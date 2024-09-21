@@ -228,7 +228,7 @@ export default abstract class MessageUiHandler extends AwaitableUiHandler {
     this.pendingPrompt = false;
   }
 
-  clear() {
+  override clear() {
     super.clear();
   }
 }

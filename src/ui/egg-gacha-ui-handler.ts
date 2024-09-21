@@ -8,7 +8,7 @@ import { VoucherType, getVoucherTypeIcon } from "../system/voucher";
 import { getPokemonSpecies } from "../data/pokemon-species";
 import { addWindow } from "./ui-theme";
 import { Tutorial, handleTutorial } from "../tutorial";
-import {Button} from "#enums/buttons";
+import { Button } from "#enums/buttons";
 import Overrides from "#app/overrides";
 import { GachaType } from "#app/enums/gacha-types";
 import i18next from "i18next";
@@ -308,7 +308,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
     this.setCursor(0);
   }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     super.show(args);
 
     this.getUi().showText(this.defaultText, 0);
@@ -567,7 +567,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
     });
   }
 
-  showText(text: string, delay?: number, callback?: Function, callbackDelay?: number, prompt?: boolean, promptDelay?: number): void {
+  override showText(text: string, delay?: number, callback?: Function, callbackDelay?: number, prompt?: boolean, promptDelay?: number): void {
     if (!text) {
       text = this.defaultText;
     }
@@ -732,7 +732,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
     return success || error;
   }
 
-  setCursor(cursor: integer): boolean {
+  override setCursor(cursor: integer): boolean {
     const ret = super.setCursor(cursor);
 
     if (!this.cursorObj) {
@@ -768,7 +768,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
     return changed;
   }
 
-  clear(): void {
+  override clear(): void {
     super.clear();
     this.setGachaCursor(-1);
     this.eggGachaContainer.setVisible(false);

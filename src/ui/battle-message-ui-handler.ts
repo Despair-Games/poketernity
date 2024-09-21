@@ -4,7 +4,7 @@ import { Mode } from "./ui";
 import MessageUiHandler from "./message-ui-handler";
 import { addWindow } from "./ui-theme";
 import BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
-import {Button} from "#enums/buttons";
+import { Button } from "#enums/buttons";
 import i18next from "i18next";
 import { Stat, PERMANENT_STATS, getStatKey } from "#app/enums/stat";
 
@@ -122,7 +122,7 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
     this.levelUpStatsValuesContent = levelUpStatsValuesContent;
   }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     super.show(args);
 
     this.commandWindow.setVisible(false);
@@ -149,16 +149,16 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
     return false;
   }
 
-  clear() {
+  override clear() {
     super.clear();
   }
 
-  showText(text: string, delay?: integer | null, callback?: Function | null, callbackDelay?: integer | null, prompt?: boolean | null, promptDelay?: integer | null) {
+  override showText(text: string, delay?: integer | null, callback?: Function | null, callbackDelay?: integer | null, prompt?: boolean | null, promptDelay?: integer | null) {
     this.hideNameText();
     super.showText(text, delay, callback, callbackDelay, prompt, promptDelay);
   }
 
-  showDialogue(text: string, name?: string, delay?: integer | null, callback?: Function, callbackDelay?: integer, prompt?: boolean, promptDelay?: integer) {
+  override showDialogue(text: string, name?: string, delay?: integer | null, callback?: Function, callbackDelay?: integer, prompt?: boolean, promptDelay?: integer) {
     if (name) {
       this.showNameText(name);
     }

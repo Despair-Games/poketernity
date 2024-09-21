@@ -44,7 +44,7 @@ export class EncounterPhase extends BattlePhase {
     this.loaded = !!loaded;
   }
 
-  start() {
+  override start() {
     super.start();
 
     this.scene.updateGameInfo();
@@ -420,7 +420,7 @@ export class EncounterPhase extends BattlePhase {
     }
   }
 
-  end() {
+  override end() {
     const enemyField = this.scene.getEnemyField();
 
     enemyField.forEach((enemyPokemon, e) => {

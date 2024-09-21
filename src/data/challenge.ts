@@ -416,7 +416,7 @@ export class SingleGenerationChallenge extends Challenge {
     super(Challenges.SINGLE_GENERATION, 9);
   }
 
-  applyStarterChoice(pokemon: PokemonSpecies, valid: Utils.BooleanHolder, dexAttr: DexAttrProps, soft: boolean = false): boolean {
+  override applyStarterChoice(pokemon: PokemonSpecies, valid: Utils.BooleanHolder, dexAttr: DexAttrProps, soft: boolean = false): boolean {
     const generations = [pokemon.generation];
     if (soft) {
       const speciesToCheck = [pokemon.speciesId];
@@ -438,7 +438,7 @@ export class SingleGenerationChallenge extends Challenge {
     return false;
   }
 
-  applyPokemonInBattle(pokemon: Pokemon, valid: Utils.BooleanHolder): boolean {
+  override applyPokemonInBattle(pokemon: Pokemon, valid: Utils.BooleanHolder): boolean {
     const baseGeneration = pokemon.species.speciesId === Species.VICTINI ? 5 : getPokemonSpecies(pokemon.species.speciesId).generation;
     const fusionGeneration = pokemon.isFusion() ? pokemon.fusionSpecies?.speciesId === Species.VICTINI ? 5 : getPokemonSpecies(pokemon.fusionSpecies!.speciesId).generation : 0; // TODO: is the bang on fusionSpecies correct?
     if (pokemon.isPlayer() && (baseGeneration !== this.value || (pokemon.isFusion() && fusionGeneration !== this.value))) {
@@ -448,7 +448,7 @@ export class SingleGenerationChallenge extends Challenge {
     return false;
   }
 
-  applyFixedBattle(waveIndex: Number, battleConfig: FixedBattleConfig): boolean {
+  override applyFixedBattle(waveIndex: Number, battleConfig: FixedBattleConfig): boolean {
     let trainerTypes: TrainerType[] = [];
     switch (waveIndex) {
     case 35:
@@ -502,7 +502,7 @@ export class SingleGenerationChallenge extends Challenge {
   /**
    * @overrides
    */
-  getDifficulty(): number {
+  override getDifficulty(): number {
     return this.value > 0 ? 1 : 0;
   }
 
@@ -511,7 +511,7 @@ export class SingleGenerationChallenge extends Challenge {
    * @param {value} overrideValue The value to check for. If undefined, gets the current value.
    * @returns {string} The localised name for the current value.
    */
-  getValue(overrideValue?: integer): string {
+  override getValue(overrideValue?: integer): string {
     if (overrideValue === undefined) {
       overrideValue = this.value;
     }
@@ -526,7 +526,7 @@ export class SingleGenerationChallenge extends Challenge {
    * @param {value} overrideValue The value to check for. If undefined, gets the current value.
    * @returns {string} The localised description for the current value.
    */
-  getDescription(overrideValue?: integer): string {
+  override getDescription(overrideValue?: integer): string {
     if (overrideValue === undefined) {
       overrideValue = this.value;
     }
@@ -537,7 +537,7 @@ export class SingleGenerationChallenge extends Challenge {
   }
 
 
-  static loadChallenge(source: SingleGenerationChallenge | any): SingleGenerationChallenge {
+  static override loadChallenge(source: SingleGenerationChallenge | any): SingleGenerationChallenge {
     const newChallenge = new SingleGenerationChallenge();
     newChallenge.value = source.value;
     newChallenge.severity = source.severity;
@@ -567,7 +567,7 @@ export class SingleTypeChallenge extends Challenge {
     super(Challenges.SINGLE_TYPE, 18);
   }
 
-  applyStarterChoice(pokemon: PokemonSpecies, valid: Utils.BooleanHolder, dexAttr: DexAttrProps, soft: boolean = false): boolean {
+  override applyStarterChoice(pokemon: PokemonSpecies, valid: Utils.BooleanHolder, dexAttr: DexAttrProps, soft: boolean = false): boolean {
     const speciesForm = getPokemonSpeciesForm(pokemon.speciesId, dexAttr.formIndex);
     const types = [speciesForm.type1, speciesForm.type2];
     if (soft) {
@@ -598,7 +598,7 @@ export class SingleTypeChallenge extends Challenge {
     return false;
   }
 
-  applyPokemonInBattle(pokemon: Pokemon, valid: Utils.BooleanHolder): boolean {
+  override applyPokemonInBattle(pokemon: Pokemon, valid: Utils.BooleanHolder): boolean {
     if (pokemon.isPlayer() && !pokemon.isOfType(this.value - 1, false, false, true)
       && !SingleTypeChallenge.TYPE_OVERRIDES.some(o => o.type === (this.value - 1) && (pokemon.isFusion() && o.fusion ? pokemon.fusionSpecies! : pokemon.species).speciesId === o.species)) { // TODO: is the bang on fusionSpecies correct?
       valid.value = false;
@@ -610,7 +610,7 @@ export class SingleTypeChallenge extends Challenge {
   /**
    * @overrides
    */
-  getDifficulty(): number {
+  override getDifficulty(): number {
     return this.value > 0 ? 1 : 0;
   }
 
@@ -619,7 +619,7 @@ export class SingleTypeChallenge extends Challenge {
    * @param {value} overrideValue The value to check for. If undefined, gets the current value.
    * @returns {string} The localised name for the current value.
    */
-  getValue(overrideValue?: integer): string {
+  override getValue(overrideValue?: integer): string {
     if (overrideValue === undefined) {
       overrideValue = this.value;
     }
@@ -631,7 +631,7 @@ export class SingleTypeChallenge extends Challenge {
    * @param {value} overrideValue The value to check for. If undefined, gets the current value.
    * @returns {string} The localised description for the current value.
    */
-  getDescription(overrideValue?: integer): string {
+  override getDescription(overrideValue?: integer): string {
     if (overrideValue === undefined) {
       overrideValue = this.value;
     }
@@ -642,7 +642,7 @@ export class SingleTypeChallenge extends Challenge {
     return this.value === 0 ? defaultDesc : typeDesc;
   }
 
-  static loadChallenge(source: SingleTypeChallenge | any): SingleTypeChallenge {
+  static override loadChallenge(source: SingleTypeChallenge | any): SingleTypeChallenge {
     const newChallenge = new SingleTypeChallenge();
     newChallenge.value = source.value;
     newChallenge.severity = source.severity;
@@ -658,7 +658,7 @@ export class FreshStartChallenge extends Challenge {
     super(Challenges.FRESH_START, 1);
   }
 
-  applyStarterChoice(pokemon: PokemonSpecies, valid: Utils.BooleanHolder): boolean {
+  override applyStarterChoice(pokemon: PokemonSpecies, valid: Utils.BooleanHolder): boolean {
     if (!defaultStarterSpecies.includes(pokemon.speciesId)) {
       valid.value = false;
       return true;
@@ -666,7 +666,7 @@ export class FreshStartChallenge extends Challenge {
     return false;
   }
 
-  applyStarterCost(species: Species, cost: Utils.NumberHolder): boolean {
+  override applyStarterCost(species: Species, cost: Utils.NumberHolder): boolean {
     if (defaultStarterSpecies.includes(species)) {
       cost.value = speciesStarters[species];
       return true;
@@ -674,7 +674,7 @@ export class FreshStartChallenge extends Challenge {
     return false;
   }
 
-  applyStarterModify(pokemon: Pokemon): boolean {
+  override applyStarterModify(pokemon: Pokemon): boolean {
     pokemon.abilityIndex = 0; // Always base ability, not hidden ability
     pokemon.passive = false; // Passive isn't unlocked
     pokemon.nature = Nature.HARDY; // Neutral nature
@@ -691,7 +691,7 @@ export class FreshStartChallenge extends Challenge {
     return 0;
   }
 
-  static loadChallenge(source: FreshStartChallenge | any): FreshStartChallenge {
+  static override loadChallenge(source: FreshStartChallenge | any): FreshStartChallenge {
     const newChallenge = new FreshStartChallenge();
     newChallenge.value = source.value;
     newChallenge.severity = source.severity;
@@ -707,7 +707,7 @@ export class InverseBattleChallenge extends Challenge {
     super(Challenges.INVERSE_BATTLE, 1);
   }
 
-  static loadChallenge(source: InverseBattleChallenge | any): InverseBattleChallenge {
+  static override loadChallenge(source: InverseBattleChallenge | any): InverseBattleChallenge {
     const newChallenge = new InverseBattleChallenge();
     newChallenge.value = source.value;
     newChallenge.severity = source.severity;
@@ -718,7 +718,7 @@ export class InverseBattleChallenge extends Challenge {
     return 0;
   }
 
-  applyTypeEffectiveness(effectiveness: Utils.NumberHolder): boolean {
+  override applyTypeEffectiveness(effectiveness: Utils.NumberHolder): boolean {
     if (effectiveness.value < 1) {
       effectiveness.value = 2;
       return true;
@@ -742,14 +742,14 @@ export class LowerStarterMaxCostChallenge extends Challenge {
   /**
    * @override
    */
-  getValue(overrideValue?: integer): string {
+  override getValue(overrideValue?: integer): string {
     if (overrideValue === undefined) {
       overrideValue = this.value;
     }
     return (DEFAULT_PARTY_MAX_COST - overrideValue).toString();
   }
 
-  applyStarterChoice(pokemon: PokemonSpecies, valid: Utils.BooleanHolder): boolean {
+  override applyStarterChoice(pokemon: PokemonSpecies, valid: Utils.BooleanHolder): boolean {
     if (speciesStarters[pokemon.speciesId] > DEFAULT_PARTY_MAX_COST - this.value) {
       valid.value = false;
       return true;
@@ -757,7 +757,7 @@ export class LowerStarterMaxCostChallenge extends Challenge {
     return false;
   }
 
-  static loadChallenge(source: LowerStarterMaxCostChallenge | any): LowerStarterMaxCostChallenge {
+  static override loadChallenge(source: LowerStarterMaxCostChallenge | any): LowerStarterMaxCostChallenge {
     const newChallenge = new LowerStarterMaxCostChallenge();
     newChallenge.value = source.value;
     newChallenge.severity = source.severity;
@@ -776,19 +776,19 @@ export class LowerStarterPointsChallenge extends Challenge {
   /**
    * @override
    */
-  getValue(overrideValue?: integer): string {
+  override getValue(overrideValue?: integer): string {
     if (overrideValue === undefined) {
       overrideValue = this.value;
     }
     return (DEFAULT_PARTY_MAX_COST - overrideValue).toString();
   }
 
-  applyStarterPoints(points: Utils.NumberHolder): boolean {
+  override applyStarterPoints(points: Utils.NumberHolder): boolean {
     points.value -= this.value;
     return true;
   }
 
-  static loadChallenge(source: LowerStarterPointsChallenge | any): LowerStarterPointsChallenge {
+  static override loadChallenge(source: LowerStarterPointsChallenge | any): LowerStarterPointsChallenge {
     const newChallenge = new LowerStarterPointsChallenge();
     newChallenge.value = source.value;
     newChallenge.severity = source.severity;

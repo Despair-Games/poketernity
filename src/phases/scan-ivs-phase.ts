@@ -17,7 +17,7 @@ export class ScanIvsPhase extends PokemonPhase {
     this.shownIvs = shownIvs;
   }
 
-  start() {
+  override start() {
     super.start();
 
     if (!this.shownIvs) {

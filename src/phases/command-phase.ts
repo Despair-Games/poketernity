@@ -27,7 +27,7 @@ export class CommandPhase extends FieldPhase {
     this.fieldIndex = fieldIndex;
   }
 
-  start() {
+  override start() {
     super.start();
 
     if (this.fieldIndex) {
@@ -293,7 +293,7 @@ export class CommandPhase extends FieldPhase {
     return this.scene.getPlayerField()[this.fieldIndex];
   }
 
-  end() {
+  override end() {
     this.scene.ui.setMode(Mode.MESSAGE).then(() => super.end());
   }
 }

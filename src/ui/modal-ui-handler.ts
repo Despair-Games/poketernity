@@ -3,7 +3,7 @@ import { TextStyle, addTextObject } from "./text";
 import { Mode } from "./ui";
 import UiHandler from "./ui-handler";
 import { WindowVariant, addWindow } from "./ui-theme";
-import {Button} from "#enums/buttons";
+import { Button } from "#enums/buttons";
 
 export interface ModalConfig {
   buttonActions: Function[];
@@ -86,7 +86,7 @@ export abstract class ModalUiHandler extends UiHandler {
     this.modalContainer.add(buttonContainer);
   }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     if (args.length >= 1 && "buttonActions" in args[0]) {
       super.show(args);
       if (args[0].hasOwnProperty("fadeOut") && typeof args[0].fadeOut === "function") {
@@ -154,7 +154,7 @@ export abstract class ModalUiHandler extends UiHandler {
     return false;
   }
 
-  clear() {
+  override clear() {
     super.clear();
     this.modalContainer.setVisible(false);
 

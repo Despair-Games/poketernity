@@ -173,7 +173,7 @@ export default class AchvsUiHandler extends MessageUiHandler {
     this.mainContainer.setVisible(false);
   }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     super.show(args);
 
     this.headerBgX = this.headerBg.getTopRight().x;
@@ -299,7 +299,7 @@ export default class AchvsUiHandler extends MessageUiHandler {
     return success;
   }
 
-  setCursor(cursor: integer, pageChange?: boolean): boolean {
+  override setCursor(cursor: integer, pageChange?: boolean): boolean {
     const ret = super.setCursor(cursor);
 
     let update = ret;
@@ -437,7 +437,7 @@ export default class AchvsUiHandler extends MessageUiHandler {
     this.currentTotal = this.vouchersTotal;
   }
 
-  clear() {
+  override clear() {
     super.clear();
     this.currentPage = Page.ACHIEVEMENTS;
     this.mainContainer.setVisible(false);

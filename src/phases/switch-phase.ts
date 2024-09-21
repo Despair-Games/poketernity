@@ -30,7 +30,7 @@ export class SwitchPhase extends BattlePhase {
     this.doReturn = doReturn;
   }
 
-  start() {
+  override start() {
     super.start();
 
     // Skip modal switch if impossible (no remaining party members that aren't in battle)

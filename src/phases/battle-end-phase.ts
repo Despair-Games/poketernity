@@ -4,7 +4,7 @@ import { BattlePhase } from "./battle-phase";
 import { GameOverPhase } from "./game-over-phase";
 
 export class BattleEndPhase extends BattlePhase {
-  start() {
+  override start() {
     super.start();
 
     this.scene.currentBattle.addBattleScore(this.scene);

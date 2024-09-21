@@ -3,7 +3,7 @@ import { TextStyle, addTextObject } from "./text";
 import { Mode } from "./ui";
 import UiHandler from "./ui-handler";
 import { addWindow } from "./ui-theme";
-import {Button} from "#enums/buttons";
+import { Button } from "#enums/buttons";
 import i18next from "i18next";
 import { Challenge } from "#app/data/challenge";
 import * as Utils from "../utils";
@@ -240,7 +240,7 @@ export default class GameChallengesUiHandler extends UiHandler {
     // this.difficultyText.updateText();
   }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     super.show(args);
 
     this.startCursor.setVisible(false);
@@ -373,7 +373,7 @@ export default class GameChallengesUiHandler extends UiHandler {
     return success;
   }
 
-  setCursor(cursor: integer): boolean {
+  override setCursor(cursor: integer): boolean {
     let ret = super.setCursor(cursor);
 
     if (!this.cursorObj) {
@@ -406,7 +406,7 @@ export default class GameChallengesUiHandler extends UiHandler {
     return this.scene.gameMode.challenges[this.cursor + this.scrollCursor];
   }
 
-  clear() {
+  override clear() {
     super.clear();
     this.challengesContainer.setVisible(false);
     this.eraseCursor();

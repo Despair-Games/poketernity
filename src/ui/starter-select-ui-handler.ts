@@ -925,7 +925,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.updateInstructions();
   }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     if (!this.starterPreferences) {
       // starterPreferences haven't been loaded yet
       this.starterPreferences = StarterPrefs.load();
@@ -1074,7 +1074,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     }
   }
 
-  showText(text: string, delay?: integer, callback?: Function, callbackDelay?: integer, prompt?: boolean, promptDelay?: integer) {
+  override showText(text: string, delay?: integer, callback?: Function, callbackDelay?: integer, prompt?: boolean, promptDelay?: integer) {
     super.showText(text, delay, callback, callbackDelay, prompt, promptDelay);
 
     if (text?.indexOf("\n") === -1) {
@@ -2651,7 +2651,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     });
   };
 
-  setCursor(cursor: integer): boolean {
+  override setCursor(cursor: integer): boolean {
     let changed = false;
 
     if (this.filterMode) {
@@ -3632,7 +3632,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.statsContainer.updateIvs(this.speciesStarterDexEntry.ivs);
   }
 
-  clearText() {
+  override clearText() {
     this.starterSelectMessageBoxContainer.setVisible(false);
     super.clearText();
   }
@@ -3654,7 +3654,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.goFilterLabel.setVisible(false);
   }
 
-  clear(): void {
+  override clear(): void {
     super.clear();
 
     StarterPrefs.save(this.starterPreferences);

@@ -7,7 +7,7 @@ import UiHandler from "./ui-handler";
 import * as Utils from "../utils";
 import { MoveCategory } from "#app/data/move";
 import i18next from "i18next";
-import {Button} from "#enums/buttons";
+import { Button } from "#enums/buttons";
 import Pokemon, { PokemonMove } from "#app/field/pokemon";
 import { CommandPhase } from "#app/phases/command-phase";
 import { BattleType } from "#app/battle";
@@ -87,7 +87,7 @@ export default class FightUiHandler extends UiHandler {
     this.moveInfoContainer.add(this.accuracyText);
   }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     super.show(args);
 
     this.fieldIndex = args.length ? args[0] as integer : 0;
@@ -160,11 +160,11 @@ export default class FightUiHandler extends UiHandler {
     return success;
   }
 
-  getCursor(): integer {
+  override getCursor(): integer {
     return !this.fieldIndex ? this.cursor : this.cursor2;
   }
 
-  setCursor(cursor: integer): boolean {
+  override setCursor(cursor: integer): boolean {
     const ui = this.getUi();
 
     const changed = this.getCursor() !== cursor;
@@ -295,7 +295,7 @@ export default class FightUiHandler extends UiHandler {
     return moveColors[0];
   }
 
-  clear() {
+  override clear() {
     super.clear();
     const messageHandler = this.getUi().getMessageHandler();
     this.clearMoves();

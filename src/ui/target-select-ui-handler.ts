@@ -4,7 +4,7 @@ import { Mode } from "./ui";
 import UiHandler from "./ui-handler";
 import * as Utils from "../utils";
 import { getMoveTargets } from "../data/move";
-import {Button} from "#enums/buttons";
+import { Button } from "#enums/buttons";
 import { Moves } from "#enums/moves";
 import Pokemon from "#app/field/pokemon";
 import { ModifierBar } from "#app/modifier/modifier";
@@ -32,7 +32,7 @@ export default class TargetSelectUiHandler extends UiHandler {
 
   setup(): void { }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     if (args.length < 3) {
       return false;
     }
@@ -101,7 +101,7 @@ export default class TargetSelectUiHandler extends UiHandler {
     return success;
   }
 
-  setCursor(cursor: integer): boolean {
+  override setCursor(cursor: integer): boolean {
     const singleTarget = this.scene.getField()[cursor];
     const multipleTargets = this.targets.map(index => this.scene.getField()[index]);
 
@@ -183,7 +183,7 @@ export default class TargetSelectUiHandler extends UiHandler {
     }
   }
 
-  clear() {
+  override clear() {
     super.clear();
     this.eraseCursor();
   }

@@ -13,7 +13,7 @@ export class TrainerMessageTestPhase extends BattlePhase {
     this.trainerTypes = trainerTypes;
   }
 
-  start() {
+  override start() {
     super.start();
 
     const testMessages: string[] = [];

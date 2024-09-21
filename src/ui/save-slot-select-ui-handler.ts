@@ -72,7 +72,7 @@ export default class SaveSlotSelectUiHandler extends MessageUiHandler {
     this.sessionSlots = [];
   }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     if ((args.length < 2 || !(args[1] instanceof Function))) {
       return false;
     }
@@ -184,7 +184,7 @@ export default class SaveSlotSelectUiHandler extends MessageUiHandler {
     }
   }
 
-  showText(text: string, delay?: integer, callback?: Function, callbackDelay?: integer, prompt?: boolean, promptDelay?: integer) {
+  override showText(text: string, delay?: integer, callback?: Function, callbackDelay?: integer, prompt?: boolean, promptDelay?: integer) {
     super.showText(text, delay, callback, callbackDelay, prompt, promptDelay);
 
     if (text?.indexOf("\n") === -1) {
@@ -198,7 +198,7 @@ export default class SaveSlotSelectUiHandler extends MessageUiHandler {
     this.saveSlotSelectMessageBoxContainer.setVisible(!!text?.length);
   }
 
-  setCursor(cursor: integer): boolean {
+  override setCursor(cursor: integer): boolean {
     const changed = super.setCursor(cursor);
 
     if (!this.cursorObj) {
@@ -228,7 +228,7 @@ export default class SaveSlotSelectUiHandler extends MessageUiHandler {
     return changed;
   }
 
-  clear() {
+  override clear() {
     super.clear();
     this.saveSlotSelectContainer.setVisible(false);
     this.eraseCursor();

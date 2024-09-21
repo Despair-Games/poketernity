@@ -8,7 +8,7 @@ export class UnavailablePhase extends Phase {
     super(scene);
   }
 
-  start(): void {
+  override start(): void {
     this.scene.ui.setMode(Mode.UNAVAILABLE, () => {
       this.scene.unshiftPhase(new LoginPhase(this.scene, true));
       this.end();

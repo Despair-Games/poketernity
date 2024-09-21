@@ -23,7 +23,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
     this.loaded = loaded;
   }
 
-  start() {
+  override start() {
     super.start();
 
     this.preSummon();
@@ -250,7 +250,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
     this.scene.pushPhase(new PostSummonPhase(this.scene, this.getPokemon().getBattlerIndex()));
   }
 
-  end() {
+  override end() {
     this.onEnd();
 
     super.end();

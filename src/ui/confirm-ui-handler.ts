@@ -2,7 +2,7 @@ import BattleScene from "../battle-scene";
 import AbstractOptionSelectUiHandler, { OptionSelectConfig } from "./abstact-option-select-ui-handler";
 import { Mode } from "./ui";
 import i18next from "i18next";
-import {Button} from "#enums/buttons";
+import { Button } from "#enums/buttons";
 
 
 export default class ConfirmUiHandler extends AbstractOptionSelectUiHandler {
@@ -20,7 +20,7 @@ export default class ConfirmUiHandler extends AbstractOptionSelectUiHandler {
     return ConfirmUiHandler.windowWidth;
   }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     if (args.length === 4 && args[0] instanceof Function && args[1] instanceof Function && args[2] instanceof Function && args[3] === "fullParty") {
       const config: OptionSelectConfig = {
         options: [
@@ -95,7 +95,7 @@ export default class ConfirmUiHandler extends AbstractOptionSelectUiHandler {
     return false;
   }
 
-  processInput(button: Button): boolean {
+  override processInput(button: Button): boolean {
     if (button === Button.CANCEL && this.blockInput) {
       this.unblockInput();
     }
@@ -103,7 +103,7 @@ export default class ConfirmUiHandler extends AbstractOptionSelectUiHandler {
     return super.processInput(button);
   }
 
-  setCursor(cursor: integer): boolean {
+  override setCursor(cursor: integer): boolean {
     const ret = super.setCursor(cursor);
 
     if (ret && this.switchCheck) {

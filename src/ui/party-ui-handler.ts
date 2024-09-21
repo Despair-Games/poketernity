@@ -14,7 +14,7 @@ import { pokemonEvolutions } from "../data/pokemon-evolutions";
 import { addWindow } from "./ui-theme";
 import { SpeciesFormChangeItemTrigger, FormChangeItem } from "../data/pokemon-forms";
 import { getVariantTint } from "#app/data/variant";
-import {Button} from "#enums/buttons";
+import { Button } from "#enums/buttons";
 import { applyChallenges, ChallengeType } from "#app/data/challenge";
 import MoveInfoOverlay from "./move-info-overlay";
 import i18next from "i18next";
@@ -290,7 +290,7 @@ export default class PartyUiHandler extends MessageUiHandler {
     this.partySlots = [];
   }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     if (!args.length || this.active) {
       return false;
     }
@@ -684,7 +684,7 @@ export default class PartyUiHandler extends MessageUiHandler {
     }
   }
 
-  setCursor(cursor: integer): boolean {
+  override setCursor(cursor: integer): boolean {
     let changed: boolean;
 
     if (this.optionsMode) {
@@ -744,7 +744,7 @@ export default class PartyUiHandler extends MessageUiHandler {
     return changed;
   }
 
-  showText(text: string, delay?: integer | null, callback?: Function | null, callbackDelay?: integer | null, prompt?: boolean | null, promptDelay?: integer | null) {
+  override showText(text: string, delay?: integer | null, callback?: Function | null, callbackDelay?: integer | null, prompt?: boolean | null, promptDelay?: integer | null) {
     if (text.length === 0) {
       text = defaultMessage;
     }
@@ -1142,7 +1142,7 @@ export default class PartyUiHandler extends MessageUiHandler {
     this.optionsCursorObj = null;
   }
 
-  clear() {
+  override clear() {
     super.clear();
     // hide the overlay
     this.moveInfoOverlay.clear();

@@ -34,7 +34,7 @@ export class MoveEffectPhase extends PokemonPhase {
     this.targets = targets;
   }
 
-  start() {
+  override start() {
     super.start();
 
     /** The Pokemon using this phase's invoked move */
@@ -331,7 +331,7 @@ export class MoveEffectPhase extends PokemonPhase {
     });
   }
 
-  end() {
+  override end() {
     const user = this.getUserPokemon();
     /**
        * If this phase isn't for the invoked move's last strike,

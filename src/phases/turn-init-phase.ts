@@ -16,7 +16,7 @@ export class TurnInitPhase extends FieldPhase {
     super(scene);
   }
 
-  start() {
+  override start() {
     super.start();
 
     this.scene.getPlayerField().forEach(p => {

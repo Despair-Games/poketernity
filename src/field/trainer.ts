@@ -1,6 +1,6 @@
 import BattleScene from "../battle-scene";
-import {pokemonPrevolutions} from "../data/pokemon-evolutions";
-import PokemonSpecies, {getPokemonSpecies} from "../data/pokemon-species";
+import { pokemonPrevolutions } from "../data/pokemon-evolutions";
+import PokemonSpecies, { getPokemonSpecies } from "../data/pokemon-species";
 import {
   TrainerConfig,
   TrainerPartyCompoundTemplate,
@@ -11,12 +11,12 @@ import {
   trainerPartyTemplates,
   signatureSpecies
 } from "../data/trainer-config";
-import {EnemyPokemon} from "./pokemon";
+import { EnemyPokemon } from "./pokemon";
 import * as Utils from "../utils";
-import {PersistentModifier} from "../modifier/modifier";
-import {trainerNamePools} from "../data/trainer-names";
-import {ArenaTagSide, ArenaTrapTag} from "#app/data/arena-tag";
-import {getIsInitialized, initI18n} from "#app/plugins/i18n";
+import { PersistentModifier } from "../modifier/modifier";
+import { trainerNamePools } from "../data/trainer-names";
+import { ArenaTagSide, ArenaTrapTag } from "#app/data/arena-tag";
+import { getIsInitialized, initI18n } from "#app/plugins/i18n";
 import i18next from "i18next";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { Species } from "#enums/species";
@@ -32,7 +32,7 @@ export default class Trainer extends Phaser.GameObjects.Container {
   public config: TrainerConfig;
   public variant: TrainerVariant;
   public partyTemplateIndex: integer;
-  public name: string;
+  public override name: string;
   public partnerName: string;
 
   constructor(scene: BattleScene, trainerType: TrainerType, variant: TrainerVariant, partyTemplateIndex?: integer, name?: string, partnerName?: string, trainerConfigOverride?: TrainerConfig) {

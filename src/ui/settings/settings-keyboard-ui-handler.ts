@@ -1,5 +1,5 @@
 import BattleScene from "../../battle-scene";
-import {Mode} from "../ui";
+import { Mode } from "../ui";
 import cfg_keyboard_qwerty from "#app/configs/inputs/cfg_keyboard_qwerty";
 import {
   setSettingKeyboard,
@@ -8,13 +8,13 @@ import {
   settingKeyboardDefaults,
   settingKeyboardOptions
 } from "#app/system/settings/settings-keyboard";
-import {reverseValueToKeySetting, truncateString} from "#app/utils";
+import { reverseValueToKeySetting, truncateString } from "#app/utils";
 import AbstractControlSettingsUiHandler from "#app/ui/settings/abstract-control-settings-ui-handler";
-import {InterfaceConfig} from "#app/inputs-controller";
-import {addTextObject, TextStyle} from "#app/ui/text";
-import {deleteBind} from "#app/configs/inputs/configHandler";
-import {Device} from "#enums/devices";
-import {NavigationManager} from "#app/ui/settings/navigationMenu";
+import { InterfaceConfig } from "#app/inputs-controller";
+import { addTextObject, TextStyle } from "#app/ui/text";
+import { deleteBind } from "#app/configs/inputs/configHandler";
+import { Device } from "#enums/devices";
+import { NavigationManager } from "#app/ui/settings/navigationMenu";
 import i18next from "i18next";
 
 /**
@@ -53,7 +53,7 @@ export default class SettingsKeyboardUiHandler extends AbstractControlSettingsUi
   /**
      * Setup UI elements.
      */
-  setup() {
+  override setup() {
     super.setup();
     // If no gamepads are detected, set up a default UI prompt in the settings container.
     this.layout["noKeyboard"] = new Map();
@@ -120,7 +120,7 @@ export default class SettingsKeyboardUiHandler extends AbstractControlSettingsUi
      * @param activeConfig - The active keyboard configuration.
      * @returns `true` if the layout was successfully applied, otherwise `false`.
      */
-  setLayout(activeConfig: InterfaceConfig): boolean {
+  override setLayout(activeConfig: InterfaceConfig): boolean {
     // Check if there is no active configuration (e.g., no gamepad connected).
     if (!activeConfig) {
       // Retrieve the layout for when no gamepads are connected.

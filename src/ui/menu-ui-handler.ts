@@ -417,7 +417,7 @@ export default class MenuUiHandler extends MessageUiHandler {
     this.setCursor(0);
   }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     this.render();
     super.show(args);
 
@@ -661,13 +661,13 @@ export default class MenuUiHandler extends MessageUiHandler {
     this.message.setY(isDialogMode ? this.textPadding + 0.4 : this.textPadding);
   }
 
-  showText(text: string, delay?: number, callback?: Function, callbackDelay?: number, prompt?: boolean, promptDelay?: number): void {
+  override showText(text: string, delay?: number, callback?: Function, callbackDelay?: number, prompt?: boolean, promptDelay?: number): void {
     this.menuMessageBoxContainer.setVisible(!!text);
 
     super.showText(text, delay, callback, callbackDelay, prompt, promptDelay);
   }
 
-  setCursor(cursor: integer): boolean {
+  override setCursor(cursor: integer): boolean {
     const ret = super.setCursor(cursor);
 
     if (!this.cursorObj) {
@@ -682,7 +682,7 @@ export default class MenuUiHandler extends MessageUiHandler {
     return ret;
   }
 
-  clear() {
+  override clear() {
     super.clear();
     this.menuContainer.setVisible(false);
     this.bgmBar.toggleBgmBar(false);

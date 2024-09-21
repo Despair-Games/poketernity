@@ -182,7 +182,7 @@ export default class AbstractSettingsUiHandler extends UiHandler {
    * @param args - Arguments to be passed to the show method.
    * @returns `true` if successful.
      */
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     super.show(args);
     this.updateBindings();
 
@@ -308,7 +308,7 @@ export default class AbstractSettingsUiHandler extends UiHandler {
    * @param cursor - The cursor position to set.
    * @returns `true` if the cursor was set successfully.
    */
-  setCursor(cursor: number): boolean {
+  override setCursor(cursor: number): boolean {
     const ret = super.setCursor(cursor);
 
     if (!this.cursorObj) {
@@ -400,7 +400,7 @@ export default class AbstractSettingsUiHandler extends UiHandler {
   /**
    * Clear the UI elements and state.
    */
-  clear() {
+  override clear() {
     super.clear();
     this.settingsContainer.setVisible(false);
     this.setScrollCursor(0);

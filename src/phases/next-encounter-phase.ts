@@ -6,11 +6,11 @@ export class NextEncounterPhase extends EncounterPhase {
     super(scene);
   }
 
-  start() {
+  override start() {
     super.start();
   }
 
-  doEncounter(): void {
+  override doEncounter(): void {
     this.scene.playBgm(undefined, true);
 
     for (const pokemon of this.scene.getParty()) {
@@ -71,6 +71,6 @@ export class NextEncounterPhase extends EncounterPhase {
   /**
    * Do nothing (since this is simply the next wave in the same biome).
    */
-  trySetWeatherIfNewBiome(): void {
+  override trySetWeatherIfNewBiome(): void {
   }
 }

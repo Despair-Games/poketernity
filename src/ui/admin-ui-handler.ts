@@ -11,7 +11,7 @@ export default class AdminUiHandler extends FormModalUiHandler {
     super(scene, mode);
   }
 
-  setup(): void {
+  override setup(): void {
     super.setup();
   }
 
@@ -35,7 +35,7 @@ export default class AdminUiHandler extends FormModalUiHandler {
     return ["Link account", "Cancel"];
   }
 
-  processInput(button: Button): boolean {
+  override processInput(button: Button): boolean {
     if (button === Button.SUBMIT && this.submitAction) {
       this.submitAction();
       return true;
@@ -44,7 +44,7 @@ export default class AdminUiHandler extends FormModalUiHandler {
     return false;
   }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     if (super.show(args)) {
       const config = args[0] as ModalConfig;
       const originalSubmitAction = this.submitAction;
@@ -82,7 +82,7 @@ export default class AdminUiHandler extends FormModalUiHandler {
 
   }
 
-  clear(): void {
+  override clear(): void {
     super.clear();
   }
 }

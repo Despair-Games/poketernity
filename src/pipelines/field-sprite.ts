@@ -216,14 +216,14 @@ export default class FieldSpritePipeline extends Phaser.Renderer.WebGL.Pipelines
     });
   }
 
-  onPreRender(): void {
+  override onPreRender(): void {
     this.set1f("time", 0);
     this.set1i("ignoreTimeTint", 0);
     this.set1f("terrainColorRatio", 0);
     this.set3fv("terrainColor", [ 0, 0, 0 ]);
   }
 
-  onBind(gameObject: Phaser.GameObjects.GameObject): void {
+  override onBind(gameObject: Phaser.GameObjects.GameObject): void {
     super.onBind();
 
     const sprite = gameObject as Phaser.GameObjects.Sprite | Phaser.GameObjects.NineSlice;
@@ -246,7 +246,7 @@ export default class FieldSpritePipeline extends Phaser.Renderer.WebGL.Pipelines
     this.set1f("terrainColorRatio", terrainColorRatio);
   }
 
-  onBatch(gameObject: Phaser.GameObjects.GameObject): void {
+  override onBatch(gameObject: Phaser.GameObjects.GameObject): void {
     if (gameObject) {
       this.flush();
     }

@@ -593,7 +593,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
   public species: string;
   public growthRate: GrowthRate;
   public malePercent: number | null;
-  public genderDiffs: boolean;
+  public override genderDiffs: boolean;
   public canChangeForm: boolean;
   public forms: PokemonForm[];
 
@@ -872,7 +872,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
     };
   }
 
-  isObtainable() {
+  override isObtainable() {
     return super.isObtainable();
   }
 

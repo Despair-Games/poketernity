@@ -12,7 +12,7 @@ export class EndCardPhase extends Phase {
     super(scene);
   }
 
-  start(): void {
+  override start(): void {
     super.start();
 
     this.scene.ui.getMessageHandler().bg.setVisible(false);

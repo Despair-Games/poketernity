@@ -352,8 +352,8 @@ export class MoneyRequirement extends EncounterSceneRequirement {
 
 export class SpeciesRequirement extends EncounterPokemonRequirement {
   requiredSpecies: Species[];
-  minNumberOfPokemon: number;
-  invertQuery: boolean;
+  override minNumberOfPokemon: number;
+  override invertQuery: boolean;
 
   constructor(species: Species | Species[], minNumberOfPokemon: number = 1, invertQuery: boolean = false) {
     super();
@@ -390,8 +390,8 @@ export class SpeciesRequirement extends EncounterPokemonRequirement {
 
 export class NatureRequirement extends EncounterPokemonRequirement {
   requiredNature: Nature[];
-  minNumberOfPokemon: number;
-  invertQuery: boolean;
+  override minNumberOfPokemon: number;
+  override invertQuery: boolean;
 
   constructor(nature: Nature | Nature[], minNumberOfPokemon: number = 1, invertQuery: boolean = false) {
     super();
@@ -428,8 +428,8 @@ export class NatureRequirement extends EncounterPokemonRequirement {
 export class TypeRequirement extends EncounterPokemonRequirement {
   requiredType: Type[];
   excludeFainted: boolean;
-  minNumberOfPokemon: number;
-  invertQuery: boolean;
+  override minNumberOfPokemon: number;
+  override invertQuery: boolean;
 
   constructor(type: Type | Type[], excludeFainted: boolean = true, minNumberOfPokemon: number = 1, invertQuery: boolean = false) {
     super();
@@ -474,8 +474,8 @@ export class TypeRequirement extends EncounterPokemonRequirement {
 
 export class MoveRequirement extends EncounterPokemonRequirement {
   requiredMoves: Moves[] = [];
-  minNumberOfPokemon: number;
-  invertQuery: boolean;
+  override minNumberOfPokemon: number;
+  override invertQuery: boolean;
 
   constructor(moves: Moves | Moves[], minNumberOfPokemon: number = 1, invertQuery: boolean = false) {
     super();
@@ -518,8 +518,8 @@ export class MoveRequirement extends EncounterPokemonRequirement {
  */
 export class CompatibleMoveRequirement extends EncounterPokemonRequirement {
   requiredMoves: Moves[];
-  minNumberOfPokemon: number;
-  invertQuery: boolean;
+  override minNumberOfPokemon: number;
+  override invertQuery: boolean;
 
   constructor(learnableMove: Moves | Moves[], minNumberOfPokemon: number = 1, invertQuery: boolean = false) {
     super();
@@ -557,8 +557,8 @@ export class CompatibleMoveRequirement extends EncounterPokemonRequirement {
 
 export class AbilityRequirement extends EncounterPokemonRequirement {
   requiredAbilities: Abilities[];
-  minNumberOfPokemon: number;
-  invertQuery: boolean;
+  override minNumberOfPokemon: number;
+  override invertQuery: boolean;
 
   constructor(abilities: Abilities | Abilities[], minNumberOfPokemon: number = 1, invertQuery: boolean = false) {
     super();
@@ -594,8 +594,8 @@ export class AbilityRequirement extends EncounterPokemonRequirement {
 
 export class StatusEffectRequirement extends EncounterPokemonRequirement {
   requiredStatusEffect: StatusEffect[];
-  minNumberOfPokemon: number;
-  invertQuery: boolean;
+  override minNumberOfPokemon: number;
+  override invertQuery: boolean;
 
   constructor(statusEffect: StatusEffect | StatusEffect[], minNumberOfPokemon: number = 1, invertQuery: boolean = false) {
     super();
@@ -664,8 +664,8 @@ export class StatusEffectRequirement extends EncounterPokemonRequirement {
  */
 export class CanFormChangeWithItemRequirement extends EncounterPokemonRequirement {
   requiredFormChangeItem: FormChangeItem[];
-  minNumberOfPokemon: number;
-  invertQuery: boolean;
+  override minNumberOfPokemon: number;
+  override invertQuery: boolean;
 
   constructor(formChangeItem: FormChangeItem | FormChangeItem[], minNumberOfPokemon: number = 1, invertQuery: boolean = false) {
     super();
@@ -716,8 +716,8 @@ export class CanFormChangeWithItemRequirement extends EncounterPokemonRequiremen
 
 export class CanEvolveWithItemRequirement extends EncounterPokemonRequirement {
   requiredEvolutionItem: EvolutionItem[];
-  minNumberOfPokemon: number;
-  invertQuery: boolean;
+  override minNumberOfPokemon: number;
+  override invertQuery: boolean;
 
   constructor(evolutionItems: EvolutionItem | EvolutionItem[], minNumberOfPokemon: number = 1, invertQuery: boolean = false) {
     super();
@@ -765,8 +765,8 @@ export class CanEvolveWithItemRequirement extends EncounterPokemonRequirement {
 
 export class HeldItemRequirement extends EncounterPokemonRequirement {
   requiredHeldItemModifiers: string[];
-  minNumberOfPokemon: number;
-  invertQuery: boolean;
+  override minNumberOfPokemon: number;
+  override invertQuery: boolean;
 
   constructor(heldItem: string | string[], minNumberOfPokemon: number = 1, invertQuery: boolean = false) {
     super();
@@ -812,8 +812,8 @@ export class HeldItemRequirement extends EncounterPokemonRequirement {
 
 export class AttackTypeBoosterHeldItemTypeRequirement extends EncounterPokemonRequirement {
   requiredHeldItemTypes: Type[];
-  minNumberOfPokemon: number;
-  invertQuery: boolean;
+  override minNumberOfPokemon: number;
+  override invertQuery: boolean;
 
   constructor(heldItemTypes: Type | Type[], minNumberOfPokemon: number = 1, invertQuery: boolean = false) {
     super();
@@ -859,8 +859,8 @@ export class AttackTypeBoosterHeldItemTypeRequirement extends EncounterPokemonRe
 
 export class LevelRequirement extends EncounterPokemonRequirement {
   requiredLevelRange: [number, number];
-  minNumberOfPokemon: number;
-  invertQuery: boolean;
+  override minNumberOfPokemon: number;
+  override invertQuery: boolean;
 
   constructor(requiredLevelRange: [number, number], minNumberOfPokemon: number = 1, invertQuery: boolean = false) {
     super();
@@ -897,8 +897,8 @@ export class LevelRequirement extends EncounterPokemonRequirement {
 
 export class FriendshipRequirement extends EncounterPokemonRequirement {
   requiredFriendshipRange: [number, number];
-  minNumberOfPokemon: number;
-  invertQuery: boolean;
+  override minNumberOfPokemon: number;
+  override invertQuery: boolean;
 
   constructor(requiredFriendshipRange: [number, number], minNumberOfPokemon: number = 1, invertQuery: boolean = false) {
     super();
@@ -940,8 +940,8 @@ export class FriendshipRequirement extends EncounterPokemonRequirement {
  */
 export class HealthRatioRequirement extends EncounterPokemonRequirement {
   requiredHealthRange: [number, number];
-  minNumberOfPokemon: number;
-  invertQuery: boolean;
+  override minNumberOfPokemon: number;
+  override invertQuery: boolean;
 
   constructor(requiredHealthRange: [number, number], minNumberOfPokemon: number = 1, invertQuery: boolean = false) {
     super();
@@ -983,8 +983,8 @@ export class HealthRatioRequirement extends EncounterPokemonRequirement {
 
 export class WeightRequirement extends EncounterPokemonRequirement {
   requiredWeightRange: [number, number];
-  minNumberOfPokemon: number;
-  invertQuery: boolean;
+  override minNumberOfPokemon: number;
+  override invertQuery: boolean;
 
   constructor(requiredWeightRange: [number, number], minNumberOfPokemon: number = 1, invertQuery: boolean = false) {
     super();

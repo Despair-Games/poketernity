@@ -14,7 +14,7 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
     super(scene, battlerIndex);
   }
 
-  start() {
+  override start() {
     const pokemon = this.getPokemon();
     if (pokemon?.isActive(true) && pokemon.status && pokemon.status.isPostTurn()) {
       pokemon.status.incrementTurn();

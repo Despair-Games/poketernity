@@ -22,7 +22,7 @@ export class PokemonAnimPhase extends BattlePhase {
     this.fieldAssets = fieldAssets ?? [];
   }
 
-  start(): void {
+  override start(): void {
     super.start();
 
     switch (this.key) {

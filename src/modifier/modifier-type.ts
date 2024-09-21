@@ -176,14 +176,14 @@ class AddPokeballModifierType extends ModifierType {
     this.count = count;
   }
 
-  get name(): string {
+  override get name(): string {
     return i18next.t("modifierType:ModifierType.AddPokeballModifierType.name", {
       "modifierCount": this.count,
       "pokeballName": getPokeballName(this.pokeballType),
     });
   }
 
-  getDescription(scene: BattleScene): string {
+  override getDescription(scene: BattleScene): string {
     return i18next.t("modifierType:ModifierType.AddPokeballModifierType.description", {
       "modifierCount": this.count,
       "pokeballName": getPokeballName(this.pokeballType),
@@ -203,14 +203,14 @@ class AddVoucherModifierType extends ModifierType {
     this.voucherType = voucherType;
   }
 
-  get name(): string {
+  override get name(): string {
     return i18next.t("modifierType:ModifierType.AddVoucherModifierType.name", {
       "modifierCount": this.count,
       "voucherTypeName": getVoucherTypeName(this.voucherType),
     });
   }
 
-  getDescription(scene: BattleScene): string {
+  override getDescription(scene: BattleScene): string {
     return i18next.t("modifierType:ModifierType.AddVoucherModifierType.description", {
       "modifierCount": this.count,
       "voucherTypeName": getVoucherTypeName(this.voucherType),
@@ -244,7 +244,7 @@ export class PokemonHeldItemModifierType extends PokemonModifierType {
     }, group, soundName);
   }
 
-  newModifier(...args: any[]): Modifiers.PokemonHeldItemModifier {
+  override newModifier(...args: any[]): Modifiers.PokemonHeldItemModifier {
     return super.newModifier(...args) as Modifiers.PokemonHeldItemModifier;
   }
 }
@@ -268,7 +268,7 @@ export class PokemonHpRestoreModifierType extends PokemonModifierType {
     this.healStatus = healStatus;
   }
 
-  getDescription(scene: BattleScene): string {
+  override getDescription(scene: BattleScene): string {
     return this.restorePoints
       ? i18next.t("modifierType:ModifierType.PokemonHpRestoreModifierType.description", {
         restorePoints: this.restorePoints,
@@ -298,7 +298,7 @@ export class PokemonReviveModifierType extends PokemonHpRestoreModifierType {
     };
   }
 
-  getDescription(scene: BattleScene): string {
+  override getDescription(scene: BattleScene): string {
     return i18next.t("modifierType:ModifierType.PokemonReviveModifierType.description", { restorePercent: this.restorePercent });
   }
 }
@@ -314,7 +314,7 @@ export class PokemonStatusHealModifierType extends PokemonModifierType {
       }));
   }
 
-  getDescription(scene: BattleScene): string {
+  override getDescription(scene: BattleScene): string {
     return i18next.t("modifierType:ModifierType.PokemonStatusHealModifierType.description");
   }
 }
@@ -346,7 +346,7 @@ export class PokemonPpRestoreModifierType extends PokemonMoveModifierType {
     this.restorePoints = restorePoints;
   }
 
-  getDescription(scene: BattleScene): string {
+  override getDescription(scene: BattleScene): string {
     return this.restorePoints > -1
       ? i18next.t("modifierType:ModifierType.PokemonPpRestoreModifierType.description", { restorePoints: this.restorePoints })
       : i18next.t("modifierType:ModifierType.PokemonPpRestoreModifierType.extra.fully")
@@ -369,7 +369,7 @@ export class PokemonAllMovePpRestoreModifierType extends PokemonModifierType {
     this.restorePoints = restorePoints;
   }
 
-  getDescription(scene: BattleScene): string {
+  override getDescription(scene: BattleScene): string {
     return this.restorePoints > -1
       ? i18next.t("modifierType:ModifierType.PokemonAllMovePpRestoreModifierType.description", { restorePoints: this.restorePoints })
       : i18next.t("modifierType:ModifierType.PokemonAllMovePpRestoreModifierType.extra.fully")
@@ -394,7 +394,7 @@ export class PokemonPpUpModifierType extends PokemonMoveModifierType {
     this.upPoints = upPoints;
   }
 
-  getDescription(scene: BattleScene): string {
+  override getDescription(scene: BattleScene): string {
     return i18next.t("modifierType:ModifierType.PokemonPpUpModifierType.description", { upPoints: this.upPoints });
   }
 }
@@ -414,11 +414,11 @@ export class PokemonNatureChangeModifierType extends PokemonModifierType {
     this.nature = nature;
   }
 
-  get name(): string {
+  override get name(): string {
     return i18next.t("modifierType:ModifierType.PokemonNatureChangeModifierType.name", { natureName: getNatureName(this.nature) });
   }
 
-  getDescription(scene: BattleScene): string {
+  override getDescription(scene: BattleScene): string {
     return i18next.t("modifierType:ModifierType.PokemonNatureChangeModifierType.description", { natureName: getNatureName(this.nature, true, true, true) });
   }
 }
@@ -444,7 +444,7 @@ export class DoubleBattleChanceBoosterModifierType extends ModifierType {
     this.maxBattles = maxBattles;
   }
 
-  getDescription(_scene: BattleScene): string {
+  override getDescription(_scene: BattleScene): string {
     return i18next.t("modifierType:ModifierType.DoubleBattleChanceBoosterModifierType.description", {
       battleCount: this.maxBattles
     });
@@ -465,11 +465,11 @@ export class TempStatStageBoosterModifierType extends ModifierType implements Ge
     this.quantityKey = (stat !== Stat.ACC) ? "percentage" : "stage";
   }
 
-  get name(): string {
+  override get name(): string {
     return i18next.t(`modifierType:TempStatStageBoosterItem.${this.nameKey}`);
   }
 
-  getDescription(_scene: BattleScene): string {
+  override getDescription(_scene: BattleScene): string {
     return i18next.t("modifierType:ModifierType.TempStatStageBoosterModifierType.description", {
       stat: i18next.t(getStatKey(this.stat)),
       amount: i18next.t(`modifierType:ModifierType.TempStatStageBoosterModifierType.extra.${this.quantityKey}`)
@@ -490,11 +490,11 @@ export class BerryModifierType extends PokemonHeldItemModifierType implements Ge
     this.berryType = berryType;
   }
 
-  get name(): string {
+  override get name(): string {
     return getBerryName(this.berryType);
   }
 
-  getDescription(scene: BattleScene): string {
+  override getDescription(scene: BattleScene): string {
     return getBerryEffectDescription(this.berryType);
   }
 
@@ -556,11 +556,11 @@ export class AttackTypeBoosterModifierType extends PokemonHeldItemModifierType i
     this.boostPercent = boostPercent;
   }
 
-  get name(): string {
+  override get name(): string {
     return i18next.t(`modifierType:AttackTypeBoosterItem.${getAttackTypeBoosterItemName(this.moveType)?.replace(/[ \-]/g, "_").toLowerCase()}`);
   }
 
-  getDescription(scene: BattleScene): string {
+  override getDescription(scene: BattleScene): string {
     // TODO: Need getTypeName?
     return i18next.t("modifierType:ModifierType.AttackTypeBoosterModifierType.description", { moveType: i18next.t(`pokemonInfo:Type.${Type[this.moveType]}`) });
   }
@@ -597,7 +597,7 @@ export class PokemonLevelIncrementModifierType extends PokemonModifierType {
     super(localeKey, iconImage, (_type, args) => new Modifiers.PokemonLevelIncrementModifier(this, (args[0] as PlayerPokemon).id), (_pokemon: PlayerPokemon) => null);
   }
 
-  getDescription(scene: BattleScene): string {
+  override getDescription(scene: BattleScene): string {
     let levels = 1;
     const hasCandyJar = scene.modifiers.find(modifier => modifier instanceof Modifiers.LevelIncrementBoosterModifier);
     if (hasCandyJar) {
@@ -612,7 +612,7 @@ export class AllPokemonLevelIncrementModifierType extends ModifierType {
     super(localeKey, iconImage, (_type, _args) => new Modifiers.PokemonLevelIncrementModifier(this, -1));
   }
 
-  getDescription(scene: BattleScene): string {
+  override getDescription(scene: BattleScene): string {
     let levels = 1;
     const hasCandyJar = scene.modifiers.find(modifier => modifier instanceof Modifiers.LevelIncrementBoosterModifier);
     if (hasCandyJar) {
@@ -634,11 +634,11 @@ export class BaseStatBoosterModifierType extends PokemonHeldItemModifierType imp
     this.key = key;
   }
 
-  get name(): string {
+  override get name(): string {
     return i18next.t(`modifierType:BaseStatBoosterItem.${this.key}`);
   }
 
-  getDescription(_scene: BattleScene): string {
+  override getDescription(_scene: BattleScene): string {
     return i18next.t("modifierType:ModifierType.BaseStatBoosterModifierType.description", { stat: i18next.t(getStatKey(this.stat)) });
   }
 
@@ -705,7 +705,7 @@ class AllPokemonFullHpRestoreModifierType extends ModifierType {
     this.descriptionKey = descriptionKey!; // TODO: is this bang correct?
   }
 
-  getDescription(scene: BattleScene): string {
+  override getDescription(scene: BattleScene): string {
     return i18next.t(`${this.descriptionKey || "modifierType:ModifierType.AllPokemonFullHpRestoreModifierType"}.description` as any);
   }
 }
@@ -727,7 +727,7 @@ export class MoneyRewardModifierType extends ModifierType {
     this.moneyMultiplierDescriptorKey = moneyMultiplierDescriptorKey;
   }
 
-  getDescription(scene: BattleScene): string {
+  override getDescription(scene: BattleScene): string {
     const moneyAmount = new Utils.IntegerHolder(scene.getWaveMoneyAmount(this.moneyMultiplier));
     scene.applyModifiers(MoneyMultiplierModifier, true, moneyAmount);
     const formattedMoney = Utils.formatMoney(scene.moneyFormat, moneyAmount.value);
@@ -748,7 +748,7 @@ export class ExpBoosterModifierType extends ModifierType {
     this.boostPercent = boostPercent;
   }
 
-  getDescription(scene: BattleScene): string {
+  override getDescription(scene: BattleScene): string {
     return i18next.t("modifierType:ModifierType.ExpBoosterModifierType.description", { boostPercent: this.boostPercent });
   }
 }
@@ -762,7 +762,7 @@ export class PokemonExpBoosterModifierType extends PokemonHeldItemModifierType {
     this.boostPercent = boostPercent;
   }
 
-  getDescription(scene: BattleScene): string {
+  override getDescription(scene: BattleScene): string {
     return i18next.t("modifierType:ModifierType.PokemonExpBoosterModifierType.description", { boostPercent: this.boostPercent });
   }
 }
@@ -772,7 +772,7 @@ export class PokemonFriendshipBoosterModifierType extends PokemonHeldItemModifie
     super(localeKey, iconImage, (_type, args) => new Modifiers.PokemonFriendshipBoosterModifier(this, (args[0] as Pokemon).id));
   }
 
-  getDescription(scene: BattleScene): string {
+  override getDescription(scene: BattleScene): string {
     return i18next.t("modifierType:ModifierType.PokemonFriendshipBoosterModifierType.description");
   }
 }
@@ -786,7 +786,7 @@ export class PokemonMoveAccuracyBoosterModifierType extends PokemonHeldItemModif
     this.amount = amount;
   }
 
-  getDescription(scene: BattleScene): string {
+  override getDescription(scene: BattleScene): string {
     return i18next.t("modifierType:ModifierType.PokemonMoveAccuracyBoosterModifierType.description", { accuracyAmount: this.amount });
   }
 }
@@ -796,7 +796,7 @@ export class PokemonMultiHitModifierType extends PokemonHeldItemModifierType {
     super(localeKey, iconImage, (type, args) => new Modifiers.PokemonMultiHitModifier(type as PokemonMultiHitModifierType, (args[0] as Pokemon).id));
   }
 
-  getDescription(scene: BattleScene): string {
+  override getDescription(scene: BattleScene): string {
     return i18next.t("modifierType:ModifierType.PokemonMultiHitModifierType.description");
   }
 }
@@ -816,14 +816,14 @@ export class TmModifierType extends PokemonModifierType {
     this.moveId = moveId;
   }
 
-  get name(): string {
+  override get name(): string {
     return i18next.t("modifierType:ModifierType.TmModifierType.name", {
       moveId: Utils.padInt(Object.keys(tmSpecies).indexOf(this.moveId.toString()) + 1, 3),
       moveName: allMoves[this.moveId].name,
     });
   }
 
-  getDescription(scene: BattleScene): string {
+  override getDescription(scene: BattleScene): string {
     return i18next.t(scene.enableMoveInfo ? "modifierType:ModifierType.TmModifierTypeWithInfo.description" : "modifierType:ModifierType.TmModifierType.description", { moveName: allMoves[this.moveId].name });
   }
 }
@@ -848,11 +848,11 @@ export class EvolutionItemModifierType extends PokemonModifierType implements Ge
     this.evolutionItem = evolutionItem;
   }
 
-  get name(): string {
+  override get name(): string {
     return i18next.t(`modifierType:EvolutionItem.${EvolutionItem[this.evolutionItem]}`);
   }
 
-  getDescription(scene: BattleScene): string {
+  override getDescription(scene: BattleScene): string {
     return i18next.t("modifierType:ModifierType.EvolutionItemModifierType.description");
   }
 
@@ -887,11 +887,11 @@ export class FormChangeItemModifierType extends PokemonModifierType implements G
     this.formChangeItem = formChangeItem;
   }
 
-  get name(): string {
+  override get name(): string {
     return i18next.t(`modifierType:FormChangeItem.${FormChangeItem[this.formChangeItem]}`);
   }
 
-  getDescription(scene: BattleScene): string {
+  override getDescription(scene: BattleScene): string {
     return i18next.t("modifierType:ModifierType.FormChangeItemModifierType.description");
   }
 
@@ -911,7 +911,7 @@ export class FusePokemonModifierType extends PokemonModifierType {
       });
   }
 
-  getDescription(scene: BattleScene): string {
+  override getDescription(scene: BattleScene): string {
     return i18next.t("modifierType:ModifierType.FusePokemonModifierType.description");
   }
 }
@@ -1191,11 +1191,11 @@ export class TerastallizeModifierType extends PokemonHeldItemModifierType implem
     this.teraType = teraType;
   }
 
-  get name(): string {
+  override get name(): string {
     return i18next.t("modifierType:ModifierType.TerastallizeModifierType.name", { teraType: i18next.t(`pokemonInfo:Type.${Type[this.teraType]}`) });
   }
 
-  getDescription(scene: BattleScene): string {
+  override getDescription(scene: BattleScene): string {
     return i18next.t("modifierType:ModifierType.TerastallizeModifierType.description", { teraType: i18next.t(`pokemonInfo:Type.${Type[this.teraType]}`) });
   }
 
@@ -1213,7 +1213,7 @@ export class ContactHeldItemTransferChanceModifierType extends PokemonHeldItemMo
     this.chancePercent = chancePercent;
   }
 
-  getDescription(scene: BattleScene): string {
+  override getDescription(scene: BattleScene): string {
     return i18next.t("modifierType:ModifierType.ContactHeldItemTransferChanceModifierType.description", { chancePercent: this.chancePercent });
   }
 }
@@ -1223,7 +1223,7 @@ export class TurnHeldItemTransferModifierType extends PokemonHeldItemModifierTyp
     super(localeKey, iconImage, (type, args) => new Modifiers.TurnHeldItemTransferModifier(type, (args[0] as Pokemon).id), group, soundName);
   }
 
-  getDescription(scene: BattleScene): string {
+  override getDescription(scene: BattleScene): string {
     return i18next.t("modifierType:ModifierType.TurnHeldItemTransferModifierType.description");
   }
 }
@@ -1239,7 +1239,7 @@ export class EnemyAttackStatusEffectChanceModifierType extends ModifierType {
     this.effect = effect;
   }
 
-  getDescription(scene: BattleScene): string {
+  override getDescription(scene: BattleScene): string {
     return i18next.t("modifierType:ModifierType.EnemyAttackStatusEffectChanceModifierType.description", {
       chancePercent: this.chancePercent,
       statusEffect: getStatusEffectDescriptor(this.effect),
@@ -1256,7 +1256,7 @@ export class EnemyEndureChanceModifierType extends ModifierType {
     this.chancePercent = chancePercent;
   }
 
-  getDescription(scene: BattleScene): string {
+  override getDescription(scene: BattleScene): string {
     return i18next.t("modifierType:ModifierType.EnemyEndureChanceModifierType.description", { chancePercent: this.chancePercent });
   }
 }
@@ -1418,7 +1418,7 @@ export const modifierTypes = {
   TEMP_STAT_STAGE_BOOSTER: () => new TempStatStageBoosterModifierTypeGenerator(),
 
   DIRE_HIT: () => new class extends ModifierType {
-    getDescription(_scene: BattleScene): string {
+    override getDescription(_scene: BattleScene): string {
       return i18next.t("modifierType:ModifierType.TempStatStageBoosterModifierType.description", {
         stat: i18next.t("modifierType:ModifierType.DIRE_HIT.extra.raises"),
         amount: i18next.t("modifierType:ModifierType.TempStatStageBoosterModifierType.extra.stage")

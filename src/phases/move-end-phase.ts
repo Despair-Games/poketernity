@@ -8,7 +8,7 @@ export class MoveEndPhase extends PokemonPhase {
     super(scene, battlerIndex);
   }
 
-  start() {
+  override start() {
     super.start();
 
     const pokemon = this.getPokemon();

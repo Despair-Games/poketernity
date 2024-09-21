@@ -6,7 +6,7 @@ export class HidePartyExpBarPhase extends BattlePhase {
     super(scene);
   }
 
-  start() {
+  override start() {
     super.start();
 
     this.scene.partyExpBar.hide().then(() => this.end());

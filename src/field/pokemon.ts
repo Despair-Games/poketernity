@@ -70,7 +70,7 @@ export enum FieldPosition {
 
 export default abstract class Pokemon extends Phaser.GameObjects.Container {
   public id: integer;
-  public name: string;
+  public override name: string;
   public nickname: string;
   public species: PokemonSpecies;
   public formIndex: integer;
@@ -3794,7 +3794,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     this.scene.triggerPokemonFormChange(this, SpeciesFormChangeActiveTrigger, true);
   }
 
-  destroy(): void {
+  override destroy(): void {
     this.battleInfo?.destroy();
     this.destroySubstitute();
     super.destroy();
@@ -4163,7 +4163,7 @@ export class PlayerPokemon extends Pokemon {
     });
   }
 
-  changeForm(formChange: SpeciesFormChange): Promise<void> {
+  override changeForm(formChange: SpeciesFormChange): Promise<void> {
     return new Promise(resolve => {
       this.formIndex = Math.max(this.species.forms.findIndex(f => f.formKey === formChange.formKey), 0);
       this.generateName();
@@ -4189,7 +4189,7 @@ export class PlayerPokemon extends Pokemon {
     });
   }
 
-  clearFusionSpecies(): void {
+  override clearFusionSpecies(): void {
     super.clearFusionSpecies();
     this.generateCompatibleTms();
   }
@@ -4371,7 +4371,7 @@ export class EnemyPokemon extends Pokemon {
     }
   }
 
-  generateAndPopulateMoveset(formIndex?: integer): void {
+  override generateAndPopulateMoveset(formIndex?: integer): void {
     switch (true) {
     case (this.species.speciesId === Species.SMEARGLE):
       this.moveset = [
@@ -4685,7 +4685,7 @@ export class EnemyPokemon extends Pokemon {
     return 0;
   }
 
-  damage(damage: integer, ignoreSegments: boolean = false, preventEndure: boolean = false, ignoreFaintPhase: boolean = false): integer {
+  override damage(damage: integer, ignoreSegments: boolean = false, preventEndure: boolean = false, ignoreFaintPhase: boolean = false): integer {
     if (this.isFainted()) {
       return 0;
     }
@@ -4796,7 +4796,7 @@ export class EnemyPokemon extends Pokemon {
     }
   }
 
-  heal(amount: integer): integer {
+  override heal(amount: integer): integer {
     if (this.isBoss()) {
       const amountRatio = amount / this.getMaxHp();
       const segmentBypassCount = Math.floor(amountRatio / (1 / this.bossSegments));

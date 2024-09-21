@@ -20,7 +20,7 @@ export class CheckSwitchPhase extends BattlePhase {
     this.useName = useName;
   }
 
-  start() {
+  override start() {
     super.start();
 
     const pokemon = this.scene.getPlayerField()[this.fieldIndex];

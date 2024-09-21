@@ -15,7 +15,7 @@ export class TrainerVictoryPhase extends BattlePhase {
     super(scene);
   }
 
-  start() {
+  override start() {
     this.scene.disableMenu = true;
 
     this.scene.playBgm(this.scene.currentBattle.trainer?.config.victoryBgm);

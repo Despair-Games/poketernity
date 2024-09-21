@@ -25,7 +25,7 @@ export class SelectModifierPhase extends BattlePhase {
     this.customModifierSettings = customModifierSettings;
   }
 
-  start() {
+  override start() {
     super.start();
 
     if (!this.rerollCount) {

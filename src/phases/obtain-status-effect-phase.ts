@@ -23,7 +23,7 @@ export class ObtainStatusEffectPhase extends PokemonPhase {
     this.sourcePokemon = sourcePokemon!; // For tracking which Pokemon caused the status effect // TODO: is this bang correct?
   }
 
-  start() {
+  override start() {
     const pokemon = this.getPokemon();
     if (!pokemon?.status) {
       if (pokemon?.trySetStatus(this.statusEffect, false, this.sourcePokemon)) {

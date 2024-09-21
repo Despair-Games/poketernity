@@ -22,7 +22,7 @@ export class VictoryPhase extends PokemonPhase {
     this.isExpOnly = isExpOnly;
   }
 
-  start() {
+  override start() {
     super.start();
 
     this.scene.gameData.gameStats.pokemonDefeated++;

@@ -28,7 +28,7 @@ export default class SessionReloadModalUiHandler extends ModalUiHandler {
     return [ ];
   }
 
-  setup(): void {
+  override setup(): void {
     super.setup();
 
     const label = addTextObject(this.scene, this.getWidth() / 2, this.getHeight() / 2, "Your session is out of date.\nYour data will be reloaded…", TextStyle.WINDOW, { fontSize: "48px", align: "center" });
@@ -37,7 +37,7 @@ export default class SessionReloadModalUiHandler extends ModalUiHandler {
     this.modalContainer.add(label);
   }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     const config: ModalConfig = {
       buttonActions: []
     };

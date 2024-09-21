@@ -1,9 +1,9 @@
 import BattleScene from "#app/battle-scene";
-import {Mode} from "#app/ui/ui";
-import {InputsIcons} from "#app/ui/settings/abstract-control-settings-ui-handler";
-import {addTextObject, setTextStyle, TextStyle} from "#app/ui/text";
-import {addWindow} from "#app/ui/ui-theme";
-import {Button} from "#enums/buttons";
+import { Mode } from "#app/ui/ui";
+import { InputsIcons } from "#app/ui/settings/abstract-control-settings-ui-handler";
+import { addTextObject, setTextStyle, TextStyle } from "#app/ui/text";
+import { addWindow } from "#app/ui/ui-theme";
+import { Button } from "#enums/buttons";
 import i18next from "i18next";
 
 const LEFT = "LEFT";
@@ -94,7 +94,7 @@ export class NavigationManager {
 
 export default class NavigationMenu extends Phaser.GameObjects.Container {
   private navigationIcons: InputsIcons;
-  public scene: BattleScene;
+  public override scene: BattleScene;
   protected headerTitles: Phaser.GameObjects.Text[] = new Array<Phaser.GameObjects.Text>();
 
   /**
@@ -154,7 +154,7 @@ export default class NavigationMenu extends Phaser.GameObjects.Container {
   /**
    * Updates the NavigationMenu's header titles based on the selected mode.
    */
-  update() {
+  override update() {
     const navigationManager = NavigationManager.getInstance();
     const posSelected = navigationManager.modes.indexOf(navigationManager.selectedMode);
 

@@ -37,15 +37,14 @@ export class SwitchSummonPhase extends SummonPhase {
     this.batonPass = batonPass;
   }
 
-  start(): void {
+  override start(): void {
     super.start();
   }
 
-  preSummon(): void {
+  override preSummon(): void {
     if (!this.player) {
       if (this.slotIndex === -1) {
-        //@ts-ignore
-        this.slotIndex = this.scene.currentBattle.trainer?.getNextSummonIndex(!this.fieldIndex ? TrainerSlot.TRAINER : TrainerSlot.TRAINER_PARTNER); // TODO: what would be the default trainer-slot fallback?
+        this.slotIndex = this.scene.currentBattle.trainer?.getNextSummonIndex(!this.fieldIndex ? TrainerSlot.TRAINER : TrainerSlot.TRAINER_PARTNER)!; // TODO: what would be the default trainer-slot fallback?
       }
       if (this.slotIndex > -1) {
         this.showEnemyTrainer(!(this.fieldIndex % 2) ? TrainerSlot.TRAINER : TrainerSlot.TRAINER_PARTNER);
@@ -157,7 +156,7 @@ export class SwitchSummonPhase extends SummonPhase {
     }
   }
 
-  onEnd(): void {
+  override onEnd(): void {
     super.onEnd();
 
     const pokemon = this.getPokemon();
@@ -185,7 +184,7 @@ export class SwitchSummonPhase extends SummonPhase {
     this.scene.arena.triggerWeatherBasedFormChanges();
   }
 
-  queuePostSummon(): void {
+  override queuePostSummon(): void {
     this.scene.unshiftPhase(new PostSummonPhase(this.scene, this.getPokemon().getBattlerIndex()));
   }
 }

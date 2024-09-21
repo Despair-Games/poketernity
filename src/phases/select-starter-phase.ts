@@ -20,7 +20,7 @@ export class SelectStarterPhase extends Phase {
     super(scene);
   }
 
-  start() {
+  override start() {
     super.start();
 
     this.scene.playBgm("menu");

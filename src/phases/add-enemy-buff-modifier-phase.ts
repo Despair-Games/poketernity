@@ -9,7 +9,7 @@ export class AddEnemyBuffModifierPhase extends Phase {
     super(scene);
   }
 
-  start() {
+  override start() {
     super.start();
 
     const waveIndex = this.scene.currentBattle.waveIndex;

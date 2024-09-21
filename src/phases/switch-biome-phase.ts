@@ -12,7 +12,7 @@ export class SwitchBiomePhase extends BattlePhase {
     this.nextBiome = nextBiome;
   }
 
-  start() {
+  override start() {
     super.start();
 
     if (this.nextBiome === undefined) {

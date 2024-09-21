@@ -22,7 +22,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
     this.fromTM = fromTM ?? false;
   }
 
-  start() {
+  override start() {
     super.start();
 
     const pokemon = this.getPokemon();

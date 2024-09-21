@@ -1,10 +1,10 @@
 import UiHandler from "../ui-handler";
 import BattleScene from "../../battle-scene";
-import {Mode} from "../ui";
-import {addWindow} from "../ui-theme";
-import {addTextObject, TextStyle} from "../text";
-import {Button} from "#enums/buttons";
-import {NavigationManager} from "#app/ui/settings/navigationMenu";
+import { Mode } from "../ui";
+import { addWindow } from "../ui-theme";
+import { addTextObject, TextStyle } from "../text";
+import { Button } from "#enums/buttons";
+import { NavigationManager } from "#app/ui/settings/navigationMenu";
 import i18next from "i18next";
 
 type CancelFn = (succes?: boolean) => boolean;
@@ -120,7 +120,7 @@ export default abstract class AbstractBindingUiHandler extends UiHandler {
      * @param args - Arguments to be passed to the show method.
      * @returns `true` if successful.
      */
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     super.show(args);
     this.buttonPressed = null;
     this.timeLeftAutoClose = 5;
@@ -204,7 +204,7 @@ export default abstract class AbstractBindingUiHandler extends UiHandler {
      * @param cursor - The cursor position to set.
      * @returns `true` if the cursor was set successfully.
      */
-  setCursor(cursor: integer): boolean {
+  override setCursor(cursor: integer): boolean {
     this.cursor = cursor;
     if (cursor === 1) {
       this.actionLabel.setColor(this.getTextColor(TextStyle.SETTINGS_SELECTED));
@@ -223,7 +223,7 @@ export default abstract class AbstractBindingUiHandler extends UiHandler {
   /**
      * Clear the UI elements and state.
      */
-  clear() {
+  override clear() {
     super.clear();
     clearTimeout(this.countdownTimer);
     this.timerText.setText("(5)");

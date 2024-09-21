@@ -10,7 +10,7 @@ import { CommonAnimPhase } from "./common-anim-phase";
 
 /** The phase after attacks where the pokemon eat berries */
 export class BerryPhase extends FieldPhase {
-  start() {
+  override start() {
     super.start();
 
     this.executeForAll((pokemon) => {

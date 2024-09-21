@@ -37,7 +37,7 @@ export default class PokemonHatchInfoContainer extends PokemonInfoContainer {
     this.pokemonListContainer = listContainer;
 
   }
-  setup(): void {
+  override setup(): void {
     super.setup();
     super.changeToEggSummaryLayout();
 

@@ -58,7 +58,7 @@ export class MovePhase extends BattlePhase {
     this.cancelled = true;
   }
 
-  start() {
+  override start() {
     super.start();
 
     console.log(Moves[this.move.moveId]);
@@ -318,7 +318,7 @@ export class MovePhase extends BattlePhase {
     this.scene.queueMessage(failedText || i18next.t("battle:attackFailed"));
   }
 
-  end() {
+  override end() {
     if (!this.followUp && this.canMove()) {
       this.scene.unshiftPhase(new MoveEndPhase(this.scene, this.pokemon.getBattlerIndex()));
     }

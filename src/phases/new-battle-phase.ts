@@ -1,7 +1,7 @@
 import { BattlePhase } from "./battle-phase";
 
 export class NewBattlePhase extends BattlePhase {
-  start() {
+  override start() {
     super.start();
 
     this.scene.newBattle();

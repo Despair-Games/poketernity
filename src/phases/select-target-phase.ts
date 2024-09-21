@@ -10,7 +10,7 @@ export class SelectTargetPhase extends PokemonPhase {
     super(scene, fieldIndex);
   }
 
-  start() {
+  override start() {
     super.start();
 
     const turnCommand = this.scene.currentBattle.turnCommands[this.fieldIndex];

@@ -19,7 +19,7 @@ export class QuietFormChangePhase extends BattlePhase {
     this.formChange = formChange;
   }
 
-  start(): void {
+  override start(): void {
     super.start();
 
     if (this.pokemon.formIndex === this.pokemon.species.forms.findIndex(f => f.formKey === this.formChange.formKey)) {
@@ -112,7 +112,7 @@ export class QuietFormChangePhase extends BattlePhase {
     });
   }
 
-  end(): void {
+  override end(): void {
     if (this.pokemon.scene?.currentBattle.battleSpec === BattleSpec.FINAL_BOSS && this.pokemon instanceof EnemyPokemon) {
       this.scene.playBgm();
       this.scene.unshiftPhase(new PokemonHealPhase(this.scene, this.pokemon.getBattlerIndex(), this.pokemon.getMaxHp(), null, false, false, false, true));

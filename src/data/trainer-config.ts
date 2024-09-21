@@ -12,11 +12,11 @@ import { PersistentModifier } from "../modifier/modifier";
 import { TrainerVariant } from "../field/trainer";
 import { getIsInitialized, initI18n } from "#app/plugins/i18n";
 import i18next from "i18next";
-import {Moves} from "#enums/moves";
-import {PartyMemberStrength} from "#enums/party-member-strength";
-import {Species} from "#enums/species";
-import {TrainerType} from "#enums/trainer-type";
-import {Gender} from "./gender";
+import { Moves } from "#enums/moves";
+import { PartyMemberStrength } from "#enums/party-member-strength";
+import { Species } from "#enums/species";
+import { TrainerType } from "#enums/trainer-type";
+import { Gender } from "./gender";
 
 export enum TrainerPoolTier {
     COMMON,
@@ -73,7 +73,7 @@ export class TrainerPartyCompoundTemplate extends TrainerPartyTemplate {
     this.templates = templates;
   }
 
-  getStrength(index: integer): PartyMemberStrength {
+  override getStrength(index: integer): PartyMemberStrength {
     let t = 0;
     for (const template of this.templates) {
       if (t + template.size > index) {
@@ -85,7 +85,7 @@ export class TrainerPartyCompoundTemplate extends TrainerPartyTemplate {
     return super.getStrength(index);
   }
 
-  isSameSpecies(index: integer): boolean {
+  override isSameSpecies(index: integer): boolean {
     let t = 0;
     for (const template of this.templates) {
       if (t + template.size > index) {
@@ -97,7 +97,7 @@ export class TrainerPartyCompoundTemplate extends TrainerPartyTemplate {
     return super.isSameSpecies(index);
   }
 
-  isBalanced(index: integer): boolean {
+  override isBalanced(index: integer): boolean {
     let t = 0;
     for (const template of this.templates) {
       if (t + template.size > index) {

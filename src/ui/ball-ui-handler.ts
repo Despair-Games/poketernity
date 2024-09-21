@@ -5,7 +5,7 @@ import { Command } from "./command-ui-handler";
 import { Mode } from "./ui";
 import UiHandler from "./ui-handler";
 import { addWindow } from "./ui-theme";
-import {Button} from "#enums/buttons";
+import { Button } from "#enums/buttons";
 import { CommandPhase } from "#app/phases/command-phase";
 
 export default class BallUiHandler extends UiHandler {
@@ -54,7 +54,7 @@ export default class BallUiHandler extends UiHandler {
     this.setCursor(0);
   }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     super.show(args);
 
     this.updateCounts();
@@ -110,7 +110,7 @@ export default class BallUiHandler extends UiHandler {
     this.countsText.setText(Object.values(this.scene.pokeballCounts).map(c => `x${c}`).join("\n"));
   }
 
-  setCursor(cursor: integer): boolean {
+  override setCursor(cursor: integer): boolean {
     const ret = super.setCursor(cursor);
 
     if (!this.cursorObj) {
@@ -124,7 +124,7 @@ export default class BallUiHandler extends UiHandler {
     return ret;
   }
 
-  clear() {
+  override clear() {
     super.clear();
     this.pokeballSelectContainer.setVisible(false);
     this.eraseCursor();

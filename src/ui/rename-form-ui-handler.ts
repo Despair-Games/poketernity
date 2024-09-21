@@ -24,7 +24,7 @@ export default class RenameFormUiHandler extends FormModalUiHandler {
     return [ i18next.t("menu:rename"), i18next.t("menu:cancel") ];
   }
 
-  getReadableErrorMessage(error: string): string {
+  override getReadableErrorMessage(error: string): string {
     const colonIndex = error?.indexOf(":");
     if (colonIndex > 0) {
       error = error.slice(0, colonIndex);
@@ -33,7 +33,7 @@ export default class RenameFormUiHandler extends FormModalUiHandler {
     return super.getReadableErrorMessage(error);
   }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     if (super.show(args)) {
       const config = args[0] as ModalConfig;
       if (args[1] && typeof (args[1] as PlayerPokemon).getNameToRender === "function") {

@@ -34,7 +34,7 @@ export class TitlePhase extends Phase {
     this.loaded = false;
   }
 
-  start(): void {
+  override start(): void {
     super.start();
 
     this.scene.ui.clearText();
@@ -257,7 +257,7 @@ export class TitlePhase extends Phase {
     });
   }
 
-  end(): void {
+  override end(): void {
     if (!this.loaded && !this.scene.gameMode.isDaily) {
       this.scene.arena.preloadBgm();
       this.scene.gameMode = getGameMode(this.gameMode);

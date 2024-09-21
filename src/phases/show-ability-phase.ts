@@ -11,7 +11,7 @@ export class ShowAbilityPhase extends PokemonPhase {
     this.passive = passive;
   }
 
-  start() {
+  override start() {
     super.start();
 
     const pokemon = this.getPokemon();

@@ -14,7 +14,7 @@ export class MoveAnimTestPhase extends BattlePhase {
     this.moveQueue = moveQueue || Utils.getEnumValues(Moves).slice(1);
   }
 
-  start() {
+  override start() {
     const moveQueue = this.moveQueue.slice(0);
     this.playMoveAnim(moveQueue, true);
   }

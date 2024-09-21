@@ -5,7 +5,7 @@ import UiHandler from "./ui-handler";
 import { addWindow } from "./ui-theme";
 import * as Utils from "../utils";
 import { argbFromRgba } from "@material/material-color-utilities";
-import {Button} from "#enums/buttons";
+import { Button } from "#enums/buttons";
 
 export interface OptionSelectConfig {
   xOffset?: number;
@@ -146,7 +146,7 @@ export default abstract class AbstractOptionSelectUiHandler extends UiHandler {
     });
   }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     if (!args.length || !args[0].hasOwnProperty("options") || !args[0].options.length) {
       return false;
     }
@@ -293,7 +293,7 @@ export default abstract class AbstractOptionSelectUiHandler extends UiHandler {
     return options;
   }
 
-  setCursor(cursor: integer): boolean {
+  override setCursor(cursor: integer): boolean {
     const changed = this.cursor !== cursor;
 
     let isScroll = false;
@@ -340,7 +340,7 @@ export default abstract class AbstractOptionSelectUiHandler extends UiHandler {
     return changed;
   }
 
-  clear() {
+  override clear() {
     super.clear();
     this.config = null;
     this.optionSelectContainer.setVisible(false);

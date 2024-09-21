@@ -1,9 +1,9 @@
 import BattleScene from "../../battle-scene";
 import AbstractBindingUiHandler from "./abstract-binding-ui-handler";
-import {Mode} from "../ui";
-import {Device} from "#enums/devices";
-import {getIconWithSettingName, getKeyWithKeycode} from "#app/configs/inputs/configHandler";
-import {addTextObject, TextStyle} from "#app/ui/text";
+import { Mode } from "../ui";
+import { Device } from "#enums/devices";
+import { getIconWithSettingName, getKeyWithKeycode } from "#app/configs/inputs/configHandler";
+import { addTextObject, TextStyle } from "#app/ui/text";
 
 
 export default class GamepadBindingUiHandler extends AbstractBindingUiHandler {
@@ -12,7 +12,7 @@ export default class GamepadBindingUiHandler extends AbstractBindingUiHandler {
     super(scene, mode);
     this.scene.input.gamepad?.on("down", this.gamepadButtonDown, this);
   }
-  setup() {
+  override setup() {
     super.setup();
 
     // New button icon setup.
@@ -75,7 +75,7 @@ export default class GamepadBindingUiHandler extends AbstractBindingUiHandler {
   /**
      * Clear the UI elements and state.
      */
-  clear() {
+  override clear() {
     super.clear();
     this.targetButtonIcon.setVisible(false);
     this.swapText.setVisible(false);

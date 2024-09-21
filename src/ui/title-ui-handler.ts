@@ -23,7 +23,7 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
     super(scene, mode);
   }
 
-  setup() {
+  override setup() {
     super.setup();
 
     const ui = this.getUi();
@@ -84,7 +84,7 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
       });
   }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     const ret = super.show(args);
 
     if (ret) {
@@ -114,7 +114,7 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
     return ret;
   }
 
-  clear(): void {
+  override clear(): void {
     super.clear();
 
     const ui = this.getUi();

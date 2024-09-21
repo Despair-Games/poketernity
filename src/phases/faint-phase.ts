@@ -28,7 +28,7 @@ export class FaintPhase extends PokemonPhase {
     this.preventEndure = preventEndure!; // TODO: is this bang correct?
   }
 
-  start() {
+  override start() {
     super.start();
 
     if (!this.preventEndure) {

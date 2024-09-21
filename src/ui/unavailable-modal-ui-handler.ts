@@ -41,7 +41,7 @@ export default class UnavailableModalUiHandler extends ModalUiHandler {
     return [ ];
   }
 
-  setup(): void {
+  override setup(): void {
     super.setup();
 
     const label = addTextObject(this.scene, this.getWidth() / 2, this.getHeight() / 2, i18next.t("menu:errorServerDown"), TextStyle.WINDOW, { fontSize: "48px", align: "center" });
@@ -71,7 +71,7 @@ export default class UnavailableModalUiHandler extends ModalUiHandler {
     });
   }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     if (args.length >= 1 && args[0] instanceof Function) {
       const config: ModalConfig = {
         buttonActions: []

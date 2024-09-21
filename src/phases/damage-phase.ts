@@ -18,7 +18,7 @@ export class DamagePhase extends PokemonPhase {
     this.critical = critical;
   }
 
-  start() {
+  override start() {
     super.start();
 
     if (this.damageResult === HitResult.ONE_HIT_KO) {

@@ -7,13 +7,13 @@ export class ReturnPhase extends SwitchSummonPhase {
     super(scene, fieldIndex, -1, true, false);
   }
 
-  switchAndSummon(): void {
+  override switchAndSummon(): void {
     this.end();
   }
 
-  summon(): void { }
+  override summon(): void { }
 
-  onEnd(): void {
+  override onEnd(): void {
     const pokemon = this.getPokemon();
 
     pokemon.resetSprite();

@@ -2,7 +2,7 @@ import BattleScene from "../battle-scene";
 import MessageUiHandler from "./message-ui-handler";
 import { TextStyle, addTextObject } from "./text";
 import { Mode } from "./ui";
-import {Button} from "#enums/buttons";
+import { Button } from "#enums/buttons";
 
 export default class EvolutionSceneHandler extends MessageUiHandler {
   public evolutionContainer: Phaser.GameObjects.Container;
@@ -48,7 +48,7 @@ export default class EvolutionSceneHandler extends MessageUiHandler {
     this.initPromptSprite(this.messageContainer);
   }
 
-  show(_args: any[]): boolean {
+  override show(_args: any[]): boolean {
     super.show(_args);
 
     this.scene.ui.bringToTop(this.evolutionContainer);
@@ -82,11 +82,11 @@ export default class EvolutionSceneHandler extends MessageUiHandler {
     return false;
   }
 
-  setCursor(_cursor: integer): boolean {
+  override setCursor(_cursor: integer): boolean {
     return false;
   }
 
-  clear() {
+  override clear() {
     this.clearText();
     this.canCancel = false;
     this.cancelled = false;

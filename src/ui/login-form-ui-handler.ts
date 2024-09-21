@@ -34,7 +34,7 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
     super(scene, mode);
   }
 
-  setup(): void {
+  override setup(): void {
     super.setup();
     this.buildExternalPartyContainer();
 

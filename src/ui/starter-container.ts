@@ -3,7 +3,7 @@ import PokemonSpecies from "../data/pokemon-species";
 import { addTextObject, TextStyle } from "./text";
 
 export class StarterContainer extends Phaser.GameObjects.Container {
-  public scene: BattleScene;
+  public override scene: BattleScene;
   public species: PokemonSpecies;
   public icon: Phaser.GameObjects.Sprite;
   public shinyIcons: Phaser.GameObjects.Image[] = [];

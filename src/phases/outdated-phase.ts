@@ -7,7 +7,7 @@ export class OutdatedPhase extends Phase {
     super(scene);
   }
 
-  start(): void {
+  override start(): void {
     this.scene.ui.setMode(Mode.OUTDATED);
   }
 }

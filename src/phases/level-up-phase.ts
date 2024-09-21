@@ -21,7 +21,7 @@ export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
     this.scene = scene;
   }
 
-  start() {
+  override start() {
     super.start();
 
     if (this.level > this.scene.gameData.gameStats.highestLevel) {

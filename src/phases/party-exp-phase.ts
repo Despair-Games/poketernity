@@ -21,7 +21,7 @@ export class PartyExpPhase extends Phase {
   /**
    * Gives EXP to the party
    */
-  start() {
+  override start() {
     super.start();
 
     this.scene.applyPartyExp(this.expValue, false, this.useWaveIndexMultiplier, this.pokemonParticipantIds);

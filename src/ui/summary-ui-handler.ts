@@ -17,10 +17,10 @@ import { getBiomeName } from "../data/biomes";
 import { Nature, getNatureName, getNatureStatMultiplier } from "../data/nature";
 import { loggedInUser } from "../account";
 import { Variant, getVariantTint } from "#app/data/variant";
-import {Button} from "#enums/buttons";
+import { Button } from "#enums/buttons";
 import { Ability } from "../data/ability";
 import i18next from "i18next";
-import {modifierSortFunc} from "../modifier/modifier";
+import { modifierSortFunc } from "../modifier/modifier";
 import { PlayerGender } from "#enums/player-gender";
 import { Stat, PERMANENT_STATS, getStatKey } from "#app/enums/stat";
 
@@ -268,7 +268,7 @@ export default class SummaryUiHandler extends UiHandler {
     return `summary_${Page[page].toLowerCase()}`;
   }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     super.show(args);
 
     /* args[] information
@@ -555,7 +555,7 @@ export default class SummaryUiHandler extends UiHandler {
     return success || error;
   }
 
-  setCursor(cursor: integer, overrideChanged: boolean = false): boolean {
+  override setCursor(cursor: integer, overrideChanged: boolean = false): boolean {
     let changed: boolean = overrideChanged || this.moveCursor !== cursor;
 
     if (this.moveSelect) {
@@ -1103,7 +1103,7 @@ export default class SummaryUiHandler extends UiHandler {
     });
   }
 
-  clear() {
+  override clear() {
     super.clear();
     this.pokemon = null;
     this.cursor = -1;

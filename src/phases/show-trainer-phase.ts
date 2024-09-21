@@ -7,7 +7,7 @@ export class ShowTrainerPhase extends BattlePhase {
     super(scene);
   }
 
-  start() {
+  override start() {
     super.start();
 
     this.scene.trainer.setVisible(true);

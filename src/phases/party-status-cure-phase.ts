@@ -24,7 +24,7 @@ export class PartyStatusCurePhase extends BattlePhase {
     this.abilityCondition = abilityCondition;
   }
 
-  start() {
+  override start() {
     super.start();
     for (const pokemon of this.scene.getParty()) {
       if (!pokemon.isOnField() || pokemon === this.user) {

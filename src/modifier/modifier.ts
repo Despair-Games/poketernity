@@ -249,7 +249,7 @@ export abstract class ConsumableModifier extends Modifier {
     return true;
   }
 
-  shouldApply(args: any[]): boolean {
+  override shouldApply(args: any[]): boolean {
     return super.shouldApply(args) && args.length === 1 && args[0] instanceof BattleScene;
   }
 }
@@ -325,7 +325,7 @@ export abstract class LapsingPersistentModifier extends PersistentModifier {
    * @param _scene N/A
    * @returns true if the modifier was successfully added or applied, false otherwise
    */
-  add(modifiers: PersistentModifier[], _virtual: boolean, scene: BattleScene): boolean {
+  override add(modifiers: PersistentModifier[], _virtual: boolean, scene: BattleScene): boolean {
     for (const modifier of modifiers) {
       if (this.match(modifier)) {
         const modifierInstance = modifier as LapsingPersistentModifier;
@@ -348,7 +348,7 @@ export abstract class LapsingPersistentModifier extends PersistentModifier {
     return this.battleCount > 0;
   }
 
-  getIcon(scene: BattleScene): Phaser.GameObjects.Container {
+  override getIcon(scene: BattleScene): Phaser.GameObjects.Container {
     const container = super.getIcon(scene);
 
     // Linear interpolation on hue
@@ -367,7 +367,7 @@ export abstract class LapsingPersistentModifier extends PersistentModifier {
     return container;
   }
 
-  getIconStackText(_scene: BattleScene, _virtual?: boolean): Phaser.GameObjects.BitmapText | null {
+  override getIconStackText(_scene: BattleScene, _virtual?: boolean): Phaser.GameObjects.BitmapText | null {
     return null;
   }
 
@@ -383,7 +383,7 @@ export abstract class LapsingPersistentModifier extends PersistentModifier {
     return this.maxBattles;
   }
 
-  getArgs(): any[] {
+  override getArgs(): any[] {
     return [ this.maxBattles, this.battleCount ];
   }
 
@@ -404,7 +404,7 @@ export class DoubleBattleChanceBoosterModifier extends LapsingPersistentModifier
     super(type, maxBattles, battleCount, stackCount);
   }
 
-  match(modifier: Modifier): boolean {
+  override match(modifier: Modifier): boolean {
     return (modifier instanceof DoubleBattleChanceBoosterModifier) && (modifier.getMaxBattles() === this.getMaxBattles());
   }
 
@@ -449,7 +449,7 @@ export class TempStatStageBoosterModifier extends LapsingPersistentModifier {
     this.boost = (stat !== Stat.ACC) ? 0.3 : 1;
   }
 
-  match(modifier: Modifier): boolean {
+  override match(modifier: Modifier): boolean {
     if (modifier instanceof TempStatStageBoosterModifier) {
       const modifierInstance = modifier as TempStatStageBoosterModifier;
       return (modifierInstance.stat === this.stat);
@@ -461,7 +461,7 @@ export class TempStatStageBoosterModifier extends LapsingPersistentModifier {
     return new TempStatStageBoosterModifier(this.type, this.stat, this.getMaxBattles(), this.getBattleCount(), this.stackCount);
   }
 
-  getArgs(): any[] {
+  override getArgs(): any[] {
     return [ this.stat, ...super.getArgs() ];
   }
 
@@ -472,7 +472,7 @@ export class TempStatStageBoosterModifier extends LapsingPersistentModifier {
    *             [1] {@linkcode Utils.NumberHolder} N/A
    * @returns true if the modifier can be applied, false otherwise
    */
-  shouldApply(args: any[]): boolean {
+  override shouldApply(args: any[]): boolean {
     return args && (args.length === 2) && TEMP_BATTLE_STATS.includes(args[0]) && (args[0] === this.stat) && (args[1] instanceof Utils.NumberHolder);
   }
 
@@ -502,7 +502,7 @@ export class TempCritBoosterModifier extends LapsingPersistentModifier {
     return new TempCritBoosterModifier(this.type, this.getMaxBattles(), this.getBattleCount(), this.stackCount);
   }
 
-  match(modifier: Modifier): boolean {
+  override match(modifier: Modifier): boolean {
     return (modifier instanceof TempCritBoosterModifier);
   }
 
@@ -511,7 +511,7 @@ export class TempCritBoosterModifier extends LapsingPersistentModifier {
    * @param args [1] {@linkcode Utils.NumberHolder} N/A
    * @returns true if the critical-hit stage boost applies successfully
    */
-  shouldApply(args: any[]): boolean {
+  override shouldApply(args: any[]): boolean {
     return args && (args.length === 1) && (args[0] instanceof Utils.NumberHolder);
   }
 
@@ -610,23 +610,23 @@ export abstract class PokemonHeldItemModifier extends PersistentModifier {
 
   abstract matchType(_modifier: Modifier): boolean;
 
-  match(modifier: Modifier) {
+  override match(modifier: Modifier) {
     return this.matchType(modifier) && (modifier as PokemonHeldItemModifier).pokemonId === this.pokemonId;
   }
 
-  getArgs(): any[] {
+  override getArgs(): any[] {
     return [ this.pokemonId ];
   }
 
-  shouldApply(args: any[]): boolean {
+  override shouldApply(args: any[]): boolean {
     return super.shouldApply(args) && args.length !== 0 && args[0] instanceof Pokemon && (this.pokemonId === -1 || (args[0] as Pokemon).id === this.pokemonId);
   }
 
-  isIconVisible(scene: BattleScene): boolean {
+  override isIconVisible(scene: BattleScene): boolean {
     return !!(this.getPokemon(scene)?.isOnField());
   }
 
-  getIcon(scene: BattleScene, forSummary?: boolean): Phaser.GameObjects.Container {
+  override getIcon(scene: BattleScene, forSummary?: boolean): Phaser.GameObjects.Container {
     const container = !forSummary ? scene.add.container(0, 0) : super.getIcon(scene);
 
     if (!forSummary) {
@@ -699,7 +699,7 @@ export abstract class PokemonHeldItemModifier extends PersistentModifier {
 
 export abstract class LapsingPokemonHeldItemModifier extends PokemonHeldItemModifier {
   protected battlesLeft: integer;
-  public isTransferable: boolean = false;
+  public override isTransferable: boolean = false;
 
   constructor(type: ModifierTypes.ModifierType, pokemonId: integer, battlesLeft?: integer, stackCount?: integer) {
     super(type, pokemonId, stackCount);
@@ -711,7 +711,7 @@ export abstract class LapsingPokemonHeldItemModifier extends PokemonHeldItemModi
     return !!--this.battlesLeft;
   }
 
-  getIcon(scene: BattleScene, forSummary?: boolean): Phaser.GameObjects.Container {
+  override getIcon(scene: BattleScene, forSummary?: boolean): Phaser.GameObjects.Container {
     const container = super.getIcon(scene, forSummary);
 
     if (this.getPokemon(scene)?.isPlayer()) {
@@ -729,14 +729,14 @@ export abstract class LapsingPokemonHeldItemModifier extends PokemonHeldItemModi
     return this.battlesLeft;
   }
 
-  getMaxStackCount(scene: BattleScene, forThreshold?: boolean): number {
+  override getMaxStackCount(scene: BattleScene, forThreshold?: boolean): number {
     return 1;
   }
 }
 
 export class TerastallizeModifier extends LapsingPokemonHeldItemModifier {
   public teraType: Type;
-  public isTransferable: boolean = false;
+  public override isTransferable: boolean = false;
 
   constructor(type: ModifierTypes.TerastallizeModifierType, pokemonId: integer, teraType: Type, battlesLeft?: integer, stackCount?: integer) {
     super(type, pokemonId, battlesLeft || 10, stackCount);
@@ -755,7 +755,7 @@ export class TerastallizeModifier extends LapsingPokemonHeldItemModifier {
     return new TerastallizeModifier(this.type as ModifierTypes.TerastallizeModifierType, this.pokemonId, this.teraType, this.battlesLeft, this.stackCount);
   }
 
-  getArgs(): any[] {
+  override getArgs(): any[] {
     return [ this.pokemonId, this.teraType, this.battlesLeft ];
   }
 
@@ -772,7 +772,7 @@ export class TerastallizeModifier extends LapsingPokemonHeldItemModifier {
     return true;
   }
 
-  lapse(args: any[]): boolean {
+  override lapse(args: any[]): boolean {
     const ret = super.lapse(args);
     if (!ret) {
       const pokemon = args[0] as Pokemon;
@@ -782,7 +782,7 @@ export class TerastallizeModifier extends LapsingPokemonHeldItemModifier {
     return ret;
   }
 
-  getScoreMultiplier(): number {
+  override getScoreMultiplier(): number {
     return 1.25;
   }
 
@@ -799,7 +799,7 @@ export class TerastallizeModifier extends LapsingPokemonHeldItemModifier {
  */
 export class BaseStatModifier extends PokemonHeldItemModifier {
   protected stat: PermanentStat;
-  public isTransferable: boolean = false;
+  public override isTransferable: boolean = false;
 
   constructor(type: ModifierType, pokemonId: integer, stat: PermanentStat, stackCount?: integer) {
     super(type, pokemonId, stackCount);
@@ -817,11 +817,11 @@ export class BaseStatModifier extends PokemonHeldItemModifier {
     return new BaseStatModifier(this.type, this.pokemonId, this.stat, this.stackCount);
   }
 
-  getArgs(): any[] {
+  override getArgs(): any[] {
     return super.getArgs().concat(this.stat);
   }
 
-  shouldApply(args: any[]): boolean {
+  override shouldApply(args: any[]): boolean {
     return super.shouldApply(args) && args.length === 2 && Array.isArray(args[1]);
   }
 
@@ -831,7 +831,7 @@ export class BaseStatModifier extends PokemonHeldItemModifier {
     return true;
   }
 
-  getScoreMultiplier(): number {
+  override getScoreMultiplier(): number {
     return 1.1;
   }
 
@@ -843,7 +843,7 @@ export class BaseStatModifier extends PokemonHeldItemModifier {
 export class EvoTrackerModifier extends PokemonHeldItemModifier {
   protected species: Species;
   protected required: integer;
-  public isTransferable: boolean = false;
+  public override isTransferable: boolean = false;
 
   constructor(type: ModifierType, pokemonId: integer, species: Species, required: integer, stackCount?: integer) {
     super(type, pokemonId, stackCount);
@@ -862,7 +862,7 @@ export class EvoTrackerModifier extends PokemonHeldItemModifier {
     return new EvoTrackerModifier(this.type, this.pokemonId, this.species, this.stackCount);
   }
 
-  getArgs(): any[] {
+  override getArgs(): any[] {
     return super.getArgs().concat(this.species);
   }
 
@@ -880,7 +880,7 @@ export class EvoTrackerModifier extends PokemonHeldItemModifier {
  */
 export class PokemonBaseStatTotalModifier extends PokemonHeldItemModifier {
   private statModifier: integer;
-  public isTransferable: boolean = false;
+  public override isTransferable: boolean = false;
 
   constructor(type: ModifierTypes.PokemonBaseStatTotalModifierType, pokemonId: integer, statModifier: integer, stackCount?: integer) {
     super(type, pokemonId, stackCount);
@@ -929,7 +929,7 @@ export class PokemonBaseStatTotalModifier extends PokemonHeldItemModifier {
 export class PokemonBaseStatFlatModifier extends PokemonHeldItemModifier {
   private statModifier: integer;
   private stats: Stat[];
-  public isTransferable: boolean = false;
+  public override isTransferable: boolean = false;
 
   constructor (type: ModifierType, pokemonId: integer, statModifier: integer, stats: Stat[], stackCount?: integer) {
     super(type, pokemonId, stackCount);
@@ -979,7 +979,7 @@ export class PokemonBaseStatFlatModifier extends PokemonHeldItemModifier {
  * Currently used by Macho Brace item
  */
 export class PokemonIncrementingStatModifier extends PokemonHeldItemModifier {
-  public isTransferable: boolean = false;
+  public override isTransferable: boolean = false;
 
   constructor (type: ModifierType, pokemonId: integer, stackCount?: integer) {
     super(type, pokemonId, stackCount);
@@ -993,11 +993,11 @@ export class PokemonIncrementingStatModifier extends PokemonHeldItemModifier {
     return new PokemonIncrementingStatModifier(this.type, this.pokemonId);
   }
 
-  getArgs(): any[] {
+  override getArgs(): any[] {
     return super.getArgs();
   }
 
-  shouldApply(args: any[]): boolean {
+  override shouldApply(args: any[]): boolean {
     return super.shouldApply(args) && args.length === 2 && args[1] instanceof Array;
   }
 
@@ -1017,7 +1017,7 @@ export class PokemonIncrementingStatModifier extends PokemonHeldItemModifier {
     return true;
   }
 
-  getScoreMultiplier(): number {
+  override getScoreMultiplier(): number {
     return 1.2;
   }
 
@@ -1049,7 +1049,7 @@ export class StatBoosterModifier extends PokemonHeldItemModifier {
     return new StatBoosterModifier(this.type, this.pokemonId, this.stats, this.multiplier, this.stackCount);
   }
 
-  getArgs(): any[] {
+  override getArgs(): any[] {
     return [ ...super.getArgs(), this.stats, this.multiplier ];
   }
 
@@ -1071,7 +1071,7 @@ export class StatBoosterModifier extends PokemonHeldItemModifier {
    *             [2] {@linkcode Utils.NumberHolder} N/A
    * @returns true if the stat could be boosted, false otherwise
    */
-  shouldApply(args: any[]): boolean {
+  override shouldApply(args: any[]): boolean {
     return super.shouldApply(args) && this.stats.includes(args[1] as Stat);
   }
 
@@ -1103,11 +1103,11 @@ export class StatBoosterModifier extends PokemonHeldItemModifier {
  * @see {@linkcode apply}
  */
 export class EvolutionStatBoosterModifier extends StatBoosterModifier {
-  clone() {
+  override clone() {
     return super.clone() as EvolutionStatBoosterModifier;
   }
 
-  matchType(modifier: Modifier): boolean {
+  override matchType(modifier: Modifier): boolean {
     return modifier instanceof EvolutionStatBoosterModifier;
   }
 
@@ -1119,7 +1119,7 @@ export class EvolutionStatBoosterModifier extends StatBoosterModifier {
    *             [2] {@linkcode Utils.NumberHolder} N/A
    * @returns true if the stat boosts can be applied, false otherwise
    */
-  shouldApply(args: any[]): boolean {
+  override shouldApply(args: any[]): boolean {
     return super.shouldApply(args) && !(args[0] as Pokemon).isMax();
   }
 
@@ -1135,7 +1135,7 @@ export class EvolutionStatBoosterModifier extends StatBoosterModifier {
    * @returns true if the stat boost applies successfully, false otherwise
    * @see shouldApply
    */
-  apply(args: any[]): boolean {
+  override apply(args: any[]): boolean {
     const holder = args[0] as Pokemon;
     const statValue = args[2] as Utils.NumberHolder;
     const isUnevolved = holder.getSpeciesForm(true).speciesId in pokemonEvolutions;
@@ -1169,15 +1169,15 @@ export class SpeciesStatBoosterModifier extends StatBoosterModifier {
     this.species = species;
   }
 
-  clone() {
+  override clone() {
     return new SpeciesStatBoosterModifier(this.type, this.pokemonId, this.stats, this.multiplier, this.species, this.stackCount);
   }
 
-  getArgs(): any[] {
+  override getArgs(): any[] {
     return [ ...super.getArgs(), this.species ];
   }
 
-  matchType(modifier: Modifier): boolean {
+  override matchType(modifier: Modifier): boolean {
     if (modifier instanceof SpeciesStatBoosterModifier) {
       const modifierInstance = modifier as SpeciesStatBoosterModifier;
       if (modifierInstance.species.length === this.species.length) {
@@ -1196,7 +1196,7 @@ export class SpeciesStatBoosterModifier extends StatBoosterModifier {
    *             [2] {@linkcode Utils.NumberHolder} N/A
    * @returns true if the stat could be boosted, false otherwise
    */
-  shouldApply(args: any[]): boolean {
+  override shouldApply(args: any[]): boolean {
     const holder = args[0] as Pokemon;
     return super.shouldApply(args) && (this.species.includes(holder.getSpeciesForm(true).speciesId) || (holder.isFusion() && this.species.includes(holder.getFusionSpeciesForm(true).speciesId)));
   }
@@ -1231,7 +1231,7 @@ export class CritBoosterModifier extends PokemonHeldItemModifier {
     return new CritBoosterModifier(this.type, this.pokemonId, this.stageIncrement, this.stackCount);
   }
 
-  getArgs(): any[] {
+  override getArgs(): any[] {
     return super.getArgs().concat(this.stageIncrement);
   }
 
@@ -1277,15 +1277,15 @@ export class SpeciesCritBoosterModifier extends CritBoosterModifier {
     this.species = species;
   }
 
-  clone() {
+  override clone() {
     return new SpeciesCritBoosterModifier(this.type, this.pokemonId, this.stageIncrement, this.species, this.stackCount);
   }
 
-  getArgs(): any[] {
+  override getArgs(): any[] {
     return [ ...super.getArgs(), this.species ];
   }
 
-  matchType(modifier: Modifier): boolean {
+  override matchType(modifier: Modifier): boolean {
     return modifier instanceof SpeciesCritBoosterModifier;
   }
 
@@ -1296,7 +1296,7 @@ export class SpeciesCritBoosterModifier extends CritBoosterModifier {
    *             [1] {@linkcode Utils.IntegerHolder} N/A
    * @returns true if the critical-hit level can be incremented, false otherwise
    */
-  shouldApply(args: any[]) {
+  override shouldApply(args: any[]) {
     const holder = args[0] as Pokemon;
 
     return super.shouldApply(args) && (this.species.includes(holder.getSpeciesForm(true).speciesId) || (holder.isFusion() && this.species.includes(holder.getFusionSpeciesForm(true).speciesId)));
@@ -1330,11 +1330,11 @@ export class AttackTypeBoosterModifier extends PokemonHeldItemModifier {
     return new AttackTypeBoosterModifier(this.type, this.pokemonId, this.moveType, this.boostMultiplier * 100, this.stackCount);
   }
 
-  getArgs(): any[] {
+  override getArgs(): any[] {
     return super.getArgs().concat([ this.moveType, this.boostMultiplier * 100 ]);
   }
 
-  shouldApply(args: any[]): boolean {
+  override shouldApply(args: any[]): boolean {
     return super.shouldApply(args) && args.length === 3 && typeof args[1] === "number" && args[2] instanceof Utils.NumberHolder;
   }
 
@@ -1354,7 +1354,7 @@ export class AttackTypeBoosterModifier extends PokemonHeldItemModifier {
     return false;
   }
 
-  getScoreMultiplier(): number {
+  override getScoreMultiplier(): number {
     return 1.2;
   }
 
@@ -1376,7 +1376,7 @@ export class SurviveDamageModifier extends PokemonHeldItemModifier {
     return new SurviveDamageModifier(this.type, this.pokemonId, this.stackCount);
   }
 
-  shouldApply(args: any[]): boolean {
+  override shouldApply(args: any[]): boolean {
     return super.shouldApply(args) && args.length === 2 && args[1] instanceof Utils.BooleanHolder;
   }
 
@@ -1412,7 +1412,7 @@ export class BypassSpeedChanceModifier extends PokemonHeldItemModifier {
     return new BypassSpeedChanceModifier(this.type, this.pokemonId, this.stackCount);
   }
 
-  shouldApply(args: any[]): boolean {
+  override shouldApply(args: any[]): boolean {
     return super.shouldApply(args) && args.length === 2 && args[1] instanceof Utils.BooleanHolder;
   }
 
@@ -1452,7 +1452,7 @@ export class FlinchChanceModifier extends PokemonHeldItemModifier {
     return new FlinchChanceModifier(this.type, this.pokemonId, this.stackCount);
   }
 
-  shouldApply(args: any[]): boolean {
+  override shouldApply(args: any[]): boolean {
     return super.shouldApply(args) && args.length === 2 && args[1] instanceof Utils.BooleanHolder;
   }
 
@@ -1599,7 +1599,7 @@ export class LevelIncrementBoosterModifier extends PersistentModifier {
     super(type, stackCount);
   }
 
-  match(modifier: Modifier) {
+  override match(modifier: Modifier) {
     return modifier instanceof LevelIncrementBoosterModifier;
   }
 
@@ -1607,7 +1607,7 @@ export class LevelIncrementBoosterModifier extends PersistentModifier {
     return new LevelIncrementBoosterModifier(this.type, this.stackCount);
   }
 
-  shouldApply(args: any[]): boolean {
+  override shouldApply(args: any[]): boolean {
     return super.shouldApply(args) && args[0] instanceof Utils.IntegerHolder;
   }
 
@@ -1641,11 +1641,11 @@ export class BerryModifier extends PokemonHeldItemModifier {
     return new BerryModifier(this.type, this.pokemonId, this.berryType, this.stackCount);
   }
 
-  getArgs(): any[] {
+  override getArgs(): any[] {
     return super.getArgs().concat(this.berryType);
   }
 
-  shouldApply(args: any[]): boolean {
+  override shouldApply(args: any[]): boolean {
     return !this.consumed && super.shouldApply(args) && getBerryPredicate(this.berryType)(args[0] as Pokemon);
   }
 
@@ -1676,7 +1676,7 @@ export class PreserveBerryModifier extends PersistentModifier {
     super(type, stackCount);
   }
 
-  match(modifier: Modifier) {
+  override match(modifier: Modifier) {
     return modifier instanceof PreserveBerryModifier;
   }
 
@@ -1684,7 +1684,7 @@ export class PreserveBerryModifier extends PersistentModifier {
     return new PreserveBerryModifier(this.type, this.stackCount);
   }
 
-  shouldApply(args: any[]): boolean {
+  override shouldApply(args: any[]): boolean {
     return super.shouldApply(args) && args[0] instanceof Pokemon && args[1] instanceof Utils.BooleanHolder;
   }
 
@@ -1785,7 +1785,7 @@ export abstract class ConsumablePokemonModifier extends ConsumableModifier {
     this.pokemonId = pokemonId;
   }
 
-  shouldApply(args: any[]): boolean {
+  override shouldApply(args: any[]): boolean {
     return args.length !== 0 && args[0] instanceof PlayerPokemon && (this.pokemonId === -1 || (args[0] as PlayerPokemon).id === this.pokemonId);
   }
 
@@ -1809,7 +1809,7 @@ export class PokemonHpRestoreModifier extends ConsumablePokemonModifier {
     this.fainted = !!fainted;
   }
 
-  shouldApply(args: any[]): boolean {
+  override shouldApply(args: any[]): boolean {
     return super.shouldApply(args) && (this.fainted || (args.length > 1 && typeof(args[1]) === "number"));
   }
 
@@ -2028,7 +2028,7 @@ export class FusePokemonModifier extends ConsumablePokemonModifier {
     this.fusePokemonId = fusePokemonId;
   }
 
-  shouldApply(args: any[]): boolean {
+  override shouldApply(args: any[]): boolean {
     return super.shouldApply(args) && args[1] instanceof PlayerPokemon && this.fusePokemonId === (args[1] as PlayerPokemon).id;
   }
 
@@ -2044,7 +2044,7 @@ export class MultipleParticipantExpBonusModifier extends PersistentModifier {
     super(type, stackCount);
   }
 
-  match(modifier: Modifier): boolean {
+  override match(modifier: Modifier): boolean {
     return modifier instanceof MultipleParticipantExpBonusModifier;
   }
 
@@ -2070,7 +2070,7 @@ export class HealingBoosterModifier extends PersistentModifier {
     this.multiplier = multiplier;
   }
 
-  match(modifier: Modifier): boolean {
+  override match(modifier: Modifier): boolean {
     return modifier instanceof HealingBoosterModifier;
   }
 
@@ -2078,7 +2078,7 @@ export class HealingBoosterModifier extends PersistentModifier {
     return new HealingBoosterModifier(this.type, this.multiplier, this.stackCount);
   }
 
-  getArgs(): any[] {
+  override getArgs(): any[] {
     return [ this.multiplier ];
   }
 
@@ -2103,7 +2103,7 @@ export class ExpBoosterModifier extends PersistentModifier {
     this.boostMultiplier = boostPercent * 0.01;
   }
 
-  match(modifier: Modifier): boolean {
+  override match(modifier: Modifier): boolean {
     if (modifier instanceof ExpBoosterModifier) {
       const expModifier = modifier as ExpBoosterModifier;
       return expModifier.boostMultiplier === this.boostMultiplier;
@@ -2115,7 +2115,7 @@ export class ExpBoosterModifier extends PersistentModifier {
     return new ExpBoosterModifier(this.type, this.boostMultiplier * 100, this.stackCount);
   }
 
-  getArgs(): any[] {
+  override getArgs(): any[] {
     return [ this.boostMultiplier * 100 ];
   }
 
@@ -2150,11 +2150,11 @@ export class PokemonExpBoosterModifier extends PokemonHeldItemModifier {
     return new PokemonExpBoosterModifier(this.type as ModifierTypes.PokemonExpBoosterModifierType, this.pokemonId, this.boostMultiplier * 100, this.stackCount);
   }
 
-  getArgs(): any[] {
+  override getArgs(): any[] {
     return super.getArgs().concat(this.boostMultiplier * 100);
   }
 
-  shouldApply(args: any[]): boolean {
+  override shouldApply(args: any[]): boolean {
     return super.shouldApply(args) && args.length === 2 && args[1] instanceof Utils.NumberHolder;
   }
 
@@ -2174,7 +2174,7 @@ export class ExpShareModifier extends PersistentModifier {
     super(type, stackCount);
   }
 
-  match(modifier: Modifier): boolean {
+  override match(modifier: Modifier): boolean {
     return modifier instanceof ExpShareModifier;
   }
 
@@ -2196,7 +2196,7 @@ export class ExpBalanceModifier extends PersistentModifier {
     super(type, stackCount);
   }
 
-  match(modifier: Modifier): boolean {
+  override match(modifier: Modifier): boolean {
     return modifier instanceof ExpBalanceModifier;
   }
 
@@ -2286,11 +2286,11 @@ export class PokemonMoveAccuracyBoosterModifier extends PokemonHeldItemModifier 
     return new PokemonMoveAccuracyBoosterModifier(this.type as ModifierTypes.PokemonMoveAccuracyBoosterModifierType, this.pokemonId, this.accuracyAmount, this.stackCount);
   }
 
-  getArgs(): any[] {
+  override getArgs(): any[] {
     return super.getArgs().concat(this.accuracyAmount);
   }
 
-  shouldApply(args: any[]): boolean {
+  override shouldApply(args: any[]): boolean {
     return super.shouldApply(args) && args.length === 2 && args[1] instanceof Utils.NumberHolder;
   }
 
@@ -2346,7 +2346,7 @@ export class PokemonMultiHitModifier extends PokemonHeldItemModifier {
 export class PokemonFormChangeItemModifier extends PokemonHeldItemModifier {
   public formChangeItem: FormChangeItem;
   public active: boolean;
-  public isTransferable: boolean = false;
+  public override isTransferable: boolean = false;
 
   constructor(type: ModifierTypes.FormChangeItemModifierType, pokemonId: integer, formChangeItem: FormChangeItem, active: boolean, stackCount?: integer) {
     super(type, pokemonId, stackCount);
@@ -2362,7 +2362,7 @@ export class PokemonFormChangeItemModifier extends PokemonHeldItemModifier {
     return new PokemonFormChangeItemModifier(this.type as ModifierTypes.FormChangeItemModifierType, this.pokemonId, this.formChangeItem, this.active, this.stackCount);
   }
 
-  getArgs(): any[] {
+  override getArgs(): any[] {
     return super.getArgs().concat(this.formChangeItem, this.active);
   }
 
@@ -2425,7 +2425,7 @@ export class MoneyMultiplierModifier extends PersistentModifier {
     super(type, stackCount);
   }
 
-  match(modifier: Modifier): boolean {
+  override match(modifier: Modifier): boolean {
     return modifier instanceof MoneyMultiplierModifier;
   }
 
@@ -2476,7 +2476,7 @@ export class MoneyInterestModifier extends PersistentModifier {
     super(type, stackCount);
   }
 
-  match(modifier: Modifier): boolean {
+  override match(modifier: Modifier): boolean {
     return modifier instanceof MoneyInterestModifier;
   }
 
@@ -2507,7 +2507,7 @@ export class HiddenAbilityRateBoosterModifier extends PersistentModifier {
     super(type, stackCount);
   }
 
-  match(modifier: Modifier): boolean {
+  override match(modifier: Modifier): boolean {
     return modifier instanceof HiddenAbilityRateBoosterModifier;
   }
 
@@ -2531,7 +2531,7 @@ export class ShinyRateBoosterModifier extends PersistentModifier {
     super(type, stackCount);
   }
 
-  match(modifier: Modifier): boolean {
+  override match(modifier: Modifier): boolean {
     return modifier instanceof ShinyRateBoosterModifier;
   }
 
@@ -2555,7 +2555,7 @@ export class LockModifierTiersModifier extends PersistentModifier {
     super(type, stackCount);
   }
 
-  match(modifier: Modifier): boolean {
+  override match(modifier: Modifier): boolean {
     return modifier instanceof LockModifierTiersModifier;
   }
 
@@ -2580,7 +2580,7 @@ export class HealShopCostModifier extends PersistentModifier {
     super(type, stackCount);
   }
 
-  match(modifier: Modifier): boolean {
+  override match(modifier: Modifier): boolean {
     return modifier instanceof HealShopCostModifier;
   }
 
@@ -2604,7 +2604,7 @@ export class BoostBugSpawnModifier extends PersistentModifier {
     super(type, stackCount);
   }
 
-  match(modifier: Modifier): boolean {
+  override match(modifier: Modifier): boolean {
     return modifier instanceof BoostBugSpawnModifier;
   }
 
@@ -2736,7 +2736,7 @@ export abstract class HeldItemTransferModifier extends PokemonHeldItemModifier {
  * @see {@linkcode modifierTypes[MINI_BLACK_HOLE]}
  */
 export class TurnHeldItemTransferModifier extends HeldItemTransferModifier {
-  isTransferable: boolean = true;
+  override isTransferable: boolean = true;
   constructor(type: ModifierType, pokemonId: integer, stackCount?: integer) {
     super(type, pokemonId, stackCount);
   }
@@ -2787,7 +2787,7 @@ export class ContactHeldItemTransferChanceModifier extends HeldItemTransferModif
    * @param args\[1\] The {@linkcode Pokemon} the holder is targeting with an attack
    * @returns The target (args[1]) stored in array format for use in {@linkcode HeldItemTransferModifier.apply}
    */
-  getTargets(args: any[]): Pokemon[] {
+  override getTargets(args: any[]): Pokemon[] {
     const target = args[1];
 
     return target instanceof Pokemon
@@ -2803,7 +2803,7 @@ export class ContactHeldItemTransferChanceModifier extends HeldItemTransferModif
     return new ContactHeldItemTransferChanceModifier(this.type, this.pokemonId, this.chance * 100, this.stackCount);
   }
 
-  getArgs(): any[] {
+  override getArgs(): any[] {
     return super.getArgs().concat(this.chance * 100);
   }
 
@@ -2825,7 +2825,7 @@ export class IvScannerModifier extends PersistentModifier {
     super(type, stackCount);
   }
 
-  match(modifier: Modifier): boolean {
+  override match(modifier: Modifier): boolean {
     return modifier instanceof IvScannerModifier;
   }
 
@@ -2847,7 +2847,7 @@ export class ExtraModifierModifier extends PersistentModifier {
     super(type, stackCount);
   }
 
-  match(modifier: Modifier): boolean {
+  override match(modifier: Modifier): boolean {
     return modifier instanceof ExtraModifierModifier;
   }
 
@@ -2891,7 +2891,7 @@ abstract class EnemyDamageMultiplierModifier extends EnemyPersistentModifier {
     return true;
   }
 
-  getMaxStackCount(scene: BattleScene): integer {
+  override getMaxStackCount(scene: BattleScene): integer {
     return 99;
   }
 }
@@ -2902,7 +2902,7 @@ export class EnemyDamageBoosterModifier extends EnemyDamageMultiplierModifier {
     super(type, 1.05, stackCount); // Hardcode multiplier temporarily
   }
 
-  match(modifier: Modifier): boolean {
+  override match(modifier: Modifier): boolean {
     return modifier instanceof EnemyDamageBoosterModifier;
   }
 
@@ -2910,11 +2910,11 @@ export class EnemyDamageBoosterModifier extends EnemyDamageMultiplierModifier {
     return new EnemyDamageBoosterModifier(this.type, (this.damageMultiplier - 1) * 100, this.stackCount);
   }
 
-  getArgs(): any[] {
+  override getArgs(): any[] {
     return [ (this.damageMultiplier - 1) * 100 ];
   }
 
-  getMaxStackCount(scene: BattleScene): integer {
+  override getMaxStackCount(scene: BattleScene): integer {
     return 999;
   }
 }
@@ -2925,7 +2925,7 @@ export class EnemyDamageReducerModifier extends EnemyDamageMultiplierModifier {
     super(type, 0.975, stackCount); // Hardcode multiplier temporarily
   }
 
-  match(modifier: Modifier): boolean {
+  override match(modifier: Modifier): boolean {
     return modifier instanceof EnemyDamageReducerModifier;
   }
 
@@ -2933,11 +2933,11 @@ export class EnemyDamageReducerModifier extends EnemyDamageMultiplierModifier {
     return new EnemyDamageReducerModifier(this.type, (1 - this.damageMultiplier) * 100, this.stackCount);
   }
 
-  getArgs(): any[] {
+  override getArgs(): any[] {
     return [ (1 - this.damageMultiplier) * 100 ];
   }
 
-  getMaxStackCount(scene: BattleScene): integer {
+  override getMaxStackCount(scene: BattleScene): integer {
     return scene.currentBattle.waveIndex < 2000 ? super.getMaxStackCount(scene) : 999;
   }
 }
@@ -2952,7 +2952,7 @@ export class EnemyTurnHealModifier extends EnemyPersistentModifier {
     this.healPercent = 2;
   }
 
-  match(modifier: Modifier): boolean {
+  override match(modifier: Modifier): boolean {
     return modifier instanceof EnemyTurnHealModifier;
   }
 
@@ -2960,7 +2960,7 @@ export class EnemyTurnHealModifier extends EnemyPersistentModifier {
     return new EnemyTurnHealModifier(this.type, this.healPercent, this.stackCount);
   }
 
-  getArgs(): any[] {
+  override getArgs(): any[] {
     return [ this.healPercent ];
   }
 
@@ -2977,7 +2977,7 @@ export class EnemyTurnHealModifier extends EnemyPersistentModifier {
     return false;
   }
 
-  getMaxStackCount(scene: BattleScene): integer {
+  override getMaxStackCount(scene: BattleScene): integer {
     return 10;
   }
 }
@@ -2994,7 +2994,7 @@ export class EnemyAttackStatusEffectChanceModifier extends EnemyPersistentModifi
     this.chance = .025 * ((this.effect === StatusEffect.BURN || this.effect === StatusEffect.POISON) ? 2 : 1);
   }
 
-  match(modifier: Modifier): boolean {
+  override match(modifier: Modifier): boolean {
     return modifier instanceof EnemyAttackStatusEffectChanceModifier && modifier.effect === this.effect;
   }
 
@@ -3002,7 +3002,7 @@ export class EnemyAttackStatusEffectChanceModifier extends EnemyPersistentModifi
     return new EnemyAttackStatusEffectChanceModifier(this.type, this.effect, this.chance * 100, this.stackCount);
   }
 
-  getArgs(): any[] {
+  override getArgs(): any[] {
     return [ this.effect, this.chance * 100 ];
   }
 
@@ -3015,7 +3015,7 @@ export class EnemyAttackStatusEffectChanceModifier extends EnemyPersistentModifi
     return false;
   }
 
-  getMaxStackCount(scene: BattleScene): integer {
+  override getMaxStackCount(scene: BattleScene): integer {
     return 10;
   }
 }
@@ -3030,7 +3030,7 @@ export class EnemyStatusEffectHealChanceModifier extends EnemyPersistentModifier
     this.chance = .025;
   }
 
-  match(modifier: Modifier): boolean {
+  override match(modifier: Modifier): boolean {
     return modifier instanceof EnemyStatusEffectHealChanceModifier;
   }
 
@@ -3038,7 +3038,7 @@ export class EnemyStatusEffectHealChanceModifier extends EnemyPersistentModifier
     return new EnemyStatusEffectHealChanceModifier(this.type, this.chance * 100, this.stackCount);
   }
 
-  getArgs(): any[] {
+  override getArgs(): any[] {
     return [ this.chance * 100 ];
   }
 
@@ -3054,7 +3054,7 @@ export class EnemyStatusEffectHealChanceModifier extends EnemyPersistentModifier
     return false;
   }
 
-  getMaxStackCount(scene: BattleScene): integer {
+  override getMaxStackCount(scene: BattleScene): integer {
     return 10;
   }
 }
@@ -3069,7 +3069,7 @@ export class EnemyEndureChanceModifier extends EnemyPersistentModifier {
     this.chance = .02;
   }
 
-  match(modifier: Modifier) {
+  override match(modifier: Modifier) {
     return modifier instanceof EnemyEndureChanceModifier;
   }
 
@@ -3077,7 +3077,7 @@ export class EnemyEndureChanceModifier extends EnemyPersistentModifier {
     return new EnemyEndureChanceModifier(this.type, this.chance * 100, this.stackCount);
   }
 
-  getArgs(): any[] {
+  override getArgs(): any[] {
     return [ this.chance * 100 ];
   }
 
@@ -3095,7 +3095,7 @@ export class EnemyEndureChanceModifier extends EnemyPersistentModifier {
     return true;
   }
 
-  getMaxStackCount(scene: BattleScene): integer {
+  override getMaxStackCount(scene: BattleScene): integer {
     return 10;
   }
 }
@@ -3109,7 +3109,7 @@ export class EnemyFusionChanceModifier extends EnemyPersistentModifier {
     this.chance = chancePercent / 100;
   }
 
-  match(modifier: Modifier) {
+  override match(modifier: Modifier) {
     return modifier instanceof EnemyFusionChanceModifier && modifier.chance === this.chance;
   }
 
@@ -3117,7 +3117,7 @@ export class EnemyFusionChanceModifier extends EnemyPersistentModifier {
     return new EnemyFusionChanceModifier(this.type, this.chance * 100, this.stackCount);
   }
 
-  getArgs(): any[] {
+  override getArgs(): any[] {
     return [ this.chance * 100 ];
   }
 
@@ -3131,7 +3131,7 @@ export class EnemyFusionChanceModifier extends EnemyPersistentModifier {
     return true;
   }
 
-  getMaxStackCount(scene: BattleScene): integer {
+  override getMaxStackCount(scene: BattleScene): integer {
     return 10;
   }
 }

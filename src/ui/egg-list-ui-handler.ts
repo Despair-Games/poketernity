@@ -5,7 +5,7 @@ import { TextStyle, addTextObject } from "./text";
 import MessageUiHandler from "./message-ui-handler";
 import { Egg } from "../data/egg";
 import { addWindow } from "./ui-theme";
-import {Button} from "#enums/buttons";
+import { Button } from "#enums/buttons";
 import i18next from "i18next";
 
 export default class EggListUiHandler extends MessageUiHandler {
@@ -89,7 +89,7 @@ export default class EggListUiHandler extends MessageUiHandler {
     this.cursor = -1;
   }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     super.show(args);
 
     this.getUi().bringToTop(this.eggListContainer);
@@ -176,7 +176,7 @@ export default class EggListUiHandler extends MessageUiHandler {
     this.eggGachaInfoText.setText(egg.getEggTypeDescriptor(this.scene));
   }
 
-  setCursor(cursor: integer): boolean {
+  override setCursor(cursor: integer): boolean {
     let changed = false;
 
     const lastCursor = this.cursor;
@@ -197,7 +197,7 @@ export default class EggListUiHandler extends MessageUiHandler {
     return changed;
   }
 
-  clear(): void {
+  override clear(): void {
     super.clear();
     this.cursor = -1;
     this.eggListContainer.setVisible(false);

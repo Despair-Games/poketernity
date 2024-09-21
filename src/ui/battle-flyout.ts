@@ -185,7 +185,7 @@ export default class BattleFlyout extends Phaser.GameObjects.Container {
     });
   }
 
-  destroy(fromScene?: boolean): void {
+  override destroy(fromScene?: boolean): void {
     this.battleScene.eventTarget.removeEventListener(BattleSceneEventType.MOVE_USED, this.onMoveUsedEvent);
     this.battleScene.eventTarget.removeEventListener(BattleSceneEventType.BERRY_USED, this.onBerryUsedEvent);
 

@@ -8,7 +8,7 @@ export class SummonMissingPhase extends SummonPhase {
     super(scene, fieldIndex);
   }
 
-  preSummon(): void {
+  override preSummon(): void {
     this.scene.ui.showText(i18next.t("battle:sendOutPokemon", { pokemonName: getPokemonNameWithAffix(this.getPokemon()) }));
     this.scene.time.delayedCall(250, () => this.summon());
   }

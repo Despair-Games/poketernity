@@ -7,7 +7,7 @@ import { addWindow } from "./ui-theme";
 import * as Utils from "../utils";
 import { DexAttr, GameData } from "../system/game-data";
 import { speciesStarters } from "../data/pokemon-species";
-import {Button} from "#enums/buttons";
+import { Button } from "#enums/buttons";
 import i18next from "i18next";
 import { UiTheme } from "#app/enums/ui-theme";
 
@@ -289,7 +289,7 @@ export default class GameStatsUiHandler extends UiHandler {
     this.gameStatsContainer.setVisible(false);
   }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     super.show(args);
 
     this.setCursor(0);
@@ -371,7 +371,7 @@ export default class GameStatsUiHandler extends UiHandler {
     return success;
   }
 
-  setCursor(cursor: integer): boolean {
+  override setCursor(cursor: integer): boolean {
     const ret = super.setCursor(cursor);
 
     if (ret) {
@@ -382,7 +382,7 @@ export default class GameStatsUiHandler extends UiHandler {
     return ret;
   }
 
-  clear() {
+  override clear() {
     super.clear();
     this.gameStatsContainer.setVisible(false);
   }

@@ -367,7 +367,7 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
    * @param args - Arguments to be passed to the show method.
    * @returns `true` if successful.
    */
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     super.show(args);
 
     this.updateNavigationDisplay();
@@ -547,7 +547,7 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
    * @param cursor - The cursor position to set.
    * @returns `true` if the cursor was set successfully.
    */
-  setCursor(cursor: number): boolean {
+  override setCursor(cursor: number): boolean {
     const ret = super.setCursor(cursor);
     // If the optionsContainer is not initialized, return the result from the parent class directly.
     if (!this.optionsContainer) {
@@ -660,7 +660,7 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
   /**
    * Clear the UI elements and state.
    */
-  clear(): void {
+  override clear(): void {
     super.clear();
 
     // Hide the settings container to remove it from the view.

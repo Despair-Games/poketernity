@@ -402,7 +402,7 @@ export default class UI extends Phaser.GameObjects.Container {
     this.tooltipTitle.clearTint();
   }
 
-  update(): void {
+  override update(): void {
     if (this.tooltipContainer.visible) {
       const xReverse = this.scene.game.input.mousePointer && this.scene.game.input.mousePointer.x >= this.scene.game.canvas.width - this.tooltipBg.width * 6 - 12;
       const yReverse = this.scene.game.input.mousePointer && this.scene.game.input.mousePointer.y >= this.scene.game.canvas.height - this.tooltipBg.height * 6 - 12;

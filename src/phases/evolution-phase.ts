@@ -45,7 +45,7 @@ export class EvolutionPhase extends Phase {
     return this.scene.ui.setModeForceTransition(Mode.EVOLUTION_SCENE);
   }
 
-  start() {
+  override start() {
     super.start();
 
     this.setMode().then(() => {

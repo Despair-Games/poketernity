@@ -35,7 +35,7 @@ export class StatStageChangePhase extends PokemonPhase {
     this.onChange = onChange;
   }
 
-  start() {
+  override start() {
     const pokemon = this.getPokemon();
 
     if (!pokemon.isActive(true)) {

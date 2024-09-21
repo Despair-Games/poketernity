@@ -10,7 +10,7 @@ export class SelectGenderPhase extends Phase {
     super(scene);
   }
 
-  start(): void {
+  override start(): void {
     super.start();
 
     this.scene.ui.showText(i18next.t("menu:boyOrGirl"), null, () => {
@@ -39,7 +39,7 @@ export class SelectGenderPhase extends Phase {
     });
   }
 
-  end(): void {
+  override end(): void {
     this.scene.ui.setMode(Mode.MESSAGE);
     super.end();
   }

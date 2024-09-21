@@ -175,7 +175,7 @@ export class DailyRunScoreboard extends Phaser.GameObjects.Container {
    * @param {ScoreboardCategory} [category=this.category] - The category to fetch rankings for. Defaults to the current category.
    * @param {number} [page=this.page] - The page number to fetch. Defaults to the current page.
   */
-  update(category: ScoreboardCategory = this.category, page: integer = this.page) {
+  override update(category: ScoreboardCategory = this.category, page: integer = this.page) {
     if (this.isUpdating) {
       return;
     }

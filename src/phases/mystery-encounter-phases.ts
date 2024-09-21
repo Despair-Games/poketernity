@@ -51,7 +51,7 @@ export class MysteryEncounterPhase extends Phase {
   /**
    * Updates seed offset, sets seen encounter session data, sets UI mode
    */
-  start() {
+  override start() {
     super.start();
 
     // Clears out queued phases that are part of standard battle
@@ -153,7 +153,7 @@ export class MysteryEncounterPhase extends Phase {
   /**
    * Ends phase
    */
-  end() {
+  override end() {
     this.scene.ui.setMode(Mode.MESSAGE).then(() => super.end());
   }
 }
@@ -180,7 +180,7 @@ export class MysteryEncounterOptionSelectedPhase extends Phase {
    * It is important to point out that no phases are directly queued by any logic within this phase.
    * Any phase that is meant to follow this one MUST be queued via the {@linkcode MysteryEncounter.onOptionSelect} logic of the selected option.
    */
-  start() {
+  override start() {
     super.start();
     if (this.scene.currentBattle.mysteryEncounter?.autoHideIntroVisuals) {
       transitionMysteryEncounterIntroVisuals(this.scene).then(() => {
@@ -214,7 +214,7 @@ export class MysteryEncounterBattleStartCleanupPhase extends Phase {
   /**
    * Cleans up `TURN_END` tags, any {@linkcode PostTurnStatusEffectPhase}s, checks for Pokemon switches, then continues
    */
-  start() {
+  override start() {
     super.start();
 
     const field = this.scene.getField(true).filter(p => p.summonData);
@@ -272,7 +272,7 @@ export class MysteryEncounterBattlePhase extends Phase {
   /**
    * Sets up a ME battle
    */
-  start() {
+  override start() {
     super.start();
 
     this.doMysteryEncounterBattle(this.scene);
@@ -487,7 +487,7 @@ export class MysteryEncounterRewardsPhase extends Phase {
   /**
    * Runs {@linkcode MysteryEncounter.doContinueEncounter} and ends phase, OR {@linkcode MysteryEncounter.onRewards} then continues encounter
    */
-  start() {
+  override start() {
     super.start();
     const encounter = this.scene.currentBattle.mysteryEncounter!;
 
@@ -550,7 +550,7 @@ export class PostMysteryEncounterPhase extends Phase {
   /**
    * Runs {@linkcode MysteryEncounter.onPostOptionSelect} then continues encounter
    */
-  start() {
+  override start() {
     super.start();
 
     if (this.onPostOptionSelect) {

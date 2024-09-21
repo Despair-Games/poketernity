@@ -28,7 +28,7 @@ export class AttemptCapturePhase extends PokemonPhase {
     this.pokeballType = pokeballType;
   }
 
-  start() {
+  override start() {
     super.start();
 
     const pokemon = this.getPokemon() as EnemyPokemon;

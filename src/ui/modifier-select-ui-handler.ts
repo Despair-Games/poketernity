@@ -137,7 +137,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
     this.scene.addInfoToggle(this.moveInfoOverlay);
   }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
 
     this.scene.disableMenu = false;
 
@@ -437,7 +437,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
     return success;
   }
 
-  setCursor(cursor: integer): boolean {
+  override setCursor(cursor: integer): boolean {
     const ui = this.getUi();
     const ret = super.setCursor(cursor);
 
@@ -567,7 +567,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
     this.lockRarityButtonText.setShadowColor(this.getTextColor(textStyle, true));
   }
 
-  clear() {
+  override clear() {
     super.clear();
 
     this.moveInfoOverlay.clear();
