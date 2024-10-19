@@ -67,6 +67,8 @@ export class TurnInitPhase extends FieldPhase {
       }
     });
 
+    [ this.scene.getParty(), this.scene.getEnemyParty() ].flat().forEach((pokemon) => pokemon.resetMoveScoreData());
+
     this.scene.pushPhase(new TurnStartPhase(this.scene));
 
     this.end();

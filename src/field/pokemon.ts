@@ -3,7 +3,7 @@ import BattleScene, { AnySound } from "#app/battle-scene";
 import { Variant, VariantSet, variantColorCache } from "#app/data/variant";
 import { variantData } from "#app/data/variant";
 import BattleInfo, { PlayerBattleInfo, EnemyBattleInfo } from "#app/ui/battle-info";
-import Move, { HighCritAttr, HitsTagAttr, applyMoveAttrs, FixedDamageAttr, VariableAtkAttr, allMoves, MoveCategory, TypelessAttr, CritOnlyAttr, getMoveTargets, OneHitKOAttr, VariableMoveTypeAttr, VariableDefAttr, AttackMove, ModifiedDamageAttr, VariableMoveTypeMultiplierAttr, IgnoreOpponentStatStagesAttr, SacrificialAttr, VariableMoveCategoryAttr, CounterDamageAttr, StatStageChangeAttr, RechargeAttr, ChargeAttr, IgnoreWeatherTypeDebuffAttr, BypassBurnDamageReductionAttr, SacrificialAttrOnHit, OneHitKOAccuracyAttr, RespectAttackTypeImmunityAttr, MoveTarget, CombinedPledgeStabBoostAttr } from "#app/data/move";
+import Move, { HighCritAttr, HitsTagAttr, applyMoveAttrs, FixedDamageAttr, VariableAtkAttr, allMoves, MoveCategory, TypelessAttr, CritOnlyAttr, getMoveTargets, OneHitKOAttr, VariableMoveTypeAttr, VariableDefAttr, AttackMove, ModifiedDamageAttr, VariableMoveTypeMultiplierAttr, IgnoreOpponentStatStagesAttr, SacrificialAttr, VariableMoveCategoryAttr, CounterDamageAttr, StatStageChangeAttr, RechargeAttr, ChargeAttr, IgnoreWeatherTypeDebuffAttr, BypassBurnDamageReductionAttr, SacrificialAttrOnHit, OneHitKOAccuracyAttr, RespectAttackTypeImmunityAttr, MoveTarget, CombinedPledgeStabBoostAttr, IncrementMovePriorityAttr } from "#app/data/move";
 import { default as PokemonSpecies, PokemonSpeciesForm, getFusedSpeciesName, getPokemonSpecies, getPokemonSpeciesForm } from "#app/data/pokemon-species";
 import { CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER, getStarterValueFriendshipCap, speciesStarterCosts } from "#app/data/balance/starters";
 import { starterPassiveAbilities } from "#app/data/balance/passives";
@@ -22,7 +22,7 @@ import { reverseCompatibleTms, tmSpecies, tmPoolTiers } from "#app/data/balance/
 import { BattlerTag, BattlerTagLapseType, EncoreTag, GroundedTag, HighestStatBoostTag, SubstituteTag, TypeImmuneTag, getBattlerTag, SemiInvulnerableTag, TypeBoostTag, MoveRestrictionBattlerTag, ExposedTag, DragonCheerTag, CritBoostTag, TrappedTag, TarShotTag, AutotomizedTag, PowerTrickTag } from "../data/battler-tags";
 import { WeatherType } from "#app/data/weather";
 import { ArenaTagSide, NoCritTag, WeakenMoveScreenTag } from "#app/data/arena-tag";
-import { Ability, AbAttr, StatMultiplierAbAttr, BlockCritAbAttr, BonusCritAbAttr, BypassBurnDamageReductionAbAttr, FieldPriorityMoveImmunityAbAttr, IgnoreOpponentStatStagesAbAttr, MoveImmunityAbAttr, PreDefendFullHpEndureAbAttr, ReceivedMoveDamageMultiplierAbAttr, ReduceStatusEffectDurationAbAttr, StabBoostAbAttr, StatusEffectImmunityAbAttr, TypeImmunityAbAttr, WeightMultiplierAbAttr, allAbilities, applyAbAttrs, applyStatMultiplierAbAttrs, applyPreApplyBattlerTagAbAttrs, applyPreAttackAbAttrs, applyPreDefendAbAttrs, applyPreSetStatusAbAttrs, UnsuppressableAbilityAbAttr, SuppressFieldAbilitiesAbAttr, NoFusionAbilityAbAttr, MultCritAbAttr, IgnoreTypeImmunityAbAttr, DamageBoostAbAttr, IgnoreTypeStatusEffectImmunityAbAttr, ConditionalCritAbAttr, applyFieldStatMultiplierAbAttrs, FieldMultiplyStatAbAttr, AddSecondStrikeAbAttr, UserFieldStatusEffectImmunityAbAttr, UserFieldBattlerTagImmunityAbAttr, BattlerTagImmunityAbAttr, MoveTypeChangeAbAttr, FullHpResistTypeAbAttr, applyCheckTrappedAbAttrs, CheckTrappedAbAttr, PostSetStatusAbAttr, applyPostSetStatusAbAttrs } from "#app/data/ability";
+import { Ability, AbAttr, StatMultiplierAbAttr, BlockCritAbAttr, BonusCritAbAttr, BypassBurnDamageReductionAbAttr, FieldPriorityMoveImmunityAbAttr, IgnoreOpponentStatStagesAbAttr, MoveImmunityAbAttr, PreDefendFullHpEndureAbAttr, ReceivedMoveDamageMultiplierAbAttr, ReduceStatusEffectDurationAbAttr, StabBoostAbAttr, StatusEffectImmunityAbAttr, TypeImmunityAbAttr, WeightMultiplierAbAttr, allAbilities, applyAbAttrs, applyStatMultiplierAbAttrs, applyPreApplyBattlerTagAbAttrs, applyPreAttackAbAttrs, applyPreDefendAbAttrs, applyPreSetStatusAbAttrs, UnsuppressableAbilityAbAttr, SuppressFieldAbilitiesAbAttr, NoFusionAbilityAbAttr, MultCritAbAttr, IgnoreTypeImmunityAbAttr, DamageBoostAbAttr, IgnoreTypeStatusEffectImmunityAbAttr, ConditionalCritAbAttr, applyFieldStatMultiplierAbAttrs, FieldMultiplyStatAbAttr, AddSecondStrikeAbAttr, UserFieldStatusEffectImmunityAbAttr, UserFieldBattlerTagImmunityAbAttr, BattlerTagImmunityAbAttr, MoveTypeChangeAbAttr, FullHpResistTypeAbAttr, applyCheckTrappedAbAttrs, CheckTrappedAbAttr, PostSetStatusAbAttr, applyPostSetStatusAbAttrs, ChangeMovePriorityAbAttr } from "#app/data/ability";
 import PokemonData from "#app/system/pokemon-data";
 import { BattlerIndex } from "#app/battle";
 import { Mode } from "#app/ui/ui";
@@ -122,6 +122,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
   public battleData: PokemonBattleData;
   public battleSummonData: PokemonBattleSummonData;
   public turnData: PokemonTurnData;
+  public moveScoreData: PokemonMoveScoreData[] = [];
   public mysteryEncounterPokemonData: MysteryEncounterPokemonData;
 
   /** Used by Mystery Encounters to execute pokemon-specific logic (such as stat boosts) at start of battle */
@@ -1111,7 +1112,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
 
   abstract isBoss(): boolean;
 
-  getMoveset(ignoreOverride?: boolean): (PokemonMove | null)[] {
+  getMoveset(ignoreOverride: boolean = false): (PokemonMove | null)[] {
     const ret = !ignoreOverride && this.summonData?.moveset
       ? this.summonData.moveset
       : this.moveset;
@@ -1132,6 +1133,26 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     return ret;
+  }
+
+  /**
+   * Returns the non-Status moves in this Pokemon's moveset.
+   * @param usableOnly if `true`, this also filters out attacks that are unusable (defaults to `false`)
+   * @param revealedOnly if `true`, this also filters out attacks that haven't been used yet in the current battle
+   * @param ignoreOverride if `true`, this pulls from this Pokemon's base moveset, ignoring in-battle
+   * overrides e.g. Mimic
+   * @returns an array of {@linkcode PokemonMove | PokemonMoves} containing this Pokemon's attack moves
+   */
+  getAttackMoves(usableOnly: boolean = false, revealedOnly: boolean = false, ignoreOverride: boolean = false): PokemonMove[] {
+    let nonNullMoveset = this.getMoveset(ignoreOverride).filter((pokemonMove) => pokemonMove !== null);
+    if (revealedOnly) {
+      nonNullMoveset = nonNullMoveset.filter((pokemonMove) => this.battleData?.movesRevealed.includes(pokemonMove.moveId));
+    }
+    return nonNullMoveset.filter((pokemonMove) => {
+      const move = pokemonMove.getMove();
+      return move && move.category !== MoveCategory.STATUS
+        && (!usableOnly || pokemonMove.isUsable(this));
+    });
   }
 
   /**
@@ -1676,42 +1697,139 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * Computes the given Pokemon's matchup score against this Pokemon.
-   * In most cases, this score ranges from near-zero to 16, but the maximum possible matchup score is 64.
-   * @param opponent {@linkcode Pokemon} The Pokemon to compare this Pokemon against
-   * @returns A score value based on how favorable this Pokemon is when fighting the given Pokemon
+   * Scores the given move based on estimated damage dealt to the given target.
+   * The enemy AI uses this score to help evaluate and select turn commands.
+   * @param target the {@linkcode Pokemon} to evaluate the move against
+   * @param move the {@linkcode Move} being scored
+   * @returns the move's Attack Score
    */
-  getMatchupScore(opponent: Pokemon): number {
-    const types = this.getTypes(true);
-    const enemyTypes = opponent.getTypes(true, true);
-    /** Is this Pokemon faster than the opponent? */
-    const outspeed = (this.isActive(true) ? this.getEffectiveStat(Stat.SPD, opponent) : this.getStat(Stat.SPD, false)) >= opponent.getEffectiveStat(Stat.SPD, this);
-    /**
-     * Based on how effective this Pokemon's types are offensively against the opponent's types.
-     * This score is increased by 25 percent if this Pokemon is faster than the opponent.
-     */
-    let atkScore = opponent.getAttackTypeEffectiveness(types[0], this) * (outspeed ? 1.25 : 1);
-    /**
-     * Based on how effectively this Pokemon defends against the opponent's types.
-     * This score cannot be higher than 4.
-     */
-    let defScore = 1 / Math.max(this.getAttackTypeEffectiveness(enemyTypes[0], opponent), 0.25);
-    if (types.length > 1) {
-      atkScore *= opponent.getAttackTypeEffectiveness(types[1], this);
+  getAttackScore(target: Pokemon, move: Move): number {
+    const cachedMoveScore = this.moveScoreData.find(
+      (msd) => msd.moveId === move.id && msd.target === target
+    );
+    if (!isNullOrUndefined(cachedMoveScore?.attackScore)) {
+      return cachedMoveScore.attackScore;
     }
-    if (enemyTypes.length > 1) {
-      defScore *= (1 / Math.max(this.getAttackTypeEffectiveness(enemyTypes[1], opponent), 0.25));
+
+    let attackScore = 0;
+
+    if (move.category !== MoveCategory.STATUS) {
+      const damage = target.getAttackDamage(this, move, !target.battleData?.abilityRevealed, false, move.hasAttr(CritOnlyAttr)).damage;
+
+      if (damage >= target.hp) {
+        const movePriority = new Utils.NumberHolder(move.priority);
+        applyAbAttrs(ChangeMovePriorityAbAttr, this, null, true, move, movePriority);
+        applyMoveAttrs(IncrementMovePriorityAttr, this, target, move, movePriority);
+
+        if (movePriority.value > 0) {
+          // Priority moves that KO are (+6)
+          attackScore = 6;
+        } else {
+          // Non-priority moves that KO are (+4)
+          attackScore = 4;
+        }
+      } else {
+        const percentMaxHpDamage = damage / target.getMaxHp() * 100;
+        if (percentMaxHpDamage >= 80) {
+          // Moves that deal 80% or more of max HP as damage are always (+2)
+          attackScore = 2;
+        } else if (percentMaxHpDamage >= 40) {
+          // Moves that deal 40-79% damage are (+1) with a (%damage - 40)/40
+          // probability of "tiering up" to (+2)
+          const tierUpChance = (Math.floor(percentMaxHpDamage) - 40) / 40 * 100;
+          attackScore = 1 + (this.randSeedInt(100) < tierUpChance ? 1 : 0);
+        } else if (percentMaxHpDamage > 0) {
+          // Moves that deal 1-39% damage are (+0) with a %damage/40
+          // probability of "tiering up" to (+1)
+          const tierUpChance = Math.floor(percentMaxHpDamage) / 40 * 100;
+          attackScore = this.randSeedInt(100) < tierUpChance ? 1 : 0;
+        } else {
+          attackScore = -1; // indicates a "bad" move, not meant to be a final score
+        }
+
+        const critStage = target.getCritStage(this, move);
+        if (critStage > 0) {
+          /**
+           * Moves that have an increased critical hit stage and only KO on a critical hit
+           * gain a (+1) + (critChance chance of additional +1) bonus.
+           */
+          const critDamage = target.getAttackDamage(this, move, !target.battleData?.abilityRevealed, false, true).damage;
+          const critChance = [ 24, 8, 2, 1 ][Math.max(0, Math.min(critStage))];
+
+          if (critDamage >= target.hp) {
+            attackScore += 1 + (!this.randSeedInt(critChance) ? 1 : 0);
+          }
+        }
+      }
     }
-    /**
-     * Based on this Pokemon's HP ratio compared to that of the opponent.
-     * This ratio is multiplied by 1.5 if this Pokemon outspeeds the opponent;
-     * however, the final ratio cannot be higher than 1.
-     */
-    let hpDiffRatio = this.getHpRatio() + (1 - opponent.getHpRatio());
-    if (outspeed) {
-      hpDiffRatio = Math.min(hpDiffRatio * 1.5, 1);
+
+    if (cachedMoveScore) {
+      cachedMoveScore.attackScore = attackScore;
+    } else {
+      const moveScoreData = new PokemonMoveScoreData(move.id, target);
+      moveScoreData.attackScore = attackScore;
+      this.moveScoreData.push(moveScoreData);
     }
-    return (atkScore + defScore) * hpDiffRatio;
+
+    return attackScore;
+  }
+
+  /**
+   * Calculates the expected value of the given move's Attack Score
+   * against the given target. Used in Matchup Score calculations
+   * @param target the {@linkcode Pokemon} to evaluate the move against
+   * @param move the {@linkcode Move} being scored
+   * @returns the expected value of the move's Attack Score
+   * @see {@linkcode getAttackScore}
+   * @see {@linkcode getMatchupScore}
+   */
+  getExpectedAttackScore(target: Pokemon, move: Move): number {
+    const cachedMoveScore = this.moveScoreData.find(
+      (msd) => msd.moveId === move.id && msd.target === target
+    );
+    if (!isNullOrUndefined(cachedMoveScore?.expectedAttackScore)) {
+      return cachedMoveScore.expectedAttackScore;
+    }
+
+    let expectedAttackScore = 0;
+
+    if (move.category !== MoveCategory.STATUS) {
+      const damage = target.getAttackDamage(this, move, !target.battleData?.abilityRevealed, false, move.hasAttr(CritOnlyAttr)).damage;
+
+      if (damage >= target.hp) {
+        const movePriority = new Utils.NumberHolder(move.priority);
+        applyAbAttrs(ChangeMovePriorityAbAttr, this, null, true, move, movePriority);
+        applyMoveAttrs(IncrementMovePriorityAttr, this, target, move, movePriority);
+
+        if (movePriority.value > 0) {
+          // Priority moves that KO are (+6)
+          expectedAttackScore = 6;
+        } else {
+          // Non-Priority moves that KO are (+4)
+          expectedAttackScore = 4;
+        }
+      } else {
+        const percentMaxHpDamage = damage / target.getMaxHp() * 100;
+        if (percentMaxHpDamage >= 80) {
+          // Moves that deal 80% max HP damage or more are always (+2)
+          expectedAttackScore = 2;
+        } else {
+          // Moves that deal 0-80% max HP damage range from (+0) to (+2).
+          // The more damage a move deals, the more likely it gains a larger bonus.
+          expectedAttackScore = percentMaxHpDamage / 40;
+        }
+      }
+    }
+
+    if (cachedMoveScore) {
+      cachedMoveScore.expectedAttackScore = expectedAttackScore;
+    } else {
+      const moveScoreData = new PokemonMoveScoreData(move.id, target);
+      moveScoreData.expectedAttackScore = expectedAttackScore;
+      this.moveScoreData.push(moveScoreData);
+    }
+
+    return expectedAttackScore;
   }
 
   getEvolution(): SpeciesFormEvolution | null {
@@ -3548,6 +3666,10 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     this.turnData = new PokemonTurnData();
   }
 
+  resetMoveScoreData(): void {
+    this.moveScoreData = [];
+  }
+
   getExpValue(): integer {
     // Logic to factor in victor level has been removed for balancing purposes, so the player doesn't have to focus on EXP maxxing
     return ((this.getSpeciesForm().getBaseExp() * this.level) / 5 + 1);
@@ -4534,6 +4656,69 @@ export class EnemyPokemon extends Pokemon {
   }
 
   /**
+   * Computes this Pokemon's Matchup Score against the given opposing Pokemon.
+   * This score ranges from 0 to 30.0 and uses the following components in its calculation:
+   * - This Pokemon's {@linkcode Pokemon.getExpectedAttackScore | Expected Attack Score (EAS)} against the opponent
+   * - The opposing Pokemon's Expected Attack Score (EAS) against this Pokemon
+   * - Whether or not this Pokemon is currently on the field (the opponent is assumed to be on the field)
+   * - Whether or not this Pokemon outspeeds the opposing Pokemon
+   * @param opponent the {@linkcode Pokemon} to compare this Pokemon against
+   * @returns a score value based on how favorable this Pokemon is when fighting the given Pokemon
+   */
+  getMatchupScore(opponent: PlayerPokemon): number {
+    const currentSpeed = this.isActive(true)
+      ? this.getEffectiveStat(Stat.SPD, opponent, undefined, false, !opponent.battleData?.abilityRevealed, false, true)
+      : this.getStat(Stat.SPD, false);
+    const currentOpponentSpeed = opponent.getEffectiveStat(Stat.SPD, this, undefined, !this.battleData?.abilityRevealed, false, false, true);
+
+    /** 1 point bonus if this Pokemon outspeeds its opponent */
+    const outspeedBonus = currentSpeed > currentOpponentSpeed ? 1 : 0;
+
+    /** This Pokemon's usable attacks */
+    const usableAttackMoves = this.getAttackMoves(true).map((pokemonMove) => pokemonMove.getMove());
+    /** The opponent's revealed usable attacks */
+    const oppUsableAttackMoves = opponent.getAttackMoves(true, true).map((pokemonMove) => pokemonMove.getMove());
+
+    /**
+     * If the opponent's full moveset isn't known, simulate moves of the
+     * same types as the opponent. The properties of simulated moves change
+     * based on the opponent's level and highest offensive (permanent) stat
+     */
+    opponent.getTypes().forEach((type) => {
+      // only generate up to 4 moves
+      if (opponent.battleData?.movesRevealed.length >= 4) {
+        return;
+      }
+
+      // simulated move power varies by the opponent's level
+      let power: number = 0;
+      if (opponent.level < 15) {
+        power = 40;
+      } else if (opponent.level < 30) {
+        power = 60;
+      } else if (opponent.level < 50) {
+        power = 80;
+      } else {
+        power = 90;
+      }
+
+      // simulated move category depends on the opponent's highest permanent stat
+      // between Attack and Sp. Atk (if there's a tie, the move is physical)
+      const category = opponent.getStat(Stat.ATK) >= opponent.getStat(Stat.SPATK)
+        ? MoveCategory.PHYSICAL
+        : MoveCategory.SPECIAL;
+
+      const simulatedMove = new AttackMove(Moves.NONE, type, category, power, 100, 1, -1, 0, 0);
+      oppUsableAttackMoves.push(simulatedMove);
+    });
+
+    const aiMaxEAS = Math.max(...usableAttackMoves.map((move) => this.getExpectedAttackScore(opponent, move)));
+    const oppMaxEAS = Math.max(...oppUsableAttackMoves.map((move) => opponent.getExpectedAttackScore(this, move)));
+
+    return aiMaxEAS * Math.max((this.isActive(true) ? 4 : 3) - oppMaxEAS + outspeedBonus, 0);
+  }
+
+  /**
    * Determines the move this Pokemon will use on the next turn, as well as
    * the Pokemon the move will target.
    * @returns this Pokemon's next move in the format {move, moveTargets}
@@ -5011,6 +5196,19 @@ export interface AttackMoveResult {
   sourceBattlerIndex: BattlerIndex;
 }
 
+export class PokemonMoveScoreData {
+  public moveId: Moves;
+  public target: Pokemon;
+  public attackScore?: number;
+  public expectedAttackScore?: number;
+  public effectScore?: number;
+
+  constructor(moveId: Moves, target: Pokemon) {
+    this.moveId = moveId;
+    this.target = target;
+  }
+}
+
 export class PokemonSummonData {
   /** [Atk, Def, SpAtk, SpDef, Spd, Acc, Eva] */
   public statStages: number[] = [ 0, 0, 0, 0, 0, 0, 0 ];
@@ -5037,6 +5235,7 @@ export class PokemonBattleData {
   public berriesEaten: BerryType[] = [];
   public abilitiesApplied: Abilities[] = [];
   public abilityRevealed: boolean = false;
+  public movesRevealed: Moves[] = [];
 }
 
 export class PokemonBattleSummonData {
@@ -5062,6 +5261,7 @@ export class PokemonTurnData {
   public damageTaken: number = 0;
   public attacksReceived: AttackMoveResult[] = [];
   public order: number;
+
   public statStagesIncreased: boolean = false;
   public statStagesDecreased: boolean = false;
   public moveEffectiveness: TypeDamageMultiplier | null = null;
