@@ -1156,6 +1156,51 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
+   * Returns an estimated set of attack moves for the Pokemon as perceived by the Enemy AI.
+   * Includes attacks revealed in battle and simulated attacks with typing, category, and power
+   * varying based on the Pokemon's typing, stat distribution, and level, respectively.
+   */
+  getEstimatedAttackMoves(): Move[] {
+    // Include usable attacks that have been used in the current battle.
+    const estimatedAttackMoves = this.getAttackMoves(true, true).map((pokemonMove) => pokemonMove.getMove());
+
+    /**
+     * If the opponent's full moveset isn't known, simulate moves of the
+     * same types as the opponent. The properties of simulated moves change
+     * based on the opponent's level and highest offensive (permanent) stat
+     */
+    this.getTypes().forEach((type) => {
+      // only generate up to 4 moves
+      if (this.battleData?.movesRevealed.length >= 4) {
+        return;
+      }
+
+      // simulated move power varies by the opponent's level
+      let power: number = 0;
+      if (this.level < 15) {
+        power = 40;
+      } else if (this.level < 30) {
+        power = 60;
+      } else if (this.level < 50) {
+        power = 80;
+      } else {
+        power = 90;
+      }
+
+      // simulated move category depends on the opponent's highest permanent stat
+      // between Attack and Sp. Atk (if there's a tie, the move is physical)
+      const category = this.getStat(Stat.ATK) >= this.getStat(Stat.SPATK)
+        ? MoveCategory.PHYSICAL
+        : MoveCategory.SPECIAL;
+
+      const simulatedMove = new AttackMove(Moves.NONE, type, category, power, 100, 1, -1, 0, 0);
+      estimatedAttackMoves.push(simulatedMove);
+    });
+
+    return estimatedAttackMoves;
+  }
+
+  /**
    * Checks which egg moves have been unlocked for the {@linkcode Pokemon} based
    * on the species it was met at or by the first {@linkcode Pokemon} in its evolution
    * line that can act as a starter and provides those egg moves.
@@ -1781,7 +1826,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
    * @param move the {@linkcode Move} being scored
    * @returns the expected value of the move's Attack Score
    * @see {@linkcode getAttackScore}
-   * @see {@linkcode getMatchupScore}
+   * @see {@linkcode EnemyPokemon.getMatchupScore}
    */
   getExpectedAttackScore(target: Pokemon, move: Move): number {
     const cachedMoveScore = this.moveScoreData.find(
@@ -4676,44 +4721,11 @@ export class EnemyPokemon extends Pokemon {
 
     /** This Pokemon's usable attacks */
     const usableAttackMoves = this.getAttackMoves(true).map((pokemonMove) => pokemonMove.getMove());
-    /** The opponent's revealed usable attacks */
-    const oppUsableAttackMoves = opponent.getAttackMoves(true, true).map((pokemonMove) => pokemonMove.getMove());
-
-    /**
-     * If the opponent's full moveset isn't known, simulate moves of the
-     * same types as the opponent. The properties of simulated moves change
-     * based on the opponent's level and highest offensive (permanent) stat
-     */
-    opponent.getTypes().forEach((type) => {
-      // only generate up to 4 moves
-      if (opponent.battleData?.movesRevealed.length >= 4) {
-        return;
-      }
-
-      // simulated move power varies by the opponent's level
-      let power: number = 0;
-      if (opponent.level < 15) {
-        power = 40;
-      } else if (opponent.level < 30) {
-        power = 60;
-      } else if (opponent.level < 50) {
-        power = 80;
-      } else {
-        power = 90;
-      }
-
-      // simulated move category depends on the opponent's highest permanent stat
-      // between Attack and Sp. Atk (if there's a tie, the move is physical)
-      const category = opponent.getStat(Stat.ATK) >= opponent.getStat(Stat.SPATK)
-        ? MoveCategory.PHYSICAL
-        : MoveCategory.SPECIAL;
-
-      const simulatedMove = new AttackMove(Moves.NONE, type, category, power, 100, 1, -1, 0, 0);
-      oppUsableAttackMoves.push(simulatedMove);
-    });
+    /** The opponent's estimated attack moves */
+    const oppEstimatedMoves = opponent.getEstimatedAttackMoves();
 
     const aiMaxEAS = Math.max(...usableAttackMoves.map((move) => this.getExpectedAttackScore(opponent, move)));
-    const oppMaxEAS = Math.max(...oppUsableAttackMoves.map((move) => opponent.getExpectedAttackScore(this, move)));
+    const oppMaxEAS = Math.max(...oppEstimatedMoves.map((move) => opponent.getExpectedAttackScore(this, move)));
 
     return aiMaxEAS * Math.max((this.isActive(true) ? 4 : 3) - oppMaxEAS + outspeedBonus, 0);
   }

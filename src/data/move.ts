@@ -118,7 +118,7 @@ export enum MoveFlags {
   /** Indicates a move is able to bypass its target's Substitute (if the target has one) */
   IGNORE_SUBSTITUTE = 1 << 18,
   /** Indicates a move is able to be redirected to allies in a double battle if the attacker faints */
-  REDIRECT_COUNTER = 1 << 19,
+  REDIRECT_COUNTER = 1 << 19
 }
 
 type MoveConditionFunc = (user: Pokemon, target: Pokemon, move: Move) => boolean;
@@ -682,6 +682,7 @@ export default class Move implements Localizable {
    * @param target {@linkcode Pokemon} receiving the move
    * @param move {@linkcode Move} using the move
    * @returns integer representing the total benefitScore
+   * @deprecated
    */
   getUserBenefitScore(user: Pokemon, target: Pokemon, move: Move): integer {
     let score = 0;
@@ -703,6 +704,7 @@ export default class Move implements Localizable {
    * @param target {@linkcode Pokemon} receiving the move
    * @param move {@linkcode Move} using the move
    * @returns integer representing the total benefitScore
+   * @deprecated
    */
   getTargetBenefitScore(user: Pokemon, target: Pokemon, move: Move): integer {
     let score = 0;
@@ -713,6 +715,23 @@ export default class Move implements Localizable {
     }
 
     return score;
+  }
+
+  /**
+   * Calculates the move's accumulated Effect Score across all attributes and conditions
+   * @param user the {@linkcode Pokemon} using the move
+   * @param target the {@linkcode Pokemon} targeted by the move
+   * @param move the {@linkcode Move} being used
+   * @returns the cumulative score of the move's attributes and conditions
+   */
+  getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    const attrScores = this.attrs.map((attr) => attr.getEffectScore(user, target, move))
+      .reduce((total, score) => total + score);
+
+    // const conditionScores = this.conditions.map((condition) => condition.getEffectScore(user, target, move))
+    //   .reduce((total, score) => total + score);
+
+    return attrScores; // + conditionScores
   }
 
   /**
@@ -875,11 +894,28 @@ export class AttackMove extends Move {
 
     return ret;
   }
+
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    // Attacks other than Pollen Puff gain a -20 penalty when targeting an ally
+    if (target === user.getAlly() && !move.hasAttr(HealOnAllyAttr)) {
+      return -20;
+    }
+    return super.getEffectScore(user, target, move);
+  }
 }
 
 export class StatusMove extends Move {
   constructor(id: Moves, type: Type, accuracy: integer, pp: integer, chance: integer, priority: integer, generation: integer) {
     super(id, type, MoveCategory.STATUS, MoveTarget.NEAR_OTHER, -1, accuracy, pp, chance, priority, generation);
+  }
+
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    // Status Moves gain a -20 penalty when targeting an ally unless at least
+    // one of their attributes overrides the penalty.
+    if (target === user.getAlly() && !this.attrs.some((attr) => attr.overridesAllyTargetPenalty)) {
+      return -20;
+    }
+    return super.getEffectScore(user, target, move);
   }
 }
 
@@ -898,8 +934,20 @@ export abstract class MoveAttr {
   /** Should this {@linkcode Move} target the user? */
   public selfTarget: boolean;
 
-  constructor(selfTarget: boolean = false) {
+  // AI Move Scoring Flags:
+  /** Does this attribute negate the base penalty of -20 for targeting an ally? */
+  public overridesAllyTargetPenalty: boolean;
+  /** Does this attribute apply its effect score bonus when the move KOs the target? */
+  public scoresOnKO: boolean;
+  /** Does this attribute apply its effect score bonus even when the move would fail? */
+  public scoresOnFail: boolean;
+
+  constructor(selfTarget: boolean = false, overridesAllyTargetPenalty: boolean = false, scoresOnKO: boolean = false, scoresOnFail: boolean = false) {
     this.selfTarget = selfTarget;
+
+    this.overridesAllyTargetPenalty = overridesAllyTargetPenalty;
+    this.scoresOnKO = scoresOnKO;
+    this.scoresOnFail = scoresOnFail;
   }
 
   /**
@@ -940,6 +988,7 @@ export abstract class MoveAttr {
    * Used by the Enemy AI to rank an attack based on a given user
    * @see {@linkcode EnemyPokemon.getNextMove}
    * @virtual
+   * @deprecated
    */
   getUserBenefitScore(user: Pokemon, target: Pokemon, move: Move): integer {
     return 0;
@@ -949,9 +998,32 @@ export abstract class MoveAttr {
    * Used by the Enemy AI to rank an attack based on a given target
    * @see {@linkcode EnemyPokemon.getNextMove}
    * @virtual
+   * @deprecated
    */
   getTargetBenefitScore(user: Pokemon, target: Pokemon, move: Move): integer {
     return 0;
+  }
+
+  /**
+   * Used by the Enemy AI to evaluate moves based on their secondary effects
+   * and non-damage-based properties.
+   * @param user the {@linkcode Pokemon} using the move
+   * @param target the {@linkcode Pokemon} targeted by the move
+   * @param move the {@linkcode Move} being used
+   * @see {@linkcode Pokemon.getAttackScore} for damage-based scoring
+   */
+  getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    return 0;
+  }
+
+  /**
+   * Logs instances where a move's effect score bonus is unimplemented
+   * @param move the {@linkcode Move} with this attribute
+   * @param message (optional) a custom message to display as the warning
+   */
+  reportUnimplementedScore(move: Move, message?: string) {
+    const warning = message ?? `Effect Score bonus unimplemented for ${this.constructor.name}`;
+    console.warn(`${move.name}: ${warning}`);
   }
 }
 
@@ -1044,7 +1116,7 @@ export class MoveEffectAttr extends MoveAttr {
  */
 export class MoveHeaderAttr extends MoveAttr {
   constructor() {
-    super(true);
+    super(true, false, true);
   }
 }
 
@@ -1088,6 +1160,52 @@ export class AddBattlerTagHeaderAttr extends MoveHeaderAttr {
   apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
     user.addTag(this.tagType);
     return true;
+  }
+
+  /**
+   * Returns the Effect Score modifier granted to moves with this attribute.
+   * The score modifier varies based on the type of tag added to the user.
+   */
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    switch (this.tagType) {
+    case BattlerTagType.SHELL_TRAP:
+      return this.getShellTrapEffectScore(user, target, move);
+    case BattlerTagType.BEAK_BLAST_CHARGING:
+      return this.getBeakBlastEffectScore(user, target, move);
+    default:
+      this.reportUnimplementedScore(move, `${this.tagType} not scored for ${this.constructor.name}`);
+      return 0;
+    }
+  }
+
+  /**
+   * Effect Score for Shell Trap's condition requiring the user to be hit by a physical move.
+   * Penalizes the move by (-2) for each target that doesn't have an affinity for physical attacks.
+   */
+  private getShellTrapEffectScore(user: Pokemon, target: Pokemon, move: Move): number {
+    return (target.getEffectiveStat(Stat.ATK) <= target.getEffectiveStat(Stat.SPATK)) ? -2 : 0;
+  }
+
+  /**
+   * Effect Score for Beak Blast's "burn on contact" effect, granting:
+   * - 50% chance of (+1) for each opponent with an affinity for physical attacks
+   * - (+1) if the user is asleep or frozen
+   *
+   * The total bonus from this attribute cannot exceed (+2).
+   */
+  private getBeakBlastEffectScore(user: Pokemon, target: Pokemon, move: Move): number {
+    const affinityBonusChance = 50;
+    let affinityBonus = 0;
+    user.getOpponents().forEach((opp) => {
+      if (opp.getEffectiveStat(Stat.ATK) > opp.getEffectiveStat(Stat.SPATK)
+          && user.randSeedInt(100) < affinityBonusChance) {
+        affinityBonus += 1;
+      }
+    });
+
+    const statusBonus = (user.status?.effect && [ StatusEffect.SLEEP, StatusEffect.FREEZE ].includes(user.status?.effect)) ? 1 : 0;
+
+    return Math.min(affinityBonus + statusBonus, 2);
   }
 }
 
@@ -1257,6 +1375,21 @@ export class CounterDamageAttr extends FixedDamageAttr {
   getCondition(): MoveConditionFunc {
     return (user, target, move) => !!user.turnData.attacksReceived.filter(ar => this.moveFilter(allMoves[ar.move])).length;
   }
+
+  /**
+   * Returns the Effect Score modifier granted to moves with this attribute.
+   * Counter moves are granted a 50% chance of (+2) when an opponent is expected
+   * to deal 40% max HP damage or more to the user without KOing the user.
+   */
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    const bonusChance = 50;
+    const canApplyBonus = user.getOpponents().some((opp) => {
+      const maxEAS = Math.max(...opp.getEstimatedAttackMoves().map((move) => opp.getExpectedAttackScore(user, move)));
+      return (maxEAS >= 1 && maxEAS <= 2);
+    });
+
+    return (canApplyBonus && user.randSeedInt(100) < bonusChance) ? 2 : 0;
+  }
 }
 
 export class LevelDamageAttr extends FixedDamageAttr {
@@ -1341,10 +1474,6 @@ export class RecoilAttr extends MoveEffectAttr {
       return false;
     }
 
-    if (cancelled.value) {
-      return false;
-    }
-
     user.damageAndUpdate(recoilDamage, HitResult.OTHER, false, true, true);
     user.scene.queueMessage(i18next.t("moveTriggers:hitWithRecoil", { pokemonName: getPokemonNameWithAffix(user) }));
     user.turnData.damageTaken += recoilDamage;
@@ -1354,6 +1483,24 @@ export class RecoilAttr extends MoveEffectAttr {
 
   getUserBenefitScore(user: Pokemon, target: Pokemon, move: Move): integer {
     return Math.floor((move.power / 5) / -4);
+  }
+
+  /**
+   * Returns the Effect Score modifier granted to moves with recoil.
+   * - If the user can block recoil with its ability, this grants (+0)
+   * - If the move's recoil is a fraction of the user's max HP, this grants (-2)
+   * - Otherwise, this has a (recoil damage ratio * 100)% chance of granting (-1)
+   */
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    const penaltyChance = Math.floor(this.damageRatio * 100);
+
+    if ((user.hasAbilityWithAttr(BlockRecoilDamageAttr) || user.hasAbilityWithAttr(BlockNonDirectDamageAbAttr)) && !this.unblockable) {
+      return 0;
+    } else if (this.useHp) {
+      return -2;
+    } else {
+      return (user.randSeedInt(100) < penaltyChance) ? -1 : 0;
+    }
   }
 }
 
@@ -1388,6 +1535,55 @@ export class SacrificialAttr extends MoveEffectAttr {
       return -20;
     }
     return Math.ceil(((1 - user.getHpRatio()) * 10 - 10) * (target.getAttackTypeEffectiveness(move.type, user) - 0.5));
+  }
+
+  /**
+   * Returns the Effect Score modifier granted to moves with this attribute:
+   * - If the user is a Boss, this grants a penalty of (-20), meaning the move
+   * should virtually never be used.
+   * - Otherwise, check each Pokemon this move can target on the field:
+   *   - If the user has a "bad" matchup against all active opponents, the
+   *     base penalty is (-1). Otherwise, the base penalty is (-3).
+   *   - Further penalize the move by (-2) for each ally neutrally affected
+   *     by the move (or better), and (-1) for each ally that resists the move.
+   */
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    if (user.isBoss()) {
+      return -20;
+    } else {
+      /** The active Pokemon this move can target */
+      const activeMoveTargets = getMoveTargets(user, move.id).targets
+        .map((targetIndex) => user.scene.getField()[targetIndex])
+        .filter((target) => target?.isActive(true));
+
+      // Effect Penalty is (-1) by default (may be overwritten)
+      let effectPenalty = -1;
+
+      // Always set the base penalty to -3 for Wild battles
+      if (!user.hasTrainer()) {
+        effectPenalty = -3;
+      } else {
+        // If the user has a favorable matchup against any opponent, set the penalty to -3
+        activeMoveTargets.filter((pokemon) => pokemon instanceof PlayerPokemon).forEach((opponent) => {
+          if (user.getMatchupScore(opponent) > 3) {
+            effectPenalty = -3;
+          }
+        });
+      }
+
+      // Penalty also increases by (-2) for each ally affected by the move
+      // (-1 if the ally resists the move)
+      activeMoveTargets.filter((pokemon) => pokemon === user.getAlly()).forEach((ally) => {
+        const effectiveness = ally.getMoveEffectiveness(user, move);
+        if (effectiveness >= 1) {
+          effectPenalty -= 2;
+        } else if (effectiveness > 0) {
+          effectPenalty -= 1;
+        }
+      });
+
+      return effectPenalty;
+    }
   }
 }
 
@@ -1426,6 +1622,24 @@ export class SacrificialAttrOnHit extends MoveEffectAttr {
       return -20;
     }
     return Math.ceil(((1 - user.getHpRatio()) * 10 - 10) * (target.getAttackTypeEffectiveness(move.type, user) - 0.5));
+  }
+
+  /**
+   * Returns the Effect Score modifier granted to moves with this attribute:
+   * - If the user is a Boss, this grants a penalty of (-20), meaning the move
+   * should virtually never be used.
+   * - Otherwise, if the user has a "bad" matchup against all active opponents,
+   * grant a penalty of (-1); if not, grant a penalty of (-3) instead.
+   */
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    if (user.isBoss()) {
+      return -20;
+    } else {
+      const hasFavorableMatchup = user.getOpponents().some(
+        (opp) => opp instanceof PlayerPokemon && user.getMatchupScore(opp) > 3);
+
+      return (!user.hasTrainer() || hasFavorableMatchup) ? -3 : -1;
+    }
   }
 }
 
@@ -1468,6 +1682,22 @@ export class HalfSacrificialAttr extends MoveEffectAttr {
       return -10;
     }
     return Math.ceil(((1 - user.getHpRatio() / 2) * 10 - 10) * (target.getAttackTypeEffectiveness(move.type, user) - 0.5));
+  }
+
+  /**
+   * Returns the Effect Score modifier granted to moves with this attribute:
+   * - If the user is a boss, grant a penalty of (-20)
+   * - If the user would faint from using this move, grant a penalty of (-4)
+   * - Otherwise, grant a penalty of (-2).
+   */
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    if (user.isBoss()) {
+      return -20;
+    } else if (user.getHpRatio() <= 0.5) {
+      return -4;
+    } else {
+      return -2;
+    }
   }
 }
 
