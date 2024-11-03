@@ -1011,6 +1011,12 @@ export class ChargingSelfStatusMove extends ChargeMove(SelfStatusMove) {}
 
 export type ChargingMove = ChargingAttackMove | ChargingSelfStatusMove;
 
+interface MoveAttrOptions {
+  overridesAllyTargetPenalty?: boolean;
+  scoresOnKO?: boolean;
+  scoresOnFail?: boolean;
+}
+
 /**
  * Base class defining all {@linkcode Move} Attributes
  * @abstract
@@ -1019,21 +1025,23 @@ export type ChargingMove = ChargingAttackMove | ChargingSelfStatusMove;
 export abstract class MoveAttr {
   /** Should this {@linkcode Move} target the user? */
   public selfTarget: boolean;
+  protected options?: MoveAttrOptions;
 
-  // AI Move Scoring Flags:
-  /** Does this attribute negate the base penalty of -20 for targeting an ally? */
-  public overridesAllyTargetPenalty: boolean;
-  /** Does this attribute apply its effect score bonus when the move KOs the target? */
-  public scoresOnKO: boolean;
-  /** Does this attribute apply its effect score bonus even when the move would fail? */
-  public scoresOnFail: boolean;
-
-  constructor(selfTarget: boolean = false, overridesAllyTargetPenalty: boolean = false, scoresOnKO: boolean = false, scoresOnFail: boolean = false) {
+  constructor(selfTarget: boolean = false, options?: MoveAttrOptions) {
     this.selfTarget = selfTarget;
+    this.options = options;
+  }
 
-    this.overridesAllyTargetPenalty = overridesAllyTargetPenalty;
-    this.scoresOnKO = scoresOnKO;
-    this.scoresOnFail = scoresOnFail;
+  public get overridesAllyTargetPenalty() {
+    return this.options?.overridesAllyTargetPenalty ?? false;
+  }
+
+  public get scoresOnKO() {
+    return this.options?.scoresOnKO ?? false;
+  }
+
+  public get scoresOnFail() {
+    return this.options?.scoresOnFail ?? false;
   }
 
   /**
@@ -1121,7 +1129,7 @@ export enum MoveEffectTrigger {
   POST_TARGET,
 }
 
-interface MoveEffectAttrOptions {
+interface MoveEffectAttrOptions extends MoveAttrOptions {
   /**
    * Defines when this effect should trigger in the move's effect order
    * @see {@linkcode MoveEffectPhase}
@@ -1146,7 +1154,7 @@ export class MoveEffectAttr extends MoveAttr {
    * A container for this attribute's optional parameters
    * @see {@linkcode MoveEffectAttrOptions} for supported params.
    */
-  protected options?: MoveEffectAttrOptions;
+  protected override options?: MoveEffectAttrOptions;
 
   constructor(selfTarget?: boolean, options?: MoveEffectAttrOptions) {
     super(selfTarget);
@@ -1250,8 +1258,8 @@ export class MoveEffectAttr extends MoveAttr {
  * (e.g. adding a battler tag).
  */
 export class MoveHeaderAttr extends MoveAttr {
-  constructor() {
-    super(true, false, true);
+  constructor(options?: MoveAttrOptions) {
+    super(true, options);
   }
 }
 
@@ -1287,8 +1295,8 @@ export class MessageHeaderAttr extends MoveHeaderAttr {
 export class AddBattlerTagHeaderAttr extends MoveHeaderAttr {
   private tagType: BattlerTagType;
 
-  constructor(tagType: BattlerTagType) {
-    super();
+  constructor(tagType: BattlerTagType, options?: MoveAttrOptions) {
+    super(options);
     this.tagType = tagType;
   }
 
@@ -1303,13 +1311,13 @@ export class AddBattlerTagHeaderAttr extends MoveHeaderAttr {
    */
   override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     switch (this.tagType) {
-    case BattlerTagType.SHELL_TRAP:
-      return this.getShellTrapEffectScore(user, target, move);
-    case BattlerTagType.BEAK_BLAST_CHARGING:
-      return this.getBeakBlastEffectScore(user, target, move);
-    default:
-      this.reportUnimplementedScore(move, `${this.tagType} not scored for ${this.constructor.name}`);
-      return 0;
+      case BattlerTagType.SHELL_TRAP:
+        return this.getShellTrapEffectScore(user, target, move);
+      case BattlerTagType.BEAK_BLAST_CHARGING:
+        return this.getBeakBlastEffectScore(user, target, move);
+      default:
+        this.reportUnimplementedScore(move, `${this.tagType} not scored for ${this.constructor.name}`);
+        return 0;
     }
   }
 
@@ -1355,7 +1363,10 @@ export class BeakBlastHeaderAttr extends AddBattlerTagHeaderAttr {
   public chargeAnim = ChargeAnim.BEAK_BLAST_CHARGING;
 
   constructor() {
-    super(BattlerTagType.BEAK_BLAST_CHARGING);
+    super(BattlerTagType.BEAK_BLAST_CHARGING, {
+      scoresOnKO: true,
+      scoresOnFail: true
+    });
   }
 }
 
@@ -1580,7 +1591,7 @@ export class RecoilAttr extends MoveEffectAttr {
   private unblockable: boolean;
 
   constructor(useHp: boolean = false, damageRatio: number = 0.25, unblockable: boolean = false) {
-    super(true, { lastHitOnly: true });
+    super(true, { lastHitOnly: true, scoresOnKO: true });
 
     this.useHp = useHp;
     this.damageRatio = damageRatio;
@@ -1652,7 +1663,12 @@ export class RecoilAttr extends MoveEffectAttr {
  **/
 export class SacrificialAttr extends MoveEffectAttr {
   constructor() {
-    super(true, { trigger: MoveEffectTrigger.POST_TARGET });
+    super(true, {
+      trigger: MoveEffectTrigger.POST_TARGET,
+      overridesAllyTargetPenalty: true,
+      scoresOnKO: true,
+      scoresOnFail: true
+    });
   }
 
   /**
@@ -1734,7 +1750,10 @@ export class SacrificialAttr extends MoveEffectAttr {
  **/
 export class SacrificialAttrOnHit extends MoveEffectAttr {
   constructor() {
-    super(true, { trigger: MoveEffectTrigger.HIT });
+    super(true, {
+      trigger: MoveEffectTrigger.HIT,
+      scoresOnKO: true
+    });
   }
 
   /**
@@ -1791,7 +1810,11 @@ export class SacrificialAttrOnHit extends MoveEffectAttr {
  */
 export class HalfSacrificialAttr extends MoveEffectAttr {
   constructor() {
-    super(true, { trigger: MoveEffectTrigger.POST_TARGET });
+    super(true, {
+      trigger: MoveEffectTrigger.POST_TARGET,
+      scoresOnKO: true,
+      scoresOnFail: true
+    });
   }
 
   /**
@@ -1882,6 +1905,20 @@ export class AddSubstituteAttr extends MoveEffectAttr {
     return 5;
   }
 
+  /**
+   * Returns the Effect Score modifier granted to moves with this attribute.
+   * - If the user has an advantageous matchup against all opponents and is not a Boss,
+   *   grant a bonus of (+2)
+   * - Otherwise, grant a penalty of (-1)
+   */
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    const opposingField = user.scene.getPlayerField();
+    if (!user.isBoss() && opposingField.every(opp => user.getMatchupScore(opp) >= 6)) {
+      return 2;
+    }
+    return -1;
+  }
+
   getCondition(): MoveConditionFunc {
     return (user, target, move) => !user.getTag(SubstituteTag) && user.hp > Math.floor(user.getMaxHp() * this.hpCost) && user.getMaxHp() > 1;
   }
@@ -1916,8 +1953,8 @@ export class HealAttr extends MoveEffectAttr {
   /** Should an animation be shown? */
   private showAnim: boolean;
 
-  constructor(healRatio?: number, showAnim?: boolean, selfTarget?: boolean) {
-    super(selfTarget === undefined || selfTarget);
+  constructor(healRatio?: number, showAnim?: boolean, selfTarget: boolean = true) {
+    super(selfTarget, { overridesAllyTargetPenalty: true });
 
     this.healRatio = healRatio || 1;
     this.showAnim = !!showAnim;
@@ -1940,6 +1977,35 @@ export class HealAttr extends MoveEffectAttr {
   getTargetBenefitScore(user: Pokemon, target: Pokemon, move: Move): integer {
     const score = ((1 - (this.selfTarget ? user : target).getHpRatio()) * 20) - this.healRatio * 10;
     return Math.round(score / (1 - this.healRatio / 2));
+  }
+
+  /**
+   * Returns the Effect Score modifier granted to moves with this attribute:
+   * - If the move is self-targeted (e.g. Recover):
+   *   - If the user is damaged beyond the move's heal ratio, or the user is below
+   *     75% max HP and is outsped by at least one opponent, grant a bonus of (+1)
+   *     +50% chance of additional (+1)
+   * - If the move is not self-targeted (e.g. Heal Pulse):
+   *   - If the target is an enemy, grant a (-10) penalty.
+   *   - If the target is an ally and either the target is damaged beyond the move's
+   *     heal ratio or the target is below 75% max HP and the user is outsped by at least
+   *     1 opponent, grant a bonus of (+1).
+   */
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    const opposingField = user.scene.getPlayerField();
+    const isOutsped = opposingField.some(opp => user.getEffectiveStat(Stat.SPD) < opp.getEffectiveStat(Stat.SPD));
+    if (this.selfTarget) {
+      if (user.getHpRatio() <= (1 - this.healRatio) || (user.getHpRatio() <= 0.75 && isOutsped)) {
+        return 1 + (user.randSeedInt(100) < 50 ? 1 : 0);
+      }
+    } else {
+      if (target !== user.getAlly()) {
+        return -10;
+      } else if (target.getHpRatio() <= (1 - this.healRatio) || (target.getHpRatio() <= 0.75 && isOutsped)) {
+        return 1;
+      }
+    }
+    return 0;
   }
 }
 
@@ -1998,6 +2064,16 @@ export class PartyStatusCureAttr extends MoveEffectAttr {
     } else {
       pokemon.scene.unshiftPhase(new ShowAbilityPhase(pokemon.scene, pokemon.id, pokemon.getPassiveAbility()?.id === this.abilityCondition));
     }
+  }
+
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    const pokemonToCure = user.scene.getEnemyParty().filter(pokemon => {
+      const statusEffect = pokemon.status?.effect;
+      return statusEffect && statusEffect !== StatusEffect.FAINT
+        && (pokemon === user || !pokemon.hasAbility(this.abilityCondition));
+    });
+
+    return Math.min(pokemonToCure.length, 3);
   }
 }
 
@@ -9823,7 +9899,7 @@ export function initMoves() {
       .ignoresVirtual(),
     /* End Unused */
     new AttackMove(Moves.SHELL_TRAP, Type.FIRE, MoveCategory.SPECIAL, 150, 100, 5, -1, -3, 7)
-      .attr(AddBattlerTagHeaderAttr, BattlerTagType.SHELL_TRAP)
+      .attr(AddBattlerTagHeaderAttr, BattlerTagType.SHELL_TRAP, { scoresOnKO: true })
       .target(MoveTarget.ALL_NEAR_ENEMIES)
       // Fails if the user was not hit by a physical attack during the turn
       .condition((user, target, move) => user.getTag(ShellTrapTag)?.activated === true),
