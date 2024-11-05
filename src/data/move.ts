@@ -1949,9 +1949,9 @@ export enum MultiHitType {
  */
 export class HealAttr extends MoveEffectAttr {
   /** The percentage of {@linkcode Stat.HP} to heal */
-  private healRatio: number;
+  protected healRatio: number;
   /** Should an animation be shown? */
-  private showAnim: boolean;
+  protected showAnim: boolean;
 
   constructor(healRatio?: number, showAnim?: boolean, selfTarget: boolean = true) {
     super(selfTarget, { overridesAllyTargetPenalty: true });
@@ -1960,9 +1960,23 @@ export class HealAttr extends MoveEffectAttr {
     this.showAnim = !!showAnim;
   }
 
+  /**
+   * Returns the fraction of the user's maximum HP restored by this effect
+   * @param user the {@linkcode Pokemon} using the move
+   * @param target the {@linkcode Pokemon} targeted by the move
+   * @param move the {@linkcode Move} being used
+   */
+  protected getHealRatio(user: Pokemon, target: Pokemon, move: Move): number {
+    return this.healRatio;
+  }
+
   apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    this.addHealPhase(this.selfTarget ? user : target, this.healRatio);
-    return true;
+    const healRatio = this.getHealRatio(user, target, move);
+    if (healRatio > 0) {
+      this.addHealPhase(this.selfTarget ? user : target, this.getHealRatio(user, target, move));
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -1994,14 +2008,15 @@ export class HealAttr extends MoveEffectAttr {
   override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     const opposingField = user.scene.getPlayerField();
     const isOutsped = opposingField.some(opp => user.getEffectiveStat(Stat.SPD) < opp.getEffectiveStat(Stat.SPD));
+    const healRatio = this.getHealRatio(user, target, move);
     if (this.selfTarget) {
-      if (user.getHpRatio() <= (1 - this.healRatio) || (user.getHpRatio() <= 0.75 && isOutsped)) {
-        return 1 + (user.randSeedInt(100) < 50 ? 1 : 0);
+      if (user.getHpRatio() <= (1 - healRatio) || (user.getHpRatio() <= 0.75 && isOutsped)) {
+        return 1 + ((user.randSeedInt(100) < 50) ? 1 : 0);
       }
     } else {
       if (target !== user.getAlly()) {
         return -10;
-      } else if (target.getHpRatio() <= (1 - this.healRatio) || (target.getHpRatio() <= 0.75 && isOutsped)) {
+      } else if (target.getHpRatio() <= (1 - healRatio) || (target.getHpRatio() <= 0.75 && isOutsped)) {
         return 1;
       }
     }
@@ -2021,7 +2036,7 @@ export class PartyStatusCureAttr extends MoveEffectAttr {
   private abilityCondition: Abilities;
 
   constructor(message: string | null, abilityCondition: Abilities) {
-    super();
+    super(true, { trigger: MoveEffectTrigger.HIT, scoresOnKO: true });
 
     this.message = message!; // TODO: is this bang correct?
     this.abilityCondition = abilityCondition;
@@ -2087,6 +2102,9 @@ export class PartyStatusCureAttr extends MoveEffectAttr {
  * @extends MoveEffectAttr
  */
 export class FlameBurstAttr extends MoveEffectAttr {
+  constructor() {
+    super(false, { scoresOnKO: true });
+  }
   /**
    * @param user - n/a
    * @param target - The target Pokémon.
@@ -2214,17 +2232,15 @@ export abstract class WeatherHealAttr extends HealAttr {
     super(0.5);
   }
 
-  apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    let healRatio = 0.5;
-    if (!user.scene.arena.weather?.isEffectSuppressed(user.scene)) {
-      const weatherType = user.scene.arena.weather?.weatherType || WeatherType.NONE;
-      healRatio = this.getWeatherHealRatio(weatherType);
-    }
-    this.addHealPhase(user, healRatio);
-    return true;
-  }
-
   abstract getWeatherHealRatio(weatherType: WeatherType): number;
+
+  protected override getHealRatio(user: Pokemon, target: Pokemon, move: Move): number {
+    if (!user.scene.arena.weather?.isEffectSuppressed(user.scene)) {
+      const weatherType = user.scene.arena.weather?.weatherType ?? WeatherType.NONE;
+      return this.getWeatherHealRatio(weatherType);
+    }
+    return super.getHealRatio(user, target, move);
+  }
 }
 
 export class PlantHealAttr extends WeatherHealAttr {
@@ -2268,26 +2284,17 @@ export class BoostHealAttr extends HealAttr {
   /** Healing received when {@linkcode condition} is true */
   private boostedHealRatio: number;
   /** The lambda expression to check against when boosting the healing value */
-  private condition?: MoveConditionFunc;
+  private condition: MoveConditionFunc;
 
-  constructor(normalHealRatio?: number, boostedHealRatio?: number, showAnim?: boolean, selfTarget?: boolean, condition?: MoveConditionFunc) {
+  constructor(normalHealRatio: number, boostedHealRatio: number, condition: MoveConditionFunc, showAnim?: boolean, selfTarget?: boolean) {
     super(normalHealRatio, showAnim, selfTarget);
     this.normalHealRatio = normalHealRatio!; // TODO: is this bang correct?
     this.boostedHealRatio = boostedHealRatio!; // TODO: is this bang correct?
     this.condition = condition;
   }
 
-  /**
-   * @param user {@linkcode Pokemon} using the move
-   * @param target {@linkcode Pokemon} target of the move
-   * @param move {@linkcode Move} with this attribute
-   * @param args N/A
-   * @returns true if the move was successful
-   */
-  apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    const healRatio: number = (this.condition ? this.condition(user, target, move) : false) ? this.boostedHealRatio : this.normalHealRatio;
-    this.addHealPhase(target, healRatio);
-    return true;
+  protected override getHealRatio(user: Pokemon, target: Pokemon, move: Move): number {
+    return this.condition(user, target, move) ? this.boostedHealRatio : this.normalHealRatio;
   }
 }
 
@@ -4330,28 +4337,19 @@ export class SpitUpPowerAttr extends VariablePowerAttr {
  * Does NOT remove stockpiled stacks.
  */
 export class SwallowHealAttr extends HealAttr {
-  apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
+  protected override getHealRatio(user: Pokemon, target: Pokemon, move: Move): number {
     const stockpilingTag = user.getTag(StockpilingTag);
 
-    if (stockpilingTag && stockpilingTag.stockpiledCount > 0) {
-      const stockpiled = stockpilingTag.stockpiledCount;
-      let healRatio: number;
-
-      if (stockpiled === 1) {
-        healRatio = 0.25;
-      } else if (stockpiled === 2) {
-        healRatio = 0.50;
-      } else { // stockpiled >= 3
-        healRatio = 1.00;
-      }
-
-      if (healRatio) {
-        this.addHealPhase(user, healRatio);
-        return true;
-      }
+    switch (stockpilingTag?.stockpiledCount) {
+      case 1:
+        return 0.25;
+      case 2:
+        return 0.50;
+      case 3:
+        return 1.00;
+      default:
+        return 0;
     }
-
-    return false;
   }
 }
 
@@ -9815,7 +9813,7 @@ export function initMoves() {
       .attr(StatStageChangeAttr, [ Stat.SPD ], -1, true)
       .punchingMove(),
     new StatusMove(Moves.FLORAL_HEALING, Type.FAIRY, -1, 10, -1, 0, 7)
-      .attr(BoostHealAttr, 0.5, 2 / 3, true, false, (user, target, move) => user.scene.arena.terrain?.terrainType === TerrainType.GRASSY)
+      .attr(BoostHealAttr, 0.5, 2 / 3, (user, target, move) => user.scene.arena.terrain?.terrainType === TerrainType.GRASSY, true, false)
       .triageMove(),
     new AttackMove(Moves.HIGH_HORSEPOWER, Type.GROUND, MoveCategory.PHYSICAL, 95, 95, 10, -1, 0, 7),
     new StatusMove(Moves.STRENGTH_SAP, Type.GRASS, 100, 10, -1, 0, 7)
