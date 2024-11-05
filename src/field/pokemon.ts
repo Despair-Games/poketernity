@@ -4807,6 +4807,18 @@ export class EnemyPokemon extends Pokemon {
   }
 
   /**
+   * @returns this Pokemon's average Matchup Score against the Player Pokemon that
+   * are currently on the field.
+   */
+  getAverageMatchupScore(): number {
+    const matchupScores = this.scene.getPlayerField()
+      .filter(opp => opp?.isActive(true))
+      .map(opp => this.getMatchupScore(opp));
+
+    return matchupScores.reduce((total, score) => total + score) / matchupScores.length;
+  }
+
+  /**
    * Determines the move this Pokemon will use on the next turn, as well as
    * the Pokemon the move will target.
    * @returns this Pokemon's next move in the format {move, moveTargets}

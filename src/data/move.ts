@@ -2066,6 +2066,11 @@ export class PartyStatusCureAttr extends MoveEffectAttr {
     }
   }
 
+  /**
+   * Returns the Effect Score modifier granted to moves with this attribute:
+   * - Grants (+1) per party Pokemon with an afflicted status that may be cured
+   *   by this move, up to (+2).
+   */
   override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     const pokemonToCure = user.scene.getEnemyParty().filter(pokemon => {
       const statusEffect = pokemon.status?.effect;
@@ -2073,7 +2078,7 @@ export class PartyStatusCureAttr extends MoveEffectAttr {
         && (pokemon === user || !pokemon.hasAbility(this.abilityCondition));
     });
 
-    return Math.min(pokemonToCure.length, 3);
+    return Math.min(pokemonToCure.length, 2);
   }
 }
 
@@ -2108,6 +2113,18 @@ export class FlameBurstAttr extends MoveEffectAttr {
   getTargetBenefitScore(user: Pokemon, target: Pokemon, move: Move): integer {
     return target.getAlly() ? -5 : 0;
   }
+
+  /**
+   * Returns the Effect Score modifier granted to moves with this attribute:
+   * - 50% to grant (+1) in a double battle.
+   */
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    if (user.scene.currentBattle?.double) {
+      const bonusChance = 50;
+      return user.randSeedInt(100) < bonusChance ? 1 : 0;
+    }
+    return 0;
+  }
 }
 
 export class SacrificialFullRestoreAttr extends SacrificialAttr {
@@ -2135,6 +2152,28 @@ export class SacrificialFullRestoreAttr extends SacrificialAttr {
 
   getCondition(): MoveConditionFunc {
     return (user, target, move) => user.scene.getParty().filter(p => p.isActive()).length > user.scene.currentBattle.getBattlerCount();
+  }
+
+  /**
+   * Returns the Effect Score modifier granted to moves with this attribute:
+   * - If the user is a boss, grant a (-20) penalty
+   * - If the user is a Trainer Pokemon, and the Trainer's Pokemon with the best matchup
+   *   is critically damaged, grant a (+2) bonus
+   * - Otherwise, grant a (-4) penalty
+   */
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    if (user.isBoss()) {
+      return -20;
+    } else if (user.hasTrainer()) {
+      const allyWithBestMatchup = user.scene.getEnemyParty()
+        .filter(pokemon => pokemon.isActive())
+        .sort((a, b) => b.getAverageMatchupScore() - a.getAverageMatchupScore())[0];
+
+      if (user !== allyWithBestMatchup && allyWithBestMatchup.getHpRatio() <= 0.25) {
+        return 2;
+      }
+    }
+    return -4;
   }
 }
 
