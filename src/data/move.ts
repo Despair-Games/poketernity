@@ -2389,6 +2389,29 @@ export class HitHealAttr extends MoveEffectAttr {
     }
     return Math.floor(Math.max((1 - user.getHpRatio()) - 0.33, 0) * (move.power / 4));
   }
+
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    const outsped = user.scene.getPlayerField().some(opp =>
+      opp.getEffectiveStat(Stat.SPD, user, move, !opp.battleData?.abilityRevealed, false)
+        > user.getEffectiveStat(Stat.SPD, opp, move, false, !opp.battleData?.abilityRevealed)
+    );
+
+    if (!user.isFullHp() || outsped) {
+      if (this.healStat) {
+        const oppStatStage = target.getStatStage(this.healStat);
+        if (!user.isFullHp() || outsped) {
+          return Math.max(Math.min(1 + oppStatStage, 3), 0);
+        }
+      } else {
+        const bonusChance = this.healRatio * 100;
+        if (user.randSeedInt(100) < bonusChance) {
+          return 1;
+        }
+      }
+    }
+
+    return 0;
+  }
 }
 
 /**
