@@ -1110,8 +1110,13 @@ export abstract class MoveAttr {
    * @param move the {@linkcode Move} being used
    * @see {@linkcode Pokemon.getAttackScore} for damage-based scoring
    */
-  getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+  public getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     return 0;
+  }
+
+  /** Has a `chance` percent chance of returning the given `score`; returns 0 otherwise. */
+  protected getRandomScore(user: EnemyPokemon, score: number, chance: number) {
+    return (user.randSeedInt(100) < chance) ? score : 0;
   }
 
   /**
@@ -1252,6 +1257,21 @@ export class MoveEffectAttr extends MoveAttr {
       applyPreDefendAbAttrs(IgnoreMoveEffectsAbAttr, target, user, null, null, false, moveChance);
     }
     return moveChance.value;
+  }
+
+  /**
+   * Converts a base score (possibly a decimal) to a final integer score
+   * based on this attribute's effect chance.
+   * Should be used when evaluating chance-based effects.
+   * @param baseScore
+   */
+  protected toChanceBasedScore(user: EnemyPokemon, target: Pokemon, move: Move, baseScore: number): number {
+    const effectChance = this.getMoveChance(user, target, move, this.selfTarget, false);
+    const expectedEffectValue = baseScore * ((effectChance < 0) ? 100 : effectChance) / 100;
+    const minScore = Math.floor(expectedEffectValue);
+
+    const tierUpChance = Math.floor((expectedEffectValue - minScore) * 100);
+    return (user.randSeedInt(100) < tierUpChance) ? minScore : minScore + 1;
   }
 }
 
@@ -2569,7 +2589,10 @@ export class StatusEffectAttr extends MoveEffectAttr {
   public overrideStatus: boolean = false;
 
   constructor(effect: StatusEffect, selfTarget?: boolean, turnsRemaining?: number, overrideStatus: boolean = false) {
-    super(selfTarget, { trigger: MoveEffectTrigger.HIT });
+    super(selfTarget, {
+      trigger: MoveEffectTrigger.HIT,
+      overridesAllyTargetPenalty: [ StatusEffect.BURN, StatusEffect.POISON, StatusEffect.TOXIC ].includes(effect)
+    });
 
     this.effect = effect;
     this.turnsRemaining = turnsRemaining;
@@ -2615,6 +2638,120 @@ export class StatusEffectAttr extends MoveEffectAttr {
 
     return !pokemon.status && pokemon.canSetStatus(this.effect, true, false, user) ? score : 0;
   }
+
+  /**
+   * Returns the Effect Score modifier granted to moves with this attribute.
+   * Varies by the type of status effect
+   */
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    if (this.selfTarget) { // should only apply to Rest
+      if (this.overrideStatus && user.status?.effect && user.status.effect !== this.effect) {
+        return 0;
+      } else {
+        return -1;
+      }
+    }
+    switch (this.effect) {
+      case StatusEffect.BURN:
+        return this.getBurnEffectScore(user, target, move);
+      case StatusEffect.FREEZE:
+        return this.getFreezeEffectScore(user, target, move);
+      case StatusEffect.PARALYSIS:
+        return this.getParalysisEffectScore(user, target, move);
+      case StatusEffect.POISON:
+        return this.getPoisonEffectScore(user, target, move, false);
+      case StatusEffect.TOXIC:
+        return this.getPoisonEffectScore(user, target, move, true);
+      case StatusEffect.SLEEP:
+        return this.getSleepEffectScore(user, target, move);
+      default:
+        this.reportUnimplementedScore(move, `Unscored status: ${StatusEffect[this.effect]}`);
+        return 0;
+    }
+  }
+
+  /** Abilities that benefit a Pokemon afflicted by Burn */
+  private burnSynergyAbilities = [
+    Abilities.GUTS,
+    Abilities.FLARE_BOOST,
+    Abilities.QUICK_FEET,
+    Abilities.MARVEL_SCALE
+  ];
+
+  /**
+   * Returns the Effect Score bonus for burning the given target:
+   * - Ally targets with a synergy ability (e.g. Guts) may be granted up to a (+2) bonus.
+   * - Gains up to (+2) when targeting Pokemon with an affinity for physical attacks.
+   */
+  protected getBurnEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    if (target === user.getAlly()) {
+      if (move.category === MoveCategory.STATUS) {
+        if (this.burnSynergyAbilities.some(ab => target.hasAbility(ab))
+            || target.getMoveset().some(mv => mv && mv.moveId === Moves.FACADE)) {
+          return this.getRandomScore(user, 2, 80);
+        }
+      }
+      return -20;
+    } else {
+      const baseScore = (target.getEffectiveStat(Stat.ATK) > target.getEffectiveStat(Stat.SPATK)) ? 2 : 1;
+      return this.toChanceBasedScore(user, target, move, baseScore);
+    }
+  }
+
+  /**
+   * Returns the Effect Score bonus for freezing the given target:
+   * - A chance-based bonus with a base score of 2.5 (i.e. 10% freeze chance
+   * translates to 25% chance of (+1) bonus).
+   */
+  protected getFreezeEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    return this.toChanceBasedScore(user, target, move, 2.5);
+  }
+
+  /**
+   * Returns the Effect Score bonus for paralyzing the given target:
+   * - Gains up to (+2) if the target outspeeds the user, depending on effect chance.
+   */
+  protected getParalysisEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    const outsped = user.getEffectiveStat(Stat.SPD) < target.getEffectiveStat(Stat.SPD);
+    const baseScore = outsped ? 2 : 1;
+    return this.toChanceBasedScore(user, target, move, baseScore);
+  }
+
+  /** Abilities that benefit a Pokemon afflicted by (Toxic) Poison */
+  private targetPoisonSynergyAbilities = [
+    Abilities.GUTS,
+    Abilities.QUICK_FEET,
+    Abilities.POISON_HEAL,
+    Abilities.TOXIC_BOOST
+  ];
+
+  /** Abilities that benefit a Pokemon inflicting (Toxic) Poison */
+  private userPoisonSynergyAbilities = [
+    Abilities.POISON_PUPPETEER,
+    Abilities.MERCILESS
+  ];
+
+  protected getPoisonEffectScore(user: EnemyPokemon, target: Pokemon, move: Move, toxic: boolean) {
+    if (target === user.getAlly()) {
+      if (move.category === MoveCategory.STATUS) {
+        if (this.targetPoisonSynergyAbilities.some(ab => target.hasAbility(ab))
+            || target.getMoveset().some(mv => mv && mv.moveId === Moves.FACADE)) {
+          return this.getRandomScore(user, 2, toxic ? 60 : 70);
+        }
+      }
+      return -20;
+    } else {
+      let baseScore = (this.userPoisonSynergyAbilities.some(ab => user.hasAbility(ab))) ? 2 : 1;
+      if (toxic) {
+        baseScore += 0.5;
+      }
+      return this.toChanceBasedScore(user, target, move, baseScore);
+    }
+  }
+
+  protected getSleepEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    return this.toChanceBasedScore(user, target, move, 2.5);
+  }
 }
 
 export class MultiStatusEffectAttr extends StatusEffectAttr {
@@ -2637,6 +2774,23 @@ export class MultiStatusEffectAttr extends StatusEffectAttr {
     const pokemon = this.selfTarget ? user : target;
 
     return !pokemon.status && pokemon.canSetStatus(this.effect, true, false, user) ? score : 0;
+  }
+
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    const statusEffectValues = new Map<StatusEffect, number>([
+      [ StatusEffect.BURN, 1.5 ],
+      [ StatusEffect.FREEZE, 2.5 ],
+      [ StatusEffect.PARALYSIS, 1.5 ],
+      [ StatusEffect.POISON, 1 ],
+      [ StatusEffect.SLEEP, 2.5 ],
+      [ StatusEffect.TOXIC, 1.5 ]
+    ]);
+
+    const totalScore = this.effects
+      .map(effect => target.canSetStatus(effect, true, false, user) ? statusEffectValues[effect] : 0)
+      .reduce((total, val) => total + val);
+
+    return Math.floor(totalScore / this.effects.length);
   }
 }
 
