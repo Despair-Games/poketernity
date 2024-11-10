@@ -9,6 +9,8 @@ import BattleScene from "../battle-scene";
 import { SuppressWeatherEffectAbAttr } from "./ability";
 import { TerrainType, getTerrainName } from "./terrain";
 import i18next from "i18next";
+import { Abilities } from "#enums/abilities";
+import { Moves } from "#enums/moves";
 
 export { WeatherType };
 export class Weather {
@@ -115,6 +117,109 @@ export class Weather {
     }
 
     return false;
+  }
+}
+
+export function getWeatherFavoringTypes(weatherType: WeatherType): Type[] {
+  switch (weatherType) {
+    case WeatherType.SUNNY:
+    case WeatherType.HARSH_SUN:
+      return [ Type.FIRE ];
+    case WeatherType.RAIN:
+    case WeatherType.HEAVY_RAIN:
+      return [ Type.WATER ];
+    case WeatherType.SANDSTORM:
+      return [ Type.ROCK, Type.GROUND, Type.STEEL ];
+    case WeatherType.HAIL:
+    case WeatherType.SNOW:
+      return [ Type.ICE ];
+    case WeatherType.STRONG_WINDS:
+      return [ Type.FLYING ];
+    default:
+      return [];
+  }
+}
+
+export function getWeatherFavoringAbilities(weatherType: WeatherType): Abilities[] {
+  switch (weatherType) {
+    case WeatherType.SUNNY:
+    case WeatherType.HARSH_SUN:
+      return [
+        Abilities.CHLOROPHYLL,
+        Abilities.SOLAR_POWER,
+        Abilities.FLOWER_GIFT,
+        Abilities.PROTOSYNTHESIS,
+        Abilities.LEAF_GUARD,
+        Abilities.FORECAST
+      ];
+    case WeatherType.RAIN:
+    case WeatherType.HEAVY_RAIN:
+      return [
+        Abilities.SWIFT_SWIM,
+        Abilities.HYDRATION,
+        Abilities.DRY_SKIN,
+        Abilities.FORECAST
+      ];
+    case WeatherType.SANDSTORM:
+      return [
+        Abilities.SAND_FORCE,
+        Abilities.SAND_VEIL,
+        Abilities.SAND_RUSH,
+        Abilities.MAGIC_GUARD,
+        Abilities.OVERCOAT
+      ];
+    case WeatherType.HAIL:
+    case WeatherType.SNOW:
+      return [
+        Abilities.SLUSH_RUSH,
+        Abilities.ICE_BODY,
+        Abilities.SNOW_CLOAK,
+        Abilities.ICE_FACE
+      ];
+    default:
+      return [];
+  }
+}
+
+export function getWeatherFavoringMoves(weatherType: WeatherType): Moves[] {
+  switch (weatherType) {
+    case WeatherType.SUNNY:
+    case WeatherType.HARSH_SUN:
+      return [
+        Moves.WEATHER_BALL,
+        Moves.GROWTH,
+        Moves.SOLAR_BEAM,
+        Moves.SOLAR_BLADE,
+        Moves.HYDRO_STEAM,
+        Moves.MOONLIGHT,
+        Moves.SYNTHESIS,
+        Moves.MORNING_SUN
+      ];
+    case WeatherType.RAIN:
+    case WeatherType.HEAVY_RAIN:
+      return [
+        Moves.WEATHER_BALL,
+        Moves.THUNDER,
+        Moves.HURRICANE,
+        Moves.BLEAKWIND_STORM,
+        Moves.SANDSEAR_STORM,
+        Moves.WILDBOLT_STORM,
+        Moves.ELECTRO_SHOT
+      ];
+    case WeatherType.SANDSTORM:
+      return [
+        Moves.WEATHER_BALL,
+        Moves.SHORE_UP
+      ];
+    case WeatherType.HAIL:
+    case WeatherType.SNOW:
+      return [
+        Moves.WEATHER_BALL,
+        Moves.BLIZZARD,
+        Moves.AURORA_VEIL
+      ];
+    default:
+      return [];
   }
 }
 

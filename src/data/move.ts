@@ -2825,6 +2825,22 @@ export class PsychoShiftEffectAttr extends MoveEffectAttr {
   getTargetBenefitScore(user: Pokemon, target: Pokemon, move: Move): number {
     return !target.status && target.canSetStatus(user.status?.effect, true, false, user) ? -10 : 0;
   }
+
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    const statusEffectValues = new Map<StatusEffect, number>([
+      [ StatusEffect.BURN, 1.5 ],
+      [ StatusEffect.FREEZE, 0 ],
+      [ StatusEffect.PARALYSIS, 1.5 ],
+      [ StatusEffect.POISON, 1 ],
+      [ StatusEffect.SLEEP, 0 ],
+      [ StatusEffect.TOXIC, 1.5 ]
+    ]);
+
+    if (user.status && !target.status && target.canSetStatus(user.status.effect, true, false, user)) {
+      return Math.min((statusEffectValues[user.status.effect] ?? 0) * 2, 3);
+    }
+    return 0;
+  }
 }
 /**
  * The following needs to be implemented for Thief
@@ -2835,7 +2851,7 @@ export class StealHeldItemChanceAttr extends MoveEffectAttr {
   private chance: number;
 
   constructor(chance: number) {
-    super(false, { trigger: MoveEffectTrigger.HIT });
+    super(false, { trigger: MoveEffectTrigger.HIT, scoresOnKO: true });
     this.chance = chance;
   }
 
@@ -2880,6 +2896,12 @@ export class StealHeldItemChanceAttr extends MoveEffectAttr {
   getTargetBenefitScore(user: Pokemon, target: Pokemon, move: Move): number {
     const heldItems = this.getTargetHeldItems(target);
     return heldItems.length ? -5 : 0;
+  }
+
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    return (this.getTargetHeldItems(target).length > 0)
+      ? this.toChanceBasedScore(user, target, move, 1.5)
+      : 0;
   }
 }
 
@@ -2964,6 +2986,12 @@ export class RemoveHeldItemAttr extends MoveEffectAttr {
     const heldItems = this.getTargetHeldItems(target);
     return heldItems.length ? -5 : 0;
   }
+
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    return (this.getTargetHeldItems(target).length)
+      ? this.getRandomScore(user, 1, 50)
+      : 0;
+  }
 }
 
 /**
@@ -2971,8 +2999,12 @@ export class RemoveHeldItemAttr extends MoveEffectAttr {
  */
 export class EatBerryAttr extends MoveEffectAttr {
   protected chosenBerry: BerryModifier | undefined;
-  constructor() {
-    super(true, { trigger: MoveEffectTrigger.HIT });
+  constructor(scoresOnKo: boolean = false) {
+    super(true, {
+      trigger: MoveEffectTrigger.HIT,
+      overridesAllyTargetPenalty: true,
+      scoresOnKO: scoresOnKo
+    });
   }
   /**
    * Causes the target to eat a berry.
@@ -3020,6 +3052,27 @@ export class EatBerryAttr extends MoveEffectAttr {
     applyAbAttrs(HealFromBerryUseAbAttr, consumer, new Utils.BooleanHolder(false));
     applyPostItemLostAbAttrs(PostItemLostAbAttr, consumer, false);
   }
+
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    const { targets } = getMoveTargets(user, move.id);
+    const berrySynergyAbilities = [
+      Abilities.HARVEST,
+      Abilities.CUD_CHEW,
+      Abilities.RIPEN
+    ];
+
+    let totalScore = 0;
+    targets
+      .map(battlerIndex => user.scene.getField(true).find(p => p.getBattlerIndex() === battlerIndex))
+      .forEach(pokemon => {
+        if (pokemon && this.getTargetHeldBerries(pokemon).length > 0) {
+          totalScore += (user.isOpponent(pokemon) ? -1 : 1)
+            * (berrySynergyAbilities.some(ab => pokemon.hasAbility(ab)) ? 2 : 1);
+        }
+      });
+
+    return totalScore;
+  }
 }
 
 /**
@@ -3028,7 +3081,7 @@ export class EatBerryAttr extends MoveEffectAttr {
  */
 export class StealEatBerryAttr extends EatBerryAttr {
   constructor() {
-    super();
+    super(true);
   }
   /**
    * User steals a random berry from the target and then eats it.
@@ -3061,6 +3114,10 @@ export class StealEatBerryAttr extends EatBerryAttr {
     this.eatBerry(user);
     return true;
   }
+
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    return (this.getTargetHeldBerries(target).length > 0) ? 1 : 0;
+  }
 }
 
 /**
@@ -3077,7 +3134,10 @@ export class HealStatusEffectAttr extends MoveEffectAttr {
    * @param ...effects - List of status effects to cure
    */
   constructor(selfTarget: boolean, ...effects: StatusEffect[]) {
-    super(selfTarget, { lastHitOnly: true });
+    super(selfTarget, {
+      lastHitOnly: true,
+      overridesAllyTargetPenalty: true
+    });
 
     this.effects = effects;
   }
@@ -3122,9 +3182,26 @@ export class HealStatusEffectAttr extends MoveEffectAttr {
   getUserBenefitScore(user: Pokemon, target: Pokemon, move: Move): integer {
     return user.status ? 10 : 0;
   }
+
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    const pokemon = this.selfTarget ? user : target;
+    if (pokemon.status && this.isOfEffect(pokemon.status.effect)) {
+      if (pokemon.isOpponent(user)) {
+        // Small penalty so as not to completely rule out moves like Wake-Up Slap
+        return -1;
+      } else {
+        return 1 + this.getRandomScore(user, 1, 50);
+      }
+    }
+    return 0;
+  }
 }
 
 export class BypassSleepAttr extends MoveAttr {
+  constructor() {
+    super(false, { scoresOnKO: true });
+  }
+
   apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
     if (user.status?.effect === StatusEffect.SLEEP) {
       user.addTag(BattlerTagType.BYPASS_SLEEP, 1, move.id, user.id);
@@ -3142,6 +3219,12 @@ export class BypassSleepAttr extends MoveAttr {
    */
   getUserBenefitScore(user: Pokemon, target: Pokemon, move: Move): integer {
     return user.status && user.status.effect === StatusEffect.SLEEP ? 200 : -10;
+  }
+
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    return (user.status && user.status.effect === StatusEffect.SLEEP)
+      ? 3 + (user.status.sleepTurnsRemaining ?? 0)
+      : 0;
   }
 }
 
@@ -3182,6 +3265,15 @@ export class WeatherChangeAttr extends MoveEffectAttr {
   getCondition(): MoveConditionFunc {
     return (user, target, move) => !user.scene.arena.weather || (user.scene.arena.weather.weatherType !== this.weatherType && !user.scene.arena.weather.isImmutable());
   }
+
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    if (user.scene.arena.weather?.isImmutable()) {
+      return 0;
+    }
+    const userWeatherBenefit = user.scene.arena.getPartyBenefitFromWeather(this.weatherType, false);
+
+    return Math.min(userWeatherBenefit, 3);
+  }
 }
 
 export class ClearWeatherAttr extends MoveEffectAttr {
@@ -3199,6 +3291,16 @@ export class ClearWeatherAttr extends MoveEffectAttr {
     }
 
     return false;
+  }
+
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    // TODO: Change this so the AI "cheats" less (not revealing player party details)
+    const userWeatherBenefit = user.scene.arena.getPartyBenefitFromWeather(this.weatherType, false);
+    const oppWeatherBenefit = user.scene.arena.getPartyBenefitFromWeather(this.weatherType, true);
+
+    return (userWeatherBenefit < oppWeatherBenefit)
+      ? 1 + this.getRandomScore(user, 1, 40)
+      : 0;
   }
 }
 

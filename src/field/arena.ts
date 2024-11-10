@@ -3,7 +3,7 @@ import { biomePokemonPools, BiomePoolTier, BiomeTierTrainerPools, biomeTrainerPo
 import { Constructor } from "#app/utils";
 import * as Utils from "#app/utils";
 import PokemonSpecies, { getPokemonSpecies } from "#app/data/pokemon-species";
-import { getTerrainClearMessage, getTerrainStartMessage, getWeatherClearMessage, getWeatherStartMessage, Weather, WeatherType } from "#app/data/weather";
+import { getTerrainClearMessage, getTerrainStartMessage, getWeatherClearMessage, getWeatherFavoringAbilities, getWeatherFavoringMoves, getWeatherFavoringTypes, getWeatherStartMessage, Weather, WeatherType } from "#app/data/weather";
 import { CommonAnim } from "#app/data/battle-anims";
 import { Type } from "#app/data/type";
 import Move from "#app/data/move";
@@ -364,6 +364,30 @@ export class Arena {
     }
 
     return weatherMultiplier * terrainMultiplier;
+  }
+
+  /**
+   * Returns a score estimating the value a party gets from the given weather type.
+   * @param weatherType The type of weather evaluated
+   * @param player If `true`, evaluates the player party; if `false`, evaluates the enemy party.
+   */
+  public getPartyBenefitFromWeather(weatherType: WeatherType, player: boolean): number {
+    const party: Pokemon[] = player ? this.scene.getPlayerParty() : this.scene.getEnemyParty();
+    const weatherFavoringTypes = getWeatherFavoringTypes(weatherType);
+    const weatherFavoringAbilities = getWeatherFavoringAbilities(weatherType);
+    const weatherFavoringMoves = getWeatherFavoringMoves(weatherType);
+
+    let totalScore = 0;
+    // Gain 1 point for each Pokemon with a favoring type, ability, or move.
+    party.forEach(pokemon => {
+      if (pokemon.getTypes().some(type => weatherFavoringTypes.includes(type))
+          || weatherFavoringAbilities.some(ability => pokemon.hasAbility(ability))
+          || weatherFavoringMoves.some(moveId => pokemon.getMoveset().some(mv => mv && mv.moveId === moveId))) {
+        totalScore += 1;
+      }
+    });
+
+    return totalScore;
   }
 
   /**
