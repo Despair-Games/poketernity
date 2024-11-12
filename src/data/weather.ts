@@ -2,7 +2,7 @@ import { Biome } from "#enums/biome";
 import { WeatherType } from "#enums/weather-type";
 import { getPokemonNameWithAffix } from "../messages";
 import Pokemon from "../field/pokemon";
-import { Type } from "./type";
+import { Type } from "#enums/type";
 import Move, { AttackMove } from "./move";
 import * as Utils from "../utils";
 import BattleScene from "../battle-scene";
@@ -12,7 +12,6 @@ import i18next from "i18next";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
 
-export { WeatherType };
 export class Weather {
   public weatherType: WeatherType;
   public turnsLeft: integer;
