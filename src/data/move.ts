@@ -3365,9 +3365,12 @@ export class TerrainChangeAttr extends MoveEffectAttr {
     return (user, target, move) => !user.scene.arena.terrain || (user.scene.arena.terrain.terrainType !== this.terrainType);
   }
 
-  getUserBenefitScore(user: Pokemon, target: Pokemon, move: Move): number {
-    // TODO: Expand on this
-    return user.scene.arena.terrain ? 0 : 6;
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    if (user.scene.arena.terrain?.terrainType === this.terrainType) {
+      return -5;
+    } else {
+      return Math.min(user.scene.arena.getPartyBenefitFromTerrain(this.terrainType, false), 3);
+    }
   }
 }
 
@@ -3378,6 +3381,20 @@ export class ClearTerrainAttr extends MoveEffectAttr {
 
   apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
     return user.scene.arena.trySetTerrain(TerrainType.NONE, true, true);
+  }
+
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    // TODO: Change this so the AI "cheats" less (not revealing player party details)
+    const currentTerrain = user.scene.arena.terrain?.terrainType;
+    if (Utils.isNullOrUndefined(currentTerrain)) {
+      return 0;
+    }
+    const userTerrainBenefit = user.scene.arena.getPartyBenefitFromTerrain(currentTerrain, false);
+    const oppTerrainBenefit = user.scene.arena.getPartyBenefitFromTerrain(currentTerrain, true);
+
+    return (userTerrainBenefit < oppTerrainBenefit)
+      ? 1 + this.getRandomScore(user, 1, 40)
+      : 0;
   }
 }
 
@@ -3411,7 +3428,7 @@ export class InstantChargeAttr extends MoveAttr {
   protected readonly condition: UserMoveConditionFunc;
 
   constructor(condition: UserMoveConditionFunc) {
-    super(true);
+    super(true, { scoresOnKO: true });
     this.condition = condition;
   }
 
@@ -3435,6 +3452,10 @@ export class InstantChargeAttr extends MoveAttr {
       return true;
     }
     return false;
+  }
+
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    return this.condition(user, move) ? 2 : 0;
   }
 }
 
@@ -3508,6 +3529,10 @@ export class DelayedAttackAttr extends OverrideMoveEffectAttr {
       }
     });
   }
+
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    return -2;
+  }
 }
 
 /**
@@ -3563,6 +3588,22 @@ export class AwaitCombinedPledgeAttr extends OverrideMoveEffectAttr {
       }
     }
     return false;
+  }
+
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    if (!user.scene.currentBattle.double) {
+      return 0;
+    }
+
+    const allyMoves = user.getAlly().getMoveset()
+      .filter(mv => !Utils.isNullOrUndefined(mv))
+      .map(mv => mv.getMove());
+
+    if (allyMoves.some(allyMove => allyMove.hasAttr(AwaitCombinedPledgeAttr) && allyMove.id !== move.id)) {
+      return 2;
+    } else {
+      return 0;
+    }
   }
 }
 
@@ -3700,6 +3741,206 @@ export class StatStageChangeAttr extends MoveEffectAttr {
       ret += (levels * 4) + (levels > 0 ? -2 : 2);
     }
     return ret;
+  }
+
+  /**
+   * Returns the Effect Score modifier granted to moves with this attribute.
+   * The modifier varies depending on the stat(s) being changed.
+   */
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    let baseScore = 0;
+    const moveLevels = this.getLevels(user);
+    for (const stat of this.stats) {
+      const statStage = (this.selfTarget ? user : target).getStatStage(stat);
+      const statStageChange = Math.max(Math.min(statStage + moveLevels, 6), -6) - statStage;
+      switch (stat) {
+        case Stat.ATK:
+        case Stat.SPATK:
+          baseScore += this.getOffensiveStatStageChangeEffectScore(user, target, statStageChange, stat === Stat.ATK);
+          break;
+        case Stat.DEF:
+        case Stat.SPDEF:
+          baseScore += this.getDefensiveStatStageChangeEffectScore(user, target, statStageChange, stat === Stat.DEF);
+          break;
+        case Stat.SPD:
+          baseScore += this.getSpeedStatStageChangeEffectScore(user, target, statStageChange);
+          break;
+        case Stat.ACC:
+          baseScore += this.getAccuracyStatStageChangeEffectScore(user, target, statStageChange);
+          break;
+        case Stat.EVA:
+          baseScore += this.getEvasivenessStatStageChangeEffectScore(user, target, statStageChange);
+          break;
+      }
+    }
+
+    return Math.min(this.toChanceBasedScore(user, target, move, baseScore), 3);
+  }
+
+  /**
+   * Returns the base score granted to moves that modify Attack or Sp. Atk:
+   * - If the affected Pokemon is the user or its ally, this grants (+0.5)
+   *   times the net stat stage change if and only if the affected Pokemon
+   *   has at least one attack of matching category (physical or special).
+   * - If the affected Pokemon is an opponent, this grants (-0.5) instead,
+   *   with the attack check covering revealed and simulated attacks.
+   * @param user the {@linkcode Pokemon} using the move
+   * @param target the {@linkcode Pokemon} targeted by the move
+   * @param statStageChange the net change in stat stages on the affected Pokemon
+   * @param isPhysical `true` if the evaluated stat is Attack; `false` if Sp. Atk.
+   * @returns a base score to be modified by effect chance for a final score.
+   */
+  getOffensiveStatStageChangeEffectScore(user: EnemyPokemon, target: Pokemon, statStageChange: number, isPhysical: boolean): number {
+    const affectedPokemon = this.selfTarget ? user : target;
+    if (!affectedPokemon.isPlayer()) {
+      const attackMoves = affectedPokemon.getAttackMoves(true).map(pokemonMove => pokemonMove.getMove());
+
+      if (attackMoves.some(move => isPhysical === (move.category === MoveCategory.PHYSICAL))) {
+        return statStageChange * 0.5;
+      } else {
+        return 0;
+      }
+    } else {
+      const attackMoves = affectedPokemon.getEstimatedAttackMoves();
+
+      if (attackMoves.some(move => isPhysical === (move.category === MoveCategory.PHYSICAL))) {
+        return statStageChange * -0.5;
+      } else {
+        return 0;
+      }
+    }
+  }
+
+  /**
+   * Returns the base score granted to moves that modify Defense or Sp. Def:
+   * - If the affected Pokemon is the user or its ally, this grants (+0.5)
+   *   times the net stat stage change per opponent with a relevant offensive
+   *   affinity (physical or special).
+   * - If the affected Pokemon is an opponent, this grants (-0.5) times the
+   *   net stat stage change per ally with a relevant offensive affinity.
+   * @param user the {@linkcode Pokemon} using the move
+   * @param target the {@linkcode Pokemon} targeted by the move
+   * @param statStageChange the net change in stat stages on the affected Pokemon
+   * @param isPhysical `true` if the evaluated stat is Defense; `false` if Sp. Def.
+   * @returns a base score to be modified by effect chance for a final score.
+   */
+  getDefensiveStatStageChangeEffectScore(user: EnemyPokemon, target: Pokemon, statStageChange: number, isPhysical: boolean): number {
+    const affectedStat = isPhysical ? Stat.ATK : Stat.SPATK;
+    const unaffectedStat = isPhysical ? Stat.SPATK : Stat.ATK;
+    const affectedPokemon = this.selfTarget ? user : target;
+
+    const numAffectedOpponents = (affectedPokemon.isPlayer() ? user.scene.getEnemyField() : user.scene.getPlayerField())
+      .filter(opp => opp.getEffectiveStat(affectedStat) > opp.getEffectiveStat(unaffectedStat))
+      .length;
+
+    const baseScoreMultiplier = affectedPokemon.isPlayer() ? -0.5 : 0.5;
+    return statStageChange * numAffectedOpponents * baseScoreMultiplier;
+  }
+
+  /**
+   * Returns the base score granted to moves that modify Attack or Sp. Atk:
+   * - If the affected Pokemon is the user or its ally, this grants (+1)
+   *   per opponent the affected Pokemon would outspeed as a result of
+   *   this stat stage change.
+   * - If the affected Pokemon is an opponent, this grants (+1) per
+   *   ally that outspeeds the affected opponent as a result of this
+   *   stat stage change.
+   * @param user the {@linkcode Pokemon} using the move
+   * @param target the {@linkcode Pokemon} targeted by the move
+   * @param statStageChange the net change in stat stages on the affected Pokemon
+   * @returns a base score to be modified by effect chance for a final score.
+   */
+  getSpeedStatStageChangeEffectScore(user: EnemyPokemon, target: Pokemon, statStageChange: number): number {
+    const affectedPokemon = this.selfTarget ? user : target;
+    const currentSpeed = affectedPokemon.getEffectiveStat(Stat.SPD);
+
+    const currentStatStage = affectedPokemon.getStatStage(Stat.SPD);
+    const postStatStage = currentStatStage + statStageChange;
+
+    const toStatMultiplier = (stage: number) => Math.max(2, 2 + stage) / Math.min(2, 2 - stage);
+
+    const speedMultiplier = currentSpeed / toStatMultiplier(currentStatStage) * toStatMultiplier(postStatStage);
+
+    if (!affectedPokemon.isPlayer()) {
+      const opponentsToBeOutsped = user.scene.getPlayerField().filter(opp => {
+        const oppSpeed = opp.getEffectiveStat(Stat.SPD);
+        return oppSpeed > currentSpeed && oppSpeed < currentSpeed * speedMultiplier;
+      });
+
+      const baseScoreMultiplier = 1;
+      return baseScoreMultiplier * opponentsToBeOutsped.length;
+    } else {
+      const alliesToOutspeed = user.scene.getEnemyField().filter(ally => {
+        const allySpeed = ally.getEffectiveStat(Stat.SPD);
+        return currentSpeed > allySpeed && currentSpeed * speedMultiplier < allySpeed;
+      });
+
+      const baseScoreMultiplier = 1;
+      return baseScoreMultiplier * alliesToOutspeed.length;
+    }
+  }
+
+  /**
+   * Returns the base score granted to moves that modify Accuracy:
+   * - If the affected Pokemon is the user or its ally, this grants (-5)
+   *   if the net stat stage change is non-positive, and (+1) per move
+   *   with 85 base accuracy or less on the affected Pokemon otherwise.
+   * - If the affected Pokemon is an opponent, this grants (-0.5) times
+   *   the net stat stage change.
+   * @param user the {@linkcode Pokemon} using the move
+   * @param target the {@linkcode Pokemon} targeted by the move
+   * @param statStageChange the net change in stat stages on the affected Pokemon
+   * @returns a base score to be modified by effect chance for a final score.
+   */
+  getAccuracyStatStageChangeEffectScore(user: EnemyPokemon, target: Pokemon, statStageChange: number): number {
+    const affectedPokemon = this.selfTarget ? user : target;
+
+    if (!affectedPokemon.isPlayer()) {
+      if (statStageChange <= 0) {
+        return -5;
+      }
+
+      const inaccurateMoves = affectedPokemon.getMoveset()
+        .filter(mv => mv && mv.getMove().accuracy <= 85);
+
+      const baseScoreMultiplier = 1;
+      return inaccurateMoves.length * baseScoreMultiplier;
+    } else {
+      const baseScoreMultiplier = -0.5;
+      return statStageChange * baseScoreMultiplier;
+    }
+  }
+
+  /**
+   * Returns the base score granted to moves that modify Evasiveness:
+   * - If the affected Pokemon is the user or its ally, this grants (+0.5)
+   *   times the net stat stage change.
+   * - If the affected Pokemon is an opponent, this grants (-0.5) times
+   *   the net stat stage change if any ally has a move with a base accuracy
+   *   of 85 or less.
+   * @param user the {@linkcode Pokemon} using the move
+   * @param target the {@linkcode Pokemon} targeted by the move
+   * @param statStageChange the net change in stat stages on the affected Pokemon
+   * @returns a base score to be modified by effect chance for a final score.
+   */
+  getEvasivenessStatStageChangeEffectScore(user: EnemyPokemon, target: Pokemon, statStageChange: number): number {
+    const affectedPokemon = this.selfTarget ? user : target;
+
+    if (!affectedPokemon.isPlayer()) {
+      const baseScoreMultiplier = 0.5;
+      return statStageChange * baseScoreMultiplier;
+    } else {
+      const allyHasLowAccuracy = user.scene.getEnemyField().some(ally =>
+        ally.getMoveset().some(mv => mv && mv.getMove().accuracy <= 85)
+      );
+
+      if (allyHasLowAccuracy) {
+        const baseScoreMultiplier = -0.5;
+        return statStageChange * baseScoreMultiplier;
+      } else {
+        return 0;
+      }
+    }
   }
 }
 
@@ -3840,6 +4081,13 @@ export class SecretPowerAttr extends MoveEffectAttr {
         break;
     }
     return secondaryEffect;
+  }
+
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    const secondaryEffect = this.determineTerrainEffect(user.scene.arena.terrain?.terrainType ?? TerrainType.NONE)
+      ?? this.determineBiomeEffect(user.scene.arena.biomeType);
+
+    return secondaryEffect.getEffectScore(user, target, move);
   }
 }
 

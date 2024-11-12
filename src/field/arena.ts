@@ -9,7 +9,7 @@ import { Type } from "#enums/type";
 import Move from "#app/data/move";
 import { ArenaTag, ArenaTagSide, ArenaTrapTag, getArenaTag } from "#app/data/arena-tag";
 import { BattlerIndex } from "#app/battle";
-import { Terrain, TerrainType } from "#app/data/terrain";
+import { getTerrainFavoringAbilities, getTerrainFavoringMoves, getTerrainFavoringTypes, Terrain, TerrainType } from "#app/data/terrain";
 import {
   applyAbAttrs,
   applyPostTerrainChangeAbAttrs,
@@ -384,6 +384,30 @@ export class Arena {
       if (pokemon.getTypes().some(type => weatherFavoringTypes.includes(type))
           || weatherFavoringAbilities.some(ability => pokemon.hasAbility(ability))
           || weatherFavoringMoves.some(moveId => pokemon.getMoveset().some(mv => mv && mv.moveId === moveId))) {
+        totalScore += 1;
+      }
+    });
+
+    return totalScore;
+  }
+
+  /**
+   * Returns a score estimating the value a party gets from the given terrain type.
+   * @param terrainType The type of terrain evaluated
+   * @param player If `true`, evaluates the player party; if `false`, evaluates the enemy party.
+   */
+  public getPartyBenefitFromTerrain(terrainType: TerrainType, player: boolean): number {
+    const party: Pokemon[] = player ? this.scene.getPlayerParty() : this.scene.getEnemyParty();
+    const terrainFavoringTypes = getTerrainFavoringTypes(terrainType);
+    const terrainFavoringAbilities = getTerrainFavoringAbilities(terrainType);
+    const terrainFavoringMoves = getTerrainFavoringMoves(terrainType);
+
+    let totalScore = 0;
+    // Gain 1 point for each Pokemon with a favoring type, ability, or move.
+    party.forEach(pokemon => {
+      if (pokemon.getTypes().some(type => terrainFavoringTypes.includes(type))
+          || terrainFavoringAbilities.some(ability => pokemon.hasAbility(ability))
+          || terrainFavoringMoves.some(moveId => pokemon.getMoveset().some(mv => mv && mv.moveId === moveId))) {
         totalScore += 1;
       }
     });
