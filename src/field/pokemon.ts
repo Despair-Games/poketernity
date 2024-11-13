@@ -1900,7 +1900,6 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
    * @param move the {@linkcode Move} being scored
    * @returns the expected value of the move's Attack Score
    * @see {@linkcode getAttackScore}
-   * @see {@linkcode EnemyPokemon.getMatchupScore}
    */
   getExpectedAttackScore(target: Pokemon, move: Move): number {
     const cachedMoveScore = this.moveScoreData.find(
