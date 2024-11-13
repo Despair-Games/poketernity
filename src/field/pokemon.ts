@@ -1177,6 +1177,17 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
+   * Returns `true` if this Pokemon has at least one of the given moves
+   * in its moveset.
+   * @param moves The list of moves to search for in the moveset.
+   */
+  hasMove(...moves: Moves[]): boolean {
+    return moves.some(moveId =>
+      this.getMoveset().some(mv => mv && mv.moveId === moveId)
+    );
+  }
+
+  /**
    * Returns the non-Status moves in this Pokemon's moveset.
    * @param usableOnly if `true`, this also filters out attacks that are unusable (defaults to `false`)
    * @param revealedOnly if `true`, this also filters out attacks that haven't been used yet in the current battle

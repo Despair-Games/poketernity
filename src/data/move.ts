@@ -9,7 +9,7 @@ import { Constructor, NumberHolder } from "#app/utils";
 import * as Utils from "../utils";
 import { WeatherType } from "#enums/weather-type";
 import { ArenaTagSide, ArenaTrapTag, WeakenMoveTypeTag } from "./arena-tag";
-import { allAbilities, AllyMoveCategoryPowerBoostAbAttr, applyAbAttrs, applyPostAttackAbAttrs, applyPostItemLostAbAttrs, applyPreAttackAbAttrs, applyPreDefendAbAttrs, BlockItemTheftAbAttr, BlockNonDirectDamageAbAttr, BlockOneHitKOAbAttr, BlockRecoilDamageAttr, ChangeMovePriorityAbAttr, ConfusionOnStatusEffectAbAttr, FieldMoveTypePowerBoostAbAttr, FieldPreventExplosiveMovesAbAttr, ForceSwitchOutImmunityAbAttr, HealFromBerryUseAbAttr, IgnoreContactAbAttr, IgnoreMoveEffectsAbAttr, IgnoreProtectOnContactAbAttr, InfiltratorAbAttr, MaxMultiHitAbAttr, MoveAbilityBypassAbAttr, MoveEffectChanceMultiplierAbAttr, MoveTypeChangeAbAttr, PostDamageForceSwitchAbAttr, PostItemLostAbAttr, ReverseDrainAbAttr, UncopiableAbilityAbAttr, UnsuppressableAbilityAbAttr, UnswappableAbilityAbAttr, UserFieldMoveTypePowerBoostAbAttr, VariableMovePowerAbAttr, WonderSkinAbAttr } from "./ability";
+import { allAbilities, AllyMoveCategoryPowerBoostAbAttr, applyAbAttrs, applyPostAttackAbAttrs, applyPostItemLostAbAttrs, applyPreAttackAbAttrs, applyPreDefendAbAttrs, BlockItemTheftAbAttr, BlockNonDirectDamageAbAttr, BlockOneHitKOAbAttr, BlockRecoilDamageAttr, ChangeMovePriorityAbAttr, ConfusionOnStatusEffectAbAttr, FieldMoveTypePowerBoostAbAttr, FieldPreventExplosiveMovesAbAttr, ForceSwitchOutImmunityAbAttr, HealFromBerryUseAbAttr, IgnoreContactAbAttr, IgnoreMoveEffectsAbAttr, IgnoreProtectOnContactAbAttr, InfiltratorAbAttr, MaxMultiHitAbAttr, MoveAbilityBypassAbAttr, MoveEffectChanceMultiplierAbAttr, MoveTypeChangeAbAttr, PostDamageForceSwitchAbAttr, PostItemLostAbAttr, RedirectMoveAbAttr, ReverseDrainAbAttr, UncopiableAbilityAbAttr, UnsuppressableAbilityAbAttr, UnswappableAbilityAbAttr, UserFieldMoveTypePowerBoostAbAttr, VariableMovePowerAbAttr, WonderSkinAbAttr } from "./ability";
 import { AttackTypeBoosterModifier, BerryModifier, PokemonHeldItemModifier, PokemonMoveAccuracyBoosterModifier, PokemonMultiHitModifier, PreserveBerryModifier } from "../modifier/modifier";
 import { BattlerIndex, BattleType } from "../battle";
 import { TerrainType } from "./terrain";
@@ -4471,6 +4471,24 @@ export class SwapStatStagesAttr extends MoveEffectAttr {
     }
     return false;
   }
+
+  /**
+   * Returns the Effect Score modifier granted to moves with this attribute:
+   * - Grants (+0.5) times the difference in total stat stages between the
+   *   target and the user under the affected stats, rounded down, max (+3).
+   */
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    const targetStatStages = this.stats
+      .map(stat => target.getStatStage(stat))
+      .reduce((total, ssc) => total + ssc);
+
+    const userStatStages = this.stats
+      .map(stat => user.getStatStage(stat))
+      .reduce((total, ssc) => total + ssc);
+
+    const targetStatStageDiff = targetStatStages - userStatStages;
+    return Math.min(Math.floor(0.5 * targetStatStageDiff), 3);
+  }
 }
 
 export class HpSplitAttr extends MoveEffectAttr {
@@ -4511,6 +4529,24 @@ export class HpSplitAttr extends MoveEffectAttr {
 
       return Promise.all(infoUpdates).then(() => resolve(true));
     });
+  }
+
+  /**
+   * Returns the Effect Score modifier granted to moves with this attribute:
+   * - If the target has twice as much HP as the user or more, grant (+1) with
+   *   a 50% chance of granting an additional (+1).
+   * - If the target outspeeds the user, the threshold for the above to apply
+   *   is relaxed such that the target may have as low as 1.5 times the user's HP.
+   * - If this condition isn't met, grant a (-2) penalty.
+   */
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    const hpDiffRatio = user.hp / target.hp;
+    const outsped = user.getEffectiveStat(Stat.SPD) < target.getEffectiveStat(Stat.SPD);
+    if (hpDiffRatio <= 0.5 || hpDiffRatio <= 0.66 && outsped) {
+      return 1 + this.getRandomScore(user, 1, 50);
+    } else {
+      return -2;
+    }
   }
 }
 
@@ -4936,6 +4972,11 @@ export class MagnitudePowerAttr extends VariablePowerAttr {
 
     return true;
   }
+
+  /** Grants a (-1) penalty for lack of consistency */
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    return -1;
+  }
 }
 
 export class AntiSunlightPowerDecreaseAttr extends VariablePowerAttr {
@@ -5063,6 +5104,11 @@ export class PresentPowerAttr extends VariablePowerAttr {
     }
 
     return true;
+  }
+
+  /** Grants a (-2) penalty for lack of consistency */
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    return -2;
   }
 }
 
@@ -5227,6 +5273,22 @@ export class LastMoveDoublePowerAttr extends VariablePowerAttr {
 
     return false;
   }
+
+  /**
+   * Returns the Effect Score modifier granted to moves with this attribute:
+   * - If the current battle is a double battle, and the user's active ally
+   *   knows the move that activates this effect, grant (+1).
+   */
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    if (!user.scene.currentBattle.double || !user.getAlly()?.isActive(true)) {
+      return 0;
+    }
+
+    const allyHasFusionMove = user.getAlly().getMoveset()
+      .some(mv => mv && mv.moveId === this.move);
+
+    return allyHasFusionMove ? 1 : 0;
+  }
 }
 
 /**
@@ -5319,6 +5381,22 @@ export class CueNextRoundAttr extends MoveEffectAttr {
     // Mark the corresponding Pokemon as having "joined the Round" (for doubling power later)
     nextRoundPhase.pokemon.turnData.joinedRound = true;
     return true;
+  }
+
+  /**
+   * Returns the Effect Score modifier granted to moves with this attribute:
+   * - If the current battle is a double battle, and the user's active ally
+   *   also knows Round, grant (+1).
+   */
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    if (!user.scene.currentBattle.double || !user.getAlly()?.isActive(true)) {
+      return 0;
+    }
+
+    const allyKnowsRound = user.getAlly().getMoveset()
+      .some(mv => mv && mv.moveId === Moves.ROUND);
+
+    return allyKnowsRound ? 1 : 0;
   }
 }
 
@@ -6102,18 +6180,48 @@ const crashDamageFunc = (user: Pokemon, move: Move) => {
   return true;
 };
 
+export class CrashDamageScoreAttr extends MoveAttr {
+  constructor() {
+    super(true, { scoresOnKO: true });
+  }
+
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    const targetKnowsProtectMove = target.getMoveset()
+      .some(mv => mv && mv.getMove().hasAttr(ProtectAttr));
+    return targetKnowsProtectMove ? this.getRandomScore(user, -1, 75) : 0;
+  }
+}
+
 export class TypelessAttr extends MoveAttr { }
+
 /**
-* Attribute used for moves which ignore redirection effects, and always target their original target, i.e. Snipe Shot
-* Bypasses Storm Drain, Follow Me, Ally Switch, and the like.
-*/
+ * Attribute used for moves which ignore redirection effects, and always target their original target, i.e. Snipe Shot
+ * Bypasses Storm Drain, Follow Me, Ally Switch, and the like.
+ */
 export class BypassRedirectAttr extends MoveAttr {
   /** `true` if this move only bypasses redirection from Abilities */
   public readonly abilitiesOnly: boolean;
 
   constructor(abilitiesOnly: boolean = false) {
-    super();
+    super(false, { scoresOnKO: true });
     this.abilitiesOnly = abilitiesOnly;
+  }
+
+  /**
+   * Returns the Effect Score modifier granted to moves with this attribute:
+   * - If any Pokemon other than the user and target are known to have a redirecting
+   *   ability (or move if this can bypass redirecting moves), grant a 30% chance of (+1).
+   */
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    const possibleRedirects = user.scene.getField(true)
+      .filter(pokemon => pokemon !== user && pokemon !== target);
+
+    const canRedirect = possibleRedirects.some(pokemon =>
+      pokemon.hasAbilityWithAttr(RedirectMoveAbAttr)
+        || !this.abilitiesOnly && pokemon.isPlayer() && pokemon.hasMove(Moves.FOLLOW_ME, Moves.RAGE_POWDER)
+    );
+
+    return canRedirect ? this.getRandomScore(user, 1, 30) : 0;
   }
 }
 
@@ -6141,6 +6249,11 @@ export class FrenzyAttr extends MoveEffectAttr {
     }
 
     return true;
+  }
+
+  /** Grant a flat (-1) penalty to moves with this attribute */
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    return -1;
   }
 }
 
@@ -8792,6 +8905,7 @@ export function initMoves() {
     new AttackMove(Moves.JUMP_KICK, Type.FIGHTING, MoveCategory.PHYSICAL, 100, 95, 10, -1, 0, 1)
       .attr(MissEffectAttr, crashDamageFunc)
       .attr(NoEffectAttr, crashDamageFunc)
+      .attr(CrashDamageScoreAttr)
       .condition(failOnGravityCondition)
       .recklessMove(),
     new AttackMove(Moves.ROLLING_KICK, Type.FIGHTING, MoveCategory.PHYSICAL, 60, 85, 15, 30, 0, 1)
@@ -9092,6 +9206,7 @@ export function initMoves() {
     new AttackMove(Moves.HIGH_JUMP_KICK, Type.FIGHTING, MoveCategory.PHYSICAL, 130, 90, 10, -1, 0, 1)
       .attr(MissEffectAttr, crashDamageFunc)
       .attr(NoEffectAttr, crashDamageFunc)
+      .attr(CrashDamageScoreAttr)
       .condition(failOnGravityCondition)
       .recklessMove(),
     new StatusMove(Moves.GLARE, Type.NORMAL, 100, 30, -1, 0, 1)
@@ -11433,6 +11548,7 @@ export function initMoves() {
     new AttackMove(Moves.AXE_KICK, Type.FIGHTING, MoveCategory.PHYSICAL, 120, 90, 10, 30, 0, 9)
       .attr(MissEffectAttr, crashDamageFunc)
       .attr(NoEffectAttr, crashDamageFunc)
+      .attr(CrashDamageScoreAttr)
       .attr(ConfuseAttr)
       .recklessMove(),
     new AttackMove(Moves.LAST_RESPECTS, Type.GHOST, MoveCategory.PHYSICAL, 50, 100, 10, -1, 0, 9)
@@ -11651,6 +11767,7 @@ export function initMoves() {
     new AttackMove(Moves.SUPERCELL_SLAM, Type.ELECTRIC, MoveCategory.PHYSICAL, 100, 95, 15, -1, 0, 9)
       .attr(MissEffectAttr, crashDamageFunc)
       .attr(NoEffectAttr, crashDamageFunc)
+      .attr(CrashDamageScoreAttr)
       .recklessMove(),
     new AttackMove(Moves.PSYCHIC_NOISE, Type.PSYCHIC, MoveCategory.SPECIAL, 75, 100, 10, -1, 0, 9)
       .soundBased()
