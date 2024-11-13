@@ -4098,12 +4098,13 @@ export class PostVictoryStatStageChangeAttr extends MoveAttr {
   private showMessage: boolean;
 
   constructor(stats: BattleStat[], stages: number, selfTarget?: boolean, condition?: MoveConditionFunc, showMessage: boolean = true, firstHitOnly: boolean = false) {
-    super();
+    super(true, { scoresOnKO: true });
     this.stats = stats;
     this.stages = stages;
     this.condition = condition!; // TODO: is this bang correct?
     this.showMessage = showMessage;
   }
+
   applyPostVictory(user: Pokemon, target: Pokemon, move: Move): void {
     if (this.condition && !this.condition(user, target, move)) {
       return;
@@ -4111,11 +4112,19 @@ export class PostVictoryStatStageChangeAttr extends MoveAttr {
     const statChangeAttr = new StatStageChangeAttr(this.stats, this.stages, this.showMessage);
     statChangeAttr.apply(user, target, move);
   }
+
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    if (user.getExpectedAttackScore(target, move) >= 4 && this.stats.some(stat => user.getStatStage(stat) < 6)) {
+      return 3;
+    } else {
+      return 0;
+    }
+  }
 }
 
 export class AcupressureStatStageChangeAttr extends MoveEffectAttr {
   constructor() {
-    super();
+    super(false, { overridesAllyTargetPenalty: true });
   }
 
   apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean | Promise<boolean> {
@@ -4126,6 +4135,21 @@ export class AcupressureStatStageChangeAttr extends MoveEffectAttr {
       return true;
     }
     return false;
+  }
+
+  /**
+   * Returns the Effect Score modifier granted to moves with this attribute:
+   * - 50% chance of granting (+1)
+   * - Grants an additional (+1) if targeting an ally that is slower than the user
+   *
+   * Note that this assumes moves with this attribute have `USER_OR_NEAR_ALLY` targeting.
+   */
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    if (target === user.getAlly() && user.getEffectiveStat(Stat.SPD) > target.getEffectiveStat(Stat.SPD)) {
+      return 1 + this.getRandomScore(user, 1, 50);
+    } else {
+      return this.getRandomScore(user, 1, 50);
+    }
   }
 }
 
@@ -4172,6 +4196,36 @@ export class CutHpStatStageBoostAttr extends StatStageChangeAttr {
   getCondition(): MoveConditionFunc {
     return (user, _target, _move) => user.getHpRatio() > 1 / this.cutRatio && this.stats.some(s => user.getStatStage(s) < 6);
   }
+
+  /**
+   * Returns the Effect Score modifier granted to moves with this attribute:
+   * - Evaluate the active opponents' threat level. 1 point in threat level is
+   *   roughly equivalent to an opponent's best predicted attack dealing 40%
+   *   of the user's max HP.
+   * - If the highest threat level among opponents is greater than (cutRatio / 2),
+   *   grant a (-2) penalty.
+   * - Otherwise, grant (+0.5) times the net stat stage increase, rounded down. The
+   *   total bonus from this attribute cannot exceed (+3).
+   */
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    const oppThreatLevels = user.scene.getPlayerField().map(opp => {
+      const oppEstimatedMoves = opp.getEstimatedAttackMoves();
+      return Math.max(...oppEstimatedMoves.map(mv => opp.getExpectedAttackScore(user, mv)));
+    });
+
+    const maxOppThreatLevel = Math.max(...oppThreatLevels);
+    if (maxOppThreatLevel > this.cutRatio / 2) {
+      return -2;
+    }
+
+    const totalStatStagesChanged = this.stats.map(stat => {
+      const currentStatStage = user.getStatStage(stat);
+      const netStatChange = Math.max(Math.min(currentStatStage + this.getLevels(user), 6), -6) - currentStatStage;
+      return netStatChange;
+    }).reduce((total, statStageChange) => total + statStageChange);
+
+    return Math.min(Math.floor(totalStatStagesChanged * 0.5), 3);
+  }
 }
 
 /**
@@ -4191,8 +4245,15 @@ export class OrderUpStatBoostAttr extends MoveEffectAttr {
       return false;
     }
 
+    const increasedStat = this.getOrderUpBoostedStat(commandedTag.tatsugiriFormKey);
+
+    user.scene.unshiftPhase(new StatStageChangePhase(user.scene, user.getBattlerIndex(), this.selfTarget, [ increasedStat ], 1));
+    return true;
+  }
+
+  private getOrderUpBoostedStat(formKey: string): EffectiveStat {
     let increasedStat: EffectiveStat = Stat.ATK;
-    switch (commandedTag.tatsugiriFormKey) {
+    switch (formKey) {
       case "curly":
         increasedStat = Stat.ATK;
         break;
@@ -4203,9 +4264,24 @@ export class OrderUpStatBoostAttr extends MoveEffectAttr {
         increasedStat = Stat.SPD;
         break;
     }
+    return increasedStat;
+  }
 
-    user.scene.unshiftPhase(new StatStageChangePhase(user.scene, user.getBattlerIndex(), this.selfTarget, [ increasedStat ], 1));
-    return true;
+  /**
+   * Returns the Effect Score modifier granted to moves with this attribute:
+   * - Grants (+1) if the user is commanded by a Tatsugiri, and the boosted stat
+   *   isn't already at maximum.
+   */
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    const commandedTag = user.getTag(CommandedTag);
+    if (!commandedTag) {
+      return 0;
+    } else {
+      const increasedStat = this.getOrderUpBoostedStat(commandedTag.tatsugiriFormKey);
+      const currentStatStage = user.getStatStage(increasedStat);
+
+      return (currentStatStage < 6) ? 1 : 0;
+    }
   }
 }
 
@@ -4231,9 +4307,25 @@ export class CopyStatsAttr extends MoveEffectAttr {
 
     return true;
   }
+
+  /**
+   * Returns the Effect Score modifier granted to moves with this attribute:
+   * - Grants (+0.5) times the net stat stage change from this effect, rounded down.
+   *   The total bonus cannot exceed (+3).
+   */
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    const statStageChanges = user.getStatStages().map((stat, i) => target.getStatStages()[i] - stat);
+    const totalStatStageChange = statStageChanges.reduce((total, ssc) => total + ssc);
+
+    return Math.min(Math.floor(totalStatStageChange * 0.5), 3);
+  }
 }
 
 export class InvertStatsAttr extends MoveEffectAttr {
+  constructor() {
+    super(false, { overridesAllyTargetPenalty: true });
+  }
+
   apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
     if (!super.apply(user, target, move, args)) {
       return false;
@@ -4250,14 +4342,32 @@ export class InvertStatsAttr extends MoveEffectAttr {
 
     return true;
   }
+
+  /**
+   * Returns the Effect Score modifier granted to moves with this attribute:
+   * - If the target is an ally, grant (+0.5) times the net stat stage change,
+   *   rounded down.
+   * - If the target is an opponent, grant (-0.5) times the net stat stage change,
+   *   rounded down.
+   * - The total bonus in both cases cannot exceed (+3).
+   */
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    const statStageChanges = user.getStatStages().map(stat => -2 * stat);
+    const totalStatStageChange = statStageChanges.reduce((total, ssc) => total + ssc);
+
+    const targetSideMultiplier = target.isPlayer() ? -0.5 : 0.5;
+    return Math.min(Math.floor(targetSideMultiplier * totalStatStageChange), 3);
+  }
 }
 
 export class ResetStatsAttr extends MoveEffectAttr {
   private targetAllPokemon: boolean;
+
   constructor(targetAllPokemon: boolean) {
-    super();
+    super(false, { overridesAllyTargetPenalty: targetAllPokemon });
     this.targetAllPokemon = targetAllPokemon;
   }
+
   async apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): Promise<boolean> {
     const promises: Promise<void>[] = [];
     if (this.targetAllPokemon) { // Target all pokemon on the field when Freezy Frost or Haze are used
@@ -4280,6 +4390,35 @@ export class ResetStatsAttr extends MoveEffectAttr {
       pokemon.setStatStage(s, 0);
     }
     return pokemon.updateInfo();
+  }
+
+  /**
+   * Returns the Effect Score modifier granted to moves with this attribute:
+   * - If this move targets all Pokemon on the field, the bonus granted is
+   *   equal to (`ally stat stage change` - `opponent stat stage change`) * (0.5),
+   *   rounded down, max (+3).
+   * - Otherwise, the bonus granted is equal to (-0.5) times the net stat stage
+   *   change on the target, rounded down, max (+2). The ally target penalty
+   *   still applies in this case.
+   */
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    if (this.targetAllPokemon) {
+      let totalStatStageChange: number = 0;
+      const activePokemon = user.scene.getField(true);
+
+      activePokemon.forEach(pokemon =>
+        totalStatStageChange += (pokemon.isPlayer() ? -1 : 1) * this.getStatStageChange(pokemon)
+      );
+
+      return Math.min(Math.floor(totalStatStageChange * 0.5), 3);
+    } else {
+      return Math.min(Math.floor(this.getStatStageChange(target) * -0.5), 2);
+    }
+  }
+
+  private getStatStageChange(pokemon: Pokemon) {
+    const statStageChanges = pokemon.getStatStages().map(stat => -stat);
+    return statStageChanges.reduce((total, ssc) => total + ssc);
   }
 }
 
