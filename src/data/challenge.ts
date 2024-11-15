@@ -454,8 +454,8 @@ export class SingleGenerationChallenge extends Challenge {
     const fusionGeneration = pokemon.isFusion()
       ? pokemon.fusionSpecies?.speciesId === Species.VICTINI
         ? 5
-        : getPokemonSpecies(pokemon.fusionSpecies!.speciesId).generation
-      : 0; // TODO: is the bang on fusionSpecies correct?
+        : getPokemonSpecies(pokemon.fusionSpecies?.speciesId).generation
+      : 0;
     if (
       pokemon.isPlayer() &&
       (baseGeneration !== this.value || (pokemon.isFusion() && fusionGeneration !== this.value))

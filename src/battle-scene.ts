@@ -1363,6 +1363,7 @@ export default class BattleScene extends SceneBase {
     return Math.max(doubleChance.value, 1);
   }
 
+  // TODO: ...this never returns `null`, right?
   newBattle(
     waveIndex?: integer,
     battleType?: BattleType,
