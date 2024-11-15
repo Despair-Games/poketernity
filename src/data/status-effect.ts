@@ -7,6 +7,7 @@ export class Status {
   /** Toxic damage is `1/16 max HP * toxicTurnCount` */
   public toxicTurnCount: number = 0;
   public sleepTurnsRemaining?: number;
+  public sleepTurnCount: number = 0;
 
   constructor(effect: StatusEffect, toxicTurnCount: number = 0, sleepTurnsRemaining?: number) {
     this.effect = effect;
@@ -16,6 +17,7 @@ export class Status {
 
   incrementTurn(): void {
     this.toxicTurnCount++;
+    this.sleepTurnCount++;
     if (this.sleepTurnsRemaining) {
       this.sleepTurnsRemaining--;
     }
