@@ -1,4 +1,4 @@
-import BattleScene from "#app/battle-scene";
+import type BattleScene from "#app/battle-scene";
 import { ModifierTier } from "#app/modifier/modifier-tier";
 import { regenerateModifierPoolThresholds, ModifierPoolType, getEnemyBuffModifierForWave } from "#app/modifier/modifier-type";
 import { EnemyPersistentModifier } from "#app/modifier/modifier";
@@ -9,7 +9,7 @@ export class AddEnemyBuffModifierPhase extends Phase {
     super(scene);
   }
 
-  start() {
+  public override start(): void {
     super.start();
 
     const waveIndex = this.scene.currentBattle.waveIndex;

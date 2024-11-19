@@ -1,11 +1,12 @@
 import { clientSessionId } from "#app/account";
 import { BattleType } from "#app/battle";
-import BattleScene from "#app/battle-scene";
+import type BattleScene from "#app/battle-scene";
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
-import PokemonSpecies, { getPokemonSpecies } from "#app/data/pokemon-species";
+import type PokemonSpecies from "#app/data/pokemon-species";
+import { getPokemonSpecies } from "#app/data/pokemon-species";
 import { trainerConfigs } from "#app/data/trainer-config";
-import Pokemon from "#app/field/pokemon";
+import type Pokemon from "#app/field/pokemon";
 import { modifierTypes } from "#app/modifier/modifier-type";
 import { BattlePhase } from "#app/phases/battle-phase";
 import { CheckSwitchPhase } from "#app/phases/check-switch-phase";
@@ -19,7 +20,7 @@ import { UnlockPhase } from "#app/phases/unlock-phase";
 import { achvs, ChallengeAchv } from "#app/system/achv";
 import { Unlockables } from "#app/system/unlockables";
 import { Mode } from "#app/ui/ui";
-import * as Utils from "#app/utils";
+import { isLocal, isLocalServerConnected } from "#app/utils";
 import { PlayerGender } from "#enums/player-gender";
 import { TrainerType } from "#enums/trainer-type";
 import i18next from "i18next";
@@ -175,7 +176,7 @@ export class GameOverPhase extends BattlePhase {
     /* Added a local check to see if the game is running offline
       If Online, execute apiFetch as intended
       If Offline, execute offlineNewClear() only for victory, a localStorage implementation of newClear daily run checks */
-    if (!Utils.isLocal || Utils.isLocalServerConnected) {
+    if (!isLocal || isLocalServerConnected) {
       pokerogueApi.savedata.session.newclear({ slot: this.scene.sessionSlotId, isVictory: this.isVictory, clientSessionId: clientSessionId })
         .then((success) => doGameOver(!!success));
     } else if (this.isVictory) {

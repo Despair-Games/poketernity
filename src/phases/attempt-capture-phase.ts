@@ -1,20 +1,20 @@
 import { BattlerIndex } from "#app/battle";
-import BattleScene from "#app/battle-scene";
+import type BattleScene from "#app/battle-scene";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
 import { SubstituteTag } from "#app/data/battler-tags";
 import { doPokeballBounceAnim, getPokeballAtlasKey, getPokeballCatchMultiplier, getPokeballTintColor, getCriticalCaptureChance } from "#app/data/pokeball";
 import { getStatusEffectCatchRateMultiplier } from "#app/data/status-effect";
 import { addPokeballCaptureStars, addPokeballOpenParticles } from "#app/field/anims";
-import { EnemyPokemon } from "#app/field/pokemon";
+import { type EnemyPokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { PokemonPhase } from "#app/phases/pokemon-phase";
 import { VictoryPhase } from "#app/phases/victory-phase";
 import { achvs } from "#app/system/achv";
-import { PartyOption, PartyUiMode } from "#app/ui/party-ui-handler";
+import { type PartyOption, PartyUiMode } from "#app/ui/party-ui-handler";
 import { SummaryUiMode } from "#app/ui/summary-ui-handler";
 import { Mode } from "#app/ui/ui";
-import { PokeballType } from "#enums/pokeball";
+import { type PokeballType } from "#enums/pokeball";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
 
@@ -23,13 +23,13 @@ export class AttemptCapturePhase extends PokemonPhase {
   private pokeball: Phaser.GameObjects.Sprite;
   private originalY: number;
 
-  constructor(scene: BattleScene, targetIndex: integer, pokeballType: PokeballType) {
+  constructor(scene: BattleScene, targetIndex: number, pokeballType: PokeballType) {
     super(scene, BattlerIndex.ENEMY + targetIndex);
 
     this.pokeballType = pokeballType;
   }
 
-  start() {
+  public override start(): void {
     super.start();
 
     const pokemon = this.getPokemon() as EnemyPokemon;
@@ -120,19 +120,19 @@ export class AttemptCapturePhase extends PokemonPhase {
                 onRepeat: () => {
                   if (!pokemon.species.isObtainable()) {
                     shakeCounter.stop();
-                    this.failCatch(shakeCount);
+                    this.failCatch();
                   } else if (shakeCount++ < (isCritical ? 1 : 3)) {
                     // Shake check (skip check for critical or guaranteed captures, but still play the sound)
                     if (pokeballMultiplier === -1 || isCritical || modifiedCatchRate >= 255 || pokemon.randSeedInt(65536) < shakeProbability) {
                       this.scene.playSound("se/pb_move");
                     } else {
                       shakeCounter.stop();
-                      this.failCatch(shakeCount);
+                      this.failCatch();
                     }
                   } else if (isCritical && pokemon.randSeedInt(65536) >= shakeProbability) {
                     // Above, perform the one shake check for critical captures after the ball shakes once
                     shakeCounter.stop();
-                    this.failCatch(shakeCount);
+                    this.failCatch();
                   } else {
                     this.scene.playSound("se/pb_lock");
                     addPokeballCaptureStars(this.scene, this.pokeball);
@@ -173,7 +173,7 @@ export class AttemptCapturePhase extends PokemonPhase {
     });
   }
 
-  failCatch(shakeCount: integer) {
+  public failCatch(): void {
     const pokemon = this.getPokemon();
 
     this.scene.playSound("se/pb_rel");
@@ -206,7 +206,7 @@ export class AttemptCapturePhase extends PokemonPhase {
     this.end();
   }
 
-  catch() {
+  public catch(): void {
     const pokemon = this.getPokemon() as EnemyPokemon;
 
     const speciesForm = !pokemon.fusionSpecies ? pokemon.getSpeciesForm() : pokemon.getFusionSpeciesForm();
@@ -275,7 +275,7 @@ export class AttemptCapturePhase extends PokemonPhase {
                   });
                 }, false);
               }, () => {
-                this.scene.ui.setMode(Mode.PARTY, PartyUiMode.RELEASE, this.fieldIndex, (slotIndex: integer, _option: PartyOption) => {
+                this.scene.ui.setMode(Mode.PARTY, PartyUiMode.RELEASE, this.fieldIndex, (slotIndex: number, _option: PartyOption) => {
                   this.scene.ui.setMode(Mode.MESSAGE).then(() => {
                     if (slotIndex < 6) {
                       addToParty(slotIndex);
@@ -300,7 +300,7 @@ export class AttemptCapturePhase extends PokemonPhase {
     }, 0, true);
   }
 
-  removePb() {
+  protected removePb(): void {
     this.scene.tweens.add({
       targets: this.pokeball,
       duration: 250,

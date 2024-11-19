@@ -3,7 +3,7 @@ import { Phase } from "#app/phase";
 import BattleScene, { AnySound } from "#app/battle-scene";
 import { SpeciesFormEvolution } from "#app/data/balance/pokemon-evolutions";
 import EvolutionSceneHandler from "#app/ui/evolution-scene-handler";
-import * as Utils from "#app/utils";
+import { fixedInt, getFrameMs, randInt } from "#app/utils";
 import { Mode } from "#app/ui/ui";
 import { cos, sin } from "#app/field/anims";
 import Pokemon, { PlayerPokemon } from "#app/field/pokemon";
@@ -15,7 +15,7 @@ import { EndEvolutionPhase } from "#app/phases/end-evolution-phase";
 
 export class EvolutionPhase extends Phase {
   protected pokemon: PlayerPokemon;
-  protected lastLevel: integer;
+  protected lastLevel: number;
 
   private preEvolvedPokemonName: string;
 
@@ -33,7 +33,7 @@ export class EvolutionPhase extends Phase {
   protected pokemonEvoSprite: Phaser.GameObjects.Sprite;
   protected pokemonEvoTintSprite: Phaser.GameObjects.Sprite;
 
-  constructor(scene: BattleScene, pokemon: PlayerPokemon, evolution: SpeciesFormEvolution | null, lastLevel: integer) {
+  constructor(scene: BattleScene, pokemon: PlayerPokemon, evolution: SpeciesFormEvolution | null, lastLevel: number) {
     super(scene);
 
     this.pokemon = pokemon;
@@ -251,8 +251,8 @@ export class EvolutionPhase extends Phase {
           this.scene.playSoundWithoutBgm("evolution_fanfare");
 
           evolvedPokemon.destroy();
-          this.scene.ui.showText(i18next.t("menu:evolutionDone", { pokemonName: this.preEvolvedPokemonName, evolvedPokemonName: this.pokemon.name }), null, () => this.end(), null, true, Utils.fixedInt(4000));
-          this.scene.time.delayedCall(Utils.fixedInt(4250), () => this.scene.playBgm());
+          this.scene.ui.showText(i18next.t("menu:evolutionDone", { pokemonName: this.preEvolvedPokemonName, evolvedPokemonName: this.pokemon.name }), null, () => this.end(), null, true, fixedInt(4000));
+          this.scene.time.delayedCall(fixedInt(4250), () => this.scene.playBgm());
         });
       });
     };
@@ -303,7 +303,7 @@ export class EvolutionPhase extends Phase {
 
     this.scene.tweens.addCounter({
       repeat: 64,
-      duration: Utils.getFrameMs(1),
+      duration: getFrameMs(1),
       onRepeat: () => {
         if (f < 64) {
           if (!(f & 7)) {
@@ -322,7 +322,7 @@ export class EvolutionPhase extends Phase {
 
     this.scene.tweens.addCounter({
       repeat: 96,
-      duration: Utils.getFrameMs(1),
+      duration: getFrameMs(1),
       onRepeat: () => {
         if (f < 96) {
           if (f < 6) {
@@ -336,7 +336,7 @@ export class EvolutionPhase extends Phase {
     });
   }
 
-  doCycle(l: number, lastCycle: integer = 15): Promise<boolean> {
+  doCycle(l: number, lastCycle: number = 15): Promise<boolean> {
     return new Promise(resolve => {
       const isLastCycle = l === lastCycle;
       this.scene.tweens.add({
@@ -372,7 +372,7 @@ export class EvolutionPhase extends Phase {
 
     this.scene.tweens.addCounter({
       repeat: 48,
-      duration: Utils.getFrameMs(1),
+      duration: getFrameMs(1),
       onRepeat: () => {
         if (!f) {
           for (let i = 0; i < 16; i++) {
@@ -393,21 +393,21 @@ export class EvolutionPhase extends Phase {
 
     this.scene.tweens.addCounter({
       repeat: 48,
-      duration: Utils.getFrameMs(1),
+      duration: getFrameMs(1),
       onRepeat: () => {
         if (!f) {
           for (let i = 0; i < 8; i++) {
             this.doSprayParticle(i);
           }
         } else if (f < 50) {
-          this.doSprayParticle(Utils.randInt(8));
+          this.doSprayParticle(randInt(8));
         }
         f++;
       }
     });
   }
 
-  doSpiralUpwardParticle(trigIndex: integer) {
+  doSpiralUpwardParticle(trigIndex: number) {
     const initialX = this.evolutionBaseBg.displayWidth / 2;
     const particle = this.scene.add.image(initialX, 0, "evo_sparkle");
     this.evolutionContainer.add(particle);
@@ -417,7 +417,7 @@ export class EvolutionPhase extends Phase {
 
     const particleTimer = this.scene.tweens.addCounter({
       repeat: -1,
-      duration: Utils.getFrameMs(1),
+      duration: getFrameMs(1),
       onRepeat: () => {
         updateParticle();
       }
@@ -443,7 +443,7 @@ export class EvolutionPhase extends Phase {
     updateParticle();
   }
 
-  doArcDownParticle(trigIndex: integer) {
+  doArcDownParticle(trigIndex: number) {
     const initialX = this.evolutionBaseBg.displayWidth / 2;
     const particle = this.scene.add.image(initialX, 0, "evo_sparkle");
     particle.setScale(0.5);
@@ -454,7 +454,7 @@ export class EvolutionPhase extends Phase {
 
     const particleTimer = this.scene.tweens.addCounter({
       repeat: -1,
-      duration: Utils.getFrameMs(1),
+      duration: getFrameMs(1),
       onRepeat: () => {
         updateParticle();
       }
@@ -476,7 +476,7 @@ export class EvolutionPhase extends Phase {
     updateParticle();
   }
 
-  doCircleInwardParticle(trigIndex: integer, speed: integer) {
+  doCircleInwardParticle(trigIndex: number, speed: number) {
     const initialX = this.evolutionBaseBg.displayWidth / 2;
     const initialY = this.evolutionBaseBg.displayHeight / 2;
     const particle = this.scene.add.image(initialX, initialY, "evo_sparkle");
@@ -486,7 +486,7 @@ export class EvolutionPhase extends Phase {
 
     const particleTimer = this.scene.tweens.addCounter({
       repeat: -1,
-      duration: Utils.getFrameMs(1),
+      duration: getFrameMs(1),
       onRepeat: () => {
         updateParticle();
       }
@@ -508,7 +508,7 @@ export class EvolutionPhase extends Phase {
     updateParticle();
   }
 
-  doSprayParticle(trigIndex: integer) {
+  doSprayParticle(trigIndex: number) {
     const initialX = this.evolutionBaseBg.displayWidth / 2;
     const initialY = this.evolutionBaseBg.displayHeight / 2;
     const particle = this.scene.add.image(initialX, initialY, "evo_sparkle");
@@ -516,12 +516,12 @@ export class EvolutionPhase extends Phase {
 
     let f = 0;
     let yOffset = 0;
-    const speed = 3 - Utils.randInt(8);
-    const amp = 48 + Utils.randInt(64);
+    const speed = 3 - randInt(8);
+    const amp = 48 + randInt(64);
 
     const particleTimer = this.scene.tweens.addCounter({
       repeat: -1,
-      duration: Utils.getFrameMs(1),
+      duration: getFrameMs(1),
       onRepeat: () => {
         updateParticle();
       }

@@ -1,21 +1,26 @@
-import { PostTurnStatusEffectPhase } from "#app/phases/post-turn-status-effect-phase";
+import type { BattlerIndex } from "#app/battle";
+import type BattleScene from "#app/battle-scene";
 import { Phase } from "#app/phase";
-import { BattlerIndex } from "#app/battle";
-import BattleScene from "#app/battle-scene";
+import { PostTurnStatusEffectPhase } from "#app/phases/post-turn-status-effect-phase";
 
+/** Queues a {@linkcode PostTurnStatusEffectPhase} for every active pokemon that needs one */
 export class CheckStatusEffectPhase extends Phase {
-  private order : BattlerIndex[];
-  constructor(scene : BattleScene, order : BattlerIndex[]) {
+  /** The pokemon being checked, ordered by turn order */
+  private activePokemon: BattlerIndex[];
+
+  constructor(scene: BattleScene, activePokemon: BattlerIndex[]) {
     super(scene);
-    this.scene = scene;
-    this.order = order;
+
+    this.activePokemon = activePokemon;
   }
 
-  start() {
+  public override start(): void {
+    super.start();
+
     const field = this.scene.getField();
-    for (const o of this.order) {
-      if (field[o].status && field[o].status.isPostTurn()) {
-        this.scene.unshiftPhase(new PostTurnStatusEffectPhase(this.scene, o));
+    for (const p of this.activePokemon) {
+      if (field[p].status && field[p].status.isPostTurn()) {
+        this.scene.unshiftPhase(new PostTurnStatusEffectPhase(this.scene, p));
       }
     }
     this.end();

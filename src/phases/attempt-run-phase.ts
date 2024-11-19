@@ -1,24 +1,24 @@
-import BattleScene from "#app/battle-scene";
+import type BattleScene from "#app/battle-scene";
 import { applyAbAttrs, RunSuccessAbAttr } from "#app/data/ability";
-import { Stat } from "#app/enums/stat";
-import { StatusEffect } from "#app/enums/status-effect";
-import Pokemon, { PlayerPokemon, EnemyPokemon } from "#app/field/pokemon";
+import type Pokemon from "#app/field/pokemon";
+import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
+import { BattleEndPhase } from "#app/phases/battle-end-phase";
+import { NewBattlePhase } from "#app/phases/new-battle-phase";
+import { PokemonPhase } from "#app/phases/pokemon-phase";
+import { NumberHolder } from "#app/utils";
+import { Stat } from "#enums/stat";
+import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
-import * as Utils from "#app/utils";
-import { BattleEndPhase } from "./battle-end-phase";
-import { NewBattlePhase } from "./new-battle-phase";
-import { PokemonPhase } from "./pokemon-phase";
 
 export class AttemptRunPhase extends PokemonPhase {
-
-  /** For testing purposes: this is to force the pokemon to fail and escape */
-  public forceFailEscape = false;
+  /** For testing purposes: this is to force the pokemon to fail to escape */
+  public forceFailEscape = false; // TODO: replace with a new override
 
   constructor(scene: BattleScene, fieldIndex: number) {
     super(scene, fieldIndex);
   }
 
-  start() {
+  public override start(): void {
     super.start();
 
     const playerField = this.scene.getPlayerField();
@@ -26,7 +26,7 @@ export class AttemptRunPhase extends PokemonPhase {
 
     const playerPokemon = this.getPokemon();
 
-    const escapeChance = new Utils.NumberHolder(0);
+    const escapeChance = new NumberHolder(0);
 
     this.attemptRunAway(playerField, enemyField, escapeChance);
 
@@ -62,7 +62,13 @@ export class AttemptRunPhase extends PokemonPhase {
     this.end();
   }
 
-  attemptRunAway(playerField: PlayerPokemon[], enemyField: EnemyPokemon[], escapeChance: Utils.NumberHolder) {
+  /**
+   * Calculates the base escape chance based on the current field.
+   * @param playerField - Usually {@linkcode BattleScene.getPlayerField()}
+   * @param enemyField - Usually {@linkcode BattleScene.getEnemyField()}
+   * @param escapeChance - {@linkcode NumberHolder} holding the % chance to escape, will be overwritten by the function
+   */
+  public attemptRunAway(playerField: PlayerPokemon[], enemyField: EnemyPokemon[], escapeChance: NumberHolder): void {
     /** Sum of the speed of all enemy pokemon on the field */
     const enemySpeed = enemyField.reduce((total: number, enemyPokemon: Pokemon) => total + enemyPokemon.getStat(Stat.SPD), 0);
     /** Sum of the speed of all player pokemon on the field */

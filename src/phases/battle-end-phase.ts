@@ -1,8 +1,8 @@
-import BattleScene from "#app/battle-scene";
+import type BattleScene from "#app/battle-scene";
 import { applyPostBattleAbAttrs, PostBattleAbAttr } from "#app/data/ability";
 import { LapsingPersistentModifier, LapsingPokemonHeldItemModifier } from "#app/modifier/modifier";
-import { BattlePhase } from "./battle-phase";
-import { GameOverPhase } from "./game-over-phase";
+import { BattlePhase } from "#app/phases/battle-phase";
+import { GameOverPhase } from "#app/phases/game-over-phase";
 
 export class BattleEndPhase extends BattlePhase {
   /** If true, will increment battles won */
@@ -14,7 +14,7 @@ export class BattleEndPhase extends BattlePhase {
     this.isVictory = isVictory;
   }
 
-  start() {
+  public override start(): void {
     super.start();
 
     if (this.isVictory) {
