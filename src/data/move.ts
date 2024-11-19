@@ -9,7 +9,7 @@ import { Constructor, NumberHolder } from "#app/utils";
 import * as Utils from "../utils";
 import { WeatherType } from "#enums/weather-type";
 import { ArenaTagSide, ArenaTrapTag, WeakenMoveTypeTag } from "./arena-tag";
-import { allAbilities, AllyMoveCategoryPowerBoostAbAttr, applyAbAttrs, applyPostAttackAbAttrs, applyPostItemLostAbAttrs, applyPreAttackAbAttrs, applyPreDefendAbAttrs, BlockItemTheftAbAttr, BlockNonDirectDamageAbAttr, BlockOneHitKOAbAttr, BlockRecoilDamageAttr, ChangeMovePriorityAbAttr, ConfusionOnStatusEffectAbAttr, FieldMoveTypePowerBoostAbAttr, FieldPreventExplosiveMovesAbAttr, ForceSwitchOutImmunityAbAttr, HealFromBerryUseAbAttr, IgnoreContactAbAttr, IgnoreMoveEffectsAbAttr, IgnoreProtectOnContactAbAttr, InfiltratorAbAttr, MaxMultiHitAbAttr, MoveAbilityBypassAbAttr, MoveEffectChanceMultiplierAbAttr, MoveTypeChangeAbAttr, PostDamageForceSwitchAbAttr, PostItemLostAbAttr, RedirectMoveAbAttr, ReverseDrainAbAttr, UncopiableAbilityAbAttr, UnsuppressableAbilityAbAttr, UnswappableAbilityAbAttr, UserFieldMoveTypePowerBoostAbAttr, VariableMovePowerAbAttr, WonderSkinAbAttr } from "./ability";
+import { allAbilities, AllyMoveCategoryPowerBoostAbAttr, applyAbAttrs, applyPostAttackAbAttrs, applyPostItemLostAbAttrs, applyPreAttackAbAttrs, applyPreDefendAbAttrs, BlockItemTheftAbAttr, BlockNonDirectDamageAbAttr, BlockOneHitKOAbAttr, BlockRecoilDamageAttr, BonusCritAbAttr, ChangeMovePriorityAbAttr, ConfusionOnStatusEffectAbAttr, FieldMoveTypePowerBoostAbAttr, FieldPreventExplosiveMovesAbAttr, ForceSwitchOutImmunityAbAttr, HealFromBerryUseAbAttr, IgnoreContactAbAttr, IgnoreMoveEffectsAbAttr, IgnoreProtectOnContactAbAttr, InfiltratorAbAttr, MaxMultiHitAbAttr, MoveAbilityBypassAbAttr, MoveEffectChanceMultiplierAbAttr, MoveTypeChangeAbAttr, PostDamageForceSwitchAbAttr, PostItemLostAbAttr, RedirectMoveAbAttr, ReverseDrainAbAttr, UncopiableAbilityAbAttr, UnsuppressableAbilityAbAttr, UnswappableAbilityAbAttr, UserFieldMoveTypePowerBoostAbAttr, VariableMovePowerAbAttr, WonderSkinAbAttr } from "./ability";
 import { AttackTypeBoosterModifier, BerryModifier, PokemonHeldItemModifier, PokemonMoveAccuracyBoosterModifier, PokemonMultiHitModifier, PreserveBerryModifier } from "../modifier/modifier";
 import { BattlerIndex, BattleType } from "../battle";
 import { TerrainType } from "./terrain";
@@ -6420,11 +6420,11 @@ export class AddBattlerTagAttr extends MoveEffectAttr {
   }
 
   override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
-    const tagScore = this.getTagScore(user, target, move, this.tagType);
+    const tagScore = this.getTagScore(user, target, move);
     return this.toChanceBasedScore(user, target, move, tagScore);
   }
 
-  protected getTagScore(user: EnemyPokemon, target: Pokemon, move: Move, tagType: BattlerTagType): number {
+  protected getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     this.reportUnimplementedScore(move, `Unscored tag type: ${this.tagType}`);
     return 0;
   }
@@ -6439,7 +6439,7 @@ export class DisableAttr extends AddBattlerTagAttr {
     super(BattlerTagType.DISABLED, false, { failOnOverlap: true });
   }
 
-  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move, tagType: BattlerTagType): number {
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     const targetBestAttack = target.getAttackMoves(true, true)
       .sort((aMove, bMove) => target.getExpectedAttackScore(user, bMove.getMove()) - target.getExpectedAttackScore(user, aMove.getMove()))[0];
 
@@ -6466,7 +6466,7 @@ export class TormentAttr extends AddBattlerTagAttr {
     super(BattlerTagType.TORMENT, false, { failOnOverlap: true });
   }
 
-  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move, tagType: BattlerTagType): number {
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     return this.getRandomScore(user, 1, 40);
   }
 }
@@ -6480,7 +6480,7 @@ export class TauntAttr extends AddBattlerTagAttr {
     super(BattlerTagType.TAUNT, false, { failOnOverlap: true });
   }
 
-  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move, tagType: BattlerTagType): number {
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     const targetEAS = target.getEstimatedAttackMoves().map(move => target.getExpectedAttackScore(user, move));
     const targetMaxEAS = Math.max(...targetEAS);
 
@@ -6501,7 +6501,7 @@ export class HealBlockAttr extends AddBattlerTagAttr {
     });
   }
 
-  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move, tagType: BattlerTagType): number {
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     return this.getRandomScore(user, 1, 40) + (target.hasAbility(Abilities.TRIAGE) ? 1 : 0);
   }
 }
@@ -6511,7 +6511,7 @@ export class ThroatChopAttr extends AddBattlerTagAttr {
     super(BattlerTagType.THROAT_CHOPPED);
   }
 
-  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move, tagType: BattlerTagType): number {
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     const targetAttacksByEAS = target.getEstimatedAttackMoves()
       .sort((aMove, bMove) => target.getExpectedAttackScore(user, bMove) - target.getExpectedAttackScore(user, aMove));
 
@@ -6533,7 +6533,7 @@ export class MinimizeAttr extends AddBattlerTagAttr {
     super(BattlerTagType.MINIMIZED, true, { failOnOverlap: true });
   }
 
-  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move, tagType: BattlerTagType): number {
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     return 0;
   }
 }
@@ -6561,7 +6561,7 @@ export class LeechSeedAttr extends AddBattlerTagAttr {
       && super.apply(user, target, move, args);
   }
 
-  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move, tagType: BattlerTagType): number {
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     const targetEAS = target.getEstimatedAttackMoves().map(move => target.getExpectedAttackScore(user, move));
     const targetMaxEAS = Math.max(...targetEAS);
 
@@ -6578,7 +6578,7 @@ export class FocusEnergyAttr extends AddBattlerTagAttr {
     super(BattlerTagType.CRIT_BOOST, true, { failOnOverlap: true });
   }
 
-  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move, tagType: BattlerTagType): number {
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     const hasCritMove = user.hasMoveWithAttr(HighCritAttr) && user.hasAbility(Abilities.SUPER_LUCK);
 
     return this.getRandomScore(user, 1, 50) + (hasCritMove ? 1 : 0);
@@ -6594,7 +6594,7 @@ export class TrapAttr extends AddBattlerTagAttr {
     super(BattlerTagType.TRAPPED, false, options);
   }
 
-  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move, tagType: BattlerTagType): number {
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     if (target instanceof PlayerPokemon && user.getMatchupScore(target) >= 6) {
       return this.getRandomScore(user, 1, 60);
     } else {
@@ -6612,7 +6612,7 @@ export class NightmareAttr extends AddBattlerTagAttr {
     super(BattlerTagType.NIGHTMARE);
   }
 
-  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move, tagType: BattlerTagType): number {
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     if (target.status?.effect === StatusEffect.SLEEP && target.status.sleepTurnCount <= 1) {
       return 1;
     } else {
@@ -6630,7 +6630,7 @@ export class AttractAttr extends AddBattlerTagAttr {
     super(BattlerTagType.INFATUATED);
   }
 
-  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move, tagType: BattlerTagType): number {
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     return this.getRandomScore(user, 1, 80);
   }
 
@@ -6644,7 +6644,7 @@ export class EncoreAttr extends AddBattlerTagAttr {
     super(BattlerTagType.ENCORE, false, { failOnOverlap: true });
   }
 
-  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move, tagType: BattlerTagType): number {
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     const outspeed = user.getEffectiveStat(Stat.SPD) > target.getEffectiveStat(Stat.SPD);
     // Since the condition is assumed to be met, we can assume the target's
     // last move is repeatable.
@@ -6667,7 +6667,7 @@ export class StockpileAttr extends AddBattlerTagAttr {
     super(BattlerTagType.STOCKPILING, true);
   }
 
-  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move, tagType: BattlerTagType): number {
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     return [ Moves.SPIT_UP, Moves.SWALLOW ].filter(mv => user.hasMove(mv)).length;
   }
 
@@ -6681,7 +6681,7 @@ export class CenterOfAttentionAttr extends AddBattlerTagAttr {
     super(BattlerTagType.CENTER_OF_ATTENTION, selfTarget, { failOnOverlap: true });
   }
 
-  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move, tagType: BattlerTagType): number {
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     if (this.selfTarget) {
       if (!user.scene.currentBattle.double || !user.getAlly()?.isActive(true)) {
         return -5;
@@ -6710,7 +6710,7 @@ export class ChargeTagAttr extends AddBattlerTagAttr {
     super(BattlerTagType.CHARGED, true);
   }
 
-  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move, tagType: BattlerTagType): number {
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     if (user.getAttackMoves(true).some(mv => mv && user.getMoveType(mv.getMove()) === Type.ELECTRIC)) {
       return this.getRandomScore(user, 2, 30);
     } else {
@@ -6724,7 +6724,7 @@ export class HelpingHandAttr extends AddBattlerTagAttr {
     super(BattlerTagType.HELPING_HAND, false, { overridesAllyTargetPenalty: true });
   }
 
-  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move, tagType: BattlerTagType): number {
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     if (!user.scene.currentBattle.double || !user.getAlly()?.isActive(true)) {
       return -5;
     }
@@ -6748,7 +6748,7 @@ export class IngrainAttr extends AddBattlerTagAttr {
     super(BattlerTagType.INGRAIN, true, { failOnOverlap: true });
   }
 
-  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move, tagType: BattlerTagType): number {
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     const activeOpponents = user.scene.getPlayerField().filter(opp => opp.isActive(true));
     const oppEAS = activeOpponents.map(opp =>
       opp.getEstimatedAttackMoves().map(mv => opp.getExpectedAttackScore(user, mv))
@@ -6767,7 +6767,7 @@ export class NoRetreatAttr extends AddBattlerTagAttr {
     super(BattlerTagType.NO_RETREAT, true);
   }
 
-  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move, tagType: BattlerTagType): number {
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     const trapTag = user.getTag(TrappedTag);
 
     if (!user.hasTrainer() || trapTag && trapTag.sourceMove !== Moves.NO_RETREAT) {
@@ -6783,7 +6783,7 @@ export class YawnAttr extends AddBattlerTagAttr {
     super(BattlerTagType.DROWSY, false, { failOnOverlap: true });
   }
 
-  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move, tagType: BattlerTagType): number {
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     return 1 + this.getRandomScore(user, 1, 30);
   }
 
@@ -6797,7 +6797,7 @@ export class RoostAttr extends AddBattlerTagAttr {
     super(BattlerTagType.ROOSTED, true);
   }
 
-  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move, tagType: BattlerTagType): number {
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     const isFlying = !user.isTerastallized() && user.isOfType(Type.FLYING, false, true);
     const oppHasSuperEffectiveAttack = user.scene.getPlayerField().filter(opp => opp.isActive(true))
       .filter(opp => user.getEffectiveStat(Stat.SPD) > opp.getEffectiveStat(Stat.SPD))
@@ -6816,7 +6816,7 @@ export class AquaRingAttr extends AddBattlerTagAttr {
     super(BattlerTagType.AQUA_RING, true, { failOnOverlap: true });
   }
 
-  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move, tagType: BattlerTagType): number {
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     const activeOpponents = user.scene.getPlayerField().filter(opp => opp.isActive(true));
     const oppEAS = activeOpponents.map(opp =>
       opp.getEstimatedAttackMoves().map(mv => opp.getExpectedAttackScore(user, mv))
@@ -6839,7 +6839,7 @@ export class FloatingAttr extends AddBattlerTagAttr {
     });
   }
 
-  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move, tagType: BattlerTagType): number {
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     const affectedPokemon = this.selfTarget ? user : target;
     const allyTarget = !affectedPokemon.isPlayer();
     const opposingField = (allyTarget ? user.scene.getPlayerField() : user.scene.getEnemyField())
@@ -6864,7 +6864,7 @@ export class GroundingAttr extends AddBattlerTagAttr {
     super(BattlerTagType.IGNORE_FLYING, false, { lastHitOnly: true });
   }
 
-  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move, tagType: BattlerTagType): number {
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     const targetNonFlyingTypes = target.getTypes(true, true).filter(type => type !== Type.FLYING);
 
     if (targetNonFlyingTypes.length > 0) {
@@ -6888,7 +6888,7 @@ export class InterruptingAttr extends AddBattlerTagAttr {
     super(BattlerTagType.INTERRUPTED);
   }
 
-  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move, tagType: BattlerTagType): number {
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     return 0;
   }
 }
@@ -6898,7 +6898,7 @@ export class LaserFocusAttr extends AddBattlerTagAttr {
     super(BattlerTagType.ALWAYS_CRIT, true);
   }
 
-  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move, tagType: BattlerTagType): number {
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     const userEAS = user.getAttackMoves(true).map(mv => user.getExpectedAttackScore(target, mv.getMove()));
     const userMaxEAS = Math.max(...userEAS) ?? 0;
 
@@ -6915,7 +6915,7 @@ export class TarShotAttr extends AddBattlerTagAttr {
     super(BattlerTagType.TAR_SHOT);
   }
 
-  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move, tagType: BattlerTagType): number {
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     const userField = user.scene.getEnemyField().filter(p => p.isActive(true));
     const hasFireMove = userField.some(p =>
       p.getAttackMoves(true).some(mv => p.getMoveType(mv.getMove()) === Type.FIRE)
@@ -6943,12 +6943,101 @@ export class GlaiveRushAttr extends AddBattlerTagAttr {
   constructor() {
     super(BattlerTagType.GLAIVE_RUSH, true, {
       lastHitOnly: true,
-      cancelOnFail: true
+      cancelOnFail: true,
+      scoresOnKO: true
     });
   }
 
-  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move, tagType: BattlerTagType): number {
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     return (user.isBoss() ? -1 : 0) + this.getRandomScore(user, -1, 30);
+  }
+}
+
+export class SaltCureAttr extends AddBattlerTagAttr {
+  constructor() {
+    super(BattlerTagType.SALT_CURED, false);
+  }
+
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    const isWaterOrSteel = [ Type.WATER, Type.STEEL ].some(t => target.isOfType(t, true, true));
+
+    return (isWaterOrSteel ? 1 : 0) + this.getRandomScore(user, 1, 80);
+  }
+}
+
+export class SyrupBombAttr extends AddBattlerTagAttr {
+  constructor() {
+    super(BattlerTagType.SYRUP_BOMB, false, { turnCountMin: 3 });
+  }
+
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    const outsped = target.getEffectiveStat(Stat.SPD) > user.getEffectiveStat(Stat.SPD);
+
+    return outsped ? this.getRandomScore(user, 1, 60) : 0;
+  }
+}
+
+export class ElectrifyAttr extends AddBattlerTagAttr {
+  constructor() {
+    super(BattlerTagType.ELECTRIFIED, false, { failOnOverlap: true });
+  }
+
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    const outspeed = user.getEffectiveStat(Stat.SPD) > target.getEffectiveStat(Stat.SPD);
+    const userElectricEffectiveness = user.getAttackTypeEffectiveness(Type.ELECTRIC, target);
+
+    if (outspeed) {
+      const sideHasLightningRod = user.scene.getEnemyField()
+        .filter(p => p.isActive(true))
+        .some(p => p.hasAbility(Abilities.LIGHTNING_ROD));
+
+      const userHasImmuneAb = [
+        Abilities.VOLT_ABSORB,
+        Abilities.MOTOR_DRIVE
+      ].some(ab => user.hasAbility(ab));
+
+      if (sideHasLightningRod || userHasImmuneAb || userElectricEffectiveness === 0) {
+        return this.getRandomScore(user, 2, 60);
+      }
+    }
+    return -1;
+  }
+}
+
+export class TelekinesisAttr extends AddBattlerTagAttr {
+  constructor() {
+    super(BattlerTagType.TELEKINESIS, false, {
+      failOnOverlap: true,
+      turnCountMin: 3
+    });
+  }
+
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    const allyField = user.scene.getEnemyField().filter(p => p.isActive(true));
+    const allyHasLowAccuracy = allyField.some(ally =>
+      ally.getMoveset().some(mv => mv && mv.getMove().accuracy <= 80)
+    );
+
+    return allyHasLowAccuracy ? this.getRandomScore(user, 1, 40) : 0;
+  }
+}
+
+export class DragonCheerAttr extends AddBattlerTagAttr {
+  constructor() {
+    super(BattlerTagType.DRAGON_CHEER, false, {
+      failOnOverlap: true,
+      overridesAllyTargetPenalty: true
+    });
+  }
+
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    const isDragon = target.isOfType(Type.DRAGON, true);
+    const hasHighCritMove = target.hasMoveWithAttr(HighCritAttr);
+    const hasHighCritAb = target.hasAbilityWithAttr(BonusCritAbAttr);
+
+    return this.getRandomScore(user, 1, 55)
+      + (isDragon ? 1 : 0)
+      + ((hasHighCritMove || hasHighCritAb) ? 1 : 0);
   }
 }
 
@@ -6957,8 +7046,11 @@ export class GlaiveRushAttr extends AddBattlerTagAttr {
  * @extends MoveEffectAttr
  */
 export class GulpMissileTagAttr extends MoveEffectAttr {
-  constructor() {
-    super(true);
+  constructor(scoresOnFail: boolean = false) {
+    super(true, {
+      scoresOnKO: true,
+      scoresOnFail: scoresOnFail
+    });
   }
 
   /**
@@ -6989,6 +7081,14 @@ export class GulpMissileTagAttr extends MoveEffectAttr {
   getUserBenefitScore(user: Pokemon, target: Pokemon, move: Move): integer {
     const isCramorant = user.hasAbility(Abilities.GULP_MISSILE) && user.species.speciesId === Species.CRAMORANT;
     return isCramorant && !user.getTag(GulpMissileTag) ? 10 : 0;
+  }
+
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    const isCramorant = user.hasAbility(Abilities.GULP_MISSILE)
+      && user.species.speciesId === Species.CRAMORANT
+      && user.formIndex === 0; // base form, no gulp missile stored
+
+    return isCramorant ? 1 : 0;
   }
 }
 
@@ -7023,10 +7123,13 @@ export class JawLockAttr extends AddBattlerTagAttr {
 
     return false;
   }
+
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    return (user.getAverageMatchupScore() > 5) ? 1 : 0;
+  }
 }
 
 export class CurseAttr extends MoveEffectAttr {
-
   apply(user: Pokemon, target: Pokemon, move:Move, args: any[]): boolean {
     if (user.getTypes(true).includes(Type.GHOST)) {
       if (target.getTag(BattlerTagType.CURSED)) {
@@ -7050,6 +7153,10 @@ export class CurseAttr extends MoveEffectAttr {
       return true;
     }
   }
+
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    return (user.isBoss() && user.isOfType(Type.GHOST, true)) ? -10 : 0;
+  }
 }
 
 export class LapseBattlerTagAttr extends MoveEffectAttr {
@@ -7071,6 +7178,15 @@ export class LapseBattlerTagAttr extends MoveEffectAttr {
     }
 
     return true;
+  }
+
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    const affectedPokemon = this.selfTarget ? user : target;
+
+    const affectedTags = affectedPokemon.summonData?.tags
+      .filter(tag => this.tagTypes.includes(tag.tagType));
+
+    return Math.min(affectedTags.length, 2);
   }
 }
 
@@ -7094,6 +7210,15 @@ export class RemoveBattlerTagAttr extends MoveEffectAttr {
 
     return true;
   }
+
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    const affectedPokemon = this.selfTarget ? user : target;
+
+    const affectedTags = affectedPokemon.summonData?.tags
+      .filter(tag => this.tagTypes.includes(tag.tagType));
+
+    return Math.min(affectedTags.length, 2);
+  }
 }
 
 export class FlinchAttr extends AddBattlerTagAttr {
@@ -7106,6 +7231,12 @@ export class FlinchAttr extends AddBattlerTagAttr {
       return super.apply(user, target, move, args);
     }
     return false;
+  }
+
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    const outspeed = user.getEffectiveStat(Stat.SPD) > target.getEffectiveStat(Stat.SPD);
+
+    return outspeed ? this.toChanceBasedScore(user, target, move, 2) : 0;
   }
 }
 
@@ -7130,6 +7261,10 @@ export class ConfuseAttr extends AddBattlerTagAttr {
     }
     return false;
   }
+
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    return this.toChanceBasedScore(user, target, move, 1);
+  }
 }
 
 export class RechargeAttr extends AddBattlerTagAttr {
@@ -7141,7 +7276,7 @@ export class RechargeAttr extends AddBattlerTagAttr {
     });
   }
 
-  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move, tagType: BattlerTagType): number {
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     return -1 + this.getRandomScore(user, -1, 60);
   }
 }
@@ -7152,6 +7287,14 @@ export class BindAttr extends AddBattlerTagAttr {
       turnCountMin: 4,
       turnCountMax: 5
     });
+  }
+
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    if (user.getAverageMatchupScore() >= 4) {
+      return this.getRandomScore(user, 1, 65);
+    } else {
+      return 0;
+    }
   }
 }
 
@@ -7178,6 +7321,51 @@ export class ProtectAttr extends AddBattlerTagAttr {
       }
       return true;
     });
+  }
+
+  protected override getTagScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    const lastMove = allMoves[user.getLastXMoves(1)[0].move];
+
+    if (!lastMove.hasAttr(ProtectAttr)) {
+      const synergyAbs = [ Abilities.MOODY, Abilities.SPEED_BOOST ];
+      const hasSynergyAb = synergyAbs.some(ab => user.hasAbility(ab));
+      const bonusChance = hasSynergyAb ? 100 : 30;
+
+      const contactEffectBonus = this.getContactEffectScore(user);
+
+      return 1 + this.getRandomScore(user, 1, bonusChance) + contactEffectBonus;
+    } else {
+      return 0;
+    }
+  }
+
+  private getContactEffectScore(user: EnemyPokemon): number {
+    const numOppsWithPhysAffinity = user.scene.getEnemyField()
+      .filter(p => p.isActive(true) && p.getEffectiveStat(Stat.ATK) > p.getEffectiveStat(Stat.SPATK))
+      .length;
+
+    let contactBonusChance = 0;
+    switch (this.tagType) {
+      case BattlerTagType.SPIKY_SHIELD:
+        contactBonusChance = numOppsWithPhysAffinity * 35;
+        break;
+      case BattlerTagType.BANEFUL_BUNKER:
+        contactBonusChance = numOppsWithPhysAffinity * 45;
+        break;
+      case BattlerTagType.KINGS_SHIELD:
+        const isAegislashInBladeForme = user.species.speciesId === Species.AEGISLASH && user.formIndex === 1;
+        contactBonusChance = isAegislashInBladeForme ? 100 : Math.min(numOppsWithPhysAffinity * 60, 100);
+        break;
+      case BattlerTagType.OBSTRUCT:
+      case BattlerTagType.BURNING_BULWARK:
+        contactBonusChance = Math.min(numOppsWithPhysAffinity * 60, 100);
+        break;
+      case BattlerTagType.SILK_TRAP:
+        contactBonusChance = numOppsWithPhysAffinity * 50;
+        break;
+    }
+
+    return this.getRandomScore(user, 1, contactBonusChance);
   }
 }
 
@@ -11121,7 +11309,7 @@ export function initMoves() {
       .attr(TerrainChangeAttr, TerrainType.MISTY)
       .target(MoveTarget.BOTH_SIDES),
     new StatusMove(Moves.ELECTRIFY, Type.ELECTRIC, -1, 20, -1, 0, 6)
-      .attr(AddBattlerTagAttr, BattlerTagType.ELECTRIFIED, false, { failOnOverlap: true }),
+      .attr(ElectrifyAttr),
     new AttackMove(Moves.PLAY_ROUGH, Type.FAIRY, MoveCategory.PHYSICAL, 90, 90, 10, 10, 0, 6)
       .attr(StatStageChangeAttr, [ Stat.ATK ], -1),
     new AttackMove(Moves.FAIRY_WIND, Type.FAIRY, MoveCategory.SPECIAL, 40, 100, 30, -1, 0, 6)
@@ -12126,7 +12314,7 @@ export function initMoves() {
       .attr(RevivalBlessingAttr)
       .target(MoveTarget.USER),
     new AttackMove(Moves.SALT_CURE, Type.ROCK, MoveCategory.PHYSICAL, 40, 100, 15, 100, 0, 9)
-      .attr(AddBattlerTagAttr, BattlerTagType.SALT_CURED)
+      .attr(SaltCureAttr)
       .makesContact(false),
     new AttackMove(Moves.TRIPLE_DIVE, Type.WATER, MoveCategory.PHYSICAL, 30, 95, 10, -1, 0, 9)
       .attr(MultiHitAttr, MultiHitType._3),
@@ -12266,7 +12454,7 @@ export function initMoves() {
       .target(MoveTarget.ALL_NEAR_ENEMIES)
       .triageMove(),
     new AttackMove(Moves.SYRUP_BOMB, Type.GRASS, MoveCategory.SPECIAL, 60, 85, 10, -1, 0, 9)
-      .attr(AddBattlerTagAttr, BattlerTagType.SYRUP_BOMB, false, { turnCountMin: 3 })
+      .attr(SyrupBombAttr)
       .ballBombMove(),
     new AttackMove(Moves.IVY_CUDGEL, Type.GRASS, MoveCategory.PHYSICAL, 100, 100, 10, -1, 0, 9)
       .attr(IvyCudgelTypeAttr)
@@ -12299,7 +12487,7 @@ export function initMoves() {
     new AttackMove(Moves.HARD_PRESS, Type.STEEL, MoveCategory.PHYSICAL, -1, 100, 10, -1, 0, 9)
       .attr(OpponentHighHpPowerAttr, 100),
     new StatusMove(Moves.DRAGON_CHEER, Type.DRAGON, -1, 15, -1, 0, 9)
-      .attr(AddBattlerTagAttr, BattlerTagType.DRAGON_CHEER, false, { failOnOverlap: true })
+      .attr(DragonCheerAttr)
       .target(MoveTarget.NEAR_ALLY),
     new AttackMove(Moves.ALLURING_VOICE, Type.FAIRY, MoveCategory.SPECIAL, 80, 100, 10, -1, 0, 9)
       .attr(AddBattlerTagIfBoostedAttr, BattlerTagType.CONFUSED)
