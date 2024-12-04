@@ -34,10 +34,10 @@ describe("Moves - Geomancy", () => {
   });
 
   it("should boost the user's stats on the second turn of use", async () => {
-    await game.classicMode.startBattle([ Species.MAGIKARP ]);
+    await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const player = game.scene.getPlayerPokemon()!;
-    const affectedStats: EffectiveStat[] = [ Stat.SPATK, Stat.SPDEF, Stat.SPD ];
+    const affectedStats: EffectiveStat[] = [Stat.SPATK, Stat.SPDEF, Stat.SPD];
 
     game.move.select(Moves.GEOMANCY);
 
@@ -55,10 +55,10 @@ describe("Moves - Geomancy", () => {
   });
 
   it("should execute over 2 turns between waves", async () => {
-    await game.classicMode.startBattle([ Species.MAGIKARP ]);
+    await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const player = game.scene.getPlayerPokemon()!;
-    const affectedStats: EffectiveStat[] = [ Stat.SPATK, Stat.SPDEF, Stat.SPD ];
+    const affectedStats: EffectiveStat[] = [Stat.SPATK, Stat.SPDEF, Stat.SPD];
 
     game.move.select(Moves.GEOMANCY);
 

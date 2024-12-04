@@ -12,7 +12,7 @@ export enum Command {
   FIGHT = 0,
   BALL,
   POKEMON,
-  RUN
+  RUN,
 }
 
 export default class CommandUiHandler extends UiHandler {
@@ -32,7 +32,7 @@ export default class CommandUiHandler extends UiHandler {
       i18next.t("commandUiHandler:fight"),
       i18next.t("commandUiHandler:ball"),
       i18next.t("commandUiHandler:pokemon"),
-      i18next.t("commandUiHandler:run")
+      i18next.t("commandUiHandler:run"),
     ];
 
     this.commandsContainer = this.scene.add.container(217, -38.7);
@@ -41,7 +41,13 @@ export default class CommandUiHandler extends UiHandler {
     ui.add(this.commandsContainer);
 
     for (let c = 0; c < commands.length; c++) {
-      const commandText = addTextObject(this.scene, c % 2 === 0 ? 0 : 55.8, c < 2 ? 0 : 16, commands[c], TextStyle.WINDOW);
+      const commandText = addTextObject(
+        this.scene,
+        c % 2 === 0 ? 0 : 55.8,
+        c < 2 ? 0 : 16,
+        commands[c],
+        TextStyle.WINDOW,
+      );
       commandText.setName(commands[c]);
       this.commandsContainer.add(commandText);
     }
@@ -50,7 +56,7 @@ export default class CommandUiHandler extends UiHandler {
   show(args: any[]): boolean {
     super.show(args);
 
-    this.fieldIndex = args.length ? args[0] as integer : 0;
+    this.fieldIndex = args.length ? (args[0] as integer) : 0;
 
     this.commandsContainer.setVisible(true);
 
@@ -67,7 +73,10 @@ export default class CommandUiHandler extends UiHandler {
     messageHandler.commandWindow.setVisible(true);
     messageHandler.movesWindowContainer.setVisible(false);
     messageHandler.message.setWordWrapWidth(1110);
-    messageHandler.showText(i18next.t("commandUiHandler:actionMessage", { pokemonName: getPokemonNameWithAffix(commandPhase.getPokemon()) }), 0);
+    messageHandler.showText(
+      i18next.t("commandUiHandler:actionMessage", { pokemonName: getPokemonNameWithAffix(commandPhase.getPokemon()) }),
+      0,
+    );
     if (this.getCursor() === Command.POKEMON) {
       this.setCursor(Command.FIGHT);
     } else {
@@ -85,10 +94,9 @@ export default class CommandUiHandler extends UiHandler {
     const cursor = this.getCursor();
 
     if (button === Button.CANCEL || button === Button.ACTION) {
-
       if (button === Button.ACTION) {
         switch (cursor) {
-        // Fight
+          // Fight
           case Command.FIGHT:
             ui.setMode(Mode.FIGHT, (this.scene.getCurrentPhase() as CommandPhase).getFieldIndex());
             success = true;
@@ -100,7 +108,13 @@ export default class CommandUiHandler extends UiHandler {
             break;
           // Pokemon
           case Command.POKEMON:
-            ui.setMode(Mode.PARTY, PartyUiMode.SWITCH, (this.scene.getCurrentPhase() as CommandPhase).getPokemon().getFieldIndex(), null, PartyUiHandler.FilterNonFainted);
+            ui.setMode(
+              Mode.PARTY,
+              PartyUiMode.SWITCH,
+              (this.scene.getCurrentPhase() as CommandPhase).getPokemon().getFieldIndex(),
+              null,
+              PartyUiHandler.FilterNonFainted,
+            );
             success = true;
             break;
           // Run

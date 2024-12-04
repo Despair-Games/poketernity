@@ -80,7 +80,7 @@ export const EXTREME_ENCOUNTER_BIOMES = [
   Biome.WASTELAND,
   Biome.ABYSS,
   Biome.SPACE,
-  Biome.END
+  Biome.END,
 ];
 
 export const NON_EXTREME_ENCOUNTER_BIOMES = [
@@ -108,7 +108,7 @@ export const NON_EXTREME_ENCOUNTER_BIOMES = [
   Biome.SLUM,
   Biome.SNOWY_FOREST,
   Biome.ISLAND,
-  Biome.LABORATORY
+  Biome.LABORATORY,
 ];
 
 /**
@@ -147,7 +147,7 @@ export const HUMAN_TRANSITABLE_BIOMES = [
   Biome.SLUM,
   Biome.SNOWY_FOREST,
   Biome.ISLAND,
-  Biome.LABORATORY
+  Biome.LABORATORY,
 ];
 
 /**
@@ -168,11 +168,10 @@ export const CIVILIZATION_ENCOUNTER_BIOMES = [
   Biome.FACTORY,
   Biome.CONSTRUCTION_SITE,
   Biome.SLUM,
-  Biome.ISLAND
+  Biome.ISLAND,
 ];
 
 export const allMysteryEncounters: { [encounterType: number]: MysteryEncounter } = {};
-
 
 const extremeBiomeEncounters: MysteryEncounterType[] = [];
 
@@ -187,14 +186,14 @@ const humanTransitableBiomeEncounters: MysteryEncounterType[] = [
   MysteryEncounterType.THE_POKEMON_SALESMAN,
   MysteryEncounterType.AN_OFFER_YOU_CANT_REFUSE,
   MysteryEncounterType.THE_WINSTRATE_CHALLENGE,
-  MysteryEncounterType.THE_EXPERT_POKEMON_BREEDER
+  MysteryEncounterType.THE_EXPERT_POKEMON_BREEDER,
 ];
 
 const civilizationBiomeEncounters: MysteryEncounterType[] = [
   MysteryEncounterType.DEPARTMENT_STORE_SALE,
   MysteryEncounterType.PART_TIMER,
   MysteryEncounterType.FUN_AND_GAMES,
-  MysteryEncounterType.GLOBAL_TRADE_SYSTEM
+  MysteryEncounterType.GLOBAL_TRADE_SYSTEM,
 ];
 
 /**
@@ -213,7 +212,7 @@ const anyBiomeEncounters: MysteryEncounterType[] = [
   MysteryEncounterType.WEIRD_DREAM,
   MysteryEncounterType.TELEPORTING_HIJINKS,
   MysteryEncounterType.BUG_TYPE_SUPERFAN,
-  MysteryEncounterType.UNCOMMON_BREED
+  MysteryEncounterType.UNCOMMON_BREED,
 ];
 
 /**
@@ -224,72 +223,40 @@ const anyBiomeEncounters: MysteryEncounterType[] = [
  * that biome groups do not cover
  */
 export const mysteryEncountersByBiome = new Map<Biome, MysteryEncounterType[]>([
-  [ Biome.TOWN, []],
-  [ Biome.PLAINS, [
-    MysteryEncounterType.SLUMBERING_SNORLAX,
-    MysteryEncounterType.ABSOLUTE_AVARICE
-  ]],
-  [ Biome.GRASS, [
-    MysteryEncounterType.SLUMBERING_SNORLAX,
-    MysteryEncounterType.ABSOLUTE_AVARICE
-  ]],
-  [ Biome.TALL_GRASS, [
-    MysteryEncounterType.ABSOLUTE_AVARICE
-  ]],
-  [ Biome.METROPOLIS, []],
-  [ Biome.FOREST, [
-    MysteryEncounterType.SAFARI_ZONE,
-    MysteryEncounterType.ABSOLUTE_AVARICE
-  ]],
-  [ Biome.SEA, [
-    MysteryEncounterType.LOST_AT_SEA
-  ]],
-  [ Biome.SWAMP, [
-    MysteryEncounterType.SAFARI_ZONE
-  ]],
-  [ Biome.BEACH, []],
-  [ Biome.LAKE, []],
-  [ Biome.SEABED, []],
-  [ Biome.MOUNTAIN, []],
-  [ Biome.BADLANDS, [
-    MysteryEncounterType.DANCING_LESSONS
-  ]],
-  [ Biome.CAVE, [
-    MysteryEncounterType.THE_STRONG_STUFF
-  ]],
-  [ Biome.DESERT, [
-    MysteryEncounterType.DANCING_LESSONS
-  ]],
-  [ Biome.ICE_CAVE, []],
-  [ Biome.MEADOW, []],
-  [ Biome.POWER_PLANT, []],
-  [ Biome.VOLCANO, [
-    MysteryEncounterType.FIERY_FALLOUT,
-    MysteryEncounterType.DANCING_LESSONS
-  ]],
-  [ Biome.GRAVEYARD, []],
-  [ Biome.DOJO, []],
-  [ Biome.FACTORY, []],
-  [ Biome.RUINS, []],
-  [ Biome.WASTELAND, [
-    MysteryEncounterType.DANCING_LESSONS
-  ]],
-  [ Biome.ABYSS, [
-    MysteryEncounterType.DANCING_LESSONS
-  ]],
-  [ Biome.SPACE, [
-    MysteryEncounterType.THE_EXPERT_POKEMON_BREEDER
-  ]],
-  [ Biome.CONSTRUCTION_SITE, []],
-  [ Biome.JUNGLE, [
-    MysteryEncounterType.SAFARI_ZONE
-  ]],
-  [ Biome.FAIRY_CAVE, []],
-  [ Biome.TEMPLE, []],
-  [ Biome.SLUM, []],
-  [ Biome.SNOWY_FOREST, []],
-  [ Biome.ISLAND, []],
-  [ Biome.LABORATORY, []]
+  [Biome.TOWN, []],
+  [Biome.PLAINS, [MysteryEncounterType.SLUMBERING_SNORLAX, MysteryEncounterType.ABSOLUTE_AVARICE]],
+  [Biome.GRASS, [MysteryEncounterType.SLUMBERING_SNORLAX, MysteryEncounterType.ABSOLUTE_AVARICE]],
+  [Biome.TALL_GRASS, [MysteryEncounterType.ABSOLUTE_AVARICE]],
+  [Biome.METROPOLIS, []],
+  [Biome.FOREST, [MysteryEncounterType.SAFARI_ZONE, MysteryEncounterType.ABSOLUTE_AVARICE]],
+  [Biome.SEA, [MysteryEncounterType.LOST_AT_SEA]],
+  [Biome.SWAMP, [MysteryEncounterType.SAFARI_ZONE]],
+  [Biome.BEACH, []],
+  [Biome.LAKE, []],
+  [Biome.SEABED, []],
+  [Biome.MOUNTAIN, []],
+  [Biome.BADLANDS, [MysteryEncounterType.DANCING_LESSONS]],
+  [Biome.CAVE, [MysteryEncounterType.THE_STRONG_STUFF]],
+  [Biome.DESERT, [MysteryEncounterType.DANCING_LESSONS]],
+  [Biome.ICE_CAVE, []],
+  [Biome.MEADOW, []],
+  [Biome.POWER_PLANT, []],
+  [Biome.VOLCANO, [MysteryEncounterType.FIERY_FALLOUT, MysteryEncounterType.DANCING_LESSONS]],
+  [Biome.GRAVEYARD, []],
+  [Biome.DOJO, []],
+  [Biome.FACTORY, []],
+  [Biome.RUINS, []],
+  [Biome.WASTELAND, [MysteryEncounterType.DANCING_LESSONS]],
+  [Biome.ABYSS, [MysteryEncounterType.DANCING_LESSONS]],
+  [Biome.SPACE, [MysteryEncounterType.THE_EXPERT_POKEMON_BREEDER]],
+  [Biome.CONSTRUCTION_SITE, []],
+  [Biome.JUNGLE, [MysteryEncounterType.SAFARI_ZONE]],
+  [Biome.FAIRY_CAVE, []],
+  [Biome.TEMPLE, []],
+  [Biome.SLUM, []],
+  [Biome.SNOWY_FOREST, []],
+  [Biome.ISLAND, []],
+  [Biome.LABORATORY, []],
 ]);
 
 export function initMysteryEncounters() {
@@ -326,8 +293,8 @@ export function initMysteryEncounters() {
   allMysteryEncounters[MysteryEncounterType.THE_EXPERT_POKEMON_BREEDER] = TheExpertPokemonBreederEncounter;
 
   // Add extreme encounters to biome map
-  extremeBiomeEncounters.forEach(encounter => {
-    EXTREME_ENCOUNTER_BIOMES.forEach(biome => {
+  extremeBiomeEncounters.forEach((encounter) => {
+    EXTREME_ENCOUNTER_BIOMES.forEach((biome) => {
       const encountersForBiome = mysteryEncountersByBiome.get(biome);
       if (encountersForBiome && !encountersForBiome.includes(encounter)) {
         encountersForBiome.push(encounter);
@@ -335,8 +302,8 @@ export function initMysteryEncounters() {
     });
   });
   // Add non-extreme encounters to biome map
-  nonExtremeBiomeEncounters.forEach(encounter => {
-    NON_EXTREME_ENCOUNTER_BIOMES.forEach(biome => {
+  nonExtremeBiomeEncounters.forEach((encounter) => {
+    NON_EXTREME_ENCOUNTER_BIOMES.forEach((biome) => {
       const encountersForBiome = mysteryEncountersByBiome.get(biome);
       if (encountersForBiome && !encountersForBiome.includes(encounter)) {
         encountersForBiome.push(encounter);
@@ -344,8 +311,8 @@ export function initMysteryEncounters() {
     });
   });
   // Add human encounters to biome map
-  humanTransitableBiomeEncounters.forEach(encounter => {
-    HUMAN_TRANSITABLE_BIOMES.forEach(biome => {
+  humanTransitableBiomeEncounters.forEach((encounter) => {
+    HUMAN_TRANSITABLE_BIOMES.forEach((biome) => {
       const encountersForBiome = mysteryEncountersByBiome.get(biome);
       if (encountersForBiome && !encountersForBiome.includes(encounter)) {
         encountersForBiome.push(encounter);
@@ -353,8 +320,8 @@ export function initMysteryEncounters() {
     });
   });
   // Add civilization encounters to biome map
-  civilizationBiomeEncounters.forEach(encounter => {
-    CIVILIZATION_ENCOUNTER_BIOMES.forEach(biome => {
+  civilizationBiomeEncounters.forEach((encounter) => {
+    CIVILIZATION_ENCOUNTER_BIOMES.forEach((biome) => {
       const encountersForBiome = mysteryEncountersByBiome.get(biome);
       if (encountersForBiome && !encountersForBiome.includes(encounter)) {
         encountersForBiome.push(encounter);
@@ -366,13 +333,16 @@ export function initMysteryEncounters() {
   // eslint-disable-next-line
   let encounterBiomeTableLog = "";
   mysteryEncountersByBiome.forEach((biomeEncounters, biome) => {
-    anyBiomeEncounters.forEach(encounter => {
+    anyBiomeEncounters.forEach((encounter) => {
       if (!biomeEncounters.includes(encounter)) {
         biomeEncounters.push(encounter);
       }
     });
 
-    encounterBiomeTableLog += `${getBiomeName(biome).toUpperCase()}: [${biomeEncounters.map(type => MysteryEncounterType[type].toString().toLowerCase()).sort().join(", ")}]\n`;
+    encounterBiomeTableLog += `${getBiomeName(biome).toUpperCase()}: [${biomeEncounters
+      .map((type) => MysteryEncounterType[type].toString().toLowerCase())
+      .sort()
+      .join(", ")}]\n`;
   });
 
   //console.debug("All Mystery Encounters by Biome:\n" + encounterBiomeTableLog);

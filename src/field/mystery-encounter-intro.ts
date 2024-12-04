@@ -36,7 +36,7 @@ export class MysteryEncounterSpriteConfig {
   /** The sprite key (which is the image file name). e.g. "ace_trainer_f" */
   spriteKey: string;
   /** Refer to [/public/images](../../public/images) directorty for all folder names */
-  fileRoot: KnownFileRoot & string | string;
+  fileRoot: (KnownFileRoot & string) | string;
   /** Optional replacement for `spriteKey`/`fileRoot`. Just know this defaults to male/genderless, form 0, no shiny */
   species?: Species;
   /** Enable shadow. Defaults to `false` */
@@ -80,16 +80,16 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
   public encounter: MysteryEncounter;
   public spriteConfigs: MysteryEncounterSpriteConfig[];
   public enterFromRight: boolean;
-  private shinySparkleSprites: { sprite: Phaser.GameObjects.Sprite, variant: Variant }[];
+  private shinySparkleSprites: { sprite: Phaser.GameObjects.Sprite; variant: Variant }[];
 
   constructor(scene: BattleScene, encounter: MysteryEncounter) {
     super(scene, -72, 76);
     this.encounter = encounter;
     this.enterFromRight = encounter.enterIntroVisualsFromRight ?? false;
     // Shallow copy configs to allow visual config updates at runtime without dirtying master copy of Encounter
-    this.spriteConfigs = encounter.spriteConfigs.map(config => {
+    this.spriteConfigs = encounter.spriteConfigs.map((config) => {
       const result = {
-        ...config
+        ...config,
       };
 
       if (!isNullOrUndefined(result.species)) {
@@ -108,14 +108,22 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
     const getSprite = (spriteKey: string, hasShadow?: boolean, yShadow?: number) => {
       const ret = this.scene.addFieldSprite(0, 0, spriteKey);
       ret.setOrigin(0.5, 1);
-      ret.setPipeline(this.scene.spritePipeline, { tone: [ 0.0, 0.0, 0.0, 0.0 ], hasShadow: !!hasShadow, yShadowOffset: yShadow ?? 0 });
+      ret.setPipeline(this.scene.spritePipeline, {
+        tone: [0.0, 0.0, 0.0, 0.0],
+        hasShadow: !!hasShadow,
+        yShadowOffset: yShadow ?? 0,
+      });
       return ret;
     };
 
     const getItemSprite = (spriteKey: string, hasShadow?: boolean, yShadow?: number) => {
       const icon = this.scene.add.sprite(-19, 2, "items", spriteKey);
       icon.setOrigin(0.5, 1);
-      icon.setPipeline(this.scene.spritePipeline, { tone: [ 0.0, 0.0, 0.0, 0.0 ], hasShadow: !!hasShadow, yShadowOffset: yShadow ?? 0 });
+      icon.setPipeline(this.scene.spritePipeline, {
+        tone: [0.0, 0.0, 0.0, 0.0],
+        hasShadow: !!hasShadow,
+        yShadowOffset: yShadow ?? 0,
+      });
       return icon;
     };
 
@@ -125,7 +133,7 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
     const origin = 4;
     let n = 0;
     // Sprites with custom X or Y defined will not count for normal spacing requirements
-    const spacingValue = Math.round((maxX - minX) / Math.max(this.spriteConfigs.filter(s => !s.x && !s.y).length, 1));
+    const spacingValue = Math.round((maxX - minX) / Math.max(this.spriteConfigs.filter((s) => !s.x && !s.y).length, 1));
 
     this.shinySparkleSprites = [];
     const shinySparkleSprites = scene.add.container(0, 0);
@@ -210,7 +218,7 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
    * Loads the assets that were defined on construction (async)
    */
   loadAssets(): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       if (!this.spriteConfigs) {
         resolve();
       }
@@ -237,17 +245,21 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
           const originalWarn = console.warn;
 
           // Ignore warnings for missing frames, because there will be a lot
-          console.warn = () => {
-          };
-          const frameNames = this.scene.anims.generateFrameNames(config.spriteKey, { zeroPad: 4, suffix: ".png", start: 1, end: 128 });
+          console.warn = () => {};
+          const frameNames = this.scene.anims.generateFrameNames(config.spriteKey, {
+            zeroPad: 4,
+            suffix: ".png",
+            start: 1,
+            end: 128,
+          });
 
           console.warn = originalWarn;
-          if (!(this.scene.anims.exists(config.spriteKey))) {
+          if (!this.scene.anims.exists(config.spriteKey)) {
             this.scene.anims.create({
               key: config.spriteKey,
               frames: frameNames,
               frameRate: 10,
-              repeat: -1
+              repeat: -1,
             });
           }
 
@@ -312,7 +324,11 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
    * @param animConfig {@linkcode Phaser.Types.Animations.PlayAnimationConfig} to pass to {@linkcode Phaser.GameObjects.Sprite.play}
    * @returns true if the sprite was able to be animated
    */
-  tryPlaySprite(sprite: Phaser.GameObjects.Sprite, tintSprite: Phaser.GameObjects.Sprite, animConfig: Phaser.Types.Animations.PlayAnimationConfig): boolean {
+  tryPlaySprite(
+    sprite: Phaser.GameObjects.Sprite,
+    tintSprite: Phaser.GameObjects.Sprite,
+    animConfig: Phaser.Types.Animations.PlayAnimationConfig,
+  ): boolean {
     // Show an error in the console if there isn't a texture loaded
     if (sprite.texture.key === "__MISSING") {
       console.error(`No texture found for '${animConfig.key}'!`);
@@ -358,7 +374,7 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
         const trainerAnimConfig: PlayAnimationConfig = {
           key: config.spriteKey,
           repeat: config?.repeat ? -1 : 0,
-          startFrame: config?.startFrame ?? 0
+          startFrame: config?.startFrame ?? 0,
         };
 
         this.tryPlaySprite(sprites[i], tintSprites[i], trainerAnimConfig);
@@ -433,7 +449,7 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
         targets: sprite,
         alpha: alpha || 1,
         duration: duration,
-        ease: ease || "Linear"
+        ease: ease || "Linear",
       });
     } else {
       sprite.setAlpha(alpha);
@@ -449,7 +465,7 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
    */
   tintAll(color: number, alpha?: number, duration?: integer, ease?: string): void {
     const tintSprites = this.getTintSprites();
-    tintSprites.map(tintSprite => {
+    tintSprites.map((tintSprite) => {
       this.tint(tintSprite, color, alpha, duration, ease);
     });
   }
@@ -470,7 +486,7 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
         onComplete: () => {
           sprite.setVisible(false);
           sprite.setAlpha(1);
-        }
+        },
       });
     } else {
       sprite.setVisible(false);
@@ -486,7 +502,7 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
    */
   untintAll(duration: integer, ease?: string): void {
     const tintSprites = this.getTintSprites();
-    tintSprites.map(tintSprite => {
+    tintSprites.map((tintSprite) => {
       this.untint(tintSprite, duration, ease);
     });
   }
@@ -496,7 +512,7 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
    * @param value - true for visible, false for hidden
    */
   setVisible(value: boolean): this {
-    this.getSprites().forEach(sprite => {
+    this.getSprites().forEach((sprite) => {
       sprite.setVisible(value);
     });
     return super.setVisible(value);
@@ -507,5 +523,5 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
  * Interface is required so as not to override {@link Phaser.GameObjects.Container.scene}
  */
 export default interface MysteryEncounterIntroVisuals {
-  scene: BattleScene
+  scene: BattleScene;
 }

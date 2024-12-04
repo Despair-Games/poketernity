@@ -18,7 +18,10 @@ export class BattleEndPhase extends BattlePhase {
     super.start();
 
     this.scene.gameData.gameStats.battles++;
-    if (this.scene.gameMode.isEndless && this.scene.currentBattle.waveIndex + 1 > this.scene.gameData.gameStats.highestEndlessWave) {
+    if (
+      this.scene.gameMode.isEndless &&
+      this.scene.currentBattle.waveIndex + 1 > this.scene.gameData.gameStats.highestEndlessWave
+    ) {
       this.scene.gameData.gameStats.highestEndlessWave = this.scene.currentBattle.waveIndex + 1;
     }
 
@@ -52,7 +55,9 @@ export class BattleEndPhase extends BattlePhase {
 
     this.scene.clearEnemyHeldItemModifiers();
 
-    const lapsingModifiers = this.scene.findModifiers(m => m instanceof LapsingPersistentModifier || m instanceof LapsingPokemonHeldItemModifier) as (LapsingPersistentModifier | LapsingPokemonHeldItemModifier)[];
+    const lapsingModifiers = this.scene.findModifiers(
+      (m) => m instanceof LapsingPersistentModifier || m instanceof LapsingPokemonHeldItemModifier,
+    ) as (LapsingPersistentModifier | LapsingPokemonHeldItemModifier)[];
     for (const m of lapsingModifiers) {
       const args: any[] = [];
       if (m instanceof LapsingPokemonHeldItemModifier) {

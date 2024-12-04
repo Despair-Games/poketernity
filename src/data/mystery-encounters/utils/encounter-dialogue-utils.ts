@@ -62,8 +62,15 @@ export function queueEncounterMessage(scene: BattleScene, contentKey: string): v
  * @param callbackDelay
  * @param promptDelay
  */
-export function showEncounterText(scene: BattleScene, contentKey: string, delay: number | null = null, callbackDelay: number = 0, prompt: boolean = true, promptDelay: number | null = null): Promise<void> {
-  return new Promise<void>(resolve => {
+export function showEncounterText(
+  scene: BattleScene,
+  contentKey: string,
+  delay: number | null = null,
+  callbackDelay: number = 0,
+  prompt: boolean = true,
+  promptDelay: number | null = null,
+): Promise<void> {
+  return new Promise<void>((resolve) => {
     const text: string | null = getEncounterText(scene, contentKey);
     scene.ui.showText(text ?? "", delay, () => resolve(), callbackDelay, prompt, promptDelay);
   });
@@ -77,8 +84,14 @@ export function showEncounterText(scene: BattleScene, contentKey: string, delay:
  * @param speakerContentKey
  * @param callbackDelay
  */
-export function showEncounterDialogue(scene: BattleScene, textContentKey: string, speakerContentKey: string, delay: number | null = null, callbackDelay: number = 0): Promise<void> {
-  return new Promise<void>(resolve => {
+export function showEncounterDialogue(
+  scene: BattleScene,
+  textContentKey: string,
+  speakerContentKey: string,
+  delay: number | null = null,
+  callbackDelay: number = 0,
+): Promise<void> {
+  return new Promise<void>((resolve) => {
     const text: string | null = getEncounterText(scene, textContentKey);
     const speaker: string | null = getEncounterText(scene, speakerContentKey);
     scene.ui.showDialogue(text ?? "", speaker ?? "", delay, () => resolve(), callbackDelay);

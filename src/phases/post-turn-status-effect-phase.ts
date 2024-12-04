@@ -1,6 +1,13 @@
 import BattleScene from "#app/battle-scene";
 import { BattlerIndex } from "#app/battle";
-import { applyAbAttrs, applyPostDamageAbAttrs, BlockNonDirectDamageAbAttr, BlockStatusDamageAbAttr, PostDamageAbAttr, ReduceBurnDamageAbAttr } from "#app/data/ability";
+import {
+  applyAbAttrs,
+  applyPostDamageAbAttrs,
+  BlockNonDirectDamageAbAttr,
+  BlockStatusDamageAbAttr,
+  PostDamageAbAttr,
+  ReduceBurnDamageAbAttr,
+} from "#app/data/ability";
 import { CommonBattleAnim, CommonAnim } from "#app/data/battle-anims";
 import { getStatusEffectActivationText } from "#app/data/status-effect";
 import { BattleSpec } from "#app/enums/battle-spec";
@@ -43,7 +50,9 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
           pokemon.updateInfo();
           applyPostDamageAbAttrs(PostDamageAbAttr, pokemon, damage.value, pokemon.hasPassive(), false, []);
         }
-        new CommonBattleAnim(CommonAnim.POISON + (pokemon.status.effect - 1), pokemon).play(this.scene, false, () => this.end());
+        new CommonBattleAnim(CommonAnim.POISON + (pokemon.status.effect - 1), pokemon).play(this.scene, false, () =>
+          this.end(),
+        );
       } else {
         this.end();
       }

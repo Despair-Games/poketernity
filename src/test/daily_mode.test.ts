@@ -60,11 +60,9 @@ describe("Shop modifications", async () => {
       .battleType("single")
       .startingLevel(100) // Avoid levelling up
       .disableTrainerWaves()
-      .moveset([ Moves.SPLASH ])
+      .moveset([Moves.SPLASH])
       .enemyMoveset(Moves.SPLASH);
-    game.modifiers
-      .addCheck("EVIOLITE")
-      .addCheck("MINI_BLACK_HOLE");
+    game.modifiers.addCheck("EVIOLITE").addCheck("MINI_BLACK_HOLE");
     vi.spyOn(pokerogueApi.daily, "getSeed").mockResolvedValue("test-seed");
   });
 
@@ -74,15 +72,13 @@ describe("Shop modifications", async () => {
   });
 
   it("should not have Eviolite and Mini Black Hole available in Classic if not unlocked", async () => {
-    await game.classicMode.startBattle([ Species.BULBASAUR ]);
+    await game.classicMode.startBattle([Species.BULBASAUR]);
     game.move.select(Moves.SPLASH);
     await game.doKillOpponents();
     await game.phaseInterceptor.to("BattleEndPhase");
     game.onNextPrompt("SelectModifierPhase", Mode.MODIFIER_SELECT, () => {
       expect(game.scene.ui.getHandler()).toBeInstanceOf(ModifierSelectUiHandler);
-      game.modifiers
-        .testCheck("EVIOLITE", false)
-        .testCheck("MINI_BLACK_HOLE", false);
+      game.modifiers.testCheck("EVIOLITE", false).testCheck("MINI_BLACK_HOLE", false);
     });
   });
 
@@ -93,9 +89,7 @@ describe("Shop modifications", async () => {
     await game.phaseInterceptor.to("BattleEndPhase");
     game.onNextPrompt("SelectModifierPhase", Mode.MODIFIER_SELECT, () => {
       expect(game.scene.ui.getHandler()).toBeInstanceOf(ModifierSelectUiHandler);
-      game.modifiers
-        .testCheck("EVIOLITE", true)
-        .testCheck("MINI_BLACK_HOLE", true);
+      game.modifiers.testCheck("EVIOLITE", true).testCheck("MINI_BLACK_HOLE", true);
     });
   });
 });

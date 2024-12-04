@@ -6,16 +6,16 @@ import { WindowVariant, addWindow } from "./ui-theme";
 import { pokerogueApi } from "#app/plugins/api/pokerogue-api";
 
 export interface RankingEntry {
-  rank: integer,
-  username: string,
-  score: integer,
-  wave: integer
+  rank: integer;
+  username: string;
+  score: integer;
+  wave: integer;
 }
 
 // Don't forget to update translations when adding a new category
 export enum ScoreboardCategory {
   DAILY,
-  WEEKLY
+  WEEKLY,
 }
 
 export class DailyRunScoreboard extends Phaser.GameObjects.Container {
@@ -63,7 +63,14 @@ export class DailyRunScoreboard extends Phaser.GameObjects.Container {
     const titleWindow = addWindow(this.scene, 0, 0, 114, 18, false, false, undefined, undefined, WindowVariant.THIN);
     this.add(titleWindow);
 
-    this.titleLabel = addTextObject(this.scene, titleWindow.displayWidth / 2, titleWindow.displayHeight / 2, i18next.t("menu:loading"), TextStyle.WINDOW, { fontSize: "64px" });
+    this.titleLabel = addTextObject(
+      this.scene,
+      titleWindow.displayWidth / 2,
+      titleWindow.displayHeight / 2,
+      i18next.t("menu:loading"),
+      TextStyle.WINDOW,
+      { fontSize: "64px" },
+    );
     this.titleLabel.setOrigin(0.5, 0.5);
     this.add(this.titleLabel);
 
@@ -73,7 +80,13 @@ export class DailyRunScoreboard extends Phaser.GameObjects.Container {
     this.rankingsContainer = this.scene.add.container(6, 21);
     this.add(this.rankingsContainer);
 
-    this.loadingLabel = addTextObject(this.scene, window.displayWidth / 2, window.displayHeight / 2 + 16, "", TextStyle.WINDOW);
+    this.loadingLabel = addTextObject(
+      this.scene,
+      window.displayWidth / 2,
+      window.displayHeight / 2 + 16,
+      "",
+      TextStyle.WINDOW,
+    );
     this.loadingLabel.setOrigin(0.5, 0.5);
     this.loadingLabel.setVisible(false);
 
@@ -95,7 +108,11 @@ export class DailyRunScoreboard extends Phaser.GameObjects.Container {
       this.update(this.category < Utils.getEnumKeys(ScoreboardCategory).length - 1 ? this.category + 1 : 0);
     });
 
-    this.prevPageButton = this.scene.add.sprite(window.displayWidth / 2 - 16, titleWindow.displayHeight + window.displayHeight - 15, "cursor_reverse");
+    this.prevPageButton = this.scene.add.sprite(
+      window.displayWidth / 2 - 16,
+      titleWindow.displayHeight + window.displayHeight - 15,
+      "cursor_reverse",
+    );
     this.prevPageButton.setOrigin(0, 0);
     this.prevPageButton.setAlpha(0.5);
     this.add(this.prevPageButton);
@@ -107,11 +124,22 @@ export class DailyRunScoreboard extends Phaser.GameObjects.Container {
       }
     });
 
-    this.pageNumberLabel = addTextObject(this.scene, window.displayWidth / 2, titleWindow.displayHeight + window.displayHeight - 16, "1", TextStyle.WINDOW, { fontSize: "64px" });
+    this.pageNumberLabel = addTextObject(
+      this.scene,
+      window.displayWidth / 2,
+      titleWindow.displayHeight + window.displayHeight - 16,
+      "1",
+      TextStyle.WINDOW,
+      { fontSize: "64px" },
+    );
     this.pageNumberLabel.setOrigin(0.5, 0);
     this.add(this.pageNumberLabel);
 
-    this.nextPageButton = this.scene.add.sprite(window.displayWidth / 2 + 16, titleWindow.displayHeight + window.displayHeight - 15, "cursor");
+    this.nextPageButton = this.scene.add.sprite(
+      window.displayWidth / 2 + 16,
+      titleWindow.displayHeight + window.displayHeight - 15,
+      "cursor",
+    );
     this.nextPageButton.setOrigin(1, 0);
     this.nextPageButton.setAlpha(0.5);
     this.add(this.nextPageButton);
@@ -155,7 +183,14 @@ export class DailyRunScoreboard extends Phaser.GameObjects.Container {
       return entryContainer;
     };
 
-    this.rankingsContainer.add(getEntry(i18next.t("menu:positionIcon"), i18next.t("menu:usernameScoreboard"), i18next.t("menu:score"), i18next.t("menu:wave")));
+    this.rankingsContainer.add(
+      getEntry(
+        i18next.t("menu:positionIcon"),
+        i18next.t("menu:usernameScoreboard"),
+        i18next.t("menu:score"),
+        i18next.t("menu:wave"),
+      ),
+    );
 
     rankings.forEach((r: RankingEntry, i: integer) => {
       const entryContainer = getEntry(r.rank.toString(), r.username, r.score.toString(), r.wave.toString());
@@ -175,7 +210,7 @@ export class DailyRunScoreboard extends Phaser.GameObjects.Container {
    *
    * @param {ScoreboardCategory} [category=this.category] - The category to fetch rankings for. Defaults to the current category.
    * @param {number} [page=this.page] - The page number to fetch. Defaults to the current page.
-  */
+   */
   update(category: ScoreboardCategory = this.category, page: integer = this.page) {
     if (this.isUpdating) {
       return;
@@ -191,27 +226,31 @@ export class DailyRunScoreboard extends Phaser.GameObjects.Container {
       this.page = page = 1;
     }
 
-    Utils.executeIf(category !== this.category || this.pageCount === undefined,
-      () =>  pokerogueApi.daily.getRankingsPageCount({ category }).then(count => this.pageCount = count)
-    ).then(() => {
-      pokerogueApi.daily.getRankings({ category, page })
-        .then(rankings => {
-          this.page = page;
-          this.category = category;
-          this.titleLabel.setText(`${i18next.t(`menu:${ScoreboardCategory[category].toLowerCase()}Rankings`)}`);
-          this.pageNumberLabel.setText(page.toString());
-          if (rankings) {
-            this.loadingLabel.setVisible(false);
-            this.updateRankings(rankings);
-          } else {
-            this.loadingLabel.setText(i18next.t("menu:noRankings"));
-          }
-        }).finally(() => {
-          this.isUpdating = false;
-        });
-    }).catch(err => {
-      console.error("Failed to load daily rankings:\n", err);
-    });
+    Utils.executeIf(category !== this.category || this.pageCount === undefined, () =>
+      pokerogueApi.daily.getRankingsPageCount({ category }).then((count) => (this.pageCount = count)),
+    )
+      .then(() => {
+        pokerogueApi.daily
+          .getRankings({ category, page })
+          .then((rankings) => {
+            this.page = page;
+            this.category = category;
+            this.titleLabel.setText(`${i18next.t(`menu:${ScoreboardCategory[category].toLowerCase()}Rankings`)}`);
+            this.pageNumberLabel.setText(page.toString());
+            if (rankings) {
+              this.loadingLabel.setVisible(false);
+              this.updateRankings(rankings);
+            } else {
+              this.loadingLabel.setText(i18next.t("menu:noRankings"));
+            }
+          })
+          .finally(() => {
+            this.isUpdating = false;
+          });
+      })
+      .catch((err) => {
+        console.error("Failed to load daily rankings:\n", err);
+      });
   }
 
   /**
@@ -223,7 +262,7 @@ export class DailyRunScoreboard extends Phaser.GameObjects.Container {
       { button: this.prevPageButton, alphaValue: enabled ? (this.page > 1 ? 1 : 0.5) : 0.5 },
       { button: this.nextPageButton, alphaValue: enabled ? (this.page < this.pageCount ? 1 : 0.5) : 0.5 },
       { button: this.nextCategoryButton, alphaValue: enabled ? 1 : 0.5 },
-      { button: this.prevCategoryButton, alphaValue: enabled ? 1 : 0.5 }
+      { button: this.prevCategoryButton, alphaValue: enabled ? 1 : 0.5 },
     ];
 
     buttons.forEach(({ button, alphaValue }) => {
@@ -238,5 +277,5 @@ export class DailyRunScoreboard extends Phaser.GameObjects.Container {
 }
 
 export interface DailyRunScoreboard {
-  scene: BattleScene
+  scene: BattleScene;
 }

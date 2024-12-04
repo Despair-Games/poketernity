@@ -31,7 +31,7 @@ describe("Moves - Whirlwind", () => {
       .battleType("single")
       .moveset(Moves.SPLASH)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset([ Moves.SPLASH, Moves.WHIRLWIND ])
+      .enemyMoveset([Moves.SPLASH, Moves.WHIRLWIND])
       .enemySpecies(Species.PIDGEY);
   });
 
@@ -40,8 +40,8 @@ describe("Moves - Whirlwind", () => {
     { move: Moves.BOUNCE, name: "Bounce" },
     { move: Moves.SKY_DROP, name: "Sky Drop" },
   ])("should not hit a flying target: $name (=$move)", async ({ move }) => {
-    game.override.moveset([ move ]);
-    await game.classicMode.startBattle([ Species.STARAPTOR ]);
+    game.override.moveset([move]);
+    await game.classicMode.startBattle([Species.STARAPTOR]);
 
     const staraptor = game.scene.getPlayerPokemon()!;
 
@@ -55,9 +55,9 @@ describe("Moves - Whirlwind", () => {
   });
 
   it("should force switches randomly", async () => {
-    await game.classicMode.startBattle([ Species.BULBASAUR, Species.CHARMANDER, Species.SQUIRTLE ]);
+    await game.classicMode.startBattle([Species.BULBASAUR, Species.CHARMANDER, Species.SQUIRTLE]);
 
-    const [ bulbasaur, charmander, squirtle ] = game.scene.getPlayerParty();
+    const [bulbasaur, charmander, squirtle] = game.scene.getPlayerParty();
 
     // Turn 1: Mock an RNG call that calls for switching to 1st backup Pokemon (Charmander)
     vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((range, min: number = 0) => {
@@ -87,9 +87,9 @@ describe("Moves - Whirlwind", () => {
   it("should not force a switch to a challenge-ineligible Pokemon", async () => {
     // Mono-Water challenge, Eevee is ineligible
     game.challengeMode.addChallenge(Challenges.SINGLE_TYPE, Type.WATER + 1, 0);
-    await game.challengeMode.startBattle([ Species.LAPRAS, Species.EEVEE, Species.TOXAPEX, Species.PRIMARINA ]);
+    await game.challengeMode.startBattle([Species.LAPRAS, Species.EEVEE, Species.TOXAPEX, Species.PRIMARINA]);
 
-    const [ lapras, eevee, toxapex, primarina ] = game.scene.getPlayerParty();
+    const [lapras, eevee, toxapex, primarina] = game.scene.getPlayerParty();
 
     // Turn 1: Mock an RNG call that would normally call for switching to Eevee, but it is ineligible
     vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((range, min: number = 0) => {
@@ -106,9 +106,9 @@ describe("Moves - Whirlwind", () => {
   });
 
   it("should not force a switch to a fainted Pokemon", async () => {
-    await game.classicMode.startBattle([ Species.LAPRAS, Species.EEVEE, Species.TOXAPEX, Species.PRIMARINA ]);
+    await game.classicMode.startBattle([Species.LAPRAS, Species.EEVEE, Species.TOXAPEX, Species.PRIMARINA]);
 
-    const [ lapras, eevee, toxapex, primarina ] = game.scene.getPlayerParty();
+    const [lapras, eevee, toxapex, primarina] = game.scene.getPlayerParty();
 
     // Turn 1: Eevee faints
     eevee.hp = 0;
@@ -133,9 +133,9 @@ describe("Moves - Whirlwind", () => {
   });
 
   it("should not force a switch if there are no available Pokemon to switch into", async () => {
-    await game.classicMode.startBattle([ Species.LAPRAS, Species.EEVEE ]);
+    await game.classicMode.startBattle([Species.LAPRAS, Species.EEVEE]);
 
-    const [ lapras, eevee ] = game.scene.getPlayerParty();
+    const [lapras, eevee] = game.scene.getPlayerParty();
 
     // Turn 1: Eevee faints
     eevee.hp = 0;

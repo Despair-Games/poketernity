@@ -56,7 +56,6 @@ export class EvolutionPhase extends Phase {
     super.start();
 
     this.setMode().then(() => {
-
       if (!this.validate()) {
         return this.end();
       }
@@ -77,14 +76,25 @@ export class EvolutionPhase extends Phase {
       this.evolutionBg.setVisible(false);
       this.evolutionContainer.add(this.evolutionBg);
 
-      this.evolutionBgOverlay = this.scene.add.rectangle(0, 0, this.scene.game.canvas.width / 6, this.scene.game.canvas.height / 6, 0x262626);
+      this.evolutionBgOverlay = this.scene.add.rectangle(
+        0,
+        0,
+        this.scene.game.canvas.width / 6,
+        this.scene.game.canvas.height / 6,
+        0x262626,
+      );
       this.evolutionBgOverlay.setOrigin(0, 0);
       this.evolutionBgOverlay.setAlpha(0);
       this.evolutionContainer.add(this.evolutionBgOverlay);
 
       const getPokemonSprite = () => {
-        const ret = this.scene.addPokemonSprite(this.pokemon, this.evolutionBaseBg.displayWidth / 2, this.evolutionBaseBg.displayHeight / 2, "pkmn__sub");
-        ret.setPipeline(this.scene.spritePipeline, { tone: [ 0.0, 0.0, 0.0, 0.0 ], ignoreTimeTint: true });
+        const ret = this.scene.addPokemonSprite(
+          this.pokemon,
+          this.evolutionBaseBg.displayWidth / 2,
+          this.evolutionBaseBg.displayHeight / 2,
+          "pkmn__sub",
+        );
+        ret.setPipeline(this.scene.spritePipeline, { tone: [0.0, 0.0, 0.0, 0.0], ignoreTimeTint: true });
         return ret;
       };
 
@@ -94,17 +104,23 @@ export class EvolutionPhase extends Phase {
       this.evolutionContainer.add((this.pokemonEvoTintSprite = getPokemonSprite()));
 
       this.pokemonTintSprite.setAlpha(0);
-      this.pokemonTintSprite.setTintFill(0xFFFFFF);
+      this.pokemonTintSprite.setTintFill(0xffffff);
       this.pokemonEvoSprite.setVisible(false);
       this.pokemonEvoTintSprite.setVisible(false);
-      this.pokemonEvoTintSprite.setTintFill(0xFFFFFF);
+      this.pokemonEvoTintSprite.setTintFill(0xffffff);
 
-      this.evolutionOverlay = this.scene.add.rectangle(0, -this.scene.game.canvas.height / 6, this.scene.game.canvas.width / 6, (this.scene.game.canvas.height / 6) - 48, 0xFFFFFF);
+      this.evolutionOverlay = this.scene.add.rectangle(
+        0,
+        -this.scene.game.canvas.height / 6,
+        this.scene.game.canvas.width / 6,
+        this.scene.game.canvas.height / 6 - 48,
+        0xffffff,
+      );
       this.evolutionOverlay.setOrigin(0, 0);
       this.evolutionOverlay.setAlpha(0);
       this.scene.ui.add(this.evolutionOverlay);
 
-      [ this.pokemonSprite, this.pokemonTintSprite, this.pokemonEvoSprite, this.pokemonEvoTintSprite ].map(sprite => {
+      [this.pokemonSprite, this.pokemonTintSprite, this.pokemonEvoSprite, this.pokemonEvoTintSprite].map((sprite) => {
         const spriteKey = this.pokemon.getSpriteKey(true);
         try {
           sprite.play(spriteKey);
@@ -112,12 +128,16 @@ export class EvolutionPhase extends Phase {
           console.error(`Failed to play animation for ${spriteKey}`, err);
         }
 
-        sprite.setPipeline(this.scene.spritePipeline, { tone: [ 0.0, 0.0, 0.0, 0.0 ], hasShadow: false, teraColor: getTypeRgb(this.pokemon.getTeraType()) });
+        sprite.setPipeline(this.scene.spritePipeline, {
+          tone: [0.0, 0.0, 0.0, 0.0],
+          hasShadow: false,
+          teraColor: getTypeRgb(this.pokemon.getTeraType()),
+        });
         sprite.setPipelineData("ignoreTimeTint", true);
         sprite.setPipelineData("spriteKey", this.pokemon.getSpriteKey());
         sprite.setPipelineData("shiny", this.pokemon.shiny);
         sprite.setPipelineData("variant", this.pokemon.variant);
-        [ "spriteColors", "fusionSpriteColors" ].map(k => {
+        ["spriteColors", "fusionSpriteColors"].map((k) => {
           if (this.pokemon.summonData?.speciesForm) {
             k += "Base";
           }
@@ -130,83 +150,87 @@ export class EvolutionPhase extends Phase {
   }
 
   doEvolution(): void {
-    this.scene.ui.showText(i18next.t("menu:evolving", { pokemonName: this.preEvolvedPokemonName }), null, () => {
-      this.pokemon.cry();
+    this.scene.ui.showText(
+      i18next.t("menu:evolving", { pokemonName: this.preEvolvedPokemonName }),
+      null,
+      () => {
+        this.pokemon.cry();
 
-      this.pokemon.getPossibleEvolution(this.evolution).then(evolvedPokemon => {
-
-        [ this.pokemonEvoSprite, this.pokemonEvoTintSprite ].map(sprite => {
-          const spriteKey = evolvedPokemon.getSpriteKey(true);
-          try {
-            sprite.play(spriteKey);
-          } catch (err: unknown) {
-            console.error(`Failed to play animation for ${spriteKey}`, err);
-          }
-
-          sprite.setPipelineData("ignoreTimeTint", true);
-          sprite.setPipelineData("spriteKey", evolvedPokemon.getSpriteKey());
-          sprite.setPipelineData("shiny", evolvedPokemon.shiny);
-          sprite.setPipelineData("variant", evolvedPokemon.variant);
-          [ "spriteColors", "fusionSpriteColors" ].map(k => {
-            if (evolvedPokemon.summonData?.speciesForm) {
-              k += "Base";
+        this.pokemon.getPossibleEvolution(this.evolution).then((evolvedPokemon) => {
+          [this.pokemonEvoSprite, this.pokemonEvoTintSprite].map((sprite) => {
+            const spriteKey = evolvedPokemon.getSpriteKey(true);
+            try {
+              sprite.play(spriteKey);
+            } catch (err: unknown) {
+              console.error(`Failed to play animation for ${spriteKey}`, err);
             }
-            sprite.pipelineData[k] = evolvedPokemon.getSprite().pipelineData[k];
-          });
-        });
 
-        this.scene.time.delayedCall(1000, () => {
-          this.evolutionBgm = this.scene.playSoundWithoutBgm("evolution");
-          this.scene.tweens.add({
-            targets: this.evolutionBgOverlay,
-            alpha: 1,
-            delay: 500,
-            duration: 1500,
-            ease: "Sine.easeOut",
-            onComplete: () => {
-              this.scene.time.delayedCall(1000, () => {
-                this.scene.tweens.add({
-                  targets: this.evolutionBgOverlay,
-                  alpha: 0,
-                  duration: 250
+            sprite.setPipelineData("ignoreTimeTint", true);
+            sprite.setPipelineData("spriteKey", evolvedPokemon.getSpriteKey());
+            sprite.setPipelineData("shiny", evolvedPokemon.shiny);
+            sprite.setPipelineData("variant", evolvedPokemon.variant);
+            ["spriteColors", "fusionSpriteColors"].map((k) => {
+              if (evolvedPokemon.summonData?.speciesForm) {
+                k += "Base";
+              }
+              sprite.pipelineData[k] = evolvedPokemon.getSprite().pipelineData[k];
+            });
+          });
+
+          this.scene.time.delayedCall(1000, () => {
+            this.evolutionBgm = this.scene.playSoundWithoutBgm("evolution");
+            this.scene.tweens.add({
+              targets: this.evolutionBgOverlay,
+              alpha: 1,
+              delay: 500,
+              duration: 1500,
+              ease: "Sine.easeOut",
+              onComplete: () => {
+                this.scene.time.delayedCall(1000, () => {
+                  this.scene.tweens.add({
+                    targets: this.evolutionBgOverlay,
+                    alpha: 0,
+                    duration: 250,
+                  });
+                  this.evolutionBg.setVisible(true);
+                  this.evolutionBg.play();
                 });
-                this.evolutionBg.setVisible(true);
-                this.evolutionBg.play();
-              });
-              this.scene.playSound("se/charge");
-              this.doSpiralUpward();
-              this.scene.tweens.addCounter({
-                from: 0,
-                to: 1,
-                duration: 2000,
-                onUpdate: t => {
-                  this.pokemonTintSprite.setAlpha(t.getValue());
-                },
-                onComplete: () => {
-                  this.pokemonSprite.setVisible(false);
-                  this.scene.time.delayedCall(1100, () => {
-                    this.scene.playSound("se/beam");
-                    this.doArcDownward();
-                    this.scene.time.delayedCall(1500, () => {
-                      this.pokemonEvoTintSprite.setScale(0.25);
-                      this.pokemonEvoTintSprite.setVisible(true);
-                      this.evolutionHandler.canCancel = true;
-                      this.doCycle(1).then(success => {
-                        if (success) {
-                          this.handleSuccessEvolution(evolvedPokemon);
-                        } else {
-                          this.handleFailedEvolution(evolvedPokemon);
-                        }
+                this.scene.playSound("se/charge");
+                this.doSpiralUpward();
+                this.scene.tweens.addCounter({
+                  from: 0,
+                  to: 1,
+                  duration: 2000,
+                  onUpdate: (t) => {
+                    this.pokemonTintSprite.setAlpha(t.getValue());
+                  },
+                  onComplete: () => {
+                    this.pokemonSprite.setVisible(false);
+                    this.scene.time.delayedCall(1100, () => {
+                      this.scene.playSound("se/beam");
+                      this.doArcDownward();
+                      this.scene.time.delayedCall(1500, () => {
+                        this.pokemonEvoTintSprite.setScale(0.25);
+                        this.pokemonEvoTintSprite.setVisible(true);
+                        this.evolutionHandler.canCancel = true;
+                        this.doCycle(1).then((success) => {
+                          if (success) {
+                            this.handleSuccessEvolution(evolvedPokemon);
+                          } else {
+                            this.handleFailedEvolution(evolvedPokemon);
+                          }
+                        });
                       });
                     });
-                  });
-                }
-              });
-            }
+                  },
+                });
+              },
+            });
           });
         });
-      });
-    }, 1000);
+      },
+      1000,
+    );
   }
 
   /**
@@ -217,36 +241,55 @@ export class EvolutionPhase extends Phase {
     this.pokemonSprite.setVisible(true);
     this.pokemonTintSprite.setScale(1);
     this.scene.tweens.add({
-      targets: [ this.evolutionBg, this.pokemonTintSprite, this.pokemonEvoSprite, this.pokemonEvoTintSprite ],
+      targets: [this.evolutionBg, this.pokemonTintSprite, this.pokemonEvoSprite, this.pokemonEvoTintSprite],
       alpha: 0,
       duration: 250,
       onComplete: () => {
         this.evolutionBg.setVisible(false);
-      }
+      },
     });
 
     SoundFade.fadeOut(this.scene, this.evolutionBgm, 100);
 
     this.scene.unshiftPhase(new EndEvolutionPhase(this.scene));
 
-    this.scene.ui.showText(i18next.t("menu:stoppedEvolving", { pokemonName: this.preEvolvedPokemonName }), null, () => {
-      this.scene.ui.showText(i18next.t("menu:pauseEvolutionsQuestion", { pokemonName: this.preEvolvedPokemonName }), null, () => {
-        const end = () => {
-          this.scene.ui.showText("", 0);
-          this.scene.playBgm();
-          evolvedPokemon.destroy();
-          this.end();
-        };
-        this.scene.ui.setOverlayMode(Mode.CONFIRM, () => {
-          this.scene.ui.revertMode();
-          this.pokemon.pauseEvolutions = true;
-          this.scene.ui.showText(i18next.t("menu:evolutionsPaused", { pokemonName: this.preEvolvedPokemonName }), null, end, 3000);
-        }, () => {
-          this.scene.ui.revertMode();
-          this.scene.time.delayedCall(3000, end);
-        });
-      });
-    }, null, true);
+    this.scene.ui.showText(
+      i18next.t("menu:stoppedEvolving", { pokemonName: this.preEvolvedPokemonName }),
+      null,
+      () => {
+        this.scene.ui.showText(
+          i18next.t("menu:pauseEvolutionsQuestion", { pokemonName: this.preEvolvedPokemonName }),
+          null,
+          () => {
+            const end = () => {
+              this.scene.ui.showText("", 0);
+              this.scene.playBgm();
+              evolvedPokemon.destroy();
+              this.end();
+            };
+            this.scene.ui.setOverlayMode(
+              Mode.CONFIRM,
+              () => {
+                this.scene.ui.revertMode();
+                this.pokemon.pauseEvolutions = true;
+                this.scene.ui.showText(
+                  i18next.t("menu:evolutionsPaused", { pokemonName: this.preEvolvedPokemonName }),
+                  null,
+                  end,
+                  3000,
+                );
+              },
+              () => {
+                this.scene.ui.revertMode();
+                this.scene.time.delayedCall(3000, end);
+              },
+            );
+          },
+        );
+      },
+      null,
+      true,
+    );
   }
 
   /**
@@ -266,7 +309,17 @@ export class EvolutionPhase extends Phase {
           this.scene.playSoundWithoutBgm("evolution_fanfare");
 
           evolvedPokemon.destroy();
-          this.scene.ui.showText(i18next.t("menu:evolutionDone", { pokemonName: this.preEvolvedPokemonName, evolvedPokemonName: this.pokemon.name }), null, () => this.end(), null, true, Utils.fixedInt(4000));
+          this.scene.ui.showText(
+            i18next.t("menu:evolutionDone", {
+              pokemonName: this.preEvolvedPokemonName,
+              evolvedPokemonName: this.pokemon.name,
+            }),
+            null,
+            () => this.end(),
+            null,
+            true,
+            Utils.fixedInt(4000),
+          );
           this.scene.time.delayedCall(Utils.fixedInt(4250), () => this.scene.playBgm());
         });
       });
@@ -276,10 +329,18 @@ export class EvolutionPhase extends Phase {
       this.evolutionHandler.canCancel = false;
 
       this.pokemon.evolve(this.evolution, this.pokemon.species).then(() => {
-        const learnSituation: LearnMoveSituation = this.fusionSpeciesEvolved ? LearnMoveSituation.EVOLUTION_FUSED : this.pokemon.fusionSpecies ? LearnMoveSituation.EVOLUTION_FUSED_BASE : LearnMoveSituation.EVOLUTION;
-        const levelMoves = this.pokemon.getLevelMoves(this.lastLevel + 1, true, false, false, learnSituation).filter(lm => lm[0] === EVOLVE_MOVE);
+        const learnSituation: LearnMoveSituation = this.fusionSpeciesEvolved
+          ? LearnMoveSituation.EVOLUTION_FUSED
+          : this.pokemon.fusionSpecies
+            ? LearnMoveSituation.EVOLUTION_FUSED_BASE
+            : LearnMoveSituation.EVOLUTION;
+        const levelMoves = this.pokemon
+          .getLevelMoves(this.lastLevel + 1, true, false, false, learnSituation)
+          .filter((lm) => lm[0] === EVOLVE_MOVE);
         for (const lm of levelMoves) {
-          this.scene.unshiftPhase(new LearnMovePhase(this.scene, this.scene.getPlayerParty().indexOf(this.pokemon), lm[1]));
+          this.scene.unshiftPhase(
+            new LearnMovePhase(this.scene, this.scene.getPlayerParty().indexOf(this.pokemon), lm[1]),
+          );
         }
         this.scene.unshiftPhase(new EndEvolutionPhase(this.scene));
 
@@ -294,7 +355,7 @@ export class EvolutionPhase extends Phase {
             this.evolutionBgOverlay.setAlpha(1);
             this.evolutionBg.setVisible(false);
             this.scene.tweens.add({
-              targets: [ this.evolutionOverlay, this.pokemonEvoTintSprite ],
+              targets: [this.evolutionOverlay, this.pokemonEvoTintSprite],
               alpha: 0,
               duration: 2000,
               delay: 150,
@@ -304,11 +365,11 @@ export class EvolutionPhase extends Phase {
                   targets: this.evolutionBgOverlay,
                   alpha: 0,
                   duration: 250,
-                  onComplete: onEvolutionComplete
+                  onComplete: onEvolutionComplete,
                 });
-              }
+              },
             });
-          }
+          },
         });
       });
     });
@@ -329,7 +390,7 @@ export class EvolutionPhase extends Phase {
           }
           f++;
         }
-      }
+      },
     });
   }
 
@@ -348,19 +409,19 @@ export class EvolutionPhase extends Phase {
           }
           f++;
         }
-      }
+      },
     });
   }
 
   doCycle(l: number, lastCycle: integer = 15): Promise<boolean> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       const isLastCycle = l === lastCycle;
       this.scene.tweens.add({
         targets: this.pokemonTintSprite,
         scale: 0.25,
         ease: "Cubic.easeInOut",
         duration: 500 / l,
-        yoyo: !isLastCycle
+        yoyo: !isLastCycle,
       });
       this.scene.tweens.add({
         targets: this.pokemonEvoTintSprite,
@@ -373,12 +434,12 @@ export class EvolutionPhase extends Phase {
             return resolve(false);
           }
           if (l < lastCycle) {
-            this.doCycle(l + 0.5, lastCycle).then(success => resolve(success));
+            this.doCycle(l + 0.5, lastCycle).then((success) => resolve(success));
           } else {
             this.pokemonTintSprite.setVisible(false);
             resolve(true);
           }
-        }
+        },
       });
     });
   }
@@ -400,7 +461,7 @@ export class EvolutionPhase extends Phase {
           }
         }
         f++;
-      }
+      },
     });
   }
 
@@ -419,7 +480,7 @@ export class EvolutionPhase extends Phase {
           this.doSprayParticle(Utils.randInt(8));
         }
         f++;
-      }
+      },
     });
   }
 
@@ -436,7 +497,7 @@ export class EvolutionPhase extends Phase {
       duration: Utils.getFrameMs(1),
       onRepeat: () => {
         updateParticle();
-      }
+      },
     });
 
     const updateParticle = () => {
@@ -444,7 +505,7 @@ export class EvolutionPhase extends Phase {
         particle.setPosition(initialX, 88 - (f * f) / 80);
         particle.y += sin(trigIndex, amp) / 4;
         particle.x += cos(trigIndex, amp);
-        particle.setScale(1 - (f / 80));
+        particle.setScale(1 - f / 80);
         trigIndex += 4;
         if (f & 1) {
           amp--;
@@ -473,7 +534,7 @@ export class EvolutionPhase extends Phase {
       duration: Utils.getFrameMs(1),
       onRepeat: () => {
         updateParticle();
-      }
+      },
     });
 
     const updateParticle = () => {
@@ -505,7 +566,7 @@ export class EvolutionPhase extends Phase {
       duration: Utils.getFrameMs(1),
       onRepeat: () => {
         updateParticle();
-      }
+      },
     });
 
     const updateParticle = () => {
@@ -540,7 +601,7 @@ export class EvolutionPhase extends Phase {
       duration: Utils.getFrameMs(1),
       onRepeat: () => {
         updateParticle();
-      }
+      },
     });
 
     const updateParticle = () => {
@@ -551,7 +612,7 @@ export class EvolutionPhase extends Phase {
         particle.setPosition(initialX + (speed * f) / 3, initialY + yOffset);
         particle.y += -sin(trigIndex, amp);
         if (f > 108) {
-          particle.setScale((1 - (f - 108) / 20));
+          particle.setScale(1 - (f - 108) / 20);
         }
         trigIndex++;
         f++;

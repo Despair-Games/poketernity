@@ -13,11 +13,11 @@ export default class RenameFormUiHandler extends FormModalUiHandler {
   }
 
   getMargin(config?: ModalConfig): [number, number, number, number] {
-    return [ 0, 0, 48, 0 ];
+    return [0, 0, 48, 0];
   }
 
   getButtonLabels(config?: ModalConfig): string[] {
-    return [ i18next.t("menu:rename"), i18next.t("menu:cancel") ];
+    return [i18next.t("menu:rename"), i18next.t("menu:cancel")];
   }
 
   getReadableErrorMessage(error: string): string {

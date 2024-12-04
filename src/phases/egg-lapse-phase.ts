@@ -15,7 +15,6 @@ import { EggHatchData } from "#app/data/egg-hatch-data";
  * Also handles prompts for skipping animation, and calling the egg summary phase
  */
 export class EggLapsePhase extends Phase {
-
   private eggHatchData: EggHatchData[] = [];
   private readonly minEggsToSkip: number = 2;
   constructor(scene: BattleScene) {
@@ -32,19 +31,32 @@ export class EggLapsePhase extends Phase {
 
     if (eggsToHatchCount > 0) {
       if (eggsToHatchCount >= this.minEggsToSkip && this.scene.eggSkipPreference === 1) {
-        this.scene.ui.showText(i18next.t("battle:eggHatching"), 0, () => {
-          // show prompt for skip, blocking inputs for 1 second
-          this.scene.ui.showText(i18next.t("battle:eggSkipPrompt", { eggsToHatch: eggsToHatchCount }), 0);
-          this.scene.ui.setModeWithoutClear(Mode.CONFIRM, () => {
-            this.hatchEggsSkipped(eggsToHatch);
-            this.showSummary();
-          }, () => {
-            this.hatchEggsRegular(eggsToHatch);
-            this.end();
+        this.scene.ui.showText(
+          i18next.t("battle:eggHatching"),
+          0,
+          () => {
+            // show prompt for skip, blocking inputs for 1 second
+            this.scene.ui.showText(i18next.t("battle:eggSkipPrompt", { eggsToHatch: eggsToHatchCount }), 0);
+            this.scene.ui.setModeWithoutClear(
+              Mode.CONFIRM,
+              () => {
+                this.hatchEggsSkipped(eggsToHatch);
+                this.showSummary();
+              },
+              () => {
+                this.hatchEggsRegular(eggsToHatch);
+                this.end();
+              },
+              null,
+              null,
+              null,
+              1000,
+              true,
+            );
           },
-          null, null, null, 1000, true
-          );
-        }, 100, true);
+          100,
+          true,
+        );
       } else if (eggsToHatchCount >= this.minEggsToSkip && this.scene.eggSkipPreference === 2) {
         this.scene.queueMessage(i18next.t("battle:eggHatching"));
         this.hatchEggsSkipped(eggsToHatch);
@@ -93,7 +105,7 @@ export class EggLapsePhase extends Phase {
    * @param egg egg to hatch
    */
   hatchEggSilently(egg: Egg) {
-    const eggIndex = this.scene.gameData.eggs.findIndex(e => e.id === egg.id);
+    const eggIndex = this.scene.gameData.eggs.findIndex((e) => e.id === egg.id);
     if (eggIndex === -1) {
       return this.end();
     }
@@ -117,7 +129,6 @@ export class EggLapsePhase extends Phase {
     if (pokemon.isShiny()) {
       this.scene.validateAchv(achvs.HATCH_SHINY);
     }
-
   }
 
   /**
@@ -128,14 +139,16 @@ export class EggLapsePhase extends Phase {
   generatePokemon(egg: Egg): EggHatchData {
     let ret: PlayerPokemon;
     let newHatchData: EggHatchData;
-    this.scene.executeWithSeedOffset(() => {
-      ret = egg.generatePlayerPokemon(this.scene);
-      newHatchData = new EggHatchData(this.scene, ret, egg.eggMoveIndex);
-      newHatchData.setDex();
-      this.eggHatchData.push(newHatchData);
-
-    }, egg.id, EGG_SEED.toString());
+    this.scene.executeWithSeedOffset(
+      () => {
+        ret = egg.generatePlayerPokemon(this.scene);
+        newHatchData = new EggHatchData(this.scene, ret, egg.eggMoveIndex);
+        newHatchData.setDex();
+        this.eggHatchData.push(newHatchData);
+      },
+      egg.id,
+      EGG_SEED.toString(),
+    );
     return newHatchData!;
   }
-
 }

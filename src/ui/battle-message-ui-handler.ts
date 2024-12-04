@@ -55,7 +55,7 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
     moveDetailsWindow.setName("move-details-window");
     moveDetailsWindow.setOrigin(0, 1);
 
-    this.movesWindowContainer.add([ movesWindow, moveDetailsWindow ]);
+    this.movesWindowContainer.add([movesWindow, moveDetailsWindow]);
     ui.add(this.movesWindowContainer);
 
     const messageContainer = this.scene.add.container(12, -39);
@@ -64,8 +64,8 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
     const message = addTextObject(this.scene, 0, 0, "", TextStyle.MESSAGE, {
       maxLines: 2,
       wordWrap: {
-        width: this.wordWrapWidth
-      }
+        width: this.wordWrapWidth,
+      },
     });
     messageContainer.add(message);
 
@@ -91,7 +91,14 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
 
     this.levelUpStatsContainer = levelUpStatsContainer;
 
-    const levelUpStatsLabelsContent = addTextObject(this.scene, (this.scene.game.canvas.width / 6) - 73, -94, "", TextStyle.WINDOW, { maxLines: 6 });
+    const levelUpStatsLabelsContent = addTextObject(
+      this.scene,
+      this.scene.game.canvas.width / 6 - 73,
+      -94,
+      "",
+      TextStyle.WINDOW,
+      { maxLines: 6 },
+    );
     levelUpStatsLabelsContent.setLineSpacing(i18next.resolvedLanguage === "ja" ? 25 : 5);
     let levelUpStatsLabelText = "";
 
@@ -101,19 +108,39 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
     levelUpStatsLabelsContent.text = levelUpStatsLabelText;
     levelUpStatsLabelsContent.x -= levelUpStatsLabelsContent.displayWidth;
 
-    const levelUpStatsBg = addWindow(this.scene, (this.scene.game.canvas.width / 6), -100, 80 + levelUpStatsLabelsContent.displayWidth, 100);
+    const levelUpStatsBg = addWindow(
+      this.scene,
+      this.scene.game.canvas.width / 6,
+      -100,
+      80 + levelUpStatsLabelsContent.displayWidth,
+      100,
+    );
     levelUpStatsBg.setOrigin(1, 0);
     levelUpStatsContainer.add(levelUpStatsBg);
 
     levelUpStatsContainer.add(levelUpStatsLabelsContent);
 
-    const levelUpStatsIncrContent = addTextObject(this.scene, (this.scene.game.canvas.width / 6) - 50, -94, "+\n+\n+\n+\n+\n+", TextStyle.WINDOW, { maxLines: 6 });
+    const levelUpStatsIncrContent = addTextObject(
+      this.scene,
+      this.scene.game.canvas.width / 6 - 50,
+      -94,
+      "+\n+\n+\n+\n+\n+",
+      TextStyle.WINDOW,
+      { maxLines: 6 },
+    );
     levelUpStatsIncrContent.setLineSpacing(i18next.resolvedLanguage === "ja" ? 25 : 5);
     levelUpStatsContainer.add(levelUpStatsIncrContent);
 
     this.levelUpStatsIncrContent = levelUpStatsIncrContent;
 
-    const levelUpStatsValuesContent = addBBCodeTextObject(this.scene, (this.scene.game.canvas.width / 6) - 7, -94, "", TextStyle.WINDOW, { maxLines: 6, lineSpacing: 5 });
+    const levelUpStatsValuesContent = addBBCodeTextObject(
+      this.scene,
+      this.scene.game.canvas.width / 6 - 7,
+      -94,
+      "",
+      TextStyle.WINDOW,
+      { maxLines: 6, lineSpacing: 5 },
+    );
     levelUpStatsValuesContent.setLineSpacing(i18next.resolvedLanguage === "ja" ? 25 : 5);
     levelUpStatsValuesContent.setOrigin(1, 0);
     levelUpStatsValuesContent.setAlign("right");
@@ -153,12 +180,27 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
     super.clear();
   }
 
-  showText(text: string, delay?: integer | null, callback?: Function | null, callbackDelay?: integer | null, prompt?: boolean | null, promptDelay?: integer | null) {
+  showText(
+    text: string,
+    delay?: integer | null,
+    callback?: Function | null,
+    callbackDelay?: integer | null,
+    prompt?: boolean | null,
+    promptDelay?: integer | null,
+  ) {
     this.hideNameText();
     super.showText(text, delay, callback, callbackDelay, prompt, promptDelay);
   }
 
-  showDialogue(text: string, name?: string, delay?: integer | null, callback?: Function, callbackDelay?: integer, prompt?: boolean, promptDelay?: integer) {
+  showDialogue(
+    text: string,
+    name?: string,
+    delay?: integer | null,
+    callback?: Function,
+    callbackDelay?: integer,
+    prompt?: boolean,
+    promptDelay?: integer,
+  ) {
     if (name) {
       this.showNameText(name);
     }
@@ -166,7 +208,7 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
   }
 
   promptLevelUpStats(partyMemberIndex: integer, prevStats: integer[], showTotals: boolean): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       if (!this.scene.showLevelUpStats) {
         return resolve();
       }
@@ -191,7 +233,7 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
   }
 
   promptIvs(pokemonId: integer, ivs: integer[], shownIvsCount: integer): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       this.scene.executeWithSeedOffset(() => {
         let levelUpStatsValuesText = "";
         const shownStats = this.getTopIvs(ivs, shownIvsCount);
