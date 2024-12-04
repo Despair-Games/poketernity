@@ -67,18 +67,18 @@ export default class EggGachaUiHandler extends MessageUiHandler {
     this.eggGachaContainer.add(bg);
 
     const hatchFrameNames = this.scene.anims.generateFrameNames("gacha_hatch", { suffix: ".png", start: 1, end: 4 });
-    if (!(this.scene.anims.exists("open"))) {
+    if (!this.scene.anims.exists("open")) {
       this.scene.anims.create({
         key: "open",
         frames: hatchFrameNames,
-        frameRate: 12
+        frameRate: 12,
       });
     }
-    if (!(this.scene.anims.exists("close"))) {
+    if (!this.scene.anims.exists("close")) {
       this.scene.anims.create({
         key: "close",
         frames: hatchFrameNames.reverse(),
-        frameRate: 12
+        frameRate: 12,
       });
     }
 
@@ -107,7 +107,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
       let pokemonIconX = -20;
       let pokemonIconY = 6;
 
-      if ([ "de", "es-ES", "fr", "ko", "pt-BR" ].includes(currentLanguage)) {
+      if (["de", "es-ES", "fr", "ko", "pt-BR"].includes(currentLanguage)) {
         gachaTextStyle = TextStyle.SMALLER_WINDOW_ALT;
         gachaX = 2;
         gachaY = 2;
@@ -115,7 +115,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
 
       let legendaryLabelX = gachaX;
       let legendaryLabelY = gachaY;
-      if ([ "de", "es-ES" ].includes(currentLanguage)) {
+      if (["de", "es-ES"].includes(currentLanguage)) {
         pokemonIconX = -25;
         pokemonIconY = 10;
         legendaryLabelX = -6;
@@ -128,11 +128,11 @@ export default class EggGachaUiHandler extends MessageUiHandler {
 
       switch (gachaType as GachaType) {
         case GachaType.LEGENDARY:
-          if ([ "de", "es-ES" ].includes(currentLanguage)) {
+          if (["de", "es-ES"].includes(currentLanguage)) {
             gachaUpLabel.setAlign("center");
             gachaUpLabel.setY(0);
           }
-          if ([ "pt-BR" ].includes(currentLanguage)) {
+          if (["pt-BR"].includes(currentLanguage)) {
             gachaUpLabel.setX(legendaryLabelX - 2);
           } else {
             gachaUpLabel.setX(legendaryLabelX);
@@ -140,7 +140,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
           gachaUpLabel.setY(legendaryLabelY);
 
           const pokemonIcon = this.scene.add.sprite(pokemonIconX, pokemonIconY, "pokemon_icons_0");
-          if ([ "pt-BR" ].includes(currentLanguage)) {
+          if (["pt-BR"].includes(currentLanguage)) {
             pokemonIcon.setX(pokemonIconX - 2);
           }
           pokemonIcon.setScale(0.5);
@@ -149,7 +149,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
           gachaInfoContainer.add(pokemonIcon);
           break;
         case GachaType.MOVE:
-          if ([ "de", "es-ES", "fr", "pt-BR" ].includes(currentLanguage)) {
+          if (["de", "es-ES", "fr", "pt-BR"].includes(currentLanguage)) {
             gachaUpLabel.setAlign("center");
             gachaUpLabel.setY(0);
           }
@@ -159,7 +159,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
           gachaUpLabel.setOrigin(0.5, 0);
           break;
         case GachaType.SHINY:
-          if ([ "de", "fr", "ko" ].includes(currentLanguage)) {
+          if (["de", "fr", "ko"].includes(currentLanguage)) {
             gachaUpLabel.setAlign("center");
             gachaUpLabel.setY(0);
           }
@@ -186,7 +186,9 @@ export default class EggGachaUiHandler extends MessageUiHandler {
       gachaGlass.setAlpha(0.5);
       gachaHatch.setAlpha(0.9);
 
-      gachaHatch.on("animationupdate", (_anim, frame) => gachaUnderlay.setFrame(frame.textureFrame === "4.png" ? "open_hatch" : "default"));
+      gachaHatch.on("animationupdate", (_anim, frame) =>
+        gachaUnderlay.setFrame(frame.textureFrame === "4.png" ? "open_hatch" : "default"),
+      );
 
       this.gachaContainers.push(gachaContainer);
       this.gachaKnobs.push(gachaKnob);
@@ -200,9 +202,8 @@ export default class EggGachaUiHandler extends MessageUiHandler {
 
     this.eggGachaOptionsContainer = this.scene.add.container();
 
-    this.eggGachaOptionsContainer = this.scene.add.container((this.scene.game.canvas.width / 6), 148);
+    this.eggGachaOptionsContainer = this.scene.add.container(this.scene.game.canvas.width / 6, 148);
     this.eggGachaContainer.add(this.eggGachaOptionsContainer);
-
 
     this.eggGachaOptionSelectBg = addWindow(this.scene, 0, 0, 96, 16 + 576 * this.scale);
     this.eggGachaOptionSelectBg.setOrigin(1, 1);
@@ -211,24 +212,46 @@ export default class EggGachaUiHandler extends MessageUiHandler {
     const multiplierOne = "x1";
     const multiplierTen = "x10";
     const pullOptions = [
-      { multiplier: multiplierOne, description: `1 ${i18next.t("egg:pull")}`, icon: getVoucherTypeIcon(VoucherType.REGULAR) },
-      { multiplier: multiplierTen, description: `10 ${i18next.t("egg:pulls")}`, icon: getVoucherTypeIcon(VoucherType.REGULAR) },
-      { multiplier: multiplierOne, description: `5 ${i18next.t("egg:pulls")}`, icon: getVoucherTypeIcon(VoucherType.PLUS) },
-      { multiplier: multiplierOne, description: `10 ${i18next.t("egg:pulls")}`, icon: getVoucherTypeIcon(VoucherType.PREMIUM) },
-      { multiplier: multiplierOne, description: `25 ${i18next.t("egg:pulls")}`, icon: getVoucherTypeIcon(VoucherType.GOLDEN) }
+      {
+        multiplier: multiplierOne,
+        description: `1 ${i18next.t("egg:pull")}`,
+        icon: getVoucherTypeIcon(VoucherType.REGULAR),
+      },
+      {
+        multiplier: multiplierTen,
+        description: `10 ${i18next.t("egg:pulls")}`,
+        icon: getVoucherTypeIcon(VoucherType.REGULAR),
+      },
+      {
+        multiplier: multiplierOne,
+        description: `5 ${i18next.t("egg:pulls")}`,
+        icon: getVoucherTypeIcon(VoucherType.PLUS),
+      },
+      {
+        multiplier: multiplierOne,
+        description: `10 ${i18next.t("egg:pulls")}`,
+        icon: getVoucherTypeIcon(VoucherType.PREMIUM),
+      },
+      {
+        multiplier: multiplierOne,
+        description: `25 ${i18next.t("egg:pulls")}`,
+        icon: getVoucherTypeIcon(VoucherType.GOLDEN),
+      },
     ];
 
     const resolvedLanguage = i18next.resolvedLanguage ?? "en";
-    const pullOptionsText = pullOptions.map(option =>{
-      const desc = option.description.split(" ");
-      if (desc[0].length < 2) {
-        desc[0] += [ "zh", "ko" ].includes(resolvedLanguage.substring(0, 2)) ? " " : "  ";
-      }
-      if (option.multiplier === multiplierOne) {
-        desc[0] = " " + desc[0];
-      }
-      return `     ${option.multiplier.padEnd(5)}${desc.join(" ")}`;
-    }).join("\n");
+    const pullOptionsText = pullOptions
+      .map((option) => {
+        const desc = option.description.split(" ");
+        if (desc[0].length < 2) {
+          desc[0] += ["zh", "ko"].includes(resolvedLanguage.substring(0, 2)) ? " " : "  ";
+        }
+        if (option.multiplier === multiplierOne) {
+          desc[0] = " " + desc[0];
+        }
+        return `     ${option.multiplier.padEnd(5)}${desc.join(" ")}`;
+      })
+      .join("\n");
 
     const optionText = addTextObject(
       this.scene,
@@ -255,7 +278,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
     this.eggGachaContainer.add(this.eggGachaOptionsContainer);
 
     new Array(Utils.getEnumKeys(VoucherType).length).fill(null).map((_, i) => {
-      const container = this.scene.add.container((this.scene.game.canvas.width / 6) - 56 * i, 0);
+      const container = this.scene.add.container(this.scene.game.canvas.width / 6 - 56 * i, 0);
 
       const bg = addWindow(this.scene, 0, 0, 56, 22);
       bg.setOrigin(1, 0);
@@ -376,7 +399,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
                     targets: egg,
                     duration: this.getDelayValue(350),
                     scale: 0.75,
-                    ease: "Sine.easeIn"
+                    ease: "Sine.easeIn",
                   });
                   this.scene.tweens.add({
                     targets: egg,
@@ -396,12 +419,12 @@ export default class EggGachaUiHandler extends MessageUiHandler {
                           } else {
                             this.showSummary(eggs!);
                           }
-                        }
+                        },
                       });
-                    }
+                    },
                   });
                 });
-              }
+              },
             });
           });
         });
@@ -419,10 +442,10 @@ export default class EggGachaUiHandler extends MessageUiHandler {
               targets: this.gachaKnobs[this.gachaCursor],
               duration: this.getDelayValue(350),
               angle: 0,
-              ease: "Sine.easeInOut"
+              ease: "Sine.easeInOut",
             });
             this.scene.time.delayedCall(this.getDelayValue(350), doPullAnim);
-          }
+          },
         });
       } else {
         doPullAnim();
@@ -444,7 +467,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
         // if not, override the egg tier
         if (i === pullCount) {
           const guaranteedEggTier = this.getGuaranteedEggTierFromPullCount(pullCount);
-          if (!eggs.some(egg => egg.tier >= guaranteedEggTier) && guaranteedEggTier !== EggTier.COMMON) {
+          if (!eggs.some((egg) => egg.tier >= guaranteedEggTier) && guaranteedEggTier !== EggTier.COMMON) {
             eggOptions.tier = guaranteedEggTier;
           }
         }
@@ -455,8 +478,10 @@ export default class EggGachaUiHandler extends MessageUiHandler {
       // Shuffle the eggs in case the guaranteed one got added as last egg
       eggs = Utils.randSeedShuffle<Egg>(eggs);
 
-
-      (this.scene.currentBattle ? this.scene.gameData.saveAll(this.scene, true, true, true) : this.scene.gameData.saveSystem()).then(success => {
+      (this.scene.currentBattle
+        ? this.scene.gameData.saveAll(this.scene, true, true, true)
+        : this.scene.gameData.saveSystem()
+      ).then((success) => {
         if (!success) {
           return this.scene.reset(true);
         }
@@ -507,14 +532,19 @@ export default class EggGachaUiHandler extends MessageUiHandler {
           const row = Math.floor(t / rowItems);
           const sliceWidth = this.eggGachaOverlay.displayWidth / (cols + 2);
           const sliceHeight = height / (rows + 2);
-          const yOffset = (sliceHeight / 2 * (row / Math.max(rows - 1, 1))) + sliceHeight / 4;
-          const ret = this.scene.add.container(sliceWidth * (col + 1) + (sliceWidth * 0.5), sliceHeight * (row + 1) + yOffset);
+          const yOffset = (sliceHeight / 2) * (row / Math.max(rows - 1, 1)) + sliceHeight / 4;
+          const ret = this.scene.add.container(
+            sliceWidth * (col + 1) + sliceWidth * 0.5,
+            sliceHeight * (row + 1) + yOffset,
+          );
           ret.setScale(0.0001);
 
           const eggSprite = this.scene.add.sprite(0, 0, "egg", `egg_${egg.getKey()}`);
           ret.add(eggSprite);
 
-          const eggText = addTextObject(this.scene, 0, 14, egg.getEggDescriptor(), TextStyle.PARTY, { align: "center" });
+          const eggText = addTextObject(this.scene, 0, 14, egg.getEggDescriptor(), TextStyle.PARTY, {
+            align: "center",
+          });
           eggText.setOrigin(0.5, 0);
           eggText.setTint(getEggTierTextTint(!egg.isManaphyEgg() ? egg.tier : EggTier.EPIC));
           ret.add(eggText);
@@ -538,18 +568,18 @@ export default class EggGachaUiHandler extends MessageUiHandler {
                   this.setTransitioning(false);
                   this.summaryFinished = true;
                 }
-              }
-            }));
-
+              },
+            }),
+          );
         });
-      }
+      },
     });
   }
 
   hideSummary() {
     this.setTransitioning(true);
     this.scene.tweens.add({
-      targets: [ this.eggGachaOverlay, this.eggGachaSummaryContainer ],
+      targets: [this.eggGachaOverlay, this.eggGachaSummaryContainer],
       alpha: 0,
       duration: this.getDelayValue(250),
       ease: "Cubic.easeIn",
@@ -560,7 +590,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
         this.setTransitioning(false);
         this.summaryFinished = false;
         this.eggGachaOptionsContainer.setVisible(true);
-      }
+      },
     });
   }
 
@@ -576,7 +606,10 @@ export default class EggGachaUiHandler extends MessageUiHandler {
   }
 
   consumeVouchers(voucherType: VoucherType, count: integer): void {
-    this.scene.gameData.voucherCounts[voucherType] = Math.max(this.scene.gameData.voucherCounts[voucherType] - count, 0);
+    this.scene.gameData.voucherCounts[voucherType] = Math.max(
+      this.scene.gameData.voucherCounts[voucherType] - count,
+      0,
+    );
     this.updateVoucherCounts();
   }
 
@@ -586,7 +619,14 @@ export default class EggGachaUiHandler extends MessageUiHandler {
     });
   }
 
-  showText(text: string, delay?: number, callback?: Function, callbackDelay?: number, prompt?: boolean, promptDelay?: number): void {
+  showText(
+    text: string,
+    delay?: number,
+    callback?: Function,
+    callbackDelay?: number,
+    prompt?: boolean,
+    promptDelay?: number,
+  ): void {
     if (!text) {
       text = this.defaultText;
     }
@@ -630,7 +670,6 @@ export default class EggGachaUiHandler extends MessageUiHandler {
         return false;
       }
     } else {
-
       if (this.eggGachaSummaryContainer.visible) {
         if (this.summaryFinished && (button === Button.ACTION || button === Button.CANCEL)) {
           this.hideSummary();
@@ -641,7 +680,10 @@ export default class EggGachaUiHandler extends MessageUiHandler {
           case Button.ACTION:
             switch (this.cursor) {
               case 0:
-                if (!this.scene.gameData.voucherCounts[VoucherType.REGULAR] && !Overrides.EGG_FREE_GACHA_PULLS_OVERRIDE) {
+                if (
+                  !this.scene.gameData.voucherCounts[VoucherType.REGULAR]
+                  && !Overrides.EGG_FREE_GACHA_PULLS_OVERRIDE
+                ) {
                   error = true;
                   this.showError(i18next.t("egg:notEnoughVouchers"));
                 } else if (this.scene.gameData.eggs.length < 99 || Overrides.UNLIMITED_EGG_COUNT_OVERRIDE) {
@@ -672,8 +714,14 @@ export default class EggGachaUiHandler extends MessageUiHandler {
                 break;
               case 1:
               case 3:
-                if ((this.cursor === 1 && this.scene.gameData.voucherCounts[VoucherType.REGULAR] < 10 && !Overrides.EGG_FREE_GACHA_PULLS_OVERRIDE)
-                  || (this.cursor === 3 && !this.scene.gameData.voucherCounts[VoucherType.PREMIUM] && !Overrides.EGG_FREE_GACHA_PULLS_OVERRIDE)) {
+                if (
+                  (this.cursor === 1
+                    && this.scene.gameData.voucherCounts[VoucherType.REGULAR] < 10
+                    && !Overrides.EGG_FREE_GACHA_PULLS_OVERRIDE)
+                  || (this.cursor === 3
+                    && !this.scene.gameData.voucherCounts[VoucherType.PREMIUM]
+                    && !Overrides.EGG_FREE_GACHA_PULLS_OVERRIDE)
+                ) {
                   error = true;
                   this.showError(i18next.t("egg:notEnoughVouchers"));
                 } else if (this.scene.gameData.eggs.length < 90 || Overrides.UNLIMITED_EGG_COUNT_OVERRIDE) {
@@ -694,7 +742,10 @@ export default class EggGachaUiHandler extends MessageUiHandler {
                 }
                 break;
               case 4:
-                if (!this.scene.gameData.voucherCounts[VoucherType.GOLDEN] && !Overrides.EGG_FREE_GACHA_PULLS_OVERRIDE) {
+                if (
+                  !this.scene.gameData.voucherCounts[VoucherType.GOLDEN]
+                  && !Overrides.EGG_FREE_GACHA_PULLS_OVERRIDE
+                ) {
                   error = true;
                   this.showError(i18next.t("egg:notEnoughVouchers"));
                 } else if (this.scene.gameData.eggs.length < 75 || Overrides.UNLIMITED_EGG_COUNT_OVERRIDE) {
@@ -780,7 +831,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
         duration: this.eggGachaContainer.visible ? 500 : 0,
         x: (_target, _key, _value, index) => 180 * (index - cursor),
         ease: "Cubic.easeInOut",
-        onComplete: () => this.setTransitioning(false)
+        onComplete: () => this.setTransitioning(false),
       });
     }
 

@@ -193,7 +193,7 @@ describe("Pokerogue Admin API", () => {
       };
       server.use(http.get(`${apiBase}/admin/account/adminSearch`, () => HttpResponse.json(responseData)));
 
-      const [ data, err ] = await adminApi.searchAccount(params);
+      const [data, err] = await adminApi.searchAccount(params);
 
       expect(data).toStrictEqual(responseData);
       expect(err).toBeUndefined();
@@ -202,7 +202,7 @@ describe("Pokerogue Admin API", () => {
     it("should return [undefined, ERR_GENERIC] and report a warning on on FAILURE", async () => {
       server.use(http.get(`${apiBase}/admin/account/adminSearch`, () => new HttpResponse("", { status: 400 })));
 
-      const [ data, err ] = await adminApi.searchAccount(params);
+      const [data, err] = await adminApi.searchAccount(params);
 
       expect(data).toBeUndefined();
       expect(err).toBe(adminApi.ERR_GENERIC);
@@ -212,7 +212,7 @@ describe("Pokerogue Admin API", () => {
     it("should return [undefined, ERR_USERNAME_NOT_FOUND] and report a warning on on 404", async () => {
       server.use(http.get(`${apiBase}/admin/account/adminSearch`, () => new HttpResponse("", { status: 404 })));
 
-      const [ data, err ] = await adminApi.searchAccount(params);
+      const [data, err] = await adminApi.searchAccount(params);
 
       expect(data).toBeUndefined();
       expect(err).toBe(adminApi.ERR_USERNAME_NOT_FOUND);
@@ -222,7 +222,7 @@ describe("Pokerogue Admin API", () => {
     it("should return [undefined, ERR_GENERIC] and report a warning on on ERROR", async () => {
       server.use(http.get(`${apiBase}/admin/account/adminSearch`, () => HttpResponse.error()));
 
-      const [ data, err ] = await adminApi.searchAccount(params);
+      const [data, err] = await adminApi.searchAccount(params);
 
       expect(data).toBeUndefined();
       expect(err).toBe(adminApi.ERR_GENERIC);

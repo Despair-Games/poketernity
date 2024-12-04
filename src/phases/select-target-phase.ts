@@ -23,7 +23,9 @@ export class SelectTargetPhase extends PokemonPhase {
       const user = fieldSide[this.fieldIndex];
       const moveObject = allMoves[move!];
       if (moveObject && user.isMoveTargetRestricted(moveObject.id, user, fieldSide[targets[0]])) {
-        const errorMessage = user.getRestrictingTag(move!, user, fieldSide[targets[0]])!.selectionDeniedText(user, moveObject.id);
+        const errorMessage = user
+          .getRestrictingTag(move!, user, fieldSide[targets[0]])!
+          .selectionDeniedText(user, moveObject.id);
         user.scene.queueMessage(i18next.t(errorMessage, { moveName: moveObject.name }), 0, true);
         targets = [];
       }
@@ -31,10 +33,10 @@ export class SelectTargetPhase extends PokemonPhase {
         this.scene.currentBattle.turnCommands[this.fieldIndex] = null;
         this.scene.unshiftPhase(new CommandPhase(this.scene, this.fieldIndex));
       } else {
-          turnCommand!.targets = targets; //TODO: is the bang correct here?
+        turnCommand!.targets = targets; //TODO: is the bang correct here?
       }
       if (turnCommand?.command === Command.BALL && this.fieldIndex) {
-          this.scene.currentBattle.turnCommands[this.fieldIndex - 1]!.skip = true; //TODO: is the bang correct here?
+        this.scene.currentBattle.turnCommands[this.fieldIndex - 1]!.skip = true; //TODO: is the bang correct here?
       }
       this.end();
     });

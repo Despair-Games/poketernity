@@ -39,26 +39,45 @@ export class CheckSwitchPhase extends BattlePhase {
     }
 
     // ...if there are no other allowed Pokemon in the player's party to switch with
-    if (!this.scene.getPlayerParty().slice(1).filter(p => p.isActive()).length) {
+    if (
+      !this.scene
+        .getPlayerParty()
+        .slice(1)
+        .filter((p) => p.isActive()).length
+    ) {
       return super.end();
     }
 
     // ...or if any player Pokemon has an effect that prevents the checked Pokemon from switching
-    if (pokemon.getTag(BattlerTagType.FRENZY)
-        || pokemon.isTrapped()
-        || this.scene.getPlayerField().some(p => p.getTag(BattlerTagType.COMMANDED))) {
+    if (
+      pokemon.getTag(BattlerTagType.FRENZY)
+      || pokemon.isTrapped()
+      || this.scene.getPlayerField().some((p) => p.getTag(BattlerTagType.COMMANDED))
+    ) {
       return super.end();
     }
 
-    this.scene.ui.showText(i18next.t("battle:switchQuestion", { pokemonName: this.useName ? getPokemonNameWithAffix(pokemon) : i18next.t("battle:pokemon") }), null, () => {
-      this.scene.ui.setMode(Mode.CONFIRM, () => {
-        this.scene.ui.setMode(Mode.MESSAGE);
-        this.scene.unshiftPhase(new SwitchPhase(this.scene, SwitchType.INITIAL_SWITCH, this.fieldIndex, false, true));
-        this.end();
-      }, () => {
-        this.scene.ui.setMode(Mode.MESSAGE);
-        this.end();
-      });
-    });
+    this.scene.ui.showText(
+      i18next.t("battle:switchQuestion", {
+        pokemonName: this.useName ? getPokemonNameWithAffix(pokemon) : i18next.t("battle:pokemon"),
+      }),
+      null,
+      () => {
+        this.scene.ui.setMode(
+          Mode.CONFIRM,
+          () => {
+            this.scene.ui.setMode(Mode.MESSAGE);
+            this.scene.unshiftPhase(
+              new SwitchPhase(this.scene, SwitchType.INITIAL_SWITCH, this.fieldIndex, false, true),
+            );
+            this.end();
+          },
+          () => {
+            this.scene.ui.setMode(Mode.MESSAGE);
+            this.end();
+          },
+        );
+      },
+    );
   }
 }

@@ -45,15 +45,26 @@ export enum TextStyle {
 }
 
 export interface TextStyleOptions {
-  scale: number,
-  styleOptions: Phaser.Types.GameObjects.Text.TextStyle | InputText.IConfig,
-  shadowColor: string,
-  shadowXpos: number,
-  shadowYpos: number
+  scale: number;
+  styleOptions: Phaser.Types.GameObjects.Text.TextStyle | InputText.IConfig;
+  shadowColor: string;
+  shadowXpos: number;
+  shadowYpos: number;
 }
 
-export function addTextObject(scene: Phaser.Scene, x: number, y: number, content: string, style: TextStyle, extraStyleOptions?: Phaser.Types.GameObjects.Text.TextStyle): Phaser.GameObjects.Text {
-  const { scale, styleOptions, shadowColor, shadowXpos, shadowYpos } = getTextStyleOptions(style, (scene as BattleScene).uiTheme, extraStyleOptions);
+export function addTextObject(
+  scene: Phaser.Scene,
+  x: number,
+  y: number,
+  content: string,
+  style: TextStyle,
+  extraStyleOptions?: Phaser.Types.GameObjects.Text.TextStyle,
+): Phaser.GameObjects.Text {
+  const { scale, styleOptions, shadowColor, shadowXpos, shadowYpos } = getTextStyleOptions(
+    style,
+    (scene as BattleScene).uiTheme,
+    extraStyleOptions,
+  );
 
   const ret = scene.add.text(x, y, content, styleOptions);
   ret.setScale(scale);
@@ -69,8 +80,17 @@ export function addTextObject(scene: Phaser.Scene, x: number, y: number, content
   return ret;
 }
 
-export function setTextStyle(obj: Phaser.GameObjects.Text, scene: Phaser.Scene, style: TextStyle, extraStyleOptions?: Phaser.Types.GameObjects.Text.TextStyle) {
-  const { scale, styleOptions, shadowColor, shadowXpos, shadowYpos } = getTextStyleOptions(style, (scene as BattleScene).uiTheme, extraStyleOptions);
+export function setTextStyle(
+  obj: Phaser.GameObjects.Text,
+  scene: Phaser.Scene,
+  style: TextStyle,
+  extraStyleOptions?: Phaser.Types.GameObjects.Text.TextStyle,
+) {
+  const { scale, styleOptions, shadowColor, shadowXpos, shadowYpos } = getTextStyleOptions(
+    style,
+    (scene as BattleScene).uiTheme,
+    extraStyleOptions,
+  );
   obj.setScale(scale);
   obj.setShadow(shadowXpos, shadowYpos, shadowColor);
   if (!(styleOptions as Phaser.Types.GameObjects.Text.TextStyle).lineSpacing) {
@@ -82,8 +102,19 @@ export function setTextStyle(obj: Phaser.GameObjects.Text, scene: Phaser.Scene, 
   }
 }
 
-export function addBBCodeTextObject(scene: Phaser.Scene, x: number, y: number, content: string, style: TextStyle, extraStyleOptions?: Phaser.Types.GameObjects.Text.TextStyle): BBCodeText {
-  const { scale, styleOptions, shadowColor, shadowXpos, shadowYpos } = getTextStyleOptions(style, (scene as BattleScene).uiTheme, extraStyleOptions);
+export function addBBCodeTextObject(
+  scene: Phaser.Scene,
+  x: number,
+  y: number,
+  content: string,
+  style: TextStyle,
+  extraStyleOptions?: Phaser.Types.GameObjects.Text.TextStyle,
+): BBCodeText {
+  const { scale, styleOptions, shadowColor, shadowXpos, shadowYpos } = getTextStyleOptions(
+    style,
+    (scene as BattleScene).uiTheme,
+    extraStyleOptions,
+  );
 
   const ret = new BBCodeText(scene, x, y, content, styleOptions as BBCodeText.TextStyle);
   scene.add.existing(ret);
@@ -100,7 +131,15 @@ export function addBBCodeTextObject(scene: Phaser.Scene, x: number, y: number, c
   return ret;
 }
 
-export function addTextInputObject(scene: Phaser.Scene, x: number, y: number, width: number, height: number, style: TextStyle, extraStyleOptions?: InputText.IConfig): InputText {
+export function addTextInputObject(
+  scene: Phaser.Scene,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  style: TextStyle,
+  extraStyleOptions?: InputText.IConfig,
+): InputText {
   const { scale, styleOptions } = getTextStyleOptions(style, (scene as BattleScene).uiTheme, extraStyleOptions);
 
   const ret = new InputText(scene, x, y, width, height, styleOptions as InputText.IConfig);
@@ -110,7 +149,11 @@ export function addTextInputObject(scene: Phaser.Scene, x: number, y: number, wi
   return ret;
 }
 
-export function getTextStyleOptions(style: TextStyle, uiTheme: UiTheme, extraStyleOptions?: Phaser.Types.GameObjects.Text.TextStyle): TextStyleOptions {
+export function getTextStyleOptions(
+  style: TextStyle,
+  uiTheme: UiTheme,
+  extraStyleOptions?: Phaser.Types.GameObjects.Text.TextStyle,
+): TextStyleOptions {
   const lang = i18next.resolvedLanguage;
   let shadowXpos = 4;
   let shadowYpos = 5;
@@ -122,13 +165,13 @@ export function getTextStyleOptions(style: TextStyle, uiTheme: UiTheme, extraSty
     fontSize: 96,
     color: getTextColor(style, false, uiTheme),
     padding: {
-      bottom: 6
-    }
+      bottom: 6,
+    },
   };
 
   if (i18next.resolvedLanguage === "ja") {
     scale = 0.1388888889;
-    styleOptions.padding = { top:2, bottom:4 };
+    styleOptions.padding = { top: 2, bottom: 4 };
   }
 
   switch (style) {
@@ -159,7 +202,7 @@ export function getTextStyleOptions(style: TextStyle, uiTheme: UiTheme, extraSty
           fontSizeLabel = "96px";
           break;
       }
-      styleOptions.fontSize =  fontSizeLabel;
+      styleOptions.fontSize = fontSizeLabel;
       break;
     case TextStyle.STATS_VALUE:
       shadowXpos = 3;
@@ -173,7 +216,7 @@ export function getTextStyleOptions(style: TextStyle, uiTheme: UiTheme, extraSty
           fontSizeValue = "96px";
           break;
       }
-      styleOptions.fontSize =  fontSizeValue;
+      styleOptions.fontSize = fontSizeValue;
       break;
     case TextStyle.MESSAGE:
     case TextStyle.SETTINGS_LABEL:
@@ -219,7 +262,9 @@ export function getTextStyleOptions(style: TextStyle, uiTheme: UiTheme, extraSty
 
   if (extraStyleOptions) {
     if (extraStyleOptions.fontSize) {
-      const sizeRatio = parseInt(extraStyleOptions.fontSize.toString().slice(0, -2)) / parseInt(styleOptions.fontSize?.toString().slice(0, -2) ?? "1");
+      const sizeRatio =
+        parseInt(extraStyleOptions.fontSize.toString().slice(0, -2))
+        / parseInt(styleOptions.fontSize?.toString().slice(0, -2) ?? "1");
       shadowXpos *= sizeRatio;
     }
     styleOptions = Object.assign(styleOptions, extraStyleOptions);
@@ -248,10 +293,15 @@ export function getBBCodeFrag(content: string, textStyle: TextStyle, uiTheme: Ui
  * @param forWindow set to `true` if the text is to be displayed in a window ({@linkcode BattleScene.addWindow})
  *  it will replace all instances of the default MONEY TextStyle by {@linkcode TextStyle.MONEY_WINDOW}
  */
-export function getTextWithColors(content: string, primaryStyle: TextStyle, uiTheme: UiTheme, forWindow?: boolean): string {
+export function getTextWithColors(
+  content: string,
+  primaryStyle: TextStyle,
+  uiTheme: UiTheme,
+  forWindow?: boolean,
+): string {
   // Apply primary styling before anything else
   let text = getBBCodeFrag(content, primaryStyle, uiTheme) + "[/color][/shadow]";
-  const primaryStyleString = [ ...text.match(new RegExp(/\[color=[^\[]*\]\[shadow=[^\[]*\]/i))! ][0];
+  const primaryStyleString = [...text.match(new RegExp(/\[color=[^\[]*\]\[shadow=[^\[]*\]/i))!][0];
 
   /* For money text displayed in game windows, we can't use the default {@linkcode TextStyle.MONEY}
    * or it will look wrong in legacy mode because of the different window background color
@@ -262,7 +312,12 @@ export function getTextWithColors(content: string, primaryStyle: TextStyle, uiTh
 
   // Set custom colors
   text = text.replace(/@\[([^{]*)\]{([^}]*)}/gi, (substring, textStyle: string, textToColor: string) => {
-    return "[/color][/shadow]" + getBBCodeFrag(textToColor, TextStyle[textStyle], uiTheme) + "[/color][/shadow]" + primaryStyleString;
+    return (
+      "[/color][/shadow]"
+      + getBBCodeFrag(textToColor, TextStyle[textStyle], uiTheme)
+      + "[/color][/shadow]"
+      + primaryStyleString
+    );
   });
 
   // Remove extra style block at the end

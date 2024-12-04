@@ -10,7 +10,12 @@ export class PartyExpPhase extends Phase {
   useWaveIndexMultiplier?: boolean;
   pokemonParticipantIds?: Set<number>;
 
-  constructor(scene: BattleScene, expValue: number, useWaveIndexMultiplier?: boolean, pokemonParticipantIds?: Set<number>) {
+  constructor(
+    scene: BattleScene,
+    expValue: number,
+    useWaveIndexMultiplier?: boolean,
+    pokemonParticipantIds?: Set<number>,
+  ) {
     super(scene);
 
     this.expValue = expValue;

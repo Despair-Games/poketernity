@@ -81,7 +81,7 @@ export class MoveHelper extends GameManagerHelper {
    */
   public changeMoveset(pokemon: Pokemon, moveset: Moves | Moves[]): void {
     if (!Array.isArray(moveset)) {
-      moveset = [ moveset ];
+      moveset = [moveset];
     }
     pokemon.moveset = [];
     moveset.forEach((move) => {

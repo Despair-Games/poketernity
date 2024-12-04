@@ -59,7 +59,7 @@ export default abstract class AbstractOptionSelectUiHandler extends UiHandler {
   setup() {
     const ui = this.getUi();
 
-    this.optionSelectContainer = this.scene.add.container((this.scene.game.canvas.width / 6) - 1, -48);
+    this.optionSelectContainer = this.scene.add.container(this.scene.game.canvas.width / 6 - 1, -48);
     this.optionSelectContainer.setName(`option-select-${this.mode ? Mode[this.mode] : "UNKNOWN"}`);
     this.optionSelectContainer.setVisible(false);
     ui.add(this.optionSelectContainer);
@@ -87,7 +87,13 @@ export default abstract class AbstractOptionSelectUiHandler extends UiHandler {
     if (configOptions.length >= 10 && this.scene.ui.getMode() === Mode.AUTO_COMPLETE) {
       const optionsScrollTotal = configOptions.length;
       const optionStartIndex = this.scrollCursor;
-      const optionEndIndex = Math.min(optionsScrollTotal, optionStartIndex + (!optionStartIndex || this.scrollCursor + (this.config?.maxOptions! - 1) >= optionsScrollTotal ? this.config?.maxOptions! - 1 : this.config?.maxOptions! - 2));
+      const optionEndIndex = Math.min(
+        optionsScrollTotal,
+        optionStartIndex
+          + (!optionStartIndex || this.scrollCursor + (this.config?.maxOptions! - 1) >= optionsScrollTotal
+            ? this.config?.maxOptions! - 1
+            : this.config?.maxOptions! - 2),
+      );
       options = configOptions.slice(optionStartIndex, optionEndIndex + 2);
     } else {
       options = configOptions;
@@ -97,21 +103,36 @@ export default abstract class AbstractOptionSelectUiHandler extends UiHandler {
       this.optionSelectText.destroy();
     }
     if (this.optionSelectIcons?.length) {
-      this.optionSelectIcons.map(i => i.destroy());
+      this.optionSelectIcons.map((i) => i.destroy());
       this.optionSelectIcons.splice(0, this.optionSelectIcons.length);
     }
 
-    this.optionSelectText = addTextObject(this.scene, 0, 0, options.map(o => o.item ? `    ${o.label}` : o.label).join("\n"), TextStyle.WINDOW, { maxLines: options.length });
+    this.optionSelectText = addTextObject(
+      this.scene,
+      0,
+      0,
+      options.map((o) => (o.item ? `    ${o.label}` : o.label)).join("\n"),
+      TextStyle.WINDOW,
+      { maxLines: options.length },
+    );
     this.optionSelectText.setLineSpacing(this.scale * 72);
     this.optionSelectText.setName("text-option-select");
     this.optionSelectText.setLineSpacing(12);
     this.optionSelectContainer.add(this.optionSelectText);
-    this.optionSelectContainer.setPosition((this.scene.game.canvas.width / 6) - 1 - (this.config?.xOffset || 0), -48 + (this.config?.yOffset || 0));
+    this.optionSelectContainer.setPosition(
+      this.scene.game.canvas.width / 6 - 1 - (this.config?.xOffset || 0),
+      -48 + (this.config?.yOffset || 0),
+    );
 
     this.optionSelectBg.width = Math.max(this.optionSelectText.displayWidth + 24, this.getWindowWidth());
 
-    if (this.config?.options && this.config?.options.length > (this.config?.maxOptions!)) { // TODO: is this bang correct?
-      this.optionSelectText.setText(this.getOptionsWithScroll().map(o => o.label).join("\n"));
+    if (this.config?.options && this.config?.options.length > this.config?.maxOptions!) {
+      // TODO: is this bang correct?
+      this.optionSelectText.setText(
+        this.getOptionsWithScroll()
+          .map((o) => o.label)
+          .join("\n"),
+      );
     }
 
     this.optionSelectBg.height = this.getWindowHeight();
@@ -190,7 +211,7 @@ export default abstract class AbstractOptionSelectUiHandler extends UiHandler {
       success = true;
       if (button === Button.CANCEL) {
         if (this.config?.maxOptions && this.config.options.length > this.config.maxOptions) {
-          this.scrollCursor = (this.config.options.length - this.config.maxOptions) + 1;
+          this.scrollCursor = this.config.options.length - this.config.maxOptions + 1;
           this.cursor = options.length - 1;
         } else if (!this.config?.noCancel) {
           this.setCursor(options.length - 1);
@@ -273,7 +294,13 @@ export default abstract class AbstractOptionSelectUiHandler extends UiHandler {
 
     const optionsScrollTotal = options.length;
     const optionStartIndex = this.scrollCursor;
-    const optionEndIndex = Math.min(optionsScrollTotal, optionStartIndex + (!optionStartIndex || this.scrollCursor + (this.config.maxOptions - 1) >= optionsScrollTotal ? this.config.maxOptions - 1 : this.config.maxOptions - 2));
+    const optionEndIndex = Math.min(
+      optionsScrollTotal,
+      optionStartIndex
+        + (!optionStartIndex || this.scrollCursor + (this.config.maxOptions - 1) >= optionsScrollTotal
+          ? this.config.maxOptions - 1
+          : this.config.maxOptions - 2),
+    );
 
     if (this.config?.maxOptions && options.length > this.config.maxOptions) {
       options.splice(optionEndIndex, optionsScrollTotal);
@@ -281,13 +308,13 @@ export default abstract class AbstractOptionSelectUiHandler extends UiHandler {
       if (optionStartIndex) {
         options.unshift({
           label: scrollUpLabel,
-          handler: () => true
+          handler: () => true,
         });
       }
       if (optionEndIndex < optionsScrollTotal) {
         options.push({
           label: scrollDownLabel,
-          handler: () => true
+          handler: () => true,
         });
       }
     }
@@ -337,7 +364,11 @@ export default abstract class AbstractOptionSelectUiHandler extends UiHandler {
     }
 
     this.cursorObj.setScale(this.scale * 6);
-    this.cursorObj.setPositionRelative(this.optionSelectBg, 12, 102 * this.scale + this.cursor * (114 * this.scale - 3));
+    this.cursorObj.setPositionRelative(
+      this.optionSelectBg,
+      12,
+      102 * this.scale + this.cursor * (114 * this.scale - 3),
+    );
 
     return changed;
   }

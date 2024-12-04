@@ -19,7 +19,10 @@ import { SwitchType } from "#enums/switch-type";
 import i18next from "i18next";
 import BattleScene from "../battle-scene";
 import { getCharVariantFromDialogue } from "../data/dialogue";
-import { OptionSelectSettings, transitionMysteryEncounterIntroVisuals } from "../data/mystery-encounters/utils/encounter-phase-utils";
+import {
+  OptionSelectSettings,
+  transitionMysteryEncounterIntroVisuals,
+} from "../data/mystery-encounters/utils/encounter-phase-utils";
 import { TrainerSlot } from "../data/trainer-config";
 import { IvScannerModifier } from "../modifier/modifier";
 import { Phase } from "../phase";
@@ -66,7 +69,9 @@ export class MysteryEncounterPhase extends Phase {
     if (!this.optionSelectSettings) {
       // Sets flag that ME was encountered, only if this is not a followup option select phase
       // Can be used in later MEs to check for requirements to spawn, run history, etc.
-      this.scene.mysteryEncounterSaveData.encounteredEvents.push(new SeenEncounterData(encounter.encounterType, encounter.encounterTier, this.scene.currentBattle.waveIndex));
+      this.scene.mysteryEncounterSaveData.encounteredEvents.push(
+        new SeenEncounterData(encounter.encounterType, encounter.encounterTier, this.scene.currentBattle.waveIndex),
+      );
     }
 
     // Initiates encounter dialogue window and option select
@@ -85,7 +90,10 @@ export class MysteryEncounterPhase extends Phase {
     if (!this.optionSelectSettings) {
       // Saves the selected option in the ME save data, only if this is not a followup option select phase
       // Can be used for analytics purposes to track what options are popular on certain encounters
-      const encounterSaveData = this.scene.mysteryEncounterSaveData.encounteredEvents[this.scene.mysteryEncounterSaveData.encounteredEvents.length - 1];
+      const encounterSaveData =
+        this.scene.mysteryEncounterSaveData.encounteredEvents[
+          this.scene.mysteryEncounterSaveData.encounteredEvents.length - 1
+        ];
       if (encounterSaveData.type === this.scene.currentBattle.mysteryEncounter?.encounterType) {
         encounterSaveData.selectedOption = index;
       }
@@ -100,12 +108,11 @@ export class MysteryEncounterPhase extends Phase {
 
     if (option.onPreOptionPhase) {
       this.scene.executeWithSeedOffset(async () => {
-        return await option.onPreOptionPhase!(this.scene)
-          .then((result) => {
-            if (isNullOrUndefined(result) || result) {
-              this.continueEncounter();
-            }
-          });
+        return await option.onPreOptionPhase!(this.scene).then((result) => {
+          if (isNullOrUndefined(result) || result) {
+            this.continueEncounter();
+          }
+        });
       }, this.scene.currentBattle.mysteryEncounter?.getSeedOffset());
     } else {
       this.continueEncounter();
@@ -140,7 +147,14 @@ export class MysteryEncounterPhase extends Phase {
 
         i++;
         if (title) {
-          this.scene.ui.showDialogue(text ?? "", title, null, nextAction, 0, i === 1 ? this.FIRST_DIALOGUE_PROMPT_DELAY : 0);
+          this.scene.ui.showDialogue(
+            text ?? "",
+            title,
+            null,
+            nextAction,
+            0,
+            i === 1 ? this.FIRST_DIALOGUE_PROMPT_DELAY : 0,
+          );
         } else {
           this.scene.ui.showText(text ?? "", null, nextAction, i === 1 ? this.FIRST_DIALOGUE_PROMPT_DELAY : 0, true);
         }
@@ -220,27 +234,32 @@ export class MysteryEncounterBattleStartCleanupPhase extends Phase {
     super.start();
 
     // Lapse any residual flinches/endures but ignore all other turn-end battle tags
-    const includedLapseTags = [ BattlerTagType.FLINCHED, BattlerTagType.ENDURING ];
-    const field = this.scene.getField(true).filter(p => p.summonData);
-    field.forEach(pokemon => {
+    const includedLapseTags = [BattlerTagType.FLINCHED, BattlerTagType.ENDURING];
+    const field = this.scene.getField(true).filter((p) => p.summonData);
+    field.forEach((pokemon) => {
       const tags = pokemon.summonData.tags;
-      tags.filter(t => includedLapseTags.includes(t.tagType)
-        && t.lapseTypes.includes(BattlerTagLapseType.TURN_END)
-        && !(t.lapse(pokemon, BattlerTagLapseType.TURN_END))).forEach(t => {
-        t.onRemove(pokemon);
-        tags.splice(tags.indexOf(t), 1);
-      });
+      tags
+        .filter(
+          (t) =>
+            includedLapseTags.includes(t.tagType)
+            && t.lapseTypes.includes(BattlerTagLapseType.TURN_END)
+            && !t.lapse(pokemon, BattlerTagLapseType.TURN_END),
+        )
+        .forEach((t) => {
+          t.onRemove(pokemon);
+          tags.splice(tags.indexOf(t), 1);
+        });
     });
 
     // Remove any status tick phases
-    while (!!this.scene.findPhase(p => p instanceof PostTurnStatusEffectPhase)) {
-      this.scene.tryRemovePhase(p => p instanceof PostTurnStatusEffectPhase);
+    while (!!this.scene.findPhase((p) => p instanceof PostTurnStatusEffectPhase)) {
+      this.scene.tryRemovePhase((p) => p instanceof PostTurnStatusEffectPhase);
     }
 
     // The total number of Pokemon in the player's party that can legally fight
     const legalPlayerPokemon = this.scene.getPokemonAllowedInBattle();
     // The total number of legal player Pokemon that aren't currently on the field
-    const legalPlayerPartyPokemon = legalPlayerPokemon.filter(p => !p.isActive(true));
+    const legalPlayerPartyPokemon = legalPlayerPokemon.filter((p) => !p.isActive(true));
     if (!legalPlayerPokemon.length) {
       this.scene.unshiftPhase(new GameOverPhase(this.scene));
       return this.end();
@@ -303,10 +322,13 @@ export class MysteryEncounterBattlePhase extends Phase {
 
     if (encounterMode === MysteryEncounterMode.TRAINER_BATTLE) {
       if (scene.currentBattle.double) {
-        return i18next.t("battle:trainerAppearedDouble", { trainerName: scene.currentBattle.trainer?.getName(TrainerSlot.NONE, true) });
-
+        return i18next.t("battle:trainerAppearedDouble", {
+          trainerName: scene.currentBattle.trainer?.getName(TrainerSlot.NONE, true),
+        });
       } else {
-        return i18next.t("battle:trainerAppeared", { trainerName: scene.currentBattle.trainer?.getName(TrainerSlot.NONE, true) });
+        return i18next.t("battle:trainerAppeared", {
+          trainerName: scene.currentBattle.trainer?.getName(TrainerSlot.NONE, true),
+        });
       }
     }
 
@@ -327,7 +349,7 @@ export class MysteryEncounterBattlePhase extends Phase {
       if (encounterMode === MysteryEncounterMode.BOSS_BATTLE) {
         scene.playBgm(undefined);
       }
-      const availablePartyMembers = scene.getEnemyParty().filter(p => !p.isFainted()).length;
+      const availablePartyMembers = scene.getEnemyParty().filter((p) => !p.isFainted()).length;
       scene.unshiftPhase(new SummonPhase(scene, 0, false));
       if (scene.currentBattle.double && availablePartyMembers > 1) {
         scene.unshiftPhase(new SummonPhase(scene, 1, false));
@@ -347,7 +369,7 @@ export class MysteryEncounterBattlePhase extends Phase {
         scene.pbTrayEnemy.showPbTray(scene.getEnemyParty());
         const doTrainerSummon = () => {
           this.hideEnemyTrainer();
-          const availablePartyMembers = scene.getEnemyParty().filter(p => !p.isFainted()).length;
+          const availablePartyMembers = scene.getEnemyParty().filter((p) => !p.isFainted()).length;
           scene.unshiftPhase(new SummonPhase(scene, 0, false));
           if (scene.currentBattle.double && availablePartyMembers > 1) {
             scene.unshiftPhase(new SummonPhase(scene, 1, false));
@@ -368,7 +390,10 @@ export class MysteryEncounterBattlePhase extends Phase {
       } else {
         const trainer = this.scene.currentBattle.trainer;
         let message: string;
-        scene.executeWithSeedOffset(() => message = Utils.randSeedItem(encounterMessages), this.scene.currentBattle.mysteryEncounter?.getSeedOffset());
+        scene.executeWithSeedOffset(
+          () => (message = Utils.randSeedItem(encounterMessages)),
+          this.scene.currentBattle.mysteryEncounter?.getSeedOffset(),
+        );
         message = message!; // tell TS compiler it's defined now
         const showDialogueAndSummon = () => {
           scene.ui.showDialogue(message, trainer?.getName(TrainerSlot.NONE, true), null, () => {
@@ -376,7 +401,13 @@ export class MysteryEncounterBattlePhase extends Phase {
           });
         };
         if (this.scene.currentBattle.trainer?.config.hasCharSprite && !this.scene.ui.shouldSkipDialogue(message)) {
-          this.scene.showFieldOverlay(500).then(() => this.scene.charSprite.showCharacter(trainer?.getKey()!, getCharVariantFromDialogue(encounterMessages[0])).then(() => showDialogueAndSummon())); // TODO: is this bang correct?
+          this.scene
+            .showFieldOverlay(500)
+            .then(() =>
+              this.scene.charSprite
+                .showCharacter(trainer?.getKey()!, getCharVariantFromDialogue(encounterMessages[0]))
+                .then(() => showDialogueAndSummon()),
+            ); // TODO: is this bang correct?
         } else {
           showDialogueAndSummon();
         }
@@ -396,13 +427,17 @@ export class MysteryEncounterBattlePhase extends Phase {
     // PostSummon and ShinySparkle phases are handled by SummonPhase
 
     if (encounterMode !== MysteryEncounterMode.TRAINER_BATTLE) {
-      const ivScannerModifier = this.scene.findModifier(m => m instanceof IvScannerModifier);
+      const ivScannerModifier = this.scene.findModifier((m) => m instanceof IvScannerModifier);
       if (ivScannerModifier) {
-        enemyField.map(p => this.scene.pushPhase(new ScanIvsPhase(this.scene, p.getBattlerIndex(), Math.min(ivScannerModifier.getStackCount() * 2, 6))));
+        enemyField.map((p) =>
+          this.scene.pushPhase(
+            new ScanIvsPhase(this.scene, p.getBattlerIndex(), Math.min(ivScannerModifier.getStackCount() * 2, 6)),
+          ),
+        );
       }
     }
 
-    const availablePartyMembers = scene.getPlayerParty().filter(p => p.isAllowedInBattle());
+    const availablePartyMembers = scene.getPlayerParty().filter((p) => p.isAllowedInBattle());
 
     if (!availablePartyMembers[0].isOnField()) {
       scene.pushPhase(new SummonPhase(scene, 0));
@@ -460,7 +495,7 @@ export class MysteryEncounterBattlePhase extends Phase {
       onComplete: () => {
         trainer.untint(100, "Sine.easeOut");
         trainer.playAnim();
-      }
+      },
     });
   }
 
@@ -471,7 +506,7 @@ export class MysteryEncounterBattlePhase extends Phase {
       y: "-=16",
       alpha: 0,
       ease: "Sine.easeInOut",
-      duration: 750
+      duration: 750,
     });
   }
 }
@@ -533,8 +568,10 @@ export class MysteryEncounterRewardsPhase extends Phase {
     if (encounter.doEncounterRewards) {
       encounter.doEncounterRewards(this.scene);
     } else if (this.addHealPhase) {
-      this.scene.tryRemovePhase(p => p instanceof SelectModifierPhase);
-      this.scene.unshiftPhase(new SelectModifierPhase(this.scene, 0, undefined, { fillRemaining: false, rerollMultiplier: -1 }));
+      this.scene.tryRemovePhase((p) => p instanceof SelectModifierPhase);
+      this.scene.unshiftPhase(
+        new SelectModifierPhase(this.scene, 0, undefined, { fillRemaining: false, rerollMultiplier: -1 }),
+      );
     }
 
     this.scene.pushPhase(new PostMysteryEncounterPhase(this.scene));
@@ -566,12 +603,11 @@ export class PostMysteryEncounterPhase extends Phase {
 
     if (this.onPostOptionSelect) {
       this.scene.executeWithSeedOffset(async () => {
-        return await this.onPostOptionSelect!(this.scene)
-          .then((result) => {
-            if (isNullOrUndefined(result) || result) {
-              this.continueEncounter();
-            }
-          });
+        return await this.onPostOptionSelect!(this.scene).then((result) => {
+          if (isNullOrUndefined(result) || result) {
+            this.continueEncounter();
+          }
+        });
       }, this.scene.currentBattle.mysteryEncounter?.getSeedOffset() * 2000);
     } else {
       this.continueEncounter();
@@ -602,7 +638,14 @@ export class PostMysteryEncounterPhase extends Phase {
         i++;
         this.scene.ui.setMode(Mode.MESSAGE);
         if (title) {
-          this.scene.ui.showDialogue(text ?? "", title, null, nextAction, 0, i === 1 ? this.FIRST_DIALOGUE_PROMPT_DELAY : 0);
+          this.scene.ui.showDialogue(
+            text ?? "",
+            title,
+            null,
+            nextAction,
+            0,
+            i === 1 ? this.FIRST_DIALOGUE_PROMPT_DELAY : 0,
+          );
         } else {
           this.scene.ui.showText(text ?? "", null, nextAction, i === 1 ? this.FIRST_DIALOGUE_PROMPT_DELAY : 0, true);
         }

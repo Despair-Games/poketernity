@@ -25,7 +25,6 @@ export class EggSummaryPhase extends Phase {
         this.scene.ui.setModeForceTransition(Mode.EGG_HATCH_SUMMARY, this.eggHatchData).then(() => {
           this.scene.fadeOutBgm(undefined, false);
         });
-
       } else {
         this.eggHatchData[i].setDex();
         this.eggHatchData[i].updatePokemon().then(() => {
@@ -36,7 +35,6 @@ export class EggSummaryPhase extends Phase {
       }
     };
     updateNextPokemon(0);
-
   }
 
   end() {

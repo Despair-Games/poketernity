@@ -23,16 +23,18 @@ export class PostSummonPhase extends PokemonPhase {
     this.scene.arena.applyTags(ArenaTrapTag, false, pokemon);
 
     // If this is mystery encounter and has post summon phase tag, apply post summon effects
-    if (this.scene.currentBattle.isBattleMysteryEncounter() && pokemon.findTags(t => t instanceof MysteryEncounterPostSummonTag).length > 0) {
+    if (
+      this.scene.currentBattle.isBattleMysteryEncounter()
+      && pokemon.findTags((t) => t instanceof MysteryEncounterPostSummonTag).length > 0
+    ) {
       pokemon.lapseTag(BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON);
     }
 
-    applyPostSummonAbAttrs(PostSummonAbAttr, pokemon)
-      .then(() => {
-        const field = pokemon.isPlayer() ? this.scene.getPlayerField() : this.scene.getEnemyField();
-        field.forEach((p) => applyAbAttrs(CommanderAbAttr, p, null, false));
+    applyPostSummonAbAttrs(PostSummonAbAttr, pokemon).then(() => {
+      const field = pokemon.isPlayer() ? this.scene.getPlayerField() : this.scene.getEnemyField();
+      field.forEach((p) => applyAbAttrs(CommanderAbAttr, p, null, false));
 
-        this.end();
-      });
+      this.end();
+    });
   }
 }

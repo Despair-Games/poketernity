@@ -66,13 +66,21 @@ export default class InputsHandler {
   }
 
   listenInputs(): void {
-    this.events.on("input_down", (event) => {
-      this.log.push({ type: "input_down", button: event.button });
-    }, this);
+    this.events.on(
+      "input_down",
+      (event) => {
+        this.log.push({ type: "input_down", button: event.button });
+      },
+      this,
+    );
 
-    this.events.on("input_up", (event) => {
-      this.logUp.push({ type: "input_up", button: event.button });
-    }, this);
+    this.events.on(
+      "input_up",
+      (event) => {
+        this.logUp.push({ type: "input_up", button: event.button });
+      },
+      this,
+    );
   }
 }
 
@@ -82,7 +90,7 @@ class Fakepad extends Phaser.Input.Gamepad.Gamepad {
 
   constructor(pad) {
     //@ts-ignore
-    super(undefined, { ...pad, buttons: pad.deviceMapping, axes: []}); //TODO: resolve ts-ignore
+    super(undefined, { ...pad, buttons: pad.deviceMapping, axes: [] }); //TODO: resolve ts-ignore
     this.id = "xbox_360_fakepad";
     this.index = 0;
   }

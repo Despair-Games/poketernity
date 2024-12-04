@@ -12,7 +12,6 @@ import GameManager from "#test/utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
-
 describe("Moves - Aurora Veil", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
@@ -33,22 +32,26 @@ describe("Moves - Aurora Veil", () => {
     game = new GameManager(phaserGame);
     game.override.battleType("single");
     game.override.ability(Abilities.NONE);
-    game.override.moveset([ Moves.ABSORB, Moves.ROCK_SLIDE, Moves.TACKLE ]);
+    game.override.moveset([Moves.ABSORB, Moves.ROCK_SLIDE, Moves.TACKLE]);
     game.override.enemyLevel(100);
     game.override.enemySpecies(Species.MAGIKARP);
-    game.override.enemyMoveset([ Moves.AURORA_VEIL, Moves.AURORA_VEIL, Moves.AURORA_VEIL, Moves.AURORA_VEIL ]);
+    game.override.enemyMoveset([Moves.AURORA_VEIL, Moves.AURORA_VEIL, Moves.AURORA_VEIL, Moves.AURORA_VEIL]);
     game.override.disableCrits();
     game.override.weather(WeatherType.HAIL);
   });
 
   it("reduces damage of physical attacks by half in a single battle", async () => {
     const moveToUse = Moves.TACKLE;
-    await game.startBattle([ Species.SHUCKLE ]);
+    await game.startBattle([Species.SHUCKLE]);
 
     game.move.select(moveToUse);
 
     await game.phaseInterceptor.to(TurnEndPhase);
-    const mockedDmg = getMockedMoveDamage(game.scene.getEnemyPokemon()!, game.scene.getPlayerPokemon()!, allMoves[moveToUse]);
+    const mockedDmg = getMockedMoveDamage(
+      game.scene.getEnemyPokemon()!,
+      game.scene.getPlayerPokemon()!,
+      allMoves[moveToUse],
+    );
 
     expect(mockedDmg).toBe(allMoves[moveToUse].power * singleBattleMultiplier);
   });
@@ -57,26 +60,34 @@ describe("Moves - Aurora Veil", () => {
     game.override.battleType("double");
 
     const moveToUse = Moves.ROCK_SLIDE;
-    await game.startBattle([ Species.SHUCKLE, Species.SHUCKLE ]);
+    await game.startBattle([Species.SHUCKLE, Species.SHUCKLE]);
 
     game.move.select(moveToUse);
     game.move.select(moveToUse, 1);
 
     await game.phaseInterceptor.to(TurnEndPhase);
-    const mockedDmg = getMockedMoveDamage(game.scene.getEnemyPokemon()!, game.scene.getPlayerPokemon()!, allMoves[moveToUse]);
+    const mockedDmg = getMockedMoveDamage(
+      game.scene.getEnemyPokemon()!,
+      game.scene.getPlayerPokemon()!,
+      allMoves[moveToUse],
+    );
 
     expect(mockedDmg).toBe(allMoves[moveToUse].power * doubleBattleMultiplier);
   });
 
   it("reduces damage of special attacks by half in a single battle", async () => {
     const moveToUse = Moves.ABSORB;
-    await game.startBattle([ Species.SHUCKLE ]);
+    await game.startBattle([Species.SHUCKLE]);
 
     game.move.select(moveToUse);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
-    const mockedDmg = getMockedMoveDamage(game.scene.getEnemyPokemon()!, game.scene.getPlayerPokemon()!, allMoves[moveToUse]);
+    const mockedDmg = getMockedMoveDamage(
+      game.scene.getEnemyPokemon()!,
+      game.scene.getPlayerPokemon()!,
+      allMoves[moveToUse],
+    );
 
     expect(mockedDmg).toBe(allMoves[moveToUse].power * singleBattleMultiplier);
   });
@@ -85,13 +96,17 @@ describe("Moves - Aurora Veil", () => {
     game.override.battleType("double");
 
     const moveToUse = Moves.DAZZLING_GLEAM;
-    await game.startBattle([ Species.SHUCKLE, Species.SHUCKLE ]);
+    await game.startBattle([Species.SHUCKLE, Species.SHUCKLE]);
 
     game.move.select(moveToUse);
     game.move.select(moveToUse, 1);
 
     await game.phaseInterceptor.to(TurnEndPhase);
-    const mockedDmg = getMockedMoveDamage(game.scene.getEnemyPokemon()!, game.scene.getPlayerPokemon()!, allMoves[moveToUse]);
+    const mockedDmg = getMockedMoveDamage(
+      game.scene.getEnemyPokemon()!,
+      game.scene.getPlayerPokemon()!,
+      allMoves[moveToUse],
+    );
 
     expect(mockedDmg).toBe(allMoves[moveToUse].power * doubleBattleMultiplier);
   });
@@ -111,7 +126,14 @@ const getMockedMoveDamage = (defender: Pokemon, attacker: Pokemon, move: Move) =
   const side = defender.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
 
   if (defender.scene.arena.getTagOnSide(ArenaTagType.AURORA_VEIL, side)) {
-    defender.scene.arena.applyTagsForSide(ArenaTagType.AURORA_VEIL, side, false, attacker, move.category, multiplierHolder);
+    defender.scene.arena.applyTagsForSide(
+      ArenaTagType.AURORA_VEIL,
+      side,
+      false,
+      attacker,
+      move.category,
+      multiplierHolder,
+    );
   }
 
   return move.power * multiplierHolder.value;

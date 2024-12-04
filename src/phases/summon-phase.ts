@@ -30,13 +30,15 @@ export class SummonPhase extends PartyMemberPokemonPhase {
   }
 
   /**
-    * Sends out a Pokemon before the battle begins and shows the appropriate messages
-    */
+   * Sends out a Pokemon before the battle begins and shows the appropriate messages
+   */
   preSummon(): void {
     const partyMember = this.getPokemon();
     // If the Pokemon about to be sent out is fainted, illegal under a challenge, or no longer in the party for some reason, switch to the first non-fainted legal Pokemon
-    if (!partyMember.isAllowedInBattle() || (this.player && !this.getParty().some(p => p.id === partyMember.id))) {
-      console.warn("The Pokemon about to be sent out is fainted or illegal under a challenge. Attempting to resolve...");
+    if (!partyMember.isAllowedInBattle() || (this.player && !this.getParty().some((p) => p.id === partyMember.id))) {
+      console.warn(
+        "The Pokemon about to be sent out is fainted or illegal under a challenge. Attempting to resolve...",
+      );
 
       // First check if they're somehow still in play, if so remove them.
       if (partyMember.isOnField()) {
@@ -57,8 +59,14 @@ export class SummonPhase extends PartyMemberPokemonPhase {
       }
 
       // Swaps the fainted Pokemon and the first non-fainted legal Pokemon in the party
-      [ party[this.partyMemberIndex], party[legalIndex] ] = [ party[legalIndex], party[this.partyMemberIndex] ];
-      console.warn("Swapped %s %O with %s %O", getPokemonNameWithAffix(partyMember), partyMember, getPokemonNameWithAffix(party[0]), party[0]);
+      [party[this.partyMemberIndex], party[legalIndex]] = [party[legalIndex], party[this.partyMemberIndex]];
+      console.warn(
+        "Swapped %s %O with %s %O",
+        getPokemonNameWithAffix(partyMember),
+        partyMember,
+        getPokemonNameWithAffix(party[0]),
+        party[0],
+      );
     }
 
     if (this.player) {
@@ -66,7 +74,9 @@ export class SummonPhase extends PartyMemberPokemonPhase {
       if (this.player) {
         this.scene.pbTray.hide();
       }
-      this.scene.trainer.setTexture(`trainer_${this.scene.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`);
+      this.scene.trainer.setTexture(
+        `trainer_${this.scene.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`,
+      );
       this.scene.time.delayedCall(562, () => {
         this.scene.trainer.setFrame("2");
         this.scene.time.delayedCall(64, () => {
@@ -77,11 +87,16 @@ export class SummonPhase extends PartyMemberPokemonPhase {
         targets: this.scene.trainer,
         x: -36,
         duration: 1000,
-        onComplete: () => this.scene.trainer.setVisible(false)
+        onComplete: () => this.scene.trainer.setVisible(false),
       });
       this.scene.time.delayedCall(750, () => this.summon());
-    } else if (this.scene.currentBattle.battleType === BattleType.TRAINER || this.scene.currentBattle.mysteryEncounter?.encounterMode === MysteryEncounterMode.TRAINER_BATTLE) {
-      const trainerName = this.scene.currentBattle.trainer?.getName(!(this.fieldIndex % 2) ? TrainerSlot.TRAINER : TrainerSlot.TRAINER_PARTNER);
+    } else if (
+      this.scene.currentBattle.battleType === BattleType.TRAINER
+      || this.scene.currentBattle.mysteryEncounter?.encounterMode === MysteryEncounterMode.TRAINER_BATTLE
+    ) {
+      const trainerName = this.scene.currentBattle.trainer?.getName(
+        !(this.fieldIndex % 2) ? TrainerSlot.TRAINER : TrainerSlot.TRAINER_PARTNER,
+      );
       const pokemonName = this.getPokemon().getNameToRender();
       const message = i18next.t("battle:trainerSendOut", { trainerName, pokemonName });
 
@@ -99,7 +114,12 @@ export class SummonPhase extends PartyMemberPokemonPhase {
   summon(): void {
     const pokemon = this.getPokemon();
 
-    const pokeball = this.scene.addFieldSprite(this.player ? 36 : 248, this.player ? 80 : 44, "pb", getPokeballAtlasKey(pokemon.pokeball));
+    const pokeball = this.scene.addFieldSprite(
+      this.player ? 36 : 248,
+      this.player ? 80 : 44,
+      "pb",
+      getPokeballAtlasKey(pokemon.pokeball),
+    );
     pokeball.setVisible(false);
     pokeball.setOrigin(0.5, 0.625);
     this.scene.field.add(pokeball);
@@ -107,8 +127,10 @@ export class SummonPhase extends PartyMemberPokemonPhase {
     if (this.fieldIndex === 1) {
       pokemon.setFieldPosition(FieldPosition.RIGHT, 0);
     } else {
-      const availablePartyMembers = this.getParty().filter(p => p.isAllowedInBattle()).length;
-      pokemon.setFieldPosition(!this.scene.currentBattle.double || availablePartyMembers === 1 ? FieldPosition.CENTER : FieldPosition.LEFT);
+      const availablePartyMembers = this.getParty().filter((p) => p.isAllowedInBattle()).length;
+      pokemon.setFieldPosition(
+        !this.scene.currentBattle.double || availablePartyMembers === 1 ? FieldPosition.CENTER : FieldPosition.LEFT,
+      );
     }
 
     const fpOffset = pokemon.getFieldPositionOffset();
@@ -118,7 +140,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
     this.scene.tweens.add({
       targets: pokeball,
       duration: 650,
-      x: (this.player ? 100 : 236) + fpOffset[0]
+      x: (this.player ? 100 : 236) + fpOffset[0],
     });
 
     this.scene.tweens.add({
@@ -166,11 +188,11 @@ export class SummonPhase extends PartyMemberPokemonPhase {
                 pokemon.getSprite().clearTint();
                 pokemon.resetSummonData();
                 this.scene.time.delayedCall(1000, () => this.end());
-              }
+              },
             });
-          }
+          },
         });
-      }
+      },
     });
   }
 
@@ -185,8 +207,10 @@ export class SummonPhase extends PartyMemberPokemonPhase {
     if (this.fieldIndex === 1) {
       pokemon.setFieldPosition(FieldPosition.RIGHT, 0);
     } else {
-      const availablePartyMembers = this.getParty().filter(p => !p.isFainted()).length;
-      pokemon.setFieldPosition(!this.scene.currentBattle.double || availablePartyMembers === 1 ? FieldPosition.CENTER : FieldPosition.LEFT);
+      const availablePartyMembers = this.getParty().filter((p) => !p.isFainted()).length;
+      pokemon.setFieldPosition(
+        !this.scene.currentBattle.double || availablePartyMembers === 1 ? FieldPosition.CENTER : FieldPosition.LEFT,
+      );
     }
 
     this.scene.add.existing(pokemon);
@@ -227,7 +251,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
         pokemon.resetSummonData();
         this.scene.updateFieldScale();
         this.scene.time.delayedCall(1000, () => this.end());
-      }
+      },
     });
   }
 
@@ -240,7 +264,11 @@ export class SummonPhase extends PartyMemberPokemonPhase {
 
     pokemon.resetTurnData();
 
-    if (!this.loaded || [ BattleType.TRAINER, BattleType.MYSTERY_ENCOUNTER ].includes(this.scene.currentBattle.battleType) || (this.scene.currentBattle.waveIndex % 10) === 1) {
+    if (
+      !this.loaded
+      || [BattleType.TRAINER, BattleType.MYSTERY_ENCOUNTER].includes(this.scene.currentBattle.battleType)
+      || this.scene.currentBattle.waveIndex % 10 === 1
+    ) {
       this.scene.triggerPokemonFormChange(pokemon, SpeciesFormChangeActiveTrigger, true);
       this.queuePostSummon();
     }

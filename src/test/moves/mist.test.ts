@@ -23,7 +23,7 @@ describe("Moves - Mist", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([ Moves.MIST, Moves.SPLASH ])
+      .moveset([Moves.MIST, Moves.SPLASH])
       .ability(Abilities.BALL_FETCH)
       .battleType("double")
       .disableCrits()
@@ -33,7 +33,7 @@ describe("Moves - Mist", () => {
   });
 
   it("should prevent the user's side from having stats lowered", async () => {
-    await game.classicMode.startBattle([ Species.MAGIKARP, Species.FEEBAS ]);
+    await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerField();
 
@@ -42,7 +42,7 @@ describe("Moves - Mist", () => {
 
     await game.phaseInterceptor.to("BerryPhase");
 
-    playerPokemon.forEach(p => expect(p.getStatStage(Stat.ATK)).toBe(0));
+    playerPokemon.forEach((p) => expect(p.getStatStage(Stat.ATK)).toBe(0));
   });
 
   it.todo("should be ignored by opponents with Infiltrator");

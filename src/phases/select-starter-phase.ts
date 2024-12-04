@@ -14,7 +14,6 @@ import { Species } from "#enums/species";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 
 export class SelectStarterPhase extends Phase {
-
   constructor(scene: BattleScene) {
     super(scene);
   }
@@ -52,25 +51,36 @@ export class SelectStarterPhase extends Phase {
       const starterProps = this.scene.gameData.getSpeciesDexAttrProps(starter.species, starter.dexAttr);
       let starterFormIndex = Math.min(starterProps.formIndex, Math.max(starter.species.forms.length - 1, 0));
       if (
-        starter.species.speciesId in Overrides.STARTER_FORM_OVERRIDES &&
-        starter.species.forms[Overrides.STARTER_FORM_OVERRIDES[starter.species.speciesId]!]
+        starter.species.speciesId in Overrides.STARTER_FORM_OVERRIDES
+        && starter.species.forms[Overrides.STARTER_FORM_OVERRIDES[starter.species.speciesId]!]
       ) {
         starterFormIndex = Overrides.STARTER_FORM_OVERRIDES[starter.species.speciesId]!;
       }
 
-      let starterGender = starter.species.malePercent !== null
-        ? !starterProps.female ? Gender.MALE : Gender.FEMALE
-        : Gender.GENDERLESS;
+      let starterGender =
+        starter.species.malePercent !== null ? (!starterProps.female ? Gender.MALE : Gender.FEMALE) : Gender.GENDERLESS;
       if (Overrides.GENDER_OVERRIDE !== null) {
         starterGender = Overrides.GENDER_OVERRIDE;
       }
       const starterIvs = this.scene.gameData.dexData[starter.species.speciesId].ivs.slice(0);
-      const starterPokemon = this.scene.addPlayerPokemon(starter.species, this.scene.gameMode.getStartingLevel(), starter.abilityIndex, starterFormIndex, starterGender, starterProps.shiny, starterProps.variant, starterIvs, starter.nature);
+      const starterPokemon = this.scene.addPlayerPokemon(
+        starter.species,
+        this.scene.gameMode.getStartingLevel(),
+        starter.abilityIndex,
+        starterFormIndex,
+        starterGender,
+        starterProps.shiny,
+        starterProps.variant,
+        starterIvs,
+        starter.nature,
+      );
       starter.moveset && starterPokemon.tryPopulateMoveset(starter.moveset);
       if (starter.passive) {
         starterPokemon.passive = true;
       }
-      starterPokemon.luck = this.scene.gameData.getDexAttrLuck(this.scene.gameData.dexData[starter.species.speciesId].caughtAttr);
+      starterPokemon.luck = this.scene.gameData.getDexAttrLuck(
+        this.scene.gameData.dexData[starter.species.speciesId].caughtAttr,
+      );
       if (starter.pokerus) {
         starterPokemon.pokerus = true;
       }

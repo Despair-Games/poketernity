@@ -1,6 +1,7 @@
 # 🎵 Music
 
 ## BGM
+
 - Pokémon Mystery Dungeon: Explorers of Sky
   - Arata Iiyoshi
   - Hideki Sakamoto
@@ -27,31 +28,36 @@
 - Firel (Custom Graveyard, Ice Cave, Laboratory, Metropolis, Plains, Power Plant, Seabed, Space, and Volcano biome music)
 - Lmz (Custom Ancient Ruins, Jungle, and Lake biome music)
 - Andr06 (Custom Forest, Slum and Sea biome music)
-- _tresnoir
+- \_tresnoir
 - unveiler
 
 ## Sound Effects
+
 - Pokémon Emerald
 - Pokémon Black/White
-
 
 # 🎨 Art
 
 ## Backgrounds
+
 - Squip (Paid Commissions)
 - Contributions by Someonealive-QN
 
 ## UI
+
 - GAMEFREAK
 - LJ Birdman
 
 ## Pagefault Games Intro
+
 - Spectremint
 
 ## Game Logo
+
 - Gonstar (Paid Commission)
 
 ## Trainer Sprites
+
 - GAMEFREAK (Pokémon Black/White 2, Pokémon Diamond/Pearl)
 - kyledove
 - Brumirage
@@ -61,6 +67,7 @@
 - wormhood
 
 ## Mystery Event Sprites
+
 - chrysomelinae
 - koda_want_to_sleep
 - “🐺Kieran/YJ 🐍” rival_kieran aka thedreadedden
@@ -70,9 +77,11 @@
 - otterwatch
 
 ## Trainer Portraits
+
 - pkmn_realidea (Paid Commissions)
 
 ## Pokémon Sprites and Animation
+
 In addition to the lists below, please check [the PokéRogue wiki](https://wiki.pokerogue.net/credits:credits) for a more detailed list of Pokémon Sprite credits.
 
 - GAMEFREAK (Pokémon Black/White 2)
@@ -95,12 +104,13 @@ In addition to the lists below, please check [the PokéRogue wiki](https://wiki.
 - lucasomi
 - Pkm Sinfonia
 - Poki Papillon
-- Fleimer_
+- Fleimer\_
 - bizcoeindoloro
 - mangalos810
 - selstar
 
 ### Static Sprites and Base Shiny Replacements Credits
+
 - AMVictory
 - Antiant
 - Arhops
@@ -192,6 +202,7 @@ In addition to the lists below, please check [the PokéRogue wiki](https://wiki.
 - Z-nogyroP
 
 ### Animated Sprites Credits
+
 - Antiant
 - arinoelle
 - Blaquaza
@@ -225,13 +236,14 @@ In addition to the lists below, please check [the PokéRogue wiki](https://wiki.
 - “Vari” \_vari\_
 
 ### Rare/Epic Shiny Variants Credits
+
 - “Andr06” andr06
 - “Appo” appo
 - “Ashhawk” k_redacted
-- “Auralite” _auralite
+- “Auralite” \_auralite
 - “Awesome_Soul” awesome_soul
 - “Bagon” bagonganda
-- “Bibble” nuts_.
+- “Bibble” nuts\_.
 - “BloomOfWoods” bloomofwoods
 - “Buge” buge
 - “bun” bunove
@@ -239,7 +251,7 @@ In addition to the lists below, please check [the PokéRogue wiki](https://wiki.
 - cameranian
 - “Caramel” saltedcarriemel
 - “Chocolate Niblets” choconibs
-- “CKC” ckc_
+- “CKC” ckc\_
 - “ClawsHDi” clawshdi
 - “Clown Princess” clown_princess
 - “Cmac2173” cmac2173
@@ -280,14 +292,14 @@ In addition to the lists below, please check [the PokéRogue wiki](https://wiki.
 - “MissingNo.” clickonflareblitz
 - “Momo” sphinx_sage
 - monkehestman
-- “Nexxus” nexxus_
+- “Nexxus” nexxus\_
 - “Nik :3” realniktrustme
 - “Nikolatsu”
 - “nora” ora.n
 - “NOVA” fabunova
 - officerporkchops
 - “Omniv” omniv
-- “Otterwatch” otterwatch_
+- “Otterwatch” otterwatch\_
 - “Pandoraz” pandoraz
 - “Papa Pepsm An” papapepsman
 - “Penguin” peng06
@@ -317,12 +329,13 @@ In addition to the lists below, please check [the PokéRogue wiki](https://wiki.
 - “zan” smtif
 
 ## Move Animations
-- Pokémon Reborn
 
+- Pokémon Reborn
 
 # ⚖️ Balance
 
 ## Balance Team
+
 - damocleas
 - Blitzy aka Kazapple
 - Cynthia_calliope
@@ -333,20 +346,23 @@ In addition to the lists below, please check [the PokéRogue wiki](https://wiki.
 - Starkrieg
 
 ## Past Members
+
 - Swizzo
 - Zaccie
 
 ## Past Contributors
+
 - chrysomelinae (Mystery Events)
 - AsdarDevelops (Mystery Events)
-
 
 # 💻 Development
 
 ## Server Owner/Administrator
+
 - pancakes aka patapancakes
 
 ## Senior Developers
+
 - Walker
 - NightKev
 - Moka
@@ -354,6 +370,7 @@ In addition to the lists below, please check [the PokéRogue wiki](https://wiki.
 - Madmadness65
 
 ## Developers
+
 - CodeTappert
 - flx-sta
 - innerthunder
@@ -363,16 +380,19 @@ In addition to the lists below, please check [the PokéRogue wiki](https://wiki.
 - Swain aka torranx
 
 ## Junior Developers
+
 - KimJeongSun
 - ImperialSympathizer
 
 ## Bug/Issue Managers
+
 - Snailman
 - Daleks
 - Lily
 - PigeonBar
 
 ## Past Contributors
+
 - Fontbane
 - sodaMelon
 - schmidtc1
@@ -430,51 +450,60 @@ In addition to the lists below, please check [the PokéRogue wiki](https://wiki.
 - Dakurei
 - Brain Frog
 
-
 # 🌎 Translation
 
 ## In-Game Translators
 
 ### 🇩🇪 German (de)
+
 - CodeTappert
 
 ### 🇪🇸 Spanish (es-ES)
+
 - Dan Stevenson
 - Javi
 - Lily Alterni
 - Qyxgames
 
 ### 🇫🇷 French (fr)
+
 - Lugiadrien
 
 ### 🇮🇹 Italian (it)
+
 - Nicus
 
 ### 🇯🇵 Japanese (ja)
+
 - 6mozuke9
 - Chapybara
 - PeachFresca
 
 ### 🇰🇷 Korean (ko)
+
 - Enoch
 - KimJeongSun
 - Returntoice
 - sodamelon
 
 ### 🇧🇷 Portuguese (pt-BR)
+
 - Zé Ricardo
 
 ### 🇨🇳 Chinese (zh-CN)
+
 - dddsenic
 - mercurius
 - VittorioVeneto
 - Yonmaru
 
 ### 🇹🇼 Chinese (zh-TW)
+
 - mercurius
 - Seagull
 
 ### Past contributors
+
 - Asdar (es-ES)
 - Rafa (es-ES)
 - GINK-SS (ko)
@@ -484,9 +513,11 @@ In addition to the lists below, please check [the PokéRogue wiki](https://wiki.
 ## Wiki Translators
 
 ### 🇪🇸 Spanish (es-ES)
+
 - victorcooler
 
 ### 🇫🇷 French (fr)
+
 - Evan
 - Mitsue
 - Papier
@@ -494,26 +525,32 @@ In addition to the lists below, please check [the PokéRogue wiki](https://wiki.
 - Voltarix
 
 ### 🇮🇹 Italian (it)
+
 - Purce
 - T-reds
 
 ### 🇰🇷 Korean (ko)
+
 - LeKaaN
 - Returntoice
 - sodamelon
 
 ### 🇵🇱 Polish (pl)
+
 - Talo
 
 ### 🇧🇷 Portuguese (pt-BR)
+
 - Beast
 - Sushi
 - Zé Ricardo
 
 ### 🇨🇳 Chinese (zh-CN)
+
 - jw-0-
 
 ### Past contributors
+
 - Dietaube (de)
 - Gnorpelltroll (de)
 - xRegix (de)
@@ -529,6 +566,7 @@ In addition to the lists below, please check [the PokéRogue wiki](https://wiki.
 - Yubari (zh-CN)
 
 ## 🇺🇸 English Proofreaders
+
 - Cheyu
 - Faust
 - HaywiredUp
@@ -540,15 +578,17 @@ In addition to the lists below, please check [the PokéRogue wiki](https://wiki.
 - The Programmer
 
 ### Past contributors
-- I...
 
+- I...
 
 # 📰 Wiki
 
 ## Wiki Head
+
 - H.A.R.V.
 
 ## Wiki Lead
+
 - Sangara
 - Zac
 - Smew
@@ -556,6 +596,7 @@ In addition to the lists below, please check [the PokéRogue wiki](https://wiki.
 - Hannah
 
 ## Editor
+
 - Prodigy
 - Akuma
 - Dan Gioia
@@ -567,12 +608,14 @@ In addition to the lists below, please check [the PokéRogue wiki](https://wiki.
 - Pom
 
 ## Artist
+
 - dub
 - SmashMania
 - Wren
 - Lugiadrien
 
 ## Contributor
+
 - Daleks <3
 - Inferno Vulpix
 - Embri
@@ -581,22 +624,25 @@ In addition to the lists below, please check [the PokéRogue wiki](https://wiki.
 - Scoom
 - BlueVaron
 
-
 # ☎️ Discord
 
 ## Head Moderator
+
 - leah
 
 ## Senior Moderators
+
 - Solanum Tuberosum
 - Madmadness65
 - Necrowmancer
 - lana
 
 ## Moderators
+
 - Sethcurry
 
 ## Junior Moderators
+
 - chacolah
 - ChaosGrimmon
 - Cynthia
@@ -604,10 +650,10 @@ In addition to the lists below, please check [the PokéRogue wiki](https://wiki.
 - lyn
 - Pom
 
-
 # ✨ Special Thanks
 
 ## Reddit Moderators
+
 - TheZigglez
 - Vicksin
 - Sapphire
@@ -615,6 +661,7 @@ In addition to the lists below, please check [the PokéRogue wiki](https://wiki.
 - roi
 
 ## External Tools
+
 - Ydarissep (RogueDex)
 - Admiral-Billy (Offline App - Desktop)
 - Red aka StonedModder (iOS App)

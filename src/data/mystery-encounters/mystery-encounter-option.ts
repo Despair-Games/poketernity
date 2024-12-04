@@ -3,11 +3,15 @@ import { Moves } from "#app/enums/moves";
 import Pokemon, { PlayerPokemon } from "#app/field/pokemon";
 import BattleScene from "#app/battle-scene";
 import { Type } from "#enums/type";
-import { EncounterPokemonRequirement, EncounterSceneRequirement, MoneyRequirement, TypeRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
+import {
+  EncounterPokemonRequirement,
+  EncounterSceneRequirement,
+  MoneyRequirement,
+  TypeRequirement,
+} from "#app/data/mystery-encounters/mystery-encounter-requirements";
 import { CanLearnMoveRequirement, CanLearnMoveRequirementOptions } from "./requirements/can-learn-move-requirement";
 import { isNullOrUndefined, randSeedInt } from "#app/utils";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-
 
 export type OptionPhaseCallback = (scene: BattleScene) => Promise<void | boolean>;
 
@@ -69,7 +73,11 @@ export default class MysteryEncounterOption implements IMysteryEncounterOption {
    * Returns true if option contains any {@linkcode EncounterRequirement}s, false otherwise.
    */
   hasRequirements(): boolean {
-    return this.requirements.length > 0 || this.primaryPokemonRequirements.length > 0 || this.secondaryPokemonRequirements.length > 0;
+    return (
+      this.requirements.length > 0
+      || this.primaryPokemonRequirements.length > 0
+      || this.secondaryPokemonRequirements.length > 0
+    );
   }
 
   /**
@@ -77,9 +85,11 @@ export default class MysteryEncounterOption implements IMysteryEncounterOption {
    * @param scene
    */
   meetsRequirements(scene: BattleScene): boolean {
-    return !this.requirements.some(requirement => !requirement.meetsRequirement(scene))
+    return (
+      !this.requirements.some((requirement) => !requirement.meetsRequirement(scene))
       && this.meetsSupportingRequirementAndSupportingPokemonSelected(scene)
-      && this.meetsPrimaryRequirementAndPrimaryPokemonSelected(scene);
+      && this.meetsPrimaryRequirementAndPrimaryPokemonSelected(scene)
+    );
   }
 
   /**
@@ -88,7 +98,13 @@ export default class MysteryEncounterOption implements IMysteryEncounterOption {
    * @param pokemon
    */
   pokemonMeetsPrimaryRequirements(scene: BattleScene, pokemon: Pokemon): boolean {
-    return !this.primaryPokemonRequirements.some(req => !req.queryParty(scene.getPlayerParty()).map(p => p.id).includes(pokemon.id));
+    return !this.primaryPokemonRequirements.some(
+      (req) =>
+        !req
+          .queryParty(scene.getPlayerParty())
+          .map((p) => p.id)
+          .includes(pokemon.id),
+    );
   }
 
   /**
@@ -106,7 +122,7 @@ export default class MysteryEncounterOption implements IMysteryEncounterOption {
     for (const req of this.primaryPokemonRequirements) {
       if (req.meetsRequirement(scene)) {
         const queryParty = req.queryParty(scene.getPlayerParty());
-        qualified = qualified.filter(pkmn => queryParty.includes(pkmn));
+        qualified = qualified.filter((pkmn) => queryParty.includes(pkmn));
       } else {
         this.primaryPokemon = undefined;
         return false;
@@ -126,7 +142,6 @@ export default class MysteryEncounterOption implements IMysteryEncounterOption {
         } else {
           overlap.push(qp);
         }
-
       }
       if (truePrimaryPool.length > 0) {
         // always choose from the non-overlapping pokemon first
@@ -134,12 +149,14 @@ export default class MysteryEncounterOption implements IMysteryEncounterOption {
         return true;
       } else {
         // if there are multiple overlapping pokemon, we're okay - just choose one and take it out of the supporting pokemon pool
-        if (overlap.length > 1 || (this.secondaryPokemon.length - overlap.length >= 1)) {
+        if (overlap.length > 1 || this.secondaryPokemon.length - overlap.length >= 1) {
           this.primaryPokemon = overlap[randSeedInt(overlap.length)];
           this.secondaryPokemon = this.secondaryPokemon.filter((supp) => supp !== this.primaryPokemon);
           return true;
         }
-        console.log("Mystery Encounter Edge Case: Requirement not met due to primay pokemon overlapping with support pokemon. There's no valid primary pokemon left.");
+        console.log(
+          "Mystery Encounter Edge Case: Requirement not met due to primay pokemon overlapping with support pokemon. There's no valid primary pokemon left.",
+        );
         return false;
       }
     } else {
@@ -166,7 +183,7 @@ export default class MysteryEncounterOption implements IMysteryEncounterOption {
     for (const req of this.secondaryPokemonRequirements) {
       if (req.meetsRequirement(scene)) {
         const queryParty = req.queryParty(scene.getPlayerParty());
-        qualified = qualified.filter(pkmn => queryParty.includes(pkmn));
+        qualified = qualified.filter((pkmn) => queryParty.includes(pkmn));
       } else {
         this.secondaryPokemon = [];
         return false;
@@ -187,7 +204,9 @@ export class MysteryEncounterOptionBuilder implements Partial<IMysteryEncounterO
   hasDexProgress: boolean = false;
   dialogue?: OptionTextDisplay;
 
-  static newOptionWithMode(optionMode: MysteryEncounterOptionMode): MysteryEncounterOptionBuilder & Pick<IMysteryEncounterOption, "optionMode"> {
+  static newOptionWithMode(
+    optionMode: MysteryEncounterOptionMode,
+  ): MysteryEncounterOptionBuilder & Pick<IMysteryEncounterOption, "optionMode"> {
     return Object.assign(new MysteryEncounterOptionBuilder(), { optionMode });
   }
 
@@ -199,7 +218,9 @@ export class MysteryEncounterOptionBuilder implements Partial<IMysteryEncounterO
    * Adds a {@linkcode EncounterSceneRequirement} to {@linkcode requirements}
    * @param requirement
    */
-  withSceneRequirement(requirement: EncounterSceneRequirement): this & Required<Pick<IMysteryEncounterOption, "requirements">> {
+  withSceneRequirement(
+    requirement: EncounterSceneRequirement,
+  ): this & Required<Pick<IMysteryEncounterOption, "requirements">> {
     if (requirement instanceof EncounterPokemonRequirement) {
       Error("Incorrectly added pokemon requirement as scene requirement.");
     }
@@ -218,7 +239,9 @@ export class MysteryEncounterOptionBuilder implements Partial<IMysteryEncounterO
    * If there are scenarios where the Encounter should NOT continue, should return boolean instead of void.
    * @param onPreOptionPhase
    */
-  withPreOptionPhase(onPreOptionPhase: OptionPhaseCallback): this & Required<Pick<IMysteryEncounterOption, "onPreOptionPhase">> {
+  withPreOptionPhase(
+    onPreOptionPhase: OptionPhaseCallback,
+  ): this & Required<Pick<IMysteryEncounterOption, "onPreOptionPhase">> {
     return Object.assign(this, { onPreOptionPhase: onPreOptionPhase });
   }
 
@@ -230,7 +253,9 @@ export class MysteryEncounterOptionBuilder implements Partial<IMysteryEncounterO
     return Object.assign(this, { onOptionPhase: onOptionPhase });
   }
 
-  withPostOptionPhase(onPostOptionPhase: OptionPhaseCallback): this & Required<Pick<IMysteryEncounterOption, "onPostOptionPhase">> {
+  withPostOptionPhase(
+    onPostOptionPhase: OptionPhaseCallback,
+  ): this & Required<Pick<IMysteryEncounterOption, "onPostOptionPhase">> {
     return Object.assign(this, { onPostOptionPhase: onPostOptionPhase });
   }
 
@@ -238,7 +263,9 @@ export class MysteryEncounterOptionBuilder implements Partial<IMysteryEncounterO
    * Adds a {@linkcode EncounterPokemonRequirement} to {@linkcode primaryPokemonRequirements}
    * @param requirement
    */
-  withPrimaryPokemonRequirement(requirement: EncounterPokemonRequirement): this & Required<Pick<IMysteryEncounterOption, "primaryPokemonRequirements">> {
+  withPrimaryPokemonRequirement(
+    requirement: EncounterPokemonRequirement,
+  ): this & Required<Pick<IMysteryEncounterOption, "primaryPokemonRequirements">> {
     if (requirement instanceof EncounterSceneRequirement) {
       Error("Incorrectly added scene requirement as pokemon requirement.");
     }
@@ -256,8 +283,15 @@ export class MysteryEncounterOptionBuilder implements Partial<IMysteryEncounterO
    * @param invertQuery
    * @returns
    */
-  withPokemonTypeRequirement(type: Type | Type[], excludeFainted?: boolean, minNumberOfPokemon?: number, invertQuery?: boolean) {
-    return this.withPrimaryPokemonRequirement(new TypeRequirement(type, excludeFainted, minNumberOfPokemon, invertQuery));
+  withPokemonTypeRequirement(
+    type: Type | Type[],
+    excludeFainted?: boolean,
+    minNumberOfPokemon?: number,
+    invertQuery?: boolean,
+  ) {
+    return this.withPrimaryPokemonRequirement(
+      new TypeRequirement(type, excludeFainted, minNumberOfPokemon, invertQuery),
+    );
   }
 
   /**
@@ -276,7 +310,10 @@ export class MysteryEncounterOptionBuilder implements Partial<IMysteryEncounterO
    * @param requirement
    * @param excludePrimaryFromSecondaryRequirements
    */
-  withSecondaryPokemonRequirement(requirement: EncounterPokemonRequirement, excludePrimaryFromSecondaryRequirements: boolean = true): this & Required<Pick<IMysteryEncounterOption, "secondaryPokemonRequirements">> {
+  withSecondaryPokemonRequirement(
+    requirement: EncounterPokemonRequirement,
+    excludePrimaryFromSecondaryRequirements: boolean = true,
+  ): this & Required<Pick<IMysteryEncounterOption, "secondaryPokemonRequirements">> {
     if (requirement instanceof EncounterSceneRequirement) {
       Error("Incorrectly added scene requirement as pokemon requirement.");
     }
