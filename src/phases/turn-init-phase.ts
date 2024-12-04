@@ -1,6 +1,9 @@
 import { BattlerIndex } from "#app/battle";
 import BattleScene from "#app/battle-scene";
-import { handleMysteryEncounterBattleStartEffects, handleMysteryEncounterTurnStartEffects } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import {
+  handleMysteryEncounterBattleStartEffects,
+  handleMysteryEncounterTurnStartEffects,
+} from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { TurnInitEvent } from "#app/events/battle-scene";
 import { PlayerPokemon } from "#app/field/pokemon";
 import i18next from "i18next";
@@ -19,10 +22,10 @@ export class TurnInitPhase extends FieldPhase {
   start() {
     super.start();
 
-    this.scene.getPlayerField().forEach(p => {
+    this.scene.getPlayerField().forEach((p) => {
       // If this pokemon is in play and evolved into something illegal under the current challenge, force a switch
       if (p.isOnField() && !p.isAllowedInBattle()) {
-        this.scene.queueMessage(i18next.t("challenges:illegalEvolution", { "pokemon": p.name }), null, true);
+        this.scene.queueMessage(i18next.t("challenges:illegalEvolution", { pokemon: p.name }), null, true);
 
         const allowedPokemon = this.scene.getPokemonAllowedInBattle();
 
@@ -30,7 +33,10 @@ export class TurnInitPhase extends FieldPhase {
           // If there are no longer any legal pokemon in the party, game over.
           this.scene.clearPhaseQueue();
           this.scene.unshiftPhase(new GameOverPhase(this.scene));
-        } else if (allowedPokemon.length >= this.scene.currentBattle.getBattlerCount() || (this.scene.currentBattle.double && !allowedPokemon[0].isActive(true))) {
+        } else if (
+          allowedPokemon.length >= this.scene.currentBattle.getBattlerCount() ||
+          (this.scene.currentBattle.double && !allowedPokemon[0].isActive(true))
+        ) {
           // If there is at least one pokemon in the back that is legal to switch in, force a switch.
           p.switchOut();
         } else {
@@ -63,7 +69,11 @@ export class TurnInitPhase extends FieldPhase {
 
         pokemon.resetTurnData();
 
-        this.scene.pushPhase(pokemon.isPlayer() ? new CommandPhase(this.scene, i) : new EnemyCommandPhase(this.scene, i - BattlerIndex.ENEMY));
+        this.scene.pushPhase(
+          pokemon.isPlayer()
+            ? new CommandPhase(this.scene, i)
+            : new EnemyCommandPhase(this.scene, i - BattlerIndex.ENEMY),
+        );
       }
     });
 

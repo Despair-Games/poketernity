@@ -253,5 +253,5 @@ export enum TrainerType {
   RIVAL_3,
   RIVAL_4,
   RIVAL_5,
-  RIVAL_6
+  RIVAL_6,
 }

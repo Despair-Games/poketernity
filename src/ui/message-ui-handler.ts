@@ -34,15 +34,37 @@ export default abstract class MessageUiHandler extends AwaitableUiHandler {
     }
   }
 
-  showText(text: string, delay?: integer | null, callback?: Function | null, callbackDelay?: integer | null, prompt?: boolean | null, promptDelay?: integer | null) {
+  showText(
+    text: string,
+    delay?: integer | null,
+    callback?: Function | null,
+    callbackDelay?: integer | null,
+    prompt?: boolean | null,
+    promptDelay?: integer | null,
+  ) {
     this.showTextInternal(text, delay, callback, callbackDelay, prompt, promptDelay);
   }
 
-  showDialogue(text: string, name?: string, delay?: integer | null, callback?: Function | null, callbackDelay?: integer | null, prompt?: boolean | null, promptDelay?: integer | null) {
+  showDialogue(
+    text: string,
+    name?: string,
+    delay?: integer | null,
+    callback?: Function | null,
+    callbackDelay?: integer | null,
+    prompt?: boolean | null,
+    promptDelay?: integer | null,
+  ) {
     this.showTextInternal(text, delay, callback, callbackDelay, prompt, promptDelay);
   }
 
-  private showTextInternal(text: string, delay?: integer | null, callback?: Function | null, callbackDelay?: integer | null, prompt?: boolean | null, promptDelay?: integer | null) {
+  private showTextInternal(
+    text: string,
+    delay?: integer | null,
+    callback?: Function | null,
+    callbackDelay?: integer | null,
+    prompt?: boolean | null,
+    promptDelay?: integer | null,
+  ) {
     if (delay === null || delay === undefined) {
       delay = 20;
     }
@@ -122,7 +144,7 @@ export default abstract class MessageUiHandler extends AwaitableUiHandler {
       this.textTimer = this.scene.time.addEvent({
         delay: delay,
         callback: () => {
-          const charIndex = text.length - (this.textTimer?.repeatCount!); // TODO: is this bang correct?
+          const charIndex = text.length - this.textTimer?.repeatCount!; // TODO: is this bang correct?
           const charVar = charVarMap.get(charIndex);
           const charSound = soundMap.get(charIndex);
           const charDelay = delayMap.get(charIndex);
@@ -156,7 +178,7 @@ export default abstract class MessageUiHandler extends AwaitableUiHandler {
               onComplete: () => {
                 this.textTimer!.paused = false; // TODO: is the bang correct?
                 advance();
-              }
+              },
             });
           } else if (charFade) {
             this.textTimer!.paused = true;
@@ -175,7 +197,7 @@ export default abstract class MessageUiHandler extends AwaitableUiHandler {
             advance();
           }
         },
-        repeat: text.length
+        repeat: text.length,
       });
     } else {
       this.message.setText(text);

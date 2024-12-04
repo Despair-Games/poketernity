@@ -85,7 +85,7 @@ export default class MockText implements MockGameObject {
     callback?: Function | null,
     callbackDelay?: integer | null,
     prompt?: boolean | null,
-    promptDelay?: integer | null
+    promptDelay?: integer | null,
   ) {
     this.scene.messageWrapper.showText(text, delay, callback, callbackDelay, prompt, promptDelay);
     if (callback) {
@@ -93,7 +93,14 @@ export default class MockText implements MockGameObject {
     }
   }
 
-  showDialogue(keyOrText: string, name: string | undefined, delay: integer | null = 0, callback: Function, callbackDelay?: integer, promptDelay?: integer) {
+  showDialogue(
+    keyOrText: string,
+    name: string | undefined,
+    delay: integer | null = 0,
+    callback: Function,
+    callbackDelay?: integer,
+    promptDelay?: integer,
+  ) {
     this.scene.messageWrapper.showDialogue(keyOrText, name, delay, callback, callbackDelay, promptDelay);
     if (callback) {
       callback();

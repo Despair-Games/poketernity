@@ -93,19 +93,33 @@ export function getCriticalCaptureChance(scene: BattleScene, modifiedCatchRate: 
   if (scene.gameMode.isFreshStartChallenge()) {
     return 0;
   }
-  const dexCount = scene.gameData.getSpeciesCount(d => !!d.caughtAttr);
+  const dexCount = scene.gameData.getSpeciesCount((d) => !!d.caughtAttr);
   const catchingCharmMultiplier = new NumberHolder(1);
-  scene.findModifier(m => m instanceof CriticalCatchChanceBoosterModifier)?.apply(catchingCharmMultiplier);
-  const dexMultiplier = scene.gameMode.isDaily || dexCount > 800 ? 2.5
-    : dexCount > 600 ? 2
-      : dexCount > 400 ? 1.5
-        : dexCount > 200 ? 1
-          : dexCount > 100 ? 0.5
-            : 0;
-  return Math.floor(catchingCharmMultiplier.value * dexMultiplier * Math.min(255, modifiedCatchRate) / 6);
+  scene.findModifier((m) => m instanceof CriticalCatchChanceBoosterModifier)?.apply(catchingCharmMultiplier);
+  const dexMultiplier =
+    scene.gameMode.isDaily || dexCount > 800
+      ? 2.5
+      : dexCount > 600
+        ? 2
+        : dexCount > 400
+          ? 1.5
+          : dexCount > 200
+            ? 1
+            : dexCount > 100
+              ? 0.5
+              : 0;
+  return Math.floor((catchingCharmMultiplier.value * dexMultiplier * Math.min(255, modifiedCatchRate)) / 6);
 }
 
-export function doPokeballBounceAnim(scene: BattleScene, pokeball: Phaser.GameObjects.Sprite, y1: number, y2: number, baseBounceDuration: number, callback: Function, isCritical: boolean = false) {
+export function doPokeballBounceAnim(
+  scene: BattleScene,
+  pokeball: Phaser.GameObjects.Sprite,
+  y1: number,
+  y2: number,
+  baseBounceDuration: number,
+  callback: Function,
+  isCritical: boolean = false,
+) {
   let bouncePower = 1;
   let bounceYOffset = y1;
   let bounceY = y2;
@@ -135,12 +149,12 @@ export function doPokeballBounceAnim(scene: BattleScene, pokeball: Phaser.GameOb
             y: bounceY,
             duration: bouncePower * baseBounceDuration,
             ease: "Cubic.easeOut",
-            onComplete: () => doBounce()
+            onComplete: () => doBounce(),
           });
         } else if (callback) {
           callback();
         }
-      }
+      },
     });
   };
 
@@ -166,12 +180,12 @@ export function doPokeballBounceAnim(scene: BattleScene, pokeball: Phaser.GameOb
                 x: x0,
                 duration: 60,
                 ease: "Linear",
-                onComplete: () => scene.time.delayedCall(500, doBounce)
+                onComplete: () => scene.time.delayedCall(500, doBounce),
               });
             }
-          }
+          },
         });
-      }
+      },
     });
   };
 

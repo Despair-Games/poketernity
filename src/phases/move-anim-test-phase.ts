@@ -29,18 +29,25 @@ export class MoveAnimTestPhase extends BattlePhase {
     }
 
     initMoveAnim(this.scene, moveId).then(() => {
-      loadMoveAnimAssets(this.scene, [ moveId ], true)
-        .then(() => {
-          const user = player ? this.scene.getPlayerPokemon()! : this.scene.getEnemyPokemon()!;
-          const target = (player !== (allMoves[moveId] instanceof SelfStatusMove)) ? this.scene.getEnemyPokemon()! : this.scene.getPlayerPokemon()!;
-          new MoveAnim(moveId, user, target.getBattlerIndex()).play(this.scene, allMoves[moveId].hitsSubstitute(user, target), () => { // TODO: are the bangs correct here?
+      loadMoveAnimAssets(this.scene, [moveId], true).then(() => {
+        const user = player ? this.scene.getPlayerPokemon()! : this.scene.getEnemyPokemon()!;
+        const target =
+          player !== allMoves[moveId] instanceof SelfStatusMove
+            ? this.scene.getEnemyPokemon()!
+            : this.scene.getPlayerPokemon()!;
+        new MoveAnim(moveId, user, target.getBattlerIndex()).play(
+          this.scene,
+          allMoves[moveId].hitsSubstitute(user, target),
+          () => {
+            // TODO: are the bangs correct here?
             if (player) {
               this.playMoveAnim(moveQueue, false);
             } else {
               this.playMoveAnim(moveQueue, true);
             }
-          });
-        });
+          },
+        );
+      });
     });
   }
 }

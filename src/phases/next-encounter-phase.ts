@@ -23,7 +23,13 @@ export class NextEncounterPhase extends EncounterPhase {
     this.scene.arenaNextEnemy.setVisible(true);
 
     const enemyField = this.scene.getEnemyField();
-    const moveTargets: any[] = [ this.scene.arenaEnemy, this.scene.arenaNextEnemy, this.scene.currentBattle.trainer, enemyField, this.scene.lastEnemyTrainer ];
+    const moveTargets: any[] = [
+      this.scene.arenaEnemy,
+      this.scene.arenaNextEnemy,
+      this.scene.currentBattle.trainer,
+      enemyField,
+      this.scene.lastEnemyTrainer,
+    ];
     const lastEncounterVisuals = this.scene.lastMysteryEncounter?.introVisuals;
     if (lastEncounterVisuals) {
       moveTargets.push(lastEncounterVisuals);
@@ -36,7 +42,7 @@ export class NextEncounterPhase extends EncounterPhase {
         this.scene.tweens.add({
           targets: nextEncounterVisuals,
           x: "-=200",
-          duration: 2000
+          duration: 2000,
         });
       } else {
         moveTargets.push(nextEncounterVisuals);
@@ -64,13 +70,12 @@ export class NextEncounterPhase extends EncounterPhase {
         if (!this.tryOverrideForBattleSpec()) {
           this.doEncounterCommon();
         }
-      }
+      },
     });
   }
 
   /**
    * Do nothing (since this is simply the next wave in the same biome).
    */
-  trySetWeatherIfNewBiome(): void {
-  }
+  trySetWeatherIfNewBiome(): void {}
 }

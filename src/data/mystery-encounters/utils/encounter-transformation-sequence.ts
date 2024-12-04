@@ -7,7 +7,7 @@ import { getTypeRgb } from "#app/data/type";
 export enum TransformationScreenPosition {
   CENTER,
   LEFT,
-  RIGHT
+  RIGHT,
 }
 
 /**
@@ -17,8 +17,13 @@ export enum TransformationScreenPosition {
  * @param transformPokemon
  * @param screenPosition
  */
-export function doPokemonTransformationSequence(scene: BattleScene, previousPokemon: PlayerPokemon, transformPokemon: PlayerPokemon, screenPosition: TransformationScreenPosition) {
-  return new Promise<void>(resolve => {
+export function doPokemonTransformationSequence(
+  scene: BattleScene,
+  previousPokemon: PlayerPokemon,
+  transformPokemon: PlayerPokemon,
+  screenPosition: TransformationScreenPosition,
+) {
+  return new Promise<void>((resolve) => {
     const transformationContainer = scene.fieldUI.getByName("Dream Background") as Phaser.GameObjects.Container;
     const transformationBaseBg = scene.add.image(0, 0, "default_bg");
     transformationBaseBg.setOrigin(0, 0);
@@ -30,14 +35,23 @@ export function doPokemonTransformationSequence(scene: BattleScene, previousPoke
     let pokemonEvoSprite: Phaser.GameObjects.Sprite;
     let pokemonEvoTintSprite: Phaser.GameObjects.Sprite;
 
-    const xOffset = screenPosition === TransformationScreenPosition.CENTER ? 0 :
-      screenPosition === TransformationScreenPosition.RIGHT ? 100 : -100;
+    const xOffset =
+      screenPosition === TransformationScreenPosition.CENTER
+        ? 0
+        : screenPosition === TransformationScreenPosition.RIGHT
+          ? 100
+          : -100;
     // Centered transformations occur at a lower y Position
     const yOffset = screenPosition !== TransformationScreenPosition.CENTER ? -15 : 0;
 
     const getPokemonSprite = () => {
-      const ret = scene.addPokemonSprite(previousPokemon, transformationBaseBg.displayWidth / 2 + xOffset, transformationBaseBg.displayHeight / 2 + yOffset, "pkmn__sub");
-      ret.setPipeline(scene.spritePipeline, { tone: [ 0.0, 0.0, 0.0, 0.0 ], ignoreTimeTint: true });
+      const ret = scene.addPokemonSprite(
+        previousPokemon,
+        transformationBaseBg.displayWidth / 2 + xOffset,
+        transformationBaseBg.displayHeight / 2 + yOffset,
+        "pkmn__sub",
+      );
+      ret.setPipeline(scene.spritePipeline, { tone: [0.0, 0.0, 0.0, 0.0], ignoreTimeTint: true });
       return ret;
     };
 
@@ -48,12 +62,12 @@ export function doPokemonTransformationSequence(scene: BattleScene, previousPoke
 
     pokemonSprite.setAlpha(0);
     pokemonTintSprite.setAlpha(0);
-    pokemonTintSprite.setTintFill(0xFFFFFF);
+    pokemonTintSprite.setTintFill(0xffffff);
     pokemonEvoSprite.setVisible(false);
     pokemonEvoTintSprite.setVisible(false);
-    pokemonEvoTintSprite.setTintFill(0xFFFFFF);
+    pokemonEvoTintSprite.setTintFill(0xffffff);
 
-    [ pokemonSprite, pokemonTintSprite, pokemonEvoSprite, pokemonEvoTintSprite ].map(sprite => {
+    [pokemonSprite, pokemonTintSprite, pokemonEvoSprite, pokemonEvoTintSprite].map((sprite) => {
       const spriteKey = previousPokemon.getSpriteKey(true);
       try {
         sprite.play(spriteKey);
@@ -61,12 +75,16 @@ export function doPokemonTransformationSequence(scene: BattleScene, previousPoke
         console.error(`Failed to play animation for ${spriteKey}`, err);
       }
 
-      sprite.setPipeline(scene.spritePipeline, { tone: [ 0.0, 0.0, 0.0, 0.0 ], hasShadow: false, teraColor: getTypeRgb(previousPokemon.getTeraType()) });
+      sprite.setPipeline(scene.spritePipeline, {
+        tone: [0.0, 0.0, 0.0, 0.0],
+        hasShadow: false,
+        teraColor: getTypeRgb(previousPokemon.getTeraType()),
+      });
       sprite.setPipelineData("ignoreTimeTint", true);
       sprite.setPipelineData("spriteKey", previousPokemon.getSpriteKey());
       sprite.setPipelineData("shiny", previousPokemon.shiny);
       sprite.setPipelineData("variant", previousPokemon.variant);
-      [ "spriteColors", "fusionSpriteColors" ].map(k => {
+      ["spriteColors", "fusionSpriteColors"].map((k) => {
         if (previousPokemon.summonData?.speciesForm) {
           k += "Base";
         }
@@ -74,7 +92,7 @@ export function doPokemonTransformationSequence(scene: BattleScene, previousPoke
       });
     });
 
-    [ pokemonEvoSprite, pokemonEvoTintSprite ].map(sprite => {
+    [pokemonEvoSprite, pokemonEvoTintSprite].map((sprite) => {
       const spriteKey = transformPokemon.getSpriteKey(true);
       try {
         sprite.play(spriteKey);
@@ -86,7 +104,7 @@ export function doPokemonTransformationSequence(scene: BattleScene, previousPoke
       sprite.setPipelineData("spriteKey", transformPokemon.getSpriteKey());
       sprite.setPipelineData("shiny", transformPokemon.shiny);
       sprite.setPipelineData("variant", transformPokemon.variant);
-      [ "spriteColors", "fusionSpriteColors" ].map(k => {
+      ["spriteColors", "fusionSpriteColors"].map((k) => {
         if (transformPokemon.summonData?.speciesForm) {
           k += "Base";
         }
@@ -105,7 +123,7 @@ export function doPokemonTransformationSequence(scene: BattleScene, previousPoke
           from: 0,
           to: 1,
           duration: 1000,
-          onUpdate: t => {
+          onUpdate: (t) => {
             pokemonTintSprite.setAlpha(t.getValue());
           },
           onComplete: () => {
@@ -139,18 +157,18 @@ export function doPokemonTransformationSequence(scene: BattleScene, previousPoke
                               previousPokemon.destroy();
                               transformPokemon.setVisible(false);
                               transformPokemon.setAlpha(1);
-                            }
+                            },
                           });
                         });
-                      }
+                      },
                     });
                   });
                 });
               });
             });
-          }
+          },
         });
-      }
+      },
     });
   });
 }
@@ -163,7 +181,13 @@ export function doPokemonTransformationSequence(scene: BattleScene, previousPoke
  * @param xOffset
  * @param yOffset
  */
-function doSpiralUpward(scene: BattleScene, transformationBaseBg: Phaser.GameObjects.Image, transformationContainer: Phaser.GameObjects.Container, xOffset: number, yOffset: number) {
+function doSpiralUpward(
+  scene: BattleScene,
+  transformationBaseBg: Phaser.GameObjects.Image,
+  transformationContainer: Phaser.GameObjects.Container,
+  xOffset: number,
+  yOffset: number,
+) {
   let f = 0;
 
   scene.tweens.addCounter({
@@ -173,12 +197,19 @@ function doSpiralUpward(scene: BattleScene, transformationBaseBg: Phaser.GameObj
       if (f < 64) {
         if (!(f & 7)) {
           for (let i = 0; i < 4; i++) {
-            doSpiralUpwardParticle(scene, (f & 120) * 2 + i * 64, transformationBaseBg, transformationContainer, xOffset, yOffset);
+            doSpiralUpwardParticle(
+              scene,
+              (f & 120) * 2 + i * 64,
+              transformationBaseBg,
+              transformationContainer,
+              xOffset,
+              yOffset,
+            );
           }
         }
         f++;
       }
-    }
+    },
   });
 }
 
@@ -190,7 +221,13 @@ function doSpiralUpward(scene: BattleScene, transformationBaseBg: Phaser.GameObj
  * @param xOffset
  * @param yOffset
  */
-function doArcDownward(scene: BattleScene, transformationBaseBg: Phaser.GameObjects.Image, transformationContainer: Phaser.GameObjects.Container, xOffset: number, yOffset: number) {
+function doArcDownward(
+  scene: BattleScene,
+  transformationBaseBg: Phaser.GameObjects.Image,
+  transformationContainer: Phaser.GameObjects.Container,
+  xOffset: number,
+  yOffset: number,
+) {
   let f = 0;
 
   scene.tweens.addCounter({
@@ -205,7 +242,7 @@ function doArcDownward(scene: BattleScene, transformationBaseBg: Phaser.GameObje
         }
         f++;
       }
-    }
+    },
   });
 }
 
@@ -217,15 +254,21 @@ function doArcDownward(scene: BattleScene, transformationBaseBg: Phaser.GameObje
  * @param pokemonTintSprite
  * @param pokemonEvoTintSprite
  */
-function doCycle(scene: BattleScene, l: number, lastCycle: number, pokemonTintSprite: Phaser.GameObjects.Sprite, pokemonEvoTintSprite: Phaser.GameObjects.Sprite): Promise<boolean> {
-  return new Promise(resolve => {
+function doCycle(
+  scene: BattleScene,
+  l: number,
+  lastCycle: number,
+  pokemonTintSprite: Phaser.GameObjects.Sprite,
+  pokemonEvoTintSprite: Phaser.GameObjects.Sprite,
+): Promise<boolean> {
+  return new Promise((resolve) => {
     const isLastCycle = l === lastCycle;
     scene.tweens.add({
       targets: pokemonTintSprite,
       scale: 0.25,
       ease: "Cubic.easeInOut",
       duration: 500 / l,
-      yoyo: !isLastCycle
+      yoyo: !isLastCycle,
     });
     scene.tweens.add({
       targets: pokemonEvoTintSprite,
@@ -235,12 +278,14 @@ function doCycle(scene: BattleScene, l: number, lastCycle: number, pokemonTintSp
       yoyo: !isLastCycle,
       onComplete: () => {
         if (l < lastCycle) {
-          doCycle(scene, l + 0.5, lastCycle, pokemonTintSprite, pokemonEvoTintSprite).then(success => resolve(success));
+          doCycle(scene, l + 0.5, lastCycle, pokemonTintSprite, pokemonEvoTintSprite).then((success) =>
+            resolve(success),
+          );
         } else {
           pokemonTintSprite.setVisible(false);
           resolve(true);
         }
-      }
+      },
     });
   });
 }
@@ -253,7 +298,13 @@ function doCycle(scene: BattleScene, l: number, lastCycle: number, pokemonTintSp
  * @param xOffset
  * @param yOffset
  */
-function doCircleInward(scene: BattleScene, transformationBaseBg: Phaser.GameObjects.Image, transformationContainer: Phaser.GameObjects.Container, xOffset: number, yOffset: number) {
+function doCircleInward(
+  scene: BattleScene,
+  transformationBaseBg: Phaser.GameObjects.Image,
+  transformationContainer: Phaser.GameObjects.Container,
+  xOffset: number,
+  yOffset: number,
+) {
   let f = 0;
 
   scene.tweens.addCounter({
@@ -270,7 +321,7 @@ function doCircleInward(scene: BattleScene, transformationBaseBg: Phaser.GameObj
         }
       }
       f++;
-    }
+    },
   });
 }
 
@@ -283,7 +334,14 @@ function doCircleInward(scene: BattleScene, transformationBaseBg: Phaser.GameObj
  * @param xOffset
  * @param yOffset
  */
-function doSpiralUpwardParticle(scene: BattleScene, trigIndex: number, transformationBaseBg: Phaser.GameObjects.Image, transformationContainer: Phaser.GameObjects.Container, xOffset: number, yOffset: number) {
+function doSpiralUpwardParticle(
+  scene: BattleScene,
+  trigIndex: number,
+  transformationBaseBg: Phaser.GameObjects.Image,
+  transformationContainer: Phaser.GameObjects.Container,
+  xOffset: number,
+  yOffset: number,
+) {
   const initialX = transformationBaseBg.displayWidth / 2 + xOffset;
   const particle = scene.add.image(initialX, 0, "evo_sparkle");
   transformationContainer.add(particle);
@@ -296,7 +354,7 @@ function doSpiralUpwardParticle(scene: BattleScene, trigIndex: number, transform
     duration: getFrameMs(1),
     onRepeat: () => {
       updateParticle();
-    }
+    },
   });
 
   const updateParticle = () => {
@@ -304,7 +362,7 @@ function doSpiralUpwardParticle(scene: BattleScene, trigIndex: number, transform
       particle.setPosition(initialX, 88 - (f * f) / 80 + yOffset);
       particle.y += sin(trigIndex, amp) / 4;
       particle.x += cos(trigIndex, amp);
-      particle.setScale(1 - (f / 80));
+      particle.setScale(1 - f / 80);
       trigIndex += 4;
       if (f & 1) {
         amp--;
@@ -328,7 +386,14 @@ function doSpiralUpwardParticle(scene: BattleScene, trigIndex: number, transform
  * @param xOffset
  * @param yOffset
  */
-function doArcDownParticle(scene: BattleScene, trigIndex: number, transformationBaseBg: Phaser.GameObjects.Image, transformationContainer: Phaser.GameObjects.Container, xOffset: number, yOffset: number) {
+function doArcDownParticle(
+  scene: BattleScene,
+  trigIndex: number,
+  transformationBaseBg: Phaser.GameObjects.Image,
+  transformationContainer: Phaser.GameObjects.Container,
+  xOffset: number,
+  yOffset: number,
+) {
   const initialX = transformationBaseBg.displayWidth / 2 + xOffset;
   const particle = scene.add.image(initialX, 0, "evo_sparkle");
   particle.setScale(0.5);
@@ -342,7 +407,7 @@ function doArcDownParticle(scene: BattleScene, trigIndex: number, transformation
     duration: getFrameMs(1),
     onRepeat: () => {
       updateParticle();
-    }
+    },
   });
 
   const updateParticle = () => {
@@ -371,7 +436,15 @@ function doArcDownParticle(scene: BattleScene, trigIndex: number, transformation
  * @param xOffset
  * @param yOffset
  */
-function doCircleInwardParticle(scene: BattleScene, trigIndex: number, speed: number, transformationBaseBg: Phaser.GameObjects.Image, transformationContainer: Phaser.GameObjects.Container, xOffset: number, yOffset: number) {
+function doCircleInwardParticle(
+  scene: BattleScene,
+  trigIndex: number,
+  speed: number,
+  transformationBaseBg: Phaser.GameObjects.Image,
+  transformationContainer: Phaser.GameObjects.Container,
+  xOffset: number,
+  yOffset: number,
+) {
   const initialX = transformationBaseBg.displayWidth / 2 + xOffset;
   const initialY = transformationBaseBg.displayHeight / 2 + yOffset;
   const particle = scene.add.image(initialX, initialY, "evo_sparkle");
@@ -384,7 +457,7 @@ function doCircleInwardParticle(scene: BattleScene, trigIndex: number, speed: nu
     duration: getFrameMs(1),
     onRepeat: () => {
       updateParticle();
-    }
+    },
   });
 
   const updateParticle = () => {

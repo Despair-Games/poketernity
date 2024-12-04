@@ -65,7 +65,8 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
     this.externalPartyContainer = this.scene.add.container(0, 0);
     this.externalPartyContainer.setInteractive(
       new Phaser.Geom.Rectangle(0, 0, this.scene.game.canvas.width / 12, this.scene.game.canvas.height / 12),
-      Phaser.Geom.Rectangle.Contains
+
+      Phaser.Geom.Rectangle.Contains,
     );
     this.externalPartyTitle = addTextObject(this.scene, 0, 4, "", TextStyle.SETTINGS_LABEL);
     this.externalPartyTitle.setOrigin(0.5, 0);
@@ -93,11 +94,11 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
   }
 
   override getMargin(_config?: ModalConfig): [number, number, number, number] {
-    return [ 0, 0, 48, 0 ];
+    return [0, 0, 48, 0];
   }
 
   override getButtonLabels(_config?: ModalConfig): string[] {
-    return [ i18next.t("menu:login"), i18next.t("menu:register") ];
+    return [i18next.t("menu:login"), i18next.t("menu:register")];
   }
 
   override getReadableErrorMessage(error: string): string {
@@ -139,7 +140,7 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
         // Prevent overlapping overrides on action modification
         this.submitAction = originalLoginAction;
         this.sanitizeInputs();
-        this.scene.ui.setMode(Mode.LOADING, { buttonActions: []});
+        this.scene.ui.setMode(Mode.LOADING, { buttonActions: [] });
         const onFail = (error) => {
           this.scene.ui.setMode(Mode.LOGIN_FORM, Object.assign(config, { errorMessage: error?.trim() }));
           this.scene.ui.playError();
@@ -148,7 +149,7 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
           return onFail(i18next.t("menu:emptyUsername"));
         }
 
-        const [ usernameInput, passwordInput ] = this.inputs;
+        const [usernameInput, passwordInput] = this.inputs;
 
         api.account.login({ username: usernameInput.text, password: passwordInput.text }).then((error) => {
           if (!error) {
@@ -171,8 +172,8 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
     this.infoContainer.setVisible(false);
     this.setMouseCursorStyle("default"); //reset cursor
 
-    [ this.discordImage, this.googleImage, this.usernameInfoImage, this.saveDownloadImage ].forEach((img) =>
-      img.off("pointerdown")
+    [this.discordImage, this.googleImage, this.usernameInfoImage, this.saveDownloadImage].forEach((img) =>
+      img.off("pointerdown"),
     );
   }
 
@@ -208,7 +209,7 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
     });
 
     const onFail = (error) => {
-      this.scene.ui.setMode(Mode.LOADING, { buttonActions: []});
+      this.scene.ui.setMode(Mode.LOADING, { buttonActions: [] });
       this.scene.ui.setModeForceTransition(Mode.LOGIN_FORM, Object.assign(config, { errorMessage: error?.trim() }));
       this.scene.ui.playError();
     };
@@ -235,7 +236,8 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
         });
         this.infoContainer.setInteractive(
           new Phaser.Geom.Rectangle(0, 0, this.scene.game.canvas.width, this.scene.game.canvas.height),
-          Phaser.Geom.Rectangle.Contains
+
+          Phaser.Geom.Rectangle.Contains,
         );
       } else {
         if (dataKeys.length > 2) {
@@ -294,7 +296,7 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
   }
 
   private buildInteractableImage(texture: string, name: string, opts: BuildInteractableImageOpts = {}) {
-    const { scale = 0.07, x = 0, y = 0, origin = { x: 0, y: 0 }} = opts;
+    const { scale = 0.07, x = 0, y = 0, origin = { x: 0, y: 0 } } = opts;
     const img = this.scene.add.image(x, y, texture);
     img.setName(name);
     img.setOrigin(origin.x, origin.y);

@@ -31,7 +31,7 @@ export class ReloadHelper extends GameManagerHelper {
    * beginning of the first turn (equivalent to running `startBattle()`) for
    * the reloaded session.
    */
-  async reloadSession() : Promise<void> {
+  async reloadSession(): Promise<void> {
     const scene = this.game.scene;
     const titlePhase = new TitlePhase(scene);
 
@@ -41,7 +41,7 @@ export class ReloadHelper extends GameManagerHelper {
     vi.spyOn(scene.gameData, "getSession").mockReturnValue(
       new Promise((resolve, reject) => {
         resolve(this.sessionData);
-      })
+      }),
     );
     scene.unshiftPhase(titlePhase);
     this.game.endPhase(); // End the currently ongoing battle
@@ -51,15 +51,25 @@ export class ReloadHelper extends GameManagerHelper {
 
     // Run through prompts for switching Pokemon, copied from classicModeHelper.ts
     if (this.game.scene.battleStyle === BattleStyle.SWITCH) {
-      this.game.onNextPrompt("CheckSwitchPhase", Mode.CONFIRM, () => {
-        this.game.setMode(Mode.MESSAGE);
-        this.game.endPhase();
-      }, () => this.game.isCurrentPhase(CommandPhase) || this.game.isCurrentPhase(TurnInitPhase));
+      this.game.onNextPrompt(
+        "CheckSwitchPhase",
+        Mode.CONFIRM,
+        () => {
+          this.game.setMode(Mode.MESSAGE);
+          this.game.endPhase();
+        },
+        () => this.game.isCurrentPhase(CommandPhase) || this.game.isCurrentPhase(TurnInitPhase),
+      );
 
-      this.game.onNextPrompt("CheckSwitchPhase", Mode.CONFIRM, () => {
-        this.game.setMode(Mode.MESSAGE);
-        this.game.endPhase();
-      }, () => this.game.isCurrentPhase(CommandPhase) || this.game.isCurrentPhase(TurnInitPhase));
+      this.game.onNextPrompt(
+        "CheckSwitchPhase",
+        Mode.CONFIRM,
+        () => {
+          this.game.setMode(Mode.MESSAGE);
+          this.game.endPhase();
+        },
+        () => this.game.isCurrentPhase(CommandPhase) || this.game.isCurrentPhase(TurnInitPhase),
+      );
     }
 
     await this.game.phaseInterceptor.to(CommandPhase);

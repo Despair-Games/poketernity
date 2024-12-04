@@ -38,18 +38,28 @@ export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
       this.scene.ui.showText(
         i18next.t("battle:levelUp", { pokemonName: getPokemonNameWithAffix(this.pokemon), level: this.level }),
         null,
-        () => this.scene.ui.getMessageHandler().promptLevelUpStats(this.partyMemberIndex, prevStats, false)
-          .then(() => this.end()), null, true);
+        () =>
+          this.scene.ui
+            .getMessageHandler()
+            .promptLevelUpStats(this.partyMemberIndex, prevStats, false)
+            .then(() => this.end()),
+        null,
+        true,
+      );
     } else if (this.scene.expParty === ExpNotification.SKIP) {
       this.end();
     } else {
       // we still want to display the stats if activated
-      this.scene.ui.getMessageHandler().promptLevelUpStats(this.partyMemberIndex, prevStats, false).then(() => this.end());
+      this.scene.ui
+        .getMessageHandler()
+        .promptLevelUpStats(this.partyMemberIndex, prevStats, false)
+        .then(() => this.end());
     }
   }
 
   public override end() {
-    if (this.lastLevel < 100) { // this feels like an unnecessary optimization
+    if (this.lastLevel < 100) {
+      // this feels like an unnecessary optimization
       const levelMoves = this.getPokemon().getLevelMoves(this.lastLevel + 1);
       for (const lm of levelMoves) {
         this.scene.unshiftPhase(new LearnMovePhase(this.scene, this.partyMemberIndex, lm[1]));

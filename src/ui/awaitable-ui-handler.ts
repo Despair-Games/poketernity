@@ -32,7 +32,14 @@ export default abstract class AwaitableUiHandler extends UiHandler {
    */
   initTutorialOverlay(container: Phaser.GameObjects.Container) {
     if (!this.tutorialOverlay) {
-      this.tutorialOverlay = new Phaser.GameObjects.Rectangle(this.scene, -1, -1, this.scene.scaledCanvas.width, this.scene.scaledCanvas.height, 0x070707);
+      this.tutorialOverlay = new Phaser.GameObjects.Rectangle(
+        this.scene,
+        -1,
+        -1,
+        this.scene.scaledCanvas.width,
+        this.scene.scaledCanvas.height,
+        0x070707,
+      );
       this.tutorialOverlay.setName("tutorial-overlay");
       this.tutorialOverlay.setOrigin(0, 0);
       this.tutorialOverlay.setAlpha(0);
