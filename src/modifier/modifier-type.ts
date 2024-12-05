@@ -13,7 +13,8 @@ import {
 } from "#app/data/pokemon-forms";
 import { getStatusEffectDescriptor } from "#app/data/status-effect";
 import { Type } from "#enums/type";
-import Pokemon, { EnemyPokemon, PlayerPokemon, PokemonMove } from "#app/field/pokemon";
+import type { EnemyPokemon, PlayerPokemon, PokemonMove } from "#app/field/pokemon";
+import type Pokemon from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import {
   AddPokeballModifier,
@@ -101,7 +102,8 @@ import { ModifierTier } from "#app/modifier/modifier-tier";
 import Overrides from "#app/overrides";
 import { Unlockables } from "#app/system/unlockables";
 import { getVoucherTypeIcon, getVoucherTypeName, VoucherType } from "#app/system/voucher";
-import PartyUiHandler, { PokemonMoveSelectFilter, PokemonSelectFilter } from "#app/ui/party-ui-handler";
+import type { PokemonMoveSelectFilter, PokemonSelectFilter } from "#app/ui/party-ui-handler";
+import PartyUiHandler from "#app/ui/party-ui-handler";
 import { getModifierTierTextTint } from "#app/ui/text";
 import {
   formatMoney,
@@ -121,7 +123,8 @@ import { Nature } from "#enums/nature";
 import { PokeballType } from "#enums/pokeball";
 import { Species } from "#enums/species";
 import { SpeciesFormKey } from "#enums/species-form-key";
-import { getStatKey, PermanentStat, Stat, TEMP_BATTLE_STATS, TempBattleStat } from "#enums/stat";
+import type { PermanentStat, TempBattleStat } from "#enums/stat";
+import { getStatKey, Stat, TEMP_BATTLE_STATS } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
 
@@ -780,7 +783,8 @@ enum AttackTypeBoosterItem {
 
 export class AttackTypeBoosterModifierType
   extends PokemonHeldItemModifierType
-  implements GeneratedPersistentModifierType {
+  implements GeneratedPersistentModifierType
+{
   public moveType: Type;
   public boostPercent: integer;
 
@@ -820,7 +824,8 @@ export type SpeciesStatBoosterItem = keyof typeof SpeciesStatBoosterModifierType
  */
 export class SpeciesStatBoosterModifierType
   extends PokemonHeldItemModifierType
-  implements GeneratedPersistentModifierType {
+  implements GeneratedPersistentModifierType
+{
   private key: SpeciesStatBoosterItem;
 
   constructor(key: SpeciesStatBoosterItem) {
@@ -877,7 +882,8 @@ export class AllPokemonLevelIncrementModifierType extends ModifierType {
 
 export class BaseStatBoosterModifierType
   extends PokemonHeldItemModifierType
-  implements GeneratedPersistentModifierType {
+  implements GeneratedPersistentModifierType
+{
   private stat: PermanentStat;
   private key: string;
 
@@ -909,7 +915,8 @@ export class BaseStatBoosterModifierType
  */
 export class PokemonBaseStatTotalModifierType
   extends PokemonHeldItemModifierType
-  implements GeneratedPersistentModifierType {
+  implements GeneratedPersistentModifierType
+{
   private readonly statModifier: integer;
 
   constructor(statModifier: integer) {
@@ -947,7 +954,8 @@ export class PokemonBaseStatTotalModifierType
  */
 export class PokemonBaseStatFlatModifierType
   extends PokemonHeldItemModifierType
-  implements GeneratedPersistentModifierType {
+  implements GeneratedPersistentModifierType
+{
   private readonly statModifier: integer;
   private readonly stats: Stat[];
 

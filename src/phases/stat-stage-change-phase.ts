@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { BattlerIndex } from "#app/battle";
+import type { BattlerIndex } from "#app/battle";
 import {
   applyAbAttrs,
   applyPostStatStageChangeAbAttrs,
@@ -10,7 +10,7 @@ import {
   StatStageChangeMultiplierAbAttr,
 } from "#app/data/ability";
 import { ArenaTagSide, MistTag } from "#app/data/arena-tag";
-import Pokemon from "#app/field/pokemon";
+import type Pokemon from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { ResetNegativeStatStageModifier } from "#app/modifier/modifier";
 import { handleTutorial, Tutorial } from "#app/tutorial";

@@ -1,11 +1,11 @@
 import i18next from "i18next";
-import BattleScene from "#app/battle-scene";
+import type BattleScene from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
 import { Button } from "#enums/buttons";
 import { GameMode } from "../game-mode";
 import * as Modifier from "../modifier/modifier";
-import { SessionSaveData } from "../system/game-data";
-import PokemonData from "../system/pokemon-data";
+import type { SessionSaveData } from "../system/game-data";
+import type PokemonData from "../system/pokemon-data";
 import { isNullOrUndefined, fixedInt, getPlayTimeString, formatLargeNumber } from "#app/utils";
 import MessageUiHandler from "./message-ui-handler";
 import { TextStyle, addTextObject } from "./text";

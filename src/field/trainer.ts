@@ -1,20 +1,20 @@
-import BattleScene from "#app/battle-scene";
+import type BattleScene from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
 import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
-import PokemonSpecies, { getPokemonSpecies } from "#app/data/pokemon-species";
+import type PokemonSpecies from "#app/data/pokemon-species";
+import { getPokemonSpecies } from "#app/data/pokemon-species";
+import type { TrainerConfig, TrainerPartyTemplate } from "#app/data/trainer-config";
 import {
-  TrainerConfig,
   TrainerPartyCompoundTemplate,
-  TrainerPartyTemplate,
   TrainerPoolTier,
   TrainerSlot,
   trainerConfigs,
   trainerPartyTemplates,
   signatureSpecies,
 } from "#app/data/trainer-config";
-import { EnemyPokemon } from "#app/field/pokemon";
+import type { EnemyPokemon } from "#app/field/pokemon";
 import { randSeedWeightedItem, randSeedItem, randSeedInt } from "#app/utils";
-import { PersistentModifier } from "#app/modifier/modifier";
+import type { PersistentModifier } from "#app/modifier/modifier";
 import { trainerNamePools } from "#app/data/trainer-names";
 import { ArenaTagSide, ArenaTrapTag } from "#app/data/arena-tag";
 import { getIsInitialized, initI18n } from "#app/plugins/i18n";
