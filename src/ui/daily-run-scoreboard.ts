@@ -1,5 +1,5 @@
 import i18next from "i18next";
-import BattleScene from "#app/battle-scene";
+import type BattleScene from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
 import { getEnumKeys, executeIf } from "#app/utils";
 import { TextStyle, addTextObject } from "./text";
