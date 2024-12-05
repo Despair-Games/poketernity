@@ -3,7 +3,7 @@ import { Gender } from "#app/data/gender";
 import { PokeballType } from "#enums/pokeball";
 import Pokemon from "#app/field/pokemon";
 import { Type } from "#enums/type";
-import * as Utils from "#app/utils";
+import { randSeedInt } from "#app/utils";
 import { WeatherType } from "#enums/weather-type";
 import { Nature } from "#enums/nature";
 import { Biome } from "#enums/biome";
@@ -1014,7 +1014,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       null,
       new SpeciesEvolutionCondition((p) => {
         let ret = false;
-        globalScene.executeWithSeedOffset(() => (ret = !Utils.randSeedInt(4)), p.id);
+        globalScene.executeWithSeedOffset(() => (ret = !randSeedInt(4)), p.id);
         return ret;
       }),
     ),
@@ -1343,7 +1343,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       new SpeciesEvolutionCondition((p) => {
         let ret = false;
         if (p.moveset.filter((m) => m.moveId === Moves.HYPER_DRILL).length > 0) {
-          globalScene.executeWithSeedOffset(() => (ret = !Utils.randSeedInt(4)), p.id);
+          globalScene.executeWithSeedOffset(() => (ret = !randSeedInt(4)), p.id);
         }
         return ret;
       }),

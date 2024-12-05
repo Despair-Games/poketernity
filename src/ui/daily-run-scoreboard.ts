@@ -1,7 +1,7 @@
 import i18next from "i18next";
 import BattleScene from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
-import * as Utils from "../utils";
+import { getEnumKeys, executeIf } from "#app/utils";
 import { TextStyle, addTextObject } from "./text";
 import { WindowVariant, addWindow } from "./ui-theme";
 import { pokerogueApi } from "#app/plugins/api/pokerogue-api";
@@ -90,7 +90,7 @@ export class DailyRunScoreboard extends Phaser.GameObjects.Container {
 
     this.prevCategoryButton.setInteractive(new Phaser.Geom.Rectangle(0, 0, 6, 10), Phaser.Geom.Rectangle.Contains);
     this.prevCategoryButton.on("pointerup", () => {
-      this.update(this.category ? this.category - 1 : Utils.getEnumKeys(ScoreboardCategory).length - 1);
+      this.update(this.category ? this.category - 1 : getEnumKeys(ScoreboardCategory).length - 1);
     });
 
     this.nextCategoryButton = globalScene.add.sprite(window.displayWidth - 4, 4, "cursor");
@@ -99,7 +99,7 @@ export class DailyRunScoreboard extends Phaser.GameObjects.Container {
 
     this.nextCategoryButton.setInteractive(new Phaser.Geom.Rectangle(0, 0, 6, 10), Phaser.Geom.Rectangle.Contains);
     this.nextCategoryButton.on("pointerup", () => {
-      this.update(this.category < Utils.getEnumKeys(ScoreboardCategory).length - 1 ? this.category + 1 : 0);
+      this.update(this.category < getEnumKeys(ScoreboardCategory).length - 1 ? this.category + 1 : 0);
     });
 
     this.prevPageButton = globalScene.add.sprite(
@@ -219,7 +219,7 @@ export class DailyRunScoreboard extends Phaser.GameObjects.Container {
       this.page = page = 1;
     }
 
-    Utils.executeIf(category !== this.category || this.pageCount === undefined, () =>
+    executeIf(category !== this.category || this.pageCount === undefined, () =>
       pokerogueApi.daily.getRankingsPageCount({ category }).then((count) => (this.pageCount = count)),
     )
       .then(() => {

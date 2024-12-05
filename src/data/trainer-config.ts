@@ -2,7 +2,7 @@ import { startingWave } from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
 import { ModifierTypeFunc, modifierTypes } from "#app/modifier/modifier-type";
 import { EnemyPokemon, PokemonMove } from "#app/field/pokemon";
-import * as Utils from "#app/utils";
+import { toReadableString, randSeedItem, randSeedInt } from "#app/utils";
 import { PokeballType } from "#enums/pokeball";
 import { pokemonEvolutions, pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
 import PokemonSpecies, { getPokemonSpecies, PokemonSpeciesFilter } from "#app/data/pokemon-species";
@@ -311,7 +311,7 @@ export class TrainerConfig {
 
   constructor(trainerType: TrainerType, allowLegendaries?: boolean) {
     this.trainerType = trainerType;
-    this.name = Utils.toReadableString(TrainerType[this.getDerivedType()]);
+    this.name = toReadableString(TrainerType[this.getDerivedType()]);
     this.battleBgm = "battle_trainer";
     this.mixedBattleBgm = "battle_trainer";
     this.victoryBgm = "victory_trainer";
@@ -1588,7 +1588,7 @@ export function getRandomPartyMemberFunc(
   postProcess?: (enemyPokemon: EnemyPokemon) => void,
 ) {
   return (level: number, strength: PartyMemberStrength) => {
-    let species = Utils.randSeedItem(speciesPool);
+    let species = randSeedItem(speciesPool);
     if (!ignoreEvolution) {
       species = getPokemonSpecies(species).getTrainerSpeciesForLevel(
         level,
@@ -1636,12 +1636,12 @@ function getRandomTeraModifiers(party: EnemyPokemon[], count: integer, types?: T
   const ret: PersistentModifier[] = [];
   const partyMemberIndexes = new Array(party.length).fill(null).map((_, i) => i);
   for (let t = 0; t < Math.min(count, party.length); t++) {
-    const randomIndex = Utils.randSeedItem(partyMemberIndexes);
+    const randomIndex = randSeedItem(partyMemberIndexes);
     partyMemberIndexes.splice(partyMemberIndexes.indexOf(randomIndex), 1);
     ret.push(
       modifierTypes
         .TERA_SHARD()
-        .generateType([], [Utils.randSeedItem(types ? types : party[randomIndex].getTypes())])!
+        .generateType([], [randSeedItem(types ? types : party[randomIndex].getTypes())])!
         .withIdFromFunc(modifierTypes.TERA_SHARD)
         .newModifier(party[randomIndex]) as PersistentModifier,
     ); // TODO: is the bang correct?
@@ -4696,7 +4696,7 @@ export const trainerConfigs: TrainerConfigs = {
         p.setBoss(true, 2);
         p.generateAndPopulateMoveset();
         p.pokeball = PokeballType.ULTRA_BALL;
-        p.formIndex = Utils.randSeedInt(4, 1); // Shock, Burn, Chill, or Douse Drive
+        p.formIndex = randSeedInt(4, 1); // Shock, Burn, Chill, or Douse Drive
       }),
     )
     .setPartyMemberFunc(
@@ -5059,7 +5059,7 @@ export const trainerConfigs: TrainerConfigs = {
       3,
       getRandomPartyMemberFunc([Species.ROTOM], TrainerSlot.TRAINER, true, (p) => {
         p.generateAndPopulateMoveset();
-        p.formIndex = Utils.randSeedInt(5, 1); // Heat, Wash, Frost, Fan, or Mow
+        p.formIndex = randSeedInt(5, 1); // Heat, Wash, Frost, Fan, or Mow
       }),
     )
     .setPartyMemberFunc(
@@ -5115,7 +5115,7 @@ export const trainerConfigs: TrainerConfigs = {
     .setPartyMemberFunc(
       3,
       getRandomPartyMemberFunc([Species.REVAVROOM], TrainerSlot.TRAINER, true, (p) => {
-        p.formIndex = Utils.randSeedInt(5, 1); //Random Starmobile form
+        p.formIndex = randSeedInt(5, 1); //Random Starmobile form
         p.generateAndPopulateMoveset();
         p.pokeball = PokeballType.ROGUE_BALL;
       }),

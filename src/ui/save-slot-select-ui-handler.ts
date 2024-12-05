@@ -6,7 +6,7 @@ import { GameMode } from "../game-mode";
 import * as Modifier from "../modifier/modifier";
 import { SessionSaveData } from "../system/game-data";
 import PokemonData from "../system/pokemon-data";
-import * as Utils from "../utils";
+import { isNullOrUndefined, fixedInt, getPlayTimeString, formatLargeNumber } from "#app/utils";
 import MessageUiHandler from "./message-ui-handler";
 import { TextStyle, addTextObject } from "./text";
 import { Mode } from "./ui";
@@ -282,7 +282,7 @@ export default class SaveSlotSelectUiHandler extends MessageUiHandler {
       }
       this.setArrowVisibility(hasData);
     }
-    if (!Utils.isNullOrUndefined(prevSlotIndex)) {
+    if (!isNullOrUndefined(prevSlotIndex)) {
       this.revertSessionSlot(prevSlotIndex);
     }
 
@@ -325,7 +325,7 @@ export default class SaveSlotSelectUiHandler extends MessageUiHandler {
       globalScene.tweens.add({
         targets: this.sessionSlotsContainer,
         y: this.sessionSlotsContainerInitialY - 56 * scrollCursor,
-        duration: Utils.fixedInt(325),
+        duration: fixedInt(325),
         ease: "Sine.easeInOut",
       });
     }
@@ -393,7 +393,7 @@ class SessionSlot extends Phaser.GameObjects.Container {
     const timestampLabel = addTextObject(8, 19, new Date(data.timestamp).toLocaleString(), TextStyle.WINDOW);
     this.add(timestampLabel);
 
-    const playTimeLabel = addTextObject(8, 33, Utils.getPlayTimeString(data.playTime), TextStyle.WINDOW);
+    const playTimeLabel = addTextObject(8, 33, getPlayTimeString(data.playTime), TextStyle.WINDOW);
     this.add(playTimeLabel);
 
     const pokemonIconsContainer = globalScene.add.container(144, 4);
@@ -407,7 +407,7 @@ class SessionSlot extends Phaser.GameObjects.Container {
       const text = addTextObject(
         32,
         20,
-        `${i18next.t("saveSlotSelectUiHandler:lv")}${Utils.formatLargeNumber(pokemon.level, 1000)}`,
+        `${i18next.t("saveSlotSelectUiHandler:lv")}${formatLargeNumber(pokemon.level, 1000)}`,
         TextStyle.PARTY,
         { fontSize: "54px", color: "#f8f8f8" },
       );

@@ -2,8 +2,20 @@ import Phaser from "phaser";
 import UI from "#app/ui/ui";
 import Pokemon, { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
 import PokemonSpecies, { allSpecies, getPokemonSpecies, PokemonSpeciesFilter } from "#app/data/pokemon-species";
-import { Constructor, isNullOrUndefined, randSeedInt } from "#app/utils";
-import * as Utils from "#app/utils";
+import {
+  fixedInt,
+  getIvsFromId,
+  randSeedInt,
+  getEnumValues,
+  randomString,
+  shiftCharCodes,
+  formatMoney,
+  isNullOrUndefined,
+  BooleanHolder,
+  executeIf,
+  NumberHolder,
+  type Constructor,
+} from "#app/utils";
 import {
   ConsumableModifier,
   ConsumablePokemonModifier,
@@ -748,7 +760,7 @@ export default class BattleScene extends SceneBase {
     }
 
     this.playTimeTimer = this.time.addEvent({
-      delay: Utils.fixedInt(1000),
+      delay: fixedInt(1000),
       repeat: -1,
       callback: () => {
         if (this.gameData) {
@@ -1063,7 +1075,7 @@ export default class BattleScene extends SceneBase {
     }
 
     if (boss && !dataSource) {
-      const secondaryIvs = Utils.getIvsFromId(Utils.randSeedInt(4294967296));
+      const secondaryIvs = getIvsFromId(randSeedInt(4294967296));
 
       for (let s = 0; s < pokemon.ivs.length; s++) {
         pokemon.ivs[s] = Math.round(
@@ -1222,7 +1234,7 @@ export default class BattleScene extends SceneBase {
    * Generates a random number using the current battle's seed
    *
    * This calls {@linkcode Battle.randSeedInt}(`scene`, {@linkcode range}, {@linkcode min}) in `src/battle.ts`
-   * which calls {@linkcode Utils.randSeedInt randSeedInt}({@linkcode range}, {@linkcode min}) in `src/utils.ts`
+   * which calls {@linkcode randSeedInt randSeedInt}({@linkcode range}, {@linkcode min}) in `src/utils.ts`
    *
    * @param range How large of a range of random numbers to choose from. If {@linkcode range} <= 1, returns {@linkcode min}
    * @param min The minimum integer to pick, default `0`
@@ -1247,7 +1259,7 @@ export default class BattleScene extends SceneBase {
     this.lockModifierTiers = false;
 
     this.pokeballCounts = Object.fromEntries(
-      Utils.getEnumValues(PokeballType)
+      getEnumValues(PokeballType)
         .filter((p) => p <= PokeballType.MASTER_BALL)
         .map((t) => [t, 0]),
     );
@@ -1279,7 +1291,7 @@ export default class BattleScene extends SceneBase {
 
     // Reset RNG after end of game or save & quit.
     // This needs to happen after clearing this.currentBattle or the seed will be affected by the last wave played
-    this.setSeed(Overrides.SEED_OVERRIDE || Utils.randomString(24));
+    this.setSeed(Overrides.SEED_OVERRIDE || randomString(24));
     console.log("Seed:", this.seed);
     this.resetSeed();
 
@@ -1319,7 +1331,7 @@ export default class BattleScene extends SceneBase {
         ...allSpecies,
         ...allMoves,
         ...allAbilities,
-        ...Utils.getEnumValues(ModifierPoolType)
+        ...getEnumValues(ModifierPoolType)
           .map((mpt) => getModifierPoolForType(mpt))
           .map((mp) =>
             Object.values(mp)
@@ -1357,7 +1369,7 @@ export default class BattleScene extends SceneBase {
   }
 
   getDoubleBattleChance(newWaveIndex: number, playerField: PlayerPokemon[]) {
-    const doubleChance = new Utils.IntegerHolder(newWaveIndex % 10 === 0 ? 32 : 8);
+    const doubleChance = new NumberHolder(newWaveIndex % 10 === 0 ? 32 : 8);
     this.applyModifiers(DoubleBattleChanceBoosterModifier, true, doubleChance);
     playerField.forEach((p) => applyAbAttrs(DoubleBattleChanceAbAttr, p, null, false, doubleChance));
     return Math.max(doubleChance.value, 1);
@@ -1409,7 +1421,7 @@ export default class BattleScene extends SceneBase {
         if (trainerConfigs[trainerType].doubleOnly) {
           doubleTrainer = true;
         } else if (trainerConfigs[trainerType].hasDouble) {
-          doubleTrainer = !Utils.randSeedInt(this.getDoubleBattleChance(newWaveIndex, playerField));
+          doubleTrainer = !randSeedInt(this.getDoubleBattleChance(newWaveIndex, playerField));
           // Add a check that special trainers can't be double except for tate and liza - they should use the normal double chance
           if (
             trainerConfigs[trainerType].trainerTypeDouble &&
@@ -1420,7 +1432,7 @@ export default class BattleScene extends SceneBase {
         }
         const variant = doubleTrainer
           ? TrainerVariant.DOUBLE
-          : Utils.randSeedInt(2)
+          : randSeedInt(2)
             ? TrainerVariant.FEMALE
             : TrainerVariant.DEFAULT;
         newTrainer = trainerData !== undefined ? trainerData.toTrainer() : new Trainer(trainerType, variant);
@@ -1438,7 +1450,7 @@ export default class BattleScene extends SceneBase {
 
     if (double === undefined && newWaveIndex > 1) {
       if (newBattleType === BattleType.WILD && !this.gameMode.isWaveFinal(newWaveIndex)) {
-        newDouble = !Utils.randSeedInt(this.getDoubleBattleChance(newWaveIndex, playerField));
+        newDouble = !randSeedInt(this.getDoubleBattleChance(newWaveIndex, playerField));
       } else if (newBattleType === BattleType.TRAINER) {
         newDouble = newTrainer?.variant === TrainerVariant.DOUBLE;
       }
@@ -1613,7 +1625,7 @@ export default class BattleScene extends SceneBase {
         scale: scale,
         x: (defaultWidth - scaledWidth) / 2,
         y: defaultHeight - scaledHeight,
-        duration: !instant ? Utils.fixedInt(Math.abs(this.field.scale - scale) * 200) : 0,
+        duration: !instant ? fixedInt(Math.abs(this.field.scale - scale) * 200) : 0,
         ease: "Sine.easeInOut",
         onComplete: () => resolve(),
       });
@@ -1649,28 +1661,28 @@ export default class BattleScene extends SceneBase {
       case Species.SQUAWKABILLY:
       case Species.TATSUGIRI:
       case Species.PALDEA_TAUROS:
-        return Utils.randSeedInt(species.forms.length);
+        return randSeedInt(species.forms.length);
       case Species.PIKACHU:
         if (this.currentBattle?.battleType === BattleType.TRAINER && this.currentBattle?.waveIndex < 30) {
           return 0; // Ban Cosplay and Partner Pika from Trainers before wave 30
         }
-        return Utils.randSeedInt(8);
+        return randSeedInt(8);
       case Species.EEVEE:
         if (this.currentBattle?.battleType === BattleType.TRAINER && this.currentBattle?.waveIndex < 30) {
           return 0; // No Partner Eevee for Wave 12 Preschoolers
         }
-        return Utils.randSeedInt(2);
+        return randSeedInt(2);
       case Species.GRENINJA:
         if (this.currentBattle?.battleType === BattleType.TRAINER) {
           return 0; // Don't give trainers Battle Bond Greninja
         }
-        return Utils.randSeedInt(2);
+        return randSeedInt(2);
       case Species.ZYGARDE:
-        return Utils.randSeedInt(4);
+        return randSeedInt(4);
       case Species.MINIOR:
-        return Utils.randSeedInt(7);
+        return randSeedInt(7);
       case Species.ALCREMIE:
-        return Utils.randSeedInt(9);
+        return randSeedInt(9);
       case Species.MEOWSTIC:
       case Species.INDEEDEE:
       case Species.BASCULEGION:
@@ -1700,7 +1712,7 @@ export default class BattleScene extends SceneBase {
         if (this.gameMode.hasMysteryEncounters) {
           return 1; // Wandering form
         } else {
-          return Utils.randSeedInt(species.forms.length);
+          return randSeedInt(species.forms.length);
         }
     }
 
@@ -1710,7 +1722,7 @@ export default class BattleScene extends SceneBase {
         case Species.WORMADAM:
         case Species.ROTOM:
         case Species.LYCANROC:
-          return Utils.randSeedInt(species.forms.length);
+          return randSeedInt(species.forms.length);
       }
       return 0;
     }
@@ -1722,7 +1734,7 @@ export default class BattleScene extends SceneBase {
     let ret = false;
     this.executeWithSeedOffset(
       () => {
-        ret = !Utils.randSeedInt(2);
+        ret = !randSeedInt(2);
       },
       0,
       this.seed.toString(),
@@ -1734,7 +1746,7 @@ export default class BattleScene extends SceneBase {
     let ret = 0;
     this.executeWithSeedOffset(
       () => {
-        ret = Utils.randSeedInt(8) * 5;
+        ret = randSeedInt(8) * 5;
       },
       0,
       this.seed.toString(),
@@ -1767,7 +1779,7 @@ export default class BattleScene extends SceneBase {
         isBoss =
           waveIndex % 10 === 0 ||
           (this.gameMode.hasRandomBosses &&
-            Utils.randSeedInt(100) < Math.min(Math.max(Math.ceil((waveIndex - 250) / 50), 0) * 2, 30));
+            randSeedInt(100) < Math.min(Math.max(Math.ceil((waveIndex - 250) / 50), 0) * 2, 30));
       }, waveIndex << 2);
     }
     if (!isBoss) {
@@ -1794,7 +1806,7 @@ export default class BattleScene extends SceneBase {
     const infectedIndexes: integer[] = [];
     const spread = (index: number, spreadTo: number) => {
       const partyMember = party[index + spreadTo];
-      if (!partyMember.pokerus && !Utils.randSeedInt(10)) {
+      if (!partyMember.pokerus && !randSeedInt(10)) {
         partyMember.pokerus = true;
         infectedIndexes.push(index + spreadTo);
       }
@@ -1820,7 +1832,7 @@ export default class BattleScene extends SceneBase {
 
   resetSeed(waveIndex?: integer): void {
     const wave = waveIndex || this.currentBattle?.waveIndex || 0;
-    this.waveSeed = Utils.shiftCharCodes(this.seed, wave);
+    this.waveSeed = shiftCharCodes(this.seed, wave);
     Phaser.Math.RND.sow([this.waveSeed]);
     console.log("Wave Seed:", this.waveSeed, wave);
     this.rngCounter = 0;
@@ -1834,7 +1846,7 @@ export default class BattleScene extends SceneBase {
     const tempRngOffset = this.rngOffset;
     const tempRngSeedOverride = this.rngSeedOverride;
     const state = Phaser.Math.RND.state();
-    Phaser.Math.RND.sow([Utils.shiftCharCodes(seedOverride || this.seed, offset)]);
+    Phaser.Math.RND.sow([shiftCharCodes(seedOverride || this.seed, offset)]);
     this.rngCounter = 0;
     this.rngOffset = offset;
     this.rngSeedOverride = seedOverride || "";
@@ -1978,7 +1990,7 @@ export default class BattleScene extends SceneBase {
     if (this.money === undefined) {
       return;
     }
-    const formattedMoney = Utils.formatMoney(this.moneyFormat, this.money);
+    const formattedMoney = formatMoney(this.moneyFormat, this.money);
     this.moneyText.setText(i18next.t("battleScene:moneyOwned", { formattedMoney }));
     this.fieldUI.moveAbove(this.moneyText, this.luckText);
     if (forceVisible) {
@@ -2126,12 +2138,12 @@ export default class BattleScene extends SceneBase {
           ),
         ]
       : allSpecies.filter((s) => s.isCatchable());
-    return filteredSpecies[Utils.randSeedInt(filteredSpecies.length)];
+    return filteredSpecies[randSeedInt(filteredSpecies.length)];
   }
 
   generateRandomBiome(waveIndex: integer): Biome {
     const relWave = waveIndex % 250;
-    const biomes = Utils.getEnumValues(Biome).slice(1, Utils.getEnumValues(Biome).filter((b) => b >= 40).length * -1);
+    const biomes = getEnumValues(Biome).slice(1, getEnumValues(Biome).filter((b) => b >= 40).length * -1);
     const maxDepth = biomeDepths[Biome.END][0] - 2;
     const depthWeights = new Array(maxDepth + 1)
       .fill(null)
@@ -2143,7 +2155,7 @@ export default class BattleScene extends SceneBase {
       biomeThresholds.push(totalWeight);
     }
 
-    const randInt = Utils.randSeedInt(totalWeight);
+    const randInt = randSeedInt(totalWeight);
 
     for (const biome of biomes) {
       if (randInt < biomeThresholds[biome]) {
@@ -2151,7 +2163,7 @@ export default class BattleScene extends SceneBase {
       }
     }
 
-    return biomes[Utils.randSeedInt(biomes.length)];
+    return biomes[randSeedInt(biomes.length)];
   }
 
   isBgmPlaying(): boolean {
@@ -2333,7 +2345,7 @@ export default class BattleScene extends SceneBase {
       this.bgmResumeTimer.destroy();
     }
     if (resumeBgm) {
-      this.bgmResumeTimer = this.time.delayedCall(pauseDuration || Utils.fixedInt(sound.totalDuration * 1000), () => {
+      this.bgmResumeTimer = this.time.delayedCall(pauseDuration || fixedInt(sound.totalDuration * 1000), () => {
         this.resumeBgm();
         this.bgmResumeTimer = null;
       });
@@ -2882,7 +2894,7 @@ export default class BattleScene extends SceneBase {
             const args: unknown[] = [];
             if (modifier instanceof PokemonHpRestoreModifier) {
               if (!(modifier as PokemonHpRestoreModifier).fainted) {
-                const hpRestoreMultiplier = new Utils.IntegerHolder(1);
+                const hpRestoreMultiplier = new NumberHolder(1);
                 this.applyModifiers(HealingBoosterModifier, true, hpRestoreMultiplier);
                 args.push(hpRestoreMultiplier.value);
               } else {
@@ -2890,7 +2902,7 @@ export default class BattleScene extends SceneBase {
               }
             } else if (modifier instanceof FusePokemonModifier) {
               args.push(this.getPokemonById(modifier.fusePokemonId) as PlayerPokemon);
-            } else if (modifier instanceof RememberMoveModifier && !Utils.isNullOrUndefined(cost)) {
+            } else if (modifier instanceof RememberMoveModifier && !isNullOrUndefined(cost)) {
               args.push(cost);
             }
 
@@ -2976,8 +2988,8 @@ export default class BattleScene extends SceneBase {
   ): Promise<boolean> {
     return new Promise((resolve) => {
       const source = itemModifier.pokemonId ? itemModifier.getPokemon() : null;
-      const cancelled = new Utils.BooleanHolder(false);
-      Utils.executeIf(!!source && source.isPlayer() !== target.isPlayer(), () =>
+      const cancelled = new BooleanHolder(false);
+      executeIf(!!source && source.isPlayer() !== target.isPlayer(), () =>
         applyAbAttrs(BlockItemTheftAbAttr, source! /* checked in condition*/, cancelled),
       ).then(() => {
         if (cancelled.value) {
@@ -3108,7 +3120,7 @@ export default class BattleScene extends SceneBase {
           const modifierChance = this.gameMode.getEnemyModifierChance(isBoss);
           let count = 0;
           for (let c = 0; c < chances; c++) {
-            if (!Utils.randSeedInt(modifierChance)) {
+            if (!randSeedInt(modifierChance)) {
               count++;
             }
           }
@@ -3286,7 +3298,7 @@ export default class BattleScene extends SceneBase {
           if (mods.length < 1) {
             return mods;
           }
-          const rand = Utils.randSeedInt(mods.length);
+          const rand = randSeedInt(mods.length);
           return [mods[rand], ...shuffleModifiers(mods.filter((_, i) => i !== rand))];
         };
         modifiers = shuffleModifiers(modifiers);
@@ -3511,7 +3523,7 @@ export default class BattleScene extends SceneBase {
    */
   initFinalBossPhaseTwo(pokemon: Pokemon): void {
     if (pokemon instanceof EnemyPokemon && pokemon.isBoss() && !pokemon.formIndex && pokemon.bossSegmentIndex < 1) {
-      this.fadeOutBgm(Utils.fixedInt(2000), false);
+      this.fadeOutBgm(fixedInt(2000), false);
       this.ui.showDialogue(
         battleSpecDialogue[BattleSpec.FINAL_BOSS].firstStageWin,
         pokemon.species.name,
@@ -3616,7 +3628,7 @@ export default class BattleScene extends SceneBase {
         if (Overrides.XP_MULTIPLIER_OVERRIDE !== null) {
           expMultiplier = Overrides.XP_MULTIPLIER_OVERRIDE;
         }
-        const pokemonExp = new Utils.NumberHolder(expValue * expMultiplier);
+        const pokemonExp = new NumberHolder(expValue * expMultiplier);
         this.applyModifiers(PokemonExpBoosterModifier, true, partyMember, pokemonExp);
         partyMemberExp.push(Math.floor(pokemonExp.value));
       }
@@ -3765,7 +3777,7 @@ export default class BattleScene extends SceneBase {
       while (i < this.mysteryEncounterSaveData.queuedEncounters.length && !!encounter) {
         const candidate = this.mysteryEncounterSaveData.queuedEncounters[i];
         const forcedChance = candidate.spawnPercent;
-        if (Utils.randSeedInt(100) < forcedChance) {
+        if (randSeedInt(100) < forcedChance) {
           encounter = allMysteryEncounters[candidate.type];
         }
 
@@ -3797,7 +3809,7 @@ export default class BattleScene extends SceneBase {
     });
 
     const totalWeight = tierWeights.reduce((a, b) => a + b);
-    const tierValue = Utils.randSeedInt(totalWeight);
+    const tierValue = randSeedInt(totalWeight);
     const commonThreshold = totalWeight - tierWeights[0];
     const greatThreshold = totalWeight - tierWeights[0] - tierWeights[1];
     const ultraThreshold = totalWeight - tierWeights[0] - tierWeights[1] - tierWeights[2];
@@ -3885,7 +3897,7 @@ export default class BattleScene extends SceneBase {
       console.log("No Mystery Encounters found, falling back to Mysterious Challengers.");
       return allMysteryEncounters[MysteryEncounterType.MYSTERIOUS_CHALLENGERS];
     }
-    encounter = availableEncounters[Utils.randSeedInt(availableEncounters.length)];
+    encounter = availableEncounters[randSeedInt(availableEncounters.length)];
     // New encounter object to not dirty flags
     encounter = new MysteryEncounter(encounter);
     encounter.populateDialogueTokensFromRequirements();
