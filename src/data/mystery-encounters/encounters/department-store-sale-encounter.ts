@@ -139,7 +139,7 @@ export const DepartmentStoreSaleEncounter: MysteryEncounter = MysteryEncounterBu
       const modifiers: ModifierTypeFunc[] = [];
       let i = 0;
       while (i < 4) {
-        // 10/30/20/5 weight on pokeballs
+        // 10/30/20 weight on pokeballs
         const roll = randSeedInt(60);
         if (roll < 10) {
           modifiers.push(modifierTypes.POKEBALL);
