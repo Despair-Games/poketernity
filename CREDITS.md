@@ -82,8 +82,6 @@
 
 ## Pokémon Sprites and Animation
 
-In addition to the lists below, please check [the project wiki](https://wiki.pokerogue.net/credits:credits) for a more detailed list of Pokémon Sprite credits.
-
 - GAMEFREAK (Pokémon Black/White 2)
 - Smogon Sprite Project (Various Artists)
 - Skyflyer
