@@ -458,7 +458,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       const modifierSelectHandler = scene.ui.handlers.find(
         (h) => h instanceof ModifierSelectUiHandler,
       ) as ModifierSelectUiHandler;
-      expect(modifierSelectHandler.options.length).toEqual(3);
+      expect(modifierSelectHandler.options.length).toEqual(2);
       expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toBe("GRIP_CLAW");
       expect(modifierSelectHandler.options[1].modifierTypeOption.type.id).toBe("MAX_LURE");
     });
