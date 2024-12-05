@@ -442,7 +442,7 @@ export const GlobalTradeSystemEncounter: MysteryEncounter = MysteryEncounterBuil
         } else if (type.id === "LUCKY_EGG") {
           tier = ModifierTier.ULTRA;
         } else if (type.id === "GOLDEN_EGG") {
-          tier = ModifierTier.ROGUE;
+          tier = ModifierTier.EPIC;
         }
         // Increment tier by 1
         if (tier < ModifierTier.MASTER) {

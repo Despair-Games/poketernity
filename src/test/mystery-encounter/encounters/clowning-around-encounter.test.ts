@@ -300,7 +300,7 @@ describe("Clowning Around - Mystery Encounter", () => {
         .filter((m) => m.type.tier === ModifierTier.ULTRA)
         .reduce((a, b) => a + b.stackCount, 0);
       const rogueCountAfter = leadItemsAfter
-        .filter((m) => m.type.tier === ModifierTier.ROGUE)
+        .filter((m) => m.type.tier === ModifierTier.EPIC)
         .reduce((a, b) => a + b.stackCount, 0);
       expect(ultraCountAfter).toBe(13);
       expect(rogueCountAfter).toBe(7);

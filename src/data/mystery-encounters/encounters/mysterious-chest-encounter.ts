@@ -160,7 +160,7 @@ export const MysteriousChestEncounter: MysteryEncounter = MysteryEncounterBuilde
           leaveEncounterWithoutBattle();
         } else if (roll >= RAND_LENGTH - COMMON_REWARDS_PERCENT - ULTRA_REWARDS_PERCENT - ROGUE_REWARDS_PERCENT) {
           // Choose between 2 ROGUE tier items (10%)
-          setEncounterRewards({ guaranteedModifierTiers: [ModifierTier.ROGUE, ModifierTier.ROGUE] });
+          setEncounterRewards({ guaranteedModifierTiers: [ModifierTier.EPIC, ModifierTier.EPIC] });
           // Display result message then proceed to rewards
           queueEncounterMessage(`${namespace}:option.1.great`);
           leaveEncounterWithoutBattle();

@@ -163,7 +163,7 @@ export const ATrainersTestEncounter: MysteryEncounter = MysteryEncounterBuilder.
       setEncounterRewards(
         {
           guaranteedModifierTypeFuncs: [modifierTypes.SACRED_ASH],
-          guaranteedModifierTiers: [ModifierTier.ROGUE, ModifierTier.ULTRA],
+          guaranteedModifierTiers: [ModifierTier.EPIC, ModifierTier.ULTRA],
           fillRemaining: true,
         },
         [eggOptions],

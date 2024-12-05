@@ -311,7 +311,7 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
           .forEach((m) => {
             const type = m.type.withTierFromPool(ModifierPoolType.PLAYER, party);
             const tier = type.tier ?? ModifierTier.ULTRA;
-            if (type.id === "GOLDEN_EGG" || tier === ModifierTier.ROGUE) {
+            if (type.id === "GOLDEN_EGG" || tier === ModifierTier.EPIC) {
               numRogue += m.stackCount;
               globalScene.removeModifier(m);
             } else if (type.id === "LUCKY_EGG" || type.id === "SOOTHE_BELL" || tier === ModifierTier.ULTRA) {
@@ -321,7 +321,7 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
           });
 
         generateItemsOfTier(mostHeldItemsPokemon, numUltra, ModifierTier.ULTRA);
-        generateItemsOfTier(mostHeldItemsPokemon, numRogue, ModifierTier.ROGUE);
+        generateItemsOfTier(mostHeldItemsPokemon, numRogue, ModifierTier.EPIC);
       })
       .withOptionPhase(async () => {
         leaveEncounterWithoutBattle(true);

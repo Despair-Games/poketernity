@@ -98,7 +98,7 @@ export const FightOrFlightEncounter: MysteryEncounter = MysteryEncounterBuilder.
       globalScene.currentBattle.waveIndex > 160
         ? ModifierTier.MASTER
         : globalScene.currentBattle.waveIndex > 120
-          ? ModifierTier.ROGUE
+          ? ModifierTier.EPIC
           : globalScene.currentBattle.waveIndex > 40
             ? ModifierTier.ULTRA
             : ModifierTier.GREAT;

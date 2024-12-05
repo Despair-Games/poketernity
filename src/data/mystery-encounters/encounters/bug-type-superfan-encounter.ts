@@ -489,7 +489,7 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
         globalScene.updateModifiers(true, true);
 
         const bugNet = generateModifierTypeOption(modifierTypes.MYSTERY_ENCOUNTER_GOLDEN_BUG_NET)!;
-        bugNet.type.tier = ModifierTier.ROGUE;
+        bugNet.type.tier = ModifierTier.EPIC;
 
         setEncounterRewards({
           guaranteedModifierTypeOptions: [bugNet],

@@ -186,7 +186,7 @@ describe("SelectModifierPhase", () => {
         ModifierTier.COMMON,
         ModifierTier.GREAT,
         ModifierTier.ULTRA,
-        ModifierTier.ROGUE,
+        ModifierTier.EPIC,
         ModifierTier.MASTER,
       ],
     };
@@ -223,7 +223,7 @@ describe("SelectModifierPhase", () => {
     expect(
       modifierSelectHandler.options[3].modifierTypeOption.type.tier -
         modifierSelectHandler.options[3].modifierTypeOption.upgradeCount,
-    ).toEqual(ModifierTier.ROGUE);
+    ).toEqual(ModifierTier.EPIC);
     expect(
       modifierSelectHandler.options[4].modifierTypeOption.type.tier -
         modifierSelectHandler.options[4].modifierTypeOption.upgradeCount,

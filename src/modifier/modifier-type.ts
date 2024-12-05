@@ -2809,7 +2809,7 @@ const modifierPool: ModifierPool = {
     m.setTier(ModifierTier.ULTRA);
     return m;
   }),
-  [ModifierTier.ROGUE]: [
+  [ModifierTier.EPIC]: [
     new WeightedModifierType(
       modifierTypes.ROGUE_BALL,
       (party: Pokemon[]) => (hasMaximumBalls(party, PokeballType.ROGUE_BALL) ? 0 : 16),
@@ -2862,7 +2862,7 @@ const modifierPool: ModifierPool = {
       3,
     ),
   ].map((m) => {
-    m.setTier(ModifierTier.ROGUE);
+    m.setTier(ModifierTier.EPIC);
     return m;
   }),
   [ModifierTier.MASTER]: [
@@ -2919,8 +2919,8 @@ const wildModifierPool: ModifierPool = {
     m.setTier(ModifierTier.ULTRA);
     return m;
   }),
-  [ModifierTier.ROGUE]: [new WeightedModifierType(modifierTypes.LUCKY_EGG, 4)].map((m) => {
-    m.setTier(ModifierTier.ROGUE);
+  [ModifierTier.EPIC]: [new WeightedModifierType(modifierTypes.LUCKY_EGG, 4)].map((m) => {
+    m.setTier(ModifierTier.EPIC);
     return m;
   }),
   [ModifierTier.MASTER]: [new WeightedModifierType(modifierTypes.GOLDEN_EGG, 1)].map((m) => {
@@ -2948,14 +2948,14 @@ const trainerModifierPool: ModifierPool = {
     m.setTier(ModifierTier.ULTRA);
     return m;
   }),
-  [ModifierTier.ROGUE]: [
+  [ModifierTier.EPIC]: [
     new WeightedModifierType(modifierTypes.FOCUS_BAND, 2),
     new WeightedModifierType(modifierTypes.LUCKY_EGG, 4),
     new WeightedModifierType(modifierTypes.QUICK_CLAW, 1),
     new WeightedModifierType(modifierTypes.GRIP_CLAW, 1),
     new WeightedModifierType(modifierTypes.WIDE_LENS, 1),
   ].map((m) => {
-    m.setTier(ModifierTier.ROGUE);
+    m.setTier(ModifierTier.EPIC);
     return m;
   }),
   [ModifierTier.MASTER]: [
@@ -3004,8 +3004,8 @@ const enemyBuffModifierPool: ModifierPool = {
     m.setTier(ModifierTier.ULTRA);
     return m;
   }),
-  [ModifierTier.ROGUE]: [].map((m: WeightedModifierType) => {
-    m.setTier(ModifierTier.ROGUE);
+  [ModifierTier.EPIC]: [].map((m: WeightedModifierType) => {
+    m.setTier(ModifierTier.EPIC);
     return m;
   }),
   [ModifierTier.MASTER]: [].map((m: WeightedModifierType) => {
@@ -3035,14 +3035,14 @@ const dailyStarterModifierPool: ModifierPool = {
     m.setTier(ModifierTier.ULTRA);
     return m;
   }),
-  [ModifierTier.ROGUE]: [
+  [ModifierTier.EPIC]: [
     new WeightedModifierType(modifierTypes.GRIP_CLAW, 5),
     new WeightedModifierType(modifierTypes.BATON, 2),
     new WeightedModifierType(modifierTypes.FOCUS_BAND, 5),
     new WeightedModifierType(modifierTypes.QUICK_CLAW, 3),
     new WeightedModifierType(modifierTypes.KINGS_ROCK, 3),
   ].map((m) => {
-    m.setTier(ModifierTier.ROGUE);
+    m.setTier(ModifierTier.EPIC);
     return m;
   }),
   [ModifierTier.MASTER]: [
@@ -3466,7 +3466,7 @@ export function getDailyRunStarterModifiers(party: PlayerPokemon[]): PokemonHeld
       } else if (tierValue > 4) {
         tier = ModifierTier.ULTRA;
       } else if (tierValue) {
-        tier = ModifierTier.ROGUE;
+        tier = ModifierTier.EPIC;
       } else {
         tier = ModifierTier.MASTER;
       }
@@ -3542,7 +3542,7 @@ function getNewModifierTypeOption(
     } else if (tierValue > 12) {
       tier = ModifierTier.ULTRA;
     } else if (tierValue) {
-      tier = ModifierTier.ROGUE;
+      tier = ModifierTier.EPIC;
     } else {
       tier = ModifierTier.MASTER;
     }
@@ -3666,7 +3666,7 @@ export function getLuckTextTint(luckValue: integer): integer {
   } else if (luckValue > 9) {
     modifierTier = ModifierTier.MASTER;
   } else if (luckValue > 5) {
-    modifierTier = ModifierTier.ROGUE;
+    modifierTier = ModifierTier.EPIC;
   } else if (luckValue > 2) {
     modifierTier = ModifierTier.ULTRA;
   } else if (luckValue) {

@@ -322,8 +322,8 @@ export const WeirdDreamEncounter: MysteryEncounter = MysteryEncounterBuilder.wit
       setEncounterRewards(
         {
           guaranteedModifierTiers: [
-            ModifierTier.ROGUE,
-            ModifierTier.ROGUE,
+            ModifierTier.EPIC,
+            ModifierTier.EPIC,
             ModifierTier.ULTRA,
             ModifierTier.ULTRA,
             ModifierTier.GREAT,

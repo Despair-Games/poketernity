@@ -209,7 +209,7 @@ export const MysteriousChallengersEncounter: MysteryEncounter = MysteryEncounter
       encounter.expMultiplier = 0.9;
 
       setEncounterRewards({
-        guaranteedModifierTiers: [ModifierTier.ROGUE, ModifierTier.ROGUE, ModifierTier.ULTRA, ModifierTier.GREAT],
+        guaranteedModifierTiers: [ModifierTier.EPIC, ModifierTier.EPIC, ModifierTier.ULTRA, ModifierTier.GREAT],
         fillRemaining: true,
       });
 

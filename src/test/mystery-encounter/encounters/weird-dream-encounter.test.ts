@@ -208,11 +208,11 @@ describe("Weird Dream - Mystery Encounter", () => {
       expect(
         modifierSelectHandler.options[0].modifierTypeOption.type.tier -
           modifierSelectHandler.options[0].modifierTypeOption.upgradeCount,
-      ).toEqual(ModifierTier.ROGUE);
+      ).toEqual(ModifierTier.EPIC);
       expect(
         modifierSelectHandler.options[1].modifierTypeOption.type.tier -
           modifierSelectHandler.options[1].modifierTypeOption.upgradeCount,
-      ).toEqual(ModifierTier.ROGUE);
+      ).toEqual(ModifierTier.EPIC);
       expect(
         modifierSelectHandler.options[2].modifierTypeOption.type.tier -
           modifierSelectHandler.options[2].modifierTypeOption.upgradeCount,
