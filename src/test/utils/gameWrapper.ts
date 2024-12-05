@@ -39,7 +39,7 @@ window.URL.createObjectURL = (blob: Blob) => {
   blobToString(blob).then((data: string) => {
     localStorage.setItem("toExport", data);
   });
-  return "";
+  return null as any;
 };
 navigator.getGamepads = () => [];
 global.fetch = vi.fn(MockFetch) as any;
@@ -152,7 +152,6 @@ export default class GameWrapper {
         if (data.onComplete) {
           data.onComplete();
         }
-        return {} as any;
       },
       getTweensOf: () => [],
       killTweensOf: () => [] as any,
@@ -161,8 +160,8 @@ export default class GameWrapper {
         if (data.onComplete) {
           data.onComplete();
         }
-        return {} as any;
       },
+      stop: () => null as any,
     } as any;
 
     this.scene.anims = this.game.anims;
