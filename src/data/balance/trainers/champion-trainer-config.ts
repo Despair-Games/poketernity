@@ -1,10 +1,10 @@
 import { Species } from "#app/enums/species";
 import { TrainerType } from "#enums/trainer-type";
-import { TrainerConfig, getRandomPartyMemberFunc, TrainerSlot } from "../../trainer-config";
+import { TrainerConfig, getRandomPartyMemberFunc, TrainerSlot, TrainerConfigs } from "../../trainer-config";
 import { signatureSpecies } from "./signature-species";
 
 let t = TrainerType.BLUE;
-export const chmapionTrainerConfigs = {
+export const championTrainerConfigs: TrainerConfigs = {
   [TrainerType.BLUE]: new TrainerConfig(t)
     .initForChampion(signatureSpecies["BLUE"], true)
     .setBattleBgm("battle_kanto_champion")

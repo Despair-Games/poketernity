@@ -1,10 +1,10 @@
-import { TrainerConfig } from "#app/data/trainer-config";
+import { TrainerConfig, TrainerConfigs } from "#app/data/trainer-config";
 import { Type } from "#app/enums/type";
 import { TrainerType } from "#enums/trainer-type";
 import { signatureSpecies } from "./signature-species";
 
 let t = TrainerType.LORELEI;
-export const eliteFourTrainerConfigs = {
+export const eliteFourTrainerConfigs: TrainerConfigs = {
   // Kanto
   [TrainerType.LORELEI]: new TrainerConfig(t)
     .initForEliteFour(signatureSpecies["LORELEI"], false, Type.ICE)

@@ -10,11 +10,12 @@ import {
   TrainerSlot,
   trainerPartyTemplates,
   getSpeciesFilterRandomPartyMemberFunc,
+  TrainerConfigs,
 } from "../../trainer-config";
 import { pokemonEvolutions, pokemonPrevolutions } from "../pokemon-evolutions";
 
 let t = TrainerType.RIVAL;
-export const rivalTrainerConfigs = {
+export const rivalTrainerConfigs: TrainerConfigs = {
   [TrainerType.RIVAL]: new TrainerConfig(t)
     .setName("Finn")
     .setHasGenders("Ivy")

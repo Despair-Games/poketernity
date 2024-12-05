@@ -5,10 +5,10 @@ import { modifierTypes } from "#app/modifier/modifier-type";
 import { PersistentModifier } from "#app/modifier/modifier";
 import { TrainerType } from "#enums/trainer-type";
 import { Utils } from "phaser";
-import { TrainerConfig, getRandomPartyMemberFunc, TrainerSlot } from "../../trainer-config";
+import { TrainerConfig, getRandomPartyMemberFunc, TrainerSlot, TrainerConfigs } from "../../trainer-config";
 
 let t = TrainerType.ROCKET_BOSS_GIOVANNI_1;
-export const evilBossTrainerConfigs = {
+export const evilBossTrainerConfigs: TrainerConfigs = {
   [TrainerType.ROCKET_BOSS_GIOVANNI_1]: new TrainerConfig(t)
     .setName("Giovanni")
     .initForEvilTeamLeader("Rocket Boss", [])

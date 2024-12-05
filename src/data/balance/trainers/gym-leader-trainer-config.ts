@@ -1,10 +1,10 @@
-import { TrainerConfig } from "#app/data/trainer-config";
+import { TrainerConfig, TrainerConfigs } from "#app/data/trainer-config";
 import { Type } from "#app/enums/type";
 import { TrainerType } from "#enums/trainer-type";
 import { signatureSpecies } from "./signature-species";
 
 let t = TrainerType.BROCK;
-export const gymLeaderTrainerConfigs = {
+export const gymLeaderTrainerConfigs: TrainerConfigs = {
   // Kanto
   [TrainerType.BROCK]: new TrainerConfig(t)
     .initForGymLeader(signatureSpecies["BROCK"], true, Type.ROCK)

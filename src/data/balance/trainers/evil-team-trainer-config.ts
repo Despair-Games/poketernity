@@ -7,6 +7,7 @@ import {
   TrainerPoolTier,
   TrainerPartyTemplate,
   trainerPartyTemplates,
+  TrainerConfigs,
 } from "../../trainer-config";
 import { Moves } from "#app/enums/moves";
 import { PokemonMove } from "#app/field/pokemon";
@@ -33,7 +34,7 @@ function getEvilGruntPartyTemplate(scene: BattleScene): TrainerPartyTemplate {
 }
 
 let t = TrainerType.ROCKET_GRUNT;
-export const evilTeamTrainerConfigs = {
+export const evilTeamTrainerConfigs: TrainerConfigs = {
   [TrainerType.ROCKET_GRUNT]: new TrainerConfig(t)
     .setHasGenders("Rocket Grunt Female")
     .setHasDouble("Rocket Grunts")

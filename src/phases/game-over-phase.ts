@@ -4,7 +4,7 @@ import BattleScene from "#app/battle-scene";
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
 import PokemonSpecies, { getPokemonSpecies } from "#app/data/pokemon-species";
-import { trainerConfigs } from "#app/data/trainer-config";
+import { trainerConfigs } from "#app/data/balance/trainers/all-trainer-configs";
 import Pokemon from "#app/field/pokemon";
 import { modifierTypes } from "#app/modifier/modifier-type";
 import { BattlePhase } from "#app/phases/battle-phase";

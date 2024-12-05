@@ -11,11 +11,11 @@ import {
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import {
   getRandomPartyMemberFunc,
-  trainerConfigs,
   TrainerPartyCompoundTemplate,
   TrainerPartyTemplate,
   TrainerSlot,
 } from "#app/data/trainer-config";
+import { trainerConfigs } from "#app/data/balance/trainers/all-trainer-configs";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import BattleScene from "#app/battle-scene";

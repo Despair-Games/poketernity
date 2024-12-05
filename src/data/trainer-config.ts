@@ -12,14 +12,6 @@ import i18next from "i18next";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
-import { genericTrainerConfigs } from "./balance/trainers/generic-trainer-config";
-import { evilTeamTrainerConfigs } from "./balance/trainers/evil-team-trainer-config";
-import { gymLeaderTrainerConfigs } from "./balance/trainers/gym-leader-trainer-config";
-import { eliteFourTrainerConfigs } from "./balance/trainers/elite-four-trainer-config";
-import { chmapionTrainerConfigs } from "./balance/trainers/champion-trainer-config";
-import { rivalTrainerConfigs } from "./balance/trainers/rival-trainer-config";
-import { evilBossTrainerConfigs } from "./balance/trainers/evil-boss-trainer-config";
-import { mysteryEncounterTrainerConfigs } from "./balance/trainers/mystery-encounter-trainer-config";
 
 /** Minimum BST for Pokemon generated onto the Elite Four's teams */
 const ELITE_FOUR_MINIMUM_BST = 460;
@@ -1534,7 +1526,7 @@ export class TrainerConfig {
   }
 }
 
-interface TrainerConfigs {
+export interface TrainerConfigs {
   [key: number]: TrainerConfig;
 }
 
@@ -1638,14 +1630,3 @@ function getRandomTeraModifiers(party: EnemyPokemon[], count: integer, types?: T
   }
   return ret;
 }
-
-export const trainerConfigs: TrainerConfigs = {
-  ...genericTrainerConfigs,
-  ...evilTeamTrainerConfigs,
-  ...gymLeaderTrainerConfigs,
-  ...eliteFourTrainerConfigs,
-  ...chmapionTrainerConfigs,
-  ...rivalTrainerConfigs,
-  ...evilBossTrainerConfigs,
-  ...mysteryEncounterTrainerConfigs,
-};

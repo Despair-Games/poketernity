@@ -7,10 +7,9 @@ import {
   TrainerPartyTemplate,
   TrainerPoolTier,
   TrainerSlot,
-  trainerConfigs,
   trainerPartyTemplates,
-  signatureSpecies,
 } from "#app/data/trainer-config";
+import { trainerConfigs } from "#app/data/balance/trainers/all-trainer-configs";
 import { EnemyPokemon } from "#app/field/pokemon";
 import * as Utils from "#app/utils";
 import { PersistentModifier } from "#app/modifier/modifier";
@@ -21,6 +20,7 @@ import i18next from "i18next";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
+import { signatureSpecies } from "#app/data/balance/trainers/signature-species";
 
 export enum TrainerVariant {
   DEFAULT,

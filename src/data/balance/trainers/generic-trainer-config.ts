@@ -9,11 +9,12 @@ import {
   getRandomPartyMemberFunc,
   TrainerSlot,
   getWavePartyTemplate,
+  TrainerConfigs,
 } from "../../trainer-config";
 import { tmSpecies } from "../tms";
 
-let t = 0;
-export const genericTrainerConfigs = {
+let t = TrainerType.UNKNOWN;
+export const genericTrainerConfigs: TrainerConfigs = {
   [TrainerType.UNKNOWN]: new TrainerConfig(t).setHasGenders(),
   [TrainerType.ACE_TRAINER]: new TrainerConfig(++t)
     .setHasGenders("Ace Trainer Female")

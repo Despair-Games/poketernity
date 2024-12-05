@@ -5,7 +5,7 @@ import Trainer, { TrainerVariant } from "./field/trainer";
 import { GameMode } from "./game-mode";
 import { MoneyMultiplierModifier, PokemonHeldItemModifier } from "./modifier/modifier";
 import { PokeballType } from "#enums/pokeball";
-import { trainerConfigs } from "#app/data/trainer-config";
+import { trainerConfigs } from "./data/balance/trainers/all-trainer-configs";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import Pokemon, { EnemyPokemon, PlayerPokemon, QueuedMove } from "#app/field/pokemon";
 import { ArenaTagType } from "#enums/arena-tag-type";

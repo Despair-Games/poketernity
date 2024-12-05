@@ -8,11 +8,12 @@ import {
   TrainerPartyCompoundTemplate,
   TrainerPartyTemplate,
   trainerPartyTemplates,
+  TrainerConfigs,
 } from "../../trainer-config";
 import { PartyMemberStrength } from "#app/enums/party-member-strength";
 
 let t = TrainerType.BUCK;
-export const mysteryEncounterTrainerConfigs = {
+export const mysteryEncounterTrainerConfigs: TrainerConfigs = {
   [TrainerType.BUCK]: new TrainerConfig(t)
     .setName("Buck")
     .initForStatTrainer([], true)

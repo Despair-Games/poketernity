@@ -4,7 +4,7 @@ import { AchvTier, achvs, getAchievementDescription } from "./achv";
 import { PlayerGender } from "#enums/player-gender";
 import { TrainerType } from "#enums/trainer-type";
 import { ConditionFn } from "#app/@types/common";
-import { trainerConfigs } from "#app/data/trainer-config";
+import { trainerConfigs } from "#app/data/balance/trainers/all-trainer-configs";
 
 export enum VoucherType {
   REGULAR,
