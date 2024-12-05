@@ -9,8 +9,8 @@ import { Mode } from "./ui";
 export default class TestDialogueUiHandler extends FormModalUiHandler {
   keys: string[];
 
-  constructor(scene, mode) {
-    super(scene, mode);
+  constructor(mode) {
+    super(mode);
   }
 
   setup() {

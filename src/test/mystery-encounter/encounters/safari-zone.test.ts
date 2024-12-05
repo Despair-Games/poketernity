@@ -89,8 +89,8 @@ describe("Safari Zone - Mystery Encounter", () => {
 
     expect(encounter.onInit).toBeDefined();
 
-    encounter.populateDialogueTokensFromRequirements(scene);
-    const onInitResult = onInit!(scene);
+    encounter.populateDialogueTokensFromRequirements();
+    const onInitResult = onInit!();
     expect(onInitResult).toBe(true);
   });
 

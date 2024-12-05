@@ -63,111 +63,126 @@ describe("Moves - Parting Shot", () => {
     expect(game.scene.getPlayerField()[0].species.speciesId).toBe(Species.MURKROW);
   });
 
-  it.skip(// TODO: fix this bug to pass the test!
-  "Parting shot should fail if target is -6/-6 de-buffed", async () => {
-    game.override.moveset([Moves.PARTING_SHOT, Moves.MEMENTO, Moves.SPLASH]);
-    await game.startBattle([Species.MEOWTH, Species.MEOWTH, Species.MEOWTH, Species.MURKROW, Species.ABRA]);
+  it.todo(
+    // TODO: fix this bug to pass the test!
+    "Parting shot should fail if target is -6/-6 de-buffed",
+    async () => {
+      game.override.moveset([Moves.PARTING_SHOT, Moves.MEMENTO, Moves.SPLASH]);
+      await game.startBattle([Species.MEOWTH, Species.MEOWTH, Species.MEOWTH, Species.MURKROW, Species.ABRA]);
 
-    // use Memento 3 times to debuff enemy
-    game.move.select(Moves.MEMENTO);
-    await game.phaseInterceptor.to(FaintPhase);
-    expect(game.scene.getPlayerParty()[0].isFainted()).toBe(true);
-    game.doSelectPartyPokemon(1);
+      // use Memento 3 times to debuff enemy
+      game.move.select(Moves.MEMENTO);
+      await game.phaseInterceptor.to(FaintPhase);
+      expect(game.scene.getPlayerParty()[0].isFainted()).toBe(true);
+      game.doSelectPartyPokemon(1);
 
-    await game.phaseInterceptor.to(TurnInitPhase, false);
-    game.move.select(Moves.MEMENTO);
-    await game.phaseInterceptor.to(FaintPhase);
-    expect(game.scene.getPlayerParty()[0].isFainted()).toBe(true);
-    game.doSelectPartyPokemon(2);
+      await game.phaseInterceptor.to(TurnInitPhase, false);
+      game.move.select(Moves.MEMENTO);
+      await game.phaseInterceptor.to(FaintPhase);
+      expect(game.scene.getPlayerParty()[0].isFainted()).toBe(true);
+      game.doSelectPartyPokemon(2);
 
-    await game.phaseInterceptor.to(TurnInitPhase, false);
-    game.move.select(Moves.MEMENTO);
-    await game.phaseInterceptor.to(FaintPhase);
-    expect(game.scene.getPlayerParty()[0].isFainted()).toBe(true);
-    game.doSelectPartyPokemon(3);
+      await game.phaseInterceptor.to(TurnInitPhase, false);
+      game.move.select(Moves.MEMENTO);
+      await game.phaseInterceptor.to(FaintPhase);
+      expect(game.scene.getPlayerParty()[0].isFainted()).toBe(true);
+      game.doSelectPartyPokemon(3);
 
-    // set up done
-    await game.phaseInterceptor.to(TurnInitPhase, false);
-    const enemyPokemon = game.scene.getEnemyPokemon()!;
-    expect(enemyPokemon).toBeDefined();
+      // set up done
+      await game.phaseInterceptor.to(TurnInitPhase, false);
+      const enemyPokemon = game.scene.getEnemyPokemon()!;
+      expect(enemyPokemon).toBeDefined();
 
-    expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(-6);
-    expect(enemyPokemon.getStatStage(Stat.SPATK)).toBe(-6);
+      expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(-6);
+      expect(enemyPokemon.getStatStage(Stat.SPATK)).toBe(-6);
 
-    // now parting shot should fail
-    game.move.select(Moves.PARTING_SHOT);
+      // now parting shot should fail
+      game.move.select(Moves.PARTING_SHOT);
 
-    await game.phaseInterceptor.to(BerryPhase, false);
-    expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(-6);
-    expect(enemyPokemon.getStatStage(Stat.SPATK)).toBe(-6);
-    expect(game.scene.getPlayerField()[0].species.speciesId).toBe(Species.MURKROW);
-  });
+      await game.phaseInterceptor.to(BerryPhase, false);
+      expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(-6);
+      expect(enemyPokemon.getStatStage(Stat.SPATK)).toBe(-6);
+      expect(game.scene.getPlayerField()[0].species.speciesId).toBe(Species.MURKROW);
+    },
+  );
 
-  it.skip(// TODO: fix this bug to pass the test!
-  "Parting shot shouldn't allow switch out when mist is active", async () => {
-    game.override.enemySpecies(Species.ALTARIA).enemyAbility(Abilities.NONE).enemyMoveset([Moves.MIST]);
-    await game.startBattle([Species.SNORLAX, Species.MEOWTH]);
+  it.todo(
+    // TODO: fix this bug to pass the test!
+    "Parting shot shouldn't allow switch out when mist is active",
+    async () => {
+      game.override.enemySpecies(Species.ALTARIA).enemyAbility(Abilities.NONE).enemyMoveset([Moves.MIST]);
+      await game.startBattle([Species.SNORLAX, Species.MEOWTH]);
 
-    const enemyPokemon = game.scene.getEnemyPokemon()!;
-    expect(enemyPokemon).toBeDefined();
+      const enemyPokemon = game.scene.getEnemyPokemon()!;
+      expect(enemyPokemon).toBeDefined();
 
-    game.move.select(Moves.PARTING_SHOT);
+      game.move.select(Moves.PARTING_SHOT);
 
-    await game.phaseInterceptor.to(BerryPhase, false);
-    expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(0);
-    expect(enemyPokemon.getStatStage(Stat.SPATK)).toBe(0);
-    expect(game.scene.getPlayerField()[0].species.speciesId).toBe(Species.MURKROW);
-  });
+      await game.phaseInterceptor.to(BerryPhase, false);
+      expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(0);
+      expect(enemyPokemon.getStatStage(Stat.SPATK)).toBe(0);
+      expect(game.scene.getPlayerField()[0].species.speciesId).toBe(Species.MURKROW);
+    },
+  );
 
-  it.skip(// TODO: fix this bug to pass the test!
-  "Parting shot shouldn't allow switch out against clear body ability", async () => {
-    game.override.enemySpecies(Species.TENTACOOL).enemyAbility(Abilities.CLEAR_BODY);
-    await game.startBattle([Species.SNORLAX, Species.MEOWTH]);
+  it.todo(
+    // TODO: fix this bug to pass the test!
+    "Parting shot shouldn't allow switch out against clear body ability",
+    async () => {
+      game.override.enemySpecies(Species.TENTACOOL).enemyAbility(Abilities.CLEAR_BODY);
+      await game.startBattle([Species.SNORLAX, Species.MEOWTH]);
 
-    const enemyPokemon = game.scene.getEnemyPokemon()!;
-    expect(enemyPokemon).toBeDefined();
+      const enemyPokemon = game.scene.getEnemyPokemon()!;
+      expect(enemyPokemon).toBeDefined();
 
-    game.move.select(Moves.PARTING_SHOT);
+      game.move.select(Moves.PARTING_SHOT);
 
-    await game.phaseInterceptor.to(BerryPhase, false);
-    expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(0);
-    expect(enemyPokemon.getStatStage(Stat.SPATK)).toBe(0);
-    expect(game.scene.getPlayerField()[0].species.speciesId).toBe(Species.MURKROW);
-  });
+      await game.phaseInterceptor.to(BerryPhase, false);
+      expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(0);
+      expect(enemyPokemon.getStatStage(Stat.SPATK)).toBe(0);
+      expect(game.scene.getPlayerField()[0].species.speciesId).toBe(Species.MURKROW);
+    },
+  );
 
-  it.skip(// TODO: fix this bug to pass the test!
-  "Parting shot should de-buff and not fail if no party available to switch - party size 1", async () => {
-    await game.startBattle([Species.MURKROW]);
+  it.todo(
+    // TODO: fix this bug to pass the test!
+    "Parting shot should de-buff and not fail if no party available to switch - party size 1",
+    async () => {
+      await game.startBattle([Species.MURKROW]);
 
-    const enemyPokemon = game.scene.getEnemyPokemon()!;
-    expect(enemyPokemon).toBeDefined();
+      const enemyPokemon = game.scene.getEnemyPokemon()!;
+      expect(enemyPokemon).toBeDefined();
 
-    game.move.select(Moves.PARTING_SHOT);
+      game.move.select(Moves.PARTING_SHOT);
 
-    await game.phaseInterceptor.to(BerryPhase, false);
-    expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(-1);
-    expect(enemyPokemon.getStatStage(Stat.SPATK)).toBe(-1);
-    expect(game.scene.getPlayerField()[0].species.speciesId).toBe(Species.MURKROW);
-  });
+      await game.phaseInterceptor.to(BerryPhase, false);
+      expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(-1);
+      expect(enemyPokemon.getStatStage(Stat.SPATK)).toBe(-1);
+      expect(game.scene.getPlayerField()[0].species.speciesId).toBe(Species.MURKROW);
+    },
+  );
 
-  it.skip(// TODO: fix this bug to pass the test!
-  "Parting shot regularly not fail if no party available to switch - party fainted", async () => {
-    await game.startBattle([Species.MURKROW, Species.MEOWTH]);
-    game.move.select(Moves.SPLASH);
+  it.todo(
+    // TODO: fix this bug to pass the test!
+    "Parting shot regularly not fail if no party available to switch - party fainted",
+    async () => {
+      await game.startBattle([Species.MURKROW, Species.MEOWTH]);
+      game.move.select(Moves.SPLASH);
 
-    // intentionally kill party pokemon, switch to second slot (now 1 party mon is fainted)
-    await game.killPokemon(game.scene.getPlayerParty()[0]);
-    expect(game.scene.getPlayerParty()[0].isFainted()).toBe(true);
-    await game.phaseInterceptor.run(MessagePhase);
-    game.doSelectPartyPokemon(1);
+      // intentionally kill party pokemon, switch to second slot (now 1 party mon is fainted)
+      await game.killPokemon(game.scene.getPlayerParty()[0]);
+      expect(game.scene.getPlayerParty()[0].isFainted()).toBe(true);
+      await game.phaseInterceptor.run(MessagePhase);
+      game.doSelectPartyPokemon(1);
 
-    await game.phaseInterceptor.to(TurnInitPhase, false);
-    game.move.select(Moves.PARTING_SHOT);
+      await game.phaseInterceptor.to(TurnInitPhase, false);
+      game.move.select(Moves.PARTING_SHOT);
 
-    await game.phaseInterceptor.to(BerryPhase, false);
-    const enemyPokemon = game.scene.getEnemyPokemon()!;
-    expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(0);
-    expect(enemyPokemon.getStatStage(Stat.SPATK)).toBe(0);
-    expect(game.scene.getPlayerField()[0].species.speciesId).toBe(Species.MEOWTH);
-  });
+      await game.phaseInterceptor.to(BerryPhase, false);
+      const enemyPokemon = game.scene.getEnemyPokemon()!;
+      expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(0);
+      expect(enemyPokemon.getStatStage(Stat.SPATK)).toBe(0);
+      expect(game.scene.getPlayerField()[0].species.speciesId).toBe(Species.MEOWTH);
+    },
+  );
 });

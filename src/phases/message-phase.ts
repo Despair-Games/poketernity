@@ -1,4 +1,4 @@
-import BattleScene from "#app/battle-scene";
+import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 
 export class MessagePhase extends Phase {
@@ -9,14 +9,13 @@ export class MessagePhase extends Phase {
   private speaker?: string;
 
   constructor(
-    scene: BattleScene,
     text: string,
     callbackDelay?: integer | null,
     prompt?: boolean | null,
     promptDelay?: integer | null,
     speaker?: string,
   ) {
-    super(scene);
+    super();
 
     this.text = text;
     this.callbackDelay = callbackDelay!; // TODO: is this bang correct?
@@ -30,9 +29,8 @@ export class MessagePhase extends Phase {
 
     if (this.text.indexOf("$") > -1) {
       const pageIndex = this.text.indexOf("$");
-      this.scene.unshiftPhase(
+      globalScene.unshiftPhase(
         new MessagePhase(
-          this.scene,
           this.text.slice(pageIndex + 1),
           this.callbackDelay,
           this.prompt,
@@ -44,7 +42,7 @@ export class MessagePhase extends Phase {
     }
 
     if (this.speaker) {
-      this.scene.ui.showDialogue(
+      globalScene.ui.showDialogue(
         this.text,
         this.speaker,
         null,
@@ -53,7 +51,7 @@ export class MessagePhase extends Phase {
         this.promptDelay ?? 0,
       );
     } else {
-      this.scene.ui.showText(
+      globalScene.ui.showText(
         this.text,
         null,
         () => this.end(),
@@ -65,8 +63,8 @@ export class MessagePhase extends Phase {
   }
 
   end() {
-    if (this.scene.abilityBar.shown) {
-      this.scene.abilityBar.hide();
+    if (globalScene.abilityBar.shown) {
+      globalScene.abilityBar.hide();
     }
 
     super.end();

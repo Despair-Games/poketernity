@@ -1,14 +1,14 @@
-import BattleScene from "../battle-scene";
+import { globalScene } from "#app/global-scene";
 import Pokemon from "./pokemon";
 import * as Utils from "../utils";
 
 export default class PokemonSpriteSparkleHandler {
   private sprites: Set<Phaser.GameObjects.Sprite>;
 
-  setup(scene: BattleScene): void {
+  setup(): void {
     this.sprites = new Set();
 
-    scene.tweens.addCounter({
+    globalScene.tweens.addCounter({
       duration: Utils.fixedInt(200),
       from: 0,
       to: 1,
@@ -39,7 +39,7 @@ export default class PokemonSpriteSparkleHandler {
       const pixel = texture.manager.getPixel(pixelX, pixelY, texture.key, "__BASE");
       if (pixel?.alpha) {
         const [xOffset, yOffset] = [-s.originX * s.width, -s.originY * s.height];
-        const sparkle = (s.scene as BattleScene).addFieldSprite(
+        const sparkle = globalScene.addFieldSprite(
           (pokemon?.x || 0) + s.x + pixelX * ratioX + xOffset,
           (pokemon?.y || 0) + s.y + pixelY * ratioY + yOffset,
           "tera_sparkle",

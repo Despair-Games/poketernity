@@ -50,6 +50,7 @@ describe("Abilities - Libero", () => {
     testPokemonTypeMatchesDefaultMoveType(leadPokemon, Moves.SPLASH);
   });
 
+  // Test for Gen9+ functionality, we are using previous funcionality
   test.skip("ability applies only once per switch in", async () => {
     game.override.moveset([Moves.SPLASH, Moves.AGILITY]);
 

@@ -1,4 +1,5 @@
-import BattleScene, { startingWave } from "#app/battle-scene";
+import { startingWave } from "#app/battle-scene";
+import { globalScene } from "#app/global-scene";
 import { ModifierTypeFunc, modifierTypes } from "#app/modifier/modifier-type";
 import { EnemyPokemon } from "#app/field/pokemon";
 import * as Utils from "#app/utils";
@@ -260,8 +261,8 @@ export const trainerPartyTemplates = {
   ),
 };
 
-type PartyTemplateFunc = (scene: BattleScene) => TrainerPartyTemplate;
-type PartyMemberFunc = (scene: BattleScene, level: number, strength: PartyMemberStrength) => EnemyPokemon;
+type PartyTemplateFunc = () => TrainerPartyTemplate;
+type PartyMemberFunc = (level: integer, strength: PartyMemberStrength) => EnemyPokemon;
 type GenModifiersFunc = (party: EnemyPokemon[]) => PersistentModifier[];
 
 export interface PartyMemberFuncs {
@@ -1233,7 +1234,7 @@ export class TrainerConfig {
     this.setBattleBgm("battle_unova_gym");
     this.setVictoryBgm("victory_gym");
     this.setGenModifiersFunc((party) => {
-      const waveIndex = party[0].scene.currentBattle.waveIndex;
+      const waveIndex = globalScene.currentBattle.waveIndex;
       return getRandomTeraModifiers(
         party,
         waveIndex >= 100 ? 1 : 0,
@@ -1413,27 +1414,27 @@ export class TrainerConfig {
     return ret;
   }
 
-  loadAssets(scene: BattleScene, variant: TrainerVariant): Promise<void> {
+  loadAssets(variant: TrainerVariant): Promise<void> {
     return new Promise((resolve) => {
       const isDouble = variant === TrainerVariant.DOUBLE;
       const trainerKey = this.getSpriteKey(variant === TrainerVariant.FEMALE, false);
       const partnerTrainerKey = this.getSpriteKey(true, true);
-      scene.loadAtlas(trainerKey, "trainer");
+      globalScene.loadAtlas(trainerKey, "trainer");
       if (isDouble) {
-        scene.loadAtlas(partnerTrainerKey, "trainer");
+        globalScene.loadAtlas(partnerTrainerKey, "trainer");
       }
-      scene.load.once(Phaser.Loader.Events.COMPLETE, () => {
+      globalScene.load.once(Phaser.Loader.Events.COMPLETE, () => {
         const originalWarn = console.warn;
         // Ignore warnings for missing frames, because there will be a lot
         console.warn = () => {};
-        const frameNames = scene.anims.generateFrameNames(trainerKey, {
+        const frameNames = globalScene.anims.generateFrameNames(trainerKey, {
           zeroPad: 4,
           suffix: ".png",
           start: 1,
           end: 128,
         });
         const partnerFrameNames = isDouble
-          ? scene.anims.generateFrameNames(partnerTrainerKey, {
+          ? globalScene.anims.generateFrameNames(partnerTrainerKey, {
               zeroPad: 4,
               suffix: ".png",
               start: 1,
@@ -1441,16 +1442,16 @@ export class TrainerConfig {
             })
           : "";
         console.warn = originalWarn;
-        if (!scene.anims.exists(trainerKey)) {
-          scene.anims.create({
+        if (!globalScene.anims.exists(trainerKey)) {
+          globalScene.anims.create({
             key: trainerKey,
             frames: frameNames,
             frameRate: 24,
             repeat: -1,
           });
         }
-        if (isDouble && !scene.anims.exists(partnerTrainerKey)) {
-          scene.anims.create({
+        if (isDouble && !globalScene.anims.exists(partnerTrainerKey)) {
+          globalScene.anims.create({
             key: partnerTrainerKey,
             frames: partnerFrameNames,
             frameRate: 24,
@@ -1459,8 +1460,8 @@ export class TrainerConfig {
         }
         resolve();
       });
-      if (!scene.load.isLoading()) {
-        scene.load.start();
+      if (!globalScene.load.isLoading()) {
+        globalScene.load.start();
       }
     });
   }
@@ -1530,12 +1531,33 @@ export interface TrainerConfigs {
   [key: number]: TrainerConfig;
 }
 
-export function getWavePartyTemplate(scene: BattleScene, ...templates: TrainerPartyTemplate[]) {
+/**
+ * The function to get variable strength grunts
+ * @param scene the singleton scene being passed in
+ * @returns the correct TrainerPartyTemplate
+ */
+function getEvilGruntPartyTemplate(): TrainerPartyTemplate {
+  const waveIndex = globalScene.currentBattle?.waveIndex;
+  if (waveIndex < 40) {
+    return trainerPartyTemplates.TWO_AVG;
+  } else if (waveIndex < 63) {
+    return trainerPartyTemplates.THREE_AVG;
+  } else if (waveIndex < 65) {
+    return trainerPartyTemplates.TWO_AVG_ONE_STRONG;
+  } else if (waveIndex < 112) {
+    return trainerPartyTemplates.GYM_LEADER_4; // 3avg 1 strong 1 stronger
+  } else {
+    return trainerPartyTemplates.GYM_LEADER_5; // 3 avg 2 strong 1 stronger
+  }
+}
+
+function getWavePartyTemplate(...templates: TrainerPartyTemplate[]) {
   return templates[
     Math.min(
       Math.max(
         Math.ceil(
-          (scene.gameMode.getWaveForDifficulty(scene.currentBattle?.waveIndex || startingWave, true) - 20) / 30,
+          (globalScene.gameMode.getWaveForDifficulty(globalScene.currentBattle?.waveIndex || startingWave, true) - 20) /
+            30,
         ),
         0,
       ),
@@ -1544,9 +1566,8 @@ export function getWavePartyTemplate(scene: BattleScene, ...templates: TrainerPa
   ];
 }
 
-function getGymLeaderPartyTemplate(scene: BattleScene) {
+function getGymLeaderPartyTemplate() {
   return getWavePartyTemplate(
-    scene,
     trainerPartyTemplates.GYM_LEADER_1,
     trainerPartyTemplates.GYM_LEADER_2,
     trainerPartyTemplates.GYM_LEADER_3,
@@ -1557,7 +1578,7 @@ function getGymLeaderPartyTemplate(scene: BattleScene) {
 
 /**
  * Randomly selects one of the `Species` from `speciesPool`, determines its evolution, level, and strength.
- * Then adds Pokemon to scene.
+ * Then adds Pokemon to globalScene.
  * @param speciesPool
  * @param trainerSlot
  * @param ignoreEvolution
@@ -1569,17 +1590,17 @@ export function getRandomPartyMemberFunc(
   ignoreEvolution: boolean = false,
   postProcess?: (enemyPokemon: EnemyPokemon) => void,
 ) {
-  return (scene: BattleScene, level: number, strength: PartyMemberStrength) => {
+  return (level: number, strength: PartyMemberStrength) => {
     let species = Utils.randSeedItem(speciesPool);
     if (!ignoreEvolution) {
       species = getPokemonSpecies(species).getTrainerSpeciesForLevel(
         level,
         true,
         strength,
-        scene.currentBattle.waveIndex,
+        globalScene.currentBattle.waveIndex,
       );
     }
-    return scene.addEnemyPokemon(
+    return globalScene.addEnemyPokemon(
       getPokemonSpecies(species),
       level,
       trainerSlot,
@@ -1602,15 +1623,15 @@ export function getSpeciesFilterRandomPartyMemberFunc(
     return (allowLegendaries || notLegendary) && !species.isTrainerForbidden() && originalSpeciesFilter(species);
   };
 
-  return (scene: BattleScene, level: number, strength: PartyMemberStrength) => {
-    const waveIndex = scene.currentBattle.waveIndex;
+  return (level: number, strength: PartyMemberStrength) => {
+    const waveIndex = globalScene.currentBattle.waveIndex;
     const species = getPokemonSpecies(
-      scene
+      globalScene
         .randomSpecies(waveIndex, level, false, speciesFilter)
         .getTrainerSpeciesForLevel(level, true, strength, waveIndex),
     );
 
-    return scene.addEnemyPokemon(species, level, trainerSlot, undefined, false, undefined, postProcess);
+    return globalScene.addEnemyPokemon(species, level, trainerSlot, undefined, false, undefined, postProcess);
   };
 }
 

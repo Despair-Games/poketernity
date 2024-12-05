@@ -1,6 +1,6 @@
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { Species } from "#enums/species";
-import BattleScene from "#app/battle-scene";
+import { globalScene } from "#app/global-scene";
 import { PlayerPokemon } from "#app/field/pokemon";
 import { Starter } from "#app/ui/starter-select-ui-handler";
 import * as Utils from "#app/utils";
@@ -25,12 +25,12 @@ export function fetchDailyRunSeed(): Promise<string | null> {
   });
 }
 
-export function getDailyRunStarters(scene: BattleScene, seed: string): Starter[] {
+export function getDailyRunStarters(seed: string): Starter[] {
   const starters: Starter[] = [];
 
-  scene.executeWithSeedOffset(
+  globalScene.executeWithSeedOffset(
     () => {
-      const startingLevel = scene.gameMode.getStartingLevel();
+      const startingLevel = globalScene.gameMode.getStartingLevel();
 
       if (/\d{18}$/.test(seed)) {
         for (let s = 0; s < 3; s++) {
@@ -39,7 +39,7 @@ export function getDailyRunStarters(scene: BattleScene, seed: string): Starter[]
             parseInt(seed.slice(offset, offset + 4)) as Species,
             parseInt(seed.slice(offset + 4, offset + 6)),
           );
-          starters.push(getDailyRunStarter(scene, starterSpeciesForm, startingLevel));
+          starters.push(getDailyRunStarter(starterSpeciesForm, startingLevel));
         }
         return;
       }
@@ -58,7 +58,7 @@ export function getDailyRunStarters(scene: BattleScene, seed: string): Starter[]
         const starterSpecies = getPokemonSpecies(
           randPkmSpecies.getTrainerSpeciesForLevel(startingLevel, true, PartyMemberStrength.STRONGER),
         );
-        starters.push(getDailyRunStarter(scene, starterSpecies, startingLevel));
+        starters.push(getDailyRunStarter(starterSpecies, startingLevel));
       }
     },
     0,
@@ -68,16 +68,11 @@ export function getDailyRunStarters(scene: BattleScene, seed: string): Starter[]
   return starters;
 }
 
-function getDailyRunStarter(
-  scene: BattleScene,
-  starterSpeciesForm: PokemonSpeciesForm,
-  startingLevel: integer,
-): Starter {
+function getDailyRunStarter(starterSpeciesForm: PokemonSpeciesForm, startingLevel: integer): Starter {
   const starterSpecies =
     starterSpeciesForm instanceof PokemonSpecies ? starterSpeciesForm : getPokemonSpecies(starterSpeciesForm.speciesId);
   const formIndex = starterSpeciesForm instanceof PokemonSpecies ? undefined : starterSpeciesForm.formIndex;
   const pokemon = new PlayerPokemon(
-    scene,
     starterSpecies,
     startingLevel,
     undefined,

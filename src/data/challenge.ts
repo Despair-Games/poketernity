@@ -540,7 +540,7 @@ export class SingleGenerationChallenge extends Challenge {
     } else {
       battleConfig
         .setBattleType(BattleType.TRAINER)
-        .setGetTrainerFunc((scene) => new Trainer(scene, trainerTypes[this.value - 1], TrainerVariant.DEFAULT));
+        .setGetTrainerFunc(() => new Trainer(trainerTypes[this.value - 1], TrainerVariant.DEFAULT));
       return true;
     }
   }
