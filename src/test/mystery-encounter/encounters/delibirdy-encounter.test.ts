@@ -8,12 +8,12 @@ import {
   runMysteryEncounterToEnd,
   runSelectMysteryEncounterOption,
 } from "#test/mystery-encounter/encounter-test-utils";
-import BattleScene from "#app/battle-scene";
+import type BattleScene from "#app/battle-scene";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { DelibirdyEncounter } from "#app/data/mystery-encounters/encounters/delibirdy-encounter";
 import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
-import { MoneyRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
+import type { MoneyRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
 import {
   BerryModifier,
   HealingBoosterModifier,

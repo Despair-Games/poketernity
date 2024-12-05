@@ -1,5 +1,6 @@
 import { getPokemonNameWithAffix } from "../messages";
-import Pokemon, { HitResult } from "../field/pokemon";
+import type Pokemon from "../field/pokemon";
+import { HitResult } from "../field/pokemon";
 import { getStatusEffectHealText } from "./status-effect";
 import { NumberHolder, toDmgValue, randSeedInt } from "#app/utils";
 import {

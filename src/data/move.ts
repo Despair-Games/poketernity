@@ -12,15 +12,9 @@ import {
   TypeBoostTag,
 } from "./battler-tags";
 import { getPokemonNameWithAffix } from "../messages";
-import Pokemon, {
-  AttackMoveResult,
-  EnemyPokemon,
-  HitResult,
-  MoveResult,
-  PlayerPokemon,
-  PokemonMove,
-  TurnMove,
-} from "../field/pokemon";
+import type { AttackMoveResult, TurnMove } from "../field/pokemon";
+import type Pokemon from "../field/pokemon";
+import { EnemyPokemon, HitResult, MoveResult, PlayerPokemon, PokemonMove } from "../field/pokemon";
 import { getNonVolatileStatusEffects, getStatusEffectHealText, isNonVolatileStatusEffect } from "./status-effect";
 import { getTypeDamageMultiplier } from "./type";
 import { Type } from "#enums/type";
@@ -36,7 +30,8 @@ import {
   toReadableString,
 } from "#app/utils";
 import { WeatherType } from "#enums/weather-type";
-import { ArenaTagSide, ArenaTrapTag, WeakenMoveTypeTag } from "./arena-tag";
+import type { ArenaTrapTag } from "./arena-tag";
+import { ArenaTagSide, WeakenMoveTypeTag } from "./arena-tag";
 import {
   allAbilities,
   AllyMoveCategoryPowerBoostAbAttr,
@@ -81,12 +76,13 @@ import {
   PokemonMultiHitModifier,
   PreserveBerryModifier,
 } from "../modifier/modifier";
-import { BattlerIndex, BattleType } from "../battle";
+import type { BattlerIndex } from "../battle";
+import { BattleType } from "../battle";
 import { TerrainType } from "./terrain";
 import { ModifierPoolType } from "#app/modifier/modifier-type";
 import { Command } from "../ui/command-ui-handler";
 import i18next from "i18next";
-import { Localizable } from "#app/interfaces/locales";
+import type { Localizable } from "#app/interfaces/locales";
 import { getBerryEffectFunc } from "./berry";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -106,7 +102,7 @@ import { SwitchPhase } from "#app/phases/switch-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { SpeciesFormChangeRevertWeatherFormTrigger } from "./pokemon-forms";
-import { GameMode } from "#app/game-mode";
+import type { GameMode } from "#app/game-mode";
 import { applyChallenges, ChallengeType } from "./challenge";
 import { SwitchType } from "#enums/switch-type";
 import { StatusEffect } from "enums/status-effect";
