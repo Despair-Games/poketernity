@@ -1,7 +1,9 @@
-import BattleScene, * as battleScene from "#app/battle-scene";
+import type BattleScene from "#app/battle-scene";
+import * as battleScene from "#app/battle-scene";
+import { SESSION_ID_COOKIE } from "#app/constants";
 import { MoveAnim } from "#app/data/battle-anims";
 import Pokemon from "#app/field/pokemon";
-import { setCookie, sessionIdKey } from "#app/utils";
+import { setCookie } from "#app/utils";
 import { blobToString } from "#test/utils/gameManagerUtils";
 import { MockClock } from "#test/utils/mocks/mockClock";
 import mockConsoleLog from "#test/utils/mocks/mockConsoleLog";
@@ -14,8 +16,8 @@ import fs from "fs";
 import Phaser from "phaser";
 import InputText from "phaser3-rex-plugins/plugins/inputtext";
 import { vi } from "vitest";
-import { MockGameObjectCreator } from "./mocks/mockGameObjectCreator";
 import { version } from "../../../package.json";
+import { MockGameObjectCreator } from "./mocks/mockGameObjectCreator";
 import { MockTimedEventManager } from "./mocks/mockTimedEventManager";
 import InputManager = Phaser.Input.InputManager;
 import KeyboardManager = Phaser.Input.Keyboard.KeyboardManager;
@@ -23,7 +25,6 @@ import KeyboardPlugin = Phaser.Input.Keyboard.KeyboardPlugin;
 import GamepadPlugin = Phaser.Input.Gamepad.GamepadPlugin;
 import EventEmitter = Phaser.Events.EventEmitter;
 import UpdateList = Phaser.GameObjects.UpdateList;
-import { SESSION_ID_COOKIE } from "#app/constants";
 
 Object.defineProperty(window, "localStorage", {
   value: mockLocalStorage(),
