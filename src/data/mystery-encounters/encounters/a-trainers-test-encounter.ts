@@ -29,7 +29,6 @@ const namespace = "mysteryEncounters/aTrainersTest";
 
 /**
  * A Trainer's Test encounter.
- * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3816 | GitHub Issue #3816}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const ATrainersTestEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(

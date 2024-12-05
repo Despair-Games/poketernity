@@ -176,7 +176,6 @@ const WAVE_LEVEL_BREAKPOINTS = [30, 50, 70, 100, 120, 140, 160];
 
 /**
  * Bug Type Superfan encounter.
- * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3820 | GitHub Issue #3820}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(

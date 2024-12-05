@@ -121,7 +121,6 @@ const STANDARD_BST_TRANSFORM_BASE_VALUES: [number, number] = [40, 50];
 
 /**
  * Weird Dream encounter.
- * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3822 | GitHub Issue #3822}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const WeirdDreamEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(

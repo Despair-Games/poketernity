@@ -37,7 +37,6 @@ const MASTER_REWARDS_PERCENT = 5;
 
 /**
  * Mysterious Chest encounter.
- * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3796 | GitHub Issue #3796}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const MysteriousChestEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(

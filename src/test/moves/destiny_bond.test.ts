@@ -226,7 +226,6 @@ describe("Moves - Destiny Bond", () => {
 
   /**
    * In particular, this should prevent something like
-   * {@link https://github.com/pagefaultgames/pokerogue/issues/4219}
    * from occurring with fainting by KO'ing a Destiny Bond user with U-Turn.
    */
   it("should not allow the opponent to revive via Reviver Seed", async () => {

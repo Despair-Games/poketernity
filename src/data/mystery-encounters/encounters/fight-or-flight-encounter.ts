@@ -42,7 +42,6 @@ const namespace = "mysteryEncounters/fightOrFlight";
 
 /**
  * Fight or Flight encounter.
- * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3795 | GitHub Issue #3795}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const FightOrFlightEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(

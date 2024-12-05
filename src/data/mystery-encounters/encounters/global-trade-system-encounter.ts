@@ -93,7 +93,6 @@ const EXCLUDED_TRADE_SPECIES = [
 
 /**
  * Global Trade System encounter.
- * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3812 | GitHub Issue #3812}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const GlobalTradeSystemEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(

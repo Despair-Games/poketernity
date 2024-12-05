@@ -71,7 +71,6 @@ const RANDOM_ABILITY_POOL = [
 
 /**
  * Clowning Around encounter.
- * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3807 | GitHub Issue #3807}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(

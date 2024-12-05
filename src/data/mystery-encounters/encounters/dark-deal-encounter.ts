@@ -93,7 +93,6 @@ const excludedBosses = [
 
 /**
  * Dark Deal encounter.
- * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3806 | GitHub Issue #3806}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const DarkDealEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(

@@ -17,7 +17,6 @@ const namespace = "mysteryEncounters/departmentStoreSale";
 
 /**
  * Department Store Sale encounter.
- * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3797 | GitHub Issue #3797}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const DepartmentStoreSaleEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(

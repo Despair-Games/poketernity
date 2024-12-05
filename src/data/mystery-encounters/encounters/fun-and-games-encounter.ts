@@ -38,7 +38,6 @@ const namespace = "mysteryEncounters/funAndGames";
 
 /**
  * Fun and Games! encounter.
- * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3819 | GitHub Issue #3819}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const FunAndGamesEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(

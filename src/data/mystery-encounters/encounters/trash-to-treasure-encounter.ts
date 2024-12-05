@@ -38,7 +38,6 @@ const SHOP_ITEM_COST_MULTIPLIER = 2.5;
 
 /**
  * Trash to Treasure encounter.
- * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3809 | GitHub Issue #3809}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const TrashToTreasureEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(
