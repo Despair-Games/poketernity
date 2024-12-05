@@ -1,22 +1,22 @@
 import { bypassLogin } from "#app/battle-scene";
+import { SESSION_ID_COOKIE } from "#app/constants";
 import { globalScene } from "#app/global-scene";
-import { TextStyle, addTextObject, getTextStyleOptions } from "./text";
-import { Mode } from "./ui";
-import { getEnumKeys, isLocal, isBeta, fixedInt, getCookie, sessionIdKey } from "#app/utils";
-import { addWindow, WindowVariant } from "./ui-theme";
-import MessageUiHandler from "./message-ui-handler";
-import type { OptionSelectConfig, OptionSelectItem } from "./abstact-option-select-ui-handler";
-import { Tutorial, handleTutorial } from "../tutorial";
-import { loggedInUser, updateUserInfo } from "../account";
-import i18next from "i18next";
+import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
+import { api } from "#app/plugins/api/api";
+import BgmBar from "#app/ui/bgm-bar";
+import { fixedInt, getCookie, getEnumKeys, isBeta, isLocal } from "#app/utils";
 import { Button } from "#enums/buttons";
 import { GameDataType } from "#enums/game-data-type";
-import BgmBar from "#app/ui/bgm-bar";
-import type AwaitableUiHandler from "./awaitable-ui-handler";
-import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
+import i18next from "i18next";
+import { loggedInUser, updateUserInfo } from "../account";
+import { Tutorial, handleTutorial } from "../tutorial";
+import type { OptionSelectConfig, OptionSelectItem } from "./abstact-option-select-ui-handler";
 import { AdminMode, getAdminModeName } from "./admin-ui-handler";
-import { api } from "#app/plugins/api/api";
-import { SESSION_ID_COOKIE } from "#app/constants";
+import type AwaitableUiHandler from "./awaitable-ui-handler";
+import MessageUiHandler from "./message-ui-handler";
+import { TextStyle, addTextObject, getTextStyleOptions } from "./text";
+import { Mode } from "./ui";
+import { WindowVariant, addWindow } from "./ui-theme";
 
 enum MenuOptions {
   GAME_SETTINGS,

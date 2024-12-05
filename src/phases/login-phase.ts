@@ -1,14 +1,14 @@
 import { updateUserInfo } from "#app/account";
 import { bypassLogin } from "#app/battle-scene";
+import { SESSION_ID_COOKIE } from "#app/constants";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { handleTutorial, Tutorial } from "#app/tutorial";
 import { Mode } from "#app/ui/ui";
+import { executeIf, getCookie, removeCookie } from "#app/utils";
 import i18next, { t } from "i18next";
-import { getCookie, sessionIdKey, executeIf, removeCookie } from "#app/utils";
 import { SelectGenderPhase } from "./select-gender-phase";
 import { UnavailablePhase } from "./unavailable-phase";
-import { SESSION_ID_COOKIE } from "#app/constants";
 
 export class LoginPhase extends Phase {
   private showText: boolean;
