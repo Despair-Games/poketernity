@@ -6938,7 +6938,7 @@ export class RandomMovesetMoveAttr extends OverrideMoveEffectAttr {
       }
       const targets = selectTargets;
       user.getMoveQueue().push({ move: move.moveId, targets: targets, ignorePP: true });
-      user.scene.unshiftPhase(new MovePhase(user.scene, user, targets, moveset[moveIndex], true));
+      globalScene.unshiftPhase(new MovePhase(user, targets, moveset[moveIndex], true));
       return true;
     }
 
@@ -7327,8 +7327,8 @@ export class ReducePpMoveAttr extends MoveEffectAttr {
       moveName: movesetMove.getName(),
       reduction: movesetMove.ppUsed - lastPpUsed,
     });
-    user.scene.eventTarget.dispatchEvent(new MoveUsedEvent(target.id, movesetMove.getMove(), movesetMove.ppUsed));
-    user.scene.queueMessage(message);
+    globalScene.eventTarget.dispatchEvent(new MoveUsedEvent(target.id, movesetMove.getMove(), movesetMove.ppUsed));
+    globalScene.queueMessage(message);
 
     return true;
   }
