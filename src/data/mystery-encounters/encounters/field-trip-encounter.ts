@@ -7,12 +7,13 @@ import {
   setEncounterExp,
   setEncounterRewards,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { PlayerPokemon, PokemonMove } from "#app/field/pokemon";
+import type { PlayerPokemon, PokemonMove } from "#app/field/pokemon";
 import { modifierTypes } from "#app/modifier/modifier-type";
-import { OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler";
+import type { OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import BattleScene from "#app/battle-scene";
-import MysteryEncounter, { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
+import { globalScene } from "#app/global-scene";
+import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
+import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { Stat } from "#enums/stat";
@@ -70,8 +71,8 @@ export const FieldTripEncounter: MysteryEncounter = MysteryEncounterBuilder.with
         buttonTooltip: `${namespace}:option.1.tooltip`,
         secondOptionPrompt: `${namespace}:second_option_prompt`,
       })
-      .withPreOptionPhase(async (scene: BattleScene): Promise<boolean> => {
-        const encounter = scene.currentBattle.mysteryEncounter!;
+      .withPreOptionPhase(async (): Promise<boolean> => {
+        const encounter = globalScene.currentBattle.mysteryEncounter!;
         const onPokemonSelected = (pokemon: PlayerPokemon) => {
           // Return the options for Pokemon move valid for this option
           return pokemon.moveset.map((move: PokemonMove) => {
@@ -80,7 +81,7 @@ export const FieldTripEncounter: MysteryEncounter = MysteryEncounterBuilder.with
               handler: () => {
                 // Pokemon and move selected
                 encounter.setDialogueToken("moveCategory", i18next.t(`${namespace}:physical`));
-                pokemonAndMoveChosen(scene, pokemon, move, MoveCategory.PHYSICAL);
+                pokemonAndMoveChosen(pokemon, move, MoveCategory.PHYSICAL);
                 return true;
               },
             };
@@ -88,23 +89,23 @@ export const FieldTripEncounter: MysteryEncounter = MysteryEncounterBuilder.with
           });
         };
 
-        return selectPokemonForOption(scene, onPokemonSelected);
+        return selectPokemonForOption(onPokemonSelected);
       })
-      .withOptionPhase(async (scene: BattleScene) => {
-        const encounter = scene.currentBattle.mysteryEncounter!;
+      .withOptionPhase(async () => {
+        const encounter = globalScene.currentBattle.mysteryEncounter!;
         if (encounter.misc.correctMove) {
           const modifiers = [
-            generateModifierTypeOption(scene, modifierTypes.TEMP_STAT_STAGE_BOOSTER, [Stat.ATK])!,
-            generateModifierTypeOption(scene, modifierTypes.TEMP_STAT_STAGE_BOOSTER, [Stat.DEF])!,
-            generateModifierTypeOption(scene, modifierTypes.TEMP_STAT_STAGE_BOOSTER, [Stat.SPD])!,
-            generateModifierTypeOption(scene, modifierTypes.DIRE_HIT)!,
-            generateModifierTypeOption(scene, modifierTypes.RARER_CANDY)!,
+            generateModifierTypeOption(modifierTypes.TEMP_STAT_STAGE_BOOSTER, [Stat.ATK])!,
+            generateModifierTypeOption(modifierTypes.TEMP_STAT_STAGE_BOOSTER, [Stat.DEF])!,
+            generateModifierTypeOption(modifierTypes.TEMP_STAT_STAGE_BOOSTER, [Stat.SPD])!,
+            generateModifierTypeOption(modifierTypes.DIRE_HIT)!,
+            generateModifierTypeOption(modifierTypes.RARER_CANDY)!,
           ];
 
-          setEncounterRewards(scene, { guaranteedModifierTypeOptions: modifiers, fillRemaining: false });
+          setEncounterRewards({ guaranteedModifierTypeOptions: modifiers, fillRemaining: false });
         }
 
-        leaveEncounterWithoutBattle(scene, !encounter.misc.correctMove);
+        leaveEncounterWithoutBattle(!encounter.misc.correctMove);
       })
       .build(),
   )
@@ -115,8 +116,8 @@ export const FieldTripEncounter: MysteryEncounter = MysteryEncounterBuilder.with
         buttonTooltip: `${namespace}:option.2.tooltip`,
         secondOptionPrompt: `${namespace}:second_option_prompt`,
       })
-      .withPreOptionPhase(async (scene: BattleScene): Promise<boolean> => {
-        const encounter = scene.currentBattle.mysteryEncounter!;
+      .withPreOptionPhase(async (): Promise<boolean> => {
+        const encounter = globalScene.currentBattle.mysteryEncounter!;
         const onPokemonSelected = (pokemon: PlayerPokemon) => {
           // Return the options for Pokemon move valid for this option
           return pokemon.moveset.map((move: PokemonMove) => {
@@ -125,7 +126,7 @@ export const FieldTripEncounter: MysteryEncounter = MysteryEncounterBuilder.with
               handler: () => {
                 // Pokemon and move selected
                 encounter.setDialogueToken("moveCategory", i18next.t(`${namespace}:special`));
-                pokemonAndMoveChosen(scene, pokemon, move, MoveCategory.SPECIAL);
+                pokemonAndMoveChosen(pokemon, move, MoveCategory.SPECIAL);
                 return true;
               },
             };
@@ -133,23 +134,23 @@ export const FieldTripEncounter: MysteryEncounter = MysteryEncounterBuilder.with
           });
         };
 
-        return selectPokemonForOption(scene, onPokemonSelected);
+        return selectPokemonForOption(onPokemonSelected);
       })
-      .withOptionPhase(async (scene: BattleScene) => {
-        const encounter = scene.currentBattle.mysteryEncounter!;
+      .withOptionPhase(async () => {
+        const encounter = globalScene.currentBattle.mysteryEncounter!;
         if (encounter.misc.correctMove) {
           const modifiers = [
-            generateModifierTypeOption(scene, modifierTypes.TEMP_STAT_STAGE_BOOSTER, [Stat.SPATK])!,
-            generateModifierTypeOption(scene, modifierTypes.TEMP_STAT_STAGE_BOOSTER, [Stat.SPDEF])!,
-            generateModifierTypeOption(scene, modifierTypes.TEMP_STAT_STAGE_BOOSTER, [Stat.SPD])!,
-            generateModifierTypeOption(scene, modifierTypes.DIRE_HIT)!,
-            generateModifierTypeOption(scene, modifierTypes.RARER_CANDY)!,
+            generateModifierTypeOption(modifierTypes.TEMP_STAT_STAGE_BOOSTER, [Stat.SPATK])!,
+            generateModifierTypeOption(modifierTypes.TEMP_STAT_STAGE_BOOSTER, [Stat.SPDEF])!,
+            generateModifierTypeOption(modifierTypes.TEMP_STAT_STAGE_BOOSTER, [Stat.SPD])!,
+            generateModifierTypeOption(modifierTypes.DIRE_HIT)!,
+            generateModifierTypeOption(modifierTypes.RARER_CANDY)!,
           ];
 
-          setEncounterRewards(scene, { guaranteedModifierTypeOptions: modifiers, fillRemaining: false });
+          setEncounterRewards({ guaranteedModifierTypeOptions: modifiers, fillRemaining: false });
         }
 
-        leaveEncounterWithoutBattle(scene, !encounter.misc.correctMove);
+        leaveEncounterWithoutBattle(!encounter.misc.correctMove);
       })
       .build(),
   )
@@ -160,8 +161,8 @@ export const FieldTripEncounter: MysteryEncounter = MysteryEncounterBuilder.with
         buttonTooltip: `${namespace}:option.3.tooltip`,
         secondOptionPrompt: `${namespace}:second_option_prompt`,
       })
-      .withPreOptionPhase(async (scene: BattleScene): Promise<boolean> => {
-        const encounter = scene.currentBattle.mysteryEncounter!;
+      .withPreOptionPhase(async (): Promise<boolean> => {
+        const encounter = globalScene.currentBattle.mysteryEncounter!;
         const onPokemonSelected = (pokemon: PlayerPokemon) => {
           // Return the options for Pokemon move valid for this option
           return pokemon.moveset.map((move: PokemonMove) => {
@@ -170,7 +171,7 @@ export const FieldTripEncounter: MysteryEncounter = MysteryEncounterBuilder.with
               handler: () => {
                 // Pokemon and move selected
                 encounter.setDialogueToken("moveCategory", i18next.t(`${namespace}:status`));
-                pokemonAndMoveChosen(scene, pokemon, move, MoveCategory.STATUS);
+                pokemonAndMoveChosen(pokemon, move, MoveCategory.STATUS);
                 return true;
               },
             };
@@ -178,35 +179,30 @@ export const FieldTripEncounter: MysteryEncounter = MysteryEncounterBuilder.with
           });
         };
 
-        return selectPokemonForOption(scene, onPokemonSelected);
+        return selectPokemonForOption(onPokemonSelected);
       })
-      .withOptionPhase(async (scene: BattleScene) => {
-        const encounter = scene.currentBattle.mysteryEncounter!;
+      .withOptionPhase(async () => {
+        const encounter = globalScene.currentBattle.mysteryEncounter!;
         if (encounter.misc.correctMove) {
           const modifiers = [
-            generateModifierTypeOption(scene, modifierTypes.TEMP_STAT_STAGE_BOOSTER, [Stat.ACC])!,
-            generateModifierTypeOption(scene, modifierTypes.TEMP_STAT_STAGE_BOOSTER, [Stat.SPD])!,
-            generateModifierTypeOption(scene, modifierTypes.GREAT_BALL)!,
-            generateModifierTypeOption(scene, modifierTypes.IV_SCANNER)!,
-            generateModifierTypeOption(scene, modifierTypes.RARER_CANDY)!,
+            generateModifierTypeOption(modifierTypes.TEMP_STAT_STAGE_BOOSTER, [Stat.ACC])!,
+            generateModifierTypeOption(modifierTypes.TEMP_STAT_STAGE_BOOSTER, [Stat.SPD])!,
+            generateModifierTypeOption(modifierTypes.GREAT_BALL)!,
+            generateModifierTypeOption(modifierTypes.IV_SCANNER)!,
+            generateModifierTypeOption(modifierTypes.RARER_CANDY)!,
           ];
 
-          setEncounterRewards(scene, { guaranteedModifierTypeOptions: modifiers, fillRemaining: false });
+          setEncounterRewards({ guaranteedModifierTypeOptions: modifiers, fillRemaining: false });
         }
 
-        leaveEncounterWithoutBattle(scene, !encounter.misc.correctMove);
+        leaveEncounterWithoutBattle(!encounter.misc.correctMove);
       })
       .build(),
   )
   .build();
 
-function pokemonAndMoveChosen(
-  scene: BattleScene,
-  pokemon: PlayerPokemon,
-  move: PokemonMove,
-  correctMoveCategory: MoveCategory,
-) {
-  const encounter = scene.currentBattle.mysteryEncounter!;
+function pokemonAndMoveChosen(pokemon: PlayerPokemon, move: PokemonMove, correctMoveCategory: MoveCategory) {
+  const encounter = globalScene.currentBattle.mysteryEncounter!;
   const correctMove = move.getMove().category === correctMoveCategory;
   encounter.setDialogueToken("pokeName", pokemon.getNameToRender());
   encounter.setDialogueToken("move", move.getName());
@@ -224,8 +220,7 @@ function pokemonAndMoveChosen(
       },
     ];
     setEncounterExp(
-      scene,
-      scene.getPlayerParty().map((p) => p.id),
+      globalScene.getPlayerParty().map((p) => p.id),
       50,
     );
   } else {
@@ -241,7 +236,7 @@ function pokemonAndMoveChosen(
         text: `${namespace}:correct_exp`,
       },
     ];
-    setEncounterExp(scene, [pokemon.id], 100);
+    setEncounterExp([pokemon.id], 100);
   }
   encounter.misc = {
     correctMove: correctMove,

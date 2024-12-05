@@ -1,9 +1,13 @@
 import Phaser from "phaser";
-import BattleScene, { AnySound } from "#app/battle-scene";
-import { Variant, VariantSet, variantColorCache } from "#app/data/variant";
+import type { AnySound } from "#app/battle-scene";
+import type BattleScene from "#app/battle-scene";
+import { globalScene } from "#app/global-scene";
+import type { Variant, VariantSet } from "#app/data/variant";
+import { variantColorCache } from "#app/data/variant";
 import { variantData } from "#app/data/variant";
 import BattleInfo, { PlayerBattleInfo, EnemyBattleInfo } from "#app/ui/battle-info";
-import Move, {
+import type Move from "#app/data/move";
+import {
   HighCritAttr,
   HitsTagAttr,
   applyMoveAttrs,
@@ -35,9 +39,9 @@ import Move, {
   CombinedPledgeStabBoostAttr,
   VariableMoveTypeChartAttr,
 } from "#app/data/move";
+import type { PokemonSpeciesForm } from "#app/data/pokemon-species";
 import {
   default as PokemonSpecies,
-  PokemonSpeciesForm,
   getFusedSpeciesName,
   getPokemonSpecies,
   getPokemonSpeciesForm,
@@ -48,9 +52,25 @@ import {
   speciesStarterCosts,
 } from "#app/data/balance/starters";
 import { starterPassiveAbilities } from "#app/data/balance/passives";
-import { Constructor, isNullOrUndefined, randSeedInt, type nil } from "#app/utils";
-import * as Utils from "#app/utils";
-import { TypeDamageMultiplier, getTypeDamageMultiplier, getTypeRgb } from "#app/data/type";
+import {
+  type Constructor,
+  isNullOrUndefined,
+  randSeedInt,
+  type nil,
+  NumberHolder,
+  getIvsFromId,
+  BooleanHolder,
+  getEnumValues,
+  toDmgValue,
+  fixedInt,
+  rgbaToInt,
+  rgbHexToRgba,
+  rgbToHsv,
+  deltaRgb,
+  isBetween,
+} from "#app/utils";
+import type { TypeDamageMultiplier } from "#app/data/type";
+import { getTypeDamageMultiplier, getTypeRgb } from "#app/data/type";
 import { Type } from "#enums/type";
 import { getLevelTotalExp } from "#app/data/exp";
 import {
@@ -90,11 +110,10 @@ import { PokeballType } from "#enums/pokeball";
 import { Gender } from "#app/data/gender";
 import { initMoveAnim, loadMoveAnimAssets } from "#app/data/battle-anims";
 import { Status, getRandomStatus } from "#app/data/status-effect";
+import type { SpeciesFormEvolution, SpeciesEvolutionCondition } from "#app/data/balance/pokemon-evolutions";
 import {
   pokemonEvolutions,
   pokemonPrevolutions,
-  SpeciesFormEvolution,
-  SpeciesEvolutionCondition,
   FusionSpeciesFormEvolution,
 } from "#app/data/balance/pokemon-evolutions";
 import { reverseCompatibleTms, tmSpecies, tmPoolTiers } from "#app/data/balance/tms";
@@ -120,9 +139,8 @@ import {
 } from "../data/battler-tags";
 import { WeatherType } from "#enums/weather-type";
 import { ArenaTagSide, NoCritTag, WeakenMoveScreenTag } from "#app/data/arena-tag";
+import type { Ability, AbAttr } from "#app/data/ability";
 import {
-  Ability,
-  AbAttr,
   StatMultiplierAbAttr,
   BlockCritAbAttr,
   BonusCritAbAttr,
@@ -171,25 +189,28 @@ import {
   applyPostItemLostAbAttrs,
   PostItemLostAbAttr,
 } from "#app/data/ability";
-import PokemonData from "#app/system/pokemon-data";
+import type PokemonData from "#app/system/pokemon-data";
 import { BattlerIndex } from "#app/battle";
 import { Mode } from "#app/ui/ui";
-import PartyUiHandler, { PartyOption, PartyUiMode } from "#app/ui/party-ui-handler";
+import type { PartyOption } from "#app/ui/party-ui-handler";
+import PartyUiHandler, { PartyUiMode } from "#app/ui/party-ui-handler";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
-import { EVOLVE_MOVE, LevelMoves, RELEARN_MOVE } from "#app/data/balance/pokemon-level-moves";
+import type { LevelMoves } from "#app/data/balance/pokemon-level-moves";
+import { EVOLVE_MOVE, RELEARN_MOVE } from "#app/data/balance/pokemon-level-moves";
 import { DamageAchv, achvs } from "#app/system/achv";
-import { DexAttr, StarterDataEntry, StarterMoveset } from "#app/system/game-data";
+import type { StarterDataEntry, StarterMoveset } from "#app/system/game-data";
+import { DexAttr } from "#app/system/game-data";
 import { QuantizerCelebi, argbFromRgba, rgbaFromArgb } from "@material/material-color-utilities";
 import { getNatureStatMultiplier } from "#app/data/nature";
+import type { SpeciesFormChange } from "#app/data/pokemon-forms";
 import {
-  SpeciesFormChange,
   SpeciesFormChangeActiveTrigger,
   SpeciesFormChangeMoveLearnedTrigger,
   SpeciesFormChangePostMoveTrigger,
   SpeciesFormChangeStatusEffectTrigger,
 } from "#app/data/pokemon-forms";
 import { TerrainType } from "#app/data/terrain";
-import { TrainerSlot } from "#app/data/trainer-config";
+import type { TrainerSlot } from "#app/data/trainer-config";
 import Overrides from "#app/overrides";
 import i18next from "i18next";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
@@ -199,7 +220,7 @@ import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattleSpec } from "#enums/battle-spec";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { BerryType } from "#enums/berry-type";
+import type { BerryType } from "#enums/berry-type";
 import { Biome } from "#enums/biome";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
@@ -307,7 +328,6 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
   private shinySparkle: Phaser.GameObjects.Sprite;
 
   constructor(
-    scene: BattleScene,
     x: number,
     y: number,
     species: PokemonSpecies,
@@ -321,15 +341,15 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     nature?: Nature,
     dataSource?: Pokemon | PokemonData,
   ) {
-    super(scene, x, y);
+    super(globalScene, x, y);
 
     if (!species.isObtainable() && this.isPlayer()) {
       throw `Cannot create a player Pokemon for species '${species.getName(formIndex)}'`;
     }
 
-    const hiddenAbilityChance = new Utils.IntegerHolder(BASE_HIDDEN_ABILITY_CHANCE);
+    const hiddenAbilityChance = new NumberHolder(BASE_HIDDEN_ABILITY_CHANCE);
     if (!this.hasTrainer()) {
-      this.scene.applyModifiers(HiddenAbilityRateBoosterModifier, true, hiddenAbilityChance);
+      globalScene.applyModifiers(HiddenAbilityRateBoosterModifier, true, hiddenAbilityChance);
     }
 
     this.species = species;
@@ -342,8 +362,8 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       this.abilityIndex = abilityIndex; // Use the provided ability index if it is defined
     } else {
       // If abilityIndex is not provided, determine it based on species and hidden ability
-      const hasHiddenAbility = !Utils.randSeedInt(hiddenAbilityChance.value);
-      const randAbilityIndex = Utils.randSeedInt(2);
+      const hasHiddenAbility = !randSeedInt(hiddenAbilityChance.value);
+      const randAbilityIndex = randSeedInt(2);
       if (species.abilityHidden && hasHiddenAbility) {
         // If the species has a hidden ability and the hidden ability is present
         this.abilityIndex = 2;
@@ -405,15 +425,15 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       this.usedTMs = dataSource.usedTMs ?? [];
       this.customPokemonData = new CustomPokemonData(dataSource.customPokemonData);
     } else {
-      this.id = Utils.randSeedInt(4294967296);
-      this.ivs = ivs || Utils.getIvsFromId(this.id);
+      this.id = randSeedInt(4294967296);
+      this.ivs = ivs || getIvsFromId(this.id);
 
       if (this.gender === undefined) {
         this.generateGender();
       }
 
       if (this.formIndex === undefined) {
-        this.formIndex = this.scene.getSpeciesFormIndex(species, this.gender, this.nature, this.isPlayer());
+        this.formIndex = globalScene.getSpeciesFormIndex(species, this.gender, this.nature, this.isPlayer());
       }
 
       if (this.shiny === undefined) {
@@ -434,15 +454,15 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
 
       this.friendship = species.baseFriendship;
       this.metLevel = level;
-      this.metBiome = scene.currentBattle ? scene.arena.biomeType : -1;
+      this.metBiome = globalScene.currentBattle ? globalScene.arena.biomeType : -1;
       this.metSpecies = species.speciesId;
-      this.metWave = scene.currentBattle ? scene.currentBattle.waveIndex : -1;
+      this.metWave = globalScene.currentBattle ? globalScene.currentBattle.waveIndex : -1;
       this.pokerus = false;
 
       if (level > 1) {
-        const fused = new Utils.BooleanHolder(scene.gameMode.isSplicedOnly);
+        const fused = new BooleanHolder(globalScene.gameMode.isSplicedOnly);
         if (!fused.value && !this.isPlayer() && !this.hasTrainer()) {
-          this.scene.applyModifier(EnemyFusionChanceModifier, false, fused);
+          globalScene.applyModifier(EnemyFusionChanceModifier, false, fused);
         }
 
         if (fused.value) {
@@ -482,10 +502,10 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
 
     this.initBattleInfo();
 
-    this.scene.fieldUI.addAt(this.battleInfo, 0);
+    globalScene.fieldUI.addAt(this.battleInfo, 0);
 
     const getSprite = (hasShadow?: boolean) => {
-      const ret = this.scene.addPokemonSprite(
+      const ret = globalScene.addPokemonSprite(
         this,
         0,
         0,
@@ -494,7 +514,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
         true,
       );
       ret.setOrigin(0.5, 1);
-      ret.setPipeline(this.scene.spritePipeline, {
+      ret.setPipeline(globalScene.spritePipeline, {
         tone: [0.0, 0.0, 0.0, 0.0],
         hasShadow: !!hasShadow,
         teraColor: getTypeRgb(this.getTeraType()),
@@ -520,13 +540,13 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
   abstract initBattleInfo(): void;
 
   isOnField(): boolean {
-    if (!this.scene) {
+    if (!globalScene) {
       return false;
     }
     if (this.switchOutStatus) {
       return false;
     }
-    return this.scene.field.getIndex(this) > -1;
+    return globalScene.field.getIndex(this) > -1;
   }
 
   /**
@@ -553,8 +573,8 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns {boolean} `true` if pokemon is allowed in battle
    */
   public isAllowedInChallenge(): boolean {
-    const challengeAllowed = new Utils.BooleanHolder(true);
-    applyChallenges(this.scene.gameMode, ChallengeType.POKEMON_IN_BATTLE, this, challengeAllowed);
+    const challengeAllowed = new BooleanHolder(true);
+    applyChallenges(globalScene.gameMode, ChallengeType.POKEMON_IN_BATTLE, this, challengeAllowed);
     return challengeAllowed.value;
   }
 
@@ -564,7 +584,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns `true` if the pokemon is "active". Returns `false` if there is no active {@linkcode BattleScene}
    */
   public isActive(onField: boolean = false): boolean {
-    if (!this.scene) {
+    if (!globalScene) {
       return false;
     }
     return this.isAllowedInBattle() && (!onField || this.isOnField());
@@ -575,7 +595,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     ret |= this.gender !== Gender.FEMALE ? DexAttr.MALE : DexAttr.FEMALE;
     ret |= !this.shiny ? DexAttr.NON_SHINY : DexAttr.SHINY;
     ret |= this.variant >= 2 ? DexAttr.VARIANT_3 : this.variant === 1 ? DexAttr.VARIANT_2 : DexAttr.DEFAULT_VARIANT;
-    ret |= this.scene.gameData.getFormAttr(this.formIndex);
+    ret |= globalScene.gameData.getFormAttr(this.formIndex);
     return ret;
   }
 
@@ -609,48 +629,41 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
   loadAssets(ignoreOverride: boolean = true): Promise<void> {
     return new Promise((resolve) => {
       const moveIds = this.getMoveset().map((m) => m!.getMove().id); // TODO: is this bang correct?
-      Promise.allSettled(moveIds.map((m) => initMoveAnim(this.scene, m))).then(() => {
-        loadMoveAnimAssets(this.scene, moveIds);
-        this.getSpeciesForm().loadAssets(
-          this.scene,
-          this.getGender() === Gender.FEMALE,
-          this.formIndex,
-          this.shiny,
-          this.variant,
-        );
+      Promise.allSettled(moveIds.map((m) => initMoveAnim(m))).then(() => {
+        loadMoveAnimAssets(moveIds);
+        this.getSpeciesForm().loadAssets(this.getGender() === Gender.FEMALE, this.formIndex, this.shiny, this.variant);
         if (this.isPlayer() || this.getFusionSpeciesForm()) {
-          this.scene.loadPokemonAtlas(
+          globalScene.loadPokemonAtlas(
             this.getBattleSpriteKey(true, ignoreOverride),
             this.getBattleSpriteAtlasPath(true, ignoreOverride),
           );
         }
         if (this.getFusionSpeciesForm()) {
           this.getFusionSpeciesForm().loadAssets(
-            this.scene,
             this.getFusionGender() === Gender.FEMALE,
             this.fusionFormIndex,
             this.fusionShiny,
             this.fusionVariant,
           );
-          this.scene.loadPokemonAtlas(
+          globalScene.loadPokemonAtlas(
             this.getFusionBattleSpriteKey(true, ignoreOverride),
             this.getFusionBattleSpriteAtlasPath(true, ignoreOverride),
           );
         }
-        this.scene.load.once(Phaser.Loader.Events.COMPLETE, () => {
+        globalScene.load.once(Phaser.Loader.Events.COMPLETE, () => {
           if (this.isPlayer()) {
             const originalWarn = console.warn;
             // Ignore warnings for missing frames, because there will be a lot
             console.warn = () => {};
-            const battleFrameNames = this.scene.anims.generateFrameNames(this.getBattleSpriteKey(), {
+            const battleFrameNames = globalScene.anims.generateFrameNames(this.getBattleSpriteKey(), {
               zeroPad: 4,
               suffix: ".png",
               start: 1,
               end: 400,
             });
             console.warn = originalWarn;
-            if (!this.scene.anims.exists(this.getBattleSpriteKey())) {
-              this.scene.anims.create({
+            if (!globalScene.anims.exists(this.getBattleSpriteKey())) {
+              globalScene.anims.create({
                 key: this.getBattleSpriteKey(),
                 frames: battleFrameNames,
                 frameRate: 10,
@@ -674,8 +687,8 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
                   .replace(/_[1-3]$/, "");
                 let config = variantData;
                 const useExpSprite =
-                  this.scene.experimentalSprites &&
-                  this.scene.hasExpSprite(this.getBattleSpriteKey(isBackSprite, ignoreOverride));
+                  globalScene.experimentalSprites &&
+                  globalScene.hasExpSprite(this.getBattleSpriteKey(isBackSprite, ignoreOverride));
                 battleSpritePath.split("/").map((p) => (config ? (config = config[p]) : null));
                 const variantSet: VariantSet = config as VariantSet;
                 if (variantSet && variantSet[this.variant] === 1) {
@@ -698,8 +711,8 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
             updateFusionPaletteAndResolve();
           }
         });
-        if (!this.scene.load.isLoading()) {
-          this.scene.load.start();
+        if (!globalScene.load.isLoading()) {
+          globalScene.load.start();
         }
       });
     });
@@ -737,7 +750,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
    */
   async populateVariantColorCache(cacheKey: string, useExpSprite: boolean, battleSpritePath: string) {
     const spritePath = `./images/pokemon/variant/${useExpSprite ? "exp/" : ""}${battleSpritePath}.json`;
-    return this.scene
+    return globalScene
       .cachedFetch(spritePath)
       .then((res) => {
         // Prevent the JSON from processing if it failed to load
@@ -949,10 +962,10 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   getHeldItems(): PokemonHeldItemModifier[] {
-    if (!this.scene) {
+    if (!globalScene) {
       return [];
     }
-    return this.scene.findModifiers(
+    return globalScene.findModifiers(
       (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === this.id,
       this.isPlayer(),
     ) as PokemonHeldItemModifier[];
@@ -970,7 +983,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   initShinySparkle(): void {
-    const shinySparkle = this.scene.addFieldSprite(0, 0, "shiny");
+    const shinySparkle = globalScene.addFieldSprite(0, 0, "shiny");
     shinySparkle.setVisible(false);
     shinySparkle.setOrigin(0.5, 1);
     this.add(shinySparkle);
@@ -1038,7 +1051,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       }
 
       // During the Pokemon's MoveEffect phase, the offset is removed to put the Pokemon "in focus"
-      const currentPhase = this.scene.getCurrentPhase();
+      const currentPhase = globalScene.getCurrentPhase();
       if (currentPhase instanceof MoveEffectPhase && currentPhase.getPokemon() === this) {
         return false;
       }
@@ -1083,7 +1096,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
         if (subTag?.sprite) {
           targets.push(subTag.sprite);
         }
-        this.scene.tweens.add({
+        globalScene.tweens.add({
           targets: targets,
           x: (_target, _key, value: number) => value + relX,
           y: (_target, _key, value: number) => value + relY,
@@ -1187,11 +1200,11 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns the final critical-hit stage value
    */
   getCritStage(source: Pokemon, move: Move): number {
-    const critStage = new Utils.IntegerHolder(0);
+    const critStage = new NumberHolder(0);
     applyMoveAttrs(HighCritAttr, source, this, move, critStage);
-    this.scene.applyModifiers(CritBoosterModifier, source.isPlayer(), source, critStage);
-    this.scene.applyModifiers(TempCritBoosterModifier, source.isPlayer(), critStage);
-    const bonusCrit = new Utils.BooleanHolder(false);
+    globalScene.applyModifiers(CritBoosterModifier, source.isPlayer(), source, critStage);
+    globalScene.applyModifiers(TempCritBoosterModifier, source.isPlayer(), critStage);
+    const bonusCrit = new BooleanHolder(false);
     //@ts-ignore
     if (applyAbAttrs(BonusCritAbAttr, source, null, false, bonusCrit)) {
       // TODO: resolve ts-ignore. This is a promise. Checking a promise is bogus.
@@ -1234,12 +1247,12 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     isCritical: boolean = false,
     simulated: boolean = true,
   ): integer {
-    const statValue = new Utils.NumberHolder(this.getStat(stat, false));
-    this.scene.applyModifiers(StatBoosterModifier, this.isPlayer(), this, stat, statValue);
+    const statValue = new NumberHolder(this.getStat(stat, false));
+    globalScene.applyModifiers(StatBoosterModifier, this.isPlayer(), this, stat, statValue);
 
     // The Ruin abilities here are never ignored, but they reveal themselves on summon anyway
-    const fieldApplied = new Utils.BooleanHolder(false);
-    for (const pokemon of this.scene.getField(true)) {
+    const fieldApplied = new BooleanHolder(false);
+    for (const pokemon of globalScene.getField(true)) {
       applyFieldStatMultiplierAbAttrs(FieldMultiplyStatAbAttr, pokemon, stat, statValue, this, fieldApplied, simulated);
       if (fieldApplied.value) {
         break;
@@ -1259,23 +1272,23 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
         }
         break;
       case Stat.DEF:
-        if (this.isOfType(Type.ICE) && this.scene.arena.weather?.weatherType === WeatherType.SNOW) {
+        if (this.isOfType(Type.ICE) && globalScene.arena.weather?.weatherType === WeatherType.SNOW) {
           ret *= 1.5;
         }
         break;
       case Stat.SPATK:
         break;
       case Stat.SPDEF:
-        if (this.isOfType(Type.ROCK) && this.scene.arena.weather?.weatherType === WeatherType.SANDSTORM) {
+        if (this.isOfType(Type.ROCK) && globalScene.arena.weather?.weatherType === WeatherType.SANDSTORM) {
           ret *= 1.5;
         }
         break;
       case Stat.SPD:
         const side = this.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
-        if (this.scene.arena.getTagOnSide(ArenaTagType.TAILWIND, side)) {
+        if (globalScene.arena.getTagOnSide(ArenaTagType.TAILWIND, side)) {
           ret *= 2;
         }
-        if (this.scene.arena.getTagOnSide(ArenaTagType.GRASS_WATER_PLEDGE, side)) {
+        if (globalScene.arena.getTagOnSide(ArenaTagType.GRASS_WATER_PLEDGE, side)) {
           ret >>= 2;
         }
 
@@ -1310,10 +1323,10 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     const baseStats = this.calculateBaseStats();
     // Using base stats, calculate and store stats one by one
     for (const s of PERMANENT_STATS) {
-      const statHolder = new Utils.IntegerHolder(Math.floor((2 * baseStats[s] + this.ivs[s]) * this.level * 0.01));
+      const statHolder = new NumberHolder(Math.floor((2 * baseStats[s] + this.ivs[s]) * this.level * 0.01));
       if (s === Stat.HP) {
         statHolder.value = statHolder.value + this.level + 10;
-        this.scene.applyModifier(PokemonIncrementingStatModifier, this.isPlayer(), this, s, statHolder);
+        globalScene.applyModifier(PokemonIncrementingStatModifier, this.isPlayer(), this, s, statHolder);
         if (this.hasAbility(Abilities.WONDER_GUARD, false, true)) {
           statHolder.value = 1;
         }
@@ -1327,15 +1340,15 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
         }
       } else {
         statHolder.value += 5;
-        const natureStatMultiplier = new Utils.NumberHolder(getNatureStatMultiplier(this.getNature(), s));
-        this.scene.applyModifier(PokemonNatureWeightModifier, this.isPlayer(), this, natureStatMultiplier);
+        const natureStatMultiplier = new NumberHolder(getNatureStatMultiplier(this.getNature(), s));
+        globalScene.applyModifier(PokemonNatureWeightModifier, this.isPlayer(), this, natureStatMultiplier);
         if (natureStatMultiplier.value !== 1) {
           statHolder.value = Math.max(
             Math[natureStatMultiplier.value > 1 ? "ceil" : "floor"](statHolder.value * natureStatMultiplier.value),
             1,
           );
         }
-        this.scene.applyModifier(PokemonIncrementingStatModifier, this.isPlayer(), this, s, statHolder);
+        globalScene.applyModifier(PokemonIncrementingStatModifier, this.isPlayer(), this, s, statHolder);
       }
 
       statHolder.value = Phaser.Math.Clamp(statHolder.value, 1, Number.MAX_SAFE_INTEGER);
@@ -1347,21 +1360,21 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
   calculateBaseStats(): number[] {
     const baseStats = this.getSpeciesForm(true).baseStats.slice(0);
     // Shuckle Juice
-    this.scene.applyModifiers(PokemonBaseStatTotalModifier, this.isPlayer(), this, baseStats);
+    globalScene.applyModifiers(PokemonBaseStatTotalModifier, this.isPlayer(), this, baseStats);
     // Old Gateau
-    this.scene.applyModifiers(PokemonBaseStatFlatModifier, this.isPlayer(), this, baseStats);
+    globalScene.applyModifiers(PokemonBaseStatFlatModifier, this.isPlayer(), this, baseStats);
     if (this.isFusion()) {
       const fusionBaseStats = this.getFusionSpeciesForm(true).baseStats;
       for (const s of PERMANENT_STATS) {
         baseStats[s] = Math.ceil((baseStats[s] + fusionBaseStats[s]) / 2);
       }
-    } else if (this.scene.gameMode.isSplicedOnly) {
+    } else if (globalScene.gameMode.isSplicedOnly) {
       for (const s of PERMANENT_STATS) {
         baseStats[s] = Math.ceil(baseStats[s] / 2);
       }
     }
     // Vitamins
-    this.scene.applyModifiers(BaseStatModifier, this.isPlayer(), this, baseStats);
+    globalScene.applyModifiers(BaseStatModifier, this.isPlayer(), this, baseStats);
 
     return baseStats;
   }
@@ -1382,9 +1395,9 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
 
   generateNature(naturePool?: Nature[]): void {
     if (naturePool === undefined) {
-      naturePool = Utils.getEnumValues(Nature);
+      naturePool = getEnumValues(Nature);
     }
-    const nature = naturePool[Utils.randSeedInt(naturePool.length)];
+    const nature = naturePool[randSeedInt(naturePool.length)];
     this.setNature(nature);
   }
 
@@ -1494,7 +1507,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       this.metSpecies in speciesEggMoves ? this.metSpecies : this.getSpeciesForm(true).getRootSpeciesId(true);
     if (species in speciesEggMoves) {
       for (let i = 0; i < 4; i++) {
-        if (this.scene.gameData.starterData[species].eggMoves & (1 << i)) {
+        if (globalScene.gameData.starterData[species].eggMoves & (1 << i)) {
           moves.push(speciesEggMoves[species][i]);
         }
       }
@@ -1513,7 +1526,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
    */
   public getLearnableLevelMoves(): Moves[] {
     let levelMoves = this.getLevelMoves(1, true, false, true).map((lm) => lm[1]);
-    if (this.metBiome === -1 && !this.scene.gameMode.isFreshStartChallenge() && !this.scene.gameMode.isDaily) {
+    if (this.metBiome === -1 && !globalScene.gameMode.isFreshStartChallenge() && !globalScene.gameMode.isDaily) {
       levelMoves = this.getUnlockedEggMoves().concat(levelMoves);
     }
     if (Array.isArray(this.usedTMs) && this.usedTMs.length > 0) {
@@ -1743,7 +1756,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     // Classic Final boss and Endless Minor/Major bosses do not have passive
-    const { currentBattle, gameMode } = this.scene;
+    const { currentBattle, gameMode } = globalScene;
     const waveIndex = currentBattle?.waveIndex;
     if (
       this instanceof EnemyPokemon &&
@@ -1772,7 +1785,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     if (this.isFusion() && ability.hasAttr(NoFusionAbilityAbAttr)) {
       return false;
     }
-    const arena = this.scene?.arena;
+    const arena = globalScene?.arena;
     if (arena.ignoreAbilities && arena.ignoringEffectSource !== this.getBattlerIndex() && ability.isIgnorable) {
       return false;
     }
@@ -1780,8 +1793,8 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       return false;
     }
     if (this.isOnField() && !ability.hasAttr(SuppressFieldAbilitiesAbAttr)) {
-      const suppressed = new Utils.BooleanHolder(false);
-      this.scene
+      const suppressed = new BooleanHolder(false);
+      globalScene
         .getField(true)
         .filter((p) => p !== this)
         .map((p) => {
@@ -1854,11 +1867,11 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
   public getWeight(): number {
     const autotomizedTag = this.getTag(AutotomizedTag);
     let weightRemoved = 0;
-    if (!Utils.isNullOrUndefined(autotomizedTag)) {
+    if (!isNullOrUndefined(autotomizedTag)) {
       weightRemoved = 100 * autotomizedTag!.autotomizeCount;
     }
     const minWeight = 0.1;
-    const weight = new Utils.NumberHolder(this.species.weight - weightRemoved);
+    const weight = new NumberHolder(this.species.weight - weightRemoved);
 
     // This will trigger the ability overlay so only call this function when necessary
     applyAbAttrs(WeightMultiplierAbAttr, this, null, false, weight);
@@ -1866,22 +1879,19 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * @returns The tera-formed type of the pokemon, or {@linkcode Type.UNKNOWN} if not present
+   * @returns the pokemon's current tera {@linkcode Type}, or `Type.UNKNOWN` if the pokemon is not terastallized
    */
   public getTeraType(): Type {
-    // this.scene can be undefined for a fainted mon in doubles
-    if (this.scene !== undefined) {
-      const teraModifier = this.scene.findModifier(
-        (m) => m instanceof TerastallizeModifier && m.pokemonId === this.id && !!m.getBattlesLeft(),
-        this.isPlayer(),
-      ) as TerastallizeModifier;
-      // return teraType
-      if (teraModifier) {
-        return teraModifier.teraType;
-      }
+    // I don't think this should be possible anymore, please report if you encounter this. --NightKev
+    if (globalScene === undefined) {
+      console.warn("Pokemon.getTeraType(): Global scene is not defined!");
+      return Type.UNKNOWN;
     }
-    // if scene is undefined, or if teraModifier is considered false, then return unknown type
-    return Type.UNKNOWN;
+    const teraModifier = globalScene.findModifier(
+      (m) => m instanceof TerastallizeModifier && m.pokemonId === this.id && m.getBattlesLeft() > 0,
+      this.isPlayer(),
+    ) as TerastallizeModifier;
+    return teraModifier?.teraType ?? Type.UNKNOWN;
   }
 
   public isTerastallized(): boolean {
@@ -1908,7 +1918,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
    */
   public isTrapped(trappedAbMessages: string[] = [], simulated: boolean = true): boolean {
     const commandedTag = this.getTag(BattlerTagType.COMMANDED);
-    if (commandedTag?.getSourcePokemon(this.scene)?.isActive(true)) {
+    if (commandedTag?.getSourcePokemon()?.isActive(true)) {
       return true;
     }
 
@@ -1916,12 +1926,12 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       return false;
     }
 
-    const trappedByAbility = new Utils.BooleanHolder(false);
+    const trappedByAbility = new BooleanHolder(false);
     /**
      * Contains opposing Pokemon (Enemy/Player Pokemon) depending on perspective
      * Afterwards, it filters out Pokemon that have been switched out of the field so trapped abilities/moves do not trigger
      */
-    const opposingFieldUnfiltered = this.isPlayer() ? this.scene.getEnemyField() : this.scene.getPlayerField();
+    const opposingFieldUnfiltered = this.isPlayer() ? globalScene.getEnemyField() : globalScene.getPlayerField();
     const opposingField = opposingFieldUnfiltered.filter((enemyPkm) => enemyPkm.switchOutStatus === false);
 
     opposingField.forEach((opponent) =>
@@ -1932,7 +1942,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     return (
       trappedByAbility.value ||
       !!this.getTag(TrappedTag) ||
-      !!this.scene.arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, side)
+      !!globalScene.arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, side)
     );
   }
 
@@ -1944,12 +1954,12 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns The {@linkcode Type} of the move after attributes are applied
    */
   public getMoveType(move: Move, simulated: boolean = true): Type {
-    const moveTypeHolder = new Utils.NumberHolder(move.type);
+    const moveTypeHolder = new NumberHolder(move.type);
 
     applyMoveAttrs(VariableMoveTypeAttr, this, null, move, moveTypeHolder);
     applyPreAttackAbAttrs(MoveTypeChangeAbAttr, this, null, move, simulated, moveTypeHolder);
 
-    this.scene.arena.applyTags(ArenaTagType.ION_DELUGE, simulated, moveTypeHolder);
+    globalScene.arena.applyTags(ArenaTagType.ION_DELUGE, simulated, moveTypeHolder);
     if (this.getTag(BattlerTagType.ELECTRIFIED)) {
       moveTypeHolder.value = Type.ELECTRIC;
     }
@@ -1964,7 +1974,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
    * @param move {@linkcode Move} The move being used by the attacking Pokémon.
    * @param ignoreAbility Whether to ignore abilities that might affect type effectiveness or immunity (defaults to `false`).
    * @param simulated Whether to apply abilities via simulated calls (defaults to `true`)
-   * @param cancelled {@linkcode Utils.BooleanHolder} Stores whether the move was cancelled by a non-type-based immunity.
+   * @param cancelled {@linkcode BooleanHolder} Stores whether the move was cancelled by a non-type-based immunity.
    * Currently only used by {@linkcode Pokemon.apply} to determine whether a "No effect" message should be shown.
    * @returns The type damage multiplier, indicating the effectiveness of the move
    */
@@ -1973,9 +1983,9 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     move: Move,
     ignoreAbility: boolean = false,
     simulated: boolean = true,
-    cancelled?: Utils.BooleanHolder,
+    cancelled?: BooleanHolder,
   ): TypeDamageMultiplier {
-    if (!Utils.isNullOrUndefined(this.turnData?.moveEffectiveness)) {
+    if (!isNullOrUndefined(this.turnData?.moveEffectiveness)) {
       return this.turnData?.moveEffectiveness;
     }
 
@@ -1984,7 +1994,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     }
     const moveType = source.getMoveType(move);
 
-    const typeMultiplier = new Utils.NumberHolder(
+    const typeMultiplier = new NumberHolder(
       move.category !== MoveCategory.STATUS || move.hasAttr(RespectAttackTypeImmunityAttr)
         ? this.getAttackTypeEffectiveness(moveType, source, false, simulated, move)
         : 1,
@@ -1999,7 +2009,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       typeMultiplier.value *= 2;
     }
 
-    const cancelledHolder = cancelled ?? new Utils.BooleanHolder(false);
+    const cancelledHolder = cancelled ?? new BooleanHolder(false);
     if (!ignoreAbility) {
       applyPreDefendAbAttrs(TypeImmunityAbAttr, this, source, move, cancelledHolder, simulated, typeMultiplier);
 
@@ -2008,7 +2018,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       }
 
       if (!cancelledHolder.value) {
-        const defendingSidePlayField = this.isPlayer() ? this.scene.getPlayerField() : this.scene.getEnemyField();
+        const defendingSidePlayField = this.isPlayer() ? globalScene.getPlayerField() : globalScene.getEnemyField();
         defendingSidePlayField.forEach((p) =>
           applyPreDefendAbAttrs(FieldPriorityMoveImmunityAbAttr, p, source, move, cancelledHolder),
         );
@@ -2055,7 +2065,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       return this.isTerastallized() ? 2 : 1;
     }
     const types = this.getTypes(true, true);
-    const arena = this.scene.arena;
+    const arena = globalScene.arena;
 
     // Handle flying v ground type immunity without removing flying type so effective types are still effective
     // Related to https://github.com/pagefaultgames/pokerogue/issues/524
@@ -2068,13 +2078,13 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
 
     let multiplier = types
       .map((defType) => {
-        const multiplier = new Utils.NumberHolder(getTypeDamageMultiplier(moveType, defType));
-        applyChallenges(this.scene.gameMode, ChallengeType.TYPE_EFFECTIVENESS, multiplier);
+        const multiplier = new NumberHolder(getTypeDamageMultiplier(moveType, defType));
+        applyChallenges(globalScene.gameMode, ChallengeType.TYPE_EFFECTIVENESS, multiplier);
         if (move) {
           applyMoveAttrs(VariableMoveTypeChartAttr, null, this, move, multiplier, defType);
         }
         if (source) {
-          const ignoreImmunity = new Utils.BooleanHolder(false);
+          const ignoreImmunity = new BooleanHolder(false);
           if (source.isActive(true) && source.hasAbilityWithAttr(IgnoreTypeImmunityAbAttr)) {
             applyAbAttrs(IgnoreTypeImmunityAbAttr, source, ignoreImmunity, simulated, moveType, defType);
           }
@@ -2095,19 +2105,19 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       })
       .reduce((acc, cur) => acc * cur, 1) as TypeDamageMultiplier;
 
-    const typeMultiplierAgainstFlying = new Utils.NumberHolder(getTypeDamageMultiplier(moveType, Type.FLYING));
-    applyChallenges(this.scene.gameMode, ChallengeType.TYPE_EFFECTIVENESS, typeMultiplierAgainstFlying);
+    const typeMultiplierAgainstFlying = new NumberHolder(getTypeDamageMultiplier(moveType, Type.FLYING));
+    applyChallenges(globalScene.gameMode, ChallengeType.TYPE_EFFECTIVENESS, typeMultiplierAgainstFlying);
     // Handle strong winds lowering effectiveness of types super effective against pure flying
     if (
       !ignoreStrongWinds &&
       arena.weather?.weatherType === WeatherType.STRONG_WINDS &&
-      !arena.weather.isEffectSuppressed(this.scene) &&
+      !arena.weather.isEffectSuppressed() &&
       this.isOfType(Type.FLYING) &&
       typeMultiplierAgainstFlying.value === 2
     ) {
       multiplier /= 2;
       if (!simulated) {
-        this.scene.queueMessage(i18next.t("weather:strongWindsEffectMessage"));
+        globalScene.queueMessage(i18next.t("weather:strongWindsEffectMessage"));
       }
     }
     return multiplier as TypeDamageMultiplier;
@@ -2376,23 +2386,23 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
    */
   trySetShiny(thresholdOverride?: integer): boolean {
     // Shiny Pokemon should not spawn in the end biome in endless
-    if (this.scene.gameMode.isEndless && this.scene.arena.biomeType === Biome.END) {
+    if (globalScene.gameMode.isEndless && globalScene.arena.biomeType === Biome.END) {
       return false;
     }
 
     const rand1 = (this.id & 0xffff0000) >>> 16;
     const rand2 = this.id & 0x0000ffff;
 
-    const E = this.scene.gameData.trainerId ^ this.scene.gameData.secretId;
+    const E = globalScene.gameData.trainerId ^ globalScene.gameData.secretId;
     const F = rand1 ^ rand2;
 
-    const shinyThreshold = new Utils.IntegerHolder(BASE_SHINY_CHANCE);
+    const shinyThreshold = new NumberHolder(BASE_SHINY_CHANCE);
     if (thresholdOverride === undefined) {
-      if (this.scene.eventManager.isEventActive()) {
-        shinyThreshold.value *= this.scene.eventManager.getShinyMultiplier();
+      if (globalScene.eventManager.isEventActive()) {
+        shinyThreshold.value *= globalScene.eventManager.getShinyMultiplier();
       }
       if (!this.hasTrainer()) {
-        this.scene.applyModifiers(ShinyRateBoosterModifier, true, shinyThreshold);
+        globalScene.applyModifiers(ShinyRateBoosterModifier, true, shinyThreshold);
       }
     } else {
       shinyThreshold.value = thresholdOverride;
@@ -2418,16 +2428,16 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns `true` if the Pokemon has been set as a shiny, `false` otherwise
    */
   public trySetShinySeed(thresholdOverride?: number, applyModifiersToOverride?: boolean): boolean {
-    const shinyThreshold = new Utils.NumberHolder(BASE_SHINY_CHANCE);
+    const shinyThreshold = new NumberHolder(BASE_SHINY_CHANCE);
     if (thresholdOverride === undefined || applyModifiersToOverride) {
       if (thresholdOverride !== undefined && applyModifiersToOverride) {
         shinyThreshold.value = thresholdOverride;
       }
-      if (this.scene.eventManager.isEventActive()) {
-        shinyThreshold.value *= this.scene.eventManager.getShinyMultiplier();
+      if (globalScene.eventManager.isEventActive()) {
+        shinyThreshold.value *= globalScene.eventManager.getShinyMultiplier();
       }
       if (!this.hasTrainer()) {
-        this.scene.applyModifiers(ShinyRateBoosterModifier, true, shinyThreshold);
+        globalScene.applyModifiers(ShinyRateBoosterModifier, true, shinyThreshold);
       }
     } else {
       shinyThreshold.value = thresholdOverride;
@@ -2467,13 +2477,13 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     ) {
       return 0;
     }
-    const rand = new Utils.NumberHolder(0);
-    this.scene.executeWithSeedOffset(
+    const rand = new NumberHolder(0);
+    globalScene.executeWithSeedOffset(
       () => {
-        rand.value = Utils.randSeedInt(10);
+        rand.value = randSeedInt(10);
       },
       this.id,
-      this.scene.waveSeed,
+      globalScene.waveSeed,
     );
     if (rand.value >= SHINY_VARIANT_CHANCE) {
       return 0; // 6/10
@@ -2485,13 +2495,13 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   public generateFusionSpecies(forStarter?: boolean): void {
-    const hiddenAbilityChance = new Utils.NumberHolder(BASE_HIDDEN_ABILITY_CHANCE);
+    const hiddenAbilityChance = new NumberHolder(BASE_HIDDEN_ABILITY_CHANCE);
     if (!this.hasTrainer()) {
-      this.scene.applyModifiers(HiddenAbilityRateBoosterModifier, true, hiddenAbilityChance);
+      globalScene.applyModifiers(HiddenAbilityRateBoosterModifier, true, hiddenAbilityChance);
     }
 
-    const hasHiddenAbility = !Utils.randSeedInt(hiddenAbilityChance.value);
-    const randAbilityIndex = Utils.randSeedInt(2);
+    const hasHiddenAbility = !randSeedInt(hiddenAbilityChance.value);
+    const randAbilityIndex = randSeedInt(2);
 
     const filter = !forStarter
       ? this.species.getCompatibleFusionSpeciesFilter()
@@ -2518,7 +2528,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
 
     this.fusionSpecies =
       fusionOverride ??
-      this.scene.randomSpecies(this.scene.currentBattle?.waveIndex || 0, this.level, false, filter, true);
+      globalScene.randomSpecies(globalScene.currentBattle?.waveIndex || 0, this.level, false, filter, true);
     this.fusionAbilityIndex =
       this.fusionSpecies.abilityHidden && hasHiddenAbility
         ? 2
@@ -2539,7 +2549,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       }
     }
 
-    this.fusionFormIndex = this.scene.getSpeciesFormIndex(
+    this.fusionFormIndex = globalScene.getSpeciesFormIndex(
       this.fusionSpecies,
       this.fusionGender,
       this.getNature(),
@@ -2730,7 +2740,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
 
       if (stabMovePool.length) {
         const totalWeight = stabMovePool.reduce((v, m) => v + m[1], 0);
-        let rand = Utils.randSeedInt(totalWeight);
+        let rand = randSeedInt(totalWeight);
         let index = 0;
         while (rand > stabMovePool[index][1]) {
           rand -= stabMovePool[index++][1];
@@ -2742,7 +2752,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       const attackMovePool = baseWeights.filter((m) => allMoves[m[0]].category !== MoveCategory.STATUS);
       if (attackMovePool.length) {
         const totalWeight = attackMovePool.reduce((v, m) => v + m[1], 0);
-        let rand = Utils.randSeedInt(totalWeight);
+        let rand = randSeedInt(totalWeight);
         let index = 0;
         while (rand > attackMovePool[index][1]) {
           rand -= attackMovePool[index++][1];
@@ -2782,7 +2792,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
         movePool = baseWeights.filter((m) => !this.moveset.some((mo) => m[0] === mo?.moveId));
       }
       const totalWeight = movePool.reduce((v, m) => v + m[1], 0);
-      let rand = Utils.randSeedInt(totalWeight);
+      let rand = randSeedInt(totalWeight);
       let index = 0;
       while (rand > movePool[index][1]) {
         rand -= movePool[index++][1];
@@ -2793,10 +2803,10 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     // Trigger FormChange, except for enemy Pokemon during Mystery Encounters, to avoid crashes
     if (
       this.isPlayer() ||
-      !this.scene.currentBattle?.isBattleMysteryEncounter() ||
-      !this.scene.currentBattle?.mysteryEncounter
+      !globalScene.currentBattle?.isBattleMysteryEncounter() ||
+      !globalScene.currentBattle?.mysteryEncounter
     ) {
-      this.scene.triggerPokemonFormChange(this, SpeciesFormChangeMoveLearnedTrigger);
+      globalScene.triggerPokemonFormChange(this, SpeciesFormChangeMoveLearnedTrigger);
     }
   }
 
@@ -2807,23 +2817,23 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
 
   showInfo(): void {
     if (!this.battleInfo.visible) {
-      const otherBattleInfo = this.scene.fieldUI
+      const otherBattleInfo = globalScene.fieldUI
         .getAll()
         .slice(0, 4)
         .filter((ui) => ui instanceof BattleInfo && (ui as BattleInfo) instanceof PlayerBattleInfo === this.isPlayer())
         .find(() => true);
       if (!otherBattleInfo || !this.getFieldIndex()) {
-        this.scene.fieldUI.sendToBack(this.battleInfo);
-        this.scene.sendTextToBack(); // Push the top right text objects behind everything else
+        globalScene.fieldUI.sendToBack(this.battleInfo);
+        globalScene.sendTextToBack(); // Push the top right text objects behind everything else
       } else {
-        this.scene.fieldUI.moveAbove(this.battleInfo, otherBattleInfo);
+        globalScene.fieldUI.moveAbove(this.battleInfo, otherBattleInfo);
       }
       this.battleInfo.setX(this.battleInfo.x + (this.isPlayer() ? 150 : !this.isBoss() ? -150 : -198));
       this.battleInfo.setVisible(true);
       if (this.isPlayer()) {
         this.battleInfo.expMaskRect.x += 150;
       }
-      this.scene.tweens.add({
+      globalScene.tweens.add({
         targets: [this.battleInfo, this.battleInfo.expMaskRect],
         x: this.isPlayer() ? "-=150" : `+=${!this.isBoss() ? 150 : 246}`,
         duration: 1000,
@@ -2835,7 +2845,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
   hideInfo(): Promise<void> {
     return new Promise((resolve) => {
       if (this.battleInfo && this.battleInfo.visible) {
-        this.scene.tweens.add({
+        globalScene.tweens.add({
           targets: [this.battleInfo, this.battleInfo.expMaskRect],
           x: this.isPlayer() ? "+=150" : `-=${!this.isBoss() ? 150 : 246}`,
           duration: 500,
@@ -2884,7 +2894,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   addExp(exp: integer) {
-    const maxExpLevel = this.scene.getMaxExpLevel();
+    const maxExpLevel = globalScene.getMaxExpLevel();
     const initialExp = this.exp;
     this.exp += exp;
     while (this.level < maxExpLevel && this.exp >= getLevelTotalExp(this.level + 1, this.species.growthRate)) {
@@ -2915,7 +2925,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   getOpponents(): Pokemon[] {
-    return ((this.isPlayer() ? this.scene.getEnemyField() : this.scene.getPlayerField()) as Pokemon[]).filter((p) =>
+    return ((this.isPlayer() ? globalScene.getEnemyField() : globalScene.getPlayerField()) as Pokemon[]).filter((p) =>
       p.isActive(),
     );
   }
@@ -2929,7 +2939,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   getAlly(): Pokemon {
-    return (this.isPlayer() ? this.scene.getPlayerField() : this.scene.getEnemyField())[this.getFieldIndex() ? 0 : 1];
+    return (this.isPlayer() ? globalScene.getPlayerField() : globalScene.getEnemyField())[this.getFieldIndex() ? 0 : 1];
   }
 
   /**
@@ -2938,7 +2948,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns An array of Pokémon on the allied field.
    */
   getAlliedField(): Pokemon[] {
-    return this instanceof PlayerPokemon ? this.scene.getPlayerField() : this.scene.getEnemyField();
+    return this instanceof PlayerPokemon ? globalScene.getPlayerField() : globalScene.getEnemyField();
   }
 
   /**
@@ -2962,8 +2972,8 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     isCritical: boolean = false,
     simulated: boolean = true,
   ): number {
-    const statStage = new Utils.IntegerHolder(this.getStatStage(stat));
-    const ignoreStatStage = new Utils.BooleanHolder(false);
+    const statStage = new NumberHolder(this.getStatStage(stat));
+    const ignoreStatStage = new BooleanHolder(false);
 
     if (opponent) {
       if (isCritical) {
@@ -2987,10 +2997,8 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     if (!ignoreStatStage.value) {
-      const statStageMultiplier = new Utils.NumberHolder(
-        Math.max(2, 2 + statStage.value) / Math.max(2, 2 - statStage.value),
-      );
-      this.scene.applyModifiers(TempStatStageBoosterModifier, this.isPlayer(), stat, statStageMultiplier);
+      const statStageMultiplier = new NumberHolder(Math.max(2, 2 + statStage.value) / Math.max(2, 2 - statStage.value));
+      globalScene.applyModifiers(TempStatStageBoosterModifier, this.isPlayer(), stat, statStageMultiplier);
       return Math.min(statStageMultiplier.value, 4);
     }
     return 1;
@@ -3012,17 +3020,17 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       return 1;
     }
 
-    const userAccStage = new Utils.IntegerHolder(this.getStatStage(Stat.ACC));
-    const targetEvaStage = new Utils.IntegerHolder(target.getStatStage(Stat.EVA));
+    const userAccStage = new NumberHolder(this.getStatStage(Stat.ACC));
+    const targetEvaStage = new NumberHolder(target.getStatStage(Stat.EVA));
 
-    const ignoreAccStatStage = new Utils.BooleanHolder(false);
-    const ignoreEvaStatStage = new Utils.BooleanHolder(false);
+    const ignoreAccStatStage = new BooleanHolder(false);
+    const ignoreEvaStatStage = new BooleanHolder(false);
 
     applyAbAttrs(IgnoreOpponentStatStagesAbAttr, target, null, false, Stat.ACC, ignoreAccStatStage);
     applyAbAttrs(IgnoreOpponentStatStagesAbAttr, this, null, false, Stat.EVA, ignoreEvaStatStage);
     applyMoveAttrs(IgnoreOpponentStatStagesAttr, this, target, sourceMove, ignoreEvaStatStage);
 
-    this.scene.applyModifiers(TempStatStageBoosterModifier, this.isPlayer(), Stat.ACC, userAccStage);
+    globalScene.applyModifiers(TempStatStageBoosterModifier, this.isPlayer(), Stat.ACC, userAccStage);
 
     userAccStage.value = ignoreAccStatStage.value ? 0 : Math.min(userAccStage.value, 6);
     targetEvaStage.value = ignoreEvaStatStage.value ? 0 : targetEvaStage.value;
@@ -3031,7 +3039,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       targetEvaStage.value = Math.min(0, targetEvaStage.value);
     }
 
-    const accuracyMultiplier = new Utils.NumberHolder(1);
+    const accuracyMultiplier = new NumberHolder(1);
     if (userAccStage.value !== targetEvaStage.value) {
       accuracyMultiplier.value =
         userAccStage.value > targetEvaStage.value
@@ -3041,7 +3049,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
 
     applyStatMultiplierAbAttrs(StatMultiplierAbAttr, this, Stat.ACC, accuracyMultiplier, false, sourceMove);
 
-    const evasionMultiplier = new Utils.NumberHolder(1);
+    const evasionMultiplier = new NumberHolder(1);
     applyStatMultiplierAbAttrs(StatMultiplierAbAttr, target, Stat.EVA, evasionMultiplier);
 
     return accuracyMultiplier.value / evasionMultiplier.value;
@@ -3080,7 +3088,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
      * The attacker's offensive stat for the given move's category.
      * Critical hits cause negative stat stages to be ignored.
      */
-    const sourceAtk = new Utils.NumberHolder(
+    const sourceAtk = new NumberHolder(
       source.getEffectiveStat(
         isPhysical ? Stat.ATK : Stat.SPATK,
         this,
@@ -3097,7 +3105,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
      * This Pokemon's defensive stat for the given move's category.
      * Critical hits cause positive stat stages to be ignored.
      */
-    const targetDef = new Utils.NumberHolder(
+    const targetDef = new NumberHolder(
       this.getEffectiveStat(
         isPhysical ? Stat.DEF : Stat.SPDEF,
         source,
@@ -3145,10 +3153,10 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     isCritical: boolean = false,
     simulated: boolean = true,
   ): DamageCalculationResult {
-    const damage = new Utils.NumberHolder(0);
+    const damage = new NumberHolder(0);
     const defendingSide = this.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
 
-    const variableCategory = new Utils.NumberHolder(move.category);
+    const variableCategory = new NumberHolder(move.category);
     applyMoveAttrs(VariableMoveCategoryAttr, source, this, move, variableCategory);
     const moveCategory = variableCategory.value as MoveCategory;
 
@@ -3156,7 +3164,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     const moveType = source.getMoveType(move);
 
     /** If `value` is `true`, cancels the move and suppresses "No Effect" messages */
-    const cancelled = new Utils.BooleanHolder(false);
+    const cancelled = new BooleanHolder(false);
 
     /**
      * The effectiveness of the move being used. Along with type matchups, this
@@ -3170,8 +3178,8 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     const isPhysical = moveCategory === MoveCategory.PHYSICAL;
 
     /** Combined damage multiplier from field effects such as weather, terrain, etc. */
-    const arenaAttackTypeMultiplier = new Utils.NumberHolder(
-      this.scene.arena.getAttackTypeMultiplier(moveType, source.isGrounded()),
+    const arenaAttackTypeMultiplier = new NumberHolder(
+      globalScene.arena.getAttackTypeMultiplier(moveType, source.isGrounded()),
     );
     applyMoveAttrs(IgnoreWeatherTypeDebuffAttr, source, this, move, arenaAttackTypeMultiplier);
 
@@ -3186,11 +3194,11 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     // If the attack deals fixed damage, return a result with that much damage
-    const fixedDamage = new Utils.NumberHolder(0);
+    const fixedDamage = new NumberHolder(0);
     applyMoveAttrs(FixedDamageAttr, source, this, move, fixedDamage);
     if (fixedDamage.value) {
-      const multiLensMultiplier = new Utils.NumberHolder(1);
-      source.scene.applyModifiers(
+      const multiLensMultiplier = new NumberHolder(1);
+      globalScene.applyModifiers(
         PokemonMultiHitModifier,
         source.isPlayer(),
         source,
@@ -3198,7 +3206,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
         null,
         multiLensMultiplier,
       );
-      fixedDamage.value = Utils.toDmgValue(fixedDamage.value * multiLensMultiplier.value);
+      fixedDamage.value = toDmgValue(fixedDamage.value * multiLensMultiplier.value);
 
       return {
         cancelled: false,
@@ -3208,7 +3216,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     // If the attack is a one-hit KO move, return a result with damage equal to this Pokemon's HP
-    const isOneHitKo = new Utils.BooleanHolder(false);
+    const isOneHitKo = new BooleanHolder(false);
     applyMoveAttrs(OneHitKOAttr, source, this, move, isOneHitKo);
     if (isOneHitKo.value) {
       return {
@@ -3238,8 +3246,8 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     const targetMultiplier = numTargets > 1 ? 0.75 : 1;
 
     /** Multiplier for moves enhanced by Multi-Lens and/or Parental Bond */
-    const multiStrikeEnhancementMultiplier = new Utils.NumberHolder(1);
-    source.scene.applyModifiers(
+    const multiStrikeEnhancementMultiplier = new NumberHolder(1);
+    globalScene.applyModifiers(
       PokemonMultiHitModifier,
       source.isPlayer(),
       source,
@@ -3260,13 +3268,13 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     /** Doubles damage if this Pokemon's last move was Glaive Rush */
-    const glaiveRushMultiplier = new Utils.IntegerHolder(1);
+    const glaiveRushMultiplier = new NumberHolder(1);
     if (this.getTag(BattlerTagType.RECEIVE_DOUBLE_DAMAGE)) {
       glaiveRushMultiplier.value = 2;
     }
 
     /** The damage multiplier when the given move critically hits */
-    const criticalMultiplier = new Utils.NumberHolder(isCritical ? 1.5 : 1);
+    const criticalMultiplier = new NumberHolder(isCritical ? 1.5 : 1);
     applyAbAttrs(MultCritAbAttr, source, null, simulated, criticalMultiplier);
 
     /**
@@ -3279,7 +3287,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     const sourceTeraType = source.getTeraType();
     const matchesSourceType = sourceTypes.includes(moveType);
     /** A damage multiplier for when the attack is of the attacker's type and/or Tera type. */
-    const stabMultiplier = new Utils.NumberHolder(1);
+    const stabMultiplier = new NumberHolder(1);
     if (matchesSourceType) {
       stabMultiplier.value += 0.5;
     }
@@ -3295,10 +3303,10 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     stabMultiplier.value = Math.min(stabMultiplier.value, 2.25);
 
     /** Halves damage if the attacker is using a physical attack while burned */
-    const burnMultiplier = new Utils.NumberHolder(1);
+    const burnMultiplier = new NumberHolder(1);
     if (isPhysical && source.status && source.status.effect === StatusEffect.BURN) {
       if (!move.hasAttr(BypassBurnDamageReductionAttr)) {
-        const burnDamageReductionCancelled = new Utils.BooleanHolder(false);
+        const burnDamageReductionCancelled = new BooleanHolder(false);
         if (!ignoreSourceAbility) {
           applyAbAttrs(BypassBurnDamageReductionAbAttr, source, burnDamageReductionCancelled, simulated);
         }
@@ -3309,8 +3317,8 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     /** Reduces damage if this Pokemon has a relevant screen (e.g. Light Screen for special attacks) */
-    const screenMultiplier = new Utils.NumberHolder(1);
-    this.scene.arena.applyTagsForSide(
+    const screenMultiplier = new NumberHolder(1);
+    globalScene.arena.applyTagsForSide(
       WeakenMoveScreenTag,
       defendingSide,
       simulated,
@@ -3325,7 +3333,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
      * AND
      * The move doubles damage when used against that tag
      */
-    const hitsTagMultiplier = new Utils.NumberHolder(1);
+    const hitsTagMultiplier = new NumberHolder(1);
     move
       .getAttrs(HitsTagAttr)
       .filter((hta) => hta.doubleDamage)
@@ -3337,11 +3345,11 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
 
     /** Halves damage if this Pokemon is grounded in Misty Terrain against a Dragon-type attack */
     const mistyTerrainMultiplier =
-      this.scene.arena.terrain?.terrainType === TerrainType.MISTY && this.isGrounded() && moveType === Type.DRAGON
+      globalScene.arena.terrain?.terrainType === TerrainType.MISTY && this.isGrounded() && moveType === Type.DRAGON
         ? 0.5
         : 1;
 
-    damage.value = Utils.toDmgValue(
+    damage.value = toDmgValue(
       baseDamage *
         targetMultiplier *
         multiStrikeEnhancementMultiplier.value *
@@ -3364,10 +3372,10 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
 
     /** Apply the enemy's Damage and Resistance tokens */
     if (!source.isPlayer()) {
-      this.scene.applyModifiers(EnemyDamageBoosterModifier, false, damage);
+      globalScene.applyModifiers(EnemyDamageBoosterModifier, false, damage);
     }
     if (!this.isPlayer()) {
-      this.scene.applyModifiers(EnemyDamageReducerModifier, false, damage);
+      globalScene.applyModifiers(EnemyDamageReducerModifier, false, damage);
     }
 
     /** Apply this Pokemon's post-calc defensive modifiers (e.g. Fur Coat) */
@@ -3375,7 +3383,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       applyPreDefendAbAttrs(ReceivedMoveDamageMultiplierAbAttr, this, source, move, cancelled, simulated, damage);
 
       /** Additionally apply friend guard damage reduction if ally has it. */
-      if (this.scene.currentBattle.double && this.getAlly()?.isActive(true)) {
+      if (globalScene.currentBattle.double && this.getAlly()?.isActive(true)) {
         applyPreDefendAbAttrs(
           AlliedFieldDamageReductionAbAttr,
           this.getAlly(),
@@ -3424,20 +3432,20 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
    */
   apply(source: Pokemon, move: Move): HitResult {
     const defendingSide = this.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
-    const moveCategory = new Utils.NumberHolder(move.category);
+    const moveCategory = new NumberHolder(move.category);
     applyMoveAttrs(VariableMoveCategoryAttr, source, this, move, moveCategory);
     if (moveCategory.value === MoveCategory.STATUS) {
-      const cancelled = new Utils.BooleanHolder(false);
+      const cancelled = new BooleanHolder(false);
       const typeMultiplier = this.getMoveEffectiveness(source, move, false, false, cancelled);
 
       if (!cancelled.value && typeMultiplier === 0) {
-        this.scene.queueMessage(i18next.t("battle:hitResultNoEffect", { pokemonName: getPokemonNameWithAffix(this) }));
+        globalScene.queueMessage(i18next.t("battle:hitResultNoEffect", { pokemonName: getPokemonNameWithAffix(this) }));
       }
       return typeMultiplier === 0 ? HitResult.NO_EFFECT : HitResult.STATUS;
     } else {
       /** Determines whether the attack critically hits */
       let isCritical: boolean;
-      const critOnly = new Utils.BooleanHolder(false);
+      const critOnly = new BooleanHolder(false);
       const critAlways = source.getTag(BattlerTagType.ALWAYS_CRIT);
       applyMoveAttrs(CritOnlyAttr, source, this, move, critOnly);
       applyAbAttrs(ConditionalCritAbAttr, source, null, false, critOnly, this, move);
@@ -3445,11 +3453,11 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
         isCritical = true;
       } else {
         const critChance = [24, 8, 2, 1][Math.max(0, Math.min(this.getCritStage(source, move), 3))];
-        isCritical = critChance === 1 || !this.scene.randBattleSeedInt(critChance);
+        isCritical = critChance === 1 || !globalScene.randBattleSeedInt(critChance);
       }
 
-      const noCritTag = this.scene.arena.getTagOnSide(NoCritTag, defendingSide);
-      const blockCrit = new Utils.BooleanHolder(false);
+      const noCritTag = globalScene.arena.getTagOnSide(NoCritTag, defendingSide);
+      const blockCrit = new BooleanHolder(false);
       applyAbAttrs(BlockCritAbAttr, this, null, false, blockCrit);
       if (noCritTag || blockCrit.value || Overrides.NEVER_CRIT_OVERRIDE) {
         isCritical = false;
@@ -3469,11 +3477,11 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
 
         if (!cancelled) {
           if (result === HitResult.IMMUNE) {
-            this.scene.queueMessage(
+            globalScene.queueMessage(
               i18next.t("battle:hitResultImmune", { pokemonName: getPokemonNameWithAffix(this) }),
             );
           } else {
-            this.scene.queueMessage(
+            globalScene.queueMessage(
               i18next.t("battle:hitResultNoEffect", { pokemonName: getPokemonNameWithAffix(this) }),
             );
           }
@@ -3496,7 +3504,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
           substitute.hp -= dmg;
         }
         if (!this.isPlayer() && dmg >= this.hp) {
-          this.scene.applyModifiers(EnemyEndureChanceModifier, false, this);
+          globalScene.applyModifiers(EnemyEndureChanceModifier, false, this);
         }
 
         /**
@@ -3515,9 +3523,9 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
 
         if (damage > 0) {
           if (source.isPlayer()) {
-            this.scene.validateAchvs(DamageAchv, new Utils.NumberHolder(damage));
-            if (damage > this.scene.gameData.gameStats.highestDamage) {
-              this.scene.gameData.gameStats.highestDamage = damage;
+            globalScene.validateAchvs(DamageAchv, new NumberHolder(damage));
+            if (damage > globalScene.gameData.gameStats.highestDamage) {
+              globalScene.gameData.gameStats.highestDamage = damage;
             }
           }
           source.turnData.totalDamageDealt += damage;
@@ -3535,36 +3543,34 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
           };
           this.turnData.attacksReceived.unshift(attackResult);
           if (source.isPlayer() && !this.isPlayer()) {
-            this.scene.applyModifiers(DamageMoneyRewardModifier, true, source, new Utils.NumberHolder(damage));
+            globalScene.applyModifiers(DamageMoneyRewardModifier, true, source, new NumberHolder(damage));
           }
         }
       }
 
       if (isCritical) {
-        this.scene.queueMessage(i18next.t("battle:hitResultCriticalHit"));
+        globalScene.queueMessage(i18next.t("battle:hitResultCriticalHit"));
       }
 
       // want to include is.Fainted() in case multi hit move ends early, still want to render message
       if (source.turnData.hitsLeft === 1 || this.isFainted()) {
         switch (result) {
           case HitResult.SUPER_EFFECTIVE:
-            this.scene.queueMessage(i18next.t("battle:hitResultSuperEffective"));
+            globalScene.queueMessage(i18next.t("battle:hitResultSuperEffective"));
             break;
           case HitResult.NOT_VERY_EFFECTIVE:
-            this.scene.queueMessage(i18next.t("battle:hitResultNotVeryEffective"));
+            globalScene.queueMessage(i18next.t("battle:hitResultNotVeryEffective"));
             break;
           case HitResult.ONE_HIT_KO:
-            this.scene.queueMessage(i18next.t("battle:hitResultOneHitKO"));
+            globalScene.queueMessage(i18next.t("battle:hitResultOneHitKO"));
             break;
         }
       }
 
       if (this.isFainted()) {
         // set splice index here, so future scene queues happen before FaintedPhase
-        this.scene.setPhaseQueueSplice();
-        this.scene.unshiftPhase(
-          new FaintPhase(this.scene, this.getBattlerIndex(), isOneHitKo, destinyTag, grudgeTag, source),
-        );
+        globalScene.setPhaseQueueSplice();
+        globalScene.unshiftPhase(new FaintPhase(this.getBattlerIndex(), isOneHitKo, destinyTag, grudgeTag, source));
 
         this.destroySubstitute();
         this.lapseTag(BattlerTagType.COMMANDED);
@@ -3592,7 +3598,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     if (this.isFainted()) {
       return 0;
     }
-    const surviveDamage = new Utils.BooleanHolder(false);
+    const surviveDamage = new BooleanHolder(false);
 
     if (!preventEndure && this.hp - damage <= 0) {
       if (this.hp >= 1 && this.getTag(BattlerTagType.ENDURING)) {
@@ -3603,7 +3609,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
         surviveDamage.value = this.lapseTag(BattlerTagType.ENDURE_TOKEN);
       }
       if (!surviveDamage.value) {
-        this.scene.applyModifiers(SurviveDamageModifier, this.isPlayer(), this, surviveDamage);
+        globalScene.applyModifiers(SurviveDamageModifier, this.isPlayer(), this, surviveDamage);
       }
       if (surviveDamage.value) {
         damage = this.hp - 1;
@@ -3620,8 +3626,8 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
        *
        * Once the MoveEffectPhase is over (and calls it's .end() function, shiftPhase() will reset the PhaseQueueSplice via clearPhaseQueueSplice() )
        */
-      this.scene.setPhaseQueueSplice();
-      this.scene.unshiftPhase(new FaintPhase(this.scene, this.getBattlerIndex(), preventEndure));
+      globalScene.setPhaseQueueSplice();
+      globalScene.unshiftPhase(new FaintPhase(this.getBattlerIndex(), preventEndure));
       this.destroySubstitute();
       this.lapseTag(BattlerTagType.COMMANDED);
       this.resetSummonData();
@@ -3648,14 +3654,8 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     ignoreFaintPhase: boolean = false,
     source?: Pokemon,
   ): number {
-    const damagePhase = new DamageAnimPhase(
-      this.scene,
-      this.getBattlerIndex(),
-      damage,
-      result as DamageResult,
-      critical,
-    );
-    this.scene.unshiftPhase(damagePhase);
+    const damagePhase = new DamageAnimPhase(this.getBattlerIndex(), damage, result as DamageResult, critical);
+    globalScene.unshiftPhase(damagePhase);
     if (this.switchOutStatus && source) {
       damage = 0;
     }
@@ -3701,7 +3701,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
 
     const stubTag = new BattlerTag(tagType, 0, 0);
 
-    const cancelled = new Utils.BooleanHolder(false);
+    const cancelled = new BooleanHolder(false);
     applyPreApplyBattlerTagAbAttrs(BattlerTagImmunityAbAttr, this, stubTag, cancelled, true);
 
     const userField = this.getAlliedField();
@@ -3721,7 +3721,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
 
     const newTag = getBattlerTag(tagType, turnCount, sourceMove!, sourceId!); // TODO: are the bangs correct?
 
-    const cancelled = new Utils.BooleanHolder(false);
+    const cancelled = new BooleanHolder(false);
     applyPreApplyBattlerTagAbAttrs(BattlerTagImmunityAbAttr, this, newTag, cancelled);
 
     const userField = this.getAlliedField();
@@ -3846,7 +3846,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     for (const s of BATTLE_STATS) {
       const sourceStage = source.getStatStage(s);
       if (this instanceof PlayerPokemon && sourceStage === 6) {
-        this.scene.validateAchv(achvs.TRANSFER_MAX_STAT_STAGE);
+        globalScene.validateAchv(achvs.TRANSFER_MAX_STAT_STAGE);
       }
       this.setStatStage(s, sourceStage);
     }
@@ -3925,7 +3925,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     if (!this.isOnField()) {
       return;
     }
-    turnMove.turn = this.scene.currentBattle?.turn;
+    turnMove.turn = globalScene.currentBattle?.turn;
     this.getMoveHistory().push(turnMove);
   }
 
@@ -3955,7 +3955,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
    * @param {Pokemon} target If specified, this only cancels subsequent strikes against the given target
    */
   stopMultiHit(target?: Pokemon): void {
-    const effectPhase = this.scene.getCurrentPhase();
+    const effectPhase = globalScene.getCurrentPhase();
     if (effectPhase instanceof MoveEffectPhase && effectPhase.getUserPokemon() === this) {
       effectPhase.stopMultiHit(target);
     }
@@ -3973,35 +3973,34 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
         // Shouldn't happen
         this.abilityIndex = abilityCount - 1;
       }
-      this.scene.gameData.setPokemonSeen(this, false);
+      globalScene.gameData.setPokemonSeen(this, false);
       this.setScale(this.getSpriteScale());
       this.loadAssets().then(() => {
         this.calculateStats();
-        this.scene.updateModifiers(this.isPlayer(), true);
-        Promise.all([this.updateInfo(), this.scene.updateFieldScale()]).then(() => resolve());
+        globalScene.updateModifiers(this.isPlayer(), true);
+        Promise.all([this.updateInfo(), globalScene.updateFieldScale()]).then(() => resolve());
       });
     });
   }
 
   cry(soundConfig?: Phaser.Types.Sound.SoundConfig, sceneOverride?: BattleScene): AnySound {
-    const scene = sceneOverride || this.scene;
-    const cry = this.getSpeciesForm().cry(scene, soundConfig);
+    const scene = sceneOverride ?? globalScene; // TODO: is `sceneOverride` needed?
+    const cry = this.getSpeciesForm().cry(soundConfig);
     let duration = cry.totalDuration * 1000;
     if (this.fusionSpecies && this.getSpeciesForm() !== this.getFusionSpeciesForm()) {
-      let fusionCry = this.getFusionSpeciesForm().cry(scene, soundConfig, true);
+      let fusionCry = this.getFusionSpeciesForm().cry(soundConfig, true);
       duration = Math.min(duration, fusionCry.totalDuration * 1000);
       fusionCry.destroy();
-      scene.time.delayedCall(Utils.fixedInt(Math.ceil(duration * 0.4)), () => {
+      scene.time.delayedCall(fixedInt(Math.ceil(duration * 0.4)), () => {
         try {
-          SoundFade.fadeOut(scene, cry, Utils.fixedInt(Math.ceil(duration * 0.2)));
+          SoundFade.fadeOut(scene, cry, fixedInt(Math.ceil(duration * 0.2)));
           fusionCry = this.getFusionSpeciesForm().cry(
-            scene,
             Object.assign({ seek: Math.max(fusionCry.totalDuration * 0.4, 0) }, soundConfig),
           );
           SoundFade.fadeIn(
             scene,
             fusionCry,
-            Utils.fixedInt(Math.ceil(duration * 0.2)),
+            fixedInt(Math.ceil(duration * 0.2)),
             scene.masterVolume * scene.fieldVolume,
             0,
           );
@@ -4021,13 +4020,13 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
 
     const key = this.species.getCryKey(this.formIndex);
     let rate = 0.85;
-    const cry = this.scene.playSound(key, { rate: rate }) as AnySound;
-    if (!cry || this.scene.fieldVolume === 0) {
+    const cry = globalScene.playSound(key, { rate: rate }) as AnySound;
+    if (!cry || globalScene.fieldVolume === 0) {
       return callback();
     }
     const sprite = this.getSprite();
     const tintSprite = this.getTintSprite();
-    const delay = Math.max(this.scene.sound.get(key).totalDuration * 50, 25);
+    const delay = Math.max(globalScene.sound.get(key).totalDuration * 50, 25);
 
     let frameProgress = 0;
     let frameThreshold: number;
@@ -4035,8 +4034,8 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     sprite.anims.pause();
     tintSprite?.anims.pause();
 
-    let faintCryTimer: Phaser.Time.TimerEvent | null = this.scene.time.addEvent({
-      delay: Utils.fixedInt(delay),
+    let faintCryTimer: Phaser.Time.TimerEvent | null = globalScene.time.addEvent({
+      delay: fixedInt(delay),
       repeat: -1,
       callback: () => {
         frameThreshold = sprite.anims.msPerFrame / rate;
@@ -4062,8 +4061,8 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     });
 
     // Failsafe
-    this.scene.time.delayedCall(Utils.fixedInt(3000), () => {
-      if (!faintCryTimer || !this.scene) {
+    globalScene.time.delayedCall(fixedInt(3000), () => {
+      if (!faintCryTimer || !globalScene) {
         return;
       }
       if (cry?.isPlaying) {
@@ -4080,14 +4079,14 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     const key = this.species.getCryKey(this.formIndex);
     let i = 0;
     let rate = 0.85;
-    const cry = this.scene.playSound(key, { rate: rate }) as AnySound;
+    const cry = globalScene.playSound(key, { rate: rate }) as AnySound;
     const sprite = this.getSprite();
     const tintSprite = this.getTintSprite();
     let duration = cry.totalDuration * 1000;
 
     const fusionCryKey = this.fusionSpecies!.getCryKey(this.fusionFormIndex);
-    let fusionCry = this.scene.playSound(fusionCryKey, { rate: rate }) as AnySound;
-    if (!cry || !fusionCry || this.scene.fieldVolume === 0) {
+    let fusionCry = globalScene.playSound(fusionCryKey, { rate: rate }) as AnySound;
+    if (!cry || !fusionCry || globalScene.fieldVolume === 0) {
       return callback();
     }
     fusionCry.stop();
@@ -4116,8 +4115,8 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     sprite.anims.pause();
     tintSprite?.anims.pause();
 
-    let faintCryTimer: Phaser.Time.TimerEvent | null = this.scene.time.addEvent({
-      delay: Utils.fixedInt(delay),
+    let faintCryTimer: Phaser.Time.TimerEvent | null = globalScene.time.addEvent({
+      delay: fixedInt(delay),
       repeat: -1,
       callback: () => {
         ++i;
@@ -4131,16 +4130,16 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
           frameProgress -= frameThreshold;
         }
         if (i === transitionIndex && fusionCryKey) {
-          SoundFade.fadeOut(this.scene, cry, Utils.fixedInt(Math.ceil((duration / rate) * 0.2)));
-          fusionCry = this.scene.playSound(
+          SoundFade.fadeOut(globalScene, cry, fixedInt(Math.ceil((duration / rate) * 0.2)));
+          fusionCry = globalScene.playSound(
             fusionCryKey,
             Object.assign({ seek: Math.max(fusionCry.totalDuration * 0.4, 0), rate: rate }),
           );
           SoundFade.fadeIn(
-            this.scene,
+            globalScene,
             fusionCry,
-            Utils.fixedInt(Math.ceil((duration / rate) * 0.2)),
-            this.scene.masterVolume * this.scene.fieldVolume,
+            fixedInt(Math.ceil((duration / rate) * 0.2)),
+            globalScene.masterVolume * globalScene.fieldVolume,
             0,
           );
         }
@@ -4162,8 +4161,8 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     });
 
     // Failsafe
-    this.scene.time.delayedCall(Utils.fixedInt(3000), () => {
-      if (!faintCryTimer || !this.scene) {
+    globalScene.time.delayedCall(fixedInt(3000), () => {
+      if (!faintCryTimer || !globalScene) {
         return;
       }
       if (cry?.isPlaying) {
@@ -4206,7 +4205,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       if (overrideStatus ? this.status?.effect === effect : this.status) {
         return false;
       }
-      if (this.isGrounded() && !ignoreField && this.scene.arena.terrain?.terrainType === TerrainType.MISTY) {
+      if (this.isGrounded() && !ignoreField && globalScene.arena.terrain?.terrainType === TerrainType.MISTY) {
         return false;
       }
     }
@@ -4228,7 +4227,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
           }
 
           // Check if the source Pokemon has an ability that cancels the Poison/Toxic immunity
-          const cancelImmunity = new Utils.BooleanHolder(false);
+          const cancelImmunity = new BooleanHolder(false);
           if (sourcePokemon) {
             applyAbAttrs(IgnoreTypeStatusEffectImmunityAbAttr, sourcePokemon, cancelImmunity, false, effect, defType);
             if (cancelImmunity.value) {
@@ -4251,7 +4250,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
         }
         break;
       case StatusEffect.SLEEP:
-        if (this.isGrounded() && this.scene.arena.terrain?.terrainType === TerrainType.ELECTRIC) {
+        if (this.isGrounded() && globalScene.arena.terrain?.terrainType === TerrainType.ELECTRIC) {
           return false;
         }
         break;
@@ -4259,8 +4258,8 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
         if (
           this.isOfType(Type.ICE) ||
           (!ignoreField &&
-            this.scene?.arena?.weather?.weatherType &&
-            [WeatherType.SUNNY, WeatherType.HARSH_SUN].includes(this.scene.arena.weather.weatherType))
+            globalScene?.arena?.weather?.weatherType &&
+            [WeatherType.SUNNY, WeatherType.HARSH_SUN].includes(globalScene.arena.weather.weatherType))
         ) {
           return false;
         }
@@ -4272,7 +4271,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
         break;
     }
 
-    const cancelled = new Utils.BooleanHolder(false);
+    const cancelled = new BooleanHolder(false);
     applyPreSetStatusAbAttrs(StatusEffectImmunityAbAttr, this, effect, cancelled, quiet);
 
     const userField = this.getAlliedField();
@@ -4307,23 +4306,16 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     if (asPhase) {
-      this.scene.unshiftPhase(
-        new ObtainStatusEffectPhase(
-          this.scene,
-          this.getBattlerIndex(),
-          effect,
-          turnsRemaining,
-          sourceText,
-          sourcePokemon,
-        ),
+      globalScene.unshiftPhase(
+        new ObtainStatusEffectPhase(this.getBattlerIndex(), effect, turnsRemaining, sourceText, sourcePokemon),
       );
       return true;
     }
 
-    let sleepTurnsRemaining: Utils.NumberHolder;
+    let sleepTurnsRemaining: NumberHolder;
 
     if (effect === StatusEffect.SLEEP) {
-      sleepTurnsRemaining = new Utils.NumberHolder(this.randSeedIntRange(2, 4));
+      sleepTurnsRemaining = new NumberHolder(this.randSeedIntRange(2, 4));
 
       this.setFrameRate(4);
 
@@ -4348,7 +4340,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     this.status = new Status(effect, 0, sleepTurnsRemaining?.value);
 
     if (effect !== StatusEffect.FAINT) {
-      this.scene.triggerPokemonFormChange(this, SpeciesFormChangeStatusEffectTrigger, true);
+      globalScene.triggerPokemonFormChange(this, SpeciesFormChangeStatusEffectTrigger, true);
       applyPostSetStatusAbAttrs(PostSetStatusAbAttr, this, effect, sourcePokemon);
     }
 
@@ -4390,8 +4382,8 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
    */
   isSafeguarded(attacker: Pokemon): boolean {
     const defendingSide = this.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
-    if (this.scene.arena.getTagOnSide(ArenaTagType.SAFEGUARD, defendingSide)) {
-      const bypassed = new Utils.BooleanHolder(false);
+    if (globalScene.arena.getTagOnSide(ArenaTagType.SAFEGUARD, defendingSide)) {
+      const bypassed = new BooleanHolder(false);
       if (attacker) {
         applyAbAttrs(InfiltratorAbAttr, attacker, null, false, bypassed);
       }
@@ -4423,14 +4415,14 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       }
       // If this Pokemon has a Substitute when loading in, play an animation to add its sprite
       if (this.getTag(SubstituteTag)) {
-        this.scene.triggerPokemonBattleAnim(this, PokemonAnimType.SUBSTITUTE_ADD);
+        globalScene.triggerPokemonBattleAnim(this, PokemonAnimType.SUBSTITUTE_ADD);
         this.getTag(SubstituteTag)!.sourceInFocus = false;
       }
 
       // If this Pokemon has Commander and Dondozo as an active ally, hide this Pokemon's sprite.
       if (
         this.hasAbilityWithAttr(CommanderAbAttr) &&
-        this.scene.currentBattle.double &&
+        globalScene.currentBattle.double &&
         this.getAlly()?.species.speciesId === Species.DONDOZO
       ) {
         this.setVisible(false);
@@ -4449,8 +4441,8 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     if (this.getTag(BattlerTagType.SEEDED)) {
       this.lapseTag(BattlerTagType.SEEDED);
     }
-    if (this.scene) {
-      this.scene.triggerPokemonFormChange(this, SpeciesFormChangePostMoveTrigger, true);
+    if (globalScene) {
+      globalScene.triggerPokemonFormChange(this, SpeciesFormChangePostMoveTrigger, true);
     }
   }
 
@@ -4464,7 +4456,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   setFrameRate(frameRate: integer) {
-    this.scene.anims.get(this.getBattleSpriteKey()).frameRate = frameRate;
+    globalScene.anims.get(this.getBattleSpriteKey()).frameRate = frameRate;
     try {
       this.getSprite().play(this.getBattleSpriteKey());
     } catch (err: unknown) {
@@ -4485,7 +4477,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     if (duration) {
       tintSprite?.setAlpha(0);
 
-      this.scene.tweens.add({
+      globalScene.tweens.add({
         targets: tintSprite,
         alpha: alpha || 1,
         duration: duration,
@@ -4500,7 +4492,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     const tintSprite = this.getTintSprite();
 
     if (duration) {
-      this.scene.tweens.add({
+      globalScene.tweens.add({
         targets: tintSprite,
         alpha: 0,
         duration: duration,
@@ -4541,7 +4533,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
 
   sparkle(): void {
     if (this.shinySparkle) {
-      doShinySparkleAnim(this.scene, this.shinySparkle, this.variant);
+      doShinySparkleAnim(this.shinySparkle, this.variant);
     }
   }
 
@@ -4583,10 +4575,10 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       )
       .replace("pkmn__", "pkmn__back__");
 
-    const sourceTexture = this.scene.textures.get(spriteKey);
-    const sourceBackTexture = this.scene.textures.get(backSpriteKey);
-    const fusionTexture = this.scene.textures.get(fusionSpriteKey);
-    const fusionBackTexture = this.scene.textures.get(fusionBackSpriteKey);
+    const sourceTexture = globalScene.textures.get(spriteKey);
+    const sourceBackTexture = globalScene.textures.get(backSpriteKey);
+    const fusionTexture = globalScene.textures.get(fusionSpriteKey);
+    const fusionBackTexture = globalScene.textures.get(fusionBackSpriteKey);
 
     const [sourceFrame, sourceBackFrame, fusionFrame, fusionBackFrame] = [
       sourceTexture,
@@ -4638,8 +4630,8 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       if (this.shiny && variantColors && variantColors[this.variant]) {
         Object.keys(variantColors[this.variant]).forEach((k) => {
           variantColorSet.set(
-            Utils.rgbaToInt(Array.from(Object.values(Utils.rgbHexToRgba(k)))),
-            Array.from(Object.values(Utils.rgbHexToRgba(variantColors[this.variant][k]))),
+            rgbaToInt(Array.from(Object.values(rgbHexToRgba(k)))),
+            Array.from(Object.values(rgbHexToRgba(variantColors[this.variant][k]))),
           );
         });
       }
@@ -4649,7 +4641,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
           const pixel = pixelData[f].slice(i, i + 4);
           let [r, g, b, a] = pixel;
           if (variantColors) {
-            const color = Utils.rgbaToInt([r, g, b, a]);
+            const color = rgbaToInt([r, g, b, a]);
             if (variantColorSet.has(color)) {
               const mappedPixel = variantColorSet.get(color);
               if (mappedPixel) {
@@ -4686,8 +4678,8 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       if (this.fusionShiny && variantColors && variantColors[this.fusionVariant]) {
         Object.keys(variantColors[this.fusionVariant]).forEach((k) => {
           variantColorSet.set(
-            Utils.rgbaToInt(Array.from(Object.values(Utils.rgbHexToRgba(k)))),
-            Array.from(Object.values(Utils.rgbHexToRgba(variantColors[this.fusionVariant][k]))),
+            rgbaToInt(Array.from(Object.values(rgbHexToRgba(k)))),
+            Array.from(Object.values(rgbHexToRgba(variantColors[this.fusionVariant][k]))),
           );
         });
       }
@@ -4703,7 +4695,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
           pixelData[2 + f][i + 3],
         ];
         if (variantColors) {
-          const color = Utils.rgbaToInt([r, g, b, a]);
+          const color = rgbaToInt([r, g, b, a]);
           if (variantColorSet.has(color)) {
             const mappedPixel = variantColorSet.get(color);
             if (mappedPixel) {
@@ -4721,7 +4713,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     const originalRandom = Math.random;
     Math.random = () => Phaser.Math.RND.realInRange(0, 1);
 
-    this.scene.executeWithSeedOffset(
+    globalScene.executeWithSeedOffset(
       () => {
         paletteColors = QuantizerCelebi.quantize(pixelColors, 4);
         fusionPaletteColors = QuantizerCelebi.quantize(fusionPixelColors, 4);
@@ -4752,7 +4744,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
         }, new Map<number, integer[]>());
         hsvColors = Array.from(rgbaColors.keys()).reduce((map: Map<number, number[]>, k: number) => {
           const rgb = rgbaColors.get(k)!.slice(0, 3);
-          map.set(k, Utils.rgbToHsv(rgb[0], rgb[1], rgb[2]));
+          map.set(k, rgbToHsv(rgb[0], rgb[1], rgb[2]));
           return map;
         }, new Map<number, number[]>());
 
@@ -4820,7 +4812,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     spriteColors.forEach((sc: integer[], i: integer) => {
       paletteDeltas.push([]);
       for (let p = 0; p < palette.length; p++) {
-        paletteDeltas[i].push(Utils.deltaRgb(sc, palette[p]));
+        paletteDeltas[i].push(deltaRgb(sc, palette[p]));
       }
     });
 
@@ -4855,23 +4847,23 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * Generates a random number using the current battle's seed, or the global seed if `this.scene.currentBattle` is falsy
+   * Generates a random number using the current battle's seed, or the global seed if `globalScene.currentBattle` is falsy
    * <!-- @import "../battle".Battle -->
    * This calls either {@linkcode BattleScene.randBattleSeedInt}({@linkcode range}, {@linkcode min}) in `src/battle-scene.ts`
    * which calls {@linkcode Battle.randSeedInt}(`scene`, {@linkcode range}, {@linkcode min}) in `src/battle.ts`
-   * which calls {@linkcode Utils.randSeedInt randSeedInt}({@linkcode range}, {@linkcode min}) in `src/utils.ts`,
-   * or it directly calls {@linkcode Utils.randSeedInt randSeedInt}({@linkcode range}, {@linkcode min}) in `src/utils.ts` if there is no current battle
+   * which calls {@linkcode randSeedInt randSeedInt}({@linkcode range}, {@linkcode min}) in `src/utils.ts`,
+   * or it directly calls {@linkcode randSeedInt randSeedInt}({@linkcode range}, {@linkcode min}) in `src/utils.ts` if there is no current battle
    *
    * @param range How large of a range of random numbers to choose from. If {@linkcode range} <= 1, returns {@linkcode min}
    * @param min The minimum integer to pick, default `0`
    * @returns A random integer between {@linkcode min} and ({@linkcode min} + {@linkcode range} - 1)
    */
   randSeedInt(range: integer, min: integer = 0): integer {
-    return this.scene.currentBattle ? this.scene.randBattleSeedInt(range, min) : Utils.randSeedInt(range, min);
+    return globalScene.currentBattle ? globalScene.randBattleSeedInt(range, min) : randSeedInt(range, min);
   }
 
   /**
-   * Generates a random number using the current battle's seed, or the global seed if `this.scene.currentBattle` is falsy
+   * Generates a random number using the current battle's seed, or the global seed if `globalScene.currentBattle` is falsy
    * @param min The minimum integer to generate
    * @param max The maximum integer to generate
    * @returns a random integer between {@linkcode min} and {@linkcode max} inclusive
@@ -4897,9 +4889,9 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     if (hideInfo) {
       this.hideInfo();
     }
-    this.scene.field.remove(this);
+    globalScene.field.remove(this);
     this.setSwitchOutStatus(true);
-    this.scene.triggerPokemonFormChange(this, SpeciesFormChangeActiveTrigger, true);
+    globalScene.triggerPokemonFormChange(this, SpeciesFormChangeActiveTrigger, true);
   }
 
   destroy(): void {
@@ -4953,7 +4945,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     if (heldItem.pokemonId === -1 || heldItem.pokemonId === this.id) {
       heldItem.stackCount--;
       if (heldItem.stackCount <= 0) {
-        this.scene.removeModifier(heldItem, !this.isPlayer());
+        globalScene.removeModifier(heldItem, !this.isPlayer());
       }
       if (forBattle) {
         applyPostItemLostAbAttrs(PostItemLostAbAttr, this, false);
@@ -4965,15 +4957,14 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 }
 
-export default interface Pokemon {
-  scene: BattleScene;
-}
+/* export default interface Pokemon {
+  scene: BattleScene
+} */
 
 export class PlayerPokemon extends Pokemon {
   public compatibleTms: Moves[];
 
   constructor(
-    scene: BattleScene,
     species: PokemonSpecies,
     level: integer,
     abilityIndex?: integer,
@@ -4985,7 +4976,7 @@ export class PlayerPokemon extends Pokemon {
     nature?: Nature,
     dataSource?: Pokemon | PokemonData,
   ) {
-    super(scene, 106, 148, species, level, abilityIndex, formIndex, gender, shiny, variant, ivs, nature, dataSource);
+    super(106, 148, species, level, abilityIndex, formIndex, gender, shiny, variant, ivs, nature, dataSource);
 
     if (Overrides.STATUS_OVERRIDE) {
       this.status = new Status(Overrides.STATUS_OVERRIDE, 0, 4);
@@ -5003,7 +4994,7 @@ export class PlayerPokemon extends Pokemon {
     }
 
     if (!dataSource) {
-      if (this.scene.gameMode.isDaily) {
+      if (globalScene.gameMode.isDaily) {
         this.generateAndPopulateMoveset();
       } else {
         this.moveset = [];
@@ -5013,7 +5004,7 @@ export class PlayerPokemon extends Pokemon {
   }
 
   initBattleInfo(): void {
-    this.battleInfo = new PlayerBattleInfo(this.scene);
+    this.battleInfo = new PlayerBattleInfo();
     this.battleInfo.initInfo(this);
   }
 
@@ -5030,7 +5021,7 @@ export class PlayerPokemon extends Pokemon {
   }
 
   getFieldIndex(): integer {
-    return this.scene.getPlayerField().indexOf(this);
+    return globalScene.getPlayerField().indexOf(this);
   }
 
   getBattlerIndex(): BattlerIndex {
@@ -5072,7 +5063,7 @@ export class PlayerPokemon extends Pokemon {
     if (
       !this.getSpeciesForm().validateStarterMoveset(
         moveset,
-        this.scene.gameData.starterData[this.species.getRootSpeciesId()].eggMoves,
+        globalScene.gameData.starterData[this.species.getRootSpeciesId()].eggMoves,
       )
     ) {
       return false;
@@ -5094,18 +5085,18 @@ export class PlayerPokemon extends Pokemon {
     return new Promise((resolve) => {
       this.leaveField(switchType === SwitchType.SWITCH);
 
-      this.scene.ui.setMode(
+      globalScene.ui.setMode(
         Mode.PARTY,
         PartyUiMode.FAINT_SWITCH,
         this.getFieldIndex(),
         (slotIndex: integer, option: PartyOption) => {
-          if (slotIndex >= this.scene.currentBattle.getBattlerCount() && slotIndex < 6) {
-            this.scene.prependToPhase(
-              new SwitchSummonPhase(this.scene, switchType, this.getFieldIndex(), slotIndex, false),
+          if (slotIndex >= globalScene.currentBattle.getBattlerCount() && slotIndex < 6) {
+            globalScene.prependToPhase(
+              new SwitchSummonPhase(switchType, this.getFieldIndex(), slotIndex, false),
               MoveEndPhase,
             );
           }
-          this.scene.ui.setMode(Mode.MESSAGE).then(resolve);
+          globalScene.ui.setMode(Mode.MESSAGE).then(resolve);
         },
         PartyUiHandler.FilterNonFainted,
       );
@@ -5117,18 +5108,18 @@ export class PlayerPokemon extends Pokemon {
       const starterSpeciesId = this.species.getRootSpeciesId();
       const fusionStarterSpeciesId = this.isFusion() && this.fusionSpecies ? this.fusionSpecies.getRootSpeciesId() : 0;
       const starterData = [
-        this.scene.gameData.starterData[starterSpeciesId],
-        fusionStarterSpeciesId ? this.scene.gameData.starterData[fusionStarterSpeciesId] : null,
+        globalScene.gameData.starterData[starterSpeciesId],
+        fusionStarterSpeciesId ? globalScene.gameData.starterData[fusionStarterSpeciesId] : null,
       ].filter((d) => !!d);
-      const amount = new Utils.NumberHolder(friendship);
-      this.scene.applyModifier(PokemonFriendshipBoosterModifier, true, this, amount);
+      const amount = new NumberHolder(friendship);
+      globalScene.applyModifier(PokemonFriendshipBoosterModifier, true, this, amount);
       let candyFriendshipMultiplier = CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER;
-      if (this.scene.eventManager.isEventActive()) {
-        candyFriendshipMultiplier *= this.scene.eventManager.getFriendshipMultiplier();
+      if (globalScene.eventManager.isEventActive()) {
+        candyFriendshipMultiplier *= globalScene.eventManager.getFriendshipMultiplier();
       }
-      const starterAmount = new Utils.NumberHolder(
+      const starterAmount = new NumberHolder(
         Math.floor(
-          (amount.value * (this.scene.gameMode.isClassic ? candyFriendshipMultiplier : 1)) /
+          (amount.value * (globalScene.gameMode.isClassic ? candyFriendshipMultiplier : 1)) /
             (fusionStarterSpeciesId ? 2 : 1),
         ),
       );
@@ -5136,14 +5127,14 @@ export class PlayerPokemon extends Pokemon {
       // Add friendship to this PlayerPokemon
       this.friendship = Math.min(this.friendship + amount.value, 255);
       if (this.friendship === 255) {
-        this.scene.validateAchv(achvs.MAX_FRIENDSHIP);
+        globalScene.validateAchv(achvs.MAX_FRIENDSHIP);
       }
       // Add to candy progress for this mon's starter species and its fused species (if it has one)
       starterData.forEach((sd: StarterDataEntry, i: number) => {
         const speciesId = !i ? starterSpeciesId : (fusionStarterSpeciesId as Species);
         sd.friendship = (sd.friendship || 0) + starterAmount.value;
         if (sd.friendship >= getStarterValueFriendshipCap(speciesStarterCosts[speciesId])) {
-          this.scene.gameData.addStarterCandy(getPokemonSpecies(speciesId), 1);
+          globalScene.gameData.addStarterCandy(getPokemonSpecies(speciesId), 1);
           sd.friendship = 0;
         }
       });
@@ -5159,47 +5150,40 @@ export class PlayerPokemon extends Pokemon {
    */
   revivalBlessing(): Promise<void> {
     return new Promise((resolve) => {
-      this.scene.ui.setMode(
+      globalScene.ui.setMode(
         Mode.PARTY,
         PartyUiMode.REVIVAL_BLESSING,
         this.getFieldIndex(),
         (slotIndex: integer, option: PartyOption) => {
           if (slotIndex >= 0 && slotIndex < 6) {
-            const pokemon = this.scene.getPlayerParty()[slotIndex];
+            const pokemon = globalScene.getPlayerParty()[slotIndex];
             if (!pokemon || !pokemon.isFainted()) {
               resolve();
             }
 
             pokemon.resetTurnData();
             pokemon.resetStatus();
-            pokemon.heal(Math.min(Utils.toDmgValue(0.5 * pokemon.getMaxHp()), pokemon.getMaxHp()));
-            this.scene.queueMessage(i18next.t("moveTriggers:revivalBlessing", { pokemonName: pokemon.name }), 0, true);
+            pokemon.heal(Math.min(toDmgValue(0.5 * pokemon.getMaxHp()), pokemon.getMaxHp()));
+            globalScene.queueMessage(i18next.t("moveTriggers:revivalBlessing", { pokemonName: pokemon.name }), 0, true);
 
-            if (this.scene.currentBattle.double && this.scene.getPlayerParty().length > 1) {
+            if (globalScene.currentBattle.double && globalScene.getPlayerParty().length > 1) {
               const allyPokemon = this.getAlly();
               if (slotIndex <= 1) {
                 // Revived ally pokemon
-                this.scene.unshiftPhase(
-                  new SwitchSummonPhase(this.scene, SwitchType.SWITCH, pokemon.getFieldIndex(), slotIndex, false, true),
+                globalScene.unshiftPhase(
+                  new SwitchSummonPhase(SwitchType.SWITCH, pokemon.getFieldIndex(), slotIndex, false, true),
                 );
-                this.scene.unshiftPhase(new ToggleDoublePositionPhase(this.scene, true));
+                globalScene.unshiftPhase(new ToggleDoublePositionPhase(true));
               } else if (allyPokemon.isFainted()) {
                 // Revived party pokemon, and ally pokemon is fainted
-                this.scene.unshiftPhase(
-                  new SwitchSummonPhase(
-                    this.scene,
-                    SwitchType.SWITCH,
-                    allyPokemon.getFieldIndex(),
-                    slotIndex,
-                    false,
-                    true,
-                  ),
+                globalScene.unshiftPhase(
+                  new SwitchSummonPhase(SwitchType.SWITCH, allyPokemon.getFieldIndex(), slotIndex, false, true),
                 );
-                this.scene.unshiftPhase(new ToggleDoublePositionPhase(this.scene, true));
+                globalScene.unshiftPhase(new ToggleDoublePositionPhase(true));
               }
             }
           }
-          this.scene.ui.setMode(Mode.MESSAGE).then(() => resolve());
+          globalScene.ui.setMode(Mode.MESSAGE).then(() => resolve());
         },
         PartyUiHandler.FilterFainted,
       );
@@ -5225,7 +5209,7 @@ export class PlayerPokemon extends Pokemon {
                 0,
               )
             : this.fusionFormIndex;
-        ret = this.scene.addPlayerPokemon(
+        ret = globalScene.addPlayerPokemon(
           this.species,
           this.level,
           this.abilityIndex,
@@ -5247,7 +5231,7 @@ export class PlayerPokemon extends Pokemon {
                 0,
               )
             : this.formIndex;
-        ret = this.scene.addPlayerPokemon(
+        ret = globalScene.addPlayerPokemon(
           !isFusion ? evolutionSpecies : this.species,
           this.level,
           this.abilityIndex,
@@ -5331,13 +5315,13 @@ export class PlayerPokemon extends Pokemon {
       if (preEvolution.speciesId === Species.GIMMIGHOUL) {
         const evotracker = this.getHeldItems().filter((m) => m instanceof EvoTrackerModifier)[0] ?? null;
         if (evotracker) {
-          this.scene.removeModifier(evotracker);
+          globalScene.removeModifier(evotracker);
         }
       }
-      if (!this.scene.gameMode.isDaily || this.metBiome > -1) {
-        this.scene.gameData.updateSpeciesDexIvs(this.species.speciesId, this.ivs);
-        this.scene.gameData.setPokemonSeen(this, false);
-        this.scene.gameData.setPokemonCaught(this, false).then(() => updateAndResolve());
+      if (!globalScene.gameMode.isDaily || this.metBiome > -1) {
+        globalScene.gameData.updateSpeciesDexIvs(this.species.speciesId, this.ivs);
+        globalScene.gameData.setPokemonSeen(this, false);
+        globalScene.gameData.setPokemonCaught(this, false).then(() => updateAndResolve());
       } else {
         updateAndResolve();
       }
@@ -5352,7 +5336,7 @@ export class PlayerPokemon extends Pokemon {
       const newEvolution = pokemonEvolutions[evoSpecies.speciesId][1];
 
       if (newEvolution.condition?.predicate(this)) {
-        const newPokemon = this.scene.addPlayerPokemon(
+        const newPokemon = globalScene.addPlayerPokemon(
           this.species,
           this.level,
           this.abilityIndex,
@@ -5380,18 +5364,18 @@ export class PlayerPokemon extends Pokemon {
         newPokemon.fusionLuck = this.fusionLuck;
         newPokemon.usedTMs = this.usedTMs;
 
-        this.scene.getPlayerParty().push(newPokemon);
+        globalScene.getPlayerParty().push(newPokemon);
         newPokemon.evolve(!isFusion ? newEvolution : new FusionSpeciesFormEvolution(this.id, newEvolution), evoSpecies);
-        const modifiers = this.scene.findModifiers(
+        const modifiers = globalScene.findModifiers(
           (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === this.id,
           true,
         ) as PokemonHeldItemModifier[];
         modifiers.forEach((m) => {
           const clonedModifier = m.clone() as PokemonHeldItemModifier;
           clonedModifier.pokemonId = newPokemon.id;
-          this.scene.addModifier(clonedModifier, true);
+          globalScene.addModifier(clonedModifier, true);
         });
-        this.scene.updateModifiers(true);
+        globalScene.updateModifiers(true);
       }
     }
   }
@@ -5402,7 +5386,7 @@ export class PlayerPokemon extends Pokemon {
         this.species.forms.findIndex((f) => f.formKey === formChange.formKey),
         0,
       );
-      const ret = this.scene.addPlayerPokemon(
+      const ret = globalScene.addPlayerPokemon(
         this.species,
         this.level,
         this.abilityIndex,
@@ -5456,13 +5440,13 @@ export class PlayerPokemon extends Pokemon {
       const updateAndResolve = () => {
         this.loadAssets().then(() => {
           this.calculateStats();
-          this.scene.updateModifiers(true, true);
+          globalScene.updateModifiers(true, true);
           this.updateInfo(true).then(() => resolve());
         });
       };
-      if (!this.scene.gameMode.isDaily || this.metBiome > -1) {
-        this.scene.gameData.setPokemonSeen(this, false);
-        this.scene.gameData.setPokemonCaught(this, false).then(() => updateAndResolve());
+      if (!globalScene.gameMode.isDaily || this.metBiome > -1) {
+        globalScene.gameData.setPokemonSeen(this, false);
+        globalScene.gameData.setPokemonCaught(this, false).then(() => updateAndResolve());
       } else {
         updateAndResolve();
       }
@@ -5492,8 +5476,8 @@ export class PlayerPokemon extends Pokemon {
         this.pauseEvolutions = true;
       }
 
-      this.scene.validateAchv(achvs.SPLICE);
-      this.scene.gameData.gameStats.pokemonFused++;
+      globalScene.validateAchv(achvs.SPLICE);
+      globalScene.gameData.gameStats.pokemonFused++;
 
       // Store the average HP% that each Pokemon has
       const maxHp = this.getMaxHp();
@@ -5516,31 +5500,29 @@ export class PlayerPokemon extends Pokemon {
 
       this.generateCompatibleTms();
       this.updateInfo(true);
-      const fusedPartyMemberIndex = this.scene.getPlayerParty().indexOf(pokemon);
-      let partyMemberIndex = this.scene.getPlayerParty().indexOf(this);
+      const fusedPartyMemberIndex = globalScene.getPlayerParty().indexOf(pokemon);
+      let partyMemberIndex = globalScene.getPlayerParty().indexOf(this);
       if (partyMemberIndex > fusedPartyMemberIndex) {
         partyMemberIndex--;
       }
-      const fusedPartyMemberHeldModifiers = this.scene.findModifiers(
+      const fusedPartyMemberHeldModifiers = globalScene.findModifiers(
         (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === pokemon.id,
         true,
       ) as PokemonHeldItemModifier[];
       const transferModifiers: Promise<boolean>[] = [];
       for (const modifier of fusedPartyMemberHeldModifiers) {
         transferModifiers.push(
-          this.scene.tryTransferHeldItemModifier(modifier, this, false, modifier.getStackCount(), true, true, false),
+          globalScene.tryTransferHeldItemModifier(modifier, this, false, modifier.getStackCount(), true, true, false),
         );
       }
       Promise.allSettled(transferModifiers).then(() => {
-        this.scene.updateModifiers(true, true).then(() => {
-          this.scene.removePartyMemberModifiers(fusedPartyMemberIndex);
-          this.scene.getPlayerParty().splice(fusedPartyMemberIndex, 1)[0];
-          const newPartyMemberIndex = this.scene.getPlayerParty().indexOf(this);
+        globalScene.updateModifiers(true, true).then(() => {
+          globalScene.removePartyMemberModifiers(fusedPartyMemberIndex);
+          globalScene.getPlayerParty().splice(fusedPartyMemberIndex, 1)[0];
+          const newPartyMemberIndex = globalScene.getPlayerParty().indexOf(this);
           pokemon
             .getMoveset(true)
-            .map((m: PokemonMove) =>
-              this.scene.unshiftPhase(new LearnMovePhase(this.scene, newPartyMemberIndex, m.getMove().id)),
-            );
+            .map((m: PokemonMove) => globalScene.unshiftPhase(new LearnMovePhase(newPartyMemberIndex, m.getMove().id)));
           pokemon.destroy();
           this.updateFusionPalette();
           resolve();
@@ -5581,7 +5563,6 @@ export class EnemyPokemon extends Pokemon {
   public readonly isPopulatedFromDataSource: boolean;
 
   constructor(
-    scene: BattleScene,
     species: PokemonSpecies,
     level: integer,
     trainerSlot: TrainerSlot,
@@ -5590,7 +5571,6 @@ export class EnemyPokemon extends Pokemon {
     dataSource?: PokemonData,
   ) {
     super(
-      scene,
       236,
       84,
       species,
@@ -5670,7 +5650,7 @@ export class EnemyPokemon extends Pokemon {
 
   initBattleInfo(): void {
     if (!this.battleInfo) {
-      this.battleInfo = new EnemyBattleInfo(this.scene);
+      this.battleInfo = new EnemyBattleInfo();
       this.battleInfo.updateBossSegments(this);
       this.battleInfo.initInfo(this);
     } else {
@@ -5689,7 +5669,7 @@ export class EnemyPokemon extends Pokemon {
     if (boss) {
       this.bossSegments =
         bossSegments ||
-        this.scene.getEncounterBossSegments(this.scene.currentBattle.waveIndex, this.level, this.species, true);
+        globalScene.getEncounterBossSegments(globalScene.currentBattle.waveIndex, this.level, this.species, true);
       this.bossSegmentIndex = this.bossSegments - 1;
     } else {
       this.bossSegments = 0;
@@ -5721,7 +5701,7 @@ export class EnemyPokemon extends Pokemon {
               new PokemonMove(Moves.FLAMETHROWER),
               new PokemonMove(Moves.COSMIC_POWER),
             ];
-        if (this.scene.gameMode.hasChallenge(Challenges.INVERSE_BATTLE)) {
+        if (globalScene.gameMode.hasChallenge(Challenges.INVERSE_BATTLE)) {
           this.moveset[2] = new PokemonMove(Moves.THUNDERBOLT);
         }
         break;
@@ -5772,7 +5752,7 @@ export class EnemyPokemon extends Pokemon {
       }
       switch (this.aiType) {
         case AiType.RANDOM: // No enemy should spawn with this AI type in-game
-          const moveId = movePool[this.scene.randBattleSeedInt(movePool.length)]!.moveId; // TODO: is the bang correct?
+          const moveId = movePool[globalScene.randBattleSeedInt(movePool.length)]!.moveId; // TODO: is the bang correct?
           return { move: moveId, targets: this.getNextTargets(moveId) };
         case AiType.SMART_RANDOM:
         case AiType.SMART:
@@ -5791,7 +5771,7 @@ export class EnemyPokemon extends Pokemon {
               return false;
             }
 
-            const fieldPokemon = this.scene.getField();
+            const fieldPokemon = globalScene.getField();
             const moveTargets = getMoveTargets(this, move.id)
               .targets.map((ind) => fieldPokemon[ind])
               .filter((p) => this.isPlayer() !== p.isPlayer());
@@ -5836,7 +5816,7 @@ export class EnemyPokemon extends Pokemon {
                 break;
               }
 
-              const target = this.scene.getField()[mt];
+              const target = globalScene.getField()[mt];
               /**
                * The "target score" of a move is given by the move's user benefit score + the move's target benefit score.
                * If the target is an ally, the target benefit score is multiplied by -1.
@@ -5900,7 +5880,7 @@ export class EnemyPokemon extends Pokemon {
           let r = 0;
           if (this.aiType === AiType.SMART_RANDOM) {
             // Has a 5/8 chance to select the best move, and a 3/8 chance to advance to the next best move (and repeat this roll)
-            while (r < sortedMovePool.length - 1 && this.scene.randBattleSeedInt(8) >= 5) {
+            while (r < sortedMovePool.length - 1 && globalScene.randBattleSeedInt(8) >= 5) {
               r++;
             }
           } else if (this.aiType === AiType.SMART) {
@@ -5909,7 +5889,7 @@ export class EnemyPokemon extends Pokemon {
               r < sortedMovePool.length - 1 &&
               moveScores[movePool.indexOf(sortedMovePool[r + 1])] / moveScores[movePool.indexOf(sortedMovePool[r])] >=
                 0 &&
-              this.scene.randBattleSeedInt(100) <
+              globalScene.randBattleSeedInt(100) <
                 Math.round(
                   (moveScores[movePool.indexOf(sortedMovePool[r + 1])] /
                     moveScores[movePool.indexOf(sortedMovePool[r])]) *
@@ -5939,7 +5919,7 @@ export class EnemyPokemon extends Pokemon {
    */
   getNextTargets(moveId: Moves): BattlerIndex[] {
     const moveTargets = getMoveTargets(this, moveId);
-    const targets = this.scene.getField(true).filter((p) => moveTargets.targets.indexOf(p.getBattlerIndex()) > -1);
+    const targets = globalScene.getField(true).filter((p) => moveTargets.targets.indexOf(p.getBattlerIndex()) > -1);
     // If the move is multi-target, return all targets' indexes
     if (moveTargets.multiple) {
       return targets.map((p) => p.getBattlerIndex());
@@ -6003,7 +5983,7 @@ export class EnemyPokemon extends Pokemon {
      * then select the first target whose cumulative weight (with all previous targets' weights)
      * is greater than that random number.
      */
-    const randValue = this.scene.randBattleSeedInt(totalWeight);
+    const randValue = globalScene.randBattleSeedInt(totalWeight);
     let targetIndex: integer = 0;
 
     thresholds.every((t, i) => {
@@ -6073,7 +6053,7 @@ export class EnemyPokemon extends Pokemon {
               //console.log('damage', damage, 'segment', segmentsBypassed + 1, 'segment size', segmentSize, 'damage needed', Math.round(segmentSize * Math.pow(2, segmentsBypassed + 1)));
             }
 
-            damage = Utils.toDmgValue(this.hp - hpThreshold + segmentSize * segmentsBypassed);
+            damage = toDmgValue(this.hp - hpThreshold + segmentSize * segmentsBypassed);
             clearedBossSegmentIndex = s - segmentsBypassed;
           }
           break;
@@ -6081,7 +6061,7 @@ export class EnemyPokemon extends Pokemon {
       }
     }
 
-    switch (this.scene.currentBattle.battleSpec) {
+    switch (globalScene.currentBattle.battleSpec) {
       case BattleSpec.FINAL_BOSS:
         if (!this.formIndex && this.bossSegmentIndex < 1) {
           damage = Math.min(damage, this.hp - 1);
@@ -6105,7 +6085,7 @@ export class EnemyPokemon extends Pokemon {
   }
 
   canBypassBossSegments(segmentCount: integer = 1): boolean {
-    if (this.scene.currentBattle.battleSpec === BattleSpec.FINAL_BOSS) {
+    if (globalScene.currentBattle.battleSpec === BattleSpec.FINAL_BOSS) {
       if (!this.formIndex && this.bossSegmentIndex - segmentCount < 1) {
         return false;
       }
@@ -6137,7 +6117,7 @@ export class EnemyPokemon extends Pokemon {
       }
 
       // Pick a random stat from the leftover stats to increase its stages
-      const randInt = Utils.randSeedInt(totalWeight);
+      const randInt = randSeedInt(totalWeight);
       for (const i in statThresholds) {
         if (randInt < statThresholds[i]) {
           boostedStat = leftoverStats[i];
@@ -6156,15 +6136,15 @@ export class EnemyPokemon extends Pokemon {
         stages++;
       }
 
-      this.scene.unshiftPhase(
-        new StatStageChangePhase(this.scene, this.getBattlerIndex(), true, [boostedStat!], stages, true, true),
+      globalScene.unshiftPhase(
+        new StatStageChangePhase(this.getBattlerIndex(), true, [boostedStat!], stages, true, true),
       );
       this.bossSegmentIndex--;
     }
   }
 
   getFieldIndex(): integer {
-    return this.scene.getEnemyField().indexOf(this);
+    return globalScene.getEnemyField().indexOf(this);
   }
 
   getBattlerIndex(): BattlerIndex {
@@ -6179,16 +6159,16 @@ export class EnemyPokemon extends Pokemon {
    * @returns the pokemon that was added or null if the pokemon could not be added
    */
   addToParty(pokeballType: PokeballType, slotIndex: number = -1) {
-    const party = this.scene.getPlayerParty();
+    const party = globalScene.getPlayerParty();
     let ret: PlayerPokemon | null = null;
 
     if (party.length < PLAYER_PARTY_MAX_SIZE) {
       this.pokeball = pokeballType;
       this.metLevel = this.level;
-      this.metBiome = this.scene.arena.biomeType;
-      this.metWave = this.scene.currentBattle.waveIndex;
+      this.metBiome = globalScene.arena.biomeType;
+      this.metWave = globalScene.currentBattle.waveIndex;
       this.metSpecies = this.species.speciesId;
-      const newPokemon = this.scene.addPlayerPokemon(
+      const newPokemon = globalScene.addPlayerPokemon(
         this.species,
         this.level,
         this.abilityIndex,
@@ -6201,7 +6181,7 @@ export class EnemyPokemon extends Pokemon {
         this,
       );
 
-      if (Utils.isBetween(slotIndex, 0, PLAYER_PARTY_MAX_SIZE - 1)) {
+      if (isBetween(slotIndex, 0, PLAYER_PARTY_MAX_SIZE - 1)) {
         party.splice(slotIndex, 0, newPokemon);
       } else {
         party.push(newPokemon);
@@ -6211,7 +6191,7 @@ export class EnemyPokemon extends Pokemon {
       newPokemon.setVisible(false);
 
       ret = newPokemon;
-      this.scene.triggerPokemonFormChange(newPokemon, SpeciesFormChangeActiveTrigger, true);
+      globalScene.triggerPokemonFormChange(newPokemon, SpeciesFormChangeActiveTrigger, true);
     }
 
     return ret;
@@ -6419,7 +6399,7 @@ export class PokemonMove {
   }
 
   getMovePp(): integer {
-    return this.maxPpOverride || this.getMove().pp + this.ppUp * Utils.toDmgValue(this.getMove().pp / 5);
+    return this.maxPpOverride || this.getMove().pp + this.ppUp * toDmgValue(this.getMove().pp / 5);
   }
 
   getPpRatio(): number {

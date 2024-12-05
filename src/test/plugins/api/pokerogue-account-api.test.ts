@@ -3,6 +3,7 @@ import { SESSION_ID_COOKIE } from "#app/constants";
 import { AccountApi } from "#app/plugins/api/account-api";
 import { getApiBaseUrl } from "#app/test/utils/testUtils";
 import * as Utils from "#app/utils";
+import { setCookie, removeCookie } from "#app/utils";
 import { http, HttpResponse } from "msw";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -98,7 +99,7 @@ describe("Account API", () => {
       const error = await accountApi.login(loginParams);
 
       expect(error).toBeNull();
-      expect(Utils.setCookie).toHaveBeenCalledWith(SESSION_ID_COOKIE, "abctest");
+      expect(setCookie).toHaveBeenCalledWith(SESSION_ID_COOKIE, "abctest");
     });
 
     it("should return error message and report a warning on FAILURE", async () => {
@@ -133,7 +134,7 @@ describe("Account API", () => {
 
       await accountApi.logout();
 
-      expect(Utils.removeCookie).toHaveBeenCalledWith(SESSION_ID_COOKIE);
+      expect(removeCookie).toHaveBeenCalledWith(SESSION_ID_COOKIE);
     });
 
     it("should report a warning on and remove cookie on FAILURE", async () => {
@@ -141,7 +142,7 @@ describe("Account API", () => {
 
       await accountApi.logout();
 
-      expect(Utils.removeCookie).toHaveBeenCalledWith(SESSION_ID_COOKIE);
+      expect(removeCookie).toHaveBeenCalledWith(SESSION_ID_COOKIE);
       expect(console.warn).toHaveBeenCalledWith("Log out failed!", expect.any(Error));
     });
 
@@ -150,7 +151,7 @@ describe("Account API", () => {
 
       await accountApi.logout();
 
-      expect(Utils.removeCookie).toHaveBeenCalledWith(SESSION_ID_COOKIE);
+      expect(removeCookie).toHaveBeenCalledWith(SESSION_ID_COOKIE);
       expect(console.warn).toHaveBeenCalledWith("Log out failed!", expect.any(Error));
     });
   });

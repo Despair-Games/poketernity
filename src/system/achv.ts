@@ -1,20 +1,20 @@
-import { Modifier } from "typescript";
-import BattleScene from "../battle-scene";
+import type { Modifier } from "typescript";
 import { TurnHeldItemTransferModifier } from "../modifier/modifier";
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
 import i18next from "i18next";
-import * as Utils from "../utils";
+import { NumberHolder } from "#app/utils";
 import { PlayerGender } from "#enums/player-gender";
+import type { Challenge } from "#app/data/challenge";
 import {
-  Challenge,
   FreshStartChallenge,
   SingleGenerationChallenge,
   SingleTypeChallenge,
   InverseBattleChallenge,
 } from "#app/data/challenge";
-import { ConditionFn } from "#app/@types/common";
+import type { ConditionFn } from "#app/@types/common";
 import { Stat, getShortenedStatKey } from "#app/enums/stat";
 import { Challenges } from "#app/enums/challenges";
+import { globalScene } from "#app/global-scene";
 
 export enum AchvTier {
   COMMON,
@@ -79,8 +79,8 @@ export class Achv {
     return this;
   }
 
-  validate(scene: BattleScene, args?: any[]): boolean {
-    return !this.conditionFunc || this.conditionFunc(scene, args);
+  validate(args?: any[]): boolean {
+    return !this.conditionFunc || this.conditionFunc(args);
   }
 
   getTier(): AchvTier {
@@ -104,14 +104,7 @@ export class MoneyAchv extends Achv {
   moneyAmount: integer;
 
   constructor(localizationKey: string, name: string, moneyAmount: integer, iconImage: string, score: integer) {
-    super(
-      localizationKey,
-      name,
-      "",
-      iconImage,
-      score,
-      (scene: BattleScene, _args: any[]) => scene.money >= this.moneyAmount,
-    );
+    super(localizationKey, name, "", iconImage, score, (_args: any[]) => globalScene.money >= this.moneyAmount);
     this.moneyAmount = moneyAmount;
   }
 }
@@ -126,7 +119,7 @@ export class RibbonAchv extends Achv {
       "",
       iconImage,
       score,
-      (scene: BattleScene, _args: any[]) => scene.gameData.gameStats.ribbonsOwned >= this.ribbonAmount,
+      (_args: any[]) => globalScene.gameData.gameStats.ribbonsOwned >= this.ribbonAmount,
     );
     this.ribbonAmount = ribbonAmount;
   }
@@ -142,8 +135,7 @@ export class DamageAchv extends Achv {
       "",
       iconImage,
       score,
-      (_scene: BattleScene, args: any[]) =>
-        (args[0] instanceof Utils.NumberHolder ? args[0].value : args[0]) >= this.damageAmount,
+      (args: any[]) => (args[0] instanceof NumberHolder ? args[0].value : args[0]) >= this.damageAmount,
     );
     this.damageAmount = damageAmount;
   }
@@ -159,8 +151,7 @@ export class HealAchv extends Achv {
       "",
       iconImage,
       score,
-      (_scene: BattleScene, args: any[]) =>
-        (args[0] instanceof Utils.NumberHolder ? args[0].value : args[0]) >= this.healAmount,
+      (args: any[]) => (args[0] instanceof NumberHolder ? args[0].value : args[0]) >= this.healAmount,
     );
     this.healAmount = healAmount;
   }
@@ -176,8 +167,7 @@ export class LevelAchv extends Achv {
       "",
       iconImage,
       score,
-      (scene: BattleScene, args: any[]) =>
-        (args[0] instanceof Utils.NumberHolder ? args[0].value : args[0]) >= this.level,
+      (args: any[]) => (args[0] instanceof NumberHolder ? args[0].value : args[0]) >= this.level,
     );
     this.level = level;
   }
@@ -192,9 +182,7 @@ export class ModifierAchv extends Achv {
     score: integer,
     modifierFunc: (modifier: Modifier) => boolean,
   ) {
-    super(localizationKey, name, description, iconImage, score, (_scene: BattleScene, args: any[]) =>
-      modifierFunc(args[0] as Modifier),
-    );
+    super(localizationKey, name, description, iconImage, score, (args: any[]) => modifierFunc(args[0] as Modifier));
   }
 }
 
@@ -205,11 +193,9 @@ export class ChallengeAchv extends Achv {
     description: string,
     iconImage: string,
     score: integer,
-    challengeFunc: (challenge: Challenge, scene: BattleScene) => boolean,
+    challengeFunc: (challenge: Challenge) => boolean,
   ) {
-    super(localizationKey, name, description, iconImage, score, (_scene: BattleScene, args: any[]) =>
-      challengeFunc(args[0] as Challenge, _scene),
-    );
+    super(localizationKey, name, description, iconImage, score, (args: any[]) => challengeFunc(args[0] as Challenge));
   }
 }
 
@@ -477,7 +463,7 @@ export const achvs = {
     "CLASSIC_VICTORY.description",
     "relic_crown",
     150,
-    (c) => c.gameData.gameStats.sessionsWon === 0,
+    (_) => globalScene.gameData.gameStats.sessionsWon === 0,
   ),
   UNEVOLVED_CLASSIC_VICTORY: new Achv(
     "UNEVOLVED_CLASSIC_VICTORY",
@@ -485,7 +471,7 @@ export const achvs = {
     "UNEVOLVED_CLASSIC_VICTORY.description",
     "eviolite",
     175,
-    (c) => c.getPlayerParty().some((p) => p.getSpeciesForm(true).speciesId in pokemonEvolutions),
+    (_) => globalScene.getPlayerParty().some((p) => p.getSpeciesForm(true).speciesId in pokemonEvolutions),
   ),
   MONO_GEN_ONE_VICTORY: new ChallengeAchv(
     "MONO_GEN_ONE",
@@ -493,10 +479,10 @@ export const achvs = {
     "MONO_GEN_ONE.description",
     "ribbon_gen1",
     100,
-    (c, scene) =>
+    (c) =>
       c instanceof SingleGenerationChallenge &&
       c.value === 1 &&
-      !scene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_GEN_TWO_VICTORY: new ChallengeAchv(
     "MONO_GEN_TWO",
@@ -504,10 +490,10 @@ export const achvs = {
     "MONO_GEN_TWO.description",
     "ribbon_gen2",
     100,
-    (c, scene) =>
+    (c) =>
       c instanceof SingleGenerationChallenge &&
       c.value === 2 &&
-      !scene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_GEN_THREE_VICTORY: new ChallengeAchv(
     "MONO_GEN_THREE",
@@ -515,10 +501,10 @@ export const achvs = {
     "MONO_GEN_THREE.description",
     "ribbon_gen3",
     100,
-    (c, scene) =>
+    (c) =>
       c instanceof SingleGenerationChallenge &&
       c.value === 3 &&
-      !scene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_GEN_FOUR_VICTORY: new ChallengeAchv(
     "MONO_GEN_FOUR",
@@ -526,10 +512,10 @@ export const achvs = {
     "MONO_GEN_FOUR.description",
     "ribbon_gen4",
     100,
-    (c, scene) =>
+    (c) =>
       c instanceof SingleGenerationChallenge &&
       c.value === 4 &&
-      !scene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_GEN_FIVE_VICTORY: new ChallengeAchv(
     "MONO_GEN_FIVE",
@@ -537,10 +523,10 @@ export const achvs = {
     "MONO_GEN_FIVE.description",
     "ribbon_gen5",
     100,
-    (c, scene) =>
+    (c) =>
       c instanceof SingleGenerationChallenge &&
       c.value === 5 &&
-      !scene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_GEN_SIX_VICTORY: new ChallengeAchv(
     "MONO_GEN_SIX",
@@ -548,10 +534,10 @@ export const achvs = {
     "MONO_GEN_SIX.description",
     "ribbon_gen6",
     100,
-    (c, scene) =>
+    (c) =>
       c instanceof SingleGenerationChallenge &&
       c.value === 6 &&
-      !scene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_GEN_SEVEN_VICTORY: new ChallengeAchv(
     "MONO_GEN_SEVEN",
@@ -559,10 +545,10 @@ export const achvs = {
     "MONO_GEN_SEVEN.description",
     "ribbon_gen7",
     100,
-    (c, scene) =>
+    (c) =>
       c instanceof SingleGenerationChallenge &&
       c.value === 7 &&
-      !scene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_GEN_EIGHT_VICTORY: new ChallengeAchv(
     "MONO_GEN_EIGHT",
@@ -570,10 +556,10 @@ export const achvs = {
     "MONO_GEN_EIGHT.description",
     "ribbon_gen8",
     100,
-    (c, scene) =>
+    (c) =>
       c instanceof SingleGenerationChallenge &&
       c.value === 8 &&
-      !scene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_GEN_NINE_VICTORY: new ChallengeAchv(
     "MONO_GEN_NINE",
@@ -581,10 +567,10 @@ export const achvs = {
     "MONO_GEN_NINE.description",
     "ribbon_gen9",
     100,
-    (c, scene) =>
+    (c) =>
       c instanceof SingleGenerationChallenge &&
       c.value === 9 &&
-      !scene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_NORMAL: new ChallengeAchv(
     "MONO_NORMAL",
@@ -592,10 +578,10 @@ export const achvs = {
     "MONO_NORMAL.description",
     "silk_scarf",
     100,
-    (c, scene) =>
+    (c) =>
       c instanceof SingleTypeChallenge &&
       c.value === 1 &&
-      !scene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_FIGHTING: new ChallengeAchv(
     "MONO_FIGHTING",
@@ -603,10 +589,10 @@ export const achvs = {
     "MONO_FIGHTING.description",
     "black_belt",
     100,
-    (c, scene) =>
+    (c) =>
       c instanceof SingleTypeChallenge &&
       c.value === 2 &&
-      !scene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_FLYING: new ChallengeAchv(
     "MONO_FLYING",
@@ -614,10 +600,10 @@ export const achvs = {
     "MONO_FLYING.description",
     "sharp_beak",
     100,
-    (c, scene) =>
+    (c) =>
       c instanceof SingleTypeChallenge &&
       c.value === 3 &&
-      !scene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_POISON: new ChallengeAchv(
     "MONO_POISON",
@@ -625,10 +611,10 @@ export const achvs = {
     "MONO_POISON.description",
     "poison_barb",
     100,
-    (c, scene) =>
+    (c) =>
       c instanceof SingleTypeChallenge &&
       c.value === 4 &&
-      !scene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_GROUND: new ChallengeAchv(
     "MONO_GROUND",
@@ -636,10 +622,10 @@ export const achvs = {
     "MONO_GROUND.description",
     "soft_sand",
     100,
-    (c, scene) =>
+    (c) =>
       c instanceof SingleTypeChallenge &&
       c.value === 5 &&
-      !scene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_ROCK: new ChallengeAchv(
     "MONO_ROCK",
@@ -647,10 +633,10 @@ export const achvs = {
     "MONO_ROCK.description",
     "hard_stone",
     100,
-    (c, scene) =>
+    (c) =>
       c instanceof SingleTypeChallenge &&
       c.value === 6 &&
-      !scene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_BUG: new ChallengeAchv(
     "MONO_BUG",
@@ -658,10 +644,10 @@ export const achvs = {
     "MONO_BUG.description",
     "silver_powder",
     100,
-    (c, scene) =>
+    (c) =>
       c instanceof SingleTypeChallenge &&
       c.value === 7 &&
-      !scene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_GHOST: new ChallengeAchv(
     "MONO_GHOST",
@@ -669,10 +655,10 @@ export const achvs = {
     "MONO_GHOST.description",
     "spell_tag",
     100,
-    (c, scene) =>
+    (c) =>
       c instanceof SingleTypeChallenge &&
       c.value === 8 &&
-      !scene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_STEEL: new ChallengeAchv(
     "MONO_STEEL",
@@ -680,10 +666,10 @@ export const achvs = {
     "MONO_STEEL.description",
     "metal_coat",
     100,
-    (c, scene) =>
+    (c) =>
       c instanceof SingleTypeChallenge &&
       c.value === 9 &&
-      !scene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_FIRE: new ChallengeAchv(
     "MONO_FIRE",
@@ -691,10 +677,10 @@ export const achvs = {
     "MONO_FIRE.description",
     "charcoal",
     100,
-    (c, scene) =>
+    (c) =>
       c instanceof SingleTypeChallenge &&
       c.value === 10 &&
-      !scene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_WATER: new ChallengeAchv(
     "MONO_WATER",
@@ -702,10 +688,10 @@ export const achvs = {
     "MONO_WATER.description",
     "mystic_water",
     100,
-    (c, scene) =>
+    (c) =>
       c instanceof SingleTypeChallenge &&
       c.value === 11 &&
-      !scene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_GRASS: new ChallengeAchv(
     "MONO_GRASS",
@@ -713,10 +699,10 @@ export const achvs = {
     "MONO_GRASS.description",
     "miracle_seed",
     100,
-    (c, scene) =>
+    (c) =>
       c instanceof SingleTypeChallenge &&
       c.value === 12 &&
-      !scene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_ELECTRIC: new ChallengeAchv(
     "MONO_ELECTRIC",
@@ -724,10 +710,10 @@ export const achvs = {
     "MONO_ELECTRIC.description",
     "magnet",
     100,
-    (c, scene) =>
+    (c) =>
       c instanceof SingleTypeChallenge &&
       c.value === 13 &&
-      !scene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_PSYCHIC: new ChallengeAchv(
     "MONO_PSYCHIC",
@@ -735,10 +721,10 @@ export const achvs = {
     "MONO_PSYCHIC.description",
     "twisted_spoon",
     100,
-    (c, scene) =>
+    (c) =>
       c instanceof SingleTypeChallenge &&
       c.value === 14 &&
-      !scene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_ICE: new ChallengeAchv(
     "MONO_ICE",
@@ -746,10 +732,10 @@ export const achvs = {
     "MONO_ICE.description",
     "never_melt_ice",
     100,
-    (c, scene) =>
+    (c) =>
       c instanceof SingleTypeChallenge &&
       c.value === 15 &&
-      !scene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_DRAGON: new ChallengeAchv(
     "MONO_DRAGON",
@@ -757,10 +743,10 @@ export const achvs = {
     "MONO_DRAGON.description",
     "dragon_fang",
     100,
-    (c, scene) =>
+    (c) =>
       c instanceof SingleTypeChallenge &&
       c.value === 16 &&
-      !scene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_DARK: new ChallengeAchv(
     "MONO_DARK",
@@ -768,10 +754,10 @@ export const achvs = {
     "MONO_DARK.description",
     "black_glasses",
     100,
-    (c, scene) =>
+    (c) =>
       c instanceof SingleTypeChallenge &&
       c.value === 17 &&
-      !scene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_FAIRY: new ChallengeAchv(
     "MONO_FAIRY",
@@ -779,10 +765,10 @@ export const achvs = {
     "MONO_FAIRY.description",
     "fairy_feather",
     100,
-    (c, scene) =>
+    (c) =>
       c instanceof SingleTypeChallenge &&
       c.value === 18 &&
-      !scene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   FRESH_START: new ChallengeAchv(
     "FRESH_START",
@@ -790,10 +776,10 @@ export const achvs = {
     "FRESH_START.description",
     "reviver_seed",
     100,
-    (c, scene) =>
+    (c) =>
       c instanceof FreshStartChallenge &&
       c.value > 0 &&
-      !scene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   INVERSE_BATTLE: new ChallengeAchv(
     "INVERSE_BATTLE",

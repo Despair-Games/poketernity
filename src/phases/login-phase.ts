@@ -1,10 +1,11 @@
 import { updateUserInfo } from "#app/account";
-import BattleScene, { bypassLogin } from "#app/battle-scene";
+import { bypassLogin } from "#app/battle-scene";
+import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { handleTutorial, Tutorial } from "#app/tutorial";
 import { Mode } from "#app/ui/ui";
 import i18next, { t } from "i18next";
-import * as Utils from "#app/utils";
+import { getCookie, sessionIdKey, executeIf, removeCookie } from "#app/utils";
 import { SelectGenderPhase } from "./select-gender-phase";
 import { UnavailablePhase } from "./unavailable-phase";
 import { SESSION_ID_COOKIE } from "#app/constants";
@@ -12,8 +13,8 @@ import { SESSION_ID_COOKIE } from "#app/constants";
 export class LoginPhase extends Phase {
   private showText: boolean;
 
-  constructor(scene: BattleScene, showText?: boolean) {
-    super(scene);
+  constructor(showText?: boolean) {
+    super();
 
     this.showText = showText === undefined || !!showText;
   }
@@ -21,54 +22,54 @@ export class LoginPhase extends Phase {
   start(): void {
     super.start();
 
-    const hasSession = !!Utils.getCookie(SESSION_ID_COOKIE);
+    const hasSession = !!getCookie(SESSION_ID_COOKIE);
 
-    this.scene.ui.setMode(Mode.LOADING, { buttonActions: [] });
-    Utils.executeIf(bypassLogin || hasSession, updateUserInfo).then((response) => {
+    globalScene.ui.setMode(Mode.LOADING, { buttonActions: [] });
+    executeIf(bypassLogin || hasSession, updateUserInfo).then((response) => {
       const success = response ? response[0] : false;
       const statusCode = response ? response[1] : null;
       if (!success) {
         if (!statusCode || statusCode === 400) {
           if (this.showText) {
-            this.scene.ui.showText(i18next.t("menu:logInOrCreateAccount"));
+            globalScene.ui.showText(i18next.t("menu:logInOrCreateAccount"));
           }
 
-          this.scene.playSound("menu_open");
+          globalScene.playSound("menu_open");
 
           const loadData = () => {
             updateUserInfo().then((success) => {
               if (!success[0]) {
-                Utils.removeCookie(SESSION_ID_COOKIE);
-                this.scene.reset(true, true);
+                removeCookie(SESSION_ID_COOKIE);
+                globalScene.reset(true, true);
                 return;
               }
-              this.scene.gameData.loadSystem().then(() => this.end());
+              globalScene.gameData.loadSystem().then(() => this.end());
             });
           };
 
-          this.scene.ui.setMode(Mode.LOGIN_FORM, {
+          globalScene.ui.setMode(Mode.LOGIN_FORM, {
             buttonActions: [
               () => {
-                this.scene.ui.playSelect();
+                globalScene.ui.playSelect();
                 loadData();
               },
               () => {
-                this.scene.playSound("menu_open");
-                this.scene.ui.setMode(Mode.REGISTRATION_FORM, {
+                globalScene.playSound("menu_open");
+                globalScene.ui.setMode(Mode.REGISTRATION_FORM, {
                   buttonActions: [
                     () => {
-                      this.scene.ui.playSelect();
+                      globalScene.ui.playSelect();
                       updateUserInfo().then((success) => {
                         if (!success[0]) {
-                          Utils.removeCookie(SESSION_ID_COOKIE);
-                          this.scene.reset(true, true);
+                          removeCookie(SESSION_ID_COOKIE);
+                          globalScene.reset(true, true);
                           return;
                         }
                         this.end();
                       });
                     },
                     () => {
-                      this.scene.unshiftPhase(new LoginPhase(this.scene, false));
+                      globalScene.unshiftPhase(new LoginPhase(false));
                       this.end();
                     },
                   ],
@@ -89,20 +90,20 @@ export class LoginPhase extends Phase {
             ],
           });
         } else if (statusCode === 401) {
-          Utils.removeCookie(SESSION_ID_COOKIE);
-          this.scene.reset(true, true);
+          removeCookie(SESSION_ID_COOKIE);
+          globalScene.reset(true, true);
         } else {
-          this.scene.unshiftPhase(new UnavailablePhase(this.scene));
+          globalScene.unshiftPhase(new UnavailablePhase());
           super.end();
         }
         return null;
       } else {
-        this.scene.gameData.loadSystem().then((success) => {
+        globalScene.gameData.loadSystem().then((success) => {
           if (success || bypassLogin) {
             this.end();
           } else {
-            this.scene.ui.setMode(Mode.MESSAGE);
-            this.scene.ui.showText(t("menu:failedToLoadSaveData"));
+            globalScene.ui.setMode(Mode.MESSAGE);
+            globalScene.ui.showText(t("menu:failedToLoadSaveData"));
           }
         });
       }
@@ -110,12 +111,12 @@ export class LoginPhase extends Phase {
   }
 
   end(): void {
-    this.scene.ui.setMode(Mode.MESSAGE);
+    globalScene.ui.setMode(Mode.MESSAGE);
 
-    if (!this.scene.gameData.gender) {
-      this.scene.unshiftPhase(new SelectGenderPhase(this.scene));
+    if (!globalScene.gameData.gender) {
+      globalScene.unshiftPhase(new SelectGenderPhase());
     }
 
-    handleTutorial(this.scene, Tutorial.Intro).then(() => super.end());
+    handleTutorial(Tutorial.Intro).then(() => super.end());
   }
 }

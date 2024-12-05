@@ -1,4 +1,4 @@
-import BattleScene from "#app/battle-scene";
+import type BattleScene from "#app/battle-scene";
 import { speciesStarterCosts } from "#app/data/balance/starters";
 import MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import {
@@ -50,12 +50,12 @@ describe("Mystery Encounter Utils", () => {
       // Seeds are calculated to return index 0 first, 1 second (if both pokemon are legal)
       game.override.seed("random");
 
-      let result = getRandomPlayerPokemon(scene);
+      let result = getRandomPlayerPokemon();
       expect(result.species.speciesId).toBe(Species.MANAPHY);
 
       game.override.seed("random2");
 
-      result = getRandomPlayerPokemon(scene);
+      result = getRandomPlayerPokemon();
       expect(result.species.speciesId).toBe(Species.ARCEUS);
     });
 
@@ -70,12 +70,12 @@ describe("Mystery Encounter Utils", () => {
       // Seeds are calculated to return index 0 first, 1 second (if both pokemon are legal)
       game.override.seed("random");
 
-      let result = getRandomPlayerPokemon(scene);
+      let result = getRandomPlayerPokemon();
       expect(result.species.speciesId).toBe(Species.MANAPHY);
 
       game.override.seed("random2");
 
-      result = getRandomPlayerPokemon(scene);
+      result = getRandomPlayerPokemon();
       expect(result.species.speciesId).toBe(Species.ARCEUS);
     });
 
@@ -89,12 +89,12 @@ describe("Mystery Encounter Utils", () => {
       // Seeds are calculated to return index 0 first, 1 second (if both pokemon are legal)
       game.override.seed("random");
 
-      let result = getRandomPlayerPokemon(scene, true);
+      let result = getRandomPlayerPokemon(true);
       expect(result.species.speciesId).toBe(Species.MANAPHY);
 
       game.override.seed("random2");
 
-      result = getRandomPlayerPokemon(scene, true);
+      result = getRandomPlayerPokemon(true);
       expect(result.species.speciesId).toBe(Species.MANAPHY);
     });
 
@@ -108,12 +108,12 @@ describe("Mystery Encounter Utils", () => {
       // Seeds are calculated to return index 0 first, 1 second (if both pokemon are legal)
       game.override.seed("random");
 
-      let result = getRandomPlayerPokemon(scene, true, false);
+      let result = getRandomPlayerPokemon(true, false);
       expect(result.species.speciesId).toBe(Species.MANAPHY);
 
       game.override.seed("random2");
 
-      result = getRandomPlayerPokemon(scene, true, false);
+      result = getRandomPlayerPokemon(true, false);
       expect(result.species.speciesId).toBe(Species.MANAPHY);
     });
 
@@ -127,12 +127,12 @@ describe("Mystery Encounter Utils", () => {
       // Seeds are calculated to return index 0 first, 1 second (if both pokemon are legal)
       game.override.seed("random");
 
-      let result = getRandomPlayerPokemon(scene, true, false, true);
+      let result = getRandomPlayerPokemon(true, false, true);
       expect(result.species.speciesId).toBe(Species.ARCEUS);
 
       game.override.seed("random2");
 
-      result = getRandomPlayerPokemon(scene, true, false, true);
+      result = getRandomPlayerPokemon(true, false, true);
       expect(result.species.speciesId).toBe(Species.ARCEUS);
     });
   });
@@ -142,7 +142,7 @@ describe("Mystery Encounter Utils", () => {
       const party = scene.getPlayerParty();
       party[0].level = 100;
 
-      const result = getHighestLevelPlayerPokemon(scene);
+      const result = getHighestLevelPlayerPokemon();
       expect(result.species.speciesId).toBe(Species.ARCEUS);
     });
 
@@ -150,7 +150,7 @@ describe("Mystery Encounter Utils", () => {
       const party = scene.getPlayerParty();
       party[1].level = 100;
 
-      const result = getHighestLevelPlayerPokemon(scene);
+      const result = getHighestLevelPlayerPokemon();
       expect(result.species.speciesId).toBe(Species.MANAPHY);
     });
 
@@ -159,7 +159,7 @@ describe("Mystery Encounter Utils", () => {
       party[0].level = 100;
       party[1].level = 100;
 
-      const result = getHighestLevelPlayerPokemon(scene);
+      const result = getHighestLevelPlayerPokemon();
       expect(result.species.speciesId).toBe(Species.ARCEUS);
     });
 
@@ -171,7 +171,7 @@ describe("Mystery Encounter Utils", () => {
       party[0].updateInfo();
       party[1].level = 10;
 
-      const result = getHighestLevelPlayerPokemon(scene, true);
+      const result = getHighestLevelPlayerPokemon(true);
       expect(result.species.speciesId).toBe(Species.MANAPHY);
     });
   });
@@ -181,7 +181,7 @@ describe("Mystery Encounter Utils", () => {
       const party = scene.getPlayerParty();
       party[0].level = 100;
 
-      const result = getLowestLevelPlayerPokemon(scene);
+      const result = getLowestLevelPlayerPokemon();
       expect(result.species.speciesId).toBe(Species.MANAPHY);
     });
 
@@ -189,7 +189,7 @@ describe("Mystery Encounter Utils", () => {
       const party = scene.getPlayerParty();
       party[1].level = 100;
 
-      const result = getLowestLevelPlayerPokemon(scene);
+      const result = getLowestLevelPlayerPokemon();
       expect(result.species.speciesId).toBe(Species.ARCEUS);
     });
 
@@ -198,7 +198,7 @@ describe("Mystery Encounter Utils", () => {
       party[0].level = 100;
       party[1].level = 100;
 
-      const result = getLowestLevelPlayerPokemon(scene);
+      const result = getLowestLevelPlayerPokemon();
       expect(result.species.speciesId).toBe(Species.ARCEUS);
     });
 
@@ -210,7 +210,7 @@ describe("Mystery Encounter Utils", () => {
       party[0].updateInfo();
       party[1].level = 100;
 
-      const result = getLowestLevelPlayerPokemon(scene, true);
+      const result = getLowestLevelPlayerPokemon(true);
       expect(result.species.speciesId).toBe(Species.MANAPHY);
     });
   });
@@ -262,7 +262,7 @@ describe("Mystery Encounter Utils", () => {
       arceus.hp = 100;
       expect(arceus.isAllowedInBattle()).toBe(true);
 
-      koPlayerPokemon(scene, arceus);
+      koPlayerPokemon(arceus);
       expect(arceus.isAllowedInBattle()).toBe(false);
     });
   });
@@ -272,7 +272,7 @@ describe("Mystery Encounter Utils", () => {
       scene.currentBattle.mysteryEncounter = new MysteryEncounter(null);
       scene.currentBattle.mysteryEncounter.setDialogueToken("test", "value");
 
-      const result = getEncounterText(scene, "mysteryEncounter:unit_test_dialogue");
+      const result = getEncounterText("mysteryEncounter:unit_test_dialogue");
       expect(result).toEqual("mysteryEncounter:unit_test_dialogue");
     });
 
@@ -281,7 +281,7 @@ describe("Mystery Encounter Utils", () => {
       scene.currentBattle.mysteryEncounter.setDialogueToken("test", "value");
       scene.currentBattle.mysteryEncounter.setDialogueToken("testvalue", "new");
 
-      const result = getEncounterText(scene, "mysteryEncounter:unit_test_dialogue");
+      const result = getEncounterText("mysteryEncounter:unit_test_dialogue");
       expect(result).toEqual("mysteryEncounter:unit_test_dialogue");
     });
   });
@@ -293,7 +293,7 @@ describe("Mystery Encounter Utils", () => {
       const spy = vi.spyOn(game.scene, "queueMessage");
       const phaseSpy = vi.spyOn(game.scene, "unshiftPhase");
 
-      queueEncounterMessage(scene, "mysteryEncounter:unit_test_dialogue");
+      queueEncounterMessage("mysteryEncounter:unit_test_dialogue");
       expect(spy).toHaveBeenCalledWith("mysteryEncounter:unit_test_dialogue", null, true);
       expect(phaseSpy).toHaveBeenCalledWith(expect.any(MessagePhase));
     });
@@ -305,7 +305,7 @@ describe("Mystery Encounter Utils", () => {
       scene.currentBattle.mysteryEncounter.setDialogueToken("test", "value");
       const spy = vi.spyOn(game.scene.ui, "showText");
 
-      await showEncounterText(scene, "mysteryEncounter:unit_test_dialogue");
+      await showEncounterText("mysteryEncounter:unit_test_dialogue");
       expect(spy).toHaveBeenCalledWith(
         "mysteryEncounter:unit_test_dialogue",
         null,
@@ -323,7 +323,7 @@ describe("Mystery Encounter Utils", () => {
       scene.currentBattle.mysteryEncounter.setDialogueToken("test", "value");
       const spy = vi.spyOn(game.scene.ui, "showDialogue");
 
-      await showEncounterDialogue(scene, "mysteryEncounter:unit_test_dialogue", "mysteryEncounter:unit_test_dialogue");
+      await showEncounterDialogue("mysteryEncounter:unit_test_dialogue", "mysteryEncounter:unit_test_dialogue");
       expect(spy).toHaveBeenCalledWith(
         "mysteryEncounter:unit_test_dialogue",
         "mysteryEncounter:unit_test_dialogue",

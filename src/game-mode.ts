@@ -1,14 +1,17 @@
 import i18next from "i18next";
-import { classicFixedBattles, FixedBattleConfig, FixedBattleConfigs } from "./battle";
-import BattleScene from "./battle-scene";
-import { allChallenges, applyChallenges, Challenge, ChallengeType, copyChallenge } from "./data/challenge";
-import PokemonSpecies, { allSpecies } from "./data/pokemon-species";
-import { Arena } from "./field/arena";
+import type { FixedBattleConfigs } from "./battle";
+import { classicFixedBattles, FixedBattleConfig } from "./battle";
+import type { Challenge } from "./data/challenge";
+import { allChallenges, applyChallenges, ChallengeType, copyChallenge } from "./data/challenge";
+import type PokemonSpecies from "./data/pokemon-species";
+import { allSpecies } from "./data/pokemon-species";
+import type { Arena } from "./field/arena";
 import Overrides from "#app/overrides";
-import * as Utils from "./utils";
+import { randSeedInt, randSeedItem } from "#app/utils";
 import { Biome } from "#enums/biome";
 import { Species } from "#enums/species";
 import { Challenges } from "./enums/challenges";
+import { globalScene } from "#app/global-scene";
 
 export enum GameModes {
   CLASSIC,
@@ -115,10 +118,10 @@ export class GameMode implements GameModeConfig {
    * - override from overrides.ts
    * - Town
    */
-  getStartingBiome(scene: BattleScene): Biome {
+  getStartingBiome(): Biome {
     switch (this.modeId) {
       case GameModes.DAILY:
-        return scene.generateRandomBiome(this.getWaveForDifficulty(1));
+        return globalScene.generateRandomBiome(this.getWaveForDifficulty(1));
       default:
         return Overrides.STARTING_BIOME_OVERRIDE || Biome.TOWN;
     }
@@ -146,7 +149,7 @@ export class GameMode implements GameModeConfig {
     if (this.isDaily) {
       return waveIndex % 10 === 5 || (!(waveIndex % 10) && waveIndex > 10 && !this.isWaveFinal(waveIndex));
     }
-    if (waveIndex % 30 === (arena.scene.offsetGym ? 0 : 20) && !this.isWaveFinal(waveIndex)) {
+    if (waveIndex % 30 === (globalScene.offsetGym ? 0 : 20) && !this.isWaveFinal(waveIndex)) {
       return true;
     } else if (waveIndex % 10 !== 1 && waveIndex % 10) {
       /**
@@ -163,13 +166,13 @@ export class GameMode implements GameModeConfig {
           if (w === waveIndex) {
             continue;
           }
-          if (w % 30 === (arena.scene.offsetGym ? 0 : 20) || this.isFixedBattle(w)) {
+          if (w % 30 === (globalScene.offsetGym ? 0 : 20) || this.isFixedBattle(w)) {
             allowTrainerBattle = false;
             break;
           } else if (w < waveIndex) {
-            arena.scene.executeWithSeedOffset(() => {
+            globalScene.executeWithSeedOffset(() => {
               const waveTrainerChance = arena.getTrainerChance();
-              if (!Utils.randSeedInt(waveTrainerChance)) {
+              if (!randSeedInt(waveTrainerChance)) {
                 allowTrainerBattle = false;
               }
             }, w);
@@ -179,7 +182,7 @@ export class GameMode implements GameModeConfig {
           }
         }
       }
-      return Boolean(allowTrainerBattle && trainerChance && !Utils.randSeedInt(trainerChance));
+      return Boolean(allowTrainerBattle && trainerChance && !randSeedInt(trainerChance));
     }
     return false;
   }
@@ -205,7 +208,7 @@ export class GameMode implements GameModeConfig {
           s.speciesId !== Species.ETERNATUS &&
           s.speciesId !== Species.ARCEUS,
       );
-      return Utils.randSeedItem(allFinalBossSpecies);
+      return randSeedItem(allFinalBossSpecies);
     }
 
     return null;

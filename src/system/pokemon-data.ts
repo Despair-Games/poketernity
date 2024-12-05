@@ -1,17 +1,17 @@
 import { BattleType } from "../battle";
-import BattleScene from "../battle-scene";
-import { Gender } from "../data/gender";
-import { Nature } from "#enums/nature";
-import { PokeballType } from "#enums/pokeball";
+import { globalScene } from "#app/global-scene";
+import type { Gender } from "../data/gender";
+import type { Nature } from "#enums/nature";
+import type { PokeballType } from "#enums/pokeball";
 import { getPokemonSpecies } from "../data/pokemon-species";
 import { Status } from "../data/status-effect";
 import Pokemon, { EnemyPokemon, PokemonMove, PokemonSummonData } from "../field/pokemon";
 import { TrainerSlot } from "../data/trainer-config";
-import { Variant } from "#app/data/variant";
+import type { Variant } from "#app/data/variant";
 import { loadBattlerTag } from "../data/battler-tags";
-import { Biome } from "#enums/biome";
+import type { Biome } from "#enums/biome";
 import { Moves } from "#enums/moves";
-import { Species } from "#enums/species";
+import type { Species } from "#enums/species";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 
 export default class PokemonData {
@@ -171,15 +171,10 @@ export default class PokemonData {
     }
   }
 
-  toPokemon(
-    scene: BattleScene,
-    battleType?: BattleType,
-    partyMemberIndex: integer = 0,
-    double: boolean = false,
-  ): Pokemon {
+  toPokemon(battleType?: BattleType, partyMemberIndex: integer = 0, double: boolean = false): Pokemon {
     const species = getPokemonSpecies(this.species);
     const ret: Pokemon = this.player
-      ? scene.addPlayerPokemon(
+      ? globalScene.addPlayerPokemon(
           species,
           this.level,
           this.abilityIndex,
@@ -196,7 +191,7 @@ export default class PokemonData {
             }
           },
         )
-      : scene.addEnemyPokemon(
+      : globalScene.addEnemyPokemon(
           species,
           this.level,
           battleType === BattleType.TRAINER

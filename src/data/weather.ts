@@ -1,14 +1,15 @@
 import { Biome } from "#enums/biome";
 import { WeatherType } from "#enums/weather-type";
 import { getPokemonNameWithAffix } from "../messages";
-import Pokemon from "../field/pokemon";
+import type Pokemon from "../field/pokemon";
 import { Type } from "#enums/type";
-import Move, { AttackMove } from "./move";
-import * as Utils from "../utils";
-import BattleScene from "../battle-scene";
+import type Move from "./move";
+import { AttackMove } from "./move";
+import { randSeedInt } from "#app/utils";
 import { SuppressWeatherEffectAbAttr } from "./ability";
 import { TerrainType, getTerrainName } from "./terrain";
 import i18next from "i18next";
+import { globalScene } from "#app/global-scene";
 
 export class Weather {
   public weatherType: WeatherType;
@@ -100,8 +101,8 @@ export class Weather {
     return false;
   }
 
-  isEffectSuppressed(scene: BattleScene): boolean {
-    const field = scene.getField(true);
+  isEffectSuppressed(): boolean {
+    const field = globalScene.getField(true);
 
     for (const pokemon of field) {
       let suppressWeatherEffectAbAttr: SuppressWeatherEffectAbAttr | null = pokemon
@@ -374,7 +375,7 @@ export function getRandomWeatherType(arena: any /* Importing from arena causes a
     let totalWeight = 0;
     weatherPool.forEach((w) => (totalWeight += w.weight));
 
-    const rand = Utils.randSeedInt(totalWeight);
+    const rand = randSeedInt(totalWeight);
     let w = 0;
     for (const weather of weatherPool) {
       w += weather.weight;

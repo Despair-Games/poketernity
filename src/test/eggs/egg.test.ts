@@ -6,6 +6,7 @@ import { EggTier } from "#app/enums/egg-type";
 import { VariantTier } from "#app/enums/variant-tier";
 import EggData from "#app/system/egg-data";
 import * as Utils from "#app/utils";
+import { isNullOrUndefined } from "#app/utils";
 import { Species } from "#enums/species";
 import GameManager from "#test/utils/gameManager";
 import Phaser from "phaser";
@@ -33,20 +34,18 @@ describe("Egg Generation Tests", () => {
   });
 
   it("should return Kyogre for the 10th of June", () => {
-    const scene = game.scene;
     const timestamp = new Date(2024, 5, 10, 15, 0, 0, 0).getTime();
     const expectedSpecies = Species.KYOGRE;
 
-    const result = getLegendaryGachaSpeciesForTimestamp(scene, timestamp);
+    const result = getLegendaryGachaSpeciesForTimestamp(timestamp);
 
     expect(result).toBe(expectedSpecies);
   });
   it("should return Kyogre for the 10th of July", () => {
-    const scene = game.scene;
     const timestamp = new Date(2024, 6, 10, 15, 0, 0, 0).getTime();
     const expectedSpecies = Species.KYOGRE;
 
-    const result = getLegendaryGachaSpeciesForTimestamp(scene, timestamp);
+    const result = getLegendaryGachaSpeciesForTimestamp(timestamp);
 
     expect(result).toBe(expectedSpecies);
   });
@@ -62,7 +61,7 @@ describe("Egg Generation Tests", () => {
         timestamp,
         sourceType: EggSourceType.GACHA_LEGENDARY,
         tier: EggTier.LEGENDARY,
-      }).generatePlayerPokemon(scene).species.speciesId;
+      }).generatePlayerPokemon().species.speciesId;
       if (result === expectedSpecies) {
         gachaSpeciesCount++;
       }
@@ -81,7 +80,7 @@ describe("Egg Generation Tests", () => {
     const scene = game.scene;
     const expectedSpecies = Species.ARCEUS;
 
-    const result = new Egg({ scene, species: expectedSpecies }).generatePlayerPokemon(scene).species.speciesId;
+    const result = new Egg({ scene, species: expectedSpecies }).generatePlayerPokemon().species.speciesId;
 
     expect(result).toBe(expectedSpecies);
   });
@@ -146,7 +145,7 @@ describe("Egg Generation Tests", () => {
     const expectedResult = true;
 
     const result = new Egg({ scene, isShiny: expectedResult, species: Species.BULBASAUR })
-      .generatePlayerPokemon(scene)
+      .generatePlayerPokemon()
       .isShiny();
 
     expect(result).toBe(expectedResult);
@@ -160,7 +159,7 @@ describe("Egg Generation Tests", () => {
       isShiny: true,
       variantTier: expectedVariantTier,
       species: Species.BULBASAUR,
-    }).generatePlayerPokemon(scene).variant;
+    }).generatePlayerPokemon().variant;
 
     expect(result).toBe(expectedVariantTier);
   });
@@ -173,7 +172,7 @@ describe("Egg Generation Tests", () => {
       isShiny: true,
       variantTier: expectedVariantTier,
       species: Species.BULBASAUR,
-    }).generatePlayerPokemon(scene).variant;
+    }).generatePlayerPokemon().variant;
 
     expect(result).toBe(expectedVariantTier);
   });
@@ -186,7 +185,7 @@ describe("Egg Generation Tests", () => {
       isShiny: true,
       variantTier: expectedVariantTier,
       species: Species.BULBASAUR,
-    }).generatePlayerPokemon(scene).variant;
+    }).generatePlayerPokemon().variant;
 
     expect(result).toBe(expectedVariantTier);
   });
@@ -194,7 +193,7 @@ describe("Egg Generation Tests", () => {
     const scene = game.scene;
 
     const eggMoveIndex = new Egg({ scene }).eggMoveIndex;
-    const result = !Utils.isNullOrUndefined(eggMoveIndex) && eggMoveIndex >= 0 && eggMoveIndex <= 3;
+    const result = !isNullOrUndefined(eggMoveIndex) && eggMoveIndex >= 0 && eggMoveIndex <= 3;
 
     expect(result).toBe(true);
   });
@@ -213,7 +212,7 @@ describe("Egg Generation Tests", () => {
       scene,
       overrideHiddenAbility: true,
       species: Species.BULBASAUR,
-    }).generatePlayerPokemon(scene);
+    }).generatePlayerPokemon();
     const expectedAbilityIndex = playerPokemon.species.ability2 ? 2 : 1;
 
     const result = playerPokemon.abilityIndex;
@@ -358,7 +357,7 @@ describe("Egg Generation Tests", () => {
     scene.resetSeed();
 
     const firstEgg = new Egg({ scene, sourceType: EggSourceType.GACHA_SHINY, tier: EggTier.COMMON });
-    const firstHatch = firstEgg.generatePlayerPokemon(scene);
+    const firstHatch = firstEgg.generatePlayerPokemon();
     let diffEggMove = false;
     let diffSpecies = false;
     let diffShiny = false;
@@ -369,7 +368,7 @@ describe("Egg Generation Tests", () => {
       scene.resetSeed(); // Make sure that eggs are unpredictable even if using same seed
 
       const newEgg = new Egg({ scene, sourceType: EggSourceType.GACHA_SHINY, tier: EggTier.COMMON });
-      const newHatch = newEgg.generatePlayerPokemon(scene);
+      const newHatch = newEgg.generatePlayerPokemon();
       diffEggMove = diffEggMove || newEgg.eggMoveIndex !== firstEgg.eggMoveIndex;
       diffSpecies = diffSpecies || newHatch.species.speciesId !== firstHatch.species.speciesId;
       diffShiny = diffShiny || newHatch.shiny !== firstHatch.shiny;
@@ -388,7 +387,7 @@ describe("Egg Generation Tests", () => {
     scene.resetSeed();
 
     const firstEgg = new Egg({ scene, species: Species.BULBASAUR });
-    const firstHatch = firstEgg.generatePlayerPokemon(scene);
+    const firstHatch = firstEgg.generatePlayerPokemon();
     let diffEggMove = false;
     let diffSpecies = false;
     let diffShiny = false;
@@ -398,7 +397,7 @@ describe("Egg Generation Tests", () => {
       scene.resetSeed(); // Make sure that eggs are unpredictable even if using same seed
 
       const newEgg = new Egg({ scene, species: Species.BULBASAUR });
-      const newHatch = newEgg.generatePlayerPokemon(scene);
+      const newHatch = newEgg.generatePlayerPokemon();
       diffEggMove = diffEggMove || newEgg.eggMoveIndex !== firstEgg.eggMoveIndex;
       diffSpecies = diffSpecies || newHatch.species.speciesId !== firstHatch.species.speciesId;
       diffShiny = diffShiny || newHatch.shiny !== firstHatch.shiny;

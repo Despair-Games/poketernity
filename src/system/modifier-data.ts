@@ -1,11 +1,7 @@
-import BattleScene from "../battle-scene";
-import { PersistentModifier } from "../modifier/modifier";
-import {
-  GeneratedPersistentModifierType,
-  ModifierType,
-  ModifierTypeGenerator,
-  getModifierTypeFuncById,
-} from "../modifier/modifier-type";
+import { globalScene } from "#app/global-scene";
+import { PersistentModifier } from "#app/modifier/modifier";
+import type { GeneratedPersistentModifierType, ModifierType } from "#app/modifier/modifier-type";
+import { ModifierTypeGenerator, getModifierTypeFuncById } from "#app/modifier/modifier-type";
 
 export default class ModifierData {
   public player: boolean;
@@ -32,7 +28,7 @@ export default class ModifierData {
     this.className = sourceModifier ? sourceModifier.constructor.name : source.className;
   }
 
-  toModifier(scene: BattleScene, constructor: any): PersistentModifier | null {
+  toModifier(constructor: any): PersistentModifier | null {
     const typeFunc = getModifierTypeFuncById(this.typeId);
     if (!typeFunc) {
       return null;
@@ -44,7 +40,7 @@ export default class ModifierData {
 
       if (type instanceof ModifierTypeGenerator) {
         type = (type as ModifierTypeGenerator).generateType(
-          this.player ? scene.getPlayerParty() : scene.getEnemyField(),
+          this.player ? globalScene.getPlayerParty() : globalScene.getEnemyField(),
           this.typePregenArgs,
         );
       }
@@ -54,8 +50,8 @@ export default class ModifierData {
         ([type] as any[]).concat(this.args).concat(this.stackCount),
       ) as PersistentModifier;
 
-      if (ret.stackCount > ret.getMaxStackCount(scene)) {
-        ret.stackCount = ret.getMaxStackCount(scene);
+      if (ret.stackCount > ret.getMaxStackCount()) {
+        ret.stackCount = ret.getMaxStackCount();
       }
 
       return ret;

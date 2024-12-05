@@ -1,7 +1,10 @@
 import { TextStyle, addTextObject } from "../ui/text";
-import Pokemon, { DamageResult, HitResult } from "./pokemon";
-import * as Utils from "../utils";
-import { BattlerIndex } from "../battle";
+import type { DamageResult } from "./pokemon";
+import type Pokemon from "./pokemon";
+import { HitResult } from "./pokemon";
+import { formatStat, fixedInt } from "#app/utils";
+import type { BattlerIndex } from "../battle";
+import { globalScene } from "#app/global-scene";
 
 type TextAndShadowArr = [string | null, string | null];
 
@@ -18,19 +21,16 @@ export default class DamageNumberHandler {
     result: DamageResult | HitResult.HEAL = HitResult.EFFECTIVE,
     critical: boolean = false,
   ): void {
-    const scene = target.scene;
-
-    if (!scene?.damageNumbersMode) {
+    if (!globalScene?.damageNumbersMode) {
       return;
     }
 
     const battlerIndex = target.getBattlerIndex();
     const baseScale = target.getSpriteScale() / 6;
     const damageNumber = addTextObject(
-      scene,
       target.x,
-      -(scene.game.canvas.height / 6) + target.y - target.getSprite().height / 2,
-      Utils.formatStat(amount, true),
+      -(globalScene.game.canvas.height / 6) + target.y - target.getSprite().height / 2,
+      formatStat(amount, true),
       TextStyle.SUMMARY,
     );
     damageNumber.setName("text-damage-number");
@@ -69,7 +69,7 @@ export default class DamageNumberHandler {
       }
     }
 
-    scene.fieldUI.add(damageNumber);
+    globalScene.fieldUI.add(damageNumber);
 
     if (!this.damageNumbers.has(battlerIndex)) {
       this.damageNumbers.set(battlerIndex, []);
@@ -82,17 +82,17 @@ export default class DamageNumberHandler {
 
     this.damageNumbers.get(battlerIndex)!.push(damageNumber);
 
-    if (scene.damageNumbersMode === 1) {
-      scene.tweens.add({
+    if (globalScene.damageNumbersMode === 1) {
+      globalScene.tweens.add({
         targets: damageNumber,
-        duration: Utils.fixedInt(750),
+        duration: fixedInt(750),
         alpha: 1,
         y: "-=32",
       });
-      scene.tweens.add({
+      globalScene.tweens.add({
         delay: 375,
         targets: damageNumber,
-        duration: Utils.fixedInt(625),
+        duration: fixedInt(625),
         alpha: 0,
         ease: "Sine.easeIn",
         onComplete: () => {
@@ -105,11 +105,11 @@ export default class DamageNumberHandler {
 
     damageNumber.setAlpha(0);
 
-    scene.tweens.chain({
+    globalScene.tweens.chain({
       targets: damageNumber,
       tweens: [
         {
-          duration: Utils.fixedInt(250),
+          duration: fixedInt(250),
           alpha: 1,
           scaleX: 0.75 * baseScale,
           scaleY: 1.25 * baseScale,
@@ -117,7 +117,7 @@ export default class DamageNumberHandler {
           ease: "Cubic.easeOut",
         },
         {
-          duration: Utils.fixedInt(175),
+          duration: fixedInt(175),
           alpha: 1,
           scaleX: 0.875 * baseScale,
           scaleY: 1.125 * baseScale,
@@ -125,59 +125,59 @@ export default class DamageNumberHandler {
           ease: "Cubic.easeIn",
         },
         {
-          duration: Utils.fixedInt(100),
+          duration: fixedInt(100),
           scaleX: 1.25 * baseScale,
           scaleY: 0.75 * baseScale,
           ease: "Cubic.easeOut",
         },
         {
-          duration: Utils.fixedInt(175),
+          duration: fixedInt(175),
           scaleX: 0.875 * baseScale,
           scaleY: 1.125 * baseScale,
           y: "-=8",
           ease: "Cubic.easeOut",
         },
         {
-          duration: Utils.fixedInt(50),
+          duration: fixedInt(50),
           scaleX: 0.925 * baseScale,
           scaleY: 1.075 * baseScale,
           y: "+=8",
           ease: "Cubic.easeIn",
         },
         {
-          duration: Utils.fixedInt(100),
+          duration: fixedInt(100),
           scaleX: 1.125 * baseScale,
           scaleY: 0.875 * baseScale,
           ease: "Cubic.easeOut",
         },
         {
-          duration: Utils.fixedInt(175),
+          duration: fixedInt(175),
           scaleX: 0.925 * baseScale,
           scaleY: 1.075 * baseScale,
           y: "-=4",
           ease: "Cubic.easeOut",
         },
         {
-          duration: Utils.fixedInt(50),
+          duration: fixedInt(50),
           scaleX: 0.975 * baseScale,
           scaleY: 1.025 * baseScale,
           y: "+=4",
           ease: "Cubic.easeIn",
         },
         {
-          duration: Utils.fixedInt(100),
+          duration: fixedInt(100),
           scaleX: 1.075 * baseScale,
           scaleY: 0.925 * baseScale,
           ease: "Cubic.easeOut",
         },
         {
-          duration: Utils.fixedInt(25),
+          duration: fixedInt(25),
           scaleX: baseScale,
           scaleY: baseScale,
           ease: "Cubic.easeOut",
         },
         {
-          delay: Utils.fixedInt(500),
+          delay: fixedInt(500),
           alpha: 0,
           onComplete: () => {
             this.damageNumbers

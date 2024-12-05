@@ -2,7 +2,7 @@ import { Stat } from "#enums/stat";
 import { SpeciesStatBoosterModifier } from "#app/modifier/modifier";
 import { modifierTypes } from "#app/modifier/modifier-type";
 import i18next from "#app/plugins/i18n";
-import * as Utils from "#app/utils";
+import { NumberHolder } from "#app/utils";
 import { Species } from "#enums/species";
 import GameManager from "#test/utils/gameManager";
 import Phase from "phaser";
@@ -89,17 +89,17 @@ describe("Items - Quick Powder", () => {
     const spdStat = partyMember.getStat(Stat.SPD);
 
     // Making sure modifier is not applied without holding item
-    const spdValue = new Utils.NumberHolder(spdStat);
-    partyMember.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.SPD, spdValue);
+    const spdValue = new NumberHolder(spdStat);
+    game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.SPD, spdValue);
 
     expect(spdValue.value / spdStat).toBe(1);
 
     // Giving Eviolite to party member and testing if it applies
-    partyMember.scene.addModifier(
+    game.scene.addModifier(
       modifierTypes.SPECIES_STAT_BOOSTER().generateType([], ["QUICK_POWDER"])!.newModifier(partyMember),
       true,
     );
-    partyMember.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.SPD, spdValue);
+    game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.SPD, spdValue);
 
     expect(spdValue.value / spdStat).toBe(2);
   }, 20000);
@@ -122,17 +122,17 @@ describe("Items - Quick Powder", () => {
     const spdStat = partyMember.getStat(Stat.SPD);
 
     // Making sure modifier is not applied without holding item
-    const spdValue = new Utils.NumberHolder(spdStat);
-    partyMember.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.SPD, spdValue);
+    const spdValue = new NumberHolder(spdStat);
+    game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.SPD, spdValue);
 
     expect(spdValue.value / spdStat).toBe(1);
 
     // Giving Eviolite to party member and testing if it applies
-    partyMember.scene.addModifier(
+    game.scene.addModifier(
       modifierTypes.SPECIES_STAT_BOOSTER().generateType([], ["QUICK_POWDER"])!.newModifier(partyMember),
       true,
     );
-    partyMember.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.SPD, spdValue);
+    game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.SPD, spdValue);
 
     expect(spdValue.value / spdStat).toBe(2);
   }, 20000);
@@ -155,17 +155,17 @@ describe("Items - Quick Powder", () => {
     const spdStat = partyMember.getStat(Stat.SPD);
 
     // Making sure modifier is not applied without holding item
-    const spdValue = new Utils.NumberHolder(spdStat);
-    partyMember.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.SPD, spdValue);
+    const spdValue = new NumberHolder(spdStat);
+    game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.SPD, spdValue);
 
     expect(spdValue.value / spdStat).toBe(1);
 
     // Giving Eviolite to party member and testing if it applies
-    partyMember.scene.addModifier(
+    game.scene.addModifier(
       modifierTypes.SPECIES_STAT_BOOSTER().generateType([], ["QUICK_POWDER"])!.newModifier(partyMember),
       true,
     );
-    partyMember.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.SPD, spdValue);
+    game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.SPD, spdValue);
 
     expect(spdValue.value / spdStat).toBe(2);
   }, 20000);
@@ -178,17 +178,17 @@ describe("Items - Quick Powder", () => {
     const spdStat = partyMember.getStat(Stat.SPD);
 
     // Making sure modifier is not applied without holding item
-    const spdValue = new Utils.NumberHolder(spdStat);
-    partyMember.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.SPD, spdValue);
+    const spdValue = new NumberHolder(spdStat);
+    game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.SPD, spdValue);
 
     expect(spdValue.value / spdStat).toBe(1);
 
     // Giving Eviolite to party member and testing if it applies
-    partyMember.scene.addModifier(
+    game.scene.addModifier(
       modifierTypes.SPECIES_STAT_BOOSTER().generateType([], ["QUICK_POWDER"])!.newModifier(partyMember),
       true,
     );
-    partyMember.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.SPD, spdValue);
+    game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.SPD, spdValue);
 
     expect(spdValue.value / spdStat).toBe(1);
   }, 20000);

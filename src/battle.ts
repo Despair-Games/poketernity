@@ -1,26 +1,35 @@
-import BattleScene from "./battle-scene";
-import { Command } from "./ui/command-ui-handler";
-import * as Utils from "./utils";
+import { globalScene } from "#app/global-scene";
+import type { Command } from "./ui/command-ui-handler";
+import {
+  randomString,
+  getEnumValues,
+  NumberHolder,
+  randSeedInt,
+  shiftCharCodes,
+  randSeedItem,
+  randInt,
+} from "#app/utils";
 import Trainer, { TrainerVariant } from "./field/trainer";
-import { GameMode } from "./game-mode";
+import type { GameMode } from "./game-mode";
 import { MoneyMultiplierModifier, PokemonHeldItemModifier } from "./modifier/modifier";
-import { PokeballType } from "#enums/pokeball";
+import type { PokeballType } from "#enums/pokeball";
 import { trainerConfigs } from "#app/data/trainer-config";
 import { SpeciesFormKey } from "#enums/species-form-key";
-import Pokemon, { EnemyPokemon, PlayerPokemon, QueuedMove } from "#app/field/pokemon";
+import type { EnemyPokemon, PlayerPokemon, QueuedMove } from "#app/field/pokemon";
+import type Pokemon from "#app/field/pokemon";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattleSpec } from "#enums/battle-spec";
-import { Moves } from "#enums/moves";
+import type { Moves } from "#enums/moves";
 import { PlayerGender } from "#enums/player-gender";
 import { MusicPreference } from "#app/system/settings/settings";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
 import i18next from "#app/plugins/i18n";
-import MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
+import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
-import { CustomModifierSettings } from "#app/modifier/modifier-type";
+import type { CustomModifierSettings } from "#app/modifier/modifier-type";
 import { ModifierTier } from "#app/modifier/modifier-tier";
-import { MysteryEncounterType } from "#enums/mystery-encounter-type";
+import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 
 export enum ClassicFixedBossWaves {
   // TODO: other fixed wave battles should be added here
@@ -80,7 +89,7 @@ export default class Battle {
   public postBattleLoot: PokemonHeldItemModifier[] = [];
   public escapeAttempts: number = 0;
   public lastMove: Moves;
-  public battleSeed: string = Utils.randomString(16, true);
+  public battleSeed: string = randomString(16, true);
   private battleSeedState: string | null = null;
   public moneyScattered: number = 0;
   public lastUsedPokeball: PokeballType | null = null;
@@ -155,9 +164,9 @@ export default class Battle {
     return this.double ? 2 : 1;
   }
 
-  incrementTurn(scene: BattleScene): void {
+  incrementTurn(): void {
     this.turn++;
-    this.turnCommands = Object.fromEntries(Utils.getEnumValues(BattlerIndex).map((bt) => [bt, null]));
+    this.turnCommands = Object.fromEntries(getEnumValues(BattlerIndex).map((bt) => [bt, null]));
     this.battleSeedState = null;
   }
 
@@ -171,7 +180,7 @@ export default class Battle {
 
   addPostBattleLoot(enemyPokemon: EnemyPokemon): void {
     this.postBattleLoot.push(
-      ...enemyPokemon.scene
+      ...globalScene
         .findModifiers(
           (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === enemyPokemon.id && m.isTransferable,
           false,
@@ -185,47 +194,47 @@ export default class Battle {
     );
   }
 
-  pickUpScatteredMoney(scene: BattleScene): void {
-    const moneyAmount = new Utils.IntegerHolder(scene.currentBattle.moneyScattered);
-    scene.applyModifiers(MoneyMultiplierModifier, true, moneyAmount);
+  pickUpScatteredMoney(): void {
+    const moneyAmount = new NumberHolder(globalScene.currentBattle.moneyScattered);
+    globalScene.applyModifiers(MoneyMultiplierModifier, true, moneyAmount);
 
-    if (scene.arena.getTag(ArenaTagType.HAPPY_HOUR)) {
+    if (globalScene.arena.getTag(ArenaTagType.HAPPY_HOUR)) {
       moneyAmount.value *= 2;
     }
 
-    scene.addMoney(moneyAmount.value);
+    globalScene.addMoney(moneyAmount.value);
 
     const userLocale = navigator.language || "en-US";
     const formattedMoneyAmount = moneyAmount.value.toLocaleString(userLocale);
     const message = i18next.t("battle:moneyPickedUp", { moneyAmount: formattedMoneyAmount });
-    scene.queueMessage(message, undefined, true);
+    globalScene.queueMessage(message, undefined, true);
 
-    scene.currentBattle.moneyScattered = 0;
+    globalScene.currentBattle.moneyScattered = 0;
   }
 
-  addBattleScore(scene: BattleScene): void {
-    let partyMemberTurnMultiplier = scene.getEnemyParty().length / 2 + 0.5;
+  addBattleScore(): void {
+    let partyMemberTurnMultiplier = globalScene.getEnemyParty().length / 2 + 0.5;
     if (this.double) {
       partyMemberTurnMultiplier /= 1.5;
     }
-    for (const p of scene.getEnemyParty()) {
+    for (const p of globalScene.getEnemyParty()) {
       if (p.isBoss()) {
-        partyMemberTurnMultiplier *= p.bossSegments / 1.5 / scene.getEnemyParty().length;
+        partyMemberTurnMultiplier *= p.bossSegments / 1.5 / globalScene.getEnemyParty().length;
       }
     }
     const turnMultiplier = Phaser.Tweens.Builders.GetEaseFunction("Sine.easeIn")(
       1 - Math.min(this.turn - 2, 10 * partyMemberTurnMultiplier) / (10 * partyMemberTurnMultiplier),
     );
     const finalBattleScore = Math.ceil(this.battleScore * turnMultiplier);
-    scene.score += finalBattleScore;
+    globalScene.score += finalBattleScore;
     console.log(
       `Battle Score: ${finalBattleScore} (${this.turn - 1} Turns x${Math.floor(turnMultiplier * 100) / 100})`,
     );
-    console.log(`Total Score: ${scene.score}`);
-    scene.updateScoreText();
+    console.log(`Total Score: ${globalScene.score}`);
+    globalScene.updateScoreText();
   }
 
-  getBgmOverride(scene: BattleScene): string | null {
+  getBgmOverride(): string | null {
     if (this.isBattleMysteryEncounter() && this.mysteryEncounter?.encounterMode === MysteryEncounterMode.DEFAULT) {
       // Music is overridden for MEs during ME onInit()
       // Should not use any BGM overrides before swapping from DEFAULT mode
@@ -237,7 +246,7 @@ export default class Battle {
       if (!this.started && this.trainer?.config.encounterBgm && this.trainer?.getEncounterMessages()?.length) {
         return `encounter_${this.trainer?.getEncounterBgm()}`;
       }
-      if (scene.musicPreference === MusicPreference.CONSISTENT) {
+      if (globalScene.musicPreference === MusicPreference.CONSISTENT) {
         return this.trainer?.getBattleBgm() ?? null;
       } else {
         return this.trainer?.getMixedBattleBgm() ?? null;
@@ -245,7 +254,7 @@ export default class Battle {
     } else if (this.gameMode.isClassic && this.waveIndex > 195 && this.battleSpec !== BattleSpec.FINAL_BOSS) {
       return "end_summit";
     }
-    const wildOpponents = scene.getEnemyParty();
+    const wildOpponents = globalScene.getEnemyParty();
     for (const pokemon of wildOpponents) {
       if (this.battleSpec === BattleSpec.FINAL_BOSS) {
         if (pokemon.species.getFormSpriteKey(pokemon.formIndex) === SpeciesFormKey.ETERNAMAX) {
@@ -254,7 +263,7 @@ export default class Battle {
         return "battle_final_encounter";
       }
       if (pokemon.species.legendary || pokemon.species.subLegendary || pokemon.species.mythical) {
-        if (scene.musicPreference === MusicPreference.CONSISTENT) {
+        if (globalScene.musicPreference === MusicPreference.CONSISTENT) {
           switch (pokemon.species.speciesId) {
             case Species.REGIROCK:
             case Species.REGICE:
@@ -271,7 +280,7 @@ export default class Battle {
               }
               return "battle_legendary_unova";
           }
-        } else if (scene.musicPreference === MusicPreference.MIXED) {
+        } else if (globalScene.musicPreference === MusicPreference.MIXED) {
           switch (pokemon.species.speciesId) {
             case Species.ARTICUNO:
             case Species.ZAPDOS:
@@ -411,7 +420,7 @@ export default class Battle {
       }
     }
 
-    if (scene.gameMode.isClassic && this.waveIndex <= 4) {
+    if (globalScene.gameMode.isClassic && this.waveIndex <= 4) {
       return "battle_wild";
     }
 
@@ -419,31 +428,31 @@ export default class Battle {
   }
 
   /**
-   * Generates a random number using the current battle's seed. Calls {@linkcode Utils.randSeedInt}
+   * Generates a random number using the current battle's seed. Calls {@linkcode randSeedInt}
    * @param range How large of a range of random numbers to choose from. If {@linkcode range} <= 1, returns {@linkcode min}
    * @param min The minimum integer to pick, default `0`
    * @returns A random integer between {@linkcode min} and ({@linkcode min} + {@linkcode range} - 1)
    */
-  randSeedInt(scene: BattleScene, range: number, min: number = 0): number {
+  randSeedInt(range: number, min: number = 0): number {
     if (range <= 1) {
       return min;
     }
-    const tempRngCounter = scene.rngCounter;
-    const tempSeedOverride = scene.rngSeedOverride;
+    const tempRngCounter = globalScene.rngCounter;
+    const tempSeedOverride = globalScene.rngSeedOverride;
     const state = Phaser.Math.RND.state();
     if (this.battleSeedState) {
       Phaser.Math.RND.state(this.battleSeedState);
     } else {
-      Phaser.Math.RND.sow([Utils.shiftCharCodes(this.battleSeed, this.turn << 6)]);
+      Phaser.Math.RND.sow([shiftCharCodes(this.battleSeed, this.turn << 6)]);
       console.log("Battle Seed:", this.battleSeed);
     }
-    scene.rngCounter = this.rngCounter++;
-    scene.rngSeedOverride = this.battleSeed;
-    const ret = Utils.randSeedInt(range, min);
+    globalScene.rngCounter = this.rngCounter++;
+    globalScene.rngSeedOverride = this.battleSeed;
+    const ret = randSeedInt(range, min);
     this.battleSeedState = Phaser.Math.RND.state();
     Phaser.Math.RND.state(state);
-    scene.rngCounter = tempRngCounter;
-    scene.rngSeedOverride = tempSeedOverride;
+    globalScene.rngCounter = tempRngCounter;
+    globalScene.rngSeedOverride = tempSeedOverride;
     return ret;
   }
 
@@ -456,22 +465,22 @@ export default class Battle {
 }
 
 export class FixedBattle extends Battle {
-  constructor(scene: BattleScene, waveIndex: number, config: FixedBattleConfig) {
+  constructor(waveIndex: number, config: FixedBattleConfig) {
     super(
-      scene.gameMode,
+      globalScene.gameMode,
       waveIndex,
       config.battleType,
-      config.battleType === BattleType.TRAINER ? config.getTrainer(scene) : undefined,
+      config.battleType === BattleType.TRAINER ? config.getTrainer() : undefined,
       config.double,
     );
     if (config.getEnemyParty) {
-      this.enemyParty = config.getEnemyParty(scene);
+      this.enemyParty = config.getEnemyParty();
     }
   }
 }
 
-type GetTrainerFunc = (scene: BattleScene) => Trainer;
-type GetEnemyPartyFunc = (scene: BattleScene) => EnemyPokemon[];
+type GetTrainerFunc = () => Trainer;
+type GetEnemyPartyFunc = () => EnemyPokemon[];
 
 export class FixedBattleConfig {
   public battleType: BattleType;
@@ -524,20 +533,20 @@ function getRandomTrainerFunc(
   randomGender: boolean = false,
   seedOffset: number = 0,
 ): GetTrainerFunc {
-  return (scene: BattleScene) => {
-    const rand = Utils.randSeedInt(trainerPool.length);
+  return () => {
+    const rand = randSeedInt(trainerPool.length);
     const trainerTypes: TrainerType[] = [];
 
-    scene.executeWithSeedOffset(() => {
+    globalScene.executeWithSeedOffset(() => {
       for (const trainerPoolEntry of trainerPool) {
-        const trainerType = Array.isArray(trainerPoolEntry) ? Utils.randSeedItem(trainerPoolEntry) : trainerPoolEntry;
+        const trainerType = Array.isArray(trainerPoolEntry) ? randSeedItem(trainerPoolEntry) : trainerPoolEntry;
         trainerTypes.push(trainerType);
       }
     }, seedOffset);
 
     let trainerGender = TrainerVariant.DEFAULT;
     if (randomGender) {
-      trainerGender = Utils.randInt(2) === 0 ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT;
+      trainerGender = randInt(2) === 0 ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT;
     }
 
     /* 1/3 chance for evil team grunts to be double battles */
@@ -556,10 +565,10 @@ function getRandomTrainerFunc(
     const isEvilTeamGrunt = evilTeamGrunts.includes(trainerTypes[rand]);
 
     if (trainerConfigs[trainerTypes[rand]].hasDouble && isEvilTeamGrunt) {
-      return new Trainer(scene, trainerTypes[rand], Utils.randInt(3) === 0 ? TrainerVariant.DOUBLE : trainerGender);
+      return new Trainer(trainerTypes[rand], randInt(3) === 0 ? TrainerVariant.DOUBLE : trainerGender);
     }
 
-    return new Trainer(scene, trainerTypes[rand], trainerGender);
+    return new Trainer(trainerTypes[rand], trainerGender);
   };
 }
 
@@ -579,31 +588,24 @@ export const classicFixedBattles: FixedBattleConfigs = {
   [5]: new FixedBattleConfig()
     .setBattleType(BattleType.TRAINER)
     .setGetTrainerFunc(
-      (scene) =>
-        new Trainer(
-          scene,
-          TrainerType.YOUNGSTER,
-          Utils.randSeedInt(2) ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
-        ),
+      () => new Trainer(TrainerType.YOUNGSTER, randSeedInt(2) ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT),
     ),
   [8]: new FixedBattleConfig()
     .setBattleType(BattleType.TRAINER)
     .setGetTrainerFunc(
-      (scene) =>
+      () =>
         new Trainer(
-          scene,
           TrainerType.RIVAL,
-          scene.gameData.gender === PlayerGender.MALE ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
+          globalScene.gameData.gender === PlayerGender.MALE ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
         ),
     ),
   [25]: new FixedBattleConfig()
     .setBattleType(BattleType.TRAINER)
     .setGetTrainerFunc(
-      (scene) =>
+      () =>
         new Trainer(
-          scene,
           TrainerType.RIVAL_2,
-          scene.gameData.gender === PlayerGender.MALE ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
+          globalScene.gameData.gender === PlayerGender.MALE ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
         ),
     )
     .setCustomModifierRewards({
@@ -632,11 +634,10 @@ export const classicFixedBattles: FixedBattleConfigs = {
   [55]: new FixedBattleConfig()
     .setBattleType(BattleType.TRAINER)
     .setGetTrainerFunc(
-      (scene) =>
+      () =>
         new Trainer(
-          scene,
           TrainerType.RIVAL_3,
-          scene.gameData.gender === PlayerGender.MALE ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
+          globalScene.gameData.gender === PlayerGender.MALE ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
         ),
     )
     .setCustomModifierRewards({
@@ -706,11 +707,10 @@ export const classicFixedBattles: FixedBattleConfigs = {
   [95]: new FixedBattleConfig()
     .setBattleType(BattleType.TRAINER)
     .setGetTrainerFunc(
-      (scene) =>
+      () =>
         new Trainer(
-          scene,
           TrainerType.RIVAL_4,
-          scene.gameData.gender === PlayerGender.MALE ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
+          globalScene.gameData.gender === PlayerGender.MALE ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
         ),
     )
     .setCustomModifierRewards({
@@ -788,11 +788,10 @@ export const classicFixedBattles: FixedBattleConfigs = {
   [145]: new FixedBattleConfig()
     .setBattleType(BattleType.TRAINER)
     .setGetTrainerFunc(
-      (scene) =>
+      () =>
         new Trainer(
-          scene,
           TrainerType.RIVAL_5,
-          scene.gameData.gender === PlayerGender.MALE ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
+          globalScene.gameData.gender === PlayerGender.MALE ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
         ),
     )
     .setCustomModifierRewards({
@@ -920,11 +919,10 @@ export const classicFixedBattles: FixedBattleConfigs = {
   [195]: new FixedBattleConfig()
     .setBattleType(BattleType.TRAINER)
     .setGetTrainerFunc(
-      (scene) =>
+      () =>
         new Trainer(
-          scene,
           TrainerType.RIVAL_6,
-          scene.gameData.gender === PlayerGender.MALE ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
+          globalScene.gameData.gender === PlayerGender.MALE ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
         ),
     )
     .setCustomModifierRewards({

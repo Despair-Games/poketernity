@@ -2,7 +2,7 @@ import { Stat } from "#enums/stat";
 import { SpeciesStatBoosterModifier } from "#app/modifier/modifier";
 import { modifierTypes } from "#app/modifier/modifier-type";
 import i18next from "#app/plugins/i18n";
-import * as Utils from "#app/utils";
+import { NumberHolder, randInt } from "#app/utils";
 import { Species } from "#enums/species";
 import GameManager from "#test/utils/gameManager";
 import Phase from "phaser";
@@ -89,17 +89,17 @@ describe("Items - Thick Club", () => {
     const atkStat = partyMember.getStat(Stat.ATK);
 
     // Making sure modifier is not applied without holding item
-    const atkValue = new Utils.NumberHolder(atkStat);
-    partyMember.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
+    const atkValue = new NumberHolder(atkStat);
+    game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
 
     expect(atkValue.value / atkStat).toBe(1);
 
     // Giving Eviolite to party member and testing if it applies
-    partyMember.scene.addModifier(
+    game.scene.addModifier(
       modifierTypes.SPECIES_STAT_BOOSTER().generateType([], ["THICK_CLUB"])!.newModifier(partyMember),
       true,
     );
-    partyMember.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
+    game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
 
     expect(atkValue.value / atkStat).toBe(2);
   }, 20000);
@@ -112,17 +112,17 @@ describe("Items - Thick Club", () => {
     const atkStat = partyMember.getStat(Stat.ATK);
 
     // Making sure modifier is not applied without holding item
-    const atkValue = new Utils.NumberHolder(atkStat);
-    partyMember.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
+    const atkValue = new NumberHolder(atkStat);
+    game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
 
     expect(atkValue.value / atkStat).toBe(1);
 
     // Giving Eviolite to party member and testing if it applies
-    partyMember.scene.addModifier(
+    game.scene.addModifier(
       modifierTypes.SPECIES_STAT_BOOSTER().generateType([], ["THICK_CLUB"])!.newModifier(partyMember),
       true,
     );
-    partyMember.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
+    game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
 
     expect(atkValue.value / atkStat).toBe(2);
   }, 20000);
@@ -135,17 +135,17 @@ describe("Items - Thick Club", () => {
     const atkStat = partyMember.getStat(Stat.ATK);
 
     // Making sure modifier is not applied without holding item
-    const atkValue = new Utils.NumberHolder(atkStat);
-    partyMember.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
+    const atkValue = new NumberHolder(atkStat);
+    game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
 
     expect(atkValue.value / atkStat).toBe(1);
 
     // Giving Eviolite to party member and testing if it applies
-    partyMember.scene.addModifier(
+    game.scene.addModifier(
       modifierTypes.SPECIES_STAT_BOOSTER().generateType([], ["THICK_CLUB"])!.newModifier(partyMember),
       true,
     );
-    partyMember.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
+    game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
 
     expect(atkValue.value / atkStat).toBe(2);
   }, 20000);
@@ -153,7 +153,7 @@ describe("Items - Thick Club", () => {
   it("THICK_CLUB held by fused CUBONE line (base)", async () => {
     // Randomly choose from the Cubone line
     const species = [Species.CUBONE, Species.MAROWAK, Species.ALOLA_MAROWAK];
-    const randSpecies = Utils.randInt(species.length);
+    const randSpecies = randInt(species.length);
 
     await game.startBattle([species[randSpecies], Species.PIKACHU]);
 
@@ -172,17 +172,17 @@ describe("Items - Thick Club", () => {
     const atkStat = partyMember.getStat(Stat.ATK);
 
     // Making sure modifier is not applied without holding item
-    const atkValue = new Utils.NumberHolder(atkStat);
-    partyMember.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
+    const atkValue = new NumberHolder(atkStat);
+    game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
 
     expect(atkValue.value / atkStat).toBe(1);
 
     // Giving Eviolite to party member and testing if it applies
-    partyMember.scene.addModifier(
+    game.scene.addModifier(
       modifierTypes.SPECIES_STAT_BOOSTER().generateType([], ["THICK_CLUB"])!.newModifier(partyMember),
       true,
     );
-    partyMember.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
+    game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
 
     expect(atkValue.value / atkStat).toBe(2);
   }, 20000);
@@ -190,7 +190,7 @@ describe("Items - Thick Club", () => {
   it("THICK_CLUB held by fused CUBONE line (part)", async () => {
     // Randomly choose from the Cubone line
     const species = [Species.CUBONE, Species.MAROWAK, Species.ALOLA_MAROWAK];
-    const randSpecies = Utils.randInt(species.length);
+    const randSpecies = randInt(species.length);
 
     await game.startBattle([Species.PIKACHU, species[randSpecies]]);
 
@@ -209,17 +209,17 @@ describe("Items - Thick Club", () => {
     const atkStat = partyMember.getStat(Stat.ATK);
 
     // Making sure modifier is not applied without holding item
-    const atkValue = new Utils.NumberHolder(atkStat);
-    partyMember.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
+    const atkValue = new NumberHolder(atkStat);
+    game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
 
     expect(atkValue.value / atkStat).toBe(1);
 
     // Giving Eviolite to party member and testing if it applies
-    partyMember.scene.addModifier(
+    game.scene.addModifier(
       modifierTypes.SPECIES_STAT_BOOSTER().generateType([], ["THICK_CLUB"])!.newModifier(partyMember),
       true,
     );
-    partyMember.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
+    game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
 
     expect(atkValue.value / atkStat).toBe(2);
   }, 20000);
@@ -232,17 +232,17 @@ describe("Items - Thick Club", () => {
     const atkStat = partyMember.getStat(Stat.ATK);
 
     // Making sure modifier is not applied without holding item
-    const atkValue = new Utils.NumberHolder(atkStat);
-    partyMember.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
+    const atkValue = new NumberHolder(atkStat);
+    game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
 
     expect(atkValue.value / atkStat).toBe(1);
 
     // Giving Eviolite to party member and testing if it applies
-    partyMember.scene.addModifier(
+    game.scene.addModifier(
       modifierTypes.SPECIES_STAT_BOOSTER().generateType([], ["THICK_CLUB"])!.newModifier(partyMember),
       true,
     );
-    partyMember.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
+    game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
 
     expect(atkValue.value / atkStat).toBe(1);
   }, 20000);

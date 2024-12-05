@@ -1,5 +1,5 @@
-import { BattlerIndex } from "#app/battle";
-import BattleScene from "#app/battle-scene";
+import { globalScene } from "#app/global-scene";
+import type { BattlerIndex } from "#app/battle";
 import {
   applyAbAttrs,
   applyPostStatStageChangeAbAttrs,
@@ -10,7 +10,7 @@ import {
   StatStageChangeMultiplierAbAttr,
 } from "#app/data/ability";
 import { ArenaTagSide, MistTag } from "#app/data/arena-tag";
-import Pokemon from "#app/field/pokemon";
+import type Pokemon from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { ResetNegativeStatStageModifier } from "#app/modifier/modifier";
 import { handleTutorial, Tutorial } from "#app/tutorial";
@@ -35,7 +35,6 @@ export class StatStageChangePhase extends PokemonPhase {
   private onChange: StatStageChangeCallback | null;
 
   constructor(
-    scene: BattleScene,
     battlerIndex: BattlerIndex,
     selfTarget: boolean,
     stats: BattleStat[],
@@ -45,7 +44,7 @@ export class StatStageChangePhase extends PokemonPhase {
     canBeCopied: boolean = true,
     onChange: StatStageChangeCallback | null = null,
   ) {
-    super(scene, battlerIndex);
+    super(battlerIndex);
 
     this.selfTarget = selfTarget;
     this.stats = stats;
@@ -61,9 +60,8 @@ export class StatStageChangePhase extends PokemonPhase {
     if (this.stats.length > 1) {
       for (let i = 0; i < this.stats.length; i++) {
         const stat = [this.stats[i]];
-        this.scene.unshiftPhase(
+        globalScene.unshiftPhase(
           new StatStageChangePhase(
-            this.scene,
             this.battlerIndex,
             this.selfTarget,
             stat,
@@ -97,7 +95,7 @@ export class StatStageChangePhase extends PokemonPhase {
 
       if (!this.selfTarget && stages.value < 0) {
         // TODO: add a reference to the source of the stat change to fix Infiltrator interaction
-        this.scene.arena.applyTagsForSide(
+        globalScene.arena.applyTagsForSide(
           MistTag,
           pokemon.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY,
           false,
@@ -131,7 +129,7 @@ export class StatStageChangePhase extends PokemonPhase {
       if (this.showMessage) {
         const messages = this.getStatStageChangeMessages(filteredStats, stages.value, relLevels);
         for (const message of messages) {
-          this.scene.queueMessage(message);
+          globalScene.queueMessage(message);
         }
       }
 
@@ -162,12 +160,12 @@ export class StatStageChangePhase extends PokemonPhase {
       applyPostStatStageChangeAbAttrs(PostStatStageChangeAbAttr, pokemon, filteredStats, this.stages, this.selfTarget);
 
       // Look for any other stat change phases; if this is the last one, do White Herb check
-      const existingPhase = this.scene.findPhase(
+      const existingPhase = globalScene.findPhase(
         (p) => p instanceof StatStageChangePhase && p.battlerIndex === this.battlerIndex,
       );
       if (!(existingPhase instanceof StatStageChangePhase)) {
         // Apply White Herb if needed
-        const whiteHerb = this.scene.applyModifier(
+        const whiteHerb = globalScene.applyModifier(
           ResetNegativeStatStageModifier,
           this.player,
           pokemon,
@@ -175,44 +173,44 @@ export class StatStageChangePhase extends PokemonPhase {
         // If the White Herb was applied, consume it
         if (whiteHerb) {
           pokemon.loseHeldItem(whiteHerb);
-          this.scene.updateModifiers(this.player);
+          globalScene.updateModifiers(this.player);
         }
       }
 
       pokemon.updateInfo();
 
-      handleTutorial(this.scene, Tutorial.Stat_Change).then(() => super.end());
+      handleTutorial(Tutorial.Stat_Change).then(() => super.end());
     };
 
-    if (relLevels.filter((l) => l).length && this.scene.moveAnimations) {
+    if (relLevels.filter((l) => l).length && globalScene.moveAnimations) {
       pokemon.enableMask();
       const pokemonMaskSprite = pokemon.maskSprite;
 
-      const tileX = (this.player ? 106 : 236) * pokemon.getSpriteScale() * this.scene.field.scale;
+      const tileX = (this.player ? 106 : 236) * pokemon.getSpriteScale() * globalScene.field.scale;
       const tileY =
-        ((this.player ? 148 : 84) + (stages.value >= 1 ? 160 : 0)) * pokemon.getSpriteScale() * this.scene.field.scale;
-      const tileWidth = 156 * this.scene.field.scale * pokemon.getSpriteScale();
-      const tileHeight = 316 * this.scene.field.scale * pokemon.getSpriteScale();
+        ((this.player ? 148 : 84) + (stages.value >= 1 ? 160 : 0)) * pokemon.getSpriteScale() * globalScene.field.scale;
+      const tileWidth = 156 * globalScene.field.scale * pokemon.getSpriteScale();
+      const tileHeight = 316 * globalScene.field.scale * pokemon.getSpriteScale();
 
       // On increase, show the red sprite located at ATK
       // On decrease, show the blue sprite located at SPD
       const spriteColor = stages.value >= 1 ? Stat[Stat.ATK].toLowerCase() : Stat[Stat.SPD].toLowerCase();
-      const statSprite = this.scene.add.tileSprite(tileX, tileY, tileWidth, tileHeight, "battle_stats", spriteColor);
-      statSprite.setPipeline(this.scene.fieldSpritePipeline);
+      const statSprite = globalScene.add.tileSprite(tileX, tileY, tileWidth, tileHeight, "battle_stats", spriteColor);
+      statSprite.setPipeline(globalScene.fieldSpritePipeline);
       statSprite.setAlpha(0);
       statSprite.setScale(6);
       statSprite.setOrigin(0.5, 1);
 
-      this.scene.playSound(`se/stat_${stages.value >= 1 ? "up" : "down"}`);
+      globalScene.playSound(`se/stat_${stages.value >= 1 ? "up" : "down"}`);
 
-      statSprite.setMask(new Phaser.Display.Masks.BitmapMask(this.scene, pokemonMaskSprite ?? undefined));
+      statSprite.setMask(new Phaser.Display.Masks.BitmapMask(globalScene, pokemonMaskSprite ?? undefined));
 
-      this.scene.tweens.add({
+      globalScene.tweens.add({
         targets: statSprite,
         duration: 250,
         alpha: 0.8375,
         onComplete: () => {
-          this.scene.tweens.add({
+          globalScene.tweens.add({
             targets: statSprite,
             delay: 1000,
             duration: 250,
@@ -221,13 +219,13 @@ export class StatStageChangePhase extends PokemonPhase {
         },
       });
 
-      this.scene.tweens.add({
+      globalScene.tweens.add({
         targets: statSprite,
         duration: 1500,
         y: `${stages.value >= 1 ? "-" : "+"}=${160 * 6}`,
       });
 
-      this.scene.time.delayedCall(1750, () => {
+      globalScene.time.delayedCall(1750, () => {
         pokemon.disableMask();
         end();
       });
@@ -242,7 +240,7 @@ export class StatStageChangePhase extends PokemonPhase {
     let existingPhase: StatStageChangePhase;
     if (this.stats.length === 1) {
       while (
-        (existingPhase = this.scene.findPhase(
+        (existingPhase = globalScene.findPhase(
           (p) =>
             p instanceof StatStageChangePhase &&
             p.battlerIndex === this.battlerIndex &&
@@ -255,13 +253,13 @@ export class StatStageChangePhase extends PokemonPhase {
       ) {
         this.stages += existingPhase.stages;
 
-        if (!this.scene.tryRemovePhase((p) => p === existingPhase)) {
+        if (!globalScene.tryRemovePhase((p) => p === existingPhase)) {
           break;
         }
       }
     }
     while (
-      (existingPhase = this.scene.findPhase(
+      (existingPhase = globalScene.findPhase(
         (p) =>
           p instanceof StatStageChangePhase &&
           p.battlerIndex === this.battlerIndex &&
@@ -273,7 +271,7 @@ export class StatStageChangePhase extends PokemonPhase {
       ) as StatStageChangePhase)
     ) {
       this.stats.push(...existingPhase.stats);
-      if (!this.scene.tryRemovePhase((p) => p === existingPhase)) {
+      if (!globalScene.tryRemovePhase((p) => p === existingPhase)) {
         break;
       }
     }

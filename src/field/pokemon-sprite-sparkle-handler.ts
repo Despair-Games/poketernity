@@ -1,15 +1,15 @@
-import BattleScene from "../battle-scene";
+import { globalScene } from "#app/global-scene";
 import Pokemon from "./pokemon";
-import * as Utils from "../utils";
+import { fixedInt, randInt } from "#app/utils";
 
 export default class PokemonSpriteSparkleHandler {
   private sprites: Set<Phaser.GameObjects.Sprite>;
 
-  setup(scene: BattleScene): void {
+  setup(): void {
     this.sprites = new Set();
 
-    scene.tweens.addCounter({
-      duration: Utils.fixedInt(200),
+    globalScene.tweens.addCounter({
+      duration: fixedInt(200),
       from: 0,
       to: 1,
       yoyo: true,
@@ -33,13 +33,13 @@ export default class PokemonSpriteSparkleHandler {
       const parent = (pokemon || s).parentContainer;
       const texture = s.texture;
       const [width, height] = [texture.source[0].width, texture.source[0].height];
-      const [pixelX, pixelY] = [Utils.randInt(width), Utils.randInt(height)];
+      const [pixelX, pixelY] = [randInt(width), randInt(height)];
       const ratioX = s.width / width;
       const ratioY = s.height / height;
       const pixel = texture.manager.getPixel(pixelX, pixelY, texture.key, "__BASE");
       if (pixel?.alpha) {
         const [xOffset, yOffset] = [-s.originX * s.width, -s.originY * s.height];
-        const sparkle = (s.scene as BattleScene).addFieldSprite(
+        const sparkle = globalScene.addFieldSprite(
           (pokemon?.x || 0) + s.x + pixelX * ratioX + xOffset,
           (pokemon?.y || 0) + s.y + pixelY * ratioY + yOffset,
           "tera_sparkle",
@@ -48,7 +48,7 @@ export default class PokemonSpriteSparkleHandler {
         sparkle.setName("sprite-tera-sparkle");
         sparkle.play("tera_sparkle");
         parent.add(sparkle);
-        s.scene.time.delayedCall(Utils.fixedInt(Math.floor((1000 / 12) * 13)), () => sparkle.destroy());
+        s.scene.time.delayedCall(fixedInt(Math.floor((1000 / 12) * 13)), () => sparkle.destroy());
       }
     }
   }

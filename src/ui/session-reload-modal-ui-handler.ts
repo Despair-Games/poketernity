@@ -1,11 +1,11 @@
-import BattleScene from "../battle-scene";
-import { ModalConfig, ModalUiHandler } from "./modal-ui-handler";
+import type { ModalConfig } from "./modal-ui-handler";
+import { ModalUiHandler } from "./modal-ui-handler";
 import { addTextObject, TextStyle } from "./text";
-import { Mode } from "./ui";
+import type { Mode } from "./ui";
 
 export default class SessionReloadModalUiHandler extends ModalUiHandler {
-  constructor(scene: BattleScene, mode: Mode | null = null) {
-    super(scene, mode);
+  constructor(mode: Mode | null = null) {
+    super(mode);
   }
 
   getModalTitle(): string {
@@ -32,7 +32,6 @@ export default class SessionReloadModalUiHandler extends ModalUiHandler {
     super.setup();
 
     const label = addTextObject(
-      this.scene,
       this.getWidth() / 2,
       this.getHeight() / 2,
       "Your session is out of date.\nYour data will be reloaded…",

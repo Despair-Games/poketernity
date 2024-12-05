@@ -10,7 +10,7 @@ import {
   runMysteryEncounterToEnd,
   skipBattleRunMysteryEncounterRewardsPhase,
 } from "#test/mystery-encounter/encounter-test-utils";
-import BattleScene from "#app/battle-scene";
+import type BattleScene from "#app/battle-scene";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { initSceneWithoutEncounterPhase } from "#test/utils/gameManagerUtils";
@@ -81,8 +81,8 @@ describe("A Trainer's Test - Mystery Encounter", () => {
 
     expect(ATrainersTestEncounter.onInit).toBeDefined();
 
-    ATrainersTestEncounter.populateDialogueTokensFromRequirements(scene);
-    const onInitResult = onInit!(scene);
+    ATrainersTestEncounter.populateDialogueTokensFromRequirements();
+    const onInitResult = onInit!();
 
     expect(ATrainersTestEncounter.dialogueTokens?.statTrainerName).toBeDefined();
     expect(ATrainersTestEncounter.misc.trainerType).toBeDefined();

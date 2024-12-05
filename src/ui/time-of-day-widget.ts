@@ -1,14 +1,11 @@
-import * as Utils from "../utils";
-import BattleScene from "#app/battle-scene";
+import { fixedInt } from "#app/utils";
+import { globalScene } from "#app/global-scene";
 import { BattleSceneEventType } from "../events/battle-scene";
 import { EaseType } from "#enums/ease-type";
 import { TimeOfDay } from "#enums/time-of-day";
 
 /** A small self contained UI element that displays the time of day as an icon */
 export default class TimeOfDayWidget extends Phaser.GameObjects.Container {
-  /** An alias for the scene typecast to a {@linkcode BattleScene} */
-  private battleScene: BattleScene;
-
   /** The {@linkcode Phaser.GameObjects.Sprite} that represents the foreground of the current time of day */
   private readonly timeOfDayIconFgs: Phaser.GameObjects.Sprite[] = new Array(2);
   /** The {@linkcode Phaser.GameObjects.Sprite} that represents the middle-ground of the current time of day */
@@ -43,32 +40,31 @@ export default class TimeOfDayWidget extends Phaser.GameObjects.Container {
   public set parentVisible(visible: boolean) {
     if (visible && !this._parentVisible) {
       // Only resume the tweens if parent is newly visible
-      this.timeOfDayIcons?.forEach((icon) => this.scene.tweens.getTweensOf(icon).forEach((tween) => tween.resume()));
+      this.timeOfDayIcons?.forEach((icon) => globalScene.tweens.getTweensOf(icon).forEach((tween) => tween.resume()));
     }
 
     this._parentVisible = visible;
   }
 
-  constructor(scene: Phaser.Scene, x: number = 0, y: number = 0) {
-    super(scene, x, y);
-    this.battleScene = this.scene as BattleScene;
+  constructor(x: number = 0, y: number = 0) {
+    super(globalScene, x, y);
 
-    this.setVisible(this.battleScene.showTimeOfDayWidget);
-    if (!this.battleScene.showTimeOfDayWidget) {
+    this.setVisible(globalScene.showTimeOfDayWidget);
+    if (!globalScene.showTimeOfDayWidget) {
       return;
     }
 
     // Initialize all sprites
     this.timeOfDayIconPairs.forEach((icons, key) => {
       for (let i = 0; i < icons.length; i++) {
-        icons[i] = this.scene.add.sprite(0, 0, "dawn_icon_" + key).setOrigin();
+        icons[i] = globalScene.add.sprite(0, 0, "dawn_icon_" + key).setOrigin();
       }
     });
     // Store a flat array of all icons for later
     this.timeOfDayIcons = [this.timeOfDayIconBgs, this.timeOfDayIconMgs, this.timeOfDayIconFgs].flat();
     this.add(this.timeOfDayIcons);
 
-    this.battleScene.eventTarget.addEventListener(BattleSceneEventType.ENCOUNTER_PHASE, this.onEncounterPhaseEvent);
+    globalScene.eventTarget.addEventListener(BattleSceneEventType.ENCOUNTER_PHASE, this.onEncounterPhaseEvent);
   }
 
   /**
@@ -79,14 +75,14 @@ export default class TimeOfDayWidget extends Phaser.GameObjects.Container {
     const rotate = {
       targets: [this.timeOfDayIconMgs[0], this.timeOfDayIconMgs[1]],
       angle: "+=90",
-      duration: Utils.fixedInt(1500),
+      duration: fixedInt(1500),
       ease: "Back.easeOut",
       paused: !this.parentVisible,
     };
     const fade = {
       targets: [this.timeOfDayIconBgs[1], this.timeOfDayIconMgs[1], this.timeOfDayIconFgs[1]],
       alpha: 0,
-      duration: Utils.fixedInt(500),
+      duration: fixedInt(500),
       ease: "Linear",
       paused: !this.parentVisible,
     };
@@ -102,14 +98,14 @@ export default class TimeOfDayWidget extends Phaser.GameObjects.Container {
     const bounce = {
       targets: [this.timeOfDayIconMgs[0], this.timeOfDayIconMgs[1]],
       angle: "+=90",
-      duration: Utils.fixedInt(2000),
+      duration: fixedInt(2000),
       ease: "Bounce.easeOut",
       paused: !this.parentVisible,
     };
     const fade = {
       targets: [this.timeOfDayIconBgs[1], this.timeOfDayIconMgs[1], this.timeOfDayIconFgs[1]],
       alpha: 0,
-      duration: Utils.fixedInt(800),
+      duration: fixedInt(800),
       ease: "Linear",
       paused: !this.parentVisible,
     };
@@ -134,13 +130,13 @@ export default class TimeOfDayWidget extends Phaser.GameObjects.Container {
 
   /** Adds the proper tween for all icons */
   private tweenTimeOfDayIcon() {
-    this.scene.tweens.killTweensOf(this.timeOfDayIcons);
+    globalScene.tweens.killTweensOf(this.timeOfDayIcons);
 
     this.resetIcons();
 
     // Tween based on the player setting
-    (this.battleScene.timeOfDayAnimation === EaseType.BACK ? this.getBackTween() : this.getBounceTween()).forEach(
-      (tween) => this.scene.tweens.add(tween),
+    (globalScene.timeOfDayAnimation === EaseType.BACK ? this.getBackTween() : this.getBounceTween()).forEach((tween) =>
+      globalScene.tweens.add(tween),
     );
 
     // Swaps all elements of the icon arrays by shifting the first element onto the end of the array
@@ -156,7 +152,7 @@ export default class TimeOfDayWidget extends Phaser.GameObjects.Container {
    * @param event {@linkcode Event} being sent
    */
   private onEncounterPhase(event: Event) {
-    const newTime = this.battleScene.arena.getTimeOfDay();
+    const newTime = globalScene.arena.getTimeOfDay();
 
     if (this.currentTime === newTime) {
       return;

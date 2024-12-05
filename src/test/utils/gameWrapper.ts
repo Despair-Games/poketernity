@@ -1,7 +1,7 @@
 import BattleScene, * as battleScene from "#app/battle-scene";
 import { MoveAnim } from "#app/data/battle-anims";
 import Pokemon from "#app/field/pokemon";
-import * as Utils from "#app/utils";
+import { setCookie, sessionIdKey } from "#app/utils";
 import { blobToString } from "#test/utils/gameManagerUtils";
 import { MockClock } from "#test/utils/mocks/mockClock";
 import mockConsoleLog from "#test/utils/mocks/mockConsoleLog";
@@ -15,14 +15,14 @@ import Phaser from "phaser";
 import InputText from "phaser3-rex-plugins/plugins/inputtext";
 import { vi } from "vitest";
 import { MockGameObjectCreator } from "./mocks/mockGameObjectCreator";
+import { version } from "../../../package.json";
+import { MockTimedEventManager } from "./mocks/mockTimedEventManager";
 import InputManager = Phaser.Input.InputManager;
 import KeyboardManager = Phaser.Input.Keyboard.KeyboardManager;
 import KeyboardPlugin = Phaser.Input.Keyboard.KeyboardPlugin;
 import GamepadPlugin = Phaser.Input.Gamepad.GamepadPlugin;
 import EventEmitter = Phaser.Events.EventEmitter;
 import UpdateList = Phaser.GameObjects.UpdateList;
-import { version } from "../../../package.json";
-import { MockTimedEventManager } from "./mocks/mockTimedEventManager";
 import { SESSION_ID_COOKIE } from "#app/constants";
 
 Object.defineProperty(window, "localStorage", {
@@ -43,7 +43,7 @@ window.URL.createObjectURL = (blob: Blob) => {
 };
 navigator.getGamepads = () => [];
 global.fetch = vi.fn(MockFetch) as any;
-Utils.setCookie(SESSION_ID_COOKIE, "fake_token");
+setCookie(SESSION_ID_COOKIE, "fake_token");
 
 window.matchMedia = () =>
   ({

@@ -10,7 +10,7 @@ import {
   RibbonAchv,
   achvs,
 } from "#app/system/achv";
-import { IntegerHolder, NumberHolder } from "#app/utils";
+import { NumberHolder } from "#app/utils";
 import GameManager from "#test/utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -67,11 +67,11 @@ describe("Achv", () => {
   });
 
   it("should validate the achievement based on the condition function", () => {
-    const conditionFunc = vi.fn((scene: BattleScene, args: any[]) => args[0] === 10);
+    const conditionFunc = vi.fn((args: any[]) => args[0] === 10);
     const achv = new Achv("", "Test Achievement", "Test Description", "test_icon", 10, conditionFunc);
 
-    expect(achv.validate(new BattleScene(), [5])).toBe(false);
-    expect(achv.validate(new BattleScene(), [10])).toBe(true);
+    expect(achv.validate([5])).toBe(false);
+    expect(achv.validate([10])).toBe(true);
     expect(conditionFunc).toHaveBeenCalledTimes(2);
   });
 });
@@ -88,10 +88,10 @@ describe("MoneyAchv", () => {
     const scene = new BattleScene();
     scene.money = 5000;
 
-    expect(moneyAchv.validate(scene, [])).toBe(false);
+    expect(moneyAchv.validate([])).toBe(false);
 
     scene.money = 15000;
-    expect(moneyAchv.validate(scene, [])).toBe(true);
+    expect(moneyAchv.validate([])).toBe(true);
   });
 });
 
@@ -131,10 +131,10 @@ describe("RibbonAchv", () => {
     const ribbonAchv = new RibbonAchv("", "Test Ribbon Achievement", 10, "ribbon_icon", 10);
     scene.gameData.gameStats.ribbonsOwned = 5;
 
-    expect(ribbonAchv.validate(scene, [])).toBe(false);
+    expect(ribbonAchv.validate([])).toBe(false);
 
     scene.gameData.gameStats.ribbonsOwned = 15;
-    expect(ribbonAchv.validate(scene, [])).toBe(true);
+    expect(ribbonAchv.validate([])).toBe(true);
   });
 });
 
@@ -147,13 +147,12 @@ describe("DamageAchv", () => {
 
   it("should validate the achievement based on the damage amount", () => {
     const damageAchv = new DamageAchv("", "Test Damage Achievement", 250, "damage_icon", 10);
-    const scene = new BattleScene();
     const numberHolder = new NumberHolder(200);
 
-    expect(damageAchv.validate(scene, [numberHolder])).toBe(false);
+    expect(damageAchv.validate([numberHolder])).toBe(false);
 
     numberHolder.value = 300;
-    expect(damageAchv.validate(scene, [numberHolder])).toBe(true);
+    expect(damageAchv.validate([numberHolder])).toBe(true);
   });
 });
 
@@ -166,13 +165,12 @@ describe("HealAchv", () => {
 
   it("should validate the achievement based on the heal amount", () => {
     const healAchv = new HealAchv("", "Test Heal Achievement", 250, "heal_icon", 10);
-    const scene = new BattleScene();
     const numberHolder = new NumberHolder(200);
 
-    expect(healAchv.validate(scene, [numberHolder])).toBe(false);
+    expect(healAchv.validate([numberHolder])).toBe(false);
 
     numberHolder.value = 300;
-    expect(healAchv.validate(scene, [numberHolder])).toBe(true);
+    expect(healAchv.validate([numberHolder])).toBe(true);
   });
 });
 
@@ -185,13 +183,12 @@ describe("LevelAchv", () => {
 
   it("should validate the achievement based on the level", () => {
     const levelAchv = new LevelAchv("", "Test Level Achievement", 100, "level_icon", 10);
-    const scene = new BattleScene();
-    const integerHolder = new IntegerHolder(50);
+    const _NumberHolder = new NumberHolder(50);
 
-    expect(levelAchv.validate(scene, [integerHolder])).toBe(false);
+    expect(levelAchv.validate([_NumberHolder])).toBe(false);
 
-    integerHolder.value = 150;
-    expect(levelAchv.validate(scene, [integerHolder])).toBe(true);
+    _NumberHolder.value = 150;
+    expect(levelAchv.validate([_NumberHolder])).toBe(true);
   });
 });
 
@@ -218,10 +215,9 @@ describe("ModifierAchv", () => {
       10,
       () => true,
     );
-    const scene = new BattleScene();
     const modifier = new TurnHeldItemTransferModifier(null!, 3, 1);
 
-    expect(modifierAchv.validate(scene, [modifier])).toBe(true);
+    expect(modifierAchv.validate([modifier])).toBe(true);
   });
 });
 

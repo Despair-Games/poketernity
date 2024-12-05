@@ -1,5 +1,6 @@
+import { globalScene } from "#app/global-scene";
+import type { EnemyPartyConfig } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import {
-  EnemyPartyConfig,
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,
   setEncounterRewards,
@@ -7,15 +8,15 @@ import {
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { trainerConfigs } from "#app/data/trainer-config";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import BattleScene from "#app/battle-scene";
-import MysteryEncounter, { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
+import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
+import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { TrainerType } from "#enums/trainer-type";
 import { Species } from "#enums/species";
 import { getSpriteKeysFromSpecies } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import { randSeedInt } from "#app/utils";
 import i18next from "i18next";
-import { IEggOptions } from "#app/data/egg";
+import type { IEggOptions } from "#app/data/egg";
 import { EggSourceType } from "#enums/egg-source-types";
 import { EggTier } from "#enums/egg-type";
 import { PartyHealPhase } from "#app/phases/party-heal-phase";
@@ -43,8 +44,8 @@ export const ATrainersTestEncounter: MysteryEncounter = MysteryEncounterBuilder.
     },
   ])
   .withAutoHideIntroVisuals(false)
-  .withOnInit((scene: BattleScene) => {
-    const encounter = scene.currentBattle.mysteryEncounter!;
+  .withOnInit(() => {
+    const encounter = globalScene.currentBattle.mysteryEncounter!;
 
     // Randomly pick from 1 of the 5 stat trainers to spawn
     let trainerType: TrainerType;
@@ -145,15 +146,14 @@ export const ATrainersTestEncounter: MysteryEncounter = MysteryEncounterBuilder.
       buttonLabel: `${namespace}:option.1.label`,
       buttonTooltip: `${namespace}:option.1.tooltip`,
     },
-    async (scene: BattleScene) => {
-      const encounter = scene.currentBattle.mysteryEncounter!;
+    async () => {
+      const encounter = globalScene.currentBattle.mysteryEncounter!;
       // Battle the stat trainer for an Egg and great rewards
       const config: EnemyPartyConfig = encounter.enemyPartyConfigs[0];
 
-      await transitionMysteryEncounterIntroVisuals(scene);
+      await transitionMysteryEncounterIntroVisuals();
 
       const eggOptions: IEggOptions = {
-        scene,
         pulled: false,
         sourceType: EggSourceType.EVENT,
         eggDescriptor: encounter.misc.trainerEggDescription,
@@ -161,7 +161,6 @@ export const ATrainersTestEncounter: MysteryEncounter = MysteryEncounterBuilder.
       };
       encounter.setDialogueToken("eggType", i18next.t(`${namespace}:eggTypes.epic`));
       setEncounterRewards(
-        scene,
         {
           guaranteedModifierTypeFuncs: [modifierTypes.SACRED_ASH],
           guaranteedModifierTiers: [ModifierTier.ROGUE, ModifierTier.ULTRA],
@@ -169,7 +168,7 @@ export const ATrainersTestEncounter: MysteryEncounter = MysteryEncounterBuilder.
         },
         [eggOptions],
       );
-      await initBattleWithEnemyConfig(scene, config);
+      await initBattleWithEnemyConfig(config);
     },
   )
   .withSimpleOption(
@@ -177,21 +176,20 @@ export const ATrainersTestEncounter: MysteryEncounter = MysteryEncounterBuilder.
       buttonLabel: `${namespace}:option.2.label`,
       buttonTooltip: `${namespace}:option.2.tooltip`,
     },
-    async (scene: BattleScene) => {
-      const encounter = scene.currentBattle.mysteryEncounter!;
+    async () => {
+      const encounter = globalScene.currentBattle.mysteryEncounter!;
       // Full heal party
-      scene.unshiftPhase(new PartyHealPhase(scene, true));
+      globalScene.unshiftPhase(new PartyHealPhase(true));
 
       const eggOptions: IEggOptions = {
-        scene,
         pulled: false,
         sourceType: EggSourceType.EVENT,
         eggDescriptor: encounter.misc.trainerEggDescription,
         tier: EggTier.RARE,
       };
       encounter.setDialogueToken("eggType", i18next.t(`${namespace}:eggTypes.rare`));
-      setEncounterRewards(scene, { fillRemaining: false, rerollMultiplier: -1 }, [eggOptions]);
-      leaveEncounterWithoutBattle(scene);
+      setEncounterRewards({ fillRemaining: false, rerollMultiplier: -1 }, [eggOptions]);
+      leaveEncounterWithoutBattle();
     },
   )
   .withOutroDialogue([

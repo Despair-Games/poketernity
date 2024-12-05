@@ -1,9 +1,8 @@
-import BattleScene from "../../battle-scene";
-import { Mode } from "../ui";
-("#app/inputs-controller");
+import type { Mode } from "../ui";
 import AbstractSettingsUiHandler from "./abstract-settings-ui-handler";
 import { SettingKeys, SettingType } from "#app/system/settings/settings";
 import { LOCALE_LS_KEY } from "#app/constants";
+("#app/inputs-controller");
 
 export default class SettingsDisplayUiHandler extends AbstractSettingsUiHandler {
   /**
@@ -12,8 +11,8 @@ export default class SettingsDisplayUiHandler extends AbstractSettingsUiHandler 
    * @param scene - The BattleScene instance.
    * @param mode - The UI mode, optional.
    */
-  constructor(scene: BattleScene, mode: Mode | null = null) {
-    super(scene, SettingType.DISPLAY, mode);
+  constructor(mode: Mode | null = null) {
+    super(SettingType.DISPLAY, mode);
     this.title = "Display";
 
     /**

@@ -8,7 +8,7 @@ import {
   runMysteryEncounterToEnd,
   runSelectMysteryEncounterOption,
 } from "#test/mystery-encounter/encounter-test-utils";
-import BattleScene from "#app/battle-scene";
+import type BattleScene from "#app/battle-scene";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { initSceneWithoutEncounterPhase } from "#test/utils/gameManagerUtils";
@@ -89,8 +89,8 @@ describe("Safari Zone - Mystery Encounter", () => {
 
     expect(encounter.onInit).toBeDefined();
 
-    encounter.populateDialogueTokensFromRequirements(scene);
-    const onInitResult = onInit!(scene);
+    encounter.populateDialogueTokensFromRequirements();
+    const onInitResult = onInit!();
     expect(onInitResult).toBe(true);
   });
 

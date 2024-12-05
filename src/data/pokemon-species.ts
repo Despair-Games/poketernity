@@ -1,31 +1,33 @@
-import { Localizable } from "#app/interfaces/locales";
+import type { Localizable } from "#app/interfaces/locales";
 import { Abilities } from "#enums/abilities";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { Species } from "#enums/species";
 import { QuantizerCelebi, argbFromRgba, rgbaFromArgb } from "@material/material-color-utilities";
 import i18next from "i18next";
-import BattleScene, { AnySound } from "#app/battle-scene";
-import { GameMode } from "#app/game-mode";
-import { StarterMoveset } from "#app/system/game-data";
-import * as Utils from "#app/utils";
+import type { AnySound } from "#app/battle-scene";
+import { globalScene } from "#app/global-scene";
+import type { GameMode } from "#app/game-mode";
+import type { StarterMoveset } from "#app/system/game-data";
+import { randSeedInt, randSeedGauss, randSeedItem } from "#app/utils";
 import { uncatchableSpecies } from "#app/data/balance/biomes";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { GrowthRate } from "#app/data/exp";
+import type { EvolutionLevel } from "#app/data/balance/pokemon-evolutions";
 import {
-  EvolutionLevel,
   SpeciesWildEvolutionDelay,
   pokemonEvolutions,
   pokemonPrevolutions,
 } from "#app/data/balance/pokemon-evolutions";
 import { Type } from "#enums/type";
+import type { LevelMoves } from "#app/data/balance/pokemon-level-moves";
 import {
-  LevelMoves,
   pokemonFormLevelMoves,
   pokemonFormLevelMoves as pokemonSpeciesFormLevelMoves,
   pokemonSpeciesLevelMoves,
 } from "#app/data/balance/pokemon-level-moves";
-import { Stat } from "#enums/stat";
-import { Variant, VariantSet, variantData } from "#app/data/variant";
+import type { Stat } from "#enums/stat";
+import type { Variant, VariantSet } from "#app/data/variant";
+import { variantData } from "#app/data/variant";
 import { speciesStarterCosts, POKERUS_STARTER_COUNT } from "#app/data/balance/starters";
 import { SpeciesFormKey } from "#enums/species-form-key";
 
@@ -527,7 +529,6 @@ export abstract class PokemonSpeciesForm {
   }
 
   loadAssets(
-    scene: BattleScene,
     female: boolean,
     formIndex?: number,
     shiny?: boolean,
@@ -536,38 +537,38 @@ export abstract class PokemonSpeciesForm {
   ): Promise<void> {
     return new Promise((resolve) => {
       const spriteKey = this.getSpriteKey(female, formIndex, shiny, variant);
-      scene.loadPokemonAtlas(spriteKey, this.getSpriteAtlasPath(female, formIndex, shiny, variant));
-      scene.load.audio(`${this.getCryKey(formIndex)}`, `audio/${this.getCryKey(formIndex)}.m4a`);
-      scene.load.once(Phaser.Loader.Events.COMPLETE, () => {
+      globalScene.loadPokemonAtlas(spriteKey, this.getSpriteAtlasPath(female, formIndex, shiny, variant));
+      globalScene.load.audio(`${this.getCryKey(formIndex)}`, `audio/${this.getCryKey(formIndex)}.m4a`);
+      globalScene.load.once(Phaser.Loader.Events.COMPLETE, () => {
         const originalWarn = console.warn;
         // Ignore warnings for missing frames, because there will be a lot
         console.warn = () => {};
-        const frameNames = scene.anims.generateFrameNames(spriteKey, {
+        const frameNames = globalScene.anims.generateFrameNames(spriteKey, {
           zeroPad: 4,
           suffix: ".png",
           start: 1,
           end: 400,
         });
         console.warn = originalWarn;
-        if (!scene.anims.exists(spriteKey)) {
-          scene.anims.create({
+        if (!globalScene.anims.exists(spriteKey)) {
+          globalScene.anims.create({
             key: this.getSpriteKey(female, formIndex, shiny, variant),
             frames: frameNames,
             frameRate: 10,
             repeat: -1,
           });
         } else {
-          scene.anims.get(spriteKey).frameRate = 10;
+          globalScene.anims.get(spriteKey).frameRate = 10;
         }
         const spritePath = this.getSpriteAtlasPath(female, formIndex, shiny, variant)
           .replace("variant/", "")
           .replace(/_[1-3]$/, "");
-        scene.loadPokemonVariantAssets(spriteKey, spritePath, variant);
+        globalScene.loadPokemonVariantAssets(spriteKey, spritePath, variant);
         resolve();
       });
       if (startLoad) {
-        if (!scene.load.isLoading()) {
-          scene.load.start();
+        if (!globalScene.load.isLoading()) {
+          globalScene.load.start();
         }
       } else {
         resolve();
@@ -575,21 +576,21 @@ export abstract class PokemonSpeciesForm {
     });
   }
 
-  cry(scene: BattleScene, soundConfig?: Phaser.Types.Sound.SoundConfig, ignorePlay?: boolean): AnySound {
+  cry(soundConfig?: Phaser.Types.Sound.SoundConfig, ignorePlay?: boolean): AnySound {
     const cryKey = this.getCryKey(this.formIndex);
-    let cry: AnySound | null = scene.sound.get(cryKey) as AnySound;
+    let cry: AnySound | null = globalScene.sound.get(cryKey) as AnySound;
     if (cry?.pendingRemove) {
       cry = null;
     }
-    cry = scene.playSound(cry ?? cryKey, soundConfig);
+    cry = globalScene.playSound(cry ?? cryKey, soundConfig);
     if (ignorePlay) {
       cry.stop();
     }
     return cry;
   }
 
-  generateCandyColors(scene: BattleScene): number[][] {
-    const sourceTexture = scene.textures.get(this.getSpriteKey(false));
+  generateCandyColors(): number[][] {
+    const sourceTexture = globalScene.textures.get(this.getSpriteKey(false));
 
     const sourceFrame = sourceTexture.frames[sourceTexture.firstFrame];
     const sourceImage = sourceTexture.getSourceImage() as HTMLImageElement;
@@ -634,7 +635,7 @@ export abstract class PokemonSpeciesForm {
     const originalRandom = Math.random;
     Math.random = () => Phaser.Math.RND.realInRange(0, 1);
 
-    scene.executeWithSeedOffset(
+    globalScene.executeWithSeedOffset(
       () => {
         paletteColors = QuantizerCelebi.quantize(pixelColors, 2);
       },
@@ -923,7 +924,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
       return this.speciesId;
     }
 
-    const randValue = evolutionPool.size === 1 ? 0 : Utils.randSeedInt(totalWeight);
+    const randValue = evolutionPool.size === 1 ? 0 : randSeedInt(totalWeight);
 
     for (const weight of evolutionPool.keys()) {
       if (randValue < weight) {
@@ -1007,7 +1008,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
           Math.min(
             Math.max(
               evolution?.level! +
-                Math.round(Utils.randSeedGauss(0.5, 1 + levelDiff * 0.2) * Math.max(evolution?.wildDelay!, 0.5) * 5) -
+                Math.round(randSeedGauss(0.5, 1 + levelDiff * 0.2) * Math.max(evolution?.wildDelay!, 0.5) * 5) -
                 1,
               2,
               evolution?.level!,
@@ -1025,7 +1026,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
         Math.min(
           Math.max(
             lastPrevolutionLevel +
-              Math.round(Utils.randSeedGauss(0.5, 1 + levelDiff * 0.2) * Math.max(evolution?.wildDelay!, 0.5) * 5),
+              Math.round(randSeedGauss(0.5, 1 + levelDiff * 0.2) * Math.max(evolution?.wildDelay!, 0.5) * 5),
             lastPrevolutionLevel + 1,
             evolution?.level!,
           ),
@@ -1180,14 +1181,14 @@ export const noStarterFormKeys: string[] = [
  * @param scene {@linkcode BattleScene} used as part of RNG
  * @returns A list of starters with Pokerus
  */
-export function getPokerusStarters(scene: BattleScene): PokemonSpecies[] {
+export function getPokerusStarters(): PokemonSpecies[] {
   const pokerusStarters: PokemonSpecies[] = [];
   const date = new Date();
   date.setUTCHours(0, 0, 0, 0);
-  scene.executeWithSeedOffset(
+  globalScene.executeWithSeedOffset(
     () => {
       while (pokerusStarters.length < POKERUS_STARTER_COUNT) {
-        const randomSpeciesId = parseInt(Utils.randSeedItem(Object.keys(speciesStarterCosts)), 10);
+        const randomSpeciesId = parseInt(randSeedItem(Object.keys(speciesStarterCosts)), 10);
         const species = getPokemonSpecies(randomSpeciesId);
         if (!pokerusStarters.includes(species)) {
           pokerusStarters.push(species);

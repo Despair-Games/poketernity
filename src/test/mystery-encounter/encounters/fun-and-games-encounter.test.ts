@@ -9,7 +9,7 @@ import {
   runMysteryEncounterToEnd,
   runSelectMysteryEncounterOption,
 } from "#test/mystery-encounter/encounter-test-utils";
-import BattleScene from "#app/battle-scene";
+import type BattleScene from "#app/battle-scene";
 import { Mode } from "#app/ui/ui";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
@@ -96,7 +96,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
 
     expect(encounter.onInit).toBeDefined();
 
-    const onInitResult = onInit!(scene);
+    const onInitResult = onInit!();
     expect(onInitResult).toBe(true);
   });
 

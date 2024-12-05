@@ -1,9 +1,10 @@
-import BattleScene from "#app/battle-scene";
-import MysteryEncounter, { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
+import { globalScene } from "#app/global-scene";
+import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
+import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { queueEncounterMessage, showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
+import type { EnemyPartyConfig } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import {
-  EnemyPartyConfig,
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,
   setEncounterRewards,
@@ -76,8 +77,8 @@ export const MysteriousChestEncounter: MysteryEncounter = MysteryEncounterBuilde
   .withTitle(`${namespace}:title`)
   .withDescription(`${namespace}:description`)
   .withQuery(`${namespace}:query`)
-  .withOnInit((scene: BattleScene) => {
-    const encounter = scene.currentBattle.mysteryEncounter!;
+  .withOnInit(() => {
+    const encounter = globalScene.currentBattle.mysteryEncounter!;
 
     // Calculate boss mon
     const config: EnemyPartyConfig = {
@@ -115,9 +116,9 @@ export const MysteriousChestEncounter: MysteryEncounter = MysteryEncounterBuilde
           },
         ],
       })
-      .withPreOptionPhase(async (scene: BattleScene) => {
+      .withPreOptionPhase(async () => {
         // Play animation
-        const encounter = scene.currentBattle.mysteryEncounter!;
+        const encounter = globalScene.currentBattle.mysteryEncounter!;
         const introVisuals = encounter.introVisuals!;
 
         // Determine roll first
@@ -137,60 +138,60 @@ export const MysteriousChestEncounter: MysteryEncounter = MysteryEncounterBuilde
         introVisuals.spriteConfigs[1].disableAnimation = false;
         introVisuals.playAnim();
       })
-      .withOptionPhase(async (scene: BattleScene) => {
+      .withOptionPhase(async () => {
         // Open the chest
-        const encounter = scene.currentBattle.mysteryEncounter!;
+        const encounter = globalScene.currentBattle.mysteryEncounter!;
         const roll = encounter.misc.roll;
         if (roll >= RAND_LENGTH - COMMON_REWARDS_PERCENT) {
           // Choose between 2 COMMON / 2 GREAT tier items (20%)
-          setEncounterRewards(scene, {
+          setEncounterRewards({
             guaranteedModifierTiers: [ModifierTier.COMMON, ModifierTier.COMMON, ModifierTier.GREAT, ModifierTier.GREAT],
           });
           // Display result message then proceed to rewards
-          queueEncounterMessage(scene, `${namespace}:option.1.normal`);
-          leaveEncounterWithoutBattle(scene);
+          queueEncounterMessage(`${namespace}:option.1.normal`);
+          leaveEncounterWithoutBattle();
         } else if (roll >= RAND_LENGTH - COMMON_REWARDS_PERCENT - ULTRA_REWARDS_PERCENT) {
           // Choose between 3 ULTRA tier items (30%)
-          setEncounterRewards(scene, {
+          setEncounterRewards({
             guaranteedModifierTiers: [ModifierTier.ULTRA, ModifierTier.ULTRA, ModifierTier.ULTRA],
           });
           // Display result message then proceed to rewards
-          queueEncounterMessage(scene, `${namespace}:option.1.good`);
-          leaveEncounterWithoutBattle(scene);
+          queueEncounterMessage(`${namespace}:option.1.good`);
+          leaveEncounterWithoutBattle();
         } else if (roll >= RAND_LENGTH - COMMON_REWARDS_PERCENT - ULTRA_REWARDS_PERCENT - ROGUE_REWARDS_PERCENT) {
           // Choose between 2 ROGUE tier items (10%)
-          setEncounterRewards(scene, { guaranteedModifierTiers: [ModifierTier.ROGUE, ModifierTier.ROGUE] });
+          setEncounterRewards({ guaranteedModifierTiers: [ModifierTier.ROGUE, ModifierTier.ROGUE] });
           // Display result message then proceed to rewards
-          queueEncounterMessage(scene, `${namespace}:option.1.great`);
-          leaveEncounterWithoutBattle(scene);
+          queueEncounterMessage(`${namespace}:option.1.great`);
+          leaveEncounterWithoutBattle();
         } else if (
           roll >=
           RAND_LENGTH - COMMON_REWARDS_PERCENT - ULTRA_REWARDS_PERCENT - ROGUE_REWARDS_PERCENT - MASTER_REWARDS_PERCENT
         ) {
           // Choose 1 MASTER tier item (5%)
-          setEncounterRewards(scene, { guaranteedModifierTiers: [ModifierTier.MASTER] });
+          setEncounterRewards({ guaranteedModifierTiers: [ModifierTier.MASTER] });
           // Display result message then proceed to rewards
-          queueEncounterMessage(scene, `${namespace}:option.1.amazing`);
-          leaveEncounterWithoutBattle(scene);
+          queueEncounterMessage(`${namespace}:option.1.amazing`);
+          leaveEncounterWithoutBattle();
         } else {
           // Your highest level unfainted Pokemon gets OHKO. Start battle against a Gimmighoul (35%)
-          const highestLevelPokemon = getHighestLevelPlayerPokemon(scene, true, false);
-          koPlayerPokemon(scene, highestLevelPokemon);
+          const highestLevelPokemon = getHighestLevelPlayerPokemon(true, false);
+          koPlayerPokemon(highestLevelPokemon);
 
           encounter.setDialogueToken("pokeName", highestLevelPokemon.getNameToRender());
-          await showEncounterText(scene, `${namespace}:option.1.bad`);
+          await showEncounterText(`${namespace}:option.1.bad`);
 
           // Handle game over edge case
-          const allowedPokemon = scene.getPokemonAllowedInBattle();
+          const allowedPokemon = globalScene.getPokemonAllowedInBattle();
           if (allowedPokemon.length === 0) {
             // If there are no longer any legal pokemon in the party, game over.
-            scene.clearPhaseQueue();
-            scene.unshiftPhase(new GameOverPhase(scene));
+            globalScene.clearPhaseQueue();
+            globalScene.unshiftPhase(new GameOverPhase());
           } else {
             // Show which Pokemon was KOed, then start battle against Gimmighoul
-            await transitionMysteryEncounterIntroVisuals(scene, true, true, 500);
-            setEncounterRewards(scene, { fillRemaining: true });
-            await initBattleWithEnemyConfig(scene, encounter.enemyPartyConfigs[0]);
+            await transitionMysteryEncounterIntroVisuals(true, true, 500);
+            setEncounterRewards({ fillRemaining: true });
+            await initBattleWithEnemyConfig(encounter.enemyPartyConfigs[0]);
           }
         }
       })
@@ -206,9 +207,9 @@ export const MysteriousChestEncounter: MysteryEncounter = MysteryEncounterBuilde
         },
       ],
     },
-    async (scene: BattleScene) => {
+    async () => {
       // Leave encounter with no rewards or exp
-      leaveEncounterWithoutBattle(scene, true);
+      leaveEncounterWithoutBattle(true);
       return true;
     },
   )

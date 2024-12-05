@@ -5,19 +5,22 @@ import {
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { isNullOrUndefined, randSeedInt } from "#app/utils";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import BattleScene from "#app/battle-scene";
-import MysteryEncounter, { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
+import { globalScene } from "#app/global-scene";
+import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
+import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MoneyRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
 import {
   catchPokemon,
   getRandomSpeciesByStarterCost,
   getSpriteKeysFromPokemon,
 } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
-import PokemonSpecies, { getPokemonSpecies } from "#app/data/pokemon-species";
+import type PokemonSpecies from "#app/data/pokemon-species";
+import { getPokemonSpecies } from "#app/data/pokemon-species";
 import { speciesStarterCosts } from "#app/data/balance/starters";
 import { Species } from "#enums/species";
 import { PokeballType } from "#enums/pokeball";
-import { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
+import type { EnemyPokemon } from "#app/field/pokemon";
+import { PlayerPokemon } from "#app/field/pokemon";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { showEncounterDialogue } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import PokemonData from "#app/system/pokemon-data";
@@ -67,8 +70,8 @@ export const ThePokemonSalesmanEncounter: MysteryEncounter = MysteryEncounterBui
   .withTitle(`${namespace}:title`)
   .withDescription(`${namespace}:description`)
   .withQuery(`${namespace}:query`)
-  .withOnInit((scene: BattleScene) => {
-    const encounter = scene.currentBattle.mysteryEncounter!;
+  .withOnInit(() => {
+    const encounter = globalScene.currentBattle.mysteryEncounter!;
 
     let species = getSalesmanSpeciesOffer();
     let tries = 0;
@@ -87,9 +90,9 @@ export const ThePokemonSalesmanEncounter: MysteryEncounter = MysteryEncounterBui
     ) {
       // If no HA mon found or you roll 1%, give shiny Magikarp with random variant
       species = getPokemonSpecies(Species.MAGIKARP);
-      pokemon = new PlayerPokemon(scene, species, 5, 2, species.formIndex, undefined, true);
+      pokemon = new PlayerPokemon(species, 5, 2, species.formIndex, undefined, true);
     } else {
-      pokemon = new PlayerPokemon(scene, species, 5, 2, species.formIndex);
+      pokemon = new PlayerPokemon(species, 5, 2, species.formIndex);
     }
     pokemon.generateAndPopulateMoveset();
 
@@ -114,7 +117,7 @@ export const ThePokemonSalesmanEncounter: MysteryEncounter = MysteryEncounterBui
       encounter.dialogue.encounterOptionsDialogue!.description = `${namespace}:description_shiny`;
       encounter.options[0].dialogue!.buttonTooltip = `${namespace}:option.1.tooltip_shiny`;
     }
-    const price = scene.getWaveMoneyAmount(priceMultiplier);
+    const price = globalScene.getWaveMoneyAmount(priceMultiplier);
     encounter.setDialogueToken("purchasePokemon", pokemon.getNameToRender());
     encounter.setDialogueToken("price", price.toString());
     encounter.misc = {
@@ -139,24 +142,24 @@ export const ThePokemonSalesmanEncounter: MysteryEncounter = MysteryEncounterBui
           },
         ],
       })
-      .withOptionPhase(async (scene: BattleScene) => {
-        const encounter = scene.currentBattle.mysteryEncounter!;
+      .withOptionPhase(async () => {
+        const encounter = globalScene.currentBattle.mysteryEncounter!;
         const price = encounter.misc.price;
         const purchasedPokemon = encounter.misc.pokemon as PlayerPokemon;
 
         // Update money
-        updatePlayerMoney(scene, -price, true, false);
+        updatePlayerMoney(-price, true, false);
 
         // Show dialogue
-        await showEncounterDialogue(scene, `${namespace}:option.1.selected_dialogue`, `${namespace}:speaker`);
-        await transitionMysteryEncounterIntroVisuals(scene);
+        await showEncounterDialogue(`${namespace}:option.1.selected_dialogue`, `${namespace}:speaker`);
+        await transitionMysteryEncounterIntroVisuals();
 
         // "Catch" purchased pokemon
         const data = new PokemonData(purchasedPokemon);
         data.player = false;
-        await catchPokemon(scene, data.toPokemon(scene) as EnemyPokemon, null, PokeballType.POKEBALL, true, true);
+        await catchPokemon(data.toPokemon() as EnemyPokemon, null, PokeballType.POKEBALL, true, true);
 
-        leaveEncounterWithoutBattle(scene, true);
+        leaveEncounterWithoutBattle(true);
       })
       .build(),
   )
@@ -170,9 +173,9 @@ export const ThePokemonSalesmanEncounter: MysteryEncounter = MysteryEncounterBui
         },
       ],
     },
-    async (scene: BattleScene) => {
+    async () => {
       // Leave encounter with no rewards or exp
-      leaveEncounterWithoutBattle(scene, true);
+      leaveEncounterWithoutBattle(true);
       return true;
     },
   )

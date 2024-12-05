@@ -1,13 +1,15 @@
 import { getVariantTint } from "#app/data/variant";
-import BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
-import BattleScene from "../battle-scene";
+import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
+import type BattleScene from "#app/battle-scene";
+import { globalScene } from "#app/global-scene";
 import { Gender, getGenderColor, getGenderSymbol } from "../data/gender";
 import { getNatureName } from "../data/nature";
 import { Type } from "#enums/type";
-import Pokemon from "../field/pokemon";
+import type Pokemon from "../field/pokemon";
 import i18next from "i18next";
-import { DexAttr, DexEntry, StarterDataEntry } from "../system/game-data";
-import * as Utils from "../utils";
+import type { DexEntry, StarterDataEntry } from "../system/game-data";
+import { DexAttr } from "../system/game-data";
+import { capitalizeString, fixedInt } from "#app/utils";
 import ConfirmUiHandler from "./confirm-ui-handler";
 import { StatsContainer } from "./stats-container";
 import { TextStyle, addBBCodeTextObject, addTextObject, getTextColor } from "./text";
@@ -57,8 +59,8 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
 
   public shown: boolean;
 
-  constructor(scene: BattleScene, x: number = 372, y: number = 66) {
-    super(scene, x, y);
+  constructor(x: number = 372, y: number = 66) {
+    super(globalScene, x, y);
     this.initialX = x;
   }
 
@@ -67,11 +69,11 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
     const currentLanguage = i18next.resolvedLanguage!; // TODO: is this bang correct?
     const langSettingKey = Object.keys(languageSettings).find((lang) => currentLanguage?.includes(lang))!; // TODO: is this bang correct?
     const textSettings = languageSettings[langSettingKey];
-    this.infoBg = addWindow(this.scene, 0, 0, this.infoWindowWidth, 132);
+    this.infoBg = addWindow(0, 0, this.infoWindowWidth, 132);
     this.infoBg.setOrigin(0.5, 0.5);
     this.infoBg.setName("window-info-bg");
 
-    this.pokemonMovesContainer = this.scene.add.container(6, 14);
+    this.pokemonMovesContainer = globalScene.add.container(6, 14);
     this.pokemonMovesContainer.setName("pkmn-moves");
 
     this.movesContainerInitialX = this.pokemonMovesContainer.x;
@@ -80,13 +82,12 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
     this.pokemonMoveBgs = [];
     this.pokemonMoveLabels = [];
 
-    const movesBg = addWindow(this.scene, 0, 0, 58, 52);
+    const movesBg = addWindow(0, 0, 58, 52);
     movesBg.setOrigin(1, 0);
     movesBg.setName("window-moves-bg");
     this.pokemonMovesContainer.add(movesBg);
 
     const movesLabel = addTextObject(
-      this.scene,
       -movesBg.width / 2,
       6,
       i18next.t("pokemonInfoContainer:moveset"),
@@ -98,15 +99,15 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
     this.pokemonMovesContainer.add(movesLabel);
 
     for (let m = 0; m < 4; m++) {
-      const moveContainer = this.scene.add.container(-6, 18 + 7 * m);
+      const moveContainer = globalScene.add.container(-6, 18 + 7 * m);
       moveContainer.setScale(0.5);
       moveContainer.setName("move");
 
-      const moveBg = this.scene.add.nineslice(0, 0, "type_bgs", "unknown", 92, 14, 2, 2, 2, 2);
+      const moveBg = globalScene.add.nineslice(0, 0, "type_bgs", "unknown", 92, 14, 2, 2, 2, 2);
       moveBg.setOrigin(1, 0);
       moveBg.setName("nineslice-move-bg");
 
-      const moveLabel = addTextObject(this.scene, -moveBg.width / 2, 0, "-", TextStyle.PARTY);
+      const moveLabel = addTextObject(-moveBg.width / 2, 0, "-", TextStyle.PARTY);
       moveLabel.setOrigin(0.5, 0);
       moveLabel.setName("text-move-label");
 
@@ -122,7 +123,7 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
 
     this.add(this.pokemonMovesContainer);
 
-    this.statsContainer = new StatsContainer(this.scene, -48, -64, true);
+    this.statsContainer = new StatsContainer(-48, -64, true);
 
     this.add(this.infoBg);
     this.add(this.statsContainer);
@@ -135,7 +136,6 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
     const infoContainerTextSize = textSettings?.infoContainerTextSize || "64px";
 
     this.pokemonFormLabelText = addTextObject(
-      this.scene,
       infoContainerLabelXPos,
       19,
       i18next.t("pokemonInfoContainer:form"),
@@ -146,29 +146,26 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
     this.pokemonFormLabelText.setVisible(false);
     this.add(this.pokemonFormLabelText);
 
-    this.pokemonFormText = addTextObject(this.scene, infoContainerTextXPos, 19, "", TextStyle.WINDOW, {
+    this.pokemonFormText = addTextObject(infoContainerTextXPos, 19, "", TextStyle.WINDOW, {
       fontSize: infoContainerTextSize,
     });
     this.pokemonFormText.setOrigin(0, 0);
     this.pokemonFormText.setVisible(false);
     this.add(this.pokemonFormText);
 
-    this.pokemonGenderText = addTextObject(this.scene, -42, -61, "", TextStyle.WINDOW, {
-      fontSize: infoContainerTextSize,
-    });
+    this.pokemonGenderText = addTextObject(-42, -61, "", TextStyle.WINDOW, { fontSize: infoContainerTextSize });
     this.pokemonGenderText.setOrigin(0, 0);
     this.pokemonGenderText.setVisible(false);
     this.pokemonGenderText.setName("text-pkmn-gender");
     this.add(this.pokemonGenderText);
 
-    this.pokemonGenderNewText = addTextObject(this.scene, -36, -61, "", TextStyle.WINDOW, { fontSize: "64px" });
+    this.pokemonGenderNewText = addTextObject(-36, -61, "", TextStyle.WINDOW, { fontSize: "64px" });
     this.pokemonGenderNewText.setOrigin(0, 0);
     this.pokemonGenderNewText.setVisible(false);
     this.pokemonGenderNewText.setName("text-pkmn-new-gender");
     this.add(this.pokemonGenderNewText);
 
     this.pokemonAbilityLabelText = addTextObject(
-      this.scene,
       infoContainerLabelXPos,
       29,
       i18next.t("pokemonInfoContainer:ability"),
@@ -179,7 +176,7 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
     this.pokemonAbilityLabelText.setName("text-pkmn-ability-label");
     this.add(this.pokemonAbilityLabelText);
 
-    this.pokemonAbilityText = addTextObject(this.scene, infoContainerTextXPos, 29, "", TextStyle.WINDOW, {
+    this.pokemonAbilityText = addTextObject(infoContainerTextXPos, 29, "", TextStyle.WINDOW, {
       fontSize: infoContainerTextSize,
     });
     this.pokemonAbilityText.setOrigin(0, 0);
@@ -187,7 +184,6 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
     this.add(this.pokemonAbilityText);
 
     this.pokemonNatureLabelText = addTextObject(
-      this.scene,
       infoContainerLabelXPos,
       39,
       i18next.t("pokemonInfoContainer:nature"),
@@ -198,7 +194,7 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
     this.pokemonNatureLabelText.setName("text-pkmn-nature-label");
     this.add(this.pokemonNatureLabelText);
 
-    this.pokemonNatureText = addBBCodeTextObject(this.scene, infoContainerTextXPos, 39, "", TextStyle.WINDOW, {
+    this.pokemonNatureText = addBBCodeTextObject(infoContainerTextXPos, 39, "", TextStyle.WINDOW, {
       fontSize: infoContainerTextSize,
       lineSpacing: 3,
       maxLines: 2,
@@ -207,7 +203,7 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
     this.pokemonNatureText.setName("text-pkmn-nature");
     this.add(this.pokemonNatureText);
 
-    this.pokemonShinyIcon = this.scene.add.image(-43.5, 48.5, "shiny_star");
+    this.pokemonShinyIcon = globalScene.add.image(-43.5, 48.5, "shiny_star");
     this.pokemonShinyIcon.setOrigin(0, 0);
     this.pokemonShinyIcon.setScale(0.75);
     this.pokemonShinyIcon.setInteractive(new Phaser.Geom.Rectangle(0, 0, 12, 15), Phaser.Geom.Rectangle.Contains);
@@ -215,7 +211,6 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
     this.add(this.pokemonShinyIcon);
 
     this.pokemonShinyNewIcon = addTextObject(
-      this.scene,
       this.pokemonShinyIcon.x + 12,
       this.pokemonShinyIcon.y,
       "",
@@ -227,7 +222,7 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
     this.add(this.pokemonShinyNewIcon);
     this.pokemonShinyNewIcon.setVisible(false);
 
-    this.pokemonFusionShinyIcon = this.scene.add.image(
+    this.pokemonFusionShinyIcon = globalScene.add.image(
       this.pokemonShinyIcon.x,
       this.pokemonShinyIcon.y,
       "shiny_star_2",
@@ -250,10 +245,10 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
   ): Promise<void> {
     return new Promise<void>((resolve) => {
       if (!dexEntry) {
-        dexEntry = pokemon.scene.gameData.dexData[pokemon.species.speciesId];
+        dexEntry = globalScene.gameData.dexData[pokemon.species.speciesId];
       }
       if (!starterEntry) {
-        starterEntry = pokemon.scene.gameData.starterData[pokemon.species.getRootSpeciesId()];
+        starterEntry = globalScene.gameData.starterData[pokemon.species.getRootSpeciesId()];
       }
 
       const caughtAttr = BigInt(dexEntry.caughtAttr);
@@ -265,8 +260,8 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
 
         const newGender = BigInt(1 << pokemon.gender) * DexAttr.MALE;
         this.pokemonGenderNewText.setText("(+)");
-        this.pokemonGenderNewText.setColor(getTextColor(TextStyle.SUMMARY_BLUE, false, this.scene.uiTheme));
-        this.pokemonGenderNewText.setShadowColor(getTextColor(TextStyle.SUMMARY_BLUE, true, this.scene.uiTheme));
+        this.pokemonGenderNewText.setColor(getTextColor(TextStyle.SUMMARY_BLUE, false, globalScene.uiTheme));
+        this.pokemonGenderNewText.setShadowColor(getTextColor(TextStyle.SUMMARY_BLUE, true, globalScene.uiTheme));
         this.pokemonGenderNewText.setVisible((newGender & caughtAttr) === BigInt(0));
       } else {
         this.pokemonGenderNewText.setVisible(false);
@@ -274,8 +269,8 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
       }
 
       const formKey = pokemon.species?.forms?.[pokemon.formIndex!]?.formKey;
-      const formText = Utils.capitalizeString(formKey, "-", false, false) || "";
-      const speciesName = Utils.capitalizeString(Species[pokemon.species.speciesId], "_", true, false);
+      const formText = capitalizeString(formKey, "-", false, false) || "";
+      const speciesName = capitalizeString(Species[pokemon.species.speciesId], "_", true, false);
 
       let formName = "";
       if (pokemon.species.speciesId === Species.ARCEUS) {
@@ -285,7 +280,7 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
         if (i18next.exists(i18key)) {
           formName = i18next.t(i18key);
         } else {
-          const rootSpeciesName = Utils.capitalizeString(Species[pokemon.species.getRootSpeciesId()], "_", true, false);
+          const rootSpeciesName = capitalizeString(Species[pokemon.species.getRootSpeciesId()], "_", true, false);
           const i18RootKey = `pokemonForm:${rootSpeciesName}${formText}`;
           formName = i18next.exists(i18RootKey) ? i18next.t(i18RootKey) : formText;
         }
@@ -297,11 +292,11 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
         const newForm = BigInt(1 << pokemon.formIndex) * DexAttr.DEFAULT_FORM;
 
         if ((newForm & caughtAttr) === BigInt(0)) {
-          this.pokemonFormLabelText.setColor(getTextColor(TextStyle.SUMMARY_BLUE, false, this.scene.uiTheme));
-          this.pokemonFormLabelText.setShadowColor(getTextColor(TextStyle.SUMMARY_BLUE, true, this.scene.uiTheme));
+          this.pokemonFormLabelText.setColor(getTextColor(TextStyle.SUMMARY_BLUE, false, globalScene.uiTheme));
+          this.pokemonFormLabelText.setShadowColor(getTextColor(TextStyle.SUMMARY_BLUE, true, globalScene.uiTheme));
         } else {
-          this.pokemonFormLabelText.setColor(getTextColor(TextStyle.WINDOW, false, this.scene.uiTheme));
-          this.pokemonFormLabelText.setShadowColor(getTextColor(TextStyle.WINDOW, true, this.scene.uiTheme));
+          this.pokemonFormLabelText.setColor(getTextColor(TextStyle.WINDOW, false, globalScene.uiTheme));
+          this.pokemonFormLabelText.setShadowColor(getTextColor(TextStyle.WINDOW, true, globalScene.uiTheme));
         }
 
         this.pokemonFormText.setText(
@@ -314,8 +309,8 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
             new Phaser.Geom.Rectangle(0, 0, this.pokemonFormText.width, this.pokemonFormText.height),
             Phaser.Geom.Rectangle.Contains,
           );
-          this.pokemonFormText.on("pointerover", () => (this.scene as BattleScene).ui.showTooltip("", formName, true));
-          this.pokemonFormText.on("pointerout", () => (this.scene as BattleScene).ui.hideTooltip());
+          this.pokemonFormText.on("pointerover", () => globalScene.ui.showTooltip("", formName, true));
+          this.pokemonFormText.on("pointerout", () => globalScene.ui.hideTooltip());
         } else {
           this.pokemonFormText.disableInteractive();
         }
@@ -327,31 +322,31 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
 
       const abilityTextStyle = pokemon.abilityIndex === 2 ? TextStyle.MONEY : TextStyle.WINDOW;
       this.pokemonAbilityText.setText(pokemon.getAbility(true).name);
-      this.pokemonAbilityText.setColor(getTextColor(abilityTextStyle, false, this.scene.uiTheme));
-      this.pokemonAbilityText.setShadowColor(getTextColor(abilityTextStyle, true, this.scene.uiTheme));
+      this.pokemonAbilityText.setColor(getTextColor(abilityTextStyle, false, globalScene.uiTheme));
+      this.pokemonAbilityText.setShadowColor(getTextColor(abilityTextStyle, true, globalScene.uiTheme));
 
       // Check if the player owns ability for the root form
       const playerOwnsThisAbility = pokemon.checkIfPlayerHasAbilityOfStarter(starterEntry.abilityAttr);
 
       if (!playerOwnsThisAbility) {
-        this.pokemonAbilityLabelText.setColor(getTextColor(TextStyle.SUMMARY_BLUE, false, this.scene.uiTheme));
-        this.pokemonAbilityLabelText.setShadowColor(getTextColor(TextStyle.SUMMARY_BLUE, true, this.scene.uiTheme));
+        this.pokemonAbilityLabelText.setColor(getTextColor(TextStyle.SUMMARY_BLUE, false, globalScene.uiTheme));
+        this.pokemonAbilityLabelText.setShadowColor(getTextColor(TextStyle.SUMMARY_BLUE, true, globalScene.uiTheme));
       } else {
-        this.pokemonAbilityLabelText.setColor(getTextColor(TextStyle.WINDOW, false, this.scene.uiTheme));
-        this.pokemonAbilityLabelText.setShadowColor(getTextColor(TextStyle.WINDOW, true, this.scene.uiTheme));
+        this.pokemonAbilityLabelText.setColor(getTextColor(TextStyle.WINDOW, false, globalScene.uiTheme));
+        this.pokemonAbilityLabelText.setShadowColor(getTextColor(TextStyle.WINDOW, true, globalScene.uiTheme));
       }
 
-      this.pokemonNatureText.setText(getNatureName(pokemon.getNature(), true, false, false, this.scene.uiTheme));
+      this.pokemonNatureText.setText(getNatureName(pokemon.getNature(), true, false, false, globalScene.uiTheme));
 
       const dexNatures = dexEntry.natureAttr;
       const newNature = 1 << (pokemon.nature + 1);
 
       if (!(dexNatures & newNature)) {
-        this.pokemonNatureLabelText.setColor(getTextColor(TextStyle.SUMMARY_BLUE, false, this.scene.uiTheme));
-        this.pokemonNatureLabelText.setShadowColor(getTextColor(TextStyle.SUMMARY_BLUE, true, this.scene.uiTheme));
+        this.pokemonNatureLabelText.setColor(getTextColor(TextStyle.SUMMARY_BLUE, false, globalScene.uiTheme));
+        this.pokemonNatureLabelText.setShadowColor(getTextColor(TextStyle.SUMMARY_BLUE, true, globalScene.uiTheme));
       } else {
-        this.pokemonNatureLabelText.setColor(getTextColor(TextStyle.WINDOW, false, this.scene.uiTheme));
-        this.pokemonNatureLabelText.setShadowColor(getTextColor(TextStyle.WINDOW, true, this.scene.uiTheme));
+        this.pokemonNatureLabelText.setColor(getTextColor(TextStyle.WINDOW, false, globalScene.uiTheme));
+        this.pokemonNatureLabelText.setShadowColor(getTextColor(TextStyle.WINDOW, true, globalScene.uiTheme));
       }
 
       const isFusion = pokemon.isFusion();
@@ -367,20 +362,20 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
             ? `${baseVariant === 2 ? i18next.t("common:epicShiny") : baseVariant === 1 ? i18next.t("common:rareShiny") : i18next.t("common:commonShiny")}${doubleShiny ? `/${pokemon.fusionVariant === 2 ? i18next.t("common:epicShiny") : pokemon.fusionVariant === 1 ? i18next.t("common:rareShiny") : i18next.t("common:commonShiny")}` : ""}`
             : "";
         this.pokemonShinyIcon.on("pointerover", () =>
-          (this.scene as BattleScene).ui.showTooltip(
+          globalScene.ui.showTooltip(
             "",
             `${i18next.t("common:shinyOnHover")}${shinyDescriptor ? ` (${shinyDescriptor})` : ""}`,
             true,
           ),
         );
-        this.pokemonShinyIcon.on("pointerout", () => (this.scene as BattleScene).ui.hideTooltip());
+        this.pokemonShinyIcon.on("pointerout", () => globalScene.ui.hideTooltip());
 
         const newShiny = BigInt(1 << (pokemon.shiny ? 1 : 0));
         const newVariant = BigInt(1 << (pokemon.variant + 4));
 
         this.pokemonShinyNewIcon.setText("(+)");
-        this.pokemonShinyNewIcon.setColor(getTextColor(TextStyle.SUMMARY_BLUE, false, this.scene.uiTheme));
-        this.pokemonShinyNewIcon.setShadowColor(getTextColor(TextStyle.SUMMARY_BLUE, true, this.scene.uiTheme));
+        this.pokemonShinyNewIcon.setColor(getTextColor(TextStyle.SUMMARY_BLUE, false, globalScene.uiTheme));
+        this.pokemonShinyNewIcon.setShadowColor(getTextColor(TextStyle.SUMMARY_BLUE, true, globalScene.uiTheme));
         const newShinyOrVariant = (newShiny & caughtAttr) === BigInt(0) || (newVariant & caughtAttr) === BigInt(0);
         this.pokemonShinyNewIcon.setVisible(!!newShinyOrVariant);
       } else if ((caughtAttr & DexAttr.NON_SHINY) === BigInt(0) && (caughtAttr & DexAttr.SHINY) === DexAttr.SHINY) {
@@ -404,15 +399,15 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
         ? dexEntry.caughtAttr
           ? dexEntry.ivs
           : null
-        : this.scene.gameData.dexData[starterSpeciesId].caughtAttr
-          ? this.scene.gameData.dexData[starterSpeciesId].ivs
+        : globalScene.gameData.dexData[starterSpeciesId].caughtAttr
+          ? globalScene.gameData.dexData[starterSpeciesId].ivs
           : null;
 
       this.statsContainer.updateIvs(pokemon.ivs, originalIvs!); // TODO: is this bang correct?
       if (!eggInfo) {
-        this.scene.tweens.add({
+        globalScene.tweens.add({
           targets: this,
-          duration: Utils.fixedInt(Math.floor(750 / speedMultiplier)),
+          duration: fixedInt(Math.floor(750 / speedMultiplier)),
           ease: "Cubic.easeInOut",
           x: this.initialX - this.infoWindowWidth,
           onComplete: () => {
@@ -421,10 +416,10 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
         });
 
         if (showMoves) {
-          this.scene.tweens.add({
-            delay: Utils.fixedInt(Math.floor(325 / speedMultiplier)),
+          globalScene.tweens.add({
+            delay: fixedInt(Math.floor(325 / speedMultiplier)),
             targets: this.pokemonMovesContainer,
-            duration: Utils.fixedInt(Math.floor(325 / speedMultiplier)),
+            duration: fixedInt(Math.floor(325 / speedMultiplier)),
             ease: "Cubic.easeInOut",
             x: this.movesContainerInitialX - 57,
             onComplete: () => resolve(),
@@ -441,7 +436,7 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
 
       this.setVisible(true);
       this.shown = true;
-      this.scene.hideEnemyModifierBar();
+      globalScene.hideEnemyModifierBar();
     });
   }
 
@@ -480,9 +475,9 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
       ? this.initialX - this.infoWindowWidth - 65
       : this.initialX - this.infoWindowWidth - ConfirmUiHandler.windowWidth;
     return new Promise<void>((resolve) => {
-      this.scene.tweens.add({
+      globalScene.tweens.add({
         targets: this,
-        duration: Utils.fixedInt(Math.floor(150 / speedMultiplier)),
+        duration: fixedInt(Math.floor(150 / speedMultiplier)),
         ease: "Cubic.easeInOut",
         x: xPosition,
         onComplete: () => {
@@ -495,28 +490,28 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
   hide(speedMultiplier: number = 1): Promise<void> {
     return new Promise((resolve) => {
       if (!this.shown) {
-        this.scene.showEnemyModifierBar();
+        globalScene.showEnemyModifierBar();
         return resolve();
       }
 
-      this.scene.tweens.add({
+      globalScene.tweens.add({
         targets: this.pokemonMovesContainer,
-        duration: Utils.fixedInt(Math.floor(750 / speedMultiplier)),
+        duration: fixedInt(Math.floor(750 / speedMultiplier)),
         ease: "Cubic.easeInOut",
         x: this.movesContainerInitialX,
       });
 
-      this.scene.tweens.add({
+      globalScene.tweens.add({
         targets: this,
-        duration: Utils.fixedInt(Math.floor(750 / speedMultiplier)),
+        duration: fixedInt(Math.floor(750 / speedMultiplier)),
         ease: "Cubic.easeInOut",
         x: this.initialX,
         onComplete: () => {
           this.setVisible(false);
           this.pokemonShinyIcon.off("pointerover");
           this.pokemonShinyIcon.off("pointerout");
-          (this.scene as BattleScene).ui.hideTooltip();
-          this.scene.showEnemyModifierBar();
+          globalScene.ui.hideTooltip();
+          globalScene.showEnemyModifierBar();
           resolve();
         },
       });
