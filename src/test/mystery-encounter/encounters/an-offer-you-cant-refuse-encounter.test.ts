@@ -96,8 +96,8 @@ describe("An Offer You Can't Refuse - Mystery Encounter", () => {
 
     expect(AnOfferYouCantRefuseEncounter.onInit).toBeDefined();
 
-    AnOfferYouCantRefuseEncounter.populateDialogueTokensFromRequirements(scene);
-    const onInitResult = onInit!(scene);
+    AnOfferYouCantRefuseEncounter.populateDialogueTokensFromRequirements();
+    const onInitResult = onInit!();
 
     expect(AnOfferYouCantRefuseEncounter.dialogueTokens?.strongestPokemon).toBeDefined();
     expect(AnOfferYouCantRefuseEncounter.dialogueTokens?.price).toBeDefined();
@@ -139,7 +139,7 @@ describe("An Offer You Can't Refuse - Mystery Encounter", () => {
 
       const price = scene.currentBattle.mysteryEncounter!.misc.price;
 
-      expect(updateMoneySpy).toHaveBeenCalledWith(scene, price);
+      expect(updateMoneySpy).toHaveBeenCalledWith(price);
       expect(scene.money).toBe(initialMoney + price);
     });
 
@@ -231,7 +231,7 @@ describe("An Offer You Can't Refuse - Mystery Encounter", () => {
 
       const price = scene.currentBattle.mysteryEncounter!.misc.price;
 
-      expect(updateMoneySpy).toHaveBeenCalledWith(scene, price);
+      expect(updateMoneySpy).toHaveBeenCalledWith(price);
       expect(scene.money).toBe(initialMoney + price);
     });
 

@@ -1,4 +1,4 @@
-import BattleScene from "../battle-scene";
+import { globalScene } from "#app/global-scene";
 import Pokemon from "../field/pokemon";
 
 export default class PokeballTray extends Phaser.GameObjects.Container {
@@ -9,13 +9,13 @@ export default class PokeballTray extends Phaser.GameObjects.Container {
 
   public shown: boolean;
 
-  constructor(scene: BattleScene, player: boolean) {
-    super(scene, player ? scene.game.canvas.width / 6 : 0, player ? -72 : -144);
+  constructor(player: boolean) {
+    super(globalScene, player ? globalScene.game.canvas.width / 6 : 0, player ? -72 : -144);
     this.player = player;
   }
 
   setup(): void {
-    this.bg = this.scene.add.nineslice(
+    this.bg = globalScene.add.nineslice(
       0,
       0,
       `pb_tray_overlay_${this.player ? "player" : "enemy"}`,
@@ -34,9 +34,9 @@ export default class PokeballTray extends Phaser.GameObjects.Container {
     this.balls = new Array(6)
       .fill(null)
       .map((_, i) =>
-        this.scene.add.sprite(
+        globalScene.add.sprite(
           (this.player ? -83 : 76) +
-            (this.scene.game.canvas.width / 6) * (this.player ? -1 : 1) +
+            (globalScene.game.canvas.width / 6) * (this.player ? -1 : 1) +
             10 * i * (this.player ? 1 : -1),
           -8,
           "pb_tray_ball",
@@ -59,7 +59,7 @@ export default class PokeballTray extends Phaser.GameObjects.Container {
         return resolve();
       }
 
-      (this.scene as BattleScene).fieldUI.bringToTop(this);
+      globalScene.fieldUI.bringToTop(this);
 
       this.x += 104 * (this.player ? 1 : -1);
 
@@ -67,7 +67,7 @@ export default class PokeballTray extends Phaser.GameObjects.Container {
       this.bg.alpha = 1;
 
       this.balls.forEach((ball, b) => {
-        ball.x += (this.scene.game.canvas.width / 6 + 104) * (this.player ? 1 : -1);
+        ball.x += (globalScene.game.canvas.width / 6 + 104) * (this.player ? 1 : -1);
         let ballFrame = "ball";
         if (b >= party.length) {
           ballFrame = "empty";
@@ -79,22 +79,21 @@ export default class PokeballTray extends Phaser.GameObjects.Container {
         ball.setFrame(ballFrame);
       });
 
-      (this.scene as BattleScene).playSound("se/pb_tray_enter");
+      globalScene.playSound("se/pb_tray_enter");
 
-      this.scene.tweens.add({
+      globalScene.tweens.add({
         targets: this,
         x: `${this.player ? "-" : "+"}=104`,
         duration: 500,
         ease: "Sine.easeIn",
         onComplete: () => {
           this.balls.forEach((ball, b) => {
-            this.scene.tweens.add({
+            globalScene.tweens.add({
               targets: ball,
               x: `${this.player ? "-" : "+"}=104`,
               duration: b * 100,
               ease: "Sine.easeIn",
-              onComplete: () =>
-                (this.scene as BattleScene).playSound(`se/${b < party.length ? "pb_tray_ball" : "pb_tray_empty"}`),
+              onComplete: () => globalScene.playSound(`se/${b < party.length ? "pb_tray_ball" : "pb_tray_empty"}`),
             });
           });
         },
@@ -103,7 +102,7 @@ export default class PokeballTray extends Phaser.GameObjects.Container {
       this.setVisible(true);
       this.shown = true;
 
-      this.scene.time.delayedCall(1100, () => resolve());
+      globalScene.time.delayedCall(1100, () => resolve());
     });
   }
 
@@ -114,16 +113,16 @@ export default class PokeballTray extends Phaser.GameObjects.Container {
       }
 
       this.balls.forEach((ball, b) => {
-        this.scene.tweens.add({
+        globalScene.tweens.add({
           targets: ball,
-          x: `${this.player ? "-" : "+"}=${this.scene.game.canvas.width / 6}`,
+          x: `${this.player ? "-" : "+"}=${globalScene.game.canvas.width / 6}`,
           duration: 250,
           delay: b * 100,
           ease: "Sine.easeIn",
         });
       });
 
-      this.scene.tweens.add({
+      globalScene.tweens.add({
         targets: this.bg,
         width: 144,
         alpha: 0,
@@ -131,7 +130,7 @@ export default class PokeballTray extends Phaser.GameObjects.Container {
         ease: "Sine.easeIn",
       });
 
-      this.scene.time.delayedCall(850, () => {
+      globalScene.time.delayedCall(850, () => {
         this.setVisible(false);
         resolve();
       });
