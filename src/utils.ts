@@ -250,6 +250,15 @@ export function getEnumValues(enumType: any): integer[] {
     .map((v) => parseInt(v!.toString()));
 }
 
+/**
+ * Utils to retrieve the length of an enum
+ * @param theEnum the enum to get the length of
+ * @returns length of the enum
+ */
+export function getEnumLength(theEnum: any): integer {
+  return getEnumKeys(theEnum).length;
+}
+
 export function executeIf<T>(condition: boolean, promiseFunc: () => Promise<T>): Promise<T | null> {
   return condition ? promiseFunc() : new Promise<T | null>((resolve) => resolve(null));
 }
