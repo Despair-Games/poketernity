@@ -2,7 +2,7 @@ import { Type } from "#enums/type";
 import { isNullOrUndefined, randSeedInt } from "#app/utils";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
-import BattleScene from "#app/battle-scene";
+import { globalScene } from "#app/global-scene";
 import { modifierTypes } from "#app/modifier/modifier-type";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
 import MysteryEncounter, { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
@@ -146,16 +146,16 @@ export const DarkDealEncounter: MysteryEncounter = MysteryEncounterBuilder.withE
           },
         ],
       })
-      .withPreOptionPhase(async (scene: BattleScene) => {
+      .withPreOptionPhase(async () => {
         // Removes random pokemon (including fainted) from party and adds name to dialogue data tokens
         // Will never return last battle able mon and instead pick fainted/unable to battle
-        const removedPokemon = getRandomPlayerPokemon(scene, true, false, true);
+        const removedPokemon = getRandomPlayerPokemon(true, false, true);
 
         // Get all the pokemon's held items
         const modifiers = removedPokemon.getHeldItems().filter((m) => !(m instanceof PokemonFormChangeItemModifier));
-        scene.removePokemonFromPlayerParty(removedPokemon);
+        globalScene.removePokemonFromPlayerParty(removedPokemon);
 
-        const encounter = scene.currentBattle.mysteryEncounter!;
+        const encounter = globalScene.currentBattle.mysteryEncounter!;
         encounter.setDialogueToken("pokeName", removedPokemon.getNameToRender());
 
         // Store removed pokemon types
@@ -164,18 +164,18 @@ export const DarkDealEncounter: MysteryEncounter = MysteryEncounterBuilder.withE
           modifiers,
         };
       })
-      .withOptionPhase(async (scene: BattleScene) => {
+      .withOptionPhase(async () => {
         // Give the player 5 Rogue Balls
-        const encounter = scene.currentBattle.mysteryEncounter!;
-        scene.unshiftPhase(new ModifierRewardPhase(scene, modifierTypes.ROGUE_BALL));
+        const encounter = globalScene.currentBattle.mysteryEncounter!;
+        globalScene.unshiftPhase(new ModifierRewardPhase(modifierTypes.ROGUE_BALL));
 
         // Start encounter with random legendary (7-10 starter strength) that has level additive
         // If this is a mono-type challenge, always ensure the required type is filtered for
         let bossTypes: Type[] = encounter.misc.removedTypes;
-        const singleTypeChallenges = scene.gameMode.challenges.filter(
+        const singleTypeChallenges = globalScene.gameMode.challenges.filter(
           (c) => c.value && c.id === Challenges.SINGLE_TYPE,
         );
-        if (scene.gameMode.isChallenge && singleTypeChallenges.length > 0) {
+        if (globalScene.gameMode.isChallenge && singleTypeChallenges.length > 0) {
           bossTypes = singleTypeChallenges.map((c) => (c.value - 1) as Type);
         }
 
@@ -200,7 +200,7 @@ export const DarkDealEncounter: MysteryEncounter = MysteryEncounterBuilder.withE
         const config: EnemyPartyConfig = {
           pokemonConfigs: [pokemonConfig],
         };
-        await initBattleWithEnemyConfig(scene, config);
+        await initBattleWithEnemyConfig(config);
       })
       .build(),
   )
@@ -215,9 +215,9 @@ export const DarkDealEncounter: MysteryEncounter = MysteryEncounterBuilder.withE
         },
       ],
     },
-    async (scene: BattleScene) => {
+    async () => {
       // Leave encounter with no rewards or exp
-      leaveEncounterWithoutBattle(scene, true);
+      leaveEncounterWithoutBattle(true);
       return true;
     },
   )

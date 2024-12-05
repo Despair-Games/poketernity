@@ -1,10 +1,10 @@
-import BattleScene from "../battle-scene";
 import { ModalConfig, ModalUiHandler } from "./modal-ui-handler";
 import { addTextObject, TextStyle } from "./text";
 import { Mode } from "./ui";
 import { updateUserInfo } from "#app/account";
 import * as Utils from "#app/utils";
 import i18next from "i18next";
+import { globalScene } from "#app/global-scene";
 
 export default class UnavailableModalUiHandler extends ModalUiHandler {
   private reconnectTimer: NodeJS.Timeout | null;
@@ -16,8 +16,8 @@ export default class UnavailableModalUiHandler extends ModalUiHandler {
 
   private readonly randVarianceTime = 1000 * 10;
 
-  constructor(scene: BattleScene, mode: Mode | null = null) {
-    super(scene, mode);
+  constructor(mode: Mode | null = null) {
+    super(mode);
     this.reconnectDuration = this.minTime;
   }
 
@@ -45,7 +45,6 @@ export default class UnavailableModalUiHandler extends ModalUiHandler {
     super.setup();
 
     const label = addTextObject(
-      this.scene,
       this.getWidth() / 2,
       this.getHeight() / 2,
       i18next.t("menu:errorServerDown"),
@@ -62,11 +61,11 @@ export default class UnavailableModalUiHandler extends ModalUiHandler {
       if (response[0] || [200, 400].includes(response[1])) {
         this.reconnectTimer = null;
         this.reconnectDuration = this.minTime;
-        this.scene.playSound("se/pb_bounce_1");
+        globalScene.playSound("se/pb_bounce_1");
         this.reconnectCallback();
       } else if (response[1] === 401) {
         Utils.removeCookie(Utils.sessionIdKey);
-        this.scene.reset(true, true);
+        globalScene.reset(true, true);
       } else {
         this.reconnectDuration = Math.min(this.reconnectDuration * 2, this.maxTime); // Set a max delay so it isn't infinite
         this.reconnectTimer = setTimeout(

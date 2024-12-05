@@ -1,17 +1,17 @@
-import BattleScene from "#app/battle-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
 import { SummonPhase } from "./summon-phase";
+import { globalScene } from "#app/global-scene";
 
 export class SummonMissingPhase extends SummonPhase {
-  constructor(scene: BattleScene, fieldIndex: integer) {
-    super(scene, fieldIndex);
+  constructor(fieldIndex: integer) {
+    super(fieldIndex);
   }
 
   preSummon(): void {
-    this.scene.ui.showText(
+    globalScene.ui.showText(
       i18next.t("battle:sendOutPokemon", { pokemonName: getPokemonNameWithAffix(this.getPokemon()) }),
     );
-    this.scene.time.delayedCall(250, () => this.summon());
+    globalScene.time.delayedCall(250, () => this.summon());
   }
 }

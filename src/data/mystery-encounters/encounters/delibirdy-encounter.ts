@@ -1,4 +1,4 @@
-import BattleScene from "#app/battle-scene";
+import { globalScene } from "#app/global-scene";
 import MysteryEncounter, { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import {
@@ -114,15 +114,15 @@ export const DelibirdyEncounter: MysteryEncounter = MysteryEncounterBuilder.with
       text: `${namespace}:outro`,
     },
   ])
-  .withOnInit((scene: BattleScene) => {
-    const encounter = scene.currentBattle.mysteryEncounter!;
+  .withOnInit(() => {
+    const encounter = globalScene.currentBattle.mysteryEncounter!;
     encounter.setDialogueToken("delibirdName", getPokemonSpecies(Species.DELIBIRD).getName());
 
-    scene.loadBgm("mystery_encounter_delibirdy", "mystery_encounter_delibirdy.mp3");
+    globalScene.loadBgm("mystery_encounter_delibirdy", "mystery_encounter_delibirdy.mp3");
     return true;
   })
-  .withOnVisualsStart((scene: BattleScene) => {
-    scene.fadeAndSwitchBgm("mystery_encounter_delibirdy");
+  .withOnVisualsStart(() => {
+    globalScene.fadeAndSwitchBgm("mystery_encounter_delibirdy");
     return true;
   })
   .withOption(
@@ -137,38 +137,34 @@ export const DelibirdyEncounter: MysteryEncounter = MysteryEncounterBuilder.with
           },
         ],
       })
-      .withPreOptionPhase(async (scene: BattleScene): Promise<boolean> => {
-        const encounter = scene.currentBattle.mysteryEncounter!;
-        updatePlayerMoney(
-          scene,
-          -(encounter.options[0].requirements[0] as MoneyRequirement).requiredMoney,
-          true,
-          false,
-        );
+      .withPreOptionPhase(async (): Promise<boolean> => {
+        const encounter = globalScene.currentBattle.mysteryEncounter!;
+        updatePlayerMoney(-(encounter.options[0].requirements[0] as MoneyRequirement).requiredMoney, true, false);
         return true;
       })
-      .withOptionPhase(async (scene: BattleScene) => {
+      .withOptionPhase(async () => {
         // Give the player an Amulet Coin
         // Check if the player has max stacks of that item already
-        const existing = scene.findModifier((m) => m instanceof MoneyMultiplierModifier) as MoneyMultiplierModifier;
+        const existing = globalScene.findModifier(
+          (m) => m instanceof MoneyMultiplierModifier,
+        ) as MoneyMultiplierModifier;
 
-        if (existing && existing.getStackCount() >= existing.getMaxStackCount(scene)) {
+        if (existing && existing.getStackCount() >= existing.getMaxStackCount()) {
           // At max stacks, give the first party pokemon a Shell Bell instead
-          const shellBell = generateModifierType(scene, modifierTypes.SHELL_BELL) as PokemonHeldItemModifierType;
-          await applyModifierTypeToPlayerPokemon(scene, scene.getPlayerPokemon()!, shellBell);
-          scene.playSound("item_fanfare");
+          const shellBell = generateModifierType(modifierTypes.SHELL_BELL) as PokemonHeldItemModifierType;
+          await applyModifierTypeToPlayerPokemon(globalScene.getPlayerPokemon()!, shellBell);
+          globalScene.playSound("item_fanfare");
           await showEncounterText(
-            scene,
             i18next.t("battle:rewardGain", { modifierName: shellBell.name }),
             null,
             undefined,
             true,
           );
         } else {
-          scene.unshiftPhase(new ModifierRewardPhase(scene, modifierTypes.AMULET_COIN));
+          globalScene.unshiftPhase(new ModifierRewardPhase(modifierTypes.AMULET_COIN));
         }
 
-        leaveEncounterWithoutBattle(scene, true);
+        leaveEncounterWithoutBattle(true);
       })
       .build(),
   )
@@ -185,8 +181,8 @@ export const DelibirdyEncounter: MysteryEncounter = MysteryEncounterBuilder.with
           },
         ],
       })
-      .withPreOptionPhase(async (scene: BattleScene): Promise<boolean> => {
-        const encounter = scene.currentBattle.mysteryEncounter!;
+      .withPreOptionPhase(async (): Promise<boolean> => {
+        const encounter = globalScene.currentBattle.mysteryEncounter!;
         const onPokemonSelected = (pokemon: PlayerPokemon) => {
           // Get Pokemon held items and filter for valid ones
           const validItems = pokemon.getHeldItems().filter((it) => {
@@ -212,67 +208,65 @@ export const DelibirdyEncounter: MysteryEncounter = MysteryEncounterBuilder.with
 
         const selectableFilter = (pokemon: Pokemon) => {
           // If pokemon has valid item, it can be selected
-          const meetsReqs = encounter.options[1].pokemonMeetsPrimaryRequirements(scene, pokemon);
+          const meetsReqs = encounter.options[1].pokemonMeetsPrimaryRequirements(pokemon);
           if (!meetsReqs) {
-            return getEncounterText(scene, `${namespace}:invalid_selection`) ?? null;
+            return getEncounterText(`${namespace}:invalid_selection`) ?? null;
           }
 
           return null;
         };
 
-        return selectPokemonForOption(scene, onPokemonSelected, undefined, selectableFilter);
+        return selectPokemonForOption(onPokemonSelected, undefined, selectableFilter);
       })
-      .withOptionPhase(async (scene: BattleScene) => {
-        const encounter = scene.currentBattle.mysteryEncounter!;
+      .withOptionPhase(async () => {
+        const encounter = globalScene.currentBattle.mysteryEncounter!;
         const modifier: BerryModifier | PokemonInstantReviveModifier = encounter.misc.chosenModifier;
         const chosenPokemon: PlayerPokemon = encounter.misc.chosenPokemon;
 
         // Give the player a Candy Jar if they gave a Berry, and a Berry Pouch for Reviver Seed
         if (modifier instanceof BerryModifier) {
           // Check if the player has max stacks of that Candy Jar already
-          const existing = scene.findModifier(
+          const existing = globalScene.findModifier(
             (m) => m instanceof LevelIncrementBoosterModifier,
           ) as LevelIncrementBoosterModifier;
 
-          if (existing && existing.getStackCount() >= existing.getMaxStackCount(scene)) {
+          if (existing && existing.getStackCount() >= existing.getMaxStackCount()) {
             // At max stacks, give the first party pokemon a Shell Bell instead
-            const shellBell = generateModifierType(scene, modifierTypes.SHELL_BELL) as PokemonHeldItemModifierType;
-            await applyModifierTypeToPlayerPokemon(scene, scene.getPlayerPokemon()!, shellBell);
-            scene.playSound("item_fanfare");
+            const shellBell = generateModifierType(modifierTypes.SHELL_BELL) as PokemonHeldItemModifierType;
+            await applyModifierTypeToPlayerPokemon(globalScene.getPlayerPokemon()!, shellBell);
+            globalScene.playSound("item_fanfare");
             await showEncounterText(
-              scene,
               i18next.t("battle:rewardGain", { modifierName: shellBell.name }),
               null,
               undefined,
               true,
             );
           } else {
-            scene.unshiftPhase(new ModifierRewardPhase(scene, modifierTypes.CANDY_JAR));
+            globalScene.unshiftPhase(new ModifierRewardPhase(modifierTypes.CANDY_JAR));
           }
         } else {
           // Check if the player has max stacks of that Berry Pouch already
-          const existing = scene.findModifier((m) => m instanceof PreserveBerryModifier) as PreserveBerryModifier;
+          const existing = globalScene.findModifier((m) => m instanceof PreserveBerryModifier) as PreserveBerryModifier;
 
-          if (existing && existing.getStackCount() >= existing.getMaxStackCount(scene)) {
+          if (existing && existing.getStackCount() >= existing.getMaxStackCount()) {
             // At max stacks, give the first party pokemon a Shell Bell instead
-            const shellBell = generateModifierType(scene, modifierTypes.SHELL_BELL) as PokemonHeldItemModifierType;
-            await applyModifierTypeToPlayerPokemon(scene, scene.getPlayerPokemon()!, shellBell);
-            scene.playSound("item_fanfare");
+            const shellBell = generateModifierType(modifierTypes.SHELL_BELL) as PokemonHeldItemModifierType;
+            await applyModifierTypeToPlayerPokemon(globalScene.getPlayerPokemon()!, shellBell);
+            globalScene.playSound("item_fanfare");
             await showEncounterText(
-              scene,
               i18next.t("battle:rewardGain", { modifierName: shellBell.name }),
               null,
               undefined,
               true,
             );
           } else {
-            scene.unshiftPhase(new ModifierRewardPhase(scene, modifierTypes.BERRY_POUCH));
+            globalScene.unshiftPhase(new ModifierRewardPhase(modifierTypes.BERRY_POUCH));
           }
         }
 
         chosenPokemon.loseHeldItem(modifier, false);
 
-        leaveEncounterWithoutBattle(scene, true);
+        leaveEncounterWithoutBattle(true);
       })
       .build(),
   )
@@ -289,8 +283,8 @@ export const DelibirdyEncounter: MysteryEncounter = MysteryEncounterBuilder.with
           },
         ],
       })
-      .withPreOptionPhase(async (scene: BattleScene): Promise<boolean> => {
-        const encounter = scene.currentBattle.mysteryEncounter!;
+      .withPreOptionPhase(async (): Promise<boolean> => {
+        const encounter = globalScene.currentBattle.mysteryEncounter!;
         const onPokemonSelected = (pokemon: PlayerPokemon) => {
           // Get Pokemon held items and filter for valid ones
           const validItems = pokemon.getHeldItems().filter((it) => {
@@ -318,43 +312,42 @@ export const DelibirdyEncounter: MysteryEncounter = MysteryEncounterBuilder.with
 
         const selectableFilter = (pokemon: Pokemon) => {
           // If pokemon has valid item, it can be selected
-          const meetsReqs = encounter.options[2].pokemonMeetsPrimaryRequirements(scene, pokemon);
+          const meetsReqs = encounter.options[2].pokemonMeetsPrimaryRequirements(pokemon);
           if (!meetsReqs) {
-            return getEncounterText(scene, `${namespace}:invalid_selection`) ?? null;
+            return getEncounterText(`${namespace}:invalid_selection`) ?? null;
           }
 
           return null;
         };
 
-        return selectPokemonForOption(scene, onPokemonSelected, undefined, selectableFilter);
+        return selectPokemonForOption(onPokemonSelected, undefined, selectableFilter);
       })
-      .withOptionPhase(async (scene: BattleScene) => {
-        const encounter = scene.currentBattle.mysteryEncounter!;
+      .withOptionPhase(async () => {
+        const encounter = globalScene.currentBattle.mysteryEncounter!;
         const modifier = encounter.misc.chosenModifier;
         const chosenPokemon: PlayerPokemon = encounter.misc.chosenPokemon;
 
         // Check if the player has max stacks of Healing Charm already
-        const existing = scene.findModifier((m) => m instanceof HealingBoosterModifier) as HealingBoosterModifier;
+        const existing = globalScene.findModifier((m) => m instanceof HealingBoosterModifier) as HealingBoosterModifier;
 
-        if (existing && existing.getStackCount() >= existing.getMaxStackCount(scene)) {
+        if (existing && existing.getStackCount() >= existing.getMaxStackCount()) {
           // At max stacks, give the first party pokemon a Shell Bell instead
-          const shellBell = generateModifierType(scene, modifierTypes.SHELL_BELL) as PokemonHeldItemModifierType;
-          await applyModifierTypeToPlayerPokemon(scene, scene.getPlayerParty()[0], shellBell);
-          scene.playSound("item_fanfare");
+          const shellBell = generateModifierType(modifierTypes.SHELL_BELL) as PokemonHeldItemModifierType;
+          await applyModifierTypeToPlayerPokemon(globalScene.getPlayerParty()[0], shellBell);
+          globalScene.playSound("item_fanfare");
           await showEncounterText(
-            scene,
             i18next.t("battle:rewardGain", { modifierName: shellBell.name }),
             null,
             undefined,
             true,
           );
         } else {
-          scene.unshiftPhase(new ModifierRewardPhase(scene, modifierTypes.HEALING_CHARM));
+          globalScene.unshiftPhase(new ModifierRewardPhase(modifierTypes.HEALING_CHARM));
         }
 
         chosenPokemon.loseHeldItem(modifier, false);
 
-        leaveEncounterWithoutBattle(scene, true);
+        leaveEncounterWithoutBattle(true);
       })
       .build(),
   )

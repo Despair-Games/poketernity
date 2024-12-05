@@ -1,4 +1,4 @@
-import BattleScene from "#app/battle-scene";
+import { globalScene } from "#app/global-scene";
 import { SemiInvulnerableTag } from "#app/data/battler-tags";
 import { SpeciesFormChange, getSpeciesFormChangeMessage } from "#app/data/pokemon-forms";
 import { getTypeRgb } from "#app/data/type";
@@ -14,8 +14,8 @@ export class QuietFormChangePhase extends BattlePhase {
   protected pokemon: Pokemon;
   protected formChange: SpeciesFormChange;
 
-  constructor(scene: BattleScene, pokemon: Pokemon, formChange: SpeciesFormChange) {
-    super(scene);
+  constructor(pokemon: Pokemon, formChange: SpeciesFormChange) {
+    super();
     this.pokemon = pokemon;
     this.formChange = formChange;
   }
@@ -32,7 +32,7 @@ export class QuietFormChangePhase extends BattlePhase {
     if (!this.pokemon.isOnField() || this.pokemon.getTag(SemiInvulnerableTag) || this.pokemon.isFainted()) {
       if (this.pokemon.isPlayer() || this.pokemon.isActive()) {
         this.pokemon.changeForm(this.formChange).then(() => {
-          this.scene.ui.showText(
+          globalScene.ui.showText(
             getSpeciesFormChangeMessage(this.pokemon, this.formChange, preName),
             null,
             () => this.end(),
@@ -46,7 +46,7 @@ export class QuietFormChangePhase extends BattlePhase {
     }
 
     const getPokemonSprite = () => {
-      const sprite = this.scene.addPokemonSprite(
+      const sprite = globalScene.addPokemonSprite(
         this.pokemon,
         this.pokemon.x + this.pokemon.getSprite().x,
         this.pokemon.y + this.pokemon.getSprite().y,
@@ -59,7 +59,7 @@ export class QuietFormChangePhase extends BattlePhase {
       } catch (err: unknown) {
         console.error(`Failed to play animation for ${spriteKey}`, err);
       }
-      sprite.setPipeline(this.scene.spritePipeline, {
+      sprite.setPipeline(globalScene.spritePipeline, {
         tone: [0.0, 0.0, 0.0, 0.0],
         hasShadow: false,
         teraColor: getTypeRgb(this.pokemon.getTeraType()),
@@ -70,7 +70,7 @@ export class QuietFormChangePhase extends BattlePhase {
         }
         sprite.pipelineData[k] = this.pokemon.getSprite().pipelineData[k];
       });
-      this.scene.field.add(sprite);
+      globalScene.field.add(sprite);
       return sprite;
     };
 
@@ -89,9 +89,9 @@ export class QuietFormChangePhase extends BattlePhase {
     pokemonFormTintSprite.setVisible(false);
     pokemonFormTintSprite.setTintFill(0xffffff);
 
-    this.scene.playSound("battle_anims/PRSFX- Transform");
+    globalScene.playSound("battle_anims/PRSFX- Transform");
 
-    this.scene.tweens.add({
+    globalScene.tweens.add({
       targets: pokemonTintSprite,
       alpha: 1,
       duration: 1000,
@@ -107,7 +107,7 @@ export class QuietFormChangePhase extends BattlePhase {
             console.error(`Failed to play animation for ${spriteKey}`, err);
           }
           pokemonFormTintSprite.setVisible(true);
-          this.scene.tweens.add({
+          globalScene.tweens.add({
             targets: pokemonTintSprite,
             delay: 250,
             scale: 0.01,
@@ -115,7 +115,7 @@ export class QuietFormChangePhase extends BattlePhase {
             duration: 500,
             onComplete: () => pokemonTintSprite.destroy(),
           });
-          this.scene.tweens.add({
+          globalScene.tweens.add({
             targets: pokemonFormTintSprite,
             delay: 250,
             scale: this.pokemon.getSpriteScale(),
@@ -123,7 +123,7 @@ export class QuietFormChangePhase extends BattlePhase {
             duration: 500,
             onComplete: () => {
               this.pokemon.setVisible(true);
-              this.scene.tweens.add({
+              globalScene.tweens.add({
                 targets: pokemonFormTintSprite,
                 delay: 250,
                 alpha: 0,
@@ -131,7 +131,7 @@ export class QuietFormChangePhase extends BattlePhase {
                 duration: 1000,
                 onComplete: () => {
                   pokemonTintSprite.setVisible(false);
-                  this.scene.ui.showText(
+                  globalScene.ui.showText(
                     getSpeciesFormChangeMessage(this.pokemon, this.formChange, preName),
                     null,
                     () => this.end(),
@@ -148,22 +148,10 @@ export class QuietFormChangePhase extends BattlePhase {
 
   end(): void {
     this.pokemon.findAndRemoveTags((t) => t.tagType === BattlerTagType.AUTOTOMIZED);
-    if (
-      this.pokemon.scene?.currentBattle.battleSpec === BattleSpec.FINAL_BOSS
-      && this.pokemon instanceof EnemyPokemon
-    ) {
-      this.scene.playBgm();
-      this.scene.unshiftPhase(
-        new PokemonHealPhase(
-          this.scene,
-          this.pokemon.getBattlerIndex(),
-          this.pokemon.getMaxHp(),
-          null,
-          false,
-          false,
-          false,
-          true,
-        ),
+    if (globalScene?.currentBattle.battleSpec === BattleSpec.FINAL_BOSS && this.pokemon instanceof EnemyPokemon) {
+      globalScene.playBgm();
+      globalScene.unshiftPhase(
+        new PokemonHealPhase(this.pokemon.getBattlerIndex(), this.pokemon.getMaxHp(), null, false, false, false, true),
       );
       this.pokemon.findAndRemoveTags(() => true);
       this.pokemon.bossSegments = 5;
@@ -171,7 +159,7 @@ export class QuietFormChangePhase extends BattlePhase {
       this.pokemon.initBattleInfo();
       this.pokemon.cry();
 
-      const movePhase = this.scene.findPhase((p) => p instanceof MovePhase && p.pokemon === this.pokemon) as MovePhase;
+      const movePhase = globalScene.findPhase((p) => p instanceof MovePhase && p.pokemon === this.pokemon) as MovePhase;
       if (movePhase) {
         movePhase.cancel();
       }

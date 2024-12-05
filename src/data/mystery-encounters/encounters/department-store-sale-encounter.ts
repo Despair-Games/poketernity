@@ -6,7 +6,6 @@ import { ModifierTypeFunc, modifierTypes } from "#app/modifier/modifier-type";
 import { randSeedInt } from "#app/utils";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
-import BattleScene from "#app/battle-scene";
 import MysteryEncounter, { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
@@ -59,7 +58,7 @@ export const DepartmentStoreSaleEncounter: MysteryEncounter = MysteryEncounterBu
       buttonLabel: `${namespace}:option.1.label`,
       buttonTooltip: `${namespace}:option.1.tooltip`,
     },
-    async (scene: BattleScene) => {
+    async () => {
       // Choose TMs
       const modifiers: ModifierTypeFunc[] = [];
       let i = 0;
@@ -76,8 +75,8 @@ export const DepartmentStoreSaleEncounter: MysteryEncounter = MysteryEncounterBu
         i++;
       }
 
-      setEncounterRewards(scene, { guaranteedModifierTypeFuncs: modifiers, fillRemaining: false });
-      leaveEncounterWithoutBattle(scene);
+      setEncounterRewards({ guaranteedModifierTypeFuncs: modifiers, fillRemaining: false });
+      leaveEncounterWithoutBattle();
     },
   )
   .withSimpleOption(
@@ -85,7 +84,7 @@ export const DepartmentStoreSaleEncounter: MysteryEncounter = MysteryEncounterBu
       buttonLabel: `${namespace}:option.2.label`,
       buttonTooltip: `${namespace}:option.2.tooltip`,
     },
-    async (scene: BattleScene) => {
+    async () => {
       // Choose Vitamins
       const modifiers: ModifierTypeFunc[] = [];
       let i = 0;
@@ -100,8 +99,8 @@ export const DepartmentStoreSaleEncounter: MysteryEncounter = MysteryEncounterBu
         i++;
       }
 
-      setEncounterRewards(scene, { guaranteedModifierTypeFuncs: modifiers, fillRemaining: false });
-      leaveEncounterWithoutBattle(scene);
+      setEncounterRewards({ guaranteedModifierTypeFuncs: modifiers, fillRemaining: false });
+      leaveEncounterWithoutBattle();
     },
   )
   .withSimpleOption(
@@ -109,7 +108,7 @@ export const DepartmentStoreSaleEncounter: MysteryEncounter = MysteryEncounterBu
       buttonLabel: `${namespace}:option.3.label`,
       buttonTooltip: `${namespace}:option.3.tooltip`,
     },
-    async (scene: BattleScene) => {
+    async () => {
       // Choose X Items
       const modifiers: ModifierTypeFunc[] = [];
       let i = 0;
@@ -124,8 +123,8 @@ export const DepartmentStoreSaleEncounter: MysteryEncounter = MysteryEncounterBu
         i++;
       }
 
-      setEncounterRewards(scene, { guaranteedModifierTypeFuncs: modifiers, fillRemaining: false });
-      leaveEncounterWithoutBattle(scene);
+      setEncounterRewards({ guaranteedModifierTypeFuncs: modifiers, fillRemaining: false });
+      leaveEncounterWithoutBattle();
     },
   )
   .withSimpleOption(
@@ -133,7 +132,7 @@ export const DepartmentStoreSaleEncounter: MysteryEncounter = MysteryEncounterBu
       buttonLabel: `${namespace}:option.4.label`,
       buttonTooltip: `${namespace}:option.4.tooltip`,
     },
-    async (scene: BattleScene) => {
+    async () => {
       // Choose Pokeballs
       const modifiers: ModifierTypeFunc[] = [];
       let i = 0;
@@ -152,8 +151,8 @@ export const DepartmentStoreSaleEncounter: MysteryEncounter = MysteryEncounterBu
         i++;
       }
 
-      setEncounterRewards(scene, { guaranteedModifierTypeFuncs: modifiers, fillRemaining: false });
-      leaveEncounterWithoutBattle(scene);
+      setEncounterRewards({ guaranteedModifierTypeFuncs: modifiers, fillRemaining: false });
+      leaveEncounterWithoutBattle();
     },
   )
   .withOutroDialogue([

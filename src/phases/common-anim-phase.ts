@@ -1,5 +1,5 @@
-import BattleScene from "#app/battle-scene";
 import { BattlerIndex } from "#app/battle";
+import { globalScene } from "#app/global-scene";
 import { CommonAnim, CommonBattleAnim } from "#app/data/battle-anims";
 import { PokemonPhase } from "./pokemon-phase";
 
@@ -9,13 +9,12 @@ export class CommonAnimPhase extends PokemonPhase {
   private playOnEmptyField: boolean;
 
   constructor(
-    scene: BattleScene,
     battlerIndex?: BattlerIndex,
-    targetIndex?: BattlerIndex | undefined,
+    targetIndex?: BattlerIndex,
     anim?: CommonAnim,
     playOnEmptyField: boolean = false,
   ) {
-    super(scene, battlerIndex);
+    super(battlerIndex);
 
     this.anim = anim!; // TODO: is this bang correct?
     this.targetIndex = targetIndex;
@@ -29,9 +28,9 @@ export class CommonAnimPhase extends PokemonPhase {
   start() {
     const target =
       this.targetIndex !== undefined
-        ? (this.player ? this.scene.getEnemyField() : this.scene.getPlayerField())[this.targetIndex]
+        ? (this.player ? globalScene.getEnemyField() : globalScene.getPlayerField())[this.targetIndex]
         : this.getPokemon();
-    new CommonBattleAnim(this.anim, this.getPokemon(), target).play(this.scene, false, () => {
+    new CommonBattleAnim(this.anim, this.getPokemon(), target).play(false, () => {
       this.end();
     });
   }

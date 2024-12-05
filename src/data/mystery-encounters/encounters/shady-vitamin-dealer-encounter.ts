@@ -10,7 +10,7 @@ import { modifierTypes } from "#app/modifier/modifier-type";
 import { randSeedInt } from "#app/utils";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
-import BattleScene from "#app/battle-scene";
+import { globalScene } from "#app/global-scene";
 import MysteryEncounter, { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { MoneyRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
@@ -89,15 +89,15 @@ export const ShadyVitaminDealerEncounter: MysteryEncounter = MysteryEncounterBui
           },
         ],
       })
-      .withPreOptionPhase(async (scene: BattleScene): Promise<boolean> => {
-        const encounter = scene.currentBattle.mysteryEncounter!;
+      .withPreOptionPhase(async (): Promise<boolean> => {
+        const encounter = globalScene.currentBattle.mysteryEncounter!;
         const onPokemonSelected = (pokemon: PlayerPokemon) => {
           // Update money
-          updatePlayerMoney(scene, -(encounter.options[0].requirements[0] as MoneyRequirement).requiredMoney);
+          updatePlayerMoney(-(encounter.options[0].requirements[0] as MoneyRequirement).requiredMoney);
           // Calculate modifiers and dialogue tokens
           const modifiers = [
-            generateModifierType(scene, modifierTypes.BASE_STAT_BOOSTER)!,
-            generateModifierType(scene, modifierTypes.BASE_STAT_BOOSTER)!,
+            generateModifierType(modifierTypes.BASE_STAT_BOOSTER)!,
+            generateModifierType(modifierTypes.BASE_STAT_BOOSTER)!,
           ];
           encounter.setDialogueToken("boost1", modifiers[0].name);
           encounter.setDialogueToken("boost2", modifiers[1].name);
@@ -113,34 +113,34 @@ export const ShadyVitaminDealerEncounter: MysteryEncounter = MysteryEncounterBui
           if (!pokemon.isAllowedInChallenge()) {
             return i18next.t("partyUiHandler:cantBeUsed", { pokemonName: pokemon.getNameToRender() }) ?? null;
           }
-          if (!encounter.pokemonMeetsPrimaryRequirements(scene, pokemon)) {
-            return getEncounterText(scene, `${namespace}:invalid_selection`) ?? null;
+          if (!encounter.pokemonMeetsPrimaryRequirements(pokemon)) {
+            return getEncounterText(`${namespace}:invalid_selection`) ?? null;
           }
 
           return null;
         };
 
-        return selectPokemonForOption(scene, onPokemonSelected, undefined, selectableFilter);
+        return selectPokemonForOption(onPokemonSelected, undefined, selectableFilter);
       })
-      .withOptionPhase(async (scene: BattleScene) => {
+      .withOptionPhase(async () => {
         // Choose Cheap Option
-        const encounter = scene.currentBattle.mysteryEncounter!;
+        const encounter = globalScene.currentBattle.mysteryEncounter!;
         const chosenPokemon = encounter.misc.chosenPokemon;
         const modifiers = encounter.misc.modifiers;
 
         for (const modType of modifiers) {
-          await applyModifierTypeToPlayerPokemon(scene, chosenPokemon, modType);
+          await applyModifierTypeToPlayerPokemon(chosenPokemon, modType);
         }
 
-        leaveEncounterWithoutBattle(scene, true);
+        leaveEncounterWithoutBattle(true);
       })
-      .withPostOptionPhase(async (scene: BattleScene) => {
+      .withPostOptionPhase(async () => {
         // Damage and status applied after dealer leaves (to make thematic sense)
-        const encounter = scene.currentBattle.mysteryEncounter!;
+        const encounter = globalScene.currentBattle.mysteryEncounter!;
         const chosenPokemon = encounter.misc.chosenPokemon as PlayerPokemon;
 
         // Pokemon takes half max HP damage and nature is randomized (does not update dex)
-        applyDamageToPokemon(scene, chosenPokemon, Math.floor(chosenPokemon.getMaxHp() / 2));
+        applyDamageToPokemon(chosenPokemon, Math.floor(chosenPokemon.getMaxHp() / 2));
 
         const currentNature = chosenPokemon.nature;
         let newNature = randSeedInt(25) as Nature;
@@ -150,8 +150,8 @@ export const ShadyVitaminDealerEncounter: MysteryEncounter = MysteryEncounterBui
 
         chosenPokemon.setCustomNature(newNature);
         encounter.setDialogueToken("newNature", getNatureName(newNature));
-        queueEncounterMessage(scene, `${namespace}:cheap_side_effects`);
-        setEncounterExp(scene, [chosenPokemon.id], 100);
+        queueEncounterMessage(`${namespace}:cheap_side_effects`);
+        setEncounterExp([chosenPokemon.id], 100);
         await chosenPokemon.updateInfo();
       })
       .build(),
@@ -168,15 +168,15 @@ export const ShadyVitaminDealerEncounter: MysteryEncounter = MysteryEncounterBui
           },
         ],
       })
-      .withPreOptionPhase(async (scene: BattleScene): Promise<boolean> => {
-        const encounter = scene.currentBattle.mysteryEncounter!;
+      .withPreOptionPhase(async (): Promise<boolean> => {
+        const encounter = globalScene.currentBattle.mysteryEncounter!;
         const onPokemonSelected = (pokemon: PlayerPokemon) => {
           // Update money
-          updatePlayerMoney(scene, -(encounter.options[1].requirements[0] as MoneyRequirement).requiredMoney);
+          updatePlayerMoney(-(encounter.options[1].requirements[0] as MoneyRequirement).requiredMoney);
           // Calculate modifiers and dialogue tokens
           const modifiers = [
-            generateModifierType(scene, modifierTypes.BASE_STAT_BOOSTER)!,
-            generateModifierType(scene, modifierTypes.BASE_STAT_BOOSTER)!,
+            generateModifierType(modifierTypes.BASE_STAT_BOOSTER)!,
+            generateModifierType(modifierTypes.BASE_STAT_BOOSTER)!,
           ];
           encounter.setDialogueToken("boost1", modifiers[0].name);
           encounter.setDialogueToken("boost2", modifiers[1].name);
@@ -188,30 +188,30 @@ export const ShadyVitaminDealerEncounter: MysteryEncounter = MysteryEncounterBui
 
         // Only Pokemon that can gain benefits are unfainted
         const selectableFilter = (pokemon: Pokemon) => {
-          return isPokemonValidForEncounterOptionSelection(pokemon, scene, `${namespace}:invalid_selection`);
+          return isPokemonValidForEncounterOptionSelection(pokemon, `${namespace}:invalid_selection`);
         };
 
-        return selectPokemonForOption(scene, onPokemonSelected, undefined, selectableFilter);
+        return selectPokemonForOption(onPokemonSelected, undefined, selectableFilter);
       })
-      .withOptionPhase(async (scene: BattleScene) => {
+      .withOptionPhase(async () => {
         // Choose Expensive Option
-        const encounter = scene.currentBattle.mysteryEncounter!;
+        const encounter = globalScene.currentBattle.mysteryEncounter!;
         const chosenPokemon = encounter.misc.chosenPokemon;
         const modifiers = encounter.misc.modifiers;
 
         for (const modType of modifiers) {
-          await applyModifierTypeToPlayerPokemon(scene, chosenPokemon, modType);
+          await applyModifierTypeToPlayerPokemon(chosenPokemon, modType);
         }
 
-        leaveEncounterWithoutBattle(scene, true);
+        leaveEncounterWithoutBattle(true);
       })
-      .withPostOptionPhase(async (scene: BattleScene) => {
+      .withPostOptionPhase(async () => {
         // Status applied after dealer leaves (to make thematic sense)
-        const encounter = scene.currentBattle.mysteryEncounter!;
+        const encounter = globalScene.currentBattle.mysteryEncounter!;
         const chosenPokemon = encounter.misc.chosenPokemon;
 
-        queueEncounterMessage(scene, `${namespace}:no_bad_effects`);
-        setEncounterExp(scene, [chosenPokemon.id], 100);
+        queueEncounterMessage(`${namespace}:no_bad_effects`);
+        setEncounterExp([chosenPokemon.id], 100);
 
         await chosenPokemon.updateInfo();
       })
@@ -228,9 +228,9 @@ export const ShadyVitaminDealerEncounter: MysteryEncounter = MysteryEncounterBui
         },
       ],
     },
-    async (scene: BattleScene) => {
+    async () => {
       // Leave encounter with no rewards or exp
-      leaveEncounterWithoutBattle(scene, true);
+      leaveEncounterWithoutBattle(true);
       return true;
     },
   )

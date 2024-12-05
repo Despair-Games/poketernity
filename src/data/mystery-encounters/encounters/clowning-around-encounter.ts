@@ -13,7 +13,7 @@ import { ModifierTier } from "#app/modifier/modifier-tier";
 import { ModifierPoolType, modifierTypes, PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PartyMemberStrength } from "#enums/party-member-strength";
-import BattleScene from "#app/battle-scene";
+import { globalScene } from "#app/global-scene";
 import MysteryEncounter, { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { Species } from "#enums/species";
@@ -118,8 +118,8 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
       speaker: `${namespace}:speaker`,
     },
   ])
-  .withOnInit((scene: BattleScene) => {
-    const encounter = scene.currentBattle.mysteryEncounter!;
+  .withOnInit(() => {
+    const encounter = globalScene.currentBattle.mysteryEncounter!;
 
     const clownTrainerType = TrainerType.HARLEQUIN;
     const clownConfig = trainerConfigs[clownTrainerType].clone();
@@ -158,7 +158,7 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
     });
 
     // Load animations/sfx for start of fight moves
-    loadCustomMovesForEncounter(scene, [Moves.ROLE_PLAY, Moves.TAUNT]);
+    loadCustomMovesForEncounter([Moves.ROLE_PLAY, Moves.TAUNT]);
 
     encounter.setDialogueToken("blacephalonName", getPokemonSpecies(Species.BLACEPHALON).getName());
 
@@ -180,12 +180,12 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
           },
         ],
       })
-      .withOptionPhase(async (scene: BattleScene) => {
-        const encounter = scene.currentBattle.mysteryEncounter!;
+      .withOptionPhase(async () => {
+        const encounter = globalScene.currentBattle.mysteryEncounter!;
         // Spawn battle
         const config: EnemyPartyConfig = encounter.enemyPartyConfigs[0];
 
-        setEncounterRewards(scene, { fillRemaining: true });
+        setEncounterRewards({ fillRemaining: true });
 
         // TODO: when Magic Room and Wonder Room are implemented, add those to start of battle
         encounter.startOfBattleEffects.push(
@@ -210,20 +210,20 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
           },
         );
 
-        await transitionMysteryEncounterIntroVisuals(scene);
-        await initBattleWithEnemyConfig(scene, config);
+        await transitionMysteryEncounterIntroVisuals();
+        await initBattleWithEnemyConfig(config);
       })
-      .withPostOptionPhase(async (scene: BattleScene): Promise<boolean> => {
+      .withPostOptionPhase(async (): Promise<boolean> => {
         // After the battle, offer the player the opportunity to permanently swap ability
-        const abilityWasSwapped = await handleSwapAbility(scene);
+        const abilityWasSwapped = await handleSwapAbility();
         if (abilityWasSwapped) {
-          await showEncounterText(scene, `${namespace}:option.1.ability_gained`);
+          await showEncounterText(`${namespace}:option.1.ability_gained`);
         }
 
         // Play animations once ability swap is complete
         // Trainer sprite that is shown at end of battle is not the same as mystery encounter intro visuals
-        scene.tweens.add({
-          targets: scene.currentBattle.trainer,
+        globalScene.tweens.add({
+          targets: globalScene.currentBattle.trainer,
           x: "+=16",
           y: "-=16",
           alpha: 0,
@@ -232,10 +232,10 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
         });
         const background = new EncounterBattleAnim(
           EncounterAnim.SMOKESCREEN,
-          scene.getPlayerPokemon()!,
-          scene.getPlayerPokemon(),
+          globalScene.getPlayerPokemon()!,
+          globalScene.getPlayerPokemon(),
         );
-        background.playWithoutTargets(scene, 230, 40, 2);
+        background.playWithoutTargets(230, 40, 2);
         return true;
       })
       .build(),
@@ -259,13 +259,13 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
           },
         ],
       })
-      .withPreOptionPhase(async (scene: BattleScene) => {
+      .withPreOptionPhase(async () => {
         // Swap player's items on pokemon with the most items
         // Item comparisons look at whichever Pokemon has the greatest number of TRANSFERABLE, non-berry items
         // So Vitamins, form change items, etc. are not included
-        const encounter = scene.currentBattle.mysteryEncounter!;
+        const encounter = globalScene.currentBattle.mysteryEncounter!;
 
-        const party = scene.getPlayerParty();
+        const party = globalScene.getPlayerParty();
         let mostHeldItemsPokemon = party[0];
         let count = mostHeldItemsPokemon
           .getHeldItems()
@@ -293,10 +293,10 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
           .filter((m) => m instanceof BerryModifier)
           .forEach((m) => {
             numBerries += m.stackCount;
-            scene.removeModifier(m);
+            globalScene.removeModifier(m);
           });
 
-        generateItemsOfTier(scene, mostHeldItemsPokemon, numBerries, "Berries");
+        generateItemsOfTier(mostHeldItemsPokemon, numBerries, "Berries");
 
         // Shuffle Transferable held items in the same tier (only shuffles Ultra and Rogue atm)
         // For the purpose of this ME, Soothe Bells and Lucky Eggs are counted as Ultra tier
@@ -310,28 +310,28 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
             const tier = type.tier ?? ModifierTier.ULTRA;
             if (type.id === "GOLDEN_EGG" || tier === ModifierTier.ROGUE) {
               numRogue += m.stackCount;
-              scene.removeModifier(m);
+              globalScene.removeModifier(m);
             } else if (type.id === "LUCKY_EGG" || type.id === "SOOTHE_BELL" || tier === ModifierTier.ULTRA) {
               numUltra += m.stackCount;
-              scene.removeModifier(m);
+              globalScene.removeModifier(m);
             }
           });
 
-        generateItemsOfTier(scene, mostHeldItemsPokemon, numUltra, ModifierTier.ULTRA);
-        generateItemsOfTier(scene, mostHeldItemsPokemon, numRogue, ModifierTier.ROGUE);
+        generateItemsOfTier(mostHeldItemsPokemon, numUltra, ModifierTier.ULTRA);
+        generateItemsOfTier(mostHeldItemsPokemon, numRogue, ModifierTier.ROGUE);
       })
-      .withOptionPhase(async (scene: BattleScene) => {
-        leaveEncounterWithoutBattle(scene, true);
+      .withOptionPhase(async () => {
+        leaveEncounterWithoutBattle(true);
       })
-      .withPostOptionPhase(async (scene: BattleScene) => {
+      .withPostOptionPhase(async () => {
         // Play animations
         const background = new EncounterBattleAnim(
           EncounterAnim.SMOKESCREEN,
-          scene.getPlayerPokemon()!,
-          scene.getPlayerPokemon(),
+          globalScene.getPlayerPokemon()!,
+          globalScene.getPlayerPokemon(),
         );
-        background.playWithoutTargets(scene, 230, 40, 2);
-        await transitionMysteryEncounterIntroVisuals(scene, true, true, 200);
+        background.playWithoutTargets(230, 40, 2);
+        await transitionMysteryEncounterIntroVisuals(true, true, 200);
       })
       .build(),
   )
@@ -354,10 +354,10 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
           },
         ],
       })
-      .withPreOptionPhase(async (scene: BattleScene) => {
+      .withPreOptionPhase(async () => {
         // Randomize the second type of all player's pokemon
         // If the pokemon does not normally have a second type, it will gain 1
-        for (const pokemon of scene.getPlayerParty()) {
+        for (const pokemon of globalScene.getPlayerParty()) {
           const originalTypes = pokemon.getTypes(false, false, true);
 
           // If the Pokemon has non-status moves that don't match the Pokemon's type, prioritizes those as the new type
@@ -397,18 +397,18 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
           }
         }
       })
-      .withOptionPhase(async (scene: BattleScene) => {
-        leaveEncounterWithoutBattle(scene, true);
+      .withOptionPhase(async () => {
+        leaveEncounterWithoutBattle(true);
       })
-      .withPostOptionPhase(async (scene: BattleScene) => {
+      .withPostOptionPhase(async () => {
         // Play animations
         const background = new EncounterBattleAnim(
           EncounterAnim.SMOKESCREEN,
-          scene.getPlayerPokemon()!,
-          scene.getPlayerPokemon(),
+          globalScene.getPlayerPokemon()!,
+          globalScene.getPlayerPokemon(),
         );
-        background.playWithoutTargets(scene, 230, 40, 2);
-        await transitionMysteryEncounterIntroVisuals(scene, true, true, 200);
+        background.playWithoutTargets(230, 40, 2);
+        await transitionMysteryEncounterIntroVisuals(true, true, 200);
       })
       .build(),
   )
@@ -419,24 +419,24 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
   ])
   .build();
 
-async function handleSwapAbility(scene: BattleScene) {
+async function handleSwapAbility() {
   return new Promise<boolean>(async (resolve) => {
-    await showEncounterDialogue(scene, `${namespace}:option.1.apply_ability_dialogue`, `${namespace}:speaker`);
-    await showEncounterText(scene, `${namespace}:option.1.apply_ability_message`);
+    await showEncounterDialogue(`${namespace}:option.1.apply_ability_dialogue`, `${namespace}:speaker`);
+    await showEncounterText(`${namespace}:option.1.apply_ability_message`);
 
-    scene.ui.setMode(Mode.MESSAGE).then(() => {
-      displayYesNoOptions(scene, resolve);
+    globalScene.ui.setMode(Mode.MESSAGE).then(() => {
+      displayYesNoOptions(resolve);
     });
   });
 }
 
-function displayYesNoOptions(scene: BattleScene, resolve) {
-  showEncounterText(scene, `${namespace}:option.1.ability_prompt`, null, 500, false);
+function displayYesNoOptions(resolve) {
+  showEncounterText(`${namespace}:option.1.ability_prompt`, null, 500, false);
   const fullOptions = [
     {
       label: i18next.t("menu:yes"),
       handler: () => {
-        onYesAbilitySwap(scene, resolve);
+        onYesAbilitySwap(resolve);
         return true;
       },
     },
@@ -454,34 +454,29 @@ function displayYesNoOptions(scene: BattleScene, resolve) {
     maxOptions: 7,
     yOffset: 0,
   };
-  scene.ui.setModeWithoutClear(Mode.OPTION_SELECT, config, null, true);
+  globalScene.ui.setModeWithoutClear(Mode.OPTION_SELECT, config, null, true);
 }
 
-function onYesAbilitySwap(scene: BattleScene, resolve) {
+function onYesAbilitySwap(resolve) {
   const onPokemonSelected = (pokemon: PlayerPokemon) => {
     // Do ability swap
-    const encounter = scene.currentBattle.mysteryEncounter!;
+    const encounter = globalScene.currentBattle.mysteryEncounter!;
 
     applyAbilityOverrideToPokemon(pokemon, encounter.misc.ability);
     encounter.setDialogueToken("chosenPokemon", pokemon.getNameToRender());
-    scene.ui.setMode(Mode.MESSAGE).then(() => resolve(true));
+    globalScene.ui.setMode(Mode.MESSAGE).then(() => resolve(true));
   };
 
   const onPokemonNotSelected = () => {
-    scene.ui.setMode(Mode.MESSAGE).then(() => {
-      displayYesNoOptions(scene, resolve);
+    globalScene.ui.setMode(Mode.MESSAGE).then(() => {
+      displayYesNoOptions(resolve);
     });
   };
 
-  selectPokemonForOption(scene, onPokemonSelected, onPokemonNotSelected);
+  selectPokemonForOption(onPokemonSelected, onPokemonNotSelected);
 }
 
-function generateItemsOfTier(
-  scene: BattleScene,
-  pokemon: PlayerPokemon,
-  numItems: number,
-  tier: ModifierTier | "Berries",
-) {
+function generateItemsOfTier(pokemon: PlayerPokemon, numItems: number, tier: ModifierTier | "Berries") {
   // These pools have to be defined at runtime so that modifierTypes exist
   // Pools have instances of the modifier type equal to the max stacks that modifier can be applied to any one pokemon
   // This is to prevent "over-generating" a random item of a certain type during item swaps
@@ -534,11 +529,11 @@ function generateItemsOfTier(
     const newItemType = pool[randIndex];
     let newMod: PokemonHeldItemModifierType;
     if (tier === "Berries") {
-      newMod = generateModifierType(scene, modifierTypes.BERRY, [newItemType[0]]) as PokemonHeldItemModifierType;
+      newMod = generateModifierType(modifierTypes.BERRY, [newItemType[0]]) as PokemonHeldItemModifierType;
     } else {
-      newMod = generateModifierType(scene, newItemType[0]) as PokemonHeldItemModifierType;
+      newMod = generateModifierType(newItemType[0]) as PokemonHeldItemModifierType;
     }
-    applyModifierTypeToPlayerPokemon(scene, pokemon, newMod);
+    applyModifierTypeToPlayerPokemon(pokemon, newMod);
     // Decrement max stacks and remove from pool if at max
     newItemType[1]--;
     if (newItemType[1] <= 0) {

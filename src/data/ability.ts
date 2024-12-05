@@ -56,7 +56,7 @@ import { MovePhase } from "#app/phases/move-phase";
 import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import BattleScene from "#app/battle-scene";
+import { globalScene } from "#app/global-scene";
 import { SwitchType } from "#app/enums/switch-type";
 import { SwitchPhase } from "#app/phases/switch-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
@@ -277,7 +277,7 @@ export class PostBattleInitFormChangeAbAttr extends PostBattleInitAbAttr {
   applyPostBattleInit(pokemon: Pokemon, passive: boolean, simulated: boolean, args: any[]): boolean {
     const formIndex = this.formFunc(pokemon);
     if (formIndex !== pokemon.formIndex && !simulated) {
-      return pokemon.scene.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger, false);
+      return globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger, false);
     }
 
     return false;
@@ -302,23 +302,21 @@ export class PostBattleInitStatStageChangeAbAttr extends PostBattleInitAbAttr {
 
     if (!simulated) {
       if (this.selfTarget) {
-        statStageChangePhases.push(
-          new StatStageChangePhase(pokemon.scene, pokemon.getBattlerIndex(), true, this.stats, this.stages),
-        );
+        statStageChangePhases.push(new StatStageChangePhase(pokemon.getBattlerIndex(), true, this.stats, this.stages));
       } else {
         for (const opponent of pokemon.getOpponents()) {
           statStageChangePhases.push(
-            new StatStageChangePhase(pokemon.scene, opponent.getBattlerIndex(), false, this.stats, this.stages),
+            new StatStageChangePhase(opponent.getBattlerIndex(), false, this.stats, this.stages),
           );
         }
       }
 
       for (const statStageChangePhase of statStageChangePhases) {
         if (!this.selfTarget && !statStageChangePhase.getPokemon()?.summonData) {
-          pokemon.scene.pushPhase(statStageChangePhase);
+          globalScene.pushPhase(statStageChangePhase);
         } else {
           // TODO: This causes the ability bar to be shown at the wrong time
-          pokemon.scene.unshiftPhase(statStageChangePhase);
+          globalScene.unshiftPhase(statStageChangePhase);
         }
       }
     }
@@ -564,9 +562,8 @@ export class TypeImmunityHealAbAttr extends TypeImmunityAbAttr {
     if (ret) {
       if (!pokemon.isFullHp() && !simulated) {
         const abilityName = (!passive ? pokemon.getAbility() : pokemon.getPassiveAbility()).name;
-        pokemon.scene.unshiftPhase(
+        globalScene.unshiftPhase(
           new PokemonHealPhase(
-            pokemon.scene,
             pokemon.getBattlerIndex(),
             Utils.toDmgValue(pokemon.getMaxHp() / 4),
             i18next.t("abilityTriggers:typeImmunityHeal", {
@@ -610,9 +607,7 @@ class TypeImmunityStatStageChangeAbAttr extends TypeImmunityAbAttr {
     if (ret) {
       cancelled.value = true; // Suppresses "No Effect" message
       if (!simulated) {
-        pokemon.scene.unshiftPhase(
-          new StatStageChangePhase(pokemon.scene, pokemon.getBattlerIndex(), true, [this.stat], this.stages),
-        );
+        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [this.stat], this.stages));
       }
     }
 
@@ -867,9 +862,7 @@ export class MoveImmunityStatStageChangeAbAttr extends MoveImmunityAbAttr {
   ): boolean {
     const ret = super.applyPreDefend(pokemon, passive, simulated, attacker, move, cancelled, args);
     if (ret && !simulated) {
-      pokemon.scene.unshiftPhase(
-        new StatStageChangePhase(pokemon.scene, pokemon.getBattlerIndex(), true, [this.stat], this.stages),
-      );
+      globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [this.stat], this.stages));
     }
 
     return ret;
@@ -904,7 +897,7 @@ export class ReverseDrainAbAttr extends PostDefendAbAttr {
   ): boolean {
     if (move.hasAttr(HitHealAttr) && !move.hitsSubstitute(attacker, pokemon)) {
       if (!simulated) {
-        pokemon.scene.queueMessage(
+        globalScene.queueMessage(
           i18next.t("abilityTriggers:reverseDrain", { pokemonNameWithAffix: getPokemonNameWithAffix(attacker) }),
         );
       }
@@ -956,15 +949,12 @@ export class PostDefendStatStageChangeAbAttr extends PostDefendAbAttr {
           ? pokemon.getOpponents().concat([pokemon.getAlly()])
           : pokemon.getOpponents();
         for (const other of otherPokemon) {
-          other.scene.unshiftPhase(
-            new StatStageChangePhase(other.scene, other.getBattlerIndex(), false, [this.stat], this.stages),
-          );
+          globalScene.unshiftPhase(new StatStageChangePhase(other.getBattlerIndex(), false, [this.stat], this.stages));
         }
         return true;
       }
-      pokemon.scene.unshiftPhase(
+      globalScene.unshiftPhase(
         new StatStageChangePhase(
-          pokemon.scene,
           (this.selfTarget ? pokemon : attacker).getBattlerIndex(),
           this.selfTarget,
           [this.stat],
@@ -1021,9 +1011,8 @@ export class PostDefendHpGatedStatStageChangeAbAttr extends PostDefendAbAttr {
       && !move.hitsSubstitute(attacker, pokemon)
     ) {
       if (!simulated) {
-        pokemon.scene.unshiftPhase(
+        globalScene.unshiftPhase(
           new StatStageChangePhase(
-            pokemon.scene,
             (this.selfTarget ? pokemon : attacker).getBattlerIndex(),
             true,
             this.stats,
@@ -1059,10 +1048,10 @@ export class PostDefendApplyArenaTrapTagAbAttr extends PostDefendAbAttr {
     _args: any[],
   ): boolean {
     if (this.condition(pokemon, attacker, move) && !move.hitsSubstitute(attacker, pokemon)) {
-      const tag = pokemon.scene.arena.getTag(this.tagType) as ArenaTrapTag;
-      if (!pokemon.scene.arena.getTag(this.tagType) || tag.layers < tag.maxLayers) {
+      const tag = globalScene.arena.getTag(this.tagType) as ArenaTrapTag;
+      if (!globalScene.arena.getTag(this.tagType) || tag.layers < tag.maxLayers) {
         if (!simulated) {
-          pokemon.scene.arena.addTag(
+          globalScene.arena.addTag(
             this.tagType,
             0,
             undefined,
@@ -1099,7 +1088,7 @@ export class PostDefendApplyBattlerTagAbAttr extends PostDefendAbAttr {
     if (this.condition(pokemon, attacker, move) && !move.hitsSubstitute(attacker, pokemon)) {
       if (!pokemon.getTag(this.tagType) && !simulated) {
         pokemon.addTag(this.tagType, undefined, undefined, pokemon.id);
-        pokemon.scene.queueMessage(
+        globalScene.queueMessage(
           i18next.t("abilityTriggers:windPowerCharged", {
             pokemonName: getPokemonNameWithAffix(pokemon),
             moveName: move.name,
@@ -1166,9 +1155,9 @@ export class PostDefendTerrainChangeAbAttr extends PostDefendAbAttr {
   ): boolean {
     if (hitResult < HitResult.NO_EFFECT && !move.hitsSubstitute(attacker, pokemon)) {
       if (simulated) {
-        return pokemon.scene.arena.terrain?.terrainType !== (this.terrainType || undefined);
+        return globalScene.arena.terrain?.terrainType !== (this.terrainType || undefined);
       } else {
-        return pokemon.scene.arena.trySetTerrain(this.terrainType, true);
+        return globalScene.arena.trySetTerrain(this.terrainType, true);
       }
     }
 
@@ -1299,9 +1288,7 @@ export class PostDefendCritStatStageChangeAbAttr extends PostDefendAbAttr {
     }
 
     if (!simulated) {
-      pokemon.scene.unshiftPhase(
-        new StatStageChangePhase(pokemon.scene, pokemon.getBattlerIndex(), true, [this.stat], this.stages),
-      );
+      globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [this.stat], this.stages));
     }
 
     return true;
@@ -1423,11 +1410,11 @@ export class PostDefendWeatherChangeAbAttr extends PostDefendAbAttr {
     if ((this.condition && !this.condition(pokemon, attacker, move)) || move.hitsSubstitute(attacker, pokemon)) {
       return false;
     }
-    if (!pokemon.scene.arena.weather?.isImmutable()) {
+    if (!globalScene.arena.weather?.isImmutable()) {
       if (simulated) {
-        return pokemon.scene.arena.weather?.weatherType !== this.weatherType;
+        return globalScene.arena.weather?.weatherType !== this.weatherType;
       }
-      return pokemon.scene.arena.trySetWeather(this.weatherType, true);
+      return globalScene.arena.trySetWeather(this.weatherType, true);
     }
 
     return false;
@@ -1574,8 +1561,8 @@ export class PostStatStageChangeStatStageChangeAbAttr extends PostStatStageChang
   ): boolean {
     if (this.condition(pokemon, statStagesChanged, stagesChanged) && !selfTarget) {
       if (!simulated) {
-        pokemon.scene.unshiftPhase(
-          new StatStageChangePhase(pokemon.scene, pokemon.getBattlerIndex(), true, this.statsToChange, this.stages),
+        globalScene.unshiftPhase(
+          new StatStageChangePhase(pokemon.getBattlerIndex(), true, this.statsToChange, this.stages),
         );
       }
       return true;
@@ -2233,9 +2220,9 @@ export class PostAttackStealHeldItemAbAttr extends PostAttackAbAttr {
         const heldItems = this.getTargetHeldItems(defender).filter((i) => i.isTransferable);
         if (heldItems.length) {
           const stolenItem = heldItems[pokemon.randSeedInt(heldItems.length)];
-          pokemon.scene.tryTransferHeldItemModifier(stolenItem, pokemon, false).then((success) => {
+          globalScene.tryTransferHeldItemModifier(stolenItem, pokemon, false).then((success) => {
             if (success) {
-              pokemon.scene.queueMessage(
+              globalScene.queueMessage(
                 i18next.t("abilityTriggers:postAttackStealHeldItem", {
                   pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
                   defenderName: defender.name,
@@ -2253,7 +2240,7 @@ export class PostAttackStealHeldItemAbAttr extends PostAttackAbAttr {
   }
 
   getTargetHeldItems(target: Pokemon): PokemonHeldItemModifier[] {
-    return target.scene.findModifiers(
+    return globalScene.findModifiers(
       (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === target.id,
       target.isPlayer(),
     ) as PokemonHeldItemModifier[];
@@ -2381,9 +2368,9 @@ export class PostDefendStealHeldItemAbAttr extends PostDefendAbAttr {
         const heldItems = this.getTargetHeldItems(attacker).filter((i) => i.isTransferable);
         if (heldItems.length) {
           const stolenItem = heldItems[pokemon.randSeedInt(heldItems.length)];
-          pokemon.scene.tryTransferHeldItemModifier(stolenItem, pokemon, false).then((success) => {
+          globalScene.tryTransferHeldItemModifier(stolenItem, pokemon, false).then((success) => {
             if (success) {
-              pokemon.scene.queueMessage(
+              globalScene.queueMessage(
                 i18next.t("abilityTriggers:postDefendStealHeldItem", {
                   pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
                   attackerName: attacker.name,
@@ -2401,7 +2388,7 @@ export class PostDefendStealHeldItemAbAttr extends PostDefendAbAttr {
   }
 
   getTargetHeldItems(target: Pokemon): PokemonHeldItemModifier[] {
-    return target.scene.findModifiers(
+    return globalScene.findModifiers(
       (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === target.id,
       target.isPlayer(),
     ) as PokemonHeldItemModifier[];
@@ -2497,9 +2484,7 @@ class PostVictoryStatStageChangeAbAttr extends PostVictoryAbAttr {
   applyPostVictory(pokemon: Pokemon, passive: boolean, simulated: boolean, args: any[]): boolean | Promise<boolean> {
     const stat = typeof this.stat === "function" ? this.stat(pokemon) : this.stat;
     if (!simulated) {
-      pokemon.scene.unshiftPhase(
-        new StatStageChangePhase(pokemon.scene, pokemon.getBattlerIndex(), true, [stat], this.stages),
-      );
+      globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [stat], this.stages));
     }
     return true;
   }
@@ -2518,7 +2503,7 @@ export class PostVictoryFormChangeAbAttr extends PostVictoryAbAttr {
     const formIndex = this.formFunc(pokemon);
     if (formIndex !== pokemon.formIndex) {
       if (!simulated) {
-        pokemon.scene.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger, false);
+        globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger, false);
       }
       return true;
     }
@@ -2559,9 +2544,7 @@ export class PostKnockOutStatStageChangeAbAttr extends PostKnockOutAbAttr {
   ): boolean | Promise<boolean> {
     const stat = typeof this.stat === "function" ? this.stat(pokemon) : this.stat;
     if (!simulated) {
-      pokemon.scene.unshiftPhase(
-        new StatStageChangePhase(pokemon.scene, pokemon.getBattlerIndex(), true, [stat], this.stages),
-      );
+      globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [stat], this.stages));
     }
     return true;
   }
@@ -2582,7 +2565,7 @@ export class CopyFaintedAllyAbilityAbAttr extends PostKnockOutAbAttr {
     if (pokemon.isPlayer() === knockedOut.isPlayer() && !knockedOut.getAbility().hasAttr(UncopiableAbilityAbAttr)) {
       if (!simulated) {
         pokemon.summonData.ability = knockedOut.getAbility().id;
-        pokemon.scene.queueMessage(
+        globalScene.queueMessage(
           i18next.t("abilityTriggers:copyFaintedAllyAbility", {
             pokemonNameWithAffix: getPokemonNameWithAffix(knockedOut),
             abilityName: allAbilities[knockedOut.getAbility().id].name,
@@ -2659,9 +2642,7 @@ export class PostIntimidateStatStageChangeAbAttr extends AbAttr {
 
   apply(pokemon: Pokemon, passive: boolean, simulated: boolean, cancelled: Utils.BooleanHolder, args: any[]): boolean {
     if (!simulated) {
-      pokemon.scene.pushPhase(
-        new StatStageChangePhase(pokemon.scene, pokemon.getBattlerIndex(), false, this.stats, this.stages),
-      );
+      globalScene.pushPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), false, this.stats, this.stages));
     }
     cancelled.value = this.overwrites;
     return true;
@@ -2703,7 +2684,7 @@ export class PostSummonRemoveArenaTagAbAttr extends PostSummonAbAttr {
   applyPostSummon(pokemon: Pokemon, passive: boolean, simulated: boolean, args: any[]): boolean | Promise<boolean> {
     if (!simulated) {
       for (const arenaTag of this.arenaTags) {
-        pokemon.scene.arena.removeTag(arenaTag);
+        globalScene.arena.removeTag(arenaTag);
       }
     }
     return true;
@@ -2721,7 +2702,7 @@ export class PostSummonMessageAbAttr extends PostSummonAbAttr {
 
   applyPostSummon(pokemon: Pokemon, passive: boolean, simulated: boolean, args: any[]): boolean {
     if (!simulated) {
-      pokemon.scene.queueMessage(this.messageFunc(pokemon));
+      globalScene.queueMessage(this.messageFunc(pokemon));
     }
 
     return true;
@@ -2740,7 +2721,7 @@ export class PostSummonUnnamedMessageAbAttr extends PostSummonAbAttr {
 
   applyPostSummon(pokemon: Pokemon, passive: boolean, simulated: boolean, args: any[]): boolean {
     if (!simulated) {
-      pokemon.scene.queueMessage(this.message);
+      globalScene.queueMessage(this.message);
     }
 
     return true;
@@ -2791,9 +2772,7 @@ export class PostSummonStatStageChangeAbAttr extends PostSummonAbAttr {
     if (this.selfTarget) {
       // we unshift the StatStageChangePhase to put it right after the showAbility and not at the end of the
       // phase list (which could be after CommandPhase for example)
-      pokemon.scene.unshiftPhase(
-        new StatStageChangePhase(pokemon.scene, pokemon.getBattlerIndex(), true, this.stats, this.stages),
-      );
+      globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, this.stats, this.stages));
       return true;
     }
     for (const opponent of pokemon.getOpponents()) {
@@ -2807,9 +2786,7 @@ export class PostSummonStatStageChangeAbAttr extends PostSummonAbAttr {
         }
       }
       if (!cancelled.value) {
-        pokemon.scene.unshiftPhase(
-          new StatStageChangePhase(pokemon.scene, opponent.getBattlerIndex(), false, this.stats, this.stages),
-        );
+        globalScene.unshiftPhase(new StatStageChangePhase(opponent.getBattlerIndex(), false, this.stats, this.stages));
       }
     }
     return true;
@@ -2831,9 +2808,8 @@ export class PostSummonAllyHealAbAttr extends PostSummonAbAttr {
     const target = pokemon.getAlly();
     if (target?.isActive(true)) {
       if (!simulated) {
-        target.scene.unshiftPhase(
+        globalScene.unshiftPhase(
           new PokemonHealPhase(
-            target.scene,
             target.getBattlerIndex(),
             Utils.toDmgValue(pokemon.getMaxHp() / this.healRatio),
             i18next.t("abilityTriggers:postSummonAllyHeal", {
@@ -2874,7 +2850,7 @@ export class PostSummonClearAllyStatStagesAbAttr extends PostSummonAbAttr {
           target.setStatStage(s, 0);
         }
 
-        target.scene.queueMessage(
+        globalScene.queueMessage(
           i18next.t("abilityTriggers:postSummonClearAllyStats", {
             pokemonNameWithAffix: getPokemonNameWithAffix(target),
           }),
@@ -2931,9 +2907,7 @@ export class DownloadAbAttr extends PostSummonAbAttr {
     if (this.enemyDef > 0 && this.enemySpDef > 0) {
       // only activate if there's actually an enemy to download from
       if (!simulated) {
-        pokemon.scene.unshiftPhase(
-          new StatStageChangePhase(pokemon.scene, pokemon.getBattlerIndex(), false, this.stats, 1),
-        );
+        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), false, this.stats, 1));
       }
       return true;
     }
@@ -2956,12 +2930,12 @@ export class PostSummonWeatherChangeAbAttr extends PostSummonAbAttr {
       this.weatherType === WeatherType.HEAVY_RAIN
       || this.weatherType === WeatherType.HARSH_SUN
       || this.weatherType === WeatherType.STRONG_WINDS
-      || !pokemon.scene.arena.weather?.isImmutable()
+      || !globalScene.arena.weather?.isImmutable()
     ) {
       if (simulated) {
-        return pokemon.scene.arena.weather?.weatherType !== this.weatherType;
+        return globalScene.arena.weather?.weatherType !== this.weatherType;
       } else {
-        return pokemon.scene.arena.trySetWeather(this.weatherType, true);
+        return globalScene.arena.trySetWeather(this.weatherType, true);
       }
     }
 
@@ -2980,9 +2954,9 @@ export class PostSummonTerrainChangeAbAttr extends PostSummonAbAttr {
 
   applyPostSummon(pokemon: Pokemon, passive: boolean, simulated: boolean, args: any[]): boolean {
     if (simulated) {
-      return pokemon.scene.arena.terrain?.terrainType !== this.terrainType;
+      return globalScene.arena.terrain?.terrainType !== this.terrainType;
     } else {
-      return pokemon.scene.arena.trySetTerrain(this.terrainType, true);
+      return globalScene.arena.trySetTerrain(this.terrainType, true);
     }
   }
 }
@@ -2999,7 +2973,7 @@ export class PostSummonFormChangeAbAttr extends PostSummonAbAttr {
   applyPostSummon(pokemon: Pokemon, passive: boolean, simulated: boolean, args: any[]): boolean {
     const formIndex = this.formFunc(pokemon);
     if (formIndex !== pokemon.formIndex) {
-      return simulated || pokemon.scene.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger, false);
+      return simulated || globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger, false);
     }
 
     return false;
@@ -3019,9 +2993,9 @@ export class PostSummonCopyAbilityAbAttr extends PostSummonAbAttr {
 
     let target: Pokemon;
     if (targets.length > 1) {
-      pokemon.scene.executeWithSeedOffset(
+      globalScene.executeWithSeedOffset(
         () => (target = Utils.randSeedItem(targets)),
-        pokemon.scene.currentBattle.waveIndex,
+        globalScene.currentBattle.waveIndex,
       );
     } else {
       target = targets[0];
@@ -3079,7 +3053,7 @@ export class PostSummonUserFieldRemoveStatusEffectAbAttr extends PostSummonAbAtt
    * @returns A boolean or a promise that resolves to a boolean indicating the result of the ability application.
    */
   applyPostSummon(pokemon: Pokemon, passive: boolean, simulated: boolean, args: any[]): boolean | Promise<boolean> {
-    const party = pokemon instanceof PlayerPokemon ? pokemon.scene.getPlayerField() : pokemon.scene.getEnemyField();
+    const party = pokemon instanceof PlayerPokemon ? globalScene.getPlayerField() : globalScene.getEnemyField();
     const allowedParty = party.filter((p) => p.isAllowedInBattle());
 
     if (allowedParty.length < 1) {
@@ -3089,7 +3063,7 @@ export class PostSummonUserFieldRemoveStatusEffectAbAttr extends PostSummonAbAtt
     if (!simulated) {
       for (const pokemon of allowedParty) {
         if (pokemon.status && this.statusEffect.includes(pokemon.status.effect)) {
-          pokemon.scene.queueMessage(getStatusEffectHealText(pokemon.status.effect, getPokemonNameWithAffix(pokemon)));
+          globalScene.queueMessage(getStatusEffectHealText(pokemon.status.effect, getPokemonNameWithAffix(pokemon)));
           pokemon.resetStatus(false);
           pokemon.updateInfo();
         }
@@ -3102,7 +3076,7 @@ export class PostSummonUserFieldRemoveStatusEffectAbAttr extends PostSummonAbAtt
 /** Attempt to copy the stat changes on an ally pokemon */
 export class PostSummonCopyAllyStatsAbAttr extends PostSummonAbAttr {
   applyPostSummon(pokemon: Pokemon, passive: boolean, simulated: boolean, args: any[]): boolean {
-    if (!pokemon.scene.currentBattle.double) {
+    if (!globalScene.currentBattle.double) {
       return false;
     }
 
@@ -3146,7 +3120,7 @@ export class PostSummonTransformAbAttr extends PostSummonAbAttr {
 
     let target: Pokemon;
     if (targets.length > 1) {
-      pokemon.scene.executeWithSeedOffset(() => {
+      globalScene.executeWithSeedOffset(() => {
         // in a double battle, if one of the opposing pokemon is fused the other one will be chosen
         // if both are fused, then Imposter will fail below
         if (targets[0].fusionSpecies) {
@@ -3157,7 +3131,7 @@ export class PostSummonTransformAbAttr extends PostSummonAbAttr {
           return;
         }
         target = Utils.randSeedItem(targets);
-      }, pokemon.scene.currentBattle.waveIndex);
+      }, globalScene.currentBattle.waveIndex);
     } else {
       target = targets[0];
     }
@@ -3194,13 +3168,13 @@ export class PostSummonTransformAbAttr extends PostSummonAbAttr {
     pokemon.summonData.types = target.getTypes();
     promises.push(pokemon.updateInfo());
 
-    pokemon.scene.queueMessage(
+    globalScene.queueMessage(
       i18next.t("abilityTriggers:postSummonTransform", {
         pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
         targetName: target.name,
       }),
     );
-    pokemon.scene.playSound("battle_anims/PRSFX- Transform");
+    globalScene.playSound("battle_anims/PRSFX- Transform");
     promises.push(
       pokemon.loadAssets(false).then(() => {
         pokemon.playAnim();
@@ -3228,14 +3202,14 @@ export class PostSummonWeatherSuppressedFormChangeAbAttr extends PostSummonAbAtt
    * @returns whether a Pokemon was reverted to its normal form
    */
   applyPostSummon(pokemon: Pokemon, passive: boolean, simulated: boolean, args: any[]) {
-    const pokemonToTransform = getPokemonWithWeatherBasedForms(pokemon.scene);
+    const pokemonToTransform = getPokemonWithWeatherBasedForms();
 
     if (pokemonToTransform.length < 1) {
       return false;
     }
 
     if (!simulated) {
-      pokemon.scene.arena.triggerWeatherBasedFormChangesToNormal();
+      globalScene.arena.triggerWeatherBasedFormChangesToNormal();
     }
 
     return true;
@@ -3277,8 +3251,8 @@ export class PostSummonFormChangeByWeatherAbAttr extends PostSummonAbAttr {
         return simulated;
       }
 
-      pokemon.scene.triggerPokemonFormChange(pokemon, SpeciesFormChangeWeatherTrigger);
-      pokemon.scene.triggerPokemonFormChange(pokemon, SpeciesFormChangeRevertWeatherFormTrigger);
+      globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeWeatherTrigger);
+      globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeRevertWeatherFormTrigger);
       queueShowAbility(pokemon, passive);
       return true;
     }
@@ -3299,7 +3273,7 @@ export class CommanderAbAttr extends AbAttr {
 
   override apply(pokemon: Pokemon, passive: boolean, simulated: boolean, cancelled: null, args: any[]): boolean {
     // TODO: Should this work with X + Dondozo fusions?
-    if (pokemon.scene.currentBattle?.double && pokemon.getAlly()?.species.speciesId === Species.DONDOZO) {
+    if (globalScene.currentBattle?.double && pokemon.getAlly()?.species.speciesId === Species.DONDOZO) {
       // If the ally Dondozo is fainted or was previously "commanded" by
       // another Pokemon, this effect cannot apply.
       if (pokemon.getAlly().isFainted() || pokemon.getAlly().getTag(BattlerTagType.COMMANDED)) {
@@ -3310,11 +3284,11 @@ export class CommanderAbAttr extends AbAttr {
         // Lapse the source's semi-invulnerable tags (to avoid visual inconsistencies)
         pokemon.lapseTags(BattlerTagLapseType.MOVE_EFFECT);
         // Play an animation of the source jumping into the ally Dondozo's mouth
-        pokemon.scene.triggerPokemonBattleAnim(pokemon, PokemonAnimType.COMMANDER_APPLY);
+        globalScene.triggerPokemonBattleAnim(pokemon, PokemonAnimType.COMMANDER_APPLY);
         // Apply boosts from this effect to the ally Dondozo
         pokemon.getAlly().addTag(BattlerTagType.COMMANDED, 0, Moves.NONE, pokemon.id);
         // Cancel the source Pokemon's next move (if a move is queued)
-        pokemon.scene.tryRemovePhase((phase) => phase instanceof MovePhase && phase.pokemon === pokemon);
+        globalScene.tryRemovePhase((phase) => phase instanceof MovePhase && phase.pokemon === pokemon);
       }
       return true;
     }
@@ -3358,7 +3332,7 @@ export class PreSwitchOutClearWeatherAbAttr extends PreSwitchOutAbAttr {
    * @returns {boolean} Returns true if the weather clears, otherwise false.
    */
   applyPreSwitchOut(pokemon: Pokemon, passive: boolean, simulated: boolean, args: any[]): boolean | Promise<boolean> {
-    const weatherType = pokemon.scene.arena.weather?.weatherType;
+    const weatherType = globalScene.arena.weather?.weatherType;
     let turnOffWeather = false;
 
     // Clear weather only if user's ability matches the weather and no other pokemon has the ability.
@@ -3366,7 +3340,7 @@ export class PreSwitchOutClearWeatherAbAttr extends PreSwitchOutAbAttr {
       case WeatherType.HARSH_SUN:
         if (
           pokemon.hasAbility(Abilities.DESOLATE_LAND)
-          && pokemon.scene
+          && globalScene
             .getField(true)
             .filter((p) => p !== pokemon)
             .filter((p) => p.hasAbility(Abilities.DESOLATE_LAND)).length === 0
@@ -3377,7 +3351,7 @@ export class PreSwitchOutClearWeatherAbAttr extends PreSwitchOutAbAttr {
       case WeatherType.HEAVY_RAIN:
         if (
           pokemon.hasAbility(Abilities.PRIMORDIAL_SEA)
-          && pokemon.scene
+          && globalScene
             .getField(true)
             .filter((p) => p !== pokemon)
             .filter((p) => p.hasAbility(Abilities.PRIMORDIAL_SEA)).length === 0
@@ -3388,7 +3362,7 @@ export class PreSwitchOutClearWeatherAbAttr extends PreSwitchOutAbAttr {
       case WeatherType.STRONG_WINDS:
         if (
           pokemon.hasAbility(Abilities.DELTA_STREAM)
-          && pokemon.scene
+          && globalScene
             .getField(true)
             .filter((p) => p !== pokemon)
             .filter((p) => p.hasAbility(Abilities.DELTA_STREAM)).length === 0
@@ -3403,7 +3377,7 @@ export class PreSwitchOutClearWeatherAbAttr extends PreSwitchOutAbAttr {
     }
 
     if (turnOffWeather) {
-      pokemon.scene.arena.trySetWeather(WeatherType.NONE, false);
+      globalScene.arena.trySetWeather(WeatherType.NONE, false);
       return true;
     }
 
@@ -3452,7 +3426,7 @@ export class PreSwitchOutFormChangeAbAttr extends PreSwitchOutAbAttr {
     const formIndex = this.formFunc(pokemon);
     if (formIndex !== pokemon.formIndex) {
       if (!simulated) {
-        pokemon.scene.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger, false);
+        globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger, false);
       }
       return true;
     }
@@ -3954,14 +3928,14 @@ function getSheerForceHitDisableAbCondition(): AbAttrCondition {
 }
 
 function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondition {
-  return (pokemon: Pokemon) => {
-    if (!pokemon.scene?.arena) {
+  return () => {
+    if (!globalScene?.arena) {
       return false;
     }
-    if (pokemon.scene.arena.weather?.isEffectSuppressed(pokemon.scene)) {
+    if (globalScene.arena.weather?.isEffectSuppressed()) {
       return false;
     }
-    const weatherType = pokemon.scene.arena.weather?.weatherType;
+    const weatherType = globalScene.arena.weather?.weatherType;
     return !!weatherType && weatherTypes.indexOf(weatherType) > -1;
   };
 }
@@ -4074,7 +4048,7 @@ export class ForewarnAbAttr extends PostSummonAbAttr {
       }
     }
     if (!simulated) {
-      pokemon.scene.queueMessage(
+      globalScene.queueMessage(
         i18next.t("abilityTriggers:forewarn", {
           pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
           moveName: maxMove,
@@ -4093,7 +4067,7 @@ export class FriskAbAttr extends PostSummonAbAttr {
   applyPostSummon(pokemon: Pokemon, passive: boolean, simulated: boolean, args: any[]): boolean {
     if (!simulated) {
       for (const opponent of pokemon.getOpponents()) {
-        pokemon.scene.queueMessage(
+        globalScene.queueMessage(
           i18next.t("abilityTriggers:frisk", {
             pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
             opponentName: opponent.name,
@@ -4161,12 +4135,12 @@ export class PostWeatherChangeFormChangeAbAttr extends PostWeatherChangeAbAttr {
         return simulated;
       }
 
-      const weatherType = pokemon.scene.arena.weather?.weatherType;
+      const weatherType = globalScene.arena.weather?.weatherType;
 
       if (weatherType && this.formRevertingWeathers.includes(weatherType)) {
-        pokemon.scene.arena.triggerWeatherBasedFormChangesToNormal();
+        globalScene.arena.triggerWeatherBasedFormChangesToNormal();
       } else {
-        pokemon.scene.arena.triggerWeatherBasedFormChanges();
+        globalScene.arena.triggerWeatherBasedFormChanges();
       }
       return true;
     }
@@ -4251,12 +4225,10 @@ export class PostWeatherLapseHealAbAttr extends PostWeatherLapseAbAttr {
     args: any[],
   ): boolean {
     if (!pokemon.isFullHp()) {
-      const scene = pokemon.scene;
       const abilityName = (!passive ? pokemon.getAbility() : pokemon.getPassiveAbility()).name;
       if (!simulated) {
-        scene.unshiftPhase(
+        globalScene.unshiftPhase(
           new PokemonHealPhase(
-            scene,
             pokemon.getBattlerIndex(),
             Utils.toDmgValue(pokemon.getMaxHp() / (16 / this.healFactor)),
             i18next.t("abilityTriggers:postWeatherLapseHeal", {
@@ -4290,14 +4262,13 @@ export class PostWeatherLapseDamageAbAttr extends PostWeatherLapseAbAttr {
     weather: Weather,
     args: any[],
   ): boolean {
-    const scene = pokemon.scene;
     if (pokemon.hasAbilityWithAttr(BlockNonDirectDamageAbAttr)) {
       return false;
     }
 
     if (!simulated) {
       const abilityName = (!passive ? pokemon.getAbility() : pokemon.getPassiveAbility()).name;
-      scene.queueMessage(
+      globalScene.queueMessage(
         i18next.t("abilityTriggers:postWeatherLapseDamage", {
           pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
           abilityName,
@@ -4356,7 +4327,7 @@ export class PostTerrainChangeAddBattlerTagAttr extends PostTerrainChangeAbAttr 
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (pokemon: Pokemon) => {
-    const terrainType = pokemon.scene.arena.terrain?.terrainType;
+    const terrainType = globalScene.arena.terrain?.terrainType;
     return !!terrainType && terrainTypes.indexOf(terrainType) > -1;
   };
 }
@@ -4392,11 +4363,9 @@ export class PostTurnStatusHealAbAttr extends PostTurnAbAttr {
     if (pokemon.status && this.effects.includes(pokemon.status.effect)) {
       if (!pokemon.isFullHp()) {
         if (!simulated) {
-          const scene = pokemon.scene;
           const abilityName = (!passive ? pokemon.getAbility() : pokemon.getPassiveAbility()).name;
-          scene.unshiftPhase(
+          globalScene.unshiftPhase(
             new PokemonHealPhase(
-              scene,
               pokemon.getBattlerIndex(),
               Utils.toDmgValue(pokemon.getMaxHp() / 8),
               i18next.t("abilityTriggers:poisonHeal", { pokemonName: getPokemonNameWithAffix(pokemon), abilityName }),
@@ -4432,7 +4401,7 @@ export class PostTurnResetStatusAbAttr extends PostTurnAbAttr {
     }
     if (this.target?.status) {
       if (!simulated) {
-        this.target.scene.queueMessage(
+        globalScene.queueMessage(
           getStatusEffectHealText(this.target.status?.effect, getPokemonNameWithAffix(this.target)),
         );
         this.target.resetStatus(false);
@@ -4499,7 +4468,7 @@ export class PostTurnLootAbAttr extends PostTurnAbAttr {
     const chosenBerry = new BerryModifierType(chosenBerryType);
     berriesEaten.splice(randomIdx); // Remove berry from memory
 
-    const berryModifier = pokemon.scene.findModifier(
+    const berryModifier = globalScene.findModifier(
       (m) => m instanceof BerryModifier && m.berryType === chosenBerryType,
       pokemon.isPlayer(),
     ) as BerryModifier | undefined;
@@ -4507,21 +4476,21 @@ export class PostTurnLootAbAttr extends PostTurnAbAttr {
     if (!berryModifier) {
       const newBerry = new BerryModifier(chosenBerry, pokemon.id, chosenBerryType, 1);
       if (pokemon.isPlayer()) {
-        pokemon.scene.addModifier(newBerry);
+        globalScene.addModifier(newBerry);
       } else {
-        pokemon.scene.addEnemyModifier(newBerry);
+        globalScene.addEnemyModifier(newBerry);
       }
     } else if (berryModifier.stackCount < berryModifier.getMaxHeldItemCount(pokemon)) {
       berryModifier.stackCount++;
     }
 
-    pokemon.scene.queueMessage(
+    globalScene.queueMessage(
       i18next.t("abilityTriggers:postTurnLootCreateEatenBerry", {
         pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
         berryName: chosenBerry.name,
       }),
     );
-    pokemon.scene.updateModifiers(pokemon.isPlayer());
+    globalScene.updateModifiers(pokemon.isPlayer());
 
     return true;
   }
@@ -4554,15 +4523,11 @@ export class MoodyAbAttr extends PostTurnAbAttr {
       if (canRaise.length > 0) {
         const raisedStat = canRaise[pokemon.randSeedInt(canRaise.length)];
         canLower = canRaise.filter((s) => s !== raisedStat);
-        pokemon.scene.unshiftPhase(
-          new StatStageChangePhase(pokemon.scene, pokemon.getBattlerIndex(), true, [raisedStat], 2),
-        );
+        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [raisedStat], 2));
       }
       if (canLower.length > 0) {
         const loweredStat = canLower[pokemon.randSeedInt(canLower.length)];
-        pokemon.scene.unshiftPhase(
-          new StatStageChangePhase(pokemon.scene, pokemon.getBattlerIndex(), true, [loweredStat], -1),
-        );
+        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [loweredStat], -1));
       }
     }
 
@@ -4578,9 +4543,7 @@ export class SpeedBoostAbAttr extends PostTurnAbAttr {
   applyPostTurn(pokemon: Pokemon, passive: boolean, simulated: boolean, args: any[]): boolean {
     if (!simulated) {
       if (!pokemon.turnData.switchedInThisTurn && !pokemon.turnData.failedRunAway) {
-        pokemon.scene.unshiftPhase(
-          new StatStageChangePhase(pokemon.scene, pokemon.getBattlerIndex(), true, [Stat.SPD], 1),
-        );
+        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [Stat.SPD], 1));
       } else {
         return false;
       }
@@ -4593,11 +4556,9 @@ export class PostTurnHealAbAttr extends PostTurnAbAttr {
   applyPostTurn(pokemon: Pokemon, passive: boolean, simulated: boolean, args: any[]): boolean {
     if (!pokemon.isFullHp()) {
       if (!simulated) {
-        const scene = pokemon.scene;
         const abilityName = (!passive ? pokemon.getAbility() : pokemon.getPassiveAbility()).name;
-        scene.unshiftPhase(
+        globalScene.unshiftPhase(
           new PokemonHealPhase(
-            scene,
             pokemon.getBattlerIndex(),
             Utils.toDmgValue(pokemon.getMaxHp() / 16),
             i18next.t("abilityTriggers:postTurnHeal", {
@@ -4629,7 +4590,7 @@ export class PostTurnFormChangeAbAttr extends PostTurnAbAttr {
     const formIndex = this.formFunc(pokemon);
     if (formIndex !== pokemon.formIndex) {
       if (!simulated) {
-        pokemon.scene.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger, false);
+        globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger, false);
       }
 
       return true;
@@ -4661,7 +4622,7 @@ export class PostTurnHurtIfSleepingAbAttr extends PostTurnAbAttr {
       ) {
         if (!simulated) {
           opp.damageAndUpdate(Utils.toDmgValue(opp.getMaxHp() / 8), HitResult.OTHER);
-          pokemon.scene.queueMessage(
+          globalScene.queueMessage(
             i18next.t("abilityTriggers:badDreams", { pokemonName: getPokemonNameWithAffix(opp) }),
           );
         }
@@ -4691,11 +4652,11 @@ export class FetchBallAbAttr extends PostTurnAbAttr {
     if (simulated) {
       return false;
     }
-    const lastUsed = pokemon.scene.currentBattle.lastUsedPokeball;
+    const lastUsed = globalScene.currentBattle.lastUsedPokeball;
     if (lastUsed !== null && !!pokemon.isPlayer) {
-      pokemon.scene.pokeballCounts[lastUsed]++;
-      pokemon.scene.currentBattle.lastUsedPokeball = null;
-      pokemon.scene.queueMessage(
+      globalScene.pokeballCounts[lastUsed]++;
+      globalScene.currentBattle.lastUsedPokeball = null;
+      globalScene.queueMessage(
         i18next.t("abilityTriggers:fetchBall", {
           pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
           pokeballName: getPokeballName(lastUsed),
@@ -4719,11 +4680,11 @@ export class PostBiomeChangeWeatherChangeAbAttr extends PostBiomeChangeAbAttr {
   }
 
   apply(pokemon: Pokemon, passive: boolean, simulated: boolean, cancelled: Utils.BooleanHolder, args: any[]): boolean {
-    if (!pokemon.scene.arena.weather?.isImmutable()) {
+    if (!globalScene.arena.weather?.isImmutable()) {
       if (simulated) {
-        return pokemon.scene.arena.weather?.weatherType !== this.weatherType;
+        return globalScene.arena.weather?.weatherType !== this.weatherType;
       } else {
-        return pokemon.scene.arena.trySetWeather(this.weatherType, true);
+        return globalScene.arena.trySetWeather(this.weatherType, true);
       }
     }
 
@@ -4742,9 +4703,9 @@ export class PostBiomeChangeTerrainChangeAbAttr extends PostBiomeChangeAbAttr {
 
   apply(pokemon: Pokemon, passive: boolean, simulated: boolean, cancelled: Utils.BooleanHolder, args: any[]): boolean {
     if (simulated) {
-      return pokemon.scene.arena.terrain?.terrainType !== this.terrainType;
+      return globalScene.arena.terrain?.terrainType !== this.terrainType;
     } else {
-      return pokemon.scene.arena.trySetTerrain(this.terrainType, true);
+      return globalScene.arena.trySetTerrain(this.terrainType, true);
     }
   }
 }
@@ -4806,10 +4767,10 @@ export class PostDancingMoveAbAttr extends PostMoveUsedAbAttr {
         // If the move is an AttackMove or a StatusMove the Dancer must replicate the move on the source of the Dance
         if (move.getMove() instanceof AttackMove || move.getMove() instanceof StatusMove) {
           const target = this.getTarget(dancer, source, targets);
-          dancer.scene.unshiftPhase(new MovePhase(dancer.scene, dancer, target, move, true, true));
+          globalScene.unshiftPhase(new MovePhase(dancer, target, move, true, true));
         } else if (move.getMove() instanceof SelfStatusMove) {
           // If the move is a SelfStatusMove (ie. Swords Dance) the Dancer should replicate it on itself
-          dancer.scene.unshiftPhase(new MovePhase(dancer.scene, dancer, [dancer.getBattlerIndex()], move, true, true));
+          globalScene.unshiftPhase(new MovePhase(dancer, [dancer.getBattlerIndex()], move, true, true));
         }
       }
       return true;
@@ -4898,9 +4859,8 @@ export class StatStageChangeCopyAbAttr extends AbAttr {
     args: any[],
   ): boolean | Promise<boolean> {
     if (!simulated) {
-      pokemon.scene.unshiftPhase(
+      globalScene.unshiftPhase(
         new StatStageChangePhase(
-          pokemon.scene,
           pokemon.getBattlerIndex(),
           true,
           args[0] as BattleStat[],
@@ -4986,9 +4946,8 @@ export class HealFromBerryUseAbAttr extends AbAttr {
   apply(pokemon: Pokemon, passive: boolean, simulated: boolean, ...args: [Utils.BooleanHolder, any[]]): boolean {
     const { name: abilityName } = passive ? pokemon.getPassiveAbility() : pokemon.getAbility();
     if (!simulated) {
-      pokemon.scene.unshiftPhase(
+      globalScene.unshiftPhase(
         new PokemonHealPhase(
-          pokemon.scene,
           pokemon.getBattlerIndex(),
           Utils.toDmgValue(pokemon.getMaxHp() * this.healPercent),
           i18next.t("abilityTriggers:healFromBerryUse", {
@@ -5117,14 +5076,14 @@ export class PostBattleLootAbAttr extends PostBattleAbAttr {
    * @returns `true` if successful
    */
   applyPostBattle(pokemon: Pokemon, passive: boolean, simulated: boolean, args: any[]): boolean {
-    const postBattleLoot = pokemon.scene.currentBattle.postBattleLoot;
+    const postBattleLoot = globalScene.currentBattle.postBattleLoot;
     if (!simulated && postBattleLoot.length && args[0]) {
       const randItem = Utils.randSeedItem(postBattleLoot);
       //@ts-ignore - TODO see below
-      if (pokemon.scene.tryTransferHeldItemModifier(randItem, pokemon, true, 1, true, undefined, false)) {
+      if (globalScene.tryTransferHeldItemModifier(randItem, pokemon, true, 1, true, undefined, false)) {
         // TODO: fix. This is a promise!?
         postBattleLoot.splice(postBattleLoot.indexOf(randItem), 1);
-        pokemon.scene.queueMessage(
+        globalScene.queueMessage(
           i18next.t("abilityTriggers:postBattleLoot", {
             pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
             itemName: randItem.type.name,
@@ -5178,14 +5137,14 @@ export class PostFaintUnsuppressedWeatherFormChangeAbAttr extends PostFaintAbAtt
     hitResult: HitResult,
     args: any[],
   ): boolean {
-    const pokemonToTransform = getPokemonWithWeatherBasedForms(pokemon.scene);
+    const pokemonToTransform = getPokemonWithWeatherBasedForms();
 
     if (pokemonToTransform.length < 1) {
       return false;
     }
 
     if (!simulated) {
-      pokemon.scene.arena.triggerWeatherBasedFormChanges();
+      globalScene.arena.triggerWeatherBasedFormChanges();
     }
 
     return true;
@@ -5214,7 +5173,7 @@ export class PostFaintClearWeatherAbAttr extends PostFaintAbAttr {
     hitResult?: HitResult,
     ...args: any[]
   ): boolean {
-    const weatherType = pokemon.scene.arena.weather?.weatherType;
+    const weatherType = globalScene.arena.weather?.weatherType;
     let turnOffWeather = false;
 
     // Clear weather only if user's ability matches the weather and no other pokemon has the ability.
@@ -5222,7 +5181,7 @@ export class PostFaintClearWeatherAbAttr extends PostFaintAbAttr {
       case WeatherType.HARSH_SUN:
         if (
           pokemon.hasAbility(Abilities.DESOLATE_LAND)
-          && pokemon.scene.getField(true).filter((p) => p.hasAbility(Abilities.DESOLATE_LAND)).length === 0
+          && globalScene.getField(true).filter((p) => p.hasAbility(Abilities.DESOLATE_LAND)).length === 0
         ) {
           turnOffWeather = true;
         }
@@ -5230,7 +5189,7 @@ export class PostFaintClearWeatherAbAttr extends PostFaintAbAttr {
       case WeatherType.HEAVY_RAIN:
         if (
           pokemon.hasAbility(Abilities.PRIMORDIAL_SEA)
-          && pokemon.scene.getField(true).filter((p) => p.hasAbility(Abilities.PRIMORDIAL_SEA)).length === 0
+          && globalScene.getField(true).filter((p) => p.hasAbility(Abilities.PRIMORDIAL_SEA)).length === 0
         ) {
           turnOffWeather = true;
         }
@@ -5238,7 +5197,7 @@ export class PostFaintClearWeatherAbAttr extends PostFaintAbAttr {
       case WeatherType.STRONG_WINDS:
         if (
           pokemon.hasAbility(Abilities.DELTA_STREAM)
-          && pokemon.scene.getField(true).filter((p) => p.hasAbility(Abilities.DELTA_STREAM)).length === 0
+          && globalScene.getField(true).filter((p) => p.hasAbility(Abilities.DELTA_STREAM)).length === 0
         ) {
           turnOffWeather = true;
         }
@@ -5250,7 +5209,7 @@ export class PostFaintClearWeatherAbAttr extends PostFaintAbAttr {
     }
 
     if (turnOffWeather) {
-      pokemon.scene.arena.trySetWeather(WeatherType.NONE, false);
+      globalScene.arena.trySetWeather(WeatherType.NONE, false);
       return true;
     }
 
@@ -5279,7 +5238,7 @@ export class PostFaintContactDamageAbAttr extends PostFaintAbAttr {
     if (move !== undefined && attacker !== undefined && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)) {
       //If the mon didn't die to indirect damage
       const cancelled = new Utils.BooleanHolder(false);
-      pokemon.scene.getField(true).map((p) => applyAbAttrs(FieldPreventExplosiveMovesAbAttr, p, cancelled, simulated));
+      globalScene.getField(true).map((p) => applyAbAttrs(FieldPreventExplosiveMovesAbAttr, p, cancelled, simulated));
       if (cancelled.value || attacker.hasAbilityWithAttr(BlockNonDirectDamageAbAttr)) {
         return false;
       }
@@ -5429,9 +5388,7 @@ export class FlinchStatStageChangeAbAttr extends FlinchEffectAbAttr {
 
   apply(pokemon: Pokemon, passive: boolean, simulated: boolean, cancelled: Utils.BooleanHolder, args: any[]): boolean {
     if (!simulated) {
-      pokemon.scene.unshiftPhase(
-        new StatStageChangePhase(pokemon.scene, pokemon.getBattlerIndex(), true, this.stats, this.stages),
-      );
+      globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, this.stats, this.stages));
     }
     return true;
   }
@@ -5649,7 +5606,7 @@ export class MoneyAbAttr extends PostBattleAbAttr {
    */
   applyPostBattle(pokemon: Pokemon, passive: boolean, simulated: boolean, args: any[]): boolean {
     if (!simulated && args[0]) {
-      pokemon.scene.currentBattle.moneyScattered += pokemon.scene.getWaveMoneyAmount(0.2);
+      globalScene.currentBattle.moneyScattered += globalScene.getWaveMoneyAmount(0.2);
       return true;
     }
     return false;
@@ -5692,7 +5649,7 @@ export class PostSummonStatStageChangeOnArenaAbAttr extends PostSummonStatStageC
   applyPostSummon(pokemon: Pokemon, passive: boolean, simulated: boolean, args: any[]): boolean {
     const side = pokemon.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
 
-    if (pokemon.scene.arena.getTagOnSide(this.tagType, side)) {
+    if (globalScene.arena.getTagOnSide(this.tagType, side)) {
       return super.applyPostSummon(pokemon, passive, simulated, args);
     }
     return false;
@@ -5803,7 +5760,7 @@ export class BypassSpeedChanceAbAttr extends AbAttr {
     const bypassSpeed = args[0] as Utils.BooleanHolder;
 
     if (!bypassSpeed.value && pokemon.randSeedInt(100) < this.chance) {
-      const turnCommand = pokemon.scene.currentBattle.turnCommands[pokemon.getBattlerIndex()];
+      const turnCommand = globalScene.currentBattle.turnCommands[pokemon.getBattlerIndex()];
       const isCommandFight = turnCommand?.command === Command.FIGHT;
       const move = turnCommand?.move?.move ? allMoves[turnCommand.move.move] : null;
       const isDamageMove = move?.category === MoveCategory.PHYSICAL || move?.category === MoveCategory.SPECIAL;
@@ -5845,7 +5802,7 @@ export class PreventBypassSpeedChanceAbAttr extends AbAttr {
     const bypassSpeed = args[0] as Utils.BooleanHolder;
     const canCheckHeldItems = args[1] as Utils.BooleanHolder;
 
-    const turnCommand = pokemon.scene.currentBattle.turnCommands[pokemon.getBattlerIndex()];
+    const turnCommand = globalScene.currentBattle.turnCommands[pokemon.getBattlerIndex()];
     const isCommandFight = turnCommand?.command === Command.FIGHT;
     const move = turnCommand?.move?.move ? allMoves[turnCommand.move.move] : null;
     if (this.condition(pokemon, move!) && isCommandFight) {
@@ -5876,7 +5833,7 @@ export class TerrainEventTypeChangeAbAttr extends PostSummonAbAttr {
     if (pokemon.isTerastallized()) {
       return false;
     }
-    const currentTerrain = pokemon.scene.arena.getTerrainType();
+    const currentTerrain = globalScene.arena.getTerrainType();
     const typeChange: Type[] = this.determineTypeChange(pokemon, currentTerrain);
     if (typeChange.length !== 0) {
       if (pokemon.summonData.addedType && typeChange.includes(pokemon.summonData.addedType)) {
@@ -5928,14 +5885,14 @@ export class TerrainEventTypeChangeAbAttr extends PostSummonAbAttr {
     simulated: boolean,
     args: any[],
   ): boolean | Promise<boolean> {
-    if (pokemon.scene.arena.getTerrainType() !== TerrainType.NONE) {
+    if (globalScene.arena.getTerrainType() !== TerrainType.NONE) {
       return this.apply(pokemon, passive, simulated, new Utils.BooleanHolder(false), []);
     }
     return false;
   }
 
   override getTriggerMessage(pokemon: Pokemon, abilityName: string, ...args: any[]) {
-    const currentTerrain = pokemon.scene.arena.getTerrainType();
+    const currentTerrain = globalScene.arena.getTerrainType();
     const pokemonNameWithAffix = getPokemonNameWithAffix(pokemon);
     if (currentTerrain === TerrainType.NONE) {
       return i18next.t("abilityTriggers:pokemonTypeChangeRevert", { pokemonNameWithAffix });
@@ -5967,7 +5924,7 @@ async function applyAbAttrsInternal<TAttr extends AbAttr>(
         continue;
       }
 
-      pokemon.scene.setPhaseQueueSplice();
+      globalScene.setPhaseQueueSplice();
 
       let result = applyFunc(attr, passive);
       // TODO Remove this when promises get reworked
@@ -5983,7 +5940,7 @@ async function applyAbAttrsInternal<TAttr extends AbAttr>(
         }
         if (attr.showAbility && !simulated) {
           if (showAbilityInstant) {
-            pokemon.scene.abilityBar.showAbility(pokemon, passive);
+            globalScene.abilityBar.showAbility(pokemon, passive);
           } else {
             queueShowAbility(pokemon, passive);
           }
@@ -5991,13 +5948,13 @@ async function applyAbAttrsInternal<TAttr extends AbAttr>(
         const message = attr.getTriggerMessage(pokemon, ability.name, args);
         if (message) {
           if (!simulated) {
-            pokemon.scene.queueMessage(message);
+            globalScene.queueMessage(message);
           }
         }
         messages.push(message!);
       }
     }
-    pokemon.scene.clearPhaseQueueSplice();
+    globalScene.clearPhaseQueueSplice();
   }
 }
 
@@ -6018,14 +5975,14 @@ class ForceSwitchOutHelper {
      * - If the Pokémon is still alive (hp > 0), and if so, it leaves the field and a new SwitchPhase is initiated.
      */
     if (switchOutTarget instanceof PlayerPokemon) {
-      if (switchOutTarget.scene.getPlayerParty().filter((p) => p.isAllowedInBattle() && !p.isOnField()).length < 1) {
+      if (globalScene.getPlayerParty().filter((p) => p.isAllowedInBattle() && !p.isOnField()).length < 1) {
         return false;
       }
 
       if (switchOutTarget.hp > 0) {
         switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
-        pokemon.scene.prependToPhase(
-          new SwitchPhase(pokemon.scene, this.switchType, switchOutTarget.getFieldIndex(), true, true),
+        globalScene.prependToPhase(
+          new SwitchPhase(this.switchType, switchOutTarget.getFieldIndex(), true, true),
           MoveEndPhase,
         );
         return true;
@@ -6034,23 +5991,17 @@ class ForceSwitchOutHelper {
        * For non-wild battles, it checks if the opposing party has any available Pokémon to switch in.
        * If yes, the Pokémon leaves the field and a new SwitchSummonPhase is initiated.
        */
-    } else if (pokemon.scene.currentBattle.battleType !== BattleType.WILD) {
-      if (switchOutTarget.scene.getEnemyParty().filter((p) => p.isAllowedInBattle() && !p.isOnField()).length < 1) {
+    } else if (globalScene.currentBattle.battleType !== BattleType.WILD) {
+      if (globalScene.getEnemyParty().filter((p) => p.isAllowedInBattle() && !p.isOnField()).length < 1) {
         return false;
       }
       if (switchOutTarget.hp > 0) {
         switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
-        pokemon.scene.prependToPhase(
-          new SwitchSummonPhase(
-            pokemon.scene,
-            this.switchType,
-            switchOutTarget.getFieldIndex(),
-            pokemon.scene.currentBattle.trainer
-              ? pokemon.scene.currentBattle.trainer.getNextSummonIndex((switchOutTarget as EnemyPokemon).trainerSlot)
-              : 0,
-            false,
-            false,
-          ),
+        const summonIndex = globalScene.currentBattle.trainer
+          ? globalScene.currentBattle.trainer.getNextSummonIndex((switchOutTarget as EnemyPokemon).trainerSlot)
+          : 0;
+        globalScene.prependToPhase(
+          new SwitchSummonPhase(this.switchType, switchOutTarget.getFieldIndex(), summonIndex, false, false),
           MoveEndPhase,
         );
         return true;
@@ -6060,31 +6011,31 @@ class ForceSwitchOutHelper {
        * It will not flee if it is a Mystery Encounter with fleeing disabled (checked in `getSwitchOutCondition()`) or if it is a wave 10x wild boss
        */
     } else {
-      if (!pokemon.scene.currentBattle.waveIndex || pokemon.scene.currentBattle.waveIndex % 10 === 0) {
+      if (!globalScene.currentBattle.waveIndex || globalScene.currentBattle.waveIndex % 10 === 0) {
         return false;
       }
 
       if (switchOutTarget.hp > 0) {
         switchOutTarget.leaveField(false);
-        pokemon.scene.queueMessage(
+        globalScene.queueMessage(
           i18next.t("moveTriggers:fled", { pokemonName: getPokemonNameWithAffix(switchOutTarget) }),
           null,
           true,
           500,
         );
 
-        if (switchOutTarget.scene.currentBattle.double) {
+        if (globalScene.currentBattle.double) {
           const allyPokemon = switchOutTarget.getAlly();
-          switchOutTarget.scene.redirectPokemonMoves(switchOutTarget, allyPokemon);
+          globalScene.redirectPokemonMoves(switchOutTarget, allyPokemon);
         }
       }
 
       if (!switchOutTarget.getAlly()?.isActive(true)) {
-        pokemon.scene.clearEnemyHeldItemModifiers();
+        globalScene.clearEnemyHeldItemModifiers();
 
         if (switchOutTarget.hp) {
-          pokemon.scene.pushPhase(new BattleEndPhase(pokemon.scene, false));
-          pokemon.scene.pushPhase(new NewBattlePhase(pokemon.scene));
+          globalScene.pushPhase(new BattleEndPhase(false));
+          globalScene.pushPhase(new NewBattlePhase());
         }
       }
     }
@@ -6108,28 +6059,28 @@ class ForceSwitchOutHelper {
       return !blockedByAbility.value;
     }
 
-    if (!player && pokemon.scene.currentBattle.battleType === BattleType.WILD) {
-      if (!pokemon.scene.currentBattle.waveIndex && pokemon.scene.currentBattle.waveIndex % 10 === 0) {
+    if (!player && globalScene.currentBattle.battleType === BattleType.WILD) {
+      if (!globalScene.currentBattle.waveIndex && globalScene.currentBattle.waveIndex % 10 === 0) {
         return false;
       }
     }
 
     if (
       !player
-      && pokemon.scene.currentBattle.isBattleMysteryEncounter()
-      && !pokemon.scene.currentBattle.mysteryEncounter?.fleeAllowed
+      && globalScene.currentBattle.isBattleMysteryEncounter()
+      && !globalScene.currentBattle.mysteryEncounter?.fleeAllowed
     ) {
       return false;
     }
 
-    const party = player ? pokemon.scene.getPlayerParty() : pokemon.scene.getEnemyParty();
+    const party = player ? globalScene.getPlayerParty() : globalScene.getEnemyParty();
     return (
-      (!player && pokemon.scene.currentBattle.battleType === BattleType.WILD)
+      (!player && globalScene.currentBattle.battleType === BattleType.WILD)
       || party.filter(
         (p) =>
           p.isAllowedInBattle()
           && (player || (p as EnemyPokemon).trainerSlot === (switchOutTarget as EnemyPokemon).trainerSlot),
-      ).length > pokemon.scene.currentBattle.getBattlerCount()
+      ).length > globalScene.currentBattle.getBattlerCount()
     );
   }
 
@@ -6779,8 +6730,8 @@ export function applyPostItemLostAbAttrs(
 }
 
 function queueShowAbility(pokemon: Pokemon, passive: boolean): void {
-  pokemon.scene.unshiftPhase(new ShowAbilityPhase(pokemon.scene, pokemon.id, passive));
-  pokemon.scene.clearPhaseQueueSplice();
+  globalScene.unshiftPhase(new ShowAbilityPhase(pokemon.id, passive));
+  globalScene.clearPhaseQueueSplice();
 }
 
 /**
@@ -6796,10 +6747,9 @@ function setAbilityRevealed(pokemon: Pokemon): void {
 
 /**
  * Returns the Pokemon with weather-based forms
- * @param {BattleScene} scene - The current scene
  */
-function getPokemonWithWeatherBasedForms(scene: BattleScene) {
-  return scene
+function getPokemonWithWeatherBasedForms() {
+  return globalScene
     .getField(true)
     .filter(
       (p) =>
@@ -6883,7 +6833,7 @@ export function initAbilities() {
       .attr(
         AttackTypeImmunityAbAttr,
         Type.GROUND,
-        (pokemon: Pokemon) => !pokemon.getTag(GroundedTag) && !pokemon.scene.arena.getTag(ArenaTagType.GRAVITY),
+        (pokemon: Pokemon) => !pokemon.getTag(GroundedTag) && !globalScene.arena.getTag(ArenaTagType.GRAVITY),
       )
       .ignorable(),
     new Ability(Abilities.EFFECT_SPORE, 3).attr(EffectSporeAbAttr),
@@ -6959,13 +6909,15 @@ export function initAbilities() {
       .attr(StatMultiplierAbAttr, Stat.ACC, 0.8, (_user, _target, move) => move.category === MoveCategory.PHYSICAL),
     new Ability(Abilities.CUTE_CHARM, 3).attr(PostDefendContactApplyTagChanceAbAttr, 30, BattlerTagType.INFATUATED),
     new Ability(Abilities.PLUS, 3).conditionalAttr(
-      (p) => p.scene.currentBattle.double && [Abilities.PLUS, Abilities.MINUS].some((a) => p.getAlly().hasAbility(a)),
+      (p) =>
+        globalScene.currentBattle.double && [Abilities.PLUS, Abilities.MINUS].some((a) => p.getAlly().hasAbility(a)),
       StatMultiplierAbAttr,
       Stat.SPATK,
       1.5,
     ),
     new Ability(Abilities.MINUS, 3).conditionalAttr(
-      (p) => p.scene.currentBattle.double && [Abilities.PLUS, Abilities.MINUS].some((a) => p.getAlly().hasAbility(a)),
+      (p) =>
+        globalScene.currentBattle.double && [Abilities.PLUS, Abilities.MINUS].some((a) => p.getAlly().hasAbility(a)),
       StatMultiplierAbAttr,
       Stat.SPATK,
       1.5,
@@ -7304,7 +7256,7 @@ export function initAbilities() {
     new Ability(Abilities.ANALYTIC, 5).attr(
       MovePowerBoostAbAttr,
       (user, target, move) => {
-        const movePhase = user?.scene.findPhase((phase) => phase instanceof MovePhase && phase.pokemon.id !== user.id);
+        const movePhase = globalScene.findPhase((phase) => phase instanceof MovePhase && phase.pokemon.id !== user?.id);
         return Utils.isNullOrUndefined(movePhase);
       },
       1.3,
@@ -7470,20 +7422,20 @@ export function initAbilities() {
     new Ability(Abilities.AURA_BREAK, 6)
       .ignorable()
       .conditionalAttr(
-        (pokemon) => pokemon.scene.getField(true).some((p) => p.hasAbility(Abilities.DARK_AURA)),
+        (pokemon) => globalScene.getField(true).some((p) => p.hasAbility(Abilities.DARK_AURA)),
         FieldMoveTypePowerBoostAbAttr,
         Type.DARK,
         9 / 16,
       )
       .conditionalAttr(
-        (pokemon) => pokemon.scene.getField(true).some((p) => p.hasAbility(Abilities.FAIRY_AURA)),
+        (pokemon) => globalScene.getField(true).some((p) => p.hasAbility(Abilities.FAIRY_AURA)),
         FieldMoveTypePowerBoostAbAttr,
         Type.FAIRY,
         9 / 16,
       )
       .conditionalAttr(
         (pokemon) =>
-          pokemon.scene
+          globalScene
             .getField(true)
             .some((p) => p.hasAbility(Abilities.DARK_AURA) || p.hasAbility(Abilities.FAIRY_AURA)),
         PostSummonMessageAbAttr,
@@ -8075,7 +8027,7 @@ export function initAbilities() {
           1
           + 0.1
             * Math.min(
-              user.isPlayer() ? user.scene.currentBattle.playerFaints : user.scene.currentBattle.enemyFaints,
+              user.isPlayer() ? globalScene.currentBattle.playerFaints : globalScene.currentBattle.enemyFaints,
               5,
             ),
       )
