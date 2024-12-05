@@ -61,7 +61,7 @@ describe("Weird Dream - Mystery Encounter", () => {
     await game.runToMysteryEncounter(MysteryEncounterType.WEIRD_DREAM, defaultParty);
 
     expect(WeirdDreamEncounter.encounterType).toBe(MysteryEncounterType.WEIRD_DREAM);
-    expect(WeirdDreamEncounter.encounterTier).toBe(MysteryEncounterTier.ROGUE);
+    expect(WeirdDreamEncounter.encounterTier).toBe(MysteryEncounterTier.EPIC);
     expect(WeirdDreamEncounter.dialogue).toBeDefined();
     expect(WeirdDreamEncounter.dialogue.intro).toStrictEqual([
       {

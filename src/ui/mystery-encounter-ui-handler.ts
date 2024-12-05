@@ -492,7 +492,7 @@ export default class MysteryEncounterUiHandler extends UiHandler {
           ? 1
           : mysteryEncounter.encounterTier === MysteryEncounterTier.ULTRA
             ? 2
-            : mysteryEncounter.encounterTier === MysteryEncounterTier.ROGUE
+            : mysteryEncounter.encounterTier === MysteryEncounterTier.EPIC
               ? 3
               : 4;
     const ballType = getPokeballAtlasKey(index);

@@ -99,7 +99,7 @@ const excludedBosses = [
 export const DarkDealEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(
   MysteryEncounterType.DARK_DEAL,
 )
-  .withEncounterTier(MysteryEncounterTier.ROGUE)
+  .withEncounterTier(MysteryEncounterTier.EPIC)
   .withIntroSpriteConfigs([
     {
       spriteKey: "dark_deal_scientist",
