@@ -1531,7 +1531,7 @@ export interface TrainerConfigs {
   [key: number]: TrainerConfig;
 }
 
-function getWavePartyTemplate(...templates: TrainerPartyTemplate[]) {
+export function getWavePartyTemplate(...templates: TrainerPartyTemplate[]) {
   return templates[
     Math.min(
       Math.max(

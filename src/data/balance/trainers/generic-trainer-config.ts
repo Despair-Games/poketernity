@@ -21,9 +21,8 @@ export const genericTrainerConfigs: TrainerConfigs = {
     .setHasDouble("Ace Duo")
     .setMoneyMultiplier(2.25)
     .setEncounterBgm(TrainerType.ACE_TRAINER)
-    .setPartyTemplateFunc((scene) =>
+    .setPartyTemplateFunc(() =>
       getWavePartyTemplate(
-        scene,
         trainerPartyTemplates.THREE_WEAK_BALANCED,
         trainerPartyTemplates.FOUR_WEAK_BALANCED,
         trainerPartyTemplates.FIVE_WEAK_BALANCED,
@@ -144,9 +143,8 @@ export const genericTrainerConfigs: TrainerConfigs = {
     .setEncounterBgm(TrainerType.POKEFAN)
     .setHasGenders("Breeder Female")
     .setHasDouble("Breeders")
-    .setPartyTemplateFunc((scene) =>
+    .setPartyTemplateFunc(() =>
       getWavePartyTemplate(
-        scene,
         trainerPartyTemplates.FOUR_WEAKER,
         trainerPartyTemplates.FIVE_WEAKER,
         trainerPartyTemplates.SIX_WEAKER,
@@ -612,9 +610,8 @@ export const genericTrainerConfigs: TrainerConfigs = {
     .setDoubleOnly()
     .setMoneyMultiplier(0.65)
     .setUseSameSeedForAllMembers()
-    .setPartyTemplateFunc((scene) =>
+    .setPartyTemplateFunc(() =>
       getWavePartyTemplate(
-        scene,
         trainerPartyTemplates.TWO_WEAK,
         trainerPartyTemplates.TWO_AVG,
         trainerPartyTemplates.TWO_STRONG,
