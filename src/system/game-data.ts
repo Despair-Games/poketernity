@@ -5,7 +5,7 @@ import Pokemon, { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
 import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
 import PokemonSpecies, { allSpecies, getPokemonSpecies, noStarterFormKeys } from "#app/data/pokemon-species";
 import { speciesStarterCosts } from "#app/data/balance/starters";
-import * as Utils from "#app/utils";
+import { randInt, getEnumKeys, isLocal, executeIf, fixedInt, randSeedItem, NumberHolder } from "#app/utils";
 import Overrides from "#app/overrides";
 import PokemonData from "#app/system/pokemon-data";
 import PersistentModifierData from "#app/system/modifier-data";
@@ -349,8 +349,8 @@ export class GameData {
     this.loadSettings();
     this.loadGamepadSettings();
     this.loadMappingConfigs();
-    this.trainerId = Utils.randInt(65536);
-    this.secretId = Utils.randInt(65536);
+    this.trainerId = randInt(65536);
+    this.secretId = randInt(65536);
     this.starterData = {};
     this.gameStats = new GameStats();
     this.runHistory = {};
@@ -577,7 +577,7 @@ export class GameData {
         }
 
         if (systemData.voucherCounts) {
-          Utils.getEnumKeys(VoucherType).forEach((key) => {
+          getEnumKeys(VoucherType).forEach((key) => {
             const index = VoucherType[key];
             this.voucherCounts[index] = systemData.voucherCounts[index] || 0;
           });
@@ -605,7 +605,7 @@ export class GameData {
    * At the moment, only retrievable from locale cache
    */
   async getRunHistoryData(): Promise<RunHistoryData> {
-    if (!Utils.isLocal) {
+    if (!isLocal) {
       /**
        * Networking Code DO NOT DELETE!
        * Note: Might have to be migrated to `pokerogue-api.ts`
@@ -1399,7 +1399,7 @@ export class GameData {
     useCachedSystem: boolean = false,
   ): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
-      Utils.executeIf(!skipVerification, updateUserInfo).then((success) => {
+      executeIf(!skipVerification, updateUserInfo).then((success) => {
         if (success !== null && !success) {
           return resolve(false);
         }
@@ -1571,7 +1571,7 @@ export class GameData {
           }
 
           const displayError = (error: string) =>
-            globalScene.ui.showText(error, null, () => globalScene.ui.showText("", 0), Utils.fixedInt(1500));
+            globalScene.ui.showText(error, null, () => globalScene.ui.showText("", 0), fixedInt(1500));
           dataName = dataName!; // tell TS compiler that dataName is defined!
 
           if (!valid) {
@@ -1579,7 +1579,7 @@ export class GameData {
               `Your ${dataName} data could not be loaded. It may be corrupted.`,
               null,
               () => globalScene.ui.showText("", 0),
-              Utils.fixedInt(1500),
+              fixedInt(1500),
             );
           }
 
@@ -1667,7 +1667,7 @@ export class GameData {
       () => {
         const neutralNatures = [Nature.HARDY, Nature.DOCILE, Nature.SERIOUS, Nature.BASHFUL, Nature.QUIRKY];
         for (let s = 0; s < defaultStarterSpecies.length; s++) {
-          defaultStarterNatures.push(Utils.randSeedItem(neutralNatures));
+          defaultStarterNatures.push(randSeedItem(neutralNatures));
         }
       },
       0,
@@ -2143,7 +2143,7 @@ export class GameData {
       value = decrementValue(value);
     }
 
-    const cost = new Utils.NumberHolder(value);
+    const cost = new NumberHolder(value);
     applyChallenges(globalScene.gameMode, ChallengeType.STARTER_COST, speciesId, cost);
 
     return cost.value;
@@ -2171,7 +2171,7 @@ export class GameData {
         entry.hatchedCount = 0;
       }
       if (!entry.hasOwnProperty("natureAttr") || (entry.caughtAttr && !entry.natureAttr)) {
-        entry.natureAttr = this.defaultDexData?.[k].natureAttr || 1 << Utils.randInt(25, 1);
+        entry.natureAttr = this.defaultDexData?.[k].natureAttr || 1 << randInt(25, 1);
       }
     }
   }

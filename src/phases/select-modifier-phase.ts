@@ -26,11 +26,10 @@ import ModifierSelectUiHandler, { SHOP_OPTIONS_ROW_LIMIT } from "#app/ui/modifie
 import PartyUiHandler, { PartyUiMode, PartyOption } from "#app/ui/party-ui-handler";
 import { Mode } from "#app/ui/ui";
 import i18next from "i18next";
-import * as Utils from "#app/utils";
+import { isNullOrUndefined, NumberHolder } from "#app/utils";
 import { BattlePhase } from "./battle-phase";
 import Overrides from "#app/overrides";
 import { CustomModifierSettings } from "#app/modifier/modifier-type";
-import { isNullOrUndefined, NumberHolder } from "#app/utils";
 
 export class SelectModifierPhase extends BattlePhase {
   private rerollCount: integer;
@@ -67,7 +66,7 @@ export class SelectModifierPhase extends BattlePhase {
     if (!this.isCopy) {
       regenerateModifierPoolThresholds(party, this.getPoolType(), this.rerollCount);
     }
-    const modifierCount = new Utils.IntegerHolder(3);
+    const modifierCount = new NumberHolder(3);
     if (this.isPlayer()) {
       globalScene.applyModifiers(ExtraModifierModifier, true, modifierCount);
       globalScene.applyModifiers(TempExtraModifierModifier, true, modifierCount);

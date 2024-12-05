@@ -6,6 +6,7 @@ import { EggTier } from "#app/enums/egg-type";
 import { VariantTier } from "#app/enums/variant-tier";
 import EggData from "#app/system/egg-data";
 import * as Utils from "#app/utils";
+import { isNullOrUndefined } from "#app/utils";
 import { Species } from "#enums/species";
 import GameManager from "#test/utils/gameManager";
 import Phaser from "phaser";
@@ -192,7 +193,7 @@ describe("Egg Generation Tests", () => {
     const scene = game.scene;
 
     const eggMoveIndex = new Egg({ scene }).eggMoveIndex;
-    const result = !Utils.isNullOrUndefined(eggMoveIndex) && eggMoveIndex >= 0 && eggMoveIndex <= 3;
+    const result = !isNullOrUndefined(eggMoveIndex) && eggMoveIndex >= 0 && eggMoveIndex <= 3;
 
     expect(result).toBe(true);
   });

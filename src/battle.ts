@@ -1,6 +1,14 @@
 import { globalScene } from "#app/global-scene";
 import { Command } from "./ui/command-ui-handler";
-import * as Utils from "./utils";
+import {
+  randomString,
+  getEnumValues,
+  NumberHolder,
+  randSeedInt,
+  shiftCharCodes,
+  randSeedItem,
+  randInt,
+} from "#app/utils";
 import Trainer, { TrainerVariant } from "./field/trainer";
 import { GameMode } from "./game-mode";
 import { MoneyMultiplierModifier, PokemonHeldItemModifier } from "./modifier/modifier";
@@ -80,7 +88,7 @@ export default class Battle {
   public postBattleLoot: PokemonHeldItemModifier[] = [];
   public escapeAttempts: number = 0;
   public lastMove: Moves;
-  public battleSeed: string = Utils.randomString(16, true);
+  public battleSeed: string = randomString(16, true);
   private battleSeedState: string | null = null;
   public moneyScattered: number = 0;
   public lastUsedPokeball: PokeballType | null = null;
@@ -157,7 +165,7 @@ export default class Battle {
 
   incrementTurn(): void {
     this.turn++;
-    this.turnCommands = Object.fromEntries(Utils.getEnumValues(BattlerIndex).map((bt) => [bt, null]));
+    this.turnCommands = Object.fromEntries(getEnumValues(BattlerIndex).map((bt) => [bt, null]));
     this.battleSeedState = null;
   }
 
@@ -186,7 +194,7 @@ export default class Battle {
   }
 
   pickUpScatteredMoney(): void {
-    const moneyAmount = new Utils.IntegerHolder(globalScene.currentBattle.moneyScattered);
+    const moneyAmount = new NumberHolder(globalScene.currentBattle.moneyScattered);
     globalScene.applyModifiers(MoneyMultiplierModifier, true, moneyAmount);
 
     if (globalScene.arena.getTag(ArenaTagType.HAPPY_HOUR)) {
@@ -419,7 +427,7 @@ export default class Battle {
   }
 
   /**
-   * Generates a random number using the current battle's seed. Calls {@linkcode Utils.randSeedInt}
+   * Generates a random number using the current battle's seed. Calls {@linkcode randSeedInt}
    * @param range How large of a range of random numbers to choose from. If {@linkcode range} <= 1, returns {@linkcode min}
    * @param min The minimum integer to pick, default `0`
    * @returns A random integer between {@linkcode min} and ({@linkcode min} + {@linkcode range} - 1)
@@ -434,12 +442,12 @@ export default class Battle {
     if (this.battleSeedState) {
       Phaser.Math.RND.state(this.battleSeedState);
     } else {
-      Phaser.Math.RND.sow([Utils.shiftCharCodes(this.battleSeed, this.turn << 6)]);
+      Phaser.Math.RND.sow([shiftCharCodes(this.battleSeed, this.turn << 6)]);
       console.log("Battle Seed:", this.battleSeed);
     }
     globalScene.rngCounter = this.rngCounter++;
     globalScene.rngSeedOverride = this.battleSeed;
-    const ret = Utils.randSeedInt(range, min);
+    const ret = randSeedInt(range, min);
     this.battleSeedState = Phaser.Math.RND.state();
     Phaser.Math.RND.state(state);
     globalScene.rngCounter = tempRngCounter;
@@ -525,19 +533,19 @@ function getRandomTrainerFunc(
   seedOffset: number = 0,
 ): GetTrainerFunc {
   return () => {
-    const rand = Utils.randSeedInt(trainerPool.length);
+    const rand = randSeedInt(trainerPool.length);
     const trainerTypes: TrainerType[] = [];
 
     globalScene.executeWithSeedOffset(() => {
       for (const trainerPoolEntry of trainerPool) {
-        const trainerType = Array.isArray(trainerPoolEntry) ? Utils.randSeedItem(trainerPoolEntry) : trainerPoolEntry;
+        const trainerType = Array.isArray(trainerPoolEntry) ? randSeedItem(trainerPoolEntry) : trainerPoolEntry;
         trainerTypes.push(trainerType);
       }
     }, seedOffset);
 
     let trainerGender = TrainerVariant.DEFAULT;
     if (randomGender) {
-      trainerGender = Utils.randInt(2) === 0 ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT;
+      trainerGender = randInt(2) === 0 ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT;
     }
 
     /* 1/3 chance for evil team grunts to be double battles */
@@ -556,7 +564,7 @@ function getRandomTrainerFunc(
     const isEvilTeamGrunt = evilTeamGrunts.includes(trainerTypes[rand]);
 
     if (trainerConfigs[trainerTypes[rand]].hasDouble && isEvilTeamGrunt) {
-      return new Trainer(trainerTypes[rand], Utils.randInt(3) === 0 ? TrainerVariant.DOUBLE : trainerGender);
+      return new Trainer(trainerTypes[rand], randInt(3) === 0 ? TrainerVariant.DOUBLE : trainerGender);
     }
 
     return new Trainer(trainerTypes[rand], trainerGender);
@@ -579,7 +587,7 @@ export const classicFixedBattles: FixedBattleConfigs = {
   [5]: new FixedBattleConfig()
     .setBattleType(BattleType.TRAINER)
     .setGetTrainerFunc(
-      () => new Trainer(TrainerType.YOUNGSTER, Utils.randSeedInt(2) ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT),
+      () => new Trainer(TrainerType.YOUNGSTER, randSeedInt(2) ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT),
     ),
   [8]: new FixedBattleConfig()
     .setBattleType(BattleType.TRAINER)

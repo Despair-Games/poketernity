@@ -6,8 +6,7 @@ import {
   biomeTrainerPools,
   PokemonPools,
 } from "#app/data/balance/biomes";
-import { Constructor } from "#app/utils";
-import * as Utils from "#app/utils";
+import { type Constructor, randSeedInt } from "#app/utils";
 import PokemonSpecies, { getPokemonSpecies } from "#app/data/pokemon-species";
 import {
   getTerrainClearMessage,
@@ -120,7 +119,7 @@ export class Arena {
     if (typeof luckValue !== "undefined") {
       luckModifier = luckValue * (isBossSpecies ? 0.5 : 2);
     }
-    const tierValue = Utils.randSeedInt(randVal - luckModifier);
+    const tierValue = randSeedInt(randVal - luckModifier);
     let tier = !isBossSpecies
       ? tierValue >= 156
         ? BiomePoolTier.COMMON
@@ -149,7 +148,7 @@ export class Arena {
     if (!tierPool.length) {
       ret = globalScene.randomSpecies(waveIndex, level);
     } else {
-      const entry = tierPool[Utils.randSeedInt(tierPool.length)];
+      const entry = tierPool[randSeedInt(tierPool.length)];
       let species: Species;
       if (typeof entry === "number") {
         species = entry as Species;
@@ -160,7 +159,7 @@ export class Arena {
           if (level >= levelThreshold) {
             const speciesIds = entry[levelThreshold];
             if (speciesIds.length > 1) {
-              species = speciesIds[Utils.randSeedInt(speciesIds.length)];
+              species = speciesIds[randSeedInt(speciesIds.length)];
             } else {
               species = speciesIds[0];
             }
@@ -207,7 +206,7 @@ export class Arena {
       !!this.trainerPool[BiomePoolTier.BOSS].length
       && (globalScene.gameMode.isTrainerBoss(waveIndex, this.biomeType, globalScene.offsetGym) || isBoss);
     console.log(isBoss, this.trainerPool);
-    const tierValue = Utils.randSeedInt(!isTrainerBoss ? 512 : 64);
+    const tierValue = randSeedInt(!isTrainerBoss ? 512 : 64);
     let tier = !isTrainerBoss
       ? tierValue >= 156
         ? BiomePoolTier.COMMON
@@ -231,7 +230,7 @@ export class Arena {
       tier--;
     }
     const tierPool = this.trainerPool[tier] || [];
-    return !tierPool.length ? TrainerType.BREEDER : tierPool[Utils.randSeedInt(tierPool.length)];
+    return !tierPool.length ? TrainerType.BREEDER : tierPool[randSeedInt(tierPool.length)];
   }
 
   getSpeciesFormIndex(species: PokemonSpecies): integer {
@@ -961,7 +960,7 @@ export class ArenaBase extends Phaser.GameObjects.Container {
     if (!this.player) {
       globalScene.executeWithSeedOffset(
         () => {
-          this.propValue = propValue === undefined ? (hasProps ? Utils.randSeedInt(8) : 0) : propValue;
+          this.propValue = propValue === undefined ? (hasProps ? randSeedInt(8) : 0) : propValue;
           this.props.forEach((prop, p) => {
             const propKey = `${biomeKey}_b${hasProps ? `_${p + 1}` : ""}`;
             prop.setTexture(propKey);

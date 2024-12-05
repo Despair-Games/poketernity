@@ -15,7 +15,7 @@ import {
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import Pokemon, { PlayerPokemon, PokemonMove } from "#app/field/pokemon";
-import { IntegerHolder, isNullOrUndefined, randSeedInt, randSeedShuffle } from "#app/utils";
+import { NumberHolder, isNullOrUndefined, randSeedInt, randSeedShuffle } from "#app/utils";
 import PokemonSpecies, { allSpecies, getPokemonSpecies } from "#app/data/pokemon-species";
 import {
   HiddenAbilityRateBoosterModifier,
@@ -508,7 +508,7 @@ async function postProcessTransformedPokemon(
   if (newPokemon.species.abilityHidden) {
     const hiddenIndex = newPokemon.species.ability2 ? 2 : 1;
     if (newPokemon.abilityIndex < hiddenIndex) {
-      const hiddenAbilityChance = new IntegerHolder(256);
+      const hiddenAbilityChance = new NumberHolder(256);
       globalScene.applyModifiers(HiddenAbilityRateBoosterModifier, true, hiddenAbilityChance);
 
       const hasHiddenAbility = !randSeedInt(hiddenAbilityChance.value);
