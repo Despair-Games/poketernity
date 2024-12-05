@@ -28,7 +28,7 @@ describe("Abilities - Sturdy", () => {
 
     game.override.starterSpecies(Species.LUCARIO);
     game.override.startingLevel(100);
-    game.override.moveset([ Moves.CLOSE_COMBAT, Moves.FISSURE ]);
+    game.override.moveset([Moves.CLOSE_COMBAT, Moves.FISSURE]);
 
     game.override.enemySpecies(Species.ARON);
     game.override.enemyLevel(5);

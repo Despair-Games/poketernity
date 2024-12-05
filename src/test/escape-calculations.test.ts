@@ -32,13 +32,13 @@ describe("Escape chance calculations", () => {
   });
 
   it("single non-boss opponent", async () => {
-    await game.classicMode.startBattle([ Species.BULBASAUR ]);
+    await game.classicMode.startBattle([Species.BULBASAUR]);
 
     const playerPokemon = game.scene.getPlayerField();
     const enemyField = game.scene.getEnemyField();
     const enemySpeed = 100;
     // set enemyPokemon's speed to 100
-    vi.spyOn(enemyField[0], "stats", "get").mockReturnValue([ 20, 20, 20, 20, 20, enemySpeed ]);
+    vi.spyOn(enemyField[0], "stats", "get").mockReturnValue([20, 20, 20, 20, 20, enemySpeed]);
 
     const commandPhase = game.scene.getCurrentPhase() as CommandPhase;
     commandPhase.handleCommand(Command.RUN, 0);
@@ -94,7 +94,7 @@ describe("Escape chance calculations", () => {
 
   it("double non-boss opponent", async () => {
     game.override.battleType("double");
-    await game.classicMode.startBattle([ Species.BULBASAUR, Species.ABOMASNOW ]);
+    await game.classicMode.startBattle([Species.BULBASAUR, Species.ABOMASNOW]);
 
     const playerPokemon = game.scene.getPlayerField();
     const enemyField = game.scene.getEnemyField();
@@ -105,9 +105,9 @@ describe("Escape chance calculations", () => {
     // this is used to find the ratio of the player's first pokemon
     const playerASpeedPercentage = 0.4;
     // set enemyAPokemon's speed to 70
-    vi.spyOn(enemyField[0], "stats", "get").mockReturnValue([ 20, 20, 20, 20, 20, enemyASpeed ]);
+    vi.spyOn(enemyField[0], "stats", "get").mockReturnValue([20, 20, 20, 20, 20, enemyASpeed]);
     // set enemyBPokemon's speed to 30
-    vi.spyOn(enemyField[1], "stats", "get").mockReturnValue([ 20, 20, 20, 20, 20, enemyBSpeed ]);
+    vi.spyOn(enemyField[1], "stats", "get").mockReturnValue([20, 20, 20, 20, 20, enemyBSpeed]);
 
     const commandPhase = game.scene.getCurrentPhase() as CommandPhase;
     commandPhase.handleCommand(Command.RUN, 0);
@@ -176,13 +176,13 @@ describe("Escape chance calculations", () => {
 
   it("single boss opponent", async () => {
     game.override.startingWave(10);
-    await game.classicMode.startBattle([ Species.BULBASAUR ]);
+    await game.classicMode.startBattle([Species.BULBASAUR]);
 
     const playerPokemon = game.scene.getPlayerField()!;
     const enemyField = game.scene.getEnemyField()!;
     const enemySpeed = 100;
     // set enemyPokemon's speed to 100
-    vi.spyOn(enemyField[0], "stats", "get").mockReturnValue([ 20, 20, 20, 20, 20, enemySpeed ]);
+    vi.spyOn(enemyField[0], "stats", "get").mockReturnValue([20, 20, 20, 20, 20, enemySpeed]);
 
     const commandPhase = game.scene.getCurrentPhase() as CommandPhase;
     commandPhase.handleCommand(Command.RUN, 0);
@@ -252,7 +252,7 @@ describe("Escape chance calculations", () => {
   it("double boss opponent", async () => {
     game.override.battleType("double");
     game.override.startingWave(10);
-    await game.classicMode.startBattle([ Species.BULBASAUR, Species.ABOMASNOW ]);
+    await game.classicMode.startBattle([Species.BULBASAUR, Species.ABOMASNOW]);
 
     const playerPokemon = game.scene.getPlayerField();
     const enemyField = game.scene.getEnemyField();
@@ -263,9 +263,9 @@ describe("Escape chance calculations", () => {
     // this is used to find the ratio of the player's first pokemon
     const playerASpeedPercentage = 0.8;
     // set enemyAPokemon's speed to 70
-    vi.spyOn(enemyField[0], "stats", "get").mockReturnValue([ 20, 20, 20, 20, 20, enemyASpeed ]);
+    vi.spyOn(enemyField[0], "stats", "get").mockReturnValue([20, 20, 20, 20, 20, enemyASpeed]);
     // set enemyBPokemon's speed to 30
-    vi.spyOn(enemyField[1], "stats", "get").mockReturnValue([ 20, 20, 20, 20, 20, enemyBSpeed ]);
+    vi.spyOn(enemyField[1], "stats", "get").mockReturnValue([20, 20, 20, 20, 20, enemyBSpeed]);
 
     const commandPhase = game.scene.getCurrentPhase() as CommandPhase;
     commandPhase.handleCommand(Command.RUN, 0);

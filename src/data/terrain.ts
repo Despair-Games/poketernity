@@ -86,14 +86,14 @@ export function getTerrainName(terrainType: TerrainType): string {
 export function getTerrainColor(terrainType: TerrainType): [integer, integer, integer] {
   switch (terrainType) {
     case TerrainType.MISTY:
-      return [ 232, 136, 200 ];
+      return [232, 136, 200];
     case TerrainType.ELECTRIC:
-      return [ 248, 248, 120 ];
+      return [248, 248, 120];
     case TerrainType.GRASSY:
-      return [ 120, 200, 80 ];
+      return [120, 200, 80];
     case TerrainType.PSYCHIC:
-      return [ 160, 64, 160 ];
+      return [160, 64, 160];
   }
 
-  return [ 0, 0, 0 ];
+  return [0, 0, 0];
 }

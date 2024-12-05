@@ -30,11 +30,11 @@ describe("Moves - Nightmare", () => {
       .enemyAbility(Abilities.BALL_FETCH)
       .enemyStatusEffect(StatusEffect.SLEEP)
       .startingLevel(5)
-      .moveset([ Moves.NIGHTMARE, Moves.SPLASH ]);
+      .moveset([Moves.NIGHTMARE, Moves.SPLASH]);
   });
 
   it("lowers enemy hp by 1/4 each turn while asleep", async () => {
-    await game.classicMode.startBattle([ Species.HYPNO ]);
+    await game.classicMode.startBattle([Species.HYPNO]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     const enemyMaxHP = enemyPokemon.hp;

@@ -50,7 +50,7 @@ export default class PokemonIconAnimHandler {
 
   addOrUpdate(icons: PokemonIcon | PokemonIcon[], mode: PokemonIconAnimMode): void {
     if (!Array.isArray(icons)) {
-      icons = [ icons ];
+      icons = [icons];
     }
     for (const i of icons) {
       if (this.icons.has(i) && this.icons.get(i) === mode) {
@@ -67,7 +67,7 @@ export default class PokemonIconAnimHandler {
 
   remove(icons: PokemonIcon | PokemonIcon[]): void {
     if (!Array.isArray(icons)) {
-      icons = [ icons ];
+      icons = [icons];
     }
     for (const i of icons) {
       if (this.toggled) {

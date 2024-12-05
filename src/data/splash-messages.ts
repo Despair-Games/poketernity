@@ -209,14 +209,14 @@ const seasonalSplashMessages: Season[] = [
     name: "New Year's",
     start: "01-01",
     end: "01-31",
-    messages: [ "newYears.happyNewYear" ],
+    messages: ["newYears.happyNewYear"],
   },
 ];
 
 //#endregion
 
 export function getSplashMessages(): string[] {
-  const splashMessages: string[] = [ ...commonSplashMessages ];
+  const splashMessages: string[] = [...commonSplashMessages];
   console.log("use seasonal splash messages", USE_SEASONAL_SPLASH_MESSAGES);
   if (USE_SEASONAL_SPLASH_MESSAGES) {
     // add seasonal splash messages if the season is active

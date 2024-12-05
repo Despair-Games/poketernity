@@ -27,11 +27,11 @@ describe("Moves - Reflect Type", () => {
 
   it("will make the user Normal/Grass if targetting a typeless Pokemon affected by Forest's Curse", async () => {
     game.override
-      .moveset([ Moves.FORESTS_CURSE, Moves.REFLECT_TYPE ])
+      .moveset([Moves.FORESTS_CURSE, Moves.REFLECT_TYPE])
       .startingLevel(60)
       .enemySpecies(Species.CHARMANDER)
-      .enemyMoveset([ Moves.BURN_UP, Moves.SPLASH ]);
-    await game.classicMode.startBattle([ Species.FEEBAS ]);
+      .enemyMoveset([Moves.BURN_UP, Moves.SPLASH]);
+    await game.classicMode.startBattle([Species.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon();
     const enemyPokemon = game.scene.getEnemyPokemon();

@@ -124,7 +124,7 @@ class SessionVersionConverter extends VersionConverter {
   }
 
   override applyMigration(data: SessionSaveData, curVersion: number[]): void {
-    const [ curMajor, curMinor, curPatch ] = curVersion;
+    const [curMajor, curMinor, curPatch] = curVersion;
 
     if (curMajor === 1) {
       if (curMinor === 0) {
@@ -150,7 +150,7 @@ class SessionVersionConverter extends VersionConverter {
  */
 class SystemVersionConverter extends VersionConverter {
   override applyMigration(data: SystemSaveData, curVersion: number[]): void {
-    const [ curMajor, curMinor, curPatch ] = curVersion;
+    const [curMajor, curMinor, curPatch] = curVersion;
 
     if (curMajor === 1) {
       if (curMinor === 0) {
@@ -176,7 +176,7 @@ class SystemVersionConverter extends VersionConverter {
  */
 class SettingsVersionConverter extends VersionConverter {
   override applyMigration(data: Object, curVersion: number[]): void {
-    const [ curMajor, curMinor, curPatch ] = curVersion;
+    const [curMajor, curMinor, curPatch] = curVersion;
 
     if (curMajor === 1) {
       if (curMinor === 0) {

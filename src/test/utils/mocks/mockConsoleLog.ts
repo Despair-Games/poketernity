@@ -8,8 +8,8 @@ const MockConsoleLog = (_logDisabled = false, _phaseText = false) => {
   const originalWarn = console.warn;
   const notified: any[] = [];
 
-  const blacklist = [ "Phaser", "variant icon does not exist", "Texture \"%s\" not found" ];
-  const whitelist = [ "Phase" ];
+  const blacklist = ["Phaser", "variant icon does not exist", 'Texture "%s" not found'];
+  const whitelist = ["Phase"];
 
   return {
     log(...args) {

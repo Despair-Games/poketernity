@@ -22,7 +22,7 @@ import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encount
 import { NON_LEGEND_PARADOX_POKEMON } from "#app/data/balance/special-species-groups";
 
 const namespace = "mysteryEncounters/safariZone";
-const defaultParty = [ Species.LAPRAS, Species.GENGAR, Species.ABRA ];
+const defaultParty = [Species.LAPRAS, Species.GENGAR, Species.ABRA];
 const defaultBiome = Biome.SWAMP;
 const defaultWave = 45;
 
@@ -44,10 +44,10 @@ describe("Safari Zone - Mystery Encounter", () => {
     game.override.disableTrainerWaves();
 
     const biomeMap = new Map<Biome, MysteryEncounterType[]>([
-      [ Biome.VOLCANO, [ MysteryEncounterType.FIGHT_OR_FLIGHT ]],
-      [ Biome.FOREST, [ MysteryEncounterType.SAFARI_ZONE ]],
-      [ Biome.SWAMP, [ MysteryEncounterType.SAFARI_ZONE ]],
-      [ Biome.JUNGLE, [ MysteryEncounterType.SAFARI_ZONE ]],
+      [Biome.VOLCANO, [MysteryEncounterType.FIGHT_OR_FLIGHT]],
+      [Biome.FOREST, [MysteryEncounterType.SAFARI_ZONE]],
+      [Biome.SWAMP, [MysteryEncounterType.SAFARI_ZONE]],
+      [Biome.JUNGLE, [MysteryEncounterType.SAFARI_ZONE]],
     ]);
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(biomeMap);
   });

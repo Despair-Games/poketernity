@@ -27,11 +27,11 @@ describe("Moves - Beat Up", () => {
 
     game.override.enemySpecies(Species.SNORLAX);
     game.override.enemyLevel(100);
-    game.override.enemyMoveset([ Moves.SPLASH ]);
+    game.override.enemyMoveset([Moves.SPLASH]);
     game.override.enemyAbility(Abilities.INSOMNIA);
 
     game.override.startingLevel(100);
-    game.override.moveset([ Moves.BEAT_UP ]);
+    game.override.moveset([Moves.BEAT_UP]);
   });
 
   it("should hit once for each healthy player Pokemon", async () => {

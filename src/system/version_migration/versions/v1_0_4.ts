@@ -122,13 +122,13 @@ export const sessionMigrators = [
           m.typePregenArgs[0] = newStat;
 
           // From [ stat, battlesLeft ] to [ stat, maxBattles, battleCount ]
-          m.args = [ newStat, maxBattles, Math.min(m.args[1], maxBattles) ];
+          m.args = [newStat, maxBattles, Math.min(m.args[1], maxBattles)];
         } else {
           m.className = "TempCritBoosterModifier";
           m.typePregenArgs = [];
 
           // From [ stat, battlesLeft ] to [ maxBattles, battleCount ]
-          m.args = [ maxBattles, Math.min(m.args[1], maxBattles) ];
+          m.args = [maxBattles, Math.min(m.args[1], maxBattles)];
         }
       } else if (m.className === "DoubleBattleChanceBoosterModifier" && m.args.length === 1) {
         let maxBattles: number;
@@ -145,7 +145,7 @@ export const sessionMigrators = [
         }
 
         // From [ battlesLeft ] to [ maxBattles, battleCount ]
-        m.args = [ maxBattles, Math.min(m.args[0], maxBattles) ];
+        m.args = [maxBattles, Math.min(m.args[0], maxBattles)];
       }
     });
 

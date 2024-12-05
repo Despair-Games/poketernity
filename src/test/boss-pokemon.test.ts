@@ -33,7 +33,7 @@ describe("Boss Pokemon / Shields", () => {
       .enemyMoveset(Moves.SPLASH)
       .enemyHeldItems([])
       .startingLevel(1000)
-      .moveset([ Moves.FALSE_SWIPE, Moves.SUPER_FANG, Moves.SPLASH, Moves.PSYCHIC ])
+      .moveset([Moves.FALSE_SWIPE, Moves.SUPER_FANG, Moves.SPLASH, Moves.PSYCHIC])
       .ability(Abilities.NO_GUARD);
   });
 
@@ -65,7 +65,7 @@ describe("Boss Pokemon / Shields", () => {
   it("should reduce the number of shields if we are in a double battle", async () => {
     game.override.battleType("double").startingWave(150); // Floor 150 > 2 shields / 3 health segments
 
-    await game.classicMode.startBattle([ Species.MEWTWO ]);
+    await game.classicMode.startBattle([Species.MEWTWO]);
 
     const boss1: EnemyPokemon = game.scene.getEnemyParty()[0]!;
     const boss2: EnemyPokemon = game.scene.getEnemyParty()[1]!;
@@ -78,7 +78,7 @@ describe("Boss Pokemon / Shields", () => {
   it("shields should stop overflow damage and give stat stage boosts when broken", async () => {
     game.override.startingWave(150); // Floor 150 > 2 shields / 3 health segments
 
-    await game.classicMode.startBattle([ Species.MEWTWO ]);
+    await game.classicMode.startBattle([Species.MEWTWO]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     const segmentHp = enemyPokemon.getMaxHp() / enemyPokemon.bossSegments;
@@ -107,7 +107,7 @@ describe("Boss Pokemon / Shields", () => {
   it("breaking multiple shields at once requires extra damage", async () => {
     game.override.battleType("double").enemyHealthSegments(5);
 
-    await game.classicMode.startBattle([ Species.MEWTWO ]);
+    await game.classicMode.startBattle([Species.MEWTWO]);
 
     // In this test we want to break through 3 shields at once
     const brokenShields = 3;
@@ -142,7 +142,7 @@ describe("Boss Pokemon / Shields", () => {
 
     game.override.battleType("double").enemyHealthSegments(shieldsToBreak + 1);
 
-    await game.classicMode.startBattle([ Species.MEWTWO ]);
+    await game.classicMode.startBattle([Species.MEWTWO]);
 
     const boss1: EnemyPokemon = game.scene.getEnemyParty()[0]!;
     const boss1SegmentHp = boss1.getMaxHp() / boss1.bossSegments;
@@ -189,7 +189,7 @@ describe("Boss Pokemon / Shields", () => {
   it("the boss enduring does not proc an extra stat boost", async () => {
     game.override.enemyHealthSegments(2).enemyAbility(Abilities.STURDY);
 
-    await game.classicMode.startBattle([ Species.MEWTWO ]);
+    await game.classicMode.startBattle([Species.MEWTWO]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     expect(enemyPokemon.isBoss()).toBe(true);

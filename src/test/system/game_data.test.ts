@@ -21,7 +21,7 @@ describe("System - Game Data", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([ Moves.SPLASH ])
+      .moveset([Moves.SPLASH])
       .battleType("single")
       .enemyAbility(Abilities.BALL_FETCH)
       .enemyMoveset(Moves.SPLASH);
@@ -35,7 +35,7 @@ describe("System - Game Data", () => {
     beforeEach(() => {
       vi.spyOn(BattleScene, "bypassLogin", "get").mockReturnValue(false);
       vi.spyOn(game.scene.gameData, "getSessionSaveData").mockReturnValue({} as SessionSaveData);
-      vi.spyOn(account, "updateUserInfo").mockImplementation(async () => [ true, 1 ]);
+      vi.spyOn(account, "updateUserInfo").mockImplementation(async () => [true, 1]);
     });
 
     it("should return [true, true] if bypassLogin is true", async () => {
@@ -43,7 +43,7 @@ describe("System - Game Data", () => {
 
       const result = await game.scene.gameData.tryClearSession(0);
 
-      expect(result).toEqual([ true, true ]);
+      expect(result).toEqual([true, true]);
     });
 
     it("should return [true, true] if successful", async () => {
@@ -51,7 +51,7 @@ describe("System - Game Data", () => {
 
       const result = await game.scene.gameData.tryClearSession(0);
 
-      expect(result).toEqual([ true, true ]);
+      expect(result).toEqual([true, true]);
       expect(account.updateUserInfo).toHaveBeenCalled();
     });
 
@@ -60,7 +60,7 @@ describe("System - Game Data", () => {
 
       const result = await game.scene.gameData.tryClearSession(0);
 
-      expect(result).toEqual([ true, false ]);
+      expect(result).toEqual([true, false]);
       expect(account.updateUserInfo).toHaveBeenCalled();
     });
 
@@ -69,7 +69,7 @@ describe("System - Game Data", () => {
 
       const result = await game.scene.gameData.tryClearSession(0);
 
-      expect(result).toEqual([ false, false ]);
+      expect(result).toEqual([false, false]);
       expect(account.updateUserInfo).toHaveBeenCalled();
     });
   });
