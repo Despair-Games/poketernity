@@ -16,8 +16,6 @@ export function getPokeballAtlasKey(type: PokeballType): string {
       return "ub";
     case PokeballType.MASTER_BALL:
       return "mb";
-    case PokeballType.LUXURY_BALL:
-      return "lb";
   }
 }
 
@@ -36,9 +34,6 @@ export function getPokeballName(type: PokeballType): string {
     case PokeballType.MASTER_BALL:
       ret = i18next.t("pokeball:masterBall");
       break;
-    case PokeballType.LUXURY_BALL:
-      ret = i18next.t("pokeball:luxuryBall");
-      break;
   }
   return ret;
 }
@@ -53,8 +48,6 @@ export function getPokeballCatchMultiplier(type: PokeballType): number {
       return 2;
     case PokeballType.MASTER_BALL:
       return -1;
-    case PokeballType.LUXURY_BALL:
-      return 1;
   }
 }
 
@@ -68,8 +61,6 @@ export function getPokeballTintColor(type: PokeballType): number {
       return 0xe6cd31;
     case PokeballType.MASTER_BALL:
       return 0xa441bd;
-    case PokeballType.LUXURY_BALL:
-      return 0xffde6a;
   }
 }
 
