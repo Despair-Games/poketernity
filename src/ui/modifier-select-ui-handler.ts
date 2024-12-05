@@ -13,7 +13,7 @@ import { formatMoney } from "#app/utils";
 import Overrides from "#app/overrides";
 import i18next from "i18next";
 import { ShopCursorTarget } from "#app/enums/shop-cursor-target";
-import { NumberHolder } from "./../utils";
+import { NumberHolder } from "#app/utils";
 import Phaser from "phaser";
 import type { PokeballType } from "#enums/pokeball";
 
