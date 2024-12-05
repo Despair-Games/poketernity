@@ -37311,7 +37311,7 @@ export function initSpecies() {
       false,
       false,
       true,
-      "Epic Monkey Pokémon",
+      "Rogue Monkey Pokémon",
       Type.DARK,
       Type.GRASS,
       1.8,
