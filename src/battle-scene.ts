@@ -2778,9 +2778,6 @@ export default class BattleScene extends SceneBase {
             upgradeChance /= 8;
           }
           const modifierChance = this.gameMode.getEnemyModifierChance(isBoss);
-          let pokemonModifierChance = modifierChance;
-          if (this.currentBattle.battleType === BattleType.TRAINER && this.currentBattle.trainer)
-            pokemonModifierChance = Math.ceil(pokemonModifierChance * this.currentBattle.trainer.getPartyMemberModifierChanceMultiplier(i)); // eslint-disable-line
           let count = 0;
           for (let c = 0; c < chances; c++) {
             if (!Utils.randSeedInt(modifierChance)) {
