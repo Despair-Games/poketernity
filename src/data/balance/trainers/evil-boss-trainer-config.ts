@@ -4,8 +4,8 @@ import { Species } from "#app/enums/species";
 import { modifierTypes } from "#app/modifier/modifier-type";
 import { PersistentModifier } from "#app/modifier/modifier";
 import { TrainerType } from "#enums/trainer-type";
-import { Utils } from "phaser";
 import { TrainerConfig, getRandomPartyMemberFunc, TrainerSlot, TrainerConfigs } from "../../trainer-config";
+import { randSeedInt } from "#app/utils";
 
 let t = TrainerType.ROCKET_BOSS_GIOVANNI_1;
 export const evilBossTrainerConfigs: TrainerConfigs = {
@@ -318,7 +318,7 @@ export const evilBossTrainerConfigs: TrainerConfigs = {
         p.setBoss(true, 2);
         p.generateAndPopulateMoveset();
         p.pokeball = PokeballType.ULTRA_BALL;
-        p.formIndex = Utils.randSeedInt(4, 1); // Shock, Burn, Chill, or Douse Drive
+        p.formIndex = randSeedInt(4, 1); // Shock, Burn, Chill, or Douse Drive
       }),
     )
     .setPartyMemberFunc(
@@ -681,7 +681,7 @@ export const evilBossTrainerConfigs: TrainerConfigs = {
       3,
       getRandomPartyMemberFunc([Species.ROTOM], TrainerSlot.TRAINER, true, (p) => {
         p.generateAndPopulateMoveset();
-        p.formIndex = Utils.randSeedInt(5, 1); // Heat, Wash, Frost, Fan, or Mow
+        p.formIndex = randSeedInt(5, 1); // Heat, Wash, Frost, Fan, or Mow
       }),
     )
     .setPartyMemberFunc(
@@ -737,7 +737,7 @@ export const evilBossTrainerConfigs: TrainerConfigs = {
     .setPartyMemberFunc(
       3,
       getRandomPartyMemberFunc([Species.REVAVROOM], TrainerSlot.TRAINER, true, (p) => {
-        p.formIndex = Utils.randSeedInt(5, 1); //Random Starmobile form
+        p.formIndex = randSeedInt(5, 1); //Random Starmobile form
         p.generateAndPopulateMoveset();
         p.pokeball = PokeballType.ROGUE_BALL;
       }),

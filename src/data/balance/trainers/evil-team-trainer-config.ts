@@ -11,15 +11,14 @@ import {
 } from "../../trainer-config";
 import { Moves } from "#app/enums/moves";
 import { PokemonMove } from "#app/field/pokemon";
-import BattleScene from "#app/battle-scene";
+import { globalScene } from "#app/global-scene";
 
 /**
  * The function to get variable strength grunts
- * @param scene the singleton scene being passed in
  * @returns the correct TrainerPartyTemplate
  */
-function getEvilGruntPartyTemplate(scene: BattleScene): TrainerPartyTemplate {
-  const waveIndex = scene.currentBattle?.waveIndex;
+function getEvilGruntPartyTemplate(): TrainerPartyTemplate {
+  const waveIndex = globalScene.currentBattle?.waveIndex;
   if (waveIndex < 40) {
     return trainerPartyTemplates.TWO_AVG;
   } else if (waveIndex < 63) {
@@ -43,7 +42,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
     .setBattleBgm("battle_plasma_grunt")
     .setMixedBattleBgm("battle_rocket_grunt")
     .setVictoryBgm("victory_team_plasma")
-    .setPartyTemplateFunc((scene) => getEvilGruntPartyTemplate(scene))
+    .setPartyTemplateFunc(() => getEvilGruntPartyTemplate())
     .setSpeciesPools({
       [TrainerPoolTier.COMMON]: [
         Species.WEEDLE,
@@ -93,7 +92,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
     .setBattleBgm("battle_plasma_grunt")
     .setMixedBattleBgm("battle_rocket_grunt")
     .setVictoryBgm("victory_team_plasma")
-    .setPartyTemplateFunc((scene) => getEvilGruntPartyTemplate(scene)),
+    .setPartyTemplateFunc(() => getEvilGruntPartyTemplate()),
   [TrainerType.ARIANA]: new TrainerConfig(++t)
     .setMoneyMultiplier(1.5)
     .initForEvilTeamAdmin("rocket_admin_female", "rocket", [Species.ARBOK])
@@ -101,7 +100,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
     .setBattleBgm("battle_plasma_grunt")
     .setMixedBattleBgm("battle_rocket_grunt")
     .setVictoryBgm("victory_team_plasma")
-    .setPartyTemplateFunc((scene) => getEvilGruntPartyTemplate(scene)),
+    .setPartyTemplateFunc(() => getEvilGruntPartyTemplate()),
   [TrainerType.PROTON]: new TrainerConfig(++t)
     .setMoneyMultiplier(1.5)
     .initForEvilTeamAdmin("rocket_admin", "rocket", [Species.CROBAT])
@@ -109,7 +108,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
     .setBattleBgm("battle_plasma_grunt")
     .setMixedBattleBgm("battle_rocket_grunt")
     .setVictoryBgm("victory_team_plasma")
-    .setPartyTemplateFunc((scene) => getEvilGruntPartyTemplate(scene)),
+    .setPartyTemplateFunc(() => getEvilGruntPartyTemplate()),
   [TrainerType.PETREL]: new TrainerConfig(++t)
     .setMoneyMultiplier(1.5)
     .initForEvilTeamAdmin("rocket_admin", "rocket", [Species.WEEZING])
@@ -117,7 +116,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
     .setBattleBgm("battle_plasma_grunt")
     .setMixedBattleBgm("battle_rocket_grunt")
     .setVictoryBgm("victory_team_plasma")
-    .setPartyTemplateFunc((scene) => getEvilGruntPartyTemplate(scene)),
+    .setPartyTemplateFunc(() => getEvilGruntPartyTemplate()),
   [TrainerType.MAGMA_GRUNT]: new TrainerConfig(++t)
     .setHasGenders("Magma Grunt Female")
     .setHasDouble("Magma Grunts")
@@ -126,7 +125,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
     .setBattleBgm("battle_plasma_grunt")
     .setMixedBattleBgm("battle_aqua_magma_grunt")
     .setVictoryBgm("victory_team_plasma")
-    .setPartyTemplateFunc((scene) => getEvilGruntPartyTemplate(scene))
+    .setPartyTemplateFunc(() => getEvilGruntPartyTemplate())
     .setSpeciesPools({
       [TrainerPoolTier.COMMON]: [
         Species.SLUGMA,
@@ -167,7 +166,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
     .setBattleBgm("battle_plasma_grunt")
     .setMixedBattleBgm("battle_aqua_magma_grunt")
     .setVictoryBgm("victory_team_plasma")
-    .setPartyTemplateFunc((scene) => getEvilGruntPartyTemplate(scene)),
+    .setPartyTemplateFunc(() => getEvilGruntPartyTemplate()),
   [TrainerType.COURTNEY]: new TrainerConfig(++t)
     .setMoneyMultiplier(1.5)
     .initForEvilTeamAdmin("magma_admin_female", "magma", [Species.CAMERUPT])
@@ -175,7 +174,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
     .setBattleBgm("battle_plasma_grunt")
     .setMixedBattleBgm("battle_aqua_magma_grunt")
     .setVictoryBgm("victory_team_plasma")
-    .setPartyTemplateFunc((scene) => getEvilGruntPartyTemplate(scene)),
+    .setPartyTemplateFunc(() => getEvilGruntPartyTemplate()),
   [TrainerType.AQUA_GRUNT]: new TrainerConfig(++t)
     .setHasGenders("Aqua Grunt Female")
     .setHasDouble("Aqua Grunts")
@@ -184,7 +183,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
     .setBattleBgm("battle_plasma_grunt")
     .setMixedBattleBgm("battle_aqua_magma_grunt")
     .setVictoryBgm("victory_team_plasma")
-    .setPartyTemplateFunc((scene) => getEvilGruntPartyTemplate(scene))
+    .setPartyTemplateFunc(() => getEvilGruntPartyTemplate())
     .setSpeciesPools({
       [TrainerPoolTier.COMMON]: [
         Species.CARVANHA,
@@ -224,7 +223,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
     .setBattleBgm("battle_plasma_grunt")
     .setMixedBattleBgm("battle_aqua_magma_grunt")
     .setVictoryBgm("victory_team_plasma")
-    .setPartyTemplateFunc((scene) => getEvilGruntPartyTemplate(scene)),
+    .setPartyTemplateFunc(() => getEvilGruntPartyTemplate()),
   [TrainerType.SHELLY]: new TrainerConfig(++t)
     .setMoneyMultiplier(1.5)
     .initForEvilTeamAdmin("aqua_admin_female", "aqua", [Species.SHARPEDO])
@@ -232,7 +231,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
     .setBattleBgm("battle_plasma_grunt")
     .setMixedBattleBgm("battle_aqua_magma_grunt")
     .setVictoryBgm("victory_team_plasma")
-    .setPartyTemplateFunc((scene) => getEvilGruntPartyTemplate(scene)),
+    .setPartyTemplateFunc(() => getEvilGruntPartyTemplate()),
   [TrainerType.GALACTIC_GRUNT]: new TrainerConfig(++t)
     .setHasGenders("Galactic Grunt Female")
     .setHasDouble("Galactic Grunts")
@@ -241,7 +240,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
     .setBattleBgm("battle_plasma_grunt")
     .setMixedBattleBgm("battle_galactic_grunt")
     .setVictoryBgm("victory_team_plasma")
-    .setPartyTemplateFunc((scene) => getEvilGruntPartyTemplate(scene))
+    .setPartyTemplateFunc(() => getEvilGruntPartyTemplate())
     .setSpeciesPools({
       [TrainerPoolTier.COMMON]: [
         Species.GLAMEOW,
@@ -281,7 +280,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
     .setBattleBgm("battle_plasma_grunt")
     .setMixedBattleBgm("battle_galactic_admin")
     .setVictoryBgm("victory_team_plasma")
-    .setPartyTemplateFunc((scene) => getEvilGruntPartyTemplate(scene)),
+    .setPartyTemplateFunc(() => getEvilGruntPartyTemplate()),
   [TrainerType.MARS]: new TrainerConfig(++t)
     .setMoneyMultiplier(1.5)
     .initForEvilTeamAdmin("galactic_commander_female", "galactic", [Species.PURUGLY])
@@ -289,7 +288,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
     .setBattleBgm("battle_plasma_grunt")
     .setMixedBattleBgm("battle_galactic_admin")
     .setVictoryBgm("victory_team_plasma")
-    .setPartyTemplateFunc((scene) => getEvilGruntPartyTemplate(scene)),
+    .setPartyTemplateFunc(() => getEvilGruntPartyTemplate()),
   [TrainerType.SATURN]: new TrainerConfig(++t)
     .setMoneyMultiplier(1.5)
     .initForEvilTeamAdmin("galactic_commander", "galactic", [Species.TOXICROAK])
@@ -297,7 +296,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
     .setBattleBgm("battle_plasma_grunt")
     .setMixedBattleBgm("battle_galactic_admin")
     .setVictoryBgm("victory_team_plasma")
-    .setPartyTemplateFunc((scene) => getEvilGruntPartyTemplate(scene)),
+    .setPartyTemplateFunc(() => getEvilGruntPartyTemplate()),
   [TrainerType.PLASMA_GRUNT]: new TrainerConfig(++t)
     .setHasGenders("Plasma Grunt Female")
     .setHasDouble("Plasma Grunts")
@@ -306,7 +305,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
     .setBattleBgm("battle_plasma_grunt")
     .setMixedBattleBgm("battle_plasma_grunt")
     .setVictoryBgm("victory_team_plasma")
-    .setPartyTemplateFunc((scene) => getEvilGruntPartyTemplate(scene))
+    .setPartyTemplateFunc(() => getEvilGruntPartyTemplate())
     .setSpeciesPools({
       [TrainerPoolTier.COMMON]: [
         Species.PATRAT,
@@ -349,7 +348,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
     .setBattleBgm("battle_plasma_grunt")
     .setMixedBattleBgm("battle_plasma_grunt")
     .setVictoryBgm("victory_team_plasma")
-    .setPartyTemplateFunc((scene) => getEvilGruntPartyTemplate(scene)),
+    .setPartyTemplateFunc(() => getEvilGruntPartyTemplate()),
   [TrainerType.ROOD]: new TrainerConfig(++t)
     .setMoneyMultiplier(1.5)
     .initForEvilTeamAdmin("plasma_sage", "plasma", [Species.SWOOBAT])
@@ -357,7 +356,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
     .setBattleBgm("battle_plasma_grunt")
     .setMixedBattleBgm("battle_plasma_grunt")
     .setVictoryBgm("victory_team_plasma")
-    .setPartyTemplateFunc((scene) => getEvilGruntPartyTemplate(scene)),
+    .setPartyTemplateFunc(() => getEvilGruntPartyTemplate()),
   [TrainerType.FLARE_GRUNT]: new TrainerConfig(++t)
     .setHasGenders("Flare Grunt Female")
     .setHasDouble("Flare Grunts")
@@ -366,7 +365,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
     .setBattleBgm("battle_plasma_grunt")
     .setMixedBattleBgm("battle_flare_grunt")
     .setVictoryBgm("victory_team_plasma")
-    .setPartyTemplateFunc((scene) => getEvilGruntPartyTemplate(scene))
+    .setPartyTemplateFunc(() => getEvilGruntPartyTemplate())
     .setSpeciesPools({
       [TrainerPoolTier.COMMON]: [
         Species.FLETCHLING,
@@ -403,7 +402,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
     .setBattleBgm("battle_plasma_grunt")
     .setMixedBattleBgm("battle_flare_grunt")
     .setVictoryBgm("victory_team_plasma")
-    .setPartyTemplateFunc((scene) => getEvilGruntPartyTemplate(scene)),
+    .setPartyTemplateFunc(() => getEvilGruntPartyTemplate()),
   [TrainerType.XEROSIC]: new TrainerConfig(++t)
     .setMoneyMultiplier(1.5)
     .initForEvilTeamAdmin("flare_admin", "flare", [Species.MALAMAR])
@@ -411,7 +410,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
     .setBattleBgm("battle_plasma_grunt")
     .setMixedBattleBgm("battle_flare_grunt")
     .setVictoryBgm("victory_team_plasma")
-    .setPartyTemplateFunc((scene) => getEvilGruntPartyTemplate(scene)),
+    .setPartyTemplateFunc(() => getEvilGruntPartyTemplate()),
   [TrainerType.AETHER_GRUNT]: new TrainerConfig(++t)
     .setHasGenders("Aether Grunt Female")
     .setHasDouble("Aether Grunts")
@@ -420,7 +419,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
     .setBattleBgm("battle_plasma_grunt")
     .setMixedBattleBgm("battle_aether_grunt")
     .setVictoryBgm("victory_team_plasma")
-    .setPartyTemplateFunc((scene) => getEvilGruntPartyTemplate(scene))
+    .setPartyTemplateFunc(() => getEvilGruntPartyTemplate())
     .setSpeciesPools({
       [TrainerPoolTier.COMMON]: [
         Species.PIKIPEK,
@@ -471,7 +470,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
     .setBattleBgm("battle_plasma_grunt")
     .setMixedBattleBgm("battle_aether_grunt")
     .setVictoryBgm("victory_team_plasma")
-    .setPartyTemplateFunc((scene) => getEvilGruntPartyTemplate(scene)),
+    .setPartyTemplateFunc(() => getEvilGruntPartyTemplate()),
   [TrainerType.SKULL_GRUNT]: new TrainerConfig(++t)
     .setHasGenders("Skull Grunt Female")
     .setHasDouble("Skull Grunts")
@@ -480,7 +479,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
     .setBattleBgm("battle_plasma_grunt")
     .setMixedBattleBgm("battle_skull_grunt")
     .setVictoryBgm("victory_team_plasma")
-    .setPartyTemplateFunc((scene) => getEvilGruntPartyTemplate(scene))
+    .setPartyTemplateFunc(() => getEvilGruntPartyTemplate())
     .setSpeciesPools({
       [TrainerPoolTier.COMMON]: [
         Species.SALANDIT,
@@ -524,7 +523,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
     .setBattleBgm("battle_plasma_grunt")
     .setMixedBattleBgm("battle_skull_admin")
     .setVictoryBgm("victory_team_plasma")
-    .setPartyTemplateFunc((scene) => getEvilGruntPartyTemplate(scene)),
+    .setPartyTemplateFunc(() => getEvilGruntPartyTemplate()),
   [TrainerType.MACRO_GRUNT]: new TrainerConfig(++t)
     .setHasGenders("Macro Grunt Female")
     .setHasDouble("Macro Grunts")
@@ -533,7 +532,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
     .setBattleBgm("battle_plasma_grunt")
     .setMixedBattleBgm("battle_macro_grunt")
     .setVictoryBgm("victory_team_plasma")
-    .setPartyTemplateFunc((scene) => getEvilGruntPartyTemplate(scene))
+    .setPartyTemplateFunc(() => getEvilGruntPartyTemplate())
     .setSpeciesPools({
       [TrainerPoolTier.COMMON]: [
         Species.CUFANT,
@@ -576,7 +575,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
     .setBattleBgm("battle_plasma_grunt")
     .setMixedBattleBgm("battle_oleana")
     .setVictoryBgm("victory_team_plasma")
-    .setPartyTemplateFunc((scene) => getEvilGruntPartyTemplate(scene)),
+    .setPartyTemplateFunc(() => getEvilGruntPartyTemplate()),
   [TrainerType.STAR_GRUNT]: new TrainerConfig(++t)
     .setHasGenders("Star Grunt Female")
     .setHasDouble("Star Grunts")
@@ -585,7 +584,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
     .setBattleBgm("battle_plasma_grunt")
     .setMixedBattleBgm("battle_star_grunt")
     .setVictoryBgm("victory_team_plasma")
-    .setPartyTemplateFunc((scene) => getEvilGruntPartyTemplate(scene))
+    .setPartyTemplateFunc(() => getEvilGruntPartyTemplate())
     .setSpeciesPools({
       [TrainerPoolTier.COMMON]: [
         Species.DUNSPARCE,
@@ -643,7 +642,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
     .setBattleBgm("battle_plasma_grunt")
     .setMixedBattleBgm("battle_star_admin")
     .setVictoryBgm("victory_team_plasma")
-    .setPartyTemplateFunc((scene) => getEvilGruntPartyTemplate(scene))
+    .setPartyTemplateFunc(() => getEvilGruntPartyTemplate())
     .setPartyMemberFunc(
       3,
       getRandomPartyMemberFunc([Species.REVAVROOM], TrainerSlot.TRAINER, true, (p) => {
@@ -663,7 +662,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
     .setBattleBgm("battle_plasma_grunt")
     .setMixedBattleBgm("battle_star_admin")
     .setVictoryBgm("victory_team_plasma")
-    .setPartyTemplateFunc((scene) => getEvilGruntPartyTemplate(scene))
+    .setPartyTemplateFunc(() => getEvilGruntPartyTemplate())
     .setPartyMemberFunc(
       3,
       getRandomPartyMemberFunc([Species.REVAVROOM], TrainerSlot.TRAINER, true, (p) => {
@@ -683,7 +682,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
     .setBattleBgm("battle_plasma_grunt")
     .setMixedBattleBgm("battle_star_admin")
     .setVictoryBgm("victory_team_plasma")
-    .setPartyTemplateFunc((scene) => getEvilGruntPartyTemplate(scene))
+    .setPartyTemplateFunc(() => getEvilGruntPartyTemplate())
     .setPartyMemberFunc(
       3,
       getRandomPartyMemberFunc([Species.REVAVROOM], TrainerSlot.TRAINER, true, (p) => {
@@ -703,7 +702,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
     .setBattleBgm("battle_plasma_grunt")
     .setMixedBattleBgm("battle_star_admin")
     .setVictoryBgm("victory_team_plasma")
-    .setPartyTemplateFunc((scene) => getEvilGruntPartyTemplate(scene))
+    .setPartyTemplateFunc(() => getEvilGruntPartyTemplate())
     .setPartyMemberFunc(
       3,
       getRandomPartyMemberFunc([Species.REVAVROOM], TrainerSlot.TRAINER, true, (p) => {
@@ -723,7 +722,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
     .setBattleBgm("battle_plasma_grunt")
     .setMixedBattleBgm("battle_star_admin")
     .setVictoryBgm("victory_team_plasma")
-    .setPartyTemplateFunc((scene) => getEvilGruntPartyTemplate(scene))
+    .setPartyTemplateFunc(() => getEvilGruntPartyTemplate())
     .setPartyMemberFunc(
       3,
       getRandomPartyMemberFunc([Species.REVAVROOM], TrainerSlot.TRAINER, true, (p) => {
