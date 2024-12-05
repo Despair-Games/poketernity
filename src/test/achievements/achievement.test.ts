@@ -10,7 +10,7 @@ import {
   RibbonAchv,
   achvs,
 } from "#app/system/achv";
-import { IntegerHolder, NumberHolder } from "#app/utils";
+import { NumberHolder } from "#app/utils";
 import GameManager from "#test/utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -183,12 +183,12 @@ describe("LevelAchv", () => {
 
   it("should validate the achievement based on the level", () => {
     const levelAchv = new LevelAchv("", "Test Level Achievement", 100, "level_icon", 10);
-    const integerHolder = new IntegerHolder(50);
+    const _NumberHolder = new NumberHolder(50);
 
-    expect(levelAchv.validate([integerHolder])).toBe(false);
+    expect(levelAchv.validate([_NumberHolder])).toBe(false);
 
-    integerHolder.value = 150;
-    expect(levelAchv.validate([integerHolder])).toBe(true);
+    _NumberHolder.value = 150;
+    expect(levelAchv.validate([_NumberHolder])).toBe(true);
   });
 });
 
