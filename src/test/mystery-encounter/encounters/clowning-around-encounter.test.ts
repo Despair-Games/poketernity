@@ -299,11 +299,11 @@ describe("Clowning Around - Mystery Encounter", () => {
       const ultraCountAfter = leadItemsAfter
         .filter((m) => m.type.tier === ModifierTier.ULTRA)
         .reduce((a, b) => a + b.stackCount, 0);
-      const rogueCountAfter = leadItemsAfter
+      const epicCountAfter = leadItemsAfter
         .filter((m) => m.type.tier === ModifierTier.EPIC)
         .reduce((a, b) => a + b.stackCount, 0);
       expect(ultraCountAfter).toBe(13);
-      expect(rogueCountAfter).toBe(7);
+      expect(epicCountAfter).toBe(7);
 
       const secondItemsAfter = scene.getPlayerParty()[1].getHeldItems();
       expect(secondItemsAfter.length).toBe(1);

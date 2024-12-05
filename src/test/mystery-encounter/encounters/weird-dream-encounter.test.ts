@@ -137,7 +137,7 @@ describe("Weird Dream - Mystery Encounter", () => {
       expect(plus40To50.length).toBe(1);
     });
 
-    it("should have 1 Memory Mushroom, 5 Rogue Balls, and 3 Mints in rewards", async () => {
+    it("should have 1 Memory Mushroom, 5 Ultra Balls, and 3 Mints in rewards", async () => {
       await game.runToMysteryEncounter(MysteryEncounterType.WEIRD_DREAM, defaultParty);
       await runMysteryEncounterToEnd(game, 1);
       await game.phaseInterceptor.to(SelectModifierPhase, false);
@@ -191,7 +191,7 @@ describe("Weird Dream - Mystery Encounter", () => {
       expect(scene.getEnemyParty().length).toBe(scene.getPlayerParty().length);
     });
 
-    it("should have 2 Rogue/2 Ultra/2 Great items in rewards", async () => {
+    it("should have 2 Epic/2 Ultra/2 Great items in rewards", async () => {
       await game.runToMysteryEncounter(MysteryEncounterType.WEIRD_DREAM, defaultParty);
       await runMysteryEncounterToEnd(game, 2, undefined, true);
       await skipBattleRunMysteryEncounterRewardsPhase(game);

@@ -301,18 +301,18 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
 
         generateItemsOfTier(mostHeldItemsPokemon, numBerries, "Berries");
 
-        // Shuffle Transferable held items in the same tier (only shuffles Ultra and Rogue atm)
+        // Shuffle Transferable held items in the same tier (only shuffles Ultra and Epic atm)
         // For the purpose of this ME, Soothe Bells and Lucky Eggs are counted as Ultra tier
-        // And Golden Eggs as Rogue tier
+        // And Golden Eggs as Epic tier
         let numUltra = 0;
-        let numRogue = 0;
+        let numEpic = 0;
         items
           .filter((m) => m.isTransferable && !(m instanceof BerryModifier))
           .forEach((m) => {
             const type = m.type.withTierFromPool(ModifierPoolType.PLAYER, party);
             const tier = type.tier ?? ModifierTier.ULTRA;
             if (type.id === "GOLDEN_EGG" || tier === ModifierTier.EPIC) {
-              numRogue += m.stackCount;
+              numEpic += m.stackCount;
               globalScene.removeModifier(m);
             } else if (type.id === "LUCKY_EGG" || type.id === "SOOTHE_BELL" || tier === ModifierTier.ULTRA) {
               numUltra += m.stackCount;
@@ -321,7 +321,7 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
           });
 
         generateItemsOfTier(mostHeldItemsPokemon, numUltra, ModifierTier.ULTRA);
-        generateItemsOfTier(mostHeldItemsPokemon, numRogue, ModifierTier.EPIC);
+        generateItemsOfTier(mostHeldItemsPokemon, numEpic, ModifierTier.EPIC);
       })
       .withOptionPhase(async () => {
         leaveEncounterWithoutBattle(true);
@@ -491,7 +491,7 @@ function generateItemsOfTier(pokemon: PlayerPokemon, numItems: number, tier: Mod
     [modifierTypes.WIDE_LENS, 3],
   ];
 
-  const roguePool = [
+  const epicPool = [
     [modifierTypes.LEFTOVERS, 4],
     [modifierTypes.SHELL_BELL, 4],
     [modifierTypes.SOUL_DEW, 10],
@@ -520,7 +520,7 @@ function generateItemsOfTier(pokemon: PlayerPokemon, numItems: number, tier: Mod
   if (tier === "Berries") {
     pool = berryPool;
   } else {
-    pool = tier === ModifierTier.ULTRA ? ultraPool : roguePool;
+    pool = tier === ModifierTier.ULTRA ? ultraPool : epicPool;
   }
 
   for (let i = 0; i < numItems; i++) {

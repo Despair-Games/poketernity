@@ -129,7 +129,7 @@ export const WeirdDreamEncounter: MysteryEncounter = MysteryEncounterBuilder.wit
 )
   .withEncounterTier(MysteryEncounterTier.EPIC)
   .withDisallowedChallenges(Challenges.SINGLE_TYPE, Challenges.SINGLE_GENERATION)
-  // TODO: should reset minimum wave to 10 when there are more Rogue tiers in pool. Matching Dark Deal minimum for now.
+  // TODO: should reset minimum wave to 10 when there are more Epic tiers in pool. Matching Dark Deal minimum for now.
   .withSceneWaveRangeRequirement(30, 140)
   .withIntroSpriteConfigs([
     {

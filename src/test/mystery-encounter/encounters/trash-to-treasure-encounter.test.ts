@@ -191,7 +191,7 @@ describe("Trash to Treasure - Mystery Encounter", () => {
       expect(movePhases.filter((p) => (p as MovePhase).move.moveId === Moves.AMNESIA).length).toBe(1);
     });
 
-    it("should have 2 Rogue, 1 Ultra, 1 Great in rewards", async () => {
+    it("should have 2 Epic, 1 Ultra, 1 Great in rewards", async () => {
       await game.runToMysteryEncounter(MysteryEncounterType.TRASH_TO_TREASURE, defaultParty);
       await runMysteryEncounterToEnd(game, 2, undefined, true);
       await skipBattleRunMysteryEncounterRewardsPhase(game);
