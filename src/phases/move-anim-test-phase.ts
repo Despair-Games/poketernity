@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import { initMoveAnim, loadMoveAnimAssets, MoveAnim } from "#app/data/battle-anims";
 import { allMoves, SelfStatusMove } from "#app/data/move";
 import { Moves } from "#app/enums/moves";
-import * as Utils from "#app/utils";
+import { getEnumValues } from "#app/utils";
 import { BattlePhase } from "./battle-phase";
 
 export class MoveAnimTestPhase extends BattlePhase {
@@ -11,7 +11,7 @@ export class MoveAnimTestPhase extends BattlePhase {
   constructor(moveQueue?: Moves[]) {
     super();
 
-    this.moveQueue = moveQueue || Utils.getEnumValues(Moves).slice(1);
+    this.moveQueue = moveQueue || getEnumValues(Moves).slice(1);
   }
 
   start() {

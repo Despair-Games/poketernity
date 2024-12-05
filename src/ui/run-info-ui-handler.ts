@@ -5,7 +5,7 @@ import { TextStyle, addTextObject, addBBCodeTextObject, getTextColor } from "./t
 import { Mode } from "./ui";
 import { addWindow } from "./ui-theme";
 import { getPokeballAtlasKey } from "#app/data/pokeball";
-import * as Utils from "../utils";
+import { formatLargeNumber, getPlayTimeString, formatMoney, formatFancyLargeNumber } from "#app/utils";
 import PokemonData from "../system/pokemon-data";
 import i18next from "i18next";
 import { Button } from "../enums/buttons";
@@ -408,7 +408,7 @@ export default class RunInfoUiHandler extends UiHandler {
     const enemyLevel = addTextObject(
       36,
       26,
-      `${i18next.t("saveSlotSelectUiHandler:lv")}${Utils.formatLargeNumber(enemy.level, 1000)}`,
+      `${i18next.t("saveSlotSelectUiHandler:lv")}${formatLargeNumber(enemy.level, 1000)}`,
       enemyLevelStyle,
       { fontSize: "44px", color: "#f8f8f8" },
     );
@@ -438,7 +438,7 @@ export default class RunInfoUiHandler extends UiHandler {
       const enemyLevel = addTextObject(
         36,
         26,
-        `${i18next.t("saveSlotSelectUiHandler:lv")}${Utils.formatLargeNumber(enemy.level, 1000)}`,
+        `${i18next.t("saveSlotSelectUiHandler:lv")}${formatLargeNumber(enemy.level, 1000)}`,
         bossStatus ? TextStyle.PARTY_RED : TextStyle.PARTY,
         { fontSize: "44px", color: "#f8f8f8" },
       );
@@ -547,7 +547,7 @@ export default class RunInfoUiHandler extends UiHandler {
       const enemyLevel = addTextObject(
         43 * (e % 3),
         27 * (pokemonRowHeight + 1),
-        `${i18next.t("saveSlotSelectUiHandler:lv")}${Utils.formatLargeNumber(enemy.level, 1000)}`,
+        `${i18next.t("saveSlotSelectUiHandler:lv")}${formatLargeNumber(enemy.level, 1000)}`,
         isBoss ? TextStyle.PARTY_RED : TextStyle.PARTY,
         { fontSize: "54px" },
       );
@@ -620,9 +620,9 @@ export default class RunInfoUiHandler extends UiHandler {
     // Japanese is set to a greater line spacing of 35px in addBBCodeTextObject() if lineSpacing < 12.
     const lineSpacing = i18next.resolvedLanguage === "ja" ? 12 : 3;
     const runInfoText = addBBCodeTextObject(7, 0, "", TextStyle.WINDOW, { fontSize: "50px", lineSpacing: lineSpacing });
-    const runTime = Utils.getPlayTimeString(this.runInfo.playTime);
+    const runTime = getPlayTimeString(this.runInfo.playTime);
     runInfoText.appendText(`${i18next.t("runHistory:runLength")}: ${runTime}`, false);
-    const runMoney = Utils.formatMoney(globalScene.moneyFormat, this.runInfo.money);
+    const runMoney = formatMoney(globalScene.moneyFormat, this.runInfo.money);
     const moneyTextColor = getTextColor(TextStyle.MONEY_WINDOW, false, globalScene.uiTheme);
     runInfoText.appendText(
       `[color=${moneyTextColor}]${i18next.t("battleScene:moneyOwned", { formattedMoney: runMoney })}[/color]`,
@@ -782,7 +782,7 @@ export default class RunInfoUiHandler extends UiHandler {
         lineSpacing: lineSpacing,
       });
       pokeInfoText.appendText(
-        `${i18next.t("saveSlotSelectUiHandler:lv")}${Utils.formatFancyLargeNumber(pokemon.level, 1)} - ${pNatureName}`,
+        `${i18next.t("saveSlotSelectUiHandler:lv")}${formatFancyLargeNumber(pokemon.level, 1)} - ${pNatureName}`,
       );
       pokeInfoText.appendText(pAbilityInfo);
       pokeInfoText.appendText(pPassiveInfo);
@@ -792,7 +792,7 @@ export default class RunInfoUiHandler extends UiHandler {
       // Colored Arrows (Red/Blue) are placed by stats that are boosted from natures
       const pokeStatTextContainer = globalScene.add.container(-35, 6);
       const pStats: string[] = [];
-      pokemon.stats.forEach((element) => pStats.push(Utils.formatFancyLargeNumber(element, 1)));
+      pokemon.stats.forEach((element) => pStats.push(formatFancyLargeNumber(element, 1)));
       for (let i = 0; i < pStats.length; i++) {
         const isMult = getNatureStatMultiplier(pNature, i);
         pStats[i] = isMult < 1 ? pStats[i] + "[color=#40c8f8]↓[/color]" : pStats[i];

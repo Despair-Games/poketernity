@@ -5,7 +5,7 @@ import { MoneyInterestModifier, MapModifier } from "#app/modifier/modifier";
 import { OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler";
 import { Mode } from "#app/ui/ui";
 import { BattlePhase } from "./battle-phase";
-import * as Utils from "#app/utils";
+import { randSeedInt } from "#app/utils";
 import { PartyHealPhase } from "./party-heal-phase";
 import { SwitchBiomePhase } from "./switch-biome-phase";
 
@@ -40,7 +40,7 @@ export class SelectBiomePhase extends BattlePhase {
       let biomes: Biome[] = [];
       globalScene.executeWithSeedOffset(() => {
         biomes = (biomeLinks[currentBiome] as (Biome | [Biome, integer])[])
-          .filter((b) => !Array.isArray(b) || !Utils.randSeedInt(b[1]))
+          .filter((b) => !Array.isArray(b) || !randSeedInt(b[1]))
           .map((b) => (!Array.isArray(b) ? b : b[0]));
       }, globalScene.currentBattle.waveIndex);
       if (biomes.length > 1 && globalScene.findModifier((m) => m instanceof MapModifier)) {
@@ -51,7 +51,7 @@ export class SelectBiomePhase extends BattlePhase {
               ? [biomeLinks[currentBiome] as Biome]
               : (biomeLinks[currentBiome] as (Biome | [Biome, integer])[])
           )
-            .filter((b, i) => !Array.isArray(b) || !Utils.randSeedInt(b[1]))
+            .filter((b, i) => !Array.isArray(b) || !randSeedInt(b[1]))
             .map((b) => (Array.isArray(b) ? b[0] : b));
         }, globalScene.currentBattle.waveIndex);
         const biomeSelectItems = biomeChoices.map((b) => {
@@ -70,7 +70,7 @@ export class SelectBiomePhase extends BattlePhase {
           delay: 1000,
         });
       } else {
-        setNextBiome(biomes[Utils.randSeedInt(biomes.length)]);
+        setNextBiome(biomes[randSeedInt(biomes.length)]);
       }
     } else if (biomeLinks.hasOwnProperty(currentBiome)) {
       setNextBiome(biomeLinks[currentBiome] as Biome);

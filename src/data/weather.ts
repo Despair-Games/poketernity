@@ -4,7 +4,7 @@ import { getPokemonNameWithAffix } from "../messages";
 import Pokemon from "../field/pokemon";
 import { Type } from "#enums/type";
 import Move, { AttackMove } from "./move";
-import * as Utils from "../utils";
+import { randSeedInt } from "#app/utils";
 import { SuppressWeatherEffectAbAttr } from "./ability";
 import { TerrainType, getTerrainName } from "./terrain";
 import i18next from "i18next";
@@ -374,7 +374,7 @@ export function getRandomWeatherType(arena: any /* Importing from arena causes a
     let totalWeight = 0;
     weatherPool.forEach((w) => (totalWeight += w.weight));
 
-    const rand = Utils.randSeedInt(totalWeight);
+    const rand = randSeedInt(totalWeight);
     let w = 0;
     for (const weather of weatherPool) {
       w += weather.weight;
