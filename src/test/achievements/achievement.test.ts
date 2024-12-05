@@ -62,7 +62,7 @@ describe("Achv", () => {
     expect(achv1.getTier()).toBe(AchvTier.COMMON);
     expect(achv2.getTier()).toBe(AchvTier.GREAT);
     expect(achv3.getTier()).toBe(AchvTier.ULTRA);
-    expect(achv4.getTier()).toBe(AchvTier.ROGUE);
+    expect(achv4.getTier()).toBe(AchvTier.EPIC);
     expect(achv5.getTier()).toBe(AchvTier.MASTER);
   });
 
