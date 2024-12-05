@@ -1861,7 +1861,6 @@ export const modifierTypes = {
   POKEBALL: () => new AddPokeballModifierType("pb", PokeballType.POKEBALL, 5),
   GREAT_BALL: () => new AddPokeballModifierType("gb", PokeballType.GREAT_BALL, 5),
   ULTRA_BALL: () => new AddPokeballModifierType("ub", PokeballType.ULTRA_BALL, 5),
-  ROGUE_BALL: () => new AddPokeballModifierType("rb", PokeballType.ROGUE_BALL, 5),
   MASTER_BALL: () => new AddPokeballModifierType("mb", PokeballType.MASTER_BALL, 1),
 
   RARE_CANDY: () => new PokemonLevelIncrementModifierType("modifierType:ModifierType.RARE_CANDY", "rare_candy"),
@@ -2810,11 +2809,6 @@ const modifierPool: ModifierPool = {
     return m;
   }),
   [ModifierTier.EPIC]: [
-    new WeightedModifierType(
-      modifierTypes.ROGUE_BALL,
-      (party: Pokemon[]) => (hasMaximumBalls(party, PokeballType.ROGUE_BALL) ? 0 : 16),
-      16,
-    ),
     new WeightedModifierType(modifierTypes.RELIC_GOLD, skipInLastClassicWaveOrDefault(2)),
     new WeightedModifierType(modifierTypes.LEFTOVERS, 3),
     new WeightedModifierType(modifierTypes.SHELL_BELL, 3),

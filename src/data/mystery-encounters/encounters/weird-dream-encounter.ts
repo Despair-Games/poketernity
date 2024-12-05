@@ -226,7 +226,7 @@ export const WeirdDreamEncounter: MysteryEncounter = MysteryEncounterBuilder.wit
         setEncounterRewards({
           guaranteedModifierTypeFuncs: [
             modifierTypes.MEMORY_MUSHROOM,
-            modifierTypes.ROGUE_BALL,
+            modifierTypes.ULTRA_BALL,
             modifierTypes.MINT,
             modifierTypes.MINT,
             modifierTypes.MINT,

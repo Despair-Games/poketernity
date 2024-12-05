@@ -140,15 +140,13 @@ export const DepartmentStoreSaleEncounter: MysteryEncounter = MysteryEncounterBu
       let i = 0;
       while (i < 4) {
         // 10/30/20/5 weight on pokeballs
-        const roll = randSeedInt(65);
+        const roll = randSeedInt(60);
         if (roll < 10) {
           modifiers.push(modifierTypes.POKEBALL);
         } else if (roll < 40) {
           modifiers.push(modifierTypes.GREAT_BALL);
-        } else if (roll < 60) {
-          modifiers.push(modifierTypes.ULTRA_BALL);
         } else {
-          modifiers.push(modifierTypes.ROGUE_BALL);
+          modifiers.push(modifierTypes.ULTRA_BALL);
         }
         i++;
       }

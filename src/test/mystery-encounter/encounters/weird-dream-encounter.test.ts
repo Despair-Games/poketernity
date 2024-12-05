@@ -150,7 +150,6 @@ describe("Weird Dream - Mystery Encounter", () => {
       ) as ModifierSelectUiHandler;
       expect(modifierSelectHandler.options.length).toEqual(5);
       expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toEqual("MEMORY_MUSHROOM");
-      expect(modifierSelectHandler.options[1].modifierTypeOption.type.id).toEqual("ROGUE_BALL");
       expect(modifierSelectHandler.options[2].modifierTypeOption.type.id).toEqual("MINT");
       expect(modifierSelectHandler.options[3].modifierTypeOption.type.id).toEqual("MINT");
       expect(modifierSelectHandler.options[3].modifierTypeOption.type.id).toEqual("MINT");

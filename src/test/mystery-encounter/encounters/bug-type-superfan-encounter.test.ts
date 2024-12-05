@@ -461,7 +461,6 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       expect(modifierSelectHandler.options.length).toEqual(3);
       expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toBe("GRIP_CLAW");
       expect(modifierSelectHandler.options[1].modifierTypeOption.type.id).toBe("MAX_LURE");
-      expect(modifierSelectHandler.options[2].modifierTypeOption.type.id).toBe("ROGUE_BALL");
     });
 
     it("should proceed to rewards screen with 6 Bug Types reward options (including form change item)", async () => {

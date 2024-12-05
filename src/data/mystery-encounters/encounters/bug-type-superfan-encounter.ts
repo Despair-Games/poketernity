@@ -349,7 +349,7 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
           ];
         } else if (numBugTypes < 6) {
           setEncounterRewards({
-            guaranteedModifierTypeFuncs: [modifierTypes.GRIP_CLAW, modifierTypes.MAX_LURE, modifierTypes.ROGUE_BALL],
+            guaranteedModifierTypeFuncs: [modifierTypes.GRIP_CLAW, modifierTypes.MAX_LURE],
             fillRemaining: false,
           });
           encounter.selectedOption!.dialogue!.selected = [
