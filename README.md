@@ -48,6 +48,6 @@ Check out [Github Issues](https://github.com/despair-games/poketernity/issues) t
 
 # 📝 Credits
 
-> If this project contains assets you have produced and you do not see your name, **please** reach out, either [here on GitHub](https://github.com/despair-games/poketernity/issues/new).
+> If this project contains assets you have produced and you do not see your name, **please** reach out [here on GitHub](https://github.com/despair-games/poketernity/issues/new).
 
 Thank you to all the wonderful people that have contributed to the project! You can find the credits [here](./CREDITS.md).
