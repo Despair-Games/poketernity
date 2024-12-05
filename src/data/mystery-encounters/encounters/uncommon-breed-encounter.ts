@@ -95,8 +95,8 @@ export const UncommonBreedEncounter: MysteryEncounter = MysteryEncounterBuilder.
     // Defense/Spd buffs below wave 50, +1 to all stats otherwise
     const statChangesForBattle: (Stat.ATK | Stat.DEF | Stat.SPATK | Stat.SPDEF | Stat.SPD | Stat.ACC | Stat.EVA)[] =
       globalScene.currentBattle.waveIndex < 50
-        ? [ Stat.DEF, Stat.SPDEF, Stat.SPD ]
-        : [ Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD ];
+        ? [Stat.DEF, Stat.SPDEF, Stat.SPD]
+        : [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD];
 
     const config: EnemyPartyConfig = {
       pokemonConfigs: [
@@ -105,7 +105,7 @@ export const UncommonBreedEncounter: MysteryEncounter = MysteryEncounterBuilder.
           species: species,
           dataSource: new PokemonData(pokemon),
           isBoss: false,
-          tags: [ BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON ],
+          tags: [BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON],
           mysteryEncounterBattleEffects: (pokemon: Pokemon) => {
             queueEncounterMessage(`${namespace}:option.1.stat_boost`);
             globalScene.unshiftPhase(
@@ -115,7 +115,7 @@ export const UncommonBreedEncounter: MysteryEncounter = MysteryEncounterBuilder.
         },
       ],
     };
-    encounter.enemyPartyConfigs = [ config ];
+    encounter.enemyPartyConfigs = [config];
 
     const { spriteKey, fileRoot } = getSpriteKeysFromPokemon(pokemon);
     encounter.spriteConfigs = [
@@ -181,7 +181,7 @@ export const UncommonBreedEncounter: MysteryEncounter = MysteryEncounterBuilder.
 
         encounter.startOfBattleEffects.push({
           sourceBattlerIndex: BattlerIndex.ENEMY,
-          targets: [ target ],
+          targets: [target],
           move: pokemonMove,
           ignorePp: true,
         });

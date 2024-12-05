@@ -43,19 +43,19 @@ export default class AdminUiHandler extends FormModalUiHandler {
   }
 
   override getMargin(): [number, number, number, number] {
-    return [ 0, 0, 0, 0 ];
+    return [0, 0, 0, 0];
   }
 
   override getButtonLabels(): string[] {
     switch (this.adminMode) {
       case AdminMode.LINK:
-        return [ "Link Account", "Cancel" ];
+        return ["Link Account", "Cancel"];
       case AdminMode.SEARCH:
-        return [ "Find account", "Cancel" ];
+        return ["Find account", "Cancel"];
       case AdminMode.ADMIN:
-        return [ "Back to search", "Cancel" ];
+        return ["Back to search", "Cancel"];
       default:
-        return [ "Activate ADMIN", "Cancel" ];
+        return ["Activate ADMIN", "Cancel"];
     }
   }
 
@@ -131,10 +131,10 @@ export default class AdminUiHandler extends FormModalUiHandler {
         const adminSearchResult: AdminSearchInfo = this.convertInputsToAdmin(); // this converts the input texts into a single object for use later
         const validFields = this.areFieldsValid(this.adminMode);
         if (validFields.error) {
-          globalScene.ui.setMode(Mode.LOADING, { buttonActions: []}); // this is here to force a loading screen to allow the admin tool to reopen again if there's an error
+          globalScene.ui.setMode(Mode.LOADING, { buttonActions: [] }); // this is here to force a loading screen to allow the admin tool to reopen again if there's an error
           return this.showMessage(validFields.errorMessage ?? "", adminSearchResult, true);
         }
-        globalScene.ui.setMode(Mode.LOADING, { buttonActions: []});
+        globalScene.ui.setMode(Mode.LOADING, { buttonActions: [] });
         if (this.adminMode === AdminMode.LINK) {
           this.adminLinkUnlink(adminSearchResult, "discord", "Link") // calls server to link discord
             .then((response) => {
@@ -210,18 +210,18 @@ export default class AdminUiHandler extends FormModalUiHandler {
               const mode = adminResult[aR] === "" ? "Link" : "Unlink"; // this figures out if we're linking or unlinking a service
               const validFields = this.areFieldsValid(this.adminMode, service);
               if (validFields.error) {
-                globalScene.ui.setMode(Mode.LOADING, { buttonActions: []}); // this is here to force a loading screen to allow the admin tool to reopen again if there's an error
+                globalScene.ui.setMode(Mode.LOADING, { buttonActions: [] }); // this is here to force a loading screen to allow the admin tool to reopen again if there's an error
                 return this.showMessage(validFields.errorMessage ?? "", adminResult, true);
               }
               this.adminLinkUnlink(this.convertInputsToAdmin(), service as AdminUiHandlerService, mode).then(
                 (response) => {
                   // attempts to link/unlink depending on the service
                   if (response.error) {
-                    globalScene.ui.setMode(Mode.LOADING, { buttonActions: []});
+                    globalScene.ui.setMode(Mode.LOADING, { buttonActions: [] });
                     return this.showMessage(response.errorType, adminResult, true); // fail
                   } else {
                     // success, reload panel with new results
-                    globalScene.ui.setMode(Mode.LOADING, { buttonActions: []});
+                    globalScene.ui.setMode(Mode.LOADING, { buttonActions: [] });
                     this.adminSearch(adminResult).then((response) => {
                       if (response.error) {
                         return this.showMessage(response.errorType, adminResult, true);
@@ -305,7 +305,7 @@ export default class AdminUiHandler extends FormModalUiHandler {
 
   private async adminSearch(adminSearchResult: AdminSearchInfo) {
     try {
-      const [ adminInfo, errorType ] = await pokerogueApi.admin.searchAccount({ username: adminSearchResult.username });
+      const [adminInfo, errorType] = await pokerogueApi.admin.searchAccount({ username: adminSearchResult.username });
       if (errorType || !adminInfo) {
         // error - if adminInfo.status === this.httpUserNotFoundErrorCode that means the username can't be found in the db
         return { adminSearchResult: adminSearchResult, error: true, errorType };
@@ -399,7 +399,7 @@ export default class AdminUiHandler extends FormModalUiHandler {
 
     // this is used to remove the existing fields on the admin panel so they can be updated
 
-    const itemsToRemove: string[] = [ "formLabel", "adminBtn" ]; // this is the start of the names for each element we want to remove
+    const itemsToRemove: string[] = ["formLabel", "adminBtn"]; // this is the start of the names for each element we want to remove
     const removeArray: any[] = [];
     const mC = this.modalContainer.list;
     for (let i = mC.length - 1; i >= 0; i--) {

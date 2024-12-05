@@ -31,7 +31,7 @@ describe("Items - Light Ball", () => {
   it("LIGHT_BALL activates in battle correctly", async () => {
     game.override.startingHeldItems([{ name: "SPECIES_STAT_BOOSTER", type: "LIGHT_BALL" }]);
     const consoleSpy = vi.spyOn(console, "log");
-    await game.startBattle([ Species.PIKACHU ]);
+    await game.startBattle([Species.PIKACHU]);
 
     const partyMember = game.scene.getPlayerParty()[0];
 
@@ -82,7 +82,7 @@ describe("Items - Light Ball", () => {
   });
 
   it("LIGHT_BALL held by PIKACHU", async () => {
-    await game.startBattle([ Species.PIKACHU ]);
+    await game.startBattle([Species.PIKACHU]);
 
     const partyMember = game.scene.getPlayerParty()[0];
 
@@ -100,7 +100,7 @@ describe("Items - Light Ball", () => {
 
     // Giving Eviolite to party member and testing if it applies
     game.scene.addModifier(
-      modifierTypes.SPECIES_STAT_BOOSTER().generateType([], [ "LIGHT_BALL" ])!.newModifier(partyMember),
+      modifierTypes.SPECIES_STAT_BOOSTER().generateType([], ["LIGHT_BALL"])!.newModifier(partyMember),
       true,
     );
     game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
@@ -111,7 +111,7 @@ describe("Items - Light Ball", () => {
   }, 20000);
 
   it("LIGHT_BALL held by fused PIKACHU (base)", async () => {
-    await game.startBattle([ Species.PIKACHU, Species.MAROWAK ]);
+    await game.startBattle([Species.PIKACHU, Species.MAROWAK]);
 
     const partyMember = game.scene.getPlayerParty()[0];
     const ally = game.scene.getPlayerParty()[1];
@@ -139,7 +139,7 @@ describe("Items - Light Ball", () => {
 
     // Giving Eviolite to party member and testing if it applies
     game.scene.addModifier(
-      modifierTypes.SPECIES_STAT_BOOSTER().generateType([], [ "LIGHT_BALL" ])!.newModifier(partyMember),
+      modifierTypes.SPECIES_STAT_BOOSTER().generateType([], ["LIGHT_BALL"])!.newModifier(partyMember),
       true,
     );
     game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
@@ -150,7 +150,7 @@ describe("Items - Light Ball", () => {
   }, 20000);
 
   it("LIGHT_BALL held by fused PIKACHU (part)", async () => {
-    await game.startBattle([ Species.MAROWAK, Species.PIKACHU ]);
+    await game.startBattle([Species.MAROWAK, Species.PIKACHU]);
 
     const partyMember = game.scene.getPlayerParty()[0];
     const ally = game.scene.getPlayerParty()[1];
@@ -178,7 +178,7 @@ describe("Items - Light Ball", () => {
 
     // Giving Eviolite to party member and testing if it applies
     game.scene.addModifier(
-      modifierTypes.SPECIES_STAT_BOOSTER().generateType([], [ "LIGHT_BALL" ])!.newModifier(partyMember),
+      modifierTypes.SPECIES_STAT_BOOSTER().generateType([], ["LIGHT_BALL"])!.newModifier(partyMember),
       true,
     );
     game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
@@ -189,7 +189,7 @@ describe("Items - Light Ball", () => {
   }, 20000);
 
   it("LIGHT_BALL not held by PIKACHU", async () => {
-    await game.startBattle([ Species.MAROWAK ]);
+    await game.startBattle([Species.MAROWAK]);
 
     const partyMember = game.scene.getPlayerParty()[0];
 
@@ -207,7 +207,7 @@ describe("Items - Light Ball", () => {
 
     // Giving Eviolite to party member and testing if it applies
     game.scene.addModifier(
-      modifierTypes.SPECIES_STAT_BOOSTER().generateType([], [ "LIGHT_BALL" ])!.newModifier(partyMember),
+      modifierTypes.SPECIES_STAT_BOOSTER().generateType([], ["LIGHT_BALL"])!.newModifier(partyMember),
       true,
     );
     game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);

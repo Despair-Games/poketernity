@@ -51,7 +51,7 @@ export default class ModifierData {
 
       const ret = Reflect.construct(
         constructor,
-        ([ type ] as any[]).concat(this.args).concat(this.stackCount),
+        ([type] as any[]).concat(this.args).concat(this.stackCount),
       ) as PersistentModifier;
 
       if (ret.stackCount > ret.getMaxStackCount()) {

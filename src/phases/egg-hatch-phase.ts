@@ -132,7 +132,7 @@ export class EggHatchPhase extends Phase {
           this.eggHatchBg.displayHeight / 2,
           "pkmn__sub",
         );
-        ret.setPipeline(globalScene.spritePipeline, { tone: [ 0.0, 0.0, 0.0, 0.0 ], ignoreTimeTint: true });
+        ret.setPipeline(globalScene.spritePipeline, { tone: [0.0, 0.0, 0.0, 0.0], ignoreTimeTint: true });
         return ret;
       };
 

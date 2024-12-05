@@ -52,15 +52,15 @@ const WONDER_TRADE_SHINY_CHANCE = 512;
 const MAX_WONDER_TRADE_SHINY_CHANCE = 4096;
 
 const LEGENDARY_TRADE_POOLS = {
-  1: [ Species.RATTATA, Species.PIDGEY, Species.WEEDLE ],
-  2: [ Species.SENTRET, Species.HOOTHOOT, Species.LEDYBA ],
-  3: [ Species.POOCHYENA, Species.ZIGZAGOON, Species.TAILLOW ],
-  4: [ Species.BIDOOF, Species.STARLY, Species.KRICKETOT ],
-  5: [ Species.PATRAT, Species.PURRLOIN, Species.PIDOVE ],
-  6: [ Species.BUNNELBY, Species.LITLEO, Species.SCATTERBUG ],
-  7: [ Species.PIKIPEK, Species.YUNGOOS, Species.ROCKRUFF ],
-  8: [ Species.SKWOVET, Species.WOOLOO, Species.ROOKIDEE ],
-  9: [ Species.LECHONK, Species.FIDOUGH, Species.TAROUNTULA ],
+  1: [Species.RATTATA, Species.PIDGEY, Species.WEEDLE],
+  2: [Species.SENTRET, Species.HOOTHOOT, Species.LEDYBA],
+  3: [Species.POOCHYENA, Species.ZIGZAGOON, Species.TAILLOW],
+  4: [Species.BIDOOF, Species.STARLY, Species.KRICKETOT],
+  5: [Species.PATRAT, Species.PURRLOIN, Species.PIDOVE],
+  6: [Species.BUNNELBY, Species.LITLEO, Species.SCATTERBUG],
+  7: [Species.PIKIPEK, Species.YUNGOOS, Species.ROCKRUFF],
+  8: [Species.SKWOVET, Species.WOOLOO, Species.ROOKIDEE],
+  9: [Species.LECHONK, Species.FIDOUGH, Species.TAROUNTULA],
 };
 
 /** Exclude Paradox mons as they aren't considered legendary/mythical */
@@ -450,13 +450,13 @@ export const GlobalTradeSystemEncounter: MysteryEncounter = MysteryEncounterBuil
         // TMs excluded from possible rewards
         while (!item || item.type.id.includes("TM_")) {
           item = getPlayerModifierTypeOptions(1, party, [], {
-            guaranteedModifierTiers: [ tier ],
+            guaranteedModifierTiers: [tier],
             allowLuckUpgrades: false,
           })[0];
         }
 
         encounter.setDialogueToken("itemName", item.type.name);
-        setEncounterRewards({ guaranteedModifierTypeOptions: [ item ], fillRemaining: false });
+        setEncounterRewards({ guaranteedModifierTypeOptions: [item], fillRemaining: false });
 
         chosenPokemon.loseHeldItem(modifier, false);
         await globalScene.updateModifiers(true, true);
@@ -637,7 +637,7 @@ function doPokemonTradeSequence(tradedPokemon: PlayerPokemon, receivedPokemon: P
         tradeBaseBg.displayHeight / 2,
         "pkmn__sub",
       );
-      ret.setPipeline(globalScene.spritePipeline, { tone: [ 0.0, 0.0, 0.0, 0.0 ], ignoreTimeTint: true });
+      ret.setPipeline(globalScene.spritePipeline, { tone: [0.0, 0.0, 0.0, 0.0], ignoreTimeTint: true });
       return ret;
     };
 
@@ -653,7 +653,7 @@ function doPokemonTradeSequence(tradedPokemon: PlayerPokemon, receivedPokemon: P
     receivedPokemonTintSprite.setVisible(false);
     receivedPokemonTintSprite.setTintFill(getPokeballTintColor(receivedPokemon.pokeball));
 
-    [ tradedPokemonSprite, tradedPokemonTintSprite ].map((sprite) => {
+    [tradedPokemonSprite, tradedPokemonTintSprite].map((sprite) => {
       const spriteKey = tradedPokemon.getSpriteKey(true);
       try {
         sprite.play(spriteKey);
@@ -662,7 +662,7 @@ function doPokemonTradeSequence(tradedPokemon: PlayerPokemon, receivedPokemon: P
       }
 
       sprite.setPipeline(globalScene.spritePipeline, {
-        tone: [ 0.0, 0.0, 0.0, 0.0 ],
+        tone: [0.0, 0.0, 0.0, 0.0],
         hasShadow: false,
         teraColor: getTypeRgb(tradedPokemon.getTeraType()),
       });
@@ -670,7 +670,7 @@ function doPokemonTradeSequence(tradedPokemon: PlayerPokemon, receivedPokemon: P
       sprite.setPipelineData("spriteKey", tradedPokemon.getSpriteKey());
       sprite.setPipelineData("shiny", tradedPokemon.shiny);
       sprite.setPipelineData("variant", tradedPokemon.variant);
-      [ "spriteColors", "fusionSpriteColors" ].map((k) => {
+      ["spriteColors", "fusionSpriteColors"].map((k) => {
         if (tradedPokemon.summonData?.speciesForm) {
           k += "Base";
         }
@@ -678,7 +678,7 @@ function doPokemonTradeSequence(tradedPokemon: PlayerPokemon, receivedPokemon: P
       });
     });
 
-    [ receivedPokemonSprite, receivedPokemonTintSprite ].map((sprite) => {
+    [receivedPokemonSprite, receivedPokemonTintSprite].map((sprite) => {
       const spriteKey = receivedPokemon.getSpriteKey(true);
       try {
         sprite.play(spriteKey);
@@ -687,7 +687,7 @@ function doPokemonTradeSequence(tradedPokemon: PlayerPokemon, receivedPokemon: P
       }
 
       sprite.setPipeline(globalScene.spritePipeline, {
-        tone: [ 0.0, 0.0, 0.0, 0.0 ],
+        tone: [0.0, 0.0, 0.0, 0.0],
         hasShadow: false,
         teraColor: getTypeRgb(tradedPokemon.getTeraType()),
       });
@@ -695,7 +695,7 @@ function doPokemonTradeSequence(tradedPokemon: PlayerPokemon, receivedPokemon: P
       sprite.setPipelineData("spriteKey", receivedPokemon.getSpriteKey());
       sprite.setPipelineData("shiny", receivedPokemon.shiny);
       sprite.setPipelineData("variant", receivedPokemon.variant);
-      [ "spriteColors", "fusionSpriteColors" ].map((k) => {
+      ["spriteColors", "fusionSpriteColors"].map((k) => {
         if (receivedPokemon.summonData?.speciesForm) {
           k += "Base";
         }
@@ -754,7 +754,7 @@ function doPokemonTradeSequence(tradedPokemon: PlayerPokemon, receivedPokemon: P
             // addPokeballOpenParticles(tradedPokemon.x, tradedPokemon.y, tradedPokemon.pokeball);
 
             globalScene.tweens.add({
-              targets: [ tradedPokemonTintSprite, tradedPokemonSprite ],
+              targets: [tradedPokemonTintSprite, tradedPokemonSprite],
               duration: 500,
               ease: "Sine.easeIn",
               scale: 0.25,
@@ -839,7 +839,7 @@ function doPokemonTradeFlyBySequence(
       duration: FADE_DELAY,
       onComplete: () => {
         globalScene.tweens.add({
-          targets: [ receivedPokemonSprite, tradedPokemonSprite ],
+          targets: [receivedPokemonSprite, tradedPokemonSprite],
           y: tradeBaseBg.displayWidth / 2 - 100,
           ease: "Cubic.easeInOut",
           duration: BASE_ANIM_DURATION * 3,

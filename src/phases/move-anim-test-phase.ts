@@ -29,7 +29,7 @@ export class MoveAnimTestPhase extends BattlePhase {
     }
 
     initMoveAnim(moveId).then(() => {
-      loadMoveAnimAssets([ moveId ], true).then(() => {
+      loadMoveAnimAssets([moveId], true).then(() => {
         const user = player ? globalScene.getPlayerPokemon()! : globalScene.getEnemyPokemon()!;
         const target =
           player !== allMoves[moveId] instanceof SelfStatusMove

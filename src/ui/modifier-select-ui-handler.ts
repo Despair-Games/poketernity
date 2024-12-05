@@ -318,13 +318,13 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
       this.lockRarityButtonContainer.setVisible(canLockRarities);
 
       globalScene.tweens.add({
-        targets: [ this.checkButtonContainer, this.continueButtonContainer ],
+        targets: [this.checkButtonContainer, this.continueButtonContainer],
         alpha: 1,
         duration: 250,
       });
 
       globalScene.tweens.add({
-        targets: [ this.rerollButtonContainer, this.lockRarityButtonContainer ],
+        targets: [this.rerollButtonContainer, this.lockRarityButtonContainer],
         alpha: this.rerollCost < 0 ? 0.5 : 1,
         duration: 250,
       });

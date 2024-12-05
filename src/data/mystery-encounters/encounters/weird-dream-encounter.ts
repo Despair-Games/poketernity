@@ -111,12 +111,12 @@ const PERCENT_LEVEL_LOSS_ON_REFUSE = 10;
  * Value ranges of the resulting species BST transformations after adding values to original species
  * 2 Pokemon in the party use this range
  */
-const HIGH_BST_TRANSFORM_BASE_VALUES: [number, number] = [ 90, 110 ];
+const HIGH_BST_TRANSFORM_BASE_VALUES: [number, number] = [90, 110];
 /**
  * Value ranges of the resulting species BST transformations after adding values to original species
  * All remaining Pokemon in the party use this range
  */
-const STANDARD_BST_TRANSFORM_BASE_VALUES: [number, number] = [ 40, 50 ];
+const STANDARD_BST_TRANSFORM_BASE_VALUES: [number, number] = [40, 50];
 
 /**
  * Weird Dream encounter.
@@ -462,7 +462,7 @@ async function doNewTeamPostProcess(transformations: PokemonTransformation[]) {
       const stats = getOldGateauBoostedStats(newPokemon);
       const modType = modifierTypes
         .MYSTERY_ENCOUNTER_OLD_GATEAU()
-        .generateType(globalScene.getPlayerParty(), [ OLD_GATEAU_STATS_UP, stats ])
+        .generateType(globalScene.getPlayerParty(), [OLD_GATEAU_STATS_UP, stats])
         ?.withIdFromFunc(modifierTypes.MYSTERY_ENCOUNTER_OLD_GATEAU);
       const modifier = modType?.newModifier(newPokemon);
       if (modifier) {
@@ -526,7 +526,7 @@ async function postProcessTransformedPokemon(
   });
 
   // Roll a neutral nature
-  newPokemon.nature = [ Nature.HARDY, Nature.DOCILE, Nature.BASHFUL, Nature.QUIRKY, Nature.SERIOUS ][randSeedInt(5)];
+  newPokemon.nature = [Nature.HARDY, Nature.DOCILE, Nature.BASHFUL, Nature.QUIRKY, Nature.SERIOUS][randSeedInt(5)];
 
   // For pokemon at/below 570 BST or any shiny pokemon, unlock it permanently as if you had caught it
   if (
@@ -592,7 +592,7 @@ async function postProcessTransformedPokemon(
 
   // Randomize the second type of the pokemon
   // If the pokemon does not normally have a second type, it will gain 1
-  const newTypes = [ newPokemon.getTypes()[0] ];
+  const newTypes = [newPokemon.getTypes()[0]];
   let newType = randSeedInt(18) as Type;
   while (newType === newTypes[0]) {
     newType = randSeedInt(18) as Type;
@@ -776,7 +776,7 @@ async function addEggMoveToNewPokemonMoveset(
   let eggMoveIndex: null | number = null;
   const eggMoves = newPokemon.getEggMoves()?.slice(0);
   if (eggMoves) {
-    const eggMoveIndices = randSeedShuffle([ 0, 1, 2, 3 ]);
+    const eggMoveIndices = randSeedShuffle([0, 1, 2, 3]);
     let randomEggMoveIndex = eggMoveIndices.pop();
     let randomEggMove = !isNullOrUndefined(randomEggMoveIndex) ? eggMoves[randomEggMoveIndex] : null;
     let retries = 0;

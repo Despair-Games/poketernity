@@ -219,7 +219,7 @@ export const AbsoluteAvariceEncounter: MysteryEncounter = MysteryEncounterBuilde
 
     // SpDef buff below wave 50, +1 to all stats otherwise
     const statChangesForBattle: (Stat.ATK | Stat.DEF | Stat.SPATK | Stat.SPDEF | Stat.SPD | Stat.ACC | Stat.EVA)[] =
-      globalScene.currentBattle.waveIndex < 50 ? [ Stat.SPDEF ] : [ Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD ];
+      globalScene.currentBattle.waveIndex < 50 ? [Stat.SPDEF] : [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD];
 
     // Calculate boss mon
     const config: EnemyPartyConfig = {
@@ -230,9 +230,9 @@ export const AbsoluteAvariceEncounter: MysteryEncounter = MysteryEncounterBuilde
           isBoss: true,
           bossSegments: 3,
           shiny: false, // Shiny lock because of consistency issues between the different options
-          moveSet: [ Moves.THRASH, Moves.BODY_PRESS, Moves.STUFF_CHEEKS, Moves.CRUNCH ],
+          moveSet: [Moves.THRASH, Moves.BODY_PRESS, Moves.STUFF_CHEEKS, Moves.CRUNCH],
           modifierConfigs: bossModifierConfigs,
-          tags: [ BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON ],
+          tags: [BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON],
           mysteryEncounterBattleEffects: (pokemon: Pokemon) => {
             queueEncounterMessage(`${namespace}:option.1.boss_enraged`);
             globalScene.unshiftPhase(
@@ -243,7 +243,7 @@ export const AbsoluteAvariceEncounter: MysteryEncounter = MysteryEncounterBuilde
       ],
     };
 
-    encounter.enemyPartyConfigs = [ config ];
+    encounter.enemyPartyConfigs = [config];
     encounter.setDialogueToken("greedentName", getPokemonSpecies(Species.GREEDENT).getName());
 
     return true;
@@ -299,7 +299,7 @@ export const AbsoluteAvariceEncounter: MysteryEncounter = MysteryEncounterBuilde
         setEncounterRewards({ fillRemaining: true }, undefined, givePartyPokemonReviverSeeds);
         encounter.startOfBattleEffects.push({
           sourceBattlerIndex: BattlerIndex.ENEMY,
-          targets: [ BattlerIndex.ENEMY ],
+          targets: [BattlerIndex.ENEMY],
           move: new PokemonMove(Moves.STUFF_CHEEKS),
           ignorePp: true,
         });
@@ -338,7 +338,7 @@ export const AbsoluteAvariceEncounter: MysteryEncounter = MysteryEncounterBuilde
               Phaser.Math.RND.shuffle(berryTypesAsArray);
               const randBerryType = berryTypesAsArray.pop();
 
-              const berryModType = generateModifierType(modifierTypes.BERRY, [ randBerryType ]) as BerryModifierType;
+              const berryModType = generateModifierType(modifierTypes.BERRY, [randBerryType]) as BerryModifierType;
               applyModifierTypeToPlayerPokemon(pokemon, berryModType);
             }
           }
@@ -539,7 +539,7 @@ function doBerrySpritePile(isEat: boolean = false) {
       // Animate Petaya berry falling off the pile
       if (berry === "petaya" && sprite && tintSprite && !isEat) {
         globalScene.time.delayedCall(200, () => {
-          doBerryBounce([ sprite, tintSprite ], 30, 500);
+          doBerryBounce([sprite, tintSprite], 30, 500);
         });
       }
     });

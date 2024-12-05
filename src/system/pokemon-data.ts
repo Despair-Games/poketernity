@@ -141,7 +141,7 @@ export default class PokemonData {
         }
       }
     } else {
-      this.moveset = (source.moveset || [ new PokemonMove(Moves.TACKLE), new PokemonMove(Moves.GROWL) ])
+      this.moveset = (source.moveset || [new PokemonMove(Moves.TACKLE), new PokemonMove(Moves.GROWL)])
         .filter((m) => m)
         .map((m: any) => new PokemonMove(m.moveId, m.ppUsed, m.ppUp, m.virtual, m.maxPpOverride));
       if (!forHistory) {
@@ -175,34 +175,34 @@ export default class PokemonData {
     const species = getPokemonSpecies(this.species);
     const ret: Pokemon = this.player
       ? globalScene.addPlayerPokemon(
-        species,
-        this.level,
-        this.abilityIndex,
-        this.formIndex,
-        this.gender,
-        this.shiny,
-        this.variant,
-        this.ivs,
-        this.nature,
-        this,
-        (playerPokemon) => {
-          if (this.nickname) {
-            playerPokemon.nickname = this.nickname;
-          }
-        },
-      )
+          species,
+          this.level,
+          this.abilityIndex,
+          this.formIndex,
+          this.gender,
+          this.shiny,
+          this.variant,
+          this.ivs,
+          this.nature,
+          this,
+          (playerPokemon) => {
+            if (this.nickname) {
+              playerPokemon.nickname = this.nickname;
+            }
+          },
+        )
       : globalScene.addEnemyPokemon(
-        species,
-        this.level,
-        battleType === BattleType.TRAINER
-          ? !double || !(partyMemberIndex % 2)
-            ? TrainerSlot.TRAINER
-            : TrainerSlot.TRAINER_PARTNER
-          : TrainerSlot.NONE,
-        this.boss,
-        false,
-        this,
-      );
+          species,
+          this.level,
+          battleType === BattleType.TRAINER
+            ? !double || !(partyMemberIndex % 2)
+              ? TrainerSlot.TRAINER
+              : TrainerSlot.TRAINER_PARTNER
+            : TrainerSlot.NONE,
+          this.boss,
+          false,
+          this,
+        );
     if (this.summonData) {
       ret.primeSummonData(this.summonData);
     }

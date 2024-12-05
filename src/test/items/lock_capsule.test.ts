@@ -27,7 +27,7 @@ describe("Items - Lock Capsule", () => {
     game.override
       .battleType("single")
       .startingLevel(200)
-      .moveset([ Moves.SURF ])
+      .moveset([Moves.SURF])
       .enemyAbility(Abilities.BALL_FETCH)
       .startingModifier([{ name: "LOCK_CAPSULE" }]);
   });
@@ -36,7 +36,7 @@ describe("Items - Lock Capsule", () => {
     await game.classicMode.startBattle();
     game.scene.overridePhase(
       new SelectModifierPhase(0, undefined, {
-        guaranteedModifierTiers: [ ModifierTier.COMMON, ModifierTier.COMMON, ModifierTier.COMMON ],
+        guaranteedModifierTiers: [ModifierTier.COMMON, ModifierTier.COMMON, ModifierTier.COMMON],
         fillRemaining: false,
       }),
     );

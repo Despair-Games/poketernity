@@ -50,7 +50,7 @@ export function doPokemonTransformationSequence(
         transformationBaseBg.displayHeight / 2 + yOffset,
         "pkmn__sub",
       );
-      ret.setPipeline(globalScene.spritePipeline, { tone: [ 0.0, 0.0, 0.0, 0.0 ], ignoreTimeTint: true });
+      ret.setPipeline(globalScene.spritePipeline, { tone: [0.0, 0.0, 0.0, 0.0], ignoreTimeTint: true });
       return ret;
     };
 
@@ -66,7 +66,7 @@ export function doPokemonTransformationSequence(
     pokemonEvoTintSprite.setVisible(false);
     pokemonEvoTintSprite.setTintFill(0xffffff);
 
-    [ pokemonSprite, pokemonTintSprite, pokemonEvoSprite, pokemonEvoTintSprite ].map((sprite) => {
+    [pokemonSprite, pokemonTintSprite, pokemonEvoSprite, pokemonEvoTintSprite].map((sprite) => {
       const spriteKey = previousPokemon.getSpriteKey(true);
       try {
         sprite.play(spriteKey);
@@ -75,7 +75,7 @@ export function doPokemonTransformationSequence(
       }
 
       sprite.setPipeline(globalScene.spritePipeline, {
-        tone: [ 0.0, 0.0, 0.0, 0.0 ],
+        tone: [0.0, 0.0, 0.0, 0.0],
         hasShadow: false,
         teraColor: getTypeRgb(previousPokemon.getTeraType()),
       });
@@ -83,7 +83,7 @@ export function doPokemonTransformationSequence(
       sprite.setPipelineData("spriteKey", previousPokemon.getSpriteKey());
       sprite.setPipelineData("shiny", previousPokemon.shiny);
       sprite.setPipelineData("variant", previousPokemon.variant);
-      [ "spriteColors", "fusionSpriteColors" ].map((k) => {
+      ["spriteColors", "fusionSpriteColors"].map((k) => {
         if (previousPokemon.summonData?.speciesForm) {
           k += "Base";
         }
@@ -91,7 +91,7 @@ export function doPokemonTransformationSequence(
       });
     });
 
-    [ pokemonEvoSprite, pokemonEvoTintSprite ].map((sprite) => {
+    [pokemonEvoSprite, pokemonEvoTintSprite].map((sprite) => {
       const spriteKey = transformPokemon.getSpriteKey(true);
       try {
         sprite.play(spriteKey);
@@ -103,7 +103,7 @@ export function doPokemonTransformationSequence(
       sprite.setPipelineData("spriteKey", transformPokemon.getSpriteKey());
       sprite.setPipelineData("shiny", transformPokemon.shiny);
       sprite.setPipelineData("variant", transformPokemon.variant);
-      [ "spriteColors", "fusionSpriteColors" ].map((k) => {
+      ["spriteColors", "fusionSpriteColors"].map((k) => {
         if (transformPokemon.summonData?.speciesForm) {
           k += "Base";
         }

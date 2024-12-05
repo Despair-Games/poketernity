@@ -30,7 +30,7 @@ import { modifierTypes } from "#app/modifier/modifier-type";
 import { BerryType } from "#enums/berry-type";
 
 const namespace = "mysteryEncounters/delibirdy";
-const defaultParty = [ Species.LAPRAS, Species.GENGAR, Species.ABRA ];
+const defaultParty = [Species.LAPRAS, Species.GENGAR, Species.ABRA];
 const defaultBiome = Biome.CAVE;
 const defaultWave = 45;
 
@@ -52,7 +52,7 @@ describe("Delibird-y - Mystery Encounter", () => {
     game.override.disableTrainerWaves();
 
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(
-      new Map<Biome, MysteryEncounterType[]>([[ Biome.CAVE, [ MysteryEncounterType.DELIBIRDY ]]]),
+      new Map<Biome, MysteryEncounterType[]>([[Biome.CAVE, [MysteryEncounterType.DELIBIRDY]]]),
     );
   });
 
@@ -201,7 +201,7 @@ describe("Delibird-y - Mystery Encounter", () => {
 
       // Set 2 Sitrus berries on party lead
       scene.modifiers = [];
-      const sitrus = generateModifierType(modifierTypes.BERRY, [ BerryType.SITRUS ])!;
+      const sitrus = generateModifierType(modifierTypes.BERRY, [BerryType.SITRUS])!;
       const sitrusMod = sitrus.newModifier(scene.getPlayerParty()[0]) as BerryModifier;
       sitrusMod.stackCount = 2;
       await scene.addModifier(sitrusMod, true, false, false, true);
@@ -246,7 +246,7 @@ describe("Delibird-y - Mystery Encounter", () => {
       const candyJar = generateModifierType(modifierTypes.CANDY_JAR)!.newModifier() as LevelIncrementBoosterModifier;
       candyJar.stackCount = 99;
       await scene.addModifier(candyJar, true, false, false, true);
-      const sitrus = generateModifierType(modifierTypes.BERRY, [ BerryType.SITRUS ])!;
+      const sitrus = generateModifierType(modifierTypes.BERRY, [BerryType.SITRUS])!;
 
       // Sitrus berries on party
       const sitrusMod = sitrus.newModifier(scene.getPlayerParty()[0]) as BerryModifier;

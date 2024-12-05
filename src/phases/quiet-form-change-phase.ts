@@ -60,11 +60,11 @@ export class QuietFormChangePhase extends BattlePhase {
         console.error(`Failed to play animation for ${spriteKey}`, err);
       }
       sprite.setPipeline(globalScene.spritePipeline, {
-        tone: [ 0.0, 0.0, 0.0, 0.0 ],
+        tone: [0.0, 0.0, 0.0, 0.0],
         hasShadow: false,
         teraColor: getTypeRgb(this.pokemon.getTeraType()),
       });
-      [ "spriteColors", "fusionSpriteColors" ].map((k) => {
+      ["spriteColors", "fusionSpriteColors"].map((k) => {
         if (this.pokemon.summonData?.speciesForm) {
           k += "Base";
         }
@@ -74,7 +74,7 @@ export class QuietFormChangePhase extends BattlePhase {
       return sprite;
     };
 
-    const [ pokemonTintSprite, pokemonFormTintSprite ] = [ getPokemonSprite(), getPokemonSprite() ];
+    const [pokemonTintSprite, pokemonFormTintSprite] = [getPokemonSprite(), getPokemonSprite()];
 
     this.pokemon.getSprite().on("animationupdate", (_anim, frame) => {
       if (frame.textureKey === pokemonTintSprite.texture.key) {

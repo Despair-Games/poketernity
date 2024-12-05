@@ -37,8 +37,8 @@ import {
 const namespace = "mysteryEncounters/teleportingHijinks";
 
 const MONEY_COST_MULTIPLIER = 1.75;
-const BIOME_CANDIDATES = [ Biome.SPACE, Biome.FAIRY_CAVE, Biome.LABORATORY, Biome.ISLAND, Biome.WASTELAND, Biome.DOJO ];
-const MACHINE_INTERFACING_TYPES = [ Type.ELECTRIC, Type.STEEL ];
+const BIOME_CANDIDATES = [Biome.SPACE, Biome.FAIRY_CAVE, Biome.LABORATORY, Biome.ISLAND, Biome.WASTELAND, Biome.DOJO];
+const MACHINE_INTERFACING_TYPES = [Type.ELECTRIC, Type.STEEL];
 
 /**
  * Teleporting Hijinks encounter.
@@ -50,7 +50,7 @@ export const TeleportingHijinksEncounter: MysteryEncounter = MysteryEncounterBui
 )
   .withEncounterTier(MysteryEncounterTier.COMMON)
   .withSceneWaveRangeRequirement(...CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES)
-  .withSceneRequirement(new WaveModulusRequirement([ 1, 2, 3 ], 10)) // Must be in first 3 waves after boss wave
+  .withSceneRequirement(new WaveModulusRequirement([1, 2, 3], 10)) // Must be in first 3 waves after boss wave
   .withSceneRequirement(new MoneyRequirement(0, MONEY_COST_MULTIPLIER)) // Must be able to pay teleport cost
   .withAutoHideIntroVisuals(false)
   .withCatchAllowed(true)
@@ -164,9 +164,9 @@ export const TeleportingHijinksEncounter: MysteryEncounter = MysteryEncounterBui
         ],
       };
 
-      const magnet = generateModifierTypeOption(modifierTypes.ATTACK_TYPE_BOOSTER, [ Type.STEEL ])!;
-      const metalCoat = generateModifierTypeOption(modifierTypes.ATTACK_TYPE_BOOSTER, [ Type.ELECTRIC ])!;
-      setEncounterRewards({ guaranteedModifierTypeOptions: [ magnet, metalCoat ], fillRemaining: true });
+      const magnet = generateModifierTypeOption(modifierTypes.ATTACK_TYPE_BOOSTER, [Type.STEEL])!;
+      const metalCoat = generateModifierTypeOption(modifierTypes.ATTACK_TYPE_BOOSTER, [Type.ELECTRIC])!;
+      setEncounterRewards({ guaranteedModifierTypeOptions: [magnet, metalCoat], fillRemaining: true });
       await transitionMysteryEncounterIntroVisuals(true, true);
       await initBattleWithEnemyConfig(config);
     },
@@ -182,7 +182,7 @@ async function doBiomeTransitionDialogueAndBattleInit() {
 
   // Show dialogue and transition biome
   await showEncounterText(`${namespace}:transport`);
-  await Promise.all([ animateBiomeChange(newBiome), transitionMysteryEncounterIntroVisuals() ]);
+  await Promise.all([animateBiomeChange(newBiome), transitionMysteryEncounterIntroVisuals()]);
   globalScene.playBgm();
   await showEncounterText(`${namespace}:attacked`);
 
@@ -201,8 +201,8 @@ async function doBiomeTransitionDialogueAndBattleInit() {
   // Defense/Spd buffs below wave 50, +1 to all stats otherwise
   const statChangesForBattle: (Stat.ATK | Stat.DEF | Stat.SPATK | Stat.SPDEF | Stat.SPD | Stat.ACC | Stat.EVA)[] =
     globalScene.currentBattle.waveIndex < 50
-      ? [ Stat.DEF, Stat.SPDEF, Stat.SPD ]
-      : [ Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD ];
+      ? [Stat.DEF, Stat.SPDEF, Stat.SPD]
+      : [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD];
 
   const config: EnemyPartyConfig = {
     pokemonConfigs: [
@@ -211,7 +211,7 @@ async function doBiomeTransitionDialogueAndBattleInit() {
         species: bossSpecies,
         dataSource: new PokemonData(bossPokemon),
         isBoss: true,
-        tags: [ BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON ],
+        tags: [BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON],
         mysteryEncounterBattleEffects: (pokemon: Pokemon) => {
           queueEncounterMessage(`${namespace}:boss_enraged`);
           globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, statChangesForBattle, 1));
@@ -226,7 +226,7 @@ async function doBiomeTransitionDialogueAndBattleInit() {
 async function animateBiomeChange(nextBiome: Biome) {
   return new Promise<void>((resolve) => {
     globalScene.tweens.add({
-      targets: [ globalScene.arenaEnemy, globalScene.lastEnemyTrainer ],
+      targets: [globalScene.arenaEnemy, globalScene.lastEnemyTrainer],
       x: "+=300",
       duration: 2000,
       onComplete: () => {
@@ -242,7 +242,7 @@ async function animateBiomeChange(nextBiome: Biome) {
         globalScene.arenaPlayerTransition.setVisible(true);
 
         globalScene.tweens.add({
-          targets: [ globalScene.arenaPlayer, globalScene.arenaBgTransition, globalScene.arenaPlayerTransition ],
+          targets: [globalScene.arenaPlayer, globalScene.arenaBgTransition, globalScene.arenaPlayerTransition],
           duration: 1000,
           ease: "Sine.easeInOut",
           alpha: (target: any) => (target === globalScene.arenaPlayer ? 0 : 1),

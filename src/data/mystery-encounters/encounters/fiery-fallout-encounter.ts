@@ -87,10 +87,10 @@ export const FieryFalloutEncounter: MysteryEncounter = MysteryEncounterBuilder.w
           species: volcaronaSpecies,
           isBoss: false,
           gender: Gender.MALE,
-          tags: [ BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON ],
+          tags: [BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON],
           mysteryEncounterBattleEffects: (pokemon: Pokemon) => {
             globalScene.unshiftPhase(
-              new StatStageChangePhase(pokemon.getBattlerIndex(), true, [ Stat.SPDEF, Stat.SPD ], 1),
+              new StatStageChangePhase(pokemon.getBattlerIndex(), true, [Stat.SPDEF, Stat.SPD], 1),
             );
           },
         },
@@ -98,10 +98,10 @@ export const FieryFalloutEncounter: MysteryEncounter = MysteryEncounterBuilder.w
           species: volcaronaSpecies,
           isBoss: false,
           gender: Gender.FEMALE,
-          tags: [ BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON ],
+          tags: [BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON],
           mysteryEncounterBattleEffects: (pokemon: Pokemon) => {
             globalScene.unshiftPhase(
-              new StatStageChangePhase(pokemon.getBattlerIndex(), true, [ Stat.SPDEF, Stat.SPD ], 1),
+              new StatStageChangePhase(pokemon.getBattlerIndex(), true, [Stat.SPDEF, Stat.SPD], 1),
             );
           },
         },
@@ -109,7 +109,7 @@ export const FieryFalloutEncounter: MysteryEncounter = MysteryEncounterBuilder.w
       doubleBattle: true,
       disableSwitch: true,
     };
-    encounter.enemyPartyConfigs = [ config ];
+    encounter.enemyPartyConfigs = [config];
 
     // Load hidden Volcarona sprites
     encounter.spriteConfigs = [
@@ -135,7 +135,7 @@ export const FieryFalloutEncounter: MysteryEncounter = MysteryEncounterBuilder.w
     ];
 
     // Load animations/sfx for Volcarona moves
-    loadCustomMovesForEncounter([ Moves.FIRE_SPIN, Moves.QUIVER_DANCE ]);
+    loadCustomMovesForEncounter([Moves.FIRE_SPIN, Moves.QUIVER_DANCE]);
 
     globalScene.arena.trySetWeather(WeatherType.SUNNY, true);
 
@@ -188,13 +188,13 @@ export const FieryFalloutEncounter: MysteryEncounter = MysteryEncounterBuilder.w
       encounter.startOfBattleEffects.push(
         {
           sourceBattlerIndex: BattlerIndex.ENEMY,
-          targets: [ BattlerIndex.PLAYER ],
+          targets: [BattlerIndex.PLAYER],
           move: new PokemonMove(Moves.FIRE_SPIN),
           ignorePp: true,
         },
         {
           sourceBattlerIndex: BattlerIndex.ENEMY_2,
-          targets: [ BattlerIndex.PLAYER_2 ],
+          targets: [BattlerIndex.PLAYER_2],
           move: new PokemonMove(Moves.FIRE_SPIN),
           ignorePp: true,
         },
@@ -280,7 +280,7 @@ export const FieryFalloutEncounter: MysteryEncounter = MysteryEncounterBuilder.w
 
         const primary = encounter.options[2].primaryPokemon!;
 
-        setEncounterExp([ primary.id ], getPokemonSpecies(Species.VOLCARONA).baseExp * 2);
+        setEncounterExp([primary.id], getPokemonSpecies(Species.VOLCARONA).baseExp * 2);
         leaveEncounterWithoutBattle();
       })
       .build(),

@@ -107,7 +107,7 @@ export default class RunHistoryUiHandler extends MessageUiHandler {
     let success = false;
     const error = false;
 
-    if ([ Button.ACTION, Button.CANCEL ].includes(button)) {
+    if ([Button.ACTION, Button.CANCEL].includes(button)) {
       if (button === Button.ACTION) {
         const cursor = this.cursor + this.scrollCursor;
         if (this.runs[cursor]) {

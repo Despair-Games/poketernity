@@ -288,7 +288,7 @@ export default class MoveTouchControlsHandler {
    * @returns All control groups of the touch controls.
    */
   private getControlGroupElements(): HTMLDivElement[] {
-    return [ ...document.querySelectorAll("#touchControls .control-group") ] as HTMLDivElement[];
+    return [...document.querySelectorAll("#touchControls .control-group")] as HTMLDivElement[];
   }
 
   /**

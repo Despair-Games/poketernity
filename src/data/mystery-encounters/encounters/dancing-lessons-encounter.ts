@@ -157,7 +157,7 @@ export const DancingLessonsEncounter: MysteryEncounter = MysteryEncounterBuilder
     globalScene.getEnemyParty().forEach((enemyPokemon) => {
       globalScene.field.remove(enemyPokemon, true);
     });
-    globalScene.currentBattle.enemyParty = [ oricorio ];
+    globalScene.currentBattle.enemyParty = [oricorio];
     globalScene.field.add(oricorio);
     // Spawns on offscreen field
     oricorio.x -= 300;
@@ -170,14 +170,14 @@ export const DancingLessonsEncounter: MysteryEncounter = MysteryEncounterBuilder
           dataSource: oricorioData,
           isBoss: true,
           // Gets +1 to all stats except SPD on battle start
-          tags: [ BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON ],
+          tags: [BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON],
           mysteryEncounterBattleEffects: (pokemon: Pokemon) => {
             queueEncounterMessage(`${namespace}:option.1.boss_enraged`);
             globalScene.unshiftPhase(
               new StatStageChangePhase(
                 pokemon.getBattlerIndex(),
                 true,
-                [ Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF ],
+                [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF],
                 1,
               ),
             );
@@ -185,7 +185,7 @@ export const DancingLessonsEncounter: MysteryEncounter = MysteryEncounterBuilder
         },
       ],
     };
-    encounter.enemyPartyConfigs = [ config ];
+    encounter.enemyPartyConfigs = [config];
     encounter.misc = {
       oricorioData,
     };
@@ -211,13 +211,13 @@ export const DancingLessonsEncounter: MysteryEncounter = MysteryEncounterBuilder
 
         encounter.startOfBattleEffects.push({
           sourceBattlerIndex: BattlerIndex.ENEMY,
-          targets: [ BattlerIndex.PLAYER ],
+          targets: [BattlerIndex.PLAYER],
           move: new PokemonMove(Moves.REVELATION_DANCE),
           ignorePp: true,
         });
 
         await hideOricorioPokemon();
-        setEncounterRewards({ guaranteedModifierTypeFuncs: [ modifierTypes.BATON ], fillRemaining: true });
+        setEncounterRewards({ guaranteedModifierTypeFuncs: [modifierTypes.BATON], fillRemaining: true });
         await initBattleWithEnemyConfig(encounter.enemyPartyConfigs[0]);
       })
       .build(),

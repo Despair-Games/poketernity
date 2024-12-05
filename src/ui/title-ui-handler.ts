@@ -120,7 +120,7 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
       }, 60000);
 
       globalScene.tweens.add({
-        targets: [ this.titleContainer, ui.getMessageHandler().bg ],
+        targets: [this.titleContainer, ui.getMessageHandler().bg],
         duration: Utils.fixedInt(325),
         alpha: (target: any) => (target === this.titleContainer ? 1 : 0),
         ease: "Sine.easeInOut",
@@ -141,7 +141,7 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
     this.titleStatsTimer = null;
 
     globalScene.tweens.add({
-      targets: [ this.titleContainer, ui.getMessageHandler().bg ],
+      targets: [this.titleContainer, ui.getMessageHandler().bg],
       duration: Utils.fixedInt(325),
       alpha: (target: any) => (target === this.titleContainer ? 0 : 1),
       ease: "Sine.easeInOut",

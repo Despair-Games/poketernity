@@ -73,7 +73,7 @@ export default class MoveInfoOverlay extends Phaser.GameObjects.Container implem
       (options?.top ? EFF_HEIGHT : 0) + BORDER - 2,
       "",
       TextStyle.BATTLE_INFO,
-      { wordWrap: { width: (width - (BORDER - 2) * 2 - (options?.onSide ? EFF_WIDTH : 0)) * GLOBAL_SCALE }},
+      { wordWrap: { width: (width - (BORDER - 2) * 2 - (options?.onSide ? EFF_WIDTH : 0)) * GLOBAL_SCALE } },
     );
     this.desc.setLineSpacing(i18next.resolvedLanguage === "ja" ? 25 : 5);
 

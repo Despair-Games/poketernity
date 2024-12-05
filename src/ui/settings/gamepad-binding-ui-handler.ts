@@ -48,7 +48,7 @@ export default class GamepadBindingUiHandler extends AbstractBindingUiHandler {
   }
 
   gamepadButtonDown(pad: Phaser.Input.Gamepad.Gamepad, button: Phaser.Input.Gamepad.Button, value: number): void {
-    const blacklist = [ 12, 13, 14, 15 ]; // d-pad buttons are blacklisted.
+    const blacklist = [12, 13, 14, 15]; // d-pad buttons are blacklisted.
     // Check conditions before processing the button press.
     if (
       !this.listening ||

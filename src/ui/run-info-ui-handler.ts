@@ -194,7 +194,7 @@ export default class RunInfoUiHandler extends UiHandler {
           globalScene.inputController?.getIconForLatestInputRecorded(SettingKeyboard.Button_Cycle_Ability),
         );
       }
-      abilityButtonContainer.add([ abilityButtonText, abilityButtonElement ]);
+      abilityButtonContainer.add([abilityButtonText, abilityButtonElement]);
       abilityButtonContainer.setPosition(
         headerBgCoords.x - abilityButtonText.displayWidth - abilityButtonElement.displayWidth - 8,
         10,
@@ -260,9 +260,9 @@ export default class RunInfoUiHandler extends UiHandler {
           globalScene.inputController?.getIconForLatestInputRecorded(SettingKeyboard.Button_Cycle_Form),
         );
       }
-      hallofFameInstructionContainer.add([ shinyButtonText, shinyButtonElement ]);
+      hallofFameInstructionContainer.add([shinyButtonText, shinyButtonElement]);
 
-      hallofFameInstructionContainer.add([ formButtonText, formButtonElement ]);
+      hallofFameInstructionContainer.add([formButtonText, formButtonElement]);
 
       hallofFameInstructionContainer.setPosition(12, 25);
       this.runResultContainer.add(hallofFameInstructionContainer);
@@ -340,7 +340,7 @@ export default class RunInfoUiHandler extends UiHandler {
         })
         .replace(/\n/g, " ");
       const descContainer = globalScene.add.container(0, 0);
-      const textBox = addTextObject(0, 0, boxString, TextStyle.WINDOW, { fontSize: "35px", wordWrap: { width: 200 }});
+      const textBox = addTextObject(0, 0, boxString, TextStyle.WINDOW, { fontSize: "35px", wordWrap: { width: 200 } });
       descContainer.add(textBox);
       descContainer.setPosition(55, 32);
       this.runResultContainer.add(descContainer);
@@ -362,7 +362,7 @@ export default class RunInfoUiHandler extends UiHandler {
       });
       descContainer.add(textBox);
       descContainer.setPosition(47, 37);
-      this.runResultContainer.add([ encounterExclaim, subSprite, descContainer ]);
+      this.runResultContainer.add([encounterExclaim, subSprite, descContainer]);
     }
 
     const runResultWindow = this.runResultContainer.getByName("Run_Result_Window") as Phaser.GameObjects.Image;
@@ -387,7 +387,7 @@ export default class RunInfoUiHandler extends UiHandler {
     );
     currentBiomeText.setOrigin(0.5, 1);
 
-    this.runResultContainer.add([ runStatusText, currentBiomeText ]);
+    this.runResultContainer.add([runStatusText, currentBiomeText]);
     this.runContainer.add(this.runResultContainer);
   }
 
@@ -482,13 +482,13 @@ export default class RunInfoUiHandler extends UiHandler {
           tObjSprite.setScale(0.55);
           tObjSprite.setPosition(-9, -3);
           tObjPartnerSprite.setScale(0.55);
-          doubleContainer.add([ tObjSprite, tObjPartnerSprite ]);
+          doubleContainer.add([tObjSprite, tObjPartnerSprite]);
           doubleContainer.setPosition(28, 34);
         }
         enemyContainer.add(doubleContainer);
       } else {
         const scale = this.runDisplayMode === RunDisplayMode.RUN_HISTORY ? 0.35 : 0.55;
-        const position = this.runDisplayMode === RunDisplayMode.RUN_HISTORY ? [ 12, 28 ] : [ 30, 32 ];
+        const position = this.runDisplayMode === RunDisplayMode.RUN_HISTORY ? [12, 28] : [30, 32];
         tObjSprite.setScale(scale, scale);
         tObjSprite.setPosition(position[0], position[1]);
         enemyContainer.add(tObjSprite);
@@ -766,7 +766,7 @@ export default class RunInfoUiHandler extends UiHandler {
       const pName = pokemon.getNameToRender();
       //With the exception of Korean/Traditional Chinese/Simplified Chinese, the code shortens the terms for ability and passive to their first letter.
       //These languages are exempted because they are already short enough.
-      const exemptedLanguages = [ "ko", "zh_CN", "zh_TW" ];
+      const exemptedLanguages = ["ko", "zh_CN", "zh_TW"];
       let passiveLabel = i18next.t("starterSelectUiHandler:passive") ?? "-";
       let abilityLabel = i18next.t("starterSelectUiHandler:ability") ?? "-";
       if (!exemptedLanguages.includes(currentLanguage)) {
@@ -864,10 +864,10 @@ export default class RunInfoUiHandler extends UiHandler {
       const pokemonMoveBgs: Phaser.GameObjects.NineSlice[] = [];
       const pokemonMoveLabels: Phaser.GameObjects.Text[] = [];
       const movePos = [
-        [ -6.5, 35.5 ],
-        [ 37, 35.5 ],
-        [ -6.5, 43.5 ],
-        [ 37, 43.5 ],
+        [-6.5, 35.5],
+        [37, 35.5],
+        [-6.5, 43.5],
+        [37, 43.5],
       ];
       for (let m = 0; m < pokemonMoveset?.length; m++) {
         const moveContainer = globalScene.add.container(movePos[m][0], movePos[m][1]);
@@ -904,7 +904,7 @@ export default class RunInfoUiHandler extends UiHandler {
         if (heldItemsList.length > 0) {
           (heldItemsList as Modifier.PokemonHeldItemModifier[]).sort(Modifier.modifierSortFunc);
           let row = 0;
-          for (const [ index, item ] of heldItemsList.entries()) {
+          for (const [index, item] of heldItemsList.entries()) {
             if (index > 36) {
               const overflowIcon = addTextObject(182, 4, "+", TextStyle.WINDOW);
               heldItemsContainer.add(overflowIcon);
@@ -1031,7 +1031,7 @@ export default class RunInfoUiHandler extends UiHandler {
       const variant = pkmn.variant;
       const species = pkmn.getSpeciesForm();
       const pokemonSprite: Phaser.GameObjects.Sprite = globalScene.add.sprite(60 + 40 * i, 40 + row * 80, "pkmn__sub");
-      pokemonSprite.setPipeline(globalScene.spritePipeline, { tone: [ 0.0, 0.0, 0.0, 0.0 ], ignoreTimeTint: true });
+      pokemonSprite.setPipeline(globalScene.spritePipeline, { tone: [0.0, 0.0, 0.0, 0.0], ignoreTimeTint: true });
       this.hallofFameContainer.add(pokemonSprite);
       const speciesLoaded: Map<Species, boolean> = new Map<Species, boolean>();
       speciesLoaded.set(id, false);

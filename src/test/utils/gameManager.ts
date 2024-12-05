@@ -361,7 +361,7 @@ export default class GameManager {
       move: moveId,
       targets:
         target !== undefined && !legalTargets.multiple && legalTargets.targets.includes(target)
-          ? [ target ]
+          ? [target]
           : enemy.getNextTargets(moveId),
     });
 
@@ -378,8 +378,8 @@ export default class GameManager {
     Trainer.prototype.getPartyMemberMatchupScores = () => {
       Trainer.prototype.getPartyMemberMatchupScores = originalMatchupScore;
       return [
-        [ 1, 100 ],
-        [ 1, 100 ],
+        [1, 100],
+        [1, 100],
       ];
     };
   }

@@ -54,7 +54,7 @@ class BreederSpeciesEvolution {
 }
 
 const POOL_1_POKEMON: (Species | BreederSpeciesEvolution)[][] = [
-  [ Species.MUNCHLAX, new BreederSpeciesEvolution(Species.SNORLAX, SECOND_STAGE_EVOLUTION_WAVE) ],
+  [Species.MUNCHLAX, new BreederSpeciesEvolution(Species.SNORLAX, SECOND_STAGE_EVOLUTION_WAVE)],
   [
     Species.HAPPINY,
     new BreederSpeciesEvolution(Species.CHANSEY, FIRST_STAGE_EVOLUTION_WAVE),
@@ -70,13 +70,13 @@ const POOL_1_POKEMON: (Species | BreederSpeciesEvolution)[][] = [
     new BreederSpeciesEvolution(Species.ELECTABUZZ, FIRST_STAGE_EVOLUTION_WAVE),
     new BreederSpeciesEvolution(Species.ELECTIVIRE, FINAL_STAGE_EVOLUTION_WAVE),
   ],
-  [ Species.RIOLU, new BreederSpeciesEvolution(Species.LUCARIO, SECOND_STAGE_EVOLUTION_WAVE) ],
+  [Species.RIOLU, new BreederSpeciesEvolution(Species.LUCARIO, SECOND_STAGE_EVOLUTION_WAVE)],
   [
     Species.BUDEW,
     new BreederSpeciesEvolution(Species.ROSELIA, FIRST_STAGE_EVOLUTION_WAVE),
     new BreederSpeciesEvolution(Species.ROSERADE, FINAL_STAGE_EVOLUTION_WAVE),
   ],
-  [ Species.TOXEL, new BreederSpeciesEvolution(Species.TOXTRICITY, SECOND_STAGE_EVOLUTION_WAVE) ],
+  [Species.TOXEL, new BreederSpeciesEvolution(Species.TOXTRICITY, SECOND_STAGE_EVOLUTION_WAVE)],
   [
     Species.MIME_JR,
     new BreederSpeciesEvolution(Species.GALAR_MR_MIME, FIRST_STAGE_EVOLUTION_WAVE),
@@ -95,10 +95,10 @@ const POOL_2_POKEMON: (Species | BreederSpeciesEvolution)[][] = [
     new BreederSpeciesEvolution(Species.PIKACHU, FIRST_STAGE_EVOLUTION_WAVE),
     new BreederSpeciesEvolution(Species.ALOLA_RAICHU, FINAL_STAGE_EVOLUTION_WAVE),
   ],
-  [ Species.SMOOCHUM, new BreederSpeciesEvolution(Species.JYNX, SECOND_STAGE_EVOLUTION_WAVE) ],
-  [ Species.TYROGUE, new BreederSpeciesEvolution(Species.HITMONLEE, SECOND_STAGE_EVOLUTION_WAVE) ],
-  [ Species.TYROGUE, new BreederSpeciesEvolution(Species.HITMONCHAN, SECOND_STAGE_EVOLUTION_WAVE) ],
-  [ Species.TYROGUE, new BreederSpeciesEvolution(Species.HITMONTOP, SECOND_STAGE_EVOLUTION_WAVE) ],
+  [Species.SMOOCHUM, new BreederSpeciesEvolution(Species.JYNX, SECOND_STAGE_EVOLUTION_WAVE)],
+  [Species.TYROGUE, new BreederSpeciesEvolution(Species.HITMONLEE, SECOND_STAGE_EVOLUTION_WAVE)],
+  [Species.TYROGUE, new BreederSpeciesEvolution(Species.HITMONCHAN, SECOND_STAGE_EVOLUTION_WAVE)],
+  [Species.TYROGUE, new BreederSpeciesEvolution(Species.HITMONTOP, SECOND_STAGE_EVOLUTION_WAVE)],
   [
     Species.IGGLYBUFF,
     new BreederSpeciesEvolution(Species.JIGGLYPUFF, FIRST_STAGE_EVOLUTION_WAVE),
@@ -109,10 +109,10 @@ const POOL_2_POKEMON: (Species | BreederSpeciesEvolution)[][] = [
     new BreederSpeciesEvolution(Species.MARILL, FIRST_STAGE_EVOLUTION_WAVE),
     new BreederSpeciesEvolution(Species.AZUMARILL, FINAL_STAGE_EVOLUTION_WAVE),
   ],
-  [ Species.WYNAUT, new BreederSpeciesEvolution(Species.WOBBUFFET, SECOND_STAGE_EVOLUTION_WAVE) ],
-  [ Species.CHINGLING, new BreederSpeciesEvolution(Species.CHIMECHO, SECOND_STAGE_EVOLUTION_WAVE) ],
-  [ Species.BONSLY, new BreederSpeciesEvolution(Species.SUDOWOODO, SECOND_STAGE_EVOLUTION_WAVE) ],
-  [ Species.MANTYKE, new BreederSpeciesEvolution(Species.MANTINE, SECOND_STAGE_EVOLUTION_WAVE) ],
+  [Species.WYNAUT, new BreederSpeciesEvolution(Species.WOBBUFFET, SECOND_STAGE_EVOLUTION_WAVE)],
+  [Species.CHINGLING, new BreederSpeciesEvolution(Species.CHIMECHO, SECOND_STAGE_EVOLUTION_WAVE)],
+  [Species.BONSLY, new BreederSpeciesEvolution(Species.SUDOWOODO, SECOND_STAGE_EVOLUTION_WAVE)],
+  [Species.MANTYKE, new BreederSpeciesEvolution(Species.MANTINE, SECOND_STAGE_EVOLUTION_WAVE)],
 ];
 
 /**
@@ -142,7 +142,7 @@ export const TheExpertPokemonBreederEncounter: MysteryEncounter = MysteryEncount
     // Calculates what trainers are available for battle in the encounter
 
     // If player is in space biome, uses special "Space" version of the trainer
-    encounter.enemyPartyConfigs = [ getPartyConfig() ];
+    encounter.enemyPartyConfigs = [getPartyConfig()];
 
     const cleffaSpecies =
       waveIndex < FIRST_STAGE_EVOLUTION_WAVE
@@ -182,7 +182,7 @@ export const TheExpertPokemonBreederEncounter: MysteryEncounter = MysteryEncount
     encounter.setDialogueToken("pokemon3Name", pokemon3.getNameToRender());
 
     // Dialogue and egg calcs for Pokemon 1
-    const [ pokemon1CommonEggs, pokemon1RareEggs ] = calculateEggRewardsForPokemon(pokemon1);
+    const [pokemon1CommonEggs, pokemon1RareEggs] = calculateEggRewardsForPokemon(pokemon1);
     let pokemon1Tooltip = getEncounterText(`${namespace}:option.1.tooltip_base`)!;
     if (pokemon1RareEggs > 0) {
       const eggsText = i18next.t(`${namespace}:numEggs`, {
@@ -203,7 +203,7 @@ export const TheExpertPokemonBreederEncounter: MysteryEncounter = MysteryEncount
     encounter.options[0].dialogue!.buttonTooltip = pokemon1Tooltip;
 
     // Dialogue and egg calcs for Pokemon 2
-    const [ pokemon2CommonEggs, pokemon2RareEggs ] = calculateEggRewardsForPokemon(pokemon2);
+    const [pokemon2CommonEggs, pokemon2RareEggs] = calculateEggRewardsForPokemon(pokemon2);
     let pokemon2Tooltip = getEncounterText(`${namespace}:option.2.tooltip_base`)!;
     if (pokemon2RareEggs > 0) {
       const eggsText = i18next.t(`${namespace}:numEggs`, {
@@ -224,7 +224,7 @@ export const TheExpertPokemonBreederEncounter: MysteryEncounter = MysteryEncount
     encounter.options[1].dialogue!.buttonTooltip = pokemon2Tooltip;
 
     // Dialogue and egg calcs for Pokemon 3
-    const [ pokemon3CommonEggs, pokemon3RareEggs ] = calculateEggRewardsForPokemon(pokemon3);
+    const [pokemon3CommonEggs, pokemon3RareEggs] = calculateEggRewardsForPokemon(pokemon3);
     let pokemon3Tooltip = getEncounterText(`${namespace}:option.3.tooltip_base`)!;
     if (pokemon3RareEggs > 0) {
       const eggsText = i18next.t(`${namespace}:numEggs`, {
@@ -283,7 +283,7 @@ export const TheExpertPokemonBreederEncounter: MysteryEncounter = MysteryEncount
         encounter.setDialogueToken("chosenPokemon", pokemon1.getNameToRender());
         const eggOptions = getEggOptions(pokemon1CommonEggs, pokemon1RareEggs);
         setEncounterRewards(
-          { guaranteedModifierTypeFuncs: [ modifierTypes.SOOTHE_BELL ], fillRemaining: true },
+          { guaranteedModifierTypeFuncs: [modifierTypes.SOOTHE_BELL], fillRemaining: true },
           eggOptions,
           () => doPostEncounterCleanup(),
         );
@@ -335,7 +335,7 @@ export const TheExpertPokemonBreederEncounter: MysteryEncounter = MysteryEncount
         encounter.setDialogueToken("chosenPokemon", pokemon2.getNameToRender());
         const eggOptions = getEggOptions(pokemon2CommonEggs, pokemon2RareEggs);
         setEncounterRewards(
-          { guaranteedModifierTypeFuncs: [ modifierTypes.SOOTHE_BELL ], fillRemaining: true },
+          { guaranteedModifierTypeFuncs: [modifierTypes.SOOTHE_BELL], fillRemaining: true },
           eggOptions,
           () => doPostEncounterCleanup(),
         );
@@ -387,7 +387,7 @@ export const TheExpertPokemonBreederEncounter: MysteryEncounter = MysteryEncount
         encounter.setDialogueToken("chosenPokemon", pokemon3.getNameToRender());
         const eggOptions = getEggOptions(pokemon3CommonEggs, pokemon3RareEggs);
         setEncounterRewards(
-          { guaranteedModifierTypeFuncs: [ modifierTypes.SOOTHE_BELL ], fillRemaining: true },
+          { guaranteedModifierTypeFuncs: [modifierTypes.SOOTHE_BELL], fillRemaining: true },
           eggOptions,
           () => doPostEncounterCleanup(),
         );
@@ -451,11 +451,11 @@ function getPartyConfig(): EnemyPartyConfig {
         abilityIndex: 1, // Magic Guard
         shiny: false,
         nature: Nature.ADAMANT,
-        moveSet: [ Moves.METEOR_MASH, Moves.FIRE_PUNCH, Moves.ICE_PUNCH, Moves.THUNDER_PUNCH ],
-        ivs: [ 31, 31, 31, 31, 31, 31 ],
+        moveSet: [Moves.METEOR_MASH, Moves.FIRE_PUNCH, Moves.ICE_PUNCH, Moves.THUNDER_PUNCH],
+        ivs: [31, 31, 31, 31, 31, 31],
         modifierConfigs: [
           {
-            modifier: generateModifierType(modifierTypes.TERA_SHARD, [ Type.STEEL ]) as PokemonHeldItemModifierType,
+            modifier: generateModifierType(modifierTypes.TERA_SHARD, [Type.STEEL]) as PokemonHeldItemModifierType,
           },
         ],
       },
@@ -475,8 +475,8 @@ function getPartyConfig(): EnemyPartyConfig {
         shiny: true,
         variant: 1,
         nature: Nature.MODEST,
-        moveSet: [ Moves.MOONBLAST, Moves.MYSTICAL_FIRE, Moves.ICE_BEAM, Moves.THUNDERBOLT ],
-        ivs: [ 31, 31, 31, 31, 31, 31 ],
+        moveSet: [Moves.MOONBLAST, Moves.MYSTICAL_FIRE, Moves.ICE_BEAM, Moves.THUNDERBOLT],
+        ivs: [31, 31, 31, 31, 31, 31],
       },
       {
         nickname: i18next.t(`${namespace}:cleffa_3_nickname`, {
@@ -488,8 +488,8 @@ function getPartyConfig(): EnemyPartyConfig {
         shiny: true,
         variant: 2,
         nature: Nature.BOLD,
-        moveSet: [ Moves.TRI_ATTACK, Moves.STORED_POWER, Moves.TAKE_HEART, Moves.MOONLIGHT ],
-        ivs: [ 31, 31, 31, 31, 31, 31 ],
+        moveSet: [Moves.TRI_ATTACK, Moves.STORED_POWER, Moves.TAKE_HEART, Moves.MOONLIGHT],
+        ivs: [31, 31, 31, 31, 31, 31],
       },
     );
   } else {
@@ -502,12 +502,12 @@ function getPartyConfig(): EnemyPartyConfig {
       {
         species: getPokemonSpecies(pool1Species),
         isBoss: false,
-        ivs: [ 31, 31, 31, 31, 31, 31 ],
+        ivs: [31, 31, 31, 31, 31, 31],
       },
       {
         species: getPokemonSpecies(pool2Species),
         isBoss: false,
-        ivs: [ 31, 31, 31, 31, 31, 31 ],
+        ivs: [31, 31, 31, 31, 31, 31],
       },
     );
   }
@@ -550,7 +550,7 @@ function calculateEggRewardsForPokemon(pokemon: PlayerPokemon): [number, number]
   // 1 Common egg for every point leftover
   numCommons += totalPoints % 4;
 
-  return [ numCommons, numRares ];
+  return [numCommons, numRares];
 }
 
 function getEggOptions(commonEggs: number, rareEggs: number) {
@@ -588,7 +588,7 @@ function removePokemonFromPartyAndStoreHeldItems(encounter: MysteryEncounter, ch
   party[0] = chosenPokemon;
   encounter.misc.originalParty = globalScene.getPlayerParty().slice(1);
   encounter.misc.originalPartyHeldItems = encounter.misc.originalParty.map((p) => p.getHeldItems());
-  globalScene["party"] = [ chosenPokemon ];
+  globalScene["party"] = [chosenPokemon];
 }
 
 function restorePartyAndHeldItems() {

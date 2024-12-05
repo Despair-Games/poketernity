@@ -283,19 +283,19 @@ class AnimFrame {
       this.opacity = 0;
     }
     if (colorR || colorG || colorB || colorA) {
-      this.color = [ colorR || 0, colorG || 0, colorB || 0, colorA || 0 ];
+      this.color = [colorR || 0, colorG || 0, colorB || 0, colorA || 0];
     } else if (init) {
-      this.color = [ 0, 0, 0, 0 ];
+      this.color = [0, 0, 0, 0];
     }
     if (toneR || toneG || toneB || toneA) {
-      this.tone = [ toneR || 0, toneG || 0, toneB || 0, toneA || 0 ];
+      this.tone = [toneR || 0, toneG || 0, toneB || 0, toneA || 0];
     } else if (init) {
-      this.tone = [ 0, 0, 0, 0 ];
+      this.tone = [0, 0, 0, 0];
     }
     if (flashR || flashG || flashB || flashA) {
-      this.flash = [ flashR || 0, flashG || 0, flashB || 0, flashA || 0 ];
+      this.flash = [flashR || 0, flashG || 0, flashB || 0, flashA || 0];
     } else if (init) {
-      this.flash = [ 0, 0, 0, 0 ];
+      this.flash = [0, 0, 0, 0];
     }
     if (locked) {
       this.locked = locked;
@@ -313,9 +313,9 @@ class AnimFrame {
 
 class ImportedAnimFrame extends AnimFrame {
   constructor(source: any) {
-    const color: integer[] = source.color || [ 0, 0, 0, 0 ];
-    const tone: integer[] = source.tone || [ 0, 0, 0, 0 ];
-    const flash: integer[] = source.flash || [ 0, 0, 0, 0 ];
+    const color: integer[] = source.color || [0, 0, 0, 0];
+    const tone: integer[] = source.tone || [0, 0, 0, 0];
+    const flash: integer[] = source.flash || [0, 0, 0, 0];
     super(
       source.x,
       source.y,
@@ -623,7 +623,7 @@ function logMissingMoveAnim(move: Moves, ...optionalParams: any[]) {
  * @param encounterAnim one or more animations to fetch
  */
 export async function initEncounterAnims(encounterAnim: EncounterAnim | EncounterAnim[]): Promise<void> {
-  const anims = Array.isArray(encounterAnim) ? encounterAnim : [ encounterAnim ];
+  const anims = Array.isArray(encounterAnim) ? encounterAnim : [encounterAnim];
   const encounterAnimNames = Utils.getEnumKeys(EncounterAnim);
   const encounterAnimFetches: Promise<Map<EncounterAnim, AnimConfig>>[] = [];
   for (const anim of anims) {
@@ -677,7 +677,7 @@ function populateMoveAnim(move: Moves, animSource: any): void {
     moveAnims.set(move, moveAnim);
     return;
   }
-  moveAnims.set(move, [ moveAnims.get(move) as AnimConfig, moveAnim ]);
+  moveAnims.set(move, [moveAnims.get(move) as AnimConfig, moveAnim]);
 }
 
 function populateMoveChargeAnim(chargeAnim: ChargeAnim, animSource: any) {
@@ -686,7 +686,7 @@ function populateMoveChargeAnim(chargeAnim: ChargeAnim, animSource: any) {
     chargeAnims.set(chargeAnim, moveChargeAnim);
     return;
   }
-  chargeAnims.set(chargeAnim, [ chargeAnims.get(chargeAnim) as AnimConfig, moveChargeAnim ]);
+  chargeAnims.set(chargeAnim, [chargeAnims.get(chargeAnim) as AnimConfig, moveChargeAnim]);
 }
 
 export function loadCommonAnimAssets(startLoad?: boolean): Promise<void> {
@@ -802,7 +802,7 @@ function yAxisIntersect(
   const dy = y2 - y1;
   const x = dx === 0 ? 0 : (px - x1) / dx;
   const y = dy === 0 ? 0 : (py - y1) / dy;
-  return [ x, y ];
+  return [x, y];
 }
 
 function repositionY(x1: number, y1: number, x2: number, y2: number, tx: number, ty: number): [x: number, y: number] {
@@ -810,7 +810,7 @@ function repositionY(x1: number, y1: number, x2: number, y2: number, tx: number,
   const dy = y2 - y1;
   const x = x1 + tx * dx;
   const y = y1 + ty * dy;
-  return [ x, y ];
+  return [x, y];
 }
 
 function isReversed(src1: number, src2: number, dst1: number, dst2: number) {
@@ -866,9 +866,9 @@ export abstract class BattleAnim {
     onSubstitute?: boolean,
   ): Map<integer, Map<AnimFrameTarget, GraphicFrameData>> {
     const ret: Map<integer, Map<AnimFrameTarget, GraphicFrameData>> = new Map([
-      [ AnimFrameTarget.GRAPHIC, new Map<AnimFrameTarget, GraphicFrameData>() ],
-      [ AnimFrameTarget.USER, new Map<AnimFrameTarget, GraphicFrameData>() ],
-      [ AnimFrameTarget.TARGET, new Map<AnimFrameTarget, GraphicFrameData>() ],
+      [AnimFrameTarget.GRAPHIC, new Map<AnimFrameTarget, GraphicFrameData>()],
+      [AnimFrameTarget.USER, new Map<AnimFrameTarget, GraphicFrameData>()],
+      [AnimFrameTarget.TARGET, new Map<AnimFrameTarget, GraphicFrameData>()],
     ]);
 
     const isOppAnim = this.isOppAnim();
@@ -962,7 +962,7 @@ export abstract class BattleAnim {
       userSprite.setPosition(0, 0);
       userSprite.setScale(1);
       userSprite.setAlpha(1);
-      userSprite.pipelineData["tone"] = [ 0.0, 0.0, 0.0, 0.0 ];
+      userSprite.pipelineData["tone"] = [0.0, 0.0, 0.0, 0.0];
       userSprite.setAngle(0);
       if (!targetSubstitute) {
         targetSprite.setPosition(0, 0);
@@ -976,7 +976,7 @@ export abstract class BattleAnim {
         targetSprite.setScale(target.getSpriteScale() * (target.isPlayer() ? 0.5 : 1));
         targetSprite.setAlpha(1);
       }
-      targetSprite.pipelineData["tone"] = [ 0.0, 0.0, 0.0, 0.0 ];
+      targetSprite.pipelineData["tone"] = [0.0, 0.0, 0.0, 0.0];
       targetSprite.setAngle(0);
 
       /**
@@ -1017,8 +1017,8 @@ export abstract class BattleAnim {
     const targetInitialX = targetSubstitute?.sprite?.x ?? target.x;
     const targetInitialY = targetSubstitute?.sprite?.y ?? target.y;
 
-    this.srcLine = [ userFocusX, userFocusY, targetFocusX, targetFocusY ];
-    this.dstLine = [ userInitialX, userInitialY, targetInitialX, targetInitialY ];
+    this.srcLine = [userFocusX, userFocusY, targetFocusX, targetFocusY];
+    this.dstLine = [userInitialX, userInitialY, targetInitialX, targetInitialY];
 
     let r = anim?.frames.length ?? 0;
     let f = 0;
@@ -1057,7 +1057,7 @@ export abstract class BattleAnim {
                   spriteSource!.frame.name,
                   true,
                 ); // TODO: are those bangs correct?
-                [ "spriteColors", "fusionSpriteColors" ].map(
+                ["spriteColors", "fusionSpriteColors"].map(
                   (k) => (sprite.pipelineData[k] = (isUser ? user! : target).getSprite().pipelineData[k]),
                 ); // TODO: are those bangs correct?
                 sprite.setPipelineData("spriteKey", (isUser ? user! : target).getBattleSpriteKey());
@@ -1234,9 +1234,9 @@ export abstract class BattleAnim {
     targetInitialY: number,
   ): Map<integer, Map<AnimFrameTarget, GraphicFrameData>> {
     const ret: Map<integer, Map<AnimFrameTarget, GraphicFrameData>> = new Map([
-      [ AnimFrameTarget.GRAPHIC, new Map<AnimFrameTarget, GraphicFrameData>() ],
-      [ AnimFrameTarget.USER, new Map<AnimFrameTarget, GraphicFrameData>() ],
-      [ AnimFrameTarget.TARGET, new Map<AnimFrameTarget, GraphicFrameData>() ],
+      [AnimFrameTarget.GRAPHIC, new Map<AnimFrameTarget, GraphicFrameData>()],
+      [AnimFrameTarget.USER, new Map<AnimFrameTarget, GraphicFrameData>()],
+      [AnimFrameTarget.TARGET, new Map<AnimFrameTarget, GraphicFrameData>()],
     ]);
 
     let g = 0;
@@ -1303,8 +1303,8 @@ export abstract class BattleAnim {
 
     const anim = this.getAnim();
 
-    this.srcLine = [ userFocusX, userFocusY, targetFocusX, targetFocusY ];
-    this.dstLine = [ 150, 75, targetInitialX, targetInitialY ];
+    this.srcLine = [userFocusX, userFocusY, targetFocusX, targetFocusY];
+    this.dstLine = [150, 75, targetInitialX, targetInitialY];
 
     let totalFrames = anim!.frames.length;
     let frameCount = 0;
@@ -1547,11 +1547,11 @@ export async function populateAnims() {
     if (commonAnimId) {
       commonAnims.set(commonAnimId, anim);
     } else if (chargeAnimId) {
-      chargeAnims.set(chargeAnimId, !isOppMove ? anim : [ chargeAnims.get(chargeAnimId) as AnimConfig, anim ]);
+      chargeAnims.set(chargeAnimId, !isOppMove ? anim : [chargeAnims.get(chargeAnimId) as AnimConfig, anim]);
     } else {
       moveAnims.set(
         moveNameToId[animName],
-        !isOppMove ? (anim as AnimConfig) : [ moveAnims.get(moveNameToId[animName]) as AnimConfig, anim as AnimConfig ],
+        !isOppMove ? (anim as AnimConfig) : [moveAnims.get(moveNameToId[animName]) as AnimConfig, anim as AnimConfig],
       );
     }
     for (let f = 0; f < fields.length; f++) {
@@ -1609,7 +1609,7 @@ export async function populateAnims() {
               .replace(/\n/g, " ")
               .replace(/[ ]{2,}/g, " ")
               .replace(/[a-z]+: ! '', /gi, "")
-              .replace(/name: (.*?),/, "name: \"$1\",")
+              .replace(/name: (.*?),/, 'name: "$1",')
               .replace(
                 /flashColor: !ruby\/object:Color { alpha: ([\d\.]+), blue: ([\d\.]+), green: ([\d\.]+), red: ([\d\.]+)}/,
                 "flashRed: $4, flashGreen: $3, flashBlue: $2, flashAlpha: $1",
@@ -1622,7 +1622,7 @@ export async function populateAnims() {
               case 0:
                 if (resourceName && resourceName.indexOf(".") === -1) {
                   let ext: string | undefined;
-                  [ "wav", "mp3", "m4a" ].every((e) => {
+                  ["wav", "mp3", "m4a"].every((e) => {
                     if (seNames.indexOf(`${resourceName}.${e}`) > -1) {
                       ext = e;
                       return false;
@@ -1709,7 +1709,7 @@ export async function populateAnims() {
     return v;
   };
 
-  const animConfigProps = [ "id", "graphic", "frames", "frameTimedEvents", "position", "hue" ];
+  const animConfigProps = ["id", "graphic", "frames", "frameTimedEvents", "position", "hue"];
   const animFrameProps = [
     "x",
     "y",
@@ -1729,7 +1729,7 @@ export async function populateAnims() {
     "priority",
     "focus",
   ];
-  const propSets = [ animConfigProps, animFrameProps ];
+  const propSets = [animConfigProps, animFrameProps];
 
   // used in commented code
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

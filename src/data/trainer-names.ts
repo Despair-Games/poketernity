@@ -6,7 +6,7 @@ class TrainerNameConfig {
   public femaleUrls: string[] | null;
 
   constructor(type: TrainerType, ...urls: string[]) {
-    this.urls = urls.length ? urls : [ Utils.toReadableString(TrainerType[type]).replace(/ /g, "_") ];
+    this.urls = urls.length ? urls : [Utils.toReadableString(TrainerType[type]).replace(/ /g, "_")];
   }
 
   hasGenderVariant(...femaleUrls: string[]): TrainerNameConfig {
@@ -444,11 +444,11 @@ export const trainerNamePools = {
     ],
   ],
   [TrainerType.ARTIST]: [
-    [ "Ismael", "William", "Horton", "Pierre", "Zach", "Gough", "Salvador", "Vincent", "Duncan" ],
-    [ "Georgia" ],
+    ["Ismael", "William", "Horton", "Pierre", "Zach", "Gough", "Salvador", "Vincent", "Duncan"],
+    ["Georgia"],
   ],
   [TrainerType.BACKERS]: [
-    [ "Alf & Fred", "Hawk & Dar", "Joe & Ross", "Les & Web", "Masa & Yas", "Stu & Art" ],
+    ["Alf & Fred", "Hawk & Dar", "Joe & Ross", "Les & Web", "Masa & Yas", "Stu & Art"],
     [
       "Ai & Ciel",
       "Ami & Eira",
@@ -548,7 +548,7 @@ export const trainerNamePools = {
       "Diane",
     ],
   ],
-  [TrainerType.BAKER]: [ "Chris", "Jenn", "Lilly" ],
+  [TrainerType.BAKER]: ["Chris", "Jenn", "Lilly"],
   [TrainerType.BEAUTY]: [
     "Cassie",
     "Julia",
@@ -925,8 +925,8 @@ export const trainerNamePools = {
     ],
   ],
   [TrainerType.CYCLIST]: [
-    [ "Axel", "James", "John", "Ryan", "Hector", "Jeremiah" ],
-    [ "Kayla", "Megan", "Nicole", "Rachel", "Krissa", "Adelaide" ],
+    ["Axel", "James", "John", "Ryan", "Hector", "Jeremiah"],
+    ["Kayla", "Megan", "Nicole", "Rachel", "Krissa", "Adelaide"],
   ],
   [TrainerType.DANCER]: [
     "Brian",
@@ -942,12 +942,12 @@ export const trainerNamePools = {
     "Ronda",
     "Zoe",
   ],
-  [TrainerType.DEPOT_AGENT]: [ "Josh", "Hank", "Vincent" ],
+  [TrainerType.DEPOT_AGENT]: ["Josh", "Hank", "Vincent"],
   [TrainerType.DOCTOR]: [
-    [ "Hank", "Jerry", "Jules", "Logan", "Wayne", "Braid", "Derek", "Heath", "Julius", "Kit", "Graham" ],
-    [ "Kirsten", "Sachiko", "Shery", "Carol", "Dixie", "Mariah" ],
+    ["Hank", "Jerry", "Jules", "Logan", "Wayne", "Braid", "Derek", "Heath", "Julius", "Kit", "Graham"],
+    ["Kirsten", "Sachiko", "Shery", "Carol", "Dixie", "Mariah"],
   ],
-  [TrainerType.FIREBREATHER]: [ "Bill", "Burt", "Cliff", "Dick", "Lyle", "Ned", "Otis", "Ray", "Richard", "Walt" ],
+  [TrainerType.FIREBREATHER]: ["Bill", "Burt", "Cliff", "Dick", "Lyle", "Ned", "Otis", "Ray", "Richard", "Walt"],
   [TrainerType.FISHERMAN]: [
     "Andre",
     "Arnold",
@@ -1202,12 +1202,12 @@ export const trainerNamePools = {
     "Kevyn",
     "Chester",
   ], //["Angela","Carla","Celia","Daniela","Estela","Fatima","Helena","Leire","Lucia","Luna","Manuela","Mar","Marina","Miyu","Nancy","Nerea","Paula","Rocio","Yanira"]
-  [TrainerType.HOOLIGANS]: [ "Jim & Cas", "Rob & Sal" ],
-  [TrainerType.HOOPSTER]: [ "Bobby", "John", "Lamarcus", "Derrick", "Nicolas" ],
-  [TrainerType.INFIELDER]: [ "Alex", "Connor", "Todd" ],
-  [TrainerType.JANITOR]: [ "Caleb", "Geoff", "Brady", "Felix", "Orville", "Melvin", "Shawn" ],
-  [TrainerType.LINEBACKER]: [ "Bob", "Dan", "Jonah" ],
-  [TrainerType.MAID]: [ "Belinda", "Sophie", "Emily", "Elena", "Clare", "Alica", "Tanya", "Tammy" ],
+  [TrainerType.HOOLIGANS]: ["Jim & Cas", "Rob & Sal"],
+  [TrainerType.HOOPSTER]: ["Bobby", "John", "Lamarcus", "Derrick", "Nicolas"],
+  [TrainerType.INFIELDER]: ["Alex", "Connor", "Todd"],
+  [TrainerType.JANITOR]: ["Caleb", "Geoff", "Brady", "Felix", "Orville", "Melvin", "Shawn"],
+  [TrainerType.LINEBACKER]: ["Bob", "Dan", "Jonah"],
+  [TrainerType.MAID]: ["Belinda", "Sophie", "Emily", "Elena", "Clare", "Alica", "Tanya", "Tammy"],
   [TrainerType.MUSICIAN]: [
     "Boris",
     "Preston",
@@ -1277,7 +1277,7 @@ export const trainerNamePools = {
     "Ingrid",
     "Tyra",
   ],
-  [TrainerType.PILOT]: [ "Chase", "Leonard", "Ted", "Elron", "Ewing", "Flynn", "Winslow" ],
+  [TrainerType.PILOT]: ["Chase", "Leonard", "Ted", "Elron", "Ewing", "Flynn", "Winslow"],
   [TrainerType.POKEFAN]: [
     [
       "Alex",
@@ -1928,7 +1928,7 @@ export const trainerNamePools = {
       "Sonia",
     ],
   ],
-  [TrainerType.SMASHER]: [ "Aspen", "Elena", "Mari", "Amy", "Lizzy" ],
+  [TrainerType.SMASHER]: ["Aspen", "Elena", "Mari", "Amy", "Lizzy"],
   [TrainerType.SNOW_WORKER]: [
     [
       "Braden",
@@ -2009,9 +2009,9 @@ export const trainerNamePools = {
       "Saken",
       "Rustix",
     ],
-    [ "Georgia", "Sandra", "Yvonne" ],
+    ["Georgia", "Sandra", "Yvonne"],
   ],
-  [TrainerType.STRIKER]: [ "Marco", "Roberto", "Tony" ],
+  [TrainerType.STRIKER]: ["Marco", "Roberto", "Tony"],
   [TrainerType.SCHOOL_KID]: [
     [
       "Alan",
@@ -2384,8 +2384,8 @@ export const trainerNamePools = {
     ],
   ],
   [TrainerType.WAITER]: [
-    [ "Bert", "Clint", "Maxwell", "Lou" ],
-    [ "Kati", "Aurora", "Bonita", "Flo", "Tia", "Jan", "Olwen", "Paget", "Paula", "Talia" ],
+    ["Bert", "Clint", "Maxwell", "Lou"],
+    ["Kati", "Aurora", "Bonita", "Flo", "Tia", "Jan", "Olwen", "Paget", "Paula", "Talia"],
   ],
   [TrainerType.WORKER]: [
     [
@@ -2467,7 +2467,7 @@ export const trainerNamePools = {
       "Saken",
       "Rustix",
     ],
-    [ "Georgia", "Sandra", "Yvonne" ],
+    ["Georgia", "Sandra", "Yvonne"],
   ],
   [TrainerType.YOUNGSTER]: [
     [
@@ -2738,7 +2738,7 @@ function fetchAndPopulateTrainerNames(
         if (!trainerListHeader) {
           return [];
         }
-        const elements = [ ...(trainerListHeader?.parentElement?.childNodes ?? []) ];
+        const elements = [...(trainerListHeader?.parentElement?.childNodes ?? [])];
         const startChildIndex = elements.indexOf(trainerListHeader);
         const endChildIndex = elements.findIndex((h) => h.nodeName === "H2" && elements.indexOf(h) > startChildIndex);
         const tables = elements
@@ -2752,7 +2752,7 @@ function fetchAndPopulateTrainerNames(
           .map((t) => t as Element);
         console.log(url, tables);
         for (const table of tables) {
-          const trainerRows = [ ...table.querySelectorAll("tr:not(:first-child)") ].filter(
+          const trainerRows = [...table.querySelectorAll("tr:not(:first-child)")].filter(
             (r) => r.children.length === 9,
           );
           for (const row of trainerRows) {

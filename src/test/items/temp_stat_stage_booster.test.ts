@@ -34,12 +34,12 @@ describe("Items - Temporary Stat Stage Boosters", () => {
       .enemySpecies(Species.SHUCKLE)
       .enemyMoveset(Moves.SPLASH)
       .enemyAbility(Abilities.BALL_FETCH)
-      .moveset([ Moves.TACKLE, Moves.SPLASH, Moves.HONE_CLAWS, Moves.BELLY_DRUM ])
+      .moveset([Moves.TACKLE, Moves.SPLASH, Moves.HONE_CLAWS, Moves.BELLY_DRUM])
       .startingModifier([{ name: "TEMP_STAT_STAGE_BOOSTER", type: Stat.ATK }]);
   });
 
   it("should provide a x1.3 stat stage multiplier", async () => {
-    await game.classicMode.startBattle([ Species.PIKACHU ]);
+    await game.classicMode.startBattle([Species.PIKACHU]);
 
     const partyMember = game.scene.getPlayerPokemon()!;
 
@@ -55,7 +55,7 @@ describe("Items - Temporary Stat Stage Boosters", () => {
   it("should increase existing ACC stat stage by 1 for X_ACCURACY only", async () => {
     game.override.startingModifier([{ name: "TEMP_STAT_STAGE_BOOSTER", type: Stat.ACC }]).ability(Abilities.SIMPLE);
 
-    await game.classicMode.startBattle([ Species.PIKACHU ]);
+    await game.classicMode.startBattle([Species.PIKACHU]);
 
     const partyMember = game.scene.getPlayerPokemon()!;
 
@@ -75,7 +75,7 @@ describe("Items - Temporary Stat Stage Boosters", () => {
   }, 20000);
 
   it("should increase existing stat stage multiplier by 3/10 for the rest of the boosters", async () => {
-    await game.classicMode.startBattle([ Species.PIKACHU ]);
+    await game.classicMode.startBattle([Species.PIKACHU]);
 
     const partyMember = game.scene.getPlayerPokemon()!;
 
@@ -100,7 +100,7 @@ describe("Items - Temporary Stat Stage Boosters", () => {
       { name: "TEMP_STAT_STAGE_BOOSTER", type: Stat.ATK },
     ]);
 
-    await game.classicMode.startBattle([ Species.PIKACHU ]);
+    await game.classicMode.startBattle([Species.PIKACHU]);
 
     const partyMember = game.scene.getPlayerPokemon()!;
 
@@ -121,7 +121,7 @@ describe("Items - Temporary Stat Stage Boosters", () => {
   it("should renew how many battles are left of existing booster when picking up new booster of same type", async () => {
     game.override.startingLevel(200).itemRewards([{ name: "TEMP_STAT_STAGE_BOOSTER", type: Stat.ATK }]);
 
-    await game.classicMode.startBattle([ Species.PIKACHU ]);
+    await game.classicMode.startBattle([Species.PIKACHU]);
 
     game.move.select(Moves.SPLASH);
 

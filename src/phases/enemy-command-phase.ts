@@ -73,7 +73,7 @@ export class EnemyCommandPhase extends FieldPhase {
             battle.turnCommands[this.fieldIndex + BattlerIndex.ENEMY] = {
               command: Command.POKEMON,
               cursor: index,
-              args: [ false ],
+              args: [false],
               skip: this.skipTurn,
             };
 

@@ -40,14 +40,14 @@ describe("Abilities - Shield Dust", () => {
   });
 
   it("Shield Dust", async () => {
-    await game.classicMode.startBattle([ Species.PIDGEOT ]);
+    await game.classicMode.startBattle([Species.PIDGEOT]);
 
     game.scene.getEnemyPokemon()!.stats[Stat.SPDEF] = 10000;
     expect(game.scene.getPlayerPokemon()!.formIndex).toBe(0);
 
     game.move.select(Moves.AIR_SLASH);
 
-    await game.setTurnOrder([ BattlerIndex.PLAYER, BattlerIndex.ENEMY ]);
+    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to(MoveEffectPhase, false);
 
     // Shield Dust negates secondary effect

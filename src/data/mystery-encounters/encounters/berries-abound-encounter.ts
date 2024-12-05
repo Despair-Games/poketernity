@@ -88,7 +88,7 @@ export const BerriesAboundEncounter: MysteryEncounter = MysteryEncounterBuilder.
         },
       ],
     };
-    encounter.enemyPartyConfigs = [ config ];
+    encounter.enemyPartyConfigs = [config];
 
     // Calculate the number of extra berries that player receives
     // 10-40: 2, 40-120: 4, 120-160: 5, 160-180: 7
@@ -231,11 +231,11 @@ export const BerriesAboundEncounter: MysteryEncounter = MysteryEncounterBuilder.
             | Stat.EVA
           )[] =
             globalScene.currentBattle.waveIndex < 50
-              ? [ Stat.DEF, Stat.SPDEF, Stat.SPD ]
-              : [ Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD ];
+              ? [Stat.DEF, Stat.SPDEF, Stat.SPD]
+              : [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD];
 
           const config = globalScene.currentBattle.mysteryEncounter!.enemyPartyConfigs[0];
-          config.pokemonConfigs![0].tags = [ BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON ];
+          config.pokemonConfigs![0].tags = [BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON];
           config.pokemonConfigs![0].mysteryEncounterBattleEffects = (pokemon: Pokemon) => {
             queueEncounterMessage(`${namespace}:option.2.boss_enraged`);
             globalScene.unshiftPhase(
@@ -300,7 +300,7 @@ export const BerriesAboundEncounter: MysteryEncounter = MysteryEncounterBuilder.
 
 function tryGiveBerry(prioritizedPokemon?: PlayerPokemon) {
   const berryType = randSeedInt(Object.keys(BerryType).filter((s) => !isNaN(Number(s))).length) as BerryType;
-  const berry = generateModifierType(modifierTypes.BERRY, [ berryType ]) as BerryModifierType;
+  const berry = generateModifierType(modifierTypes.BERRY, [berryType]) as BerryModifierType;
 
   const party = globalScene.getPlayerParty();
 

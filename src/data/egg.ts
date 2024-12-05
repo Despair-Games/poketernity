@@ -449,7 +449,7 @@ export class Egg {
         break;
     }
 
-    const ignoredSpecies = [ Species.PHIONE, Species.MANAPHY, Species.ETERNATUS ];
+    const ignoredSpecies = [Species.PHIONE, Species.MANAPHY, Species.ETERNATUS];
 
     let speciesPool = Object.keys(speciesEggTiers)
       .filter((s) => speciesEggTiers[s] === this.tier)

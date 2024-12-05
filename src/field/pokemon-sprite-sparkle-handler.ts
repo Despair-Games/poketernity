@@ -32,13 +32,13 @@ export default class PokemonSpriteSparkleHandler {
       const pokemon = s.parentContainer instanceof Pokemon ? (s.parentContainer as Pokemon) : null;
       const parent = (pokemon || s).parentContainer;
       const texture = s.texture;
-      const [ width, height ] = [ texture.source[0].width, texture.source[0].height ];
-      const [ pixelX, pixelY ] = [ Utils.randInt(width), Utils.randInt(height) ];
+      const [width, height] = [texture.source[0].width, texture.source[0].height];
+      const [pixelX, pixelY] = [Utils.randInt(width), Utils.randInt(height)];
       const ratioX = s.width / width;
       const ratioY = s.height / height;
       const pixel = texture.manager.getPixel(pixelX, pixelY, texture.key, "__BASE");
       if (pixel?.alpha) {
-        const [ xOffset, yOffset ] = [ -s.originX * s.width, -s.originY * s.height ];
+        const [xOffset, yOffset] = [-s.originX * s.width, -s.originY * s.height];
         const sparkle = globalScene.addFieldSprite(
           (pokemon?.x || 0) + s.x + pixelX * ratioX + xOffset,
           (pokemon?.y || 0) + s.y + pixelY * ratioY + yOffset,
@@ -55,7 +55,7 @@ export default class PokemonSpriteSparkleHandler {
 
   add(sprites: Phaser.GameObjects.Sprite | Phaser.GameObjects.Sprite[]): void {
     if (!Array.isArray(sprites)) {
-      sprites = [ sprites ];
+      sprites = [sprites];
     }
     for (const s of sprites) {
       if (this.sprites.has(s)) {
@@ -67,7 +67,7 @@ export default class PokemonSpriteSparkleHandler {
 
   remove(sprites: Phaser.GameObjects.Sprite | Phaser.GameObjects.Sprite[]): void {
     if (!Array.isArray(sprites)) {
-      sprites = [ sprites ];
+      sprites = [sprites];
     }
     for (const s of sprites) {
       this.sprites.delete(s);

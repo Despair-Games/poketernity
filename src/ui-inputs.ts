@@ -148,7 +148,7 @@ export class UiInputs {
   }
 
   buttonGoToFilter(button: Button): void {
-    const whitelist = [ StarterSelectUiHandler ];
+    const whitelist = [StarterSelectUiHandler];
     const uiHandler = globalScene.ui?.getHandler();
     if (whitelist.some((handler) => uiHandler instanceof handler)) {
       globalScene.ui.processInput(button);

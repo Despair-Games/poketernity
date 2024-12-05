@@ -36,7 +36,7 @@ export default class SettingsGamepadUiHandler extends AbstractControlSettingsUiH
     this.setting = SettingGamepad;
     this.settingDeviceDefaults = settingGamepadDefaults;
     this.settingDeviceOptions = settingGamepadOptions;
-    this.configs = [ pad_xbox360, pad_dualshock, pad_unlicensedSNES ];
+    this.configs = [pad_xbox360, pad_dualshock, pad_unlicensedSNES];
     this.commonSettingsCount = 2;
     this.localStoragePropertyName = "settingsGamepad";
     this.settingBlacklisted = settingGamepadBlackList;
@@ -93,7 +93,7 @@ export default class SettingsGamepadUiHandler extends AbstractControlSettingsUiH
     this.resetScroll();
 
     // Iterate over the keys in the settingDevice enumeration.
-    for (const [ index, key ] of Object.keys(this.setting).entries()) {
+    for (const [index, key] of Object.keys(this.setting).entries()) {
       const setting = this.setting[key]; // Get the actual setting value using the key.
 
       // Check if the current setting corresponds to the controller setting.

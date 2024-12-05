@@ -43,7 +43,7 @@ export default class PokemonHatchInfoContainer extends PokemonInfoContainer {
     this.currentPokemonSprite = globalScene.add.sprite(54, 80, "pkmn__sub");
     this.currentPokemonSprite.setScale(0.8);
     this.currentPokemonSprite.setPipeline(globalScene.spritePipeline, {
-      tone: [ 0.0, 0.0, 0.0, 0.0 ],
+      tone: [0.0, 0.0, 0.0, 0.0],
       ignoreTimeTint: true,
     });
     this.pokemonListContainer.add(this.currentPokemonSprite);

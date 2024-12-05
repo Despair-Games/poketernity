@@ -325,14 +325,14 @@ export default class SpritePipeline extends FieldSpritePipeline {
       vertShader: spriteVertShader,
     });
 
-    this._tone = [ 0, 0, 0, 0 ];
+    this._tone = [0, 0, 0, 0];
   }
 
   onPreRender(): void {
     super.onPreRender();
 
     this.set1f("teraTime", 0);
-    this.set3fv("teraColor", [ 0, 0, 0 ]);
+    this.set3fv("teraColor", [0, 0, 0]);
     this.set1i("hasShadow", 0);
     this.set1i("yCenter", 0);
     this.set2f("relPosition", 0, 0);
@@ -351,7 +351,7 @@ export default class SpritePipeline extends FieldSpritePipeline {
 
     const data = sprite.pipelineData;
     const tone = data["tone"] as number[];
-    const teraColor = (data["teraColor"] as integer[]) ?? [ 0, 0, 0 ];
+    const teraColor = (data["teraColor"] as integer[]) ?? [0, 0, 0];
     const hasShadow = data["hasShadow"] as boolean;
     const yShadowOffset = data["yShadowOffset"] as number;
     const ignoreFieldPos = data["ignoreFieldPos"] as boolean;
@@ -362,7 +362,7 @@ export default class SpritePipeline extends FieldSpritePipeline {
       sprite.parentContainer instanceof Trainer ||
       sprite.parentContainer instanceof MysteryEncounterIntroVisuals;
     const field = isEntityObj ? sprite.parentContainer.parentContainer : sprite.parentContainer;
-    const position = isEntityObj ? [ sprite.parentContainer.x, sprite.parentContainer.y ] : [ sprite.x, sprite.y ];
+    const position = isEntityObj ? [sprite.parentContainer.x, sprite.parentContainer.y] : [sprite.x, sprite.y];
     if (field) {
       position[0] += field.x / field.scale;
       position[1] += field.y / field.scale;
@@ -400,7 +400,7 @@ export default class SpritePipeline extends FieldSpritePipeline {
         data["fusionSpriteColors"] ||
         []) as number[][];
 
-      const emptyColors = [ 0, 0, 0, 0 ];
+      const emptyColors = [0, 0, 0, 0];
       const flatSpriteColors: integer[] = [];
       const flatFusionSpriteColors: integer[] = [];
       for (let c = 0; c < 32; c++) {
@@ -433,7 +433,7 @@ export default class SpritePipeline extends FieldSpritePipeline {
           : 0;
       let variantColors;
 
-      const emptyColors = [ 0, 0, 0, 0 ];
+      const emptyColors = [0, 0, 0, 0];
       const flatBaseColors: integer[] = [];
       const flatVariantColors: number[] = [];
 

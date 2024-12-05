@@ -182,7 +182,7 @@ export class FaintPhase extends PokemonPhase {
       }
     } else {
       globalScene.unshiftPhase(new VictoryPhase(this.battlerIndex));
-      if ([ BattleType.TRAINER, BattleType.MYSTERY_ENCOUNTER ].includes(globalScene.currentBattle.battleType)) {
+      if ([BattleType.TRAINER, BattleType.MYSTERY_ENCOUNTER].includes(globalScene.currentBattle.battleType)) {
         const hasReservePartyMember = !!globalScene
           .getEnemyParty()
           .filter((p) => p.isActive() && !p.isOnField() && p.trainerSlot === (pokemon as EnemyPokemon).trainerSlot)

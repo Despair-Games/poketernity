@@ -44,7 +44,7 @@ export class TrainerVictoryPhase extends BattlePhase {
       ) {
         globalScene.unshiftPhase(
           new ModifierRewardPhase(
-            [ modifierTypes.VOUCHER, modifierTypes.VOUCHER, modifierTypes.VOUCHER_PLUS, modifierTypes.VOUCHER_PREMIUM ][
+            [modifierTypes.VOUCHER, modifierTypes.VOUCHER, modifierTypes.VOUCHER_PLUS, modifierTypes.VOUCHER_PREMIUM][
               vouchers[TrainerType[trainerType]].voucherType
             ],
           ),

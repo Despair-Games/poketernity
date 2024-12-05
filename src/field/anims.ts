@@ -42,7 +42,7 @@ function doDefaultPbOpenParticles(x: number, y: number, radius: number) {
     const particle = globalScene.add.sprite(x, y, "pb_open_particle");
     globalScene.field.add(particle);
     const angle = index * 45;
-    const [ xCoord, yCoord ] = [ radius * Math.cos((angle * Math.PI) / 180), radius * Math.sin((angle * Math.PI) / 180) ];
+    const [xCoord, yCoord] = [radius * Math.cos((angle * Math.PI) / 180), radius * Math.sin((angle * Math.PI) / 180)];
     globalScene.tweens.add({
       targets: particle,
       x: x + xCoord,

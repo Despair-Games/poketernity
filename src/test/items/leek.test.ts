@@ -25,15 +25,15 @@ describe("Items - Leek", () => {
 
     game.override
       .enemySpecies(Species.MAGIKARP)
-      .enemyMoveset([ Moves.SPLASH, Moves.SPLASH, Moves.SPLASH, Moves.SPLASH ])
+      .enemyMoveset([Moves.SPLASH, Moves.SPLASH, Moves.SPLASH, Moves.SPLASH])
       .startingHeldItems([{ name: "LEEK" }])
-      .moveset([ Moves.TACKLE ])
+      .moveset([Moves.TACKLE])
       .disableCrits()
       .battleType("single");
   });
 
   it("should raise CRIT stage by 2 when held by FARFETCHD", async () => {
-    await game.startBattle([ Species.FARFETCHD ]);
+    await game.startBattle([Species.FARFETCHD]);
 
     const enemyMember = game.scene.getEnemyPokemon()!;
 
@@ -47,7 +47,7 @@ describe("Items - Leek", () => {
   }, 20000);
 
   it("should raise CRIT stage by 2 when held by GALAR_FARFETCHD", async () => {
-    await game.startBattle([ Species.GALAR_FARFETCHD ]);
+    await game.startBattle([Species.GALAR_FARFETCHD]);
 
     const enemyMember = game.scene.getEnemyPokemon()!;
 
@@ -61,7 +61,7 @@ describe("Items - Leek", () => {
   }, 20000);
 
   it("should raise CRIT stage by 2 when held by SIRFETCHD", async () => {
-    await game.startBattle([ Species.SIRFETCHD ]);
+    await game.startBattle([Species.SIRFETCHD]);
 
     const enemyMember = game.scene.getEnemyPokemon()!;
 
@@ -76,11 +76,11 @@ describe("Items - Leek", () => {
 
   it("should raise CRIT stage by 2 when held by FARFETCHD line fused with Pokemon", async () => {
     // Randomly choose from the Farfetch'd line
-    const species = [ Species.FARFETCHD, Species.GALAR_FARFETCHD, Species.SIRFETCHD ];
+    const species = [Species.FARFETCHD, Species.GALAR_FARFETCHD, Species.SIRFETCHD];
 
-    await game.startBattle([ species[Utils.randInt(species.length)], Species.PIKACHU ]);
+    await game.startBattle([species[Utils.randInt(species.length)], Species.PIKACHU]);
 
-    const [ partyMember, ally ] = game.scene.getPlayerParty();
+    const [partyMember, ally] = game.scene.getPlayerParty();
 
     // Fuse party members (taken from PlayerPokemon.fuse(...) function)
     partyMember.fusionSpecies = ally.species;
@@ -104,11 +104,11 @@ describe("Items - Leek", () => {
 
   it("should raise CRIT stage by 2 when held by Pokemon fused with FARFETCHD line", async () => {
     // Randomly choose from the Farfetch'd line
-    const species = [ Species.FARFETCHD, Species.GALAR_FARFETCHD, Species.SIRFETCHD ];
+    const species = [Species.FARFETCHD, Species.GALAR_FARFETCHD, Species.SIRFETCHD];
 
-    await game.startBattle([ Species.PIKACHU, species[Utils.randInt(species.length)] ]);
+    await game.startBattle([Species.PIKACHU, species[Utils.randInt(species.length)]]);
 
-    const [ partyMember, ally ] = game.scene.getPlayerParty();
+    const [partyMember, ally] = game.scene.getPlayerParty();
 
     // Fuse party members (taken from PlayerPokemon.fuse(...) function)
     partyMember.fusionSpecies = ally.species;
@@ -131,7 +131,7 @@ describe("Items - Leek", () => {
   }, 20000);
 
   it("should not raise CRIT stage when held by a Pokemon outside of FARFETCHD line", async () => {
-    await game.startBattle([ Species.PIKACHU ]);
+    await game.startBattle([Species.PIKACHU]);
 
     const enemyMember = game.scene.getEnemyPokemon()!;
 

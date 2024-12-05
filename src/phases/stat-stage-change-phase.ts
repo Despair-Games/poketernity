@@ -59,7 +59,7 @@ export class StatStageChangePhase extends PokemonPhase {
     // Check if multiple stats are being changed at the same time, then run SSCPhase for each of them
     if (this.stats.length > 1) {
       for (let i = 0; i < this.stats.length; i++) {
-        const stat = [ this.stats[i] ];
+        const stat = [this.stats[i]];
         globalScene.unshiftPhase(
           new StatStageChangePhase(
             this.battlerIndex,
@@ -235,7 +235,7 @@ export class StatStageChangePhase extends PokemonPhase {
   }
 
   aggregateStatStageChanges(): void {
-    const accEva: BattleStat[] = [ Stat.ACC, Stat.EVA ];
+    const accEva: BattleStat[] = [Stat.ACC, Stat.EVA];
     const isAccEva = accEva.some((s) => this.stats.includes(s));
     let existingPhase: StatStageChangePhase;
     if (this.stats.length === 1) {
@@ -298,11 +298,11 @@ export class StatStageChangePhase extends PokemonPhase {
           relStageStats.length >= 5
             ? i18next.t("battle:stats")
             : `${relStageStats
-              .slice(0, -1)
-              .map((s) => i18next.t(getStatKey(s)))
-              .join(
-                ", ",
-              )}${relStageStats.length > 2 ? "," : ""} ${i18next.t("battle:statsAnd")} ${i18next.t(getStatKey(relStageStats[relStageStats.length - 1]))}`;
+                .slice(0, -1)
+                .map((s) => i18next.t(getStatKey(s)))
+                .join(
+                  ", ",
+                )}${relStageStats.length > 2 ? "," : ""} ${i18next.t("battle:statsAnd")} ${i18next.t(getStatKey(relStageStats[relStageStats.length - 1]))}`;
         messages.push(
           i18next.t(getStatStageChangeDescriptionKey(Math.abs(parseInt(rl)), stages >= 1), {
             pokemonNameWithAffix: getPokemonNameWithAffix(this.getPokemon()),

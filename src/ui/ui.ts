@@ -276,7 +276,7 @@ export default class UI extends Phaser.GameObjects.Container {
     }
 
     const battleScene = globalScene as BattleScene;
-    if ([ Mode.CONFIRM, Mode.COMMAND, Mode.FIGHT, Mode.MESSAGE ].includes(this.mode)) {
+    if ([Mode.CONFIRM, Mode.COMMAND, Mode.FIGHT, Mode.MESSAGE].includes(this.mode)) {
       battleScene?.processInfoButton(pressed);
       return true;
     }

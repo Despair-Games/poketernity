@@ -31,7 +31,7 @@ describe("Items - Thick Club", () => {
   it("THICK_CLUB activates in battle correctly", async () => {
     game.override.startingHeldItems([{ name: "SPECIES_STAT_BOOSTER", type: "THICK_CLUB" }]);
     const consoleSpy = vi.spyOn(console, "log");
-    await game.startBattle([ Species.CUBONE ]);
+    await game.startBattle([Species.CUBONE]);
 
     const partyMember = game.scene.getPlayerParty()[0];
 
@@ -82,7 +82,7 @@ describe("Items - Thick Club", () => {
   });
 
   it("THICK_CLUB held by CUBONE", async () => {
-    await game.startBattle([ Species.CUBONE ]);
+    await game.startBattle([Species.CUBONE]);
 
     const partyMember = game.scene.getPlayerParty()[0];
 
@@ -96,7 +96,7 @@ describe("Items - Thick Club", () => {
 
     // Giving Eviolite to party member and testing if it applies
     game.scene.addModifier(
-      modifierTypes.SPECIES_STAT_BOOSTER().generateType([], [ "THICK_CLUB" ])!.newModifier(partyMember),
+      modifierTypes.SPECIES_STAT_BOOSTER().generateType([], ["THICK_CLUB"])!.newModifier(partyMember),
       true,
     );
     game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
@@ -105,7 +105,7 @@ describe("Items - Thick Club", () => {
   }, 20000);
 
   it("THICK_CLUB held by MAROWAK", async () => {
-    await game.startBattle([ Species.MAROWAK ]);
+    await game.startBattle([Species.MAROWAK]);
 
     const partyMember = game.scene.getPlayerParty()[0];
 
@@ -119,7 +119,7 @@ describe("Items - Thick Club", () => {
 
     // Giving Eviolite to party member and testing if it applies
     game.scene.addModifier(
-      modifierTypes.SPECIES_STAT_BOOSTER().generateType([], [ "THICK_CLUB" ])!.newModifier(partyMember),
+      modifierTypes.SPECIES_STAT_BOOSTER().generateType([], ["THICK_CLUB"])!.newModifier(partyMember),
       true,
     );
     game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
@@ -128,7 +128,7 @@ describe("Items - Thick Club", () => {
   }, 20000);
 
   it("THICK_CLUB held by ALOLA_MAROWAK", async () => {
-    await game.startBattle([ Species.ALOLA_MAROWAK ]);
+    await game.startBattle([Species.ALOLA_MAROWAK]);
 
     const partyMember = game.scene.getPlayerParty()[0];
 
@@ -142,7 +142,7 @@ describe("Items - Thick Club", () => {
 
     // Giving Eviolite to party member and testing if it applies
     game.scene.addModifier(
-      modifierTypes.SPECIES_STAT_BOOSTER().generateType([], [ "THICK_CLUB" ])!.newModifier(partyMember),
+      modifierTypes.SPECIES_STAT_BOOSTER().generateType([], ["THICK_CLUB"])!.newModifier(partyMember),
       true,
     );
     game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
@@ -152,10 +152,10 @@ describe("Items - Thick Club", () => {
 
   it("THICK_CLUB held by fused CUBONE line (base)", async () => {
     // Randomly choose from the Cubone line
-    const species = [ Species.CUBONE, Species.MAROWAK, Species.ALOLA_MAROWAK ];
+    const species = [Species.CUBONE, Species.MAROWAK, Species.ALOLA_MAROWAK];
     const randSpecies = Utils.randInt(species.length);
 
-    await game.startBattle([ species[randSpecies], Species.PIKACHU ]);
+    await game.startBattle([species[randSpecies], Species.PIKACHU]);
 
     const partyMember = game.scene.getPlayerParty()[0];
     const ally = game.scene.getPlayerParty()[1];
@@ -179,7 +179,7 @@ describe("Items - Thick Club", () => {
 
     // Giving Eviolite to party member and testing if it applies
     game.scene.addModifier(
-      modifierTypes.SPECIES_STAT_BOOSTER().generateType([], [ "THICK_CLUB" ])!.newModifier(partyMember),
+      modifierTypes.SPECIES_STAT_BOOSTER().generateType([], ["THICK_CLUB"])!.newModifier(partyMember),
       true,
     );
     game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
@@ -189,10 +189,10 @@ describe("Items - Thick Club", () => {
 
   it("THICK_CLUB held by fused CUBONE line (part)", async () => {
     // Randomly choose from the Cubone line
-    const species = [ Species.CUBONE, Species.MAROWAK, Species.ALOLA_MAROWAK ];
+    const species = [Species.CUBONE, Species.MAROWAK, Species.ALOLA_MAROWAK];
     const randSpecies = Utils.randInt(species.length);
 
-    await game.startBattle([ Species.PIKACHU, species[randSpecies] ]);
+    await game.startBattle([Species.PIKACHU, species[randSpecies]]);
 
     const partyMember = game.scene.getPlayerParty()[0];
     const ally = game.scene.getPlayerParty()[1];
@@ -216,7 +216,7 @@ describe("Items - Thick Club", () => {
 
     // Giving Eviolite to party member and testing if it applies
     game.scene.addModifier(
-      modifierTypes.SPECIES_STAT_BOOSTER().generateType([], [ "THICK_CLUB" ])!.newModifier(partyMember),
+      modifierTypes.SPECIES_STAT_BOOSTER().generateType([], ["THICK_CLUB"])!.newModifier(partyMember),
       true,
     );
     game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
@@ -225,7 +225,7 @@ describe("Items - Thick Club", () => {
   }, 20000);
 
   it("THICK_CLUB not held by CUBONE", async () => {
-    await game.startBattle([ Species.PIKACHU ]);
+    await game.startBattle([Species.PIKACHU]);
 
     const partyMember = game.scene.getPlayerParty()[0];
 
@@ -239,7 +239,7 @@ describe("Items - Thick Club", () => {
 
     // Giving Eviolite to party member and testing if it applies
     game.scene.addModifier(
-      modifierTypes.SPECIES_STAT_BOOSTER().generateType([], [ "THICK_CLUB" ])!.newModifier(partyMember),
+      modifierTypes.SPECIES_STAT_BOOSTER().generateType([], ["THICK_CLUB"])!.newModifier(partyMember),
       true,
     );
     game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);

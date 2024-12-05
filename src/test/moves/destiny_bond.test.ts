@@ -15,9 +15,9 @@ describe("Moves - Destiny Bond", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
 
-  const defaultParty = [ Species.BULBASAUR, Species.SQUIRTLE ];
-  const enemyFirst = [ BattlerIndex.ENEMY, BattlerIndex.PLAYER ];
-  const playerFirst = [ BattlerIndex.PLAYER, BattlerIndex.ENEMY ];
+  const defaultParty = [Species.BULBASAUR, Species.SQUIRTLE];
+  const enemyFirst = [BattlerIndex.ENEMY, BattlerIndex.PLAYER];
+  const playerFirst = [BattlerIndex.PLAYER, BattlerIndex.ENEMY];
 
   beforeAll(() => {
     phaserGame = new Phaser.Game({
@@ -61,7 +61,7 @@ describe("Moves - Destiny Bond", () => {
   it("should KO the opponent on the next turn", async () => {
     const moveToUse = Moves.TACKLE;
 
-    game.override.moveset([ Moves.SPLASH, moveToUse ]);
+    game.override.moveset([Moves.SPLASH, moveToUse]);
     await game.classicMode.startBattle(defaultParty);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
@@ -87,7 +87,7 @@ describe("Moves - Destiny Bond", () => {
   it("should fail if used twice in a row", async () => {
     const moveToUse = Moves.TACKLE;
 
-    game.override.moveset([ Moves.SPLASH, moveToUse ]);
+    game.override.moveset([Moves.SPLASH, moveToUse]);
     await game.classicMode.startBattle(defaultParty);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
@@ -131,7 +131,7 @@ describe("Moves - Destiny Bond", () => {
   it("should not KO the opponent if the user had another turn", async () => {
     const moveToUse = Moves.TACKLE;
 
-    game.override.moveset([ Moves.SPORE, moveToUse ]);
+    game.override.moveset([Moves.SPORE, moveToUse]);
     await game.classicMode.startBattle(defaultParty);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
@@ -156,8 +156,8 @@ describe("Moves - Destiny Bond", () => {
   });
 
   it("should not KO an ally", async () => {
-    game.override.moveset([ Moves.DESTINY_BOND, Moves.CRUNCH ]).battleType("double");
-    await game.classicMode.startBattle([ Species.SHEDINJA, Species.BULBASAUR, Species.SQUIRTLE ]);
+    game.override.moveset([Moves.DESTINY_BOND, Moves.CRUNCH]).battleType("double");
+    await game.classicMode.startBattle([Species.SHEDINJA, Species.BULBASAUR, Species.SQUIRTLE]);
 
     const enemyPokemon0 = game.scene.getEnemyField()[0];
     const enemyPokemon1 = game.scene.getEnemyField()[1];
@@ -167,7 +167,7 @@ describe("Moves - Destiny Bond", () => {
     // Shedinja uses Destiny Bond, then ally Bulbasaur KO's Shedinja with Crunch
     game.move.select(Moves.DESTINY_BOND, 0);
     game.move.select(Moves.CRUNCH, 1, BattlerIndex.PLAYER);
-    await game.setTurnOrder([ BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2 ]);
+    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(enemyPokemon0?.isFainted()).toBe(false);
@@ -200,7 +200,7 @@ describe("Moves - Destiny Bond", () => {
   });
 
   it("should not cause a crash if the user is KO'd by Pledge moves", async () => {
-    game.override.moveset([ Moves.GRASS_PLEDGE, Moves.WATER_PLEDGE ]).battleType("double");
+    game.override.moveset([Moves.GRASS_PLEDGE, Moves.WATER_PLEDGE]).battleType("double");
     await game.classicMode.startBattle(defaultParty);
 
     const enemyPokemon0 = game.scene.getEnemyField()[0];
@@ -210,7 +210,7 @@ describe("Moves - Destiny Bond", () => {
 
     game.move.select(Moves.GRASS_PLEDGE, 0, BattlerIndex.ENEMY);
     game.move.select(Moves.WATER_PLEDGE, 1, BattlerIndex.ENEMY);
-    await game.setTurnOrder([ BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2 ]);
+    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(enemyPokemon0?.isFainted()).toBe(true);

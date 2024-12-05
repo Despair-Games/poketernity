@@ -28,7 +28,7 @@ describe("Items - Grip Claw", () => {
 
     game.override
       .battleType("double")
-      .moveset([ Moves.TACKLE, Moves.SPLASH, Moves.ATTRACT ])
+      .moveset([Moves.TACKLE, Moves.SPLASH, Moves.ATTRACT])
       .startingHeldItems([{ name: "GRIP_CLAW", count: 1 }])
       .enemySpecies(Species.SNORLAX)
       .enemyAbility(Abilities.UNNERVE)
@@ -42,9 +42,9 @@ describe("Items - Grip Claw", () => {
   });
 
   it("should steal items on contact and only from the attack target", async () => {
-    await game.classicMode.startBattle([ Species.FEEBAS, Species.MILOTIC ]);
+    await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
 
-    const [ playerPokemon ] = game.scene.getPlayerField();
+    const [playerPokemon] = game.scene.getPlayerField();
 
     const gripClaw = playerPokemon.getHeldItems()[0] as ContactHeldItemTransferChanceModifier;
     vi.spyOn(gripClaw, "chance", "get").mockReturnValue(100);
@@ -71,9 +71,9 @@ describe("Items - Grip Claw", () => {
   });
 
   it("should not steal items when using a targetted, non attack move", async () => {
-    await game.classicMode.startBattle([ Species.FEEBAS, Species.MILOTIC ]);
+    await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
 
-    const [ playerPokemon ] = game.scene.getPlayerField();
+    const [playerPokemon] = game.scene.getPlayerField();
 
     const gripClaw = playerPokemon.getHeldItems()[0] as ContactHeldItemTransferChanceModifier;
     vi.spyOn(gripClaw, "chance", "get").mockReturnValue(100);

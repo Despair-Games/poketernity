@@ -73,8 +73,8 @@ export function getFusedSpeciesName(speciesAName: string, speciesBName: string):
   const fragAPattern = /([a-z]{2}.*?[aeiou(?:y$)\-\']+)(.*?)$/i;
   const fragBPattern = /([a-z]{2}.*?[aeiou(?:y$)\-\'])(.*?)$/i;
 
-  const [ speciesAPrefixMatch, speciesBPrefixMatch ] = [ speciesAName, speciesBName ].map((n) => /^(?:[^ ]+) /.exec(n));
-  const [ speciesAPrefix, speciesBPrefix ] = [ speciesAPrefixMatch, speciesBPrefixMatch ].map((m) => (m ? m[0] : ""));
+  const [speciesAPrefixMatch, speciesBPrefixMatch] = [speciesAName, speciesBName].map((n) => /^(?:[^ ]+) /.exec(n));
+  const [speciesAPrefix, speciesBPrefix] = [speciesAPrefixMatch, speciesBPrefixMatch].map((m) => (m ? m[0] : ""));
 
   if (speciesAPrefix) {
     speciesAName = speciesAName.slice(speciesAPrefix.length);
@@ -83,8 +83,8 @@ export function getFusedSpeciesName(speciesAName: string, speciesBName: string):
     speciesBName = speciesBName.slice(speciesBPrefix.length);
   }
 
-  const [ speciesASuffixMatch, speciesBSuffixMatch ] = [ speciesAName, speciesBName ].map((n) => / (?:[^ ]+)$/.exec(n));
-  const [ speciesASuffix, speciesBSuffix ] = [ speciesASuffixMatch, speciesBSuffixMatch ].map((m) => (m ? m[0] : ""));
+  const [speciesASuffixMatch, speciesBSuffixMatch] = [speciesAName, speciesBName].map((n) => / (?:[^ ]+)$/.exec(n));
+  const [speciesASuffix, speciesBSuffix] = [speciesASuffixMatch, speciesBSuffixMatch].map((m) => (m ? m[0] : ""));
 
   if (speciesASuffix) {
     speciesAName = speciesAName.slice(0, -speciesASuffix.length);
@@ -185,7 +185,7 @@ export abstract class PokemonSpeciesForm {
     this.ability2 = ability2 === Abilities.NONE ? ability1 : ability2;
     this.abilityHidden = abilityHidden;
     this.baseTotal = baseTotal;
-    this.baseStats = [ baseHp, baseAtk, baseDef, baseSpatk, baseSpdef, baseSpd ];
+    this.baseStats = [baseHp, baseAtk, baseDef, baseSpatk, baseSpdef, baseSpd];
     this.catchRate = catchRate;
     this.baseFriendship = baseFriendship;
     this.baseExp = baseExp;
@@ -280,7 +280,7 @@ export abstract class PokemonSpeciesForm {
   }
 
   isTrainerForbidden(): boolean {
-    return [ Species.ETERNAL_FLOETTE, Species.BLOODMOON_URSALUNA ].includes(this.speciesId);
+    return [Species.ETERNAL_FLOETTE, Species.BLOODMOON_URSALUNA].includes(this.speciesId);
   }
 
   isRareRegional(): boolean {
@@ -336,7 +336,7 @@ export abstract class PokemonSpeciesForm {
 
     const formSpriteKey = this.getFormSpriteKey(formIndex);
     const showGenderDiffs =
-      this.genderDiffs && female && ![ SpeciesFormKey.MEGA, SpeciesFormKey.GIGANTAMAX ].find((k) => formSpriteKey === k);
+      this.genderDiffs && female && ![SpeciesFormKey.MEGA, SpeciesFormKey.GIGANTAMAX].find((k) => formSpriteKey === k);
 
     const baseSpriteKey = `${showGenderDiffs ? "female__" : ""}${this.speciesId}${formSpriteKey ? `-${formSpriteKey}` : ""}`;
 
@@ -611,9 +611,9 @@ export abstract class PokemonSpeciesForm {
       for (let i = 0; i < pixelData.length; i += 4) {
         if (pixelData[i + 3]) {
           const pixel = pixelData.slice(i, i + 4);
-          const [ r, g, b, a ] = pixel;
+          const [r, g, b, a] = pixel;
           if (!spriteColors.find((c) => c[0] === r && c[1] === g && c[2] === b)) {
-            spriteColors.push([ r, g, b, a ]);
+            spriteColors.push([r, g, b, a]);
           }
         }
       }
@@ -949,7 +949,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
       for (const e of pokemonEvolutions[this.speciesId]) {
         const speciesId = e.speciesId;
         const level = e.level;
-        evolutionLevels.push([ speciesId, level ]);
+        evolutionLevels.push([speciesId, level]);
         //console.log(Species[speciesId], getPokemonSpecies(speciesId), getPokemonSpecies(speciesId).getEvolutionLevels());
         const nextEvolutionLevels = getPokemonSpecies(speciesId).getEvolutionLevels();
         for (const npl of nextEvolutionLevels) {
@@ -974,7 +974,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
         ) {
           const speciesId = parseInt(p) as Species;
           const level = e.level;
-          prevolutionLevels.push([ speciesId, level ]);
+          prevolutionLevels.push([speciesId, level]);
           const subPrevolutionLevels = getPokemonSpecies(speciesId).getPrevolutionLevels();
           for (const spl of subPrevolutionLevels) {
             prevolutionLevels.push(spl);
@@ -997,7 +997,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
     if (pokemonPrevolutions.hasOwnProperty(this.speciesId)) {
       const prevolutionLevels = this.getPrevolutionLevels().reverse();
       const levelDiff = player ? 0 : forTrainer || isBoss ? (forTrainer && isBoss ? 2.5 : 5) : 10;
-      ret.push([ prevolutionLevels[0][0], 1 ]);
+      ret.push([prevolutionLevels[0][0], 1]);
       for (let l = 1; l < prevolutionLevels.length; l++) {
         const evolution = pokemonEvolutions[prevolutionLevels[l - 1][0]].find(
           (e) => e.speciesId === prevolutionLevels[l][0],
@@ -1033,7 +1033,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
         ),
       ]); // TODO: are those bangs correct?
     } else {
-      ret.push([ this.speciesId, 1 ]);
+      ret.push([this.speciesId, 1]);
     }
 
     return ret;

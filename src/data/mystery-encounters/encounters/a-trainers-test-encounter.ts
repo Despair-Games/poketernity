@@ -161,11 +161,11 @@ export const ATrainersTestEncounter: MysteryEncounter = MysteryEncounterBuilder.
       encounter.setDialogueToken("eggType", i18next.t(`${namespace}:eggTypes.epic`));
       setEncounterRewards(
         {
-          guaranteedModifierTypeFuncs: [ modifierTypes.SACRED_ASH ],
-          guaranteedModifierTiers: [ ModifierTier.ROGUE, ModifierTier.ULTRA ],
+          guaranteedModifierTypeFuncs: [modifierTypes.SACRED_ASH],
+          guaranteedModifierTiers: [ModifierTier.ROGUE, ModifierTier.ULTRA],
           fillRemaining: true,
         },
-        [ eggOptions ],
+        [eggOptions],
       );
       await initBattleWithEnemyConfig(config);
     },
@@ -187,7 +187,7 @@ export const ATrainersTestEncounter: MysteryEncounter = MysteryEncounterBuilder.
         tier: EggTier.RARE,
       };
       encounter.setDialogueToken("eggType", i18next.t(`${namespace}:eggTypes.rare`));
-      setEncounterRewards({ fillRemaining: false, rerollMultiplier: -1 }, [ eggOptions ]);
+      setEncounterRewards({ fillRemaining: false, rerollMultiplier: -1 }, [eggOptions]);
       leaveEncounterWithoutBattle();
     },
   )

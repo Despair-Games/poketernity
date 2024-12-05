@@ -79,17 +79,17 @@ export const TrashToTreasureEncounter: MysteryEncounter = MysteryEncounterBuilde
       shiny: false, // Shiny lock because of custom intro sprite
       formIndex: 1, // Gmax
       bossSegmentModifier: 1, // +1 Segment from normal
-      moveSet: [ Moves.PAYBACK, Moves.GUNK_SHOT, Moves.STOMPING_TANTRUM, Moves.DRAIN_PUNCH ],
+      moveSet: [Moves.PAYBACK, Moves.GUNK_SHOT, Moves.STOMPING_TANTRUM, Moves.DRAIN_PUNCH],
     };
     const config: EnemyPartyConfig = {
       levelAdditiveModifier: 0.5,
-      pokemonConfigs: [ pokemonConfig ],
+      pokemonConfigs: [pokemonConfig],
       disableSwitch: true,
     };
-    encounter.enemyPartyConfigs = [ config ];
+    encounter.enemyPartyConfigs = [config];
 
     // Load animations/sfx for Garbodor fight start moves
-    loadCustomMovesForEncounter([ Moves.TOXIC, Moves.AMNESIA ]);
+    loadCustomMovesForEncounter([Moves.TOXIC, Moves.AMNESIA]);
 
     globalScene.loadSe("PRSFX- Dig2", "battle_anims", "PRSFX- Dig2.wav");
     globalScene.loadSe("PRSFX- Venom Drench", "battle_anims", "PRSFX- Venom Drench.wav");
@@ -157,19 +157,19 @@ export const TrashToTreasureEncounter: MysteryEncounter = MysteryEncounterBuilde
         const encounter = globalScene.currentBattle.mysteryEncounter!;
 
         setEncounterRewards({
-          guaranteedModifierTiers: [ ModifierTier.ROGUE, ModifierTier.ROGUE, ModifierTier.ULTRA, ModifierTier.GREAT ],
+          guaranteedModifierTiers: [ModifierTier.ROGUE, ModifierTier.ROGUE, ModifierTier.ULTRA, ModifierTier.GREAT],
           fillRemaining: true,
         });
         encounter.startOfBattleEffects.push(
           {
             sourceBattlerIndex: BattlerIndex.ENEMY,
-            targets: [ BattlerIndex.PLAYER ],
+            targets: [BattlerIndex.PLAYER],
             move: new PokemonMove(Moves.TOXIC),
             ignorePp: true,
           },
           {
             sourceBattlerIndex: BattlerIndex.ENEMY,
-            targets: [ BattlerIndex.ENEMY ],
+            targets: [BattlerIndex.ENEMY],
             move: new PokemonMove(Moves.AMNESIA),
             ignorePp: true,
           },

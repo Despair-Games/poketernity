@@ -99,7 +99,7 @@ export abstract class ModalUiHandler extends UiHandler {
     if (args.length >= 1 && "buttonActions" in args[0]) {
       super.show(args);
       if (args[0].hasOwnProperty("fadeOut") && typeof args[0].fadeOut === "function") {
-        const [ marginTop, marginRight, marginBottom, marginLeft ] = this.getMargin();
+        const [marginTop, marginRight, marginBottom, marginLeft] = this.getMargin();
 
         const overlay = globalScene.add.rectangle(
           (this.getWidth() + marginLeft + marginRight) / 2,
@@ -145,9 +145,9 @@ export abstract class ModalUiHandler extends UiHandler {
   }
 
   updateContainer(config?: ModalConfig): void {
-    const [ marginTop, marginRight, marginBottom, marginLeft ] = this.getMargin(config);
+    const [marginTop, marginRight, marginBottom, marginLeft] = this.getMargin(config);
 
-    const [ width, height ] = [ this.getWidth(config), this.getHeight(config) ];
+    const [width, height] = [this.getWidth(config), this.getHeight(config)];
     this.modalContainer.setPosition(
       (globalScene.game.canvas.width / 6 - (width + (marginRight - marginLeft))) / 2,
       (-globalScene.game.canvas.height / 6 - (height + (marginBottom - marginTop))) / 2,

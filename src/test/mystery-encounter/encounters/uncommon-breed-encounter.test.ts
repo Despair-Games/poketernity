@@ -30,7 +30,7 @@ import { modifierTypes } from "#app/modifier/modifier-type";
 import { Abilities } from "#enums/abilities";
 
 const namespace = "mysteryEncounters/uncommonBreed";
-const defaultParty = [ Species.LAPRAS, Species.GENGAR, Species.ABRA ];
+const defaultParty = [Species.LAPRAS, Species.GENGAR, Species.ABRA];
 const defaultBiome = Biome.CAVE;
 const defaultWave = 45;
 
@@ -56,7 +56,7 @@ describe("Uncommon Breed - Mystery Encounter", () => {
       .enemyPassiveAbility(Abilities.BALL_FETCH);
 
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(
-      new Map<Biome, MysteryEncounterType[]>([[ Biome.CAVE, [ MysteryEncounterType.UNCOMMON_BREED ]]]),
+      new Map<Biome, MysteryEncounterType[]>([[Biome.CAVE, [MysteryEncounterType.UNCOMMON_BREED]]]),
     );
   });
 
@@ -130,7 +130,7 @@ describe("Uncommon Breed - Mystery Encounter", () => {
       const statStagePhases = unshiftPhaseSpy.mock.calls.filter(
         (p) => p[0] instanceof StatStageChangePhase,
       )[0][0] as any;
-      expect(statStagePhases.stats).toEqual([ Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD ]);
+      expect(statStagePhases.stats).toEqual([Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD]);
 
       // Should have used its egg move pre-battle
       const movePhases = phaseSpy.mock.calls.filter((p) => p[0] instanceof MovePhase).map((p) => p[0]);
@@ -159,7 +159,7 @@ describe("Uncommon Breed - Mystery Encounter", () => {
       const statStagePhases = unshiftPhaseSpy.mock.calls.filter(
         (p) => p[0] instanceof StatStageChangePhase,
       )[0][0] as any;
-      expect(statStagePhases.stats).toEqual([ Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD ]);
+      expect(statStagePhases.stats).toEqual([Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD]);
 
       // Should have used its egg move pre-battle
       const movePhases = phaseSpy.mock.calls.filter((p) => p[0] instanceof MovePhase).map((p) => p[0]);
@@ -219,11 +219,11 @@ describe("Uncommon Breed - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.UNCOMMON_BREED, defaultParty);
 
       // Berries on party lead
-      const sitrus = generateModifierType(modifierTypes.BERRY, [ BerryType.SITRUS ])!;
+      const sitrus = generateModifierType(modifierTypes.BERRY, [BerryType.SITRUS])!;
       const sitrusMod = sitrus.newModifier(scene.getPlayerParty()[0]) as BerryModifier;
       sitrusMod.stackCount = 2;
       await scene.addModifier(sitrusMod, true, false, false, true);
-      const ganlon = generateModifierType(modifierTypes.BERRY, [ BerryType.GANLON ])!;
+      const ganlon = generateModifierType(modifierTypes.BERRY, [BerryType.GANLON])!;
       const ganlonMod = ganlon.newModifier(scene.getPlayerParty()[0]) as BerryModifier;
       ganlonMod.stackCount = 3;
       await scene.addModifier(ganlonMod, true, false, false, true);
@@ -276,7 +276,7 @@ describe("Uncommon Breed - Mystery Encounter", () => {
       const leaveEncounterWithoutBattleSpy = vi.spyOn(EncounterPhaseUtils, "leaveEncounterWithoutBattle");
       await game.runToMysteryEncounter(MysteryEncounterType.UNCOMMON_BREED, defaultParty);
       // Mock moveset
-      scene.getPlayerParty()[0].moveset = [ new PokemonMove(Moves.CHARM) ];
+      scene.getPlayerParty()[0].moveset = [new PokemonMove(Moves.CHARM)];
       await runMysteryEncounterToEnd(game, 3);
 
       expect(leaveEncounterWithoutBattleSpy).toBeCalled();

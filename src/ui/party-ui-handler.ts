@@ -969,8 +969,8 @@ export default class PartyUiHandler extends MessageUiHandler {
     const itemModifiers =
       this.partyUiMode === PartyUiMode.MODIFIER_TRANSFER
         ? (globalScene.findModifiers(
-          (m) => m instanceof PokemonHeldItemModifier && m.isTransferable && m.pokemonId === pokemon.id,
-        ) as PokemonHeldItemModifier[])
+            (m) => m instanceof PokemonHeldItemModifier && m.isTransferable && m.pokemonId === pokemon.id,
+          ) as PokemonHeldItemModifier[])
         : [];
 
     if (this.options.length) {
@@ -1473,7 +1473,7 @@ class PartySlot extends Phaser.GameObjects.Container {
     slotLevelText.setPositionRelative(slotLevelLabel, 9, 0);
     slotLevelText.setOrigin(0, 0.25);
 
-    slotInfoContainer.add([ this.slotName, slotLevelLabel, slotLevelText ]);
+    slotInfoContainer.add([this.slotName, slotLevelLabel, slotLevelText]);
 
     const genderSymbol = getGenderSymbol(this.pokemon.getGender(true));
 
@@ -1569,7 +1569,7 @@ class PartySlot extends Phaser.GameObjects.Container {
     this.slotDescriptionLabel.setOrigin(0, 1);
     this.slotDescriptionLabel.setVisible(false);
 
-    slotInfoContainer.add([ this.slotHpBar, this.slotHpOverlay, this.slotHpText, this.slotDescriptionLabel ]);
+    slotInfoContainer.add([this.slotHpBar, this.slotHpOverlay, this.slotHpText, this.slotDescriptionLabel]);
 
     if (partyUiMode !== PartyUiMode.TM_MODIFIER) {
       this.slotDescriptionLabel.setVisible(false);

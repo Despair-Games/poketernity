@@ -4,7 +4,7 @@ import { Abilities } from "#enums/abilities";
 /**
  * Moves that "steal" things
  */
-export const STEALING_MOVES = [ Moves.PLUCK, Moves.COVET, Moves.KNOCK_OFF, Moves.THIEF, Moves.TRICK, Moves.SWITCHEROO ];
+export const STEALING_MOVES = [Moves.PLUCK, Moves.COVET, Moves.KNOCK_OFF, Moves.THIEF, Moves.TRICK, Moves.SWITCHEROO];
 
 /**
  * Moves that "charm" someone

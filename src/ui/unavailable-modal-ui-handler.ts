@@ -34,7 +34,7 @@ export default class UnavailableModalUiHandler extends ModalUiHandler {
   }
 
   getMargin(): [number, number, number, number] {
-    return [ 0, 0, 48, 0 ];
+    return [0, 0, 48, 0];
   }
 
   getButtonLabels(): string[] {
@@ -58,7 +58,7 @@ export default class UnavailableModalUiHandler extends ModalUiHandler {
 
   tryReconnect(): void {
     updateUserInfo().then((response) => {
-      if (response[0] || [ 200, 400 ].includes(response[1])) {
+      if (response[0] || [200, 400].includes(response[1])) {
         this.reconnectTimer = null;
         this.reconnectDuration = this.minTime;
         globalScene.playSound("se/pb_bounce_1");
@@ -87,7 +87,7 @@ export default class UnavailableModalUiHandler extends ModalUiHandler {
       this.reconnectDuration = this.minTime;
       this.reconnectTimer = setTimeout(() => this.tryReconnect(), this.reconnectDuration);
 
-      return super.show([ config ]);
+      return super.show([config]);
     }
 
     return false;

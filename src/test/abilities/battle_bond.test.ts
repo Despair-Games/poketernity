@@ -31,7 +31,7 @@ describe("Abilities - BATTLE BOND", () => {
       .startingWave(4) // Leads to arena reset on Wave 5 trainer battle
       .ability(Abilities.BATTLE_BOND)
       .starterForms({ [Species.GRENINJA]: ashForm })
-      .moveset([ Moves.SPLASH, Moves.WATER_SHURIKEN ])
+      .moveset([Moves.SPLASH, Moves.WATER_SHURIKEN])
       .enemySpecies(Species.BULBASAUR)
       .enemyMoveset(Moves.SPLASH)
       .startingLevel(100) // Avoid levelling up
@@ -39,7 +39,7 @@ describe("Abilities - BATTLE BOND", () => {
   });
 
   it("check if fainted pokemon switches to base form on arena reset", async () => {
-    await game.classicMode.startBattle([ Species.MAGIKARP, Species.GRENINJA ]);
+    await game.classicMode.startBattle([Species.MAGIKARP, Species.GRENINJA]);
 
     const greninja = game.scene.getPlayerParty()[1];
     expect(greninja.formIndex).toBe(ashForm);
@@ -58,7 +58,7 @@ describe("Abilities - BATTLE BOND", () => {
   });
 
   it("should not keep buffing Water Shuriken after Greninja switches to base form", async () => {
-    await game.classicMode.startBattle([ Species.GRENINJA ]);
+    await game.classicMode.startBattle([Species.GRENINJA]);
 
     const waterShuriken = allMoves[Moves.WATER_SHURIKEN];
     vi.spyOn(waterShuriken, "calculateBattlePower");

@@ -31,7 +31,7 @@ describe("Abilities - Contrary", () => {
   });
 
   it("should invert stat changes when applied", async () => {
-    await game.classicMode.startBattle([ Species.SLOWBRO ]);
+    await game.classicMode.startBattle([Species.SLOWBRO]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -40,8 +40,8 @@ describe("Abilities - Contrary", () => {
 
   describe("With Clear Body", () => {
     it("should apply positive effects", async () => {
-      game.override.enemyPassiveAbility(Abilities.CLEAR_BODY).moveset([ Moves.TAIL_WHIP ]);
-      await game.classicMode.startBattle([ Species.SLOWBRO ]);
+      game.override.enemyPassiveAbility(Abilities.CLEAR_BODY).moveset([Moves.TAIL_WHIP]);
+      await game.classicMode.startBattle([Species.SLOWBRO]);
 
       const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -56,9 +56,9 @@ describe("Abilities - Contrary", () => {
     it("should block negative effects", async () => {
       game.override
         .enemyPassiveAbility(Abilities.CLEAR_BODY)
-        .enemyMoveset([ Moves.HOWL, Moves.HOWL, Moves.HOWL, Moves.HOWL ])
-        .moveset([ Moves.SPLASH ]);
-      await game.classicMode.startBattle([ Species.SLOWBRO ]);
+        .enemyMoveset([Moves.HOWL, Moves.HOWL, Moves.HOWL, Moves.HOWL])
+        .moveset([Moves.SPLASH]);
+      await game.classicMode.startBattle([Species.SLOWBRO]);
 
       const enemyPokemon = game.scene.getEnemyPokemon()!;
 

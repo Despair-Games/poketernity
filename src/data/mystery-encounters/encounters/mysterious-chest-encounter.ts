@@ -88,12 +88,12 @@ export const MysteriousChestEncounter: MysteryEncounter = MysteryEncounterBuilde
           species: getPokemonSpecies(Species.GIMMIGHOUL),
           formIndex: 0,
           isBoss: true,
-          moveSet: [ Moves.NASTY_PLOT, Moves.SHADOW_BALL, Moves.POWER_GEM, Moves.THIEF ],
+          moveSet: [Moves.NASTY_PLOT, Moves.SHADOW_BALL, Moves.POWER_GEM, Moves.THIEF],
         },
       ],
     };
 
-    encounter.enemyPartyConfigs = [ config ];
+    encounter.enemyPartyConfigs = [config];
 
     encounter.setDialogueToken("gimmighoulName", getPokemonSpecies(Species.GIMMIGHOUL).getName());
     encounter.setDialogueToken("trapPercent", TRAP_PERCENT.toString());
@@ -144,7 +144,7 @@ export const MysteriousChestEncounter: MysteryEncounter = MysteryEncounterBuilde
         if (roll >= RAND_LENGTH - COMMON_REWARDS_PERCENT) {
           // Choose between 2 COMMON / 2 GREAT tier items (20%)
           setEncounterRewards({
-            guaranteedModifierTiers: [ ModifierTier.COMMON, ModifierTier.COMMON, ModifierTier.GREAT, ModifierTier.GREAT ],
+            guaranteedModifierTiers: [ModifierTier.COMMON, ModifierTier.COMMON, ModifierTier.GREAT, ModifierTier.GREAT],
           });
           // Display result message then proceed to rewards
           queueEncounterMessage(`${namespace}:option.1.normal`);
@@ -152,14 +152,14 @@ export const MysteriousChestEncounter: MysteryEncounter = MysteryEncounterBuilde
         } else if (roll >= RAND_LENGTH - COMMON_REWARDS_PERCENT - ULTRA_REWARDS_PERCENT) {
           // Choose between 3 ULTRA tier items (30%)
           setEncounterRewards({
-            guaranteedModifierTiers: [ ModifierTier.ULTRA, ModifierTier.ULTRA, ModifierTier.ULTRA ],
+            guaranteedModifierTiers: [ModifierTier.ULTRA, ModifierTier.ULTRA, ModifierTier.ULTRA],
           });
           // Display result message then proceed to rewards
           queueEncounterMessage(`${namespace}:option.1.good`);
           leaveEncounterWithoutBattle();
         } else if (roll >= RAND_LENGTH - COMMON_REWARDS_PERCENT - ULTRA_REWARDS_PERCENT - ROGUE_REWARDS_PERCENT) {
           // Choose between 2 ROGUE tier items (10%)
-          setEncounterRewards({ guaranteedModifierTiers: [ ModifierTier.ROGUE, ModifierTier.ROGUE ]});
+          setEncounterRewards({ guaranteedModifierTiers: [ModifierTier.ROGUE, ModifierTier.ROGUE] });
           // Display result message then proceed to rewards
           queueEncounterMessage(`${namespace}:option.1.great`);
           leaveEncounterWithoutBattle();
@@ -168,7 +168,7 @@ export const MysteriousChestEncounter: MysteryEncounter = MysteryEncounterBuilde
           RAND_LENGTH - COMMON_REWARDS_PERCENT - ULTRA_REWARDS_PERCENT - ROGUE_REWARDS_PERCENT - MASTER_REWARDS_PERCENT
         ) {
           // Choose 1 MASTER tier item (5%)
-          setEncounterRewards({ guaranteedModifierTiers: [ ModifierTier.MASTER ]});
+          setEncounterRewards({ guaranteedModifierTiers: [ModifierTier.MASTER] });
           // Display result message then proceed to rewards
           queueEncounterMessage(`${namespace}:option.1.amazing`);
           leaveEncounterWithoutBattle();

@@ -90,11 +90,11 @@ export class SwitchSummonPhase extends SummonPhase {
       this.player
         ? i18next.t("battle:playerComeBack", { pokemonName: getPokemonNameWithAffix(pokemon) })
         : i18next.t("battle:trainerComeBack", {
-          trainerName: globalScene.currentBattle.trainer?.getName(
-            !(this.fieldIndex % 2) ? TrainerSlot.TRAINER : TrainerSlot.TRAINER_PARTNER,
-          ),
-          pokemonName: pokemon.getNameToRender(),
-        }),
+            trainerName: globalScene.currentBattle.trainer?.getName(
+              !(this.fieldIndex % 2) ? TrainerSlot.TRAINER : TrainerSlot.TRAINER_PARTNER,
+            ),
+            pokemonName: pokemon.getNameToRender(),
+          }),
     );
     globalScene.playSound("se/pb_rel");
     pokemon.hideInfo();
@@ -160,11 +160,11 @@ export class SwitchSummonPhase extends SummonPhase {
           this.player
             ? i18next.t("battle:playerGo", { pokemonName: getPokemonNameWithAffix(switchedInPokemon) })
             : i18next.t("battle:trainerGo", {
-              trainerName: globalScene.currentBattle.trainer?.getName(
-                !(this.fieldIndex % 2) ? TrainerSlot.TRAINER : TrainerSlot.TRAINER_PARTNER,
-              ),
-              pokemonName: this.getPokemon().getNameToRender(),
-            }),
+                trainerName: globalScene.currentBattle.trainer?.getName(
+                  !(this.fieldIndex % 2) ? TrainerSlot.TRAINER : TrainerSlot.TRAINER_PARTNER,
+                ),
+                pokemonName: this.getPokemon().getNameToRender(),
+              }),
         );
         /**
          * If this switch is passing a Substitute, make the switched Pokemon match the returned Pokemon's state as it left.

@@ -53,7 +53,7 @@ describe("Items - Double Battle Chance Boosters", () => {
       .moveset(Moves.SPLASH)
       .startingLevel(200);
 
-    await game.classicMode.startBattle([ Species.PIKACHU ]);
+    await game.classicMode.startBattle([Species.PIKACHU]);
 
     game.move.select(Moves.SPLASH);
 

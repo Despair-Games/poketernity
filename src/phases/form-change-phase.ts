@@ -37,7 +37,7 @@ export class FormChangePhase extends EvolutionPhase {
     const preName = getPokemonNameWithAffix(this.pokemon);
 
     this.pokemon.getPossibleForm(this.formChange).then((transformedPokemon) => {
-      [ this.pokemonEvoSprite, this.pokemonEvoTintSprite ].map((sprite) => {
+      [this.pokemonEvoSprite, this.pokemonEvoTintSprite].map((sprite) => {
         const spriteKey = transformedPokemon.getSpriteKey(true);
         try {
           sprite.play(spriteKey);
@@ -49,7 +49,7 @@ export class FormChangePhase extends EvolutionPhase {
         sprite.setPipelineData("spriteKey", transformedPokemon.getSpriteKey());
         sprite.setPipelineData("shiny", transformedPokemon.shiny);
         sprite.setPipelineData("variant", transformedPokemon.variant);
-        [ "spriteColors", "fusionSpriteColors" ].map((k) => {
+        ["spriteColors", "fusionSpriteColors"].map((k) => {
           if (transformedPokemon.summonData?.speciesForm) {
             k += "Base";
           }
@@ -112,7 +112,7 @@ export class FormChangePhase extends EvolutionPhase {
                               this.evolutionBgOverlay.setAlpha(1);
                               this.evolutionBg.setVisible(false);
                               globalScene.tweens.add({
-                                targets: [ this.evolutionOverlay, this.pokemonEvoTintSprite ],
+                                targets: [this.evolutionOverlay, this.pokemonEvoTintSprite],
                                 alpha: 0,
                                 duration: 2000,
                                 delay: 150,

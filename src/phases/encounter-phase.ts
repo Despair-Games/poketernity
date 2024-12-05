@@ -360,9 +360,9 @@ export class EncounterPhase extends BattlePhase {
     return enemyField.length === 1
       ? i18next.t("battle:singleWildAppeared", { pokemonName: enemyField[0].getNameToRender() })
       : i18next.t("battle:multiWildAppeared", {
-        pokemonName1: enemyField[0].getNameToRender(),
-        pokemonName2: enemyField[1].getNameToRender(),
-      });
+          pokemonName1: enemyField[0].getNameToRender(),
+          pokemonName2: enemyField[1].getNameToRender(),
+        });
   }
 
   doEncounterCommon(showEncounterMessage: boolean = true) {
@@ -532,7 +532,7 @@ export class EncounterPhase extends BattlePhase {
       }
     });
 
-    if (![ BattleType.TRAINER, BattleType.MYSTERY_ENCOUNTER ].includes(globalScene.currentBattle.battleType)) {
+    if (![BattleType.TRAINER, BattleType.MYSTERY_ENCOUNTER].includes(globalScene.currentBattle.battleType)) {
       enemyField.map((p) =>
         globalScene.pushConditionalPhase(new PostSummonPhase(p.getBattlerIndex()), () => {
           // if there is not a player party, we can't continue
@@ -617,7 +617,7 @@ export class EncounterPhase extends BattlePhase {
               const count = 5643853 + globalScene.gameData.gameStats.classicSessionsPlayed;
               // The line below checks if an English ordinal is necessary or not based on whether an entry for encounterLocalizationKey exists in the language or not.
               const ordinalUsed =
-                !i18next.exists(localizationKey, { fallbackLng: []}) || i18next.resolvedLanguage === "en"
+                !i18next.exists(localizationKey, { fallbackLng: [] }) || i18next.resolvedLanguage === "en"
                   ? i18next.t("battleSpecDialogue:key", { count: count, ordinal: true })
                   : "";
               const cycleCount = count.toLocaleString() + ordinalUsed;

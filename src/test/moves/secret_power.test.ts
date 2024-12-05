@@ -30,7 +30,7 @@ describe("Moves - Secret Power", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([ Moves.SECRET_POWER ])
+      .moveset([Moves.SECRET_POWER])
       .ability(Abilities.BALL_FETCH)
       .battleType("single")
       .disableCrits()
@@ -40,9 +40,9 @@ describe("Moves - Secret Power", () => {
   });
 
   it("Secret Power checks for an active terrain first then looks at the biome for its secondary effect", async () => {
-    game.override.startingBiome(Biome.VOLCANO).enemyMoveset([ Moves.SPLASH, Moves.MISTY_TERRAIN ]);
+    game.override.startingBiome(Biome.VOLCANO).enemyMoveset([Moves.SPLASH, Moves.MISTY_TERRAIN]);
     vi.spyOn(allMoves[Moves.SECRET_POWER], "chance", "get").mockReturnValue(100);
-    await game.classicMode.startBattle([ Species.FEEBAS ]);
+    await game.classicMode.startBattle([Species.FEEBAS]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -61,11 +61,11 @@ describe("Moves - Secret Power", () => {
 
   it("Secret Power's effect chance is doubled by Serene Grace, but not by the 'rainbow' effect from Fire/Water Pledge", async () => {
     game.override
-      .moveset([ Moves.FIRE_PLEDGE, Moves.WATER_PLEDGE, Moves.SECRET_POWER, Moves.SPLASH ])
+      .moveset([Moves.FIRE_PLEDGE, Moves.WATER_PLEDGE, Moves.SECRET_POWER, Moves.SPLASH])
       .ability(Abilities.SERENE_GRACE)
-      .enemyMoveset([ Moves.SPLASH ])
+      .enemyMoveset([Moves.SPLASH])
       .battleType("double");
-    await game.classicMode.startBattle([ Species.BLASTOISE, Species.CHARIZARD ]);
+    await game.classicMode.startBattle([Species.BLASTOISE, Species.CHARIZARD]);
 
     const sereneGraceAttr = allAbilities[Abilities.SERENE_GRACE].getAttrs(MoveEffectChanceMultiplierAbAttr)[0];
     vi.spyOn(sereneGraceAttr, "apply");

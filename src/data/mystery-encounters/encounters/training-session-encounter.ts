@@ -308,7 +308,7 @@ export const TrainingSessionEncounter: MysteryEncounter = MysteryEncounterBuilde
         const segments = Math.min(2 + Math.floor(globalScene.currentBattle.waveIndex / 30), 6);
         const modifiers = new ModifiersHolder();
         const config = getEnemyConfig(playerPokemon, segments, modifiers);
-        config.pokemonConfigs![0].tags = [ BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON ];
+        config.pokemonConfigs![0].tags = [BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON];
         globalScene.removePokemonFromPlayerParty(playerPokemon, false);
 
         const onBeforeRewardsPhase = () => {

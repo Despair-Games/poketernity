@@ -89,7 +89,7 @@ export interface Vouchers {
 export const vouchers: Vouchers = {};
 
 export function initVouchers() {
-  for (const achv of [ achvs.CLASSIC_VICTORY ]) {
+  for (const achv of [achvs.CLASSIC_VICTORY]) {
     const voucherType =
       achv.score >= 150
         ? VoucherType.GOLDEN

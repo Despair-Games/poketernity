@@ -62,7 +62,7 @@ export class DropDownOption extends Phaser.GameObjects.Container {
     if (Array.isArray(labels)) {
       this.labels = labels;
     } else {
-      this.labels = labels ? [ labels ] : [ new DropDownLabel("") ];
+      this.labels = labels ? [labels] : [new DropDownLabel("")];
     }
     this.currentLabelIndex = 0;
     const currentLabel = this.labels[this.currentLabelIndex];
@@ -484,7 +484,7 @@ export class DropDown extends Phaser.GameObjects.Container {
         return this.options.filter((_, i) => i > 0).map((option) => option.val);
       }
       // if nothing is selected and a single option is hovered, return that one
-      return [ this.options[this.cursor].val ];
+      return [this.options[this.cursor].val];
     } else if (this.dropDownType === DropDownType.RADIAL) {
       return this.options.map((option) => {
         return { val: option.val, state: option.state };
@@ -533,13 +533,13 @@ export class DropDown extends Phaser.GameObjects.Container {
     switch (this.dropDownType) {
       case DropDownType.MULTI:
       case DropDownType.RADIAL:
-        return compareValues([ "val", "state" ]);
+        return compareValues(["val", "state"]);
 
       case DropDownType.HYBRID:
-        return compareValues([ "val", "state", "cursor" ]);
+        return compareValues(["val", "state", "cursor"]);
 
       case DropDownType.SINGLE:
-        return compareValues([ "val", "state", "dir" ]);
+        return compareValues(["val", "state", "dir"]);
 
       default:
         return false;

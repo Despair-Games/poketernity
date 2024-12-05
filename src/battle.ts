@@ -157,7 +157,7 @@ export default class Battle {
 
   incrementTurn(): void {
     this.turn++;
-    this.turnCommands = Object.fromEntries(Utils.getEnumValues(BattlerIndex).map((bt) => [ bt, null ]));
+    this.turnCommands = Object.fromEntries(Utils.getEnumValues(BattlerIndex).map((bt) => [bt, null]));
     this.battleSeedState = null;
   }
 
@@ -434,7 +434,7 @@ export default class Battle {
     if (this.battleSeedState) {
       Phaser.Math.RND.state(this.battleSeedState);
     } else {
-      Phaser.Math.RND.sow([ Utils.shiftCharCodes(this.battleSeed, this.turn << 6) ]);
+      Phaser.Math.RND.sow([Utils.shiftCharCodes(this.battleSeed, this.turn << 6)]);
       console.log("Battle Seed:", this.battleSeed);
     }
     globalScene.rngCounter = this.rngCounter++;
@@ -600,7 +600,7 @@ export const classicFixedBattles: FixedBattleConfigs = {
         ),
     )
     .setCustomModifierRewards({
-      guaranteedModifierTiers: [ ModifierTier.ULTRA, ModifierTier.GREAT, ModifierTier.GREAT ],
+      guaranteedModifierTiers: [ModifierTier.ULTRA, ModifierTier.GREAT, ModifierTier.GREAT],
       allowLuckUpgrades: false,
     }),
   [35]: new FixedBattleConfig()
@@ -632,7 +632,7 @@ export const classicFixedBattles: FixedBattleConfigs = {
         ),
     )
     .setCustomModifierRewards({
-      guaranteedModifierTiers: [ ModifierTier.ULTRA, ModifierTier.ULTRA, ModifierTier.GREAT, ModifierTier.GREAT ],
+      guaranteedModifierTiers: [ModifierTier.ULTRA, ModifierTier.ULTRA, ModifierTier.GREAT, ModifierTier.GREAT],
       allowLuckUpgrades: false,
     }),
   [62]: new FixedBattleConfig()
@@ -681,16 +681,16 @@ export const classicFixedBattles: FixedBattleConfigs = {
     .setGetTrainerFunc(
       getRandomTrainerFunc(
         [
-          [ TrainerType.ARCHER, TrainerType.ARIANA, TrainerType.PROTON, TrainerType.PETREL ],
-          [ TrainerType.TABITHA, TrainerType.COURTNEY ],
-          [ TrainerType.MATT, TrainerType.SHELLY ],
-          [ TrainerType.JUPITER, TrainerType.MARS, TrainerType.SATURN ],
-          [ TrainerType.ZINZOLIN, TrainerType.ROOD ],
-          [ TrainerType.XEROSIC, TrainerType.BRYONY ],
+          [TrainerType.ARCHER, TrainerType.ARIANA, TrainerType.PROTON, TrainerType.PETREL],
+          [TrainerType.TABITHA, TrainerType.COURTNEY],
+          [TrainerType.MATT, TrainerType.SHELLY],
+          [TrainerType.JUPITER, TrainerType.MARS, TrainerType.SATURN],
+          [TrainerType.ZINZOLIN, TrainerType.ROOD],
+          [TrainerType.XEROSIC, TrainerType.BRYONY],
           TrainerType.FABA,
           TrainerType.PLUMERIA,
           TrainerType.OLEANA,
-          [ TrainerType.GIACOMO, TrainerType.MELA, TrainerType.ATTICUS, TrainerType.ORTEGA, TrainerType.ERI ],
+          [TrainerType.GIACOMO, TrainerType.MELA, TrainerType.ATTICUS, TrainerType.ORTEGA, TrainerType.ERI],
         ],
         true,
       ),
@@ -705,7 +705,7 @@ export const classicFixedBattles: FixedBattleConfigs = {
         ),
     )
     .setCustomModifierRewards({
-      guaranteedModifierTiers: [ ModifierTier.ULTRA, ModifierTier.ULTRA, ModifierTier.ULTRA, ModifierTier.ULTRA ],
+      guaranteedModifierTiers: [ModifierTier.ULTRA, ModifierTier.ULTRA, ModifierTier.ULTRA, ModifierTier.ULTRA],
       allowLuckUpgrades: false,
     }),
   [112]: new FixedBattleConfig()
@@ -734,16 +734,16 @@ export const classicFixedBattles: FixedBattleConfigs = {
     .setGetTrainerFunc(
       getRandomTrainerFunc(
         [
-          [ TrainerType.ARCHER, TrainerType.ARIANA, TrainerType.PROTON, TrainerType.PETREL ],
-          [ TrainerType.TABITHA, TrainerType.COURTNEY ],
-          [ TrainerType.MATT, TrainerType.SHELLY ],
-          [ TrainerType.JUPITER, TrainerType.MARS, TrainerType.SATURN ],
-          [ TrainerType.ZINZOLIN, TrainerType.ROOD ],
-          [ TrainerType.XEROSIC, TrainerType.BRYONY ],
+          [TrainerType.ARCHER, TrainerType.ARIANA, TrainerType.PROTON, TrainerType.PETREL],
+          [TrainerType.TABITHA, TrainerType.COURTNEY],
+          [TrainerType.MATT, TrainerType.SHELLY],
+          [TrainerType.JUPITER, TrainerType.MARS, TrainerType.SATURN],
+          [TrainerType.ZINZOLIN, TrainerType.ROOD],
+          [TrainerType.XEROSIC, TrainerType.BRYONY],
           TrainerType.FABA,
           TrainerType.PLUMERIA,
           TrainerType.OLEANA,
-          [ TrainerType.GIACOMO, TrainerType.MELA, TrainerType.ATTICUS, TrainerType.ORTEGA, TrainerType.ERI ],
+          [TrainerType.GIACOMO, TrainerType.MELA, TrainerType.ATTICUS, TrainerType.ORTEGA, TrainerType.ERI],
         ],
         true,
         1,
@@ -833,7 +833,7 @@ export const classicFixedBattles: FixedBattleConfigs = {
         TrainerType.AARON,
         TrainerType.SHAUNTAL,
         TrainerType.MALVA,
-        [ TrainerType.HALA, TrainerType.MOLAYNE ],
+        [TrainerType.HALA, TrainerType.MOLAYNE],
         TrainerType.MARNIE_ELITE,
         TrainerType.RIKA,
         TrainerType.CRISPIN,
@@ -868,7 +868,7 @@ export const classicFixedBattles: FixedBattleConfigs = {
         TrainerType.GRIMSLEY,
         TrainerType.WIKSTROM,
         TrainerType.ACEROLA,
-        [ TrainerType.BEA_ELITE, TrainerType.ALLISTER_ELITE ],
+        [TrainerType.BEA_ELITE, TrainerType.ALLISTER_ELITE],
         TrainerType.LARRY_ELITE,
         TrainerType.LACEY,
       ]),
@@ -896,14 +896,14 @@ export const classicFixedBattles: FixedBattleConfigs = {
     .setGetTrainerFunc(
       getRandomTrainerFunc([
         TrainerType.BLUE,
-        [ TrainerType.RED, TrainerType.LANCE_CHAMPION ],
-        [ TrainerType.STEVEN, TrainerType.WALLACE ],
+        [TrainerType.RED, TrainerType.LANCE_CHAMPION],
+        [TrainerType.STEVEN, TrainerType.WALLACE],
         TrainerType.CYNTHIA,
-        [ TrainerType.ALDER, TrainerType.IRIS ],
+        [TrainerType.ALDER, TrainerType.IRIS],
         TrainerType.DIANTHA,
         TrainerType.HAU,
         TrainerType.LEON,
-        [ TrainerType.GEETA, TrainerType.NEMONA ],
+        [TrainerType.GEETA, TrainerType.NEMONA],
         TrainerType.KIERAN,
       ]),
     ),

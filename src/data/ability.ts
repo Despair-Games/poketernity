@@ -497,7 +497,7 @@ export class TypeImmunityAbAttr extends PreDefendAbAttr {
     args: any[],
   ): boolean {
     // Field moves should ignore immunity
-    if ([ MoveTarget.BOTH_SIDES, MoveTarget.ENEMY_SIDE, MoveTarget.USER_SIDE ].includes(move.moveTarget)) {
+    if ([MoveTarget.BOTH_SIDES, MoveTarget.ENEMY_SIDE, MoveTarget.USER_SIDE].includes(move.moveTarget)) {
       return false;
     }
     if (attacker !== pokemon && attacker.getMoveType(move) === this.immuneType) {
@@ -607,7 +607,7 @@ class TypeImmunityStatStageChangeAbAttr extends TypeImmunityAbAttr {
     if (ret) {
       cancelled.value = true; // Suppresses "No Effect" message
       if (!simulated) {
-        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [ this.stat ], this.stages));
+        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [this.stat], this.stages));
       }
     }
 
@@ -862,7 +862,7 @@ export class MoveImmunityStatStageChangeAbAttr extends MoveImmunityAbAttr {
   ): boolean {
     const ret = super.applyPreDefend(pokemon, passive, simulated, attacker, move, cancelled, args);
     if (ret && !simulated) {
-      globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [ this.stat ], this.stages));
+      globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [this.stat], this.stages));
     }
 
     return ret;
@@ -946,10 +946,10 @@ export class PostDefendStatStageChangeAbAttr extends PostDefendAbAttr {
 
       if (this.allOthers) {
         const otherPokemon = pokemon.getAlly()
-          ? pokemon.getOpponents().concat([ pokemon.getAlly() ])
+          ? pokemon.getOpponents().concat([pokemon.getAlly()])
           : pokemon.getOpponents();
         for (const other of otherPokemon) {
-          globalScene.unshiftPhase(new StatStageChangePhase(other.getBattlerIndex(), false, [ this.stat ], this.stages));
+          globalScene.unshiftPhase(new StatStageChangePhase(other.getBattlerIndex(), false, [this.stat], this.stages));
         }
         return true;
       }
@@ -957,7 +957,7 @@ export class PostDefendStatStageChangeAbAttr extends PostDefendAbAttr {
         new StatStageChangePhase(
           (this.selfTarget ? pokemon : attacker).getBattlerIndex(),
           this.selfTarget,
-          [ this.stat ],
+          [this.stat],
           this.stages,
         ),
       );
@@ -1118,7 +1118,7 @@ export class PostDefendTypeChangeAbAttr extends PostDefendAbAttr {
       const type = attacker.getMoveType(move);
       const pokemonTypes = pokemon.getTypes(true);
       if (pokemonTypes.length !== 1 || pokemonTypes[0] !== type) {
-        pokemon.summonData.types = [ type ];
+        pokemon.summonData.types = [type];
         return true;
       }
     }
@@ -1288,7 +1288,7 @@ export class PostDefendCritStatStageChangeAbAttr extends PostDefendAbAttr {
     }
 
     if (!simulated) {
-      globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [ this.stat ], this.stages));
+      globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [this.stat], this.stages));
     }
 
     return true;
@@ -1605,7 +1605,7 @@ export class MoveEffectChanceMultiplierAbAttr extends AbAttr {
     // Disable showAbility during getTargetBenefitScore
     this.showAbility = args[4];
 
-    const exceptMoves = [ Moves.ORDER_UP, Moves.ELECTRO_SHOT ];
+    const exceptMoves = [Moves.ORDER_UP, Moves.ELECTRO_SHOT];
     if ((args[0] as Utils.NumberHolder).value <= 0 || exceptMoves.includes((args[1] as Move).id)) {
       return false;
     }
@@ -1797,7 +1797,7 @@ export class PokemonTypeChangeAbAttr extends PreAttackAbAttr {
       if (pokemon.getTypes().some((t) => t !== moveType)) {
         if (!simulated) {
           this.moveType = moveType;
-          pokemon.summonData.types = [ moveType ];
+          pokemon.summonData.types = [moveType];
           pokemon.updateInfo();
         }
 
@@ -2484,7 +2484,7 @@ class PostVictoryStatStageChangeAbAttr extends PostVictoryAbAttr {
   applyPostVictory(pokemon: Pokemon, passive: boolean, simulated: boolean, args: any[]): boolean | Promise<boolean> {
     const stat = typeof this.stat === "function" ? this.stat(pokemon) : this.stat;
     if (!simulated) {
-      globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [ stat ], this.stages));
+      globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [stat], this.stages));
     }
     return true;
   }
@@ -2544,7 +2544,7 @@ export class PostKnockOutStatStageChangeAbAttr extends PostKnockOutAbAttr {
   ): boolean | Promise<boolean> {
     const stat = typeof this.stat === "function" ? this.stat(pokemon) : this.stat;
     if (!simulated) {
-      globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [ stat ], this.stages));
+      globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [stat], this.stages));
     }
     return true;
   }
@@ -2899,9 +2899,9 @@ export class DownloadAbAttr extends PostSummonAbAttr {
     this.enemySpDef = Math.round(this.enemySpDef / this.enemyCountTally);
 
     if (this.enemyDef < this.enemySpDef) {
-      this.stats = [ Stat.ATK ];
+      this.stats = [Stat.ATK];
     } else {
-      this.stats = [ Stat.SPATK ];
+      this.stats = [Stat.SPATK];
     }
 
     if (this.enemyDef > 0 && this.enemySpDef > 0) {
@@ -3599,14 +3599,14 @@ export class PreSetStatusEffectImmunityAbAttr extends PreSetStatusAbAttr {
   getTriggerMessage(pokemon: Pokemon, abilityName: string, ...args: any[]): string {
     return this.immuneEffects.length
       ? i18next.t("abilityTriggers:statusEffectImmunityWithName", {
-        pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-        abilityName,
-        statusEffectName: getStatusEffectDescriptor(args[0] as StatusEffect),
-      })
+          pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
+          abilityName,
+          statusEffectName: getStatusEffectDescriptor(args[0] as StatusEffect),
+        })
       : i18next.t("abilityTriggers:statusEffectImmunity", {
-        pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-        abilityName,
-      });
+          pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
+          abilityName,
+        });
   }
 }
 
@@ -3645,7 +3645,7 @@ export class PreApplyBattlerTagImmunityAbAttr extends PreApplyBattlerTagAbAttr {
   constructor(immuneTagTypes: BattlerTagType | BattlerTagType[]) {
     super();
 
-    this.immuneTagTypes = Array.isArray(immuneTagTypes) ? immuneTagTypes : [ immuneTagTypes ];
+    this.immuneTagTypes = Array.isArray(immuneTagTypes) ? immuneTagTypes : [immuneTagTypes];
   }
 
   applyPreApplyBattlerTag(
@@ -4523,11 +4523,11 @@ export class MoodyAbAttr extends PostTurnAbAttr {
       if (canRaise.length > 0) {
         const raisedStat = canRaise[pokemon.randSeedInt(canRaise.length)];
         canLower = canRaise.filter((s) => s !== raisedStat);
-        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [ raisedStat ], 2));
+        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [raisedStat], 2));
       }
       if (canLower.length > 0) {
         const loweredStat = canLower[pokemon.randSeedInt(canLower.length)];
-        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [ loweredStat ], -1));
+        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [loweredStat], -1));
       }
     }
 
@@ -4543,7 +4543,7 @@ export class SpeedBoostAbAttr extends PostTurnAbAttr {
   applyPostTurn(pokemon: Pokemon, passive: boolean, simulated: boolean, args: any[]): boolean {
     if (!simulated) {
       if (!pokemon.turnData.switchedInThisTurn && !pokemon.turnData.failedRunAway) {
-        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [ Stat.SPD ], 1));
+        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [Stat.SPD], 1));
       } else {
         return false;
       }
@@ -4770,7 +4770,7 @@ export class PostDancingMoveAbAttr extends PostMoveUsedAbAttr {
           globalScene.unshiftPhase(new MovePhase(dancer, target, move, true, true));
         } else if (move.getMove() instanceof SelfStatusMove) {
           // If the move is a SelfStatusMove (ie. Swords Dance) the Dancer should replicate it on itself
-          globalScene.unshiftPhase(new MovePhase(dancer, [ dancer.getBattlerIndex() ], move, true, true));
+          globalScene.unshiftPhase(new MovePhase(dancer, [dancer.getBattlerIndex()], move, true, true));
         }
       }
       return true;
@@ -4787,9 +4787,9 @@ export class PostDancingMoveAbAttr extends PostMoveUsedAbAttr {
    */
   getTarget(dancer: Pokemon, source: Pokemon, targets: BattlerIndex[]): BattlerIndex[] {
     if (dancer.isPlayer()) {
-      return source.isPlayer() ? targets : [ source.getBattlerIndex() ];
+      return source.isPlayer() ? targets : [source.getBattlerIndex()];
     }
-    return source.isPlayer() ? [ source.getBattlerIndex() ] : targets;
+    return source.isPlayer() ? [source.getBattlerIndex()] : targets;
   }
 }
 
@@ -5310,7 +5310,7 @@ export class RedirectMoveAbAttr extends AbAttr {
 
   canRedirect(moveId: Moves): boolean {
     const move = allMoves[moveId];
-    return !![ MoveTarget.NEAR_OTHER, MoveTarget.OTHER ].find((t) => move.moveTarget === t);
+    return !![MoveTarget.NEAR_OTHER, MoveTarget.OTHER].find((t) => move.moveTarget === t);
   }
 }
 
@@ -5382,7 +5382,7 @@ export class FlinchStatStageChangeAbAttr extends FlinchEffectAbAttr {
   constructor(stats: BattleStat[], stages: number) {
     super();
 
-    this.stats = Array.isArray(stats) ? stats : [ stats ];
+    this.stats = Array.isArray(stats) ? stats : [stats];
     this.stages = stages;
   }
 
@@ -5633,7 +5633,7 @@ export class PostSummonStatStageChangeOnArenaAbAttr extends PostSummonStatStageC
    * @param {ArenaTagType} tagType - The type of arena tag to check for.
    */
   constructor(tagType: ArenaTagType) {
-    super([ Stat.ATK ], 1, true, false);
+    super([Stat.ATK], 1, true, false);
     this.tagType = tagType;
   }
 
@@ -5912,7 +5912,7 @@ async function applyAbAttrsInternal<TAttr extends AbAttr>(
   simulated: boolean = false,
   messages: string[] = [],
 ) {
-  for (const passive of [ false, true ]) {
+  for (const passive of [false, true]) {
     if (!pokemon?.canApplyAbility(passive) || (passive && pokemon.getPassiveAbility().id === pokemon.getAbility().id)) {
       continue;
     }
@@ -6176,7 +6176,7 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
   ): boolean | Promise<boolean> {
     const moveHistory = pokemon.getMoveHistory();
     // Will not activate when the Pokémon's HP is lowered by cutting its own HP
-    const fordbiddenAttackingMoves = [ Moves.BELLY_DRUM, Moves.SUBSTITUTE, Moves.CURSE, Moves.PAIN_SPLIT ];
+    const fordbiddenAttackingMoves = [Moves.BELLY_DRUM, Moves.SUBSTITUTE, Moves.CURSE, Moves.PAIN_SPLIT];
     if (moveHistory.length > 0) {
       const lastMoveUsed = moveHistory[moveHistory.length - 1];
       if (fordbiddenAttackingMoves.includes(lastMoveUsed.move)) {
@@ -6185,7 +6185,7 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
     }
 
     // Dragon Tail and Circle Throw switch out Pokémon before the Ability activates.
-    const fordbiddenDefendingMoves = [ Moves.DRAGON_TAIL, Moves.CIRCLE_THROW ];
+    const fordbiddenDefendingMoves = [Moves.DRAGON_TAIL, Moves.CIRCLE_THROW];
     if (source) {
       const enemyMoveHistory = source.getMoveHistory();
       if (enemyMoveHistory.length > 0) {
@@ -6758,7 +6758,7 @@ function getPokemonWithWeatherBasedForms() {
     );
 }
 
-export const allAbilities = [ new Ability(Abilities.NONE, 3) ];
+export const allAbilities = [new Ability(Abilities.NONE, 3)];
 
 export function initAbilities() {
   allAbilities.push(
@@ -6787,7 +6787,7 @@ export function initAbilities() {
     new Ability(Abilities.VOLT_ABSORB, 3).attr(TypeImmunityHealAbAttr, Type.ELECTRIC).ignorable(),
     new Ability(Abilities.WATER_ABSORB, 3).attr(TypeImmunityHealAbAttr, Type.WATER).ignorable(),
     new Ability(Abilities.OBLIVIOUS, 3)
-      .attr(BattlerTagImmunityAbAttr, [ BattlerTagType.INFATUATED, BattlerTagType.TAUNT ])
+      .attr(BattlerTagImmunityAbAttr, [BattlerTagType.INFATUATED, BattlerTagType.TAUNT])
       .attr(IntimidateImmunityAbAttr)
       .ignorable(),
     new Ability(Abilities.CLOUD_NINE, 3)
@@ -6816,7 +6816,7 @@ export function initAbilities() {
       .attr(IntimidateImmunityAbAttr)
       .ignorable(),
     new Ability(Abilities.SUCTION_CUPS, 3).attr(ForceSwitchOutImmunityAbAttr).ignorable(),
-    new Ability(Abilities.INTIMIDATE, 3).attr(PostSummonStatStageChangeAbAttr, [ Stat.ATK ], -1, false, true),
+    new Ability(Abilities.INTIMIDATE, 3).attr(PostSummonStatStageChangeAbAttr, [Stat.ATK], -1, false, true),
     new Ability(Abilities.SHADOW_TAG, 3).attr(ArenaTrapAbAttr, (user, target) => {
       if (target.hasAbility(Abilities.SHADOW_TAG)) {
         return false;
@@ -6854,7 +6854,7 @@ export function initAbilities() {
     new Ability(Abilities.ILLUMINATE, 3)
       .attr(ProtectStatAbAttr, Stat.ACC)
       .attr(DoubleBattleChanceAbAttr)
-      .attr(IgnoreOpponentStatStagesAbAttr, [ Stat.EVA ])
+      .attr(IgnoreOpponentStatStagesAbAttr, [Stat.EVA])
       .ignorable(),
     new Ability(Abilities.TRACE, 3).attr(PostSummonCopyAbilityAbAttr).attr(UncopiableAbilityAbAttr),
     new Ability(Abilities.HUGE_POWER, 3).attr(StatMultiplierAbAttr, Stat.ATK, 2),
@@ -6910,14 +6910,14 @@ export function initAbilities() {
     new Ability(Abilities.CUTE_CHARM, 3).attr(PostDefendContactApplyTagChanceAbAttr, 30, BattlerTagType.INFATUATED),
     new Ability(Abilities.PLUS, 3).conditionalAttr(
       (p) =>
-        globalScene.currentBattle.double && [ Abilities.PLUS, Abilities.MINUS ].some((a) => p.getAlly().hasAbility(a)),
+        globalScene.currentBattle.double && [Abilities.PLUS, Abilities.MINUS].some((a) => p.getAlly().hasAbility(a)),
       StatMultiplierAbAttr,
       Stat.SPATK,
       1.5,
     ),
     new Ability(Abilities.MINUS, 3).conditionalAttr(
       (p) =>
-        globalScene.currentBattle.double && [ Abilities.PLUS, Abilities.MINUS ].some((a) => p.getAlly().hasAbility(a)),
+        globalScene.currentBattle.double && [Abilities.PLUS, Abilities.MINUS].some((a) => p.getAlly().hasAbility(a)),
       StatMultiplierAbAttr,
       Stat.SPATK,
       1.5,
@@ -7000,7 +7000,7 @@ export function initAbilities() {
           user?.gender !== Gender.GENDERLESS && target?.gender !== Gender.GENDERLESS && user?.gender !== target?.gender,
         0.75,
       ),
-    new Ability(Abilities.STEADFAST, 4).attr(FlinchStatStageChangeAbAttr, [ Stat.SPD ], 1),
+    new Ability(Abilities.STEADFAST, 4).attr(FlinchStatStageChangeAbAttr, [Stat.SPD], 1),
     new Ability(Abilities.SNOW_CLOAK, 4)
       .attr(StatMultiplierAbAttr, Stat.EVA, 1.2)
       .attr(BlockWeatherDamageAttr, WeatherType.HAIL)
@@ -7055,7 +7055,7 @@ export function initAbilities() {
         1.5,
       ),
     new Ability(Abilities.NORMALIZE, 4).attr(MoveTypeChangeAbAttr, Type.NORMAL, 1.2, (user, target, move) => {
-      return ![ Moves.HIDDEN_POWER, Moves.WEATHER_BALL, Moves.NATURAL_GIFT, Moves.JUDGMENT, Moves.TECHNO_BLAST ].includes(
+      return ![Moves.HIDDEN_POWER, Moves.WEATHER_BALL, Moves.NATURAL_GIFT, Moves.JUDGMENT, Moves.TECHNO_BLAST].includes(
         move.id,
       );
     }),
@@ -7092,7 +7092,7 @@ export function initAbilities() {
     ),
     new Ability(Abilities.FOREWARN, 4).attr(ForewarnAbAttr),
     new Ability(Abilities.UNAWARE, 4)
-      .attr(IgnoreOpponentStatStagesAbAttr, [ Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.ACC, Stat.EVA ])
+      .attr(IgnoreOpponentStatStagesAbAttr, [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.ACC, Stat.EVA])
       .ignorable(),
     new Ability(Abilities.TINTED_LENS, 4).attr(
       DamageBoostAbAttr,
@@ -7108,7 +7108,7 @@ export function initAbilities() {
       .ignorable(),
     new Ability(Abilities.SLOW_START, 4).attr(PostSummonAddBattlerTagAbAttr, BattlerTagType.SLOW_START, 5),
     new Ability(Abilities.SCRAPPY, 4)
-      .attr(IgnoreTypeImmunityAbAttr, Type.GHOST, [ Type.NORMAL, Type.FIGHTING ])
+      .attr(IgnoreTypeImmunityAbAttr, Type.GHOST, [Type.NORMAL, Type.FIGHTING])
       .attr(IntimidateImmunityAbAttr),
     new Ability(Abilities.STORM_DRAIN, 4)
       .attr(RedirectTypeMoveAbAttr, Type.WATER)
@@ -7179,7 +7179,7 @@ export function initAbilities() {
     new Ability(Abilities.DEFIANT, 5).attr(
       PostStatStageChangeStatStageChangeAbAttr,
       (target, statsChanged, stages) => stages < 0,
-      [ Stat.ATK ],
+      [Stat.ATK],
       2,
     ),
     new Ability(Abilities.DEFEATIST, 5)
@@ -7285,7 +7285,7 @@ export function initAbilities() {
         Stat.SPD,
         1,
       )
-      .attr(PostIntimidateStatStageChangeAbAttr, [ Stat.SPD ], 1),
+      .attr(PostIntimidateStatStageChangeAbAttr, [Stat.SPD], 1),
     new Ability(Abilities.MAGIC_BOUNCE, 5).ignorable().unimplemented(),
     new Ability(Abilities.SAP_SIPPER, 5).attr(TypeImmunityStatStageChangeAbAttr, Type.GRASS, Stat.ATK, 1).ignorable(),
     new Ability(Abilities.PRANKSTER, 5).attr(
@@ -7346,7 +7346,7 @@ export function initAbilities() {
     new Ability(Abilities.COMPETITIVE, 6).attr(
       PostStatStageChangeStatStageChangeAbAttr,
       (target, statsChanged, stages) => stages < 0,
-      [ Stat.SPATK ],
+      [Stat.SPATK],
       2,
     ),
     new Ability(Abilities.STRONG_JAW, 6).attr(
@@ -7505,7 +7505,7 @@ export function initAbilities() {
         PostDefendHpGatedStatStageChangeAbAttr,
         (target, user, move) => move.category !== MoveCategory.STATUS,
         0.5,
-        [ Stat.SPATK ],
+        [Stat.SPATK],
         1,
       )
       .condition(getSheerForceHitDisableAbCondition()),
@@ -7616,7 +7616,7 @@ export function initAbilities() {
       .attr(NoFusionAbilityAbAttr)
       .bypassFaint(),
     new Ability(Abilities.CORROSION, 7)
-      .attr(IgnoreTypeStatusEffectImmunityAbAttr, [ StatusEffect.POISON, StatusEffect.TOXIC ], [ Type.STEEL, Type.POISON ])
+      .attr(IgnoreTypeStatusEffectImmunityAbAttr, [StatusEffect.POISON, StatusEffect.TOXIC], [Type.STEEL, Type.POISON])
       .edgeCase(), // Should interact correctly with magic coat/bounce (not yet implemented) + fling with toxic orb (not implemented yet)
     new Ability(Abilities.COMATOSE, 7)
       .attr(UncopiableAbilityAbAttr)
@@ -7627,7 +7627,7 @@ export function initAbilities() {
     new Ability(Abilities.QUEENLY_MAJESTY, 7).attr(FieldPriorityMoveImmunityAbAttr).ignorable(),
     new Ability(Abilities.INNARDS_OUT, 7).attr(PostFaintHPDamageAbAttr).bypassFaint(),
     new Ability(Abilities.DANCER, 7).attr(PostDancingMoveAbAttr),
-    new Ability(Abilities.BATTERY, 7).attr(AllyMoveCategoryPowerBoostAbAttr, [ MoveCategory.SPECIAL ], 1.3),
+    new Ability(Abilities.BATTERY, 7).attr(AllyMoveCategoryPowerBoostAbAttr, [MoveCategory.SPECIAL], 1.3),
     new Ability(Abilities.FLUFFY, 7)
       .attr(ReceivedMoveDamageMultiplierAbAttr, (target, user, move) => move.hasFlag(MoveFlags.MAKES_CONTACT), 0.5)
       .attr(ReceivedMoveDamageMultiplierAbAttr, (target, user, move) => user.getMoveType(move) === Type.FIRE, 2)
@@ -7692,8 +7692,8 @@ export function initAbilities() {
       (user, target, move) => (target?.getMoveEffectiveness(user!, move) ?? 1) >= 2,
       1.25,
     ),
-    new Ability(Abilities.INTREPID_SWORD, 8).attr(PostSummonStatStageChangeAbAttr, [ Stat.ATK ], 1, true),
-    new Ability(Abilities.DAUNTLESS_SHIELD, 8).attr(PostSummonStatStageChangeAbAttr, [ Stat.DEF ], 1, true),
+    new Ability(Abilities.INTREPID_SWORD, 8).attr(PostSummonStatStageChangeAbAttr, [Stat.ATK], 1, true),
+    new Ability(Abilities.DAUNTLESS_SHIELD, 8).attr(PostSummonStatStageChangeAbAttr, [Stat.DEF], 1, true),
     new Ability(Abilities.LIBERO, 8).attr(PokemonTypeChangeAbAttr),
     //.condition((p) => !p.summonData?.abilitiesApplied.includes(Abilities.LIBERO)), //Gen 9 Implementation
     new Ability(Abilities.BALL_FETCH, 8)
@@ -7786,7 +7786,7 @@ export function initAbilities() {
       .ignorable(),
     new Ability(Abilities.POWER_SPOT, 8).attr(
       AllyMoveCategoryPowerBoostAbAttr,
-      [ MoveCategory.SPECIAL, MoveCategory.PHYSICAL ],
+      [MoveCategory.SPECIAL, MoveCategory.PHYSICAL],
       1.3,
     ),
     new Ability(Abilities.MIMICRY, 8).attr(TerrainEventTypeChangeAbAttr),
@@ -7869,14 +7869,14 @@ export function initAbilities() {
         PostDefendHpGatedStatStageChangeAbAttr,
         (target, user, move) => move.category !== MoveCategory.STATUS,
         0.5,
-        [ Stat.ATK, Stat.SPATK, Stat.SPD ],
+        [Stat.ATK, Stat.SPATK, Stat.SPD],
         1,
       )
       .attr(
         PostDefendHpGatedStatStageChangeAbAttr,
         (target, user, move) => move.category !== MoveCategory.STATUS,
         0.5,
-        [ Stat.DEF, Stat.SPDEF ],
+        [Stat.DEF, Stat.SPDEF],
         -1,
       )
       .condition(getSheerForceHitDisableAbCondition()),
@@ -7898,7 +7898,7 @@ export function initAbilities() {
       .attr(PostSummonStatStageChangeOnArenaAbAttr, ArenaTagType.TAILWIND)
       .ignorable(),
     new Ability(Abilities.GUARD_DOG, 9)
-      .attr(PostIntimidateStatStageChangeAbAttr, [ Stat.ATK ], 1, true)
+      .attr(PostIntimidateStatStageChangeAbAttr, [Stat.ATK], 1, true)
       .attr(ForceSwitchOutImmunityAbAttr)
       .ignorable(),
     new Ability(Abilities.ROCKY_PAYLOAD, 9).attr(MoveTypePowerBoostAbAttr, Type.ROCK),
@@ -8047,33 +8047,33 @@ export function initAbilities() {
       .attr(PreventBypassSpeedChanceAbAttr, (pokemon, move) => move.category === MoveCategory.STATUS)
       .attr(MoveAbilityBypassAbAttr, (pokemon, move: Move) => move.category === MoveCategory.STATUS),
     new Ability(Abilities.MINDS_EYE, 9)
-      .attr(IgnoreTypeImmunityAbAttr, Type.GHOST, [ Type.NORMAL, Type.FIGHTING ])
+      .attr(IgnoreTypeImmunityAbAttr, Type.GHOST, [Type.NORMAL, Type.FIGHTING])
       .attr(ProtectStatAbAttr, Stat.ACC)
-      .attr(IgnoreOpponentStatStagesAbAttr, [ Stat.EVA ])
+      .attr(IgnoreOpponentStatStagesAbAttr, [Stat.EVA])
       .ignorable(),
-    new Ability(Abilities.SUPERSWEET_SYRUP, 9).attr(PostSummonStatStageChangeAbAttr, [ Stat.EVA ], -1),
+    new Ability(Abilities.SUPERSWEET_SYRUP, 9).attr(PostSummonStatStageChangeAbAttr, [Stat.EVA], -1),
     new Ability(Abilities.HOSPITALITY, 9).attr(PostSummonAllyHealAbAttr, 4, true),
     new Ability(Abilities.TOXIC_CHAIN, 9).attr(PostAttackApplyStatusEffectAbAttr, false, 30, StatusEffect.TOXIC),
     new Ability(Abilities.EMBODY_ASPECT_TEAL, 9)
-      .attr(PostBattleInitStatStageChangeAbAttr, [ Stat.SPD ], 1, true)
+      .attr(PostBattleInitStatStageChangeAbAttr, [Stat.SPD], 1, true)
       .attr(UncopiableAbilityAbAttr)
       .attr(UnswappableAbilityAbAttr)
       .attr(NoTransformAbilityAbAttr)
       .partial(), // Ogerpon tera interactions
     new Ability(Abilities.EMBODY_ASPECT_WELLSPRING, 9)
-      .attr(PostBattleInitStatStageChangeAbAttr, [ Stat.SPDEF ], 1, true)
+      .attr(PostBattleInitStatStageChangeAbAttr, [Stat.SPDEF], 1, true)
       .attr(UncopiableAbilityAbAttr)
       .attr(UnswappableAbilityAbAttr)
       .attr(NoTransformAbilityAbAttr)
       .partial(), // Ogerpon tera interactions
     new Ability(Abilities.EMBODY_ASPECT_HEARTHFLAME, 9)
-      .attr(PostBattleInitStatStageChangeAbAttr, [ Stat.ATK ], 1, true)
+      .attr(PostBattleInitStatStageChangeAbAttr, [Stat.ATK], 1, true)
       .attr(UncopiableAbilityAbAttr)
       .attr(UnswappableAbilityAbAttr)
       .attr(NoTransformAbilityAbAttr)
       .partial(), // Ogerpon tera interactions
     new Ability(Abilities.EMBODY_ASPECT_CORNERSTONE, 9)
-      .attr(PostBattleInitStatStageChangeAbAttr, [ Stat.DEF ], 1, true)
+      .attr(PostBattleInitStatStageChangeAbAttr, [Stat.DEF], 1, true)
       .attr(UncopiableAbilityAbAttr)
       .attr(UnswappableAbilityAbAttr)
       .attr(NoTransformAbilityAbAttr)

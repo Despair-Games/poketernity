@@ -20,7 +20,7 @@ export default class SessionReloadModalUiHandler extends ModalUiHandler {
   }
 
   getMargin(): [number, number, number, number] {
-    return [ 0, 0, 48, 0 ];
+    return [0, 0, 48, 0];
   }
 
   getButtonLabels(): string[] {
@@ -47,6 +47,6 @@ export default class SessionReloadModalUiHandler extends ModalUiHandler {
       buttonActions: [],
     };
 
-    return super.show([ config ]);
+    return super.show([config]);
   }
 }

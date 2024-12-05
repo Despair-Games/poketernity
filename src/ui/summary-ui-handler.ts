@@ -339,7 +339,7 @@ export default class SummaryUiHandler extends UiHandler {
     this.pokemonSprite.setPipelineData("spriteKey", this.pokemon.getSpriteKey());
     this.pokemonSprite.setPipelineData("shiny", this.pokemon.shiny);
     this.pokemonSprite.setPipelineData("variant", this.pokemon.variant);
-    [ "spriteColors", "fusionSpriteColors" ].map((k) => {
+    ["spriteColors", "fusionSpriteColors"].map((k) => {
       delete this.pokemonSprite.pipelineData[`${k}Base`];
       if (this.pokemon?.summonData?.speciesForm) {
         k += "Base";
@@ -600,7 +600,7 @@ export default class SummaryUiHandler extends UiHandler {
             if ((isDown && partyMemberIndex < party.length - 1) || (!isDown && partyMemberIndex)) {
               const page = this.cursor;
               this.clear();
-              this.show([ party[partyMemberIndex + (isDown ? 1 : -1)], this.summaryUiMode, page ]);
+              this.show([party[partyMemberIndex + (isDown ? 1 : -1)], this.summaryUiMode, page]);
             }
             break;
           case Button.LEFT:
@@ -839,7 +839,7 @@ export default class SummaryUiHandler extends UiHandler {
           descriptionText: null,
         };
 
-        const allAbilityInfo = [ this.abilityContainer ]; // Creates an array to iterate through
+        const allAbilityInfo = [this.abilityContainer]; // Creates an array to iterate through
         // Only add to the array and set up displaying a passive if it's unlocked
         if (this.pokemon?.hasPassive()) {
           this.passiveContainer = {
@@ -1100,7 +1100,7 @@ export default class SummaryUiHandler extends UiHandler {
           moveRowContainer.add(ppText);
         }
 
-        this.moveDescriptionText = addTextObject(2, 84, "", TextStyle.WINDOW_ALT, { wordWrap: { width: 1212 }});
+        this.moveDescriptionText = addTextObject(2, 84, "", TextStyle.WINDOW_ALT, { wordWrap: { width: 1212 } });
         this.movesContainer.add(this.moveDescriptionText);
 
         const moveDescriptionTextMaskRect = globalScene.make.graphics({});

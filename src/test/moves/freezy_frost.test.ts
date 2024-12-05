@@ -27,17 +27,17 @@ describe("Moves - Freezy Frost", () => {
       .battleType("single")
       .enemySpecies(Species.RATTATA)
       .enemyLevel(100)
-      .enemyMoveset([ Moves.HOWL, Moves.HOWL, Moves.HOWL, Moves.HOWL ])
+      .enemyMoveset([Moves.HOWL, Moves.HOWL, Moves.HOWL, Moves.HOWL])
       .enemyAbility(Abilities.BALL_FETCH)
       .startingLevel(100)
-      .moveset([ Moves.FREEZY_FROST, Moves.HOWL, Moves.SPLASH ])
+      .moveset([Moves.FREEZY_FROST, Moves.HOWL, Moves.SPLASH])
       .ability(Abilities.BALL_FETCH);
 
     vi.spyOn(allMoves[Moves.FREEZY_FROST], "accuracy", "get").mockReturnValue(100);
   });
 
   it("should clear stat changes of user and opponent", async () => {
-    await game.classicMode.startBattle([ Species.SHUCKLE ]);
+    await game.classicMode.startBattle([Species.SHUCKLE]);
     const user = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
@@ -55,8 +55,8 @@ describe("Moves - Freezy Frost", () => {
   });
 
   it("should clear all stat changes even when enemy uses the move", async () => {
-    game.override.enemyMoveset([ Moves.FREEZY_FROST, Moves.FREEZY_FROST, Moves.FREEZY_FROST, Moves.FREEZY_FROST ]);
-    await game.classicMode.startBattle([ Species.SHUCKLE ]); // Shuckle for slower Howl on first turn so Freezy Frost doesn't affect it.
+    game.override.enemyMoveset([Moves.FREEZY_FROST, Moves.FREEZY_FROST, Moves.FREEZY_FROST, Moves.FREEZY_FROST]);
+    await game.classicMode.startBattle([Species.SHUCKLE]); // Shuckle for slower Howl on first turn so Freezy Frost doesn't affect it.
     const user = game.scene.getPlayerPokemon()!;
 
     game.move.select(Moves.HOWL);
@@ -72,9 +72,9 @@ describe("Moves - Freezy Frost", () => {
 
   it("should clear all stat changes in double battle", async () => {
     game.override.battleType("double");
-    await game.classicMode.startBattle([ Species.SHUCKLE, Species.RATTATA ]);
-    const [ leftPlayer, rightPlayer ] = game.scene.getPlayerField();
-    const [ leftOpp, rightOpp ] = game.scene.getEnemyField();
+    await game.classicMode.startBattle([Species.SHUCKLE, Species.RATTATA]);
+    const [leftPlayer, rightPlayer] = game.scene.getPlayerField();
+    const [leftOpp, rightOpp] = game.scene.getEnemyField();
 
     game.move.select(Moves.HOWL, 0);
     await game.phaseInterceptor.to(CommandPhase);

@@ -524,15 +524,15 @@ export class Arena {
   overrideTint(): [integer, integer, integer] {
     switch (Overrides.ARENA_TINT_OVERRIDE) {
       case TimeOfDay.DUSK:
-        return [ 98, 48, 73 ].map((c) => Math.round((c + 128) / 2)) as [integer, integer, integer];
+        return [98, 48, 73].map((c) => Math.round((c + 128) / 2)) as [integer, integer, integer];
         break;
       case TimeOfDay.NIGHT:
-        return [ 64, 64, 64 ];
+        return [64, 64, 64];
         break;
       case TimeOfDay.DAWN:
       case TimeOfDay.DAY:
       default:
-        return [ 128, 128, 128 ];
+        return [128, 128, 128];
         break;
     }
   }
@@ -543,9 +543,9 @@ export class Arena {
     }
     switch (this.biomeType) {
       case Biome.ABYSS:
-        return [ 64, 64, 64 ];
+        return [64, 64, 64];
       default:
-        return [ 128, 128, 128 ];
+        return [128, 128, 128];
     }
   }
 
@@ -554,12 +554,12 @@ export class Arena {
       return this.overrideTint();
     }
     if (!this.isOutside()) {
-      return [ 0, 0, 0 ];
+      return [0, 0, 0];
     }
 
     switch (this.biomeType) {
       default:
-        return [ 98, 48, 73 ].map((c) => Math.round((c + 128) / 2)) as [integer, integer, integer];
+        return [98, 48, 73].map((c) => Math.round((c + 128) / 2)) as [integer, integer, integer];
     }
   }
 
@@ -575,12 +575,12 @@ export class Arena {
     }
 
     if (!this.isOutside()) {
-      return [ 64, 64, 64 ];
+      return [64, 64, 64];
     }
 
     switch (this.biomeType) {
       default:
-        return [ 48, 48, 98 ];
+        return [48, 48, 98];
     }
   }
 
@@ -695,13 +695,13 @@ export class Arena {
   getTagOnSide(tagType: ArenaTagType | Constructor<ArenaTag>, side: ArenaTagSide): ArenaTag | undefined {
     return typeof tagType === "string"
       ? this.tags.find(
-        (t) =>
-          t.tagType === tagType && (side === ArenaTagSide.BOTH || t.side === ArenaTagSide.BOTH || t.side === side),
-      )
+          (t) =>
+            t.tagType === tagType && (side === ArenaTagSide.BOTH || t.side === ArenaTagSide.BOTH || t.side === side),
+        )
       : this.tags.find(
-        (t) =>
-          t instanceof tagType && (side === ArenaTagSide.BOTH || t.side === ArenaTagSide.BOTH || t.side === side),
-      );
+          (t) =>
+            t instanceof tagType && (side === ArenaTagSide.BOTH || t.side === ArenaTagSide.BOTH || t.side === side),
+        );
   }
 
   /**
@@ -917,11 +917,11 @@ export class ArenaBase extends Phaser.GameObjects.Container {
 
     this.props = !player
       ? new Array(3).fill(null).map(() => {
-        const ret = globalScene.addFieldSprite(0, 0, "plains_b", undefined, 1);
-        ret.setOrigin(0, 0);
-        ret.setVisible(false);
-        return ret;
-      })
+          const ret = globalScene.addFieldSprite(0, 0, "plains_b", undefined, 1);
+          ret.setOrigin(0, 0);
+          ret.setVisible(false);
+          return ret;
+        })
       : [];
   }
 

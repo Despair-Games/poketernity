@@ -73,8 +73,8 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
   public flyoutMenu?: BattleFlyout;
 
   private statOrder: Stat[];
-  private readonly statOrderPlayer = [ Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.ACC, Stat.EVA, Stat.SPD ];
-  private readonly statOrderEnemy = [ Stat.HP, Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.ACC, Stat.EVA, Stat.SPD ];
+  private readonly statOrderPlayer = [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.ACC, Stat.EVA, Stat.SPD];
+  private readonly statOrderEnemy = [Stat.HP, Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.ACC, Stat.EVA, Stat.SPD];
 
   constructor(x: number, y: number, player: boolean) {
     super(globalScene, x, y);
@@ -519,7 +519,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
     ];
     offsetElements.forEach((el) => (el.y += 1.5 * (mini ? -1 : 1)));
 
-    [ this.type1Icon, this.type2Icon, this.type3Icon ].forEach((el) => {
+    [this.type1Icon, this.type2Icon, this.type3Icon].forEach((el) => {
       el.x += 4 * (mini ? 1 : -1);
       el.y += -8 * (mini ? 1 : -1);
     });
@@ -527,7 +527,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
     this.statValuesContainer.x += 2 * (mini ? 1 : -1);
     this.statValuesContainer.y += -7 * (mini ? 1 : -1);
 
-    const toggledElements = [ this.hpNumbersContainer, this.expBar ];
+    const toggledElements = [this.hpNumbersContainer, this.expBar];
     toggledElements.forEach((el) => el.setVisible(!mini));
   }
 

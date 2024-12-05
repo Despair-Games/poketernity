@@ -70,8 +70,8 @@ describe("Achv", () => {
     const conditionFunc = vi.fn((args: any[]) => args[0] === 10);
     const achv = new Achv("", "Test Achievement", "Test Description", "test_icon", 10, conditionFunc);
 
-    expect(achv.validate([ 5 ])).toBe(false);
-    expect(achv.validate([ 10 ])).toBe(true);
+    expect(achv.validate([5])).toBe(false);
+    expect(achv.validate([10])).toBe(true);
     expect(conditionFunc).toHaveBeenCalledTimes(2);
   });
 });
@@ -149,10 +149,10 @@ describe("DamageAchv", () => {
     const damageAchv = new DamageAchv("", "Test Damage Achievement", 250, "damage_icon", 10);
     const numberHolder = new NumberHolder(200);
 
-    expect(damageAchv.validate([ numberHolder ])).toBe(false);
+    expect(damageAchv.validate([numberHolder])).toBe(false);
 
     numberHolder.value = 300;
-    expect(damageAchv.validate([ numberHolder ])).toBe(true);
+    expect(damageAchv.validate([numberHolder])).toBe(true);
   });
 });
 
@@ -167,10 +167,10 @@ describe("HealAchv", () => {
     const healAchv = new HealAchv("", "Test Heal Achievement", 250, "heal_icon", 10);
     const numberHolder = new NumberHolder(200);
 
-    expect(healAchv.validate([ numberHolder ])).toBe(false);
+    expect(healAchv.validate([numberHolder])).toBe(false);
 
     numberHolder.value = 300;
-    expect(healAchv.validate([ numberHolder ])).toBe(true);
+    expect(healAchv.validate([numberHolder])).toBe(true);
   });
 });
 
@@ -185,10 +185,10 @@ describe("LevelAchv", () => {
     const levelAchv = new LevelAchv("", "Test Level Achievement", 100, "level_icon", 10);
     const integerHolder = new IntegerHolder(50);
 
-    expect(levelAchv.validate([ integerHolder ])).toBe(false);
+    expect(levelAchv.validate([integerHolder])).toBe(false);
 
     integerHolder.value = 150;
-    expect(levelAchv.validate([ integerHolder ])).toBe(true);
+    expect(levelAchv.validate([integerHolder])).toBe(true);
   });
 });
 
@@ -217,7 +217,7 @@ describe("ModifierAchv", () => {
     );
     const modifier = new TurnHeldItemTransferModifier(null!, 3, 1);
 
-    expect(modifierAchv.validate([ modifier ])).toBe(true);
+    expect(modifierAchv.validate([modifier])).toBe(true);
   });
 });
 

@@ -257,7 +257,7 @@ export function getRandomSpeciesByStarterCost(
   let max = Array.isArray(starterTiers) ? starterTiers[1] : starterTiers;
 
   let filteredSpecies: [PokemonSpecies, number][] = Object.keys(speciesStarterCosts)
-    .map((s) => [ parseInt(s) as Species, speciesStarterCosts[s] as number ])
+    .map((s) => [parseInt(s) as Species, speciesStarterCosts[s] as number])
     .filter((s) => {
       const pokemonSpecies = getPokemonSpecies(s[0]);
       return (
@@ -268,7 +268,7 @@ export function getRandomSpeciesByStarterCost(
         (allowMythical || !pokemonSpecies.mythical)
       );
     })
-    .map((s) => [ getPokemonSpecies(s[0]), s[1] ]);
+    .map((s) => [getPokemonSpecies(s[0]), s[1]]);
 
   if (types && types.length > 0) {
     filteredSpecies = filteredSpecies.filter(
@@ -375,7 +375,7 @@ export function applyHealToPokemon(pokemon: PlayerPokemon, heal: number) {
 export async function modifyPlayerPokemonBST(pokemon: PlayerPokemon, value: number) {
   const modType = modifierTypes
     .MYSTERY_ENCOUNTER_SHUCKLE_JUICE()
-    .generateType(globalScene.getPlayerParty(), [ value ])
+    .generateType(globalScene.getPlayerParty(), [value])
     ?.withIdFromFunc(modifierTypes.MYSTERY_ENCOUNTER_SHUCKLE_JUICE);
   const modifier = modType?.newModifier(pokemon);
   if (modifier) {
@@ -697,7 +697,7 @@ export async function catchPokemon(
           }
         });
       };
-      Promise.all([ pokemon.hideInfo(), globalScene.gameData.setPokemonCaught(pokemon) ]).then(() => {
+      Promise.all([pokemon.hideInfo(), globalScene.gameData.setPokemonCaught(pokemon)]).then(() => {
         if (globalScene.getPlayerParty().length === 6) {
           const promptRelease = () => {
             globalScene.ui.showText(
@@ -872,33 +872,33 @@ export function doPlayerFlee(pokemon: EnemyPokemon): Promise<void> {
  * Bug Species and their corresponding weights
  */
 const GOLDEN_BUG_NET_SPECIES_POOL: [Species, number][] = [
-  [ Species.SCYTHER, 40 ],
-  [ Species.SCIZOR, 40 ],
-  [ Species.KLEAVOR, 40 ],
-  [ Species.PINSIR, 40 ],
-  [ Species.HERACROSS, 40 ],
-  [ Species.YANMA, 40 ],
-  [ Species.YANMEGA, 40 ],
-  [ Species.SHUCKLE, 40 ],
-  [ Species.ANORITH, 40 ],
-  [ Species.ARMALDO, 40 ],
-  [ Species.ESCAVALIER, 40 ],
-  [ Species.ACCELGOR, 40 ],
-  [ Species.JOLTIK, 40 ],
-  [ Species.GALVANTULA, 40 ],
-  [ Species.DURANT, 40 ],
-  [ Species.LARVESTA, 40 ],
-  [ Species.VOLCARONA, 40 ],
-  [ Species.DEWPIDER, 40 ],
-  [ Species.ARAQUANID, 40 ],
-  [ Species.WIMPOD, 40 ],
-  [ Species.GOLISOPOD, 40 ],
-  [ Species.SIZZLIPEDE, 40 ],
-  [ Species.CENTISKORCH, 40 ],
-  [ Species.NYMBLE, 40 ],
-  [ Species.LOKIX, 40 ],
-  [ Species.BUZZWOLE, 1 ],
-  [ Species.PHEROMOSA, 1 ],
+  [Species.SCYTHER, 40],
+  [Species.SCIZOR, 40],
+  [Species.KLEAVOR, 40],
+  [Species.PINSIR, 40],
+  [Species.HERACROSS, 40],
+  [Species.YANMA, 40],
+  [Species.YANMEGA, 40],
+  [Species.SHUCKLE, 40],
+  [Species.ANORITH, 40],
+  [Species.ARMALDO, 40],
+  [Species.ESCAVALIER, 40],
+  [Species.ACCELGOR, 40],
+  [Species.JOLTIK, 40],
+  [Species.GALVANTULA, 40],
+  [Species.DURANT, 40],
+  [Species.LARVESTA, 40],
+  [Species.VOLCARONA, 40],
+  [Species.DEWPIDER, 40],
+  [Species.ARAQUANID, 40],
+  [Species.WIMPOD, 40],
+  [Species.GOLISOPOD, 40],
+  [Species.SIZZLIPEDE, 40],
+  [Species.CENTISKORCH, 40],
+  [Species.NYMBLE, 40],
+  [Species.LOKIX, 40],
+  [Species.BUZZWOLE, 1],
+  [Species.PHEROMOSA, 1],
 ];
 
 /**

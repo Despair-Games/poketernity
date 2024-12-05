@@ -19,7 +19,7 @@ export default class InvertPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFX
       game,
       name: "InvertPostFX",
       fragShader,
-      uniforms: [ "uMainSampler" ],
+      uniforms: ["uMainSampler"],
     } as Phaser.Types.Renderer.WebGL.WebGLPipelineConfig);
   }
 }

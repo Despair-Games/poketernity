@@ -24,7 +24,7 @@ import { PostMysteryEncounterPhase } from "#app/phases/mystery-encounter-phases"
 import { FRIENDSHIP_GAIN_FROM_BATTLE } from "#app/data/balance/starters";
 
 const namespace = "mysteryEncounters/theExpertPokemonBreeder";
-const defaultParty = [ Species.LAPRAS, Species.GENGAR, Species.ABRA ];
+const defaultParty = [Species.LAPRAS, Species.GENGAR, Species.ABRA];
 const defaultBiome = Biome.CAVE;
 const defaultWave = 45;
 
@@ -45,9 +45,9 @@ describe("The Expert Pokémon Breeder - Mystery Encounter", () => {
     game.override.startingBiome(defaultBiome);
     game.override.disableTrainerWaves();
 
-    const biomeMap = new Map<Biome, MysteryEncounterType[]>([[ Biome.VOLCANO, [ MysteryEncounterType.FIGHT_OR_FLIGHT ]]]);
+    const biomeMap = new Map<Biome, MysteryEncounterType[]>([[Biome.VOLCANO, [MysteryEncounterType.FIGHT_OR_FLIGHT]]]);
     HUMAN_TRANSITABLE_BIOMES.forEach((biome) => {
-      biomeMap.set(biome, [ MysteryEncounterType.THE_EXPERT_POKEMON_BREEDER ]);
+      biomeMap.set(biome, [MysteryEncounterType.THE_EXPERT_POKEMON_BREEDER]);
     });
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(biomeMap);
   });

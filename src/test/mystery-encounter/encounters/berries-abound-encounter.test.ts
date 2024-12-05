@@ -23,7 +23,7 @@ import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { Abilities } from "#enums/abilities";
 
 const namespace = "mysteryEncounters/berriesAbound";
-const defaultParty = [ Species.PYUKUMUKU, Species.MAGIKARP, Species.PIKACHU ];
+const defaultParty = [Species.PYUKUMUKU, Species.MAGIKARP, Species.PIKACHU];
 const defaultBiome = Biome.CAVE;
 const defaultWave = 45;
 
@@ -51,7 +51,7 @@ describe("Berries Abound - Mystery Encounter", () => {
       .enemyPassiveAbility(Abilities.BALL_FETCH);
 
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(
-      new Map<Biome, MysteryEncounterType[]>([[ Biome.CAVE, [ MysteryEncounterType.BERRIES_ABOUND ]]]),
+      new Map<Biome, MysteryEncounterType[]>([[Biome.CAVE, [MysteryEncounterType.BERRIES_ABOUND]]]),
     );
   });
 
@@ -195,7 +195,7 @@ describe("Berries Abound - Mystery Encounter", () => {
       expect(enemyField[0].species.speciesId).toBe(speciesToSpawn);
 
       // Should be enraged
-      expect(enemyField[0].summonData.statStages).toEqual([ 0, 1, 0, 1, 1, 0, 0 ]);
+      expect(enemyField[0].summonData.statStages).toEqual([0, 1, 0, 1, 1, 0, 0]);
       expect(encounterTextSpy).toHaveBeenCalledWith(`${namespace}:option.2.selected_bad`);
     });
 
@@ -219,7 +219,7 @@ describe("Berries Abound - Mystery Encounter", () => {
       expect(enemyField[0].species.speciesId).toBe(speciesToSpawn);
 
       // Should be enraged
-      expect(enemyField[0].summonData.statStages).toEqual([ 1, 1, 1, 1, 1, 0, 0 ]);
+      expect(enemyField[0].summonData.statStages).toEqual([1, 1, 1, 1, 1, 0, 0]);
       expect(encounterTextSpy).toHaveBeenCalledWith(`${namespace}:option.2.selected_bad`);
     });
 

@@ -773,7 +773,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     });
 
     this.pokemonSprite = globalScene.add.sprite(53, 63, "pkmn__sub");
-    this.pokemonSprite.setPipeline(globalScene.spritePipeline, { tone: [ 0.0, 0.0, 0.0, 0.0 ], ignoreTimeTint: true });
+    this.pokemonSprite.setPipeline(globalScene.spritePipeline, { tone: [0.0, 0.0, 0.0, 0.0], ignoreTimeTint: true });
     this.starterSelectContainer.add(this.pokemonSprite);
 
     this.type1Icon = globalScene.add.sprite(8, 98, getLocalizedSpriteKey("types"));
@@ -1693,7 +1693,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
           const ui = this.getUi();
           let options: any[] = []; // TODO: add proper type
 
-          const [ isDupe, removeIndex ]: [boolean, number] = this.isInParty(this.lastSpecies); // checks to see if the pokemon is a duplicate; if it is, returns the index that will be removed
+          const [isDupe, removeIndex]: [boolean, number] = this.isInParty(this.lastSpecies); // checks to see if the pokemon is a duplicate; if it is, returns the index that will be removed
 
           const isPartyValid = this.isPartyValid();
           const isValidForChallenge = new BooleanHolder(true);
@@ -2478,7 +2478,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         break;
       }
     }
-    return [ isDupe, removeIndex ];
+    return [isDupe, removeIndex];
   }
 
   addToParty(species: PokemonSpecies, dexAttr: bigint, abilityIndex: integer, nature: Nature, moveset: StarterMoveset) {
@@ -2608,7 +2608,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     controlLabel.setPosition(this.instructionRowX + this.instructionRowTextOffset, this.instructionRowY);
     iconElement.setVisible(true);
     controlLabel.setVisible(true);
-    this.instructionsContainer.add([ iconElement, controlLabel ]);
+    this.instructionsContainer.add([iconElement, controlLabel]);
     this.instructionRowY += 8;
     if (this.instructionRowY >= 24) {
       this.instructionRowY = 0;
@@ -2631,7 +2631,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     controlLabel.setPosition(this.filterInstructionRowX + this.instructionRowTextOffset, this.filterInstructionRowY);
     iconElement.setVisible(true);
     controlLabel.setVisible(true);
-    this.filterInstructionsContainer.add([ iconElement, controlLabel ]);
+    this.filterInstructionsContainer.add([iconElement, controlLabel]);
     this.filterInstructionRowY += 8;
     if (this.filterInstructionRowY >= 24) {
       this.filterInstructionRowY = 0;
@@ -3035,9 +3035,9 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         container.label.setVisible(true);
         const speciesVariants =
           speciesId && globalScene.gameData.dexData[speciesId].caughtAttr & DexAttr.SHINY
-            ? [ DexAttr.DEFAULT_VARIANT, DexAttr.VARIANT_2, DexAttr.VARIANT_3 ].filter(
-              (v) => !!(globalScene.gameData.dexData[speciesId].caughtAttr & v),
-            )
+            ? [DexAttr.DEFAULT_VARIANT, DexAttr.VARIANT_2, DexAttr.VARIANT_3].filter(
+                (v) => !!(globalScene.gameData.dexData[speciesId].caughtAttr & v),
+              )
             : [];
         for (let v = 0; v < 3; v++) {
           const hasVariant = speciesVariants.length > v;
@@ -3063,7 +3063,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         if (globalScene.candyUpgradeDisplay === 0) {
           if (!starterColors[speciesId]) {
             // Default to white if no colors are found
-            starterColors[speciesId] = [ "ffffff", "ffffff" ];
+            starterColors[speciesId] = ["ffffff", "ffffff"];
           }
 
           // Set the candy colors
@@ -3261,7 +3261,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
           this.pokemonCaughtHatchedContainer.setY(16);
           this.pokemonShinyIcon.setY(135);
           this.pokemonShinyIcon.setFrame(getVariantIcon(variant));
-          [ this.pokemonCandyContainer, this.pokemonHatchedIcon, this.pokemonHatchedCountText ].map((c) =>
+          [this.pokemonCandyContainer, this.pokemonHatchedIcon, this.pokemonHatchedCountText].map((c) =>
             c.setVisible(false),
           );
           this.pokemonFormText.setY(25);
@@ -3467,7 +3467,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       ); // TODO: is this bang correct?
       this.abilityCursor = abilityIndex !== undefined ? abilityIndex : (abilityIndex = oldAbilityIndex);
       this.natureCursor = natureIndex !== undefined ? natureIndex : (natureIndex = oldNatureIndex);
-      const [ isInParty, partyIndex ]: [boolean, number] = this.isInParty(species); // we use this to firstly check if the pokemon is in the party, and if so, to get the party index in order to update the icon image
+      const [isInParty, partyIndex]: [boolean, number] = this.isInParty(species); // we use this to firstly check if the pokemon is in the party, and if so, to get the party index in order to update the icon image
       if (isInParty) {
         this.updatePartyIcon(species, partyIndex);
       }
@@ -3583,7 +3583,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
 
         this.canCycleShiny = isNonShinyCaught && isShinyCaught;
         this.canCycleVariant =
-          !!shiny && [ isVariant1Caught, isVariant2Caught, isVariant3Caught ].filter((v) => v).length > 1;
+          !!shiny && [isVariant1Caught, isVariant2Caught, isVariant3Caught].filter((v) => v).length > 1;
 
         const isMaleCaught = !!(caughtAttr & DexAttr.MALE);
         const isFemaleCaught = !!(caughtAttr & DexAttr.FEMALE);
@@ -3602,7 +3602,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
           hasAbility2 = 0;
         }
 
-        this.canCycleAbility = [ hasAbility1, hasAbility2, hasHiddenAbility ].filter((a) => a).length > 1;
+        this.canCycleAbility = [hasAbility1, hasAbility2, hasHiddenAbility].filter((a) => a).length > 1;
 
         this.canCycleForm =
           species.forms
@@ -3725,8 +3725,8 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         const availableStarterMoves = this.speciesStarterMoves.concat(
           speciesEggMoves.hasOwnProperty(species.speciesId)
             ? speciesEggMoves[species.speciesId].filter(
-              (_, em: integer) => globalScene.gameData.starterData[species.speciesId].eggMoves & (1 << em),
-            )
+                (_, em: integer) => globalScene.gameData.starterData[species.speciesId].eggMoves & (1 << em),
+              )
             : [],
         );
         this.starterMoveset = (moveData || (this.speciesStarterMoves.slice(0, 4) as StarterMoveset)).filter((m) =>

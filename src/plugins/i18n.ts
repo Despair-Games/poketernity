@@ -27,9 +27,9 @@ const unicodeRanges = {
 };
 
 const rangesByLanguage = {
-  korean: [ unicodeRanges.CJKCommon, unicodeRanges.hangul ].join(","),
-  chinese: [ unicodeRanges.CJKCommon, unicodeRanges.fullwidth, unicodeRanges.CJKIdeograph ].join(","),
-  japanese: [ unicodeRanges.CJKCommon, unicodeRanges.fullwidth, unicodeRanges.kana, unicodeRanges.CJKIdeograph ].join(
+  korean: [unicodeRanges.CJKCommon, unicodeRanges.hangul].join(","),
+  chinese: [unicodeRanges.CJKCommon, unicodeRanges.fullwidth, unicodeRanges.CJKIdeograph].join(","),
+  japanese: [unicodeRanges.CJKCommon, unicodeRanges.fullwidth, unicodeRanges.kana, unicodeRanges.CJKIdeograph].join(
     ",",
   ),
 };
@@ -61,24 +61,24 @@ const fonts: Array<LoadingFontFaceProperty> = [
       unicodeRange: rangesByLanguage.chinese,
     }),
     extraOptions: { sizeAdjust: "70%", format: "woff2" },
-    only: [ "en", "es", "fr", "it", "de", "zh", "pt", "ko", "ca" ],
+    only: ["en", "es", "fr", "it", "de", "zh", "pt", "ko", "ca"],
   },
   {
     face: new FontFace("pkmnems", "url(./fonts/unifont-15.1.05.subset.woff2)", {
       unicodeRange: rangesByLanguage.chinese,
     }),
     extraOptions: { format: "woff2" },
-    only: [ "en", "es", "fr", "it", "de", "zh", "pt", "ko", "ca" ],
+    only: ["en", "es", "fr", "it", "de", "zh", "pt", "ko", "ca"],
   },
   // japanese
   {
     face: new FontFace("emerald", "url(./fonts/Galmuri11.subset.woff2)", { unicodeRange: rangesByLanguage.japanese }),
     extraOptions: { sizeAdjust: "66%" },
-    only: [ "ja" ],
+    only: ["ja"],
   },
   {
     face: new FontFace("pkmnems", "url(./fonts/Galmuri9.subset.woff2)", { unicodeRange: rangesByLanguage.japanese }),
-    only: [ "ja" ],
+    only: ["ja"],
   },
 ];
 
@@ -163,9 +163,9 @@ export async function initI18n(): Promise<void> {
   i18next.use(new KoreanPostpositionProcessor());
   await i18next.init({
     fallbackLng: "en",
-    supportedLngs: [ "en", "es-ES", "fr", "it", "de", "zh-CN", "zh-TW", "pt-BR", "ko", "ja", "ca-ES" ],
+    supportedLngs: ["en", "es-ES", "fr", "it", "de", "zh-CN", "zh-TW", "pt-BR", "ko", "ja", "ca-ES"],
     backend: {
-      loadPath(lng: string, [ ns ]: string[]) {
+      loadPath(lng: string, [ns]: string[]) {
         let fileName: string;
         if (namespaceMap[ns]) {
           fileName = namespaceMap[ns];
@@ -274,7 +274,7 @@ export async function initI18n(): Promise<void> {
     interpolation: {
       escapeValue: false,
     },
-    postProcess: [ "korean-postposition" ],
+    postProcess: ["korean-postposition"],
   });
 
   if (i18next.services.formatter) {

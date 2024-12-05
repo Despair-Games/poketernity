@@ -26,7 +26,7 @@ import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
 
 const namespace = "mysteryEncounters/bugTypeSuperfan";
-const defaultParty = [ Species.LAPRAS, Species.GENGAR, Species.WEEDLE ];
+const defaultParty = [Species.LAPRAS, Species.GENGAR, Species.WEEDLE];
 const defaultBiome = Biome.CAVE;
 const defaultWave = 24;
 
@@ -114,7 +114,7 @@ const POOL_3_POKEMON: { species: Species; formIndex?: number }[] = [
   },
 ];
 
-const POOL_4_POKEMON = [ Species.GENESECT, Species.SLITHER_WING, Species.BUZZWOLE, Species.PHEROMOSA ];
+const POOL_4_POKEMON = [Species.GENESECT, Species.SLITHER_WING, Species.BUZZWOLE, Species.PHEROMOSA];
 
 const PHYSICAL_TUTOR_MOVES = [
   Moves.MEGAHORN,
@@ -124,9 +124,9 @@ const PHYSICAL_TUTOR_MOVES = [
   Moves.FIRST_IMPRESSION,
 ];
 
-const SPECIAL_TUTOR_MOVES = [ Moves.SILVER_WIND, Moves.BUG_BUZZ, Moves.SIGNAL_BEAM, Moves.POLLEN_PUFF ];
+const SPECIAL_TUTOR_MOVES = [Moves.SILVER_WIND, Moves.BUG_BUZZ, Moves.SIGNAL_BEAM, Moves.POLLEN_PUFF];
 
-const STATUS_TUTOR_MOVES = [ Moves.STRING_SHOT, Moves.STICKY_WEB, Moves.SILK_TRAP, Moves.RAGE_POWDER, Moves.HEAL_ORDER ];
+const STATUS_TUTOR_MOVES = [Moves.STRING_SHOT, Moves.STICKY_WEB, Moves.SILK_TRAP, Moves.RAGE_POWDER, Moves.HEAL_ORDER];
 
 const MISC_TUTOR_MOVES = [
   Moves.BUG_BITE,
@@ -156,7 +156,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
     game.override.disableTrainerWaves();
 
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(
-      new Map<Biome, MysteryEncounterType[]>([[ Biome.CAVE, [ MysteryEncounterType.BUG_TYPE_SUPERFAN ]]]),
+      new Map<Biome, MysteryEncounterType[]>([[Biome.CAVE, [MysteryEncounterType.BUG_TYPE_SUPERFAN]]]),
     );
   });
 
@@ -391,7 +391,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
     });
 
     it("should NOT be selectable if the player doesn't have any Bug types", async () => {
-      await game.runToMysteryEncounter(MysteryEncounterType.BUG_TYPE_SUPERFAN, [ Species.ABRA ]);
+      await game.runToMysteryEncounter(MysteryEncounterType.BUG_TYPE_SUPERFAN, [Species.ABRA]);
       await game.phaseInterceptor.to(MysteryEncounterPhase, false);
 
       const encounterPhase = scene.getCurrentPhase();
@@ -426,7 +426,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
     });
 
     it("should proceed to rewards screen with 2-3 Bug Types reward options", async () => {
-      await game.runToMysteryEncounter(MysteryEncounterType.BUG_TYPE_SUPERFAN, [ Species.BUTTERFREE, Species.BEEDRILL ]);
+      await game.runToMysteryEncounter(MysteryEncounterType.BUG_TYPE_SUPERFAN, [Species.BUTTERFREE, Species.BEEDRILL]);
       await runMysteryEncounterToEnd(game, 2);
 
       expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
@@ -544,7 +544,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
 
     it("should remove the gifted item and proceed to rewards screen", async () => {
       game.override.startingHeldItems([{ name: "GRIP_CLAW", count: 1 }]);
-      await game.runToMysteryEncounter(MysteryEncounterType.BUG_TYPE_SUPERFAN, [ Species.BUTTERFREE ]);
+      await game.runToMysteryEncounter(MysteryEncounterType.BUG_TYPE_SUPERFAN, [Species.BUTTERFREE]);
 
       const gripClawCountBefore =
         scene.findModifier((m) => m instanceof ContactHeldItemTransferChanceModifier)?.stackCount ?? 0;
@@ -571,7 +571,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       game.override.startingHeldItems([{ name: "GRIP_CLAW", count: 1 }]);
       const leaveEncounterWithoutBattleSpy = vi.spyOn(encounterPhaseUtils, "leaveEncounterWithoutBattle");
 
-      await game.runToMysteryEncounter(MysteryEncounterType.BUG_TYPE_SUPERFAN, [ Species.BUTTERFREE ]);
+      await game.runToMysteryEncounter(MysteryEncounterType.BUG_TYPE_SUPERFAN, [Species.BUTTERFREE]);
       await runMysteryEncounterToEnd(game, 3, { pokemonNo: 1, optionNo: 1 });
 
       expect(leaveEncounterWithoutBattleSpy).toBeCalled();

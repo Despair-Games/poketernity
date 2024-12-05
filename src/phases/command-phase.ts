@@ -63,7 +63,7 @@ export class CommandPhase extends FieldPhase {
     ) {
       globalScene.currentBattle.turnCommands[this.fieldIndex] = {
         command: Command.FIGHT,
-        move: { move: Moves.NONE, targets: []},
+        move: { move: Moves.NONE, targets: [] },
         skip: true,
       };
     }
@@ -151,7 +151,7 @@ export class CommandPhase extends FieldPhase {
           };
           const moveTargets: MoveTargetSet = args.length < 3 ? getMoveTargets(playerPokemon, moveId) : args[2];
           if (!moveId) {
-            turnCommand.targets = [ this.fieldIndex ];
+            turnCommand.targets = [this.fieldIndex];
           }
           console.log(moveTargets, getPokemonNameWithAffix(playerPokemon));
           if (moveTargets.targets.length > 1 && moveTargets.multiple) {
@@ -173,8 +173,8 @@ export class CommandPhase extends FieldPhase {
           // Decides between a Disabled, Not Implemented, or No PP translation message
           const errorMessage = playerPokemon.isMoveRestricted(move.moveId, playerPokemon)
             ? playerPokemon
-              .getRestrictingTag(move.moveId, playerPokemon)!
-              .selectionDeniedText(playerPokemon, move.moveId)
+                .getRestrictingTag(move.moveId, playerPokemon)!
+                .selectionDeniedText(playerPokemon, move.moveId)
             : move.getName().endsWith(" (N)")
               ? "battle:moveNotImplemented"
               : "battle:moveNoPP";

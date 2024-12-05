@@ -48,7 +48,7 @@ export class SelectBiomePhase extends BattlePhase {
         globalScene.executeWithSeedOffset(() => {
           biomeChoices = (
             !Array.isArray(biomeLinks[currentBiome])
-              ? [ biomeLinks[currentBiome] as Biome ]
+              ? [biomeLinks[currentBiome] as Biome]
               : (biomeLinks[currentBiome] as (Biome | [Biome, integer])[])
           )
             .filter((b, i) => !Array.isArray(b) || !Utils.randSeedInt(b[1]))

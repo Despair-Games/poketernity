@@ -35,23 +35,23 @@ export default class DamageNumberHandler {
     damageNumber.setOrigin(0.5, 1);
     damageNumber.setScale(baseScale);
 
-    let [ textColor, shadowColor ]: TextAndShadowArr = [ null, null ];
+    let [textColor, shadowColor]: TextAndShadowArr = [null, null];
 
     switch (result) {
       case HitResult.SUPER_EFFECTIVE:
-        [ textColor, shadowColor ] = [ "#f8d030", "#b8a038" ];
+        [textColor, shadowColor] = ["#f8d030", "#b8a038"];
         break;
       case HitResult.NOT_VERY_EFFECTIVE:
-        [ textColor, shadowColor ] = [ "#f08030", "#c03028" ];
+        [textColor, shadowColor] = ["#f08030", "#c03028"];
         break;
       case HitResult.ONE_HIT_KO:
-        [ textColor, shadowColor ] = [ "#a040a0", "#483850" ];
+        [textColor, shadowColor] = ["#a040a0", "#483850"];
         break;
       case HitResult.HEAL:
-        [ textColor, shadowColor ] = [ "#78c850", "#588040" ];
+        [textColor, shadowColor] = ["#78c850", "#588040"];
         break;
       default:
-        [ textColor, shadowColor ] = [ "#ffffff", "#636363" ];
+        [textColor, shadowColor] = ["#ffffff", "#636363"];
         break;
     }
 

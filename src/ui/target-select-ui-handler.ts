@@ -71,7 +71,7 @@ export default class TargetSelectUiHandler extends UiHandler {
    */
   resetCursor(cursorN: number, user: Pokemon): void {
     if (!Utils.isNullOrUndefined(cursorN)) {
-      if ([ BattlerIndex.PLAYER, BattlerIndex.PLAYER_2 ].includes(cursorN) || user.battleSummonData.waveTurnCount === 1) {
+      if ([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2].includes(cursorN) || user.battleSummonData.waveTurnCount === 1) {
         // Reset cursor on the first turn of a fight or if an ally was targeted last turn
         cursorN = -1;
       }
@@ -85,7 +85,7 @@ export default class TargetSelectUiHandler extends UiHandler {
     let success = false;
 
     if (button === Button.ACTION || button === Button.CANCEL) {
-      const targetIndexes: BattlerIndex[] = this.isMultipleTargets ? this.targets : [ this.cursor ];
+      const targetIndexes: BattlerIndex[] = this.isMultipleTargets ? this.targets : [this.cursor];
       this.targetSelectCallback(button === Button.ACTION ? targetIndexes : []);
       success = true;
       if (this.fieldIndex === BattlerIndex.PLAYER) {
@@ -135,7 +135,7 @@ export default class TargetSelectUiHandler extends UiHandler {
     const singleTarget = globalScene.getField()[cursor];
     const multipleTargets = this.targets.map((index) => globalScene.getField()[index]);
 
-    this.targetsHighlighted = this.isMultipleTargets ? multipleTargets : [ singleTarget ];
+    this.targetsHighlighted = this.isMultipleTargets ? multipleTargets : [singleTarget];
 
     const ret = super.setCursor(cursor);
 
@@ -175,7 +175,7 @@ export default class TargetSelectUiHandler extends UiHandler {
     targetsBattleInfo.map((info) => {
       this.targetBattleInfoMoveTween.push(
         globalScene.tweens.add({
-          targets: [ info ],
+          targets: [info],
           y: { start: info.getBaseY(), to: info.getBaseY() + 1 },
           loop: -1,
           duration: Utils.fixedInt(250),

@@ -247,7 +247,7 @@ export default class GameStatsUiHandler extends UiHandler {
     headerText.setPositionRelative(headerBg, 8, 4);
 
     const statsBgWidth = (globalScene.game.canvas.width / 6 - 2) / 2;
-    const [ statsBgLeft, statsBgRight ] = new Array(2).fill(null).map((_, i) => {
+    const [statsBgLeft, statsBgRight] = new Array(2).fill(null).map((_, i) => {
       const width = statsBgWidth + 2;
       const height = Math.floor(globalScene.game.canvas.height / 6 - headerBg.height - 2);
       const statsBg = addWindow(

@@ -269,7 +269,7 @@ describe("Egg Generation Tests", () => {
   });
   it("should increase egg pity", () => {
     const scene = game.scene;
-    const startPityValues = [ ...scene.gameData.eggPity ];
+    const startPityValues = [...scene.gameData.eggPity];
 
     new Egg({ scene, sourceType: EggSourceType.GACHA_MOVE, pulled: true, tier: EggTier.COMMON });
 
@@ -279,7 +279,7 @@ describe("Egg Generation Tests", () => {
   });
   it("should increase legendary egg pity by two", () => {
     const scene = game.scene;
-    const startPityValues = [ ...scene.gameData.eggPity ];
+    const startPityValues = [...scene.gameData.eggPity];
 
     new Egg({ scene, sourceType: EggSourceType.GACHA_LEGENDARY, pulled: true, tier: EggTier.COMMON });
 

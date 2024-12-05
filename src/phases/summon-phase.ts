@@ -59,7 +59,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
       }
 
       // Swaps the fainted Pokemon and the first non-fainted legal Pokemon in the party
-      [ party[this.partyMemberIndex], party[legalIndex] ] = [ party[legalIndex], party[this.partyMemberIndex] ];
+      [party[this.partyMemberIndex], party[legalIndex]] = [party[legalIndex], party[this.partyMemberIndex]];
       console.warn(
         "Swapped %s %O with %s %O",
         getPokemonNameWithAffix(partyMember),
@@ -268,7 +268,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
 
     if (
       !this.loaded ||
-      [ BattleType.TRAINER, BattleType.MYSTERY_ENCOUNTER ].includes(globalScene.currentBattle.battleType) ||
+      [BattleType.TRAINER, BattleType.MYSTERY_ENCOUNTER].includes(globalScene.currentBattle.battleType) ||
       globalScene.currentBattle.waveIndex % 10 === 1
     ) {
       globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeActiveTrigger, true);

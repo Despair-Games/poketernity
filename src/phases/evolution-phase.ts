@@ -95,7 +95,7 @@ export class EvolutionPhase extends Phase {
           this.evolutionBaseBg.displayHeight / 2,
           "pkmn__sub",
         );
-        ret.setPipeline(globalScene.spritePipeline, { tone: [ 0.0, 0.0, 0.0, 0.0 ], ignoreTimeTint: true });
+        ret.setPipeline(globalScene.spritePipeline, { tone: [0.0, 0.0, 0.0, 0.0], ignoreTimeTint: true });
         return ret;
       };
 
@@ -121,7 +121,7 @@ export class EvolutionPhase extends Phase {
       this.evolutionOverlay.setAlpha(0);
       globalScene.ui.add(this.evolutionOverlay);
 
-      [ this.pokemonSprite, this.pokemonTintSprite, this.pokemonEvoSprite, this.pokemonEvoTintSprite ].map((sprite) => {
+      [this.pokemonSprite, this.pokemonTintSprite, this.pokemonEvoSprite, this.pokemonEvoTintSprite].map((sprite) => {
         const spriteKey = this.pokemon.getSpriteKey(true);
         try {
           sprite.play(spriteKey);
@@ -130,7 +130,7 @@ export class EvolutionPhase extends Phase {
         }
 
         sprite.setPipeline(globalScene.spritePipeline, {
-          tone: [ 0.0, 0.0, 0.0, 0.0 ],
+          tone: [0.0, 0.0, 0.0, 0.0],
           hasShadow: false,
           teraColor: getTypeRgb(this.pokemon.getTeraType()),
         });
@@ -138,7 +138,7 @@ export class EvolutionPhase extends Phase {
         sprite.setPipelineData("spriteKey", this.pokemon.getSpriteKey());
         sprite.setPipelineData("shiny", this.pokemon.shiny);
         sprite.setPipelineData("variant", this.pokemon.variant);
-        [ "spriteColors", "fusionSpriteColors" ].map((k) => {
+        ["spriteColors", "fusionSpriteColors"].map((k) => {
           if (this.pokemon.summonData?.speciesForm) {
             k += "Base";
           }
@@ -158,7 +158,7 @@ export class EvolutionPhase extends Phase {
         this.pokemon.cry();
 
         this.pokemon.getPossibleEvolution(this.evolution).then((evolvedPokemon) => {
-          [ this.pokemonEvoSprite, this.pokemonEvoTintSprite ].map((sprite) => {
+          [this.pokemonEvoSprite, this.pokemonEvoTintSprite].map((sprite) => {
             const spriteKey = evolvedPokemon.getSpriteKey(true);
             try {
               sprite.play(spriteKey);
@@ -170,7 +170,7 @@ export class EvolutionPhase extends Phase {
             sprite.setPipelineData("spriteKey", evolvedPokemon.getSpriteKey());
             sprite.setPipelineData("shiny", evolvedPokemon.shiny);
             sprite.setPipelineData("variant", evolvedPokemon.variant);
-            [ "spriteColors", "fusionSpriteColors" ].map((k) => {
+            ["spriteColors", "fusionSpriteColors"].map((k) => {
               if (evolvedPokemon.summonData?.speciesForm) {
                 k += "Base";
               }
@@ -242,7 +242,7 @@ export class EvolutionPhase extends Phase {
     this.pokemonSprite.setVisible(true);
     this.pokemonTintSprite.setScale(1);
     globalScene.tweens.add({
-      targets: [ this.evolutionBg, this.pokemonTintSprite, this.pokemonEvoSprite, this.pokemonEvoTintSprite ],
+      targets: [this.evolutionBg, this.pokemonTintSprite, this.pokemonEvoSprite, this.pokemonEvoTintSprite],
       alpha: 0,
       duration: 250,
       onComplete: () => {
@@ -354,7 +354,7 @@ export class EvolutionPhase extends Phase {
             this.evolutionBgOverlay.setAlpha(1);
             this.evolutionBg.setVisible(false);
             globalScene.tweens.add({
-              targets: [ this.evolutionOverlay, this.pokemonEvoTintSprite ],
+              targets: [this.evolutionOverlay, this.pokemonEvoTintSprite],
               alpha: 0,
               duration: 2000,
               delay: 150,

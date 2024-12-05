@@ -195,7 +195,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
       this.cursorObj?.setVisible(false);
     }
     globalScene.tweens.add({
-      targets: [ this.movesContainer, this.cursorObj ],
+      targets: [this.movesContainer, this.cursorObj],
       duration: Utils.fixedInt(125),
       ease: "Sine.easeInOut",
       alpha: visible ? 0 : 1,

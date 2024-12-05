@@ -31,20 +31,20 @@ describe("Moves - SYRUP BOMB", () => {
       .ability(Abilities.BALL_FETCH)
       .startingLevel(30)
       .enemyLevel(100)
-      .moveset([ Moves.SYRUP_BOMB, Moves.SPLASH ])
+      .moveset([Moves.SYRUP_BOMB, Moves.SPLASH])
       .enemyMoveset(Moves.SPLASH);
   });
 
   //Bulbapedia Reference: https://bulbapedia.bulbagarden.net/wiki/syrup_bomb_(move)
 
   it("decreases the target Pokemon's speed stat once per turn for 3 turns", async () => {
-    await game.classicMode.startBattle([ Species.MAGIKARP ]);
+    await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const targetPokemon = game.scene.getEnemyPokemon()!;
     expect(targetPokemon.getStatStage(Stat.SPD)).toBe(0);
 
     game.move.select(Moves.SYRUP_BOMB);
-    await game.setTurnOrder([ BattlerIndex.PLAYER, BattlerIndex.ENEMY ]);
+    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.move.forceHit();
     await game.toNextTurn();
     expect(targetPokemon.getTag(BattlerTagType.SYRUP_BOMB)).toBeDefined();
@@ -63,12 +63,12 @@ describe("Moves - SYRUP BOMB", () => {
 
   it("does not affect Pokemon with the ability Bulletproof", async () => {
     game.override.enemyAbility(Abilities.BULLETPROOF);
-    await game.classicMode.startBattle([ Species.MAGIKARP ]);
+    await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const targetPokemon = game.scene.getEnemyPokemon()!;
 
     game.move.select(Moves.SYRUP_BOMB);
-    await game.setTurnOrder([ BattlerIndex.PLAYER, BattlerIndex.ENEMY ]);
+    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.move.forceHit();
     await game.toNextTurn();
     expect(targetPokemon.isFullHp()).toBe(true);
@@ -77,10 +77,10 @@ describe("Moves - SYRUP BOMB", () => {
   });
 
   it("stops lowering the target's speed if the user leaves the field", async () => {
-    await game.classicMode.startBattle([ Species.FEEBAS, Species.MILOTIC ]);
+    await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
 
     game.move.select(Moves.SYRUP_BOMB);
-    await game.setTurnOrder([ BattlerIndex.PLAYER, BattlerIndex.ENEMY ]);
+    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.move.forceHit();
     await game.toNextTurn();
 

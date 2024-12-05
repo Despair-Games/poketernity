@@ -188,7 +188,7 @@ export abstract class Challenge {
    */
   getDescription(overrideValue?: number): string {
     const value = overrideValue ?? this.value;
-    return `${i18next.t([ `challenges:${this.geti18nKey()}.desc.${value}`, `challenges:${this.geti18nKey()}.desc` ])}`;
+    return `${i18next.t([`challenges:${this.geti18nKey()}.desc.${value}`, `challenges:${this.geti18nKey()}.desc`])}`;
   }
 
   /**
@@ -427,9 +427,9 @@ export class SingleGenerationChallenge extends Challenge {
     dexAttr: DexAttrProps,
     soft: boolean = false,
   ): boolean {
-    const generations = [ pokemon.generation ];
+    const generations = [pokemon.generation];
     if (soft) {
-      const speciesToCheck = [ pokemon.speciesId ];
+      const speciesToCheck = [pokemon.speciesId];
       while (speciesToCheck.length) {
         const checking = speciesToCheck.pop();
         if (checking && pokemonEvolutions.hasOwnProperty(checking)) {
@@ -477,7 +477,7 @@ export class SingleGenerationChallenge extends Challenge {
           TrainerType.AARON,
           TrainerType.SHAUNTAL,
           TrainerType.MALVA,
-          Utils.randSeedItem([ TrainerType.HALA, TrainerType.MOLAYNE ]),
+          Utils.randSeedItem([TrainerType.HALA, TrainerType.MOLAYNE]),
           TrainerType.MARNIE_ELITE,
           TrainerType.RIKA,
         ];
@@ -504,7 +504,7 @@ export class SingleGenerationChallenge extends Challenge {
           TrainerType.GRIMSLEY,
           TrainerType.WIKSTROM,
           TrainerType.ACEROLA,
-          Utils.randSeedItem([ TrainerType.BEA_ELITE, TrainerType.ALLISTER_ELITE ]),
+          Utils.randSeedItem([TrainerType.BEA_ELITE, TrainerType.ALLISTER_ELITE]),
           TrainerType.LARRY_ELITE,
         ];
         break;
@@ -524,14 +524,14 @@ export class SingleGenerationChallenge extends Challenge {
       case 190:
         trainerTypes = [
           TrainerType.BLUE,
-          Utils.randSeedItem([ TrainerType.RED, TrainerType.LANCE_CHAMPION ]),
-          Utils.randSeedItem([ TrainerType.STEVEN, TrainerType.WALLACE ]),
+          Utils.randSeedItem([TrainerType.RED, TrainerType.LANCE_CHAMPION]),
+          Utils.randSeedItem([TrainerType.STEVEN, TrainerType.WALLACE]),
           TrainerType.CYNTHIA,
-          Utils.randSeedItem([ TrainerType.ALDER, TrainerType.IRIS ]),
+          Utils.randSeedItem([TrainerType.ALDER, TrainerType.IRIS]),
           TrainerType.DIANTHA,
           TrainerType.HAU,
           TrainerType.LEON,
-          Utils.randSeedItem([ TrainerType.GEETA, TrainerType.NEMONA ]),
+          Utils.randSeedItem([TrainerType.GEETA, TrainerType.NEMONA]),
         ];
         break;
     }
@@ -603,7 +603,7 @@ interface monotypeOverride {
 export class SingleTypeChallenge extends Challenge {
   private static TYPE_OVERRIDES: monotypeOverride[] = [{ species: Species.CASTFORM, type: Type.NORMAL, fusion: false }];
   // TODO: Find a solution for all Pokemon with this ssui issue, including Basculin and Burmy
-  private static SPECIES_OVERRIDES: Species[] = [ Species.MELOETTA ];
+  private static SPECIES_OVERRIDES: Species[] = [Species.MELOETTA];
 
   constructor() {
     super(Challenges.SINGLE_TYPE, 18);
@@ -616,9 +616,9 @@ export class SingleTypeChallenge extends Challenge {
     soft: boolean = false,
   ): boolean {
     const speciesForm = getPokemonSpeciesForm(pokemon.speciesId, dexAttr.formIndex);
-    const types = [ speciesForm.type1, speciesForm.type2 ];
+    const types = [speciesForm.type1, speciesForm.type2];
     if (soft && !SingleTypeChallenge.SPECIES_OVERRIDES.includes(pokemon.speciesId)) {
-      const speciesToCheck = [ pokemon.speciesId ];
+      const speciesToCheck = [pokemon.speciesId];
       while (speciesToCheck.length) {
         const checking = speciesToCheck.pop();
         if (checking && pokemonEvolutions.hasOwnProperty(checking)) {
@@ -743,7 +743,7 @@ export class FreshStartChallenge extends Challenge {
     pokemon.shiny = false; // Not shiny
     pokemon.variant = 0; // Not shiny
     pokemon.formIndex = 0; // Froakie should be base form
-    pokemon.ivs = [ 15, 15, 15, 15, 15, 15 ]; // Default IVs of 15 for all stats (Updated to 15 from 10 in 1.2.0)
+    pokemon.ivs = [15, 15, 15, 15, 15, 15]; // Default IVs of 15 for all stats (Updated to 15 from 10 in 1.2.0)
     return true;
   }
 

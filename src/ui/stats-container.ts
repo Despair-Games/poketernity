@@ -6,18 +6,18 @@ import { globalScene } from "#app/global-scene";
 
 const ivChartSize = 24;
 const ivChartStatCoordMultipliers = [
-  [ 0, -1 ],
-  [ 0.825, -0.5 ],
-  [ 0.825, 0.5 ],
-  [ -0.825, -0.5 ],
-  [ -0.825, 0.5 ],
-  [ 0, 1 ],
+  [0, -1],
+  [0.825, -0.5],
+  [0.825, 0.5],
+  [-0.825, -0.5],
+  [-0.825, 0.5],
+  [0, 1],
 ];
 const speedLabelOffset = -3;
 const sideLabelOffset = 1;
-const ivLabelOffset = [ 0, sideLabelOffset, -sideLabelOffset, sideLabelOffset, -sideLabelOffset, speedLabelOffset ];
-const ivChartLabelyOffset = [ 0, 5, 0, 5, 0, 0 ]; // doing this so attack does not overlap with (+N)
-const ivChartStatIndexes = [ 0, 1, 2, 5, 4, 3 ]; // swap special attack and speed
+const ivLabelOffset = [0, sideLabelOffset, -sideLabelOffset, sideLabelOffset, -sideLabelOffset, speedLabelOffset];
+const ivChartLabelyOffset = [0, 5, 0, 5, 0, 0]; // doing this so attack does not overlap with (+N)
+const ivChartStatIndexes = [0, 1, 2, 5, 4, 3]; // swap special attack and speed
 
 const defaultIvChartData = new Array(12).fill(null).map(() => 0);
 
@@ -51,9 +51,9 @@ export class StatsContainer extends Phaser.GameObjects.Container {
     ivChartBorder.setOrigin(0, 0);
 
     const ivChartBgLines = [
-      [ 0, -1, 0, 1 ],
-      [ -0.825, -0.5, 0.825, 0.5 ],
-      [ 0.825, -0.5, -0.825, 0.5 ],
+      [0, -1, 0, 1],
+      [-0.825, -0.5, 0.825, 0.5],
+      [0.825, -0.5, -0.825, 0.5],
     ].map((coords) => {
       const line = new Phaser.GameObjects.Line(
         globalScene,
@@ -140,7 +140,7 @@ export class StatsContainer extends Phaser.GameObjects.Container {
       const oldColor = this.ivChart.fillColor;
       const interpolateColor =
         oldColor !== newColor
-          ? [ Phaser.Display.Color.IntegerToColor(oldColor), Phaser.Display.Color.IntegerToColor(newColor) ]
+          ? [Phaser.Display.Color.IntegerToColor(oldColor), Phaser.Display.Color.IntegerToColor(newColor)]
           : null;
 
       globalScene.tweens.addCounter({

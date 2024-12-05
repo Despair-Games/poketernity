@@ -192,7 +192,7 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
         .slice(0, this.commonSettingsCount)
         .map((key) => this.setting[key]);
       // Combine common and specific bindings into a single array.
-      const specificBindingKeys = [ ...commonSettingKeys, ...Object.keys(config.settings) ];
+      const specificBindingKeys = [...commonSettingKeys, ...Object.keys(config.settings)];
       // Fetch default values for these settings and prepare to highlight selected options.
       const optionCursors = Object.values(
         Object.keys(this.settingDeviceDefaults)
@@ -227,7 +227,7 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
         const valueLabels: Phaser.GameObjects.GameObject[] = [];
 
         // Process each option for the current setting.
-        for (const [ o, option ] of this.settingDeviceOptions[this.setting[setting]].entries()) {
+        for (const [o, option] of this.settingDeviceOptions[this.setting[setting]].entries()) {
           // Check if the current setting is for binding keys.
           if (bindingSettings.includes(this.setting[setting])) {
             // Create a label for non-null options, typically indicating actionable options like 'change'.

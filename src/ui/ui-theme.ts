@@ -21,18 +21,18 @@ export function getWindowVariantSuffix(windowVariant: WindowVariant): string {
 
 const windowTypeControlColors = {
   [UiTheme.DEFAULT]: {
-    0: [ "#6b5a73", "#DD5748", "#7E4955" ],
-    1: [ "#6b5a73", "#48DDAA", "#4D7574" ],
-    2: [ "#6b5a73", "#C5C5C5", "#766D7E" ],
-    3: [ "#6b5a73", "#EBC07C", "#836C66" ],
-    4: [ "#686868", "#E8E8E8", "#919191" ],
+    0: ["#6b5a73", "#DD5748", "#7E4955"],
+    1: ["#6b5a73", "#48DDAA", "#4D7574"],
+    2: ["#6b5a73", "#C5C5C5", "#766D7E"],
+    3: ["#6b5a73", "#EBC07C", "#836C66"],
+    4: ["#686868", "#E8E8E8", "#919191"],
   },
   [UiTheme.LEGACY]: {
-    0: [ "#706880", "#8888c8", "#484868" ],
-    1: [ "#d04028", "#e0a028", "#902008" ],
-    2: [ "#48b840", "#88d880", "#089040" ],
-    3: [ "#2068d0", "#80b0e0", "#104888" ],
-    4: [ "#706880", "#8888c8", "#484868" ],
+    0: ["#706880", "#8888c8", "#484868"],
+    1: ["#d04028", "#e0a028", "#902008"],
+    2: ["#48b840", "#88d880", "#089040"],
+    3: ["#2068d0", "#80b0e0", "#104888"],
+    4: ["#706880", "#8888c8", "#484868"],
   },
 };
 
@@ -129,13 +129,13 @@ export function updateWindowType(windowTypeIndex: integer): void {
   globalScene.windowType = windowTypeIndex;
 
   const rootStyle = document.documentElement.style;
-  [ "base", "light", "dark" ].map((k, i) =>
+  ["base", "light", "dark"].map((k, i) =>
     rootStyle.setProperty(`--color-${k}`, windowTypeControlColors[globalScene.uiTheme][windowTypeIndex - 1][i]),
   );
 
   const windowKey = `window_${windowTypeIndex}`;
 
-  for (const [ window, variant ] of windowObjects) {
+  for (const [window, variant] of windowObjects) {
     window.setTexture(`${windowKey}${getWindowVariantSuffix(variant)}`);
   }
 
@@ -157,12 +157,12 @@ export function addUiThemeOverrides(): void {
       legacy = true;
       texture += "_legacy";
     }
-    const ret: Phaser.GameObjects.Image = originalAddImage.apply(this, [ x, y, texture, frame ]);
+    const ret: Phaser.GameObjects.Image = originalAddImage.apply(this, [x, y, texture, frame]);
     if (legacy) {
       const originalSetTexture = ret.setTexture;
       ret.setTexture = function (key: string, frame?: string | number) {
         key += "_legacy";
-        return originalSetTexture.apply(this, [ key, frame ]);
+        return originalSetTexture.apply(this, [key, frame]);
       };
     }
     return ret;
@@ -180,12 +180,12 @@ export function addUiThemeOverrides(): void {
       legacy = true;
       texture += "_legacy";
     }
-    const ret: Phaser.GameObjects.Sprite = originalAddSprite.apply(this, [ x, y, texture, frame ]);
+    const ret: Phaser.GameObjects.Sprite = originalAddSprite.apply(this, [x, y, texture, frame]);
     if (legacy) {
       const originalSetTexture = ret.setTexture;
       ret.setTexture = function (key: string, frame?: string | number) {
         key += "_legacy";
-        return originalSetTexture.apply(this, [ key, frame ]);
+        return originalSetTexture.apply(this, [key, frame]);
       };
     }
     return ret;
@@ -230,7 +230,7 @@ export function addUiThemeOverrides(): void {
         updateOrigin?: boolean,
       ) {
         key += "_legacy";
-        return originalSetTexture.apply(this, [ key, frame, updateSize, updateOrigin ]);
+        return originalSetTexture.apply(this, [key, frame, updateSize, updateOrigin]);
       };
     }
     return ret;

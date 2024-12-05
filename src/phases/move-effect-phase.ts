@@ -178,7 +178,7 @@ export class MoveEffectPhase extends PokemonPhase {
        * Stores results of hit checks of the invoked move against all targets, organized by battler index.
        * @see {@linkcode hitCheck}
        */
-      const targetHitChecks = Object.fromEntries(targets.map((p) => [ p.getBattlerIndex(), this.hitCheck(p) ]));
+      const targetHitChecks = Object.fromEntries(targets.map((p) => [p.getBattlerIndex(), this.hitCheck(p)]));
       const hasActiveTargets = targets.some((t) => t.isActive(true));
 
       /** Check if the target is immune via ability to the attacking move, and NOT in semi invulnerable state */
@@ -420,11 +420,11 @@ export class MoveEffectPhase extends PokemonPhase {
           const postTarget =
             user.turnData.hitsLeft === 1 || !this.getFirstTarget()?.isActive()
               ? applyFilteredMoveAttrs(
-                (attr: MoveAttr) => attr instanceof MoveEffectAttr && attr.trigger === MoveEffectTrigger.POST_TARGET,
-                user,
-                null,
-                move,
-              )
+                  (attr: MoveAttr) => attr instanceof MoveEffectAttr && attr.trigger === MoveEffectTrigger.POST_TARGET,
+                  user,
+                  null,
+                  move,
+                )
               : null;
 
           if (postTarget) {
@@ -666,7 +666,7 @@ export class MoveEffectPhase extends PokemonPhase {
    */
   public hitCheck(target: Pokemon): boolean {
     // Moves targeting the user and entry hazards can't miss
-    if ([ MoveTarget.USER, MoveTarget.ENEMY_SIDE ].includes(this.move.getMove().moveTarget)) {
+    if ([MoveTarget.USER, MoveTarget.ENEMY_SIDE].includes(this.move.getMove().moveTarget)) {
       return true;
     }
 

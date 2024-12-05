@@ -36,7 +36,7 @@ import { NON_LEGEND_PARADOX_POKEMON } from "#app/data/balance/special-species-gr
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/safariZone";
 
-const TRAINER_THROW_ANIMATION_TIMES = [ 512, 184, 768 ];
+const TRAINER_THROW_ANIMATION_TIMES = [512, 184, 768];
 
 const SAFARI_MONEY_MULTIPLIER = 2;
 
@@ -571,6 +571,6 @@ async function doEndTurn(cursorIndex: number) {
  */
 export function getSafariSpeciesSpawn(): PokemonSpecies {
   return getPokemonSpecies(
-    getRandomSpeciesByStarterCost([ 0, 5 ], NON_LEGEND_PARADOX_POKEMON, undefined, false, false, false),
+    getRandomSpeciesByStarterCost([0, 5], NON_LEGEND_PARADOX_POKEMON, undefined, false, false, false),
   );
 }

@@ -92,11 +92,11 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
   }
 
   override getMargin(_config?: ModalConfig): [number, number, number, number] {
-    return [ 0, 0, 48, 0 ];
+    return [0, 0, 48, 0];
   }
 
   override getButtonLabels(_config?: ModalConfig): string[] {
-    return [ i18next.t("menu:login"), i18next.t("menu:register") ];
+    return [i18next.t("menu:login"), i18next.t("menu:register")];
   }
 
   override getReadableErrorMessage(error: string): string {
@@ -138,7 +138,7 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
         // Prevent overlapping overrides on action modification
         this.submitAction = originalLoginAction;
         this.sanitizeInputs();
-        globalScene.ui.setMode(Mode.LOADING, { buttonActions: []});
+        globalScene.ui.setMode(Mode.LOADING, { buttonActions: [] });
         const onFail = (error) => {
           globalScene.ui.setMode(Mode.LOGIN_FORM, Object.assign(config, { errorMessage: error?.trim() }));
           globalScene.ui.playError();
@@ -147,7 +147,7 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
           return onFail(i18next.t("menu:emptyUsername"));
         }
 
-        const [ usernameInput, passwordInput ] = this.inputs;
+        const [usernameInput, passwordInput] = this.inputs;
 
         pokerogueApi.account.login({ username: usernameInput.text, password: passwordInput.text }).then((error) => {
           if (!error) {
@@ -170,7 +170,7 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
     this.infoContainer.setVisible(false);
     this.setMouseCursorStyle("default"); //reset cursor
 
-    [ this.discordImage, this.googleImage, this.usernameInfoImage, this.saveDownloadImage ].forEach((img) =>
+    [this.discordImage, this.googleImage, this.usernameInfoImage, this.saveDownloadImage].forEach((img) =>
       img.off("pointerdown"),
     );
   }
@@ -207,7 +207,7 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
     });
 
     const onFail = (error) => {
-      globalScene.ui.setMode(Mode.LOADING, { buttonActions: []});
+      globalScene.ui.setMode(Mode.LOADING, { buttonActions: [] });
       globalScene.ui.setModeForceTransition(Mode.LOGIN_FORM, Object.assign(config, { errorMessage: error?.trim() }));
       globalScene.ui.playError();
     };
@@ -293,7 +293,7 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
   }
 
   private buildInteractableImage(texture: string, name: string, opts: BuildInteractableImageOpts = {}) {
-    const { scale = 0.07, x = 0, y = 0, origin = { x: 0, y: 0 }} = opts;
+    const { scale = 0.07, x = 0, y = 0, origin = { x: 0, y: 0 } } = opts;
     const img = globalScene.add.image(x, y, texture);
     img.setName(name);
     img.setOrigin(origin.x, origin.y);

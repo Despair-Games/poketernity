@@ -35,7 +35,7 @@ export default class SettingsKeyboardUiHandler extends AbstractControlSettingsUi
     this.setting = SettingKeyboard;
     this.settingDeviceDefaults = settingKeyboardDefaults;
     this.settingDeviceOptions = settingKeyboardOptions;
-    this.configs = [ cfg_keyboard_qwerty ];
+    this.configs = [cfg_keyboard_qwerty];
     this.commonSettingsCount = 0;
     this.textureOverride = "keyboard";
     this.localStoragePropertyName = "settingsKeyboard";
@@ -85,7 +85,7 @@ export default class SettingsKeyboardUiHandler extends AbstractControlSettingsUi
    * Handle the home key press event.
    */
   onHomeDown(): void {
-    if (![ Mode.SETTINGS_KEYBOARD, Mode.SETTINGS_GAMEPAD ].includes(globalScene.ui.getMode())) {
+    if (![Mode.SETTINGS_KEYBOARD, Mode.SETTINGS_GAMEPAD].includes(globalScene.ui.getMode())) {
       return;
     }
     globalScene.gameData.resetMappingToFactory();
@@ -140,7 +140,7 @@ export default class SettingsKeyboardUiHandler extends AbstractControlSettingsUi
     this.updateBindings();
 
     // Iterate over the keys in the settingDevice enumeration.
-    for (const [ index, key ] of Object.keys(this.setting).entries()) {
+    for (const [index, key] of Object.keys(this.setting).entries()) {
       const setting = this.setting[key]; // Get the actual setting value using the key.
 
       // Check if the current setting corresponds to the layout setting.

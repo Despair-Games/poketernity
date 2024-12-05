@@ -53,7 +53,7 @@ export default class ConfirmUiHandler extends AbstractOptionSelectUiHandler {
         delay: args.length >= 8 && args[7] !== null ? (args[7] as integer) : 0,
       };
 
-      super.show([ config ]);
+      super.show([config]);
 
       this.switchCheck = args.length >= 5 && args[4] !== null && (args[4] as boolean);
 
@@ -86,7 +86,7 @@ export default class ConfirmUiHandler extends AbstractOptionSelectUiHandler {
         noCancel: args.length >= 7 && args[6] !== null ? (args[6] as boolean) : false,
       };
 
-      super.show([ config ]);
+      super.show([config]);
 
       this.switchCheck = args.length >= 3 && args[2] !== null && (args[2] as boolean);
 

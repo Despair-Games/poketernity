@@ -213,7 +213,7 @@ async function summonPlayerPokemon() {
       false,
       true,
     );
-    wobbuffet.ivs = [ 0, 0, 0, 0, 0, 0 ];
+    wobbuffet.ivs = [0, 0, 0, 0, 0, 0];
     wobbuffet.setNature(Nature.MILD);
     wobbuffet.setAlpha(0);
     wobbuffet.setVisible(false);
@@ -272,15 +272,15 @@ function handleNextTurn() {
     let isHealPhase = false;
     if (healthRatio < 0.03) {
       // Grand prize
-      setEncounterRewards({ guaranteedModifierTypeFuncs: [ modifierTypes.MULTI_LENS ], fillRemaining: false });
+      setEncounterRewards({ guaranteedModifierTypeFuncs: [modifierTypes.MULTI_LENS], fillRemaining: false });
       resultMessageKey = `${namespace}:best_result`;
     } else if (healthRatio < 0.15) {
       // 2nd prize
-      setEncounterRewards({ guaranteedModifierTypeFuncs: [ modifierTypes.SCOPE_LENS ], fillRemaining: false });
+      setEncounterRewards({ guaranteedModifierTypeFuncs: [modifierTypes.SCOPE_LENS], fillRemaining: false });
       resultMessageKey = `${namespace}:great_result`;
     } else if (healthRatio < 0.33) {
       // 3rd prize
-      setEncounterRewards({ guaranteedModifierTypeFuncs: [ modifierTypes.WIDE_LENS ], fillRemaining: false });
+      setEncounterRewards({ guaranteedModifierTypeFuncs: [modifierTypes.WIDE_LENS], fillRemaining: false });
       resultMessageKey = `${namespace}:good_result`;
     } else {
       // No prize
@@ -427,7 +427,7 @@ function hideShowmanIntroSprite() {
 
   // Slide the Wobbuffet and Game over slightly
   globalScene.tweens.add({
-    targets: [ wobbuffet, carnivalGame ],
+    targets: [wobbuffet, carnivalGame],
     x: "+=16",
     ease: "Sine.easeInOut",
     duration: 750,

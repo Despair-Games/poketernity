@@ -25,19 +25,19 @@ describe("Moves - Encore", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([ Moves.SPLASH, Moves.ENCORE ])
+      .moveset([Moves.SPLASH, Moves.ENCORE])
       .ability(Abilities.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset([ Moves.SPLASH, Moves.TACKLE ])
+      .enemyMoveset([Moves.SPLASH, Moves.TACKLE])
       .startingLevel(100)
       .enemyLevel(100);
   });
 
   it("should prevent the target from using any move except the last used move", async () => {
-    await game.classicMode.startBattle([ Species.SNORLAX ]);
+    await game.classicMode.startBattle([Species.SNORLAX]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -65,20 +65,20 @@ describe("Moves - Encore", () => {
     ])("$name", async ({ moveId, delay }) => {
       game.override.enemyMoveset(moveId);
 
-      await game.classicMode.startBattle([ Species.SNORLAX ]);
+      await game.classicMode.startBattle([Species.SNORLAX]);
 
       const playerPokemon = game.scene.getPlayerPokemon()!;
       const enemyPokemon = game.scene.getEnemyPokemon()!;
 
       if (delay) {
         game.move.select(Moves.SPLASH);
-        await game.setTurnOrder([ BattlerIndex.PLAYER, BattlerIndex.ENEMY ]);
+        await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
         await game.toNextTurn();
       }
 
       game.move.select(Moves.ENCORE);
 
-      const turnOrder = delay ? [ BattlerIndex.PLAYER, BattlerIndex.ENEMY ] : [ BattlerIndex.ENEMY, BattlerIndex.PLAYER ];
+      const turnOrder = delay ? [BattlerIndex.PLAYER, BattlerIndex.ENEMY] : [BattlerIndex.ENEMY, BattlerIndex.PLAYER];
       await game.setTurnOrder(turnOrder);
 
       await game.phaseInterceptor.to("BerryPhase", false);
@@ -88,9 +88,9 @@ describe("Moves - Encore", () => {
   });
 
   it("Pokemon under both Encore and Torment should alternate between Struggle and restricted move", async () => {
-    const turnOrder = [ BattlerIndex.ENEMY, BattlerIndex.PLAYER ];
-    game.override.moveset([ Moves.ENCORE, Moves.TORMENT, Moves.SPLASH ]);
-    await game.classicMode.startBattle([ Species.FEEBAS ]);
+    const turnOrder = [BattlerIndex.ENEMY, BattlerIndex.PLAYER];
+    game.override.moveset([Moves.ENCORE, Moves.TORMENT, Moves.SPLASH]);
+    await game.classicMode.startBattle([Species.FEEBAS]);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
     game.move.select(Moves.ENCORE);

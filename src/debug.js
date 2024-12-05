@@ -4,7 +4,7 @@ export function getData() {
     return null;
   }
   return JSON.parse(atob(dataStr), (k, v) =>
-    k.endsWith("Attr") && ![ "natureAttr", "abilityAttr", "passiveAttr" ].includes(k) ? BigInt(v) : v,
+    k.endsWith("Attr") && !["natureAttr", "abilityAttr", "passiveAttr"].includes(k) ? BigInt(v) : v,
   );
 }
 

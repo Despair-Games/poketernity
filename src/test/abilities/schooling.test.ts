@@ -27,8 +27,8 @@ describe("Abilities - SCHOOLING", () => {
     const moveToUse = Moves.SPLASH;
     game.override.battleType("single");
     game.override.ability(Abilities.SCHOOLING);
-    game.override.moveset([ moveToUse ]);
-    game.override.enemyMoveset([ Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE ]);
+    game.override.moveset([moveToUse]);
+    game.override.enemyMoveset([Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE]);
   });
 
   test("check if fainted pokemon switches to base form on arena reset", async () => {
@@ -39,7 +39,7 @@ describe("Abilities - SCHOOLING", () => {
       [Species.WISHIWASHI]: schoolForm,
     });
 
-    await game.startBattle([ Species.MAGIKARP, Species.WISHIWASHI ]);
+    await game.startBattle([Species.MAGIKARP, Species.WISHIWASHI]);
 
     const wishiwashi = game.scene.getPlayerParty().find((p) => p.species.speciesId === Species.WISHIWASHI)!;
     expect(wishiwashi).not.toBe(undefined);

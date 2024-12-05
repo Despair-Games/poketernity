@@ -44,7 +44,7 @@ export const ShadyVitaminDealerEncounter: MysteryEncounter = MysteryEncounterBui
   .withEncounterTier(MysteryEncounterTier.COMMON)
   .withSceneWaveRangeRequirement(...CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES)
   .withSceneRequirement(new MoneyRequirement(0, VITAMIN_DEALER_CHEAP_PRICE_MULTIPLIER)) // Must have the money for at least the cheap deal
-  .withPrimaryPokemonHealthRatioRequirement([ 0.51, 1 ]) // At least 1 Pokemon must have above half HP
+  .withPrimaryPokemonHealthRatioRequirement([0.51, 1]) // At least 1 Pokemon must have above half HP
   .withIntroSpriteConfigs([
     {
       spriteKey: Species.KROOKODILE.toString(),
@@ -151,7 +151,7 @@ export const ShadyVitaminDealerEncounter: MysteryEncounter = MysteryEncounterBui
         chosenPokemon.setCustomNature(newNature);
         encounter.setDialogueToken("newNature", getNatureName(newNature));
         queueEncounterMessage(`${namespace}:cheap_side_effects`);
-        setEncounterExp([ chosenPokemon.id ], 100);
+        setEncounterExp([chosenPokemon.id], 100);
         await chosenPokemon.updateInfo();
       })
       .build(),
@@ -211,7 +211,7 @@ export const ShadyVitaminDealerEncounter: MysteryEncounter = MysteryEncounterBui
         const chosenPokemon = encounter.misc.chosenPokemon;
 
         queueEncounterMessage(`${namespace}:no_bad_effects`);
-        setEncounterExp([ chosenPokemon.id ], 100);
+        setEncounterExp([chosenPokemon.id], 100);
 
         await chosenPokemon.updateInfo();
       })

@@ -14,7 +14,7 @@ export default class CharSprite extends Phaser.GameObjects.Container {
   }
 
   setup(): void {
-    [ this.sprite, this.transitionSprite ] = new Array(2).fill(null).map(() => {
+    [this.sprite, this.transitionSprite] = new Array(2).fill(null).map(() => {
       const ret = globalScene.add.sprite(0, 0, "", "");
       ret.setOrigin(0.5, 1);
       this.add(ret);

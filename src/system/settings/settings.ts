@@ -13,13 +13,13 @@ import { ShopCursorTarget } from "#enums/shop-cursor-target";
 const VOLUME_OPTIONS: SettingOption[] = new Array(11).fill(null).map((_, i) =>
   i
     ? {
-      value: (i * 10).toString(),
-      label: (i * 10).toString(),
-    }
+        value: (i * 10).toString(),
+        label: (i * 10).toString(),
+      }
     : {
-      value: "Mute",
-      label: i18next.t("settings:mute"),
-    },
+        value: "Mute",
+        label: i18next.t("settings:mute"),
+      },
 );
 
 const SHOP_OVERLAY_OPACITY_OPTIONS: SettingOption[] = new Array(9).fill(null).map((_, i) => {

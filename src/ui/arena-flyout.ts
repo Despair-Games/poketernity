@@ -295,8 +295,8 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
 
         const existingTrapTagIndex = isArenaTrapTag
           ? this.fieldEffectInfo.findIndex(
-            (e) => tagAddedEvent.arenaTagType === e.tagType && arenaEffectType === e.effecType,
-          )
+              (e) => tagAddedEvent.arenaTagType === e.tagType && arenaEffectType === e.effecType,
+            )
           : -1;
         let name: string = getFieldEffectText(ArenaTagType[tagAddedEvent.arenaTagType]);
 
@@ -351,7 +351,7 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
           duration: fieldEffectChangedEvent.duration,
         };
 
-        foundIndex = this.fieldEffectInfo.findIndex((info) => [ newInfo.name, oldName ].includes(info.name));
+        foundIndex = this.fieldEffectInfo.findIndex((info) => [newInfo.name, oldName].includes(info.name));
         if (foundIndex === -1) {
           if (newInfo.name !== undefined) {
             this.fieldEffectInfo.push(newInfo); // Adds the info to the array if it doesn't already exist and is defined

@@ -161,7 +161,7 @@ export default class NavigationMenu extends Phaser.GameObjects.Container {
     const navigationManager = NavigationManager.getInstance();
     const posSelected = navigationManager.modes.indexOf(navigationManager.selectedMode);
 
-    for (const [ index, title ] of this.headerTitles.entries()) {
+    for (const [index, title] of this.headerTitles.entries()) {
       setTextStyle(title, index === posSelected ? TextStyle.SETTINGS_SELECTED : TextStyle.SETTINGS_LABEL);
     }
   }

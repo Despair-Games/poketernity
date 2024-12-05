@@ -308,7 +308,7 @@ export class InputsController {
    * Initializes or updates configurations for connected keyboards.
    */
   setupKeyboard(): void {
-    for (const layout of [ "default" ]) {
+    for (const layout of ["default"]) {
       const config = deepCopy(this.getConfigKeyboard(layout)) as InterfaceConfig;
       config.custom = this.configs[layout]?.custom || { ...config.default };
       this.configs[layout] = config;
@@ -332,7 +332,7 @@ export class InputsController {
         return el !== null;
       }) ?? [];
 
-    for (const [ index, thisGamepad ] of this.gamepads.entries()) {
+    for (const [index, thisGamepad] of this.gamepads.entries()) {
       thisGamepad.index = index; // Overwrite the gamepad index, in case we had undefined gamepads earlier
     }
   }

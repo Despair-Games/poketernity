@@ -141,7 +141,7 @@ const POOL_3_POKEMON: { species: Species; formIndex?: number }[] = [
   },
 ];
 
-const POOL_4_POKEMON = [ Species.GENESECT, Species.SLITHER_WING, Species.BUZZWOLE, Species.PHEROMOSA ];
+const POOL_4_POKEMON = [Species.GENESECT, Species.SLITHER_WING, Species.BUZZWOLE, Species.PHEROMOSA];
 
 const PHYSICAL_TUTOR_MOVES = [
   Moves.MEGAHORN,
@@ -151,9 +151,9 @@ const PHYSICAL_TUTOR_MOVES = [
   Moves.FIRST_IMPRESSION,
 ];
 
-const SPECIAL_TUTOR_MOVES = [ Moves.SILVER_WIND, Moves.BUG_BUZZ, Moves.SIGNAL_BEAM, Moves.POLLEN_PUFF ];
+const SPECIAL_TUTOR_MOVES = [Moves.SILVER_WIND, Moves.BUG_BUZZ, Moves.SIGNAL_BEAM, Moves.POLLEN_PUFF];
 
-const STATUS_TUTOR_MOVES = [ Moves.STRING_SHOT, Moves.STICKY_WEB, Moves.SILK_TRAP, Moves.RAGE_POWDER, Moves.HEAL_ORDER ];
+const STATUS_TUTOR_MOVES = [Moves.STRING_SHOT, Moves.STICKY_WEB, Moves.SILK_TRAP, Moves.RAGE_POWDER, Moves.HEAL_ORDER];
 
 const MISC_TUTOR_MOVES = [
   Moves.BUG_BITE,
@@ -168,7 +168,7 @@ const MISC_TUTOR_MOVES = [
 /**
  * Wave breakpoints that determine how strong to make the Bug-Type Superfan's team
  */
-const WAVE_LEVEL_BREAKPOINTS = [ 30, 50, 70, 100, 120, 140, 160 ];
+const WAVE_LEVEL_BREAKPOINTS = [30, 50, 70, 100, 120, 140, 160];
 
 /**
  * Bug Type Superfan encounter.
@@ -182,7 +182,7 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
   .withPrimaryPokemonRequirement(
     CombinationPokemonRequirement.Some(
       // Must have at least 1 Bug type on team, OR have a bug item somewhere on the team
-      new HeldItemRequirement([ "BypassSpeedChanceModifier", "ContactHeldItemTransferChanceModifier" ], 1),
+      new HeldItemRequirement(["BypassSpeedChanceModifier", "ContactHeldItemTransferChanceModifier"], 1),
       new AttackTypeBoosterHeldItemTypeRequirement(Type.BUG, 1),
       new TypeRequirement(Type.BUG, false, 1),
     ),
@@ -258,7 +258,7 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
     const requiredItems = [
       generateModifierType(modifierTypes.QUICK_CLAW),
       generateModifierType(modifierTypes.GRIP_CLAW),
-      generateModifierType(modifierTypes.ATTACK_TYPE_BOOSTER, [ Type.BUG ]),
+      generateModifierType(modifierTypes.ATTACK_TYPE_BOOSTER, [Type.BUG]),
     ];
 
     const requiredItemString = requiredItems.map((m) => m?.name ?? "unknown").join("/");
@@ -323,7 +323,7 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
 
         if (numBugTypes < 2) {
           setEncounterRewards({
-            guaranteedModifierTypeFuncs: [ modifierTypes.SUPER_LURE, modifierTypes.GREAT_BALL ],
+            guaranteedModifierTypeFuncs: [modifierTypes.SUPER_LURE, modifierTypes.GREAT_BALL],
             fillRemaining: false,
           });
           encounter.selectedOption!.dialogue!.selected = [
@@ -334,7 +334,7 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
           ];
         } else if (numBugTypes < 4) {
           setEncounterRewards({
-            guaranteedModifierTypeFuncs: [ modifierTypes.QUICK_CLAW, modifierTypes.MAX_LURE, modifierTypes.ULTRA_BALL ],
+            guaranteedModifierTypeFuncs: [modifierTypes.QUICK_CLAW, modifierTypes.MAX_LURE, modifierTypes.ULTRA_BALL],
             fillRemaining: false,
           });
           encounter.selectedOption!.dialogue!.selected = [
@@ -345,7 +345,7 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
           ];
         } else if (numBugTypes < 6) {
           setEncounterRewards({
-            guaranteedModifierTypeFuncs: [ modifierTypes.GRIP_CLAW, modifierTypes.MAX_LURE, modifierTypes.ROGUE_BALL ],
+            guaranteedModifierTypeFuncs: [modifierTypes.GRIP_CLAW, modifierTypes.MAX_LURE, modifierTypes.ROGUE_BALL],
             fillRemaining: false,
           });
           encounter.selectedOption!.dialogue!.selected = [
@@ -357,7 +357,7 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
         } else {
           // If the player has any evolution/form change items that are valid for their party,
           // spawn one of those items in addition to Dynamax Band, Mega Band, and Master Ball
-          const modifierOptions: ModifierTypeOption[] = [ generateModifierTypeOption(modifierTypes.MASTER_BALL)! ];
+          const modifierOptions: ModifierTypeOption[] = [generateModifierTypeOption(modifierTypes.MASTER_BALL)!];
           const specialOptions: ModifierTypeOption[] = [];
 
           if (!globalScene.findModifier((m) => m instanceof MegaEvolutionAccessModifier)) {
@@ -406,7 +406,7 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
       .withPrimaryPokemonRequirement(
         CombinationPokemonRequirement.Some(
           // Meets one or both of the below reqs
-          new HeldItemRequirement([ "BypassSpeedChanceModifier", "ContactHeldItemTransferChanceModifier" ], 1),
+          new HeldItemRequirement(["BypassSpeedChanceModifier", "ContactHeldItemTransferChanceModifier"], 1),
           new AttackTypeBoosterHeldItemTypeRequirement(Type.BUG, 1),
         ),
       )
@@ -488,8 +488,8 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
         bugNet.type.tier = ModifierTier.ROGUE;
 
         setEncounterRewards({
-          guaranteedModifierTypeOptions: [ bugNet ],
-          guaranteedModifierTypeFuncs: [ modifierTypes.REVIVER_SEED ],
+          guaranteedModifierTypeOptions: [bugNet],
+          guaranteedModifierTypeFuncs: [modifierTypes.REVIVER_SEED],
           fillRemaining: false,
         });
         leaveEncounterWithoutBattle(true);
@@ -515,26 +515,26 @@ function getTrainerConfigForWave(waveIndex: number) {
   if (waveIndex < WAVE_LEVEL_BREAKPOINTS[0]) {
     // Use default template (2 AVG)
     config
-      .setPartyMemberFunc(0, getRandomPartyMemberFunc([ Species.BEEDRILL ], TrainerSlot.TRAINER, true))
-      .setPartyMemberFunc(1, getRandomPartyMemberFunc([ Species.BUTTERFREE ], TrainerSlot.TRAINER, true));
+      .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.BEEDRILL], TrainerSlot.TRAINER, true))
+      .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.BUTTERFREE], TrainerSlot.TRAINER, true));
   } else if (waveIndex < WAVE_LEVEL_BREAKPOINTS[1]) {
     config
       .setPartyTemplates(new TrainerPartyTemplate(3, PartyMemberStrength.AVERAGE))
-      .setPartyMemberFunc(0, getRandomPartyMemberFunc([ Species.BEEDRILL ], TrainerSlot.TRAINER, true))
-      .setPartyMemberFunc(1, getRandomPartyMemberFunc([ Species.BUTTERFREE ], TrainerSlot.TRAINER, true))
+      .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.BEEDRILL], TrainerSlot.TRAINER, true))
+      .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.BUTTERFREE], TrainerSlot.TRAINER, true))
       .setPartyMemberFunc(2, getRandomPartyMemberFunc(POOL_1_POKEMON, TrainerSlot.TRAINER, true));
   } else if (waveIndex < WAVE_LEVEL_BREAKPOINTS[2]) {
     config
       .setPartyTemplates(new TrainerPartyTemplate(4, PartyMemberStrength.AVERAGE))
-      .setPartyMemberFunc(0, getRandomPartyMemberFunc([ Species.BEEDRILL ], TrainerSlot.TRAINER, true))
-      .setPartyMemberFunc(1, getRandomPartyMemberFunc([ Species.BUTTERFREE ], TrainerSlot.TRAINER, true))
+      .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.BEEDRILL], TrainerSlot.TRAINER, true))
+      .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.BUTTERFREE], TrainerSlot.TRAINER, true))
       .setPartyMemberFunc(2, getRandomPartyMemberFunc(POOL_1_POKEMON, TrainerSlot.TRAINER, true))
       .setPartyMemberFunc(3, getRandomPartyMemberFunc(POOL_2_POKEMON, TrainerSlot.TRAINER, true));
   } else if (waveIndex < WAVE_LEVEL_BREAKPOINTS[3]) {
     config
       .setPartyTemplates(new TrainerPartyTemplate(5, PartyMemberStrength.AVERAGE))
-      .setPartyMemberFunc(0, getRandomPartyMemberFunc([ Species.BEEDRILL ], TrainerSlot.TRAINER, true))
-      .setPartyMemberFunc(1, getRandomPartyMemberFunc([ Species.BUTTERFREE ], TrainerSlot.TRAINER, true))
+      .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.BEEDRILL], TrainerSlot.TRAINER, true))
+      .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.BUTTERFREE], TrainerSlot.TRAINER, true))
       .setPartyMemberFunc(2, getRandomPartyMemberFunc(POOL_1_POKEMON, TrainerSlot.TRAINER, true))
       .setPartyMemberFunc(3, getRandomPartyMemberFunc(POOL_2_POKEMON, TrainerSlot.TRAINER, true))
       .setPartyMemberFunc(4, getRandomPartyMemberFunc(POOL_2_POKEMON, TrainerSlot.TRAINER, true));
@@ -543,7 +543,7 @@ function getTrainerConfigForWave(waveIndex: number) {
       .setPartyTemplates(new TrainerPartyTemplate(5, PartyMemberStrength.AVERAGE))
       .setPartyMemberFunc(
         0,
-        getRandomPartyMemberFunc([ Species.BEEDRILL ], TrainerSlot.TRAINER, true, (p) => {
+        getRandomPartyMemberFunc([Species.BEEDRILL], TrainerSlot.TRAINER, true, (p) => {
           p.formIndex = 1;
           p.generateAndPopulateMoveset();
           p.generateName();
@@ -551,7 +551,7 @@ function getTrainerConfigForWave(waveIndex: number) {
       )
       .setPartyMemberFunc(
         1,
-        getRandomPartyMemberFunc([ Species.BUTTERFREE ], TrainerSlot.TRAINER, true, (p) => {
+        getRandomPartyMemberFunc([Species.BUTTERFREE], TrainerSlot.TRAINER, true, (p) => {
           p.formIndex = 1;
           p.generateAndPopulateMoveset();
           p.generateName();
@@ -561,7 +561,7 @@ function getTrainerConfigForWave(waveIndex: number) {
       .setPartyMemberFunc(3, getRandomPartyMemberFunc(POOL_2_POKEMON, TrainerSlot.TRAINER, true))
       .setPartyMemberFunc(
         4,
-        getRandomPartyMemberFunc([ pool3Mon.species ], TrainerSlot.TRAINER, true, (p) => {
+        getRandomPartyMemberFunc([pool3Mon.species], TrainerSlot.TRAINER, true, (p) => {
           if (!isNullOrUndefined(pool3Mon.formIndex)) {
             p.formIndex = pool3Mon.formIndex;
             p.generateAndPopulateMoveset();
@@ -576,7 +576,7 @@ function getTrainerConfigForWave(waveIndex: number) {
       .setPartyTemplates(new TrainerPartyTemplate(5, PartyMemberStrength.AVERAGE))
       .setPartyMemberFunc(
         0,
-        getRandomPartyMemberFunc([ Species.BEEDRILL ], TrainerSlot.TRAINER, true, (p) => {
+        getRandomPartyMemberFunc([Species.BEEDRILL], TrainerSlot.TRAINER, true, (p) => {
           p.formIndex = 1;
           p.generateAndPopulateMoveset();
           p.generateName();
@@ -584,7 +584,7 @@ function getTrainerConfigForWave(waveIndex: number) {
       )
       .setPartyMemberFunc(
         1,
-        getRandomPartyMemberFunc([ Species.BUTTERFREE ], TrainerSlot.TRAINER, true, (p) => {
+        getRandomPartyMemberFunc([Species.BUTTERFREE], TrainerSlot.TRAINER, true, (p) => {
           p.formIndex = 1;
           p.generateAndPopulateMoveset();
           p.generateName();
@@ -593,7 +593,7 @@ function getTrainerConfigForWave(waveIndex: number) {
       .setPartyMemberFunc(2, getRandomPartyMemberFunc(POOL_2_POKEMON, TrainerSlot.TRAINER, true))
       .setPartyMemberFunc(
         3,
-        getRandomPartyMemberFunc([ pool3Mon.species ], TrainerSlot.TRAINER, true, (p) => {
+        getRandomPartyMemberFunc([pool3Mon.species], TrainerSlot.TRAINER, true, (p) => {
           if (!isNullOrUndefined(pool3Mon.formIndex)) {
             p.formIndex = pool3Mon.formIndex;
             p.generateAndPopulateMoveset();
@@ -603,7 +603,7 @@ function getTrainerConfigForWave(waveIndex: number) {
       )
       .setPartyMemberFunc(
         4,
-        getRandomPartyMemberFunc([ pool3Mon2.species ], TrainerSlot.TRAINER, true, (p) => {
+        getRandomPartyMemberFunc([pool3Mon2.species], TrainerSlot.TRAINER, true, (p) => {
           if (!isNullOrUndefined(pool3Mon2.formIndex)) {
             p.formIndex = pool3Mon2.formIndex;
             p.generateAndPopulateMoveset();
@@ -621,7 +621,7 @@ function getTrainerConfigForWave(waveIndex: number) {
       )
       .setPartyMemberFunc(
         0,
-        getRandomPartyMemberFunc([ Species.BEEDRILL ], TrainerSlot.TRAINER, true, (p) => {
+        getRandomPartyMemberFunc([Species.BEEDRILL], TrainerSlot.TRAINER, true, (p) => {
           p.formIndex = 1;
           p.generateAndPopulateMoveset();
           p.generateName();
@@ -629,7 +629,7 @@ function getTrainerConfigForWave(waveIndex: number) {
       )
       .setPartyMemberFunc(
         1,
-        getRandomPartyMemberFunc([ Species.BUTTERFREE ], TrainerSlot.TRAINER, true, (p) => {
+        getRandomPartyMemberFunc([Species.BUTTERFREE], TrainerSlot.TRAINER, true, (p) => {
           p.formIndex = 1;
           p.generateAndPopulateMoveset();
           p.generateName();
@@ -638,7 +638,7 @@ function getTrainerConfigForWave(waveIndex: number) {
       .setPartyMemberFunc(2, getRandomPartyMemberFunc(POOL_2_POKEMON, TrainerSlot.TRAINER, true))
       .setPartyMemberFunc(
         3,
-        getRandomPartyMemberFunc([ pool3Mon.species ], TrainerSlot.TRAINER, true, (p) => {
+        getRandomPartyMemberFunc([pool3Mon.species], TrainerSlot.TRAINER, true, (p) => {
           if (!isNullOrUndefined(pool3Mon.formIndex)) {
             p.formIndex = pool3Mon.formIndex;
             p.generateAndPopulateMoveset();
@@ -659,7 +659,7 @@ function getTrainerConfigForWave(waveIndex: number) {
       )
       .setPartyMemberFunc(
         0,
-        getRandomPartyMemberFunc([ Species.BEEDRILL ], TrainerSlot.TRAINER, true, (p) => {
+        getRandomPartyMemberFunc([Species.BEEDRILL], TrainerSlot.TRAINER, true, (p) => {
           p.setBoss(true, 2);
           p.formIndex = 1;
           p.generateAndPopulateMoveset();
@@ -668,7 +668,7 @@ function getTrainerConfigForWave(waveIndex: number) {
       )
       .setPartyMemberFunc(
         1,
-        getRandomPartyMemberFunc([ Species.BUTTERFREE ], TrainerSlot.TRAINER, true, (p) => {
+        getRandomPartyMemberFunc([Species.BUTTERFREE], TrainerSlot.TRAINER, true, (p) => {
           p.setBoss(true, 2);
           p.formIndex = 1;
           p.generateAndPopulateMoveset();
@@ -677,7 +677,7 @@ function getTrainerConfigForWave(waveIndex: number) {
       )
       .setPartyMemberFunc(
         2,
-        getRandomPartyMemberFunc([ pool3Mon.species ], TrainerSlot.TRAINER, true, (p) => {
+        getRandomPartyMemberFunc([pool3Mon.species], TrainerSlot.TRAINER, true, (p) => {
           if (!isNullOrUndefined(pool3Mon.formIndex)) {
             p.formIndex = pool3Mon.formIndex;
             p.generateAndPopulateMoveset();
@@ -687,7 +687,7 @@ function getTrainerConfigForWave(waveIndex: number) {
       )
       .setPartyMemberFunc(
         3,
-        getRandomPartyMemberFunc([ pool3Mon2.species ], TrainerSlot.TRAINER, true, (p) => {
+        getRandomPartyMemberFunc([pool3Mon2.species], TrainerSlot.TRAINER, true, (p) => {
           if (!isNullOrUndefined(pool3Mon2.formIndex)) {
             p.formIndex = pool3Mon2.formIndex;
             p.generateAndPopulateMoveset();

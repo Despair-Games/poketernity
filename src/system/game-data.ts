@@ -369,8 +369,8 @@ export class GameData {
       [VoucherType.GOLDEN]: 0,
     };
     this.eggs = [];
-    this.eggPity = [ 0, 0, 0, 0 ];
-    this.unlockPity = [ 0, 0, 0, 0 ];
+    this.eggPity = [0, 0, 0, 0];
+    this.unlockPity = [0, 0, 0, 0];
     this.initDexData();
     this.initStarterData();
   }
@@ -585,8 +585,8 @@ export class GameData {
 
         this.eggs = systemData.eggs ? systemData.eggs.map((e) => e.toEgg()) : [];
 
-        this.eggPity = systemData.eggPity ? systemData.eggPity.slice(0) : [ 0, 0, 0, 0 ];
-        this.unlockPity = systemData.unlockPity ? systemData.unlockPity.slice(0) : [ 0, 0, 0, 0 ];
+        this.eggPity = systemData.eggPity ? systemData.eggPity.slice(0) : [0, 0, 0, 0];
+        this.unlockPity = systemData.unlockPity ? systemData.unlockPity.slice(0) : [0, 0, 0, 0];
 
         this.dexData = Object.assign(this.dexData, systemData.dexData);
         this.consolidateDexData(this.dexData);
@@ -711,7 +711,7 @@ export class GameData {
         return ret;
       }
 
-      return k.endsWith("Attr") && ![ "natureAttr", "abilityAttr", "passiveAttr" ].includes(k) ? BigInt(v ?? 0) : v;
+      return k.endsWith("Attr") && !["natureAttr", "abilityAttr", "passiveAttr"].includes(k) ? BigInt(v ?? 0) : v;
     }) as SystemSaveData;
   }
 
@@ -1287,11 +1287,11 @@ export class GameData {
    * To delete an unfinished run instead, use {@linkcode deleteSession}
    */
   async tryClearSession(slotId: integer): Promise<[success: boolean, newClear: boolean]> {
-    let result: [boolean, boolean] = [ false, false ];
+    let result: [boolean, boolean] = [false, false];
 
     if (bypassLogin) {
       localStorage.removeItem(`sessionData${slotId ? slotId : ""}_${loggedInUser?.username}`);
-      result = [ true, true ];
+      result = [true, true];
     } else {
       const sessionData = this.getSessionSaveData();
       const { trainerId } = this;
@@ -1301,7 +1301,7 @@ export class GameData {
       );
 
       if (!jsonResponse?.error) {
-        result = [ true, jsonResponse?.success ?? false ];
+        result = [true, jsonResponse?.success ?? false];
         if (loggedInUser) {
           loggedInUser!.lastSessionSlot = -1;
         }
@@ -1313,7 +1313,7 @@ export class GameData {
         }
 
         console.error(jsonResponse);
-        result = [ false, false ];
+        result = [false, false];
       }
     }
 
@@ -1408,13 +1408,13 @@ export class GameData {
         }
         const sessionData = useCachedSession
           ? this.parseSessionData(
-            decrypt(
+              decrypt(
                 localStorage.getItem(
                   `sessionData${globalScene.sessionSlotId ? globalScene.sessionSlotId : ""}_${loggedInUser?.username}`,
                 )!,
                 bypassLogin,
-            ),
-          ) // TODO: is this bang correct?
+              ),
+            ) // TODO: is this bang correct?
           : this.getSessionSaveData();
 
         const maxIntAttrValue = 0x80000000;
@@ -1482,7 +1482,7 @@ export class GameData {
             break;
         }
         const encryptedData = AES.encrypt(dataStr, saveKey);
-        const blob = new Blob([ encryptedData.toString() ], { type: "text/json" });
+        const blob = new Blob([encryptedData.toString()], { type: "text/json" });
         const link = document.createElement("a");
         link.href = window.URL.createObjectURL(blob);
         link.download = `${dataKey}.prsv`;
@@ -1558,7 +1558,7 @@ export class GameData {
                 keys.forEach((key) => {
                   const entryKeys = Object.keys(data[key]);
                   valid =
-                    [ "isFavorite", "isVictory", "entry" ].every((v) => entryKeys.includes(v)) && entryKeys.length === 3;
+                    ["isFavorite", "isVictory", "entry"].every((v) => entryKeys.includes(v)) && entryKeys.length === 3;
                 });
                 break;
               case GameDataType.SETTINGS:
@@ -1654,7 +1654,7 @@ export class GameData {
         seenCount: 0,
         caughtCount: 0,
         hatchedCount: 0,
-        ivs: [ 0, 0, 0, 0, 0, 0 ],
+        ivs: [0, 0, 0, 0, 0, 0],
       };
     }
 
@@ -1665,7 +1665,7 @@ export class GameData {
 
     globalScene.executeWithSeedOffset(
       () => {
-        const neutralNatures = [ Nature.HARDY, Nature.DOCILE, Nature.SERIOUS, Nature.BASHFUL, Nature.QUIRKY ];
+        const neutralNatures = [Nature.HARDY, Nature.DOCILE, Nature.SERIOUS, Nature.BASHFUL, Nature.QUIRKY];
         for (let s = 0; s < defaultStarterSpecies.length; s++) {
           defaultStarterNatures.push(Utils.randSeedItem(neutralNatures));
         }

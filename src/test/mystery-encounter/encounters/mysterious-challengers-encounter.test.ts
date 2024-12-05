@@ -25,7 +25,7 @@ import { CommandPhase } from "#app/phases/command-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 
 const namespace = "mysteryEncounters/mysteriousChallengers";
-const defaultParty = [ Species.LAPRAS, Species.GENGAR, Species.ABRA ];
+const defaultParty = [Species.LAPRAS, Species.GENGAR, Species.ABRA];
 const defaultBiome = Biome.CAVE;
 const defaultWave = 45;
 
@@ -46,9 +46,9 @@ describe("Mysterious Challengers - Mystery Encounter", () => {
     game.override.startingBiome(defaultBiome);
     game.override.disableTrainerWaves();
 
-    const biomeMap = new Map<Biome, MysteryEncounterType[]>([[ Biome.VOLCANO, [ MysteryEncounterType.FIGHT_OR_FLIGHT ]]]);
+    const biomeMap = new Map<Biome, MysteryEncounterType[]>([[Biome.VOLCANO, [MysteryEncounterType.FIGHT_OR_FLIGHT]]]);
     HUMAN_TRANSITABLE_BIOMES.forEach((biome) => {
-      biomeMap.set(biome, [ MysteryEncounterType.MYSTERIOUS_CHALLENGERS ]);
+      biomeMap.set(biome, [MysteryEncounterType.MYSTERIOUS_CHALLENGERS]);
     });
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(biomeMap);
   });

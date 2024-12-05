@@ -222,7 +222,7 @@ export default class FieldSpritePipeline extends Phaser.Renderer.WebGL.Pipelines
     this.set1f("time", 0);
     this.set1i("ignoreTimeTint", 0);
     this.set1f("terrainColorRatio", 0);
-    this.set3fv("terrainColor", [ 0, 0, 0 ]);
+    this.set3fv("terrainColor", [0, 0, 0]);
   }
 
   onBind(gameObject: Phaser.GameObjects.GameObject): void {

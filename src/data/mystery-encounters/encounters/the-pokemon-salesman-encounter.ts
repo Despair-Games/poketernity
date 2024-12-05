@@ -183,6 +183,6 @@ export const ThePokemonSalesmanEncounter: MysteryEncounter = MysteryEncounterBui
  */
 export function getSalesmanSpeciesOffer(): PokemonSpecies {
   return getPokemonSpecies(
-    getRandomSpeciesByStarterCost([ 0, 5 ], NON_LEGEND_PARADOX_POKEMON, undefined, false, false, false),
+    getRandomSpeciesByStarterCost([0, 5], NON_LEGEND_PARADOX_POKEMON, undefined, false, false, false),
   );
 }

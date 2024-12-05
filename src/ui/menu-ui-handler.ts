@@ -69,10 +69,10 @@ export default class MenuUiHandler extends MessageUiHandler {
 
     this.excludedMenus = () => [
       {
-        condition: [ Mode.COMMAND, Mode.TITLE ].includes(mode ?? Mode.TITLE),
-        options: [ MenuOptions.EGG_GACHA, MenuOptions.EGG_LIST ],
+        condition: [Mode.COMMAND, Mode.TITLE].includes(mode ?? Mode.TITLE),
+        options: [MenuOptions.EGG_GACHA, MenuOptions.EGG_LIST],
       },
-      { condition: bypassLogin, options: [ MenuOptions.LOG_OUT ]},
+      { condition: bypassLogin, options: [MenuOptions.LOG_OUT] },
     ];
 
     this.menuOptions = Utils.getEnumKeys(MenuOptions)
@@ -86,7 +86,7 @@ export default class MenuUiHandler extends MessageUiHandler {
     const ui = this.getUi();
     // wiki url directs based on languges available on wiki
     const lang = i18next.resolvedLanguage?.substring(0, 2)!; // TODO: is this bang correct?
-    if ([ "de", "fr", "ko", "zh" ].includes(lang)) {
+    if (["de", "fr", "ko", "zh"].includes(lang)) {
       wikiUrl = `https://wiki.pokerogue.net/${lang}:start`;
     }
 
@@ -125,9 +125,9 @@ export default class MenuUiHandler extends MessageUiHandler {
     this.excludedMenus = () => [
       {
         condition: globalScene.getCurrentPhase() instanceof SelectModifierPhase,
-        options: [ MenuOptions.EGG_GACHA, MenuOptions.EGG_LIST ],
+        options: [MenuOptions.EGG_GACHA, MenuOptions.EGG_LIST],
       },
-      { condition: bypassLogin, options: [ MenuOptions.LOG_OUT ]},
+      { condition: bypassLogin, options: [MenuOptions.LOG_OUT] },
     ];
 
     this.menuOptions = Utils.getEnumKeys(MenuOptions)
@@ -445,7 +445,7 @@ export default class MenuUiHandler extends MessageUiHandler {
       communityOptions.push({
         label: "Admin",
         handler: () => {
-          const skippedAdminModes: AdminMode[] = [ AdminMode.ADMIN ]; // this is here so that we can skip the menu populating enums that aren't meant for the menu, such as the AdminMode.ADMIN
+          const skippedAdminModes: AdminMode[] = [AdminMode.ADMIN]; // this is here so that we can skip the menu populating enums that aren't meant for the menu, such as the AdminMode.ADMIN
           const options: OptionSelectItem[] = [];
           Object.values(AdminMode)
             .filter((v) => !isNaN(Number(v)) && !skippedAdminModes.includes(v as AdminMode))

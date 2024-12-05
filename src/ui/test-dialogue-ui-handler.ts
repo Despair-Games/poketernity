@@ -26,7 +26,7 @@ export default class TestDialogueUiHandler extends FormModalUiHandler {
             // If the value is an object, execute the same process
             // si el valor es un objeto ejecuta el mismo proceso
 
-            return flattenKeys(value, topKey ?? t, topKey ? (midleKey ? [ ...midleKey, t ] : [ t ]) : undefined).filter(
+            return flattenKeys(value, topKey ?? t, topKey ? (midleKey ? [...midleKey, t] : [t]) : undefined).filter(
               (t) => t.length > 0,
             );
           } else if (typeof value === "string" || isNullOrUndefined(value)) {
@@ -55,11 +55,11 @@ export default class TestDialogueUiHandler extends FormModalUiHandler {
   }
 
   getMargin(config?: ModalConfig): [number, number, number, number] {
-    return [ 0, 0, 48, 0 ];
+    return [0, 0, 48, 0];
   }
 
   getButtonLabels(config?: ModalConfig): string[] {
-    return [ "Check", "Cancel" ];
+    return ["Check", "Cancel"];
   }
 
   getReadableErrorMessage(error: string): string {
@@ -85,7 +85,7 @@ export default class TestDialogueUiHandler extends FormModalUiHandler {
 
     input.on("keydown", (inputObject, evt: KeyboardEvent) => {
       if (
-        [ "escape", "space" ].some((v) => v === evt.key.toLowerCase() || v === evt.code.toLowerCase()) &&
+        ["escape", "space"].some((v) => v === evt.key.toLowerCase() || v === evt.code.toLowerCase()) &&
         ui.getMode() === Mode.AUTO_COMPLETE
       ) {
         // Delete autocomplete list and recovery focus.

@@ -70,7 +70,7 @@ export default class Trainer extends Phaser.GameObjects.Container {
           if (partnerName) {
             this.partnerName = partnerName;
           } else {
-            [ this.name, this.partnerName ] = this.name.split(" & ");
+            [this.name, this.partnerName] = this.name.split(" & ");
           }
         } else {
           this.partnerName = partnerName || Utils.randSeedItem(Array.isArray(namePool[0]) ? namePool[1] : namePool);
@@ -102,7 +102,7 @@ export default class Trainer extends Phaser.GameObjects.Container {
         this.config.getSpriteKey(variant === TrainerVariant.FEMALE || forceFemale, this.isDouble()),
       );
       ret.setOrigin(0.5, 1);
-      ret.setPipeline(globalScene.spritePipeline, { tone: [ 0.0, 0.0, 0.0, 0.0 ], hasShadow: !!hasShadow });
+      ret.setPipeline(globalScene.spritePipeline, { tone: [0.0, 0.0, 0.0, 0.0], hasShadow: !!hasShadow });
       return ret;
     };
 
@@ -146,7 +146,7 @@ export default class Trainer extends Phaser.GameObjects.Container {
 
     // Determine the title to include based on the configuration and includeTitle flag.
     let title = includeTitle && this.config.title ? this.config.title : null;
-    const evilTeamTitles = [ "grunt" ];
+    const evilTeamTitles = ["grunt"];
     if (this.name === "" && evilTeamTitles.some((t) => name.toLocaleLowerCase().includes(t))) {
       // This is a evil team grunt so we localize it by only using the "name" as the title
       title = i18next.t(`trainerClasses:${name.toLowerCase().replace(/\s/g, "_")}`);
@@ -219,24 +219,24 @@ export default class Trainer extends Phaser.GameObjects.Container {
     return !this.variant
       ? this.config.encounterMessages
       : (this.variant === TrainerVariant.DOUBLE
-        ? this.config.doubleEncounterMessages
-        : this.config.femaleEncounterMessages) || this.config.encounterMessages;
+          ? this.config.doubleEncounterMessages
+          : this.config.femaleEncounterMessages) || this.config.encounterMessages;
   }
 
   getVictoryMessages(): string[] {
     return !this.variant
       ? this.config.victoryMessages
       : (this.variant === TrainerVariant.DOUBLE
-        ? this.config.doubleVictoryMessages
-        : this.config.femaleVictoryMessages) || this.config.victoryMessages;
+          ? this.config.doubleVictoryMessages
+          : this.config.femaleVictoryMessages) || this.config.victoryMessages;
   }
 
   getDefeatMessages(): string[] {
     return !this.variant
       ? this.config.defeatMessages
       : (this.variant === TrainerVariant.DOUBLE
-        ? this.config.doubleDefeatMessages
-        : this.config.femaleDefeatMessages) || this.config.defeatMessages;
+          ? this.config.doubleDefeatMessages
+          : this.config.femaleDefeatMessages) || this.config.defeatMessages;
   }
 
   getPartyTemplate(): TrainerPartyTemplate {
@@ -369,9 +369,9 @@ export default class Trainer extends Phaser.GameObjects.Container {
           if (!(index % 2)) {
             // Since the only currently allowed double battle with named trainers is Tate & Liza, we need to make sure that Solrock is the first pokemon in the party for Tate and Lunatone for Liza
             if (index === 0 && TrainerType[this.config.trainerType] === TrainerType[TrainerType.TATE]) {
-              newSpeciesPool = [ Species.SOLROCK ];
+              newSpeciesPool = [Species.SOLROCK];
             } else if (index === 0 && TrainerType[this.config.trainerType] === TrainerType[TrainerType.LIZA]) {
-              newSpeciesPool = [ Species.LUNATONE ];
+              newSpeciesPool = [Species.LUNATONE];
             } else {
               newSpeciesPool = speciesPoolFiltered;
             }
@@ -379,9 +379,9 @@ export default class Trainer extends Phaser.GameObjects.Container {
             // If the index is odd, use the species pool for the partner trainer (that way he only uses his own pokemon in battle)
             // Since the only currently allowed double battle with named trainers is Tate & Liza, we need to make sure that Solrock is the first pokemon in the party for Tate and Lunatone for Liza
             if (index === 1 && TrainerType[this.config.trainerTypeDouble] === TrainerType[TrainerType.TATE]) {
-              newSpeciesPool = [ Species.SOLROCK ];
+              newSpeciesPool = [Species.SOLROCK];
             } else if (index === 1 && TrainerType[this.config.trainerTypeDouble] === TrainerType[TrainerType.LIZA]) {
-              newSpeciesPool = [ Species.LUNATONE ];
+              newSpeciesPool = [Species.LUNATONE];
             } else {
               newSpeciesPool = speciesPoolPartnerFiltered;
             }
@@ -398,13 +398,13 @@ export default class Trainer extends Phaser.GameObjects.Container {
           ? getPokemonSpecies(newSpeciesPool[Math.floor(Utils.randSeedInt(newSpeciesPool.length))])
           : template.isSameSpecies(index) && index > offset
             ? getPokemonSpecies(
-              battle.enemyParty[offset].species.getTrainerSpeciesForLevel(
-                level,
-                false,
-                template.getStrength(offset),
-                globalScene.currentBattle.waveIndex,
-              ),
-            )
+                battle.enemyParty[offset].species.getTrainerSpeciesForLevel(
+                  level,
+                  false,
+                  template.getStrength(offset),
+                  globalScene.currentBattle.waveIndex,
+                ),
+              )
             : this.genNewPartyMemberSpecies(level, strength);
 
         // If the species is from newSpeciesPool, we need to adjust it based on the level and strength
@@ -555,7 +555,7 @@ export default class Trainer extends Phaser.GameObjects.Container {
         }
       }
 
-      return [ party.indexOf(p), score ];
+      return [party.indexOf(p), score];
     }) as [integer, integer][];
 
     return partyMemberScores;
@@ -688,7 +688,7 @@ export default class Trainer extends Phaser.GameObjects.Container {
   }
 
   getSprites(): Phaser.GameObjects.Sprite[] {
-    const ret: Phaser.GameObjects.Sprite[] = [ this.getAt(0) ];
+    const ret: Phaser.GameObjects.Sprite[] = [this.getAt(0)];
     if (this.variant === TrainerVariant.DOUBLE && !this.config.doubleOnly) {
       ret.push(this.getAt(2));
     }
@@ -696,7 +696,7 @@ export default class Trainer extends Phaser.GameObjects.Container {
   }
 
   getTintSprites(): Phaser.GameObjects.Sprite[] {
-    const ret: Phaser.GameObjects.Sprite[] = [ this.getAt(1) ];
+    const ret: Phaser.GameObjects.Sprite[] = [this.getAt(1)];
     if (this.variant === TrainerVariant.DOUBLE && !this.config.doubleOnly) {
       ret.push(this.getAt(3));
     }
