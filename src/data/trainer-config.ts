@@ -1531,26 +1531,6 @@ export interface TrainerConfigs {
   [key: number]: TrainerConfig;
 }
 
-/**
- * The function to get variable strength grunts
- * @param scene the singleton scene being passed in
- * @returns the correct TrainerPartyTemplate
- */
-function getEvilGruntPartyTemplate(): TrainerPartyTemplate {
-  const waveIndex = globalScene.currentBattle?.waveIndex;
-  if (waveIndex < 40) {
-    return trainerPartyTemplates.TWO_AVG;
-  } else if (waveIndex < 63) {
-    return trainerPartyTemplates.THREE_AVG;
-  } else if (waveIndex < 65) {
-    return trainerPartyTemplates.TWO_AVG_ONE_STRONG;
-  } else if (waveIndex < 112) {
-    return trainerPartyTemplates.GYM_LEADER_4; // 3avg 1 strong 1 stronger
-  } else {
-    return trainerPartyTemplates.GYM_LEADER_5; // 3 avg 2 strong 1 stronger
-  }
-}
-
 function getWavePartyTemplate(...templates: TrainerPartyTemplate[]) {
   return templates[
     Math.min(
