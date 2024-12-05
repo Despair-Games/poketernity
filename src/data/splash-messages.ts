@@ -119,7 +119,7 @@ const commonSplashMessages = [
   "luxrayIsNotADarkType",
   "selfDestructiveEncounters",
   "mostOptionsAreViable",
-  "orse",
+  "morse",
   "smiley",
   "beAwareOfPassives",
   "asSeenOnTheWorldWideWeb",

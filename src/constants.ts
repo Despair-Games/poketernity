@@ -14,7 +14,7 @@ export const MAX_INT_ATTR_VALUE = 0x80000000;
 export const SAVES_ZIP_PREFIX = "poketernity_";
 
 /** File extension for save files. */
-export const SAVE_FILE_EXTENSION = "poketernity.sav";
+export const SAVE_FILE_EXTENSION = "txt";
 
 /** Prefix for local storage keys. */
 export const LS_PREFIX = "pkty";
