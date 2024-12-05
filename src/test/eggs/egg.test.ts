@@ -1,3 +1,4 @@
+import { SAVE_FILE_EXTENSION } from "#app/constants";
 import { speciesEggTiers } from "#app/data/balance/species-egg-tiers";
 import { Egg, getLegendaryGachaSpeciesForTimestamp, getValidLegendaryGachaSpecies } from "#app/data/egg";
 import { allSpecies } from "#app/data/pokemon-species";
@@ -30,7 +31,7 @@ describe("Egg Generation Tests", () => {
   });
 
   beforeEach(async () => {
-    await game.importData("src/test/utils/saves/everything.poketernity.sav");
+    await game.importData(`src/test/utils/saves/everything.${SAVE_FILE_EXTENSION}`);
   });
 
   it("should return Kyogre for the 10th of June", () => {
