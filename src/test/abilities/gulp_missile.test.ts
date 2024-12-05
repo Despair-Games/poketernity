@@ -25,7 +25,7 @@ describe("Abilities - Gulp Missile", () => {
    * @returns The effect damage of Gulp Missile
    */
   const getEffectDamage = (pokemon: Pokemon): number => {
-    return Math.max(1, Math.floor(pokemon.getMaxHp() * 1 / 4));
+    return Math.max(1, Math.floor((pokemon.getMaxHp() * 1) / 4));
   };
 
   beforeAll(() => {
@@ -59,7 +59,7 @@ describe("Abilities - Gulp Missile", () => {
     game.move.select(Moves.DIVE);
     await game.phaseInterceptor.to("MoveEndPhase");
 
-    expect(cramorant.getHpRatio()).toBeGreaterThanOrEqual(.5);
+    expect(cramorant.getHpRatio()).toBeGreaterThanOrEqual(0.5);
     expect(cramorant.getTag(BattlerTagType.GULP_MISSILE_ARROKUDA)).toBeDefined();
     expect(cramorant.formIndex).toBe(GULPING_FORM);
   });
@@ -68,8 +68,8 @@ describe("Abilities - Gulp Missile", () => {
     await game.classicMode.startBattle([ Species.CRAMORANT ]);
     const cramorant = game.scene.getPlayerPokemon()!;
 
-    vi.spyOn(cramorant, "getHpRatio").mockReturnValue(.49);
-    expect(cramorant.getHpRatio()).toBe(.49);
+    vi.spyOn(cramorant, "getHpRatio").mockReturnValue(0.49);
+    expect(cramorant.getHpRatio()).toBe(0.49);
 
     game.move.select(Moves.SURF);
     await game.phaseInterceptor.to("MoveEndPhase");
@@ -122,7 +122,7 @@ describe("Abilities - Gulp Missile", () => {
     await game.classicMode.startBattle([ Species.CRAMORANT ]);
 
     const cramorant = game.scene.getPlayerPokemon()!;
-    vi.spyOn(cramorant, "getHpRatio").mockReturnValue(.55);
+    vi.spyOn(cramorant, "getHpRatio").mockReturnValue(0.55);
 
     game.move.select(Moves.SURF);
     await game.phaseInterceptor.to("MoveEndPhase");
@@ -144,7 +144,7 @@ describe("Abilities - Gulp Missile", () => {
     const enemy = game.scene.getEnemyPokemon()!;
 
     vi.spyOn(enemy, "damageAndUpdate");
-    vi.spyOn(cramorant, "getHpRatio").mockReturnValue(.55);
+    vi.spyOn(cramorant, "getHpRatio").mockReturnValue(0.55);
 
     game.move.select(Moves.SURF);
     await game.phaseInterceptor.to("MoveEndPhase");
@@ -168,7 +168,7 @@ describe("Abilities - Gulp Missile", () => {
     const enemy = game.scene.getEnemyPokemon()!;
 
     vi.spyOn(enemy, "damageAndUpdate");
-    vi.spyOn(cramorant, "getHpRatio").mockReturnValue(.45);
+    vi.spyOn(cramorant, "getHpRatio").mockReturnValue(0.45);
 
     game.move.select(Moves.SURF);
     await game.phaseInterceptor.to("MoveEndPhase");
@@ -204,7 +204,7 @@ describe("Abilities - Gulp Missile", () => {
     const cramorant = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
-    vi.spyOn(cramorant, "getHpRatio").mockReturnValue(.55);
+    vi.spyOn(cramorant, "getHpRatio").mockReturnValue(0.55);
 
     game.move.select(Moves.SURF);
     await game.phaseInterceptor.to("MoveEndPhase");
@@ -237,9 +237,7 @@ describe("Abilities - Gulp Missile", () => {
   });
 
   it("doesn't trigger if user is behind a substitute", async () => {
-    game.override
-      .enemyAbility(Abilities.STURDY)
-      .enemyMoveset([ Moves.SPLASH, Moves.POWER_TRIP ]);
+    game.override.enemyAbility(Abilities.STURDY).enemyMoveset([ Moves.SPLASH, Moves.POWER_TRIP ]);
     await game.classicMode.startBattle([ Species.CRAMORANT ]);
 
     game.move.select(Moves.SURF);
@@ -261,7 +259,7 @@ describe("Abilities - Gulp Missile", () => {
     await game.classicMode.startBattle([ Species.CRAMORANT ]);
 
     const cramorant = game.scene.getPlayerPokemon()!;
-    vi.spyOn(cramorant, "getHpRatio").mockReturnValue(.55);
+    vi.spyOn(cramorant, "getHpRatio").mockReturnValue(0.55);
 
     game.move.select(Moves.SURF);
     await game.phaseInterceptor.to("MoveEndPhase");
@@ -281,7 +279,7 @@ describe("Abilities - Gulp Missile", () => {
     await game.classicMode.startBattle([ Species.CRAMORANT ]);
 
     const cramorant = game.scene.getPlayerPokemon()!;
-    vi.spyOn(cramorant, "getHpRatio").mockReturnValue(.55);
+    vi.spyOn(cramorant, "getHpRatio").mockReturnValue(0.55);
 
     game.move.select(Moves.SURF);
     await game.phaseInterceptor.to("MoveEndPhase");

@@ -31,10 +31,8 @@ describe("Moves - Growth", () => {
     game.override.enemyMoveset(Moves.SPLASH);
   });
 
-  it("should raise SPATK stat stage by 1", async() => {
-    await game.startBattle([
-      Species.MIGHTYENA
-    ]);
+  it("should raise SPATK stat stage by 1", async () => {
+    await game.startBattle([ Species.MIGHTYENA ]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 

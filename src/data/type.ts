@@ -271,7 +271,10 @@ export function getTypeDamageMultiplier(attackType: Type, defType: Type): TypeDa
  * Retrieve the color corresponding to a specific damage multiplier
  * @returns A color or undefined if the default color should be used
  */
-export function getTypeDamageMultiplierColor(multiplier: TypeDamageMultiplier, side: "defense" | "offense"): string | undefined {
+export function getTypeDamageMultiplierColor(
+  multiplier: TypeDamageMultiplier,
+  side: "defense" | "offense",
+): string | undefined {
   if (side === "offense") {
     switch (multiplier) {
       case 0:
@@ -313,7 +316,7 @@ export function getTypeDamageMultiplierColor(multiplier: TypeDamageMultiplier, s
   }
 }
 
-export function getTypeRgb(type: Type): [ integer, integer, integer ] {
+export function getTypeRgb(type: Type): [integer, integer, integer] {
   switch (type) {
     case Type.NORMAL:
       return [ 168, 168, 120 ];

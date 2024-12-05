@@ -30,9 +30,11 @@ describe("Items - Toxic orb", () => {
       .enemyAbility(Abilities.BALL_FETCH)
       .moveset(Moves.SPLASH)
       .enemyMoveset(Moves.SPLASH)
-      .startingHeldItems([{
-        name: "TOXIC_ORB",
-      }]);
+      .startingHeldItems([
+        {
+          name: "TOXIC_ORB",
+        },
+      ]);
 
     vi.spyOn(i18next, "t");
   });

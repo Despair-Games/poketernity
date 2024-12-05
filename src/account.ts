@@ -12,7 +12,7 @@ export function initLoggedInUser(): void {
 }
 
 export function updateUserInfo(): Promise<[boolean, integer]> {
-  return new Promise<[boolean, integer]>(resolve => {
+  return new Promise<[boolean, integer]>((resolve) => {
     if (bypassLogin) {
       loggedInUser = { username: "Guest", lastSessionSlot: -1, discordId: "", googleId: "", hasAdminRole: false };
       let lastSessionSlot = -1;
@@ -24,7 +24,7 @@ export function updateUserInfo(): Promise<[boolean, integer]> {
       }
       loggedInUser.lastSessionSlot = lastSessionSlot;
       // Migrate old data from before the username was appended
-      [ "data", "sessionData", "sessionData1", "sessionData2", "sessionData3", "sessionData4" ].map(d => {
+      [ "data", "sessionData", "sessionData1", "sessionData2", "sessionData3", "sessionData4" ].map((d) => {
         const lsItem = localStorage.getItem(d);
         if (lsItem && !!loggedInUser?.username) {
           const lsUserItem = localStorage.getItem(`${d}_${loggedInUser.username}`);

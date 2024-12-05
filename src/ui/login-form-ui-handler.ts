@@ -45,12 +45,12 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
 
     this.usernameInfoImage = this.buildInteractableImage("settings_icon", "username-info-icon", {
       x: 20,
-      scale: 0.5
+      scale: 0.5,
     });
 
     this.saveDownloadImage = this.buildInteractableImage("saving_icon", "save-download-icon", {
       x: 0,
-      scale: 0.75
+      scale: 0.75,
     });
 
     this.infoContainer.add(this.usernameInfoImage);
@@ -62,7 +62,10 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
 
   private buildExternalPartyContainer() {
     this.externalPartyContainer = globalScene.add.container(0, 0);
-    this.externalPartyContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, globalScene.game.canvas.width / 12, globalScene.game.canvas.height / 12), Phaser.Geom.Rectangle.Contains);
+    this.externalPartyContainer.setInteractive(
+      new Phaser.Geom.Rectangle(0, 0, globalScene.game.canvas.width / 12, globalScene.game.canvas.height / 12),
+      Phaser.Geom.Rectangle.Contains,
+    );
     this.externalPartyTitle = addTextObject(0, 4, "", TextStyle.SETTINGS_LABEL);
     this.externalPartyTitle.setOrigin(0.5, 0);
     this.externalPartyBg = addWindow(0, 0, 0, 0);
@@ -128,7 +131,6 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
 
   override show(args: any[]): boolean {
     if (super.show(args)) {
-
       const config = args[0] as ModalConfig;
       this.processExternalProvider(config);
       const originalLoginAction = this.submitAction;
@@ -137,7 +139,7 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
         this.submitAction = originalLoginAction;
         this.sanitizeInputs();
         globalScene.ui.setMode(Mode.LOADING, { buttonActions: []});
-        const onFail = error => {
+        const onFail = (error) => {
           globalScene.ui.setMode(Mode.LOGIN_FORM, Object.assign(config, { errorMessage: error?.trim() }));
           globalScene.ui.playError();
         };
@@ -147,7 +149,7 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
 
         const [ usernameInput, passwordInput ] = this.inputs;
 
-        pokerogueApi.account.login({ username: usernameInput.text, password: passwordInput.text }).then(error => {
+        pokerogueApi.account.login({ username: usernameInput.text, password: passwordInput.text }).then((error) => {
           if (!error) {
             originalLoginAction && originalLoginAction();
           } else {
@@ -168,7 +170,9 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
     this.infoContainer.setVisible(false);
     this.setMouseCursorStyle("default"); //reset cursor
 
-    [ this.discordImage, this.googleImage, this.usernameInfoImage, this.saveDownloadImage ].forEach((img) => img.off("pointerdown"));
+    [ this.discordImage, this.googleImage, this.usernameInfoImage, this.saveDownloadImage ].forEach((img) =>
+      img.off("pointerdown"),
+    );
   }
 
   private processExternalProvider(config: ModalConfig): void {
@@ -202,7 +206,7 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
       window.open(googleUrl, "_self");
     });
 
-    const onFail = error => {
+    const onFail = (error) => {
       globalScene.ui.setMode(Mode.LOADING, { buttonActions: []});
       globalScene.ui.setModeForceTransition(Mode.LOGIN_FORM, Object.assign(config, { errorMessage: error?.trim() }));
       globalScene.ui.playError();
@@ -211,7 +215,7 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
     this.usernameInfoImage.on("pointerdown", () => {
       const localStorageKeys = Object.keys(localStorage); // this gets the keys for localStorage
       const keyToFind = "data_";
-      const dataKeys = localStorageKeys.filter(ls => ls.indexOf(keyToFind) >= 0);
+      const dataKeys = localStorageKeys.filter((ls) => ls.indexOf(keyToFind) >= 0);
       if (dataKeys.length > 0 && dataKeys.length <= 2) {
         const options: OptionSelectItem[] = [];
         for (let i = 0; i < dataKeys.length; i++) {
@@ -221,14 +225,17 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
               globalScene.ui.revertMode();
               this.infoContainer.disableInteractive();
               return true;
-            }
+            },
           });
         }
         globalScene.ui.setOverlayMode(Mode.OPTION_SELECT, {
           options: options,
-          delay: 1000
+          delay: 1000,
         });
-        this.infoContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, globalScene.game.canvas.width, globalScene.game.canvas.height), Phaser.Geom.Rectangle.Contains);
+        this.infoContainer.setInteractive(
+          new Phaser.Geom.Rectangle(0, 0, globalScene.game.canvas.width, globalScene.game.canvas.height),
+          Phaser.Geom.Rectangle.Contains,
+        );
       } else {
         if (dataKeys.length > 2) {
           return onFail(this.ERR_TOO_MANY_SAVES);
@@ -243,8 +250,8 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
       const localStorageKeys = Object.keys(localStorage); // this gets the keys for localStorage
       const keyToFind = "data_";
       const sessionKeyToFind = "sessionData";
-      const dataKeys = localStorageKeys.filter(ls => ls.indexOf(keyToFind) >= 0);
-      const sessionKeys = localStorageKeys.filter(ls => ls.indexOf(sessionKeyToFind) >= 0);
+      const dataKeys = localStorageKeys.filter((ls) => ls.indexOf(keyToFind) >= 0);
+      const sessionKeys = localStorageKeys.filter((ls) => ls.indexOf(sessionKeyToFind) >= 0);
       if (dataKeys.length > 0 || sessionKeys.length > 0) {
         const zip = new JSZip();
         for (let i = 0; i < dataKeys.length; i++) {
@@ -253,7 +260,7 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
         for (let i = 0; i < sessionKeys.length; i++) {
           zip.file(sessionKeys[i] + ".prsv", localStorage.getItem(sessionKeys[i])!);
         }
-        zip.generateAsync({ type: "blob" }).then(content => {
+        zip.generateAsync({ type: "blob" }).then((content) => {
           const url = URL.createObjectURL(content);
           const a = document.createElement("a");
           a.href = url;
@@ -272,7 +279,7 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
       duration: Utils.fixedInt(1000),
       ease: "Sine.easeInOut",
       y: "-=24",
-      alpha: 1
+      alpha: 1,
     });
 
     this.infoContainer.setAlpha(0);
@@ -281,17 +288,12 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
       duration: Utils.fixedInt(1000),
       ease: "Sine.easeInOut",
       y: "-=24",
-      alpha: 1
+      alpha: 1,
     });
   }
 
   private buildInteractableImage(texture: string, name: string, opts: BuildInteractableImageOpts = {}) {
-    const {
-      scale = 0.07,
-      x = 0,
-      y = 0,
-      origin = { x: 0, y: 0 }
-    } = opts;
+    const { scale = 0.07, x = 0, y = 0, origin = { x: 0, y: 0 }} = opts;
     const img = globalScene.add.image(x, y, texture);
     img.setName(name);
     img.setOrigin(origin.x, origin.y);

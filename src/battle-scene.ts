@@ -4,9 +4,36 @@ import Pokemon, { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
 import PokemonSpecies, { allSpecies, getPokemonSpecies, PokemonSpeciesFilter } from "#app/data/pokemon-species";
 import { Constructor, isNullOrUndefined, randSeedInt } from "#app/utils";
 import * as Utils from "#app/utils";
-import { ConsumableModifier, ConsumablePokemonModifier, DoubleBattleChanceBoosterModifier, ExpBalanceModifier, ExpShareModifier, FusePokemonModifier, HealingBoosterModifier, Modifier, ModifierBar, ModifierPredicate, MultipleParticipantExpBonusModifier, PersistentModifier, PokemonExpBoosterModifier, PokemonFormChangeItemModifier, PokemonHeldItemModifier, PokemonHpRestoreModifier, PokemonIncrementingStatModifier, RememberMoveModifier, TerastallizeModifier, TurnHeldItemTransferModifier } from "./modifier/modifier";
+import {
+  ConsumableModifier,
+  ConsumablePokemonModifier,
+  DoubleBattleChanceBoosterModifier,
+  ExpBalanceModifier,
+  ExpShareModifier,
+  FusePokemonModifier,
+  HealingBoosterModifier,
+  Modifier,
+  ModifierBar,
+  ModifierPredicate,
+  MultipleParticipantExpBonusModifier,
+  PersistentModifier,
+  PokemonExpBoosterModifier,
+  PokemonFormChangeItemModifier,
+  PokemonHeldItemModifier,
+  PokemonHpRestoreModifier,
+  PokemonIncrementingStatModifier,
+  RememberMoveModifier,
+  TerastallizeModifier,
+  TurnHeldItemTransferModifier,
+} from "./modifier/modifier";
 import { PokeballType } from "#enums/pokeball";
-import { initCommonAnims, initMoveAnim, loadCommonAnimAssets, loadMoveAnimAssets, populateAnims } from "#app/data/battle-anims";
+import {
+  initCommonAnims,
+  initMoveAnim,
+  loadCommonAnimAssets,
+  loadMoveAnimAssets,
+  populateAnims,
+} from "#app/data/battle-anims";
 import { Phase } from "#app/phase";
 import { initGameSpeed } from "#app/system/game-speed";
 import { Arena, ArenaBase } from "#app/field/arena";
@@ -14,9 +41,29 @@ import { GameData } from "#app/system/game-data";
 import { addTextObject, getTextColor, TextStyle } from "#app/ui/text";
 import { allMoves } from "#app/data/move";
 import { MusicPreference } from "#app/system/settings/settings";
-import { getDefaultModifierTypeForTier, getEnemyModifierTypesForWave, getLuckString, getLuckTextTint, getModifierPoolForType, getModifierType, getPartyLuckValue, ModifierPoolType, modifierTypes, PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
+import {
+  getDefaultModifierTypeForTier,
+  getEnemyModifierTypesForWave,
+  getLuckString,
+  getLuckTextTint,
+  getModifierPoolForType,
+  getModifierType,
+  getPartyLuckValue,
+  ModifierPoolType,
+  modifierTypes,
+  PokemonHeldItemModifierType,
+} from "#app/modifier/modifier-type";
 import AbilityBar from "#app/ui/ability-bar";
-import { allAbilities, applyAbAttrs, applyPostBattleInitAbAttrs, applyPostItemLostAbAttrs, BlockItemTheftAbAttr, DoubleBattleChanceAbAttr, PostBattleInitAbAttr, PostItemLostAbAttr } from "#app/data/ability";
+import {
+  allAbilities,
+  applyAbAttrs,
+  applyPostBattleInitAbAttrs,
+  applyPostItemLostAbAttrs,
+  BlockItemTheftAbAttr,
+  DoubleBattleChanceAbAttr,
+  PostBattleInitAbAttr,
+  PostItemLostAbAttr,
+} from "#app/data/ability";
 import Battle, { BattleType, FixedBattleConfig } from "#app/battle";
 import { GameMode, GameModes, getGameMode } from "#app/game-mode";
 import FieldSpritePipeline from "#app/pipelines/field-sprite";
@@ -36,7 +83,14 @@ import UIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin";
 import { addUiThemeOverrides } from "#app/ui/ui-theme";
 import PokemonData from "#app/system/pokemon-data";
 import { Nature } from "#enums/nature";
-import { FormChangeItem, pokemonFormChanges, SpeciesFormChange, SpeciesFormChangeManualTrigger, SpeciesFormChangeTimeOfDayTrigger, SpeciesFormChangeTrigger } from "#app/data/pokemon-forms";
+import {
+  FormChangeItem,
+  pokemonFormChanges,
+  SpeciesFormChange,
+  SpeciesFormChangeManualTrigger,
+  SpeciesFormChangeTimeOfDayTrigger,
+  SpeciesFormChangeTrigger,
+} from "#app/data/pokemon-forms";
 import { FormChangePhase } from "#app/phases/form-change-phase";
 import { getTypeRgb } from "#app/data/type";
 import { Type } from "#enums/type";
@@ -88,7 +142,14 @@ import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-ph
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
 import { ShopCursorTarget } from "#app/enums/shop-cursor-target";
 import MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
-import { allMysteryEncounters, ANTI_VARIANCE_WEIGHT_MODIFIER, AVERAGE_ENCOUNTERS_PER_RUN_TARGET, BASE_MYSTERY_ENCOUNTER_SPAWN_WEIGHT, MYSTERY_ENCOUNTER_SPAWN_MAX_WEIGHT, mysteryEncountersByBiome } from "#app/data/mystery-encounters/mystery-encounters";
+import {
+  allMysteryEncounters,
+  ANTI_VARIANCE_WEIGHT_MODIFIER,
+  AVERAGE_ENCOUNTERS_PER_RUN_TARGET,
+  BASE_MYSTERY_ENCOUNTER_SPAWN_WEIGHT,
+  MYSTERY_ENCOUNTER_SPAWN_MAX_WEIGHT,
+  mysteryEncountersByBiome,
+} from "#app/data/mystery-encounters/mystery-encounters";
 import { MysteryEncounterSaveData } from "#app/data/mystery-encounters/mystery-encounter-save-data";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
@@ -106,11 +167,9 @@ export const bypassLogin = import.meta.env.VITE_BYPASS_LOGIN === "1";
 
 const DEBUG_RNG = false;
 
-const OPP_IVS_OVERRIDE_VALIDATED : integer[] = (
-  Array.isArray(Overrides.OPP_IVS_OVERRIDE) ?
-    Overrides.OPP_IVS_OVERRIDE :
-    new Array(6).fill(Overrides.OPP_IVS_OVERRIDE)
-).map(iv => isNaN(iv) || iv === null || iv > 31 ? -1 : iv);
+const OPP_IVS_OVERRIDE_VALIDATED: integer[] = (
+  Array.isArray(Overrides.OPP_IVS_OVERRIDE) ? Overrides.OPP_IVS_OVERRIDE : new Array(6).fill(Overrides.OPP_IVS_OVERRIDE)
+).map((iv) => (isNaN(iv) || iv === null || iv > 31 ? -1 : iv));
 
 export const startingWave = Overrides.STARTING_WAVE_OVERRIDE || 1;
 
@@ -118,18 +177,18 @@ const expSpriteKeys: string[] = [];
 
 export let starterColors: StarterColors;
 interface StarterColors {
-    [key: string]: [string, string]
+  [key: string]: [string, string];
 }
 
 export interface PokeballCounts {
-    [pb: string]: integer;
+  [pb: string]: integer;
 }
 
 export type AnySound = Phaser.Sound.WebAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.NoAudioSound;
 
 export interface InfoToggle {
-    toggleInfo(force?: boolean): void;
-    isActive(): boolean;
+  toggleInfo(force?: boolean): void;
+  isActive(): boolean;
 }
 
 export default class BattleScene extends SceneBase {
@@ -187,17 +246,17 @@ export default class BattleScene extends SceneBase {
   public eggSkipPreference: number = 0;
 
   /**
-     * Defines the experience gain display mode.
-     *
-     * @remarks
-     * The `expParty` can have several modes:
-     * - `0` - Default: The normal experience gain display, nothing changed.
-     * - `1` - Level Up Notification: Displays the level up in the small frame instead of a message.
-     * - `2` - Skip: No level up frame nor message.
-     *
-     * Modes `1` and `2` are still compatible with stats display, level up, new move, etc.
-     * @default 0 - Uses the default normal experience gain display.
-     */
+   * Defines the experience gain display mode.
+   *
+   * @remarks
+   * The `expParty` can have several modes:
+   * - `0` - Default: The normal experience gain display, nothing changed.
+   * - `1` - Level Up Notification: Displays the level up in the small frame instead of a message.
+   * - `2` - Skip: No level up frame nor message.
+   *
+   * Modes `1` and `2` are still compatible with stats display, level up, new move, etc.
+   * @default 0 - Uses the default normal experience gain display.
+   */
   public expParty: ExpNotification = 0;
   public hpBarSpeed: integer = 0;
   public fusionPaletteSwaps: boolean = true;
@@ -213,9 +272,9 @@ export default class BattleScene extends SceneBase {
   public battleStyle: integer = BattleStyle.SWITCH;
 
   /**
-  * Defines whether or not to show type effectiveness hints
-  * - true: No hints
-  * - false: Show hints for moves
+   * Defines whether or not to show type effectiveness hints
+   * - true: No hints
+   * - false: Show hints for moves
    */
   public typeHints: boolean = false;
 
@@ -278,7 +337,7 @@ export default class BattleScene extends SceneBase {
   private fieldOverlay: Phaser.GameObjects.Rectangle;
   private shopOverlay: Phaser.GameObjects.Rectangle;
   private shopOverlayShown: boolean = false;
-  private shopOverlayOpacity: number = .8;
+  private shopOverlayOpacity: number = 0.8;
 
   public modifiers: PersistentModifier[];
   private enemyModifiers: PersistentModifier[];
@@ -344,7 +403,11 @@ export default class BattleScene extends SceneBase {
     if (variant) {
       atlasPath = atlasPath.replace("variant/", "");
     }
-    this.load.atlas(key, `images/pokemon/${variant ? "variant/" : ""}${experimental ? "exp/" : ""}${atlasPath}.png`,  `images/pokemon/${variant ? "variant/" : ""}${experimental ? "exp/" : ""}${atlasPath}.json`);
+    this.load.atlas(
+      key,
+      `images/pokemon/${variant ? "variant/" : ""}${experimental ? "exp/" : ""}${atlasPath}.png`,
+      `images/pokemon/${variant ? "variant/" : ""}${experimental ? "exp/" : ""}${atlasPath}.json`,
+    );
   }
 
   /**
@@ -356,18 +419,20 @@ export default class BattleScene extends SceneBase {
       fileRoot = `exp/${fileRoot}`;
     }
     let variantConfig = variantData;
-    fileRoot.split("/").map(p => variantConfig ? variantConfig = variantConfig[p] : null);
+    fileRoot.split("/").map((p) => (variantConfig ? (variantConfig = variantConfig[p]) : null));
     const variantSet = variantConfig as VariantSet;
-    if (variantSet && (variant !== undefined && variantSet[variant] === 1)) {
+    if (variantSet && variant !== undefined && variantSet[variant] === 1) {
       const populateVariantColors = (key: string): Promise<void> => {
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
           if (variantColorCache.hasOwnProperty(key)) {
             return resolve();
           }
-          this.cachedFetch(`./images/pokemon/variant/${fileRoot}.json`).then(res => res.json()).then(c => {
-            variantColorCache[key] = c;
-            resolve();
-          });
+          this.cachedFetch(`./images/pokemon/variant/${fileRoot}.json`)
+            .then((res) => res.json())
+            .then((c) => {
+              variantColorCache[key] = c;
+              resolve();
+            });
         });
       };
       populateVariantColors(spriteKey);
@@ -425,7 +490,7 @@ export default class BattleScene extends SceneBase {
     this.arenaBgTransition = this.add.sprite(0, 0, "plains_bg");
     this.arenaBgTransition.setName("sprite-arena-bg-transition");
 
-    [ this.arenaBgTransition, this.arenaBg ].forEach(a => {
+    [ this.arenaBgTransition, this.arenaBg ].forEach((a) => {
       a.setPipeline(this.fieldSpritePipeline);
       a.setScale(6);
       a.setOrigin(0);
@@ -445,13 +510,16 @@ export default class BattleScene extends SceneBase {
 
     this.fieldUI = fieldUI;
 
-    const transition = this.make.rexTransitionImagePack({
-      x: 0,
-      y: 0,
-      scale: 6,
-      key: "loading_bg",
-      origin: { x: 0, y: 0 }
-    }, true);
+    const transition = this.make.rexTransitionImagePack(
+      {
+        x: 0,
+        y: 0,
+        scale: 6,
+        key: "loading_bg",
+        origin: { x: 0, y: 0 },
+      },
+      true,
+    );
 
     //@ts-ignore (the defined types in the package are incromplete...)
     transition.transit({
@@ -473,7 +541,7 @@ export default class BattleScene extends SceneBase {
     this.uiContainer = uiContainer;
 
     const overlayWidth = this.game.canvas.width / 6;
-    const overlayHeight = (this.game.canvas.height / 6) - 48;
+    const overlayHeight = this.game.canvas.height / 6 - 48;
     this.fieldOverlay = this.add.rectangle(0, overlayHeight * -1 - 48, overlayWidth, overlayHeight, 0x424242);
     this.fieldOverlay.setName("rect-field-overlay");
     this.fieldOverlay.setOrigin(0, 0);
@@ -531,28 +599,39 @@ export default class BattleScene extends SceneBase {
     this.candyBar.setup();
     this.fieldUI.add(this.candyBar);
 
-    this.biomeWaveText = addTextObject((this.game.canvas.width / 6) - 2, 0, startingWave.toString(), TextStyle.BATTLE_INFO);
+    this.biomeWaveText = addTextObject(
+      this.game.canvas.width / 6 - 2,
+      0,
+      startingWave.toString(),
+      TextStyle.BATTLE_INFO,
+    );
     this.biomeWaveText.setName("text-biome-wave");
     this.biomeWaveText.setOrigin(1, 0.5);
     this.fieldUI.add(this.biomeWaveText);
 
-    this.moneyText = addTextObject((this.game.canvas.width / 6) - 2, 0, "", TextStyle.MONEY);
+    this.moneyText = addTextObject(this.game.canvas.width / 6 - 2, 0, "", TextStyle.MONEY);
     this.moneyText.setName("text-money");
     this.moneyText.setOrigin(1, 0.5);
     this.fieldUI.add(this.moneyText);
 
-    this.scoreText = addTextObject((this.game.canvas.width / 6) - 2, 0, "", TextStyle.PARTY, { fontSize: "54px" });
+    this.scoreText = addTextObject(this.game.canvas.width / 6 - 2, 0, "", TextStyle.PARTY, { fontSize: "54px" });
     this.scoreText.setName("text-score");
     this.scoreText.setOrigin(1, 0.5);
     this.fieldUI.add(this.scoreText);
 
-    this.luckText = addTextObject((this.game.canvas.width / 6) - 2, 0, "", TextStyle.PARTY, { fontSize: "54px" });
+    this.luckText = addTextObject(this.game.canvas.width / 6 - 2, 0, "", TextStyle.PARTY, { fontSize: "54px" });
     this.luckText.setName("text-luck");
     this.luckText.setOrigin(1, 0.5);
     this.luckText.setVisible(false);
     this.fieldUI.add(this.luckText);
 
-    this.luckLabelText = addTextObject((this.game.canvas.width / 6) - 2, 0, i18next.t("common:luckIndicator"), TextStyle.PARTY, { fontSize: "54px" });
+    this.luckLabelText = addTextObject(
+      this.game.canvas.width / 6 - 2,
+      0,
+      i18next.t("common:luckIndicator"),
+      TextStyle.PARTY,
+      { fontSize: "54px" },
+    );
     this.luckLabelText.setName("text-luck-label");
     this.luckLabelText.setOrigin(1, 0.5);
     this.luckLabelText.setVisible(false);
@@ -569,7 +648,10 @@ export default class BattleScene extends SceneBase {
     this.spriteSparkleHandler = new PokemonSpriteSparkleHandler();
     this.spriteSparkleHandler.setup();
 
-    this.pokemonInfoContainer = new PokemonInfoContainer((this.game.canvas.width / 6) + 52, -(this.game.canvas.height / 6) + 66);
+    this.pokemonInfoContainer = new PokemonInfoContainer(
+      this.game.canvas.width / 6 + 52,
+      -(this.game.canvas.height / 6) + 66,
+    );
     this.pokemonInfoContainer.setup();
 
     this.fieldUI.add(this.pokemonInfoContainer);
@@ -591,14 +673,18 @@ export default class BattleScene extends SceneBase {
     this.arenaPlayerTransition.setVisible(false);
     this.arenaNextEnemy.setVisible(false);
 
-    [ this.arenaPlayer, this.arenaPlayerTransition, this.arenaEnemy, this.arenaNextEnemy ].forEach(a => {
+    [ this.arenaPlayer, this.arenaPlayerTransition, this.arenaEnemy, this.arenaNextEnemy ].forEach((a) => {
       if (a instanceof Phaser.GameObjects.Sprite) {
         a.setOrigin(0, 0);
       }
       field.add(a);
     });
 
-    const trainer = this.addFieldSprite(0, 0, `trainer_${this.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back`);
+    const trainer = this.addFieldSprite(
+      0,
+      0,
+      `trainer_${this.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back`,
+    );
     trainer.setOrigin(0.5, 1);
     trainer.setName("sprite-trainer");
 
@@ -611,7 +697,7 @@ export default class BattleScene extends SceneBase {
       frames: this.anims.generateFrameNumbers("prompt", { start: 1, end: 4 }),
       frameRate: 6,
       repeat: -1,
-      showOnStart: true
+      showOnStart: true,
     });
 
     this.anims.create({
@@ -620,7 +706,7 @@ export default class BattleScene extends SceneBase {
       frameRate: 18,
       repeat: 0,
       showOnStart: true,
-      hideOnComplete: true
+      hideOnComplete: true,
     });
 
     this.reset(false, false, true);
@@ -637,8 +723,10 @@ export default class BattleScene extends SceneBase {
     Promise.all([
       Promise.all(loadPokemonAssets),
       initCommonAnims().then(() => loadCommonAnimAssets(true)),
-      Promise.all([ Moves.TACKLE, Moves.TAIL_WHIP, Moves.FOCUS_ENERGY, Moves.STRUGGLE ].map(m => initMoveAnim(m))).then(() => loadMoveAnimAssets(defaultMoves, true)),
-      this.initStarterColors()
+      Promise.all([ Moves.TACKLE, Moves.TAIL_WHIP, Moves.FOCUS_ENERGY, Moves.STRUGGLE ].map((m) => initMoveAnim(m))).then(
+        () => loadMoveAnimAssets(defaultMoves, true),
+      ),
+      this.initStarterColors(),
     ]).then(() => {
       this.pushPhase(new LoginPhase());
       this.pushPhase(new TitlePhase());
@@ -672,7 +760,7 @@ export default class BattleScene extends SceneBase {
         if (this.lastSavePlayTime !== null) {
           this.lastSavePlayTime++;
         }
-      }
+      },
     });
 
     this.updateBiomeWaveText();
@@ -684,19 +772,22 @@ export default class BattleScene extends SceneBase {
     if (expSpriteKeys.length) {
       return;
     }
-    this.cachedFetch("./exp-sprites.json").then(res => res.json()).then(keys => {
-      if (Array.isArray(keys)) {
-        expSpriteKeys.push(...keys);
-      }
-      Promise.resolve();
-    });
+    this.cachedFetch("./exp-sprites.json")
+      .then((res) => res.json())
+      .then((keys) => {
+        if (Array.isArray(keys)) {
+          expSpriteKeys.push(...keys);
+        }
+        Promise.resolve();
+      });
   }
 
   async initVariantData(): Promise<void> {
-    Object.keys(variantData).forEach(key => delete variantData[key]);
-    await this.cachedFetch("./images/pokemon/variant/_masterlist.json").then(res => res.json())
-      .then(v => {
-        Object.keys(v).forEach(k => variantData[k] = v[k]);
+    Object.keys(variantData).forEach((key) => delete variantData[key]);
+    await this.cachedFetch("./images/pokemon/variant/_masterlist.json")
+      .then((res) => res.json())
+      .then((v) => {
+        Object.keys(v).forEach((k) => (variantData[k] = v[k]));
         if (this.experimentalSprites) {
           const expVariantData = variantData["exp"];
           const traverseVariantData = (keys: string[]) => {
@@ -715,7 +806,7 @@ export default class BattleScene extends SceneBase {
               }
             });
           };
-          Object.keys(expVariantData).forEach(ek => traverseVariantData([ ek ]));
+          Object.keys(expVariantData).forEach((ek) => traverseVariantData([ ek ]));
         }
         Promise.resolve();
       });
@@ -733,18 +824,20 @@ export default class BattleScene extends SceneBase {
   }
 
   initStarterColors(): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       if (starterColors) {
         return resolve();
       }
 
-      this.cachedFetch("./starter-colors.json").then(res => res.json()).then(sc => {
-        starterColors = {};
-        Object.keys(sc).forEach(key => {
-          starterColors[key] = sc[key];
-        });
+      this.cachedFetch("./starter-colors.json")
+        .then((res) => res.json())
+        .then((sc) => {
+          starterColors = {};
+          Object.keys(sc).forEach((key) => {
+            starterColors[key] = sc[key];
+          });
 
-        /*const loadPokemonAssets: Promise<void>[] = [];
+          /*const loadPokemonAssets: Promise<void>[] = [];
 
                 for (let s of Object.keys(speciesStarters)) {
                     const species = getPokemonSpecies(parseInt(s));
@@ -766,8 +859,8 @@ export default class BattleScene extends SceneBase {
                     resolve();
                 });*/
 
-        resolve();
-      });
+          resolve();
+        });
     });
   }
 
@@ -805,7 +898,7 @@ export default class BattleScene extends SceneBase {
    * that are {@linkcode Pokemon.isAllowedInBattle | allowed in battle}.
    */
   public getPokemonAllowedInBattle(): PlayerPokemon[] {
-    return this.getPlayerParty().filter(p => p.isAllowedInBattle());
+    return this.getPlayerParty().filter((p) => p.isAllowedInBattle());
   }
 
   /**
@@ -816,7 +909,7 @@ export default class BattleScene extends SceneBase {
    * @param includeSwitching Whether a pokemon that is currently switching out is valid, default `true`
    */
   public getPlayerPokemon(includeSwitching: boolean = true): PlayerPokemon | undefined {
-    return this.getPlayerField().find(p => p.isActive() && (includeSwitching || p.switchOutStatus === false));
+    return this.getPlayerField().find((p) => p.isActive() && (includeSwitching || p.switchOutStatus === false));
   }
 
   /**
@@ -841,7 +934,7 @@ export default class BattleScene extends SceneBase {
    * @param includeSwitching Whether a pokemon that is currently switching out is valid, default `true`
    */
   public getEnemyPokemon(includeSwitching: boolean = true): EnemyPokemon | undefined {
-    return this.getEnemyField().find(p => p.isActive() && (includeSwitching || p.switchOutStatus === false));
+    return this.getEnemyField().find((p) => p.isActive() && (includeSwitching || p.switchOutStatus === false));
   }
 
   /**
@@ -860,9 +953,7 @@ export default class BattleScene extends SceneBase {
     const enemyField = this.getEnemyField();
     ret.splice(0, playerField.length, ...playerField);
     ret.splice(2, enemyField.length, ...enemyField);
-    return activeOnly
-      ? ret.filter(p => p?.isActive())
-      : ret;
+    return activeOnly ? ret.filter((p) => p?.isActive()) : ret;
   }
 
   /**
@@ -878,7 +969,13 @@ export default class BattleScene extends SceneBase {
     if (allyPokemon?.isActive(true)) {
       let targetingMovePhase: MovePhase;
       do {
-        targetingMovePhase = this.findPhase(mp => mp instanceof MovePhase && mp.targets.length === 1 && mp.targets[0] === removedPokemon.getBattlerIndex() && mp.pokemon.isPlayer() !== allyPokemon.isPlayer()) as MovePhase;
+        targetingMovePhase = this.findPhase(
+          (mp) =>
+            mp instanceof MovePhase &&
+            mp.targets.length === 1 &&
+            mp.targets[0] === removedPokemon.getBattlerIndex() &&
+            mp.pokemon.isPlayer() !== allyPokemon.isPlayer(),
+        ) as MovePhase;
         if (targetingMovePhase && targetingMovePhase.targets[0] !== allyPokemon.getBattlerIndex()) {
           targetingMovePhase.targets[0] = allyPokemon.getBattlerIndex();
         }
@@ -902,16 +999,39 @@ export default class BattleScene extends SceneBase {
 
   // return the stored info toggles; used by ui-inputs
   getInfoToggles(activeOnly: boolean = false): InfoToggle[] {
-    return activeOnly ? this.infoToggles.filter(t => t?.isActive()) : this.infoToggles;
+    return activeOnly ? this.infoToggles.filter((t) => t?.isActive()) : this.infoToggles;
   }
 
   getPokemonById(pokemonId: integer): Pokemon | null {
-    const findInParty = (party: Pokemon[]) => party.find(p => p.id === pokemonId);
+    const findInParty = (party: Pokemon[]) => party.find((p) => p.id === pokemonId);
     return (findInParty(this.getPlayerParty()) || findInParty(this.getEnemyParty())) ?? null;
   }
 
-  addPlayerPokemon(species: PokemonSpecies, level: integer, abilityIndex?: integer, formIndex?: integer, gender?: Gender, shiny?: boolean, variant?: Variant, ivs?: integer[], nature?: Nature, dataSource?: Pokemon | PokemonData, postProcess?: (playerPokemon: PlayerPokemon) => void): PlayerPokemon {
-    const pokemon = new PlayerPokemon(species, level, abilityIndex, formIndex, gender, shiny, variant, ivs, nature, dataSource);
+  addPlayerPokemon(
+    species: PokemonSpecies,
+    level: integer,
+    abilityIndex?: integer,
+    formIndex?: integer,
+    gender?: Gender,
+    shiny?: boolean,
+    variant?: Variant,
+    ivs?: integer[],
+    nature?: Nature,
+    dataSource?: Pokemon | PokemonData,
+    postProcess?: (playerPokemon: PlayerPokemon) => void,
+  ): PlayerPokemon {
+    const pokemon = new PlayerPokemon(
+      species,
+      level,
+      abilityIndex,
+      formIndex,
+      gender,
+      shiny,
+      variant,
+      ivs,
+      nature,
+      dataSource,
+    );
     if (postProcess) {
       postProcess(pokemon);
     }
@@ -919,7 +1039,15 @@ export default class BattleScene extends SceneBase {
     return pokemon;
   }
 
-  addEnemyPokemon(species: PokemonSpecies, level: integer, trainerSlot: TrainerSlot, boss: boolean = false, shinyLock: boolean = false, dataSource?: PokemonData, postProcess?: (enemyPokemon: EnemyPokemon) => void): EnemyPokemon {
+  addEnemyPokemon(
+    species: PokemonSpecies,
+    level: integer,
+    trainerSlot: TrainerSlot,
+    boss: boolean = false,
+    shinyLock: boolean = false,
+    dataSource?: PokemonData,
+    postProcess?: (enemyPokemon: EnemyPokemon) => void,
+  ): EnemyPokemon {
     if (Overrides.OPP_LEVEL_OVERRIDE > 0) {
       level = Overrides.OPP_LEVEL_OVERRIDE;
     }
@@ -938,7 +1066,13 @@ export default class BattleScene extends SceneBase {
       const secondaryIvs = Utils.getIvsFromId(Utils.randSeedInt(4294967296));
 
       for (let s = 0; s < pokemon.ivs.length; s++) {
-        pokemon.ivs[s] = Math.round(Phaser.Math.Linear(Math.min(pokemon.ivs[s], secondaryIvs[s]), Math.max(pokemon.ivs[s], secondaryIvs[s]), 0.75));
+        pokemon.ivs[s] = Math.round(
+          Phaser.Math.Linear(
+            Math.min(pokemon.ivs[s], secondaryIvs[s]),
+            Math.max(pokemon.ivs[s], secondaryIvs[s]),
+            0.75,
+          ),
+        );
       }
     }
     if (postProcess) {
@@ -975,7 +1109,14 @@ export default class BattleScene extends SceneBase {
     this.updateModifiers(true);
   }
 
-  addPokemonIcon(pokemon: Pokemon, x: number, y: number, originX: number = 0.5, originY: number = 0.5, ignoreOverride: boolean = false): Phaser.GameObjects.Container {
+  addPokemonIcon(
+    pokemon: Pokemon,
+    x: number,
+    y: number,
+    originX: number = 0.5,
+    originY: number = 0.5,
+    ignoreOverride: boolean = false,
+  ): Phaser.GameObjects.Container {
     const container = this.add.container(x, y);
     container.setName(`${pokemon.name}-icon`);
 
@@ -1005,13 +1146,22 @@ export default class BattleScene extends SceneBase {
       const originalHeight = icon.height;
       const originalFrame = icon.frame;
 
-      const iconHeight = (icon.frame.cutHeight <= fusionIcon.frame.cutHeight ? Math.ceil : Math.floor)((icon.frame.cutHeight + fusionIcon.frame.cutHeight) / 4);
+      const iconHeight = (icon.frame.cutHeight <= fusionIcon.frame.cutHeight ? Math.ceil : Math.floor)(
+        (icon.frame.cutHeight + fusionIcon.frame.cutHeight) / 4,
+      );
 
       // Inefficient, but for some reason didn't work with only the unique properties as part of the name
       const iconFrameId = `${icon.frame.name}f${fusionIcon.frame.name}`;
 
       if (!icon.frame.texture.has(iconFrameId)) {
-        icon.frame.texture.add(iconFrameId, icon.frame.sourceIndex, icon.frame.cutX, icon.frame.cutY, icon.frame.cutWidth, iconHeight);
+        icon.frame.texture.add(
+          iconFrameId,
+          icon.frame.sourceIndex,
+          icon.frame.cutX,
+          icon.frame.cutY,
+          icon.frame.cutWidth,
+          iconHeight,
+        );
       }
 
       icon.setFrame(iconFrameId);
@@ -1027,7 +1177,14 @@ export default class BattleScene extends SceneBase {
       const fusionIconFrameId = `${fusionIcon.frame.name}f${icon.frame.name}`;
 
       if (!fusionIcon.frame.texture.has(fusionIconFrameId)) {
-        fusionIcon.frame.texture.add(fusionIconFrameId, fusionIcon.frame.sourceIndex, fusionIcon.frame.cutX, fusionIconY, fusionIcon.frame.cutWidth, fusionIconHeight);
+        fusionIcon.frame.texture.add(
+          fusionIconFrameId,
+          fusionIcon.frame.sourceIndex,
+          fusionIcon.frame.cutX,
+          fusionIconY,
+          fusionIcon.frame.cutWidth,
+          fusionIconHeight,
+        );
       }
       fusionIcon.setFrame(fusionIconFrameId);
 
@@ -1040,7 +1197,7 @@ export default class BattleScene extends SceneBase {
         container.x -= originalWidth * (originX - 0.5);
       }
       if (originY !== 0) {
-        container.y -= (originalHeight) * originY;
+        container.y -= originalHeight * originY;
       }
     } else {
       if (originX !== 0.5) {
@@ -1089,7 +1246,11 @@ export default class BattleScene extends SceneBase {
 
     this.lockModifierTiers = false;
 
-    this.pokeballCounts = Object.fromEntries(Utils.getEnumValues(PokeballType).filter(p => p <= PokeballType.MASTER_BALL).map(t => [ t, 0 ]));
+    this.pokeballCounts = Object.fromEntries(
+      Utils.getEnumValues(PokeballType)
+        .filter((p) => p <= PokeballType.MASTER_BALL)
+        .map((t) => [ t, 0 ]),
+    );
     this.pokeballCounts[PokeballType.POKEBALL] += 5;
     if (Overrides.POKEBALL_OVERRIDE.active) {
       this.pokeballCounts = Overrides.POKEBALL_OVERRIDE.pokeballs;
@@ -1131,7 +1292,7 @@ export default class BattleScene extends SceneBase {
     this.updateScoreText();
     this.scoreText.setVisible(false);
 
-    [ this.luckLabelText, this.luckText ].map(t => t.setVisible(false));
+    [ this.luckLabelText, this.luckText ].map((t) => t.setVisible(false));
 
     this.newArena(Overrides.STARTING_BIOME_OVERRIDE || Biome.TOWN);
 
@@ -1140,7 +1301,7 @@ export default class BattleScene extends SceneBase {
     this.arenaBgTransition.setPosition(0, 0);
     this.arenaPlayer.setPosition(300, 0);
     this.arenaPlayerTransition.setPosition(0, 0);
-    [ this.arenaEnemy, this.arenaNextEnemy ].forEach(a => a.setPosition(-280, 0));
+    [ this.arenaEnemy, this.arenaNextEnemy ].forEach((a) => a.setPosition(-280, 0));
     this.arenaNextEnemy.setVisible(false);
 
     this.arena.init();
@@ -1158,7 +1319,16 @@ export default class BattleScene extends SceneBase {
         ...allSpecies,
         ...allMoves,
         ...allAbilities,
-        ...Utils.getEnumValues(ModifierPoolType).map(mpt => getModifierPoolForType(mpt)).map(mp => Object.values(mp).flat().map(mt => mt.modifierType).filter(mt => "localize" in mt).map(lpb => lpb as unknown as Localizable)).flat()
+        ...Utils.getEnumValues(ModifierPoolType)
+          .map((mpt) => getModifierPoolForType(mpt))
+          .map((mp) =>
+            Object.values(mp)
+              .flat()
+              .map((mt) => mt.modifierType)
+              .filter((mt) => "localize" in mt)
+              .map((lpb) => lpb as unknown as Localizable),
+          )
+          .flat(),
       ];
       for (const item of localizable) {
         item.localize();
@@ -1181,7 +1351,7 @@ export default class BattleScene extends SceneBase {
           this.children.removeAll(true);
           this.game.domContainer.innerHTML = "";
           this.launchBattle();
-        }
+        },
       });
     }
   }
@@ -1189,13 +1359,19 @@ export default class BattleScene extends SceneBase {
   getDoubleBattleChance(newWaveIndex: number, playerField: PlayerPokemon[]) {
     const doubleChance = new Utils.IntegerHolder(newWaveIndex % 10 === 0 ? 32 : 8);
     this.applyModifiers(DoubleBattleChanceBoosterModifier, true, doubleChance);
-    playerField.forEach(p => applyAbAttrs(DoubleBattleChanceAbAttr, p, null, false, doubleChance));
+    playerField.forEach((p) => applyAbAttrs(DoubleBattleChanceAbAttr, p, null, false, doubleChance));
     return Math.max(doubleChance.value, 1);
   }
 
-  newBattle(waveIndex?: integer, battleType?: BattleType, trainerData?: TrainerData, double?: boolean, mysteryEncounterType?: MysteryEncounterType): Battle | null {
+  newBattle(
+    waveIndex?: integer,
+    battleType?: BattleType,
+    trainerData?: TrainerData,
+    double?: boolean,
+    mysteryEncounterType?: MysteryEncounterType,
+  ): Battle | null {
     const _startingWave = Overrides.STARTING_WAVE_OVERRIDE || startingWave;
-    const newWaveIndex = waveIndex || ((this.currentBattle?.waveIndex || (_startingWave - 1)) + 1);
+    const newWaveIndex = waveIndex || (this.currentBattle?.waveIndex || _startingWave - 1) + 1;
     let newDouble: boolean | undefined;
     let newBattleType: BattleType;
     let newTrainer: Trainer | undefined;
@@ -1210,7 +1386,10 @@ export default class BattleScene extends SceneBase {
       battleConfig = this.gameMode.getFixedBattle(newWaveIndex);
       newDouble = battleConfig.double;
       newBattleType = battleConfig.battleType;
-      this.executeWithSeedOffset(() => newTrainer = battleConfig?.getTrainer(), (battleConfig.seedOffsetWaveIndex || newWaveIndex) << 8);
+      this.executeWithSeedOffset(
+        () => (newTrainer = battleConfig?.getTrainer()),
+        (battleConfig.seedOffsetWaveIndex || newWaveIndex) << 8,
+      );
       if (newTrainer) {
         this.field.add(newTrainer);
       }
@@ -1231,11 +1410,18 @@ export default class BattleScene extends SceneBase {
         } else if (trainerConfigs[trainerType].hasDouble) {
           doubleTrainer = !Utils.randSeedInt(this.getDoubleBattleChance(newWaveIndex, playerField));
           // Add a check that special trainers can't be double except for tate and liza - they should use the normal double chance
-          if (trainerConfigs[trainerType].trainerTypeDouble && ![ TrainerType.TATE, TrainerType.LIZA ].includes(trainerType)) {
+          if (
+            trainerConfigs[trainerType].trainerTypeDouble &&
+            ![ TrainerType.TATE, TrainerType.LIZA ].includes(trainerType)
+          ) {
             doubleTrainer = false;
           }
         }
-        const variant = doubleTrainer ? TrainerVariant.DOUBLE : (Utils.randSeedInt(2) ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT);
+        const variant = doubleTrainer
+          ? TrainerVariant.DOUBLE
+          : Utils.randSeedInt(2)
+            ? TrainerVariant.FEMALE
+            : TrainerVariant.DEFAULT;
         newTrainer = trainerData !== undefined ? trainerData.toTrainer() : new Trainer(trainerType, variant);
         this.field.add(newTrainer);
       }
@@ -1275,10 +1461,10 @@ export default class BattleScene extends SceneBase {
           doubleOverrideForWave = "single";
           break;
         case "even-doubles":
-          doubleOverrideForWave = (newWaveIndex % 2) ? "single" : "double";
+          doubleOverrideForWave = newWaveIndex % 2 ? "single" : "double";
           break;
         case "odd-doubles":
-          doubleOverrideForWave = (newWaveIndex % 2) ? "double" : "single";
+          doubleOverrideForWave = newWaveIndex % 2 ? "double" : "single";
           break;
       }
 
@@ -1307,13 +1493,17 @@ export default class BattleScene extends SceneBase {
     }
 
     if (lastBattle?.double && !newDouble) {
-      this.tryRemovePhase(p => p instanceof SwitchPhase);
-      this.getPlayerField().forEach(p => p.lapseTag(BattlerTagType.COMMANDED));
+      this.tryRemovePhase((p) => p instanceof SwitchPhase);
+      this.getPlayerField().forEach((p) => p.lapseTag(BattlerTagType.COMMANDED));
     }
 
-    this.executeWithSeedOffset(() => {
-      this.currentBattle = new Battle(this.gameMode, newWaveIndex, newBattleType, newTrainer, newDouble);
-    }, newWaveIndex << 3, this.waveSeed);
+    this.executeWithSeedOffset(
+      () => {
+        this.currentBattle = new Battle(this.gameMode, newWaveIndex, newBattleType, newTrainer, newDouble);
+      },
+      newWaveIndex << 3,
+      this.waveSeed,
+    );
     this.currentBattle.incrementTurn();
 
     if (newBattleType === BattleType.MYSTERY_ENCOUNTER) {
@@ -1326,13 +1516,17 @@ export default class BattleScene extends SceneBase {
     if (!waveIndex && lastBattle) {
       const isWaveIndexMultipleOfTen = !(lastBattle.waveIndex % 10);
       const isEndlessOrDaily = this.gameMode.hasShortBiomes || this.gameMode.isDaily;
-      const isEndlessFifthWave = this.gameMode.hasShortBiomes && (lastBattle.waveIndex % 5) === 0;
-      const isWaveIndexMultipleOfFiftyMinusOne = (lastBattle.waveIndex % 50) === 49;
-      const isNewBiome = isWaveIndexMultipleOfTen || isEndlessFifthWave || (isEndlessOrDaily && isWaveIndexMultipleOfFiftyMinusOne);
-      const resetArenaState = isNewBiome || [ BattleType.TRAINER, BattleType.MYSTERY_ENCOUNTER ].includes(this.currentBattle.battleType) || this.currentBattle.battleSpec === BattleSpec.FINAL_BOSS;
-      this.getEnemyParty().forEach(enemyPokemon => enemyPokemon.destroy());
+      const isEndlessFifthWave = this.gameMode.hasShortBiomes && lastBattle.waveIndex % 5 === 0;
+      const isWaveIndexMultipleOfFiftyMinusOne = lastBattle.waveIndex % 50 === 49;
+      const isNewBiome =
+        isWaveIndexMultipleOfTen || isEndlessFifthWave || (isEndlessOrDaily && isWaveIndexMultipleOfFiftyMinusOne);
+      const resetArenaState =
+        isNewBiome ||
+        [ BattleType.TRAINER, BattleType.MYSTERY_ENCOUNTER ].includes(this.currentBattle.battleType) ||
+        this.currentBattle.battleSpec === BattleSpec.FINAL_BOSS;
+      this.getEnemyParty().forEach((enemyPokemon) => enemyPokemon.destroy());
       this.trySpreadPokerus();
-      if (!isNewBiome && (newWaveIndex % 10) === 5) {
+      if (!isNewBiome && newWaveIndex % 10 === 5) {
         this.arena.updatePoolsForTimeOfDay();
       }
       if (resetArenaState) {
@@ -1386,17 +1580,23 @@ export default class BattleScene extends SceneBase {
   }
 
   updateFieldScale(): Promise<void> {
-    return new Promise(resolve => {
-      const fieldScale = Math.floor(Math.pow(1 / this.getField(true)
-        .map(p => p.getSpriteScale())
-        .reduce((highestScale: number, scale: number) => highestScale = Math.max(scale, highestScale), 0), 0.7) * 40
-      ) / 40;
+    return new Promise((resolve) => {
+      const fieldScale =
+        Math.floor(
+          Math.pow(
+            1 /
+              this.getField(true)
+                .map((p) => p.getSpriteScale())
+                .reduce((highestScale: number, scale: number) => (highestScale = Math.max(scale, highestScale)), 0),
+            0.7,
+          ) * 40,
+        ) / 40;
       this.setFieldScale(fieldScale).then(() => resolve());
     });
   }
 
   setFieldScale(scale: number, instant: boolean = false): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       scale *= 6;
       if (this.field.scale === scale) {
         return resolve();
@@ -1414,7 +1614,7 @@ export default class BattleScene extends SceneBase {
         y: defaultHeight - scaledHeight,
         duration: !instant ? Utils.fixedInt(Math.abs(this.field.scale - scale) * 200) : 0,
         ease: "Sine.easeInOut",
-        onComplete: () => resolve()
+        onComplete: () => resolve(),
       });
     });
   }
@@ -1476,13 +1676,26 @@ export default class BattleScene extends SceneBase {
       case Species.OINKOLOGNE:
         return gender === Gender.FEMALE ? 1 : 0;
       case Species.TOXTRICITY:
-        const lowkeyNatures = [ Nature.LONELY, Nature.BOLD, Nature.RELAXED, Nature.TIMID, Nature.SERIOUS, Nature.MODEST, Nature.MILD, Nature.QUIET, Nature.BASHFUL, Nature.CALM, Nature.GENTLE, Nature.CAREFUL ];
+        const lowkeyNatures = [
+          Nature.LONELY,
+          Nature.BOLD,
+          Nature.RELAXED,
+          Nature.TIMID,
+          Nature.SERIOUS,
+          Nature.MODEST,
+          Nature.MILD,
+          Nature.QUIET,
+          Nature.BASHFUL,
+          Nature.CALM,
+          Nature.GENTLE,
+          Nature.CAREFUL,
+        ];
         if (nature !== undefined && lowkeyNatures.indexOf(nature) > -1) {
           return 1;
         }
         return 0;
       case Species.GIMMIGHOUL:
-      // Chest form can only be found in Mysterious Chest Encounter, if this is a game mode with MEs
+        // Chest form can only be found in Mysterious Chest Encounter, if this is a game mode with MEs
         if (this.gameMode.hasMysteryEncounters) {
           return 1; // Wandering form
         } else {
@@ -1506,21 +1719,34 @@ export default class BattleScene extends SceneBase {
 
   private getGeneratedOffsetGym(): boolean {
     let ret = false;
-    this.executeWithSeedOffset(() => {
-      ret = !Utils.randSeedInt(2);
-    }, 0, this.seed.toString());
+    this.executeWithSeedOffset(
+      () => {
+        ret = !Utils.randSeedInt(2);
+      },
+      0,
+      this.seed.toString(),
+    );
     return ret;
   }
 
   private getGeneratedWaveCycleOffset(): integer {
     let ret = 0;
-    this.executeWithSeedOffset(() => {
-      ret = Utils.randSeedInt(8) * 5;
-    }, 0, this.seed.toString());
+    this.executeWithSeedOffset(
+      () => {
+        ret = Utils.randSeedInt(8) * 5;
+      },
+      0,
+      this.seed.toString(),
+    );
     return ret;
   }
 
-  getEncounterBossSegments(waveIndex: integer, level: integer, species?: PokemonSpecies, forceBoss: boolean = false): integer {
+  getEncounterBossSegments(
+    waveIndex: integer,
+    level: integer,
+    species?: PokemonSpecies,
+    forceBoss: boolean = false,
+  ): integer {
     if (Overrides.OPP_HEALTH_SEGMENTS_OVERRIDE > 1) {
       return Overrides.OPP_HEALTH_SEGMENTS_OVERRIDE;
     } else if (Overrides.OPP_HEALTH_SEGMENTS_OVERRIDE === 1) {
@@ -1537,7 +1763,10 @@ export default class BattleScene extends SceneBase {
       isBoss = true;
     } else {
       this.executeWithSeedOffset(() => {
-        isBoss = waveIndex % 10 === 0 || (this.gameMode.hasRandomBosses && Utils.randSeedInt(100) < Math.min(Math.max(Math.ceil((waveIndex - 250) / 50), 0) * 2, 30));
+        isBoss =
+          waveIndex % 10 === 0 ||
+          (this.gameMode.hasRandomBosses &&
+            Utils.randSeedInt(100) < Math.min(Math.max(Math.ceil((waveIndex - 250) / 50), 0) * 2, 30));
       }, waveIndex << 2);
     }
     if (!isBoss) {
@@ -1574,14 +1803,17 @@ export default class BattleScene extends SceneBase {
         return;
       }
 
-      this.executeWithSeedOffset(() => {
-        if (p) {
-          spread(p, -1);
-        }
-        if (p < party.length - 1) {
-          spread(p, 1);
-        }
-      }, this.currentBattle.waveIndex + (p << 8));
+      this.executeWithSeedOffset(
+        () => {
+          if (p) {
+            spread(p, -1);
+          }
+          if (p < party.length - 1) {
+            spread(p, 1);
+          }
+        },
+        this.currentBattle.waveIndex + (p << 8),
+      );
     });
   }
 
@@ -1612,7 +1844,13 @@ export default class BattleScene extends SceneBase {
     this.rngSeedOverride = tempRngSeedOverride;
   }
 
-  addFieldSprite(x: number, y: number, texture: string | Phaser.Textures.Texture, frame?: string | number, terrainColorRatio: number = 0): Phaser.GameObjects.Sprite {
+  addFieldSprite(
+    x: number,
+    y: number,
+    texture: string | Phaser.Textures.Texture,
+    frame?: string | number,
+    terrainColorRatio: number = 0,
+  ): Phaser.GameObjects.Sprite {
     const ret = this.add.sprite(x, y, texture, frame);
     ret.setPipeline(this.fieldSpritePipeline);
     if (terrainColorRatio) {
@@ -1622,14 +1860,32 @@ export default class BattleScene extends SceneBase {
     return ret;
   }
 
-  addPokemonSprite(pokemon: Pokemon, x: number, y: number, texture: string | Phaser.Textures.Texture, frame?: string | number, hasShadow: boolean = false, ignoreOverride: boolean = false): Phaser.GameObjects.Sprite {
+  addPokemonSprite(
+    pokemon: Pokemon,
+    x: number,
+    y: number,
+    texture: string | Phaser.Textures.Texture,
+    frame?: string | number,
+    hasShadow: boolean = false,
+    ignoreOverride: boolean = false,
+  ): Phaser.GameObjects.Sprite {
     const ret = this.addFieldSprite(x, y, texture, frame);
     this.initPokemonSprite(ret, pokemon, hasShadow, ignoreOverride);
     return ret;
   }
 
-  initPokemonSprite(sprite: Phaser.GameObjects.Sprite, pokemon?: Pokemon, hasShadow: boolean = false, ignoreOverride: boolean = false): Phaser.GameObjects.Sprite {
-    sprite.setPipeline(this.spritePipeline, { tone: [ 0.0, 0.0, 0.0, 0.0 ], hasShadow: hasShadow, ignoreOverride: ignoreOverride, teraColor: pokemon ? getTypeRgb(pokemon.getTeraType()) : undefined });
+  initPokemonSprite(
+    sprite: Phaser.GameObjects.Sprite,
+    pokemon?: Pokemon,
+    hasShadow: boolean = false,
+    ignoreOverride: boolean = false,
+  ): Phaser.GameObjects.Sprite {
+    sprite.setPipeline(this.spritePipeline, {
+      tone: [ 0.0, 0.0, 0.0, 0.0 ],
+      hasShadow: hasShadow,
+      ignoreOverride: ignoreOverride,
+      teraColor: pokemon ? getTypeRgb(pokemon.getTeraType()) : undefined,
+    });
     this.spriteSparkleHandler.add(sprite);
     return sprite;
   }
@@ -1642,25 +1898,25 @@ export default class BattleScene extends SceneBase {
   }
 
   showFieldOverlay(duration: integer): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       this.tweens.add({
         targets: this.fieldOverlay,
         alpha: 0.5,
         ease: "Sine.easeOut",
         duration: duration,
-        onComplete: () => resolve()
+        onComplete: () => resolve(),
       });
     });
   }
 
   hideFieldOverlay(duration: integer): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       this.tweens.add({
         targets: this.fieldOverlay,
         alpha: 0,
         duration: duration,
         ease: "Cubic.easeIn",
-        onComplete: () => resolve()
+        onComplete: () => resolve(),
       });
     });
   }
@@ -1675,26 +1931,26 @@ export default class BattleScene extends SceneBase {
 
   showShopOverlay(duration: integer): Promise<void> {
     this.shopOverlayShown = true;
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       this.tweens.add({
         targets: this.shopOverlay,
         alpha: this.shopOverlayOpacity,
         ease: "Sine.easeOut",
         duration,
-        onComplete: () => resolve()
+        onComplete: () => resolve(),
       });
     });
   }
 
   hideShopOverlay(duration: integer): Promise<void> {
     this.shopOverlayShown = false;
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       this.tweens.add({
         targets: this.shopOverlay,
         alpha: 0,
         duration: duration,
         ease: "Cubic.easeIn",
-        onComplete: () => resolve()
+        onComplete: () => resolve(),
       });
     });
   }
@@ -1711,7 +1967,7 @@ export default class BattleScene extends SceneBase {
     const isBoss = !(this.currentBattle.waveIndex % 10);
     const biomeString: string = getBiomeName(this.arena.biomeType);
     this.fieldUI.moveAbove(this.biomeWaveText, this.luckText);
-    this.biomeWaveText.setText( biomeString + " - " + this.currentBattle.waveIndex.toString());
+    this.biomeWaveText.setText(biomeString + " - " + this.currentBattle.waveIndex.toString());
     this.biomeWaveText.setColor(!isBoss ? "#ffffff" : "#f89890");
     this.biomeWaveText.setShadowColor(!isBoss ? "#636363" : "#984038");
     this.biomeWaveText.setVisible(true);
@@ -1756,7 +2012,7 @@ export default class BattleScene extends SceneBase {
    */
   updateAndShowText(duration: number): void {
     const labels = [ this.luckLabelText, this.luckText ];
-    labels.forEach(t => t.setAlpha(0));
+    labels.forEach((t) => t.setAlpha(0));
     const luckValue = getPartyLuckValue(this.getPlayerParty());
     this.luckText.setText(getLuckString(luckValue));
     if (luckValue < 14) {
@@ -1764,14 +2020,14 @@ export default class BattleScene extends SceneBase {
     } else {
       this.luckText.setTint(0xffef5c, 0x47ff69, 0x6b6bff, 0xff6969);
     }
-    this.luckLabelText.setX((this.game.canvas.width / 6) - 2 - (this.luckText.displayWidth + 2));
+    this.luckLabelText.setX(this.game.canvas.width / 6 - 2 - (this.luckText.displayWidth + 2));
     this.tweens.add({
       targets: labels,
       duration: duration,
       alpha: 1,
       onComplete: () => {
-        labels.forEach(t => t.setVisible(true));
-      }
+        labels.forEach((t) => t.setVisible(true));
+      },
     });
   }
 
@@ -1785,20 +2041,24 @@ export default class BattleScene extends SceneBase {
       duration: duration,
       alpha: 0,
       onComplete: () => {
-        labels.forEach(l => l.setVisible(false));
-      }
+        labels.forEach((l) => l.setVisible(false));
+      },
     });
   }
 
   updateUIPositions(): void {
-    const enemyModifierCount = this.enemyModifiers.filter(m => m.isIconVisible()).length;
+    const enemyModifierCount = this.enemyModifiers.filter((m) => m.isIconVisible()).length;
     const biomeWaveTextHeight = this.biomeWaveText.getBottomLeft().y - this.biomeWaveText.getTopLeft().y;
     this.biomeWaveText.setY(
-      -(this.game.canvas.height / 6) + (enemyModifierCount ? enemyModifierCount <= 12 ? 15 : 24 : 0) + (biomeWaveTextHeight / 2)
+      -(this.game.canvas.height / 6) +
+        (enemyModifierCount ? (enemyModifierCount <= 12 ? 15 : 24) : 0) +
+        biomeWaveTextHeight / 2,
     );
     this.moneyText.setY(this.biomeWaveText.y + 10);
     this.scoreText.setY(this.moneyText.y + 10);
-    [ this.luckLabelText, this.luckText ].map(l => l.setY((this.scoreText.visible ? this.scoreText : this.moneyText).y + 10));
+    [ this.luckLabelText, this.luckText ].map((l) =>
+      l.setY((this.scoreText.visible ? this.scoreText : this.moneyText).y + 10),
+    );
     const offsetY = (this.scoreText.visible ? this.scoreText : this.moneyText).y + 15;
     this.partyExpBar.setY(offsetY);
     this.candyBar.setY(offsetY + 15);
@@ -1815,8 +2075,13 @@ export default class BattleScene extends SceneBase {
   }
 
   addFaintedEnemyScore(enemy: EnemyPokemon): void {
-    let scoreIncrease = enemy.getSpeciesForm().getBaseExp() * (enemy.level / this.getMaxExpLevel()) * ((enemy.ivs.reduce((iv: integer, total: integer) => total += iv, 0) / 93) * 0.2 + 0.8);
-    this.findModifiers(m => m instanceof PokemonHeldItemModifier && m.pokemonId === enemy.id, false).map(m => scoreIncrease *= (m as PokemonHeldItemModifier).getScoreMultiplier());
+    let scoreIncrease =
+      enemy.getSpeciesForm().getBaseExp() *
+      (enemy.level / this.getMaxExpLevel()) *
+      ((enemy.ivs.reduce((iv: integer, total: integer) => (total += iv), 0) / 93) * 0.2 + 0.8);
+    this.findModifiers((m) => m instanceof PokemonHeldItemModifier && m.pokemonId === enemy.id, false).map(
+      (m) => (scoreIncrease *= (m as PokemonHeldItemModifier).getScoreMultiplier()),
+    );
     if (enemy.isBoss()) {
       scoreIncrease *= Math.sqrt(enemy.bossSegments);
     }
@@ -1833,27 +2098,43 @@ export default class BattleScene extends SceneBase {
     return Math.ceil(baseLevel / 2) * 2 + 2;
   }
 
-  randomSpecies(waveIndex: integer, level: integer, fromArenaPool?: boolean, speciesFilter?: PokemonSpeciesFilter, filterAllEvolutions?: boolean): PokemonSpecies {
+  randomSpecies(
+    waveIndex: integer,
+    level: integer,
+    fromArenaPool?: boolean,
+    speciesFilter?: PokemonSpeciesFilter,
+    filterAllEvolutions?: boolean,
+  ): PokemonSpecies {
     if (fromArenaPool) {
       return this.arena.randomSpecies(waveIndex, level, undefined, getPartyLuckValue(this.party));
     }
-    const filteredSpecies = speciesFilter ? [ ...new Set(allSpecies.filter(s => s.isCatchable()).filter(speciesFilter).map(s => {
-      if (!filterAllEvolutions) {
-        while (pokemonPrevolutions.hasOwnProperty(s.speciesId)) {
-          s = getPokemonSpecies(pokemonPrevolutions[s.speciesId]);
-        }
-      }
-      return s;
-    })) ] : allSpecies.filter(s => s.isCatchable());
+    const filteredSpecies = speciesFilter
+      ? [
+        ...new Set(
+          allSpecies
+            .filter((s) => s.isCatchable())
+            .filter(speciesFilter)
+            .map((s) => {
+              if (!filterAllEvolutions) {
+                while (pokemonPrevolutions.hasOwnProperty(s.speciesId)) {
+                  s = getPokemonSpecies(pokemonPrevolutions[s.speciesId]);
+                }
+              }
+              return s;
+            }),
+        ),
+      ]
+      : allSpecies.filter((s) => s.isCatchable());
     return filteredSpecies[Utils.randSeedInt(filteredSpecies.length)];
   }
 
   generateRandomBiome(waveIndex: integer): Biome {
     const relWave = waveIndex % 250;
-    const biomes = Utils.getEnumValues(Biome).slice(1, Utils.getEnumValues(Biome).filter(b => b >= 40).length * -1);
+    const biomes = Utils.getEnumValues(Biome).slice(1, Utils.getEnumValues(Biome).filter((b) => b >= 40).length * -1);
     const maxDepth = biomeDepths[Biome.END][0] - 2;
-    const depthWeights = new Array(maxDepth + 1).fill(null)
-      .map((_, i: integer) => ((1 - Math.min(Math.abs((i / (maxDepth - 1)) - (relWave / 250)) + 0.25, 1)) / 0.75) * 250);
+    const depthWeights = new Array(maxDepth + 1)
+      .fill(null)
+      .map((_, i: integer) => ((1 - Math.min(Math.abs(i / (maxDepth - 1) - relWave / 250) + 0.25, 1)) / 0.75) * 250);
     const biomeThresholds: integer[] = [];
     let totalWeight = 0;
     for (const biome of biomes) {
@@ -1883,7 +2164,7 @@ export default class BattleScene extends SceneBase {
     if (this.bgm && bgmName === this.bgm.key) {
       if (!this.bgm.isPlaying) {
         this.bgm.play({
-          volume: this.masterVolume * this.bgmVolume
+          volume: this.masterVolume * this.bgmVolume,
         });
       }
       return;
@@ -1894,15 +2175,13 @@ export default class BattleScene extends SceneBase {
     this.bgmCache.add(bgmName);
     this.loadBgm(bgmName);
     let loopPoint = 0;
-    loopPoint = bgmName === this.arena.bgm
-      ? this.arena.getBgmLoopPoint()
-      : this.getBgmLoopPoint(bgmName);
+    loopPoint = bgmName === this.arena.bgm ? this.arena.getBgmLoopPoint() : this.getBgmLoopPoint(bgmName);
     let loaded = false;
     const playNewBgm = () => {
       this.ui.bgmBar.setBgmToBgmBar(bgmName);
       if (bgmName === null && this.bgm && !this.bgm.pendingRemove) {
         this.bgm.play({
-          volume: this.masterVolume * this.bgmVolume
+          volume: this.masterVolume * this.bgmVolume,
         });
         return;
       }
@@ -1911,7 +2190,7 @@ export default class BattleScene extends SceneBase {
       }
       this.bgm = this.sound.add(bgmName, { loop: true });
       this.bgm.play({
-        volume: this.masterVolume * this.bgmVolume
+        volume: this.masterVolume * this.bgmVolume,
       });
       if (loopPoint) {
         this.bgm.on("looped", () => this.bgm.play({ seek: loopPoint }));
@@ -1960,7 +2239,6 @@ export default class BattleScene extends SceneBase {
         } else {
           const soundDetails = sound.key.split("/");
           switch (soundDetails[0]) {
-
             case "battle_anims":
             case "cry":
               if (soundDetails[1].startsWith("PRSFX- ")) {
@@ -1982,7 +2260,7 @@ export default class BattleScene extends SceneBase {
     if (!this.bgm) {
       return false;
     }
-    const bgm = this.sound.getAllPlaying().find(bgm => bgm.key === this.bgm.key);
+    const bgm = this.sound.getAllPlaying().find((bgm) => bgm.key === this.bgm.key);
     if (bgm) {
       SoundFade.fadeOut(this, this.bgm, duration, destroy);
       return true;
@@ -2017,24 +2295,24 @@ export default class BattleScene extends SceneBase {
         case "heal":
         case "evolution":
         case "evolution_fanfare":
-        // These sounds are loaded in as BGM, but played as sound effects
-        // When these sounds are updated in updateVolume(), they are treated as BGM however because they are placed in the BGM Cache through being called by playSoundWithoutBGM()
-          config["volume"] *= (this.masterVolume * this.bgmVolume);
+          // These sounds are loaded in as BGM, but played as sound effects
+          // When these sounds are updated in updateVolume(), they are treated as BGM however because they are placed in the BGM Cache through being called by playSoundWithoutBGM()
+          config["volume"] *= this.masterVolume * this.bgmVolume;
           break;
         case "battle_anims":
         case "cry":
-          config["volume"] *= (this.masterVolume * this.fieldVolume);
+          config["volume"] *= this.masterVolume * this.fieldVolume;
           //PRSFX sound files are unusually loud
           if (keyDetails[1].startsWith("PRSFX- ")) {
             config["volume"] *= 0.5;
           }
           break;
         case "ui":
-        //As of, right now this applies to the "select", "menu_open", "error" sound effects
-          config["volume"] *= (this.masterVolume * this.uiVolume);
+          //As of, right now this applies to the "select", "menu_open", "error" sound effects
+          config["volume"] *= this.masterVolume * this.uiVolume;
           break;
         case "se":
-          config["volume"] *= (this.masterVolume * this.seVolume);
+          config["volume"] *= this.masterVolume * this.seVolume;
           break;
       }
       this.sound.play(key, config);
@@ -2054,7 +2332,7 @@ export default class BattleScene extends SceneBase {
       this.bgmResumeTimer.destroy();
     }
     if (resumeBgm) {
-      this.bgmResumeTimer = this.time.delayedCall((pauseDuration || Utils.fixedInt(sound.totalDuration * 1000)), () => {
+      this.bgmResumeTimer = this.time.delayedCall(pauseDuration || Utils.fixedInt(sound.totalDuration * 1000), () => {
         this.resumeBgm();
         this.bgmResumeTimer = null;
       });
@@ -2065,7 +2343,7 @@ export default class BattleScene extends SceneBase {
   getBgmLoopPoint(bgmName: string): number {
     switch (bgmName) {
       case "battle_kanto_champion": //B2W2 Kanto Champion Battle
-        return 13.950;
+        return 13.95;
       case "battle_johto_champion": //B2W2 Johto Champion Battle
         return 23.498;
       case "battle_hoenn_champion_g5": //B2W2 Hoenn Champion Battle
@@ -2079,7 +2357,7 @@ export default class BattleScene extends SceneBase {
       case "battle_champion_iris": //B2W2 Unova Champion Battle
         return 10.145;
       case "battle_kalos_champion": //XY Kalos Champion Battle
-        return 10.380;
+        return 10.38;
       case "battle_alola_champion": //USUM Alola Champion Battle
         return 13.025;
       case "battle_galar_champion": //SWSH Galar Champion Battle
@@ -2091,17 +2369,17 @@ export default class BattleScene extends SceneBase {
       case "battle_champion_kieran": //SV Champion Kieran Battle
         return 7.206;
       case "battle_hoenn_elite": //ORAS Elite Four Battle
-        return 11.350;
+        return 11.35;
       case "battle_unova_elite": //BW Elite Four Battle
-        return 17.730;
+        return 17.73;
       case "battle_kalos_elite": //XY Elite Four Battle
-        return 12.340;
+        return 12.34;
       case "battle_alola_elite": //SM Elite Four Battle
         return 19.212;
       case "battle_galar_elite": //SWSH League Tournament Battle
         return 164.069;
       case "battle_paldea_elite": //SV Elite Four Battle
-        return 12.770;
+        return 12.77;
       case "battle_bb_elite": //SV BB League Elite Four Battle
         return 19.434;
       case "battle_final_encounter": //PMD RTDX Rayquaza's Domain
@@ -2119,7 +2397,7 @@ export default class BattleScene extends SceneBase {
       case "battle_unova_gym": //BW Unova Gym Battle
         return 19.145;
       case "battle_kalos_gym": //XY Kalos Gym Battle
-        return 44.810;
+        return 44.81;
       case "battle_galar_gym": //SWSH Galar Gym Battle
         return 171.262;
       case "battle_paldea_gym": //SV Paldea Gym Battle
@@ -2133,13 +2411,13 @@ export default class BattleScene extends SceneBase {
       case "battle_legendary_suicune": //HGSS Suicune Battle
         return 12.636;
       case "battle_legendary_lugia": //HGSS Lugia Battle
-        return 19.770;
+        return 19.77;
       case "battle_legendary_ho_oh": //HGSS Ho-oh Battle
         return 17.668;
       case "battle_legendary_regis_g5": //B2W2 Legendary Titan Battle
-        return 49.500;
+        return 49.5;
       case "battle_legendary_regis_g6": //ORAS Legendary Titan Battle
-        return 21.130;
+        return 21.13;
       case "battle_legendary_gro_kyo": //ORAS Groudon & Kyogre Battle
         return 10.547;
       case "battle_legendary_rayquaza": //ORAS Rayquaza Battle
@@ -2149,7 +2427,7 @@ export default class BattleScene extends SceneBase {
       case "battle_legendary_lake_trio": //ORAS Lake Guardians Battle
         return 16.887;
       case "battle_legendary_sinnoh": //ORAS Sinnoh Legendary Battle
-        return 22.770;
+        return 22.77;
       case "battle_legendary_dia_pal": //ORAS Dialga & Palkia Battle
         return 16.009;
       case "battle_legendary_origin_forme": //LA Origin Dialga & Palkia Battle
@@ -2167,7 +2445,7 @@ export default class BattleScene extends SceneBase {
       case "battle_legendary_xern_yvel": //XY Xerneas & Yveltal Battle
         return 26.468;
       case "battle_legendary_tapu": //SM Tapu Battle
-        return 0.000;
+        return 0.0;
       case "battle_legendary_sol_lun": //SM Solgaleo & Lunala Battle
         return 6.525;
       case "battle_legendary_ub": //SM Ultra Beast Battle
@@ -2191,7 +2469,7 @@ export default class BattleScene extends SceneBase {
       case "battle_legendary_kor_mir": //SV Depths of Area Zero Battle
         return 6.442;
       case "battle_legendary_loyal_three": //SV Loyal Three Battle
-        return 6.500;
+        return 6.5;
       case "battle_legendary_ogerpon": //SV Ogerpon Battle
         return 14.335;
       case "battle_legendary_terapagos": //SV Terapagos Battle
@@ -2199,7 +2477,7 @@ export default class BattleScene extends SceneBase {
       case "battle_legendary_pecharunt": //SV Pecharunt Battle
         return 6.508;
       case "battle_rival": //BW Rival Battle
-        return 14.110;
+        return 14.11;
       case "battle_rival_2": //BW N Battle
         return 17.714;
       case "battle_rival_3": //BW Final N Battle
@@ -2209,7 +2487,7 @@ export default class BattleScene extends SceneBase {
       case "battle_wild": //BW Wild Battle
         return 12.703;
       case "battle_wild_strong": //BW Strong Wild Battle
-        return 13.940;
+        return 13.94;
       case "end_summit": //PMD RTDX Sky Tower Summit
         return 30.025;
       case "battle_rocket_grunt": //HGSS Team Rocket Battle
@@ -2223,7 +2501,7 @@ export default class BattleScene extends SceneBase {
       case "battle_flare_grunt": //XY Team Flare Battle
         return 4.228;
       case "battle_aether_grunt": // SM Aether Foundation Battle
-        return 16.00;
+        return 16.0;
       case "battle_skull_grunt": // SM Team Skull Battle
         return 20.87;
       case "battle_macro_grunt": // SWSH Trainer Battle
@@ -2235,7 +2513,7 @@ export default class BattleScene extends SceneBase {
       case "battle_skull_admin": //SM Team Skull Admin Battle
         return 15.463;
       case "battle_oleana": //SWSH Oleana Battle
-        return 14.110;
+        return 14.11;
       case "battle_star_admin": //SV Team Star Boss Battle
         return 9.493;
       case "battle_rocket_boss": //USUM Giovanni Battle
@@ -2287,7 +2565,6 @@ export default class BattleScene extends SceneBase {
   getStandbyPhase(): Phase | null {
     return this.standbyPhase;
   }
-
 
   /**
    * Adds a phase to the conditional queue and ensures it is executed only when the specified condition is met.
@@ -2459,7 +2736,7 @@ export default class BattleScene extends SceneBase {
    * @returns boolean if a targetPhase was found and added
    */
   prependToPhase(phase: Phase, targetPhase: Constructor<Phase>): boolean {
-    const targetIndex = this.phaseQueue.findIndex(ph => ph instanceof targetPhase);
+    const targetIndex = this.phaseQueue.findIndex((ph) => ph instanceof targetPhase);
 
     if (targetIndex !== -1) {
       this.phaseQueue.splice(targetIndex, 0, phase);
@@ -2477,7 +2754,7 @@ export default class BattleScene extends SceneBase {
    * @returns `true` if a `targetPhase` was found to append to
    */
   appendToPhase(phase: Phase, targetPhase: Constructor<Phase>): boolean {
-    const targetIndex = this.phaseQueue.findIndex(ph => ph instanceof targetPhase);
+    const targetIndex = this.phaseQueue.findIndex((ph) => ph instanceof targetPhase);
 
     if (targetIndex !== -1 && this.phaseQueue.length > targetIndex) {
       this.phaseQueue.splice(targetIndex + 1, 0, phase);
@@ -2496,7 +2773,13 @@ export default class BattleScene extends SceneBase {
    * @param promptDelay optional param for MessagePhase constructor
    * @param defer boolean for which queue to add it to, false -> add to PhaseQueuePrepend, true -> nextCommandPhaseQueue
    */
-  queueMessage(message: string, callbackDelay?: integer | null, prompt?: boolean | null, promptDelay?: integer | null, defer?: boolean | null) {
+  queueMessage(
+    message: string,
+    callbackDelay?: integer | null,
+    prompt?: boolean | null,
+    promptDelay?: integer | null,
+    defer?: boolean | null,
+  ) {
     const phase = new MessagePhase(message, callbackDelay, prompt, promptDelay);
     if (!defer) {
       // adds to the end of PhaseQueuePrepend
@@ -2528,15 +2811,24 @@ export default class BattleScene extends SceneBase {
   getWaveMoneyAmount(moneyMultiplier: number): integer {
     const waveIndex = this.currentBattle.waveIndex;
     const waveSetIndex = Math.ceil(waveIndex / 10) - 1;
-    const moneyValue = Math.pow((waveSetIndex + 1 + (0.75 + (((waveIndex - 1) % 10) + 1) / 10)) * 100, 1 + 0.005 * waveSetIndex) * moneyMultiplier;
+    const moneyValue =
+      Math.pow((waveSetIndex + 1 + (0.75 + (((waveIndex - 1) % 10) + 1) / 10)) * 100, 1 + 0.005 * waveSetIndex) *
+      moneyMultiplier;
     return Math.floor(moneyValue / 10) * 10;
   }
 
-  addModifier(modifier: Modifier | null, ignoreUpdate?: boolean, playSound?: boolean, virtual?: boolean, instant?: boolean, cost?: number): Promise<boolean> {
+  addModifier(
+    modifier: Modifier | null,
+    ignoreUpdate?: boolean,
+    playSound?: boolean,
+    virtual?: boolean,
+    instant?: boolean,
+    cost?: number,
+  ): Promise<boolean> {
     if (!modifier) {
       return Promise.resolve(false);
     }
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       let success = false;
       const soundName = modifier.type.soundName;
       this.validateAchvs(ModifierAchv, modifier);
@@ -2544,7 +2836,9 @@ export default class BattleScene extends SceneBase {
       const modifierPromises: Promise<boolean>[] = [];
       if (modifier instanceof PersistentModifier) {
         if (modifier instanceof TerastallizeModifier) {
-          modifiersToRemove.push(...(this.findModifiers(m => m instanceof TerastallizeModifier && m.pokemonId === modifier.pokemonId)));
+          modifiersToRemove.push(
+            ...this.findModifiers((m) => m instanceof TerastallizeModifier && m.pokemonId === modifier.pokemonId),
+          );
         }
         if ((modifier as PersistentModifier).add(this.modifiers, !!virtual)) {
           if (modifier instanceof PokemonFormChangeItemModifier || modifier instanceof TerastallizeModifier) {
@@ -2558,8 +2852,14 @@ export default class BattleScene extends SceneBase {
           }
         } else if (!virtual) {
           const defaultModifierType = getDefaultModifierTypeForTier(modifier.type.tier);
-          this.queueMessage(i18next.t("battle:itemStackFull", { fullItemName: modifier.type.name, itemName: defaultModifierType.name }), undefined, true);
-          return this.addModifier(defaultModifierType.newModifier(), ignoreUpdate, playSound, false, instant).then(success => resolve(success));
+          this.queueMessage(
+            i18next.t("battle:itemStackFull", { fullItemName: modifier.type.name, itemName: defaultModifierType.name }),
+            undefined,
+            true,
+          );
+          return this.addModifier(defaultModifierType.newModifier(), ignoreUpdate, playSound, false, instant).then(
+            (success) => resolve(success),
+          );
         }
 
         for (const rm of modifiersToRemove) {
@@ -2596,20 +2896,22 @@ export default class BattleScene extends SceneBase {
             if (modifier.shouldApply(pokemon, ...args)) {
               const result = modifier.apply(pokemon, ...args);
               if (result instanceof Promise) {
-                modifierPromises.push(result.then(s => success ||= s));
+                modifierPromises.push(result.then((s) => (success ||= s)));
               } else {
                 success ||= result;
               }
             }
           }
 
-          return Promise.allSettled([ this.party.map(p => p.updateInfo(instant)), ...modifierPromises ]).then(() => resolve(success));
+          return Promise.allSettled([ this.party.map((p) => p.updateInfo(instant)), ...modifierPromises ]).then(() =>
+            resolve(success),
+          );
         } else {
           const args = [ this ];
           if (modifier.shouldApply(...args)) {
             const result = modifier.apply(...args);
             if (result instanceof Promise) {
-              return result.then(success => resolve(success));
+              return result.then((success) => resolve(success));
             } else {
               success ||= result;
             }
@@ -2622,10 +2924,12 @@ export default class BattleScene extends SceneBase {
   }
 
   addEnemyModifier(modifier: PersistentModifier, ignoreUpdate?: boolean, instant?: boolean): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       const modifiersToRemove: PersistentModifier[] = [];
       if (modifier instanceof TerastallizeModifier) {
-        modifiersToRemove.push(...(this.findModifiers(m => m instanceof TerastallizeModifier && m.pokemonId === modifier.pokemonId, false)));
+        modifiersToRemove.push(
+          ...this.findModifiers((m) => m instanceof TerastallizeModifier && m.pokemonId === modifier.pokemonId, false),
+        );
       }
       if ((modifier as PersistentModifier).add(this.enemyModifiers, false)) {
         if (modifier instanceof PokemonFormChangeItemModifier || modifier instanceof TerastallizeModifier) {
@@ -2660,25 +2964,44 @@ export default class BattleScene extends SceneBase {
    * @param itemLost If `true`, treat the item's current holder as losing the item (for now, this simply enables Unburden). Default is `true`.
    * @returns `true` if the transfer was successful
    */
-  tryTransferHeldItemModifier(itemModifier: PokemonHeldItemModifier, target: Pokemon, playSound: boolean, transferQuantity: number = 1, instant?: boolean, ignoreUpdate?: boolean, itemLost: boolean = true): Promise<boolean> {
-    return new Promise(resolve => {
+  tryTransferHeldItemModifier(
+    itemModifier: PokemonHeldItemModifier,
+    target: Pokemon,
+    playSound: boolean,
+    transferQuantity: number = 1,
+    instant?: boolean,
+    ignoreUpdate?: boolean,
+    itemLost: boolean = true,
+  ): Promise<boolean> {
+    return new Promise((resolve) => {
       const source = itemModifier.pokemonId ? itemModifier.getPokemon() : null;
       const cancelled = new Utils.BooleanHolder(false);
-      Utils.executeIf(!!source && source.isPlayer() !== target.isPlayer(), () => applyAbAttrs(BlockItemTheftAbAttr, source! /* checked in condition*/, cancelled)).then(() => {
+      Utils.executeIf(!!source && source.isPlayer() !== target.isPlayer(), () =>
+        applyAbAttrs(BlockItemTheftAbAttr, source! /* checked in condition*/, cancelled),
+      ).then(() => {
         if (cancelled.value) {
           return resolve(false);
         }
         const newItemModifier = itemModifier.clone() as PokemonHeldItemModifier;
         newItemModifier.pokemonId = target.id;
-        const matchingModifier = this.findModifier(m => m instanceof PokemonHeldItemModifier
-                    && (m as PokemonHeldItemModifier).matchType(itemModifier) && m.pokemonId === target.id, target.isPlayer()) as PokemonHeldItemModifier;
+        const matchingModifier = this.findModifier(
+          (m) =>
+            m instanceof PokemonHeldItemModifier &&
+            (m as PokemonHeldItemModifier).matchType(itemModifier) &&
+            m.pokemonId === target.id,
+          target.isPlayer(),
+        ) as PokemonHeldItemModifier;
         let removeOld = true;
         if (matchingModifier) {
           const maxStackCount = matchingModifier.getMaxStackCount();
           if (matchingModifier.stackCount >= maxStackCount) {
             return resolve(false);
           }
-          const countTaken = Math.min(transferQuantity, itemModifier.stackCount, maxStackCount - matchingModifier.stackCount);
+          const countTaken = Math.min(
+            transferQuantity,
+            itemModifier.stackCount,
+            maxStackCount - matchingModifier.stackCount,
+          );
           itemModifier.stackCount -= countTaken;
           newItemModifier.stackCount = matchingModifier.stackCount + countTaken;
           removeOld = !itemModifier.stackCount;
@@ -2723,9 +3046,11 @@ export default class BattleScene extends SceneBase {
   }
 
   removePartyMemberModifiers(partyMemberIndex: integer): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       const pokemonId = this.getPlayerParty()[partyMemberIndex].id;
-      const modifiersToRemove = this.modifiers.filter(m => m instanceof PokemonHeldItemModifier && (m as PokemonHeldItemModifier).pokemonId === pokemonId);
+      const modifiersToRemove = this.modifiers.filter(
+        (m) => m instanceof PokemonHeldItemModifier && (m as PokemonHeldItemModifier).pokemonId === pokemonId,
+      );
       for (const m of modifiersToRemove) {
         this.modifiers.splice(this.modifiers.indexOf(m), 1);
       }
@@ -2734,7 +3059,7 @@ export default class BattleScene extends SceneBase {
   }
 
   generateEnemyModifiers(heldModifiersConfigs?: HeldModifierConfig[][]): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       if (this.currentBattle.battleSpec === BattleSpec.FINAL_BOSS) {
         return resolve();
       }
@@ -2756,7 +3081,7 @@ export default class BattleScene extends SceneBase {
 
       party.forEach((enemyPokemon: EnemyPokemon, i: integer) => {
         if (heldModifiersConfigs && i < heldModifiersConfigs.length && heldModifiersConfigs[i]) {
-          heldModifiersConfigs[i].forEach(mt => {
+          heldModifiersConfigs[i].forEach((mt) => {
             let modifier: PokemonHeldItemModifier;
             if (mt.modifier instanceof PokemonHeldItemModifierType) {
               modifier = mt.modifier.newModifier(enemyPokemon);
@@ -2769,7 +3094,9 @@ export default class BattleScene extends SceneBase {
             this.addEnemyModifier(modifier, true);
           });
         } else {
-          const isBoss = enemyPokemon.isBoss() || (this.currentBattle.battleType === BattleType.TRAINER && !!this.currentBattle.trainer?.config.isBoss);
+          const isBoss =
+            enemyPokemon.isBoss() ||
+            (this.currentBattle.battleType === BattleType.TRAINER && !!this.currentBattle.trainer?.config.isBoss);
           let upgradeChance = 32;
           if (isBoss) {
             upgradeChance /= 2;
@@ -2787,8 +3114,13 @@ export default class BattleScene extends SceneBase {
           if (isBoss) {
             count = Math.max(count, Math.floor(chances / 2));
           }
-          getEnemyModifierTypesForWave(difficultyWaveIndex, count, [ enemyPokemon ], this.currentBattle.battleType === BattleType.TRAINER ? ModifierPoolType.TRAINER : ModifierPoolType.WILD, upgradeChance)
-            .map(mt => mt.newModifier(enemyPokemon).add(this.enemyModifiers, false));
+          getEnemyModifierTypesForWave(
+            difficultyWaveIndex,
+            count,
+            [ enemyPokemon ],
+            this.currentBattle.battleType === BattleType.TRAINER ? ModifierPoolType.TRAINER : ModifierPoolType.WILD,
+            upgradeChance,
+          ).map((mt) => mt.newModifier(enemyPokemon).add(this.enemyModifiers, false));
         }
         return true;
       });
@@ -2797,10 +3129,10 @@ export default class BattleScene extends SceneBase {
   }
 
   /**
-    * Removes all modifiers from enemy pokemon of {@linkcode PersistentModifier} type
-    */
+   * Removes all modifiers from enemy pokemon of {@linkcode PersistentModifier} type
+   */
   clearEnemyModifiers(): void {
-    const modifiersToRemove = this.enemyModifiers.filter(m => m instanceof PersistentModifier);
+    const modifiersToRemove = this.enemyModifiers.filter((m) => m instanceof PersistentModifier);
     for (const m of modifiersToRemove) {
       this.enemyModifiers.splice(this.enemyModifiers.indexOf(m), 1);
     }
@@ -2808,11 +3140,13 @@ export default class BattleScene extends SceneBase {
   }
 
   /**
-    * Removes all modifiers from enemy pokemon of {@linkcode PokemonHeldItemModifier} type
-    * @param pokemon - If specified, only removes held items from that {@linkcode Pokemon}
-    */
+   * Removes all modifiers from enemy pokemon of {@linkcode PokemonHeldItemModifier} type
+   * @param pokemon - If specified, only removes held items from that {@linkcode Pokemon}
+   */
   clearEnemyHeldItemModifiers(pokemon?: Pokemon): void {
-    const modifiersToRemove = this.enemyModifiers.filter(m => m instanceof PokemonHeldItemModifier && (!pokemon || m.getPokemon() === pokemon));
+    const modifiersToRemove = this.enemyModifiers.filter(
+      (m) => m instanceof PokemonHeldItemModifier && (!pokemon || m.getPokemon() === pokemon),
+    );
     for (const m of modifiersToRemove) {
       this.enemyModifiers.splice(this.enemyModifiers.indexOf(m), 1);
     }
@@ -2820,18 +3154,21 @@ export default class BattleScene extends SceneBase {
   }
 
   setModifiersVisible(visible: boolean) {
-    [ this.modifierBar, this.enemyModifierBar ].map(m => m.setVisible(visible));
+    [ this.modifierBar, this.enemyModifierBar ].map((m) => m.setVisible(visible));
   }
 
   updateModifiers(player?: boolean, instant?: boolean): Promise<void> {
     if (player === undefined) {
       player = true;
     }
-    return new Promise(resolve => {
-      const modifiers = player ? this.modifiers : this.enemyModifiers as PersistentModifier[];
+    return new Promise((resolve) => {
+      const modifiers = player ? this.modifiers : (this.enemyModifiers as PersistentModifier[]);
       for (let m = 0; m < modifiers.length; m++) {
         const modifier = modifiers[m];
-        if (modifier instanceof PokemonHeldItemModifier && !this.getPokemonById((modifier as PokemonHeldItemModifier).pokemonId)) {
+        if (
+          modifier instanceof PokemonHeldItemModifier &&
+          !this.getPokemonById((modifier as PokemonHeldItemModifier).pokemonId)
+        ) {
           modifiers.splice(m--, 1);
         }
       }
@@ -2859,13 +3196,15 @@ export default class BattleScene extends SceneBase {
   }
 
   updatePartyForModifiers(party: Pokemon[], instant?: boolean): Promise<void> {
-    return new Promise(resolve => {
-      Promise.allSettled(party.map(p => {
-        if (p.scene) {
-          p.calculateStats();
-        }
-        return p.updateInfo(instant);
-      })).then(() => resolve());
+    return new Promise((resolve) => {
+      Promise.allSettled(
+        party.map((p) => {
+          if (p.scene) {
+            p.calculateStats();
+          }
+          return p.updateInfo(instant);
+        }),
+      ).then(() => resolve());
     });
   }
 
@@ -2932,18 +3271,28 @@ export default class BattleScene extends SceneBase {
    * @param ...args The list of arguments needed to invoke `modifierType.apply`
    * @returns the list of all modifiers that matched `modifierType` and were applied.
    */
-  applyShuffledModifiers<T extends PersistentModifier>(modifierType: Constructor<T>, player: boolean = true, ...args: Parameters<T["apply"]>): T[] {
-    let modifiers = (player ? this.modifiers : this.enemyModifiers).filter((m): m is T => m instanceof modifierType && m.shouldApply(...args));
-    globalScene.executeWithSeedOffset(() => {
-      const shuffleModifiers = mods => {
-        if (mods.length < 1) {
-          return mods;
-        }
-        const rand = Utils.randSeedInt(mods.length);
-        return [ mods[rand], ...shuffleModifiers(mods.filter((_, i) => i !== rand)) ];
-      };
-      modifiers = shuffleModifiers(modifiers);
-    }, globalScene.currentBattle.turn << 4, globalScene.waveSeed);
+  applyShuffledModifiers<T extends PersistentModifier>(
+    modifierType: Constructor<T>,
+    player: boolean = true,
+    ...args: Parameters<T["apply"]>
+  ): T[] {
+    let modifiers = (player ? this.modifiers : this.enemyModifiers).filter(
+      (m): m is T => m instanceof modifierType && m.shouldApply(...args),
+    );
+    globalScene.executeWithSeedOffset(
+      () => {
+        const shuffleModifiers = (mods) => {
+          if (mods.length < 1) {
+            return mods;
+          }
+          const rand = Utils.randSeedInt(mods.length);
+          return [ mods[rand], ...shuffleModifiers(mods.filter((_, i) => i !== rand)) ];
+        };
+        modifiers = shuffleModifiers(modifiers);
+      },
+      globalScene.currentBattle.turn << 4,
+      globalScene.waveSeed,
+    );
     return this.applyModifiersInternal(modifiers, player, args);
   }
 
@@ -2954,13 +3303,23 @@ export default class BattleScene extends SceneBase {
    * @param ...args The list of arguments needed to invoke `modifierType.apply`
    * @returns the list of all modifiers that matched `modifierType` and were applied.
    */
-  applyModifiers<T extends PersistentModifier>(modifierType: Constructor<T>, player: boolean = true, ...args: Parameters<T["apply"]>): T[] {
-    const modifiers = (player ? this.modifiers : this.enemyModifiers).filter((m): m is T => m instanceof modifierType && m.shouldApply(...args));
+  applyModifiers<T extends PersistentModifier>(
+    modifierType: Constructor<T>,
+    player: boolean = true,
+    ...args: Parameters<T["apply"]>
+  ): T[] {
+    const modifiers = (player ? this.modifiers : this.enemyModifiers).filter(
+      (m): m is T => m instanceof modifierType && m.shouldApply(...args),
+    );
     return this.applyModifiersInternal(modifiers, player, args);
   }
 
   /** Helper function to apply all passed modifiers */
-  applyModifiersInternal<T extends PersistentModifier>(modifiers: T[], player: boolean, args: Parameters<T["apply"]>): T[] {
+  applyModifiersInternal<T extends PersistentModifier>(
+    modifiers: T[],
+    player: boolean,
+    args: Parameters<T["apply"]>,
+  ): T[] {
     const appliedModifiers: T[] = [];
     for (const modifier of modifiers) {
       if (modifier.apply(...args)) {
@@ -2979,8 +3338,14 @@ export default class BattleScene extends SceneBase {
    * @param ...args The list of arguments needed to invoke `modifierType.apply`
    * @returns the first modifier that matches `modifierType` and was applied; return `null` if none matched
    */
-  applyModifier<T extends PersistentModifier>(modifierType: Constructor<T>, player: boolean = true, ...args: Parameters<T["apply"]>): T | null {
-    const modifiers = (player ? this.modifiers : this.enemyModifiers).filter((m): m is T => m instanceof modifierType && m.shouldApply(...args));
+  applyModifier<T extends PersistentModifier>(
+    modifierType: Constructor<T>,
+    player: boolean = true,
+    ...args: Parameters<T["apply"]>
+  ): T | null {
+    const modifiers = (player ? this.modifiers : this.enemyModifiers).filter(
+      (m): m is T => m instanceof modifierType && m.shouldApply(...args),
+    );
     for (const modifier of modifiers) {
       if (modifier.apply(...args)) {
         console.log("Applied", modifier.type.name, !player ? "(enemy)" : "");
@@ -2991,22 +3356,33 @@ export default class BattleScene extends SceneBase {
     return null;
   }
 
-  triggerPokemonFormChange(pokemon: Pokemon, formChangeTriggerType: Constructor<SpeciesFormChangeTrigger>, delayed: boolean = false, modal: boolean = false): boolean {
+  triggerPokemonFormChange(
+    pokemon: Pokemon,
+    formChangeTriggerType: Constructor<SpeciesFormChangeTrigger>,
+    delayed: boolean = false,
+    modal: boolean = false,
+  ): boolean {
     if (pokemonFormChanges.hasOwnProperty(pokemon.species.speciesId)) {
-
       // in case this is NECROZMA, determine which forms this
-      const matchingFormChangeOpts = pokemonFormChanges[pokemon.species.speciesId].filter(fc => fc.findTrigger(formChangeTriggerType) && fc.canChange(pokemon));
+      const matchingFormChangeOpts = pokemonFormChanges[pokemon.species.speciesId].filter(
+        (fc) => fc.findTrigger(formChangeTriggerType) && fc.canChange(pokemon),
+      );
       let matchingFormChange: SpeciesFormChange | null;
       if (pokemon.species.speciesId === Species.NECROZMA && matchingFormChangeOpts.length > 1) {
         // Ultra Necrozma is changing its form back, so we need to figure out into which form it devolves.
-        const formChangeItemModifiers = (this.findModifiers(m => m instanceof PokemonFormChangeItemModifier && m.pokemonId === pokemon.id) as PokemonFormChangeItemModifier[]).filter(m => m.active).map(m => m.formChangeItem);
+        const formChangeItemModifiers = (
+          this.findModifiers(
+            (m) => m instanceof PokemonFormChangeItemModifier && m.pokemonId === pokemon.id,
+          ) as PokemonFormChangeItemModifier[]
+        )
+          .filter((m) => m.active)
+          .map((m) => m.formChangeItem);
 
-
-        matchingFormChange = formChangeItemModifiers.includes(FormChangeItem.N_LUNARIZER) ?
-          matchingFormChangeOpts[0] :
-          formChangeItemModifiers.includes(FormChangeItem.N_SOLARIZER) ?
-            matchingFormChangeOpts[1] :
-            null;
+        matchingFormChange = formChangeItemModifiers.includes(FormChangeItem.N_LUNARIZER)
+          ? matchingFormChangeOpts[0]
+          : formChangeItemModifiers.includes(FormChangeItem.N_SOLARIZER)
+            ? matchingFormChangeOpts[1]
+            : null;
       } else {
         matchingFormChange = matchingFormChangeOpts[0];
       }
@@ -3031,7 +3407,12 @@ export default class BattleScene extends SceneBase {
     return false;
   }
 
-  triggerPokemonBattleAnim(pokemon: Pokemon, battleAnimType: PokemonAnimType, fieldAssets?: Phaser.GameObjects.Sprite[], delayed: boolean = false): boolean {
+  triggerPokemonBattleAnim(
+    pokemon: Pokemon,
+    battleAnimType: PokemonAnimType,
+    fieldAssets?: Phaser.GameObjects.Sprite[],
+    delayed: boolean = false,
+  ): boolean {
     const phase: Phase = new PokemonAnimPhase(battleAnimType, pokemon, fieldAssets);
     if (delayed) {
       this.pushPhase(phase);
@@ -3042,15 +3423,17 @@ export default class BattleScene extends SceneBase {
   }
 
   validateAchvs(achvType: Constructor<Achv>, ...args: unknown[]): void {
-    const filteredAchvs = Object.values(achvs).filter(a => a instanceof achvType);
+    const filteredAchvs = Object.values(achvs).filter((a) => a instanceof achvType);
     for (const achv of filteredAchvs) {
       this.validateAchv(achv, args);
     }
   }
 
   validateAchv(achv: Achv, args?: unknown[]): boolean {
-    if ((!this.gameData.achvUnlocks.hasOwnProperty(achv.id) || Overrides.ACHIEVEMENTS_REUNLOCK_OVERRIDE)
-      && achv.validate(args)) {
+    if (
+      (!this.gameData.achvUnlocks.hasOwnProperty(achv.id) || Overrides.ACHIEVEMENTS_REUNLOCK_OVERRIDE) &&
+      achv.validate(args)
+    ) {
       this.gameData.achvUnlocks[achv.id] = new Date().getTime();
       this.ui.achvBar.showAchv(achv);
       if (vouchers.hasOwnProperty(achv.id)) {
@@ -3079,18 +3462,20 @@ export default class BattleScene extends SceneBase {
       gameMode: this.currentBattle ? this.gameMode.getName() : "Title",
       biome: this.currentBattle ? getBiomeName(this.arena.biomeType) : "",
       wave: this.currentBattle?.waveIndex ?? 0,
-      party: this.party ? this.party.map((p) => {
-        return {
-          name: p.name,
-          form: p.getFormKey(),
-          types: p.getTypes().map((type) => Type[type]),
-          teraType: p.getTeraType() !== Type.UNKNOWN ? Type[p.getTeraType()] : "",
-          level: p.level,
-          currentHP: p.hp,
-          maxHP: p.getMaxHp(),
-          status: p.status?.effect ? StatusEffect[p.status.effect] : ""
-        };
-      }) : [],
+      party: this.party
+        ? this.party.map((p) => {
+          return {
+            name: p.name,
+            form: p.getFormKey(),
+            types: p.getTypes().map((type) => Type[type]),
+            teraType: p.getTeraType() !== Type.UNKNOWN ? Type[p.getTeraType()] : "",
+            level: p.level,
+            currentHP: p.hp,
+            maxHP: p.getMaxHp(),
+            status: p.status?.effect ? StatusEffect[p.status.effect] : "",
+          };
+        })
+        : [],
       modeChain: this.ui?.getModeChain() ?? [],
     };
     (window as any).gameInfo = gameInfo;
@@ -3126,24 +3511,31 @@ export default class BattleScene extends SceneBase {
   initFinalBossPhaseTwo(pokemon: Pokemon): void {
     if (pokemon instanceof EnemyPokemon && pokemon.isBoss() && !pokemon.formIndex && pokemon.bossSegmentIndex < 1) {
       this.fadeOutBgm(Utils.fixedInt(2000), false);
-      this.ui.showDialogue(battleSpecDialogue[BattleSpec.FINAL_BOSS].firstStageWin, pokemon.species.name, undefined, () => {
-        const finalBossMBH = getModifierType(modifierTypes.MINI_BLACK_HOLE).newModifier(pokemon) as TurnHeldItemTransferModifier;
-        finalBossMBH.setTransferrableFalse();
-        this.addEnemyModifier(finalBossMBH, false, true);
-        pokemon.generateAndPopulateMoveset(1);
-        this.setFieldScale(0.75);
-        this.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger, false);
-        this.currentBattle.double = true;
-        const availablePartyMembers = this.getPlayerParty().filter((p) => p.isAllowedInBattle());
-        if (availablePartyMembers.length > 1) {
-          this.pushPhase(new ToggleDoublePositionPhase(true));
-          if (!availablePartyMembers[1].isOnField()) {
-            this.pushPhase(new SummonPhase(1));
+      this.ui.showDialogue(
+        battleSpecDialogue[BattleSpec.FINAL_BOSS].firstStageWin,
+        pokemon.species.name,
+        undefined,
+        () => {
+          const finalBossMBH = getModifierType(modifierTypes.MINI_BLACK_HOLE).newModifier(
+            pokemon,
+          ) as TurnHeldItemTransferModifier;
+          finalBossMBH.setTransferrableFalse();
+          this.addEnemyModifier(finalBossMBH, false, true);
+          pokemon.generateAndPopulateMoveset(1);
+          this.setFieldScale(0.75);
+          this.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger, false);
+          this.currentBattle.double = true;
+          const availablePartyMembers = this.getPlayerParty().filter((p) => p.isAllowedInBattle());
+          if (availablePartyMembers.length > 1) {
+            this.pushPhase(new ToggleDoublePositionPhase(true));
+            if (!availablePartyMembers[1].isOnField()) {
+              this.pushPhase(new SummonPhase(1));
+            }
           }
-        }
 
-        this.shiftPhase();
-      });
+          this.shiftPhase();
+        },
+      );
       return;
     }
 
@@ -3157,22 +3549,32 @@ export default class BattleScene extends SceneBase {
    * @param useWaveIndexMultiplier Default false. If true, will multiply expValue by a scaling waveIndex multiplier. Not needed if expValue is already scaled by level/wave
    * @param pokemonParticipantIds Participants. If none are defined, no exp will be given. To spread evenly among the party, should pass all ids of party members.
    */
-  applyPartyExp(expValue: number, pokemonDefeated: boolean, useWaveIndexMultiplier?: boolean, pokemonParticipantIds?: Set<number>): void {
+  applyPartyExp(
+    expValue: number,
+    pokemonDefeated: boolean,
+    useWaveIndexMultiplier?: boolean,
+    pokemonParticipantIds?: Set<number>,
+  ): void {
     const participantIds = pokemonParticipantIds ?? this.currentBattle.playerParticipantIds;
     const party = this.getPlayerParty();
-    const expShareModifier = this.findModifier(m => m instanceof ExpShareModifier) as ExpShareModifier;
-    const expBalanceModifier = this.findModifier(m => m instanceof ExpBalanceModifier) as ExpBalanceModifier;
-    const multipleParticipantExpBonusModifier = this.findModifier(m => m instanceof MultipleParticipantExpBonusModifier) as MultipleParticipantExpBonusModifier;
-    const nonFaintedPartyMembers = party.filter(p => p.hp);
-    const expPartyMembers = nonFaintedPartyMembers.filter(p => p.level < this.getMaxExpLevel());
+    const expShareModifier = this.findModifier((m) => m instanceof ExpShareModifier) as ExpShareModifier;
+    const expBalanceModifier = this.findModifier((m) => m instanceof ExpBalanceModifier) as ExpBalanceModifier;
+    const multipleParticipantExpBonusModifier = this.findModifier(
+      (m) => m instanceof MultipleParticipantExpBonusModifier,
+    ) as MultipleParticipantExpBonusModifier;
+    const nonFaintedPartyMembers = party.filter((p) => p.hp);
+    const expPartyMembers = nonFaintedPartyMembers.filter((p) => p.level < this.getMaxExpLevel());
     const partyMemberExp: number[] = [];
     // EXP value calculation is based off Pokemon.getExpValue
     if (useWaveIndexMultiplier) {
-      expValue = Math.floor(expValue * this.currentBattle.waveIndex / 5 + 1);
+      expValue = Math.floor((expValue * this.currentBattle.waveIndex) / 5 + 1);
     }
 
     if (participantIds.size > 0) {
-      if (this.currentBattle.battleType === BattleType.TRAINER || this.currentBattle.mysteryEncounter?.encounterMode === MysteryEncounterMode.TRAINER_BATTLE) {
+      if (
+        this.currentBattle.battleType === BattleType.TRAINER ||
+        this.currentBattle.mysteryEncounter?.encounterMode === MysteryEncounterMode.TRAINER_BATTLE
+      ) {
         expValue = Math.floor(expValue * 1.5);
       } else if (this.currentBattle.isBattleMysteryEncounter() && this.currentBattle.mysteryEncounter) {
         expValue = Math.floor(expValue * this.currentBattle.mysteryEncounter.expMultiplier);
@@ -3182,7 +3584,9 @@ export default class BattleScene extends SceneBase {
         const participated = participantIds.has(pId);
         if (participated && pokemonDefeated) {
           partyMember.addFriendship(FRIENDSHIP_GAIN_FROM_BATTLE);
-          const machoBraceModifier = partyMember.getHeldItems().find(m => m instanceof PokemonIncrementingStatModifier);
+          const machoBraceModifier = partyMember
+            .getHeldItems()
+            .find((m) => m instanceof PokemonIncrementingStatModifier);
           if (machoBraceModifier && machoBraceModifier.stackCount < machoBraceModifier.getMaxStackCount()) {
             machoBraceModifier.stackCount++;
             this.updateModifiers(true, true);
@@ -3198,7 +3602,7 @@ export default class BattleScene extends SceneBase {
         }
         let expMultiplier = 0;
         if (participated) {
-          expMultiplier += (1 / participantIds.size);
+          expMultiplier += 1 / participantIds.size;
           if (participantIds.size > 1 && multipleParticipantExpBonusModifier) {
             expMultiplier += multipleParticipantExpBonusModifier.getStackCount() * 0.2;
           }
@@ -3236,7 +3640,11 @@ export default class BattleScene extends SceneBase {
         const splitExp = Math.floor(totalExp / recipientExpPartyMemberIndexes.length);
 
         expPartyMembers.forEach((_partyMember, pm) => {
-          partyMemberExp[pm] = Phaser.Math.Linear(partyMemberExp[pm], recipientExpPartyMemberIndexes.indexOf(pm) > -1 ? splitExp : 0, 0.2 * expBalanceModifier.getStackCount());
+          partyMemberExp[pm] = Phaser.Math.Linear(
+            partyMemberExp[pm],
+            recipientExpPartyMemberIndexes.indexOf(pm) > -1 ? splitExp : 0,
+            0.2 * expBalanceModifier.getStackCount(),
+          );
         });
       }
 
@@ -3245,7 +3653,11 @@ export default class BattleScene extends SceneBase {
 
         if (exp) {
           const partyMemberIndex = party.indexOf(expPartyMembers[pm]);
-          this.unshiftPhase(expPartyMembers[pm].isOnField() ? new ExpPhase(partyMemberIndex, exp) : new ShowPartyExpBarPhase(partyMemberIndex, exp));
+          this.unshiftPhase(
+            expPartyMembers[pm].isOnField()
+              ? new ExpPhase(partyMemberIndex, exp)
+              : new ShowPartyExpBarPhase(partyMemberIndex, exp),
+          );
         }
       }
     }
@@ -3258,7 +3670,13 @@ export default class BattleScene extends SceneBase {
    */
   isMysteryEncounterValidForWave(battleType: BattleType, waveIndex: number): boolean {
     const [ lowestMysteryEncounterWave, highestMysteryEncounterWave ] = this.gameMode.getMysteryEncounterLegalWaves();
-    return this.gameMode.hasMysteryEncounters && battleType === BattleType.WILD && !this.gameMode.isBoss(waveIndex) && waveIndex < highestMysteryEncounterWave && waveIndex > lowestMysteryEncounterWave;
+    return (
+      this.gameMode.hasMysteryEncounters &&
+      battleType === BattleType.WILD &&
+      !this.gameMode.isBoss(waveIndex) &&
+      waveIndex < highestMysteryEncounterWave &&
+      waveIndex > lowestMysteryEncounterWave
+    );
   }
 
   /**
@@ -3278,21 +3696,33 @@ export default class BattleScene extends SceneBase {
       // If total number of encounters is lower than expected for the run, slightly favor a new encounter spawn (reverse as well)
       // Reduces occurrence of runs with total encounters significantly different from AVERAGE_ENCOUNTERS_PER_RUN_TARGET
       // Favored rate changes can never exceed 50%. So if base rate is 15/256 and favored rate would add 200/256, result will be (15 + 128)/256
-      const expectedEncountersByFloor = AVERAGE_ENCOUNTERS_PER_RUN_TARGET / (highestMysteryEncounterWave - lowestMysteryEncounterWave) * (waveIndex - lowestMysteryEncounterWave);
+      const expectedEncountersByFloor =
+        (AVERAGE_ENCOUNTERS_PER_RUN_TARGET / (highestMysteryEncounterWave - lowestMysteryEncounterWave)) *
+        (waveIndex - lowestMysteryEncounterWave);
       const currentRunDiffFromAvg = expectedEncountersByFloor - encounteredEvents.length;
-      const favoredEncounterRate = sessionEncounterRate + Math.min(currentRunDiffFromAvg * ANTI_VARIANCE_WEIGHT_MODIFIER, MYSTERY_ENCOUNTER_SPAWN_MAX_WEIGHT / 2);
+      const favoredEncounterRate =
+        sessionEncounterRate +
+        Math.min(currentRunDiffFromAvg * ANTI_VARIANCE_WEIGHT_MODIFIER, MYSTERY_ENCOUNTER_SPAWN_MAX_WEIGHT / 2);
 
-      const successRate = isNullOrUndefined(Overrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE) ? favoredEncounterRate : Overrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE!;
+      const successRate = isNullOrUndefined(Overrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE)
+        ? favoredEncounterRate
+        : Overrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE!;
 
       // If the most recent ME was 3 or fewer waves ago, can never spawn a ME
-      const canSpawn = encounteredEvents.length === 0 || (waveIndex - encounteredEvents[encounteredEvents.length - 1].waveIndex) > 3 || !isNullOrUndefined(Overrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE);
+      const canSpawn =
+        encounteredEvents.length === 0 ||
+        waveIndex - encounteredEvents[encounteredEvents.length - 1].waveIndex > 3 ||
+        !isNullOrUndefined(Overrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE);
 
       if (canSpawn) {
         let roll = MYSTERY_ENCOUNTER_SPAWN_MAX_WEIGHT;
         // Always rolls the check on the same offset to ensure no RNG changes from reloading session
-        this.executeWithSeedOffset(() => {
-          roll = randSeedInt(MYSTERY_ENCOUNTER_SPAWN_MAX_WEIGHT);
-        }, waveIndex * 3 * 1000);
+        this.executeWithSeedOffset(
+          () => {
+            roll = randSeedInt(MYSTERY_ENCOUNTER_SPAWN_MAX_WEIGHT);
+          },
+          waveIndex * 3 * 1000,
+        );
         return roll < successRate;
       }
     }
@@ -3309,7 +3739,10 @@ export default class BattleScene extends SceneBase {
   getMysteryEncounter(encounterType?: MysteryEncounterType, canBypass?: boolean): MysteryEncounter {
     // Loading override or session encounter
     let encounter: MysteryEncounter | null;
-    if (!isNullOrUndefined(Overrides.MYSTERY_ENCOUNTER_OVERRIDE) && allMysteryEncounters.hasOwnProperty(Overrides.MYSTERY_ENCOUNTER_OVERRIDE)) {
+    if (
+      !isNullOrUndefined(Overrides.MYSTERY_ENCOUNTER_OVERRIDE) &&
+      allMysteryEncounters.hasOwnProperty(Overrides.MYSTERY_ENCOUNTER_OVERRIDE)
+    ) {
       encounter = allMysteryEncounters[Overrides.MYSTERY_ENCOUNTER_OVERRIDE];
       if (canBypass) {
         return encounter;
@@ -3322,7 +3755,11 @@ export default class BattleScene extends SceneBase {
     }
 
     // Check for queued encounters first
-    if (!encounter && this.mysteryEncounterSaveData?.queuedEncounters && this.mysteryEncounterSaveData.queuedEncounters.length > 0) {
+    if (
+      !encounter &&
+      this.mysteryEncounterSaveData?.queuedEncounters &&
+      this.mysteryEncounterSaveData.queuedEncounters.length > 0
+    ) {
       let i = 0;
       while (i < this.mysteryEncounterSaveData.queuedEncounters.length && !!encounter) {
         const candidate = this.mysteryEncounterSaveData.queuedEncounters[i];
@@ -3342,10 +3779,15 @@ export default class BattleScene extends SceneBase {
     }
 
     // See Enum values for base tier weights
-    const tierWeights = [ MysteryEncounterTier.COMMON, MysteryEncounterTier.GREAT, MysteryEncounterTier.ULTRA, MysteryEncounterTier.ROGUE ];
+    const tierWeights = [
+      MysteryEncounterTier.COMMON,
+      MysteryEncounterTier.GREAT,
+      MysteryEncounterTier.ULTRA,
+      MysteryEncounterTier.ROGUE,
+    ];
 
     // Adjust tier weights by previously encountered events to lower odds of only Common/Great in run
-    this.mysteryEncounterSaveData.encounteredEvents.forEach(seenEncounterData => {
+    this.mysteryEncounterSaveData.encounteredEvents.forEach((seenEncounterData) => {
       if (seenEncounterData.tier === MysteryEncounterTier.COMMON) {
         tierWeights[0] = tierWeights[0] - 6;
       } else if (seenEncounterData.tier === MysteryEncounterTier.GREAT) {
@@ -3358,16 +3800,25 @@ export default class BattleScene extends SceneBase {
     const commonThreshold = totalWeight - tierWeights[0];
     const greatThreshold = totalWeight - tierWeights[0] - tierWeights[1];
     const ultraThreshold = totalWeight - tierWeights[0] - tierWeights[1] - tierWeights[2];
-    let tier: MysteryEncounterTier | null = tierValue > commonThreshold ? MysteryEncounterTier.COMMON : tierValue > greatThreshold ? MysteryEncounterTier.GREAT : tierValue > ultraThreshold ? MysteryEncounterTier.ULTRA : MysteryEncounterTier.ROGUE;
+    let tier: MysteryEncounterTier | null =
+      tierValue > commonThreshold
+        ? MysteryEncounterTier.COMMON
+        : tierValue > greatThreshold
+          ? MysteryEncounterTier.GREAT
+          : tierValue > ultraThreshold
+            ? MysteryEncounterTier.ULTRA
+            : MysteryEncounterTier.ROGUE;
 
     if (!isNullOrUndefined(Overrides.MYSTERY_ENCOUNTER_TIER_OVERRIDE)) {
       tier = Overrides.MYSTERY_ENCOUNTER_TIER_OVERRIDE;
     }
 
     let availableEncounters: MysteryEncounter[] = [];
-    const previousEncounter = this.mysteryEncounterSaveData.encounteredEvents.length > 0 ?
-      this.mysteryEncounterSaveData.encounteredEvents[this.mysteryEncounterSaveData.encounteredEvents.length - 1].type
-      : null;
+    const previousEncounter =
+      this.mysteryEncounterSaveData.encounteredEvents.length > 0
+        ? this.mysteryEncounterSaveData.encounteredEvents[this.mysteryEncounterSaveData.encounteredEvents.length - 1]
+          .type
+        : null;
     const biomeMysteryEncounters = mysteryEncountersByBiome.get(this.arena.biomeType) ?? [];
     // If no valid encounters exist at tier, checks next tier down, continuing until there are some encounters available
     while (availableEncounters.length === 0 && tier !== null) {
@@ -3381,13 +3832,20 @@ export default class BattleScene extends SceneBase {
             return false;
           }
           const disallowedGameModes = encounterCandidate.disallowedGameModes;
-          if (disallowedGameModes && disallowedGameModes.length > 0
-            && disallowedGameModes.includes(this.gameMode.modeId)) {
+          if (
+            disallowedGameModes &&
+            disallowedGameModes.length > 0 &&
+            disallowedGameModes.includes(this.gameMode.modeId)
+          ) {
             return false;
           }
           if (this.gameMode.modeId === GameModes.CHALLENGE) {
             const disallowedChallenges = encounterCandidate.disallowedChallenges;
-            if (disallowedChallenges && disallowedChallenges.length > 0 && this.gameMode.challenges.some(challenge => disallowedChallenges.includes(challenge.id))) {
+            if (
+              disallowedChallenges &&
+              disallowedChallenges.length > 0 &&
+              this.gameMode.challenges.some((challenge) => disallowedChallenges.includes(challenge.id))
+            ) {
               return false;
             }
           }
@@ -3397,14 +3855,18 @@ export default class BattleScene extends SceneBase {
           if (previousEncounter !== null && encounterType === previousEncounter) {
             return false;
           }
-          if (this.mysteryEncounterSaveData.encounteredEvents.length > 0 &&
-            (encounterCandidate.maxAllowedEncounters && encounterCandidate.maxAllowedEncounters > 0)
-            && this.mysteryEncounterSaveData.encounteredEvents.filter(e => e.type === encounterType).length >= encounterCandidate.maxAllowedEncounters) {
+          if (
+            this.mysteryEncounterSaveData.encounteredEvents.length > 0 &&
+            encounterCandidate.maxAllowedEncounters &&
+            encounterCandidate.maxAllowedEncounters > 0 &&
+            this.mysteryEncounterSaveData.encounteredEvents.filter((e) => e.type === encounterType).length >=
+              encounterCandidate.maxAllowedEncounters
+          ) {
             return false;
           }
           return true;
         })
-        .map((m) => (allMysteryEncounters[m]));
+        .map((m) => allMysteryEncounters[m]);
       // Decrement tier
       if (tier === MysteryEncounterTier.ROGUE) {
         tier = MysteryEncounterTier.ULTRA;

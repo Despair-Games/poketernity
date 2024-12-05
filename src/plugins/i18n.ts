@@ -1,4 +1,4 @@
-import { camelCaseToKebabCase, } from "#app/utils";
+import { camelCaseToKebabCase } from "#app/utils";
 import i18next from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import HttpBackend from "i18next-http-backend";
@@ -8,9 +8,9 @@ import pkg from "../../package.json";
 //#region Interfaces/Types
 
 interface LoadingFontFaceProperty {
-  face: FontFace,
-  extraOptions?: { [key:string]: any },
-  only?: Array<string>
+  face: FontFace;
+  extraOptions?: { [key: string]: any };
+  only?: Array<string>;
 }
 
 //#region Constants
@@ -23,22 +23,28 @@ const unicodeRanges = {
   kana: "U+3040-30FF",
   CJKCommon: "U+2E80-2EFF,U+3000-303F,U+31C0-31EF,U+3200-32FF,U+3400-4DBF,U+F900-FAFF,U+FE30-FE4F",
   CJKIdeograph: "U+4E00-9FFF",
-  specialCharacters: "U+266A,U+2605,U+2665,U+2663" //♪.★,♥,♣
+  specialCharacters: "U+266A,U+2605,U+2665,U+2663", //♪.★,♥,♣
 };
 
 const rangesByLanguage = {
   korean: [ unicodeRanges.CJKCommon, unicodeRanges.hangul ].join(","),
   chinese: [ unicodeRanges.CJKCommon, unicodeRanges.fullwidth, unicodeRanges.CJKIdeograph ].join(","),
-  japanese: [ unicodeRanges.CJKCommon, unicodeRanges.fullwidth, unicodeRanges.kana, unicodeRanges.CJKIdeograph ].join(",")
+  japanese: [ unicodeRanges.CJKCommon, unicodeRanges.fullwidth, unicodeRanges.kana, unicodeRanges.CJKIdeograph ].join(
+    ",",
+  ),
 };
 
 const fonts: Array<LoadingFontFaceProperty> = [
   // unicode (special character from PokePT)
   {
-    face: new FontFace("emerald", "url(./fonts/PokePT_Wansung.woff2)", { unicodeRange: unicodeRanges.specialCharacters }),
+    face: new FontFace("emerald", "url(./fonts/PokePT_Wansung.woff2)", {
+      unicodeRange: unicodeRanges.specialCharacters,
+    }),
   },
   {
-    face: new FontFace("pkmnems", "url(./fonts/PokePT_Wansung.woff2)", { unicodeRange: unicodeRanges.specialCharacters }),
+    face: new FontFace("pkmnems", "url(./fonts/PokePT_Wansung.woff2)", {
+      unicodeRange: unicodeRanges.specialCharacters,
+    }),
     extraOptions: { sizeAdjust: "133%" },
   },
   // unicode (korean)
@@ -51,12 +57,16 @@ const fonts: Array<LoadingFontFaceProperty> = [
   },
   // unicode (chinese)
   {
-    face: new FontFace("emerald", "url(./fonts/unifont-15.1.05.subset.woff2)", { unicodeRange: rangesByLanguage.chinese }),
+    face: new FontFace("emerald", "url(./fonts/unifont-15.1.05.subset.woff2)", {
+      unicodeRange: rangesByLanguage.chinese,
+    }),
     extraOptions: { sizeAdjust: "70%", format: "woff2" },
     only: [ "en", "es", "fr", "it", "de", "zh", "pt", "ko", "ca" ],
   },
   {
-    face: new FontFace("pkmnems", "url(./fonts/unifont-15.1.05.subset.woff2)", { unicodeRange: rangesByLanguage.chinese }),
+    face: new FontFace("pkmnems", "url(./fonts/unifont-15.1.05.subset.woff2)", {
+      unicodeRange: rangesByLanguage.chinese,
+    }),
     extraOptions: { format: "woff2" },
     only: [ "en", "es", "fr", "it", "de", "zh", "pt", "ko", "ca" ],
   },
@@ -90,8 +100,8 @@ const namespaceMap = {
 async function initFonts(language: string | undefined) {
   const results = await Promise.allSettled(
     fonts
-      .filter(font => !font.only || font.only.some(exclude => language?.indexOf(exclude) === 0))
-      .map(font => Object.assign(font.face, font.extraOptions ?? {}).load())
+      .filter((font) => !font.only || font.only.some((exclude) => language?.indexOf(exclude) === 0))
+      .map((font) => Object.assign(font.face, font.extraOptions ?? {}).load()),
   );
   for (const result of results) {
     if (result.status === "fulfilled") {
@@ -258,7 +268,7 @@ export async function initI18n(): Promise<void> {
       "mysteryEncounterMessages",
     ],
     detection: {
-      lookupLocalStorage: "prLang"
+      lookupLocalStorage: "prLang",
     },
     debug: Number(import.meta.env.VITE_I18N_DEBUG) === 1,
     interpolation: {
@@ -266,7 +276,6 @@ export async function initI18n(): Promise<void> {
     },
     postProcess: [ "korean-postposition" ],
   });
-
 
   if (i18next.services.formatter) {
     i18next.services.formatter.add("money", i18nMoneyFormatter);

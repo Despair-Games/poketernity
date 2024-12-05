@@ -47,7 +47,7 @@ describe("Spec - Pokemon", () => {
 
       const party = scene.getPlayerParty();
       expect(party).toHaveLength(6);
-      party.forEach((pkm, index) =>{
+      party.forEach((pkm, index) => {
         expect(pkm.species.speciesId).toBe(index === 5 ? Species.ZUBAT : Species.ABRA);
       });
     });
@@ -59,7 +59,7 @@ describe("Spec - Pokemon", () => {
 
       const party = scene.getPlayerParty();
       expect(party).toHaveLength(6);
-      party.forEach((pkm, index) =>{
+      party.forEach((pkm, index) => {
         expect(pkm.species.speciesId).toBe(index === slotIndex ? Species.ZUBAT : Species.ABRA);
       });
     });

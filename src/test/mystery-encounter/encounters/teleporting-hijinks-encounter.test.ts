@@ -13,7 +13,11 @@ import ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
 import { Mode } from "#app/ui/ui";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
-import { runMysteryEncounterToEnd, runSelectMysteryEncounterOption, skipBattleRunMysteryEncounterRewardsPhase } from "#test/mystery-encounter/encounter-test-utils";
+import {
+  runMysteryEncounterToEnd,
+  runSelectMysteryEncounterOption,
+  skipBattleRunMysteryEncounterRewardsPhase,
+} from "#test/mystery-encounter/encounter-test-utils";
 import { initSceneWithoutEncounterPhase } from "#test/utils/gameManagerUtils";
 import i18next from "i18next";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -47,9 +51,7 @@ describe("Teleporting Hijinks - Mystery Encounter", () => {
       .enemyPassiveAbility(Abilities.BALL_FETCH);
 
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(
-      new Map<Biome, MysteryEncounterType[]>([
-        [ Biome.CAVE, [ MysteryEncounterType.TELEPORTING_HIJINKS ]],
-      ])
+      new Map<Biome, MysteryEncounterType[]>([[ Biome.CAVE, [ MysteryEncounterType.TELEPORTING_HIJINKS ]]]),
     );
   });
 
@@ -207,7 +209,7 @@ describe("Teleporting Hijinks - Mystery Encounter", () => {
         selected: [
           {
             text: `${namespace}:option.2.selected`,
-          }
+          },
         ],
       });
     });
@@ -300,9 +302,19 @@ describe("Teleporting Hijinks - Mystery Encounter", () => {
       await game.phaseInterceptor.run(SelectModifierPhase);
 
       expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.handlers.find(h => h instanceof ModifierSelectUiHandler) as ModifierSelectUiHandler;
-      expect(modifierSelectHandler.options.some(opt => opt.modifierTypeOption.type.name === i18next.t("modifierType:AttackTypeBoosterItem.metal_coat"))).toBe(true);
-      expect(modifierSelectHandler.options.some(opt => opt.modifierTypeOption.type.name === i18next.t("modifierType:AttackTypeBoosterItem.magnet"))).toBe(true);
+      const modifierSelectHandler = scene.ui.handlers.find(
+        (h) => h instanceof ModifierSelectUiHandler,
+      ) as ModifierSelectUiHandler;
+      expect(
+        modifierSelectHandler.options.some(
+          (opt) => opt.modifierTypeOption.type.name === i18next.t("modifierType:AttackTypeBoosterItem.metal_coat"),
+        ),
+      ).toBe(true);
+      expect(
+        modifierSelectHandler.options.some(
+          (opt) => opt.modifierTypeOption.type.name === i18next.t("modifierType:AttackTypeBoosterItem.magnet"),
+        ),
+      ).toBe(true);
     });
   });
 });

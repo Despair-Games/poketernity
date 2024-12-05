@@ -93,7 +93,7 @@ describe("Final Boss", () => {
     expect(eternatus.formIndex).toBe(1);
     expect(eternatus.bossSegments).toBe(5);
     expect(eternatus.bossSegmentIndex).toBe(4);
-    const miniBlackHole = eternatus.getHeldItems().find(m => m instanceof TurnHeldItemTransferModifier);
+    const miniBlackHole = eternatus.getHeldItems().find((m) => m instanceof TurnHeldItemTransferModifier);
     expect(miniBlackHole).toBeDefined();
     expect(miniBlackHole?.stackCount).toBe(1);
   });
@@ -136,9 +136,8 @@ describe("Final Boss", () => {
     expect(eternatus.formIndex).toBe(1);
     expect(eternatus.bossSegments).toBe(5);
     expect(eternatus.bossSegmentIndex).toBe(4);
-    const miniBlackHole = eternatus.getHeldItems().find(m => m instanceof TurnHeldItemTransferModifier);
+    const miniBlackHole = eternatus.getHeldItems().find((m) => m instanceof TurnHeldItemTransferModifier);
     expect(miniBlackHole).toBeDefined();
     expect(miniBlackHole?.stackCount).toBe(1);
   });
-
 });

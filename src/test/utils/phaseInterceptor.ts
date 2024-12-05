@@ -50,7 +50,7 @@ import {
   MysteryEncounterOptionSelectedPhase,
   MysteryEncounterPhase,
   MysteryEncounterRewardsPhase,
-  PostMysteryEncounterPhase
+  PostMysteryEncounterPhase,
 } from "#app/phases/mystery-encounter-phases";
 import { ModifierRewardPhase } from "#app/phases/modifier-reward-phase";
 import { PartyExpPhase } from "#app/phases/party-exp-phase";
@@ -272,7 +272,12 @@ export default class PhaseInterceptor {
   ];
 
   private endBySetMode = [
-    TitlePhase, SelectGenderPhase, CommandPhase, SelectModifierPhase, MysteryEncounterPhase, PostMysteryEncounterPhase
+    TitlePhase,
+    SelectGenderPhase,
+    CommandPhase,
+    SelectModifierPhase,
+    MysteryEncounterPhase,
+    PostMysteryEncounterPhase,
   ];
 
   /**
@@ -328,7 +333,7 @@ export default class PhaseInterceptor {
         this.phaseFrom = null;
       }
       const targetName = typeof phaseTo === "string" ? phaseTo : phaseTo.name;
-      this.intervalRun = setInterval(async() => {
+      this.intervalRun = setInterval(async () => {
         const currentPhase = this.onHold?.length && this.onHold[0];
         if (currentPhase && currentPhase.name === targetName) {
           clearInterval(this.intervalRun);
@@ -420,7 +425,7 @@ export default class PhaseInterceptor {
    *
    * @param shouldRun Whether or not the current scene should also be run.
    */
-  shift(shouldRun: boolean = false) : void {
+  shift(shouldRun: boolean = false): void {
     this.onHold.shift();
     if (shouldRun) {
       this.scene.shiftPhase();
@@ -456,7 +461,7 @@ export default class PhaseInterceptor {
       name: phase.name,
       call: () => {
         this.phases[phase.name].start.apply(instance);
-      }
+      },
     });
   }
 
@@ -487,8 +492,9 @@ export default class PhaseInterceptor {
     console.log("setMode", `${Mode[mode]} (=${mode})`, args);
     const ret = this.originalSetMode.apply(instance, [ mode, ...args ]);
     if (!this.phases[currentPhase.constructor.name]) {
-      throw new Error(`missing ${currentPhase.constructor.name} in phaseInterceptor PHASES list  ---  Add it to PHASES inside of /test/utils/phaseInterceptor.ts`);
-
+      throw new Error(
+        `missing ${currentPhase.constructor.name} in phaseInterceptor PHASES list  ---  Add it to PHASES inside of /test/utils/phaseInterceptor.ts`,
+      );
     }
     if (this.phases[currentPhase.constructor.name].endBySetMode) {
       this.inProgress?.callback();
@@ -511,11 +517,11 @@ export default class PhaseInterceptor {
         if (expireFn) {
           this.prompts.shift();
         } else if (
-          currentMode === actionForNextPrompt.mode
-          && currentPhase === actionForNextPrompt.phaseTarget
-          && currentHandler.active
-          && (!actionForNextPrompt.awaitingActionInput
-            || (actionForNextPrompt.awaitingActionInput && currentHandler.awaitingActionInput))
+          currentMode === actionForNextPrompt.mode &&
+          currentPhase === actionForNextPrompt.phaseTarget &&
+          currentHandler.active &&
+          (!actionForNextPrompt.awaitingActionInput ||
+            (actionForNextPrompt.awaitingActionInput && currentHandler.awaitingActionInput))
         ) {
           const prompt = this.prompts.shift();
           if (prompt?.callback) {
@@ -534,13 +540,19 @@ export default class PhaseInterceptor {
    * @param expireFn - The function to determine if the prompt has expired.
    * @param awaitingActionInput
    */
-  addToNextPrompt(phaseTarget: string, mode: Mode, callback: () => void, expireFn?: () => void, awaitingActionInput: boolean = false) {
+  addToNextPrompt(
+    phaseTarget: string,
+    mode: Mode,
+    callback: () => void,
+    expireFn?: () => void,
+    awaitingActionInput: boolean = false,
+  ) {
     this.prompts.push({
       phaseTarget,
       mode,
       callback,
       expireFn,
-      awaitingActionInput
+      awaitingActionInput,
     });
   }
 

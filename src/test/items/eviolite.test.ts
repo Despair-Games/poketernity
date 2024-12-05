@@ -22,12 +22,10 @@ describe("Items - Eviolite", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override
-      .battleType("single")
-      .startingHeldItems([{ name: "EVIOLITE" }]);
+    game.override.battleType("single").startingHeldItems([{ name: "EVIOLITE" }]);
   });
 
-  it("should provide 50% boost to DEF and SPDEF for unevolved, unfused pokemon", async() => {
+  it("should provide 50% boost to DEF and SPDEF for unevolved, unfused pokemon", async () => {
     await game.classicMode.startBattle([ Species.PICHU ]);
 
     const partyMember = game.scene.getPlayerPokemon()!;
@@ -48,7 +46,7 @@ describe("Items - Eviolite", () => {
     expect(partyMember.getEffectiveStat(Stat.SPDEF)).toBe(Math.floor(spDefStat * 1.5));
   });
 
-  it("should not provide a boost for fully evolved, unfused pokemon", async() => {
+  it("should not provide a boost for fully evolved, unfused pokemon", async () => {
     await game.classicMode.startBattle([ Species.RAICHU ]);
 
     const partyMember = game.scene.getPlayerPokemon()!;
@@ -67,10 +65,9 @@ describe("Items - Eviolite", () => {
 
     expect(partyMember.getEffectiveStat(Stat.DEF)).toBe(defStat);
     expect(partyMember.getEffectiveStat(Stat.SPDEF)).toBe(spDefStat);
-
   });
 
-  it("should provide 50% boost to DEF and SPDEF for completely unevolved, fused pokemon", async() => {
+  it("should provide 50% boost to DEF and SPDEF for completely unevolved, fused pokemon", async () => {
     await game.classicMode.startBattle([ Species.PICHU, Species.CLEFFA ]);
 
     const [ partyMember, ally ] = game.scene.getPlayerParty();
@@ -100,7 +97,7 @@ describe("Items - Eviolite", () => {
     expect(partyMember.getEffectiveStat(Stat.SPDEF)).toBe(Math.floor(spDefStat * 1.5));
   });
 
-  it("should provide 25% boost to DEF and SPDEF for partially unevolved (base), fused pokemon", async() => {
+  it("should provide 25% boost to DEF and SPDEF for partially unevolved (base), fused pokemon", async () => {
     await game.classicMode.startBattle([ Species.PICHU, Species.CLEFABLE ]);
 
     const [ partyMember, ally ] = game.scene.getPlayerParty();
@@ -130,7 +127,7 @@ describe("Items - Eviolite", () => {
     expect(partyMember.getEffectiveStat(Stat.SPDEF)).toBe(Math.floor(spDefStat * 1.25));
   });
 
-  it("should provide 25% boost to DEF and SPDEF for partially unevolved (fusion), fused pokemon", async() => {
+  it("should provide 25% boost to DEF and SPDEF for partially unevolved (fusion), fused pokemon", async () => {
     await game.classicMode.startBattle([ Species.RAICHU, Species.CLEFFA ]);
 
     const [ partyMember, ally ] = game.scene.getPlayerParty();
@@ -160,7 +157,7 @@ describe("Items - Eviolite", () => {
     expect(partyMember.getEffectiveStat(Stat.SPDEF)).toBe(Math.floor(spDefStat * 1.25));
   });
 
-  it("should not provide a boost for fully evolved, fused pokemon", async() => {
+  it("should not provide a boost for fully evolved, fused pokemon", async () => {
     await game.classicMode.startBattle([ Species.RAICHU, Species.CLEFABLE ]);
 
     const [ partyMember, ally ] = game.scene.getPlayerParty();
@@ -190,12 +187,12 @@ describe("Items - Eviolite", () => {
     expect(partyMember.getEffectiveStat(Stat.SPDEF)).toBe(spDefStat);
   });
 
-  it("should not provide a boost for Gigantamax Pokémon", async() => {
+  it("should not provide a boost for Gigantamax Pokémon", async () => {
     game.override.starterForms({
       [Species.PIKACHU]: 8,
       [Species.EEVEE]: 2,
       [Species.DURALUDON]: 1,
-      [Species.MEOWTH]: 1
+      [Species.MEOWTH]: 1,
     });
 
     const gMaxablePokemon = [ Species.PIKACHU, Species.EEVEE, Species.DURALUDON, Species.MEOWTH ];

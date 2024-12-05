@@ -578,5 +578,5 @@ export const starterPassiveAbilities = {
   [Species.PECHARUNT]: Abilities.TOXIC_CHAIN,
   [Species.PALDEA_TAUROS]: Abilities.ADAPTABILITY,
   [Species.PALDEA_WOOPER]: Abilities.THICK_FAT,
-  [Species.BLOODMOON_URSALUNA]: Abilities.BERSERK
+  [Species.BLOODMOON_URSALUNA]: Abilities.BERSERK,
 };

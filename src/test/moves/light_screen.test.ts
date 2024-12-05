@@ -50,7 +50,11 @@ describe("Moves - Light Screen", () => {
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
-    const mockedDmg = getMockedMoveDamage(game.scene.getEnemyPokemon()!, game.scene.getPlayerPokemon()!, allMoves[moveToUse]);
+    const mockedDmg = getMockedMoveDamage(
+      game.scene.getEnemyPokemon()!,
+      game.scene.getPlayerPokemon()!,
+      allMoves[moveToUse],
+    );
 
     expect(mockedDmg).toBe(allMoves[moveToUse].power * singleBattleMultiplier);
   });
@@ -65,7 +69,11 @@ describe("Moves - Light Screen", () => {
     game.move.select(moveToUse, 1);
 
     await game.phaseInterceptor.to(TurnEndPhase);
-    const mockedDmg = getMockedMoveDamage(game.scene.getEnemyPokemon()!, game.scene.getPlayerPokemon()!, allMoves[moveToUse]);
+    const mockedDmg = getMockedMoveDamage(
+      game.scene.getEnemyPokemon()!,
+      game.scene.getPlayerPokemon()!,
+      allMoves[moveToUse],
+    );
 
     expect(mockedDmg).toBe(allMoves[moveToUse].power * doubleBattleMultiplier);
   });
@@ -77,7 +85,11 @@ describe("Moves - Light Screen", () => {
     game.move.select(moveToUse);
 
     await game.phaseInterceptor.to(TurnEndPhase);
-    const mockedDmg = getMockedMoveDamage(game.scene.getEnemyPokemon()!, game.scene.getPlayerPokemon()!, allMoves[moveToUse]);
+    const mockedDmg = getMockedMoveDamage(
+      game.scene.getEnemyPokemon()!,
+      game.scene.getPlayerPokemon()!,
+      allMoves[moveToUse],
+    );
 
     expect(mockedDmg).toBe(allMoves[moveToUse].power);
   });
@@ -97,7 +109,14 @@ const getMockedMoveDamage = (defender: Pokemon, attacker: Pokemon, move: Move) =
   const side = defender.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
 
   if (globalScene.arena.getTagOnSide(ArenaTagType.LIGHT_SCREEN, side)) {
-    globalScene.arena.applyTagsForSide(ArenaTagType.LIGHT_SCREEN, side, false, attacker, move.category, multiplierHolder);
+    globalScene.arena.applyTagsForSide(
+      ArenaTagType.LIGHT_SCREEN,
+      side,
+      false,
+      attacker,
+      move.category,
+      multiplierHolder,
+    );
   }
 
   return move.power * multiplierHolder.value;

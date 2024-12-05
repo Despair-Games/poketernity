@@ -16,18 +16,20 @@ export class PostGameOverPhase extends Phase {
     super.start();
 
     const saveAndReset = () => {
-      globalScene.gameData.saveAll(true, true, true).then(success => {
+      globalScene.gameData.saveAll(true, true, true).then((success) => {
         if (!success) {
           return globalScene.reset(true);
         }
-        globalScene.gameData.tryClearSession(globalScene.sessionSlotId).then((success: boolean | [boolean, boolean]) => {
-          if (!success[0]) {
-            return globalScene.reset(true);
-          }
-          globalScene.reset();
-          globalScene.unshiftPhase(new TitlePhase());
-          this.end();
-        });
+        globalScene.gameData
+          .tryClearSession(globalScene.sessionSlotId)
+          .then((success: boolean | [boolean, boolean]) => {
+            if (!success[0]) {
+              return globalScene.reset(true);
+            }
+            globalScene.reset();
+            globalScene.unshiftPhase(new TitlePhase());
+            this.end();
+          });
       });
     };
 

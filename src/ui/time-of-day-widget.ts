@@ -6,7 +6,6 @@ import { TimeOfDay } from "#enums/time-of-day";
 
 /** A small self contained UI element that displays the time of day as an icon */
 export default class TimeOfDayWidget extends Phaser.GameObjects.Container {
-
   /** The {@linkcode Phaser.GameObjects.Sprite} that represents the foreground of the current time of day */
   private readonly timeOfDayIconFgs: Phaser.GameObjects.Sprite[] = new Array(2);
   /** The {@linkcode Phaser.GameObjects.Sprite} that represents the middle-ground of the current time of day */
@@ -21,7 +20,8 @@ export default class TimeOfDayWidget extends Phaser.GameObjects.Container {
   private timeOfDayIconPairs: Map<string, Phaser.GameObjects.Sprite[]> = new Map([
     [ "bg", this.timeOfDayIconBgs ],
     [ "mg", this.timeOfDayIconMgs ],
-    [ "fg", this.timeOfDayIconFgs ],]);
+    [ "fg", this.timeOfDayIconFgs ],
+  ]);
 
   /** The current time of day */
   private currentTime: TimeOfDay = TimeOfDay.ALL;
@@ -38,10 +38,9 @@ export default class TimeOfDayWidget extends Phaser.GameObjects.Container {
   }
   /** On set, resumes any paused tweens if true */
   public set parentVisible(visible: boolean) {
-    if (visible && !this._parentVisible) { // Only resume the tweens if parent is newly visible
-      this.timeOfDayIcons?.forEach(
-        icon => globalScene.tweens.getTweensOf(icon).forEach(
-          tween => tween.resume()));
+    if (visible && !this._parentVisible) {
+      // Only resume the tweens if parent is newly visible
+      this.timeOfDayIcons?.forEach((icon) => globalScene.tweens.getTweensOf(icon).forEach((tween) => tween.resume()));
     }
 
     this._parentVisible = visible;
@@ -56,12 +55,11 @@ export default class TimeOfDayWidget extends Phaser.GameObjects.Container {
     }
 
     // Initialize all sprites
-    this.timeOfDayIconPairs.forEach(
-      (icons, key) => {
-        for (let i = 0; i < icons.length; i++) {
-          icons[i] = globalScene.add.sprite(0, 0, "dawn_icon_" + key).setOrigin();
-        }
-      });
+    this.timeOfDayIconPairs.forEach((icons, key) => {
+      for (let i = 0; i < icons.length; i++) {
+        icons[i] = globalScene.add.sprite(0, 0, "dawn_icon_" + key).setOrigin();
+      }
+    });
     // Store a flat array of all icons for later
     this.timeOfDayIcons = [ this.timeOfDayIconBgs, this.timeOfDayIconMgs, this.timeOfDayIconFgs ].flat();
     this.add(this.timeOfDayIcons);
@@ -121,14 +119,13 @@ export default class TimeOfDayWidget extends Phaser.GameObjects.Container {
     this.moveBelow(this.timeOfDayIconMgs[0], this.timeOfDayIconBgs[1]);
     this.moveBelow(this.timeOfDayIconFgs[0], this.timeOfDayIconFgs[1]);
 
-    this.timeOfDayIconPairs.forEach(
-      (icons, key) => {
-        icons[0].setTexture(TimeOfDay[this.currentTime].toLowerCase() + "_icon_" + key);
-        icons[1].setTexture(TimeOfDay[this.previousTime].toLowerCase() + "_icon_" + key);
-      });
+    this.timeOfDayIconPairs.forEach((icons, key) => {
+      icons[0].setTexture(TimeOfDay[this.currentTime].toLowerCase() + "_icon_" + key);
+      icons[1].setTexture(TimeOfDay[this.previousTime].toLowerCase() + "_icon_" + key);
+    });
     this.timeOfDayIconMgs[0].setRotation(-90 * (3.14 / 180));
 
-    this.timeOfDayIcons.forEach(icon => icon.setAlpha(1));
+    this.timeOfDayIcons.forEach((icon) => icon.setAlpha(1));
   }
 
   /** Adds the proper tween for all icons */
@@ -138,16 +135,16 @@ export default class TimeOfDayWidget extends Phaser.GameObjects.Container {
     this.resetIcons();
 
     // Tween based on the player setting
-    (globalScene.timeOfDayAnimation === EaseType.BACK ? this.getBackTween() : this.getBounceTween())
-      .forEach(tween => globalScene.tweens.add(tween));
+    (globalScene.timeOfDayAnimation === EaseType.BACK ? this.getBackTween() : this.getBounceTween()).forEach((tween) =>
+      globalScene.tweens.add(tween),
+    );
 
     // Swaps all elements of the icon arrays by shifting the first element onto the end of the array
     // This ensures index[0] is always the new time of day icon and index[1] is always the current one
-    this.timeOfDayIconPairs.forEach(
-      icons => {
-        const shifted = icons.shift();
-        shifted && icons.push(shifted);
-      });
+    this.timeOfDayIconPairs.forEach((icons) => {
+      const shifted = icons.shift();
+      shifted && icons.push(shifted);
+    });
   }
 
   /**

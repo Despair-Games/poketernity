@@ -6,18 +6,17 @@ import i18next from "i18next";
 import { pokerogueApi } from "#app/plugins/api/pokerogue-api";
 import { globalScene } from "#app/global-scene";
 
-
 interface LanguageSetting {
-  inputFieldFontSize?: string,
-  warningMessageFontSize?: string,
-  errorMessageFontSize?: string,
+  inputFieldFontSize?: string;
+  warningMessageFontSize?: string;
+  errorMessageFontSize?: string;
 }
 
 const languageSettings: { [key: string]: LanguageSetting } = {
   "es-ES": {
     inputFieldFontSize: "50px",
     errorMessageFontSize: "40px",
-  }
+  },
 };
 
 export default class RegistrationFormUiHandler extends FormModalUiHandler {
@@ -79,7 +78,9 @@ export default class RegistrationFormUiHandler extends FormModalUiHandler {
     });
 
     const warningMessageFontSize = languageSettings[i18next.resolvedLanguage!]?.warningMessageFontSize ?? "42px";
-    const label = addTextObject(10, 87, i18next.t("menu:registrationAgeWarning"), TextStyle.TOOLTIP_CONTENT, { fontSize: warningMessageFontSize });
+    const label = addTextObject(10, 87, i18next.t("menu:registrationAgeWarning"), TextStyle.TOOLTIP_CONTENT, {
+      fontSize: warningMessageFontSize,
+    });
 
     this.modalContainer.add(label);
   }
@@ -94,7 +95,7 @@ export default class RegistrationFormUiHandler extends FormModalUiHandler {
         this.submitAction = originalRegistrationAction;
         this.sanitizeInputs();
         globalScene.ui.setMode(Mode.LOADING, { buttonActions: []});
-        const onFail = error => {
+        const onFail = (error) => {
           globalScene.ui.setMode(Mode.REGISTRATION_FORM, Object.assign(config, { errorMessage: error?.trim() }));
           globalScene.ui.playError();
           const errorMessageFontSize = languageSettings[i18next.resolvedLanguage!]?.errorMessageFontSize;
@@ -112,11 +113,13 @@ export default class RegistrationFormUiHandler extends FormModalUiHandler {
           return onFail(i18next.t("menu:passwordNotMatchingConfirmPassword"));
         }
         const [ usernameInput, passwordInput ] = this.inputs;
-        pokerogueApi.account.register({ username: usernameInput.text, password: passwordInput.text })
-          .then(registerError => {
+        pokerogueApi.account
+          .register({ username: usernameInput.text, password: passwordInput.text })
+          .then((registerError) => {
             if (!registerError) {
-              pokerogueApi.account.login({ username: usernameInput.text, password: passwordInput.text })
-                .then(loginError => {
+              pokerogueApi.account
+                .login({ username: usernameInput.text, password: passwordInput.text })
+                .then((loginError) => {
                   if (!loginError) {
                     originalRegistrationAction && originalRegistrationAction();
                   } else {

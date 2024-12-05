@@ -10,7 +10,7 @@ export enum TerrainType {
   MISTY,
   ELECTRIC,
   GRASSY,
-  PSYCHIC
+  PSYCHIC,
 }
 
 export class Terrain {
@@ -57,7 +57,10 @@ export class Terrain {
       case TerrainType.PSYCHIC:
         if (!move.hasAttr(ProtectAttr)) {
           // Cancels move if the move has positive priority and targets a Pokemon grounded on the Psychic Terrain
-          return move.getPriority(user) > 0 && user.getOpponents().some(o => targets.includes(o.getBattlerIndex()) && o.isGrounded());
+          return (
+            move.getPriority(user) > 0 &&
+            user.getOpponents().some((o) => targets.includes(o.getBattlerIndex()) && o.isGrounded())
+          );
         }
     }
 
@@ -80,8 +83,7 @@ export function getTerrainName(terrainType: TerrainType): string {
   return "";
 }
 
-
-export function getTerrainColor(terrainType: TerrainType): [ integer, integer, integer ] {
+export function getTerrainColor(terrainType: TerrainType): [integer, integer, integer] {
   switch (terrainType) {
     case TerrainType.MISTY:
       return [ 232, 136, 200 ];

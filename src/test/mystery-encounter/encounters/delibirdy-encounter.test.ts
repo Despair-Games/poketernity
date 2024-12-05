@@ -4,14 +4,26 @@ import { Species } from "#app/enums/species";
 import GameManager from "#app/test/utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { runMysteryEncounterToEnd, runSelectMysteryEncounterOption } from "#test/mystery-encounter/encounter-test-utils";
+import {
+  runMysteryEncounterToEnd,
+  runSelectMysteryEncounterOption,
+} from "#test/mystery-encounter/encounter-test-utils";
 import BattleScene from "#app/battle-scene";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { DelibirdyEncounter } from "#app/data/mystery-encounters/encounters/delibirdy-encounter";
 import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
 import { MoneyRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
-import { BerryModifier, HealingBoosterModifier, HitHealModifier, LevelIncrementBoosterModifier, MoneyMultiplierModifier, PokemonInstantReviveModifier, PokemonNatureWeightModifier, PreserveBerryModifier } from "#app/modifier/modifier";
+import {
+  BerryModifier,
+  HealingBoosterModifier,
+  HitHealModifier,
+  LevelIncrementBoosterModifier,
+  MoneyMultiplierModifier,
+  PokemonInstantReviveModifier,
+  PokemonNatureWeightModifier,
+  PreserveBerryModifier,
+} from "#app/modifier/modifier";
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases";
 import { generateModifierType } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { modifierTypes } from "#app/modifier/modifier-type";
@@ -40,9 +52,7 @@ describe("Delibird-y - Mystery Encounter", () => {
     game.override.disableTrainerWaves();
 
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(
-      new Map<Biome, MysteryEncounterType[]>([
-        [ Biome.CAVE, [ MysteryEncounterType.DELIBIRDY ]],
-      ])
+      new Map<Biome, MysteryEncounterType[]>([[ Biome.CAVE, [ MysteryEncounterType.DELIBIRDY ]]]),
     );
   });
 
@@ -98,7 +108,8 @@ describe("Delibird-y - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.DELIBIRDY, defaultParty);
       await runMysteryEncounterToEnd(game, 1);
 
-      const price = (scene.currentBattle.mysteryEncounter?.options[0].requirements[0] as MoneyRequirement).requiredMoney;
+      const price = (scene.currentBattle.mysteryEncounter?.options[0].requirements[0] as MoneyRequirement)
+        .requiredMoney;
 
       expect(updateMoneySpy).toHaveBeenCalledWith(-price, true, false);
       expect(scene.money).toBe(initialMoney - price);
@@ -109,7 +120,7 @@ describe("Delibird-y - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.DELIBIRDY, defaultParty);
       await runMysteryEncounterToEnd(game, 1);
 
-      const itemModifier = scene.findModifier(m => m instanceof MoneyMultiplierModifier) as MoneyMultiplierModifier;
+      const itemModifier = scene.findModifier((m) => m instanceof MoneyMultiplierModifier) as MoneyMultiplierModifier;
 
       expect(itemModifier).toBeDefined();
       expect(itemModifier?.stackCount).toBe(1);
@@ -128,8 +139,8 @@ describe("Delibird-y - Mystery Encounter", () => {
 
       await runMysteryEncounterToEnd(game, 1);
 
-      const amuletCoinAfter = scene.findModifier(m => m instanceof MoneyMultiplierModifier);
-      const shellBellAfter = scene.findModifier(m => m instanceof HitHealModifier);
+      const amuletCoinAfter = scene.findModifier((m) => m instanceof MoneyMultiplierModifier);
+      const shellBellAfter = scene.findModifier((m) => m instanceof HitHealModifier);
 
       expect(amuletCoinAfter).toBeDefined();
       expect(amuletCoinAfter?.stackCount).toBe(5);
@@ -198,8 +209,8 @@ describe("Delibird-y - Mystery Encounter", () => {
 
       await runMysteryEncounterToEnd(game, 2, { pokemonNo: 1, optionNo: 1 });
 
-      const sitrusAfter = scene.findModifier(m => m instanceof BerryModifier);
-      const candyJarAfter = scene.findModifier(m => m instanceof LevelIncrementBoosterModifier);
+      const sitrusAfter = scene.findModifier((m) => m instanceof BerryModifier);
+      const candyJarAfter = scene.findModifier((m) => m instanceof LevelIncrementBoosterModifier);
 
       expect(sitrusAfter?.stackCount).toBe(1);
       expect(candyJarAfter).toBeDefined();
@@ -219,8 +230,8 @@ describe("Delibird-y - Mystery Encounter", () => {
 
       await runMysteryEncounterToEnd(game, 2, { pokemonNo: 1, optionNo: 1 });
 
-      const reviverSeedAfter = scene.findModifier(m => m instanceof PokemonInstantReviveModifier);
-      const berryPouchAfter = scene.findModifier(m => m instanceof PreserveBerryModifier);
+      const reviverSeedAfter = scene.findModifier((m) => m instanceof PokemonInstantReviveModifier);
+      const berryPouchAfter = scene.findModifier((m) => m instanceof PreserveBerryModifier);
 
       expect(reviverSeedAfter).toBeUndefined();
       expect(berryPouchAfter).toBeDefined();
@@ -245,9 +256,9 @@ describe("Delibird-y - Mystery Encounter", () => {
 
       await runMysteryEncounterToEnd(game, 2, { pokemonNo: 1, optionNo: 1 });
 
-      const sitrusAfter = scene.findModifier(m => m instanceof BerryModifier);
-      const candyJarAfter = scene.findModifier(m => m instanceof LevelIncrementBoosterModifier);
-      const shellBellAfter = scene.findModifier(m => m instanceof HitHealModifier);
+      const sitrusAfter = scene.findModifier((m) => m instanceof BerryModifier);
+      const candyJarAfter = scene.findModifier((m) => m instanceof LevelIncrementBoosterModifier);
+      const shellBellAfter = scene.findModifier((m) => m instanceof HitHealModifier);
 
       expect(sitrusAfter?.stackCount).toBe(1);
       expect(candyJarAfter).toBeDefined();
@@ -274,9 +285,9 @@ describe("Delibird-y - Mystery Encounter", () => {
 
       await runMysteryEncounterToEnd(game, 2, { pokemonNo: 1, optionNo: 1 });
 
-      const reviverSeedAfter = scene.findModifier(m => m instanceof PokemonInstantReviveModifier);
-      const healingCharmAfter = scene.findModifier(m => m instanceof PreserveBerryModifier);
-      const shellBellAfter = scene.findModifier(m => m instanceof HitHealModifier);
+      const reviverSeedAfter = scene.findModifier((m) => m instanceof PokemonInstantReviveModifier);
+      const healingCharmAfter = scene.findModifier((m) => m instanceof PreserveBerryModifier);
+      const shellBellAfter = scene.findModifier((m) => m instanceof HitHealModifier);
 
       expect(reviverSeedAfter).toBeUndefined();
       expect(healingCharmAfter).toBeDefined();
@@ -360,8 +371,8 @@ describe("Delibird-y - Mystery Encounter", () => {
 
       await runMysteryEncounterToEnd(game, 3, { pokemonNo: 1, optionNo: 1 });
 
-      const soulDewAfter = scene.findModifier(m => m instanceof PokemonNatureWeightModifier);
-      const healingCharmAfter = scene.findModifier(m => m instanceof HealingBoosterModifier);
+      const soulDewAfter = scene.findModifier((m) => m instanceof PokemonNatureWeightModifier);
+      const healingCharmAfter = scene.findModifier((m) => m instanceof HealingBoosterModifier);
 
       expect(soulDewAfter?.stackCount).toBe(1);
       expect(healingCharmAfter).toBeDefined();
@@ -381,8 +392,8 @@ describe("Delibird-y - Mystery Encounter", () => {
 
       await runMysteryEncounterToEnd(game, 3, { pokemonNo: 1, optionNo: 1 });
 
-      const soulDewAfter = scene.findModifier(m => m instanceof PokemonNatureWeightModifier);
-      const healingCharmAfter = scene.findModifier(m => m instanceof HealingBoosterModifier);
+      const soulDewAfter = scene.findModifier((m) => m instanceof PokemonNatureWeightModifier);
+      const healingCharmAfter = scene.findModifier((m) => m instanceof HealingBoosterModifier);
 
       expect(soulDewAfter).toBeUndefined();
       expect(healingCharmAfter).toBeDefined();
@@ -407,9 +418,9 @@ describe("Delibird-y - Mystery Encounter", () => {
 
       await runMysteryEncounterToEnd(game, 3, { pokemonNo: 1, optionNo: 1 });
 
-      const soulDewAfter = scene.findModifier(m => m instanceof PokemonNatureWeightModifier);
-      const healingCharmAfter = scene.findModifier(m => m instanceof HealingBoosterModifier);
-      const shellBellAfter = scene.findModifier(m => m instanceof HitHealModifier);
+      const soulDewAfter = scene.findModifier((m) => m instanceof PokemonNatureWeightModifier);
+      const healingCharmAfter = scene.findModifier((m) => m instanceof HealingBoosterModifier);
+      const shellBellAfter = scene.findModifier((m) => m instanceof HitHealModifier);
 
       expect(soulDewAfter).toBeUndefined();
       expect(healingCharmAfter).toBeDefined();

@@ -50,6 +50,6 @@ describe("UI - Battle Info", () => {
       await game.phaseInterceptor.to(ExpPhase, true);
 
       expect(Math.pow).not.toHaveBeenCalledWith(2, expGainsSpeed);
-    }
+    },
   );
 });

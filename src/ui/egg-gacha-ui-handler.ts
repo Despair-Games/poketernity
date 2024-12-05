@@ -67,18 +67,18 @@ export default class EggGachaUiHandler extends MessageUiHandler {
     this.eggGachaContainer.add(bg);
 
     const hatchFrameNames = globalScene.anims.generateFrameNames("gacha_hatch", { suffix: ".png", start: 1, end: 4 });
-    if (!(globalScene.anims.exists("open"))) {
+    if (!globalScene.anims.exists("open")) {
       globalScene.anims.create({
         key: "open",
         frames: hatchFrameNames,
-        frameRate: 12
+        frameRate: 12,
       });
     }
-    if (!(globalScene.anims.exists("close"))) {
+    if (!globalScene.anims.exists("close")) {
       globalScene.anims.create({
         key: "close",
         frames: hatchFrameNames.reverse(),
-        frameRate: 12
+        frameRate: 12,
       });
     }
 
@@ -186,7 +186,9 @@ export default class EggGachaUiHandler extends MessageUiHandler {
       gachaGlass.setAlpha(0.5);
       gachaHatch.setAlpha(0.9);
 
-      gachaHatch.on("animationupdate", (_anim, frame) => gachaUnderlay.setFrame(frame.textureFrame === "4.png" ? "open_hatch" : "default"));
+      gachaHatch.on("animationupdate", (_anim, frame) =>
+        gachaUnderlay.setFrame(frame.textureFrame === "4.png" ? "open_hatch" : "default"),
+      );
 
       this.gachaContainers.push(gachaContainer);
       this.gachaKnobs.push(gachaKnob);
@@ -200,9 +202,8 @@ export default class EggGachaUiHandler extends MessageUiHandler {
 
     this.eggGachaOptionsContainer = globalScene.add.container();
 
-    this.eggGachaOptionsContainer = globalScene.add.container((globalScene.game.canvas.width / 6), 148);
+    this.eggGachaOptionsContainer = globalScene.add.container(globalScene.game.canvas.width / 6, 148);
     this.eggGachaContainer.add(this.eggGachaOptionsContainer);
-
 
     this.eggGachaOptionSelectBg = addWindow(0, 0, 96, 16 + 576 * this.scale);
     this.eggGachaOptionSelectBg.setOrigin(1, 1);
@@ -211,31 +212,48 @@ export default class EggGachaUiHandler extends MessageUiHandler {
     const multiplierOne = "x1";
     const multiplierTen = "x10";
     const pullOptions = [
-      { multiplier: multiplierOne, description: `1 ${i18next.t("egg:pull")}`, icon: getVoucherTypeIcon(VoucherType.REGULAR) },
-      { multiplier: multiplierTen, description: `10 ${i18next.t("egg:pulls")}`, icon: getVoucherTypeIcon(VoucherType.REGULAR) },
-      { multiplier: multiplierOne, description: `5 ${i18next.t("egg:pulls")}`, icon: getVoucherTypeIcon(VoucherType.PLUS) },
-      { multiplier: multiplierOne, description: `10 ${i18next.t("egg:pulls")}`, icon: getVoucherTypeIcon(VoucherType.PREMIUM) },
-      { multiplier: multiplierOne, description: `25 ${i18next.t("egg:pulls")}`, icon: getVoucherTypeIcon(VoucherType.GOLDEN) }
+      {
+        multiplier: multiplierOne,
+        description: `1 ${i18next.t("egg:pull")}`,
+        icon: getVoucherTypeIcon(VoucherType.REGULAR),
+      },
+      {
+        multiplier: multiplierTen,
+        description: `10 ${i18next.t("egg:pulls")}`,
+        icon: getVoucherTypeIcon(VoucherType.REGULAR),
+      },
+      {
+        multiplier: multiplierOne,
+        description: `5 ${i18next.t("egg:pulls")}`,
+        icon: getVoucherTypeIcon(VoucherType.PLUS),
+      },
+      {
+        multiplier: multiplierOne,
+        description: `10 ${i18next.t("egg:pulls")}`,
+        icon: getVoucherTypeIcon(VoucherType.PREMIUM),
+      },
+      {
+        multiplier: multiplierOne,
+        description: `25 ${i18next.t("egg:pulls")}`,
+        icon: getVoucherTypeIcon(VoucherType.GOLDEN),
+      },
     ];
 
     const resolvedLanguage = i18next.resolvedLanguage ?? "en";
-    const pullOptionsText = pullOptions.map(option =>{
-      const desc = option.description.split(" ");
-      if (desc[0].length < 2) {
-        desc[0] += [ "zh", "ko" ].includes(resolvedLanguage.substring(0, 2)) ? " " : "  ";
-      }
-      if (option.multiplier === multiplierOne) {
-        desc[0] = " " + desc[0];
-      }
-      return `     ${option.multiplier.padEnd(5)}${desc.join(" ")}`;
-    }).join("\n");
+    const pullOptionsText = pullOptions
+      .map((option) => {
+        const desc = option.description.split(" ");
+        if (desc[0].length < 2) {
+          desc[0] += [ "zh", "ko" ].includes(resolvedLanguage.substring(0, 2)) ? " " : "  ";
+        }
+        if (option.multiplier === multiplierOne) {
+          desc[0] = " " + desc[0];
+        }
+        return `     ${option.multiplier.padEnd(5)}${desc.join(" ")}`;
+      })
+      .join("\n");
 
-    const optionText = addTextObject(
-      0,
-      0,
-      `${pullOptionsText}\n${i18next.t("menu:cancel")}`,
-      TextStyle.WINDOW,
-    );
+    const optionText = addTextObject(0, 0, `${pullOptionsText}\n${i18next.t("menu:cancel")}`, TextStyle.WINDOW);
 
     optionText.setLineSpacing(28);
     optionText.setFontSize("80px");
@@ -254,7 +272,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
     this.eggGachaContainer.add(this.eggGachaOptionsContainer);
 
     new Array(Utils.getEnumKeys(VoucherType).length).fill(null).map((_, i) => {
-      const container = globalScene.add.container((globalScene.game.canvas.width / 6) - 56 * i, 0);
+      const container = globalScene.add.container(globalScene.game.canvas.width / 6 - 56 * i, 0);
 
       const bg = addWindow(0, 0, 56, 22);
       bg.setOrigin(1, 0);
@@ -375,7 +393,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
                     targets: egg,
                     duration: this.getDelayValue(350),
                     scale: 0.75,
-                    ease: "Sine.easeIn"
+                    ease: "Sine.easeIn",
                   });
                   globalScene.tweens.add({
                     targets: egg,
@@ -395,12 +413,12 @@ export default class EggGachaUiHandler extends MessageUiHandler {
                           } else {
                             this.showSummary(eggs!);
                           }
-                        }
+                        },
                       });
-                    }
+                    },
                   });
                 });
-              }
+              },
             });
           });
         });
@@ -418,10 +436,10 @@ export default class EggGachaUiHandler extends MessageUiHandler {
               targets: this.gachaKnobs[this.gachaCursor],
               duration: this.getDelayValue(350),
               angle: 0,
-              ease: "Sine.easeInOut"
+              ease: "Sine.easeInOut",
             });
             globalScene.time.delayedCall(this.getDelayValue(350), doPullAnim);
-          }
+          },
         });
       } else {
         doPullAnim();
@@ -443,7 +461,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
         // if not, override the egg tier
         if (i === pullCount) {
           const guaranteedEggTier = this.getGuaranteedEggTierFromPullCount(pullCount);
-          if (!eggs.some(egg => egg.tier >= guaranteedEggTier) && guaranteedEggTier !== EggTier.COMMON) {
+          if (!eggs.some((egg) => egg.tier >= guaranteedEggTier) && guaranteedEggTier !== EggTier.COMMON) {
             eggOptions.tier = guaranteedEggTier;
           }
         }
@@ -454,8 +472,10 @@ export default class EggGachaUiHandler extends MessageUiHandler {
       // Shuffle the eggs in case the guaranteed one got added as last egg
       eggs = Utils.randSeedShuffle<Egg>(eggs);
 
-
-      (globalScene.currentBattle ? globalScene.gameData.saveAll(true, true, true) : globalScene.gameData.saveSystem()).then(success => {
+      (globalScene.currentBattle
+        ? globalScene.gameData.saveAll(true, true, true)
+        : globalScene.gameData.saveSystem()
+      ).then((success) => {
         if (!success) {
           return globalScene.reset(true);
         }
@@ -506,8 +526,11 @@ export default class EggGachaUiHandler extends MessageUiHandler {
           const row = Math.floor(t / rowItems);
           const sliceWidth = this.eggGachaOverlay.displayWidth / (cols + 2);
           const sliceHeight = height / (rows + 2);
-          const yOffset = (sliceHeight / 2 * (row / Math.max(rows - 1, 1))) + sliceHeight / 4;
-          const ret = globalScene.add.container(sliceWidth * (col + 1) + (sliceWidth * 0.5), sliceHeight * (row + 1) + yOffset);
+          const yOffset = (sliceHeight / 2) * (row / Math.max(rows - 1, 1)) + sliceHeight / 4;
+          const ret = globalScene.add.container(
+            sliceWidth * (col + 1) + sliceWidth * 0.5,
+            sliceHeight * (row + 1) + yOffset,
+          );
           ret.setScale(0.0001);
 
           const eggSprite = globalScene.add.sprite(0, 0, "egg", `egg_${egg.getKey()}`);
@@ -537,11 +560,11 @@ export default class EggGachaUiHandler extends MessageUiHandler {
                   this.setTransitioning(false);
                   this.summaryFinished = true;
                 }
-              }
-            }));
-
+              },
+            }),
+          );
         });
-      }
+      },
     });
   }
 
@@ -559,7 +582,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
         this.setTransitioning(false);
         this.summaryFinished = false;
         this.eggGachaOptionsContainer.setVisible(true);
-      }
+      },
     });
   }
 
@@ -575,7 +598,10 @@ export default class EggGachaUiHandler extends MessageUiHandler {
   }
 
   consumeVouchers(voucherType: VoucherType, count: integer): void {
-    globalScene.gameData.voucherCounts[voucherType] = Math.max(globalScene.gameData.voucherCounts[voucherType] - count, 0);
+    globalScene.gameData.voucherCounts[voucherType] = Math.max(
+      globalScene.gameData.voucherCounts[voucherType] - count,
+      0,
+    );
     this.updateVoucherCounts();
   }
 
@@ -585,7 +611,14 @@ export default class EggGachaUiHandler extends MessageUiHandler {
     });
   }
 
-  showText(text: string, delay?: number, callback?: Function, callbackDelay?: number, prompt?: boolean, promptDelay?: number): void {
+  showText(
+    text: string,
+    delay?: number,
+    callback?: Function,
+    callbackDelay?: number,
+    prompt?: boolean,
+    promptDelay?: number,
+  ): void {
     if (!text) {
       text = this.defaultText;
     }
@@ -629,7 +662,6 @@ export default class EggGachaUiHandler extends MessageUiHandler {
         return false;
       }
     } else {
-
       if (this.eggGachaSummaryContainer.visible) {
         if (this.summaryFinished && (button === Button.ACTION || button === Button.CANCEL)) {
           this.hideSummary();
@@ -640,7 +672,10 @@ export default class EggGachaUiHandler extends MessageUiHandler {
           case Button.ACTION:
             switch (this.cursor) {
               case 0:
-                if (!globalScene.gameData.voucherCounts[VoucherType.REGULAR] && !Overrides.EGG_FREE_GACHA_PULLS_OVERRIDE) {
+                if (
+                  !globalScene.gameData.voucherCounts[VoucherType.REGULAR] &&
+                  !Overrides.EGG_FREE_GACHA_PULLS_OVERRIDE
+                ) {
                   error = true;
                   this.showError(i18next.t("egg:notEnoughVouchers"));
                 } else if (globalScene.gameData.eggs.length < 99 || Overrides.UNLIMITED_EGG_COUNT_OVERRIDE) {
@@ -671,8 +706,14 @@ export default class EggGachaUiHandler extends MessageUiHandler {
                 break;
               case 1:
               case 3:
-                if ((this.cursor === 1 && globalScene.gameData.voucherCounts[VoucherType.REGULAR] < 10 && !Overrides.EGG_FREE_GACHA_PULLS_OVERRIDE)
-                  || (this.cursor === 3 && !globalScene.gameData.voucherCounts[VoucherType.PREMIUM] && !Overrides.EGG_FREE_GACHA_PULLS_OVERRIDE)) {
+                if (
+                  (this.cursor === 1 &&
+                    globalScene.gameData.voucherCounts[VoucherType.REGULAR] < 10 &&
+                    !Overrides.EGG_FREE_GACHA_PULLS_OVERRIDE) ||
+                  (this.cursor === 3 &&
+                    !globalScene.gameData.voucherCounts[VoucherType.PREMIUM] &&
+                    !Overrides.EGG_FREE_GACHA_PULLS_OVERRIDE)
+                ) {
                   error = true;
                   this.showError(i18next.t("egg:notEnoughVouchers"));
                 } else if (globalScene.gameData.eggs.length < 90 || Overrides.UNLIMITED_EGG_COUNT_OVERRIDE) {
@@ -693,7 +734,10 @@ export default class EggGachaUiHandler extends MessageUiHandler {
                 }
                 break;
               case 4:
-                if (!globalScene.gameData.voucherCounts[VoucherType.GOLDEN] && !Overrides.EGG_FREE_GACHA_PULLS_OVERRIDE) {
+                if (
+                  !globalScene.gameData.voucherCounts[VoucherType.GOLDEN] &&
+                  !Overrides.EGG_FREE_GACHA_PULLS_OVERRIDE
+                ) {
                   error = true;
                   this.showError(i18next.t("egg:notEnoughVouchers"));
                 } else if (globalScene.gameData.eggs.length < 75 || Overrides.UNLIMITED_EGG_COUNT_OVERRIDE) {
@@ -779,7 +823,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
         duration: this.eggGachaContainer.visible ? 500 : 0,
         x: (_target, _key, _value, index) => 180 * (index - cursor),
         ease: "Cubic.easeInOut",
-        onComplete: () => this.setTransitioning(false)
+        onComplete: () => this.setTransitioning(false),
       });
     }
 

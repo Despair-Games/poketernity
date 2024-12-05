@@ -29,7 +29,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
   private accuracyText: Phaser.GameObjects.Text;
   private cursorObj: Phaser.GameObjects.Image | null;
   private moveCategoryIcon: Phaser.GameObjects.Sprite;
-  private moveInfoOverlay : MoveInfoOverlay;
+  private moveInfoOverlay: MoveInfoOverlay;
 
   protected fieldIndex: integer = 0;
   protected cursor2: integer = 0;
@@ -49,7 +49,12 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
     this.moveInfoContainer.setName("move-info");
     ui.add(this.moveInfoContainer);
 
-    this.typeIcon = globalScene.add.sprite(globalScene.scaledCanvas.width - 57, -36, Utils.getLocalizedSpriteKey("types"), "unknown");
+    this.typeIcon = globalScene.add.sprite(
+      globalScene.scaledCanvas.width - 57,
+      -36,
+      Utils.getLocalizedSpriteKey("types"),
+      "unknown",
+    );
     this.typeIcon.setVisible(false);
     this.moveInfoContainer.add(this.typeIcon);
 
@@ -99,9 +104,9 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
       right: true,
       x: 0,
       y: -MoveInfoOverlay.getHeight(overlayScale, true),
-      width: (globalScene.game.canvas.width / 6) + 4,
+      width: globalScene.game.canvas.width / 6 + 4,
       hideEffectBox: true,
-      hideBg: true
+      hideBg: true,
     });
     ui.add(this.moveInfoOverlay);
     // register the overlay to receive toggle events
@@ -112,7 +117,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
   show(args: any[]): boolean {
     super.show(args);
 
-    this.fieldIndex = args.length ? args[0] as integer : 0;
+    this.fieldIndex = args.length ? (args[0] as integer) : 0;
 
     const messageHandler = this.getUi().getMessageHandler();
     messageHandler.bg.setVisible(false);
@@ -193,7 +198,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
       targets: [ this.movesContainer, this.cursorObj ],
       duration: Utils.fixedInt(125),
       ease: "Sine.easeInOut",
-      alpha: visible ? 0 : 1
+      alpha: visible ? 0 : 1,
     });
     if (!visible) {
       this.movesContainer.setVisible(true);
@@ -292,7 +297,11 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
    * Returns undefined if it's a status move
    */
   private getEffectivenessText(pokemon: Pokemon, opponent: Pokemon, pokemonMove: PokemonMove): string | undefined {
-    const effectiveness = opponent.getMoveEffectiveness(pokemon, pokemonMove.getMove(), !opponent.battleData?.abilityRevealed);
+    const effectiveness = opponent.getMoveEffectiveness(
+      pokemon,
+      pokemonMove.getMove(),
+      !opponent.battleData?.abilityRevealed,
+    );
     if (effectiveness === undefined) {
       return undefined;
     }
@@ -335,7 +344,9 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
     }
 
     const moveColors = opponents
-      .map((opponent) => opponent.getMoveEffectiveness(pokemon, pokemonMove.getMove(), !opponent.battleData.abilityRevealed))
+      .map((opponent) =>
+        opponent.getMoveEffectiveness(pokemon, pokemonMove.getMove(), !opponent.battleData.abilityRevealed),
+      )
       .sort((a, b) => b - a)
       .map((effectiveness) => getTypeDamageMultiplierColor(effectiveness ?? 0, "offense"));
 

@@ -1,8 +1,15 @@
-import { initSubsequentOptionSelect, leaveEncounterWithoutBattle, transitionMysteryEncounterIntroVisuals, updatePlayerMoney, } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import {
+  initSubsequentOptionSelect,
+  leaveEncounterWithoutBattle,
+  transitionMysteryEncounterIntroVisuals,
+  updatePlayerMoney,
+} from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
 import MysteryEncounter, { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
-import MysteryEncounterOption, { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
+import MysteryEncounterOption, {
+  MysteryEncounterOptionBuilder,
+} from "#app/data/mystery-encounters/mystery-encounter-option";
 import { TrainerSlot } from "#app/data/trainer-config";
 import { HiddenAbilityRateBoosterModifier, IvScannerModifier } from "#app/modifier/modifier";
 import { EnemyPokemon } from "#app/field/pokemon";
@@ -11,7 +18,12 @@ import { PlayerGender } from "#enums/player-gender";
 import { IntegerHolder, randSeedInt } from "#app/utils";
 import PokemonSpecies, { getPokemonSpecies } from "#app/data/pokemon-species";
 import { MoneyRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
-import { doPlayerFlee, doPokemonFlee, getRandomSpeciesByStarterCost, trainerThrowPokeball } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
+import {
+  doPlayerFlee,
+  doPokemonFlee,
+  getRandomSpeciesByStarterCost,
+  trainerThrowPokeball,
+} from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import { getEncounterText, showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
@@ -35,36 +47,37 @@ const NUM_SAFARI_ENCOUNTERS = 3;
  * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3800 | GitHub Issue #3800}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
-export const SafariZoneEncounter: MysteryEncounter =
-  MysteryEncounterBuilder.withEncounterType(MysteryEncounterType.SAFARI_ZONE)
-    .withEncounterTier(MysteryEncounterTier.GREAT)
-    .withSceneWaveRangeRequirement(...CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES)
-    .withSceneRequirement(new MoneyRequirement(0, SAFARI_MONEY_MULTIPLIER)) // Cost equal to 1 Max Revive
-    .withAutoHideIntroVisuals(false)
-    .withIntroSpriteConfigs([
-      {
-        spriteKey: "safari_zone",
-        fileRoot: "mystery-encounters",
-        hasShadow: false,
-        x: 4,
-        y: 6
-      },
-    ])
-    .withIntroDialogue([
-      {
-        text: `${namespace}:intro`,
-      },
-    ])
-    .setLocalizationKey(`${namespace}`)
-    .withTitle(`${namespace}:title`)
-    .withDescription(`${namespace}:description`)
-    .withQuery(`${namespace}:query`)
-    .withOnInit(() => {
-      globalScene.currentBattle.mysteryEncounter?.setDialogueToken("numEncounters", NUM_SAFARI_ENCOUNTERS.toString());
-      return true;
-    })
-    .withOption(MysteryEncounterOptionBuilder
-      .newOptionWithMode(MysteryEncounterOptionMode.DISABLED_OR_DEFAULT)
+export const SafariZoneEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(
+  MysteryEncounterType.SAFARI_ZONE,
+)
+  .withEncounterTier(MysteryEncounterTier.GREAT)
+  .withSceneWaveRangeRequirement(...CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES)
+  .withSceneRequirement(new MoneyRequirement(0, SAFARI_MONEY_MULTIPLIER)) // Cost equal to 1 Max Revive
+  .withAutoHideIntroVisuals(false)
+  .withIntroSpriteConfigs([
+    {
+      spriteKey: "safari_zone",
+      fileRoot: "mystery-encounters",
+      hasShadow: false,
+      x: 4,
+      y: 6,
+    },
+  ])
+  .withIntroDialogue([
+    {
+      text: `${namespace}:intro`,
+    },
+  ])
+  .setLocalizationKey(`${namespace}`)
+  .withTitle(`${namespace}:title`)
+  .withDescription(`${namespace}:description`)
+  .withQuery(`${namespace}:query`)
+  .withOnInit(() => {
+    globalScene.currentBattle.mysteryEncounter?.setDialogueToken("numEncounters", NUM_SAFARI_ENCOUNTERS.toString());
+    return true;
+  })
+  .withOption(
+    MysteryEncounterOptionBuilder.newOptionWithMode(MysteryEncounterOptionMode.DISABLED_OR_DEFAULT)
       .withSceneRequirement(new MoneyRequirement(0, SAFARI_MONEY_MULTIPLIER)) // Cost equal to 1 Max Revive
       .withDialogue({
         buttonLabel: `${namespace}:option.1.label`,
@@ -80,7 +93,7 @@ export const SafariZoneEncounter: MysteryEncounter =
         const encounter = globalScene.currentBattle.mysteryEncounter!;
         encounter.continuousEncounter = true;
         encounter.misc = {
-          safariPokemonRemaining: NUM_SAFARI_ENCOUNTERS
+          safariPokemonRemaining: NUM_SAFARI_ENCOUNTERS,
         };
         updatePlayerMoney(-(encounter.options[0].requirements[0] as MoneyRequirement).requiredMoney);
         // Load bait/mud assets
@@ -96,25 +109,25 @@ export const SafariZoneEncounter: MysteryEncounter =
         initSubsequentOptionSelect({ overrideOptions: safariZoneGameOptions, hideDescription: true });
         return true;
       })
-      .build()
-    )
-    .withSimpleOption(
-      {
-        buttonLabel: `${namespace}:option.2.label`,
-        buttonTooltip: `${namespace}:option.2.tooltip`,
-        selected: [
-          {
-            text: `${namespace}:option.2.selected`,
-          },
-        ],
-      },
-      async () => {
-        // Leave encounter with no rewards or exp
-        leaveEncounterWithoutBattle(true);
-        return true;
-      }
-    )
-    .build();
+      .build(),
+  )
+  .withSimpleOption(
+    {
+      buttonLabel: `${namespace}:option.2.label`,
+      buttonTooltip: `${namespace}:option.2.tooltip`,
+      selected: [
+        {
+          text: `${namespace}:option.2.selected`,
+        },
+      ],
+    },
+    async () => {
+      // Leave encounter with no rewards or exp
+      leaveEncounterWithoutBattle(true);
+      return true;
+    },
+  )
+  .build();
 
 /**
  * SAFARI ZONE MINIGAME OPTIONS
@@ -132,15 +145,14 @@ export const SafariZoneEncounter: MysteryEncounter =
  * Flee chance = fleeRate / 255
  */
 const safariZoneGameOptions: MysteryEncounterOption[] = [
-  MysteryEncounterOptionBuilder
-    .newOptionWithMode(MysteryEncounterOptionMode.DEFAULT)
+  MysteryEncounterOptionBuilder.newOptionWithMode(MysteryEncounterOptionMode.DEFAULT)
     .withDialogue({
       buttonLabel: `${namespace}:safari.1.label`,
       buttonTooltip: `${namespace}:safari.1.tooltip`,
       selected: [
         {
           text: `${namespace}:safari.1.selected`,
-        }
+        },
       ],
     })
     .withOptionPhase(async () => {
@@ -154,7 +166,11 @@ const safariZoneGameOptions: MysteryEncounterOption[] = [
         // Check how many safari pokemon left
         if (encounter.misc.safariPokemonRemaining > 0) {
           await summonSafariPokemon();
-          initSubsequentOptionSelect({ overrideOptions: safariZoneGameOptions, startingCursorIndex: 0, hideDescription: true });
+          initSubsequentOptionSelect({
+            overrideOptions: safariZoneGameOptions,
+            startingCursorIndex: 0,
+            hideDescription: true,
+          });
         } else {
           // End safari mode
           encounter.continuousEncounter = false;
@@ -167,8 +183,7 @@ const safariZoneGameOptions: MysteryEncounterOption[] = [
       return true;
     })
     .build(),
-  MysteryEncounterOptionBuilder
-    .newOptionWithMode(MysteryEncounterOptionMode.DEFAULT)
+  MysteryEncounterOptionBuilder.newOptionWithMode(MysteryEncounterOptionMode.DEFAULT)
     .withDialogue({
       buttonLabel: `${namespace}:safari.2.label`,
       buttonTooltip: `${namespace}:safari.2.tooltip`,
@@ -188,7 +203,7 @@ const safariZoneGameOptions: MysteryEncounterOption[] = [
       // 80% chance to increase flee stage +1
       const fleeChangeResult = tryChangeFleeStage(1, 8);
       if (!fleeChangeResult) {
-        await showEncounterText(getEncounterText(`${namespace}:safari.busy_eating`) ?? "", null, 1000, false );
+        await showEncounterText(getEncounterText(`${namespace}:safari.busy_eating`) ?? "", null, 1000, false);
       } else {
         await showEncounterText(getEncounterText(`${namespace}:safari.eating`) ?? "", null, 1000, false);
       }
@@ -197,8 +212,7 @@ const safariZoneGameOptions: MysteryEncounterOption[] = [
       return true;
     })
     .build(),
-  MysteryEncounterOptionBuilder
-    .newOptionWithMode(MysteryEncounterOptionMode.DEFAULT)
+  MysteryEncounterOptionBuilder.newOptionWithMode(MysteryEncounterOptionMode.DEFAULT)
     .withDialogue({
       buttonLabel: `${namespace}:safari.3.label`,
       buttonTooltip: `${namespace}:safari.3.tooltip`,
@@ -217,17 +231,16 @@ const safariZoneGameOptions: MysteryEncounterOption[] = [
       // 80% chance to decrease catch stage -1
       const catchChangeResult = tryChangeCatchStage(-1, 8);
       if (!catchChangeResult) {
-        await showEncounterText(getEncounterText(`${namespace}:safari.beside_itself_angry`) ?? "", null, 1000, false );
+        await showEncounterText(getEncounterText(`${namespace}:safari.beside_itself_angry`) ?? "", null, 1000, false);
       } else {
-        await showEncounterText(getEncounterText(`${namespace}:safari.angry`) ?? "", null, 1000, false );
+        await showEncounterText(getEncounterText(`${namespace}:safari.angry`) ?? "", null, 1000, false);
       }
 
       await doEndTurn(2);
       return true;
     })
     .build(),
-  MysteryEncounterOptionBuilder
-    .newOptionWithMode(MysteryEncounterOptionMode.DEFAULT)
+  MysteryEncounterOptionBuilder.newOptionWithMode(MysteryEncounterOptionMode.DEFAULT)
     .withDialogue({
       buttonLabel: `${namespace}:safari.4.label`,
       buttonTooltip: `${namespace}:safari.4.tooltip`,
@@ -240,7 +253,11 @@ const safariZoneGameOptions: MysteryEncounterOption[] = [
       // Check how many safari pokemon left
       if (encounter.misc.safariPokemonRemaining > 0) {
         await summonSafariPokemon();
-        initSubsequentOptionSelect({ overrideOptions: safariZoneGameOptions, startingCursorIndex: 3, hideDescription: true });
+        initSubsequentOptionSelect({
+          overrideOptions: safariZoneGameOptions,
+          startingCursorIndex: 3,
+          hideDescription: true,
+        });
       } else {
         // End safari mode
         encounter.continuousEncounter = false;
@@ -248,7 +265,7 @@ const safariZoneGameOptions: MysteryEncounterOption[] = [
       }
       return true;
     })
-    .build()
+    .build(),
 ];
 
 async function summonSafariPokemon() {
@@ -261,36 +278,39 @@ async function summonSafariPokemon() {
   // Safari pokemon roll twice on shiny and HA chances, but are otherwise normal
   let enemySpecies;
   let pokemon;
-  globalScene.executeWithSeedOffset(() => {
-    enemySpecies = getSafariSpeciesSpawn();
-    const level = globalScene.currentBattle.getLevelForWave();
-    enemySpecies = getPokemonSpecies(enemySpecies.getWildSpeciesForLevel(level, true, false, globalScene.gameMode));
-    pokemon = globalScene.addEnemyPokemon(enemySpecies, level, TrainerSlot.NONE, false);
+  globalScene.executeWithSeedOffset(
+    () => {
+      enemySpecies = getSafariSpeciesSpawn();
+      const level = globalScene.currentBattle.getLevelForWave();
+      enemySpecies = getPokemonSpecies(enemySpecies.getWildSpeciesForLevel(level, true, false, globalScene.gameMode));
+      pokemon = globalScene.addEnemyPokemon(enemySpecies, level, TrainerSlot.NONE, false);
 
-    // Roll shiny twice
-    if (!pokemon.shiny) {
-      pokemon.trySetShinySeed();
-    }
+      // Roll shiny twice
+      if (!pokemon.shiny) {
+        pokemon.trySetShinySeed();
+      }
 
-    // Roll HA twice
-    if (pokemon.species.abilityHidden) {
-      const hiddenIndex = pokemon.species.ability2 ? 2 : 1;
-      if (pokemon.abilityIndex < hiddenIndex) {
-        const hiddenAbilityChance = new IntegerHolder(256);
-        globalScene.applyModifiers(HiddenAbilityRateBoosterModifier, true, hiddenAbilityChance);
+      // Roll HA twice
+      if (pokemon.species.abilityHidden) {
+        const hiddenIndex = pokemon.species.ability2 ? 2 : 1;
+        if (pokemon.abilityIndex < hiddenIndex) {
+          const hiddenAbilityChance = new IntegerHolder(256);
+          globalScene.applyModifiers(HiddenAbilityRateBoosterModifier, true, hiddenAbilityChance);
 
-        const hasHiddenAbility = !randSeedInt(hiddenAbilityChance.value);
+          const hasHiddenAbility = !randSeedInt(hiddenAbilityChance.value);
 
-        if (hasHiddenAbility) {
-          pokemon.abilityIndex = hiddenIndex;
+          if (hasHiddenAbility) {
+            pokemon.abilityIndex = hiddenIndex;
+          }
         }
       }
-    }
 
-    pokemon.calculateStats();
+      pokemon.calculateStats();
 
-    globalScene.currentBattle.enemyParty.unshift(pokemon);
-  }, globalScene.currentBattle.waveIndex * 1000 * encounter.misc.safariPokemonRemaining);
+      globalScene.currentBattle.enemyParty.unshift(pokemon);
+    },
+    globalScene.currentBattle.waveIndex * 1000 * encounter.misc.safariPokemonRemaining,
+  );
 
   globalScene.gameData.setPokemonSeen(pokemon, true);
   await pokemon.loadAssets();
@@ -310,9 +330,11 @@ async function summonSafariPokemon() {
   // shows up and the IV scanner breaks. For now, we place the IV scanner code
   // separately so that at least the IV scanner works.
 
-  const ivScannerModifier = globalScene.findModifier(m => m instanceof IvScannerModifier);
+  const ivScannerModifier = globalScene.findModifier((m) => m instanceof IvScannerModifier);
   if (ivScannerModifier) {
-    globalScene.pushPhase(new ScanIvsPhase(pokemon.getBattlerIndex(), Math.min(ivScannerModifier.getStackCount() * 2, 6)));
+    globalScene.pushPhase(
+      new ScanIvsPhase(pokemon.getBattlerIndex(), Math.min(ivScannerModifier.getStackCount() * 2, 6)),
+    );
   }
 }
 
@@ -321,7 +343,8 @@ function throwPokeball(pokemon: EnemyPokemon): Promise<boolean> {
   // Catch stage ranges from -6 to +6 (like stat boost stages)
   const safariCatchStage = globalScene.currentBattle.mysteryEncounter!.misc.catchStage;
   // Catch modifier ranges from 2/8 (-6 stage) to 8/2 (+6)
-  const safariModifier = (2 + Math.min(Math.max(safariCatchStage, 0), 6)) / (2 - Math.max(Math.min(safariCatchStage, 0), -6));
+  const safariModifier =
+    (2 + Math.min(Math.max(safariCatchStage, 0), 6)) / (2 - Math.max(Math.min(safariCatchStage, 0), -6));
   // Catch rate same as safari ball
   const pokeballMultiplier = 1.5;
   const catchRate = Math.round(baseCatchRate * pokeballMultiplier * safariModifier);
@@ -337,8 +360,10 @@ async function throwBait(pokemon: EnemyPokemon): Promise<boolean> {
   bait.setOrigin(0.5, 0.625);
   globalScene.field.add(bait);
 
-  return new Promise(resolve => {
-    globalScene.trainer.setTexture(`trainer_${globalScene.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`);
+  return new Promise((resolve) => {
+    globalScene.trainer.setTexture(
+      `trainer_${globalScene.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`,
+    );
     globalScene.time.delayedCall(TRAINER_THROW_ANIMATION_TIMES[0], () => {
       globalScene.playSound("se/pb_throw");
 
@@ -347,7 +372,9 @@ async function throwBait(pokemon: EnemyPokemon): Promise<boolean> {
       globalScene.time.delayedCall(TRAINER_THROW_ANIMATION_TIMES[1], () => {
         globalScene.trainer.setFrame("3");
         globalScene.time.delayedCall(TRAINER_THROW_ANIMATION_TIMES[2], () => {
-          globalScene.trainer.setTexture(`trainer_${globalScene.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back`);
+          globalScene.trainer.setTexture(
+            `trainer_${globalScene.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back`,
+          );
         });
       });
 
@@ -358,7 +385,6 @@ async function throwBait(pokemon: EnemyPokemon): Promise<boolean> {
         y: { value: 55 + fpOffset[1], ease: "Cubic.easeOut" },
         duration: 500,
         onComplete: () => {
-
           let index = 1;
           globalScene.time.delayedCall(768, () => {
             globalScene.tweens.add({
@@ -386,10 +412,10 @@ async function throwBait(pokemon: EnemyPokemon): Promise<boolean> {
                   bait.destroy();
                   resolve(true);
                 });
-              }
+              },
             });
           });
-        }
+        },
       });
     });
   });
@@ -403,8 +429,10 @@ async function throwMud(pokemon: EnemyPokemon): Promise<boolean> {
   mud.setOrigin(0.5, 0.625);
   globalScene.field.add(mud);
 
-  return new Promise(resolve => {
-    globalScene.trainer.setTexture(`trainer_${globalScene.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`);
+  return new Promise((resolve) => {
+    globalScene.trainer.setTexture(
+      `trainer_${globalScene.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`,
+    );
     globalScene.time.delayedCall(TRAINER_THROW_ANIMATION_TIMES[0], () => {
       globalScene.playSound("se/pb_throw");
 
@@ -413,7 +441,9 @@ async function throwMud(pokemon: EnemyPokemon): Promise<boolean> {
       globalScene.time.delayedCall(TRAINER_THROW_ANIMATION_TIMES[1], () => {
         globalScene.trainer.setFrame("3");
         globalScene.time.delayedCall(TRAINER_THROW_ANIMATION_TIMES[2], () => {
-          globalScene.trainer.setTexture(`trainer_${globalScene.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back`);
+          globalScene.trainer.setTexture(
+            `trainer_${globalScene.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back`,
+          );
         });
       });
 
@@ -458,11 +488,11 @@ async function throwMud(pokemon: EnemyPokemon): Promise<boolean> {
                 },
                 onComplete: () => {
                   resolve(true);
-                }
+                },
               });
-            }
+            },
           });
-        }
+        },
       });
     });
   });
@@ -471,7 +501,7 @@ async function throwMud(pokemon: EnemyPokemon): Promise<boolean> {
 function isPokemonFlee(pokemon: EnemyPokemon, fleeStage: number): boolean {
   const speciesCatchRate = pokemon.species.catchRate;
   const fleeModifier = (2 + Math.min(Math.max(fleeStage, 0), 6)) / (2 - Math.max(Math.min(fleeStage, 0), -6));
-  const fleeRate = (255 * 255 - speciesCatchRate * speciesCatchRate) / 255 / 2 * fleeModifier;
+  const fleeRate = ((255 * 255 - speciesCatchRate * speciesCatchRate) / 255 / 2) * fleeModifier;
   console.log("Flee rate: " + fleeRate);
   const roll = randSeedInt(256);
   console.log("Roll: " + roll);
@@ -516,7 +546,11 @@ async function doEndTurn(cursorIndex: number) {
     // Check how many safari pokemon left
     if (encounter.misc.safariPokemonRemaining > 0) {
       await summonSafariPokemon();
-      initSubsequentOptionSelect({ overrideOptions: safariZoneGameOptions, startingCursorIndex: cursorIndex, hideDescription: true });
+      initSubsequentOptionSelect({
+        overrideOptions: safariZoneGameOptions,
+        startingCursorIndex: cursorIndex,
+        hideDescription: true,
+      });
     } else {
       // End safari mode
       encounter.continuousEncounter = false;
@@ -524,7 +558,11 @@ async function doEndTurn(cursorIndex: number) {
     }
   } else {
     globalScene.queueMessage(getEncounterText(`${namespace}:safari.watching`) ?? "", 0, null, 1000);
-    initSubsequentOptionSelect({ overrideOptions: safariZoneGameOptions, startingCursorIndex: cursorIndex, hideDescription: true });
+    initSubsequentOptionSelect({
+      overrideOptions: safariZoneGameOptions,
+      startingCursorIndex: cursorIndex,
+      hideDescription: true,
+    });
   }
 }
 
@@ -532,5 +570,7 @@ async function doEndTurn(cursorIndex: number) {
  * @returns A random species that has at most 5 starter cost and is not Mythical, Paradox, etc.
  */
 export function getSafariSpeciesSpawn(): PokemonSpecies {
-  return getPokemonSpecies(getRandomSpeciesByStarterCost([ 0, 5 ], NON_LEGEND_PARADOX_POKEMON, undefined, false, false, false));
+  return getPokemonSpecies(
+    getRandomSpeciesByStarterCost([ 0, 5 ], NON_LEGEND_PARADOX_POKEMON, undefined, false, false, false),
+  );
 }

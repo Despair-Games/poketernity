@@ -8,7 +8,6 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 
-
 describe("Moves - Make It Rain", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
@@ -77,7 +76,7 @@ describe("Moves - Make It Rain", () => {
 
     await game.phaseInterceptor.to(StatStageChangePhase);
 
-    enemyPokemon.forEach(p => expect(p.isFainted()).toBe(true));
+    enemyPokemon.forEach((p) => expect(p.isFainted()).toBe(true));
     expect(playerPokemon.getStatStage(Stat.SPATK)).toBe(-1);
   });
 

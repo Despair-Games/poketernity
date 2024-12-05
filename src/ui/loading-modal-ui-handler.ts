@@ -25,7 +25,7 @@ export default class LoadingModalUiHandler extends ModalUiHandler {
   }
 
   getButtonLabels(): string[] {
-    return [ ];
+    return [];
   }
 
   setup(): void {

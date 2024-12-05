@@ -6,7 +6,6 @@ import { MoveResult } from "#app/field/pokemon";
 import GameManager from "#test/utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
-
 describe("Moves - Gastro Acid", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;

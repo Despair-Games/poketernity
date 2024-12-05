@@ -39,7 +39,7 @@ describe("Abilities - Stakeout", () => {
   it("should do double damage to a pokemon that switched out", async () => {
     await game.classicMode.startBattle([ Species.MILOTIC ]);
 
-    const [ enemy1, ] = game.scene.getEnemyParty();
+    const [ enemy1 ] = game.scene.getEnemyParty();
 
     game.move.select(Moves.SURF);
     await game.forceEnemyMove(Moves.SPLASH);
@@ -56,13 +56,13 @@ describe("Abilities - Stakeout", () => {
     await game.toNextTurn();
 
     expect(enemy1.isFainted()).toBe(false);
-    expect(isBetween(enemy1.getInverseHp(), (damage1 * 2) - 5, (damage1 * 2) + 5)).toBe(true);
+    expect(isBetween(enemy1.getInverseHp(), damage1 * 2 - 5, damage1 * 2 + 5)).toBe(true);
   });
 
   it("should do double damage to a pokemon that switched out via U-Turn/etc", async () => {
     await game.classicMode.startBattle([ Species.MILOTIC ]);
 
-    const [ enemy1, ] = game.scene.getEnemyParty();
+    const [ enemy1 ] = game.scene.getEnemyParty();
 
     game.move.select(Moves.SURF);
     await game.forceEnemyMove(Moves.SPLASH);
@@ -80,6 +80,6 @@ describe("Abilities - Stakeout", () => {
     await game.toNextTurn();
 
     expect(enemy1.isFainted()).toBe(false);
-    expect(isBetween(enemy1.getInverseHp(), (damage1 * 2) - 5, (damage1 * 2) + 5)).toBe(true);
+    expect(isBetween(enemy1.getInverseHp(), damage1 * 2 - 5, damage1 * 2 + 5)).toBe(true);
   });
 });

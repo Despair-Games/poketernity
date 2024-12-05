@@ -13,7 +13,6 @@ import GameManager from "#test/utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
-
 describe("Abilities - Unburden", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
@@ -22,7 +21,7 @@ describe("Abilities - Unburden", () => {
    * Count the number of held items a Pokemon has, accounting for stacks of multiple items.
    */
   function getHeldItemCount(pokemon: Pokemon): number {
-    const stackCounts = pokemon.getHeldItems().map(m => m.getStackCount());
+    const stackCounts = pokemon.getHeldItems().map((m) => m.getStackCount());
     if (stackCounts.length) {
       return stackCounts.reduce((a, b) => a + b);
     } else {
@@ -82,8 +81,7 @@ describe("Abilities - Unburden", () => {
   });
 
   it("should activate when a berry is eaten, even if Berry Pouch preserves the berry", async () => {
-    game.override.enemyMoveset(Moves.FALSE_SWIPE)
-      .startingModifier([{ name: "BERRY_POUCH", count: 5850 }]);
+    game.override.enemyMoveset(Moves.FALSE_SWIPE).startingModifier([{ name: "BERRY_POUCH", count: 5850 }]);
     await game.classicMode.startBattle([ Species.TREECKO ]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
@@ -132,9 +130,7 @@ describe("Abilities - Unburden", () => {
   });
 
   it("should activate when an item is stolen via attacking ability", async () => {
-    game.override
-      .ability(Abilities.MAGICIAN)
-      .startingHeldItems([]); // Remove player's full stacks of held items so it can steal opponent's held items
+    game.override.ability(Abilities.MAGICIAN).startingHeldItems([]); // Remove player's full stacks of held items so it can steal opponent's held items
     await game.classicMode.startBattle([ Species.TREECKO ]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -150,9 +146,7 @@ describe("Abilities - Unburden", () => {
   });
 
   it("should activate when an item is stolen via defending ability", async () => {
-    game.override
-      .enemyAbility(Abilities.PICKPOCKET)
-      .enemyHeldItems([]); // Remove opponent's full stacks of held items so it can steal player's held items
+    game.override.enemyAbility(Abilities.PICKPOCKET).enemyHeldItems([]); // Remove opponent's full stacks of held items so it can steal player's held items
     await game.classicMode.startBattle([ Species.TREECKO ]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
@@ -168,8 +162,7 @@ describe("Abilities - Unburden", () => {
   });
 
   it("should activate when an item is stolen via move", async () => {
-    game.override.moveset(Moves.THIEF)
-      .startingHeldItems([]); // Remove player's full stacks of held items so it can steal opponent's held items
+    game.override.moveset(Moves.THIEF).startingHeldItems([]); // Remove player's full stacks of held items so it can steal opponent's held items
     await game.classicMode.startBattle([ Species.TREECKO ]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -185,10 +178,7 @@ describe("Abilities - Unburden", () => {
   });
 
   it("should activate when an item is stolen via grip claw", async () => {
-    game.override
-      .startingHeldItems([
-        { name: "GRIP_CLAW", count: 1 },
-      ]);
+    game.override.startingHeldItems([{ name: "GRIP_CLAW", count: 1 }]);
     await game.classicMode.startBattle([ Species.TREECKO ]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
@@ -208,8 +198,7 @@ describe("Abilities - Unburden", () => {
   });
 
   it("should not activate when a neutralizing ability is present", async () => {
-    game.override.enemyAbility(Abilities.NEUTRALIZING_GAS)
-      .enemyMoveset(Moves.FALSE_SWIPE);
+    game.override.enemyAbility(Abilities.NEUTRALIZING_GAS).enemyMoveset(Moves.FALSE_SWIPE);
     await game.classicMode.startBattle([ Species.TREECKO ]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
@@ -243,9 +232,7 @@ describe("Abilities - Unburden", () => {
   });
 
   it("should deactivate temporarily when a neutralizing gas user is on the field", async () => {
-    game.override
-      .battleType("double")
-      .ability(Abilities.NONE); // Disable ability override so that we can properly set abilities below
+    game.override.battleType("double").ability(Abilities.NONE); // Disable ability override so that we can properly set abilities below
     await game.classicMode.startBattle([ Species.TREECKO, Species.MEOWTH, Species.WEEZING ]);
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -285,8 +272,7 @@ describe("Abilities - Unburden", () => {
   });
 
   it("should not activate when passing a baton to a teammate switching in", async () => {
-    game.override.startingHeldItems([{ name: "BATON" }])
-      .moveset(Moves.BATON_PASS);
+    game.override.startingHeldItems([{ name: "BATON" }]).moveset(Moves.BATON_PASS);
     await game.classicMode.startBattle([ Species.TREECKO, Species.PURRLOIN ]);
 
     const [ treecko, purrloin ] = game.scene.getPlayerParty();
@@ -333,8 +319,7 @@ describe("Abilities - Unburden", () => {
   });
 
   it("should activate when a reviver seed is used", async () => {
-    game.override.startingHeldItems([{ name: "REVIVER_SEED" }])
-      .enemyMoveset([ Moves.WING_ATTACK ]);
+    game.override.startingHeldItems([{ name: "REVIVER_SEED" }]).enemyMoveset([ Moves.WING_ATTACK ]);
     await game.classicMode.startBattle([ Species.TREECKO ]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;

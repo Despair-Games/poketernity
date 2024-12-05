@@ -40,14 +40,21 @@ export class VictoryPhase extends PokemonPhase {
       return this.end();
     }
 
-    if (!globalScene.getEnemyParty().find(p => globalScene.currentBattle.battleType === BattleType.WILD ? p.isOnField() : !p?.isFainted(true))) {
+    if (
+      !globalScene
+        .getEnemyParty()
+        .find((p) => (globalScene.currentBattle.battleType === BattleType.WILD ? p.isOnField() : !p?.isFainted(true)))
+    ) {
       globalScene.pushPhase(new BattleEndPhase(true));
       if (globalScene.currentBattle.battleType === BattleType.TRAINER) {
         globalScene.pushPhase(new TrainerVictoryPhase());
       }
       if (globalScene.gameMode.isEndless || !globalScene.gameMode.isWaveFinal(globalScene.currentBattle.waveIndex)) {
         globalScene.pushPhase(new EggLapsePhase());
-        if (globalScene.gameMode.isClassic && globalScene.currentBattle.waveIndex === ClassicFixedBossWaves.EVIL_BOSS_2) {
+        if (
+          globalScene.gameMode.isClassic &&
+          globalScene.currentBattle.waveIndex === ClassicFixedBossWaves.EVIL_BOSS_2
+        ) {
           // Should get Lock Capsule on 165 before shop phase so it can be used in the rewards shop
           globalScene.pushPhase(new ModifierRewardPhase(modifierTypes.LOCK_CAPSULE));
         }
@@ -55,7 +62,10 @@ export class VictoryPhase extends PokemonPhase {
           globalScene.pushPhase(new SelectModifierPhase(undefined, undefined, this.getFixedBattleCustomModifiers()));
         } else if (globalScene.gameMode.isDaily) {
           globalScene.pushPhase(new ModifierRewardPhase(modifierTypes.EXP_CHARM));
-          if (globalScene.currentBattle.waveIndex > 10 && !globalScene.gameMode.isWaveFinal(globalScene.currentBattle.waveIndex)) {
+          if (
+            globalScene.currentBattle.waveIndex > 10 &&
+            !globalScene.gameMode.isWaveFinal(globalScene.currentBattle.waveIndex)
+          ) {
             globalScene.pushPhase(new ModifierRewardPhase(modifierTypes.GOLDEN_POKEBALL));
           }
         } else {
@@ -63,14 +73,29 @@ export class VictoryPhase extends PokemonPhase {
           if (globalScene.gameMode.isEndless && globalScene.currentBattle.waveIndex === 10) {
             globalScene.pushPhase(new ModifierRewardPhase(modifierTypes.EXP_SHARE));
           }
-          if (globalScene.currentBattle.waveIndex <= 750 && (globalScene.currentBattle.waveIndex <= 500 || (globalScene.currentBattle.waveIndex % 30) === superExpWave)) {
-            globalScene.pushPhase(new ModifierRewardPhase((globalScene.currentBattle.waveIndex % 30) !== superExpWave || globalScene.currentBattle.waveIndex > 250 ? modifierTypes.EXP_CHARM : modifierTypes.SUPER_EXP_CHARM));
+          if (
+            globalScene.currentBattle.waveIndex <= 750 &&
+            (globalScene.currentBattle.waveIndex <= 500 || globalScene.currentBattle.waveIndex % 30 === superExpWave)
+          ) {
+            globalScene.pushPhase(
+              new ModifierRewardPhase(
+                globalScene.currentBattle.waveIndex % 30 !== superExpWave || globalScene.currentBattle.waveIndex > 250
+                  ? modifierTypes.EXP_CHARM
+                  : modifierTypes.SUPER_EXP_CHARM,
+              ),
+            );
           }
           if (globalScene.currentBattle.waveIndex <= 150 && !(globalScene.currentBattle.waveIndex % 50)) {
             globalScene.pushPhase(new ModifierRewardPhase(modifierTypes.GOLDEN_POKEBALL));
           }
           if (globalScene.gameMode.isEndless && !(globalScene.currentBattle.waveIndex % 50)) {
-            globalScene.pushPhase(new ModifierRewardPhase(!(globalScene.currentBattle.waveIndex % 250) ? modifierTypes.VOUCHER_PREMIUM : modifierTypes.VOUCHER_PLUS));
+            globalScene.pushPhase(
+              new ModifierRewardPhase(
+                !(globalScene.currentBattle.waveIndex % 250)
+                  ? modifierTypes.VOUCHER_PREMIUM
+                  : modifierTypes.VOUCHER_PLUS,
+              ),
+            );
             globalScene.pushPhase(new AddEnemyBuffModifierPhase());
           }
         }

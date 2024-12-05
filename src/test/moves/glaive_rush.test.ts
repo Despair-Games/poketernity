@@ -6,7 +6,6 @@ import GameManager from "#test/utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
-
 describe("Moves - Glaive Rush", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
@@ -46,8 +45,7 @@ describe("Moves - Glaive Rush", () => {
     await game.phaseInterceptor.to("TurnEndPhase");
     game.move.select(Moves.SHADOW_SNEAK);
     await game.phaseInterceptor.to("DamageAnimPhase");
-    expect(enemy.hp).toBeLessThanOrEqual(1001 - (damageDealt * 3));
-
+    expect(enemy.hp).toBeLessThanOrEqual(1001 - damageDealt * 3);
   });
 
   it("always gets hit by attacks", async () => {
@@ -60,13 +58,10 @@ describe("Moves - Glaive Rush", () => {
     game.move.select(Moves.AVALANCHE);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemy.hp).toBeLessThan(1000);
-
   });
 
   it("interacts properly with multi-lens", async () => {
-    game.override
-      .startingHeldItems([{ name: "MULTI_LENS", count: 2 }])
-      .enemyMoveset([ Moves.AVALANCHE ]);
+    game.override.startingHeldItems([{ name: "MULTI_LENS", count: 2 }]).enemyMoveset([ Moves.AVALANCHE ]);
     await game.classicMode.startBattle();
 
     const player = game.scene.getPlayerPokemon()!;
@@ -83,7 +78,6 @@ describe("Moves - Glaive Rush", () => {
     game.move.select(Moves.SPLASH);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(player.hp).toBe(1000);
-
   });
 
   it("secondary effects only last until next move", async () => {
@@ -109,13 +103,10 @@ describe("Moves - Glaive Rush", () => {
     game.move.select(Moves.SPLASH);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(player.hp).toBe(damagedHp);
-
   });
 
   it("secondary effects are removed upon switching", async () => {
-    game.override
-      .enemyMoveset([ Moves.SHADOW_SNEAK ])
-      .starterSpecies(0);
+    game.override.enemyMoveset([ Moves.SHADOW_SNEAK ]).starterSpecies(0);
     await game.classicMode.startBattle([ Species.KLINK, Species.FEEBAS ]);
 
     const player = game.scene.getPlayerPokemon()!;
@@ -133,7 +124,6 @@ describe("Moves - Glaive Rush", () => {
     game.doSwitchPokemon(1);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(player.hp).toBe(player.getMaxHp());
-
   });
 
   it("secondary effects don't activate if move fails", async () => {
@@ -159,6 +149,6 @@ describe("Moves - Glaive Rush", () => {
     await game.phaseInterceptor.to("TurnEndPhase");
     const damagedHP2 = 1000 - enemy.hp;
 
-    expect(damagedHP2).toBeGreaterThanOrEqual((damagedHP1 * 2) - 1);
+    expect(damagedHP2).toBeGreaterThanOrEqual(damagedHP1 * 2 - 1);
   });
 });

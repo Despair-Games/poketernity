@@ -135,10 +135,10 @@ export class LoadingScene extends SceneBase {
     this.loadImage("summary_bg", "ui");
     this.loadImage("summary_overlay_shiny", "ui");
     this.loadImage("summary_profile", "ui");
-    this.loadImage("summary_profile_prompt_z", "ui");      // The pixel Z button prompt
-    this.loadImage("summary_profile_prompt_a", "ui");     // The pixel A button prompt
-    this.loadImage("summary_profile_ability", "ui");      // Pixel text 'ABILITY'
-    this.loadImage("summary_profile_passive", "ui");      // Pixel text 'PASSIVE'
+    this.loadImage("summary_profile_prompt_z", "ui"); // The pixel Z button prompt
+    this.loadImage("summary_profile_prompt_a", "ui"); // The pixel A button prompt
+    this.loadImage("summary_profile_ability", "ui"); // Pixel text 'ABILITY'
+    this.loadImage("summary_profile_passive", "ui"); // Pixel text 'PASSIVE'
     this.loadImage("summary_status", "ui");
     this.loadImage("summary_stats", "ui");
     this.loadImage("summary_stats_overlay_exp", "ui");
@@ -171,7 +171,7 @@ export class LoadingScene extends SceneBase {
 
     this.loadImage("default_bg", "arenas");
     // Load arena images
-    Utils.getEnumValues(Biome).map(bt => {
+    Utils.getEnumValues(Biome).map((bt) => {
       const btKey = Biome[bt].toLowerCase();
       const isBaseAnimated = btKey === "end";
       const baseAKey = `${btKey}_a`;
@@ -189,7 +189,7 @@ export class LoadingScene extends SceneBase {
       }
       if (getBiomeHasProps(bt)) {
         for (let p = 1; p <= 3; p++) {
-          const isPropAnimated = p === 3 && [ "power_plant", "end" ].find(b => b === btKey);
+          const isPropAnimated = p === 3 && [ "power_plant", "end" ].find((b) => b === btKey);
           const propKey = `${btKey}_b_${p}`;
           if (!isPropAnimated) {
             this.loadImage(propKey, "arenas");
@@ -260,7 +260,7 @@ export class LoadingScene extends SceneBase {
     this.loadAtlas("egg_icons", "egg");
     this.loadAtlas("egg_shard", "egg");
     this.loadAtlas("egg_lightrays", "egg");
-    Utils.getEnumKeys(GachaType).forEach(gt => {
+    Utils.getEnumKeys(GachaType).forEach((gt) => {
       const key = gt.toLowerCase();
       this.loadImage(`gacha_${key}`, "egg");
       this.loadAtlas(`gacha_underlay_${key}`, "egg");
@@ -346,7 +346,11 @@ export class LoadingScene extends SceneBase {
     this.loadBgm("evolution", "bw/evolution.mp3");
     this.loadBgm("evolution_fanfare", "bw/evolution_fanfare.mp3");
 
-    this.load.plugin("rextexteditplugin", "https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rextexteditplugin.min.js", true);
+    this.load.plugin(
+      "rextexteditplugin",
+      "https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rextexteditplugin.min.js",
+      true,
+    );
 
     this.loadLoadingScreen();
 
@@ -435,15 +439,25 @@ export class LoadingScene extends SceneBase {
       style: {
         font: "48px emerald",
         color: "#ffffff",
-        align: "center"
+        align: "center",
       },
     });
     disclaimerDescriptionText.setOrigin(0.5, 0.5);
 
-    loadingGraphics.push(bg, graphics, progressBar, progressBox, logo, percentText, assetText, disclaimerText, disclaimerDescriptionText);
+    loadingGraphics.push(
+      bg,
+      graphics,
+      progressBar,
+      progressBox,
+      logo,
+      percentText,
+      assetText,
+      disclaimerText,
+      disclaimerDescriptionText,
+    );
 
     if (!mobile) {
-      loadingGraphics.map(g => g.setVisible(false));
+      loadingGraphics.map((g) => g.setVisible(false));
     }
 
     const intro = this.add.video(0, 0);
@@ -455,7 +469,7 @@ export class LoadingScene extends SceneBase {
         ease: "Sine.easeIn",
         onComplete: () => video.destroy(),
       });
-      loadingGraphics.forEach(g => g.setVisible(true));
+      loadingGraphics.forEach((g) => g.setVisible(true));
     });
     intro.setOrigin(0, 0);
     intro.setScale(3);
@@ -496,7 +510,7 @@ export class LoadingScene extends SceneBase {
     });
 
     this.load.on(this.LOAD_EVENTS.COMPLETE, () => {
-      loadingGraphics.forEach(go => go.destroy());
+      loadingGraphics.forEach((go) => go.destroy());
       intro.destroy();
     });
   }

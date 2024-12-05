@@ -80,9 +80,7 @@ describe("Arena - Gravity", () => {
 
   describe("Against flying types", () => {
     it("can be hit by ground-type moves now", async () => {
-      game.override
-        .enemySpecies(Species.PIDGEOT)
-        .moveset([ Moves.GRAVITY, Moves.EARTHQUAKE ]);
+      game.override.enemySpecies(Species.PIDGEOT).moveset([ Moves.GRAVITY, Moves.EARTHQUAKE ]);
 
       await game.classicMode.startBattle([ Species.PIKACHU ]);
 
@@ -111,9 +109,7 @@ describe("Arena - Gravity", () => {
     });
 
     it("keeps super-effective moves super-effective after using gravity", async () => {
-      game.override
-        .enemySpecies(Species.PIDGEOT)
-        .moveset([ Moves.GRAVITY, Moves.THUNDERBOLT ]);
+      game.override.enemySpecies(Species.PIDGEOT).moveset([ Moves.GRAVITY, Moves.THUNDERBOLT ]);
 
       await game.classicMode.startBattle([ Species.PIKACHU ]);
 
@@ -136,10 +132,7 @@ describe("Arena - Gravity", () => {
   });
 
   it("cancels Fly if its user is semi-invulnerable", async () => {
-    game.override
-      .enemySpecies(Species.SNORLAX)
-      .enemyMoveset(Moves.FLY)
-      .moveset([ Moves.GRAVITY, Moves.SPLASH ]);
+    game.override.enemySpecies(Species.SNORLAX).enemyMoveset(Moves.FLY).moveset([ Moves.GRAVITY, Moves.SPLASH ]);
 
     await game.classicMode.startBattle([ Species.CHARIZARD ]);
 

@@ -42,7 +42,7 @@ describe("Moves - Mist", () => {
 
     await game.phaseInterceptor.to("BerryPhase");
 
-    playerPokemon.forEach(p => expect(p.getStatStage(Stat.ATK)).toBe(0));
+    playerPokemon.forEach((p) => expect(p.getStatStage(Stat.ATK)).toBe(0));
   });
 
   it.todo("should be ignored by opponents with Infiltrator");

@@ -4,7 +4,10 @@ import { MysteryEncounterType } from "#app/enums/mystery-encounter-type";
 import { Species } from "#app/enums/species";
 import GameManager from "#app/test/utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { runMysteryEncounterToEnd, runSelectMysteryEncounterOption } from "#test/mystery-encounter/encounter-test-utils";
+import {
+  runMysteryEncounterToEnd,
+  runSelectMysteryEncounterOption,
+} from "#test/mystery-encounter/encounter-test-utils";
 import { Moves } from "#enums/moves";
 import BattleScene from "#app/battle-scene";
 import { PokemonMove } from "#app/field/pokemon";
@@ -43,7 +46,8 @@ describe("Uncommon Breed - Mystery Encounter", () => {
   beforeEach(async () => {
     game = new GameManager(phaserGame);
     scene = game.scene;
-    game.override.mysteryEncounterChance(100)
+    game.override
+      .mysteryEncounterChance(100)
       .mysteryEncounterTier(MysteryEncounterTier.COMMON)
       .startingWave(defaultWave)
       .startingBiome(defaultBiome)
@@ -52,9 +56,7 @@ describe("Uncommon Breed - Mystery Encounter", () => {
       .enemyPassiveAbility(Abilities.BALL_FETCH);
 
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(
-      new Map<Biome, MysteryEncounterType[]>([
-        [ Biome.CAVE, [ MysteryEncounterType.UNCOMMON_BREED ]],
-      ])
+      new Map<Biome, MysteryEncounterType[]>([[ Biome.CAVE, [ MysteryEncounterType.UNCOMMON_BREED ]]]),
     );
   });
 
@@ -125,11 +127,13 @@ describe("Uncommon Breed - Mystery Encounter", () => {
       expect(enemyField.length).toBe(1);
       expect(enemyField[0].species.speciesId).toBe(speciesToSpawn);
 
-      const statStagePhases = unshiftPhaseSpy.mock.calls.filter(p => p[0] instanceof StatStageChangePhase)[0][0] as any;
+      const statStagePhases = unshiftPhaseSpy.mock.calls.filter(
+        (p) => p[0] instanceof StatStageChangePhase,
+      )[0][0] as any;
       expect(statStagePhases.stats).toEqual([ Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD ]);
 
       // Should have used its egg move pre-battle
-      const movePhases = phaseSpy.mock.calls.filter(p => p[0] instanceof MovePhase).map(p => p[0]);
+      const movePhases = phaseSpy.mock.calls.filter((p) => p[0] instanceof MovePhase).map((p) => p[0]);
       expect(movePhases.length).toBe(1);
       const eggMoves: Moves[] = speciesEggMoves[getPokemonSpecies(speciesToSpawn).getRootSpeciesId()];
       const usedMove = (movePhases[0] as MovePhase).move.moveId;
@@ -152,11 +156,13 @@ describe("Uncommon Breed - Mystery Encounter", () => {
       expect(enemyField.length).toBe(1);
       expect(enemyField[0].species.speciesId).toBe(speciesToSpawn);
 
-      const statStagePhases = unshiftPhaseSpy.mock.calls.filter(p => p[0] instanceof StatStageChangePhase)[0][0] as any;
+      const statStagePhases = unshiftPhaseSpy.mock.calls.filter(
+        (p) => p[0] instanceof StatStageChangePhase,
+      )[0][0] as any;
       expect(statStagePhases.stats).toEqual([ Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD ]);
 
       // Should have used its egg move pre-battle
-      const movePhases = phaseSpy.mock.calls.filter(p => p[0] instanceof MovePhase).map(p => p[0]);
+      const movePhases = phaseSpy.mock.calls.filter((p) => p[0] instanceof MovePhase).map((p) => p[0]);
       expect(movePhases.length).toBe(1);
       const eggMoves: Moves[] = speciesEggMoves[getPokemonSpecies(speciesToSpawn).getRootSpeciesId()];
       const usedMove = (movePhases[0] as MovePhase).move.moveId;
@@ -176,7 +182,7 @@ describe("Uncommon Breed - Mystery Encounter", () => {
         selected: [
           {
             text: `${namespace}:option.2.selected`,
-          }
+          },
         ],
       });
     });
@@ -185,7 +191,7 @@ describe("Uncommon Breed - Mystery Encounter", () => {
     it.skip("should NOT be selectable if the player doesn't have enough berries", async () => {
       await game.runToMysteryEncounter(MysteryEncounterType.UNCOMMON_BREED, defaultParty);
       // Clear out any pesky mods that slipped through test spin-up
-      scene.modifiers.forEach(mod => {
+      scene.modifiers.forEach((mod) => {
         scene.removeModifier(mod);
       });
       await scene.updateModifiers(true);
@@ -241,14 +247,14 @@ describe("Uncommon Breed - Mystery Encounter", () => {
         selected: [
           {
             text: `${namespace}:option.3.selected`,
-          }
+          },
         ],
       });
     });
 
     it("should NOT be selectable if the player doesn't have an Attracting move", async () => {
       await game.runToMysteryEncounter(MysteryEncounterType.UNCOMMON_BREED, defaultParty);
-      scene.getPlayerParty().forEach(p => p.moveset = []);
+      scene.getPlayerParty().forEach((p) => (p.moveset = []));
       await game.phaseInterceptor.to(MysteryEncounterPhase, false);
 
       const encounterPhase = scene.getCurrentPhase();

@@ -30,7 +30,7 @@ describe("Moves - Fake Out", () => {
       .disableCrits();
   });
 
-  it("can only be used on the first turn a pokemon is sent out in a battle", async() => {
+  it("can only be used on the first turn a pokemon is sent out in a battle", async () => {
     await game.classicMode.startBattle([ Species.FEEBAS ]);
 
     const enemy = game.scene.getEnemyPokemon()!;
@@ -48,7 +48,7 @@ describe("Moves - Fake Out", () => {
   }, 20000);
 
   // This is a PokeRogue buff to Fake Out
-  it("can be used at the start of every wave even if the pokemon wasn't recalled", async() => {
+  it("can be used at the start of every wave even if the pokemon wasn't recalled", async () => {
     await game.classicMode.startBattle([ Species.FEEBAS ]);
 
     const enemy = game.scene.getEnemyPokemon()!;
@@ -63,7 +63,7 @@ describe("Moves - Fake Out", () => {
     expect(game.scene.getEnemyPokemon()!.isFullHp()).toBe(false);
   }, 20000);
 
-  it("can be used again if recalled and sent back out", async() => {
+  it("can be used again if recalled and sent back out", async () => {
     game.override.startingWave(4);
     await game.classicMode.startBattle([ Species.FEEBAS, Species.MAGIKARP ]);
 

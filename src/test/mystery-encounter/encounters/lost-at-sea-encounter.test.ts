@@ -16,7 +16,6 @@ import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases";
 import { PartyExpPhase } from "#app/phases/party-exp-phase";
 import i18next from "i18next";
 
-
 const namespace = "mysteryEncounters/lostAtSea";
 /** Blastoise for surf. Pidgeot for fly. Abra for none. */
 const defaultParty = [ Species.BLASTOISE, Species.PIDGEOT, Species.ABRA ];
@@ -44,7 +43,7 @@ describe("Lost at Sea - Mystery Encounter", () => {
       new Map<Biome, MysteryEncounterType[]>([
         [ Biome.SEA, [ MysteryEncounterType.LOST_AT_SEA ]],
         [ Biome.MOUNTAIN, [ MysteryEncounterType.MYSTERIOUS_CHALLENGERS ]],
-      ])
+      ]),
     );
   });
 
@@ -121,7 +120,7 @@ describe("Lost at Sea - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1);
       await game.phaseInterceptor.to(PartyExpPhase);
 
-      expect(blastoise?.exp).toBe(expBefore + Math.floor(laprasSpecies.baseExp * defaultWave / 5 + 1));
+      expect(blastoise?.exp).toBe(expBefore + Math.floor((laprasSpecies.baseExp * defaultWave) / 5 + 1));
     });
 
     it("should leave encounter without battle", async () => {
@@ -186,7 +185,7 @@ describe("Lost at Sea - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 2);
       await game.phaseInterceptor.to(PartyExpPhase);
 
-      expect(pidgeot!.exp).toBe(expBefore + Math.floor(laprasBaseExp * defaultWave / 5 + 1));
+      expect(pidgeot!.exp).toBe(expBefore + Math.floor((laprasBaseExp * defaultWave) / 5 + 1));
     });
 
     it("should leave encounter without battle", async () => {
@@ -250,10 +249,14 @@ describe("Lost at Sea - Mystery Encounter", () => {
       const allowedPkm = party.filter((pkm) => pkm.isAllowedInBattle());
       const notAllowedPkm = party.filter((pkm) => !pkm.isAllowedInBattle());
       allowedPkm.forEach((pkm) =>
-        expect(pkm.hp, `${pkm.name} should have receivd 25% damage: ${pkm.hp} / ${pkm.getMaxHp()} HP`).toBe(pkm.getMaxHp() - Math.floor(pkm.getMaxHp() * 0.25))
+        expect(pkm.hp, `${pkm.name} should have receivd 25% damage: ${pkm.hp} / ${pkm.getMaxHp()} HP`).toBe(
+          pkm.getMaxHp() - Math.floor(pkm.getMaxHp() * 0.25),
+        ),
       );
 
-      notAllowedPkm.forEach((pkm) => expect(pkm.hp, `${pkm.name} should be full hp: ${pkm.hp} / ${pkm.getMaxHp()} HP`).toBe(pkm.getMaxHp()));
+      notAllowedPkm.forEach((pkm) =>
+        expect(pkm.hp, `${pkm.name} should be full hp: ${pkm.hp} / ${pkm.getMaxHp()} HP`).toBe(pkm.getMaxHp()),
+      );
     });
 
     it("should leave encounter without battle", async () => {

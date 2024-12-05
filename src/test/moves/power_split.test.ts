@@ -34,9 +34,7 @@ describe("Moves - Power Split", () => {
 
   it("should average the user's ATK and SPATK stats with those of the target", async () => {
     game.override.enemyMoveset(Moves.SPLASH);
-    await game.startBattle([
-      Species.INDEEDEE
-    ]);
+    await game.startBattle([ Species.INDEEDEE ]);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
@@ -56,9 +54,7 @@ describe("Moves - Power Split", () => {
 
   it("should be idempotent", async () => {
     game.override.enemyMoveset([ Moves.POWER_SPLIT ]);
-    await game.startBattle([
-      Species.INDEEDEE
-    ]);
+    await game.startBattle([ Species.INDEEDEE ]);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;

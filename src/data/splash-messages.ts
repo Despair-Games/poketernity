@@ -185,13 +185,25 @@ const seasonalSplashMessages: Season[] = [
     name: "Halloween",
     start: "09-15",
     end: "10-31",
-    messages: [ "halloween.pumpkabooAbout", "halloween.mayContainSpiders", "halloween.spookyScarySkeledirge", "halloween.gourgeistUsedTrickOrTreat", "halloween.letsSnuggleForever" ],
+    messages: [
+      "halloween.pumpkabooAbout",
+      "halloween.mayContainSpiders",
+      "halloween.spookyScarySkeledirge",
+      "halloween.gourgeistUsedTrickOrTreat",
+      "halloween.letsSnuggleForever",
+    ],
   },
   {
     name: "XMAS",
     start: "12-01",
     end: "12-26",
-    messages: [ "xmas.happyHolidays", "xmas.unaffilicatedWithDelibirdServices", "xmas.delibirdSeason", "xmas.diamondsFromTheSky", "xmas.holidayStylePikachuNotIncluded" ],
+    messages: [
+      "xmas.happyHolidays",
+      "xmas.unaffilicatedWithDelibirdServices",
+      "xmas.delibirdSeason",
+      "xmas.diamondsFromTheSky",
+      "xmas.holidayStylePikachuNotIncluded",
+    ],
   },
   {
     name: "New Year's",

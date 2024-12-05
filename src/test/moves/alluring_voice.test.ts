@@ -8,7 +8,6 @@ import GameManager from "#test/utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
-
 describe("Moves - Alluring Voice", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
@@ -36,7 +35,6 @@ describe("Moves - Alluring Voice", () => {
       .starterSpecies(Species.FEEBAS)
       .ability(Abilities.BALL_FETCH)
       .moveset([ Moves.ALLURING_VOICE ]);
-
   });
 
   it("should confuse the opponent if their stat stages were raised", async () => {

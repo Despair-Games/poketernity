@@ -17,12 +17,12 @@ export class NewBiomeEncounterPhase extends NextEncounterPhase {
       }
     }
 
-    for (const pokemon of globalScene.getPlayerParty().filter(p => p.isOnField())) {
+    for (const pokemon of globalScene.getPlayerParty().filter((p) => p.isOnField())) {
       applyAbAttrs(PostBiomeChangeAbAttr, pokemon, null);
     }
 
     const enemyField = globalScene.getEnemyField();
-    const moveTargets: any[]  = [ globalScene.arenaEnemy, enemyField ];
+    const moveTargets: any[] = [ globalScene.arenaEnemy, enemyField ];
     const mysteryEncounter = globalScene.currentBattle?.mysteryEncounter?.introVisuals;
     if (mysteryEncounter) {
       moveTargets.push(mysteryEncounter);
@@ -36,7 +36,7 @@ export class NewBiomeEncounterPhase extends NextEncounterPhase {
         if (!this.tryOverrideForBattleSpec()) {
           this.doEncounterCommon();
         }
-      }
+      },
     });
   }
 

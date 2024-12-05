@@ -66,13 +66,21 @@ export default class InputsHandler {
   }
 
   listenInputs(): void {
-    this.events.on("input_down", (event) => {
-      this.log.push({ type: "input_down", button: event.button });
-    }, this);
+    this.events.on(
+      "input_down",
+      (event) => {
+        this.log.push({ type: "input_down", button: event.button });
+      },
+      this,
+    );
 
-    this.events.on("input_up", (event) => {
-      this.logUp.push({ type: "input_up", button: event.button });
-    }, this);
+    this.events.on(
+      "input_up",
+      (event) => {
+        this.logUp.push({ type: "input_up", button: event.button });
+      },
+      this,
+    );
   }
 }
 

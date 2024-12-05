@@ -24,7 +24,8 @@ describe("Abilities - Defiant", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override.battleType("single")
+    game.override
+      .battleType("single")
       .enemySpecies(Species.BEEDRILL)
       .enemyMoveset(Moves.TICKLE)
       .startingLevel(1)

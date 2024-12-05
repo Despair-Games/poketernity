@@ -54,13 +54,13 @@ describe("Moves - Solar Beam", () => {
     expect(playerPokemon.getMoveHistory()).toHaveLength(2);
     expect(playerPokemon.getLastXMoves(1)[0].result).toBe(MoveResult.SUCCESS);
 
-    const playerSolarBeam = playerPokemon.getMoveset().find(mv => mv && mv.moveId === Moves.SOLAR_BEAM);
+    const playerSolarBeam = playerPokemon.getMoveset().find((mv) => mv && mv.moveId === Moves.SOLAR_BEAM);
     expect(playerSolarBeam?.ppUsed).toBe(1);
   });
 
   it.each([
     { weatherType: WeatherType.SUNNY, name: "Sun" },
-    { weatherType: WeatherType.HARSH_SUN, name: "Harsh Sun" }
+    { weatherType: WeatherType.HARSH_SUN, name: "Harsh Sun" },
   ])("should deal damage in one turn if $name is active", async ({ weatherType }) => {
     game.override.weather(weatherType);
 
@@ -77,13 +77,13 @@ describe("Moves - Solar Beam", () => {
     expect(playerPokemon.getMoveHistory()).toHaveLength(2);
     expect(playerPokemon.getLastXMoves(1)[0].result).toBe(MoveResult.SUCCESS);
 
-    const playerSolarBeam = playerPokemon.getMoveset().find(mv => mv && mv.moveId === Moves.SOLAR_BEAM);
+    const playerSolarBeam = playerPokemon.getMoveset().find((mv) => mv && mv.moveId === Moves.SOLAR_BEAM);
     expect(playerSolarBeam?.ppUsed).toBe(1);
   });
 
   it.each([
     { weatherType: WeatherType.RAIN, name: "Rain" },
-    { weatherType: WeatherType.HEAVY_RAIN, name: "Heavy Rain" }
+    { weatherType: WeatherType.HEAVY_RAIN, name: "Heavy Rain" },
   ])("should have its power halved in $name", async ({ weatherType }) => {
     game.override.weather(weatherType);
 

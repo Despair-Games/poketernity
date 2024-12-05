@@ -11,7 +11,6 @@ import GameManager from "#test/utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, test, vi } from "vitest";
 
-
 describe("Moves - Astonish", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
@@ -39,33 +38,30 @@ describe("Moves - Astonish", () => {
     vi.spyOn(allMoves[Moves.ASTONISH], "chance", "get").mockReturnValue(100);
   });
 
-  test(
-    "move effect should cancel the target's move on the turn it applies",
-    async () => {
-      await game.startBattle([ Species.MEOWSCARADA ]);
+  test("move effect should cancel the target's move on the turn it applies", async () => {
+    await game.startBattle([ Species.MEOWSCARADA ]);
 
-      const leadPokemon = game.scene.getPlayerPokemon()!;
+    const leadPokemon = game.scene.getPlayerPokemon()!;
 
-      const enemyPokemon = game.scene.getEnemyPokemon()!;
+    const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-      game.move.select(Moves.ASTONISH);
+    game.move.select(Moves.ASTONISH);
 
-      await game.phaseInterceptor.to(MoveEndPhase, false);
+    await game.phaseInterceptor.to(MoveEndPhase, false);
 
-      expect(enemyPokemon.getTag(BattlerTagType.FLINCHED)).toBeDefined();
+    expect(enemyPokemon.getTag(BattlerTagType.FLINCHED)).toBeDefined();
 
-      await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to(TurnEndPhase);
 
-      expect(leadPokemon.hp).toBe(leadPokemon.getMaxHp());
-      expect(enemyPokemon.getTag(BattlerTagType.FLINCHED)).toBeUndefined();
+    expect(leadPokemon.hp).toBe(leadPokemon.getMaxHp());
+    expect(enemyPokemon.getTag(BattlerTagType.FLINCHED)).toBeUndefined();
 
-      await game.phaseInterceptor.to(CommandPhase, false);
+    await game.phaseInterceptor.to(CommandPhase, false);
 
-      game.move.select(Moves.SPLASH);
+    game.move.select(Moves.SPLASH);
 
-      await game.phaseInterceptor.to(BerryPhase, false);
+    await game.phaseInterceptor.to(BerryPhase, false);
 
-      expect(leadPokemon.hp).toBeLessThan(leadPokemon.getMaxHp());
-    }
-  );
+    expect(leadPokemon.hp).toBeLessThan(leadPokemon.getMaxHp());
+  });
 });

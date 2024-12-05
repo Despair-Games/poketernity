@@ -44,9 +44,7 @@ describe("Moves - Tera Blast", () => {
   });
 
   it("changes type to match user's tera type", async () => {
-    game.override
-      .enemySpecies(Species.FURRET)
-      .startingHeldItems([{ name: "TERA_SHARD", type: Type.FIGHTING }]);
+    game.override.enemySpecies(Species.FURRET).startingHeldItems([{ name: "TERA_SHARD", type: Type.FIGHTING }]);
     await game.startBattle();
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "apply");
@@ -87,18 +85,22 @@ describe("Moves - Tera Blast", () => {
   });
 
   // Currently abilities are bugged and can't see when a move's category is changed
-  it.todo("uses the higher stat of the user's Atk and SpAtk for damage calculation", async () => {
-    game.override.enemyAbility(Abilities.TOXIC_DEBRIS);
-    await game.startBattle();
+  it.todo(
+    "uses the higher stat of the user's Atk and SpAtk for damage calculation",
+    async () => {
+      game.override.enemyAbility(Abilities.TOXIC_DEBRIS);
+      await game.startBattle();
 
-    const playerPokemon = game.scene.getPlayerPokemon()!;
-    playerPokemon.stats[Stat.ATK] = 100;
-    playerPokemon.stats[Stat.SPATK] = 1;
+      const playerPokemon = game.scene.getPlayerPokemon()!;
+      playerPokemon.stats[Stat.ATK] = 100;
+      playerPokemon.stats[Stat.SPATK] = 1;
 
-    game.move.select(Moves.TERA_BLAST);
-    await game.phaseInterceptor.to("TurnEndPhase");
-    expect(game.scene.getEnemyPokemon()!.battleData.abilityRevealed).toBe(true);
-  }, 20000);
+      game.move.select(Moves.TERA_BLAST);
+      await game.phaseInterceptor.to("TurnEndPhase");
+      expect(game.scene.getEnemyPokemon()!.battleData.abilityRevealed).toBe(true);
+    },
+    20000,
+  );
 
   it("causes stat drops if user is Stellar tera type", async () => {
     game.override.startingHeldItems([{ name: "TERA_SHARD", type: Type.STELLAR }]);

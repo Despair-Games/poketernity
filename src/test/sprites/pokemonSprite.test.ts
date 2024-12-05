@@ -78,7 +78,9 @@ describe("check if every variant's sprite are correctly set", () => {
                   const trimmedUrlSpriteFilepath = `${trimmedDirpath}${id}_${variant}.json`;
                   const spriteFileExists = fs.existsSync(urlSpriteJsonFile);
                   if (spriteFileExists) {
-                    errors.push(`[${id}] [${mlist[id]}] - the value should be 2 for the index ${index} - ${trimmedUrlSpriteFilepath}`);
+                    errors.push(
+                      `[${id}] [${mlist[id]}] - the value should be 2 for the index ${index} - ${trimmedUrlSpriteFilepath}`,
+                    );
                   }
                 }
               }
@@ -95,7 +97,9 @@ describe("check if every variant's sprite are correctly set", () => {
               const urlSpriteJsonFile = `${dirpath}${name}_${parseInt(key, 10) + 1}.json`;
               const spriteFileExists = fs.existsSync(urlSpriteJsonFile);
               if (!spriteFileExists) {
-                errors.push(`[${name}] [${mlist[name]}] - the value should be 1 for the index ${key} - ${trimmedFilePath}`);
+                errors.push(
+                  `[${name}] [${mlist[name]}] - the value should be 1 for the index ${key} - ${trimmedFilePath}`,
+                );
               }
             }
           }

@@ -13,54 +13,107 @@ export enum Tutorial {
   Pokerus = "POKERUS",
   Stat_Change = "STAT_CHANGE",
   Select_Item = "SELECT_ITEM",
-  Egg_Gacha = "EGG_GACHA"
+  Egg_Gacha = "EGG_GACHA",
 }
 
 const tutorialHandlers = {
   [Tutorial.Intro]: () => {
-    return new Promise<void>(resolve => {
+    return new Promise<void>((resolve) => {
       globalScene.ui.showText(i18next.t("tutorial:intro"), null, () => resolve(), null, true);
     });
   },
   [Tutorial.Access_Menu]: () => {
-    return new Promise<void>(resolve => {
+    return new Promise<void>((resolve) => {
       if (globalScene.enableTouchControls) {
         return resolve();
       }
-      globalScene.showFieldOverlay(1000).then(() => globalScene.ui.showText(i18next.t("tutorial:accessMenu"), null, () => globalScene.hideFieldOverlay(1000).then(() => resolve()), null, true));
+      globalScene
+        .showFieldOverlay(1000)
+        .then(() =>
+          globalScene.ui.showText(
+            i18next.t("tutorial:accessMenu"),
+            null,
+            () => globalScene.hideFieldOverlay(1000).then(() => resolve()),
+            null,
+            true,
+          ),
+        );
     });
   },
   [Tutorial.Menu]: () => {
-    return new Promise<void>(resolve => {
+    return new Promise<void>((resolve) => {
       globalScene.gameData.saveTutorialFlag(Tutorial.Access_Menu, true);
-      globalScene.ui.showText(i18next.t("tutorial:menu"), null, () => globalScene.ui.showText("", null, () => resolve()), null, true);
+      globalScene.ui.showText(
+        i18next.t("tutorial:menu"),
+        null,
+        () => globalScene.ui.showText("", null, () => resolve()),
+        null,
+        true,
+      );
     });
   },
   [Tutorial.Starter_Select]: () => {
-    return new Promise<void>(resolve => {
-      globalScene.ui.showText(i18next.t("tutorial:starterSelect"), null, () => globalScene.ui.showText("", null, () => resolve()), null, true);
+    return new Promise<void>((resolve) => {
+      globalScene.ui.showText(
+        i18next.t("tutorial:starterSelect"),
+        null,
+        () => globalScene.ui.showText("", null, () => resolve()),
+        null,
+        true,
+      );
     });
   },
   [Tutorial.Pokerus]: () => {
-    return new Promise<void>(resolve => {
-      globalScene.ui.showText(i18next.t("tutorial:pokerus"), null, () => globalScene.ui.showText("", null, () => resolve()), null, true);
+    return new Promise<void>((resolve) => {
+      globalScene.ui.showText(
+        i18next.t("tutorial:pokerus"),
+        null,
+        () => globalScene.ui.showText("", null, () => resolve()),
+        null,
+        true,
+      );
     });
   },
   [Tutorial.Stat_Change]: () => {
-    return new Promise<void>(resolve => {
-      globalScene.showFieldOverlay(1000).then(() => globalScene.ui.showText(i18next.t("tutorial:statChange"), null, () => globalScene.ui.showText("", null, () => globalScene.hideFieldOverlay(1000).then(() => resolve())), null, true));
+    return new Promise<void>((resolve) => {
+      globalScene
+        .showFieldOverlay(1000)
+        .then(() =>
+          globalScene.ui.showText(
+            i18next.t("tutorial:statChange"),
+            null,
+            () => globalScene.ui.showText("", null, () => globalScene.hideFieldOverlay(1000).then(() => resolve())),
+            null,
+            true,
+          ),
+        );
     });
   },
   [Tutorial.Select_Item]: () => {
-    return new Promise<void>(resolve => {
+    return new Promise<void>((resolve) => {
       globalScene.ui.setModeWithoutClear(Mode.MESSAGE).then(() => {
-        globalScene.ui.showText(i18next.t("tutorial:selectItem"), null, () => globalScene.ui.showText("", null, () => globalScene.ui.setModeWithoutClear(Mode.MODIFIER_SELECT).then(() => resolve())), null, true);
+        globalScene.ui.showText(
+          i18next.t("tutorial:selectItem"),
+          null,
+          () =>
+            globalScene.ui.showText("", null, () =>
+              globalScene.ui.setModeWithoutClear(Mode.MODIFIER_SELECT).then(() => resolve()),
+            ),
+          null,
+          true,
+        );
       });
     });
   },
   [Tutorial.Egg_Gacha]: () => {
-    return new Promise<void>(resolve => {
-      globalScene.ui.showText(i18next.t("tutorial:eggGacha"), null, () => globalScene.ui.showText("", null, () => resolve()), null, true);
+    return new Promise<void>((resolve) => {
+      globalScene.ui.showText(
+        i18next.t("tutorial:eggGacha"),
+        null,
+        () => globalScene.ui.showText("", null, () => resolve()),
+        null,
+        true,
+      );
     });
   },
 };
@@ -120,7 +173,7 @@ async function showTutorialOverlay(handler: UiHandler) {
       ease: "Sine.easeOut",
       onComplete: () => {
         return true;
-      }
+      },
     });
   } else {
     return true;
@@ -142,10 +195,9 @@ async function hideTutorialOverlay(handler: UiHandler) {
       ease: "Sine.easeOut",
       onComplete: () => {
         return true;
-      }
+      },
     });
   } else {
     return true;
   }
 }
-

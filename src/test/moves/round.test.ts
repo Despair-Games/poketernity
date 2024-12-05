@@ -58,8 +58,13 @@ describe("Moves - Round", () => {
       await game.phaseInterceptor.to("MoveEndPhase");
     }
 
-    expect(actualTurnOrder).toEqual([ BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2 ]);
-    const powerResults = spy.mock.results.map(result => result.value);
-    expect(powerResults).toEqual( [ 60, 120, 120 ]);
+    expect(actualTurnOrder).toEqual([
+      BattlerIndex.PLAYER,
+      BattlerIndex.PLAYER_2,
+      BattlerIndex.ENEMY,
+      BattlerIndex.ENEMY_2,
+    ]);
+    const powerResults = spy.mock.results.map((result) => result.value);
+    expect(powerResults).toEqual([ 60, 120, 120 ]);
   });
 });

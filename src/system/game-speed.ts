@@ -15,7 +15,7 @@ export function initGameSpeed() {
     if (value instanceof Utils.FixedInt) {
       return (value as Utils.FixedInt).value;
     }
-    return thisArg.gameSpeed === 1 ? value : Math.ceil(value /= thisArg.gameSpeed);
+    return thisArg.gameSpeed === 1 ? value : Math.ceil((value /= thisArg.gameSpeed));
   };
 
   const originalAddEvent = this.time.addEvent;
@@ -26,12 +26,18 @@ export function initGameSpeed() {
     return originalAddEvent.apply(this, [ config ]);
   };
   const originalTweensAdd = this.tweens.add;
-  this.tweens.add = function (config: Phaser.Types.Tweens.TweenBuilderConfig | Phaser.Types.Tweens.TweenChainBuilderConfig | Phaser.Tweens.Tween | Phaser.Tweens.TweenChain) {
+  this.tweens.add = function (
+    config:
+      | Phaser.Types.Tweens.TweenBuilderConfig
+      | Phaser.Types.Tweens.TweenChainBuilderConfig
+      | Phaser.Tweens.Tween
+      | Phaser.Tweens.TweenChain,
+  ) {
     if (config.loopDelay) {
       config.loopDelay = transformValue(config.loopDelay as number);
     }
 
-    if (!(config instanceof Phaser.Tweens.TweenChain) ) {
+    if (!(config instanceof Phaser.Tweens.TweenChain)) {
       if (config.duration) {
         config.duration = transformValue(config.duration);
       }
@@ -53,7 +59,7 @@ export function initGameSpeed() {
   const originalTweensChain = this.tweens.chain;
   this.tweens.chain = function (config: Phaser.Types.Tweens.TweenChainBuilderConfig): Phaser.Tweens.TweenChain {
     if (config.tweens) {
-      config.tweens.forEach(t => {
+      config.tweens.forEach((t) => {
         if (t.duration) {
           t.duration = transformValue(t.duration);
         }
@@ -94,12 +100,8 @@ export function initGameSpeed() {
   };
 
   const originalFadeOut = SoundFade.fadeOut;
-  SoundFade.fadeOut = ((
-    scene: Phaser.Scene,
-    sound: Phaser.Sound.BaseSound,
-    duration: number,
-    destroy?: boolean
-  ) => originalFadeOut(globalScene, sound, transformValue(duration), destroy)) as FadeOut;
+  SoundFade.fadeOut = ((scene: Phaser.Scene, sound: Phaser.Sound.BaseSound, duration: number, destroy?: boolean) =>
+    originalFadeOut(globalScene, sound, transformValue(duration), destroy)) as FadeOut;
 
   const originalFadeIn = SoundFade.fadeIn;
   SoundFade.fadeIn = ((
@@ -107,6 +109,6 @@ export function initGameSpeed() {
     sound: string | Phaser.Sound.BaseSound,
     duration: number,
     endVolume?: number,
-    startVolume?: number
+    startVolume?: number,
   ) => originalFadeIn(globalScene, sound, transformValue(duration), endVolume, startVolume)) as FadeIn;
 }

@@ -1,18 +1,18 @@
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
 
-export type LevelMoves = ([integer, Moves])[];
+export type LevelMoves = [integer, Moves][];
 
 interface PokemonSpeciesLevelMoves {
-  [key: integer]: LevelMoves
+  [key: integer]: LevelMoves;
 }
 
 interface PokemonFormLevelMoves {
-  [key: integer]: LevelMoves
+  [key: integer]: LevelMoves;
 }
 
 interface PokemonSpeciesFormLevelMoves {
-  [key: integer]: PokemonFormLevelMoves
+  [key: integer]: PokemonFormLevelMoves;
 }
 
 /** Moves that can only be learned with a memory-mushroom */
@@ -2285,9 +2285,7 @@ export const pokemonSpeciesLevelMoves: PokemonSpeciesLevelMoves = {
     [ 60, Moves.PERISH_SONG ],
     [ 65, Moves.SHEER_COLD ],
   ],
-  [Species.DITTO]: [
-    [ 1, Moves.TRANSFORM ],
-  ],
+  [Species.DITTO]: [[ 1, Moves.TRANSFORM ]],
   [Species.EEVEE]: [
     [ 1, Moves.TACKLE ],
     [ 1, Moves.TAIL_WHIP ],
@@ -3531,9 +3529,7 @@ export const pokemonSpeciesLevelMoves: PokemonSpeciesLevelMoves = {
     [ 46, Moves.PERISH_SONG ],
     [ 50, Moves.POWER_GEM ],
   ],
-  [Species.UNOWN]: [
-    [ 1, Moves.HIDDEN_POWER ],
-  ],
+  [Species.UNOWN]: [[ 1, Moves.HIDDEN_POWER ]],
   [Species.WOBBUFFET]: [
     [ EVOLVE_MOVE, Moves.COUNTER ],
     [ EVOLVE_MOVE, Moves.DESTINY_BOND ],
@@ -3947,7 +3943,8 @@ export const pokemonSpeciesLevelMoves: PokemonSpeciesLevelMoves = {
     [ 48, Moves.SOAK ],
     [ 54, Moves.HYPER_BEAM ],
   ],
-  [Species.DELIBIRD]: [ // Given a custom level up learnset
+  [Species.DELIBIRD]: [
+    // Given a custom level up learnset
     [ 1, Moves.PRESENT ],
     [ 1, Moves.METRONOME ],
     [ 5, Moves.FAKE_OUT ],
@@ -6635,9 +6632,7 @@ export const pokemonSpeciesLevelMoves: PokemonSpeciesLevelMoves = {
     [ 55, Moves.FLAMETHROWER ],
     [ 73, Moves.DOUBLE_EDGE ],
   ],
-  [Species.BELDUM]: [
-    [ 1, Moves.TACKLE ],
-  ],
+  [Species.BELDUM]: [[ 1, Moves.TACKLE ]],
   [Species.METANG]: [
     [ EVOLVE_MOVE, Moves.CONFUSION ],
     [ EVOLVE_MOVE, Moves.METAL_CLAW ],
@@ -14449,9 +14444,7 @@ export const pokemonSpeciesLevelMoves: PokemonSpeciesLevelMoves = {
     [ 42, Moves.SWAGGER ],
     [ 50, Moves.BRAVE_BIRD ],
   ],
-  [Species.BLIPBUG]: [
-    [ 1, Moves.STRUGGLE_BUG ],
-  ],
+  [Species.BLIPBUG]: [[ 1, Moves.STRUGGLE_BUG ]],
   [Species.DOTTLER]: [
     [ EVOLVE_MOVE, Moves.CONFUSION ],
     [ EVOLVE_MOVE, Moves.LIGHT_SCREEN ],
@@ -18931,11 +18924,12 @@ export const pokemonSpeciesLevelMoves: PokemonSpeciesLevelMoves = {
     [ 56, Moves.MOONBLAST ],
     [ 64, Moves.HAMMER_ARM ],
     [ 70, Moves.BLOOD_MOON ],
-  ]
+  ],
 };
 
 export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
-  [Species.PIKACHU]: { // Custom
+  [Species.PIKACHU]: {
+    // Custom
     1: [
       [ 1, Moves.TAIL_WHIP ],
       [ 1, Moves.GROWL ],
@@ -19130,7 +19124,8 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [ 48, Moves.PIKA_PAPOW ],
     ],
   },
-  [Species.EEVEE]: { // Custom
+  [Species.EEVEE]: {
+    // Custom
     1: [
       [ 1, Moves.TACKLE ],
       [ 1, Moves.TAIL_WHIP ],
@@ -19381,7 +19376,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [ 82, Moves.SWEET_KISS ],
       [ 91, Moves.LEAF_STORM ],
       [ 100, Moves.SEED_FLARE ],
-    ]
+    ],
   },
   [Species.KYUREM]: {
     1: [
@@ -19940,6 +19935,6 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [ 50, Moves.THRASH ],
       [ 55, Moves.WAVE_CRASH ],
       [ 60, Moves.CLOSE_COMBAT ],
-    ]
-  }
+    ],
+  },
 };

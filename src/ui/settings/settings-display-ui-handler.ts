@@ -1,7 +1,7 @@
 import { Mode } from "../ui";
 import AbstractSettingsUiHandler from "./abstract-settings-ui-handler";
 import { SettingKeys, SettingType } from "#app/system/settings/settings";
-"#app/inputs-controller";
+("#app/inputs-controller");
 
 export default class SettingsDisplayUiHandler extends AbstractSettingsUiHandler {
   /**
@@ -18,7 +18,7 @@ export default class SettingsDisplayUiHandler extends AbstractSettingsUiHandler 
      * Update to current language from default value.
      * - default value is 'English'
      */
-    const languageIndex = this.settings.findIndex(s => s.key === SettingKeys.Language);
+    const languageIndex = this.settings.findIndex((s) => s.key === SettingKeys.Language);
     if (languageIndex >= 0) {
       const currentLocale = localStorage.getItem("prLang");
       switch (currentLocale) {

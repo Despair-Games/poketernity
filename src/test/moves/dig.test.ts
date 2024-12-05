@@ -55,7 +55,7 @@ describe("Moves - Dig", () => {
     expect(enemyPokemon.hp).toBeLessThan(enemyPokemon.getMaxHp());
     expect(playerPokemon.getMoveHistory()).toHaveLength(2);
 
-    const playerDig = playerPokemon.getMoveset().find(mv => mv && mv.moveId === Moves.DIG);
+    const playerDig = playerPokemon.getMoveset().find((mv) => mv && mv.moveId === Moves.DIG);
     expect(playerDig?.ppUsed).toBe(1);
   });
 
@@ -75,9 +75,7 @@ describe("Moves - Dig", () => {
   });
 
   it("should not expend PP when the attack phase is cancelled", async () => {
-    game.override
-      .enemyAbility(Abilities.NO_GUARD)
-      .enemyMoveset(Moves.SPORE);
+    game.override.enemyAbility(Abilities.NO_GUARD).enemyMoveset(Moves.SPORE);
 
     await game.classicMode.startBattle([ Species.MAGIKARP ]);
 
@@ -89,7 +87,7 @@ describe("Moves - Dig", () => {
     expect(playerPokemon.getTag(BattlerTagType.UNDERGROUND)).toBeUndefined();
     expect(playerPokemon.status?.effect).toBe(StatusEffect.SLEEP);
 
-    const playerDig = playerPokemon.getMoveset().find(mv => mv && mv.moveId === Moves.DIG);
+    const playerDig = playerPokemon.getMoveset().find((mv) => mv && mv.moveId === Moves.DIG);
     expect(playerDig?.ppUsed).toBe(0);
   });
 

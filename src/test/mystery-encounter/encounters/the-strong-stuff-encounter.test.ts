@@ -7,7 +7,10 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vite
 import { getPokemonSpecies } from "#app/data/pokemon-species";
 import * as BattleAnims from "#app/data/battle-anims";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { runMysteryEncounterToEnd, skipBattleRunMysteryEncounterRewardsPhase } from "#test/mystery-encounter/encounter-test-utils";
+import {
+  runMysteryEncounterToEnd,
+  skipBattleRunMysteryEncounterRewardsPhase,
+} from "#test/mystery-encounter/encounter-test-utils";
 import { Moves } from "#enums/moves";
 import BattleScene from "#app/battle-scene";
 import { TheStrongStuffEncounter } from "#app/data/mystery-encounters/encounters/the-strong-stuff-encounter";
@@ -56,7 +59,7 @@ describe("The Strong Stuff - Mystery Encounter", () => {
       new Map<Biome, MysteryEncounterType[]>([
         [ Biome.CAVE, [ MysteryEncounterType.THE_STRONG_STUFF ]],
         [ Biome.MOUNTAIN, [ MysteryEncounterType.MYSTERIOUS_CHALLENGERS ]],
-      ])
+      ]),
     );
   });
 
@@ -115,10 +118,10 @@ describe("The Strong Stuff - Mystery Encounter", () => {
             moveSet: [ Moves.INFESTATION, Moves.SALT_CURE, Moves.GASTRO_ACID, Moves.HEAL_ORDER ],
             modifierConfigs: expect.any(Array),
             tags: [ BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON ],
-            mysteryEncounterBattleEffects: expect.any(Function)
-          }
+            mysteryEncounterBattleEffects: expect.any(Function),
+          },
         ],
-      }
+      },
     ]);
     await vi.waitFor(() => expect(moveInitSpy).toHaveBeenCalled());
     await vi.waitFor(() => expect(moveLoadSpy).toHaveBeenCalled());
@@ -144,10 +147,10 @@ describe("The Strong Stuff - Mystery Encounter", () => {
     it("should lower stats of 2 highest BST and raise stats for rest of party", async () => {
       await game.runToMysteryEncounter(MysteryEncounterType.THE_STRONG_STUFF, defaultParty);
 
-      const bstsPrior = scene.getPlayerParty().map(p => p.getSpeciesForm().getBaseStatTotal());
+      const bstsPrior = scene.getPlayerParty().map((p) => p.getSpeciesForm().getBaseStatTotal());
       await runMysteryEncounterToEnd(game, 1);
 
-      const bstsAfter = scene.getPlayerParty().map(p => {
+      const bstsAfter = scene.getPlayerParty().map((p) => {
         const baseStats = p.getSpeciesForm().baseStats.slice(0);
         scene.applyModifiers(PokemonBaseStatTotalModifier, true, p, baseStats);
         return baseStats.reduce((a, b) => a + b);
@@ -198,18 +201,31 @@ describe("The Strong Stuff - Mystery Encounter", () => {
       expect(enemyField[0].summonData.statStages).toEqual([ 0, 2, 0, 2, 0, 0, 0 ]);
       const shuckleItems = enemyField[0].getHeldItems();
       expect(shuckleItems.length).toBe(5);
-      expect(shuckleItems.find(m => m instanceof BerryModifier && m.berryType === BerryType.SITRUS)?.stackCount).toBe(1);
-      expect(shuckleItems.find(m => m instanceof BerryModifier && m.berryType === BerryType.ENIGMA)?.stackCount).toBe(1);
-      expect(shuckleItems.find(m => m instanceof BerryModifier && m.berryType === BerryType.GANLON)?.stackCount).toBe(1);
-      expect(shuckleItems.find(m => m instanceof BerryModifier && m.berryType === BerryType.APICOT)?.stackCount).toBe(1);
-      expect(shuckleItems.find(m => m instanceof BerryModifier && m.berryType === BerryType.LUM)?.stackCount).toBe(2);
-      expect(enemyField[0].moveset).toEqual([ new PokemonMove(Moves.INFESTATION), new PokemonMove(Moves.SALT_CURE), new PokemonMove(Moves.GASTRO_ACID), new PokemonMove(Moves.HEAL_ORDER) ]);
+      expect(shuckleItems.find((m) => m instanceof BerryModifier && m.berryType === BerryType.SITRUS)?.stackCount).toBe(
+        1,
+      );
+      expect(shuckleItems.find((m) => m instanceof BerryModifier && m.berryType === BerryType.ENIGMA)?.stackCount).toBe(
+        1,
+      );
+      expect(shuckleItems.find((m) => m instanceof BerryModifier && m.berryType === BerryType.GANLON)?.stackCount).toBe(
+        1,
+      );
+      expect(shuckleItems.find((m) => m instanceof BerryModifier && m.berryType === BerryType.APICOT)?.stackCount).toBe(
+        1,
+      );
+      expect(shuckleItems.find((m) => m instanceof BerryModifier && m.berryType === BerryType.LUM)?.stackCount).toBe(2);
+      expect(enemyField[0].moveset).toEqual([
+        new PokemonMove(Moves.INFESTATION),
+        new PokemonMove(Moves.SALT_CURE),
+        new PokemonMove(Moves.GASTRO_ACID),
+        new PokemonMove(Moves.HEAL_ORDER),
+      ]);
 
       // Should have used moves pre-battle
-      const movePhases = phaseSpy.mock.calls.filter(p => p[0] instanceof MovePhase).map(p => p[0]);
+      const movePhases = phaseSpy.mock.calls.filter((p) => p[0] instanceof MovePhase).map((p) => p[0]);
       expect(movePhases.length).toBe(2);
-      expect(movePhases.filter(p => (p as MovePhase).move.moveId === Moves.GASTRO_ACID).length).toBe(1);
-      expect(movePhases.filter(p => (p as MovePhase).move.moveId === Moves.STEALTH_ROCK).length).toBe(1);
+      expect(movePhases.filter((p) => (p as MovePhase).move.moveId === Moves.GASTRO_ACID).length).toBe(1);
+      expect(movePhases.filter((p) => (p as MovePhase).move.moveId === Moves.STEALTH_ROCK).length).toBe(1);
     });
 
     it("should have Soul Dew in rewards", async () => {
@@ -221,7 +237,9 @@ describe("The Strong Stuff - Mystery Encounter", () => {
       await game.phaseInterceptor.run(SelectModifierPhase);
 
       expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.handlers.find(h => h instanceof ModifierSelectUiHandler) as ModifierSelectUiHandler;
+      const modifierSelectHandler = scene.ui.handlers.find(
+        (h) => h instanceof ModifierSelectUiHandler,
+      ) as ModifierSelectUiHandler;
       expect(modifierSelectHandler.options.length).toEqual(3);
       expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toEqual("SOUL_DEW");
     });

@@ -224,9 +224,7 @@ describe("Abilities - Ice Face", () => {
   });
 
   it("doesn't trigger if user is behind a substitute", async () => {
-    game.override
-      .enemyMoveset(Moves.SUBSTITUTE)
-      .moveset(Moves.POWER_TRIP);
+    game.override.enemyMoveset(Moves.SUBSTITUTE).moveset(Moves.POWER_TRIP);
     await game.classicMode.startBattle();
 
     game.move.select(Moves.POWER_TRIP);

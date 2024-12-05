@@ -51,7 +51,11 @@ describe("Moves - Aurora Veil", () => {
     game.move.select(moveToUse);
 
     await game.phaseInterceptor.to(TurnEndPhase);
-    const mockedDmg = getMockedMoveDamage(game.scene.getEnemyPokemon()!, game.scene.getPlayerPokemon()!, allMoves[moveToUse]);
+    const mockedDmg = getMockedMoveDamage(
+      game.scene.getEnemyPokemon()!,
+      game.scene.getPlayerPokemon()!,
+      allMoves[moveToUse],
+    );
 
     expect(mockedDmg).toBe(allMoves[moveToUse].power * singleBattleMultiplier);
   });
@@ -66,7 +70,11 @@ describe("Moves - Aurora Veil", () => {
     game.move.select(moveToUse, 1);
 
     await game.phaseInterceptor.to(TurnEndPhase);
-    const mockedDmg = getMockedMoveDamage(game.scene.getEnemyPokemon()!, game.scene.getPlayerPokemon()!, allMoves[moveToUse]);
+    const mockedDmg = getMockedMoveDamage(
+      game.scene.getEnemyPokemon()!,
+      game.scene.getPlayerPokemon()!,
+      allMoves[moveToUse],
+    );
 
     expect(mockedDmg).toBe(allMoves[moveToUse].power * doubleBattleMultiplier);
   });
@@ -79,7 +87,11 @@ describe("Moves - Aurora Veil", () => {
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
-    const mockedDmg = getMockedMoveDamage(game.scene.getEnemyPokemon()!, game.scene.getPlayerPokemon()!, allMoves[moveToUse]);
+    const mockedDmg = getMockedMoveDamage(
+      game.scene.getEnemyPokemon()!,
+      game.scene.getPlayerPokemon()!,
+      allMoves[moveToUse],
+    );
 
     expect(mockedDmg).toBe(allMoves[moveToUse].power * singleBattleMultiplier);
   });
@@ -94,7 +106,11 @@ describe("Moves - Aurora Veil", () => {
     game.move.select(moveToUse, 1);
 
     await game.phaseInterceptor.to(TurnEndPhase);
-    const mockedDmg = getMockedMoveDamage(game.scene.getEnemyPokemon()!, game.scene.getPlayerPokemon()!, allMoves[moveToUse]);
+    const mockedDmg = getMockedMoveDamage(
+      game.scene.getEnemyPokemon()!,
+      game.scene.getPlayerPokemon()!,
+      allMoves[moveToUse],
+    );
 
     expect(mockedDmg).toBe(allMoves[moveToUse].power * doubleBattleMultiplier);
   });
@@ -114,7 +130,14 @@ const getMockedMoveDamage = (defender: Pokemon, attacker: Pokemon, move: Move) =
   const side = defender.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
 
   if (globalScene.arena.getTagOnSide(ArenaTagType.AURORA_VEIL, side)) {
-    globalScene.arena.applyTagsForSide(ArenaTagType.AURORA_VEIL, side, false, attacker, move.category, multiplierHolder);
+    globalScene.arena.applyTagsForSide(
+      ArenaTagType.AURORA_VEIL,
+      side,
+      false,
+      attacker,
+      move.category,
+      multiplierHolder,
+    );
   }
 
   return move.power * multiplierHolder.value;

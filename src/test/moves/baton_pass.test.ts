@@ -59,9 +59,7 @@ describe("Moves - Baton Pass", () => {
 
   it("passes stat stage buffs when AI uses it", async () => {
     // arrange
-    game.override
-      .startingWave(5)
-      .enemyMoveset(new Array(4).fill([ Moves.NASTY_PLOT ]));
+    game.override.startingWave(5).enemyMoveset(new Array(4).fill([ Moves.NASTY_PLOT ]));
     await game.classicMode.startBattle([ Species.RAICHU, Species.SHUCKLE ]);
 
     // round 1 - ai buffs
@@ -87,7 +85,7 @@ describe("Moves - Baton Pass", () => {
       "MoveEffectPhase",
       "SwitchSummonPhase",
       "SummonPhase",
-      "PostSummonPhase"
+      "PostSummonPhase",
     ]);
   }, 20000);
 

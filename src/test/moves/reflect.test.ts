@@ -49,7 +49,11 @@ describe("Moves - Reflect", () => {
     game.move.select(moveToUse);
 
     await game.phaseInterceptor.to(TurnEndPhase);
-    const mockedDmg = getMockedMoveDamage(game.scene.getEnemyPokemon()!, game.scene.getPlayerPokemon()!, allMoves[moveToUse]);
+    const mockedDmg = getMockedMoveDamage(
+      game.scene.getEnemyPokemon()!,
+      game.scene.getPlayerPokemon()!,
+      allMoves[moveToUse],
+    );
 
     expect(mockedDmg).toBe(allMoves[moveToUse].power * singleBattleMultiplier);
   });
@@ -64,7 +68,11 @@ describe("Moves - Reflect", () => {
     game.move.select(moveToUse, 1);
 
     await game.phaseInterceptor.to(TurnEndPhase);
-    const mockedDmg = getMockedMoveDamage(game.scene.getEnemyPokemon()!, game.scene.getPlayerPokemon()!, allMoves[moveToUse]);
+    const mockedDmg = getMockedMoveDamage(
+      game.scene.getEnemyPokemon()!,
+      game.scene.getPlayerPokemon()!,
+      allMoves[moveToUse],
+    );
 
     expect(mockedDmg).toBe(allMoves[moveToUse].power * doubleBattleMultiplier);
   });
@@ -77,7 +85,11 @@ describe("Moves - Reflect", () => {
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
-    const mockedDmg = getMockedMoveDamage(game.scene.getEnemyPokemon()!, game.scene.getPlayerPokemon()!, allMoves[moveToUse]);
+    const mockedDmg = getMockedMoveDamage(
+      game.scene.getEnemyPokemon()!,
+      game.scene.getPlayerPokemon()!,
+      allMoves[moveToUse],
+    );
 
     expect(mockedDmg).toBe(allMoves[moveToUse].power);
   });

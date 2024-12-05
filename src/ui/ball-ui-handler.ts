@@ -34,7 +34,10 @@ export default class BallUiHandler extends UiHandler {
     optionsTextContent += "Cancel";
     const optionsText = addTextObject(0, 0, optionsTextContent, TextStyle.WINDOW, { align: "right", maxLines: 6 });
     const optionsTextWidth = optionsText.displayWidth;
-    this.pokeballSelectContainer = globalScene.add.container((globalScene.game.canvas.width / 6) - 51 - Math.max(64, optionsTextWidth), -49);
+    this.pokeballSelectContainer = globalScene.add.container(
+      globalScene.game.canvas.width / 6 - 51 - Math.max(64, optionsTextWidth),
+      -49,
+    );
     this.pokeballSelectContainer.setVisible(false);
     ui.add(this.pokeballSelectContainer);
 
@@ -107,7 +110,11 @@ export default class BallUiHandler extends UiHandler {
   }
 
   updateCounts() {
-    this.countsText.setText(Object.values(globalScene.pokeballCounts).map(c => `x${c}`).join("\n"));
+    this.countsText.setText(
+      Object.values(globalScene.pokeballCounts)
+        .map((c) => `x${c}`)
+        .join("\n"),
+    );
   }
 
   setCursor(cursor: integer): boolean {

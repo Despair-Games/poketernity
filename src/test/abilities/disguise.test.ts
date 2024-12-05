@@ -8,7 +8,6 @@ import { StatusEffect } from "#enums/status-effect";
 import GameManager from "#test/utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
-
 describe("Abilities - Disguise", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
@@ -134,7 +133,7 @@ describe("Abilities - Disguise", () => {
   it("persists form change when wave changes with no arena reset", async () => {
     game.override.starterSpecies(0);
     game.override.starterForms({
-      [Species.MIMIKYU]: bustedForm
+      [Species.MIMIKYU]: bustedForm,
     });
     await game.classicMode.startBattle([ Species.FURRET, Species.MIMIKYU ]);
 
@@ -152,7 +151,7 @@ describe("Abilities - Disguise", () => {
     game.override.startingWave(4);
     game.override.starterSpecies(Species.MIMIKYU);
     game.override.starterForms({
-      [Species.MIMIKYU]: bustedForm
+      [Species.MIMIKYU]: bustedForm,
     });
 
     await game.classicMode.startBattle();
@@ -172,7 +171,7 @@ describe("Abilities - Disguise", () => {
     game.override.startingWave(10);
     game.override.starterSpecies(0);
     game.override.starterForms({
-      [Species.MIMIKYU]: bustedForm
+      [Species.MIMIKYU]: bustedForm,
     });
 
     await game.classicMode.startBattle([ Species.MIMIKYU, Species.FURRET ]);
@@ -225,9 +224,7 @@ describe("Abilities - Disguise", () => {
   });
 
   it("doesn't trigger if user is behind a substitute", async () => {
-    game.override
-      .enemyMoveset(Moves.SUBSTITUTE)
-      .moveset(Moves.POWER_TRIP);
+    game.override.enemyMoveset(Moves.SUBSTITUTE).moveset(Moves.POWER_TRIP);
     await game.classicMode.startBattle();
 
     game.move.select(Moves.POWER_TRIP);

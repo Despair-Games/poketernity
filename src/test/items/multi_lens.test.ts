@@ -38,8 +38,9 @@ describe("Items - Multi Lens", () => {
 
   it.each([
     { stackCount: 1, firstHitDamage: 0.75 },
-    { stackCount: 2, firstHitDamage: 0.50 }
-  ])("$stackCount count: should deal {$firstHitDamage}x damage on the first hit, then hit $stackCount times for 0.25x",
+    { stackCount: 2, firstHitDamage: 0.5 },
+  ])(
+    "$stackCount count: should deal {$firstHitDamage}x damage on the first hit, then hit $stackCount times for 0.25x",
     async ({ stackCount, firstHitDamage }) => {
       game.override.startingHeldItems([{ name: "MULTI_LENS", count: stackCount }]);
 
@@ -53,12 +54,13 @@ describe("Items - Multi Lens", () => {
       await game.setTurnOrder([ BattlerIndex.PLAYER, BattlerIndex.ENEMY ]);
 
       await game.phaseInterceptor.to("MoveEndPhase");
-      const damageResults = spy.mock.results.map(result => result.value?.damage);
+      const damageResults = spy.mock.results.map((result) => result.value?.damage);
 
       expect(damageResults).toHaveLength(1 + stackCount);
       expect(damageResults[0]).toBe(firstHitDamage * 100);
-      damageResults.slice(1).forEach(dmg => expect(dmg).toBe(25));
-    });
+      damageResults.slice(1).forEach((dmg) => expect(dmg).toBe(25));
+    },
+  );
 
   it("should stack additively with Parental Bond", async () => {
     game.override.ability(Abilities.PARENTAL_BOND);
@@ -97,13 +99,11 @@ describe("Items - Multi Lens", () => {
   });
 
   it("should enhance multi-target moves", async () => {
-    game.override
-      .battleType("double")
-      .moveset([ Moves.SWIFT, Moves.SPLASH ]);
+    game.override.battleType("double").moveset([ Moves.SWIFT, Moves.SPLASH ]);
 
     await game.classicMode.startBattle([ Species.MAGIKARP, Species.FEEBAS ]);
 
-    const [ magikarp, ] = game.scene.getPlayerField();
+    const [ magikarp ] = game.scene.getPlayerField();
 
     game.move.select(Moves.SWIFT, 0);
     game.move.select(Moves.SPLASH, 1);
@@ -116,8 +116,7 @@ describe("Items - Multi Lens", () => {
   });
 
   it("should enhance fixed-damage moves while also applying damage reduction", async () => {
-    game.override.startingHeldItems([{ name: "MULTI_LENS", count: 1 }])
-      .moveset(Moves.SEISMIC_TOSS);
+    game.override.startingHeldItems([{ name: "MULTI_LENS", count: 1 }]).moveset(Moves.SEISMIC_TOSS);
 
     await game.classicMode.startBattle([ Species.MAGIKARP ]);
 
@@ -129,7 +128,7 @@ describe("Items - Multi Lens", () => {
     await game.setTurnOrder([ BattlerIndex.PLAYER, BattlerIndex.ENEMY ]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
-    const damageResults = spy.mock.results.map(result => result.value?.damage);
+    const damageResults = spy.mock.results.map((result) => result.value?.damage);
 
     expect(damageResults).toHaveLength(2);
     expect(damageResults[0]).toBe(Math.floor(playerPokemon.level * 0.75));
@@ -137,7 +136,8 @@ describe("Items - Multi Lens", () => {
   });
 
   it("should result in correct damage for hp% attacks with 1 lens", async () => {
-    game.override.startingHeldItems([{ name: "MULTI_LENS", count: 1 }])
+    game.override
+      .startingHeldItems([{ name: "MULTI_LENS", count: 1 }])
       .moveset(Moves.SUPER_FANG)
       .ability(Abilities.COMPOUND_EYES)
       .enemyLevel(1000)
@@ -154,7 +154,8 @@ describe("Items - Multi Lens", () => {
   });
 
   it("should result in correct damage for hp% attacks with 2 lenses", async () => {
-    game.override.startingHeldItems([{ name: "MULTI_LENS", count: 2 }])
+    game.override
+      .startingHeldItems([{ name: "MULTI_LENS", count: 2 }])
       .moveset(Moves.SUPER_FANG)
       .ability(Abilities.COMPOUND_EYES)
       .enemyMoveset(Moves.SPLASH)
@@ -172,7 +173,8 @@ describe("Items - Multi Lens", () => {
   });
 
   it("should result in correct damage for hp% attacks with 2 lenses + Parental Bond", async () => {
-    game.override.startingHeldItems([{ name: "MULTI_LENS", count: 2 }])
+    game.override
+      .startingHeldItems([{ name: "MULTI_LENS", count: 2 }])
       .moveset(Moves.SUPER_FANG)
       .ability(Abilities.PARENTAL_BOND)
       .passiveAbility(Abilities.COMPOUND_EYES)

@@ -7,7 +7,6 @@ import GameManager from "#test/utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
-
 describe("Moves - Lash Out", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
@@ -35,7 +34,6 @@ describe("Moves - Lash Out", () => {
       .starterSpecies(Species.FEEBAS)
       .ability(Abilities.BALL_FETCH)
       .moveset([ Moves.LASH_OUT ]);
-
   });
 
   it("should deal double damage if the user's stat stages were lowered this turn", async () => {

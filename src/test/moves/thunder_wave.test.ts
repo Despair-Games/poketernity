@@ -7,7 +7,6 @@ import GameManager from "#test/utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
-
 describe("Moves - Thunder Wave", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;

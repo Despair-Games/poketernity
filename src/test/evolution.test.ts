@@ -1,4 +1,8 @@
-import { pokemonEvolutions, SpeciesFormEvolution, SpeciesWildEvolutionDelay } from "#app/data/balance/pokemon-evolutions";
+import {
+  pokemonEvolutions,
+  SpeciesFormEvolution,
+  SpeciesWildEvolutionDelay,
+} from "#app/data/balance/pokemon-evolutions";
 import { Abilities } from "#app/enums/abilities";
 import { Moves } from "#app/enums/moves";
 import { Species } from "#app/enums/species";
@@ -95,7 +99,8 @@ describe("Evolution", () => {
   });
 
   it("should increase both HP and max HP when evolving", async () => {
-    game.override.moveset([ Moves.SURF ])
+    game.override
+      .moveset([ Moves.SURF ])
       .enemySpecies(Species.GOLEM)
       .enemyMoveset(Moves.SPLASH)
       .startingWave(21)
@@ -122,7 +127,8 @@ describe("Evolution", () => {
   });
 
   it("should not fully heal HP when evolving", async () => {
-    game.override.moveset([ Moves.SURF ])
+    game.override
+      .moveset([ Moves.SURF ])
       .enemySpecies(Species.GOLEM)
       .enemyMoveset(Moves.SPLASH)
       .startingWave(21)

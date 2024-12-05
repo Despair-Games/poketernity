@@ -5,7 +5,10 @@ import { MysteryEncounterType } from "#app/enums/mystery-encounter-type";
 import { Species } from "#app/enums/species";
 import GameManager from "#app/test/utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { runMysteryEncounterToEnd, runSelectMysteryEncounterOption } from "#test/mystery-encounter/encounter-test-utils";
+import {
+  runMysteryEncounterToEnd,
+  runSelectMysteryEncounterOption,
+} from "#test/mystery-encounter/encounter-test-utils";
 import BattleScene from "#app/battle-scene";
 import { Mode } from "#app/ui/ui";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
@@ -44,10 +47,8 @@ describe("Fun And Games! - Mystery Encounter", () => {
     game.override.startingBiome(defaultBiome);
     game.override.disableTrainerWaves();
 
-    const biomeMap = new Map<Biome, MysteryEncounterType[]>([
-      [ Biome.VOLCANO, [ MysteryEncounterType.FIGHT_OR_FLIGHT ]],
-    ]);
-    HUMAN_TRANSITABLE_BIOMES.forEach(biome => {
+    const biomeMap = new Map<Biome, MysteryEncounterType[]>([[ Biome.VOLCANO, [ MysteryEncounterType.FIGHT_OR_FLIGHT ]]]);
+    HUMAN_TRANSITABLE_BIOMES.forEach((biome) => {
       biomeMap.set(biome, [ MysteryEncounterType.FUN_AND_GAMES ]);
     });
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(biomeMap);
@@ -69,7 +70,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
       {
         speaker: `${namespace}:speaker`,
         text: `${namespace}:intro_dialogue`,
-      }
+      },
     ]);
     expect(FunAndGamesEncounter.dialogue.encounterOptionsDialogue?.title).toBe(`${namespace}:title`);
     expect(FunAndGamesEncounter.dialogue.encounterOptionsDialogue?.description).toBe(`${namespace}:description`);
@@ -186,7 +187,9 @@ describe("Fun And Games! - Mystery Encounter", () => {
       await game.phaseInterceptor.run(SelectModifierPhase);
 
       expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.handlers.find(h => h instanceof ModifierSelectUiHandler) as ModifierSelectUiHandler;
+      const modifierSelectHandler = scene.ui.handlers.find(
+        (h) => h instanceof ModifierSelectUiHandler,
+      ) as ModifierSelectUiHandler;
       expect(modifierSelectHandler.options.length).toEqual(0);
     });
 
@@ -213,7 +216,9 @@ describe("Fun And Games! - Mystery Encounter", () => {
       await game.phaseInterceptor.run(SelectModifierPhase);
 
       expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.handlers.find(h => h instanceof ModifierSelectUiHandler) as ModifierSelectUiHandler;
+      const modifierSelectHandler = scene.ui.handlers.find(
+        (h) => h instanceof ModifierSelectUiHandler,
+      ) as ModifierSelectUiHandler;
       expect(modifierSelectHandler.options.length).toEqual(1);
       expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toEqual("WIDE_LENS");
     });
@@ -241,7 +246,9 @@ describe("Fun And Games! - Mystery Encounter", () => {
       await game.phaseInterceptor.run(SelectModifierPhase);
 
       expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.handlers.find(h => h instanceof ModifierSelectUiHandler) as ModifierSelectUiHandler;
+      const modifierSelectHandler = scene.ui.handlers.find(
+        (h) => h instanceof ModifierSelectUiHandler,
+      ) as ModifierSelectUiHandler;
       expect(modifierSelectHandler.options.length).toEqual(1);
       expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toEqual("SCOPE_LENS");
     });
@@ -269,7 +276,9 @@ describe("Fun And Games! - Mystery Encounter", () => {
       await game.phaseInterceptor.run(SelectModifierPhase);
 
       expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.handlers.find(h => h instanceof ModifierSelectUiHandler) as ModifierSelectUiHandler;
+      const modifierSelectHandler = scene.ui.handlers.find(
+        (h) => h instanceof ModifierSelectUiHandler,
+      ) as ModifierSelectUiHandler;
       expect(modifierSelectHandler.options.length).toEqual(1);
       expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toEqual("MULTI_LENS");
     });

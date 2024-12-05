@@ -635,7 +635,7 @@ export const speciesStarterCosts = {
   [Species.BLOODMOON_URSALUNA]: 5,
 };
 
-const starterCandyCosts: { passive: number; costReduction: [number, number]; egg: number; }[] = [
+const starterCandyCosts: { passive: number; costReduction: [number, number]; egg: number }[] = [
   { passive: 40, costReduction: [ 25, 60 ], egg: 30 }, // 1 Cost
   { passive: 40, costReduction: [ 25, 60 ], egg: 30 }, // 2 Cost
   { passive: 35, costReduction: [ 20, 50 ], egg: 25 }, // 3 Cost
@@ -674,4 +674,3 @@ export function getValueReductionCandyCounts(starterCost: number): [number, numb
 export function getSameSpeciesEggCandyCounts(starterCost: number): number {
   return starterCandyCosts[starterCost - 1].egg;
 }
-

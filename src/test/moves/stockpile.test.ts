@@ -60,18 +60,22 @@ describe("Moves - Stockpile", () => {
 
         const stockpilingTag = user.getTag(StockpilingTag)!;
 
-        if (i < 3) { // first three uses should behave normally
+        if (i < 3) {
+          // first three uses should behave normally
           expect(user.getStatStage(Stat.DEF)).toBe(i + 1);
           expect(user.getStatStage(Stat.SPDEF)).toBe(i + 1);
           expect(stockpilingTag).toBeDefined();
           expect(stockpilingTag.stockpiledCount).toBe(i + 1);
-
-        } else { // fourth should have failed
+        } else {
+          // fourth should have failed
           expect(user.getStatStage(Stat.DEF)).toBe(3);
           expect(user.getStatStage(Stat.SPDEF)).toBe(3);
           expect(stockpilingTag).toBeDefined();
           expect(stockpilingTag.stockpiledCount).toBe(3);
-          expect(user.getMoveHistory().at(-1)).toMatchObject<TurnMove>({ result: MoveResult.FAIL, move: Moves.STOCKPILE });
+          expect(user.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
+            result: MoveResult.FAIL,
+            move: Moves.STOCKPILE,
+          });
         }
       }
     });

@@ -70,7 +70,7 @@ describe("Pokerogue Account API", () => {
 
     it("should return error message on FAILURE", async () => {
       server.use(
-        http.post(`${apiBase}/account/register`, () => new HttpResponse("Username is already taken", { status: 400 }))
+        http.post(`${apiBase}/account/register`, () => new HttpResponse("Username is already taken", { status: 400 })),
       );
 
       const error = await accountApi.register(registerParams);
@@ -103,7 +103,7 @@ describe("Pokerogue Account API", () => {
 
     it("should return error message and report a warning on FAILURE", async () => {
       server.use(
-        http.post(`${apiBase}/account/login`, () => new HttpResponse("Password is incorrect", { status: 401 }))
+        http.post(`${apiBase}/account/login`, () => new HttpResponse("Password is incorrect", { status: 401 })),
       );
 
       const error = await accountApi.login(loginParams);

@@ -1,4 +1,12 @@
-import { EnemyPartyConfig, generateModifierType, generateModifierTypeOption, initBattleWithEnemyConfig, leaveEncounterWithoutBattle, setEncounterRewards, transitionMysteryEncounterIntroVisuals, } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import {
+  EnemyPartyConfig,
+  generateModifierType,
+  generateModifierTypeOption,
+  initBattleWithEnemyConfig,
+  leaveEncounterWithoutBattle,
+  setEncounterRewards,
+  transitionMysteryEncounterIntroVisuals,
+} from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { modifierTypes, PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
@@ -33,111 +41,112 @@ const namespace = "mysteryEncounters/theWinstrateChallenge";
  * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3821 | GitHub Issue #3821}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
-export const TheWinstrateChallengeEncounter: MysteryEncounter =
-  MysteryEncounterBuilder.withEncounterType(MysteryEncounterType.THE_WINSTRATE_CHALLENGE)
-    .withEncounterTier(MysteryEncounterTier.ROGUE)
-    .withSceneWaveRangeRequirement(100, CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES[1])
-    .withIntroSpriteConfigs([
-      {
-        spriteKey: "vito",
-        fileRoot: "trainer",
-        hasShadow: false,
-        x: 16,
-        y: -4
-      },
-      {
-        spriteKey: "vivi",
-        fileRoot: "trainer",
-        hasShadow: false,
-        x: -14,
-        y: -4
-      },
-      {
-        spriteKey: "victor",
-        fileRoot: "trainer",
-        hasShadow: true,
-        x: -32
-      },
-      {
-        spriteKey: "victoria",
-        fileRoot: "trainer",
-        hasShadow: true,
-        x: 40,
-      },
-      {
-        spriteKey: "vicky",
-        fileRoot: "trainer",
-        hasShadow: true,
-        x: 3,
-        y: 5,
-        yShadow: 5
-      },
-    ])
-    .withIntroDialogue([
-      {
-        text: `${namespace}:intro`,
-      },
-      {
-        speaker: `${namespace}:speaker`,
-        text: `${namespace}:intro_dialogue`,
-      },
-    ])
-    .withAutoHideIntroVisuals(false)
-    .withOnInit(() => {
-      const encounter = globalScene.currentBattle.mysteryEncounter!;
+export const TheWinstrateChallengeEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(
+  MysteryEncounterType.THE_WINSTRATE_CHALLENGE,
+)
+  .withEncounterTier(MysteryEncounterTier.ROGUE)
+  .withSceneWaveRangeRequirement(100, CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES[1])
+  .withIntroSpriteConfigs([
+    {
+      spriteKey: "vito",
+      fileRoot: "trainer",
+      hasShadow: false,
+      x: 16,
+      y: -4,
+    },
+    {
+      spriteKey: "vivi",
+      fileRoot: "trainer",
+      hasShadow: false,
+      x: -14,
+      y: -4,
+    },
+    {
+      spriteKey: "victor",
+      fileRoot: "trainer",
+      hasShadow: true,
+      x: -32,
+    },
+    {
+      spriteKey: "victoria",
+      fileRoot: "trainer",
+      hasShadow: true,
+      x: 40,
+    },
+    {
+      spriteKey: "vicky",
+      fileRoot: "trainer",
+      hasShadow: true,
+      x: 3,
+      y: 5,
+      yShadow: 5,
+    },
+  ])
+  .withIntroDialogue([
+    {
+      text: `${namespace}:intro`,
+    },
+    {
+      speaker: `${namespace}:speaker`,
+      text: `${namespace}:intro_dialogue`,
+    },
+  ])
+  .withAutoHideIntroVisuals(false)
+  .withOnInit(() => {
+    const encounter = globalScene.currentBattle.mysteryEncounter!;
 
-      // Loaded back to front for pop() operations
-      encounter.enemyPartyConfigs.push(getVitoTrainerConfig());
-      encounter.enemyPartyConfigs.push(getVickyTrainerConfig());
-      encounter.enemyPartyConfigs.push(getViviTrainerConfig());
-      encounter.enemyPartyConfigs.push(getVictoriaTrainerConfig());
-      encounter.enemyPartyConfigs.push(getVictorTrainerConfig());
+    // Loaded back to front for pop() operations
+    encounter.enemyPartyConfigs.push(getVitoTrainerConfig());
+    encounter.enemyPartyConfigs.push(getVickyTrainerConfig());
+    encounter.enemyPartyConfigs.push(getViviTrainerConfig());
+    encounter.enemyPartyConfigs.push(getVictoriaTrainerConfig());
+    encounter.enemyPartyConfigs.push(getVictorTrainerConfig());
 
-      return true;
-    })
-    .setLocalizationKey(`${namespace}`)
-    .withTitle(`${namespace}:title`)
-    .withDescription(`${namespace}:description`)
-    .withQuery(`${namespace}:query`)
-    .withSimpleOption(
-      {
-        buttonLabel: `${namespace}:option.1.label`,
-        buttonTooltip: `${namespace}:option.1.tooltip`,
-        selected: [
-          {
-            speaker: `${namespace}:speaker`,
-            text: `${namespace}:option.1.selected`,
-          },
-        ],
-      },
-      async () => {
-        // Spawn 5 trainer battles back to back with Macho Brace in rewards
-        globalScene.currentBattle.mysteryEncounter!.doContinueEncounter = async () => {
-          await endTrainerBattleAndShowDialogue();
-        };
-        await transitionMysteryEncounterIntroVisuals(true, false);
-        await spawnNextTrainerOrEndEncounter();
-      }
-    )
-    .withSimpleOption(
-      {
-        buttonLabel: `${namespace}:option.2.label`,
-        buttonTooltip: `${namespace}:option.2.tooltip`,
-        selected: [
-          {
-            speaker: `${namespace}:speaker`,
-            text: `${namespace}:option.2.selected`,
-          },
-        ],
-      },
-      async () => {
-        // Refuse the challenge, they full heal the party and give the player a Rarer Candy
-        globalScene.unshiftPhase(new PartyHealPhase(true));
-        setEncounterRewards({ guaranteedModifierTypeFuncs: [ modifierTypes.RARER_CANDY ], fillRemaining: false });
-        leaveEncounterWithoutBattle();
-      }
-    )
-    .build();
+    return true;
+  })
+  .setLocalizationKey(`${namespace}`)
+  .withTitle(`${namespace}:title`)
+  .withDescription(`${namespace}:description`)
+  .withQuery(`${namespace}:query`)
+  .withSimpleOption(
+    {
+      buttonLabel: `${namespace}:option.1.label`,
+      buttonTooltip: `${namespace}:option.1.tooltip`,
+      selected: [
+        {
+          speaker: `${namespace}:speaker`,
+          text: `${namespace}:option.1.selected`,
+        },
+      ],
+    },
+    async () => {
+      // Spawn 5 trainer battles back to back with Macho Brace in rewards
+      globalScene.currentBattle.mysteryEncounter!.doContinueEncounter = async () => {
+        await endTrainerBattleAndShowDialogue();
+      };
+      await transitionMysteryEncounterIntroVisuals(true, false);
+      await spawnNextTrainerOrEndEncounter();
+    },
+  )
+  .withSimpleOption(
+    {
+      buttonLabel: `${namespace}:option.2.label`,
+      buttonTooltip: `${namespace}:option.2.tooltip`,
+      selected: [
+        {
+          speaker: `${namespace}:speaker`,
+          text: `${namespace}:option.2.selected`,
+        },
+      ],
+    },
+    async () => {
+      // Refuse the challenge, they full heal the party and give the player a Rarer Candy
+      globalScene.unshiftPhase(new PartyHealPhase(true));
+      setEncounterRewards({ guaranteedModifierTypeFuncs: [ modifierTypes.RARER_CANDY ], fillRemaining: false });
+      leaveEncounterWithoutBattle();
+    },
+  )
+  .build();
 
 async function spawnNextTrainerOrEndEncounter() {
   const encounter = globalScene.currentBattle.mysteryEncounter!;
@@ -165,7 +174,7 @@ async function spawnNextTrainerOrEndEncounter() {
 }
 
 function endTrainerBattleAndShowDialogue(): Promise<void> {
-  return new Promise(async resolve => {
+  return new Promise(async (resolve) => {
     if (globalScene.currentBattle.mysteryEncounter!.enemyPartyConfigs.length === 0) {
       // Battle is over
       const trainer = globalScene.currentBattle.trainer;
@@ -179,7 +188,7 @@ function endTrainerBattleAndShowDialogue(): Promise<void> {
           duration: 750,
           onComplete: () => {
             globalScene.field.remove(trainer, true);
-          }
+          },
         });
       }
 
@@ -194,7 +203,11 @@ function endTrainerBattleAndShowDialogue(): Promise<void> {
       for (const pokemon of globalScene.getPlayerParty()) {
         // Only trigger form change when Eiscue is in Noice form
         // Hardcoded Eiscue for now in case it is fused with another pokemon
-        if (pokemon.species.speciesId === Species.EISCUE && pokemon.hasAbility(Abilities.ICE_FACE) && pokemon.formIndex === 1) {
+        if (
+          pokemon.species.speciesId === Species.EISCUE &&
+          pokemon.hasAbility(Abilities.ICE_FACE) &&
+          pokemon.formIndex === 1
+        ) {
           globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger);
         }
 
@@ -219,7 +232,7 @@ function endTrainerBattleAndShowDialogue(): Promise<void> {
           onComplete: () => {
             globalScene.field.remove(trainer, true);
             resolve();
-          }
+          },
         });
       }
     }
@@ -239,14 +252,14 @@ function getVictorTrainerConfig(): EnemyPartyConfig {
         modifierConfigs: [
           {
             modifier: generateModifierType(modifierTypes.FLAME_ORB) as PokemonHeldItemModifierType,
-            isTransferable: false
+            isTransferable: false,
           },
           {
             modifier: generateModifierType(modifierTypes.FOCUS_BAND) as PokemonHeldItemModifierType,
             stackCount: 2,
-            isTransferable: false
+            isTransferable: false,
           },
-        ]
+        ],
       },
       {
         species: getPokemonSpecies(Species.OBSTAGOON),
@@ -257,16 +270,16 @@ function getVictorTrainerConfig(): EnemyPartyConfig {
         modifierConfigs: [
           {
             modifier: generateModifierType(modifierTypes.FLAME_ORB) as PokemonHeldItemModifierType,
-            isTransferable: false
+            isTransferable: false,
           },
           {
             modifier: generateModifierType(modifierTypes.LEFTOVERS) as PokemonHeldItemModifierType,
             stackCount: 2,
-            isTransferable: false
-          }
-        ]
-      }
-    ]
+            isTransferable: false,
+          },
+        ],
+      },
+    ],
   };
 }
 
@@ -283,14 +296,14 @@ function getVictoriaTrainerConfig(): EnemyPartyConfig {
         modifierConfigs: [
           {
             modifier: generateModifierType(modifierTypes.SOUL_DEW) as PokemonHeldItemModifierType,
-            isTransferable: false
+            isTransferable: false,
           },
           {
             modifier: generateModifierType(modifierTypes.QUICK_CLAW) as PokemonHeldItemModifierType,
             stackCount: 2,
-            isTransferable: false
-          }
-        ]
+            isTransferable: false,
+          },
+        ],
       },
       {
         species: getPokemonSpecies(Species.GARDEVOIR),
@@ -300,18 +313,22 @@ function getVictoriaTrainerConfig(): EnemyPartyConfig {
         moveSet: [ Moves.PSYSHOCK, Moves.MOONBLAST, Moves.SHADOW_BALL, Moves.WILL_O_WISP ],
         modifierConfigs: [
           {
-            modifier: generateModifierType(modifierTypes.ATTACK_TYPE_BOOSTER, [ Type.PSYCHIC ]) as PokemonHeldItemModifierType,
+            modifier: generateModifierType(modifierTypes.ATTACK_TYPE_BOOSTER, [
+              Type.PSYCHIC,
+            ]) as PokemonHeldItemModifierType,
             stackCount: 1,
-            isTransferable: false
+            isTransferable: false,
           },
           {
-            modifier: generateModifierType(modifierTypes.ATTACK_TYPE_BOOSTER, [ Type.FAIRY ]) as PokemonHeldItemModifierType,
+            modifier: generateModifierType(modifierTypes.ATTACK_TYPE_BOOSTER, [
+              Type.FAIRY,
+            ]) as PokemonHeldItemModifierType,
             stackCount: 1,
-            isTransferable: false
-          }
-        ]
-      }
-    ]
+            isTransferable: false,
+          },
+        ],
+      },
+    ],
   };
 }
 
@@ -329,14 +346,14 @@ function getViviTrainerConfig(): EnemyPartyConfig {
           {
             modifier: generateModifierType(modifierTypes.BERRY, [ BerryType.LUM ]) as PokemonHeldItemModifierType,
             stackCount: 2,
-            isTransferable: false
+            isTransferable: false,
           },
           {
             modifier: generateModifierType(modifierTypes.BASE_STAT_BOOSTER, [ Stat.HP ]) as PokemonHeldItemModifierType,
             stackCount: 4,
-            isTransferable: false
-          }
-        ]
+            isTransferable: false,
+          },
+        ],
       },
       {
         species: getPokemonSpecies(Species.BRELOOM),
@@ -348,13 +365,13 @@ function getViviTrainerConfig(): EnemyPartyConfig {
           {
             modifier: generateModifierType(modifierTypes.BASE_STAT_BOOSTER, [ Stat.HP ]) as PokemonHeldItemModifierType,
             stackCount: 4,
-            isTransferable: false
+            isTransferable: false,
           },
           {
             modifier: generateModifierType(modifierTypes.TOXIC_ORB) as PokemonHeldItemModifierType,
-            isTransferable: false
-          }
-        ]
+            isTransferable: false,
+          },
+        ],
       },
       {
         species: getPokemonSpecies(Species.CAMERUPT),
@@ -366,11 +383,11 @@ function getViviTrainerConfig(): EnemyPartyConfig {
           {
             modifier: generateModifierType(modifierTypes.QUICK_CLAW) as PokemonHeldItemModifierType,
             stackCount: 3,
-            isTransferable: false
+            isTransferable: false,
           },
-        ]
-      }
-    ]
+        ],
+      },
+    ],
   };
 }
 
@@ -387,11 +404,11 @@ function getVickyTrainerConfig(): EnemyPartyConfig {
         modifierConfigs: [
           {
             modifier: generateModifierType(modifierTypes.SHELL_BELL) as PokemonHeldItemModifierType,
-            isTransferable: false
-          }
-        ]
-      }
-    ]
+            isTransferable: false,
+          },
+        ],
+      },
+    ],
   };
 }
 
@@ -409,9 +426,9 @@ function getVitoTrainerConfig(): EnemyPartyConfig {
           {
             modifier: generateModifierType(modifierTypes.BASE_STAT_BOOSTER, [ Stat.SPD ]) as PokemonHeldItemModifierType,
             stackCount: 2,
-            isTransferable: false
-          }
-        ]
+            isTransferable: false,
+          },
+        ],
       },
       {
         species: getPokemonSpecies(Species.SWALOT),
@@ -463,8 +480,8 @@ function getVitoTrainerConfig(): EnemyPartyConfig {
           {
             modifier: generateModifierType(modifierTypes.BERRY, [ BerryType.LEPPA ]) as PokemonHeldItemModifierType,
             stackCount: 2,
-          }
-        ]
+          },
+        ],
       },
       {
         species: getPokemonSpecies(Species.DODRIO),
@@ -476,9 +493,9 @@ function getVitoTrainerConfig(): EnemyPartyConfig {
           {
             modifier: generateModifierType(modifierTypes.KINGS_ROCK) as PokemonHeldItemModifierType,
             stackCount: 2,
-            isTransferable: false
-          }
-        ]
+            isTransferable: false,
+          },
+        ],
       },
       {
         species: getPokemonSpecies(Species.ALAKAZAM),
@@ -490,9 +507,9 @@ function getVitoTrainerConfig(): EnemyPartyConfig {
           {
             modifier: generateModifierType(modifierTypes.WIDE_LENS) as PokemonHeldItemModifierType,
             stackCount: 2,
-            isTransferable: false
+            isTransferable: false,
           },
-        ]
+        ],
       },
       {
         species: getPokemonSpecies(Species.DARMANITAN),
@@ -504,10 +521,10 @@ function getVitoTrainerConfig(): EnemyPartyConfig {
           {
             modifier: generateModifierType(modifierTypes.QUICK_CLAW) as PokemonHeldItemModifierType,
             stackCount: 2,
-            isTransferable: false
+            isTransferable: false,
           },
-        ]
-      }
-    ]
+        ],
+      },
+    ],
   };
 }

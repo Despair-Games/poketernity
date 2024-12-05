@@ -3,7 +3,6 @@ import * as Utils from "#app/utils";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
 
-
 export const speciesEggMoves = {
   [Species.BULBASAUR]: [ Moves.SAPPY_SEED, Moves.MALIGNANT_CHAIN, Moves.EARTH_POWER, Moves.MATCHA_GOTCHA ],
   [Species.CHARMANDER]: [ Moves.DRAGON_DANCE, Moves.BITTER_BLADE, Moves.EARTH_POWER, Moves.OBLIVION_WING ],
@@ -581,7 +580,7 @@ export const speciesEggMoves = {
   [Species.PECHARUNT]: [ Moves.TAKE_HEART, Moves.BODY_PRESS, Moves.SAPPY_SEED, Moves.KINGS_SHIELD ],
   [Species.PALDEA_TAUROS]: [ Moves.NO_RETREAT, Moves.BLAZING_TORQUE, Moves.AQUA_STEP, Moves.THUNDEROUS_KICK ],
   [Species.PALDEA_WOOPER]: [ Moves.STONE_AXE, Moves.RECOVER, Moves.BANEFUL_BUNKER, Moves.BARB_BARRAGE ],
-  [Species.BLOODMOON_URSALUNA]: [ Moves.NASTY_PLOT, Moves.ROCK_POLISH, Moves.SANDSEAR_STORM, Moves.BOOMBURST ]
+  [Species.BLOODMOON_URSALUNA]: [ Moves.NASTY_PLOT, Moves.ROCK_POLISH, Moves.SANDSEAR_STORM, Moves.BOOMBURST ],
 };
 
 function parseEggMoves(content: string): void {
@@ -593,24 +592,24 @@ function parseEggMoves(content: string): void {
 
   lines.forEach((line, l) => {
     const cols = line.split(",").slice(0, 5);
-    const moveNames = allMoves.map(m => m.name.replace(/ \([A-Z]\)$/, "").toLowerCase());
+    const moveNames = allMoves.map((m) => m.name.replace(/ \([A-Z]\)$/, "").toLowerCase());
     const enumSpeciesName = cols[0].toUpperCase().replace(/[ -]/g, "_");
-    const species = speciesValues[speciesNames.findIndex(s => s === enumSpeciesName)];
+    const species = speciesValues[speciesNames.findIndex((s) => s === enumSpeciesName)];
 
     const eggMoves: Moves[] = [];
 
     for (let m = 0; m < 4; m++) {
       const moveName = cols[m + 1].trim();
-      const moveIndex = moveName !== "N/A" ? moveNames.findIndex(mn => mn === moveName.toLowerCase()) : -1;
-      eggMoves.push(moveIndex > -1 ? moveIndex as Moves : Moves.NONE);
+      const moveIndex = moveName !== "N/A" ? moveNames.findIndex((mn) => mn === moveName.toLowerCase()) : -1;
+      eggMoves.push(moveIndex > -1 ? (moveIndex as Moves) : Moves.NONE);
 
       if (moveIndex === -1) {
         console.warn(moveName, "could not be parsed");
       }
     }
 
-    if (eggMoves.find(m => m !== Moves.NONE)) {
-      output += `[Species.${Species[species]}]: [ ${eggMoves.map(m => `Moves.${Moves[m]}`).join(", ")} ],\n`;
+    if (eggMoves.find((m) => m !== Moves.NONE)) {
+      output += `[Species.${Species[species]}]: [ ${eggMoves.map((m) => `Moves.${Moves[m]}`).join(", ")} ],\n`;
     }
   });
 

@@ -42,7 +42,7 @@ describe("Abilities - Infiltrator", () => {
   it.each([
     { effectName: "Light Screen", tagType: ArenaTagType.LIGHT_SCREEN, move: Moves.WATER_GUN },
     { effectName: "Reflect", tagType: ArenaTagType.REFLECT, move: Moves.TACKLE },
-    { effectName: "Aurora Veil", tagType: ArenaTagType.AURORA_VEIL, move: Moves.TACKLE }
+    { effectName: "Aurora Veil", tagType: ArenaTagType.AURORA_VEIL, move: Moves.TACKLE },
   ])("should bypass the target's $effectName", async ({ tagType, move }) => {
     await game.classicMode.startBattle([ Species.MAGIKARP ]);
 

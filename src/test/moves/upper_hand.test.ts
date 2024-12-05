@@ -51,7 +51,7 @@ describe("Moves - Upper Hand", () => {
 
   it.each([
     { descriptor: "non-priority attack", move: Moves.TACKLE },
-    { descriptor: "status move", move: Moves.BABY_DOLL_EYES }
+    { descriptor: "status move", move: Moves.BABY_DOLL_EYES },
   ])("should fail when the opponent selects a $descriptor", async ({ move }) => {
     game.override.enemyMoveset(move);
 
@@ -66,9 +66,7 @@ describe("Moves - Upper Hand", () => {
   });
 
   it("should flinch the opponent before they use an attack boosted by Gale Wings", async () => {
-    game.override
-      .enemyAbility(Abilities.GALE_WINGS)
-      .enemyMoveset(Moves.GUST);
+    game.override.enemyAbility(Abilities.GALE_WINGS).enemyMoveset(Moves.GUST);
 
     await game.classicMode.startBattle([ Species.FEEBAS ]);
 
@@ -84,9 +82,7 @@ describe("Moves - Upper Hand", () => {
   });
 
   it("should fail if the target has already moved", async () => {
-    game.override
-      .enemyMoveset(Moves.FAKE_OUT)
-      .enemyAbility(Abilities.SHEER_FORCE);
+    game.override.enemyMoveset(Moves.FAKE_OUT).enemyAbility(Abilities.SHEER_FORCE);
 
     await game.classicMode.startBattle([ Species.FEEBAS ]);
 

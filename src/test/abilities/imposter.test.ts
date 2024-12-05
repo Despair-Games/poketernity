@@ -104,7 +104,7 @@ describe("Abilities - Imposter", () => {
     game.move.select(Moves.TACKLE);
     await game.phaseInterceptor.to(TurnEndPhase);
 
-    player.getMoveset().forEach(move => {
+    player.getMoveset().forEach((move) => {
       // Should set correct maximum PP without touching `ppUp`
       if (move) {
         if (move.moveId === Moves.SKETCH) {

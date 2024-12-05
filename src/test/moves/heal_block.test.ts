@@ -36,8 +36,7 @@ describe("Moves - Heal Block", () => {
       .disableCrits();
   });
 
-  it("shouldn't stop damage from HP-drain attacks, just HP restoration", async() => {
-
+  it("shouldn't stop damage from HP-drain attacks, just HP restoration", async () => {
     await game.classicMode.startBattle([ Species.CHARIZARD ]);
 
     const player = game.scene.getPlayerPokemon()!;
@@ -53,7 +52,7 @@ describe("Moves - Heal Block", () => {
     expect(enemy.hp).toBeLessThan(enemy.getMaxHp());
   });
 
-  it("shouldn't stop Liquid Ooze from dealing damage", async() => {
+  it("shouldn't stop Liquid Ooze from dealing damage", async () => {
     game.override.enemyAbility(Abilities.LIQUID_OOZE);
 
     await game.classicMode.startBattle([ Species.CHARIZARD ]);
@@ -69,7 +68,7 @@ describe("Moves - Heal Block", () => {
     expect(enemy.isFullHp()).toBe(false);
   });
 
-  it("should stop delayed heals, such as from Wish", async() => {
+  it("should stop delayed heals, such as from Wish", async () => {
     await game.classicMode.startBattle([ Species.CHARIZARD ]);
 
     const player = game.scene.getPlayerPokemon()!;
@@ -88,7 +87,7 @@ describe("Moves - Heal Block", () => {
     expect(player.hp).toBe(1);
   });
 
-  it("should prevent Grassy Terrain from restoring HP", async() => {
+  it("should prevent Grassy Terrain from restoring HP", async () => {
     game.override.enemyAbility(Abilities.GRASSY_SURGE);
 
     await game.classicMode.startBattle([ Species.CHARIZARD ]);
@@ -103,7 +102,7 @@ describe("Moves - Heal Block", () => {
     expect(player.hp).toBe(1);
   });
 
-  it("should prevent healing from heal-over-time moves", async() => {
+  it("should prevent healing from heal-over-time moves", async () => {
     await game.classicMode.startBattle([ Species.CHARIZARD ]);
 
     const player = game.scene.getPlayerPokemon()!;
@@ -117,10 +116,8 @@ describe("Moves - Heal Block", () => {
     expect(player.hp).toBe(1);
   });
 
-  it("should prevent abilities from restoring HP", async() => {
-    game.override
-      .weather(WeatherType.RAIN)
-      .ability(Abilities.RAIN_DISH);
+  it("should prevent abilities from restoring HP", async () => {
+    game.override.weather(WeatherType.RAIN).ability(Abilities.RAIN_DISH);
 
     await game.classicMode.startBattle([ Species.CHARIZARD ]);
 
@@ -134,7 +131,7 @@ describe("Moves - Heal Block", () => {
     expect(player.hp).toBe(1);
   });
 
-  it("should stop healing from items", async() => {
+  it("should stop healing from items", async () => {
     game.override.startingHeldItems([{ name: "LEFTOVERS" }]);
 
     await game.classicMode.startBattle([ Species.CHARIZARD ]);

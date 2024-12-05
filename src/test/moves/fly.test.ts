@@ -58,7 +58,7 @@ describe("Moves - Fly", () => {
     expect(enemyPokemon.hp).toBeLessThan(enemyPokemon.getMaxHp());
     expect(playerPokemon.getMoveHistory()).toHaveLength(2);
 
-    const playerFly = playerPokemon.getMoveset().find(mv => mv && mv.moveId === Moves.FLY);
+    const playerFly = playerPokemon.getMoveset().find((mv) => mv && mv.moveId === Moves.FLY);
     expect(playerFly?.ppUsed).toBe(1);
   });
 
@@ -78,9 +78,7 @@ describe("Moves - Fly", () => {
   });
 
   it("should not expend PP when the attack phase is cancelled", async () => {
-    game.override
-      .enemyAbility(Abilities.NO_GUARD)
-      .enemyMoveset(Moves.SPORE);
+    game.override.enemyAbility(Abilities.NO_GUARD).enemyMoveset(Moves.SPORE);
 
     await game.classicMode.startBattle([ Species.MAGIKARP ]);
 
@@ -92,7 +90,7 @@ describe("Moves - Fly", () => {
     expect(playerPokemon.getTag(BattlerTagType.FLYING)).toBeUndefined();
     expect(playerPokemon.status?.effect).toBe(StatusEffect.SLEEP);
 
-    const playerFly = playerPokemon.getMoveset().find(mv => mv && mv.moveId === Moves.FLY);
+    const playerFly = playerPokemon.getMoveset().find((mv) => mv && mv.moveId === Moves.FLY);
     expect(playerFly?.ppUsed).toBe(0);
   });
 
@@ -116,7 +114,7 @@ describe("Moves - Fly", () => {
     expect(playerPokemon.getLastXMoves(1)[0].result).toBe(MoveResult.FAIL);
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
 
-    const playerFly = playerPokemon.getMoveset().find(mv => mv && mv.moveId === Moves.FLY);
+    const playerFly = playerPokemon.getMoveset().find((mv) => mv && mv.moveId === Moves.FLY);
     expect(playerFly?.ppUsed).toBe(0);
   });
 });

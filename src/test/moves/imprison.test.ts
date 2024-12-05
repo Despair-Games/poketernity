@@ -38,8 +38,11 @@ describe("Moves - Imprison", () => {
     game.move.select(Moves.TRANSFORM);
     await game.forceEnemyMove(Moves.IMPRISON);
     await game.toNextTurn();
-    const playerMoveset = playerPokemon.getMoveset().map(x => x?.moveId);
-    const enemyMoveset = game.scene.getEnemyPokemon()!.getMoveset().map(x => x?.moveId);
+    const playerMoveset = playerPokemon.getMoveset().map((x) => x?.moveId);
+    const enemyMoveset = game.scene
+      .getEnemyPokemon()!
+      .getMoveset()
+      .map((x) => x?.moveId);
     expect(enemyMoveset.includes(playerMoveset[0])).toBeTruthy();
     const imprisonArenaTag = game.scene.arena.getTag(ArenaTagType.IMPRISON);
     const imprisonBattlerTag = playerPokemon.getTag(BattlerTagType.IMPRISON);

@@ -34,9 +34,7 @@ describe("Moves - Power Swap", () => {
   });
 
   it("should swap the user's ATK and SPATK stat stages with the target's", async () => {
-    await game.classicMode.startBattle([
-      Species.INDEEDEE
-    ]);
+    await game.classicMode.startBattle([ Species.INDEEDEE ]);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;

@@ -34,7 +34,7 @@ export class MoveChargePhase extends PokemonPhase {
 
     // If the target is somehow not defined, or the move is somehow not a ChargingMove,
     // immediately end this phase.
-    if (!target || !(move.isChargingMove())) {
+    if (!target || !move.isChargingMove()) {
       console.warn("Invalid parameters for MoveChargePhase");
       return super.end();
     }

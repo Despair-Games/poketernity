@@ -1,6 +1,11 @@
 import { globalScene } from "#app/global-scene";
 import { PersistentModifier } from "#app/modifier/modifier";
-import { GeneratedPersistentModifierType, ModifierType, ModifierTypeGenerator, getModifierTypeFuncById } from "#app/modifier/modifier-type";
+import {
+  GeneratedPersistentModifierType,
+  ModifierType,
+  ModifierTypeGenerator,
+  getModifierTypeFuncById,
+} from "#app/modifier/modifier-type";
 
 export default class ModifierData {
   public player: boolean;
@@ -12,7 +17,7 @@ export default class ModifierData {
   public className: string;
 
   constructor(source: PersistentModifier | any, player: boolean) {
-    const sourceModifier = source instanceof PersistentModifier ? source as PersistentModifier : null;
+    const sourceModifier = source instanceof PersistentModifier ? (source as PersistentModifier) : null;
     this.player = player;
     this.typeId = sourceModifier ? sourceModifier.type.id : source.typeId;
     if (sourceModifier) {
@@ -38,10 +43,16 @@ export default class ModifierData {
       type.id = this.typeId;
 
       if (type instanceof ModifierTypeGenerator) {
-        type = (type as ModifierTypeGenerator).generateType(this.player ? globalScene.getPlayerParty() : globalScene.getEnemyField(), this.typePregenArgs);
+        type = (type as ModifierTypeGenerator).generateType(
+          this.player ? globalScene.getPlayerParty() : globalScene.getEnemyField(),
+          this.typePregenArgs,
+        );
       }
 
-      const ret = Reflect.construct(constructor, ([ type ] as any[]).concat(this.args).concat(this.stackCount)) as PersistentModifier;
+      const ret = Reflect.construct(
+        constructor,
+        ([ type ] as any[]).concat(this.args).concat(this.stackCount),
+      ) as PersistentModifier;
 
       if (ret.stackCount > ret.getMaxStackCount()) {
         ret.stackCount = ret.getMaxStackCount();

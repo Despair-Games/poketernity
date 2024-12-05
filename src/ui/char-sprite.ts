@@ -10,7 +10,7 @@ export default class CharSprite extends Phaser.GameObjects.Container {
   public shown: boolean;
 
   constructor() {
-    super(globalScene, (globalScene.game.canvas.width / 6) + 32, -42);
+    super(globalScene, globalScene.game.canvas.width / 6 + 32, -42);
   }
 
   setup(): void {
@@ -28,7 +28,7 @@ export default class CharSprite extends Phaser.GameObjects.Container {
   }
 
   showCharacter(key: string, variant: string): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       if (!key.startsWith("c_")) {
         key = `c_${key}`;
       }
@@ -49,12 +49,12 @@ export default class CharSprite extends Phaser.GameObjects.Container {
 
       globalScene.tweens.add({
         targets: this,
-        x: (globalScene.game.canvas.width / 6) - 102,
+        x: globalScene.game.canvas.width / 6 - 102,
         duration: 750,
         ease: "Cubic.easeOut",
         onComplete: () => {
           resolve();
-        }
+        },
       });
 
       this.setVisible(globalScene.textures.get(key).key !== Utils.MissingTextureKey);
@@ -66,7 +66,7 @@ export default class CharSprite extends Phaser.GameObjects.Container {
   }
 
   setVariant(variant: string): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       globalScene.fieldUI.bringToTop(this);
 
       this.transitionSprite.setTexture(this.key, variant);
@@ -81,21 +81,21 @@ export default class CharSprite extends Phaser.GameObjects.Container {
           this.sprite.setTexture(this.key, variant);
           this.transitionSprite.setVisible(false);
           resolve();
-        }
+        },
       });
       this.variant = variant;
     });
   }
 
   hide(): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       if (!this.shown) {
         return resolve();
       }
 
       globalScene.tweens.add({
         targets: this,
-        x: (globalScene.game.canvas.width / 6) + 32,
+        x: globalScene.game.canvas.width / 6 + 32,
         duration: 750,
         ease: "Cubic.easeIn",
         onComplete: () => {
@@ -103,7 +103,7 @@ export default class CharSprite extends Phaser.GameObjects.Container {
             this.setVisible(false);
           }
           resolve();
-        }
+        },
       });
 
       this.shown = false;

@@ -1,5 +1,10 @@
 import { BattlerIndex } from "#app/battle";
-import { applyAbAttrs, applyPreDefendAbAttrs, IgnoreMoveEffectsAbAttr, MoveEffectChanceMultiplierAbAttr } from "#app/data/ability";
+import {
+  applyAbAttrs,
+  applyPreDefendAbAttrs,
+  IgnoreMoveEffectsAbAttr,
+  MoveEffectChanceMultiplierAbAttr,
+} from "#app/data/ability";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { NumberHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
@@ -9,7 +14,6 @@ import { Stat } from "#enums/stat";
 import GameManager from "#test/utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-
 
 describe("Abilities - Shield Dust", () => {
   let phaserGame: Phaser.Game;
@@ -38,7 +42,6 @@ describe("Abilities - Shield Dust", () => {
   it("Shield Dust", async () => {
     await game.classicMode.startBattle([ Species.PIDGEOT ]);
 
-
     game.scene.getEnemyPokemon()!.stats[Stat.SPDEF] = 10000;
     expect(game.scene.getPlayerPokemon()!.formIndex).toBe(0);
 
@@ -53,10 +56,26 @@ describe("Abilities - Shield Dust", () => {
     expect(move.id).toBe(Moves.AIR_SLASH);
 
     const chance = new NumberHolder(move.chance);
-    applyAbAttrs(MoveEffectChanceMultiplierAbAttr, phase.getUserPokemon()!, null, false, chance, move, phase.getFirstTarget(), false);
-    applyPreDefendAbAttrs(IgnoreMoveEffectsAbAttr, phase.getFirstTarget()!, phase.getUserPokemon()!, null, null, false, chance);
+    applyAbAttrs(
+      MoveEffectChanceMultiplierAbAttr,
+      phase.getUserPokemon()!,
+      null,
+      false,
+      chance,
+      move,
+      phase.getFirstTarget(),
+      false,
+    );
+    applyPreDefendAbAttrs(
+      IgnoreMoveEffectsAbAttr,
+      phase.getFirstTarget()!,
+      phase.getUserPokemon()!,
+      null,
+      null,
+      false,
+      chance,
+    );
     expect(chance.value).toBe(0);
-
   }, 20000);
 
   //TODO King's Rock Interaction Unit Test

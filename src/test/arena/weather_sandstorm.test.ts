@@ -38,7 +38,7 @@ describe("Weather - Sandstorm", () => {
 
     await game.phaseInterceptor.to("TurnEndPhase");
 
-    game.scene.getField(true).forEach(pokemon => {
+    game.scene.getField(true).forEach((pokemon) => {
       expect(pokemon.hp).toBe(pokemon.getMaxHp() - Math.max(Math.floor(pokemon.getMaxHp() / 16), 1));
     });
   });
@@ -72,7 +72,7 @@ describe("Weather - Sandstorm", () => {
 
     await game.phaseInterceptor.to("TurnEndPhase");
 
-    game.scene.getField(true).forEach(pokemon => {
+    game.scene.getField(true).forEach((pokemon) => {
       expect(pokemon.hp).toBe(pokemon.getMaxHp());
     });
   });

@@ -10,7 +10,6 @@ import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { SubstituteTag } from "#app/data/battler-tags";
 
-
 describe("Moves - Tidy Up", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
@@ -47,7 +46,6 @@ describe("Moves - Tidy Up", () => {
     game.move.select(Moves.TIDY_UP);
     await game.phaseInterceptor.to(MoveEndPhase);
     expect(game.scene.arena.getTag(ArenaTagType.SPIKES)).toBeUndefined();
-
   }, 20000);
 
   it("stealth rocks are cleared", async () => {
@@ -99,7 +97,7 @@ describe("Moves - Tidy Up", () => {
     await game.phaseInterceptor.to(MoveEndPhase);
 
     const pokemon = [ game.scene.getPlayerPokemon()!, game.scene.getEnemyPokemon()! ];
-    pokemon.forEach(p => {
+    pokemon.forEach((p) => {
       expect(p).toBeDefined();
       expect(p!.getTag(SubstituteTag)).toBeUndefined();
     });

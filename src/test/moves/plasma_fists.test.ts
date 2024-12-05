@@ -37,7 +37,7 @@ describe("Moves - Plasma Fists", () => {
     await game.classicMode.startBattle([ Species.DUSCLOPS, Species.BLASTOISE ]);
 
     const field = game.scene.getField(true);
-    field.forEach(p => vi.spyOn(p, "getMoveType"));
+    field.forEach((p) => vi.spyOn(p, "getMoveType"));
 
     game.move.select(Moves.PLASMA_FISTS, 0, BattlerIndex.ENEMY);
     game.move.select(Moves.TACKLE, 1, BattlerIndex.ENEMY_2);
@@ -49,16 +49,14 @@ describe("Moves - Plasma Fists", () => {
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
-    field.forEach(p => {
+    field.forEach((p) => {
       expect(p.getMoveType).toHaveLastReturnedWith(Type.ELECTRIC);
       expect(p.hp).toBeLessThan(p.getMaxHp());
     });
   });
 
   it("should not affect Normal-type attacks boosted by Pixilate", async () => {
-    game.override
-      .battleType("single")
-      .enemyAbility(Abilities.PIXILATE);
+    game.override.battleType("single").enemyAbility(Abilities.PIXILATE);
 
     await game.classicMode.startBattle([ Species.ONIX ]);
 
@@ -76,10 +74,7 @@ describe("Moves - Plasma Fists", () => {
   });
 
   it("should affect moves that become Normal type due to Normalize", async () => {
-    game.override
-      .battleType("single")
-      .enemyAbility(Abilities.NORMALIZE)
-      .enemyMoveset(Moves.WATER_GUN);
+    game.override.battleType("single").enemyAbility(Abilities.NORMALIZE).enemyMoveset(Moves.WATER_GUN);
 
     await game.classicMode.startBattle([ Species.DUSCLOPS ]);
 

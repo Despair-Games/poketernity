@@ -52,7 +52,7 @@ describe("Moves - Encore", () => {
     // forced into using Splash.
     await game.phaseInterceptor.to("BerryPhase", false);
 
-    expect(enemyPokemon.getLastXMoves().every(turnMove => turnMove.move === Moves.SPLASH)).toBeTruthy();
+    expect(enemyPokemon.getLastXMoves().every((turnMove) => turnMove.move === Moves.SPLASH)).toBeTruthy();
   });
 
   describe("should fail against the following moves:", () => {
@@ -61,7 +61,7 @@ describe("Moves - Encore", () => {
       { moveId: Moves.MIMIC, name: "Mimic", delay: true },
       { moveId: Moves.SKETCH, name: "Sketch", delay: true },
       { moveId: Moves.ENCORE, name: "Encore", delay: false },
-      { moveId: Moves.STRUGGLE, name: "Struggle", delay: false }
+      { moveId: Moves.STRUGGLE, name: "Struggle", delay: false },
     ])("$name", async ({ moveId, delay }) => {
       game.override.enemyMoveset(moveId);
 
@@ -78,9 +78,7 @@ describe("Moves - Encore", () => {
 
       game.move.select(Moves.ENCORE);
 
-      const turnOrder = delay
-        ? [ BattlerIndex.PLAYER, BattlerIndex.ENEMY ]
-        : [ BattlerIndex.ENEMY, BattlerIndex.PLAYER ];
+      const turnOrder = delay ? [ BattlerIndex.PLAYER, BattlerIndex.ENEMY ] : [ BattlerIndex.ENEMY, BattlerIndex.PLAYER ];
       await game.setTurnOrder(turnOrder);
 
       await game.phaseInterceptor.to("BerryPhase", false);

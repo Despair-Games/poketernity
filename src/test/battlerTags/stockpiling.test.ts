@@ -35,7 +35,7 @@ describe("BattlerTag - StockpilingTag", () => {
 
       const subject = new StockpilingTag(1);
 
-      vi.spyOn(game.scene, "unshiftPhase").mockImplementation(phase => {
+      vi.spyOn(game.scene, "unshiftPhase").mockImplementation((phase) => {
         expect(phase).toBeInstanceOf(StatStageChangePhase);
         expect((phase as StatStageChangePhase)["stages"]).toEqual(1);
         expect((phase as StatStageChangePhase)["stats"]).toEqual(expect.arrayContaining([ Stat.DEF, Stat.SPDEF ]));
@@ -61,7 +61,7 @@ describe("BattlerTag - StockpilingTag", () => {
 
       const subject = new StockpilingTag(1);
 
-      vi.spyOn(game.scene, "unshiftPhase").mockImplementation(phase => {
+      vi.spyOn(game.scene, "unshiftPhase").mockImplementation((phase) => {
         expect(phase).toBeInstanceOf(StatStageChangePhase);
         expect((phase as StatStageChangePhase)["stages"]).toEqual(1);
         expect((phase as StatStageChangePhase)["stats"]).toEqual(expect.arrayContaining([ Stat.DEF, Stat.SPDEF ]));
@@ -85,7 +85,7 @@ describe("BattlerTag - StockpilingTag", () => {
 
       const subject = new StockpilingTag(1);
 
-      vi.spyOn(game.scene, "unshiftPhase").mockImplementation(phase => {
+      vi.spyOn(game.scene, "unshiftPhase").mockImplementation((phase) => {
         expect(phase).toBeInstanceOf(StatStageChangePhase);
         expect((phase as StatStageChangePhase)["stages"]).toEqual(1);
         expect((phase as StatStageChangePhase)["stats"]).toEqual(expect.arrayContaining([ Stat.DEF, Stat.SPDEF ]));
@@ -113,7 +113,7 @@ describe("BattlerTag - StockpilingTag", () => {
 
       const subject = new StockpilingTag(1);
 
-      vi.spyOn(game.scene, "unshiftPhase").mockImplementationOnce(phase => {
+      vi.spyOn(game.scene, "unshiftPhase").mockImplementationOnce((phase) => {
         expect(phase).toBeInstanceOf(StatStageChangePhase);
         expect((phase as StatStageChangePhase)["stages"]).toEqual(1);
         expect((phase as StatStageChangePhase)["stats"]).toEqual(expect.arrayContaining([ Stat.DEF, Stat.SPDEF ]));
@@ -125,7 +125,7 @@ describe("BattlerTag - StockpilingTag", () => {
       subject.onAdd(mockPokemon);
       expect(subject.stockpiledCount).toBe(1);
 
-      vi.spyOn(game.scene, "unshiftPhase").mockImplementationOnce(phase => {
+      vi.spyOn(game.scene, "unshiftPhase").mockImplementationOnce((phase) => {
         expect(phase).toBeInstanceOf(StatStageChangePhase);
         expect((phase as StatStageChangePhase)["stages"]).toEqual(1);
         expect((phase as StatStageChangePhase)["stats"]).toEqual(expect.arrayContaining([ Stat.DEF, Stat.SPDEF ]));
@@ -137,7 +137,7 @@ describe("BattlerTag - StockpilingTag", () => {
       subject.onOverlap(mockPokemon);
       expect(subject.stockpiledCount).toBe(2);
 
-      vi.spyOn(game.scene, "unshiftPhase").mockImplementationOnce(phase => {
+      vi.spyOn(game.scene, "unshiftPhase").mockImplementationOnce((phase) => {
         expect(phase).toBeInstanceOf(StatStageChangePhase);
         expect((phase as StatStageChangePhase)["stages"]).toEqual(1);
         expect((phase as StatStageChangePhase)["stats"]).toEqual(expect.arrayContaining([ Stat.DEF, Stat.SPDEF ]));
@@ -148,7 +148,7 @@ describe("BattlerTag - StockpilingTag", () => {
       subject.onOverlap(mockPokemon);
       expect(subject.stockpiledCount).toBe(3);
 
-      vi.spyOn(game.scene, "unshiftPhase").mockImplementationOnce(_phase => {
+      vi.spyOn(game.scene, "unshiftPhase").mockImplementationOnce((_phase) => {
         throw new Error("Should not be called a fourth time");
       });
 
@@ -158,7 +158,7 @@ describe("BattlerTag - StockpilingTag", () => {
       expect(subject.statChangeCounts).toMatchObject({ [Stat.DEF]: 0, [Stat.SPDEF]: 2 });
 
       // removing tag should reverse stat changes
-      vi.spyOn(game.scene, "unshiftPhase").mockImplementationOnce(phase => {
+      vi.spyOn(game.scene, "unshiftPhase").mockImplementationOnce((phase) => {
         expect(phase).toBeInstanceOf(StatStageChangePhase);
         expect((phase as StatStageChangePhase)["stages"]).toEqual(-2);
         expect((phase as StatStageChangePhase)["stats"]).toEqual(expect.arrayContaining([ Stat.SPDEF ]));

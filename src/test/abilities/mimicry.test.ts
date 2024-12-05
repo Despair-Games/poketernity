@@ -70,8 +70,7 @@ describe("Abilities - Mimicry", () => {
   });
 
   it("If the Pokemon is under the effect of a type-adding move and an equivalent terrain activates, the move's effect disappears", async () => {
-    game.override
-      .enemyMoveset([ Moves.FORESTS_CURSE, Moves.GRASSY_TERRAIN ]);
+    game.override.enemyMoveset([ Moves.FORESTS_CURSE, Moves.GRASSY_TERRAIN ]);
     await game.classicMode.startBattle([ Species.FEEBAS ]);
 
     const playerPokemon = game.scene.getPlayerPokemon();

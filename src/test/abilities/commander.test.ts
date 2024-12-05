@@ -62,7 +62,7 @@ describe("Abilities - Commander", () => {
     await game.forceEnemyMove(Moves.TACKLE, BattlerIndex.PLAYER);
 
     await game.phaseInterceptor.to("BerryPhase", false);
-    game.scene.getEnemyField().forEach(enemy => expect(enemy.getLastXMoves(1)[0].result).toBe(MoveResult.MISS));
+    game.scene.getEnemyField().forEach((enemy) => expect(enemy.getLastXMoves(1)[0].result).toBe(MoveResult.MISS));
     expect(tatsugiri.isFullHp()).toBeTruthy();
   });
 
@@ -113,9 +113,7 @@ describe("Abilities - Commander", () => {
   });
 
   it("source should still take damage from Poison while hidden", async () => {
-    game.override
-      .statusEffect(StatusEffect.POISON)
-      .enemyMoveset(Moves.SPLASH);
+    game.override.statusEffect(StatusEffect.POISON).enemyMoveset(Moves.SPLASH);
 
     await game.classicMode.startBattle([ Species.TATSUGIRI, Species.DONDOZO ]);
 
@@ -153,9 +151,7 @@ describe("Abilities - Commander", () => {
   });
 
   it("source should still take damage from Sandstorm while hidden", async () => {
-    game.override
-      .weather(WeatherType.SANDSTORM)
-      .enemyMoveset(Moves.SPLASH);
+    game.override.weather(WeatherType.SANDSTORM).enemyMoveset(Moves.SPLASH);
 
     await game.classicMode.startBattle([ Species.TATSUGIRI, Species.DONDOZO ]);
 
@@ -195,9 +191,7 @@ describe("Abilities - Commander", () => {
   });
 
   it("should interrupt the source's semi-invulnerability", async () => {
-    game.override
-      .moveset([ Moves.SPLASH, Moves.DIVE ])
-      .enemyMoveset(Moves.SPLASH);
+    game.override.moveset([ Moves.SPLASH, Moves.DIVE ]).enemyMoveset(Moves.SPLASH);
 
     await game.classicMode.startBattle([ Species.TATSUGIRI, Species.MAGIKARP, Species.DONDOZO ]);
 

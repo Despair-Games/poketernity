@@ -25,11 +25,9 @@ export default class MockContainer implements MockGameObject {
     this.visible = visible;
   }
 
-  once(event, callback, source) {
-  }
+  once(event, callback, source) {}
 
-  off(event, callback, source) {
-  }
+  off(event, callback, source) {}
 
   removeFromDisplayList() {
     // same as remove or destroy
@@ -175,8 +173,7 @@ export default class MockContainer implements MockGameObject {
     // Brings this Game Object to the top of its parents display list.
   }
 
-  on(event, callback, source) {
-  }
+  on(event, callback, source) {}
 
   add(obj) {
     // Adds a child to this Game Object.
@@ -214,7 +211,7 @@ export default class MockContainer implements MockGameObject {
   }
 
   getByName(key: string) {
-    return this.list.find(v => v.name === key) ?? new MockContainer(this.textureManager, 0, 0);
+    return this.list.find((v) => v.name === key) ?? new MockContainer(this.textureManager, 0, 0);
   }
 
   disableInteractive = () => null;

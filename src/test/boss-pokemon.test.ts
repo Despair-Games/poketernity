@@ -63,9 +63,7 @@ describe("Boss Pokemon / Shields", () => {
   });
 
   it("should reduce the number of shields if we are in a double battle", async () => {
-    game.override
-      .battleType("double")
-      .startingWave(150); // Floor 150 > 2 shields / 3 health segments
+    game.override.battleType("double").startingWave(150); // Floor 150 > 2 shields / 3 health segments
 
     await game.classicMode.startBattle([ Species.MEWTWO ]);
 
@@ -104,13 +102,10 @@ describe("Boss Pokemon / Shields", () => {
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp() - toDmgValue(2 * segmentHp));
     // Breaking the last shield gives a +2 boost to ATK, DEF, SP ATK, SP DEF or SPD
     expect(getTotalStatStageBoosts(enemyPokemon)).toBe(3);
-
   });
 
   it("breaking multiple shields at once requires extra damage", async () => {
-    game.override
-      .battleType("double")
-      .enemyHealthSegments(5);
+    game.override.battleType("double").enemyHealthSegments(5);
 
     await game.classicMode.startBattle([ Species.MEWTWO ]);
 
@@ -140,15 +135,12 @@ describe("Boss Pokemon / Shields", () => {
     boss2.damageAndUpdate(Math.ceil(requiredDamageBoss2));
     expect(boss2.bossSegmentIndex).toBe(0);
     expect(boss2.hp).toBe(boss2.getMaxHp() - toDmgValue(boss2SegmentHp * 4));
-
   });
 
   it("the number of stat stage boosts is consistent when several shields are broken at once", async () => {
     const shieldsToBreak = 4;
 
-    game.override
-      .battleType("double")
-      .enemyHealthSegments(shieldsToBreak + 1);
+    game.override.battleType("double").enemyHealthSegments(shieldsToBreak + 1);
 
     await game.classicMode.startBattle([ Species.MEWTWO ]);
 
@@ -159,7 +151,6 @@ describe("Boss Pokemon / Shields", () => {
     expect(boss1.bossSegments).toBe(shieldsToBreak + 1);
     expect(boss1.bossSegmentIndex).toBe(shieldsToBreak);
     expect(getTotalStatStageBoosts(boss1)).toBe(0);
-
 
     let totalStatStages = 0;
 
@@ -193,13 +184,10 @@ describe("Boss Pokemon / Shields", () => {
     game.move.select(Moves.SPLASH);
     await game.toNextTurn();
     expect(getTotalStatStageBoosts(boss2)).toBe(totalStatStages);
-
   });
 
   it("the boss enduring does not proc an extra stat boost", async () => {
-    game.override
-      .enemyHealthSegments(2)
-      .enemyAbility(Abilities.STURDY);
+    game.override.enemyHealthSegments(2).enemyAbility(Abilities.STURDY);
 
     await game.classicMode.startBattle([ Species.MEWTWO ]);
 
@@ -215,7 +203,6 @@ describe("Boss Pokemon / Shields", () => {
     expect(enemyPokemon.bossSegmentIndex).toBe(0);
     expect(enemyPokemon.hp).toBe(1);
     expect(getTotalStatStageBoosts(enemyPokemon)).toBe(1);
-
   });
 
   /**
@@ -231,4 +218,3 @@ describe("Boss Pokemon / Shields", () => {
     return boosts;
   }
 });
-

@@ -6,7 +6,10 @@ import { Species } from "#app/enums/species";
 import GameManager from "#app/test/utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { runMysteryEncounterToEnd, skipBattleRunMysteryEncounterRewardsPhase } from "#test/mystery-encounter/encounter-test-utils";
+import {
+  runMysteryEncounterToEnd,
+  skipBattleRunMysteryEncounterRewardsPhase,
+} from "#test/mystery-encounter/encounter-test-utils";
 import BattleScene from "#app/battle-scene";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
@@ -43,7 +46,7 @@ describe("A Trainer's Test - Mystery Encounter", () => {
     const biomeMap = new Map<Biome, MysteryEncounterType[]>([
       [ Biome.VOLCANO, [ MysteryEncounterType.MYSTERIOUS_CHALLENGERS ]],
     ]);
-    HUMAN_TRANSITABLE_BIOMES.forEach(biome => {
+    HUMAN_TRANSITABLE_BIOMES.forEach((biome) => {
       biomeMap.set(biome, [ MysteryEncounterType.A_TRAINERS_TEST ]);
     });
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(biomeMap);
@@ -107,8 +110,17 @@ describe("A Trainer's Test - Mystery Encounter", () => {
       expect(scene.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
       expect(enemyField.length).toBe(1);
       expect(scene.currentBattle.trainer).toBeDefined();
-      expect([ i18next.t("trainerNames:buck"), i18next.t("trainerNames:cheryl"), i18next.t("trainerNames:marley"), i18next.t("trainerNames:mira"), i18next.t("trainerNames:riley") ]
-        .map(name => name.toLowerCase()).includes(scene.currentBattle.trainer!.config.name)).toBeTruthy();
+      expect(
+        [
+          i18next.t("trainerNames:buck"),
+          i18next.t("trainerNames:cheryl"),
+          i18next.t("trainerNames:marley"),
+          i18next.t("trainerNames:mira"),
+          i18next.t("trainerNames:riley"),
+        ]
+          .map((name) => name.toLowerCase())
+          .includes(scene.currentBattle.trainer!.config.name),
+      ).toBeTruthy();
       expect(enemyField[0]).toBeDefined();
     });
 
@@ -138,7 +150,7 @@ describe("A Trainer's Test - Mystery Encounter", () => {
       vi.spyOn(scene, "playSoundWithoutBgm").mockImplementation(() => {
         return {
           totalDuration: 1,
-          destroy: () => null
+          destroy: () => null,
         } as any;
       });
     });
@@ -157,7 +169,7 @@ describe("A Trainer's Test - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.A_TRAINERS_TEST, defaultParty);
       await runMysteryEncounterToEnd(game, 2);
 
-      const partyHealPhases = phaseSpy.mock.calls.filter(p => p[0] instanceof PartyHealPhase).map(p => p[0]);
+      const partyHealPhases = phaseSpy.mock.calls.filter((p) => p[0] instanceof PartyHealPhase).map((p) => p[0]);
       expect(partyHealPhases.length).toBe(1);
     });
 

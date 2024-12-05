@@ -6,7 +6,7 @@ type PokemonFunc = (pokemon: Pokemon) => void;
 
 export abstract class FieldPhase extends BattlePhase {
   executeForAll(func: PokemonFunc): void {
-    const field = globalScene.getField(true).filter(p => p.summonData);
-    field.forEach(pokemon => func(pokemon));
+    const field = globalScene.getField(true).filter((p) => p.summonData);
+    field.forEach((pokemon) => func(pokemon));
   }
 }

@@ -1,6 +1,13 @@
 import { BattlerIndex, BattleType } from "#app/battle";
 import { globalScene } from "#app/global-scene";
-import { applyPostFaintAbAttrs, applyPostKnockOutAbAttrs, applyPostVictoryAbAttrs, PostFaintAbAttr, PostKnockOutAbAttr, PostVictoryAbAttr } from "#app/data/ability";
+import {
+  applyPostFaintAbAttrs,
+  applyPostKnockOutAbAttrs,
+  applyPostVictoryAbAttrs,
+  PostFaintAbAttr,
+  PostKnockOutAbAttr,
+  PostVictoryAbAttr,
+} from "#app/data/ability";
 import { BattlerTagLapseType, DestinyBondTag, GrudgeTag } from "#app/data/battler-tags";
 import { battleSpecDialogue } from "#app/data/dialogue";
 import { allMoves, PostVictoryStatStageChangeAttr } from "#app/data/move";
@@ -43,7 +50,13 @@ export class FaintPhase extends PokemonPhase {
    */
   private source?: Pokemon;
 
-  constructor(battlerIndex: BattlerIndex, preventEndure: boolean = false, destinyTag?: DestinyBondTag | null, grudgeTag?: GrudgeTag | null, source?: Pokemon) {
+  constructor(
+    battlerIndex: BattlerIndex,
+    preventEndure: boolean = false,
+    destinyTag?: DestinyBondTag | null,
+    grudgeTag?: GrudgeTag | null,
+    source?: Pokemon,
+  ) {
     super(battlerIndex);
 
     this.preventEndure = preventEndure;
@@ -66,7 +79,11 @@ export class FaintPhase extends PokemonPhase {
     }
 
     if (!this.preventEndure) {
-      const instantReviveModifier = globalScene.applyModifier(PokemonInstantReviveModifier, this.player, faintPokemon) as PokemonInstantReviveModifier;
+      const instantReviveModifier = globalScene.applyModifier(
+        PokemonInstantReviveModifier,
+        this.player,
+        faintPokemon,
+      ) as PokemonInstantReviveModifier;
 
       if (instantReviveModifier) {
         faintPokemon.loseHeldItem(instantReviveModifier);
@@ -92,7 +109,6 @@ export class FaintPhase extends PokemonPhase {
   doFaint(): void {
     const pokemon = this.getPokemon();
 
-
     // Track total times pokemon have been KO'd for supreme overlord/last respects
     if (pokemon.isPlayer()) {
       globalScene.currentBattle.playerFaints += 1;
@@ -102,18 +118,29 @@ export class FaintPhase extends PokemonPhase {
       globalScene.currentBattle.enemyFaintsHistory.push({ pokemon: pokemon, turn: globalScene.currentBattle.turn });
     }
 
-    globalScene.queueMessage(i18next.t("battle:fainted", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }), null, true);
+    globalScene.queueMessage(
+      i18next.t("battle:fainted", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+      null,
+      true,
+    );
     globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeActiveTrigger, true);
 
     if (pokemon.turnData?.attacksReceived?.length) {
       const lastAttack = pokemon.turnData.attacksReceived[0];
-      applyPostFaintAbAttrs(PostFaintAbAttr, pokemon, globalScene.getPokemonById(lastAttack.sourceId)!, new PokemonMove(lastAttack.move).getMove(), lastAttack.result); // TODO: is this bang correct?
-    } else { //If killed by indirect damage, apply post-faint abilities without providing a last move
+      applyPostFaintAbAttrs(
+        PostFaintAbAttr,
+        pokemon,
+        globalScene.getPokemonById(lastAttack.sourceId)!,
+        new PokemonMove(lastAttack.move).getMove(),
+        lastAttack.result,
+      ); // TODO: is this bang correct?
+    } else {
+      //If killed by indirect damage, apply post-faint abilities without providing a last move
       applyPostFaintAbAttrs(PostFaintAbAttr, pokemon);
     }
 
     const alivePlayField = globalScene.getField(true);
-    alivePlayField.forEach(p => applyPostKnockOutAbAttrs(PostKnockOutAbAttr, p, pokemon));
+    alivePlayField.forEach((p) => applyPostKnockOutAbAttrs(PostKnockOutAbAttr, p, pokemon));
     if (pokemon.turnData?.attacksReceived?.length) {
       const defeatSource = globalScene.getPokemonById(pokemon.turnData.attacksReceived[0].sourceId);
       if (defeatSource?.isOnField()) {
@@ -132,11 +159,15 @@ export class FaintPhase extends PokemonPhase {
       /** The total number of Pokemon in the player's party that can legally fight */
       const legalPlayerPokemon = globalScene.getPokemonAllowedInBattle();
       /** The total number of legal player Pokemon that aren't currently on the field */
-      const legalPlayerPartyPokemon = legalPlayerPokemon.filter(p => !p.isActive(true));
+      const legalPlayerPartyPokemon = legalPlayerPokemon.filter((p) => !p.isActive(true));
       if (!legalPlayerPokemon.length) {
         /** If the player doesn't have any legal Pokemon, end the game */
         globalScene.unshiftPhase(new GameOverPhase());
-      } else if (globalScene.currentBattle.double && legalPlayerPokemon.length === 1 && legalPlayerPartyPokemon.length === 0) {
+      } else if (
+        globalScene.currentBattle.double &&
+        legalPlayerPokemon.length === 1 &&
+        legalPlayerPartyPokemon.length === 0
+      ) {
         /**
          * If the player has exactly one Pokemon in total at this point in a double battle, and that Pokemon
          * is already on the field, unshift a phase that moves that Pokemon to center position.
@@ -152,7 +183,10 @@ export class FaintPhase extends PokemonPhase {
     } else {
       globalScene.unshiftPhase(new VictoryPhase(this.battlerIndex));
       if ([ BattleType.TRAINER, BattleType.MYSTERY_ENCOUNTER ].includes(globalScene.currentBattle.battleType)) {
-        const hasReservePartyMember = !!globalScene.getEnemyParty().filter(p => p.isActive() && !p.isOnField() && p.trainerSlot === (pokemon as EnemyPokemon).trainerSlot).length;
+        const hasReservePartyMember = !!globalScene
+          .getEnemyParty()
+          .filter((p) => p.isActive() && !p.isOnField() && p.trainerSlot === (pokemon as EnemyPokemon).trainerSlot)
+          .length;
         if (hasReservePartyMember) {
           globalScene.pushPhase(new SwitchSummonPhase(SwitchType.SWITCH, this.fieldIndex, -1, false, false));
         }
@@ -179,7 +213,10 @@ export class FaintPhase extends PokemonPhase {
         onComplete: () => {
           pokemon.resetSprite();
           pokemon.lapseTags(BattlerTagLapseType.FAINT);
-          globalScene.getField(true).filter(p => p !== pokemon).forEach(p => p.removeTagsBySourceId(pokemon.id));
+          globalScene
+            .getField(true)
+            .filter((p) => p !== pokemon)
+            .forEach((p) => p.removeTagsBySourceId(pokemon.id));
 
           pokemon.y -= 150;
           pokemon.trySetStatus(StatusEffect.FAINT);
@@ -191,7 +228,7 @@ export class FaintPhase extends PokemonPhase {
           }
           globalScene.field.remove(pokemon);
           this.end();
-        }
+        },
       });
     });
   }
@@ -202,9 +239,14 @@ export class FaintPhase extends PokemonPhase {
         if (!this.player) {
           const enemy = this.getPokemon();
           if (enemy.formIndex) {
-            globalScene.ui.showDialogue(battleSpecDialogue[BattleSpec.FINAL_BOSS].secondStageWin, enemy.species.name, null, () => this.doFaint());
+            globalScene.ui.showDialogue(
+              battleSpecDialogue[BattleSpec.FINAL_BOSS].secondStageWin,
+              enemy.species.name,
+              null,
+              () => this.doFaint(),
+            );
           } else {
-          // Final boss' HP threshold has been bypassed; cancel faint and force check for 2nd phase
+            // Final boss' HP threshold has been bypassed; cancel faint and force check for 2nd phase
             enemy.hp++;
             globalScene.unshiftPhase(new DamageAnimPhase(enemy.getBattlerIndex(), 0, HitResult.OTHER));
             this.end();

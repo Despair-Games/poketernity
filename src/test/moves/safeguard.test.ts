@@ -8,7 +8,6 @@ import { Species } from "#enums/species";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
-
 describe("Moves - Safeguard", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
@@ -138,7 +137,11 @@ describe("Moves - Safeguard", () => {
 
   it("protects from ability-inflicted status", async () => {
     game.override.ability(Abilities.STATIC);
-    vi.spyOn(allAbilities[Abilities.STATIC].getAttrs(PostDefendContactApplyStatusEffectAbAttr)[0], "chance", "get").mockReturnValue(100);
+    vi.spyOn(
+      allAbilities[Abilities.STATIC].getAttrs(PostDefendContactApplyStatusEffectAbAttr)[0],
+      "chance",
+      "get",
+    ).mockReturnValue(100);
     await game.classicMode.startBattle();
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 

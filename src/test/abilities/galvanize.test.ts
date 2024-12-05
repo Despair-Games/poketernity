@@ -9,7 +9,6 @@ import GameManager from "#test/utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
-
 describe("Abilities - Galvanize", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;

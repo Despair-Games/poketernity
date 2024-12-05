@@ -102,13 +102,13 @@ describe("Moves - Octolock", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     // before Octolock - enemy should not be trapped
-    expect(enemyPokemon.findTag(t => t instanceof TrappedTag)).toBeUndefined();
+    expect(enemyPokemon.findTag((t) => t instanceof TrappedTag)).toBeUndefined();
 
     game.move.select(Moves.OCTOLOCK);
 
     // after Octolock - enemy should be trapped
     await game.phaseInterceptor.to("MoveEndPhase");
-    expect(enemyPokemon.findTag(t => t instanceof TrappedTag)).toBeDefined();
+    expect(enemyPokemon.findTag((t) => t instanceof TrappedTag)).toBeDefined();
   });
 
   it("does not work on ghost type pokemon", async () => {
@@ -118,13 +118,13 @@ describe("Moves - Octolock", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
     // before Octolock - player should not be trapped
-    expect(playerPokemon.findTag(t => t instanceof TrappedTag)).toBeUndefined();
+    expect(playerPokemon.findTag((t) => t instanceof TrappedTag)).toBeUndefined();
 
     game.move.select(Moves.SPLASH);
     await game.toNextTurn();
 
     // after Octolock - player should still not be trapped, and no stat loss
-    expect(playerPokemon.findTag(t => t instanceof TrappedTag)).toBeUndefined();
+    expect(playerPokemon.findTag((t) => t instanceof TrappedTag)).toBeUndefined();
     expect(playerPokemon.getStatStage(Stat.DEF)).toBe(0);
     expect(playerPokemon.getStatStage(Stat.SPDEF)).toBe(0);
   });
@@ -135,7 +135,7 @@ describe("Moves - Octolock", () => {
     const enemy = game.scene.getEnemyPokemon()!;
 
     // before Octolock - pokemon should not be trapped
-    expect(enemy.findTag(t => t instanceof TrappedTag)).toBeUndefined();
+    expect(enemy.findTag((t) => t instanceof TrappedTag)).toBeUndefined();
 
     game.move.select(Moves.TRICK_OR_TREAT);
     await game.toNextTurn();
@@ -143,7 +143,7 @@ describe("Moves - Octolock", () => {
     await game.toNextTurn();
 
     // after Octolock - pokemon should still not be trapped, and no stat loss
-    expect(enemy.findTag(t => t instanceof TrappedTag)).toBeUndefined();
+    expect(enemy.findTag((t) => t instanceof TrappedTag)).toBeUndefined();
     expect(enemy.getStatStage(Stat.DEF)).toBe(0);
     expect(enemy.getStatStage(Stat.SPDEF)).toBe(0);
   });

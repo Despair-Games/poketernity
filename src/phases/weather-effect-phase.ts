@@ -1,5 +1,13 @@
 import { globalScene } from "#app/global-scene";
-import { applyPreWeatherEffectAbAttrs, SuppressWeatherEffectAbAttr, PreWeatherDamageAbAttr, applyAbAttrs, BlockNonDirectDamageAbAttr, applyPostWeatherLapseAbAttrs, PostWeatherLapseAbAttr } from "#app/data/ability";
+import {
+  applyPreWeatherEffectAbAttrs,
+  SuppressWeatherEffectAbAttr,
+  PreWeatherDamageAbAttr,
+  applyAbAttrs,
+  BlockNonDirectDamageAbAttr,
+  applyPostWeatherLapseAbAttrs,
+  PostWeatherLapseAbAttr,
+} from "#app/data/ability";
 import { CommonAnim } from "#app/data/battle-anims";
 import { Weather, getWeatherDamageMessage, getWeatherLapseMessage } from "#app/data/weather";
 import { BattlerTagType } from "#app/enums/battler-tag-type";
@@ -12,7 +20,11 @@ export class WeatherEffectPhase extends CommonAnimPhase {
   public weather: Weather | null;
 
   constructor() {
-    super(undefined, undefined, CommonAnim.SUNNY + ((globalScene?.arena?.weather?.weatherType || WeatherType.NONE) - 1));
+    super(
+      undefined,
+      undefined,
+      CommonAnim.SUNNY + ((globalScene?.arena?.weather?.weatherType || WeatherType.NONE) - 1),
+    );
     this.weather = globalScene?.arena?.weather;
   }
 
@@ -28,10 +40,11 @@ export class WeatherEffectPhase extends CommonAnimPhase {
     this.setAnimation(CommonAnim.SUNNY + (this.weather.weatherType - 1));
 
     if (this.weather.isDamaging()) {
-
       const cancelled = new Utils.BooleanHolder(false);
 
-      this.executeForAll((pokemon: Pokemon) => applyPreWeatherEffectAbAttrs(SuppressWeatherEffectAbAttr, pokemon, this.weather, cancelled));
+      this.executeForAll((pokemon: Pokemon) =>
+        applyPreWeatherEffectAbAttrs(SuppressWeatherEffectAbAttr, pokemon, this.weather, cancelled),
+      );
 
       if (!cancelled.value) {
         const inflictDamage = (pokemon: Pokemon) => {
@@ -40,7 +53,11 @@ export class WeatherEffectPhase extends CommonAnimPhase {
           applyPreWeatherEffectAbAttrs(PreWeatherDamageAbAttr, pokemon, this.weather, cancelled);
           applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, cancelled);
 
-          if (cancelled.value || pokemon.getTag(BattlerTagType.UNDERGROUND) || pokemon.getTag(BattlerTagType.UNDERWATER)) {
+          if (
+            cancelled.value ||
+            pokemon.getTag(BattlerTagType.UNDERGROUND) ||
+            pokemon.getTag(BattlerTagType.UNDERWATER)
+          ) {
             return;
           }
 
@@ -51,7 +68,10 @@ export class WeatherEffectPhase extends CommonAnimPhase {
         };
 
         this.executeForAll((pokemon: Pokemon) => {
-          const immune = !pokemon || !!pokemon.getTypes(true, true).filter(t => this.weather?.isTypeDamageImmune(t)).length || pokemon.switchOutStatus;
+          const immune =
+            !pokemon ||
+            !!pokemon.getTypes(true, true).filter((t) => this.weather?.isTypeDamageImmune(t)).length ||
+            pokemon.switchOutStatus;
           if (!immune) {
             inflictDamage(pokemon);
           }

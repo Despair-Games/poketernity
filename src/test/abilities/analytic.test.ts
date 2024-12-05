@@ -56,7 +56,7 @@ describe("Abilities - Analytic", () => {
     game.override.battleType("double");
     await game.classicMode.startBattle([ Species.GENGAR, Species.SHUCKLE ]);
 
-    const [ enemy, ] = game.scene.getEnemyField();
+    const [ enemy ] = game.scene.getEnemyField();
 
     game.move.select(Moves.TACKLE, 0, BattlerIndex.ENEMY);
     game.move.select(Moves.SPLASH, 1);

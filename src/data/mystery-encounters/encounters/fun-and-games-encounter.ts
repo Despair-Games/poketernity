@@ -1,4 +1,10 @@
-import { leaveEncounterWithoutBattle, selectPokemonForOption, setEncounterRewards, transitionMysteryEncounterIntroVisuals, updatePlayerMoney, } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import {
+  leaveEncounterWithoutBattle,
+  selectPokemonForOption,
+  setEncounterRewards,
+  transitionMysteryEncounterIntroVisuals,
+  updatePlayerMoney,
+} from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
 import MysteryEncounter, { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
@@ -32,66 +38,67 @@ const namespace = "mysteryEncounters/funAndGames";
  * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3819 | GitHub Issue #3819}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
-export const FunAndGamesEncounter: MysteryEncounter =
-  MysteryEncounterBuilder.withEncounterType(MysteryEncounterType.FUN_AND_GAMES)
-    .withEncounterTier(MysteryEncounterTier.GREAT)
-    .withSceneWaveRangeRequirement(...CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES)
-    .withSceneRequirement(new MoneyRequirement(0, 1.5)) // Cost equal to 1 Max Potion to play
-    .withAutoHideIntroVisuals(false)
-    // Allows using move without a visible enemy pokemon
-    .withBattleAnimationsWithoutTargets(true)
-    // The Wobbuffet won't use moves
-    .withSkipEnemyBattleTurns(true)
-    // Will skip COMMAND selection menu and go straight to FIGHT (move select) menu
-    .withSkipToFightInput(true)
-    .withFleeAllowed(false)
-    .withIntroSpriteConfigs([
-      {
-        spriteKey: "fun_and_games_game",
-        fileRoot: "mystery-encounters",
-        hasShadow: false,
-        x: 0,
-        y: 6,
-      },
-      {
-        spriteKey: "fun_and_games_wobbuffet",
-        fileRoot: "mystery-encounters",
-        hasShadow: true,
-        x: -28,
-        y: 6,
-        yShadow: 6
-      },
-      {
-        spriteKey: "fun_and_games_man",
-        fileRoot: "mystery-encounters",
-        hasShadow: true,
-        x: 40,
-        y: 6,
-        yShadow: 6
-      },
-    ])
-    .withIntroDialogue([
-      {
-        speaker: `${namespace}:speaker`,
-        text: `${namespace}:intro_dialogue`,
-      },
-    ])
-    .setLocalizationKey(`${namespace}`)
-    .withTitle(`${namespace}:title`)
-    .withDescription(`${namespace}:description`)
-    .withQuery(`${namespace}:query`)
-    .withOnInit(() => {
-      const encounter = globalScene.currentBattle.mysteryEncounter!;
-      globalScene.loadBgm("mystery_encounter_fun_and_games", "mystery_encounter_fun_and_games.mp3");
-      encounter.setDialogueToken("wobbuffetName", getPokemonSpecies(Species.WOBBUFFET).getName());
-      return true;
-    })
-    .withOnVisualsStart(() => {
-      globalScene.fadeAndSwitchBgm("mystery_encounter_fun_and_games");
-      return true;
-    })
-    .withOption(MysteryEncounterOptionBuilder
-      .newOptionWithMode(MysteryEncounterOptionMode.DISABLED_OR_DEFAULT)
+export const FunAndGamesEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(
+  MysteryEncounterType.FUN_AND_GAMES,
+)
+  .withEncounterTier(MysteryEncounterTier.GREAT)
+  .withSceneWaveRangeRequirement(...CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES)
+  .withSceneRequirement(new MoneyRequirement(0, 1.5)) // Cost equal to 1 Max Potion to play
+  .withAutoHideIntroVisuals(false)
+  // Allows using move without a visible enemy pokemon
+  .withBattleAnimationsWithoutTargets(true)
+  // The Wobbuffet won't use moves
+  .withSkipEnemyBattleTurns(true)
+  // Will skip COMMAND selection menu and go straight to FIGHT (move select) menu
+  .withSkipToFightInput(true)
+  .withFleeAllowed(false)
+  .withIntroSpriteConfigs([
+    {
+      spriteKey: "fun_and_games_game",
+      fileRoot: "mystery-encounters",
+      hasShadow: false,
+      x: 0,
+      y: 6,
+    },
+    {
+      spriteKey: "fun_and_games_wobbuffet",
+      fileRoot: "mystery-encounters",
+      hasShadow: true,
+      x: -28,
+      y: 6,
+      yShadow: 6,
+    },
+    {
+      spriteKey: "fun_and_games_man",
+      fileRoot: "mystery-encounters",
+      hasShadow: true,
+      x: 40,
+      y: 6,
+      yShadow: 6,
+    },
+  ])
+  .withIntroDialogue([
+    {
+      speaker: `${namespace}:speaker`,
+      text: `${namespace}:intro_dialogue`,
+    },
+  ])
+  .setLocalizationKey(`${namespace}`)
+  .withTitle(`${namespace}:title`)
+  .withDescription(`${namespace}:description`)
+  .withQuery(`${namespace}:query`)
+  .withOnInit(() => {
+    const encounter = globalScene.currentBattle.mysteryEncounter!;
+    globalScene.loadBgm("mystery_encounter_fun_and_games", "mystery_encounter_fun_and_games.mp3");
+    encounter.setDialogueToken("wobbuffetName", getPokemonSpecies(Species.WOBBUFFET).getName());
+    return true;
+  })
+  .withOnVisualsStart(() => {
+    globalScene.fadeAndSwitchBgm("mystery_encounter_fun_and_games");
+    return true;
+  })
+  .withOption(
+    MysteryEncounterOptionBuilder.newOptionWithMode(MysteryEncounterOptionMode.DISABLED_OR_DEFAULT)
       .withSceneRequirement(new MoneyRequirement(0, 1.5)) // Cost equal to 1 Max Potion
       .withDialogue({
         buttonLabel: `${namespace}:option.1.label`,
@@ -138,29 +145,29 @@ export const FunAndGamesEncounter: MysteryEncounter =
 
         return true;
       })
-      .build()
-    )
-    .withSimpleOption(
-      {
-        buttonLabel: `${namespace}:option.2.label`,
-        buttonTooltip: `${namespace}:option.2.tooltip`,
-        selected: [
-          {
-            text: `${namespace}:option.2.selected`,
-          },
-        ],
-      },
-      async () => {
-        // Leave encounter with no rewards or exp
-        await transitionMysteryEncounterIntroVisuals(true, true);
-        leaveEncounterWithoutBattle(true);
-        return true;
-      }
-    )
-    .build();
+      .build(),
+  )
+  .withSimpleOption(
+    {
+      buttonLabel: `${namespace}:option.2.label`,
+      buttonTooltip: `${namespace}:option.2.tooltip`,
+      selected: [
+        {
+          text: `${namespace}:option.2.selected`,
+        },
+      ],
+    },
+    async () => {
+      // Leave encounter with no rewards or exp
+      await transitionMysteryEncounterIntroVisuals(true, true);
+      leaveEncounterWithoutBattle(true);
+      return true;
+    },
+  )
+  .build();
 
 async function summonPlayerPokemon() {
-  return new Promise<void>(async resolve => {
+  return new Promise<void>(async (resolve) => {
     const encounter = globalScene.currentBattle.mysteryEncounter!;
 
     const playerPokemon = encounter.misc.playerPokemon;
@@ -177,7 +184,9 @@ async function summonPlayerPokemon() {
     let playerAnimationPromise: Promise<void> | undefined;
     globalScene.ui.showText(i18next.t("battle:playerGo", { pokemonName: getPokemonNameWithAffix(playerPokemon) }));
     globalScene.pbTray.hide();
-    globalScene.trainer.setTexture(`trainer_${globalScene.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`);
+    globalScene.trainer.setTexture(
+      `trainer_${globalScene.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`,
+    );
     globalScene.time.delayedCall(562, () => {
       globalScene.trainer.setFrame("2");
       globalScene.time.delayedCall(64, () => {
@@ -188,7 +197,7 @@ async function summonPlayerPokemon() {
       targets: globalScene.trainer,
       x: -36,
       duration: 1000,
-      onComplete: () => globalScene.trainer.setVisible(false)
+      onComplete: () => globalScene.trainer.setVisible(false),
     });
     globalScene.time.delayedCall(750, () => {
       playerAnimationPromise = summonPlayerPokemonAnimation(playerPokemon);
@@ -197,7 +206,13 @@ async function summonPlayerPokemon() {
     // Also loads Wobbuffet data (cannot be shiny)
     const enemySpecies = getPokemonSpecies(Species.WOBBUFFET);
     globalScene.currentBattle.enemyParty = [];
-    const wobbuffet = globalScene.addEnemyPokemon(enemySpecies, encounter.misc.playerPokemon.level, TrainerSlot.NONE, false, true);
+    const wobbuffet = globalScene.addEnemyPokemon(
+      enemySpecies,
+      encounter.misc.playerPokemon.level,
+      TrainerSlot.NONE,
+      false,
+      true,
+    );
     wobbuffet.ivs = [ 0, 0, 0, 0, 0, 0 ];
     wobbuffet.setNature(Nature.MILD);
     wobbuffet.setAlpha(0);
@@ -218,7 +233,7 @@ async function summonPlayerPokemon() {
 }
 
 function handleLoseMinigame() {
-  return new Promise<void>(async resolve => {
+  return new Promise<void>(async (resolve) => {
     // Check Wobbuffet is still alive
     const wobbuffet = globalScene.getEnemyPokemon();
     if (!wobbuffet || wobbuffet.isFainted(true) || wobbuffet.hp === 0) {
@@ -320,7 +335,7 @@ async function showWobbuffetHealthBar() {
 }
 
 function summonPlayerPokemonAnimation(pokemon: PlayerPokemon): Promise<void> {
-  return new Promise<void>(resolve => {
+  return new Promise<void>((resolve) => {
     const pokeball = globalScene.addFieldSprite(36, 80, "pb", getPokeballAtlasKey(pokemon.pokeball));
     pokeball.setVisible(false);
     pokeball.setOrigin(0.5, 0.625);
@@ -335,7 +350,7 @@ function summonPlayerPokemonAnimation(pokemon: PlayerPokemon): Promise<void> {
     globalScene.tweens.add({
       targets: pokeball,
       duration: 650,
-      x: 100 + fpOffset[0]
+      x: 100 + fpOffset[0],
     });
 
     globalScene.tweens.add({
@@ -386,11 +401,11 @@ function summonPlayerPokemonAnimation(pokemon: PlayerPokemon): Promise<void> {
                   globalScene.pushPhase(new PostSummonPhase(pokemon.getBattlerIndex()));
                   resolve();
                 });
-              }
+              },
             });
-          }
+          },
         });
-      }
+      },
     });
   });
 }
@@ -407,7 +422,7 @@ function hideShowmanIntroSprite() {
     y: "-=16",
     alpha: 0,
     ease: "Sine.easeInOut",
-    duration: 750
+    duration: 750,
   });
 
   // Slide the Wobbuffet and Game over slightly
@@ -415,6 +430,6 @@ function hideShowmanIntroSprite() {
     targets: [ wobbuffet, carnivalGame ],
     x: "+=16",
     ease: "Sine.easeInOut",
-    duration: 750
+    duration: 750,
   });
 }

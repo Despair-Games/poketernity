@@ -15,7 +15,7 @@ describe("Moves - Instruct", () => {
   function instructSuccess(pokemon: Pokemon, move: Moves): void {
     expect(pokemon.getLastXMoves(-1)[0].move).toBe(move);
     expect(pokemon.getLastXMoves(-1)[1].move).toBe(pokemon.getLastXMoves()[0].move);
-    expect(pokemon.getMoveset().find(m => m?.moveId === move)?.ppUsed).toBe(2);
+    expect(pokemon.getMoveset().find((m) => m?.moveId === move)?.ppUsed).toBe(2);
   }
 
   beforeAll(() => {
@@ -77,9 +77,7 @@ describe("Moves - Instruct", () => {
   });
 
   it("should repeat ally's attack on enemy", async () => {
-    game.override
-      .battleType("double")
-      .moveset([]);
+    game.override.battleType("double").moveset([]);
     await game.classicMode.startBattle([ Species.AMOONGUSS, Species.SHUCKLE ]);
 
     const [ amoonguss, shuckle ] = game.scene.getPlayerField();
@@ -99,8 +97,7 @@ describe("Moves - Instruct", () => {
 
   // TODO: Enable test case once gigaton hammer (and blood moon) is fixed
   it.todo("should repeat enemy's Gigaton Hammer", async () => {
-    game.override
-      .enemyLevel(5);
+    game.override.enemyLevel(5);
     await game.classicMode.startBattle([ Species.AMOONGUSS ]);
 
     const enemy = game.scene.getEnemyPokemon()!;
@@ -114,9 +111,7 @@ describe("Moves - Instruct", () => {
   });
 
   it("should respect enemy's status condition", async () => {
-    game.override
-      .moveset([ Moves.THUNDER_WAVE, Moves.INSTRUCT ])
-      .enemyMoveset([ Moves.SPLASH, Moves.SONIC_BOOM ]);
+    game.override.moveset([ Moves.THUNDER_WAVE, Moves.INSTRUCT ]).enemyMoveset([ Moves.SPLASH, Moves.SONIC_BOOM ]);
     await game.classicMode.startBattle([ Species.AMOONGUSS ]);
 
     game.move.select(Moves.THUNDER_WAVE);
@@ -145,7 +140,7 @@ describe("Moves - Instruct", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     game.move.changeMoveset(enemyPokemon, Moves.HIDDEN_POWER);
-    const moveUsed = enemyPokemon.moveset.find(m => m?.moveId === Moves.HIDDEN_POWER)!;
+    const moveUsed = enemyPokemon.moveset.find((m) => m?.moveId === Moves.HIDDEN_POWER)!;
     moveUsed.ppUsed = moveUsed.getMovePp() - 1;
 
     game.move.select(Moves.INSTRUCT);
@@ -171,9 +166,7 @@ describe("Moves - Instruct", () => {
   });
 
   it("should attempt to call enemy's disabled move, but move use itself should fail", async () => {
-    game.override
-      .moveset([ Moves.INSTRUCT, Moves.DISABLE ])
-      .battleType("double");
+    game.override.moveset([ Moves.INSTRUCT, Moves.DISABLE ]).battleType("double");
     await game.classicMode.startBattle([ Species.AMOONGUSS, Species.DROWZEE ]);
 
     const [ enemy1, enemy2 ] = game.scene.getEnemyField();
@@ -190,8 +183,12 @@ describe("Moves - Instruct", () => {
     expect(game.scene.getPlayerField()[0].getLastXMoves()[0].result).toBe(MoveResult.SUCCESS);
     const enemyMove = game.scene.getEnemyPokemon()!.getLastXMoves()[0];
     expect(enemyMove.result).toBe(MoveResult.FAIL);
-    expect(game.scene.getEnemyPokemon()!.getMoveset().find(m => m?.moveId === Moves.SONIC_BOOM)?.ppUsed).toBe(1);
-
+    expect(
+      game.scene
+        .getEnemyPokemon()!
+        .getMoveset()
+        .find((m) => m?.moveId === Moves.SONIC_BOOM)?.ppUsed,
+    ).toBe(1);
   });
 
   it("should not repeat enemy's move through protect", async () => {
@@ -207,18 +204,18 @@ describe("Moves - Instruct", () => {
 
     expect(enemyPokemon.getLastXMoves(-1)[0].move).toBe(Moves.PROTECT);
     expect(enemyPokemon.getLastXMoves(-1)[1]).toBeUndefined(); // undefined because protect failed
-    expect(enemyPokemon.getMoveset().find(m => m?.moveId === Moves.PROTECT)?.ppUsed).toBe(1);
+    expect(enemyPokemon.getMoveset().find((m) => m?.moveId === Moves.PROTECT)?.ppUsed).toBe(1);
   });
 
   it("should not repeat enemy's charging move", async () => {
-    game.override
-      .enemyMoveset([ Moves.SONIC_BOOM, Moves.HYPER_BEAM ])
-      .enemyLevel(5);
+    game.override.enemyMoveset([ Moves.SONIC_BOOM, Moves.HYPER_BEAM ]).enemyLevel(5);
     await game.classicMode.startBattle([ Species.SHUCKLE ]);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
-    enemyPokemon.battleSummonData.moveHistory = [{ move: Moves.SONIC_BOOM, targets: [ BattlerIndex.PLAYER ], result: MoveResult.SUCCESS, virtual: false }];
+    enemyPokemon.battleSummonData.moveHistory = [
+      { move: Moves.SONIC_BOOM, targets: [ BattlerIndex.PLAYER ], result: MoveResult.SUCCESS, virtual: false },
+    ];
 
     game.move.select(Moves.INSTRUCT);
     await game.forceEnemyMove(Moves.HYPER_BEAM);
@@ -253,9 +250,7 @@ describe("Moves - Instruct", () => {
   });
 
   it("should cause multi-hit moves to hit the appropriate number of times in singles", async () => {
-    game.override
-      .enemyAbility(Abilities.SKILL_LINK)
-      .enemyMoveset(Moves.BULLET_SEED);
+    game.override.enemyAbility(Abilities.SKILL_LINK).enemyMoveset(Moves.BULLET_SEED);
     await game.classicMode.startBattle([ Species.BULBASAUR ]);
 
     const player = game.scene.getPlayerPokemon()!;

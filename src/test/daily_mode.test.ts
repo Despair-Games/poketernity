@@ -62,9 +62,7 @@ describe("Shop modifications", async () => {
       .disableTrainerWaves()
       .moveset([ Moves.SPLASH ])
       .enemyMoveset(Moves.SPLASH);
-    game.modifiers
-      .addCheck("EVIOLITE")
-      .addCheck("MINI_BLACK_HOLE");
+    game.modifiers.addCheck("EVIOLITE").addCheck("MINI_BLACK_HOLE");
     vi.spyOn(pokerogueApi.daily, "getSeed").mockResolvedValue("test-seed");
   });
 
@@ -80,9 +78,7 @@ describe("Shop modifications", async () => {
     await game.phaseInterceptor.to("BattleEndPhase");
     game.onNextPrompt("SelectModifierPhase", Mode.MODIFIER_SELECT, () => {
       expect(game.scene.ui.getHandler()).toBeInstanceOf(ModifierSelectUiHandler);
-      game.modifiers
-        .testCheck("EVIOLITE", false)
-        .testCheck("MINI_BLACK_HOLE", false);
+      game.modifiers.testCheck("EVIOLITE", false).testCheck("MINI_BLACK_HOLE", false);
     });
   });
 
@@ -93,9 +89,7 @@ describe("Shop modifications", async () => {
     await game.phaseInterceptor.to("BattleEndPhase");
     game.onNextPrompt("SelectModifierPhase", Mode.MODIFIER_SELECT, () => {
       expect(game.scene.ui.getHandler()).toBeInstanceOf(ModifierSelectUiHandler);
-      game.modifiers
-        .testCheck("EVIOLITE", true)
-        .testCheck("MINI_BLACK_HOLE", true);
+      game.modifiers.testCheck("EVIOLITE", true).testCheck("MINI_BLACK_HOLE", true);
     });
   });
 });

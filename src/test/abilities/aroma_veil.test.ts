@@ -42,7 +42,7 @@ describe("Moves - Aroma Veil", () => {
     game.move.select(Moves.GROWL);
     await game.forceEnemyMove(Moves.HEAL_BLOCK);
     await game.toNextTurn();
-    party.forEach(p => {
+    party.forEach((p) => {
       expect(p.getTag(BattlerTagType.HEAL_BLOCK)).toBeUndefined();
     });
   });
@@ -58,7 +58,7 @@ describe("Moves - Aroma Veil", () => {
     await game.forceEnemyMove(Moves.SPLASH);
     await game.toNextTurn();
     expect(game.scene.arena.getTag(ArenaTagType.IMPRISON)).toBeDefined();
-    party.forEach(p => {
+    party.forEach((p) => {
       expect(p.getTag(BattlerTagType.IMPRISON)).toBeDefined();
     });
   });

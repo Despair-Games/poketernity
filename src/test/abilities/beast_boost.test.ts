@@ -33,7 +33,7 @@ describe("Abilities - Beast Boost", () => {
       .enemyMoveset(Moves.SPLASH);
   });
 
-  it("should prefer highest stat to boost its corresponding stat stage by 1 when winning a battle", async() => {
+  it("should prefer highest stat to boost its corresponding stat stage by 1 when winning a battle", async () => {
     await game.classicMode.startBattle([ Species.SLOWBRO ]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
@@ -49,7 +49,7 @@ describe("Abilities - Beast Boost", () => {
     expect(playerPokemon.getStatStage(Stat.DEF)).toBe(1);
   }, 20000);
 
-  it("should use in-battle overriden stats when determining the stat stage to raise by 1", async() => {
+  it("should use in-battle overriden stats when determining the stat stage to raise by 1", async () => {
     game.override.enemyMoveset([ Moves.GUARD_SPLIT ]);
 
     await game.classicMode.startBattle([ Species.SLOWBRO ]);
@@ -68,7 +68,7 @@ describe("Abilities - Beast Boost", () => {
     expect(playerPokemon.getStatStage(Stat.SPATK)).toBe(1);
   }, 20000);
 
-  it("should have order preference in case of stat ties", async() => {
+  it("should have order preference in case of stat ties", async () => {
     // Order preference follows the order of EFFECTIVE_STAT
     await game.classicMode.startBattle([ Species.SLOWBRO ]);
 

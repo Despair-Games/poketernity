@@ -18,7 +18,7 @@ export default class CandyBar extends Phaser.GameObjects.Container {
   public shown: boolean;
 
   constructor() {
-    super(globalScene, (globalScene.game.canvas.width / 6), -((globalScene.game.canvas.height) / 6) + 15);
+    super(globalScene, globalScene.game.canvas.width / 6, -(globalScene.game.canvas.height / 6) + 15);
   }
 
   setup(): void {
@@ -48,12 +48,14 @@ export default class CandyBar extends Phaser.GameObjects.Container {
   }
 
   showStarterSpeciesCandy(starterSpeciesId: Species, count: integer): Promise<void> {
-    return new Promise<void>(resolve => {
+    return new Promise<void>((resolve) => {
       if (this.shown) {
         if (this.speciesId === starterSpeciesId) {
           return resolve();
         } else {
-          return this.hide().then(() => this.showStarterSpeciesCandy(starterSpeciesId, count)).then(() => resolve());
+          return this.hide()
+            .then(() => this.showStarterSpeciesCandy(starterSpeciesId, count))
+            .then(() => resolve());
         }
       }
 
@@ -62,7 +64,9 @@ export default class CandyBar extends Phaser.GameObjects.Container {
       this.candyIcon.setTint(argbFromRgba(Utils.rgbHexToRgba(colorScheme[0])));
       this.candyOverlayIcon.setTint(argbFromRgba(Utils.rgbHexToRgba(colorScheme[1])));
 
-      this.countText.setText(`${globalScene.gameData.starterData[starterSpeciesId].candyCount + count} (+${count.toString()})`);
+      this.countText.setText(
+        `${globalScene.gameData.starterData[starterSpeciesId].candyCount + count} (+${count.toString()})`,
+      );
 
       this.bg.width = this.countText.displayWidth + 28;
 
@@ -76,14 +80,14 @@ export default class CandyBar extends Phaser.GameObjects.Container {
 
       this.tween = globalScene.tweens.add({
         targets: this,
-        x: (globalScene.game.canvas.width / 6) - (this.bg.width - 5),
+        x: globalScene.game.canvas.width / 6 - (this.bg.width - 5),
         duration: 500,
         ease: "Sine.easeOut",
         onComplete: () => {
           this.tween = null;
           this.resetAutoHideTimer();
           resolve();
-        }
+        },
       });
 
       this.setVisible(true);
@@ -92,7 +96,7 @@ export default class CandyBar extends Phaser.GameObjects.Container {
   }
 
   hide(): Promise<void> {
-    return new Promise<void>(resolve => {
+    return new Promise<void>((resolve) => {
       if (!this.shown) {
         return resolve();
       }
@@ -107,7 +111,7 @@ export default class CandyBar extends Phaser.GameObjects.Container {
 
       this.tween = globalScene.tweens.add({
         targets: this,
-        x: (globalScene.game.canvas.width / 6),
+        x: globalScene.game.canvas.width / 6,
         duration: 500,
         ease: "Sine.easeIn",
         onComplete: () => {
@@ -115,7 +119,7 @@ export default class CandyBar extends Phaser.GameObjects.Container {
           this.shown = false;
           this.setVisible(false);
           resolve();
-        }
+        },
       });
     });
   }

@@ -55,7 +55,12 @@ describe("Egg Generation Tests", () => {
     let gachaSpeciesCount = 0;
 
     for (let i = 0; i < EGG_HATCH_COUNT; i++) {
-      const result = new Egg({ scene, timestamp, sourceType: EggSourceType.GACHA_LEGENDARY, tier: EggTier.LEGENDARY }).generatePlayerPokemon().species.speciesId;
+      const result = new Egg({
+        scene,
+        timestamp,
+        sourceType: EggSourceType.GACHA_LEGENDARY,
+        tier: EggTier.LEGENDARY,
+      }).generatePlayerPokemon().species.speciesId;
       if (result === expectedSpecies) {
         gachaSpeciesCount++;
       }
@@ -66,8 +71,8 @@ describe("Egg Generation Tests", () => {
   });
   it("should never be allowed to generate Eternatus via the legendary gacha", () => {
     const validLegendaryGachaSpecies = getValidLegendaryGachaSpecies();
-    expect(validLegendaryGachaSpecies.every(s => speciesEggTiers[s] === EggTier.LEGENDARY)).toBe(true);
-    expect(validLegendaryGachaSpecies.every(s => allSpecies[s].isObtainable())).toBe(true);
+    expect(validLegendaryGachaSpecies.every((s) => speciesEggTiers[s] === EggTier.LEGENDARY)).toBe(true);
+    expect(validLegendaryGachaSpecies.every((s) => allSpecies[s].isObtainable())).toBe(true);
     expect(validLegendaryGachaSpecies.includes(Species.ETERNATUS)).toBe(false);
   });
   it("should hatch an Arceus. Set from species", () => {
@@ -138,7 +143,9 @@ describe("Egg Generation Tests", () => {
     const scene = game.scene;
     const expectedResult = true;
 
-    const result = new Egg({ scene, isShiny: expectedResult, species: Species.BULBASAUR }).generatePlayerPokemon().isShiny();
+    const result = new Egg({ scene, isShiny: expectedResult, species: Species.BULBASAUR })
+      .generatePlayerPokemon()
+      .isShiny();
 
     expect(result).toBe(expectedResult);
   });
@@ -146,7 +153,12 @@ describe("Egg Generation Tests", () => {
     const scene = game.scene;
     const expectedVariantTier = VariantTier.STANDARD;
 
-    const result = new Egg({ scene, isShiny: true, variantTier: expectedVariantTier, species: Species.BULBASAUR }).generatePlayerPokemon().variant;
+    const result = new Egg({
+      scene,
+      isShiny: true,
+      variantTier: expectedVariantTier,
+      species: Species.BULBASAUR,
+    }).generatePlayerPokemon().variant;
 
     expect(result).toBe(expectedVariantTier);
   });
@@ -154,7 +166,12 @@ describe("Egg Generation Tests", () => {
     const scene = game.scene;
     const expectedVariantTier = VariantTier.RARE;
 
-    const result = new Egg({ scene, isShiny: true, variantTier: expectedVariantTier, species: Species.BULBASAUR }).generatePlayerPokemon().variant;
+    const result = new Egg({
+      scene,
+      isShiny: true,
+      variantTier: expectedVariantTier,
+      species: Species.BULBASAUR,
+    }).generatePlayerPokemon().variant;
 
     expect(result).toBe(expectedVariantTier);
   });
@@ -162,7 +179,12 @@ describe("Egg Generation Tests", () => {
     const scene = game.scene;
     const expectedVariantTier = VariantTier.EPIC;
 
-    const result = new Egg({ scene, isShiny: true, variantTier: expectedVariantTier, species: Species.BULBASAUR }).generatePlayerPokemon().variant;
+    const result = new Egg({
+      scene,
+      isShiny: true,
+      variantTier: expectedVariantTier,
+      species: Species.BULBASAUR,
+    }).generatePlayerPokemon().variant;
 
     expect(result).toBe(expectedVariantTier);
   });
@@ -185,7 +207,11 @@ describe("Egg Generation Tests", () => {
   it("should return a hatched pokemon with a hidden ability", () => {
     const scene = game.scene;
 
-    const playerPokemon = new Egg({ scene, overrideHiddenAbility: true, species: Species.BULBASAUR }).generatePlayerPokemon();
+    const playerPokemon = new Egg({
+      scene,
+      overrideHiddenAbility: true,
+      species: Species.BULBASAUR,
+    }).generatePlayerPokemon();
     const expectedAbilityIndex = playerPokemon.species.ability2 ? 2 : 1;
 
     const result = playerPokemon.abilityIndex;
@@ -342,10 +368,10 @@ describe("Egg Generation Tests", () => {
 
       const newEgg = new Egg({ scene, sourceType: EggSourceType.GACHA_SHINY, tier: EggTier.COMMON });
       const newHatch = newEgg.generatePlayerPokemon();
-      diffEggMove = diffEggMove || (newEgg.eggMoveIndex !== firstEgg.eggMoveIndex);
-      diffSpecies = diffSpecies || (newHatch.species.speciesId !== firstHatch.species.speciesId);
-      diffShiny = diffShiny || (newHatch.shiny !== firstHatch.shiny);
-      diffAbility = diffAbility || (newHatch.abilityIndex !== firstHatch.abilityIndex);
+      diffEggMove = diffEggMove || newEgg.eggMoveIndex !== firstEgg.eggMoveIndex;
+      diffSpecies = diffSpecies || newHatch.species.speciesId !== firstHatch.species.speciesId;
+      diffShiny = diffShiny || newHatch.shiny !== firstHatch.shiny;
+      diffAbility = diffAbility || newHatch.abilityIndex !== firstHatch.abilityIndex;
     }
 
     expect(diffEggMove).toBe(true);
@@ -371,10 +397,10 @@ describe("Egg Generation Tests", () => {
 
       const newEgg = new Egg({ scene, species: Species.BULBASAUR });
       const newHatch = newEgg.generatePlayerPokemon();
-      diffEggMove = diffEggMove || (newEgg.eggMoveIndex !== firstEgg.eggMoveIndex);
-      diffSpecies = diffSpecies || (newHatch.species.speciesId !== firstHatch.species.speciesId);
-      diffShiny = diffShiny || (newHatch.shiny !== firstHatch.shiny);
-      diffAbility = diffAbility || (newHatch.abilityIndex !== firstHatch.abilityIndex);
+      diffEggMove = diffEggMove || newEgg.eggMoveIndex !== firstEgg.eggMoveIndex;
+      diffSpecies = diffSpecies || newHatch.species.speciesId !== firstHatch.species.speciesId;
+      diffShiny = diffShiny || newHatch.shiny !== firstHatch.shiny;
+      diffAbility = diffAbility || newHatch.abilityIndex !== firstHatch.abilityIndex;
     }
 
     expect(diffEggMove).toBe(true);

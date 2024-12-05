@@ -109,7 +109,7 @@ describe("Moves - Toxic Spikes", () => {
     game.move.select(Moves.TOXIC_SPIKES);
     await game.phaseInterceptor.to("TurnEndPhase");
 
-    const arenaTags = (game.scene.arena.getTagOnSide(ArenaTagType.TOXIC_SPIKES, ArenaTagSide.ENEMY) as ArenaTrapTag);
+    const arenaTags = game.scene.arena.getTagOnSide(ArenaTagType.TOXIC_SPIKES, ArenaTagSide.ENEMY) as ArenaTrapTag;
     expect(arenaTags.tagType).toBe(ArenaTagType.TOXIC_SPIKES);
     expect(arenaTags.layers).toBe(1);
   });
@@ -127,9 +127,11 @@ describe("Moves - Toxic Spikes", () => {
     await game.phaseInterceptor.to("BattleEndPhase");
     await game.toNextWave();
 
-    const sessionData : SessionSaveData = gameData["getSessionSaveData"]();
+    const sessionData: SessionSaveData = gameData["getSessionSaveData"]();
     localStorage.setItem("sessionTestData", encrypt(JSON.stringify(sessionData), true));
-    const recoveredData : SessionSaveData = gameData.parseSessionData(decrypt(localStorage.getItem("sessionTestData")!, true));
+    const recoveredData: SessionSaveData = gameData.parseSessionData(
+      decrypt(localStorage.getItem("sessionTestData")!, true),
+    );
     gameData.loadSession(0, recoveredData);
 
     expect(sessionData.arena.tags).toEqual(recoveredData.arena.tags);

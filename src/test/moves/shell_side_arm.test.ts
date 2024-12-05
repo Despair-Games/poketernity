@@ -61,9 +61,7 @@ describe("Moves - Shell Side Arm", () => {
   });
 
   it("respects stat stage changes when forecasting base damage", async () => {
-    game.override
-      .enemySpecies(Species.SNORLAX)
-      .enemyMoveset(Moves.COTTON_GUARD);
+    game.override.enemySpecies(Species.SNORLAX).enemyMoveset(Moves.COTTON_GUARD);
 
     await game.classicMode.startBattle([ Species.MANAPHY ]);
 

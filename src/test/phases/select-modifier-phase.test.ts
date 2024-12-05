@@ -59,7 +59,9 @@ describe("SelectModifierPhase", () => {
     await game.phaseInterceptor.to("SelectModifierPhase");
 
     expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
-    const modifierSelectHandler = scene.ui.handlers.find(h => h instanceof ModifierSelectUiHandler) as ModifierSelectUiHandler;
+    const modifierSelectHandler = scene.ui.handlers.find(
+      (h) => h instanceof ModifierSelectUiHandler,
+    ) as ModifierSelectUiHandler;
     expect(modifierSelectHandler.options.length).toEqual(3);
   });
 
@@ -68,11 +70,14 @@ describe("SelectModifierPhase", () => {
     const options = [
       new ModifierTypeOption(modifierTypes.POTION(), 0, 100),
       new ModifierTypeOption(modifierTypes.ETHER(), 0, 400),
-      new ModifierTypeOption(modifierTypes.REVIVE(), 0, 1000)
+      new ModifierTypeOption(modifierTypes.REVIVE(), 0, 1000),
     ];
 
     const selectModifierPhase1 = new SelectModifierPhase(0, undefined, { guaranteedModifierTypeOptions: options });
-    const selectModifierPhase2 = new SelectModifierPhase(0, undefined, { guaranteedModifierTypeOptions: options, rerollMultiplier: 2 });
+    const selectModifierPhase2 = new SelectModifierPhase(0, undefined, {
+      guaranteedModifierTypeOptions: options,
+      rerollMultiplier: 2,
+    });
 
     const cost1 = selectModifierPhase1.getRerollCost(false);
     const cost2 = selectModifierPhase2.getRerollCost(false);
@@ -90,7 +95,9 @@ describe("SelectModifierPhase", () => {
     // TODO: nagivate the ui to reroll somehow
     //const smphase = scene.getCurrentPhase() as SelectModifierPhase;
     expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
-    const modifierSelectHandler = scene.ui.handlers.find(h => h instanceof ModifierSelectUiHandler) as ModifierSelectUiHandler;
+    const modifierSelectHandler = scene.ui.handlers.find(
+      (h) => h instanceof ModifierSelectUiHandler,
+    ) as ModifierSelectUiHandler;
     expect(modifierSelectHandler.options.length).toEqual(3);
 
     modifierSelectHandler.processInput(Button.ACTION);
@@ -116,25 +123,42 @@ describe("SelectModifierPhase", () => {
     await game.phaseInterceptor.to("SelectModifierPhase");
 
     expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
-    const modifierSelectHandler = scene.ui.handlers.find(h => h instanceof ModifierSelectUiHandler) as ModifierSelectUiHandler;
+    const modifierSelectHandler = scene.ui.handlers.find(
+      (h) => h instanceof ModifierSelectUiHandler,
+    ) as ModifierSelectUiHandler;
     expect(modifierSelectHandler.options.length).toEqual(3);
-    const firstRollTiers: ModifierTier[] = modifierSelectHandler.options.map(o => o.modifierTypeOption.type.tier);
+    const firstRollTiers: ModifierTier[] = modifierSelectHandler.options.map((o) => o.modifierTypeOption.type.tier);
 
     // TODO: nagivate ui to reroll with lock capsule enabled
 
     expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
     expect(modifierSelectHandler.options.length).toEqual(3);
     // Reroll with lock can still upgrade
-    expect(modifierSelectHandler.options[0].modifierTypeOption.type.tier - modifierSelectHandler.options[0].modifierTypeOption.upgradeCount).toEqual(firstRollTiers[0]);
-    expect(modifierSelectHandler.options[1].modifierTypeOption.type.tier - modifierSelectHandler.options[1].modifierTypeOption.upgradeCount).toEqual(firstRollTiers[1]);
-    expect(modifierSelectHandler.options[2].modifierTypeOption.type.tier - modifierSelectHandler.options[2].modifierTypeOption.upgradeCount).toEqual(firstRollTiers[2]);
+    expect(
+      modifierSelectHandler.options[0].modifierTypeOption.type.tier -
+        modifierSelectHandler.options[0].modifierTypeOption.upgradeCount,
+    ).toEqual(firstRollTiers[0]);
+    expect(
+      modifierSelectHandler.options[1].modifierTypeOption.type.tier -
+        modifierSelectHandler.options[1].modifierTypeOption.upgradeCount,
+    ).toEqual(firstRollTiers[1]);
+    expect(
+      modifierSelectHandler.options[2].modifierTypeOption.type.tier -
+        modifierSelectHandler.options[2].modifierTypeOption.upgradeCount,
+    ).toEqual(firstRollTiers[2]);
   });
 
   it("should generate custom modifiers", async () => {
     await game.classicMode.startBattle([ Species.ABRA, Species.VOLCARONA ]);
     scene.money = 1000000;
     const customModifiers: CustomModifierSettings = {
-      guaranteedModifierTypeFuncs: [ modifierTypes.MEMORY_MUSHROOM, modifierTypes.TM_ULTRA, modifierTypes.LEFTOVERS, modifierTypes.AMULET_COIN, modifierTypes.GOLDEN_PUNCH ]
+      guaranteedModifierTypeFuncs: [
+        modifierTypes.MEMORY_MUSHROOM,
+        modifierTypes.TM_ULTRA,
+        modifierTypes.LEFTOVERS,
+        modifierTypes.AMULET_COIN,
+        modifierTypes.GOLDEN_PUNCH,
+      ],
     };
     const selectModifierPhase = new SelectModifierPhase(0, undefined, customModifiers);
     scene.unshiftPhase(selectModifierPhase);
@@ -142,7 +166,9 @@ describe("SelectModifierPhase", () => {
     await game.phaseInterceptor.to("SelectModifierPhase");
 
     expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
-    const modifierSelectHandler = scene.ui.handlers.find(h => h instanceof ModifierSelectUiHandler) as ModifierSelectUiHandler;
+    const modifierSelectHandler = scene.ui.handlers.find(
+      (h) => h instanceof ModifierSelectUiHandler,
+    ) as ModifierSelectUiHandler;
     expect(modifierSelectHandler.options.length).toEqual(5);
     expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toEqual("MEMORY_MUSHROOM");
     expect(modifierSelectHandler.options[1].modifierTypeOption.type.id).toEqual("TM_ULTRA");
@@ -155,7 +181,13 @@ describe("SelectModifierPhase", () => {
     await game.classicMode.startBattle([ Species.ABRA, Species.VOLCARONA ]);
     scene.money = 1000000;
     const customModifiers: CustomModifierSettings = {
-      guaranteedModifierTiers: [ ModifierTier.COMMON, ModifierTier.GREAT, ModifierTier.ULTRA, ModifierTier.ROGUE, ModifierTier.MASTER ]
+      guaranteedModifierTiers: [
+        ModifierTier.COMMON,
+        ModifierTier.GREAT,
+        ModifierTier.ULTRA,
+        ModifierTier.ROGUE,
+        ModifierTier.MASTER,
+      ],
     };
     const pokemon = new PlayerPokemon(getPokemonSpecies(Species.BULBASAUR), 10, undefined, 0, undefined, true, 2);
 
@@ -171,13 +203,30 @@ describe("SelectModifierPhase", () => {
     await game.phaseInterceptor.to("SelectModifierPhase");
 
     expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
-    const modifierSelectHandler = scene.ui.handlers.find(h => h instanceof ModifierSelectUiHandler) as ModifierSelectUiHandler;
+    const modifierSelectHandler = scene.ui.handlers.find(
+      (h) => h instanceof ModifierSelectUiHandler,
+    ) as ModifierSelectUiHandler;
     expect(modifierSelectHandler.options.length).toEqual(5);
-    expect(modifierSelectHandler.options[0].modifierTypeOption.type.tier - modifierSelectHandler.options[0].modifierTypeOption.upgradeCount).toEqual(ModifierTier.COMMON);
-    expect(modifierSelectHandler.options[1].modifierTypeOption.type.tier - modifierSelectHandler.options[1].modifierTypeOption.upgradeCount).toEqual(ModifierTier.GREAT);
-    expect(modifierSelectHandler.options[2].modifierTypeOption.type.tier - modifierSelectHandler.options[2].modifierTypeOption.upgradeCount).toEqual(ModifierTier.ULTRA);
-    expect(modifierSelectHandler.options[3].modifierTypeOption.type.tier - modifierSelectHandler.options[3].modifierTypeOption.upgradeCount).toEqual(ModifierTier.ROGUE);
-    expect(modifierSelectHandler.options[4].modifierTypeOption.type.tier - modifierSelectHandler.options[4].modifierTypeOption.upgradeCount).toEqual(ModifierTier.MASTER);
+    expect(
+      modifierSelectHandler.options[0].modifierTypeOption.type.tier -
+        modifierSelectHandler.options[0].modifierTypeOption.upgradeCount,
+    ).toEqual(ModifierTier.COMMON);
+    expect(
+      modifierSelectHandler.options[1].modifierTypeOption.type.tier -
+        modifierSelectHandler.options[1].modifierTypeOption.upgradeCount,
+    ).toEqual(ModifierTier.GREAT);
+    expect(
+      modifierSelectHandler.options[2].modifierTypeOption.type.tier -
+        modifierSelectHandler.options[2].modifierTypeOption.upgradeCount,
+    ).toEqual(ModifierTier.ULTRA);
+    expect(
+      modifierSelectHandler.options[3].modifierTypeOption.type.tier -
+        modifierSelectHandler.options[3].modifierTypeOption.upgradeCount,
+    ).toEqual(ModifierTier.ROGUE);
+    expect(
+      modifierSelectHandler.options[4].modifierTypeOption.type.tier -
+        modifierSelectHandler.options[4].modifierTypeOption.upgradeCount,
+    ).toEqual(ModifierTier.MASTER);
   });
 
   it("should generate custom modifiers and modifier tiers together", async () => {
@@ -185,16 +234,17 @@ describe("SelectModifierPhase", () => {
     scene.money = 1000000;
     const customModifiers: CustomModifierSettings = {
       guaranteedModifierTypeFuncs: [ modifierTypes.MEMORY_MUSHROOM, modifierTypes.TM_COMMON ],
-      guaranteedModifierTiers: [ ModifierTier.MASTER, ModifierTier.MASTER ]
+      guaranteedModifierTiers: [ ModifierTier.MASTER, ModifierTier.MASTER ],
     };
     const selectModifierPhase = new SelectModifierPhase(0, undefined, customModifiers);
     scene.unshiftPhase(selectModifierPhase);
     game.move.select(Moves.SPLASH);
     await game.phaseInterceptor.run(SelectModifierPhase);
 
-
     expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
-    const modifierSelectHandler = scene.ui.handlers.find(h => h instanceof ModifierSelectUiHandler) as ModifierSelectUiHandler;
+    const modifierSelectHandler = scene.ui.handlers.find(
+      (h) => h instanceof ModifierSelectUiHandler,
+    ) as ModifierSelectUiHandler;
     expect(modifierSelectHandler.options.length).toEqual(4);
     expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toEqual("MEMORY_MUSHROOM");
     expect(modifierSelectHandler.options[1].modifierTypeOption.type.id).toEqual("TM_COMMON");
@@ -208,16 +258,17 @@ describe("SelectModifierPhase", () => {
     const customModifiers: CustomModifierSettings = {
       guaranteedModifierTypeFuncs: [ modifierTypes.MEMORY_MUSHROOM ],
       guaranteedModifierTiers: [ ModifierTier.MASTER ],
-      fillRemaining: true
+      fillRemaining: true,
     };
     const selectModifierPhase = new SelectModifierPhase(0, undefined, customModifiers);
     scene.unshiftPhase(selectModifierPhase);
     game.move.select(Moves.SPLASH);
     await game.phaseInterceptor.run(SelectModifierPhase);
 
-
     expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
-    const modifierSelectHandler = scene.ui.handlers.find(h => h instanceof ModifierSelectUiHandler) as ModifierSelectUiHandler;
+    const modifierSelectHandler = scene.ui.handlers.find(
+      (h) => h instanceof ModifierSelectUiHandler,
+    ) as ModifierSelectUiHandler;
     expect(modifierSelectHandler.options.length).toEqual(3);
     expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toEqual("MEMORY_MUSHROOM");
     expect(modifierSelectHandler.options[1].modifierTypeOption.type.tier).toEqual(ModifierTier.MASTER);

@@ -24,13 +24,19 @@ export default class SessionReloadModalUiHandler extends ModalUiHandler {
   }
 
   getButtonLabels(): string[] {
-    return [ ];
+    return [];
   }
 
   setup(): void {
     super.setup();
 
-    const label = addTextObject(this.getWidth() / 2, this.getHeight() / 2, "Your session is out of date.\nYour data will be reloaded…", TextStyle.WINDOW, { fontSize: "48px", align: "center" });
+    const label = addTextObject(
+      this.getWidth() / 2,
+      this.getHeight() / 2,
+      "Your session is out of date.\nYour data will be reloaded…",
+      TextStyle.WINDOW,
+      { fontSize: "48px", align: "center" },
+    );
     label.setOrigin(0.5, 0.5);
 
     this.modalContainer.add(label);
@@ -38,7 +44,7 @@ export default class SessionReloadModalUiHandler extends ModalUiHandler {
 
   show(args: any[]): boolean {
     const config: ModalConfig = {
-      buttonActions: []
+      buttonActions: [],
     };
 
     return super.show([ config ]);

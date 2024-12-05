@@ -7,7 +7,6 @@ import { StatusEffect } from "#enums/status-effect";
 import GameManager from "#test/utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
-
 describe("Abilities - BATTLE BOND", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
@@ -27,10 +26,11 @@ describe("Abilities - BATTLE BOND", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("single")
+    game.override
+      .battleType("single")
       .startingWave(4) // Leads to arena reset on Wave 5 trainer battle
       .ability(Abilities.BATTLE_BOND)
-      .starterForms({ [Species.GRENINJA]: ashForm, })
+      .starterForms({ [Species.GRENINJA]: ashForm })
       .moveset([ Moves.SPLASH, Moves.WATER_SHURIKEN ])
       .enemySpecies(Species.BULBASAUR)
       .enemyMoveset(Moves.SPLASH)

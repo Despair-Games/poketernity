@@ -45,9 +45,7 @@ describe("Abilities - Wind Rider", () => {
   });
 
   it("ATK stat stage is raised by 1 when Tailwind is present on its side", async () => {
-    game.override
-      .enemySpecies(Species.MAGIKARP)
-      .ability(Abilities.WIND_RIDER);
+    game.override.enemySpecies(Species.MAGIKARP).ability(Abilities.WIND_RIDER);
 
     await game.classicMode.startBattle([ Species.SHIFTRY ]);
     const shiftry = game.scene.getPlayerPokemon()!;
@@ -62,9 +60,7 @@ describe("Abilities - Wind Rider", () => {
   });
 
   it("does not raise ATK stat stage when Tailwind is present on opposing side", async () => {
-    game.override
-      .enemySpecies(Species.MAGIKARP)
-      .ability(Abilities.WIND_RIDER);
+    game.override.enemySpecies(Species.MAGIKARP).ability(Abilities.WIND_RIDER);
 
     await game.classicMode.startBattle([ Species.SHIFTRY ]);
     const magikarp = game.scene.getEnemyPokemon()!;
@@ -82,9 +78,7 @@ describe("Abilities - Wind Rider", () => {
   });
 
   it("does not raise ATK stat stage when Tailwind is present on opposing side", async () => {
-    game.override
-      .enemySpecies(Species.MAGIKARP)
-      .ability(Abilities.WIND_RIDER);
+    game.override.enemySpecies(Species.MAGIKARP).ability(Abilities.WIND_RIDER);
 
     await game.classicMode.startBattle([ Species.SHIFTRY ]);
     const magikarp = game.scene.getEnemyPokemon()!;

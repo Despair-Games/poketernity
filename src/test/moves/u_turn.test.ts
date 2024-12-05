@@ -45,7 +45,9 @@ describe("Moves - U-turn", () => {
     await game.phaseInterceptor.to("TurnEndPhase");
 
     // assert
-    expect(game.scene.getPlayerParty()[1].hp).toEqual(Math.floor(game.scene.getPlayerParty()[1].getMaxHp() * 0.33 + playerHp));
+    expect(game.scene.getPlayerParty()[1].hp).toEqual(
+      Math.floor(game.scene.getPlayerParty()[1].getMaxHp() * 0.33 + playerHp),
+    );
     expect(game.phaseInterceptor.log).toContain("SwitchSummonPhase");
     expect(game.scene.getPlayerPokemon()!.species.speciesId).toBe(Species.SHUCKLE);
   }, 20000);
@@ -88,10 +90,7 @@ describe("Moves - U-turn", () => {
 
   it("still forces a switch if u-turn KO's the opponent", async () => {
     game.override.startingLevel(1000); // Ensure that U-Turn KO's the opponent
-    await game.classicMode.startBattle([
-      Species.RAICHU,
-      Species.SHUCKLE
-    ]);
+    await game.classicMode.startBattle([ Species.RAICHU, Species.SHUCKLE ]);
     const enemy = game.scene.getEnemyPokemon()!;
 
     // KO the opponent with U-Turn

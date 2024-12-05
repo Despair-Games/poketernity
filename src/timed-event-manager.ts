@@ -5,7 +5,7 @@ import i18next from "i18next";
 
 export enum EventType {
   SHINY,
-  NO_TIMER_DISPLAY
+  NO_TIMER_DISPLAY,
 }
 
 interface EventBanner {
@@ -35,18 +35,15 @@ const timedEvents: TimedEvent[] = [
     endDate: new Date(Date.UTC(2024, 10, 4, 0)),
     bannerKey: "halloween2024-event-",
     scale: 0.21,
-    availableLangs: [ "en", "de", "it", "fr", "ja", "ko", "es-ES", "pt-BR", "zh-CN" ]
-  }
+    availableLangs: [ "en", "de", "it", "fr", "ja", "ko", "es-ES", "pt-BR", "zh-CN" ],
+  },
 ];
 
 export class TimedEventManager {
   constructor() {}
 
   isActive(event: TimedEvent) {
-    return (
-      event.startDate < new Date() &&
-        new Date() < event.endDate
-    );
+    return event.startDate < new Date() && new Date() < event.endDate;
   }
 
   activeEvent(): TimedEvent | undefined {
@@ -142,7 +139,7 @@ export class TimedEventDisplay extends Phaser.GameObjects.Container {
           this.banner.x,
           this.banner.y + 2,
           this.timeToGo(this.event.endDate),
-          TextStyle.WINDOW
+          TextStyle.WINDOW,
         );
         this.eventTimerText.setName("text-event-timer");
         this.eventTimerText.setScale(0.15);
@@ -170,7 +167,6 @@ export class TimedEventDisplay extends Phaser.GameObjects.Container {
   }
 
   private timeToGo(date: Date) {
-
     // Utility to add leading zero
     function z(n) {
       return (n < 10 ? "0" : "") + n;
@@ -182,10 +178,10 @@ export class TimedEventDisplay extends Phaser.GameObjects.Container {
     diff = Math.abs(diff);
 
     // Get time components
-    const days = diff / 8.64e7 | 0;
-    const hours = diff % 8.64e7 / 3.6e6 | 0;
-    const mins  = diff % 3.6e6 / 6e4 | 0;
-    const secs  = Math.round(diff % 6e4 / 1e3);
+    const days = (diff / 8.64e7) | 0;
+    const hours = ((diff % 8.64e7) / 3.6e6) | 0;
+    const mins = ((diff % 3.6e6) / 6e4) | 0;
+    const secs = Math.round((diff % 6e4) / 1e3);
 
     // Return formatted string
     return "Event Ends in : " + z(days) + "d " + z(hours) + "h " + z(mins) + "m " + z(secs) + "s";

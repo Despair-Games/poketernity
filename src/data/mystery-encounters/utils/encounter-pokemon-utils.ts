@@ -3,7 +3,12 @@ import i18next from "i18next";
 import { isNullOrUndefined, randSeedInt } from "#app/utils";
 import { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import Pokemon, { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
-import { doPokeballBounceAnim, getPokeballAtlasKey, getPokeballCatchMultiplier, getPokeballTintColor } from "#app/data/pokeball";
+import {
+  doPokeballBounceAnim,
+  getPokeballAtlasKey,
+  getPokeballCatchMultiplier,
+  getPokeballTintColor,
+} from "#app/data/pokeball";
 import { PlayerGender } from "#enums/player-gender";
 import { addPokeballCaptureStars, addPokeballOpenParticles } from "#app/field/anims";
 import { getStatusEffectCatchRateMultiplier } from "#app/data/status-effect";
@@ -14,7 +19,11 @@ import { Species } from "#enums/species";
 import { Type } from "#enums/type";
 import PokemonSpecies, { getPokemonSpecies } from "#app/data/pokemon-species";
 import { speciesStarterCosts } from "#app/data/balance/starters";
-import { getEncounterText, queueEncounterMessage, showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
+import {
+  getEncounterText,
+  queueEncounterMessage,
+  showEncounterText,
+} from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { modifierTypes, PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { Gender } from "#app/data/gender";
@@ -37,18 +46,38 @@ export const STANDARD_ENCOUNTER_BOOSTED_LEVEL_MODIFIER = 1;
  * @param shiny
  * @param variant
  */
-export function getSpriteKeysFromSpecies(species: Species, female?: boolean, formIndex?: number, shiny?: boolean, variant?: number): { spriteKey: string, fileRoot: string } {
-  const spriteKey = getPokemonSpecies(species).getSpriteKey(female ?? false, formIndex ?? 0, shiny ?? false, variant ?? 0);
-  const fileRoot = getPokemonSpecies(species).getSpriteAtlasPath(female ?? false, formIndex ?? 0, shiny ?? false, variant ?? 0);
+export function getSpriteKeysFromSpecies(
+  species: Species,
+  female?: boolean,
+  formIndex?: number,
+  shiny?: boolean,
+  variant?: number,
+): { spriteKey: string; fileRoot: string } {
+  const spriteKey = getPokemonSpecies(species).getSpriteKey(
+    female ?? false,
+    formIndex ?? 0,
+    shiny ?? false,
+    variant ?? 0,
+  );
+  const fileRoot = getPokemonSpecies(species).getSpriteAtlasPath(
+    female ?? false,
+    formIndex ?? 0,
+    shiny ?? false,
+    variant ?? 0,
+  );
   return { spriteKey, fileRoot };
 }
 
 /**
  * Gets the sprite key and file root for a given Pokemon (accounts for gender, shiny, variants, forms, and experimental)
  */
-export function getSpriteKeysFromPokemon(pokemon: Pokemon): { spriteKey: string, fileRoot: string } {
-  const spriteKey = pokemon.getSpeciesForm().getSpriteKey(pokemon.getGender() === Gender.FEMALE, pokemon.formIndex, pokemon.shiny, pokemon.variant);
-  const fileRoot = pokemon.getSpeciesForm().getSpriteAtlasPath(pokemon.getGender() === Gender.FEMALE, pokemon.formIndex, pokemon.shiny, pokemon.variant);
+export function getSpriteKeysFromPokemon(pokemon: Pokemon): { spriteKey: string; fileRoot: string } {
+  const spriteKey = pokemon
+    .getSpeciesForm()
+    .getSpriteKey(pokemon.getGender() === Gender.FEMALE, pokemon.formIndex, pokemon.shiny, pokemon.variant);
+  const fileRoot = pokemon
+    .getSpeciesForm()
+    .getSpriteAtlasPath(pokemon.getGender() === Gender.FEMALE, pokemon.formIndex, pokemon.shiny, pokemon.variant);
 
   return { spriteKey, fileRoot };
 }
@@ -61,16 +90,20 @@ export function getSpriteKeysFromPokemon(pokemon: Pokemon): { spriteKey: string,
  * @param doNotReturnLastAllowedMon Default `false`. If `true`, will never return the last unfainted pokemon in the party. Useful when this function is being used to determine what Pokemon to remove from the party (Don't want to remove last unfainted)
  * @returns
  */
-export function getRandomPlayerPokemon(isAllowed: boolean = false, isFainted: boolean = false, doNotReturnLastAllowedMon: boolean = false): PlayerPokemon {
+export function getRandomPlayerPokemon(
+  isAllowed: boolean = false,
+  isFainted: boolean = false,
+  doNotReturnLastAllowedMon: boolean = false,
+): PlayerPokemon {
   const party = globalScene.getPlayerParty();
   let chosenIndex: number;
   let chosenPokemon: PlayerPokemon | null = null;
-  const fullyLegalMons = party.filter(p => (!isAllowed || p.isAllowedInChallenge()) && (isFainted || !p.isFainted()));
-  const allowedOnlyMons = party.filter(p => p.isAllowedInChallenge());
+  const fullyLegalMons = party.filter((p) => (!isAllowed || p.isAllowedInChallenge()) && (isFainted || !p.isFainted()));
+  const allowedOnlyMons = party.filter((p) => p.isAllowedInChallenge());
 
   if (doNotReturnLastAllowedMon && fullyLegalMons.length === 1) {
     // If there is only 1 legal/unfainted mon left, select from fainted legal mons
-    const faintedLegalMons = party.filter(p => (!isAllowed || p.isAllowedInChallenge()) && p.isFainted());
+    const faintedLegalMons = party.filter((p) => (!isAllowed || p.isAllowedInChallenge()) && p.isFainted());
     if (faintedLegalMons.length > 0) {
       chosenIndex = randSeedInt(faintedLegalMons.length);
       chosenPokemon = faintedLegalMons[chosenIndex];
@@ -112,7 +145,7 @@ export function getHighestLevelPlayerPokemon(isAllowed: boolean = false, isFaint
       continue;
     }
 
-    pokemon = pokemon ? pokemon?.level < p?.level ? p : pokemon : p;
+    pokemon = pokemon ? (pokemon?.level < p?.level ? p : pokemon) : p;
   }
 
   return pokemon!;
@@ -126,7 +159,11 @@ export function getHighestLevelPlayerPokemon(isAllowed: boolean = false, isFaint
  * @param isFainted Default false. If true, includes fainted mons.
  * @returns
  */
-export function getHighestStatPlayerPokemon(stat: PermanentStat, isAllowed: boolean = false, isFainted: boolean = false): PlayerPokemon {
+export function getHighestStatPlayerPokemon(
+  stat: PermanentStat,
+  isAllowed: boolean = false,
+  isFainted: boolean = false,
+): PlayerPokemon {
   const party = globalScene.getPlayerParty();
   let pokemon: PlayerPokemon | null = null;
 
@@ -138,7 +175,7 @@ export function getHighestStatPlayerPokemon(stat: PermanentStat, isAllowed: bool
       continue;
     }
 
-    pokemon = pokemon ? pokemon.getStat(stat) < p?.getStat(stat) ? p : pokemon : p;
+    pokemon = pokemon ? (pokemon.getStat(stat) < p?.getStat(stat) ? p : pokemon) : p;
   }
 
   return pokemon!;
@@ -163,7 +200,7 @@ export function getLowestLevelPlayerPokemon(isAllowed: boolean = false, isFainte
       continue;
     }
 
-    pokemon = pokemon ? pokemon?.level > p?.level ? p : pokemon : p;
+    pokemon = pokemon ? (pokemon?.level > p?.level ? p : pokemon) : p;
   }
 
   return pokemon!;
@@ -176,7 +213,10 @@ export function getLowestLevelPlayerPokemon(isAllowed: boolean = false, isFainte
  * @param isFainted Default false. If true, includes fainted mons.
  * @returns
  */
-export function getHighestStatTotalPlayerPokemon(isAllowed: boolean = false, isFainted: boolean = false): PlayerPokemon {
+export function getHighestStatTotalPlayerPokemon(
+  isAllowed: boolean = false,
+  isFainted: boolean = false,
+): PlayerPokemon {
   const party = globalScene.getPlayerParty();
   let pokemon: PlayerPokemon | null = null;
 
@@ -188,7 +228,7 @@ export function getHighestStatTotalPlayerPokemon(isAllowed: boolean = false, isF
       continue;
     }
 
-    pokemon = pokemon ? pokemon?.stats.reduce((a, b) => a + b) < p?.stats.reduce((a, b) => a + b) ? p : pokemon : p;
+    pokemon = pokemon ? (pokemon?.stats.reduce((a, b) => a + b) < p?.stats.reduce((a, b) => a + b) ? p : pokemon) : p;
   }
 
   return pokemon!;
@@ -205,28 +245,40 @@ export function getHighestStatTotalPlayerPokemon(isAllowed: boolean = false, isF
  * @param allowMythical
  * @returns
  */
-export function getRandomSpeciesByStarterCost(starterTiers: number | [number, number], excludedSpecies?: Species[], types?: Type[], allowSubLegendary: boolean = true, allowLegendary: boolean = true, allowMythical: boolean = true): Species {
+export function getRandomSpeciesByStarterCost(
+  starterTiers: number | [number, number],
+  excludedSpecies?: Species[],
+  types?: Type[],
+  allowSubLegendary: boolean = true,
+  allowLegendary: boolean = true,
+  allowMythical: boolean = true,
+): Species {
   let min = Array.isArray(starterTiers) ? starterTiers[0] : starterTiers;
   let max = Array.isArray(starterTiers) ? starterTiers[1] : starterTiers;
 
   let filteredSpecies: [PokemonSpecies, number][] = Object.keys(speciesStarterCosts)
-    .map(s => [ parseInt(s) as Species, speciesStarterCosts[s] as number ])
-    .filter(s => {
+    .map((s) => [ parseInt(s) as Species, speciesStarterCosts[s] as number ])
+    .filter((s) => {
       const pokemonSpecies = getPokemonSpecies(s[0]);
-      return pokemonSpecies && (!excludedSpecies || !excludedSpecies.includes(s[0]))
-        && (allowSubLegendary || !pokemonSpecies.subLegendary)
-        && (allowLegendary || !pokemonSpecies.legendary)
-        && (allowMythical || !pokemonSpecies.mythical);
+      return (
+        pokemonSpecies &&
+        (!excludedSpecies || !excludedSpecies.includes(s[0])) &&
+        (allowSubLegendary || !pokemonSpecies.subLegendary) &&
+        (allowLegendary || !pokemonSpecies.legendary) &&
+        (allowMythical || !pokemonSpecies.mythical)
+      );
     })
-    .map(s => [ getPokemonSpecies(s[0]), s[1] ]);
+    .map((s) => [ getPokemonSpecies(s[0]), s[1] ]);
 
   if (types && types.length > 0) {
-    filteredSpecies = filteredSpecies.filter(s => types.includes(s[0].type1) || (!isNullOrUndefined(s[0].type2) && types.includes(s[0].type2)));
+    filteredSpecies = filteredSpecies.filter(
+      (s) => types.includes(s[0].type1) || (!isNullOrUndefined(s[0].type2) && types.includes(s[0].type2)),
+    );
   }
 
   // If no filtered mons exist at specified starter tiers, will expand starter search range until there are
   // Starts by decrementing starter tier min until it is 0, then increments tier max up to 10
-  let tryFilterStarterTiers: [PokemonSpecies, number][] = filteredSpecies.filter(s => (s[1] >= min && s[1] <= max));
+  let tryFilterStarterTiers: [PokemonSpecies, number][] = filteredSpecies.filter((s) => s[1] >= min && s[1] <= max);
   while (tryFilterStarterTiers.length === 0 && !(min === 0 && max === 10)) {
     if (min > 0) {
       min--;
@@ -234,7 +286,7 @@ export function getRandomSpeciesByStarterCost(starterTiers: number | [number, nu
       max++;
     }
 
-    tryFilterStarterTiers = filteredSpecies.filter(s => s[1] >= min && s[1] <= max);
+    tryFilterStarterTiers = filteredSpecies.filter((s) => s[1] >= min && s[1] <= max);
   }
 
   if (tryFilterStarterTiers.length > 0) {
@@ -286,7 +338,9 @@ function applyHpChangeToPokemon(pokemon: PlayerPokemon, value: number) {
  */
 export function applyDamageToPokemon(pokemon: PlayerPokemon, damage: number) {
   if (damage <= 0) {
-    console.warn("Healing pokemon with `applyDamageToPokemon` is not recommended! Please use `applyHealToPokemon` instead.");
+    console.warn(
+      "Healing pokemon with `applyDamageToPokemon` is not recommended! Please use `applyHealToPokemon` instead.",
+    );
   }
   // If a Pokemon would faint from the damage applied, its HP is instead set to 1.
   if (pokemon.isAllowedInBattle() && pokemon.hp - damage <= 0) {
@@ -304,7 +358,9 @@ export function applyDamageToPokemon(pokemon: PlayerPokemon, damage: number) {
  */
 export function applyHealToPokemon(pokemon: PlayerPokemon, heal: number) {
   if (heal <= 0) {
-    console.warn("Damaging pokemon with `applyHealToPokemon` is not recommended! Please use `applyDamageToPokemon` instead.");
+    console.warn(
+      "Damaging pokemon with `applyHealToPokemon` is not recommended! Please use `applyDamageToPokemon` instead.",
+    );
   }
 
   applyHpChangeToPokemon(pokemon, heal);
@@ -317,7 +373,8 @@ export function applyHealToPokemon(pokemon: PlayerPokemon, heal: number) {
  * @param value
  */
 export async function modifyPlayerPokemonBST(pokemon: PlayerPokemon, value: number) {
-  const modType = modifierTypes.MYSTERY_ENCOUNTER_SHUCKLE_JUICE()
+  const modType = modifierTypes
+    .MYSTERY_ENCOUNTER_SHUCKLE_JUICE()
     .generateType(globalScene.getPlayerParty(), [ value ])
     ?.withIdFromFunc(modifierTypes.MYSTERY_ENCOUNTER_SHUCKLE_JUICE);
   const modifier = modType?.newModifier(pokemon);
@@ -335,15 +392,20 @@ export async function modifyPlayerPokemonBST(pokemon: PlayerPokemon, value: numb
  * @param modType
  * @param fallbackModifierType
  */
-export async function applyModifierTypeToPlayerPokemon(pokemon: PlayerPokemon, modType: PokemonHeldItemModifierType, fallbackModifierType?: PokemonHeldItemModifierType) {
+export async function applyModifierTypeToPlayerPokemon(
+  pokemon: PlayerPokemon,
+  modType: PokemonHeldItemModifierType,
+  fallbackModifierType?: PokemonHeldItemModifierType,
+) {
   // Check if the Pokemon has max stacks of that item already
   const modifier = modType.newModifier(pokemon);
-  const existing = globalScene.findModifier(m => (
-    m instanceof PokemonHeldItemModifier &&
-    m.type.id === modType.id &&
-    m.pokemonId === pokemon.id &&
-    m.matchType(modifier)
-  )) as PokemonHeldItemModifier;
+  const existing = globalScene.findModifier(
+    (m) =>
+      m instanceof PokemonHeldItemModifier &&
+      m.type.id === modType.id &&
+      m.pokemonId === pokemon.id &&
+      m.matchType(modifier),
+  ) as PokemonHeldItemModifier;
 
   // At max stacks
   if (existing && existing.getStackCount() >= existing.getMaxStackCount()) {
@@ -369,7 +431,11 @@ export async function applyModifierTypeToPlayerPokemon(pokemon: PlayerPokemon, m
  * @param pokeballType
  * @param ballTwitchRate - can pass custom ball catch rates (for special events, like safari)
  */
-export function trainerThrowPokeball(pokemon: EnemyPokemon, pokeballType: PokeballType, ballTwitchRate?: number): Promise<boolean> {
+export function trainerThrowPokeball(
+  pokemon: EnemyPokemon,
+  pokeballType: PokeballType,
+  ballTwitchRate?: number,
+): Promise<boolean> {
   const originalY: number = pokemon.y;
 
   if (!ballTwitchRate) {
@@ -392,8 +458,10 @@ export function trainerThrowPokeball(pokemon: EnemyPokemon, pokeballType: Pokeba
     globalScene.field.moveBelow(pokeball as Phaser.GameObjects.GameObject, pokemon);
   });
 
-  return new Promise(resolve => {
-    globalScene.trainer.setTexture(`trainer_${globalScene.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`);
+  return new Promise((resolve) => {
+    globalScene.trainer.setTexture(
+      `trainer_${globalScene.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`,
+    );
     globalScene.time.delayedCall(512, () => {
       globalScene.playSound("se/pb_throw");
 
@@ -402,7 +470,9 @@ export function trainerThrowPokeball(pokemon: EnemyPokemon, pokeballType: Pokeba
       globalScene.time.delayedCall(256, () => {
         globalScene.trainer.setFrame("3");
         globalScene.time.delayedCall(768, () => {
-          globalScene.trainer.setTexture(`trainer_${globalScene.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back`);
+          globalScene.trainer.setTexture(
+            `trainer_${globalScene.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back`,
+          );
         });
       });
 
@@ -443,7 +513,7 @@ export function trainerThrowPokeball(pokemon: EnemyPokemon, pokeballType: Pokeba
                   ease: "Cubic.easeOut",
                   duration: 250,
                   repeatDelay: 500,
-                  onUpdate: t => {
+                  onUpdate: (t) => {
                     if (shakeCount && shakeCount < 4) {
                       const value = t.getValue();
                       const directionMultiplier = shakeCount % 2 === 1 ? 1 : -1;
@@ -482,22 +552,22 @@ export function trainerThrowPokeball(pokemon: EnemyPokemon, pokeballType: Pokeba
                             alpha: 0,
                             duration: 200,
                             easing: "Sine.easeIn",
-                            onComplete: () => pbTint.destroy()
+                            onComplete: () => pbTint.destroy(),
                           });
-                        }
+                        },
                       });
                     }
                   },
                   onComplete: () => {
                     catchPokemon(pokemon, pokeball, pokeballType).then(() => resolve(true));
-                  }
+                  },
                 });
               };
 
               globalScene.time.delayedCall(250, () => doPokeballBounceAnim(pokeball, 16, 72, 350, doShake));
-            }
+            },
           });
-        }
+        },
       });
     });
   });
@@ -511,8 +581,13 @@ export function trainerThrowPokeball(pokemon: EnemyPokemon, pokeballType: Pokeba
  * @param pokeball
  * @param pokeballType
  */
-function failCatch(pokemon: EnemyPokemon, originalY: number, pokeball: Phaser.GameObjects.Sprite, pokeballType: PokeballType) {
-  return new Promise<void>(resolve => {
+function failCatch(
+  pokemon: EnemyPokemon,
+  originalY: number,
+  pokeball: Phaser.GameObjects.Sprite,
+  pokeballType: PokeballType,
+) {
+  return new Promise<void>((resolve) => {
     globalScene.playSound("se/pb_rel");
     pokemon.setY(originalY);
     if (pokemon.status?.effect !== StatusEffect.SLEEP) {
@@ -530,13 +605,19 @@ function failCatch(pokemon: EnemyPokemon, originalY: number, pokeball: Phaser.Ga
       targets: pokemon,
       duration: 250,
       ease: "Sine.easeOut",
-      scale: 1
+      scale: 1,
     });
 
     globalScene.currentBattle.lastUsedPokeball = pokeballType;
     removePb(pokeball);
 
-    globalScene.ui.showText(i18next.t("battle:pokemonBrokeFree", { pokemonName: pokemon.getNameToRender() }), null, () => resolve(), null, true);
+    globalScene.ui.showText(
+      i18next.t("battle:pokemonBrokeFree", { pokemonName: pokemon.getNameToRender() }),
+      null,
+      () => resolve(),
+      null,
+      true,
+    );
   });
 }
 
@@ -549,10 +630,19 @@ function failCatch(pokemon: EnemyPokemon, originalY: number, pokeball: Phaser.Ga
  * @param showCatchObtainMessage
  * @param isObtain
  */
-export async function catchPokemon(pokemon: EnemyPokemon, pokeball: Phaser.GameObjects.Sprite | null, pokeballType: PokeballType, showCatchObtainMessage: boolean = true, isObtain: boolean = false): Promise<void> {
+export async function catchPokemon(
+  pokemon: EnemyPokemon,
+  pokeball: Phaser.GameObjects.Sprite | null,
+  pokeballType: PokeballType,
+  showCatchObtainMessage: boolean = true,
+  isObtain: boolean = false,
+): Promise<void> {
   const speciesForm = !pokemon.fusionSpecies ? pokemon.getSpeciesForm() : pokemon.getFusionSpeciesForm();
 
-  if (speciesForm.abilityHidden && (pokemon.fusionSpecies ? pokemon.fusionAbilityIndex : pokemon.abilityIndex) === speciesForm.getAbilityCount() - 1) {
+  if (
+    speciesForm.abilityHidden &&
+    (pokemon.fusionSpecies ? pokemon.fusionAbilityIndex : pokemon.abilityIndex) === speciesForm.getAbilityCount() - 1
+  ) {
     globalScene.validateAchv(achvs.HIDDEN_ABILITY);
   }
 
@@ -572,11 +662,11 @@ export async function catchPokemon(pokemon: EnemyPokemon, pokeball: Phaser.GameO
 
   globalScene.gameData.updateSpeciesDexIvs(pokemon.species.getRootSpeciesId(true), pokemon.ivs);
 
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     const doPokemonCatchMenu = () => {
       const end = () => {
         // Ensure the pokemon is in the enemy party in all situations
-        if (!globalScene.getEnemyParty().some(p => p.id === pokemon.id)) {
+        if (!globalScene.getEnemyParty().some((p) => p.id === pokemon.id)) {
           globalScene.getEnemyParty().push(pokemon);
         }
         globalScene.unshiftPhase(new VictoryPhase(pokemon.id, true));
@@ -593,11 +683,11 @@ export async function catchPokemon(pokemon: EnemyPokemon, pokeball: Phaser.GameO
       };
       const addToParty = (slotIndex?: number) => {
         const newPokemon = pokemon.addToParty(pokeballType, slotIndex);
-        const modifiers = globalScene.findModifiers(m => m instanceof PokemonHeldItemModifier, false);
-        if (globalScene.getPlayerParty().filter(p => p.isShiny()).length === 6) {
+        const modifiers = globalScene.findModifiers((m) => m instanceof PokemonHeldItemModifier, false);
+        if (globalScene.getPlayerParty().filter((p) => p.isShiny()).length === 6) {
           globalScene.validateAchv(achvs.SHINY_PARTY);
         }
-        Promise.all(modifiers.map(m => globalScene.addModifier(m, true))).then(() => {
+        Promise.all(modifiers.map((m) => globalScene.addModifier(m, true))).then(() => {
           globalScene.updateModifiers(true);
           removePokemon();
           if (newPokemon) {
@@ -610,32 +700,65 @@ export async function catchPokemon(pokemon: EnemyPokemon, pokeball: Phaser.GameO
       Promise.all([ pokemon.hideInfo(), globalScene.gameData.setPokemonCaught(pokemon) ]).then(() => {
         if (globalScene.getPlayerParty().length === 6) {
           const promptRelease = () => {
-            globalScene.ui.showText(i18next.t("battle:partyFull", { pokemonName: pokemon.getNameToRender() }), null, () => {
-              globalScene.pokemonInfoContainer.makeRoomForConfirmUi(1, true);
-              globalScene.ui.setMode(Mode.CONFIRM, () => {
-                const newPokemon = globalScene.addPlayerPokemon(pokemon.species, pokemon.level, pokemon.abilityIndex, pokemon.formIndex, pokemon.gender, pokemon.shiny, pokemon.variant, pokemon.ivs, pokemon.nature, pokemon);
-                globalScene.ui.setMode(Mode.SUMMARY, newPokemon, 0, SummaryUiMode.DEFAULT, () => {
-                  globalScene.ui.setMode(Mode.MESSAGE).then(() => {
-                    promptRelease();
-                  });
-                }, false);
-              }, () => {
-                globalScene.ui.setMode(Mode.PARTY, PartyUiMode.RELEASE, 0, (slotIndex: integer, _option: PartyOption) => {
-                  globalScene.ui.setMode(Mode.MESSAGE).then(() => {
-                    if (slotIndex < 6) {
-                      addToParty(slotIndex);
-                    } else {
-                      promptRelease();
-                    }
-                  });
-                });
-              }, () => {
-                globalScene.ui.setMode(Mode.MESSAGE).then(() => {
-                  removePokemon();
-                  end();
-                });
-              }, "fullParty");
-            });
+            globalScene.ui.showText(
+              i18next.t("battle:partyFull", { pokemonName: pokemon.getNameToRender() }),
+              null,
+              () => {
+                globalScene.pokemonInfoContainer.makeRoomForConfirmUi(1, true);
+                globalScene.ui.setMode(
+                  Mode.CONFIRM,
+                  () => {
+                    const newPokemon = globalScene.addPlayerPokemon(
+                      pokemon.species,
+                      pokemon.level,
+                      pokemon.abilityIndex,
+                      pokemon.formIndex,
+                      pokemon.gender,
+                      pokemon.shiny,
+                      pokemon.variant,
+                      pokemon.ivs,
+                      pokemon.nature,
+                      pokemon,
+                    );
+                    globalScene.ui.setMode(
+                      Mode.SUMMARY,
+                      newPokemon,
+                      0,
+                      SummaryUiMode.DEFAULT,
+                      () => {
+                        globalScene.ui.setMode(Mode.MESSAGE).then(() => {
+                          promptRelease();
+                        });
+                      },
+                      false,
+                    );
+                  },
+                  () => {
+                    globalScene.ui.setMode(
+                      Mode.PARTY,
+                      PartyUiMode.RELEASE,
+                      0,
+                      (slotIndex: integer, _option: PartyOption) => {
+                        globalScene.ui.setMode(Mode.MESSAGE).then(() => {
+                          if (slotIndex < 6) {
+                            addToParty(slotIndex);
+                          } else {
+                            promptRelease();
+                          }
+                        });
+                      },
+                    );
+                  },
+                  () => {
+                    globalScene.ui.setMode(Mode.MESSAGE).then(() => {
+                      removePokemon();
+                      end();
+                    });
+                  },
+                  "fullParty",
+                );
+              },
+            );
           };
           promptRelease();
         } else {
@@ -645,7 +768,15 @@ export async function catchPokemon(pokemon: EnemyPokemon, pokeball: Phaser.GameO
     };
 
     if (showCatchObtainMessage) {
-      globalScene.ui.showText(i18next.t(isObtain ? "battle:pokemonObtained" : "battle:pokemonCaught", { pokemonName: pokemon.getNameToRender() }), null, doPokemonCatchMenu, 0, true);
+      globalScene.ui.showText(
+        i18next.t(isObtain ? "battle:pokemonObtained" : "battle:pokemonCaught", {
+          pokemonName: pokemon.getNameToRender(),
+        }),
+        null,
+        doPokemonCatchMenu,
+        0,
+        true,
+      );
     } else {
       doPokemonCatchMenu();
     }
@@ -667,7 +798,7 @@ function removePb(pokeball: Phaser.GameObjects.Sprite) {
       alpha: 0,
       onComplete: () => {
         pokeball.destroy();
-      }
+      },
     });
   }
 }
@@ -678,7 +809,7 @@ function removePb(pokeball: Phaser.GameObjects.Sprite) {
  * @param pokemon
  */
 export async function doPokemonFlee(pokemon: EnemyPokemon): Promise<void> {
-  await new Promise<void>(resolve => {
+  await new Promise<void>((resolve) => {
     globalScene.playSound("se/flee");
     // Ease pokemon out
     globalScene.tweens.add({
@@ -692,11 +823,15 @@ export async function doPokemonFlee(pokemon: EnemyPokemon): Promise<void> {
       onComplete: () => {
         pokemon.setVisible(false);
         globalScene.field.remove(pokemon, true);
-        showEncounterText(i18next.t("battle:pokemonFled", { pokemonName: pokemon.getNameToRender() }), null, 600, false)
-          .then(() => {
-            resolve();
-          });
-      }
+        showEncounterText(
+          i18next.t("battle:pokemonFled", { pokemonName: pokemon.getNameToRender() }),
+          null,
+          600,
+          false,
+        ).then(() => {
+          resolve();
+        });
+      },
     });
   });
 }
@@ -707,7 +842,7 @@ export async function doPokemonFlee(pokemon: EnemyPokemon): Promise<void> {
  * @param pokemon
  */
 export function doPlayerFlee(pokemon: EnemyPokemon): Promise<void> {
-  return new Promise<void>(resolve => {
+  return new Promise<void>((resolve) => {
     // Ease pokemon out
     globalScene.tweens.add({
       targets: pokemon,
@@ -720,11 +855,15 @@ export function doPlayerFlee(pokemon: EnemyPokemon): Promise<void> {
       onComplete: () => {
         pokemon.setVisible(false);
         globalScene.field.remove(pokemon, true);
-        showEncounterText(i18next.t("battle:playerFled", { pokemonName: pokemon.getNameToRender() }), null, 600, false)
-          .then(() => {
-            resolve();
-          });
-      }
+        showEncounterText(
+          i18next.t("battle:playerFled", { pokemonName: pokemon.getNameToRender() }),
+          null,
+          600,
+          false,
+        ).then(() => {
+          resolve();
+        });
+      },
     });
   });
 }
@@ -799,7 +938,10 @@ export function getEncounterPokemonLevelForWave(levelAdditiveModifier: number = 
 export async function addPokemonDataToDexAndValidateAchievements(pokemon: PlayerPokemon) {
   const speciesForm = !pokemon.fusionSpecies ? pokemon.getSpeciesForm() : pokemon.getFusionSpeciesForm();
 
-  if (speciesForm.abilityHidden && (pokemon.fusionSpecies ? pokemon.fusionAbilityIndex : pokemon.abilityIndex) === speciesForm.getAbilityCount() - 1) {
+  if (
+    speciesForm.abilityHidden &&
+    (pokemon.fusionSpecies ? pokemon.fusionAbilityIndex : pokemon.abilityIndex) === speciesForm.getAbilityCount() - 1
+  ) {
     globalScene.validateAchv(achvs.HIDDEN_ABILITY);
   }
 
@@ -828,7 +970,10 @@ export async function addPokemonDataToDexAndValidateAchievements(pokemon: Player
  * @param scene
  * @param invalidSelectionKey
  */
-export function isPokemonValidForEncounterOptionSelection(pokemon: Pokemon, invalidSelectionKey: string): string | null {
+export function isPokemonValidForEncounterOptionSelection(
+  pokemon: Pokemon,
+  invalidSelectionKey: string,
+): string | null {
   if (!pokemon.isAllowedInChallenge()) {
     return i18next.t("partyUiHandler:cantBeUsed", { pokemonName: pokemon.getNameToRender() }) ?? null;
   }

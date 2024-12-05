@@ -14,20 +14,22 @@ export default class PokemonSpriteSparkleHandler {
       to: 1,
       yoyo: true,
       repeat: -1,
-      onRepeat: () => this.onLapse()
+      onRepeat: () => this.onLapse(),
     });
   }
 
   onLapse(): void {
-    Array.from(this.sprites.values()).filter(s => !s.scene).map(s => this.sprites.delete(s));
+    Array.from(this.sprites.values())
+      .filter((s) => !s.scene)
+      .map((s) => this.sprites.delete(s));
     for (const s of this.sprites.values()) {
-      if (!s.pipelineData["teraColor"] || !(s.pipelineData["teraColor"] as number[]).find(c => c)) {
+      if (!s.pipelineData["teraColor"] || !(s.pipelineData["teraColor"] as number[]).find((c) => c)) {
         continue;
       }
       if (!s.visible || (s.parentContainer instanceof Pokemon && !s.parentContainer.parentContainer)) {
         continue;
       }
-      const pokemon = s.parentContainer instanceof Pokemon ? s.parentContainer as Pokemon : null;
+      const pokemon = s.parentContainer instanceof Pokemon ? (s.parentContainer as Pokemon) : null;
       const parent = (pokemon || s).parentContainer;
       const texture = s.texture;
       const [ width, height ] = [ texture.source[0].width, texture.source[0].height ];
@@ -37,7 +39,11 @@ export default class PokemonSpriteSparkleHandler {
       const pixel = texture.manager.getPixel(pixelX, pixelY, texture.key, "__BASE");
       if (pixel?.alpha) {
         const [ xOffset, yOffset ] = [ -s.originX * s.width, -s.originY * s.height ];
-        const sparkle = globalScene.addFieldSprite(((pokemon?.x || 0) + s.x + pixelX * ratioX + xOffset), ((pokemon?.y || 0) + s.y + pixelY * ratioY + yOffset), "tera_sparkle");
+        const sparkle = globalScene.addFieldSprite(
+          (pokemon?.x || 0) + s.x + pixelX * ratioX + xOffset,
+          (pokemon?.y || 0) + s.y + pixelY * ratioY + yOffset,
+          "tera_sparkle",
+        );
         sparkle.pipelineData["ignoreTimeTint"] = s.pipelineData["ignoreTimeTint"];
         sparkle.setName("sprite-tera-sparkle");
         sparkle.play("tera_sparkle");

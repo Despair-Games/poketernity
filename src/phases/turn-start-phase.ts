@@ -32,16 +32,20 @@ export class TurnStartPhase extends FieldPhase {
    * @returns {@linkcode BattlerIndex[]} the battle indices of all pokemon on the field ordered by speed
    */
   getSpeedOrder(): BattlerIndex[] {
-    const playerField = globalScene.getPlayerField().filter(p => p.isActive()) as Pokemon[];
-    const enemyField = globalScene.getEnemyField().filter(p => p.isActive()) as Pokemon[];
+    const playerField = globalScene.getPlayerField().filter((p) => p.isActive()) as Pokemon[];
+    const enemyField = globalScene.getEnemyField().filter((p) => p.isActive()) as Pokemon[];
 
     // We shuffle the list before sorting so speed ties produce random results
     let orderedTargets: Pokemon[] = playerField.concat(enemyField);
     // We seed it with the current turn to prevent an inconsistency where it
     // was varying based on how long since you last reloaded
-    globalScene.executeWithSeedOffset(() => {
-      orderedTargets = Utils.randSeedShuffle(orderedTargets);
-    }, globalScene.currentBattle.turn, globalScene.waveSeed);
+    globalScene.executeWithSeedOffset(
+      () => {
+        orderedTargets = Utils.randSeedShuffle(orderedTargets);
+      },
+      globalScene.currentBattle.turn,
+      globalScene.waveSeed,
+    );
 
     // Next, a check for Trick Room is applied to determine sort order.
     const speedReversed = new Utils.BooleanHolder(false);
@@ -55,7 +59,7 @@ export class TurnStartPhase extends FieldPhase {
       return speedReversed.value ? aSpeed - bSpeed : bSpeed - aSpeed;
     });
 
-    return orderedTargets.map(t => t.getFieldIndex() + (!t.isPlayer() ? BattlerIndex.ENEMY : BattlerIndex.PLAYER));
+    return orderedTargets.map((t) => t.getFieldIndex() + (!t.isPlayer() ? BattlerIndex.ENEMY : BattlerIndex.PLAYER));
   }
 
   /**
@@ -70,16 +74,19 @@ export class TurnStartPhase extends FieldPhase {
     // This occurs before the main loop because of battles with more than two Pokemon
     const battlerBypassSpeed = {};
 
-    globalScene.getField(true).filter(p => p.summonData).map(p => {
-      const bypassSpeed = new Utils.BooleanHolder(false);
-      const canCheckHeldItems = new Utils.BooleanHolder(true);
-      applyAbAttrs(BypassSpeedChanceAbAttr, p, null, false, bypassSpeed);
-      applyAbAttrs(PreventBypassSpeedChanceAbAttr, p, null, false, bypassSpeed, canCheckHeldItems);
-      if (canCheckHeldItems.value) {
-        globalScene.applyModifiers(BypassSpeedChanceModifier, p.isPlayer(), p, bypassSpeed);
-      }
-      battlerBypassSpeed[p.getBattlerIndex()] = bypassSpeed;
-    });
+    globalScene
+      .getField(true)
+      .filter((p) => p.summonData)
+      .map((p) => {
+        const bypassSpeed = new Utils.BooleanHolder(false);
+        const canCheckHeldItems = new Utils.BooleanHolder(true);
+        applyAbAttrs(BypassSpeedChanceAbAttr, p, null, false, bypassSpeed);
+        applyAbAttrs(PreventBypassSpeedChanceAbAttr, p, null, false, bypassSpeed, canCheckHeldItems);
+        if (canCheckHeldItems.value) {
+          globalScene.applyModifiers(BypassSpeedChanceModifier, p.isPlayer(), p, bypassSpeed);
+        }
+        battlerBypassSpeed[p.getBattlerIndex()] = bypassSpeed;
+      });
 
     // The function begins sorting orderedTargets based on command priority, move priority, and possible speed bypasses.
     // Non-FIGHT commands (SWITCH, BALL, RUN) have a higher command priority and will always occur before any FIGHT commands.
@@ -98,8 +105,8 @@ export class TurnStartPhase extends FieldPhase {
         const aMove = allMoves[aCommand.move!.move];
         const bMove = allMoves[bCommand!.move!.move];
 
-        const aUser = globalScene.getField(true).find(p => p.getBattlerIndex() === a)!;
-        const bUser = globalScene.getField(true).find(p => p.getBattlerIndex() === b)!;
+        const aUser = globalScene.getField(true).find((p) => p.getBattlerIndex() === a)!;
+        const bUser = globalScene.getField(true).find((p) => p.getBattlerIndex() === b)!;
 
         const aPriority = aMove.getPriority(aUser, false);
         const bPriority = bMove.getPriority(bUser, false);
@@ -113,7 +120,7 @@ export class TurnStartPhase extends FieldPhase {
           if (isSameBracket && battlerBypassSpeed[a].value !== battlerBypassSpeed[b].value) {
             return battlerBypassSpeed[a].value ? -1 : 1;
           }
-          return (aPriority < bPriority) ? 1 : -1;
+          return aPriority < bPriority ? 1 : -1;
         }
       }
 
@@ -139,7 +146,6 @@ export class TurnStartPhase extends FieldPhase {
     let orderIndex = 0;
 
     for (const o of moveOrder) {
-
       const pokemon = field[o];
       const turnCommand = globalScene.currentBattle.turnCommands[o];
 
@@ -154,32 +160,50 @@ export class TurnStartPhase extends FieldPhase {
           if (!queuedMove) {
             continue;
           }
-          const move = pokemon.getMoveset().find(m => m?.moveId === queuedMove.move && m?.ppUsed < m?.getMovePp()) || new PokemonMove(queuedMove.move);
+          const move =
+            pokemon.getMoveset().find((m) => m?.moveId === queuedMove.move && m?.ppUsed < m?.getMovePp()) ||
+            new PokemonMove(queuedMove.move);
           if (move.getMove().hasAttr(MoveHeaderAttr)) {
             globalScene.unshiftPhase(new MoveHeaderPhase(pokemon, move));
           }
           if (pokemon.isPlayer()) {
             if (turnCommand.cursor === -1) {
-              globalScene.pushPhase(new MovePhase(pokemon, turnCommand.targets || turnCommand.move!.targets, move));//TODO: is the bang correct here?
+              globalScene.pushPhase(new MovePhase(pokemon, turnCommand.targets || turnCommand.move!.targets, move)); //TODO: is the bang correct here?
             } else {
-              const playerPhase = new MovePhase(pokemon, turnCommand.targets || turnCommand.move!.targets, move, false, queuedMove.ignorePP);//TODO: is the bang correct here?
+              const playerPhase = new MovePhase(
+                pokemon,
+                turnCommand.targets || turnCommand.move!.targets,
+                move,
+                false,
+                queuedMove.ignorePP,
+              ); //TODO: is the bang correct here?
               globalScene.pushPhase(playerPhase);
             }
           } else {
-            globalScene.pushPhase(new MovePhase(pokemon, turnCommand.targets || turnCommand.move!.targets, move, false, queuedMove.ignorePP));//TODO: is the bang correct here?
+            globalScene.pushPhase(
+              new MovePhase(
+                pokemon,
+                turnCommand.targets || turnCommand.move!.targets,
+                move,
+                false,
+                queuedMove.ignorePP,
+              ),
+            ); //TODO: is the bang correct here?
           }
           break;
         case Command.BALL:
-          globalScene.unshiftPhase(new AttemptCapturePhase(turnCommand.targets![0] % 2, turnCommand.cursor!));//TODO: is the bang correct here?
+          globalScene.unshiftPhase(new AttemptCapturePhase(turnCommand.targets![0] % 2, turnCommand.cursor!)); //TODO: is the bang correct here?
           break;
         case Command.POKEMON:
           const switchType = turnCommand.args?.[0] ? SwitchType.BATON_PASS : SwitchType.SWITCH;
-          globalScene.unshiftPhase(new SwitchSummonPhase(switchType, pokemon.getFieldIndex(), turnCommand.cursor!, true, pokemon.isPlayer()));
+          globalScene.unshiftPhase(
+            new SwitchSummonPhase(switchType, pokemon.getFieldIndex(), turnCommand.cursor!, true, pokemon.isPlayer()),
+          );
           break;
         case Command.RUN:
           let runningPokemon = pokemon;
           if (globalScene.currentBattle.double) {
-            const playerActivePokemon = field.filter(pokemon => {
+            const playerActivePokemon = field.filter((pokemon) => {
               if (!!pokemon) {
                 return pokemon.isPlayer() && pokemon.isActive();
               } else {
@@ -188,10 +212,13 @@ export class TurnStartPhase extends FieldPhase {
             });
             // if only one pokemon is alive, use that one
             if (playerActivePokemon.length > 1) {
-            // find which active pokemon has faster speed
-              const fasterPokemon = playerActivePokemon[0].getStat(Stat.SPD) > playerActivePokemon[1].getStat(Stat.SPD) ? playerActivePokemon[0] : playerActivePokemon[1];
+              // find which active pokemon has faster speed
+              const fasterPokemon =
+                playerActivePokemon[0].getStat(Stat.SPD) > playerActivePokemon[1].getStat(Stat.SPD)
+                  ? playerActivePokemon[0]
+                  : playerActivePokemon[1];
               // check if either active pokemon has the ability "Run Away"
-              const hasRunAway = playerActivePokemon.find(p => p.hasAbility(Abilities.RUN_AWAY));
+              const hasRunAway = playerActivePokemon.find((p) => p.hasAbility(Abilities.RUN_AWAY));
               runningPokemon = hasRunAway !== undefined ? hasRunAway : fasterPokemon;
             }
           }
@@ -209,10 +236,10 @@ export class TurnStartPhase extends FieldPhase {
     globalScene.pushPhase(new TurnEndPhase());
 
     /**
-       * this.end() will call shiftPhase(), which dumps everything from PrependQueue (aka everything that is unshifted()) to the front
-       * of the queue and dequeues to start the next phase
-       * this is important since stuff like SwitchSummon, AttemptRun, AttemptCapture Phases break the "flow" and should take precedence
-       */
+     * this.end() will call shiftPhase(), which dumps everything from PrependQueue (aka everything that is unshifted()) to the front
+     * of the queue and dequeues to start the next phase
+     * this is important since stuff like SwitchSummon, AttemptRun, AttemptCapture Phases break the "flow" and should take precedence
+     */
     this.end();
   }
 }

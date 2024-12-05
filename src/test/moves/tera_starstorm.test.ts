@@ -60,11 +60,11 @@ describe("Moves - Tera Starstorm", () => {
 
     // Pokemon other than Terapagos should not be affected - only hits one target
     await game.phaseInterceptor.to("MoveEndPhase");
-    expect(enemyField.some(pokemon => pokemon.isFullHp())).toBe(true);
+    expect(enemyField.some((pokemon) => pokemon.isFullHp())).toBe(true);
 
     // Terapagos in Stellar Form should hit both targets
     await game.phaseInterceptor.to("MoveEndPhase");
-    expect(enemyField.every(pokemon => pokemon.isFullHp())).toBe(false);
+    expect(enemyField.every((pokemon) => pokemon.isFullHp())).toBe(false);
   });
 
   it("applies the effects when Terapagos in Stellar Form is fused with another Pokemon", async () => {
@@ -93,6 +93,6 @@ describe("Moves - Tera Starstorm", () => {
     expect(fusionedMon.isTerastallized()).toBe(true);
     // Move effects should be applied
     expect(fusionedMon.getMoveType).toHaveReturnedWith(Type.STELLAR);
-    expect(game.scene.getEnemyField().every(pokemon => pokemon.isFullHp())).toBe(false);
+    expect(game.scene.getEnemyField().every((pokemon) => pokemon.isFullHp())).toBe(false);
   });
 });

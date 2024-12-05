@@ -113,14 +113,13 @@ describe("Abilities - Sheer Force", () => {
 
   it("Two Pokemon with abilities disabled by Sheer Force hitting each other should not cause a crash", async () => {
     const moveToUse = Moves.CRUNCH;
-    game.override.enemyAbility(Abilities.COLOR_CHANGE)
+    game.override
+      .enemyAbility(Abilities.COLOR_CHANGE)
       .ability(Abilities.COLOR_CHANGE)
       .moveset(moveToUse)
       .enemyMoveset(moveToUse);
 
-    await game.classicMode.startBattle([
-      Species.PIDGEOT
-    ]);
+    await game.classicMode.startBattle([ Species.PIDGEOT ]);
 
     const pidgeot = game.scene.getPlayerParty()[0];
     const onix = game.scene.getEnemyParty()[0];
