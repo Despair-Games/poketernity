@@ -82,7 +82,7 @@
 
 ## Pokémon Sprites and Animation
 
-In addition to the lists below, please check [the PokéRogue wiki](https://wiki.pokerogue.net/credits:credits) for a more detailed list of Pokémon Sprite credits.
+In addition to the lists below, please check [the project wiki](https://wiki.pokerogue.net/credits:credits) for a more detailed list of Pokémon Sprite credits.
 
 - GAMEFREAK (Pokémon Black/White 2)
 - Smogon Sprite Project (Various Artists)
@@ -443,7 +443,7 @@ In addition to the lists below, please check [the PokéRogue wiki](https://wiki.
 - AsdarDevelops
 - Vassiat
 - RedstonewolfX
-- Sam/Flashfyre (initial developer, started PokéRogue)
+- Sam/Flashfyre (initial developer, started project)
 - Greenlamp
 - bennybroseph
 - OrangeRed
