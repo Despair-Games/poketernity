@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import * as Utils from "../utils";
+import { fixedInt } from "#app/utils";
 import { achvs } from "../system/achv";
 import { SpeciesFormChange, getSpeciesFormChangeMessage } from "../data/pokemon-forms";
 import { PlayerPokemon } from "../field/pokemon";
@@ -150,9 +150,9 @@ export class FormChangePhase extends EvolutionPhase {
                                             () => this.end(),
                                             null,
                                             true,
-                                            Utils.fixedInt(delay),
+                                            fixedInt(delay),
                                           );
-                                          globalScene.time.delayedCall(Utils.fixedInt(delay + 250), () =>
+                                          globalScene.time.delayedCall(fixedInt(delay + 250), () =>
                                             globalScene.playBgm(),
                                           );
                                         });

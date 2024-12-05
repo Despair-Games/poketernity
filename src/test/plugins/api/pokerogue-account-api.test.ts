@@ -3,6 +3,7 @@ import { SESSION_ID_COOKIE_NAME } from "#app/constants";
 import { PokerogueAccountApi } from "#app/plugins/api/pokerogue-account-api";
 import { getApiBaseUrl } from "#app/test/utils/testUtils";
 import * as Utils from "#app/utils";
+import { setCookie, removeCookie } from "#app/utils";
 import { http, HttpResponse } from "msw";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -98,7 +99,7 @@ describe("Pokerogue Account API", () => {
       const error = await accountApi.login(loginParams);
 
       expect(error).toBeNull();
-      expect(Utils.setCookie).toHaveBeenCalledWith(SESSION_ID_COOKIE_NAME, "abctest");
+      expect(setCookie).toHaveBeenCalledWith(SESSION_ID_COOKIE_NAME, "abctest");
     });
 
     it("should return error message and report a warning on FAILURE", async () => {
@@ -133,7 +134,7 @@ describe("Pokerogue Account API", () => {
 
       await accountApi.logout();
 
-      expect(Utils.removeCookie).toHaveBeenCalledWith(SESSION_ID_COOKIE_NAME);
+      expect(removeCookie).toHaveBeenCalledWith(SESSION_ID_COOKIE_NAME);
     });
 
     it("should report a warning on and remove cookie on FAILURE", async () => {
@@ -141,7 +142,7 @@ describe("Pokerogue Account API", () => {
 
       await accountApi.logout();
 
-      expect(Utils.removeCookie).toHaveBeenCalledWith(SESSION_ID_COOKIE_NAME);
+      expect(removeCookie).toHaveBeenCalledWith(SESSION_ID_COOKIE_NAME);
       expect(console.warn).toHaveBeenCalledWith("Log out failed!", expect.any(Error));
     });
 
@@ -150,7 +151,7 @@ describe("Pokerogue Account API", () => {
 
       await accountApi.logout();
 
-      expect(Utils.removeCookie).toHaveBeenCalledWith(SESSION_ID_COOKIE_NAME);
+      expect(removeCookie).toHaveBeenCalledWith(SESSION_ID_COOKIE_NAME);
       expect(console.warn).toHaveBeenCalledWith("Log out failed!", expect.any(Error));
     });
   });
