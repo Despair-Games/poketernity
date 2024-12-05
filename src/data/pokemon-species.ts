@@ -13604,7 +13604,7 @@ export function initSpecies() {
       false,
       false,
       false,
-      "Epic Pokémon",
+      "Rogue Pokémon",
       Type.WATER,
       Type.DARK,
       1.1,
