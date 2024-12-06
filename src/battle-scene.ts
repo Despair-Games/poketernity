@@ -2824,103 +2824,87 @@ export default class BattleScene extends SceneBase {
     virtual?: boolean,
     instant?: boolean,
     cost?: number,
-  ): Promise<boolean> {
+  ): boolean {
     if (!modifier) {
-      return Promise.resolve(false);
+      return false;
     }
-    return new Promise((resolve) => {
-      let success = false;
-      const soundName = modifier.type.soundName;
-      this.validateAchvs(ModifierAchv, modifier);
-      const modifiersToRemove: PersistentModifier[] = [];
-      const modifierPromises: Promise<boolean>[] = [];
-      if (modifier instanceof PersistentModifier) {
-        if (modifier instanceof TerastallizeModifier) {
-          modifiersToRemove.push(
-            ...this.findModifiers((m) => m instanceof TerastallizeModifier && m.pokemonId === modifier.pokemonId),
-          );
-        }
-        if ((modifier as PersistentModifier).add(this.modifiers, !!virtual)) {
-          if (modifier instanceof PokemonFormChangeItemModifier || modifier instanceof TerastallizeModifier) {
-            const pokemon = this.getPokemonById(modifier.pokemonId);
-            if (pokemon) {
-              success = modifier.apply(pokemon, true);
-            }
+    let success = false;
+    const soundName = modifier.type.soundName;
+    this.validateAchvs(ModifierAchv, modifier);
+    const modifiersToRemove: PersistentModifier[] = [];
+    if (modifier instanceof PersistentModifier) {
+      if (modifier instanceof TerastallizeModifier) {
+        modifiersToRemove.push(
+          ...this.findModifiers((m) => m instanceof TerastallizeModifier && m.pokemonId === modifier.pokemonId),
+        );
+      }
+      if ((modifier as PersistentModifier).add(this.modifiers, !!virtual)) {
+        if (modifier instanceof PokemonFormChangeItemModifier || modifier instanceof TerastallizeModifier) {
+          const pokemon = this.getPokemonById(modifier.pokemonId);
+          if (pokemon) {
+            success = modifier.apply(pokemon, true);
           }
-          if (playSound && !this.sound.get(soundName)) {
-            this.playSound(soundName);
-          }
-        } else if (!virtual) {
-          const defaultModifierType = getDefaultModifierTypeForTier(modifier.type.tier);
-          this.queueMessage(
-            i18next.t("battle:itemStackFull", { fullItemName: modifier.type.name, itemName: defaultModifierType.name }),
-            undefined,
-            true,
-          );
-          return this.addModifier(defaultModifierType.newModifier(), ignoreUpdate, playSound, false, instant).then(
-            (success) => resolve(success),
-          );
         }
-
-        for (const rm of modifiersToRemove) {
-          this.removeModifier(rm);
-        }
-
-        if (!ignoreUpdate && !virtual) {
-          return this.updateModifiers(true, instant).then(() => resolve(success));
-        }
-      } else if (modifier instanceof ConsumableModifier) {
         if (playSound && !this.sound.get(soundName)) {
           this.playSound(soundName);
         }
-
-        if (modifier instanceof ConsumablePokemonModifier) {
-          for (const p in this.party) {
-            const pokemon = this.party[p];
-
-            const args: unknown[] = [];
-            if (modifier instanceof PokemonHpRestoreModifier) {
-              if (!(modifier as PokemonHpRestoreModifier).fainted) {
-                const hpRestoreMultiplier = new Utils.IntegerHolder(1);
-                this.applyModifiers(HealingBoosterModifier, true, hpRestoreMultiplier);
-                args.push(hpRestoreMultiplier.value);
-              } else {
-                args.push(1);
-              }
-            } else if (modifier instanceof FusePokemonModifier) {
-              args.push(this.getPokemonById(modifier.fusePokemonId) as PlayerPokemon);
-            } else if (modifier instanceof RememberMoveModifier && !Utils.isNullOrUndefined(cost)) {
-              args.push(cost);
-            }
-
-            if (modifier.shouldApply(pokemon, ...args)) {
-              const result = modifier.apply(pokemon, ...args);
-              if (result instanceof Promise) {
-                modifierPromises.push(result.then((s) => (success ||= s)));
-              } else {
-                success ||= result;
-              }
-            }
-          }
-
-          return Promise.allSettled([this.party.map((p) => p.updateInfo(instant)), ...modifierPromises]).then(() =>
-            resolve(success),
-          );
-        } else {
-          const args = [this];
-          if (modifier.shouldApply(...args)) {
-            const result = modifier.apply(...args);
-            if (result instanceof Promise) {
-              return result.then((success) => resolve(success));
-            } else {
-              success ||= result;
-            }
-          }
-        }
+      } else if (!virtual) {
+        const defaultModifierType = getDefaultModifierTypeForTier(modifier.type.tier);
+        this.queueMessage(
+          i18next.t("battle:itemStackFull", { fullItemName: modifier.type.name, itemName: defaultModifierType.name }),
+          undefined,
+          true,
+        );
+        return this.addModifier(defaultModifierType.newModifier(), ignoreUpdate, playSound, false, instant);
       }
 
-      resolve(success);
-    });
+      for (const rm of modifiersToRemove) {
+        this.removeModifier(rm);
+      }
+
+      if (!ignoreUpdate && !virtual) {
+        this.updateModifiers(true, instant);
+      }
+    } else if (modifier instanceof ConsumableModifier) {
+      if (playSound && !this.sound.get(soundName)) {
+        this.playSound(soundName);
+      }
+
+      if (modifier instanceof ConsumablePokemonModifier) {
+        for (const p in this.party) {
+          const pokemon = this.party[p];
+
+          const args: unknown[] = [];
+          if (modifier instanceof PokemonHpRestoreModifier) {
+            if (!(modifier as PokemonHpRestoreModifier).fainted) {
+              const hpRestoreMultiplier = new Utils.IntegerHolder(1);
+              this.applyModifiers(HealingBoosterModifier, true, hpRestoreMultiplier);
+              args.push(hpRestoreMultiplier.value);
+            } else {
+              args.push(1);
+            }
+          } else if (modifier instanceof FusePokemonModifier) {
+            args.push(this.getPokemonById(modifier.fusePokemonId) as PlayerPokemon);
+          } else if (modifier instanceof RememberMoveModifier && !Utils.isNullOrUndefined(cost)) {
+            args.push(cost);
+          }
+
+          if (modifier.shouldApply(pokemon, ...args)) {
+            const result = modifier.apply(pokemon, ...args);
+            success ||= result;
+          }
+        }
+
+        this.party.map((p) => p.updateInfo(instant));
+      } else {
+        const args = [this];
+        if (modifier.shouldApply(...args)) {
+          const result = modifier.apply(...args);
+          success ||= result;
+        }
+      }
+    }
+    return true;
   }
 
   addEnemyModifier(modifier: PersistentModifier, ignoreUpdate?: boolean, instant?: boolean): Promise<void> {
@@ -2943,7 +2927,8 @@ export default class BattleScene extends SceneBase {
         }
       }
       if (!ignoreUpdate) {
-        this.updateModifiers(false, instant).then(() => resolve());
+        this.updateModifiers(false, instant);
+        resolve();
       } else {
         resolve();
       }
@@ -2972,77 +2957,74 @@ export default class BattleScene extends SceneBase {
     instant?: boolean,
     ignoreUpdate?: boolean,
     itemLost: boolean = true,
-  ): Promise<boolean> {
-    return new Promise((resolve) => {
-      const source = itemModifier.pokemonId ? itemModifier.getPokemon() : null;
-      const cancelled = new Utils.BooleanHolder(false);
-      Utils.executeIf(!!source && source.isPlayer() !== target.isPlayer(), () =>
-        applyAbAttrs(BlockItemTheftAbAttr, source! /* checked in condition*/, cancelled),
-      ).then(() => {
-        if (cancelled.value) {
-          return resolve(false);
-        }
-        const newItemModifier = itemModifier.clone() as PokemonHeldItemModifier;
-        newItemModifier.pokemonId = target.id;
-        const matchingModifier = this.findModifier(
-          (m) =>
-            m instanceof PokemonHeldItemModifier &&
-            (m as PokemonHeldItemModifier).matchType(itemModifier) &&
-            m.pokemonId === target.id,
-          target.isPlayer(),
-        ) as PokemonHeldItemModifier;
-        let removeOld = true;
-        if (matchingModifier) {
-          const maxStackCount = matchingModifier.getMaxStackCount();
-          if (matchingModifier.stackCount >= maxStackCount) {
-            return resolve(false);
-          }
-          const countTaken = Math.min(
-            transferQuantity,
-            itemModifier.stackCount,
-            maxStackCount - matchingModifier.stackCount,
-          );
-          itemModifier.stackCount -= countTaken;
-          newItemModifier.stackCount = matchingModifier.stackCount + countTaken;
-          removeOld = !itemModifier.stackCount;
-        } else {
-          const countTaken = Math.min(transferQuantity, itemModifier.stackCount);
-          itemModifier.stackCount -= countTaken;
-          newItemModifier.stackCount = countTaken;
-        }
-        removeOld = !itemModifier.stackCount;
-        if (!removeOld || !source || this.removeModifier(itemModifier, !source.isPlayer())) {
-          const addModifier = () => {
-            if (!matchingModifier || this.removeModifier(matchingModifier, !target.isPlayer())) {
-              if (target.isPlayer()) {
-                this.addModifier(newItemModifier, ignoreUpdate, playSound, false, instant).then(() => {
-                  if (source && itemLost) {
-                    applyPostItemLostAbAttrs(PostItemLostAbAttr, source, false);
-                  }
-                  resolve(true);
-                });
-              } else {
-                this.addEnemyModifier(newItemModifier, ignoreUpdate, instant).then(() => {
-                  if (source && itemLost) {
-                    applyPostItemLostAbAttrs(PostItemLostAbAttr, source, false);
-                  }
-                  resolve(true);
-                });
-              }
-            } else {
-              resolve(false);
+  ): boolean {
+    const source = itemModifier.pokemonId ? itemModifier.getPokemon() : null;
+    const cancelled = new Utils.BooleanHolder(false);
+
+    if (source && source.isPlayer() !== target.isPlayer()) {
+      applyAbAttrs(BlockItemTheftAbAttr, source, cancelled);
+    }
+
+    if (cancelled.value) {
+      return false;
+    }
+
+    const newItemModifier = itemModifier.clone() as PokemonHeldItemModifier;
+    newItemModifier.pokemonId = target.id;
+    const matchingModifier = this.findModifier(
+      (m) => m instanceof PokemonHeldItemModifier && m.matchType(itemModifier) && m.pokemonId === target.id,
+      target.isPlayer(),
+    ) as PokemonHeldItemModifier;
+
+    if (matchingModifier) {
+      const maxStackCount = matchingModifier.getMaxStackCount();
+      if (matchingModifier.stackCount >= maxStackCount) {
+        return false;
+      }
+      const countTaken = Math.min(
+        transferQuantity,
+        itemModifier.stackCount,
+        maxStackCount - matchingModifier.stackCount,
+      );
+      itemModifier.stackCount -= countTaken;
+      newItemModifier.stackCount = matchingModifier.stackCount + countTaken;
+    } else {
+      const countTaken = Math.min(transferQuantity, itemModifier.stackCount);
+      itemModifier.stackCount -= countTaken;
+      newItemModifier.stackCount = countTaken;
+    }
+
+    const removeOld = itemModifier.stackCount === 0;
+
+    if (!removeOld || !source || this.removeModifier(itemModifier, !source.isPlayer())) {
+      const addModifier = () => {
+        if (!matchingModifier || this.removeModifier(matchingModifier, !target.isPlayer())) {
+          if (target.isPlayer()) {
+            this.addModifier(newItemModifier, ignoreUpdate, playSound, false, instant);
+            if (source && itemLost) {
+              applyPostItemLostAbAttrs(PostItemLostAbAttr, source, false);
             }
-          };
-          if (source && source.isPlayer() !== target.isPlayer() && !ignoreUpdate) {
-            this.updateModifiers(source.isPlayer(), instant).then(() => addModifier());
+            return true;
           } else {
-            addModifier();
+            this.addEnemyModifier(newItemModifier, ignoreUpdate, instant).then(() => {
+              if (source && itemLost) {
+                applyPostItemLostAbAttrs(PostItemLostAbAttr, source, false);
+              }
+              return true;
+            });
           }
-          return;
         }
-        resolve(false);
-      });
-    });
+        return false;
+      };
+      if (source && source.isPlayer() !== target.isPlayer() && !ignoreUpdate) {
+        this.updateModifiers(source.isPlayer(), instant);
+        addModifier();
+      } else {
+        addModifier();
+      }
+      return true;
+    }
+    return false;
   }
 
   removePartyMemberModifiers(partyMemberIndex: integer): Promise<void> {
@@ -3054,7 +3036,8 @@ export default class BattleScene extends SceneBase {
       for (const m of modifiersToRemove) {
         this.modifiers.splice(this.modifiers.indexOf(m), 1);
       }
-      this.updateModifiers().then(() => resolve());
+      this.updateModifiers();
+      resolve();
     });
   }
 
@@ -3124,7 +3107,8 @@ export default class BattleScene extends SceneBase {
         }
         return true;
       });
-      this.updateModifiers(false).then(() => resolve());
+      this.updateModifiers(false);
+      resolve();
     });
   }
 
@@ -3136,7 +3120,8 @@ export default class BattleScene extends SceneBase {
     for (const m of modifiersToRemove) {
       this.enemyModifiers.splice(this.enemyModifiers.indexOf(m), 1);
     }
-    this.updateModifiers(false).then(() => this.updateUIPositions());
+    this.updateModifiers(false);
+    this.updateUIPositions();
   }
 
   /**
@@ -3150,49 +3135,43 @@ export default class BattleScene extends SceneBase {
     for (const m of modifiersToRemove) {
       this.enemyModifiers.splice(this.enemyModifiers.indexOf(m), 1);
     }
-    this.updateModifiers(false).then(() => this.updateUIPositions());
+    this.updateModifiers(false);
+    this.updateUIPositions();
   }
 
   setModifiersVisible(visible: boolean) {
     [this.modifierBar, this.enemyModifierBar].map((m) => m.setVisible(visible));
   }
 
-  updateModifiers(player?: boolean, instant?: boolean): Promise<void> {
-    if (player === undefined) {
-      player = true;
+  updateModifiers(player: boolean = true, instant?: boolean): void {
+    const modifiers = player ? this.modifiers : (this.enemyModifiers as PersistentModifier[]);
+    for (let m = 0; m < modifiers.length; m++) {
+      const modifier = modifiers[m];
+      if (
+        modifier instanceof PokemonHeldItemModifier &&
+        !this.getPokemonById((modifier as PokemonHeldItemModifier).pokemonId)
+      ) {
+        modifiers.splice(m--, 1);
+      }
     }
-    return new Promise((resolve) => {
-      const modifiers = player ? this.modifiers : (this.enemyModifiers as PersistentModifier[]);
-      for (let m = 0; m < modifiers.length; m++) {
-        const modifier = modifiers[m];
-        if (
-          modifier instanceof PokemonHeldItemModifier &&
-          !this.getPokemonById((modifier as PokemonHeldItemModifier).pokemonId)
-        ) {
-          modifiers.splice(m--, 1);
-        }
+    for (const modifier of modifiers) {
+      if (modifier instanceof PersistentModifier) {
+        (modifier as PersistentModifier).virtualStackCount = 0;
       }
-      for (const modifier of modifiers) {
-        if (modifier instanceof PersistentModifier) {
-          (modifier as PersistentModifier).virtualStackCount = 0;
-        }
-      }
+    }
 
-      const modifiersClone = modifiers.slice(0);
-      for (const modifier of modifiersClone) {
-        if (!modifier.getStackCount()) {
-          modifiers.splice(modifiers.indexOf(modifier), 1);
-        }
+    const modifiersClone = modifiers.slice(0);
+    for (const modifier of modifiersClone) {
+      if (!modifier.getStackCount()) {
+        modifiers.splice(modifiers.indexOf(modifier), 1);
       }
+    }
 
-      this.updatePartyForModifiers(player ? this.getPlayerParty() : this.getEnemyParty(), instant).then(() => {
-        (player ? this.modifierBar : this.enemyModifierBar).updateModifiers(modifiers);
-        if (!player) {
-          this.updateUIPositions();
-        }
-        resolve();
-      });
-    });
+    this.updatePartyForModifiers(player ? this.getPlayerParty() : this.getEnemyParty(), instant);
+    (player ? this.modifierBar : this.enemyModifierBar).updateModifiers(modifiers);
+    if (!player) {
+      this.updateUIPositions();
+    }
   }
 
   updatePartyForModifiers(party: Pokemon[], instant?: boolean): Promise<void> {
