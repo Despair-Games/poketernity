@@ -1,4 +1,5 @@
 **/*.yml
+**/*.md
 
 # Ignore artifacts:
 build
