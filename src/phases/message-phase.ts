@@ -3,16 +3,16 @@ import { Phase } from "#app/phase";
 
 export class MessagePhase extends Phase {
   private text: string;
-  private callbackDelay?: number | null;
-  private prompt?: boolean | null;
-  private promptDelay?: number | null;
+  private callbackDelay: number | null;
+  private prompt: boolean | null;
+  private promptDelay: number | null;
   private speaker?: string;
 
   constructor(
     text: string,
-    callbackDelay?: number | null,
-    prompt?: boolean | null,
-    promptDelay?: number | null,
+    callbackDelay: number | null = null,
+    prompt: boolean | null = null,
+    promptDelay: number | null = null,
     speaker?: string,
   ) {
     super();
