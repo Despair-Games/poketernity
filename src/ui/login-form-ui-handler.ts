@@ -66,7 +66,6 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
     this.externalPartyContainer = globalScene.add.container(0, 0);
     this.externalPartyContainer.setInteractive(
       new Phaser.Geom.Rectangle(0, 0, globalScene.game.canvas.width / 12, globalScene.game.canvas.height / 12),
-
       Phaser.Geom.Rectangle.Contains,
     );
     this.externalPartyTitle = addTextObject(0, 4, "", TextStyle.SETTINGS_LABEL);
@@ -237,7 +236,6 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
         });
         this.infoContainer.setInteractive(
           new Phaser.Geom.Rectangle(0, 0, globalScene.game.canvas.width, globalScene.game.canvas.height),
-
           Phaser.Geom.Rectangle.Contains,
         );
       } else {
