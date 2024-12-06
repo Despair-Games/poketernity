@@ -6,23 +6,45 @@
   "scripts": {
     "start": "vite",
     "start:dev": "vite --mode development",
+
     "build": "vite build",
     "build:beta": "vite build --mode beta",
+
     "preview": "vite preview",
-    "test": "vitest run --project pre && vitest run --project main",
-    "test:cov": "vitest run --project pre && vitest run --project main --coverage",
-    "test:watch": "vitest run --project pre && vitest watch --project main --coverage",
-    "test:silent": "vitest run --project pre && vitest run --project main --silent",
+
+    "pretest": "vitest run --project pre",
+    "test": "vitest run --project main",
+    "posttest": "git rev-parse --short HEAD",
+
+    "pretest:cov": "vitest run --project pre",
+    "test:cov": "vitest run --project main --coverage",
+    "posttest:cov": "git rev-parse --short HEAD",
+
+    "pretest:watch": "vitest run --project pre",
+    "test:watch": "vitest watch --project main --coverage",
+    "posttest:watch": "git rev-parse --short HEAD",
+
+    "pretest:silent": "vitest run --project pre",
+    "test:silent": "vitest run --project main --silent",
+    "posttest:silent": "git rev-parse --short HEAD",
+
     "typecheck": "tsc --noEmit",
+    "posttypecheck": "git rev-parse --short HEAD",
+
     "eslint": "eslint --fix .",
     "eslint-ci": "eslint .",
+
     "docs": "typedoc",
+
     "depcruise": "depcruise src",
     "depcruise:graph": "depcruise src --output-type dot | node dependency-graph.js > dependency-graph.svg",
+
     "create-test": "node ./create-test-boilerplate.js",
+
     "postinstall": "npx lefthook install && npx lefthook run post-merge"
   },
   "devDependencies": {
+    "@btmills/prettier": "^3.3.3",
     "@eslint/js": "^9.3.0",
     "@hpcc-js/wasm": "^2.18.0",
     "@stylistic/eslint-plugin-ts": "^2.6.0-beta.0",
@@ -39,7 +61,6 @@
     "lefthook": "^1.6.12",
     "msw": "^2.4.9",
     "phaser3spectorjs": "^0.0.8",
-    "prettier": "3.4.1",
     "typedoc": "^0.26.4",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.0-alpha.54",
