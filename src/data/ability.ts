@@ -2334,7 +2334,8 @@ export class PostAttackApplyBattlerTagAbAttr extends PostAttackAbAttr {
      * - If the target is behind a substitute, the move must be able to bypass the substitute
      * - The game rolls successfully based on the chance
      *
-     * Note: Battler tags inflicted by abilities post attacking are also considered additional effects of moves.*/
+     * Note: Battler tags inflicted by abilities post attacking are also considered additional effects of moves.
+     */
     if (
       !attacker.hasAbilityWithAttr(IgnoreMoveEffectsAbAttr)
       && target.id !== attacker.id
