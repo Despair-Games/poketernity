@@ -674,8 +674,8 @@ export default class EggGachaUiHandler extends MessageUiHandler {
             switch (this.cursor) {
               case 0:
                 if (
-                  !globalScene.gameData.voucherCounts[VoucherType.REGULAR] &&
-                  !Overrides.EGG_FREE_GACHA_PULLS_OVERRIDE
+                  !globalScene.gameData.voucherCounts[VoucherType.REGULAR]
+                  && !Overrides.EGG_FREE_GACHA_PULLS_OVERRIDE
                 ) {
                   error = true;
                   this.showError(i18next.t("egg:notEnoughVouchers"));
@@ -708,12 +708,12 @@ export default class EggGachaUiHandler extends MessageUiHandler {
               case 1:
               case 3:
                 if (
-                  (this.cursor === 1 &&
-                    globalScene.gameData.voucherCounts[VoucherType.REGULAR] < 10 &&
-                    !Overrides.EGG_FREE_GACHA_PULLS_OVERRIDE) ||
-                  (this.cursor === 3 &&
-                    !globalScene.gameData.voucherCounts[VoucherType.PREMIUM] &&
-                    !Overrides.EGG_FREE_GACHA_PULLS_OVERRIDE)
+                  (this.cursor === 1
+                    && globalScene.gameData.voucherCounts[VoucherType.REGULAR] < 10
+                    && !Overrides.EGG_FREE_GACHA_PULLS_OVERRIDE)
+                  || (this.cursor === 3
+                    && !globalScene.gameData.voucherCounts[VoucherType.PREMIUM]
+                    && !Overrides.EGG_FREE_GACHA_PULLS_OVERRIDE)
                 ) {
                   error = true;
                   this.showError(i18next.t("egg:notEnoughVouchers"));
@@ -736,8 +736,8 @@ export default class EggGachaUiHandler extends MessageUiHandler {
                 break;
               case 4:
                 if (
-                  !globalScene.gameData.voucherCounts[VoucherType.GOLDEN] &&
-                  !Overrides.EGG_FREE_GACHA_PULLS_OVERRIDE
+                  !globalScene.gameData.voucherCounts[VoucherType.GOLDEN]
+                  && !Overrides.EGG_FREE_GACHA_PULLS_OVERRIDE
                 ) {
                   error = true;
                   this.showError(i18next.t("egg:notEnoughVouchers"));

@@ -172,9 +172,9 @@ export default class BattleFlyout extends Phaser.GameObjects.Container {
   private onBerryUsed(event: Event) {
     const berryUsedEvent = event as BerryUsedEvent;
     if (
-      !berryUsedEvent ||
-      berryUsedEvent.berryModifier.pokemonId !== this.pokemon?.id ||
-      berryUsedEvent.berryModifier.berryType !== BerryType.LEPPA
+      !berryUsedEvent
+      || berryUsedEvent.berryModifier.pokemonId !== this.pokemon?.id
+      || berryUsedEvent.berryModifier.berryType !== BerryType.LEPPA
     ) {
       // We only care about Leppa berries
       return;

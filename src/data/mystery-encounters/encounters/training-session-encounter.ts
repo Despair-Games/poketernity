@@ -325,9 +325,9 @@ export const TrainingSessionEncounter: MysteryEncounter = MysteryEncounterBuilde
             // Only update the fusion's dex data if the Pokemon is already caught in dex (ignore rentals)
             const rootFusionSpecies = playerPokemon.fusionSpecies?.getRootSpeciesId();
             if (
-              !isNullOrUndefined(rootFusionSpecies) &&
-              speciesStarterCosts.hasOwnProperty(rootFusionSpecies) &&
-              !!globalScene.gameData.dexData[rootFusionSpecies].caughtAttr
+              !isNullOrUndefined(rootFusionSpecies)
+              && speciesStarterCosts.hasOwnProperty(rootFusionSpecies)
+              && !!globalScene.gameData.dexData[rootFusionSpecies].caughtAttr
             ) {
               globalScene.gameData.starterData[rootFusionSpecies].abilityAttr |=
                 playerPokemon.fusionAbilityIndex !== 1 || playerPokemon.fusionSpecies?.ability2

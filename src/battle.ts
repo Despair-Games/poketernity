@@ -240,8 +240,8 @@ export default class Battle {
       // Should not use any BGM overrides before swapping from DEFAULT mode
       return null;
     } else if (
-      this.battleType === BattleType.TRAINER ||
-      this.mysteryEncounter?.encounterMode === MysteryEncounterMode.TRAINER_BATTLE
+      this.battleType === BattleType.TRAINER
+      || this.mysteryEncounter?.encounterMode === MysteryEncounterMode.TRAINER_BATTLE
     ) {
       if (!this.started && this.trainer?.config.encounterBgm && this.trainer?.getEncounterMessages()?.length) {
         return `encounter_${this.trainer?.getEncounterBgm()}`;
