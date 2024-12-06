@@ -3,20 +3,20 @@ import type {
   AccountLoginRequest,
   AccountLoginResponse,
   AccountRegisterRequest,
-} from "#app/@types/AccountApi";
-import { SESSION_ID_COOKIE } from "#app/constants";
+} from "#app/@types/PokerogueAccountApi";
+import { SESSION_ID_COOKIE_NAME } from "#app/constants";
 import { ApiBase } from "#app/plugins/api/api-base";
 import { removeCookie, setCookie } from "#app/utils";
 
 /**
- * A wrapper for the account API requests.
+ * A wrapper for PokéRogue account API requests.
  */
-export class AccountApi extends ApiBase {
+export class PokerogueAccountApi extends ApiBase {
   //#region Public
 
   /**
    * Request the {@linkcode AccountInfoResponse | UserInfo} of the logged in user.
-   * The user is identified by the {@linkcode SESSION_ID_COOKIE | session cookie}.
+   * The user is identified by the {@linkcode SESSION_ID_COOKIE_NAME | session cookie}.
    */
   public async getInfo(): Promise<[data: AccountInfoResponse | null, status: number]> {
     try {
@@ -68,7 +68,7 @@ export class AccountApi extends ApiBase {
 
       if (response.ok) {
         const loginResponse = (await response.json()) as AccountLoginResponse;
-        setCookie(SESSION_ID_COOKIE, loginResponse.token);
+        setCookie(SESSION_ID_COOKIE_NAME, loginResponse.token);
         return null;
       } else {
         console.warn("Login failed!", response.status, response.statusText);
@@ -96,6 +96,6 @@ export class AccountApi extends ApiBase {
       console.warn("Log out failed!", err);
     }
 
-    removeCookie(SESSION_ID_COOKIE); // we are always clearing the cookie.
+    removeCookie(SESSION_ID_COOKIE_NAME); // we are always clearing the cookie.
   }
 }

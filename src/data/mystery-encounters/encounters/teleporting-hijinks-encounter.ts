@@ -44,6 +44,7 @@ const MACHINE_INTERFACING_TYPES = [Type.ELECTRIC, Type.STEEL];
 
 /**
  * Teleporting Hijinks encounter.
+ * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3817 | GitHub Issue #3817}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const TeleportingHijinksEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(

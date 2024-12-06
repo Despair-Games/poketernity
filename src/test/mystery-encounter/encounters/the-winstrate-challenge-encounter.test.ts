@@ -66,7 +66,7 @@ describe("The Winstrate Challenge - Mystery Encounter", () => {
     await game.runToMysteryEncounter(MysteryEncounterType.THE_WINSTRATE_CHALLENGE, defaultParty);
 
     expect(TheWinstrateChallengeEncounter.encounterType).toBe(MysteryEncounterType.THE_WINSTRATE_CHALLENGE);
-    expect(TheWinstrateChallengeEncounter.encounterTier).toBe(MysteryEncounterTier.EPIC);
+    expect(TheWinstrateChallengeEncounter.encounterTier).toBe(MysteryEncounterTier.ROGUE);
     expect(TheWinstrateChallengeEncounter.dialogue).toBeDefined();
     expect(TheWinstrateChallengeEncounter.dialogue.intro).toStrictEqual([
       { text: `${namespace}:intro` },

@@ -25,6 +25,7 @@ const namespace = "mysteryEncounters/mysteriousChallengers";
 
 /**
  * Mysterious Challengers encounter.
+ * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3801 | GitHub Issue #3801}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const MysteriousChallengersEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(
@@ -208,7 +209,7 @@ export const MysteriousChallengersEncounter: MysteryEncounter = MysteryEncounter
       encounter.expMultiplier = 0.9;
 
       setEncounterRewards({
-        guaranteedModifierTiers: [ModifierTier.EPIC, ModifierTier.EPIC, ModifierTier.ULTRA, ModifierTier.GREAT],
+        guaranteedModifierTiers: [ModifierTier.ROGUE, ModifierTier.ROGUE, ModifierTier.ULTRA, ModifierTier.GREAT],
         fillRemaining: true,
       });
 

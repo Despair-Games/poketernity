@@ -572,7 +572,7 @@ export default class RunInfoUiHandler extends UiHandler {
    */
   private async parseRunInfo(windowX: number, windowY: number) {
     // Parsing and displaying the mode.
-    // In the future, parsing Challenges + Challenge Rules may have to be reworked as the game adds additional challenges and users can stack these challenges in various ways.
+    // In the future, parsing Challenges + Challenge Rules may have to be reworked as PokeRogue adds additional challenges and users can stack these challenges in various ways.
     const modeText = addBBCodeTextObject(7, 0, "", TextStyle.WINDOW, { fontSize: "50px", lineSpacing: 3 });
     modeText.setPosition(7, 5);
     modeText.appendText(i18next.t("runHistory:mode") + ": ", false);

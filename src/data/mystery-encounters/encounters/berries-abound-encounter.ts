@@ -49,6 +49,7 @@ const namespace = "mysteryEncounters/berriesAbound";
 
 /**
  * Berries Abound encounter.
+ * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3810 | GitHub Issue #3810}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const BerriesAboundEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(

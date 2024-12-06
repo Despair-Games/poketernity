@@ -1,19 +1,19 @@
-import type { GetDailyRankingsPageCountRequest, GetDailyRankingsRequest } from "#app/@types/DailyApi";
-import { DailyApi } from "#app/plugins/api/daily-api";
+import type { GetDailyRankingsPageCountRequest, GetDailyRankingsRequest } from "#app/@types/PokerogueDailyApi";
+import { PokerogueDailyApi } from "#app/plugins/api/pokerogue-daily-api";
 import { getApiBaseUrl } from "#app/test/utils/testUtils";
 import { ScoreboardCategory, type RankingEntry } from "#app/ui/daily-run-scoreboard";
 import { http, HttpResponse } from "msw";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const apiBase = getApiBaseUrl();
-const dailyApi = new DailyApi(apiBase);
+const dailyApi = new PokerogueDailyApi(apiBase);
 const { server } = global;
 
 afterEach(() => {
   server.resetHandlers();
 });
 
-describe("Daily API", () => {
+describe("Pokerogue Daily API", () => {
   beforeEach(() => {
     vi.spyOn(console, "warn");
   });

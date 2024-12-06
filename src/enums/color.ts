@@ -17,6 +17,7 @@ export enum Color {
   COMMON = "#ffffff",
   GREAT = "#3890f8",
   ULTRA = "#f8d038",
+  ROGUE = "#d52929",
   MASTER = "#e020c0",
   LUXURY = "#e64a18",
 }

@@ -3,22 +3,22 @@ import type {
   UpdateSystemSavedataRequest,
   VerifySystemSavedataRequest,
   VerifySystemSavedataResponse,
-} from "#app/@types/SystemSavedataApi";
-import { SystemSavedataApi } from "#app/plugins/api/system-savedata-api";
+} from "#app/@types/PokerogueSystemSavedataApi";
+import { PokerogueSystemSavedataApi } from "#app/plugins/api/pokerogue-system-savedata-api";
 import type { SystemSaveData } from "#app/system/game-data";
 import { getApiBaseUrl } from "#app/test/utils/testUtils";
 import { http, HttpResponse } from "msw";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const apiBase = getApiBaseUrl();
-const systemSavedataApi = new SystemSavedataApi(getApiBaseUrl());
+const systemSavedataApi = new PokerogueSystemSavedataApi(getApiBaseUrl());
 const { server } = global;
 
 afterEach(() => {
   server.resetHandlers();
 });
 
-describe("System Savedata API", () => {
+describe("Pokerogue System Savedata API", () => {
   beforeEach(() => {
     vi.spyOn(console, "warn");
   });

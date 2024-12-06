@@ -90,7 +90,7 @@ describe("Moves - Toxic Spikes", () => {
     game.move.select(Moves.TOXIC_SPIKES);
     await game.toNextTurn();
     // also make sure the toxic spikes are removed even if the pokemon
-    // that set them up is the one switching in
+    // that set them up is the one switching in (https://github.com/pagefaultgames/pokerogue/issues/935)
     game.move.select(Moves.COURT_CHANGE);
     await game.toNextTurn();
     game.doSwitchPokemon(1);

@@ -1,5 +1,5 @@
-import type { TitleStatsResponse } from "#app/@types/Api";
-import { api } from "#app/plugins/api/api";
+import type { TitleStatsResponse } from "#app/@types/PokerogueApi";
+import { pokerogueApi } from "#app/plugins/api/pokerogue-api";
 import { getApiBaseUrl } from "#app/test/utils/testUtils";
 import { http, HttpResponse } from "msw";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -11,7 +11,7 @@ afterEach(() => {
   server.resetHandlers();
 });
 
-describe("API", () => {
+describe("Pokerogue API", () => {
   beforeEach(() => {
     vi.spyOn(console, "warn");
   });
@@ -25,14 +25,14 @@ describe("API", () => {
     it("should return the stats on SUCCESS", async () => {
       server.use(http.get(`${apiBase}/game/titlestats`, () => HttpResponse.json(expectedTitleStats)));
 
-      const titleStats = await api.getGameTitleStats();
+      const titleStats = await pokerogueApi.getGameTitleStats();
 
       expect(titleStats).toEqual(expectedTitleStats);
     });
 
     it("should return null and report a warning on ERROR", async () => {
       server.use(http.get(`${apiBase}/game/titlestats`, () => HttpResponse.error()));
-      const titleStats = await api.getGameTitleStats();
+      const titleStats = await pokerogueApi.getGameTitleStats();
 
       expect(titleStats).toBeNull();
       expect(console.warn).toHaveBeenCalledWith("Could not get game title stats!", expect.any(Error));
@@ -43,7 +43,7 @@ describe("API", () => {
     it("should return true on SUCCESS", async () => {
       server.use(http.post(`${apiBase}/auth/discord/logout`, () => new HttpResponse("", { status: 200 })));
 
-      const success = await api.unlinkDiscord();
+      const success = await pokerogueApi.unlinkDiscord();
 
       expect(success).toBe(true);
     });
@@ -51,7 +51,7 @@ describe("API", () => {
     it("should return false and report a warning on FAILURE", async () => {
       server.use(http.post(`${apiBase}/auth/discord/logout`, () => new HttpResponse("", { status: 401 })));
 
-      const success = await api.unlinkDiscord();
+      const success = await pokerogueApi.unlinkDiscord();
 
       expect(success).toBe(false);
       expect(console.warn).toHaveBeenCalledWith("Discord unlink failed (401: Unauthorized)");
@@ -60,7 +60,7 @@ describe("API", () => {
     it("should return false and report a warning on ERROR", async () => {
       server.use(http.post(`${apiBase}/auth/discord/logout`, () => HttpResponse.error()));
 
-      const success = await api.unlinkDiscord();
+      const success = await pokerogueApi.unlinkDiscord();
 
       expect(success).toBe(false);
       expect(console.warn).toHaveBeenCalledWith("Could not unlink Discord!", expect.any(Error));
@@ -71,7 +71,7 @@ describe("API", () => {
     it("should return true on SUCCESS", async () => {
       server.use(http.post(`${apiBase}/auth/google/logout`, () => new HttpResponse("", { status: 200 })));
 
-      const success = await api.unlinkGoogle();
+      const success = await pokerogueApi.unlinkGoogle();
 
       expect(success).toBe(true);
     });
@@ -79,7 +79,7 @@ describe("API", () => {
     it("should return false and report a warning on FAILURE", async () => {
       server.use(http.post(`${apiBase}/auth/google/logout`, () => new HttpResponse("", { status: 401 })));
 
-      const success = await api.unlinkGoogle();
+      const success = await pokerogueApi.unlinkGoogle();
 
       expect(success).toBe(false);
       expect(console.warn).toHaveBeenCalledWith("Google unlink failed (401: Unauthorized)");
@@ -88,7 +88,7 @@ describe("API", () => {
     it("should return false and report a warning on ERROR", async () => {
       server.use(http.post(`${apiBase}/auth/google/logout`, () => HttpResponse.error()));
 
-      const success = await api.unlinkGoogle();
+      const success = await pokerogueApi.unlinkGoogle();
 
       expect(success).toBe(false);
       expect(console.warn).toHaveBeenCalledWith("Could not unlink Google!", expect.any(Error));

@@ -5,21 +5,21 @@ import type {
   SearchAccountResponse,
   UnlinkAccountFromDiscordIdRequest,
   UnlinkAccountFromGoogledIdRequest,
-} from "#app/@types/AdminApi";
-import { AdminApi } from "#app/plugins/api/admin-api";
+} from "#app/@types/PokerogueAdminApi";
+import { PokerogueAdminApi } from "#app/plugins/api/pokerogue-admin-api";
 import { getApiBaseUrl } from "#app/test/utils/testUtils";
 import { http, HttpResponse } from "msw";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const apiBase = getApiBaseUrl();
-const adminApi = new AdminApi(apiBase);
+const adminApi = new PokerogueAdminApi(apiBase);
 const { server } = global;
 
 afterEach(() => {
   server.resetHandlers();
 });
 
-describe("Admin API", () => {
+describe("Pokerogue Admin API", () => {
   beforeEach(() => {
     vi.spyOn(console, "warn");
   });

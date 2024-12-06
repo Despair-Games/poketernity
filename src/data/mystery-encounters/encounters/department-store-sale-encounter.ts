@@ -17,6 +17,7 @@ const namespace = "mysteryEncounters/departmentStoreSale";
 
 /**
  * Department Store Sale encounter.
+ * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3797 | GitHub Issue #3797}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const DepartmentStoreSaleEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(
@@ -138,14 +139,16 @@ export const DepartmentStoreSaleEncounter: MysteryEncounter = MysteryEncounterBu
       const modifiers: ModifierTypeFunc[] = [];
       let i = 0;
       while (i < 4) {
-        // 10/30/20 weight on pokeballs
-        const roll = randSeedInt(60);
+        // 10/30/20/5 weight on pokeballs
+        const roll = randSeedInt(65);
         if (roll < 10) {
           modifiers.push(modifierTypes.POKEBALL);
         } else if (roll < 40) {
           modifiers.push(modifierTypes.GREAT_BALL);
-        } else {
+        } else if (roll < 60) {
           modifiers.push(modifierTypes.ULTRA_BALL);
+        } else {
+          modifiers.push(modifierTypes.ROGUE_BALL);
         }
         i++;
       }

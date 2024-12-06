@@ -40,6 +40,7 @@ const SHINY_MAGIKARP_WEIGHT = 100;
 
 /**
  * Pokemon Salesman encounter.
+ * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3799 | GitHub Issue #3799}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const ThePokemonSalesmanEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(

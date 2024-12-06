@@ -26,6 +26,7 @@ const namespace = "mysteryEncounters/lostAtSea";
 
 /**
  * Lost at sea encounter.
+ * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3793 | GitHub Issue #3793}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const LostAtSeaEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(

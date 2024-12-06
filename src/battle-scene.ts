@@ -1491,6 +1491,7 @@ export default class BattleScene extends SceneBase {
       }
       /**
        * Override battles into single only if not fighting with trainers.
+       * @see {@link https://github.com/pagefaultgames/pokerogue/issues/1948 | GitHub Issue #1948}
        */
       if (newBattleType !== BattleType.TRAINER && doubleOverrideForWave === "single") {
         newDouble = false;
@@ -3800,7 +3801,7 @@ export default class BattleScene extends SceneBase {
       MysteryEncounterTier.COMMON,
       MysteryEncounterTier.GREAT,
       MysteryEncounterTier.ULTRA,
-      MysteryEncounterTier.EPIC,
+      MysteryEncounterTier.ROGUE,
     ];
 
     // Adjust tier weights by previously encountered events to lower odds of only Common/Great in run
@@ -3824,7 +3825,7 @@ export default class BattleScene extends SceneBase {
           ? MysteryEncounterTier.GREAT
           : tierValue > ultraThreshold
             ? MysteryEncounterTier.ULTRA
-            : MysteryEncounterTier.EPIC;
+            : MysteryEncounterTier.ROGUE;
 
     if (!isNullOrUndefined(Overrides.MYSTERY_ENCOUNTER_TIER_OVERRIDE)) {
       tier = Overrides.MYSTERY_ENCOUNTER_TIER_OVERRIDE;
@@ -3885,7 +3886,7 @@ export default class BattleScene extends SceneBase {
         })
         .map((m) => allMysteryEncounters[m]);
       // Decrement tier
-      if (tier === MysteryEncounterTier.EPIC) {
+      if (tier === MysteryEncounterTier.ROGUE) {
         tier = MysteryEncounterTier.ULTRA;
       } else if (tier === MysteryEncounterTier.ULTRA) {
         tier = MysteryEncounterTier.GREAT;

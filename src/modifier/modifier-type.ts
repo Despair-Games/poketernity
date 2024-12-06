@@ -1,3 +1,4 @@
+import { globalScene } from "#app/global-scene";
 import { EvolutionItem, pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
 import { tmPoolTiers, tmSpecies } from "#app/data/balance/tms";
 import { getBerryEffectDescription, getBerryName } from "#app/data/berry";
@@ -11,9 +12,9 @@ import {
   SpeciesFormChangeItemTrigger,
 } from "#app/data/pokemon-forms";
 import { getStatusEffectDescriptor } from "#app/data/status-effect";
-import type Pokemon from "#app/field/pokemon";
+import { Type } from "#enums/type";
 import type { EnemyPokemon, PlayerPokemon, PokemonMove } from "#app/field/pokemon";
-import { globalScene } from "#app/global-scene";
+import type Pokemon from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import {
   AddPokeballModifier,
@@ -25,7 +26,6 @@ import {
   BypassSpeedChanceModifier,
   ContactHeldItemTransferChanceModifier,
   CritBoosterModifier,
-  CriticalCatchChanceBoosterModifier,
   DamageMoneyRewardModifier,
   DoubleBattleChanceBoosterModifier,
   EnemyAttackStatusEffectChanceModifier,
@@ -85,7 +85,6 @@ import {
   SurviveDamageModifier,
   SwitchEffectTransferModifier,
   TempCritBoosterModifier,
-  TempExtraModifierModifier,
   TempStatStageBoosterModifier,
   TerastallizeAccessModifier,
   TerastallizeModifier,
@@ -96,6 +95,8 @@ import {
   type EnemyPersistentModifier,
   type Modifier,
   type PersistentModifier,
+  TempExtraModifierModifier,
+  CriticalCatchChanceBoosterModifier,
 } from "#app/modifier/modifier";
 import { ModifierTier } from "#app/modifier/modifier-tier";
 import Overrides from "#app/overrides";
@@ -125,7 +126,6 @@ import { SpeciesFormKey } from "#enums/species-form-key";
 import type { PermanentStat, TempBattleStat } from "#enums/stat";
 import { getStatKey, Stat, TEMP_BATTLE_STATS } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
-import { Type } from "#enums/type";
 import i18next from "i18next";
 
 const outputModifierData = false;
@@ -1861,6 +1861,7 @@ export const modifierTypes = {
   POKEBALL: () => new AddPokeballModifierType("pb", PokeballType.POKEBALL, 5),
   GREAT_BALL: () => new AddPokeballModifierType("gb", PokeballType.GREAT_BALL, 5),
   ULTRA_BALL: () => new AddPokeballModifierType("ub", PokeballType.ULTRA_BALL, 5),
+  ROGUE_BALL: () => new AddPokeballModifierType("rb", PokeballType.ROGUE_BALL, 5),
   MASTER_BALL: () => new AddPokeballModifierType("mb", PokeballType.MASTER_BALL, 1),
 
   RARE_CANDY: () => new PokemonLevelIncrementModifierType("modifierType:ModifierType.RARE_CANDY", "rare_candy"),
@@ -2808,7 +2809,12 @@ const modifierPool: ModifierPool = {
     m.setTier(ModifierTier.ULTRA);
     return m;
   }),
-  [ModifierTier.EPIC]: [
+  [ModifierTier.ROGUE]: [
+    new WeightedModifierType(
+      modifierTypes.ROGUE_BALL,
+      (party: Pokemon[]) => (hasMaximumBalls(party, PokeballType.ROGUE_BALL) ? 0 : 16),
+      16,
+    ),
     new WeightedModifierType(modifierTypes.RELIC_GOLD, skipInLastClassicWaveOrDefault(2)),
     new WeightedModifierType(modifierTypes.LEFTOVERS, 3),
     new WeightedModifierType(modifierTypes.SHELL_BELL, 3),
@@ -2856,7 +2862,7 @@ const modifierPool: ModifierPool = {
       3,
     ),
   ].map((m) => {
-    m.setTier(ModifierTier.EPIC);
+    m.setTier(ModifierTier.ROGUE);
     return m;
   }),
   [ModifierTier.MASTER]: [
@@ -2913,8 +2919,8 @@ const wildModifierPool: ModifierPool = {
     m.setTier(ModifierTier.ULTRA);
     return m;
   }),
-  [ModifierTier.EPIC]: [new WeightedModifierType(modifierTypes.LUCKY_EGG, 4)].map((m) => {
-    m.setTier(ModifierTier.EPIC);
+  [ModifierTier.ROGUE]: [new WeightedModifierType(modifierTypes.LUCKY_EGG, 4)].map((m) => {
+    m.setTier(ModifierTier.ROGUE);
     return m;
   }),
   [ModifierTier.MASTER]: [new WeightedModifierType(modifierTypes.GOLDEN_EGG, 1)].map((m) => {
@@ -2942,14 +2948,14 @@ const trainerModifierPool: ModifierPool = {
     m.setTier(ModifierTier.ULTRA);
     return m;
   }),
-  [ModifierTier.EPIC]: [
+  [ModifierTier.ROGUE]: [
     new WeightedModifierType(modifierTypes.FOCUS_BAND, 2),
     new WeightedModifierType(modifierTypes.LUCKY_EGG, 4),
     new WeightedModifierType(modifierTypes.QUICK_CLAW, 1),
     new WeightedModifierType(modifierTypes.GRIP_CLAW, 1),
     new WeightedModifierType(modifierTypes.WIDE_LENS, 1),
   ].map((m) => {
-    m.setTier(ModifierTier.EPIC);
+    m.setTier(ModifierTier.ROGUE);
     return m;
   }),
   [ModifierTier.MASTER]: [
@@ -2998,8 +3004,8 @@ const enemyBuffModifierPool: ModifierPool = {
     m.setTier(ModifierTier.ULTRA);
     return m;
   }),
-  [ModifierTier.EPIC]: [].map((m: WeightedModifierType) => {
-    m.setTier(ModifierTier.EPIC);
+  [ModifierTier.ROGUE]: [].map((m: WeightedModifierType) => {
+    m.setTier(ModifierTier.ROGUE);
     return m;
   }),
   [ModifierTier.MASTER]: [].map((m: WeightedModifierType) => {
@@ -3029,14 +3035,14 @@ const dailyStarterModifierPool: ModifierPool = {
     m.setTier(ModifierTier.ULTRA);
     return m;
   }),
-  [ModifierTier.EPIC]: [
+  [ModifierTier.ROGUE]: [
     new WeightedModifierType(modifierTypes.GRIP_CLAW, 5),
     new WeightedModifierType(modifierTypes.BATON, 2),
     new WeightedModifierType(modifierTypes.FOCUS_BAND, 5),
     new WeightedModifierType(modifierTypes.QUICK_CLAW, 3),
     new WeightedModifierType(modifierTypes.KINGS_ROCK, 3),
   ].map((m) => {
-    m.setTier(ModifierTier.EPIC);
+    m.setTier(ModifierTier.ROGUE);
     return m;
   }),
   [ModifierTier.MASTER]: [
@@ -3460,7 +3466,7 @@ export function getDailyRunStarterModifiers(party: PlayerPokemon[]): PokemonHeld
       } else if (tierValue > 4) {
         tier = ModifierTier.ULTRA;
       } else if (tierValue) {
-        tier = ModifierTier.EPIC;
+        tier = ModifierTier.ROGUE;
       } else {
         tier = ModifierTier.MASTER;
       }
@@ -3536,7 +3542,7 @@ function getNewModifierTypeOption(
     } else if (tierValue > 12) {
       tier = ModifierTier.ULTRA;
     } else if (tierValue) {
-      tier = ModifierTier.EPIC;
+      tier = ModifierTier.ROGUE;
     } else {
       tier = ModifierTier.MASTER;
     }
@@ -3660,7 +3666,7 @@ export function getLuckTextTint(luckValue: integer): integer {
   } else if (luckValue > 9) {
     modifierTier = ModifierTier.MASTER;
   } else if (luckValue > 5) {
-    modifierTier = ModifierTier.EPIC;
+    modifierTier = ModifierTier.ROGUE;
   } else if (luckValue > 2) {
     modifierTier = ModifierTier.ULTRA;
   } else if (luckValue) {

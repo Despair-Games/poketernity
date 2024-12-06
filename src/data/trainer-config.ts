@@ -4823,7 +4823,7 @@ export const trainerConfigs: TrainerConfigs = {
       getRandomPartyMemberFunc([Species.NIHILEGO], TrainerSlot.TRAINER, true, (p) => {
         p.setBoss(true, 2);
         p.generateAndPopulateMoveset();
-        p.pokeball = PokeballType.ULTRA_BALL;
+        p.pokeball = PokeballType.ROGUE_BALL;
       }),
     ),
   [TrainerType.LUSAMINE_2]: new TrainerConfig(++t)
@@ -4836,7 +4836,7 @@ export const trainerConfigs: TrainerConfigs = {
       getRandomPartyMemberFunc([Species.NIHILEGO], TrainerSlot.TRAINER, true, (p) => {
         p.setBoss(true, 2);
         p.generateAndPopulateMoveset();
-        p.pokeball = PokeballType.ULTRA_BALL;
+        p.pokeball = PokeballType.ROGUE_BALL;
       }),
     )
     .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.MILOTIC, Species.PRIMARINA]))
@@ -4855,7 +4855,7 @@ export const trainerConfigs: TrainerConfigs = {
         true,
         (p) => {
           p.generateAndPopulateMoveset();
-          p.pokeball = PokeballType.ULTRA_BALL;
+          p.pokeball = PokeballType.ROGUE_BALL;
         },
       ),
     )
@@ -4864,7 +4864,7 @@ export const trainerConfigs: TrainerConfigs = {
       getRandomPartyMemberFunc([Species.PHEROMOSA], TrainerSlot.TRAINER, true, (p) => {
         p.setBoss(true, 2);
         p.generateAndPopulateMoveset();
-        p.pokeball = PokeballType.ULTRA_BALL;
+        p.pokeball = PokeballType.ROGUE_BALL;
       }),
     )
     .setPartyMemberFunc(
@@ -4958,7 +4958,7 @@ export const trainerConfigs: TrainerConfigs = {
       3,
       getRandomPartyMemberFunc([Species.BUZZWOLE], TrainerSlot.TRAINER, true, (p) => {
         p.generateAndPopulateMoveset();
-        p.pokeball = PokeballType.ULTRA_BALL;
+        p.pokeball = PokeballType.ROGUE_BALL;
       }),
     )
     .setPartyMemberFunc(
@@ -4966,7 +4966,7 @@ export const trainerConfigs: TrainerConfigs = {
       getRandomPartyMemberFunc([Species.XURKITREE], TrainerSlot.TRAINER, true, (p) => {
         p.setBoss(true, 2);
         p.generateAndPopulateMoveset();
-        p.pokeball = PokeballType.ULTRA_BALL;
+        p.pokeball = PokeballType.ROGUE_BALL;
       }),
     )
     .setPartyMemberFunc(
@@ -5121,7 +5121,7 @@ export const trainerConfigs: TrainerConfigs = {
       getRandomPartyMemberFunc([Species.REVAVROOM], TrainerSlot.TRAINER, true, (p) => {
         p.formIndex = randSeedInt(5, 1); //Random Starmobile form
         p.generateAndPopulateMoveset();
-        p.pokeball = PokeballType.ULTRA_BALL;
+        p.pokeball = PokeballType.ROGUE_BALL;
       }),
     )
     .setPartyMemberFunc(

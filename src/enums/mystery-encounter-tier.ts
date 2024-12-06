@@ -6,6 +6,6 @@ export enum MysteryEncounterTier {
   COMMON = 66,
   GREAT = 40,
   ULTRA = 19,
-  EPIC = 3,
+  ROGUE = 3,
   MASTER = 0, // Not currently used
 }

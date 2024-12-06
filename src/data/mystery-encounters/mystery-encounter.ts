@@ -38,7 +38,7 @@ export interface EncounterStartOfBattleEffect {
 }
 
 const DEFAULT_MAX_ALLOWED_ENCOUNTERS = 2;
-const DEFAULT_MAX_ALLOWED_EPIC_ENCOUNTERS = 1;
+const DEFAULT_MAX_ALLOWED_ROGUE_ENCOUNTERS = 1;
 
 /**
  * Used by {@linkcode MysteryEncounterBuilder} class to define required/optional properties on the {@linkcode MysteryEncounter} class when building.
@@ -145,7 +145,7 @@ export default class MysteryEncounter implements IMysteryEncounter {
   continuousEncounter: boolean;
   /**
    * Maximum number of times the encounter can be seen per run
-   * Epic tier encounters default to 1, others default to 3
+   * Rogue tier encounters default to 1, others default to 3
    */
   maxAllowedEncounters: number;
   /**
@@ -283,10 +283,10 @@ export default class MysteryEncounter implements IMysteryEncounter {
     this.localizationKey = this.localizationKey ?? "";
     this.dialogue = this.dialogue ?? {};
     this.spriteConfigs = this.spriteConfigs ? [...this.spriteConfigs] : [];
-    // Default max is 1 for EPIC encounters, 2 for others
+    // Default max is 1 for ROGUE encounters, 2 for others
     this.maxAllowedEncounters =
-      (this.maxAllowedEncounters ?? this.encounterTier === MysteryEncounterTier.EPIC)
-        ? DEFAULT_MAX_ALLOWED_EPIC_ENCOUNTERS
+      (this.maxAllowedEncounters ?? this.encounterTier === MysteryEncounterTier.ROGUE)
+        ? DEFAULT_MAX_ALLOWED_ROGUE_ENCOUNTERS
         : DEFAULT_MAX_ALLOWED_ENCOUNTERS;
     this.encounterMode = MysteryEncounterMode.DEFAULT;
     this.requirements = this.requirements ? this.requirements : [];
@@ -705,7 +705,7 @@ export class MysteryEncounterBuilder implements Partial<IMysteryEncounter> {
    * COMMON 32/64 odds
    * GREAT 16/64 odds
    * ULTRA 10/64 odds
-   * EPIC 6/64 odds
+   * ROGUE 6/64 odds
    * ULTRA_RARE Not currently used
    * @param encounterTier
    * @returns

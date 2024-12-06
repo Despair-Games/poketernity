@@ -3,13 +3,13 @@ import type {
   UpdateSystemSavedataRequest,
   VerifySystemSavedataRequest,
   VerifySystemSavedataResponse,
-} from "#app/@types/SystemSavedataApi";
+} from "#app/@types/PokerogueSystemSavedataApi";
 import { ApiBase } from "#app/plugins/api/api-base";
 
 /**
- * A wrapper for system savedata API requests.
+ * A wrapper for PokéRogue system savedata API requests.
  */
-export class SystemSavedataApi extends ApiBase {
+export class PokerogueSystemSavedataApi extends ApiBase {
   //#region Public
 
   /**

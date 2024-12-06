@@ -3,9 +3,8 @@ import { ModalUiHandler } from "./modal-ui-handler";
 import { addTextObject, TextStyle } from "./text";
 import type { Mode } from "./ui";
 import { updateUserInfo } from "#app/account";
-import { removeCookie } from "#app/utils";
+import { removeCookie, sessionIdKey } from "#app/utils";
 import i18next from "i18next";
-import { SESSION_ID_COOKIE } from "#app/constants";
 import { globalScene } from "#app/global-scene";
 
 export default class UnavailableModalUiHandler extends ModalUiHandler {
@@ -66,7 +65,7 @@ export default class UnavailableModalUiHandler extends ModalUiHandler {
         globalScene.playSound("se/pb_bounce_1");
         this.reconnectCallback();
       } else if (response[1] === 401) {
-        removeCookie(SESSION_ID_COOKIE);
+        removeCookie(sessionIdKey);
         globalScene.reset(true, true);
       } else {
         this.reconnectDuration = Math.min(this.reconnectDuration * 2, this.maxTime); // Set a max delay so it isn't infinite

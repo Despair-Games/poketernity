@@ -1,9 +1,9 @@
-import type BattleScene from "#app/battle-scene";
-import * as battleScene from "#app/battle-scene";
-import { SESSION_ID_COOKIE } from "#app/constants";
+/* eslint-disable */
+// @ts-nocheck
+import BattleScene, * as battleScene from "#app/battle-scene";
 import { MoveAnim } from "#app/data/battle-anims";
 import Pokemon from "#app/field/pokemon";
-import { setCookie } from "#app/utils";
+import { setCookie, sessionIdKey } from "#app/utils";
 import { blobToString } from "#test/utils/gameManagerUtils";
 import { MockClock } from "#test/utils/mocks/mockClock";
 import mockConsoleLog from "#test/utils/mocks/mockConsoleLog";
@@ -16,8 +16,8 @@ import fs from "fs";
 import Phaser from "phaser";
 import InputText from "phaser3-rex-plugins/plugins/inputtext";
 import { vi } from "vitest";
-import { version } from "../../../package.json";
 import { MockGameObjectCreator } from "./mocks/mockGameObjectCreator";
+import { version } from "../../../package.json";
 import { MockTimedEventManager } from "./mocks/mockTimedEventManager";
 import InputManager = Phaser.Input.InputManager;
 import KeyboardManager = Phaser.Input.Keyboard.KeyboardManager;
@@ -33,23 +33,22 @@ Object.defineProperty(window, "console", {
   value: mockConsoleLog(false),
 });
 
-InputText.prototype.setElement = () => null as any;
-InputText.prototype.resize = () => null as any;
-Phaser.GameObjects.Image = MockImage as any;
+InputText.prototype.setElement = () => null;
+InputText.prototype.resize = () => null;
+Phaser.GameObjects.Image = MockImage;
 window.URL.createObjectURL = (blob: Blob) => {
   blobToString(blob).then((data: string) => {
     localStorage.setItem("toExport", data);
   });
-  return null as any;
+  return null;
 };
 navigator.getGamepads = () => [];
-global.fetch = vi.fn(MockFetch) as any;
-setCookie(SESSION_ID_COOKIE, "fake_token");
+global.fetch = vi.fn(MockFetch);
+setCookie(sessionIdKey, "fake_token");
 
-window.matchMedia = () =>
-  ({
-    matches: false,
-  }) as any;
+window.matchMedia = () => ({
+  matches: false,
+});
 
 /**
  * Sets this object's position relative to another object with a given offset
@@ -81,13 +80,12 @@ export default class GameWrapper {
       vi.spyOn(battleScene, "bypassLogin", "get").mockReturnValue(true);
     }
     this.game = phaserGame;
-    MoveAnim.prototype.getAnim = () =>
-      ({
-        frames: {} as any,
-      }) as any;
+    MoveAnim.prototype.getAnim = () => ({
+      frames: {},
+    });
     Pokemon.prototype.enableMask = () => null;
     Pokemon.prototype.updateFusionPalette = () => null;
-    Pokemon.prototype.cry = () => null as any;
+    Pokemon.prototype.cry = () => null;
     Pokemon.prototype.faintCry = (cb) => {
       if (cb) cb();
     };
@@ -101,7 +99,6 @@ export default class GameWrapper {
   }
 
   injectMandatory() {
-    // @ts-ignore
     this.game.config = {
       seed: ["test"],
       gameVersion: version,
@@ -110,25 +107,24 @@ export default class GameWrapper {
     this.game.renderer = {
       maxTextures: -1,
       gl: {},
-      deleteTexture: () => null as any,
-      canvasToTexture: () => ({}) as any,
-      createCanvasTexture: () => ({}) as any,
+      deleteTexture: () => null,
+      canvasToTexture: () => ({}),
+      createCanvasTexture: () => ({}),
       pipelines: {
         add: () => null,
       },
-    } as any;
+    };
     this.scene.renderer = this.game.renderer;
     this.scene.children = {
-      removeAll: () => null as any,
-    } as any;
+      removeAll: () => null,
+    };
 
     this.scene.sound = {
-      play: () => null as any,
-      // @ts-ignore
+      play: () => null,
       pause: () => null,
-      setRate: () => null as any,
-      add: () => this.scene.sound as any,
-      get: () => ({ ...this.scene.sound, totalDuration: 0 }) as any,
+      setRate: () => null,
+      add: () => this.scene.sound,
+      get: () => ({ ...this.scene.sound, totalDuration: 0 }),
       getAllPlaying: () => [],
       manager: {
         game: this.game,
@@ -136,34 +132,33 @@ export default class GameWrapper {
       destroy: () => null,
       setVolume: () => null,
       stop: () => null,
-      stopByKey: () => null as any,
+      stopByKey: () => null,
       on: (evt, callback) => callback(),
       key: "",
     };
 
     this.scene.cameras = {
       main: {
-        setPostPipeline: () => null as any,
-        removePostPipeline: () => null as any,
+        setPostPipeline: () => null,
+        removePostPipeline: () => null,
       },
-    } as any;
+    };
 
     this.scene.tweens = {
-      add: (data: any) => {
+      add: (data) => {
         if (data.onComplete) {
           data.onComplete();
         }
       },
       getTweensOf: () => [],
-      killTweensOf: () => [] as any,
-      chain: () => null as any,
-      addCounter: (data: any) => {
+      killTweensOf: () => [],
+      chain: () => null,
+      addCounter: (data) => {
         if (data.onComplete) {
           data.onComplete();
         }
       },
-      stop: () => null as any,
-    } as any;
+    };
 
     this.scene.anims = this.game.anims;
     this.scene.cache = this.game.cache;
@@ -172,18 +167,13 @@ export default class GameWrapper {
     this.scene.scale = this.game.scale;
     this.scene.textures = this.game.textures;
     this.scene.events = this.game.events;
-    // @ts-ignore
     this.scene.manager = new InputManager(this.game, {});
-    // @ts-ignore
     this.scene.manager.keyboard = new KeyboardManager(this.scene);
-    // @ts-ignore
     this.scene.pluginEvents = new EventEmitter();
-    // @ts-ignore
     this.scene.domContainer = {} as HTMLDivElement;
-    // @ts-ignore
     this.scene.spritePipeline = {};
-    this.scene.fieldSpritePipeline = {} as any;
-    this.scene.load = new MockLoader(this.scene) as any;
+    this.scene.fieldSpritePipeline = {};
+    this.scene.load = new MockLoader(this.scene);
     this.scene.sys = {
       queueDepthSort: () => null,
       anims: this.game.anims,
@@ -192,9 +182,8 @@ export default class GameWrapper {
         addCanvas: () => ({
           get: () => ({
             // this.frame in Text.js
-            source: {} as any,
-            setSize: () => null as any,
-            // @ts-ignore
+            source: {},
+            setSize: () => null,
             glTexture: () => ({
               spectorMetadata: {},
             }),
@@ -214,19 +203,17 @@ export default class GameWrapper {
         },
       },
       input: this.game.input,
-    } as any;
+    };
     const mockTextureManager = new MockTextureManager(this.scene);
     this.scene.add = mockTextureManager.add;
-    this.scene.textures = mockTextureManager as any;
-    // @ts-ignore
+    this.scene.textures = mockTextureManager;
     this.scene.sys.displayList = this.scene.add.displayList;
     this.scene.sys.updateList = new UpdateList(this.scene);
-    // @ts-ignore
     this.scene.systems = this.scene.sys;
-    this.scene.input = this.game.input as any;
-    this.scene.scene = this.scene as any;
-    this.scene.input.keyboard = new KeyboardPlugin(this.scene as any);
-    this.scene.input.gamepad = new GamepadPlugin(this.scene as any);
+    this.scene.input = this.game.input;
+    this.scene.scene = this.scene;
+    this.scene.input.keyboard = new KeyboardPlugin(this.scene);
+    this.scene.input.gamepad = new GamepadPlugin(this.scene);
     this.scene.cachedFetch = (url, init) => {
       return new Promise((resolve) => {
         // need to remove that if later we want to test battle-anims
@@ -235,18 +222,16 @@ export default class GameWrapper {
         try {
           raw = fs.readFileSync(newUrl, { encoding: "utf8", flag: "r" });
         } catch (e) {
-          console.error("Error reading file", e);
-          return resolve(createFetchBadResponse({}) as any);
+          return resolve(createFetchBadResponse({}));
         }
         const data = JSON.parse(raw);
         const response = createFetchResponse(data);
-        return resolve(response as any);
+        return resolve(response);
       });
     };
-    this.scene.make = new MockGameObjectCreator(mockTextureManager) as any;
+    this.scene.make = new MockGameObjectCreator(mockTextureManager);
     this.scene.time = new MockClock(this.scene);
-    // @ts-ignore
-    this.scene.remove = vi.fn();
+    this.scene.remove = vi.fn(); // TODO: this should be stubbed differently
     this.scene.eventManager = new MockTimedEventManager(); // Disable Timed Events
   }
 }

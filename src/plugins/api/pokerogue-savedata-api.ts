@@ -1,24 +1,24 @@
-import type { UpdateAllSavedataRequest } from "#app/@types/SavedataApi";
+import type { UpdateAllSavedataRequest } from "#app/@types/PokerogueSavedataApi";
 import { MAX_INT_ATTR_VALUE } from "#app/constants";
 import { ApiBase } from "#app/plugins/api/api-base";
-import { SessionSavedataApi } from "#app/plugins/api/session-savedata-api";
-import { SystemSavedataApi } from "#app/plugins/api/system-savedata-api";
+import { PokerogueSessionSavedataApi } from "#app/plugins/api/pokerogue-session-savedata-api";
+import { PokerogueSystemSavedataApi } from "#app/plugins/api/pokerogue-system-savedata-api";
 
 /**
- * A wrapper for savedata API requests.
+ * A wrapper for PokéRogue savedata API requests.
  */
-export class SavedataApi extends ApiBase {
+export class PokerogueSavedataApi extends ApiBase {
   //#region Fields
 
-  public readonly system: SystemSavedataApi;
-  public readonly session: SessionSavedataApi;
+  public readonly system: PokerogueSystemSavedataApi;
+  public readonly session: PokerogueSessionSavedataApi;
 
   //#region Public
 
   constructor(base: string) {
     super(base);
-    this.system = new SystemSavedataApi(base);
-    this.session = new SessionSavedataApi(base);
+    this.system = new PokerogueSystemSavedataApi(base);
+    this.session = new PokerogueSessionSavedataApi(base);
   }
 
   /**

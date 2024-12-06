@@ -37,6 +37,7 @@ const VITAMIN_DEALER_EXPENSIVE_PRICE_MULTIPLIER = 5;
 
 /**
  * Shady Vitamin Dealer encounter.
+ * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3798 | GitHub Issue #3798}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const ShadyVitaminDealerEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(

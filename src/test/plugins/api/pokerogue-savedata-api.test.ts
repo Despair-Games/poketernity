@@ -1,18 +1,18 @@
-import type { UpdateAllSavedataRequest } from "#app/@types/SavedataApi";
-import { SavedataApi } from "#app/plugins/api/savedata-api";
+import type { UpdateAllSavedataRequest } from "#app/@types/PokerogueSavedataApi";
+import { PokerogueSavedataApi } from "#app/plugins/api/pokerogue-savedata-api";
 import { getApiBaseUrl } from "#app/test/utils/testUtils";
 import { http, HttpResponse } from "msw";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const apiBase = getApiBaseUrl();
-const savedataApi = new SavedataApi(apiBase);
+const savedataApi = new PokerogueSavedataApi(apiBase);
 const { server } = global;
 
 afterEach(() => {
   server.resetHandlers();
 });
 
-describe("Savedata API", () => {
+describe("Pokerogue Savedata API", () => {
   beforeEach(() => {
     vi.spyOn(console, "warn");
   });

@@ -1,4 +1,3 @@
-import { SAVE_FILE_EXTENSION } from "#app/constants";
 import { Egg } from "#app/data/egg";
 import { EggSourceType } from "#app/enums/egg-source-types";
 import { EggTier } from "#app/enums/egg-type";
@@ -26,7 +25,7 @@ describe("Manaphy Eggs", () => {
   });
 
   beforeEach(async () => {
-    await game.importData(`src/test/utils/saves/everything.${SAVE_FILE_EXTENSION}`);
+    await game.importData("src/test/utils/saves/everything.prsv");
 
     /**
      * In our tests, we will perform an "RNG sweep" by letting rngSweepProgress

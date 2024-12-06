@@ -39,6 +39,7 @@ const MONEY_MAXIMUM_MULTIPLIER = 30;
 
 /**
  * An Offer You Can't Refuse encounter.
+ * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3808 | GitHub Issue #3808}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const AnOfferYouCantRefuseEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(

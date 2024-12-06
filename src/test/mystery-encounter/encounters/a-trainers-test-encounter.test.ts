@@ -62,7 +62,7 @@ describe("A Trainer's Test - Mystery Encounter", () => {
     await game.runToMysteryEncounter(MysteryEncounterType.A_TRAINERS_TEST, defaultParty);
 
     expect(ATrainersTestEncounter.encounterType).toBe(MysteryEncounterType.A_TRAINERS_TEST);
-    expect(ATrainersTestEncounter.encounterTier).toBe(MysteryEncounterTier.EPIC);
+    expect(ATrainersTestEncounter.encounterTier).toBe(MysteryEncounterTier.ROGUE);
     expect(ATrainersTestEncounter.dialogue).toBeDefined();
     expect(ATrainersTestEncounter.dialogue.intro).toBeDefined();
     expect(ATrainersTestEncounter.dialogue.intro?.[0].speaker).toBeDefined();

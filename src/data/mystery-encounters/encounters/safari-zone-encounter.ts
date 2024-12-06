@@ -45,6 +45,7 @@ const NUM_SAFARI_ENCOUNTERS = 3;
 
 /**
  * Safari Zone encounter.
+ * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3800 | GitHub Issue #3800}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const SafariZoneEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(

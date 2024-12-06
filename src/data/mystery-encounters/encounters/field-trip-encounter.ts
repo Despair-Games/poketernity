@@ -25,6 +25,7 @@ const namespace = "mysteryEncounters/fieldTrip";
 
 /**
  * Field Trip encounter.
+ * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3794 | GitHub Issue #3794}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const FieldTripEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(

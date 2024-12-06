@@ -5,14 +5,14 @@ import type {
   GetSessionSavedataRequest,
   NewClearSessionSavedataRequest,
   UpdateSessionSavedataRequest,
-} from "#app/@types/SessionSavedataApi";
+} from "#app/@types/PokerogueSessionSavedataApi";
 import { ApiBase } from "#app/plugins/api/api-base";
 import type { SessionSaveData } from "#app/system/game-data";
 
 /**
- * A wrapper for session savedata API requests.
+ * A wrapper for PokéRogue session savedata API requests.
  */
-export class SessionSavedataApi extends ApiBase {
+export class PokerogueSessionSavedataApi extends ApiBase {
   //#region Public
 
   /**

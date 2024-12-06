@@ -26,7 +26,6 @@ import { Species } from "#enums/species";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { Biome } from "#app/enums/biome";
-import { SAVE_FILE_EXTENSION } from "#app/constants";
 
 describe("Test Battle Phase", () => {
   let phaserGame: Phaser.Game;
@@ -119,7 +118,7 @@ describe("Test Battle Phase", () => {
   }, 20000);
 
   it("load 100% data file", async () => {
-    await game.importData(`src/test/utils/saves/everything.${SAVE_FILE_EXTENSION}`);
+    await game.importData("src/test/utils/saves/everything.prsv");
     const caughtCount = Object.keys(game.scene.gameData.dexData).filter((key) => {
       const species = game.scene.gameData.dexData[key];
       return species.caughtAttr !== 0n;
