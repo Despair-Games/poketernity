@@ -34,7 +34,7 @@ body {
 }
 
 /*
-  Supports automatic vertical centering as suggested in PR#1114, but only via CSS
+  Supports automatic vertical centering
 
   Condition factorized to deduce CSS rules:
   true if (isLandscape && !isMobile() && !hasTouchscreen() || (hasTouchscreen() && !isTouchControlsEnabled))
