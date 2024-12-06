@@ -26,6 +26,7 @@ describe("Abilities - Stench", () => {
     game = new GameManager(phaserGame);
     game.override
       .ability(Abilities.STENCH)
+      .moveset([Moves.TACKLE, Moves.SPLASH, Moves.HEADBUTT])
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
@@ -35,7 +36,6 @@ describe("Abilities - Stench", () => {
   });
 
   it("Stench should have a base 10% chance of applying flinch to the target Pokemon", async () => {
-    game.override.moveset([Moves.TACKLE]);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon();
@@ -51,7 +51,6 @@ describe("Abilities - Stench", () => {
   });
 
   it("Stench should not stack with moves that already have a chance to flinch", async () => {
-    game.override.moveset([Moves.HEADBUTT]);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon();
@@ -72,7 +71,7 @@ describe("Abilities - Stench", () => {
   });
 
   it("Stench should not bypass the enemy Pokemon's substitute under normal conditions", async () => {
-    game.override.moveset([Moves.TACKLE, Moves.SPLASH]).enemyMoveset([Moves.SPLASH, Moves.SUBSTITUTE]);
+    game.override.enemyMoveset([Moves.SPLASH, Moves.SUBSTITUTE]);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon();
