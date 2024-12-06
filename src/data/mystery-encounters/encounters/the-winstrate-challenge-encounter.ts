@@ -158,7 +158,7 @@ async function spawnNextTrainerOrEndEncounter() {
 
     // Give 10x Voucher
     const newModifier = modifierTypes.VOUCHER_PREMIUM().newModifier();
-    await globalScene.addModifier(newModifier);
+    globalScene.addModifier(newModifier);
     globalScene.playSound("item_fanfare");
     await showEncounterText(i18next.t("battle:rewardGain", { modifierName: newModifier?.type.name }));
 
@@ -205,9 +205,9 @@ function endTrainerBattleAndShowDialogue(): Promise<void> {
         // Only trigger form change when Eiscue is in Noice form
         // Hardcoded Eiscue for now in case it is fused with another pokemon
         if (
-          pokemon.species.speciesId === Species.EISCUE
-          && pokemon.hasAbility(Abilities.ICE_FACE)
-          && pokemon.formIndex === 1
+          pokemon.species.speciesId === Species.EISCUE &&
+          pokemon.hasAbility(Abilities.ICE_FACE) &&
+          pokemon.formIndex === 1
         ) {
           globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger);
         }

@@ -131,10 +131,10 @@ export class AttemptCapturePhase extends PokemonPhase {
                   } else if (shakeCount++ < (isCritical ? 1 : 3)) {
                     // Shake check (skip check for critical or guaranteed captures, but still play the sound)
                     if (
-                      pokeballMultiplier === -1
-                      || isCritical
-                      || modifiedCatchRate >= 255
-                      || pokemon.randSeedInt(65536) < shakeProbability
+                      pokeballMultiplier === -1 ||
+                      isCritical ||
+                      modifiedCatchRate >= 255 ||
+                      pokemon.randSeedInt(65536) < shakeProbability
                     ) {
                       globalScene.playSound("se/pb_move");
                     } else {
@@ -226,9 +226,8 @@ export class AttemptCapturePhase extends PokemonPhase {
     const speciesForm = !pokemon.fusionSpecies ? pokemon.getSpeciesForm() : pokemon.getFusionSpeciesForm();
 
     if (
-      speciesForm.abilityHidden
-      && (pokemon.fusionSpecies ? pokemon.fusionAbilityIndex : pokemon.abilityIndex)
-        === speciesForm.getAbilityCount() - 1
+      speciesForm.abilityHidden &&
+      (pokemon.fusionSpecies ? pokemon.fusionAbilityIndex : pokemon.abilityIndex) === speciesForm.getAbilityCount() - 1
     ) {
       globalScene.validateAchv(achvs.HIDDEN_ABILITY);
     }
@@ -276,15 +275,14 @@ export class AttemptCapturePhase extends PokemonPhase {
           if (globalScene.getPlayerParty().filter((p) => p.isShiny()).length === PLAYER_PARTY_MAX_SIZE) {
             globalScene.validateAchv(achvs.SHINY_PARTY);
           }
-          Promise.all(modifiers.map((m) => globalScene.addModifier(m, true))).then(() => {
-            globalScene.updateModifiers(true);
-            removePokemon();
-            if (newPokemon) {
-              newPokemon.loadAssets().then(end);
-            } else {
-              end();
-            }
-          });
+          modifiers.forEach((m) => globalScene.addModifier(m, true));
+          globalScene.updateModifiers(true);
+          removePokemon();
+          if (newPokemon) {
+            newPokemon.loadAssets().then(end);
+          } else {
+            end();
+          }
         };
         Promise.all([pokemon.hideInfo(), globalScene.gameData.setPokemonCaught(pokemon)]).then(() => {
           if (globalScene.getPlayerParty().length === PLAYER_PARTY_MAX_SIZE) {

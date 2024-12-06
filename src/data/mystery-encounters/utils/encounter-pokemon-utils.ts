@@ -265,11 +265,11 @@ export function getRandomSpeciesByStarterCost(
     .filter((s) => {
       const pokemonSpecies = getPokemonSpecies(s[0]);
       return (
-        pokemonSpecies
-        && (!excludedSpecies || !excludedSpecies.includes(s[0]))
-        && (allowSubLegendary || !pokemonSpecies.subLegendary)
-        && (allowLegendary || !pokemonSpecies.legendary)
-        && (allowMythical || !pokemonSpecies.mythical)
+        pokemonSpecies &&
+        (!excludedSpecies || !excludedSpecies.includes(s[0])) &&
+        (allowSubLegendary || !pokemonSpecies.subLegendary) &&
+        (allowLegendary || !pokemonSpecies.legendary) &&
+        (allowMythical || !pokemonSpecies.mythical)
       );
     })
     .map((s) => [getPokemonSpecies(s[0]), s[1]]);
@@ -383,7 +383,7 @@ export async function modifyPlayerPokemonBST(pokemon: PlayerPokemon, value: numb
     ?.withIdFromFunc(modifierTypes.MYSTERY_ENCOUNTER_SHUCKLE_JUICE);
   const modifier = modType?.newModifier(pokemon);
   if (modifier) {
-    await globalScene.addModifier(modifier, false, false, false, true);
+    globalScene.addModifier(modifier, false, false, false, true);
     pokemon.calculateStats();
   }
 }
@@ -405,10 +405,10 @@ export async function applyModifierTypeToPlayerPokemon(
   const modifier = modType.newModifier(pokemon);
   const existing = globalScene.findModifier(
     (m) =>
-      m instanceof PokemonHeldItemModifier
-      && m.type.id === modType.id
-      && m.pokemonId === pokemon.id
-      && m.matchType(modifier),
+      m instanceof PokemonHeldItemModifier &&
+      m.type.id === modType.id &&
+      m.pokemonId === pokemon.id &&
+      m.matchType(modifier),
   ) as PokemonHeldItemModifier;
 
   // At max stacks
@@ -421,7 +421,7 @@ export async function applyModifierTypeToPlayerPokemon(
     return applyModifierTypeToPlayerPokemon(pokemon, fallbackModifierType);
   }
 
-  await globalScene.addModifier(modifier, false, false, false, true);
+  globalScene.addModifier(modifier, false, false, false, true);
 }
 
 /**
@@ -644,8 +644,8 @@ export async function catchPokemon(
   const speciesForm = !pokemon.fusionSpecies ? pokemon.getSpeciesForm() : pokemon.getFusionSpeciesForm();
 
   if (
-    speciesForm.abilityHidden
-    && (pokemon.fusionSpecies ? pokemon.fusionAbilityIndex : pokemon.abilityIndex) === speciesForm.getAbilityCount() - 1
+    speciesForm.abilityHidden &&
+    (pokemon.fusionSpecies ? pokemon.fusionAbilityIndex : pokemon.abilityIndex) === speciesForm.getAbilityCount() - 1
   ) {
     globalScene.validateAchv(achvs.HIDDEN_ABILITY);
   }
@@ -943,8 +943,8 @@ export async function addPokemonDataToDexAndValidateAchievements(pokemon: Player
   const speciesForm = !pokemon.fusionSpecies ? pokemon.getSpeciesForm() : pokemon.getFusionSpeciesForm();
 
   if (
-    speciesForm.abilityHidden
-    && (pokemon.fusionSpecies ? pokemon.fusionAbilityIndex : pokemon.abilityIndex) === speciesForm.getAbilityCount() - 1
+    speciesForm.abilityHidden &&
+    (pokemon.fusionSpecies ? pokemon.fusionAbilityIndex : pokemon.abilityIndex) === speciesForm.getAbilityCount() - 1
   ) {
     globalScene.validateAchv(achvs.HIDDEN_ABILITY);
   }

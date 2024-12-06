@@ -455,7 +455,7 @@ async function doNewTeamPostProcess(transformations: PokemonTransformation[]) {
     // Copy old items to new pokemon
     for (const item of transformation.heldItems) {
       item.pokemonId = newPokemon.id;
-      await globalScene.addModifier(item, false, false, false, true);
+      globalScene.addModifier(item, false, false, false, true);
     }
     // Any pokemon that is below 570 BST gets +20 permanent BST to 3 stats
     if (shouldGetOldGateau(newPokemon)) {
@@ -466,7 +466,7 @@ async function doNewTeamPostProcess(transformations: PokemonTransformation[]) {
         ?.withIdFromFunc(modifierTypes.MYSTERY_ENCOUNTER_OLD_GATEAU);
       const modifier = modType?.newModifier(newPokemon);
       if (modifier) {
-        await globalScene.addModifier(modifier, false, false, false, true);
+        globalScene.addModifier(modifier, false, false, false, true);
       }
     }
 
@@ -530,12 +530,12 @@ async function postProcessTransformedPokemon(
 
   // For pokemon at/below 570 BST or any shiny pokemon, unlock it permanently as if you had caught it
   if (
-    !forBattle
-    && (newPokemon.getSpeciesForm().getBaseStatTotal() <= NON_LEGENDARY_BST_THRESHOLD || newPokemon.isShiny())
+    !forBattle &&
+    (newPokemon.getSpeciesForm().getBaseStatTotal() <= NON_LEGENDARY_BST_THRESHOLD || newPokemon.isShiny())
   ) {
     if (
-      newPokemon.getSpeciesForm().abilityHidden
-      && newPokemon.abilityIndex === newPokemon.getSpeciesForm().getAbilityCount() - 1
+      newPokemon.getSpeciesForm().abilityHidden &&
+      newPokemon.abilityIndex === newPokemon.getSpeciesForm().getAbilityCount() - 1
     ) {
       globalScene.validateAchv(achvs.HIDDEN_ABILITY);
     }
@@ -650,10 +650,10 @@ function getTransformedSpecies(
       const bstInRange = speciesBst >= bstMin && speciesBst <= bstCap;
       // Checks that a Pokemon has not already been added in the +600 or 570-600 slots;
       const validBst =
-        (!hasPokemonBstBetween570And600
-          || speciesBst < NON_LEGENDARY_BST_THRESHOLD
-          || speciesBst > SUPER_LEGENDARY_BST_THRESHOLD)
-        && (!hasPokemonBstHigherThan600 || speciesBst <= SUPER_LEGENDARY_BST_THRESHOLD);
+        (!hasPokemonBstBetween570And600 ||
+          speciesBst < NON_LEGENDARY_BST_THRESHOLD ||
+          speciesBst > SUPER_LEGENDARY_BST_THRESHOLD) &&
+        (!hasPokemonBstHigherThan600 || speciesBst <= SUPER_LEGENDARY_BST_THRESHOLD);
       return bstInRange && validBst && !EXCLUDED_TRANSFORMATION_SPECIES.includes(s.speciesId);
     });
 
@@ -799,9 +799,9 @@ async function addEggMoveToNewPokemonMoveset(
 
       // For pokemon that the player owns (including ones just caught), unlock the egg move
       if (
-        !forBattle
-        && !isNullOrUndefined(randomEggMoveIndex)
-        && !!globalScene.gameData.dexData[speciesRootForm].caughtAttr
+        !forBattle &&
+        !isNullOrUndefined(randomEggMoveIndex) &&
+        !!globalScene.gameData.dexData[speciesRootForm].caughtAttr
       ) {
         await globalScene.gameData.setEggMoveUnlocked(getPokemonSpecies(speciesRootForm), randomEggMoveIndex, true);
       }
@@ -826,8 +826,8 @@ function addFavoredMoveToNewPokemonMoveset(
   for (const move of newPokemonGeneratedMoveset) {
     // Needs to match first type, second type will be replaced
     if (
-      move?.getMove().type === newPokemon.getTypes()[0]
-      && !newPokemon.moveset.some((m) => m?.moveId === move?.moveId)
+      move?.getMove().type === newPokemon.getTypes()[0] &&
+      !newPokemon.moveset.some((m) => m?.moveId === move?.moveId)
     ) {
       favoredMove = move;
       break;
