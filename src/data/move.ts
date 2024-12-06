@@ -843,7 +843,7 @@ export default class Move implements Localizable {
 
     if (globalScene.arena.weather?.weatherType === WeatherType.FOG) {
       /**
-       *  The 0.9 multiplier is PokeRogue-only implementation, Bulbapedia uses 3/5
+       *  The 0.9 multiplier is Game-specific implementation, Bulbapedia uses 3/5
        *  See Fog {@link https://bulbapedia.bulbagarden.net/wiki/Fog}
        */
       moveAccuracy.value = Math.floor(moveAccuracy.value * 0.9);

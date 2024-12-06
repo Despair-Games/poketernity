@@ -42,7 +42,6 @@ const namespace = "mysteryEncounters/fightOrFlight";
 
 /**
  * Fight or Flight encounter.
- * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3795 | GitHub Issue #3795}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const FightOrFlightEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(
@@ -93,12 +92,12 @@ export const FightOrFlightEncounter: MysteryEncounter = MysteryEncounterBuilder.
     encounter.enemyPartyConfigs = [config];
 
     // Calculate item
-    // Waves 10-40 GREAT, 60-120 ULTRA, 120-160 ROGUE, 160-180 MASTER
+    // Waves 10-40 GREAT, 60-120 ULTRA, 120-160 EPIC, 160-180 MASTER
     const tier =
       globalScene.currentBattle.waveIndex > 160
         ? ModifierTier.MASTER
         : globalScene.currentBattle.waveIndex > 120
-          ? ModifierTier.ROGUE
+          ? ModifierTier.EPIC
           : globalScene.currentBattle.waveIndex > 40
             ? ModifierTier.ULTRA
             : ModifierTier.GREAT;

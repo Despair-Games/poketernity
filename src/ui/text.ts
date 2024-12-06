@@ -421,7 +421,7 @@ export function getModifierTierTextTint(tier: ModifierTier): integer {
       return 0x4998f8;
     case ModifierTier.ULTRA:
       return 0xf8d038;
-    case ModifierTier.ROGUE:
+    case ModifierTier.EPIC:
       return 0xdb4343;
     case ModifierTier.MASTER:
       return 0xe331c5;

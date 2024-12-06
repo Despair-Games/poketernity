@@ -119,7 +119,6 @@ const POOL_2_POKEMON: (Species | BreederSpeciesEvolution)[][] = [
 
 /**
  * The Expert Pokémon Breeder encounter.
- * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3818 | GitHub Issue #3818}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const TheExpertPokemonBreederEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(

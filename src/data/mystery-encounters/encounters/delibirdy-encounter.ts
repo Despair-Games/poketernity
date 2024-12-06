@@ -56,7 +56,6 @@ const DELIBIRDY_MONEY_PRICE_MULTIPLIER = 2;
 
 /**
  * Delibird-y encounter.
- * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3804 | GitHub Issue #3804}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const DelibirdyEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(

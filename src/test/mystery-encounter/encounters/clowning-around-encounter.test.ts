@@ -282,10 +282,10 @@ describe("Clowning Around - Mystery Encounter", () => {
       // 3 Soothe Bell on lead (great tier, but counted as ultra by this ME)
       itemType = generateModifierType(modifierTypes.SOOTHE_BELL) as PokemonHeldItemModifierType;
       await addItemToPokemon(scene, scene.getPlayerParty()[0], 3, itemType);
-      // 5 Soul Dew on lead (rogue)
+      // 5 Soul Dew on lead (epic)
       itemType = generateModifierType(modifierTypes.SOUL_DEW) as PokemonHeldItemModifierType;
       await addItemToPokemon(scene, scene.getPlayerParty()[0], 5, itemType);
-      // 2 Golden Egg on lead (rogue)
+      // 2 Golden Egg on lead (epic)
       itemType = generateModifierType(modifierTypes.GOLDEN_EGG) as PokemonHeldItemModifierType;
       await addItemToPokemon(scene, scene.getPlayerParty()[0], 2, itemType);
 
@@ -299,11 +299,11 @@ describe("Clowning Around - Mystery Encounter", () => {
       const ultraCountAfter = leadItemsAfter
         .filter((m) => m.type.tier === ModifierTier.ULTRA)
         .reduce((a, b) => a + b.stackCount, 0);
-      const rogueCountAfter = leadItemsAfter
-        .filter((m) => m.type.tier === ModifierTier.ROGUE)
+      const epicCountAfter = leadItemsAfter
+        .filter((m) => m.type.tier === ModifierTier.EPIC)
         .reduce((a, b) => a + b.stackCount, 0);
       expect(ultraCountAfter).toBe(13);
-      expect(rogueCountAfter).toBe(7);
+      expect(epicCountAfter).toBe(7);
 
       const secondItemsAfter = scene.getPlayerParty()[1].getHeldItems();
       expect(secondItemsAfter.length).toBe(1);

@@ -2068,7 +2068,6 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     const arena = globalScene.arena;
 
     // Handle flying v ground type immunity without removing flying type so effective types are still effective
-    // Related to https://github.com/pagefaultgames/pokerogue/issues/524
     if (moveType === Type.GROUND && (this.isGrounded() || arena.hasTag(ArenaTagType.GRAVITY))) {
       const flyingIndex = types.indexOf(Type.FLYING);
       if (flyingIndex > -1) {

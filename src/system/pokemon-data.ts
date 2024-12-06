@@ -63,7 +63,7 @@ export default class PokemonData {
   public customPokemonData: CustomPokemonData;
   public fusionCustomPokemonData: CustomPokemonData;
 
-  // Deprecated attributes, needed for now to allow SessionData migration (see PR#4619 comments)
+  // Deprecated attributes, needed for now to allow SessionData migration
   public natureOverride: Nature | -1;
   public mysteryEncounterPokemonData: CustomPokemonData | null;
   public fusionMysteryEncounterPokemonData: CustomPokemonData | null;

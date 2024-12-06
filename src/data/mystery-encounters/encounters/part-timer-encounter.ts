@@ -28,7 +28,6 @@ const namespace = "mysteryEncounters/partTimer";
 
 /**
  * Part Timer encounter.
- * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3813 | GitHub Issue #3813}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const PartTimerEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(

@@ -4,7 +4,7 @@ import { globalScene } from "#app/global-scene";
 import { getEnumKeys, executeIf } from "#app/utils";
 import { TextStyle, addTextObject } from "./text";
 import { WindowVariant, addWindow } from "./ui-theme";
-import { pokerogueApi } from "#app/plugins/api/pokerogue-api";
+import { api } from "#app/plugins/api/api";
 
 export interface RankingEntry {
   rank: integer;
@@ -220,10 +220,10 @@ export class DailyRunScoreboard extends Phaser.GameObjects.Container {
     }
 
     executeIf(category !== this.category || this.pageCount === undefined, () =>
-      pokerogueApi.daily.getRankingsPageCount({ category }).then((count) => (this.pageCount = count)),
+      api.daily.getRankingsPageCount({ category }).then((count) => (this.pageCount = count)),
     )
       .then(() => {
-        pokerogueApi.daily
+        api.daily
           .getRankings({ category, page })
           .then((rankings) => {
             this.page = page;
