@@ -255,7 +255,7 @@ export function getEnumValues(enumType: any): integer[] {
  * @param theEnum the enum to get the length of
  * @returns length of the enum
  */
-export function getEnumLength(theEnum: any): integer {
+export function getEnumLength(theEnum: any): number {
   return getEnumKeys(theEnum).length;
 }
 
