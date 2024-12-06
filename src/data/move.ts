@@ -2173,8 +2173,8 @@ export class BoostHealAttr extends HealAttr {
   private condition?: MoveConditionFunc;
 
   constructor(
-    normalHealRatio: number = 0.5,
-    boostedHealRatio: number = 2 / 3,
+    normalHealRatio: number,
+    boostedHealRatio: number,
     showAnim?: boolean,
     selfTarget?: boolean,
     condition?: MoveConditionFunc,
