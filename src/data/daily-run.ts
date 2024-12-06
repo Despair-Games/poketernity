@@ -7,7 +7,7 @@ import { randSeedGauss, randSeedInt, randSeedItem } from "#app/utils";
 import type { PokemonSpeciesForm } from "#app/data/pokemon-species";
 import PokemonSpecies, { getPokemonSpecies, getPokemonSpeciesForm } from "#app/data/pokemon-species";
 import { speciesStarterCosts } from "#app/data/balance/starters";
-import { pokerogueApi } from "#app/plugins/api/pokerogue-api";
+import { api } from "#app/plugins/api/api";
 
 export interface DailyRunConfig {
   seed: integer;
@@ -16,7 +16,7 @@ export interface DailyRunConfig {
 
 export function fetchDailyRunSeed(): Promise<string | null> {
   return new Promise<string | null>((resolve, reject) => {
-    pokerogueApi.daily.getSeed().then((dailySeed) => {
+    api.daily.getSeed().then((dailySeed) => {
       resolve(dailySeed);
     });
   });
