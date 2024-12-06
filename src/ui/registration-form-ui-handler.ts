@@ -114,23 +114,19 @@ export default class RegistrationFormUiHandler extends FormModalUiHandler {
           return onFail(i18next.t("menu:passwordNotMatchingConfirmPassword"));
         }
         const [usernameInput, passwordInput] = this.inputs;
-        api.account
-          .register({ username: usernameInput.text, password: passwordInput.text })
-          .then((registerError) => {
-            if (!registerError) {
-              api.account
-                .login({ username: usernameInput.text, password: passwordInput.text })
-                .then((loginError) => {
-                  if (!loginError) {
-                    originalRegistrationAction && originalRegistrationAction();
-                  } else {
-                    onFail(loginError);
-                  }
-                });
-            } else {
-              onFail(registerError);
-            }
-          });
+        api.account.register({ username: usernameInput.text, password: passwordInput.text }).then((registerError) => {
+          if (!registerError) {
+            api.account.login({ username: usernameInput.text, password: passwordInput.text }).then((loginError) => {
+              if (!loginError) {
+                originalRegistrationAction && originalRegistrationAction();
+              } else {
+                onFail(loginError);
+              }
+            });
+          } else {
+            onFail(registerError);
+          }
+        });
       };
 
       return true;
