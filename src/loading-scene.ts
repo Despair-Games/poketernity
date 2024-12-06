@@ -460,28 +460,10 @@ export class LoadingScene extends SceneBase {
       loadingGraphics.map((g) => g.setVisible(false));
     }
 
-    const intro = this.add.video(0, 0);
-    intro.once(Phaser.GameObjects.Events.VIDEO_COMPLETE, (video: Phaser.GameObjects.Video) => {
-      this.tweens.add({
-        targets: intro,
-        duration: 500,
-        alpha: 0,
-        ease: "Sine.easeIn",
-        onComplete: () => video.destroy(),
-      });
-      loadingGraphics.forEach((g) => g.setVisible(true));
-    });
-    intro.setOrigin(0, 0);
-    intro.setScale(3);
-
     this.load.once(this.LOAD_EVENTS.START, () => {
-      // videos do not need to be preloaded
-      intro.loadURL("images/intro_dark.mp4", true);
-      if (mobile) {
-        intro.video?.setAttribute("webkit-playsinline", "webkit-playsinline");
-        intro.video?.setAttribute("playsinline", "playsinline");
-      }
-      intro.play();
+      setTimeout(() => {
+        loadingGraphics.forEach((g) => g.setVisible(true));
+      }, 500);
     });
 
     this.load.on(this.LOAD_EVENTS.PROGRESS, (progress: number) => {
@@ -511,7 +493,6 @@ export class LoadingScene extends SceneBase {
 
     this.load.on(this.LOAD_EVENTS.COMPLETE, () => {
       loadingGraphics.forEach((go) => go.destroy());
-      intro.destroy();
     });
   }
 

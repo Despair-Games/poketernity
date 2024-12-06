@@ -944,10 +944,10 @@ export function transitionMysteryEncounterIntroVisuals(
 export function handleMysteryEncounterBattleStartEffects() {
   const encounter = globalScene.currentBattle.mysteryEncounter;
   if (
-    globalScene.currentBattle.isBattleMysteryEncounter() &&
-    encounter &&
-    encounter.encounterMode !== MysteryEncounterMode.NO_BATTLE &&
-    !encounter.startOfBattleEffectsComplete
+    globalScene.currentBattle.isBattleMysteryEncounter()
+    && encounter
+    && encounter.encounterMode !== MysteryEncounterMode.NO_BATTLE
+    && !encounter.startOfBattleEffectsComplete
   ) {
     const effects = encounter.startOfBattleEffects;
     effects.forEach((effect) => {
@@ -1163,7 +1163,7 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
     meanMEFloorsPerRunPerBiome.set(key, value / n);
   });
 
-  let stats = `Starting weight: ${baseSpawnWeight}\nAverage MEs per run: ${totalMean}\nStandard Deviation: ${totalStd}\nAvg Commons: ${commonMean}\nAvg Greats: ${uncommonMean}\nAvg Ultras: ${rareMean}\nAvg Rogues: ${superRareMean}\n`;
+  let stats = `Starting weight: ${baseSpawnWeight}\nAverage MEs per run: ${totalMean}\nStandard Deviation: ${totalStd}\nAvg Commons: ${commonMean}\nAvg Greats: ${uncommonMean}\nAvg Ultras: ${rareMean}\nAvg Epics: ${superRareMean}\n`;
 
   const meanEncountersPerRunPerBiomeSorted = [...meanEncountersPerRunPerBiome.entries()].sort(
     (e1, e2) => e2[1] - e1[1],

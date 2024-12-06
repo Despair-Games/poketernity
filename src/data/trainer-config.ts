@@ -321,8 +321,8 @@ export class TrainerConfig {
     this.victoryBgm = "victory_trainer";
     this.partyTemplates = [trainerPartyTemplates.TWO_AVG];
     this.speciesFilter = (species) =>
-      (allowLegendaries || (!species.legendary && !species.subLegendary && !species.mythical)) &&
-      !species.isTrainerForbidden();
+      (allowLegendaries || (!species.legendary && !species.subLegendary && !species.mythical))
+      && !species.isTrainerForbidden();
   }
 
   getKey(): string {
@@ -1389,8 +1389,8 @@ export class TrainerConfig {
       if (this.nameFemale) {
         // Check if the variant is either female or this is for the partner in a double battle
         if (
-          variant === TrainerVariant.FEMALE ||
-          (variant === TrainerVariant.DOUBLE && trainerSlot === TrainerSlot.TRAINER_PARTNER)
+          variant === TrainerVariant.FEMALE
+          || (variant === TrainerVariant.DOUBLE && trainerSlot === TrainerSlot.TRAINER_PARTNER)
         ) {
           return this.nameFemale;
         }
@@ -1557,8 +1557,8 @@ function getWavePartyTemplate(...templates: TrainerPartyTemplate[]) {
     Math.min(
       Math.max(
         Math.ceil(
-          (globalScene.gameMode.getWaveForDifficulty(globalScene.currentBattle?.waveIndex || startingWave, true) - 20) /
-            30,
+          (globalScene.gameMode.getWaveForDifficulty(globalScene.currentBattle?.waveIndex || startingWave, true) - 20)
+            / 30,
         ),
         0,
       ),
@@ -4016,9 +4016,9 @@ export const trainerConfigs: TrainerConfigs = {
       2,
       getSpeciesFilterRandomPartyMemberFunc(
         (species: PokemonSpecies) =>
-          !pokemonEvolutions.hasOwnProperty(species.speciesId) &&
-          !pokemonPrevolutions.hasOwnProperty(species.speciesId) &&
-          species.baseTotal >= 450,
+          !pokemonEvolutions.hasOwnProperty(species.speciesId)
+          && !pokemonPrevolutions.hasOwnProperty(species.speciesId)
+          && species.baseTotal >= 450,
       ),
     ),
   [TrainerType.RIVAL_3]: new TrainerConfig(++t)
@@ -4091,9 +4091,9 @@ export const trainerConfigs: TrainerConfigs = {
       2,
       getSpeciesFilterRandomPartyMemberFunc(
         (species: PokemonSpecies) =>
-          !pokemonEvolutions.hasOwnProperty(species.speciesId) &&
-          !pokemonPrevolutions.hasOwnProperty(species.speciesId) &&
-          species.baseTotal >= 450,
+          !pokemonEvolutions.hasOwnProperty(species.speciesId)
+          && !pokemonPrevolutions.hasOwnProperty(species.speciesId)
+          && species.baseTotal >= 450,
       ),
     )
     .setSpeciesFilter((species) => species.baseTotal >= 540),
@@ -4168,9 +4168,9 @@ export const trainerConfigs: TrainerConfigs = {
       2,
       getSpeciesFilterRandomPartyMemberFunc(
         (species: PokemonSpecies) =>
-          !pokemonEvolutions.hasOwnProperty(species.speciesId) &&
-          !pokemonPrevolutions.hasOwnProperty(species.speciesId) &&
-          species.baseTotal >= 450,
+          !pokemonEvolutions.hasOwnProperty(species.speciesId)
+          && !pokemonPrevolutions.hasOwnProperty(species.speciesId)
+          && species.baseTotal >= 450,
       ),
     )
     .setSpeciesFilter((species) => species.baseTotal >= 540)
@@ -4258,9 +4258,9 @@ export const trainerConfigs: TrainerConfigs = {
       2,
       getSpeciesFilterRandomPartyMemberFunc(
         (species: PokemonSpecies) =>
-          !pokemonEvolutions.hasOwnProperty(species.speciesId) &&
-          !pokemonPrevolutions.hasOwnProperty(species.speciesId) &&
-          species.baseTotal >= 450,
+          !pokemonEvolutions.hasOwnProperty(species.speciesId)
+          && !pokemonPrevolutions.hasOwnProperty(species.speciesId)
+          && species.baseTotal >= 450,
       ),
     )
     .setSpeciesFilter((species) => species.baseTotal >= 540)
@@ -4362,9 +4362,9 @@ export const trainerConfigs: TrainerConfigs = {
       2,
       getSpeciesFilterRandomPartyMemberFunc(
         (species: PokemonSpecies) =>
-          !pokemonEvolutions.hasOwnProperty(species.speciesId) &&
-          !pokemonPrevolutions.hasOwnProperty(species.speciesId) &&
-          species.baseTotal >= 450,
+          !pokemonEvolutions.hasOwnProperty(species.speciesId)
+          && !pokemonPrevolutions.hasOwnProperty(species.speciesId)
+          && species.baseTotal >= 450,
       ),
     )
     .setSpeciesFilter((species) => species.baseTotal >= 540)
@@ -4823,7 +4823,7 @@ export const trainerConfigs: TrainerConfigs = {
       getRandomPartyMemberFunc([Species.NIHILEGO], TrainerSlot.TRAINER, true, (p) => {
         p.setBoss(true, 2);
         p.generateAndPopulateMoveset();
-        p.pokeball = PokeballType.ROGUE_BALL;
+        p.pokeball = PokeballType.ULTRA_BALL;
       }),
     ),
   [TrainerType.LUSAMINE_2]: new TrainerConfig(++t)
@@ -4836,7 +4836,7 @@ export const trainerConfigs: TrainerConfigs = {
       getRandomPartyMemberFunc([Species.NIHILEGO], TrainerSlot.TRAINER, true, (p) => {
         p.setBoss(true, 2);
         p.generateAndPopulateMoveset();
-        p.pokeball = PokeballType.ROGUE_BALL;
+        p.pokeball = PokeballType.ULTRA_BALL;
       }),
     )
     .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.MILOTIC, Species.PRIMARINA]))
@@ -4855,7 +4855,7 @@ export const trainerConfigs: TrainerConfigs = {
         true,
         (p) => {
           p.generateAndPopulateMoveset();
-          p.pokeball = PokeballType.ROGUE_BALL;
+          p.pokeball = PokeballType.ULTRA_BALL;
         },
       ),
     )
@@ -4864,7 +4864,7 @@ export const trainerConfigs: TrainerConfigs = {
       getRandomPartyMemberFunc([Species.PHEROMOSA], TrainerSlot.TRAINER, true, (p) => {
         p.setBoss(true, 2);
         p.generateAndPopulateMoveset();
-        p.pokeball = PokeballType.ROGUE_BALL;
+        p.pokeball = PokeballType.ULTRA_BALL;
       }),
     )
     .setPartyMemberFunc(
@@ -4958,7 +4958,7 @@ export const trainerConfigs: TrainerConfigs = {
       3,
       getRandomPartyMemberFunc([Species.BUZZWOLE], TrainerSlot.TRAINER, true, (p) => {
         p.generateAndPopulateMoveset();
-        p.pokeball = PokeballType.ROGUE_BALL;
+        p.pokeball = PokeballType.ULTRA_BALL;
       }),
     )
     .setPartyMemberFunc(
@@ -4966,7 +4966,7 @@ export const trainerConfigs: TrainerConfigs = {
       getRandomPartyMemberFunc([Species.XURKITREE], TrainerSlot.TRAINER, true, (p) => {
         p.setBoss(true, 2);
         p.generateAndPopulateMoveset();
-        p.pokeball = PokeballType.ROGUE_BALL;
+        p.pokeball = PokeballType.ULTRA_BALL;
       }),
     )
     .setPartyMemberFunc(
@@ -5121,7 +5121,7 @@ export const trainerConfigs: TrainerConfigs = {
       getRandomPartyMemberFunc([Species.REVAVROOM], TrainerSlot.TRAINER, true, (p) => {
         p.formIndex = randSeedInt(5, 1); //Random Starmobile form
         p.generateAndPopulateMoveset();
-        p.pokeball = PokeballType.ROGUE_BALL;
+        p.pokeball = PokeballType.ULTRA_BALL;
       }),
     )
     .setPartyMemberFunc(

@@ -49,7 +49,6 @@ const namespace = "mysteryEncounters/berriesAbound";
 
 /**
  * Berries Abound encounter.
- * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3810 | GitHub Issue #3810}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const BerriesAboundEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(
@@ -310,9 +309,9 @@ function tryGiveBerry(prioritizedPokemon?: PlayerPokemon) {
   if (prioritizedPokemon) {
     const heldBerriesOfType = globalScene.findModifier(
       (m) =>
-        m instanceof BerryModifier &&
-        m.pokemonId === prioritizedPokemon.id &&
-        (m as BerryModifier).berryType === berryType,
+        m instanceof BerryModifier
+        && m.pokemonId === prioritizedPokemon.id
+        && (m as BerryModifier).berryType === berryType,
       true,
     ) as BerryModifier;
 

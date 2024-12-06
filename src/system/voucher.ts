@@ -51,7 +51,7 @@ export class Voucher {
       case VoucherType.PREMIUM:
         return AchvTier.ULTRA;
       case VoucherType.GOLDEN:
-        return AchvTier.ROGUE;
+        return AchvTier.EPIC;
     }
   }
 }
@@ -103,9 +103,9 @@ export function initVouchers() {
 
   const bossTrainerTypes = Object.keys(trainerConfigs).filter(
     (tt) =>
-      trainerConfigs[tt].isBoss &&
-      trainerConfigs[tt].getDerivedType() !== TrainerType.RIVAL &&
-      trainerConfigs[tt].hasVoucher,
+      trainerConfigs[tt].isBoss
+      && trainerConfigs[tt].getDerivedType() !== TrainerType.RIVAL
+      && trainerConfigs[tt].hasVoucher,
   );
 
   for (const trainerType of bossTrainerTypes) {

@@ -184,8 +184,8 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
     this.player = args[0];
 
     const partyHasHeldItem =
-      this.player &&
-      !!globalScene.findModifiers((m) => m instanceof PokemonHeldItemModifier && m.isTransferable).length;
+      this.player
+      && !!globalScene.findModifiers((m) => m instanceof PokemonHeldItemModifier && m.isTransferable).length;
     const canLockRarities = !!globalScene.findModifier((m) => m instanceof LockModifierTiersModifier);
 
     this.transferButtonContainer.setVisible(false);
@@ -501,8 +501,8 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
         this.cursorObj.setScale(1.25);
         this.cursorObj.setPosition(
           globalScene.game.canvas.width / 18 + 23,
-          -globalScene.game.canvas.height / 12 -
-            (this.shopOptionsRows.length > 1 ? SINGLE_SHOP_ROW_YOFFSET - 2 : DOUBLE_SHOP_ROW_YOFFSET - 2),
+          -globalScene.game.canvas.height / 12
+            - (this.shopOptionsRows.length > 1 ? SINGLE_SHOP_ROW_YOFFSET - 2 : DOUBLE_SHOP_ROW_YOFFSET - 2),
         );
         ui.showText(i18next.t("modifierSelectUiHandler:continueNextWaveDescription"));
         return ret;
@@ -513,16 +513,16 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
         // Cursor on free items
         this.cursorObj.setPosition(
           sliceWidth * (cursor + 1) + sliceWidth * 0.5 - 20,
-          -globalScene.game.canvas.height / 12 -
-            (this.shopOptionsRows.length > 1 ? SINGLE_SHOP_ROW_YOFFSET - 2 : DOUBLE_SHOP_ROW_YOFFSET - 2),
+          -globalScene.game.canvas.height / 12
+            - (this.shopOptionsRows.length > 1 ? SINGLE_SHOP_ROW_YOFFSET - 2 : DOUBLE_SHOP_ROW_YOFFSET - 2),
         );
       } else {
         // Cursor on paying items
         this.cursorObj.setPosition(
           sliceWidth * (cursor + 1) + sliceWidth * 0.5 - 16,
-          -globalScene.game.canvas.height / 12 -
-            globalScene.game.canvas.height / 32 -
-            (-14 + 28 * (this.rowCursor - (this.shopOptionsRows.length - 1))),
+          -globalScene.game.canvas.height / 12
+            - globalScene.game.canvas.height / 32
+            - (-14 + 28 * (this.rowCursor - (this.shopOptionsRows.length - 1))),
         );
       }
 

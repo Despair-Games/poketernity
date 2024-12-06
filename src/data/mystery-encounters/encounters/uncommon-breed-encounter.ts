@@ -44,7 +44,6 @@ const namespace = "mysteryEncounters/uncommonBreed";
 
 /**
  * Uncommon Breed encounter.
- * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3811 | GitHub Issue #3811}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const UncommonBreedEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(

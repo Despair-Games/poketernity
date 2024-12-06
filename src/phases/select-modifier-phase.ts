@@ -75,9 +75,9 @@ export class SelectModifierPhase extends BattlePhase {
     // If custom modifiers are specified, overrides default item count
     if (!!this.customModifierSettings) {
       const newItemCount =
-        (this.customModifierSettings.guaranteedModifierTiers?.length || 0) +
-        (this.customModifierSettings.guaranteedModifierTypeOptions?.length || 0) +
-        (this.customModifierSettings.guaranteedModifierTypeFuncs?.length || 0);
+        (this.customModifierSettings.guaranteedModifierTiers?.length || 0)
+        + (this.customModifierSettings.guaranteedModifierTypeOptions?.length || 0)
+        + (this.customModifierSettings.guaranteedModifierTypeFuncs?.length || 0);
       if (this.customModifierSettings.fillRemaining) {
         const originalCount = modifierCount.value;
         modifierCount.value = originalCount > newItemCount ? originalCount : newItemCount;
@@ -145,17 +145,17 @@ export class SelectModifierPhase extends BattlePhase {
                 -1,
                 (fromSlotIndex: integer, itemIndex: integer, itemQuantity: integer, toSlotIndex: integer) => {
                   if (
-                    toSlotIndex !== undefined &&
-                    fromSlotIndex < 6 &&
-                    toSlotIndex < 6 &&
-                    fromSlotIndex !== toSlotIndex &&
-                    itemIndex > -1
+                    toSlotIndex !== undefined
+                    && fromSlotIndex < 6
+                    && toSlotIndex < 6
+                    && fromSlotIndex !== toSlotIndex
+                    && itemIndex > -1
                   ) {
                     const itemModifiers = globalScene.findModifiers(
                       (m) =>
-                        m instanceof PokemonHeldItemModifier &&
-                        m.isTransferable &&
-                        m.pokemonId === party[fromSlotIndex].id,
+                        m instanceof PokemonHeldItemModifier
+                        && m.isTransferable
+                        && m.pokemonId === party[fromSlotIndex].id,
                     ) as PokemonHeldItemModifier[];
                     const itemModifier = itemModifiers[itemIndex];
                     globalScene.tryTransferHeldItemModifier(
@@ -287,10 +287,10 @@ export class SelectModifierPhase extends BattlePhase {
             -1,
             (fromSlotIndex: integer, spliceSlotIndex: integer) => {
               if (
-                spliceSlotIndex !== undefined &&
-                fromSlotIndex < 6 &&
-                spliceSlotIndex < 6 &&
-                fromSlotIndex !== spliceSlotIndex
+                spliceSlotIndex !== undefined
+                && fromSlotIndex < 6
+                && spliceSlotIndex < 6
+                && fromSlotIndex !== spliceSlotIndex
               ) {
                 globalScene.ui.setMode(Mode.MODIFIER_SELECT, this.isPlayer()).then(() => {
                   const modifier = modifierType.newModifier(party[fromSlotIndex], party[spliceSlotIndex])!; //TODO: is the bang correct?

@@ -5,22 +5,22 @@ import type {
   GetSessionSavedataRequest,
   NewClearSessionSavedataRequest,
   UpdateSessionSavedataRequest,
-} from "#app/@types/PokerogueSessionSavedataApi";
-import { PokerogueSessionSavedataApi } from "#app/plugins/api/pokerogue-session-savedata-api";
+} from "#app/@types/SessionSavedataApi";
+import { SessionSavedataApi } from "#app/plugins/api/session-savedata-api";
 import type { SessionSaveData } from "#app/system/game-data";
 import { getApiBaseUrl } from "#app/test/utils/testUtils";
 import { http, HttpResponse } from "msw";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const apiBase = getApiBaseUrl();
-const sessionSavedataApi = new PokerogueSessionSavedataApi(apiBase);
+const sessionSavedataApi = new SessionSavedataApi(apiBase);
 const { server } = global;
 
 afterEach(() => {
   server.resetHandlers();
 });
 
-describe("Pokerogue Session Savedata API", () => {
+describe("Session Savedata API", () => {
   beforeEach(() => {
     vi.spyOn(console, "warn");
   });

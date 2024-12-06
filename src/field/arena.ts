@@ -105,9 +105,11 @@ export class Arena {
       return overrideSpecies;
     }
     const isBossSpecies =
-      !!globalScene.getEncounterBossSegments(waveIndex, level) &&
-      !!this.pokemonPool[BiomePoolTier.BOSS].length &&
-      (this.biomeType !== Biome.END || globalScene.gameMode.isClassic || globalScene.gameMode.isWaveFinal(waveIndex));
+      !!globalScene.getEncounterBossSegments(waveIndex, level)
+      && !!this.pokemonPool[BiomePoolTier.BOSS].length
+      && (this.biomeType !== Biome.END
+        || globalScene.gameMode.isClassic
+        || globalScene.gameMode.isWaveFinal(waveIndex));
     const randVal = isBossSpecies ? 64 : 512;
     // luck influences encounter rarity
     let luckModifier = 0;
@@ -198,8 +200,8 @@ export class Arena {
 
   randomTrainerType(waveIndex: integer, isBoss: boolean = false): TrainerType {
     const isTrainerBoss =
-      !!this.trainerPool[BiomePoolTier.BOSS].length &&
-      (globalScene.gameMode.isTrainerBoss(waveIndex, this.biomeType, globalScene.offsetGym) || isBoss);
+      !!this.trainerPool[BiomePoolTier.BOSS].length
+      && (globalScene.gameMode.isTrainerBoss(waveIndex, this.biomeType, globalScene.offsetGym) || isBoss);
     console.log(isBoss, this.trainerPool);
     const tierValue = randSeedInt(!isTrainerBoss ? 512 : 64);
     let tier = !isTrainerBoss
