@@ -352,8 +352,8 @@ export default class RunInfoUiHandler extends UiHandler {
       subSprite.setScale(0.65);
       subSprite.setPosition(34, 46);
       const mysteryEncounterTitle = i18next.t(
-        globalScene.getMysteryEncounter(this.runInfo.mysteryEncounterType as MysteryEncounterType, true)
-          .localizationKey + ":title",
+        globalScene.getMysteryEncounter(this.runInfo.mysteryEncounterType as MysteryEncounterType, true).localizationKey
+          + ":title",
       );
       const descContainer = globalScene.add.container(0, 0);
       const textBox = addTextObject(0, 0, mysteryEncounterTitle, TextStyle.WINDOW, {

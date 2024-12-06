@@ -279,12 +279,12 @@ describe("Mysterious Challengers - Mystery Encounter", () => {
           - modifierSelectHandler.options[1].modifierTypeOption.upgradeCount,
       ).toBe(ModifierTier.EPIC);
       expect(
-        modifierSelectHandler.options[2].modifierTypeOption.type.tier -
-          modifierSelectHandler.options[2].modifierTypeOption.upgradeCount,
+        modifierSelectHandler.options[2].modifierTypeOption.type.tier
+          - modifierSelectHandler.options[2].modifierTypeOption.upgradeCount,
       ).toBe(ModifierTier.ULTRA);
       expect(
-        modifierSelectHandler.options[3].modifierTypeOption.type.tier -
-          modifierSelectHandler.options[3].modifierTypeOption.upgradeCount,
+        modifierSelectHandler.options[3].modifierTypeOption.type.tier
+          - modifierSelectHandler.options[3].modifierTypeOption.upgradeCount,
       ).toBe(ModifierTier.GREAT);
     });
   });
