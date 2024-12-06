@@ -944,10 +944,10 @@ export function transitionMysteryEncounterIntroVisuals(
 export function handleMysteryEncounterBattleStartEffects() {
   const encounter = globalScene.currentBattle.mysteryEncounter;
   if (
-    globalScene.currentBattle.isBattleMysteryEncounter() &&
-    encounter &&
-    encounter.encounterMode !== MysteryEncounterMode.NO_BATTLE &&
-    !encounter.startOfBattleEffectsComplete
+    globalScene.currentBattle.isBattleMysteryEncounter()
+    && encounter
+    && encounter.encounterMode !== MysteryEncounterMode.NO_BATTLE
+    && !encounter.startOfBattleEffectsComplete
   ) {
     const effects = encounter.startOfBattleEffects;
     effects.forEach((effect) => {

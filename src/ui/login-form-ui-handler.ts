@@ -9,6 +9,7 @@ import { addWindow } from "./ui-theme";
 import type { OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler";
 import { api } from "#app/plugins/api/api";
 import { globalScene } from "#app/global-scene";
+import { globalScene } from "#app/global-scene";
 import JSZip from "jszip";
 import { SAVE_FILE_EXTENSION, SAVES_ZIP_PREFIX } from "#app/constants";
 
@@ -66,7 +67,6 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
     this.externalPartyContainer = globalScene.add.container(0, 0);
     this.externalPartyContainer.setInteractive(
       new Phaser.Geom.Rectangle(0, 0, globalScene.game.canvas.width / 12, globalScene.game.canvas.height / 12),
-
       Phaser.Geom.Rectangle.Contains,
     );
     this.externalPartyTitle = addTextObject(0, 4, "", TextStyle.SETTINGS_LABEL);
@@ -237,7 +237,6 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
         });
         this.infoContainer.setInteractive(
           new Phaser.Geom.Rectangle(0, 0, globalScene.game.canvas.width, globalScene.game.canvas.height),
-
           Phaser.Geom.Rectangle.Contains,
         );
       } else {

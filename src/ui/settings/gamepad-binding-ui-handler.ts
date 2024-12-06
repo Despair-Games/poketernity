@@ -51,10 +51,10 @@ export default class GamepadBindingUiHandler extends AbstractBindingUiHandler {
     const blacklist = [12, 13, 14, 15]; // d-pad buttons are blacklisted.
     // Check conditions before processing the button press.
     if (
-      !this.listening ||
-      pad.id.toLowerCase() !== this.getSelectedDevice() ||
-      blacklist.includes(button.index) ||
-      this.buttonPressed !== null
+      !this.listening
+      || pad.id.toLowerCase() !== this.getSelectedDevice()
+      || blacklist.includes(button.index)
+      || this.buttonPressed !== null
     ) {
       return;
     }

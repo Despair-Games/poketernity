@@ -410,9 +410,9 @@ export default class AdminUiHandler extends FormModalUiHandler {
        * and if either of these conditions are met, the element is destroyed.
        */
       if (
-        itemsToRemove.some((iTR) => mC[i].name.includes(iTR)) ||
-        (mC[i].type === "Container" &&
-          (mC[i] as Phaser.GameObjects.Container).list.find((m) => m.type === "rexInputText"))
+        itemsToRemove.some((iTR) => mC[i].name.includes(iTR))
+        || (mC[i].type === "Container"
+          && (mC[i] as Phaser.GameObjects.Container).list.find((m) => m.type === "rexInputText"))
       ) {
         removeArray.push(mC[i]);
       }

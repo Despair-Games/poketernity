@@ -435,11 +435,11 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
           // Get Pokemon held items and filter for valid ones
           const validItems = pokemon.getHeldItems().filter((item) => {
             return (
-              (item instanceof BypassSpeedChanceModifier ||
-                item instanceof ContactHeldItemTransferChanceModifier ||
-                (item instanceof AttackTypeBoosterModifier &&
-                  (item.type as AttackTypeBoosterModifierType).moveType === Type.BUG)) &&
-              item.isTransferable
+              (item instanceof BypassSpeedChanceModifier
+                || item instanceof ContactHeldItemTransferChanceModifier
+                || (item instanceof AttackTypeBoosterModifier
+                  && (item.type as AttackTypeBoosterModifierType).moveType === Type.BUG))
+              && item.isTransferable
             );
           });
 
@@ -464,10 +464,10 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
           // If pokemon has valid item, it can be selected
           const hasValidItem = pokemon.getHeldItems().some((item) => {
             return (
-              item instanceof BypassSpeedChanceModifier ||
-              item instanceof ContactHeldItemTransferChanceModifier ||
-              (item instanceof AttackTypeBoosterModifier &&
-                (item.type as AttackTypeBoosterModifierType).moveType === Type.BUG)
+              item instanceof BypassSpeedChanceModifier
+              || item instanceof ContactHeldItemTransferChanceModifier
+              || (item instanceof AttackTypeBoosterModifier
+                && (item.type as AttackTypeBoosterModifierType).moveType === Type.BUG)
             );
           });
           if (!hasValidItem) {

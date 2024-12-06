@@ -265,9 +265,9 @@ export function executeIf<T>(condition: boolean, promiseFunc: () => Promise<T>):
 
 // Check if the current hostname is 'localhost' or an IP address, and ensure a port is specified
 export const isLocal =
-  ((window.location.hostname === "localhost" || /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/.test(window.location.hostname)) &&
-    window.location.port !== "") ||
-  window.location.hostname === "";
+  ((window.location.hostname === "localhost" || /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/.test(window.location.hostname))
+    && window.location.port !== "")
+  || window.location.hostname === "";
 
 /**
  * @deprecated Refer to [api.ts](./plugins/api/api.ts) instead

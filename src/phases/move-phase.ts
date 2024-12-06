@@ -110,9 +110,9 @@ export class MovePhase extends BattlePhase {
    */
   public canMove(ignoreDisableTags: boolean = false): boolean {
     return (
-      this.pokemon.isActive(true) &&
-      this.move.isUsable(this.pokemon, this.ignorePp, ignoreDisableTags) &&
-      !!this.targets.length
+      this.pokemon.isActive(true)
+      && this.move.isUsable(this.pokemon, this.ignorePp, ignoreDisableTags)
+      && !!this.targets.length
     );
   }
 
@@ -207,8 +207,8 @@ export class MovePhase extends BattlePhase {
       switch (this.pokemon.status.effect) {
         case StatusEffect.PARALYSIS:
           activated =
-            (!this.pokemon.randSeedInt(4) || Overrides.STATUS_ACTIVATION_OVERRIDE === true) &&
-            Overrides.STATUS_ACTIVATION_OVERRIDE !== false;
+            (!this.pokemon.randSeedInt(4) || Overrides.STATUS_ACTIVATION_OVERRIDE === true)
+            && Overrides.STATUS_ACTIVATION_OVERRIDE !== false;
           break;
         case StatusEffect.SLEEP:
           applyMoveAttrs(BypassSleepAttr, this.pokemon, null, this.move.getMove());
@@ -232,9 +232,9 @@ export class MovePhase extends BattlePhase {
               .findAttr(
                 (attr) =>
                   attr instanceof HealStatusEffectAttr && attr.selfTarget && attr.isOfEffect(StatusEffect.FREEZE),
-              ) ||
-            (!this.pokemon.randSeedInt(5) && Overrides.STATUS_ACTIVATION_OVERRIDE !== true) ||
-            Overrides.STATUS_ACTIVATION_OVERRIDE === false;
+              )
+            || (!this.pokemon.randSeedInt(5) && Overrides.STATUS_ACTIVATION_OVERRIDE !== true)
+            || Overrides.STATUS_ACTIVATION_OVERRIDE === false;
 
           activated = !healed;
           break;
@@ -479,8 +479,9 @@ export class MovePhase extends BattlePhase {
         // TODO: don't hardcode this interaction.
         // Handle interaction between the rage powder center-of-attention tag and moves used by grass types/overcoat-havers (which are immune to RP's redirect)
         if (
-          redirectTag &&
-          (!redirectTag.powder || (!this.pokemon.isOfType(Type.GRASS) && !this.pokemon.hasAbility(Abilities.OVERCOAT)))
+          redirectTag
+          && (!redirectTag.powder
+            || (!this.pokemon.isOfType(Type.GRASS) && !this.pokemon.hasAbility(Abilities.OVERCOAT)))
         ) {
           redirectTarget.value = p.getBattlerIndex();
           redirectedByAbility = false;
