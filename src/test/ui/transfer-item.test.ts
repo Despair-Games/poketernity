@@ -9,9 +9,8 @@ import PartyUiHandler, { PartyUiMode } from "#app/ui/party-ui-handler";
 import { Mode } from "#app/ui/ui";
 import GameManager from "#test/utils/gameManager";
 import Phaser from "phaser";
-import BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
+import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-
 
 describe("UI - Transfer Items", () => {
   let phaserGame: Phaser.Game;
@@ -37,11 +36,11 @@ describe("UI - Transfer Items", () => {
       { name: "BERRY", count: 2, type: BerryType.APICOT },
       { name: "BERRY", count: 2, type: BerryType.LUM },
     ]);
-    game.override.moveset([ Moves.DRAGON_CLAW ]);
+    game.override.moveset([Moves.DRAGON_CLAW]);
     game.override.enemySpecies(Species.MAGIKARP);
-    game.override.enemyMoveset([ Moves.SPLASH ]);
+    game.override.enemyMoveset([Moves.SPLASH]);
 
-    await game.startBattle([ Species.RAYQUAZA, Species.RAYQUAZA, Species.RAYQUAZA ]);
+    await game.startBattle([Species.RAYQUAZA, Species.RAYQUAZA, Species.RAYQUAZA]);
 
     game.move.select(Moves.DRAGON_CLAW);
 
@@ -65,9 +64,17 @@ describe("UI - Transfer Items", () => {
       const handler = game.scene.ui.getHandler() as PartyUiHandler;
       handler.processInput(Button.ACTION);
 
-      expect(handler.optionsContainer.list.some((option) => (option as BBCodeText).text?.includes("Sitrus Berry"))).toBe(true);
-      expect(handler.optionsContainer.list.some((option) => (option as BBCodeText).text?.includes("Apicot Berry (2)"))).toBe(true);
-      expect(handler.optionsContainer.list.some((option) => RegExp(/Lum Berry\[color.*(2)/).exec((option as BBCodeText).text))).toBe(true);
+      expect(
+        handler.optionsContainer.list.some((option) => (option as BBCodeText).text?.includes("Sitrus Berry")),
+      ).toBe(true);
+      expect(
+        handler.optionsContainer.list.some((option) => (option as BBCodeText).text?.includes("Apicot Berry (2)")),
+      ).toBe(true);
+      expect(
+        handler.optionsContainer.list.some((option) =>
+          RegExp(/Lum Berry\[color.*(2)/).exec((option as BBCodeText).text),
+        ),
+      ).toBe(true);
 
       game.phaseInterceptor.unlock();
     });
@@ -86,7 +93,9 @@ describe("UI - Transfer Items", () => {
       handler.setCursor(1); // move to other Pokemon
       handler.processInput(Button.ACTION); // select Pokemon
 
-      expect(handler.optionsContainer.list.some((option) => (option as BBCodeText).text?.includes("Transfer"))).toBe(true);
+      expect(handler.optionsContainer.list.some((option) => (option as BBCodeText).text?.includes("Transfer"))).toBe(
+        true,
+      );
 
       game.phaseInterceptor.unlock();
     });

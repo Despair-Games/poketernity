@@ -5,8 +5,8 @@ import { vi } from "vitest";
 import { BattleStyle } from "#app/enums/battle-style";
 import { CommandPhase } from "#app/phases/command-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
-import { SessionSaveData } from "#app/system/game-data";
-import GameManager from "../gameManager";
+import type { SessionSaveData } from "#app/system/game-data";
+import type GameManager from "../gameManager";
 
 /**
  * Helper to allow reloading sessions in unit tests.
@@ -18,9 +18,9 @@ export class ReloadHelper extends GameManagerHelper {
     super(game);
 
     // Whenever the game saves the session, save it to the reloadHelper instead
-    vi.spyOn(game.scene.gameData, "saveAll").mockImplementation((scene) => {
+    vi.spyOn(game.scene.gameData, "saveAll").mockImplementation(() => {
       return new Promise<boolean>((resolve, reject) => {
-        this.sessionData = scene.gameData.getSessionSaveData(scene);
+        this.sessionData = game.scene.gameData.getSessionSaveData();
         resolve(true);
       });
     });
@@ -31,9 +31,9 @@ export class ReloadHelper extends GameManagerHelper {
    * beginning of the first turn (equivalent to running `startBattle()`) for
    * the reloaded session.
    */
-  async reloadSession() : Promise<void> {
+  async reloadSession(): Promise<void> {
     const scene = this.game.scene;
-    const titlePhase = new TitlePhase(scene);
+    const titlePhase = new TitlePhase();
 
     scene.clearPhaseQueue();
 
@@ -41,7 +41,7 @@ export class ReloadHelper extends GameManagerHelper {
     vi.spyOn(scene.gameData, "getSession").mockReturnValue(
       new Promise((resolve, reject) => {
         resolve(this.sessionData);
-      })
+      }),
     );
     scene.unshiftPhase(titlePhase);
     this.game.endPhase(); // End the currently ongoing battle
@@ -51,15 +51,25 @@ export class ReloadHelper extends GameManagerHelper {
 
     // Run through prompts for switching Pokemon, copied from classicModeHelper.ts
     if (this.game.scene.battleStyle === BattleStyle.SWITCH) {
-      this.game.onNextPrompt("CheckSwitchPhase", Mode.CONFIRM, () => {
-        this.game.setMode(Mode.MESSAGE);
-        this.game.endPhase();
-      }, () => this.game.isCurrentPhase(CommandPhase) || this.game.isCurrentPhase(TurnInitPhase));
+      this.game.onNextPrompt(
+        "CheckSwitchPhase",
+        Mode.CONFIRM,
+        () => {
+          this.game.setMode(Mode.MESSAGE);
+          this.game.endPhase();
+        },
+        () => this.game.isCurrentPhase(CommandPhase) || this.game.isCurrentPhase(TurnInitPhase),
+      );
 
-      this.game.onNextPrompt("CheckSwitchPhase", Mode.CONFIRM, () => {
-        this.game.setMode(Mode.MESSAGE);
-        this.game.endPhase();
-      }, () => this.game.isCurrentPhase(CommandPhase) || this.game.isCurrentPhase(TurnInitPhase));
+      this.game.onNextPrompt(
+        "CheckSwitchPhase",
+        Mode.CONFIRM,
+        () => {
+          this.game.setMode(Mode.MESSAGE);
+          this.game.endPhase();
+        },
+        () => this.game.isCurrentPhase(CommandPhase) || this.game.isCurrentPhase(TurnInitPhase),
+      );
     }
 
     await this.game.phaseInterceptor.to(CommandPhase);

@@ -5,11 +5,17 @@ import { Species } from "#app/enums/species";
 import GameManager from "#app/test/utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { runMysteryEncounterToEnd, runSelectMysteryEncounterOption } from "#test/mystery-encounter/encounter-test-utils";
-import BattleScene from "#app/battle-scene";
+import {
+  runMysteryEncounterToEnd,
+  runSelectMysteryEncounterOption,
+} from "#test/mystery-encounter/encounter-test-utils";
+import type BattleScene from "#app/battle-scene";
 import { PlayerPokemon } from "#app/field/pokemon";
 import { HUMAN_TRANSITABLE_BIOMES } from "#app/data/mystery-encounters/mystery-encounters";
-import { getSalesmanSpeciesOffer, ThePokemonSalesmanEncounter } from "#app/data/mystery-encounters/encounters/the-pokemon-salesman-encounter";
+import {
+  getSalesmanSpeciesOffer,
+  ThePokemonSalesmanEncounter,
+} from "#app/data/mystery-encounters/encounters/the-pokemon-salesman-encounter";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { initSceneWithoutEncounterPhase } from "#test/utils/gameManagerUtils";
@@ -17,7 +23,7 @@ import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases";
 import { NON_LEGEND_PARADOX_POKEMON } from "#app/data/balance/special-species-groups";
 
 const namespace = "mysteryEncounters/thePokemonSalesman";
-const defaultParty = [ Species.LAPRAS, Species.GENGAR, Species.ABRA ];
+const defaultParty = [Species.LAPRAS, Species.GENGAR, Species.ABRA];
 const defaultBiome = Biome.CAVE;
 const defaultWave = 45;
 
@@ -39,10 +45,10 @@ describe("The Pokemon Salesman - Mystery Encounter", () => {
     game.override.disableTrainerWaves();
 
     const biomeMap = new Map<Biome, MysteryEncounterType[]>([
-      [ Biome.VOLCANO, [ MysteryEncounterType.MYSTERIOUS_CHALLENGERS ]],
+      [Biome.VOLCANO, [MysteryEncounterType.MYSTERIOUS_CHALLENGERS]],
     ]);
-    HUMAN_TRANSITABLE_BIOMES.forEach(biome => {
-      biomeMap.set(biome, [ MysteryEncounterType.THE_POKEMON_SALESMAN ]);
+    HUMAN_TRANSITABLE_BIOMES.forEach((biome) => {
+      biomeMap.set(biome, [MysteryEncounterType.THE_POKEMON_SALESMAN]);
     });
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(biomeMap);
   });
@@ -63,7 +69,7 @@ describe("The Pokemon Salesman - Mystery Encounter", () => {
     expect(dialogue).toBeDefined();
     expect(dialogue.intro).toStrictEqual([
       { text: `${namespace}:intro` },
-      { speaker: `${namespace}:speaker`, text: `${namespace}:intro_dialogue` }
+      { speaker: `${namespace}:speaker`, text: `${namespace}:intro_dialogue` },
     ]);
     const { title, description, query } = dialogue.encounterOptionsDialogue!;
     expect(title).toBe(`${namespace}:title`);
@@ -88,8 +94,8 @@ describe("The Pokemon Salesman - Mystery Encounter", () => {
 
     expect(ThePokemonSalesmanEncounter.onInit).toBeDefined();
 
-    ThePokemonSalesmanEncounter.populateDialogueTokensFromRequirements(scene);
-    const onInitResult = onInit!(scene);
+    ThePokemonSalesmanEncounter.populateDialogueTokensFromRequirements();
+    const onInitResult = onInit!();
 
     expect(ThePokemonSalesmanEncounter.dialogueTokens?.purchasePokemon).toBeDefined();
     expect(ThePokemonSalesmanEncounter.dialogueTokens?.price).toBeDefined();
@@ -133,7 +139,7 @@ describe("The Pokemon Salesman - Mystery Encounter", () => {
 
       const price = scene.currentBattle.mysteryEncounter!.misc.price;
 
-      expect(updateMoneySpy).toHaveBeenCalledWith(scene, -price, true, false);
+      expect(updateMoneySpy).toHaveBeenCalledWith(-price, true, false);
       expect(scene.money).toBe(initialMoney - price);
     });
 

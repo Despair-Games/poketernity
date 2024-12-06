@@ -1,13 +1,13 @@
 import { GameModes } from "#app/game-mode";
 import { pokerogueApi } from "#app/plugins/api/pokerogue-api";
-import OptionSelectUiHandler from "#app/ui/settings/option-select-ui-handler";
+import type OptionSelectUiHandler from "#app/ui/settings/option-select-ui-handler";
 import { Mode } from "#app/ui/ui";
 import { Biome } from "#enums/biome";
 import { Button } from "#enums/buttons";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
 import GameManager from "#test/utils/gameManager";
-import { MockClock } from "#test/utils/mocks/mockClock";
+import type { MockClock } from "#test/utils/mocks/mockClock";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("Reload", () => {
@@ -48,7 +48,7 @@ describe("Reload", () => {
       .battleType("single")
       .startingLevel(100) // Avoid levelling up
       .disableTrainerWaves()
-      .moveset([ Moves.SPLASH ])
+      .moveset([Moves.SPLASH])
       .enemyMoveset(Moves.SPLASH);
     await game.dailyMode.startBattle();
 
@@ -81,7 +81,7 @@ describe("Reload", () => {
       .battleType("single")
       .startingLevel(100) // Avoid levelling up
       .disableTrainerWaves()
-      .moveset([ Moves.SPLASH ])
+      .moveset([Moves.SPLASH])
       .enemyMoveset(Moves.SPLASH);
     await game.classicMode.startBattle(); // Apparently daily mode would override the biome
 
@@ -153,7 +153,7 @@ describe("Reload", () => {
 
   it("should not have RNG inconsistencies at a Daily run wave 50 Boss fight", async () => {
     game.override.battleType("single").startingWave(50);
-    await game.runToFinalBossEncounter([ Species.BULBASAUR ], GameModes.DAILY);
+    await game.runToFinalBossEncounter([Species.BULBASAUR], GameModes.DAILY);
 
     const preReloadRngState = Phaser.Math.RND.state();
 

@@ -1,5 +1,5 @@
 import { BattleStyle } from "#app/enums/battle-style";
-import { Species } from "#app/enums/species";
+import type { Species } from "#app/enums/species";
 import { GameModes, getGameMode } from "#app/game-mode";
 import overrides from "#app/overrides";
 import { CommandPhase } from "#app/phases/command-phase";
@@ -14,7 +14,6 @@ import { GameManagerHelper } from "./gameManagerHelper";
  * Helper to handle classic mode specifics
  */
 export class ClassicModeHelper extends GameManagerHelper {
-
   /**
    * Runs the classic game to the summon phase.
    * @param species - Optional array of species to summon.
@@ -30,8 +29,8 @@ export class ClassicModeHelper extends GameManagerHelper {
     this.game.onNextPrompt("TitlePhase", Mode.TITLE, () => {
       this.game.scene.gameMode = getGameMode(GameModes.CLASSIC);
       const starters = generateStarter(this.game.scene, species);
-      const selectStarterPhase = new SelectStarterPhase(this.game.scene);
-      this.game.scene.pushPhase(new EncounterPhase(this.game.scene, false));
+      const selectStarterPhase = new SelectStarterPhase();
+      this.game.scene.pushPhase(new EncounterPhase(false));
       selectStarterPhase.initBattle(starters);
     });
 
@@ -50,15 +49,25 @@ export class ClassicModeHelper extends GameManagerHelper {
     await this.runToSummon(species);
 
     if (this.game.scene.battleStyle === BattleStyle.SWITCH) {
-      this.game.onNextPrompt("CheckSwitchPhase", Mode.CONFIRM, () => {
-        this.game.setMode(Mode.MESSAGE);
-        this.game.endPhase();
-      }, () => this.game.isCurrentPhase(CommandPhase) || this.game.isCurrentPhase(TurnInitPhase));
+      this.game.onNextPrompt(
+        "CheckSwitchPhase",
+        Mode.CONFIRM,
+        () => {
+          this.game.setMode(Mode.MESSAGE);
+          this.game.endPhase();
+        },
+        () => this.game.isCurrentPhase(CommandPhase) || this.game.isCurrentPhase(TurnInitPhase),
+      );
 
-      this.game.onNextPrompt("CheckSwitchPhase", Mode.CONFIRM, () => {
-        this.game.setMode(Mode.MESSAGE);
-        this.game.endPhase();
-      }, () => this.game.isCurrentPhase(CommandPhase) || this.game.isCurrentPhase(TurnInitPhase));
+      this.game.onNextPrompt(
+        "CheckSwitchPhase",
+        Mode.CONFIRM,
+        () => {
+          this.game.setMode(Mode.MESSAGE);
+          this.game.endPhase();
+        },
+        () => this.game.isCurrentPhase(CommandPhase) || this.game.isCurrentPhase(TurnInitPhase),
+      );
     }
 
     await this.game.phaseInterceptor.to(CommandPhase);

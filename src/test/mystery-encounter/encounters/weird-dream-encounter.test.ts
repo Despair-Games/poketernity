@@ -5,8 +5,11 @@ import { Species } from "#app/enums/species";
 import GameManager from "#app/test/utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { runMysteryEncounterToEnd, skipBattleRunMysteryEncounterRewardsPhase } from "#test/mystery-encounter/encounter-test-utils";
-import BattleScene from "#app/battle-scene";
+import {
+  runMysteryEncounterToEnd,
+  skipBattleRunMysteryEncounterRewardsPhase,
+} from "#test/mystery-encounter/encounter-test-utils";
+import type BattleScene from "#app/battle-scene";
 import { Mode } from "#app/ui/ui";
 import ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
@@ -19,7 +22,7 @@ import { CommandPhase } from "#app/phases/command-phase";
 import { ModifierTier } from "#app/modifier/modifier-tier";
 
 const namespace = "mysteryEncounters/weirdDream";
-const defaultParty = [ Species.MAGBY, Species.HAUNTER, Species.ABRA ];
+const defaultParty = [Species.MAGBY, Species.HAUNTER, Species.ABRA];
 const defaultBiome = Biome.CAVE;
 const defaultWave = 45;
 
@@ -39,12 +42,12 @@ describe("Weird Dream - Mystery Encounter", () => {
     game.override.startingWave(defaultWave);
     game.override.startingBiome(defaultBiome);
     game.override.disableTrainerWaves();
-    vi.spyOn(EncounterTransformationSequence, "doPokemonTransformationSequence").mockImplementation(() => new Promise<void>(resolve => resolve()));
+    vi.spyOn(EncounterTransformationSequence, "doPokemonTransformationSequence").mockImplementation(
+      () => new Promise<void>((resolve) => resolve()),
+    );
 
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(
-      new Map<Biome, MysteryEncounterType[]>([
-        [ Biome.CAVE, [ MysteryEncounterType.WEIRD_DREAM ]],
-      ])
+      new Map<Biome, MysteryEncounterType[]>([[Biome.CAVE, [MysteryEncounterType.WEIRD_DREAM]]]),
     );
   });
 
@@ -62,7 +65,7 @@ describe("Weird Dream - Mystery Encounter", () => {
     expect(WeirdDreamEncounter.dialogue).toBeDefined();
     expect(WeirdDreamEncounter.dialogue.intro).toStrictEqual([
       {
-        text: `${namespace}:intro`
+        text: `${namespace}:intro`,
       },
       {
         speaker: `${namespace}:speaker`,
@@ -84,8 +87,8 @@ describe("Weird Dream - Mystery Encounter", () => {
 
     expect(WeirdDreamEncounter.onInit).toBeDefined();
 
-    WeirdDreamEncounter.populateDialogueTokensFromRequirements(scene);
-    const onInitResult = onInit!(scene);
+    WeirdDreamEncounter.populateDialogueTokensFromRequirements();
+    const onInitResult = onInit!();
 
     expect(loadBgmSpy).toHaveBeenCalled();
     expect(onInitResult).toBe(true);
@@ -110,15 +113,15 @@ describe("Weird Dream - Mystery Encounter", () => {
     it("should transform the new party into new species, 2 at +90/+110, the rest at +40/50 BST", async () => {
       await game.runToMysteryEncounter(MysteryEncounterType.WEIRD_DREAM, defaultParty);
 
-      const pokemonPrior = scene.getPlayerParty().map(pokemon => pokemon);
-      const bstsPrior = pokemonPrior.map(species => species.getSpeciesForm().getBaseStatTotal());
+      const pokemonPrior = scene.getPlayerParty().map((pokemon) => pokemon);
+      const bstsPrior = pokemonPrior.map((species) => species.getSpeciesForm().getBaseStatTotal());
 
       await runMysteryEncounterToEnd(game, 1);
       await game.phaseInterceptor.to(SelectModifierPhase, false);
       expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
 
       const pokemonAfter = scene.getPlayerParty();
-      const bstsAfter = pokemonAfter.map(pokemon => pokemon.getSpeciesForm().getBaseStatTotal());
+      const bstsAfter = pokemonAfter.map((pokemon) => pokemon.getSpeciesForm().getBaseStatTotal());
       const bstDiff = bstsAfter.map((bst, index) => bst - bstsPrior[index]);
 
       for (let i = 0; i < pokemonAfter.length; i++) {
@@ -127,8 +130,8 @@ describe("Weird Dream - Mystery Encounter", () => {
         expect(newPokemon.customPokemonData?.types.length).toBe(2);
       }
 
-      const plus90To110 = bstDiff.filter(bst => bst > 80);
-      const plus40To50 = bstDiff.filter(bst => bst < 80);
+      const plus90To110 = bstDiff.filter((bst) => bst > 80);
+      const plus40To50 = bstDiff.filter((bst) => bst < 80);
 
       expect(plus90To110.length).toBe(2);
       expect(plus40To50.length).toBe(1);
@@ -142,7 +145,9 @@ describe("Weird Dream - Mystery Encounter", () => {
       await game.phaseInterceptor.run(SelectModifierPhase);
 
       expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.handlers.find(h => h instanceof ModifierSelectUiHandler) as ModifierSelectUiHandler;
+      const modifierSelectHandler = scene.ui.handlers.find(
+        (h) => h instanceof ModifierSelectUiHandler,
+      ) as ModifierSelectUiHandler;
       expect(modifierSelectHandler.options.length).toEqual(5);
       expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toEqual("MEMORY_MUSHROOM");
       expect(modifierSelectHandler.options[1].modifierTypeOption.type.id).toEqual("ROGUE_BALL");
@@ -196,14 +201,34 @@ describe("Weird Dream - Mystery Encounter", () => {
       await game.phaseInterceptor.run(SelectModifierPhase);
 
       expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
-      const modifierSelectHandler = scene.ui.handlers.find(h => h instanceof ModifierSelectUiHandler) as ModifierSelectUiHandler;
+      const modifierSelectHandler = scene.ui.handlers.find(
+        (h) => h instanceof ModifierSelectUiHandler,
+      ) as ModifierSelectUiHandler;
       expect(modifierSelectHandler.options.length).toEqual(6);
-      expect(modifierSelectHandler.options[0].modifierTypeOption.type.tier - modifierSelectHandler.options[0].modifierTypeOption.upgradeCount).toEqual(ModifierTier.ROGUE);
-      expect(modifierSelectHandler.options[1].modifierTypeOption.type.tier - modifierSelectHandler.options[1].modifierTypeOption.upgradeCount).toEqual(ModifierTier.ROGUE);
-      expect(modifierSelectHandler.options[2].modifierTypeOption.type.tier - modifierSelectHandler.options[2].modifierTypeOption.upgradeCount).toEqual(ModifierTier.ULTRA);
-      expect(modifierSelectHandler.options[3].modifierTypeOption.type.tier - modifierSelectHandler.options[3].modifierTypeOption.upgradeCount).toEqual(ModifierTier.ULTRA);
-      expect(modifierSelectHandler.options[4].modifierTypeOption.type.tier - modifierSelectHandler.options[4].modifierTypeOption.upgradeCount).toEqual(ModifierTier.GREAT);
-      expect(modifierSelectHandler.options[5].modifierTypeOption.type.tier - modifierSelectHandler.options[5].modifierTypeOption.upgradeCount).toEqual(ModifierTier.GREAT);
+      expect(
+        modifierSelectHandler.options[0].modifierTypeOption.type.tier
+          - modifierSelectHandler.options[0].modifierTypeOption.upgradeCount,
+      ).toEqual(ModifierTier.ROGUE);
+      expect(
+        modifierSelectHandler.options[1].modifierTypeOption.type.tier
+          - modifierSelectHandler.options[1].modifierTypeOption.upgradeCount,
+      ).toEqual(ModifierTier.ROGUE);
+      expect(
+        modifierSelectHandler.options[2].modifierTypeOption.type.tier
+          - modifierSelectHandler.options[2].modifierTypeOption.upgradeCount,
+      ).toEqual(ModifierTier.ULTRA);
+      expect(
+        modifierSelectHandler.options[3].modifierTypeOption.type.tier
+          - modifierSelectHandler.options[3].modifierTypeOption.upgradeCount,
+      ).toEqual(ModifierTier.ULTRA);
+      expect(
+        modifierSelectHandler.options[4].modifierTypeOption.type.tier
+          - modifierSelectHandler.options[4].modifierTypeOption.upgradeCount,
+      ).toEqual(ModifierTier.GREAT);
+      expect(
+        modifierSelectHandler.options[5].modifierTypeOption.type.tier
+          - modifierSelectHandler.options[5].modifierTypeOption.upgradeCount,
+      ).toEqual(ModifierTier.GREAT);
     });
   });
 
@@ -227,10 +252,10 @@ describe("Weird Dream - Mystery Encounter", () => {
       const leaveEncounterWithoutBattleSpy = vi.spyOn(EncounterPhaseUtils, "leaveEncounterWithoutBattle");
 
       await game.runToMysteryEncounter(MysteryEncounterType.WEIRD_DREAM, defaultParty);
-      const levelsPrior = scene.getPlayerParty().map(p => p.level);
+      const levelsPrior = scene.getPlayerParty().map((p) => p.level);
       await runMysteryEncounterToEnd(game, 3);
 
-      const levelsAfter = scene.getPlayerParty().map(p => p.level);
+      const levelsAfter = scene.getPlayerParty().map((p) => p.level);
 
       for (let i = 0; i < levelsPrior.length; i++) {
         expect(Math.max(Math.ceil(0.9 * levelsPrior[i]), 1)).toBe(levelsAfter[i]);

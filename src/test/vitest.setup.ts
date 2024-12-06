@@ -19,12 +19,13 @@ process.env.TZ = "UTC";
 
 /** Mock the override import to always return default values, ignoring any custom overrides. */
 vi.mock("#app/overrides", async (importOriginal) => {
+  // eslint-disable-next-line
   const { defaultOverrides } = await importOriginal<typeof import("#app/overrides")>();
 
   return {
     default: defaultOverrides,
     defaultOverrides,
-  } satisfies typeof import("#app/overrides");
+  } satisfies typeof import("#app/overrides"); // eslint-disable-line
 });
 
 /**

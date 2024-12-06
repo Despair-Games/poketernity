@@ -123,18 +123,18 @@ export class PokerogueAdminApi extends ApiBase {
 
       if (response.ok) {
         const resData: SearchAccountResponse = await response.json();
-        return [ resData, undefined ];
+        return [resData, undefined];
       } else {
         console.warn("Could not find account!", response.status, response.statusText);
 
         if (response.status === 404) {
-          return [ undefined, this.ERR_USERNAME_NOT_FOUND ];
+          return [undefined, this.ERR_USERNAME_NOT_FOUND];
         }
       }
     } catch (err) {
       console.warn("Could not find account!", err);
     }
 
-    return [ undefined, this.ERR_GENERIC ];
+    return [undefined, this.ERR_GENERIC];
   }
 }

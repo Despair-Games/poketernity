@@ -39,7 +39,7 @@ describe("Moves - Fly", () => {
   });
 
   it("should make the user semi-invulnerable, then attack over 2 turns", async () => {
-    await game.classicMode.startBattle([ Species.MAGIKARP ]);
+    await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -58,14 +58,14 @@ describe("Moves - Fly", () => {
     expect(enemyPokemon.hp).toBeLessThan(enemyPokemon.getMaxHp());
     expect(playerPokemon.getMoveHistory()).toHaveLength(2);
 
-    const playerFly = playerPokemon.getMoveset().find(mv => mv && mv.moveId === Moves.FLY);
+    const playerFly = playerPokemon.getMoveset().find((mv) => mv && mv.moveId === Moves.FLY);
     expect(playerFly?.ppUsed).toBe(1);
   });
 
   it("should not allow the user to evade attacks from Pokemon with No Guard", async () => {
     game.override.enemyAbility(Abilities.NO_GUARD);
 
-    await game.classicMode.startBattle([ Species.MAGIKARP ]);
+    await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -78,11 +78,9 @@ describe("Moves - Fly", () => {
   });
 
   it("should not expend PP when the attack phase is cancelled", async () => {
-    game.override
-      .enemyAbility(Abilities.NO_GUARD)
-      .enemyMoveset(Moves.SPORE);
+    game.override.enemyAbility(Abilities.NO_GUARD).enemyMoveset(Moves.SPORE);
 
-    await game.classicMode.startBattle([ Species.MAGIKARP ]);
+    await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
@@ -92,14 +90,14 @@ describe("Moves - Fly", () => {
     expect(playerPokemon.getTag(BattlerTagType.FLYING)).toBeUndefined();
     expect(playerPokemon.status?.effect).toBe(StatusEffect.SLEEP);
 
-    const playerFly = playerPokemon.getMoveset().find(mv => mv && mv.moveId === Moves.FLY);
+    const playerFly = playerPokemon.getMoveset().find((mv) => mv && mv.moveId === Moves.FLY);
     expect(playerFly?.ppUsed).toBe(0);
   });
 
   it("should be cancelled when another Pokemon uses Gravity", async () => {
-    game.override.enemyMoveset([ Moves.SPLASH, Moves.GRAVITY ]);
+    game.override.enemyMoveset([Moves.SPLASH, Moves.GRAVITY]);
 
-    await game.classicMode.startBattle([ Species.MAGIKARP ]);
+    await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -110,13 +108,13 @@ describe("Moves - Fly", () => {
 
     await game.toNextTurn();
     await game.forceEnemyMove(Moves.GRAVITY);
-    await game.setTurnOrder([ BattlerIndex.ENEMY, BattlerIndex.PLAYER ]);
+    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(playerPokemon.getLastXMoves(1)[0].result).toBe(MoveResult.FAIL);
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
 
-    const playerFly = playerPokemon.getMoveset().find(mv => mv && mv.moveId === Moves.FLY);
+    const playerFly = playerPokemon.getMoveset().find((mv) => mv && mv.moveId === Moves.FLY);
     expect(playerFly?.ppUsed).toBe(0);
   });
 });

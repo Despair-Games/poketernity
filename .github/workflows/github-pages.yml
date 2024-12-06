@@ -14,7 +14,7 @@ on:
 jobs:
   pages:
     name: Github Pages
-    if: github.repository == 'pagefaultgames/pokerogue'
+    if: github.repository == 'Despair-Games/poketernity'
     runs-on: ubuntu-latest
     env:
       api-dir: ./
@@ -26,7 +26,7 @@ jobs:
       - name: Checkout repository for Typedoc
         uses: actions/checkout@v3
         with:
-          submodules: 'recursive'
+          submodules: "recursive"
           path: pokerogue_docs
 
       - name: Install OS package

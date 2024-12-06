@@ -1,7 +1,8 @@
 import { BattlerIndex } from "#app/battle";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
-import { EffectiveStat, Stat } from "#enums/stat";
+import type { EffectiveStat } from "#enums/stat";
+import { Stat } from "#enums/stat";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
@@ -42,34 +43,35 @@ describe("Moves - Order Up", () => {
   it.each([
     { formIndex: 0, formName: "Curly", stat: Stat.ATK, statName: "Attack" },
     { formIndex: 1, formName: "Droopy", stat: Stat.DEF, statName: "Defense" },
-    { formIndex: 2, formName: "Stretchy", stat: Stat.SPD, statName: "Speed" }
-  ])("should raise the user's $statName when the user is commanded by a $formName Tatsugiri", async ({ formIndex, stat }) => {
-    game.override.starterForms({ [Species.TATSUGIRI]: formIndex });
+    { formIndex: 2, formName: "Stretchy", stat: Stat.SPD, statName: "Speed" },
+  ])(
+    "should raise the user's $statName when the user is commanded by a $formName Tatsugiri",
+    async ({ formIndex, stat }) => {
+      game.override.starterForms({ [Species.TATSUGIRI]: formIndex });
 
-    await game.classicMode.startBattle([ Species.TATSUGIRI, Species.DONDOZO ]);
+      await game.classicMode.startBattle([Species.TATSUGIRI, Species.DONDOZO]);
 
-    const [ tatsugiri, dondozo ] = game.scene.getPlayerField();
+      const [tatsugiri, dondozo] = game.scene.getPlayerField();
 
-    expect(game.scene.triggerPokemonBattleAnim).toHaveBeenLastCalledWith(tatsugiri, PokemonAnimType.COMMANDER_APPLY);
-    expect(dondozo.getTag(BattlerTagType.COMMANDED)).toBeDefined();
+      expect(game.scene.triggerPokemonBattleAnim).toHaveBeenLastCalledWith(tatsugiri, PokemonAnimType.COMMANDER_APPLY);
+      expect(dondozo.getTag(BattlerTagType.COMMANDED)).toBeDefined();
 
-    game.move.select(Moves.ORDER_UP, 1, BattlerIndex.ENEMY);
-    expect(game.scene.currentBattle.turnCommands[0]?.skip).toBeTruthy();
+      game.move.select(Moves.ORDER_UP, 1, BattlerIndex.ENEMY);
+      expect(game.scene.currentBattle.turnCommands[0]?.skip).toBeTruthy();
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+      await game.phaseInterceptor.to("BerryPhase", false);
 
-    const affectedStats: EffectiveStat[] = [ Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD ];
-    affectedStats.forEach(st => expect(dondozo.getStatStage(st)).toBe(st === stat ? 3 : 2));
-  });
+      const affectedStats: EffectiveStat[] = [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD];
+      affectedStats.forEach((st) => expect(dondozo.getStatStage(st)).toBe(st === stat ? 3 : 2));
+    },
+  );
 
   it("should be boosted by Sheer Force while still applying a stat boost", async () => {
-    game.override
-      .passiveAbility(Abilities.SHEER_FORCE)
-      .starterForms({ [Species.TATSUGIRI]: 0 });
+    game.override.passiveAbility(Abilities.SHEER_FORCE).starterForms({ [Species.TATSUGIRI]: 0 });
 
-    await game.classicMode.startBattle([ Species.TATSUGIRI, Species.DONDOZO ]);
+    await game.classicMode.startBattle([Species.TATSUGIRI, Species.DONDOZO]);
 
-    const [ tatsugiri, dondozo ] = game.scene.getPlayerField();
+    const [tatsugiri, dondozo] = game.scene.getPlayerField();
 
     expect(game.scene.triggerPokemonBattleAnim).toHaveBeenLastCalledWith(tatsugiri, PokemonAnimType.COMMANDER_APPLY);
     expect(dondozo.getTag(BattlerTagType.COMMANDED)).toBeDefined();

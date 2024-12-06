@@ -5,7 +5,7 @@ import { CommandPhase } from "#app/phases/command-phase";
 import { EncounterPhase } from "#app/phases/encounter-phase";
 import { TitlePhase } from "#app/phases/title-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
-import SaveSlotSelectUiHandler from "#app/ui/save-slot-select-ui-handler";
+import type SaveSlotSelectUiHandler from "#app/ui/save-slot-select-ui-handler";
 import { Mode } from "#app/ui/ui";
 import { GameManagerHelper } from "./gameManagerHelper";
 
@@ -13,7 +13,6 @@ import { GameManagerHelper } from "./gameManagerHelper";
  * Helper to handle daily mode specifics
  */
 export class DailyModeHelper extends GameManagerHelper {
-
   /**
    * Runs the daily game to the summon phase.
    * @returns A promise that resolves when the summon phase is reached.
@@ -26,7 +25,7 @@ export class DailyModeHelper extends GameManagerHelper {
     }
 
     this.game.onNextPrompt("TitlePhase", Mode.TITLE, () => {
-      const titlePhase = new TitlePhase(this.game.scene);
+      const titlePhase = new TitlePhase();
       titlePhase.initDailyRun();
     });
 
@@ -50,15 +49,25 @@ export class DailyModeHelper extends GameManagerHelper {
     await this.runToSummon();
 
     if (this.game.scene.battleStyle === BattleStyle.SWITCH) {
-      this.game.onNextPrompt("CheckSwitchPhase", Mode.CONFIRM, () => {
-        this.game.setMode(Mode.MESSAGE);
-        this.game.endPhase();
-      }, () => this.game.isCurrentPhase(CommandPhase) || this.game.isCurrentPhase(TurnInitPhase));
+      this.game.onNextPrompt(
+        "CheckSwitchPhase",
+        Mode.CONFIRM,
+        () => {
+          this.game.setMode(Mode.MESSAGE);
+          this.game.endPhase();
+        },
+        () => this.game.isCurrentPhase(CommandPhase) || this.game.isCurrentPhase(TurnInitPhase),
+      );
 
-      this.game.onNextPrompt("CheckSwitchPhase", Mode.CONFIRM, () => {
-        this.game.setMode(Mode.MESSAGE);
-        this.game.endPhase();
-      }, () => this.game.isCurrentPhase(CommandPhase) || this.game.isCurrentPhase(TurnInitPhase));
+      this.game.onNextPrompt(
+        "CheckSwitchPhase",
+        Mode.CONFIRM,
+        () => {
+          this.game.setMode(Mode.MESSAGE);
+          this.game.endPhase();
+        },
+        () => this.game.isCurrentPhase(CommandPhase) || this.game.isCurrentPhase(TurnInitPhase),
+      );
     }
 
     await this.game.phaseInterceptor.to(CommandPhase);

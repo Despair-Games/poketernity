@@ -1,7 +1,8 @@
-import { FormModalUiHandler, InputFieldConfig } from "./form-modal-ui-handler";
-import { ModalConfig } from "./modal-ui-handler";
+import type { InputFieldConfig } from "./form-modal-ui-handler";
+import { FormModalUiHandler } from "./form-modal-ui-handler";
+import type { ModalConfig } from "./modal-ui-handler";
 import i18next from "i18next";
-import { PlayerPokemon } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/pokemon";
 
 export default class RenameFormUiHandler extends FormModalUiHandler {
   getModalTitle(config?: ModalConfig): string {
@@ -13,11 +14,11 @@ export default class RenameFormUiHandler extends FormModalUiHandler {
   }
 
   getMargin(config?: ModalConfig): [number, number, number, number] {
-    return [ 0, 0, 48, 0 ];
+    return [0, 0, 48, 0];
   }
 
   getButtonLabels(config?: ModalConfig): string[] {
-    return [ i18next.t("menu:rename"), i18next.t("menu:cancel") ];
+    return [i18next.t("menu:rename"), i18next.t("menu:cancel")];
   }
 
   getReadableErrorMessage(error: string): string {

@@ -7,7 +7,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerIndex } from "#app/battle";
-import { PlayerPokemon } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/pokemon";
 
 describe("Moves - Aroma Veil", () => {
   let phaserGame: Phaser.Game;
@@ -27,14 +27,14 @@ describe("Moves - Aroma Veil", () => {
     game.override
       .battleType("double")
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset([ Moves.HEAL_BLOCK, Moves.IMPRISON, Moves.SPLASH ])
+      .enemyMoveset([Moves.HEAL_BLOCK, Moves.IMPRISON, Moves.SPLASH])
       .enemySpecies(Species.SHUCKLE)
       .ability(Abilities.AROMA_VEIL)
-      .moveset([ Moves.GROWL ]);
+      .moveset([Moves.GROWL]);
   });
 
   it("Aroma Veil protects the Pokemon's side against most Move Restriction Battler Tags", async () => {
-    await game.classicMode.startBattle([ Species.REGIELEKI, Species.BULBASAUR ]);
+    await game.classicMode.startBattle([Species.REGIELEKI, Species.BULBASAUR]);
 
     const party = game.scene.getPlayerParty()! as PlayerPokemon[];
 
@@ -42,13 +42,13 @@ describe("Moves - Aroma Veil", () => {
     game.move.select(Moves.GROWL);
     await game.forceEnemyMove(Moves.HEAL_BLOCK);
     await game.toNextTurn();
-    party.forEach(p => {
+    party.forEach((p) => {
       expect(p.getTag(BattlerTagType.HEAL_BLOCK)).toBeUndefined();
     });
   });
 
   it("Aroma Veil does not protect against Imprison", async () => {
-    await game.classicMode.startBattle([ Species.REGIELEKI, Species.BULBASAUR ]);
+    await game.classicMode.startBattle([Species.REGIELEKI, Species.BULBASAUR]);
 
     const party = game.scene.getPlayerParty()! as PlayerPokemon[];
 
@@ -58,7 +58,7 @@ describe("Moves - Aroma Veil", () => {
     await game.forceEnemyMove(Moves.SPLASH);
     await game.toNextTurn();
     expect(game.scene.arena.getTag(ArenaTagType.IMPRISON)).toBeDefined();
-    party.forEach(p => {
+    party.forEach((p) => {
       expect(p.getTag(BattlerTagType.IMPRISON)).toBeDefined();
     });
   });

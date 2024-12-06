@@ -9,9 +9,13 @@ import { Gender } from "#app/data/gender";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
 import * as BattleAnims from "#app/data/battle-anims";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { runMysteryEncounterToEnd, runSelectMysteryEncounterOption, skipBattleRunMysteryEncounterRewardsPhase } from "#test/mystery-encounter/encounter-test-utils";
+import {
+  runMysteryEncounterToEnd,
+  runSelectMysteryEncounterOption,
+  skipBattleRunMysteryEncounterRewardsPhase,
+} from "#test/mystery-encounter/encounter-test-utils";
 import { Moves } from "#enums/moves";
-import BattleScene from "#app/battle-scene";
+import type BattleScene from "#app/battle-scene";
 import { AttackTypeBoosterModifier, PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { Type } from "#enums/type";
 import { Status } from "#app/data/status-effect";
@@ -29,7 +33,7 @@ import { StatusEffect } from "#enums/status-effect";
 
 const namespace = "mysteryEncounters/fieryFallout";
 /** Arcanine and Ninetails for 2 Fire types. Lapras, Gengar, Abra for burnable mon. */
-const defaultParty = [ Species.ARCANINE, Species.NINETALES, Species.LAPRAS, Species.GENGAR, Species.ABRA ];
+const defaultParty = [Species.ARCANINE, Species.NINETALES, Species.LAPRAS, Species.GENGAR, Species.ABRA];
 const defaultBiome = Biome.VOLCANO;
 const defaultWave = 56;
 
@@ -45,17 +49,18 @@ describe("Fiery Fallout - Mystery Encounter", () => {
   beforeEach(async () => {
     game = new GameManager(phaserGame);
     scene = game.scene;
-    game.override.mysteryEncounterChance(100)
+    game.override
+      .mysteryEncounterChance(100)
       .startingWave(defaultWave)
       .startingBiome(defaultBiome)
       .disableTrainerWaves()
-      .moveset([ Moves.PAYBACK, Moves.THUNDERBOLT ]); // Required for attack type booster item generation
+      .moveset([Moves.PAYBACK, Moves.THUNDERBOLT]); // Required for attack type booster item generation
 
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(
       new Map<Biome, MysteryEncounterType[]>([
-        [ Biome.VOLCANO, [ MysteryEncounterType.FIERY_FALLOUT ]],
-        [ Biome.MOUNTAIN, [ MysteryEncounterType.MYSTERIOUS_CHALLENGERS ]],
-      ])
+        [Biome.VOLCANO, [MysteryEncounterType.FIERY_FALLOUT]],
+        [Biome.MOUNTAIN, [MysteryEncounterType.MYSTERIOUS_CHALLENGERS]],
+      ]),
     );
   });
 
@@ -104,8 +109,8 @@ describe("Fiery Fallout - Mystery Encounter", () => {
 
     expect(FieryFalloutEncounter.onInit).toBeDefined();
 
-    FieryFalloutEncounter.populateDialogueTokensFromRequirements(scene);
-    const onInitResult = onInit!(scene);
+    FieryFalloutEncounter.populateDialogueTokensFromRequirements();
+    const onInitResult = onInit!();
 
     expect(FieryFalloutEncounter.enemyPartyConfigs).toEqual([
       {
@@ -114,20 +119,20 @@ describe("Fiery Fallout - Mystery Encounter", () => {
             species: getPokemonSpecies(Species.VOLCARONA),
             isBoss: false,
             gender: Gender.MALE,
-            tags: [ BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON ],
-            mysteryEncounterBattleEffects: expect.any(Function)
+            tags: [BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON],
+            mysteryEncounterBattleEffects: expect.any(Function),
           },
           {
             species: getPokemonSpecies(Species.VOLCARONA),
             isBoss: false,
             gender: Gender.FEMALE,
-            tags: [ BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON ],
-            mysteryEncounterBattleEffects: expect.any(Function)
-          }
+            tags: [BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON],
+            mysteryEncounterBattleEffects: expect.any(Function),
+          },
         ],
         doubleBattle: true,
-        disableSwitch: true
-      }
+        disableSwitch: true,
+      },
     ]);
     expect(weatherSpy).toHaveBeenCalledTimes(1);
     await vi.waitFor(() => expect(moveInitSpy).toHaveBeenCalled());
@@ -164,9 +169,9 @@ describe("Fiery Fallout - Mystery Encounter", () => {
       expect(enemyField[1].species.speciesId).toBe(Species.VOLCARONA);
       expect(enemyField[0].gender).not.toEqual(enemyField[1].gender); // Should be opposite gender
 
-      const movePhases = phaseSpy.mock.calls.filter(p => p[0] instanceof MovePhase).map(p => p[0]);
+      const movePhases = phaseSpy.mock.calls.filter((p) => p[0] instanceof MovePhase).map((p) => p[0]);
       expect(movePhases.length).toBe(2);
-      expect(movePhases.filter(p => (p as MovePhase).move.moveId === Moves.FIRE_SPIN).length).toBe(2); // Fire spin used twice before battle
+      expect(movePhases.filter((p) => (p as MovePhase).move.moveId === Moves.FIRE_SPIN).length).toBe(2); // Fire spin used twice before battle
     });
 
     it("should give attack type boosting item to lead pokemon", async () => {
@@ -177,9 +182,11 @@ describe("Fiery Fallout - Mystery Encounter", () => {
       expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
 
       const leadPokemonId = scene.getPlayerParty()?.[0].id;
-      const leadPokemonItems = scene.findModifiers(m => m instanceof PokemonHeldItemModifier
-        && (m as PokemonHeldItemModifier).pokemonId === leadPokemonId, true) as PokemonHeldItemModifier[];
-      const item = leadPokemonItems.find(i => i instanceof AttackTypeBoosterModifier);
+      const leadPokemonItems = scene.findModifiers(
+        (m) => m instanceof PokemonHeldItemModifier && (m as PokemonHeldItemModifier).pokemonId === leadPokemonId,
+        true,
+      ) as PokemonHeldItemModifier[];
+      const item = leadPokemonItems.find((i) => i instanceof AttackTypeBoosterModifier);
       expect(item).toBeDefined;
     });
   });
@@ -215,11 +222,15 @@ describe("Fiery Fallout - Mystery Encounter", () => {
       const notBurnablePokemon = party.filter((pkm) => !pkm.isAllowedInBattle() || pkm.getTypes().includes(Type.FIRE));
       expect(scene.currentBattle.mysteryEncounter?.dialogueTokens["burnedPokemon"]).toBe(i18next.t("pokemon:gengar"));
       burnablePokemon.forEach((pkm) => {
-        expect(pkm.hp, `${pkm.name} should have received 20% damage: ${pkm.hp} / ${pkm.getMaxHp()} HP`).toBe(pkm.getMaxHp() - Math.floor(pkm.getMaxHp() * 0.2));
+        expect(pkm.hp, `${pkm.name} should have received 20% damage: ${pkm.hp} / ${pkm.getMaxHp()} HP`).toBe(
+          pkm.getMaxHp() - Math.floor(pkm.getMaxHp() * 0.2),
+        );
       });
-      expect(burnablePokemon.some(pkm => pkm.status?.effect === StatusEffect.BURN)).toBeTruthy();
-      expect(burnablePokemon.some(pkm => pkm.customPokemonData.ability === Abilities.HEATPROOF));
-      notBurnablePokemon.forEach((pkm) => expect(pkm.hp, `${pkm.name} should be full hp: ${pkm.hp} / ${pkm.getMaxHp()} HP`).toBe(pkm.getMaxHp()));
+      expect(burnablePokemon.some((pkm) => pkm.status?.effect === StatusEffect.BURN)).toBeTruthy();
+      expect(burnablePokemon.some((pkm) => pkm.customPokemonData.ability === Abilities.HEATPROOF));
+      notBurnablePokemon.forEach((pkm) =>
+        expect(pkm.hp, `${pkm.name} should be full hp: ${pkm.hp} / ${pkm.getMaxHp()} HP`).toBe(pkm.getMaxHp()),
+      );
     });
 
     it("should leave encounter without battle", async () => {
@@ -256,7 +267,7 @@ describe("Fiery Fallout - Mystery Encounter", () => {
       expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
 
       const leadPokemonItems = scene.getPlayerParty()?.[0].getHeldItems() as PokemonHeldItemModifier[];
-      const item = leadPokemonItems.find(i => i instanceof AttackTypeBoosterModifier);
+      const item = leadPokemonItems.find((i) => i instanceof AttackTypeBoosterModifier);
       expect(item).toBeDefined;
     });
 
@@ -270,12 +281,12 @@ describe("Fiery Fallout - Mystery Encounter", () => {
     });
 
     it("should be disabled if not enough FIRE types are in party", async () => {
-      await game.runToMysteryEncounter(MysteryEncounterType.FIERY_FALLOUT, [ Species.MAGIKARP ]);
+      await game.runToMysteryEncounter(MysteryEncounterType.FIERY_FALLOUT, [Species.MAGIKARP]);
       await game.phaseInterceptor.to(MysteryEncounterPhase, false);
 
       const encounterPhase = scene.getCurrentPhase();
       expect(encounterPhase?.constructor.name).toBe(MysteryEncounterPhase.name);
-      const continueEncounterSpy = vi.spyOn((encounterPhase as MysteryEncounterPhase), "continueEncounter");
+      const continueEncounterSpy = vi.spyOn(encounterPhase as MysteryEncounterPhase, "continueEncounter");
 
       await runSelectMysteryEncounterOption(game, 3);
 
