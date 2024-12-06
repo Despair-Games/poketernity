@@ -6,8 +6,7 @@ import {
 import { TrainerSlot } from "#app/data/trainer-config";
 import { ModifierTier } from "#app/modifier/modifier-tier";
 import { MusicPreference } from "#app/system/settings/settings";
-import type {
-  ModifierTypeOption} from "#app/modifier/modifier-type";
+import type { ModifierTypeOption } from "#app/modifier/modifier-type";
 import {
   getPlayerModifierTypeOptions,
   ModifierPoolType,
@@ -25,11 +24,10 @@ import { getTypeRgb } from "#app/data/type";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { NumberHolder, isNullOrUndefined, randInt, randSeedInt, randSeedShuffle } from "#app/utils";
-import type { PlayerPokemon} from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/pokemon";
 import type Pokemon from "#app/field/pokemon";
 import { EnemyPokemon, PokemonMove } from "#app/field/pokemon";
-import type {
-  PokemonHeldItemModifier} from "#app/modifier/modifier";
+import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import {
   HiddenAbilityRateBoosterModifier,
   PokemonFormChangeItemModifier,
@@ -188,20 +186,20 @@ export const GlobalTradeSystemEncounter: MysteryEncounter = MysteryEncounterBuil
                     ? tradePokemon.species.forms[tradePokemon.formIndex].formName
                     : null;
                 const line1 =
-                  i18next.t("pokemonInfoContainer:ability") +
-                  " " +
-                  tradePokemon.getAbility().name +
-                  (tradePokemon.getGender() !== Gender.GENDERLESS
-                    ? "     |     " +
-                      i18next.t("pokemonInfoContainer:gender") +
-                      " " +
-                      getGenderSymbol(tradePokemon.getGender())
+                  i18next.t("pokemonInfoContainer:ability")
+                  + " "
+                  + tradePokemon.getAbility().name
+                  + (tradePokemon.getGender() !== Gender.GENDERLESS
+                    ? "     |     "
+                      + i18next.t("pokemonInfoContainer:gender")
+                      + " "
+                      + getGenderSymbol(tradePokemon.getGender())
                     : "");
                 const line2 =
-                  i18next.t("pokemonInfoContainer:nature") +
-                  " " +
-                  getNatureName(tradePokemon.getNature()) +
-                  (formName ? "     |     " + i18next.t("pokemonInfoContainer:form") + " " + formName : "");
+                  i18next.t("pokemonInfoContainer:nature")
+                  + " "
+                  + getNatureName(tradePokemon.getNature())
+                  + (formName ? "     |     " + i18next.t("pokemonInfoContainer:form") + " " + formName : "");
                 showEncounterText(`${line1}\n${line2}`, 0, 0, false);
               },
             };

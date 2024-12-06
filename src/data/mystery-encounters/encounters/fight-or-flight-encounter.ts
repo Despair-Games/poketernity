@@ -1,6 +1,5 @@
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
-import type {
-  EnemyPartyConfig} from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import type { EnemyPartyConfig } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import {
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,
@@ -11,8 +10,7 @@ import { STEALING_MOVES } from "#app/data/mystery-encounters/requirements/requir
 import type Pokemon from "#app/field/pokemon";
 import { EnemyPokemon } from "#app/field/pokemon";
 import { ModifierTier } from "#app/modifier/modifier-tier";
-import type {
-  ModifierTypeOption} from "#app/modifier/modifier-type";
+import type { ModifierTypeOption } from "#app/modifier/modifier-type";
 import {
   getPartyLuckValue,
   getPlayerModifierTypeOptions,

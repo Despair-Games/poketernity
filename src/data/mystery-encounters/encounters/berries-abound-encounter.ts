@@ -1,6 +1,5 @@
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
-import type {
-  EnemyPartyConfig} from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import type { EnemyPartyConfig } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import {
   generateModifierType,
   generateModifierTypeOption,
@@ -12,9 +11,7 @@ import {
 import type { PlayerPokemon } from "#app/field/pokemon";
 import type Pokemon from "#app/field/pokemon";
 import { EnemyPokemon } from "#app/field/pokemon";
-import type {
-  BerryModifierType,
-  ModifierTypeOption} from "#app/modifier/modifier-type";
+import type { BerryModifierType, ModifierTypeOption } from "#app/modifier/modifier-type";
 import {
   getPartyLuckValue,
   ModifierPoolType,
@@ -313,9 +310,9 @@ function tryGiveBerry(prioritizedPokemon?: PlayerPokemon) {
   if (prioritizedPokemon) {
     const heldBerriesOfType = globalScene.findModifier(
       (m) =>
-        m instanceof BerryModifier &&
-        m.pokemonId === prioritizedPokemon.id &&
-        (m as BerryModifier).berryType === berryType,
+        m instanceof BerryModifier
+        && m.pokemonId === prioritizedPokemon.id
+        && (m as BerryModifier).berryType === berryType,
       true,
     ) as BerryModifier;
 

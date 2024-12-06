@@ -1,12 +1,6 @@
 import { globalScene } from "#app/global-scene";
-import type {
-  BiomeTierTrainerPools,
-  PokemonPools} from "#app/data/balance/biomes";
-import {
-  biomePokemonPools,
-  BiomePoolTier,
-  biomeTrainerPools
-} from "#app/data/balance/biomes";
+import type { BiomeTierTrainerPools, PokemonPools } from "#app/data/balance/biomes";
+import { biomePokemonPools, BiomePoolTier, biomeTrainerPools } from "#app/data/balance/biomes";
 import { type Constructor, randSeedInt } from "#app/utils";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
@@ -20,7 +14,7 @@ import {
 import { CommonAnim } from "#app/data/battle-anims";
 import type { Type } from "#enums/type";
 import type Move from "#app/data/move";
-import type { ArenaTag} from "#app/data/arena-tag";
+import type { ArenaTag } from "#app/data/arena-tag";
 import { ArenaTagSide, ArenaTrapTag, getArenaTag } from "#app/data/arena-tag";
 import type { BattlerIndex } from "#app/battle";
 import { Terrain, TerrainType } from "#app/data/terrain";
@@ -111,9 +105,11 @@ export class Arena {
       return overrideSpecies;
     }
     const isBossSpecies =
-      !!globalScene.getEncounterBossSegments(waveIndex, level) &&
-      !!this.pokemonPool[BiomePoolTier.BOSS].length &&
-      (this.biomeType !== Biome.END || globalScene.gameMode.isClassic || globalScene.gameMode.isWaveFinal(waveIndex));
+      !!globalScene.getEncounterBossSegments(waveIndex, level)
+      && !!this.pokemonPool[BiomePoolTier.BOSS].length
+      && (this.biomeType !== Biome.END
+        || globalScene.gameMode.isClassic
+        || globalScene.gameMode.isWaveFinal(waveIndex));
     const randVal = isBossSpecies ? 64 : 512;
     // luck influences encounter rarity
     let luckModifier = 0;
@@ -204,8 +200,8 @@ export class Arena {
 
   randomTrainerType(waveIndex: integer, isBoss: boolean = false): TrainerType {
     const isTrainerBoss =
-      !!this.trainerPool[BiomePoolTier.BOSS].length &&
-      (globalScene.gameMode.isTrainerBoss(waveIndex, this.biomeType, globalScene.offsetGym) || isBoss);
+      !!this.trainerPool[BiomePoolTier.BOSS].length
+      && (globalScene.gameMode.isTrainerBoss(waveIndex, this.biomeType, globalScene.offsetGym) || isBoss);
     console.log(isBoss, this.trainerPool);
     const tierValue = randSeedInt(!isTrainerBoss ? 512 : 64);
     let tier = !isTrainerBoss

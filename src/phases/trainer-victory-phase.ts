@@ -39,8 +39,8 @@ export class TrainerVictoryPhase extends BattlePhase {
     // Validate Voucher for boss trainers
     if (vouchers.hasOwnProperty(TrainerType[trainerType])) {
       if (
-        !globalScene.validateVoucher(vouchers[TrainerType[trainerType]]) &&
-        globalScene.currentBattle.trainer?.config.isBoss
+        !globalScene.validateVoucher(vouchers[TrainerType[trainerType]])
+        && globalScene.currentBattle.trainer?.config.isBoss
       ) {
         globalScene.unshiftPhase(
           new ModifierRewardPhase(
@@ -53,8 +53,8 @@ export class TrainerVictoryPhase extends BattlePhase {
     }
     // Breeders in Space achievement
     if (
-      globalScene.arena.biomeType === Biome.SPACE &&
-      (trainerType === TrainerType.BREEDER || trainerType === TrainerType.EXPERT_POKEMON_BREEDER)
+      globalScene.arena.biomeType === Biome.SPACE
+      && (trainerType === TrainerType.BREEDER || trainerType === TrainerType.EXPERT_POKEMON_BREEDER)
     ) {
       globalScene.validateAchv(achvs.BREEDERS_IN_SPACE);
     }

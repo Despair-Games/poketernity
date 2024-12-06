@@ -20,11 +20,8 @@ import { SwitchType } from "#enums/switch-type";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
 import { getCharVariantFromDialogue } from "../data/dialogue";
-import type {
-  OptionSelectSettings} from "../data/mystery-encounters/utils/encounter-phase-utils";
-import {
-  transitionMysteryEncounterIntroVisuals,
-} from "../data/mystery-encounters/utils/encounter-phase-utils";
+import type { OptionSelectSettings } from "../data/mystery-encounters/utils/encounter-phase-utils";
+import { transitionMysteryEncounterIntroVisuals } from "../data/mystery-encounters/utils/encounter-phase-utils";
 import { TrainerSlot } from "../data/trainer-config";
 import { IvScannerModifier } from "../modifier/modifier";
 import { Phase } from "../phase";
@@ -242,9 +239,9 @@ export class MysteryEncounterBattleStartCleanupPhase extends Phase {
       tags
         .filter(
           (t) =>
-            includedLapseTags.includes(t.tagType) &&
-            t.lapseTypes.includes(BattlerTagLapseType.TURN_END) &&
-            !t.lapse(pokemon, BattlerTagLapseType.TURN_END),
+            includedLapseTags.includes(t.tagType)
+            && t.lapseTypes.includes(BattlerTagLapseType.TURN_END)
+            && !t.lapse(pokemon, BattlerTagLapseType.TURN_END),
         )
         .forEach((t) => {
           t.onRemove(pokemon);

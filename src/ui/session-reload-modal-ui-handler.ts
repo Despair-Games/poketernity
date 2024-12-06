@@ -1,4 +1,4 @@
-import type { ModalConfig} from "./modal-ui-handler";
+import type { ModalConfig } from "./modal-ui-handler";
 import { ModalUiHandler } from "./modal-ui-handler";
 import { addTextObject, TextStyle } from "./text";
 import type { Mode } from "./ui";

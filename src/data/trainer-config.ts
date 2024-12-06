@@ -1,8 +1,8 @@
 import { startingWave } from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
-import type { ModifierTypeFunc} from "#app/modifier/modifier-type";
+import type { ModifierTypeFunc } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-type";
-import type { EnemyPokemon} from "#app/field/pokemon";
+import type { EnemyPokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon";
 import { toReadableString, randSeedItem, randSeedInt } from "#app/utils";
 import { PokeballType } from "#enums/pokeball";
@@ -321,8 +321,8 @@ export class TrainerConfig {
     this.victoryBgm = "victory_trainer";
     this.partyTemplates = [trainerPartyTemplates.TWO_AVG];
     this.speciesFilter = (species) =>
-      (allowLegendaries || (!species.legendary && !species.subLegendary && !species.mythical)) &&
-      !species.isTrainerForbidden();
+      (allowLegendaries || (!species.legendary && !species.subLegendary && !species.mythical))
+      && !species.isTrainerForbidden();
   }
 
   getKey(): string {
@@ -1389,8 +1389,8 @@ export class TrainerConfig {
       if (this.nameFemale) {
         // Check if the variant is either female or this is for the partner in a double battle
         if (
-          variant === TrainerVariant.FEMALE ||
-          (variant === TrainerVariant.DOUBLE && trainerSlot === TrainerSlot.TRAINER_PARTNER)
+          variant === TrainerVariant.FEMALE
+          || (variant === TrainerVariant.DOUBLE && trainerSlot === TrainerSlot.TRAINER_PARTNER)
         ) {
           return this.nameFemale;
         }
@@ -1557,8 +1557,8 @@ function getWavePartyTemplate(...templates: TrainerPartyTemplate[]) {
     Math.min(
       Math.max(
         Math.ceil(
-          (globalScene.gameMode.getWaveForDifficulty(globalScene.currentBattle?.waveIndex || startingWave, true) - 20) /
-            30,
+          (globalScene.gameMode.getWaveForDifficulty(globalScene.currentBattle?.waveIndex || startingWave, true) - 20)
+            / 30,
         ),
         0,
       ),
@@ -4016,9 +4016,9 @@ export const trainerConfigs: TrainerConfigs = {
       2,
       getSpeciesFilterRandomPartyMemberFunc(
         (species: PokemonSpecies) =>
-          !pokemonEvolutions.hasOwnProperty(species.speciesId) &&
-          !pokemonPrevolutions.hasOwnProperty(species.speciesId) &&
-          species.baseTotal >= 450,
+          !pokemonEvolutions.hasOwnProperty(species.speciesId)
+          && !pokemonPrevolutions.hasOwnProperty(species.speciesId)
+          && species.baseTotal >= 450,
       ),
     ),
   [TrainerType.RIVAL_3]: new TrainerConfig(++t)
@@ -4091,9 +4091,9 @@ export const trainerConfigs: TrainerConfigs = {
       2,
       getSpeciesFilterRandomPartyMemberFunc(
         (species: PokemonSpecies) =>
-          !pokemonEvolutions.hasOwnProperty(species.speciesId) &&
-          !pokemonPrevolutions.hasOwnProperty(species.speciesId) &&
-          species.baseTotal >= 450,
+          !pokemonEvolutions.hasOwnProperty(species.speciesId)
+          && !pokemonPrevolutions.hasOwnProperty(species.speciesId)
+          && species.baseTotal >= 450,
       ),
     )
     .setSpeciesFilter((species) => species.baseTotal >= 540),
@@ -4168,9 +4168,9 @@ export const trainerConfigs: TrainerConfigs = {
       2,
       getSpeciesFilterRandomPartyMemberFunc(
         (species: PokemonSpecies) =>
-          !pokemonEvolutions.hasOwnProperty(species.speciesId) &&
-          !pokemonPrevolutions.hasOwnProperty(species.speciesId) &&
-          species.baseTotal >= 450,
+          !pokemonEvolutions.hasOwnProperty(species.speciesId)
+          && !pokemonPrevolutions.hasOwnProperty(species.speciesId)
+          && species.baseTotal >= 450,
       ),
     )
     .setSpeciesFilter((species) => species.baseTotal >= 540)
@@ -4258,9 +4258,9 @@ export const trainerConfigs: TrainerConfigs = {
       2,
       getSpeciesFilterRandomPartyMemberFunc(
         (species: PokemonSpecies) =>
-          !pokemonEvolutions.hasOwnProperty(species.speciesId) &&
-          !pokemonPrevolutions.hasOwnProperty(species.speciesId) &&
-          species.baseTotal >= 450,
+          !pokemonEvolutions.hasOwnProperty(species.speciesId)
+          && !pokemonPrevolutions.hasOwnProperty(species.speciesId)
+          && species.baseTotal >= 450,
       ),
     )
     .setSpeciesFilter((species) => species.baseTotal >= 540)
@@ -4362,9 +4362,9 @@ export const trainerConfigs: TrainerConfigs = {
       2,
       getSpeciesFilterRandomPartyMemberFunc(
         (species: PokemonSpecies) =>
-          !pokemonEvolutions.hasOwnProperty(species.speciesId) &&
-          !pokemonPrevolutions.hasOwnProperty(species.speciesId) &&
-          species.baseTotal >= 450,
+          !pokemonEvolutions.hasOwnProperty(species.speciesId)
+          && !pokemonPrevolutions.hasOwnProperty(species.speciesId)
+          && species.baseTotal >= 450,
       ),
     )
     .setSpeciesFilter((species) => species.baseTotal >= 540)

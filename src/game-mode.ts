@@ -1,7 +1,7 @@
 import i18next from "i18next";
 import type { FixedBattleConfigs } from "./battle";
 import { classicFixedBattles, FixedBattleConfig } from "./battle";
-import type { Challenge} from "./data/challenge";
+import type { Challenge } from "./data/challenge";
 import { allChallenges, applyChallenges, ChallengeType, copyChallenge } from "./data/challenge";
 import type PokemonSpecies from "./data/pokemon-species";
 import { allSpecies } from "./data/pokemon-species";
@@ -193,8 +193,8 @@ export class GameMode implements GameModeConfig {
         return waveIndex > 10 && waveIndex < 50 && !(waveIndex % 10);
       default:
         return (
-          waveIndex % 30 === (offsetGym ? 0 : 20) &&
-          (biomeType !== Biome.END || this.isClassic || this.isWaveFinal(waveIndex))
+          waveIndex % 30 === (offsetGym ? 0 : 20)
+          && (biomeType !== Biome.END || this.isClassic || this.isWaveFinal(waveIndex))
         );
     }
   }
@@ -203,10 +203,10 @@ export class GameMode implements GameModeConfig {
     if (this.isDaily && this.isWaveFinal(waveIndex)) {
       const allFinalBossSpecies = allSpecies.filter(
         (s) =>
-          (s.subLegendary || s.legendary || s.mythical) &&
-          s.baseTotal >= 600 &&
-          s.speciesId !== Species.ETERNATUS &&
-          s.speciesId !== Species.ARCEUS,
+          (s.subLegendary || s.legendary || s.mythical)
+          && s.baseTotal >= 600
+          && s.speciesId !== Species.ETERNATUS
+          && s.speciesId !== Species.ARCEUS,
       );
       return randSeedItem(allFinalBossSpecies);
     }
@@ -283,8 +283,8 @@ export class GameMode implements GameModeConfig {
   isFixedBattle(waveIndex: integer): boolean {
     const dummyConfig = new FixedBattleConfig();
     return (
-      this.battleConfig.hasOwnProperty(waveIndex) ||
-      applyChallenges(this, ChallengeType.FIXED_BATTLES, waveIndex, dummyConfig)
+      this.battleConfig.hasOwnProperty(waveIndex)
+      || applyChallenges(this, ChallengeType.FIXED_BATTLES, waveIndex, dummyConfig)
     );
   }
 

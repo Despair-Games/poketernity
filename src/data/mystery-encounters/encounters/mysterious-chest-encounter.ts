@@ -3,8 +3,7 @@ import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounte
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { queueEncounterMessage, showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
-import type {
-  EnemyPartyConfig} from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import type { EnemyPartyConfig } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import {
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,
@@ -166,8 +165,12 @@ export const MysteriousChestEncounter: MysteryEncounter = MysteryEncounterBuilde
           queueEncounterMessage(`${namespace}:option.1.great`);
           leaveEncounterWithoutBattle();
         } else if (
-          roll >=
-          RAND_LENGTH - COMMON_REWARDS_PERCENT - ULTRA_REWARDS_PERCENT - ROGUE_REWARDS_PERCENT - MASTER_REWARDS_PERCENT
+          roll
+          >= RAND_LENGTH
+            - COMMON_REWARDS_PERCENT
+            - ULTRA_REWARDS_PERCENT
+            - ROGUE_REWARDS_PERCENT
+            - MASTER_REWARDS_PERCENT
         ) {
           // Choose 1 MASTER tier item (5%)
           setEncounterRewards({ guaranteedModifierTiers: [ModifierTier.MASTER] });

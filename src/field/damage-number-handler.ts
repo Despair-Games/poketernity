@@ -1,5 +1,5 @@
 import { TextStyle, addTextObject } from "../ui/text";
-import type { DamageResult} from "./pokemon";
+import type { DamageResult } from "./pokemon";
 import type Pokemon from "./pokemon";
 import { HitResult } from "./pokemon";
 import { formatStat, fixedInt } from "#app/utils";

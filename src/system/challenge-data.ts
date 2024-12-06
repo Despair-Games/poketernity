@@ -1,4 +1,4 @@
-import type { Challenge} from "#app/data/challenge";
+import type { Challenge } from "#app/data/challenge";
 import { copyChallenge } from "#app/data/challenge";
 
 export default class ChallengeData {

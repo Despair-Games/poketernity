@@ -1,4 +1,4 @@
-import type { DropDown} from "./dropdown";
+import type { DropDown } from "./dropdown";
 import { DropDownType } from "./dropdown";
 import type { StarterContainer } from "./starter-container";
 import { addTextObject, getTextColor, TextStyle } from "./text";

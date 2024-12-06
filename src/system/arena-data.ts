@@ -1,5 +1,5 @@
 import { Arena } from "../field/arena";
-import type { ArenaTag} from "../data/arena-tag";
+import type { ArenaTag } from "../data/arena-tag";
 import { loadArenaTag } from "../data/arena-tag";
 import type { Biome } from "#enums/biome";
 import { Weather } from "../data/weather";

@@ -12,23 +12,21 @@ import { randSeedInt, randSeedGauss, randSeedItem } from "#app/utils";
 import { uncatchableSpecies } from "#app/data/balance/biomes";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { GrowthRate } from "#app/data/exp";
-import type {
-  EvolutionLevel} from "#app/data/balance/pokemon-evolutions";
+import type { EvolutionLevel } from "#app/data/balance/pokemon-evolutions";
 import {
   SpeciesWildEvolutionDelay,
   pokemonEvolutions,
   pokemonPrevolutions,
 } from "#app/data/balance/pokemon-evolutions";
 import { Type } from "#enums/type";
-import type {
-  LevelMoves} from "#app/data/balance/pokemon-level-moves";
+import type { LevelMoves } from "#app/data/balance/pokemon-level-moves";
 import {
   pokemonFormLevelMoves,
   pokemonFormLevelMoves as pokemonSpeciesFormLevelMoves,
   pokemonSpeciesLevelMoves,
 } from "#app/data/balance/pokemon-level-moves";
 import type { Stat } from "#enums/stat";
-import type { Variant, VariantSet} from "#app/data/variant";
+import type { Variant, VariantSet } from "#app/data/variant";
 import { variantData } from "#app/data/variant";
 import { speciesStarterCosts, POKERUS_STARTER_COUNT } from "#app/data/balance/starters";
 import { SpeciesFormKey } from "#enums/species-form-key";
@@ -258,8 +256,8 @@ export abstract class PokemonSpeciesForm {
 
   getLevelMoves(): LevelMoves {
     if (
-      pokemonSpeciesFormLevelMoves.hasOwnProperty(this.speciesId) &&
-      pokemonSpeciesFormLevelMoves[this.speciesId].hasOwnProperty(this.formIndex)
+      pokemonSpeciesFormLevelMoves.hasOwnProperty(this.speciesId)
+      && pokemonSpeciesFormLevelMoves[this.speciesId].hasOwnProperty(this.formIndex)
     ) {
       return pokemonSpeciesFormLevelMoves[this.speciesId][this.formIndex].slice(0);
     }
@@ -516,8 +514,8 @@ export abstract class PokemonSpeciesForm {
         }
       }
       if (
-        pokemonFormLevelMoves.hasOwnProperty(this.speciesId) &&
-        pokemonFormLevelMoves[this.speciesId].hasOwnProperty(this.formIndex)
+        pokemonFormLevelMoves.hasOwnProperty(this.speciesId)
+        && pokemonFormLevelMoves[this.speciesId].hasOwnProperty(this.formIndex)
       ) {
         if (!pokemonFormLevelMoves[this.speciesId][this.formIndex].find((lm) => lm[0] <= 5 && lm[1] === moveId)) {
           return false;
@@ -890,9 +888,9 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
           }
 
           evolutionChance = Math.min(
-            0.65 * easeInFunc(Math.min(Math.max(level - evolutionLevel, 0), preferredMinLevel) / preferredMinLevel) +
-              0.35 *
-                easeOutFunc(
+            0.65 * easeInFunc(Math.min(Math.max(level - evolutionLevel, 0), preferredMinLevel) / preferredMinLevel)
+              + 0.35
+                * easeOutFunc(
                   Math.min(Math.max(level - evolutionLevel, 0), preferredMinLevel * 2.5) / (preferredMinLevel * 2.5),
                 ),
             1,
@@ -971,9 +969,9 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
     for (const p of allEvolvingPokemon) {
       for (const e of pokemonEvolutions[p]) {
         if (
-          e.speciesId === this.speciesId &&
-          (!this.forms.length || !e.evoFormKey || e.evoFormKey === this.forms[this.formIndex].formKey) &&
-          prevolutionLevels.every((pe) => pe[0] !== parseInt(p))
+          e.speciesId === this.speciesId
+          && (!this.forms.length || !e.evoFormKey || e.evoFormKey === this.forms[this.formIndex].formKey)
+          && prevolutionLevels.every((pe) => pe[0] !== parseInt(p))
         ) {
           const speciesId = parseInt(p) as Species;
           const level = e.level;
@@ -1009,9 +1007,9 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
           prevolutionLevels[l][0],
           Math.min(
             Math.max(
-              evolution?.level! +
-                Math.round(randSeedGauss(0.5, 1 + levelDiff * 0.2) * Math.max(evolution?.wildDelay!, 0.5) * 5) -
-                1,
+              evolution?.level!
+                + Math.round(randSeedGauss(0.5, 1 + levelDiff * 0.2) * Math.max(evolution?.wildDelay!, 0.5) * 5)
+                - 1,
               2,
               evolution?.level!,
             ),
@@ -1027,8 +1025,8 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
         this.speciesId,
         Math.min(
           Math.max(
-            lastPrevolutionLevel +
-              Math.round(randSeedGauss(0.5, 1 + levelDiff * 0.2) * Math.max(evolution?.wildDelay!, 0.5) * 5),
+            lastPrevolutionLevel
+              + Math.round(randSeedGauss(0.5, 1 + levelDiff * 0.2) * Math.max(evolution?.wildDelay!, 0.5) * 5),
             lastPrevolutionLevel + 1,
             evolution?.level!,
           ),
@@ -1050,16 +1048,16 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
     const mythical = this.mythical;
     return (species) => {
       return (
-        (subLegendary ||
-          legendary ||
-          mythical ||
-          (pokemonEvolutions.hasOwnProperty(species.speciesId) === hasEvolution &&
-            pokemonPrevolutions.hasOwnProperty(species.speciesId) === hasPrevolution)) &&
-        species.subLegendary === subLegendary &&
-        species.legendary === legendary &&
-        species.mythical === mythical &&
-        (this.isTrainerForbidden() || !species.isTrainerForbidden()) &&
-        species.speciesId !== Species.DITTO
+        (subLegendary
+          || legendary
+          || mythical
+          || (pokemonEvolutions.hasOwnProperty(species.speciesId) === hasEvolution
+            && pokemonPrevolutions.hasOwnProperty(species.speciesId) === hasPrevolution))
+        && species.subLegendary === subLegendary
+        && species.legendary === legendary
+        && species.mythical === mythical
+        && (this.isTrainerForbidden() || !species.isTrainerForbidden())
+        && species.speciesId !== Species.DITTO
       );
     };
   }

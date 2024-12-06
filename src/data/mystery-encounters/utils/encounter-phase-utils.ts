@@ -7,12 +7,10 @@ import {
   WEIGHT_INCREMENT_ON_SPAWN_MISS,
 } from "#app/data/mystery-encounters/mystery-encounters";
 import { showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
-import type { AiType, PlayerPokemon} from "#app/field/pokemon";
+import type { AiType, PlayerPokemon } from "#app/field/pokemon";
 import type Pokemon from "#app/field/pokemon";
 import { FieldPosition, PokemonMove, PokemonSummonData } from "#app/field/pokemon";
-import type {
-  CustomModifierSettings,
-  ModifierType} from "#app/modifier/modifier-type";
+import type { CustomModifierSettings, ModifierType } from "#app/modifier/modifier-type";
 import {
   ModifierPoolType,
   ModifierTypeGenerator,
@@ -43,7 +41,7 @@ import type { Moves } from "#enums/moves";
 import { initMoveAnim, loadMoveAnimAssets } from "#app/data/battle-anims";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { Status } from "#app/data/status-effect";
-import type { TrainerConfig} from "#app/data/trainer-config";
+import type { TrainerConfig } from "#app/data/trainer-config";
 import { trainerConfigs, TrainerSlot } from "#app/data/trainer-config";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import type { IEggOptions } from "#app/data/egg";
@@ -946,10 +944,10 @@ export function transitionMysteryEncounterIntroVisuals(
 export function handleMysteryEncounterBattleStartEffects() {
   const encounter = globalScene.currentBattle.mysteryEncounter;
   if (
-    globalScene.currentBattle.isBattleMysteryEncounter() &&
-    encounter &&
-    encounter.encounterMode !== MysteryEncounterMode.NO_BATTLE &&
-    !encounter.startOfBattleEffectsComplete
+    globalScene.currentBattle.isBattleMysteryEncounter()
+    && encounter
+    && encounter.encounterMode !== MysteryEncounterMode.NO_BATTLE
+    && !encounter.startOfBattleEffectsComplete
   ) {
     const effects = encounter.startOfBattleEffects;
     effects.forEach((effect) => {

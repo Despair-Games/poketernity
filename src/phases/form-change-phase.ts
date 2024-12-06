@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { fixedInt } from "#app/utils";
 import { achvs } from "../system/achv";
-import type { SpeciesFormChange} from "../data/pokemon-forms";
+import type { SpeciesFormChange } from "../data/pokemon-forms";
 import { getSpeciesFormChangeMessage } from "../data/pokemon-forms";
 import type { PlayerPokemon } from "../field/pokemon";
 import { Mode } from "../ui/ui";
@@ -132,8 +132,8 @@ export class FormChangePhase extends EvolutionPhase {
                                             globalScene.validateAchv(achvs.MEGA_EVOLVE);
                                             playEvolutionFanfare = true;
                                           } else if (
-                                            this.formChange.formKey.indexOf(SpeciesFormKey.GIGANTAMAX) > -1 ||
-                                            this.formChange.formKey.indexOf(SpeciesFormKey.ETERNAMAX) > -1
+                                            this.formChange.formKey.indexOf(SpeciesFormKey.GIGANTAMAX) > -1
+                                            || this.formChange.formKey.indexOf(SpeciesFormKey.ETERNAMAX) > -1
                                           ) {
                                             globalScene.validateAchv(achvs.GIGANTAMAX);
                                             playEvolutionFanfare = true;

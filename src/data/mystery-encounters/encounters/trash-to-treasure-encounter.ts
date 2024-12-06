@@ -1,6 +1,4 @@
-import type {
-  EnemyPartyConfig,
-  EnemyPokemonConfig} from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import type { EnemyPartyConfig, EnemyPokemonConfig } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import {
   generateModifierType,
   initBattleWithEnemyConfig,

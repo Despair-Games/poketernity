@@ -358,9 +358,9 @@ export default class SpritePipeline extends FieldSpritePipeline {
     const ignoreOverride = data["ignoreOverride"] as boolean;
 
     const isEntityObj =
-      sprite.parentContainer instanceof Pokemon ||
-      sprite.parentContainer instanceof Trainer ||
-      sprite.parentContainer instanceof MysteryEncounterIntroVisuals;
+      sprite.parentContainer instanceof Pokemon
+      || sprite.parentContainer instanceof Trainer
+      || sprite.parentContainer instanceof MysteryEncounterIntroVisuals;
     const field = isEntityObj ? sprite.parentContainer.parentContainer : sprite.parentContainer;
     const position = isEntityObj ? [sprite.parentContainer.x, sprite.parentContainer.y] : [sprite.x, sprite.y];
     if (field) {
@@ -371,8 +371,8 @@ export default class SpritePipeline extends FieldSpritePipeline {
       -(sprite.width - sprite.frame.width) / 2 + sprite.frame.x + (!ignoreFieldPos ? sprite.x - field.x : 0);
     if (sprite.originY === 0.5) {
       position[1] +=
-        (sprite.height / 2) * ((isEntityObj ? sprite.parentContainer : sprite).scale - 1) +
-        (!ignoreFieldPos ? sprite.y - field.y : 0);
+        (sprite.height / 2) * ((isEntityObj ? sprite.parentContainer : sprite).scale - 1)
+        + (!ignoreFieldPos ? sprite.y - field.y : 0);
     }
     this.set1f("teraTime", (this.game.getTime() % 500000) / 500000);
     this.set3fv(
@@ -396,9 +396,9 @@ export default class SpritePipeline extends FieldSpritePipeline {
 
     if ((gameObject.scene as BattleScene).fusionPaletteSwaps) {
       const spriteColors = ((ignoreOverride && data["spriteColorsBase"]) || data["spriteColors"] || []) as number[][];
-      const fusionSpriteColors = ((ignoreOverride && data["fusionSpriteColorsBase"]) ||
-        data["fusionSpriteColors"] ||
-        []) as number[][];
+      const fusionSpriteColors = ((ignoreOverride && data["fusionSpriteColorsBase"])
+        || data["fusionSpriteColors"]
+        || []) as number[][];
 
       const emptyColors = [0, 0, 0, 0];
       const flatSpriteColors: integer[] = [];
@@ -438,14 +438,14 @@ export default class SpritePipeline extends FieldSpritePipeline {
       const flatVariantColors: number[] = [];
 
       if (
-        (sprite.parentContainer instanceof Pokemon ? sprite.parentContainer.shiny : !!data["shiny"]) &&
-        (variantColors =
+        (sprite.parentContainer instanceof Pokemon ? sprite.parentContainer.shiny : !!data["shiny"])
+        && (variantColors =
           variantColorCache[
             sprite.parentContainer instanceof Pokemon
               ? sprite.parentContainer.getSprite().texture.key
               : data["spriteKey"]
-          ]) &&
-        variantColors.hasOwnProperty(variant)
+          ])
+        && variantColors.hasOwnProperty(variant)
       ) {
         const baseColors = Object.keys(variantColors[variant]);
         for (let c = 0; c < 32; c++) {
@@ -503,9 +503,9 @@ export default class SpritePipeline extends FieldSpritePipeline {
     const yShadowOffset = (sprite.pipelineData["yShadowOffset"] as number) ?? 0;
     if (hasShadow) {
       const isEntityObj =
-        sprite.parentContainer instanceof Pokemon ||
-        sprite.parentContainer instanceof Trainer ||
-        sprite.parentContainer instanceof MysteryEncounterIntroVisuals;
+        sprite.parentContainer instanceof Pokemon
+        || sprite.parentContainer instanceof Trainer
+        || sprite.parentContainer instanceof MysteryEncounterIntroVisuals;
       const field = isEntityObj ? sprite.parentContainer.parentContainer : sprite.parentContainer;
       const fieldScaleRatio = field.scale / 6;
       const baseY = ((isEntityObj ? sprite.parentContainer.y : sprite.y + sprite.height) * 6) / fieldScaleRatio;

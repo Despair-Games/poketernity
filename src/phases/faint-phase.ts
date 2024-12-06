@@ -1,4 +1,4 @@
-import type { BattlerIndex} from "#app/battle";
+import type { BattlerIndex } from "#app/battle";
 import { BattleType } from "#app/battle";
 import { globalScene } from "#app/global-scene";
 import {
@@ -16,7 +16,7 @@ import { allMoves, PostVictoryStatStageChangeAttr } from "#app/data/move";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";
 import { BattleSpec } from "#app/enums/battle-spec";
 import { StatusEffect } from "#app/enums/status-effect";
-import type { EnemyPokemon} from "#app/field/pokemon";
+import type { EnemyPokemon } from "#app/field/pokemon";
 import type Pokemon from "#app/field/pokemon";
 import { HitResult, PlayerPokemon, PokemonMove } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -168,9 +168,9 @@ export class FaintPhase extends PokemonPhase {
         /** If the player doesn't have any legal Pokemon, end the game */
         globalScene.unshiftPhase(new GameOverPhase());
       } else if (
-        globalScene.currentBattle.double &&
-        legalPlayerPokemon.length === 1 &&
-        legalPlayerPartyPokemon.length === 0
+        globalScene.currentBattle.double
+        && legalPlayerPokemon.length === 1
+        && legalPlayerPartyPokemon.length === 0
       ) {
         /**
          * If the player has exactly one Pokemon in total at this point in a double battle, and that Pokemon

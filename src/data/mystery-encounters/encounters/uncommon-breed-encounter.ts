@@ -1,6 +1,5 @@
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
-import type {
-  EnemyPartyConfig} from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import type { EnemyPartyConfig } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import {
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,

@@ -6,7 +6,7 @@ import { addWindow } from "./ui-theme";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 import { Button } from "#enums/buttons";
 import i18next from "i18next";
-import type { Stat} from "#app/enums/stat";
+import type { Stat } from "#app/enums/stat";
 import { PERMANENT_STATS, getStatKey } from "#app/enums/stat";
 
 export default class BattleMessageUiHandler extends MessageUiHandler {

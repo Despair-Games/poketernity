@@ -10762,9 +10762,9 @@ export function initBiomes() {
       const linkedBiome = !Array.isArray(linkedBiomeEntry) ? (linkedBiomeEntry as Biome) : linkedBiomeEntry[0];
       const biomeChance = !Array.isArray(linkedBiomeEntry) ? 1 : linkedBiomeEntry[1];
       if (
-        !biomeDepths.hasOwnProperty(linkedBiome) ||
-        biomeChance < biomeDepths[linkedBiome][1] ||
-        (depth < biomeDepths[linkedBiome][0] && biomeChance === biomeDepths[linkedBiome][1])
+        !biomeDepths.hasOwnProperty(linkedBiome)
+        || biomeChance < biomeDepths[linkedBiome][1]
+        || (depth < biomeDepths[linkedBiome][0] && biomeChance === biomeDepths[linkedBiome][1])
       ) {
         biomeDepths[linkedBiome] = [depth + 1, biomeChance];
         traverseBiome(linkedBiome, depth + 1);
@@ -10803,8 +10803,8 @@ export function initBiomes() {
       : [];
 
     if (
-      !biomeEntries.filter((b) => b[0] !== Biome.END).length &&
-      !speciesEvolutions.filter(
+      !biomeEntries.filter((b) => b[0] !== Biome.END).length
+      && !speciesEvolutions.filter(
         (es) =>
           !!(pokemonBiomes.find((p) => p[0] === es.speciesId)![3] as any[]).filter((b) => b[0] !== Biome.END).length,
       ).length
@@ -10820,9 +10820,9 @@ export function initBiomes() {
 
       for (const tod of timesOfDay) {
         if (
-          !biomePokemonPools.hasOwnProperty(biome) ||
-          !biomePokemonPools[biome].hasOwnProperty(tier) ||
-          !biomePokemonPools[biome][tier].hasOwnProperty(tod)
+          !biomePokemonPools.hasOwnProperty(biome)
+          || !biomePokemonPools[biome].hasOwnProperty(tier)
+          || !biomePokemonPools[biome][tier].hasOwnProperty(tod)
         ) {
           continue;
         }
@@ -10837,8 +10837,8 @@ export function initBiomes() {
           for (let es = 0; es < existingSpeciesIds.length; es++) {
             const existingSpeciesId = existingSpeciesIds[es];
             if (
-              pokemonEvolutions.hasOwnProperty(existingSpeciesId) &&
-              (pokemonEvolutions[existingSpeciesId] as SpeciesFormEvolution[]).find(
+              pokemonEvolutions.hasOwnProperty(existingSpeciesId)
+              && (pokemonEvolutions[existingSpeciesId] as SpeciesFormEvolution[]).find(
                 (ese) => ese.speciesId === speciesId,
               )
             ) {
@@ -10885,10 +10885,10 @@ export function initBiomes() {
                 .flat()
                 .find((e) => e && e.speciesId === speciesId);
               const level =
-                prevolution.level -
-                (prevolution.level === 1 ? 1 : 0) +
-                prevolution.wildDelay * 10 -
-                (tier >= BiomePoolTier.BOSS ? 10 : 0);
+                prevolution.level
+                - (prevolution.level === 1 ? 1 : 0)
+                + prevolution.wildDelay * 10
+                - (tier >= BiomePoolTier.BOSS ? 10 : 0);
               if (!newEntry.hasOwnProperty(level)) {
                 newEntry[level] = [speciesId];
               } else {

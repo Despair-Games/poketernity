@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import type { Egg} from "#app/data/egg";
+import type { Egg } from "#app/data/egg";
 import { EGG_SEED } from "#app/data/egg";
 import { Phase } from "#app/phase";
 import i18next from "i18next";

@@ -5,9 +5,7 @@ import { globalScene } from "#app/global-scene";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
-import type {
-  EnemyPartyConfig,
-  EnemyPokemonConfig} from "../utils/encounter-phase-utils";
+import type { EnemyPartyConfig, EnemyPokemonConfig } from "../utils/encounter-phase-utils";
 import {
   generateModifierType,
   initBattleWithEnemyConfig,
@@ -16,18 +14,14 @@ import {
 } from "../utils/encounter-phase-utils";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import type { PlayerPokemon} from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/pokemon";
 import type Pokemon from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon";
 import { NumberHolder, isNullOrUndefined, randSeedInt, randSeedShuffle } from "#app/utils";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { allSpecies, getPokemonSpecies } from "#app/data/pokemon-species";
-import type {
-  PokemonHeldItemModifier} from "#app/modifier/modifier";
-import {
-  HiddenAbilityRateBoosterModifier,
-  PokemonFormChangeItemModifier
-} from "#app/modifier/modifier";
+import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
+import { HiddenAbilityRateBoosterModifier, PokemonFormChangeItemModifier } from "#app/modifier/modifier";
 import { achvs } from "#app/system/achv";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import { showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
@@ -537,12 +531,12 @@ async function postProcessTransformedPokemon(
 
   // For pokemon at/below 570 BST or any shiny pokemon, unlock it permanently as if you had caught it
   if (
-    !forBattle &&
-    (newPokemon.getSpeciesForm().getBaseStatTotal() <= NON_LEGENDARY_BST_THRESHOLD || newPokemon.isShiny())
+    !forBattle
+    && (newPokemon.getSpeciesForm().getBaseStatTotal() <= NON_LEGENDARY_BST_THRESHOLD || newPokemon.isShiny())
   ) {
     if (
-      newPokemon.getSpeciesForm().abilityHidden &&
-      newPokemon.abilityIndex === newPokemon.getSpeciesForm().getAbilityCount() - 1
+      newPokemon.getSpeciesForm().abilityHidden
+      && newPokemon.abilityIndex === newPokemon.getSpeciesForm().getAbilityCount() - 1
     ) {
       globalScene.validateAchv(achvs.HIDDEN_ABILITY);
     }
@@ -657,10 +651,10 @@ function getTransformedSpecies(
       const bstInRange = speciesBst >= bstMin && speciesBst <= bstCap;
       // Checks that a Pokemon has not already been added in the +600 or 570-600 slots;
       const validBst =
-        (!hasPokemonBstBetween570And600 ||
-          speciesBst < NON_LEGENDARY_BST_THRESHOLD ||
-          speciesBst > SUPER_LEGENDARY_BST_THRESHOLD) &&
-        (!hasPokemonBstHigherThan600 || speciesBst <= SUPER_LEGENDARY_BST_THRESHOLD);
+        (!hasPokemonBstBetween570And600
+          || speciesBst < NON_LEGENDARY_BST_THRESHOLD
+          || speciesBst > SUPER_LEGENDARY_BST_THRESHOLD)
+        && (!hasPokemonBstHigherThan600 || speciesBst <= SUPER_LEGENDARY_BST_THRESHOLD);
       return bstInRange && validBst && !EXCLUDED_TRANSFORMATION_SPECIES.includes(s.speciesId);
     });
 
@@ -806,9 +800,9 @@ async function addEggMoveToNewPokemonMoveset(
 
       // For pokemon that the player owns (including ones just caught), unlock the egg move
       if (
-        !forBattle &&
-        !isNullOrUndefined(randomEggMoveIndex) &&
-        !!globalScene.gameData.dexData[speciesRootForm].caughtAttr
+        !forBattle
+        && !isNullOrUndefined(randomEggMoveIndex)
+        && !!globalScene.gameData.dexData[speciesRootForm].caughtAttr
       ) {
         await globalScene.gameData.setEggMoveUnlocked(getPokemonSpecies(speciesRootForm), randomEggMoveIndex, true);
       }

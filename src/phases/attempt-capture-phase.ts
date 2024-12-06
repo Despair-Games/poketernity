@@ -16,7 +16,7 @@ import { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { PokemonPhase } from "#app/phases/pokemon-phase";
 import { VictoryPhase } from "#app/phases/victory-phase";
 import { achvs } from "#app/system/achv";
-import type { PartyOption} from "#app/ui/party-ui-handler";
+import type { PartyOption } from "#app/ui/party-ui-handler";
 import { PartyUiMode } from "#app/ui/party-ui-handler";
 import { SummaryUiMode } from "#app/ui/summary-ui-handler";
 import { Mode } from "#app/ui/ui";
@@ -131,10 +131,10 @@ export class AttemptCapturePhase extends PokemonPhase {
                   } else if (shakeCount++ < (isCritical ? 1 : 3)) {
                     // Shake check (skip check for critical or guaranteed captures, but still play the sound)
                     if (
-                      pokeballMultiplier === -1 ||
-                      isCritical ||
-                      modifiedCatchRate >= 255 ||
-                      pokemon.randSeedInt(65536) < shakeProbability
+                      pokeballMultiplier === -1
+                      || isCritical
+                      || modifiedCatchRate >= 255
+                      || pokemon.randSeedInt(65536) < shakeProbability
                     ) {
                       globalScene.playSound("se/pb_move");
                     } else {
@@ -226,8 +226,9 @@ export class AttemptCapturePhase extends PokemonPhase {
     const speciesForm = !pokemon.fusionSpecies ? pokemon.getSpeciesForm() : pokemon.getFusionSpeciesForm();
 
     if (
-      speciesForm.abilityHidden &&
-      (pokemon.fusionSpecies ? pokemon.fusionAbilityIndex : pokemon.abilityIndex) === speciesForm.getAbilityCount() - 1
+      speciesForm.abilityHidden
+      && (pokemon.fusionSpecies ? pokemon.fusionAbilityIndex : pokemon.abilityIndex)
+        === speciesForm.getAbilityCount() - 1
     ) {
       globalScene.validateAchv(achvs.HIDDEN_ABILITY);
     }

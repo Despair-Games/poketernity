@@ -4,12 +4,8 @@ import { globalScene } from "#app/global-scene";
 import { PlayerPokemon } from "#app/field/pokemon";
 import type { Starter } from "#app/ui/starter-select-ui-handler";
 import { randSeedGauss, randSeedInt, randSeedItem } from "#app/utils";
-import type {
-  PokemonSpeciesForm} from "#app/data/pokemon-species";
-import PokemonSpecies, {
-  getPokemonSpecies,
-  getPokemonSpeciesForm,
-} from "#app/data/pokemon-species";
+import type { PokemonSpeciesForm } from "#app/data/pokemon-species";
+import PokemonSpecies, { getPokemonSpecies, getPokemonSpeciesForm } from "#app/data/pokemon-species";
 import { speciesStarterCosts } from "#app/data/balance/starters";
 import { pokerogueApi } from "#app/plugins/api/pokerogue-api";
 

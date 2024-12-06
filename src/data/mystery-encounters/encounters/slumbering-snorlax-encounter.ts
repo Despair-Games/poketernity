@@ -9,9 +9,7 @@ import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounte
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { MoveRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
-import type {
-  EnemyPartyConfig,
-  EnemyPokemonConfig} from "../utils/encounter-phase-utils";
+import type { EnemyPartyConfig, EnemyPokemonConfig } from "../utils/encounter-phase-utils";
 import {
   generateModifierType,
   initBattleWithEnemyConfig,

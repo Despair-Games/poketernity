@@ -27,7 +27,7 @@ import { StatusEffect } from "#enums/status-effect";
 import { getBiomeName } from "#app/data/balance/biomes";
 import { getNatureName, getNatureStatMultiplier } from "#app/data/nature";
 import { loggedInUser } from "#app/account";
-import type { Variant} from "#app/data/variant";
+import type { Variant } from "#app/data/variant";
 import { getVariantTint } from "#app/data/variant";
 import { Button } from "#enums/buttons";
 import type { Ability } from "#app/data/ability";
@@ -376,8 +376,8 @@ export default class SummaryUiHandler extends UiHandler {
     }
 
     if (
-      globalScene.gameData.starterData[this.pokemon.species.getRootSpeciesId()].classicWinCount > 0 &&
-      globalScene.gameData.starterData[this.pokemon.species.getRootSpeciesId(true)].classicWinCount > 0
+      globalScene.gameData.starterData[this.pokemon.species.getRootSpeciesId()].classicWinCount > 0
+      && globalScene.gameData.starterData[this.pokemon.species.getRootSpeciesId(true)].classicWinCount > 0
     ) {
       this.championRibbon.setVisible(true);
     } else {

@@ -1,5 +1,4 @@
-import type {
-  EnemyPartyConfig} from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import type { EnemyPartyConfig } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import {
   generateModifierType,
   generateModifierTypeOption,
@@ -26,7 +25,7 @@ import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-en
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { TrainerType } from "#enums/trainer-type";
 import { Species } from "#enums/species";
-import type { PlayerPokemon} from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/pokemon";
 import type Pokemon from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon";
 import { getEncounterText, showEncounterDialogue } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
@@ -42,16 +41,15 @@ import {
   TypeRequirement,
 } from "#app/data/mystery-encounters/mystery-encounter-requirements";
 import { Type } from "#enums/type";
-import type { AttackTypeBoosterModifierType, ModifierTypeOption} from "#app/modifier/modifier-type";
+import type { AttackTypeBoosterModifierType, ModifierTypeOption } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-type";
-import type {
-  PokemonHeldItemModifier} from "#app/modifier/modifier";
+import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import {
   AttackTypeBoosterModifier,
   BypassSpeedChanceModifier,
   ContactHeldItemTransferChanceModifier,
   GigantamaxAccessModifier,
-  MegaEvolutionAccessModifier
+  MegaEvolutionAccessModifier,
 } from "#app/modifier/modifier";
 import i18next from "i18next";
 import MoveInfoOverlay from "#app/ui/move-info-overlay";
@@ -438,11 +436,11 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
           // Get Pokemon held items and filter for valid ones
           const validItems = pokemon.getHeldItems().filter((item) => {
             return (
-              (item instanceof BypassSpeedChanceModifier ||
-                item instanceof ContactHeldItemTransferChanceModifier ||
-                (item instanceof AttackTypeBoosterModifier &&
-                  (item.type as AttackTypeBoosterModifierType).moveType === Type.BUG)) &&
-              item.isTransferable
+              (item instanceof BypassSpeedChanceModifier
+                || item instanceof ContactHeldItemTransferChanceModifier
+                || (item instanceof AttackTypeBoosterModifier
+                  && (item.type as AttackTypeBoosterModifierType).moveType === Type.BUG))
+              && item.isTransferable
             );
           });
 
@@ -467,10 +465,10 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
           // If pokemon has valid item, it can be selected
           const hasValidItem = pokemon.getHeldItems().some((item) => {
             return (
-              item instanceof BypassSpeedChanceModifier ||
-              item instanceof ContactHeldItemTransferChanceModifier ||
-              (item instanceof AttackTypeBoosterModifier &&
-                (item.type as AttackTypeBoosterModifierType).moveType === Type.BUG)
+              item instanceof BypassSpeedChanceModifier
+              || item instanceof ContactHeldItemTransferChanceModifier
+              || (item instanceof AttackTypeBoosterModifier
+                && (item.type as AttackTypeBoosterModifierType).moveType === Type.BUG)
             );
           });
           if (!hasValidItem) {

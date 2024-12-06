@@ -1,7 +1,7 @@
 import type { CandyUpgradeNotificationChangedEvent } from "#app/events/battle-scene";
 import { BattleSceneEventType } from "#app/events/battle-scene";
 import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
-import type { Variant} from "#app/data/variant";
+import type { Variant } from "#app/data/variant";
 import { getVariantTint, getVariantIcon } from "#app/data/variant";
 import { argbFromRgba } from "@material/material-color-utilities";
 import i18next from "i18next";
@@ -15,7 +15,7 @@ import { Gender, getGenderColor, getGenderSymbol } from "#app/data/gender";
 import { allMoves } from "#app/data/move";
 import { getNatureName } from "#app/data/nature";
 import { pokemonFormChanges } from "#app/data/pokemon-forms";
-import type { LevelMoves} from "#app/data/balance/pokemon-level-moves";
+import type { LevelMoves } from "#app/data/balance/pokemon-level-moves";
 import { pokemonFormLevelMoves, pokemonSpeciesLevelMoves } from "#app/data/balance/pokemon-level-moves";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { allSpecies, getPokemonSpeciesForm, getPokerusStarters } from "#app/data/pokemon-species";
@@ -28,12 +28,9 @@ import type {
   DexEntry,
   StarterMoveset,
   StarterAttributes,
-  StarterPreferences} from "#app/system/game-data";
-import {
-  AbilityAttr,
-  DexAttr,
-  StarterPrefs,
+  StarterPreferences,
 } from "#app/system/game-data";
+import { AbilityAttr, DexAttr, StarterPrefs } from "#app/system/game-data";
 import { Tutorial, handleTutorial } from "#app/tutorial";
 import type { OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler";
 import MessageUiHandler from "#app/ui/message-ui-handler";
@@ -1202,9 +1199,9 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         hasShiny && caughtAttr & DexAttr.VARIANT_3,
       ];
       if (
-        isNaN(starterAttributes.variant) ||
-        starterAttributes.variant < 0 ||
-        !unlockedVariants[starterAttributes.variant]
+        isNaN(starterAttributes.variant)
+        || starterAttributes.variant < 0
+        || !unlockedVariants[starterAttributes.variant]
       ) {
         // variant value is invalid or requested variant wasn't unlocked, purging setting
         delete starterAttributes.variant;
@@ -1239,9 +1236,9 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
 
     const selectedForm = starterAttributes.form;
     if (
-      selectedForm !== undefined &&
-      (!species.forms[selectedForm]?.isStarterSelectable ||
-        !(caughtAttr & globalScene.gameData.getFormAttr(selectedForm)))
+      selectedForm !== undefined
+      && (!species.forms[selectedForm]?.isStarterSelectable
+        || !(caughtAttr & globalScene.gameData.getFormAttr(selectedForm)))
     ) {
       // requested form wasn't unlocked/isn't a starter form, purging setting
       delete starterAttributes.form;
@@ -1328,8 +1325,8 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     const starterData = globalScene.gameData.starterData[speciesId];
 
     return (
-      starterData.candyCount >= getPassiveCandyCount(speciesStarterCosts[speciesId]) &&
-      !(starterData.passiveAttr & PassiveAttr.UNLOCKED)
+      starterData.candyCount >= getPassiveCandyCount(speciesStarterCosts[speciesId])
+      && !(starterData.passiveAttr & PassiveAttr.UNLOCKED)
     );
   }
 
@@ -1343,9 +1340,8 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     const starterData = globalScene.gameData.starterData[speciesId];
 
     return (
-      starterData.candyCount >=
-        getValueReductionCandyCounts(speciesStarterCosts[speciesId])[starterData.valueReduction] &&
-      starterData.valueReduction < valueReductionMax
+      starterData.candyCount >= getValueReductionCandyCounts(speciesStarterCosts[speciesId])[starterData.valueReduction]
+      && starterData.valueReduction < valueReductionMax
     );
   }
 
@@ -1425,9 +1421,9 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     const slotVisible = !!species?.speciesId;
 
     if (
-      !species ||
-      globalScene.candyUpgradeNotification === 0 ||
-      species.speciesId !== species.getRootSpeciesId(false)
+      !species
+      || globalScene.candyUpgradeNotification === 0
+      || species.speciesId !== species.getRootSpeciesId(false)
     ) {
       starter.candyUpgradeIcon.setVisible(false);
       starter.candyUpgradeOverlayIcon.setVisible(false);
@@ -1724,10 +1720,10 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
             );
           const newCost = globalScene.gameData.getSpeciesStarterValue(this.lastSpecies.speciesId);
           if (
-            !isDupe &&
-            isValidForChallenge.value &&
-            currentPartyValue + newCost <= this.getValueLimit() &&
-            this.starterSpecies.length < PLAYER_PARTY_MAX_SIZE
+            !isDupe
+            && isValidForChallenge.value
+            && currentPartyValue + newCost <= this.getValueLimit()
+            && this.starterSpecies.length < PLAYER_PARTY_MAX_SIZE
           ) {
             // this checks to make sure the pokemon doesn't exist in your party, it's valid for the challenge and that it won't go over the cost limit; if it meets all these criteria it will add it to your party
             options = [
@@ -2255,8 +2251,8 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
               do {
                 newFormIndex = (newFormIndex + 1) % formCount;
                 if (
-                  this.lastSpecies.forms[newFormIndex].isStarterSelectable &&
-                  this.speciesStarterDexEntry!.caughtAttr! & globalScene.gameData.getFormAttr(newFormIndex)
+                  this.lastSpecies.forms[newFormIndex].isStarterSelectable
+                  && this.speciesStarterDexEntry!.caughtAttr! & globalScene.gameData.getFormAttr(newFormIndex)
                 ) {
                   // TODO: are those bangs correct?
                   break;
@@ -2533,8 +2529,8 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     if (pokemonFormLevelMoves.hasOwnProperty(speciesId)) {
       // starterMoveData doesn't have base form moves or is using the single form format
       if (
-        !globalScene.gameData.starterData[speciesId].moveset ||
-        Array.isArray(globalScene.gameData.starterData[speciesId].moveset)
+        !globalScene.gameData.starterData[speciesId].moveset
+        || Array.isArray(globalScene.gameData.starterData[speciesId].moveset)
       ) {
         globalScene.gameData.starterData[speciesId].moveset = {
           [props.formIndex]: this.starterMoveset?.slice(0) as StarterMoveset,
@@ -2905,8 +2901,8 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
 
       // HA Filter
       const speciesHasHiddenAbility =
-        container.species.abilityHidden !== container.species.ability1 &&
-        container.species.abilityHidden !== Abilities.NONE;
+        container.species.abilityHidden !== container.species.ability1
+        && container.species.abilityHidden !== Abilities.NONE;
       const hasHA = starterData.abilityAttr & AbilityAttr.ABILITY_HIDDEN;
       const fitsHA = this.filterBar.getVals(DropDownColumn.MISC).some((misc) => {
         if (misc.val === "HIDDEN_ABILITY" && misc.state === DropDownState.ON) {
@@ -2942,16 +2938,16 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       });
 
       if (
-        fitsGen &&
-        fitsType &&
-        fitsCaught &&
-        fitsPassive &&
-        fitsCostReduction &&
-        fitsFavorite &&
-        fitsWin &&
-        fitsHA &&
-        fitsEgg &&
-        fitsPokerus
+        fitsGen
+        && fitsType
+        && fitsCaught
+        && fitsPassive
+        && fitsCostReduction
+        && fitsFavorite
+        && fitsWin
+        && fitsHA
+        && fitsEgg
+        && fitsPokerus
       ) {
         this.filteredStarterContainers.push(container);
       }
@@ -2976,11 +2972,11 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
           return (candyCountA - candyCountB) * -sort.dir;
         case SortCriteria.IV:
           const avgIVsA =
-            globalScene.gameData.dexData[a.species.speciesId].ivs.reduce((a, b) => a + b, 0) /
-            globalScene.gameData.dexData[a.species.speciesId].ivs.length;
+            globalScene.gameData.dexData[a.species.speciesId].ivs.reduce((a, b) => a + b, 0)
+            / globalScene.gameData.dexData[a.species.speciesId].ivs.length;
           const avgIVsB =
-            globalScene.gameData.dexData[b.species.speciesId].ivs.reduce((a, b) => a + b, 0) /
-            globalScene.gameData.dexData[b.species.speciesId].ivs.length;
+            globalScene.gameData.dexData[b.species.speciesId].ivs.reduce((a, b) => a + b, 0)
+            / globalScene.gameData.dexData[b.species.speciesId].ivs.length;
           return (avgIVsA - avgIVsB) * -sort.dir;
         case SortCriteria.NAME:
           return a.species.name.localeCompare(b.species.name) * -sort.dir;
@@ -3058,8 +3054,8 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
 
         container.starterPassiveBgs.setVisible(!!globalScene.gameData.starterData[speciesId].passiveAttr);
         container.hiddenAbilityIcon.setVisible(
-          !!globalScene.gameData.dexData[speciesId].caughtAttr &&
-            !!(globalScene.gameData.starterData[speciesId].abilityAttr & 4),
+          !!globalScene.gameData.dexData[speciesId].caughtAttr
+            && !!(globalScene.gameData.starterData[speciesId].abilityAttr & 4),
         );
         container.classicWinIcon.setVisible(globalScene.gameData.starterData[speciesId].classicWinCount > 0);
         container.favoriteIcon.setVisible(this.starterPreferences[speciesId]?.favorite ?? false);
@@ -3433,10 +3429,10 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     // We will only update the sprite if there is a change to form, shiny/variant
     // or gender for species with gender sprite differences
     const shouldUpdateSprite =
-      (species?.genderDiffs && !isNullOrUndefined(female)) ||
-      !isNullOrUndefined(formIndex) ||
-      !isNullOrUndefined(shiny) ||
-      !isNullOrUndefined(variant);
+      (species?.genderDiffs && !isNullOrUndefined(female))
+      || !isNullOrUndefined(formIndex)
+      || !isNullOrUndefined(shiny)
+      || !isNullOrUndefined(variant);
 
     if (this.activeTooltip === "CANDY") {
       if (this.lastSpecies && this.pokemonCandyContainer.visible) {
@@ -3704,9 +3700,9 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
 
         let levelMoves: LevelMoves;
         if (
-          pokemonFormLevelMoves.hasOwnProperty(species.speciesId) &&
-          formIndex &&
-          pokemonFormLevelMoves[species.speciesId].hasOwnProperty(formIndex)
+          pokemonFormLevelMoves.hasOwnProperty(species.speciesId)
+          && formIndex
+          && pokemonFormLevelMoves[species.speciesId].hasOwnProperty(formIndex)
         ) {
           levelMoves = pokemonFormLevelMoves[species.speciesId][formIndex];
         } else {
@@ -4068,8 +4064,8 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
               const thisObj = this;
               const originalStarterSelectCallback = this.starterSelectCallback;
               this.starterSelectCallback = null;
-              originalStarterSelectCallback &&
-                originalStarterSelectCallback(
+              originalStarterSelectCallback
+                && originalStarterSelectCallback(
                   new Array(this.starterSpecies.length).fill(0).map(function (_, i) {
                     const starterSpecies = thisObj.starterSpecies[i];
                     return {
@@ -4077,8 +4073,8 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                       dexAttr: thisObj.starterAttr[i],
                       abilityIndex: thisObj.starterAbilityIndexes[i],
                       passive: !(
-                        globalScene.gameData.starterData[starterSpecies.speciesId].passiveAttr ^
-                        (PassiveAttr.ENABLED | PassiveAttr.UNLOCKED)
+                        globalScene.gameData.starterData[starterSpecies.speciesId].passiveAttr
+                        ^ (PassiveAttr.ENABLED | PassiveAttr.UNLOCKED)
                       ),
                       nature: thisObj.starterNatures[i] as Nature,
                       moveset: thisObj.starterMovesets[i],
@@ -4146,8 +4142,8 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
      *  If neither of these pass, we add DexAttr.MALE to our temp props
      */
     if (
-      this.starterPreferences[speciesId]?.female ||
-      ((caughtAttr & DexAttr.FEMALE) > 0n && (caughtAttr & DexAttr.MALE) === 0n)
+      this.starterPreferences[speciesId]?.female
+      || ((caughtAttr & DexAttr.FEMALE) > 0n && (caughtAttr & DexAttr.MALE) === 0n)
     ) {
       props += DexAttr.FEMALE;
     } else {
@@ -4157,8 +4153,8 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
      * If they're not there, it enables shiny state by default if any shiny was caught
      */
     if (
-      this.starterPreferences[speciesId]?.shiny ||
-      ((caughtAttr & DexAttr.SHINY) > 0n && this.starterPreferences[speciesId]?.shiny !== false)
+      this.starterPreferences[speciesId]?.shiny
+      || ((caughtAttr & DexAttr.SHINY) > 0n && this.starterPreferences[speciesId]?.shiny !== false)
     ) {
       props += DexAttr.SHINY;
       if (this.starterPreferences[speciesId]?.variant !== undefined) {

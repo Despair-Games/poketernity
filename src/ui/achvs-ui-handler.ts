@@ -1,8 +1,8 @@
 import { Button } from "#enums/buttons";
 import i18next from "i18next";
-import type { Achv} from "#app/system/achv";
+import type { Achv } from "#app/system/achv";
 import { achvs, getAchievementDescription } from "#app/system/achv";
-import type { Voucher} from "#app/system/voucher";
+import type { Voucher } from "#app/system/voucher";
 import { getVoucherTypeIcon, getVoucherTypeName, vouchers } from "#app/system/voucher";
 import MessageUiHandler from "#app/ui/message-ui-handler";
 import { addTextObject, TextStyle } from "#app/ui/text";

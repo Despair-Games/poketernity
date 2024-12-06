@@ -1,4 +1,4 @@
-import type { BooleanHolder, NumberHolder} from "#app/utils";
+import type { BooleanHolder, NumberHolder } from "#app/utils";
 import { randSeedItem } from "#app/utils";
 import i18next from "i18next";
 import type { DexAttrProps, GameData } from "#app/system/game-data";
@@ -462,8 +462,8 @@ export class SingleGenerationChallenge extends Challenge {
         : getPokemonSpecies(pokemon.fusionSpecies?.speciesId).generation
       : 0;
     if (
-      pokemon.isPlayer() &&
-      (baseGeneration !== this.value || (pokemon.isFusion() && fusionGeneration !== this.value))
+      pokemon.isPlayer()
+      && (baseGeneration !== this.value || (pokemon.isFusion() && fusionGeneration !== this.value))
     ) {
       valid.value = false;
       return true;
@@ -652,12 +652,12 @@ export class SingleTypeChallenge extends Challenge {
 
   applyPokemonInBattle(pokemon: Pokemon, valid: BooleanHolder): boolean {
     if (
-      pokemon.isPlayer() &&
-      !pokemon.isOfType(this.value - 1, false, false, true) &&
-      !SingleTypeChallenge.TYPE_OVERRIDES.some(
+      pokemon.isPlayer()
+      && !pokemon.isOfType(this.value - 1, false, false, true)
+      && !SingleTypeChallenge.TYPE_OVERRIDES.some(
         (o) =>
-          o.type === this.value - 1 &&
-          (pokemon.isFusion() && o.fusion ? pokemon.fusionSpecies! : pokemon.species).speciesId === o.species,
+          o.type === this.value - 1
+          && (pokemon.isFusion() && o.fusion ? pokemon.fusionSpecies! : pokemon.species).speciesId === o.species,
       )
     ) {
       // TODO: is the bang on fusionSpecies correct?

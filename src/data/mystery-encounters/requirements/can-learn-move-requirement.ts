@@ -1,5 +1,5 @@
 import type { Moves } from "#app/enums/moves";
-import type { PlayerPokemon} from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon";
 import { isNullOrUndefined } from "#app/utils";
 import { EncounterPokemonRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";

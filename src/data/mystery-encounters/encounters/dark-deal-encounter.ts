@@ -8,13 +8,8 @@ import { getPokemonSpecies } from "#app/data/pokemon-species";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
-import type {
-  EnemyPartyConfig,
-  EnemyPokemonConfig} from "../utils/encounter-phase-utils";
-import {
-  initBattleWithEnemyConfig,
-  leaveEncounterWithoutBattle,
-} from "../utils/encounter-phase-utils";
+import type { EnemyPartyConfig, EnemyPokemonConfig } from "../utils/encounter-phase-utils";
+import { initBattleWithEnemyConfig, leaveEncounterWithoutBattle } from "../utils/encounter-phase-utils";
 import {
   getRandomPlayerPokemon,
   getRandomSpeciesByStarterCost,

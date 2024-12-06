@@ -9,7 +9,7 @@ import {
   PostWeatherLapseAbAttr,
 } from "#app/data/ability";
 import { CommonAnim } from "#app/data/battle-anims";
-import type { Weather} from "#app/data/weather";
+import type { Weather } from "#app/data/weather";
 import { getWeatherDamageMessage, getWeatherLapseMessage } from "#app/data/weather";
 import { BattlerTagType } from "#app/enums/battler-tag-type";
 import { WeatherType } from "#app/enums/weather-type";
@@ -56,9 +56,9 @@ export class WeatherEffectPhase extends CommonAnimPhase {
           applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, cancelled);
 
           if (
-            cancelled.value ||
-            pokemon.getTag(BattlerTagType.UNDERGROUND) ||
-            pokemon.getTag(BattlerTagType.UNDERWATER)
+            cancelled.value
+            || pokemon.getTag(BattlerTagType.UNDERGROUND)
+            || pokemon.getTag(BattlerTagType.UNDERWATER)
           ) {
             return;
           }
@@ -71,9 +71,9 @@ export class WeatherEffectPhase extends CommonAnimPhase {
 
         this.executeForAll((pokemon: Pokemon) => {
           const immune =
-            !pokemon ||
-            !!pokemon.getTypes(true, true).filter((t) => this.weather?.isTypeDamageImmune(t)).length ||
-            pokemon.switchOutStatus;
+            !pokemon
+            || !!pokemon.getTypes(true, true).filter((t) => this.weather?.isTypeDamageImmune(t)).length
+            || pokemon.switchOutStatus;
           if (!immune) {
             inflictDamage(pokemon);
           }

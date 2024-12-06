@@ -2,7 +2,7 @@ import {
   leaveEncounterWithoutBattle,
   setEncounterRewards,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import type { ModifierTypeFunc} from "#app/modifier/modifier-type";
+import type { ModifierTypeFunc } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-type";
 import { randSeedInt } from "#app/utils";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";

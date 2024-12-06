@@ -1,5 +1,4 @@
-import type {
-  EnemyPartyConfig} from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import type { EnemyPartyConfig } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import {
   generateModifierType,
   generateModifierTypeOption,
@@ -207,9 +206,9 @@ function endTrainerBattleAndShowDialogue(): Promise<void> {
         // Only trigger form change when Eiscue is in Noice form
         // Hardcoded Eiscue for now in case it is fused with another pokemon
         if (
-          pokemon.species.speciesId === Species.EISCUE &&
-          pokemon.hasAbility(Abilities.ICE_FACE) &&
-          pokemon.formIndex === 1
+          pokemon.species.speciesId === Species.EISCUE
+          && pokemon.hasAbility(Abilities.ICE_FACE)
+          && pokemon.formIndex === 1
         ) {
           globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger);
         }

@@ -7,8 +7,7 @@ import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/myst
 import { MoveRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
 import { DANCING_MOVES } from "#app/data/mystery-encounters/requirements/requirement-groups";
 import { getEncounterText, queueEncounterMessage } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
-import type {
-  EnemyPartyConfig} from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import type { EnemyPartyConfig } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import {
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,
@@ -22,7 +21,7 @@ import {
 } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
 import { TrainerSlot } from "#app/data/trainer-config";
-import type { PlayerPokemon} from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/pokemon";
 import type Pokemon from "#app/field/pokemon";
 import { EnemyPokemon, PokemonMove } from "#app/field/pokemon";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";

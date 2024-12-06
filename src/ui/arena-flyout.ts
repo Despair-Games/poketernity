@@ -4,8 +4,7 @@ import { ArenaTagSide, ArenaTrapTag } from "#app/data/arena-tag";
 import { WeatherType } from "#enums/weather-type";
 import { TerrainType } from "#app/data/terrain";
 import { addWindow, WindowVariant } from "./ui-theme";
-import type {
-  ArenaEvent} from "#app/events/arena";
+import type { ArenaEvent } from "#app/events/arena";
 import {
   ArenaEventType,
   TagAddedEvent,
