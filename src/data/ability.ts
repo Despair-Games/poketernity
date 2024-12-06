@@ -2336,11 +2336,11 @@ export class PostAttackApplyBattlerTagAbAttr extends PostAttackAbAttr {
      *
      * Note: Battler tags inflicted by abilities post attacking are also considered additional effects of moves.*/
     if (
-      !attacker.hasAbilityWithAttr(IgnoreMoveEffectsAbAttr) &&
-      target.id !== attacker.id &&
-      (!this.contactRequired || move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, target)) &&
-      (target.getTag(BattlerTagType.SUBSTITUTE) ? move.hitsSubstitute(attacker, target) : true) &&
-      target.randSeedInt(100) < this.getChance(attacker, target, move)
+      !attacker.hasAbilityWithAttr(IgnoreMoveEffectsAbAttr)
+      && target.id !== attacker.id
+      && (!this.contactRequired || move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, target))
+      && (target.getTag(BattlerTagType.SUBSTITUTE) ? move.hitsSubstitute(attacker, target) : true)
+      && target.randSeedInt(100) < this.getChance(attacker, target, move)
     ) {
       const effect =
         this.effects.length === 1 ? this.effects[0] : this.effects[target.randSeedInt(this.effects.length)];
@@ -6774,11 +6774,11 @@ export function initAbilities() {
       PostAttackApplyBattlerTagAbAttr,
       false,
       (user, target, move) =>
-        !move.hasAttr(FlinchAttr) &&
-        !move.hitsSubstitute(user, target) &&
-        !target.turnData.acted &&
-        move.category !== MoveCategory.STATUS &&
-        (target.status
+        !move.hasAttr(FlinchAttr)
+        && !move.hitsSubstitute(user, target)
+        && !target.turnData.acted
+        && move.category !== MoveCategory.STATUS
+        && (target.status
           ? ![StatusEffect.FREEZE, StatusEffect.SLEEP, StatusEffect.FAINT].includes(target.status.effect)
           : true)
           ? 10
