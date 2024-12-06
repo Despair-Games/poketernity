@@ -4,7 +4,7 @@ import CacheBustedLoaderPlugin from "#app/plugins/cache-busted-loader-plugin";
 import { SceneBase } from "#app/scene-base";
 import { WindowVariant, getWindowVariantSuffix } from "#app/ui/ui-theme";
 import { isMobile } from "#app/touch-controls";
-import * as Utils from "#app/utils";
+import { localPing, getEnumValues, hasAllLocalizedSprites, getEnumKeys } from "#app/utils";
 import { initPokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
 import { initBiomes } from "#app/data/balance/biomes";
 import { initEggMoves } from "#app/data/balance/egg-moves";
@@ -34,7 +34,7 @@ export class LoadingScene extends SceneBase {
   }
 
   preload() {
-    Utils.localPing();
+    localPing();
     this.load["manifest"] = this.game["manifest"];
 
     this.loadImage("loading_bg", "arenas");
@@ -49,7 +49,7 @@ export class LoadingScene extends SceneBase {
     this.loadImage("friendship_overlay", "ui");
     this.loadImage("cursor", "ui");
     this.loadImage("cursor_reverse", "ui");
-    for (const wv of Utils.getEnumValues(WindowVariant)) {
+    for (const wv of getEnumValues(WindowVariant)) {
       for (let w = 1; w <= 5; w++) {
         this.loadImage(`window_${w}${getWindowVariantSuffix(wv)}`, "ui/windows");
       }
@@ -171,7 +171,7 @@ export class LoadingScene extends SceneBase {
 
     this.loadImage("default_bg", "arenas");
     // Load arena images
-    Utils.getEnumValues(Biome).map((bt) => {
+    getEnumValues(Biome).map((bt) => {
       const btKey = Biome[bt].toLowerCase();
       const isBaseAnimated = btKey === "end";
       const baseAKey = `${btKey}_a`;
@@ -233,7 +233,7 @@ export class LoadingScene extends SceneBase {
     // Get current lang and load the types atlas for it. English will only load types while all other languages will load types and types_<lang>
     const lang = i18next.resolvedLanguage;
     if (lang !== "en") {
-      if (Utils.hasAllLocalizedSprites(lang)) {
+      if (hasAllLocalizedSprites(lang)) {
         this.loadAtlas(`statuses_${lang}`, "");
         this.loadAtlas(`types_${lang}`, "");
       } else {
@@ -260,7 +260,7 @@ export class LoadingScene extends SceneBase {
     this.loadAtlas("egg_icons", "egg");
     this.loadAtlas("egg_shard", "egg");
     this.loadAtlas("egg_lightrays", "egg");
-    Utils.getEnumKeys(GachaType).forEach((gt) => {
+    getEnumKeys(GachaType).forEach((gt) => {
       const key = gt.toLowerCase();
       this.loadImage(`gacha_${key}`, "egg");
       this.loadAtlas(`gacha_underlay_${key}`, "egg");
@@ -460,28 +460,26 @@ export class LoadingScene extends SceneBase {
       loadingGraphics.map((g) => g.setVisible(false));
     }
 
-    const intro = this.add.video(0, 0);
-    intro.once(Phaser.GameObjects.Events.VIDEO_COMPLETE, (video: Phaser.GameObjects.Video) => {
-      this.tweens.add({
-        targets: intro,
-        duration: 500,
-        alpha: 0,
-        ease: "Sine.easeIn",
-        onComplete: () => video.destroy(),
-      });
-      loadingGraphics.forEach((g) => g.setVisible(true));
-    });
-    intro.setOrigin(0, 0);
-    intro.setScale(3);
+    // loadingGraphics.forEach((g: GameObjects.Graphics) => g.on(Phaser.GameObjects.Events.));
+
+    // const intro = this.add.video(0, 0);
+    // intro.once(Phaser.GameObjects.Events.VIDEO_COMPLETE, (video: Phaser.GameObjects.Video) => {
+    // this.tweens.add({
+    //   targets: intro,
+    //   duration: 500,
+    //   alpha: 0,
+    //   ease: "Sine.easeIn",
+    //   onComplete: () => video.destroy(),
+    // });
+    // loadingGraphics.forEach((g) => g.setVisible(true));
+    // });
+    // intro.setOrigin(0, 0);
+    // intro.setScale(3);
 
     this.load.once(this.LOAD_EVENTS.START, () => {
-      // videos do not need to be preloaded
-      intro.loadURL("images/intro_dark.mp4", true);
-      if (mobile) {
-        intro.video?.setAttribute("webkit-playsinline", "webkit-playsinline");
-        intro.video?.setAttribute("playsinline", "playsinline");
-      }
-      intro.play();
+      setTimeout(() => {
+        loadingGraphics.forEach((g) => g.setVisible(true));
+      }, 500);
     });
 
     this.load.on(this.LOAD_EVENTS.PROGRESS, (progress: number) => {
@@ -511,7 +509,6 @@ export class LoadingScene extends SceneBase {
 
     this.load.on(this.LOAD_EVENTS.COMPLETE, () => {
       loadingGraphics.forEach((go) => go.destroy());
-      intro.destroy();
     });
   }
 

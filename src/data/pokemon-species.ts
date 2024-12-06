@@ -1,32 +1,33 @@
-import { Localizable } from "#app/interfaces/locales";
+import type { Localizable } from "#app/interfaces/locales";
 import { Abilities } from "#enums/abilities";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { Species } from "#enums/species";
 import { QuantizerCelebi, argbFromRgba, rgbaFromArgb } from "@material/material-color-utilities";
 import i18next from "i18next";
-import { AnySound } from "#app/battle-scene";
+import type { AnySound } from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
-import { GameMode } from "#app/game-mode";
-import { StarterMoveset } from "#app/system/game-data";
-import * as Utils from "#app/utils";
+import type { GameMode } from "#app/game-mode";
+import type { StarterMoveset } from "#app/system/game-data";
+import { randSeedInt, randSeedGauss, randSeedItem } from "#app/utils";
 import { uncatchableSpecies } from "#app/data/balance/biomes";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { GrowthRate } from "#app/data/exp";
+import type { EvolutionLevel } from "#app/data/balance/pokemon-evolutions";
 import {
-  EvolutionLevel,
   SpeciesWildEvolutionDelay,
   pokemonEvolutions,
   pokemonPrevolutions,
 } from "#app/data/balance/pokemon-evolutions";
 import { Type } from "#enums/type";
+import type { LevelMoves } from "#app/data/balance/pokemon-level-moves";
 import {
-  LevelMoves,
   pokemonFormLevelMoves,
   pokemonFormLevelMoves as pokemonSpeciesFormLevelMoves,
   pokemonSpeciesLevelMoves,
 } from "#app/data/balance/pokemon-level-moves";
-import { Stat } from "#enums/stat";
-import { Variant, VariantSet, variantData } from "#app/data/variant";
+import type { Stat } from "#enums/stat";
+import type { Variant, VariantSet } from "#app/data/variant";
+import { variantData } from "#app/data/variant";
 import { speciesStarterCosts, POKERUS_STARTER_COUNT } from "#app/data/balance/starters";
 import { SpeciesFormKey } from "#enums/species-form-key";
 
@@ -923,7 +924,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
       return this.speciesId;
     }
 
-    const randValue = evolutionPool.size === 1 ? 0 : Utils.randSeedInt(totalWeight);
+    const randValue = evolutionPool.size === 1 ? 0 : randSeedInt(totalWeight);
 
     for (const weight of evolutionPool.keys()) {
       if (randValue < weight) {
@@ -1007,7 +1008,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
           Math.min(
             Math.max(
               evolution?.level! +
-                Math.round(Utils.randSeedGauss(0.5, 1 + levelDiff * 0.2) * Math.max(evolution?.wildDelay!, 0.5) * 5) -
+                Math.round(randSeedGauss(0.5, 1 + levelDiff * 0.2) * Math.max(evolution?.wildDelay!, 0.5) * 5) -
                 1,
               2,
               evolution?.level!,
@@ -1025,7 +1026,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
         Math.min(
           Math.max(
             lastPrevolutionLevel +
-              Math.round(Utils.randSeedGauss(0.5, 1 + levelDiff * 0.2) * Math.max(evolution?.wildDelay!, 0.5) * 5),
+              Math.round(randSeedGauss(0.5, 1 + levelDiff * 0.2) * Math.max(evolution?.wildDelay!, 0.5) * 5),
             lastPrevolutionLevel + 1,
             evolution?.level!,
           ),
@@ -1187,7 +1188,7 @@ export function getPokerusStarters(): PokemonSpecies[] {
   globalScene.executeWithSeedOffset(
     () => {
       while (pokerusStarters.length < POKERUS_STARTER_COUNT) {
-        const randomSpeciesId = parseInt(Utils.randSeedItem(Object.keys(speciesStarterCosts)), 10);
+        const randomSpeciesId = parseInt(randSeedItem(Object.keys(speciesStarterCosts)), 10);
         const species = getPokemonSpecies(randomSpeciesId);
         if (!pokerusStarters.includes(species)) {
           pokerusStarters.push(species);

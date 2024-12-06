@@ -1,14 +1,15 @@
 import { getVariantTint } from "#app/data/variant";
-import BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
-import BattleScene from "#app/battle-scene";
+import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
+import type BattleScene from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
 import { Gender, getGenderColor, getGenderSymbol } from "../data/gender";
 import { getNatureName } from "../data/nature";
 import { Type } from "#enums/type";
-import Pokemon from "../field/pokemon";
+import type Pokemon from "../field/pokemon";
 import i18next from "i18next";
-import { DexAttr, DexEntry, StarterDataEntry } from "../system/game-data";
-import * as Utils from "../utils";
+import type { DexEntry, StarterDataEntry } from "../system/game-data";
+import { DexAttr } from "../system/game-data";
+import { capitalizeString, fixedInt } from "#app/utils";
 import ConfirmUiHandler from "./confirm-ui-handler";
 import { StatsContainer } from "./stats-container";
 import { TextStyle, addBBCodeTextObject, addTextObject, getTextColor } from "./text";
@@ -268,8 +269,8 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
       }
 
       const formKey = pokemon.species?.forms?.[pokemon.formIndex!]?.formKey;
-      const formText = Utils.capitalizeString(formKey, "-", false, false) || "";
-      const speciesName = Utils.capitalizeString(Species[pokemon.species.speciesId], "_", true, false);
+      const formText = capitalizeString(formKey, "-", false, false) || "";
+      const speciesName = capitalizeString(Species[pokemon.species.speciesId], "_", true, false);
 
       let formName = "";
       if (pokemon.species.speciesId === Species.ARCEUS) {
@@ -279,7 +280,7 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
         if (i18next.exists(i18key)) {
           formName = i18next.t(i18key);
         } else {
-          const rootSpeciesName = Utils.capitalizeString(Species[pokemon.species.getRootSpeciesId()], "_", true, false);
+          const rootSpeciesName = capitalizeString(Species[pokemon.species.getRootSpeciesId()], "_", true, false);
           const i18RootKey = `pokemonForm:${rootSpeciesName}${formText}`;
           formName = i18next.exists(i18RootKey) ? i18next.t(i18RootKey) : formText;
         }
@@ -406,7 +407,7 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
       if (!eggInfo) {
         globalScene.tweens.add({
           targets: this,
-          duration: Utils.fixedInt(Math.floor(750 / speedMultiplier)),
+          duration: fixedInt(Math.floor(750 / speedMultiplier)),
           ease: "Cubic.easeInOut",
           x: this.initialX - this.infoWindowWidth,
           onComplete: () => {
@@ -416,9 +417,9 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
 
         if (showMoves) {
           globalScene.tweens.add({
-            delay: Utils.fixedInt(Math.floor(325 / speedMultiplier)),
+            delay: fixedInt(Math.floor(325 / speedMultiplier)),
             targets: this.pokemonMovesContainer,
-            duration: Utils.fixedInt(Math.floor(325 / speedMultiplier)),
+            duration: fixedInt(Math.floor(325 / speedMultiplier)),
             ease: "Cubic.easeInOut",
             x: this.movesContainerInitialX - 57,
             onComplete: () => resolve(),
@@ -476,7 +477,7 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
     return new Promise<void>((resolve) => {
       globalScene.tweens.add({
         targets: this,
-        duration: Utils.fixedInt(Math.floor(150 / speedMultiplier)),
+        duration: fixedInt(Math.floor(150 / speedMultiplier)),
         ease: "Cubic.easeInOut",
         x: xPosition,
         onComplete: () => {
@@ -495,14 +496,14 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
 
       globalScene.tweens.add({
         targets: this.pokemonMovesContainer,
-        duration: Utils.fixedInt(Math.floor(750 / speedMultiplier)),
+        duration: fixedInt(Math.floor(750 / speedMultiplier)),
         ease: "Cubic.easeInOut",
         x: this.movesContainerInitialX,
       });
 
       globalScene.tweens.add({
         targets: this,
-        duration: Utils.fixedInt(Math.floor(750 / speedMultiplier)),
+        duration: fixedInt(Math.floor(750 / speedMultiplier)),
         ease: "Cubic.easeInOut",
         x: this.initialX,
         onComplete: () => {

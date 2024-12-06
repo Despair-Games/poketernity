@@ -1,6 +1,6 @@
-import { default as BattleScene } from "#app/battle-scene";
+import type { default as BattleScene } from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
-import UiHandler from "./ui-handler";
+import type UiHandler from "./ui-handler";
 import BattleMessageUiHandler from "./battle-message-ui-handler";
 import CommandUiHandler from "./command-ui-handler";
 import PartyUiHandler from "./party-ui-handler";
@@ -28,7 +28,7 @@ import { addWindow } from "./ui-theme";
 import LoginFormUiHandler from "./login-form-ui-handler";
 import RegistrationFormUiHandler from "./registration-form-ui-handler";
 import LoadingModalUiHandler from "./loading-modal-ui-handler";
-import * as Utils from "../utils";
+import { executeIf } from "#app/utils";
 import GameStatsUiHandler from "./game-stats-ui-handler";
 import AwaitableUiHandler from "./awaitable-ui-handler";
 import SaveSlotSelectUiHandler from "./save-slot-select-ui-handler";
@@ -36,7 +36,7 @@ import TitleUiHandler from "./title-ui-handler";
 import SavingIconHandler from "./saving-icon-handler";
 import UnavailableModalUiHandler from "./unavailable-modal-ui-handler";
 import SessionReloadModalUiHandler from "./session-reload-modal-ui-handler";
-import { Button } from "#enums/buttons";
+import type { Button } from "#enums/buttons";
 import i18next from "i18next";
 import GamepadBindingUiHandler from "./settings/gamepad-binding-ui-handler";
 import SettingsKeyboardUiHandler from "#app/ui/settings/settings-keyboard-ui-handler";
@@ -44,7 +44,7 @@ import KeyboardBindingUiHandler from "#app/ui/settings/keyboard-binding-ui-handl
 import SettingsDisplayUiHandler from "./settings/settings-display-ui-handler";
 import SettingsAudioUiHandler from "./settings/settings-audio-ui-handler";
 import { PlayerGender } from "#enums/player-gender";
-import BgmBar from "#app/ui/bgm-bar";
+import type BgmBar from "#app/ui/bgm-bar";
 import RenameFormUiHandler from "./rename-form-ui-handler";
 import AdminUiHandler from "./admin-ui-handler";
 import RunHistoryUiHandler from "./run-history-ui-handler";
@@ -650,7 +650,7 @@ export default class UI extends Phaser.GameObjects.Container {
       if (!this?.modeChain?.length) {
         return resolve();
       }
-      this.revertMode().then((success) => Utils.executeIf(success, this.revertModes).then(() => resolve()));
+      this.revertMode().then((success) => executeIf(success, this.revertModes).then(() => resolve()));
     });
   }
 

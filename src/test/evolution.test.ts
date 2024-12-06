@@ -88,7 +88,7 @@ describe("Evolution", () => {
     const shedinja = game.scene.getPlayerParty()[1];
     expect(ninjask.abilityIndex).toBe(2);
     expect(shedinja.abilityIndex).toBe(1);
-    // Regression test for https://github.com/pagefaultgames/pokerogue/issues/3842
+    // Regression test
     expect(shedinja.metBiome).toBe(-1);
   });
 

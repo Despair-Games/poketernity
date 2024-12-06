@@ -1,4 +1,5 @@
-import { ArenaTagSide, ArenaTrapTag } from "#app/data/arena-tag";
+import type { ArenaTrapTag } from "#app/data/arena-tag";
+import { ArenaTagSide } from "#app/data/arena-tag";
 import { allMoves } from "#app/data/move";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -224,8 +225,7 @@ describe("Moves - Destiny Bond", () => {
   });
 
   /**
-   * In particular, this should prevent something like
-   * {@link https://github.com/pagefaultgames/pokerogue/issues/4219}
+   * In particular, this should prevent a previously existing softlock
    * from occurring with fainting by KO'ing a Destiny Bond user with U-Turn.
    */
   it("should not allow the opponent to revive via Reviver Seed", async () => {

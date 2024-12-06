@@ -1,16 +1,13 @@
 import { PartyMemberStrength } from "#enums/party-member-strength";
-import { Species } from "#enums/species";
+import type { Species } from "#enums/species";
 import { globalScene } from "#app/global-scene";
 import { PlayerPokemon } from "#app/field/pokemon";
-import { Starter } from "#app/ui/starter-select-ui-handler";
-import * as Utils from "#app/utils";
-import PokemonSpecies, {
-  PokemonSpeciesForm,
-  getPokemonSpecies,
-  getPokemonSpeciesForm,
-} from "#app/data/pokemon-species";
+import type { Starter } from "#app/ui/starter-select-ui-handler";
+import { randSeedGauss, randSeedInt, randSeedItem } from "#app/utils";
+import type { PokemonSpeciesForm } from "#app/data/pokemon-species";
+import PokemonSpecies, { getPokemonSpecies, getPokemonSpeciesForm } from "#app/data/pokemon-species";
 import { speciesStarterCosts } from "#app/data/balance/starters";
-import { pokerogueApi } from "#app/plugins/api/pokerogue-api";
+import { api } from "#app/plugins/api/api";
 
 export interface DailyRunConfig {
   seed: integer;
@@ -19,7 +16,7 @@ export interface DailyRunConfig {
 
 export function fetchDailyRunSeed(): Promise<string | null> {
   return new Promise<string | null>((resolve, reject) => {
-    pokerogueApi.daily.getSeed().then((dailySeed) => {
+    api.daily.getSeed().then((dailySeed) => {
       resolve(dailySeed);
     });
   });
@@ -45,8 +42,8 @@ export function getDailyRunStarters(seed: string): Starter[] {
       }
 
       const starterCosts: integer[] = [];
-      starterCosts.push(Math.min(Math.round(3.5 + Math.abs(Utils.randSeedGauss(1))), 8));
-      starterCosts.push(Utils.randSeedInt(9 - starterCosts[0], 1));
+      starterCosts.push(Math.min(Math.round(3.5 + Math.abs(randSeedGauss(1))), 8));
+      starterCosts.push(randSeedInt(9 - starterCosts[0], 1));
       starterCosts.push(10 - (starterCosts[0] + starterCosts[1]));
 
       for (let c = 0; c < starterCosts.length; c++) {
@@ -54,7 +51,7 @@ export function getDailyRunStarters(seed: string): Starter[] {
         const costSpecies = Object.keys(speciesStarterCosts)
           .map((s) => parseInt(s) as Species)
           .filter((s) => speciesStarterCosts[s] === cost);
-        const randPkmSpecies = getPokemonSpecies(Utils.randSeedItem(costSpecies));
+        const randPkmSpecies = getPokemonSpecies(randSeedItem(costSpecies));
         const starterSpecies = getPokemonSpecies(
           randPkmSpecies.getTrainerSpeciesForLevel(startingLevel, true, PartyMemberStrength.STRONGER),
         );

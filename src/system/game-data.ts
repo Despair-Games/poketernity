@@ -1,11 +1,14 @@
 import i18next from "i18next";
-import { bypassLogin, PokeballCounts } from "#app/battle-scene";
+import type { PokeballCounts } from "#app/battle-scene";
+import { bypassLogin } from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
-import Pokemon, { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
+import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
+import type Pokemon from "#app/field/pokemon";
 import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
-import PokemonSpecies, { allSpecies, getPokemonSpecies, noStarterFormKeys } from "#app/data/pokemon-species";
+import type PokemonSpecies from "#app/data/pokemon-species";
+import { allSpecies, getPokemonSpecies, noStarterFormKeys } from "#app/data/pokemon-species";
 import { speciesStarterCosts } from "#app/data/balance/starters";
-import * as Utils from "#app/utils";
+import { randInt, getEnumKeys, isLocal, executeIf, fixedInt, randSeedItem, NumberHolder } from "#app/utils";
 import Overrides from "#app/overrides";
 import PokemonData from "#app/system/pokemon-data";
 import PersistentModifierData from "#app/system/modifier-data";
@@ -18,7 +21,7 @@ import { trainerConfigs } from "#app/data/trainer-config";
 import { resetSettings, setSetting, SettingKeys } from "#app/system/settings/settings";
 import { achvs } from "#app/system/achv";
 import EggData from "#app/system/egg-data";
-import { Egg } from "#app/data/egg";
+import type { Egg } from "#app/data/egg";
 import { vouchers, VoucherType } from "#app/system/voucher";
 import { AES, enc } from "crypto-js";
 import { Mode } from "#app/ui/ui";
@@ -29,16 +32,17 @@ import { Tutorial } from "#app/tutorial";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { allMoves } from "#app/data/move";
 import { TrainerVariant } from "#app/field/trainer";
-import { Variant } from "#app/data/variant";
+import type { Variant } from "#app/data/variant";
 import { setSettingGamepad, SettingGamepad, settingGamepadDefaults } from "#app/system/settings/settings-gamepad";
-import { setSettingKeyboard, SettingKeyboard } from "#app/system/settings/settings-keyboard";
+import type { SettingKeyboard } from "#app/system/settings/settings-keyboard";
+import { setSettingKeyboard } from "#app/system/settings/settings-keyboard";
 import { TagAddedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";
 import * as Modifier from "#app/modifier/modifier";
 import { StatusEffect } from "#enums/status-effect";
 import ChallengeData from "#app/system/challenge-data";
 import { Device } from "#enums/devices";
 import { GameDataType } from "#enums/game-data-type";
-import { Moves } from "#enums/moves";
+import type { Moves } from "#enums/moves";
 import { PlayerGender } from "#enums/player-gender";
 import { Species } from "#enums/species";
 import { applyChallenges, ChallengeType } from "#app/data/challenge";
@@ -52,9 +56,10 @@ import {
   applySettingsVersionMigration,
 } from "./version_migration/version_converter";
 import { MysteryEncounterSaveData } from "#app/data/mystery-encounters/mystery-encounter-save-data";
-import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { pokerogueApi } from "#app/plugins/api/pokerogue-api";
+import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
+import { api } from "#app/plugins/api/api";
 import { ArenaTrapTag } from "#app/data/arena-tag";
+import { SAVE_FILE_EXTENSION } from "#app/constants";
 
 export const defaultStarterSpecies: Species[] = [
   Species.BULBASAUR,
@@ -349,8 +354,8 @@ export class GameData {
     this.loadSettings();
     this.loadGamepadSettings();
     this.loadMappingConfigs();
-    this.trainerId = Utils.randInt(65536);
-    this.secretId = Utils.randInt(65536);
+    this.trainerId = randInt(65536);
+    this.secretId = randInt(65536);
     this.starterData = {};
     this.gameStats = new GameStats();
     this.runHistory = {};
@@ -420,7 +425,7 @@ export class GameData {
       localStorage.setItem(`data_${loggedInUser?.username}`, encrypt(systemData, bypassLogin));
 
       if (!bypassLogin) {
-        pokerogueApi.savedata.system.update({ clientSessionId }, systemData).then((error) => {
+        api.savedata.system.update({ clientSessionId }, systemData).then((error) => {
           globalScene.ui.savingIcon.hide();
           if (error) {
             if (error.startsWith("session out of date")) {
@@ -449,7 +454,7 @@ export class GameData {
       }
 
       if (!bypassLogin) {
-        pokerogueApi.savedata.system.get({ clientSessionId }).then((saveDataOrErr) => {
+        api.savedata.system.get({ clientSessionId }).then((saveDataOrErr) => {
           if (!saveDataOrErr || saveDataOrErr.length === 0 || saveDataOrErr[0] !== "{") {
             if (saveDataOrErr?.startsWith("sql: no rows in result set")) {
               globalScene.queueMessage(
@@ -577,7 +582,7 @@ export class GameData {
         }
 
         if (systemData.voucherCounts) {
-          Utils.getEnumKeys(VoucherType).forEach((key) => {
+          getEnumKeys(VoucherType).forEach((key) => {
             const index = VoucherType[key];
             this.voucherCounts[index] = systemData.voucherCounts[index] || 0;
           });
@@ -605,10 +610,10 @@ export class GameData {
    * At the moment, only retrievable from locale cache
    */
   async getRunHistoryData(): Promise<RunHistoryData> {
-    if (!Utils.isLocal) {
+    if (!isLocal) {
       /**
        * Networking Code DO NOT DELETE!
-       * Note: Might have to be migrated to `pokerogue-api.ts`
+       * Note: Might have to be migrated to `api.ts`
        *
       const response = await Utils.apiFetch("savedata/runHistory", true);
       const data = await response.json();
@@ -691,7 +696,7 @@ export class GameData {
         return false;
       }
     }
-    NOTE: should be adopted to `pokerogue-api.ts`
+    NOTE: should be adopted to `api.ts`
     */
     return true;
   }
@@ -736,7 +741,7 @@ export class GameData {
       return true;
     }
 
-    const systemData = await pokerogueApi.savedata.system.verify({ clientSessionId });
+    const systemData = await api.savedata.system.verify({ clientSessionId });
 
     if (systemData) {
       globalScene.clearPhaseQueue();
@@ -1037,7 +1042,7 @@ export class GameData {
       };
 
       if (!bypassLogin && !localStorage.getItem(`sessionData${slotId ? slotId : ""}_${loggedInUser?.username}`)) {
-        pokerogueApi.savedata.session.get({ slot: slotId, clientSessionId }).then(async (response) => {
+        api.savedata.session.get({ slot: slotId, clientSessionId }).then(async (response) => {
           if (!response || response?.length === 0 || response?.[0] !== "{") {
             console.error(response);
             return resolve(null);
@@ -1230,7 +1235,7 @@ export class GameData {
         if (success !== null && !success) {
           return resolve(false);
         }
-        pokerogueApi.savedata.session.delete({ slot: slotId, clientSessionId }).then((error) => {
+        api.savedata.session.delete({ slot: slotId, clientSessionId }).then((error) => {
           if (error) {
             if (error.startsWith("session out of date")) {
               globalScene.clearPhaseQueue();
@@ -1295,10 +1300,7 @@ export class GameData {
     } else {
       const sessionData = this.getSessionSaveData();
       const { trainerId } = this;
-      const jsonResponse = await pokerogueApi.savedata.session.clear(
-        { slot: slotId, trainerId, clientSessionId },
-        sessionData,
-      );
+      const jsonResponse = await api.savedata.session.clear({ slot: slotId, trainerId, clientSessionId }, sessionData);
 
       if (!jsonResponse?.error) {
         result = [true, jsonResponse?.success ?? false];
@@ -1399,7 +1401,7 @@ export class GameData {
     useCachedSystem: boolean = false,
   ): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
-      Utils.executeIf(!skipVerification, updateUserInfo).then((success) => {
+      executeIf(!skipVerification, updateUserInfo).then((success) => {
         if (success !== null && !success) {
           return resolve(false);
         }
@@ -1447,7 +1449,7 @@ export class GameData {
         console.debug("Session data saved");
 
         if (!bypassLogin && sync) {
-          pokerogueApi.savedata.updateAll(request).then((error) => {
+          api.savedata.updateAll(request).then((error) => {
             if (sync) {
               globalScene.lastSavePlayTime = 0;
               globalScene.ui.savingIcon.hide();
@@ -1485,7 +1487,7 @@ export class GameData {
         const blob = new Blob([encryptedData.toString()], { type: "text/json" });
         const link = document.createElement("a");
         link.href = window.URL.createObjectURL(blob);
-        link.download = `${dataKey}.prsv`;
+        link.download = `${dataKey}.${SAVE_FILE_EXTENSION}`;
         link.click();
         link.remove();
       };
@@ -1493,9 +1495,9 @@ export class GameData {
         let promise: Promise<string | null> = Promise.resolve(null);
 
         if (dataType === GameDataType.SYSTEM) {
-          promise = pokerogueApi.savedata.system.get({ clientSessionId });
+          promise = api.savedata.system.get({ clientSessionId });
         } else if (dataType === GameDataType.SESSION) {
-          promise = pokerogueApi.savedata.session.get({ slot: slotId, clientSessionId });
+          promise = api.savedata.session.get({ slot: slotId, clientSessionId });
         }
 
         promise.then((response) => {
@@ -1529,7 +1531,7 @@ export class GameData {
     saveFile = document.createElement("input");
     saveFile.id = "saveFile";
     saveFile.type = "file";
-    saveFile.accept = ".prsv";
+    saveFile.accept = `.${SAVE_FILE_EXTENSION}`;
     saveFile.style.display = "none";
     saveFile.addEventListener("change", (e) => {
       const reader = new FileReader();
@@ -1571,7 +1573,7 @@ export class GameData {
           }
 
           const displayError = (error: string) =>
-            globalScene.ui.showText(error, null, () => globalScene.ui.showText("", 0), Utils.fixedInt(1500));
+            globalScene.ui.showText(error, null, () => globalScene.ui.showText("", 0), fixedInt(1500));
           dataName = dataName!; // tell TS compiler that dataName is defined!
 
           if (!valid) {
@@ -1579,7 +1581,7 @@ export class GameData {
               `Your ${dataName} data could not be loaded. It may be corrupted.`,
               null,
               () => globalScene.ui.showText("", 0),
-              Utils.fixedInt(1500),
+              fixedInt(1500),
             );
           }
 
@@ -1602,15 +1604,12 @@ export class GameData {
                       const { trainerId, secretId } = this;
                       let updatePromise: Promise<string | null>;
                       if (dataType === GameDataType.SESSION) {
-                        updatePromise = pokerogueApi.savedata.session.update(
+                        updatePromise = api.savedata.session.update(
                           { slot: slotId, trainerId, secretId, clientSessionId },
                           dataStr,
                         );
                       } else {
-                        updatePromise = pokerogueApi.savedata.system.update(
-                          { trainerId, secretId, clientSessionId },
-                          dataStr,
-                        );
+                        updatePromise = api.savedata.system.update({ trainerId, secretId, clientSessionId }, dataStr);
                       }
                       updatePromise.then((error) => {
                         if (error) {
@@ -1667,7 +1666,7 @@ export class GameData {
       () => {
         const neutralNatures = [Nature.HARDY, Nature.DOCILE, Nature.SERIOUS, Nature.BASHFUL, Nature.QUIRKY];
         for (let s = 0; s < defaultStarterSpecies.length; s++) {
-          defaultStarterNatures.push(Utils.randSeedItem(neutralNatures));
+          defaultStarterNatures.push(randSeedItem(neutralNatures));
         }
       },
       0,
@@ -2143,7 +2142,7 @@ export class GameData {
       value = decrementValue(value);
     }
 
-    const cost = new Utils.NumberHolder(value);
+    const cost = new NumberHolder(value);
     applyChallenges(globalScene.gameMode, ChallengeType.STARTER_COST, speciesId, cost);
 
     return cost.value;
@@ -2171,7 +2170,7 @@ export class GameData {
         entry.hatchedCount = 0;
       }
       if (!entry.hasOwnProperty("natureAttr") || (entry.caughtAttr && !entry.natureAttr)) {
-        entry.natureAttr = this.defaultDexData?.[k].natureAttr || 1 << Utils.randInt(25, 1);
+        entry.natureAttr = this.defaultDexData?.[k].natureAttr || 1 << randInt(25, 1);
       }
     }
   }

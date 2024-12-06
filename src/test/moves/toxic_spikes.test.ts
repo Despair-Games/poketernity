@@ -1,5 +1,7 @@
-import { ArenaTagSide, ArenaTrapTag } from "#app/data/arena-tag";
-import { decrypt, encrypt, GameData, SessionSaveData } from "#app/system/game-data";
+import type { ArenaTrapTag } from "#app/data/arena-tag";
+import { ArenaTagSide } from "#app/data/arena-tag";
+import type { SessionSaveData } from "#app/system/game-data";
+import { decrypt, encrypt, GameData } from "#app/system/game-data";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { Moves } from "#enums/moves";
@@ -88,7 +90,7 @@ describe("Moves - Toxic Spikes", () => {
     game.move.select(Moves.TOXIC_SPIKES);
     await game.toNextTurn();
     // also make sure the toxic spikes are removed even if the pokemon
-    // that set them up is the one switching in (https://github.com/pagefaultgames/pokerogue/issues/935)
+    // that set them up is the one switching in
     game.move.select(Moves.COURT_CHANGE);
     await game.toNextTurn();
     game.doSwitchPokemon(1);

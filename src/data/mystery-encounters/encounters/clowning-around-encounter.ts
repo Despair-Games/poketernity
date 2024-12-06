@@ -1,5 +1,5 @@
+import type { EnemyPartyConfig } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import {
-  EnemyPartyConfig,
   generateModifierType,
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,
@@ -10,11 +10,13 @@ import {
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { trainerConfigs, TrainerPartyCompoundTemplate, TrainerPartyTemplate } from "#app/data/trainer-config";
 import { ModifierTier } from "#app/modifier/modifier-tier";
-import { ModifierPoolType, modifierTypes, PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
+import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
+import { ModifierPoolType, modifierTypes } from "#app/modifier/modifier-type";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { globalScene } from "#app/global-scene";
-import MysteryEncounter, { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
+import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
+import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
@@ -24,15 +26,16 @@ import {
   applyAbilityOverrideToPokemon,
   applyModifierTypeToPlayerPokemon,
 } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
-import { Type } from "#enums/type";
+import type { Type } from "#enums/type";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { randSeedInt, randSeedShuffle } from "#app/utils";
 import { showEncounterDialogue, showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { Mode } from "#app/ui/ui";
 import i18next from "i18next";
-import { OptionSelectConfig } from "#app/ui/abstact-option-select-ui-handler";
-import { PlayerPokemon, PokemonMove } from "#app/field/pokemon";
+import type { OptionSelectConfig } from "#app/ui/abstact-option-select-ui-handler";
+import type { PlayerPokemon } from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon";
 import { Ability } from "#app/data/ability";
 import { BerryModifier } from "#app/modifier/modifier";
 import { BerryType } from "#enums/berry-type";
@@ -68,7 +71,6 @@ const RANDOM_ABILITY_POOL = [
 
 /**
  * Clowning Around encounter.
- * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3807 | GitHub Issue #3807}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(
@@ -298,18 +300,18 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
 
         generateItemsOfTier(mostHeldItemsPokemon, numBerries, "Berries");
 
-        // Shuffle Transferable held items in the same tier (only shuffles Ultra and Rogue atm)
+        // Shuffle Transferable held items in the same tier (only shuffles Ultra and Epic atm)
         // For the purpose of this ME, Soothe Bells and Lucky Eggs are counted as Ultra tier
-        // And Golden Eggs as Rogue tier
+        // And Golden Eggs as Epic tier
         let numUltra = 0;
-        let numRogue = 0;
+        let numEpic = 0;
         items
           .filter((m) => m.isTransferable && !(m instanceof BerryModifier))
           .forEach((m) => {
             const type = m.type.withTierFromPool(ModifierPoolType.PLAYER, party);
             const tier = type.tier ?? ModifierTier.ULTRA;
-            if (type.id === "GOLDEN_EGG" || tier === ModifierTier.ROGUE) {
-              numRogue += m.stackCount;
+            if (type.id === "GOLDEN_EGG" || tier === ModifierTier.EPIC) {
+              numEpic += m.stackCount;
               globalScene.removeModifier(m);
             } else if (type.id === "LUCKY_EGG" || type.id === "SOOTHE_BELL" || tier === ModifierTier.ULTRA) {
               numUltra += m.stackCount;
@@ -318,7 +320,7 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
           });
 
         generateItemsOfTier(mostHeldItemsPokemon, numUltra, ModifierTier.ULTRA);
-        generateItemsOfTier(mostHeldItemsPokemon, numRogue, ModifierTier.ROGUE);
+        generateItemsOfTier(mostHeldItemsPokemon, numEpic, ModifierTier.EPIC);
       })
       .withOptionPhase(async () => {
         leaveEncounterWithoutBattle(true);
@@ -488,7 +490,7 @@ function generateItemsOfTier(pokemon: PlayerPokemon, numItems: number, tier: Mod
     [modifierTypes.WIDE_LENS, 3],
   ];
 
-  const roguePool = [
+  const epicPool = [
     [modifierTypes.LEFTOVERS, 4],
     [modifierTypes.SHELL_BELL, 4],
     [modifierTypes.SOUL_DEW, 10],
@@ -517,7 +519,7 @@ function generateItemsOfTier(pokemon: PlayerPokemon, numItems: number, tier: Mod
   if (tier === "Berries") {
     pool = berryPool;
   } else {
-    pool = tier === ModifierTier.ULTRA ? ultraPool : roguePool;
+    pool = tier === ModifierTier.ULTRA ? ultraPool : epicPool;
   }
 
   for (let i = 0; i < numItems; i++) {

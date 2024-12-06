@@ -2,7 +2,7 @@ import { Species } from "#app/enums/species";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import GameManager from "../utils/gameManager";
 import { PokeballType } from "#enums/pokeball";
-import BattleScene from "#app/battle-scene";
+import type BattleScene from "#app/battle-scene";
 import { Moves } from "#app/enums/moves";
 
 describe("Spec - Pokemon", () => {
@@ -43,7 +43,7 @@ describe("Spec - Pokemon", () => {
 
     it("should append a new pokemon by default", async () => {
       const zubat = scene.getEnemyPokemon()!;
-      zubat.addToParty(PokeballType.LUXURY_BALL);
+      zubat.addToParty(PokeballType.POKEBALL);
 
       const party = scene.getPlayerParty();
       expect(party).toHaveLength(6);
@@ -55,7 +55,7 @@ describe("Spec - Pokemon", () => {
     it("should put a new pokemon into the passed slotIndex", async () => {
       const slotIndex = 1;
       const zubat = scene.getEnemyPokemon()!;
-      zubat.addToParty(PokeballType.LUXURY_BALL, slotIndex);
+      zubat.addToParty(PokeballType.POKEBALL, slotIndex);
 
       const party = scene.getPlayerParty();
       expect(party).toHaveLength(6);

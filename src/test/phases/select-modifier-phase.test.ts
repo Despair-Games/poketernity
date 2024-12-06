@@ -2,7 +2,8 @@ import type BattleScene from "#app/battle-scene";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
 import { PlayerPokemon } from "#app/field/pokemon";
 import { ModifierTier } from "#app/modifier/modifier-tier";
-import { CustomModifierSettings, ModifierTypeOption, modifierTypes } from "#app/modifier/modifier-type";
+import type { CustomModifierSettings } from "#app/modifier/modifier-type";
+import { ModifierTypeOption, modifierTypes } from "#app/modifier/modifier-type";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
 import { Mode } from "#app/ui/ui";
@@ -185,7 +186,7 @@ describe("SelectModifierPhase", () => {
         ModifierTier.COMMON,
         ModifierTier.GREAT,
         ModifierTier.ULTRA,
-        ModifierTier.ROGUE,
+        ModifierTier.EPIC,
         ModifierTier.MASTER,
       ],
     };
@@ -222,7 +223,7 @@ describe("SelectModifierPhase", () => {
     expect(
       modifierSelectHandler.options[3].modifierTypeOption.type.tier -
         modifierSelectHandler.options[3].modifierTypeOption.upgradeCount,
-    ).toEqual(ModifierTier.ROGUE);
+    ).toEqual(ModifierTier.EPIC);
     expect(
       modifierSelectHandler.options[4].modifierTypeOption.type.tier -
         modifierSelectHandler.options[4].modifierTypeOption.upgradeCount,

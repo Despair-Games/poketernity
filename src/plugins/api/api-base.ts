@@ -1,4 +1,4 @@
-import { SESSION_ID_COOKIE_NAME } from "#app/constants";
+import { SESSION_ID_COOKIE } from "#app/constants";
 import { getCookie } from "#app/utils";
 
 type DataType = "json" | "form-urlencoded";
@@ -65,7 +65,7 @@ export abstract class ApiBase {
   protected async doFetch(path: string, config: RequestInit): Promise<Response> {
     config.headers = {
       ...config.headers,
-      Authorization: getCookie(SESSION_ID_COOKIE_NAME),
+      Authorization: getCookie(SESSION_ID_COOKIE),
       "Content-Type": config.headers?.["Content-Type"] ?? "application/json",
     };
 

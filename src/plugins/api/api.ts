@@ -1,29 +1,29 @@
-import type { TitleStatsResponse } from "#app/@types/PokerogueApi";
+import type { TitleStatsResponse } from "#app/@types/Api";
 import { ApiBase } from "#app/plugins/api/api-base";
-import { PokerogueAccountApi } from "#app/plugins/api/pokerogue-account-api";
-import { PokerogueAdminApi } from "#app/plugins/api/pokerogue-admin-api";
-import { PokerogueDailyApi } from "#app/plugins/api/pokerogue-daily-api";
-import { PokerogueSavedataApi } from "#app/plugins/api/pokerogue-savedata-api";
+import { AccountApi } from "#app/plugins/api/account-api";
+import { AdminApi } from "#app/plugins/api/admin-api";
+import { DailyApi } from "#app/plugins/api/daily-api";
+import { SavedataApi } from "#app/plugins/api/savedata-api";
 
 /**
- * A wrapper for PokéRogue API requests.
+ * A wrapper for API requests.
  */
-export class PokerogueApi extends ApiBase {
+export class Api extends ApiBase {
   //#region Fields∏
 
-  public readonly account: PokerogueAccountApi;
-  public readonly daily: PokerogueDailyApi;
-  public readonly admin: PokerogueAdminApi;
-  public readonly savedata: PokerogueSavedataApi;
+  public readonly account: AccountApi;
+  public readonly daily: DailyApi;
+  public readonly admin: AdminApi;
+  public readonly savedata: SavedataApi;
 
   //#region Public
 
   constructor(base: string) {
     super(base);
-    this.account = new PokerogueAccountApi(base);
-    this.daily = new PokerogueDailyApi(base);
-    this.admin = new PokerogueAdminApi(base);
-    this.savedata = new PokerogueSavedataApi(base);
+    this.account = new AccountApi(base);
+    this.daily = new DailyApi(base);
+    this.admin = new AdminApi(base);
+    this.savedata = new SavedataApi(base);
   }
 
   /**
@@ -80,4 +80,4 @@ export class PokerogueApi extends ApiBase {
   //#endregion
 }
 
-export const pokerogueApi = new PokerogueApi(import.meta.env.VITE_SERVER_URL ?? "http://localhost:8001");
+export const api = new Api(import.meta.env.VITE_SERVER_URL ?? "http://localhost:8001");

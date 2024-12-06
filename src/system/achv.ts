@@ -1,17 +1,17 @@
-import { Modifier } from "typescript";
+import type { Modifier } from "typescript";
 import { TurnHeldItemTransferModifier } from "../modifier/modifier";
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
 import i18next from "i18next";
-import * as Utils from "../utils";
+import { NumberHolder } from "#app/utils";
 import { PlayerGender } from "#enums/player-gender";
+import type { Challenge } from "#app/data/challenge";
 import {
-  Challenge,
   FreshStartChallenge,
   SingleGenerationChallenge,
   SingleTypeChallenge,
   InverseBattleChallenge,
 } from "#app/data/challenge";
-import { ConditionFn } from "#app/@types/common";
+import type { ConditionFn } from "#app/@types/common";
 import { Stat, getShortenedStatKey } from "#app/enums/stat";
 import { Challenges } from "#app/enums/challenges";
 import { globalScene } from "#app/global-scene";
@@ -20,7 +20,7 @@ export enum AchvTier {
   COMMON,
   GREAT,
   ULTRA,
-  ROGUE,
+  EPIC,
   MASTER,
 }
 
@@ -88,7 +88,7 @@ export class Achv {
       return AchvTier.MASTER;
     }
     if (this.score >= 75) {
-      return AchvTier.ROGUE;
+      return AchvTier.EPIC;
     }
     if (this.score >= 50) {
       return AchvTier.ULTRA;
@@ -135,7 +135,7 @@ export class DamageAchv extends Achv {
       "",
       iconImage,
       score,
-      (args: any[]) => (args[0] instanceof Utils.NumberHolder ? args[0].value : args[0]) >= this.damageAmount,
+      (args: any[]) => (args[0] instanceof NumberHolder ? args[0].value : args[0]) >= this.damageAmount,
     );
     this.damageAmount = damageAmount;
   }
@@ -151,7 +151,7 @@ export class HealAchv extends Achv {
       "",
       iconImage,
       score,
-      (args: any[]) => (args[0] instanceof Utils.NumberHolder ? args[0].value : args[0]) >= this.healAmount,
+      (args: any[]) => (args[0] instanceof NumberHolder ? args[0].value : args[0]) >= this.healAmount,
     );
     this.healAmount = healAmount;
   }
@@ -167,7 +167,7 @@ export class LevelAchv extends Achv {
       "",
       iconImage,
       score,
-      (args: any[]) => (args[0] instanceof Utils.NumberHolder ? args[0].value : args[0]) >= this.level,
+      (args: any[]) => (args[0] instanceof NumberHolder ? args[0].value : args[0]) >= this.level,
     );
     this.level = level;
   }
@@ -417,7 +417,7 @@ export const achvs = {
   _10_RIBBONS: new RibbonAchv("10_RIBBONS", "", 10, "bronze_ribbon", 10),
   _25_RIBBONS: new RibbonAchv("25_RIBBONS", "", 25, "great_ribbon", 25).setSecret(true),
   _50_RIBBONS: new RibbonAchv("50_RIBBONS", "", 50, "ultra_ribbon", 50).setSecret(true),
-  _75_RIBBONS: new RibbonAchv("75_RIBBONS", "", 75, "rogue_ribbon", 75).setSecret(true),
+  _75_RIBBONS: new RibbonAchv("75_RIBBONS", "", 75, "epic_ribbon", 75).setSecret(true),
   _100_RIBBONS: new RibbonAchv("100_RIBBONS", "", 100, "master_ribbon", 100).setSecret(true),
   TRANSFER_MAX_STAT_STAGE: new Achv("TRANSFER_MAX_STAT_STAGE", "", "TRANSFER_MAX_STAT_STAGE.description", "baton", 20),
   MAX_FRIENDSHIP: new Achv("MAX_FRIENDSHIP", "", "MAX_FRIENDSHIP.description", "soothe_bell", 25),

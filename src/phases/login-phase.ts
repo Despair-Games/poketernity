@@ -1,11 +1,12 @@
 import { updateUserInfo } from "#app/account";
 import { bypassLogin } from "#app/battle-scene";
+import { SESSION_ID_COOKIE } from "#app/constants";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { handleTutorial, Tutorial } from "#app/tutorial";
 import { Mode } from "#app/ui/ui";
+import { executeIf, getCookie, removeCookie } from "#app/utils";
 import i18next, { t } from "i18next";
-import * as Utils from "#app/utils";
 import { SelectGenderPhase } from "./select-gender-phase";
 import { UnavailablePhase } from "./unavailable-phase";
 
@@ -21,10 +22,10 @@ export class LoginPhase extends Phase {
   start(): void {
     super.start();
 
-    const hasSession = !!Utils.getCookie(Utils.sessionIdKey);
+    const hasSession = !!getCookie(SESSION_ID_COOKIE);
 
     globalScene.ui.setMode(Mode.LOADING, { buttonActions: [] });
-    Utils.executeIf(bypassLogin || hasSession, updateUserInfo).then((response) => {
+    executeIf(bypassLogin || hasSession, updateUserInfo).then((response) => {
       const success = response ? response[0] : false;
       const statusCode = response ? response[1] : null;
       if (!success) {
@@ -38,7 +39,7 @@ export class LoginPhase extends Phase {
           const loadData = () => {
             updateUserInfo().then((success) => {
               if (!success[0]) {
-                Utils.removeCookie(Utils.sessionIdKey);
+                removeCookie(SESSION_ID_COOKIE);
                 globalScene.reset(true, true);
                 return;
               }
@@ -60,7 +61,7 @@ export class LoginPhase extends Phase {
                       globalScene.ui.playSelect();
                       updateUserInfo().then((success) => {
                         if (!success[0]) {
-                          Utils.removeCookie(Utils.sessionIdKey);
+                          removeCookie(SESSION_ID_COOKIE);
                           globalScene.reset(true, true);
                           return;
                         }
@@ -89,7 +90,7 @@ export class LoginPhase extends Phase {
             ],
           });
         } else if (statusCode === 401) {
-          Utils.removeCookie(Utils.sessionIdKey);
+          removeCookie(SESSION_ID_COOKIE);
           globalScene.reset(true, true);
         } else {
           globalScene.unshiftPhase(new UnavailablePhase());

@@ -4,11 +4,12 @@ import { globalScene } from "#app/global-scene";
 import { hasTouchscreen } from "#app/touch-controls";
 import { updateWindowType } from "#app/ui/ui-theme";
 import { CandyUpgradeNotificationChangedEvent } from "#app/events/battle-scene";
-import SettingsUiHandler from "#app/ui/settings/settings-ui-handler";
+import type SettingsUiHandler from "#app/ui/settings/settings-ui-handler";
 import { EaseType } from "#enums/ease-type";
 import { MoneyFormat } from "#enums/money-format";
 import { PlayerGender } from "#enums/player-gender";
 import { ShopCursorTarget } from "#enums/shop-cursor-target";
+import { LOCALE_LS_KEY } from "#app/constants";
 
 const VOLUME_OPTIONS: SettingOption[] = new Array(11).fill(null).map((_, i) =>
   i
@@ -868,7 +869,7 @@ export function setSetting(setting: string, value: integer): boolean {
           const changeLocaleHandler = (locale: string): boolean => {
             try {
               i18next.changeLanguage(locale);
-              localStorage.setItem("prLang", locale);
+              localStorage.setItem(LOCALE_LS_KEY, locale);
               cancelHandler();
               // Reload the whole game to apply the new locale since also some constants are translated
               window.location.reload();

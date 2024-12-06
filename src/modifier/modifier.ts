@@ -24,7 +24,7 @@ import { addTextObject, TextStyle } from "#app/ui/text";
 import { BooleanHolder, hslToHex, isNullOrUndefined, NumberHolder, toDmgValue } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryType } from "#enums/berry-type";
-import { Moves } from "#enums/moves";
+import type { Moves } from "#enums/moves";
 import type { Nature } from "#enums/nature";
 import type { PokeballType } from "#enums/pokeball";
 import { Species } from "#enums/species";
@@ -1729,7 +1729,7 @@ export class BypassSpeedChanceModifier extends PokemonHeldItemModifier {
 
 /**
  * Class for Pokemon held items like King's Rock
- * Because King's Rock can be stacked in PokeRogue, unlike mainline, it does not receive a boost from Abilities.SERENE_GRACE
+ * Because King's Rock can be stacked in the game, unlike mainline, it does not receive a boost from Abilities.SERENE_GRACE
  */
 export class FlinchChanceModifier extends PokemonHeldItemModifier {
   private chance: number;

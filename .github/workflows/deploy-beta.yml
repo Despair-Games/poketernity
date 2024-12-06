@@ -7,7 +7,8 @@ on:
 
 jobs:
   deploy:
-    if: github.repository == 'Despair-Games/poketernity'
+    if:false
+    # if: github.repository == 'despair-games/poketernity'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

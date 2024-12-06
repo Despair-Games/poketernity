@@ -1,9 +1,10 @@
-import { InfoToggle } from "#app/battle-scene";
+import type { InfoToggle } from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
 import { TextStyle, addTextObject } from "./text";
 import { addWindow } from "./ui-theme";
-import * as Utils from "../utils";
-import Move, { MoveCategory } from "../data/move";
+import { getLocalizedSpriteKey, fixedInt } from "#app/utils";
+import type Move from "../data/move";
+import { MoveCategory } from "../data/move";
 import { Type } from "#enums/type";
 import i18next from "i18next";
 
@@ -115,7 +116,7 @@ export default class MoveInfoOverlay extends Phaser.GameObjects.Container implem
     valuesBg.setOrigin(0, 0);
     this.val.add(valuesBg);
 
-    this.typ = globalScene.add.sprite(25, EFF_HEIGHT - 35, Utils.getLocalizedSpriteKey("types"), "unknown");
+    this.typ = globalScene.add.sprite(25, EFF_HEIGHT - 35, getLocalizedSpriteKey("types"), "unknown");
     this.typ.setScale(0.8);
     this.val.add(this.typ);
 
@@ -170,7 +171,7 @@ export default class MoveInfoOverlay extends Phaser.GameObjects.Container implem
     this.pow.setText(move.power >= 0 ? move.power.toString() : "---");
     this.acc.setText(move.accuracy >= 0 ? move.accuracy.toString() : "---");
     this.pp.setText(move.pp >= 0 ? move.pp.toString() : "---");
-    this.typ.setTexture(Utils.getLocalizedSpriteKey("types"), Type[move.type].toLowerCase());
+    this.typ.setTexture(getLocalizedSpriteKey("types"), Type[move.type].toLowerCase());
     this.cat.setFrame(MoveCategory[move.category].toLowerCase());
 
     this.desc.setText(move?.effect || "");
@@ -188,10 +189,10 @@ export default class MoveInfoOverlay extends Phaser.GameObjects.Container implem
       // generate scrolling effects
       this.descScroll = globalScene.tweens.add({
         targets: this.desc,
-        delay: Utils.fixedInt(2000),
+        delay: fixedInt(2000),
         loop: -1,
-        hold: Utils.fixedInt(2000),
-        duration: Utils.fixedInt((moveDescriptionLineCount - 3) * 2000),
+        hold: fixedInt(2000),
+        duration: fixedInt((moveDescriptionLineCount - 3) * 2000),
         y: `-=${14.83 * (72 / 96) * (moveDescriptionLineCount - 3)}`,
       });
     }
@@ -214,7 +215,7 @@ export default class MoveInfoOverlay extends Phaser.GameObjects.Container implem
     }
     globalScene.tweens.add({
       targets: this.desc,
-      duration: Utils.fixedInt(125),
+      duration: fixedInt(125),
       ease: "Sine.easeInOut",
       alpha: visible ? 1 : 0,
     });

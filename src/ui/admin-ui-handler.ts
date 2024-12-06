@@ -1,8 +1,9 @@
 import { Button } from "#app/enums/buttons";
-import { pokerogueApi } from "#app/plugins/api/pokerogue-api";
+import { api } from "#app/plugins/api/api";
 import { formatText } from "#app/utils";
-import { FormModalUiHandler, InputFieldConfig } from "./form-modal-ui-handler";
-import { ModalConfig } from "./modal-ui-handler";
+import type { InputFieldConfig } from "./form-modal-ui-handler";
+import { FormModalUiHandler } from "./form-modal-ui-handler";
+import type { ModalConfig } from "./modal-ui-handler";
 import { TextStyle } from "./text";
 import { Mode } from "./ui";
 import { globalScene } from "#app/global-scene";
@@ -305,7 +306,7 @@ export default class AdminUiHandler extends FormModalUiHandler {
 
   private async adminSearch(adminSearchResult: AdminSearchInfo) {
     try {
-      const [adminInfo, errorType] = await pokerogueApi.admin.searchAccount({ username: adminSearchResult.username });
+      const [adminInfo, errorType] = await api.admin.searchAccount({ username: adminSearchResult.username });
       if (errorType || !adminInfo) {
         // error - if adminInfo.status === this.httpUserNotFoundErrorCode that means the username can't be found in the db
         return { adminSearchResult: adminSearchResult, error: true, errorType };
@@ -329,12 +330,12 @@ export default class AdminUiHandler extends FormModalUiHandler {
 
       if (service === "discord") {
         if (mode === "Link") {
-          errorType = await pokerogueApi.admin.linkAccountToDiscord({
+          errorType = await api.admin.linkAccountToDiscord({
             discordId: adminSearchResult.discordId,
             username: adminSearchResult.username,
           });
         } else if (mode === "Unlink") {
-          errorType = await pokerogueApi.admin.unlinkAccountFromDiscord({
+          errorType = await api.admin.unlinkAccountFromDiscord({
             discordId: adminSearchResult.discordId,
             username: adminSearchResult.username,
           });
@@ -343,12 +344,12 @@ export default class AdminUiHandler extends FormModalUiHandler {
         }
       } else if (service === "google") {
         if (mode === "Link") {
-          errorType = await pokerogueApi.admin.linkAccountToGoogleId({
+          errorType = await api.admin.linkAccountToGoogleId({
             googleId: adminSearchResult.googleId,
             username: adminSearchResult.username,
           });
         } else if (mode === "Unlink") {
-          errorType = await pokerogueApi.admin.unlinkAccountFromGoogleId({
+          errorType = await api.admin.unlinkAccountFromGoogleId({
             googleId: adminSearchResult.googleId,
             username: adminSearchResult.username,
           });

@@ -2,11 +2,13 @@ import {
   leaveEncounterWithoutBattle,
   setEncounterRewards,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { ModifierTypeFunc, modifierTypes } from "#app/modifier/modifier-type";
+import type { ModifierTypeFunc } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-type";
 import { randSeedInt } from "#app/utils";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
-import MysteryEncounter, { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
+import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
+import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
 
@@ -15,7 +17,6 @@ const namespace = "mysteryEncounters/departmentStoreSale";
 
 /**
  * Department Store Sale encounter.
- * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3797 | GitHub Issue #3797}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const DepartmentStoreSaleEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(
@@ -137,16 +138,14 @@ export const DepartmentStoreSaleEncounter: MysteryEncounter = MysteryEncounterBu
       const modifiers: ModifierTypeFunc[] = [];
       let i = 0;
       while (i < 4) {
-        // 10/30/20/5 weight on pokeballs
-        const roll = randSeedInt(65);
+        // 10/30/20 weight on pokeballs
+        const roll = randSeedInt(60);
         if (roll < 10) {
           modifiers.push(modifierTypes.POKEBALL);
         } else if (roll < 40) {
           modifiers.push(modifierTypes.GREAT_BALL);
-        } else if (roll < 60) {
-          modifiers.push(modifierTypes.ULTRA_BALL);
         } else {
-          modifiers.push(modifierTypes.ROGUE_BALL);
+          modifiers.push(modifierTypes.ULTRA_BALL);
         }
         i++;
       }

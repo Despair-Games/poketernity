@@ -10,7 +10,7 @@ import {
   runMysteryEncounterToEnd,
   skipBattleRunMysteryEncounterRewardsPhase,
 } from "#test/mystery-encounter/encounter-test-utils";
-import BattleScene from "#app/battle-scene";
+import type BattleScene from "#app/battle-scene";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { initSceneWithoutEncounterPhase } from "#test/utils/gameManagerUtils";
@@ -62,7 +62,7 @@ describe("A Trainer's Test - Mystery Encounter", () => {
     await game.runToMysteryEncounter(MysteryEncounterType.A_TRAINERS_TEST, defaultParty);
 
     expect(ATrainersTestEncounter.encounterType).toBe(MysteryEncounterType.A_TRAINERS_TEST);
-    expect(ATrainersTestEncounter.encounterTier).toBe(MysteryEncounterTier.ROGUE);
+    expect(ATrainersTestEncounter.encounterTier).toBe(MysteryEncounterTier.EPIC);
     expect(ATrainersTestEncounter.dialogue).toBeDefined();
     expect(ATrainersTestEncounter.dialogue.intro).toBeDefined();
     expect(ATrainersTestEncounter.dialogue.intro?.[0].speaker).toBeDefined();

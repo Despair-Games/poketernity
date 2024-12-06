@@ -1,24 +1,26 @@
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
+import type { EnemyPartyConfig } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import {
-  EnemyPartyConfig,
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,
   setEncounterExp,
   setEncounterRewards,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { STEALING_MOVES } from "#app/data/mystery-encounters/requirements/requirement-groups";
-import Pokemon, { EnemyPokemon } from "#app/field/pokemon";
+import type Pokemon from "#app/field/pokemon";
+import { EnemyPokemon } from "#app/field/pokemon";
 import { ModifierTier } from "#app/modifier/modifier-tier";
+import type { ModifierTypeOption } from "#app/modifier/modifier-type";
 import {
   getPartyLuckValue,
   getPlayerModifierTypeOptions,
   ModifierPoolType,
-  ModifierTypeOption,
   regenerateModifierPoolThresholds,
 } from "#app/modifier/modifier-type";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
-import MysteryEncounter, { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
+import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
+import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MoveRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
@@ -40,7 +42,6 @@ const namespace = "mysteryEncounters/fightOrFlight";
 
 /**
  * Fight or Flight encounter.
- * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3795 | GitHub Issue #3795}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const FightOrFlightEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(
@@ -91,12 +92,12 @@ export const FightOrFlightEncounter: MysteryEncounter = MysteryEncounterBuilder.
     encounter.enemyPartyConfigs = [config];
 
     // Calculate item
-    // Waves 10-40 GREAT, 60-120 ULTRA, 120-160 ROGUE, 160-180 MASTER
+    // Waves 10-40 GREAT, 60-120 ULTRA, 120-160 EPIC, 160-180 MASTER
     const tier =
       globalScene.currentBattle.waveIndex > 160
         ? ModifierTier.MASTER
         : globalScene.currentBattle.waveIndex > 120
-          ? ModifierTier.ROGUE
+          ? ModifierTier.EPIC
           : globalScene.currentBattle.waveIndex > 40
             ? ModifierTier.ULTRA
             : ModifierTier.GREAT;

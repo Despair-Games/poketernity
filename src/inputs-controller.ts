@@ -1,19 +1,18 @@
 import Phaser from "phaser";
-import * as Utils from "./utils";
-import { deepCopy } from "./utils";
+import { getEnumValues, deepCopy } from "#app/utils";
 import pad_generic from "./configs/inputs/pad_generic";
 import pad_unlicensedSNES from "./configs/inputs/pad_unlicensedSNES";
 import pad_xbox360 from "./configs/inputs/pad_xbox360";
 import pad_dualshock from "./configs/inputs/pad_dualshock";
 import pad_procon from "./configs/inputs/pad_procon";
 import { Mode } from "./ui/ui";
-import SettingsGamepadUiHandler from "./ui/settings/settings-gamepad-ui-handler";
-import SettingsKeyboardUiHandler from "./ui/settings/settings-keyboard-ui-handler";
+import type SettingsGamepadUiHandler from "./ui/settings/settings-gamepad-ui-handler";
+import type SettingsKeyboardUiHandler from "./ui/settings/settings-keyboard-ui-handler";
 import cfg_keyboard_qwerty from "./configs/inputs/cfg_keyboard_qwerty";
 import { assign, getButtonWithKeycode, getIconForLatestInput, swap } from "#app/configs/inputs/configHandler";
 import { globalScene } from "#app/global-scene";
-import { SettingGamepad } from "#app/system/settings/settings-gamepad";
-import { SettingKeyboard } from "#app/system/settings/settings-keyboard";
+import type { SettingGamepad } from "#app/system/settings/settings-gamepad";
+import type { SettingKeyboard } from "#app/system/settings/settings-keyboard";
 import TouchControl from "#app/touch-controls";
 import { Button } from "#enums/buttons";
 import { Device } from "#enums/devices";
@@ -105,7 +104,7 @@ export class InputsController {
       [Device.KEYBOARD]: "default",
     };
 
-    for (const b of Utils.getEnumValues(Button)) {
+    for (const b of getEnumValues(Button)) {
       this.interactions[b] = {
         pressTime: false,
         isPressed: false,

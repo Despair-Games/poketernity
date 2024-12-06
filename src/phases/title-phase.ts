@@ -4,7 +4,7 @@ import { fetchDailyRunSeed, getDailyRunStarters } from "#app/data/daily-run";
 import { Gender } from "#app/data/gender";
 import { getBiomeKey } from "#app/field/arena";
 import { GameMode, GameModes, getGameMode } from "#app/game-mode";
-import { Modifier } from "#app/modifier/modifier";
+import type { Modifier } from "#app/modifier/modifier";
 import {
   getDailyRunStarterModifiers,
   ModifierPoolType,
@@ -12,13 +12,13 @@ import {
   regenerateModifierPoolThresholds,
 } from "#app/modifier/modifier-type";
 import { Phase } from "#app/phase";
-import { SessionSaveData } from "#app/system/game-data";
+import type { SessionSaveData } from "#app/system/game-data";
 import { Unlockables } from "#app/system/unlockables";
 import { vouchers } from "#app/system/voucher";
-import { OptionSelectConfig, OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler";
+import type { OptionSelectConfig, OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler";
 import { SaveSlotUiMode } from "#app/ui/save-slot-select-ui-handler";
 import { Mode } from "#app/ui/ui";
-import * as Utils from "#app/utils";
+import { isLocal, isLocalServerConnected } from "#app/utils";
 import i18next from "i18next";
 import { CheckSwitchPhase } from "./check-switch-phase";
 import { EncounterPhase } from "./encounter-phase";
@@ -275,7 +275,7 @@ export class TitlePhase extends Phase {
       };
 
       // If Online, calls seed fetch from db to generate daily run. If Offline, generates a daily run based on current date.
-      if (!Utils.isLocal || Utils.isLocalServerConnected) {
+      if (!isLocal || isLocalServerConnected) {
         fetchDailyRunSeed()
           .then((seed) => {
             if (seed) {

@@ -6,17 +6,18 @@ import {
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
-import MysteryEncounter, { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
-import MysteryEncounterOption, {
-  MysteryEncounterOptionBuilder,
-} from "#app/data/mystery-encounters/mystery-encounter-option";
+import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
+import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
+import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
+import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { TrainerSlot } from "#app/data/trainer-config";
 import { HiddenAbilityRateBoosterModifier, IvScannerModifier } from "#app/modifier/modifier";
-import { EnemyPokemon } from "#app/field/pokemon";
+import type { EnemyPokemon } from "#app/field/pokemon";
 import { PokeballType } from "#enums/pokeball";
 import { PlayerGender } from "#enums/player-gender";
-import { IntegerHolder, randSeedInt } from "#app/utils";
-import PokemonSpecies, { getPokemonSpecies } from "#app/data/pokemon-species";
+import { NumberHolder, randSeedInt } from "#app/utils";
+import type PokemonSpecies from "#app/data/pokemon-species";
+import { getPokemonSpecies } from "#app/data/pokemon-species";
 import { MoneyRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
 import {
   doPlayerFlee,
@@ -44,7 +45,6 @@ const NUM_SAFARI_ENCOUNTERS = 3;
 
 /**
  * Safari Zone encounter.
- * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3800 | GitHub Issue #3800}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const SafariZoneEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(
@@ -294,7 +294,7 @@ async function summonSafariPokemon() {
       if (pokemon.species.abilityHidden) {
         const hiddenIndex = pokemon.species.ability2 ? 2 : 1;
         if (pokemon.abilityIndex < hiddenIndex) {
-          const hiddenAbilityChance = new IntegerHolder(256);
+          const hiddenAbilityChance = new NumberHolder(256);
           globalScene.applyModifiers(HiddenAbilityRateBoosterModifier, true, hiddenAbilityChance);
 
           const hasHiddenAbility = !randSeedInt(hiddenAbilityChance.value);

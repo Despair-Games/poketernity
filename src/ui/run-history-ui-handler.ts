@@ -1,16 +1,16 @@
-import BattleScene from "#app/battle-scene";
+import type BattleScene from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
 import { GameModes } from "../game-mode";
 import { TextStyle, addTextObject } from "./text";
 import { Mode } from "./ui";
 import { addWindow } from "./ui-theme";
-import * as Utils from "../utils";
-import PokemonData from "../system/pokemon-data";
+import { fixedInt, formatLargeNumber } from "#app/utils";
+import type PokemonData from "../system/pokemon-data";
 import MessageUiHandler from "./message-ui-handler";
 import i18next from "i18next";
 import { Button } from "../enums/buttons";
 import { BattleType } from "../battle";
-import { RunEntry } from "../system/game-data";
+import type { RunEntry } from "../system/game-data";
 import { PlayerGender } from "#enums/player-gender";
 import { TrainerVariant } from "../field/trainer";
 import { RunDisplayMode } from "#app/ui/run-info-ui-handler";
@@ -220,7 +220,7 @@ export default class RunHistoryUiHandler extends MessageUiHandler {
       globalScene.tweens.add({
         targets: this.runsContainer,
         y: this.runContainerInitialY - 56 * scrollCursor,
-        duration: Utils.fixedInt(325),
+        duration: fixedInt(325),
         ease: "Sine.easeInOut",
       });
     }
@@ -316,7 +316,7 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
           const enemyLevel = addTextObject(
             32,
             20,
-            `${i18next.t("saveSlotSelectUiHandler:lv")}${Utils.formatLargeNumber(enemy.level, 1000)}`,
+            `${i18next.t("saveSlotSelectUiHandler:lv")}${formatLargeNumber(enemy.level, 1000)}`,
             TextStyle.PARTY,
             { fontSize: "54px", color: "#f8f8f8" },
           );
@@ -410,7 +410,7 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
       const text = addTextObject(
         32,
         20,
-        `${i18next.t("saveSlotSelectUiHandler:lv")}${Utils.formatLargeNumber(pokemon.level, 1000)}`,
+        `${i18next.t("saveSlotSelectUiHandler:lv")}${formatLargeNumber(pokemon.level, 1000)}`,
         TextStyle.PARTY,
         { fontSize: "54px", color: "#f8f8f8" },
       );

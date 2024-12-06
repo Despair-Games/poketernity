@@ -1,12 +1,16 @@
-import { EnemyPartyConfig } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import Pokemon, { PlayerPokemon, PokemonMove } from "#app/field/pokemon";
-import { capitalizeFirstLetter, isNullOrUndefined } from "#app/utils";
-import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import MysteryEncounterIntroVisuals, { MysteryEncounterSpriteConfig } from "#app/field/mystery-encounter-intro";
-import * as Utils from "#app/utils";
-import { StatusEffect } from "#enums/status-effect";
-import MysteryEncounterDialogue, { OptionTextDisplay } from "./mystery-encounter-dialogue";
-import MysteryEncounterOption, { MysteryEncounterOptionBuilder, OptionPhaseCallback } from "./mystery-encounter-option";
+import type { EnemyPartyConfig } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import type { PlayerPokemon, PokemonMove } from "#app/field/pokemon";
+import type Pokemon from "#app/field/pokemon";
+import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
+import type { MysteryEncounterSpriteConfig } from "#app/field/mystery-encounter-intro";
+import MysteryEncounterIntroVisuals from "#app/field/mystery-encounter-intro";
+import { capitalizeFirstLetter, isNullOrUndefined, randSeedInt } from "#app/utils";
+import type { StatusEffect } from "#enums/status-effect";
+import type { OptionTextDisplay } from "./mystery-encounter-dialogue";
+import type MysteryEncounterDialogue from "./mystery-encounter-dialogue";
+import type { OptionPhaseCallback } from "./mystery-encounter-option";
+import type MysteryEncounterOption from "./mystery-encounter-option";
+import { MysteryEncounterOptionBuilder } from "./mystery-encounter-option";
 import {
   EncounterPokemonRequirement,
   EncounterSceneRequirement,
@@ -15,13 +19,13 @@ import {
   StatusEffectRequirement,
   WaveRangeRequirement,
 } from "./mystery-encounter-requirements";
-import { BattlerIndex } from "#app/battle";
+import type { BattlerIndex } from "#app/battle";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import { GameModes } from "#app/game-mode";
-import { EncounterAnim } from "#enums/encounter-anims";
-import { Challenges } from "#enums/challenges";
+import type { GameModes } from "#app/game-mode";
+import type { EncounterAnim } from "#enums/encounter-anims";
+import type { Challenges } from "#enums/challenges";
 import { globalScene } from "#app/global-scene";
 
 export interface EncounterStartOfBattleEffect {
@@ -34,7 +38,7 @@ export interface EncounterStartOfBattleEffect {
 }
 
 const DEFAULT_MAX_ALLOWED_ENCOUNTERS = 2;
-const DEFAULT_MAX_ALLOWED_ROGUE_ENCOUNTERS = 1;
+const DEFAULT_MAX_ALLOWED_EPIC_ENCOUNTERS = 1;
 
 /**
  * Used by {@linkcode MysteryEncounterBuilder} class to define required/optional properties on the {@linkcode MysteryEncounter} class when building.
@@ -141,7 +145,7 @@ export default class MysteryEncounter implements IMysteryEncounter {
   continuousEncounter: boolean;
   /**
    * Maximum number of times the encounter can be seen per run
-   * Rogue tier encounters default to 1, others default to 3
+   * Epic tier encounters default to 1, others default to 3
    */
   maxAllowedEncounters: number;
   /**
@@ -279,10 +283,10 @@ export default class MysteryEncounter implements IMysteryEncounter {
     this.localizationKey = this.localizationKey ?? "";
     this.dialogue = this.dialogue ?? {};
     this.spriteConfigs = this.spriteConfigs ? [...this.spriteConfigs] : [];
-    // Default max is 1 for ROGUE encounters, 2 for others
+    // Default max is 1 for EPIC encounters, 2 for others
     this.maxAllowedEncounters =
-      (this.maxAllowedEncounters ?? this.encounterTier === MysteryEncounterTier.ROGUE)
-        ? DEFAULT_MAX_ALLOWED_ROGUE_ENCOUNTERS
+      (this.maxAllowedEncounters ?? this.encounterTier === MysteryEncounterTier.EPIC)
+        ? DEFAULT_MAX_ALLOWED_EPIC_ENCOUNTERS
         : DEFAULT_MAX_ALLOWED_ENCOUNTERS;
     this.encounterMode = MysteryEncounterMode.DEFAULT;
     this.requirements = this.requirements ? this.requirements : [];
@@ -376,13 +380,13 @@ export default class MysteryEncounter implements IMysteryEncounter {
       }
       if (truePrimaryPool.length > 0) {
         // Always choose from the non-overlapping pokemon first
-        this.primaryPokemon = truePrimaryPool[Utils.randSeedInt(truePrimaryPool.length, 0)];
+        this.primaryPokemon = truePrimaryPool[randSeedInt(truePrimaryPool.length, 0)];
         return true;
       } else {
         // If there are multiple overlapping pokemon, we're okay - just choose one and take it out of the primary pokemon pool
         if (overlap.length > 1 || this.secondaryPokemon.length - overlap.length >= 1) {
           // is this working?
-          this.primaryPokemon = overlap[Utils.randSeedInt(overlap.length, 0)];
+          this.primaryPokemon = overlap[randSeedInt(overlap.length, 0)];
           this.secondaryPokemon = this.secondaryPokemon.filter((supp) => supp !== this.primaryPokemon);
           return true;
         }
@@ -393,7 +397,7 @@ export default class MysteryEncounter implements IMysteryEncounter {
       }
     } else {
       // this means we CAN have the same pokemon be a primary and secondary pokemon, so just choose any qualifying one randomly.
-      this.primaryPokemon = qualified[Utils.randSeedInt(qualified.length, 0)];
+      this.primaryPokemon = qualified[randSeedInt(qualified.length, 0)];
       return true;
     }
   }
@@ -701,7 +705,7 @@ export class MysteryEncounterBuilder implements Partial<IMysteryEncounter> {
    * COMMON 32/64 odds
    * GREAT 16/64 odds
    * ULTRA 10/64 odds
-   * ROGUE 6/64 odds
+   * EPIC 6/64 odds
    * ULTRA_RARE Not currently used
    * @param encounterTier
    * @returns

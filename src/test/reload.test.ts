@@ -1,13 +1,13 @@
 import { GameModes } from "#app/game-mode";
-import { pokerogueApi } from "#app/plugins/api/pokerogue-api";
-import OptionSelectUiHandler from "#app/ui/settings/option-select-ui-handler";
+import { api } from "#app/plugins/api/api";
+import type OptionSelectUiHandler from "#app/ui/settings/option-select-ui-handler";
 import { Mode } from "#app/ui/ui";
 import { Biome } from "#enums/biome";
 import { Button } from "#enums/buttons";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
 import GameManager from "#test/utils/gameManager";
-import { MockClock } from "#test/utils/mocks/mockClock";
+import type { MockClock } from "#test/utils/mocks/mockClock";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("Reload", () => {
@@ -26,8 +26,8 @@ describe("Reload", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    vi.spyOn(pokerogueApi, "getGameTitleStats").mockResolvedValue({ battleCount: -1, playerCount: -1 });
-    vi.spyOn(pokerogueApi.daily, "getSeed").mockResolvedValue("test-seed");
+    vi.spyOn(api, "getGameTitleStats").mockResolvedValue({ battleCount: -1, playerCount: -1 });
+    vi.spyOn(api.daily, "getSeed").mockResolvedValue("test-seed");
   });
 
   it("should not have RNG inconsistencies in a Classic run", async () => {

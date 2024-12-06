@@ -3,18 +3,17 @@ import { Mode } from "./ui";
 import UiHandler from "./ui-handler";
 import { Button } from "#enums/buttons";
 import { addWindow, WindowVariant } from "./ui-theme";
-import { MysteryEncounterPhase } from "../phases/mystery-encounter-phases";
+import type { MysteryEncounterPhase } from "../phases/mystery-encounter-phases";
 import { PartyUiMode } from "./party-ui-handler";
-import MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
-import * as Utils from "../utils";
-import { isNullOrUndefined } from "../utils";
+import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
+import { fixedInt, isNullOrUndefined } from "#app/utils";
 import { getPokeballAtlasKey } from "../data/pokeball";
-import { OptionSelectSettings } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import type { OptionSelectSettings } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { getEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import i18next from "i18next";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
-import BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
+import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 import { globalScene } from "#app/global-scene";
 
 export default class MysteryEncounterUiHandler extends UiHandler {
@@ -454,10 +453,10 @@ export default class MysteryEncounterUiHandler extends UiHandler {
       if (optionTextWidth > nonScrollWidth) {
         this.optionScrollTweens[i] = globalScene.tweens.add({
           targets: optionText,
-          delay: Utils.fixedInt(2000),
+          delay: fixedInt(2000),
           loop: -1,
-          hold: Utils.fixedInt(2000),
-          duration: Utils.fixedInt(((optionTextWidth - nonScrollWidth) / 15) * 2000),
+          hold: fixedInt(2000),
+          duration: fixedInt(((optionTextWidth - nonScrollWidth) / 15) * 2000),
           x: `-=${optionTextWidth - nonScrollWidth}`,
         });
       }
@@ -493,9 +492,9 @@ export default class MysteryEncounterUiHandler extends UiHandler {
           ? 1
           : mysteryEncounter.encounterTier === MysteryEncounterTier.ULTRA
             ? 2
-            : mysteryEncounter.encounterTier === MysteryEncounterTier.ROGUE
+            : mysteryEncounter.encounterTier === MysteryEncounterTier.EPIC
               ? 3
-              : 4;
+              : 3; // There is no 4th ball rn
     const ballType = getPokeballAtlasKey(index);
     this.rarityBall.setTexture("pb", ballType);
 
@@ -525,10 +524,10 @@ export default class MysteryEncounterUiHandler extends UiHandler {
     if (descriptionLineCount > 6) {
       this.descriptionScrollTween = globalScene.tweens.add({
         targets: descriptionTextObject,
-        delay: Utils.fixedInt(2000),
+        delay: fixedInt(2000),
         loop: -1,
-        hold: Utils.fixedInt(2000),
-        duration: Utils.fixedInt((descriptionLineCount - 6) * 2000),
+        hold: fixedInt(2000),
+        duration: fixedInt((descriptionLineCount - 6) * 2000),
         y: `-=${10 * (descriptionLineCount - 6)}`,
       });
     }
@@ -635,10 +634,10 @@ export default class MysteryEncounterUiHandler extends UiHandler {
       if (tooltipLineCount > 3) {
         this.tooltipScrollTween = globalScene.tweens.add({
           targets: tooltipTextObject,
-          delay: Utils.fixedInt(1200),
+          delay: fixedInt(1200),
           loop: -1,
-          hold: Utils.fixedInt(1200),
-          duration: Utils.fixedInt((tooltipLineCount - 3) * 1200),
+          hold: fixedInt(1200),
+          duration: fixedInt((tooltipLineCount - 3) * 1200),
           y: `-=${11.2 * (tooltipLineCount - 3)}`,
         });
       }

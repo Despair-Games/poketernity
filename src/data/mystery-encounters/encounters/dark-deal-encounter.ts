@@ -1,18 +1,15 @@
-import { Type } from "#enums/type";
+import type { Type } from "#enums/type";
 import { isNullOrUndefined, randSeedInt } from "#app/utils";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
 import { globalScene } from "#app/global-scene";
 import { modifierTypes } from "#app/modifier/modifier-type";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
-import MysteryEncounter, { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
+import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
+import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
-import {
-  EnemyPartyConfig,
-  EnemyPokemonConfig,
-  initBattleWithEnemyConfig,
-  leaveEncounterWithoutBattle,
-} from "../utils/encounter-phase-utils";
+import type { EnemyPartyConfig, EnemyPokemonConfig } from "../utils/encounter-phase-utils";
+import { initBattleWithEnemyConfig, leaveEncounterWithoutBattle } from "../utils/encounter-phase-utils";
 import {
   getRandomPlayerPokemon,
   getRandomSpeciesByStarterCost,
@@ -20,7 +17,8 @@ import {
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { ModifierRewardPhase } from "#app/phases/modifier-reward-phase";
-import { PokemonFormChangeItemModifier, PokemonHeldItemModifier } from "#app/modifier/modifier";
+import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
+import { PokemonFormChangeItemModifier } from "#app/modifier/modifier";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
 import { Challenges } from "#enums/challenges";
 
@@ -95,13 +93,12 @@ const excludedBosses = [
 
 /**
  * Dark Deal encounter.
- * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3806 | GitHub Issue #3806}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const DarkDealEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(
   MysteryEncounterType.DARK_DEAL,
 )
-  .withEncounterTier(MysteryEncounterTier.ROGUE)
+  .withEncounterTier(MysteryEncounterTier.EPIC)
   .withIntroSpriteConfigs([
     {
       spriteKey: "dark_deal_scientist",
@@ -165,9 +162,9 @@ export const DarkDealEncounter: MysteryEncounter = MysteryEncounterBuilder.withE
         };
       })
       .withOptionPhase(async () => {
-        // Give the player 5 Rogue Balls
+        // Give the player 5 Ultra Balls
         const encounter = globalScene.currentBattle.mysteryEncounter!;
-        globalScene.unshiftPhase(new ModifierRewardPhase(modifierTypes.ROGUE_BALL));
+        globalScene.unshiftPhase(new ModifierRewardPhase(modifierTypes.ULTRA_BALL));
 
         // Start encounter with random legendary (7-10 starter strength) that has level additive
         // If this is a mono-type challenge, always ensure the required type is filtered for

@@ -1,4 +1,4 @@
-import { InfoToggle } from "#app/battle-scene";
+import type { InfoToggle } from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
 import { addTextObject, TextStyle } from "./text";
 import { getTypeDamageMultiplierColor } from "#app/data/type";
@@ -6,12 +6,13 @@ import { Type } from "#enums/type";
 import { Command } from "./command-ui-handler";
 import { Mode } from "./ui";
 import UiHandler from "./ui-handler";
-import * as Utils from "../utils";
+import { getLocalizedSpriteKey, fixedInt, padInt } from "#app/utils";
 import { MoveCategory } from "#app/data/move";
 import i18next from "i18next";
 import { Button } from "#enums/buttons";
-import Pokemon, { PokemonMove } from "#app/field/pokemon";
-import { CommandPhase } from "#app/phases/command-phase";
+import type { PokemonMove } from "#app/field/pokemon";
+import type Pokemon from "#app/field/pokemon";
+import type { CommandPhase } from "#app/phases/command-phase";
 import MoveInfoOverlay from "./move-info-overlay";
 import { BattleType } from "#app/battle";
 
@@ -52,7 +53,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
     this.typeIcon = globalScene.add.sprite(
       globalScene.scaledCanvas.width - 57,
       -36,
-      Utils.getLocalizedSpriteKey("types"),
+      getLocalizedSpriteKey("types"),
       "unknown",
     );
     this.typeIcon.setVisible(false);
@@ -196,7 +197,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
     }
     globalScene.tweens.add({
       targets: [this.movesContainer, this.cursorObj],
-      duration: Utils.fixedInt(125),
+      duration: fixedInt(125),
       ease: "Sine.easeInOut",
       alpha: visible ? 0 : 1,
     });
@@ -240,7 +241,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
     if (hasMove) {
       const pokemonMove = moveset[cursor]!; // TODO: is the bang correct?
       const moveType = pokemon.getMoveType(pokemonMove.getMove());
-      const textureKey = Utils.getLocalizedSpriteKey("types");
+      const textureKey = getLocalizedSpriteKey("types");
       this.typeIcon.setTexture(textureKey, Type[moveType].toLowerCase()).setScale(0.8);
 
       const moveCategory = pokemonMove.getMove().category;
@@ -250,8 +251,8 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
       const maxPP = pokemonMove.getMovePp();
       const pp = maxPP - pokemonMove.ppUsed;
 
-      const ppLeftStr = Utils.padInt(pp, 2, "  ");
-      const ppMaxStr = Utils.padInt(maxPP, 2, "  ");
+      const ppLeftStr = padInt(pp, 2, "  ");
+      const ppMaxStr = padInt(maxPP, 2, "  ");
       this.ppText.setText(`${ppLeftStr}/${ppMaxStr}`);
       this.powerText.setText(`${power >= 0 ? power : "---"}`);
       this.accuracyText.setText(`${accuracy >= 0 ? accuracy : "---"}`);

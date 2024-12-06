@@ -8,7 +8,8 @@ import { modifierTypes } from "#app/modifier/modifier-type";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
 import { globalScene } from "#app/global-scene";
-import MysteryEncounter, { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
+import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
+import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import {
   AbilityRequirement,
@@ -38,7 +39,6 @@ const MONEY_MAXIMUM_MULTIPLIER = 30;
 
 /**
  * An Offer You Can't Refuse encounter.
- * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3808 | GitHub Issue #3808}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const AnOfferYouCantRefuseEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(

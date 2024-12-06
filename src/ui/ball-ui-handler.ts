@@ -5,8 +5,10 @@ import { Mode } from "./ui";
 import UiHandler from "./ui-handler";
 import { addWindow } from "./ui-theme";
 import { Button } from "#enums/buttons";
-import { CommandPhase } from "#app/phases/command-phase";
+import type { CommandPhase } from "#app/phases/command-phase";
 import { globalScene } from "#app/global-scene";
+import { PokeballType } from "#app/enums/pokeball";
+import { getEnumLength } from "#app/utils";
 
 export default class BallUiHandler extends UiHandler {
   private pokeballSelectContainer: Phaser.GameObjects.Container;
@@ -41,7 +43,12 @@ export default class BallUiHandler extends UiHandler {
     this.pokeballSelectContainer.setVisible(false);
     ui.add(this.pokeballSelectContainer);
 
-    this.pokeballSelectBg = addWindow(0, 0, 50 + Math.max(64, optionsTextWidth), 32 + 480 * this.scale);
+    this.pokeballSelectBg = addWindow(
+      0,
+      0,
+      50 + Math.max(64, optionsTextWidth),
+      32 + getEnumLength(PokeballType) * 96 * this.scale,
+    );
     this.pokeballSelectBg.setOrigin(0, 1);
     this.pokeballSelectContainer.add(this.pokeballSelectBg);
     this.pokeballSelectContainer.add(optionsText);
