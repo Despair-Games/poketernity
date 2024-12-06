@@ -91,7 +91,6 @@ const SENSU_STYLE_BIOMES = [
 
 /**
  * Dancing Lessons encounter.
- * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3823 | GitHub Issue #3823}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const DancingLessonsEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(

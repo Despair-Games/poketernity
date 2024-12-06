@@ -5,10 +5,10 @@ import type {
   SearchAccountResponse,
   UnlinkAccountFromDiscordIdRequest,
   UnlinkAccountFromGoogledIdRequest,
-} from "#app/@types/PokerogueAdminApi";
+} from "#app/@types/AdminApi";
 import { ApiBase } from "#app/plugins/api/api-base";
 
-export class PokerogueAdminApi extends ApiBase {
+export class AdminApi extends ApiBase {
   public readonly ERR_USERNAME_NOT_FOUND: string = "Username not found!";
 
   /**

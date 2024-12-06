@@ -45,7 +45,6 @@ const namespace = "mysteryEncounters/absoluteAvarice";
 
 /**
  * Absolute Avarice encounter.
- * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3805 | GitHub Issue #3805}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const AbsoluteAvariceEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(
