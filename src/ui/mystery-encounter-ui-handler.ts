@@ -149,10 +149,10 @@ export default class MysteryEncounterUiHandler extends UiHandler {
             }, 300);
           });
         } else if (
-          this.blockInput ||
-          (!this.optionsMeetsReqs[cursor] &&
-            (selected.optionMode === MysteryEncounterOptionMode.DISABLED_OR_DEFAULT ||
-              selected.optionMode === MysteryEncounterOptionMode.DISABLED_OR_SPECIAL))
+          this.blockInput
+          || (!this.optionsMeetsReqs[cursor]
+            && (selected.optionMode === MysteryEncounterOptionMode.DISABLED_OR_DEFAULT
+              || selected.optionMode === MysteryEncounterOptionMode.DISABLED_OR_SPECIAL))
         ) {
           success = false;
         } else {
@@ -302,9 +302,9 @@ export default class MysteryEncounterUiHandler extends UiHandler {
       for (let i = 0; i < this.optionsContainer.length - 1; i++) {
         const optionMode = this.encounterOptions[i].optionMode;
         if (
-          !this.optionsMeetsReqs[i] &&
-          (optionMode === MysteryEncounterOptionMode.DISABLED_OR_DEFAULT ||
-            optionMode === MysteryEncounterOptionMode.DISABLED_OR_SPECIAL)
+          !this.optionsMeetsReqs[i]
+          && (optionMode === MysteryEncounterOptionMode.DISABLED_OR_DEFAULT
+            || optionMode === MysteryEncounterOptionMode.DISABLED_OR_SPECIAL)
         ) {
           continue;
         }
@@ -404,10 +404,10 @@ export default class MysteryEncounterUiHandler extends UiHandler {
           : optionDialogue.buttonLabel;
       let text: string | null;
       if (
-        option.hasRequirements() &&
-        this.optionsMeetsReqs[i] &&
-        (option.optionMode === MysteryEncounterOptionMode.DEFAULT_OR_SPECIAL ||
-          option.optionMode === MysteryEncounterOptionMode.DISABLED_OR_SPECIAL)
+        option.hasRequirements()
+        && this.optionsMeetsReqs[i]
+        && (option.optionMode === MysteryEncounterOptionMode.DEFAULT_OR_SPECIAL
+          || option.optionMode === MysteryEncounterOptionMode.DISABLED_OR_SPECIAL)
       ) {
         // Options with special requirements that are met are automatically colored green
         text = getEncounterText(label, TextStyle.ME_OPTION_SPECIAL);
@@ -420,9 +420,9 @@ export default class MysteryEncounterUiHandler extends UiHandler {
       }
 
       if (
-        !this.optionsMeetsReqs[i] &&
-        (option.optionMode === MysteryEncounterOptionMode.DISABLED_OR_DEFAULT ||
-          option.optionMode === MysteryEncounterOptionMode.DISABLED_OR_SPECIAL)
+        !this.optionsMeetsReqs[i]
+        && (option.optionMode === MysteryEncounterOptionMode.DISABLED_OR_DEFAULT
+          || option.optionMode === MysteryEncounterOptionMode.DISABLED_OR_SPECIAL)
       ) {
         optionText.setAlpha(0.5);
       }
@@ -575,10 +575,10 @@ export default class MysteryEncounterUiHandler extends UiHandler {
     const cursorOption = this.encounterOptions[cursor];
     const optionDialogue = cursorOption.dialogue!;
     if (
-      !this.optionsMeetsReqs[cursor] &&
-      (cursorOption.optionMode === MysteryEncounterOptionMode.DISABLED_OR_DEFAULT ||
-        cursorOption.optionMode === MysteryEncounterOptionMode.DISABLED_OR_SPECIAL) &&
-      optionDialogue.disabledButtonTooltip
+      !this.optionsMeetsReqs[cursor]
+      && (cursorOption.optionMode === MysteryEncounterOptionMode.DISABLED_OR_DEFAULT
+        || cursorOption.optionMode === MysteryEncounterOptionMode.DISABLED_OR_SPECIAL)
+      && optionDialogue.disabledButtonTooltip
     ) {
       text = getEncounterText(optionDialogue.disabledButtonTooltip, TextStyle.TOOLTIP_CONTENT);
     } else {
@@ -591,18 +591,18 @@ export default class MysteryEncounterUiHandler extends UiHandler {
       text = text.replace(
         /(\(\+\)[^\(\[]*)/gi,
         (substring) =>
-          "[/color][/shadow]" +
-          getBBCodeFrag(substring, TextStyle.SUMMARY_GREEN) +
-          "[/color][/shadow]" +
-          primaryStyleString,
+          "[/color][/shadow]"
+          + getBBCodeFrag(substring, TextStyle.SUMMARY_GREEN)
+          + "[/color][/shadow]"
+          + primaryStyleString,
       );
       text = text.replace(
         /(\(\-\)[^\(\[]*)/gi,
         (substring) =>
-          "[/color][/shadow]" +
-          getBBCodeFrag(substring, TextStyle.SUMMARY_BLUE) +
-          "[/color][/shadow]" +
-          primaryStyleString,
+          "[/color][/shadow]"
+          + getBBCodeFrag(substring, TextStyle.SUMMARY_BLUE)
+          + "[/color][/shadow]"
+          + primaryStyleString,
       );
     }
 

@@ -274,8 +274,8 @@ export default class RunInfoUiHandler extends UiHandler {
       const enemyContainer = globalScene.add.container(0, 0);
       // Wild - Single and Doubles
       if (
-        this.runInfo.battleType === BattleType.WILD ||
-        (this.runInfo.battleType === BattleType.MYSTERY_ENCOUNTER && !this.runInfo.trainer)
+        this.runInfo.battleType === BattleType.WILD
+        || (this.runInfo.battleType === BattleType.MYSTERY_ENCOUNTER && !this.runInfo.trainer)
       ) {
         switch (this.runInfo.enemyParty.length) {
           case 1:
@@ -288,8 +288,8 @@ export default class RunInfoUiHandler extends UiHandler {
             break;
         }
       } else if (
-        this.runInfo.battleType === BattleType.TRAINER ||
-        (this.runInfo.battleType === BattleType.MYSTERY_ENCOUNTER && this.runInfo.trainer)
+        this.runInfo.battleType === BattleType.TRAINER
+        || (this.runInfo.battleType === BattleType.MYSTERY_ENCOUNTER && this.runInfo.trainer)
       ) {
         this.parseTrainerDefeat(enemyContainer);
       }
@@ -352,8 +352,8 @@ export default class RunInfoUiHandler extends UiHandler {
       subSprite.setScale(0.65);
       subSprite.setPosition(34, 46);
       const mysteryEncounterTitle = i18next.t(
-        globalScene.getMysteryEncounter(this.runInfo.mysteryEncounterType as MysteryEncounterType, true)
-          .localizationKey + ":title",
+        globalScene.getMysteryEncounter(this.runInfo.mysteryEncounterType as MysteryEncounterType, true).localizationKey
+          + ":title",
       );
       const descContainer = globalScene.add.container(0, 0);
       const textBox = addTextObject(0, 0, mysteryEncounterTitle, TextStyle.WINDOW, {
@@ -608,8 +608,8 @@ export default class RunInfoUiHandler extends UiHandler {
 
     // If the player achieves a personal best in Endless, the mode text will be tinted similarly to SSS luck to celebrate their achievement.
     if (
-      (this.runInfo.gameMode === GameModes.ENDLESS || this.runInfo.gameMode === GameModes.SPLICED_ENDLESS) &&
-      this.runInfo.waveIndex === globalScene.gameData.gameStats.highestEndlessWave
+      (this.runInfo.gameMode === GameModes.ENDLESS || this.runInfo.gameMode === GameModes.SPLICED_ENDLESS)
+      && this.runInfo.waveIndex === globalScene.gameData.gameStats.highestEndlessWave
     ) {
       modeText.appendText(` [${i18next.t("runHistory:personalBest")}]`);
       modeText.setTint(0xffef5c, 0x47ff69, 0x6b6bff, 0xff6969);
@@ -912,8 +912,8 @@ export default class RunInfoUiHandler extends UiHandler {
             }
             const itemIcon = item?.getIcon(true);
             if (
-              item?.stackCount < item?.getMaxHeldItemCount(pokemon) &&
-              itemIcon.list[1] instanceof Phaser.GameObjects.BitmapText
+              item?.stackCount < item?.getMaxHeldItemCount(pokemon)
+              && itemIcon.list[1] instanceof Phaser.GameObjects.BitmapText
             ) {
               itemIcon.list[1].clearTint();
             }

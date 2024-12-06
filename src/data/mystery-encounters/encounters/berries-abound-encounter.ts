@@ -310,9 +310,9 @@ function tryGiveBerry(prioritizedPokemon?: PlayerPokemon) {
   if (prioritizedPokemon) {
     const heldBerriesOfType = globalScene.findModifier(
       (m) =>
-        m instanceof BerryModifier &&
-        m.pokemonId === prioritizedPokemon.id &&
-        (m as BerryModifier).berryType === berryType,
+        m instanceof BerryModifier
+        && m.pokemonId === prioritizedPokemon.id
+        && (m as BerryModifier).berryType === berryType,
       true,
     ) as BerryModifier;
 
