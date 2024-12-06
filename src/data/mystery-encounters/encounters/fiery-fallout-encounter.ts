@@ -1,6 +1,7 @@
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
+import type {
+  EnemyPartyConfig} from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import {
-  EnemyPartyConfig,
   initBattleWithEnemyConfig,
   loadCustomMovesForEncounter,
   leaveEncounterWithoutBattle,
@@ -9,10 +10,12 @@ import {
   transitionMysteryEncounterIntroVisuals,
   generateModifierType,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { AttackTypeBoosterModifierType, modifierTypes } from "#app/modifier/modifier-type";
+import type { AttackTypeBoosterModifierType} from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-type";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
-import MysteryEncounter, { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
+import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
+import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import {
   AbilityRequirement,
   CombinationPokemonRequirement,
@@ -23,7 +26,8 @@ import { getPokemonSpecies } from "#app/data/pokemon-species";
 import { Gender } from "#app/data/gender";
 import { Type } from "#enums/type";
 import { BattlerIndex } from "#app/battle";
-import Pokemon, { PokemonMove } from "#app/field/pokemon";
+import type Pokemon from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon";
 import { Moves } from "#enums/moves";
 import { EncounterBattleAnim } from "#app/data/battle-anims";
 import { WeatherType } from "#enums/weather-type";

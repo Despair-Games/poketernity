@@ -1,4 +1,5 @@
-import { BattlerIndex, BattleType } from "#app/battle";
+import type { BattlerIndex} from "#app/battle";
+import { BattleType } from "#app/battle";
 import { globalScene } from "#app/global-scene";
 import {
   applyPostFaintAbAttrs,
@@ -8,13 +9,16 @@ import {
   PostKnockOutAbAttr,
   PostVictoryAbAttr,
 } from "#app/data/ability";
-import { BattlerTagLapseType, DestinyBondTag, GrudgeTag } from "#app/data/battler-tags";
+import type { DestinyBondTag, GrudgeTag } from "#app/data/battler-tags";
+import { BattlerTagLapseType } from "#app/data/battler-tags";
 import { battleSpecDialogue } from "#app/data/dialogue";
 import { allMoves, PostVictoryStatStageChangeAttr } from "#app/data/move";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";
 import { BattleSpec } from "#app/enums/battle-spec";
 import { StatusEffect } from "#app/enums/status-effect";
-import Pokemon, { EnemyPokemon, HitResult, PlayerPokemon, PokemonMove } from "#app/field/pokemon";
+import type { EnemyPokemon} from "#app/field/pokemon";
+import type Pokemon from "#app/field/pokemon";
+import { HitResult, PlayerPokemon, PokemonMove } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { PokemonInstantReviveModifier } from "#app/modifier/modifier";
 import { SwitchType } from "#enums/switch-type";

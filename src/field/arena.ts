@@ -1,13 +1,15 @@
 import { globalScene } from "#app/global-scene";
+import type {
+  BiomeTierTrainerPools,
+  PokemonPools} from "#app/data/balance/biomes";
 import {
   biomePokemonPools,
   BiomePoolTier,
-  BiomeTierTrainerPools,
-  biomeTrainerPools,
-  PokemonPools,
+  biomeTrainerPools
 } from "#app/data/balance/biomes";
 import { type Constructor, randSeedInt } from "#app/utils";
-import PokemonSpecies, { getPokemonSpecies } from "#app/data/pokemon-species";
+import type PokemonSpecies from "#app/data/pokemon-species";
+import { getPokemonSpecies } from "#app/data/pokemon-species";
 import {
   getTerrainClearMessage,
   getTerrainStartMessage,
@@ -16,10 +18,11 @@ import {
   Weather,
 } from "#app/data/weather";
 import { CommonAnim } from "#app/data/battle-anims";
-import { Type } from "#enums/type";
-import Move from "#app/data/move";
-import { ArenaTag, ArenaTagSide, ArenaTrapTag, getArenaTag } from "#app/data/arena-tag";
-import { BattlerIndex } from "#app/battle";
+import type { Type } from "#enums/type";
+import type Move from "#app/data/move";
+import type { ArenaTag} from "#app/data/arena-tag";
+import { ArenaTagSide, ArenaTrapTag, getArenaTag } from "#app/data/arena-tag";
+import type { BattlerIndex } from "#app/battle";
 import { Terrain, TerrainType } from "#app/data/terrain";
 import {
   applyAbAttrs,
@@ -29,12 +32,12 @@ import {
   PostWeatherChangeAbAttr,
   TerrainEventTypeChangeAbAttr,
 } from "#app/data/ability";
-import Pokemon from "#app/field/pokemon";
+import type Pokemon from "#app/field/pokemon";
 import Overrides from "#app/overrides";
 import { TagAddedEvent, TagRemovedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";
-import { ArenaTagType } from "#enums/arena-tag-type";
+import type { ArenaTagType } from "#enums/arena-tag-type";
 import { Biome } from "#enums/biome";
-import { Moves } from "#enums/moves";
+import type { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
 import { TimeOfDay } from "#enums/time-of-day";
 import { TrainerType } from "#enums/trainer-type";

@@ -2,7 +2,8 @@ import { globalScene } from "#app/global-scene";
 import i18next from "i18next";
 import { isNullOrUndefined, randSeedInt } from "#app/utils";
 import { PokemonHeldItemModifier } from "#app/modifier/modifier";
-import Pokemon, { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
+import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
+import type Pokemon from "#app/field/pokemon";
 import {
   doPokeballBounceAnim,
   getPokeballAtlasKey,
@@ -14,10 +15,12 @@ import { addPokeballCaptureStars, addPokeballOpenParticles } from "#app/field/an
 import { getStatusEffectCatchRateMultiplier } from "#app/data/status-effect";
 import { achvs } from "#app/system/achv";
 import { Mode } from "#app/ui/ui";
-import { PartyOption, PartyUiMode } from "#app/ui/party-ui-handler";
+import type { PartyOption} from "#app/ui/party-ui-handler";
+import { PartyUiMode } from "#app/ui/party-ui-handler";
 import { Species } from "#enums/species";
-import { Type } from "#enums/type";
-import PokemonSpecies, { getPokemonSpecies } from "#app/data/pokemon-species";
+import type { Type } from "#enums/type";
+import type PokemonSpecies from "#app/data/pokemon-species";
+import { getPokemonSpecies } from "#app/data/pokemon-species";
 import { speciesStarterCosts } from "#app/data/balance/starters";
 import {
   getEncounterText,
@@ -25,13 +28,14 @@ import {
   showEncounterText,
 } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { modifierTypes, PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
+import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-type";
 import { Gender } from "#app/data/gender";
-import { PermanentStat } from "#enums/stat";
+import type { PermanentStat } from "#enums/stat";
 import { VictoryPhase } from "#app/phases/victory-phase";
 import { SummaryUiMode } from "#app/ui/summary-ui-handler";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
-import { Abilities } from "#enums/abilities";
+import type { Abilities } from "#enums/abilities";
 import type { PokeballType } from "#enums/pokeball";
 import { StatusEffect } from "#enums/status-effect";
 

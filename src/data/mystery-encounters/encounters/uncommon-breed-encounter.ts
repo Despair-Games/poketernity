@@ -1,17 +1,20 @@
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
+import type {
+  EnemyPartyConfig} from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import {
-  EnemyPartyConfig,
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,
   setEncounterExp,
   setEncounterRewards,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { CHARMING_MOVES } from "#app/data/mystery-encounters/requirements/requirement-groups";
-import Pokemon, { EnemyPokemon, PokemonMove } from "#app/field/pokemon";
+import type Pokemon from "#app/field/pokemon";
+import { EnemyPokemon, PokemonMove } from "#app/field/pokemon";
 import { getPartyLuckValue } from "#app/modifier/modifier-type";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
-import MysteryEncounter, { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
+import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
+import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import {
   MoveRequirement,
   PersistentModifierRequirement,
@@ -26,7 +29,7 @@ import {
 } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import PokemonData from "#app/system/pokemon-data";
 import { isNullOrUndefined, randSeedInt } from "#app/utils";
-import { Moves } from "#enums/moves";
+import type { Moves } from "#enums/moves";
 import { BattlerIndex } from "#app/battle";
 import { SelfStatusMove } from "#app/data/move";
 import { PokeballType } from "#enums/pokeball";

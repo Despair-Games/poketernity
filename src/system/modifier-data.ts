@@ -1,8 +1,9 @@
 import { globalScene } from "#app/global-scene";
 import { PersistentModifier } from "#app/modifier/modifier";
-import {
+import type {
   GeneratedPersistentModifierType,
-  ModifierType,
+  ModifierType} from "#app/modifier/modifier-type";
+import {
   ModifierTypeGenerator,
   getModifierTypeFuncById,
 } from "#app/modifier/modifier-type";

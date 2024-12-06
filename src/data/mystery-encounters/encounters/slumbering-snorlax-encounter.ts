@@ -1,15 +1,18 @@
 import { STEALING_MOVES } from "#app/data/mystery-encounters/requirements/requirement-groups";
-import { modifierTypes, PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
+import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-type";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
 import { globalScene } from "#app/global-scene";
 import { StatusEffect } from "#enums/status-effect";
-import MysteryEncounter, { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
+import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
+import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { MoveRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
-import {
+import type {
   EnemyPartyConfig,
-  EnemyPokemonConfig,
+  EnemyPokemonConfig} from "../utils/encounter-phase-utils";
+import {
   generateModifierType,
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,

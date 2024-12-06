@@ -1,17 +1,21 @@
-import Pokemon, { EnemyPokemon, HitResult, MoveResult, PlayerPokemon, PokemonMove } from "../field/pokemon";
+import type { EnemyPokemon} from "../field/pokemon";
+import type Pokemon from "../field/pokemon";
+import { HitResult, MoveResult, PlayerPokemon, PokemonMove } from "../field/pokemon";
 import { Type } from "#enums/type";
-import { Constructor } from "#app/utils";
+import type { Constructor } from "#app/utils";
 import { BooleanHolder, toDmgValue, randSeedItem, isNullOrUndefined, NumberHolder, randSeedInt } from "#app/utils";
 import { getPokemonNameWithAffix } from "../messages";
-import { Weather } from "#app/data/weather";
-import { BattlerTag, BattlerTagLapseType, GroundedTag } from "./battler-tags";
+import type { Weather } from "#app/data/weather";
+import type { BattlerTag} from "./battler-tags";
+import { BattlerTagLapseType, GroundedTag } from "./battler-tags";
 import {
   getNonVolatileStatusEffects,
   getStatusEffectDescriptor,
   getStatusEffectHealText,
 } from "#app/data/status-effect";
 import { Gender } from "./gender";
-import Move, {
+import type Move from "./move";
+import {
   AttackMove,
   MoveCategory,
   MoveFlags,
@@ -32,7 +36,8 @@ import Move, {
   NeutralDamageAgainstFlyingTypeMultiplierAttr,
   FixedDamageAttr,
 } from "./move";
-import { ArenaTagSide, ArenaTrapTag } from "./arena-tag";
+import type { ArenaTrapTag } from "./arena-tag";
+import { ArenaTagSide } from "./arena-tag";
 import { BerryModifier, HitHealModifier, PokemonHeldItemModifier } from "../modifier/modifier";
 import { TerrainType } from "./terrain";
 import {
@@ -41,11 +46,12 @@ import {
   SpeciesFormChangeWeatherTrigger,
 } from "./pokemon-forms";
 import i18next from "i18next";
-import { Localizable } from "#app/interfaces/locales";
+import type { Localizable } from "#app/interfaces/locales";
 import { Command } from "../ui/command-ui-handler";
 import { BerryModifierType } from "#app/modifier/modifier-type";
 import { getPokeballName } from "./pokeball";
-import { BattlerIndex, BattleType } from "#app/battle";
+import type { BattlerIndex} from "#app/battle";
+import { BattleType } from "#app/battle";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";

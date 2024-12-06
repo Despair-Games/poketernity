@@ -1,5 +1,6 @@
+import type {
+  EnemyPartyConfig} from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import {
-  EnemyPartyConfig,
   generateModifierType,
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,
@@ -10,11 +11,13 @@ import {
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { trainerConfigs, TrainerPartyCompoundTemplate, TrainerPartyTemplate } from "#app/data/trainer-config";
 import { ModifierTier } from "#app/modifier/modifier-tier";
-import { ModifierPoolType, modifierTypes, PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
+import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
+import { ModifierPoolType, modifierTypes } from "#app/modifier/modifier-type";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { globalScene } from "#app/global-scene";
-import MysteryEncounter, { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
+import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
+import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
@@ -24,15 +27,16 @@ import {
   applyAbilityOverrideToPokemon,
   applyModifierTypeToPlayerPokemon,
 } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
-import { Type } from "#enums/type";
+import type { Type } from "#enums/type";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { randSeedInt, randSeedShuffle } from "#app/utils";
 import { showEncounterDialogue, showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { Mode } from "#app/ui/ui";
 import i18next from "i18next";
-import { OptionSelectConfig } from "#app/ui/abstact-option-select-ui-handler";
-import { PlayerPokemon, PokemonMove } from "#app/field/pokemon";
+import type { OptionSelectConfig } from "#app/ui/abstact-option-select-ui-handler";
+import type { PlayerPokemon} from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon";
 import { Ability } from "#app/data/ability";
 import { BerryModifier } from "#app/modifier/modifier";
 import { BerryType } from "#enums/berry-type";

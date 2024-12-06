@@ -1,10 +1,13 @@
 import Phaser from "phaser";
-import BattleScene, { AnySound } from "#app/battle-scene";
+import type { AnySound } from "#app/battle-scene";
+import type BattleScene from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
-import { Variant, VariantSet, variantColorCache } from "#app/data/variant";
+import type { Variant, VariantSet} from "#app/data/variant";
+import { variantColorCache } from "#app/data/variant";
 import { variantData } from "#app/data/variant";
 import BattleInfo, { PlayerBattleInfo, EnemyBattleInfo } from "#app/ui/battle-info";
-import Move, {
+import type Move from "#app/data/move";
+import {
   HighCritAttr,
   HitsTagAttr,
   applyMoveAttrs,
@@ -36,9 +39,10 @@ import Move, {
   CombinedPledgeStabBoostAttr,
   VariableMoveTypeChartAttr,
 } from "#app/data/move";
+import type {
+  PokemonSpeciesForm} from "#app/data/pokemon-species";
 import {
   default as PokemonSpecies,
-  PokemonSpeciesForm,
   getFusedSpeciesName,
   getPokemonSpecies,
   getPokemonSpeciesForm,
@@ -66,7 +70,8 @@ import {
   deltaRgb,
   isBetween,
 } from "#app/utils";
-import { TypeDamageMultiplier, getTypeDamageMultiplier, getTypeRgb } from "#app/data/type";
+import type { TypeDamageMultiplier} from "#app/data/type";
+import { getTypeDamageMultiplier, getTypeRgb } from "#app/data/type";
 import { Type } from "#enums/type";
 import { getLevelTotalExp } from "#app/data/exp";
 import {
@@ -106,11 +111,12 @@ import { PokeballType } from "#enums/pokeball";
 import { Gender } from "#app/data/gender";
 import { initMoveAnim, loadMoveAnimAssets } from "#app/data/battle-anims";
 import { Status, getRandomStatus } from "#app/data/status-effect";
+import type {
+  SpeciesFormEvolution,
+  SpeciesEvolutionCondition} from "#app/data/balance/pokemon-evolutions";
 import {
   pokemonEvolutions,
   pokemonPrevolutions,
-  SpeciesFormEvolution,
-  SpeciesEvolutionCondition,
   FusionSpeciesFormEvolution,
 } from "#app/data/balance/pokemon-evolutions";
 import { reverseCompatibleTms, tmSpecies, tmPoolTiers } from "#app/data/balance/tms";
@@ -136,9 +142,10 @@ import {
 } from "../data/battler-tags";
 import { WeatherType } from "#enums/weather-type";
 import { ArenaTagSide, NoCritTag, WeakenMoveScreenTag } from "#app/data/arena-tag";
-import {
+import type {
   Ability,
-  AbAttr,
+  AbAttr} from "#app/data/ability";
+import {
   StatMultiplierAbAttr,
   BlockCritAbAttr,
   BonusCritAbAttr,
@@ -187,25 +194,29 @@ import {
   applyPostItemLostAbAttrs,
   PostItemLostAbAttr,
 } from "#app/data/ability";
-import PokemonData from "#app/system/pokemon-data";
+import type PokemonData from "#app/system/pokemon-data";
 import { BattlerIndex } from "#app/battle";
 import { Mode } from "#app/ui/ui";
-import PartyUiHandler, { PartyOption, PartyUiMode } from "#app/ui/party-ui-handler";
+import type { PartyOption} from "#app/ui/party-ui-handler";
+import PartyUiHandler, { PartyUiMode } from "#app/ui/party-ui-handler";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
-import { EVOLVE_MOVE, LevelMoves, RELEARN_MOVE } from "#app/data/balance/pokemon-level-moves";
+import type { LevelMoves} from "#app/data/balance/pokemon-level-moves";
+import { EVOLVE_MOVE, RELEARN_MOVE } from "#app/data/balance/pokemon-level-moves";
 import { DamageAchv, achvs } from "#app/system/achv";
-import { DexAttr, StarterDataEntry, StarterMoveset } from "#app/system/game-data";
+import type { StarterDataEntry, StarterMoveset } from "#app/system/game-data";
+import { DexAttr } from "#app/system/game-data";
 import { QuantizerCelebi, argbFromRgba, rgbaFromArgb } from "@material/material-color-utilities";
 import { getNatureStatMultiplier } from "#app/data/nature";
+import type {
+  SpeciesFormChange} from "#app/data/pokemon-forms";
 import {
-  SpeciesFormChange,
   SpeciesFormChangeActiveTrigger,
   SpeciesFormChangeMoveLearnedTrigger,
   SpeciesFormChangePostMoveTrigger,
   SpeciesFormChangeStatusEffectTrigger,
 } from "#app/data/pokemon-forms";
 import { TerrainType } from "#app/data/terrain";
-import { TrainerSlot } from "#app/data/trainer-config";
+import type { TrainerSlot } from "#app/data/trainer-config";
 import Overrides from "#app/overrides";
 import i18next from "i18next";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
@@ -215,7 +226,7 @@ import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattleSpec } from "#enums/battle-spec";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { BerryType } from "#enums/berry-type";
+import type { BerryType } from "#enums/berry-type";
 import { Biome } from "#enums/biome";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
