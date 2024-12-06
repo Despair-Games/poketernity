@@ -30,7 +30,7 @@ export interface ClearSessionSavedataRequest {
 }
 
 /**
- * Pokerogue API response for path: `/savedata/session/clear`
+ * API response for path: `/savedata/session/clear`
  */
 export interface ClearSessionSavedataResponse {
   /** Contains the error message if any occured */

@@ -1,4 +1,4 @@
-import { pokerogueApi } from "#app/plugins/api/pokerogue-api";
+import { api } from "#app/plugins/api/api";
 import type { UserInfo } from "#app/@types/UserInfo";
 import { bypassLogin } from "./battle-scene";
 import { randomString } from "#app/utils";
@@ -37,7 +37,7 @@ export function updateUserInfo(): Promise<[boolean, integer]> {
       });
       return resolve([true, 200]);
     }
-    pokerogueApi.account.getInfo().then(([accountInfo, status]) => {
+    api.account.getInfo().then(([accountInfo, status]) => {
       if (!accountInfo) {
         resolve([false, status]);
         return;

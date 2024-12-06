@@ -273,11 +273,11 @@ describe("Mysterious Challengers - Mystery Encounter", () => {
       expect(
         modifierSelectHandler.options[0].modifierTypeOption.type.tier -
           modifierSelectHandler.options[0].modifierTypeOption.upgradeCount,
-      ).toBe(ModifierTier.ROGUE);
+      ).toBe(ModifierTier.EPIC);
       expect(
         modifierSelectHandler.options[1].modifierTypeOption.type.tier -
           modifierSelectHandler.options[1].modifierTypeOption.upgradeCount,
-      ).toBe(ModifierTier.ROGUE);
+      ).toBe(ModifierTier.EPIC);
       expect(
         modifierSelectHandler.options[2].modifierTypeOption.type.tier -
           modifierSelectHandler.options[2].modifierTypeOption.upgradeCount,

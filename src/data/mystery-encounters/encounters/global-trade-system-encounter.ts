@@ -93,7 +93,6 @@ const EXCLUDED_TRADE_SPECIES = [
 
 /**
  * Global Trade System encounter.
- * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3812 | GitHub Issue #3812}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const GlobalTradeSystemEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(
@@ -442,7 +441,7 @@ export const GlobalTradeSystemEncounter: MysteryEncounter = MysteryEncounterBuil
         } else if (type.id === "LUCKY_EGG") {
           tier = ModifierTier.ULTRA;
         } else if (type.id === "GOLDEN_EGG") {
-          tier = ModifierTier.ROGUE;
+          tier = ModifierTier.EPIC;
         }
         // Increment tier by 1
         if (tier < ModifierTier.MASTER) {

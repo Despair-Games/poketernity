@@ -492,9 +492,9 @@ export default class MysteryEncounterUiHandler extends UiHandler {
           ? 1
           : mysteryEncounter.encounterTier === MysteryEncounterTier.ULTRA
             ? 2
-            : mysteryEncounter.encounterTier === MysteryEncounterTier.ROGUE
+            : mysteryEncounter.encounterTier === MysteryEncounterTier.EPIC
               ? 3
-              : 4;
+              : 3; // There is no 4th ball rn
     const ballType = getPokeballAtlasKey(index);
     this.rarityBall.setTexture("pb", ballType);
 

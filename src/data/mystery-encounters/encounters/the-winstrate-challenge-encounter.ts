@@ -40,13 +40,12 @@ const namespace = "mysteryEncounters/theWinstrateChallenge";
 
 /**
  * The Winstrate Challenge encounter.
- * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3821 | GitHub Issue #3821}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const TheWinstrateChallengeEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(
   MysteryEncounterType.THE_WINSTRATE_CHALLENGE,
 )
-  .withEncounterTier(MysteryEncounterTier.ROGUE)
+  .withEncounterTier(MysteryEncounterTier.EPIC)
   .withSceneWaveRangeRequirement(100, CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES[1])
   .withIntroSpriteConfigs([
     {

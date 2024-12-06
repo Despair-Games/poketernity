@@ -37,7 +37,6 @@ const namespace = "mysteryEncounters/trainingSession";
 
 /**
  * Training Session encounter.
- * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3802 | GitHub Issue #3802}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const TrainingSessionEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(

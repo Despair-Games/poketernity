@@ -1,21 +1,22 @@
 import { bypassLogin } from "#app/battle-scene";
+import { SESSION_ID_COOKIE } from "#app/constants";
 import { globalScene } from "#app/global-scene";
-import { TextStyle, addTextObject, getTextStyleOptions } from "./text";
-import { Mode } from "./ui";
-import { getEnumKeys, isLocal, isBeta, fixedInt, getCookie, sessionIdKey } from "#app/utils";
-import { addWindow, WindowVariant } from "./ui-theme";
-import MessageUiHandler from "./message-ui-handler";
-import type { OptionSelectConfig, OptionSelectItem } from "./abstact-option-select-ui-handler";
-import { Tutorial, handleTutorial } from "../tutorial";
-import { loggedInUser, updateUserInfo } from "../account";
-import i18next from "i18next";
+import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
+import { api } from "#app/plugins/api/api";
+import BgmBar from "#app/ui/bgm-bar";
+import { fixedInt, getCookie, getEnumKeys, isBeta, isLocal } from "#app/utils";
 import { Button } from "#enums/buttons";
 import { GameDataType } from "#enums/game-data-type";
-import BgmBar from "#app/ui/bgm-bar";
-import type AwaitableUiHandler from "./awaitable-ui-handler";
-import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
+import i18next from "i18next";
+import { loggedInUser, updateUserInfo } from "../account";
+import { Tutorial, handleTutorial } from "../tutorial";
+import type { OptionSelectConfig, OptionSelectItem } from "./abstact-option-select-ui-handler";
 import { AdminMode, getAdminModeName } from "./admin-ui-handler";
-import { pokerogueApi } from "#app/plugins/api/pokerogue-api";
+import type AwaitableUiHandler from "./awaitable-ui-handler";
+import MessageUiHandler from "./message-ui-handler";
+import { TextStyle, addTextObject, getTextStyleOptions } from "./text";
+import { Mode } from "./ui";
+import { WindowVariant, addWindow } from "./ui-theme";
 
 enum MenuOptions {
   GAME_SETTINGS,
@@ -30,11 +31,7 @@ enum MenuOptions {
   LOG_OUT,
 }
 
-let wikiUrl = "https://wiki.pokerogue.net/start";
-const discordUrl = "https://discord.gg/uWpTfdKG49";
-const githubUrl = "https://github.com/pagefaultgames/pokerogue";
-const redditUrl = "https://www.reddit.com/r/pokerogue";
-const donateUrl = "https://github.com/sponsors/pagefaultgames";
+const { VITE_WIKI_URL, VITE_DISCORD_URL, VITE_GITHUB_URL, VITE_REDDIT_URL, VITE_DONATE_URL } = import.meta.env;
 
 export default class MenuUiHandler extends MessageUiHandler {
   private readonly textPadding = 8;
@@ -84,11 +81,6 @@ export default class MenuUiHandler extends MessageUiHandler {
 
   setup(): void {
     const ui = this.getUi();
-    // wiki url directs based on languges available on wiki
-    const lang = i18next.resolvedLanguage?.substring(0, 2)!; // TODO: is this bang correct?
-    if (["de", "fr", "ko", "zh"].includes(lang)) {
-      wikiUrl = `https://wiki.pokerogue.net/${lang}:start`;
-    }
 
     this.bgmBar = new BgmBar();
     this.bgmBar.setup();
@@ -399,48 +391,63 @@ export default class MenuUiHandler extends MessageUiHandler {
       maxOptions: 7,
     };
 
-    const communityOptions: OptionSelectItem[] = [
-      {
+    const communityOptions: OptionSelectItem[] = [];
+
+    if (VITE_WIKI_URL && VITE_WIKI_URL.startsWith("https://")) {
+      communityOptions.push({
         label: "Wiki",
         handler: () => {
-          window.open(wikiUrl, "_blank")?.focus();
+          window.open(VITE_WIKI_URL, "_blank")?.focus();
           return true;
         },
         keepOpen: true,
-      },
-      {
+      });
+    }
+
+    if (VITE_DISCORD_URL && VITE_DISCORD_URL.startsWith("https://")) {
+      communityOptions.push({
         label: "Discord",
         handler: () => {
-          window.open(discordUrl, "_blank")?.focus();
+          window.open(VITE_DISCORD_URL, "_blank")?.focus();
           return true;
         },
         keepOpen: true,
-      },
-      {
+      });
+    }
+
+    if (VITE_GITHUB_URL && VITE_GITHUB_URL.startsWith("https://")) {
+      communityOptions.push({
         label: "GitHub",
         handler: () => {
-          window.open(githubUrl, "_blank")?.focus();
+          window.open(VITE_GITHUB_URL, "_blank")?.focus();
           return true;
         },
         keepOpen: true,
-      },
-      {
+      });
+    }
+
+    if (VITE_REDDIT_URL && VITE_REDDIT_URL.startsWith("https://")) {
+      communityOptions.push({
         label: "Reddit",
         handler: () => {
-          window.open(redditUrl, "_blank")?.focus();
+          window.open(VITE_REDDIT_URL, "_blank")?.focus();
           return true;
         },
         keepOpen: true,
-      },
-      {
+      });
+    }
+
+    if (VITE_DONATE_URL && VITE_DONATE_URL.startsWith("https://")) {
+      communityOptions.push({
         label: i18next.t("menuUiHandler:donate"),
         handler: () => {
-          window.open(donateUrl, "_blank")?.focus();
+          window.open(VITE_DONATE_URL, "_blank")?.focus();
           return true;
         },
         keepOpen: true,
-      },
-    ];
+      });
+    }
+
     if (!bypassLogin && loggedInUser?.hasAdminRole) {
       communityOptions.push({
         label: "Admin",
@@ -606,14 +613,14 @@ export default class MenuUiHandler extends MessageUiHandler {
                     : i18next.t("menuUiHandler:unlinkDiscord"),
                 handler: () => {
                   if (loggedInUser?.discordId === "") {
-                    const token = getCookie(sessionIdKey);
+                    const token = getCookie(SESSION_ID_COOKIE);
                     const redirectUri = encodeURIComponent(`${import.meta.env.VITE_SERVER_URL}/auth/discord/callback`);
                     const discordId = import.meta.env.VITE_DISCORD_CLIENT_ID;
                     const discordUrl = `https://discord.com/api/oauth2/authorize?client_id=${discordId}&redirect_uri=${redirectUri}&response_type=code&scope=identify&state=${token}&prompt=none`;
                     window.open(discordUrl, "_self");
                     return true;
                   } else {
-                    pokerogueApi.unlinkDiscord().then((_isSuccess) => {
+                    api.unlinkDiscord().then((_isSuccess) => {
                       updateUserInfo().then(() => globalScene.reset(true, true));
                     });
                     return true;
@@ -627,14 +634,14 @@ export default class MenuUiHandler extends MessageUiHandler {
                     : i18next.t("menuUiHandler:unlinkGoogle"),
                 handler: () => {
                   if (loggedInUser?.googleId === "") {
-                    const token = getCookie(sessionIdKey);
+                    const token = getCookie(SESSION_ID_COOKIE);
                     const redirectUri = encodeURIComponent(`${import.meta.env.VITE_SERVER_URL}/auth/google/callback`);
                     const googleId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
                     const googleUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${googleId}&response_type=code&redirect_uri=${redirectUri}&scope=openid&state=${token}`;
                     window.open(googleUrl, "_self");
                     return true;
                   } else {
-                    pokerogueApi.unlinkGoogle().then((_isSuccess) => {
+                    api.unlinkGoogle().then((_isSuccess) => {
                       updateUserInfo().then(() => globalScene.reset(true, true));
                     });
                     return true;
@@ -692,7 +699,7 @@ export default class MenuUiHandler extends MessageUiHandler {
             ui.setMode(Mode.LOADING, {
               buttonActions: [],
               fadeOut: () =>
-                pokerogueApi.account.logout().then(() => {
+                api.account.logout().then(() => {
                   updateUserInfo().then(() => globalScene.reset(true, true));
                 }),
             });

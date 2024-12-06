@@ -121,15 +121,14 @@ const STANDARD_BST_TRANSFORM_BASE_VALUES: [number, number] = [40, 50];
 
 /**
  * Weird Dream encounter.
- * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3822 | GitHub Issue #3822}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const WeirdDreamEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(
   MysteryEncounterType.WEIRD_DREAM,
 )
-  .withEncounterTier(MysteryEncounterTier.ROGUE)
+  .withEncounterTier(MysteryEncounterTier.EPIC)
   .withDisallowedChallenges(Challenges.SINGLE_TYPE, Challenges.SINGLE_GENERATION)
-  // TODO: should reset minimum wave to 10 when there are more Rogue tiers in pool. Matching Dark Deal minimum for now.
+  // TODO: should reset minimum wave to 10 when there are more Epic tiers in pool. Matching Dark Deal minimum for now.
   .withSceneWaveRangeRequirement(30, 140)
   .withIntroSpriteConfigs([
     {
@@ -226,7 +225,7 @@ export const WeirdDreamEncounter: MysteryEncounter = MysteryEncounterBuilder.wit
         setEncounterRewards({
           guaranteedModifierTypeFuncs: [
             modifierTypes.MEMORY_MUSHROOM,
-            modifierTypes.ROGUE_BALL,
+            modifierTypes.ULTRA_BALL,
             modifierTypes.MINT,
             modifierTypes.MINT,
             modifierTypes.MINT,
@@ -322,8 +321,8 @@ export const WeirdDreamEncounter: MysteryEncounter = MysteryEncounterBuilder.wit
       setEncounterRewards(
         {
           guaranteedModifierTiers: [
-            ModifierTier.ROGUE,
-            ModifierTier.ROGUE,
+            ModifierTier.EPIC,
+            ModifierTier.EPIC,
             ModifierTier.ULTRA,
             ModifierTier.ULTRA,
             ModifierTier.GREAT,

@@ -1,3 +1,4 @@
+import { LOCALE_LS_KEY } from "#app/constants";
 import { camelCaseToKebabCase } from "#app/utils";
 import i18next from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
@@ -268,7 +269,7 @@ export async function initI18n(): Promise<void> {
       "mysteryEncounterMessages",
     ],
     detection: {
-      lookupLocalStorage: "prLang",
+      lookupLocalStorage: LOCALE_LS_KEY,
     },
     debug: Number(import.meta.env.VITE_I18N_DEBUG) === 1,
     interpolation: {
@@ -281,7 +282,7 @@ export async function initI18n(): Promise<void> {
     i18next.services.formatter.add("money", i18nMoneyFormatter);
   }
 
-  await initFonts(localStorage.getItem("prLang") ?? undefined);
+  await initFonts(localStorage.getItem(LOCALE_LS_KEY) ?? undefined);
 }
 
 export function getIsInitialized(): boolean {

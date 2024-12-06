@@ -93,13 +93,12 @@ const excludedBosses = [
 
 /**
  * Dark Deal encounter.
- * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3806 | GitHub Issue #3806}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const DarkDealEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(
   MysteryEncounterType.DARK_DEAL,
 )
-  .withEncounterTier(MysteryEncounterTier.ROGUE)
+  .withEncounterTier(MysteryEncounterTier.EPIC)
   .withIntroSpriteConfigs([
     {
       spriteKey: "dark_deal_scientist",
@@ -163,9 +162,9 @@ export const DarkDealEncounter: MysteryEncounter = MysteryEncounterBuilder.withE
         };
       })
       .withOptionPhase(async () => {
-        // Give the player 5 Rogue Balls
+        // Give the player 5 Ultra Balls
         const encounter = globalScene.currentBattle.mysteryEncounter!;
-        globalScene.unshiftPhase(new ModifierRewardPhase(modifierTypes.ROGUE_BALL));
+        globalScene.unshiftPhase(new ModifierRewardPhase(modifierTypes.ULTRA_BALL));
 
         // Start encounter with random legendary (7-10 starter strength) that has level additive
         // If this is a mono-type challenge, always ensure the required type is filtered for

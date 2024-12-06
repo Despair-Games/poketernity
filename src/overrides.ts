@@ -78,7 +78,6 @@ class DefaultOverrides {
       [PokeballType.POKEBALL]: 5,
       [PokeballType.GREAT_BALL]: 0,
       [PokeballType.ULTRA_BALL]: 0,
-      [PokeballType.ROGUE_BALL]: 0,
       [PokeballType.MASTER_BALL]: 0,
     },
   };

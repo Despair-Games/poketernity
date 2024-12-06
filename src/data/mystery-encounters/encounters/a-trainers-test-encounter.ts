@@ -29,13 +29,12 @@ const namespace = "mysteryEncounters/aTrainersTest";
 
 /**
  * A Trainer's Test encounter.
- * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3816 | GitHub Issue #3816}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const ATrainersTestEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(
   MysteryEncounterType.A_TRAINERS_TEST,
 )
-  .withEncounterTier(MysteryEncounterTier.ROGUE)
+  .withEncounterTier(MysteryEncounterTier.EPIC)
   .withSceneWaveRangeRequirement(100, CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES[1])
   .withIntroSpriteConfigs([]) // These are set in onInit()
   .withIntroDialogue([
@@ -163,7 +162,7 @@ export const ATrainersTestEncounter: MysteryEncounter = MysteryEncounterBuilder.
       setEncounterRewards(
         {
           guaranteedModifierTypeFuncs: [modifierTypes.SACRED_ASH],
-          guaranteedModifierTiers: [ModifierTier.ROGUE, ModifierTier.ULTRA],
+          guaranteedModifierTiers: [ModifierTier.EPIC, ModifierTier.ULTRA],
           fillRemaining: true,
         },
         [eggOptions],
