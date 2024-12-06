@@ -54,8 +54,8 @@ export class VictoryPhase extends PokemonPhase {
       if (globalScene.gameMode.isEndless || !globalScene.gameMode.isWaveFinal(globalScene.currentBattle.waveIndex)) {
         globalScene.pushPhase(new EggLapsePhase());
         if (
-          globalScene.gameMode.isClassic &&
-          globalScene.currentBattle.waveIndex === ClassicFixedBossWaves.EVIL_BOSS_2
+          globalScene.gameMode.isClassic
+          && globalScene.currentBattle.waveIndex === ClassicFixedBossWaves.EVIL_BOSS_2
         ) {
           // Should get Lock Capsule on 165 before shop phase so it can be used in the rewards shop
           globalScene.pushPhase(new ModifierRewardPhase(modifierTypes.LOCK_CAPSULE));
@@ -65,8 +65,8 @@ export class VictoryPhase extends PokemonPhase {
         } else if (globalScene.gameMode.isDaily) {
           globalScene.pushPhase(new ModifierRewardPhase(modifierTypes.EXP_CHARM));
           if (
-            globalScene.currentBattle.waveIndex > 10 &&
-            !globalScene.gameMode.isWaveFinal(globalScene.currentBattle.waveIndex)
+            globalScene.currentBattle.waveIndex > 10
+            && !globalScene.gameMode.isWaveFinal(globalScene.currentBattle.waveIndex)
           ) {
             globalScene.pushPhase(new ModifierRewardPhase(modifierTypes.GOLDEN_POKEBALL));
           }
@@ -76,8 +76,8 @@ export class VictoryPhase extends PokemonPhase {
             globalScene.pushPhase(new ModifierRewardPhase(modifierTypes.EXP_SHARE));
           }
           if (
-            globalScene.currentBattle.waveIndex <= 750 &&
-            (globalScene.currentBattle.waveIndex <= 500 || globalScene.currentBattle.waveIndex % 30 === superExpWave)
+            globalScene.currentBattle.waveIndex <= 750
+            && (globalScene.currentBattle.waveIndex <= 500 || globalScene.currentBattle.waveIndex % 30 === superExpWave)
           ) {
             globalScene.pushPhase(
               new ModifierRewardPhase(

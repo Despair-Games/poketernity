@@ -14,7 +14,7 @@ on:
 jobs:
   pages:
     name: Github Pages
-    if: github.repository == 'despair-games/poketernity'
+    if: github.repository == 'Despair-Games/poketernity'
     runs-on: ubuntu-latest
     env:
       api-dir: ./
@@ -27,7 +27,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           submodules: "recursive"
-          path: poketernity_docs
+          path: pokerogue_docs
 
       - name: Install OS package
         run: |
@@ -43,25 +43,25 @@ jobs:
         if: github.event_name == 'push'
         uses: actions/checkout@v3
         with:
-          path: poketernity_gh
+          path: pokerogue_gh
           ref: gh-pages
 
       - name: Install Node.js dependencies
         working-directory: ${{env.api-dir}}
         run: |
-          cd poketernity_docs
+          cd pokerogue_docs
           npm ci
 
       - name: Generate Typedoc docs
         working-directory: ${{env.api-dir}}
         run: |
-          cd poketernity_docs
+          cd pokerogue_docs
           npm run docs -- --out /tmp/docs --githubPages false --entryPoints ./src/
 
       - name: Commit & Push docs
         if: github.event_name == 'push'
         run: |
-          cd poketernity_gh
+          cd pokerogue_gh
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
           mkdir -p $GITHUB_REF_NAME

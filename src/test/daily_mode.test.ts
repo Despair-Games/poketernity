@@ -1,7 +1,7 @@
 import { Biome } from "#app/enums/biome";
 import { Moves } from "#app/enums/moves";
 import { MapModifier } from "#app/modifier/modifier";
-import { api } from "#app/plugins/api/api";
+import { pokerogueApi } from "#app/plugins/api/pokerogue-api";
 import ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
 import { Species } from "#enums/species";
 import { Mode } from "#app/ui/ui";
@@ -22,7 +22,7 @@ describe("Daily Mode", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    vi.spyOn(api.daily, "getSeed").mockResolvedValue("test-seed");
+    vi.spyOn(pokerogueApi.daily, "getSeed").mockResolvedValue("test-seed");
   });
 
   afterEach(() => {
@@ -63,7 +63,7 @@ describe("Shop modifications", async () => {
       .moveset([Moves.SPLASH])
       .enemyMoveset(Moves.SPLASH);
     game.modifiers.addCheck("EVIOLITE").addCheck("MINI_BLACK_HOLE");
-    vi.spyOn(api.daily, "getSeed").mockResolvedValue("test-seed");
+    vi.spyOn(pokerogueApi.daily, "getSeed").mockResolvedValue("test-seed");
   });
 
   afterEach(() => {

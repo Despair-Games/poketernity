@@ -26,9 +26,9 @@ export const systemMigrators = [
    */
   function fixLegendaryStats(data: SystemSaveData) {
     if (
-      data.gameStats &&
-      data.gameStats.legendaryPokemonCaught !== undefined &&
-      data.gameStats.subLegendaryPokemonCaught === undefined
+      data.gameStats
+      && data.gameStats.legendaryPokemonCaught !== undefined
+      && data.gameStats.subLegendaryPokemonCaught === undefined
     ) {
       data.gameStats.subLegendaryPokemonSeen = 0;
       data.gameStats.subLegendaryPokemonCaught = 0;

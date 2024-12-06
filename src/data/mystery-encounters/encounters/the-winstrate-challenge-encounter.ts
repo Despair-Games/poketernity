@@ -40,12 +40,13 @@ const namespace = "mysteryEncounters/theWinstrateChallenge";
 
 /**
  * The Winstrate Challenge encounter.
+ * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3821 | GitHub Issue #3821}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const TheWinstrateChallengeEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(
   MysteryEncounterType.THE_WINSTRATE_CHALLENGE,
 )
-  .withEncounterTier(MysteryEncounterTier.EPIC)
+  .withEncounterTier(MysteryEncounterTier.ROGUE)
   .withSceneWaveRangeRequirement(100, CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES[1])
   .withIntroSpriteConfigs([
     {
@@ -205,9 +206,9 @@ function endTrainerBattleAndShowDialogue(): Promise<void> {
         // Only trigger form change when Eiscue is in Noice form
         // Hardcoded Eiscue for now in case it is fused with another pokemon
         if (
-          pokemon.species.speciesId === Species.EISCUE &&
-          pokemon.hasAbility(Abilities.ICE_FACE) &&
-          pokemon.formIndex === 1
+          pokemon.species.speciesId === Species.EISCUE
+          && pokemon.hasAbility(Abilities.ICE_FACE)
+          && pokemon.formIndex === 1
         ) {
           globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger);
         }

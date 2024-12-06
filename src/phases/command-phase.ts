@@ -62,8 +62,8 @@ export class CommandPhase extends FieldPhase {
 
     // If the Pokemon has applied Commander's effects to its ally, skip this command
     if (
-      globalScene.currentBattle?.double &&
-      this.getPokemon().getAlly()?.getTag(BattlerTagType.COMMANDED)?.getSourcePokemon() === this.getPokemon()
+      globalScene.currentBattle?.double
+      && this.getPokemon().getAlly()?.getTag(BattlerTagType.COMMANDED)?.getSourcePokemon() === this.getPokemon()
     ) {
       globalScene.currentBattle.turnCommands[this.fieldIndex] = {
         command: Command.FIGHT,
@@ -87,11 +87,11 @@ export class CommandPhase extends FieldPhase {
     const moveQueue = playerPokemon.getMoveQueue();
 
     while (
-      moveQueue.length &&
-      moveQueue[0] &&
-      moveQueue[0].move &&
-      (!playerPokemon.getMoveset().find((m) => m?.moveId === moveQueue[0].move) ||
-        !playerPokemon
+      moveQueue.length
+      && moveQueue[0]
+      && moveQueue[0].move
+      && (!playerPokemon.getMoveset().find((m) => m?.moveId === moveQueue[0].move)
+        || !playerPokemon
           .getMoveset()
           [
             playerPokemon.getMoveset().findIndex((m) => m?.moveId === moveQueue[0].move)
@@ -119,8 +119,8 @@ export class CommandPhase extends FieldPhase {
       }
     } else {
       if (
-        globalScene.currentBattle.isBattleMysteryEncounter() &&
-        globalScene.currentBattle.mysteryEncounter?.skipToFightInput
+        globalScene.currentBattle.isBattleMysteryEncounter()
+        && globalScene.currentBattle.mysteryEncounter?.skipToFightInput
       ) {
         globalScene.ui.clearText();
         globalScene.ui.setMode(Mode.FIGHT, this.fieldIndex);
@@ -138,9 +138,9 @@ export class CommandPhase extends FieldPhase {
       case Command.FIGHT:
         let useStruggle = false;
         if (
-          cursor === -1 ||
-          playerPokemon.trySelectMove(cursor, args[0] as boolean) ||
-          (useStruggle = cursor > -1 && !playerPokemon.getMoveset().filter((m) => m?.isUsable(playerPokemon)).length)
+          cursor === -1
+          || playerPokemon.trySelectMove(cursor, args[0] as boolean)
+          || (useStruggle = cursor > -1 && !playerPokemon.getMoveset().filter((m) => m?.isUsable(playerPokemon)).length)
         ) {
           const moveId = !useStruggle
             ? cursor > -1
@@ -201,11 +201,11 @@ export class CommandPhase extends FieldPhase {
           globalScene
             .getEnemyField()
             .filter((p) => p.isActive(true))
-            .some((p) => !globalScene.gameData.dexData[p.species.speciesId].caughtAttr) &&
-          globalScene.gameData.getStarterCount((d) => !!d.caughtAttr) < Object.keys(speciesStarterCosts).length - 1;
+            .some((p) => !globalScene.gameData.dexData[p.species.speciesId].caughtAttr)
+          && globalScene.gameData.getStarterCount((d) => !!d.caughtAttr) < Object.keys(speciesStarterCosts).length - 1;
         if (
-          globalScene.arena.biomeType === Biome.END &&
-          (!globalScene.gameMode.isClassic || globalScene.gameMode.isFreshStartChallenge() || notInDex)
+          globalScene.arena.biomeType === Biome.END
+          && (!globalScene.gameMode.isClassic || globalScene.gameMode.isFreshStartChallenge() || notInDex)
         ) {
           globalScene.ui.setMode(Mode.COMMAND, this.fieldIndex);
           globalScene.ui.setMode(Mode.MESSAGE);
@@ -233,8 +233,8 @@ export class CommandPhase extends FieldPhase {
             true,
           );
         } else if (
-          globalScene.currentBattle.isBattleMysteryEncounter() &&
-          !globalScene.currentBattle.mysteryEncounter!.catchAllowed
+          globalScene.currentBattle.isBattleMysteryEncounter()
+          && !globalScene.currentBattle.mysteryEncounter!.catchAllowed
         ) {
           globalScene.ui.setMode(Mode.COMMAND, this.fieldIndex);
           globalScene.ui.setMode(Mode.MESSAGE);
@@ -269,10 +269,10 @@ export class CommandPhase extends FieldPhase {
           } else if (cursor < 5) {
             const targetPokemon = globalScene.getEnemyField().find((p) => p.isActive(true));
             if (
-              targetPokemon?.isBoss() &&
-              targetPokemon?.bossSegmentIndex >= 1 &&
-              !targetPokemon?.hasAbility(Abilities.WONDER_GUARD, false, true) &&
-              cursor < PokeballType.MASTER_BALL
+              targetPokemon?.isBoss()
+              && targetPokemon?.bossSegmentIndex >= 1
+              && !targetPokemon?.hasAbility(Abilities.WONDER_GUARD, false, true)
+              && cursor < PokeballType.MASTER_BALL
             ) {
               globalScene.ui.setMode(Mode.COMMAND, this.fieldIndex);
               globalScene.ui.setMode(Mode.MESSAGE);
@@ -303,9 +303,9 @@ export class CommandPhase extends FieldPhase {
         const { currentBattle, arena } = globalScene;
         const mysteryEncounterFleeAllowed = currentBattle.mysteryEncounter?.fleeAllowed;
         if (
-          !isSwitch &&
-          (arena.biomeType === Biome.END ||
-            (!isNullOrUndefined(mysteryEncounterFleeAllowed) && !mysteryEncounterFleeAllowed))
+          !isSwitch
+          && (arena.biomeType === Biome.END
+            || (!isNullOrUndefined(mysteryEncounterFleeAllowed) && !mysteryEncounterFleeAllowed))
         ) {
           globalScene.ui.setMode(Mode.COMMAND, this.fieldIndex);
           globalScene.ui.setMode(Mode.MESSAGE);
@@ -320,9 +320,9 @@ export class CommandPhase extends FieldPhase {
             true,
           );
         } else if (
-          !isSwitch &&
-          (currentBattle.battleType === BattleType.TRAINER ||
-            currentBattle.mysteryEncounter?.encounterMode === MysteryEncounterMode.TRAINER_BATTLE)
+          !isSwitch
+          && (currentBattle.battleType === BattleType.TRAINER
+            || currentBattle.mysteryEncounter?.encounterMode === MysteryEncounterMode.TRAINER_BATTLE)
         ) {
           globalScene.ui.setMode(Mode.COMMAND, this.fieldIndex);
           globalScene.ui.setMode(Mode.MESSAGE);

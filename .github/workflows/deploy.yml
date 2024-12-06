@@ -10,7 +10,7 @@ on:
 
 jobs:
   deploy:
-    if: github.repository == 'despair-games/poketernity'
+    if: github.repository == 'Despair-Games/poketernity'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -46,8 +46,8 @@ jobs:
           cf_auth: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           cf_zone: ${{ secrets.CLOUDFLARE_ZONE_ID }}
           files: |
-            https://poketernity.com/
-            https://poketernity.com/index.html
-            https://poketernity.com/manifest.json
-            https://poketernity.com/manifest.webmanifest
-            https://poketernity.com/service-worker.js
+            https://pokerogue.net/
+            https://pokerogue.net/index.html
+            https://pokerogue.net/manifest.json
+            https://pokerogue.net/manifest.webmanifest
+            https://pokerogue.net/service-worker.js

@@ -1,5 +1,5 @@
 import * as BattleScene from "#app/battle-scene";
-import { api } from "#app/plugins/api/api";
+import { pokerogueApi } from "#app/plugins/api/pokerogue-api";
 import type { SessionSaveData } from "#app/system/game-data";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
@@ -47,7 +47,7 @@ describe("System - Game Data", () => {
     });
 
     it("should return [true, true] if successful", async () => {
-      vi.spyOn(api.savedata.session, "clear").mockResolvedValue({ success: true });
+      vi.spyOn(pokerogueApi.savedata.session, "clear").mockResolvedValue({ success: true });
 
       const result = await game.scene.gameData.tryClearSession(0);
 
@@ -56,7 +56,7 @@ describe("System - Game Data", () => {
     });
 
     it("should return [true, false] if not successful", async () => {
-      vi.spyOn(api.savedata.session, "clear").mockResolvedValue({ success: false });
+      vi.spyOn(pokerogueApi.savedata.session, "clear").mockResolvedValue({ success: false });
 
       const result = await game.scene.gameData.tryClearSession(0);
 
@@ -65,7 +65,7 @@ describe("System - Game Data", () => {
     });
 
     it("should return [false, false] session is out of date", async () => {
-      vi.spyOn(api.savedata.session, "clear").mockResolvedValue({ error: "session out of date" });
+      vi.spyOn(pokerogueApi.savedata.session, "clear").mockResolvedValue({ error: "session out of date" });
 
       const result = await game.scene.gameData.tryClearSession(0);
 

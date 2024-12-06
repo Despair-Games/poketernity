@@ -1,7 +1,7 @@
 import { MoneyFormat } from "#enums/money-format";
 import { Moves } from "#enums/moves";
 import i18next from "i18next";
-import { api } from "#app/plugins/api/api";
+import { pokerogueApi } from "#app/plugins/api/pokerogue-api";
 
 export type nil = null | undefined;
 
@@ -250,27 +250,19 @@ export function getEnumValues(enumType: any): integer[] {
     .map((v) => parseInt(v!.toString()));
 }
 
-/**
- * Utils to retrieve the length of an enum
- * @param theEnum the enum to get the length of
- * @returns length of the enum
- */
-export function getEnumLength(theEnum: any): number {
-  return getEnumKeys(theEnum).length;
-}
-
 export function executeIf<T>(condition: boolean, promiseFunc: () => Promise<T>): Promise<T | null> {
   return condition ? promiseFunc() : new Promise<T | null>((resolve) => resolve(null));
 }
 
+export const sessionIdKey = "pokerogue_sessionId";
 // Check if the current hostname is 'localhost' or an IP address, and ensure a port is specified
 export const isLocal =
-  ((window.location.hostname === "localhost" || /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/.test(window.location.hostname)) &&
-    window.location.port !== "") ||
-  window.location.hostname === "";
+  ((window.location.hostname === "localhost" || /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/.test(window.location.hostname))
+    && window.location.port !== "")
+  || window.location.hostname === "";
 
 /**
- * @deprecated Refer to [api.ts](./plugins/api/api.ts) instead
+ * @deprecated Refer to [pokerogue-api.ts](./plugins/api/pokerogue-api.ts) instead
  */
 export const localServerUrl =
   import.meta.env.VITE_SERVER_URL ?? `http://${window.location.hostname}:${window.location.port + 1}`;
@@ -278,9 +270,9 @@ export const localServerUrl =
 /**
  * Set the server URL based on whether it's local or not
  *
- * @deprecated Refer to [api.ts](./plugins/api/api.ts) instead
+ * @deprecated Refer to [pokerogue-api.ts](./plugins/api/pokerogue-api.ts) instead
  */
-export const apiUrl = localServerUrl ?? "https://api.poketernity.com";
+export const apiUrl = localServerUrl ?? "https://api.pokerogue.net";
 // used to disable api calls when isLocal is true and a server is not found
 export let isLocalServerConnected = true;
 
@@ -294,7 +286,7 @@ export function setCookie(cName: string, cValue: string): void {
 
 export function removeCookie(cName: string): void {
   if (isBeta) {
-    document.cookie = `${cName}=;Secure;SameSite=Strict;Domain=poketernity.com;Path=/;Max-Age=-1`; // we need to remove the cookie from the main domain as well
+    document.cookie = `${cName}=;Secure;SameSite=Strict;Domain=pokerogue.net;Path=/;Max-Age=-1`; // we need to remove the cookie from the main domain as well
   }
 
   document.cookie = `${cName}=;Secure;SameSite=Strict;Domain=${window.location.hostname};Path=/;Max-Age=-1`;
@@ -328,7 +320,7 @@ export function getCookie(cName: string): string {
  */
 export async function localPing() {
   if (isLocal) {
-    const titleStats = await api.getGameTitleStats();
+    const titleStats = await pokerogueApi.getGameTitleStats();
     isLocalServerConnected = !!titleStats;
     console.log("isLocalServerConnected:", isLocalServerConnected);
   }

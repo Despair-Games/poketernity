@@ -93,6 +93,7 @@ const EXCLUDED_TRADE_SPECIES = [
 
 /**
  * Global Trade System encounter.
+ * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3812 | GitHub Issue #3812}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const GlobalTradeSystemEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(
@@ -185,20 +186,20 @@ export const GlobalTradeSystemEncounter: MysteryEncounter = MysteryEncounterBuil
                     ? tradePokemon.species.forms[tradePokemon.formIndex].formName
                     : null;
                 const line1 =
-                  i18next.t("pokemonInfoContainer:ability") +
-                  " " +
-                  tradePokemon.getAbility().name +
-                  (tradePokemon.getGender() !== Gender.GENDERLESS
-                    ? "     |     " +
-                      i18next.t("pokemonInfoContainer:gender") +
-                      " " +
-                      getGenderSymbol(tradePokemon.getGender())
+                  i18next.t("pokemonInfoContainer:ability")
+                  + " "
+                  + tradePokemon.getAbility().name
+                  + (tradePokemon.getGender() !== Gender.GENDERLESS
+                    ? "     |     "
+                      + i18next.t("pokemonInfoContainer:gender")
+                      + " "
+                      + getGenderSymbol(tradePokemon.getGender())
                     : "");
                 const line2 =
-                  i18next.t("pokemonInfoContainer:nature") +
-                  " " +
-                  getNatureName(tradePokemon.getNature()) +
-                  (formName ? "     |     " + i18next.t("pokemonInfoContainer:form") + " " + formName : "");
+                  i18next.t("pokemonInfoContainer:nature")
+                  + " "
+                  + getNatureName(tradePokemon.getNature())
+                  + (formName ? "     |     " + i18next.t("pokemonInfoContainer:form") + " " + formName : "");
                 showEncounterText(`${line1}\n${line2}`, 0, 0, false);
               },
             };
@@ -441,7 +442,7 @@ export const GlobalTradeSystemEncounter: MysteryEncounter = MysteryEncounterBuil
         } else if (type.id === "LUCKY_EGG") {
           tier = ModifierTier.ULTRA;
         } else if (type.id === "GOLDEN_EGG") {
-          tier = ModifierTier.EPIC;
+          tier = ModifierTier.ROGUE;
         }
         // Increment tier by 1
         if (tier < ModifierTier.MASTER) {

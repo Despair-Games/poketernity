@@ -1011,13 +1011,13 @@ export class EvoTrackerModifier extends PokemonHeldItemModifier {
     const pokemon = globalScene.getPokemonById(this.pokemonId);
 
     this.stackCount = pokemon
-      ? pokemon.evoCounter +
-        pokemon.getHeldItems().filter((m) => m instanceof DamageMoneyRewardModifier).length +
-        globalScene.findModifiers(
+      ? pokemon.evoCounter
+        + pokemon.getHeldItems().filter((m) => m instanceof DamageMoneyRewardModifier).length
+        + globalScene.findModifiers(
           (m) =>
-            m instanceof MoneyMultiplierModifier ||
-            m instanceof ExtraModifierModifier ||
-            m instanceof TempExtraModifierModifier,
+            m instanceof MoneyMultiplierModifier
+            || m instanceof ExtraModifierModifier
+            || m instanceof TempExtraModifierModifier,
         ).length
       : this.stackCount;
 
@@ -1033,13 +1033,13 @@ export class EvoTrackerModifier extends PokemonHeldItemModifier {
 
   getMaxHeldItemCount(pokemon: Pokemon): number {
     this.stackCount =
-      pokemon.evoCounter +
-      pokemon.getHeldItems().filter((m) => m instanceof DamageMoneyRewardModifier).length +
-      globalScene.findModifiers(
+      pokemon.evoCounter
+      + pokemon.getHeldItems().filter((m) => m instanceof DamageMoneyRewardModifier).length
+      + globalScene.findModifiers(
         (m) =>
-          m instanceof MoneyMultiplierModifier ||
-          m instanceof ExtraModifierModifier ||
-          m instanceof TempExtraModifierModifier,
+          m instanceof MoneyMultiplierModifier
+          || m instanceof ExtraModifierModifier
+          || m instanceof TempExtraModifierModifier,
       ).length;
     return 999;
   }
@@ -1124,9 +1124,9 @@ export class PokemonBaseStatFlatModifier extends PokemonHeldItemModifier {
 
   override matchType(modifier: Modifier): boolean {
     return (
-      modifier instanceof PokemonBaseStatFlatModifier &&
-      modifier.statModifier === this.statModifier &&
-      this.stats.every((s) => modifier.stats.some((stat) => s === stat))
+      modifier instanceof PokemonBaseStatFlatModifier
+      && modifier.statModifier === this.statModifier
+      && this.stats.every((s) => modifier.stats.some((stat) => s === stat))
     );
   }
 
@@ -1426,9 +1426,9 @@ export class SpeciesStatBoosterModifier extends StatBoosterModifier {
    */
   override shouldApply(pokemon: Pokemon, stat: Stat, statValue: NumberHolder): boolean {
     return (
-      super.shouldApply(pokemon, stat, statValue) &&
-      (this.species.includes(pokemon.getSpeciesForm(true).speciesId) ||
-        (pokemon.isFusion() && this.species.includes(pokemon.getFusionSpeciesForm(true).speciesId)))
+      super.shouldApply(pokemon, stat, statValue)
+      && (this.species.includes(pokemon.getSpeciesForm(true).speciesId)
+        || (pokemon.isFusion() && this.species.includes(pokemon.getFusionSpeciesForm(true).speciesId)))
     );
   }
 
@@ -1533,9 +1533,9 @@ export class SpeciesCritBoosterModifier extends CritBoosterModifier {
    */
   override shouldApply(pokemon: Pokemon, critStage: NumberHolder): boolean {
     return (
-      super.shouldApply(pokemon, critStage) &&
-      (this.species.includes(pokemon.getSpeciesForm(true).speciesId) ||
-        (pokemon.isFusion() && this.species.includes(pokemon.getFusionSpeciesForm(true).speciesId)))
+      super.shouldApply(pokemon, critStage)
+      && (this.species.includes(pokemon.getSpeciesForm(true).speciesId)
+        || (pokemon.isFusion() && this.species.includes(pokemon.getFusionSpeciesForm(true).speciesId)))
     );
   }
 }
@@ -1558,8 +1558,8 @@ export class AttackTypeBoosterModifier extends PokemonHeldItemModifier {
     if (modifier instanceof AttackTypeBoosterModifier) {
       const attackTypeBoosterModifier = modifier as AttackTypeBoosterModifier;
       return (
-        attackTypeBoosterModifier.moveType === this.moveType &&
-        attackTypeBoosterModifier.boostMultiplier === this.boostMultiplier
+        attackTypeBoosterModifier.moveType === this.moveType
+        && attackTypeBoosterModifier.boostMultiplier === this.boostMultiplier
       );
     }
 
@@ -1589,9 +1589,9 @@ export class AttackTypeBoosterModifier extends PokemonHeldItemModifier {
    */
   override shouldApply(pokemon?: Pokemon, moveType?: Type, movePower?: NumberHolder): boolean {
     return (
-      super.shouldApply(pokemon, moveType, movePower) &&
-      typeof moveType === "number" &&
-      movePower instanceof NumberHolder
+      super.shouldApply(pokemon, moveType, movePower)
+      && typeof moveType === "number"
+      && movePower instanceof NumberHolder
     );
   }
 
@@ -2217,8 +2217,8 @@ export class PokemonHpRestoreModifier extends ConsumablePokemonModifier {
    */
   override shouldApply(playerPokemon?: PlayerPokemon, multiplier?: number): boolean {
     return (
-      super.shouldApply(playerPokemon) &&
-      (this.fainted || (!isNullOrUndefined(multiplier) && typeof multiplier === "number"))
+      super.shouldApply(playerPokemon)
+      && (this.fainted || (!isNullOrUndefined(multiplier) && typeof multiplier === "number"))
     );
   }
 
@@ -2238,8 +2238,11 @@ export class PokemonHpRestoreModifier extends ConsumablePokemonModifier {
         pokemon.resetStatus(true, true);
       }
       pokemon.hp = Math.min(
-        pokemon.hp +
-          Math.max(Math.ceil(Math.max(Math.floor(this.restorePercent * 0.01 * pokemon.getMaxHp()), restorePoints)), 1),
+        pokemon.hp
+          + Math.max(
+            Math.ceil(Math.max(Math.floor(this.restorePercent * 0.01 * pokemon.getMaxHp()), restorePoints)),
+            1,
+          ),
         pokemon.getMaxHp(),
       );
       return true;
@@ -2470,18 +2473,18 @@ export class EvolutionItemModifier extends ConsumablePokemonModifier {
     let matchingEvolution = pokemonEvolutions.hasOwnProperty(playerPokemon.species.speciesId)
       ? pokemonEvolutions[playerPokemon.species.speciesId].find(
           (e) =>
-            e.item === this.type.evolutionItem &&
-            (e.evoFormKey === null || (e.preFormKey || "") === playerPokemon.getFormKey()) &&
-            (!e.condition || e.condition.predicate(playerPokemon)),
+            e.item === this.type.evolutionItem
+            && (e.evoFormKey === null || (e.preFormKey || "") === playerPokemon.getFormKey())
+            && (!e.condition || e.condition.predicate(playerPokemon)),
         )
       : null;
 
     if (!matchingEvolution && playerPokemon.isFusion()) {
       matchingEvolution = pokemonEvolutions[playerPokemon.fusionSpecies!.speciesId].find(
         (e) =>
-          e.item === this.type.evolutionItem && // TODO: is the bang correct?
-          (e.evoFormKey === null || (e.preFormKey || "") === playerPokemon.getFusionFormKey()) &&
-          (!e.condition || e.condition.predicate(playerPokemon)),
+          e.item === this.type.evolutionItem // TODO: is the bang correct?
+          && (e.evoFormKey === null || (e.preFormKey || "") === playerPokemon.getFusionFormKey())
+          && (!e.condition || e.condition.predicate(playerPokemon)),
       );
       if (matchingEvolution) {
         matchingEvolution = new FusionSpeciesFormEvolution(playerPokemon.species.speciesId, matchingEvolution);

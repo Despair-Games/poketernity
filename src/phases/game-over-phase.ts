@@ -30,7 +30,7 @@ import PokemonData from "#app/system/pokemon-data";
 import ChallengeData from "#app/system/challenge-data";
 import TrainerData from "#app/system/trainer-data";
 import ArenaData from "#app/system/arena-data";
-import { api } from "#app/plugins/api/api";
+import { pokerogueApi } from "#app/plugins/api/pokerogue-api";
 
 export class GameOverPhase extends BattlePhase {
   private isVictory: boolean;
@@ -53,9 +53,9 @@ export class GameOverPhase extends BattlePhase {
     // Handle Mystery Encounter special Game Over cases
     // Situations such as when player lost a battle, but it isn't treated as full Game Over
     if (
-      !this.isVictory &&
-      globalScene.currentBattle.mysteryEncounter?.onGameOver &&
-      !globalScene.currentBattle.mysteryEncounter.onGameOver()
+      !this.isVictory
+      && globalScene.currentBattle.mysteryEncounter?.onGameOver
+      && !globalScene.currentBattle.mysteryEncounter.onGameOver()
     ) {
       // Do not end the game
       return this.end();
@@ -91,8 +91,8 @@ export class GameOverPhase extends BattlePhase {
                   globalScene.pushPhase(new SummonPhase(1));
                 }
                 if (
-                  globalScene.currentBattle.waveIndex > 1 &&
-                  globalScene.currentBattle.battleType !== BattleType.TRAINER
+                  globalScene.currentBattle.waveIndex > 1
+                  && globalScene.currentBattle.battleType !== BattleType.TRAINER
                 ) {
                   globalScene.pushPhase(new CheckSwitchPhase(0, globalScene.currentBattle.double));
                   if (globalScene.currentBattle.double && availablePartyMembers > 1) {
@@ -218,7 +218,7 @@ export class GameOverPhase extends BattlePhase {
       If Online, execute apiFetch as intended
       If Offline, execute offlineNewClear() only for victory, a localStorage implementation of newClear daily run checks */
     if (!isLocal || isLocalServerConnected) {
-      api.savedata.session
+      pokerogueApi.savedata.session
         .newclear({ slot: globalScene.sessionSlotId, isVictory: this.isVictory, clientSessionId: clientSessionId })
         .then((success) => doGameOver(!!success));
     } else if (this.isVictory) {
@@ -236,8 +236,8 @@ export class GameOverPhase extends BattlePhase {
         globalScene.unshiftPhase(new UnlockPhase(Unlockables.ENDLESS_MODE));
       }
       if (
-        globalScene.getPlayerParty().filter((p) => p.fusionSpecies).length &&
-        !globalScene.gameData.unlocks[Unlockables.SPLICED_ENDLESS_MODE]
+        globalScene.getPlayerParty().filter((p) => p.fusionSpecies).length
+        && !globalScene.gameData.unlocks[Unlockables.SPLICED_ENDLESS_MODE]
       ) {
         globalScene.unshiftPhase(new UnlockPhase(Unlockables.SPLICED_ENDLESS_MODE));
       }
@@ -245,8 +245,8 @@ export class GameOverPhase extends BattlePhase {
         globalScene.unshiftPhase(new UnlockPhase(Unlockables.MINI_BLACK_HOLE));
       }
       if (
-        !globalScene.gameData.unlocks[Unlockables.EVIOLITE] &&
-        globalScene.getPlayerParty().some((p) => p.getSpeciesForm(true).speciesId in pokemonEvolutions)
+        !globalScene.gameData.unlocks[Unlockables.EVIOLITE]
+        && globalScene.getPlayerParty().some((p) => p.getSpeciesForm(true).speciesId in pokemonEvolutions)
       ) {
         globalScene.unshiftPhase(new UnlockPhase(Unlockables.EVIOLITE));
       }

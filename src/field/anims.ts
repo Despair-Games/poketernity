@@ -14,6 +14,9 @@ export function addPokeballOpenParticles(x: number, y: number, pokeballType: Pok
     case PokeballType.ULTRA_BALL:
       doUbOpenParticles(x, y, 8);
       break;
+    case PokeballType.ROGUE_BALL:
+      doUbOpenParticles(x, y, 10);
+      break;
     case PokeballType.MASTER_BALL:
       doMbOpenParticles(x, y);
       break;

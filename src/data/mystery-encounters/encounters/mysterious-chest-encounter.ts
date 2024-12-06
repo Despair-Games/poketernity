@@ -32,11 +32,12 @@ const RAND_LENGTH = 100;
 const TRAP_PERCENT = 35;
 const COMMON_REWARDS_PERCENT = 20;
 const ULTRA_REWARDS_PERCENT = 30;
-const EPIC_REWARDS_PERCENT = 10;
+const ROGUE_REWARDS_PERCENT = 10;
 const MASTER_REWARDS_PERCENT = 5;
 
 /**
  * Mysterious Chest encounter.
+ * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3796 | GitHub Issue #3796}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const MysteriousChestEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(
@@ -99,7 +100,7 @@ export const MysteriousChestEncounter: MysteryEncounter = MysteryEncounterBuilde
     encounter.setDialogueToken("trapPercent", TRAP_PERCENT.toString());
     encounter.setDialogueToken("commonPercent", COMMON_REWARDS_PERCENT.toString());
     encounter.setDialogueToken("ultraPercent", ULTRA_REWARDS_PERCENT.toString());
-    encounter.setDialogueToken("roguePercent", EPIC_REWARDS_PERCENT.toString());
+    encounter.setDialogueToken("roguePercent", ROGUE_REWARDS_PERCENT.toString());
     encounter.setDialogueToken("masterPercent", MASTER_REWARDS_PERCENT.toString());
 
     return true;
@@ -157,15 +158,19 @@ export const MysteriousChestEncounter: MysteryEncounter = MysteryEncounterBuilde
           // Display result message then proceed to rewards
           queueEncounterMessage(`${namespace}:option.1.good`);
           leaveEncounterWithoutBattle();
-        } else if (roll >= RAND_LENGTH - COMMON_REWARDS_PERCENT - ULTRA_REWARDS_PERCENT - EPIC_REWARDS_PERCENT) {
-          // Choose between 2 EPIC tier items (10%)
-          setEncounterRewards({ guaranteedModifierTiers: [ModifierTier.EPIC, ModifierTier.EPIC] });
+        } else if (roll >= RAND_LENGTH - COMMON_REWARDS_PERCENT - ULTRA_REWARDS_PERCENT - ROGUE_REWARDS_PERCENT) {
+          // Choose between 2 ROGUE tier items (10%)
+          setEncounterRewards({ guaranteedModifierTiers: [ModifierTier.ROGUE, ModifierTier.ROGUE] });
           // Display result message then proceed to rewards
           queueEncounterMessage(`${namespace}:option.1.great`);
           leaveEncounterWithoutBattle();
         } else if (
-          roll >=
-          RAND_LENGTH - COMMON_REWARDS_PERCENT - ULTRA_REWARDS_PERCENT - EPIC_REWARDS_PERCENT - MASTER_REWARDS_PERCENT
+          roll
+          >= RAND_LENGTH
+            - COMMON_REWARDS_PERCENT
+            - ULTRA_REWARDS_PERCENT
+            - ROGUE_REWARDS_PERCENT
+            - MASTER_REWARDS_PERCENT
         ) {
           // Choose 1 MASTER tier item (5%)
           setEncounterRewards({ guaranteedModifierTiers: [ModifierTier.MASTER] });

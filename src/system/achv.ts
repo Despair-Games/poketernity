@@ -20,7 +20,7 @@ export enum AchvTier {
   COMMON,
   GREAT,
   ULTRA,
-  EPIC,
+  ROGUE,
   MASTER,
 }
 
@@ -88,7 +88,7 @@ export class Achv {
       return AchvTier.MASTER;
     }
     if (this.score >= 75) {
-      return AchvTier.EPIC;
+      return AchvTier.ROGUE;
     }
     if (this.score >= 50) {
       return AchvTier.ULTRA;
@@ -417,7 +417,7 @@ export const achvs = {
   _10_RIBBONS: new RibbonAchv("10_RIBBONS", "", 10, "bronze_ribbon", 10),
   _25_RIBBONS: new RibbonAchv("25_RIBBONS", "", 25, "great_ribbon", 25).setSecret(true),
   _50_RIBBONS: new RibbonAchv("50_RIBBONS", "", 50, "ultra_ribbon", 50).setSecret(true),
-  _75_RIBBONS: new RibbonAchv("75_RIBBONS", "", 75, "epic_ribbon", 75).setSecret(true),
+  _75_RIBBONS: new RibbonAchv("75_RIBBONS", "", 75, "rogue_ribbon", 75).setSecret(true),
   _100_RIBBONS: new RibbonAchv("100_RIBBONS", "", 100, "master_ribbon", 100).setSecret(true),
   TRANSFER_MAX_STAT_STAGE: new Achv("TRANSFER_MAX_STAT_STAGE", "", "TRANSFER_MAX_STAT_STAGE.description", "baton", 20),
   MAX_FRIENDSHIP: new Achv("MAX_FRIENDSHIP", "", "MAX_FRIENDSHIP.description", "soothe_bell", 25),
@@ -480,9 +480,9 @@ export const achvs = {
     "ribbon_gen1",
     100,
     (c) =>
-      c instanceof SingleGenerationChallenge &&
-      c.value === 1 &&
-      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      c instanceof SingleGenerationChallenge
+      && c.value === 1
+      && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_GEN_TWO_VICTORY: new ChallengeAchv(
     "MONO_GEN_TWO",
@@ -491,9 +491,9 @@ export const achvs = {
     "ribbon_gen2",
     100,
     (c) =>
-      c instanceof SingleGenerationChallenge &&
-      c.value === 2 &&
-      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      c instanceof SingleGenerationChallenge
+      && c.value === 2
+      && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_GEN_THREE_VICTORY: new ChallengeAchv(
     "MONO_GEN_THREE",
@@ -502,9 +502,9 @@ export const achvs = {
     "ribbon_gen3",
     100,
     (c) =>
-      c instanceof SingleGenerationChallenge &&
-      c.value === 3 &&
-      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      c instanceof SingleGenerationChallenge
+      && c.value === 3
+      && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_GEN_FOUR_VICTORY: new ChallengeAchv(
     "MONO_GEN_FOUR",
@@ -513,9 +513,9 @@ export const achvs = {
     "ribbon_gen4",
     100,
     (c) =>
-      c instanceof SingleGenerationChallenge &&
-      c.value === 4 &&
-      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      c instanceof SingleGenerationChallenge
+      && c.value === 4
+      && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_GEN_FIVE_VICTORY: new ChallengeAchv(
     "MONO_GEN_FIVE",
@@ -524,9 +524,9 @@ export const achvs = {
     "ribbon_gen5",
     100,
     (c) =>
-      c instanceof SingleGenerationChallenge &&
-      c.value === 5 &&
-      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      c instanceof SingleGenerationChallenge
+      && c.value === 5
+      && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_GEN_SIX_VICTORY: new ChallengeAchv(
     "MONO_GEN_SIX",
@@ -535,9 +535,9 @@ export const achvs = {
     "ribbon_gen6",
     100,
     (c) =>
-      c instanceof SingleGenerationChallenge &&
-      c.value === 6 &&
-      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      c instanceof SingleGenerationChallenge
+      && c.value === 6
+      && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_GEN_SEVEN_VICTORY: new ChallengeAchv(
     "MONO_GEN_SEVEN",
@@ -546,9 +546,9 @@ export const achvs = {
     "ribbon_gen7",
     100,
     (c) =>
-      c instanceof SingleGenerationChallenge &&
-      c.value === 7 &&
-      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      c instanceof SingleGenerationChallenge
+      && c.value === 7
+      && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_GEN_EIGHT_VICTORY: new ChallengeAchv(
     "MONO_GEN_EIGHT",
@@ -557,9 +557,9 @@ export const achvs = {
     "ribbon_gen8",
     100,
     (c) =>
-      c instanceof SingleGenerationChallenge &&
-      c.value === 8 &&
-      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      c instanceof SingleGenerationChallenge
+      && c.value === 8
+      && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_GEN_NINE_VICTORY: new ChallengeAchv(
     "MONO_GEN_NINE",
@@ -568,9 +568,9 @@ export const achvs = {
     "ribbon_gen9",
     100,
     (c) =>
-      c instanceof SingleGenerationChallenge &&
-      c.value === 9 &&
-      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      c instanceof SingleGenerationChallenge
+      && c.value === 9
+      && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_NORMAL: new ChallengeAchv(
     "MONO_NORMAL",
@@ -579,9 +579,9 @@ export const achvs = {
     "silk_scarf",
     100,
     (c) =>
-      c instanceof SingleTypeChallenge &&
-      c.value === 1 &&
-      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      c instanceof SingleTypeChallenge
+      && c.value === 1
+      && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_FIGHTING: new ChallengeAchv(
     "MONO_FIGHTING",
@@ -590,9 +590,9 @@ export const achvs = {
     "black_belt",
     100,
     (c) =>
-      c instanceof SingleTypeChallenge &&
-      c.value === 2 &&
-      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      c instanceof SingleTypeChallenge
+      && c.value === 2
+      && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_FLYING: new ChallengeAchv(
     "MONO_FLYING",
@@ -601,9 +601,9 @@ export const achvs = {
     "sharp_beak",
     100,
     (c) =>
-      c instanceof SingleTypeChallenge &&
-      c.value === 3 &&
-      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      c instanceof SingleTypeChallenge
+      && c.value === 3
+      && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_POISON: new ChallengeAchv(
     "MONO_POISON",
@@ -612,9 +612,9 @@ export const achvs = {
     "poison_barb",
     100,
     (c) =>
-      c instanceof SingleTypeChallenge &&
-      c.value === 4 &&
-      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      c instanceof SingleTypeChallenge
+      && c.value === 4
+      && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_GROUND: new ChallengeAchv(
     "MONO_GROUND",
@@ -623,9 +623,9 @@ export const achvs = {
     "soft_sand",
     100,
     (c) =>
-      c instanceof SingleTypeChallenge &&
-      c.value === 5 &&
-      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      c instanceof SingleTypeChallenge
+      && c.value === 5
+      && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_ROCK: new ChallengeAchv(
     "MONO_ROCK",
@@ -634,9 +634,9 @@ export const achvs = {
     "hard_stone",
     100,
     (c) =>
-      c instanceof SingleTypeChallenge &&
-      c.value === 6 &&
-      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      c instanceof SingleTypeChallenge
+      && c.value === 6
+      && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_BUG: new ChallengeAchv(
     "MONO_BUG",
@@ -645,9 +645,9 @@ export const achvs = {
     "silver_powder",
     100,
     (c) =>
-      c instanceof SingleTypeChallenge &&
-      c.value === 7 &&
-      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      c instanceof SingleTypeChallenge
+      && c.value === 7
+      && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_GHOST: new ChallengeAchv(
     "MONO_GHOST",
@@ -656,9 +656,9 @@ export const achvs = {
     "spell_tag",
     100,
     (c) =>
-      c instanceof SingleTypeChallenge &&
-      c.value === 8 &&
-      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      c instanceof SingleTypeChallenge
+      && c.value === 8
+      && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_STEEL: new ChallengeAchv(
     "MONO_STEEL",
@@ -667,9 +667,9 @@ export const achvs = {
     "metal_coat",
     100,
     (c) =>
-      c instanceof SingleTypeChallenge &&
-      c.value === 9 &&
-      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      c instanceof SingleTypeChallenge
+      && c.value === 9
+      && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_FIRE: new ChallengeAchv(
     "MONO_FIRE",
@@ -678,9 +678,9 @@ export const achvs = {
     "charcoal",
     100,
     (c) =>
-      c instanceof SingleTypeChallenge &&
-      c.value === 10 &&
-      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      c instanceof SingleTypeChallenge
+      && c.value === 10
+      && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_WATER: new ChallengeAchv(
     "MONO_WATER",
@@ -689,9 +689,9 @@ export const achvs = {
     "mystic_water",
     100,
     (c) =>
-      c instanceof SingleTypeChallenge &&
-      c.value === 11 &&
-      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      c instanceof SingleTypeChallenge
+      && c.value === 11
+      && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_GRASS: new ChallengeAchv(
     "MONO_GRASS",
@@ -700,9 +700,9 @@ export const achvs = {
     "miracle_seed",
     100,
     (c) =>
-      c instanceof SingleTypeChallenge &&
-      c.value === 12 &&
-      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      c instanceof SingleTypeChallenge
+      && c.value === 12
+      && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_ELECTRIC: new ChallengeAchv(
     "MONO_ELECTRIC",
@@ -711,9 +711,9 @@ export const achvs = {
     "magnet",
     100,
     (c) =>
-      c instanceof SingleTypeChallenge &&
-      c.value === 13 &&
-      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      c instanceof SingleTypeChallenge
+      && c.value === 13
+      && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_PSYCHIC: new ChallengeAchv(
     "MONO_PSYCHIC",
@@ -722,9 +722,9 @@ export const achvs = {
     "twisted_spoon",
     100,
     (c) =>
-      c instanceof SingleTypeChallenge &&
-      c.value === 14 &&
-      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      c instanceof SingleTypeChallenge
+      && c.value === 14
+      && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_ICE: new ChallengeAchv(
     "MONO_ICE",
@@ -733,9 +733,9 @@ export const achvs = {
     "never_melt_ice",
     100,
     (c) =>
-      c instanceof SingleTypeChallenge &&
-      c.value === 15 &&
-      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      c instanceof SingleTypeChallenge
+      && c.value === 15
+      && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_DRAGON: new ChallengeAchv(
     "MONO_DRAGON",
@@ -744,9 +744,9 @@ export const achvs = {
     "dragon_fang",
     100,
     (c) =>
-      c instanceof SingleTypeChallenge &&
-      c.value === 16 &&
-      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      c instanceof SingleTypeChallenge
+      && c.value === 16
+      && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_DARK: new ChallengeAchv(
     "MONO_DARK",
@@ -755,9 +755,9 @@ export const achvs = {
     "black_glasses",
     100,
     (c) =>
-      c instanceof SingleTypeChallenge &&
-      c.value === 17 &&
-      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      c instanceof SingleTypeChallenge
+      && c.value === 17
+      && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   MONO_FAIRY: new ChallengeAchv(
     "MONO_FAIRY",
@@ -766,9 +766,9 @@ export const achvs = {
     "fairy_feather",
     100,
     (c) =>
-      c instanceof SingleTypeChallenge &&
-      c.value === 18 &&
-      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      c instanceof SingleTypeChallenge
+      && c.value === 18
+      && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   FRESH_START: new ChallengeAchv(
     "FRESH_START",
@@ -777,9 +777,9 @@ export const achvs = {
     "reviver_seed",
     100,
     (c) =>
-      c instanceof FreshStartChallenge &&
-      c.value > 0 &&
-      !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
+      c instanceof FreshStartChallenge
+      && c.value > 0
+      && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
   INVERSE_BATTLE: new ChallengeAchv(
     "INVERSE_BATTLE",

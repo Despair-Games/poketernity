@@ -35,9 +35,9 @@ export default class PokeballTray extends Phaser.GameObjects.Container {
       .fill(null)
       .map((_, i) =>
         globalScene.add.sprite(
-          (this.player ? -83 : 76) +
-            (globalScene.game.canvas.width / 6) * (this.player ? -1 : 1) +
-            10 * i * (this.player ? 1 : -1),
+          (this.player ? -83 : 76)
+            + (globalScene.game.canvas.width / 6) * (this.player ? -1 : 1)
+            + 10 * i * (this.player ? 1 : -1),
           -8,
           "pb_tray_ball",
           "empty",

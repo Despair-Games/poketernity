@@ -37,6 +37,7 @@ const namespace = "mysteryEncounters/trainingSession";
 
 /**
  * Training Session encounter.
+ * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3802 | GitHub Issue #3802}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const TrainingSessionEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(
@@ -324,9 +325,9 @@ export const TrainingSessionEncounter: MysteryEncounter = MysteryEncounterBuilde
             // Only update the fusion's dex data if the Pokemon is already caught in dex (ignore rentals)
             const rootFusionSpecies = playerPokemon.fusionSpecies?.getRootSpeciesId();
             if (
-              !isNullOrUndefined(rootFusionSpecies) &&
-              speciesStarterCosts.hasOwnProperty(rootFusionSpecies) &&
-              !!globalScene.gameData.dexData[rootFusionSpecies].caughtAttr
+              !isNullOrUndefined(rootFusionSpecies)
+              && speciesStarterCosts.hasOwnProperty(rootFusionSpecies)
+              && !!globalScene.gameData.dexData[rootFusionSpecies].caughtAttr
             ) {
               globalScene.gameData.starterData[rootFusionSpecies].abilityAttr |=
                 playerPokemon.fusionAbilityIndex !== 1 || playerPokemon.fusionSpecies?.ability2

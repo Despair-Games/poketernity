@@ -988,10 +988,10 @@ export default class BattleScene extends SceneBase {
       do {
         targetingMovePhase = this.findPhase(
           (mp) =>
-            mp instanceof MovePhase &&
-            mp.targets.length === 1 &&
-            mp.targets[0] === removedPokemon.getBattlerIndex() &&
-            mp.pokemon.isPlayer() !== allyPokemon.isPlayer(),
+            mp instanceof MovePhase
+            && mp.targets.length === 1
+            && mp.targets[0] === removedPokemon.getBattlerIndex()
+            && mp.pokemon.isPlayer() !== allyPokemon.isPlayer(),
         ) as MovePhase;
         if (targetingMovePhase && targetingMovePhase.targets[0] !== allyPokemon.getBattlerIndex()) {
           targetingMovePhase.targets[0] = allyPokemon.getBattlerIndex();
@@ -1428,8 +1428,8 @@ export default class BattleScene extends SceneBase {
           doubleTrainer = !randSeedInt(this.getDoubleBattleChance(newWaveIndex, playerField));
           // Add a check that special trainers can't be double except for tate and liza - they should use the normal double chance
           if (
-            trainerConfigs[trainerType].trainerTypeDouble &&
-            ![TrainerType.TATE, TrainerType.LIZA].includes(trainerType)
+            trainerConfigs[trainerType].trainerTypeDouble
+            && ![TrainerType.TATE, TrainerType.LIZA].includes(trainerType)
           ) {
             doubleTrainer = false;
           }
@@ -1537,9 +1537,9 @@ export default class BattleScene extends SceneBase {
       const isNewBiome =
         isWaveIndexMultipleOfTen || isEndlessFifthWave || (isEndlessOrDaily && isWaveIndexMultipleOfFiftyMinusOne);
       const resetArenaState =
-        isNewBiome ||
-        [BattleType.TRAINER, BattleType.MYSTERY_ENCOUNTER].includes(this.currentBattle.battleType) ||
-        this.currentBattle.battleSpec === BattleSpec.FINAL_BOSS;
+        isNewBiome
+        || [BattleType.TRAINER, BattleType.MYSTERY_ENCOUNTER].includes(this.currentBattle.battleType)
+        || this.currentBattle.battleSpec === BattleSpec.FINAL_BOSS;
       this.getEnemyParty().forEach((enemyPokemon) => enemyPokemon.destroy());
       this.trySpreadPokerus();
       if (!isNewBiome && newWaveIndex % 10 === 5) {
@@ -1600,8 +1600,8 @@ export default class BattleScene extends SceneBase {
       const fieldScale =
         Math.floor(
           Math.pow(
-            1 /
-              this.getField(true)
+            1
+              / this.getField(true)
                 .map((p) => p.getSpriteScale())
                 .reduce((highestScale: number, scale: number) => (highestScale = Math.max(scale, highestScale)), 0),
             0.7,
@@ -1780,9 +1780,9 @@ export default class BattleScene extends SceneBase {
     } else {
       this.executeWithSeedOffset(() => {
         isBoss =
-          waveIndex % 10 === 0 ||
-          (this.gameMode.hasRandomBosses &&
-            randSeedInt(100) < Math.min(Math.max(Math.ceil((waveIndex - 250) / 50), 0) * 2, 30));
+          waveIndex % 10 === 0
+          || (this.gameMode.hasRandomBosses
+            && randSeedInt(100) < Math.min(Math.max(Math.ceil((waveIndex - 250) / 50), 0) * 2, 30));
       }, waveIndex << 2);
     }
     if (!isBoss) {
@@ -2066,9 +2066,9 @@ export default class BattleScene extends SceneBase {
     const enemyModifierCount = this.enemyModifiers.filter((m) => m.isIconVisible()).length;
     const biomeWaveTextHeight = this.biomeWaveText.getBottomLeft().y - this.biomeWaveText.getTopLeft().y;
     this.biomeWaveText.setY(
-      -(this.game.canvas.height / 6) +
-        (enemyModifierCount ? (enemyModifierCount <= 12 ? 15 : 24) : 0) +
-        biomeWaveTextHeight / 2,
+      -(this.game.canvas.height / 6)
+        + (enemyModifierCount ? (enemyModifierCount <= 12 ? 15 : 24) : 0)
+        + biomeWaveTextHeight / 2,
     );
     this.moneyText.setY(this.biomeWaveText.y + 10);
     this.scoreText.setY(this.moneyText.y + 10);
@@ -2092,9 +2092,9 @@ export default class BattleScene extends SceneBase {
 
   addFaintedEnemyScore(enemy: EnemyPokemon): void {
     let scoreIncrease =
-      enemy.getSpeciesForm().getBaseExp() *
-      (enemy.level / this.getMaxExpLevel()) *
-      ((enemy.ivs.reduce((iv: integer, total: integer) => (total += iv), 0) / 93) * 0.2 + 0.8);
+      enemy.getSpeciesForm().getBaseExp()
+      * (enemy.level / this.getMaxExpLevel())
+      * ((enemy.ivs.reduce((iv: integer, total: integer) => (total += iv), 0) / 93) * 0.2 + 0.8);
     this.findModifiers((m) => m instanceof PokemonHeldItemModifier && m.pokemonId === enemy.id, false).map(
       (m) => (scoreIncrease *= (m as PokemonHeldItemModifier).getScoreMultiplier()),
     );
@@ -2828,8 +2828,8 @@ export default class BattleScene extends SceneBase {
     const waveIndex = this.currentBattle.waveIndex;
     const waveSetIndex = Math.ceil(waveIndex / 10) - 1;
     const moneyValue =
-      Math.pow((waveSetIndex + 1 + (0.75 + (((waveIndex - 1) % 10) + 1) / 10)) * 100, 1 + 0.005 * waveSetIndex) *
-      moneyMultiplier;
+      Math.pow((waveSetIndex + 1 + (0.75 + (((waveIndex - 1) % 10) + 1) / 10)) * 100, 1 + 0.005 * waveSetIndex)
+      * moneyMultiplier;
     return Math.floor(moneyValue / 10) * 10;
   }
 
@@ -3094,8 +3094,8 @@ export default class BattleScene extends SceneBase {
           });
         } else {
           const isBoss =
-            enemyPokemon.isBoss() ||
-            (this.currentBattle.battleType === BattleType.TRAINER && !!this.currentBattle.trainer?.config.isBoss);
+            enemyPokemon.isBoss()
+            || (this.currentBattle.battleType === BattleType.TRAINER && !!this.currentBattle.trainer?.config.isBoss);
           let upgradeChance = 32;
           if (isBoss) {
             upgradeChance /= 2;
@@ -3426,8 +3426,8 @@ export default class BattleScene extends SceneBase {
 
   validateAchv(achv: Achv, args?: unknown[]): boolean {
     if (
-      (!this.gameData.achvUnlocks.hasOwnProperty(achv.id) || Overrides.ACHIEVEMENTS_REUNLOCK_OVERRIDE) &&
-      achv.validate(args)
+      (!this.gameData.achvUnlocks.hasOwnProperty(achv.id) || Overrides.ACHIEVEMENTS_REUNLOCK_OVERRIDE)
+      && achv.validate(args)
     ) {
       this.gameData.achvUnlocks[achv.id] = new Date().getTime();
       this.ui.achvBar.showAchv(achv);
@@ -3567,8 +3567,8 @@ export default class BattleScene extends SceneBase {
 
     if (participantIds.size > 0) {
       if (
-        this.currentBattle.battleType === BattleType.TRAINER ||
-        this.currentBattle.mysteryEncounter?.encounterMode === MysteryEncounterMode.TRAINER_BATTLE
+        this.currentBattle.battleType === BattleType.TRAINER
+        || this.currentBattle.mysteryEncounter?.encounterMode === MysteryEncounterMode.TRAINER_BATTLE
       ) {
         expValue = Math.floor(expValue * 1.5);
       } else if (this.currentBattle.isBattleMysteryEncounter() && this.currentBattle.mysteryEncounter) {
@@ -3666,11 +3666,11 @@ export default class BattleScene extends SceneBase {
   isMysteryEncounterValidForWave(battleType: BattleType, waveIndex: number): boolean {
     const [lowestMysteryEncounterWave, highestMysteryEncounterWave] = this.gameMode.getMysteryEncounterLegalWaves();
     return (
-      this.gameMode.hasMysteryEncounters &&
-      battleType === BattleType.WILD &&
-      !this.gameMode.isBoss(waveIndex) &&
-      waveIndex < highestMysteryEncounterWave &&
-      waveIndex > lowestMysteryEncounterWave
+      this.gameMode.hasMysteryEncounters
+      && battleType === BattleType.WILD
+      && !this.gameMode.isBoss(waveIndex)
+      && waveIndex < highestMysteryEncounterWave
+      && waveIndex > lowestMysteryEncounterWave
     );
   }
 
@@ -3692,12 +3692,12 @@ export default class BattleScene extends SceneBase {
       // Reduces occurrence of runs with total encounters significantly different from AVERAGE_ENCOUNTERS_PER_RUN_TARGET
       // Favored rate changes can never exceed 50%. So if base rate is 15/256 and favored rate would add 200/256, result will be (15 + 128)/256
       const expectedEncountersByFloor =
-        (AVERAGE_ENCOUNTERS_PER_RUN_TARGET / (highestMysteryEncounterWave - lowestMysteryEncounterWave)) *
-        (waveIndex - lowestMysteryEncounterWave);
+        (AVERAGE_ENCOUNTERS_PER_RUN_TARGET / (highestMysteryEncounterWave - lowestMysteryEncounterWave))
+        * (waveIndex - lowestMysteryEncounterWave);
       const currentRunDiffFromAvg = expectedEncountersByFloor - encounteredEvents.length;
       const favoredEncounterRate =
-        sessionEncounterRate +
-        Math.min(currentRunDiffFromAvg * ANTI_VARIANCE_WEIGHT_MODIFIER, MYSTERY_ENCOUNTER_SPAWN_MAX_WEIGHT / 2);
+        sessionEncounterRate
+        + Math.min(currentRunDiffFromAvg * ANTI_VARIANCE_WEIGHT_MODIFIER, MYSTERY_ENCOUNTER_SPAWN_MAX_WEIGHT / 2);
 
       const successRate = isNullOrUndefined(Overrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE)
         ? favoredEncounterRate
@@ -3705,9 +3705,9 @@ export default class BattleScene extends SceneBase {
 
       // If the most recent ME was 3 or fewer waves ago, can never spawn a ME
       const canSpawn =
-        encounteredEvents.length === 0 ||
-        waveIndex - encounteredEvents[encounteredEvents.length - 1].waveIndex > 3 ||
-        !isNullOrUndefined(Overrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE);
+        encounteredEvents.length === 0
+        || waveIndex - encounteredEvents[encounteredEvents.length - 1].waveIndex > 3
+        || !isNullOrUndefined(Overrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE);
 
       if (canSpawn) {
         let roll = MYSTERY_ENCOUNTER_SPAWN_MAX_WEIGHT;
@@ -3735,8 +3735,8 @@ export default class BattleScene extends SceneBase {
     // Loading override or session encounter
     let encounter: MysteryEncounter | null;
     if (
-      !isNullOrUndefined(Overrides.MYSTERY_ENCOUNTER_OVERRIDE) &&
-      allMysteryEncounters.hasOwnProperty(Overrides.MYSTERY_ENCOUNTER_OVERRIDE)
+      !isNullOrUndefined(Overrides.MYSTERY_ENCOUNTER_OVERRIDE)
+      && allMysteryEncounters.hasOwnProperty(Overrides.MYSTERY_ENCOUNTER_OVERRIDE)
     ) {
       encounter = allMysteryEncounters[Overrides.MYSTERY_ENCOUNTER_OVERRIDE];
       if (canBypass) {
@@ -3751,9 +3751,9 @@ export default class BattleScene extends SceneBase {
 
     // Check for queued encounters first
     if (
-      !encounter &&
-      this.mysteryEncounterSaveData?.queuedEncounters &&
-      this.mysteryEncounterSaveData.queuedEncounters.length > 0
+      !encounter
+      && this.mysteryEncounterSaveData?.queuedEncounters
+      && this.mysteryEncounterSaveData.queuedEncounters.length > 0
     ) {
       let i = 0;
       while (i < this.mysteryEncounterSaveData.queuedEncounters.length && !!encounter) {
@@ -3828,18 +3828,18 @@ export default class BattleScene extends SceneBase {
           }
           const disallowedGameModes = encounterCandidate.disallowedGameModes;
           if (
-            disallowedGameModes &&
-            disallowedGameModes.length > 0 &&
-            disallowedGameModes.includes(this.gameMode.modeId)
+            disallowedGameModes
+            && disallowedGameModes.length > 0
+            && disallowedGameModes.includes(this.gameMode.modeId)
           ) {
             return false;
           }
           if (this.gameMode.modeId === GameModes.CHALLENGE) {
             const disallowedChallenges = encounterCandidate.disallowedChallenges;
             if (
-              disallowedChallenges &&
-              disallowedChallenges.length > 0 &&
-              this.gameMode.challenges.some((challenge) => disallowedChallenges.includes(challenge.id))
+              disallowedChallenges
+              && disallowedChallenges.length > 0
+              && this.gameMode.challenges.some((challenge) => disallowedChallenges.includes(challenge.id))
             ) {
               return false;
             }
@@ -3851,11 +3851,11 @@ export default class BattleScene extends SceneBase {
             return false;
           }
           if (
-            this.mysteryEncounterSaveData.encounteredEvents.length > 0 &&
-            encounterCandidate.maxAllowedEncounters &&
-            encounterCandidate.maxAllowedEncounters > 0 &&
-            this.mysteryEncounterSaveData.encounteredEvents.filter((e) => e.type === encounterType).length >=
-              encounterCandidate.maxAllowedEncounters
+            this.mysteryEncounterSaveData.encounteredEvents.length > 0
+            && encounterCandidate.maxAllowedEncounters
+            && encounterCandidate.maxAllowedEncounters > 0
+            && this.mysteryEncounterSaveData.encounteredEvents.filter((e) => e.type === encounterType).length
+              >= encounterCandidate.maxAllowedEncounters
           ) {
             return false;
           }

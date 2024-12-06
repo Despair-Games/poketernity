@@ -40,6 +40,7 @@ const SHINY_MAGIKARP_WEIGHT = 100;
 
 /**
  * Pokemon Salesman encounter.
+ * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3799 | GitHub Issue #3799}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const ThePokemonSalesmanEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(
@@ -83,9 +84,9 @@ export const ThePokemonSalesmanEncounter: MysteryEncounter = MysteryEncounterBui
 
     let pokemon: PlayerPokemon;
     if (
-      randSeedInt(SHINY_MAGIKARP_WEIGHT) === 0 ||
-      isNullOrUndefined(species.abilityHidden) ||
-      species.abilityHidden === Abilities.NONE
+      randSeedInt(SHINY_MAGIKARP_WEIGHT) === 0
+      || isNullOrUndefined(species.abilityHidden)
+      || species.abilityHidden === Abilities.NONE
     ) {
       // If no HA mon found or you roll 1%, give shiny Magikarp with random variant
       species = getPokemonSpecies(Species.MAGIKARP);

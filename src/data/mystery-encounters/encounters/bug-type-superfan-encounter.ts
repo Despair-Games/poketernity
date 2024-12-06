@@ -176,6 +176,7 @@ const WAVE_LEVEL_BREAKPOINTS = [30, 50, 70, 100, 120, 140, 160];
 
 /**
  * Bug Type Superfan encounter.
+ * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3820 | GitHub Issue #3820}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(
@@ -348,7 +349,7 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
           ];
         } else if (numBugTypes < 6) {
           setEncounterRewards({
-            guaranteedModifierTypeFuncs: [modifierTypes.GRIP_CLAW, modifierTypes.MAX_LURE, modifierTypes.ULTRA_BALL],
+            guaranteedModifierTypeFuncs: [modifierTypes.GRIP_CLAW, modifierTypes.MAX_LURE, modifierTypes.ROGUE_BALL],
             fillRemaining: false,
           });
           encounter.selectedOption!.dialogue!.selected = [
@@ -435,11 +436,11 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
           // Get Pokemon held items and filter for valid ones
           const validItems = pokemon.getHeldItems().filter((item) => {
             return (
-              (item instanceof BypassSpeedChanceModifier ||
-                item instanceof ContactHeldItemTransferChanceModifier ||
-                (item instanceof AttackTypeBoosterModifier &&
-                  (item.type as AttackTypeBoosterModifierType).moveType === Type.BUG)) &&
-              item.isTransferable
+              (item instanceof BypassSpeedChanceModifier
+                || item instanceof ContactHeldItemTransferChanceModifier
+                || (item instanceof AttackTypeBoosterModifier
+                  && (item.type as AttackTypeBoosterModifierType).moveType === Type.BUG))
+              && item.isTransferable
             );
           });
 
@@ -464,10 +465,10 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
           // If pokemon has valid item, it can be selected
           const hasValidItem = pokemon.getHeldItems().some((item) => {
             return (
-              item instanceof BypassSpeedChanceModifier ||
-              item instanceof ContactHeldItemTransferChanceModifier ||
-              (item instanceof AttackTypeBoosterModifier &&
-                (item.type as AttackTypeBoosterModifierType).moveType === Type.BUG)
+              item instanceof BypassSpeedChanceModifier
+              || item instanceof ContactHeldItemTransferChanceModifier
+              || (item instanceof AttackTypeBoosterModifier
+                && (item.type as AttackTypeBoosterModifierType).moveType === Type.BUG)
             );
           });
           if (!hasValidItem) {
@@ -488,7 +489,7 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
         globalScene.updateModifiers(true, true);
 
         const bugNet = generateModifierTypeOption(modifierTypes.MYSTERY_ENCOUNTER_GOLDEN_BUG_NET)!;
-        bugNet.type.tier = ModifierTier.EPIC;
+        bugNet.type.tier = ModifierTier.ROGUE;
 
         setEncounterRewards({
           guaranteedModifierTypeOptions: [bugNet],
