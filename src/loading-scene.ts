@@ -460,22 +460,6 @@ export class LoadingScene extends SceneBase {
       loadingGraphics.map((g) => g.setVisible(false));
     }
 
-    // loadingGraphics.forEach((g: GameObjects.Graphics) => g.on(Phaser.GameObjects.Events.));
-
-    // const intro = this.add.video(0, 0);
-    // intro.once(Phaser.GameObjects.Events.VIDEO_COMPLETE, (video: Phaser.GameObjects.Video) => {
-    // this.tweens.add({
-    //   targets: intro,
-    //   duration: 500,
-    //   alpha: 0,
-    //   ease: "Sine.easeIn",
-    //   onComplete: () => video.destroy(),
-    // });
-    // loadingGraphics.forEach((g) => g.setVisible(true));
-    // });
-    // intro.setOrigin(0, 0);
-    // intro.setScale(3);
-
     this.load.once(this.LOAD_EVENTS.START, () => {
       setTimeout(() => {
         loadingGraphics.forEach((g) => g.setVisible(true));
