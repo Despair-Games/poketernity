@@ -30,7 +30,7 @@ import PokemonData from "#app/system/pokemon-data";
 import ChallengeData from "#app/system/challenge-data";
 import TrainerData from "#app/system/trainer-data";
 import ArenaData from "#app/system/arena-data";
-import { pokerogueApi } from "#app/plugins/api/pokerogue-api";
+import { api } from "#app/plugins/api/api";
 
 export class GameOverPhase extends BattlePhase {
   private isVictory: boolean;
@@ -218,7 +218,7 @@ export class GameOverPhase extends BattlePhase {
       If Online, execute apiFetch as intended
       If Offline, execute offlineNewClear() only for victory, a localStorage implementation of newClear daily run checks */
     if (!isLocal || isLocalServerConnected) {
-      pokerogueApi.savedata.session
+      api.savedata.session
         .newclear({ slot: globalScene.sessionSlotId, isVictory: this.isVictory, clientSessionId: clientSessionId })
         .then((success) => doGameOver(!!success));
     } else if (this.isVictory) {

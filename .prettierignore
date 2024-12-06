@@ -1,3 +1,6 @@
+**/*.yml
+**/*.md
+
 # Ignore artifacts:
 build
 coverage

@@ -1,5 +1,5 @@
 import * as battleScene from "#app/battle-scene";
-import { pokerogueApi } from "#app/plugins/api/pokerogue-api";
+import { api } from "#app/plugins/api/api";
 import { describe, expect, it, vi } from "vitest";
 import { initLoggedInUser, loggedInUser, updateUserInfo } from "../account";
 
@@ -27,7 +27,7 @@ describe("account", () => {
 
     it("should fetch user info from the API if bypassLogin is false", async () => {
       vi.spyOn(battleScene, "bypassLogin", "get").mockReturnValue(false);
-      vi.spyOn(pokerogueApi.account, "getInfo").mockResolvedValue([
+      vi.spyOn(api.account, "getInfo").mockResolvedValue([
         {
           username: "test",
           lastSessionSlot: 99,
@@ -48,7 +48,7 @@ describe("account", () => {
 
     it("should handle resolved API errors", async () => {
       vi.spyOn(battleScene, "bypassLogin", "get").mockReturnValue(false);
-      vi.spyOn(pokerogueApi.account, "getInfo").mockResolvedValue([null, 401]);
+      vi.spyOn(api.account, "getInfo").mockResolvedValue([null, 401]);
 
       const [success, status] = await updateUserInfo();
 
@@ -58,7 +58,7 @@ describe("account", () => {
 
     it("should handle 500 API errors", async () => {
       vi.spyOn(battleScene, "bypassLogin", "get").mockReturnValue(false);
-      vi.spyOn(pokerogueApi.account, "getInfo").mockResolvedValue([null, 500]);
+      vi.spyOn(api.account, "getInfo").mockResolvedValue([null, 500]);
 
       const [success, status] = await updateUserInfo();
 

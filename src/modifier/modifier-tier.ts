@@ -2,7 +2,7 @@ export enum ModifierTier {
   COMMON,
   GREAT,
   ULTRA,
-  ROGUE,
+  EPIC,
   MASTER,
   LUXURY,
 }

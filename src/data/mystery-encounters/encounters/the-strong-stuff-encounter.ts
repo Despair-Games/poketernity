@@ -39,7 +39,6 @@ const BST_INCREASE_VALUE = 10;
 
 /**
  * The Strong Stuff encounter.
- * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3803 | GitHub Issue #3803}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const TheStrongStuffEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(

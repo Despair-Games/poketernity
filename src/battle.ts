@@ -777,8 +777,8 @@ export const classicFixedBattles: FixedBattleConfigs = {
     )
     .setCustomModifierRewards({
       guaranteedModifierTiers: [
-        ModifierTier.ROGUE,
-        ModifierTier.ROGUE,
+        ModifierTier.EPIC,
+        ModifierTier.EPIC,
         ModifierTier.ULTRA,
         ModifierTier.ULTRA,
         ModifierTier.ULTRA,
@@ -796,9 +796,9 @@ export const classicFixedBattles: FixedBattleConfigs = {
     )
     .setCustomModifierRewards({
       guaranteedModifierTiers: [
-        ModifierTier.ROGUE,
-        ModifierTier.ROGUE,
-        ModifierTier.ROGUE,
+        ModifierTier.EPIC,
+        ModifierTier.EPIC,
+        ModifierTier.EPIC,
         ModifierTier.ULTRA,
         ModifierTier.ULTRA,
       ],
@@ -823,8 +823,8 @@ export const classicFixedBattles: FixedBattleConfigs = {
     )
     .setCustomModifierRewards({
       guaranteedModifierTiers: [
-        ModifierTier.ROGUE,
-        ModifierTier.ROGUE,
+        ModifierTier.EPIC,
+        ModifierTier.EPIC,
         ModifierTier.ULTRA,
         ModifierTier.ULTRA,
         ModifierTier.ULTRA,
@@ -927,8 +927,8 @@ export const classicFixedBattles: FixedBattleConfigs = {
     )
     .setCustomModifierRewards({
       guaranteedModifierTiers: [
-        ModifierTier.ROGUE,
-        ModifierTier.ROGUE,
+        ModifierTier.EPIC,
+        ModifierTier.EPIC,
         ModifierTier.ULTRA,
         ModifierTier.ULTRA,
         ModifierTier.GREAT,

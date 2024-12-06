@@ -47,7 +47,7 @@ describe("Moves - Fake Out", () => {
     expect(enemy.hp).toBe(postTurnOneHp);
   }, 20000);
 
-  // This is a PokeRogue buff to Fake Out
+  // This is a game-specific buff to Fake Out
   it("can be used at the start of every wave even if the pokemon wasn't recalled", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 

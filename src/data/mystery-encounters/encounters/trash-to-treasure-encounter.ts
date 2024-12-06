@@ -38,7 +38,6 @@ const SHOP_ITEM_COST_MULTIPLIER = 2.5;
 
 /**
  * Trash to Treasure encounter.
- * @see {@link https://github.com/pagefaultgames/pokerogue/issues/3809 | GitHub Issue #3809}
  * @see For biome requirements check {@linkcode mysteryEncountersByBiome}
  */
 export const TrashToTreasureEncounter: MysteryEncounter = MysteryEncounterBuilder.withEncounterType(
@@ -158,7 +157,7 @@ export const TrashToTreasureEncounter: MysteryEncounter = MysteryEncounterBuilde
         const encounter = globalScene.currentBattle.mysteryEncounter!;
 
         setEncounterRewards({
-          guaranteedModifierTiers: [ModifierTier.ROGUE, ModifierTier.ROGUE, ModifierTier.ULTRA, ModifierTier.GREAT],
+          guaranteedModifierTiers: [ModifierTier.EPIC, ModifierTier.EPIC, ModifierTier.ULTRA, ModifierTier.GREAT],
           fillRemaining: true,
         });
         encounter.startOfBattleEffects.push(
