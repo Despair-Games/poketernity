@@ -71,7 +71,7 @@ describe("Abilities - Stench", () => {
     expect(abilityAttr.getChance).toHaveLastReturnedWith(0);
   });
 
-  it("Stench should not bypass the enemy Pokemon's substitute if the move used doesn't", async () => {
+  it("Stench should not bypass the enemy Pokemon's substitute under normal conditions", async () => {
     game.override.moveset([Moves.TACKLE, Moves.SPLASH]).enemyMoveset([Moves.SPLASH, Moves.SUBSTITUTE]);
     await game.classicMode.startBattle([Species.FEEBAS]);
 

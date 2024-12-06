@@ -2318,10 +2318,10 @@ export class PostAttackApplyBattlerTagAbAttr extends PostAttackAbAttr {
   }
 
   applyPostAttackAfterMoveTypeCheck(
-    target: Pokemon,
+    attacker: Pokemon,
     passive: boolean,
     simulated: boolean,
-    attacker: Pokemon,
+    target: Pokemon,
     move: Move,
     hitResult: HitResult,
     args: any[],
@@ -2330,27 +2330,22 @@ export class PostAttackApplyBattlerTagAbAttr extends PostAttackAbAttr {
      * The battler tag is only applied to the target if
      * - The attacker does not have a secondary ability that suppresses move effects
      * - The target is not the attacker
-     * - If a contact move is required to activate the ability, the move makes contact
-     * - The move is not a status move
-     * - The game rolls successfully
-     * - The target is immobilized from a status effect like freeze or sleep
+     * - If a contact move is required to activate the ability, the move should make contact
+     * - If the target is behind a substitute, the move must be able to bypass the substitute
+     * - The game rolls successfully based on the chance
      *
      * Note: Battler tags inflicted by abilities post attacking are also considered additional effects of moves.*/
     if (
       !attacker.hasAbilityWithAttr(IgnoreMoveEffectsAbAttr) &&
       target.id !== attacker.id &&
       (!this.contactRequired || move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, target)) &&
-      target.randSeedInt(100) < this.getChance(attacker, target, move) &&
-      move.category !== MoveCategory.STATUS &&
-      (!target.status ||
-        (target.status &&
-          ![StatusEffect.FREEZE, StatusEffect.SLEEP, StatusEffect.FAINT].includes(target.status.effect)))
+      (target.getTag(BattlerTagType.SUBSTITUTE) ? move.hitsSubstitute(attacker, target) : true) &&
+      target.randSeedInt(100) < this.getChance(attacker, target, move)
     ) {
       const effect =
         this.effects.length === 1 ? this.effects[0] : this.effects[target.randSeedInt(this.effects.length)];
       return simulated || attacker.addTag(effect);
     }
-
     return false;
   }
 
@@ -2358,9 +2353,6 @@ export class PostAttackApplyBattlerTagAbAttr extends PostAttackAbAttr {
    * Calculates the ability's activation chance based on the conditional stored in this.chance
    */
   getChance(attacker: Pokemon, target: Pokemon, move: Move): number {
-    console.log(target.getTag(BattlerTagType.SUBSTITUTE));
-    console.log(move.hitsSubstitute(attacker, target));
-    console.log(this.chance(attacker, target, move));
     return this.chance(attacker, target, move);
   }
 }
@@ -6783,7 +6775,12 @@ export function initAbilities() {
       false,
       (user, target, move) =>
         !move.hasAttr(FlinchAttr) &&
-        (!target.getTag(BattlerTagType.SUBSTITUTE) ? true : move.hitsSubstitute(user, target))
+        !move.hitsSubstitute(user, target) &&
+        !target.turnData.acted &&
+        move.category !== MoveCategory.STATUS &&
+        (target.status
+          ? ![StatusEffect.FREEZE, StatusEffect.SLEEP, StatusEffect.FAINT].includes(target.status.effect)
+          : true)
           ? 10
           : 0,
       BattlerTagType.FLINCHED,
