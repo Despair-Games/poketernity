@@ -23,6 +23,7 @@
     "postinstall": "npx lefthook install && npx lefthook run post-merge"
   },
   "devDependencies": {
+    "@btmills/prettier": "^3.3.3",
     "@eslint/js": "^9.3.0",
     "@hpcc-js/wasm": "^2.18.0",
     "@stylistic/eslint-plugin-ts": "^2.6.0-beta.0",
@@ -39,7 +40,6 @@
     "lefthook": "^1.6.12",
     "msw": "^2.4.9",
     "phaser3spectorjs": "^0.0.8",
-    "prettier": "3.4.1",
     "typedoc": "^0.26.4",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.0-alpha.54",
