@@ -61,7 +61,7 @@ describe("Weird Dream - Mystery Encounter", () => {
     await game.runToMysteryEncounter(MysteryEncounterType.WEIRD_DREAM, defaultParty);
 
     expect(WeirdDreamEncounter.encounterType).toBe(MysteryEncounterType.WEIRD_DREAM);
-    expect(WeirdDreamEncounter.encounterTier).toBe(MysteryEncounterTier.ROGUE);
+    expect(WeirdDreamEncounter.encounterTier).toBe(MysteryEncounterTier.EPIC);
     expect(WeirdDreamEncounter.dialogue).toBeDefined();
     expect(WeirdDreamEncounter.dialogue.intro).toStrictEqual([
       {
@@ -137,7 +137,7 @@ describe("Weird Dream - Mystery Encounter", () => {
       expect(plus40To50.length).toBe(1);
     });
 
-    it("should have 1 Memory Mushroom, 5 Rogue Balls, and 3 Mints in rewards", async () => {
+    it("should have 1 Memory Mushroom, 5 Ultra Balls, and 3 Mints in rewards", async () => {
       await game.runToMysteryEncounter(MysteryEncounterType.WEIRD_DREAM, defaultParty);
       await runMysteryEncounterToEnd(game, 1);
       await game.phaseInterceptor.to(SelectModifierPhase, false);
@@ -150,7 +150,6 @@ describe("Weird Dream - Mystery Encounter", () => {
       ) as ModifierSelectUiHandler;
       expect(modifierSelectHandler.options.length).toEqual(5);
       expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toEqual("MEMORY_MUSHROOM");
-      expect(modifierSelectHandler.options[1].modifierTypeOption.type.id).toEqual("ROGUE_BALL");
       expect(modifierSelectHandler.options[2].modifierTypeOption.type.id).toEqual("MINT");
       expect(modifierSelectHandler.options[3].modifierTypeOption.type.id).toEqual("MINT");
       expect(modifierSelectHandler.options[3].modifierTypeOption.type.id).toEqual("MINT");
@@ -192,7 +191,7 @@ describe("Weird Dream - Mystery Encounter", () => {
       expect(scene.getEnemyParty().length).toBe(scene.getPlayerParty().length);
     });
 
-    it("should have 2 Rogue/2 Ultra/2 Great items in rewards", async () => {
+    it("should have 2 Epic/2 Ultra/2 Great items in rewards", async () => {
       await game.runToMysteryEncounter(MysteryEncounterType.WEIRD_DREAM, defaultParty);
       await runMysteryEncounterToEnd(game, 2, undefined, true);
       await skipBattleRunMysteryEncounterRewardsPhase(game);
@@ -208,11 +207,11 @@ describe("Weird Dream - Mystery Encounter", () => {
       expect(
         modifierSelectHandler.options[0].modifierTypeOption.type.tier
           - modifierSelectHandler.options[0].modifierTypeOption.upgradeCount,
-      ).toEqual(ModifierTier.ROGUE);
+      ).toEqual(ModifierTier.EPIC);
       expect(
         modifierSelectHandler.options[1].modifierTypeOption.type.tier
           - modifierSelectHandler.options[1].modifierTypeOption.upgradeCount,
-      ).toEqual(ModifierTier.ROGUE);
+      ).toEqual(ModifierTier.EPIC);
       expect(
         modifierSelectHandler.options[2].modifierTypeOption.type.tier
           - modifierSelectHandler.options[2].modifierTypeOption.upgradeCount,

@@ -7,9 +7,10 @@ import i18next from "i18next";
 import { addTextObject, TextStyle } from "./text";
 import { addWindow } from "./ui-theme";
 import type { OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler";
-import { pokerogueApi } from "#app/plugins/api/pokerogue-api";
+import { api } from "#app/plugins/api/api";
 import { globalScene } from "#app/global-scene";
 import JSZip from "jszip";
+import { SAVE_FILE_EXTENSION, SAVES_ZIP_PREFIX } from "#app/constants";
 
 interface BuildInteractableImageOpts {
   scale?: number;
@@ -150,7 +151,7 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
 
         const [usernameInput, passwordInput] = this.inputs;
 
-        pokerogueApi.account.login({ username: usernameInput.text, password: passwordInput.text }).then((error) => {
+        api.account.login({ username: usernameInput.text, password: passwordInput.text }).then((error) => {
           if (!error) {
             originalLoginAction && originalLoginAction();
           } else {
@@ -256,16 +257,16 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
       if (dataKeys.length > 0 || sessionKeys.length > 0) {
         const zip = new JSZip();
         for (let i = 0; i < dataKeys.length; i++) {
-          zip.file(dataKeys[i] + ".prsv", localStorage.getItem(dataKeys[i])!);
+          zip.file(dataKeys[i] + `.${SAVE_FILE_EXTENSION}`, localStorage.getItem(dataKeys[i])!);
         }
         for (let i = 0; i < sessionKeys.length; i++) {
-          zip.file(sessionKeys[i] + ".prsv", localStorage.getItem(sessionKeys[i])!);
+          zip.file(sessionKeys[i] + `.${SAVE_FILE_EXTENSION}`, localStorage.getItem(sessionKeys[i])!);
         }
         zip.generateAsync({ type: "blob" }).then((content) => {
           const url = URL.createObjectURL(content);
           const a = document.createElement("a");
           a.href = url;
-          a.download = "pokerogue_saves.zip";
+          a.download = `${SAVES_ZIP_PREFIX}saves.zip`;
           a.click();
           URL.revokeObjectURL(url);
         });

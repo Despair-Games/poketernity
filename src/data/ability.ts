@@ -2295,14 +2295,19 @@ export class PostAttackContactApplyStatusEffectAbAttr extends PostAttackApplySta
   }
 }
 
+/**
+ * Ability attribute that applies a battler tag to the target after an attack
+ * Abilities using this attribute:
+ * - Stench
+ */
 export class PostAttackApplyBattlerTagAbAttr extends PostAttackAbAttr {
   private contactRequired: boolean;
-  private chance: (user: Pokemon, target: Pokemon, move: Move) => integer;
+  private chance: (user: Pokemon, target: Pokemon, move: Move) => number;
   private effects: BattlerTagType[];
 
   constructor(
     contactRequired: boolean,
-    chance: (user: Pokemon, target: Pokemon, move: Move) => integer,
+    chance: (user: Pokemon, target: Pokemon, move: Move) => number,
     ...effects: BattlerTagType[]
   ) {
     super();
@@ -2313,28 +2318,43 @@ export class PostAttackApplyBattlerTagAbAttr extends PostAttackAbAttr {
   }
 
   applyPostAttackAfterMoveTypeCheck(
-    pokemon: Pokemon,
+    attacker: Pokemon,
     passive: boolean,
     simulated: boolean,
-    attacker: Pokemon,
+    target: Pokemon,
     move: Move,
     hitResult: HitResult,
     args: any[],
   ): boolean {
-    /**Battler tags inflicted by abilities post attacking are also considered additional effects.*/
+    /**
+     * The battler tag is only applied to the target if
+     * - The attacker does not have a secondary ability that suppresses move effects
+     * - The target is not the attacker
+     * - If a contact move is required to activate the ability, the move should make contact
+     * - If the target is behind a substitute, the move must be able to bypass the substitute
+     * - The game rolls successfully based on the chance
+     *
+     * Note: Battler tags inflicted by abilities post attacking are also considered additional effects of moves.
+     */
     if (
       !attacker.hasAbilityWithAttr(IgnoreMoveEffectsAbAttr)
-      && pokemon !== attacker
-      && (!this.contactRequired || move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon))
-      && pokemon.randSeedInt(100) < this.chance(attacker, pokemon, move)
-      && !pokemon.status
+      && target.id !== attacker.id
+      && (!this.contactRequired || move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, target))
+      && (target.getTag(BattlerTagType.SUBSTITUTE) ? move.hitsSubstitute(attacker, target) : true)
+      && target.randSeedInt(100) < this.getChance(attacker, target, move)
     ) {
       const effect =
-        this.effects.length === 1 ? this.effects[0] : this.effects[pokemon.randSeedInt(this.effects.length)];
+        this.effects.length === 1 ? this.effects[0] : this.effects[target.randSeedInt(this.effects.length)];
       return simulated || attacker.addTag(effect);
     }
-
     return false;
+  }
+
+  /**
+   * Calculates the ability's activation chance based on the conditional stored in this.chance
+   */
+  getChance(attacker: Pokemon, target: Pokemon, move: Move): number {
+    return this.chance(attacker, target, move);
   }
 }
 
@@ -6754,7 +6774,16 @@ export function initAbilities() {
     new Ability(Abilities.STENCH, 3).attr(
       PostAttackApplyBattlerTagAbAttr,
       false,
-      (user, target, move) => (!move.hasAttr(FlinchAttr) && !move.hitsSubstitute(user, target) ? 10 : 0),
+      (user, target, move) =>
+        !move.hasAttr(FlinchAttr)
+        && !move.hitsSubstitute(user, target)
+        && !target.turnData.acted
+        && move.category !== MoveCategory.STATUS
+        && (target.status
+          ? ![StatusEffect.FREEZE, StatusEffect.SLEEP, StatusEffect.FAINT].includes(target.status.effect)
+          : true)
+          ? 10
+          : 0,
       BattlerTagType.FLINCHED,
     ),
     new Ability(Abilities.DRIZZLE, 3)

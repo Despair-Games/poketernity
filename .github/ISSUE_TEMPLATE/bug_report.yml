@@ -55,7 +55,7 @@ body:
     id: session-file
     attributes:
       label: Session export file
-      description: Open Menu → ManageData → Export Session → Select slot. The file should now be in your `/Downloads` directory. Change the file extension type from `.prsv` to `.txt` (How to [Windows](https://www.guidingtech.com/how-to-change-file-type-on-windows/) | [Mac](https://support.apple.com/guide/mac-help/show-or-hide-filename-extensions-on-mac-mchlp2304/mac) | [iOS](https://www.guidingtech.com/change-file-type-extension-on-iphone/)).
+      description: Open Menu → ManageData → Export Session → Select slot. The file should now be in your `/Downloads` directory.
       placeholder: Focus me and then drop your file here (or use the upload button at the bottom)
     validations:
       required: false
@@ -63,7 +63,7 @@ body:
     id: data-file
     attributes:
       label: User data export file
-      description: Open Menu → ManageData → Export Data. The file should now be in your `/Downloads` directory. Change the file extension type from `.prsv` to `.txt` (How to [Windows](https://www.guidingtech.com/how-to-change-file-type-on-windows/) | [Mac](https://support.apple.com/guide/mac-help/show-or-hide-filename-extensions-on-mac-mchlp2304/mac) | [iOS](https://www.guidingtech.com/change-file-type-extension-on-iphone/)).
+      description: Open Menu → ManageData → Export Data. The file should now be in your `/Downloads` directory.
       placeholder: Focus me and then drop your file here (or use the upload button at the bottom)
     validations:
       required: false
