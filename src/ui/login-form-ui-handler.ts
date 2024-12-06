@@ -9,7 +9,6 @@ import { addWindow } from "./ui-theme";
 import type { OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler";
 import { api } from "#app/plugins/api/api";
 import { globalScene } from "#app/global-scene";
-import { globalScene } from "#app/global-scene";
 import JSZip from "jszip";
 import { SAVE_FILE_EXTENSION, SAVES_ZIP_PREFIX } from "#app/constants";
 

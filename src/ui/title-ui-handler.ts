@@ -8,7 +8,6 @@ import { TimedEventDisplay } from "#app/timed-event-manager";
 import { version } from "../../package.json";
 import { api } from "#app/plugins/api/api";
 import { globalScene } from "#app/global-scene";
-import { globalScene } from "#app/global-scene";
 
 export default class TitleUiHandler extends OptionSelectUiHandler {
   /** If the stats can not be retrieved, use this fallback value */
