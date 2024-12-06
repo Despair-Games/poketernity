@@ -586,7 +586,7 @@ export class PokemonAllMovePpRestoreModifierType extends PokemonModifierType {
       iconImage,
       (_type, args) => new PokemonAllMovePpRestoreModifier(this, (args[0] as PlayerPokemon).id, this.restorePoints),
       (pokemon: PlayerPokemon) => {
-        if (!pokemon.getMoveset().filter((m) => m?.ppUsed).length) {
+        if (!pokemon.getMoveset().filter((m) => m.ppUsed).length) {
           return PartyUiHandler.NoEffectMessage;
         }
         return null;
@@ -1124,7 +1124,7 @@ export class TmModifierType extends PokemonModifierType {
       (pokemon: PlayerPokemon) => {
         if (
           pokemon.compatibleTms.indexOf(moveId) === -1
-          || pokemon.getMoveset().filter((m) => m?.moveId === moveId).length
+          || pokemon.getMoveset().filter((m) => m.moveId === moveId).length
         ) {
           return PartyUiHandler.NoEffectMessage;
         }
@@ -1288,7 +1288,7 @@ class AttackTypeBoosterModifierTypeGenerator extends ModifierTypeGenerator {
         .map((p) =>
           p
             .getMoveset()
-            .map((m) => m?.getMove())
+            .map((m) => m.getMove())
             .filter((m) => m instanceof AttackMove)
             .map((m) => m.type),
         )
@@ -1407,7 +1407,7 @@ class SpeciesStatBoosterModifierTypeGenerator extends ModifierTypeGenerator {
       for (const p of party) {
         const speciesId = p.getSpeciesForm(true).speciesId;
         const fusionSpeciesId = p.isFusion() ? p.getFusionSpeciesForm(true).speciesId : null;
-        const hasFling = p.getMoveset(true).some((m) => m?.moveId === Moves.FLING);
+        const hasFling = p.getMoveset(true).some((m) => m.moveId === Moves.FLING);
 
         for (const i in values) {
           const checkedSpecies = values[i].species;
@@ -1466,7 +1466,7 @@ class TmModifierTypeGenerator extends ModifierTypeGenerator {
         return new TmModifierType(pregenArgs[0] as Moves);
       }
       const partyMemberCompatibleTms = party.map((p) =>
-        (p as PlayerPokemon).compatibleTms.filter((tm) => !p.moveset.find((m) => m?.moveId === tm)),
+        (p as PlayerPokemon).compatibleTms.filter((tm) => !p.moveset.find((m) => m.moveId === tm)),
       );
       const tierUniqueCompatibleTms = partyMemberCompatibleTms
         .flat()
@@ -2407,7 +2407,7 @@ const modifierPool: ModifierPool = {
               && !p.getHeldItems().some((m) => m instanceof BerryModifier && m.berryType === BerryType.LEPPA)
               && p
                 .getMoveset()
-                .filter((m) => m?.ppUsed && m.getMovePp() - m.ppUsed <= 5 && m.ppUsed > Math.floor(m.getMovePp() / 2))
+                .filter((m) => m.ppUsed && m.getMovePp() - m.ppUsed <= 5 && m.ppUsed > Math.floor(m.getMovePp() / 2))
                 .length,
           ).length,
           3,
@@ -2426,7 +2426,7 @@ const modifierPool: ModifierPool = {
               && !p.getHeldItems().some((m) => m instanceof BerryModifier && m.berryType === BerryType.LEPPA)
               && p
                 .getMoveset()
-                .filter((m) => m?.ppUsed && m.getMovePp() - m.ppUsed <= 5 && m.ppUsed > Math.floor(m.getMovePp() / 2))
+                .filter((m) => m.ppUsed && m.getMovePp() - m.ppUsed <= 5 && m.ppUsed > Math.floor(m.getMovePp() / 2))
                 .length,
           ).length,
           3,
@@ -2552,7 +2552,7 @@ const modifierPool: ModifierPool = {
               && !p.getHeldItems().some((m) => m instanceof BerryModifier && m.berryType === BerryType.LEPPA)
               && p
                 .getMoveset()
-                .filter((m) => m?.ppUsed && m.getMovePp() - m.ppUsed <= 5 && m.ppUsed > Math.floor(m.getMovePp() / 2))
+                .filter((m) => m.ppUsed && m.getMovePp() - m.ppUsed <= 5 && m.ppUsed > Math.floor(m.getMovePp() / 2))
                 .length,
           ).length,
           3,
@@ -2571,7 +2571,7 @@ const modifierPool: ModifierPool = {
               && !p.getHeldItems().some((m) => m instanceof BerryModifier && m.berryType === BerryType.LEPPA)
               && p
                 .getMoveset()
-                .filter((m) => m?.ppUsed && m.getMovePp() - m.ppUsed <= 5 && m.ppUsed > Math.floor(m.getMovePp() / 2))
+                .filter((m) => m.ppUsed && m.getMovePp() - m.ppUsed <= 5 && m.ppUsed > Math.floor(m.getMovePp() / 2))
                 .length,
           ).length,
           3,
