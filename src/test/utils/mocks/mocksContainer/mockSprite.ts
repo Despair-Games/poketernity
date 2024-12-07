@@ -1,8 +1,7 @@
 import Phaser from "phaser";
-import { MockGameObject } from "../mockGameObject";
+import type { MockGameObject } from "../mockGameObject";
 import Sprite = Phaser.GameObjects.Sprite;
 import Frame = Phaser.Textures.Frame;
-
 
 export default class MockSprite implements MockGameObject {
   private phaserSprite;
@@ -51,8 +50,7 @@ export default class MockSprite implements MockGameObject {
     return this.phaserSprite.setPipeline(obj);
   }
 
-  off(event, callback, source) {
-  }
+  off(event, callback, source) {}
 
   setTintFill(color) {
     // Sets the tint fill color.
@@ -172,9 +170,7 @@ export default class MockSprite implements MockGameObject {
     return this.phaserSprite.setAngle(angle);
   }
 
-  setMask() {
-
-  }
+  setMask() {}
 
   add(obj) {
     // Adds a child to this Game Object.
@@ -210,6 +206,4 @@ export default class MockSprite implements MockGameObject {
   getAll() {
     return this.list;
   }
-
-
 }

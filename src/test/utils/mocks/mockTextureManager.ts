@@ -6,7 +6,7 @@ import MockRectangle from "#test/utils/mocks/mocksContainer/mockRectangle";
 import MockSprite from "#test/utils/mocks/mocksContainer/mockSprite";
 import MockText from "#test/utils/mocks/mocksContainer/mockText";
 import MockTexture from "#test/utils/mocks/mocksContainer/mockTexture";
-import { MockGameObject } from "./mockGameObject";
+import type { MockGameObject } from "./mockGameObject";
 import { MockVideoGameObject } from "./mockVideoGameObject";
 
 /**
@@ -74,7 +74,19 @@ export default class MockTextureManager {
   }
 
   nineslice(x, y, texture, frame, width, height, leftWidth, rightWidth, topHeight, bottomHeight) {
-    const nineSlice = new MockNineslice(this, x, y, texture, frame, width, height, leftWidth, rightWidth, topHeight, bottomHeight);
+    const nineSlice = new MockNineslice(
+      this,
+      x,
+      y,
+      texture,
+      frame,
+      width,
+      height,
+      leftWidth,
+      rightWidth,
+      topHeight,
+      bottomHeight,
+    );
     this.list.push(nineSlice);
     return nineSlice;
   }

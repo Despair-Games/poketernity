@@ -1,22 +1,21 @@
 import { BattleStyle } from "#app/enums/battle-style";
-import { Species } from "#app/enums/species";
+import type { Species } from "#app/enums/species";
 import overrides from "#app/overrides";
 import { EncounterPhase } from "#app/phases/encounter-phase";
 import { SelectStarterPhase } from "#app/phases/select-starter-phase";
 import { Mode } from "#app/ui/ui";
 import { generateStarter } from "../gameManagerUtils";
 import { GameManagerHelper } from "./gameManagerHelper";
-import { Challenge } from "#app/data/challenge";
+import type { Challenge } from "#app/data/challenge";
 import { CommandPhase } from "#app/phases/command-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
-import { Challenges } from "#enums/challenges";
+import type { Challenges } from "#enums/challenges";
 import { copyChallenge } from "data/challenge";
 
 /**
  * Helper to handle Challenge mode specifics
  */
 export class ChallengeModeHelper extends GameManagerHelper {
-
   challenges: Challenge[] = [];
 
   /**
@@ -45,8 +44,8 @@ export class ChallengeModeHelper extends GameManagerHelper {
     this.game.onNextPrompt("TitlePhase", Mode.TITLE, () => {
       this.game.scene.gameMode.challenges = this.challenges;
       const starters = generateStarter(this.game.scene, species);
-      const selectStarterPhase = new SelectStarterPhase(this.game.scene);
-      this.game.scene.pushPhase(new EncounterPhase(this.game.scene, false));
+      const selectStarterPhase = new SelectStarterPhase();
+      this.game.scene.pushPhase(new EncounterPhase(false));
       selectStarterPhase.initBattle(starters);
     });
 
@@ -65,15 +64,25 @@ export class ChallengeModeHelper extends GameManagerHelper {
     await this.runToSummon(species);
 
     if (this.game.scene.battleStyle === BattleStyle.SWITCH) {
-      this.game.onNextPrompt("CheckSwitchPhase", Mode.CONFIRM, () => {
-        this.game.setMode(Mode.MESSAGE);
-        this.game.endPhase();
-      }, () => this.game.isCurrentPhase(CommandPhase) || this.game.isCurrentPhase(TurnInitPhase));
+      this.game.onNextPrompt(
+        "CheckSwitchPhase",
+        Mode.CONFIRM,
+        () => {
+          this.game.setMode(Mode.MESSAGE);
+          this.game.endPhase();
+        },
+        () => this.game.isCurrentPhase(CommandPhase) || this.game.isCurrentPhase(TurnInitPhase),
+      );
 
-      this.game.onNextPrompt("CheckSwitchPhase", Mode.CONFIRM, () => {
-        this.game.setMode(Mode.MESSAGE);
-        this.game.endPhase();
-      }, () => this.game.isCurrentPhase(CommandPhase) || this.game.isCurrentPhase(TurnInitPhase));
+      this.game.onNextPrompt(
+        "CheckSwitchPhase",
+        Mode.CONFIRM,
+        () => {
+          this.game.setMode(Mode.MESSAGE);
+          this.game.endPhase();
+        },
+        () => this.game.isCurrentPhase(CommandPhase) || this.game.isCurrentPhase(TurnInitPhase),
+      );
     }
 
     await this.game.phaseInterceptor.to(CommandPhase);

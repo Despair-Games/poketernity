@@ -4,7 +4,7 @@ import CacheBustedLoaderPlugin from "#app/plugins/cache-busted-loader-plugin";
 import { SceneBase } from "#app/scene-base";
 import { WindowVariant, getWindowVariantSuffix } from "#app/ui/ui-theme";
 import { isMobile } from "#app/touch-controls";
-import * as Utils from "#app/utils";
+import { localPing, getEnumValues, hasAllLocalizedSprites, getEnumKeys } from "#app/utils";
 import { initPokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
 import { initBiomes } from "#app/data/balance/biomes";
 import { initEggMoves } from "#app/data/balance/egg-moves";
@@ -20,6 +20,7 @@ import { initStatsKeys } from "#app/ui/game-stats-ui-handler";
 import { initVouchers } from "#app/system/voucher";
 import { Biome } from "#enums/biome";
 import { initMysteryEncounters } from "#app/data/mystery-encounters/mystery-encounters";
+import { globalScene } from "#app/global-scene";
 
 export class LoadingScene extends SceneBase {
   public static readonly KEY = "loading";
@@ -33,7 +34,7 @@ export class LoadingScene extends SceneBase {
   }
 
   preload() {
-    Utils.localPing();
+    localPing();
     this.load["manifest"] = this.game["manifest"];
 
     this.loadImage("loading_bg", "arenas");
@@ -48,7 +49,7 @@ export class LoadingScene extends SceneBase {
     this.loadImage("friendship_overlay", "ui");
     this.loadImage("cursor", "ui");
     this.loadImage("cursor_reverse", "ui");
-    for (const wv of Utils.getEnumValues(WindowVariant)) {
+    for (const wv of getEnumValues(WindowVariant)) {
       for (let w = 1; w <= 5; w++) {
         this.loadImage(`window_${w}${getWindowVariantSuffix(wv)}`, "ui/windows");
       }
@@ -134,10 +135,10 @@ export class LoadingScene extends SceneBase {
     this.loadImage("summary_bg", "ui");
     this.loadImage("summary_overlay_shiny", "ui");
     this.loadImage("summary_profile", "ui");
-    this.loadImage("summary_profile_prompt_z", "ui");      // The pixel Z button prompt
-    this.loadImage("summary_profile_prompt_a", "ui");     // The pixel A button prompt
-    this.loadImage("summary_profile_ability", "ui");      // Pixel text 'ABILITY'
-    this.loadImage("summary_profile_passive", "ui");      // Pixel text 'PASSIVE'
+    this.loadImage("summary_profile_prompt_z", "ui"); // The pixel Z button prompt
+    this.loadImage("summary_profile_prompt_a", "ui"); // The pixel A button prompt
+    this.loadImage("summary_profile_ability", "ui"); // Pixel text 'ABILITY'
+    this.loadImage("summary_profile_passive", "ui"); // Pixel text 'PASSIVE'
     this.loadImage("summary_status", "ui");
     this.loadImage("summary_stats", "ui");
     this.loadImage("summary_stats_overlay_exp", "ui");
@@ -170,7 +171,7 @@ export class LoadingScene extends SceneBase {
 
     this.loadImage("default_bg", "arenas");
     // Load arena images
-    Utils.getEnumValues(Biome).map(bt => {
+    getEnumValues(Biome).map((bt) => {
       const btKey = Biome[bt].toLowerCase();
       const isBaseAnimated = btKey === "end";
       const baseAKey = `${btKey}_a`;
@@ -188,7 +189,7 @@ export class LoadingScene extends SceneBase {
       }
       if (getBiomeHasProps(bt)) {
         for (let p = 1; p <= 3; p++) {
-          const isPropAnimated = p === 3 && [ "power_plant", "end" ].find(b => b === btKey);
+          const isPropAnimated = p === 3 && ["power_plant", "end"].find((b) => b === btKey);
           const propKey = `${btKey}_b_${p}`;
           if (!isPropAnimated) {
             this.loadImage(propKey, "arenas");
@@ -232,7 +233,7 @@ export class LoadingScene extends SceneBase {
     // Get current lang and load the types atlas for it. English will only load types while all other languages will load types and types_<lang>
     const lang = i18next.resolvedLanguage;
     if (lang !== "en") {
-      if (Utils.hasAllLocalizedSprites(lang)) {
+      if (hasAllLocalizedSprites(lang)) {
         this.loadAtlas(`statuses_${lang}`, "");
         this.loadAtlas(`types_${lang}`, "");
       } else {
@@ -244,7 +245,7 @@ export class LoadingScene extends SceneBase {
       this.loadAtlas("statuses", "");
       this.loadAtlas("types", "");
     }
-    const availableLangs = [ "en", "de", "it", "fr", "ja", "ko", "es-ES", "pt-BR", "zh-CN" ];
+    const availableLangs = ["en", "de", "it", "fr", "ja", "ko", "es-ES", "pt-BR", "zh-CN"];
     if (lang && availableLangs.includes(lang)) {
       this.loadImage("halloween2024-event-" + lang, "events");
     } else {
@@ -259,7 +260,7 @@ export class LoadingScene extends SceneBase {
     this.loadAtlas("egg_icons", "egg");
     this.loadAtlas("egg_shard", "egg");
     this.loadAtlas("egg_lightrays", "egg");
-    Utils.getEnumKeys(GachaType).forEach(gt => {
+    getEnumKeys(GachaType).forEach((gt) => {
       const key = gt.toLowerCase();
       this.loadImage(`gacha_${key}`, "egg");
       this.loadAtlas(`gacha_underlay_${key}`, "egg");
@@ -345,7 +346,11 @@ export class LoadingScene extends SceneBase {
     this.loadBgm("evolution", "bw/evolution.mp3");
     this.loadBgm("evolution_fanfare", "bw/evolution_fanfare.mp3");
 
-    this.load.plugin("rextexteditplugin", "https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rextexteditplugin.min.js", true);
+    this.load.plugin(
+      "rextexteditplugin",
+      "https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rextexteditplugin.min.js",
+      true,
+    );
 
     this.loadLoadingScreen();
 
@@ -434,39 +439,31 @@ export class LoadingScene extends SceneBase {
       style: {
         font: "48px emerald",
         color: "#ffffff",
-        align: "center"
+        align: "center",
       },
     });
     disclaimerDescriptionText.setOrigin(0.5, 0.5);
 
-    loadingGraphics.push(bg, graphics, progressBar, progressBox, logo, percentText, assetText, disclaimerText, disclaimerDescriptionText);
+    loadingGraphics.push(
+      bg,
+      graphics,
+      progressBar,
+      progressBox,
+      logo,
+      percentText,
+      assetText,
+      disclaimerText,
+      disclaimerDescriptionText,
+    );
 
     if (!mobile) {
-      loadingGraphics.map(g => g.setVisible(false));
+      loadingGraphics.map((g) => g.setVisible(false));
     }
 
-    const intro = this.add.video(0, 0);
-    intro.once(Phaser.GameObjects.Events.VIDEO_COMPLETE, (video: Phaser.GameObjects.Video) => {
-      this.tweens.add({
-        targets: intro,
-        duration: 500,
-        alpha: 0,
-        ease: "Sine.easeIn",
-        onComplete: () => video.destroy(),
-      });
-      loadingGraphics.forEach(g => g.setVisible(true));
-    });
-    intro.setOrigin(0, 0);
-    intro.setScale(3);
-
     this.load.once(this.LOAD_EVENTS.START, () => {
-      // videos do not need to be preloaded
-      intro.loadURL("images/intro_dark.mp4", true);
-      if (mobile) {
-        intro.video?.setAttribute("webkit-playsinline", "webkit-playsinline");
-        intro.video?.setAttribute("playsinline", "playsinline");
-      }
-      intro.play();
+      setTimeout(() => {
+        loadingGraphics.forEach((g) => g.setVisible(true));
+      }, 500);
     });
 
     this.load.on(this.LOAD_EVENTS.PROGRESS, (progress: number) => {
@@ -495,8 +492,7 @@ export class LoadingScene extends SceneBase {
     });
 
     this.load.on(this.LOAD_EVENTS.COMPLETE, () => {
-      loadingGraphics.forEach(go => go.destroy());
-      intro.destroy();
+      loadingGraphics.forEach((go) => go.destroy());
     });
   }
 
@@ -510,7 +506,7 @@ export class LoadingScene extends SceneBase {
 
   async create() {
     this.events.once(Phaser.Scenes.Events.DESTROY, () => this.handleDestroy());
-    this.scene.start("battle");
+    globalScene.scene.start("battle");
   }
 
   handleDestroy() {

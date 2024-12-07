@@ -5,22 +5,22 @@ import type {
   GetSessionSavedataRequest,
   NewClearSessionSavedataRequest,
   UpdateSessionSavedataRequest,
-} from "#app/@types/PokerogueSessionSavedataApi";
-import { PokerogueSessionSavedataApi } from "#app/plugins/api/pokerogue-session-savedata-api";
+} from "#app/@types/SessionSavedataApi";
+import { SessionSavedataApi } from "#app/plugins/api/session-savedata-api";
 import type { SessionSaveData } from "#app/system/game-data";
 import { getApiBaseUrl } from "#app/test/utils/testUtils";
 import { http, HttpResponse } from "msw";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const apiBase = getApiBaseUrl();
-const sessionSavedataApi = new PokerogueSessionSavedataApi(apiBase);
+const sessionSavedataApi = new SessionSavedataApi(apiBase);
 const { server } = global;
 
 afterEach(() => {
   server.resetHandlers();
 });
 
-describe("Pokerogue Session Savedata API", () => {
+describe("Session Savedata API", () => {
   beforeEach(() => {
     vi.spyOn(console, "warn");
   });
@@ -29,7 +29,7 @@ describe("Pokerogue Session Savedata API", () => {
     const params: NewClearSessionSavedataRequest = {
       clientSessionId: "test-session-id",
       isVictory: true,
-      slot: 3
+      slot: 3,
     };
 
     it("should return true on SUCCESS", async () => {
@@ -132,7 +132,7 @@ describe("Pokerogue Session Savedata API", () => {
 
     it("should return an error string on FAILURE", async () => {
       server.use(
-        http.get(`${apiBase}/savedata/session/delete`, () => new HttpResponse("Failed to delete!", { status: 400 }))
+        http.get(`${apiBase}/savedata/session/delete`, () => new HttpResponse("Failed to delete!", { status: 400 })),
       );
 
       const error = await sessionSavedataApi.delete(params);
@@ -162,8 +162,8 @@ describe("Pokerogue Session Savedata API", () => {
         http.post(`${apiBase}/savedata/session/clear`, () =>
           HttpResponse.json<ClearSessionSavedataResponse>({
             success: true,
-          })
-        )
+          }),
+        ),
       );
 
       const { success, error } = await sessionSavedataApi.clear(params, {} as SessionSaveData);
@@ -178,8 +178,8 @@ describe("Pokerogue Session Savedata API", () => {
           HttpResponse.json<ClearSessionSavedataResponse>({
             success: false,
             error: "Failed to clear!",
-          })
-        )
+          }),
+        ),
       );
 
       const { success, error } = await sessionSavedataApi.clear(params, {} as SessionSaveData);

@@ -36,7 +36,7 @@ describe("Moves - Dive", () => {
   });
 
   it("should make the user semi-invulnerable, then attack over 2 turns", async () => {
-    await game.classicMode.startBattle([ Species.MAGIKARP ]);
+    await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -55,14 +55,14 @@ describe("Moves - Dive", () => {
     expect(enemyPokemon.hp).toBeLessThan(enemyPokemon.getMaxHp());
     expect(playerPokemon.getMoveHistory()).toHaveLength(2);
 
-    const playerDive = playerPokemon.getMoveset().find(mv => mv && mv.moveId === Moves.DIVE);
+    const playerDive = playerPokemon.getMoveset().find((mv) => mv && mv.moveId === Moves.DIVE);
     expect(playerDive?.ppUsed).toBe(1);
   });
 
   it("should not allow the user to evade attacks from Pokemon with No Guard", async () => {
     game.override.enemyAbility(Abilities.NO_GUARD);
 
-    await game.classicMode.startBattle([ Species.MAGIKARP ]);
+    await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -75,11 +75,9 @@ describe("Moves - Dive", () => {
   });
 
   it("should not expend PP when the attack phase is cancelled", async () => {
-    game.override
-      .enemyAbility(Abilities.NO_GUARD)
-      .enemyMoveset(Moves.SPORE);
+    game.override.enemyAbility(Abilities.NO_GUARD).enemyMoveset(Moves.SPORE);
 
-    await game.classicMode.startBattle([ Species.MAGIKARP ]);
+    await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
@@ -89,16 +87,14 @@ describe("Moves - Dive", () => {
     expect(playerPokemon.getTag(BattlerTagType.UNDERWATER)).toBeUndefined();
     expect(playerPokemon.status?.effect).toBe(StatusEffect.SLEEP);
 
-    const playerDive = playerPokemon.getMoveset().find(mv => mv && mv.moveId === Moves.DIVE);
+    const playerDive = playerPokemon.getMoveset().find((mv) => mv && mv.moveId === Moves.DIVE);
     expect(playerDive?.ppUsed).toBe(0);
   });
 
   it("should trigger on-contact post-defend ability effects", async () => {
-    game.override
-      .enemyAbility(Abilities.ROUGH_SKIN)
-      .enemyMoveset(Moves.SPLASH);
+    game.override.enemyAbility(Abilities.ROUGH_SKIN).enemyMoveset(Moves.SPLASH);
 
-    await game.classicMode.startBattle([ Species.MAGIKARP ]);
+    await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -115,7 +111,7 @@ describe("Moves - Dive", () => {
   it("should cancel attack after Harsh Sunlight is set", async () => {
     game.override.enemyMoveset(Moves.SPLASH);
 
-    await game.classicMode.startBattle([ Species.MAGIKARP ]);
+    await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -131,7 +127,7 @@ describe("Moves - Dive", () => {
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
     expect(playerPokemon.getTag(BattlerTagType.UNDERWATER)).toBeUndefined();
 
-    const playerDive = playerPokemon.getMoveset().find(mv => mv && mv.moveId === Moves.DIVE);
+    const playerDive = playerPokemon.getMoveset().find((mv) => mv && mv.moveId === Moves.DIVE);
     expect(playerDive?.ppUsed).toBe(1);
   });
 });

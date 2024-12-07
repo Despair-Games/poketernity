@@ -1,3 +1,4 @@
+import { globalScene } from "#app/global-scene";
 import type { nil } from "#app/utils";
 import { BattleSpec } from "#enums/battle-spec";
 import type Pokemon from "./field/pokemon";
@@ -14,16 +15,16 @@ export function getPokemonNameWithAffix(pokemon: Pokemon | nil): string {
     return "Missigno";
   }
 
-  switch (pokemon.scene.currentBattle.battleSpec) {
+  switch (globalScene.currentBattle.battleSpec) {
     case BattleSpec.DEFAULT:
       return !pokemon.isPlayer()
         ? pokemon.hasTrainer()
           ? i18next.t("battle:foePokemonWithAffix", {
-            pokemonName: pokemon.getNameToRender(),
-          })
+              pokemonName: pokemon.getNameToRender(),
+            })
           : i18next.t("battle:wildPokemonWithAffix", {
-            pokemonName: pokemon.getNameToRender(),
-          })
+              pokemonName: pokemon.getNameToRender(),
+            })
         : pokemon.getNameToRender();
     case BattleSpec.FINAL_BOSS:
       return !pokemon.isPlayer()

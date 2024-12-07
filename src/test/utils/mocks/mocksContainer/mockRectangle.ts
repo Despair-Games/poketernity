@@ -1,4 +1,4 @@
-import { MockGameObject } from "../mockGameObject";
+import type { MockGameObject } from "../mockGameObject";
 
 export default class MockRectangle implements MockGameObject {
   private fillColor;
@@ -10,19 +10,14 @@ export default class MockRectangle implements MockGameObject {
     this.fillColor = fillColor;
     this.scene = textureManager.scene;
   }
-  setOrigin(x, y) {
-  }
+  setOrigin(x, y) {}
 
-  setAlpha(alpha) {
-  }
-  setVisible(visible) {
-  }
+  setAlpha(alpha) {}
+  setVisible(visible) {}
 
-  setName(name) {
-  }
+  setName(name) {}
 
-  once(event, callback, source) {
-  }
+  once(event, callback, source) {}
 
   removeFromDisplayList() {
     // same as remove or destroy

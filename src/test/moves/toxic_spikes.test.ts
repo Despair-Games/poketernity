@@ -1,5 +1,7 @@
-import { ArenaTagSide, ArenaTrapTag } from "#app/data/arena-tag";
-import { decrypt, encrypt, GameData, SessionSaveData } from "#app/system/game-data";
+import type { ArenaTrapTag } from "#app/data/arena-tag";
+import { ArenaTagSide } from "#app/data/arena-tag";
+import type { SessionSaveData } from "#app/system/game-data";
+import { decrypt, encrypt, GameData } from "#app/system/game-data";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { Moves } from "#enums/moves";
@@ -32,11 +34,11 @@ describe("Moves - Toxic Spikes", () => {
       .enemyAbility(Abilities.BALL_FETCH)
       .ability(Abilities.BALL_FETCH)
       .enemyMoveset(Moves.SPLASH)
-      .moveset([ Moves.TOXIC_SPIKES, Moves.SPLASH, Moves.ROAR, Moves.COURT_CHANGE ]);
+      .moveset([Moves.TOXIC_SPIKES, Moves.SPLASH, Moves.ROAR, Moves.COURT_CHANGE]);
   });
 
   it("should not affect the opponent if they do not switch", async () => {
-    await game.classicMode.runToSummon([ Species.MIGHTYENA, Species.POOCHYENA ]);
+    await game.classicMode.runToSummon([Species.MIGHTYENA, Species.POOCHYENA]);
 
     const enemy = game.scene.getEnemyField()[0];
 
@@ -52,7 +54,7 @@ describe("Moves - Toxic Spikes", () => {
   });
 
   it("should poison the opponent if they switch into 1 layer", async () => {
-    await game.classicMode.runToSummon([ Species.MIGHTYENA ]);
+    await game.classicMode.runToSummon([Species.MIGHTYENA]);
 
     game.move.select(Moves.TOXIC_SPIKES);
     await game.phaseInterceptor.to("TurnEndPhase");
@@ -66,7 +68,7 @@ describe("Moves - Toxic Spikes", () => {
   });
 
   it("should badly poison the opponent if they switch into 2 layers", async () => {
-    await game.classicMode.runToSummon([ Species.MIGHTYENA ]);
+    await game.classicMode.runToSummon([Species.MIGHTYENA]);
 
     game.move.select(Moves.TOXIC_SPIKES);
     await game.phaseInterceptor.to("TurnEndPhase");
@@ -81,14 +83,14 @@ describe("Moves - Toxic Spikes", () => {
   });
 
   it("should be removed if a grounded poison pokemon switches in", async () => {
-    await game.classicMode.runToSummon([ Species.MUK, Species.PIDGEY ]);
+    await game.classicMode.runToSummon([Species.MUK, Species.PIDGEY]);
 
     const muk = game.scene.getPlayerPokemon()!;
 
     game.move.select(Moves.TOXIC_SPIKES);
     await game.toNextTurn();
     // also make sure the toxic spikes are removed even if the pokemon
-    // that set them up is the one switching in (https://github.com/pagefaultgames/pokerogue/issues/935)
+    // that set them up is the one switching in
     game.move.select(Moves.COURT_CHANGE);
     await game.toNextTurn();
     game.doSwitchPokemon(1);
@@ -104,22 +106,21 @@ describe("Moves - Toxic Spikes", () => {
   });
 
   it("shouldn't create multiple layers per use in doubles", async () => {
-    await game.classicMode.runToSummon([ Species.MIGHTYENA, Species.POOCHYENA ]);
+    await game.classicMode.runToSummon([Species.MIGHTYENA, Species.POOCHYENA]);
 
     game.move.select(Moves.TOXIC_SPIKES);
     await game.phaseInterceptor.to("TurnEndPhase");
 
-    const arenaTags = (game.scene.arena.getTagOnSide(ArenaTagType.TOXIC_SPIKES, ArenaTagSide.ENEMY) as ArenaTrapTag);
+    const arenaTags = game.scene.arena.getTagOnSide(ArenaTagType.TOXIC_SPIKES, ArenaTagSide.ENEMY) as ArenaTrapTag;
     expect(arenaTags.tagType).toBe(ArenaTagType.TOXIC_SPIKES);
     expect(arenaTags.layers).toBe(1);
   });
 
   it("should persist through reload", async () => {
     game.override.startingWave(1);
-    const scene = game.scene;
-    const gameData = new GameData(scene);
+    const gameData = new GameData();
 
-    await game.classicMode.runToSummon([ Species.MIGHTYENA ]);
+    await game.classicMode.runToSummon([Species.MIGHTYENA]);
 
     game.move.select(Moves.TOXIC_SPIKES);
     await game.phaseInterceptor.to("TurnEndPhase");
@@ -128,10 +129,12 @@ describe("Moves - Toxic Spikes", () => {
     await game.phaseInterceptor.to("BattleEndPhase");
     await game.toNextWave();
 
-    const sessionData : SessionSaveData = gameData["getSessionSaveData"](game.scene);
+    const sessionData: SessionSaveData = gameData["getSessionSaveData"]();
     localStorage.setItem("sessionTestData", encrypt(JSON.stringify(sessionData), true));
-    const recoveredData : SessionSaveData = gameData.parseSessionData(decrypt(localStorage.getItem("sessionTestData")!, true));
-    gameData.loadSession(game.scene, 0, recoveredData);
+    const recoveredData: SessionSaveData = gameData.parseSessionData(
+      decrypt(localStorage.getItem("sessionTestData")!, true),
+    );
+    gameData.loadSession(0, recoveredData);
 
     expect(sessionData.arena.tags).toEqual(recoveredData.arena.tags);
     localStorage.removeItem("sessionTestData");

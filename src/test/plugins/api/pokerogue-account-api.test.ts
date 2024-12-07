@@ -1,20 +1,21 @@
-import type { AccountInfoResponse } from "#app/@types/PokerogueAccountApi";
-import { SESSION_ID_COOKIE_NAME } from "#app/constants";
-import { PokerogueAccountApi } from "#app/plugins/api/pokerogue-account-api";
+import type { AccountInfoResponse } from "#app/@types/AccountApi";
+import { SESSION_ID_COOKIE } from "#app/constants";
+import { AccountApi } from "#app/plugins/api/account-api";
 import { getApiBaseUrl } from "#app/test/utils/testUtils";
 import * as Utils from "#app/utils";
+import { setCookie, removeCookie } from "#app/utils";
 import { http, HttpResponse } from "msw";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const apiBase = getApiBaseUrl();
-const accountApi = new PokerogueAccountApi(apiBase);
+const accountApi = new AccountApi(apiBase);
 const { server } = global;
 
 afterEach(() => {
   server.resetHandlers();
 });
 
-describe("Pokerogue Account API", () => {
+describe("Account API", () => {
   beforeEach(() => {
     vi.spyOn(console, "warn");
   });
@@ -30,7 +31,7 @@ describe("Pokerogue Account API", () => {
       };
       server.use(http.get(`${apiBase}/account/info`, () => HttpResponse.json(expectedAccountInfo)));
 
-      const [ accountInfo, status ] = await accountApi.getInfo();
+      const [accountInfo, status] = await accountApi.getInfo();
 
       expect(accountInfo).toEqual(expectedAccountInfo);
       expect(status).toBe(200);
@@ -39,7 +40,7 @@ describe("Pokerogue Account API", () => {
     it("should return null + status-code anad report a warning on FAILURE", async () => {
       server.use(http.get(`${apiBase}/account/info`, () => new HttpResponse("", { status: 401 })));
 
-      const [ accountInfo, status ] = await accountApi.getInfo();
+      const [accountInfo, status] = await accountApi.getInfo();
 
       expect(accountInfo).toBeNull();
       expect(status).toBe(401);
@@ -49,7 +50,7 @@ describe("Pokerogue Account API", () => {
     it("should return null + 500 anad report a warning on ERROR", async () => {
       server.use(http.get(`${apiBase}/account/info`, () => HttpResponse.error()));
 
-      const [ accountInfo, status ] = await accountApi.getInfo();
+      const [accountInfo, status] = await accountApi.getInfo();
 
       expect(accountInfo).toBeNull();
       expect(status).toBe(500);
@@ -70,7 +71,7 @@ describe("Pokerogue Account API", () => {
 
     it("should return error message on FAILURE", async () => {
       server.use(
-        http.post(`${apiBase}/account/register`, () => new HttpResponse("Username is already taken", { status: 400 }))
+        http.post(`${apiBase}/account/register`, () => new HttpResponse("Username is already taken", { status: 400 })),
       );
 
       const error = await accountApi.register(registerParams);
@@ -78,7 +79,7 @@ describe("Pokerogue Account API", () => {
       expect(error).toBe("Username is already taken");
     });
 
-    it("should return \"Unknown error\" and report a warning on ERROR", async () => {
+    it('should return "Unknown error" and report a warning on ERROR', async () => {
       server.use(http.post(`${apiBase}/account/register`, () => HttpResponse.error()));
 
       const error = await accountApi.register(registerParams);
@@ -98,12 +99,12 @@ describe("Pokerogue Account API", () => {
       const error = await accountApi.login(loginParams);
 
       expect(error).toBeNull();
-      expect(Utils.setCookie).toHaveBeenCalledWith(SESSION_ID_COOKIE_NAME, "abctest");
+      expect(setCookie).toHaveBeenCalledWith(SESSION_ID_COOKIE, "abctest");
     });
 
     it("should return error message and report a warning on FAILURE", async () => {
       server.use(
-        http.post(`${apiBase}/account/login`, () => new HttpResponse("Password is incorrect", { status: 401 }))
+        http.post(`${apiBase}/account/login`, () => new HttpResponse("Password is incorrect", { status: 401 })),
       );
 
       const error = await accountApi.login(loginParams);
@@ -112,7 +113,7 @@ describe("Pokerogue Account API", () => {
       expect(console.warn).toHaveBeenCalledWith("Login failed!", 401, "Unauthorized");
     });
 
-    it("should return \"Unknown error\" and report a warning on ERROR", async () => {
+    it('should return "Unknown error" and report a warning on ERROR', async () => {
       server.use(http.post(`${apiBase}/account/login`, () => HttpResponse.error()));
 
       const error = await accountApi.login(loginParams);
@@ -133,7 +134,7 @@ describe("Pokerogue Account API", () => {
 
       await accountApi.logout();
 
-      expect(Utils.removeCookie).toHaveBeenCalledWith(SESSION_ID_COOKIE_NAME);
+      expect(removeCookie).toHaveBeenCalledWith(SESSION_ID_COOKIE);
     });
 
     it("should report a warning on and remove cookie on FAILURE", async () => {
@@ -141,7 +142,7 @@ describe("Pokerogue Account API", () => {
 
       await accountApi.logout();
 
-      expect(Utils.removeCookie).toHaveBeenCalledWith(SESSION_ID_COOKIE_NAME);
+      expect(removeCookie).toHaveBeenCalledWith(SESSION_ID_COOKIE);
       expect(console.warn).toHaveBeenCalledWith("Log out failed!", expect.any(Error));
     });
 
@@ -150,7 +151,7 @@ describe("Pokerogue Account API", () => {
 
       await accountApi.logout();
 
-      expect(Utils.removeCookie).toHaveBeenCalledWith(SESSION_ID_COOKIE_NAME);
+      expect(removeCookie).toHaveBeenCalledWith(SESSION_ID_COOKIE);
       expect(console.warn).toHaveBeenCalledWith("Log out failed!", expect.any(Error));
     });
   });

@@ -1,8 +1,8 @@
-import BattleScene from "../../battle-scene";
-import { Mode } from "../ui";
-"#app/inputs-controller";
+import type { Mode } from "../ui";
 import AbstractSettingsUiHandler from "./abstract-settings-ui-handler";
 import { SettingKeys, SettingType } from "#app/system/settings/settings";
+import { LOCALE_LS_KEY } from "#app/constants";
+("#app/inputs-controller");
 
 export default class SettingsDisplayUiHandler extends AbstractSettingsUiHandler {
   /**
@@ -11,17 +11,17 @@ export default class SettingsDisplayUiHandler extends AbstractSettingsUiHandler 
    * @param scene - The BattleScene instance.
    * @param mode - The UI mode, optional.
    */
-  constructor(scene: BattleScene, mode: Mode | null = null) {
-    super(scene, SettingType.DISPLAY, mode);
+  constructor(mode: Mode | null = null) {
+    super(SettingType.DISPLAY, mode);
     this.title = "Display";
 
     /**
      * Update to current language from default value.
      * - default value is 'English'
      */
-    const languageIndex = this.settings.findIndex(s => s.key === SettingKeys.Language);
+    const languageIndex = this.settings.findIndex((s) => s.key === SettingKeys.Language);
     if (languageIndex >= 0) {
-      const currentLocale = localStorage.getItem("prLang");
+      const currentLocale = localStorage.getItem(LOCALE_LS_KEY);
       switch (currentLocale) {
         case "en":
           this.settings[languageIndex].options[0] = {

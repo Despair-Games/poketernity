@@ -1,15 +1,17 @@
-import { Variant } from "#app/data/variant";
+import type { Variant } from "#app/data/variant";
 import { Weather } from "#app/data/weather";
 import { Abilities } from "#app/enums/abilities";
 import * as GameMode from "#app/game-mode";
-import { GameModes, getGameMode } from "#app/game-mode";
-import { ModifierOverride } from "#app/modifier/modifier-type";
-import Overrides, { BattleStyle } from "#app/overrides";
-import { Unlockables } from "#app/system/unlockables";
+import type { GameModes } from "#app/game-mode";
+import { getGameMode } from "#app/game-mode";
+import type { ModifierOverride } from "#app/modifier/modifier-type";
+import type { BattleStyle } from "#app/overrides";
+import Overrides from "#app/overrides";
+import type { Unlockables } from "#app/system/unlockables";
 import { Biome } from "#enums/biome";
 import { Moves } from "#enums/moves";
-import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
-import { MysteryEncounterType } from "#enums/mystery-encounter-type";
+import type { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
+import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
 import type { WeatherType } from "#enums/weather-type";
@@ -120,7 +122,7 @@ export class OverridesHelper extends GameManagerHelper {
   public starterForms(forms: Partial<Record<Species, number>>): this {
     vi.spyOn(Overrides, "STARTER_FORM_OVERRIDES", "get").mockReturnValue(forms);
     const formsStr = Object.entries(forms)
-      .map(([ speciesId, formIndex ]) => `${Species[speciesId]}=${formIndex}`)
+      .map(([speciesId, formIndex]) => `${Species[speciesId]}=${formIndex}`)
       .join(", ");
     this.log(`Player Pokemon form set to: ${formsStr}!`);
     return this;
@@ -167,7 +169,7 @@ export class OverridesHelper extends GameManagerHelper {
   public moveset(moveset: Moves | Moves[]): this {
     vi.spyOn(Overrides, "MOVESET_OVERRIDE", "get").mockReturnValue(moveset);
     if (!Array.isArray(moveset)) {
-      moveset = [ moveset ];
+      moveset = [moveset];
     }
     const movesetStr = moveset.map((moveId) => Moves[moveId]).join(", ");
     this.log(`Player Pokemon moveset set to ${movesetStr} (=[${moveset.join(", ")}])!`);
@@ -229,7 +231,7 @@ export class OverridesHelper extends GameManagerHelper {
   public seed(seed: string): this {
     vi.spyOn(this.game.scene, "resetSeed").mockImplementation(() => {
       this.game.scene.waveSeed = seed;
-      Phaser.Math.RND.sow([ seed ]);
+      Phaser.Math.RND.sow([seed]);
       this.game.scene.rngCounter = 0;
     });
     this.game.scene.resetSeed();
@@ -311,7 +313,7 @@ export class OverridesHelper extends GameManagerHelper {
   public enemyMoveset(moveset: Moves | Moves[]): this {
     vi.spyOn(Overrides, "OPP_MOVESET_OVERRIDE", "get").mockReturnValue(moveset);
     if (!Array.isArray(moveset)) {
-      moveset = [ moveset ];
+      moveset = [moveset];
     }
     const movesetStr = moveset.map((moveId) => Moves[moveId]).join(", ");
     this.log(`Enemy Pokemon moveset set to ${movesetStr} (=[${moveset.join(", ")}])!`);

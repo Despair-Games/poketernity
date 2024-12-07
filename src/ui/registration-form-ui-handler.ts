@@ -1,22 +1,23 @@
-import { FormModalUiHandler, InputFieldConfig } from "./form-modal-ui-handler";
-import { ModalConfig } from "./modal-ui-handler";
+import type { InputFieldConfig } from "./form-modal-ui-handler";
+import { FormModalUiHandler } from "./form-modal-ui-handler";
+import type { ModalConfig } from "./modal-ui-handler";
 import { Mode } from "./ui";
 import { TextStyle, addTextObject } from "./text";
 import i18next from "i18next";
-import { pokerogueApi } from "#app/plugins/api/pokerogue-api";
-
+import { api } from "#app/plugins/api/api";
+import { globalScene } from "#app/global-scene";
 
 interface LanguageSetting {
-  inputFieldFontSize?: string,
-  warningMessageFontSize?: string,
-  errorMessageFontSize?: string,
+  inputFieldFontSize?: string;
+  warningMessageFontSize?: string;
+  errorMessageFontSize?: string;
 }
 
 const languageSettings: { [key: string]: LanguageSetting } = {
   "es-ES": {
     inputFieldFontSize: "50px",
     errorMessageFontSize: "40px",
-  }
+  },
 };
 
 export default class RegistrationFormUiHandler extends FormModalUiHandler {
@@ -29,7 +30,7 @@ export default class RegistrationFormUiHandler extends FormModalUiHandler {
   }
 
   getMargin(config?: ModalConfig): [number, number, number, number] {
-    return [ 0, 0, 48, 0 ];
+    return [0, 0, 48, 0];
   }
 
   getButtonTopMargin(): number {
@@ -37,7 +38,7 @@ export default class RegistrationFormUiHandler extends FormModalUiHandler {
   }
 
   getButtonLabels(config?: ModalConfig): string[] {
-    return [ i18next.t("menu:register"), i18next.t("menu:backToLogin") ];
+    return [i18next.t("menu:register"), i18next.t("menu:backToLogin")];
   }
 
   getReadableErrorMessage(error: string): string {
@@ -78,7 +79,9 @@ export default class RegistrationFormUiHandler extends FormModalUiHandler {
     });
 
     const warningMessageFontSize = languageSettings[i18next.resolvedLanguage!]?.warningMessageFontSize ?? "42px";
-    const label = addTextObject(this.scene, 10, 87, i18next.t("menu:registrationAgeWarning"), TextStyle.TOOLTIP_CONTENT, { fontSize: warningMessageFontSize });
+    const label = addTextObject(10, 87, i18next.t("menu:registrationAgeWarning"), TextStyle.TOOLTIP_CONTENT, {
+      fontSize: warningMessageFontSize,
+    });
 
     this.modalContainer.add(label);
   }
@@ -92,10 +95,10 @@ export default class RegistrationFormUiHandler extends FormModalUiHandler {
         // Prevent overlapping overrides on action modification
         this.submitAction = originalRegistrationAction;
         this.sanitizeInputs();
-        this.scene.ui.setMode(Mode.LOADING, { buttonActions: []});
-        const onFail = error => {
-          this.scene.ui.setMode(Mode.REGISTRATION_FORM, Object.assign(config, { errorMessage: error?.trim() }));
-          this.scene.ui.playError();
+        globalScene.ui.setMode(Mode.LOADING, { buttonActions: [] });
+        const onFail = (error) => {
+          globalScene.ui.setMode(Mode.REGISTRATION_FORM, Object.assign(config, { errorMessage: error?.trim() }));
+          globalScene.ui.playError();
           const errorMessageFontSize = languageSettings[i18next.resolvedLanguage!]?.errorMessageFontSize;
           if (errorMessageFontSize) {
             this.errorMessage.setFontSize(errorMessageFontSize);
@@ -110,22 +113,20 @@ export default class RegistrationFormUiHandler extends FormModalUiHandler {
         if (this.inputs[1].text !== this.inputs[2].text) {
           return onFail(i18next.t("menu:passwordNotMatchingConfirmPassword"));
         }
-        const [ usernameInput, passwordInput ] = this.inputs;
-        pokerogueApi.account.register({ username: usernameInput.text, password: passwordInput.text })
-          .then(registerError => {
-            if (!registerError) {
-              pokerogueApi.account.login({ username: usernameInput.text, password: passwordInput.text })
-                .then(loginError => {
-                  if (!loginError) {
-                    originalRegistrationAction && originalRegistrationAction();
-                  } else {
-                    onFail(loginError);
-                  }
-                });
-            } else {
-              onFail(registerError);
-            }
-          });
+        const [usernameInput, passwordInput] = this.inputs;
+        api.account.register({ username: usernameInput.text, password: passwordInput.text }).then((registerError) => {
+          if (!registerError) {
+            api.account.login({ username: usernameInput.text, password: passwordInput.text }).then((loginError) => {
+              if (!loginError) {
+                originalRegistrationAction && originalRegistrationAction();
+              } else {
+                onFail(loginError);
+              }
+            });
+          } else {
+            onFail(registerError);
+          }
+        });
       };
 
       return true;
