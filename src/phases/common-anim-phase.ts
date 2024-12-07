@@ -7,26 +7,19 @@ import { PokemonPhase } from "./pokemon-phase";
 export class CommonAnimPhase extends PokemonPhase {
   private anim: CommonAnim | null;
   private targetIndex?: BattlerIndex;
-  private playOnEmptyField: boolean;
 
-  constructor(
-    battlerIndex?: BattlerIndex,
-    targetIndex?: BattlerIndex,
-    anim: CommonAnim | null = null,
-    playOnEmptyField: boolean = false,
-  ) {
+  constructor(battlerIndex?: BattlerIndex, targetIndex?: BattlerIndex, anim: CommonAnim | null = null) {
     super(battlerIndex);
 
     this.anim = anim;
     this.targetIndex = targetIndex;
-    this.playOnEmptyField = playOnEmptyField;
   }
 
-  setAnimation(anim: CommonAnim) {
+  public setAnimation(anim: CommonAnim): void {
     this.anim = anim;
   }
 
-  start() {
+  public override start(): void {
     const target =
       this.targetIndex !== undefined
         ? (this.player ? globalScene.getEnemyField() : globalScene.getPlayerField())[this.targetIndex]

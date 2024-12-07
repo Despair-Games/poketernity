@@ -2,7 +2,6 @@ import { type BattlerIndex } from "#app/battle";
 import { type DamageResult, HitResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { PokemonPhase } from "#app/phases/pokemon-phase";
-import { fixedInt } from "#app/utils";
 import { BattleSpec } from "#enums/battle-spec";
 
 export class DamageAnimPhase extends PokemonPhase {
@@ -23,28 +22,28 @@ export class DamageAnimPhase extends PokemonPhase {
     this.critical = critical;
   }
 
-  start() {
+  public override start(): void {
     super.start();
 
     if (this.damageResult === HitResult.ONE_HIT_KO) {
       if (globalScene.moveAnimations) {
         globalScene.toggleInvert(true);
       }
-      globalScene.time.delayedCall(fixedInt(1000), () => {
+      globalScene.time.delayedCall(1000, () => {
         globalScene.toggleInvert(false);
-        this.applyDamage();
+        this.displayDamage();
       });
       return;
     }
 
-    this.applyDamage();
+    this.displayDamage();
   }
 
-  updateAmount(amount: number): void {
+  public updateAmount(amount: number): void {
     this.amount = amount;
   }
 
-  applyDamage() {
+  protected displayDamage(): void {
     switch (this.damageResult) {
       case HitResult.EFFECTIVE:
         globalScene.playSound("se/hit");
@@ -85,7 +84,7 @@ export class DamageAnimPhase extends PokemonPhase {
     }
   }
 
-  override end() {
+  override end(): void {
     if (globalScene.currentBattle.battleSpec === BattleSpec.FINAL_BOSS) {
       globalScene.initFinalBossPhaseTwo(this.getPokemon());
     } else {

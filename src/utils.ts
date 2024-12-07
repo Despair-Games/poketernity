@@ -631,3 +631,13 @@ export function animationFileName(move: Moves): string {
 export function camelCaseToKebabCase(str: string): string {
   return str.replace(/[A-Z]+(?![a-z])|[A-Z]/g, (s, o) => (o ? "-" : "") + s.toLowerCase());
 }
+
+/**
+ * Helper function to generate sines.
+ * @param index number to scale pi/128 inside the sine function
+ * @param amplitude Scales the output of the sine function
+ * @returns a number
+ */
+export function sin(index: number, amplitude: number): number {
+  return amplitude * Math.sin(index * (Math.PI / 128));
+}
