@@ -3051,75 +3051,72 @@ export default class BattleScene extends SceneBase {
     });
   }
 
-  generateEnemyModifiers(heldModifiersConfigs?: HeldModifierConfig[][]): Promise<void> {
-    return new Promise((resolve) => {
-      if (this.currentBattle.battleSpec === BattleSpec.FINAL_BOSS) {
-        return resolve();
-      }
-      const difficultyWaveIndex = this.gameMode.getWaveForDifficulty(this.currentBattle.waveIndex);
-      const isFinalBoss = this.gameMode.isWaveFinal(this.currentBattle.waveIndex);
-      let chances = Math.ceil(difficultyWaveIndex / 10);
-      if (isFinalBoss) {
-        chances = Math.ceil(chances * 2.5);
-      }
+  generateEnemyModifiers(heldModifiersConfigs?: HeldModifierConfig[][]): void {
+    if (this.currentBattle.battleSpec === BattleSpec.FINAL_BOSS) {
+      return;
+    }
+    const difficultyWaveIndex = this.gameMode.getWaveForDifficulty(this.currentBattle.waveIndex);
+    const isFinalBoss = this.gameMode.isWaveFinal(this.currentBattle.waveIndex);
+    let chances = Math.ceil(difficultyWaveIndex / 10);
+    if (isFinalBoss) {
+      chances = Math.ceil(chances * 2.5);
+    }
 
-      const party = this.getEnemyParty();
+    const party = this.getEnemyParty();
 
-      if (this.currentBattle.trainer) {
-        const modifiers = this.currentBattle.trainer.genModifiers(party);
-        for (const modifier of modifiers) {
-          this.addEnemyModifier(modifier, true, true);
+    if (this.currentBattle.trainer) {
+      const modifiers = this.currentBattle.trainer.genModifiers(party);
+      for (const modifier of modifiers) {
+        this.addEnemyModifier(modifier, true, true);
+      }
+    }
+
+    party.forEach((enemyPokemon: EnemyPokemon, i: integer) => {
+      if (heldModifiersConfigs && i < heldModifiersConfigs.length && heldModifiersConfigs[i]) {
+        heldModifiersConfigs[i].forEach((mt) => {
+          let modifier: PokemonHeldItemModifier;
+          if (mt.modifier instanceof PokemonHeldItemModifierType) {
+            modifier = mt.modifier.newModifier(enemyPokemon);
+          } else {
+            modifier = mt.modifier as PokemonHeldItemModifier;
+            modifier.pokemonId = enemyPokemon.id;
+          }
+          modifier.stackCount = mt.stackCount ?? 1;
+          modifier.isTransferable = mt.isTransferable ?? modifier.isTransferable;
+          this.addEnemyModifier(modifier, true);
+        });
+      } else {
+        const isBoss =
+          enemyPokemon.isBoss() ||
+          (this.currentBattle.battleType === BattleType.TRAINER && !!this.currentBattle.trainer?.config.isBoss);
+        let upgradeChance = 32;
+        if (isBoss) {
+          upgradeChance /= 2;
         }
-      }
-
-      party.forEach((enemyPokemon: EnemyPokemon, i: integer) => {
-        if (heldModifiersConfigs && i < heldModifiersConfigs.length && heldModifiersConfigs[i]) {
-          heldModifiersConfigs[i].forEach((mt) => {
-            let modifier: PokemonHeldItemModifier;
-            if (mt.modifier instanceof PokemonHeldItemModifierType) {
-              modifier = mt.modifier.newModifier(enemyPokemon);
-            } else {
-              modifier = mt.modifier as PokemonHeldItemModifier;
-              modifier.pokemonId = enemyPokemon.id;
-            }
-            modifier.stackCount = mt.stackCount ?? 1;
-            modifier.isTransferable = mt.isTransferable ?? modifier.isTransferable;
-            this.addEnemyModifier(modifier, true);
-          });
-        } else {
-          const isBoss =
-            enemyPokemon.isBoss() ||
-            (this.currentBattle.battleType === BattleType.TRAINER && !!this.currentBattle.trainer?.config.isBoss);
-          let upgradeChance = 32;
-          if (isBoss) {
-            upgradeChance /= 2;
-          }
-          if (isFinalBoss) {
-            upgradeChance /= 8;
-          }
-          const modifierChance = this.gameMode.getEnemyModifierChance(isBoss);
-          let count = 0;
-          for (let c = 0; c < chances; c++) {
-            if (!randSeedInt(modifierChance)) {
-              count++;
-            }
-          }
-          if (isBoss) {
-            count = Math.max(count, Math.floor(chances / 2));
-          }
-          getEnemyModifierTypesForWave(
-            difficultyWaveIndex,
-            count,
-            [enemyPokemon],
-            this.currentBattle.battleType === BattleType.TRAINER ? ModifierPoolType.TRAINER : ModifierPoolType.WILD,
-            upgradeChance,
-          ).map((mt) => mt.newModifier(enemyPokemon).add(this.enemyModifiers, false));
+        if (isFinalBoss) {
+          upgradeChance /= 8;
         }
-        return true;
-      });
-      this.updateModifiers(false);
-      resolve();
+        const modifierChance = this.gameMode.getEnemyModifierChance(isBoss);
+        let count = 0;
+        for (let c = 0; c < chances; c++) {
+          if (!randSeedInt(modifierChance)) {
+            count++;
+          }
+        }
+        if (isBoss) {
+          count = Math.max(count, Math.floor(chances / 2));
+        }
+        getEnemyModifierTypesForWave(
+          difficultyWaveIndex,
+          count,
+          [enemyPokemon],
+          this.currentBattle.battleType === BattleType.TRAINER ? ModifierPoolType.TRAINER : ModifierPoolType.WILD,
+          upgradeChance,
+        ).map((mt) => mt.newModifier(enemyPokemon).add(this.enemyModifiers, false));
+      }
+      return true;
     });
+    this.updateModifiers(false);
   }
 
   /**
