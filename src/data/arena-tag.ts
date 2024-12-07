@@ -112,7 +112,7 @@ export class MistTag extends ArenaTag {
     super(ArenaTagType.MIST, turnCount, Moves.MIST, sourceId, side);
   }
 
-  onAdd(arena: Arena, quiet: boolean = false): void {
+  override onAdd(arena: Arena, quiet: boolean = false): void {
     super.onAdd(arena);
 
     if (this.sourceId) {
@@ -228,7 +228,7 @@ class ReflectTag extends WeakenMoveScreenTag {
     super(ArenaTagType.REFLECT, turnCount, Moves.REFLECT, sourceId, side, [MoveCategory.PHYSICAL]);
   }
 
-  onAdd(arena: Arena, quiet: boolean = false): void {
+  override onAdd(arena: Arena, quiet: boolean = false): void {
     if (!quiet) {
       globalScene.queueMessage(
         i18next.t(
@@ -248,7 +248,7 @@ class LightScreenTag extends WeakenMoveScreenTag {
     super(ArenaTagType.LIGHT_SCREEN, turnCount, Moves.LIGHT_SCREEN, sourceId, side, [MoveCategory.SPECIAL]);
   }
 
-  onAdd(arena: Arena, quiet: boolean = false): void {
+  override onAdd(arena: Arena, quiet: boolean = false): void {
     if (!quiet) {
       globalScene.queueMessage(
         i18next.t(
@@ -271,7 +271,7 @@ class AuroraVeilTag extends WeakenMoveScreenTag {
     ]);
   }
 
-  onAdd(arena: Arena, quiet: boolean = false): void {
+  override onAdd(arena: Arena, quiet: boolean = false): void {
     if (!quiet) {
       globalScene.queueMessage(
         i18next.t(
@@ -308,7 +308,7 @@ export class ConditionalProtectTag extends ArenaTag {
     this.ignoresBypass = ignoresBypass;
   }
 
-  onAdd(arena: Arena): void {
+  override onAdd(arena: Arena): void {
     globalScene.queueMessage(
       i18next.t(
         `arenaTag:conditionalProtectOnAdd${this.side === ArenaTagSide.PLAYER ? "Player" : this.side === ArenaTagSide.ENEMY ? "Enemy" : ""}`,
@@ -318,7 +318,7 @@ export class ConditionalProtectTag extends ArenaTag {
   }
 
   // Removes default message for effect removal
-  onRemove(arena: Arena): void {}
+  override onRemove(arena: Arena): void {}
 
   /**
    * Checks incoming moves against the condition function
@@ -447,7 +447,7 @@ class MatBlockTag extends ConditionalProtectTag {
     super(ArenaTagType.MAT_BLOCK, Moves.MAT_BLOCK, sourceId, side, MatBlockConditionFunc);
   }
 
-  onAdd(arena: Arena) {
+  override onAdd(arena: Arena) {
     if (this.sourceId) {
       const source = globalScene.getPokemonById(this.sourceId);
       if (source) {
@@ -507,7 +507,7 @@ export class NoCritTag extends ArenaTag {
   }
 
   /** Queues a message upon adding this effect to the field */
-  onAdd(arena: Arena): void {
+  override onAdd(arena: Arena): void {
     globalScene.queueMessage(
       i18next.t(`arenaTag:noCritOnAdd${this.side === ArenaTagSide.PLAYER ? "Player" : "Enemy"}`, {
         moveName: this.getMoveName(),
@@ -516,7 +516,7 @@ export class NoCritTag extends ArenaTag {
   }
 
   /** Queues a message upon removing this effect from the field */
-  onRemove(arena: Arena): void {
+  override onRemove(arena: Arena): void {
     const source = globalScene.getPokemonById(this.sourceId!); // TODO: is this bang correct?
     globalScene.queueMessage(
       i18next.t("arenaTag:noCritOnRemove", {
@@ -540,7 +540,7 @@ class WishTag extends ArenaTag {
     super(ArenaTagType.WISH, turnCount, Moves.WISH, sourceId, side);
   }
 
-  onAdd(arena: Arena): void {
+  override onAdd(arena: Arena): void {
     if (this.sourceId) {
       const user = globalScene.getPokemonById(this.sourceId);
       if (user) {
@@ -555,7 +555,7 @@ class WishTag extends ArenaTag {
     }
   }
 
-  onRemove(arena: Arena): void {
+  override onRemove(arena: Arena): void {
     const target = globalScene.getField()[this.battlerIndex];
     if (target?.isActive(true)) {
       globalScene.queueMessage(this.triggerMessage);
@@ -611,11 +611,11 @@ class MudSportTag extends WeakenMoveTypeTag {
     super(ArenaTagType.MUD_SPORT, turnCount, Type.ELECTRIC, Moves.MUD_SPORT, sourceId);
   }
 
-  onAdd(arena: Arena): void {
+  override onAdd(arena: Arena): void {
     globalScene.queueMessage(i18next.t("arenaTag:mudSportOnAdd"));
   }
 
-  onRemove(arena: Arena): void {
+  override onRemove(arena: Arena): void {
     globalScene.queueMessage(i18next.t("arenaTag:mudSportOnRemove"));
   }
 }
@@ -629,11 +629,11 @@ class WaterSportTag extends WeakenMoveTypeTag {
     super(ArenaTagType.WATER_SPORT, turnCount, Type.FIRE, Moves.WATER_SPORT, sourceId);
   }
 
-  onAdd(arena: Arena): void {
+  override onAdd(arena: Arena): void {
     globalScene.queueMessage(i18next.t("arenaTag:waterSportOnAdd"));
   }
 
-  onRemove(arena: Arena): void {
+  override onRemove(arena: Arena): void {
     globalScene.queueMessage(i18next.t("arenaTag:waterSportOnRemove"));
   }
 }
@@ -649,11 +649,11 @@ export class IonDelugeTag extends ArenaTag {
   }
 
   /** Queues an on-add message */
-  onAdd(arena: Arena): void {
+  override onAdd(arena: Arena): void {
     globalScene.queueMessage(i18next.t("arenaTag:plasmaFistsOnAdd"));
   }
 
-  onRemove(arena: Arena): void {} // Removes default on-remove message
+  override onRemove(arena: Arena): void {} // Removes default on-remove message
 
   /**
    * Converts Normal-type moves to Electric type
@@ -694,7 +694,7 @@ export class ArenaTrapTag extends ArenaTag {
     this.maxLayers = maxLayers;
   }
 
-  onOverlap(arena: Arena): void {
+  override onOverlap(arena: Arena): void {
     if (this.layers < this.maxLayers) {
       this.layers++;
 
@@ -727,7 +727,7 @@ export class ArenaTrapTag extends ArenaTag {
       : Phaser.Math.Linear(0, 1 / Math.pow(2, this.layers), Math.min(pokemon.getHpRatio(), 0.5) * 2);
   }
 
-  loadTag(source: any): void {
+  override loadTag(source: any): void {
     super.loadTag(source);
     this.layers = source.layers;
     this.maxLayers = source.maxLayers;
@@ -744,7 +744,7 @@ class SpikesTag extends ArenaTrapTag {
     super(ArenaTagType.SPIKES, Moves.SPIKES, sourceId, side, 3);
   }
 
-  onAdd(arena: Arena, quiet: boolean = false): void {
+  override onAdd(arena: Arena, quiet: boolean = false): void {
     super.onAdd(arena);
 
     const source = this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
@@ -800,7 +800,7 @@ class ToxicSpikesTag extends ArenaTrapTag {
     this.neutralized = false;
   }
 
-  onAdd(arena: Arena, quiet: boolean = false): void {
+  override onAdd(arena: Arena, quiet: boolean = false): void {
     super.onAdd(arena);
 
     const source = this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
@@ -814,7 +814,7 @@ class ToxicSpikesTag extends ArenaTrapTag {
     }
   }
 
-  onRemove(arena: Arena): void {
+  override onRemove(arena: Arena): void {
     if (!this.neutralized) {
       super.onRemove(arena);
     }
@@ -849,7 +849,7 @@ class ToxicSpikesTag extends ArenaTrapTag {
     return false;
   }
 
-  getMatchupScoreMultiplier(pokemon: Pokemon): number {
+  override getMatchupScoreMultiplier(pokemon: Pokemon): number {
     if (pokemon.isGrounded() || !pokemon.canSetStatus(StatusEffect.POISON, true)) {
       return 1;
     }
@@ -881,7 +881,7 @@ export class DelayedAttackTag extends ArenaTag {
     this.side = side;
   }
 
-  lapse(arena: Arena): boolean {
+  override lapse(arena: Arena): boolean {
     const ret = super.lapse(arena);
 
     if (!ret) {
@@ -893,7 +893,7 @@ export class DelayedAttackTag extends ArenaTag {
     return ret;
   }
 
-  onRemove(arena: Arena): void {}
+  override onRemove(arena: Arena): void {}
 }
 
 /**
@@ -906,7 +906,7 @@ class StealthRockTag extends ArenaTrapTag {
     super(ArenaTagType.STEALTH_ROCK, Moves.STEALTH_ROCK, sourceId, side, 1);
   }
 
-  onAdd(arena: Arena, quiet: boolean = false): void {
+  override onAdd(arena: Arena, quiet: boolean = false): void {
     super.onAdd(arena);
 
     const source = this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
@@ -974,7 +974,7 @@ class StealthRockTag extends ArenaTrapTag {
     return false;
   }
 
-  getMatchupScoreMultiplier(pokemon: Pokemon): number {
+  override getMatchupScoreMultiplier(pokemon: Pokemon): number {
     const damageHpRatio = this.getDamageHpRatio(pokemon);
     return Phaser.Math.Linear(super.getMatchupScoreMultiplier(pokemon), 1, 1 - Math.pow(damageHpRatio, damageHpRatio));
   }
@@ -990,7 +990,7 @@ class StickyWebTag extends ArenaTrapTag {
     super(ArenaTagType.STICKY_WEB, Moves.STICKY_WEB, sourceId, side, 1);
   }
 
-  onAdd(arena: Arena, quiet: boolean = false): void {
+  override onAdd(arena: Arena, quiet: boolean = false): void {
     super.onAdd(arena);
     const source = this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
     if (!quiet && source) {
@@ -1049,7 +1049,7 @@ export class TrickRoomTag extends ArenaTag {
     return true;
   }
 
-  onAdd(arena: Arena): void {
+  override onAdd(arena: Arena): void {
     const source = this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
     if (source) {
       globalScene.queueMessage(
@@ -1058,7 +1058,7 @@ export class TrickRoomTag extends ArenaTag {
     }
   }
 
-  onRemove(arena: Arena): void {
+  override onRemove(arena: Arena): void {
     globalScene.queueMessage(i18next.t("arenaTag:trickRoomOnRemove"));
   }
 }
@@ -1073,7 +1073,7 @@ export class GravityTag extends ArenaTag {
     super(ArenaTagType.GRAVITY, turnCount, Moves.GRAVITY);
   }
 
-  onAdd(arena: Arena): void {
+  override onAdd(arena: Arena): void {
     globalScene.queueMessage(i18next.t("arenaTag:gravityOnAdd"));
     globalScene.getField(true).forEach((pokemon) => {
       if (pokemon !== null) {
@@ -1086,7 +1086,7 @@ export class GravityTag extends ArenaTag {
     });
   }
 
-  onRemove(arena: Arena): void {
+  override onRemove(arena: Arena): void {
     globalScene.queueMessage(i18next.t("arenaTag:gravityOnRemove"));
   }
 }
@@ -1101,7 +1101,7 @@ class TailwindTag extends ArenaTag {
     super(ArenaTagType.TAILWIND, turnCount, Moves.TAILWIND, sourceId, side);
   }
 
-  onAdd(arena: Arena, quiet: boolean = false): void {
+  override onAdd(arena: Arena, quiet: boolean = false): void {
     if (!quiet) {
       globalScene.queueMessage(
         i18next.t(
@@ -1132,7 +1132,7 @@ class TailwindTag extends ArenaTag {
     }
   }
 
-  onRemove(arena: Arena, quiet: boolean = false): void {
+  override onRemove(arena: Arena, quiet: boolean = false): void {
     if (!quiet) {
       globalScene.queueMessage(
         i18next.t(
@@ -1152,11 +1152,11 @@ class HappyHourTag extends ArenaTag {
     super(ArenaTagType.HAPPY_HOUR, turnCount, Moves.HAPPY_HOUR, sourceId, side);
   }
 
-  onAdd(arena: Arena): void {
+  override onAdd(arena: Arena): void {
     globalScene.queueMessage(i18next.t("arenaTag:happyHourOnAdd"));
   }
 
-  onRemove(arena: Arena): void {
+  override onRemove(arena: Arena): void {
     globalScene.queueMessage(i18next.t("arenaTag:happyHourOnRemove"));
   }
 }
@@ -1166,7 +1166,7 @@ class SafeguardTag extends ArenaTag {
     super(ArenaTagType.SAFEGUARD, turnCount, Moves.SAFEGUARD, sourceId, side);
   }
 
-  onAdd(arena: Arena): void {
+  override onAdd(arena: Arena): void {
     globalScene.queueMessage(
       i18next.t(
         `arenaTag:safeguardOnAdd${this.side === ArenaTagSide.PLAYER ? "Player" : this.side === ArenaTagSide.ENEMY ? "Enemy" : ""}`,
@@ -1174,7 +1174,7 @@ class SafeguardTag extends ArenaTag {
     );
   }
 
-  onRemove(arena: Arena): void {
+  override onRemove(arena: Arena): void {
     globalScene.queueMessage(
       i18next.t(
         `arenaTag:safeguardOnRemove${this.side === ArenaTagSide.PLAYER ? "Player" : this.side === ArenaTagSide.ENEMY ? "Enemy" : ""}`,
@@ -1363,7 +1363,7 @@ export class FairyLockTag extends ArenaTag {
     super(ArenaTagType.FAIRY_LOCK, turnCount, Moves.FAIRY_LOCK, sourceId);
   }
 
-  onAdd(arena: Arena): void {
+  override onAdd(arena: Arena): void {
     globalScene.queueMessage(i18next.t("arenaTag:fairyLockOnAdd"));
   }
 }

@@ -33,7 +33,7 @@ export default class Trainer extends Phaser.GameObjects.Container {
   public config: TrainerConfig;
   public variant: TrainerVariant;
   public partyTemplateIndex: integer;
-  public name: string;
+  public override name: string;
   public partnerName: string;
 
   constructor(

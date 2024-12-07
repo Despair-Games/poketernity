@@ -14,7 +14,7 @@ export default class TestDialogueUiHandler extends FormModalUiHandler {
     super(mode);
   }
 
-  setup() {
+  override setup() {
     super.setup();
 
     const flattenKeys = (object?: any, topKey?: string, midleKey?: string[]): Array<any> => {
@@ -63,7 +63,7 @@ export default class TestDialogueUiHandler extends FormModalUiHandler {
     return ["Check", "Cancel"];
   }
 
-  getReadableErrorMessage(error: string): string {
+  override getReadableErrorMessage(error: string): string {
     const colonIndex = error?.indexOf(":");
     if (colonIndex > 0) {
       error = error.slice(0, colonIndex);
@@ -76,7 +76,7 @@ export default class TestDialogueUiHandler extends FormModalUiHandler {
     return [{ label: "Dialogue" }];
   }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     const ui = this.getUi();
     const hasTitle = !!this.getModalTitle();
     this.updateFields(this.getInputFieldConfigs(), hasTitle);

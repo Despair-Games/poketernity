@@ -16,7 +16,7 @@ export class EggSummaryPhase extends Phase {
     this.eggHatchData = eggHatchData;
   }
 
-  start() {
+  override start() {
     super.start();
 
     // updates next pokemon once the current update has been completed
@@ -37,7 +37,7 @@ export class EggSummaryPhase extends Phase {
     updateNextPokemon(0);
   }
 
-  end() {
+  override end() {
     globalScene.time.delayedCall(250, () => globalScene.setModifiersVisible(true));
     globalScene.ui.setModeForceTransition(Mode.MESSAGE).then(() => {
       super.end();

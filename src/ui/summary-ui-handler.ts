@@ -309,7 +309,7 @@ export default class SummaryUiHandler extends UiHandler {
     return `summary_${Page[page].toLowerCase()}`;
   }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     super.show(args);
 
     /* args[] information
@@ -639,7 +639,7 @@ export default class SummaryUiHandler extends UiHandler {
     return success || error;
   }
 
-  setCursor(cursor: integer, overrideChanged: boolean = false): boolean {
+  override setCursor(cursor: integer, overrideChanged: boolean = false): boolean {
     let changed: boolean = overrideChanged || this.moveCursor !== cursor;
 
     if (this.moveSelect) {
@@ -1228,7 +1228,7 @@ export default class SummaryUiHandler extends UiHandler {
     });
   }
 
-  clear() {
+  override clear() {
     super.clear();
     this.pokemon = null;
     this.cursor = -1;

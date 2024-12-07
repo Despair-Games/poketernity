@@ -12,7 +12,7 @@ export class ReloadSessionPhase extends Phase {
     this.systemDataStr = systemDataStr;
   }
 
-  start(): void {
+  override start(): void {
     globalScene.ui.setMode(Mode.SESSION_RELOAD);
 
     let delayElapsed = false;

@@ -74,7 +74,7 @@ export class EggHatchPhase extends Phase {
     this.eggsToHatchCount = eggsToHatchCount;
   }
 
-  start() {
+  override start() {
     super.start();
 
     globalScene.ui.setModeForceTransition(Mode.EGG_HATCH_SCENE).then(() => {
@@ -221,7 +221,7 @@ export class EggHatchPhase extends Phase {
     });
   }
 
-  end() {
+  override end() {
     if (globalScene.findPhase((p) => p instanceof EggHatchPhase)) {
       this.eggHatchHandler.clear();
     } else {

@@ -31,7 +31,7 @@ const BORDER = 8;
 const GLOBAL_SCALE = 6;
 
 export default class MoveInfoOverlay extends Phaser.GameObjects.Container implements InfoToggle {
-  public active: boolean = false;
+  public override active: boolean = false;
 
   private move: Move;
 

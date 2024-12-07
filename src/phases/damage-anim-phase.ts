@@ -10,7 +10,12 @@ export class DamageAnimPhase extends PokemonPhase {
   private damageResult: DamageResult;
   private critical: boolean;
 
-  constructor(battlerIndex: BattlerIndex, amount: number, damageResult: DamageResult = HitResult.EFFECTIVE, critical: boolean = false) {
+  constructor(
+    battlerIndex: BattlerIndex,
+    amount: number,
+    damageResult: DamageResult = HitResult.EFFECTIVE,
+    critical: boolean = false,
+  ) {
     super(battlerIndex);
 
     this.amount = amount;
@@ -18,7 +23,7 @@ export class DamageAnimPhase extends PokemonPhase {
     this.critical = critical;
   }
 
-  start() {
+  override start() {
     super.start();
 
     if (this.damageResult === HitResult.ONE_HIT_KO) {
