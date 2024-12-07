@@ -1,5 +1,7 @@
 **/*.yml
 **/*.md
+package.json
+package-lock.json
 
 # Ignore artifacts:
 build
