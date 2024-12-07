@@ -458,9 +458,10 @@ export class SingleGenerationChallenge extends Challenge {
       pokemon.species.speciesId === Species.VICTINI ? 5 : getPokemonSpecies(pokemon.species.speciesId).generation;
     let fusionGeneration = 0;
     if (pokemon.isFusion() && pokemon.fusionSpecies) {
-    fusionGeneration = pokemon.fusionSpecies.speciesId === Species.VICTINI ?
-      5
-      : getPokemonSpecies(pokemon.fusionSpecies.speciesId).generation;
+      fusionGeneration =
+        pokemon.fusionSpecies.speciesId === Species.VICTINI
+          ? 5
+          : getPokemonSpecies(pokemon.fusionSpecies.speciesId).generation;
     }
     if (
       pokemon.isPlayer()
