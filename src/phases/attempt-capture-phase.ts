@@ -3,14 +3,15 @@ import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
 import { SubstituteTag } from "#app/data/battler-tags";
 import {
   doPokeballBounceAnim,
+  getCriticalCaptureChance,
   getPokeballAtlasKey,
   getPokeballCatchMultiplier,
   getPokeballTintColor,
-  getCriticalCaptureChance,
 } from "#app/data/pokeball";
 import { getStatusEffectCatchRateMultiplier } from "#app/data/status-effect";
 import { addPokeballCaptureStars, addPokeballOpenParticles } from "#app/field/anims";
 import { type EnemyPokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { PokemonPhase } from "#app/phases/pokemon-phase";
@@ -22,7 +23,6 @@ import { Mode } from "#app/ui/ui";
 import { type PokeballType } from "#enums/pokeball";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
-import { globalScene } from "#app/global-scene";
 
 export class AttemptCapturePhase extends PokemonPhase {
   private pokeballType: PokeballType;

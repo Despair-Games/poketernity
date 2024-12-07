@@ -1,5 +1,5 @@
-import { globalScene } from "#app/global-scene";
 import { applyPostBattleAbAttrs, PostBattleAbAttr } from "#app/data/ability";
+import { globalScene } from "#app/global-scene";
 import { LapsingPersistentModifier, LapsingPokemonHeldItemModifier } from "#app/modifier/modifier";
 import { BattlePhase } from "#app/phases/battle-phase";
 import { GameOverPhase } from "#app/phases/game-over-phase";

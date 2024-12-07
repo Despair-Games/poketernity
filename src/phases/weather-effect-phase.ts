@@ -1,12 +1,11 @@
-import { globalScene } from "#app/global-scene";
 import {
-  applyPreWeatherEffectAbAttrs,
-  SuppressWeatherEffectAbAttr,
-  PreWeatherDamageAbAttr,
   applyAbAttrs,
-  BlockNonDirectDamageAbAttr,
   applyPostWeatherLapseAbAttrs,
+  applyPreWeatherEffectAbAttrs,
+  BlockNonDirectDamageAbAttr,
   PostWeatherLapseAbAttr,
+  PreWeatherDamageAbAttr,
+  SuppressWeatherEffectAbAttr,
 } from "#app/data/ability";
 import { CommonAnim } from "#app/data/battle-anims";
 import { type Weather, getWeatherDamageMessage, getWeatherLapseMessage } from "#app/data/weather";
@@ -14,6 +13,7 @@ import { BattlerTagType } from "#app/enums/battler-tag-type";
 import { WeatherType } from "#app/enums/weather-type";
 import type Pokemon from "#app/field/pokemon";
 import { HitResult } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
 import { BooleanHolder, toDmgValue } from "#app/utils";
 import { CommonAnimPhase } from "./common-anim-phase";
 

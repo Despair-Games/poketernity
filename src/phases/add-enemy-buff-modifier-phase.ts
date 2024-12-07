@@ -1,12 +1,12 @@
+import { globalScene } from "#app/global-scene";
+import { EnemyPersistentModifier } from "#app/modifier/modifier";
 import { ModifierTier } from "#app/modifier/modifier-tier";
 import {
-  regenerateModifierPoolThresholds,
   ModifierPoolType,
   getEnemyBuffModifierForWave,
+  regenerateModifierPoolThresholds,
 } from "#app/modifier/modifier-type";
-import { EnemyPersistentModifier } from "#app/modifier/modifier";
 import { Phase } from "#app/phase";
-import { globalScene } from "#app/global-scene";
 
 export class AddEnemyBuffModifierPhase extends Phase {
   constructor() {

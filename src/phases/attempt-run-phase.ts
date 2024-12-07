@@ -1,6 +1,7 @@
 import { applyAbAttrs, RunSuccessAbAttr } from "#app/data/ability";
 import type Pokemon from "#app/field/pokemon";
 import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
 import { BattleEndPhase } from "#app/phases/battle-end-phase";
 import { NewBattlePhase } from "#app/phases/new-battle-phase";
 import { PokemonPhase } from "#app/phases/pokemon-phase";
@@ -8,7 +9,6 @@ import { NumberHolder } from "#app/utils";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
-import { globalScene } from "#app/global-scene";
 
 export class AttemptRunPhase extends PokemonPhase {
   /** For testing purposes: this is to force the pokemon to fail to escape */

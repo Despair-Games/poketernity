@@ -1,26 +1,26 @@
-import { globalScene } from "#app/global-scene";
 import type { TurnCommand } from "#app/battle";
 import { BattleType } from "#app/battle";
+import { ArenaTagSide, type ArenaTag } from "#app/data/arena-tag";
+import { speciesStarterCosts } from "#app/data/balance/starters";
 import type { EncoreTag } from "#app/data/battler-tags";
 import { TrappedTag, type BattlerTag } from "#app/data/battler-tags";
 import { getMoveTargets, type MoveTargetSet } from "#app/data/move";
-import { speciesStarterCosts } from "#app/data/balance/starters";
+import type { PlayerPokemon } from "#app/field/pokemon";
+import { FieldPosition } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
+import { getPokemonNameWithAffix } from "#app/messages";
+import { FieldPhase } from "#app/phases/field-phase";
+import { SelectTargetPhase } from "#app/phases/select-target-phase";
+import { Command } from "#app/ui/command-ui-handler";
+import { Mode } from "#app/ui/ui";
 import { Abilities } from "#enums/abilities";
+import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { Biome } from "#enums/biome";
 import { Moves } from "#enums/moves";
-import { PokeballType } from "#enums/pokeball";
-import type { PlayerPokemon } from "#app/field/pokemon";
-import { FieldPosition } from "#app/field/pokemon";
-import { getPokemonNameWithAffix } from "#app/messages";
-import { Command } from "#app/ui/command-ui-handler";
-import { Mode } from "#app/ui/ui";
-import i18next from "i18next";
-import { FieldPhase } from "#app/phases/field-phase";
-import { SelectTargetPhase } from "#app/phases/select-target-phase";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
-import { ArenaTagSide, type ArenaTag } from "#app/data/arena-tag";
-import { ArenaTagType } from "#enums/arena-tag-type";
+import { PokeballType } from "#enums/pokeball";
+import i18next from "i18next";
 
 /**
  * Handles the player's start-of-turn actions (`Fight/Ball/Pokemon/Run`) during a battle
