@@ -32,8 +32,6 @@ export class WeatherEffectPhase extends CommonAnimPhase {
   start() {
     // Update weather state with any changes that occurred during the turn
     this.weather = globalScene?.arena?.weather;
-    // Fix TS compiler issues
-    const weather = this.weather;
 
     const { weather } = this;
 

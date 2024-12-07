@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
-import type { TurnCommand} from "#app/battle";
+import type { TurnCommand } from "#app/battle";
 import { BattleType } from "#app/battle";
-import type { EncoreTag} from "#app/data/battler-tags";
+import type { EncoreTag } from "#app/data/battler-tags";
 import { TrappedTag, type BattlerTag } from "#app/data/battler-tags";
 import { getMoveTargets, type MoveTargetSet } from "#app/data/move";
 import { speciesStarterCosts } from "#app/data/balance/starters";
@@ -145,7 +145,7 @@ export class CommandPhase extends FieldPhase {
    * @param targets - (optional, unused) {@linkcode MoveTargetSet} containing the queued moves targets (ie: from rollout, etc)
    * @returns `true` if the command was successful
    */
-  public handleCommand(command: Command.FIGHT, cursor: number, ignorePp: boolean, targets?: MoveTargetSet): boolean;
+  public handleCommand(command: Command.FIGHT, cursor: number, ignorePp?: boolean, targets?: MoveTargetSet): boolean;
   /**
    * @param command - {@linkcode Command.POKEMON}
    * @param cursor - Cursor index for the selected Pokemon
@@ -156,7 +156,7 @@ export class CommandPhase extends FieldPhase {
   public handleCommand(command: Command, cursor: number, ...args: any[]): boolean {
     const playerPokemon = globalScene.getPlayerField()[this.fieldIndex];
     let success: boolean = false;
-    const { arena, currentBattle, gameData, gameMode, ui } = this.scene;
+    const { arena, currentBattle, gameData, gameMode, ui } = globalScene;
     const { battleType, mysteryEncounter } = currentBattle;
 
     switch (command) {
@@ -231,10 +231,10 @@ export class CommandPhase extends FieldPhase {
         break;
       case Command.BALL:
         const notInDex =
-          this.scene
+          globalScene
             .getEnemyField()
             .filter((p) => p.isActive(true))
-            .some((p) => !p.scene.gameData.dexData[p.species.speciesId].caughtAttr)
+            .some((p) => !globalScene.gameData.dexData[p.species.speciesId].caughtAttr)
           && gameData.getStarterCount((d) => !!d.caughtAttr) < Object.keys(speciesStarterCosts).length - 1;
 
         if (arena.biomeType === Biome.END && (!gameMode.isClassic || gameMode.isFreshStartChallenge() || notInDex)) {
@@ -296,7 +296,7 @@ export class CommandPhase extends FieldPhase {
             );
           } else if (cursor < 5) {
             // TODO: when would `cursor` be greater than 4?
-            const targetPokemon = this.scene.getEnemyField().find((p) => p.isActive(true));
+            const targetPokemon = globalScene.getEnemyField().find((p) => p.isActive(true));
             if (
               targetPokemon?.isBoss()
               && targetPokemon?.bossSegmentIndex >= 1
@@ -404,8 +404,8 @@ export class CommandPhase extends FieldPhase {
             ui.showText(
               i18next.t("battle:noEscapePokemon", {
                 pokemonName:
-                  tag.sourceId && this.scene.getPokemonById(tag.sourceId)
-                    ? getPokemonNameWithAffix(this.scene.getPokemonById(tag.sourceId))
+                  tag.sourceId && globalScene.getPokemonById(tag.sourceId)
+                    ? getPokemonNameWithAffix(globalScene.getPokemonById(tag.sourceId))
                     : "",
                 moveName: tag.getMoveName(),
                 escapeVerb: isSwitch ? i18next.t("battle:escapeVerbSwitch") : i18next.t("battle:escapeVerbFlee"),
