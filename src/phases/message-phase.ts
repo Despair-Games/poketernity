@@ -3,24 +3,24 @@ import { Phase } from "#app/phase";
 
 export class MessagePhase extends Phase {
   private text: string;
-  private callbackDelay: integer | null;
+  private callbackDelay: number | null;
   private prompt: boolean | null;
-  private promptDelay: integer | null;
+  private promptDelay: number | null;
   private speaker?: string;
 
   constructor(
     text: string,
-    callbackDelay?: integer | null,
-    prompt?: boolean | null,
-    promptDelay?: integer | null,
+    callbackDelay: number | null = null,
+    prompt: boolean | null = null,
+    promptDelay: number | null = null,
     speaker?: string,
   ) {
     super();
 
     this.text = text;
-    this.callbackDelay = callbackDelay!; // TODO: is this bang correct?
-    this.prompt = prompt!; // TODO: is this bang correct?
-    this.promptDelay = promptDelay!; // TODO: is this bang correct?
+    this.callbackDelay = callbackDelay;
+    this.prompt = prompt;
+    this.promptDelay = promptDelay;
     this.speaker = speaker;
   }
 

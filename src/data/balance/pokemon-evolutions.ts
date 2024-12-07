@@ -1134,7 +1134,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.TANGROWTH,
       34,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m?.moveId === Moves.ANCIENT_POWER).length > 0),
+      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === Moves.ANCIENT_POWER).length > 0),
       SpeciesWildEvolutionDelay.LONG,
     ),
   ],
@@ -1143,7 +1143,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.LICKILICKY,
       32,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m?.moveId === Moves.ROLLOUT).length > 0),
+      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === Moves.ROLLOUT).length > 0),
       SpeciesWildEvolutionDelay.LONG,
     ),
   ],
@@ -1159,7 +1159,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       null,
       new SpeciesFriendshipEvolutionCondition(
         120,
-        (p) => !!p.getMoveset().find((m) => m?.getMove().type === Type.FAIRY),
+        (p) => !!p.getMoveset().find((m) => m.getMove().type === Type.FAIRY),
       ),
       SpeciesWildEvolutionDelay.LONG,
     ),
@@ -1171,7 +1171,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       null,
       new SpeciesFriendshipEvolutionCondition(
         120,
-        (p) => !!p.getMoveset().find((m) => m?.getMove().type === Type.FAIRY),
+        (p) => !!p.getMoveset().find((m) => m.getMove().type === Type.FAIRY),
       ),
       SpeciesWildEvolutionDelay.LONG,
     ),
@@ -1302,7 +1302,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.AMBIPOM,
       32,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m?.moveId === Moves.DOUBLE_HIT).length > 0),
+      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === Moves.DOUBLE_HIT).length > 0),
       SpeciesWildEvolutionDelay.LONG,
     ),
   ],
@@ -1314,7 +1314,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.YANMEGA,
       33,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m?.moveId === Moves.ANCIENT_POWER).length > 0),
+      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === Moves.ANCIENT_POWER).length > 0),
       SpeciesWildEvolutionDelay.LONG,
     ),
   ],
@@ -1329,7 +1329,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.FARIGIRAF,
       32,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m?.moveId === Moves.TWIN_BEAM).length > 0),
+      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === Moves.TWIN_BEAM).length > 0),
       SpeciesWildEvolutionDelay.LONG,
     ),
   ],
@@ -1342,7 +1342,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       null,
       new SpeciesEvolutionCondition((p) => {
         let ret = false;
-        if (p.moveset.filter((m) => m?.moveId === Moves.HYPER_DRILL).length > 0) {
+        if (p.moveset.filter((m) => m.moveId === Moves.HYPER_DRILL).length > 0) {
           globalScene.executeWithSeedOffset(() => (ret = !randSeedInt(4)), p.id);
         }
         return ret;
@@ -1353,7 +1353,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.DUDUNSPARCE,
       32,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m?.moveId === Moves.HYPER_DRILL).length > 0),
+      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === Moves.HYPER_DRILL).length > 0),
       SpeciesWildEvolutionDelay.LONG,
     ),
   ],
@@ -1364,8 +1364,8 @@ export const pokemonEvolutions: PokemonEvolutions = {
       EvolutionItem.RAZOR_FANG,
       new SpeciesEvolutionCondition(
         (p) =>
-          globalScene.arena.getTimeOfDay() === TimeOfDay.DUSK
-          || globalScene.arena.getTimeOfDay() === TimeOfDay.NIGHT /* Razor fang at night*/,
+          globalScene.arena.getTimeOfDay() === TimeOfDay.DUSK ||
+          globalScene.arena.getTimeOfDay() === TimeOfDay.NIGHT /* Razor fang at night*/,
       ),
       SpeciesWildEvolutionDelay.VERY_LONG,
     ),
@@ -1377,8 +1377,8 @@ export const pokemonEvolutions: PokemonEvolutions = {
       EvolutionItem.RAZOR_CLAW,
       new SpeciesEvolutionCondition(
         (p) =>
-          globalScene.arena.getTimeOfDay() === TimeOfDay.DUSK
-          || globalScene.arena.getTimeOfDay() === TimeOfDay.NIGHT /* Razor claw at night*/,
+          globalScene.arena.getTimeOfDay() === TimeOfDay.DUSK ||
+          globalScene.arena.getTimeOfDay() === TimeOfDay.NIGHT /* Razor claw at night*/,
       ),
       SpeciesWildEvolutionDelay.VERY_LONG,
     ),
@@ -1391,7 +1391,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.MAMOSWINE,
       1,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m?.moveId === Moves.ANCIENT_POWER).length > 0),
+      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === Moves.ANCIENT_POWER).length > 0),
       SpeciesWildEvolutionDelay.VERY_LONG,
     ),
   ],
@@ -1400,7 +1400,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.WYRDEER,
       25,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m?.moveId === Moves.PSYSHIELD_BASH).length > 0),
+      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === Moves.PSYSHIELD_BASH).length > 0),
       SpeciesWildEvolutionDelay.VERY_LONG,
     ),
   ],
@@ -1424,7 +1424,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.SUDOWOODO,
       1,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m?.moveId === Moves.MIMIC).length > 0),
+      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === Moves.MIMIC).length > 0),
       SpeciesWildEvolutionDelay.MEDIUM,
     ),
   ],
@@ -1435,9 +1435,8 @@ export const pokemonEvolutions: PokemonEvolutions = {
       null,
       new SpeciesEvolutionCondition(
         (p) =>
-          p.moveset.filter((m) => m?.moveId === Moves.MIMIC).length > 0
-          && (globalScene.arena.getTimeOfDay() === TimeOfDay.DUSK
-            || globalScene.arena.getTimeOfDay() === TimeOfDay.NIGHT),
+          p.moveset.filter((m) => m.moveId === Moves.MIMIC).length > 0 &&
+          (globalScene.arena.getTimeOfDay() === TimeOfDay.DUSK || globalScene.arena.getTimeOfDay() === TimeOfDay.NIGHT),
       ),
       SpeciesWildEvolutionDelay.MEDIUM,
     ),
@@ -1447,9 +1446,8 @@ export const pokemonEvolutions: PokemonEvolutions = {
       null,
       new SpeciesEvolutionCondition(
         (p) =>
-          p.moveset.filter((m) => m?.moveId === Moves.MIMIC).length > 0
-          && (globalScene.arena.getTimeOfDay() === TimeOfDay.DAWN
-            || globalScene.arena.getTimeOfDay() === TimeOfDay.DAY),
+          p.moveset.filter((m) => m.moveId === Moves.MIMIC).length > 0 &&
+          (globalScene.arena.getTimeOfDay() === TimeOfDay.DAWN || globalScene.arena.getTimeOfDay() === TimeOfDay.DAY),
       ),
       SpeciesWildEvolutionDelay.MEDIUM,
     ),
@@ -1532,8 +1530,8 @@ export const pokemonEvolutions: PokemonEvolutions = {
       null,
       new SpeciesEvolutionCondition(
         (p) =>
-          (globalScene.arena.getTimeOfDay() === TimeOfDay.DAWN || globalScene.arena.getTimeOfDay() === TimeOfDay.DAY)
-          && p.formIndex === 0,
+          (globalScene.arena.getTimeOfDay() === TimeOfDay.DAWN || globalScene.arena.getTimeOfDay() === TimeOfDay.DAY) &&
+          p.formIndex === 0,
       ),
     ),
     new SpeciesFormEvolution(
@@ -1552,8 +1550,9 @@ export const pokemonEvolutions: PokemonEvolutions = {
       null,
       new SpeciesEvolutionCondition(
         (p) =>
-          (globalScene.arena.getTimeOfDay() === TimeOfDay.DUSK || globalScene.arena.getTimeOfDay() === TimeOfDay.NIGHT)
-          && p.formIndex === 0,
+          (globalScene.arena.getTimeOfDay() === TimeOfDay.DUSK ||
+            globalScene.arena.getTimeOfDay() === TimeOfDay.NIGHT) &&
+          p.formIndex === 0,
       ),
     ),
   ],
@@ -1562,7 +1561,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.TSAREENA,
       28,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m?.moveId === Moves.STOMP).length > 0),
+      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === Moves.STOMP).length > 0),
       SpeciesWildEvolutionDelay.LONG,
     ),
   ],
@@ -1571,7 +1570,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.NAGANADEL,
       1,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m?.moveId === Moves.DRAGON_PULSE).length > 0),
+      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === Moves.DRAGON_PULSE).length > 0),
       SpeciesWildEvolutionDelay.LONG,
     ),
   ],
@@ -1592,7 +1591,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       35,
       null,
       new SpeciesEvolutionCondition(
-        (p) => p.moveset.filter((m) => m?.moveId === Moves.TAUNT).length > 0,
+        (p) => p.moveset.filter((m) => m.moveId === Moves.TAUNT).length > 0,
       ) /*Once Taunt is implemented, change evo level to 1 and delay to LONG*/,
     ),
   ],
@@ -1625,11 +1624,11 @@ export const pokemonEvolutions: PokemonEvolutions = {
       EvolutionItem.STRAWBERRY_SWEET,
       new SpeciesEvolutionCondition(
         (p) =>
-          globalScene.arena.biomeType === Biome.TOWN
-          || globalScene.arena.biomeType === Biome.PLAINS
-          || globalScene.arena.biomeType === Biome.GRASS
-          || globalScene.arena.biomeType === Biome.TALL_GRASS
-          || globalScene.arena.biomeType === Biome.METROPOLIS,
+          globalScene.arena.biomeType === Biome.TOWN ||
+          globalScene.arena.biomeType === Biome.PLAINS ||
+          globalScene.arena.biomeType === Biome.GRASS ||
+          globalScene.arena.biomeType === Biome.TALL_GRASS ||
+          globalScene.arena.biomeType === Biome.METROPOLIS,
       ),
       SpeciesWildEvolutionDelay.LONG,
     ),
@@ -1641,11 +1640,11 @@ export const pokemonEvolutions: PokemonEvolutions = {
       EvolutionItem.STRAWBERRY_SWEET,
       new SpeciesEvolutionCondition(
         (p) =>
-          globalScene.arena.biomeType === Biome.BADLANDS
-          || globalScene.arena.biomeType === Biome.VOLCANO
-          || globalScene.arena.biomeType === Biome.GRAVEYARD
-          || globalScene.arena.biomeType === Biome.FACTORY
-          || globalScene.arena.biomeType === Biome.SLUM,
+          globalScene.arena.biomeType === Biome.BADLANDS ||
+          globalScene.arena.biomeType === Biome.VOLCANO ||
+          globalScene.arena.biomeType === Biome.GRAVEYARD ||
+          globalScene.arena.biomeType === Biome.FACTORY ||
+          globalScene.arena.biomeType === Biome.SLUM,
       ),
       SpeciesWildEvolutionDelay.LONG,
     ),
@@ -1657,10 +1656,10 @@ export const pokemonEvolutions: PokemonEvolutions = {
       EvolutionItem.STRAWBERRY_SWEET,
       new SpeciesEvolutionCondition(
         (p) =>
-          globalScene.arena.biomeType === Biome.FOREST
-          || globalScene.arena.biomeType === Biome.SWAMP
-          || globalScene.arena.biomeType === Biome.MEADOW
-          || globalScene.arena.biomeType === Biome.JUNGLE,
+          globalScene.arena.biomeType === Biome.FOREST ||
+          globalScene.arena.biomeType === Biome.SWAMP ||
+          globalScene.arena.biomeType === Biome.MEADOW ||
+          globalScene.arena.biomeType === Biome.JUNGLE,
       ),
       SpeciesWildEvolutionDelay.LONG,
     ),
@@ -1672,10 +1671,10 @@ export const pokemonEvolutions: PokemonEvolutions = {
       EvolutionItem.STRAWBERRY_SWEET,
       new SpeciesEvolutionCondition(
         (p) =>
-          globalScene.arena.biomeType === Biome.SEA
-          || globalScene.arena.biomeType === Biome.BEACH
-          || globalScene.arena.biomeType === Biome.LAKE
-          || globalScene.arena.biomeType === Biome.SEABED,
+          globalScene.arena.biomeType === Biome.SEA ||
+          globalScene.arena.biomeType === Biome.BEACH ||
+          globalScene.arena.biomeType === Biome.LAKE ||
+          globalScene.arena.biomeType === Biome.SEABED,
       ),
       SpeciesWildEvolutionDelay.LONG,
     ),
@@ -1687,11 +1686,11 @@ export const pokemonEvolutions: PokemonEvolutions = {
       EvolutionItem.STRAWBERRY_SWEET,
       new SpeciesEvolutionCondition(
         (p) =>
-          globalScene.arena.biomeType === Biome.DESERT
-          || globalScene.arena.biomeType === Biome.POWER_PLANT
-          || globalScene.arena.biomeType === Biome.DOJO
-          || globalScene.arena.biomeType === Biome.RUINS
-          || globalScene.arena.biomeType === Biome.CONSTRUCTION_SITE,
+          globalScene.arena.biomeType === Biome.DESERT ||
+          globalScene.arena.biomeType === Biome.POWER_PLANT ||
+          globalScene.arena.biomeType === Biome.DOJO ||
+          globalScene.arena.biomeType === Biome.RUINS ||
+          globalScene.arena.biomeType === Biome.CONSTRUCTION_SITE,
       ),
       SpeciesWildEvolutionDelay.LONG,
     ),
@@ -1703,11 +1702,11 @@ export const pokemonEvolutions: PokemonEvolutions = {
       EvolutionItem.STRAWBERRY_SWEET,
       new SpeciesEvolutionCondition(
         (p) =>
-          globalScene.arena.biomeType === Biome.MOUNTAIN
-          || globalScene.arena.biomeType === Biome.CAVE
-          || globalScene.arena.biomeType === Biome.ICE_CAVE
-          || globalScene.arena.biomeType === Biome.FAIRY_CAVE
-          || globalScene.arena.biomeType === Biome.SNOWY_FOREST,
+          globalScene.arena.biomeType === Biome.MOUNTAIN ||
+          globalScene.arena.biomeType === Biome.CAVE ||
+          globalScene.arena.biomeType === Biome.ICE_CAVE ||
+          globalScene.arena.biomeType === Biome.FAIRY_CAVE ||
+          globalScene.arena.biomeType === Biome.SNOWY_FOREST,
       ),
       SpeciesWildEvolutionDelay.LONG,
     ),
@@ -1741,9 +1740,9 @@ export const pokemonEvolutions: PokemonEvolutions = {
       EvolutionItem.STRAWBERRY_SWEET,
       new SpeciesEvolutionCondition(
         (p) =>
-          globalScene.arena.biomeType === Biome.ABYSS
-          || globalScene.arena.biomeType === Biome.SPACE
-          || globalScene.arena.biomeType === Biome.END,
+          globalScene.arena.biomeType === Biome.ABYSS ||
+          globalScene.arena.biomeType === Biome.SPACE ||
+          globalScene.arena.biomeType === Biome.END,
       ),
       SpeciesWildEvolutionDelay.LONG,
     ),
@@ -1793,7 +1792,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.OVERQWIL,
       28,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m?.moveId === Moves.BARB_BARRAGE).length > 0),
+      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === Moves.BARB_BARRAGE).length > 0),
       SpeciesWildEvolutionDelay.LONG,
     ),
   ],
@@ -1804,8 +1803,8 @@ export const pokemonEvolutions: PokemonEvolutions = {
       EvolutionItem.RAZOR_CLAW,
       new SpeciesEvolutionCondition(
         (p) =>
-          globalScene.arena.getTimeOfDay() === TimeOfDay.DAWN
-          || globalScene.arena.getTimeOfDay() === TimeOfDay.DAY /* Razor claw at day*/,
+          globalScene.arena.getTimeOfDay() === TimeOfDay.DAWN ||
+          globalScene.arena.getTimeOfDay() === TimeOfDay.DAY /* Razor claw at day*/,
       ),
       SpeciesWildEvolutionDelay.VERY_LONG,
     ),
@@ -1848,7 +1847,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.HYDRAPPLE,
       1,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m?.moveId === Moves.DRAGON_CHEER).length > 0),
+      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === Moves.DRAGON_CHEER).length > 0),
       SpeciesWildEvolutionDelay.VERY_LONG,
     ),
   ],
@@ -1869,7 +1868,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.STEELIX,
       1,
       EvolutionItem.LINKING_CORD,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m?.getMove().type === Type.STEEL).length > 0),
+      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.getMove().type === Type.STEEL).length > 0),
       SpeciesWildEvolutionDelay.VERY_LONG,
     ),
   ],
@@ -1884,7 +1883,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.SCIZOR,
       1,
       EvolutionItem.LINKING_CORD,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m?.getMove().type === Type.STEEL).length > 0),
+      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.getMove().type === Type.STEEL).length > 0),
       SpeciesWildEvolutionDelay.VERY_LONG,
     ),
     new SpeciesEvolution(Species.KLEAVOR, 1, EvolutionItem.BLACK_AUGURITE, null, SpeciesWildEvolutionDelay.VERY_LONG),
@@ -1973,7 +1972,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.ANNIHILAPE,
       35,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m?.moveId === Moves.RAGE_FIST).length > 0),
+      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === Moves.RAGE_FIST).length > 0),
       SpeciesWildEvolutionDelay.VERY_LONG,
     ),
   ],
@@ -2175,15 +2174,15 @@ export const pokemonEvolutions: PokemonEvolutions = {
       null,
       new SpeciesEvolutionCondition(
         (p) =>
-          p.evoCounter
-            + p.getHeldItems().filter((m) => m instanceof DamageMoneyRewardModifier).length
-            + globalScene.findModifiers(
+          p.evoCounter +
+            p.getHeldItems().filter((m) => m instanceof DamageMoneyRewardModifier).length +
+            globalScene.findModifiers(
               (m) =>
-                m instanceof MoneyMultiplierModifier
-                || m instanceof ExtraModifierModifier
-                || m instanceof TempExtraModifierModifier,
-            ).length
-          > 9,
+                m instanceof MoneyMultiplierModifier ||
+                m instanceof ExtraModifierModifier ||
+                m instanceof TempExtraModifierModifier,
+            ).length >
+          9,
       ),
       SpeciesWildEvolutionDelay.VERY_LONG,
     ),
@@ -2195,15 +2194,15 @@ export const pokemonEvolutions: PokemonEvolutions = {
       null,
       new SpeciesEvolutionCondition(
         (p) =>
-          p.evoCounter
-            + p.getHeldItems().filter((m) => m instanceof DamageMoneyRewardModifier).length
-            + globalScene.findModifiers(
+          p.evoCounter +
+            p.getHeldItems().filter((m) => m instanceof DamageMoneyRewardModifier).length +
+            globalScene.findModifiers(
               (m) =>
-                m instanceof MoneyMultiplierModifier
-                || m instanceof ExtraModifierModifier
-                || m instanceof TempExtraModifierModifier,
-            ).length
-          > 9,
+                m instanceof MoneyMultiplierModifier ||
+                m instanceof ExtraModifierModifier ||
+                m instanceof TempExtraModifierModifier,
+            ).length >
+          9,
       ),
       SpeciesWildEvolutionDelay.VERY_LONG,
     ),

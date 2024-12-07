@@ -15,10 +15,10 @@ import { BattlerTagType } from "#enums/battler-tag-type";
  * @see {@linkcode EnemyPokemon.getNextMove}
  */
 export class EnemyCommandPhase extends FieldPhase {
-  protected fieldIndex: integer;
+  protected fieldIndex: number;
   protected skipTurn: boolean = false;
 
-  constructor(fieldIndex: integer) {
+  constructor(fieldIndex: number) {
     super();
 
     this.fieldIndex = fieldIndex;
@@ -37,9 +37,9 @@ export class EnemyCommandPhase extends FieldPhase {
     const trainer = battle.trainer;
 
     if (
-      battle.double
-      && enemyPokemon.hasAbility(Abilities.COMMANDER)
-      && enemyPokemon.getAlly().getTag(BattlerTagType.COMMANDED)
+      battle.double &&
+      enemyPokemon.hasAbility(Abilities.COMMANDER) &&
+      enemyPokemon.getAlly().getTag(BattlerTagType.COMMANDED)
     ) {
       this.skipTurn = true;
     }

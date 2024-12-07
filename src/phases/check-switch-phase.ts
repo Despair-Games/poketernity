@@ -10,10 +10,10 @@ import { SwitchPhase } from "./switch-phase";
 import { SwitchType } from "#enums/switch-type";
 
 export class CheckSwitchPhase extends BattlePhase {
-  protected fieldIndex: integer;
+  protected fieldIndex: number;
   protected useName: boolean;
 
-  constructor(fieldIndex: integer, useName: boolean) {
+  constructor(fieldIndex: number, useName: boolean) {
     super();
 
     this.fieldIndex = fieldIndex;
@@ -50,9 +50,9 @@ export class CheckSwitchPhase extends BattlePhase {
 
     // ...or if any player Pokemon has an effect that prevents the checked Pokemon from switching
     if (
-      pokemon.getTag(BattlerTagType.FRENZY)
-      || pokemon.isTrapped()
-      || globalScene.getPlayerField().some((p) => p.getTag(BattlerTagType.COMMANDED))
+      pokemon.getTag(BattlerTagType.FRENZY) ||
+      pokemon.isTrapped() ||
+      globalScene.getPlayerField().some((p) => p.getTag(BattlerTagType.COMMANDED))
     ) {
       return super.end();
     }

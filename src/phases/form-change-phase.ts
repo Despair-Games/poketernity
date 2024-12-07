@@ -9,7 +9,7 @@ import type PartyUiHandler from "../ui/party-ui-handler";
 import { getPokemonNameWithAffix } from "../messages";
 import { EndEvolutionPhase } from "./end-evolution-phase";
 import { EvolutionPhase } from "./evolution-phase";
-import { BattlerTagType } from "#app/enums/battler-tag-type";
+import { BattlerTagType } from "#enums/battler-tag-type";
 import { SpeciesFormKey } from "#enums/species-form-key";
 
 export class FormChangePhase extends EvolutionPhase {
@@ -132,8 +132,8 @@ export class FormChangePhase extends EvolutionPhase {
                                             globalScene.validateAchv(achvs.MEGA_EVOLVE);
                                             playEvolutionFanfare = true;
                                           } else if (
-                                            this.formChange.formKey.indexOf(SpeciesFormKey.GIGANTAMAX) > -1
-                                            || this.formChange.formKey.indexOf(SpeciesFormKey.ETERNAMAX) > -1
+                                            this.formChange.formKey.indexOf(SpeciesFormKey.GIGANTAMAX) > -1 ||
+                                            this.formChange.formKey.indexOf(SpeciesFormKey.ETERNAMAX) > -1
                                           ) {
                                             globalScene.validateAchv(achvs.GIGANTAMAX);
                                             playEvolutionFanfare = true;

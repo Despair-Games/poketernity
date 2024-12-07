@@ -8,8 +8,13 @@ export class BattlePhase extends Phase {
   }
 
   showEnemyTrainer(trainerSlot: TrainerSlot = TrainerSlot.NONE): void {
-    const sprites = globalScene.currentBattle.trainer?.getSprites()!; // TODO: is this bang correct?
-    const tintSprites = globalScene.currentBattle.trainer?.getTintSprites()!; // TODO: is this bang correct?
+    const { trainer } = globalScene.currentBattle;
+    if (!trainer) {
+      console.warn("Enemy trainer is missing!");
+      return;
+    }
+    const sprites = trainer.getSprites();
+    const tintSprites = trainer.getTintSprites();
     for (let i = 0; i < sprites.length; i++) {
       const visible = !trainerSlot || !i === (trainerSlot === TrainerSlot.TRAINER) || sprites.length < 2;
       [sprites[i], tintSprites[i]].map((sprite) => {
@@ -25,7 +30,7 @@ export class BattlePhase extends Phase {
       tintSprites[i].clearTint();
     }
     globalScene.tweens.add({
-      targets: globalScene.currentBattle.trainer,
+      targets: trainer,
       x: "-=16",
       y: "+=16",
       alpha: 1,

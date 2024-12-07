@@ -256,8 +256,8 @@ export abstract class PokemonSpeciesForm {
 
   getLevelMoves(): LevelMoves {
     if (
-      pokemonSpeciesFormLevelMoves.hasOwnProperty(this.speciesId)
-      && pokemonSpeciesFormLevelMoves[this.speciesId].hasOwnProperty(this.formIndex)
+      pokemonSpeciesFormLevelMoves.hasOwnProperty(this.speciesId) &&
+      pokemonSpeciesFormLevelMoves[this.speciesId].hasOwnProperty(this.formIndex)
     ) {
       return pokemonSpeciesFormLevelMoves[this.speciesId][this.formIndex].slice(0);
     }
@@ -514,8 +514,8 @@ export abstract class PokemonSpeciesForm {
         }
       }
       if (
-        pokemonFormLevelMoves.hasOwnProperty(this.speciesId)
-        && pokemonFormLevelMoves[this.speciesId].hasOwnProperty(this.formIndex)
+        pokemonFormLevelMoves.hasOwnProperty(this.speciesId) &&
+        pokemonFormLevelMoves[this.speciesId].hasOwnProperty(this.formIndex)
       ) {
         if (!pokemonFormLevelMoves[this.speciesId][this.formIndex].find((lm) => lm[0] <= 5 && lm[1] === moveId)) {
           return false;
@@ -888,9 +888,9 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
           }
 
           evolutionChance = Math.min(
-            0.65 * easeInFunc(Math.min(Math.max(level - evolutionLevel, 0), preferredMinLevel) / preferredMinLevel)
-              + 0.35
-                * easeOutFunc(
+            0.65 * easeInFunc(Math.min(Math.max(level - evolutionLevel, 0), preferredMinLevel) / preferredMinLevel) +
+              0.35 *
+                easeOutFunc(
                   Math.min(Math.max(level - evolutionLevel, 0), preferredMinLevel * 2.5) / (preferredMinLevel * 2.5),
                 ),
             1,
@@ -969,9 +969,9 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
     for (const p of allEvolvingPokemon) {
       for (const e of pokemonEvolutions[p]) {
         if (
-          e.speciesId === this.speciesId
-          && (!this.forms.length || !e.evoFormKey || e.evoFormKey === this.forms[this.formIndex].formKey)
-          && prevolutionLevels.every((pe) => pe[0] !== parseInt(p))
+          e.speciesId === this.speciesId &&
+          (!this.forms.length || !e.evoFormKey || e.evoFormKey === this.forms[this.formIndex].formKey) &&
+          prevolutionLevels.every((pe) => pe[0] !== parseInt(p))
         ) {
           const speciesId = parseInt(p) as Species;
           const level = e.level;
@@ -1007,9 +1007,9 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
           prevolutionLevels[l][0],
           Math.min(
             Math.max(
-              evolution?.level!
-                + Math.round(randSeedGauss(0.5, 1 + levelDiff * 0.2) * Math.max(evolution?.wildDelay!, 0.5) * 5)
-                - 1,
+              evolution?.level! +
+                Math.round(randSeedGauss(0.5, 1 + levelDiff * 0.2) * Math.max(evolution?.wildDelay!, 0.5) * 5) -
+                1,
               2,
               evolution?.level!,
             ),
@@ -1025,8 +1025,8 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
         this.speciesId,
         Math.min(
           Math.max(
-            lastPrevolutionLevel
-              + Math.round(randSeedGauss(0.5, 1 + levelDiff * 0.2) * Math.max(evolution?.wildDelay!, 0.5) * 5),
+            lastPrevolutionLevel +
+              Math.round(randSeedGauss(0.5, 1 + levelDiff * 0.2) * Math.max(evolution?.wildDelay!, 0.5) * 5),
             lastPrevolutionLevel + 1,
             evolution?.level!,
           ),
@@ -1048,16 +1048,16 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
     const mythical = this.mythical;
     return (species) => {
       return (
-        (subLegendary
-          || legendary
-          || mythical
-          || (pokemonEvolutions.hasOwnProperty(species.speciesId) === hasEvolution
-            && pokemonPrevolutions.hasOwnProperty(species.speciesId) === hasPrevolution))
-        && species.subLegendary === subLegendary
-        && species.legendary === legendary
-        && species.mythical === mythical
-        && (this.isTrainerForbidden() || !species.isTrainerForbidden())
-        && species.speciesId !== Species.DITTO
+        (subLegendary ||
+          legendary ||
+          mythical ||
+          (pokemonEvolutions.hasOwnProperty(species.speciesId) === hasEvolution &&
+            pokemonPrevolutions.hasOwnProperty(species.speciesId) === hasPrevolution)) &&
+        species.subLegendary === subLegendary &&
+        species.legendary === legendary &&
+        species.mythical === mythical &&
+        (this.isTrainerForbidden() || !species.isTrainerForbidden()) &&
+        species.speciesId !== Species.DITTO
       );
     };
   }
@@ -44061,24 +44061,4 @@ export function initSpecies() {
       false,
     ), //Marked as Sub-Legend, for casing purposes
   );
-}
-
-// TODO: Remove
-{
-  //setTimeout(() => {
-  /*for (let tc of Object.keys(trainerConfigs)) {
-      console.log(TrainerType[tc], !trainerConfigs[tc].speciesFilter ? 'all' : [...new Set(allSpecies.filter(s => s.generation <= 9).filter(trainerConfigs[tc].speciesFilter).map(s => {
-        while (pokemonPrevolutions.hasOwnProperty(s.speciesId))
-				  s = getPokemonSpecies(pokemonPrevolutions[s.speciesId]);
-        return s;
-      }))].map(s => s.name));
-    }
-
-    const speciesFilter = (species: PokemonSpecies) => !species.legendary && !species.pseudoLegendary && !species.mythical && species.baseTotal >= 540;
-    console.log(!speciesFilter ? 'all' : [...new Set(allSpecies.filter(s => s.generation <= 9).filter(speciesFilter).map(s => {
-      while (pokemonPrevolutions.hasOwnProperty(s.speciesId))
-        s = getPokemonSpecies(pokemonPrevolutions[s.speciesId]);
-      return s;
-    }))].map(s => s.name));*/
-  //}, 1000);
 }

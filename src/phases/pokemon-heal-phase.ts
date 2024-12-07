@@ -15,7 +15,7 @@ import { BattlerTagType } from "#app/enums/battler-tag-type";
 import type { HealBlockTag } from "#app/data/battler-tags";
 
 export class PokemonHealPhase extends CommonAnimPhase {
-  private hpHealed: integer;
+  private hpHealed: number;
   private message: string | null;
   private showFullHpMessage: boolean;
   private skipAnim: boolean;
@@ -25,7 +25,7 @@ export class PokemonHealPhase extends CommonAnimPhase {
 
   constructor(
     battlerIndex: BattlerIndex,
-    hpHealed: integer,
+    hpHealed: number,
     message: string | null,
     showFullHpMessage: boolean,
     skipAnim: boolean = false,

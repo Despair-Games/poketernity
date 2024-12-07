@@ -29,9 +29,9 @@ export class SelectBiomePhase extends BattlePhase {
     };
 
     if (
-      (globalScene.gameMode.isClassic && globalScene.gameMode.isWaveFinal(globalScene.currentBattle.waveIndex + 9))
-      || (globalScene.gameMode.isDaily && globalScene.gameMode.isWaveFinal(globalScene.currentBattle.waveIndex))
-      || (globalScene.gameMode.hasShortBiomes && !(globalScene.currentBattle.waveIndex % 50))
+      (globalScene.gameMode.isClassic && globalScene.gameMode.isWaveFinal(globalScene.currentBattle.waveIndex + 9)) ||
+      (globalScene.gameMode.isDaily && globalScene.gameMode.isWaveFinal(globalScene.currentBattle.waveIndex)) ||
+      (globalScene.gameMode.hasShortBiomes && !(globalScene.currentBattle.waveIndex % 50))
     ) {
       setNextBiome(Biome.END);
     } else if (globalScene.gameMode.hasRandomBiomes) {
@@ -39,7 +39,7 @@ export class SelectBiomePhase extends BattlePhase {
     } else if (Array.isArray(biomeLinks[currentBiome])) {
       let biomes: Biome[] = [];
       globalScene.executeWithSeedOffset(() => {
-        biomes = (biomeLinks[currentBiome] as (Biome | [Biome, integer])[])
+        biomes = (biomeLinks[currentBiome] as (Biome | [Biome, number])[])
           .filter((b) => !Array.isArray(b) || !randSeedInt(b[1]))
           .map((b) => (!Array.isArray(b) ? b : b[0]));
       }, globalScene.currentBattle.waveIndex);
@@ -49,7 +49,7 @@ export class SelectBiomePhase extends BattlePhase {
           biomeChoices = (
             !Array.isArray(biomeLinks[currentBiome])
               ? [biomeLinks[currentBiome] as Biome]
-              : (biomeLinks[currentBiome] as (Biome | [Biome, integer])[])
+              : (biomeLinks[currentBiome] as (Biome | [Biome, number])[])
           )
             .filter((b, i) => !Array.isArray(b) || !randSeedInt(b[1]))
             .map((b) => (Array.isArray(b) ? b[0] : b));

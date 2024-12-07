@@ -376,8 +376,8 @@ export default class SummaryUiHandler extends UiHandler {
     }
 
     if (
-      globalScene.gameData.starterData[this.pokemon.species.getRootSpeciesId()].classicWinCount > 0
-      && globalScene.gameData.starterData[this.pokemon.species.getRootSpeciesId(true)].classicWinCount > 0
+      globalScene.gameData.starterData[this.pokemon.species.getRootSpeciesId()].classicWinCount > 0 &&
+      globalScene.gameData.starterData[this.pokemon.species.getRootSpeciesId(true)].classicWinCount > 0
     ) {
       this.championRibbon.setVisible(true);
     } else {
@@ -1158,7 +1158,7 @@ export default class SummaryUiHandler extends UiHandler {
     }
 
     if (this.moveCursor < 4 && this.pokemon && this.moveCursor < this.pokemon.moveset.length) {
-      return this.pokemon.moveset[this.moveCursor]!.getMove(); // TODO: is this bang correct?
+      return this.pokemon.moveset[this.moveCursor].getMove();
     } else if (this.summaryUiMode === SummaryUiMode.LEARN_MOVE && this.moveCursor === 4) {
       return this.newMove;
     }

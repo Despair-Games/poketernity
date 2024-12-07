@@ -1130,7 +1130,7 @@ export class GameData {
               ? trainerConfig?.doubleOnly || sessionData.trainer?.variant === TrainerVariant.DOUBLE
               : sessionData.enemyParty.length > 1,
             mysteryEncounterType,
-          )!; // TODO: is this bang correct?
+          );
           battle.enemyLevels = sessionData.enemyParty.map((p) => p.level);
 
           globalScene.arena.init();
@@ -1353,8 +1353,8 @@ export class GameData {
             md.stackCount = Math.min(md.stackCount, 4);
           }
           if (
-            (md instanceof Modifier.EnemyAttackStatusEffectChanceModifier && md.effect === StatusEffect.FREEZE)
-            || md.effect === StatusEffect.SLEEP
+            (md instanceof Modifier.EnemyAttackStatusEffectChanceModifier && md.effect === StatusEffect.FREEZE) ||
+            md.effect === StatusEffect.SLEEP
           ) {
             continue;
           }
@@ -1711,8 +1711,8 @@ export class GameData {
   setPokemonSeen(pokemon: Pokemon, incrementCount: boolean = true, trainer: boolean = false): void {
     // Some Mystery Encounters block updates to these stats
     if (
-      globalScene.currentBattle?.isBattleMysteryEncounter()
-      && globalScene.currentBattle.mysteryEncounter?.preventGameStatsUpdates
+      globalScene.currentBattle?.isBattleMysteryEncounter() &&
+      globalScene.currentBattle.mysteryEncounter?.preventGameStatsUpdates
     ) {
       return;
     }
@@ -2182,9 +2182,9 @@ export class GameData {
     for (const s of starterIds) {
       const dexAttr = dexData[s].caughtAttr;
       starterData[s].abilityAttr =
-        (dexAttr & DexAttr.DEFAULT_VARIANT ? AbilityAttr.ABILITY_1 : 0)
-        | (dexAttr & DexAttr.VARIANT_2 ? AbilityAttr.ABILITY_2 : 0)
-        | (dexAttr & DexAttr.VARIANT_3 ? AbilityAttr.ABILITY_HIDDEN : 0);
+        (dexAttr & DexAttr.DEFAULT_VARIANT ? AbilityAttr.ABILITY_1 : 0) |
+        (dexAttr & DexAttr.VARIANT_2 ? AbilityAttr.ABILITY_2 : 0) |
+        (dexAttr & DexAttr.VARIANT_3 ? AbilityAttr.ABILITY_HIDDEN : 0);
       if (dexAttr) {
         if (!(dexAttr & DexAttr.DEFAULT_VARIANT)) {
           dexData[s].caughtAttr ^= DexAttr.DEFAULT_VARIANT;

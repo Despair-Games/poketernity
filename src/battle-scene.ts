@@ -1386,7 +1386,7 @@ export default class BattleScene extends SceneBase {
     trainerData?: TrainerData,
     double?: boolean,
     mysteryEncounterType?: MysteryEncounterType,
-  ): Battle | null {
+  ): Battle {
     const _startingWave = Overrides.STARTING_WAVE_OVERRIDE || startingWave;
     const newWaveIndex = waveIndex || (this.currentBattle?.waveIndex || _startingWave - 1) + 1;
     let newDouble: boolean | undefined;
@@ -1526,8 +1526,6 @@ export default class BattleScene extends SceneBase {
       // Will generate the actual Mystery Encounter during NextEncounterPhase, to ensure it uses proper biome
       this.currentBattle.mysteryEncounterType = mysteryEncounterType;
     }
-
-    //this.pushPhase(new TrainerMessageTestPhase(this, TrainerType.RIVAL, TrainerType.RIVAL_2, TrainerType.RIVAL_3, TrainerType.RIVAL_4, TrainerType.RIVAL_5, TrainerType.RIVAL_6));
 
     if (!waveIndex && lastBattle) {
       const isWaveIndexMultipleOfTen = !(lastBattle.waveIndex % 10);

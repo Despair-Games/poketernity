@@ -4,12 +4,12 @@ import { Mode } from "#app/ui/ui";
 import { fixedInt } from "#app/utils";
 
 export class ReloadSessionPhase extends Phase {
-  private systemDataStr: string | null;
+  private systemDataStr?: string;
 
   constructor(systemDataStr?: string) {
     super();
 
-    this.systemDataStr = systemDataStr ?? null;
+    this.systemDataStr = systemDataStr;
   }
 
   start(): void {

@@ -32,7 +32,7 @@ import Overrides from "#app/overrides";
 import type { CustomModifierSettings } from "#app/modifier/modifier-type";
 
 export class SelectModifierPhase extends BattlePhase {
-  private rerollCount: integer;
+  private rerollCount: number;
   private modifierTiers?: ModifierTier[];
   private customModifierSettings?: CustomModifierSettings;
   private isCopy: boolean;
@@ -40,7 +40,7 @@ export class SelectModifierPhase extends BattlePhase {
   private typeOptions: ModifierTypeOption[];
 
   constructor(
-    rerollCount: integer = 0,
+    rerollCount: number = 0,
     modifierTiers?: ModifierTier[],
     customModifierSettings?: CustomModifierSettings,
     isCopy: boolean = false,
@@ -88,7 +88,7 @@ export class SelectModifierPhase extends BattlePhase {
 
     this.typeOptions = this.getModifierTypeOptions(modifierCount.value);
 
-    const modifierSelectCallback = (rowCursor: integer, cursor: integer) => {
+    const modifierSelectCallback = (rowCursor: number, cursor: number) => {
       if (rowCursor < 0 || cursor < 0) {
         globalScene.ui.showText(i18next.t("battle:skipItemQuestion"), null, () => {
           globalScene.ui.setOverlayMode(
@@ -111,7 +111,7 @@ export class SelectModifierPhase extends BattlePhase {
         return false;
       }
       let modifierType: ModifierType;
-      let cost: integer;
+      let cost: number;
       const rerollCost = this.getRerollCost(globalScene.lockModifierTiers);
       switch (rowCursor) {
         case 0:
@@ -143,7 +143,7 @@ export class SelectModifierPhase extends BattlePhase {
                 Mode.PARTY,
                 PartyUiMode.MODIFIER_TRANSFER,
                 -1,
-                (fromSlotIndex: integer, itemIndex: integer, itemQuantity: integer, toSlotIndex: integer) => {
+                (fromSlotIndex: number, itemIndex: number, itemQuantity: number, toSlotIndex: number) => {
                   if (
                     toSlotIndex !== undefined &&
                     fromSlotIndex < 6 &&
@@ -276,7 +276,7 @@ export class SelectModifierPhase extends BattlePhase {
             Mode.PARTY,
             PartyUiMode.SPLICE,
             -1,
-            (fromSlotIndex: integer, spliceSlotIndex: integer) => {
+            (fromSlotIndex: number, spliceSlotIndex: number) => {
               if (
                 spliceSlotIndex !== undefined &&
                 fromSlotIndex < 6 &&
@@ -318,13 +318,13 @@ export class SelectModifierPhase extends BattlePhase {
             Mode.PARTY,
             partyUiMode,
             -1,
-            (slotIndex: integer, option: PartyOption) => {
+            (slotIndex: number, option: PartyOption) => {
               if (slotIndex < 6) {
                 globalScene.ui.setMode(Mode.MODIFIER_SELECT, this.isPlayer()).then(() => {
                   const modifier = !isMoveModifier
                     ? !isRememberMoveModifier
                       ? modifierType.newModifier(party[slotIndex])
-                      : modifierType.newModifier(party[slotIndex], option as integer)
+                      : modifierType.newModifier(party[slotIndex], option as number)
                     : modifierType.newModifier(party[slotIndex], option - PartyOption.MOVE_1);
                   applyModifier(modifier!, true); // TODO: is the bang correct?
                 });
@@ -408,7 +408,7 @@ export class SelectModifierPhase extends BattlePhase {
     return ModifierPoolType.PLAYER;
   }
 
-  getModifierTypeOptions(modifierCount: integer): ModifierTypeOption[] {
+  getModifierTypeOptions(modifierCount: number): ModifierTypeOption[] {
     return getPlayerModifierTypeOptions(
       modifierCount,
       globalScene.getPlayerParty(),
