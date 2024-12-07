@@ -1,6 +1,6 @@
 import { applyAbAttrs, RunSuccessAbAttr } from "#app/data/ability";
-import { Stat } from "#app/enums/stat";
-import { StatusEffect } from "#app/enums/status-effect";
+import { Stat } from "#enums/stat";
+import { StatusEffect } from "#enums/status-effect";
 import type { PlayerPokemon, EnemyPokemon } from "#app/field/pokemon";
 import type Pokemon from "#app/field/pokemon";
 import i18next from "i18next";

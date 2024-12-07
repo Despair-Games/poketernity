@@ -20,7 +20,7 @@ import { EVOLVE_MOVE } from "#app/data/balance/pokemon-level-moves";
 
 export class EvolutionPhase extends Phase {
   protected pokemon: PlayerPokemon;
-  protected lastLevel: integer;
+  protected lastLevel: number;
 
   private preEvolvedPokemonName: string;
 
@@ -39,7 +39,7 @@ export class EvolutionPhase extends Phase {
   protected pokemonEvoSprite: Phaser.GameObjects.Sprite;
   protected pokemonEvoTintSprite: Phaser.GameObjects.Sprite;
 
-  constructor(pokemon: PlayerPokemon, evolution: SpeciesFormEvolution | null, lastLevel: integer) {
+  constructor(pokemon: PlayerPokemon, evolution: SpeciesFormEvolution | null, lastLevel: number) {
     super();
 
     this.pokemon = pokemon;
@@ -415,7 +415,7 @@ export class EvolutionPhase extends Phase {
     });
   }
 
-  doCycle(l: number, lastCycle: integer = 15): Promise<boolean> {
+  doCycle(l: number, lastCycle: number = 15): Promise<boolean> {
     return new Promise((resolve) => {
       const isLastCycle = l === lastCycle;
       globalScene.tweens.add({
@@ -486,7 +486,7 @@ export class EvolutionPhase extends Phase {
     });
   }
 
-  doSpiralUpwardParticle(trigIndex: integer) {
+  doSpiralUpwardParticle(trigIndex: number) {
     const initialX = this.evolutionBaseBg.displayWidth / 2;
     const particle = globalScene.add.image(initialX, 0, "evo_sparkle");
     this.evolutionContainer.add(particle);
@@ -522,7 +522,7 @@ export class EvolutionPhase extends Phase {
     updateParticle();
   }
 
-  doArcDownParticle(trigIndex: integer) {
+  doArcDownParticle(trigIndex: number) {
     const initialX = this.evolutionBaseBg.displayWidth / 2;
     const particle = globalScene.add.image(initialX, 0, "evo_sparkle");
     particle.setScale(0.5);
@@ -555,7 +555,7 @@ export class EvolutionPhase extends Phase {
     updateParticle();
   }
 
-  doCircleInwardParticle(trigIndex: integer, speed: integer) {
+  doCircleInwardParticle(trigIndex: number, speed: number) {
     const initialX = this.evolutionBaseBg.displayWidth / 2;
     const initialY = this.evolutionBaseBg.displayHeight / 2;
     const particle = globalScene.add.image(initialX, initialY, "evo_sparkle");
@@ -587,7 +587,7 @@ export class EvolutionPhase extends Phase {
     updateParticle();
   }
 
-  doSprayParticle(trigIndex: integer) {
+  doSprayParticle(trigIndex: number) {
     const initialX = this.evolutionBaseBg.displayWidth / 2;
     const initialY = this.evolutionBaseBg.displayHeight / 2;
     const particle = globalScene.add.image(initialX, initialY, "evo_sparkle");

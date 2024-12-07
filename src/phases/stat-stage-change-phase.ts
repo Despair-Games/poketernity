@@ -28,7 +28,7 @@ export type StatStageChangeCallback = (
 export class StatStageChangePhase extends PokemonPhase {
   private stats: BattleStat[];
   private selfTarget: boolean;
-  private stages: integer;
+  private stages: number;
   private showMessage: boolean;
   private ignoreAbilities: boolean;
   private canBeCopied: boolean;
@@ -38,7 +38,7 @@ export class StatStageChangePhase extends PokemonPhase {
     battlerIndex: BattlerIndex,
     selfTarget: boolean,
     stats: BattleStat[],
-    stages: integer,
+    stages: number,
     showMessage: boolean = true,
     ignoreAbilities: boolean = false,
     canBeCopied: boolean = true,
@@ -277,7 +277,7 @@ export class StatStageChangePhase extends PokemonPhase {
     }
   }
 
-  getStatStageChangeMessages(stats: BattleStat[], stages: integer, relStages: integer[]): string[] {
+  getStatStageChangeMessages(stats: BattleStat[], stages: number, relStages: number[]): string[] {
     const messages: string[] = [];
 
     const relStageStatIndexes = {};

@@ -26,11 +26,11 @@ export enum LearnMoveType {
 export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
   private moveId: Moves;
   private messageMode: Mode;
-  private learnMoveType;
+  private learnMoveType: LearnMoveType;
   private cost: number;
 
   constructor(
-    partyMemberIndex: integer,
+    partyMemberIndex: number,
     moveId: Moves,
     learnMoveType: LearnMoveType = LearnMoveType.LEARN_MOVE,
     cost: number = -1,
@@ -117,7 +117,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
       pokemon,
       SummaryUiMode.LEARN_MOVE,
       move,
-      (moveIndex: integer) => {
+      (moveIndex: number) => {
         if (moveIndex === 4) {
           globalScene.ui.setMode(this.messageMode).then(() => this.rejectMoveAndEnd(move, pokemon));
           return;

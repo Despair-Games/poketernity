@@ -13,10 +13,10 @@ import { UnavailablePhase } from "./unavailable-phase";
 export class LoginPhase extends Phase {
   private showText: boolean;
 
-  constructor(showText?: boolean) {
+  constructor(showText: boolean = true) {
     super();
 
-    this.showText = showText === undefined || !!showText;
+    this.showText = showText;
   }
 
   start(): void {
