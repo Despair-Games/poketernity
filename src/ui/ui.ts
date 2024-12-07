@@ -443,7 +443,7 @@ export default class UI extends Phaser.GameObjects.Container {
     this.tooltipTitle.clearTint();
   }
 
-  update(): void {
+  override update(): void {
     if (this.tooltipContainer.visible) {
       const isTouch = globalScene.inputMethod === "touch";
       const pointerX = globalScene.game.input.activePointer.x;

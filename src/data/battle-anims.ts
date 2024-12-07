@@ -1450,11 +1450,11 @@ export class MoveAnim extends BattleAnim {
     return !this.user?.isPlayer() && Array.isArray(moveAnims.get(this.move));
   }
 
-  protected isHideUser(): boolean {
+  protected override isHideUser(): boolean {
     return allMoves[this.move].hasFlag(MoveFlags.HIDE_USER);
   }
 
-  protected isHideTarget(): boolean {
+  protected override isHideTarget(): boolean {
     return allMoves[this.move].hasFlag(MoveFlags.HIDE_TARGET);
   }
 }
@@ -1468,11 +1468,11 @@ export class MoveChargeAnim extends MoveAnim {
     this.chargeAnim = chargeAnim;
   }
 
-  isOppAnim(): boolean {
+  override isOppAnim(): boolean {
     return !this.user?.isPlayer() && Array.isArray(chargeAnims.get(this.chargeAnim));
   }
 
-  getAnim(): AnimConfig {
+  override getAnim(): AnimConfig {
     return chargeAnims.get(this.chargeAnim) instanceof AnimConfig
       ? (chargeAnims.get(this.chargeAnim) as AnimConfig)
       : (chargeAnims.get(this.chargeAnim)?.[this.user?.isPlayer() ? 0 : 1] as AnimConfig);
