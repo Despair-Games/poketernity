@@ -1,4 +1,4 @@
-import type BattleScene from "#app/battle-scene";
+import BattleScene from "#app/battle-scene";
 import * as battleScene from "#app/battle-scene";
 import { SESSION_ID_COOKIE } from "#app/constants";
 import { MoveAnim } from "#app/data/battle-anims";
@@ -91,6 +91,8 @@ export default class GameWrapper {
     Pokemon.prototype.faintCry = (cb) => {
       if (cb) cb();
     };
+
+    BattleScene.prototype.addPokemonIcon = () => new Phaser.GameObjects.Container(this.scene);
   }
 
   setScene(scene: BattleScene) {
