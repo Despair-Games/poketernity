@@ -41,7 +41,6 @@ export class WeatherEffectPhase extends CommonAnimPhase {
       return this.end();
     }
 
-
     this.setAnimation(CommonAnim.SUNNY + (weather.weatherType - 1));
 
     if (weather.isDamaging()) {
@@ -59,9 +58,9 @@ export class WeatherEffectPhase extends CommonAnimPhase {
           applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, cancelled);
 
           if (
-            cancelled.value ||
-            pokemon.getTag(BattlerTagType.UNDERGROUND) ||
-            pokemon.getTag(BattlerTagType.UNDERWATER)
+            cancelled.value
+            || pokemon.getTag(BattlerTagType.UNDERGROUND)
+            || pokemon.getTag(BattlerTagType.UNDERWATER)
           ) {
             return;
           }
@@ -74,9 +73,9 @@ export class WeatherEffectPhase extends CommonAnimPhase {
 
         this.executeForAll((pokemon: Pokemon) => {
           const immune =
-            !pokemon ||
-            !!pokemon.getTypes(true, true).filter((t) => weather?.isTypeDamageImmune(t)).length ||
-            pokemon.switchOutStatus;
+            !pokemon
+            || !!pokemon.getTypes(true, true).filter((t) => weather?.isTypeDamageImmune(t)).length
+            || pokemon.switchOutStatus;
           if (!immune) {
             inflictDamage(pokemon);
           }

@@ -1,7 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlePhase } from "#app/phases/battle-phase";
-import { PostSummonPhase } from "#app/phases/post-summon-phase";
 import { SummonMissingPhase } from "#app/phases/summon-missing-phase";
 import { SwitchPhase } from "#app/phases/switch-phase";
 import { Mode } from "#app/ui/ui";
@@ -51,9 +50,10 @@ export class CheckSwitchPhase extends BattlePhase {
     }
 
     // ...or if any player Pokemon has an effect that prevents the checked Pokemon from switching
-    if (pokemon.getTag(BattlerTagType.FRENZY)
-        || pokemon.isTrapped()
-        || globalScene.getPlayerField().some(p => p.getTag(BattlerTagType.COMMANDED))
+    if (
+      pokemon.getTag(BattlerTagType.FRENZY)
+      || pokemon.isTrapped()
+      || globalScene.getPlayerField().some((p) => p.getTag(BattlerTagType.COMMANDED))
     ) {
       return this.end();
     }
