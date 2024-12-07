@@ -79,17 +79,17 @@ export class BattlerTag {
     this.isBatonPassable = isBatonPassable;
   }
 
-  canAdd(pokemon: Pokemon): boolean {
+  canAdd(_pokemon: Pokemon): boolean {
     return true;
   }
 
-  onAdd(pokemon: Pokemon): void {}
+  onAdd(_pokemon: Pokemon): void {}
 
-  onRemove(pokemon: Pokemon): void {}
+  onRemove(_pokemon: Pokemon): void {}
 
-  onOverlap(pokemon: Pokemon): void {}
+  onOverlap(_pokemon: Pokemon): void {}
 
-  lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
+  lapse(_pokemon: Pokemon, _lapseType: BattlerTagLapseType): boolean {
     return --this.turnCount > 0;
   }
 
@@ -190,7 +190,7 @@ export abstract class MoveRestrictionBattlerTag extends BattlerTag {
    * @param {Pokemon} target {@linkcode Pokemon} the target of the above move
    * @returns {boolean} `false` unless overridden by the child tag
    */
-  isMoveTargetRestricted(move: Moves, user: Pokemon, target: Pokemon): boolean {
+  isMoveTargetRestricted(_move: Moves, _user: Pokemon, _target: Pokemon): boolean {
     return false;
   }
 
@@ -212,7 +212,7 @@ export abstract class MoveRestrictionBattlerTag extends BattlerTag {
    * @param {Moves} move {@linkcode Moves} ID of the move being interrupted
    * @returns {string} text to display when the move is interrupted
    */
-  interruptedText(pokemon: Pokemon, move: Moves): string {
+  interruptedText(_pokemon: Pokemon, _move: Moves): string {
     return "";
   }
 }
@@ -249,7 +249,7 @@ export class ThroatChoppedTag extends MoveRestrictionBattlerTag {
    * @param {Moves} move the {@linkcode Moves | move} that is being restricted
    * @returns the message to display when the player attempts to select the restricted move
    */
-  override selectionDeniedText(pokemon: Pokemon, move: Moves): string {
+  override selectionDeniedText(_pokemon: Pokemon, move: Moves): string {
     return i18next.t("battle:moveCannotBeSelected", { moveName: allMoves[move].name });
   }
 
@@ -260,7 +260,7 @@ export class ThroatChoppedTag extends MoveRestrictionBattlerTag {
    * @param {Moves} move the {@linkcode Moves | move} that was interrupted
    * @returns the message to display when the move is interrupted
    */
-  override interruptedText(pokemon: Pokemon, move: Moves): string {
+  override interruptedText(pokemon: Pokemon, _move: Moves): string {
     return i18next.t("battle:throatChopInterruptedMove", { pokemonName: getPokemonNameWithAffix(pokemon) });
   }
 }
@@ -325,7 +325,7 @@ export class DisabledTag extends MoveRestrictionBattlerTag {
   }
 
   /** @override */
-  override selectionDeniedText(pokemon: Pokemon, move: Moves): string {
+  override selectionDeniedText(_pokemon: Pokemon, move: Moves): string {
     return i18next.t("battle:moveDisabled", { moveName: allMoves[move].name });
   }
 
@@ -408,7 +408,7 @@ export class GorillaTacticsTag extends MoveRestrictionBattlerTag {
    * @param {Moves} move {@linkcode Moves} ID of the move being denied
    * @returns {string} text to display when the move is denied
    */
-  override selectionDeniedText(pokemon: Pokemon, move: Moves): string {
+  override selectionDeniedText(pokemon: Pokemon, _move: Moves): string {
     return i18next.t("battle:canOnlyUseMove", {
       moveName: allMoves[this.moveId].name,
       pokemonName: getPokemonNameWithAffix(pokemon),
@@ -2506,7 +2506,7 @@ export class GulpMissileTag extends BattlerTag {
     super(tagType, BattlerTagLapseType.HIT, 0, sourceMove);
   }
 
-  override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
+  override lapse(pokemon: Pokemon, _lapseType: BattlerTagLapseType): boolean {
     if (pokemon.getTag(BattlerTagType.UNDERWATER)) {
       return true;
     }
@@ -3066,7 +3066,7 @@ export class ImprisonTag extends MoveRestrictionBattlerTag {
    * @param {Moves} move the move under investigation
    * @returns `false` if either condition is not met
    */
-  public override isMoveRestricted(move: Moves, user: Pokemon): boolean {
+  public override isMoveRestricted(move: Moves, _user: Pokemon): boolean {
     const source = this.getSourcePokemon();
     if (source) {
       const sourceMoveset = source.getMoveset().map((m) => m.moveId);
@@ -3490,7 +3490,7 @@ export function loadBattlerTag(source: BattlerTag | any): BattlerTag {
  * @returns null if current phase is not MoveEffectPhase, otherwise Object containing the {@linkcode MoveEffectPhase}, and its
  * corresponding {@linkcode Move} and user {@linkcode Pokemon}
  */
-function getMoveEffectPhaseData(pokemon: Pokemon): { phase: MoveEffectPhase; attacker: Pokemon; move: Move } | null {
+function getMoveEffectPhaseData(_pokemon: Pokemon): { phase: MoveEffectPhase; attacker: Pokemon; move: Move } | null {
   const phase = globalScene.getCurrentPhase();
   if (phase instanceof MoveEffectPhase) {
     return {

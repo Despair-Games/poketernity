@@ -100,12 +100,12 @@ export function initGameSpeed() {
   };
 
   const originalFadeOut = SoundFade.fadeOut;
-  SoundFade.fadeOut = ((scene: Phaser.Scene, sound: Phaser.Sound.BaseSound, duration: number, destroy?: boolean) =>
+  SoundFade.fadeOut = ((_scene: Phaser.Scene, sound: Phaser.Sound.BaseSound, duration: number, destroy?: boolean) =>
     originalFadeOut(globalScene, sound, transformValue(duration), destroy)) as FadeOut;
 
   const originalFadeIn = SoundFade.fadeIn;
   SoundFade.fadeIn = ((
-    scene: Phaser.Scene,
+    _scene: Phaser.Scene,
     sound: string | Phaser.Sound.BaseSound,
     duration: number,
     endVolume?: number,

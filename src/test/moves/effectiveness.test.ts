@@ -44,7 +44,7 @@ describe("Moves - Type Effectiveness", () => {
       type: Phaser.HEADLESS,
     });
     game = new GameManager(phaserGame);
-    TerastallizeModifier.prototype.apply = (args) => true;
+    TerastallizeModifier.prototype.apply = (_args) => true;
 
     game.override.ability(Abilities.BALL_FETCH);
   });

@@ -396,10 +396,10 @@ export default class PhaseInterceptor {
     });
   }
 
-  whenAboutToRun(phaseTarget: PhaseInterceptorPhase, skipFn?: (className: PhaseClass) => boolean): Promise<void> {
+  whenAboutToRun(phaseTarget: PhaseInterceptorPhase, _skipFn?: (className: PhaseClass) => boolean): Promise<void> {
     const targetName = typeof phaseTarget === "string" ? phaseTarget : phaseTarget.name;
     this.scene.moveAnimations = null; // Mandatory to avoid crash
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve, _reject) => {
       ErrorInterceptor.getInstance().add(this);
       const interval = setInterval(async () => {
         const currentPhase = this.onHold[0];

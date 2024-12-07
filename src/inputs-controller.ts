@@ -286,7 +286,7 @@ export class InputsController {
    *
    * @param thisGamepad The gamepad that is being set up.
    */
-  setupGamepad(thisGamepad: Phaser.Input.Gamepad.Gamepad): void {
+  setupGamepad(_thisGamepad: Phaser.Input.Gamepad.Gamepad): void {
     const allGamepads = this.getGamepadsName();
     for (const gamepad of allGamepads) {
       const gamepadID = gamepad.toLowerCase();
@@ -402,7 +402,7 @@ export class InputsController {
    * @param button The specific button that was pressed.
    * @param value The intensity or value of the button press, if applicable.
    */
-  gamepadButtonDown(pad: Phaser.Input.Gamepad.Gamepad, button: Phaser.Input.Gamepad.Button, value: number): void {
+  gamepadButtonDown(pad: Phaser.Input.Gamepad.Gamepad, button: Phaser.Input.Gamepad.Button, _value: number): void {
     if (!this.configs[this.selectedDevice[Device.KEYBOARD]]?.padID) {
       this.setupKeyboard();
     }
@@ -454,7 +454,7 @@ export class InputsController {
    * @param button The specific button that was released.
    * @param value The intensity or value of the button release, if applicable.
    */
-  gamepadButtonUp(pad: Phaser.Input.Gamepad.Gamepad, button: Phaser.Input.Gamepad.Button, value: number): void {
+  gamepadButtonUp(pad: Phaser.Input.Gamepad.Gamepad, button: Phaser.Input.Gamepad.Button, _value: number): void {
     if (!pad) {
       return;
     }

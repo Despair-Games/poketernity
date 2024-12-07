@@ -272,7 +272,7 @@ export abstract class Challenge {
    * @param source The source challenge or json.
    * @returns This challenge.
    */
-  static loadChallenge(source: Challenge | any): Challenge {
+  static loadChallenge(_source: Challenge | any): Challenge {
     throw new Error("Method not implemented! Use derived class");
   }
 
@@ -285,10 +285,10 @@ export abstract class Challenge {
    * @returns {@link boolean} Whether this function did anything.
    */
   applyStarterChoice(
-    pokemon: PokemonSpecies,
-    valid: BooleanHolder,
-    dexAttr: DexAttrProps,
-    soft: boolean = false,
+    _pokemon: PokemonSpecies,
+    _valid: BooleanHolder,
+    _dexAttr: DexAttrProps,
+    _soft: boolean = false,
   ): boolean {
     return false;
   }
@@ -298,7 +298,7 @@ export abstract class Challenge {
    * @param points {@link NumberHolder} The amount of points you have available.
    * @returns {@link boolean} Whether this function did anything.
    */
-  applyStarterPoints(points: NumberHolder): boolean {
+  applyStarterPoints(_points: NumberHolder): boolean {
     return false;
   }
 
@@ -308,7 +308,7 @@ export abstract class Challenge {
    * @param cost {@link NumberHolder} The cost of the starter.
    * @returns {@link boolean} Whether this function did anything.
    */
-  applyStarterCost(species: Species, cost: NumberHolder): boolean {
+  applyStarterCost(_species: Species, _cost: NumberHolder): boolean {
     return false;
   }
 
@@ -317,7 +317,7 @@ export abstract class Challenge {
    * @param pokemon {@link Pokemon} The starter pokemon to modify.
    * @returns {@link boolean} Whether this function did anything.
    */
-  applyStarterModify(pokemon: Pokemon): boolean {
+  applyStarterModify(_pokemon: Pokemon): boolean {
     return false;
   }
 
@@ -327,7 +327,7 @@ export abstract class Challenge {
    * @param valid {@link BooleanHolder} A BooleanHolder, the value gets set to false if the pokemon isn't allowed.
    * @returns {@link boolean} Whether this function did anything.
    */
-  applyPokemonInBattle(pokemon: Pokemon, valid: BooleanHolder): boolean {
+  applyPokemonInBattle(_pokemon: Pokemon, _valid: BooleanHolder): boolean {
     return false;
   }
 
@@ -337,7 +337,7 @@ export abstract class Challenge {
    * @param battleConfig {@link FixedBattleConfig} The battle config to modify.
    * @returns {@link boolean} Whether this function did anything.
    */
-  applyFixedBattle(waveIndex: Number, battleConfig: FixedBattleConfig): boolean {
+  applyFixedBattle(_waveIndex: Number, _battleConfig: FixedBattleConfig): boolean {
     return false;
   }
 
@@ -346,7 +346,7 @@ export abstract class Challenge {
    * @param effectiveness {@linkcode NumberHolder} The current effectiveness of the move.
    * @returns Whether this function did anything.
    */
-  applyTypeEffectiveness(effectiveness: NumberHolder): boolean {
+  applyTypeEffectiveness(_effectiveness: NumberHolder): boolean {
     return false;
   }
 
@@ -358,7 +358,7 @@ export abstract class Challenge {
    * @param isBoss {@link Boolean} Whether this is a non-trainer boss pokemon.
    * @returns {@link boolean} Whether this function did anything.
    */
-  applyLevelChange(level: NumberHolder, levelCap: number, isTrainer: boolean, isBoss: boolean): boolean {
+  applyLevelChange(_level: NumberHolder, _levelCap: number, _isTrainer: boolean, _isBoss: boolean): boolean {
     return false;
   }
 
@@ -368,7 +368,7 @@ export abstract class Challenge {
    * @param moveSlots {@link NumberHolder} The amount of move slots.
    * @returns {@link boolean} Whether this function did anything.
    */
-  applyMoveSlot(pokemon: Pokemon, moveSlots: NumberHolder): boolean {
+  applyMoveSlot(_pokemon: Pokemon, _moveSlots: NumberHolder): boolean {
     return false;
   }
 
@@ -378,7 +378,7 @@ export abstract class Challenge {
    * @param hasPassive {@link BooleanHolder} Whether it should have its passive.
    * @returns {@link boolean} Whether this function did anything.
    */
-  applyPassiveAccess(pokemon: Pokemon, hasPassive: BooleanHolder): boolean {
+  applyPassiveAccess(_pokemon: Pokemon, _hasPassive: BooleanHolder): boolean {
     return false;
   }
 
@@ -387,7 +387,7 @@ export abstract class Challenge {
    * @param gameMode {@link GameMode} The current game mode.
    * @returns {@link boolean} Whether this function did anything.
    */
-  applyGameModeModify(gameMode: GameMode): boolean {
+  applyGameModeModify(_gameMode: GameMode): boolean {
     return false;
   }
 
@@ -399,7 +399,7 @@ export abstract class Challenge {
    * @param level {@link NumberHolder} The level threshold for access.
    * @returns {@link boolean} Whether this function did anything.
    */
-  applyMoveAccessLevel(pokemon: Pokemon, moveSource: MoveSourceType, move: Moves, level: NumberHolder): boolean {
+  applyMoveAccessLevel(_pokemon: Pokemon, _moveSource: MoveSourceType, _move: Moves, _level: NumberHolder): boolean {
     return false;
   }
 
@@ -411,7 +411,7 @@ export abstract class Challenge {
    * @param weight {@link NumberHolder} The base weight of the move
    * @returns {@link boolean} Whether this function did anything.
    */
-  applyMoveWeight(pokemon: Pokemon, moveSource: MoveSourceType, move: Moves, level: NumberHolder): boolean {
+  applyMoveWeight(_pokemon: Pokemon, _moveSource: MoveSourceType, _move: Moves, _level: NumberHolder): boolean {
     return false;
   }
 }
@@ -429,7 +429,7 @@ export class SingleGenerationChallenge extends Challenge {
   applyStarterChoice(
     pokemon: PokemonSpecies,
     valid: BooleanHolder,
-    dexAttr: DexAttrProps,
+    _dexAttr: DexAttrProps,
     soft: boolean = false,
   ): boolean {
     const generations = [pokemon.generation];
@@ -458,9 +458,10 @@ export class SingleGenerationChallenge extends Challenge {
       pokemon.species.speciesId === Species.VICTINI ? 5 : getPokemonSpecies(pokemon.species.speciesId).generation;
     let fusionGeneration = 0;
     if (pokemon.isFusion() && pokemon.fusionSpecies) {
-    fusionGeneration = pokemon.fusionSpecies.speciesId === Species.VICTINI ?
-      5
-      : getPokemonSpecies(pokemon.fusionSpecies.speciesId).generation;
+      fusionGeneration =
+        pokemon.fusionSpecies.speciesId === Species.VICTINI
+          ? 5
+          : getPokemonSpecies(pokemon.fusionSpecies.speciesId).generation;
     }
     if (
       pokemon.isPlayer()

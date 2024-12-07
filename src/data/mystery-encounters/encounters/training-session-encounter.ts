@@ -183,7 +183,7 @@ export const TrainingSessionEncounter: MysteryEncounter = MysteryEncounterBuilde
       .withPreOptionPhase(async (): Promise<boolean> => {
         // Open menu for selecting pokemon and Nature
         const encounter = globalScene.currentBattle.mysteryEncounter!;
-        const natures = new Array(25).fill(null).map((val, i) => i as Nature);
+        const natures = new Array(25).fill(null).map((_val, i) => i as Nature);
         const onPokemonSelected = (pokemon: PlayerPokemon) => {
           // Return the options for nature selection
           return natures.map((nature: Nature) => {
@@ -266,7 +266,7 @@ export const TrainingSessionEncounter: MysteryEncounter = MysteryEncounterBuilde
           const abilityCount = speciesForm.getAbilityCount();
           const abilities: Ability[] = new Array(abilityCount)
             .fill(null)
-            .map((val, i) => allAbilities[speciesForm.getAbility(i)]);
+            .map((_val, i) => allAbilities[speciesForm.getAbility(i)]);
 
           const optionSelectItems: OptionSelectItem[] = [];
           abilities.forEach((ability: Ability, index) => {
