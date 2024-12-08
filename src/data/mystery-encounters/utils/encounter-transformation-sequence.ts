@@ -10,12 +10,13 @@ export enum TransformationScreenPosition {
   RIGHT,
 }
 
+// TODO: Seems like there's repeated code here and in the evolution animation. Maybe consolidate them?
+
 /**
  * Initiates an "evolution-like" animation to transform a previousPokemon (presumably from the player's party) into a new one, not necessarily an evolution species.
- * @param scene
- * @param previousPokemon
- * @param transformPokemon
- * @param screenPosition
+ * @param previousPokemon - The Pokemon's previous form
+ * @param transformPokemon - The Pokemon's new form
+ * @param screenPosition - Either left (-100), center (0), or right (200)
  */
 export function doPokemonTransformationSequence(
   previousPokemon: PlayerPokemon,
@@ -174,11 +175,10 @@ export function doPokemonTransformationSequence(
 
 /**
  * Animates particles that "spiral" upwards at start of transform animation
- * @param scene
- * @param transformationBaseBg
- * @param transformationContainer
- * @param xOffset
- * @param yOffset
+ * @param transformationBaseBg - The background iamge
+ * @param transformationContainer - The phaser container
+ * @param xOffset - The x offset
+ * @param yOffset - The y offset
  */
 function doSpiralUpward(
   transformationBaseBg: Phaser.GameObjects.Image,
@@ -212,11 +212,10 @@ function doSpiralUpward(
 
 /**
  * Animates particles that arc downwards after the upwards spiral
- * @param scene
- * @param transformationBaseBg
- * @param transformationContainer
- * @param xOffset
- * @param yOffset
+ * @param transformationBaseBg - The background iamge
+ * @param transformationContainer - The phaser container
+ * @param xOffset - The x offset
+ * @param yOffset - The y offset
  */
 function doArcDownward(
   transformationBaseBg: Phaser.GameObjects.Image,
@@ -244,11 +243,10 @@ function doArcDownward(
 
 /**
  * Animates the transformation between the old pokemon form and new pokemon form
- * @param scene
- * @param l
- * @param lastCycle
- * @param pokemonTintSprite
- * @param pokemonEvoTintSprite
+ * @param l - Variable to track how many cycles have been run and also how long the delay is
+ * @param lastCycle - Number representing how many times to recursively cycle the animation
+ * @param pokemonTintSprite - The tinted sprite of the Pokemon
+ * @param pokemonEvoTintSprite - The tinted sprite of the Pokemon's new form
  */
 function doCycle(
   l: number,
@@ -285,11 +283,10 @@ function doCycle(
 
 /**
  * Animates particles in a circle pattern
- * @param scene
- * @param transformationBaseBg
- * @param transformationContainer
- * @param xOffset
- * @param yOffset
+ * @param transformationBaseBg - The background iamge
+ * @param transformationContainer - The phaser container
+ * @param xOffset - The x offset
+ * @param yOffset - The y offset
  */
 function doCircleInward(
   transformationBaseBg: Phaser.GameObjects.Image,
@@ -319,12 +316,11 @@ function doCircleInward(
 
 /**
  * Helper function for {@linkcode doSpiralUpward}, handles a single particle
- * @param scene
- * @param trigIndex
- * @param transformationBaseBg
- * @param transformationContainer
- * @param xOffset
- * @param yOffset
+ * @param trigIndex - Starting offset for particle
+ * @param transformationBaseBg - The background iamge
+ * @param transformationContainer - The phaser container
+ * @param xOffset - The x offset
+ * @param yOffset - The y offset
  */
 function doSpiralUpwardParticle(
   trigIndex: number,
@@ -370,12 +366,11 @@ function doSpiralUpwardParticle(
 
 /**
  * Helper function for {@linkcode doArcDownward}, handles a single particle
- * @param scene
- * @param trigIndex
- * @param transformationBaseBg
- * @param transformationContainer
- * @param xOffset
- * @param yOffset
+ * @param trigIndex - Starting offset for particle
+ * @param transformationBaseBg - The background iamge
+ * @param transformationContainer - The phaser container
+ * @param xOffset - The x offset
+ * @param yOffset - The y offset
  */
 function doArcDownParticle(
   trigIndex: number,
@@ -418,13 +413,12 @@ function doArcDownParticle(
 
 /**
  * Helper function for @{link doCircleInward}, handles a single particle
- * @param scene
- * @param trigIndex
- * @param speed
- * @param transformationBaseBg
- * @param transformationContainer
- * @param xOffset
- * @param yOffset
+ * @param trigIndex - Starting offset for particle
+ * @param speed - How much the amplitude slows down by each cycle
+ * @param transformationBaseBg - The background iamge
+ * @param transformationContainer - The phaser container
+ * @param xOffset - The x offset
+ * @param yOffset - The y offset
  */
 function doCircleInwardParticle(
   trigIndex: number,

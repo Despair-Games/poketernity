@@ -61,7 +61,6 @@ import { globalScene } from "#app/global-scene";
 
 /**
  * Animates exclamation sprite over trainer's head at start of encounter
- * @param scene
  */
 export function doTrainerExclamation() {
   const exclamationSprite = globalScene.add.sprite(0, 0, "encounter_exclaim");
@@ -178,6 +177,7 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
   } else {
     // Wild
     globalScene.currentBattle.mysteryEncounter!.encounterMode = MysteryEncounterMode.WILD_BATTLE;
+
     const numEnemies =
       partyConfig?.pokemonConfigs && partyConfig.pokemonConfigs.length > 0
         ? partyConfig?.pokemonConfigs?.length
@@ -430,7 +430,7 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
  * See: [startOfBattleEffects](IMysteryEncounter.startOfBattleEffects) for more details
  *
  * This promise does not need to be awaited on if called in an encounter onInit (will just load lazily)
- * @param moves
+ * @param moves The move or moves the Pokemon uses at the start of the encounter
  */
 export function loadCustomMovesForEncounter(moves: Moves | Moves[]) {
   moves = Array.isArray(moves) ? moves : [moves];
@@ -439,9 +439,9 @@ export function loadCustomMovesForEncounter(moves: Moves | Moves[]) {
 
 /**
  * Will update player money, and animate change (sound optional)
- * @param changeValue
- * @param playSound
- * @param showMessage
+ * @param changeValue the amount by how much the player's money value changes by
+ * @param playSound whether or not to play the buying sound effect
+ * @param showMessage whether or not to display a message about paying or receiving money
  */
 export function updatePlayerMoney(changeValue: number, playSound: boolean = true, showMessage: boolean = true) {
   globalScene.money = Math.min(Math.max(globalScene.money + changeValue, 0), Number.MAX_SAFE_INTEGER);
@@ -465,7 +465,7 @@ export function updatePlayerMoney(changeValue: number, playSound: boolean = true
 
 /**
  * Converts modifier bullshit to an actual item
- * @param modifier
+ * @param modifier the modifier being converted
  * @param pregenArgs Can specify BerryType for berries, TM for TMs, AttackBoostType for item, etc.
  */
 export function generateModifierType(modifier: () => ModifierType, pregenArgs?: any[]): ModifierType | null {
@@ -488,7 +488,7 @@ export function generateModifierType(modifier: () => ModifierType, pregenArgs?: 
 
 /**
  * Converts modifier bullshit to an actual item
- * @param modifier
+ * @param modifier The modifier being converted
  * @param pregenArgs - can specify BerryType for berries, TM for TMs, AttackBoostType for item, etc.
  */
 export function generateModifierTypeOption(
@@ -507,7 +507,7 @@ export function generateModifierTypeOption(
  * @param onPokemonSelected - Any logic that needs to be performed when Pokemon is chosen
  * If a second option needs to be selected, onPokemonSelected should return a OptionSelectItem[] object
  * @param onPokemonNotSelected - Any logic that needs to be performed if no Pokemon is chosen
- * @param selectablePokemonFilter
+ * @param selectablePokemonFilter - A filter for which Pokemon are allowed
  */
 export function selectPokemonForOption(
   onPokemonSelected: (pokemon: PlayerPokemon) => void | OptionSelectItem[],
@@ -614,10 +614,12 @@ interface PokemonAndOptionSelected {
  * This function is intended for use inside `onPreOptionPhase()` of an encounter option
  *
  * If a second option needs to be selected, `onPokemonSelected` should return a {@linkcode OptionSelectItem}`[]` object
- * @param options
- * @param optionSelectPromptKey
- * @param selectablePokemonFilter
- * @param onHoverOverCancelOption
+ *
+ * Used in the bug type superfan ME
+ * @param options - The list of selectable options
+ * @param optionSelectPromptKey - The text key for selecting
+ * @param selectablePokemonFilter - The filter for selectable Pokemon
+ * @param onHoverOverCancelOption - The function that is called when hovering over the cancel option
  */
 export function selectOptionThenPokemon(
   options: OptionSelectItem[],
@@ -716,7 +718,7 @@ export function selectOptionThenPokemon(
  * Will initialize reward phases to follow the mystery encounter
  * Can have shop displayed or skipped
  * @param customShopRewards - adds a shop phase with the specified rewards / reward tiers
- * @param eggRewards
+ * @param eggRewards - an option for custom egg rewards
  * @param preRewardsCallback - can execute an arbitrary callback before the new phases if necessary (useful for updating items/party/injecting new phases before {@linkcode MysteryEncounterRewardsPhase})
  */
 export function setEncounterRewards(
@@ -789,7 +791,7 @@ export class OptionSelectSettings {
 /**
  * Can be used to queue a new series of Options to select for an Encounter
  * MUST be used only in onOptionPhase, will not work in onPreOptionPhase or onPostOptionPhase
- * @param optionSelectSettings
+ * @param optionSelectSettings - The initial OptionSelectSettings being passed to the new ME
  */
 export function initSubsequentOptionSelect(optionSelectSettings: OptionSelectSettings) {
   globalScene.pushPhase(new MysteryEncounterPhase(optionSelectSettings));
@@ -812,7 +814,7 @@ export function leaveEncounterWithoutBattle(
 }
 
 /**
- *
+ * Function to handle the player winning a ME battle
  * @param addHealPhase - Adds an empty shop phase to allow player to purchase healing items
  * @param doNotContinue - default `false`. If set to true, will not end the battle and continue to next wave
  */
@@ -856,7 +858,8 @@ export function handleMysteryEncounterVictory(addHealPhase: boolean = false, doN
 
 /**
  * Similar to {@linkcode handleMysteryEncounterVictory}, but for cases where the player lost a battle or failed a challenge
- * @param addHealPhase
+ * @param addHealPhase - Adds an empty shop phase to allow player to purchase healing items
+ * @param doNotContinue - default `false`. If set to true, will not end the battle and continue to next wave
  */
 export function handleMysteryEncounterBattleFailed(addHealPhase: boolean = false, doNotContinue: boolean = false) {
   const allowedPkm = globalScene.getPlayerParty().filter((pkm) => pkm.isAllowedInBattle());
@@ -885,10 +888,10 @@ export function handleMysteryEncounterBattleFailed(addHealPhase: boolean = false
 }
 
 /**
- *
+ * Function used to bring in a ME's intro visuals
  * @param hide - If true, performs ease out and hide visuals. If false, eases in visuals. Defaults to true
  * @param destroy - If true, will destroy visuals ONLY ON HIDE TRANSITION. Does nothing on show. Defaults to true
- * @param duration
+ * @param duration - Delay in milliseconds (default 750)
  */
 export function transitionMysteryEncounterIntroVisuals(
   hide: boolean = true,
@@ -994,9 +997,9 @@ export function handleMysteryEncounterTurnStartEffects(): boolean {
 }
 
 /**
- * TODO: remove once encounter spawn rate is finalized
- * Just a helper function to calculate aggregate stats for MEs in a Classic run
- * @param baseSpawnWeight
+ * Debug function used to calculate ME statistics in a Classic run.
+ * UNUSED IN THE GAME. PURELY FOR DEBUGGING.
+ * @param baseSpawnWeight - The chance of spawning a ME in %
  */
 export function calculateMEAggregateStats(baseSpawnWeight: number) {
   const numRuns = 1000;
