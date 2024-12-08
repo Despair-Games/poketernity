@@ -3,7 +3,7 @@ pre-commit:
     prettier:
       glob: "*.{js,jsx,ts,tsx}"
       run: npx prettier --write {staged_files}
-      stage_fixed: true
+      priority: 1
     eslint:
       glob: "*.{js,jsx,ts,tsx}"
       run: npx eslint --fix {staged_files}
@@ -11,6 +11,7 @@ pre-commit:
       skip:
         - merge
         - rebase
+      priority: 2
 
 pre-push:
   commands:
