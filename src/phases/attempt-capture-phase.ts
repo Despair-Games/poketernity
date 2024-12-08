@@ -187,7 +187,7 @@ export class AttemptCapturePhase extends PokemonPhase {
     });
   }
 
-  failCatch(shakeCount: number) {
+  failCatch(_shakeCount: number) {
     const pokemon = this.getPokemon();
 
     globalScene.playSound("se/pb_rel");

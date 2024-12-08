@@ -590,7 +590,7 @@ function parseEggMoves(content: string): void {
   const speciesValues = getEnumValues(Species);
   const lines = content.split(/\n/g);
 
-  lines.forEach((line, l) => {
+  lines.forEach((line, _l) => {
     const cols = line.split(",").slice(0, 5);
     const moveNames = allMoves.map((m) => m.name.replace(/ \([A-Z]\)$/, "").toLowerCase());
     const enumSpeciesName = cols[0].toUpperCase().replace(/[ -]/g, "_");

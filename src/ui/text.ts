@@ -307,7 +307,7 @@ export function getTextWithColors(
   }
 
   // Set custom colors
-  text = text.replace(/@\[([^{]*)\]{([^}]*)}/gi, (substring, textStyle: string, textToColor: string) => {
+  text = text.replace(/@\[([^{]*)\]{([^}]*)}/gi, (_substring, textStyle: string, textToColor: string) => {
     return (
       "[/color][/shadow]"
       + getBBCodeFrag(textToColor, TextStyle[textStyle], uiTheme)

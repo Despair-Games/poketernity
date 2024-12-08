@@ -37,13 +37,13 @@ export abstract class ArenaTag {
     public side: ArenaTagSide = ArenaTagSide.BOTH,
   ) {}
 
-  apply(arena: Arena, simulated: boolean, ...args: unknown[]): boolean {
+  apply(_arena: Arena, _simulated: boolean, ..._args: unknown[]): boolean {
     return true;
   }
 
-  onAdd(arena: Arena, quiet: boolean = false): void {}
+  onAdd(_arena: Arena, _quiet: boolean = false): void {}
 
-  onRemove(arena: Arena, quiet: boolean = false): void {
+  onRemove(_arena: Arena, quiet: boolean = false): void {
     if (!quiet) {
       globalScene.queueMessage(
         i18next.t(
@@ -54,9 +54,9 @@ export abstract class ArenaTag {
     }
   }
 
-  onOverlap(arena: Arena): void {}
+  onOverlap(_arena: Arena): void {}
 
-  lapse(arena: Arena): boolean {
+  lapse(_arena: Arena): boolean {
     return this.turnCount < 1 || !!--this.turnCount;
   }
 
@@ -137,7 +137,7 @@ export class MistTag extends ArenaTag {
    * to flag the stat reduction as cancelled
    * @returns `true` if a stat reduction was cancelled; `false` otherwise
    */
-  override apply(arena: Arena, simulated: boolean, attacker: Pokemon, cancelled: BooleanHolder): boolean {
+  override apply(_arena: Arena, simulated: boolean, attacker: Pokemon, cancelled: BooleanHolder): boolean {
     // `StatStageChangePhase` currently doesn't have a reference to the source of stat drops,
     // so this code currently has no effect on gameplay.
     if (attacker) {
@@ -200,8 +200,8 @@ export class WeakenMoveScreenTag extends ArenaTag {
    * @returns `true` if the attacking move was weakened; `false` otherwise.
    */
   override apply(
-    arena: Arena,
-    simulated: boolean,
+    _arena: Arena,
+    _simulated: boolean,
     attacker: Pokemon,
     moveCategory: MoveCategory,
     damageMultiplier: NumberHolder,
@@ -228,7 +228,7 @@ class ReflectTag extends WeakenMoveScreenTag {
     super(ArenaTagType.REFLECT, turnCount, Moves.REFLECT, sourceId, side, [MoveCategory.PHYSICAL]);
   }
 
-  onAdd(arena: Arena, quiet: boolean = false): void {
+  onAdd(_arena: Arena, quiet: boolean = false): void {
     if (!quiet) {
       globalScene.queueMessage(
         i18next.t(
@@ -248,7 +248,7 @@ class LightScreenTag extends WeakenMoveScreenTag {
     super(ArenaTagType.LIGHT_SCREEN, turnCount, Moves.LIGHT_SCREEN, sourceId, side, [MoveCategory.SPECIAL]);
   }
 
-  onAdd(arena: Arena, quiet: boolean = false): void {
+  onAdd(_arena: Arena, quiet: boolean = false): void {
     if (!quiet) {
       globalScene.queueMessage(
         i18next.t(
@@ -271,7 +271,7 @@ class AuroraVeilTag extends WeakenMoveScreenTag {
     ]);
   }
 
-  onAdd(arena: Arena, quiet: boolean = false): void {
+  onAdd(_arena: Arena, quiet: boolean = false): void {
     if (!quiet) {
       globalScene.queueMessage(
         i18next.t(
@@ -308,7 +308,7 @@ export class ConditionalProtectTag extends ArenaTag {
     this.ignoresBypass = ignoresBypass;
   }
 
-  onAdd(arena: Arena): void {
+  onAdd(_arena: Arena): void {
     globalScene.queueMessage(
       i18next.t(
         `arenaTag:conditionalProtectOnAdd${this.side === ArenaTagSide.PLAYER ? "Player" : this.side === ArenaTagSide.ENEMY ? "Enemy" : ""}`,
@@ -318,7 +318,7 @@ export class ConditionalProtectTag extends ArenaTag {
   }
 
   // Removes default message for effect removal
-  onRemove(arena: Arena): void {}
+  onRemove(_arena: Arena): void {}
 
   /**
    * Checks incoming moves against the condition function
@@ -372,7 +372,7 @@ export class ConditionalProtectTag extends ArenaTag {
  * @returns `true` if the incoming move's priority is greater than 0.
  *   This includes moves with modified priorities from abilities (e.g. Prankster)
  */
-const QuickGuardConditionFunc: ProtectConditionFunc = (arena, moveId) => {
+const QuickGuardConditionFunc: ProtectConditionFunc = (_arena, moveId) => {
   const move = allMoves[moveId];
   const effectPhase = globalScene.getCurrentPhase();
 
@@ -402,7 +402,7 @@ class QuickGuardTag extends ConditionalProtectTag {
  * @param moveId {@linkcode Moves} The move to check against this condition
  * @returns `true` if the incoming move is multi-targeted (even if it's only used against one Pokemon).
  */
-const WideGuardConditionFunc: ProtectConditionFunc = (arena, moveId): boolean => {
+const WideGuardConditionFunc: ProtectConditionFunc = (_arena, moveId): boolean => {
   const move = allMoves[moveId];
 
   switch (move.moveTarget) {
@@ -433,7 +433,7 @@ class WideGuardTag extends ConditionalProtectTag {
  * @param moveId {@linkcode Moves} The move to check against this condition.
  * @returns `true` if the incoming move is not a Status move.
  */
-const MatBlockConditionFunc: ProtectConditionFunc = (arena, moveId): boolean => {
+const MatBlockConditionFunc: ProtectConditionFunc = (_arena, moveId): boolean => {
   const move = allMoves[moveId];
   return move.category !== MoveCategory.STATUS;
 };
@@ -447,7 +447,7 @@ class MatBlockTag extends ConditionalProtectTag {
     super(ArenaTagType.MAT_BLOCK, Moves.MAT_BLOCK, sourceId, side, MatBlockConditionFunc);
   }
 
-  onAdd(arena: Arena) {
+  onAdd(_arena: Arena) {
     if (this.sourceId) {
       const source = globalScene.getPokemonById(this.sourceId);
       if (source) {
@@ -469,7 +469,7 @@ class MatBlockTag extends ConditionalProtectTag {
  * @returns `true` if the incoming move is a Status move, is not a hazard, and does not target all
  * Pokemon or sides of the field.
  */
-const CraftyShieldConditionFunc: ProtectConditionFunc = (arena, moveId) => {
+const CraftyShieldConditionFunc: ProtectConditionFunc = (_arena, moveId) => {
   const move = allMoves[moveId];
   return (
     move.category === MoveCategory.STATUS
@@ -507,7 +507,7 @@ export class NoCritTag extends ArenaTag {
   }
 
   /** Queues a message upon adding this effect to the field */
-  onAdd(arena: Arena): void {
+  onAdd(_arena: Arena): void {
     globalScene.queueMessage(
       i18next.t(`arenaTag:noCritOnAdd${this.side === ArenaTagSide.PLAYER ? "Player" : "Enemy"}`, {
         moveName: this.getMoveName(),
@@ -516,7 +516,7 @@ export class NoCritTag extends ArenaTag {
   }
 
   /** Queues a message upon removing this effect from the field */
-  onRemove(arena: Arena): void {
+  onRemove(_arena: Arena): void {
     const source = globalScene.getPokemonById(this.sourceId!); // TODO: is this bang correct?
     globalScene.queueMessage(
       i18next.t("arenaTag:noCritOnRemove", {
@@ -540,7 +540,7 @@ class WishTag extends ArenaTag {
     super(ArenaTagType.WISH, turnCount, Moves.WISH, sourceId, side);
   }
 
-  onAdd(arena: Arena): void {
+  onAdd(_arena: Arena): void {
     if (this.sourceId) {
       const user = globalScene.getPokemonById(this.sourceId);
       if (user) {
@@ -555,7 +555,7 @@ class WishTag extends ArenaTag {
     }
   }
 
-  onRemove(arena: Arena): void {
+  onRemove(_arena: Arena): void {
     const target = globalScene.getField()[this.battlerIndex];
     if (target?.isActive(true)) {
       globalScene.queueMessage(this.triggerMessage);
@@ -593,7 +593,7 @@ export class WeakenMoveTypeTag extends ArenaTag {
    * @param power a {@linkcode NumberHolder} containing the attack's power
    * @returns `true` if the attack's power was reduced; `false` otherwise.
    */
-  override apply(arena: Arena, simulated: boolean, type: Type, power: NumberHolder): boolean {
+  override apply(_arena: Arena, _simulated: boolean, type: Type, power: NumberHolder): boolean {
     if (type === this.weakenedType) {
       power.value *= 0.33;
       return true;
@@ -611,11 +611,11 @@ class MudSportTag extends WeakenMoveTypeTag {
     super(ArenaTagType.MUD_SPORT, turnCount, Type.ELECTRIC, Moves.MUD_SPORT, sourceId);
   }
 
-  onAdd(arena: Arena): void {
+  onAdd(_arena: Arena): void {
     globalScene.queueMessage(i18next.t("arenaTag:mudSportOnAdd"));
   }
 
-  onRemove(arena: Arena): void {
+  onRemove(_arena: Arena): void {
     globalScene.queueMessage(i18next.t("arenaTag:mudSportOnRemove"));
   }
 }
@@ -629,11 +629,11 @@ class WaterSportTag extends WeakenMoveTypeTag {
     super(ArenaTagType.WATER_SPORT, turnCount, Type.FIRE, Moves.WATER_SPORT, sourceId);
   }
 
-  onAdd(arena: Arena): void {
+  onAdd(_arena: Arena): void {
     globalScene.queueMessage(i18next.t("arenaTag:waterSportOnAdd"));
   }
 
-  onRemove(arena: Arena): void {
+  onRemove(_arena: Arena): void {
     globalScene.queueMessage(i18next.t("arenaTag:waterSportOnRemove"));
   }
 }
@@ -649,11 +649,11 @@ export class IonDelugeTag extends ArenaTag {
   }
 
   /** Queues an on-add message */
-  onAdd(arena: Arena): void {
+  onAdd(_arena: Arena): void {
     globalScene.queueMessage(i18next.t("arenaTag:plasmaFistsOnAdd"));
   }
 
-  onRemove(arena: Arena): void {} // Removes default on-remove message
+  onRemove(_arena: Arena): void {} // Removes default on-remove message
 
   /**
    * Converts Normal-type moves to Electric type
@@ -662,7 +662,7 @@ export class IonDelugeTag extends ArenaTag {
    * @param moveType a {@linkcode NumberHolder} containing a move's {@linkcode Type}
    * @returns `true` if the given move type changed; `false` otherwise.
    */
-  override apply(arena: Arena, simulated: boolean, moveType: NumberHolder): boolean {
+  override apply(_arena: Arena, _simulated: boolean, moveType: NumberHolder): boolean {
     if (moveType.value === Type.NORMAL) {
       moveType.value = Type.ELECTRIC;
       return true;
@@ -709,7 +709,7 @@ export class ArenaTrapTag extends ArenaTag {
    * @param pokemon the {@linkcode Pokemon} triggering this hazard
    * @returns `true` if this hazard affects the given Pokemon; `false` otherwise.
    */
-  override apply(arena: Arena, simulated: boolean, pokemon: Pokemon): boolean {
+  override apply(_arena: Arena, simulated: boolean, pokemon: Pokemon): boolean {
     if ((this.side === ArenaTagSide.PLAYER) !== pokemon.isPlayer()) {
       return false;
     }
@@ -717,7 +717,7 @@ export class ArenaTrapTag extends ArenaTag {
     return this.activateTrap(pokemon, simulated);
   }
 
-  activateTrap(pokemon: Pokemon, simulated: boolean): boolean {
+  activateTrap(_pokemon: Pokemon, _simulated: boolean): boolean {
     return false;
   }
 
@@ -893,7 +893,7 @@ export class DelayedAttackTag extends ArenaTag {
     return ret;
   }
 
-  onRemove(arena: Arena): void {}
+  onRemove(_arena: Arena): void {}
 }
 
 /**
@@ -1044,12 +1044,12 @@ export class TrickRoomTag extends ArenaTag {
    * turn order should be reversed.
    * @returns `true` if turn order is successfully reversed; `false` otherwise
    */
-  override apply(arena: Arena, simulated: boolean, speedReversed: BooleanHolder): boolean {
+  override apply(_arena: Arena, _simulated: boolean, speedReversed: BooleanHolder): boolean {
     speedReversed.value = !speedReversed.value;
     return true;
   }
 
-  onAdd(arena: Arena): void {
+  onAdd(_arena: Arena): void {
     const source = this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
     if (source) {
       globalScene.queueMessage(
@@ -1058,7 +1058,7 @@ export class TrickRoomTag extends ArenaTag {
     }
   }
 
-  onRemove(arena: Arena): void {
+  onRemove(_arena: Arena): void {
     globalScene.queueMessage(i18next.t("arenaTag:trickRoomOnRemove"));
   }
 }
@@ -1073,7 +1073,7 @@ export class GravityTag extends ArenaTag {
     super(ArenaTagType.GRAVITY, turnCount, Moves.GRAVITY);
   }
 
-  onAdd(arena: Arena): void {
+  onAdd(_arena: Arena): void {
     globalScene.queueMessage(i18next.t("arenaTag:gravityOnAdd"));
     globalScene.getField(true).forEach((pokemon) => {
       if (pokemon !== null) {
@@ -1086,7 +1086,7 @@ export class GravityTag extends ArenaTag {
     });
   }
 
-  onRemove(arena: Arena): void {
+  onRemove(_arena: Arena): void {
     globalScene.queueMessage(i18next.t("arenaTag:gravityOnRemove"));
   }
 }
@@ -1101,7 +1101,7 @@ class TailwindTag extends ArenaTag {
     super(ArenaTagType.TAILWIND, turnCount, Moves.TAILWIND, sourceId, side);
   }
 
-  onAdd(arena: Arena, quiet: boolean = false): void {
+  onAdd(_arena: Arena, quiet: boolean = false): void {
     if (!quiet) {
       globalScene.queueMessage(
         i18next.t(
@@ -1132,7 +1132,7 @@ class TailwindTag extends ArenaTag {
     }
   }
 
-  onRemove(arena: Arena, quiet: boolean = false): void {
+  onRemove(_arena: Arena, quiet: boolean = false): void {
     if (!quiet) {
       globalScene.queueMessage(
         i18next.t(
@@ -1152,11 +1152,11 @@ class HappyHourTag extends ArenaTag {
     super(ArenaTagType.HAPPY_HOUR, turnCount, Moves.HAPPY_HOUR, sourceId, side);
   }
 
-  onAdd(arena: Arena): void {
+  onAdd(_arena: Arena): void {
     globalScene.queueMessage(i18next.t("arenaTag:happyHourOnAdd"));
   }
 
-  onRemove(arena: Arena): void {
+  onRemove(_arena: Arena): void {
     globalScene.queueMessage(i18next.t("arenaTag:happyHourOnRemove"));
   }
 }
@@ -1166,7 +1166,7 @@ class SafeguardTag extends ArenaTag {
     super(ArenaTagType.SAFEGUARD, turnCount, Moves.SAFEGUARD, sourceId, side);
   }
 
-  onAdd(arena: Arena): void {
+  onAdd(_arena: Arena): void {
     globalScene.queueMessage(
       i18next.t(
         `arenaTag:safeguardOnAdd${this.side === ArenaTagSide.PLAYER ? "Player" : this.side === ArenaTagSide.ENEMY ? "Enemy" : ""}`,
@@ -1174,7 +1174,7 @@ class SafeguardTag extends ArenaTag {
     );
   }
 
-  onRemove(arena: Arena): void {
+  onRemove(_arena: Arena): void {
     globalScene.queueMessage(
       i18next.t(
         `arenaTag:safeguardOnRemove${this.side === ArenaTagSide.PLAYER ? "Player" : this.side === ArenaTagSide.ENEMY ? "Enemy" : ""}`,
@@ -1264,7 +1264,7 @@ class FireGrassPledgeTag extends ArenaTag {
     super(ArenaTagType.FIRE_GRASS_PLEDGE, 4, Moves.FIRE_PLEDGE, sourceId, side);
   }
 
-  override onAdd(arena: Arena): void {
+  override onAdd(_arena: Arena): void {
     // "A sea of fire enveloped your/the opposing team!"
     globalScene.queueMessage(
       i18next.t(
@@ -1307,7 +1307,7 @@ class WaterFirePledgeTag extends ArenaTag {
     super(ArenaTagType.WATER_FIRE_PLEDGE, 4, Moves.WATER_PLEDGE, sourceId, side);
   }
 
-  override onAdd(arena: Arena): void {
+  override onAdd(_arena: Arena): void {
     // "A rainbow appeared in the sky on your/the opposing team's side!"
     globalScene.queueMessage(
       i18next.t(
@@ -1324,7 +1324,7 @@ class WaterFirePledgeTag extends ArenaTag {
    * the move's current effect chance
    * @returns `true` if the move's effect chance was doubled (currently always `true`)
    */
-  override apply(arena: Arena, simulated: boolean, moveChance: NumberHolder): boolean {
+  override apply(_arena: Arena, _simulated: boolean, moveChance: NumberHolder): boolean {
     moveChance.value *= 2;
     return true;
   }
@@ -1341,7 +1341,7 @@ class GrassWaterPledgeTag extends ArenaTag {
     super(ArenaTagType.GRASS_WATER_PLEDGE, 4, Moves.GRASS_PLEDGE, sourceId, side);
   }
 
-  override onAdd(arena: Arena): void {
+  override onAdd(_arena: Arena): void {
     // "A swamp enveloped your/the opposing team!"
     globalScene.queueMessage(
       i18next.t(
@@ -1363,7 +1363,7 @@ export class FairyLockTag extends ArenaTag {
     super(ArenaTagType.FAIRY_LOCK, turnCount, Moves.FAIRY_LOCK, sourceId);
   }
 
-  onAdd(arena: Arena): void {
+  onAdd(_arena: Arena): void {
     globalScene.queueMessage(i18next.t("arenaTag:fairyLockOnAdd"));
   }
 }

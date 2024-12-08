@@ -53,7 +53,7 @@ export default class MoveTouchControlsHandler {
     this.touchControls = touchControls;
     this.inConfigurationMode = false;
     this.setPositions(this.getSavedPositionsOfCurrentOrientation() ?? []);
-    window.addEventListener("resize", (event) => {
+    window.addEventListener("resize", (_event) => {
       const screenSize = this.getScreenSize();
       if (screenSize.width > screenSize.height !== this.isLandscapeMode) {
         this.changeOrientation(screenSize.width > screenSize.height);
@@ -322,7 +322,7 @@ export default class MoveTouchControlsHandler {
    * @param ui The UI of the game.
    * @param scene The scene of the game.
    */
-  private createOverlay(ui: UI, scene: Scene) {
+  private createOverlay(ui: UI, _scene: Scene) {
     const container = new Phaser.GameObjects.Container(globalScene, 0, 0);
     const overlay = new Phaser.GameObjects.Rectangle(
       globalScene,

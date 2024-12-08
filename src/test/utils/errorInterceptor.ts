@@ -39,7 +39,7 @@ process.on("uncaughtException", (error) => {
 });
 
 // Global error handler for unhandled promise rejections
-process.on("unhandledRejection", (reason, promise) => {
+process.on("unhandledRejection", (reason, _promise) => {
   console.log(reason);
   const toStop = ErrorInterceptor.getInstance().running;
   for (const elm of toStop) {

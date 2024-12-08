@@ -1,4 +1,4 @@
-export const MockFetch = (input, init) => {
+export const MockFetch = (input, _init) => {
   const url = typeof input === "string" ? input : input.url;
 
   let responseHandler;
