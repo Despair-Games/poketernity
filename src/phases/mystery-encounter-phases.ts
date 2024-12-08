@@ -13,7 +13,6 @@ import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { SummonPhase } from "#app/phases/summon-phase";
 import { SwitchPhase } from "#app/phases/switch-phase";
 import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
-import { BattleSpec } from "#enums/battle-spec";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { SwitchType } from "#enums/switch-type";
@@ -314,7 +313,7 @@ export class MysteryEncounterBattlePhase extends Phase {
     const enemyField = globalScene.getEnemyField();
     const encounterMode = globalScene.currentBattle.mysteryEncounter!.encounterMode;
 
-    if (globalScene.currentBattle.battleSpec === BattleSpec.FINAL_BOSS) {
+    if (globalScene.currentBattle.isClassicFinalBoss) {
       return i18next.t("battle:bossAppeared", { bossName: enemyField[0].name });
     }
 

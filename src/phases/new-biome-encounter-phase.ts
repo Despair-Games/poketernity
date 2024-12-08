@@ -33,7 +33,9 @@ export class NewBiomeEncounterPhase extends NextEncounterPhase {
       x: "+=300",
       duration: 2000,
       onComplete: () => {
-        if (!this.tryOverrideForBattleSpec()) {
+        if (globalScene.currentBattle.isClassicFinalBoss) {
+          this.displayFinalBossDialogue();
+        } else {
           this.doEncounterCommon();
         }
       },

@@ -11,10 +11,9 @@ import {
 } from "#app/data/ability";
 import type { DestinyBondTag, GrudgeTag } from "#app/data/battler-tags";
 import { BattlerTagLapseType } from "#app/data/battler-tags";
-import { battleSpecDialogue } from "#app/data/dialogue";
+import { classicFinalBossDialogue } from "#app/data/dialogue";
 import { allMoves, PostVictoryStatStageChangeAttr } from "#app/data/move";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";
-import { BattleSpec } from "#app/enums/battle-spec";
 import { StatusEffect } from "#app/enums/status-effect";
 import type { EnemyPokemon } from "#app/field/pokemon";
 import type Pokemon from "#app/field/pokemon";
@@ -105,7 +104,9 @@ export class FaintPhase extends PokemonPhase {
       }
     });
 
-    if (!this.tryOverrideForBattleSpec()) {
+    if (globalScene.currentBattle.isClassicFinalBoss && !this.player) {
+      this.handleFinalBossFaint();
+    } else {
       this.doFaint();
     }
   }
@@ -237,28 +238,17 @@ export class FaintPhase extends PokemonPhase {
     });
   }
 
-  tryOverrideForBattleSpec(): boolean {
-    switch (globalScene.currentBattle.battleSpec) {
-      case BattleSpec.FINAL_BOSS:
-        if (!this.player) {
-          const enemy = this.getPokemon();
-          if (enemy.formIndex) {
-            globalScene.ui.showDialogue(
-              battleSpecDialogue[BattleSpec.FINAL_BOSS].secondStageWin,
-              enemy.species.name,
-              null,
-              () => this.doFaint(),
-            );
-          } else {
-            // Final boss' HP threshold has been bypassed; cancel faint and force check for 2nd phase
-            enemy.hp++;
-            globalScene.unshiftPhase(new DamageAnimPhase(enemy.getBattlerIndex(), 0, HitResult.OTHER));
-            this.end();
-          }
-          return true;
-        }
+  handleFinalBossFaint(): void {
+    const enemy = this.getPokemon();
+    if (enemy.formIndex > 0) {
+      globalScene.ui.showDialogue(classicFinalBossDialogue.secondStageWin, enemy.species.name, null, () =>
+        this.doFaint(),
+      );
+    } else {
+      // Final boss' HP threshold has been bypassed; cancel faint and force check for 2nd phase
+      enemy.hp++;
+      globalScene.unshiftPhase(new DamageAnimPhase(enemy.getBattlerIndex(), 0, HitResult.OTHER));
+      this.end();
     }
-
-    return false;
   }
 }

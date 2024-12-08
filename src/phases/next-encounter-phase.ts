@@ -67,7 +67,9 @@ export class NextEncounterPhase extends EncounterPhase {
           globalScene.lastMysteryEncounter!.introVisuals = undefined;
         }
 
-        if (!this.tryOverrideForBattleSpec()) {
+        if (globalScene.currentBattle.isClassicFinalBoss) {
+          this.displayFinalBossDialogue();
+        } else {
           this.doEncounterCommon();
         }
       },
