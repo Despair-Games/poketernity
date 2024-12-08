@@ -15,8 +15,8 @@ export abstract class PokemonPhase extends FieldPhase {
       battlerIndex ??
       globalScene
         .getField()
-        .find((p) => p?.isActive())!
-        .getBattlerIndex(); // TODO: is the bang correct here?
+        .find((p) => p?.isActive())! // TODO: is the bang correct here?
+        .getBattlerIndex();
     if (battlerIndex === undefined) {
       console.warn("There are no Pokemon on the field!"); // TODO: figure out a suitable fallback behavior
     }
