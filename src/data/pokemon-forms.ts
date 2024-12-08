@@ -219,7 +219,7 @@ export class SpeciesFormChangeCondition {
 }
 
 export abstract class SpeciesFormChangeTrigger {
-  canChange(pokemon: Pokemon): boolean {
+  canChange(_pokemon: Pokemon): boolean {
     return true;
   }
 
@@ -229,7 +229,7 @@ export abstract class SpeciesFormChangeTrigger {
 }
 
 export class SpeciesFormChangeManualTrigger extends SpeciesFormChangeTrigger {
-  canChange(pokemon: Pokemon): boolean {
+  canChange(_pokemon: Pokemon): boolean {
     return true;
   }
 }
@@ -285,7 +285,7 @@ export class SpeciesFormChangeTimeOfDayTrigger extends SpeciesFormChangeTrigger 
     this.timesOfDay = timesOfDay;
   }
 
-  canChange(pokemon: Pokemon): boolean {
+  canChange(_pokemon: Pokemon): boolean {
     return this.timesOfDay.indexOf(globalScene.arena.getTimeOfDay()) > -1;
   }
 }
@@ -537,7 +537,7 @@ export function getSpeciesFormChangeMessage(pokemon: Pokemon, formChange: Specie
  * @returns A {@linkcode SpeciesFormChangeCondition} checking if that species is registered as caught
  */
 function getSpeciesDependentFormChangeCondition(species: Species): SpeciesFormChangeCondition {
-  return new SpeciesFormChangeCondition((p) => !!globalScene.gameData.dexData[species].caughtAttr);
+  return new SpeciesFormChangeCondition((_p) => !!globalScene.gameData.dexData[species].caughtAttr);
 }
 
 interface PokemonFormChanges {

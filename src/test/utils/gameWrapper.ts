@@ -130,7 +130,11 @@ export default class GameWrapper {
       pause: () => null,
       setRate: () => null as any,
       add: () => this.scene.sound as any,
-      get: () => ({ ...this.scene.sound, totalDuration: 0 }) as any,
+      get: () =>
+        ({
+          ...this.scene.sound,
+          totalDuration: 0,
+        }) as any,
       getAllPlaying: () => [],
       manager: {
         game: this.game,
@@ -139,7 +143,7 @@ export default class GameWrapper {
       setVolume: () => null,
       stop: () => null,
       stopByKey: () => null as any,
-      on: (evt, callback) => callback(),
+      on: (_evt, callback) => callback(),
       key: "",
     };
 
@@ -229,7 +233,7 @@ export default class GameWrapper {
     this.scene.scene = this.scene as any;
     this.scene.input.keyboard = new KeyboardPlugin(this.scene as any);
     this.scene.input.gamepad = new GamepadPlugin(this.scene as any);
-    this.scene.cachedFetch = (url, init) => {
+    this.scene.cachedFetch = (url, _init) => {
       return new Promise((resolve) => {
         // need to remove that if later we want to test battle-anims
         const newUrl = url.includes("./battle-anims/") ? prependPath("./battle-anims/tackle.json") : prependPath(url);

@@ -76,9 +76,9 @@ export default class MysteryEncounterOption implements IMysteryEncounterOption {
    */
   hasRequirements(): boolean {
     return (
-      this.requirements.length > 0
-      || this.primaryPokemonRequirements.length > 0
-      || this.secondaryPokemonRequirements.length > 0
+      this.requirements.length > 0 ||
+      this.primaryPokemonRequirements.length > 0 ||
+      this.secondaryPokemonRequirements.length > 0
     );
   }
 
@@ -88,9 +88,9 @@ export default class MysteryEncounterOption implements IMysteryEncounterOption {
    */
   meetsRequirements(): boolean {
     return (
-      !this.requirements.some((requirement) => !requirement.meetsRequirement())
-      && this.meetsSupportingRequirementAndSupportingPokemonSelected()
-      && this.meetsPrimaryRequirementAndPrimaryPokemonSelected()
+      !this.requirements.some((requirement) => !requirement.meetsRequirement()) &&
+      this.meetsSupportingRequirementAndSupportingPokemonSelected() &&
+      this.meetsPrimaryRequirementAndPrimaryPokemonSelected()
     );
   }
 
@@ -336,7 +336,7 @@ export class MysteryEncounterOptionBuilder implements Partial<IMysteryEncounterO
     return this;
   }
 
-  build(this: IMysteryEncounterOption) {
+  build(_this: IMysteryEncounterOption) {
     return new MysteryEncounterOption(this);
   }
 }

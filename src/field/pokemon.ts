@@ -3592,7 +3592,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
    */
   damage(
     damage: integer,
-    ignoreSegments: boolean = false,
+    _ignoreSegments: boolean = false,
     preventEndure: boolean = false,
     ignoreFaintPhase: boolean = false,
   ): integer {
@@ -5090,7 +5090,7 @@ export class PlayerPokemon extends Pokemon {
         Mode.PARTY,
         PartyUiMode.FAINT_SWITCH,
         this.getFieldIndex(),
-        (slotIndex: integer, option: PartyOption) => {
+        (slotIndex: integer, _option: PartyOption) => {
           if (slotIndex >= globalScene.currentBattle.getBattlerCount() && slotIndex < 6) {
             globalScene.prependToPhase(
               new SwitchSummonPhase(switchType, this.getFieldIndex(), slotIndex, false),

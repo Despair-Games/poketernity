@@ -418,7 +418,7 @@ export class GameData {
       const data = this.getSystemSaveData();
 
       const maxIntAttrValue = 0x80000000;
-      const systemData = JSON.stringify(data, (k: any, v: any) =>
+      const systemData = JSON.stringify(data, (_k: any, v: any) =>
         typeof v === "bigint" ? (v <= maxIntAttrValue ? Number(v) : v.toString()) : v,
       );
 
@@ -1434,7 +1434,7 @@ export class GameData {
         localStorage.setItem(
           `data_${loggedInUser?.username}`,
           encrypt(
-            JSON.stringify(systemData, (k: any, v: any) =>
+            JSON.stringify(systemData, (_k: any, v: any) =>
               typeof v === "bigint" ? (v <= maxIntAttrValue ? Number(v) : v.toString()) : v,
             ),
             bypassLogin,
@@ -2071,7 +2071,7 @@ export class GameData {
     return ret;
   }
 
-  getSpeciesDexAttrProps(species: PokemonSpecies, dexAttr: bigint): DexAttrProps {
+  getSpeciesDexAttrProps(_species: PokemonSpecies, dexAttr: bigint): DexAttrProps {
     const shiny = !(dexAttr & DexAttr.NON_SHINY);
     const female = !(dexAttr & DexAttr.MALE);
     let variant: Variant = 0;

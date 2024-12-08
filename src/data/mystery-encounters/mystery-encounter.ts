@@ -1109,7 +1109,7 @@ export class MysteryEncounterBuilder implements Partial<IMysteryEncounter> {
    *
    * @returns
    */
-  build(this: IMysteryEncounter): MysteryEncounter {
+  build(_this: IMysteryEncounter): MysteryEncounter {
     return new MysteryEncounter(this);
   }
 }

@@ -522,7 +522,7 @@ export function selectPokemonForOption(
       Mode.PARTY,
       PartyUiMode.SELECT,
       -1,
-      (slotIndex: number, option: PartyOption) => {
+      (slotIndex: number, _option: PartyOption) => {
         if (slotIndex < globalScene.getPlayerParty().length) {
           globalScene.ui.setMode(modeToSetOnExit).then(() => {
             const pokemon = globalScene.getPlayerParty()[slotIndex];
@@ -654,7 +654,7 @@ export function selectOptionThenPokemon(
         Mode.PARTY,
         PartyUiMode.SELECT,
         -1,
-        (slotIndex: number, option: PartyOption) => {
+        (slotIndex: number, _option: PartyOption) => {
           if (slotIndex < globalScene.getPlayerParty().length) {
             // Pokemon and option selected
             globalScene.ui.setMode(modeToSetOnExit).then(() => {
@@ -944,10 +944,10 @@ export function transitionMysteryEncounterIntroVisuals(
 export function handleMysteryEncounterBattleStartEffects() {
   const encounter = globalScene.currentBattle.mysteryEncounter;
   if (
-    globalScene.currentBattle.isBattleMysteryEncounter()
-    && encounter
-    && encounter.encounterMode !== MysteryEncounterMode.NO_BATTLE
-    && !encounter.startOfBattleEffectsComplete
+    globalScene.currentBattle.isBattleMysteryEncounter() &&
+    encounter &&
+    encounter.encounterMode !== MysteryEncounterMode.NO_BATTLE &&
+    !encounter.startOfBattleEffectsComplete
   ) {
     const effects = encounter.startOfBattleEffects;
     effects.forEach((effect) => {

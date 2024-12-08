@@ -34,7 +34,7 @@ export class Voucher {
    * @param playerGender - this is ignored here. It's only there to match the signature of the function in the Achv class
    * @returns the name of the voucher
    */
-  getName(playerGender: PlayerGender): string {
+  getName(_playerGender: PlayerGender): string {
     return getVoucherTypeName(this.voucherType);
   }
 
@@ -103,9 +103,9 @@ export function initVouchers() {
 
   const bossTrainerTypes = Object.keys(trainerConfigs).filter(
     (tt) =>
-      trainerConfigs[tt].isBoss
-      && trainerConfigs[tt].getDerivedType() !== TrainerType.RIVAL
-      && trainerConfigs[tt].hasVoucher,
+      trainerConfigs[tt].isBoss &&
+      trainerConfigs[tt].getDerivedType() !== TrainerType.RIVAL &&
+      trainerConfigs[tt].hasVoucher,
   );
 
   for (const trainerType of bossTrainerTypes) {

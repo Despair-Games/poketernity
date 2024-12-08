@@ -97,7 +97,7 @@ export class FaintPhase extends PokemonPhase {
     }
 
     /** In case the current pokemon was just switched in, make sure it is counted as participating in the combat */
-    globalScene.getPlayerField().forEach((pokemon, i) => {
+    globalScene.getPlayerField().forEach((pokemon, _i) => {
       if (pokemon?.isActive(true)) {
         if (pokemon.isPlayer()) {
           globalScene.currentBattle.addParticipant(pokemon as PlayerPokemon);
@@ -168,9 +168,9 @@ export class FaintPhase extends PokemonPhase {
         /** If the player doesn't have any legal Pokemon, end the game */
         globalScene.unshiftPhase(new GameOverPhase());
       } else if (
-        globalScene.currentBattle.double
-        && legalPlayerPokemon.length === 1
-        && legalPlayerPartyPokemon.length === 0
+        globalScene.currentBattle.double &&
+        legalPlayerPokemon.length === 1 &&
+        legalPlayerPartyPokemon.length === 0
       ) {
         /**
          * If the player has exactly one Pokemon in total at this point in a double battle, and that Pokemon

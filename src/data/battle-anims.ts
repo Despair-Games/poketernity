@@ -375,7 +375,7 @@ class AnimTimedSoundEvent extends AnimTimedEvent {
     }
   }
 
-  execute(battleAnim: BattleAnim, priority?: number): integer {
+  execute(battleAnim: BattleAnim, _priority?: number): integer {
     const soundConfig = { rate: this.pitch * 0.01, volume: this.volume * 0.01 };
     if (this.resourceName) {
       try {
@@ -437,7 +437,7 @@ class AnimTimedUpdateBgEvent extends AnimTimedBgEvent {
     super(frameIndex, resourceName, source);
   }
 
-  execute(moveAnim: MoveAnim, priority?: number): integer {
+  execute(moveAnim: MoveAnim, _priority?: number): integer {
     const tweenProps = {};
     if (this.bgX !== undefined) {
       tweenProps["x"] = this.bgX * 0.5 - 320;
@@ -918,8 +918,8 @@ export abstract class BattleAnim {
           x = point[0];
           y = point[1];
           if (
-            frame.target === AnimFrameTarget.GRAPHIC
-            && isReversed(this.srcLine[0], this.srcLine[2], this.dstLine[0], this.dstLine[2])
+            frame.target === AnimFrameTarget.GRAPHIC &&
+            isReversed(this.srcLine[0], this.srcLine[2], this.dstLine[0], this.dstLine[2])
           ) {
             scaleX = scaleX * -1;
           }

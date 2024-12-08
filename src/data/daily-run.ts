@@ -15,7 +15,7 @@ export interface DailyRunConfig {
 }
 
 export function fetchDailyRunSeed(): Promise<string | null> {
-  return new Promise<string | null>((resolve, reject) => {
+  return new Promise<string | null>((resolve, _reject) => {
     api.daily.getSeed().then((dailySeed) => {
       resolve(dailySeed);
     });
