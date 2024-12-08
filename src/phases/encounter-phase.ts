@@ -1,9 +1,9 @@
 import { BattlerIndex, BattleType } from "#app/battle";
-import { globalScene } from "#app/global-scene";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
 import { applyAbAttrs, SyncEncounterNatureAbAttr } from "#app/data/ability";
 import { initEncounterAnims, loadEncounterAnimAssets } from "#app/data/battle-anims";
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
+import { WEIGHT_INCREMENT_ON_SPAWN_MISS } from "#app/data/mystery-encounters/mystery-encounters";
 import { getEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { doTrainerExclamation } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { getGoldenBugNetSpecies } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
@@ -12,8 +12,15 @@ import { getRandomWeatherType } from "#app/data/weather";
 import { EncounterPhaseEvent } from "#app/events/battle-scene";
 import type Pokemon from "#app/field/pokemon";
 import { FieldPosition } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { BoostBugSpawnModifier, IvScannerModifier, TurnHeldItemTransferModifier } from "#app/modifier/modifier";
+import {
+  BoostBugSpawnModifier,
+  IvScannerModifier,
+  overrideHeldItems,
+  overrideModifiers,
+  TurnHeldItemTransferModifier,
+} from "#app/modifier/modifier";
 import { ModifierPoolType, regenerateModifierPoolThresholds } from "#app/modifier/modifier-type";
 import Overrides from "#app/overrides";
 import { BattlePhase } from "#app/phases/battle-phase";
@@ -35,9 +42,7 @@ import { Biome } from "#enums/biome";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { PlayerGender } from "#enums/player-gender";
 import { Species } from "#enums/species";
-import { overrideHeldItems, overrideModifiers } from "#app/modifier/modifier";
 import i18next from "i18next";
-import { WEIGHT_INCREMENT_ON_SPAWN_MISS } from "#app/data/mystery-encounters/mystery-encounters";
 
 export class EncounterPhase extends BattlePhase {
   private loaded: boolean;
@@ -48,7 +53,7 @@ export class EncounterPhase extends BattlePhase {
     this.loaded = loaded;
   }
 
-  start() {
+  public override start(): void {
     super.start();
 
     globalScene.updateGameInfo();
@@ -105,8 +110,8 @@ export class EncounterPhase extends BattlePhase {
         return false;
       }
       if (!this.loaded) {
-        if (battle.battleType === BattleType.TRAINER) {
-          battle.enemyParty[e] = battle.trainer?.genPartyMember(e)!; // TODO:: is the bang correct here?
+        if (battle.battleType === BattleType.TRAINER && battle.trainer) {
+          battle.enemyParty[e] = battle.trainer.genPartyMember(e);
         } else {
           let enemySpecies = globalScene.randomSpecies(battle.waveIndex, level, true);
           // If player has golden bug net, rolls 10% chance to replace non-boss wave wild species from the golden bug net bug pool
@@ -157,6 +162,7 @@ export class EncounterPhase extends BattlePhase {
           && (battle.battleSpec === BattleSpec.FINAL_BOSS || globalScene.gameMode.isWaveFinal(battle.waveIndex))
         ) {
           if (battle.battleSpec !== BattleSpec.FINAL_BOSS) {
+            console.log("how??");
             enemyPokemon.formIndex = 1;
             enemyPokemon.updateScale();
           }

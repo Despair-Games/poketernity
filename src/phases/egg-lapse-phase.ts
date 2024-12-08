@@ -18,9 +18,6 @@ import { EggHatchData } from "#app/data/egg-hatch-data";
 export class EggLapsePhase extends Phase {
   private eggHatchData: EggHatchData[] = [];
   private readonly minEggsToSkip: number = 2;
-  constructor() {
-    super();
-  }
 
   public override start(): void {
     super.start();
@@ -78,7 +75,7 @@ export class EggLapsePhase extends Phase {
    * Hatches eggs normally one by one, showing animations
    * @param eggsToHatch list of eggs to hatch
    */
-  hatchEggsRegular(eggsToHatch: Egg[]) {
+  protected hatchEggsRegular(eggsToHatch: Egg[]): void {
     let eggsToHatchCount: number = eggsToHatch.length;
     for (const egg of eggsToHatch) {
       globalScene.unshiftPhase(new EggHatchPhase(this, egg, eggsToHatchCount));
@@ -90,13 +87,13 @@ export class EggLapsePhase extends Phase {
    * Hatches eggs with no animations
    * @param eggsToHatch list of eggs to hatch
    */
-  hatchEggsSkipped(eggsToHatch: Egg[]) {
+  protected hatchEggsSkipped(eggsToHatch: Egg[]): void {
     for (const egg of eggsToHatch) {
       this.hatchEggSilently(egg);
     }
   }
 
-  showSummary() {
+  protected showSummary(): void {
     globalScene.unshiftPhase(new EggSummaryPhase(this.eggHatchData));
     this.end();
   }
@@ -106,7 +103,7 @@ export class EggLapsePhase extends Phase {
    * Also validates the achievements for the hatched pokemon and removes the egg
    * @param egg egg to hatch
    */
-  hatchEggSilently(egg: Egg) {
+  protected hatchEggSilently(egg: Egg): void {
     const eggIndex = globalScene.gameData.eggs.findIndex((e) => e.id === egg.id);
     if (eggIndex === -1) {
       return this.end();
@@ -138,7 +135,7 @@ export class EggLapsePhase extends Phase {
    * @param egg the egg to hatch
    * @returns the hatched PlayerPokemon
    */
-  generatePokemon(egg: Egg): EggHatchData {
+  protected generatePokemon(egg: Egg): EggHatchData {
     let ret: PlayerPokemon;
     let newHatchData: EggHatchData;
     globalScene.executeWithSeedOffset(

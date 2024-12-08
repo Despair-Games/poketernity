@@ -24,6 +24,7 @@ import { type PokeballType } from "#enums/pokeball";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
 
+/** Handles catching a pokemon after the player throws a ball */
 export class AttemptCapturePhase extends PokemonPhase {
   private pokeballType: PokeballType;
   private pokeball: Phaser.GameObjects.Sprite;
@@ -103,7 +104,7 @@ export class AttemptCapturePhase extends PokemonPhase {
             globalScene.playSound("se/pb_catch");
             globalScene.time.delayedCall(17, () => this.pokeball.setTexture("pb", `${pokeballAtlasKey}`));
 
-            const doShake = () => {
+            const doShake = (): void => {
               // After the overall catch rate check, the game does 3 shake checks before confirming the catch.
               let shakeCount = 0;
               const pbX = this.pokeball.x;
@@ -123,7 +124,7 @@ export class AttemptCapturePhase extends PokemonPhase {
                     this.pokeball.setAngle(value * 27.5 * directionMultiplier);
                   }
                 },
-                onRepeat: () => {
+                onRepeat: (): void => {
                   if (!pokemon.species.isObtainable()) {
                     shakeCounter.stop();
                     this.failCatch();
@@ -170,7 +171,7 @@ export class AttemptCapturePhase extends PokemonPhase {
                     });
                   }
                 },
-                onComplete: () => {
+                onComplete: (): void => {
                   this.catch();
                 },
               });
@@ -252,13 +253,13 @@ export class AttemptCapturePhase extends PokemonPhase {
       i18next.t("battle:pokemonCaught", { pokemonName: getPokemonNameWithAffix(pokemon) }),
       null,
       () => {
-        const end = () => {
+        const end = (): void => {
           globalScene.unshiftPhase(new VictoryPhase(this.battlerIndex));
           globalScene.pokemonInfoContainer.hide();
           this.removePb();
           this.end();
         };
-        const removePokemon = () => {
+        const removePokemon = (): void => {
           globalScene.addFaintedEnemyScore(pokemon);
           globalScene
             .getPlayerField()
@@ -269,7 +270,7 @@ export class AttemptCapturePhase extends PokemonPhase {
           globalScene.clearEnemyHeldItemModifiers();
           globalScene.field.remove(pokemon, true);
         };
-        const addToParty = (slotIndex?: number) => {
+        const addToParty = (slotIndex?: number): void => {
           const newPokemon = pokemon.addToParty(this.pokeballType, slotIndex);
           const modifiers = globalScene.findModifiers((m) => m instanceof PokemonHeldItemModifier, false);
           if (globalScene.getPlayerParty().filter((p) => p.isShiny()).length === PLAYER_PARTY_MAX_SIZE) {
@@ -287,7 +288,7 @@ export class AttemptCapturePhase extends PokemonPhase {
         };
         Promise.all([pokemon.hideInfo(), globalScene.gameData.setPokemonCaught(pokemon)]).then(() => {
           if (globalScene.getPlayerParty().length === PLAYER_PARTY_MAX_SIZE) {
-            const promptRelease = () => {
+            const promptRelease = (): void => {
               globalScene.ui.showText(
                 i18next.t("battle:partyFull", { pokemonName: pokemon.getNameToRender() }),
                 null,

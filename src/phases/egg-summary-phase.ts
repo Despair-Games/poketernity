@@ -16,11 +16,11 @@ export class EggSummaryPhase extends Phase {
     this.eggHatchData = eggHatchData;
   }
 
-  start() {
+  public override start(): void {
     super.start();
 
     // updates next pokemon once the current update has been completed
-    const updateNextPokemon = (i: number) => {
+    const updateNextPokemon = (i: number): void => {
       if (i >= this.eggHatchData.length) {
         globalScene.ui.setModeForceTransition(Mode.EGG_HATCH_SUMMARY, this.eggHatchData).then(() => {
           globalScene.fadeOutBgm(undefined, false);
@@ -37,7 +37,7 @@ export class EggSummaryPhase extends Phase {
     updateNextPokemon(0);
   }
 
-  end() {
+  public override end(): void {
     globalScene.time.delayedCall(250, () => globalScene.setModifiersVisible(true));
     globalScene.ui.setModeForceTransition(Mode.MESSAGE).then(() => {
       super.end();
