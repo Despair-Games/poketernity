@@ -1,6 +1,9 @@
 pre-commit:
-  parallel: true
   commands:
+    prettier:
+      glob: "*.{js,jsx,ts,tsx}"
+      run: npx prettier --write {staged_files}
+      stage_fixed: true
     eslint:
       glob: "*.{js,jsx,ts,tsx}"
       run: npx eslint --fix {staged_files}
@@ -8,16 +11,12 @@ pre-commit:
       skip:
         - merge
         - rebase
-    prettier:
-      glob: "*.{js,jsx,ts,tsx}"
-      run: npx prettier --write {staged_files}
-      stage_fixed: true
 
 pre-push:
   commands:
     eslint:
       glob: "*.{js,ts,jsx,tsx}"
-      run: npx eslint --fix {push_files}
+      run: npx eslint {push_files}
 
 post-merge:
   commands:
