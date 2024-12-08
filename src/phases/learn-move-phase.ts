@@ -13,7 +13,7 @@ import i18next from "i18next";
 import { PlayerPartyMemberPokemonPhase } from "#app/phases/player-party-member-pokemon-phase";
 import type Pokemon from "#app/field/pokemon";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import { phaseManager } from "#app/phase-manager";
+import { phaseManager, triggerPokemonFormChange } from "#app/phase-manager";
 
 export enum LearnMoveType {
   /** For learning a move via level-up, evolution, or other non-item-based event */
@@ -224,7 +224,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
       learnMoveText,
       null,
       () => {
-        globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeMoveLearnedTrigger, true);
+        triggerPokemonFormChange(pokemon, SpeciesFormChangeMoveLearnedTrigger, true);
         this.end();
       },
       this.messageMode === Mode.EVOLUTION_SCENE ? 1000 : undefined,

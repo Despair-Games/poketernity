@@ -55,7 +55,7 @@ import { Color, ShadowColor } from "#enums/color";
 import { FRIENDSHIP_GAIN_FROM_RARE_CANDY } from "#app/data/balance/starters";
 import { applyAbAttrs, CommanderAbAttr } from "#app/data/ability";
 import { globalScene } from "#app/global-scene";
-import { queueMessage, phaseManager } from "#app/phase-manager";
+import { queueMessage, phaseManager, triggerPokemonFormChange } from "#app/phase-manager";
 
 export type ModifierPredicate = (modifier: Modifier) => boolean;
 
@@ -878,7 +878,7 @@ export class TerastallizeModifier extends LapsingPokemonHeldItemModifier {
    */
   override apply(pokemon: Pokemon): boolean {
     if (pokemon.isPlayer()) {
-      globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeTeraTrigger);
+      triggerPokemonFormChange(pokemon, SpeciesFormChangeTeraTrigger);
       globalScene.validateAchv(achvs.TERASTALLIZE);
       if (this.teraType === Type.STELLAR) {
         globalScene.validateAchv(achvs.STELLAR_TERASTALLIZE);
@@ -896,7 +896,7 @@ export class TerastallizeModifier extends LapsingPokemonHeldItemModifier {
   public override lapse(pokemon: Pokemon): boolean {
     const ret = super.lapse(pokemon);
     if (!ret) {
-      globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeLapseTeraTrigger);
+      triggerPokemonFormChange(pokemon, SpeciesFormChangeLapseTeraTrigger);
       pokemon.updateSpritePipelineData();
     }
     return ret;
@@ -2992,7 +2992,7 @@ export class PokemonFormChangeItemModifier extends PokemonHeldItemModifier {
       this.active = false;
     }
 
-    const ret = globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeItemTrigger);
+    const ret = triggerPokemonFormChange(pokemon, SpeciesFormChangeItemTrigger);
 
     if (switchActive) {
       this.active = true;

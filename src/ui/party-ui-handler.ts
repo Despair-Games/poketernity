@@ -30,7 +30,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { CommandPhase } from "#app/phases/command-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { globalScene } from "#app/global-scene";
-import { phaseManager } from "#app/phase-manager";
+import { phaseManager, triggerPokemonFormChange } from "#app/phase-manager";
 
 const defaultMessage = i18next.t("partyUiHandler:choosePokemon");
 
@@ -525,7 +525,7 @@ export default class PartyUiHandler extends MessageUiHandler {
                   const formChangeItemModifiers = this.getFormChangeItemsModifiers(pokemon);
                   const modifier = formChangeItemModifiers[option - PartyOption.FORM_CHANGE_ITEM];
                   modifier.active = !modifier.active;
-                  globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeItemTrigger, false, true);
+                  triggerPokemonFormChange(pokemon, SpeciesFormChangeItemTrigger, false, true);
                 }
               } else if (this.cursor) {
                 (phaseManager.getCurrentPhase() as CommandPhase).handleCommand(

@@ -47,7 +47,6 @@ import {
   loadMoveAnimAssets,
   populateAnims,
 } from "#app/data/battle-anims";
-import type { Phase } from "#app/phase";
 import { initGameSpeed } from "#app/system/game-speed";
 import { Arena, ArenaBase } from "#app/field/arena";
 import { GameData } from "#app/system/game-data";
@@ -101,14 +100,7 @@ import type UIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin";
 import { addUiThemeOverrides } from "#app/ui/ui-theme";
 import type PokemonData from "#app/system/pokemon-data";
 import { Nature } from "#enums/nature";
-import type { SpeciesFormChange, SpeciesFormChangeTrigger } from "#app/data/pokemon-forms";
-import {
-  FormChangeItem,
-  pokemonFormChanges,
-  SpeciesFormChangeManualTrigger,
-  SpeciesFormChangeTimeOfDayTrigger,
-} from "#app/data/pokemon-forms";
-import { FormChangePhase } from "#app/phases/form-change-phase";
+import { SpeciesFormChangeManualTrigger, SpeciesFormChangeTimeOfDayTrigger } from "#app/data/pokemon-forms";
 import { getTypeRgb } from "#app/data/type";
 import { Type } from "#enums/type";
 import PokemonSpriteSparkleHandler from "#app/field/pokemon-sprite-sparkle-handler";
@@ -137,7 +129,6 @@ import { PlayerGender } from "#enums/player-gender";
 import { Species } from "#enums/species";
 import { UiTheme } from "#enums/ui-theme";
 import { TimedEventManager } from "#app/timed-event-manager";
-import type { PokemonAnimType } from "#enums/pokemon-anim-type";
 import i18next from "i18next";
 import { TrainerType } from "#enums/trainer-type";
 import { battleSpecDialogue } from "#app/data/dialogue";
@@ -147,8 +138,6 @@ import { LoginPhase } from "#app/phases/login-phase";
 import { MovePhase } from "#app/phases/move-phase";
 import { NewBiomeEncounterPhase } from "#app/phases/new-biome-encounter-phase";
 import { NextEncounterPhase } from "#app/phases/next-encounter-phase";
-import { PokemonAnimPhase } from "#app/phases/pokemon-anim-phase";
-import { QuietFormChangePhase } from "#app/phases/quiet-form-change-phase";
 import { ReturnPhase } from "#app/phases/return-phase";
 import { SelectBiomePhase } from "#app/phases/select-biome-phase";
 import { ShowTrainerPhase } from "#app/phases/show-trainer-phase";
@@ -178,7 +167,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { FRIENDSHIP_GAIN_FROM_BATTLE } from "#app/data/balance/starters";
 import { StatusEffect } from "#enums/status-effect";
 import { globalScene, initGlobalScene } from "#app/global-scene";
-import { phaseManager, queueMessage } from "#app/phase-manager";
+import { phaseManager, queueMessage, triggerPokemonFormChange } from "#app/phase-manager";
 
 export const bypassLogin = import.meta.env.VITE_BYPASS_LOGIN === "1";
 
@@ -1548,7 +1537,7 @@ export default class BattleScene extends SceneBase {
       }
 
       for (const pokemon of this.getPlayerParty()) {
-        this.triggerPokemonFormChange(pokemon, SpeciesFormChangeTimeOfDayTrigger);
+        triggerPokemonFormChange(pokemon, SpeciesFormChangeTimeOfDayTrigger);
       }
 
       if (!this.gameMode.hasRandomBiomes && !isNewBiome) {
@@ -3109,72 +3098,6 @@ export default class BattleScene extends SceneBase {
     return null;
   }
 
-  triggerPokemonFormChange(
-    pokemon: Pokemon,
-    formChangeTriggerType: Constructor<SpeciesFormChangeTrigger>,
-    delayed: boolean = false,
-    modal: boolean = false,
-  ): boolean {
-    if (pokemonFormChanges.hasOwnProperty(pokemon.species.speciesId)) {
-      // in case this is NECROZMA, determine which forms this
-      const matchingFormChangeOpts = pokemonFormChanges[pokemon.species.speciesId].filter(
-        (fc) => fc.findTrigger(formChangeTriggerType) && fc.canChange(pokemon),
-      );
-      let matchingFormChange: SpeciesFormChange | null;
-      if (pokemon.species.speciesId === Species.NECROZMA && matchingFormChangeOpts.length > 1) {
-        // Ultra Necrozma is changing its form back, so we need to figure out into which form it devolves.
-        const formChangeItemModifiers = (
-          this.findModifiers(
-            (m) => m instanceof PokemonFormChangeItemModifier && m.pokemonId === pokemon.id,
-          ) as PokemonFormChangeItemModifier[]
-        )
-          .filter((m) => m.active)
-          .map((m) => m.formChangeItem);
-
-        matchingFormChange = formChangeItemModifiers.includes(FormChangeItem.N_LUNARIZER)
-          ? matchingFormChangeOpts[0]
-          : formChangeItemModifiers.includes(FormChangeItem.N_SOLARIZER)
-            ? matchingFormChangeOpts[1]
-            : null;
-      } else {
-        matchingFormChange = matchingFormChangeOpts[0];
-      }
-      if (matchingFormChange) {
-        let phase: Phase;
-        if (pokemon instanceof PlayerPokemon && !matchingFormChange.quiet) {
-          phase = new FormChangePhase(pokemon, matchingFormChange, modal);
-        } else {
-          phase = new QuietFormChangePhase(pokemon, matchingFormChange);
-        }
-        if (pokemon instanceof PlayerPokemon && !matchingFormChange.quiet && modal) {
-          phaseManager.overridePhase(phase);
-        } else if (delayed) {
-          phaseManager.pushPhase(phase);
-        } else {
-          phaseManager.unshiftPhase(phase);
-        }
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  triggerPokemonBattleAnim(
-    pokemon: Pokemon,
-    battleAnimType: PokemonAnimType,
-    fieldAssets?: Phaser.GameObjects.Sprite[],
-    delayed: boolean = false,
-  ): boolean {
-    const phase: Phase = new PokemonAnimPhase(battleAnimType, pokemon, fieldAssets);
-    if (delayed) {
-      phaseManager.pushPhase(phase);
-    } else {
-      phaseManager.unshiftPhase(phase);
-    }
-    return true;
-  }
-
   validateAchvs(achvType: Constructor<Achv>, ...args: unknown[]): void {
     const filteredAchvs = Object.values(achvs).filter((a) => a instanceof achvType);
     for (const achv of filteredAchvs) {
@@ -3276,7 +3199,7 @@ export default class BattleScene extends SceneBase {
           this.addEnemyModifier(finalBossMBH, false, true);
           pokemon.generateAndPopulateMoveset(1);
           this.setFieldScale(0.75);
-          this.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger, false);
+          triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger, false);
           this.currentBattle.double = true;
           const availablePartyMembers = this.getPlayerParty().filter((p) => p.isAllowedInBattle());
           if (availablePartyMembers.length > 1) {

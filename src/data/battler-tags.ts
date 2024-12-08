@@ -42,7 +42,7 @@ import { Species } from "#enums/species";
 import { EFFECTIVE_STATS, getStatKey, Stat, type BattleStat, type EffectiveStat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { WeatherType } from "#enums/weather-type";
-import { phaseManager, queueMessage } from "#app/phase-manager";
+import { phaseManager, queueMessage, triggerPokemonBattleAnim, triggerPokemonFormChange } from "#app/phase-manager";
 
 export enum BattlerTagLapseType {
   FAINT,
@@ -2278,7 +2278,7 @@ export class FormBlockDamageTag extends BattlerTag {
     super.onAdd(pokemon);
 
     if (pokemon.formIndex !== 0) {
-      globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger);
+      triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger);
     }
   }
 
@@ -2290,7 +2290,7 @@ export class FormBlockDamageTag extends BattlerTag {
   onRemove(pokemon: Pokemon): void {
     super.onRemove(pokemon);
 
-    globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger);
+    triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger);
   }
 }
 /** Provides the additional weather-based effects of the Ice Face ability */
@@ -2343,7 +2343,7 @@ export class CommandedTag extends BattlerTag {
   /** Triggers an {@linkcode PokemonAnimType | animation} of the tagged Pokemon "spitting out" Tatsugiri */
   override onRemove(pokemon: Pokemon): void {
     if (this.getSourcePokemon()?.isActive(true)) {
-      globalScene.triggerPokemonBattleAnim(pokemon, PokemonAnimType.COMMANDER_REMOVE);
+      triggerPokemonBattleAnim(pokemon, PokemonAnimType.COMMANDER_REMOVE);
     }
   }
 
@@ -2514,12 +2514,12 @@ export class GulpMissileTag extends BattlerTag {
 
   onAdd(pokemon: Pokemon): void {
     super.onAdd(pokemon);
-    globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger);
+    triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger);
   }
 
   onRemove(pokemon: Pokemon): void {
     super.onRemove(pokemon);
-    globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger);
+    triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger);
   }
 }
 
@@ -2749,7 +2749,7 @@ export class SubstituteTag extends BattlerTag {
     this.sourceInFocus = false;
 
     // Queue battle animation and message
-    globalScene.triggerPokemonBattleAnim(pokemon, PokemonAnimType.SUBSTITUTE_ADD);
+    triggerPokemonBattleAnim(pokemon, PokemonAnimType.SUBSTITUTE_ADD);
     if (this.sourceMove === Moves.SHED_TAIL) {
       queueMessage(
         i18next.t("battlerTags:shedTailOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
@@ -2770,7 +2770,7 @@ export class SubstituteTag extends BattlerTag {
   onRemove(pokemon: Pokemon): void {
     // Only play the animation if the cause of removal isn't from the source's own move
     if (!this.sourceInFocus) {
-      globalScene.triggerPokemonBattleAnim(pokemon, PokemonAnimType.SUBSTITUTE_REMOVE, [this.sprite]);
+      triggerPokemonBattleAnim(pokemon, PokemonAnimType.SUBSTITUTE_REMOVE, [this.sprite]);
     } else {
       this.sprite.destroy();
     }
@@ -2796,13 +2796,13 @@ export class SubstituteTag extends BattlerTag {
 
   /** Triggers an animation that brings the Pokemon into focus before it uses a move */
   onPreMove(pokemon: Pokemon): void {
-    globalScene.triggerPokemonBattleAnim(pokemon, PokemonAnimType.SUBSTITUTE_PRE_MOVE, [this.sprite]);
+    triggerPokemonBattleAnim(pokemon, PokemonAnimType.SUBSTITUTE_PRE_MOVE, [this.sprite]);
     this.sourceInFocus = true;
   }
 
   /** Triggers an animation that brings the Pokemon out of focus after it uses a move */
   onAfterMove(pokemon: Pokemon): void {
-    globalScene.triggerPokemonBattleAnim(pokemon, PokemonAnimType.SUBSTITUTE_POST_MOVE, [this.sprite]);
+    triggerPokemonBattleAnim(pokemon, PokemonAnimType.SUBSTITUTE_POST_MOVE, [this.sprite]);
     this.sourceInFocus = false;
   }
 

@@ -12,7 +12,7 @@ import type { Starter } from "#app/ui/starter-select-ui-handler";
 import { Mode } from "#app/ui/ui";
 import type { Species } from "#enums/species";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
-import { phaseManager } from "#app/phase-manager";
+import { phaseManager, triggerPokemonFormChange } from "#app/phase-manager";
 
 export class SelectStarterPhase extends Phase {
   constructor() {
@@ -114,7 +114,7 @@ export class SelectStarterPhase extends Phase {
       globalScene.lastSavePlayTime = 0;
       // Ensures Keldeo (or any future Pokemon that have this type of form change) starts in the correct form
       globalScene.getPlayerParty().forEach((p) => {
-        globalScene.triggerPokemonFormChange(p, SpeciesFormChangeMoveLearnedTrigger);
+        triggerPokemonFormChange(p, SpeciesFormChangeMoveLearnedTrigger);
       });
       this.end();
     });

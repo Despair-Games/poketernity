@@ -32,7 +32,7 @@ import { ToggleDoublePositionPhase } from "./toggle-double-position-phase";
 import { VictoryPhase } from "./victory-phase";
 import { isNullOrUndefined } from "#app/utils";
 import { FRIENDSHIP_LOSS_FROM_FAINT } from "#app/data/balance/starters";
-import { queueMessage, phaseManager } from "#app/phase-manager";
+import { queueMessage, phaseManager, triggerPokemonFormChange } from "#app/phase-manager";
 
 export class FaintPhase extends PokemonPhase {
   /**
@@ -124,7 +124,7 @@ export class FaintPhase extends PokemonPhase {
     }
 
     queueMessage(i18next.t("battle:fainted", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }), null, true);
-    globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeActiveTrigger, true);
+    triggerPokemonFormChange(pokemon, SpeciesFormChangeActiveTrigger, true);
 
     if (pokemon.turnData?.attacksReceived?.length) {
       const lastAttack = pokemon.turnData.attacksReceived[0];

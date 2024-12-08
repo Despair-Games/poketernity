@@ -249,7 +249,7 @@ import {
 import { Nature } from "#enums/nature";
 import { StatusEffect } from "#enums/status-effect";
 import { doShinySparkleAnim } from "#app/field/anims";
-import { phaseManager, queueMessage } from "#app/phase-manager";
+import { phaseManager, queueMessage, triggerPokemonBattleAnim, triggerPokemonFormChange } from "#app/phase-manager";
 
 export enum LearnMoveSituation {
   MISC,
@@ -2809,7 +2809,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       || !globalScene.currentBattle?.isBattleMysteryEncounter()
       || !globalScene.currentBattle?.mysteryEncounter
     ) {
-      globalScene.triggerPokemonFormChange(this, SpeciesFormChangeMoveLearnedTrigger);
+      triggerPokemonFormChange(this, SpeciesFormChangeMoveLearnedTrigger);
     }
   }
 
@@ -4339,7 +4339,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     this.status = new Status(effect, 0, sleepTurnsRemaining?.value);
 
     if (effect !== StatusEffect.FAINT) {
-      globalScene.triggerPokemonFormChange(this, SpeciesFormChangeStatusEffectTrigger, true);
+      triggerPokemonFormChange(this, SpeciesFormChangeStatusEffectTrigger, true);
       applyPostSetStatusAbAttrs(PostSetStatusAbAttr, this, effect, sourcePokemon);
     }
 
@@ -4414,7 +4414,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       }
       // If this Pokemon has a Substitute when loading in, play an animation to add its sprite
       if (this.getTag(SubstituteTag)) {
-        globalScene.triggerPokemonBattleAnim(this, PokemonAnimType.SUBSTITUTE_ADD);
+        triggerPokemonBattleAnim(this, PokemonAnimType.SUBSTITUTE_ADD);
         this.getTag(SubstituteTag)!.sourceInFocus = false;
       }
 
@@ -4441,7 +4441,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       this.lapseTag(BattlerTagType.SEEDED);
     }
     if (globalScene) {
-      globalScene.triggerPokemonFormChange(this, SpeciesFormChangePostMoveTrigger, true);
+      triggerPokemonFormChange(this, SpeciesFormChangePostMoveTrigger, true);
     }
   }
 
@@ -4890,7 +4890,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     }
     globalScene.field.remove(this);
     this.setSwitchOutStatus(true);
-    globalScene.triggerPokemonFormChange(this, SpeciesFormChangeActiveTrigger, true);
+    triggerPokemonFormChange(this, SpeciesFormChangeActiveTrigger, true);
   }
 
   destroy(): void {
@@ -6190,7 +6190,7 @@ export class EnemyPokemon extends Pokemon {
       newPokemon.setVisible(false);
 
       ret = newPokemon;
-      globalScene.triggerPokemonFormChange(newPokemon, SpeciesFormChangeActiveTrigger, true);
+      triggerPokemonFormChange(newPokemon, SpeciesFormChangeActiveTrigger, true);
     }
 
     return ret;

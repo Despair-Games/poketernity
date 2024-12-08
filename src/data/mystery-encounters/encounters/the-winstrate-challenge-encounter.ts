@@ -34,7 +34,7 @@ import i18next from "i18next";
 import { ModifierTier } from "#app/modifier/modifier-tier";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { phaseManager } from "#app/phase-manager";
+import { phaseManager, triggerPokemonFormChange } from "#app/phase-manager";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/theWinstrateChallenge";
@@ -210,7 +210,7 @@ function endTrainerBattleAndShowDialogue(): Promise<void> {
           && pokemon.hasAbility(Abilities.ICE_FACE)
           && pokemon.formIndex === 1
         ) {
-          globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger);
+          triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger);
         }
 
         pokemon.resetBattleData();

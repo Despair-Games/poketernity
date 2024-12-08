@@ -72,7 +72,7 @@ import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import { StatusEffect } from "#enums/status-effect";
 import { WeatherType } from "#enums/weather-type";
-import { phaseManager, queueMessage } from "#app/phase-manager";
+import { phaseManager, queueMessage, triggerPokemonBattleAnim, triggerPokemonFormChange } from "#app/phase-manager";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -283,7 +283,7 @@ export class PostBattleInitFormChangeAbAttr extends PostBattleInitAbAttr {
   applyPostBattleInit(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
     const formIndex = this.formFunc(pokemon);
     if (formIndex !== pokemon.formIndex && !simulated) {
-      return globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger, false);
+      return triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger, false);
     }
 
     return false;
@@ -2532,7 +2532,7 @@ export class PostVictoryFormChangeAbAttr extends PostVictoryAbAttr {
     const formIndex = this.formFunc(pokemon);
     if (formIndex !== pokemon.formIndex) {
       if (!simulated) {
-        globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger, false);
+        triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger, false);
       }
       return true;
     }
@@ -3002,7 +3002,7 @@ export class PostSummonFormChangeAbAttr extends PostSummonAbAttr {
   applyPostSummon(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
     const formIndex = this.formFunc(pokemon);
     if (formIndex !== pokemon.formIndex) {
-      return simulated || globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger, false);
+      return simulated || triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger, false);
     }
 
     return false;
@@ -3257,7 +3257,7 @@ export class PostSummonFormChangeByWeatherAbAttr extends PostSummonAbAttr {
   }
 
   /**
-   * Calls the {@linkcode BattleScene.triggerPokemonFormChange | triggerPokemonFormChange} for both
+   * Calls the {@linkcode triggerPokemonFormChange} for both
    * {@linkcode SpeciesFormChange.SpeciesFormChangeWeatherTrigger | SpeciesFormChangeWeatherTrigger} and
    * {@linkcode SpeciesFormChange.SpeciesFormChangeWeatherTrigger | SpeciesFormChangeRevertWeatherFormTrigger} if it
    * is the specific Pokemon and ability
@@ -3277,8 +3277,8 @@ export class PostSummonFormChangeByWeatherAbAttr extends PostSummonAbAttr {
         return simulated;
       }
 
-      globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeWeatherTrigger);
-      globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeRevertWeatherFormTrigger);
+      triggerPokemonFormChange(pokemon, SpeciesFormChangeWeatherTrigger);
+      triggerPokemonFormChange(pokemon, SpeciesFormChangeRevertWeatherFormTrigger);
       queueShowAbility(pokemon, passive);
       return true;
     }
@@ -3310,7 +3310,7 @@ export class CommanderAbAttr extends AbAttr {
         // Lapse the source's semi-invulnerable tags (to avoid visual inconsistencies)
         pokemon.lapseTags(BattlerTagLapseType.MOVE_EFFECT);
         // Play an animation of the source jumping into the ally Dondozo's mouth
-        globalScene.triggerPokemonBattleAnim(pokemon, PokemonAnimType.COMMANDER_APPLY);
+        triggerPokemonBattleAnim(pokemon, PokemonAnimType.COMMANDER_APPLY);
         // Apply boosts from this effect to the ally Dondozo
         pokemon.getAlly().addTag(BattlerTagType.COMMANDED, 0, Moves.NONE, pokemon.id);
         // Cancel the source Pokemon's next move (if a move is queued)
@@ -3457,7 +3457,7 @@ export class PreSwitchOutFormChangeAbAttr extends PreSwitchOutAbAttr {
     const formIndex = this.formFunc(pokemon);
     if (formIndex !== pokemon.formIndex) {
       if (!simulated) {
-        globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger, false);
+        triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger, false);
       }
       return true;
     }
@@ -4619,7 +4619,7 @@ export class PostTurnFormChangeAbAttr extends PostTurnAbAttr {
     const formIndex = this.formFunc(pokemon);
     if (formIndex !== pokemon.formIndex) {
       if (!simulated) {
-        globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger, false);
+        triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger, false);
       }
 
       return true;

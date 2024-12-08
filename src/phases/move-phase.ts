@@ -49,7 +49,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { Moves } from "#enums/moves";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
-import { queueMessage, phaseManager } from "#app/phase-manager";
+import { queueMessage, phaseManager, triggerPokemonFormChange } from "#app/phase-manager";
 
 export class MovePhase extends BattlePhase {
   protected _pokemon: Pokemon;
@@ -277,7 +277,7 @@ export class MovePhase extends BattlePhase {
     const moveQueue = this.pokemon.getMoveQueue();
 
     // form changes happen even before we know that the move wll execute.
-    globalScene.triggerPokemonFormChange(this.pokemon, SpeciesFormChangePreMoveTrigger);
+    triggerPokemonFormChange(this.pokemon, SpeciesFormChangePreMoveTrigger);
 
     const isDelayedAttack = this.move.getMove().hasAttr(DelayedAttackAttr);
     if (isDelayedAttack) {

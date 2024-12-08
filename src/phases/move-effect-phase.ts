@@ -62,7 +62,7 @@ import { BooleanHolder, executeIf, isNullOrUndefined, NumberHolder } from "#app/
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { Moves } from "#enums/moves";
 import i18next from "i18next";
-import { queueMessage, phaseManager } from "#app/phase-manager";
+import { queueMessage, phaseManager, triggerPokemonFormChange } from "#app/phase-manager";
 
 export class MoveEffectPhase extends PokemonPhase {
   public move: PokemonMove;
@@ -358,7 +358,7 @@ export class MoveEffectPhase extends PokemonPhase {
              * (see Relic Song's interaction with Parental Bond when used by Meloetta).
              */
             if (lastHit) {
-              globalScene.triggerPokemonFormChange(user, SpeciesFormChangePostMoveTrigger);
+              triggerPokemonFormChange(user, SpeciesFormChangePostMoveTrigger);
               /**
                * Multi-Lens, Multi Hit move and Parental Bond check for PostDamageAbAttr
                * other damage source are calculated in damageAndUpdate in pokemon.ts

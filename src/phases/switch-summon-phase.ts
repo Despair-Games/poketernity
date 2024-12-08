@@ -13,7 +13,7 @@ import { PostSummonPhase } from "./post-summon-phase";
 import { SummonPhase } from "./summon-phase";
 import { SubstituteTag } from "#app/data/battler-tags";
 import { SwitchType } from "#enums/switch-type";
-import { phaseManager } from "#app/phase-manager";
+import { phaseManager, triggerPokemonFormChange } from "#app/phase-manager";
 
 export class SwitchSummonPhase extends SummonPhase {
   private readonly switchType: SwitchType;
@@ -238,7 +238,7 @@ export class SwitchSummonPhase extends SummonPhase {
 
     this.lastPokemon?.resetSummonData();
 
-    globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeActiveTrigger, true);
+    triggerPokemonFormChange(pokemon, SpeciesFormChangeActiveTrigger, true);
     // Reverts to weather-based forms when weather suppressors (Cloud Nine/Air Lock) are switched out
     globalScene.arena.triggerWeatherBasedFormChanges();
   }

@@ -40,7 +40,7 @@ import { SpeciesFormChangeRevertWeatherFormTrigger, SpeciesFormChangeWeatherTrig
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { WeatherType } from "#enums/weather-type";
-import { phaseManager, queueMessage } from "#app/phase-manager";
+import { phaseManager, queueMessage, triggerPokemonFormChange } from "#app/phase-manager";
 
 export class Arena {
   public biomeType: Biome;
@@ -348,7 +348,7 @@ export class Arena {
 
       if (isCastformWithForecast || isCherrimWithFlowerGift) {
         new ShowAbilityPhase(p.getBattlerIndex());
-        globalScene.triggerPokemonFormChange(p, SpeciesFormChangeWeatherTrigger);
+        triggerPokemonFormChange(p, SpeciesFormChangeWeatherTrigger);
       }
     });
   }
@@ -365,7 +365,7 @@ export class Arena {
 
       if (isCastformWithForecast || isCherrimWithFlowerGift) {
         new ShowAbilityPhase(p.getBattlerIndex());
-        return globalScene.triggerPokemonFormChange(p, SpeciesFormChangeRevertWeatherFormTrigger);
+        return triggerPokemonFormChange(p, SpeciesFormChangeRevertWeatherFormTrigger);
       }
     });
   }

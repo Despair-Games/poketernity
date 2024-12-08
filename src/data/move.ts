@@ -107,7 +107,7 @@ import { applyChallenges, ChallengeType } from "./challenge";
 import { SwitchType } from "#enums/switch-type";
 import { StatusEffect } from "enums/status-effect";
 import { globalScene } from "#app/global-scene";
-import { phaseManager, queueMessage } from "#app/phase-manager";
+import { phaseManager, queueMessage, triggerPokemonFormChange } from "#app/phase-manager";
 
 export enum MoveCategory {
   PHYSICAL,
@@ -7554,7 +7554,7 @@ export class AbilityChangeAttr extends MoveEffectAttr {
     const moveTarget = this.selfTarget ? user : target;
 
     moveTarget.summonData.ability = this.ability;
-    globalScene.triggerPokemonFormChange(moveTarget, SpeciesFormChangeRevertWeatherFormTrigger);
+    triggerPokemonFormChange(moveTarget, SpeciesFormChangeRevertWeatherFormTrigger);
 
     queueMessage(
       i18next.t("moveTriggers:acquiredAbility", {

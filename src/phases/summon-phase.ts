@@ -14,7 +14,7 @@ import { GameOverPhase } from "./game-over-phase";
 import { ShinySparklePhase } from "./shiny-sparkle-phase";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { globalScene } from "#app/global-scene";
-import { phaseManager } from "#app/phase-manager";
+import { phaseManager, triggerPokemonFormChange } from "#app/phase-manager";
 
 export class SummonPhase extends PartyMemberPokemonPhase {
   private loaded: boolean;
@@ -273,7 +273,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
       || [BattleType.TRAINER, BattleType.MYSTERY_ENCOUNTER].includes(globalScene.currentBattle.battleType)
       || globalScene.currentBattle.waveIndex % 10 === 1
     ) {
-      globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeActiveTrigger, true);
+      triggerPokemonFormChange(pokemon, SpeciesFormChangeActiveTrigger, true);
       this.queuePostSummon();
     }
   }
