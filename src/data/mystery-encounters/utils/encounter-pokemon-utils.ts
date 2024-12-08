@@ -88,6 +88,8 @@ export function getSpriteKeysFromPokemon(pokemon: Pokemon): { spriteKey: string;
   return { spriteKey, fileRoot };
 }
 
+// TODO: Move all the helper functions to get player's random/highest level/lowest level/highest BST to a different utils
+
 /**
  * Will never remove the player's last non-fainted Pokemon (if they only have 1).
  * Otherwise, picks a Pokemon completely at random and removes from the party
@@ -192,7 +194,7 @@ export function getHighestStatPlayerPokemon(
  * Ties are broken by whatever mon is closer to the front of the party
  * @param isAllowed Default false. If true, only picks from legal mons.
  * @param isFainted Default false. If true, includes fainted mons.
- * @returns the player's highest leveled Pokemon
+ * @returns the player's lowest leveled Pokemon
  */
 export function getLowestLevelPlayerPokemon(isAllowed: boolean = false, isFainted: boolean = false): PlayerPokemon {
   const party = globalScene.getPlayerParty();
@@ -419,6 +421,8 @@ export async function applyModifierTypeToPlayerPokemon(
 
   await globalScene.addModifier(modifier, false, false, false, true);
 }
+
+// TODO: deduplicate catch code/formula
 
 /**
  * Alternative to using AttemptCapturePhase

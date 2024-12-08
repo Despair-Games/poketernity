@@ -16,7 +16,7 @@ export enum TransformationScreenPosition {
  * Initiates an "evolution-like" animation to transform a previousPokemon (presumably from the player's party) into a new one, not necessarily an evolution species.
  * @param previousPokemon - The Pokemon's previous form
  * @param transformPokemon - The Pokemon's new form
- * @param screenPosition - Either left (-100), center (0), or right (200)
+ * @param screenPosition - Either left (-100), center (0), or right (100)
  */
 export function doPokemonTransformationSequence(
   previousPokemon: PlayerPokemon,
