@@ -1714,7 +1714,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
           const currentPartyValue = this.starterSpecies
             .map((s) => s.generation)
             .reduce(
-              (total: number, gen: number, i: number) =>
+              (total: number, _gen: number, i: number) =>
                 (total += globalScene.gameData.getSpeciesStarterValue(this.starterSpecies[i].speciesId)),
               0,
             );
@@ -1885,7 +1885,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                   const natures = globalScene.gameData.getNaturesForAttr(this.speciesStarterDexEntry?.natureAttr);
                   ui.setModeWithoutClear(Mode.OPTION_SELECT, {
                     options: natures
-                      .map((n: Nature, i: number) => {
+                      .map((n: Nature, _i: number) => {
                         const option: OptionSelectItem = {
                           label: getNatureName(n, true, true, true, globalScene.uiTheme),
                           handler: () => {
@@ -3907,7 +3907,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     const value = this.starterSpecies
       .map((s) => s.generation)
       .reduce(
-        (total: integer, gen: integer, i: integer) =>
+        (total: integer, _gen: integer, i: integer) =>
           (total += globalScene.gameData.getSpeciesStarterValue(this.starterSpecies[i].speciesId)),
         0,
       );

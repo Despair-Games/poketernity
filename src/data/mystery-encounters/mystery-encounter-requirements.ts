@@ -206,7 +206,7 @@ export class PreviousEncounterRequirement extends EncounterSceneRequirement {
     );
   }
 
-  override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
+  override getDialogueToken(_pokemon?: PlayerPokemon): [string, string] {
     return [
       "previousEncounter",
       globalScene.mysteryEncounterSaveData.encounteredEvents
@@ -242,7 +242,7 @@ export class WaveRangeRequirement extends EncounterSceneRequirement {
     return true;
   }
 
-  override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
+  override getDialogueToken(_pokemon?: PlayerPokemon): [string, string] {
     return ["waveIndex", globalScene.currentBattle.waveIndex.toString()];
   }
 }
@@ -271,7 +271,7 @@ export class WaveModulusRequirement extends EncounterSceneRequirement {
     return this.waveModuli.includes(globalScene.currentBattle.waveIndex % this.modulusValue);
   }
 
-  override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
+  override getDialogueToken(_pokemon?: PlayerPokemon): [string, string] {
     return ["waveIndex", globalScene.currentBattle.waveIndex.toString()];
   }
 }
@@ -297,7 +297,7 @@ export class TimeOfDayRequirement extends EncounterSceneRequirement {
     return true;
   }
 
-  override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
+  override getDialogueToken(_pokemon?: PlayerPokemon): [string, string] {
     return ["timeOfDay", TimeOfDay[globalScene.arena.getTimeOfDay()].toLocaleLowerCase()];
   }
 }
@@ -323,7 +323,7 @@ export class WeatherRequirement extends EncounterSceneRequirement {
     return true;
   }
 
-  override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
+  override getDialogueToken(_pokemon?: PlayerPokemon): [string, string] {
     const currentWeather = globalScene.arena.weather?.weatherType;
     let token = "";
     if (!isNullOrUndefined(currentWeather)) {
@@ -365,7 +365,7 @@ export class PartySizeRequirement extends EncounterSceneRequirement {
     return true;
   }
 
-  override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
+  override getDialogueToken(_pokemon?: PlayerPokemon): [string, string] {
     return ["partySize", globalScene.getPlayerParty().length.toString()];
   }
 }
@@ -398,7 +398,7 @@ export class PersistentModifierRequirement extends EncounterSceneRequirement {
     return modifierCount >= this.minNumberOfItems;
   }
 
-  override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
+  override getDialogueToken(_pokemon?: PlayerPokemon): [string, string] {
     return ["requiredItem", this.requiredHeldItemModifiers[0]];
   }
 }
@@ -426,7 +426,7 @@ export class MoneyRequirement extends EncounterSceneRequirement {
     return !(this.requiredMoney > 0 && this.requiredMoney > money);
   }
 
-  override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
+  override getDialogueToken(_pokemon?: PlayerPokemon): [string, string] {
     const value =
       this.scalingMultiplier > 0
         ? globalScene.getWaveMoneyAmount(this.scalingMultiplier).toString()

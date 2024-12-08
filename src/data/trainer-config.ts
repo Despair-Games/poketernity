@@ -59,15 +59,15 @@ export class TrainerPartyTemplate {
     this.balanced = !!balanced;
   }
 
-  getStrength(index: integer): PartyMemberStrength {
+  getStrength(_index: integer): PartyMemberStrength {
     return this.strength;
   }
 
-  isSameSpecies(index: integer): boolean {
+  isSameSpecies(_index: integer): boolean {
     return this.sameSpecies;
   }
 
-  isBalanced(index: integer): boolean {
+  isBalanced(_index: integer): boolean {
     return this.balanced;
   }
 }
@@ -1103,7 +1103,7 @@ export class TrainerConfig {
    **/
   initForStatTrainer(
     signatureSpecies: (Species | Species[])[],
-    isMale: boolean,
+    _isMale: boolean,
     ...specialtyTypes: Type[]
   ): TrainerConfig {
     if (!getIsInitialized()) {

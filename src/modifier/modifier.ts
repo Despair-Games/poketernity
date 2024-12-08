@@ -244,7 +244,7 @@ export abstract class PersistentModifier extends Modifier {
     return true;
   }
 
-  getIcon(forSummary?: boolean): Phaser.GameObjects.Container {
+  getIcon(_forSummary?: boolean): Phaser.GameObjects.Container {
     const container = globalScene.add.container(0, 0);
 
     const item = globalScene.add.sprite(0, 12, "items");
@@ -833,7 +833,7 @@ export abstract class LapsingPokemonHeldItemModifier extends PokemonHeldItemModi
     return this.battlesLeft;
   }
 
-  override getMaxStackCount(forThreshold?: boolean): number {
+  override getMaxStackCount(_forThreshold?: boolean): number {
     return 1;
   }
 }
@@ -905,7 +905,7 @@ export class TerastallizeModifier extends LapsingPokemonHeldItemModifier {
     return 1.25;
   }
 
-  getMaxHeldItemCount(pokemon: Pokemon): number {
+  getMaxHeldItemCount(_pokemon: Pokemon): number {
     return 1;
   }
 }
@@ -1102,7 +1102,7 @@ export class PokemonBaseStatTotalModifier extends PokemonHeldItemModifier {
     return 1.2;
   }
 
-  override getMaxHeldItemCount(pokemon: Pokemon): number {
+  override getMaxHeldItemCount(_pokemon: Pokemon): number {
     return 2;
   }
 }
@@ -1170,7 +1170,7 @@ export class PokemonBaseStatFlatModifier extends PokemonHeldItemModifier {
     return 1.1;
   }
 
-  override getMaxHeldItemCount(pokemon: Pokemon): number {
+  override getMaxHeldItemCount(_pokemon: Pokemon): number {
     return 1;
   }
 }
@@ -1239,7 +1239,7 @@ export class PokemonIncrementingStatModifier extends PokemonHeldItemModifier {
     return 1.2;
   }
 
-  getMaxHeldItemCount(pokemon?: Pokemon): number {
+  getMaxHeldItemCount(_pokemon?: Pokemon): number {
     return 50;
   }
 }
@@ -1617,7 +1617,7 @@ export class AttackTypeBoosterModifier extends PokemonHeldItemModifier {
     return 1.2;
   }
 
-  getMaxHeldItemCount(pokemon: Pokemon): number {
+  getMaxHeldItemCount(_pokemon: Pokemon): number {
     return 99;
   }
 }
@@ -1667,7 +1667,7 @@ export class SurviveDamageModifier extends PokemonHeldItemModifier {
     return false;
   }
 
-  getMaxHeldItemCount(pokemon: Pokemon): number {
+  getMaxHeldItemCount(_pokemon: Pokemon): number {
     return 5;
   }
 }
@@ -1722,7 +1722,7 @@ export class BypassSpeedChanceModifier extends PokemonHeldItemModifier {
     return false;
   }
 
-  getMaxHeldItemCount(pokemon: Pokemon): number {
+  getMaxHeldItemCount(_pokemon: Pokemon): number {
     return 3;
   }
 }
@@ -1815,7 +1815,7 @@ export class TurnHealModifier extends PokemonHeldItemModifier {
     return false;
   }
 
-  getMaxHeldItemCount(pokemon: Pokemon): number {
+  getMaxHeldItemCount(_pokemon: Pokemon): number {
     return 4;
   }
 }
@@ -1870,7 +1870,7 @@ export class TurnStatusEffectModifier extends PokemonHeldItemModifier {
     return pokemon.trySetStatus(this.effect, true, undefined, undefined, this.type.name);
   }
 
-  getMaxHeldItemCount(pokemon: Pokemon): number {
+  getMaxHeldItemCount(_pokemon: Pokemon): number {
     return 1;
   }
 
@@ -1915,7 +1915,7 @@ export class HitHealModifier extends PokemonHeldItemModifier {
     return true;
   }
 
-  getMaxHeldItemCount(pokemon: Pokemon): number {
+  getMaxHeldItemCount(_pokemon: Pokemon): number {
     return 4;
   }
 }
@@ -1953,7 +1953,7 @@ export class LevelIncrementBoosterModifier extends PersistentModifier {
     return true;
   }
 
-  getMaxStackCount(forThreshold?: boolean): number {
+  getMaxStackCount(_forThreshold?: boolean): number {
     return 99;
   }
 }
@@ -2007,7 +2007,7 @@ export class BerryModifier extends PokemonHeldItemModifier {
     return true;
   }
 
-  getMaxHeldItemCount(pokemon: Pokemon): number {
+  getMaxHeldItemCount(_pokemon: Pokemon): number {
     if ([BerryType.LUM, BerryType.LEPPA, BerryType.SITRUS, BerryType.ENIGMA].includes(this.berryType)) {
       return 2;
     }
@@ -2100,7 +2100,7 @@ export class PokemonInstantReviveModifier extends PokemonHeldItemModifier {
     return true;
   }
 
-  getMaxHeldItemCount(pokemon: Pokemon): number {
+  getMaxHeldItemCount(_pokemon: Pokemon): number {
     return 1;
   }
 }
@@ -2632,7 +2632,7 @@ export class ExpBoosterModifier extends PersistentModifier {
     return true;
   }
 
-  getMaxStackCount(forThreshold?: boolean): number {
+  getMaxStackCount(_forThreshold?: boolean): number {
     return this.boostMultiplier < 1 ? (this.boostMultiplier < 0.6 ? 99 : 30) : 10;
   }
 }
@@ -2685,7 +2685,7 @@ export class PokemonExpBoosterModifier extends PokemonHeldItemModifier {
     return true;
   }
 
-  getMaxHeldItemCount(pokemon: Pokemon): number {
+  getMaxHeldItemCount(_pokemon: Pokemon): number {
     return 99;
   }
 }
@@ -2769,7 +2769,7 @@ export class PokemonFriendshipBoosterModifier extends PokemonHeldItemModifier {
     return true;
   }
 
-  getMaxHeldItemCount(pokemon: Pokemon): number {
+  getMaxHeldItemCount(_pokemon: Pokemon): number {
     return 3;
   }
 }
@@ -2802,7 +2802,7 @@ export class PokemonNatureWeightModifier extends PokemonHeldItemModifier {
     return false;
   }
 
-  getMaxHeldItemCount(pokemon: Pokemon): number {
+  getMaxHeldItemCount(_pokemon: Pokemon): number {
     return 10;
   }
 }
@@ -2854,7 +2854,7 @@ export class PokemonMoveAccuracyBoosterModifier extends PokemonHeldItemModifier 
     return true;
   }
 
-  getMaxHeldItemCount(pokemon: Pokemon): number {
+  getMaxHeldItemCount(_pokemon: Pokemon): number {
     return 3;
   }
 }
@@ -2937,7 +2937,7 @@ export class PokemonMultiHitModifier extends PokemonHeldItemModifier {
     }
   }
 
-  getMaxHeldItemCount(pokemon: Pokemon): number {
+  getMaxHeldItemCount(_pokemon: Pokemon): number {
     return 2;
   }
 }
@@ -3000,7 +3000,7 @@ export class PokemonFormChangeItemModifier extends PokemonHeldItemModifier {
     return ret;
   }
 
-  getMaxHeldItemCount(pokemon: Pokemon): number {
+  getMaxHeldItemCount(_pokemon: Pokemon): number {
     return 1;
   }
 }
@@ -3089,7 +3089,7 @@ export class DamageMoneyRewardModifier extends PokemonHeldItemModifier {
    * @param multiplier {@linkcode NumberHolder} holding the multiplier value
    * @returns always `true`
    */
-  override apply(pokemon: Pokemon, multiplier: NumberHolder): boolean {
+  override apply(_pokemon: Pokemon, multiplier: NumberHolder): boolean {
     const moneyAmount = new NumberHolder(Math.floor(multiplier.value * (0.5 * this.getStackCount())));
     globalScene.applyModifiers(MoneyMultiplierModifier, true, moneyAmount);
     globalScene.addMoney(moneyAmount.value);
@@ -3097,7 +3097,7 @@ export class DamageMoneyRewardModifier extends PokemonHeldItemModifier {
     return true;
   }
 
-  getMaxHeldItemCount(pokemon: Pokemon): number {
+  getMaxHeldItemCount(_pokemon: Pokemon): number {
     return 5;
   }
 }
@@ -3342,7 +3342,7 @@ export class SwitchEffectTransferModifier extends PokemonHeldItemModifier {
     return true;
   }
 
-  getMaxHeldItemCount(pokemon: Pokemon): number {
+  getMaxHeldItemCount(_pokemon: Pokemon): number {
     return 1;
   }
 }
@@ -3474,7 +3474,7 @@ export class TurnHeldItemTransferModifier extends HeldItemTransferModifier {
     });
   }
 
-  getMaxHeldItemCount(pokemon: Pokemon): number {
+  getMaxHeldItemCount(_pokemon: Pokemon): number {
     return 1;
   }
 
@@ -3533,7 +3533,7 @@ export class ContactHeldItemTransferChanceModifier extends HeldItemTransferModif
     });
   }
 
-  getMaxHeldItemCount(pokemon: Pokemon): number {
+  getMaxHeldItemCount(_pokemon: Pokemon): number {
     return 5;
   }
 }
@@ -3683,7 +3683,7 @@ abstract class EnemyDamageMultiplierModifier extends EnemyPersistentModifier {
 }
 
 export class EnemyDamageBoosterModifier extends EnemyDamageMultiplierModifier {
-  constructor(type: ModifierType, boostPercent: number, stackCount?: number) {
+  constructor(type: ModifierType, _boostPercent: number, stackCount?: number) {
     //super(type, 1 + ((boostPercent || 10) * 0.01), stackCount);
     super(type, 1.05, stackCount); // Hardcode multiplier temporarily
   }
@@ -3706,7 +3706,7 @@ export class EnemyDamageBoosterModifier extends EnemyDamageMultiplierModifier {
 }
 
 export class EnemyDamageReducerModifier extends EnemyDamageMultiplierModifier {
-  constructor(type: ModifierType, reductionPercent: number, stackCount?: number) {
+  constructor(type: ModifierType, _reductionPercent: number, stackCount?: number) {
     //super(type, 1 - ((reductionPercent || 5) * 0.01), stackCount);
     super(type, 0.975, stackCount); // Hardcode multiplier temporarily
   }
@@ -3731,7 +3731,7 @@ export class EnemyDamageReducerModifier extends EnemyDamageMultiplierModifier {
 export class EnemyTurnHealModifier extends EnemyPersistentModifier {
   public healPercent: number;
 
-  constructor(type: ModifierType, healPercent: number, stackCount?: number) {
+  constructor(type: ModifierType, _healPercent: number, stackCount?: number) {
     super(type, stackCount);
 
     // Hardcode temporarily
@@ -3784,7 +3784,7 @@ export class EnemyAttackStatusEffectChanceModifier extends EnemyPersistentModifi
   public effect: StatusEffect;
   public chance: number;
 
-  constructor(type: ModifierType, effect: StatusEffect, chancePercent: number, stackCount?: number) {
+  constructor(type: ModifierType, effect: StatusEffect, _chancePercent: number, stackCount?: number) {
     super(type, stackCount);
 
     this.effect = effect;
@@ -3825,7 +3825,7 @@ export class EnemyAttackStatusEffectChanceModifier extends EnemyPersistentModifi
 export class EnemyStatusEffectHealChanceModifier extends EnemyPersistentModifier {
   public chance: number;
 
-  constructor(type: ModifierType, chancePercent: number, stackCount?: number) {
+  constructor(type: ModifierType, _chancePercent: number, stackCount?: number) {
     super(type, stackCount);
 
     //Hardcode temporarily
@@ -3870,7 +3870,7 @@ export class EnemyStatusEffectHealChanceModifier extends EnemyPersistentModifier
 export class EnemyEndureChanceModifier extends EnemyPersistentModifier {
   public chance: number;
 
-  constructor(type: ModifierType, chancePercent?: number, stackCount?: number) {
+  constructor(type: ModifierType, _chancePercent?: number, stackCount?: number) {
     super(type, stackCount || 10);
 
     //Hardcode temporarily

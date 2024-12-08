@@ -97,7 +97,7 @@ export class FaintPhase extends PokemonPhase {
     }
 
     /** In case the current pokemon was just switched in, make sure it is counted as participating in the combat */
-    globalScene.getPlayerField().forEach((pokemon, i) => {
+    globalScene.getPlayerField().forEach((pokemon, _i) => {
       if (pokemon?.isActive(true)) {
         if (pokemon.isPlayer()) {
           globalScene.currentBattle.addParticipant(pokemon as PlayerPokemon);

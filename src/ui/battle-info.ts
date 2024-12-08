@@ -955,5 +955,5 @@ export class EnemyBattleInfo extends BattleInfo {
     super(140, -141, false);
   }
 
-  override setMini(mini: boolean): void {} // Always mini
+  override setMini(_mini: boolean): void {} // Always mini
 }

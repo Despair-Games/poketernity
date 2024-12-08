@@ -215,7 +215,7 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
     globalScene.eventTarget.addEventListener(BattleSceneEventType.TURN_END, this.onTurnEndEvent);
   }
 
-  private onNewArena(event: Event) {
+  private onNewArena(_event: Event) {
     this.fieldEffectInfo.length = 0;
 
     // Subscribes to required events available on battle start

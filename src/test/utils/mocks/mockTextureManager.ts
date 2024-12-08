@@ -51,7 +51,7 @@ export default class MockTextureManager {
     return sprite;
   }
 
-  existing(obj) {
+  existing(_obj) {
     // const whitelist = ["ArenaBase", "PlayerPokemon", "EnemyPokemon"];
     // const key = obj.constructor.name;
     // if (whitelist.includes(key) || obj.texture?.key?.includes("trainer_")) {

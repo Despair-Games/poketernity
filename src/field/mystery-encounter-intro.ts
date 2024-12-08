@@ -408,7 +408,7 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
     }
 
     const ret: Phaser.GameObjects.Sprite[] = [];
-    this.spriteConfigs.forEach((config, i) => {
+    this.spriteConfigs.forEach((_config, i) => {
       ret.push(this.getAt(i * 2));
     });
     return ret;
@@ -423,7 +423,7 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
     }
 
     const ret: Phaser.GameObjects.Sprite[] = [];
-    this.spriteConfigs.forEach((config, i) => {
+    this.spriteConfigs.forEach((_config, i) => {
       ret.push(this.getAt(i * 2 + 1));
     });
 

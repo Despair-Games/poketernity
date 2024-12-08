@@ -19,7 +19,7 @@ export class ReloadHelper extends GameManagerHelper {
 
     // Whenever the game saves the session, save it to the reloadHelper instead
     vi.spyOn(game.scene.gameData, "saveAll").mockImplementation(() => {
-      return new Promise<boolean>((resolve, reject) => {
+      return new Promise<boolean>((resolve, _reject) => {
         this.sessionData = game.scene.gameData.getSessionSaveData();
         resolve(true);
       });
@@ -39,7 +39,7 @@ export class ReloadHelper extends GameManagerHelper {
 
     // Set the last saved session to the desired session data
     vi.spyOn(scene.gameData, "getSession").mockReturnValue(
-      new Promise((resolve, reject) => {
+      new Promise((resolve, _reject) => {
         resolve(this.sessionData);
       }),
     );

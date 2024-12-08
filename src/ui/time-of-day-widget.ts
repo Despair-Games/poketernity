@@ -151,7 +151,7 @@ export default class TimeOfDayWidget extends Phaser.GameObjects.Container {
    * Grabs the current time of day from the arena and calls {@linkcode tweenTimeOfDayIcon}
    * @param event {@linkcode Event} being sent
    */
-  private onEncounterPhase(event: Event) {
+  private onEncounterPhase(_event: Event) {
     const newTime = globalScene.arena.getTimeOfDay();
 
     if (this.currentTime === newTime) {

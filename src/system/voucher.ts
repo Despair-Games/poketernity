@@ -34,7 +34,7 @@ export class Voucher {
    * @param playerGender - this is ignored here. It's only there to match the signature of the function in the Achv class
    * @returns the name of the voucher
    */
-  getName(playerGender: PlayerGender): string {
+  getName(_playerGender: PlayerGender): string {
     return getVoucherTypeName(this.voucherType);
   }
 

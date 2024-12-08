@@ -8,7 +8,7 @@ import TransitionImagePackPlugin from "phaser3-rex-plugins/templates/transitioni
 import { initI18n } from "./plugins/i18n";
 
 // Catch global errors and display them in an alert so users can report the issue.
-window.onerror = function (message, source, lineno, colno, error) {
+window.onerror = function (_message, _source, _lineno, _colno, error) {
   console.error(error);
   // const errorString = `Received unhandled error. Open browser console and click OK to see details.\nError: ${message}\nSource: ${source}\nLine: ${lineno}\nColumn: ${colno}\nStack: ${error.stack}`;
   //alert(errorString);
