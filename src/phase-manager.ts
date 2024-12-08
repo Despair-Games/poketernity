@@ -25,7 +25,7 @@ class PhaseManager {
     /** PhaseQueuePrepend: is a temp storage of what will be added to PhaseQueue */
     private phaseQueuePrepend: Phase[] = [],
 
-    /** overrides default of inserting phases to end of phaseQueuePrepend array, useful or inserting Phases "out of order" */
+    /** overrides default of inserting phases to end of phaseQueuePrepend array, useful for inserting Phases "out of order" */
     private phaseQueuePrependSpliceIndex: number = -1,
     private nextCommandPhaseQueue: Phase[] = [],
 
@@ -125,22 +125,17 @@ class PhaseManager {
     }
     if (!this.phaseQueue.length) {
       this.populatePhaseQueue();
-      // Clear the conditionalQueue if there are no phases left in the phaseQueue
       this.clearConditionalPhaseQueue();
     }
 
     this.currentPhase = this.phaseQueue.shift() ?? null;
 
-    // Check if there are any conditional phases queued
     if (this.conditionalQueue?.length) {
-      // Retrieve the first conditional phase from the queue
       const conditionalPhase = this.conditionalQueue.shift();
       // Evaluate the condition associated with the phase
       if (conditionalPhase?.[0]()) {
-        // If the condition is met, add the phase to the phase queue
         this.pushPhase(conditionalPhase[1]);
       } else if (conditionalPhase) {
-        // If the condition is not met, re-add the phase back to the front of the conditional queue
         this.conditionalQueue.unshift(conditionalPhase);
       } else {
         console.warn("condition phase is undefined/null!", conditionalPhase);
