@@ -336,7 +336,7 @@ export class MysteryEncounterOptionBuilder implements Partial<IMysteryEncounterO
     return this;
   }
 
-  build(_this: IMysteryEncounterOption) {
-    return new MysteryEncounterOption(this);
+  build() {
+    return new MysteryEncounterOption(this as unknown as IMysteryEncounterOption);
   }
 }
