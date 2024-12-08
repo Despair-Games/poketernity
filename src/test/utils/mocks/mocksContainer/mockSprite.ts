@@ -37,11 +37,11 @@ export default class MockSprite implements MockGameObject {
     };
   }
 
-  setTexture(key: string, frame?: string | number) {
+  setTexture(_key: string, _frame?: string | number) {
     return this;
   }
 
-  setSizeToFrame(frame?: boolean | Frame): Sprite {
+  setSizeToFrame(_frame?: boolean | Frame): Sprite {
     return {} as Sprite;
   }
 
@@ -50,7 +50,7 @@ export default class MockSprite implements MockGameObject {
     return this.phaserSprite.setPipeline(obj);
   }
 
-  off(event, callback, source) {}
+  off(_event, _callback, _source) {}
 
   setTintFill(color) {
     // Sets the tint fill color.
@@ -115,7 +115,7 @@ export default class MockSprite implements MockGameObject {
     return this.phaserSprite.setTint(color);
   }
 
-  setFrame(frame, updateSize?: boolean, updateOrigin?: boolean) {
+  setFrame(frame, _updateSize?: boolean, _updateOrigin?: boolean) {
     // Sets the frame this Game Object will use to render with.
     this.frame = frame;
     return frame;

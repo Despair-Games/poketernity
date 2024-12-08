@@ -7,7 +7,7 @@ export default class MockNineslice extends MockContainer {
   private topHeight;
   private bottomHeight;
 
-  constructor(textureManager, x, y, texture, frame, width, height, leftWidth, rightWidth, topHeight, bottomHeight) {
+  constructor(textureManager, x, y, texture, frame, _width, _height, leftWidth, rightWidth, topHeight, bottomHeight) {
     super(textureManager, x, y);
     this.texture = texture;
     this.frame = frame;

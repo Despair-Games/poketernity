@@ -60,7 +60,7 @@ describe("Moves - Whirlwind", () => {
     const [bulbasaur, charmander, squirtle] = game.scene.getPlayerParty();
 
     // Turn 1: Mock an RNG call that calls for switching to 1st backup Pokemon (Charmander)
-    vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((range, min: number = 0) => {
+    vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: number = 0) => {
       return min;
     });
     game.move.select(Moves.SPLASH);
@@ -72,7 +72,7 @@ describe("Moves - Whirlwind", () => {
     expect(squirtle.isOnField()).toBe(false);
 
     // Turn 2: Mock an RNG call that calls for switching to 2nd backup Pokemon (Squirtle)
-    vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((range, min: number = 0) => {
+    vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: number = 0) => {
       return min + 1;
     });
     game.move.select(Moves.SPLASH);
@@ -92,7 +92,7 @@ describe("Moves - Whirlwind", () => {
     const [lapras, eevee, toxapex, primarina] = game.scene.getPlayerParty();
 
     // Turn 1: Mock an RNG call that would normally call for switching to Eevee, but it is ineligible
-    vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((range, min: number = 0) => {
+    vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: number = 0) => {
       return min;
     });
     game.move.select(Moves.SPLASH);
@@ -119,7 +119,7 @@ describe("Moves - Whirlwind", () => {
     await game.toNextTurn();
 
     // Turn 2: Mock an RNG call that would normally call for switching to Eevee, but it is fainted
-    vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((range, min: number = 0) => {
+    vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: number = 0) => {
       return min;
     });
     game.move.select(Moves.SPLASH);
@@ -146,7 +146,7 @@ describe("Moves - Whirlwind", () => {
     await game.toNextTurn();
 
     // Turn 2: Mock an RNG call that would normally call for switching to Eevee, but it is fainted
-    vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((range, min: number = 0) => {
+    vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: number = 0) => {
       return min;
     });
     game.move.select(Moves.SPLASH);

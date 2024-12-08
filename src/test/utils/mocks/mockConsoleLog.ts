@@ -65,7 +65,7 @@ const MockConsoleLog = (_logDisabled = false, _phaseText = false) => {
         .map((arg) => {
           if (typeof arg === "object" && arg !== null) {
             // Handle objects including arrays
-            return JSON.stringify(arg, (key, value) => (typeof value === "bigint" ? value.toString() : value));
+            return JSON.stringify(arg, (_key, value) => (typeof value === "bigint" ? value.toString() : value));
           } else if (typeof arg === "bigint") {
             // Handle BigInt values
             return arg.toString();

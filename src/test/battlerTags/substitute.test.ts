@@ -49,7 +49,7 @@ describe("BattlerTag - SubstituteTag", () => {
       const subject = new SubstituteTag(Moves.SUBSTITUTE, mockPokemon.id);
 
       vi.spyOn(mockPokemon.scene as BattleScene, "triggerPokemonBattleAnim").mockImplementation(
-        (pokemon, battleAnimType, fieldAssets?, delayed?) => {
+        (_pokemon, battleAnimType, _fieldAssets?, _delayed?) => {
           expect(battleAnimType).toBe(PokemonAnimType.SUBSTITUTE_ADD);
           return true;
         },
@@ -91,7 +91,7 @@ describe("BattlerTag - SubstituteTag", () => {
       subject.sourceInFocus = false;
 
       vi.spyOn(mockPokemon.scene as BattleScene, "triggerPokemonBattleAnim").mockImplementation(
-        (pokemon, battleAnimType, fieldAssets?, delayed?) => {
+        (_pokemon, battleAnimType, _fieldAssets?, _delayed?) => {
           expect(battleAnimType).toBe(PokemonAnimType.SUBSTITUTE_REMOVE);
           return true;
         },
@@ -127,7 +127,7 @@ describe("BattlerTag - SubstituteTag", () => {
       const subject = new SubstituteTag(Moves.SUBSTITUTE, mockPokemon.id);
 
       vi.spyOn(mockPokemon.scene as BattleScene, "triggerPokemonBattleAnim").mockImplementation(
-        (pokemon, battleAnimType, fieldAssets?, delayed?) => {
+        (_pokemon, battleAnimType, _fieldAssets?, _delayed?) => {
           expect(battleAnimType).toBe(PokemonAnimType.SUBSTITUTE_PRE_MOVE);
           return true;
         },
@@ -146,7 +146,7 @@ describe("BattlerTag - SubstituteTag", () => {
       const subject = new SubstituteTag(Moves.SUBSTITUTE, mockPokemon.id);
 
       vi.spyOn(mockPokemon.scene as BattleScene, "triggerPokemonBattleAnim").mockImplementation(
-        (pokemon, battleAnimType, fieldAssets?, delayed?) => {
+        (_pokemon, battleAnimType, _fieldAssets?, _delayed?) => {
           expect(battleAnimType).toBe(PokemonAnimType.SUBSTITUTE_POST_MOVE);
           return true;
         },
