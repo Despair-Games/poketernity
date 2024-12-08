@@ -33,6 +33,7 @@ import { modifierTypes } from "#app/modifier/modifier-type";
 import { Type } from "#enums/type";
 import { getPokeballTintColor } from "#app/data/pokeball";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
+import { phaseManager } from "#app/phase-manager";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/theExpertPokemonBreeder";
@@ -632,8 +633,8 @@ function onGameOver() {
   globalScene.playBgm(globalScene.arena.bgm);
 
   // Clear any leftover battle phases
-  globalScene.clearPhaseQueue();
-  globalScene.clearPhaseQueueSplice();
+  phaseManager.clearPhaseQueue();
+  phaseManager.clearPhaseQueueSplice();
 
   // Return enemy Pokemon
   const pokemon = globalScene.getEnemyPokemon();

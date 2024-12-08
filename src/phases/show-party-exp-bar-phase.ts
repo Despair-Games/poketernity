@@ -6,6 +6,7 @@ import { NumberHolder } from "#app/utils";
 import { HidePartyExpBarPhase } from "./hide-party-exp-bar-phase";
 import { LevelUpPhase } from "./level-up-phase";
 import { PlayerPartyMemberPokemonPhase } from "./player-party-member-pokemon-phase";
+import { phaseManager } from "#app/phase-manager";
 
 export class ShowPartyExpBarPhase extends PlayerPartyMemberPokemonPhase {
   private expValue: number;
@@ -28,9 +29,9 @@ export class ShowPartyExpBarPhase extends PlayerPartyMemberPokemonPhase {
     pokemon.addExp(exp.value);
     const newLevel = pokemon.level;
     if (newLevel > lastLevel) {
-      globalScene.unshiftPhase(new LevelUpPhase(this.partyMemberIndex, lastLevel, newLevel));
+      phaseManager.unshiftPhase(new LevelUpPhase(this.partyMemberIndex, lastLevel, newLevel));
     }
-    globalScene.unshiftPhase(new HidePartyExpBarPhase());
+    phaseManager.unshiftPhase(new HidePartyExpBarPhase());
     pokemon.updateInfo();
 
     if (globalScene.expParty === ExpNotification.SKIP) {

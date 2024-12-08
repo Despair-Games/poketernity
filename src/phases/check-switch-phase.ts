@@ -8,6 +8,7 @@ import { BattlePhase } from "./battle-phase";
 import { SummonMissingPhase } from "./summon-missing-phase";
 import { SwitchPhase } from "./switch-phase";
 import { SwitchType } from "#enums/switch-type";
+import { phaseManager } from "#app/phase-manager";
 
 export class CheckSwitchPhase extends BattlePhase {
   protected fieldIndex: number;
@@ -34,7 +35,7 @@ export class CheckSwitchPhase extends BattlePhase {
 
     // ...if the checked Pokemon is somehow not on the field
     if (globalScene.field.getAll().indexOf(pokemon) === -1) {
-      globalScene.unshiftPhase(new SummonMissingPhase(this.fieldIndex));
+      phaseManager.unshiftPhase(new SummonMissingPhase(this.fieldIndex));
       return super.end();
     }
 
@@ -67,7 +68,7 @@ export class CheckSwitchPhase extends BattlePhase {
           Mode.CONFIRM,
           () => {
             globalScene.ui.setMode(Mode.MESSAGE);
-            globalScene.unshiftPhase(new SwitchPhase(SwitchType.INITIAL_SWITCH, this.fieldIndex, false, true));
+            phaseManager.unshiftPhase(new SwitchPhase(SwitchType.INITIAL_SWITCH, this.fieldIndex, false, true));
             this.end();
           },
           () => {

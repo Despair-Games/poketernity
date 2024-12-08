@@ -13,6 +13,7 @@ import { PostSummonPhase } from "./post-summon-phase";
 import { SummonPhase } from "./summon-phase";
 import { SubstituteTag } from "#app/data/battler-tags";
 import { SwitchType } from "#enums/switch-type";
+import { phaseManager } from "#app/phase-manager";
 
 export class SwitchSummonPhase extends SummonPhase {
   private readonly switchType: SwitchType;
@@ -243,6 +244,6 @@ export class SwitchSummonPhase extends SummonPhase {
   }
 
   queuePostSummon(): void {
-    globalScene.unshiftPhase(new PostSummonPhase(this.getPokemon().getBattlerIndex()));
+    phaseManager.unshiftPhase(new PostSummonPhase(this.getPokemon().getBattlerIndex()));
   }
 }

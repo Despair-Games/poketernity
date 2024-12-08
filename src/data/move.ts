@@ -107,6 +107,7 @@ import { applyChallenges, ChallengeType } from "./challenge";
 import { SwitchType } from "#enums/switch-type";
 import { StatusEffect } from "enums/status-effect";
 import { globalScene } from "#app/global-scene";
+import { phaseManager, queueMessage } from "#app/phase-manager";
 
 export enum MoveCategory {
   PHYSICAL,
@@ -1104,7 +1105,7 @@ function ChargeMove<TBase extends SubMove>(Base: TBase) {
      * @param target the {@linkcode Pokemon} targeted by this move (optional)
      */
     showChargeText(user: Pokemon, target?: Pokemon): void {
-      globalScene.queueMessage(
+      queueMessage(
         this._chargeText
           .replace("{USER}", getPokemonNameWithAffix(user))
           .replace("{TARGET}", getPokemonNameWithAffix(target)),
@@ -1387,7 +1388,7 @@ export class MessageHeaderAttr extends MoveHeaderAttr {
     const message = typeof this.message === "string" ? this.message : this.message(user, move);
 
     if (message) {
-      globalScene.queueMessage(message);
+      queueMessage(message);
       return true;
     }
     return false;
@@ -1438,7 +1439,7 @@ export class PreMoveMessageAttr extends MoveAttr {
   apply(user: Pokemon, target: Pokemon, move: Move, _args: any[]): boolean {
     const message = typeof this.message === "string" ? (this.message as string) : this.message(user, target, move);
     if (message) {
-      globalScene.queueMessage(message, 500);
+      queueMessage(message, 500);
       return true;
     }
     return false;
@@ -1701,7 +1702,7 @@ export class RecoilAttr extends MoveEffectAttr {
     }
 
     user.damageAndUpdate(recoilDamage, HitResult.OTHER, false, true, true);
-    globalScene.queueMessage(i18next.t("moveTriggers:hitWithRecoil", { pokemonName: getPokemonNameWithAffix(user) }));
+    queueMessage(i18next.t("moveTriggers:hitWithRecoil", { pokemonName: getPokemonNameWithAffix(user) }));
     user.turnData.damageTaken += recoilDamage;
 
     return true;
@@ -1812,9 +1813,7 @@ export class HalfSacrificialAttr extends MoveEffectAttr {
     applyAbAttrs(BlockNonDirectDamageAbAttr, user, cancelled);
     if (!cancelled.value) {
       user.damageAndUpdate(toDmgValue(user.getMaxHp() / 2), HitResult.OTHER, false, true, true);
-      globalScene.queueMessage(
-        i18next.t("moveTriggers:cutHpPowerUpMove", { pokemonName: getPokemonNameWithAffix(user) }),
-      ); // Queue recoil message
+      queueMessage(i18next.t("moveTriggers:cutHpPowerUpMove", { pokemonName: getPokemonNameWithAffix(user) })); // Queue recoil message
     }
     return true;
   }
@@ -1922,7 +1921,7 @@ export class HealAttr extends MoveEffectAttr {
    * This heals the target and shows the appropriate message.
    */
   addHealPhase(target: Pokemon, healRatio: number) {
-    globalScene.unshiftPhase(
+    phaseManager.unshiftPhase(
       new PokemonHealPhase(
         target.getBattlerIndex(),
         toDmgValue(target.getMaxHp() * healRatio),
@@ -1973,7 +1972,7 @@ export class PartyStatusCureAttr extends MoveEffectAttr {
     partyPokemon.forEach((p) => this.cureStatus(p, user.id));
 
     if (this.message) {
-      globalScene.queueMessage(this.message);
+      queueMessage(this.message);
     }
 
     return true;
@@ -1993,7 +1992,7 @@ export class PartyStatusCureAttr extends MoveEffectAttr {
       pokemon.resetStatus();
       pokemon.updateInfo();
     } else {
-      globalScene.unshiftPhase(
+      phaseManager.unshiftPhase(
         new ShowAbilityPhase(pokemon.id, pokemon.getPassiveAbility()?.id === this.abilityCondition),
       );
     }
@@ -2049,7 +2048,7 @@ export class SacrificialFullRestoreAttr extends SacrificialAttr {
       .map((p) => p.getMaxHp())
       .reduce((maxHp: integer, hp: integer) => Math.max(hp, maxHp), 0);
 
-    globalScene.pushPhase(
+    phaseManager.pushPhase(
       new PokemonHealPhase(
         user.getBattlerIndex(),
         maxPartyMemberHp,
@@ -2270,7 +2269,7 @@ export class HitHealAttr extends MoveEffectAttr {
         message = "";
       }
     }
-    globalScene.unshiftPhase(new PokemonHealPhase(user.getBattlerIndex(), healAmount, message, false, true));
+    phaseManager.unshiftPhase(new PokemonHealPhase(user.getBattlerIndex(), healAmount, message, false, true));
     return true;
   }
 
@@ -2469,9 +2468,7 @@ export class StatusEffectAttr extends MoveEffectAttr {
 
       if (user !== target && target.isSafeguarded(user)) {
         if (move.category === MoveCategory.STATUS) {
-          globalScene.queueMessage(
-            i18next.t("moveTriggers:safeguard", { targetName: getPokemonNameWithAffix(target) }),
-          );
+          queueMessage(i18next.t("moveTriggers:safeguard", { targetName: getPokemonNameWithAffix(target) }));
         }
         return false;
       }
@@ -2587,7 +2584,7 @@ export class StealHeldItemChanceAttr extends MoveEffectAttr {
         const stolenItem = tierHeldItems[user.randSeedInt(tierHeldItems.length)];
         globalScene.tryTransferHeldItemModifier(stolenItem, user, false).then((success) => {
           if (success) {
-            globalScene.queueMessage(
+            queueMessage(
               i18next.t("moveTriggers:stoleItem", {
                 pokemonName: getPokemonNameWithAffix(user),
                 targetName: getPokemonNameWithAffix(target),
@@ -2678,7 +2675,7 @@ export class RemoveHeldItemAttr extends MoveEffectAttr {
       globalScene.updateModifiers(target.isPlayer());
 
       if (this.berriesOnly) {
-        globalScene.queueMessage(
+        queueMessage(
           i18next.t("moveTriggers:incineratedItem", {
             pokemonName: getPokemonNameWithAffix(user),
             targetName: getPokemonNameWithAffix(target),
@@ -2686,7 +2683,7 @@ export class RemoveHeldItemAttr extends MoveEffectAttr {
           }),
         );
       } else {
-        globalScene.queueMessage(
+        queueMessage(
           i18next.t("moveTriggers:knockedOffItem", {
             pokemonName: getPokemonNameWithAffix(user),
             targetName: getPokemonNameWithAffix(target),
@@ -2810,7 +2807,7 @@ export class StealEatBerryAttr extends EatBerryAttr {
       targetName: target.name,
       berryName: this.chosenBerry.type.name,
     });
-    globalScene.queueMessage(message);
+    queueMessage(message);
     this.reduceBerryModifier(target);
     this.eatBerry(user, target);
     return true;
@@ -2862,7 +2859,7 @@ export class HealStatusEffectAttr extends MoveEffectAttr {
 
     const pokemon = this.selfTarget ? user : target;
     if (pokemon.status && this.effects.includes(pokemon.status.effect)) {
-      globalScene.queueMessage(getStatusEffectHealText(pokemon.status.effect, getPokemonNameWithAffix(pokemon)));
+      queueMessage(getStatusEffectHealText(pokemon.status.effect, getPokemonNameWithAffix(pokemon)));
       pokemon.resetStatus();
       pokemon.updateInfo();
 
@@ -3110,7 +3107,7 @@ export class DelayedAttackAttr extends OverrideMoveEffectAttr {
       if (args.length < 2 || !args[1]) {
         new MoveChargeAnim(this.chargeAnim, move.id, user).play(false, () => {
           (args[0] as BooleanHolder).value = true;
-          globalScene.queueMessage(
+          queueMessage(
             this.chargeText
               .replace("{TARGET}", getPokemonNameWithAffix(target))
               .replace("{USER}", getPokemonNameWithAffix(user)),
@@ -3157,13 +3154,13 @@ export class AwaitCombinedPledgeAttr extends OverrideMoveEffectAttr {
   override apply(user: Pokemon, _target: Pokemon, move: Move, args: any[]): boolean {
     if (user.turnData.combiningPledge) {
       // "The two moves have become one!\nIt's a combined move!"
-      globalScene.queueMessage(i18next.t("moveTriggers:combiningPledge"));
+      queueMessage(i18next.t("moveTriggers:combiningPledge"));
       return false;
     }
 
     const overridden = args[0] as BooleanHolder;
 
-    const allyMovePhase = globalScene.findPhase<MovePhase>(
+    const allyMovePhase = phaseManager.findPhase<MovePhase>(
       (phase) => phase instanceof MovePhase && phase.pokemon.isPlayer() === user.isPlayer(),
     );
     if (allyMovePhase) {
@@ -3172,7 +3169,7 @@ export class AwaitCombinedPledgeAttr extends OverrideMoveEffectAttr {
         [user, allyMovePhase.pokemon].forEach((p) => (p.turnData.combiningPledge = move.id));
 
         // "{userPokemonName} is waiting for {allyPokemonName}'s move..."
-        globalScene.queueMessage(
+        queueMessage(
           i18next.t("moveTriggers:awaitingPledge", {
             userPokemonName: getPokemonNameWithAffix(user),
             allyPokemonName: getPokemonNameWithAffix(allyMovePhase.pokemon),
@@ -3180,10 +3177,10 @@ export class AwaitCombinedPledgeAttr extends OverrideMoveEffectAttr {
         );
 
         // Move the ally's MovePhase (if needed) so that the ally moves next
-        const allyMovePhaseIndex = globalScene.phaseQueue.indexOf(allyMovePhase);
-        const firstMovePhaseIndex = globalScene.phaseQueue.findIndex((phase) => phase instanceof MovePhase);
+        const allyMovePhaseIndex = phaseManager.phaseQueue.indexOf(allyMovePhase);
+        const firstMovePhaseIndex = phaseManager.phaseQueue.findIndex((phase) => phase instanceof MovePhase);
         if (allyMovePhaseIndex !== firstMovePhaseIndex) {
-          globalScene.prependToPhase(globalScene.phaseQueue.splice(allyMovePhaseIndex, 1)[0], MovePhase);
+          phaseManager.prependToPhase(phaseManager.phaseQueue.splice(allyMovePhaseIndex, 1)[0], MovePhase);
         }
 
         overridden.value = true;
@@ -3277,7 +3274,7 @@ export class StatStageChangeAttr extends MoveEffectAttr {
     const moveChance = this.getMoveChance(user, target, move, this.selfTarget, true);
     if (moveChance < 0 || moveChance === 100 || user.randSeedInt(100) < moveChance) {
       const stages = this.getLevels(user);
-      globalScene.unshiftPhase(
+      phaseManager.unshiftPhase(
         new StatStageChangePhase(
           (this.selfTarget ? user : target).getBattlerIndex(),
           this.selfTarget,
@@ -3517,7 +3514,7 @@ export class AcupressureStatStageChangeAttr extends MoveEffectAttr {
     const randStats = BATTLE_STATS.filter((s) => target.getStatStage(s) < 6);
     if (randStats.length > 0) {
       const boostStat = [randStats[user.randSeedInt(randStats.length)]];
-      globalScene.unshiftPhase(new StatStageChangePhase(target.getBattlerIndex(), this.selfTarget, boostStat, 2));
+      phaseManager.unshiftPhase(new StatStageChangePhase(target.getBattlerIndex(), this.selfTarget, boostStat, 2));
       return true;
     }
     return false;
@@ -3605,7 +3602,7 @@ export class OrderUpStatBoostAttr extends MoveEffectAttr {
         break;
     }
 
-    globalScene.unshiftPhase(new StatStageChangePhase(user.getBattlerIndex(), this.selfTarget, [increasedStat], 1));
+    phaseManager.unshiftPhase(new StatStageChangePhase(user.getBattlerIndex(), this.selfTarget, [increasedStat], 1));
     return true;
   }
 }
@@ -3628,7 +3625,7 @@ export class CopyStatsAttr extends MoveEffectAttr {
     }
     target.updateInfo();
     user.updateInfo();
-    globalScene.queueMessage(
+    queueMessage(
       i18next.t("moveTriggers:copiedStatChanges", {
         pokemonName: getPokemonNameWithAffix(user),
         targetName: getPokemonNameWithAffix(target),
@@ -3652,7 +3649,7 @@ export class InvertStatsAttr extends MoveEffectAttr {
     target.updateInfo();
     user.updateInfo();
 
-    globalScene.queueMessage(i18next.t("moveTriggers:invertStats", { pokemonName: getPokemonNameWithAffix(target) }));
+    queueMessage(i18next.t("moveTriggers:invertStats", { pokemonName: getPokemonNameWithAffix(target) }));
 
     return true;
   }
@@ -3670,14 +3667,12 @@ export class ResetStatsAttr extends MoveEffectAttr {
       // Target all pokemon on the field when Freezy Frost or Haze are used
       const activePokemon = globalScene.getField(true);
       activePokemon.forEach((p) => promises.push(this.resetStats(p)));
-      globalScene.queueMessage(i18next.t("moveTriggers:statEliminated"));
+      queueMessage(i18next.t("moveTriggers:statEliminated"));
     } else {
       // Affects only the single target when Clear Smog is used
       if (!move.hitsSubstitute(user, target)) {
         promises.push(this.resetStats(target));
-        globalScene.queueMessage(
-          i18next.t("moveTriggers:resetStats", { pokemonName: getPokemonNameWithAffix(target) }),
-        );
+        queueMessage(i18next.t("moveTriggers:resetStats", { pokemonName: getPokemonNameWithAffix(target) }));
       }
     }
 
@@ -3730,11 +3725,9 @@ export class SwapStatStagesAttr extends MoveEffectAttr {
       user.updateInfo();
 
       if (this.stats.length === 7) {
-        globalScene.queueMessage(
-          i18next.t("moveTriggers:switchedStatChanges", { pokemonName: getPokemonNameWithAffix(user) }),
-        );
+        queueMessage(i18next.t("moveTriggers:switchedStatChanges", { pokemonName: getPokemonNameWithAffix(user) }));
       } else if (this.stats.length === 2) {
-        globalScene.queueMessage(
+        queueMessage(
           i18next.t("moveTriggers:switchedTwoStatChanges", {
             pokemonName: getPokemonNameWithAffix(user),
             firstStat: i18next.t(getStatKey(this.stats[0])),
@@ -4351,7 +4344,7 @@ export class PresentPowerAttr extends VariablePowerAttr {
     } else if (80 < powerSeed && powerSeed <= 100) {
       // If this move is multi-hit, disable all other hits
       user.stopMultiHit();
-      globalScene.unshiftPhase(
+      phaseManager.unshiftPhase(
         new PokemonHealPhase(
           target.getBattlerIndex(),
           toDmgValue(target.getMaxHp() / 4),
@@ -4610,7 +4603,7 @@ export class CueNextRoundAttr extends MoveEffectAttr {
   }
 
   override apply(_user: Pokemon, _target: Pokemon, _move: Move, _args?: any[]): boolean {
-    const nextRoundPhase = globalScene.findPhase<MovePhase>(
+    const nextRoundPhase = phaseManager.findPhase<MovePhase>(
       (phase) => phase instanceof MovePhase && phase.move.moveId === Moves.ROUND,
     );
 
@@ -4619,10 +4612,10 @@ export class CueNextRoundAttr extends MoveEffectAttr {
     }
 
     // Update the phase queue so that the next Pokemon using Round moves next
-    const nextRoundIndex = globalScene.phaseQueue.indexOf(nextRoundPhase);
-    const nextMoveIndex = globalScene.phaseQueue.findIndex((phase) => phase instanceof MovePhase);
+    const nextRoundIndex = phaseManager.phaseQueue.indexOf(nextRoundPhase);
+    const nextMoveIndex = phaseManager.phaseQueue.findIndex((phase) => phase instanceof MovePhase);
     if (nextRoundIndex !== nextMoveIndex) {
-      globalScene.prependToPhase(globalScene.phaseQueue.splice(nextRoundIndex, 1)[0], MovePhase);
+      phaseManager.prependToPhase(phaseManager.phaseQueue.splice(nextRoundIndex, 1)[0], MovePhase);
     }
 
     // Mark the corresponding Pokemon as having "joined the Round" (for doubling power later)
@@ -5453,9 +5446,7 @@ const crashDamageFunc = (user: Pokemon, _move: Move) => {
   }
 
   user.damageAndUpdate(toDmgValue(user.getMaxHp() / 2), HitResult.OTHER, false, true);
-  globalScene.queueMessage(
-    i18next.t("moveTriggers:keptGoingAndCrashed", { pokemonName: getPokemonNameWithAffix(user) }),
-  );
+  queueMessage(i18next.t("moveTriggers:keptGoingAndCrashed", { pokemonName: getPokemonNameWithAffix(user) }));
   user.turnData.damageTaken += toDmgValue(user.getMaxHp() / 2);
 
   return true;
@@ -5764,12 +5755,12 @@ export class CurseAttr extends MoveEffectAttr {
   apply(user: Pokemon, target: Pokemon, move: Move, _args: any[]): boolean {
     if (user.getTypes(true).includes(Type.GHOST)) {
       if (target.getTag(BattlerTagType.CURSED)) {
-        globalScene.queueMessage(i18next.t("battle:attackFailed"));
+        queueMessage(i18next.t("battle:attackFailed"));
         return false;
       }
       const curseRecoilDamage = Math.max(1, Math.floor(user.getMaxHp() / 2));
       user.damageAndUpdate(curseRecoilDamage, HitResult.OTHER, false, true, true);
-      globalScene.queueMessage(
+      queueMessage(
         i18next.t("battlerTags:cursedOnAdd", {
           pokemonNameWithAffix: getPokemonNameWithAffix(user),
           pokemonName: getPokemonNameWithAffix(target),
@@ -5779,8 +5770,8 @@ export class CurseAttr extends MoveEffectAttr {
       target.addTag(BattlerTagType.CURSED, 0, move.id, user.id);
       return true;
     } else {
-      globalScene.unshiftPhase(new StatStageChangePhase(user.getBattlerIndex(), true, [Stat.ATK, Stat.DEF], 1));
-      globalScene.unshiftPhase(new StatStageChangePhase(user.getBattlerIndex(), true, [Stat.SPD], -1));
+      phaseManager.unshiftPhase(new StatStageChangePhase(user.getBattlerIndex(), true, [Stat.ATK, Stat.DEF], 1));
+      phaseManager.unshiftPhase(new StatStageChangePhase(user.getBattlerIndex(), true, [Stat.SPD], -1));
       return true;
     }
   }
@@ -5851,7 +5842,7 @@ export class ConfuseAttr extends AddBattlerTagAttr {
   apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
     if (!this.selfTarget && target.isSafeguarded(user)) {
       if (move.category === MoveCategory.STATUS) {
-        globalScene.queueMessage(i18next.t("moveTriggers:safeguard", { targetName: getPokemonNameWithAffix(target) }));
+        queueMessage(i18next.t("moveTriggers:safeguard", { targetName: getPokemonNameWithAffix(target) }));
       }
       return false;
     }
@@ -5911,7 +5902,7 @@ export class IgnoreAccuracyAttr extends AddBattlerTagAttr {
       return false;
     }
 
-    globalScene.queueMessage(
+    queueMessage(
       i18next.t("moveTriggers:tookAimAtTarget", {
         pokemonName: getPokemonNameWithAffix(user),
         targetName: getPokemonNameWithAffix(target),
@@ -5932,7 +5923,7 @@ export class FaintCountdownAttr extends AddBattlerTagAttr {
       return false;
     }
 
-    globalScene.queueMessage(
+    queueMessage(
       i18next.t("moveTriggers:faintCountdown", {
         pokemonName: getPokemonNameWithAffix(target),
         turnCount: this.turnCountMin - 1,
@@ -6264,7 +6255,7 @@ export class SwapArenaTagsAttr extends MoveEffectAttr {
       }
     }
 
-    globalScene.queueMessage(i18next.t("moveTriggers:swapArenaTags", { pokemonName: getPokemonNameWithAffix(user) }));
+    queueMessage(i18next.t("moveTriggers:swapArenaTags", { pokemonName: getPokemonNameWithAffix(user) }));
     return true;
   }
 }
@@ -6332,7 +6323,7 @@ export class RevivalBlessingAttr extends MoveEffectAttr {
         const slotIndex = globalScene.getEnemyParty().findIndex((p) => pokemon.id === p.id);
         pokemon.resetStatus();
         pokemon.heal(Math.min(toDmgValue(0.5 * pokemon.getMaxHp()), pokemon.getMaxHp()));
-        globalScene.queueMessage(
+        queueMessage(
           i18next.t("moveTriggers:revivalBlessing", { pokemonName: getPokemonNameWithAffix(pokemon) }),
           0,
           true,
@@ -6341,18 +6332,18 @@ export class RevivalBlessingAttr extends MoveEffectAttr {
         if (globalScene.currentBattle.double && globalScene.getEnemyParty().length > 1) {
           const allyPokemon = user.getAlly();
           if (slotIndex <= 1) {
-            globalScene.unshiftPhase(
+            phaseManager.unshiftPhase(
               new SwitchSummonPhase(SwitchType.SWITCH, pokemon.getFieldIndex(), slotIndex, false, false),
             );
           } else if (allyPokemon.isFainted()) {
-            globalScene.unshiftPhase(
+            phaseManager.unshiftPhase(
               new SwitchSummonPhase(SwitchType.SWITCH, allyPokemon.getFieldIndex(), slotIndex, false, false),
             );
           }
         }
         resolve(true);
       } else {
-        globalScene.queueMessage(i18next.t("battle:attackFailed"));
+        queueMessage(i18next.t("battle:attackFailed"));
         resolve(false);
       }
     });
@@ -6422,13 +6413,13 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
         if (this.switchType === SwitchType.FORCE_SWITCH) {
           switchOutTarget.leaveField(true);
           const slotIndex = eligibleNewIndices[user.randSeedInt(eligibleNewIndices.length)];
-          globalScene.prependToPhase(
+          phaseManager.prependToPhase(
             new SwitchSummonPhase(this.switchType, switchOutTarget.getFieldIndex(), slotIndex, false, true),
             MoveEndPhase,
           );
         } else {
           switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
-          globalScene.prependToPhase(
+          phaseManager.prependToPhase(
             new SwitchPhase(this.switchType, switchOutTarget.getFieldIndex(), true, true),
             MoveEndPhase,
           );
@@ -6454,13 +6445,13 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
         if (this.switchType === SwitchType.FORCE_SWITCH) {
           switchOutTarget.leaveField(true);
           const slotIndex = eligibleNewIndices[user.randSeedInt(eligibleNewIndices.length)];
-          globalScene.prependToPhase(
+          phaseManager.prependToPhase(
             new SwitchSummonPhase(this.switchType, switchOutTarget.getFieldIndex(), slotIndex, false, false),
             MoveEndPhase,
           );
         } else {
           switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
-          globalScene.prependToPhase(
+          phaseManager.prependToPhase(
             new SwitchSummonPhase(
               this.switchType,
               switchOutTarget.getFieldIndex(),
@@ -6500,7 +6491,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
 
       if (switchOutTarget.hp > 0) {
         switchOutTarget.leaveField(false);
-        globalScene.queueMessage(
+        queueMessage(
           i18next.t("moveTriggers:fled", { pokemonName: getPokemonNameWithAffix(switchOutTarget) }),
           null,
           true,
@@ -6518,8 +6509,8 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
         globalScene.clearEnemyHeldItemModifiers();
 
         if (switchOutTarget.hp) {
-          globalScene.pushPhase(new BattleEndPhase(false));
-          globalScene.pushPhase(new NewBattlePhase());
+          phaseManager.pushPhase(new BattleEndPhase(false));
+          phaseManager.pushPhase(new NewBattlePhase());
         }
       }
     }
@@ -6690,7 +6681,7 @@ export class CopyTypeAttr extends MoveEffectAttr {
     user.summonData.types = targetTypes;
     user.updateInfo();
 
-    globalScene.queueMessage(
+    queueMessage(
       i18next.t("moveTriggers:copyType", {
         pokemonName: getPokemonNameWithAffix(user),
         targetPokemonName: getPokemonNameWithAffix(target),
@@ -6726,7 +6717,7 @@ export class CopyBiomeTypeAttr extends MoveEffectAttr {
     user.summonData.types = [typeChange];
     user.updateInfo();
 
-    globalScene.queueMessage(
+    queueMessage(
       i18next.t("moveTriggers:transformedIntoType", {
         pokemonName: getPokemonNameWithAffix(user),
         typeName: i18next.t(`pokemonInfo:Type.${Type[typeChange]}`),
@@ -6836,7 +6827,7 @@ export class ChangeTypeAttr extends MoveEffectAttr {
     target.summonData.types = [this.type];
     target.updateInfo();
 
-    globalScene.queueMessage(
+    queueMessage(
       i18next.t("moveTriggers:transformedIntoType", {
         pokemonName: getPokemonNameWithAffix(target),
         typeName: i18next.t(`pokemonInfo:Type.${Type[this.type]}`),
@@ -6868,7 +6859,7 @@ export class AddTypeAttr extends MoveEffectAttr {
     target.summonData.addedType = this.type;
     target.updateInfo();
 
-    globalScene.queueMessage(
+    queueMessage(
       i18next.t("moveTriggers:addType", {
         typeName: i18next.t(`pokemonInfo:Type.${Type[this.type]}`),
         pokemonName: getPokemonNameWithAffix(target),
@@ -6895,7 +6886,7 @@ export class FirstMoveTypeAttr extends MoveEffectAttr {
 
     const firstMoveType = target.getMoveset()[0].getMove().type;
     user.summonData.types = [firstMoveType];
-    globalScene.queueMessage(
+    queueMessage(
       i18next.t("battle:transformedIntoType", {
         pokemonName: getPokemonNameWithAffix(user),
         type: i18next.t(`pokemonInfo:Type.${Type[firstMoveType]}`),
@@ -6943,7 +6934,7 @@ export class RandomMovesetMoveAttr extends OverrideMoveEffectAttr {
       }
       const targets = selectTargets;
       user.getMoveQueue().push({ move: move.moveId, targets: targets, ignorePP: true });
-      globalScene.unshiftPhase(new MovePhase(user, targets, moveset[moveIndex], true));
+      phaseManager.unshiftPhase(new MovePhase(user, targets, moveset[moveIndex], true));
       return true;
     }
 
@@ -6978,7 +6969,7 @@ export class RandomMoveAttr extends OverrideMoveEffectAttr {
             ? [target.getBattlerIndex()]
             : [moveTargets.targets[user.randSeedInt(moveTargets.targets.length)]];
       user.getMoveQueue().push({ move: moveId, targets: targets, ignorePP: true });
-      globalScene.unshiftPhase(new MovePhase(user, targets, new PokemonMove(moveId, 0, 0, true), true));
+      phaseManager.unshiftPhase(new MovePhase(user, targets, new PokemonMove(moveId, 0, 0, true), true));
       initMoveAnim(moveId).then(() => {
         loadMoveAnimAssets([moveId], true).then(() => resolve(true));
       });
@@ -7120,7 +7111,7 @@ export class NaturePowerAttr extends OverrideMoveEffectAttr {
       }
 
       user.getMoveQueue().push({ move: moveId, targets: [target.getBattlerIndex()], ignorePP: true });
-      globalScene.unshiftPhase(
+      phaseManager.unshiftPhase(
         new MovePhase(user, [target.getBattlerIndex()], new PokemonMove(moveId, 0, 0, true), true),
       );
       initMoveAnim(moveId).then(() => {
@@ -7163,7 +7154,7 @@ export class CopyMoveAttr extends OverrideMoveEffectAttr {
           : [moveTargets.targets[user.randSeedInt(moveTargets.targets.length)]];
     user.getMoveQueue().push({ move: lastMove, targets: targets, ignorePP: true });
 
-    globalScene.unshiftPhase(
+    phaseManager.unshiftPhase(
       new MovePhase(user as PlayerPokemon, targets, new PokemonMove(lastMove, 0, 0, true), true),
     );
 
@@ -7200,7 +7191,7 @@ export class RepeatMoveAttr extends MoveEffectAttr {
     const movesetMove = target.getMoveset().find((m) => m?.moveId === lastMove.move)!;
     const moveTargets = lastMove.targets ?? [];
 
-    globalScene.queueMessage(
+    queueMessage(
       i18next.t("moveTriggers:instructingMove", {
         userPokemonName: getPokemonNameWithAffix(user),
         targetPokemonName: getPokemonNameWithAffix(target),
@@ -7208,7 +7199,7 @@ export class RepeatMoveAttr extends MoveEffectAttr {
     );
     target.getMoveQueue().unshift({ move: lastMove.move, targets: moveTargets, ignorePP: false });
     target.turnData.extraTurns++;
-    globalScene.appendToPhase(new MovePhase(target, moveTargets, movesetMove), MoveEndPhase);
+    phaseManager.appendToPhase(new MovePhase(target, moveTargets, movesetMove), MoveEndPhase);
     return true;
   }
 
@@ -7333,7 +7324,7 @@ export class ReducePpMoveAttr extends MoveEffectAttr {
       reduction: movesetMove.ppUsed - lastPpUsed,
     });
     globalScene.eventTarget.dispatchEvent(new MoveUsedEvent(target.id, movesetMove.getMove(), movesetMove.ppUsed));
-    globalScene.queueMessage(message);
+    queueMessage(message);
 
     return true;
   }
@@ -7444,7 +7435,7 @@ export class MovesetCopyMoveAttr extends OverrideMoveEffectAttr {
     user.summonData.moveset = user.getMoveset().slice(0);
     user.summonData.moveset[thisMoveIndex] = new PokemonMove(copiedMove.id, 0, 0);
 
-    globalScene.queueMessage(
+    queueMessage(
       i18next.t("moveTriggers:copiedMove", { pokemonName: getPokemonNameWithAffix(user), moveName: copiedMove.name }),
     );
 
@@ -7497,7 +7488,7 @@ export class SketchAttr extends MoveEffectAttr {
 
     user.setMove(sketchIndex, sketchedMove.id);
 
-    globalScene.queueMessage(
+    queueMessage(
       i18next.t("moveTriggers:sketchedMove", {
         pokemonName: getPokemonNameWithAffix(user),
         moveName: sketchedMove.name,
@@ -7565,7 +7556,7 @@ export class AbilityChangeAttr extends MoveEffectAttr {
     moveTarget.summonData.ability = this.ability;
     globalScene.triggerPokemonFormChange(moveTarget, SpeciesFormChangeRevertWeatherFormTrigger);
 
-    globalScene.queueMessage(
+    queueMessage(
       i18next.t("moveTriggers:acquiredAbility", {
         pokemonName: getPokemonNameWithAffix(this.selfTarget ? user : target),
         abilityName: allAbilities[this.ability].name,
@@ -7598,7 +7589,7 @@ export class AbilityCopyAttr extends MoveEffectAttr {
 
     user.summonData.ability = target.getAbility().id;
 
-    globalScene.queueMessage(
+    queueMessage(
       i18next.t("moveTriggers:copiedTargetAbility", {
         pokemonName: getPokemonNameWithAffix(user),
         targetName: getPokemonNameWithAffix(target),
@@ -7608,7 +7599,7 @@ export class AbilityCopyAttr extends MoveEffectAttr {
 
     if (this.copyToPartner && globalScene.currentBattle?.double && user.getAlly().hp) {
       user.getAlly().summonData.ability = target.getAbility().id;
-      globalScene.queueMessage(
+      queueMessage(
         i18next.t("moveTriggers:copiedTargetAbility", {
           pokemonName: getPokemonNameWithAffix(user.getAlly()),
           targetName: getPokemonNameWithAffix(target),
@@ -7649,7 +7640,7 @@ export class AbilityGiveAttr extends MoveEffectAttr {
 
     target.summonData.ability = user.getAbility().id;
 
-    globalScene.queueMessage(
+    queueMessage(
       i18next.t("moveTriggers:acquiredAbility", {
         pokemonName: getPokemonNameWithAffix(target),
         abilityName: allAbilities[user.getAbility().id].name,
@@ -7677,9 +7668,7 @@ export class SwitchAbilitiesAttr extends MoveEffectAttr {
     user.summonData.ability = target.getAbility().id;
     target.summonData.ability = tempAbilityId;
 
-    globalScene.queueMessage(
-      i18next.t("moveTriggers:swappedAbilitiesWithTarget", { pokemonName: getPokemonNameWithAffix(user) }),
-    );
+    queueMessage(i18next.t("moveTriggers:swappedAbilitiesWithTarget", { pokemonName: getPokemonNameWithAffix(user) }));
     // Swaps Forecast/Flower Gift from Castform/Cherrim
     globalScene.arena.triggerWeatherBasedFormChangesToNormal();
     // Swaps Forecast/Flower Gift to Castform/Cherrim (edge case)
@@ -7712,9 +7701,7 @@ export class SuppressAbilitiesAttr extends MoveEffectAttr {
     target.summonData.abilitySuppressed = true;
     globalScene.arena.triggerWeatherBasedFormChangesToNormal();
 
-    globalScene.queueMessage(
-      i18next.t("moveTriggers:suppressAbilities", { pokemonName: getPokemonNameWithAffix(target) }),
-    );
+    queueMessage(i18next.t("moveTriggers:suppressAbilities", { pokemonName: getPokemonNameWithAffix(target) }));
 
     return true;
   }
@@ -7794,7 +7781,7 @@ export class TransformAttr extends MoveEffectAttr {
     user.summonData.types = target.getTypes();
     promises.push(user.updateInfo());
 
-    globalScene.queueMessage(
+    queueMessage(
       i18next.t("moveTriggers:transformedIntoTarget", {
         pokemonName: getPokemonNameWithAffix(user),
         targetName: getPokemonNameWithAffix(target),
@@ -7844,7 +7831,7 @@ export class SwapStatAttr extends MoveEffectAttr {
       user.setStat(this.stat, target.getStat(this.stat, false), false);
       target.setStat(this.stat, temp, false);
 
-      globalScene.queueMessage(
+      queueMessage(
         i18next.t("moveTriggers:switchedStat", {
           pokemonName: getPokemonNameWithAffix(user),
           stat: i18next.t(getStatKey(this.stat)),
@@ -7892,7 +7879,7 @@ export class ShiftStatAttr extends MoveEffectAttr {
     user.setStat(this.statToSwitch, secondStat, false);
     user.setStat(this.statToSwitchWith, firstStat, false);
 
-    globalScene.queueMessage(
+    queueMessage(
       i18next.t("moveTriggers:shiftedStats", {
         pokemonName: getPokemonNameWithAffix(user),
         statToSwitch: i18next.t(getStatKey(this.statToSwitch)),
@@ -7953,7 +7940,7 @@ export class AverageStatsAttr extends MoveEffectAttr {
         target.setStat(s, avg, false);
       }
 
-      globalScene.queueMessage(i18next.t(this.msgKey, { pokemonName: getPokemonNameWithAffix(user) }));
+      queueMessage(i18next.t(this.msgKey, { pokemonName: getPokemonNameWithAffix(user) }));
 
       return true;
     }
@@ -7982,7 +7969,7 @@ export class MoneyAttr extends MoveEffectAttr {
 
   apply(_user: Pokemon, _target: Pokemon, _move: Move): boolean {
     globalScene.currentBattle.moneyScattered += globalScene.getWaveMoneyAmount(0.2);
-    globalScene.queueMessage(i18next.t("moveTriggers:coinsScatteredEverywhere"));
+    queueMessage(i18next.t("moveTriggers:coinsScatteredEverywhere"));
     return true;
   }
 }
@@ -8006,9 +7993,7 @@ export class DestinyBondAttr extends MoveEffectAttr {
    * @returns true
    */
   apply(user: Pokemon, _target: Pokemon, move: Move, _args: any[]): boolean {
-    globalScene.queueMessage(
-      `${i18next.t("moveTriggers:tryingToTakeFoeDown", { pokemonName: getPokemonNameWithAffix(user) })}`,
-    );
+    queueMessage(`${i18next.t("moveTriggers:tryingToTakeFoeDown", { pokemonName: getPokemonNameWithAffix(user) })}`);
     user.addTag(BattlerTagType.DESTINY_BOND, undefined, move.id, user.id);
     return true;
   }
@@ -8097,7 +8082,7 @@ export class AttackedByItemAttr extends MoveAttr {
       }
 
       const itemName = heldItems[0]?.type?.name ?? "item";
-      globalScene.queueMessage(
+      queueMessage(
         i18next.t("moveTriggers:attackedByItem", { pokemonName: getPokemonNameWithAffix(target), itemName: itemName }),
       );
 
@@ -8138,12 +8123,12 @@ export class AfterYouAttr extends MoveEffectAttr {
    * @returns true
    */
   override apply(_user: Pokemon, target: Pokemon, _move: Move, _args: any[]): boolean {
-    globalScene.queueMessage(i18next.t("moveTriggers:afterYou", { targetName: getPokemonNameWithAffix(target) }));
+    queueMessage(i18next.t("moveTriggers:afterYou", { targetName: getPokemonNameWithAffix(target) }));
 
     //Will find next acting phase of the targeted pokémon, delete it and queue it next on successful delete.
-    const nextAttackPhase = globalScene.findPhase<MovePhase>((phase) => phase.pokemon === target);
-    if (nextAttackPhase && globalScene.tryRemovePhase((phase: MovePhase) => phase.pokemon === target)) {
-      globalScene.prependToPhase(new MovePhase(target, [...nextAttackPhase.targets], nextAttackPhase.move), MovePhase);
+    const nextAttackPhase = phaseManager.findPhase<MovePhase>((phase) => phase.pokemon === target);
+    if (nextAttackPhase && phaseManager.tryRemovePhase((phase: MovePhase) => phase.pokemon === target)) {
+      phaseManager.prependToPhase(new MovePhase(target, [...nextAttackPhase.targets], nextAttackPhase.move), MovePhase);
     }
 
     return true;
@@ -8162,7 +8147,7 @@ const failIfDampCondition: MoveConditionFunc = (user, _target, move) => {
   globalScene.getField(true).map((p) => applyAbAttrs(FieldPreventExplosiveMovesAbAttr, p, cancelled));
   // Queue a message if an ability prevented usage of the move
   if (cancelled.value) {
-    globalScene.queueMessage(
+    queueMessage(
       i18next.t("moveTriggers:cannotUseMove", { pokemonName: getPokemonNameWithAffix(user), moveName: move.name }),
     );
   }
@@ -8176,7 +8161,7 @@ const targetSleptOrComatoseCondition: MoveConditionFunc = (_user: Pokemon, targe
   target.status?.effect === StatusEffect.SLEEP || target.hasAbility(Abilities.COMATOSE);
 
 const failIfLastCondition: MoveConditionFunc = (_user: Pokemon, _target: Pokemon, _move: Move) =>
-  globalScene.phaseQueue.find((phase) => phase instanceof MovePhase) !== undefined;
+  phaseManager.phaseQueue.find((phase) => phase instanceof MovePhase) !== undefined;
 
 const failIfLastInPartyCondition: MoveConditionFunc = (user: Pokemon, _target: Pokemon, _move: Move) => {
   const party: Pokemon[] = user.isPlayer() ? globalScene.getPlayerParty() : globalScene.getEnemyParty();
@@ -8362,7 +8347,7 @@ export class ResistLastMoveTypeAttr extends MoveEffectAttr {
     }
     const type = validTypes[user.randSeedInt(validTypes.length)];
     user.summonData.types = [type];
-    globalScene.queueMessage(
+    queueMessage(
       i18next.t("battle:transformedIntoType", {
         pokemonName: getPokemonNameWithAffix(user),
         type: toReadableString(Type[type]),
@@ -8426,7 +8411,7 @@ export class ExposedMoveAttr extends AddBattlerTagAttr {
       return false;
     }
 
-    globalScene.queueMessage(
+    queueMessage(
       i18next.t("moveTriggers:exposedMove", {
         pokemonName: getPokemonNameWithAffix(user),
         targetPokemonName: getPokemonNameWithAffix(target),
@@ -9037,7 +9022,7 @@ export function initMoves() {
       12,
       2,
       (user) => {
-        globalScene.queueMessage(
+        queueMessage(
           i18next.t("moveTriggers:cutOwnHpAndMaximizedStat", {
             pokemonName: getPokemonNameWithAffix(user),
             statName: i18next.t(getStatKey(Stat.ATK)),
@@ -10854,9 +10839,7 @@ export function initMoves() {
       .attr(HealStatusEffectAttr, true, StatusEffect.FREEZE)
       .attr(AddBattlerTagAttr, BattlerTagType.BURNED_UP, true, false)
       .attr(RemoveTypeAttr, Type.FIRE, (user) => {
-        globalScene.queueMessage(
-          i18next.t("moveTriggers:burnedItselfOut", { pokemonName: getPokemonNameWithAffix(user) }),
-        );
+        queueMessage(i18next.t("moveTriggers:burnedItselfOut", { pokemonName: getPokemonNameWithAffix(user) }));
       }),
     new StatusMove(Moves.SPEED_SWAP, Type.PSYCHIC, -1, 10, -1, 0, 7).attr(SwapStatAttr, Stat.SPD).ignoresSubstitute(),
     new AttackMove(Moves.SMART_STRIKE, Type.STEEL, MoveCategory.PHYSICAL, 70, -1, 10, -1, 0, 7),
@@ -11823,9 +11806,7 @@ export function initMoves() {
       })
       .attr(AddBattlerTagAttr, BattlerTagType.DOUBLE_SHOCKED, true, false)
       .attr(RemoveTypeAttr, Type.ELECTRIC, (user) => {
-        globalScene.queueMessage(
-          i18next.t("moveTriggers:usedUpAllElectricity", { pokemonName: getPokemonNameWithAffix(user) }),
-        );
+        queueMessage(i18next.t("moveTriggers:usedUpAllElectricity", { pokemonName: getPokemonNameWithAffix(user) }));
       }),
     new AttackMove(Moves.GIGATON_HAMMER, Type.STEEL, MoveCategory.PHYSICAL, 160, 100, 5, -1, 0, 9)
       .makesContact(false)

@@ -8,6 +8,7 @@ import { PlayerPartyMemberPokemonPhase } from "#app/phases/player-party-member-p
 import { LevelAchv } from "#app/system/achv";
 import { NumberHolder } from "#app/utils";
 import i18next from "i18next";
+import { phaseManager } from "#app/phase-manager";
 
 export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
   protected lastLevel: number;
@@ -62,13 +63,13 @@ export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
       // this feels like an unnecessary optimization
       const levelMoves = this.getPokemon().getLevelMoves(this.lastLevel + 1);
       for (const lm of levelMoves) {
-        globalScene.unshiftPhase(new LearnMovePhase(this.partyMemberIndex, lm[1]));
+        phaseManager.unshiftPhase(new LearnMovePhase(this.partyMemberIndex, lm[1]));
       }
     }
     if (!this.pokemon.pauseEvolutions) {
       const evolution = this.pokemon.getEvolution();
       if (evolution) {
-        globalScene.unshiftPhase(new EvolutionPhase(this.pokemon, evolution, this.lastLevel));
+        phaseManager.unshiftPhase(new EvolutionPhase(this.pokemon, evolution, this.lastLevel));
       }
     }
     return super.end();

@@ -12,6 +12,7 @@ import { Color, ShadowColor } from "#app/enums/color";
 import { SelectStarterPhase } from "#app/phases/select-starter-phase";
 import { TitlePhase } from "#app/phases/title-phase";
 import { globalScene } from "#app/global-scene";
+import { phaseManager } from "#app/phase-manager";
 
 /**
  * Handles all the UI for choosing optional challenges.
@@ -383,16 +384,16 @@ export default class GameChallengesUiHandler extends UiHandler {
         this.cursorObj?.setVisible(true);
         this.updateChallengeArrows(this.startCursor.visible);
       } else {
-        globalScene.clearPhaseQueue();
-        globalScene.pushPhase(new TitlePhase());
-        globalScene.getCurrentPhase()?.end();
+        phaseManager.clearPhaseQueue();
+        phaseManager.pushPhase(new TitlePhase());
+        phaseManager.getCurrentPhase()?.end();
       }
       success = true;
     } else if (button === Button.SUBMIT || button === Button.ACTION) {
       if (this.hasSelectedChallenge) {
         if (this.startCursor.visible) {
-          globalScene.unshiftPhase(new SelectStarterPhase());
-          globalScene.getCurrentPhase()?.end();
+          phaseManager.unshiftPhase(new SelectStarterPhase());
+          phaseManager.getCurrentPhase()?.end();
         } else {
           this.startCursor.setVisible(true);
           this.cursorObj?.setVisible(false);

@@ -34,6 +34,7 @@ import {
   getEncounterPokemonLevelForWave,
   STANDARD_ENCOUNTER_BOOSTED_LEVEL_MODIFIER,
 } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
+import { phaseManager } from "#app/phase-manager";
 
 /** the i18n namespace for this encounter */
 const namespace = "mysteryEncounters/teleportingHijinks";
@@ -215,7 +216,7 @@ async function doBiomeTransitionDialogueAndBattleInit() {
         tags: [BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON],
         mysteryEncounterBattleEffects: (pokemon: Pokemon) => {
           queueEncounterMessage(`${namespace}:boss_enraged`);
-          globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, statChangesForBattle, 1));
+          phaseManager.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, statChangesForBattle, 1));
         },
       },
     ],

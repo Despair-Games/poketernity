@@ -32,6 +32,7 @@ import { ToggleDoublePositionPhase } from "./toggle-double-position-phase";
 import { VictoryPhase } from "./victory-phase";
 import { isNullOrUndefined } from "#app/utils";
 import { FRIENDSHIP_LOSS_FROM_FAINT } from "#app/data/balance/starters";
+import { queueMessage, phaseManager } from "#app/phase-manager";
 
 export class FaintPhase extends PokemonPhase {
   /**
@@ -122,11 +123,7 @@ export class FaintPhase extends PokemonPhase {
       globalScene.currentBattle.enemyFaintsHistory.push({ pokemon: pokemon, turn: globalScene.currentBattle.turn });
     }
 
-    globalScene.queueMessage(
-      i18next.t("battle:fainted", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
-      null,
-      true,
-    );
+    queueMessage(i18next.t("battle:fainted", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }), null, true);
     globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeActiveTrigger, true);
 
     if (pokemon.turnData?.attacksReceived?.length) {
@@ -166,7 +163,7 @@ export class FaintPhase extends PokemonPhase {
       const legalPlayerPartyPokemon = legalPlayerPokemon.filter((p) => !p.isActive(true));
       if (!legalPlayerPokemon.length) {
         /** If the player doesn't have any legal Pokemon, end the game */
-        globalScene.unshiftPhase(new GameOverPhase());
+        phaseManager.unshiftPhase(new GameOverPhase());
       } else if (
         globalScene.currentBattle.double
         && legalPlayerPokemon.length === 1
@@ -176,23 +173,23 @@ export class FaintPhase extends PokemonPhase {
          * If the player has exactly one Pokemon in total at this point in a double battle, and that Pokemon
          * is already on the field, unshift a phase that moves that Pokemon to center position.
          */
-        globalScene.unshiftPhase(new ToggleDoublePositionPhase(true));
+        phaseManager.unshiftPhase(new ToggleDoublePositionPhase(true));
       } else if (legalPlayerPartyPokemon.length > 0) {
         /**
          * If previous conditions weren't met, and the player has at least 1 legal Pokemon off the field,
          * push a phase that prompts the player to summon a Pokemon from their party.
          */
-        globalScene.pushPhase(new SwitchPhase(SwitchType.SWITCH, this.fieldIndex, true, false));
+        phaseManager.pushPhase(new SwitchPhase(SwitchType.SWITCH, this.fieldIndex, true, false));
       }
     } else {
-      globalScene.unshiftPhase(new VictoryPhase(this.battlerIndex));
+      phaseManager.unshiftPhase(new VictoryPhase(this.battlerIndex));
       if ([BattleType.TRAINER, BattleType.MYSTERY_ENCOUNTER].includes(globalScene.currentBattle.battleType)) {
         const hasReservePartyMember = !!globalScene
           .getEnemyParty()
           .filter((p) => p.isActive() && !p.isOnField() && p.trainerSlot === (pokemon as EnemyPokemon).trainerSlot)
           .length;
         if (hasReservePartyMember) {
-          globalScene.pushPhase(new SwitchSummonPhase(SwitchType.SWITCH, this.fieldIndex, -1, false, false));
+          phaseManager.pushPhase(new SwitchSummonPhase(SwitchType.SWITCH, this.fieldIndex, -1, false, false));
         }
       }
     }
@@ -252,7 +249,7 @@ export class FaintPhase extends PokemonPhase {
           } else {
             // Final boss' HP threshold has been bypassed; cancel faint and force check for 2nd phase
             enemy.hp++;
-            globalScene.unshiftPhase(new DamageAnimPhase(enemy.getBattlerIndex(), 0, HitResult.OTHER));
+            phaseManager.unshiftPhase(new DamageAnimPhase(enemy.getBattlerIndex(), 0, HitResult.OTHER));
             this.end();
           }
           return true;

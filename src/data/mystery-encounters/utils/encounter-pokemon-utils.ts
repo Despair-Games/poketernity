@@ -38,6 +38,7 @@ import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import type { Abilities } from "#enums/abilities";
 import type { PokeballType } from "#enums/pokeball";
 import { StatusEffect } from "#enums/status-effect";
+import { phaseManager } from "#app/phase-manager";
 
 /** Will give +1 level every 10 waves */
 export const STANDARD_ENCOUNTER_BOOSTED_LEVEL_MODIFIER = 1;
@@ -673,7 +674,7 @@ export async function catchPokemon(
         if (!globalScene.getEnemyParty().some((p) => p.id === pokemon.id)) {
           globalScene.getEnemyParty().push(pokemon);
         }
-        globalScene.unshiftPhase(new VictoryPhase(pokemon.id, true));
+        phaseManager.unshiftPhase(new VictoryPhase(pokemon.id, true));
         globalScene.pokemonInfoContainer.hide();
         if (pokeball) {
           removePb(pokeball);

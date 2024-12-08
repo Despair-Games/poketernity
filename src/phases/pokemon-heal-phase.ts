@@ -65,7 +65,7 @@ export class PokemonHealPhase extends CommonAnimPhase {
     let lastStatusEffect = StatusEffect.NONE;
 
     if (healBlock && this.hpHealed > 0) {
-      globalScene.queueMessage(healBlock.onActivation(pokemon));
+      queueMessage(healBlock.onActivation(pokemon));
       this.message = null;
       return super.end();
     } else if (healOrDamage) {
@@ -106,11 +106,11 @@ export class PokemonHealPhase extends CommonAnimPhase {
     }
 
     if (this.message) {
-      globalScene.queueMessage(this.message);
+      queueMessage(this.message);
     }
 
     if (this.healStatus && lastStatusEffect && !hasMessage) {
-      globalScene.queueMessage(getStatusEffectHealText(lastStatusEffect, getPokemonNameWithAffix(pokemon)));
+      queueMessage(getStatusEffectHealText(lastStatusEffect, getPokemonNameWithAffix(pokemon)));
     }
 
     if (!healOrDamage && !lastStatusEffect) {

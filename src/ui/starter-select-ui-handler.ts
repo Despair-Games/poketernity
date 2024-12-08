@@ -78,6 +78,7 @@ import {
 } from "#app/utils";
 import type { Nature } from "#enums/nature";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
+import { phaseManager } from "#app/phase-manager";
 
 export type StarterSelectCallback = (starters: Starter[]) => void;
 
@@ -4016,15 +4017,15 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         Mode.CONFIRM,
         () => {
           ui.setMode(Mode.STARTER_SELECT);
-          globalScene.clearPhaseQueue();
+          phaseManager.clearPhaseQueue();
           if (globalScene.gameMode.isChallenge) {
-            globalScene.pushPhase(new SelectChallengePhase());
-            globalScene.pushPhase(new EncounterPhase());
+            phaseManager.pushPhase(new SelectChallengePhase());
+            phaseManager.pushPhase(new EncounterPhase());
           } else {
-            globalScene.pushPhase(new TitlePhase());
+            phaseManager.pushPhase(new TitlePhase());
           }
           this.clearText();
-          globalScene.getCurrentPhase()?.end();
+          phaseManager.getCurrentPhase()?.end();
         },
         cancel,
         null,

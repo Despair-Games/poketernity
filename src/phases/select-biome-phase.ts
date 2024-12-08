@@ -8,6 +8,7 @@ import { BattlePhase } from "./battle-phase";
 import { randSeedInt } from "#app/utils";
 import { PartyHealPhase } from "./party-heal-phase";
 import { SwitchBiomePhase } from "./switch-biome-phase";
+import { phaseManager } from "#app/phase-manager";
 
 export class SelectBiomePhase extends BattlePhase {
   constructor() {
@@ -22,9 +23,9 @@ export class SelectBiomePhase extends BattlePhase {
     const setNextBiome = (nextBiome: Biome) => {
       if (globalScene.currentBattle.waveIndex % 10 === 1) {
         globalScene.applyModifiers(MoneyInterestModifier, true);
-        globalScene.unshiftPhase(new PartyHealPhase(false));
+        phaseManager.unshiftPhase(new PartyHealPhase(false));
       }
-      globalScene.unshiftPhase(new SwitchBiomePhase(nextBiome));
+      phaseManager.unshiftPhase(new SwitchBiomePhase(nextBiome));
       this.end();
     };
 

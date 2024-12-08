@@ -9,6 +9,7 @@ import { BattleEndPhase } from "./battle-end-phase";
 import { NewBattlePhase } from "./new-battle-phase";
 import { PokemonPhase } from "./pokemon-phase";
 import { globalScene } from "#app/global-scene";
+import { queueMessage, phaseManager } from "#app/phase-manager";
 
 export class AttemptRunPhase extends PokemonPhase {
   /** For testing purposes: this is to force the pokemon to fail and escape */
@@ -34,7 +35,7 @@ export class AttemptRunPhase extends PokemonPhase {
 
     if (playerPokemon.randSeedInt(100) < escapeChance.value && !this.forceFailEscape) {
       globalScene.playSound("se/flee");
-      globalScene.queueMessage(i18next.t("battle:runAwaySuccess"), null, true, 500);
+      queueMessage(i18next.t("battle:runAwaySuccess"), null, true, 500);
 
       globalScene.tweens.add({
         targets: [globalScene.arenaEnemy, enemyField].flat(),
@@ -52,11 +53,11 @@ export class AttemptRunPhase extends PokemonPhase {
         enemyPokemon.trySetStatus(StatusEffect.FAINT);
       });
 
-      globalScene.pushPhase(new BattleEndPhase(false));
-      globalScene.pushPhase(new NewBattlePhase());
+      phaseManager.pushPhase(new BattleEndPhase(false));
+      phaseManager.pushPhase(new NewBattlePhase());
     } else {
       playerPokemon.turnData.failedRunAway = true;
-      globalScene.queueMessage(i18next.t("battle:runAwayCannotEscape"), null, true, 500);
+      queueMessage(i18next.t("battle:runAwayCannotEscape"), null, true, 500);
     }
 
     this.end();

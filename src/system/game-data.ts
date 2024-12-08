@@ -60,6 +60,7 @@ import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { api } from "#app/plugins/api/api";
 import { ArenaTrapTag } from "#app/data/arena-tag";
 import { SAVE_FILE_EXTENSION } from "#app/constants";
+import { phaseManager, queueMessage } from "#app/phase-manager";
 
 export const defaultStarterSpecies: Species[] = [
   Species.BULBASAUR,
@@ -429,8 +430,8 @@ export class GameData {
           globalScene.ui.savingIcon.hide();
           if (error) {
             if (error.startsWith("session out of date")) {
-              globalScene.clearPhaseQueue();
-              globalScene.unshiftPhase(new ReloadSessionPhase());
+              phaseManager.clearPhaseQueue();
+              phaseManager.unshiftPhase(new ReloadSessionPhase());
             }
             console.error(error);
             return resolve(false);
@@ -457,14 +458,14 @@ export class GameData {
         api.savedata.system.get({ clientSessionId }).then((saveDataOrErr) => {
           if (!saveDataOrErr || saveDataOrErr.length === 0 || saveDataOrErr[0] !== "{") {
             if (saveDataOrErr?.startsWith("sql: no rows in result set")) {
-              globalScene.queueMessage(
+              queueMessage(
                 "Save data could not be found. If this is a new account, you can safely ignore this message.",
                 null,
                 true,
               );
               return resolve(true);
             } else if (saveDataOrErr?.includes("Too many connections")) {
-              globalScene.queueMessage(
+              queueMessage(
                 "Too many people are trying to connect and the server is overloaded. Please try again later.",
                 null,
                 true,
@@ -744,8 +745,8 @@ export class GameData {
     const systemData = await api.savedata.system.verify({ clientSessionId });
 
     if (systemData) {
-      globalScene.clearPhaseQueue();
-      globalScene.unshiftPhase(new ReloadSessionPhase(JSON.stringify(systemData)));
+      phaseManager.clearPhaseQueue();
+      phaseManager.unshiftPhase(new ReloadSessionPhase(JSON.stringify(systemData)));
       this.clearLocalData();
       return false;
     }
@@ -1238,8 +1239,8 @@ export class GameData {
         api.savedata.session.delete({ slot: slotId, clientSessionId }).then((error) => {
           if (error) {
             if (error.startsWith("session out of date")) {
-              globalScene.clearPhaseQueue();
-              globalScene.unshiftPhase(new ReloadSessionPhase());
+              phaseManager.clearPhaseQueue();
+              phaseManager.unshiftPhase(new ReloadSessionPhase());
             }
             console.error(error);
             resolve(false);
@@ -1310,8 +1311,8 @@ export class GameData {
         localStorage.removeItem(`sessionData${slotId ? slotId : ""}_${loggedInUser?.username}`);
       } else {
         if (jsonResponse && jsonResponse.error?.startsWith("session out of date")) {
-          globalScene.clearPhaseQueue();
-          globalScene.unshiftPhase(new ReloadSessionPhase());
+          phaseManager.clearPhaseQueue();
+          phaseManager.unshiftPhase(new ReloadSessionPhase());
         }
 
         console.error(jsonResponse);
@@ -1456,8 +1457,8 @@ export class GameData {
             }
             if (error) {
               if (error.startsWith("session out of date")) {
-                globalScene.clearPhaseQueue();
-                globalScene.unshiftPhase(new ReloadSessionPhase());
+                phaseManager.clearPhaseQueue();
+                phaseManager.unshiftPhase(new ReloadSessionPhase());
               }
               console.error(error);
               return resolve(false);

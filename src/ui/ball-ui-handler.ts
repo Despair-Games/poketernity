@@ -9,6 +9,7 @@ import type { CommandPhase } from "#app/phases/command-phase";
 import { globalScene } from "#app/global-scene";
 import { PokeballType } from "#app/enums/pokeball";
 import { getEnumLength } from "#app/utils";
+import { phaseManager } from "#app/phase-manager";
 
 export default class BallUiHandler extends UiHandler {
   private pokeballSelectContainer: Phaser.GameObjects.Container;
@@ -82,7 +83,7 @@ export default class BallUiHandler extends UiHandler {
     const pokeballTypeCount = Object.keys(globalScene.pokeballCounts).length;
 
     if (button === Button.ACTION || button === Button.CANCEL) {
-      const commandPhase = globalScene.getCurrentPhase() as CommandPhase;
+      const commandPhase = phaseManager.getCurrentPhase() as CommandPhase;
       success = true;
       if (button === Button.ACTION && this.cursor < pokeballTypeCount) {
         if (globalScene.pokeballCounts[this.cursor]) {

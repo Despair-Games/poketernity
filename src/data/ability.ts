@@ -72,6 +72,7 @@ import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import { StatusEffect } from "#enums/status-effect";
 import { WeatherType } from "#enums/weather-type";
+import { phaseManager, queueMessage } from "#app/phase-manager";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -318,10 +319,10 @@ export class PostBattleInitStatStageChangeAbAttr extends PostBattleInitAbAttr {
 
       for (const statStageChangePhase of statStageChangePhases) {
         if (!this.selfTarget && !statStageChangePhase.getPokemon()?.summonData) {
-          globalScene.pushPhase(statStageChangePhase);
+          phaseManager.pushPhase(statStageChangePhase);
         } else {
           // TODO: This causes the ability bar to be shown at the wrong time
-          globalScene.unshiftPhase(statStageChangePhase);
+          phaseManager.unshiftPhase(statStageChangePhase);
         }
       }
     }
@@ -565,7 +566,7 @@ export class TypeImmunityHealAbAttr extends TypeImmunityAbAttr {
     if (ret) {
       if (!pokemon.isFullHp() && !simulated) {
         const abilityName = (!passive ? pokemon.getAbility() : pokemon.getPassiveAbility()).name;
-        globalScene.unshiftPhase(
+        phaseManager.unshiftPhase(
           new PokemonHealPhase(
             pokemon.getBattlerIndex(),
             toDmgValue(pokemon.getMaxHp() / 4),
@@ -610,7 +611,7 @@ class TypeImmunityStatStageChangeAbAttr extends TypeImmunityAbAttr {
     if (ret) {
       cancelled.value = true; // Suppresses "No Effect" message
       if (!simulated) {
-        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [this.stat], this.stages));
+        phaseManager.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [this.stat], this.stages));
       }
     }
 
@@ -865,7 +866,7 @@ export class MoveImmunityStatStageChangeAbAttr extends MoveImmunityAbAttr {
   ): boolean {
     const ret = super.applyPreDefend(pokemon, passive, simulated, attacker, move, cancelled, args);
     if (ret && !simulated) {
-      globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [this.stat], this.stages));
+      phaseManager.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [this.stat], this.stages));
     }
 
     return ret;
@@ -900,7 +901,7 @@ export class ReverseDrainAbAttr extends PostDefendAbAttr {
   ): boolean {
     if (move.hasAttr(HitHealAttr) && !move.hitsSubstitute(attacker, pokemon)) {
       if (!simulated) {
-        globalScene.queueMessage(
+        queueMessage(
           i18next.t("abilityTriggers:reverseDrain", { pokemonNameWithAffix: getPokemonNameWithAffix(attacker) }),
         );
       }
@@ -952,11 +953,11 @@ export class PostDefendStatStageChangeAbAttr extends PostDefendAbAttr {
           ? pokemon.getOpponents().concat([pokemon.getAlly()])
           : pokemon.getOpponents();
         for (const other of otherPokemon) {
-          globalScene.unshiftPhase(new StatStageChangePhase(other.getBattlerIndex(), false, [this.stat], this.stages));
+          phaseManager.unshiftPhase(new StatStageChangePhase(other.getBattlerIndex(), false, [this.stat], this.stages));
         }
         return true;
       }
-      globalScene.unshiftPhase(
+      phaseManager.unshiftPhase(
         new StatStageChangePhase(
           (this.selfTarget ? pokemon : attacker).getBattlerIndex(),
           this.selfTarget,
@@ -1014,7 +1015,7 @@ export class PostDefendHpGatedStatStageChangeAbAttr extends PostDefendAbAttr {
       && !move.hitsSubstitute(attacker, pokemon)
     ) {
       if (!simulated) {
-        globalScene.unshiftPhase(
+        phaseManager.unshiftPhase(
           new StatStageChangePhase(
             (this.selfTarget ? pokemon : attacker).getBattlerIndex(),
             true,
@@ -1091,7 +1092,7 @@ export class PostDefendApplyBattlerTagAbAttr extends PostDefendAbAttr {
     if (this.condition(pokemon, attacker, move) && !move.hitsSubstitute(attacker, pokemon)) {
       if (!pokemon.getTag(this.tagType) && !simulated) {
         pokemon.addTag(this.tagType, undefined, undefined, pokemon.id);
-        globalScene.queueMessage(
+        queueMessage(
           i18next.t("abilityTriggers:windPowerCharged", {
             pokemonName: getPokemonNameWithAffix(pokemon),
             moveName: move.name,
@@ -1291,7 +1292,7 @@ export class PostDefendCritStatStageChangeAbAttr extends PostDefendAbAttr {
     }
 
     if (!simulated) {
-      globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [this.stat], this.stages));
+      phaseManager.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [this.stat], this.stages));
     }
 
     return true;
@@ -1564,7 +1565,7 @@ export class PostStatStageChangeStatStageChangeAbAttr extends PostStatStageChang
   ): boolean {
     if (this.condition(pokemon, statStagesChanged, stagesChanged) && !selfTarget) {
       if (!simulated) {
-        globalScene.unshiftPhase(
+        phaseManager.unshiftPhase(
           new StatStageChangePhase(pokemon.getBattlerIndex(), true, this.statsToChange, this.stages),
         );
       }
@@ -2225,7 +2226,7 @@ export class PostAttackStealHeldItemAbAttr extends PostAttackAbAttr {
           const stolenItem = heldItems[pokemon.randSeedInt(heldItems.length)];
           globalScene.tryTransferHeldItemModifier(stolenItem, pokemon, false).then((success) => {
             if (success) {
-              globalScene.queueMessage(
+              queueMessage(
                 i18next.t("abilityTriggers:postAttackStealHeldItem", {
                   pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
                   defenderName: defender.name,
@@ -2393,7 +2394,7 @@ export class PostDefendStealHeldItemAbAttr extends PostDefendAbAttr {
           const stolenItem = heldItems[pokemon.randSeedInt(heldItems.length)];
           globalScene.tryTransferHeldItemModifier(stolenItem, pokemon, false).then((success) => {
             if (success) {
-              globalScene.queueMessage(
+              queueMessage(
                 i18next.t("abilityTriggers:postDefendStealHeldItem", {
                   pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
                   attackerName: attacker.name,
@@ -2512,7 +2513,7 @@ class PostVictoryStatStageChangeAbAttr extends PostVictoryAbAttr {
   applyPostVictory(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean | Promise<boolean> {
     const stat = typeof this.stat === "function" ? this.stat(pokemon) : this.stat;
     if (!simulated) {
-      globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [stat], this.stages));
+      phaseManager.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [stat], this.stages));
     }
     return true;
   }
@@ -2572,7 +2573,7 @@ export class PostKnockOutStatStageChangeAbAttr extends PostKnockOutAbAttr {
   ): boolean | Promise<boolean> {
     const stat = typeof this.stat === "function" ? this.stat(pokemon) : this.stat;
     if (!simulated) {
-      globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [stat], this.stages));
+      phaseManager.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [stat], this.stages));
     }
     return true;
   }
@@ -2593,7 +2594,7 @@ export class CopyFaintedAllyAbilityAbAttr extends PostKnockOutAbAttr {
     if (pokemon.isPlayer() === knockedOut.isPlayer() && !knockedOut.getAbility().hasAttr(UncopiableAbilityAbAttr)) {
       if (!simulated) {
         pokemon.summonData.ability = knockedOut.getAbility().id;
-        globalScene.queueMessage(
+        queueMessage(
           i18next.t("abilityTriggers:copyFaintedAllyAbility", {
             pokemonNameWithAffix: getPokemonNameWithAffix(knockedOut),
             abilityName: allAbilities[knockedOut.getAbility().id].name,
@@ -2670,7 +2671,7 @@ export class PostIntimidateStatStageChangeAbAttr extends AbAttr {
 
   apply(pokemon: Pokemon, _passive: boolean, simulated: boolean, cancelled: BooleanHolder, _args: any[]): boolean {
     if (!simulated) {
-      globalScene.pushPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), false, this.stats, this.stages));
+      phaseManager.pushPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), false, this.stats, this.stages));
     }
     cancelled.value = this.overwrites;
     return true;
@@ -2730,7 +2731,7 @@ export class PostSummonMessageAbAttr extends PostSummonAbAttr {
 
   applyPostSummon(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
     if (!simulated) {
-      globalScene.queueMessage(this.messageFunc(pokemon));
+      queueMessage(this.messageFunc(pokemon));
     }
 
     return true;
@@ -2749,7 +2750,7 @@ export class PostSummonUnnamedMessageAbAttr extends PostSummonAbAttr {
 
   applyPostSummon(_pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
     if (!simulated) {
-      globalScene.queueMessage(this.message);
+      queueMessage(this.message);
     }
 
     return true;
@@ -2800,7 +2801,7 @@ export class PostSummonStatStageChangeAbAttr extends PostSummonAbAttr {
     if (this.selfTarget) {
       // we unshift the StatStageChangePhase to put it right after the showAbility and not at the end of the
       // phase list (which could be after CommandPhase for example)
-      globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, this.stats, this.stages));
+      phaseManager.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, this.stats, this.stages));
       return true;
     }
     for (const opponent of pokemon.getOpponents()) {
@@ -2814,7 +2815,7 @@ export class PostSummonStatStageChangeAbAttr extends PostSummonAbAttr {
         }
       }
       if (!cancelled.value) {
-        globalScene.unshiftPhase(new StatStageChangePhase(opponent.getBattlerIndex(), false, this.stats, this.stages));
+        phaseManager.unshiftPhase(new StatStageChangePhase(opponent.getBattlerIndex(), false, this.stats, this.stages));
       }
     }
     return true;
@@ -2836,7 +2837,7 @@ export class PostSummonAllyHealAbAttr extends PostSummonAbAttr {
     const target = pokemon.getAlly();
     if (target?.isActive(true)) {
       if (!simulated) {
-        globalScene.unshiftPhase(
+        phaseManager.unshiftPhase(
           new PokemonHealPhase(
             target.getBattlerIndex(),
             toDmgValue(pokemon.getMaxHp() / this.healRatio),
@@ -2878,7 +2879,7 @@ export class PostSummonClearAllyStatStagesAbAttr extends PostSummonAbAttr {
           target.setStatStage(s, 0);
         }
 
-        globalScene.queueMessage(
+        queueMessage(
           i18next.t("abilityTriggers:postSummonClearAllyStats", {
             pokemonNameWithAffix: getPokemonNameWithAffix(target),
           }),
@@ -2935,7 +2936,7 @@ export class DownloadAbAttr extends PostSummonAbAttr {
     if (this.enemyDef > 0 && this.enemySpDef > 0) {
       // only activate if there's actually an enemy to download from
       if (!simulated) {
-        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), false, this.stats, 1));
+        phaseManager.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), false, this.stats, 1));
       }
       return true;
     }
@@ -3088,7 +3089,7 @@ export class PostSummonUserFieldRemoveStatusEffectAbAttr extends PostSummonAbAtt
     if (!simulated) {
       for (const pokemon of allowedParty) {
         if (pokemon.status && this.statusEffect.includes(pokemon.status.effect)) {
-          globalScene.queueMessage(getStatusEffectHealText(pokemon.status.effect, getPokemonNameWithAffix(pokemon)));
+          queueMessage(getStatusEffectHealText(pokemon.status.effect, getPokemonNameWithAffix(pokemon)));
           pokemon.resetStatus(false);
           pokemon.updateInfo();
         }
@@ -3193,7 +3194,7 @@ export class PostSummonTransformAbAttr extends PostSummonAbAttr {
     pokemon.summonData.types = target.getTypes();
     promises.push(pokemon.updateInfo());
 
-    globalScene.queueMessage(
+    queueMessage(
       i18next.t("abilityTriggers:postSummonTransform", {
         pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
         targetName: target.name,
@@ -3313,7 +3314,7 @@ export class CommanderAbAttr extends AbAttr {
         // Apply boosts from this effect to the ally Dondozo
         pokemon.getAlly().addTag(BattlerTagType.COMMANDED, 0, Moves.NONE, pokemon.id);
         // Cancel the source Pokemon's next move (if a move is queued)
-        globalScene.tryRemovePhase((phase) => phase instanceof MovePhase && phase.pokemon === pokemon);
+        phaseManager.tryRemovePhase((phase) => phase instanceof MovePhase && phase.pokemon === pokemon);
       }
       return true;
     }
@@ -4078,7 +4079,7 @@ export class ForewarnAbAttr extends PostSummonAbAttr {
       }
     }
     if (!simulated) {
-      globalScene.queueMessage(
+      queueMessage(
         i18next.t("abilityTriggers:forewarn", {
           pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
           moveName: maxMove,
@@ -4097,7 +4098,7 @@ export class FriskAbAttr extends PostSummonAbAttr {
   applyPostSummon(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
     if (!simulated) {
       for (const opponent of pokemon.getOpponents()) {
-        globalScene.queueMessage(
+        queueMessage(
           i18next.t("abilityTriggers:frisk", {
             pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
             opponentName: opponent.name,
@@ -4257,7 +4258,7 @@ export class PostWeatherLapseHealAbAttr extends PostWeatherLapseAbAttr {
     if (!pokemon.isFullHp()) {
       const abilityName = (!passive ? pokemon.getAbility() : pokemon.getPassiveAbility()).name;
       if (!simulated) {
-        globalScene.unshiftPhase(
+        phaseManager.unshiftPhase(
           new PokemonHealPhase(
             pokemon.getBattlerIndex(),
             toDmgValue(pokemon.getMaxHp() / (16 / this.healFactor)),
@@ -4298,7 +4299,7 @@ export class PostWeatherLapseDamageAbAttr extends PostWeatherLapseAbAttr {
 
     if (!simulated) {
       const abilityName = (!passive ? pokemon.getAbility() : pokemon.getPassiveAbility()).name;
-      globalScene.queueMessage(
+      queueMessage(
         i18next.t("abilityTriggers:postWeatherLapseDamage", {
           pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
           abilityName,
@@ -4394,7 +4395,7 @@ export class PostTurnStatusHealAbAttr extends PostTurnAbAttr {
       if (!pokemon.isFullHp()) {
         if (!simulated) {
           const abilityName = (!passive ? pokemon.getAbility() : pokemon.getPassiveAbility()).name;
-          globalScene.unshiftPhase(
+          phaseManager.unshiftPhase(
             new PokemonHealPhase(
               pokemon.getBattlerIndex(),
               toDmgValue(pokemon.getMaxHp() / 8),
@@ -4431,9 +4432,7 @@ export class PostTurnResetStatusAbAttr extends PostTurnAbAttr {
     }
     if (this.target?.status) {
       if (!simulated) {
-        globalScene.queueMessage(
-          getStatusEffectHealText(this.target.status?.effect, getPokemonNameWithAffix(this.target)),
-        );
+        queueMessage(getStatusEffectHealText(this.target.status?.effect, getPokemonNameWithAffix(this.target)));
         this.target.resetStatus(false);
         this.target.updateInfo();
       }
@@ -4514,7 +4513,7 @@ export class PostTurnLootAbAttr extends PostTurnAbAttr {
       berryModifier.stackCount++;
     }
 
-    globalScene.queueMessage(
+    queueMessage(
       i18next.t("abilityTriggers:postTurnLootCreateEatenBerry", {
         pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
         berryName: chosenBerry.name,
@@ -4553,11 +4552,11 @@ export class MoodyAbAttr extends PostTurnAbAttr {
       if (canRaise.length > 0) {
         const raisedStat = canRaise[pokemon.randSeedInt(canRaise.length)];
         canLower = canRaise.filter((s) => s !== raisedStat);
-        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [raisedStat], 2));
+        phaseManager.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [raisedStat], 2));
       }
       if (canLower.length > 0) {
         const loweredStat = canLower[pokemon.randSeedInt(canLower.length)];
-        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [loweredStat], -1));
+        phaseManager.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [loweredStat], -1));
       }
     }
 
@@ -4573,7 +4572,7 @@ export class SpeedBoostAbAttr extends PostTurnAbAttr {
   applyPostTurn(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
     if (!simulated) {
       if (!pokemon.turnData.switchedInThisTurn && !pokemon.turnData.failedRunAway) {
-        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [Stat.SPD], 1));
+        phaseManager.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [Stat.SPD], 1));
       } else {
         return false;
       }
@@ -4587,7 +4586,7 @@ export class PostTurnHealAbAttr extends PostTurnAbAttr {
     if (!pokemon.isFullHp()) {
       if (!simulated) {
         const abilityName = (!passive ? pokemon.getAbility() : pokemon.getPassiveAbility()).name;
-        globalScene.unshiftPhase(
+        phaseManager.unshiftPhase(
           new PokemonHealPhase(
             pokemon.getBattlerIndex(),
             toDmgValue(pokemon.getMaxHp() / 16),
@@ -4652,9 +4651,7 @@ export class PostTurnHurtIfSleepingAbAttr extends PostTurnAbAttr {
       ) {
         if (!simulated) {
           opp.damageAndUpdate(toDmgValue(opp.getMaxHp() / 8), HitResult.OTHER);
-          globalScene.queueMessage(
-            i18next.t("abilityTriggers:badDreams", { pokemonName: getPokemonNameWithAffix(opp) }),
-          );
+          queueMessage(i18next.t("abilityTriggers:badDreams", { pokemonName: getPokemonNameWithAffix(opp) }));
         }
         hadEffect = true;
       }
@@ -4686,7 +4683,7 @@ export class FetchBallAbAttr extends PostTurnAbAttr {
     if (lastUsed !== null && !!pokemon.isPlayer) {
       globalScene.pokeballCounts[lastUsed]++;
       globalScene.currentBattle.lastUsedPokeball = null;
-      globalScene.queueMessage(
+      queueMessage(
         i18next.t("abilityTriggers:fetchBall", {
           pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
           pokeballName: getPokeballName(lastUsed),
@@ -4797,10 +4794,10 @@ export class PostDancingMoveAbAttr extends PostMoveUsedAbAttr {
         // If the move is an AttackMove or a StatusMove the Dancer must replicate the move on the source of the Dance
         if (move.getMove() instanceof AttackMove || move.getMove() instanceof StatusMove) {
           const target = this.getTarget(dancer, source, targets);
-          globalScene.unshiftPhase(new MovePhase(dancer, target, move, true, true));
+          phaseManager.unshiftPhase(new MovePhase(dancer, target, move, true, true));
         } else if (move.getMove() instanceof SelfStatusMove) {
           // If the move is a SelfStatusMove (ie. Swords Dance) the Dancer should replicate it on itself
-          globalScene.unshiftPhase(new MovePhase(dancer, [dancer.getBattlerIndex()], move, true, true));
+          phaseManager.unshiftPhase(new MovePhase(dancer, [dancer.getBattlerIndex()], move, true, true));
         }
       }
       return true;
@@ -4889,7 +4886,7 @@ export class StatStageChangeCopyAbAttr extends AbAttr {
     args: any[],
   ): boolean | Promise<boolean> {
     if (!simulated) {
-      globalScene.unshiftPhase(
+      phaseManager.unshiftPhase(
         new StatStageChangePhase(
           pokemon.getBattlerIndex(),
           true,
@@ -4976,7 +4973,7 @@ export class HealFromBerryUseAbAttr extends AbAttr {
   apply(pokemon: Pokemon, passive: boolean, simulated: boolean, ..._args: [BooleanHolder, any[]]): boolean {
     const { name: abilityName } = passive ? pokemon.getPassiveAbility() : pokemon.getAbility();
     if (!simulated) {
-      globalScene.unshiftPhase(
+      phaseManager.unshiftPhase(
         new PokemonHealPhase(
           pokemon.getBattlerIndex(),
           toDmgValue(pokemon.getMaxHp() * this.healPercent),
@@ -5113,7 +5110,7 @@ export class PostBattleLootAbAttr extends PostBattleAbAttr {
       if (globalScene.tryTransferHeldItemModifier(randItem, pokemon, true, 1, true, undefined, false)) {
         // TODO: fix. This is a promise!?
         postBattleLoot.splice(postBattleLoot.indexOf(randItem), 1);
-        globalScene.queueMessage(
+        queueMessage(
           i18next.t("abilityTriggers:postBattleLoot", {
             pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
             itemName: randItem.type.name,
@@ -5412,7 +5409,7 @@ export class FlinchStatStageChangeAbAttr extends FlinchEffectAbAttr {
 
   apply(pokemon: Pokemon, _passive: boolean, simulated: boolean, _cancelled: BooleanHolder, _args: any[]): boolean {
     if (!simulated) {
-      globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, this.stats, this.stages));
+      phaseManager.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, this.stats, this.stages));
     }
     return true;
   }
@@ -5948,7 +5945,7 @@ async function applyAbAttrsInternal<TAttr extends AbAttr>(
         continue;
       }
 
-      globalScene.setPhaseQueueSplice();
+      phaseManager.setPhaseQueueSplice();
 
       let result = applyFunc(attr, passive);
       // TODO Remove this when promises get reworked
@@ -5972,13 +5969,13 @@ async function applyAbAttrsInternal<TAttr extends AbAttr>(
         const message = attr.getTriggerMessage(pokemon, ability.name, args);
         if (message) {
           if (!simulated) {
-            globalScene.queueMessage(message);
+            queueMessage(message);
           }
         }
         messages.push(message!);
       }
     }
-    globalScene.clearPhaseQueueSplice();
+    phaseManager.clearPhaseQueueSplice();
   }
 }
 
@@ -6005,7 +6002,7 @@ class ForceSwitchOutHelper {
 
       if (switchOutTarget.hp > 0) {
         switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
-        globalScene.prependToPhase(
+        phaseManager.prependToPhase(
           new SwitchPhase(this.switchType, switchOutTarget.getFieldIndex(), true, true),
           MoveEndPhase,
         );
@@ -6024,7 +6021,7 @@ class ForceSwitchOutHelper {
         const summonIndex = globalScene.currentBattle.trainer
           ? globalScene.currentBattle.trainer.getNextSummonIndex((switchOutTarget as EnemyPokemon).trainerSlot)
           : 0;
-        globalScene.prependToPhase(
+        phaseManager.prependToPhase(
           new SwitchSummonPhase(this.switchType, switchOutTarget.getFieldIndex(), summonIndex, false, false),
           MoveEndPhase,
         );
@@ -6041,7 +6038,7 @@ class ForceSwitchOutHelper {
 
       if (switchOutTarget.hp > 0) {
         switchOutTarget.leaveField(false);
-        globalScene.queueMessage(
+        queueMessage(
           i18next.t("moveTriggers:fled", { pokemonName: getPokemonNameWithAffix(switchOutTarget) }),
           null,
           true,
@@ -6058,8 +6055,8 @@ class ForceSwitchOutHelper {
         globalScene.clearEnemyHeldItemModifiers();
 
         if (switchOutTarget.hp) {
-          globalScene.pushPhase(new BattleEndPhase(false));
-          globalScene.pushPhase(new NewBattlePhase());
+          phaseManager.pushPhase(new BattleEndPhase(false));
+          phaseManager.pushPhase(new NewBattlePhase());
         }
       }
     }
@@ -6754,8 +6751,8 @@ export function applyPostItemLostAbAttrs(
 }
 
 function queueShowAbility(pokemon: Pokemon, passive: boolean): void {
-  globalScene.unshiftPhase(new ShowAbilityPhase(pokemon.id, passive));
-  globalScene.clearPhaseQueueSplice();
+  phaseManager.unshiftPhase(new ShowAbilityPhase(pokemon.id, passive));
+  phaseManager.clearPhaseQueueSplice();
 }
 
 /**
@@ -7289,7 +7286,9 @@ export function initAbilities() {
     new Ability(Abilities.ANALYTIC, 5).attr(
       MovePowerBoostAbAttr,
       (user, _target, _move) => {
-        const movePhase = globalScene.findPhase((phase) => phase instanceof MovePhase && phase.pokemon.id !== user?.id);
+        const movePhase = phaseManager.findPhase(
+          (phase) => phase instanceof MovePhase && phase.pokemon.id !== user?.id,
+        );
         return isNullOrUndefined(movePhase);
       },
       1.3,

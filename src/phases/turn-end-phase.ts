@@ -16,6 +16,7 @@ import i18next from "i18next";
 import { FieldPhase } from "./field-phase";
 import { PokemonHealPhase } from "./pokemon-heal-phase";
 import { globalScene } from "#app/global-scene";
+import { phaseManager } from "#app/phase-manager";
 
 export class TurnEndPhase extends FieldPhase {
   constructor() {
@@ -35,7 +36,7 @@ export class TurnEndPhase extends FieldPhase {
         globalScene.applyModifiers(TurnHealModifier, pokemon.isPlayer(), pokemon);
 
         if (globalScene.arena.terrain?.terrainType === TerrainType.GRASSY && pokemon.isGrounded()) {
-          globalScene.unshiftPhase(
+          phaseManager.unshiftPhase(
             new PokemonHealPhase(
               pokemon.getBattlerIndex(),
               Math.max(pokemon.getMaxHp() >> 4, 1),

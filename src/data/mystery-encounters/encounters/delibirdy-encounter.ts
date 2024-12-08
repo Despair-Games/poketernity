@@ -36,6 +36,7 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
+import { phaseManager } from "#app/phase-manager";
 
 /** the i18n namespace for this encounter */
 const namespace = "mysteryEncounters/delibirdy";
@@ -162,7 +163,7 @@ export const DelibirdyEncounter: MysteryEncounter = MysteryEncounterBuilder.with
             true,
           );
         } else {
-          globalScene.unshiftPhase(new ModifierRewardPhase(modifierTypes.AMULET_COIN));
+          phaseManager.unshiftPhase(new ModifierRewardPhase(modifierTypes.AMULET_COIN));
         }
 
         leaveEncounterWithoutBattle(true);
@@ -243,7 +244,7 @@ export const DelibirdyEncounter: MysteryEncounter = MysteryEncounterBuilder.with
               true,
             );
           } else {
-            globalScene.unshiftPhase(new ModifierRewardPhase(modifierTypes.CANDY_JAR));
+            phaseManager.unshiftPhase(new ModifierRewardPhase(modifierTypes.CANDY_JAR));
           }
         } else {
           // Check if the player has max stacks of that Berry Pouch already
@@ -261,7 +262,7 @@ export const DelibirdyEncounter: MysteryEncounter = MysteryEncounterBuilder.with
               true,
             );
           } else {
-            globalScene.unshiftPhase(new ModifierRewardPhase(modifierTypes.BERRY_POUCH));
+            phaseManager.unshiftPhase(new ModifierRewardPhase(modifierTypes.BERRY_POUCH));
           }
         }
 
@@ -343,7 +344,7 @@ export const DelibirdyEncounter: MysteryEncounter = MysteryEncounterBuilder.with
             true,
           );
         } else {
-          globalScene.unshiftPhase(new ModifierRewardPhase(modifierTypes.HEALING_CHARM));
+          phaseManager.unshiftPhase(new ModifierRewardPhase(modifierTypes.HEALING_CHARM));
         }
 
         chosenPokemon.loseHeldItem(modifier, false);

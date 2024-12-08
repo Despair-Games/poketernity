@@ -21,6 +21,7 @@ import { BattlerIndex } from "#app/battle";
 import { TrickRoomTag } from "#app/data/arena-tag";
 import { SwitchType } from "#enums/switch-type";
 import { globalScene } from "#app/global-scene";
+import { phaseManager } from "#app/phase-manager";
 
 export class TurnStartPhase extends FieldPhase {
   constructor() {
@@ -165,11 +166,11 @@ export class TurnStartPhase extends FieldPhase {
             pokemon.getMoveset().find((m) => m.moveId === queuedMove.move && m.ppUsed < m.getMovePp())
             || new PokemonMove(queuedMove.move);
           if (move.getMove().hasAttr(MoveHeaderAttr)) {
-            globalScene.unshiftPhase(new MoveHeaderPhase(pokemon, move));
+            phaseManager.unshiftPhase(new MoveHeaderPhase(pokemon, move));
           }
           if (pokemon.isPlayer()) {
             if (turnCommand.cursor === -1) {
-              globalScene.pushPhase(new MovePhase(pokemon, turnCommand.targets || turnCommand.move!.targets, move)); //TODO: is the bang correct here?
+              phaseManager.pushPhase(new MovePhase(pokemon, turnCommand.targets || turnCommand.move!.targets, move)); //TODO: is the bang correct here?
             } else {
               const playerPhase = new MovePhase(
                 pokemon,
@@ -178,10 +179,10 @@ export class TurnStartPhase extends FieldPhase {
                 false,
                 queuedMove.ignorePP,
               ); //TODO: is the bang correct here?
-              globalScene.pushPhase(playerPhase);
+              phaseManager.pushPhase(playerPhase);
             }
           } else {
-            globalScene.pushPhase(
+            phaseManager.pushPhase(
               new MovePhase(
                 pokemon,
                 turnCommand.targets || turnCommand.move!.targets,
@@ -193,11 +194,11 @@ export class TurnStartPhase extends FieldPhase {
           }
           break;
         case Command.BALL:
-          globalScene.unshiftPhase(new AttemptCapturePhase(turnCommand.targets![0] % 2, turnCommand.cursor!)); //TODO: is the bang correct here?
+          phaseManager.unshiftPhase(new AttemptCapturePhase(turnCommand.targets![0] % 2, turnCommand.cursor!)); //TODO: is the bang correct here?
           break;
         case Command.POKEMON:
           const switchType = turnCommand.args?.[0] ? SwitchType.BATON_PASS : SwitchType.SWITCH;
-          globalScene.unshiftPhase(
+          phaseManager.unshiftPhase(
             new SwitchSummonPhase(switchType, pokemon.getFieldIndex(), turnCommand.cursor!, true, pokemon.isPlayer()),
           );
           break;
@@ -223,18 +224,18 @@ export class TurnStartPhase extends FieldPhase {
               runningPokemon = hasRunAway !== undefined ? hasRunAway : fasterPokemon;
             }
           }
-          globalScene.unshiftPhase(new AttemptRunPhase(runningPokemon.getFieldIndex()));
+          phaseManager.unshiftPhase(new AttemptRunPhase(runningPokemon.getFieldIndex()));
           break;
       }
     }
 
-    globalScene.pushPhase(new WeatherEffectPhase());
-    globalScene.pushPhase(new BerryPhase());
+    phaseManager.pushPhase(new WeatherEffectPhase());
+    phaseManager.pushPhase(new BerryPhase());
 
     /** Add a new phase to check who should be taking status damage */
-    globalScene.pushPhase(new CheckStatusEffectPhase(moveOrder));
+    phaseManager.pushPhase(new CheckStatusEffectPhase(moveOrder));
 
-    globalScene.pushPhase(new TurnEndPhase());
+    phaseManager.pushPhase(new TurnEndPhase());
 
     /**
      * this.end() will call shiftPhase(), which dumps everything from PrependQueue (aka everything that is unshifted()) to the front

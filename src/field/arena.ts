@@ -40,6 +40,7 @@ import { SpeciesFormChangeRevertWeatherFormTrigger, SpeciesFormChangeWeatherTrig
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { WeatherType } from "#enums/weather-type";
+import { phaseManager, queueMessage } from "#app/phase-manager";
 
 export class Arena {
   public biomeType: Biome;
@@ -290,8 +291,8 @@ export class Arena {
    */
   trySetWeatherOverride(weather: WeatherType): boolean {
     this.weather = new Weather(weather, 0);
-    globalScene.unshiftPhase(new CommonAnimPhase(undefined, undefined, CommonAnim.SUNNY + (weather - 1)));
-    globalScene.queueMessage(getWeatherStartMessage(weather)!); // TODO: is this bang correct?
+    phaseManager.unshiftPhase(new CommonAnimPhase(undefined, undefined, CommonAnim.SUNNY + (weather - 1)));
+    queueMessage(getWeatherStartMessage(weather)!); // TODO: is this bang correct?
     return true;
   }
 
@@ -318,10 +319,10 @@ export class Arena {
     ); // TODO: is this bang correct?
 
     if (this.weather) {
-      globalScene.unshiftPhase(new CommonAnimPhase(undefined, undefined, CommonAnim.SUNNY + (weather - 1), true));
-      globalScene.queueMessage(getWeatherStartMessage(weather)!); // TODO: is this bang correct?
+      phaseManager.unshiftPhase(new CommonAnimPhase(undefined, undefined, CommonAnim.SUNNY + (weather - 1), true));
+      queueMessage(getWeatherStartMessage(weather)!); // TODO: is this bang correct?
     } else {
-      globalScene.queueMessage(getWeatherClearMessage(oldWeatherType)!); // TODO: is this bang correct?
+      queueMessage(getWeatherClearMessage(oldWeatherType)!); // TODO: is this bang correct?
     }
 
     globalScene
@@ -383,11 +384,11 @@ export class Arena {
 
     if (this.terrain) {
       if (!ignoreAnim) {
-        globalScene.unshiftPhase(new CommonAnimPhase(undefined, undefined, CommonAnim.MISTY_TERRAIN + (terrain - 1)));
+        phaseManager.unshiftPhase(new CommonAnimPhase(undefined, undefined, CommonAnim.MISTY_TERRAIN + (terrain - 1)));
       }
-      globalScene.queueMessage(getTerrainStartMessage(terrain)!); // TODO: is this bang correct?
+      queueMessage(getTerrainStartMessage(terrain)!); // TODO: is this bang correct?
     } else {
-      globalScene.queueMessage(getTerrainClearMessage(oldTerrainType)!); // TODO: is this bang correct?
+      queueMessage(getTerrainClearMessage(oldTerrainType)!); // TODO: is this bang correct?
     }
 
     globalScene

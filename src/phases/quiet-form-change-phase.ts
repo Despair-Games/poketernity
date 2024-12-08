@@ -11,6 +11,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlePhase } from "./battle-phase";
 import { MovePhase } from "./move-phase";
 import { PokemonHealPhase } from "./pokemon-heal-phase";
+import { phaseManager } from "#app/phase-manager";
 
 export class QuietFormChangePhase extends BattlePhase {
   protected pokemon: Pokemon;
@@ -152,7 +153,7 @@ export class QuietFormChangePhase extends BattlePhase {
     this.pokemon.findAndRemoveTags((t) => t.tagType === BattlerTagType.AUTOTOMIZED);
     if (globalScene?.currentBattle.battleSpec === BattleSpec.FINAL_BOSS && this.pokemon instanceof EnemyPokemon) {
       globalScene.playBgm();
-      globalScene.unshiftPhase(
+      phaseManager.unshiftPhase(
         new PokemonHealPhase(this.pokemon.getBattlerIndex(), this.pokemon.getMaxHp(), null, false, false, false, true),
       );
       this.pokemon.findAndRemoveTags(() => true);
@@ -161,7 +162,9 @@ export class QuietFormChangePhase extends BattlePhase {
       this.pokemon.initBattleInfo();
       this.pokemon.cry();
 
-      const movePhase = globalScene.findPhase((p) => p instanceof MovePhase && p.pokemon === this.pokemon) as MovePhase;
+      const movePhase = phaseManager.findPhase(
+        (p) => p instanceof MovePhase && p.pokemon === this.pokemon,
+      ) as MovePhase;
       if (movePhase) {
         movePhase.cancel();
       }

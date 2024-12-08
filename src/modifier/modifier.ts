@@ -55,6 +55,7 @@ import { Color, ShadowColor } from "#enums/color";
 import { FRIENDSHIP_GAIN_FROM_RARE_CANDY } from "#app/data/balance/starters";
 import { applyAbAttrs, CommanderAbAttr } from "#app/data/ability";
 import { globalScene } from "#app/global-scene";
+import { queueMessage, phaseManager } from "#app/phase-manager";
 
 export type ModifierPredicate = (modifier: Modifier) => boolean;
 
@@ -1655,7 +1656,7 @@ export class SurviveDamageModifier extends PokemonHeldItemModifier {
     if (!surviveDamage.value && pokemon.randSeedInt(10) < this.getStackCount()) {
       surviveDamage.value = true;
 
-      globalScene.queueMessage(
+      queueMessage(
         i18next.t("modifier:surviveDamageApply", {
           pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
           typeName: this.type.name,
@@ -1709,7 +1710,7 @@ export class BypassSpeedChanceModifier extends PokemonHeldItemModifier {
       const hasQuickClaw = this.type instanceof PokemonHeldItemModifierType && this.type.id === "QUICK_CLAW";
 
       if (isCommandFight && hasQuickClaw) {
-        globalScene.queueMessage(
+        queueMessage(
           i18next.t("modifier:bypassSpeedChanceApply", {
             pokemonName: getPokemonNameWithAffix(pokemon),
             itemName: i18next.t("modifierType:ModifierType.QUICK_CLAW.name"),
@@ -1798,7 +1799,7 @@ export class TurnHealModifier extends PokemonHeldItemModifier {
    */
   override apply(pokemon: Pokemon): boolean {
     if (!pokemon.isFullHp()) {
-      globalScene.unshiftPhase(
+      phaseManager.unshiftPhase(
         new PokemonHealPhase(
           pokemon.getBattlerIndex(),
           toDmgValue(pokemon.getMaxHp() / 16) * this.stackCount,
@@ -1899,7 +1900,7 @@ export class HitHealModifier extends PokemonHeldItemModifier {
    */
   override apply(pokemon: Pokemon): boolean {
     if (pokemon.turnData.totalDamageDealt && !pokemon.isFullHp()) {
-      globalScene.unshiftPhase(
+      phaseManager.unshiftPhase(
         new PokemonHealPhase(
           pokemon.getBattlerIndex(),
           toDmgValue(pokemon.turnData.totalDamageDealt / 8) * this.stackCount,
@@ -2077,7 +2078,7 @@ export class PokemonInstantReviveModifier extends PokemonHeldItemModifier {
    */
   override apply(pokemon: Pokemon): boolean {
     // Restore the Pokemon to half HP
-    globalScene.unshiftPhase(
+    phaseManager.unshiftPhase(
       new PokemonHealPhase(
         pokemon.getBattlerIndex(),
         toDmgValue(pokemon.getMaxHp() / 2),
@@ -2141,7 +2142,7 @@ export class ResetNegativeStatStageModifier extends PokemonHeldItemModifier {
     }
 
     if (statRestored) {
-      globalScene.queueMessage(
+      queueMessage(
         i18next.t("modifier:resetNegativeStatStageApply", {
           pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
           typeName: this.type.name,
@@ -2396,7 +2397,7 @@ export class PokemonLevelIncrementModifier extends ConsumablePokemonModifier {
 
     playerPokemon.addFriendship(FRIENDSHIP_GAIN_FROM_RARE_CANDY);
 
-    globalScene.unshiftPhase(
+    phaseManager.unshiftPhase(
       new LevelUpPhase(
         globalScene.getPlayerParty().indexOf(playerPokemon),
         playerPokemon.level - levelCount.value,
@@ -2421,7 +2422,7 @@ export class TmModifier extends ConsumablePokemonModifier {
    * @returns always `true`
    */
   override apply(playerPokemon: PlayerPokemon): boolean {
-    globalScene.unshiftPhase(
+    phaseManager.unshiftPhase(
       new LearnMovePhase(globalScene.getPlayerParty().indexOf(playerPokemon), this.type.moveId, LearnMoveType.TM),
     );
 
@@ -2444,7 +2445,7 @@ export class RememberMoveModifier extends ConsumablePokemonModifier {
    * @returns always `true`
    */
   override apply(playerPokemon: PlayerPokemon, cost?: number): boolean {
-    globalScene.unshiftPhase(
+    phaseManager.unshiftPhase(
       new LearnMovePhase(
         globalScene.getPlayerParty().indexOf(playerPokemon),
         playerPokemon.getLearnableLevelMoves()[this.levelMoveIndex],
@@ -2492,7 +2493,7 @@ export class EvolutionItemModifier extends ConsumablePokemonModifier {
     }
 
     if (matchingEvolution) {
-      globalScene.unshiftPhase(new EvolutionPhase(playerPokemon, matchingEvolution, playerPokemon.level - 1));
+      phaseManager.unshiftPhase(new EvolutionPhase(playerPokemon, matchingEvolution, playerPokemon.level - 1));
       return true;
     }
 
@@ -3125,7 +3126,7 @@ export class MoneyInterestModifier extends PersistentModifier {
       moneyAmount: formattedMoneyAmount,
       typeName: this.type.name,
     });
-    globalScene.queueMessage(message, undefined, true);
+    queueMessage(message, undefined, true);
 
     return true;
   }
@@ -3430,7 +3431,7 @@ export abstract class HeldItemTransferModifier extends PokemonHeldItemModifier {
 
     Promise.all(heldItemTransferPromises).then(() => {
       for (const mt of transferredModifierTypes) {
-        globalScene.queueMessage(this.getTransferMessage(pokemon, targetPokemon, mt));
+        queueMessage(this.getTransferMessage(pokemon, targetPokemon, mt));
       }
     });
 
@@ -3757,7 +3758,7 @@ export class EnemyTurnHealModifier extends EnemyPersistentModifier {
    */
   override apply(enemyPokemon: Pokemon): boolean {
     if (!enemyPokemon.isFullHp()) {
-      globalScene.unshiftPhase(
+      phaseManager.unshiftPhase(
         new PokemonHealPhase(
           enemyPokemon.getBattlerIndex(),
           Math.max(Math.floor(enemyPokemon.getMaxHp() / (100 / this.healPercent)) * this.stackCount, 1),
@@ -3851,9 +3852,7 @@ export class EnemyStatusEffectHealChanceModifier extends EnemyPersistentModifier
    */
   override apply(enemyPokemon: Pokemon): boolean {
     if (enemyPokemon.status && Phaser.Math.RND.realInRange(0, 1) < this.chance * this.getStackCount()) {
-      globalScene.queueMessage(
-        getStatusEffectHealText(enemyPokemon.status.effect, getPokemonNameWithAffix(enemyPokemon)),
-      );
+      queueMessage(getStatusEffectHealText(enemyPokemon.status.effect, getPokemonNameWithAffix(enemyPokemon)));
       enemyPokemon.resetStatus();
       enemyPokemon.updateInfo();
       return true;

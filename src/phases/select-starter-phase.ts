@@ -12,6 +12,7 @@ import type { Starter } from "#app/ui/starter-select-ui-handler";
 import { Mode } from "#app/ui/ui";
 import type { Species } from "#enums/species";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
+import { phaseManager } from "#app/phase-manager";
 
 export class SelectStarterPhase extends Phase {
   constructor() {
@@ -27,8 +28,8 @@ export class SelectStarterPhase extends Phase {
       globalScene.ui.clearText();
       globalScene.ui.setMode(Mode.SAVE_SLOT, SaveSlotUiMode.SAVE, (slotId: number) => {
         if (slotId === -1) {
-          globalScene.clearPhaseQueue();
-          globalScene.pushPhase(new TitlePhase());
+          phaseManager.clearPhaseQueue();
+          phaseManager.pushPhase(new TitlePhase());
           return this.end();
         }
         globalScene.sessionSlotId = slotId;

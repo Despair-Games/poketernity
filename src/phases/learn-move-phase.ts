@@ -13,6 +13,7 @@ import i18next from "i18next";
 import { PlayerPartyMemberPokemonPhase } from "#app/phases/player-party-member-pokemon-phase";
 import type Pokemon from "#app/field/pokemon";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
+import { phaseManager } from "#app/phase-manager";
 
 export enum LearnMoveType {
   /** For learning a move via level-up, evolution, or other non-item-based event */
@@ -193,7 +194,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
         pokemon.usedTMs = [];
       }
       pokemon.usedTMs.push(this.moveId);
-      globalScene.tryRemovePhase((phase) => phase instanceof SelectModifierPhase);
+      phaseManager.tryRemovePhase((phase) => phase instanceof SelectModifierPhase);
     } else if (this.learnMoveType === LearnMoveType.MEMORY) {
       if (this.cost !== -1) {
         if (!Overrides.WAIVE_ROLL_FEE_OVERRIDE) {
@@ -203,7 +204,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
         }
         globalScene.playSound("se/buy");
       } else {
-        globalScene.tryRemovePhase((phase) => phase instanceof SelectModifierPhase);
+        phaseManager.tryRemovePhase((phase) => phase instanceof SelectModifierPhase);
       }
     }
     pokemon.setMove(index, this.moveId);

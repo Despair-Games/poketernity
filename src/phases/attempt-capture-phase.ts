@@ -24,6 +24,7 @@ import type { PokeballType } from "#enums/pokeball";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
+import { phaseManager } from "#app/phase-manager";
 
 export class AttemptCapturePhase extends PokemonPhase {
   private pokeballType: PokeballType;
@@ -254,7 +255,7 @@ export class AttemptCapturePhase extends PokemonPhase {
       null,
       () => {
         const end = () => {
-          globalScene.unshiftPhase(new VictoryPhase(this.battlerIndex));
+          phaseManager.unshiftPhase(new VictoryPhase(this.battlerIndex));
           globalScene.pokemonInfoContainer.hide();
           this.removePb();
           this.end();

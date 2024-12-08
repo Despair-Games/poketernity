@@ -17,6 +17,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
 import { EndEvolutionPhase } from "#app/phases/end-evolution-phase";
 import { EVOLVE_MOVE } from "#app/data/balance/pokemon-level-moves";
+import { phaseManager } from "#app/phase-manager";
 
 export class EvolutionPhase extends Phase {
   protected pokemon: PlayerPokemon;
@@ -255,7 +256,7 @@ export class EvolutionPhase extends Phase {
 
     SoundFade.fadeOut(globalScene, this.evolutionBgm, 100);
 
-    globalScene.unshiftPhase(new EndEvolutionPhase());
+    phaseManager.unshiftPhase(new EndEvolutionPhase());
 
     globalScene.ui.showText(
       i18next.t("menu:stoppedEvolving", { pokemonName: this.preEvolvedPokemonName }),
@@ -342,9 +343,9 @@ export class EvolutionPhase extends Phase {
           .getLevelMoves(this.lastLevel + 1, true, false, false, learnSituation)
           .filter((lm) => lm[0] === EVOLVE_MOVE);
         for (const lm of levelMoves) {
-          globalScene.unshiftPhase(new LearnMovePhase(globalScene.getPlayerParty().indexOf(this.pokemon), lm[1]));
+          phaseManager.unshiftPhase(new LearnMovePhase(globalScene.getPlayerParty().indexOf(this.pokemon), lm[1]));
         }
-        globalScene.unshiftPhase(new EndEvolutionPhase());
+        phaseManager.unshiftPhase(new EndEvolutionPhase());
 
         globalScene.playSound("se/shine");
         this.doSpray();

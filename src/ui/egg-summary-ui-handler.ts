@@ -10,6 +10,7 @@ import ScrollableGridUiHandler from "./scrollable-grid-handler";
 import { HatchedPokemonContainer } from "./hatched-pokemon-container";
 import { ScrollBar } from "#app/ui/scroll-bar";
 import { globalScene } from "#app/global-scene";
+import { phaseManager } from "#app/phase-manager";
 
 const iconContainerX = 112;
 const iconContainerY = 9;
@@ -222,7 +223,7 @@ export default class EggSummaryUiHandler extends MessageUiHandler {
     let error = false;
     if (button === Button.CANCEL) {
       if (!this.blockExit) {
-        const phase = globalScene.getCurrentPhase();
+        const phase = phaseManager.getCurrentPhase();
         if (phase instanceof EggSummaryPhase) {
           phase.end();
         }

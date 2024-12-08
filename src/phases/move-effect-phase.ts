@@ -62,6 +62,7 @@ import { BooleanHolder, executeIf, isNullOrUndefined, NumberHolder } from "#app/
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { Moves } from "#enums/moves";
 import i18next from "i18next";
+import { queueMessage, phaseManager } from "#app/phase-manager";
 
 export class MoveEffectPhase extends PokemonPhase {
   public move: PokemonMove;
@@ -204,7 +205,7 @@ export class MoveEffectPhase extends PokemonPhase {
       ) {
         this.stopMultiHit();
         if (hasActiveTargets) {
-          globalScene.queueMessage(
+          queueMessage(
             i18next.t("battle:attackMissed", {
               pokemonNameWithAffix: this.getFirstTarget() ? getPokemonNameWithAffix(this.getFirstTarget()!) : "",
             }),
@@ -212,7 +213,7 @@ export class MoveEffectPhase extends PokemonPhase {
           moveHistoryEntry.result = MoveResult.MISS;
           applyMoveAttrs(MissEffectAttr, user, null, this.move.getMove());
         } else {
-          globalScene.queueMessage(i18next.t("battle:attackFailed"));
+          queueMessage(i18next.t("battle:attackFailed"));
           moveHistoryEntry.result = MoveResult.FAIL;
         }
         user.pushMoveHistory(moveHistoryEntry);
@@ -286,7 +287,7 @@ export class MoveEffectPhase extends PokemonPhase {
             ) {
               this.stopMultiHit(target);
               if (!target.switchOutStatus) {
-                globalScene.queueMessage(
+                queueMessage(
                   i18next.t("battle:attackMissed", { pokemonNameWithAffix: getPokemonNameWithAffix(target) }),
                 );
               }
@@ -470,14 +471,14 @@ export class MoveEffectPhase extends PokemonPhase {
      */
     if (user) {
       if (user.turnData.hitsLeft && --user.turnData.hitsLeft >= 1 && this.getFirstTarget()?.isActive()) {
-        globalScene.unshiftPhase(this.getNewHitPhase());
+        phaseManager.unshiftPhase(this.getNewHitPhase());
       } else {
         // Queue message for number of hits made by multi-move
         // If multi-hit attack only hits once, still want to render a message
         const hitsTotal = user.turnData.hitCount - Math.max(user.turnData.hitsLeft, 0);
         if (hitsTotal > 1 || (user.turnData.hitsLeft && user.turnData.hitsLeft > 0)) {
           // If there are multiple hits, or if there are hits of the multi-hit move left
-          globalScene.queueMessage(i18next.t("battle:attackHitsCount", { count: hitsTotal }));
+          queueMessage(i18next.t("battle:attackHitsCount", { count: hitsTotal }));
         }
         globalScene.applyModifiers(HitHealModifier, this.player, user);
         // Clear all cached move effectiveness values among targets

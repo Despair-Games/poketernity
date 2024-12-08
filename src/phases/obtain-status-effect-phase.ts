@@ -1,10 +1,10 @@
-import { globalScene } from "#app/global-scene";
 import type { BattlerIndex } from "#app/battle";
 import { CommonBattleAnim, CommonAnim } from "#app/data/battle-anims";
 import { getStatusEffectObtainText, getStatusEffectOverlapText } from "#app/data/status-effect";
 import { StatusEffect } from "#app/enums/status-effect";
 import type Pokemon from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { queueMessage } from "#app/phase-manager";
 import { PokemonPhase } from "./pokemon-phase";
 
 export class ObtainStatusEffectPhase extends PokemonPhase {
@@ -37,7 +37,7 @@ export class ObtainStatusEffectPhase extends PokemonPhase {
         }
         pokemon.updateInfo(true);
         new CommonBattleAnim(CommonAnim.POISON + (this.statusEffect! - 1), pokemon).play(false, () => {
-          globalScene.queueMessage(
+          queueMessage(
             getStatusEffectObtainText(
               this.statusEffect,
               getPokemonNameWithAffix(pokemon),
@@ -49,7 +49,7 @@ export class ObtainStatusEffectPhase extends PokemonPhase {
         return;
       }
     } else if (pokemon.status?.effect === this.statusEffect) {
-      globalScene.queueMessage(
+      queueMessage(
         getStatusEffectOverlapText(this.statusEffect ?? StatusEffect.NONE, getPokemonNameWithAffix(pokemon)),
       );
     }

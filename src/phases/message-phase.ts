@@ -1,5 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
+import { phaseManager } from "#app/phase-manager";
 
 export class MessagePhase extends Phase {
   private text: string;
@@ -29,7 +30,7 @@ export class MessagePhase extends Phase {
 
     if (this.text.indexOf("$") > -1) {
       const pageIndex = this.text.indexOf("$");
-      globalScene.unshiftPhase(
+      phaseManager.unshiftPhase(
         new MessagePhase(
           this.text.slice(pageIndex + 1),
           this.callbackDelay,

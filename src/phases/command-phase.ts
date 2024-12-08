@@ -23,6 +23,7 @@ import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { isNullOrUndefined } from "#app/utils";
 import { ArenaTagSide } from "#app/data/arena-tag";
 import { ArenaTagType } from "#app/enums/arena-tag-type";
+import { phaseManager } from "#app/phase-manager";
 
 export class CommandPhase extends FieldPhase {
   protected fieldIndex: number;
@@ -157,7 +158,7 @@ export class CommandPhase extends FieldPhase {
           }
           console.log(moveTargets, getPokemonNameWithAffix(playerPokemon));
           if (moveTargets.targets.length > 1 && moveTargets.multiple) {
-            globalScene.unshiftPhase(new SelectTargetPhase(this.fieldIndex));
+            phaseManager.unshiftPhase(new SelectTargetPhase(this.fieldIndex));
           }
           if (turnCommand.move && (moveTargets.targets.length <= 1 || moveTargets.multiple)) {
             turnCommand.move.targets = moveTargets.targets;
@@ -168,7 +169,7 @@ export class CommandPhase extends FieldPhase {
           ) {
             turnCommand.move.targets = playerPokemon.getMoveQueue()[0].targets;
           } else {
-            globalScene.unshiftPhase(new SelectTargetPhase(this.fieldIndex));
+            phaseManager.unshiftPhase(new SelectTargetPhase(this.fieldIndex));
           }
           globalScene.currentBattle.turnCommands[this.fieldIndex] = turnCommand;
           success = true;
@@ -418,8 +419,8 @@ export class CommandPhase extends FieldPhase {
 
   cancel() {
     if (this.fieldIndex) {
-      globalScene.unshiftPhase(new CommandPhase(0));
-      globalScene.unshiftPhase(new CommandPhase(1));
+      phaseManager.unshiftPhase(new CommandPhase(0));
+      phaseManager.unshiftPhase(new CommandPhase(1));
       this.end();
     }
   }

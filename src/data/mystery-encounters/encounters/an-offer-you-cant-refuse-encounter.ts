@@ -25,6 +25,7 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { ModifierRewardPhase } from "#app/phases/modifier-reward-phase";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
 import i18next from "i18next";
+import { phaseManager } from "#app/phase-manager";
 
 /** the i18n namespace for this encounter */
 const namespace = "mysteryEncounters/anOfferYouCantRefuse";
@@ -136,7 +137,7 @@ export const AnOfferYouCantRefuseEncounter: MysteryEncounter = MysteryEncounterB
       })
       .withOptionPhase(async () => {
         // Give the player a Shiny Charm
-        globalScene.unshiftPhase(new ModifierRewardPhase(modifierTypes.SHINY_CHARM));
+        phaseManager.unshiftPhase(new ModifierRewardPhase(modifierTypes.SHINY_CHARM));
         leaveEncounterWithoutBattle(true);
       })
       .build(),

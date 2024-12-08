@@ -16,6 +16,7 @@ import { fixedInt, getFrameMs, randInt } from "#app/utils";
 import type { EggLapsePhase } from "./egg-lapse-phase";
 import type { EggHatchData } from "#app/data/egg-hatch-data";
 import { doShinySparkleAnim } from "#app/field/anims";
+import { phaseManager } from "#app/phase-manager";
 
 /**
  * Class that represents egg hatching
@@ -222,7 +223,7 @@ export class EggHatchPhase extends Phase {
   }
 
   end() {
-    if (globalScene.findPhase((p) => p instanceof EggHatchPhase)) {
+    if (phaseManager.findPhase((p) => p instanceof EggHatchPhase)) {
       this.eggHatchHandler.clear();
     } else {
       globalScene.time.delayedCall(250, () => globalScene.setModifiersVisible(true));

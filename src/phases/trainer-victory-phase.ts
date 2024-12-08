@@ -11,6 +11,7 @@ import { TrainerSlot } from "#app/data/trainer-config";
 import { globalScene } from "#app/global-scene";
 import { Biome } from "#app/enums/biome";
 import { achvs } from "#app/system/achv";
+import { phaseManager } from "#app/phase-manager";
 
 export class TrainerVictoryPhase extends BattlePhase {
   constructor() {
@@ -22,16 +23,16 @@ export class TrainerVictoryPhase extends BattlePhase {
 
     globalScene.playBgm(globalScene.currentBattle.trainer?.config.victoryBgm);
 
-    globalScene.unshiftPhase(new MoneyRewardPhase(globalScene.currentBattle.trainer?.config.moneyMultiplier!)); // TODO: is this bang correct?
+    phaseManager.unshiftPhase(new MoneyRewardPhase(globalScene.currentBattle.trainer?.config.moneyMultiplier!)); // TODO: is this bang correct?
 
     const modifierRewardFuncs = globalScene.currentBattle.trainer?.config.modifierRewardFuncs!; // TODO: is this bang correct?
     for (const modifierRewardFunc of modifierRewardFuncs) {
-      globalScene.unshiftPhase(new ModifierRewardPhase(modifierRewardFunc));
+      phaseManager.unshiftPhase(new ModifierRewardPhase(modifierRewardFunc));
     }
 
     if (globalScene.eventManager.isEventActive()) {
       for (const rewardFunc of globalScene.currentBattle.trainer?.config.eventRewardFuncs!) {
-        globalScene.unshiftPhase(new ModifierRewardPhase(rewardFunc));
+        phaseManager.unshiftPhase(new ModifierRewardPhase(rewardFunc));
       }
     }
 
@@ -42,7 +43,7 @@ export class TrainerVictoryPhase extends BattlePhase {
         !globalScene.validateVoucher(vouchers[TrainerType[trainerType]])
         && globalScene.currentBattle.trainer?.config.isBoss
       ) {
-        globalScene.unshiftPhase(
+        phaseManager.unshiftPhase(
           new ModifierRewardPhase(
             [modifierTypes.VOUCHER, modifierTypes.VOUCHER, modifierTypes.VOUCHER_PLUS, modifierTypes.VOUCHER_PREMIUM][
               vouchers[TrainerType[trainerType]].voucherType

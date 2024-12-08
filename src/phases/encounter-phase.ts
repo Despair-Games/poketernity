@@ -38,6 +38,7 @@ import { Species } from "#enums/species";
 import { overrideHeldItems, overrideModifiers } from "#app/modifier/modifier";
 import i18next from "i18next";
 import { WEIGHT_INCREMENT_ON_SPAWN_MISS } from "#app/data/mystery-encounters/mystery-encounters";
+import { phaseManager } from "#app/phase-manager";
 
 export class EncounterPhase extends BattlePhase {
   private loaded: boolean;
@@ -59,7 +60,7 @@ export class EncounterPhase extends BattlePhase {
 
     // Failsafe if players somehow skip floor 200 in classic mode
     if (globalScene.gameMode.isClassic && globalScene.currentBattle.waveIndex > 200) {
-      globalScene.unshiftPhase(new GameOverPhase());
+      phaseManager.unshiftPhase(new GameOverPhase());
     }
 
     const loadEnemyAssets: Promise<void>[] = [];
@@ -397,9 +398,9 @@ export class EncounterPhase extends BattlePhase {
         const doTrainerSummon = () => {
           this.hideEnemyTrainer();
           const availablePartyMembers = globalScene.getEnemyParty().filter((p) => !p.isFainted()).length;
-          globalScene.unshiftPhase(new SummonPhase(0, false));
+          phaseManager.unshiftPhase(new SummonPhase(0, false));
           if (globalScene.currentBattle.double && availablePartyMembers > 1) {
-            globalScene.unshiftPhase(new SummonPhase(1, false));
+            phaseManager.unshiftPhase(new SummonPhase(1, false));
           }
           this.end();
         };
@@ -455,7 +456,7 @@ export class EncounterPhase extends BattlePhase {
           globalScene.ui.clearText();
           globalScene.ui.getMessageHandler().hideNameText();
 
-          globalScene.unshiftPhase(new MysteryEncounterPhase());
+          phaseManager.unshiftPhase(new MysteryEncounterPhase());
           this.end();
         };
 
@@ -513,7 +514,7 @@ export class EncounterPhase extends BattlePhase {
 
     enemyField.forEach((enemyPokemon, e) => {
       if (enemyPokemon.isShiny()) {
-        globalScene.unshiftPhase(new ShinySparklePhase(BattlerIndex.ENEMY + e));
+        phaseManager.unshiftPhase(new ShinySparklePhase(BattlerIndex.ENEMY + e));
       }
       /** This sets Eternatus' held item to be untransferrable, preventing it from being stolen  */
       if (
@@ -535,7 +536,7 @@ export class EncounterPhase extends BattlePhase {
 
     if (![BattleType.TRAINER, BattleType.MYSTERY_ENCOUNTER].includes(globalScene.currentBattle.battleType)) {
       enemyField.map((p) =>
-        globalScene.pushConditionalPhase(new PostSummonPhase(p.getBattlerIndex()), () => {
+        phaseManager.pushConditionalPhase(new PostSummonPhase(p.getBattlerIndex()), () => {
           // if there is not a player party, we can't continue
           if (!globalScene.getPlayerParty().length) {
             return false;
@@ -557,7 +558,7 @@ export class EncounterPhase extends BattlePhase {
       const ivScannerModifier = globalScene.findModifier((m) => m instanceof IvScannerModifier);
       if (ivScannerModifier) {
         enemyField.map((p) =>
-          globalScene.pushPhase(
+          phaseManager.pushPhase(
             new ScanIvsPhase(p.getBattlerIndex(), Math.min(ivScannerModifier.getStackCount() * 2, 6)),
           ),
         );
@@ -568,21 +569,21 @@ export class EncounterPhase extends BattlePhase {
       const availablePartyMembers = globalScene.getPokemonAllowedInBattle();
 
       if (!availablePartyMembers[0].isOnField()) {
-        globalScene.pushPhase(new SummonPhase(0));
+        phaseManager.pushPhase(new SummonPhase(0));
       }
 
       if (globalScene.currentBattle.double) {
         if (availablePartyMembers.length > 1) {
-          globalScene.pushPhase(new ToggleDoublePositionPhase(true));
+          phaseManager.pushPhase(new ToggleDoublePositionPhase(true));
           if (!availablePartyMembers[1].isOnField()) {
-            globalScene.pushPhase(new SummonPhase(1));
+            phaseManager.pushPhase(new SummonPhase(1));
           }
         }
       } else {
         if (availablePartyMembers.length > 1 && availablePartyMembers[1].isOnField()) {
-          globalScene.pushPhase(new ReturnPhase(1));
+          phaseManager.pushPhase(new ReturnPhase(1));
         }
-        globalScene.pushPhase(new ToggleDoublePositionPhase(false));
+        phaseManager.pushPhase(new ToggleDoublePositionPhase(false));
       }
 
       if (
@@ -591,9 +592,9 @@ export class EncounterPhase extends BattlePhase {
       ) {
         const minPartySize = globalScene.currentBattle.double ? 2 : 1;
         if (availablePartyMembers.length > minPartySize) {
-          globalScene.pushPhase(new CheckSwitchPhase(0, globalScene.currentBattle.double));
+          phaseManager.pushPhase(new CheckSwitchPhase(0, globalScene.currentBattle.double));
           if (globalScene.currentBattle.double) {
-            globalScene.pushPhase(new CheckSwitchPhase(1, globalScene.currentBattle.double));
+            phaseManager.pushPhase(new CheckSwitchPhase(1, globalScene.currentBattle.double));
           }
         }
       }

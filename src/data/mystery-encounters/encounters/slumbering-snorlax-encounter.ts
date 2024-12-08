@@ -29,6 +29,7 @@ import { PartyHealPhase } from "#app/phases/party-heal-phase";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
 import { BerryType } from "#enums/berry-type";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
+import { phaseManager } from "#app/phase-manager";
 
 /** i18n namespace for the encounter */
 const namespace = "mysteryEncounters/slumberingSnorlax";
@@ -147,7 +148,7 @@ export const SlumberingSnorlaxEncounter: MysteryEncounter = MysteryEncounterBuil
     async () => {
       // Fall asleep waiting for Snorlax
       // Full heal party
-      globalScene.unshiftPhase(new PartyHealPhase(true));
+      phaseManager.unshiftPhase(new PartyHealPhase(true));
       queueEncounterMessage(`${namespace}:option.2.rest_result`);
       leaveEncounterWithoutBattle();
     },

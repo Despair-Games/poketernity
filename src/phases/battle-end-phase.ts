@@ -3,6 +3,7 @@ import { applyPostBattleAbAttrs, PostBattleAbAttr } from "#app/data/ability";
 import { LapsingPersistentModifier, LapsingPokemonHeldItemModifier } from "#app/modifier/modifier";
 import { BattlePhase } from "./battle-phase";
 import { GameOverPhase } from "./game-over-phase";
+import { phaseManager } from "#app/phase-manager";
 
 export class BattleEndPhase extends BattlePhase {
   /** If true, will increment battles won */
@@ -35,8 +36,8 @@ export class BattleEndPhase extends BattlePhase {
 
     // Endless graceful end
     if (globalScene.gameMode.isEndless && globalScene.currentBattle.waveIndex >= 5850) {
-      globalScene.clearPhaseQueue();
-      globalScene.unshiftPhase(new GameOverPhase(true));
+      phaseManager.clearPhaseQueue();
+      phaseManager.unshiftPhase(new GameOverPhase(true));
     }
 
     for (const pokemon of globalScene.getField()) {

@@ -23,6 +23,7 @@ import { PartyHealPhase } from "#app/phases/party-heal-phase";
 import { ModifierTier } from "#app/modifier/modifier-tier";
 import { modifierTypes } from "#app/modifier/modifier-type";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
+import { phaseManager } from "#app/phase-manager";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/aTrainersTest";
@@ -178,7 +179,7 @@ export const ATrainersTestEncounter: MysteryEncounter = MysteryEncounterBuilder.
     async () => {
       const encounter = globalScene.currentBattle.mysteryEncounter!;
       // Full heal party
-      globalScene.unshiftPhase(new PartyHealPhase(true));
+      phaseManager.unshiftPhase(new PartyHealPhase(true));
 
       const eggOptions: IEggOptions = {
         pulled: false,

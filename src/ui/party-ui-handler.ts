@@ -30,6 +30,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { CommandPhase } from "#app/phases/command-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { globalScene } from "#app/global-scene";
+import { phaseManager } from "#app/phase-manager";
 
 const defaultMessage = i18next.t("partyUiHandler:choosePokemon");
 
@@ -518,7 +519,7 @@ export default class PartyUiHandler extends MessageUiHandler {
             } else {
               if (
                 option >= PartyOption.FORM_CHANGE_ITEM
-                && globalScene.getCurrentPhase() instanceof SelectModifierPhase
+                && phaseManager.getCurrentPhase() instanceof SelectModifierPhase
               ) {
                 if (this.partyUiMode === PartyUiMode.CHECK) {
                   const formChangeItemModifiers = this.getFormChangeItemsModifiers(pokemon);
@@ -527,7 +528,7 @@ export default class PartyUiHandler extends MessageUiHandler {
                   globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeItemTrigger, false, true);
                 }
               } else if (this.cursor) {
-                (globalScene.getCurrentPhase() as CommandPhase).handleCommand(
+                (phaseManager.getCurrentPhase() as CommandPhase).handleCommand(
                   Command.POKEMON,
                   this.cursor,
                   option === PartyOption.PASS_BATON,
@@ -1046,7 +1047,7 @@ export default class PartyUiHandler extends MessageUiHandler {
           this.options.push(PartyOption.RELEASE);
           break;
         case PartyUiMode.CHECK:
-          if (globalScene.getCurrentPhase() instanceof SelectModifierPhase) {
+          if (phaseManager.getCurrentPhase() instanceof SelectModifierPhase) {
             formChangeItemModifiers = this.getFormChangeItemsModifiers(pokemon);
             for (let i = 0; i < formChangeItemModifiers.length; i++) {
               this.options.push(PartyOption.FORM_CHANGE_ITEM + i);

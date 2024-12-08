@@ -18,6 +18,7 @@ import { NumberHolder, BooleanHolder } from "#app/utils";
 import i18next from "i18next";
 import { PokemonPhase } from "./pokemon-phase";
 import { Stat, type BattleStat, getStatKey, getStatStageChangeDescriptionKey } from "#enums/stat";
+import { phaseManager, queueMessage } from "#app/phase-manager";
 
 export type StatStageChangeCallback = (
   target: Pokemon | null,
@@ -60,7 +61,7 @@ export class StatStageChangePhase extends PokemonPhase {
     if (this.stats.length > 1) {
       for (let i = 0; i < this.stats.length; i++) {
         const stat = [this.stats[i]];
-        globalScene.unshiftPhase(
+        phaseManager.unshiftPhase(
           new StatStageChangePhase(
             this.battlerIndex,
             this.selfTarget,
@@ -129,7 +130,7 @@ export class StatStageChangePhase extends PokemonPhase {
       if (this.showMessage) {
         const messages = this.getStatStageChangeMessages(filteredStats, stages.value, relLevels);
         for (const message of messages) {
-          globalScene.queueMessage(message);
+          queueMessage(message);
         }
       }
 
@@ -160,7 +161,7 @@ export class StatStageChangePhase extends PokemonPhase {
       applyPostStatStageChangeAbAttrs(PostStatStageChangeAbAttr, pokemon, filteredStats, this.stages, this.selfTarget);
 
       // Look for any other stat change phases; if this is the last one, do White Herb check
-      const existingPhase = globalScene.findPhase(
+      const existingPhase = phaseManager.findPhase(
         (p) => p instanceof StatStageChangePhase && p.battlerIndex === this.battlerIndex,
       );
       if (!(existingPhase instanceof StatStageChangePhase)) {
@@ -240,7 +241,7 @@ export class StatStageChangePhase extends PokemonPhase {
     let existingPhase: StatStageChangePhase;
     if (this.stats.length === 1) {
       while (
-        (existingPhase = globalScene.findPhase(
+        (existingPhase = phaseManager.findPhase(
           (p) =>
             p instanceof StatStageChangePhase
             && p.battlerIndex === this.battlerIndex
@@ -253,13 +254,13 @@ export class StatStageChangePhase extends PokemonPhase {
       ) {
         this.stages += existingPhase.stages;
 
-        if (!globalScene.tryRemovePhase((p) => p === existingPhase)) {
+        if (!phaseManager.tryRemovePhase((p) => p === existingPhase)) {
           break;
         }
       }
     }
     while (
-      (existingPhase = globalScene.findPhase(
+      (existingPhase = phaseManager.findPhase(
         (p) =>
           p instanceof StatStageChangePhase
           && p.battlerIndex === this.battlerIndex
@@ -271,7 +272,7 @@ export class StatStageChangePhase extends PokemonPhase {
       ) as StatStageChangePhase)
     ) {
       this.stats.push(...existingPhase.stats);
-      if (!globalScene.tryRemovePhase((p) => p === existingPhase)) {
+      if (!phaseManager.tryRemovePhase((p) => p === existingPhase)) {
         break;
       }
     }

@@ -30,6 +30,7 @@ import { isNullOrUndefined, NumberHolder } from "#app/utils";
 import { BattlePhase } from "./battle-phase";
 import Overrides from "#app/overrides";
 import type { CustomModifierSettings } from "#app/modifier/modifier-type";
+import { phaseManager } from "#app/phase-manager";
 
 export class SelectModifierPhase extends BattlePhase {
   private rerollCount: number;
@@ -122,7 +123,7 @@ export class SelectModifierPhase extends BattlePhase {
                 return false;
               } else {
                 globalScene.reroll = true;
-                globalScene.unshiftPhase(
+                phaseManager.unshiftPhase(
                   new SelectModifierPhase(
                     this.rerollCount + 1,
                     this.typeOptions.map((o) => o.type?.tier).filter((t) => t !== undefined) as ModifierTier[],
@@ -247,7 +248,7 @@ export class SelectModifierPhase extends BattlePhase {
         // If the player selects either of these, then escapes out of consuming them,
         // they are returned to a shop in the same state.
         if (modifier.type instanceof RememberMoveModifierType || modifier.type instanceof TmModifierType) {
-          globalScene.unshiftPhase(this.copy());
+          phaseManager.unshiftPhase(this.copy());
         }
 
         if (cost && !(modifier.type instanceof RememberMoveModifierType)) {

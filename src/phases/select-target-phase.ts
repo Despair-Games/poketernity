@@ -6,6 +6,7 @@ import { CommandPhase } from "./command-phase";
 import { PokemonPhase } from "./pokemon-phase";
 import i18next from "#app/plugins/i18n";
 import { allMoves } from "#app/data/move";
+import { queueMessage, phaseManager } from "#app/phase-manager";
 
 export class SelectTargetPhase extends PokemonPhase {
   constructor(fieldIndex: number) {
@@ -26,12 +27,12 @@ export class SelectTargetPhase extends PokemonPhase {
         const errorMessage = user
           .getRestrictingTag(move!, user, fieldSide[targets[0]])!
           .selectionDeniedText(user, moveObject.id);
-        globalScene.queueMessage(i18next.t(errorMessage, { moveName: moveObject.name }), 0, true);
+        queueMessage(i18next.t(errorMessage, { moveName: moveObject.name }), 0, true);
         targets = [];
       }
       if (targets.length < 1) {
         globalScene.currentBattle.turnCommands[this.fieldIndex] = null;
-        globalScene.unshiftPhase(new CommandPhase(this.fieldIndex));
+        phaseManager.unshiftPhase(new CommandPhase(this.fieldIndex));
       } else {
         turnCommand!.targets = targets; //TODO: is the bang correct here?
       }

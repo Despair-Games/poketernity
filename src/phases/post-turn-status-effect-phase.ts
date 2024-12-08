@@ -30,9 +30,7 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
       applyAbAttrs(BlockStatusDamageAbAttr, pokemon, cancelled);
 
       if (!cancelled.value) {
-        globalScene.queueMessage(
-          getStatusEffectActivationText(pokemon.status.effect, getPokemonNameWithAffix(pokemon)),
-        );
+        queueMessage(getStatusEffectActivationText(pokemon.status.effect, getPokemonNameWithAffix(pokemon)));
         const damage = new NumberHolder(0);
         switch (pokemon.status.effect) {
           case StatusEffect.POISON:

@@ -14,6 +14,7 @@ import { GameOverPhase } from "./game-over-phase";
 import { ShinySparklePhase } from "./shiny-sparkle-phase";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { globalScene } from "#app/global-scene";
+import { phaseManager } from "#app/phase-manager";
 
 export class SummonPhase extends PartyMemberPokemonPhase {
   private loaded: boolean;
@@ -53,8 +54,8 @@ export class SummonPhase extends PartyMemberPokemonPhase {
       if (legalIndex === -1) {
         console.error("Party Details:\n", party);
         console.error("All available Pokemon were fainted or illegal!");
-        globalScene.clearPhaseQueue();
-        globalScene.unshiftPhase(new GameOverPhase());
+        phaseManager.clearPhaseQueue();
+        phaseManager.unshiftPhase(new GameOverPhase());
         this.end();
         return;
       }
@@ -262,7 +263,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
     const pokemon = this.getPokemon();
 
     if (pokemon.isShiny()) {
-      globalScene.unshiftPhase(new ShinySparklePhase(pokemon.getBattlerIndex()));
+      phaseManager.unshiftPhase(new ShinySparklePhase(pokemon.getBattlerIndex()));
     }
 
     pokemon.resetTurnData();
@@ -278,7 +279,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
   }
 
   queuePostSummon(): void {
-    globalScene.pushPhase(new PostSummonPhase(this.getPokemon().getBattlerIndex()));
+    phaseManager.pushPhase(new PostSummonPhase(this.getPokemon().getBattlerIndex()));
   }
 
   end() {

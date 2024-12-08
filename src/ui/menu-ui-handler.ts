@@ -17,6 +17,7 @@ import MessageUiHandler from "./message-ui-handler";
 import { TextStyle, addTextObject, getTextStyleOptions } from "./text";
 import { Mode } from "./ui";
 import { WindowVariant, addWindow } from "./ui-theme";
+import { phaseManager } from "#app/phase-manager";
 
 enum MenuOptions {
   GAME_SETTINGS,
@@ -116,7 +117,7 @@ export default class MenuUiHandler extends MessageUiHandler {
     const ui = this.getUi();
     this.excludedMenus = () => [
       {
-        condition: globalScene.getCurrentPhase() instanceof SelectModifierPhase,
+        condition: phaseManager.getCurrentPhase() instanceof SelectModifierPhase,
         options: [MenuOptions.EGG_GACHA, MenuOptions.EGG_LIST],
       },
       { condition: bypassLogin, options: [MenuOptions.LOG_OUT] },

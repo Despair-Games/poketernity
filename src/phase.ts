@@ -1,4 +1,5 @@
 import { globalScene } from "#app/global-scene";
+import { phaseManager } from "#app/phase-manager";
 
 export class Phase {
   start() {
@@ -8,6 +9,6 @@ export class Phase {
   }
 
   end() {
-    globalScene.shiftPhase();
+    phaseManager.shiftPhase();
   }
 }

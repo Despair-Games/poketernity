@@ -1,5 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
+import { phaseManager } from "#app/phase-manager";
 import type { EndCardPhase } from "./end-card-phase";
 import { TitlePhase } from "./title-phase";
 
@@ -27,7 +28,7 @@ export class PostGameOverPhase extends Phase {
               return globalScene.reset(true);
             }
             globalScene.reset();
-            globalScene.unshiftPhase(new TitlePhase());
+            phaseManager.unshiftPhase(new TitlePhase());
             this.end();
           });
       });

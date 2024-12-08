@@ -8,6 +8,7 @@ import { BooleanHolder } from "#app/utils";
 import { FieldPhase } from "./field-phase";
 import { CommonAnimPhase } from "./common-anim-phase";
 import { globalScene } from "#app/global-scene";
+import { queueMessage, phaseManager } from "#app/phase-manager";
 
 /** The phase after attacks where the pokemon eat berries */
 export class BerryPhase extends FieldPhase {
@@ -24,11 +25,11 @@ export class BerryPhase extends FieldPhase {
         pokemon.getOpponents().map((opp) => applyAbAttrs(PreventBerryUseAbAttr, opp, cancelled));
 
         if (cancelled.value) {
-          globalScene.queueMessage(
+          queueMessage(
             i18next.t("abilityTriggers:preventBerryUse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
           );
         } else {
-          globalScene.unshiftPhase(
+          phaseManager.unshiftPhase(
             new CommonAnimPhase(pokemon.getBattlerIndex(), pokemon.getBattlerIndex(), CommonAnim.USE_ITEM),
           );
 

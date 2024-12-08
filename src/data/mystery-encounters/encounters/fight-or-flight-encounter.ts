@@ -36,6 +36,7 @@ import { queueEncounterMessage } from "#app/data/mystery-encounters/utils/encoun
 import { randSeedInt } from "#app/utils";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
+import { phaseManager } from "#app/phase-manager";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/fightOrFlight";
@@ -84,7 +85,9 @@ export const FightOrFlightEncounter: MysteryEncounter = MysteryEncounterBuilder.
             queueEncounterMessage(`${namespace}:option.1.stat_boost`);
             // Randomly boost 1 stat 2 stages
             // Cannot boost Spd, Acc, or Evasion
-            globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [randSeedInt(4, 1)], 2));
+            phaseManager.unshiftPhase(
+              new StatStageChangePhase(pokemon.getBattlerIndex(), true, [randSeedInt(4, 1)], 2),
+            );
           },
         },
       ],

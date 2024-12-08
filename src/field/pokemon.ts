@@ -249,6 +249,7 @@ import {
 import { Nature } from "#enums/nature";
 import { StatusEffect } from "#enums/status-effect";
 import { doShinySparkleAnim } from "#app/field/anims";
+import { phaseManager, queueMessage } from "#app/phase-manager";
 
 export enum LearnMoveSituation {
   MISC,
@@ -1051,7 +1052,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       }
 
       // During the Pokemon's MoveEffect phase, the offset is removed to put the Pokemon "in focus"
-      const currentPhase = globalScene.getCurrentPhase();
+      const currentPhase = phaseManager.getCurrentPhase();
       if (currentPhase instanceof MoveEffectPhase && currentPhase.getPokemon() === this) {
         return false;
       }
@@ -2116,7 +2117,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     ) {
       multiplier /= 2;
       if (!simulated) {
-        globalScene.queueMessage(i18next.t("weather:strongWindsEffectMessage"));
+        queueMessage(i18next.t("weather:strongWindsEffectMessage"));
       }
     }
     return multiplier as TypeDamageMultiplier;
@@ -3441,7 +3442,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       const typeMultiplier = this.getMoveEffectiveness(source, move, false, false, cancelled);
 
       if (!cancelled.value && typeMultiplier === 0) {
-        globalScene.queueMessage(i18next.t("battle:hitResultNoEffect", { pokemonName: getPokemonNameWithAffix(this) }));
+        queueMessage(i18next.t("battle:hitResultNoEffect", { pokemonName: getPokemonNameWithAffix(this) }));
       }
       return typeMultiplier === 0 ? HitResult.NO_EFFECT : HitResult.STATUS;
     } else {
@@ -3479,13 +3480,9 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
 
         if (!cancelled) {
           if (result === HitResult.IMMUNE) {
-            globalScene.queueMessage(
-              i18next.t("battle:hitResultImmune", { pokemonName: getPokemonNameWithAffix(this) }),
-            );
+            queueMessage(i18next.t("battle:hitResultImmune", { pokemonName: getPokemonNameWithAffix(this) }));
           } else {
-            globalScene.queueMessage(
-              i18next.t("battle:hitResultNoEffect", { pokemonName: getPokemonNameWithAffix(this) }),
-            );
+            queueMessage(i18next.t("battle:hitResultNoEffect", { pokemonName: getPokemonNameWithAffix(this) }));
           }
         }
         return result;
@@ -3551,28 +3548,28 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       }
 
       if (isCritical) {
-        globalScene.queueMessage(i18next.t("battle:hitResultCriticalHit"));
+        queueMessage(i18next.t("battle:hitResultCriticalHit"));
       }
 
       // want to include is.Fainted() in case multi hit move ends early, still want to render message
       if (source.turnData.hitsLeft === 1 || this.isFainted()) {
         switch (result) {
           case HitResult.SUPER_EFFECTIVE:
-            globalScene.queueMessage(i18next.t("battle:hitResultSuperEffective"));
+            queueMessage(i18next.t("battle:hitResultSuperEffective"));
             break;
           case HitResult.NOT_VERY_EFFECTIVE:
-            globalScene.queueMessage(i18next.t("battle:hitResultNotVeryEffective"));
+            queueMessage(i18next.t("battle:hitResultNotVeryEffective"));
             break;
           case HitResult.ONE_HIT_KO:
-            globalScene.queueMessage(i18next.t("battle:hitResultOneHitKO"));
+            queueMessage(i18next.t("battle:hitResultOneHitKO"));
             break;
         }
       }
 
       if (this.isFainted()) {
         // set splice index here, so future scene queues happen before FaintedPhase
-        globalScene.setPhaseQueueSplice();
-        globalScene.unshiftPhase(new FaintPhase(this.getBattlerIndex(), isOneHitKo, destinyTag, grudgeTag, source));
+        phaseManager.setPhaseQueueSplice();
+        phaseManager.unshiftPhase(new FaintPhase(this.getBattlerIndex(), isOneHitKo, destinyTag, grudgeTag, source));
 
         this.destroySubstitute();
         this.lapseTag(BattlerTagType.COMMANDED);
@@ -3628,8 +3625,8 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
        *
        * Once the MoveEffectPhase is over (and calls it's .end() function, shiftPhase() will reset the PhaseQueueSplice via clearPhaseQueueSplice() )
        */
-      globalScene.setPhaseQueueSplice();
-      globalScene.unshiftPhase(new FaintPhase(this.getBattlerIndex(), preventEndure));
+      phaseManager.setPhaseQueueSplice();
+      phaseManager.unshiftPhase(new FaintPhase(this.getBattlerIndex(), preventEndure));
       this.destroySubstitute();
       this.lapseTag(BattlerTagType.COMMANDED);
       this.resetSummonData();
@@ -3657,7 +3654,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     source?: Pokemon,
   ): number {
     const damagePhase = new DamageAnimPhase(this.getBattlerIndex(), damage, result as DamageResult, critical);
-    globalScene.unshiftPhase(damagePhase);
+    phaseManager.unshiftPhase(damagePhase);
     if (this.switchOutStatus && source) {
       damage = 0;
     }
@@ -3957,7 +3954,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
    * @param {Pokemon} target If specified, this only cancels subsequent strikes against the given target
    */
   stopMultiHit(target?: Pokemon): void {
-    const effectPhase = globalScene.getCurrentPhase();
+    const effectPhase = phaseManager.getCurrentPhase();
     if (effectPhase instanceof MoveEffectPhase && effectPhase.getUserPokemon() === this) {
       effectPhase.stopMultiHit(target);
     }
@@ -4308,7 +4305,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     if (asPhase) {
-      globalScene.unshiftPhase(
+      phaseManager.unshiftPhase(
         new ObtainStatusEffectPhase(this.getBattlerIndex(), effect, turnsRemaining, sourceText, sourcePokemon),
       );
       return true;
@@ -5093,7 +5090,7 @@ export class PlayerPokemon extends Pokemon {
         this.getFieldIndex(),
         (slotIndex: integer, _option: PartyOption) => {
           if (slotIndex >= globalScene.currentBattle.getBattlerCount() && slotIndex < 6) {
-            globalScene.prependToPhase(
+            phaseManager.prependToPhase(
               new SwitchSummonPhase(switchType, this.getFieldIndex(), slotIndex, false),
               MoveEndPhase,
             );
@@ -5166,22 +5163,22 @@ export class PlayerPokemon extends Pokemon {
             pokemon.resetTurnData();
             pokemon.resetStatus();
             pokemon.heal(Math.min(toDmgValue(0.5 * pokemon.getMaxHp()), pokemon.getMaxHp()));
-            globalScene.queueMessage(i18next.t("moveTriggers:revivalBlessing", { pokemonName: pokemon.name }), 0, true);
+            queueMessage(i18next.t("moveTriggers:revivalBlessing", { pokemonName: pokemon.name }), 0, true);
 
             if (globalScene.currentBattle.double && globalScene.getPlayerParty().length > 1) {
               const allyPokemon = this.getAlly();
               if (slotIndex <= 1) {
                 // Revived ally pokemon
-                globalScene.unshiftPhase(
+                phaseManager.unshiftPhase(
                   new SwitchSummonPhase(SwitchType.SWITCH, pokemon.getFieldIndex(), slotIndex, false, true),
                 );
-                globalScene.unshiftPhase(new ToggleDoublePositionPhase(true));
+                phaseManager.unshiftPhase(new ToggleDoublePositionPhase(true));
               } else if (allyPokemon.isFainted()) {
                 // Revived party pokemon, and ally pokemon is fainted
-                globalScene.unshiftPhase(
+                phaseManager.unshiftPhase(
                   new SwitchSummonPhase(SwitchType.SWITCH, allyPokemon.getFieldIndex(), slotIndex, false, true),
                 );
-                globalScene.unshiftPhase(new ToggleDoublePositionPhase(true));
+                phaseManager.unshiftPhase(new ToggleDoublePositionPhase(true));
               }
             }
           }
@@ -5524,7 +5521,9 @@ export class PlayerPokemon extends Pokemon {
           const newPartyMemberIndex = globalScene.getPlayerParty().indexOf(this);
           pokemon
             .getMoveset(true)
-            .map((m: PokemonMove) => globalScene.unshiftPhase(new LearnMovePhase(newPartyMemberIndex, m.getMove().id)));
+            .map((m: PokemonMove) =>
+              phaseManager.unshiftPhase(new LearnMovePhase(newPartyMemberIndex, m.getMove().id)),
+            );
           pokemon.destroy();
           this.updateFusionPalette();
           resolve();
@@ -6136,7 +6135,7 @@ export class EnemyPokemon extends Pokemon {
         stages++;
       }
 
-      globalScene.unshiftPhase(
+      phaseManager.unshiftPhase(
         new StatStageChangePhase(this.getBattlerIndex(), true, [boostedStat!], stages, true, true),
       );
       this.bossSegmentIndex--;
