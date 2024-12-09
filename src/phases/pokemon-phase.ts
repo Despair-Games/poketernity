@@ -12,8 +12,8 @@ export abstract class PokemonPhase extends FieldPhase {
     super();
 
     battlerIndex =
-      battlerIndex ??
-      globalScene
+      battlerIndex
+      ?? globalScene
         .getField()
         .find((p) => p?.isActive())! // TODO: is the bang correct here?
         .getBattlerIndex();

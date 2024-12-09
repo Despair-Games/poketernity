@@ -411,9 +411,9 @@ export class InputsController {
     }
     this.lastSource = "gamepad";
     if (
-      !this.selectedDevice[Device.GAMEPAD] ||
-      (globalScene.ui.getMode() !== Mode.GAMEPAD_BINDING &&
-        this.selectedDevice[Device.GAMEPAD] !== pad.id.toLowerCase())
+      !this.selectedDevice[Device.GAMEPAD]
+      || (globalScene.ui.getMode() !== Mode.GAMEPAD_BINDING
+        && this.selectedDevice[Device.GAMEPAD] !== pad.id.toLowerCase())
     ) {
       this.setChosenGamepad(pad.id);
     }
