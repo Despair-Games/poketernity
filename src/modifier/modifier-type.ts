@@ -1,4 +1,4 @@
-import { EvolutionItem, pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
+import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
 import { tmPoolTiers, tmSpecies } from "#app/data/balance/tms";
 import { getBerryEffectDescription, getBerryName } from "#app/data/berry";
 import { allMoves, AttackMove, selfStatLowerMoves } from "#app/data/move";
@@ -117,6 +117,7 @@ import {
 import { Abilities } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryType } from "#enums/berry-type";
+import { EvolutionItem } from "#enums/evolution-item";
 import { Moves } from "#enums/moves";
 import { Nature } from "#enums/nature";
 import { PokeballType } from "#enums/pokeball";
