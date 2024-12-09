@@ -55,6 +55,15 @@ export default [
       "space-infix-ops": ["error", { int32Hint: false }], // Enforces spacing around infix operators
       "no-multiple-empty-lines": ["error", { max: 2, maxEOF: 1, maxBOF: 0 }], // Disallows multiple empty lines
       "@typescript-eslint/consistent-type-imports": "error", // Enforces type-only imports wherever possible
+      /*"@typescript-eslint/explicit-function-return-type": "warn", // Warns if a function doesn't have a specified return type
+      "@typescript-eslint/explicit-member-accessibility": [
+        "warn", // Warns if a class member doesn't have defined accessibility (`public`/etc)
+        {
+          "overrides": {
+            "constructors": "off", // Doesn't warn for class constructors
+          }
+        },
+      ],*/
     },
   },
   prettierConfig,

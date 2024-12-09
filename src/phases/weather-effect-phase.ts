@@ -29,7 +29,7 @@ export class WeatherEffectPhase extends CommonAnimPhase {
     this.weather = globalScene?.arena?.weather;
   }
 
-  start() {
+  override start() {
     // Update weather state with any changes that occurred during the turn
     this.weather = globalScene?.arena?.weather;
 

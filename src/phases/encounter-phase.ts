@@ -514,7 +514,7 @@ export class EncounterPhase extends BattlePhase {
     }
   }
 
-  end() {
+  override end() {
     const enemyField = globalScene.getEnemyField();
 
     enemyField.forEach((enemyPokemon, e) => {

@@ -8,7 +8,7 @@ export class LevelCapPhase extends FieldPhase {
     super();
   }
 
-  start(): void {
+  override start(): void {
     super.start();
 
     globalScene.ui.setMode(Mode.MESSAGE).then(() => {

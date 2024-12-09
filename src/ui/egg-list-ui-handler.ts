@@ -109,7 +109,7 @@ export default class EggListUiHandler extends MessageUiHandler {
     this.cursor = -1;
   }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     super.show(args);
 
     this.initEggIcons();
@@ -205,7 +205,7 @@ export default class EggListUiHandler extends MessageUiHandler {
     return success || error;
   }
 
-  setCursor(cursor: number): boolean {
+  override setCursor(cursor: number): boolean {
     let changed = false;
 
     const lastCursor = this.cursor;
@@ -227,7 +227,7 @@ export default class EggListUiHandler extends MessageUiHandler {
     return changed;
   }
 
-  clear(): void {
+  override clear(): void {
     super.clear();
     this.scrollGridHandler.reset();
     this.cursor = -1;
