@@ -142,7 +142,7 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
     this.levelUpStatsValuesContent = levelUpStatsValuesContent;
   }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     super.show(args);
 
     this.commandWindow.setVisible(false);
@@ -169,11 +169,11 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
     return false;
   }
 
-  clear() {
+  override clear() {
     super.clear();
   }
 
-  showText(
+  override showText(
     text: string,
     delay?: integer | null,
     callback?: Function | null,
@@ -185,7 +185,7 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
     super.showText(text, delay, callback, callbackDelay, prompt, promptDelay);
   }
 
-  showDialogue(
+  override showDialogue(
     text: string,
     name?: string,
     delay?: integer | null,

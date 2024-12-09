@@ -43,7 +43,7 @@ export class DropDownLabel {
 }
 
 export class DropDownOption extends Phaser.GameObjects.Container {
-  public state: DropDownState = DropDownState.ON;
+  public override state: DropDownState = DropDownState.ON;
   public toggle: Phaser.GameObjects.Sprite;
   public text: Phaser.GameObjects.Text;
   public val: any;
@@ -363,7 +363,7 @@ export class DropDown extends Phaser.GameObjects.Container {
     this.setVisible(!this.visible);
   }
 
-  setVisible(value: boolean): this {
+  override setVisible(value: boolean): this {
     super.setVisible(value);
 
     if (value) {

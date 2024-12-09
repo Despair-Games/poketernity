@@ -19,7 +19,7 @@ export default class ConfirmUiHandler extends AbstractOptionSelectUiHandler {
     return ConfirmUiHandler.windowWidth;
   }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     if (
       args.length === 4
       && args[0] instanceof Function
@@ -103,7 +103,7 @@ export default class ConfirmUiHandler extends AbstractOptionSelectUiHandler {
     return false;
   }
 
-  processInput(button: Button): boolean {
+  override processInput(button: Button): boolean {
     if (button === Button.CANCEL && this.blockInput && !this.config?.noCancel) {
       this.unblockInput();
     }
@@ -111,7 +111,7 @@ export default class ConfirmUiHandler extends AbstractOptionSelectUiHandler {
     return super.processInput(button);
   }
 
-  setCursor(cursor: integer): boolean {
+  override setCursor(cursor: integer): boolean {
     const ret = super.setCursor(cursor);
 
     if (ret && this.switchCheck) {

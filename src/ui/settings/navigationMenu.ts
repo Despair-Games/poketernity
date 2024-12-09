@@ -157,7 +157,7 @@ export default class NavigationMenu extends Phaser.GameObjects.Container {
   /**
    * Updates the NavigationMenu's header titles based on the selected mode.
    */
-  update() {
+  override update() {
     const navigationManager = NavigationManager.getInstance();
     const posSelected = navigationManager.modes.indexOf(navigationManager.selectedMode);
 

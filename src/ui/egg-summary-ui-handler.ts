@@ -106,7 +106,7 @@ export default class EggSummaryUiHandler extends MessageUiHandler {
     this.cursor = -1;
   }
 
-  clear() {
+  override clear() {
     super.clear();
     this.scrollGridHandler.reset();
     this.cursor = -1;
@@ -143,7 +143,7 @@ export default class EggSummaryUiHandler extends MessageUiHandler {
    * @param args EggHatchData[][]
    * args[0]: list of EggHatchData for each egg/pokemon hatched
    */
-  show(args: EggHatchData[][]): boolean {
+  override show(args: EggHatchData[][]): boolean {
     super.show(args);
     if (args.length >= 1) {
       // sort the egg hatch data by egg tier then by species number (then by order hatched)
@@ -243,7 +243,7 @@ export default class EggSummaryUiHandler extends MessageUiHandler {
     return success || error;
   }
 
-  setCursor(cursor: number): boolean {
+  override setCursor(cursor: number): boolean {
     let changed = false;
 
     const lastCursor = this.cursor;

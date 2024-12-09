@@ -13,7 +13,7 @@ export default class CacheBustedLoaderPlugin extends Phaser.Loader.LoaderPlugin 
     manifest = manifestObj;
   }
 
-  addFile(file): void {
+  override addFile(file): void {
     if (!Array.isArray(file)) {
       file = [file];
     }

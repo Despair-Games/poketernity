@@ -43,7 +43,7 @@ export default class UnavailableModalUiHandler extends ModalUiHandler {
     return [];
   }
 
-  setup(): void {
+  override setup(): void {
     super.setup();
 
     const label = addTextObject(
@@ -79,7 +79,7 @@ export default class UnavailableModalUiHandler extends ModalUiHandler {
     });
   }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     if (args.length >= 1 && args[0] instanceof Function) {
       const config: ModalConfig = {
         buttonActions: [],

@@ -328,7 +328,7 @@ export default class SpritePipeline extends FieldSpritePipeline {
     this._tone = [0, 0, 0, 0];
   }
 
-  onPreRender(): void {
+  override onPreRender(): void {
     super.onPreRender();
 
     this.set1f("teraTime", 0);
@@ -344,7 +344,7 @@ export default class SpritePipeline extends FieldSpritePipeline {
     this.set4fv("tone", this._tone);
   }
 
-  onBind(gameObject: Phaser.GameObjects.GameObject): void {
+  override onBind(gameObject: Phaser.GameObjects.GameObject): void {
     super.onBind(gameObject);
 
     const sprite = gameObject as Phaser.GameObjects.Sprite;
@@ -421,7 +421,7 @@ export default class SpritePipeline extends FieldSpritePipeline {
     }
   }
 
-  onBatch(gameObject: Phaser.GameObjects.GameObject): void {
+  override onBatch(gameObject: Phaser.GameObjects.GameObject): void {
     if (gameObject) {
       const sprite = gameObject as Phaser.GameObjects.Sprite;
       const data = sprite.pipelineData;
@@ -473,7 +473,7 @@ export default class SpritePipeline extends FieldSpritePipeline {
     super.onBatch(gameObject);
   }
 
-  batchQuad(
+  override batchQuad(
     gameObject: Phaser.GameObjects.GameObject,
     x0: number,
     y0: number,
