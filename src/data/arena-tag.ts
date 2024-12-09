@@ -10,7 +10,7 @@ import { StatusEffect } from "#enums/status-effect";
 import type { BattlerIndex } from "#enums/battler-index";
 import { BlockNonDirectDamageAbAttr, InfiltratorAbAttr, ProtectStatAbAttr, applyAbAttrs } from "#app/data/ability";
 import { Stat } from "#enums/stat";
-import { CommonAnim, CommonBattleAnim } from "#app/data/battle-anims";
+import { CommonBattleAnim } from "#app/data/battle-anims";
 import i18next from "i18next";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -22,6 +22,7 @@ import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { HitResult } from "#app/enums/hit-result";
+import { CommonAnim } from "#enums/common-anim";
 
 export enum ArenaTagSide {
   BOTH,

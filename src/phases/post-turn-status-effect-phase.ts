@@ -8,12 +8,13 @@ import {
   PostDamageAbAttr,
   ReduceBurnDamageAbAttr,
 } from "#app/data/ability";
-import { CommonBattleAnim, CommonAnim } from "#app/data/battle-anims";
+import { CommonBattleAnim } from "#app/data/battle-anims";
 import { getStatusEffectActivationText } from "#app/data/status-effect";
 import { StatusEffect } from "#app/enums/status-effect";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BooleanHolder, NumberHolder } from "#app/utils";
 import { PokemonPhase } from "./pokemon-phase";
+import { CommonAnim } from "#enums/common-anim";
 
 export class PostTurnStatusEffectPhase extends PokemonPhase {
   constructor(battlerIndex: BattlerIndex) {

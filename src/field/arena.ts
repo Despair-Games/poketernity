@@ -11,7 +11,7 @@ import {
   getWeatherStartMessage,
   Weather,
 } from "#app/data/weather";
-import { CommonAnim } from "#app/data/battle-anims";
+import { CommonAnim } from "#enums/common-anim";
 import type { Type } from "#enums/type";
 import type Move from "#app/data/move";
 import type { ArenaTag } from "#app/data/arena-tag";

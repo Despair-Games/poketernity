@@ -7,7 +7,7 @@ import {
   ProtectStatAbAttr,
   ReverseDrainAbAttr,
 } from "#app/data/ability";
-import { ChargeAnim, CommonAnim, CommonBattleAnim, MoveChargeAnim } from "#app/data/battle-anims";
+import { ChargeAnim, CommonBattleAnim, MoveChargeAnim } from "#app/data/battle-anims";
 import type Move from "#app/data/move";
 import {
   allMoves,
@@ -44,6 +44,7 @@ import { StatusEffect } from "#enums/status-effect";
 import { WeatherType } from "#enums/weather-type";
 import { HitResult } from "#app/enums/hit-result";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
+import { CommonAnim } from "#enums/common-anim";
 
 export class BattlerTag {
   public tagType: BattlerTagType;

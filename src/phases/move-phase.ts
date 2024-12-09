@@ -12,7 +12,7 @@ import {
   ReduceStatusEffectDurationAbAttr,
 } from "#app/data/ability";
 import type { DelayedAttackTag } from "#app/data/arena-tag";
-import { CommonAnim } from "#app/data/battle-anims";
+import { CommonAnim } from "#enums/common-anim";
 import { CenterOfAttentionTag } from "#app/data/battler-tags";
 import {
   allMoves,
