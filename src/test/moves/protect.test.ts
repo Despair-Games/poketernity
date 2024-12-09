@@ -7,9 +7,9 @@ import { Moves } from "#enums/moves";
 import { Stat } from "#enums/stat";
 import { allMoves } from "#app/data/move";
 import { ArenaTrapTag } from "#app/data/arena-tag";
-import { BattlerIndex } from "#app/battle";
 import { MoveResult } from "#app/field/pokemon";
 import { ArenaTagSide } from "#app/enums/arena-tag-side";
+import { BattlerIndex } from "#app/enums/battler-index";
 
 describe("Moves - Protect", () => {
   let phaserGame: Phaser.Game;
