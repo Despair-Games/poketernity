@@ -17,7 +17,7 @@ import { EvolutionPhase } from "#app/phases/evolution-phase";
 import { LearnMovePhase, LearnMoveType } from "#app/phases/learn-move-phase";
 import { LevelUpPhase } from "#app/phases/level-up-phase";
 import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";
-import { achvs } from "#app/system/achv";
+import { achvs } from "#app/system/achvs";
 import type { VoucherType } from "#app/system/voucher";
 import { Command } from "#app/ui/command-ui-handler";
 import { addTextObject, TextStyle } from "#app/ui/text";

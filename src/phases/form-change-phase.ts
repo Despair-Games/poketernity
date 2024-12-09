@@ -1,6 +1,5 @@
 import { globalScene } from "#app/global-scene";
 import { fixedInt } from "#app/utils";
-import { achvs } from "../system/achv";
 import type { SpeciesFormChange } from "../data/pokemon-forms";
 import { getSpeciesFormChangeMessage } from "../data/pokemon-forms";
 import type { PlayerPokemon } from "../field/pokemon";
@@ -11,6 +10,7 @@ import { EndEvolutionPhase } from "./end-evolution-phase";
 import { EvolutionPhase } from "./evolution-phase";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { SpeciesFormKey } from "#enums/species-form-key";
+import { achvs } from "#app/system/achvs";
 
 export class FormChangePhase extends EvolutionPhase {
   private formChange: SpeciesFormChange;

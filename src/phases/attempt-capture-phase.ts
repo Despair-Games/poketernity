@@ -15,7 +15,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { PokemonPhase } from "#app/phases/pokemon-phase";
 import { VictoryPhase } from "#app/phases/victory-phase";
-import { achvs } from "#app/system/achv";
+import { achvs } from "#app/system/achvs";
 import type { PartyOption } from "#app/ui/party-ui-handler";
 import { PartyUiMode } from "#app/ui/party-ui-handler";
 import { SummaryUiMode } from "#app/ui/summary-ui-handler";

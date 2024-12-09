@@ -6,7 +6,7 @@ import i18next from "i18next";
 import Overrides from "#app/overrides";
 import { EggHatchPhase } from "./egg-hatch-phase";
 import { UiMode } from "#enums/ui-mode";
-import { achvs } from "#app/system/achv";
+import { achvs } from "#app/system/achvs";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { EggSummaryPhase } from "./egg-summary-phase";
 import { EggHatchData } from "#app/data/egg-hatch-data";

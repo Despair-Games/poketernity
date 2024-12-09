@@ -26,7 +26,7 @@ import { ScanIvsPhase } from "#app/phases/scan-ivs-phase";
 import { ShinySparklePhase } from "#app/phases/shiny-sparkle-phase";
 import { SummonPhase } from "#app/phases/summon-phase";
 import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
-import { achvs } from "#app/system/achv";
+import { achvs } from "#app/system/achvs";
 import { handleTutorial, Tutorial } from "#app/tutorial";
 import { UiMode } from "#enums/ui-mode";
 import { randSeedInt, randSeedItem } from "#app/utils";

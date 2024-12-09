@@ -100,7 +100,7 @@ import InvertPostFX from "#app/pipelines/invert";
 import SpritePipeline from "#app/pipelines/sprite";
 import { SceneBase } from "#app/scene-base";
 import type { Achv } from "#app/system/achv";
-import { achvs, ModifierAchv, MoneyAchv } from "#app/system/achv";
+import { ModifierAchv, MoneyAchv } from "#app/system/achv";
 import { GameData } from "#app/system/game-data";
 import { initGameSpeed } from "#app/system/game-speed";
 import type PokemonData from "#app/system/pokemon-data";
@@ -184,6 +184,7 @@ import {
   RememberMoveModifier,
   TerastallizeModifier,
 } from "./modifier/modifier";
+import { achvs } from "./system/achvs";
 
 const DEBUG_RNG = false;
 

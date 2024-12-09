@@ -196,7 +196,7 @@ import PartyUiHandler, { PartyUiMode } from "#app/ui/party-ui-handler";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 import type { LevelMoves } from "#app/data/balance/pokemon-level-moves";
 import { EVOLVE_MOVE, RELEARN_MOVE } from "#app/data/balance/pokemon-level-moves";
-import { DamageAchv, achvs } from "#app/system/achv";
+import { DamageAchv } from "#app/system/achv";
 import type { StarterDataEntry, StarterMoveset } from "#app/system/game-data";
 import { DexAttr } from "#app/system/game-data";
 import { QuantizerCelebi, argbFromRgba, rgbaFromArgb } from "@material/material-color-utilities";
@@ -251,6 +251,7 @@ import { HitResult } from "#app/enums/hit-result";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { ArenaTagSide } from "#app/enums/arena-tag-side";
 import type { MoveResult } from "#enums/move-result";
+import { achvs } from "#app/system/achvs";
 
 export enum LearnMoveSituation {
   MISC,

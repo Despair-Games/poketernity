@@ -27,7 +27,7 @@ import { BattleType } from "#enums/battle-type";
 import TrainerData from "#app/system/trainer-data";
 import { trainerConfigs } from "#app/data/trainer-config";
 import { resetSettings, setSetting, SettingKeys } from "#app/system/settings/settings";
-import { achvs } from "#app/system/achv";
+import { achvs } from "#app/system/achvs";
 import EggData from "#app/system/egg-data";
 import type { Egg } from "#app/data/egg";
 import { vouchers, VoucherType } from "#app/system/voucher";

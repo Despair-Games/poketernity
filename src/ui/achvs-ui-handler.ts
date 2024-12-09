@@ -1,7 +1,7 @@
 import { Button } from "#enums/buttons";
 import i18next from "i18next";
 import type { Achv } from "#app/system/achv";
-import { achvs, getAchievementDescription } from "#app/system/achv";
+import { getAchievementDescription } from "#app/system/achv";
 import type { Voucher } from "#app/system/voucher";
 import { getVoucherTypeIcon, getVoucherTypeName, vouchers } from "#app/system/voucher";
 import MessageUiHandler from "#app/ui/message-ui-handler";
@@ -11,6 +11,7 @@ import { addWindow } from "#app/ui/ui-theme";
 import { ScrollBar } from "#app/ui/scroll-bar";
 import { PlayerGender } from "#enums/player-gender";
 import { globalScene } from "#app/global-scene";
+import { achvs } from "#app/system/achvs";
 
 enum Page {
   ACHIEVEMENTS,

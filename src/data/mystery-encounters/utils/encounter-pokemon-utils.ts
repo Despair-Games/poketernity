@@ -13,7 +13,7 @@ import {
 import { PlayerGender } from "#enums/player-gender";
 import { addPokeballCaptureStars, addPokeballOpenParticles } from "#app/field/anims";
 import { getStatusEffectCatchRateMultiplier } from "#app/data/status-effect";
-import { achvs } from "#app/system/achv";
+import { achvs } from "#app/system/achvs";
 import { UiMode } from "#enums/ui-mode";
 import type { PartyOption } from "#app/ui/party-ui-handler";
 import { PartyUiMode } from "#app/ui/party-ui-handler";

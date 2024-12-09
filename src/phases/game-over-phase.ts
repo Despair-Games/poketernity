@@ -17,7 +17,7 @@ import { PostGameOverPhase } from "#app/phases/post-game-over-phase";
 import { RibbonModifierRewardPhase } from "#app/phases/ribbon-modifier-reward-phase";
 import { SummonPhase } from "#app/phases/summon-phase";
 import { UnlockPhase } from "#app/phases/unlock-phase";
-import { achvs, ChallengeAchv } from "#app/system/achv";
+import { ChallengeAchv } from "#app/system/achv";
 import { Unlockables } from "#app/system/unlockables";
 import { UiMode } from "#enums/ui-mode";
 import { isLocal, isLocalServerConnected } from "#app/utils";
@@ -31,6 +31,7 @@ import ChallengeData from "#app/system/challenge-data";
 import TrainerData from "#app/system/trainer-data";
 import ArenaData from "#app/system/arena-data";
 import { api } from "#app/plugins/api/api";
+import { achvs } from "#app/system/achvs";
 
 export class GameOverPhase extends BattlePhase {
   private isVictory: boolean;

@@ -10,7 +10,7 @@ import { MoneyRewardPhase } from "./money-reward-phase";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { globalScene } from "#app/global-scene";
 import { Biome } from "#app/enums/biome";
-import { achvs } from "#app/system/achv";
+import { achvs } from "#app/system/achvs";
 
 export class TrainerVictoryPhase extends BattlePhase {
   constructor() {

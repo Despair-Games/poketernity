@@ -5,7 +5,7 @@ import { Species } from "#enums/species";
 import GameManager from "#test/utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { achvs } from "#app/system/achv";
+import { achvs } from "#app/system/achvs";
 import { Unlockables } from "#app/system/unlockables";
 
 describe("Game Over Phase", () => {
