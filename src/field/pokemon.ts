@@ -167,7 +167,6 @@ import {
   MultCritAbAttr,
   IgnoreTypeImmunityAbAttr,
   DamageBoostAbAttr,
-  IgnoreTypeStatusEffectImmunityAbAttr,
   ConditionalCritAbAttr,
   applyFieldStatMultiplierAbAttrs,
   FieldMultiplyStatAbAttr,
@@ -247,6 +246,7 @@ import {
 import { Nature } from "#enums/nature";
 import { StatusEffect } from "#enums/status-effect";
 import { doShinySparkleAnim } from "#app/field/anims";
+import { IgnoreTypeStatusEffectImmunityAbAttr } from "#app/data/abilities/ignore-type-status-effect-immunity-attr";
 
 export enum LearnMoveSituation {
   MISC,

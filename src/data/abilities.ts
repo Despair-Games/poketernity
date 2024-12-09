@@ -63,7 +63,6 @@ import {
   IgnoreOpponentStatStagesAbAttr,
   IgnoreProtectOnContactAbAttr,
   IgnoreTypeImmunityAbAttr,
-  IgnoreTypeStatusEffectImmunityAbAttr,
   IncreasePpAbAttr,
   InfiltratorAbAttr,
   IntimidateImmunityAbAttr,
@@ -201,6 +200,7 @@ import {
   VariablePowerAttr,
 } from "./move";
 import { getNonVolatileStatusEffects } from "./status-effect";
+import { IgnoreTypeStatusEffectImmunityAbAttr } from "./abilities/ignore-type-status-effect-immunity-attr";
 
 type AbAttrCondition = (pokemon: Pokemon) => boolean;
 
