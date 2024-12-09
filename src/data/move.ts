@@ -6327,7 +6327,7 @@ export class RevivalBlessingAttr extends MoveEffectAttr {
     return false;
   }
 
-  getCondition(): MoveConditionFunc {
+  override getCondition(): MoveConditionFunc {
     return (user, _target, _move) =>
       (user instanceof PlayerPokemon && globalScene.getPlayerParty().findIndex((p) => p.isFainted()) > -1)
       || (user instanceof EnemyPokemon
