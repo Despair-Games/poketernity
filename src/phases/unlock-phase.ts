@@ -14,7 +14,7 @@ export class UnlockPhase extends Phase {
     this.unlockable = unlockable;
   }
 
-  start(): void {
+  override start(): void {
     globalScene.time.delayedCall(2000, () => {
       globalScene.gameData.unlocks[this.unlockable] = true;
       // Sound loaded into game as is

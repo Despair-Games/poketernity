@@ -33,7 +33,7 @@ export default class RegistrationFormUiHandler extends FormModalUiHandler {
     return [0, 0, 48, 0];
   }
 
-  getButtonTopMargin(): number {
+  override getButtonTopMargin(): number {
     return 8;
   }
 
@@ -41,7 +41,7 @@ export default class RegistrationFormUiHandler extends FormModalUiHandler {
     return [i18next.t("menu:register"), i18next.t("menu:backToLogin")];
   }
 
-  getReadableErrorMessage(error: string): string {
+  override getReadableErrorMessage(error: string): string {
     const colonIndex = error?.indexOf(":");
     if (colonIndex > 0) {
       error = error.slice(0, colonIndex);
@@ -66,7 +66,7 @@ export default class RegistrationFormUiHandler extends FormModalUiHandler {
     return inputFieldConfigs;
   }
 
-  setup(): void {
+  override setup(): void {
     super.setup();
 
     this.modalContainer.list.forEach((child: Phaser.GameObjects.GameObject) => {
@@ -86,7 +86,7 @@ export default class RegistrationFormUiHandler extends FormModalUiHandler {
     this.modalContainer.add(label);
   }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     if (super.show(args)) {
       const config = args[0] as ModalConfig;
 

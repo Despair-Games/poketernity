@@ -48,7 +48,7 @@ export default class EvolutionSceneHandler extends MessageUiHandler {
     this.initPromptSprite(this.messageContainer);
   }
 
-  show(_args: any[]): boolean {
+  override show(_args: any[]): boolean {
     super.show(_args);
 
     globalScene.ui.bringToTop(this.evolutionContainer);
@@ -82,11 +82,11 @@ export default class EvolutionSceneHandler extends MessageUiHandler {
     return false;
   }
 
-  setCursor(_cursor: integer): boolean {
+  override setCursor(_cursor: integer): boolean {
     return false;
   }
 
-  clear() {
+  override clear() {
     this.clearText();
     this.canCancel = false;
     this.cancelled = false;

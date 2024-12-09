@@ -21,7 +21,7 @@ export class QuietFormChangePhase extends BattlePhase {
     this.formChange = formChange;
   }
 
-  start(): void {
+  override start(): void {
     super.start();
 
     if (this.pokemon.formIndex === this.pokemon.species.forms.findIndex((f) => f.formKey === this.formChange.formKey)) {
@@ -147,7 +147,7 @@ export class QuietFormChangePhase extends BattlePhase {
     });
   }
 
-  end(): void {
+  override end(): void {
     this.pokemon.findAndRemoveTags((t) => t.tagType === BattlerTagType.AUTOTOMIZED);
     if (globalScene?.currentBattle.isClassicFinalBoss && this.pokemon instanceof EnemyPokemon) {
       globalScene.playBgm();

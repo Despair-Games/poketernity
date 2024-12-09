@@ -47,7 +47,7 @@ export class EncounterPhase extends BattlePhase {
     this.loaded = loaded;
   }
 
-  start() {
+  override start() {
     super.start();
 
     globalScene.updateGameInfo();
@@ -502,7 +502,7 @@ export class EncounterPhase extends BattlePhase {
     }
   }
 
-  end() {
+  override end() {
     const enemyField = globalScene.getEnemyField();
 
     enemyField.forEach((enemyPokemon, e) => {

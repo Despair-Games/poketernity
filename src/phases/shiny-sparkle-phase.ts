@@ -7,7 +7,7 @@ export class ShinySparklePhase extends PokemonPhase {
     super(battlerIndex);
   }
 
-  start() {
+  override start() {
     super.start();
 
     this.getPokemon().sparkle();

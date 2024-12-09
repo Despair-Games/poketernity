@@ -8,7 +8,7 @@ export class NewBiomeEncounterPhase extends NextEncounterPhase {
     super();
   }
 
-  doEncounter(): void {
+  override doEncounter(): void {
     globalScene.playBgm(undefined, true);
 
     for (const pokemon of globalScene.getPlayerParty()) {
@@ -45,7 +45,7 @@ export class NewBiomeEncounterPhase extends NextEncounterPhase {
   /**
    * Set biome weather.
    */
-  trySetWeatherIfNewBiome(): void {
+  override trySetWeatherIfNewBiome(): void {
     globalScene.arena.trySetWeather(getRandomWeatherType(globalScene.arena), false);
   }
 }

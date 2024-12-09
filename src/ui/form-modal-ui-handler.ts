@@ -55,7 +55,7 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
     return error;
   }
 
-  setup(): void {
+  override setup(): void {
     super.setup();
 
     const config = this.getInputFieldConfigs();
@@ -113,7 +113,7 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
     });
   }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     if (super.show(args)) {
       this.inputContainers.map((ic) => ic.setVisible(true));
 
@@ -147,7 +147,7 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
     return false;
   }
 
-  processInput(button: Button): boolean {
+  override processInput(button: Button): boolean {
     if (button === Button.SUBMIT && this.submitAction) {
       this.submitAction();
       return true;
@@ -162,14 +162,14 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
     }
   }
 
-  updateContainer(config?: ModalConfig): void {
+  override updateContainer(config?: ModalConfig): void {
     super.updateContainer(config);
 
     this.errorMessage.setText(this.getReadableErrorMessage((config as FormModalConfig)?.errorMessage || ""));
     this.errorMessage.setVisible(!!this.errorMessage.text);
   }
 
-  clear(): void {
+  override clear(): void {
     super.clear();
     this.modalContainer.setVisible(false);
 
