@@ -9,7 +9,7 @@ import {
   StatStageChangeCopyAbAttr,
   StatStageChangeMultiplierAbAttr,
 } from "#app/data/ability";
-import { ArenaTagSide, MistTag } from "#app/data/arena-tag";
+import { MistTag } from "#app/data/arena-tag";
 import type Pokemon from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { ResetNegativeStatStageModifier } from "#app/modifier/modifier";
@@ -18,6 +18,7 @@ import { NumberHolder, BooleanHolder } from "#app/utils";
 import i18next from "i18next";
 import { PokemonPhase } from "./pokemon-phase";
 import { Stat, type BattleStat, getStatKey, getStatStageChangeDescriptionKey } from "#enums/stat";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 
 export type StatStageChangeCallback = (
   target: Pokemon | null,

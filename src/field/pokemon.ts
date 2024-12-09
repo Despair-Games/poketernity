@@ -137,7 +137,7 @@ import {
   PowerTrickTag,
 } from "../data/battler-tags";
 import { WeatherType } from "#enums/weather-type";
-import { ArenaTagSide, NoCritTag, WeakenMoveScreenTag } from "#app/data/arena-tag";
+import { NoCritTag, WeakenMoveScreenTag } from "#app/data/arena-tag";
 import type { Ability, AbAttr } from "#app/data/ability";
 import {
   StatMultiplierAbAttr,

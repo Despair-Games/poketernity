@@ -23,12 +23,7 @@ import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { HitResult } from "#app/enums/hit-result";
 import { CommonAnim } from "#enums/common-anim";
-
-export enum ArenaTagSide {
-  BOTH,
-  PLAYER,
-  ENEMY,
-}
+import { ArenaTagSide } from "#enums/arena-tag-side";
 
 export abstract class ArenaTag {
   constructor(
