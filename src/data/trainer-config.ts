@@ -14,7 +14,7 @@ import { tmSpecies } from "#app/data/balance/tms";
 import { Type } from "#enums/type";
 import { doubleBattleDialogue } from "#app/data/dialogue";
 import type { PersistentModifier } from "#app/modifier/modifier";
-import { TrainerVariant } from "#app/field/trainer";
+import { TrainerVariant } from "#enums/trainer-variant";
 import { getIsInitialized, initI18n } from "#app/plugins/i18n";
 import i18next from "i18next";
 import { Moves } from "#enums/moves";

@@ -34,7 +34,7 @@ import type { BattlerTagType } from "#enums/battler-tag-type";
 import { Biome } from "#enums/biome";
 import type { TrainerType } from "#enums/trainer-type";
 import i18next from "i18next";
-import Trainer, { TrainerVariant } from "#app/field/trainer";
+import Trainer from "#app/field/trainer";
 import type { Gender } from "#app/data/gender";
 import type { Nature } from "#enums/nature";
 import type { Moves } from "#enums/moves";
@@ -59,6 +59,7 @@ import type { Variant } from "#app/data/variant";
 import { StatusEffect } from "#enums/status-effect";
 import { globalScene } from "#app/global-scene";
 import { BattleType } from "#app/enums/battle-type";
+import { TrainerVariant } from "#app/enums/trainer-variant";
 
 /**
  * Animates exclamation sprite over trainer's head at start of encounter

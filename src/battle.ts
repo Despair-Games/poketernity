@@ -28,10 +28,11 @@ import { SpeciesFormKey } from "#enums/species-form-key";
 import { TrainerType } from "#enums/trainer-type";
 import { BattleType } from "./enums/battle-type";
 import { BattlerIndex } from "./enums/battler-index";
-import Trainer, { TrainerVariant } from "./field/trainer";
+import Trainer from "#app/field/trainer";
 import type { GameMode } from "./game-mode";
 import { MoneyMultiplierModifier, PokemonHeldItemModifier } from "./modifier/modifier";
 import type { Command } from "./ui/command-ui-handler";
+import { TrainerVariant } from "#enums/trainer-variant";
 
 export enum ClassicFixedBossWaves {
   // TODO: other fixed wave battles should be added here
