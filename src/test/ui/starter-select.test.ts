@@ -1,4 +1,4 @@
-import { Gender } from "#app/data/gender";
+import { Gender } from "#app/enums/gender";
 import { Nature } from "#enums/nature";
 import { allSpecies } from "#app/data/pokemon-species";
 import { GameModes } from "#app/game-mode";

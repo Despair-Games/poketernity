@@ -107,7 +107,7 @@ import {
   PokemonMultiHitModifier,
 } from "#app/modifier/modifier";
 import { PokeballType } from "#enums/pokeball";
-import { Gender } from "#app/data/gender";
+import { Gender } from "#app/enums/gender";
 import { initMoveAnim, loadMoveAnimAssets } from "#app/data/battle-anims";
 import { Status, getRandomStatus } from "#app/data/status-effect";
 import type { SpeciesFormEvolution, SpeciesEvolutionCondition } from "#app/data/balance/pokemon-evolutions";
@@ -137,7 +137,7 @@ import {
   AutotomizedTag,
   PowerTrickTag,
 } from "../data/battler-tags";
-import { WeatherType } from "#app/data/weather";
+import { WeatherType } from "#app/enums/weather-type";
 import { ArenaTagSide, NoCritTag, WeakenMoveScreenTag } from "#app/data/arena-tag";
 import type { Ability, AbAttr } from "#app/data/ability";
 import {
@@ -209,7 +209,7 @@ import {
   SpeciesFormChangePostMoveTrigger,
   SpeciesFormChangeStatusEffectTrigger,
 } from "#app/data/pokemon-forms";
-import { TerrainType } from "#app/data/terrain";
+import { TerrainType } from "#app/enums/terrain-type";
 import type { TrainerSlot } from "#app/data/trainer-config";
 import Overrides from "#app/overrides";
 import i18next from "i18next";

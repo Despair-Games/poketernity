@@ -1,7 +1,7 @@
 import { loggedInUser } from "#app/account";
 import { BattleType } from "#app/battle";
 import { fetchDailyRunSeed, getDailyRunStarters } from "#app/data/daily-run";
-import { Gender } from "#app/data/gender";
+import { Gender } from "#app/enums/gender";
 import { getBiomeKey } from "#app/field/arena";
 import { GameMode, GameModes, getGameMode } from "#app/game-mode";
 import type { Modifier } from "#app/modifier/modifier";

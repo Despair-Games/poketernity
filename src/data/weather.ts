@@ -9,19 +9,7 @@ import { SuppressWeatherEffectAbAttr } from "./ability";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
 import type { Arena } from "#app/field/arena";
-
-export enum WeatherType {
-  NONE,
-  SUNNY,
-  RAIN,
-  SANDSTORM,
-  HAIL,
-  SNOW,
-  FOG,
-  HEAVY_RAIN,
-  HARSH_SUN,
-  STRONG_WINDS,
-}
+import { WeatherType } from "#app/enums/weather-type";
 
 /**
  * Class representing Weather effects

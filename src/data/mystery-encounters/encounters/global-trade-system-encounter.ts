@@ -37,7 +37,8 @@ import {
 import type { OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler";
 import PokemonData from "#app/system/pokemon-data";
 import i18next from "i18next";
-import { Gender, getGenderSymbol } from "#app/data/gender";
+import { getGenderSymbol } from "#app/data/gender";
+import { Gender } from "#app/enums/gender";
 import { getNatureName } from "#app/data/nature";
 import { getPokeballAtlasKey, getPokeballTintColor } from "#app/data/pokeball";
 import { getEncounterText, showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";

@@ -5,14 +5,7 @@ import { ProtectAttr } from "./move";
 import type { BattlerIndex } from "#app/battle";
 import i18next from "i18next";
 import { getPokemonNameWithAffix } from "#app/messages";
-
-export enum TerrainType {
-  NONE,
-  MISTY,
-  ELECTRIC,
-  GRASSY,
-  PSYCHIC,
-}
+import { TerrainType } from "#app/enums/terrain-type";
 
 /**
  * Class representing Terrain effects

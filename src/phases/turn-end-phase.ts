@@ -1,7 +1,7 @@
 import { applyPostTurnAbAttrs, PostTurnAbAttr } from "#app/data/ability";
 import { BattlerTagLapseType } from "#app/data/battler-tags";
-import { TerrainType } from "#app/data/terrain";
-import { WeatherType } from "#app/data/weather";
+import { TerrainType } from "#app/enums/terrain-type";
+import { WeatherType } from "#app/enums/weather-type";
 import { TurnEndEvent } from "#app/events/battle-scene";
 import type Pokemon from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";

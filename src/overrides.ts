@@ -1,5 +1,5 @@
 import { type PokeballCounts } from "#app/battle-scene";
-import type { Gender } from "#app/data/gender";
+import type { Gender } from "./enums/gender";
 import type { Variant } from "#app/data/variant";
 import { type ModifierOverride } from "#app/modifier/modifier-type";
 import type { Unlockables } from "#app/system/unlockables";
@@ -14,7 +14,7 @@ import type { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
 import type { TimeOfDay } from "#enums/time-of-day";
 import type { VariantTier } from "#enums/variant-tier";
-import { WeatherType } from "./data/weather";
+import { WeatherType } from "./enums/weather-type";
 
 /**
  * Overrides that are using when testing different in game situations

@@ -13,7 +13,7 @@ import {
   getStatusEffectDescriptor,
   getStatusEffectHealText,
 } from "#app/data/status-effect";
-import { Gender } from "./gender";
+import { Gender } from "#app/enums/gender";
 import type Move from "./move";
 import {
   AttackMove,
@@ -39,7 +39,7 @@ import {
 import type { ArenaTrapTag } from "./arena-tag";
 import { ArenaTagSide } from "./arena-tag";
 import { BerryModifier, HitHealModifier, PokemonHeldItemModifier } from "../modifier/modifier";
-import { TerrainType } from "./terrain";
+import { TerrainType } from "#app/enums/terrain-type";
 import {
   SpeciesFormChangeManualTrigger,
   SpeciesFormChangeRevertWeatherFormTrigger,
@@ -71,7 +71,7 @@ import { NewBattlePhase } from "#app/phases/new-battle-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import { StatusEffect } from "#enums/status-effect";
-import { WeatherType } from "./weather";
+import { WeatherType } from "#app/enums/weather-type";
 
 export class Ability implements Localizable {
   public id: Abilities;

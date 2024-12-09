@@ -1,5 +1,5 @@
 import PokemonInfoContainer from "#app/ui/pokemon-info-container";
-import { Gender } from "#app/data/gender";
+import { Gender } from "#app/enums/gender";
 import { Type } from "#enums/type";
 import { rgbHexToRgba, padInt } from "#app/utils";
 import { TextStyle, addTextObject } from "#app/ui/text";

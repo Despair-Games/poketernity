@@ -1,8 +1,4 @@
-export enum Gender {
-  GENDERLESS = -1,
-  MALE,
-  FEMALE,
-}
+import { Gender } from "#app/enums/gender";
 
 /**
  * Gets the gender symbol for an associated gender

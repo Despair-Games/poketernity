@@ -22,14 +22,14 @@ import {
 } from "#app/data/mystery-encounters/mystery-encounter-requirements";
 import { Species } from "#enums/species";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
-import { Gender } from "#app/data/gender";
+import { Gender } from "#app/enums/gender";
 import { Type } from "#enums/type";
 import { BattlerIndex } from "#app/battle";
 import type Pokemon from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon";
 import { Moves } from "#enums/moves";
 import { EncounterBattleAnim } from "#app/data/battle-anims";
-import { WeatherType } from "#app/data/weather";
+import { WeatherType } from "#app/enums/weather-type";
 import { isNullOrUndefined, randSeedInt } from "#app/utils";
 import { StatusEffect } from "#enums/status-effect";
 import { queueEncounterMessage } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";

@@ -1,6 +1,6 @@
 import { BattleType } from "../battle";
 import { globalScene } from "#app/global-scene";
-import type { Gender } from "../data/gender";
+import type { Gender } from "#app/enums/gender";
 import type { Nature } from "#enums/nature";
 import type { PokeballType } from "#enums/pokeball";
 import { getPokemonSpecies } from "../data/pokemon-species";

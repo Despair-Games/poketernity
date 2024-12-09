@@ -1,7 +1,7 @@
 import { BattlerIndex } from "#app/battle";
 import { allAbilities } from "#app/data/ability";
 import { Abilities } from "#app/enums/abilities";
-import { WeatherType } from "#app/data/weather";
+import { WeatherType } from "#app/enums/weather-type";
 import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
 import { MovePhase } from "#app/phases/move-phase";
 import { PostSummonPhase } from "#app/phases/post-summon-phase";
