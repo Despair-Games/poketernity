@@ -1,4 +1,4 @@
-import { BattlerIndex, BattleType } from "#app/battle";
+import { BattlerIndex } from "#app/battle";
 import { globalScene } from "#app/global-scene";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
 import { applyAbAttrs, SyncEncounterNatureAbAttr } from "#app/data/ability";
@@ -37,6 +37,7 @@ import { Species } from "#enums/species";
 import { overrideHeldItems, overrideModifiers } from "#app/modifier/modifier";
 import i18next from "i18next";
 import { WEIGHT_INCREMENT_ON_SPAWN_MISS } from "#app/data/mystery-encounters/mystery-encounters";
+import { BattleType } from "#app/enums/battle-type";
 
 export class EncounterPhase extends BattlePhase {
   private loaded: boolean;

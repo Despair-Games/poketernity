@@ -1,8 +1,9 @@
-import Battle, { BattleType } from "#app/battle";
+import { Battle } from "#app/battle";
 import type BattleScene from "#app/battle-scene";
 import { getDailyRunStarters } from "#app/data/daily-run";
 import { Gender } from "#app/data/gender";
 import { getPokemonSpecies, getPokemonSpeciesForm } from "#app/data/pokemon-species";
+import { BattleType } from "#app/enums/battle-type";
 import { PlayerPokemon } from "#app/field/pokemon";
 import { GameModes, getGameMode } from "#app/game-mode";
 import type { StarterMoveset } from "#app/system/game-data";

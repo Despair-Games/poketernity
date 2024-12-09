@@ -1,47 +1,41 @@
+import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
+import { trainerConfigs } from "#app/data/trainer-config";
+import type Pokemon from "#app/field/pokemon";
+import type { EnemyPokemon, PlayerPokemon, QueuedMove } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import type { Command } from "./ui/command-ui-handler";
+import { ModifierTier } from "#app/modifier/modifier-tier";
+import type { CustomModifierSettings } from "#app/modifier/modifier-type";
+import i18next from "#app/plugins/i18n";
+import { MusicPreference } from "#app/system/settings/settings";
 import {
-  randomString,
   getEnumValues,
-  NumberHolder,
-  randSeedInt,
-  shiftCharCodes,
-  randSeedItem,
-  randInt,
   isBetween,
+  NumberHolder,
+  randInt,
+  randomString,
+  randSeedInt,
+  randSeedItem,
+  shiftCharCodes,
 } from "#app/utils";
+import { ArenaTagType } from "#enums/arena-tag-type";
+import type { Moves } from "#enums/moves";
+import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
+import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
+import { PlayerGender } from "#enums/player-gender";
+import type { PokeballType } from "#enums/pokeball";
+import { Species } from "#enums/species";
+import { SpeciesFormKey } from "#enums/species-form-key";
+import { TrainerType } from "#enums/trainer-type";
+import { BattleType } from "./enums/battle-type";
 import Trainer, { TrainerVariant } from "./field/trainer";
 import type { GameMode } from "./game-mode";
 import { MoneyMultiplierModifier, PokemonHeldItemModifier } from "./modifier/modifier";
-import type { PokeballType } from "#enums/pokeball";
-import { trainerConfigs } from "#app/data/trainer-config";
-import { SpeciesFormKey } from "#enums/species-form-key";
-import type { EnemyPokemon, PlayerPokemon, QueuedMove } from "#app/field/pokemon";
-import type Pokemon from "#app/field/pokemon";
-import { ArenaTagType } from "#enums/arena-tag-type";
-import type { Moves } from "#enums/moves";
-import { PlayerGender } from "#enums/player-gender";
-import { MusicPreference } from "#app/system/settings/settings";
-import { Species } from "#enums/species";
-import { TrainerType } from "#enums/trainer-type";
-import i18next from "#app/plugins/i18n";
-import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
-import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
-import type { CustomModifierSettings } from "#app/modifier/modifier-type";
-import { ModifierTier } from "#app/modifier/modifier-tier";
-import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
+import type { Command } from "./ui/command-ui-handler";
 
 export enum ClassicFixedBossWaves {
   // TODO: other fixed wave battles should be added here
   EVIL_BOSS_1 = 115,
   EVIL_BOSS_2 = 165,
-}
-
-export enum BattleType {
-  WILD,
-  TRAINER,
-  CLEAR,
-  MYSTERY_ENCOUNTER,
 }
 
 export enum BattlerIndex {
@@ -70,7 +64,7 @@ interface TurnCommands {
   [key: number]: TurnCommand | null;
 }
 
-export default class Battle {
+export class Battle {
   protected gameMode: GameMode;
   public waveIndex: number;
   public battleType: BattleType;
@@ -455,6 +449,8 @@ export default class Battle {
     return this.battleType === BattleType.MYSTERY_ENCOUNTER;
   }
 }
+
+export default Battle;
 
 export class FixedBattle extends Battle {
   constructor(waveIndex: number, config: FixedBattleConfig) {

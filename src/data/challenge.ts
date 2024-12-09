@@ -9,7 +9,7 @@ import { speciesStarterCosts } from "#app/data/balance/starters";
 import type Pokemon from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon";
 import type { FixedBattleConfig } from "#app/battle";
-import { BattleType } from "#app/battle";
+import { BattleType } from "#enums/battle-type";
 import Trainer, { TrainerVariant } from "#app/field/trainer";
 import type { GameMode } from "#app/game-mode";
 import { Type } from "#enums/type";

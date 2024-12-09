@@ -1,5 +1,5 @@
 import type Battle from "#app/battle";
-import { BattlerIndex, BattleType } from "#app/battle";
+import { BattlerIndex } from "#app/battle";
 import { biomeLinks, BiomePoolTier } from "#app/data/balance/biomes";
 import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
 import {
@@ -58,6 +58,7 @@ import { PartyExpPhase } from "#app/phases/party-exp-phase";
 import type { Variant } from "#app/data/variant";
 import { StatusEffect } from "#enums/status-effect";
 import { globalScene } from "#app/global-scene";
+import { BattleType } from "#app/enums/battle-type";
 
 /**
  * Animates exclamation sprite over trainer's head at start of encounter
