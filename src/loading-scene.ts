@@ -12,7 +12,6 @@ import { initPokemonForms } from "#app/data/pokemon-forms";
 import { initSpecies } from "#app/data/pokemon-species";
 import { initMoves } from "#app/data/move";
 import { initAbilities } from "#app/data/ability";
-import { initAchievements } from "#app/system/achv";
 import { initTrainerTypeDialogue } from "#app/data/dialogue";
 import { initChallenges } from "#app/data/challenge";
 import i18next from "i18next";
@@ -21,6 +20,7 @@ import { initVouchers } from "#app/system/voucher";
 import { Biome } from "#enums/biome";
 import { initMysteryEncounters } from "#app/data/mystery-encounters/mystery-encounters";
 import { globalScene } from "#app/global-scene";
+import { initAchievements } from "./system/achvs";
 
 export class LoadingScene extends SceneBase {
   public static readonly KEY = "loading";

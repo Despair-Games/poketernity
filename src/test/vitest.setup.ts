@@ -9,10 +9,10 @@ import { initMoves } from "#app/data/move";
 import { initMysteryEncounters } from "#app/data/mystery-encounters/mystery-encounters";
 import { initPokemonForms } from "#app/data/pokemon-forms";
 import { initSpecies } from "#app/data/pokemon-species";
-import { initAchievements } from "#app/system/achv";
 import { initVouchers } from "#app/system/voucher";
 import { initStatsKeys } from "#app/ui/game-stats-ui-handler";
 import { afterAll, beforeAll, vi } from "vitest";
+import { initAchievements } from "#app/system/achvs";
 
 /** Set the timezone to UTC for tests. */
 process.env.TZ = "UTC";

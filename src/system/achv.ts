@@ -382,13 +382,3 @@ export function getAchievementDescription(localizationKey: string): string {
       return "";
   }
 }
-
-export function initAchievements() {
-  const achvKeys = Object.keys(achvs);
-  achvKeys.forEach((a: string, i: integer) => {
-    achvs[a].id = a;
-    if (achvs[a].hasParent) {
-      achvs[a].parentId = achvKeys[i - 1];
-    }
-  });
-}

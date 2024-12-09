@@ -403,3 +403,13 @@ export const achvs = {
   ),
   BREEDERS_IN_SPACE: new Achv("BREEDERS_IN_SPACE", "", "BREEDERS_IN_SPACE.description", "moon_stone", 50).setSecret(),
 };
+
+export function initAchievements() {
+  const achvKeys = Object.keys(achvs);
+  achvKeys.forEach((a: string, i: integer) => {
+    achvs[a].id = a;
+    if (achvs[a].hasParent) {
+      achvs[a].parentId = achvKeys[i - 1];
+    }
+  });
+}
