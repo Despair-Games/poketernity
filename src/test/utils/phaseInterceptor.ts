@@ -60,6 +60,7 @@ import { RibbonModifierRewardPhase } from "#app/phases/ribbon-modifier-reward-ph
 import { GameOverModifierRewardPhase } from "#app/phases/game-over-modifier-reward-phase";
 import { UnlockPhase } from "#app/phases/unlock-phase";
 import { PostGameOverPhase } from "#app/phases/post-game-over-phase";
+import { phaseManager } from "#app/phase-manager";
 
 export interface PromptHandler {
   phaseTarget?: string;
@@ -191,6 +192,7 @@ type PhaseInterceptorPhase = PhaseClass | PhaseString;
 
 export default class PhaseInterceptor {
   public scene;
+  public phaseManager;
   public phases = {};
   public log: string[];
   private onHold;
@@ -456,7 +458,7 @@ export default class PhaseInterceptor {
    */
   startPhase(phase: PhaseClass) {
     this.log.push(phase.name);
-    const instance = this.scene.getCurrentPhase();
+    const instance = phaseManager.getCurrentPhase();
     this.onHold.push({
       name: phase.name,
       call: () => {
@@ -475,7 +477,7 @@ export default class PhaseInterceptor {
    * @param phase - The phase to start.
    */
   superEndPhase() {
-    const instance = this.scene.getCurrentPhase();
+    const instance = phaseManager.getCurrentPhase();
     this.originalSuperEnd.apply(instance);
     this.inProgress?.callback();
     this.inProgress = undefined;
@@ -487,7 +489,10 @@ export default class PhaseInterceptor {
    * @param args - Additional arguments to pass to the original method.
    */
   setMode(mode: Mode, ...args: unknown[]): Promise<void> {
-    const currentPhase = this.scene.getCurrentPhase();
+    const currentPhase = phaseManager.getCurrentPhase();
+    if (!currentPhase) {
+      return Promise.resolve();
+    }
     const instance = this.scene.ui;
     console.log("setMode", `${Mode[mode]} (=${mode})`, args);
     const ret = this.originalSetMode.apply(instance, [mode, ...args]);
@@ -512,7 +517,7 @@ export default class PhaseInterceptor {
         const actionForNextPrompt = this.prompts[0];
         const expireFn = actionForNextPrompt.expireFn && actionForNextPrompt.expireFn();
         const currentMode = this.scene.ui.getMode();
-        const currentPhase = this.scene.getCurrentPhase()?.constructor.name;
+        const currentPhase = phaseManager.getCurrentPhase()?.constructor.name;
         const currentHandler = this.scene.ui.getHandler();
         if (expireFn) {
           this.prompts.shift();

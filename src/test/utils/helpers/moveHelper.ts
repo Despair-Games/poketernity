@@ -2,6 +2,7 @@ import type { BattlerIndex } from "#app/battle";
 import type Pokemon from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon";
 import Overrides from "#app/overrides";
+import { phaseManager } from "#app/phase-manager";
 import type { CommandPhase } from "#app/phases/command-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { Command } from "#app/ui/command-ui-handler";
@@ -22,7 +23,7 @@ export class MoveHelper extends GameManagerHelper {
    */
   public async forceHit(): Promise<void> {
     await this.game.phaseInterceptor.to(MoveEffectPhase, false);
-    vi.spyOn(this.game.scene.getCurrentPhase() as MoveEffectPhase, "hitCheck").mockReturnValue(true);
+    vi.spyOn(phaseManager.getCurrentPhase() as MoveEffectPhase, "hitCheck").mockReturnValue(true);
   }
 
   /**
@@ -33,7 +34,7 @@ export class MoveHelper extends GameManagerHelper {
    */
   public async forceMiss(firstTargetOnly: boolean = false): Promise<void> {
     await this.game.phaseInterceptor.to(MoveEffectPhase, false);
-    const hitCheck = vi.spyOn(this.game.scene.getCurrentPhase() as MoveEffectPhase, "hitCheck");
+    const hitCheck = vi.spyOn(phaseManager.getCurrentPhase() as MoveEffectPhase, "hitCheck");
 
     if (firstTargetOnly) {
       hitCheck.mockReturnValueOnce(false);
@@ -52,10 +53,10 @@ export class MoveHelper extends GameManagerHelper {
     const movePosition = getMovePosition(this.game.scene, pkmIndex, move);
 
     this.game.onNextPrompt("CommandPhase", Mode.COMMAND, () => {
-      this.game.scene.ui.setMode(Mode.FIGHT, (this.game.scene.getCurrentPhase() as CommandPhase).getFieldIndex());
+      this.game.scene.ui.setMode(Mode.FIGHT, (phaseManager.getCurrentPhase() as CommandPhase).getFieldIndex());
     });
     this.game.onNextPrompt("CommandPhase", Mode.FIGHT, () => {
-      (this.game.scene.getCurrentPhase() as CommandPhase).handleCommand(Command.FIGHT, movePosition, false);
+      (phaseManager.getCurrentPhase() as CommandPhase).handleCommand(Command.FIGHT, movePosition, false);
     });
 
     if (targetIndex !== null) {

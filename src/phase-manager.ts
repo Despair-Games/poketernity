@@ -17,21 +17,20 @@ import { QuietFormChangePhase } from "#app/phases/quiet-form-change-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
 import type { Constructor } from "#app/utils";
 
-class PhaseManager {
-  constructor(
-    /** PhaseQueue: dequeue/remove the first element to get the next phase */
-    public readonly phaseQueue: Phase[] = [],
-    public readonly conditionalQueue: Array<[() => boolean, Phase]> = [],
-    /** PhaseQueuePrepend: is a temp storage of what will be added to PhaseQueue */
-    private phaseQueuePrepend: Phase[] = [],
+export class PhaseManager {
+  /** PhaseQueue: dequeue/remove the first element to get the next phase */
+  public readonly phaseQueue: Phase[] = [];
+  public readonly conditionalQueue: Array<[() => boolean, Phase]> = [];
+  /** PhaseQueuePrepend: is a temp storage of what will be added to PhaseQueue */
+  private phaseQueuePrepend: Phase[] = [];
 
-    /** overrides default of inserting phases to end of phaseQueuePrepend array, useful for inserting Phases "out of order" */
-    private phaseQueuePrependSpliceIndex: number = -1,
-    private nextCommandPhaseQueue: Phase[] = [],
+  /** overrides default of inserting phases to end of phaseQueuePrepend array, useful for inserting Phases "out of order" */
+  private phaseQueuePrependSpliceIndex: number = -1;
+  private nextCommandPhaseQueue: Phase[] = [];
 
-    private currentPhase: Phase | null = null,
-    private standbyPhase: Phase | null = null,
-  ) {}
+  private currentPhase: Phase | null = null;
+  private standbyPhase: Phase | null = null;
+  constructor() {}
 
   getCurrentPhase(): Phase | null {
     return this.currentPhase;
