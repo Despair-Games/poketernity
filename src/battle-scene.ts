@@ -32,7 +32,7 @@ import {
   MYSTERY_ENCOUNTER_SPAWN_MAX_WEIGHT,
   mysteryEncountersByBiome,
 } from "#app/data/mystery-encounters/mystery-encounters";
-import type { SpeciesFormChange, SpeciesFormChangeTrigger } from "#app/data/pokemon-forms";
+import type { SpeciesFormChange } from "#app/data/pokemon-forms";
 import { FormChangeItem, pokemonFormChanges, SpeciesFormChangeTimeOfDayTrigger } from "#app/data/pokemon-forms";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import type { PokemonSpeciesFilter } from "#app/data/pokemon-species";
@@ -181,6 +181,7 @@ import {
 } from "./modifier/modifier";
 import { achvs } from "./system/achvs";
 import { SpeciesFormChangeManualTrigger } from "./data/pokemon-forms/species-form-change-manual-trigger";
+import type { SpeciesFormChangeTrigger } from "./data/pokemon-forms/species-form-change-trigger";
 
 const DEBUG_RNG = false;
 

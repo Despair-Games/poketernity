@@ -15,6 +15,7 @@ import { Challenges } from "#app/enums/challenges";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { globalScene } from "#app/global-scene";
 import { SpeciesFormChangeManualTrigger } from "./pokemon-forms/species-form-change-manual-trigger";
+import { SpeciesFormChangeTrigger } from "./pokemon-forms/species-form-change-trigger";
 
 export enum FormChangeItem {
   NONE,
@@ -216,16 +217,6 @@ export class SpeciesFormChangeCondition {
   constructor(predicate: SpeciesFormChangeConditionPredicate, enforceFunc?: SpeciesFormChangeConditionEnforceFunc) {
     this.predicate = predicate;
     this.enforceFunc = enforceFunc;
-  }
-}
-
-export abstract class SpeciesFormChangeTrigger {
-  canChange(_pokemon: Pokemon): boolean {
-    return true;
-  }
-
-  hasTriggerType(triggerType: Constructor<SpeciesFormChangeTrigger>): boolean {
-    return this instanceof triggerType;
   }
 }
 
