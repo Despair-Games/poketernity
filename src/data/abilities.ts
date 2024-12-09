@@ -27,7 +27,6 @@ import {
   BlockCritAbAttr,
   BlockNonDirectDamageAbAttr,
   BlockOneHitKOAbAttr,
-  BlockRecoilDamageAttr,
   BlockRedirectAbAttr,
   BlockStatusDamageAbAttr,
   BlockWeatherDamageAttr,
@@ -201,6 +200,7 @@ import {
 import { getNonVolatileStatusEffects } from "./status-effect";
 import { IgnoreTypeStatusEffectImmunityAbAttr } from "./abilities/ignore-type-status-effect-immunity-ab-attr";
 import { BlockItemTheftAbAttr } from "./abilities/block-item-theft-ab-attr";
+import { BlockRecoilDamageAttr } from "./abilities/block-recoil-damage-ab-attr";
 
 type AbAttrCondition = (pokemon: Pokemon) => boolean;
 

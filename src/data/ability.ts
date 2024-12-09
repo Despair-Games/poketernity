@@ -180,59 +180,6 @@ type PokemonAttackCondition = (user: Pokemon | null, target: Pokemon | null, mov
 type PokemonDefendCondition = (target: Pokemon, user: Pokemon, move: Move) => boolean;
 type PokemonStatStageChangeCondition = (target: Pokemon, statsChanged: BattleStat[], stages: number) => boolean;
 
-// export abstract class AbAttr {
-//   public showAbility: boolean;
-//   private extraCondition: AbAttrCondition;
-
-//   constructor(showAbility: boolean = true) {
-//     this.showAbility = showAbility;
-//   }
-
-//   apply(
-//     _pokemon: Pokemon,
-//     _passive: boolean,
-//     _simulated: boolean,
-//     _cancelled: BooleanHolder | null,
-//     _args: any[],
-//   ): boolean {
-//     return false;
-//   }
-
-//   getTriggerMessage(_pokemon: Pokemon, _abilityName: string, ..._args: any[]): string | null {
-//     return null;
-//   }
-
-//   getCondition(): AbAttrCondition | null {
-//     return this.extraCondition || null;
-//   }
-
-//   addCondition(condition: AbAttrCondition): AbAttr {
-//     this.extraCondition = condition;
-//     return this;
-//   }
-// }
-
-export class BlockRecoilDamageAttr extends AbAttr {
-  override apply(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    cancelled: BooleanHolder,
-    _args: any[],
-  ): boolean {
-    cancelled.value = true;
-
-    return true;
-  }
-
-  override getTriggerMessage(pokemon: Pokemon, abilityName: string, ..._args: any[]) {
-    return i18next.t("abilityTriggers:blockRecoilDamage", {
-      pokemonName: getPokemonNameWithAffix(pokemon),
-      abilityName: abilityName,
-    });
-  }
-}
-
 /**
  * Attribute for abilities that increase the chance of a double battle
  * occurring.
