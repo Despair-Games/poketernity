@@ -13,6 +13,7 @@ import { initAchievements } from "#app/system/achv";
 import { initVouchers } from "#app/system/voucher";
 import { initStatsKeys } from "#app/ui/game-stats-ui-handler";
 import { afterAll, beforeAll, vi } from "vitest";
+import { getAppRootDir } from "#test/testUtils/testUtils";
 
 /** Set the timezone to UTC for tests. */
 process.env.TZ = "UTC";
@@ -44,7 +45,7 @@ vi.mock("i18next", async (importOriginal) => {
       const filename = req.params[0];
 
       try {
-        const json = await import(`../public/locales/en/${req.params[0]}`);
+        const json = await import(`${getAppRootDir()}/public/locales/en/${req.params[0]}`);
         console.log("Loaded locale", filename);
         return HttpResponse.json(json);
       } catch (err) {

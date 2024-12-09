@@ -7,7 +7,7 @@ import type {
   UnlinkAccountFromGoogledIdRequest,
 } from "#app/@types/AdminApi";
 import { AdminApi } from "#app/plugins/api/admin-api";
-import { getApiBaseUrl } from "#test/utils/testUtils";
+import { getApiBaseUrl } from "#test/testUtils/testUtils";
 import { http, HttpResponse } from "msw";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 

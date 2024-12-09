@@ -11,7 +11,7 @@ import {
   achvs,
 } from "#app/system/achv";
 import { NumberHolder } from "#app/utils";
-import GameManager from "#test/utils/gameManager";
+import GameManager from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import BattleScene from "#app/battle-scene";

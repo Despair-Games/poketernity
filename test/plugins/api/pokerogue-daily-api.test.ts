@@ -1,6 +1,6 @@
 import type { GetDailyRankingsPageCountRequest, GetDailyRankingsRequest } from "#app/@types/DailyApi";
 import { DailyApi } from "#app/plugins/api/daily-api";
-import { getApiBaseUrl } from "#test/utils/testUtils";
+import { getApiBaseUrl } from "#test/testUtils/testUtils";
 import { ScoreboardCategory, type RankingEntry } from "#app/ui/daily-run-scoreboard";
 import { http, HttpResponse } from "msw";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";

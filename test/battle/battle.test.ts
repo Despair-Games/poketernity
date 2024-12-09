@@ -16,8 +16,8 @@ import { SwitchPhase } from "#app/phases/switch-phase";
 import { TitlePhase } from "#app/phases/title-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
 import { VictoryPhase } from "#app/phases/victory-phase";
-import GameManager from "#test/utils/gameManager";
-import { generateStarter } from "#test/utils/gameManagerUtils";
+import GameManager from "#test/testUtils/gameManager";
+import { generateStarter } from "#test/testUtils/gameManagerUtils";
 import { Mode } from "#app/ui/ui";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
@@ -26,7 +26,7 @@ import { Species } from "#enums/species";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { Biome } from "#enums/biome";
-import { SAVE_FILE_EXTENSION } from "#app/constants";
+import { EVERYTHING_SAVE_FILE_PATH } from "#test/testUtils/testUtils";
 
 describe("Test Battle Phase", () => {
   let phaserGame: Phaser.Game;
@@ -119,7 +119,7 @@ describe("Test Battle Phase", () => {
   }, 20000);
 
   it("load 100% data file", async () => {
-    await game.importData(`test/utils/saves/everything.${SAVE_FILE_EXTENSION}`);
+    await game.importData(EVERYTHING_SAVE_FILE_PATH);
     const caughtCount = Object.keys(game.scene.gameData.dexData).filter((key) => {
       const species = game.scene.gameData.dexData[key];
       return species.caughtAttr !== 0n;

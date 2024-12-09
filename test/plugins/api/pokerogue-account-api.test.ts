@@ -1,7 +1,7 @@
 import type { AccountInfoResponse } from "#app/@types/AccountApi";
 import { SESSION_ID_COOKIE } from "#app/constants";
 import { AccountApi } from "#app/plugins/api/account-api";
-import { getApiBaseUrl } from "#test/utils/testUtils";
+import { getApiBaseUrl } from "#test/testUtils/testUtils";
 import * as Utils from "#app/utils";
 import { setCookie, removeCookie } from "#app/utils";
 import { http, HttpResponse } from "msw";

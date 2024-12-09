@@ -1,4 +1,4 @@
-import { SAVE_FILE_EXTENSION } from "#app/constants";
+import { EVERYTHING_SAVE_FILE_PATH } from "#test/testUtils/testUtils";
 import { speciesEggTiers } from "#app/data/balance/species-egg-tiers";
 import { Egg, getLegendaryGachaSpeciesForTimestamp, getValidLegendaryGachaSpecies } from "#app/data/egg";
 import { allSpecies } from "#app/data/pokemon-species";
@@ -9,7 +9,7 @@ import EggData from "#app/system/egg-data";
 import * as Utils from "#app/utils";
 import { isNullOrUndefined } from "#app/utils";
 import { Species } from "#enums/species";
-import GameManager from "#test/utils/gameManager";
+import GameManager from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -31,7 +31,7 @@ describe("Egg Generation Tests", () => {
   });
 
   beforeEach(async () => {
-    await game.importData(`test/utils/saves/everything.${SAVE_FILE_EXTENSION}`);
+    await game.importData(EVERYTHING_SAVE_FILE_PATH);
   });
 
   it("should return Kyogre for the 10th of June", () => {

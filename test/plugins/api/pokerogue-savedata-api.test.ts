@@ -1,6 +1,6 @@
 import type { UpdateAllSavedataRequest } from "#app/@types/SavedataApi";
 import { SavedataApi } from "#app/plugins/api/savedata-api";
-import { getApiBaseUrl } from "#test/utils/testUtils";
+import { getApiBaseUrl } from "#test/testUtils/testUtils";
 import { http, HttpResponse } from "msw";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
