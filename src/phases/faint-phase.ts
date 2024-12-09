@@ -10,7 +10,7 @@ import {
   PostVictoryAbAttr,
 } from "#app/data/ability";
 import type { DestinyBondTag, GrudgeTag } from "#app/data/battler-tags";
-import { BattlerTagLapseType } from "#app/data/battler-tags";
+import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { classicFinalBossDialogue } from "#app/data/dialogue";
 import { allMoves, PostVictoryStatStageChangeAttr } from "#app/data/move";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";

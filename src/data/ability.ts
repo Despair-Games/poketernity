@@ -7,7 +7,7 @@ import { BooleanHolder, toDmgValue, randSeedItem, isNullOrUndefined, NumberHolde
 import { getPokemonNameWithAffix } from "../messages";
 import type { Weather } from "#app/data/weather";
 import type { BattlerTag } from "./battler-tags";
-import { BattlerTagLapseType, GroundedTag } from "./battler-tags";
+import { GroundedTag } from "./battler-tags";
 import {
   getNonVolatileStatusEffects,
   getStatusEffectDescriptor,
@@ -73,6 +73,7 @@ import { WeatherType } from "#enums/weather-type";
 import { BattleType } from "#app/enums/battle-type";
 import { HitResult } from "#app/enums/hit-result";
 import { ArenaTagSide } from "#app/enums/arena-tag-side";
+import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 
 export class Ability implements Localizable {
   public id: Abilities;

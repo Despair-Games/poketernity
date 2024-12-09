@@ -119,7 +119,6 @@ import {
 import { reverseCompatibleTms, tmSpecies, tmPoolTiers } from "#app/data/balance/tms";
 import {
   BattlerTag,
-  BattlerTagLapseType,
   EncoreTag,
   GroundedTag,
   HighestStatBoostTag,
@@ -249,6 +248,7 @@ import { Nature } from "#enums/nature";
 import { StatusEffect } from "#enums/status-effect";
 import { doShinySparkleAnim } from "#app/field/anims";
 import { HitResult } from "#app/enums/hit-result";
+import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 
 export enum LearnMoveSituation {
   MISC,

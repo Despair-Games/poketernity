@@ -43,18 +43,7 @@ import { EFFECTIVE_STATS, getStatKey, Stat, type BattleStat, type EffectiveStat 
 import { StatusEffect } from "#enums/status-effect";
 import { WeatherType } from "#enums/weather-type";
 import { HitResult } from "#app/enums/hit-result";
-
-export enum BattlerTagLapseType {
-  FAINT,
-  MOVE,
-  PRE_MOVE,
-  AFTER_MOVE,
-  MOVE_EFFECT,
-  TURN_END,
-  HIT,
-  AFTER_HIT,
-  CUSTOM,
-}
+import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 
 export class BattlerTag {
   public tagType: BattlerTagType;

@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import type { BattlerIndex } from "#enums/battler-index";
-import { BattlerTagLapseType } from "#app/data/battler-tags";
+import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { PokemonPhase } from "./pokemon-phase";
 
 export class MoveEndPhase extends PokemonPhase {

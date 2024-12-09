@@ -13,7 +13,7 @@ import {
 } from "#app/data/ability";
 import type { DelayedAttackTag } from "#app/data/arena-tag";
 import { CommonAnim } from "#app/data/battle-anims";
-import { BattlerTagLapseType, CenterOfAttentionTag } from "#app/data/battler-tags";
+import { CenterOfAttentionTag } from "#app/data/battler-tags";
 import {
   allMoves,
   applyMoveAttrs,
@@ -49,6 +49,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { Moves } from "#enums/moves";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
+import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 
 export class MovePhase extends BattlePhase {
   protected _pokemon: Pokemon;

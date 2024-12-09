@@ -16,13 +16,7 @@ import {
 } from "#app/data/ability";
 import { ArenaTagSide, ConditionalProtectTag } from "#app/data/arena-tag";
 import { MoveAnim } from "#app/data/battle-anims";
-import {
-  BattlerTagLapseType,
-  DamageProtectedTag,
-  ProtectedTag,
-  SemiInvulnerableTag,
-  SubstituteTag,
-} from "#app/data/battler-tags";
+import { DamageProtectedTag, ProtectedTag, SemiInvulnerableTag, SubstituteTag } from "#app/data/battler-tags";
 import type { MoveAttr } from "#app/data/move";
 import {
   applyFilteredMoveAttrs,
@@ -63,6 +57,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import type { Moves } from "#enums/moves";
 import i18next from "i18next";
 import { HitResult } from "#app/enums/hit-result";
+import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 
 export class MoveEffectPhase extends PokemonPhase {
   public move: PokemonMove;
