@@ -16,13 +16,14 @@ import type { EnemyPokemon } from "#app/field/pokemon";
 import { randSeedWeightedItem, randSeedItem, randSeedInt } from "#app/utils";
 import type { PersistentModifier } from "#app/modifier/modifier";
 import { trainerNamePools } from "#app/data/trainer-names";
-import { ArenaTagSide, ArenaTrapTag } from "#app/data/arena-tag";
+import { ArenaTrapTag } from "#app/data/arena-tag";
 import { getIsInitialized, initI18n } from "#app/plugins/i18n";
 import i18next from "i18next";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
 import { TrainerVariant } from "#app/enums/trainer-variant";
+import { ArenaTagSide } from "#app/enums/arena-tag-side";
 
 export default class Trainer extends Phaser.GameObjects.Container {
   public config: TrainerConfig;

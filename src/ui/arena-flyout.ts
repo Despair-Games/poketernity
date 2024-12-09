@@ -1,6 +1,6 @@
 import { addTextObject, TextStyle } from "./text";
 import { globalScene } from "#app/global-scene";
-import { ArenaTagSide, ArenaTrapTag } from "#app/data/arena-tag";
+import { ArenaTrapTag } from "#app/data/arena-tag";
 import { WeatherType } from "#enums/weather-type";
 import { TerrainType } from "#app/data/terrain";
 import { addWindow, WindowVariant } from "./ui-theme";
@@ -19,6 +19,7 @@ import TimeOfDayWidget from "./time-of-day-widget";
 import { toCamelCaseString, formatText, fixedInt } from "#app/utils";
 import type { ParseKeys } from "i18next";
 import i18next from "i18next";
+import { ArenaTagSide } from "#app/enums/arena-tag-side";
 
 /** Enum used to differentiate {@linkcode Arena} effects */
 enum ArenaEffectType {

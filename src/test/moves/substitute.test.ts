@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { ArenaTagSide } from "#app/data/arena-tag";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 import { SubstituteTag, TrappedTag } from "#app/data/battler-tags";
 import { allMoves, StealHeldItemChanceAttr } from "#app/data/move";
 import { MoveResult } from "#app/field/pokemon";

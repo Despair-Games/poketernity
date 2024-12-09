@@ -15,7 +15,7 @@ import { CommonAnim } from "#app/data/battle-anims";
 import type { Type } from "#enums/type";
 import type Move from "#app/data/move";
 import type { ArenaTag } from "#app/data/arena-tag";
-import { ArenaTagSide, ArenaTrapTag, getArenaTag } from "#app/data/arena-tag";
+import { ArenaTrapTag, getArenaTag } from "#app/data/arena-tag";
 import type { BattlerIndex } from "#enums/battler-index";
 import { Terrain, TerrainType } from "#app/data/terrain";
 import {
@@ -40,6 +40,7 @@ import { SpeciesFormChangeRevertWeatherFormTrigger, SpeciesFormChangeWeatherTrig
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { WeatherType } from "#enums/weather-type";
+import { ArenaTagSide } from "#app/enums/arena-tag-side";
 
 export class Arena {
   public biomeType: Biome;

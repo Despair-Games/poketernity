@@ -31,7 +31,7 @@ import {
 } from "#app/utils";
 import { WeatherType } from "#enums/weather-type";
 import type { ArenaTrapTag } from "./arena-tag";
-import { ArenaTagSide, WeakenMoveTypeTag } from "./arena-tag";
+import { WeakenMoveTypeTag } from "./arena-tag";
 import {
   allAbilities,
   AllyMoveCategoryPowerBoostAbAttr,
@@ -108,6 +108,7 @@ import { StatusEffect } from "enums/status-effect";
 import { globalScene } from "#app/global-scene";
 import type { BattlerIndex } from "#app/enums/battler-index";
 import { HitResult } from "#app/enums/hit-result";
+import { ArenaTagSide } from "#app/enums/arena-tag-side";
 
 export enum MoveCategory {
   PHYSICAL,

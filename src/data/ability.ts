@@ -37,7 +37,6 @@ import {
   FixedDamageAttr,
 } from "./move";
 import type { ArenaTrapTag } from "./arena-tag";
-import { ArenaTagSide } from "./arena-tag";
 import { BerryModifier, HitHealModifier, PokemonHeldItemModifier } from "../modifier/modifier";
 import { TerrainType } from "./terrain";
 import {
@@ -73,6 +72,7 @@ import { StatusEffect } from "#enums/status-effect";
 import { WeatherType } from "#enums/weather-type";
 import { BattleType } from "#app/enums/battle-type";
 import { HitResult } from "#app/enums/hit-result";
+import { ArenaTagSide } from "#app/enums/arena-tag-side";
 
 export class Ability implements Localizable {
   public id: Abilities;
