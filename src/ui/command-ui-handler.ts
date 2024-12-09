@@ -48,7 +48,7 @@ export default class CommandUiHandler extends UiHandler {
     }
   }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     super.show(args);
 
     this.fieldIndex = args.length ? (args[0] as integer) : 0;
@@ -153,11 +153,11 @@ export default class CommandUiHandler extends UiHandler {
     return success;
   }
 
-  getCursor(): integer {
+  override getCursor(): integer {
     return !this.fieldIndex ? this.cursor : this.cursor2;
   }
 
-  setCursor(cursor: integer): boolean {
+  override setCursor(cursor: integer): boolean {
     const changed = this.getCursor() !== cursor;
     if (changed) {
       if (!this.fieldIndex) {
@@ -177,7 +177,7 @@ export default class CommandUiHandler extends UiHandler {
     return changed;
   }
 
-  clear(): void {
+  override clear(): void {
     super.clear();
     this.getUi().getMessageHandler().commandWindow.setVisible(false);
     this.commandsContainer.setVisible(false);

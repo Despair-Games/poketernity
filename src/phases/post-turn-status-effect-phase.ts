@@ -10,7 +10,6 @@ import {
 } from "#app/data/ability";
 import { CommonBattleAnim, CommonAnim } from "#app/data/battle-anims";
 import { getStatusEffectActivationText } from "#app/data/status-effect";
-import { BattleSpec } from "#app/enums/battle-spec";
 import { StatusEffect } from "#app/enums/status-effect";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BooleanHolder, NumberHolder } from "#app/utils";
@@ -21,7 +20,7 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
     super(battlerIndex);
   }
 
-  start() {
+  override start() {
     const pokemon = this.getPokemon();
     if (pokemon?.isActive(true) && pokemon.status && pokemon.status.isPostTurn() && !pokemon.switchOutStatus) {
       pokemon.status.incrementTurn();
@@ -60,7 +59,7 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
   }
 
   override end() {
-    if (globalScene.currentBattle.battleSpec === BattleSpec.FINAL_BOSS) {
+    if (globalScene.currentBattle.isClassicFinalBoss) {
       globalScene.initFinalBossPhaseTwo(this.getPokemon());
     } else {
       super.end();

@@ -127,7 +127,7 @@ export class MovePhase extends BattlePhase {
     this.cancelled = true;
   }
 
-  public start(): void {
+  public override start(): void {
     super.start();
 
     console.log(Moves[this.move.moveId]);
@@ -429,7 +429,7 @@ export class MovePhase extends BattlePhase {
    * Queues a {@linkcode MoveEndPhase} if the move wasn't a {@linkcode followUp} and {@linkcode canMove()} returns `true`,
    * then ends the phase.
    */
-  public end(): void {
+  public override end(): void {
     if (!this.followUp && this.canMove()) {
       phaseManager.unshiftPhase(new MoveEndPhase(this.pokemon.getBattlerIndex()));
     }

@@ -23,7 +23,7 @@ export class EggLapsePhase extends Phase {
     super();
   }
 
-  start() {
+  override start() {
     super.start();
     const eggsToHatch: Egg[] = globalScene.gameData.eggs.filter((egg: Egg) => {
       return Overrides.EGG_IMMEDIATE_HATCH_OVERRIDE ? true : --egg.hatchWaves < 1;

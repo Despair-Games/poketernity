@@ -119,7 +119,6 @@ import { UiInputs } from "#app/ui-inputs";
 import { NewArenaEvent } from "#app/events/battle-scene";
 import { ArenaFlyout } from "#app/ui/arena-flyout";
 import { EaseType } from "#enums/ease-type";
-import { BattleSpec } from "#enums/battle-spec";
 import { BattleStyle } from "#enums/battle-style";
 import { Biome } from "#enums/biome";
 import type { ExpNotification } from "#enums/exp-notification";
@@ -131,7 +130,7 @@ import { UiTheme } from "#enums/ui-theme";
 import { TimedEventManager } from "#app/timed-event-manager";
 import i18next from "i18next";
 import { TrainerType } from "#enums/trainer-type";
-import { battleSpecDialogue } from "#app/data/dialogue";
+import { classicFinalBossDialogue } from "#app/data/dialogue";
 import { LoadingScene } from "#app/loading-scene";
 import { LevelCapPhase } from "#app/phases/level-cap-phase";
 import { LoginPhase } from "#app/phases/login-phase";
@@ -469,7 +468,7 @@ export default class BattleScene extends SceneBase {
     this.launchBattle();
   }
 
-  update() {
+  override update() {
     this.ui?.update();
   }
 
@@ -1509,7 +1508,7 @@ export default class BattleScene extends SceneBase {
       const resetArenaState =
         isNewBiome
         || [BattleType.TRAINER, BattleType.MYSTERY_ENCOUNTER].includes(this.currentBattle.battleType)
-        || this.currentBattle.battleSpec === BattleSpec.FINAL_BOSS;
+        || this.currentBattle.isClassicFinalBoss;
       this.getEnemyParty().forEach((enemyPokemon) => enemyPokemon.destroy());
       this.trySpreadPokerus();
       if (!isNewBiome && newWaveIndex % 10 === 5) {
@@ -2802,7 +2801,7 @@ export default class BattleScene extends SceneBase {
 
   generateEnemyModifiers(heldModifiersConfigs?: HeldModifierConfig[][]): Promise<void> {
     return new Promise((resolve) => {
-      if (this.currentBattle.battleSpec === BattleSpec.FINAL_BOSS) {
+      if (this.currentBattle.isClassicFinalBoss) {
         return resolve();
       }
       const difficultyWaveIndex = this.gameMode.getWaveForDifficulty(this.currentBattle.waveIndex);
@@ -3187,31 +3186,26 @@ export default class BattleScene extends SceneBase {
   initFinalBossPhaseTwo(pokemon: Pokemon): void {
     if (pokemon instanceof EnemyPokemon && pokemon.isBoss() && !pokemon.formIndex && pokemon.bossSegmentIndex < 1) {
       this.fadeOutBgm(fixedInt(2000), false);
-      this.ui.showDialogue(
-        battleSpecDialogue[BattleSpec.FINAL_BOSS].firstStageWin,
-        pokemon.species.name,
-        undefined,
-        () => {
-          const finalBossMBH = getModifierType(modifierTypes.MINI_BLACK_HOLE).newModifier(
-            pokemon,
-          ) as TurnHeldItemTransferModifier;
-          finalBossMBH.setTransferrableFalse();
-          this.addEnemyModifier(finalBossMBH, false, true);
-          pokemon.generateAndPopulateMoveset(1);
-          this.setFieldScale(0.75);
-          triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger, false);
-          this.currentBattle.double = true;
-          const availablePartyMembers = this.getPlayerParty().filter((p) => p.isAllowedInBattle());
-          if (availablePartyMembers.length > 1) {
-            phaseManager.pushPhase(new ToggleDoublePositionPhase(true));
-            if (!availablePartyMembers[1].isOnField()) {
-              phaseManager.pushPhase(new SummonPhase(1));
-            }
+      this.ui.showDialogue(classicFinalBossDialogue.firstStageWin, pokemon.species.name, undefined, () => {
+        const finalBossMBH = getModifierType(modifierTypes.MINI_BLACK_HOLE).newModifier(
+          pokemon,
+        ) as TurnHeldItemTransferModifier;
+        finalBossMBH.setTransferrableFalse();
+        this.addEnemyModifier(finalBossMBH, false, true);
+        pokemon.generateAndPopulateMoveset(1);
+        this.setFieldScale(0.75);
+        triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger, false);
+        this.currentBattle.double = true;
+        const availablePartyMembers = this.getPlayerParty().filter((p) => p.isAllowedInBattle());
+        if (availablePartyMembers.length > 1) {
+          phaseManager.pushPhase(new ToggleDoublePositionPhase(true));
+          if (!availablePartyMembers[1].isOnField()) {
+            phaseManager.pushPhase(new SummonPhase(1));
           }
+        }
 
-          phaseManager.shiftPhase();
-        },
-      );
+        phaseManager.shiftPhase();
+      });
       return;
     }
 

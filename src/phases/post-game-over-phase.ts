@@ -13,7 +13,7 @@ export class PostGameOverPhase extends Phase {
     this.endCardPhase = endCardPhase;
   }
 
-  start() {
+  override start() {
     super.start();
 
     const saveAndReset = () => {

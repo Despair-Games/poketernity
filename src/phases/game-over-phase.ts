@@ -43,7 +43,7 @@ export class GameOverPhase extends BattlePhase {
     this.isVictory = isVictory;
   }
 
-  start() {
+  override start() {
     super.start();
 
     // Failsafe if players somehow skip floor 200 in classic mode

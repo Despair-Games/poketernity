@@ -292,7 +292,7 @@ export class Arena {
   trySetWeatherOverride(weather: WeatherType): boolean {
     this.weather = new Weather(weather, 0);
     phaseManager.unshiftPhase(new CommonAnimPhase(undefined, undefined, CommonAnim.SUNNY + (weather - 1)));
-    queueMessage(getWeatherStartMessage(weather)!); // TODO: is this bang correct?
+    queueMessage(getWeatherStartMessage(weather) ?? "");
     return true;
   }
 
@@ -314,15 +314,15 @@ export class Arena {
     const oldWeatherType = this.weather?.weatherType || WeatherType.NONE;
 
     this.weather = weather ? new Weather(weather, hasPokemonSource ? 5 : 0) : null;
-    this.eventTarget.dispatchEvent(
-      new WeatherChangedEvent(oldWeatherType, this.weather?.weatherType!, this.weather?.turnsLeft!),
-    ); // TODO: is this bang correct?
 
     if (this.weather) {
+      this.eventTarget.dispatchEvent(
+        new WeatherChangedEvent(oldWeatherType, this.weather.weatherType, this.weather.turnsLeft),
+      );
       phaseManager.unshiftPhase(new CommonAnimPhase(undefined, undefined, CommonAnim.SUNNY + (weather - 1), true));
-      queueMessage(getWeatherStartMessage(weather)!); // TODO: is this bang correct?
+      queueMessage(getWeatherStartMessage(weather) ?? "");
     } else {
-      queueMessage(getWeatherClearMessage(oldWeatherType)!); // TODO: is this bang correct?
+      queueMessage(getWeatherClearMessage(oldWeatherType) ?? "");
     }
 
     globalScene
@@ -378,17 +378,17 @@ export class Arena {
     const oldTerrainType = this.terrain?.terrainType || TerrainType.NONE;
 
     this.terrain = terrain ? new Terrain(terrain, hasPokemonSource ? 5 : 0) : null;
-    this.eventTarget.dispatchEvent(
-      new TerrainChangedEvent(oldTerrainType, this.terrain?.terrainType!, this.terrain?.turnsLeft!),
-    ); // TODO: are those bangs correct?
 
     if (this.terrain) {
+      this.eventTarget.dispatchEvent(
+        new TerrainChangedEvent(oldTerrainType, this.terrain.terrainType, this.terrain.turnsLeft),
+      );
       if (!ignoreAnim) {
         phaseManager.unshiftPhase(new CommonAnimPhase(undefined, undefined, CommonAnim.MISTY_TERRAIN + (terrain - 1)));
       }
-      queueMessage(getTerrainStartMessage(terrain)!); // TODO: is this bang correct?
+      queueMessage(getTerrainStartMessage(terrain) ?? "");
     } else {
-      queueMessage(getTerrainClearMessage(oldTerrainType)!); // TODO: is this bang correct?
+      queueMessage(getTerrainClearMessage(oldTerrainType) ?? "");
     }
 
     globalScene

@@ -19,7 +19,7 @@ export class AttemptRunPhase extends PokemonPhase {
     super(fieldIndex);
   }
 
-  start() {
+  override start() {
     super.start();
 
     const playerField = globalScene.getPlayerField();

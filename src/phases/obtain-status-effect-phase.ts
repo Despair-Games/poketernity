@@ -28,7 +28,7 @@ export class ObtainStatusEffectPhase extends PokemonPhase {
     this.sourcePokemon = sourcePokemon;
   }
 
-  start() {
+  override start() {
     const pokemon = this.getPokemon();
     if (pokemon && !pokemon.status) {
       if (pokemon.trySetStatus(this.statusEffect, false, this.sourcePokemon)) {

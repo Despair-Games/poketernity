@@ -11,7 +11,7 @@ export class PartyHealPhase extends BattlePhase {
     this.resumeBgm = resumeBgm;
   }
 
-  start() {
+  override start() {
     super.start();
 
     const bgmPlaying = globalScene.isBgmPlaying();

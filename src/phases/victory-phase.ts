@@ -25,7 +25,7 @@ export class VictoryPhase extends PokemonPhase {
     this.isExpOnly = isExpOnly;
   }
 
-  start() {
+  override start() {
     super.start();
 
     const isMysteryEncounter = globalScene.currentBattle.isBattleMysteryEncounter();

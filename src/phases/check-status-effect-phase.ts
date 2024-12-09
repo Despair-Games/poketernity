@@ -11,7 +11,7 @@ export class CheckStatusEffectPhase extends Phase {
     this.order = order;
   }
 
-  start() {
+  override start() {
     const field = globalScene.getField();
     for (const o of this.order) {
       if (field[o].status && field[o].status.isPostTurn()) {

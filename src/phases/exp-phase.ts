@@ -16,7 +16,7 @@ export class ExpPhase extends PlayerPartyMemberPokemonPhase {
     this.expValue = expValue;
   }
 
-  start() {
+  override start() {
     super.start();
 
     const pokemon = this.getPokemon();

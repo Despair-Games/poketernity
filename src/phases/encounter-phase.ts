@@ -30,7 +30,6 @@ import { achvs } from "#app/system/achv";
 import { handleTutorial, Tutorial } from "#app/tutorial";
 import { Mode } from "#app/ui/ui";
 import { randSeedInt, randSeedItem } from "#app/utils";
-import { BattleSpec } from "#enums/battle-spec";
 import { Biome } from "#enums/biome";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { PlayerGender } from "#enums/player-gender";
@@ -49,7 +48,7 @@ export class EncounterPhase extends BattlePhase {
     this.loaded = loaded;
   }
 
-  start() {
+  override start() {
     super.start();
 
     globalScene.updateGameInfo();
@@ -125,7 +124,7 @@ export class EncounterPhase extends BattlePhase {
             TrainerSlot.NONE,
             !!globalScene.getEncounterBossSegments(battle.waveIndex, level, enemySpecies),
           );
-          if (globalScene.currentBattle.battleSpec === BattleSpec.FINAL_BOSS) {
+          if (battle.isClassicFinalBoss) {
             battle.enemyParty[e].ivs = new Array(6).fill(31);
           }
           globalScene
@@ -153,14 +152,7 @@ export class EncounterPhase extends BattlePhase {
       }
 
       if (enemyPokemon.species.speciesId === Species.ETERNATUS) {
-        if (
-          globalScene.gameMode.isClassic
-          && (battle.battleSpec === BattleSpec.FINAL_BOSS || globalScene.gameMode.isWaveFinal(battle.waveIndex))
-        ) {
-          if (battle.battleSpec !== BattleSpec.FINAL_BOSS) {
-            enemyPokemon.formIndex = 1;
-            enemyPokemon.updateScale();
-          }
+        if (battle.isClassicFinalBoss) {
           enemyPokemon.setBoss();
         } else if (!(battle.waveIndex % 1000)) {
           enemyPokemon.formIndex = 1;
@@ -320,7 +312,9 @@ export class EncounterPhase extends BattlePhase {
         fieldIndex < 2 + enemyField.length ? value + 300 : value - 300,
       duration: 2000,
       onComplete: () => {
-        if (!this.tryOverrideForBattleSpec()) {
+        if (globalScene.currentBattle.isClassicFinalBoss) {
+          this.displayFinalBossDialogue();
+        } else {
           this.doEncounterCommon();
         }
       },
@@ -343,7 +337,7 @@ export class EncounterPhase extends BattlePhase {
   getEncounterMessage(): string {
     const enemyField = globalScene.getEnemyField();
 
-    if (globalScene.currentBattle.battleSpec === BattleSpec.FINAL_BOSS) {
+    if (globalScene.currentBattle.isClassicFinalBoss) {
       return i18next.t("battle:bossAppeared", { bossName: getPokemonNameWithAffix(enemyField[0]) });
     }
 
@@ -509,7 +503,7 @@ export class EncounterPhase extends BattlePhase {
     }
   }
 
-  end() {
+  override end() {
     const enemyField = globalScene.getEnemyField();
 
     enemyField.forEach((enemyPokemon, e) => {
@@ -602,44 +596,40 @@ export class EncounterPhase extends BattlePhase {
     handleTutorial(Tutorial.Access_Menu).then(() => super.end());
   }
 
-  tryOverrideForBattleSpec(): boolean {
-    switch (globalScene.currentBattle.battleSpec) {
-      case BattleSpec.FINAL_BOSS:
-        const enemy = globalScene.getEnemyPokemon();
-        globalScene.ui.showText(
-          this.getEncounterMessage(),
-          null,
-          () => {
-            const localizationKey = "battleSpecDialogue:encounter";
-            if (globalScene.ui.shouldSkipDialogue(localizationKey)) {
-              // Logging mirrors logging found in dialogue-ui-handler
-              console.log(`Dialogue ${localizationKey} skipped`);
-              this.doEncounterCommon(false);
-            } else {
-              const count = 5643853 + globalScene.gameData.gameStats.classicSessionsPlayed;
-              // The line below checks if an English ordinal is necessary or not based on whether an entry for encounterLocalizationKey exists in the language or not.
-              const ordinalUsed =
-                !i18next.exists(localizationKey, { fallbackLng: [] }) || i18next.resolvedLanguage === "en"
-                  ? i18next.t("battleSpecDialogue:key", { count: count, ordinal: true })
-                  : "";
-              const cycleCount = count.toLocaleString() + ordinalUsed;
-              const genderIndex = globalScene.gameData.gender ?? PlayerGender.UNSET;
-              const genderStr = PlayerGender[genderIndex].toLowerCase();
-              const encounterDialogue = i18next.t(localizationKey, { context: genderStr, cycleCount: cycleCount });
-              if (!globalScene.gameData.getSeenDialogues()[localizationKey]) {
-                globalScene.gameData.saveSeenDialogue(localizationKey);
-              }
-              globalScene.ui.showDialogue(encounterDialogue, enemy?.species.name, null, () => {
-                this.doEncounterCommon(false);
-              });
-            }
-          },
-          1500,
-          true,
-        );
-        return true;
-    }
-    return false;
+  public displayFinalBossDialogue(): void {
+    const enemy = globalScene.getEnemyPokemon();
+    const { gameData, ui } = globalScene;
+    ui.showText(
+      this.getEncounterMessage(),
+      null,
+      () => {
+        const localizationKey = "battleSpecDialogue:encounter";
+        if (ui.shouldSkipDialogue(localizationKey)) {
+          // Logging mirrors logging found in dialogue-ui-handler
+          console.log(`Dialogue ${localizationKey} skipped`);
+          this.doEncounterCommon(false);
+        } else {
+          const count = 5643853 + gameData.gameStats.classicSessionsPlayed;
+          // The line below checks if an English ordinal is necessary or not based on whether an entry for encounterLocalizationKey exists in the language or not.
+          const ordinalUsed =
+            !i18next.exists(localizationKey, { fallbackLng: [] }) || i18next.resolvedLanguage === "en"
+              ? i18next.t("battleSpecDialogue:key", { count: count, ordinal: true })
+              : "";
+          const cycleCount = count.toLocaleString() + ordinalUsed;
+          const genderIndex = gameData.gender ?? PlayerGender.UNSET;
+          const genderStr = PlayerGender[genderIndex].toLowerCase();
+          const encounterDialogue = i18next.t(localizationKey, { context: genderStr, cycleCount: cycleCount });
+          if (!gameData.getSeenDialogues()[localizationKey]) {
+            gameData.saveSeenDialogue(localizationKey);
+          }
+          ui.showDialogue(encounterDialogue, enemy?.species.name, null, () => {
+            this.doEncounterCommon(false);
+          });
+        }
+      },
+      1500,
+      true,
+    );
   }
 
   /**

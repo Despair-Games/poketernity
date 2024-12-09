@@ -24,18 +24,18 @@ export class FormChangePhase extends EvolutionPhase {
     this.modal = modal;
   }
 
-  validate(): boolean {
+  override validate(): boolean {
     return !!this.formChange;
   }
 
-  setMode(): Promise<void> {
+  override setMode(): Promise<void> {
     if (!this.modal) {
       return super.setMode();
     }
     return globalScene.ui.setOverlayMode(Mode.EVOLUTION_SCENE);
   }
 
-  doEvolution(): void {
+  override doEvolution(): void {
     const preName = getPokemonNameWithAffix(this.pokemon);
 
     this.pokemon.getPossibleForm(this.formChange).then((transformedPokemon) => {
@@ -178,7 +178,7 @@ export class FormChangePhase extends EvolutionPhase {
     });
   }
 
-  end(): void {
+  override end(): void {
     this.pokemon.findAndRemoveTags((t) => t.tagType === BattlerTagType.AUTOTOMIZED);
     if (this.modal) {
       globalScene.ui.revertMode().then(() => {

@@ -42,7 +42,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
     this.cost = cost;
   }
 
-  start() {
+  override start() {
     super.start();
 
     const pokemon = this.getPokemon();

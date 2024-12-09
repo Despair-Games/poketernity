@@ -39,11 +39,11 @@ export class SwitchSummonPhase extends SummonPhase {
     this.doReturn = doReturn;
   }
 
-  start(): void {
+  override start(): void {
     super.start();
   }
 
-  preSummon(): void {
+  override preSummon(): void {
     if (!this.player) {
       if (this.slotIndex === -1) {
         //@ts-ignore
@@ -197,7 +197,7 @@ export class SwitchSummonPhase extends SummonPhase {
     }
   }
 
-  onEnd(): void {
+  override onEnd(): void {
     super.onEnd();
 
     const pokemon = this.getPokemon();
@@ -243,7 +243,7 @@ export class SwitchSummonPhase extends SummonPhase {
     globalScene.arena.triggerWeatherBasedFormChanges();
   }
 
-  queuePostSummon(): void {
+  override queuePostSummon(): void {
     phaseManager.unshiftPhase(new PostSummonPhase(this.getPokemon().getBattlerIndex()));
   }
 }

@@ -34,7 +34,7 @@ export default class EggHatchSceneHandler extends UiHandler {
     }
   }
 
-  show(_args: any[]): boolean {
+  override show(_args: any[]): boolean {
     super.show(_args);
 
     this.getUi().showText("", 0);
@@ -55,11 +55,11 @@ export default class EggHatchSceneHandler extends UiHandler {
     return globalScene.ui.getMessageHandler().processInput(button);
   }
 
-  setCursor(_cursor: integer): boolean {
+  override setCursor(_cursor: integer): boolean {
     return false;
   }
 
-  clear() {
+  override clear() {
     super.clear();
     this.eggHatchContainer.removeAll(true);
     this.getUi().hideTooltip();

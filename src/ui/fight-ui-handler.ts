@@ -116,7 +116,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
     globalScene.addInfoToggle(this);
   }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     super.show(args);
 
     this.fieldIndex = args.length ? (args[0] as integer) : 0;
@@ -212,11 +212,11 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
     return this.active;
   }
 
-  getCursor(): integer {
+  override getCursor(): integer {
     return !this.fieldIndex ? this.cursor : this.cursor2;
   }
 
-  setCursor(cursor: integer): boolean {
+  override setCursor(cursor: integer): boolean {
     const ui = this.getUi();
 
     this.moveInfoOverlay.clear();
@@ -355,7 +355,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
     return moveColors[0];
   }
 
-  clear() {
+  override clear() {
     super.clear();
     const messageHandler = this.getUi().getMessageHandler();
     this.clearMoves();

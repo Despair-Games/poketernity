@@ -65,7 +65,7 @@ export default class BallUiHandler extends UiHandler {
     this.setCursor(0);
   }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     super.show(args);
 
     this.updateCounts();
@@ -125,7 +125,7 @@ export default class BallUiHandler extends UiHandler {
     );
   }
 
-  setCursor(cursor: integer): boolean {
+  override setCursor(cursor: integer): boolean {
     const ret = super.setCursor(cursor);
 
     if (!this.cursorObj) {
@@ -139,7 +139,7 @@ export default class BallUiHandler extends UiHandler {
     return ret;
   }
 
-  clear() {
+  override clear() {
     super.clear();
     this.pokeballSelectContainer.setVisible(false);
     this.eraseCursor();

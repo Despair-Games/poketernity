@@ -25,7 +25,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
     this.loaded = loaded;
   }
 
-  start() {
+  override start() {
     super.start();
 
     this.preSummon();
@@ -282,7 +282,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
     phaseManager.pushPhase(new PostSummonPhase(this.getPokemon().getBattlerIndex()));
   }
 
-  end() {
+  override end() {
     this.onEnd();
 
     super.end();

@@ -44,7 +44,7 @@ export class PokemonHealPhase extends CommonAnimPhase {
     this.preventFullHeal = preventFullHeal;
   }
 
-  start() {
+  override start() {
     if (!this.skipAnim && (this.revive || this.getPokemon().hp) && !this.getPokemon().isFullHp()) {
       super.start();
     } else {
@@ -52,7 +52,7 @@ export class PokemonHealPhase extends CommonAnimPhase {
     }
   }
 
-  end() {
+  override end() {
     const pokemon = this.getPokemon();
 
     if (!pokemon.isOnField() || (!this.revive && !pokemon.isActive())) {

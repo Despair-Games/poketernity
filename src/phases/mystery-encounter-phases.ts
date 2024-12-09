@@ -13,7 +13,6 @@ import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { SummonPhase } from "#app/phases/summon-phase";
 import { SwitchPhase } from "#app/phases/switch-phase";
 import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
-import { BattleSpec } from "#enums/battle-spec";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { SwitchType } from "#enums/switch-type";
@@ -55,7 +54,7 @@ export class MysteryEncounterPhase extends Phase {
   /**
    * Updates seed offset, sets seen encounter session data, sets UI mode
    */
-  start() {
+  override start() {
     super.start();
 
     // Clears out queued phases that are part of standard battle
@@ -168,7 +167,7 @@ export class MysteryEncounterPhase extends Phase {
   /**
    * Ends phase
    */
-  end() {
+  override end() {
     globalScene.ui.setMode(Mode.MESSAGE).then(() => super.end());
   }
 }
@@ -195,7 +194,7 @@ export class MysteryEncounterOptionSelectedPhase extends Phase {
    * It is important to point out that no phases are directly queued by any logic within this phase.
    * Any phase that is meant to follow this one MUST be queued via the {@linkcode MysteryEncounter.onOptionSelect} logic of the selected option.
    */
-  start() {
+  override start() {
     super.start();
     if (globalScene.currentBattle.mysteryEncounter?.autoHideIntroVisuals) {
       transitionMysteryEncounterIntroVisuals().then(() => {
@@ -229,7 +228,7 @@ export class MysteryEncounterBattleStartCleanupPhase extends Phase {
   /**
    * Cleans up `TURN_END` tags, any {@linkcode PostTurnStatusEffectPhase}s, checks for Pokemon switches, then continues
    */
-  start() {
+  override start() {
     super.start();
 
     // Lapse any residual flinches/endures but ignore all other turn-end battle tags
@@ -300,7 +299,7 @@ export class MysteryEncounterBattlePhase extends Phase {
   /**
    * Sets up a ME battle
    */
-  start() {
+  override start() {
     super.start();
 
     this.doMysteryEncounterBattle();
@@ -315,7 +314,7 @@ export class MysteryEncounterBattlePhase extends Phase {
     const enemyField = globalScene.getEnemyField();
     const encounterMode = globalScene.currentBattle.mysteryEncounter!.encounterMode;
 
-    if (globalScene.currentBattle.battleSpec === BattleSpec.FINAL_BOSS) {
+    if (globalScene.currentBattle.isClassicFinalBoss) {
       return i18next.t("battle:bossAppeared", { bossName: enemyField[0].name });
     }
 
@@ -532,7 +531,7 @@ export class MysteryEncounterRewardsPhase extends Phase {
   /**
    * Runs {@linkcode MysteryEncounter.doContinueEncounter} and ends phase, OR {@linkcode MysteryEncounter.onRewards} then continues encounter
    */
-  start() {
+  override start() {
     super.start();
     const encounter = globalScene.currentBattle.mysteryEncounter!;
 
@@ -595,7 +594,7 @@ export class PostMysteryEncounterPhase extends Phase {
   /**
    * Runs {@linkcode MysteryEncounter.onPostOptionSelect} then continues encounter
    */
-  start() {
+  override start() {
     super.start();
 
     if (this.onPostOptionSelect) {

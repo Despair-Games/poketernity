@@ -10,7 +10,7 @@ export default class GamepadBindingUiHandler extends AbstractBindingUiHandler {
     super(mode);
     globalScene.input.gamepad?.on("down", this.gamepadButtonDown, this);
   }
-  setup() {
+  override setup() {
     super.setup();
 
     // New button icon setup.
@@ -82,7 +82,7 @@ export default class GamepadBindingUiHandler extends AbstractBindingUiHandler {
   /**
    * Clear the UI elements and state.
    */
-  clear() {
+  override clear() {
     super.clear();
     this.targetButtonIcon.setVisible(false);
     this.swapText.setVisible(false);

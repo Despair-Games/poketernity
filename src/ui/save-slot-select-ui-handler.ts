@@ -80,7 +80,7 @@ export default class SaveSlotSelectUiHandler extends MessageUiHandler {
     this.sessionSlots = [];
   }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     if (args.length < 2 || !(args[1] instanceof Function)) {
       return false;
     }
@@ -217,7 +217,7 @@ export default class SaveSlotSelectUiHandler extends MessageUiHandler {
     }
   }
 
-  showText(
+  override showText(
     text: string,
     delay?: integer,
     callback?: Function,
@@ -333,7 +333,7 @@ export default class SaveSlotSelectUiHandler extends MessageUiHandler {
     return changed;
   }
 
-  clear() {
+  override clear() {
     super.clear();
     this.saveSlotSelectContainer.setVisible(false);
     this.setScrollCursor(0);

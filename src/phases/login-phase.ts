@@ -20,7 +20,7 @@ export class LoginPhase extends Phase {
     this.showText = showText;
   }
 
-  start(): void {
+  override start(): void {
     super.start();
 
     const hasSession = !!getCookie(SESSION_ID_COOKIE);
@@ -111,7 +111,7 @@ export class LoginPhase extends Phase {
     });
   }
 
-  end(): void {
+  override end(): void {
     globalScene.ui.setMode(Mode.MESSAGE);
 
     if (!globalScene.gameData.gender) {

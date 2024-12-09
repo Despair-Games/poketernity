@@ -18,7 +18,7 @@ export class TrainerVictoryPhase extends BattlePhase {
     super();
   }
 
-  start() {
+  override start() {
     globalScene.disableMenu = true;
 
     globalScene.playBgm(globalScene.currentBattle.trainer?.config.victoryBgm);

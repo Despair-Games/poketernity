@@ -33,7 +33,7 @@ export class TitlePhase extends Phase {
   private lastSessionData: SessionSaveData;
   public gameMode: GameModes;
 
-  start(): void {
+  override start(): void {
     super.start();
 
     globalScene.ui.clearText();
@@ -288,7 +288,7 @@ export class TitlePhase extends Phase {
     });
   }
 
-  end(): void {
+  override end(): void {
     if (!this.loaded && !globalScene.gameMode.isDaily) {
       globalScene.arena.preloadBgm();
       globalScene.gameMode = getGameMode(this.gameMode);
