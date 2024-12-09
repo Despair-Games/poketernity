@@ -13,9 +13,9 @@ import { globalScene } from "#app/global-scene";
 
 export class Weather {
   public weatherType: WeatherType;
-  public turnsLeft: integer;
+  public turnsLeft: number;
 
-  constructor(weatherType: WeatherType, turnsLeft?: integer) {
+  constructor(weatherType: WeatherType, turnsLeft?: number) {
     this.weatherType = weatherType;
     this.turnsLeft = !this.isImmutable() ? turnsLeft || 0 : 0;
   }
@@ -252,7 +252,7 @@ export function getTerrainBlockMessage(pokemon: Pokemon, terrainType: TerrainTyp
 
 interface WeatherPoolEntry {
   weatherType: WeatherType;
-  weight: integer;
+  weight: number;
 }
 
 export function getRandomWeatherType(arena: any /* Importing from arena causes a circular dependency */): WeatherType {

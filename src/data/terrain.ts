@@ -15,9 +15,9 @@ export enum TerrainType {
 
 export class Terrain {
   public terrainType: TerrainType;
-  public turnsLeft: integer;
+  public turnsLeft: number;
 
-  constructor(terrainType: TerrainType, turnsLeft?: integer) {
+  constructor(terrainType: TerrainType, turnsLeft?: number) {
     this.terrainType = terrainType;
     this.turnsLeft = turnsLeft || 0;
   }
@@ -83,7 +83,7 @@ export function getTerrainName(terrainType: TerrainType): string {
   return "";
 }
 
-export function getTerrainColor(terrainType: TerrainType): [integer, integer, integer] {
+export function getTerrainColor(terrainType: TerrainType): [number, number, number] {
   switch (terrainType) {
     case TerrainType.MISTY:
       return [232, 136, 200];

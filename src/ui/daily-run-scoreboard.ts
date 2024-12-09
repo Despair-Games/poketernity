@@ -7,10 +7,10 @@ import { WindowVariant, addWindow } from "./ui-theme";
 import { api } from "#app/plugins/api/api";
 
 export interface RankingEntry {
-  rank: integer;
+  rank: number;
   username: string;
-  score: integer;
-  wave: integer;
+  score: number;
+  wave: number;
 }
 
 // Don't forget to update translations when adding a new category
@@ -29,8 +29,8 @@ export class DailyRunScoreboard extends Phaser.GameObjects.Container {
   private pageNumberLabel: Phaser.GameObjects.Text;
   private nextPageButton: Phaser.GameObjects.Sprite;
 
-  private pageCount: integer;
-  private page: integer;
+  private pageCount: number;
+  private page: number;
   private category: ScoreboardCategory;
 
   private _isUpdating: boolean;
@@ -185,7 +185,7 @@ export class DailyRunScoreboard extends Phaser.GameObjects.Container {
       ),
     );
 
-    rankings.forEach((r: RankingEntry, i: integer) => {
+    rankings.forEach((r: RankingEntry, i: number) => {
       const entryContainer = getEntry(r.rank.toString(), r.username, r.score.toString(), r.wave.toString());
       entryContainer.setY((i + 1) * 9);
       this.rankingsContainer.add(entryContainer);
@@ -204,7 +204,7 @@ export class DailyRunScoreboard extends Phaser.GameObjects.Container {
    * @param {ScoreboardCategory} [category=this.category] - The category to fetch rankings for. Defaults to the current category.
    * @param {number} [page=this.page] - The page number to fetch. Defaults to the current page.
    */
-  override update(category: ScoreboardCategory = this.category, page: integer = this.page) {
+  override update(category: ScoreboardCategory = this.category, page: number = this.page) {
     if (this.isUpdating) {
       return;
     }

@@ -82,7 +82,7 @@ export default class EvolutionSceneHandler extends MessageUiHandler {
     return false;
   }
 
-  override setCursor(_cursor: integer): boolean {
+  override setCursor(_cursor: number): boolean {
     return false;
   }
 

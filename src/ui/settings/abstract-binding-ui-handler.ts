@@ -219,7 +219,7 @@ export default abstract class AbstractBindingUiHandler extends UiHandler {
    * @param cursor - The cursor position to set.
    * @returns `true` if the cursor was set successfully.
    */
-  override setCursor(cursor: integer): boolean {
+  override setCursor(cursor: number): boolean {
     this.cursor = cursor;
     if (cursor === 1) {
       this.actionLabel.setColor(this.getTextColor(TextStyle.SETTINGS_SELECTED));

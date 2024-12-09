@@ -105,15 +105,15 @@ export enum CommonAnim {
 }
 
 export class AnimConfig {
-  public id: integer;
+  public id: number;
   public graphic: string;
   public frames: AnimFrame[][];
-  public frameTimedEvents: Map<integer, AnimTimedEvent[]>;
-  public position: integer;
-  public hue: integer;
+  public frameTimedEvents: Map<number, AnimTimedEvent[]>;
+  public position: number;
+  public hue: number;
 
   constructor(source?: any) {
-    this.frameTimedEvents = new Map<integer, AnimTimedEvent[]>();
+    this.frameTimedEvents = new Map<number, AnimTimedEvent[]>();
 
     if (source) {
       this.id = source.id;
@@ -194,13 +194,13 @@ class AnimFrame {
   public visible: boolean;
   public blendType: AnimBlendType;
   public target: AnimFrameTarget;
-  public graphicFrame: integer;
-  public opacity: integer;
-  public color: integer[];
-  public tone: integer[];
-  public flash: integer[];
+  public graphicFrame: number;
+  public opacity: number;
+  public color: number[];
+  public tone: number[];
+  public flash: number[];
   public locked: boolean;
-  public priority: integer;
+  public priority: number;
   public focus: AnimFocus;
 
   constructor(
@@ -212,22 +212,22 @@ class AnimFrame {
     mirror: boolean,
     visible: boolean,
     blendType: AnimBlendType,
-    pattern: integer,
-    opacity: integer,
-    colorR: integer,
-    colorG: integer,
-    colorB: integer,
-    colorA: integer,
-    toneR: integer,
-    toneG: integer,
-    toneB: integer,
-    toneA: integer,
-    flashR: integer,
-    flashG: integer,
-    flashB: integer,
-    flashA: integer,
+    pattern: number,
+    opacity: number,
+    colorR: number,
+    colorG: number,
+    colorB: number,
+    colorA: number,
+    toneR: number,
+    toneG: number,
+    toneB: number,
+    toneA: number,
+    flashR: number,
+    flashG: number,
+    flashB: number,
+    flashA: number,
     locked: boolean,
-    priority: integer,
+    priority: number,
     focus: AnimFocus,
     init?: boolean,
   ) {
@@ -312,9 +312,9 @@ class AnimFrame {
 
 class ImportedAnimFrame extends AnimFrame {
   constructor(source: any) {
-    const color: integer[] = source.color || [0, 0, 0, 0];
-    const tone: integer[] = source.tone || [0, 0, 0, 0];
-    const flash: integer[] = source.flash || [0, 0, 0, 0];
+    const color: number[] = source.color || [0, 0, 0, 0];
+    const tone: number[] = source.tone || [0, 0, 0, 0];
+    const flash: number[] = source.flash || [0, 0, 0, 0];
     super(
       source.x,
       source.y,
@@ -349,15 +349,15 @@ class ImportedAnimFrame extends AnimFrame {
 }
 
 abstract class AnimTimedEvent {
-  public frameIndex: integer;
+  public frameIndex: number;
   public resourceName: string;
 
-  constructor(frameIndex: integer, resourceName: string) {
+  constructor(frameIndex: number, resourceName: string) {
     this.frameIndex = frameIndex;
     this.resourceName = resourceName;
   }
 
-  abstract execute(battleAnim: BattleAnim, priority?: number): integer;
+  abstract execute(battleAnim: BattleAnim, priority?: number): number;
 
   abstract getEventType(): string;
 }
@@ -366,7 +366,7 @@ class AnimTimedSoundEvent extends AnimTimedEvent {
   public volume: number = 100;
   public pitch: number = 100;
 
-  constructor(frameIndex: integer, resourceName: string, source?: any) {
+  constructor(frameIndex: number, resourceName: string, source?: any) {
     super(frameIndex, resourceName);
 
     if (source) {
@@ -375,7 +375,7 @@ class AnimTimedSoundEvent extends AnimTimedEvent {
     }
   }
 
-  execute(battleAnim: BattleAnim, _priority?: number): integer {
+  execute(battleAnim: BattleAnim, _priority?: number): number {
     const soundConfig = { rate: this.pitch * 0.01, volume: this.volume * 0.01 };
     if (this.resourceName) {
       try {
@@ -397,12 +397,12 @@ class AnimTimedSoundEvent extends AnimTimedEvent {
 abstract class AnimTimedBgEvent extends AnimTimedEvent {
   public bgX: number = 0;
   public bgY: number = 0;
-  public opacity: integer = 0;
+  public opacity: number = 0;
   /*public colorRed: integer = 0;
     public colorGreen: integer = 0;
     public colorBlue: integer = 0;
     public colorAlpha: integer = 0;*/
-  public duration: integer = 0;
+  public duration: number = 0;
   /*public flashScope: integer = 0;
     public flashRed: integer = 0;
     public flashGreen: integer = 0;
@@ -410,7 +410,7 @@ abstract class AnimTimedBgEvent extends AnimTimedEvent {
     public flashAlpha: integer = 0;
     public flashDuration: integer = 0;*/
 
-  constructor(frameIndex: integer, resourceName: string, source: any) {
+  constructor(frameIndex: number, resourceName: string, source: any) {
     super(frameIndex, resourceName);
 
     if (source) {
@@ -433,11 +433,11 @@ abstract class AnimTimedBgEvent extends AnimTimedEvent {
 }
 
 class AnimTimedUpdateBgEvent extends AnimTimedBgEvent {
-  constructor(frameIndex: integer, resourceName: string, source?: any) {
+  constructor(frameIndex: number, resourceName: string, source?: any) {
     super(frameIndex, resourceName, source);
   }
 
-  execute(moveAnim: MoveAnim, _priority?: number): integer {
+  execute(moveAnim: MoveAnim, _priority?: number): number {
     const tweenProps = {};
     if (this.bgX !== undefined) {
       tweenProps["x"] = this.bgX * 0.5 - 320;
@@ -468,11 +468,11 @@ class AnimTimedUpdateBgEvent extends AnimTimedBgEvent {
 }
 
 class AnimTimedAddBgEvent extends AnimTimedBgEvent {
-  constructor(frameIndex: integer, resourceName: string, source?: any) {
+  constructor(frameIndex: number, resourceName: string, source?: any) {
     super(frameIndex, resourceName, source);
   }
 
-  execute(moveAnim: MoveAnim, priority?: number): integer {
+  execute(moveAnim: MoveAnim, priority?: number): number {
     if (moveAnim.bgSprite) {
       moveAnim.bgSprite.destroy();
     }
@@ -823,7 +823,7 @@ function isReversed(src1: number, src2: number, dst1: number, dst2: number) {
 }
 
 interface SpriteCache {
-  [key: integer]: Phaser.GameObjects.Sprite[];
+  [key: number]: Phaser.GameObjects.Sprite[];
 }
 
 export abstract class BattleAnim {
@@ -863,8 +863,8 @@ export abstract class BattleAnim {
   private getGraphicFrameData(
     frames: AnimFrame[],
     onSubstitute?: boolean,
-  ): Map<integer, Map<AnimFrameTarget, GraphicFrameData>> {
-    const ret: Map<integer, Map<AnimFrameTarget, GraphicFrameData>> = new Map([
+  ): Map<number, Map<AnimFrameTarget, GraphicFrameData>> {
+    const ret: Map<number, Map<AnimFrameTarget, GraphicFrameData>> = new Map([
       [AnimFrameTarget.GRAPHIC, new Map<AnimFrameTarget, GraphicFrameData>()],
       [AnimFrameTarget.USER, new Map<AnimFrameTarget, GraphicFrameData>()],
       [AnimFrameTarget.TARGET, new Map<AnimFrameTarget, GraphicFrameData>()],
@@ -955,7 +955,7 @@ export abstract class BattleAnim {
       [AnimFrameTarget.USER]: [],
       [AnimFrameTarget.TARGET]: [],
     };
-    const spritePriorities: integer[] = [];
+    const spritePriorities: number[] = [];
 
     const cleanUpAndComplete = () => {
       userSprite.setPosition(0, 0);
@@ -1117,7 +1117,7 @@ export abstract class BattleAnim {
             const moveSprite = sprites[graphicIndex];
             if (spritePriorities[graphicIndex] !== frame.priority) {
               spritePriorities[graphicIndex] = frame.priority;
-              const setSpritePriority = (priority: integer) => {
+              const setSpritePriority = (priority: number) => {
                 switch (priority) {
                   case 0:
                     globalScene.field.moveBelow(
@@ -1231,8 +1231,8 @@ export abstract class BattleAnim {
     frames: AnimFrame[],
     targetInitialX: number,
     targetInitialY: number,
-  ): Map<integer, Map<AnimFrameTarget, GraphicFrameData>> {
-    const ret: Map<integer, Map<AnimFrameTarget, GraphicFrameData>> = new Map([
+  ): Map<number, Map<AnimFrameTarget, GraphicFrameData>> {
+    const ret: Map<number, Map<AnimFrameTarget, GraphicFrameData>> = new Map([
       [AnimFrameTarget.GRAPHIC, new Map<AnimFrameTarget, GraphicFrameData>()],
       [AnimFrameTarget.USER, new Map<AnimFrameTarget, GraphicFrameData>()],
       [AnimFrameTarget.TARGET, new Map<AnimFrameTarget, GraphicFrameData>()],
@@ -1338,7 +1338,7 @@ export abstract class BattleAnim {
           const graphicIndex = graphicFrameCount++;
           const moveSprite = sprites[graphicIndex];
           if (!isNullOrUndefined(frame.priority)) {
-            const setSpritePriority = (priority: integer) => {
+            const setSpritePriority = (priority: number) => {
               if (existingFieldSprites.length > priority) {
                 // Move to specified priority index
                 const index = globalScene.field.getIndex(existingFieldSprites[priority]);

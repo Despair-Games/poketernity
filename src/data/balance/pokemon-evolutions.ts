@@ -79,9 +79,9 @@ export enum EvolutionItem {
 /**
  * Pokemon Evolution tuple type consisting of:
  * @property 0 {@linkcode Species} The species of the Pokemon.
- * @property 1 {@linkcode integer} The level at which the Pokemon evolves.
+ * @property 1 {@linkcode number} The level at which the Pokemon evolves.
  */
-export type EvolutionLevel = [species: Species, level: integer];
+export type EvolutionLevel = [species: Species, level: number];
 
 export type EvolutionConditionPredicate = (p: Pokemon) => boolean;
 export type EvolutionConditionEnforceFunc = (p: Pokemon) => void;
@@ -90,7 +90,7 @@ export class SpeciesFormEvolution {
   public speciesId: Species;
   public preFormKey: string | null;
   public evoFormKey: string | null;
-  public level: integer;
+  public level: number;
   public item: EvolutionItem | null;
   public condition: SpeciesEvolutionCondition | null;
   public wildDelay: SpeciesWildEvolutionDelay;
@@ -99,7 +99,7 @@ export class SpeciesFormEvolution {
     speciesId: Species,
     preFormKey: string | null,
     evoFormKey: string | null,
-    level: integer,
+    level: number,
     item: EvolutionItem | null,
     condition: SpeciesEvolutionCondition | null,
     wildDelay?: SpeciesWildEvolutionDelay,
@@ -117,7 +117,7 @@ export class SpeciesFormEvolution {
 export class SpeciesEvolution extends SpeciesFormEvolution {
   constructor(
     speciesId: Species,
-    level: integer,
+    level: number,
     item: EvolutionItem | null,
     condition: SpeciesEvolutionCondition | null,
     wildDelay?: SpeciesWildEvolutionDelay,
@@ -156,7 +156,7 @@ export class SpeciesEvolutionCondition {
 
 export class SpeciesFriendshipEvolutionCondition extends SpeciesEvolutionCondition {
   constructor(
-    friendshipAmount: integer,
+    friendshipAmount: number,
     predicate?: EvolutionConditionPredicate,
     enforceFunc?: EvolutionConditionEnforceFunc,
   ) {

@@ -54,7 +54,7 @@ export default class EggHatchSceneHandler extends UiHandler {
     return globalScene.ui.getMessageHandler().processInput(button);
   }
 
-  override setCursor(_cursor: integer): boolean {
+  override setCursor(_cursor: number): boolean {
     return false;
   }
 

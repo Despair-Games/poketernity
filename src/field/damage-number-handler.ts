@@ -17,7 +17,7 @@ export default class DamageNumberHandler {
 
   add(
     target: Pokemon,
-    amount: integer,
+    amount: number,
     result: DamageResult | HitResult.HEAL = HitResult.EFFECTIVE,
     critical: boolean = false,
   ): void {

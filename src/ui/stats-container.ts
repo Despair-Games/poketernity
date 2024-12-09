@@ -23,7 +23,7 @@ const defaultIvChartData = new Array(12).fill(null).map(() => 0);
 
 export class StatsContainer extends Phaser.GameObjects.Container {
   private showDiff: boolean;
-  private statsIvsCache: integer[];
+  private statsIvsCache: number[];
   private ivChart: Phaser.GameObjects.Polygon;
   private ivStatValueTexts: BBCodeText[];
 
@@ -39,7 +39,7 @@ export class StatsContainer extends Phaser.GameObjects.Container {
     this.setName("stats");
     const ivChartBgData = new Array(6)
       .fill(null)
-      .map((_, i: integer) => [
+      .map((_, i: number) => [
         ivChartSize * ivChartStatCoordMultipliers[ivChartStatIndexes[i]][0],
         ivChartSize * ivChartStatCoordMultipliers[ivChartStatIndexes[i]][1],
       ])
@@ -104,7 +104,7 @@ export class StatsContainer extends Phaser.GameObjects.Container {
     }
   }
 
-  updateIvs(ivs: integer[], originalIvs?: integer[]): void {
+  updateIvs(ivs: number[], originalIvs?: number[]): void {
     if (ivs) {
       const ivChartData = new Array(6)
         .fill(null)
@@ -117,7 +117,7 @@ export class StatsContainer extends Phaser.GameObjects.Container {
       const perfectIVColor: string = getTextColor(TextStyle.SUMMARY_GOLD, false, globalScene.uiTheme);
       this.statsIvsCache = ivChartData.slice(0);
 
-      this.ivStatValueTexts.map((t: BBCodeText, i: integer) => {
+      this.ivStatValueTexts.map((t: BBCodeText, i: number) => {
         let label = "";
 
         // Check to see if IVs are 31, if so change the text style to gold, otherwise leave them be.
@@ -151,7 +151,7 @@ export class StatsContainer extends Phaser.GameObjects.Container {
         onUpdate: (tween: Phaser.Tweens.Tween) => {
           const progress = tween.getValue();
           const interpolatedData = ivChartData.map(
-            (v: number, i: integer) => v * progress + lastIvChartData[i] * (1 - progress),
+            (v: number, i: number) => v * progress + lastIvChartData[i] * (1 - progress),
           );
           if (interpolateColor) {
             this.ivChart.setFillStyle(

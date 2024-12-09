@@ -265,45 +265,45 @@ export enum FieldPosition {
 }
 
 export default abstract class Pokemon extends Phaser.GameObjects.Container {
-  public id: integer;
+  public id: number;
   public override name: string;
   public nickname: string;
   public species: PokemonSpecies;
-  public formIndex: integer;
-  public abilityIndex: integer;
+  public formIndex: number;
+  public abilityIndex: number;
   public passive: boolean;
   public shiny: boolean;
   public variant: Variant;
   public pokeball: PokeballType;
   protected battleInfo: BattleInfo;
-  public level: integer;
-  public exp: integer;
-  public levelExp: integer;
+  public level: number;
+  public exp: number;
+  public levelExp: number;
   public gender: Gender;
-  public hp: integer;
-  public stats: integer[];
-  public ivs: integer[];
+  public hp: number;
+  public stats: number[];
+  public ivs: number[];
   public nature: Nature;
   public moveset: PokemonMove[];
   public status: Status | null;
-  public friendship: integer;
-  public metLevel: integer;
+  public friendship: number;
+  public metLevel: number;
   public metBiome: Biome | -1;
   public metSpecies: Species;
   public metWave: number;
-  public luck: integer;
+  public luck: number;
   public pauseEvolutions: boolean;
   public pokerus: boolean;
   public switchOutStatus: boolean;
-  public evoCounter: integer;
+  public evoCounter: number;
 
   public fusionSpecies: PokemonSpecies | null;
-  public fusionFormIndex: integer;
-  public fusionAbilityIndex: integer;
+  public fusionFormIndex: number;
+  public fusionAbilityIndex: number;
   public fusionShiny: boolean;
   public fusionVariant: Variant;
   public fusionGender: Gender;
-  public fusionLuck: integer;
+  public fusionLuck: number;
   public fusionCustomPokemonData: CustomPokemonData | null;
 
   private summonDataPrimer: PokemonSummonData | null;
@@ -330,13 +330,13 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     x: number,
     y: number,
     species: PokemonSpecies,
-    level: integer,
-    abilityIndex?: integer,
-    formIndex?: integer,
+    level: number,
+    abilityIndex?: number,
+    formIndex?: number,
     gender?: Gender,
     shiny?: boolean,
     variant?: Variant,
-    ivs?: integer[],
+    ivs?: number[],
     nature?: Nature,
     dataSource?: Pokemon | PokemonData,
   ) {
@@ -621,7 +621,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
 
   abstract hasTrainer(): boolean;
 
-  abstract getFieldIndex(): integer;
+  abstract getFieldIndex(): number;
 
   abstract getBattlerIndex(): BattlerIndex;
 
@@ -1068,7 +1068,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     }
   }
 
-  setFieldPosition(fieldPosition: FieldPosition, duration?: integer): Promise<void> {
+  setFieldPosition(fieldPosition: FieldPosition, duration?: number): Promise<void> {
     return new Promise((resolve) => {
       if (fieldPosition === this.fieldPosition) {
         resolve();
@@ -1245,7 +1245,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     ignoreOppAbility: boolean = false,
     isCritical: boolean = false,
     simulated: boolean = true,
-  ): integer {
+  ): number {
     const statValue = new NumberHolder(this.getStat(stat, false));
     globalScene.applyModifiers(StatBoosterModifier, this.isPlayer(), this, stat, statValue);
 
@@ -1404,11 +1404,11 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     return this.hp >= this.getMaxHp();
   }
 
-  getMaxHp(): integer {
+  getMaxHp(): number {
     return this.getStat(Stat.HP);
   }
 
-  getInverseHp(): integer {
+  getInverseHp(): number {
     return this.getMaxHp() - this.hp;
   }
 
@@ -1451,7 +1451,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     return !this.isFusion() ? this.variant : (Math.max(this.variant, this.fusionVariant) as Variant);
   }
 
-  getLuck(): integer {
+  getLuck(): number {
     return this.luck + (this.isFusion() ? this.fusionLuck : 0);
   }
 
@@ -2200,14 +2200,14 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
 
   /**
    * Gets all level up moves in a given range for a particular pokemon.
-   * @param {integer} startingLevel Don't include moves below this level
+   * @param {number} startingLevel Don't include moves below this level
    * @param {boolean} includeEvolutionMoves Whether to include evolution moves
    * @param {boolean} simulateEvolutionChain Whether to include moves from prior evolutions
    * @param {boolean} includeRelearnerMoves Whether to include moves that would require a relearner. Note the move relearner inherently allows evolution moves
    * @returns {LevelMoves} A list of moves and the levels they can be learned at
    */
   getLevelMoves(
-    startingLevel?: integer,
+    startingLevel?: number,
     includeEvolutionMoves: boolean = false,
     simulateEvolutionChain: boolean = false,
     includeRelearnerMoves: boolean = false,
@@ -2307,9 +2307,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
         }
       }
     }
-    levelMoves.sort((lma: [integer, integer], lmb: [integer, integer]) =>
-      lma[0] > lmb[0] ? 1 : lma[0] < lmb[0] ? -1 : 0,
-    );
+    levelMoves.sort((lma: [number, number], lmb: [number, number]) => (lma[0] > lmb[0] ? 1 : lma[0] < lmb[0] ? -1 : 0));
 
     /**
      * Filter out moves not within the correct level range(s)
@@ -2363,7 +2361,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     return speciesEggMoves[this.getSpeciesForm().getRootSpeciesId()];
   }
 
-  setMove(moveIndex: integer, moveId: Moves): void {
+  setMove(moveIndex: number, moveId: Moves): void {
     if (moveId === Moves.NONE) {
       return;
     }
@@ -2385,7 +2383,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
    * @param thresholdOverride number that is divided by 2^16 (65536) to get the shiny chance, overrides {@linkcode shinyThreshold} if set (bypassing shiny rate modifiers such as Shiny Charm)
    * @returns true if the Pokemon has been set as a shiny, false otherwise
    */
-  trySetShiny(thresholdOverride?: integer): boolean {
+  trySetShiny(thresholdOverride?: number): boolean {
     // Shiny Pokemon should not spawn in the end biome in endless
     if (globalScene.gameMode.isEndless && globalScene.arena.biomeType === Biome.END) {
       return false;
@@ -2811,7 +2809,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     }
   }
 
-  public trySelectMove(moveIndex: integer, ignorePp?: boolean): boolean {
+  public trySelectMove(moveIndex: number, ignorePp?: boolean): boolean {
     const move = this.getMoveset().length > moveIndex ? this.getMoveset()[moveIndex] : null;
     return move?.isUsable(this, ignorePp) ?? false;
   }
@@ -2894,7 +2892,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     this.battleInfo.toggleFlyout(visible);
   }
 
-  addExp(exp: integer) {
+  addExp(exp: number) {
     const maxExpLevel = globalScene.getMaxExpLevel();
     const initialExp = this.exp;
     this.exp += exp;
@@ -2917,7 +2915,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     return this.isPlayer() !== target.isPlayer();
   }
 
-  getOpponent(targetIndex: integer): Pokemon | null {
+  getOpponent(targetIndex: number): Pokemon | null {
     const ret = this.getOpponents()[targetIndex];
     if (ret.summonData) {
       return ret;
@@ -3591,11 +3589,11 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns integer representing damage
    */
   damage(
-    damage: integer,
+    damage: number,
     _ignoreSegments: boolean = false,
     preventEndure: boolean = false,
     ignoreFaintPhase: boolean = false,
-  ): integer {
+  ): number {
     if (this.isFainted()) {
       return 0;
     }
@@ -3673,7 +3671,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     return damage;
   }
 
-  heal(amount: integer): integer {
+  heal(amount: number): number {
     const healAmount = Math.min(amount, this.getMaxHp() - this.hp);
     this.hp += healAmount;
     return healAmount;
@@ -3713,7 +3711,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     return !cancelled.value;
   }
 
-  addTag(tagType: BattlerTagType, turnCount: integer = 0, sourceMove?: Moves, sourceId?: integer): boolean {
+  addTag(tagType: BattlerTagType, turnCount: number = 0, sourceMove?: Moves, sourceId?: number): boolean {
     const existingTag = this.getTag(tagType);
     if (existingTag) {
       existingTag.onOverlap(this);
@@ -3826,11 +3824,11 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     return true;
   }
 
-  removeTagsBySourceId(sourceId: integer): void {
+  removeTagsBySourceId(sourceId: number): void {
     this.findAndRemoveTags((t) => t.isSourceLinked() && t.sourceId === sourceId);
   }
 
-  transferTagsBySourceId(sourceId: integer, newSourceId: integer): void {
+  transferTagsBySourceId(sourceId: number, newSourceId: number): void {
     if (!this.summonData) {
       return;
     }
@@ -4451,12 +4449,12 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     this.turnData = new PokemonTurnData();
   }
 
-  getExpValue(): integer {
+  getExpValue(): number {
     // Logic to factor in victor level has been removed for balancing purposes, so the player doesn't have to focus on EXP maxxing
     return (this.getSpeciesForm().getBaseExp() * this.level) / 5 + 1;
   }
 
-  setFrameRate(frameRate: integer) {
+  setFrameRate(frameRate: number) {
     globalScene.anims.get(this.getBattleSpriteKey()).frameRate = frameRate;
     try {
       this.getSprite().play(this.getBattleSpriteKey());
@@ -4470,7 +4468,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     }
   }
 
-  tint(color: number, alpha?: number, duration?: integer, ease?: string) {
+  tint(color: number, alpha?: number, duration?: number, ease?: string) {
     const tintSprite = this.getTintSprite();
     tintSprite?.setTintFill(color);
     tintSprite?.setVisible(true);
@@ -4489,7 +4487,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     }
   }
 
-  untint(duration: integer, ease?: string) {
+  untint(duration: number, ease?: string) {
     const tintSprite = this.getTintSprite();
 
     if (duration) {
@@ -4599,10 +4597,10 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     const fusionCanvas = document.createElement("canvas");
     const fusionBackCanvas = document.createElement("canvas");
 
-    const spriteColors: integer[][] = [];
+    const spriteColors: number[][] = [];
     const pixelData: Uint8ClampedArray[] = [];
 
-    [canvas, backCanvas, fusionCanvas, fusionBackCanvas].forEach((canv: HTMLCanvasElement, c: integer) => {
+    [canvas, backCanvas, fusionCanvas, fusionBackCanvas].forEach((canv: HTMLCanvasElement, c: number) => {
       const context = canv.getContext("2d");
       const frame = [sourceFrame, sourceBackFrame, fusionFrame, fusionBackFrame][c];
       canv.width = frame.width;
@@ -4627,7 +4625,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
 
     for (let f = 0; f < 2; f++) {
       const variantColors = variantColorCache[!f ? spriteKey : backSpriteKey];
-      const variantColorSet = new Map<integer, integer[]>();
+      const variantColorSet = new Map<number, number[]>();
       if (this.shiny && variantColors && variantColors[this.variant]) {
         Object.keys(variantColors[this.variant]).forEach((k) => {
           variantColorSet.set(
@@ -4662,7 +4660,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     const pixelColors: number[] = [];
     for (let f = 0; f < 2; f++) {
       for (let i = 0; i < pixelData[f].length; i += 4) {
-        const total = pixelData[f].slice(i, i + 3).reduce((total: integer, value: integer) => total + value, 0);
+        const total = pixelData[f].slice(i, i + 3).reduce((total: number, value: number) => total + value, 0);
         if (!total) {
           continue;
         }
@@ -4675,7 +4673,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     const fusionPixelColors: number[] = [];
     for (let f = 0; f < 2; f++) {
       const variantColors = variantColorCache[!f ? fusionSpriteKey : fusionBackSpriteKey];
-      const variantColorSet = new Map<integer, integer[]>();
+      const variantColorSet = new Map<number, number[]>();
       if (this.fusionShiny && variantColors && variantColors[this.fusionVariant]) {
         Object.keys(variantColors[this.fusionVariant]).forEach((k) => {
           variantColorSet.set(
@@ -4685,7 +4683,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
         });
       }
       for (let i = 0; i < pixelData[2 + f].length; i += 4) {
-        const total = pixelData[2 + f].slice(i, i + 3).reduce((total: integer, value: integer) => total + value, 0);
+        const total = pixelData[2 + f].slice(i, i + 3).reduce((total: number, value: number) => total + value, 0);
         if (!total) {
           continue;
         }
@@ -4728,21 +4726,21 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     paletteColors = paletteColors!; // tell TS compiler that paletteColors is defined!
     fusionPaletteColors = fusionPaletteColors!; // TS compiler that fusionPaletteColors is defined!
     const [palette, fusionPalette] = [paletteColors, fusionPaletteColors].map((paletteColors) => {
-      let keys = Array.from(paletteColors.keys()).sort((a: integer, b: integer) =>
+      let keys = Array.from(paletteColors.keys()).sort((a: number, b: number) =>
         paletteColors.get(a)! < paletteColors.get(b)! ? 1 : -1,
       );
-      let rgbaColors: Map<number, integer[]>;
+      let rgbaColors: Map<number, number[]>;
       let hsvColors: Map<number, number[]>;
 
-      const mappedColors = new Map<integer, integer[]>();
+      const mappedColors = new Map<number, number[]>();
 
       do {
         mappedColors.clear();
 
-        rgbaColors = keys.reduce((map: Map<number, integer[]>, k: number) => {
+        rgbaColors = keys.reduce((map: Map<number, number[]>, k: number) => {
           map.set(k, Object.values(rgbaFromArgb(k)));
           return map;
-        }, new Map<number, integer[]>());
+        }, new Map<number, number[]>());
         hsvColors = Array.from(rgbaColors.keys()).reduce((map: Map<number, number[]>, k: number) => {
           const rgb = rgbaColors.get(k)!.slice(0, 3);
           map.set(k, rgbToHsv(rgb[0], rgb[1], rgb[2]));
@@ -4765,7 +4763,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
           }
         }
 
-        mappedColors.forEach((values: integer[], key: integer) => {
+        mappedColors.forEach((values: number[], key: number) => {
           const keyColor = rgbaColors.get(key)!;
           const valueColors = values.map((v) => rgbaColors.get(v)!);
           const color = keyColor.slice(0);
@@ -4780,7 +4778,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
 
           for (let c = 0; c < 3; c++) {
             color[c] *= paletteColors.get(key)! / count;
-            values.forEach((value: integer, i: integer) => {
+            values.forEach((value: number, i: number) => {
               if (paletteColors.has(value)) {
                 const valueCount = paletteColors.get(value)!;
                 color[c] += valueColors[i][c] * (valueCount / count);
@@ -4800,7 +4798,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
           paletteColors.set(argbFromRgba({ r: color[0], g: color[1], b: color[2], a: color[3] }), count);
         });
 
-        keys = Array.from(paletteColors.keys()).sort((a: integer, b: integer) =>
+        keys = Array.from(paletteColors.keys()).sort((a: number, b: number) =>
           paletteColors.get(a)! < paletteColors.get(b)! ? 1 : -1,
         );
       } while (mappedColors.size);
@@ -4810,7 +4808,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
 
     const paletteDeltas: number[][] = [];
 
-    spriteColors.forEach((sc: integer[], i: integer) => {
+    spriteColors.forEach((sc: number[], i: number) => {
       paletteDeltas.push([]);
       for (let p = 0; p < palette.length; p++) {
         paletteDeltas[i].push(deltaRgb(sc, palette[p]));
@@ -4859,7 +4857,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
    * @param min The minimum integer to pick, default `0`
    * @returns A random integer between {@linkcode min} and ({@linkcode min} + {@linkcode range} - 1)
    */
-  randSeedInt(range: integer, min: integer = 0): integer {
+  randSeedInt(range: number, min: number = 0): number {
     return globalScene.currentBattle ? globalScene.randBattleSeedInt(range, min) : randSeedInt(range, min);
   }
 
@@ -4869,7 +4867,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
    * @param max The maximum integer to generate
    * @returns a random integer between {@linkcode min} and {@linkcode max} inclusive
    */
-  randSeedIntRange(min: integer, max: integer): integer {
+  randSeedIntRange(min: number, max: number): number {
     return this.randSeedInt(max - min + 1, min);
   }
 
@@ -4967,13 +4965,13 @@ export class PlayerPokemon extends Pokemon {
 
   constructor(
     species: PokemonSpecies,
-    level: integer,
-    abilityIndex?: integer,
-    formIndex?: integer,
+    level: number,
+    abilityIndex?: number,
+    formIndex?: number,
     gender?: Gender,
     shiny?: boolean,
     variant?: Variant,
-    ivs?: integer[],
+    ivs?: number[],
     nature?: Nature,
     dataSource?: Pokemon | PokemonData,
   ) {
@@ -5021,7 +5019,7 @@ export class PlayerPokemon extends Pokemon {
     return false;
   }
 
-  getFieldIndex(): integer {
+  getFieldIndex(): number {
     return globalScene.getPlayerField().indexOf(this);
   }
 
@@ -5090,7 +5088,7 @@ export class PlayerPokemon extends Pokemon {
         Mode.PARTY,
         PartyUiMode.FAINT_SWITCH,
         this.getFieldIndex(),
-        (slotIndex: integer, _option: PartyOption) => {
+        (slotIndex: number, _option: PartyOption) => {
           if (slotIndex >= globalScene.currentBattle.getBattlerCount() && slotIndex < 6) {
             globalScene.prependToPhase(
               new SwitchSummonPhase(switchType, this.getFieldIndex(), slotIndex, false),
@@ -5155,7 +5153,7 @@ export class PlayerPokemon extends Pokemon {
         Mode.PARTY,
         PartyUiMode.REVIVAL_BLESSING,
         this.getFieldIndex(),
-        (slotIndex: integer, _option: PartyOption) => {
+        (slotIndex: number, _option: PartyOption) => {
           if (slotIndex >= 0 && slotIndex < 6) {
             const pokemon = globalScene.getPlayerParty()[slotIndex];
             if (!pokemon || !pokemon.isFainted()) {
@@ -5555,14 +5553,14 @@ export class PlayerPokemon extends Pokemon {
 export class EnemyPokemon extends Pokemon {
   public trainerSlot: TrainerSlot;
   public aiType: AiType;
-  public bossSegments: integer;
-  public bossSegmentIndex: integer;
+  public bossSegments: number;
+  public bossSegmentIndex: number;
   /** To indicate if the instance was populated with a dataSource -> e.g. loaded & populated from session data */
   public readonly isPopulatedFromDataSource: boolean;
 
   constructor(
     species: PokemonSpecies,
-    level: integer,
+    level: number,
     trainerSlot: TrainerSlot,
     boss: boolean,
     shinyLock: boolean = false,
@@ -5663,7 +5661,7 @@ export class EnemyPokemon extends Pokemon {
    * @param boss if the pokemon is a boss
    * @param bossSegments amount of boss segments (health-bar segments)
    */
-  setBoss(boss: boolean = true, bossSegments: integer = 0): void {
+  setBoss(boss: boolean = true, bossSegments: number = 0): void {
     if (boss) {
       this.bossSegments =
         bossSegments
@@ -5675,7 +5673,7 @@ export class EnemyPokemon extends Pokemon {
     }
   }
 
-  override generateAndPopulateMoveset(formIndex?: integer): void {
+  override generateAndPopulateMoveset(formIndex?: number): void {
     switch (true) {
       case this.species.speciesId === Species.SMEARGLE:
         this.moveset = [
@@ -5806,7 +5804,7 @@ export class EnemyPokemon extends Pokemon {
             const move = pokemonMove.getMove();
 
             let moveScore = moveScores[m];
-            const targetScores: integer[] = [];
+            const targetScores: number[] = [];
 
             for (const mt of moveTargets[move.id]) {
               // Prevent a target score from being calculated when the target is whoever attacks the user
@@ -5968,9 +5966,9 @@ export class EnemyPokemon extends Pokemon {
       targetWeights = targetWeights.slice(0, benefitCutoffIndex);
     }
 
-    const thresholds: integer[] = [];
-    let totalWeight: integer = 0;
-    targetWeights.reduce((total: integer, w: integer) => {
+    const thresholds: number[] = [];
+    let totalWeight: number = 0;
+    targetWeights.reduce((total: number, w: number) => {
       total += w;
       thresholds.push(total);
       totalWeight = total;
@@ -5983,7 +5981,7 @@ export class EnemyPokemon extends Pokemon {
      * is greater than that random number.
      */
     const randValue = globalScene.randBattleSeedInt(totalWeight);
-    let targetIndex: integer = 0;
+    let targetIndex: number = 0;
 
     thresholds.every((t, i) => {
       if (randValue >= t) {
@@ -6009,7 +6007,7 @@ export class EnemyPokemon extends Pokemon {
     return !!this.bossSegments;
   }
 
-  getBossSegmentIndex(): integer {
+  getBossSegmentIndex(): number {
     const segments = (this as EnemyPokemon).bossSegments;
     const segmentSize = this.getMaxHp() / segments;
     for (let s = segments - 1; s > 0; s--) {
@@ -6023,11 +6021,11 @@ export class EnemyPokemon extends Pokemon {
   }
 
   override damage(
-    damage: integer,
+    damage: number,
     ignoreSegments: boolean = false,
     preventEndure: boolean = false,
     ignoreFaintPhase: boolean = false,
-  ): integer {
+  ): number {
     if (this.isFainted()) {
       return 0;
     }
@@ -6082,7 +6080,7 @@ export class EnemyPokemon extends Pokemon {
     return ret;
   }
 
-  canBypassBossSegments(segmentCount: integer = 1): boolean {
+  canBypassBossSegments(segmentCount: number = 1): boolean {
     if (globalScene.currentBattle.isClassicFinalBoss) {
       if (!this.formIndex && this.bossSegmentIndex - segmentCount < 1) {
         return false;
@@ -6099,7 +6097,7 @@ export class EnemyPokemon extends Pokemon {
    * For Pokemon with 5 health segments or more, breaking the last two shields give +2 each
    * @param segmentIndex index of the segment to get down to (0 = no shield left, 1 = 1 shield left, etc.)
    */
-  handleBossSegmentCleared(segmentIndex: integer): void {
+  handleBossSegmentCleared(segmentIndex: number): void {
     while (this.bossSegmentIndex > 0 && segmentIndex - 1 < this.bossSegmentIndex) {
       // Filter out already maxed out stat stages and weigh the rest based on existing stats
       const leftoverStats = EFFECTIVE_STATS.filter((s: EffectiveStat) => this.getStatStage(s) < 6);
@@ -6141,7 +6139,7 @@ export class EnemyPokemon extends Pokemon {
     }
   }
 
-  getFieldIndex(): integer {
+  getFieldIndex(): number {
     return globalScene.getEnemyField().indexOf(this);
   }
 
@@ -6396,7 +6394,7 @@ export class PokemonMove {
     this.ppUsed = Math.min(this.ppUsed + count, this.getMovePp());
   }
 
-  getMovePp(): integer {
+  getMovePp(): number {
     return this.maxPpOverride || this.getMove().pp + this.ppUp * toDmgValue(this.getMove().pp / 5);
   }
 

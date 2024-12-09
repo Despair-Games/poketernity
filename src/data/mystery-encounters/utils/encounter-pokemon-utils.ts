@@ -740,7 +740,7 @@ export async function catchPokemon(
                       Mode.PARTY,
                       PartyUiMode.RELEASE,
                       0,
-                      (slotIndex: integer, _option: PartyOption) => {
+                      (slotIndex: number, _option: PartyOption) => {
                         globalScene.ui.setMode(Mode.MESSAGE).then(() => {
                           if (slotIndex < 6) {
                             addToParty(slotIndex);

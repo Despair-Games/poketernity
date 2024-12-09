@@ -37,7 +37,7 @@ export enum TrainerPoolTier {
 }
 
 export interface TrainerTierPools {
-  [key: integer]: Species[];
+  [key: number]: Species[];
 }
 
 export enum TrainerSlot {
@@ -47,27 +47,27 @@ export enum TrainerSlot {
 }
 
 export class TrainerPartyTemplate {
-  public size: integer;
+  public size: number;
   public strength: PartyMemberStrength;
   public sameSpecies: boolean;
   public balanced: boolean;
 
-  constructor(size: integer, strength: PartyMemberStrength, sameSpecies?: boolean, balanced?: boolean) {
+  constructor(size: number, strength: PartyMemberStrength, sameSpecies?: boolean, balanced?: boolean) {
     this.size = size;
     this.strength = strength;
     this.sameSpecies = !!sameSpecies;
     this.balanced = !!balanced;
   }
 
-  getStrength(_index: integer): PartyMemberStrength {
+  getStrength(_index: number): PartyMemberStrength {
     return this.strength;
   }
 
-  isSameSpecies(_index: integer): boolean {
+  isSameSpecies(_index: number): boolean {
     return this.sameSpecies;
   }
 
-  isBalanced(_index: integer): boolean {
+  isBalanced(_index: number): boolean {
     return this.balanced;
   }
 }
@@ -77,7 +77,7 @@ export class TrainerPartyCompoundTemplate extends TrainerPartyTemplate {
 
   constructor(...templates: TrainerPartyTemplate[]) {
     super(
-      templates.reduce((total: integer, template: TrainerPartyTemplate) => {
+      templates.reduce((total: number, template: TrainerPartyTemplate) => {
         total += template.size;
         return total;
       }, 0),
@@ -86,7 +86,7 @@ export class TrainerPartyCompoundTemplate extends TrainerPartyTemplate {
     this.templates = templates;
   }
 
-  override getStrength(index: integer): PartyMemberStrength {
+  override getStrength(index: number): PartyMemberStrength {
     let t = 0;
     for (const template of this.templates) {
       if (t + template.size > index) {
@@ -98,7 +98,7 @@ export class TrainerPartyCompoundTemplate extends TrainerPartyTemplate {
     return super.getStrength(index);
   }
 
-  override isSameSpecies(index: integer): boolean {
+  override isSameSpecies(index: number): boolean {
     let t = 0;
     for (const template of this.templates) {
       if (t + template.size > index) {
@@ -110,7 +110,7 @@ export class TrainerPartyCompoundTemplate extends TrainerPartyTemplate {
     return super.isSameSpecies(index);
   }
 
-  override isBalanced(index: integer): boolean {
+  override isBalanced(index: number): boolean {
     let t = 0;
     for (const template of this.templates) {
       if (t + template.size > index) {
@@ -261,11 +261,11 @@ export const trainerPartyTemplates = {
 };
 
 type PartyTemplateFunc = () => TrainerPartyTemplate;
-type PartyMemberFunc = (level: integer, strength: PartyMemberStrength) => EnemyPokemon;
+type PartyMemberFunc = (level: number, strength: PartyMemberStrength) => EnemyPokemon;
 type GenModifiersFunc = (party: EnemyPokemon[]) => PersistentModifier[];
 
 export interface PartyMemberFuncs {
-  [key: integer]: PartyMemberFunc;
+  [key: number]: PartyMemberFunc;
 }
 
 export class TrainerConfig {
@@ -617,7 +617,7 @@ export class TrainerConfig {
     return this;
   }
 
-  setPartyMemberFunc(slotIndex: integer, partyMemberFunc: PartyMemberFunc): TrainerConfig {
+  setPartyMemberFunc(slotIndex: number, partyMemberFunc: PartyMemberFunc): TrainerConfig {
     this.partyMemberFuncs[slotIndex] = partyMemberFunc;
     return this;
   }
@@ -1529,7 +1529,7 @@ export class TrainerConfig {
 let t = 0;
 
 interface TrainerConfigs {
-  [key: integer]: TrainerConfig;
+  [key: number]: TrainerConfig;
 }
 
 /**
@@ -1636,7 +1636,7 @@ function getSpeciesFilterRandomPartyMemberFunc(
   };
 }
 
-function getRandomTeraModifiers(party: EnemyPokemon[], count: integer, types?: Type[]): PersistentModifier[] {
+function getRandomTeraModifiers(party: EnemyPokemon[], count: number, types?: Type[]): PersistentModifier[] {
   const ret: PersistentModifier[] = [];
   const partyMemberIndexes = new Array(party.length).fill(null).map((_, i) => i);
   for (let t = 0; t < Math.min(count, party.length); t++) {

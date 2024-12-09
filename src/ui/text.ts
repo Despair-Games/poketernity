@@ -413,7 +413,7 @@ export function getTextColor(textStyle: TextStyle, shadow?: boolean, uiTheme: Ui
   }
 }
 
-export function getModifierTierTextTint(tier: ModifierTier): integer {
+export function getModifierTierTextTint(tier: ModifierTier): number {
   switch (tier) {
     case ModifierTier.COMMON:
       return 0xf8f8f8;
@@ -430,7 +430,7 @@ export function getModifierTierTextTint(tier: ModifierTier): integer {
   }
 }
 
-export function getEggTierTextTint(tier: EggTier): integer {
+export function getEggTierTextTint(tier: EggTier): number {
   switch (tier) {
     case EggTier.COMMON:
       return getModifierTierTextTint(ModifierTier.COMMON);
