@@ -79,7 +79,7 @@ export enum EvolutionItem {
 /**
  * Pokemon Evolution tuple type consisting of:
  * @property 0 {@linkcode Species} The species of the Pokemon.
- * @property 1 {@linkcode number} The level at which the Pokemon evolves.
+ * @property 1 The level at which the Pokemon evolves.
  */
 export type EvolutionLevel = [species: Species, level: number];
 
