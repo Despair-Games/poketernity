@@ -1,5 +1,6 @@
 import { BattlerIndex } from "#app/battle";
 import { MoveResult } from "#app/field/pokemon";
+import { toDmgValue } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
@@ -84,14 +85,14 @@ describe("Moves - Revival Blessing", () => {
     const player = game.scene.getPlayerPokemon()!;
     expect(player.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
   });
-  
+
   it("should revive a player pokemon and immediately send it back out if used in the same turn it fainted in doubles", async () => {
     game.override
       .battleType("double")
       .enemyMoveset([Moves.SPLASH, Moves.FISSURE])
       .enemyAbility(Abilities.NO_GUARD)
       .enemyLevel(100);
-    await game.classicMode.startBattle([ Species.FEEBAS, Species.MILOTIC, Species.GYARADOS ]);
+    await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC, Species.GYARADOS]);
 
     const feebas = game.scene.getPlayerField()[0];
 
@@ -99,7 +100,7 @@ describe("Moves - Revival Blessing", () => {
     game.move.select(Moves.REVIVAL_BLESSING, 1);
     await game.forceEnemyMove(Moves.FISSURE, BattlerIndex.PLAYER);
     await game.forceEnemyMove(Moves.SPLASH);
-    await game.setTurnOrder([ BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2 ]);
+    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     await game.phaseInterceptor.to("MoveEndPhase");
