@@ -3,7 +3,7 @@ import { Mode } from "./ui";
 import UiHandler from "./ui-handler";
 import { Button } from "#enums/buttons";
 import { addWindow, WindowVariant } from "./ui-theme";
-import type { MysteryEncounterPhase } from "../phases/mystery-encounter-phases";
+import type { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { PartyUiMode } from "./party-ui-handler";
 import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
 import { fixedInt, isNullOrUndefined } from "#app/utils";

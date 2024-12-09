@@ -2,7 +2,7 @@ import { afterEach, beforeAll, beforeEach, expect, describe, it } from "vitest";
 import GameManager from "#app/test/utils/gameManager";
 import Phaser from "phaser";
 import { Species } from "#enums/species";
-import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases";
+import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import type BattleScene from "#app/battle-scene";
 

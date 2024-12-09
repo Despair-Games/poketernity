@@ -2,12 +2,10 @@ import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encount
 import { Status } from "#app/data/status-effect";
 import { CommandPhase } from "#app/phases/command-phase";
 import { MessagePhase } from "#app/phases/message-phase";
-import {
-  MysteryEncounterBattlePhase,
-  MysteryEncounterOptionSelectedPhase,
-  MysteryEncounterPhase,
-  MysteryEncounterRewardsPhase,
-} from "#app/phases/mystery-encounter-phases";
+import { MysteryEncounterBattlePhase } from "#app/phases/mystery-encounter-phases/battle-phase";
+import { MysteryEncounterRewardsPhase } from "#app/phases/mystery-encounter-phases/rewards-phase";
+import { MysteryEncounterOptionSelectedPhase } from "#app/phases/mystery-encounter-phases/option-selected-phase";
+import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { VictoryPhase } from "#app/phases/victory-phase";
 import type MessageUiHandler from "#app/ui/message-ui-handler";
 import type MysteryEncounterUiHandler from "#app/ui/mystery-encounter-ui-handler";

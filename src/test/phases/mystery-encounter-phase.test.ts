@@ -2,7 +2,8 @@ import { afterEach, beforeAll, beforeEach, expect, describe, it, vi } from "vite
 import GameManager from "#app/test/utils/gameManager";
 import Phaser from "phaser";
 import { Species } from "#enums/species";
-import { MysteryEncounterOptionSelectedPhase, MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases";
+import { MysteryEncounterOptionSelectedPhase } from "#app/phases/mystery-encounter-phases/option-selected-phase";
+import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { Mode } from "#app/ui/ui";
 import { Button } from "#enums/buttons";
 import type MysteryEncounterUiHandler from "#app/ui/mystery-encounter-ui-handler";

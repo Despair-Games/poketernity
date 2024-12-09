@@ -45,13 +45,11 @@ import { VictoryPhase } from "#app/phases/victory-phase";
 import { PartyHealPhase } from "#app/phases/party-heal-phase";
 import UI, { Mode } from "#app/ui/ui";
 import { SelectBiomePhase } from "#app/phases/select-biome-phase";
-import {
-  MysteryEncounterBattlePhase,
-  MysteryEncounterOptionSelectedPhase,
-  MysteryEncounterPhase,
-  MysteryEncounterRewardsPhase,
-  PostMysteryEncounterPhase,
-} from "#app/phases/mystery-encounter-phases";
+import { MysteryEncounterBattlePhase } from "#app/phases/mystery-encounter-phases/battle-phase";
+import { PostMysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/post-mystery-encounter-phase";
+import { MysteryEncounterRewardsPhase } from "#app/phases/mystery-encounter-phases/rewards-phase";
+import { MysteryEncounterOptionSelectedPhase } from "#app/phases/mystery-encounter-phases/option-selected-phase";
+import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { ModifierRewardPhase } from "#app/phases/modifier-reward-phase";
 import { PartyExpPhase } from "#app/phases/party-exp-phase";
 import { ExpPhase } from "#app/phases/exp-phase";
