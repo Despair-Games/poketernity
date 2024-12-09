@@ -14,7 +14,7 @@ import {
 import { getPokemonNameWithAffix } from "../messages";
 import type { AttackMoveResult, TurnMove } from "../field/pokemon";
 import type Pokemon from "../field/pokemon";
-import { EnemyPokemon, MoveResult, PlayerPokemon, PokemonMove } from "../field/pokemon";
+import { EnemyPokemon, PlayerPokemon, PokemonMove } from "../field/pokemon";
 import { getNonVolatileStatusEffects, getStatusEffectHealText, isNonVolatileStatusEffect } from "./status-effect";
 import { getTypeDamageMultiplier } from "./type";
 import { Type } from "#enums/type";
@@ -109,6 +109,7 @@ import { globalScene } from "#app/global-scene";
 import type { BattlerIndex } from "#app/enums/battler-index";
 import { HitResult } from "#app/enums/hit-result";
 import { ArenaTagSide } from "#app/enums/arena-tag-side";
+import { MoveResult } from "#enums/move-result";
 
 export enum MoveCategory {
   PHYSICAL,

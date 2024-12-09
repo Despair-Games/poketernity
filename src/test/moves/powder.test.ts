@@ -5,11 +5,12 @@ import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
 import { BerryPhase } from "#app/phases/berry-phase";
-import { MoveResult, PokemonMove } from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon";
 import { Type } from "#enums/type";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { StatusEffect } from "#enums/status-effect";
 import { BattlerIndex } from "#enums/battler-index";
+import { MoveResult } from "#enums/move-result";
 
 describe("Moves - Powder", () => {
   let phaserGame: Phaser.Game;

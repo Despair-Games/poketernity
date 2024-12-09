@@ -249,6 +249,8 @@ import { StatusEffect } from "#enums/status-effect";
 import { doShinySparkleAnim } from "#app/field/anims";
 import { HitResult } from "#app/enums/hit-result";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
+import { ArenaTagSide } from "#app/enums/arena-tag-side";
+import type { MoveResult } from "#enums/move-result";
 
 export enum LearnMoveSituation {
   MISC,
@@ -6290,14 +6292,6 @@ export enum AiType {
   RANDOM,
   SMART_RANDOM,
   SMART,
-}
-
-export enum MoveResult {
-  PENDING,
-  SUCCESS,
-  FAIL,
-  MISS,
-  OTHER,
 }
 
 export type DamageResult =

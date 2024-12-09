@@ -1,6 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { Abilities } from "#app/enums/abilities";
-import { MoveResult } from "#app/field/pokemon";
+import { MoveResult } from "#enums/move-result";
 import { MovePhase } from "#app/phases/move-phase";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";

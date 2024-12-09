@@ -4,7 +4,7 @@ import { Abilities } from "#enums/abilities";
 import GameManager from "#test/utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { MoveResult } from "#app/field/pokemon";
+import { MoveResult } from "#enums/move-result";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 

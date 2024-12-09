@@ -33,7 +33,7 @@ import { getTerrainBlockMessage } from "#app/data/weather";
 import { MoveUsedEvent } from "#app/events/battle-scene";
 import type { PokemonMove } from "#app/field/pokemon";
 import type Pokemon from "#app/field/pokemon";
-import { MoveResult } from "#app/field/pokemon";
+import { MoveResult } from "#enums/move-result";
 import { getPokemonNameWithAffix } from "#app/messages";
 import Overrides from "#app/overrides";
 import { BattlePhase } from "#app/phases/battle-phase";

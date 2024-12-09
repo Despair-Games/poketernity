@@ -42,7 +42,7 @@ import { SpeciesFormChangePostMoveTrigger } from "#app/data/pokemon-forms";
 import { Type } from "#enums/type";
 import type { PokemonMove } from "#app/field/pokemon";
 import type Pokemon from "#app/field/pokemon";
-import { MoveResult } from "#app/field/pokemon";
+import { MoveResult } from "#enums/move-result";
 import { getPokemonNameWithAffix } from "#app/messages";
 import {
   ContactHeldItemTransferChanceModifier,

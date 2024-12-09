@@ -1,7 +1,7 @@
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { Stat } from "#enums/stat";
 import { WeatherType } from "#enums/weather-type";
-import { MoveResult } from "#app/field/pokemon";
+import { MoveResult } from "#enums/move-result";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";

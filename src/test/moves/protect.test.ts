@@ -7,7 +7,7 @@ import { Moves } from "#enums/moves";
 import { Stat } from "#enums/stat";
 import { allMoves } from "#app/data/move";
 import { ArenaTrapTag } from "#app/data/arena-tag";
-import { MoveResult } from "#app/field/pokemon";
+import { MoveResult } from "#enums/move-result";
 import { ArenaTagSide } from "#app/enums/arena-tag-side";
 import { BattlerIndex } from "#app/enums/battler-index";
 

@@ -2,7 +2,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/move";
 import { Moves } from "#app/enums/moves";
 import { Species } from "#app/enums/species";
-import { MoveResult } from "#app/field/pokemon";
+import { MoveResult } from "#enums/move-result";
 import { BerryPhase } from "#app/phases/berry-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { MovePhase } from "#app/phases/move-phase";

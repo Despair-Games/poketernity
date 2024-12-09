@@ -5,7 +5,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
-import { MoveResult } from "#app/field/pokemon";
+import { MoveResult } from "#enums/move-result";
 import { describe, beforeAll, afterEach, beforeEach, it, expect } from "vitest";
 import GameManager from "#test/utils/gameManager";
 
