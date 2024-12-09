@@ -34,7 +34,7 @@ export default class TargetSelectUiHandler extends UiHandler {
 
   setup(): void {}
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     if (args.length < 3) {
       return false;
     }
@@ -131,7 +131,7 @@ export default class TargetSelectUiHandler extends UiHandler {
     return success;
   }
 
-  setCursor(cursor: integer): boolean {
+  override setCursor(cursor: integer): boolean {
     const singleTarget = globalScene.getField()[cursor];
     const multipleTargets = this.targets.map((index) => globalScene.getField()[index]);
 
@@ -214,7 +214,7 @@ export default class TargetSelectUiHandler extends UiHandler {
     }
   }
 
-  clear() {
+  override clear() {
     super.clear();
     this.eraseCursor();
   }

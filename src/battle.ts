@@ -8,6 +8,7 @@ import {
   shiftCharCodes,
   randSeedItem,
   randInt,
+  isBetween,
 } from "#app/utils";
 import Trainer, { TrainerVariant } from "./field/trainer";
 import type { GameMode } from "./game-mode";
@@ -18,7 +19,6 @@ import { SpeciesFormKey } from "#enums/species-form-key";
 import type { EnemyPokemon, PlayerPokemon, QueuedMove } from "#app/field/pokemon";
 import type Pokemon from "#app/field/pokemon";
 import { ArenaTagType } from "#enums/arena-tag-type";
-import { BattleSpec } from "#enums/battle-spec";
 import type { Moves } from "#enums/moves";
 import { PlayerGender } from "#enums/player-gender";
 import { MusicPreference } from "#app/system/settings/settings";
@@ -74,7 +74,7 @@ export default class Battle {
   protected gameMode: GameMode;
   public waveIndex: number;
   public battleType: BattleType;
-  public battleSpec: BattleSpec;
+  public readonly isClassicFinalBoss: boolean;
   public trainer: Trainer | null;
   public enemyLevels: number[] | undefined;
   public enemyParty: EnemyPokemon[] = [];
@@ -111,20 +111,12 @@ export default class Battle {
     this.waveIndex = waveIndex;
     this.battleType = battleType;
     this.trainer = trainer ?? null;
-    this.initBattleSpec();
+    this.isClassicFinalBoss = this.gameMode.isClassic && this.gameMode.isWaveFinal(this.waveIndex);
     this.enemyLevels =
       battleType !== BattleType.TRAINER
         ? new Array(double ? 2 : 1).fill(null).map(() => this.getLevelForWave())
         : trainer?.getPartyLevels(this.waveIndex);
     this.double = double ?? false;
-  }
-
-  private initBattleSpec(): void {
-    let spec = BattleSpec.DEFAULT;
-    if (this.gameMode.isWaveFinal(this.waveIndex) && this.gameMode.isClassic) {
-      spec = BattleSpec.FINAL_BOSS;
-    }
-    this.battleSpec = spec;
   }
 
   public getLevelForWave(): number {
@@ -134,7 +126,7 @@ export default class Battle {
 
     if (this.gameMode.isBoss(this.waveIndex)) {
       const ret = Math.floor(baseLevel * bossMultiplier);
-      if (this.battleSpec === BattleSpec.FINAL_BOSS || !(this.waveIndex % 250)) {
+      if (this.isClassicFinalBoss || !(this.waveIndex % 250)) {
         return Math.ceil(ret / 25) * 25;
       }
       let levelOffset = 0;
@@ -251,12 +243,12 @@ export default class Battle {
       } else {
         return this.trainer?.getMixedBattleBgm() ?? null;
       }
-    } else if (this.gameMode.isClassic && this.waveIndex > 195 && this.battleSpec !== BattleSpec.FINAL_BOSS) {
+    } else if (this.gameMode.isClassic && isBetween(this.waveIndex, 195, 199)) {
       return "end_summit";
     }
     const wildOpponents = globalScene.getEnemyParty();
     for (const pokemon of wildOpponents) {
-      if (this.battleSpec === BattleSpec.FINAL_BOSS) {
+      if (this.isClassicFinalBoss) {
         if (pokemon.species.getFormSpriteKey(pokemon.formIndex) === SpeciesFormKey.ETERNAMAX) {
           return "battle_final";
         }

@@ -14,7 +14,7 @@ export class SelectBiomePhase extends BattlePhase {
     super();
   }
 
-  start() {
+  override start() {
     super.start();
 
     const currentBiome = globalScene.arena.biomeType;

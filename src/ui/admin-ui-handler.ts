@@ -89,7 +89,7 @@ export default class AdminUiHandler extends FormModalUiHandler {
     return inputFieldConfigs;
   }
 
-  processInput(button: Button): boolean {
+  override processInput(button: Button): boolean {
     if (button === Button.SUBMIT && this.submitAction) {
       this.submitAction();
       return true;
@@ -98,7 +98,7 @@ export default class AdminUiHandler extends FormModalUiHandler {
     return false;
   }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     this.config = args[0] as ModalConfig; // config
     this.adminMode = args[1] as AdminMode; // admin mode
     this.adminResult = args[2] ?? { username: "", discordId: "", googleId: "", lastLoggedIn: "", registered: "" }; // admin result, if any
@@ -395,7 +395,7 @@ export default class AdminUiHandler extends FormModalUiHandler {
     );
   }
 
-  clear(): void {
+  override clear(): void {
     super.clear();
 
     // this is used to remove the existing fields on the admin panel so they can be updated

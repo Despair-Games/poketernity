@@ -7,7 +7,7 @@ export class EndEvolutionPhase extends Phase {
     super();
   }
 
-  start() {
+  override start() {
     super.start();
 
     globalScene.ui.setModeForceTransition(Mode.MESSAGE).then(() => this.end());
