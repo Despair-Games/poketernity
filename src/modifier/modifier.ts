@@ -1,5 +1,5 @@
 import { FusionSpeciesFormEvolution, pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
-import { getBerryEffectFunc, getBerryPredicate } from "#app/data/berry";
+import { getBerryPredicate } from "#app/data/berry";
 import { getLevelTotalExp } from "#app/data/exp";
 import { allMoves } from "#app/data/move";
 import { MAX_PER_TYPE_POKEBALLS } from "#app/data/pokeball";
@@ -55,6 +55,7 @@ import { Color, ShadowColor } from "#enums/color";
 import { FRIENDSHIP_GAIN_FROM_RARE_CANDY } from "#app/data/balance/starters";
 import { applyAbAttrs, CommanderAbAttr } from "#app/data/ability";
 import { globalScene } from "#app/global-scene";
+import { getBerryEffectFunc } from "#app/data/berries/berry-utils";
 
 export type ModifierPredicate = (modifier: Modifier) => boolean;
 

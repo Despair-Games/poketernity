@@ -82,7 +82,6 @@ import { ModifierPoolType } from "#app/modifier/modifier-type";
 import { Command } from "../ui/command-ui-handler";
 import i18next from "i18next";
 import type { Localizable } from "#app/interfaces/locales";
-import { getBerryEffectFunc } from "./berry";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -110,6 +109,7 @@ import type { BattlerIndex } from "#app/enums/battler-index";
 import { HitResult } from "#app/enums/hit-result";
 import { ArenaTagSide } from "#app/enums/arena-tag-side";
 import { MoveResult } from "#enums/move-result";
+import { getBerryEffectFunc } from "./berries/berry-utils";
 
 export enum MoveCategory {
   PHYSICAL,
