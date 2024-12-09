@@ -1,8 +1,9 @@
 import { applyMoveAttrs, MoveHeaderAttr } from "#app/data/move";
-import type { PokemonMove } from "#app/field/pokemon";
 import type Pokemon from "#app/field/pokemon";
+import type { PokemonMove } from "#app/field/pokemon";
 import { BattlePhase } from "./battle-phase";
 
+/** Applies {@linkcode MoveHeaderAttr}s */
 export class MoveHeaderPhase extends BattlePhase {
   public pokemon: Pokemon;
   public move: PokemonMove;
@@ -14,11 +15,11 @@ export class MoveHeaderPhase extends BattlePhase {
     this.move = move;
   }
 
-  canMove(): boolean {
+  public canMove(): boolean {
     return this.pokemon.isActive(true) && this.move.isUsable(this.pokemon);
   }
 
-  override start() {
+  public override start(): void {
     super.start();
 
     if (this.canMove()) {

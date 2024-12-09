@@ -314,8 +314,7 @@ export class EncounterPhase extends BattlePhase {
         globalScene.arenaPlayer,
         globalScene.trainer,
       ].flat(),
-      x: (_target, _key, value, fieldIndex: integer) =>
-        fieldIndex < 2 + enemyField.length ? value + 300 : value - 300,
+      x: (_target, _key, value, fieldIndex: number) => (fieldIndex < 2 + enemyField.length ? value + 300 : value - 300),
       duration: 2000,
       onComplete: () => {
         if (globalScene.currentBattle.isClassicFinalBoss) {

@@ -326,7 +326,7 @@ export class AttemptCapturePhase extends PokemonPhase {
                       Mode.PARTY,
                       PartyUiMode.RELEASE,
                       this.fieldIndex,
-                      (slotIndex: integer, _option: PartyOption) => {
+                      (slotIndex: number, _option: PartyOption) => {
                         ui.setMode(Mode.MESSAGE).then(() => {
                           if (slotIndex < 6) {
                             addToParty(slotIndex);
