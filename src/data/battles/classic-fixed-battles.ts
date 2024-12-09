@@ -7,7 +7,8 @@ import { TrainerVariant } from "#app/enums/trainer-variant";
 import Trainer from "#app/field/trainer";
 import { globalScene } from "#app/global-scene";
 import { ModifierTier } from "#app/modifier/modifier-tier";
-import { getRandomTrainerFunc, randSeedInt } from "#app/utils";
+import { randInt, randSeedInt, randSeedItem } from "#app/utils";
+import { trainerConfigs } from "../trainer-config";
 
 /**
  * Youngster/Lass on 5
@@ -371,3 +372,55 @@ export const classicFixedBattles: FixedBattleConfigs = {
       allowLuckUpgrades: false,
     }),
 };
+
+type GetTrainerFunc = () => Trainer;
+/**
+ * Helper function to generate a random trainer for evil team trainers and the elite 4/champion
+ * @param trainerPool The TrainerType or list of TrainerTypes that can possibly be generated
+ * @param randomGender whether or not to randomly (50%) generate a female trainer (for use with evil team grunts)
+ * @param seedOffset the seed offset to use for the random generation of the trainer
+ * @returns the generated trainer
+ */
+export function getRandomTrainerFunc(
+  trainerPool: (TrainerType | TrainerType[])[],
+  randomGender: boolean = false,
+  seedOffset: number = 0,
+): GetTrainerFunc {
+  return () => {
+    const rand = randSeedInt(trainerPool.length);
+    const trainerTypes: TrainerType[] = [];
+
+    globalScene.executeWithSeedOffset(() => {
+      for (const trainerPoolEntry of trainerPool) {
+        const trainerType = Array.isArray(trainerPoolEntry) ? randSeedItem(trainerPoolEntry) : trainerPoolEntry;
+        trainerTypes.push(trainerType);
+      }
+    }, seedOffset);
+
+    let trainerGender = TrainerVariant.DEFAULT;
+    if (randomGender) {
+      trainerGender = randInt(2) === 0 ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT;
+    }
+
+    /* 1/3 chance for evil team grunts to be double battles */
+    const evilTeamGrunts = [
+      TrainerType.ROCKET_GRUNT,
+      TrainerType.MAGMA_GRUNT,
+      TrainerType.AQUA_GRUNT,
+      TrainerType.GALACTIC_GRUNT,
+      TrainerType.PLASMA_GRUNT,
+      TrainerType.FLARE_GRUNT,
+      TrainerType.AETHER_GRUNT,
+      TrainerType.SKULL_GRUNT,
+      TrainerType.MACRO_GRUNT,
+      TrainerType.STAR_GRUNT,
+    ];
+    const isEvilTeamGrunt = evilTeamGrunts.includes(trainerTypes[rand]);
+
+    if (trainerConfigs[trainerTypes[rand]].hasDouble && isEvilTeamGrunt) {
+      return new Trainer(trainerTypes[rand], randInt(3) === 0 ? TrainerVariant.DOUBLE : trainerGender);
+    }
+
+    return new Trainer(trainerTypes[rand], trainerGender);
+  };
+}
