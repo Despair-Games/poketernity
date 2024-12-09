@@ -123,7 +123,7 @@ export const TrashToTreasureEncounter: MysteryEncounter = MysteryEncounterBuilde
         ]);
         const modifier = blackSludge?.newModifier();
         if (modifier) {
-          await globalScene.addModifier(modifier, false, false, false, true);
+          globalScene.addModifier(modifier, false, false, false, true);
           globalScene.playSound("battle_anims/PRSFX- Venom Drench", { volume: 2 });
           await showEncounterText(
             i18next.t("battle:rewardGain", { modifierName: modifier.type.name }),

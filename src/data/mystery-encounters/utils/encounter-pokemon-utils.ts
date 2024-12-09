@@ -382,7 +382,7 @@ export async function modifyPlayerPokemonBST(pokemon: PlayerPokemon, value: numb
     ?.withIdFromFunc(modifierTypes.MYSTERY_ENCOUNTER_SHUCKLE_JUICE);
   const modifier = modType?.newModifier(pokemon);
   if (modifier) {
-    await globalScene.addModifier(modifier, false, false, false, true);
+    globalScene.addModifier(modifier, false, false, false, true);
     pokemon.calculateStats();
   }
 }
@@ -419,7 +419,7 @@ export async function applyModifierTypeToPlayerPokemon(
     return applyModifierTypeToPlayerPokemon(pokemon, fallbackModifierType);
   }
 
-  await globalScene.addModifier(modifier, false, false, false, true);
+  globalScene.addModifier(modifier, false, false, false, true);
 }
 
 // TODO: deduplicate catch code/formula

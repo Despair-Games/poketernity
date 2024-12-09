@@ -68,6 +68,7 @@ export class BattleEndPhase extends BattlePhase {
       }
     }
 
-    globalScene.updateModifiers().then(() => this.end());
+    globalScene.updateModifiers();
+    this.end();
   }
 }
