@@ -11,6 +11,7 @@ import { ScrollBar } from "#app/ui/scroll-bar";
 import { PlayerGender } from "#enums/player-gender";
 import { globalScene } from "#app/global-scene";
 import { achvs } from "#app/system/achvs";
+import { getAchievementDescription } from "#app/system/achv-utils";
 
 enum Page {
   ACHIEVEMENTS,
