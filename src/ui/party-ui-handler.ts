@@ -321,7 +321,7 @@ export default class PartyUiHandler extends MessageUiHandler {
     this.partySlots = [];
   }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     if (!args.length || this.active) {
       return false;
     }
@@ -832,7 +832,7 @@ export default class PartyUiHandler extends MessageUiHandler {
     }
   }
 
-  setCursor(cursor: integer): boolean {
+  override setCursor(cursor: integer): boolean {
     let changed: boolean;
 
     if (this.optionsMode) {
@@ -895,7 +895,7 @@ export default class PartyUiHandler extends MessageUiHandler {
     return changed;
   }
 
-  showText(
+  override showText(
     text: string,
     delay?: integer | null,
     callback?: Function | null,
@@ -1353,7 +1353,7 @@ export default class PartyUiHandler extends MessageUiHandler {
     this.optionsCursorObj = null;
   }
 
-  clear() {
+  override clear() {
     super.clear();
     // hide the overlay
     this.moveInfoOverlay.clear();

@@ -325,7 +325,7 @@ export default class GameChallengesUiHandler extends UiHandler {
     this.challengesContainer.update();
   }
 
-  show(args: any[]): boolean {
+  override show(args: any[]): boolean {
     super.show(args);
 
     this.startCursor.setVisible(false);
@@ -481,7 +481,7 @@ export default class GameChallengesUiHandler extends UiHandler {
     return success;
   }
 
-  setCursor(cursor: integer): boolean {
+  override setCursor(cursor: integer): boolean {
     let ret = super.setCursor(cursor);
 
     if (!this.cursorObj) {
@@ -525,7 +525,7 @@ export default class GameChallengesUiHandler extends UiHandler {
     return globalScene.gameMode.challenges[this.cursor + this.scrollCursor];
   }
 
-  clear() {
+  override clear() {
     super.clear();
     this.challengesContainer.setVisible(false);
     this.eraseCursor();

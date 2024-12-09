@@ -229,7 +229,7 @@ export abstract class SpeciesFormChangeTrigger {
 }
 
 export class SpeciesFormChangeManualTrigger extends SpeciesFormChangeTrigger {
-  canChange(_pokemon: Pokemon): boolean {
+  override canChange(_pokemon: Pokemon): boolean {
     return true;
   }
 }
@@ -266,7 +266,7 @@ export class SpeciesFormChangeItemTrigger extends SpeciesFormChangeTrigger {
     this.active = active;
   }
 
-  canChange(pokemon: Pokemon): boolean {
+  override canChange(pokemon: Pokemon): boolean {
     return !!globalScene.findModifier(
       (m) =>
         m instanceof PokemonFormChangeItemModifier &&
@@ -285,7 +285,7 @@ export class SpeciesFormChangeTimeOfDayTrigger extends SpeciesFormChangeTrigger 
     this.timesOfDay = timesOfDay;
   }
 
-  canChange(_pokemon: Pokemon): boolean {
+  override canChange(_pokemon: Pokemon): boolean {
     return this.timesOfDay.indexOf(globalScene.arena.getTimeOfDay()) > -1;
   }
 }
@@ -298,7 +298,7 @@ export class SpeciesFormChangeActiveTrigger extends SpeciesFormChangeTrigger {
     this.active = active;
   }
 
-  canChange(pokemon: Pokemon): boolean {
+  override canChange(pokemon: Pokemon): boolean {
     return pokemon.isActive(true) === this.active;
   }
 }
@@ -316,7 +316,7 @@ export class SpeciesFormChangeStatusEffectTrigger extends SpeciesFormChangeTrigg
     this.invert = invert;
   }
 
-  canChange(pokemon: Pokemon): boolean {
+  override canChange(pokemon: Pokemon): boolean {
     return this.statusEffects.indexOf(pokemon.status?.effect || StatusEffect.NONE) > -1 !== this.invert;
   }
 }
@@ -331,7 +331,7 @@ export class SpeciesFormChangeMoveLearnedTrigger extends SpeciesFormChangeTrigge
     this.known = known;
   }
 
-  canChange(pokemon: Pokemon): boolean {
+  override canChange(pokemon: Pokemon): boolean {
     return !!pokemon.moveset.filter((m) => m.moveId === this.move).length === this.known;
   }
 }
@@ -348,14 +348,14 @@ export abstract class SpeciesFormChangeMoveTrigger extends SpeciesFormChangeTrig
 }
 
 export class SpeciesFormChangePreMoveTrigger extends SpeciesFormChangeMoveTrigger {
-  canChange(pokemon: Pokemon): boolean {
+  override canChange(pokemon: Pokemon): boolean {
     const command = globalScene.currentBattle.turnCommands[pokemon.getBattlerIndex()];
     return !!command?.move && this.movePredicate(command.move.move) === this.used;
   }
 }
 
 export class SpeciesFormChangePostMoveTrigger extends SpeciesFormChangeMoveTrigger {
-  canChange(pokemon: Pokemon): boolean {
+  override canChange(pokemon: Pokemon): boolean {
     return (
       pokemon.summonData && !!pokemon.getLastXMoves(1).filter((m) => this.movePredicate(m.move)).length === this.used
     );
@@ -384,7 +384,7 @@ export class SpeciesDefaultFormMatchTrigger extends SpeciesFormChangeTrigger {
     this.formKey = formKey;
   }
 
-  canChange(pokemon: Pokemon): boolean {
+  override canChange(pokemon: Pokemon): boolean {
     return (
       this.formKey ===
       pokemon.species.forms[globalScene.getSpeciesFormIndex(pokemon.species, pokemon.gender, pokemon.getNature(), true)]
@@ -412,7 +412,7 @@ export class SpeciesFormChangeTeraTrigger extends SpeciesFormChangeTrigger {
    * @param {Pokemon} pokemon the Pokémon that is trying to do the form change
    * @returns `true` if the Pokémon can change forms, `false` otherwise
    */
-  canChange(pokemon: Pokemon): boolean {
+  override canChange(pokemon: Pokemon): boolean {
     return !!globalScene.findModifier(
       (m) => m instanceof TerastallizeModifier && m.pokemonId === pokemon.id && m.teraType === this.teraType,
     );
@@ -425,7 +425,7 @@ export class SpeciesFormChangeTeraTrigger extends SpeciesFormChangeTrigger {
  * @extends SpeciesFormChangeTrigger
  */
 export class SpeciesFormChangeLapseTeraTrigger extends SpeciesFormChangeTrigger {
-  canChange(pokemon: Pokemon): boolean {
+  override canChange(pokemon: Pokemon): boolean {
     return !!globalScene.findModifier((m) => m instanceof TerastallizeModifier && m.pokemonId === pokemon.id);
   }
 }
@@ -453,7 +453,7 @@ export class SpeciesFormChangeWeatherTrigger extends SpeciesFormChangeTrigger {
    * @param {Pokemon} pokemon the pokemon that is trying to do the form change
    * @returns `true` if the Pokemon can change forms, `false` otherwise
    */
-  canChange(pokemon: Pokemon): boolean {
+  override canChange(pokemon: Pokemon): boolean {
     const currentWeather = globalScene.arena.weather?.weatherType ?? WeatherType.NONE;
     const isWeatherSuppressed = globalScene.arena.weather?.isEffectSuppressed();
     const isAbilitySuppressed = pokemon.summonData.abilitySuppressed;
@@ -491,7 +491,7 @@ export class SpeciesFormChangeRevertWeatherFormTrigger extends SpeciesFormChange
    * @param {Pokemon} pokemon the pokemon that is trying to do the form change
    * @returns `true` if the Pokemon will revert to its original form, `false` otherwise
    */
-  canChange(pokemon: Pokemon): boolean {
+  override canChange(pokemon: Pokemon): boolean {
     if (pokemon.hasAbility(this.ability, false, true)) {
       const currentWeather = globalScene.arena.weather?.weatherType ?? WeatherType.NONE;
       const isWeatherSuppressed = globalScene.arena.weather?.isEffectSuppressed();

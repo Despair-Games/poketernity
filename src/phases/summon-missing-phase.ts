@@ -8,7 +8,7 @@ export class SummonMissingPhase extends SummonPhase {
     super(fieldIndex);
   }
 
-  preSummon(): void {
+  override preSummon(): void {
     globalScene.ui.showText(
       i18next.t("battle:sendOutPokemon", { pokemonName: getPokemonNameWithAffix(this.getPokemon()) }),
     );

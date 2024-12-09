@@ -27,7 +27,7 @@ export class EnemyCommandPhase extends FieldPhase {
     }
   }
 
-  start() {
+  override start() {
     super.start();
 
     const enemyPokemon = globalScene.getEnemyField()[this.fieldIndex];

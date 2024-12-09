@@ -426,7 +426,7 @@ export class SingleGenerationChallenge extends Challenge {
     super(Challenges.SINGLE_GENERATION, 9);
   }
 
-  applyStarterChoice(
+  override applyStarterChoice(
     pokemon: PokemonSpecies,
     valid: BooleanHolder,
     _dexAttr: DexAttrProps,
@@ -453,7 +453,7 @@ export class SingleGenerationChallenge extends Challenge {
     return false;
   }
 
-  applyPokemonInBattle(pokemon: Pokemon, valid: BooleanHolder): boolean {
+  override applyPokemonInBattle(pokemon: Pokemon, valid: BooleanHolder): boolean {
     const baseGeneration =
       pokemon.species.speciesId === Species.VICTINI ? 5 : getPokemonSpecies(pokemon.species.speciesId).generation;
     let fusionGeneration = 0;
@@ -473,7 +473,7 @@ export class SingleGenerationChallenge extends Challenge {
     return false;
   }
 
-  applyFixedBattle(waveIndex: Number, battleConfig: FixedBattleConfig): boolean {
+  override applyFixedBattle(waveIndex: Number, battleConfig: FixedBattleConfig): boolean {
     let trainerTypes: TrainerType[] = [];
     switch (waveIndex) {
       case 182:
@@ -555,7 +555,7 @@ export class SingleGenerationChallenge extends Challenge {
   /**
    * @overrides
    */
-  getDifficulty(): number {
+  override getDifficulty(): number {
     return this.value > 0 ? 1 : 0;
   }
 
@@ -564,7 +564,7 @@ export class SingleGenerationChallenge extends Challenge {
    * @param {value} overrideValue The value to check for. If undefined, gets the current value.
    * @returns {string} The localised name for the current value.
    */
-  getValue(overrideValue?: number): string {
+  override getValue(overrideValue?: number): string {
     const value = overrideValue ?? this.value;
     if (value === 0) {
       return i18next.t("settings:off");
@@ -577,7 +577,7 @@ export class SingleGenerationChallenge extends Challenge {
    * @param {value} overrideValue The value to check for. If undefined, gets the current value.
    * @returns {string} The localised description for the current value.
    */
-  getDescription(overrideValue?: number): string {
+  override getDescription(overrideValue?: number): string {
     const value = overrideValue ?? this.value;
     if (value === 0) {
       return i18next.t("challenges:singleGeneration.desc_default");
@@ -587,7 +587,7 @@ export class SingleGenerationChallenge extends Challenge {
     });
   }
 
-  static loadChallenge(source: SingleGenerationChallenge | any): SingleGenerationChallenge {
+  static override loadChallenge(source: SingleGenerationChallenge | any): SingleGenerationChallenge {
     const newChallenge = new SingleGenerationChallenge();
     newChallenge.value = source.value;
     newChallenge.severity = source.severity;
@@ -652,7 +652,7 @@ export class SingleTypeChallenge extends Challenge {
     return false;
   }
 
-  applyPokemonInBattle(pokemon: Pokemon, valid: BooleanHolder): boolean {
+  override applyPokemonInBattle(pokemon: Pokemon, valid: BooleanHolder): boolean {
     if (
       pokemon.isPlayer() &&
       !pokemon.isOfType(this.value - 1, false, false, true) &&
@@ -672,7 +672,7 @@ export class SingleTypeChallenge extends Challenge {
   /**
    * @overrides
    */
-  getDifficulty(): number {
+  override getDifficulty(): number {
     return this.value > 0 ? 1 : 0;
   }
 
@@ -681,7 +681,7 @@ export class SingleTypeChallenge extends Challenge {
    * @param {value} overrideValue The value to check for. If undefined, gets the current value.
    * @returns {string} The localised name for the current value.
    */
-  getValue(overrideValue?: integer): string {
+  override getValue(overrideValue?: integer): string {
     if (overrideValue === undefined) {
       overrideValue = this.value;
     }
@@ -693,7 +693,7 @@ export class SingleTypeChallenge extends Challenge {
    * @param {value} overrideValue The value to check for. If undefined, gets the current value.
    * @returns {string} The localised description for the current value.
    */
-  getDescription(overrideValue?: integer): string {
+  override getDescription(overrideValue?: integer): string {
     if (overrideValue === undefined) {
       overrideValue = this.value;
     }
@@ -704,7 +704,7 @@ export class SingleTypeChallenge extends Challenge {
     return this.value === 0 ? defaultDesc : typeDesc;
   }
 
-  static loadChallenge(source: SingleTypeChallenge | any): SingleTypeChallenge {
+  static override loadChallenge(source: SingleTypeChallenge | any): SingleTypeChallenge {
     const newChallenge = new SingleTypeChallenge();
     newChallenge.value = source.value;
     newChallenge.severity = source.severity;
@@ -720,7 +720,7 @@ export class FreshStartChallenge extends Challenge {
     super(Challenges.FRESH_START, 1);
   }
 
-  applyStarterChoice(pokemon: PokemonSpecies, valid: BooleanHolder): boolean {
+  override applyStarterChoice(pokemon: PokemonSpecies, valid: BooleanHolder): boolean {
     if (!defaultStarterSpecies.includes(pokemon.speciesId)) {
       valid.value = false;
       return true;
@@ -728,7 +728,7 @@ export class FreshStartChallenge extends Challenge {
     return false;
   }
 
-  applyStarterCost(species: Species, cost: NumberHolder): boolean {
+  override applyStarterCost(species: Species, cost: NumberHolder): boolean {
     if (defaultStarterSpecies.includes(species)) {
       cost.value = speciesStarterCosts[species];
       return true;
@@ -736,7 +736,7 @@ export class FreshStartChallenge extends Challenge {
     return false;
   }
 
-  applyStarterModify(pokemon: Pokemon): boolean {
+  override applyStarterModify(pokemon: Pokemon): boolean {
     pokemon.abilityIndex = 0; // Always base ability, not hidden ability
     pokemon.passive = false; // Passive isn't unlocked
     pokemon.nature = Nature.HARDY; // Neutral nature
@@ -758,7 +758,7 @@ export class FreshStartChallenge extends Challenge {
     return 0;
   }
 
-  static loadChallenge(source: FreshStartChallenge | any): FreshStartChallenge {
+  static override loadChallenge(source: FreshStartChallenge | any): FreshStartChallenge {
     const newChallenge = new FreshStartChallenge();
     newChallenge.value = source.value;
     newChallenge.severity = source.severity;
@@ -774,7 +774,7 @@ export class InverseBattleChallenge extends Challenge {
     super(Challenges.INVERSE_BATTLE, 1);
   }
 
-  static loadChallenge(source: InverseBattleChallenge | any): InverseBattleChallenge {
+  static override loadChallenge(source: InverseBattleChallenge | any): InverseBattleChallenge {
     const newChallenge = new InverseBattleChallenge();
     newChallenge.value = source.value;
     newChallenge.severity = source.severity;
@@ -785,7 +785,7 @@ export class InverseBattleChallenge extends Challenge {
     return 0;
   }
 
-  applyTypeEffectiveness(effectiveness: NumberHolder): boolean {
+  override applyTypeEffectiveness(effectiveness: NumberHolder): boolean {
     if (effectiveness.value < 1) {
       effectiveness.value = 2;
       return true;
@@ -809,14 +809,14 @@ export class LowerStarterMaxCostChallenge extends Challenge {
   /**
    * @override
    */
-  getValue(overrideValue?: integer): string {
+  override getValue(overrideValue?: integer): string {
     if (overrideValue === undefined) {
       overrideValue = this.value;
     }
     return (DEFAULT_PARTY_MAX_COST - overrideValue).toString();
   }
 
-  applyStarterChoice(pokemon: PokemonSpecies, valid: BooleanHolder): boolean {
+  override applyStarterChoice(pokemon: PokemonSpecies, valid: BooleanHolder): boolean {
     if (speciesStarterCosts[pokemon.speciesId] > DEFAULT_PARTY_MAX_COST - this.value) {
       valid.value = false;
       return true;
@@ -824,7 +824,7 @@ export class LowerStarterMaxCostChallenge extends Challenge {
     return false;
   }
 
-  static loadChallenge(source: LowerStarterMaxCostChallenge | any): LowerStarterMaxCostChallenge {
+  static override loadChallenge(source: LowerStarterMaxCostChallenge | any): LowerStarterMaxCostChallenge {
     const newChallenge = new LowerStarterMaxCostChallenge();
     newChallenge.value = source.value;
     newChallenge.severity = source.severity;
@@ -843,19 +843,19 @@ export class LowerStarterPointsChallenge extends Challenge {
   /**
    * @override
    */
-  getValue(overrideValue?: integer): string {
+  override getValue(overrideValue?: integer): string {
     if (overrideValue === undefined) {
       overrideValue = this.value;
     }
     return (DEFAULT_PARTY_MAX_COST - overrideValue).toString();
   }
 
-  applyStarterPoints(points: NumberHolder): boolean {
+  override applyStarterPoints(points: NumberHolder): boolean {
     points.value -= this.value;
     return true;
   }
 
-  static loadChallenge(source: LowerStarterPointsChallenge | any): LowerStarterPointsChallenge {
+  static override loadChallenge(source: LowerStarterPointsChallenge | any): LowerStarterPointsChallenge {
     const newChallenge = new LowerStarterPointsChallenge();
     newChallenge.value = source.value;
     newChallenge.severity = source.severity;

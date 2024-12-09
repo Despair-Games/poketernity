@@ -414,7 +414,7 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
     });
   }
 
-  public destroy(fromScene?: boolean): void {
+  public override destroy(fromScene?: boolean): void {
     globalScene.eventTarget.removeEventListener(BattleSceneEventType.NEW_ARENA, this.onNewArenaEvent);
     globalScene.eventTarget.removeEventListener(BattleSceneEventType.TURN_END, this.onTurnEndEvent);
 

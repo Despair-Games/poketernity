@@ -218,7 +218,6 @@ import { ModifierTier } from "#app/modifier/modifier-tier";
 import { applyChallenges, ChallengeType } from "#app/data/challenge";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
-import { BattleSpec } from "#enums/battle-spec";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { BerryType } from "#enums/berry-type";
 import { Biome } from "#enums/biome";
@@ -266,7 +265,7 @@ export enum FieldPosition {
 
 export default abstract class Pokemon extends Phaser.GameObjects.Container {
   public id: integer;
-  public name: string;
+  public override name: string;
   public nickname: string;
   public species: PokemonSpecies;
   public formIndex: integer;
@@ -1758,10 +1757,10 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     const { currentBattle, gameMode } = globalScene;
     const waveIndex = currentBattle?.waveIndex;
     if (
-      this instanceof EnemyPokemon &&
-      (currentBattle?.battleSpec === BattleSpec.FINAL_BOSS ||
-        gameMode.isEndlessMinorBoss(waveIndex) ||
-        gameMode.isEndlessMajorBoss(waveIndex))
+      this instanceof EnemyPokemon
+      && (currentBattle?.isClassicFinalBoss
+        || gameMode.isEndlessMinorBoss(waveIndex)
+        || gameMode.isEndlessMajorBoss(waveIndex))
     ) {
       return false;
     }
@@ -4895,7 +4894,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     globalScene.triggerPokemonFormChange(this, SpeciesFormChangeActiveTrigger, true);
   }
 
-  destroy(): void {
+  override destroy(): void {
     this.battleInfo?.destroy();
     this.destroySubstitute();
     super.destroy();
@@ -5357,7 +5356,7 @@ export class PlayerPokemon extends Pokemon {
     });
   }
 
-  changeForm(formChange: SpeciesFormChange): Promise<void> {
+  override changeForm(formChange: SpeciesFormChange): Promise<void> {
     return new Promise((resolve) => {
       const previousFormIndex = this.formIndex;
       this.formIndex = Math.max(
@@ -5408,7 +5407,7 @@ export class PlayerPokemon extends Pokemon {
     });
   }
 
-  clearFusionSpecies(): void {
+  override clearFusionSpecies(): void {
     super.clearFusionSpecies();
     this.generateCompatibleTms();
   }
@@ -5620,7 +5619,7 @@ export class EnemyPokemon extends Pokemon {
     }
   }
 
-  generateAndPopulateMoveset(formIndex?: integer): void {
+  override generateAndPopulateMoveset(formIndex?: integer): void {
     switch (true) {
       case this.species.speciesId === Species.SMEARGLE:
         this.moveset = [
@@ -5966,7 +5965,7 @@ export class EnemyPokemon extends Pokemon {
     return 0;
   }
 
-  damage(
+  override damage(
     damage: integer,
     ignoreSegments: boolean = false,
     preventEndure: boolean = false,
@@ -6004,11 +6003,10 @@ export class EnemyPokemon extends Pokemon {
       }
     }
 
-    switch (globalScene.currentBattle.battleSpec) {
-      case BattleSpec.FINAL_BOSS:
-        if (!this.formIndex && this.bossSegmentIndex < 1) {
-          damage = Math.min(damage, this.hp - 1);
-        }
+    if (globalScene.currentBattle.isClassicFinalBoss) {
+      if (!this.formIndex && this.bossSegmentIndex < 1) {
+        damage = Math.min(damage, this.hp - 1);
+      }
     }
 
     const ret = super.damage(damage, ignoreSegments, preventEndure, ignoreFaintPhase);
@@ -6028,7 +6026,7 @@ export class EnemyPokemon extends Pokemon {
   }
 
   canBypassBossSegments(segmentCount: integer = 1): boolean {
-    if (globalScene.currentBattle.battleSpec === BattleSpec.FINAL_BOSS) {
+    if (globalScene.currentBattle.isClassicFinalBoss) {
       if (!this.formIndex && this.bossSegmentIndex - segmentCount < 1) {
         return false;
       }

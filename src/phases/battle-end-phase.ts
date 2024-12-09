@@ -14,7 +14,7 @@ export class BattleEndPhase extends BattlePhase {
     this.isVictory = isVictory;
   }
 
-  start() {
+  override start() {
     super.start();
 
     globalScene.gameData.gameStats.battles++;

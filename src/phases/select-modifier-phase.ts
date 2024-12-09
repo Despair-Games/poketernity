@@ -53,7 +53,7 @@ export class SelectModifierPhase extends BattlePhase {
     this.isCopy = isCopy;
   }
 
-  start() {
+  override start() {
     super.start();
 
     if (!this.rerollCount && !this.isCopy) {

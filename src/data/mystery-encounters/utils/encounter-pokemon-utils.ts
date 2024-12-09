@@ -44,11 +44,11 @@ export const STANDARD_ENCOUNTER_BOOSTED_LEVEL_MODIFIER = 1;
 
 /**
  * Gets the sprite key and file root for a given PokemonSpecies (accounts for gender, shiny, variants, forms, and experimental)
- * @param species
- * @param female
- * @param formIndex
- * @param shiny
- * @param variant
+ * @param species - The species of the sprite
+ * @param female - Whether the sprite represents the female version
+ * @param formIndex - The formIndex of the sprite
+ * @param shiny - Whether or not to use the shiny sprite
+ * @param variant - The variant index
  */
 export function getSpriteKeysFromSpecies(
   species: Species,
@@ -74,6 +74,8 @@ export function getSpriteKeysFromSpecies(
 
 /**
  * Gets the sprite key and file root for a given Pokemon (accounts for gender, shiny, variants, forms, and experimental)
+ * @param pokemon - The input Pokemon
+ * @returns an object with the sprite key and file root
  */
 export function getSpriteKeysFromPokemon(pokemon: Pokemon): { spriteKey: string; fileRoot: string } {
   const spriteKey = pokemon
@@ -86,13 +88,15 @@ export function getSpriteKeysFromPokemon(pokemon: Pokemon): { spriteKey: string;
   return { spriteKey, fileRoot };
 }
 
+// TODO: Move all the helper functions to get player's random/highest level/lowest level/highest BST to a different utils
+
 /**
  * Will never remove the player's last non-fainted Pokemon (if they only have 1).
  * Otherwise, picks a Pokemon completely at random and removes from the party
  * @param isAllowed Default `false`. If `true`, only picks from legal mons. If no legal mons are found (or there is 1, with `doNotReturnLastAllowedMon = true`), will return a mon that is not allowed.
  * @param isFainted Default `false`. If `true`, includes fainted mons.
  * @param doNotReturnLastAllowedMon Default `false`. If `true`, will never return the last unfainted pokemon in the party. Useful when this function is being used to determine what Pokemon to remove from the party (Don't want to remove last unfainted)
- * @returns
+ * @returns a random player Pokemon
  */
 export function getRandomPlayerPokemon(
   isAllowed: boolean = false,
@@ -131,11 +135,11 @@ export function getRandomPlayerPokemon(
 }
 
 /**
+ * Helper function to get a player's Pokemon with the highest level (should be in a general utils rather than ME/utils)
  * Ties are broken by whatever mon is closer to the front of the party
- * @param scene
  * @param isAllowed Default false. If true, only picks from legal mons.
  * @param isFainted Default false. If true, includes fainted mons.
- * @returns
+ * @returns the player's highest leveled Pokemon
  */
 export function getHighestLevelPlayerPokemon(isAllowed: boolean = false, isFainted: boolean = false): PlayerPokemon {
   const party = globalScene.getPlayerParty();
@@ -156,12 +160,12 @@ export function getHighestLevelPlayerPokemon(isAllowed: boolean = false, isFaint
 }
 
 /**
+ * Helper function to get a player's Pokemon with the highest stat (should be in a general utils rather than ME/utils)
  * Ties are broken by whatever mon is closer to the front of the party
- * @param scene
  * @param stat Stat to search for
  * @param isAllowed Default false. If true, only picks from legal mons.
  * @param isFainted Default false. If true, includes fainted mons.
- * @returns
+ * @returns the Player's Pokemon with the highest stat
  */
 export function getHighestStatPlayerPokemon(
   stat: PermanentStat,
@@ -186,11 +190,11 @@ export function getHighestStatPlayerPokemon(
 }
 
 /**
+ * Helper function to get a player's Pokemon with the lowest level (should be in a general utils rather than ME/utils)
  * Ties are broken by whatever mon is closer to the front of the party
- * @param scene
  * @param isAllowed Default false. If true, only picks from legal mons.
  * @param isFainted Default false. If true, includes fainted mons.
- * @returns
+ * @returns the player's lowest leveled Pokemon
  */
 export function getLowestLevelPlayerPokemon(isAllowed: boolean = false, isFainted: boolean = false): PlayerPokemon {
   const party = globalScene.getPlayerParty();
@@ -211,11 +215,11 @@ export function getLowestLevelPlayerPokemon(isAllowed: boolean = false, isFainte
 }
 
 /**
+ * Helper function to get a player's Pokemon with the highest BST (should be in a general utils rather than ME/utils)
  * Ties are broken by whatever mon is closer to the front of the party
- * @param scene
  * @param isAllowed Default false. If true, only picks from legal mons.
  * @param isFainted Default false. If true, includes fainted mons.
- * @returns
+ * @returns the player's Pokemon with the highest BST
  */
 export function getHighestStatTotalPlayerPokemon(
   isAllowed: boolean = false,
@@ -239,15 +243,15 @@ export function getHighestStatTotalPlayerPokemon(
 }
 
 /**
- *
+ * Function to get a random starter
  * NOTE: This returns ANY random species, including those locked behind eggs, etc.
- * @param starterTiers
- * @param excludedSpecies
- * @param types
- * @param allowSubLegendary
- * @param allowLegendary
- * @param allowMythical
- * @returns
+ * @param starterTiers - either a starter tier or a list representing the min and max starter tiers
+ * @param excludedSpecies - species to be excluded
+ * @param types - list of types to filter for
+ * @param allowSubLegendary - whether or not sub legends are allowed
+ * @param allowLegendary - whether or not legends are allowed
+ * @param allowMythical - wehther or not mythicals are allowed
+ * @returns a randomly generated Species (dfeault Bulbasaur if all filters fail)
  */
 export function getRandomSpeciesByStarterCost(
   starterTiers: number | [number, number],
@@ -303,8 +307,6 @@ export function getRandomSpeciesByStarterCost(
 
 /**
  * Takes care of handling player pokemon KO (with all its side effects)
- *
- * @param scene the battle scene
  * @param pokemon the player pokemon to KO
  */
 export function koPlayerPokemon(pokemon: PlayerPokemon) {
@@ -318,10 +320,8 @@ export function koPlayerPokemon(pokemon: PlayerPokemon) {
  * Handles applying hp changes to a player pokemon.
  * Takes care of not going below `0`, above max-hp, adding `FNT` status correctly and updating the pokemon info.
  * TODO: should we handle special cases like wonder-guard/shedinja?
- * @param scene the battle scene
  * @param pokemon the player pokemon to apply the hp change to
  * @param value the hp change amount. Positive for heal. Negative for damage
- *
  */
 function applyHpChangeToPokemon(pokemon: PlayerPokemon, value: number) {
   const hpChange = Math.round(pokemon.hp + value);
@@ -335,7 +335,6 @@ function applyHpChangeToPokemon(pokemon: PlayerPokemon, value: number) {
 
 /**
  * Handles applying damage to a player pokemon
- * @param scene the battle scene
  * @param pokemon the player pokemon to apply damage to
  * @param damage the amount of damage to apply
  * @see {@linkcode applyHpChangeToPokemon}
@@ -355,7 +354,6 @@ export function applyDamageToPokemon(pokemon: PlayerPokemon, damage: number) {
 
 /**
  * Handles applying heal to a player pokemon
- * @param scene the battle scene
  * @param pokemon the player pokemon to apply heal to
  * @param heal the amount of heal to apply
  * @see {@linkcode applyHpChangeToPokemon}
@@ -372,9 +370,10 @@ export function applyHealToPokemon(pokemon: PlayerPokemon, heal: number) {
 
 /**
  * Will modify all of a Pokemon's base stats by a flat value
+ * Used for the shuckle juice ME
  * Base stats can never go below 1
- * @param pokemon
- * @param value
+ * @param pokemon - The Pokemon being modified
+ * @param value - The amount a Pokemon's stats are modified by
  */
 export async function modifyPlayerPokemonBST(pokemon: PlayerPokemon, value: number) {
   const modType = modifierTypes
@@ -389,12 +388,11 @@ export async function modifyPlayerPokemonBST(pokemon: PlayerPokemon, value: numb
 }
 
 /**
- * Will attempt to add a new modifier to a Pokemon.
+ * Will attempt to add a new modifier (item) to a Pokemon.
  * If the Pokemon already has max stacks of that item, it will instead apply 'fallbackModifierType', if specified.
- * @param scene
- * @param pokemon
- * @param modType
- * @param fallbackModifierType
+ * @param pokemon - The Pokemon that will have modifiers added to it
+ * @param modType - The modifier being added
+ * @param fallbackModifierType - A backup modifier if modType is already at max stacks
  */
 export async function applyModifierTypeToPlayerPokemon(
   pokemon: PlayerPokemon,
@@ -424,15 +422,16 @@ export async function applyModifierTypeToPlayerPokemon(
   globalScene.addModifier(modifier, false, false, false, true);
 }
 
+// TODO: deduplicate catch code/formula
+
 /**
  * Alternative to using AttemptCapturePhase
  * Assumes player sprite is visible on the screen (this is intended for non-combat uses)
  *
  * Can await returned promise to wait for throw animation completion before continuing
  *
- * @param scene
- * @param pokemon
- * @param pokeballType
+ * @param pokemon - The Pokemon that is being caught
+ * @param pokeballType - The Pokeball type
  * @param ballTwitchRate - can pass custom ball catch rates (for special events, like safari)
  */
 export function trainerThrowPokeball(
@@ -579,11 +578,10 @@ export function trainerThrowPokeball(
 
 /**
  * Animates pokeball opening and messages when an attempted catch fails
- * @param scene
- * @param pokemon
- * @param originalY
- * @param pokeball
- * @param pokeballType
+ * @param pokemon - The Pokemon that was not caught
+ * @param originalY - The Pokemon's original Y position
+ * @param pokeball - The sprite of the Pokeball
+ * @param pokeballType - The Pokeball type
  */
 function failCatch(
   pokemon: EnemyPokemon,
@@ -626,13 +624,13 @@ function failCatch(
 }
 
 /**
- *
- * @param scene
- * @param pokemon
- * @param pokeball
- * @param pokeballType
- * @param showCatchObtainMessage
- * @param isObtain
+ * Helper function that handles everything that comes with obtaining a new Pokemon in MEs (Should maybe be renamed)
+ * TODO: noticing a lot of copypasted code. This one can make use of addPokemonDataToDexAndValidateAchievements
+ * @param pokemon - The newly obtained Pokemon
+ * @param pokeball - The pokeball sprite
+ * @param pokeballType - The Pokeball type
+ * @param showCatchObtainMessage - Whether or not to display a message for obtaining the Pokemon
+ * @param isObtain - Toggles whether or not to use "obtained" or "caught" for showCatchObtainMessage
  */
 export async function catchPokemon(
   pokemon: EnemyPokemon,
@@ -789,8 +787,7 @@ export async function catchPokemon(
 
 /**
  * Animates pokeball disappearing then destroys the object
- * @param scene
- * @param pokeball
+ * @param pokeball the Pokeball sprite
  */
 function removePb(pokeball: Phaser.GameObjects.Sprite) {
   if (pokeball) {
@@ -809,8 +806,7 @@ function removePb(pokeball: Phaser.GameObjects.Sprite) {
 
 /**
  * Animates a wild pokemon "fleeing", including sfx and messaging
- * @param scene
- * @param pokemon
+ * @param pokemon - The fleeing Pokemon
  */
 export async function doPokemonFlee(pokemon: EnemyPokemon): Promise<void> {
   await new Promise<void>((resolve) => {
@@ -842,8 +838,7 @@ export async function doPokemonFlee(pokemon: EnemyPokemon): Promise<void> {
 
 /**
  * Handles the player fleeing from a wild pokemon, including sfx and messaging
- * @param scene
- * @param pokemon
+ * @param pokemon - The enemy Pokemon being fled from
  */
 export function doPlayerFlee(pokemon: EnemyPokemon): Promise<void> {
   return new Promise<void>((resolve) => {
@@ -908,6 +903,8 @@ const GOLDEN_BUG_NET_SPECIES_POOL: [Species, number][] = [
 /**
  * Will randomly return one of the species from GOLDEN_BUG_NET_SPECIES_POOL, based on their weights.
  * Will also check for and evolve pokemon based on level.
+ * Default is Scyther
+ * @param level - The associated level for the generated bug Pokemon to account for evolutions
  */
 export function getGoldenBugNetSpecies(level: number): PokemonSpecies {
   const totalWeight = GOLDEN_BUG_NET_SPECIES_POOL.reduce((a, b) => a + b[1], 0);
@@ -928,7 +925,6 @@ export function getGoldenBugNetSpecies(level: number): PokemonSpecies {
 
 /**
  * Generates a Pokemon level for a given wave, with an option to increase/decrease by a scaling modifier
- * @param scene
  * @param levelAdditiveModifier Default 0. will add +(1 level / 10 waves * levelAdditiveModifier) to the level calculation
  */
 export function getEncounterPokemonLevelForWave(levelAdditiveModifier: number = 0) {
@@ -939,6 +935,10 @@ export function getEncounterPokemonLevelForWave(levelAdditiveModifier: number = 
   return baseLevel + Math.max(Math.round((currentBattle.waveIndex / 10) * levelAdditiveModifier), 0);
 }
 
+/**
+ * Helper async function to update a player's dex and award achievements
+ * @param pokemon - The newly obtained Pokemon
+ */
 export async function addPokemonDataToDexAndValidateAchievements(pokemon: PlayerPokemon) {
   const speciesForm = !pokemon.fusionSpecies ? pokemon.getSpeciesForm() : pokemon.getFusionSpeciesForm();
 
@@ -970,9 +970,8 @@ export async function addPokemonDataToDexAndValidateAchievements(pokemon: Player
  * If both are true, returns `null`.
  * If one of them is not true, returns message content that the Pokemon is invalid.
  * Typically used for cheecking whether a Pokemon can be selected for a {@linkcode MysteryEncounterOption}
- * @param pokemon
- * @param scene
- * @param invalidSelectionKey
+ * @param pokemon - The Pokemon being checked
+ * @param invalidSelectionKey - The text key for an invalid selection
  */
 export function isPokemonValidForEncounterOptionSelection(
   pokemon: Pokemon,
@@ -991,6 +990,8 @@ export function isPokemonValidForEncounterOptionSelection(
 /**
  * Permanently overrides the ability (not passive) of a pokemon.
  * If the pokemon is a fusion, instead overrides the fused pokemon's ability.
+ * @param pokemon - The Pokemon with its ability being overriden
+ * @param ability - The ability that is overriding
  */
 export function applyAbilityOverrideToPokemon(pokemon: Pokemon, ability: Abilities) {
   if (pokemon.isFusion()) {

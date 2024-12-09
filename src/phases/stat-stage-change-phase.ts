@@ -55,7 +55,7 @@ export class StatStageChangePhase extends PokemonPhase {
     this.onChange = onChange;
   }
 
-  start() {
+  override start() {
     // Check if multiple stats are being changed at the same time, then run SSCPhase for each of them
     if (this.stats.length > 1) {
       for (let i = 0; i < this.stats.length; i++) {

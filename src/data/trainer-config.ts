@@ -86,7 +86,7 @@ export class TrainerPartyCompoundTemplate extends TrainerPartyTemplate {
     this.templates = templates;
   }
 
-  getStrength(index: integer): PartyMemberStrength {
+  override getStrength(index: integer): PartyMemberStrength {
     let t = 0;
     for (const template of this.templates) {
       if (t + template.size > index) {
@@ -98,7 +98,7 @@ export class TrainerPartyCompoundTemplate extends TrainerPartyTemplate {
     return super.getStrength(index);
   }
 
-  isSameSpecies(index: integer): boolean {
+  override isSameSpecies(index: integer): boolean {
     let t = 0;
     for (const template of this.templates) {
       if (t + template.size > index) {
@@ -110,7 +110,7 @@ export class TrainerPartyCompoundTemplate extends TrainerPartyTemplate {
     return super.isSameSpecies(index);
   }
 
-  isBalanced(index: integer): boolean {
+  override isBalanced(index: integer): boolean {
     let t = 0;
     for (const template of this.templates) {
       if (t + template.size > index) {

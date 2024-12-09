@@ -6,9 +6,9 @@ import { isNullOrUndefined } from "#app/utils";
 import i18next from "i18next";
 
 /**
- * Will inject all relevant dialogue tokens that exist in the {@linkcode BattlegScene.currentBattle.mysteryEncounter.dialogueTokens}, into i18n text.
+ * Will inject all relevant dialogue tokens that exist into i18n text.
  * Also adds BBCodeText fragments for colored text, if applicable
- * @param keyOrString
+ * @param keyOrString The key or string that represents the text
  * @param primaryStyle Can define a text style to be applied to the entire string. Must be defined for BBCodeText styles to be applied correctly
  */
 export function getEncounterText(keyOrString?: string, primaryStyle?: TextStyle): string | null {
@@ -31,8 +31,7 @@ export function getEncounterText(keyOrString?: string, primaryStyle?: TextStyle)
 
 /**
  * Helper function to inject {@linkcode globalScene.currentBattle.mysteryEncounter.dialogueTokens} into a given content string
- * @param scene
- * @param keyOrString
+ * @param keyOrString The key or string that represents the text
  */
 function getTextWithDialogueTokens(keyOrString: string): string | null {
   const tokens = globalScene.currentBattle?.mysteryEncounter?.dialogueTokens;
@@ -46,8 +45,7 @@ function getTextWithDialogueTokens(keyOrString: string): string | null {
 
 /**
  * Will queue a message in UI with injected encounter data tokens
- * @param scene
- * @param contentKey
+ * @param contentKey the key representing the localized text
  */
 export function queueEncounterMessage(contentKey: string): void {
   const text: string | null = getEncounterText(contentKey);
@@ -56,12 +54,11 @@ export function queueEncounterMessage(contentKey: string): void {
 
 /**
  * Will display a message in UI with injected encounter data tokens
- * @param scene
- * @param contentKey
- * @param delay
- * @param prompt
- * @param callbackDelay
- * @param promptDelay
+ * @param contentKey the key representing the localized text
+ * @param delay the delay in milliseconds (20 if null or undefined)
+ * @param callbackDelay the delay of resolving the promise in milliseconds
+ * @param prompt whether or not to use the promptDelay
+ * @param promptDelay the delay of the prompt in milliseconds
  */
 export function showEncounterText(
   contentKey: string,
@@ -78,11 +75,10 @@ export function showEncounterText(
 
 /**
  * Will display a dialogue (with speaker title) in UI with injected encounter data tokens
- * @param scene
- * @param textContentKey
- * @param delay
- * @param speakerContentKey
- * @param callbackDelay
+ * @param textContentKey the content key relating to the dialogue
+ * @param speakerContentKey the content key relating to the speaker
+ * @param delay the delay in milliseconds (20 if null or undefined)
+ * @param callbackDelay the delay of resolving the promise in milliseconds
  */
 export function showEncounterDialogue(
   textContentKey: string,

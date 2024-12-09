@@ -12,7 +12,7 @@ export class PostSummonPhase extends PokemonPhase {
     super(battlerIndex);
   }
 
-  start() {
+  override start() {
     super.start();
 
     const pokemon = this.getPokemon();

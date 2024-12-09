@@ -85,8 +85,8 @@ export default class InputsHandler {
 }
 
 class Fakepad extends Phaser.Input.Gamepad.Gamepad {
-  public id: string;
-  public index: number;
+  public override id: string;
+  public override index: number;
 
   constructor(pad) {
     //@ts-ignore
