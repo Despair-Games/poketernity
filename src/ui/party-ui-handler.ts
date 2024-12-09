@@ -4,7 +4,7 @@ import { MoveResult } from "#app/field/pokemon";
 import { addBBCodeTextObject, addTextObject, getTextColor, TextStyle } from "#app/ui/text";
 import { Command } from "#app/ui/command-ui-handler";
 import MessageUiHandler from "#app/ui/message-ui-handler";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { BooleanHolder, toReadableString, randInt, getLocalizedSpriteKey } from "#app/utils";
 import {
   PokemonFormChangeItemModifier,
@@ -250,7 +250,7 @@ export default class PartyUiHandler extends MessageUiHandler {
   ];
 
   constructor() {
-    super(Mode.PARTY);
+    super(UiMode.PARTY);
   }
 
   setup() {
@@ -548,7 +548,7 @@ export default class PartyUiHandler extends MessageUiHandler {
           }
         } else if (option === PartyOption.SUMMARY) {
           ui.playSelect();
-          ui.setModeWithoutClear(Mode.SUMMARY, pokemon).then(() => this.clearOptions());
+          ui.setModeWithoutClear(UiMode.SUMMARY, pokemon).then(() => this.clearOptions());
           return true;
         } else if (option === PartyOption.UNPAUSE_EVOLUTION) {
           this.clearOptions();
@@ -575,18 +575,18 @@ export default class PartyUiHandler extends MessageUiHandler {
             null,
             () => {
               ui.setModeWithoutClear(
-                Mode.CONFIRM,
+                UiMode.CONFIRM,
                 () => {
                   const fusionName = pokemon.name;
                   pokemon.unfuse().then(() => {
                     this.clearPartySlots();
                     this.populatePartySlots();
-                    ui.setMode(Mode.PARTY);
+                    ui.setMode(UiMode.PARTY);
                     this.showText(
                       i18next.t("partyUiHandler:wasReverted", { fusionName: fusionName, pokemonName: pokemon.name }),
                       undefined,
                       () => {
-                        ui.setMode(Mode.PARTY);
+                        ui.setMode(UiMode.PARTY);
                         this.showText("", 0);
                       },
                       null,
@@ -595,7 +595,7 @@ export default class PartyUiHandler extends MessageUiHandler {
                   });
                 },
                 () => {
-                  ui.setMode(Mode.PARTY);
+                  ui.setMode(UiMode.PARTY);
                   this.showText("", 0);
                 },
               );
@@ -612,13 +612,13 @@ export default class PartyUiHandler extends MessageUiHandler {
               () => {
                 this.blockInput = false;
                 ui.setModeWithoutClear(
-                  Mode.CONFIRM,
+                  UiMode.CONFIRM,
                   () => {
-                    ui.setMode(Mode.PARTY);
+                    ui.setMode(UiMode.PARTY);
                     this.doRelease(this.cursor);
                   },
                   () => {
-                    ui.setMode(Mode.PARTY);
+                    ui.setMode(UiMode.PARTY);
                     this.showText("", 0);
                   },
                 );
@@ -632,7 +632,7 @@ export default class PartyUiHandler extends MessageUiHandler {
           this.clearOptions();
           ui.playSelect();
           ui.setModeWithoutClear(
-            Mode.RENAME_POKEMON,
+            UiMode.RENAME_POKEMON,
             {
               buttonActions: [
                 (nickname: string) => {
@@ -641,10 +641,10 @@ export default class PartyUiHandler extends MessageUiHandler {
                   pokemon.updateInfo();
                   this.clearPartySlots();
                   this.populatePartySlots();
-                  ui.setMode(Mode.PARTY);
+                  ui.setMode(UiMode.PARTY);
                 },
                 () => {
-                  ui.setMode(Mode.PARTY);
+                  ui.setMode(UiMode.PARTY);
                 },
               ],
             },
@@ -764,7 +764,7 @@ export default class PartyUiHandler extends MessageUiHandler {
             selectCallback(6, PartyOption.CANCEL);
             ui.playSelect();
           } else {
-            ui.setMode(Mode.COMMAND, this.fieldIndex);
+            ui.setMode(UiMode.COMMAND, this.fieldIndex);
             ui.playSelect();
           }
         }

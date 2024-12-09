@@ -14,7 +14,7 @@ import { AdminMode, getAdminModeName } from "./admin-ui-handler";
 import type AwaitableUiHandler from "./awaitable-ui-handler";
 import MessageUiHandler from "./message-ui-handler";
 import { TextStyle, addTextObject, getTextStyleOptions } from "./text";
-import { Mode } from "./ui";
+import { UiMode } from "#enums/ui-mode";
 import { WindowVariant, addWindow } from "./ui-theme";
 
 enum MenuOptions {
@@ -60,12 +60,12 @@ export default class MenuUiHandler extends MessageUiHandler {
 
   public bgmBar: BgmBar;
 
-  constructor(mode: Mode | null = null) {
+  constructor(mode: UiMode | null = null) {
     super(mode);
 
     this.excludedMenus = () => [
       {
-        condition: [Mode.COMMAND, Mode.TITLE].includes(mode ?? Mode.TITLE),
+        condition: [UiMode.COMMAND, UiMode.TITLE].includes(mode ?? UiMode.TITLE),
         options: [MenuOptions.EGG_GACHA, MenuOptions.EGG_LIST],
       },
       { condition: bypassLogin, options: [MenuOptions.LOG_OUT] },
@@ -225,7 +225,7 @@ export default class MenuUiHandler extends MessageUiHandler {
             ]),
           xOffset: 98,
         };
-        ui.setOverlayMode(Mode.MENU_OPTION_SELECT, config);
+        ui.setOverlayMode(UiMode.MENU_OPTION_SELECT, config);
       });
     };
 
@@ -368,7 +368,7 @@ export default class MenuUiHandler extends MessageUiHandler {
               ui.revertMode();
             },
           ];
-          ui.setMode(Mode.TEST_DIALOGUE, buttonAction, prefilledText);
+          ui.setMode(UiMode.TEST_DIALOGUE, buttonAction, prefilledText);
           return true;
         },
         keepOpen: true,
@@ -462,7 +462,7 @@ export default class MenuUiHandler extends MessageUiHandler {
                 handler: () => {
                   ui.playSelect();
                   ui.setOverlayMode(
-                    Mode.ADMIN,
+                    UiMode.ADMIN,
                     {
                       buttonActions: [
                         // we double revert here and below to go back 2 layers of menus
@@ -489,7 +489,7 @@ export default class MenuUiHandler extends MessageUiHandler {
               return true;
             },
           });
-          globalScene.ui.setOverlayMode(Mode.OPTION_SELECT, {
+          globalScene.ui.setOverlayMode(UiMode.OPTION_SELECT, {
             options: options,
             delay: 0,
           });
@@ -563,25 +563,25 @@ export default class MenuUiHandler extends MessageUiHandler {
       this.showText("", 0);
       switch (adjustedCursor) {
         case MenuOptions.GAME_SETTINGS:
-          ui.setOverlayMode(Mode.SETTINGS);
+          ui.setOverlayMode(UiMode.SETTINGS);
           success = true;
           break;
         case MenuOptions.ACHIEVEMENTS:
-          ui.setOverlayMode(Mode.ACHIEVEMENTS);
+          ui.setOverlayMode(UiMode.ACHIEVEMENTS);
           success = true;
           break;
         case MenuOptions.STATS:
-          ui.setOverlayMode(Mode.GAME_STATS);
+          ui.setOverlayMode(UiMode.GAME_STATS);
           success = true;
           break;
         case MenuOptions.RUN_HISTORY:
-          ui.setOverlayMode(Mode.RUN_HISTORY);
+          ui.setOverlayMode(UiMode.RUN_HISTORY);
           success = true;
           break;
         case MenuOptions.EGG_LIST:
           if (globalScene.gameData.eggs.length) {
             ui.revertMode();
-            ui.setOverlayMode(Mode.EGG_LIST);
+            ui.setOverlayMode(UiMode.EGG_LIST);
             success = true;
           } else {
             ui.showText(i18next.t("menuUiHandler:noEggs"), null, () => ui.showText(""), fixedInt(1500));
@@ -590,7 +590,7 @@ export default class MenuUiHandler extends MessageUiHandler {
           break;
         case MenuOptions.EGG_GACHA:
           ui.revertMode();
-          ui.setOverlayMode(Mode.EGG_GACHA);
+          ui.setOverlayMode(UiMode.EGG_GACHA);
           success = true;
           break;
         case MenuOptions.MANAGE_DATA:
@@ -649,18 +649,18 @@ export default class MenuUiHandler extends MessageUiHandler {
               },
             );
           }
-          ui.setOverlayMode(Mode.MENU_OPTION_SELECT, this.manageDataConfig);
+          ui.setOverlayMode(UiMode.MENU_OPTION_SELECT, this.manageDataConfig);
           success = true;
           break;
         case MenuOptions.COMMUNITY:
-          ui.setOverlayMode(Mode.MENU_OPTION_SELECT, this.communityConfig);
+          ui.setOverlayMode(UiMode.MENU_OPTION_SELECT, this.communityConfig);
           success = true;
           break;
         case MenuOptions.SAVE_AND_QUIT:
           if (globalScene.currentBattle) {
             success = true;
             const doSaveQuit = () => {
-              ui.setMode(Mode.LOADING, {
+              ui.setMode(UiMode.LOADING, {
                 buttonActions: [],
                 fadeOut: () =>
                   globalScene.gameData.saveAll(true, true, true, true).then(() => {
@@ -675,7 +675,7 @@ export default class MenuUiHandler extends MessageUiHandler {
                   return;
                 }
                 ui.setOverlayMode(
-                  Mode.CONFIRM,
+                  UiMode.CONFIRM,
                   doSaveQuit,
                   () => {
                     ui.revertMode();
@@ -695,7 +695,7 @@ export default class MenuUiHandler extends MessageUiHandler {
         case MenuOptions.LOG_OUT:
           success = true;
           const doLogout = () => {
-            ui.setMode(Mode.LOADING, {
+            ui.setMode(UiMode.LOADING, {
               buttonActions: [],
               fadeOut: () =>
                 api.account.logout().then(() => {
@@ -710,7 +710,7 @@ export default class MenuUiHandler extends MessageUiHandler {
                 return;
               }
               ui.setOverlayMode(
-                Mode.CONFIRM,
+                UiMode.CONFIRM,
                 doLogout,
                 () => {
                   ui.revertMode();
@@ -729,7 +729,7 @@ export default class MenuUiHandler extends MessageUiHandler {
       success = true;
       ui.revertMode().then((result) => {
         if (!result) {
-          ui.setMode(Mode.MESSAGE);
+          ui.setMode(UiMode.MESSAGE);
         }
       });
     } else {

@@ -6,7 +6,7 @@ import { BattleEndPhase } from "#app/phases/battle-end-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
 import PartyUiHandler, { PartyUiMode } from "#app/ui/party-ui-handler";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import GameManager from "#test/utils/gameManager";
 import Phaser from "phaser";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
@@ -44,21 +44,21 @@ describe("UI - Transfer Items", () => {
 
     game.move.select(Moves.DRAGON_CLAW);
 
-    game.onNextPrompt("SelectModifierPhase", Mode.MODIFIER_SELECT, () => {
+    game.onNextPrompt("SelectModifierPhase", UiMode.MODIFIER_SELECT, () => {
       expect(game.scene.ui.getHandler()).toBeInstanceOf(ModifierSelectUiHandler);
 
       const handler = game.scene.ui.getHandler() as ModifierSelectUiHandler;
       handler.setCursor(1);
       handler.processInput(Button.ACTION);
 
-      game.scene.ui.setModeWithoutClear(Mode.PARTY, PartyUiMode.MODIFIER_TRANSFER);
+      game.scene.ui.setModeWithoutClear(UiMode.PARTY, PartyUiMode.MODIFIER_TRANSFER);
     });
 
     await game.phaseInterceptor.to(BattleEndPhase);
   });
 
   it("check red tint for held item limit in transfer menu", async () => {
-    game.onNextPrompt("SelectModifierPhase", Mode.PARTY, () => {
+    game.onNextPrompt("SelectModifierPhase", UiMode.PARTY, () => {
       expect(game.scene.ui.getHandler()).toBeInstanceOf(PartyUiHandler);
 
       const handler = game.scene.ui.getHandler() as PartyUiHandler;
@@ -83,7 +83,7 @@ describe("UI - Transfer Items", () => {
   }, 20000);
 
   it("check transfer option for pokemon to transfer to", async () => {
-    game.onNextPrompt("SelectModifierPhase", Mode.PARTY, () => {
+    game.onNextPrompt("SelectModifierPhase", UiMode.PARTY, () => {
       expect(game.scene.ui.getHandler()).toBeInstanceOf(PartyUiHandler);
 
       const handler = game.scene.ui.getHandler() as PartyUiHandler;

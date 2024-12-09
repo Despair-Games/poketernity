@@ -15,7 +15,7 @@ import type { PlayerPokemon } from "#app/field/pokemon";
 import { FieldPosition } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { Command } from "#app/ui/command-ui-handler";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import { FieldPhase } from "./field-phase";
 import { SelectTargetPhase } from "./select-target-phase";
@@ -38,7 +38,7 @@ export class CommandPhase extends FieldPhase {
 
     globalScene.updateGameInfo();
 
-    const commandUiHandler = globalScene.ui.handlers[Mode.COMMAND];
+    const commandUiHandler = globalScene.ui.handlers[UiMode.COMMAND];
     if (commandUiHandler) {
       if (globalScene.currentBattle.turn === 1 || commandUiHandler.getCursor() === Command.POKEMON) {
         commandUiHandler.setCursor(Command.FIGHT);
@@ -112,7 +112,7 @@ export class CommandPhase extends FieldPhase {
             multiple: queuedMove.targets.length > 1,
           });
         } else {
-          globalScene.ui.setMode(Mode.COMMAND, this.fieldIndex);
+          globalScene.ui.setMode(UiMode.COMMAND, this.fieldIndex);
         }
       }
     } else {
@@ -121,9 +121,9 @@ export class CommandPhase extends FieldPhase {
         && globalScene.currentBattle.mysteryEncounter?.skipToFightInput
       ) {
         globalScene.ui.clearText();
-        globalScene.ui.setMode(Mode.FIGHT, this.fieldIndex);
+        globalScene.ui.setMode(UiMode.FIGHT, this.fieldIndex);
       } else {
-        globalScene.ui.setMode(Mode.COMMAND, this.fieldIndex);
+        globalScene.ui.setMode(UiMode.COMMAND, this.fieldIndex);
       }
     }
   }
@@ -174,7 +174,7 @@ export class CommandPhase extends FieldPhase {
           success = true;
         } else if (cursor < playerPokemon.getMoveset().length) {
           const move = playerPokemon.getMoveset()[cursor];
-          globalScene.ui.setMode(Mode.MESSAGE);
+          globalScene.ui.setMode(UiMode.MESSAGE);
 
           // Decides between a Disabled, Not Implemented, or No PP translation message
           const errorMessage = playerPokemon.isMoveRestricted(move.moveId, playerPokemon)
@@ -191,7 +191,7 @@ export class CommandPhase extends FieldPhase {
             null,
             () => {
               globalScene.ui.clearText();
-              globalScene.ui.setMode(Mode.FIGHT, this.fieldIndex);
+              globalScene.ui.setMode(UiMode.FIGHT, this.fieldIndex);
             },
             null,
             true,
@@ -209,27 +209,27 @@ export class CommandPhase extends FieldPhase {
           globalScene.arena.biomeType === Biome.END
           && (!globalScene.gameMode.isClassic || globalScene.gameMode.isFreshStartChallenge() || notInDex)
         ) {
-          globalScene.ui.setMode(Mode.COMMAND, this.fieldIndex);
-          globalScene.ui.setMode(Mode.MESSAGE);
+          globalScene.ui.setMode(UiMode.COMMAND, this.fieldIndex);
+          globalScene.ui.setMode(UiMode.MESSAGE);
           globalScene.ui.showText(
             i18next.t("battle:noPokeballForce"),
             null,
             () => {
               globalScene.ui.showText("", 0);
-              globalScene.ui.setMode(Mode.COMMAND, this.fieldIndex);
+              globalScene.ui.setMode(UiMode.COMMAND, this.fieldIndex);
             },
             null,
             true,
           );
         } else if (globalScene.currentBattle.battleType === BattleType.TRAINER) {
-          globalScene.ui.setMode(Mode.COMMAND, this.fieldIndex);
-          globalScene.ui.setMode(Mode.MESSAGE);
+          globalScene.ui.setMode(UiMode.COMMAND, this.fieldIndex);
+          globalScene.ui.setMode(UiMode.MESSAGE);
           globalScene.ui.showText(
             i18next.t("battle:noPokeballTrainer"),
             null,
             () => {
               globalScene.ui.showText("", 0);
-              globalScene.ui.setMode(Mode.COMMAND, this.fieldIndex);
+              globalScene.ui.setMode(UiMode.COMMAND, this.fieldIndex);
             },
             null,
             true,
@@ -238,14 +238,14 @@ export class CommandPhase extends FieldPhase {
           globalScene.currentBattle.isBattleMysteryEncounter()
           && !globalScene.currentBattle.mysteryEncounter!.catchAllowed
         ) {
-          globalScene.ui.setMode(Mode.COMMAND, this.fieldIndex);
-          globalScene.ui.setMode(Mode.MESSAGE);
+          globalScene.ui.setMode(UiMode.COMMAND, this.fieldIndex);
+          globalScene.ui.setMode(UiMode.MESSAGE);
           globalScene.ui.showText(
             i18next.t("battle:noPokeballMysteryEncounter"),
             null,
             () => {
               globalScene.ui.showText("", 0);
-              globalScene.ui.setMode(Mode.COMMAND, this.fieldIndex);
+              globalScene.ui.setMode(UiMode.COMMAND, this.fieldIndex);
             },
             null,
             true,
@@ -256,14 +256,14 @@ export class CommandPhase extends FieldPhase {
             .filter((p) => p.isActive(true))
             .map((p) => p.getBattlerIndex());
           if (targets.length > 1) {
-            globalScene.ui.setMode(Mode.COMMAND, this.fieldIndex);
-            globalScene.ui.setMode(Mode.MESSAGE);
+            globalScene.ui.setMode(UiMode.COMMAND, this.fieldIndex);
+            globalScene.ui.setMode(UiMode.MESSAGE);
             globalScene.ui.showText(
               i18next.t("battle:noPokeballMulti"),
               null,
               () => {
                 globalScene.ui.showText("", 0);
-                globalScene.ui.setMode(Mode.COMMAND, this.fieldIndex);
+                globalScene.ui.setMode(UiMode.COMMAND, this.fieldIndex);
               },
               null,
               true,
@@ -276,14 +276,14 @@ export class CommandPhase extends FieldPhase {
               && !targetPokemon?.hasAbility(Abilities.WONDER_GUARD, false, true)
               && cursor < PokeballType.MASTER_BALL
             ) {
-              globalScene.ui.setMode(Mode.COMMAND, this.fieldIndex);
-              globalScene.ui.setMode(Mode.MESSAGE);
+              globalScene.ui.setMode(UiMode.COMMAND, this.fieldIndex);
+              globalScene.ui.setMode(UiMode.MESSAGE);
               globalScene.ui.showText(
                 i18next.t("battle:noPokeballStrong"),
                 null,
                 () => {
                   globalScene.ui.showText("", 0);
-                  globalScene.ui.setMode(Mode.COMMAND, this.fieldIndex);
+                  globalScene.ui.setMode(UiMode.COMMAND, this.fieldIndex);
                 },
                 null,
                 true,
@@ -309,14 +309,14 @@ export class CommandPhase extends FieldPhase {
           && (arena.biomeType === Biome.END
             || (!isNullOrUndefined(mysteryEncounterFleeAllowed) && !mysteryEncounterFleeAllowed))
         ) {
-          globalScene.ui.setMode(Mode.COMMAND, this.fieldIndex);
-          globalScene.ui.setMode(Mode.MESSAGE);
+          globalScene.ui.setMode(UiMode.COMMAND, this.fieldIndex);
+          globalScene.ui.setMode(UiMode.MESSAGE);
           globalScene.ui.showText(
             i18next.t("battle:noEscapeForce"),
             null,
             () => {
               globalScene.ui.showText("", 0);
-              globalScene.ui.setMode(Mode.COMMAND, this.fieldIndex);
+              globalScene.ui.setMode(UiMode.COMMAND, this.fieldIndex);
             },
             null,
             true,
@@ -326,14 +326,14 @@ export class CommandPhase extends FieldPhase {
           && (currentBattle.battleType === BattleType.TRAINER
             || currentBattle.mysteryEncounter?.encounterMode === MysteryEncounterMode.TRAINER_BATTLE)
         ) {
-          globalScene.ui.setMode(Mode.COMMAND, this.fieldIndex);
-          globalScene.ui.setMode(Mode.MESSAGE);
+          globalScene.ui.setMode(UiMode.COMMAND, this.fieldIndex);
+          globalScene.ui.setMode(UiMode.MESSAGE);
           globalScene.ui.showText(
             i18next.t("battle:noEscapeTrainer"),
             null,
             () => {
               globalScene.ui.showText("", 0);
-              globalScene.ui.setMode(Mode.COMMAND, this.fieldIndex);
+              globalScene.ui.setMode(UiMode.COMMAND, this.fieldIndex);
             },
             null,
             true,
@@ -351,7 +351,7 @@ export class CommandPhase extends FieldPhase {
             }
           } else if (trappedAbMessages.length > 0) {
             if (!isSwitch) {
-              globalScene.ui.setMode(Mode.MESSAGE);
+              globalScene.ui.setMode(UiMode.MESSAGE);
             }
             globalScene.ui.showText(
               trappedAbMessages[0],
@@ -359,7 +359,7 @@ export class CommandPhase extends FieldPhase {
               () => {
                 globalScene.ui.showText("", 0);
                 if (!isSwitch) {
-                  globalScene.ui.setMode(Mode.COMMAND, this.fieldIndex);
+                  globalScene.ui.setMode(UiMode.COMMAND, this.fieldIndex);
                 }
               },
               null,
@@ -374,8 +374,8 @@ export class CommandPhase extends FieldPhase {
               break;
             }
             if (!isSwitch) {
-              globalScene.ui.setMode(Mode.COMMAND, this.fieldIndex);
-              globalScene.ui.setMode(Mode.MESSAGE);
+              globalScene.ui.setMode(UiMode.COMMAND, this.fieldIndex);
+              globalScene.ui.setMode(UiMode.MESSAGE);
             }
             const showNoEscapeText = (tag: any) => {
               globalScene.ui.showText(
@@ -391,7 +391,7 @@ export class CommandPhase extends FieldPhase {
                 () => {
                   globalScene.ui.showText("", 0);
                   if (!isSwitch) {
-                    globalScene.ui.setMode(Mode.COMMAND, this.fieldIndex);
+                    globalScene.ui.setMode(UiMode.COMMAND, this.fieldIndex);
                   }
                 },
                 null,
@@ -433,6 +433,6 @@ export class CommandPhase extends FieldPhase {
   }
 
   override end() {
-    globalScene.ui.setMode(Mode.MESSAGE).then(() => super.end());
+    globalScene.ui.setMode(UiMode.MESSAGE).then(() => super.end());
   }
 }

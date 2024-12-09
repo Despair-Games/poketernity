@@ -634,3 +634,13 @@ export function camelCaseToKebabCase(str: string): string {
 
 /** Quick access to bypass login env. */
 export const bypassLogin = import.meta.env.VITE_BYPASS_LOGIN === "1";
+
+interface StarterColors {
+  [key: string]: [string, string];
+}
+
+export let starterColors: StarterColors;
+
+export function setStarterColors(colors: StarterColors) {
+  starterColors = colors;
+}

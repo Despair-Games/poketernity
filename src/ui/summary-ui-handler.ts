@@ -1,6 +1,5 @@
-import { starterColors } from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import UiHandler from "#app/ui/ui-handler";
 import {
   getLocalizedSpriteKey,
@@ -10,6 +9,7 @@ import {
   fixedInt,
   toReadableString,
   formatStat,
+  starterColors,
 } from "#app/utils";
 import type { PlayerPokemon, PokemonMove } from "#app/field/pokemon";
 import { getStarterValueFriendshipCap, speciesStarterCosts } from "#app/data/balance/starters";
@@ -123,7 +123,7 @@ export default class SummaryUiHandler extends UiHandler {
   private selectCallback: Function | null;
 
   constructor() {
-    super(Mode.SUMMARY);
+    super(UiMode.SUMMARY);
   }
 
   setup() {
@@ -491,7 +491,7 @@ export default class SummaryUiHandler extends UiHandler {
     }
 
     const ui = this.getUi();
-    const fromPartyMode = ui.handlers[Mode.PARTY].active;
+    const fromPartyMode = ui.handlers[UiMode.PARTY].active;
     let success = false;
     let error = false;
 
@@ -588,9 +588,9 @@ export default class SummaryUiHandler extends UiHandler {
           }
 
           if (!fromPartyMode) {
-            ui.setMode(Mode.MESSAGE);
+            ui.setMode(UiMode.MESSAGE);
           } else {
-            ui.setMode(Mode.PARTY);
+            ui.setMode(UiMode.PARTY);
           }
         }
         success = true;

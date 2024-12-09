@@ -4,7 +4,7 @@ import { CommonBattleAnim, CommonAnim } from "#app/data/battle-anims";
 import { Stat } from "#app/enums/stat";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { getTextColor, TextStyle } from "#app/ui/text";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import { PokemonPhase } from "./pokemon-phase";
 
@@ -57,9 +57,9 @@ export class ScanIvsPhase extends PokemonPhase {
         null,
         () => {
           globalScene.ui.setMode(
-            Mode.CONFIRM,
+            UiMode.CONFIRM,
             () => {
-              globalScene.ui.setMode(Mode.MESSAGE);
+              globalScene.ui.setMode(UiMode.MESSAGE);
               globalScene.ui.clearText();
               new CommonBattleAnim(CommonAnim.LOCK_ON, pokemon, pokemon).play(false, () => {
                 globalScene.ui
@@ -69,7 +69,7 @@ export class ScanIvsPhase extends PokemonPhase {
               });
             },
             () => {
-              globalScene.ui.setMode(Mode.MESSAGE);
+              globalScene.ui.setMode(UiMode.MESSAGE);
               globalScene.ui.clearText();
               this.end();
             },

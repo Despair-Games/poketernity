@@ -5,7 +5,7 @@ import { Phase } from "#app/phase";
 import i18next from "i18next";
 import Overrides from "#app/overrides";
 import { EggHatchPhase } from "./egg-hatch-phase";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { achvs } from "#app/system/achv";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { EggSummaryPhase } from "./egg-summary-phase";
@@ -39,7 +39,7 @@ export class EggLapsePhase extends Phase {
             // show prompt for skip, blocking inputs for 1 second
             globalScene.ui.showText(i18next.t("battle:eggSkipPrompt", { eggsToHatch: eggsToHatchCount }), 0);
             globalScene.ui.setModeWithoutClear(
-              Mode.CONFIRM,
+              UiMode.CONFIRM,
               () => {
                 this.hatchEggsSkipped(eggsToHatch);
                 this.showSummary();

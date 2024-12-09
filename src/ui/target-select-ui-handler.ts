@@ -1,4 +1,4 @@
-import { Mode } from "./ui";
+import { UiMode } from "#enums/ui-mode";
 import UiHandler from "./ui-handler";
 import { isNullOrUndefined, fixedInt } from "#app/utils";
 import { getMoveTargets } from "../data/move";
@@ -27,7 +27,7 @@ export default class TargetSelectUiHandler extends UiHandler {
   private targetBattleInfoMoveTween: Phaser.Tweens.Tween[] = [];
 
   constructor() {
-    super(Mode.TARGET_SELECT);
+    super(UiMode.TARGET_SELECT);
 
     this.cursor = -1;
   }

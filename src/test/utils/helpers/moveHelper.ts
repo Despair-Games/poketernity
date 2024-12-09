@@ -5,7 +5,7 @@ import Overrides from "#app/overrides";
 import type { CommandPhase } from "#app/phases/command-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { Command } from "#app/ui/command-ui-handler";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { Moves } from "#enums/moves";
 import { getMovePosition } from "#test/utils/gameManagerUtils";
 import { GameManagerHelper } from "#test/utils/helpers/gameManagerHelper";
@@ -51,10 +51,10 @@ export class MoveHelper extends GameManagerHelper {
   public select(move: Moves, pkmIndex: 0 | 1 = 0, targetIndex?: BattlerIndex | null) {
     const movePosition = getMovePosition(this.game.scene, pkmIndex, move);
 
-    this.game.onNextPrompt("CommandPhase", Mode.COMMAND, () => {
-      this.game.scene.ui.setMode(Mode.FIGHT, (this.game.scene.getCurrentPhase() as CommandPhase).getFieldIndex());
+    this.game.onNextPrompt("CommandPhase", UiMode.COMMAND, () => {
+      this.game.scene.ui.setMode(UiMode.FIGHT, (this.game.scene.getCurrentPhase() as CommandPhase).getFieldIndex());
     });
-    this.game.onNextPrompt("CommandPhase", Mode.FIGHT, () => {
+    this.game.onNextPrompt("CommandPhase", UiMode.FIGHT, () => {
       (this.game.scene.getCurrentPhase() as CommandPhase).handleCommand(Command.FIGHT, movePosition, false);
     });
 

@@ -191,7 +191,7 @@ import {
 } from "#app/data/ability";
 import type PokemonData from "#app/system/pokemon-data";
 import { BattlerIndex } from "#enums/battler-index";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import type { PartyOption } from "#app/ui/party-ui-handler";
 import PartyUiHandler, { PartyUiMode } from "#app/ui/party-ui-handler";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
@@ -5088,7 +5088,7 @@ export class PlayerPokemon extends Pokemon {
       this.leaveField(switchType === SwitchType.SWITCH);
 
       globalScene.ui.setMode(
-        Mode.PARTY,
+        UiMode.PARTY,
         PartyUiMode.FAINT_SWITCH,
         this.getFieldIndex(),
         (slotIndex: integer, _option: PartyOption) => {
@@ -5098,7 +5098,7 @@ export class PlayerPokemon extends Pokemon {
               MoveEndPhase,
             );
           }
-          globalScene.ui.setMode(Mode.MESSAGE).then(resolve);
+          globalScene.ui.setMode(UiMode.MESSAGE).then(resolve);
         },
         PartyUiHandler.FilterNonFainted,
       );
@@ -5153,7 +5153,7 @@ export class PlayerPokemon extends Pokemon {
   revivalBlessing(): Promise<void> {
     return new Promise((resolve) => {
       globalScene.ui.setMode(
-        Mode.PARTY,
+        UiMode.PARTY,
         PartyUiMode.REVIVAL_BLESSING,
         this.getFieldIndex(),
         (slotIndex: integer, _option: PartyOption) => {
@@ -5185,7 +5185,7 @@ export class PlayerPokemon extends Pokemon {
               }
             }
           }
-          globalScene.ui.setMode(Mode.MESSAGE).then(() => resolve());
+          globalScene.ui.setMode(UiMode.MESSAGE).then(() => resolve());
         },
         PartyUiHandler.FilterFainted,
       );

@@ -1,3 +1,5 @@
+import Overrides from "#app/overrides";
+
 /** The maximum size of the player's party */
 export const PLAYER_PARTY_MAX_SIZE: number = 6;
 
@@ -21,3 +23,6 @@ export const LS_PREFIX = "pkty";
 
 /** Key for the local storage item storing the locale. */
 export const LOCALE_LS_KEY = `${LS_PREFIX}/locale`;
+
+/** The starting wave for classic. */
+export const startingWave = Overrides.STARTING_WAVE_OVERRIDE || 1;

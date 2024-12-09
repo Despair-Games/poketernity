@@ -6,7 +6,6 @@ import { getVariantTint, getVariantIcon } from "#app/data/variant";
 import { argbFromRgba } from "@material/material-color-utilities";
 import i18next from "i18next";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
-import { starterColors } from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
 import { allAbilities } from "#app/data/ability";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
@@ -37,7 +36,7 @@ import MessageUiHandler from "#app/ui/message-ui-handler";
 import PokemonIconAnimHandler, { PokemonIconAnimMode } from "#app/ui/pokemon-icon-anim-handler";
 import { StatsContainer } from "#app/ui/stats-container";
 import { TextStyle, addBBCodeTextObject, addTextObject } from "#app/ui/text";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { addWindow } from "#app/ui/ui-theme";
 import { Egg } from "#app/data/egg";
 import Overrides from "#app/overrides";
@@ -74,6 +73,7 @@ import {
   padInt,
   randIntRange,
   rgbHexToRgba,
+  starterColors,
   toReadableString,
 } from "#app/utils";
 import type { Nature } from "#enums/nature";
@@ -362,7 +362,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
   protected blockInput: boolean = false;
 
   constructor() {
-    super(Mode.STARTER_SELECT);
+    super(UiMode.STARTER_SELECT);
   }
 
   setup() {
@@ -1730,7 +1730,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
               {
                 label: i18next.t("starterSelectUiHandler:addToParty"),
                 handler: () => {
-                  ui.setMode(Mode.STARTER_SELECT);
+                  ui.setMode(UiMode.STARTER_SELECT);
                   const isOverValueLimit = this.tryUpdateValue(
                     globalScene.gameData.getSpeciesStarterValue(this.lastSpecies.speciesId),
                     true,
@@ -1762,7 +1762,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                 label: i18next.t("starterSelectUiHandler:removeFromParty"),
                 handler: () => {
                   this.popStarter(removeIndex);
-                  ui.setMode(Mode.STARTER_SELECT);
+                  ui.setMode(UiMode.STARTER_SELECT);
                   return true;
                 },
               },
@@ -1775,7 +1775,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
               label: i18next.t("starterSelectUiHandler:toggleIVs"),
               handler: () => {
                 this.toggleStatsMode();
-                ui.setMode(Mode.STARTER_SELECT);
+                ui.setMode(UiMode.STARTER_SELECT);
                 return true;
               },
             },
@@ -1785,18 +1785,18 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
             const showSwapOptions = (moveset: StarterMoveset) => {
               this.blockInput = true;
 
-              ui.setMode(Mode.STARTER_SELECT).then(() => {
+              ui.setMode(UiMode.STARTER_SELECT).then(() => {
                 ui.showText(i18next.t("starterSelectUiHandler:selectMoveSwapOut"), null, () => {
                   this.moveInfoOverlay.show(allMoves[moveset[0]]);
 
-                  ui.setModeWithoutClear(Mode.OPTION_SELECT, {
+                  ui.setModeWithoutClear(UiMode.OPTION_SELECT, {
                     options: moveset
                       .map((m: Moves, i: number) => {
                         const option: OptionSelectItem = {
                           label: allMoves[m].name,
                           handler: () => {
                             this.blockInput = true;
-                            ui.setMode(Mode.STARTER_SELECT).then(() => {
+                            ui.setMode(UiMode.STARTER_SELECT).then(() => {
                               ui.showText(
                                 `${i18next.t("starterSelectUiHandler:selectMoveSwapWith")} ${allMoves[m].name}.`,
                                 null,
@@ -1804,7 +1804,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                                   const possibleMoves = this.speciesStarterMoves.filter((sm: Moves) => sm !== m);
                                   this.moveInfoOverlay.show(allMoves[possibleMoves[0]]);
 
-                                  ui.setModeWithoutClear(Mode.OPTION_SELECT, {
+                                  ui.setModeWithoutClear(UiMode.OPTION_SELECT, {
                                     options: possibleMoves
                                       .map((sm) => {
                                         // make an option for each available starter move
@@ -1852,7 +1852,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                         handler: () => {
                           this.moveInfoOverlay.clear();
                           this.clearText();
-                          ui.setMode(Mode.STARTER_SELECT);
+                          ui.setMode(UiMode.STARTER_SELECT);
                           return true;
                         },
                         onHover: () => {
@@ -1880,10 +1880,10 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
             const showNatureOptions = () => {
               this.blockInput = true;
 
-              ui.setMode(Mode.STARTER_SELECT).then(() => {
+              ui.setMode(UiMode.STARTER_SELECT).then(() => {
                 ui.showText(i18next.t("starterSelectUiHandler:selectNature"), null, () => {
                   const natures = globalScene.gameData.getNaturesForAttr(this.speciesStarterDexEntry?.natureAttr);
-                  ui.setModeWithoutClear(Mode.OPTION_SELECT, {
+                  ui.setModeWithoutClear(UiMode.OPTION_SELECT, {
                     options: natures
                       .map((n: Nature, _i: number) => {
                         const option: OptionSelectItem = {
@@ -1895,7 +1895,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                             }
                             starterAttributes.nature = n;
                             this.clearText();
-                            ui.setMode(Mode.STARTER_SELECT);
+                            ui.setMode(UiMode.STARTER_SELECT);
                             // set nature for starter
                             this.setSpeciesDetails(this.lastSpecies, { natureIndex: n });
                             this.blockInput = false;
@@ -1908,7 +1908,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                         label: i18next.t("menu:cancel"),
                         handler: () => {
                           this.clearText();
-                          ui.setMode(Mode.STARTER_SELECT);
+                          ui.setMode(UiMode.STARTER_SELECT);
                           this.blockInput = false;
                           return true;
                         },
@@ -1936,7 +1936,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                 label: i18next.t("starterSelectUiHandler:enablePassive"),
                 handler: () => {
                   starterData.passiveAttr |= PassiveAttr.ENABLED;
-                  ui.setMode(Mode.STARTER_SELECT);
+                  ui.setMode(UiMode.STARTER_SELECT);
                   this.setSpeciesDetails(this.lastSpecies);
                   return true;
                 },
@@ -1946,7 +1946,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                 label: i18next.t("starterSelectUiHandler:disablePassive"),
                 handler: () => {
                   starterData.passiveAttr ^= PassiveAttr.ENABLED;
-                  ui.setMode(Mode.STARTER_SELECT);
+                  ui.setMode(UiMode.STARTER_SELECT);
                   this.setSpeciesDetails(this.lastSpecies);
                   return true;
                 },
@@ -1964,7 +1964,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                 if (starterContainer) {
                   starterContainer.favoriteIcon.setVisible(starterAttributes.favorite);
                 }
-                ui.setMode(Mode.STARTER_SELECT);
+                ui.setMode(UiMode.STARTER_SELECT);
                 return true;
               },
             });
@@ -1977,7 +1977,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                 if (starterContainer) {
                   starterContainer.favoriteIcon.setVisible(starterAttributes.favorite);
                 }
-                ui.setMode(Mode.STARTER_SELECT);
+                ui.setMode(UiMode.STARTER_SELECT);
                 return true;
               },
             });
@@ -1989,7 +1989,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
               let nickname = starterAttributes.nickname ? String(starterAttributes.nickname) : "";
               nickname = decodeURIComponent(escape(atob(nickname)));
               ui.setModeWithoutClear(
-                Mode.RENAME_POKEMON,
+                UiMode.RENAME_POKEMON,
                 {
                   buttonActions: [
                     (sanitizedName: string) => {
@@ -2001,10 +2001,10 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                       } else {
                         this.pokemonNameText.setText(this.lastSpecies.name);
                       }
-                      ui.setMode(Mode.STARTER_SELECT);
+                      ui.setMode(UiMode.STARTER_SELECT);
                     },
                     () => {
-                      ui.setMode(Mode.STARTER_SELECT);
+                      ui.setMode(UiMode.STARTER_SELECT);
                     },
                   ],
                 },
@@ -2036,7 +2036,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                         return globalScene.reset(true);
                       }
                     });
-                    ui.setMode(Mode.STARTER_SELECT);
+                    ui.setMode(UiMode.STARTER_SELECT);
                     this.setSpeciesDetails(this.lastSpecies);
                     globalScene.playSound("se/buy");
 
@@ -2077,7 +2077,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                       }
                     });
                     this.tryUpdateValue(0);
-                    ui.setMode(Mode.STARTER_SELECT);
+                    ui.setMode(UiMode.STARTER_SELECT);
                     globalScene.playSound("se/buy");
 
                     // update the value label and icon/animation for available upgrade
@@ -2130,7 +2130,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                       return globalScene.reset(true);
                     }
                   });
-                  ui.setMode(Mode.STARTER_SELECT);
+                  ui.setMode(UiMode.STARTER_SELECT);
                   globalScene.playSound("se/buy");
 
                   // update the icon/animation for available upgrade
@@ -2148,11 +2148,11 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
             options.push({
               label: i18next.t("menu:cancel"),
               handler: () => {
-                ui.setMode(Mode.STARTER_SELECT);
+                ui.setMode(UiMode.STARTER_SELECT);
                 return true;
               },
             });
-            ui.setModeWithoutClear(Mode.OPTION_SELECT, {
+            ui.setModeWithoutClear(UiMode.OPTION_SELECT, {
               options: options,
               yOffset: 47,
             });
@@ -2161,7 +2161,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
             options.push({
               label: i18next.t("starterSelectUiHandler:useCandies"),
               handler: () => {
-                ui.setMode(Mode.STARTER_SELECT).then(() => showUseCandies());
+                ui.setMode(UiMode.STARTER_SELECT).then(() => showUseCandies());
                 return true;
               },
             });
@@ -2169,11 +2169,11 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
           options.push({
             label: i18next.t("menu:cancel"),
             handler: () => {
-              ui.setMode(Mode.STARTER_SELECT);
+              ui.setMode(UiMode.STARTER_SELECT);
               return true;
             },
           });
-          ui.setModeWithoutClear(Mode.OPTION_SELECT, {
+          ui.setModeWithoutClear(UiMode.OPTION_SELECT, {
             options: options,
             yOffset: 47,
           });
@@ -4007,15 +4007,15 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     const ui = this.getUi();
 
     const cancel = () => {
-      ui.setMode(Mode.STARTER_SELECT);
+      ui.setMode(UiMode.STARTER_SELECT);
       this.clearText();
       this.blockInput = false;
     };
     ui.showText(i18next.t("starterSelectUiHandler:confirmExit"), null, () => {
       ui.setModeWithoutClear(
-        Mode.CONFIRM,
+        UiMode.CONFIRM,
         () => {
-          ui.setMode(Mode.STARTER_SELECT);
+          ui.setMode(UiMode.STARTER_SELECT);
           globalScene.clearPhaseQueue();
           if (globalScene.gameMode.isChallenge) {
             globalScene.pushPhase(new SelectChallengePhase());
@@ -4044,7 +4044,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     const ui = this.getUi();
 
     const cancel = () => {
-      ui.setMode(Mode.STARTER_SELECT);
+      ui.setMode(UiMode.STARTER_SELECT);
       if (!manualTrigger) {
         this.popStarter(this.starterSpecies.length - 1);
       }
@@ -4056,11 +4056,11 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     if (canStart) {
       ui.showText(i18next.t("starterSelectUiHandler:confirmStartTeam"), null, () => {
         ui.setModeWithoutClear(
-          Mode.CONFIRM,
+          UiMode.CONFIRM,
           () => {
             const startRun = () => {
               globalScene.money = globalScene.gameMode.getStartingMoney();
-              ui.setMode(Mode.STARTER_SELECT);
+              ui.setMode(UiMode.STARTER_SELECT);
               const thisObj = this;
               const originalStarterSelectCallback = this.starterSelectCallback;
               this.starterSelectCallback = null;

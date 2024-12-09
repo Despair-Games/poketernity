@@ -28,7 +28,7 @@ import { SummonPhase } from "#app/phases/summon-phase";
 import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
 import { achvs } from "#app/system/achv";
 import { handleTutorial, Tutorial } from "#app/tutorial";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { randSeedInt, randSeedItem } from "#app/utils";
 import { Biome } from "#enums/biome";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
@@ -256,7 +256,7 @@ export class EncounterPhase extends BattlePhase {
         });
       }
 
-      globalScene.ui.setMode(Mode.MESSAGE).then(() => {
+      globalScene.ui.setMode(UiMode.MESSAGE).then(() => {
         if (!this.loaded) {
           this.trySetWeatherIfNewBiome(); // Set weather before session gets saved
           // Game syncs to server on waves X1 and X6 (As of 1.2.0)

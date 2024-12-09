@@ -1,4 +1,4 @@
-import { Mode } from "../ui";
+import { UiMode } from "#enums/ui-mode";
 import cfg_keyboard_qwerty from "#app/configs/inputs/cfg_keyboard_qwerty";
 import {
   setSettingKeyboard,
@@ -29,7 +29,7 @@ export default class SettingsKeyboardUiHandler extends AbstractControlSettingsUi
    * @param scene - The BattleScene instance.
    * @param mode - The UI mode, optional.
    */
-  constructor(mode: Mode | null = null) {
+  constructor(mode: UiMode | null = null) {
     super(mode);
     this.titleSelected = "Keyboard";
     this.setting = SettingKeyboard;
@@ -85,7 +85,7 @@ export default class SettingsKeyboardUiHandler extends AbstractControlSettingsUi
    * Handle the home key press event.
    */
   onHomeDown(): void {
-    if (![Mode.SETTINGS_KEYBOARD, Mode.SETTINGS_GAMEPAD].includes(globalScene.ui.getMode())) {
+    if (![UiMode.SETTINGS_KEYBOARD, UiMode.SETTINGS_GAMEPAD].includes(globalScene.ui.getMode())) {
       return;
     }
     globalScene.gameData.resetMappingToFactory();
@@ -96,7 +96,7 @@ export default class SettingsKeyboardUiHandler extends AbstractControlSettingsUi
    * Handle the delete key press event.
    */
   onDeleteDown(): void {
-    if (globalScene.ui.getMode() !== Mode.SETTINGS_KEYBOARD) {
+    if (globalScene.ui.getMode() !== UiMode.SETTINGS_KEYBOARD) {
       return;
     }
     const cursor = this.cursor + this.scrollCursor; // Calculate the absolute cursor position.
