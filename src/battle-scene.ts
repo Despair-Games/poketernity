@@ -180,8 +180,6 @@ import { FRIENDSHIP_GAIN_FROM_BATTLE } from "#app/data/balance/starters";
 import { StatusEffect } from "#enums/status-effect";
 import { globalScene, initGlobalScene } from "#app/global-scene";
 
-export const bypassLogin = import.meta.env.VITE_BYPASS_LOGIN === "1";
-
 const DEBUG_RNG = false;
 
 const OPP_IVS_OVERRIDE_VALIDATED: integer[] = (

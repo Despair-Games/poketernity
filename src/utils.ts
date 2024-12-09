@@ -631,3 +631,6 @@ export function animationFileName(move: Moves): string {
 export function camelCaseToKebabCase(str: string): string {
   return str.replace(/[A-Z]+(?![a-z])|[A-Z]/g, (s, o) => (o ? "-" : "") + s.toLowerCase());
 }
+
+/** Quick access to bypass login env. */
+export const bypassLogin = import.meta.env.VITE_BYPASS_LOGIN === "1";

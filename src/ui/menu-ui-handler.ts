@@ -1,10 +1,9 @@
-import { bypassLogin } from "#app/battle-scene";
 import { SESSION_ID_COOKIE } from "#app/constants";
 import { globalScene } from "#app/global-scene";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { api } from "#app/plugins/api/api";
 import BgmBar from "#app/ui/bgm-bar";
-import { fixedInt, getCookie, getEnumKeys, isBeta, isLocal } from "#app/utils";
+import { bypassLogin, fixedInt, getCookie, getEnumKeys, isBeta, isLocal } from "#app/utils";
 import { Button } from "#enums/buttons";
 import { GameDataType } from "#enums/game-data-type";
 import i18next from "i18next";
