@@ -7,7 +7,6 @@ import type { TrainerConfig, TrainerPartyTemplate } from "#app/data/trainer-conf
 import {
   TrainerPartyCompoundTemplate,
   TrainerPoolTier,
-  TrainerSlot,
   trainerConfigs,
   trainerPartyTemplates,
   signatureSpecies,
@@ -24,6 +23,7 @@ import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
 import { TrainerVariant } from "#app/enums/trainer-variant";
 import { ArenaTagSide } from "#app/enums/arena-tag-side";
+import { TrainerSlot } from "#enums/trainer-slot";
 
 export default class Trainer extends Phaser.GameObjects.Container {
   public config: TrainerConfig;

@@ -22,6 +22,7 @@ import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
 import { Gender } from "#app/data/gender";
 import { startingWave } from "#app/constants";
+import { TrainerSlot } from "#enums/trainer-slot";
 
 /** Minimum BST for Pokemon generated onto the Elite Four's teams */
 const ELITE_FOUR_MINIMUM_BST = 460;
@@ -38,12 +39,6 @@ export enum TrainerPoolTier {
 
 export interface TrainerTierPools {
   [key: integer]: Species[];
-}
-
-export enum TrainerSlot {
-  NONE,
-  TRAINER,
-  TRAINER_PARTNER,
 }
 
 export class TrainerPartyTemplate {

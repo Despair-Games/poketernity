@@ -42,7 +42,7 @@ import {
 import type PokemonSpecies from "#app/data/pokemon-species";
 import type { PokemonSpeciesFilter } from "#app/data/pokemon-species";
 import { allSpecies, getPokemonSpecies } from "#app/data/pokemon-species";
-import type { TrainerSlot } from "#app/data/trainer-config";
+import type { TrainerSlot } from "#enums/trainer-slot";
 import { trainerConfigs } from "#app/data/trainer-config";
 import { getTypeRgb } from "#app/data/type";
 import type { Variant, VariantSet } from "#app/data/variant";

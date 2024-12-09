@@ -1,6 +1,6 @@
 import { allMoves } from "#app/data/move";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
-import { TrainerSlot } from "#app/data/trainer-config";
+import { TrainerSlot } from "#enums/trainer-slot";
 import { Type } from "#enums/type";
 import { Abilities } from "#app/enums/abilities";
 import { Moves } from "#app/enums/moves";
