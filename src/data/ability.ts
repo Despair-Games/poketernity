@@ -39,11 +39,7 @@ import {
 import type { ArenaTrapTag } from "./arena-tag";
 import { BerryModifier, HitHealModifier, PokemonHeldItemModifier } from "../modifier/modifier";
 import { TerrainType } from "./terrain";
-import {
-  SpeciesFormChangeManualTrigger,
-  SpeciesFormChangeRevertWeatherFormTrigger,
-  SpeciesFormChangeWeatherTrigger,
-} from "./pokemon-forms";
+import { SpeciesFormChangeRevertWeatherFormTrigger, SpeciesFormChangeWeatherTrigger } from "./pokemon-forms";
 import i18next from "i18next";
 import type { Localizable } from "#app/interfaces/locales";
 import { Command } from "../ui/command-ui-handler";
@@ -75,6 +71,7 @@ import { HitResult } from "#app/enums/hit-result";
 import { ArenaTagSide } from "#app/enums/arena-tag-side";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { MoveResult } from "#enums/move-result";
+import { SpeciesFormChangeManualTrigger } from "./pokemon-forms/species-form-change-manual-trigger";
 
 export class Ability implements Localizable {
   public id: Abilities;

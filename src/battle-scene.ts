@@ -33,12 +33,7 @@ import {
   mysteryEncountersByBiome,
 } from "#app/data/mystery-encounters/mystery-encounters";
 import type { SpeciesFormChange, SpeciesFormChangeTrigger } from "#app/data/pokemon-forms";
-import {
-  FormChangeItem,
-  pokemonFormChanges,
-  SpeciesFormChangeManualTrigger,
-  SpeciesFormChangeTimeOfDayTrigger,
-} from "#app/data/pokemon-forms";
+import { FormChangeItem, pokemonFormChanges, SpeciesFormChangeTimeOfDayTrigger } from "#app/data/pokemon-forms";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import type { PokemonSpeciesFilter } from "#app/data/pokemon-species";
 import { allSpecies, getPokemonSpecies } from "#app/data/pokemon-species";
@@ -185,6 +180,7 @@ import {
   TerastallizeModifier,
 } from "./modifier/modifier";
 import { achvs } from "./system/achvs";
+import { SpeciesFormChangeManualTrigger } from "./data/pokemon-forms/species-form-change-manual-trigger";
 
 const DEBUG_RNG = false;
 

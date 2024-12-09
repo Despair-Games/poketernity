@@ -14,6 +14,7 @@ import { WeatherType } from "#enums/weather-type";
 import { Challenges } from "#app/enums/challenges";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { globalScene } from "#app/global-scene";
+import { SpeciesFormChangeManualTrigger } from "./pokemon-forms/species-form-change-manual-trigger";
 
 export enum FormChangeItem {
   NONE,
@@ -225,12 +226,6 @@ export abstract class SpeciesFormChangeTrigger {
 
   hasTriggerType(triggerType: Constructor<SpeciesFormChangeTrigger>): boolean {
     return this instanceof triggerType;
-  }
-}
-
-export class SpeciesFormChangeManualTrigger extends SpeciesFormChangeTrigger {
-  override canChange(_pokemon: Pokemon): boolean {
-    return true;
   }
 }
 

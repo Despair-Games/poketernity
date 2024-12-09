@@ -18,7 +18,6 @@ import {
   MoveFlags,
   StatusCategoryOnAllyAttr,
 } from "#app/data/move";
-import { SpeciesFormChangeManualTrigger } from "#app/data/pokemon-forms";
 import { getStatusEffectHealText } from "#app/data/status-effect";
 import { TerrainType } from "#app/data/terrain";
 import { Type } from "#enums/type";
@@ -45,6 +44,7 @@ import { WeatherType } from "#enums/weather-type";
 import { HitResult } from "#app/enums/hit-result";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { CommonAnim } from "#enums/common-anim";
+import { SpeciesFormChangeManualTrigger } from "./pokemon-forms/species-form-change-manual-trigger";
 
 export class BattlerTag {
   public tagType: BattlerTagType;
