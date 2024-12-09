@@ -96,7 +96,7 @@ import type { Achv } from "#app/system/achv";
 import { achvs, ModifierAchv, MoneyAchv } from "#app/system/achv";
 import type { Voucher } from "#app/system/voucher";
 import { vouchers } from "#app/system/voucher";
-import { Gender } from "#app/data/gender";
+import { Gender } from "#enums/gender";
 import type UIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin";
 import { addUiThemeOverrides } from "#app/ui/ui-theme";
 import type PokemonData from "#app/system/pokemon-data";

@@ -22,7 +22,7 @@ import {
 } from "#app/data/mystery-encounters/mystery-encounter-requirements";
 import { Species } from "#enums/species";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
-import { Gender } from "#app/data/gender";
+import { Gender } from "#enums/gender";
 import { Type } from "#enums/type";
 import { BattlerIndex } from "#app/battle";
 import type Pokemon from "#app/field/pokemon";

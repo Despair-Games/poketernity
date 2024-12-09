@@ -1,5 +1,5 @@
 import { type PokeballCounts } from "#app/battle-scene";
-import type { Gender } from "#app/data/gender";
+import type { Gender } from "#enums/gender";
 import type { Variant } from "#app/data/variant";
 import { type ModifierOverride } from "#app/modifier/modifier-type";
 import type { Unlockables } from "#app/system/unlockables";

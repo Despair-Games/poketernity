@@ -12,7 +12,7 @@ import {
   SwitchEffectTransferModifier,
 } from "#app/modifier/modifier";
 import { allMoves, ForceSwitchOutAttr } from "#app/data/move";
-import { getGenderColor, getGenderSymbol } from "#app/data/gender";
+import { getGenderColor, getGenderShadowColor, getGenderSymbol } from "#app/data/gender";
 import { StatusEffect } from "#enums/status-effect";
 import PokemonIconAnimHandler, { PokemonIconAnimMode } from "#app/ui/pokemon-icon-anim-handler";
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
@@ -1482,7 +1482,7 @@ class PartySlot extends Phaser.GameObjects.Container {
     if (genderSymbol) {
       const slotGenderText = addTextObject(0, 0, genderSymbol, TextStyle.PARTY);
       slotGenderText.setColor(getGenderColor(this.pokemon.getGender(true)));
-      slotGenderText.setShadowColor(getGenderColor(this.pokemon.getGender(true), true));
+      slotGenderText.setShadowColor(getGenderShadowColor(this.pokemon.getGender(true)));
       if (this.slotIndex >= battlerCount) {
         slotGenderText.setPositionRelative(slotLevelLabel, 36, 0);
       } else {

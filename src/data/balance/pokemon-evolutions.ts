@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { Gender } from "#app/data/gender";
+import { Gender } from "#enums/gender";
 import { PokeballType } from "#enums/pokeball";
 import type Pokemon from "#app/field/pokemon";
 import { Type } from "#enums/type";

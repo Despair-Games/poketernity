@@ -1,5 +1,6 @@
 import { globalScene } from "#app/global-scene";
-import { TerrainType, getTerrainColor } from "../data/terrain";
+import { getTerrainColor } from "#app/data/terrain";
+import { TerrainType } from "#enums/terrain-type";
 import { getCurrentTime } from "#app/utils";
 
 const spriteFragShader = `

@@ -1,5 +1,5 @@
 import { Stat } from "#enums/stat";
-import { TerrainType } from "#app/data/terrain";
+import { TerrainType } from "#enums/terrain-type";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { Abilities } from "#enums/abilities";

@@ -13,7 +13,7 @@ import {
   getStatusEffectDescriptor,
   getStatusEffectHealText,
 } from "#app/data/status-effect";
-import { Gender } from "./gender";
+import { Gender } from "#enums/gender";
 import type Move from "./move";
 import {
   AttackMove,
@@ -39,7 +39,7 @@ import {
 import type { ArenaTrapTag } from "./arena-tag";
 import { ArenaTagSide } from "./arena-tag";
 import { BerryModifier, HitHealModifier, PokemonHeldItemModifier } from "../modifier/modifier";
-import { TerrainType } from "./terrain";
+import { TerrainType } from "#enums/terrain-type";
 import {
   SpeciesFormChangeManualTrigger,
   SpeciesFormChangeRevertWeatherFormTrigger,

@@ -1,5 +1,5 @@
 import type { EggHatchData } from "#app/data/egg-hatch-data";
-import { Gender } from "#app/data/gender";
+import { Gender } from "#enums/gender";
 import { getVariantTint } from "#app/data/variant";
 import { DexAttr } from "#app/system/game-data";
 import { globalScene } from "#app/global-scene";

@@ -20,7 +20,7 @@ import {
 } from "#app/data/move";
 import { SpeciesFormChangeManualTrigger } from "#app/data/pokemon-forms";
 import { getStatusEffectHealText } from "#app/data/status-effect";
-import { TerrainType } from "#app/data/terrain";
+import { TerrainType } from "#enums/terrain-type";
 import { Type } from "#enums/type";
 import type Pokemon from "#app/field/pokemon";
 import { HitResult, MoveResult } from "#app/field/pokemon";
