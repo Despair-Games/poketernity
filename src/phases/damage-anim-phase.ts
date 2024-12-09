@@ -2,7 +2,6 @@ import { type BattlerIndex } from "#app/battle";
 import { type DamageResult, HitResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { PokemonPhase } from "#app/phases/pokemon-phase";
-import { BattleSpec } from "#enums/battle-spec";
 
 /** Displays damage numbers and plays move hit SFX during battle */
 export class DamageAnimPhase extends PokemonPhase {

@@ -279,7 +279,7 @@ export class EggHatchPhase extends Phase {
    * Tries to skip the hatching animation
    * @returns false if cannot be skipped or already skipped. True otherwise
    */
-  protected trySkip(): boolean {
+  public trySkip(): boolean {
     if (!this.canSkip || this.skipped) {
       return false;
     }

@@ -323,10 +323,11 @@ export default class RunInfoUiHandler extends UiHandler {
         pokeball.setPosition(58 + (i % row_limit) * 8, i <= 2 ? 18 : 25);
         enemyContainer.add(pokeball);
       });
-      const trainerObj = this.runInfo.trainer.toTrainer();
+      const trainerObj = this.runInfo.trainer!.toTrainer(); // TODO: resolve bang
       const RIVAL_TRAINER_ID_THRESHOLD = 375;
       let trainerName = "";
-      if (this.runInfo.trainer.trainerType >= RIVAL_TRAINER_ID_THRESHOLD) {
+      if (this.runInfo.trainer!.trainerType >= RIVAL_TRAINER_ID_THRESHOLD) {
+        // TODO: resolve bang
         trainerName =
           trainerObj.variant === TrainerVariant.FEMALE
             ? i18next.t("trainerNames:rival_female")
@@ -461,12 +462,14 @@ export default class RunInfoUiHandler extends UiHandler {
    */
   private showTrainerSprites(enemyContainer: Phaser.GameObjects.Container) {
     // Creating the trainer sprite and adding it to enemyContainer
-    const tObj = this.runInfo.trainer.toTrainer();
+    const tObj = this.runInfo.trainer!.toTrainer(); // TODO: resolve bang
     // Loads trainer assets on demand, as they are not loaded by default in the scene
-    tObj.config.loadAssets(this.runInfo.trainer.variant).then(() => {
-      const tObjSpriteKey = tObj.config.getSpriteKey(this.runInfo.trainer.variant === TrainerVariant.FEMALE, false);
+    tObj.config.loadAssets(this.runInfo.trainer!.variant).then(() => {
+      // TODO: resolve bang
+      const tObjSpriteKey = tObj.config.getSpriteKey(this.runInfo.trainer!.variant === TrainerVariant.FEMALE, false); // TODO: resolve bang
       const tObjSprite = globalScene.add.sprite(0, 5, tObjSpriteKey);
-      if (this.runInfo.trainer.variant === TrainerVariant.DOUBLE && !tObj.config.doubleOnly) {
+      if (this.runInfo.trainer!.variant === TrainerVariant.DOUBLE && !tObj.config.doubleOnly) {
+        // TODO: resolve bang
         const doubleContainer = globalScene.add.container(5, 8);
         tObjSprite.setPosition(-3, -3);
         const tObjPartnerSpriteKey = tObj.config.getSpriteKey(true, true);

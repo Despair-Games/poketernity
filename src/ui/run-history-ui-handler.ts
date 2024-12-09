@@ -334,10 +334,11 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
         || (data.battleType === BattleType.MYSTERY_ENCOUNTER && data.trainer)
       ) {
         // Defeats from Trainers show the trainer's title and name
-        const tObj = data.trainer.toTrainer();
+        const tObj = data.trainer!.toTrainer(); // TODO: resolve band
         // Because of the interesting mechanics behind rival names, the rival name and title have to be retrieved differently
         const RIVAL_TRAINER_ID_THRESHOLD = 375;
-        if (data.trainer.trainerType >= RIVAL_TRAINER_ID_THRESHOLD) {
+        if (data.trainer!.trainerType >= RIVAL_TRAINER_ID_THRESHOLD) {
+          // TODO: resolve bang
           const rivalName = tObj.variant === TrainerVariant.FEMALE ? "trainerNames:rival_female" : "trainerNames:rival";
           const gameOutcomeLabel = addTextObject(
             8,

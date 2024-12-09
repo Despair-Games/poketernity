@@ -1,4 +1,4 @@
-import battle, { BattlerIndex, BattleType } from "#app/battle";
+import { BattlerIndex, BattleType } from "#app/battle";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
 import { applyAbAttrs, SyncEncounterNatureAbAttr } from "#app/data/ability";
 import { initEncounterAnims, loadEncounterAnimAssets } from "#app/data/battle-anims";
@@ -128,8 +128,8 @@ export class EncounterPhase extends BattlePhase {
             TrainerSlot.NONE,
             !!globalScene.getEncounterBossSegments(currentBattle.waveIndex, level, enemySpecies),
           );
-          if (battle.isClassicFinalBoss) {
-            battle.enemyParty[e].ivs = new Array(6).fill(31);
+          if (currentBattle.isClassicFinalBoss) {
+            currentBattle.enemyParty[e].ivs = new Array(6).fill(31);
           }
           globalScene
             .getPlayerParty()
@@ -156,9 +156,9 @@ export class EncounterPhase extends BattlePhase {
       }
 
       if (enemyPokemon.species.speciesId === Species.ETERNATUS) {
-        if (battle.isClassicFinalBoss) {
+        if (currentBattle.isClassicFinalBoss) {
           enemyPokemon.setBoss();
-        } else if (!(battle.waveIndex % 1000)) {
+        } else if (!(currentBattle.waveIndex % 1000)) {
           enemyPokemon.formIndex = 1;
           enemyPokemon.updateScale();
         }
