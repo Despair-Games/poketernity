@@ -1,7 +1,6 @@
 import "vitest-canvas-mock";
 
 import { initLoggedInUser } from "#app/account";
-import { initAbilities } from "#app/data/ability";
 import { initBiomes } from "#app/data/balance/biomes";
 import { initEggMoves } from "#app/data/balance/egg-moves";
 import { initPokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
@@ -13,6 +12,7 @@ import { initAchievements } from "#app/system/achv";
 import { initVouchers } from "#app/system/voucher";
 import { initStatsKeys } from "#app/ui/game-stats-ui-handler";
 import { afterAll, beforeAll, vi } from "vitest";
+import { initAbilities } from "#app/data/abilities";
 
 /** Set the timezone to UTC for tests. */
 process.env.TZ = "UTC";
