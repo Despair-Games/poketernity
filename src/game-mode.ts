@@ -1,6 +1,6 @@
 import i18next from "i18next";
 import type { FixedBattleConfigs } from "./battle";
-import { classicFixedBattles, FixedBattleConfig } from "./battle";
+import { FixedBattleConfig } from "./battle";
 import type { Challenge } from "./data/challenge";
 import { allChallenges, applyChallenges, ChallengeType, copyChallenge } from "./data/challenge";
 import type PokemonSpecies from "./data/pokemon-species";
@@ -12,6 +12,7 @@ import { Biome } from "#enums/biome";
 import { Species } from "#enums/species";
 import { Challenges } from "./enums/challenges";
 import { globalScene } from "#app/global-scene";
+import { classicFixedBattles } from "./data/battles/classic-fixed-battles";
 
 export enum GameModes {
   CLASSIC,

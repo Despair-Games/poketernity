@@ -1,5 +1,4 @@
 import type { BattlerIndex } from "#enums/battler-index";
-import { ClassicFixedBossWaves } from "#app/battle";
 import type { CustomModifierSettings } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-type";
 import { BattleEndPhase } from "./battle-end-phase";
@@ -14,6 +13,7 @@ import { TrainerVictoryPhase } from "./trainer-victory-phase";
 import { handleMysteryEncounterVictory } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { globalScene } from "#app/global-scene";
 import { BattleType } from "#app/enums/battle-type";
+import { ClassicFixedBossWaves } from "#app/enums/classic-fixed-boss-waves";
 
 export class VictoryPhase extends PokemonPhase {
   /** If true, indicates that the phase is intended for EXP purposes only, and not to continue a battle to next phase */
