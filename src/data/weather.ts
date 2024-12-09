@@ -1,5 +1,4 @@
 import { Biome } from "#enums/biome";
-import { WeatherType } from "#enums/weather-type";
 import { getPokemonNameWithAffix } from "../messages";
 import type Pokemon from "../field/pokemon";
 import { Type } from "#enums/type";
@@ -9,10 +8,24 @@ import { randSeedInt } from "#app/utils";
 import { SuppressWeatherEffectAbAttr } from "./ability";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
+import type { Arena } from "#app/field/arena";
+
+export enum WeatherType {
+  NONE,
+  SUNNY,
+  RAIN,
+  SANDSTORM,
+  HAIL,
+  SNOW,
+  FOG,
+  HEAVY_RAIN,
+  HARSH_SUN,
+  STRONG_WINDS,
+}
 
 /**
  * Class representing Weather effects
- * @var weatherType - The WeatherType that is being represented
+ * @var weatherType - The {@linkcode WeatherType} that is being represented
  * @var turnsLeft - How many turns the weather still has left (0 if immutable)
  */
 export class Weather {
@@ -41,7 +54,7 @@ export class Weather {
 
   /**
    * Checks if the weather is immutable (heavy rain, harsh sun, or strong winds)
-   * @returns true if WeatherType is immutable, false otherwise
+   * @returns true if {@linkcode WeatherType} is immutable, false otherwise
    */
   isImmutable(): boolean {
     switch (this.weatherType) {
@@ -72,7 +85,7 @@ export class Weather {
    * Checks if the weather will deal damage to a type
    * Rock/Ground/Steel types are immune to sandstorm
    * Ice is immune to hail
-   * @param type - the type of the Pokemon being checked
+   * @param type - the {@linkcode Type} of the Pokemon being checked
    * @returns true if damage will be dealt, false otherwise
    */
   isTypeDamageImmune(type: Type): boolean {
@@ -90,7 +103,7 @@ export class Weather {
    * Function to return a multiplier for specific types
    * Harsh/normal sun boosts fire by 50% and reduces water by 50%
    * Heavy/normal rain boosts water by 50% and reduces fire by 50%
-   * @param attackType - the type being checked
+   * @param attackType - the {@linkcode Type} being checked
    * @returns a multiplier (0.5, 1.5, or 1)
    */
   getAttackTypeMultiplier(attackType: Type): number {
@@ -122,8 +135,8 @@ export class Weather {
    * Checks if the weather should cancel the move
    * Harsh sun cancels out water attacks
    * Heavy rain cancels out fire attacks
-   * @param user - The Pokemon using the move
-   * @param move - The Move
+   * @param user - The {@linkcode Pokemon} using the move
+   * @param move - The {@linkcode Move}
    * @returns true if the move is cancelled by the weather, false otherwise
    */
   isMoveWeatherCancelled(user: Pokemon, move: Move): boolean {
@@ -169,7 +182,7 @@ export class Weather {
 
 /**
  * Function to get the starting message for weather
- * @param weatherType - the WeatherType starting
+ * @param weatherType - the {@linkcode WeatherType} starting
  * @returns the associated string
  */
 export function getWeatherStartMessage(weatherType: WeatherType): string | null {
@@ -199,7 +212,7 @@ export function getWeatherStartMessage(weatherType: WeatherType): string | null 
 
 /**
  * Function to get the lapsing message for weather
- * @param weatherType - the WeatherType lapsing
+ * @param weatherType - the {@linkcode WeatherType} lapsing
  * @returns the associated string
  */
 export function getWeatherLapseMessage(weatherType: WeatherType): string | null {
@@ -229,8 +242,8 @@ export function getWeatherLapseMessage(weatherType: WeatherType): string | null 
 
 /**
  * Function to get the associated message for when a Pokemon is damaged by weather (sandstorm or hail)
- * @param weatherType - The weather
- * @param pokemon - The Pokemon being damaged
+ * @param weatherType - The {@linkcode WeatherType}
+ * @param pokemon - The {@linkcode Pokemon} being damaged
  * @returns the corresponding string
  */
 export function getWeatherDamageMessage(weatherType: WeatherType, pokemon: Pokemon): string | null {
@@ -246,7 +259,7 @@ export function getWeatherDamageMessage(weatherType: WeatherType, pokemon: Pokem
 
 /**
  * Function to get the ending message for weather
- * @param weatherType - the WeatherType ending
+ * @param weatherType - the {@linkcode WeatherType} ending
  * @returns the associated string
  */
 export function getWeatherClearMessage(weatherType: WeatherType): string | null {
@@ -287,9 +300,9 @@ interface WeatherPoolEntry {
  * Each biome has their own weighted weather distribution
  * TODO: the biome specific weather pools should probably be moved into either biome.ts or a balance/ file
  * @param arena - The associated arena
- * @returns the WeatherType, WeatherType.NONE if no weather
+ * @returns the {@linkcode WeatherType}, WeatherType.NONE if no weather
  */
-export function getRandomWeatherType(arena: any /* Importing from arena causes a circular dependency */): WeatherType {
+export function getRandomWeatherType(arena: Arena): WeatherType {
   let weatherPool: WeatherPoolEntry[] = [];
   const hasSun = arena.getTimeOfDay() < 2;
   switch (arena.biomeType) {

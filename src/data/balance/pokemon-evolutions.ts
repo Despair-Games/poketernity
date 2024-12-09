@@ -4,7 +4,7 @@ import { PokeballType } from "#enums/pokeball";
 import type Pokemon from "#app/field/pokemon";
 import { Type } from "#enums/type";
 import { randSeedInt } from "#app/utils";
-import { WeatherType } from "#enums/weather-type";
+import { WeatherType } from "../weather";
 import { Nature } from "#enums/nature";
 import { Biome } from "#enums/biome";
 import { Moves } from "#enums/moves";

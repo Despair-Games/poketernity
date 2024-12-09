@@ -14,7 +14,7 @@ import type { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
 import type { TimeOfDay } from "#enums/time-of-day";
 import type { VariantTier } from "#enums/variant-tier";
-import { WeatherType } from "#enums/weather-type";
+import { WeatherType } from "./data/weather";
 
 /**
  * Overrides that are using when testing different in game situations

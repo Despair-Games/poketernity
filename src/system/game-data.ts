@@ -46,7 +46,7 @@ import type { Moves } from "#enums/moves";
 import { PlayerGender } from "#enums/player-gender";
 import { Species } from "#enums/species";
 import { applyChallenges, ChallengeType } from "#app/data/challenge";
-import { WeatherType } from "#enums/weather-type";
+import { WeatherType } from "#app/data/weather";
 import { TerrainType } from "#app/data/terrain";
 import { ReloadSessionPhase } from "#app/phases/reload-session-phase";
 import { RUN_HISTORY_LIMIT } from "#app/ui/run-history-ui-handler";

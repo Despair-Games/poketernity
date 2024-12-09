@@ -71,7 +71,7 @@ import { NewBattlePhase } from "#app/phases/new-battle-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import { StatusEffect } from "#enums/status-effect";
-import { WeatherType } from "#enums/weather-type";
+import { WeatherType } from "./weather";
 
 export class Ability implements Localizable {
   public id: Abilities;

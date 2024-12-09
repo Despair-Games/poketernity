@@ -6,7 +6,7 @@ export enum Gender {
 
 /**
  * Gets the gender symbol for an associated gender
- * @param gender - The gender being checked
+ * @param gender - The {@linkcode Gender} being checked
  * @returns - The associated symbol
  */
 export function getGenderSymbol(gender: Gender) {
@@ -21,7 +21,7 @@ export function getGenderSymbol(gender: Gender) {
 
 /**
  * Gets a color for a gender
- * @param gender - The gender
+ * @param gender - The {@linkcode Gender}
  * @returns a hex representation of color
  */
 export function getGenderColor(gender: Gender) {
@@ -36,7 +36,7 @@ export function getGenderColor(gender: Gender) {
 
 /**
  * Gets a color for a gender shadow
- * @param gender - The gender
+ * @param gender - The {@linkcode Gender}
  * @returns a hex representation of color
  */
 export function getGenderShadowColor(gender: Gender) {

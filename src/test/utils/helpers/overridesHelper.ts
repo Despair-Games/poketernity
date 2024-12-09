@@ -14,7 +14,7 @@ import type { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
-import type { WeatherType } from "#enums/weather-type";
+import type { WeatherType } from "#app/data/weather";
 import { vi } from "vitest";
 import { GameManagerHelper } from "./gameManagerHelper";
 

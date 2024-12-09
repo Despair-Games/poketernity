@@ -16,7 +16,7 @@ export enum TerrainType {
 
 /**
  * Class representing Terrain effects
- * @var weatherType - The TerrainType that is being represented
+ * @var terrainType - The TerrainType that is being represented
  * @var turnsLeft - How many turns the terrain still has left
  */
 export class Terrain {
@@ -177,7 +177,7 @@ export function getTerrainClearMessage(terrainType: TerrainType): string | null 
 
 /**
  * Function to get the message for when a terrain blocks a move
- * @param pokemon - The Pokemon using the move
+ * @param pokemon - The Pokemon being attacked
  * @param terrainType - the Terrain type (misty terrain has a unique message)
  * @returns the associated string
  */

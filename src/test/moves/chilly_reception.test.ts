@@ -1,7 +1,7 @@
 import { Abilities } from "#app/enums/abilities";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
-import { WeatherType } from "#enums/weather-type";
+import { WeatherType } from "#app/data/weather";
 import GameManager from "#test/utils/gameManager";
 import Phaser from "phaser";
 //import { TurnInitPhase } from "#app/phases/turn-init-phase";

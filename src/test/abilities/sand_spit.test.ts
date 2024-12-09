@@ -1,4 +1,4 @@
-import { WeatherType } from "#app/enums/weather-type";
+import { WeatherType } from "#app/data/weather";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";

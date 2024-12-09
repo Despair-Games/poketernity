@@ -10,7 +10,7 @@ import { Species } from "#enums/species";
 import type { TimeOfDay } from "#enums/time-of-day";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
-import { WeatherType } from "#enums/weather-type";
+import { WeatherType } from "./weather";
 import { Challenges } from "#app/enums/challenges";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { globalScene } from "#app/global-scene";

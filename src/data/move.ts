@@ -29,7 +29,7 @@ import {
   getEnumValues,
   toReadableString,
 } from "#app/utils";
-import { WeatherType } from "#enums/weather-type";
+import { WeatherType } from "./weather";
 import type { ArenaTrapTag } from "./arena-tag";
 import { ArenaTagSide, WeakenMoveTypeTag } from "./arena-tag";
 import {
