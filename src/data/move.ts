@@ -3552,7 +3552,7 @@ export class CutHpStatStageBoostAttr extends StatStageChangeAttr {
 
   override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
     user.damageAndUpdate(toDmgValue(user.getMaxHp() / this.cutRatio), HitResult.OTHER, false, true);
-    user.updateInfo(); // TODO: Is this Promise safe to run?
+    user.updateInfo();
     const ret = super.apply(user, target, move, args);
     if (this.messageCallback) {
       this.messageCallback(user);
@@ -3678,7 +3678,7 @@ export class ResetStatsAttr extends MoveEffectAttr {
     for (const s of BATTLE_STATS) {
       pokemon.setStatStage(s, 0);
     }
-    pokemon.updateInfo(); // TODO: Is this Promise safe to run?
+    pokemon.updateInfo();
   }
 }
 
@@ -3756,7 +3756,7 @@ export class HpSplitAttr extends MoveEffectAttr {
           globalScene.damageNumberHandler.add(p, damage);
         }
       }
-      p.updateInfo(); // TODO: Is this Promise safe to run?
+      p.updateInfo();
     });
 
     return true;
@@ -6289,14 +6289,10 @@ export class RevivalBlessingAttr extends MoveEffectAttr {
    */
   override apply(user: Pokemon, _target: Pokemon, _move: Move, _args: any[]): boolean {
     // If user is player, checks if the user has fainted pokemon
-    if (user instanceof PlayerPokemon && globalScene.getPlayerParty().findIndex((p) => p.isFainted()) > -1) {
+    if (user instanceof PlayerPokemon) {
       globalScene.unshiftPhase(new RevivalBlessingPhase(user));
       return true;
-    } else if (
-      user instanceof EnemyPokemon
-      && user.hasTrainer()
-      && globalScene.getEnemyParty().findIndex((p) => p.isFainted() && !p.isBoss()) > -1
-    ) {
+    } else if (user instanceof EnemyPokemon) {
       // If used by an enemy trainer with at least one fainted non-boss Pokemon, this
       // revives one of said Pokemon selected at random.
       const faintedPokemon = globalScene.getEnemyParty().filter((p) => p.isFainted() && !p.isBoss());
