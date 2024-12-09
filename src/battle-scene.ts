@@ -77,8 +77,7 @@ import {
   PostBattleInitAbAttr,
   PostItemLostAbAttr,
 } from "#app/data/ability";
-import type { FixedBattleConfig } from "#app/battle";
-import Battle from "#app/battle";
+import { Battle } from "#app/battle";
 import type { GameMode } from "#app/game-mode";
 import { GameModes, getGameMode } from "#app/game-mode";
 import FieldSpritePipeline from "#app/pipelines/field-sprite";
@@ -181,6 +180,7 @@ import { FRIENDSHIP_GAIN_FROM_BATTLE } from "#app/data/balance/starters";
 import { StatusEffect } from "#enums/status-effect";
 import { globalScene, initGlobalScene } from "#app/global-scene";
 import { BattleType } from "#enums/battle-type";
+import type { FixedBattleConfig } from "./fixed-battle-config";
 
 const DEBUG_RNG = false;
 

@@ -3,7 +3,6 @@ import type Pokemon from "#app/field/pokemon";
 import type { EnemyPokemon, PlayerPokemon, QueuedMove } from "#app/field/pokemon";
 import type Trainer from "#app/field/trainer";
 import { globalScene } from "#app/global-scene";
-import type { CustomModifierSettings } from "#app/modifier/modifier-type";
 import i18next from "#app/plugins/i18n";
 import { MusicPreference } from "#app/system/settings/settings";
 import { getEnumValues, isBetween, NumberHolder, randomString, randSeedInt, shiftCharCodes } from "#app/utils";
@@ -16,6 +15,7 @@ import { Species } from "#enums/species";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { BattleType } from "./enums/battle-type";
 import { BattlerIndex } from "./enums/battler-index";
+import type { FixedBattleConfig } from "./fixed-battle-config";
 import type { GameMode } from "./game-mode";
 import { MoneyMultiplierModifier, PokemonHeldItemModifier } from "./modifier/modifier";
 import type { Command } from "./ui/command-ui-handler";
@@ -439,50 +439,4 @@ export class FixedBattle extends Battle {
       this.enemyParty = config.getEnemyParty();
     }
   }
-}
-
-type GetTrainerFunc = () => Trainer;
-type GetEnemyPartyFunc = () => EnemyPokemon[];
-
-export class FixedBattleConfig {
-  public battleType: BattleType;
-  public double: boolean;
-  public getTrainer: GetTrainerFunc;
-  public getEnemyParty: GetEnemyPartyFunc;
-  public seedOffsetWaveIndex: number;
-  public customModifierRewardSettings?: CustomModifierSettings;
-
-  setBattleType(battleType: BattleType): FixedBattleConfig {
-    this.battleType = battleType;
-    return this;
-  }
-
-  setDouble(double: boolean): FixedBattleConfig {
-    this.double = double;
-    return this;
-  }
-
-  setGetTrainerFunc(getTrainerFunc: GetTrainerFunc): FixedBattleConfig {
-    this.getTrainer = getTrainerFunc;
-    return this;
-  }
-
-  setGetEnemyPartyFunc(getEnemyPartyFunc: GetEnemyPartyFunc): FixedBattleConfig {
-    this.getEnemyParty = getEnemyPartyFunc;
-    return this;
-  }
-
-  setSeedOffsetWave(seedOffsetWaveIndex: number): FixedBattleConfig {
-    this.seedOffsetWaveIndex = seedOffsetWaveIndex;
-    return this;
-  }
-
-  setCustomModifierRewards(customModifierRewardSettings: CustomModifierSettings) {
-    this.customModifierRewardSettings = customModifierRewardSettings;
-    return this;
-  }
-}
-
-export interface FixedBattleConfigs {
-  [key: number]: FixedBattleConfig;
 }

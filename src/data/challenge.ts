@@ -8,7 +8,6 @@ import { getPokemonSpecies, getPokemonSpeciesForm } from "#app/data/pokemon-spec
 import { speciesStarterCosts } from "#app/data/balance/starters";
 import type Pokemon from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon";
-import type { FixedBattleConfig } from "#app/battle";
 import { BattleType } from "#enums/battle-type";
 import Trainer from "#app/field/trainer";
 import { TrainerVariant } from "#enums/trainer-variant";
@@ -22,6 +21,7 @@ import type { Moves } from "#enums/moves";
 import { TypeColor, TypeShadow } from "#enums/color";
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
 import { pokemonFormChanges } from "#app/data/pokemon-forms";
+import type { FixedBattleConfig } from "#app/fixed-battle-config";
 
 /** A constant for the default max cost of the starting party before a run */
 const DEFAULT_PARTY_MAX_COST = 10;

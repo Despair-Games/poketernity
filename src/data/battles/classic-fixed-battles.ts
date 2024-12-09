@@ -1,10 +1,10 @@
-import { type FixedBattleConfigs, FixedBattleConfig } from "#app/battle";
 import { BattleType } from "#app/enums/battle-type";
 import { ClassicFixedBossWaves } from "#app/enums/classic-fixed-boss-waves";
 import { PlayerGender } from "#app/enums/player-gender";
 import { TrainerType } from "#app/enums/trainer-type";
 import { TrainerVariant } from "#app/enums/trainer-variant";
 import Trainer from "#app/field/trainer";
+import { FixedBattleConfig, type FixedBattleConfigs } from "#app/fixed-battle-config";
 import { globalScene } from "#app/global-scene";
 import { ModifierTier } from "#app/modifier/modifier-tier";
 import { randInt, randSeedInt, randSeedItem } from "#app/utils";
