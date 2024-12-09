@@ -8,6 +8,9 @@ import { Mode } from "#app/ui/ui";
 import { isNullOrUndefined } from "#app/utils";
 import { MysteryEncounterOptionSelectedPhase } from "./option-selected-phase";
 
+const { currentBattle, mysteryEncounterSaveData, ui } = globalScene;
+const mysteryEncounter = currentBattle.mysteryEncounter!; // TODO: Resolve bang?
+
 /**
  * Will handle (in order):
  * - Clearing of phase queues to enter the Mystery Encounter game state
@@ -42,19 +45,18 @@ export class MysteryEncounterPhase extends Phase {
     globalScene.clearPhaseQueue();
     globalScene.clearPhaseQueueSplice();
 
-    const encounter = globalScene.currentBattle.mysteryEncounter!;
-    encounter.updateSeedOffset();
+    mysteryEncounter.updateSeedOffset();
 
     if (!this.optionSelectSettings) {
       // Sets flag that ME was encountered, only if this is not a followup option select phase
       // Can be used in later MEs to check for requirements to spawn, run history, etc.
-      globalScene.mysteryEncounterSaveData.encounteredEvents.push(
-        new SeenEncounterData(encounter.encounterType, encounter.encounterTier, globalScene.currentBattle.waveIndex),
+      mysteryEncounterSaveData.encounteredEvents.push(
+        new SeenEncounterData(mysteryEncounter.encounterType, mysteryEncounter.encounterTier, currentBattle.waveIndex),
       );
     }
 
     // Initiates encounter dialogue window and option select
-    globalScene.ui.setMode(Mode.MYSTERY_ENCOUNTER, this.optionSelectSettings);
+    ui.setMode(Mode.MYSTERY_ENCOUNTER, this.optionSelectSettings);
   }
 
   /**
@@ -64,16 +66,14 @@ export class MysteryEncounterPhase extends Phase {
    */
   public handleOptionSelect(option: MysteryEncounterOption, index: number): boolean {
     // Set option selected flag
-    globalScene.currentBattle.mysteryEncounter!.selectedOption = option;
+    mysteryEncounter.selectedOption = option;
 
     if (!this.optionSelectSettings) {
       // Saves the selected option in the ME save data, only if this is not a followup option select phase
       // Can be used for analytics purposes to track what options are popular on certain encounters
       const encounterSaveData =
-        globalScene.mysteryEncounterSaveData.encounteredEvents[
-          globalScene.mysteryEncounterSaveData.encounteredEvents.length - 1
-        ];
-      if (encounterSaveData.type === globalScene.currentBattle.mysteryEncounter?.encounterType) {
+        mysteryEncounterSaveData.encounteredEvents[mysteryEncounterSaveData.encounteredEvents.length - 1];
+      if (encounterSaveData.type === mysteryEncounter?.encounterType) {
         encounterSaveData.selectedOption = index;
       }
     }
@@ -83,7 +83,7 @@ export class MysteryEncounterPhase extends Phase {
     }
 
     // Populate dialogue tokens for option requirements
-    globalScene.currentBattle.mysteryEncounter!.populateDialogueTokensFromRequirements();
+    mysteryEncounter.populateDialogueTokensFromRequirements();
 
     if (option.onPreOptionPhase) {
       globalScene.executeWithSeedOffset(async () => {
@@ -92,7 +92,7 @@ export class MysteryEncounterPhase extends Phase {
             this.continueEncounter();
           }
         });
-      }, globalScene.currentBattle.mysteryEncounter?.getSeedOffset());
+      }, mysteryEncounter?.getSeedOffset() ?? 0);
     } else {
       this.continueEncounter();
     }
@@ -109,10 +109,10 @@ export class MysteryEncounterPhase extends Phase {
       this.end();
     };
 
-    const optionSelectDialogue = globalScene.currentBattle?.mysteryEncounter?.selectedOption?.dialogue;
+    const optionSelectDialogue = currentBattle?.mysteryEncounter?.selectedOption?.dialogue;
     if (optionSelectDialogue?.selected && optionSelectDialogue.selected.length > 0) {
       // Handle intermediate dialogue (between player selection event and the onOptionSelect logic)
-      globalScene.ui.setMode(Mode.MESSAGE);
+      ui.setMode(Mode.MESSAGE);
       const selectedDialogue = optionSelectDialogue.selected;
       let i = 0;
       const showNextDialogue = (): void => {
@@ -126,16 +126,9 @@ export class MysteryEncounterPhase extends Phase {
 
         i++;
         if (title) {
-          globalScene.ui.showDialogue(
-            text ?? "",
-            title,
-            null,
-            nextAction,
-            0,
-            i === 1 ? this.FIRST_DIALOGUE_PROMPT_DELAY : 0,
-          );
+          ui.showDialogue(text ?? "", title, null, nextAction, 0, i === 1 ? this.FIRST_DIALOGUE_PROMPT_DELAY : 0);
         } else {
-          globalScene.ui.showText(text ?? "", null, nextAction, i === 1 ? this.FIRST_DIALOGUE_PROMPT_DELAY : 0, true);
+          ui.showText(text ?? "", null, nextAction, i === 1 ? this.FIRST_DIALOGUE_PROMPT_DELAY : 0, true);
         }
       };
 
@@ -149,6 +142,6 @@ export class MysteryEncounterPhase extends Phase {
    * Ends phase
    */
   public override end(): void {
-    globalScene.ui.setMode(Mode.MESSAGE).then(() => super.end());
+    ui.setMode(Mode.MESSAGE).then(() => super.end());
   }
 }

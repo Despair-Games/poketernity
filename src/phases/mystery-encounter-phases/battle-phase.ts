@@ -13,6 +13,10 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import i18next from "i18next";
 
+const { currentBattle, tweens, ui } = globalScene;
+const { double, mysteryEncounter, trainer } = currentBattle;
+const encounterMode = mysteryEncounter?.encounterMode;
+
 /**
  * Will handle (in order):
  * - Setting BGM
@@ -23,7 +27,7 @@ import i18next from "i18next";
 export class MysteryEncounterBattlePhase extends Phase {
   protected disableSwitch: boolean;
 
-  constructor(disableSwitch = false) {
+  constructor(disableSwitch: boolean = false) {
     super();
     this.disableSwitch = disableSwitch;
   }
@@ -39,27 +43,20 @@ export class MysteryEncounterBattlePhase extends Phase {
 
   /**
    * Gets intro battle message for new battle
-   * @param scene
    * @private
    */
   private getBattleMessage(): string {
     const enemyField = globalScene.getEnemyField();
-    const encounterMode = globalScene.currentBattle.mysteryEncounter!.encounterMode;
 
-    if (globalScene.currentBattle.isClassicFinalBoss) {
+    // This shouldn't ever happen, right?
+    if (currentBattle.isClassicFinalBoss) {
       return i18next.t("battle:bossAppeared", { bossName: enemyField[0].name });
     }
 
     if (encounterMode === MysteryEncounterMode.TRAINER_BATTLE) {
-      if (globalScene.currentBattle.double) {
-        return i18next.t("battle:trainerAppearedDouble", {
-          trainerName: globalScene.currentBattle.trainer?.getName(TrainerSlot.NONE, true),
-        });
-      } else {
-        return i18next.t("battle:trainerAppeared", {
-          trainerName: globalScene.currentBattle.trainer?.getName(TrainerSlot.NONE, true),
-        });
-      }
+      return i18next.t(`battle:trainerAppeared${double ? "Double" : ""}`, {
+        trainerName: trainer?.getName(TrainerSlot.NONE, true),
+      });
     }
 
     return enemyField.length === 1
@@ -69,31 +66,28 @@ export class MysteryEncounterBattlePhase extends Phase {
 
   /**
    * Queues {@linkcode SummonPhase}s for the new battle, and handles trainer animations/dialogue if it's a Trainer battle
-   * @param scene
    * @private
    */
   private doMysteryEncounterBattle(): void {
-    const encounterMode = globalScene.currentBattle.mysteryEncounter!.encounterMode;
     if (encounterMode === MysteryEncounterMode.WILD_BATTLE || encounterMode === MysteryEncounterMode.BOSS_BATTLE) {
-      // Summons the wild/boss Pokemon
       if (encounterMode === MysteryEncounterMode.BOSS_BATTLE) {
         globalScene.playBgm();
       }
       const availablePartyMembers = globalScene.getEnemyParty().filter((p) => !p.isFainted()).length;
       globalScene.unshiftPhase(new SummonPhase(0, false));
-      if (globalScene.currentBattle.double && availablePartyMembers > 1) {
+      if (double && availablePartyMembers > 1) {
         globalScene.unshiftPhase(new SummonPhase(1, false));
       }
 
-      if (!globalScene.currentBattle.mysteryEncounter?.hideBattleIntroMessage) {
-        globalScene.ui.showText(this.getBattleMessage(), null, () => this.endBattleSetup(), 0);
+      if (!mysteryEncounter?.hideBattleIntroMessage) {
+        ui.showText(this.getBattleMessage(), null, () => this.endBattleSetup(), 0);
       } else {
         this.endBattleSetup();
       }
     } else if (encounterMode === MysteryEncounterMode.TRAINER_BATTLE) {
       this.showEnemyTrainer();
       const doSummon = (): void => {
-        globalScene.currentBattle.started = true;
+        currentBattle.started = true;
         globalScene.playBgm();
         globalScene.pbTray.showPbTray(globalScene.getPlayerParty());
         globalScene.pbTrayEnemy.showPbTray(globalScene.getEnemyParty());
@@ -101,43 +95,42 @@ export class MysteryEncounterBattlePhase extends Phase {
           this.hideEnemyTrainer();
           const availablePartyMembers = globalScene.getEnemyParty().filter((p) => !p.isFainted()).length;
           globalScene.unshiftPhase(new SummonPhase(0, false));
-          if (globalScene.currentBattle.double && availablePartyMembers > 1) {
+          if (double && availablePartyMembers > 1) {
             globalScene.unshiftPhase(new SummonPhase(1, false));
           }
           this.endBattleSetup();
         };
-        if (!globalScene.currentBattle.mysteryEncounter?.hideBattleIntroMessage) {
-          globalScene.ui.showText(this.getBattleMessage(), null, doTrainerSummon, 1000, true);
+        if (!mysteryEncounter?.hideBattleIntroMessage) {
+          ui.showText(this.getBattleMessage(), null, doTrainerSummon, 1000, true);
         } else {
           doTrainerSummon();
         }
       };
 
-      const encounterMessages = globalScene.currentBattle.trainer?.getEncounterMessages();
+      const encounterMessages = trainer?.getEncounterMessages();
 
       if (!encounterMessages || !encounterMessages.length) {
         doSummon();
       } else {
-        const trainer = globalScene.currentBattle.trainer;
         let message: string;
         globalScene.executeWithSeedOffset(
           () => (message = randSeedItem(encounterMessages)),
-          globalScene.currentBattle.mysteryEncounter?.getSeedOffset(),
+          mysteryEncounter?.getSeedOffset() ?? 0,
         );
         message = message!; // tell TS compiler it's defined now
         const showDialogueAndSummon = (): void => {
-          globalScene.ui.showDialogue(message, trainer?.getName(TrainerSlot.NONE, true), null, () => {
+          ui.showDialogue(message, trainer?.getName(TrainerSlot.NONE, true), null, () => {
             globalScene.charSprite.hide().then(() => globalScene.hideFieldOverlay(250).then(() => doSummon()));
           });
         };
-        if (globalScene.currentBattle.trainer?.config.hasCharSprite && !globalScene.ui.shouldSkipDialogue(message)) {
+        if (trainer?.config.hasCharSprite && !ui.shouldSkipDialogue(message)) {
           globalScene
             .showFieldOverlay(500)
             .then(() =>
               globalScene.charSprite
-                .showCharacter(trainer?.getKey()!, getCharVariantFromDialogue(encounterMessages[0]))
+                .showCharacter(trainer.getKey(), getCharVariantFromDialogue(encounterMessages[0]))
                 .then(() => showDialogueAndSummon()),
-            ); // TODO: is this bang correct?
+            );
         } else {
           showDialogueAndSummon();
         }
@@ -147,12 +140,10 @@ export class MysteryEncounterBattlePhase extends Phase {
 
   /**
    * Initiate {@linkcode SummonPhase}s, {@linkcode ScanIvsPhase}, {@linkcode PostSummonPhase}s, etc.
-   * @param scene
    * @private
    */
   private endBattleSetup(): void {
     const enemyField = globalScene.getEnemyField();
-    const encounterMode = globalScene.currentBattle.mysteryEncounter!.encounterMode;
 
     // PostSummon and ShinySparkle phases are handled by SummonPhase
 
@@ -173,7 +164,7 @@ export class MysteryEncounterBattlePhase extends Phase {
       globalScene.pushPhase(new SummonPhase(0));
     }
 
-    if (globalScene.currentBattle.double) {
+    if (double) {
       if (availablePartyMembers.length > 1) {
         globalScene.pushPhase(new ToggleDoublePositionPhase(true));
         if (!availablePartyMembers[1].isOnField()) {
@@ -189,11 +180,11 @@ export class MysteryEncounterBattlePhase extends Phase {
     }
 
     if (encounterMode !== MysteryEncounterMode.TRAINER_BATTLE && !this.disableSwitch) {
-      const minPartySize = globalScene.currentBattle.double ? 2 : 1;
+      const minPartySize = double ? 2 : 1;
       if (availablePartyMembers.length > minPartySize) {
-        globalScene.pushPhase(new CheckSwitchPhase(0, globalScene.currentBattle.double));
-        if (globalScene.currentBattle.double) {
-          globalScene.pushPhase(new CheckSwitchPhase(1, globalScene.currentBattle.double));
+        globalScene.pushPhase(new CheckSwitchPhase(0, double));
+        if (double) {
+          globalScene.pushPhase(new CheckSwitchPhase(1, double));
         }
       }
     }
@@ -206,7 +197,6 @@ export class MysteryEncounterBattlePhase extends Phase {
    * @private
    */
   private showEnemyTrainer(): void {
-    const trainer = globalScene.currentBattle.trainer;
     if (!trainer) {
       return;
     }
@@ -214,7 +204,7 @@ export class MysteryEncounterBattlePhase extends Phase {
     trainer.x += 16;
     trainer.y -= 16;
     trainer.setVisible(true);
-    globalScene.tweens.add({
+    tweens.add({
       targets: trainer,
       x: "-=16",
       y: "+=16",
@@ -229,8 +219,8 @@ export class MysteryEncounterBattlePhase extends Phase {
   }
 
   private hideEnemyTrainer(): void {
-    globalScene.tweens.add({
-      targets: globalScene.currentBattle.trainer,
+    tweens.add({
+      targets: trainer,
       x: "+=16",
       y: "-=16",
       alpha: 0,

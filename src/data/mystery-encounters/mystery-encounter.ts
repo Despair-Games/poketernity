@@ -273,7 +273,7 @@ export default class MysteryEncounter implements IMysteryEncounter {
    * Used for keeping RNG consistent on session resets, but increments when cycling through multiple "Encounters" on the same wave
    * You should only need to interact via getter/update methods
    */
-  private seedOffset?: any;
+  private seedOffset?: number;
 
   constructor(encounter: IMysteryEncounter | null) {
     if (!isNullOrUndefined(encounter)) {

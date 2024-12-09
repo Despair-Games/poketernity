@@ -6,6 +6,9 @@ import { NewBattlePhase } from "#app/phases/new-battle-phase";
 import { Mode } from "#app/ui/ui";
 import { isNullOrUndefined } from "#app/utils";
 
+const { currentBattle, ui } = globalScene;
+const { mysteryEncounter } = currentBattle;
+
 /**
  * Will handle (in order):
  * - {@linkcode MysteryEncounter.onPostOptionSelect} logic (based on an option that was selected)
@@ -13,14 +16,13 @@ import { isNullOrUndefined } from "#app/utils";
  * - Cleanup of any leftover intro visuals
  * - Queuing of the next wave
  */
-
 export class PostMysteryEncounterPhase extends Phase {
   private readonly FIRST_DIALOGUE_PROMPT_DELAY = 750;
   protected onPostOptionSelect?: OptionPhaseCallback;
 
   constructor() {
     super();
-    this.onPostOptionSelect = globalScene.currentBattle.mysteryEncounter?.selectedOption?.onPostOptionPhase;
+    this.onPostOptionSelect = mysteryEncounter?.selectedOption?.onPostOptionPhase;
   }
 
   /**
@@ -30,13 +32,16 @@ export class PostMysteryEncounterPhase extends Phase {
     super.start();
 
     if (this.onPostOptionSelect) {
-      globalScene.executeWithSeedOffset(async () => {
-        return await this.onPostOptionSelect!().then((result) => {
-          if (isNullOrUndefined(result) || result) {
-            this.continueEncounter();
-          }
-        });
-      }, globalScene.currentBattle.mysteryEncounter?.getSeedOffset() * 2000);
+      globalScene.executeWithSeedOffset(
+        async () => {
+          return await this.onPostOptionSelect!().then((result) => {
+            if (isNullOrUndefined(result) || result) {
+              this.continueEncounter();
+            }
+          });
+        },
+        (mysteryEncounter?.getSeedOffset() ?? 0) * 2000,
+      );
     } else {
       this.continueEncounter();
     }
@@ -51,7 +56,7 @@ export class PostMysteryEncounterPhase extends Phase {
       this.end();
     };
 
-    const outroDialogue = globalScene.currentBattle?.mysteryEncounter?.dialogue?.outro;
+    const outroDialogue = mysteryEncounter?.dialogue?.outro;
     if (outroDialogue && outroDialogue.length > 0) {
       let i = 0;
       const showNextDialogue = (): void => {
@@ -64,18 +69,11 @@ export class PostMysteryEncounterPhase extends Phase {
         }
 
         i++;
-        globalScene.ui.setMode(Mode.MESSAGE);
+        ui.setMode(Mode.MESSAGE);
         if (title) {
-          globalScene.ui.showDialogue(
-            text ?? "",
-            title,
-            null,
-            nextAction,
-            0,
-            i === 1 ? this.FIRST_DIALOGUE_PROMPT_DELAY : 0,
-          );
+          ui.showDialogue(text ?? "", title, null, nextAction, 0, i === 1 ? this.FIRST_DIALOGUE_PROMPT_DELAY : 0);
         } else {
-          globalScene.ui.showText(text ?? "", null, nextAction, i === 1 ? this.FIRST_DIALOGUE_PROMPT_DELAY : 0, true);
+          ui.showText(text ?? "", null, nextAction, i === 1 ? this.FIRST_DIALOGUE_PROMPT_DELAY : 0, true);
         }
       };
 

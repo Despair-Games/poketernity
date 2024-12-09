@@ -16,10 +16,6 @@ import { SwitchType } from "#enums/switch-type";
  */
 
 export class MysteryEncounterBattleStartCleanupPhase extends Phase {
-  constructor() {
-    super();
-  }
-
   /**
    * Cleans up `TURN_END` tags, any {@linkcode PostTurnStatusEffectPhase}s, checks for Pokemon switches, then continues
    */
@@ -45,13 +41,13 @@ export class MysteryEncounterBattleStartCleanupPhase extends Phase {
     });
 
     // Remove any status tick phases
-    while (!!globalScene.findPhase((p) => p instanceof PostTurnStatusEffectPhase)) {
+    while (globalScene.findPhase((p) => p instanceof PostTurnStatusEffectPhase)) {
       globalScene.tryRemovePhase((p) => p instanceof PostTurnStatusEffectPhase);
     }
 
-    // The total number of Pokemon in the player's party that can legally fight
+    /** The total number of Pokemon in the player's party that can legally fight */
     const legalPlayerPokemon = globalScene.getPokemonAllowedInBattle();
-    // The total number of legal player Pokemon that aren't currently on the field
+    /** The total number of legal player Pokemon that aren't currently on the field */
     const legalPlayerPartyPokemon = legalPlayerPokemon.filter((p) => !p.isActive(true));
     if (!legalPlayerPokemon.length) {
       globalScene.unshiftPhase(new GameOverPhase());

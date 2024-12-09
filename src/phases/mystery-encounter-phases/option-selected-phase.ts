@@ -3,6 +3,8 @@ import { transitionMysteryEncounterIntroVisuals } from "#app/data/mystery-encoun
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 
+const { mysteryEncounter } = globalScene.currentBattle;
+
 /**
  * Will handle (in order):
  * - Execute {@linkcode MysteryEncounter.onOptionSelect} logic if it exists for the selected option
@@ -10,13 +12,12 @@ import { Phase } from "#app/phase";
  * It is important to point out that no phases are directly queued by any logic within this phase
  * Any phase that is meant to follow this one MUST be queued via the onOptionSelect() logic of the selected option
  */
-
 export class MysteryEncounterOptionSelectedPhase extends Phase {
   protected onOptionSelect: OptionPhaseCallback;
 
   constructor() {
     super();
-    this.onOptionSelect = globalScene.currentBattle.mysteryEncounter!.selectedOption!.onOptionPhase;
+    this.onOptionSelect = mysteryEncounter!.selectedOption!.onOptionPhase; // TODO: resolve bangs?
   }
 
   /**
@@ -28,20 +29,26 @@ export class MysteryEncounterOptionSelectedPhase extends Phase {
    */
   public override start(): void {
     super.start();
-    if (globalScene.currentBattle.mysteryEncounter?.autoHideIntroVisuals) {
+    if (mysteryEncounter?.autoHideIntroVisuals) {
       transitionMysteryEncounterIntroVisuals().then(() => {
-        globalScene.executeWithSeedOffset(() => {
+        globalScene.executeWithSeedOffset(
+          () => {
+            this.onOptionSelect().finally(() => {
+              this.end();
+            });
+          },
+          (mysteryEncounter?.getSeedOffset() ?? 0) * 500,
+        );
+      });
+    } else {
+      globalScene.executeWithSeedOffset(
+        () => {
           this.onOptionSelect().finally(() => {
             this.end();
           });
-        }, globalScene.currentBattle.mysteryEncounter?.getSeedOffset() * 500);
-      });
-    } else {
-      globalScene.executeWithSeedOffset(() => {
-        this.onOptionSelect().finally(() => {
-          this.end();
-        });
-      }, globalScene.currentBattle.mysteryEncounter?.getSeedOffset() * 500);
+        },
+        (mysteryEncounter?.getSeedOffset() ?? 0) * 500,
+      );
     }
   }
 }
