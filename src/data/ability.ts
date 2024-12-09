@@ -3805,6 +3805,12 @@ export class BattlerTagImmunityAbAttr extends PreApplyBattlerTagImmunityAbAttr {
  */
 export class UserFieldBattlerTagImmunityAbAttr extends PreApplyBattlerTagImmunityAbAttr {}
 
+/**
+ * Provides immunity to critical hits
+ * These abilities use this attribute:
+ * - Battle Armor
+ * - Shell Armor (Identical to Battle Armor in functionality, just has a different name)
+ */
 export class BlockCritAbAttr extends AbAttr {
   override apply(
     _pokemon: Pokemon,
