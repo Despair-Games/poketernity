@@ -13,10 +13,6 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import i18next from "i18next";
 
-const { currentBattle, tweens, ui } = globalScene;
-const { double, mysteryEncounter, trainer } = currentBattle;
-const encounterMode = mysteryEncounter?.encounterMode;
-
 /**
  * Will handle (in order):
  * - Setting BGM
@@ -46,6 +42,9 @@ export class MysteryEncounterBattlePhase extends Phase {
    * @private
    */
   private getBattleMessage(): string {
+    const { currentBattle } = globalScene;
+    const { double, mysteryEncounter, trainer } = currentBattle;
+    const encounterMode = mysteryEncounter?.encounterMode;
     const enemyField = globalScene.getEnemyField();
 
     // This shouldn't ever happen, right?
@@ -69,6 +68,9 @@ export class MysteryEncounterBattlePhase extends Phase {
    * @private
    */
   private doMysteryEncounterBattle(): void {
+    const { currentBattle, ui } = globalScene;
+    const { double, mysteryEncounter, trainer } = currentBattle;
+    const encounterMode = mysteryEncounter?.encounterMode;
     if (encounterMode === MysteryEncounterMode.WILD_BATTLE || encounterMode === MysteryEncounterMode.BOSS_BATTLE) {
       if (encounterMode === MysteryEncounterMode.BOSS_BATTLE) {
         globalScene.playBgm();
@@ -143,6 +145,9 @@ export class MysteryEncounterBattlePhase extends Phase {
    * @private
    */
   private endBattleSetup(): void {
+    const { currentBattle } = globalScene;
+    const { double, mysteryEncounter } = currentBattle;
+    const encounterMode = mysteryEncounter?.encounterMode;
     const enemyField = globalScene.getEnemyField();
 
     // PostSummon and ShinySparkle phases are handled by SummonPhase
@@ -197,6 +202,8 @@ export class MysteryEncounterBattlePhase extends Phase {
    * @private
    */
   private showEnemyTrainer(): void {
+    const { currentBattle, tweens } = globalScene;
+    const { trainer } = currentBattle;
     if (!trainer) {
       return;
     }
@@ -219,6 +226,8 @@ export class MysteryEncounterBattlePhase extends Phase {
   }
 
   private hideEnemyTrainer(): void {
+    const { currentBattle, tweens } = globalScene;
+    const { trainer } = currentBattle;
     tweens.add({
       targets: trainer,
       x: "+=16",

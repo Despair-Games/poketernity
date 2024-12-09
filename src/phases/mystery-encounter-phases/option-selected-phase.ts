@@ -3,8 +3,6 @@ import { transitionMysteryEncounterIntroVisuals } from "#app/data/mystery-encoun
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 
-const { mysteryEncounter } = globalScene.currentBattle;
-
 /**
  * Will handle (in order):
  * - Execute {@linkcode MysteryEncounter.onOptionSelect} logic if it exists for the selected option
@@ -13,12 +11,8 @@ const { mysteryEncounter } = globalScene.currentBattle;
  * Any phase that is meant to follow this one MUST be queued via the onOptionSelect() logic of the selected option
  */
 export class MysteryEncounterOptionSelectedPhase extends Phase {
-  protected onOptionSelect: OptionPhaseCallback;
-
-  constructor() {
-    super();
-    this.onOptionSelect = mysteryEncounter!.selectedOption!.onOptionPhase; // TODO: resolve bangs?
-  }
+  protected onOptionSelect: OptionPhaseCallback =
+    globalScene.currentBattle.mysteryEncounter!.selectedOption!.onOptionPhase;
 
   /**
    * Will handle (in order):
@@ -29,6 +23,7 @@ export class MysteryEncounterOptionSelectedPhase extends Phase {
    */
   public override start(): void {
     super.start();
+    const { mysteryEncounter } = globalScene.currentBattle;
     if (mysteryEncounter?.autoHideIntroVisuals) {
       transitionMysteryEncounterIntroVisuals().then(() => {
         globalScene.executeWithSeedOffset(

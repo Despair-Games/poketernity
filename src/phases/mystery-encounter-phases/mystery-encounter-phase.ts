@@ -8,9 +8,6 @@ import { Mode } from "#app/ui/ui";
 import { isNullOrUndefined } from "#app/utils";
 import { MysteryEncounterOptionSelectedPhase } from "./option-selected-phase";
 
-const { currentBattle, mysteryEncounterSaveData, ui } = globalScene;
-const mysteryEncounter = currentBattle.mysteryEncounter!; // TODO: Resolve bang?
-
 /**
  * Will handle (in order):
  * - Clearing of phase queues to enter the Mystery Encounter game state
@@ -41,6 +38,9 @@ export class MysteryEncounterPhase extends Phase {
   public override start(): void {
     super.start();
 
+    const { currentBattle, mysteryEncounterSaveData, ui } = globalScene;
+    const mysteryEncounter = currentBattle.mysteryEncounter!; // TODO: Resolve bang?
+
     // Clears out queued phases that are part of standard battle
     globalScene.clearPhaseQueue();
     globalScene.clearPhaseQueueSplice();
@@ -65,6 +65,9 @@ export class MysteryEncounterPhase extends Phase {
    * @param index
    */
   public handleOptionSelect(option: MysteryEncounterOption, index: number): boolean {
+    const { currentBattle, mysteryEncounterSaveData } = globalScene;
+    const mysteryEncounter = currentBattle.mysteryEncounter!; // TODO: Resolve bang?
+
     // Set option selected flag
     mysteryEncounter.selectedOption = option;
 
@@ -104,6 +107,8 @@ export class MysteryEncounterPhase extends Phase {
    * Queues {@linkcode MysteryEncounterOptionSelectedPhase}, displays option.selected dialogue and ends phase
    */
   public continueEncounter(): void {
+    const { currentBattle, ui } = globalScene;
+
     const endDialogueAndContinueEncounter = (): void => {
       globalScene.pushPhase(new MysteryEncounterOptionSelectedPhase());
       this.end();
@@ -142,6 +147,6 @@ export class MysteryEncounterPhase extends Phase {
    * Ends phase
    */
   public override end(): void {
-    ui.setMode(Mode.MESSAGE).then(() => super.end());
+    globalScene.ui.setMode(Mode.MESSAGE).then(() => super.end());
   }
 }

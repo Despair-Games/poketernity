@@ -3,8 +3,6 @@ import { Phase } from "#app/phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { PostMysteryEncounterPhase } from "./post-mystery-encounter-phase";
 
-const encounter = globalScene.currentBattle.mysteryEncounter!; // TODO: Resolve bang?
-
 /**
  * Will handle (in order):
  * - doContinueEncounter() callback for continuous encounters with back-to-back battles (this should push/shift its own phases as needed)
@@ -30,6 +28,8 @@ export class MysteryEncounterRewardsPhase extends Phase {
   public override start(): void {
     super.start();
 
+    const encounter = globalScene.currentBattle.mysteryEncounter!; // TODO: Resolve bang?
+
     if (encounter.doContinueEncounter) {
       encounter.doContinueEncounter().then(() => {
         this.end();
@@ -52,6 +52,8 @@ export class MysteryEncounterRewardsPhase extends Phase {
    * Queues encounter EXP and rewards phases, {@linkcode PostMysteryEncounterPhase}, and ends phase
    */
   protected doEncounterRewardsAndContinue(): void {
+    const encounter = globalScene.currentBattle.mysteryEncounter!; // TODO: Resolve bang?
+
     if (encounter.doEncounterExp) {
       encounter.doEncounterExp();
     }

@@ -6,9 +6,6 @@ import { NewBattlePhase } from "#app/phases/new-battle-phase";
 import { Mode } from "#app/ui/ui";
 import { isNullOrUndefined } from "#app/utils";
 
-const { currentBattle, ui } = globalScene;
-const { mysteryEncounter } = currentBattle;
-
 /**
  * Will handle (in order):
  * - {@linkcode MysteryEncounter.onPostOptionSelect} logic (based on an option that was selected)
@@ -18,18 +15,16 @@ const { mysteryEncounter } = currentBattle;
  */
 export class PostMysteryEncounterPhase extends Phase {
   private readonly FIRST_DIALOGUE_PROMPT_DELAY = 750;
-  protected onPostOptionSelect?: OptionPhaseCallback;
-
-  constructor() {
-    super();
-    this.onPostOptionSelect = mysteryEncounter?.selectedOption?.onPostOptionPhase;
-  }
+  protected onPostOptionSelect?: OptionPhaseCallback =
+    globalScene.currentBattle.mysteryEncounter?.selectedOption?.onPostOptionPhase;
 
   /**
    * Runs {@linkcode MysteryEncounter.onPostOptionSelect} then continues encounter
    */
   public override start(): void {
     super.start();
+
+    const { mysteryEncounter } = globalScene.currentBattle;
 
     if (this.onPostOptionSelect) {
       globalScene.executeWithSeedOffset(
@@ -51,6 +46,9 @@ export class PostMysteryEncounterPhase extends Phase {
    * Queues {@linkcode NewBattlePhase}, plays outro dialogue and ends phase
    */
   protected continueEncounter(): void {
+    const { currentBattle, ui } = globalScene;
+    const { mysteryEncounter } = currentBattle;
+
     const endPhase = (): void => {
       globalScene.pushPhase(new NewBattlePhase());
       this.end();
