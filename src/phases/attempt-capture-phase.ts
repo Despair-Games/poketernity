@@ -39,6 +39,8 @@ export class AttemptCapturePhase extends PokemonPhase {
   public override start(): void {
     super.start();
 
+    const { field, time, tweens } = globalScene;
+
     const pokemon = this.getPokemon() as EnemyPokemon;
 
     if (!pokemon?.hp) {
@@ -68,14 +70,14 @@ export class AttemptCapturePhase extends PokemonPhase {
     const pokeballAtlasKey = getPokeballAtlasKey(this.pokeballType);
     this.pokeball = globalScene.addFieldSprite(16, 80, "pb", pokeballAtlasKey);
     this.pokeball.setOrigin(0.5, 0.625);
-    globalScene.field.add(this.pokeball);
+    field.add(this.pokeball);
 
     globalScene.playSound("se/pb_throw", isCritical ? { rate: 0.2 } : undefined); // Crit catch throws are higher pitched
-    globalScene.time.delayedCall(300, () => {
-      globalScene.field.moveBelow(this.pokeball as Phaser.GameObjects.GameObject, pokemon);
+    time.delayedCall(300, () => {
+      field.moveBelow(this.pokeball as Phaser.GameObjects.GameObject, pokemon);
     });
 
-    globalScene.tweens.add({
+    tweens.add({
       // Throw animation
       targets: this.pokeball,
       x: { value: 236 + fpOffset[0], ease: "Linear" },
@@ -84,13 +86,13 @@ export class AttemptCapturePhase extends PokemonPhase {
       onComplete: () => {
         // Ball opens
         this.pokeball.setTexture("pb", `${pokeballAtlasKey}_opening`);
-        globalScene.time.delayedCall(17, () => this.pokeball.setTexture("pb", `${pokeballAtlasKey}_open`));
+        time.delayedCall(17, () => this.pokeball.setTexture("pb", `${pokeballAtlasKey}_open`));
         globalScene.playSound("se/pb_rel");
         pokemon.tint(getPokeballTintColor(this.pokeballType));
 
         addPokeballOpenParticles(this.pokeball.x, this.pokeball.y, this.pokeballType);
 
-        globalScene.tweens.add({
+        tweens.add({
           // Mon enters ball
           targets: pokemon,
           duration: 500,
@@ -102,13 +104,13 @@ export class AttemptCapturePhase extends PokemonPhase {
             this.pokeball.setTexture("pb", `${pokeballAtlasKey}_opening`);
             pokemon.setVisible(false);
             globalScene.playSound("se/pb_catch");
-            globalScene.time.delayedCall(17, () => this.pokeball.setTexture("pb", `${pokeballAtlasKey}`));
+            time.delayedCall(17, () => this.pokeball.setTexture("pb", `${pokeballAtlasKey}`));
 
             const doShake = (): void => {
               // After the overall catch rate check, the game does 3 shake checks before confirming the catch.
               let shakeCount = 0;
               const pbX = this.pokeball.x;
-              const shakeCounter = globalScene.tweens.addCounter({
+              const shakeCounter = tweens.addCounter({
                 from: 0,
                 to: 1,
                 repeat: isCritical ? 2 : 4, // Critical captures only perform 1 shake check
@@ -153,14 +155,14 @@ export class AttemptCapturePhase extends PokemonPhase {
                     pbTint.setOrigin(this.pokeball.originX, this.pokeball.originY);
                     pbTint.setTintFill(0);
                     pbTint.setAlpha(0);
-                    globalScene.field.add(pbTint);
-                    globalScene.tweens.add({
+                    field.add(pbTint);
+                    tweens.add({
                       targets: pbTint,
                       alpha: 0.375,
                       duration: 200,
                       easing: "Sine.easeOut",
                       onComplete: () => {
-                        globalScene.tweens.add({
+                        tweens.add({
                           targets: pbTint,
                           alpha: 0,
                           duration: 200,
@@ -178,9 +180,7 @@ export class AttemptCapturePhase extends PokemonPhase {
             };
 
             // Ball bounces (handled in pokemon.ts)
-            globalScene.time.delayedCall(250, () =>
-              doPokeballBounceAnim(this.pokeball, 16, 72, 350, doShake, isCritical),
-            );
+            time.delayedCall(250, () => doPokeballBounceAnim(this.pokeball, 16, 72, 350, doShake, isCritical));
           },
         });
       },
@@ -221,6 +221,8 @@ export class AttemptCapturePhase extends PokemonPhase {
   }
 
   public catch(): void {
+    const { pokemonInfoContainer, ui } = globalScene;
+
     const pokemon = this.getPokemon() as EnemyPokemon;
 
     const speciesForm = !pokemon.fusionSpecies ? pokemon.getSpeciesForm() : pokemon.getFusionSpeciesForm();
@@ -245,17 +247,17 @@ export class AttemptCapturePhase extends PokemonPhase {
       globalScene.validateAchv(achvs.CATCH_MYTHICAL);
     }
 
-    globalScene.pokemonInfoContainer.show(pokemon, true);
+    pokemonInfoContainer.show(pokemon, true);
 
     globalScene.gameData.updateSpeciesDexIvs(pokemon.species.getRootSpeciesId(true), pokemon.ivs);
 
-    globalScene.ui.showText(
+    ui.showText(
       i18next.t("battle:pokemonCaught", { pokemonName: getPokemonNameWithAffix(pokemon) }),
       null,
       () => {
         const end = (): void => {
           globalScene.unshiftPhase(new VictoryPhase(this.battlerIndex));
-          globalScene.pokemonInfoContainer.hide();
+          pokemonInfoContainer.hide();
           this.removePb();
           this.end();
         };
@@ -289,65 +291,61 @@ export class AttemptCapturePhase extends PokemonPhase {
         Promise.all([pokemon.hideInfo(), globalScene.gameData.setPokemonCaught(pokemon)]).then(() => {
           if (globalScene.getPlayerParty().length === PLAYER_PARTY_MAX_SIZE) {
             const promptRelease = (): void => {
-              globalScene.ui.showText(
-                i18next.t("battle:partyFull", { pokemonName: pokemon.getNameToRender() }),
-                null,
-                () => {
-                  globalScene.pokemonInfoContainer.makeRoomForConfirmUi(1, true);
-                  globalScene.ui.setMode(
-                    Mode.CONFIRM,
-                    () => {
-                      const newPokemon = globalScene.addPlayerPokemon(
-                        pokemon.species,
-                        pokemon.level,
-                        pokemon.abilityIndex,
-                        pokemon.formIndex,
-                        pokemon.gender,
-                        pokemon.shiny,
-                        pokemon.variant,
-                        pokemon.ivs,
-                        pokemon.nature,
-                        pokemon,
-                      );
-                      globalScene.ui.setMode(
-                        Mode.SUMMARY,
-                        newPokemon,
-                        0,
-                        SummaryUiMode.DEFAULT,
-                        () => {
-                          globalScene.ui.setMode(Mode.MESSAGE).then(() => {
+              ui.showText(i18next.t("battle:partyFull", { pokemonName: pokemon.getNameToRender() }), null, () => {
+                pokemonInfoContainer.makeRoomForConfirmUi(1, true);
+                ui.setMode(
+                  Mode.CONFIRM,
+                  () => {
+                    const newPokemon = globalScene.addPlayerPokemon(
+                      pokemon.species,
+                      pokemon.level,
+                      pokemon.abilityIndex,
+                      pokemon.formIndex,
+                      pokemon.gender,
+                      pokemon.shiny,
+                      pokemon.variant,
+                      pokemon.ivs,
+                      pokemon.nature,
+                      pokemon,
+                    );
+                    ui.setMode(
+                      Mode.SUMMARY,
+                      newPokemon,
+                      0,
+                      SummaryUiMode.DEFAULT,
+                      () => {
+                        ui.setMode(Mode.MESSAGE).then(() => {
+                          promptRelease();
+                        });
+                      },
+                      false,
+                    );
+                  },
+                  () => {
+                    ui.setMode(
+                      Mode.PARTY,
+                      PartyUiMode.RELEASE,
+                      this.fieldIndex,
+                      (slotIndex: integer, _option: PartyOption) => {
+                        ui.setMode(Mode.MESSAGE).then(() => {
+                          if (slotIndex < 6) {
+                            addToParty(slotIndex);
+                          } else {
                             promptRelease();
-                          });
-                        },
-                        false,
-                      );
-                    },
-                    () => {
-                      globalScene.ui.setMode(
-                        Mode.PARTY,
-                        PartyUiMode.RELEASE,
-                        this.fieldIndex,
-                        (slotIndex: integer, _option: PartyOption) => {
-                          globalScene.ui.setMode(Mode.MESSAGE).then(() => {
-                            if (slotIndex < 6) {
-                              addToParty(slotIndex);
-                            } else {
-                              promptRelease();
-                            }
-                          });
-                        },
-                      );
-                    },
-                    () => {
-                      globalScene.ui.setMode(Mode.MESSAGE).then(() => {
-                        removePokemon();
-                        end();
-                      });
-                    },
-                    "fullParty",
-                  );
-                },
-              );
+                          }
+                        });
+                      },
+                    );
+                  },
+                  () => {
+                    ui.setMode(Mode.MESSAGE).then(() => {
+                      removePokemon();
+                      end();
+                    });
+                  },
+                  "fullParty",
+                );
+              });
             };
             promptRelease();
           } else {
@@ -360,6 +358,7 @@ export class AttemptCapturePhase extends PokemonPhase {
     );
   }
 
+  /** Destroys the thrown pokeball object */
   protected removePb(): void {
     globalScene.tweens.add({
       targets: this.pokeball,

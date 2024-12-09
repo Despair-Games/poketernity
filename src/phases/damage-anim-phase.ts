@@ -4,6 +4,7 @@ import { globalScene } from "#app/global-scene";
 import { PokemonPhase } from "#app/phases/pokemon-phase";
 import { BattleSpec } from "#enums/battle-spec";
 
+/** Displays damage numbers and plays move hit SFX during battle */
 export class DamageAnimPhase extends PokemonPhase {
   private amount: number;
   private damageResult: DamageResult;
@@ -84,7 +85,7 @@ export class DamageAnimPhase extends PokemonPhase {
     }
   }
 
-  override end(): void {
+  public override end(): void {
     if (globalScene.currentBattle.battleSpec === BattleSpec.FINAL_BOSS) {
       globalScene.initFinalBossPhaseTwo(this.getPokemon());
     } else {

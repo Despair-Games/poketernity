@@ -1,15 +1,15 @@
-import { globalScene } from "#app/global-scene";
 import type { Egg } from "#app/data/egg";
 import { EGG_SEED } from "#app/data/egg";
-import { Phase } from "#app/phase";
-import i18next from "i18next";
-import Overrides from "#app/overrides";
-import { EggHatchPhase } from "./egg-hatch-phase";
-import { Mode } from "#app/ui/ui";
-import { achvs } from "#app/system/achv";
-import type { PlayerPokemon } from "#app/field/pokemon";
-import { EggSummaryPhase } from "./egg-summary-phase";
 import { EggHatchData } from "#app/data/egg-hatch-data";
+import type { PlayerPokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
+import Overrides from "#app/overrides";
+import { Phase } from "#app/phase";
+import { achvs } from "#app/system/achv";
+import { Mode } from "#app/ui/ui";
+import i18next from "i18next";
+import { EggHatchPhase } from "./egg-hatch-phase";
+import { EggSummaryPhase } from "./egg-summary-phase";
 
 /**
  * Phase that handles updating eggs, and hatching any ready eggs
@@ -135,7 +135,7 @@ export class EggLapsePhase extends Phase {
    * @param egg the egg to hatch
    * @returns the hatched PlayerPokemon
    */
-  protected generatePokemon(egg: Egg): EggHatchData {
+  public generatePokemon(egg: Egg): EggHatchData {
     let ret: PlayerPokemon;
     let newHatchData: EggHatchData;
     globalScene.executeWithSeedOffset(

@@ -2,11 +2,8 @@ import { TrainerSlot } from "#app/data/trainer-config";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 
+/** Displays/hides the enemy trainer */
 export class BattlePhase extends Phase {
-  constructor() {
-    super();
-  }
-
   public showEnemyTrainer(trainerSlot: TrainerSlot = TrainerSlot.NONE): void {
     const { trainer } = globalScene.currentBattle;
     if (!trainer) {

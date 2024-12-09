@@ -9,6 +9,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { SwitchType } from "#enums/switch-type";
 import i18next from "i18next";
 
+/** Handles the prompt to switch pokemon at the start of a battle when the player is playing in Switch mode */
 export class CheckSwitchPhase extends BattlePhase {
   protected fieldIndex: number;
   /** Whether to use the pokemon's name or "Pokemon" when displaying the dialog box */

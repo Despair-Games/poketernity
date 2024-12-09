@@ -1,22 +1,20 @@
 import { globalScene } from "#app/global-scene";
-import { PlayerGender } from "#app/enums/player-gender";
 import { Phase } from "#app/phase";
 import { addTextObject, TextStyle } from "#app/ui/text";
+import { PlayerGender } from "#enums/player-gender";
 import i18next from "i18next";
 
 export class EndCardPhase extends Phase {
   public endCard: Phaser.GameObjects.Image;
   public text: Phaser.GameObjects.Text;
 
-  constructor() {
-    super();
-  }
-
-  override start(): void {
+  public override start(): void {
     super.start();
 
-    globalScene.ui.getMessageHandler().bg.setVisible(false);
-    globalScene.ui.getMessageHandler().nameBoxContainer.setVisible(false);
+    const { field, game, ui } = globalScene;
+
+    ui.getMessageHandler().bg.setVisible(false);
+    ui.getMessageHandler().nameBoxContainer.setVisible(false);
 
     this.endCard = globalScene.add.image(
       0,
@@ -25,26 +23,26 @@ export class EndCardPhase extends Phase {
     );
     this.endCard.setOrigin(0);
     this.endCard.setScale(0.5);
-    globalScene.field.add(this.endCard);
+    field.add(this.endCard);
 
     this.text = addTextObject(
-      globalScene.game.canvas.width / 12,
-      globalScene.game.canvas.height / 6 - 16,
+      game.canvas.width / 12,
+      game.canvas.height / 6 - 16,
       i18next.t("battle:congratulations"),
       TextStyle.SUMMARY,
       { fontSize: "128px" },
     );
     this.text.setOrigin(0.5);
-    globalScene.field.add(this.text);
+    field.add(this.text);
 
-    globalScene.ui.clearText();
+    ui.clearText();
 
-    globalScene.ui.fadeIn(1000).then(() => {
-      globalScene.ui.showText(
+    ui.fadeIn(1000).then(() => {
+      ui.showText(
         "",
         null,
         () => {
-          globalScene.ui.getMessageHandler().bg.setVisible(true);
+          ui.getMessageHandler().bg.setVisible(true);
           this.end();
         },
         null,

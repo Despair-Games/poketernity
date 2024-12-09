@@ -1,9 +1,9 @@
-import { globalScene } from "#app/global-scene";
 import { BattlerIndex } from "#app/battle";
+import { globalScene } from "#app/global-scene";
 import { Command } from "#app/ui/command-ui-handler";
-import { FieldPhase } from "./field-phase";
 import { Abilities } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import { FieldPhase } from "./field-phase";
 
 /**
  * Phase for determining an enemy AI's action for the next turn.
@@ -27,7 +27,7 @@ export class EnemyCommandPhase extends FieldPhase {
     }
   }
 
-  override start() {
+  public override start(): void {
     super.start();
 
     const enemyPokemon = globalScene.getEnemyField()[this.fieldIndex];
@@ -88,18 +88,18 @@ export class EnemyCommandPhase extends FieldPhase {
     /** Select a move to use (and a target to use it against, if applicable) */
     const nextMove = enemyPokemon.getNextMove();
 
-    globalScene.currentBattle.turnCommands[this.fieldIndex + BattlerIndex.ENEMY] = {
+    battle.turnCommands[this.fieldIndex + BattlerIndex.ENEMY] = {
       command: Command.FIGHT,
       move: nextMove,
       skip: this.skipTurn,
     };
 
-    globalScene.currentBattle.enemySwitchCounter = Math.max(globalScene.currentBattle.enemySwitchCounter - 1, 0);
+    battle.enemySwitchCounter = Math.max(battle.enemySwitchCounter - 1, 0);
 
     this.end();
   }
 
-  getFieldIndex(): number {
+  public getFieldIndex(): number {
     return this.fieldIndex;
   }
 }

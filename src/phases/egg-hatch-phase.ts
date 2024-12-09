@@ -7,6 +7,7 @@ import type { PlayerPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { Phase } from "#app/phase";
+import type { EggLapsePhase } from "#app/phases/egg-lapse-phase";
 import { achvs } from "#app/system/achv";
 import EggCounterContainer from "#app/ui/egg-counter-container";
 import type EggHatchSceneHandler from "#app/ui/egg-hatch-scene-handler";
@@ -15,7 +16,6 @@ import { Mode } from "#app/ui/ui";
 import { getFrameMs, randInt, sin } from "#app/utils";
 import i18next from "i18next";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
-import type { EggLapsePhase } from "./egg-lapse-phase";
 
 /**
  * Class that represents egg hatching
@@ -128,7 +128,7 @@ export class EggHatchPhase extends Phase {
       this.eggCounterContainer = new EggCounterContainer(this.eggsToHatchCount);
       this.eggHatchContainer.add(this.eggCounterContainer);
 
-      const getPokemonSprite = () => {
+      const getPokemonSprite = (): Phaser.GameObjects.Sprite => {
         const ret = globalScene.add.sprite(
           this.eggHatchBg.displayWidth / 2,
           this.eggHatchBg.displayHeight / 2,
@@ -408,7 +408,7 @@ export class EggHatchPhase extends Phase {
    * @param repeats number of times this is repeated
    * @param offsetY how much to offset the Y coordinates
    */
-  protected doSpray(repeats: number, offsetY: number = 0) {
+  protected doSpray(repeats: number, offsetY: number = 0): void {
     globalScene.tweens.addCounter({
       repeat: repeats,
       duration: getFrameMs(1),
@@ -423,7 +423,7 @@ export class EggHatchPhase extends Phase {
    * @param trigIndex Used to modify the particle's vertical speed
    * @param offsetY how much to offset the Y coordinate
    */
-  protected doSprayParticle(trigIndex: number, offsetY: number) {
+  protected doSprayParticle(trigIndex: number, offsetY: number): void {
     const initialX = this.eggHatchBg.displayWidth / 2;
     const initialY = this.eggHatchBg.displayHeight / 2 + offsetY;
     const shardKey = !this.egg.isManaphyEgg() ? this.egg.tier.toString() : "1";
@@ -443,7 +443,7 @@ export class EggHatchPhase extends Phase {
       },
     });
 
-    const updateParticle = () => {
+    const updateParticle = (): void => {
       const speedMultiplier = this.skipped ? 6 : 1;
       yOffset += speedMultiplier;
       if (trigIndex < 160) {

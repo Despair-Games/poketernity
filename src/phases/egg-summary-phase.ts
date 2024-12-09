@@ -1,7 +1,7 @@
+import type { EggHatchData } from "#app/data/egg-hatch-data";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { Mode } from "#app/ui/ui";
-import type { EggHatchData } from "#app/data/egg-hatch-data";
 
 /**
  * Class that represents the egg summary phase
