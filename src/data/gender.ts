@@ -4,6 +4,11 @@ export enum Gender {
   FEMALE,
 }
 
+/**
+ * Gets the gender symbol for an associated gender
+ * @param gender - The gender being checked
+ * @returns - The associated symbol
+ */
 export function getGenderSymbol(gender: Gender) {
   switch (gender) {
     case Gender.MALE:
@@ -14,12 +19,32 @@ export function getGenderSymbol(gender: Gender) {
   return "";
 }
 
-export function getGenderColor(gender: Gender, shadow?: boolean) {
+/**
+ * Gets a color for a gender
+ * @param gender - The gender
+ * @returns a hex representation of color
+ */
+export function getGenderColor(gender: Gender) {
   switch (gender) {
     case Gender.MALE:
-      return shadow ? "#006090" : "#40c8f8";
+      return "#40c8f8"; // light blue
     case Gender.FEMALE:
-      return shadow ? "#984038" : "#f89890";
+      return "#f89890"; // pink
   }
-  return "#ffffff";
+  return "#ffffff"; // White
+}
+
+/**
+ * Gets a color for a gender shadow
+ * @param gender - The gender
+ * @returns a hex representation of color
+ */
+export function getGenderShadowColor(gender: Gender) {
+  switch (gender) {
+    case Gender.MALE:
+      return "#006090"; // Dark blue
+    case Gender.FEMALE:
+      return "#984038"; // Red
+  }
+  return "#ffffff"; // White
 }

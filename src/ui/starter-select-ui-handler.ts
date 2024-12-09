@@ -2,7 +2,7 @@ import type { CandyUpgradeNotificationChangedEvent } from "#app/events/battle-sc
 import { BattleSceneEventType } from "#app/events/battle-scene";
 import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
 import type { Variant } from "#app/data/variant";
-import { getVariantTint, getVariantIcon } from "#app/data/variant";
+import { getVariantTint, getVariantTierForVariant } from "#app/data/variant";
 import { argbFromRgba } from "@material/material-color-utilities";
 import i18next from "i18next";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
@@ -11,7 +11,7 @@ import { globalScene } from "#app/global-scene";
 import { allAbilities } from "#app/data/ability";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { GrowthRate, getGrowthRateColor } from "#app/data/exp";
-import { Gender, getGenderColor, getGenderSymbol } from "#app/data/gender";
+import { Gender, getGenderColor, getGenderShadowColor, getGenderSymbol } from "#app/data/gender";
 import { allMoves } from "#app/data/move";
 import { getNatureName } from "#app/data/nature";
 import { pokemonFormChanges } from "#app/data/pokemon-forms";
@@ -450,17 +450,17 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     const shiny1Sprite = globalScene.add.sprite(0, 0, "shiny_icons");
     shiny1Sprite.setOrigin(0.15, 0.2);
     shiny1Sprite.setScale(0.6);
-    shiny1Sprite.setFrame(getVariantIcon(0));
+    shiny1Sprite.setFrame(getVariantTierForVariant(0));
     shiny1Sprite.setTint(getVariantTint(0));
     const shiny2Sprite = globalScene.add.sprite(0, 0, "shiny_icons");
     shiny2Sprite.setOrigin(0.15, 0.2);
     shiny2Sprite.setScale(0.6);
-    shiny2Sprite.setFrame(getVariantIcon(1));
+    shiny2Sprite.setFrame(getVariantTierForVariant(1));
     shiny2Sprite.setTint(getVariantTint(1));
     const shiny3Sprite = globalScene.add.sprite(0, 0, "shiny_icons");
     shiny3Sprite.setOrigin(0.15, 0.2);
     shiny3Sprite.setScale(0.6);
-    shiny3Sprite.setFrame(getVariantIcon(2));
+    shiny3Sprite.setFrame(getVariantTierForVariant(2));
     shiny3Sprite.setTint(getVariantTint(2));
 
     const caughtOptions = [
@@ -2203,7 +2203,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                 globalScene.playSound("se/sparkle");
                 // Set the variant label to the shiny tint
                 const tint = getVariantTint(newVariant);
-                this.pokemonShinyIcon.setFrame(getVariantIcon(newVariant));
+                this.pokemonShinyIcon.setFrame(getVariantTierForVariant(newVariant));
                 this.pokemonShinyIcon.setTint(tint);
                 this.pokemonShinyIcon.setVisible(true);
               } else {
@@ -2239,7 +2239,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
               this.setSpeciesDetails(this.lastSpecies, { variant: newVariant as Variant });
               // Cycle tint based on current sprite tint
               const tint = getVariantTint(newVariant as Variant);
-              this.pokemonShinyIcon.setFrame(getVariantIcon(newVariant as Variant));
+              this.pokemonShinyIcon.setFrame(getVariantTierForVariant(newVariant as Variant));
               this.pokemonShinyIcon.setTint(tint);
               success = true;
             }
@@ -3104,7 +3104,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
           ? (this.starterPreferences[species.speciesId].variant as Variant)
           : defaultProps.variant;
         const tint = getVariantTint(variant);
-        this.pokemonShinyIcon.setFrame(getVariantIcon(variant));
+        this.pokemonShinyIcon.setFrame(getVariantTierForVariant(variant));
         this.pokemonShinyIcon.setTint(tint);
         this.setSpecies(species);
         this.updateInstructions();
@@ -3252,7 +3252,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         const defaultProps = globalScene.gameData.getSpeciesDexAttrProps(species, defaultDexAttr);
         const variant = defaultProps.variant;
         const tint = getVariantTint(variant);
-        this.pokemonShinyIcon.setFrame(getVariantIcon(variant));
+        this.pokemonShinyIcon.setFrame(getVariantTierForVariant(variant));
         this.pokemonShinyIcon.setTint(tint);
         this.pokemonShinyIcon.setVisible(defaultProps.shiny);
         this.pokemonCaughtHatchedContainer.setVisible(true);
@@ -3261,7 +3261,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         if (pokemonPrevolutions.hasOwnProperty(species.speciesId)) {
           this.pokemonCaughtHatchedContainer.setY(16);
           this.pokemonShinyIcon.setY(135);
-          this.pokemonShinyIcon.setFrame(getVariantIcon(variant));
+          this.pokemonShinyIcon.setFrame(getVariantTierForVariant(variant));
           [this.pokemonCandyContainer, this.pokemonHatchedIcon, this.pokemonHatchedCountText].map((c) =>
             c.setVisible(false),
           );
@@ -3617,7 +3617,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         const gender = !female ? Gender.MALE : Gender.FEMALE;
         this.pokemonGenderText.setText(getGenderSymbol(gender));
         this.pokemonGenderText.setColor(getGenderColor(gender));
-        this.pokemonGenderText.setShadowColor(getGenderColor(gender, true));
+        this.pokemonGenderText.setShadowColor(getGenderShadowColor(gender));
       } else {
         this.pokemonGenderText.setText("");
       }

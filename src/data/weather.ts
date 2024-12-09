@@ -7,19 +7,27 @@ import type Move from "./move";
 import { AttackMove } from "./move";
 import { randSeedInt } from "#app/utils";
 import { SuppressWeatherEffectAbAttr } from "./ability";
-import { TerrainType, getTerrainName } from "./terrain";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
 
+/**
+ * Class representing Weather effects
+ * @var weatherType - The WeatherType that is being represented
+ * @var turnsLeft - How many turns the weather still has left (0 if immutable)
+ */
 export class Weather {
   public weatherType: WeatherType;
-  public turnsLeft: integer;
+  public turnsLeft: number;
 
-  constructor(weatherType: WeatherType, turnsLeft?: integer) {
+  constructor(weatherType: WeatherType, turnsLeft?: number) {
     this.weatherType = weatherType;
     this.turnsLeft = !this.isImmutable() ? turnsLeft || 0 : 0;
   }
 
+  /**
+   * Decrements turnsLeft by 1
+   * @returns false if turnsLeft is set to 0. True otherwise
+   */
   lapse(): boolean {
     if (this.isImmutable()) {
       return true;
@@ -31,6 +39,10 @@ export class Weather {
     return true;
   }
 
+  /**
+   * Checks if the weather is immutable (heavy rain, harsh sun, or strong winds)
+   * @returns true if WeatherType is immutable, false otherwise
+   */
   isImmutable(): boolean {
     switch (this.weatherType) {
       case WeatherType.HEAVY_RAIN:
@@ -42,6 +54,10 @@ export class Weather {
     return false;
   }
 
+  /**
+   * Checks if the weather deals damage
+   * @returns true for sandstorm or hail, false otherwise
+   */
   isDamaging(): boolean {
     switch (this.weatherType) {
       case WeatherType.SANDSTORM:
@@ -52,6 +68,13 @@ export class Weather {
     return false;
   }
 
+  /**
+   * Checks if the weather will deal damage to a type
+   * Rock/Ground/Steel types are immune to sandstorm
+   * Ice is immune to hail
+   * @param type - the type of the Pokemon being checked
+   * @returns true if damage will be dealt, false otherwise
+   */
   isTypeDamageImmune(type: Type): boolean {
     switch (this.weatherType) {
       case WeatherType.SANDSTORM:
@@ -63,6 +86,13 @@ export class Weather {
     return false;
   }
 
+  /**
+   * Function to return a multiplier for specific types
+   * Harsh/normal sun boosts fire by 50% and reduces water by 50%
+   * Heavy/normal rain boosts water by 50% and reduces fire by 50%
+   * @param attackType - the type being checked
+   * @returns a multiplier (0.5, 1.5, or 1)
+   */
   getAttackTypeMultiplier(attackType: Type): number {
     switch (this.weatherType) {
       case WeatherType.SUNNY:
@@ -88,6 +118,14 @@ export class Weather {
     return 1;
   }
 
+  /**
+   * Checks if the weather should cancel the move
+   * Harsh sun cancels out water attacks
+   * Heavy rain cancels out fire attacks
+   * @param user - The Pokemon using the move
+   * @param move - The Move
+   * @returns true if the move is cancelled by the weather, false otherwise
+   */
   isMoveWeatherCancelled(user: Pokemon, move: Move): boolean {
     const moveType = user.getMoveType(move);
 
@@ -101,6 +139,11 @@ export class Weather {
     return false;
   }
 
+  /**
+   * Checks if the weather would be suppressed by a Pokemon with an ability/passive
+   * with SuppressWeatherEffectAbAttr (Air Lock or Cloud Nine)
+   * @returns true if the weather is being suppressed, false otherwise
+   */
   isEffectSuppressed(): boolean {
     const field = globalScene.getField(true);
 
@@ -122,6 +165,13 @@ export class Weather {
   }
 }
 
+// TODO: Should localization return null or "" as a default? Inconsistencies in the codebase
+
+/**
+ * Function to get the starting message for weather
+ * @param weatherType - the WeatherType starting
+ * @returns the associated string
+ */
 export function getWeatherStartMessage(weatherType: WeatherType): string | null {
   switch (weatherType) {
     case WeatherType.SUNNY:
@@ -147,6 +197,11 @@ export function getWeatherStartMessage(weatherType: WeatherType): string | null 
   return null;
 }
 
+/**
+ * Function to get the lapsing message for weather
+ * @param weatherType - the WeatherType lapsing
+ * @returns the associated string
+ */
 export function getWeatherLapseMessage(weatherType: WeatherType): string | null {
   switch (weatherType) {
     case WeatherType.SUNNY:
@@ -172,6 +227,12 @@ export function getWeatherLapseMessage(weatherType: WeatherType): string | null 
   return null;
 }
 
+/**
+ * Function to get the associated message for when a Pokemon is damaged by weather (sandstorm or hail)
+ * @param weatherType - The weather
+ * @param pokemon - The Pokemon being damaged
+ * @returns the corresponding string
+ */
 export function getWeatherDamageMessage(weatherType: WeatherType, pokemon: Pokemon): string | null {
   switch (weatherType) {
     case WeatherType.SANDSTORM:
@@ -183,6 +244,11 @@ export function getWeatherDamageMessage(weatherType: WeatherType, pokemon: Pokem
   return null;
 }
 
+/**
+ * Function to get the ending message for weather
+ * @param weatherType - the WeatherType ending
+ * @returns the associated string
+ */
 export function getWeatherClearMessage(weatherType: WeatherType): string | null {
   switch (weatherType) {
     case WeatherType.SUNNY:
@@ -208,53 +274,21 @@ export function getWeatherClearMessage(weatherType: WeatherType): string | null 
   return null;
 }
 
-export function getTerrainStartMessage(terrainType: TerrainType): string | null {
-  switch (terrainType) {
-    case TerrainType.MISTY:
-      return i18next.t("terrain:mistyStartMessage");
-    case TerrainType.ELECTRIC:
-      return i18next.t("terrain:electricStartMessage");
-    case TerrainType.GRASSY:
-      return i18next.t("terrain:grassyStartMessage");
-    case TerrainType.PSYCHIC:
-      return i18next.t("terrain:psychicStartMessage");
-    default:
-      console.warn("getTerrainStartMessage not defined. Using default null");
-      return null;
-  }
-}
-
-export function getTerrainClearMessage(terrainType: TerrainType): string | null {
-  switch (terrainType) {
-    case TerrainType.MISTY:
-      return i18next.t("terrain:mistyClearMessage");
-    case TerrainType.ELECTRIC:
-      return i18next.t("terrain:electricClearMessage");
-    case TerrainType.GRASSY:
-      return i18next.t("terrain:grassyClearMessage");
-    case TerrainType.PSYCHIC:
-      return i18next.t("terrain:psychicClearMessage");
-    default:
-      console.warn("getTerrainClearMessage not defined. Using default null");
-      return null;
-  }
-}
-
-export function getTerrainBlockMessage(pokemon: Pokemon, terrainType: TerrainType): string {
-  if (terrainType === TerrainType.MISTY) {
-    return i18next.t("terrain:mistyBlockMessage", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) });
-  }
-  return i18next.t("terrain:defaultBlockMessage", {
-    pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-    terrainName: getTerrainName(terrainType),
-  });
-}
-
+/**
+ * A mapping of weather type to weight
+ */
 interface WeatherPoolEntry {
   weatherType: WeatherType;
-  weight: integer;
+  weight: number;
 }
 
+/**
+ * Gets a random weather type for an arena's biome
+ * Each biome has their own weighted weather distribution
+ * TODO: the biome specific weather pools should probably be moved into either biome.ts or a balance/ file
+ * @param arena - The associated arena
+ * @returns the WeatherType, WeatherType.NONE if no weather
+ */
 export function getRandomWeatherType(arena: any /* Importing from arena causes a circular dependency */): WeatherType {
   let weatherPool: WeatherPoolEntry[] = [];
   const hasSun = arena.getTimeOfDay() < 2;
