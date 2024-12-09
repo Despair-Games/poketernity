@@ -12,19 +12,15 @@
 
     "preview": "vite preview",
 
-    "pretest": "vitest run --project pre",
     "test": "vitest run --project main",
     "posttest": "git rev-parse --short HEAD",
 
-    "pretest:cov": "vitest run --project pre",
     "test:cov": "vitest run --project main --coverage",
     "posttest:cov": "git rev-parse --short HEAD",
 
-    "pretest:watch": "vitest run --project pre",
     "test:watch": "vitest watch --project main --coverage",
     "posttest:watch": "git rev-parse --short HEAD",
 
-    "pretest:silent": "vitest run --project pre",
     "test:silent": "vitest run --project main --silent",
     "posttest:silent": "git rev-parse --short HEAD",
 

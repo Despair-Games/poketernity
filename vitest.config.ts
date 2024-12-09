@@ -34,7 +34,6 @@ export default defineProject(({ mode }) => ({
     },
     name: "main",
     include: ["./test/**/*.{test,spec}.ts"],
-    exclude: ["./test/pre.test.ts"],
   },
   esbuild: {
     pure: mode === "production" ? ["console.log"] : [],
