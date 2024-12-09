@@ -1,15 +1,15 @@
-import { globalScene } from "#app/global-scene";
 import type { BattlerIndex } from "#app/battle";
 import { MoveChargeAnim } from "#app/data/battle-anims";
-import { applyMoveChargeAttrs, MoveEffectAttr, InstantChargeAttr } from "#app/data/move";
-import type { PokemonMove } from "#app/field/pokemon";
+import { applyMoveChargeAttrs, InstantChargeAttr, MoveEffectAttr } from "#app/data/move";
 import type Pokemon from "#app/field/pokemon";
+import type { PokemonMove } from "#app/field/pokemon";
 import { MoveResult } from "#app/field/pokemon";
-import { BooleanHolder } from "#app/utils";
+import { globalScene } from "#app/global-scene";
+import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { MovePhase } from "#app/phases/move-phase";
 import { PokemonPhase } from "#app/phases/pokemon-phase";
+import { BooleanHolder } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { MoveEndPhase } from "#app/phases/move-end-phase";
 
 /**
  * Phase for the "charging turn" of two-turn moves (e.g. Dig).
@@ -27,7 +27,7 @@ export class MoveChargePhase extends PokemonPhase {
     this.targetIndex = targetIndex;
   }
 
-  public override start() {
+  public override start(): void {
     super.start();
 
     const user = this.getUserPokemon();
@@ -38,7 +38,7 @@ export class MoveChargePhase extends PokemonPhase {
     // immediately end this phase.
     if (!target || !move.isChargingMove()) {
       console.warn("Invalid parameters for MoveChargePhase");
-      return super.end();
+      return this.end();
     }
 
     new MoveChargeAnim(move.chargeAnim, move.id, user).play(false, () => {
@@ -46,13 +46,13 @@ export class MoveChargePhase extends PokemonPhase {
 
       applyMoveChargeAttrs(MoveEffectAttr, user, target, move).then(() => {
         user.addTag(BattlerTagType.CHARGING, 1, move.id, user.id);
-        this.end();
+        this.checkInstantCharge();
       });
     });
   }
 
   /** Checks the move's instant charge conditions, then ends this phase. */
-  public override end() {
+  protected checkInstantCharge(): void {
     const user = this.getUserPokemon();
     const move = this.move.getMove();
 
@@ -73,7 +73,7 @@ export class MoveChargePhase extends PokemonPhase {
       // Add this move's charging phase to the user's move history
       user.pushMoveHistory({ move: this.move.moveId, targets: [this.targetIndex], result: MoveResult.OTHER });
     }
-    super.end();
+    this.end();
   }
 
   public getUserPokemon(): Pokemon {

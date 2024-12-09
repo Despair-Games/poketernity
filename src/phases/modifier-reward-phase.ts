@@ -13,13 +13,13 @@ export class ModifierRewardPhase extends BattlePhase {
     this.modifierType = getModifierType(modifierTypeFunc);
   }
 
-  override start() {
+  public override start(): void {
     super.start();
 
     this.doReward().then(() => this.end());
   }
 
-  doReward(): Promise<void> {
+  protected doReward(): Promise<void> {
     return new Promise<void>((resolve) => {
       const newModifier = this.modifierType.newModifier();
       globalScene.addModifier(newModifier).then(() => {

@@ -19,46 +19,48 @@ export class LoginPhase extends Phase {
     this.showText = showText;
   }
 
-  override start(): void {
+  public override start(): void {
     super.start();
+
+    const { gameData, ui } = globalScene;
 
     const hasSession = !!getCookie(SESSION_ID_COOKIE);
 
-    globalScene.ui.setMode(Mode.LOADING, { buttonActions: [] });
+    ui.setMode(Mode.LOADING, { buttonActions: [] });
     executeIf(bypassLogin || hasSession, updateUserInfo).then((response) => {
       const success = response ? response[0] : false;
       const statusCode = response ? response[1] : null;
       if (!success) {
         if (!statusCode || statusCode === 400) {
           if (this.showText) {
-            globalScene.ui.showText(i18next.t("menu:logInOrCreateAccount"));
+            ui.showText(i18next.t("menu:logInOrCreateAccount"));
           }
 
           globalScene.playSound("menu_open");
 
-          const loadData = () => {
+          const loadData = (): void => {
             updateUserInfo().then((success) => {
               if (!success[0]) {
                 removeCookie(SESSION_ID_COOKIE);
                 globalScene.reset(true, true);
                 return;
               }
-              globalScene.gameData.loadSystem().then(() => this.end());
+              gameData.loadSystem().then(() => this.end());
             });
           };
 
-          globalScene.ui.setMode(Mode.LOGIN_FORM, {
+          ui.setMode(Mode.LOGIN_FORM, {
             buttonActions: [
-              () => {
-                globalScene.ui.playSelect();
+              (): void => {
+                ui.playSelect();
                 loadData();
               },
-              () => {
+              (): void => {
                 globalScene.playSound("menu_open");
-                globalScene.ui.setMode(Mode.REGISTRATION_FORM, {
+                ui.setMode(Mode.REGISTRATION_FORM, {
                   buttonActions: [
-                    () => {
-                      globalScene.ui.playSelect();
+                    (): void => {
+                      ui.playSelect();
                       updateUserInfo().then((success) => {
                         if (!success[0]) {
                           removeCookie(SESSION_ID_COOKIE);
@@ -68,20 +70,20 @@ export class LoginPhase extends Phase {
                         this.end();
                       });
                     },
-                    () => {
+                    (): void => {
                       globalScene.unshiftPhase(new LoginPhase(false));
                       this.end();
                     },
                   ],
                 });
               },
-              () => {
+              (): void => {
                 const redirectUri = encodeURIComponent(`${import.meta.env.VITE_SERVER_URL}/auth/discord/callback`);
                 const discordId = import.meta.env.VITE_DISCORD_CLIENT_ID;
                 const discordUrl = `https://discord.com/api/oauth2/authorize?client_id=${discordId}&redirect_uri=${redirectUri}&response_type=code&scope=identify&prompt=none`;
                 window.open(discordUrl, "_self");
               },
-              () => {
+              (): void => {
                 const redirectUri = encodeURIComponent(`${import.meta.env.VITE_SERVER_URL}/auth/google/callback`);
                 const googleId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
                 const googleUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${googleId}&redirect_uri=${redirectUri}&response_type=code&scope=openid`;
@@ -98,19 +100,19 @@ export class LoginPhase extends Phase {
         }
         return null;
       } else {
-        globalScene.gameData.loadSystem().then((success) => {
+        gameData.loadSystem().then((success) => {
           if (success || bypassLogin) {
             this.end();
           } else {
-            globalScene.ui.setMode(Mode.MESSAGE);
-            globalScene.ui.showText(t("menu:failedToLoadSaveData"));
+            ui.setMode(Mode.MESSAGE);
+            ui.showText(t("menu:failedToLoadSaveData"));
           }
         });
       }
     });
   }
 
-  override end(): void {
+  public override end(): void {
     globalScene.ui.setMode(Mode.MESSAGE);
 
     if (!globalScene.gameData.gender) {

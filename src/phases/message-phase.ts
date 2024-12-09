@@ -24,7 +24,7 @@ export class MessagePhase extends Phase {
     this.speaker = speaker;
   }
 
-  override start() {
+  public override start(): void {
     super.start();
 
     if (this.text.indexOf("$") > -1) {
@@ -62,7 +62,7 @@ export class MessagePhase extends Phase {
     }
   }
 
-  override end() {
+  public override end(): void {
     if (globalScene.abilityBar.shown) {
       globalScene.abilityBar.hide();
     }
