@@ -7,14 +7,7 @@ import { PlayerGender } from "#enums/player-gender";
 import i18next from "i18next";
 import type { Modifier } from "typescript";
 import { achvs } from "./achvs";
-
-export enum AchvTier {
-  COMMON,
-  GREAT,
-  ULTRA,
-  EPIC,
-  MASTER,
-}
+import { AchvTier } from "#enums/achv-tier";
 
 export class Achv {
   public localizationKey: string;

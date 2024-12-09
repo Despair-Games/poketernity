@@ -1,11 +1,12 @@
 import { TurnHeldItemTransferModifier } from "#app/modifier/modifier";
-import { Achv, AchvTier, DamageAchv, HealAchv, LevelAchv, ModifierAchv, MoneyAchv, RibbonAchv } from "#app/system/achv";
+import { Achv, DamageAchv, HealAchv, LevelAchv, ModifierAchv, MoneyAchv, RibbonAchv } from "#app/system/achv";
 import { NumberHolder } from "#app/utils";
 import GameManager from "#test/utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import BattleScene from "../../battle-scene";
 import { achvs } from "#app/system/achvs";
+import { AchvTier } from "#enums/achv-tier";
 
 describe("check some Achievement related stuff", () => {
   it("should check Achievement creation", () => {
