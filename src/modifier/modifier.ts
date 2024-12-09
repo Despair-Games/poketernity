@@ -3405,8 +3405,6 @@ export abstract class HeldItemTransferModifier extends PokemonHeldItemModifier {
       .reduce((highestTier, tier) => Math.max(tier!, highestTier), 0); // TODO: is this bang correct?
     let tierItemModifiers = itemModifiers.filter((m) => m.type.getOrInferTier(poolType) === highestItemTier);
 
-    const heldItemTransferPromises: Promise<void>[] = [];
-
     for (let i = 0; i < transferredItemCount; i++) {
       if (!tierItemModifiers.length) {
         while (highestItemTier-- && !tierItemModifiers.length) {
@@ -3424,11 +3422,9 @@ export abstract class HeldItemTransferModifier extends PokemonHeldItemModifier {
       }
     }
 
-    Promise.all(heldItemTransferPromises).then(() => {
-      for (const mt of transferredModifierTypes) {
-        globalScene.queueMessage(this.getTransferMessage(pokemon, targetPokemon, mt));
-      }
-    });
+    for (const mt of transferredModifierTypes) {
+      globalScene.queueMessage(this.getTransferMessage(pokemon, targetPokemon, mt));
+    }
 
     return !!transferredModifierTypes.length;
   }

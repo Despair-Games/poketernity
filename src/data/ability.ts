@@ -6396,8 +6396,8 @@ function applyAbAttrsInternal<TAttr extends AbAttr>(
           if (!simulated) {
             globalScene.queueMessage(message);
           }
+          messages.push(message);
         }
-        messages.push(message!);
       }
     }
     globalScene.clearPhaseQueueSplice();
