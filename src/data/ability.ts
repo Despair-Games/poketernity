@@ -65,6 +65,7 @@ import {
   SpeciesFormChangeWeatherTrigger,
 } from "./pokemon-forms";
 import { AbAttr } from "./abilities/ab-attr";
+import { PostBattleInitAbAttr } from "./abilities/post-battle-init-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -179,12 +180,6 @@ type AbAttrCondition = (pokemon: Pokemon) => boolean;
 type PokemonAttackCondition = (user: Pokemon | null, target: Pokemon | null, move: Move) => boolean;
 type PokemonDefendCondition = (target: Pokemon, user: Pokemon, move: Move) => boolean;
 type PokemonStatStageChangeCondition = (target: Pokemon, statsChanged: BattleStat[], stages: number) => boolean;
-
-export class PostBattleInitAbAttr extends AbAttr {
-  applyPostBattleInit(_pokemon: Pokemon, _passive: boolean, _simulated: boolean, _args: any[]): boolean {
-    return false;
-  }
-}
 
 export class PostBattleInitFormChangeAbAttr extends PostBattleInitAbAttr {
   private formFunc: (p: Pokemon) => integer;

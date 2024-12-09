@@ -24,7 +24,7 @@ import { Type } from "#enums/type";
 import { BerryType } from "#enums/berry-type";
 import { Stat } from "#enums/stat";
 import { SpeciesFormChangeManualTrigger } from "#app/data/pokemon-forms";
-import { applyPostBattleInitAbAttrs, PostBattleInitAbAttr } from "#app/data/ability";
+import { applyPostBattleInitAbAttrs } from "#app/data/ability";
 import { showEncounterDialogue, showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { PartyHealPhase } from "#app/phases/party-heal-phase";
@@ -34,6 +34,7 @@ import i18next from "i18next";
 import { ModifierTier } from "#app/modifier/modifier-tier";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import { PostBattleInitAbAttr } from "#app/data/abilities/post-battle-init-ab-attr";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/theWinstrateChallenge";

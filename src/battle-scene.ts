@@ -71,7 +71,6 @@ import {
   applyAbAttrs,
   applyPostBattleInitAbAttrs,
   applyPostItemLostAbAttrs,
-  PostBattleInitAbAttr,
   PostItemLostAbAttr,
 } from "#app/data/ability";
 import type { FixedBattleConfig } from "#app/battle";
@@ -178,6 +177,7 @@ import { StatusEffect } from "#enums/status-effect";
 import { globalScene, initGlobalScene } from "#app/global-scene";
 import { BlockItemTheftAbAttr } from "./data/abilities/block-item-theft-ab-attr";
 import { DoubleBattleChanceAbAttr } from "./data/abilities/double-battle-chance-ab-attr";
+import { PostBattleInitAbAttr } from "./data/abilities/post-battle-init-ab-attr";
 
 export const bypassLogin = import.meta.env.VITE_BYPASS_LOGIN === "1";
 
