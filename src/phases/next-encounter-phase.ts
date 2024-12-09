@@ -2,15 +2,11 @@ import { globalScene } from "#app/global-scene";
 import { EncounterPhase } from "./encounter-phase";
 
 export class NextEncounterPhase extends EncounterPhase {
-  constructor() {
-    super();
-  }
+  protected override doEncounter(): void {
+    const { arena, arenaEnemy, arenaNextEnemy, currentBattle, field, lastEnemyTrainer, lastMysteryEncounter, tweens } =
+      globalScene;
+    const { mysteryEncounter } = currentBattle;
 
-  override start() {
-    super.start();
-  }
-
-  override doEncounter(): void {
     globalScene.playBgm(undefined, true);
 
     for (const pokemon of globalScene.getPlayerParty()) {
@@ -19,27 +15,21 @@ export class NextEncounterPhase extends EncounterPhase {
       }
     }
 
-    globalScene.arenaNextEnemy.setBiome(globalScene.arena.biomeType);
-    globalScene.arenaNextEnemy.setVisible(true);
+    arenaNextEnemy.setBiome(arena.biomeType);
+    arenaNextEnemy.setVisible(true);
 
     const enemyField = globalScene.getEnemyField();
-    const moveTargets: any[] = [
-      globalScene.arenaEnemy,
-      globalScene.arenaNextEnemy,
-      globalScene.currentBattle.trainer,
-      enemyField,
-      globalScene.lastEnemyTrainer,
-    ];
-    const lastEncounterVisuals = globalScene.lastMysteryEncounter?.introVisuals;
+    const moveTargets: any[] = [arenaEnemy, arenaNextEnemy, currentBattle.trainer, enemyField, lastEnemyTrainer];
+    const lastEncounterVisuals = lastMysteryEncounter?.introVisuals;
     if (lastEncounterVisuals) {
       moveTargets.push(lastEncounterVisuals);
     }
-    const nextEncounterVisuals = globalScene.currentBattle.mysteryEncounter?.introVisuals;
+    const nextEncounterVisuals = mysteryEncounter?.introVisuals;
     if (nextEncounterVisuals) {
       const enterFromRight = nextEncounterVisuals.enterFromRight;
       if (enterFromRight) {
         nextEncounterVisuals.x += 500;
-        globalScene.tweens.add({
+        tweens.add({
           targets: nextEncounterVisuals,
           x: "-=200",
           duration: 2000,
@@ -49,25 +39,27 @@ export class NextEncounterPhase extends EncounterPhase {
       }
     }
 
-    globalScene.tweens.add({
+    tweens.add({
       targets: moveTargets.flat(),
       x: "+=300",
       duration: 2000,
       onComplete: () => {
-        globalScene.arenaEnemy.setBiome(globalScene.arena.biomeType);
-        globalScene.arenaEnemy.setX(globalScene.arenaNextEnemy.x);
-        globalScene.arenaEnemy.setAlpha(1);
-        globalScene.arenaNextEnemy.setX(globalScene.arenaNextEnemy.x - 300);
-        globalScene.arenaNextEnemy.setVisible(false);
-        if (globalScene.lastEnemyTrainer) {
-          globalScene.lastEnemyTrainer.destroy();
+        arenaEnemy.setBiome(arena.biomeType);
+        arenaEnemy.setX(arenaNextEnemy.x);
+        arenaEnemy.setAlpha(1);
+        arenaNextEnemy.setX(arenaNextEnemy.x - 300);
+        arenaNextEnemy.setVisible(false);
+        if (lastEnemyTrainer) {
+          lastEnemyTrainer.destroy();
         }
         if (lastEncounterVisuals) {
-          globalScene.field.remove(lastEncounterVisuals, true);
-          globalScene.lastMysteryEncounter!.introVisuals = undefined;
+          field.remove(lastEncounterVisuals, true);
+          if (lastMysteryEncounter) {
+            lastMysteryEncounter.introVisuals = undefined;
+          }
         }
 
-        if (globalScene.currentBattle.isClassicFinalBoss) {
+        if (currentBattle.isClassicFinalBoss) {
           this.displayFinalBossDialogue();
         } else {
           this.doEncounterCommon();
@@ -79,5 +71,5 @@ export class NextEncounterPhase extends EncounterPhase {
   /**
    * Do nothing (since this is simply the next wave in the same biome).
    */
-  override trySetWeatherIfNewBiome(): void {}
+  protected override trySetWeatherIfNewBiome(): void {}
 }

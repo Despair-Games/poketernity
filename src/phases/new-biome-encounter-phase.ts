@@ -4,11 +4,7 @@ import { getRandomWeatherType } from "#app/data/weather";
 import { NextEncounterPhase } from "./next-encounter-phase";
 
 export class NewBiomeEncounterPhase extends NextEncounterPhase {
-  constructor() {
-    super();
-  }
-
-  override doEncounter(): void {
+  protected override doEncounter(): void {
     globalScene.playBgm(undefined, true);
 
     for (const pokemon of globalScene.getPlayerParty()) {
@@ -45,7 +41,7 @@ export class NewBiomeEncounterPhase extends NextEncounterPhase {
   /**
    * Set biome weather.
    */
-  override trySetWeatherIfNewBiome(): void {
+  protected override trySetWeatherIfNewBiome(): void {
     globalScene.arena.trySetWeather(getRandomWeatherType(globalScene.arena), false);
   }
 }
