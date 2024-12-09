@@ -389,16 +389,16 @@ export default class PartyUiHandler extends MessageUiHandler {
             const getTransferrableItemsFromPokemon = (newPokemon: PlayerPokemon) =>
               globalScene.findModifiers(
                 (m) =>
-                  m instanceof PokemonHeldItemModifier &&
-                  (m as PokemonHeldItemModifier).isTransferable &&
-                  (m as PokemonHeldItemModifier).pokemonId === newPokemon.id,
+                  m instanceof PokemonHeldItemModifier
+                  && (m as PokemonHeldItemModifier).isTransferable
+                  && (m as PokemonHeldItemModifier).pokemonId === newPokemon.id,
               ) as PokemonHeldItemModifier[];
             // this next bit checks to see if the the selected item from the original transfer pokemon exists on the new pokemon [p]; this returns undefined if the new pokemon doesn't have the item at all, otherwise it returns the pokemonHeldItemModifier for that item
             const matchingModifier = globalScene.findModifier(
               (m) =>
-                m instanceof PokemonHeldItemModifier &&
-                m.pokemonId === newPokemon.id &&
-                m.matchType(getTransferrableItemsFromPokemon(pokemon)[this.transferOptionCursor]),
+                m instanceof PokemonHeldItemModifier
+                && m.pokemonId === newPokemon.id
+                && m.matchType(getTransferrableItemsFromPokemon(pokemon)[this.transferOptionCursor]),
             ) as PokemonHeldItemModifier;
             const partySlot = this.partySlots.filter((m) => m.getPokemon() === newPokemon)[0]; // this gets pokemon [p] for us
             if (p !== this.transferCursor) {
@@ -444,13 +444,13 @@ export default class PartyUiHandler extends MessageUiHandler {
           ui.playSelect();
           return true;
         } else if (
-          (option !== PartyOption.SUMMARY &&
-            option !== PartyOption.UNPAUSE_EVOLUTION &&
-            option !== PartyOption.UNSPLICE &&
-            option !== PartyOption.RELEASE &&
-            option !== PartyOption.CANCEL &&
-            option !== PartyOption.RENAME) ||
-          (option === PartyOption.RELEASE && this.partyUiMode === PartyUiMode.RELEASE)
+          (option !== PartyOption.SUMMARY
+            && option !== PartyOption.UNPAUSE_EVOLUTION
+            && option !== PartyOption.UNSPLICE
+            && option !== PartyOption.RELEASE
+            && option !== PartyOption.CANCEL
+            && option !== PartyOption.RENAME)
+          || (option === PartyOption.RELEASE && this.partyUiMode === PartyUiMode.RELEASE)
         ) {
           let filterResult: string | null;
           const getTransferrableItemsFromPokemon = (pokemon: PlayerPokemon) =>
@@ -517,8 +517,8 @@ export default class PartyUiHandler extends MessageUiHandler {
               }
             } else {
               if (
-                option >= PartyOption.FORM_CHANGE_ITEM &&
-                globalScene.getCurrentPhase() instanceof SelectModifierPhase
+                option >= PartyOption.FORM_CHANGE_ITEM
+                && globalScene.getCurrentPhase() instanceof SelectModifierPhase
               ) {
                 if (this.partyUiMode === PartyUiMode.CHECK) {
                   const formChangeItemModifiers = this.getFormChangeItemsModifiers(pokemon);
@@ -535,9 +535,9 @@ export default class PartyUiHandler extends MessageUiHandler {
               }
             }
             if (
-              this.partyUiMode !== PartyUiMode.MODIFIER &&
-              this.partyUiMode !== PartyUiMode.TM_MODIFIER &&
-              this.partyUiMode !== PartyUiMode.MOVE_MODIFIER
+              this.partyUiMode !== PartyUiMode.MODIFIER
+              && this.partyUiMode !== PartyUiMode.TM_MODIFIER
+              && this.partyUiMode !== PartyUiMode.MOVE_MODIFIER
             ) {
               ui.playSelect();
             }
@@ -735,9 +735,9 @@ export default class PartyUiHandler extends MessageUiHandler {
             /** Initialize item quantities for the selected Pokemon */
             const itemModifiers = globalScene.findModifiers(
               (m) =>
-                m instanceof PokemonHeldItemModifier &&
-                m.isTransferable &&
-                m.pokemonId === globalScene.getPlayerParty()[this.cursor].id,
+                m instanceof PokemonHeldItemModifier
+                && m.isTransferable
+                && m.pokemonId === globalScene.getPlayerParty()[this.cursor].id,
             ) as PokemonHeldItemModifier[];
             this.transferQuantities = itemModifiers.map((item) => item.getStackCount());
             this.transferQuantitiesMax = itemModifiers.map((item) => item.getStackCount());
@@ -752,8 +752,8 @@ export default class PartyUiHandler extends MessageUiHandler {
         return true;
       } else if (button === Button.CANCEL) {
         if (
-          (this.partyUiMode === PartyUiMode.MODIFIER_TRANSFER || this.partyUiMode === PartyUiMode.SPLICE) &&
-          this.transferMode
+          (this.partyUiMode === PartyUiMode.MODIFIER_TRANSFER || this.partyUiMode === PartyUiMode.SPLICE)
+          && this.transferMode
         ) {
           this.clearTransfer();
           ui.playSelect();
@@ -984,9 +984,9 @@ export default class PartyUiHandler extends MessageUiHandler {
     let formChangeItemModifiers: PokemonFormChangeItemModifier[] | undefined;
 
     if (
-      this.partyUiMode !== PartyUiMode.MOVE_MODIFIER &&
-      this.partyUiMode !== PartyUiMode.REMEMBER_MOVE_MODIFIER &&
-      (this.transferMode || this.partyUiMode !== PartyUiMode.MODIFIER_TRANSFER)
+      this.partyUiMode !== PartyUiMode.MOVE_MODIFIER
+      && this.partyUiMode !== PartyUiMode.REMEMBER_MOVE_MODIFIER
+      && (this.transferMode || this.partyUiMode !== PartyUiMode.MODIFIER_TRANSFER)
     ) {
       switch (this.partyUiMode) {
         case PartyUiMode.SWITCH:
@@ -994,19 +994,19 @@ export default class PartyUiHandler extends MessageUiHandler {
         case PartyUiMode.POST_BATTLE_SWITCH:
           if (this.cursor >= globalScene.currentBattle.getBattlerCount()) {
             const allowBatonModifierSwitch =
-              this.partyUiMode !== PartyUiMode.FAINT_SWITCH &&
-              globalScene.findModifier(
+              this.partyUiMode !== PartyUiMode.FAINT_SWITCH
+              && globalScene.findModifier(
                 (m) =>
-                  m instanceof SwitchEffectTransferModifier &&
-                  (m as SwitchEffectTransferModifier).pokemonId === globalScene.getPlayerField()[this.fieldIndex].id,
+                  m instanceof SwitchEffectTransferModifier
+                  && (m as SwitchEffectTransferModifier).pokemonId === globalScene.getPlayerField()[this.fieldIndex].id,
               );
 
             const moveHistory = globalScene.getPlayerField()[this.fieldIndex].getMoveHistory();
             const isBatonPassMove =
-              this.partyUiMode === PartyUiMode.FAINT_SWITCH &&
-              moveHistory.length &&
-              allMoves[moveHistory[moveHistory.length - 1].move].getAttrs(ForceSwitchOutAttr)[0]?.isBatonPass() &&
-              moveHistory[moveHistory.length - 1].result === MoveResult.SUCCESS;
+              this.partyUiMode === PartyUiMode.FAINT_SWITCH
+              && moveHistory.length
+              && allMoves[moveHistory[moveHistory.length - 1].move].getAttrs(ForceSwitchOutAttr)[0]?.isBatonPass()
+              && moveHistory[moveHistory.length - 1].result === MoveResult.SUCCESS;
 
             // isBatonPassMove and allowBatonModifierSwitch shouldn't ever be true
             // at the same time, because they both explicitly check for a mutually
@@ -1062,10 +1062,10 @@ export default class PartyUiHandler extends MessageUiHandler {
       this.options.push(PartyOption.RENAME);
 
       if (
-        pokemonEvolutions.hasOwnProperty(pokemon.species.speciesId) ||
-        (pokemon.isFusion() &&
-          pokemon.fusionSpecies &&
-          pokemonEvolutions.hasOwnProperty(pokemon.fusionSpecies.speciesId))
+        pokemonEvolutions.hasOwnProperty(pokemon.species.speciesId)
+        || (pokemon.isFusion()
+          && pokemon.fusionSpecies
+          && pokemonEvolutions.hasOwnProperty(pokemon.fusionSpecies.speciesId))
       ) {
         this.options.push(PartyOption.UNPAUSE_EVOLUTION);
       }
@@ -1138,9 +1138,9 @@ export default class PartyUiHandler extends MessageUiHandler {
       } else if (option === PartyOption.SCROLL_DOWN) {
         optionName = "↓";
       } else if (
-        (this.partyUiMode !== PartyUiMode.REMEMBER_MOVE_MODIFIER &&
-          (this.partyUiMode !== PartyUiMode.MODIFIER_TRANSFER || this.transferMode)) ||
-        option === PartyOption.CANCEL
+        (this.partyUiMode !== PartyUiMode.REMEMBER_MOVE_MODIFIER
+          && (this.partyUiMode !== PartyUiMode.MODIFIER_TRANSFER || this.transferMode))
+        || option === PartyOption.CANCEL
       ) {
         switch (option) {
           case PartyOption.MOVE_1:
@@ -1196,11 +1196,11 @@ export default class PartyUiHandler extends MessageUiHandler {
       /** For every item that has stack bigger than 1, display the current quantity selection */
       const itemModifier = itemModifiers[option];
       if (
-        this.partyUiMode === PartyUiMode.MODIFIER_TRANSFER &&
-        this.transferQuantitiesMax[option] > 1 &&
-        !this.transferMode &&
-        itemModifier !== undefined &&
-        itemModifier.type.name === optionName
+        this.partyUiMode === PartyUiMode.MODIFIER_TRANSFER
+        && this.transferQuantitiesMax[option] > 1
+        && !this.transferMode
+        && itemModifier !== undefined
+        && itemModifier.type.name === optionName
       ) {
         let amountText = ` (${this.transferQuantities[option]})`;
 
@@ -1325,9 +1325,9 @@ export default class PartyUiHandler extends MessageUiHandler {
 
   getOptionsCursorWithScroll(): integer {
     return (
-      this.optionsCursor +
-      this.optionsScrollCursor +
-      (this.options && this.options[0] === PartyOption.SCROLL_UP ? -1 : 0)
+      this.optionsCursor
+      + this.optionsScrollCursor
+      + (this.options && this.options[0] === PartyOption.SCROLL_UP ? -1 : 0)
     );
   }
 
@@ -1395,9 +1395,9 @@ class PartySlot extends Phaser.GameObjects.Container {
       globalScene,
       slotIndex >= globalScene.currentBattle.getBattlerCount() ? 230.5 : 64,
       slotIndex >= globalScene.currentBattle.getBattlerCount()
-        ? -184 +
-            (globalScene.currentBattle.double ? -40 : 0) +
-            (28 + (globalScene.currentBattle.double ? 8 : 0)) * slotIndex
+        ? -184
+            + (globalScene.currentBattle.double ? -40 : 0)
+            + (28 + (globalScene.currentBattle.double ? 8 : 0)) * slotIndex
         : -124 + (globalScene.currentBattle.double ? -8 : 0) + slotIndex * 64,
     );
 

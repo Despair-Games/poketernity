@@ -86,8 +86,8 @@ export default class TestDialogueUiHandler extends FormModalUiHandler {
 
     input.on("keydown", (inputObject, evt: KeyboardEvent) => {
       if (
-        ["escape", "space"].some((v) => v === evt.key.toLowerCase() || v === evt.code.toLowerCase()) &&
-        ui.getMode() === Mode.AUTO_COMPLETE
+        ["escape", "space"].some((v) => v === evt.key.toLowerCase() || v === evt.code.toLowerCase())
+        && ui.getMode() === Mode.AUTO_COMPLETE
       ) {
         // Delete autocomplete list and recovery focus.
         inputObject.on("blur", () => inputObject.node.focus(), { once: true });

@@ -377,11 +377,11 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
 
     this.shinyIcon.setPositionRelative(
       this.nameText,
-      nameTextWidth +
-        this.genderText.displayWidth +
-        1 +
-        (this.teraIcon.visible ? this.teraIcon.displayWidth + 1 : 0) +
-        (this.splicedIcon.visible ? this.splicedIcon.displayWidth + 1 : 0),
+      nameTextWidth
+        + this.genderText.displayWidth
+        + 1
+        + (this.teraIcon.visible ? this.teraIcon.displayWidth + 1 : 0)
+        + (this.splicedIcon.visible ? this.splicedIcon.displayWidth + 1 : 0),
       2.5,
     );
     this.shinyIcon.setTexture(`shiny_star${doubleShiny ? "_1" : ""}`);
@@ -425,8 +425,8 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
       const opponentPokemonDexAttr = pokemon.getDexAttr();
       if (globalScene.gameMode.isClassic) {
         if (
-          globalScene.gameData.starterData[pokemon.species.getRootSpeciesId()].classicWinCount > 0 &&
-          globalScene.gameData.starterData[pokemon.species.getRootSpeciesId(true)].classicWinCount > 0
+          globalScene.gameData.starterData[pokemon.species.getRootSpeciesId()].classicWinCount > 0
+          && globalScene.gameData.starterData[pokemon.species.getRootSpeciesId(true)].classicWinCount > 0
         ) {
           this.championRibbon.setVisible(true);
         }
@@ -646,19 +646,19 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
         );
         this.splicedIcon.setPositionRelative(
           this.nameText,
-          this.nameText.displayWidth +
-            this.genderText.displayWidth +
-            1 +
-            (this.teraIcon.visible ? this.teraIcon.displayWidth + 1 : 0),
+          this.nameText.displayWidth
+            + this.genderText.displayWidth
+            + 1
+            + (this.teraIcon.visible ? this.teraIcon.displayWidth + 1 : 0),
           1.5,
         );
         this.shinyIcon.setPositionRelative(
           this.nameText,
-          this.nameText.displayWidth +
-            this.genderText.displayWidth +
-            1 +
-            (this.teraIcon.visible ? this.teraIcon.displayWidth + 1 : 0) +
-            (this.splicedIcon.visible ? this.splicedIcon.displayWidth + 1 : 0),
+          this.nameText.displayWidth
+            + this.genderText.displayWidth
+            + 1
+            + (this.teraIcon.visible ? this.teraIcon.displayWidth + 1 : 0)
+            + (this.splicedIcon.visible ? this.splicedIcon.displayWidth + 1 : 0),
           2.5,
         );
       }
@@ -775,12 +775,12 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
     nameTextWidth = nameSizeTest.displayWidth;
 
     while (
-      nameTextWidth >
-      (this.player || !this.boss ? 60 : 98) -
-        ((pokemon.gender !== Gender.GENDERLESS ? 6 : 0) +
-          (pokemon.fusionSpecies ? 8 : 0) +
-          (pokemon.isShiny() ? 8 : 0) +
-          (Math.min(pokemon.level.toString().length, 3) - 3) * 8)
+      nameTextWidth
+      > (this.player || !this.boss ? 60 : 98)
+        - ((pokemon.gender !== Gender.GENDERLESS ? 6 : 0)
+          + (pokemon.fusionSpecies ? 8 : 0)
+          + (pokemon.isShiny() ? 8 : 0)
+          + (Math.min(pokemon.level.toString().length, 3) - 3) * 8)
     ) {
       displayName = `${displayName.slice(0, displayName.endsWith(".") ? -2 : -1).trimEnd()}.`;
       nameSizeTest.setText(displayName);
@@ -819,10 +819,10 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
       );
       let duration =
         this.visible && !instant
-          ? ((levelExp - this.lastLevelExp) / relLevelExp) *
-            BattleInfo.EXP_GAINS_DURATION_BASE *
-            durationMultiplier *
-            levelDurationMultiplier
+          ? ((levelExp - this.lastLevelExp) / relLevelExp)
+            * BattleInfo.EXP_GAINS_DURATION_BASE
+            * durationMultiplier
+            * levelDurationMultiplier
           : 0;
       const speed = globalScene.expGainsSpeed;
       if (speed && speed >= ExpGainsSpeed.DEFAULT) {

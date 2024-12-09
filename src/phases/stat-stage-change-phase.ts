@@ -242,13 +242,13 @@ export class StatStageChangePhase extends PokemonPhase {
       while (
         (existingPhase = globalScene.findPhase(
           (p) =>
-            p instanceof StatStageChangePhase &&
-            p.battlerIndex === this.battlerIndex &&
-            p.stats.length === 1 &&
-            p.stats[0] === this.stats[0] &&
-            p.selfTarget === this.selfTarget &&
-            p.showMessage === this.showMessage &&
-            p.ignoreAbilities === this.ignoreAbilities,
+            p instanceof StatStageChangePhase
+            && p.battlerIndex === this.battlerIndex
+            && p.stats.length === 1
+            && p.stats[0] === this.stats[0]
+            && p.selfTarget === this.selfTarget
+            && p.showMessage === this.showMessage
+            && p.ignoreAbilities === this.ignoreAbilities,
         ) as StatStageChangePhase)
       ) {
         this.stages += existingPhase.stages;
@@ -261,13 +261,13 @@ export class StatStageChangePhase extends PokemonPhase {
     while (
       (existingPhase = globalScene.findPhase(
         (p) =>
-          p instanceof StatStageChangePhase &&
-          p.battlerIndex === this.battlerIndex &&
-          p.selfTarget === this.selfTarget &&
-          accEva.some((s) => p.stats.includes(s)) === isAccEva &&
-          p.stages === this.stages &&
-          p.showMessage === this.showMessage &&
-          p.ignoreAbilities === this.ignoreAbilities,
+          p instanceof StatStageChangePhase
+          && p.battlerIndex === this.battlerIndex
+          && p.selfTarget === this.selfTarget
+          && accEva.some((s) => p.stats.includes(s)) === isAccEva
+          && p.stages === this.stages
+          && p.showMessage === this.showMessage
+          && p.ignoreAbilities === this.ignoreAbilities,
       ) as StatStageChangePhase)
     ) {
       this.stats.push(...existingPhase.stats);

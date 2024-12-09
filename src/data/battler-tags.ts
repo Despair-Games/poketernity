@@ -978,8 +978,8 @@ export class PowderTag extends BattlerTag {
         const move = movePhase.move.getMove();
         const weather = globalScene.arena.weather;
         if (
-          pokemon.getMoveType(move) === Type.FIRE &&
-          !(weather && weather.weatherType === WeatherType.HEAVY_RAIN && !weather.isEffectSuppressed())
+          pokemon.getMoveType(move) === Type.FIRE
+          && !(weather && weather.weatherType === WeatherType.HEAVY_RAIN && !weather.isEffectSuppressed())
         ) {
           movePhase.fail();
           movePhase.showMoveText();
@@ -2547,9 +2547,9 @@ export class GulpMissileTag extends BattlerTag {
   override canAdd(pokemon: Pokemon): boolean {
     const isSurfOrDive = [Moves.SURF, Moves.DIVE].includes(this.sourceMove);
     const isNormalForm =
-      pokemon.formIndex === 0 &&
-      !pokemon.getTag(BattlerTagType.GULP_MISSILE_ARROKUDA) &&
-      !pokemon.getTag(BattlerTagType.GULP_MISSILE_PIKACHU);
+      pokemon.formIndex === 0
+      && !pokemon.getTag(BattlerTagType.GULP_MISSILE_ARROKUDA)
+      && !pokemon.getTag(BattlerTagType.GULP_MISSILE_PIKACHU);
     const isCramorant = pokemon.species.speciesId === Species.CRAMORANT;
 
     return isSurfOrDive && isNormalForm && isCramorant;

@@ -57,9 +57,9 @@ export class SwitchSummonPhase extends SummonPhase {
     }
 
     if (
-      !this.doReturn ||
-      (this.slotIndex !== -1 &&
-        !(this.player ? globalScene.getPlayerParty() : globalScene.getEnemyParty())[this.slotIndex])
+      !this.doReturn
+      || (this.slotIndex !== -1
+        && !(this.player ? globalScene.getPlayerParty() : globalScene.getEnemyParty())[this.slotIndex])
     ) {
       if (this.player) {
         return this.switchAndSummon();
@@ -123,21 +123,21 @@ export class SwitchSummonPhase extends SummonPhase {
       if (
         !globalScene.findModifier(
           (m) =>
-            m instanceof SwitchEffectTransferModifier &&
-            (m as SwitchEffectTransferModifier).pokemonId === switchedInPokemon.id,
+            m instanceof SwitchEffectTransferModifier
+            && (m as SwitchEffectTransferModifier).pokemonId === switchedInPokemon.id,
         )
       ) {
         const batonPassModifier = globalScene.findModifier(
           (m) =>
-            m instanceof SwitchEffectTransferModifier &&
-            (m as SwitchEffectTransferModifier).pokemonId === this.lastPokemon.id,
+            m instanceof SwitchEffectTransferModifier
+            && (m as SwitchEffectTransferModifier).pokemonId === this.lastPokemon.id,
         ) as SwitchEffectTransferModifier;
         if (
-          batonPassModifier &&
-          !globalScene.findModifier(
+          batonPassModifier
+          && !globalScene.findModifier(
             (m) =>
-              m instanceof SwitchEffectTransferModifier &&
-              (m as SwitchEffectTransferModifier).pokemonId === switchedInPokemon.id,
+              m instanceof SwitchEffectTransferModifier
+              && (m as SwitchEffectTransferModifier).pokemonId === switchedInPokemon.id,
           )
         ) {
           globalScene.tryTransferHeldItemModifier(
@@ -213,9 +213,9 @@ export class SwitchSummonPhase extends SummonPhase {
     // Compensate for turn spent summoning
     // Or compensate for force switch move if switched out pokemon is not fainted
     if (
-      currentCommand === Command.POKEMON ||
-      lastPokemonIsForceSwitchedAndNotFainted ||
-      lastPokemonHasForceSwitchAbAttr
+      currentCommand === Command.POKEMON
+      || lastPokemonIsForceSwitchedAndNotFainted
+      || lastPokemonHasForceSwitchAbAttr
     ) {
       pokemon.battleSummonData.turnCount--;
       pokemon.battleSummonData.waveTurnCount--;

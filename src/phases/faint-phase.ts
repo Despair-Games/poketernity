@@ -169,9 +169,9 @@ export class FaintPhase extends PokemonPhase {
         /** If the player doesn't have any legal Pokemon, end the game */
         globalScene.unshiftPhase(new GameOverPhase());
       } else if (
-        globalScene.currentBattle.double &&
-        legalPlayerPokemon.length === 1 &&
-        legalPlayerPartyPokemon.length === 0
+        globalScene.currentBattle.double
+        && legalPlayerPokemon.length === 1
+        && legalPlayerPartyPokemon.length === 0
       ) {
         /**
          * If the player has exactly one Pokemon in total at this point in a double battle, and that Pokemon

@@ -918,8 +918,8 @@ export abstract class BattleAnim {
           x = point[0];
           y = point[1];
           if (
-            frame.target === AnimFrameTarget.GRAPHIC &&
-            isReversed(this.srcLine[0], this.srcLine[2], this.dstLine[0], this.dstLine[2])
+            frame.target === AnimFrameTarget.GRAPHIC
+            && isReversed(this.srcLine[0], this.srcLine[2], this.dstLine[0], this.dstLine[2])
           ) {
             scaleX = scaleX * -1;
           }

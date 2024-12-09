@@ -472,10 +472,10 @@ class MatBlockTag extends ConditionalProtectTag {
 const CraftyShieldConditionFunc: ProtectConditionFunc = (_arena, moveId) => {
   const move = allMoves[moveId];
   return (
-    move.category === MoveCategory.STATUS &&
-    move.moveTarget !== MoveTarget.ENEMY_SIDE &&
-    move.moveTarget !== MoveTarget.BOTH_SIDES &&
-    move.moveTarget !== MoveTarget.ALL
+    move.category === MoveCategory.STATUS
+    && move.moveTarget !== MoveTarget.ENEMY_SIDE
+    && move.moveTarget !== MoveTarget.BOTH_SIDES
+    && move.moveTarget !== MoveTarget.ALL
   );
 };
 
@@ -1447,14 +1447,8 @@ export function getArenaTag(
  */
 export function loadArenaTag(source: ArenaTag | any): ArenaTag {
   const tag =
-    getArenaTag(
-      source.tagType,
-      source.turnCount,
-      source.sourceMove,
-      source.sourceId,
-      source.targetIndex,
-      source.side,
-    ) ?? new NoneTag();
+    getArenaTag(source.tagType, source.turnCount, source.sourceMove, source.sourceId, source.targetIndex, source.side)
+    ?? new NoneTag();
   tag.loadTag(source);
   return tag;
 }
