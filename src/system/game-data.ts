@@ -158,7 +158,7 @@ export interface SessionSaveData {
   score: integer;
   waveIndex: integer;
   battleType: BattleType;
-  trainer: TrainerData;
+  trainer: TrainerData | null;
   gameVersion: string;
   timestamp: integer;
   challenges: ChallengeData[];
@@ -999,6 +999,7 @@ export class GameData {
     return ret;
   }
 
+  // Note: changing this requires testing run history (and updating `GameOverPhase.getRunHistoryEntry()` if necessary)
   public getSessionSaveData(): SessionSaveData {
     return {
       seed: globalScene.seed,
@@ -1125,7 +1126,7 @@ export class GameData {
           const battle = globalScene.newBattle(
             sessionData.waveIndex,
             battleType,
-            sessionData.trainer,
+            sessionData.trainer!, // TODO: resolve bang
             battleType === BattleType.TRAINER
               ? trainerConfig?.doubleOnly || sessionData.trainer?.variant === TrainerVariant.DOUBLE
               : sessionData.enemyParty.length > 1,

@@ -3,12 +3,9 @@ import { Mode } from "#app/ui/ui";
 import i18next from "i18next";
 import { FieldPhase } from "./field-phase";
 
+/** Displays the message for when the player reaches the level cap with a pokemon */
 export class LevelCapPhase extends FieldPhase {
-  constructor() {
-    super();
-  }
-
-  override start(): void {
+  public override start(): void {
     super.start();
 
     globalScene.ui.setMode(Mode.MESSAGE).then(() => {

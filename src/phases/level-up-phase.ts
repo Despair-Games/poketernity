@@ -1,14 +1,23 @@
-import { globalScene } from "#app/global-scene";
-import { ExpNotification } from "#app/enums/exp-notification";
 import type { PlayerPokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { EvolutionPhase } from "#app/phases/evolution-phase";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
 import { PlayerPartyMemberPokemonPhase } from "#app/phases/player-party-member-pokemon-phase";
 import { LevelAchv } from "#app/system/achv";
 import { NumberHolder } from "#app/utils";
+import { ExpNotification } from "#enums/exp-notification";
 import i18next from "i18next";
 
+/**
+ * Handles the effects of a pokemon levelling up:
+ * - Validates the {@linkcode LevelAchv} achievement
+ * - Updates and displays the pokemon's stats
+ * - Plays the level up SFX
+ * - Displays the appropriate messages
+ * - Pushes a {@linkcode LearnMovePhase} for each newly learned move
+ * - Pushes an {@linkcode EvolutionPhase} if the pokemon should evolve
+ */
 export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
   protected lastLevel: number;
   protected level: number;
@@ -21,7 +30,7 @@ export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
     this.level = level;
   }
 
-  public override start() {
+  public override start(): void {
     super.start();
 
     if (this.level > globalScene.gameData.gameStats.highestLevel) {
@@ -33,6 +42,7 @@ export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
     const prevStats = this.pokemon.stats.slice(0);
     this.pokemon.calculateStats();
     this.pokemon.updateInfo();
+
     if (globalScene.expParty === ExpNotification.DEFAULT) {
       globalScene.playSound("level_up_fanfare");
       globalScene.ui.showText(
@@ -57,20 +67,22 @@ export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
     }
   }
 
-  public override end() {
+  public override end(): void {
+    // this feels like an unnecessary optimization
     if (this.lastLevel < 100) {
-      // this feels like an unnecessary optimization
       const levelMoves = this.getPokemon().getLevelMoves(this.lastLevel + 1);
       for (const lm of levelMoves) {
         globalScene.unshiftPhase(new LearnMovePhase(this.partyMemberIndex, lm[1]));
       }
     }
+
     if (!this.pokemon.pauseEvolutions) {
       const evolution = this.pokemon.getEvolution();
       if (evolution) {
         globalScene.unshiftPhase(new EvolutionPhase(this.pokemon, evolution, this.lastLevel));
       }
     }
+
     return super.end();
   }
 }

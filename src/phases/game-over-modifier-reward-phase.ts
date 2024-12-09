@@ -4,12 +4,13 @@ import { Mode } from "#app/ui/ui";
 import i18next from "i18next";
 import { ModifierRewardPhase } from "./modifier-reward-phase";
 
+/** Used to grant vouchers to the player after they finish a classic run */
 export class GameOverModifierRewardPhase extends ModifierRewardPhase {
   constructor(modifierTypeFunc: ModifierTypeFunc) {
     super(modifierTypeFunc);
   }
 
-  override doReward(): Promise<void> {
+  public override doReward(): Promise<void> {
     return new Promise<void>((resolve) => {
       const newModifier = this.modifierType.newModifier();
       globalScene.addModifier(newModifier).then(() => {

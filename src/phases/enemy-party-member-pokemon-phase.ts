@@ -6,7 +6,7 @@ export abstract class EnemyPartyMemberPokemonPhase extends PartyMemberPokemonPha
     super(partyMemberIndex, false);
   }
 
-  getEnemyPokemon(): EnemyPokemon {
+  public getEnemyPokemon(): EnemyPokemon {
     return super.getPokemon() as EnemyPokemon;
   }
 }
