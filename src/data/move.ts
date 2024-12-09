@@ -40,7 +40,6 @@ import {
   applyPostItemLostAbAttrs,
   applyPreAttackAbAttrs,
   applyPreDefendAbAttrs,
-  BlockItemTheftAbAttr,
   BlockNonDirectDamageAbAttr,
   BlockOneHitKOAbAttr,
   BlockRecoilDamageAttr,
@@ -111,6 +110,7 @@ import { RevivalBlessingPhase } from "#app/phases/revival-blessing-phase";
 import { LoadMoveAnimPhase } from "#app/phases/load-move-anim-phase";
 import { PokemonTransformPhase } from "#app/phases/pokemon-transform-phase";
 import { MoveAnimPhase } from "#app/phases/move-anim-phase";
+import { BlockItemTheftAbAttr } from "./abilities/block-item-theft-ab-attr";
 
 export enum MoveCategory {
   PHYSICAL,

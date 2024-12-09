@@ -64,6 +64,7 @@ import {
   SpeciesFormChangeRevertWeatherFormTrigger,
   SpeciesFormChangeWeatherTrigger,
 } from "./pokemon-forms";
+import { AbAttr } from "./abilities/ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -179,37 +180,37 @@ type PokemonAttackCondition = (user: Pokemon | null, target: Pokemon | null, mov
 type PokemonDefendCondition = (target: Pokemon, user: Pokemon, move: Move) => boolean;
 type PokemonStatStageChangeCondition = (target: Pokemon, statsChanged: BattleStat[], stages: number) => boolean;
 
-export abstract class AbAttr {
-  public showAbility: boolean;
-  private extraCondition: AbAttrCondition;
+// export abstract class AbAttr {
+//   public showAbility: boolean;
+//   private extraCondition: AbAttrCondition;
 
-  constructor(showAbility: boolean = true) {
-    this.showAbility = showAbility;
-  }
+//   constructor(showAbility: boolean = true) {
+//     this.showAbility = showAbility;
+//   }
 
-  apply(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    _cancelled: BooleanHolder | null,
-    _args: any[],
-  ): boolean {
-    return false;
-  }
+//   apply(
+//     _pokemon: Pokemon,
+//     _passive: boolean,
+//     _simulated: boolean,
+//     _cancelled: BooleanHolder | null,
+//     _args: any[],
+//   ): boolean {
+//     return false;
+//   }
 
-  getTriggerMessage(_pokemon: Pokemon, _abilityName: string, ..._args: any[]): string | null {
-    return null;
-  }
+//   getTriggerMessage(_pokemon: Pokemon, _abilityName: string, ..._args: any[]): string | null {
+//     return null;
+//   }
 
-  getCondition(): AbAttrCondition | null {
-    return this.extraCondition || null;
-  }
+//   getCondition(): AbAttrCondition | null {
+//     return this.extraCondition || null;
+//   }
 
-  addCondition(condition: AbAttrCondition): AbAttr {
-    this.extraCondition = condition;
-    return this;
-  }
-}
+//   addCondition(condition: AbAttrCondition): AbAttr {
+//     this.extraCondition = condition;
+//     return this;
+//   }
+// }
 
 export class BlockRecoilDamageAttr extends AbAttr {
   override apply(
@@ -365,27 +366,6 @@ export class PreDefendFullHpEndureAbAttr extends PreDefendAbAttr {
     }
 
     return false;
-  }
-}
-
-export class BlockItemTheftAbAttr extends AbAttr {
-  override apply(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    cancelled: BooleanHolder,
-    _args: any[],
-  ): boolean {
-    cancelled.value = true;
-
-    return true;
-  }
-
-  override getTriggerMessage(pokemon: Pokemon, abilityName: string, ..._args: any[]) {
-    return i18next.t("abilityTriggers:blockItemTheft", {
-      pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-      abilityName,
-    });
   }
 }
 

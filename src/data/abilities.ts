@@ -25,7 +25,6 @@ import {
   AttackTypeImmunityAbAttr,
   BattlerTagImmunityAbAttr,
   BlockCritAbAttr,
-  BlockItemTheftAbAttr,
   BlockNonDirectDamageAbAttr,
   BlockOneHitKOAbAttr,
   BlockRecoilDamageAttr,
@@ -200,7 +199,8 @@ import {
   VariablePowerAttr,
 } from "./move";
 import { getNonVolatileStatusEffects } from "./status-effect";
-import { IgnoreTypeStatusEffectImmunityAbAttr } from "./abilities/ignore-type-status-effect-immunity-attr";
+import { IgnoreTypeStatusEffectImmunityAbAttr } from "./abilities/ignore-type-status-effect-immunity-ab-attr";
+import { BlockItemTheftAbAttr } from "./abilities/block-item-theft-ab-attr";
 
 type AbAttrCondition = (pokemon: Pokemon) => boolean;
 

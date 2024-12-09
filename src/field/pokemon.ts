@@ -139,7 +139,7 @@ import {
 } from "../data/battler-tags";
 import { WeatherType } from "#enums/weather-type";
 import { ArenaTagSide, NoCritTag, WeakenMoveScreenTag } from "#app/data/arena-tag";
-import type { Ability, AbAttr } from "#app/data/ability";
+import type { Ability } from "#app/data/ability";
 import {
   StatMultiplierAbAttr,
   BlockCritAbAttr,
@@ -246,7 +246,8 @@ import {
 import { Nature } from "#enums/nature";
 import { StatusEffect } from "#enums/status-effect";
 import { doShinySparkleAnim } from "#app/field/anims";
-import { IgnoreTypeStatusEffectImmunityAbAttr } from "#app/data/abilities/ignore-type-status-effect-immunity-attr";
+import { IgnoreTypeStatusEffectImmunityAbAttr } from "#app/data/abilities/ignore-type-status-effect-immunity-ab-attr";
+import type { AbAttr } from "#app/data/abilities/ab-attr";
 
 export enum LearnMoveSituation {
   MISC,
@@ -263,7 +264,7 @@ export enum FieldPosition {
   RIGHT,
 }
 
-export default abstract class Pokemon extends Phaser.GameObjects.Container {
+export abstract class Pokemon extends Phaser.GameObjects.Container {
   public id: integer;
   public override name: string;
   public nickname: string;
@@ -4956,6 +4957,8 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     }
   }
 }
+
+export default Pokemon;
 
 /* export default interface Pokemon {
   scene: BattleScene

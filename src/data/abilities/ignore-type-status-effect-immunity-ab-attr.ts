@@ -2,7 +2,7 @@ import type { StatusEffect } from "#app/enums/status-effect";
 import type { Type } from "#app/enums/type";
 import type Pokemon from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
-import { AbAttr } from "../ability";
+import { AbAttr } from "./ab-attr";
 
 /**
  * Ignores the type immunity to Status Effects of the defender if the defender is of a certain type
