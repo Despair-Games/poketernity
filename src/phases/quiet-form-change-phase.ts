@@ -3,7 +3,6 @@ import { SemiInvulnerableTag } from "#app/data/battler-tags";
 import type { SpeciesFormChange } from "#app/data/pokemon-forms";
 import { getSpeciesFormChangeMessage } from "#app/data/pokemon-forms";
 import { getTypeRgb } from "#app/data/type";
-import { BattleSpec } from "#app/enums/battle-spec";
 import { BattlerTagType } from "#app/enums/battler-tag-type";
 import type Pokemon from "#app/field/pokemon";
 import { EnemyPokemon } from "#app/field/pokemon";
@@ -150,7 +149,7 @@ export class QuietFormChangePhase extends BattlePhase {
 
   override end(): void {
     this.pokemon.findAndRemoveTags((t) => t.tagType === BattlerTagType.AUTOTOMIZED);
-    if (globalScene?.currentBattle.battleSpec === BattleSpec.FINAL_BOSS && this.pokemon instanceof EnemyPokemon) {
+    if (globalScene?.currentBattle.isClassicFinalBoss && this.pokemon instanceof EnemyPokemon) {
       globalScene.playBgm();
       globalScene.unshiftPhase(
         new PokemonHealPhase(this.pokemon.getBattlerIndex(), this.pokemon.getMaxHp(), null, false, false, false, true),

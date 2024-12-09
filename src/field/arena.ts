@@ -291,7 +291,7 @@ export class Arena {
   trySetWeatherOverride(weather: WeatherType): boolean {
     this.weather = new Weather(weather, 0);
     globalScene.unshiftPhase(new CommonAnimPhase(undefined, undefined, CommonAnim.SUNNY + (weather - 1)));
-    globalScene.queueMessage(getWeatherStartMessage(weather)!); // TODO: is this bang correct?
+    globalScene.queueMessage(getWeatherStartMessage(weather) ?? "");
     return true;
   }
 
@@ -313,15 +313,15 @@ export class Arena {
     const oldWeatherType = this.weather?.weatherType || WeatherType.NONE;
 
     this.weather = weather ? new Weather(weather, hasPokemonSource ? 5 : 0) : null;
-    this.eventTarget.dispatchEvent(
-      new WeatherChangedEvent(oldWeatherType, this.weather?.weatherType!, this.weather?.turnsLeft!),
-    ); // TODO: is this bang correct?
 
     if (this.weather) {
-      globalScene.unshiftPhase(new CommonAnimPhase(undefined, undefined, CommonAnim.SUNNY + (weather - 1)));
-      globalScene.queueMessage(getWeatherStartMessage(weather)!); // TODO: is this bang correct?
+      this.eventTarget.dispatchEvent(
+        new WeatherChangedEvent(oldWeatherType, this.weather.weatherType, this.weather.turnsLeft),
+      );
+      globalScene.unshiftPhase(new CommonAnimPhase(undefined, undefined, CommonAnim.SUNNY + (weather - 1), true));
+      globalScene.queueMessage(getWeatherStartMessage(weather) ?? "");
     } else {
-      globalScene.queueMessage(getWeatherClearMessage(oldWeatherType)!); // TODO: is this bang correct?
+      globalScene.queueMessage(getWeatherClearMessage(oldWeatherType) ?? "");
     }
 
     globalScene
@@ -377,17 +377,17 @@ export class Arena {
     const oldTerrainType = this.terrain?.terrainType || TerrainType.NONE;
 
     this.terrain = terrain ? new Terrain(terrain, hasPokemonSource ? 5 : 0) : null;
-    this.eventTarget.dispatchEvent(
-      new TerrainChangedEvent(oldTerrainType, this.terrain?.terrainType!, this.terrain?.turnsLeft!),
-    ); // TODO: are those bangs correct?
 
     if (this.terrain) {
+      this.eventTarget.dispatchEvent(
+        new TerrainChangedEvent(oldTerrainType, this.terrain.terrainType, this.terrain.turnsLeft),
+      );
       if (!ignoreAnim) {
         globalScene.unshiftPhase(new CommonAnimPhase(undefined, undefined, CommonAnim.MISTY_TERRAIN + (terrain - 1)));
       }
-      globalScene.queueMessage(getTerrainStartMessage(terrain)!); // TODO: is this bang correct?
+      globalScene.queueMessage(getTerrainStartMessage(terrain) ?? "");
     } else {
-      globalScene.queueMessage(getTerrainClearMessage(oldTerrainType)!); // TODO: is this bang correct?
+      globalScene.queueMessage(getTerrainClearMessage(oldTerrainType) ?? "");
     }
 
     globalScene

@@ -86,7 +86,7 @@ export class DamageAnimPhase extends PokemonPhase {
   }
 
   public override end(): void {
-    if (globalScene.currentBattle.battleSpec === BattleSpec.FINAL_BOSS) {
+    if (globalScene.currentBattle.isClassicFinalBoss) {
       globalScene.initFinalBossPhaseTwo(this.getPokemon());
     } else {
       super.end();
