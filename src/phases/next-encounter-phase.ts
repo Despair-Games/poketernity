@@ -1,6 +1,10 @@
 import { globalScene } from "#app/global-scene";
 import { EncounterPhase } from "./encounter-phase";
 
+/**
+ * Triggers the next encounter (no biome change)
+ * @extends EncounterPhase
+ */
 export class NextEncounterPhase extends EncounterPhase {
   protected override doEncounter(): void {
     const { arena, arenaEnemy, arenaNextEnemy, currentBattle, field, lastEnemyTrainer, lastMysteryEncounter, tweens } =

@@ -3,7 +3,10 @@ import { BattlerTagLapseType } from "#app/data/battler-tags";
 import { globalScene } from "#app/global-scene";
 import { PokemonPhase } from "./pokemon-phase";
 
-/** Lapses {@linkcode BattlerTagLapseType.AFTER_MOVE} and calls `Arena.setIgnoreAbilities(false)` */
+/**
+ * Lapses {@linkcode BattlerTagLapseType.AFTER_MOVE} and calls `Arena.setIgnoreAbilities(false)`
+ * @extends PokemonPhase
+ */
 export class MoveEndPhase extends PokemonPhase {
   constructor(battlerIndex: BattlerIndex) {
     super(battlerIndex);

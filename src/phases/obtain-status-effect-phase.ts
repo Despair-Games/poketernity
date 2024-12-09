@@ -1,13 +1,18 @@
-import { globalScene } from "#app/global-scene";
 import type { BattlerIndex } from "#app/battle";
-import { CommonBattleAnim, CommonAnim } from "#app/data/battle-anims";
+import { CommonAnim, CommonBattleAnim } from "#app/data/battle-anims";
 import { getStatusEffectObtainText, getStatusEffectOverlapText } from "#app/data/status-effect";
-import { StatusEffect } from "#app/enums/status-effect";
 import type Pokemon from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { StatusEffect } from "#enums/status-effect";
 import { PokemonPhase } from "./pokemon-phase";
 
+/**
+ * Applies a status effect to a pokemon
+ * @extends PokemonPhase
+ */
 export class ObtainStatusEffectPhase extends PokemonPhase {
+  // TODO: Should this be able to be undefined? Early return if so?
   private statusEffect?: StatusEffect;
   private turnsRemaining?: number;
   private sourceText?: string | null;
@@ -28,7 +33,7 @@ export class ObtainStatusEffectPhase extends PokemonPhase {
     this.sourcePokemon = sourcePokemon;
   }
 
-  override start() {
+  public override start(): void {
     const pokemon = this.getPokemon();
     if (pokemon && !pokemon.status) {
       if (pokemon.trySetStatus(this.statusEffect, false, this.sourcePokemon)) {
@@ -38,11 +43,7 @@ export class ObtainStatusEffectPhase extends PokemonPhase {
         pokemon.updateInfo(true);
         new CommonBattleAnim(CommonAnim.POISON + (this.statusEffect! - 1), pokemon).play(false, () => {
           globalScene.queueMessage(
-            getStatusEffectObtainText(
-              this.statusEffect,
-              getPokemonNameWithAffix(pokemon),
-              this.sourceText ?? undefined,
-            ),
+            getStatusEffectObtainText(this.statusEffect, getPokemonNameWithAffix(pokemon), this.sourceText),
           );
           this.end();
         });

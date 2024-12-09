@@ -3,6 +3,10 @@ import { applyAbAttrs, PostBiomeChangeAbAttr } from "#app/data/ability";
 import { getRandomWeatherType } from "#app/data/weather";
 import { NextEncounterPhase } from "./next-encounter-phase";
 
+/**
+ * Triggers the first encounter of a new biome
+ * @extends NextEncounterPhase
+ */
 export class NewBiomeEncounterPhase extends NextEncounterPhase {
   protected override doEncounter(): void {
     globalScene.playBgm(undefined, true);

@@ -3,7 +3,10 @@ import type Pokemon from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon";
 import { BattlePhase } from "./battle-phase";
 
-/** Applies {@linkcode MoveHeaderAttr}s */
+/**
+ * Applies {@linkcode MoveHeaderAttr}s
+ * @extends BattlePhase
+ */
 export class MoveHeaderPhase extends BattlePhase {
   public pokemon: Pokemon;
   public move: PokemonMove;

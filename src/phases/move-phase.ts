@@ -50,6 +50,23 @@ import { Moves } from "#enums/moves";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
 
+/**
+ * Resolves the following:
+ * - Checks if the move can be executed
+ * - Applies target redirection based on move effects and abilities
+ * - Chooses the move target for counterattack moves
+ * - Applies the effects of statuses that might stop a move from executing
+ * - Lapses `PRE_MOVE` and `MOVE` `BattlerTag`s
+ * - Checks if it's the first turn of a charging move and passes off to a {@linkcode MoveChargePhase} if so
+ * - Handles the delayed attack of Future Sight and Doom Desire
+ * - Handles PP usage
+ * - Handles move failure due to weather or terrain
+ * - Handles the Dancer ability
+ *
+ * If the move is successful then a {@linkcode MoveEffectPhase} is queued.
+ * Regardless of success, a {@linkcode MoveEndPhase} is queued.
+ * @extends BattlePhase
+ */
 export class MovePhase extends BattlePhase {
   protected _pokemon: Pokemon;
   protected _move: PokemonMove;
@@ -401,7 +418,7 @@ export class MovePhase extends BattlePhase {
   }
 
   /** Queues a {@linkcode MoveChargePhase} for this phase's invoked move. */
-  protected chargeMove() {
+  protected chargeMove(): void {
     const move = this.move.getMove();
     const targets = this.getActiveTargetPokemon();
 

@@ -5,6 +5,10 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 import i18next from "i18next";
 import { BattlePhase } from "./battle-phase";
 
+/**
+ * Grants the player money at the end of a wave
+ * @extends BattlePhase
+ */
 export class MoneyRewardPhase extends BattlePhase {
   private moneyMultiplier: number;
 
