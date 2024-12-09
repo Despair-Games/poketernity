@@ -498,7 +498,7 @@ export default class BattleScene extends SceneBase {
     this.launchBattle();
   }
 
-  update() {
+  override update() {
     this.ui?.update();
   }
 

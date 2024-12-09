@@ -138,7 +138,7 @@ export class TurnStartPhase extends FieldPhase {
     return moveOrder;
   }
 
-  start() {
+  override start() {
     super.start();
 
     const field = globalScene.getField();

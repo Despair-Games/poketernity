@@ -13,7 +13,7 @@ export class ModifierRewardPhase extends BattlePhase {
     this.modifierType = getModifierType(modifierTypeFunc);
   }
 
-  start() {
+  override start() {
     super.start();
 
     this.doReward().then(() => this.end());

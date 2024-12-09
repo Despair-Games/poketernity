@@ -9,7 +9,7 @@ export class GameOverModifierRewardPhase extends ModifierRewardPhase {
     super(modifierTypeFunc);
   }
 
-  doReward(): Promise<void> {
+  override doReward(): Promise<void> {
     return new Promise<void>((resolve) => {
       const newModifier = this.modifierType.newModifier();
       globalScene.addModifier(newModifier).then(() => {

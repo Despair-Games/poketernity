@@ -22,7 +22,7 @@ export class TurnEndPhase extends FieldPhase {
     super();
   }
 
-  start() {
+  override start() {
     super.start();
 
     globalScene.currentBattle.incrementTurn();

@@ -33,7 +33,7 @@ export class CommandPhase extends FieldPhase {
     this.fieldIndex = fieldIndex;
   }
 
-  start() {
+  override start() {
     super.start();
 
     globalScene.updateGameInfo();
@@ -432,7 +432,7 @@ export class CommandPhase extends FieldPhase {
     return globalScene.getPlayerField()[this.fieldIndex];
   }
 
-  end() {
+  override end() {
     globalScene.ui.setMode(Mode.MESSAGE).then(() => super.end());
   }
 }

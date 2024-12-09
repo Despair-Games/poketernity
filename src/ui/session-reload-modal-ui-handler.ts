@@ -28,7 +28,7 @@ export default class SessionReloadModalUiHandler extends ModalUiHandler {
     return [];
   }
 
-  setup(): void {
+  override setup(): void {
     super.setup();
 
     const label = addTextObject(
@@ -43,7 +43,7 @@ export default class SessionReloadModalUiHandler extends ModalUiHandler {
     this.modalContainer.add(label);
   }
 
-  show(_args: any[]): boolean {
+  override show(_args: any[]): boolean {
     const config: ModalConfig = {
       buttonActions: [],
     };

@@ -53,7 +53,7 @@ export default class SettingsKeyboardUiHandler extends AbstractControlSettingsUi
   /**
    * Setup UI elements.
    */
-  setup() {
+  override setup() {
     super.setup();
     // If no gamepads are detected, set up a default UI prompt in the settings container.
     this.layout["noKeyboard"] = new Map();
@@ -118,7 +118,7 @@ export default class SettingsKeyboardUiHandler extends AbstractControlSettingsUi
    * @param activeConfig - The active keyboard configuration.
    * @returns `true` if the layout was successfully applied, otherwise `false`.
    */
-  setLayout(activeConfig: InterfaceConfig): boolean {
+  override setLayout(activeConfig: InterfaceConfig): boolean {
     // Check if there is no active configuration (e.g., no gamepad connected).
     if (!activeConfig) {
       // Retrieve the layout for when no gamepads are connected.
