@@ -1,6 +1,6 @@
 import type { EnemyPokemon } from "../field/pokemon";
 import type Pokemon from "../field/pokemon";
-import { HitResult, MoveResult, PlayerPokemon, PokemonMove } from "../field/pokemon";
+import { MoveResult, PlayerPokemon, PokemonMove } from "../field/pokemon";
 import { Type } from "#enums/type";
 import type { Constructor } from "#app/utils";
 import { BooleanHolder, toDmgValue, randSeedItem, isNullOrUndefined, NumberHolder, randSeedInt } from "#app/utils";
@@ -72,6 +72,7 @@ import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import { StatusEffect } from "#enums/status-effect";
 import { WeatherType } from "#enums/weather-type";
 import { BattleType } from "#app/enums/battle-type";
+import { HitResult } from "#app/enums/hit-result";
 
 export class Ability implements Localizable {
   public id: Abilities;

@@ -17,7 +17,7 @@ import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";
 import { StatusEffect } from "#app/enums/status-effect";
 import type { EnemyPokemon } from "#app/field/pokemon";
 import type Pokemon from "#app/field/pokemon";
-import { HitResult, PlayerPokemon, PokemonMove } from "#app/field/pokemon";
+import { PlayerPokemon, PokemonMove } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { PokemonInstantReviveModifier } from "#app/modifier/modifier";
 import { SwitchType } from "#enums/switch-type";
@@ -31,6 +31,7 @@ import { ToggleDoublePositionPhase } from "./toggle-double-position-phase";
 import { VictoryPhase } from "./victory-phase";
 import { isNullOrUndefined } from "#app/utils";
 import { FRIENDSHIP_LOSS_FROM_FAINT } from "#app/data/balance/starters";
+import { HitResult } from "#app/enums/hit-result";
 
 export class FaintPhase extends PokemonPhase {
   /**

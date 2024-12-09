@@ -248,6 +248,7 @@ import {
 import { Nature } from "#enums/nature";
 import { StatusEffect } from "#enums/status-effect";
 import { doShinySparkleAnim } from "#app/field/anims";
+import { HitResult } from "#app/enums/hit-result";
 
 export enum LearnMoveSituation {
   MISC,
@@ -6297,20 +6298,6 @@ export enum MoveResult {
   FAIL,
   MISS,
   OTHER,
-}
-
-export enum HitResult {
-  EFFECTIVE = 1,
-  SUPER_EFFECTIVE,
-  NOT_VERY_EFFECTIVE,
-  ONE_HIT_KO,
-  NO_EFFECT,
-  STATUS,
-  HEAL,
-  FAIL,
-  MISS,
-  OTHER,
-  IMMUNE,
 }
 
 export type DamageResult =

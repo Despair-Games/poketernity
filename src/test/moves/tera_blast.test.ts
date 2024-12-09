@@ -3,7 +3,7 @@ import { Stat } from "#enums/stat";
 import { allMoves } from "#app/data/move";
 import { Type } from "#enums/type";
 import { Abilities } from "#app/enums/abilities";
-import { HitResult } from "#app/field/pokemon";
+import { HitResult } from "#enums/hit-result";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
 import GameManager from "#test/utils/gameManager";

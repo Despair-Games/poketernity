@@ -48,7 +48,7 @@ import { SpeciesFormChangePostMoveTrigger } from "#app/data/pokemon-forms";
 import { Type } from "#enums/type";
 import type { PokemonMove } from "#app/field/pokemon";
 import type Pokemon from "#app/field/pokemon";
-import { HitResult, MoveResult } from "#app/field/pokemon";
+import { MoveResult } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import {
   ContactHeldItemTransferChanceModifier,
@@ -62,6 +62,7 @@ import { BooleanHolder, executeIf, isNullOrUndefined, NumberHolder } from "#app/
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { Moves } from "#enums/moves";
 import i18next from "i18next";
+import { HitResult } from "#app/enums/hit-result";
 
 export class MoveEffectPhase extends PokemonPhase {
   public move: PokemonMove;
