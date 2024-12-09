@@ -84,4 +84,33 @@ describe("Moves - Revival Blessing", () => {
     const player = game.scene.getPlayerPokemon()!;
     expect(player.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
   });
+  
+  it("should revive a player pokemon and immediately send it back out if used in the same turn it fainted in doubles", async () => {
+    game.override
+      .battleType("double")
+      .enemyMoveset([Moves.SPLASH, Moves.FISSURE])
+      .enemyAbility(Abilities.NO_GUARD)
+      .enemyLevel(100);
+    await game.classicMode.startBattle([ Species.FEEBAS, Species.MILOTIC, Species.GYARADOS ]);
+
+    const feebas = game.scene.getPlayerField()[0];
+
+    game.move.select(Moves.SPLASH);
+    game.move.select(Moves.REVIVAL_BLESSING, 1);
+    await game.forceEnemyMove(Moves.FISSURE, BattlerIndex.PLAYER);
+    await game.forceEnemyMove(Moves.SPLASH);
+    await game.setTurnOrder([ BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2 ]);
+
+    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("MoveEndPhase");
+
+    expect(feebas.isFainted()).toBe(true);
+
+    game.doSelectPartyPokemon(0, "RevivalBlessingPhase");
+    await game.toNextTurn();
+
+    expect(feebas.isFainted()).toBe(false);
+    expect(feebas.hp).toBe(toDmgValue(0.5 * feebas.getMaxHp()));
+    expect(game.scene.getPlayerField()[0]).toBe(feebas);
+  });
 });

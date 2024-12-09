@@ -1,6 +1,5 @@
 import type { BattlerIndex } from "#app/battle";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { Moves } from "#enums/moves";
 import { EFFECTIVE_STATS, BATTLE_STATS } from "#enums/stat";
 import { PokemonMove } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -47,12 +46,8 @@ export class PokemonTransformPhase extends PokemonPhase {
     }
 
     user.summonData.moveset = target.getMoveset().map((m) => {
-      if (m) {
-        // If PP value is less than 5, do nothing. If greater, we need to reduce the value to 5.
-        return new PokemonMove(m.moveId, 0, 0, false, Math.min(m.getMove().pp, 5));
-      } else {
-        console.warn(`Transform: somehow iterating over a ${m} value when copying moveset!`);
-        return new PokemonMove(Moves.NONE);
+      // If PP value is less than 5, do nothing. If greater, we need to reduce the value to 5.
+      return new PokemonMove(m.moveId, 0, 0, false, Math.min(m.getMove().pp, 5));
       }
     });
     user.summonData.types = target.getTypes();
