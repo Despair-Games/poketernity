@@ -1,4 +1,4 @@
-import { BattlerIndex } from "#app/battle";
+import { BattlerIndex } from "#enums/battler-index";
 import { allAbilities } from "#app/data/ability";
 import { Abilities } from "#app/enums/abilities";
 import { WeatherType } from "#app/enums/weather-type";

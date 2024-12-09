@@ -1,4 +1,4 @@
-import { BattlerIndex } from "#app/battle";
+import { BattlerIndex } from "#enums/battler-index";
 import { ArenaTagSide } from "#app/data/arena-tag";
 import { allMoves } from "#app/data/move";
 import GameManager from "#app/test/utils/gameManager";

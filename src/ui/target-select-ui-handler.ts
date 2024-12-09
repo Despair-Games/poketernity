@@ -1,4 +1,3 @@
-import { BattlerIndex } from "../battle";
 import { Mode } from "./ui";
 import UiHandler from "./ui-handler";
 import { isNullOrUndefined, fixedInt } from "#app/utils";
@@ -9,6 +8,7 @@ import type Pokemon from "#app/field/pokemon";
 import type { ModifierBar } from "#app/modifier/modifier";
 import { SubstituteTag } from "#app/data/battler-tags";
 import { globalScene } from "#app/global-scene";
+import { BattlerIndex } from "#app/enums/battler-index";
 
 export type TargetSelectCallback = (targets: BattlerIndex[]) => void;
 

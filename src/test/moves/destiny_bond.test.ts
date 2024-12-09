@@ -8,7 +8,7 @@ import { Species } from "#enums/species";
 import GameManager from "#test/utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { BattlerIndex } from "#app/battle";
+import { BattlerIndex } from "#enums/battler-index";
 import { StatusEffect } from "#enums/status-effect";
 import { PokemonInstantReviveModifier } from "#app/modifier/modifier";
 

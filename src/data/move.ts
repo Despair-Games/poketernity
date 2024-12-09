@@ -76,7 +76,6 @@ import {
   PokemonMultiHitModifier,
   PreserveBerryModifier,
 } from "../modifier/modifier";
-import type { BattlerIndex } from "../battle";
 import { BattleType } from "#enums/battle-type";
 import { TerrainType } from "./terrain";
 import { ModifierPoolType } from "#app/modifier/modifier-type";
@@ -107,6 +106,7 @@ import { applyChallenges, ChallengeType } from "./challenge";
 import { SwitchType } from "#enums/switch-type";
 import { StatusEffect } from "enums/status-effect";
 import { globalScene } from "#app/global-scene";
+import type { BattlerIndex } from "#app/enums/battler-index";
 
 export enum MoveCategory {
   PHYSICAL,

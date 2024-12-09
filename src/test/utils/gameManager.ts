@@ -1,5 +1,5 @@
 import { updateUserInfo } from "#app/account";
-import { BattlerIndex } from "#app/battle";
+import { BattlerIndex } from "#enums/battler-index";
 import BattleScene from "#app/battle-scene";
 import { getMoveTargets } from "#app/data/move";
 import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";

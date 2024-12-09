@@ -3,8 +3,8 @@ import type { DamageResult } from "./pokemon";
 import type Pokemon from "./pokemon";
 import { HitResult } from "./pokemon";
 import { formatStat, fixedInt } from "#app/utils";
-import type { BattlerIndex } from "../battle";
 import { globalScene } from "#app/global-scene";
+import type { BattlerIndex } from "#app/enums/battler-index";
 
 type TextAndShadowArr = [string | null, string | null];
 

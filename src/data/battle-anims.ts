@@ -2,12 +2,12 @@ import { globalScene } from "#app/global-scene";
 import { AttackMove, BeakBlastHeaderAttr, DelayedAttackAttr, MoveFlags, SelfStatusMove, allMoves } from "./move";
 import type Pokemon from "../field/pokemon";
 import { getFrameMs, getEnumKeys, getEnumValues, animationFileName, isNullOrUndefined } from "#app/utils";
-import type { BattlerIndex } from "../battle";
 import type { Element } from "json-stable-stringify";
 import { Moves } from "#enums/moves";
 import { SubstituteTag } from "./battler-tags";
 import Phaser from "phaser";
 import { EncounterAnim } from "#enums/encounter-anims";
+import type { BattlerIndex } from "#app/enums/battler-index";
 
 export enum AnimFrameTarget {
   USER,

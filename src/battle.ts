@@ -27,6 +27,7 @@ import { Species } from "#enums/species";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { TrainerType } from "#enums/trainer-type";
 import { BattleType } from "./enums/battle-type";
+import { BattlerIndex } from "./enums/battler-index";
 import Trainer, { TrainerVariant } from "./field/trainer";
 import type { GameMode } from "./game-mode";
 import { MoneyMultiplierModifier, PokemonHeldItemModifier } from "./modifier/modifier";
@@ -36,14 +37,6 @@ export enum ClassicFixedBossWaves {
   // TODO: other fixed wave battles should be added here
   EVIL_BOSS_1 = 115,
   EVIL_BOSS_2 = 165,
-}
-
-export enum BattlerIndex {
-  ATTACKER = -1,
-  PLAYER,
-  PLAYER_2,
-  ENEMY,
-  ENEMY_2,
 }
 
 export interface TurnCommand {

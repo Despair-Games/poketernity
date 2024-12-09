@@ -1,8 +1,8 @@
 import { globalScene } from "#app/global-scene";
-import { type BattlerIndex } from "#app/battle";
 import { type DamageResult, HitResult } from "#app/field/pokemon";
 import { fixedInt } from "#app/utils";
 import { PokemonPhase } from "#app/phases/pokemon-phase";
+import type { BattlerIndex } from "#app/enums/battler-index";
 
 export class DamageAnimPhase extends PokemonPhase {
   private amount: number;

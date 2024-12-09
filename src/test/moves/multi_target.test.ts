@@ -1,4 +1,4 @@
-import { BattlerIndex } from "#app/battle";
+import { BattlerIndex } from "#enums/battler-index";
 import { Abilities } from "#app/enums/abilities";
 import { Species } from "#app/enums/species";
 import { toDmgValue } from "#app/utils";

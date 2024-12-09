@@ -1,4 +1,4 @@
-import { BattlerIndex } from "#app/battle";
+import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/move";
 import { Status } from "#app/data/status-effect";
 import { Challenges } from "#enums/challenges";

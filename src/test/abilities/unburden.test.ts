@@ -1,4 +1,4 @@
-import { BattlerIndex } from "#app/battle";
+import { BattlerIndex } from "#enums/battler-index";
 import { PostItemLostAbAttr } from "#app/data/ability";
 import { allMoves, StealHeldItemChanceAttr } from "#app/data/move";
 import type Pokemon from "#app/field/pokemon";

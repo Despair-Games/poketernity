@@ -1,4 +1,4 @@
-import { BattlerIndex } from "#app/battle";
+import { BattlerIndex } from "#enums/battler-index";
 import { PostAttackApplyBattlerTagAbAttr } from "#app/data/ability";
 import { FlinchAttr } from "#app/data/move";
 import { Abilities } from "#enums/abilities";
