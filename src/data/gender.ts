@@ -1,4 +1,4 @@
-import { Gender } from "#app/enums/gender";
+import { Gender } from "#enums/gender";
 
 /**
  * Gets the gender symbol for an associated gender

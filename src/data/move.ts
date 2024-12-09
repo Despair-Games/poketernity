@@ -29,7 +29,7 @@ import {
   getEnumValues,
   toReadableString,
 } from "#app/utils";
-import { WeatherType } from "#app/enums/weather-type";
+import { WeatherType } from "#enums/weather-type";
 import type { ArenaTrapTag } from "./arena-tag";
 import { ArenaTagSide, WeakenMoveTypeTag } from "./arena-tag";
 import {
@@ -78,7 +78,7 @@ import {
 } from "../modifier/modifier";
 import type { BattlerIndex } from "../battle";
 import { BattleType } from "../battle";
-import { TerrainType } from "#app/enums/terrain-type";
+import { TerrainType } from "#enums/terrain-type";
 import { ModifierPoolType } from "#app/modifier/modifier-type";
 import { Command } from "../ui/command-ui-handler";
 import i18next from "i18next";

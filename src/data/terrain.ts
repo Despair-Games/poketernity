@@ -5,11 +5,11 @@ import { ProtectAttr } from "./move";
 import type { BattlerIndex } from "#app/battle";
 import i18next from "i18next";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { TerrainType } from "#app/enums/terrain-type";
+import { TerrainType } from "#enums/terrain-type";
 
 /**
  * Class representing Terrain effects
- * @var terrainType - The TerrainType that is being represented
+ * @var terrainType - The {@linkcode TerrainType} that is being represented
  * @var turnsLeft - How many turns the terrain still has left
  */
 export class Terrain {
@@ -36,7 +36,7 @@ export class Terrain {
   /**
    * Function to return a multiplier for specific types
    * Electric, Grassy, and Psychic give their corresponding types 30% boost
-   * @param attackType - the Attacking Type
+   * @param attackType - the Attacking  {@linkcode Type}
    * @returns a multiplier (1.3 or 1)
    */
   getAttackTypeMultiplier(attackType: Type): number {
@@ -64,9 +64,9 @@ export class Terrain {
   /**
    * Checks if the weather should cancel the move
    * Psychic terrain cancels positive priority moves that target grounded Pokemon
-   * @param user - The attacker
-   * @param targets - The targets
-   * @param move - The move being used
+   * @param user - The attacker {@linkcode Pokemon}
+   * @param targets - The targets' {@linkcode BattlerIndex}
+   * @param move - The {@linkcode Move} being used
    * @returns true if the move is cancelled, false otherwise
    */
   isMoveTerrainCancelled(user: Pokemon, targets: BattlerIndex[], move: Move): boolean {
@@ -86,9 +86,9 @@ export class Terrain {
 }
 
 /**
- * Function to get the name for a TerrainType
- * @param terrainType - The terrainType
- * @returns the associated string
+ * Get the name for a given terrain type
+ * @param terrainType - The {@linkcode TerrainType}
+ * @returns the associated name, or an empty string if there is none
  */
 export function getTerrainName(terrainType: TerrainType): string {
   switch (terrainType) {
@@ -106,10 +106,10 @@ export function getTerrainName(terrainType: TerrainType): string {
 }
 
 /**
- * Function to get an RGB representation for a TerrainType
+ * Function to get an RGB representation for a {@linkcode TerrainType}
  * TODO: we should either be using hex or RGB, not a mix
- * @param terrainType - The terrainType
- * @returns the associated RGB list of 3 numbers
+ * @param terrainType - The {@linkcode TerrainType}
+ * @returns the associated RGB array of 3 numbers
  */
 export function getTerrainColor(terrainType: TerrainType): [number, number, number] {
   switch (terrainType) {
@@ -128,7 +128,7 @@ export function getTerrainColor(terrainType: TerrainType): [number, number, numb
 
 /**
  * Function to get the starting message for a terrain
- * @param terrainType - the terrainType starting
+ * @param terrainType - the {@linkcode TerrainType} starting
  * @returns the associated string
  */
 export function getTerrainStartMessage(terrainType: TerrainType): string | null {
@@ -149,7 +149,7 @@ export function getTerrainStartMessage(terrainType: TerrainType): string | null 
 
 /**
  * Function to get the ending message for a terrain
- * @param terrainType - the terrainType ending
+ * @param terrainType - the {@linkcode TerrainType} ending
  * @returns the associated string
  */
 export function getTerrainClearMessage(terrainType: TerrainType): string | null {
@@ -171,7 +171,7 @@ export function getTerrainClearMessage(terrainType: TerrainType): string | null 
 /**
  * Function to get the message for when a terrain blocks a move
  * @param pokemon - The Pokemon being attacked
- * @param terrainType - the Terrain type (misty terrain has a unique message)
+ * @param terrainType - the {@linkcode TerrainType} (misty terrain has a unique message)
  * @returns the associated string
  */
 export function getTerrainBlockMessage(pokemon: Pokemon, terrainType: TerrainType): string {

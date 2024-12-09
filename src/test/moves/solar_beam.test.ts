@@ -1,6 +1,6 @@
 import { allMoves } from "#app/data/move";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { WeatherType } from "#app/enums/weather-type";
+import { WeatherType } from "#enums/weather-type";
 import { MoveResult } from "#app/field/pokemon";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";

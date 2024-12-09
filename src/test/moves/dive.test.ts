@@ -7,7 +7,7 @@ import { Species } from "#enums/species";
 import GameManager from "#test/utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, it, expect } from "vitest";
-import { WeatherType } from "#app/enums/weather-type";
+import { WeatherType } from "#enums/weather-type";
 
 describe("Moves - Dive", () => {
   let phaserGame: Phaser.Game;

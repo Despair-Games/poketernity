@@ -20,7 +20,7 @@ import {
 } from "#app/data/move";
 import { SpeciesFormChangeManualTrigger } from "#app/data/pokemon-forms";
 import { getStatusEffectHealText } from "#app/data/status-effect";
-import { TerrainType } from "#app/enums/terrain-type";
+import { TerrainType } from "#enums/terrain-type";
 import { Type } from "#enums/type";
 import type Pokemon from "#app/field/pokemon";
 import { HitResult, MoveResult } from "#app/field/pokemon";
@@ -41,7 +41,7 @@ import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import { Species } from "#enums/species";
 import { EFFECTIVE_STATS, getStatKey, Stat, type BattleStat, type EffectiveStat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
-import { WeatherType } from "#app/enums/weather-type";
+import { WeatherType } from "#enums/weather-type";
 
 export enum BattlerTagLapseType {
   FAINT,

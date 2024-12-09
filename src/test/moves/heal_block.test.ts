@@ -6,7 +6,7 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
-import { WeatherType } from "#app/enums/weather-type";
+import { WeatherType } from "#enums/weather-type";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 

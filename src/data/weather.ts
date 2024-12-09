@@ -9,7 +9,7 @@ import { SuppressWeatherEffectAbAttr } from "./ability";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
 import type { Arena } from "#app/field/arena";
-import { WeatherType } from "#app/enums/weather-type";
+import { WeatherType } from "#enums/weather-type";
 
 /**
  * Class representing Weather effects

@@ -9,7 +9,7 @@ import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
-import { WeatherType } from "#app/enums/weather-type";
+import { WeatherType } from "#enums/weather-type";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 

@@ -12,7 +12,7 @@ import { allAbilities } from "#app/data/ability";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { GrowthRate, getGrowthRateColor } from "#app/data/exp";
 import { getGenderColor, getGenderShadowColor, getGenderSymbol } from "#app/data/gender";
-import { Gender } from "#app/enums/gender";
+import { Gender } from "#enums/gender";
 import { allMoves } from "#app/data/move";
 import { getNatureName } from "#app/data/nature";
 import { pokemonFormChanges } from "#app/data/pokemon-forms";

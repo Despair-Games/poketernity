@@ -12,7 +12,7 @@ import type { ArenaTag } from "#app/data/arena-tag";
 import { ArenaTagSide, ArenaTrapTag, getArenaTag } from "#app/data/arena-tag";
 import type { BattlerIndex } from "#app/battle";
 import { getTerrainClearMessage, getTerrainStartMessage, Terrain } from "#app/data/terrain";
-import { TerrainType } from "#app/enums/terrain-type";
+import { TerrainType } from "#enums/terrain-type";
 import {
   applyAbAttrs,
   applyPostTerrainChangeAbAttrs,
@@ -34,7 +34,7 @@ import { Abilities } from "#enums/abilities";
 import { SpeciesFormChangeRevertWeatherFormTrigger, SpeciesFormChangeWeatherTrigger } from "#app/data/pokemon-forms";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
-import { WeatherType } from "#app/enums/weather-type";
+import { WeatherType } from "#enums/weather-type";
 
 export class Arena {
   public biomeType: Biome;

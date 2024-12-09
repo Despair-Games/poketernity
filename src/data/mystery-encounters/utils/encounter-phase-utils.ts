@@ -35,7 +35,7 @@ import { Biome } from "#enums/biome";
 import type { TrainerType } from "#enums/trainer-type";
 import i18next from "i18next";
 import Trainer, { TrainerVariant } from "#app/field/trainer";
-import type { Gender } from "#app/enums/gender";
+import type { Gender } from "#enums/gender";
 import type { Nature } from "#enums/nature";
 import type { Moves } from "#enums/moves";
 import { initMoveAnim, loadMoveAnimAssets } from "#app/data/battle-anims";

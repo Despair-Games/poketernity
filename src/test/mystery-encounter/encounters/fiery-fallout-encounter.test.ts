@@ -5,7 +5,7 @@ import { Species } from "#enums/species";
 import GameManager from "#test/utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { FieryFalloutEncounter } from "#app/data/mystery-encounters/encounters/fiery-fallout-encounter";
-import { Gender } from "#app/enums/gender";
+import { Gender } from "#enums/gender";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
 import * as BattleAnims from "#app/data/battle-anims";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
