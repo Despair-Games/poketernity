@@ -91,6 +91,6 @@
     "#enums/*": "./enums/*",
     "#app": "./src/main.js",
     "#app/*": "./src/*",
-    "#test/*": "./src/test/*"
+    "#test/*": "./test/*"
   }
 }
