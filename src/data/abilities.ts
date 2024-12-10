@@ -52,7 +52,6 @@ import {
   PostTurnFormChangeAbAttr,
   PostTurnHurtIfSleepingAbAttr,
   PostTurnLootAbAttr,
-  PostTurnResetStatusAbAttr,
   PreventBerryUseAbAttr,
   PreventBypassSpeedChanceAbAttr,
   RedirectTypeMoveAbAttr,
@@ -71,6 +70,7 @@ import {
   UnswappableAbilityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { PostTurnResetStatusAbAttr } from "./abilities/post-turn-reset-status-ab-attr";
 import { PostTerrainChangeAddBattlerTagAttr } from "./abilities/post-terrain-change-add-battler-tag-attr";
 import { PostWeatherChangeAddBattlerTagAttr } from "./abilities/post-weather-change-add-battler-tag-ab-attr";
 import { PostWeatherChangeFormChangeAbAttr } from "./abilities/post-weather-change-form-change-ab-attr";

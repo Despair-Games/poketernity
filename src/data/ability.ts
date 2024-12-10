@@ -1,6 +1,5 @@
 import type { BattlerIndex } from "#app/battle";
 import { BattleType } from "#app/battle";
-import { getStatusEffectHealText } from "#app/data/status-effect";
 import type { Weather } from "#app/data/weather";
 import { EFFECTIVE_STATS, Stat, type BattleStat } from "#app/enums/stat";
 import { SwitchType } from "#app/enums/switch-type";
@@ -190,41 +189,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
     const weatherType = globalScene.arena.weather?.weatherType;
     return !!weatherType && weatherTypes.indexOf(weatherType) > -1;
   };
-}
-
-/**
- * After the turn ends, resets the status of either the ability holder or their ally
- * @param {boolean} allyTarget Whether to target ally, defaults to false (self-target)
- */
-export class PostTurnResetStatusAbAttr extends PostTurnAbAttr {
-  private allyTarget: boolean;
-  private target: Pokemon;
-
-  constructor(allyTarget: boolean = false) {
-    super(true);
-    this.allyTarget = allyTarget;
-  }
-
-  override applyPostTurn(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
-    if (this.allyTarget) {
-      this.target = pokemon.getAlly();
-    } else {
-      this.target = pokemon;
-    }
-    if (this.target?.status) {
-      if (!simulated) {
-        globalScene.queueMessage(
-          getStatusEffectHealText(this.target.status?.effect, getPokemonNameWithAffix(this.target)),
-        );
-        this.target.resetStatus(false);
-        this.target.updateInfo();
-      }
-
-      return true;
-    }
-
-    return false;
-  }
 }
 
 /**
