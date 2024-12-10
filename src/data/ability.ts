@@ -2,7 +2,7 @@ import type { BattlerIndex } from "#app/battle";
 import { BattleType } from "#app/battle";
 import { getStatusEffectDescriptor, getStatusEffectHealText } from "#app/data/status-effect";
 import type { Weather } from "#app/data/weather";
-import { BATTLE_STATS, EFFECTIVE_STATS, getStatKey, Stat, type BattleStat } from "#app/enums/stat";
+import { EFFECTIVE_STATS, getStatKey, Stat, type BattleStat } from "#app/enums/stat";
 import { SwitchType } from "#app/enums/switch-type";
 import type Pokemon from "#app/field/pokemon";
 import type { EnemyPokemon, PokemonMove } from "#app/field/pokemon";
@@ -184,36 +184,6 @@ export class Ability implements Localizable {
 }
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
-
-/** Attempt to copy the stat changes on an ally pokemon */
-export class PostSummonCopyAllyStatsAbAttr extends PostSummonAbAttr {
-  override applyPostSummon(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
-    if (!globalScene.currentBattle.double) {
-      return false;
-    }
-
-    const ally = pokemon.getAlly();
-    if (!ally || ally.getStatStages().every((s) => s === 0)) {
-      return false;
-    }
-
-    if (!simulated) {
-      for (const s of BATTLE_STATS) {
-        pokemon.setStatStage(s, ally.getStatStage(s));
-      }
-      pokemon.updateInfo();
-    }
-
-    return true;
-  }
-
-  override getTriggerMessage(pokemon: Pokemon, _abilityName: string, ..._args: any[]): string {
-    return i18next.t("abilityTriggers:costar", {
-      pokemonName: getPokemonNameWithAffix(pokemon),
-      allyName: getPokemonNameWithAffix(pokemon.getAlly()),
-    });
-  }
-}
 
 /**
  * Used by Imposter
