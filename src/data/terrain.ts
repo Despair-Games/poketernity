@@ -4,15 +4,14 @@ import { Type } from "#enums/type";
 import { ProtectAttr } from "./move";
 import type { BattlerIndex } from "#app/battle";
 import i18next from "i18next";
+import { getPokemonNameWithAffix } from "#app/messages";
+import { TerrainType } from "#enums/terrain-type";
 
-export enum TerrainType {
-  NONE,
-  MISTY,
-  ELECTRIC,
-  GRASSY,
-  PSYCHIC,
-}
-
+/**
+ * Class representing Terrain effects
+ * @var terrainType - The {@linkcode TerrainType} that is being represented
+ * @var turnsLeft - How many turns the terrain still has left
+ */
 export class Terrain {
   public terrainType: TerrainType;
   public turnsLeft: integer;
@@ -22,6 +21,10 @@ export class Terrain {
     this.turnsLeft = turnsLeft || 0;
   }
 
+  /**
+   * Decrements turnsLeft and checks if it is greater than 0
+   * @returns true if turnsLeft is greater than 0
+   */
   lapse(): boolean {
     if (this.turnsLeft) {
       return !!--this.turnsLeft;
@@ -30,6 +33,12 @@ export class Terrain {
     return true;
   }
 
+  /**
+   * Function to return a multiplier for specific types
+   * Electric, Grassy, and Psychic give their corresponding types 30% boost
+   * @param attackType - the Attacking  {@linkcode Type}
+   * @returns a multiplier (1.3 or 1)
+   */
   getAttackTypeMultiplier(attackType: Type): number {
     switch (this.terrainType) {
       case TerrainType.ELECTRIC:
@@ -52,6 +61,14 @@ export class Terrain {
     return 1;
   }
 
+  /**
+   * Checks if the weather should cancel the move
+   * Psychic terrain cancels positive priority moves that target grounded Pokemon
+   * @param user - The attacker {@linkcode Pokemon}
+   * @param targets - The targets' {@linkcode BattlerIndex}
+   * @param move - The {@linkcode Move} being used
+   * @returns true if the move is cancelled, false otherwise
+   */
   isMoveTerrainCancelled(user: Pokemon, targets: BattlerIndex[], move: Move): boolean {
     switch (this.terrainType) {
       case TerrainType.PSYCHIC:
@@ -68,6 +85,11 @@ export class Terrain {
   }
 }
 
+/**
+ * Get the name for a given terrain type
+ * @param terrainType - The {@linkcode TerrainType}
+ * @returns the associated name, or an empty string if there is none
+ */
 export function getTerrainName(terrainType: TerrainType): string {
   switch (terrainType) {
     case TerrainType.MISTY:
@@ -83,17 +105,81 @@ export function getTerrainName(terrainType: TerrainType): string {
   return "";
 }
 
-export function getTerrainColor(terrainType: TerrainType): [integer, integer, integer] {
+/**
+ * Function to get an RGB representation for a {@linkcode TerrainType}
+ * TODO: we should either be using hex or RGB, not a mix
+ * @param terrainType - The {@linkcode TerrainType}
+ * @returns the associated RGB array of 3 numbers
+ */
+export function getTerrainColor(terrainType: TerrainType): [number, number, number] {
   switch (terrainType) {
     case TerrainType.MISTY:
-      return [232, 136, 200];
+      return [232, 136, 200]; // Pink
     case TerrainType.ELECTRIC:
-      return [248, 248, 120];
+      return [248, 248, 120]; // Yellow
     case TerrainType.GRASSY:
-      return [120, 200, 80];
+      return [120, 200, 80]; // Green
     case TerrainType.PSYCHIC:
-      return [160, 64, 160];
+      return [160, 64, 160]; // Purple
   }
 
   return [0, 0, 0];
+}
+
+/**
+ * Function to get the starting message for a terrain
+ * @param terrainType - the {@linkcode TerrainType} starting
+ * @returns the associated string
+ */
+export function getTerrainStartMessage(terrainType: TerrainType): string | null {
+  switch (terrainType) {
+    case TerrainType.MISTY:
+      return i18next.t("terrain:mistyStartMessage");
+    case TerrainType.ELECTRIC:
+      return i18next.t("terrain:electricStartMessage");
+    case TerrainType.GRASSY:
+      return i18next.t("terrain:grassyStartMessage");
+    case TerrainType.PSYCHIC:
+      return i18next.t("terrain:psychicStartMessage");
+    default:
+      console.warn("getTerrainStartMessage not defined. Using default null");
+      return null;
+  }
+}
+
+/**
+ * Function to get the ending message for a terrain
+ * @param terrainType - the {@linkcode TerrainType} ending
+ * @returns the associated string
+ */
+export function getTerrainClearMessage(terrainType: TerrainType): string | null {
+  switch (terrainType) {
+    case TerrainType.MISTY:
+      return i18next.t("terrain:mistyClearMessage");
+    case TerrainType.ELECTRIC:
+      return i18next.t("terrain:electricClearMessage");
+    case TerrainType.GRASSY:
+      return i18next.t("terrain:grassyClearMessage");
+    case TerrainType.PSYCHIC:
+      return i18next.t("terrain:psychicClearMessage");
+    default:
+      console.warn("getTerrainClearMessage not defined. Using default null");
+      return null;
+  }
+}
+
+/**
+ * Function to get the message for when a terrain blocks a move
+ * @param pokemon - The Pokemon being attacked
+ * @param terrainType - the {@linkcode TerrainType} (misty terrain has a unique message)
+ * @returns the associated string
+ */
+export function getTerrainBlockMessage(pokemon: Pokemon, terrainType: TerrainType): string {
+  if (terrainType === TerrainType.MISTY) {
+    return i18next.t("terrain:mistyBlockMessage", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) });
+  }
+  return i18next.t("terrain:defaultBlockMessage", {
+    pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
+    terrainName: getTerrainName(terrainType),
+  });
 }

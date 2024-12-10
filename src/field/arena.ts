@@ -4,20 +4,15 @@ import { biomePokemonPools, BiomePoolTier, biomeTrainerPools } from "#app/data/b
 import { type Constructor, randSeedInt } from "#app/utils";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
-import {
-  getTerrainClearMessage,
-  getTerrainStartMessage,
-  getWeatherClearMessage,
-  getWeatherStartMessage,
-  Weather,
-} from "#app/data/weather";
+import { getWeatherClearMessage, getWeatherStartMessage, Weather } from "#app/data/weather";
 import { CommonAnim } from "#app/data/battle-anims";
 import type { Type } from "#enums/type";
 import type Move from "#app/data/move";
 import type { ArenaTag } from "#app/data/arena-tag";
 import { ArenaTagSide, ArenaTrapTag, getArenaTag } from "#app/data/arena-tag";
 import type { BattlerIndex } from "#app/battle";
-import { Terrain, TerrainType } from "#app/data/terrain";
+import { getTerrainClearMessage, getTerrainStartMessage, Terrain } from "#app/data/terrain";
+import { TerrainType } from "#enums/terrain-type";
 import {
   applyAbAttrs,
   applyPostTerrainChangeAbAttrs,

@@ -455,7 +455,7 @@ async function doNewTeamPostProcess(transformations: PokemonTransformation[]) {
     // Copy old items to new pokemon
     for (const item of transformation.heldItems) {
       item.pokemonId = newPokemon.id;
-      await globalScene.addModifier(item, false, false, false, true);
+      globalScene.addModifier(item, false, false, false, true);
     }
     // Any pokemon that is below 570 BST gets +20 permanent BST to 3 stats
     if (shouldGetOldGateau(newPokemon)) {
@@ -466,7 +466,7 @@ async function doNewTeamPostProcess(transformations: PokemonTransformation[]) {
         ?.withIdFromFunc(modifierTypes.MYSTERY_ENCOUNTER_OLD_GATEAU);
       const modifier = modType?.newModifier(newPokemon);
       if (modifier) {
-        await globalScene.addModifier(modifier, false, false, false, true);
+        globalScene.addModifier(modifier, false, false, false, true);
       }
     }
 

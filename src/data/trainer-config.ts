@@ -21,7 +21,7 @@ import { Moves } from "#enums/moves";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
-import { Gender } from "#app/data/gender";
+import { Gender } from "#enums/gender";
 
 /** Minimum BST for Pokemon generated onto the Elite Four's teams */
 const ELITE_FOUR_MINIMUM_BST = 460;
