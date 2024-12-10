@@ -185,43 +185,6 @@ type PokemonAttackCondition = (user: Pokemon | null, target: Pokemon | null, mov
 export type PokemonDefendCondition = (target: Pokemon, user: Pokemon, move: Move) => boolean;
 type PokemonStatStageChangeCondition = (target: Pokemon, statsChanged: BattleStat[], stages: number) => boolean;
 
-export class PostDefendAbilitySwapAbAttr extends PostDefendAbAttr {
-  constructor() {
-    super();
-  }
-
-  override applyPostDefend(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
-    _hitResult: HitResult,
-    _args: any[],
-  ): boolean {
-    if (
-      move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
-      && !attacker.getAbility().hasAttr(UnswappableAbilityAbAttr)
-      && !move.hitsSubstitute(attacker, pokemon)
-    ) {
-      if (!simulated) {
-        const tempAbilityId = attacker.getAbility().id;
-        attacker.summonData.ability = pokemon.getAbility().id;
-        pokemon.summonData.ability = tempAbilityId;
-      }
-      return true;
-    }
-
-    return false;
-  }
-
-  override getTriggerMessage(pokemon: Pokemon, _abilityName: string, ..._args: any[]): string {
-    return i18next.t("abilityTriggers:postDefendAbilitySwap", {
-      pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-    });
-  }
-}
-
 export class PostDefendAbilityGiveAbAttr extends PostDefendAbAttr {
   private ability: Abilities;
 
