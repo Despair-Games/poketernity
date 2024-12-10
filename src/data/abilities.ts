@@ -14,13 +14,8 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { MovePhase } from "#app/phases/move-phase";
 import { isNullOrUndefined, NumberHolder, randSeedInt, toDmgValue } from "#app/utils";
 import i18next from "i18next";
-import {
-  Ability,
-  allAbilities,
-  PostDamageForceSwitchAbAttr,
-  PreventBypassSpeedChanceAbAttr,
-  TerrainEventTypeChangeAbAttr,
-} from "./ability";
+import { Ability, allAbilities, PostDamageForceSwitchAbAttr, TerrainEventTypeChangeAbAttr } from "./ability";
+import { PreventBypassSpeedChanceAbAttr } from "./abilities/prevent-bypass-speed-chance-ab-attr";
 import { FormBlockDamageAbAttr } from "./abilities/form-block-damage-ab-attr";
 import { PostSummonStatStageChangeOnArenaAbAttr } from "./abilities/post-summon-stat-stage-change-on-arena-ab-attr";
 import { MoneyAbAttr } from "./abilities/money-ab-attr";

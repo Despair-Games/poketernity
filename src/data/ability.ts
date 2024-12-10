@@ -26,11 +26,10 @@ import type { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
 import { getPokemonNameWithAffix } from "../messages";
 import { HitHealModifier } from "../modifier/modifier";
-import { Command } from "../ui/command-ui-handler";
 import type { BattlerTag } from "./battler-tags";
 import type Move from "./move";
 import { allMoves } from "./move";
-import { AbAttr } from "./abilities/ab-attr";
+import type { AbAttr } from "./abilities/ab-attr";
 import type { PostBattleInitAbAttr } from "./abilities/post-battle-init-ab-attr";
 import { PostDamageAbAttr } from "./abilities/post-damage-ab-attr";
 import { PostSummonAbAttr } from "./abilities/post-summon-ab-attr";
@@ -181,47 +180,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
     const weatherType = globalScene.arena.weather?.weatherType;
     return !!weatherType && weatherTypes.indexOf(weatherType) > -1;
   };
-}
-
-/**
- * This attribute checks if a Pokemon's move meets a provided condition to determine if the Pokemon can use Quick Claw
- * It was created because Pokemon with the ability Mycelium Might cannot access Quick Claw's benefits when using status moves.
- */
-export class PreventBypassSpeedChanceAbAttr extends AbAttr {
-  private condition: (pokemon: Pokemon, move: Move) => boolean;
-
-  /**
-   * @param {function} condition - checks if a move meets certain conditions
-   */
-  constructor(condition: (pokemon: Pokemon, move: Move) => boolean) {
-    super(true);
-    this.condition = condition;
-  }
-
-  /**
-   * @argument {boolean} bypassSpeed - determines if a Pokemon is able to bypass speed at the moment
-   * @argument {boolean} canCheckHeldItems - determines if a Pokemon has access to Quick Claw's effects or not
-   */
-  override apply(
-    pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    _cancelled: BooleanHolder,
-    args: any[],
-  ): boolean {
-    const bypassSpeed = args[0] as BooleanHolder;
-    const canCheckHeldItems = args[1] as BooleanHolder;
-
-    const turnCommand = globalScene.currentBattle.turnCommands[pokemon.getBattlerIndex()];
-    const isCommandFight = turnCommand?.command === Command.FIGHT;
-    const move = turnCommand?.move?.move ? allMoves[turnCommand.move.move] : null;
-    if (this.condition(pokemon, move!) && isCommandFight) {
-      bypassSpeed.value = false;
-      canCheckHeldItems.value = false;
-      return false;
-    }
-    return true;
-  }
 }
 
 /**

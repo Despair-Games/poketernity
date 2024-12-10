@@ -1,4 +1,5 @@
-import { applyAbAttrs, PreventBypassSpeedChanceAbAttr } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/ability";
+import { PreventBypassSpeedChanceAbAttr } from "#app/data/abilities/prevent-bypass-speed-chance-ab-attr";
 import { allMoves, MoveHeaderAttr } from "#app/data/move";
 import { Abilities } from "#app/enums/abilities";
 import { Stat } from "#app/enums/stat";
