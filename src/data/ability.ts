@@ -185,45 +185,6 @@ type PokemonAttackCondition = (user: Pokemon | null, target: Pokemon | null, mov
 export type PokemonDefendCondition = (target: Pokemon, user: Pokemon, move: Move) => boolean;
 type PokemonStatStageChangeCondition = (target: Pokemon, statsChanged: BattleStat[], stages: number) => boolean;
 
-export class PostDefendMoveDisableAbAttr extends PostDefendAbAttr {
-  private chance: integer;
-  private attacker: Pokemon;
-  private move: Move;
-
-  constructor(chance: integer) {
-    super();
-
-    this.chance = chance;
-  }
-
-  override applyPostDefend(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
-    _hitResult: HitResult,
-    _args: any[],
-  ): boolean {
-    if (attacker.getTag(BattlerTagType.DISABLED) === null && !move.hitsSubstitute(attacker, pokemon)) {
-      if (
-        move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
-        && (this.chance === -1 || pokemon.randSeedInt(100) < this.chance)
-      ) {
-        if (simulated) {
-          return true;
-        }
-
-        this.attacker = attacker;
-        this.move = move;
-        this.attacker.addTag(BattlerTagType.DISABLED, 4, 0, pokemon.id);
-        return true;
-      }
-    }
-    return false;
-  }
-}
-
 export class PostStatStageChangeStatStageChangeAbAttr extends PostStatStageChangeAbAttr {
   private condition: PokemonStatStageChangeCondition;
   private statsToChange: BattleStat[];

@@ -78,7 +78,6 @@ import {
   PostBiomeChangeWeatherChangeAbAttr,
   PostDamageForceSwitchAbAttr,
   PostDancingMoveAbAttr,
-  PostDefendMoveDisableAbAttr,
   PostDefendStealHeldItemAbAttr,
   PostFaintClearWeatherAbAttr,
   PostFaintContactDamageAbAttr,
@@ -202,6 +201,7 @@ import { PostDefendContactDamageAbAttr } from "./abilities/post-defend-contact-d
 import { PostDefendPerishSongAbAttr } from "./abilities/post-defend-perish-song-ab-attr";
 import { PostDefendAbilitySwapAbAttr } from "./abilities/post-defend-ability-swap-ab-attr";
 import { PostDefendAbilityGiveAbAttr } from "./abilities/post-defend-ability-give-ab-attr";
+import { PostDefendMoveDisableAbAttr } from "./abilities/post-defend-move-disable-ab-attr";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {
