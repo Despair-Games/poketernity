@@ -19,7 +19,6 @@ import {
   allAbilities,
   AlwaysHitAbAttr,
   BypassSpeedChanceAbAttr,
-  FlinchStatStageChangeAbAttr,
   ForceSwitchOutImmunityAbAttr,
   FormBlockDamageAbAttr,
   IgnoreProtectOnContactAbAttr,
@@ -42,6 +41,7 @@ import {
   UnswappableAbilityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { FlinchStatStageChangeAbAttr } from "./abilities/flinch-stat-stage-change-ab-attr";
 import { ReduceStatusEffectDurationAbAttr } from "./abilities/reduce-status-effect-duration-ab-attr";
 import { BlockRedirectAbAttr } from "./abilities/block-redirect-ab-attr";
 import { RedirectTypeMoveAbAttr } from "./abilities/redirect-type-move-ab-attr";

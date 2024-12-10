@@ -12,7 +12,6 @@ import { BattleEndPhase } from "#app/phases/battle-end-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { NewBattlePhase } from "#app/phases/new-battle-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
-import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { SwitchPhase } from "#app/phases/switch-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import type { Constructor, NumberHolder } from "#app/utils";
@@ -67,7 +66,6 @@ import type { PostItemLostAbAttr } from "./abilities/post-item-lost-ab-attr";
 import type { CheckTrappedAbAttr } from "./abilities/check-trapped-ab-attr";
 import { PostBattleAbAttr } from "./abilities/post-battle-ab-attr";
 import type { PostFaintAbAttr } from "./abilities/post-faint-ab-attr";
-import { FlinchEffectAbAttr } from "./abilities/flinch-effect-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -188,31 +186,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
     const weatherType = globalScene.arena.weather?.weatherType;
     return !!weatherType && weatherTypes.indexOf(weatherType) > -1;
   };
-}
-
-export class FlinchStatStageChangeAbAttr extends FlinchEffectAbAttr {
-  private stats: BattleStat[];
-  private stages: number;
-
-  constructor(stats: BattleStat[], stages: number) {
-    super();
-
-    this.stats = Array.isArray(stats) ? stats : [stats];
-    this.stages = stages;
-  }
-
-  override apply(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    _cancelled: BooleanHolder,
-    _args: any[],
-  ): boolean {
-    if (!simulated) {
-      globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, this.stats, this.stages));
-    }
-    return true;
-  }
 }
 
 export class IncreasePpAbAttr extends AbAttr {}
