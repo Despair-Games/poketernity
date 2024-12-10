@@ -81,7 +81,6 @@ import {
   PostDancingMoveAbAttr,
   PostDefendAbilityGiveAbAttr,
   PostDefendAbilitySwapAbAttr,
-  PostDefendApplyArenaTrapTagAbAttr,
   PostDefendApplyBattlerTagAbAttr,
   PostDefendContactApplyStatusEffectAbAttr,
   PostDefendContactApplyTagChanceAbAttr,
@@ -161,6 +160,7 @@ import {
   VariableMovePowerBoostAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { PostDefendApplyArenaTrapTagAbAttr } from "./abilities/post-defend-apply-arena-trap-tag-ab-attr";
 import { PostDefendHpGatedStatStageChangeAbAttr } from "./abilities/post-defend-hp-gated-stat-tage-change-ab-attr";
 import { PostDefendStatStageChangeAbAttr } from "./abilities/post-defend-stat-stage-change-ab-attr";
 import { GroundedTag } from "./battler-tags";

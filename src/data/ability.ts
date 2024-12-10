@@ -36,7 +36,6 @@ import i18next from "i18next";
 import { getPokemonNameWithAffix } from "../messages";
 import { BerryModifier, HitHealModifier, PokemonHeldItemModifier } from "../modifier/modifier";
 import { Command } from "../ui/command-ui-handler";
-import type { ArenaTrapTag } from "./arena-tag";
 import { ArenaTagSide } from "./arena-tag";
 import type { BattlerTag } from "./battler-tags";
 import { BattlerTagLapseType } from "./battler-tags";
@@ -185,45 +184,6 @@ type AbAttrCondition = (pokemon: Pokemon) => boolean;
 type PokemonAttackCondition = (user: Pokemon | null, target: Pokemon | null, move: Move) => boolean;
 export type PokemonDefendCondition = (target: Pokemon, user: Pokemon, move: Move) => boolean;
 type PokemonStatStageChangeCondition = (target: Pokemon, statsChanged: BattleStat[], stages: number) => boolean;
-
-export class PostDefendApplyArenaTrapTagAbAttr extends PostDefendAbAttr {
-  private condition: PokemonDefendCondition;
-  private tagType: ArenaTagType;
-
-  constructor(condition: PokemonDefendCondition, tagType: ArenaTagType) {
-    super(true);
-
-    this.condition = condition;
-    this.tagType = tagType;
-  }
-
-  override applyPostDefend(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
-    _hitResult: HitResult,
-    _args: any[],
-  ): boolean {
-    if (this.condition(pokemon, attacker, move) && !move.hitsSubstitute(attacker, pokemon)) {
-      const tag = globalScene.arena.getTag(this.tagType) as ArenaTrapTag;
-      if (!globalScene.arena.getTag(this.tagType) || tag.layers < tag.maxLayers) {
-        if (!simulated) {
-          globalScene.arena.addTag(
-            this.tagType,
-            0,
-            undefined,
-            pokemon.id,
-            pokemon.isPlayer() ? ArenaTagSide.ENEMY : ArenaTagSide.PLAYER,
-          );
-        }
-        return true;
-      }
-    }
-    return false;
-  }
-}
 
 export class PostDefendApplyBattlerTagAbAttr extends PostDefendAbAttr {
   private condition: PokemonDefendCondition;
