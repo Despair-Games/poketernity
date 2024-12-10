@@ -1,11 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import type { BattlerIndex } from "#app/battle";
-import {
-  applyAbAttrs,
-  applyPostStatStageChangeAbAttrs,
-  applyPreStatStageChangeAbAttrs,
-  StatStageChangeCopyAbAttr,
-} from "#app/data/ability";
+import { applyAbAttrs, applyPostStatStageChangeAbAttrs, applyPreStatStageChangeAbAttrs } from "#app/data/ability";
+import { StatStageChangeCopyAbAttr } from "#app/data/abilities/stat-stage-change-copy-ab-attr";
 import { StatStageChangeMultiplierAbAttr } from "#app/data/abilities/stat-stage-change-multiplier-ab-attr";
 import { ArenaTagSide, MistTag } from "#app/data/arena-tag";
 import type Pokemon from "#app/field/pokemon";

@@ -50,7 +50,6 @@ import {
   ReduceBurnDamageAbAttr,
   ReduceStatusEffectDurationAbAttr,
   RunSuccessAbAttr,
-  StatStageChangeCopyAbAttr,
   SuppressFieldAbilitiesAbAttr,
   SyncEncounterNatureAbAttr,
   TerrainEventTypeChangeAbAttr,
@@ -59,6 +58,7 @@ import {
   UnswappableAbilityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { StatStageChangeCopyAbAttr } from "./abilities/stat-stage-change-copy-ab-attr";
 import { StatStageChangeMultiplierAbAttr } from "./abilities/stat-stage-change-multiplier-ab-attr";
 import { PostItemLostApplyBattlerTagAbAttr } from "./abilities/post-item-lost-apply-battler-tag-ab-attr";
 import { PostDancingMoveAbAttr } from "./abilities/post-dancing-move-ab-attr";

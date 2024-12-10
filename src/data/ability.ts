@@ -189,31 +189,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
   };
 }
 
-export class StatStageChangeCopyAbAttr extends AbAttr {
-  override apply(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    _cancelled: BooleanHolder,
-    args: any[],
-  ): boolean {
-    if (!simulated) {
-      globalScene.unshiftPhase(
-        new StatStageChangePhase(
-          pokemon.getBattlerIndex(),
-          true,
-          args[0] as BattleStat[],
-          args[1] as number,
-          true,
-          false,
-          false,
-        ),
-      );
-    }
-    return true;
-  }
-}
-
 export class BypassBurnDamageReductionAbAttr extends AbAttr {
   constructor() {
     super(false);
