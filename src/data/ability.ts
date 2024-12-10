@@ -187,29 +187,6 @@ type PokemonStatStageChangeCondition = (target: Pokemon, statsChanged: BattleSta
 
 type PreDefendAbAttrCondition = (pokemon: Pokemon, attacker: Pokemon, move: Move) => boolean;
 
-export class PreDefendFullHpEndureAbAttr extends PreDefendAbAttr {
-  override applyPreDefend(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    _attacker: Pokemon,
-    _move: Move,
-    _cancelled: BooleanHolder,
-    args: any[],
-  ): boolean {
-    if (
-      pokemon.isFullHp()
-      && pokemon.getMaxHp() > 1 //Checks if pokemon has wonder_guard (which forces 1hp)
-      && (args[0] as NumberHolder).value >= pokemon.hp
-    ) {
-      //Damage >= hp
-      return simulated || pokemon.addTag(BattlerTagType.STURDY, 1);
-    }
-
-    return false;
-  }
-}
-
 export class StabBoostAbAttr extends AbAttr {
   override apply(
     _pokemon: Pokemon,

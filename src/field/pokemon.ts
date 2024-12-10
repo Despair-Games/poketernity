@@ -148,7 +148,6 @@ import {
   FieldPriorityMoveImmunityAbAttr,
   IgnoreOpponentStatStagesAbAttr,
   MoveImmunityAbAttr,
-  PreDefendFullHpEndureAbAttr,
   ReceivedMoveDamageMultiplierAbAttr,
   StabBoostAbAttr,
   StatusEffectImmunityAbAttr,
@@ -248,6 +247,7 @@ import { doShinySparkleAnim } from "#app/field/anims";
 import { IgnoreTypeStatusEffectImmunityAbAttr } from "#app/data/abilities/ignore-type-status-effect-immunity-ab-attr";
 import type { AbAttr } from "#app/data/abilities/ab-attr";
 import { PostDamageAbAttr } from "#app/data/abilities/post-damage-ab-attr";
+import { PreDefendFullHpEndureAbAttr } from "#app/data/abilities/pre-defend-full-hp-endure-ab-attr";
 
 export enum LearnMoveSituation {
   MISC,
