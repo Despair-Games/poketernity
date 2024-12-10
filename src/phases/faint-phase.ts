@@ -1,12 +1,8 @@
 import type { BattlerIndex } from "#app/battle";
 import { BattleType } from "#app/battle";
 import { globalScene } from "#app/global-scene";
-import {
-  applyPostFaintAbAttrs,
-  applyPostKnockOutAbAttrs,
-  applyPostVictoryAbAttrs,
-  PostFaintAbAttr,
-} from "#app/data/ability";
+import { applyPostFaintAbAttrs, applyPostKnockOutAbAttrs, applyPostVictoryAbAttrs } from "#app/data/ability";
+import { PostFaintAbAttr } from "#app/data/abilities/post-faint-ab-attr";
 import { PostKnockOutAbAttr } from "#app/data/abilities/post-knock-out-ab-attr";
 import { PostVictoryAbAttr } from "#app/data/abilities/post-victory-ab-attr";
 import type { DestinyBondTag, GrudgeTag } from "#app/data/battler-tags";

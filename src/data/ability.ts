@@ -68,6 +68,7 @@ import type { PostMoveUsedAbAttr } from "./abilities/post-move-used-ab-attr";
 import type { PostItemLostAbAttr } from "./abilities/post-item-lost-ab-attr";
 import type { CheckTrappedAbAttr } from "./abilities/check-trapped-ab-attr";
 import { PostBattleAbAttr } from "./abilities/post-battle-ab-attr";
+import { PostFaintAbAttr } from "./abilities/post-faint-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -188,20 +189,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
     const weatherType = globalScene.arena.weather?.weatherType;
     return !!weatherType && weatherTypes.indexOf(weatherType) > -1;
   };
-}
-
-export class PostFaintAbAttr extends AbAttr {
-  applyPostFaint(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    _attacker?: Pokemon,
-    _move?: Move,
-    _hitResult?: HitResult,
-    ..._args: any[]
-  ): boolean {
-    return false;
-  }
 }
 
 /**
