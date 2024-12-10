@@ -44,7 +44,6 @@ import {
   FieldMoveTypePowerBoostAbAttr,
   FieldMultiplyStatAbAttr,
   FieldPreventExplosiveMovesAbAttr,
-  FieldPriorityMoveImmunityAbAttr,
   FlinchStatStageChangeAbAttr,
   ForceSwitchOutImmunityAbAttr,
   ForewarnAbAttr,
@@ -202,6 +201,7 @@ import { TypeImmunityAddBattlerTagAbAttr } from "./abilities/type-immunity-add-b
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import { NonSuperEffectiveImmunityAbAttr } from "./abilities/non-super-effective-immunity-ab-attr";
 import { FullHpResistTypeAbAttr } from "./abilities/full-hp-resist-type-ab-attr";
+import { FieldPriorityMoveImmunityAbAttr } from "./abilities/field-priority-move-immunity-ab-attr";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {

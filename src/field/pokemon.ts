@@ -145,7 +145,6 @@ import {
   BlockCritAbAttr,
   BonusCritAbAttr,
   BypassBurnDamageReductionAbAttr,
-  FieldPriorityMoveImmunityAbAttr,
   IgnoreOpponentStatStagesAbAttr,
   MoveImmunityAbAttr,
   StatusEffectImmunityAbAttr,
@@ -248,6 +247,7 @@ import { ReceivedMoveDamageMultiplierAbAttr } from "#app/data/abilities/received
 import { AlliedFieldDamageReductionAbAttr } from "#app/data/abilities/allied-field-damage-reduction-ab-attr";
 import { TypeImmunityAbAttr } from "#app/data/abilities/type-immunity-ab-attr";
 import { FullHpResistTypeAbAttr } from "#app/data/abilities/full-hp-resist-type-ab-attr";
+import { FieldPriorityMoveImmunityAbAttr } from "#app/data/abilities/field-priority-move-immunity-ab-attr";
 
 export enum LearnMoveSituation {
   MISC,
