@@ -72,6 +72,7 @@ import type { FieldMultiplyStatAbAttr } from "./abilities/field-multiply-stat-ab
 import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition";
 import type { PokemonDefendCondition } from "../@types/PokemonDefendCondition";
 import { FieldMovePowerBoostAbAttr } from "./abilities/field-move-power-boost-ab-attr";
+import { PreAttackFieldMoveTypePowerBoostAbAttr } from "./abilities/pre-attack-field-move-type-power-boost-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -180,20 +181,6 @@ export class Ability implements Localizable {
 }
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
-
-/**
- * Boosts the power of a specific type of move.
- * @extends FieldMovePowerBoostAbAttr
- */
-export class PreAttackFieldMoveTypePowerBoostAbAttr extends FieldMovePowerBoostAbAttr {
-  /**
-   * @param boostedType - The type of move that will receive the power boost.
-   * @param powerMultiplier - The multiplier to apply to the move's power, defaults to 1.5 if not provided.
-   */
-  constructor(boostedType: Type, powerMultiplier?: number) {
-    super((pokemon, _defender, move) => pokemon?.getMoveType(move) === boostedType, powerMultiplier || 1.5);
-  }
-}
 
 /**
  * Boosts the power of a specific type of move for all Pokemon in the field.
