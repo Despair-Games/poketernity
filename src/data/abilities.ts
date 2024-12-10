@@ -34,7 +34,6 @@ import {
   ConditionalCritAbAttr,
   ConfusionOnStatusEffectAbAttr,
   DoubleBerryEffectAbAttr,
-  DownloadAbAttr,
   FetchBallAbAttr,
   FlinchStatStageChangeAbAttr,
   ForceSwitchOutImmunityAbAttr,
@@ -111,6 +110,7 @@ import {
   UserFieldStatusEffectImmunityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { DownloadAbAttr } from "./abilities/download-ab-attr";
 import { PostSummonStatStageChangeAbAttr } from "./abilities/post-summon-stat-stage-change-ab-attr";
 import { PostSummonAddBattlerTagAbAttr } from "./abilities/post-summon-add-battler-tag-ab-attr";
 import { PostSummonUnnamedMessageAbAttr } from "./abilities/post-summon-unnamed-message-ab-attr";
