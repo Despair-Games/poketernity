@@ -72,7 +72,6 @@ import { FieldPreventExplosiveMovesAbAttr } from "./abilities/field-prevent-expl
 import type { FieldMultiplyStatAbAttr } from "./abilities/field-multiply-stat-ab-attr";
 import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition";
 import type { PokemonDefendCondition } from "../@types/PokemonDefendCondition";
-import { MoveTypePowerBoostAbAttr } from "./abilities/move-type-power-boost-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -181,16 +180,6 @@ export class Ability implements Localizable {
 }
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
-
-export class LowHpMoveTypePowerBoostAbAttr extends MoveTypePowerBoostAbAttr {
-  constructor(boostedType: Type) {
-    super(boostedType);
-  }
-
-  override getCondition(): AbAttrCondition {
-    return (pokemon) => pokemon.getHpRatio() <= 0.33;
-  }
-}
 
 /**
  * Abilities which cause a variable amount of power increase.

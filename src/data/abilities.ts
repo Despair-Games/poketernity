@@ -53,7 +53,6 @@ import {
   IncreasePpAbAttr,
   InfiltratorAbAttr,
   IntimidateImmunityAbAttr,
-  LowHpMoveTypePowerBoostAbAttr,
   MaxMultiHitAbAttr,
   MoneyAbAttr,
   MoodyAbAttr,
@@ -138,6 +137,7 @@ import {
   VariableMovePowerBoostAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { LowHpMoveTypePowerBoostAbAttr } from "./abilities/low-hp-move-type-power-boost-ab-attr";
 import { MoveTypePowerBoostAbAttr } from "./abilities/move-type-power-boost-ab-attr";
 import { MovePowerBoostAbAttr } from "./abilities/move-power-boost-ab-attr";
 import { DamageBoostAbAttr } from "./abilities/damage-boost-ab-attr";
