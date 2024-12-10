@@ -175,9 +175,9 @@ export class FaintPhase extends PokemonPhase {
       ) {
         /**
          * If the player has exactly one Pokemon in total at this point in a double battle, and that Pokemon
-         * is already on the field, unshift a phase that moves that Pokemon to center position.
+         * is already on the field, push a phase that moves that Pokemon to center position.
          */
-        globalScene.unshiftPhase(new ToggleDoublePositionPhase(true));
+        globalScene.pushPhase(new ToggleDoublePositionPhase(true));
       } else if (legalPlayerPartyPokemon.length > 0) {
         /**
          * If previous conditions weren't met, and the player has at least 1 legal Pokemon off the field,
