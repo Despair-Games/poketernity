@@ -1,11 +1,12 @@
 import { globalScene } from "#app/global-scene";
 import type { BattlerIndex } from "#app/battle";
-import { applyAbAttrs, applyPostSummonAbAttrs, CommanderAbAttr, PostSummonAbAttr } from "#app/data/ability";
+import { applyAbAttrs, applyPostSummonAbAttrs, CommanderAbAttr } from "#app/data/ability";
 import { ArenaTrapTag } from "#app/data/arena-tag";
 import { StatusEffect } from "#app/enums/status-effect";
 import { PokemonPhase } from "./pokemon-phase";
 import { MysteryEncounterPostSummonTag } from "#app/data/battler-tags";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import { PostSummonAbAttr } from "#app/data/abilities/post-summon-ab-attr";
 
 export class PostSummonPhase extends PokemonPhase {
   constructor(battlerIndex: BattlerIndex) {
