@@ -163,7 +163,6 @@ import {
   SynchronizeStatusAbAttr,
   TerrainEventTypeChangeAbAttr,
   TypeImmunityAddBattlerTagAbAttr,
-  TypeImmunityHealAbAttr,
   TypeImmunityStatStageChangeAbAttr,
   UncopiableAbilityAbAttr,
   UnsuppressableAbilityAbAttr,
@@ -201,6 +200,7 @@ import { ReceivedMoveDamageMultiplierAbAttr } from "./abilities/received-move-da
 import { AlliedFieldDamageReductionAbAttr } from "./abilities/allied-field-damage-reduction-ab-attr";
 import { ReceivedTypeDamageMultiplierAbAttr } from "./abilities/received-type-damage-multiplier-ab-attr";
 import { AttackTypeImmunityAbAttr } from "./abilities/attack-type-immunity-ab-attr";
+import { TypeImmunityHealAbAttr } from "./abilities/type-immunity-heal-ab-attr";
 
 type AbAttrCondition = (pokemon: Pokemon) => boolean;
 
