@@ -66,7 +66,7 @@ import type { PostMoveUsedAbAttr } from "./abilities/post-move-used-ab-attr";
 import type { PostItemLostAbAttr } from "./abilities/post-item-lost-ab-attr";
 import type { CheckTrappedAbAttr } from "./abilities/check-trapped-ab-attr";
 import { PostBattleAbAttr } from "./abilities/post-battle-ab-attr";
-import { PostFaintAbAttr } from "./abilities/post-faint-ab-attr";
+import type { PostFaintAbAttr } from "./abilities/post-faint-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -187,40 +187,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
     const weatherType = globalScene.arena.weather?.weatherType;
     return !!weatherType && weatherTypes.indexOf(weatherType) > -1;
   };
-}
-
-/**
- * Attribute used for abilities (Innards Out) that damage the opponent based on how much HP the last attack used to knock out the owner of the ability.
- */
-export class PostFaintHPDamageAbAttr extends PostFaintAbAttr {
-  constructor() {
-    super();
-  }
-
-  override applyPostFaint(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    attacker?: Pokemon,
-    move?: Move,
-    _hitResult?: HitResult,
-    ..._args: any[]
-  ): boolean {
-    if (move !== undefined && attacker !== undefined && !simulated) {
-      //If the mon didn't die to indirect damage
-      const damage = pokemon.turnData.attacksReceived[0].damage;
-      attacker.damageAndUpdate(damage, HitResult.OTHER);
-      attacker.turnData.damageTaken += damage;
-    }
-    return true;
-  }
-
-  override getTriggerMessage(pokemon: Pokemon, abilityName: string, ..._args: any[]): string {
-    return i18next.t("abilityTriggers:postFaintHpDamage", {
-      pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-      abilityName,
-    });
-  }
 }
 
 export class RedirectMoveAbAttr extends AbAttr {
