@@ -72,6 +72,7 @@ import type { PostStatStageChangeAbAttr } from "./abilities/post-stat-stage-chan
 import { IgnoreMoveEffectsAbAttr } from "./abilities/ignore-move-effect-ab-attr";
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import { VariableMovePowerAbAttr } from "./abilities/variable-move-power-ab-attr";
+import { FieldPreventExplosiveMovesAbAttr } from "./abilities/field-prevent-explosive-moves-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -185,19 +186,6 @@ type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => 
 type PokemonAttackCondition = (user: Pokemon | null, target: Pokemon | null, move: Move) => boolean;
 export type PokemonDefendCondition = (target: Pokemon, user: Pokemon, move: Move) => boolean;
 export type PokemonStatStageChangeCondition = (target: Pokemon, statsChanged: BattleStat[], stages: number) => boolean;
-
-export class FieldPreventExplosiveMovesAbAttr extends AbAttr {
-  override apply(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    cancelled: BooleanHolder,
-    _args: any[],
-  ): boolean {
-    cancelled.value = true;
-    return true;
-  }
-}
 
 /**
  * Multiplies a Stat if the checked Pokemon lacks this ability.

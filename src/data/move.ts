@@ -45,7 +45,6 @@ import {
   ChangeMovePriorityAbAttr,
   ConfusionOnStatusEffectAbAttr,
   FieldMoveTypePowerBoostAbAttr,
-  FieldPreventExplosiveMovesAbAttr,
   ForceSwitchOutImmunityAbAttr,
   HealFromBerryUseAbAttr,
   IgnoreContactAbAttr,
@@ -61,6 +60,7 @@ import {
   UnswappableAbilityAbAttr,
   UserFieldMoveTypePowerBoostAbAttr,
 } from "./ability";
+import { FieldPreventExplosiveMovesAbAttr } from "./abilities/field-prevent-explosive-moves-ab-attr";
 import { VariableMovePowerAbAttr } from "./abilities/variable-move-power-ab-attr";
 import {
   AttackTypeBoosterModifier,
