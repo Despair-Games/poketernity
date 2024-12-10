@@ -188,8 +188,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
   };
 }
 
-export class IncreasePpAbAttr extends AbAttr {}
-
 export class ForceSwitchOutImmunityAbAttr extends AbAttr {
   override apply(
     _pokemon: Pokemon,
