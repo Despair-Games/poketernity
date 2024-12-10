@@ -179,21 +179,6 @@ export class Ability implements Localizable {
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
 
-export class PreSwitchOutResetStatusAbAttr extends PreSwitchOutAbAttr {
-  override applyPreSwitchOut(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
-    if (pokemon.status) {
-      if (!simulated) {
-        pokemon.resetStatus();
-        pokemon.updateInfo();
-      }
-
-      return true;
-    }
-
-    return false;
-  }
-}
-
 /**
  * Clears Desolate Land/Primordial Sea/Delta Stream upon the Pokemon switching out.
  */

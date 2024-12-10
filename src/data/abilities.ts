@@ -76,7 +76,6 @@ import {
   PreSwitchOutClearWeatherAbAttr,
   PreSwitchOutFormChangeAbAttr,
   PreSwitchOutHealAbAttr,
-  PreSwitchOutResetStatusAbAttr,
   PreventBerryUseAbAttr,
   PreventBypassSpeedChanceAbAttr,
   ProtectStatAbAttr,
@@ -100,6 +99,7 @@ import {
   UserFieldStatusEffectImmunityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { PreSwitchOutResetStatusAbAttr } from "./abilities/pre-switch-out-reset-status-ab-attr";
 import { CommanderAbAttr } from "./abilities/commander-ab-attr";
 import { PostSummonFormChangeByWeatherAbAttr } from "./abilities/post-summon-form-change-by-weather-ab-attr";
 import { PostSummonUserFieldRemoveStatusEffectAbAttr } from "./abilities/post-summon-user-field-remove-status-effect-ab-attr";
