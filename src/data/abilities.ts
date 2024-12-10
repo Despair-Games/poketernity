@@ -52,7 +52,6 @@ import {
   GorillaTacticsAbAttr,
   HealFromBerryUseAbAttr,
   IgnoreContactAbAttr,
-  IgnoreMoveEffectsAbAttr,
   IgnoreOpponentStatStagesAbAttr,
   IgnoreProtectOnContactAbAttr,
   IgnoreTypeImmunityAbAttr,
@@ -202,6 +201,7 @@ import { WonderSkinAbAttr } from "./abilities/wonder-skin-ab-attr";
 import { MoveImmunityStatStageChangeAbAttr } from "./abilities/move-immunity-stat-stage-change-ab-attr";
 import { ReverseDrainAbAttr } from "./abilities/reverse-drain-ab-attr";
 import { MoveEffectChanceMultiplierAbAttr } from "./abilities/move-effect-chance-multiplier-ab-attr";
+import { IgnoreMoveEffectsAbAttr } from "./abilities/ignore-move-effect-ab-attr";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {

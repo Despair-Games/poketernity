@@ -66,10 +66,11 @@ import type { PostBattleInitAbAttr } from "./abilities/post-battle-init-ab-attr"
 import { PostDamageAbAttr } from "./abilities/post-damage-ab-attr";
 import { PostSummonAbAttr } from "./abilities/post-summon-ab-attr";
 import { PreAttackAbAttr } from "./abilities/pre-attack-ab-attr";
-import { PreDefendAbAttr } from "./abilities/pre-defend-ab-attr";
+import { type PreDefendAbAttr } from "./abilities/pre-defend-ab-attr";
 import { ReceivedMoveDamageMultiplierAbAttr } from "./abilities/received-move-damage-multiplier-ab-attr";
 import { PostDefendAbAttr } from "./abilities/post-defend-ab-attr";
 import { PostStatStageChangeAbAttr } from "./abilities/post-stat-stage-change-ab-attr";
+import { IgnoreMoveEffectsAbAttr } from "./abilities/ignore-move-effect-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -847,33 +848,6 @@ export class PostStatStageChangeStatStageChangeAbAttr extends PostStatStageChang
     }
 
     return false;
-  }
-}
-
-/**
- * Sets incoming moves additional effect chance to zero, ignoring all effects from moves. ie. Shield Dust.
- * @extends PreDefendAbAttr
- * @see {@linkcode applyPreDefend}
- */
-export class IgnoreMoveEffectsAbAttr extends PreDefendAbAttr {
-  /**
-   * @param args [0]: {@linkcode NumberHolder} Move additional effect chance.
-   */
-  override applyPreDefend(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    _attacker: Pokemon,
-    _move: Move,
-    _cancelled: BooleanHolder,
-    args: any[],
-  ): boolean {
-    if ((args[0] as NumberHolder).value <= 0) {
-      return false;
-    }
-
-    (args[0] as NumberHolder).value = 0;
-    return true;
   }
 }
 

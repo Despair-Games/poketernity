@@ -7,7 +7,6 @@ import {
   applyPostDamageAbAttrs,
   applyPostDefendAbAttrs,
   applyPreAttackAbAttrs,
-  IgnoreMoveEffectsAbAttr,
   MaxMultiHitAbAttr,
   PostAttackAbAttr,
 } from "#app/data/ability";
@@ -62,6 +61,7 @@ import i18next from "i18next";
 import { PostDamageAbAttr } from "#app/data/abilities/post-damage-ab-attr";
 import { TypeImmunityAbAttr } from "#app/data/abilities/type-immunity-ab-attr";
 import { PostDefendAbAttr } from "#app/data/abilities/post-defend-ab-attr";
+import { IgnoreMoveEffectsAbAttr } from "#app/data/abilities/ignore-move-effect-ab-attr";
 
 export class MoveEffectPhase extends PokemonPhase {
   public move: PokemonMove;

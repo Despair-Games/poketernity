@@ -1,6 +1,7 @@
 import { BattlerIndex } from "#app/battle";
+import { IgnoreMoveEffectsAbAttr } from "#app/data/abilities/ignore-move-effect-ab-attr";
 import { MoveEffectChanceMultiplierAbAttr } from "#app/data/abilities/move-effect-chance-multiplier-ab-attr";
-import { applyAbAttrs, applyPreDefendAbAttrs, IgnoreMoveEffectsAbAttr } from "#app/data/ability";
+import { applyAbAttrs, applyPreDefendAbAttrs } from "#app/data/ability";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { NumberHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";

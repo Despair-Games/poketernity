@@ -49,7 +49,6 @@ import {
   ForceSwitchOutImmunityAbAttr,
   HealFromBerryUseAbAttr,
   IgnoreContactAbAttr,
-  IgnoreMoveEffectsAbAttr,
   IgnoreProtectOnContactAbAttr,
   InfiltratorAbAttr,
   MaxMultiHitAbAttr,
@@ -111,6 +110,7 @@ import { BlockRecoilDamageAttr } from "./abilities/block-recoil-damage-ab-attr";
 import { WonderSkinAbAttr } from "./abilities/wonder-skin-ab-attr";
 import { ReverseDrainAbAttr } from "./abilities/reverse-drain-ab-attr";
 import { MoveEffectChanceMultiplierAbAttr } from "./abilities/move-effect-chance-multiplier-ab-attr";
+import { IgnoreMoveEffectsAbAttr } from "./abilities/ignore-move-effect-ab-attr";
 
 export enum MoveCategory {
   PHYSICAL,
