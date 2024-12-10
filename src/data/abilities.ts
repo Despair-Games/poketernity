@@ -64,7 +64,6 @@ import {
   PostFaintHPDamageAbAttr,
   PostFaintUnsuppressedWeatherFormChangeAbAttr,
   PostItemLostApplyBattlerTagAbAttr,
-  PostSummonAddBattlerTagAbAttr,
   PostSummonAllyHealAbAttr,
   PostSummonClearAllyStatStagesAbAttr,
   PostSummonCopyAbilityAbAttr,
@@ -115,6 +114,7 @@ import {
   UserFieldStatusEffectImmunityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { PostSummonAddBattlerTagAbAttr } from "./abilities/post-summon-add-battler-tag-ab-attr";
 import { PostSummonUnnamedMessageAbAttr } from "./abilities/post-summon-unnamed-message-ab-attr";
 import { PostSummonMessageAbAttr } from "./abilities/post-summon-message-ab-attr";
 import { PostSummonRemoveArenaTagAbAttr } from "./abilities/post-summon-remove-arena-tag-ab-attr";
