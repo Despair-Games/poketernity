@@ -1,5 +1,6 @@
 import { globalScene } from "#app/global-scene";
-import { allAbilities, applyAbAttrs, FlinchEffectAbAttr } from "#app/data/ability";
+import { allAbilities, applyAbAttrs } from "#app/data/ability";
+import { FlinchEffectAbAttr } from "./abilities/flinch-effect-ab-attr";
 import { BlockNonDirectDamageAbAttr } from "./abilities/block-non-direct-damage-ab-attr";
 import { ChargeAnim, CommonAnim, CommonBattleAnim, MoveChargeAnim } from "#app/data/battle-anims";
 import type Move from "#app/data/move";

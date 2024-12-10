@@ -67,6 +67,7 @@ import type { PostItemLostAbAttr } from "./abilities/post-item-lost-ab-attr";
 import type { CheckTrappedAbAttr } from "./abilities/check-trapped-ab-attr";
 import { PostBattleAbAttr } from "./abilities/post-battle-ab-attr";
 import type { PostFaintAbAttr } from "./abilities/post-faint-ab-attr";
+import { FlinchEffectAbAttr } from "./abilities/flinch-effect-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -187,12 +188,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
     const weatherType = globalScene.arena.weather?.weatherType;
     return !!weatherType && weatherTypes.indexOf(weatherType) > -1;
   };
-}
-
-export class FlinchEffectAbAttr extends AbAttr {
-  constructor() {
-    super(true);
-  }
 }
 
 export class FlinchStatStageChangeAbAttr extends FlinchEffectAbAttr {
