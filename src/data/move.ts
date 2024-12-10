@@ -56,8 +56,8 @@ import {
   UncopiableAbilityAbAttr,
   UnsuppressableAbilityAbAttr,
   UnswappableAbilityAbAttr,
-  UserFieldMoveTypePowerBoostAbAttr,
 } from "./ability";
+import { UserFieldMoveTypePowerBoostAbAttr } from "./abilities/user-field-move-type-power-boost-ab-attr";
 import { MoveTypeChangeAbAttr } from "./abilities/move-type-change-ab-attr";
 import { FieldPreventExplosiveMovesAbAttr } from "./abilities/field-prevent-explosive-moves-ab-attr";
 import { VariableMovePowerAbAttr } from "./abilities/variable-move-power-ab-attr";

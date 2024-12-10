@@ -131,10 +131,10 @@ import {
   UnsuppressableAbilityAbAttr,
   UnswappableAbilityAbAttr,
   UserFieldBattlerTagImmunityAbAttr,
-  UserFieldMoveTypePowerBoostAbAttr,
   UserFieldStatusEffectImmunityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { UserFieldMoveTypePowerBoostAbAttr } from "./abilities/user-field-move-type-power-boost-ab-attr";
 import { VariableMovePowerBoostAbAttr } from "./abilities/variable-move-power-boost-ab-attr";
 import { LowHpMoveTypePowerBoostAbAttr } from "./abilities/low-hp-move-type-power-boost-ab-attr";
 import { MoveTypePowerBoostAbAttr } from "./abilities/move-type-power-boost-ab-attr";
