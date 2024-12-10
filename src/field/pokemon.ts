@@ -141,7 +141,6 @@ import { WeatherType } from "#enums/weather-type";
 import { ArenaTagSide, NoCritTag, WeakenMoveScreenTag } from "#app/data/arena-tag";
 import type { Ability } from "#app/data/ability";
 import {
-  StatMultiplierAbAttr,
   BlockCritAbAttr,
   BonusCritAbAttr,
   BypassBurnDamageReductionAbAttr,
@@ -175,6 +174,7 @@ import {
   applyPostItemLostAbAttrs,
   PostItemLostAbAttr,
 } from "#app/data/ability";
+import { StatMultiplierAbAttr } from "#app/data/abilities/stat-multiplier-ab-attr";
 import { DamageBoostAbAttr } from "#app/data/abilities/damage-boost-ab-attr";
 import { AddSecondStrikeAbAttr } from "#app/data/abilities/add-second-strike-ab-attr";
 import { MoveTypeChangeAbAttr } from "#app/data/abilities/move-type-change-ab-attr";

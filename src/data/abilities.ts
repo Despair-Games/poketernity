@@ -117,7 +117,6 @@ import {
   ReduceStatusEffectDurationAbAttr,
   RunSuccessAbAttr,
   SpeedBoostAbAttr,
-  StatMultiplierAbAttr,
   StatStageChangeCopyAbAttr,
   StatStageChangeMultiplierAbAttr,
   StatusEffectImmunityAbAttr,
@@ -133,6 +132,7 @@ import {
   UserFieldStatusEffectImmunityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { StatMultiplierAbAttr } from "./abilities/stat-multiplier-ab-attr";
 import { AllyMoveCategoryPowerBoostAbAttr } from "./abilities/ally-move-category-power-boost-ab-attr";
 import { UserFieldMoveTypePowerBoostAbAttr } from "./abilities/user-field-move-type-power-boost-ab-attr";
 import { VariableMovePowerBoostAbAttr } from "./abilities/variable-move-power-boost-ab-attr";
