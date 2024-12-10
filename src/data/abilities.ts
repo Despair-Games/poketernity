@@ -29,12 +29,12 @@ import {
   PostDamageForceSwitchAbAttr,
   PostSummonStatStageChangeOnArenaAbAttr,
   PreventBypassSpeedChanceAbAttr,
-  SuppressFieldAbilitiesAbAttr,
   TerrainEventTypeChangeAbAttr,
   UncopiableAbilityAbAttr,
   UnsuppressableAbilityAbAttr,
   UnswappableAbilityAbAttr,
 } from "./ability";
+import { SuppressFieldAbilitiesAbAttr } from "./abilities/suppress-field-abilities-ab-attr";
 import { MoveAbilityBypassAbAttr } from "./abilities/move-ability-bypass-ab-attr";
 import { SyncEncounterNatureAbAttr } from "./abilities/sync-encounter-nature-ab-attr";
 import { WeightMultiplierAbAttr } from "./abilities/weight-multiplier-ab-attr";

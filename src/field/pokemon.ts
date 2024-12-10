@@ -149,7 +149,6 @@ import {
   applyPreDefendAbAttrs,
   applyPreSetStatusAbAttrs,
   UnsuppressableAbilityAbAttr,
-  SuppressFieldAbilitiesAbAttr,
   NoFusionAbilityAbAttr,
   IgnoreTypeImmunityAbAttr,
   applyFieldStatMultiplierAbAttrs,
@@ -159,6 +158,7 @@ import {
   applyPostDamageAbAttrs,
   applyPostItemLostAbAttrs,
 } from "#app/data/ability";
+import { SuppressFieldAbilitiesAbAttr } from "#app/data/abilities/suppress-field-abilities-ab-attr";
 import { WeightMultiplierAbAttr } from "#app/data/abilities/weight-multiplier-ab-attr";
 import { CheckTrappedAbAttr } from "#app/data/abilities/check-trapped-ab-attr";
 import { BypassBurnDamageReductionAbAttr } from "#app/data/abilities/bypass-burn-damage-reduction-ab-attr";

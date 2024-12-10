@@ -189,27 +189,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
   };
 }
 
-export class SuppressFieldAbilitiesAbAttr extends AbAttr {
-  constructor() {
-    super(false);
-  }
-
-  override apply(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    cancelled: BooleanHolder,
-    args: any[],
-  ): boolean {
-    const ability = args[0] as Ability;
-    if (!ability.hasAttr(UnsuppressableAbilityAbAttr) && !ability.hasAttr(SuppressFieldAbilitiesAbAttr)) {
-      cancelled.value = true;
-      return true;
-    }
-    return false;
-  }
-}
-
 export class AlwaysHitAbAttr extends AbAttr {}
 
 /** Attribute for abilities that allow moves that make contact to ignore protection (i.e. Unseen Fist) */
