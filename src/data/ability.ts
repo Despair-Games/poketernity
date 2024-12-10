@@ -185,34 +185,6 @@ export class Ability implements Localizable {
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
 
 /**
- * Reverts weather-based forms to their normal forms when the user is summoned.
- * Used by Cloud Nine and Air Lock.
- * @extends PostSummonAbAttr
- */
-export class PostSummonWeatherSuppressedFormChangeAbAttr extends PostSummonAbAttr {
-  /**
-   * Triggers {@linkcode Arena.triggerWeatherBasedFormChangesToNormal | triggerWeatherBasedFormChangesToNormal}
-   * @param {Pokemon} _pokemon the Pokemon with this ability
-   * @param _passive n/a
-   * @param _args n/a
-   * @returns whether a Pokemon was reverted to its normal form
-   */
-  override applyPostSummon(_pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]) {
-    const pokemonToTransform = getPokemonWithWeatherBasedForms();
-
-    if (pokemonToTransform.length < 1) {
-      return false;
-    }
-
-    if (!simulated) {
-      globalScene.arena.triggerWeatherBasedFormChangesToNormal();
-    }
-
-    return true;
-  }
-}
-
-/**
  * Triggers weather-based form change when summoned into an active weather.
  * Used by Forecast and Flower Gift.
  * @extends PostSummonAbAttr

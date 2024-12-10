@@ -65,7 +65,6 @@ import {
   PostItemLostApplyBattlerTagAbAttr,
   PostSummonFormChangeByWeatherAbAttr,
   PostSummonStatStageChangeOnArenaAbAttr,
-  PostSummonWeatherSuppressedFormChangeAbAttr,
   PostTerrainChangeAddBattlerTagAttr,
   PostTurnFormChangeAbAttr,
   PostTurnHurtIfSleepingAbAttr,
@@ -202,6 +201,7 @@ import { PostSummonClearAllyStatStagesAbAttr } from "./abilities/post-summon-cle
 import { PostSummonCopyAbilityAbAttr } from "./abilities/post-summon-copy-ability-ab-attr";
 import { PostSummonCopyAllyStatsAbAttr } from "./abilities/post-summon-copy-ally-stats-ab-attr";
 import { PostSummonTransformAbAttr } from "./abilities/post-summon-transform-ab-attr";
+import { PostSummonWeatherSuppressedFormChangeAbAttr } from "./abilities/post-summon-weather-suppressed-form-change-ab-attr";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {
