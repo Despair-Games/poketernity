@@ -5,8 +5,8 @@ import {
   applyPostStatStageChangeAbAttrs,
   applyPreStatStageChangeAbAttrs,
   StatStageChangeCopyAbAttr,
-  StatStageChangeMultiplierAbAttr,
 } from "#app/data/ability";
+import { StatStageChangeMultiplierAbAttr } from "#app/data/abilities/stat-stage-change-multiplier-ab-attr";
 import { ArenaTagSide, MistTag } from "#app/data/arena-tag";
 import type Pokemon from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";

@@ -51,7 +51,6 @@ import {
   ReduceStatusEffectDurationAbAttr,
   RunSuccessAbAttr,
   StatStageChangeCopyAbAttr,
-  StatStageChangeMultiplierAbAttr,
   SuppressFieldAbilitiesAbAttr,
   SyncEncounterNatureAbAttr,
   TerrainEventTypeChangeAbAttr,
@@ -60,6 +59,7 @@ import {
   UnswappableAbilityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { StatStageChangeMultiplierAbAttr } from "./abilities/stat-stage-change-multiplier-ab-attr";
 import { PostItemLostApplyBattlerTagAbAttr } from "./abilities/post-item-lost-apply-battler-tag-ab-attr";
 import { PostDancingMoveAbAttr } from "./abilities/post-dancing-move-ab-attr";
 import { PostBiomeChangeTerrainChangeAbAttr } from "./abilities/post-biome-change-terrain-change-ab-attr";
