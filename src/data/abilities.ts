@@ -27,7 +27,6 @@ import {
   FlinchStatStageChangeAbAttr,
   ForceSwitchOutImmunityAbAttr,
   FormBlockDamageAbAttr,
-  FriskAbAttr,
   HealFromBerryUseAbAttr,
   IgnoreProtectOnContactAbAttr,
   IgnoreTypeImmunityAbAttr,
@@ -202,6 +201,7 @@ import { PostSummonTransformAbAttr } from "./abilities/post-summon-transform-ab-
 import { PostSummonWeatherSuppressedFormChangeAbAttr } from "./abilities/post-summon-weather-suppressed-form-change-ab-attr";
 import { ProtectStatAbAttr } from "./abilities/protect-stat-ab-attr";
 import { ForewarnAbAttr } from "./abilities/forewarn-ab-attr";
+import { FriskAbAttr } from "./abilities/frisk-ab-attr";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {

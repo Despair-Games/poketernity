@@ -188,28 +188,6 @@ function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondition {
   };
 }
 
-export class FriskAbAttr extends PostSummonAbAttr {
-  constructor() {
-    super(true);
-  }
-
-  override applyPostSummon(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
-    if (!simulated) {
-      for (const opponent of pokemon.getOpponents()) {
-        globalScene.queueMessage(
-          i18next.t("abilityTriggers:frisk", {
-            pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-            opponentName: opponent.name,
-            opponentAbilityName: opponent.getAbility().name,
-          }),
-        );
-        setAbilityRevealed(opponent);
-      }
-    }
-    return true;
-  }
-}
-
 export class PostWeatherChangeAbAttr extends AbAttr {
   applyPostWeatherChange(
     _pokemon: Pokemon,
@@ -2918,17 +2896,6 @@ export function applyPostItemLostAbAttrs(
 export function queueShowAbility(pokemon: Pokemon, passive: boolean): void {
   globalScene.unshiftPhase(new ShowAbilityPhase(pokemon.id, passive));
   globalScene.clearPhaseQueueSplice();
-}
-
-/**
- * Sets the ability of a Pokémon as revealed.
- *
- * @param pokemon - The Pokémon whose ability is being revealed.
- */
-function setAbilityRevealed(pokemon: Pokemon): void {
-  if (pokemon.battleData) {
-    pokemon.battleData.abilityRevealed = true;
-  }
 }
 
 /**
