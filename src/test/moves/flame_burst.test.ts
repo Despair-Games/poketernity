@@ -118,7 +118,45 @@ describe("Moves - Flame Burst", () => {
     expect(rightEnemy.hp).toBe(rightEnemy.getMaxHp() - getEffectDamage(rightEnemy));
   });
 
-  it.skip("is not affected by protection moves and Endure", async () => {
-    // TODO: update this test when it's possible to select move for each enemy
+  it("effect damage should bypass protection", async () => {
+    game.override.enemyMoveset([Moves.PROTECT, Moves.SPLASH]);
+
+    await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
+
+    const leftEnemy = game.scene.getEnemyField()[0];
+
+    game.move.select(Moves.FLAME_BURST, 0, BattlerIndex.ENEMY_2);
+    game.move.select(Moves.SPLASH, 1);
+
+    await game.forceEnemyMove(Moves.PROTECT);
+    await game.forceEnemyMove(Moves.SPLASH);
+
+    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
+
+    await game.phaseInterceptor.to("TurnEndPhase");
+
+    expect(leftEnemy.hp).toBe(leftEnemy.getMaxHp() - getEffectDamage(leftEnemy));
+  });
+
+  // TODO: fix Endure's interactions with effect damage to pass this test
+  it.skip("effect damage should bypass Endure", async () => {
+    game.override.enemyMoveset([Moves.ENDURE, Moves.SPLASH]);
+
+    await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
+
+    const leftEnemy = game.scene.getEnemyField()[0];
+    leftEnemy.hp = 1;
+
+    game.move.select(Moves.FLAME_BURST, 0, BattlerIndex.ENEMY_2);
+    game.move.select(Moves.SPLASH, 1);
+
+    await game.forceEnemyMove(Moves.ENDURE);
+    await game.forceEnemyMove(Moves.SPLASH);
+
+    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
+
+    await game.phaseInterceptor.to("TurnEndPhase");
+
+    expect(leftEnemy.isFainted(true)).toBeTruthy();
   });
 });
