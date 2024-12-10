@@ -80,7 +80,6 @@ import {
   PostDancingMoveAbAttr,
   PostDefendAbilityGiveAbAttr,
   PostDefendAbilitySwapAbAttr,
-  PostDefendContactApplyTagChanceAbAttr,
   PostDefendContactDamageAbAttr,
   PostDefendCritStatStageChangeAbAttr,
   PostDefendMoveDisableAbAttr,
@@ -155,6 +154,7 @@ import {
   VariableMovePowerBoostAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { PostDefendContactApplyTagChanceAbAttr } from "./abilities/post-defend-contact-apply-tag-chance-ab-attr";
 import { EffectSporeAbAttr } from "./abilities/effect-spore-ab-attr";
 import { PostDefendContactApplyStatusEffectAbAttr } from "./abilities/post-defend-contact-apply-status-effect-ab-attr";
 import { PostDefendTerrainChangeAbAttr } from "./abilities/post-defend-terrain-change-ab-attr";

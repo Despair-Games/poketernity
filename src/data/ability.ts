@@ -185,44 +185,6 @@ type PokemonAttackCondition = (user: Pokemon | null, target: Pokemon | null, mov
 export type PokemonDefendCondition = (target: Pokemon, user: Pokemon, move: Move) => boolean;
 type PokemonStatStageChangeCondition = (target: Pokemon, statsChanged: BattleStat[], stages: number) => boolean;
 
-export class PostDefendContactApplyTagChanceAbAttr extends PostDefendAbAttr {
-  private chance: integer;
-  private tagType: BattlerTagType;
-  private turnCount: integer | undefined;
-
-  constructor(chance: integer, tagType: BattlerTagType, turnCount?: integer) {
-    super();
-
-    this.tagType = tagType;
-    this.chance = chance;
-    this.turnCount = turnCount;
-  }
-
-  override applyPostDefend(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
-    _hitResult: HitResult,
-    _args: any[],
-  ): boolean {
-    if (
-      move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
-      && pokemon.randSeedInt(100) < this.chance
-      && !move.hitsSubstitute(attacker, pokemon)
-    ) {
-      if (simulated) {
-        return attacker.canAddTag(this.tagType);
-      } else {
-        return attacker.addTag(this.tagType, this.turnCount, move.id, attacker.id);
-      }
-    }
-
-    return false;
-  }
-}
-
 export class PostDefendCritStatStageChangeAbAttr extends PostDefendAbAttr {
   private stat: BattleStat;
   private stages: number;
