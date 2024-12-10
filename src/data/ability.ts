@@ -76,6 +76,7 @@ import type { PostSetStatusAbAttr } from "./abilities/post-set-status-ab-attr";
 import type { PostVictoryAbAttr } from "./abilities/post-victory-ab-attr";
 import type { PostKnockOutAbAttr } from "./abilities/post-knock-out-ab-attr";
 import { IntimidateImmunityAbAttr } from "./abilities/intimidate-immunity-ab-attr";
+import { PostIntimidateStatStageChangeAbAttr } from "./abilities/post-intimidate-stat-stage-change-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -184,33 +185,6 @@ export class Ability implements Localizable {
 }
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
-
-export class PostIntimidateStatStageChangeAbAttr extends AbAttr {
-  private stats: BattleStat[];
-  private stages: number;
-  private overwrites: boolean;
-
-  constructor(stats: BattleStat[], stages: number, overwrites?: boolean) {
-    super(true);
-    this.stats = stats;
-    this.stages = stages;
-    this.overwrites = !!overwrites;
-  }
-
-  override apply(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    cancelled: BooleanHolder,
-    _args: any[],
-  ): boolean {
-    if (!simulated) {
-      globalScene.pushPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), false, this.stats, this.stages));
-    }
-    cancelled.value = this.overwrites;
-    return true;
-  }
-}
 
 /**
  * Removes specified arena tags when a Pokemon is summoned.

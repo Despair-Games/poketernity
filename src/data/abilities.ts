@@ -63,7 +63,6 @@ import {
   PostFaintContactDamageAbAttr,
   PostFaintHPDamageAbAttr,
   PostFaintUnsuppressedWeatherFormChangeAbAttr,
-  PostIntimidateStatStageChangeAbAttr,
   PostItemLostApplyBattlerTagAbAttr,
   PostSummonAddBattlerTagAbAttr,
   PostSummonAllyHealAbAttr,
@@ -119,6 +118,7 @@ import {
   UserFieldStatusEffectImmunityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { PostIntimidateStatStageChangeAbAttr } from "./abilities/post-intimidate-stat-stage-change-ab-attr";
 import { IgnoreOpponentStatStagesAbAttr } from "./abilities/ignore-opponent-stat-stages-ab-attr";
 import { PostKnockOutStatStageChangeAbAttr } from "./abilities/post-knock-out-stat-stage-change-ab-attr";
 import { PostVictoryFormChangeAbAttr } from "./abilities/post-victory-form-change-ab-attr";
