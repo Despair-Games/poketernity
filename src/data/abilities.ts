@@ -93,7 +93,6 @@ import {
   PostTurnResetStatusAbAttr,
   PostTurnStatusHealAbAttr,
   PostVictoryFormChangeAbAttr,
-  PostVictoryStatStageChangeAbAttr,
   PostWeatherChangeAddBattlerTagAttr,
   PostWeatherChangeFormChangeAbAttr,
   PostWeatherLapseDamageAbAttr,
@@ -125,6 +124,7 @@ import {
   UserFieldStatusEffectImmunityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { PostVictoryStatStageChangeAbAttr } from "./abilities/post-victory-stat-stage-change-ab-attr";
 import { SynchronizeStatusAbAttr } from "./abilities/synchronize-status-ab-attr";
 import { PostAttackApplyBattlerTagAbAttr } from "./abilities/post-attack-apply-battler-tag-ab-attr";
 import { PostAttackContactApplyStatusEffectAbAttr } from "./abilities/post-attack-contact-apply-status-effect-ab-attr";

@@ -183,26 +183,6 @@ export class Ability implements Localizable {
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
 
-export class PostVictoryStatStageChangeAbAttr extends PostVictoryAbAttr {
-  private stat: BattleStat | ((p: Pokemon) => BattleStat);
-  private stages: number;
-
-  constructor(stat: BattleStat | ((p: Pokemon) => BattleStat), stages: number) {
-    super();
-
-    this.stat = stat;
-    this.stages = stages;
-  }
-
-  override applyPostVictory(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
-    const stat = typeof this.stat === "function" ? this.stat(pokemon) : this.stat;
-    if (!simulated) {
-      globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [stat], this.stages));
-    }
-    return true;
-  }
-}
-
 export class PostVictoryFormChangeAbAttr extends PostVictoryAbAttr {
   private formFunc: (p: Pokemon) => integer;
 
