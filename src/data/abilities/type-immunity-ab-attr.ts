@@ -1,14 +1,9 @@
+import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import type { Type } from "#app/enums/type";
 import type Pokemon from "#app/field/pokemon";
 import type { BooleanHolder, NumberHolder } from "#app/utils";
 import { type Move, MoveTarget } from "../move";
 import { PreDefendAbAttr } from "./pre-defend-ab-attr";
-
-//#region Types
-
-type AbAttrCondition = (pokemon: Pokemon) => boolean;
-
-//#endregion
 
 /**
  * Determines whether a Pokemon is immune to a move because of an ability.

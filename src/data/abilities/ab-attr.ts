@@ -1,7 +1,6 @@
+import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import { type Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
-
-type AbAttrCondition = (pokemon: Pokemon) => boolean;
 
 export abstract class AbAttr {
   public showAbility: boolean;

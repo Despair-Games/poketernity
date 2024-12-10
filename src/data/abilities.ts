@@ -201,8 +201,7 @@ import { AttackTypeImmunityAbAttr } from "./abilities/attack-type-immunity-ab-at
 import { TypeImmunityHealAbAttr } from "./abilities/type-immunity-heal-ab-attr";
 import { TypeImmunityStatStageChangeAbAttr } from "./abilities/type-immunity-stat-stage-change-ab-attr";
 import { TypeImmunityAddBattlerTagAbAttr } from "./abilities/type-immunity-add-battler-tag-ab-attr";
-
-type AbAttrCondition = (pokemon: Pokemon) => boolean;
+import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {

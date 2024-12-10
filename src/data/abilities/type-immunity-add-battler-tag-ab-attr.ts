@@ -1,15 +1,10 @@
+import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import type { BattlerTagType } from "#app/enums/battler-tag-type";
 import type { Type } from "#app/enums/type";
 import type Pokemon from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
 import type Move from "../move";
 import { TypeImmunityAbAttr } from "./type-immunity-ab-attr";
-
-//#region Types
-
-type AbAttrCondition = (pokemon: Pokemon) => boolean;
-
-//#endregion
 
 export class TypeImmunityAddBattlerTagAbAttr extends TypeImmunityAbAttr {
   private tagType: BattlerTagType;
