@@ -39,7 +39,6 @@ import {
   applyPostItemLostAbAttrs,
   applyPreAttackAbAttrs,
   applyPreDefendAbAttrs,
-  BlockOneHitKOAbAttr,
   ChangeMovePriorityAbAttr,
   ForceSwitchOutImmunityAbAttr,
   HealFromBerryUseAbAttr,
@@ -54,6 +53,7 @@ import {
   UnsuppressableAbilityAbAttr,
   UnswappableAbilityAbAttr,
 } from "./ability";
+import { BlockOneHitKOAbAttr } from "./abilities/block-one-hit-ko-ab-attr";
 import { BlockNonDirectDamageAbAttr } from "./abilities/block-non-direct-damage-ab-attr";
 import { ConfusionOnStatusEffectAbAttr } from "./abilities/confusion-on-status-effect-ab-attr";
 import { AllyMoveCategoryPowerBoostAbAttr } from "./abilities/ally-move-category-power-boost-ab-attr";

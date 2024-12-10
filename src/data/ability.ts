@@ -182,19 +182,6 @@ export class Ability implements Localizable {
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
 
-export class BlockOneHitKOAbAttr extends AbAttr {
-  override apply(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    cancelled: BooleanHolder,
-    _args: any[],
-  ): boolean {
-    cancelled.value = true;
-    return true;
-  }
-}
-
 /**
  * This governs abilities that alter the priority of moves
  * Abilities: Prankster, Gale Wings, Triage, Mycelium Might, Stall
