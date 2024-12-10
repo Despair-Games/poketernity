@@ -182,7 +182,6 @@ import {
   applyPostSetStatusAbAttrs,
   InfiltratorAbAttr,
   AlliedFieldDamageReductionAbAttr,
-  PostDamageAbAttr,
   applyPostDamageAbAttrs,
   CommanderAbAttr,
   applyPostItemLostAbAttrs,
@@ -248,6 +247,7 @@ import { StatusEffect } from "#enums/status-effect";
 import { doShinySparkleAnim } from "#app/field/anims";
 import { IgnoreTypeStatusEffectImmunityAbAttr } from "#app/data/abilities/ignore-type-status-effect-immunity-ab-attr";
 import type { AbAttr } from "#app/data/abilities/ab-attr";
+import { PostDamageAbAttr } from "#app/data/abilities/post-damage-ab-attr";
 
 export enum LearnMoveSituation {
   MISC,

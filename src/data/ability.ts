@@ -66,6 +66,7 @@ import {
 } from "./pokemon-forms";
 import { AbAttr } from "./abilities/ab-attr";
 import type { PostBattleInitAbAttr } from "./abilities/post-battle-init-ab-attr";
+import { PostDamageAbAttr } from "./abilities/post-damage-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -5924,23 +5925,6 @@ function calculateShellBellRecovery(pokemon: Pokemon): number {
     return toDmgValue(pokemon.turnData.totalDamageDealt / 8) * shellBellModifier.stackCount;
   }
   return 0;
-}
-
-/**
- * Triggers after the Pokemon takes any damage
- * @extends AbAttr
- */
-export class PostDamageAbAttr extends AbAttr {
-  public applyPostDamage(
-    _pokemon: Pokemon,
-    _damage: number,
-    _passive: boolean,
-    _simulated: boolean,
-    _args: any[],
-    _source?: Pokemon,
-  ): boolean {
-    return false;
-  }
 }
 
 /**

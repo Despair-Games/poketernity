@@ -10,7 +10,6 @@ import {
   IgnoreMoveEffectsAbAttr,
   MaxMultiHitAbAttr,
   PostAttackAbAttr,
-  PostDamageAbAttr,
   PostDefendAbAttr,
   TypeImmunityAbAttr,
 } from "#app/data/ability";
@@ -62,6 +61,7 @@ import { BooleanHolder, isNullOrUndefined, NumberHolder } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { Moves } from "#enums/moves";
 import i18next from "i18next";
+import { PostDamageAbAttr } from "#app/data/abilities/post-damage-ab-attr";
 
 export class MoveEffectPhase extends PokemonPhase {
   public move: PokemonMove;
