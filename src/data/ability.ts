@@ -68,7 +68,7 @@ import { PreAttackAbAttr } from "./abilities/pre-attack-ab-attr";
 import { type PreDefendAbAttr } from "./abilities/pre-defend-ab-attr";
 import { ReceivedMoveDamageMultiplierAbAttr } from "./abilities/received-move-damage-multiplier-ab-attr";
 import { PostDefendAbAttr } from "./abilities/post-defend-ab-attr";
-import { PostStatStageChangeAbAttr } from "./abilities/post-stat-stage-change-ab-attr";
+import type { PostStatStageChangeAbAttr } from "./abilities/post-stat-stage-change-ab-attr";
 import { IgnoreMoveEffectsAbAttr } from "./abilities/ignore-move-effect-ab-attr";
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 
@@ -183,41 +183,7 @@ type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => 
 // TODO: Can this be improved?
 type PokemonAttackCondition = (user: Pokemon | null, target: Pokemon | null, move: Move) => boolean;
 export type PokemonDefendCondition = (target: Pokemon, user: Pokemon, move: Move) => boolean;
-type PokemonStatStageChangeCondition = (target: Pokemon, statsChanged: BattleStat[], stages: number) => boolean;
-
-export class PostStatStageChangeStatStageChangeAbAttr extends PostStatStageChangeAbAttr {
-  private condition: PokemonStatStageChangeCondition;
-  private statsToChange: BattleStat[];
-  private stages: number;
-
-  constructor(condition: PokemonStatStageChangeCondition, statsToChange: BattleStat[], stages: number) {
-    super(true);
-
-    this.condition = condition;
-    this.statsToChange = statsToChange;
-    this.stages = stages;
-  }
-
-  override applyPostStatStageChange(
-    pokemon: Pokemon,
-    simulated: boolean,
-    statStagesChanged: BattleStat[],
-    stagesChanged: number,
-    selfTarget: boolean,
-    _args: any[],
-  ): boolean {
-    if (this.condition(pokemon, statStagesChanged, stagesChanged) && !selfTarget) {
-      if (!simulated) {
-        globalScene.unshiftPhase(
-          new StatStageChangePhase(pokemon.getBattlerIndex(), true, this.statsToChange, this.stages),
-        );
-      }
-      return true;
-    }
-
-    return false;
-  }
-}
+export type PokemonStatStageChangeCondition = (target: Pokemon, statsChanged: BattleStat[], stages: number) => boolean;
 
 export class VariableMovePowerAbAttr extends PreAttackAbAttr {
   override applyPreAttack(

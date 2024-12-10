@@ -86,7 +86,6 @@ import {
   PostIntimidateStatStageChangeAbAttr,
   PostItemLostApplyBattlerTagAbAttr,
   PostKnockOutStatStageChangeAbAttr,
-  PostStatStageChangeStatStageChangeAbAttr,
   PostSummonAddBattlerTagAbAttr,
   PostSummonAllyHealAbAttr,
   PostSummonClearAllyStatStagesAbAttr,
@@ -147,6 +146,7 @@ import {
   VariableMovePowerBoostAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { PostStatStageChangeStatStageChangeAbAttr } from "./abilities/post-stat-stage-change-stat-stage-change-ab-attr";
 import { PostDefendWeatherChangeAbAttr } from "./abilities/post-defend-weather-change-ab-attr";
 import { PostDefendCritStatStageChangeAbAttr } from "./abilities/post-defend-crit-stat-stage-change-ab-attr";
 import { PostDefendContactApplyTagChanceAbAttr } from "./abilities/post-defend-contact-apply-tag-chance-ab-attr";
