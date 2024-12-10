@@ -67,6 +67,7 @@ import { BlockNonDirectDamageAbAttr } from "./abilities/block-non-direct-damage-
 import type { PreWeatherEffectAbAttr } from "./abilities/pre-weather-effect-ab-attr";
 import type { PreWeatherDamageAbAttr } from "./abilities/pre-weather-damage-ab-attr";
 import type { PostWeatherChangeAbAttr } from "./abilities/post-weather-change-ab-attr";
+import { PostWeatherLapseAbAttr } from "./abilities/post-weather-lapse-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -176,7 +177,7 @@ export class Ability implements Localizable {
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
 
-function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondition {
+export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondition {
   return () => {
     if (!globalScene?.arena) {
       return false;
@@ -187,30 +188,6 @@ function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondition {
     const weatherType = globalScene.arena.weather?.weatherType;
     return !!weatherType && weatherTypes.indexOf(weatherType) > -1;
   };
-}
-
-export class PostWeatherLapseAbAttr extends AbAttr {
-  protected weatherTypes: WeatherType[];
-
-  constructor(...weatherTypes: WeatherType[]) {
-    super();
-
-    this.weatherTypes = weatherTypes;
-  }
-
-  applyPostWeatherLapse(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    _weather: Weather | null,
-    _args: any[],
-  ): boolean {
-    return false;
-  }
-
-  override getCondition(): AbAttrCondition {
-    return getWeatherCondition(...this.weatherTypes);
-  }
 }
 
 export class PostWeatherLapseHealAbAttr extends PostWeatherLapseAbAttr {
