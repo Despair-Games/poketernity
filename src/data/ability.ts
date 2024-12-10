@@ -70,7 +70,6 @@ import { ReceivedMoveDamageMultiplierAbAttr } from "./abilities/received-move-da
 import { PostDefendAbAttr } from "./abilities/post-defend-ab-attr";
 import { PostStatStageChangeAbAttr } from "./abilities/post-stat-stage-change-ab-attr";
 import { IgnoreMoveEffectsAbAttr } from "./abilities/ignore-move-effect-ab-attr";
-import { PostDefendContactApplyStatusEffectAbAttr } from "./abilities/post-defend-contact-apply-status-effect-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -185,27 +184,6 @@ type AbAttrCondition = (pokemon: Pokemon) => boolean;
 type PokemonAttackCondition = (user: Pokemon | null, target: Pokemon | null, move: Move) => boolean;
 export type PokemonDefendCondition = (target: Pokemon, user: Pokemon, move: Move) => boolean;
 type PokemonStatStageChangeCondition = (target: Pokemon, statsChanged: BattleStat[], stages: number) => boolean;
-
-export class EffectSporeAbAttr extends PostDefendContactApplyStatusEffectAbAttr {
-  constructor() {
-    super(10, StatusEffect.POISON, StatusEffect.PARALYSIS, StatusEffect.SLEEP);
-  }
-
-  override applyPostDefend(
-    pokemon: Pokemon,
-    passive: boolean,
-    simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
-    hitResult: HitResult,
-    args: any[],
-  ): boolean {
-    if (attacker.hasAbility(Abilities.OVERCOAT) || attacker.isOfType(Type.GRASS)) {
-      return false;
-    }
-    return super.applyPostDefend(pokemon, passive, simulated, attacker, move, hitResult, args);
-  }
-}
 
 export class PostDefendContactApplyTagChanceAbAttr extends PostDefendAbAttr {
   private chance: integer;

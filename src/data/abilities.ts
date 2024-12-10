@@ -39,7 +39,6 @@ import {
   DamageBoostAbAttr,
   DoubleBerryEffectAbAttr,
   DownloadAbAttr,
-  EffectSporeAbAttr,
   FetchBallAbAttr,
   FieldMoveTypePowerBoostAbAttr,
   FieldMultiplyStatAbAttr,
@@ -156,6 +155,7 @@ import {
   VariableMovePowerBoostAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { EffectSporeAbAttr } from "./abilities/effect-spore-ab-attr";
 import { PostDefendContactApplyStatusEffectAbAttr } from "./abilities/post-defend-contact-apply-status-effect-ab-attr";
 import { PostDefendTerrainChangeAbAttr } from "./abilities/post-defend-terrain-change-ab-attr";
 import { PostDefendApplyArenaTrapTagAbAttr } from "./abilities/post-defend-apply-arena-trap-tag-ab-attr";
