@@ -34,7 +34,6 @@ import {
   InfiltratorAbAttr,
   MaxMultiHitAbAttr,
   MoneyAbAttr,
-  MoodyAbAttr,
   MoveAbilityBypassAbAttr,
   NoFusionAbilityAbAttr,
   NoTransformAbilityAbAttr,
@@ -69,6 +68,7 @@ import {
   UnswappableAbilityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { MoodyAbAttr } from "./abilities/moody-ab-attr";
 import { PostTurnResetStatusAbAttr } from "./abilities/post-turn-reset-status-ab-attr";
 import { PostTerrainChangeAddBattlerTagAttr } from "./abilities/post-terrain-change-add-battler-tag-attr";
 import { PostWeatherChangeAddBattlerTagAttr } from "./abilities/post-weather-change-add-battler-tag-ab-attr";
