@@ -24,7 +24,6 @@ import {
   IgnoreTypeImmunityAbAttr,
   InfiltratorAbAttr,
   MoneyAbAttr,
-  MoveAbilityBypassAbAttr,
   NoFusionAbilityAbAttr,
   NoTransformAbilityAbAttr,
   PostDamageForceSwitchAbAttr,
@@ -36,6 +35,7 @@ import {
   UnsuppressableAbilityAbAttr,
   UnswappableAbilityAbAttr,
 } from "./ability";
+import { MoveAbilityBypassAbAttr } from "./abilities/move-ability-bypass-ab-attr";
 import { SyncEncounterNatureAbAttr } from "./abilities/sync-encounter-nature-ab-attr";
 import { WeightMultiplierAbAttr } from "./abilities/weight-multiplier-ab-attr";
 import { ReduceBerryUseThresholdAbAttr } from "./abilities/reduce-berry-use-threshold-ab-attr";
