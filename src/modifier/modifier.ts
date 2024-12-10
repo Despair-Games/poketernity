@@ -304,7 +304,6 @@ export class AddPokeballModifier extends ConsumableModifier {
 
   /**
    * Applies {@linkcode AddPokeballModifier}
-   * @param battleScene {@linkcode BattleScene}
    * @returns always `true`
    */
   override apply(): boolean {
@@ -331,7 +330,6 @@ export class AddVoucherModifier extends ConsumableModifier {
 
   /**
    * Applies {@linkcode AddVoucherModifier}
-   * @param battleScene {@linkcode BattleScene}
    * @returns always `true`
    */
   override apply(): boolean {
