@@ -34,7 +34,6 @@ import {
   PostSummonStatStageChangeOnArenaAbAttr,
   PreventBypassSpeedChanceAbAttr,
   ReduceBerryUseThresholdAbAttr,
-  ReduceStatusEffectDurationAbAttr,
   SuppressFieldAbilitiesAbAttr,
   SyncEncounterNatureAbAttr,
   TerrainEventTypeChangeAbAttr,
@@ -43,6 +42,7 @@ import {
   UnswappableAbilityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { ReduceStatusEffectDurationAbAttr } from "./abilities/reduce-status-effect-duration-ab-attr";
 import { BlockRedirectAbAttr } from "./abilities/block-redirect-ab-attr";
 import { RedirectTypeMoveAbAttr } from "./abilities/redirect-type-move-ab-attr";
 import { PostFaintClearWeatherAbAttr } from "./abilities/post-faint-clear-weather-ab-attr";

@@ -15,8 +15,8 @@ import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { SwitchPhase } from "#app/phases/switch-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
-import type { Constructor } from "#app/utils";
-import { BooleanHolder, NumberHolder, toDmgValue } from "#app/utils";
+import type { Constructor, NumberHolder } from "#app/utils";
+import { BooleanHolder, toDmgValue } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import type { ArenaTagType } from "#enums/arena-tag-type";
 import type { BattlerTagType } from "#enums/battler-tag-type";
@@ -187,46 +187,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
     const weatherType = globalScene.arena.weather?.weatherType;
     return !!weatherType && weatherTypes.indexOf(weatherType) > -1;
   };
-}
-
-/**
- * Used by Early Bird, makes the pokemon wake up faster
- * @param statusEffect - The {@linkcode StatusEffect} to check for
- * @see {@linkcode apply}
- */
-export class ReduceStatusEffectDurationAbAttr extends AbAttr {
-  private statusEffect: StatusEffect;
-
-  constructor(statusEffect: StatusEffect) {
-    super(true);
-
-    this.statusEffect = statusEffect;
-  }
-
-  /**
-   * Reduces the number of sleep turns remaining by an extra 1 when applied
-   * @param args - The args passed to the `AbAttr`:
-   * - `[0]` - The {@linkcode StatusEffect} of the Pokemon
-   * - `[1]` - The number of turns remaining until the status is healed
-   * @returns `true` if the ability was applied
-   */
-  override apply(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    _cancelled: BooleanHolder,
-    args: any[],
-  ): boolean {
-    if (!(args[1] instanceof NumberHolder)) {
-      return false;
-    }
-    if (args[0] === this.statusEffect) {
-      args[1].value -= 1;
-      return true;
-    }
-
-    return false;
-  }
 }
 
 export class FlinchEffectAbAttr extends AbAttr {

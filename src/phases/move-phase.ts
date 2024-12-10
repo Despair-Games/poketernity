@@ -1,12 +1,7 @@
 import { BattlerIndex } from "#app/battle";
 import { globalScene } from "#app/global-scene";
-import {
-  applyAbAttrs,
-  applyPostMoveUsedAbAttrs,
-  applyPreAttackAbAttrs,
-  IncreasePpAbAttr,
-  ReduceStatusEffectDurationAbAttr,
-} from "#app/data/ability";
+import { applyAbAttrs, applyPostMoveUsedAbAttrs, applyPreAttackAbAttrs, IncreasePpAbAttr } from "#app/data/ability";
+import { ReduceStatusEffectDurationAbAttr } from "#app/data/abilities/reduce-status-effect-duration-ab-attr";
 import { BlockRedirectAbAttr } from "#app/data/abilities/block-redirect-ab-attr";
 import { RedirectMoveAbAttr } from "#app/data/abilities/redirect-move-ab-attr";
 import { PostMoveUsedAbAttr } from "#app/data/abilities/post-move-used-ab-attr";
