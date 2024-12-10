@@ -37,7 +37,6 @@ import {
   NoFusionAbilityAbAttr,
   NoTransformAbilityAbAttr,
   PostBattleLootAbAttr,
-  PostBiomeChangeTerrainChangeAbAttr,
   PostDamageForceSwitchAbAttr,
   PostDancingMoveAbAttr,
   PostFaintClearWeatherAbAttr,
@@ -63,6 +62,7 @@ import {
   UnswappableAbilityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { PostBiomeChangeTerrainChangeAbAttr } from "./abilities/post-biome-change-terrain-change-ab-attr";
 import { PostBiomeChangeWeatherChangeAbAttr } from "./abilities/post-biome-change-weather-change-ab-attr";
 import { PostTurnFormChangeAbAttr } from "./abilities/post-turn-form-change-ab-attr";
 import { SpeedBoostAbAttr } from "./abilities/speed-boost-ab-attr";
