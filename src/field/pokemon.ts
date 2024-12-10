@@ -141,7 +141,6 @@ import { WeatherType } from "#enums/weather-type";
 import { ArenaTagSide, NoCritTag, WeakenMoveScreenTag } from "#app/data/arena-tag";
 import type { Ability } from "#app/data/ability";
 import {
-  BlockCritAbAttr,
   BonusCritAbAttr,
   BypassBurnDamageReductionAbAttr,
   WeightMultiplierAbAttr,
@@ -167,6 +166,7 @@ import {
   applyPostItemLostAbAttrs,
   PostItemLostAbAttr,
 } from "#app/data/ability";
+import { BlockCritAbAttr } from "#app/data/abilities/block-crit-ab-attr";
 import { UserFieldBattlerTagImmunityAbAttr } from "#app/data/abilities/user-field-battler-tag-immunity-ab-attr";
 import { BattlerTagImmunityAbAttr } from "#app/data/abilities/battler-tag-immunity-ab-attr";
 import { UserFieldStatusEffectImmunityAbAttr } from "#app/data/abilities/user-field-status-effect-immunity-ab-attr";

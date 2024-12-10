@@ -182,25 +182,6 @@ export class Ability implements Localizable {
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
 
-/**
- * Provides immunity to critical hits
- * These abilities use this attribute:
- * - Battle Armor
- * - Shell Armor (Identical to Battle Armor in functionality, just has a different name)
- */
-export class BlockCritAbAttr extends AbAttr {
-  override apply(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    _cancelled: BooleanHolder,
-    args: any[],
-  ): boolean {
-    (args[0] as BooleanHolder).value = true;
-    return true;
-  }
-}
-
 export class BonusCritAbAttr extends AbAttr {
   override apply(
     _pokemon: Pokemon,
