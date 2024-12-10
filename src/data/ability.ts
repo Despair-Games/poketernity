@@ -33,7 +33,7 @@ import { Command } from "../ui/command-ui-handler";
 import { ArenaTagSide } from "./arena-tag";
 import type { BattlerTag } from "./battler-tags";
 import type Move from "./move";
-import { allMoves, MoveCategory, MoveFlags, MoveTarget } from "./move";
+import { allMoves, MoveCategory, MoveTarget } from "./move";
 import { AbAttr } from "./abilities/ab-attr";
 import type { PostBattleInitAbAttr } from "./abilities/post-battle-init-ab-attr";
 import { PostDamageAbAttr } from "./abilities/post-damage-ab-attr";
@@ -44,7 +44,6 @@ import { ReceivedMoveDamageMultiplierAbAttr } from "./abilities/received-move-da
 import type { PostDefendAbAttr } from "./abilities/post-defend-ab-attr";
 import type { PostStatStageChangeAbAttr } from "./abilities/post-stat-stage-change-ab-attr";
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
-import { FieldPreventExplosiveMovesAbAttr } from "./abilities/field-prevent-explosive-moves-ab-attr";
 import type { FieldMultiplyStatAbAttr } from "./abilities/field-multiply-stat-ab-attr";
 import type { PokemonDefendCondition } from "../@types/PokemonDefendCondition";
 import type { StatMultiplierAbAttr } from "./abilities/stat-multiplier-ab-attr";
@@ -57,7 +56,6 @@ import type { PreSwitchOutAbAttr } from "./abilities/pre-switch-out-ab-attr";
 import type { PreStatStageChangeAbAttr } from "./abilities/pre-stat-stage-change-ab-attr";
 import type { PreSetStatusAbAttr } from "./abilities/pre-set-status-ab-attr";
 import type { PreApplyBattlerTagAbAttr } from "./abilities/pre-apply-battler-tag-ab-attr";
-import { BlockNonDirectDamageAbAttr } from "./abilities/block-non-direct-damage-ab-attr";
 import type { PreWeatherEffectAbAttr } from "./abilities/pre-weather-effect-ab-attr";
 import type { PreWeatherDamageAbAttr } from "./abilities/pre-weather-damage-ab-attr";
 import type { PostWeatherChangeAbAttr } from "./abilities/post-weather-change-ab-attr";
@@ -189,49 +187,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
     const weatherType = globalScene.arena.weather?.weatherType;
     return !!weatherType && weatherTypes.indexOf(weatherType) > -1;
   };
-}
-
-export class PostFaintContactDamageAbAttr extends PostFaintAbAttr {
-  private damageRatio: integer;
-
-  constructor(damageRatio: integer) {
-    super();
-
-    this.damageRatio = damageRatio;
-  }
-
-  override applyPostFaint(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    attacker?: Pokemon,
-    move?: Move,
-    _hitResult?: HitResult,
-    ..._args: any[]
-  ): boolean {
-    if (move !== undefined && attacker !== undefined && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)) {
-      //If the mon didn't die to indirect damage
-      const cancelled = new BooleanHolder(false);
-      globalScene.getField(true).map((p) => applyAbAttrs(FieldPreventExplosiveMovesAbAttr, p, cancelled, simulated));
-      if (cancelled.value || attacker.hasAbilityWithAttr(BlockNonDirectDamageAbAttr)) {
-        return false;
-      }
-      if (!simulated) {
-        attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio)), HitResult.OTHER);
-        attacker.turnData.damageTaken += toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio));
-      }
-      return true;
-    }
-
-    return false;
-  }
-
-  override getTriggerMessage(pokemon: Pokemon, abilityName: string, ..._args: any[]): string {
-    return i18next.t("abilityTriggers:postFaintContactDamage", {
-      pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-      abilityName,
-    });
-  }
 }
 
 /**

@@ -32,7 +32,6 @@ import {
   NoFusionAbilityAbAttr,
   NoTransformAbilityAbAttr,
   PostDamageForceSwitchAbAttr,
-  PostFaintContactDamageAbAttr,
   PostFaintHPDamageAbAttr,
   PostSummonStatStageChangeOnArenaAbAttr,
   PreventBypassSpeedChanceAbAttr,
@@ -202,6 +201,7 @@ import { FetchBallAbAttr } from "./abilities/fetch-ball-ab-attr";
 import { HealFromBerryUseAbAttr } from "./abilities/heal-from-berry-use-ab-attr";
 import { ArenaTrapAbAttr } from "./abilities/arena-trap-ab-attr";
 import { PostBattleLootAbAttr } from "./abilities/post-battle-loot-ab-attr";
+import { PostFaintContactDamageAbAttr } from "./abilities/post-faint-contact-damage-ab-attr";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {
