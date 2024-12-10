@@ -20,7 +20,6 @@ import {
   AlwaysHitAbAttr,
   ArenaTrapAbAttr,
   BlockRedirectAbAttr,
-  BlockWeatherDamageAttr,
   BypassBurnDamageReductionAbAttr,
   BypassSpeedChanceAbAttr,
   DoubleBerryEffectAbAttr,
@@ -81,6 +80,7 @@ import {
   UnswappableAbilityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { BlockWeatherDamageAttr } from "./abilities/block-weather-damage-attr";
 import { IgnoreContactAbAttr } from "./abilities/ignore-contact-ab-attr";
 import { ChangeMovePriorityAbAttr } from "./abilities/change-move-priority-ab-attr";
 import { BlockOneHitKOAbAttr } from "./abilities/block-one-hit-ko-ab-attr";

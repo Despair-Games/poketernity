@@ -74,7 +74,7 @@ import type { PreSetStatusAbAttr } from "./abilities/pre-set-status-ab-attr";
 import type { PreApplyBattlerTagAbAttr } from "./abilities/pre-apply-battler-tag-ab-attr";
 import { BlockNonDirectDamageAbAttr } from "./abilities/block-non-direct-damage-ab-attr";
 import { PreWeatherEffectAbAttr } from "./abilities/pre-weather-effect-ab-attr";
-import { PreWeatherDamageAbAttr } from "./abilities/pre-weather-damage-ab-attr";
+import type { PreWeatherDamageAbAttr } from "./abilities/pre-weather-damage-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -183,31 +183,6 @@ export class Ability implements Localizable {
 }
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
-
-export class BlockWeatherDamageAttr extends PreWeatherDamageAbAttr {
-  private weatherTypes: WeatherType[];
-
-  constructor(...weatherTypes: WeatherType[]) {
-    super();
-
-    this.weatherTypes = weatherTypes;
-  }
-
-  override applyPreWeatherEffect(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    weather: Weather,
-    cancelled: BooleanHolder,
-    _args: any[],
-  ): boolean {
-    if (!this.weatherTypes.length || this.weatherTypes.indexOf(weather?.weatherType) > -1) {
-      cancelled.value = true;
-    }
-
-    return true;
-  }
-}
 
 export class SuppressWeatherEffectAbAttr extends PreWeatherEffectAbAttr {
   public affectsImmutable: boolean;
