@@ -71,6 +71,7 @@ import { FieldPreventExplosiveMovesAbAttr } from "./abilities/field-prevent-expl
 import type { FieldMultiplyStatAbAttr } from "./abilities/field-multiply-stat-ab-attr";
 import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition";
 import type { PokemonDefendCondition } from "../@types/PokemonDefendCondition";
+import { FieldMovePowerBoostAbAttr } from "./abilities/field-move-power-boost-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -179,42 +180,6 @@ export class Ability implements Localizable {
 }
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
-
-/**
- * Boosts the power of a Pokémon's move under certain conditions.
- * @extends AbAttr
- */
-export class FieldMovePowerBoostAbAttr extends AbAttr {
-  private condition: PokemonAttackCondition;
-  private powerMultiplier: number;
-
-  /**
-   * @param condition - A function that determines whether the power boost condition is met.
-   * @param powerMultiplier - The multiplier to apply to the move's power when the condition is met.
-   */
-  constructor(condition: PokemonAttackCondition, powerMultiplier: number) {
-    super(false);
-    this.condition = condition;
-    this.powerMultiplier = powerMultiplier;
-  }
-
-  applyPreAttack(
-    pokemon: Pokemon | null,
-    _passive: boolean | null,
-    _simulated: boolean,
-    defender: Pokemon | null,
-    move: Move,
-    args: any[],
-  ): boolean {
-    if (this.condition(pokemon, defender, move)) {
-      (args[0] as NumberHolder).value *= this.powerMultiplier;
-
-      return true;
-    }
-
-    return false;
-  }
-}
 
 /**
  * Boosts the power of a specific type of move.
