@@ -1,6 +1,6 @@
 import type { BattlerIndex } from "#app/battle";
 import { BattleType } from "#app/battle";
-import { getStatusEffectDescriptor, getStatusEffectHealText } from "#app/data/status-effect";
+import { getStatusEffectHealText } from "#app/data/status-effect";
 import type { Weather } from "#app/data/weather";
 import { EFFECTIVE_STATS, Stat, type BattleStat } from "#app/enums/stat";
 import { SwitchType } from "#app/enums/switch-type";
@@ -71,7 +71,8 @@ import type { PostKnockOutAbAttr } from "./abilities/post-knock-out-ab-attr";
 import { PostSummonStatStageChangeAbAttr } from "./abilities/post-summon-stat-stage-change-ab-attr";
 import type { PreSwitchOutAbAttr } from "./abilities/pre-switch-out-ab-attr";
 import type { PreStatStageChangeAbAttr } from "./abilities/pre-stat-stage-change-ab-attr";
-import { PreSetStatusAbAttr } from "./abilities/pre-set-status-ab-attr";
+import type { PreSetStatusAbAttr } from "./abilities/pre-set-status-ab-attr";
+import { PreSetStatusEffectImmunityAbAttr } from "./abilities/pre-set-status-effect-immunity-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -180,61 +181,6 @@ export class Ability implements Localizable {
 }
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
-
-/**
- * Provides immunity to status effects to specified targets.
- */
-export class PreSetStatusEffectImmunityAbAttr extends PreSetStatusAbAttr {
-  private immuneEffects: StatusEffect[];
-
-  /**
-   * @param immuneEffects - The status effects to which the Pokémon is immune.
-   */
-  constructor(...immuneEffects: StatusEffect[]) {
-    super();
-
-    this.immuneEffects = immuneEffects;
-  }
-
-  /**
-   * Applies immunity to supplied status effects.
-   *
-   * @param _pokemon - The Pokémon to which the status is being applied.
-   * @param _passive - n/a
-   * @param effect - The status effect being applied.
-   * @param cancelled - A holder for a boolean value indicating if the status application was cancelled.
-   * @param _args - n/a
-   * @returns A boolean indicating the result of the status application.
-   */
-  override applyPreSetStatus(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    effect: StatusEffect,
-    cancelled: BooleanHolder,
-    _args: any[],
-  ): boolean {
-    if (this.immuneEffects.length < 1 || this.immuneEffects.includes(effect)) {
-      cancelled.value = true;
-      return true;
-    }
-
-    return false;
-  }
-
-  override getTriggerMessage(pokemon: Pokemon, abilityName: string, ...args: any[]): string {
-    return this.immuneEffects.length
-      ? i18next.t("abilityTriggers:statusEffectImmunityWithName", {
-          pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-          abilityName,
-          statusEffectName: getStatusEffectDescriptor(args[0] as StatusEffect),
-        })
-      : i18next.t("abilityTriggers:statusEffectImmunity", {
-          pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-          abilityName,
-        });
-  }
-}
 
 /**
  * Provides immunity to status effects to the user.
