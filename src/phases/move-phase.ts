@@ -6,7 +6,6 @@ import {
   applyPreAttackAbAttrs,
   BlockRedirectAbAttr,
   IncreasePpAbAttr,
-  PokemonTypeChangeAbAttr,
   PostMoveUsedAbAttr,
   RedirectMoveAbAttr,
   ReduceStatusEffectDurationAbAttr,
@@ -49,6 +48,7 @@ import { Moves } from "#enums/moves";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
 import { getTerrainBlockMessage } from "#app/data/terrain";
+import { PokemonTypeChangeAbAttr } from "#app/data/abilities/pokemon-type-change-ab-attr";
 
 export class MovePhase extends BattlePhase {
   protected _pokemon: Pokemon;
