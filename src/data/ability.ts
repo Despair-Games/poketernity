@@ -66,6 +66,7 @@ import type { PostWeatherChangeAbAttr } from "./abilities/post-weather-change-ab
 import type { PostWeatherLapseAbAttr } from "./abilities/post-weather-lapse-ab-attr";
 import type { PostTerrainChangeAbAttr } from "./abilities/post-terrain-change-ab-attr";
 import type { PostTurnAbAttr } from "./abilities/post-turn-ab-attr";
+import { PostBiomeChangeAbAttr } from "./abilities/post-biome-change-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -187,8 +188,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
     return !!weatherType && weatherTypes.indexOf(weatherType) > -1;
   };
 }
-
-export class PostBiomeChangeAbAttr extends AbAttr {}
 
 export class PostBiomeChangeWeatherChangeAbAttr extends PostBiomeChangeAbAttr {
   private weatherType: WeatherType;
