@@ -153,7 +153,6 @@ import {
   UnsuppressableAbilityAbAttr,
   SuppressFieldAbilitiesAbAttr,
   NoFusionAbilityAbAttr,
-  MultCritAbAttr,
   IgnoreTypeImmunityAbAttr,
   ConditionalCritAbAttr,
   applyFieldStatMultiplierAbAttrs,
@@ -165,6 +164,7 @@ import {
   applyPostItemLostAbAttrs,
   PostItemLostAbAttr,
 } from "#app/data/ability";
+import { MultCritAbAttr } from "#app/data/abilities/mult-crit-ab-attr";
 import { BonusCritAbAttr } from "#app/data/abilities/bonus-crit-ab-attr";
 import { BlockCritAbAttr } from "#app/data/abilities/block-crit-ab-attr";
 import { UserFieldBattlerTagImmunityAbAttr } from "#app/data/abilities/user-field-battler-tag-immunity-ab-attr";

@@ -182,32 +182,6 @@ export class Ability implements Localizable {
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
 
-export class MultCritAbAttr extends AbAttr {
-  public multAmount: number;
-
-  constructor(multAmount: number) {
-    super(true);
-
-    this.multAmount = multAmount;
-  }
-
-  override apply(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    _cancelled: BooleanHolder,
-    args: any[],
-  ): boolean {
-    const critMult = args[0] as NumberHolder;
-    if (critMult.value > 1) {
-      critMult.value *= this.multAmount;
-      return true;
-    }
-
-    return false;
-  }
-}
-
 /**
  * Guarantees a critical hit according to the given condition, except if target prevents critical hits. ie. Merciless
  * @extends AbAttr

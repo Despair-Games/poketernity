@@ -45,7 +45,6 @@ import {
   MoneyAbAttr,
   MoodyAbAttr,
   MoveAbilityBypassAbAttr,
-  MultCritAbAttr,
   NoFusionAbilityAbAttr,
   NoTransformAbilityAbAttr,
   PostBattleLootAbAttr,
@@ -88,6 +87,7 @@ import {
   UnswappableAbilityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { MultCritAbAttr } from "./abilities/mult-crit-ab-attr";
 import { BonusCritAbAttr } from "./abilities/bonus-crit-ab-attr";
 import { BlockCritAbAttr } from "./abilities/block-crit-ab-attr";
 import { UserFieldBattlerTagImmunityAbAttr } from "./abilities/user-field-battler-tag-immunity-ab-attr";
