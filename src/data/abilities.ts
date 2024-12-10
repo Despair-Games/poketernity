@@ -166,7 +166,6 @@ import {
   UserFieldStatusEffectImmunityAbAttr,
   VariableMovePowerBoostAbAttr,
   WeightMultiplierAbAttr,
-  WonderSkinAbAttr,
 } from "./ability";
 import { GroundedTag } from "./battler-tags";
 import type Move from "./move";
@@ -202,6 +201,7 @@ import { NonSuperEffectiveImmunityAbAttr } from "./abilities/non-super-effective
 import { FullHpResistTypeAbAttr } from "./abilities/full-hp-resist-type-ab-attr";
 import { FieldPriorityMoveImmunityAbAttr } from "./abilities/field-priority-move-immunity-ab-attr";
 import { MoveImmunityAbAttr } from "./abilities/move-immunity-ab-attr";
+import { WonderSkinAbAttr } from "./abilities/wonder-skin-ab-attr";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {

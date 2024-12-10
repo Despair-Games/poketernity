@@ -64,7 +64,6 @@ import {
   UnswappableAbilityAbAttr,
   UserFieldMoveTypePowerBoostAbAttr,
   VariableMovePowerAbAttr,
-  WonderSkinAbAttr,
 } from "./ability";
 import {
   AttackTypeBoosterModifier,
@@ -111,6 +110,7 @@ import { PokemonTransformPhase } from "#app/phases/pokemon-transform-phase";
 import { MoveAnimPhase } from "#app/phases/move-anim-phase";
 import { BlockItemTheftAbAttr } from "./abilities/block-item-theft-ab-attr";
 import { BlockRecoilDamageAttr } from "./abilities/block-recoil-damage-ab-attr";
+import { WonderSkinAbAttr } from "./abilities/wonder-skin-ab-attr";
 
 export enum MoveCategory {
   PHYSICAL,
