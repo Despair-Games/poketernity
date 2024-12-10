@@ -72,7 +72,6 @@ import { PostSummonStatStageChangeAbAttr } from "./abilities/post-summon-stat-st
 import type { PreSwitchOutAbAttr } from "./abilities/pre-switch-out-ab-attr";
 import type { PreStatStageChangeAbAttr } from "./abilities/pre-stat-stage-change-ab-attr";
 import type { PreSetStatusAbAttr } from "./abilities/pre-set-status-ab-attr";
-import { PreSetStatusEffectImmunityAbAttr } from "./abilities/pre-set-status-effect-immunity-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -181,12 +180,6 @@ export class Ability implements Localizable {
 }
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
-
-/**
- * Provides immunity to status effects to the user's field.
- * @extends PreSetStatusEffectImmunityAbAttr
- */
-export class UserFieldStatusEffectImmunityAbAttr extends PreSetStatusEffectImmunityAbAttr {}
 
 export class PreApplyBattlerTagAbAttr extends AbAttr {
   applyPreApplyBattlerTag(
