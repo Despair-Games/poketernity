@@ -185,24 +185,6 @@ export class Ability implements Localizable {
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
 
-export class PostSummonTerrainChangeAbAttr extends PostSummonAbAttr {
-  private terrainType: TerrainType;
-
-  constructor(terrainType: TerrainType) {
-    super();
-
-    this.terrainType = terrainType;
-  }
-
-  override applyPostSummon(_pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
-    if (simulated) {
-      return globalScene.arena.terrain?.terrainType !== this.terrainType;
-    } else {
-      return globalScene.arena.trySetTerrain(this.terrainType, true);
-    }
-  }
-}
-
 export class PostSummonFormChangeAbAttr extends PostSummonAbAttr {
   private formFunc: (p: Pokemon) => integer;
 
