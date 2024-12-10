@@ -66,6 +66,7 @@ import type { PostWeatherChangeAbAttr } from "./abilities/post-weather-change-ab
 import type { PostWeatherLapseAbAttr } from "./abilities/post-weather-lapse-ab-attr";
 import type { PostTerrainChangeAbAttr } from "./abilities/post-terrain-change-ab-attr";
 import type { PostTurnAbAttr } from "./abilities/post-turn-ab-attr";
+import { PostMoveUsedAbAttr } from "./abilities/post-move-used-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -186,23 +187,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
     const weatherType = globalScene.arena.weather?.weatherType;
     return !!weatherType && weatherTypes.indexOf(weatherType) > -1;
   };
-}
-
-/**
- * Triggers just after a move is used either by the opponent or the player
- * @extends AbAttr
- */
-export class PostMoveUsedAbAttr extends AbAttr {
-  applyPostMoveUsed(
-    _pokemon: Pokemon,
-    _move: PokemonMove,
-    _source: Pokemon,
-    _targets: BattlerIndex[],
-    _simulated: boolean,
-    _args: any[],
-  ): boolean {
-    return false;
-  }
 }
 
 /**
