@@ -61,7 +61,6 @@ import {
   MoodyAbAttr,
   MoveAbilityBypassAbAttr,
   MovePowerBoostAbAttr,
-  MoveTypeChangeAbAttr,
   MoveTypePowerBoostAbAttr,
   MultCritAbAttr,
   NoFusionAbilityAbAttr,
@@ -144,6 +143,7 @@ import {
   VariableMovePowerBoostAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { MoveTypeChangeAbAttr } from "./abilities/move-type-change-ab-attr";
 import { FieldMultiplyStatAbAttr } from "./abilities/field-multiply-stat-ab-attr";
 import { FieldPreventExplosiveMovesAbAttr } from "./abilities/field-prevent-explosive-moves-ab-attr";
 import { PostStatStageChangeStatStageChangeAbAttr } from "./abilities/post-stat-stage-change-stat-stage-change-ab-attr";

@@ -167,7 +167,6 @@ import {
   UserFieldStatusEffectImmunityAbAttr,
   UserFieldBattlerTagImmunityAbAttr,
   BattlerTagImmunityAbAttr,
-  MoveTypeChangeAbAttr,
   applyCheckTrappedAbAttrs,
   CheckTrappedAbAttr,
   PostSetStatusAbAttr,
@@ -178,6 +177,7 @@ import {
   applyPostItemLostAbAttrs,
   PostItemLostAbAttr,
 } from "#app/data/ability";
+import { MoveTypeChangeAbAttr } from "#app/data/abilities/move-type-change-ab-attr";
 import { FieldMultiplyStatAbAttr } from "#app/data/abilities/field-multiply-stat-ab-attr";
 import type PokemonData from "#app/system/pokemon-data";
 import { BattlerIndex } from "#app/battle";

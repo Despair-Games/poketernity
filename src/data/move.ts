@@ -52,7 +52,6 @@ import {
   InfiltratorAbAttr,
   MaxMultiHitAbAttr,
   MoveAbilityBypassAbAttr,
-  MoveTypeChangeAbAttr,
   PostDamageForceSwitchAbAttr,
   PostItemLostAbAttr,
   UncopiableAbilityAbAttr,
@@ -60,6 +59,7 @@ import {
   UnswappableAbilityAbAttr,
   UserFieldMoveTypePowerBoostAbAttr,
 } from "./ability";
+import { MoveTypeChangeAbAttr } from "./abilities/move-type-change-ab-attr";
 import { FieldPreventExplosiveMovesAbAttr } from "./abilities/field-prevent-explosive-moves-ab-attr";
 import { VariableMovePowerAbAttr } from "./abilities/variable-move-power-ab-attr";
 import {

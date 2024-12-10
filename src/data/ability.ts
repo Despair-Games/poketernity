@@ -74,6 +74,7 @@ import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import { VariableMovePowerAbAttr } from "./abilities/variable-move-power-ab-attr";
 import { FieldPreventExplosiveMovesAbAttr } from "./abilities/field-prevent-explosive-moves-ab-attr";
 import type { FieldMultiplyStatAbAttr } from "./abilities/field-multiply-stat-ab-attr";
+import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -184,41 +185,8 @@ export class Ability implements Localizable {
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
 
 // TODO: Can this be improved?
-type PokemonAttackCondition = (user: Pokemon | null, target: Pokemon | null, move: Move) => boolean;
 export type PokemonDefendCondition = (target: Pokemon, user: Pokemon, move: Move) => boolean;
 export type PokemonStatStageChangeCondition = (target: Pokemon, statsChanged: BattleStat[], stages: number) => boolean;
-
-export class MoveTypeChangeAbAttr extends PreAttackAbAttr {
-  constructor(
-    private newType: Type,
-    private powerMultiplier: number,
-    private condition?: PokemonAttackCondition,
-  ) {
-    super(true);
-  }
-
-  // TODO: Decouple this into two attributes (type change / power boost)
-  override applyPreAttack(
-    pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    defender: Pokemon,
-    move: Move,
-    args: any[],
-  ): boolean {
-    if (this.condition && this.condition(pokemon, defender, move)) {
-      if (args[0] && args[0] instanceof NumberHolder) {
-        args[0].value = this.newType;
-      }
-      if (args[1] && args[1] instanceof NumberHolder) {
-        args[1].value *= this.powerMultiplier;
-      }
-      return true;
-    }
-
-    return false;
-  }
-}
 
 /** Ability attribute for changing a pokemon's type before using a move */
 export class PokemonTypeChangeAbAttr extends PreAttackAbAttr {
