@@ -73,6 +73,7 @@ import type { PreStatStageChangeAbAttr } from "./abilities/pre-stat-stage-change
 import type { PreSetStatusAbAttr } from "./abilities/pre-set-status-ab-attr";
 import type { PreApplyBattlerTagAbAttr } from "./abilities/pre-apply-battler-tag-ab-attr";
 import { BlockNonDirectDamageAbAttr } from "./abilities/block-non-direct-damage-ab-attr";
+import { PreWeatherEffectAbAttr } from "./abilities/pre-weather-effect-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -181,19 +182,6 @@ export class Ability implements Localizable {
 }
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
-
-export class PreWeatherEffectAbAttr extends AbAttr {
-  applyPreWeatherEffect(
-    _pokemon: Pokemon,
-    _passive: Boolean,
-    _simulated: boolean,
-    _weather: Weather | null,
-    _cancelled: BooleanHolder,
-    _args: any[],
-  ): boolean {
-    return false;
-  }
-}
 
 export class PreWeatherDamageAbAttr extends PreWeatherEffectAbAttr {}
 
