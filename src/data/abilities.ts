@@ -117,7 +117,6 @@ import {
   SuppressFieldAbilitiesAbAttr,
   SuppressWeatherEffectAbAttr,
   SyncEncounterNatureAbAttr,
-  SynchronizeStatusAbAttr,
   TerrainEventTypeChangeAbAttr,
   UncopiableAbilityAbAttr,
   UnsuppressableAbilityAbAttr,
@@ -126,6 +125,7 @@ import {
   UserFieldStatusEffectImmunityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { SynchronizeStatusAbAttr } from "./abilities/synchronize-status-ab-attr";
 import { PostAttackApplyBattlerTagAbAttr } from "./abilities/post-attack-apply-battler-tag-ab-attr";
 import { PostAttackContactApplyStatusEffectAbAttr } from "./abilities/post-attack-contact-apply-status-effect-ab-attr";
 import { PostAttackApplyStatusEffectAbAttr } from "./abilities/post-attack-apply-status-effect-ab-attr";
