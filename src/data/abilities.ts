@@ -134,9 +134,9 @@ import {
   UserFieldBattlerTagImmunityAbAttr,
   UserFieldMoveTypePowerBoostAbAttr,
   UserFieldStatusEffectImmunityAbAttr,
-  VariableMovePowerBoostAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { VariableMovePowerBoostAbAttr } from "./abilities/variable-move-power-boost-ab-attr";
 import { LowHpMoveTypePowerBoostAbAttr } from "./abilities/low-hp-move-type-power-boost-ab-attr";
 import { MoveTypePowerBoostAbAttr } from "./abilities/move-type-power-boost-ab-attr";
 import { MovePowerBoostAbAttr } from "./abilities/move-power-boost-ab-attr";
