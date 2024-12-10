@@ -35,7 +35,6 @@ import {
   PostFaintClearWeatherAbAttr,
   PostFaintContactDamageAbAttr,
   PostFaintHPDamageAbAttr,
-  PostFaintUnsuppressedWeatherFormChangeAbAttr,
   PostSummonStatStageChangeOnArenaAbAttr,
   PreventBypassSpeedChanceAbAttr,
   RedirectTypeMoveAbAttr,
@@ -49,6 +48,7 @@ import {
   UnswappableAbilityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { PostFaintUnsuppressedWeatherFormChangeAbAttr } from "./abilities/post-faint-unsuppressed-weather-form-change-ab-attr";
 import { MaxMultiHitAbAttr } from "./abilities/max-multi-hit-ab-attr";
 import { RunSuccessAbAttr } from "./abilities/run-success-ab-attr";
 import { PreventBerryUseAbAttr } from "./abilities/prevent-berry-use-ab-attr";

@@ -192,46 +192,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
 }
 
 /**
- * Used for weather suppressing abilities to trigger weather-based form changes upon being fainted.
- * Used by Cloud Nine and Air Lock.
- * @extends PostFaintAbAttr
- */
-export class PostFaintUnsuppressedWeatherFormChangeAbAttr extends PostFaintAbAttr {
-  /**
-   * Triggers {@linkcode Arena.triggerWeatherBasedFormChanges | triggerWeatherBasedFormChanges}
-   * when the user of the ability faints
-   * @param {Pokemon} _pokemon the fainted Pokemon
-   * @param _passive n/a
-   * @param _attacker n/a
-   * @param _move n/a
-   * @param _hitResult n/a
-   * @param _args n/a
-   * @returns whether the form change was triggered
-   */
-  override applyPostFaint(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    _attacker: Pokemon,
-    _move: Move,
-    _hitResult: HitResult,
-    _args: any[],
-  ): boolean {
-    const pokemonToTransform = getPokemonWithWeatherBasedForms();
-
-    if (pokemonToTransform.length < 1) {
-      return false;
-    }
-
-    if (!simulated) {
-      globalScene.arena.triggerWeatherBasedFormChanges();
-    }
-
-    return true;
-  }
-}
-
-/**
  * Clears Desolate Land/Primordial Sea/Delta Stream upon the Pokemon fainting
  */
 export class PostFaintClearWeatherAbAttr extends PostFaintAbAttr {
@@ -1833,7 +1793,7 @@ export function queueShowAbility(pokemon: Pokemon, passive: boolean): void {
 /**
  * Returns the Pokemon with weather-based forms
  */
-function getPokemonWithWeatherBasedForms() {
+export function getPokemonWithWeatherBasedForms() {
   return globalScene
     .getField(true)
     .filter(
