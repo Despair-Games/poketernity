@@ -44,7 +44,6 @@ import {
   BlockOneHitKOAbAttr,
   ChangeMovePriorityAbAttr,
   ConfusionOnStatusEffectAbAttr,
-  FieldMoveTypePowerBoostAbAttr,
   ForceSwitchOutImmunityAbAttr,
   HealFromBerryUseAbAttr,
   IgnoreContactAbAttr,
@@ -111,6 +110,7 @@ import { WonderSkinAbAttr } from "./abilities/wonder-skin-ab-attr";
 import { ReverseDrainAbAttr } from "./abilities/reverse-drain-ab-attr";
 import { MoveEffectChanceMultiplierAbAttr } from "./abilities/move-effect-chance-multiplier-ab-attr";
 import { IgnoreMoveEffectsAbAttr } from "./abilities/ignore-move-effect-ab-attr";
+import { FieldMoveTypePowerBoostAbAttr } from "./abilities/field-move-type-power-boost-ab-attr";
 
 export enum MoveCategory {
   PHYSICAL,

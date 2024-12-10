@@ -183,12 +183,6 @@ export class Ability implements Localizable {
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
 
 /**
- * Boosts the power of a specific type of move for all Pokemon in the field.
- * @extends PreAttackFieldMoveTypePowerBoostAbAttr
- */
-export class FieldMoveTypePowerBoostAbAttr extends PreAttackFieldMoveTypePowerBoostAbAttr {}
-
-/**
  * Boosts the power of a specific type of move for the user and its allies.
  * @extends PreAttackFieldMoveTypePowerBoostAbAttr
  */

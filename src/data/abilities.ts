@@ -38,7 +38,6 @@ import {
   DoubleBerryEffectAbAttr,
   DownloadAbAttr,
   FetchBallAbAttr,
-  FieldMoveTypePowerBoostAbAttr,
   FlinchStatStageChangeAbAttr,
   ForceSwitchOutImmunityAbAttr,
   ForewarnAbAttr,
@@ -202,6 +201,7 @@ import { PostDefendAbilitySwapAbAttr } from "./abilities/post-defend-ability-swa
 import { PostDefendAbilityGiveAbAttr } from "./abilities/post-defend-ability-give-ab-attr";
 import { PostDefendMoveDisableAbAttr } from "./abilities/post-defend-move-disable-ab-attr";
 import { PokemonTypeChangeAbAttr } from "./abilities/pokemon-type-change-ab-attr";
+import { FieldMoveTypePowerBoostAbAttr } from "./abilities/field-move-type-power-boost-ab-attr";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {
