@@ -14,7 +14,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { MovePhase } from "#app/phases/move-phase";
 import { isNullOrUndefined, NumberHolder, randSeedInt, toDmgValue } from "#app/utils";
 import i18next from "i18next";
-import { Ability, allAbilities, PostDamageForceSwitchAbAttr, TerrainEventTypeChangeAbAttr } from "./ability";
+import { Ability, allAbilities, PostDamageForceSwitchAbAttr } from "./ability";
 import { PreventBypassSpeedChanceAbAttr } from "./abilities/prevent-bypass-speed-chance-ab-attr";
 import { FormBlockDamageAbAttr } from "./abilities/form-block-damage-ab-attr";
 import { PostSummonStatStageChangeOnArenaAbAttr } from "./abilities/post-summon-stat-stage-change-on-arena-ab-attr";
@@ -197,6 +197,7 @@ import { PostBattleLootAbAttr } from "./abilities/post-battle-loot-ab-attr";
 import { PostFaintContactDamageAbAttr } from "./abilities/post-faint-contact-damage-ab-attr";
 import { PostFaintHPDamageAbAttr } from "./abilities/post-faint-hp-damage-ab-attr";
 import { BypassSpeedChanceAbAttr } from "./abilities/bypass-speed-chance-ab-attr";
+import { TerrainEventTypeChangeAbAttr } from "./abilities/terrain-event-type-change-ab-attr";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {

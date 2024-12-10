@@ -20,8 +20,7 @@ import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
 import type { StatusEffect } from "#enums/status-effect";
-import { TerrainType } from "#enums/terrain-type";
-import { Type } from "#enums/type";
+import type { TerrainType } from "#enums/terrain-type";
 import type { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
 import { getPokemonNameWithAffix } from "../messages";
@@ -32,7 +31,7 @@ import { allMoves } from "./move";
 import type { AbAttr } from "./abilities/ab-attr";
 import type { PostBattleInitAbAttr } from "./abilities/post-battle-init-ab-attr";
 import { PostDamageAbAttr } from "./abilities/post-damage-ab-attr";
-import { PostSummonAbAttr } from "./abilities/post-summon-ab-attr";
+import type { PostSummonAbAttr } from "./abilities/post-summon-ab-attr";
 import type { PreAttackAbAttr } from "./abilities/pre-attack-ab-attr";
 import { type PreDefendAbAttr } from "./abilities/pre-defend-ab-attr";
 import type { PostDefendAbAttr } from "./abilities/post-defend-ab-attr";
@@ -180,90 +179,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
     const weatherType = globalScene.arena.weather?.weatherType;
     return !!weatherType && weatherTypes.indexOf(weatherType) > -1;
   };
-}
-
-/**
- * This applies a terrain-based type change to the Pokemon.
- * Used by Mimicry.
- */
-export class TerrainEventTypeChangeAbAttr extends PostSummonAbAttr {
-  constructor() {
-    super(true);
-  }
-
-  override apply(
-    pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    _cancelled: BooleanHolder,
-    _args: any[],
-  ): boolean {
-    if (pokemon.isTerastallized()) {
-      return false;
-    }
-    const currentTerrain = globalScene.arena.getTerrainType();
-    const typeChange: Type[] = this.determineTypeChange(pokemon, currentTerrain);
-    if (typeChange.length !== 0) {
-      if (pokemon.summonData.addedType && typeChange.includes(pokemon.summonData.addedType)) {
-        pokemon.summonData.addedType = null;
-      }
-      pokemon.summonData.types = typeChange;
-      pokemon.updateInfo();
-    }
-    return true;
-  }
-
-  /**
-   * Retrieves the type(s) the Pokemon should change to in response to a terrain
-   * @param pokemon
-   * @param currentTerrain {@linkcode TerrainType}
-   * @returns a list of type(s)
-   */
-  private determineTypeChange(pokemon: Pokemon, currentTerrain: TerrainType): Type[] {
-    const typeChange: Type[] = [];
-    switch (currentTerrain) {
-      case TerrainType.ELECTRIC:
-        typeChange.push(Type.ELECTRIC);
-        break;
-      case TerrainType.MISTY:
-        typeChange.push(Type.FAIRY);
-        break;
-      case TerrainType.GRASSY:
-        typeChange.push(Type.GRASS);
-        break;
-      case TerrainType.PSYCHIC:
-        typeChange.push(Type.PSYCHIC);
-        break;
-      default:
-        pokemon.getTypes(false, false, true).forEach((t) => {
-          typeChange.push(t);
-        });
-        break;
-    }
-    return typeChange;
-  }
-
-  /**
-   * Checks if the Pokemon should change types if summoned into an active terrain
-   * @returns `true` if there is an active terrain requiring a type change | `false` if not
-   */
-  override applyPostSummon(pokemon: Pokemon, passive: boolean, simulated: boolean, _args: any[]): boolean {
-    if (globalScene.arena.getTerrainType() !== TerrainType.NONE) {
-      return this.apply(pokemon, passive, simulated, new BooleanHolder(false), []);
-    }
-    return false;
-  }
-
-  override getTriggerMessage(pokemon: Pokemon, _abilityName: string, ..._args: any[]) {
-    const currentTerrain = globalScene.arena.getTerrainType();
-    const pokemonNameWithAffix = getPokemonNameWithAffix(pokemon);
-    if (currentTerrain === TerrainType.NONE) {
-      return i18next.t("abilityTriggers:pokemonTypeChangeRevert", { pokemonNameWithAffix });
-    } else {
-      const moveType = i18next.t(`pokemonInfo:Type.${Type[this.determineTypeChange(pokemon, currentTerrain)[0]]}`);
-      return i18next.t("abilityTriggers:pokemonTypeChange", { pokemonNameWithAffix, moveType });
-    }
-  }
 }
 
 class ForceSwitchOutHelper {
