@@ -181,8 +181,6 @@ export class Ability implements Localizable {
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
 
-export type PokemonStatStageChangeCondition = (target: Pokemon, statsChanged: BattleStat[], stages: number) => boolean;
-
 /**
  * Class for abilities that convert single-strike moves to two-strike moves (i.e. Parental Bond).
  * @param damageMultiplier the damage multiplier for the second strike, relative to the first.
