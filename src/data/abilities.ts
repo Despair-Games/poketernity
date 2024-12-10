@@ -42,7 +42,6 @@ import {
   PostFaintContactDamageAbAttr,
   PostFaintHPDamageAbAttr,
   PostFaintUnsuppressedWeatherFormChangeAbAttr,
-  PostItemLostApplyBattlerTagAbAttr,
   PostSummonStatStageChangeOnArenaAbAttr,
   PreventBerryUseAbAttr,
   PreventBypassSpeedChanceAbAttr,
@@ -61,6 +60,7 @@ import {
   UnswappableAbilityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { PostItemLostApplyBattlerTagAbAttr } from "./abilities/post-item-lost-apply-battler-tag-ab-attr";
 import { PostDancingMoveAbAttr } from "./abilities/post-dancing-move-ab-attr";
 import { PostBiomeChangeTerrainChangeAbAttr } from "./abilities/post-biome-change-terrain-change-ab-attr";
 import { PostBiomeChangeWeatherChangeAbAttr } from "./abilities/post-biome-change-weather-change-ab-attr";

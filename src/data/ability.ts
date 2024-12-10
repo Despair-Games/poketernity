@@ -66,7 +66,7 @@ import type { PostWeatherLapseAbAttr } from "./abilities/post-weather-lapse-ab-a
 import type { PostTerrainChangeAbAttr } from "./abilities/post-terrain-change-ab-attr";
 import type { PostTurnAbAttr } from "./abilities/post-turn-ab-attr";
 import type { PostMoveUsedAbAttr } from "./abilities/post-move-used-ab-attr";
-import { PostItemLostAbAttr } from "./abilities/post-item-lost-ab-attr";
+import type { PostItemLostAbAttr } from "./abilities/post-item-lost-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -187,31 +187,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
     const weatherType = globalScene.arena.weather?.weatherType;
     return !!weatherType && weatherTypes.indexOf(weatherType) > -1;
   };
-}
-
-/**
- * Applies a Battler Tag to the Pokemon after it loses or consumes item
- * @extends PostItemLostAbAttr
- */
-export class PostItemLostApplyBattlerTagAbAttr extends PostItemLostAbAttr {
-  private tagType: BattlerTagType;
-  constructor(tagType: BattlerTagType) {
-    super(true);
-    this.tagType = tagType;
-  }
-  /**
-   * Adds the last used Pokeball back into the player's inventory
-   * @param pokemon {@linkcode Pokemon} with this ability
-   * @param _args N/A
-   * @returns true if BattlerTag was applied
-   */
-  override applyPostItemLost(pokemon: Pokemon, simulated: boolean, _args: any[]): boolean {
-    if (!pokemon.getTag(this.tagType) && !simulated) {
-      pokemon.addTag(this.tagType);
-      return true;
-    }
-    return false;
-  }
 }
 
 export class StatStageChangeMultiplierAbAttr extends AbAttr {
