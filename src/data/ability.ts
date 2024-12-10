@@ -189,20 +189,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
   };
 }
 
-export class DoubleBerryEffectAbAttr extends AbAttr {
-  override apply(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    _cancelled: BooleanHolder,
-    args: any[],
-  ): boolean {
-    (args[0] as NumberHolder).value *= 2;
-
-    return true;
-  }
-}
-
 export class PreventBerryUseAbAttr extends AbAttr {
   override apply(
     _pokemon: Pokemon,

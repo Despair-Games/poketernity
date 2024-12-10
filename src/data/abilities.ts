@@ -21,7 +21,6 @@ import {
   ArenaTrapAbAttr,
   BlockRedirectAbAttr,
   BypassSpeedChanceAbAttr,
-  DoubleBerryEffectAbAttr,
   FlinchStatStageChangeAbAttr,
   ForceSwitchOutImmunityAbAttr,
   FormBlockDamageAbAttr,
@@ -56,6 +55,7 @@ import {
   UnswappableAbilityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { DoubleBerryEffectAbAttr } from "./abilities/double-berry-effect-ab-attr";
 import { ReduceBurnDamageAbAttr } from "./abilities/reduce-burn-damage-ab-attr";
 import { BypassBurnDamageReductionAbAttr } from "./abilities/bypass-burn-damage-reduction-ab-attr";
 import { StatStageChangeCopyAbAttr } from "./abilities/stat-stage-change-copy-ab-attr";
