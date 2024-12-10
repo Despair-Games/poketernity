@@ -6,9 +6,9 @@ import {
   applyPreAttackAbAttrs,
   BlockRedirectAbAttr,
   IncreasePpAbAttr,
-  RedirectMoveAbAttr,
   ReduceStatusEffectDurationAbAttr,
 } from "#app/data/ability";
+import { RedirectMoveAbAttr } from "#app/data/abilities/redirect-move-ab-attr";
 import { PostMoveUsedAbAttr } from "#app/data/abilities/post-move-used-ab-attr";
 import type { DelayedAttackTag } from "#app/data/arena-tag";
 import { CommonAnim } from "#app/data/battle-anims";

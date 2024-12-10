@@ -33,7 +33,7 @@ import { Command } from "../ui/command-ui-handler";
 import { ArenaTagSide } from "./arena-tag";
 import type { BattlerTag } from "./battler-tags";
 import type Move from "./move";
-import { allMoves, MoveCategory, MoveTarget } from "./move";
+import { allMoves, MoveCategory } from "./move";
 import { AbAttr } from "./abilities/ab-attr";
 import type { PostBattleInitAbAttr } from "./abilities/post-battle-init-ab-attr";
 import { PostDamageAbAttr } from "./abilities/post-damage-ab-attr";
@@ -67,6 +67,7 @@ import type { PostItemLostAbAttr } from "./abilities/post-item-lost-ab-attr";
 import type { CheckTrappedAbAttr } from "./abilities/check-trapped-ab-attr";
 import { PostBattleAbAttr } from "./abilities/post-battle-ab-attr";
 import type { PostFaintAbAttr } from "./abilities/post-faint-ab-attr";
+import { RedirectMoveAbAttr } from "./abilities/redirect-move-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -187,32 +188,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
     const weatherType = globalScene.arena.weather?.weatherType;
     return !!weatherType && weatherTypes.indexOf(weatherType) > -1;
   };
-}
-
-export class RedirectMoveAbAttr extends AbAttr {
-  override apply(
-    pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    _cancelled: BooleanHolder,
-    args: any[],
-  ): boolean {
-    if (this.canRedirect(args[0] as Moves)) {
-      const target = args[1] as NumberHolder;
-      const newTarget = pokemon.getBattlerIndex();
-      if (target.value !== newTarget) {
-        target.value = newTarget;
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  canRedirect(moveId: Moves): boolean {
-    const move = allMoves[moveId];
-    return !![MoveTarget.NEAR_OTHER, MoveTarget.OTHER].find((t) => move.moveTarget === t);
-  }
 }
 
 export class RedirectTypeMoveAbAttr extends RedirectMoveAbAttr {
