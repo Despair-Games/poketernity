@@ -400,9 +400,9 @@ export default class Move implements Localizable {
   /**
    * Checks if the move is immune to certain types.
    * Currently looks at cases of Grass types with powder moves and Dark types with moves affected by Prankster.
-   * @param {Pokemon} user the source of this move
-   * @param {Pokemon} target the target of this move
-   * @param {Type} type the type of the move's target
+   * @param user the source of this move
+   * @param target the target of this move
+   * @param type the type of the move's target
    * @returns boolean
    */
   isTypeImmune(user: Pokemon, target: Pokemon, type: Type): boolean {
@@ -2642,7 +2642,7 @@ export class RemoveHeldItemAttr extends MoveEffectAttr {
    * @param target Target {@linkcode Pokemon} that the moves applies to
    * @param move {@linkcode Move} that is used
    * @param _args N/A
-   * @returns {boolean} True if an item was removed
+   * @returns `True` if an item was removed
    */
   override apply(user: Pokemon, target: Pokemon, move: Move, _args: any[]): boolean {
     if (!this.berriesOnly && target.isPlayer()) {
@@ -2729,7 +2729,7 @@ export class EatBerryAttr extends MoveEffectAttr {
    * @param target {@linkcode Pokemon} Pokemon that will eat a berry
    * @param move {@linkcode Move} The move being used
    * @param args Unused
-   * @returns {boolean} true if the function succeeds
+   * @returns `true` if the function succeeds
    */
   override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
     if (!super.apply(user, target, move, args)) {
@@ -2780,11 +2780,11 @@ export class StealEatBerryAttr extends EatBerryAttr {
   }
   /**
    * User steals a random berry from the target and then eats it.
-   * @param {Pokemon} user Pokemon that used the move and will eat the stolen berry
-   * @param {Pokemon} target Pokemon that will have its berry stolen
-   * @param {Move} move Move being used
-   * @param {any[]} _args Unused
-   * @returns {boolean} true if the function succeeds
+   * @param user Pokemon that used the move and will eat the stolen berry
+   * @param target Pokemon that will have its berry stolen
+   * @param move Move being used
+   * @param _args Unused
+   * @returns `true` if the function succeeds
    */
   override apply(user: Pokemon, target: Pokemon, move: Move, _args: any[]): boolean {
     if (move.hitsSubstitute(user, target)) {
@@ -4267,11 +4267,11 @@ const countPositiveStatStages = (pokemon: Pokemon): number => {
  */
 export class PositiveStatStagePowerAttr extends VariablePowerAttr {
   /**
-   * @param {Pokemon} user The pokemon that is being used to calculate the amount of positive stats
-   * @param {Pokemon} _target N/A
-   * @param {Move} _move N/A
-   * @param {any[]} args The argument for VariablePowerAttr, accumulates and sets the amount of power multiplied by stats
-   * @returns {boolean} Returns true if attribute is applied
+   * @param user The pokemon that is being used to calculate the amount of positive stats
+   * @param _target N/A
+   * @param _move N/A
+   * @param args The argument for VariablePowerAttr, accumulates and sets the amount of power multiplied by stats
+   * @returns Returns `true` if attribute is applied
    */
   override apply(user: Pokemon, _target: Pokemon, _move: Move, args: any[]): boolean {
     const positiveStatStages: number = countPositiveStatStages(user);
@@ -4291,10 +4291,10 @@ export class PunishmentPowerAttr extends VariablePowerAttr {
   private PUNISHMENT_MAX_BASE_POWER = 200;
 
   /**
-   * @param {Pokemon} _user N/A
-   * @param {Pokemon} target The pokemon that the move is being used against, as well as calculating the stats for the min/max base power
-   * @param {Move} _move N/A
-   * @param {any[]} args The value that is being changed due to VariablePowerAttr
+   * @param _user N/A
+   * @param target The pokemon that the move is being used against, as well as calculating the stats for the min/max base power
+   * @param _move N/A
+   * @param args The value that is being changed due to VariablePowerAttr
    * @returns Returns true if attribute is applied
    */
   override apply(_user: Pokemon, target: Pokemon, _move: Move, args: any[]): boolean {
@@ -5370,10 +5370,10 @@ export class SheerColdAccuracyAttr extends OneHitKOAccuracyAttr {
   /**
    * Changes the normal One Hit KO Accuracy Attr to implement the Gen VII changes,
    * where if the user is Ice-Type, it has more accuracy.
-   * @param {Pokemon} user Pokemon that is using the move; checks the Pokemon's level.
-   * @param {Pokemon} target Pokemon that is receiving the move; checks the Pokemon's level.
-   * @param {Move} _move N/A
-   * @param {any[]} args Uses the accuracy argument, allowing to change it from either 0 if it doesn't pass
+   * @param user Pokemon that is using the move; checks the Pokemon's level.
+   * @param target Pokemon that is receiving the move; checks the Pokemon's level.
+   * @param _move N/A
+   * @param args Uses the accuracy argument, allowing to change it from either 0 if it doesn't pass
    * the first if/else, or 30/20 depending on the type of the user Pokemon.
    * @returns Returns true if move is successful, false if misses.
    */
@@ -6712,7 +6712,7 @@ export class CopyBiomeTypeAttr extends MoveEffectAttr {
   /**
    * Retrieves a type from the current terrain
    * @param terrainType {@linkcode TerrainType}
-   * @returns {@linkcode Type}
+   * @returns the {@linkcode Type} corresponding to the terrain
    */
   private getTypeForTerrain(terrainType: TerrainType): Type {
     switch (terrainType) {
@@ -6733,7 +6733,7 @@ export class CopyBiomeTypeAttr extends MoveEffectAttr {
   /**
    * Retrieves a type from the current biome
    * @param biomeType {@linkcode Biome}
-   * @returns {@linkcode Type}
+   * @returns the {@linkcode Type} corresponding to the biome
    */
   private getTypeForBiome(biomeType: Biome): Type {
     switch (biomeType) {
@@ -7350,7 +7350,7 @@ export class AttackReducePpMoveAttr extends ReducePpMoveAttr {
    * @param target {@linkcode Pokemon} targeted by the attack
    * @param move {@linkcode Move} being used
    * @param args N/A
-   * @returns {boolean} true
+   * @returns `true`
    */
   override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
     const lastMove = target.getLastXMoves().find(() => true);
@@ -7436,11 +7436,11 @@ export class SketchAttr extends MoveEffectAttr {
   }
   /**
    * User copies the opponent's last used move, if possible
-   * @param {Pokemon} user Pokemon that used the move and will replace Sketch with the copied move
-   * @param {Pokemon} target Pokemon that the user wants to copy a move from
-   * @param {Move} move Move being used
-   * @param {any[]} args Unused
-   * @returns {boolean} true if the function succeeds, otherwise false
+   * @param user Pokemon that used the move and will replace Sketch with the copied move
+   * @param target Pokemon that the user wants to copy a move from
+   * @param move Move being used
+   * @param args Unused
+   * @returns `true` if the function succeeds, otherwise `false`
    */
 
   override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
@@ -7805,7 +7805,7 @@ export class ShiftStatAttr extends MoveEffectAttr {
 
   /**
    * Switches the user's stats based on the {@linkcode statToSwitch} and {@linkcode statToSwitchWith} attributes.
-   * @param {Pokemon} user the {@linkcode Pokemon} that used the move
+   * @param user the {@linkcode Pokemon} that used the move
    * @param target n/a
    * @param move n/a
    * @param args n/a
@@ -7835,7 +7835,7 @@ export class ShiftStatAttr extends MoveEffectAttr {
 
   /**
    * Encourages the user to use the move if the stat to switch with is greater than the stat to switch.
-   * @param {Pokemon} user the {@linkcode Pokemon} that used the move
+   * @param user the {@linkcode Pokemon} that used the move
    * @param _target n/a
    * @param _move n/a
    * @returns number of points to add to the user's benefit score
@@ -7932,7 +7932,7 @@ export class DestinyBondAttr extends MoveEffectAttr {
    * @param user {@linkcode Pokemon} that is having the tag applied to.
    * @param _target {@linkcode Pokemon} N/A
    * @param move {@linkcode Move} {@linkcode Move.DESTINY_BOND}
-   * @param {any[]} _args N/A
+   * @param _args N/A
    * @returns true
    */
   override apply(user: Pokemon, _target: Pokemon, move: Move, _args: any[]): boolean {
@@ -7957,7 +7957,7 @@ export class AddBattlerTagIfBoostedAttr extends AddBattlerTagAttr {
    * @param user {@linkcode Pokemon} using this move
    * @param target {@linkcode Pokemon} target of this move
    * @param move {@linkcode Move} being used
-   * @param {any[]} args N/A
+   * @param args N/A
    * @returns true
    */
   override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
@@ -7984,7 +7984,7 @@ export class StatusIfBoostedAttr extends MoveEffectAttr {
    * @param user {@linkcode Pokemon} using this move
    * @param target {@linkcode Pokemon} target of this move
    * @param _move {@linkcode Move} N/A
-   * @param {any[]} _args N/A
+   * @param _args N/A
    * @returns true
    */
   override apply(user: Pokemon, target: Pokemon, _move: Move, _args: any[]): boolean {
@@ -8243,11 +8243,11 @@ export class ResistLastMoveTypeAttr extends MoveEffectAttr {
   }
   /**
    * User changes its type to a random type that resists the target's last used move
-   * @param {Pokemon} user Pokemon that used the move and will change types
-   * @param {Pokemon} target Opposing pokemon that recently used a move
-   * @param {Move} move Move being used
-   * @param {any[]} args Unused
-   * @returns {boolean} true if the function succeeds
+   * @param user Pokemon that used the move and will change types
+   * @param target Opposing pokemon that recently used a move
+   * @param move Move being used
+   * @param args Unused
+   * @returns `true` if the function succeeds
    */
   override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
     if (!super.apply(user, target, move, args)) {

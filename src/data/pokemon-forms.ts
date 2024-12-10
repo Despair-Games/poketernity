@@ -410,7 +410,7 @@ export class SpeciesFormChangeTeraTrigger extends SpeciesFormChangeTrigger {
 
   /**
    * Checks if the associated Pokémon has the required Tera Shard that matches with the associated Tera type.
-   * @param {Pokemon} pokemon the Pokémon that is trying to do the form change
+   * @param pokemon the Pokémon that is trying to do the form change
    * @returns `true` if the Pokémon can change forms, `false` otherwise
    */
   override canChange(pokemon: Pokemon): boolean {
@@ -451,7 +451,7 @@ export class SpeciesFormChangeWeatherTrigger extends SpeciesFormChangeTrigger {
   /**
    * Checks if the Pokemon has the required ability and is in the correct weather while
    * the weather or ability is also not suppressed.
-   * @param {Pokemon} pokemon the pokemon that is trying to do the form change
+   * @param pokemon the pokemon that is trying to do the form change
    * @returns `true` if the Pokemon can change forms, `false` otherwise
    */
   override canChange(pokemon: Pokemon): boolean {
@@ -489,7 +489,7 @@ export class SpeciesFormChangeRevertWeatherFormTrigger extends SpeciesFormChange
   /**
    * Checks if the Pokemon has the required ability and the weather is one that will revert
    * the Pokemon to its original form or the weather or ability is suppressed
-   * @param {Pokemon} pokemon the pokemon that is trying to do the form change
+   * @param pokemon the pokemon that is trying to do the form change
    * @returns `true` if the Pokemon will revert to its original form, `false` otherwise
    */
   override canChange(pokemon: Pokemon): boolean {
