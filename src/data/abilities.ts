@@ -72,7 +72,6 @@ import {
   PostSummonFormChangeAbAttr,
   PostSummonFormChangeByWeatherAbAttr,
   PostSummonMessageAbAttr,
-  PostSummonRemoveArenaTagAbAttr,
   PostSummonStatStageChangeAbAttr,
   PostSummonStatStageChangeOnArenaAbAttr,
   PostSummonTerrainChangeAbAttr,
@@ -118,6 +117,7 @@ import {
   UserFieldStatusEffectImmunityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { PostSummonRemoveArenaTagAbAttr } from "./abilities/post-summon-remove-arena-tag-ab-attr";
 import { PostIntimidateStatStageChangeAbAttr } from "./abilities/post-intimidate-stat-stage-change-ab-attr";
 import { IgnoreOpponentStatStagesAbAttr } from "./abilities/ignore-opponent-stat-stages-ab-attr";
 import { PostKnockOutStatStageChangeAbAttr } from "./abilities/post-knock-out-stat-stage-change-ab-attr";

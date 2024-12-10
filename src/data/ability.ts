@@ -186,31 +186,6 @@ export class Ability implements Localizable {
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
 
-/**
- * Removes specified arena tags when a Pokemon is summoned.
- */
-export class PostSummonRemoveArenaTagAbAttr extends PostSummonAbAttr {
-  private arenaTags: ArenaTagType[];
-
-  /**
-   * @param arenaTags {@linkcode ArenaTagType[]} - the arena tags to be removed
-   */
-  constructor(arenaTags: ArenaTagType[]) {
-    super(true);
-
-    this.arenaTags = arenaTags;
-  }
-
-  override applyPostSummon(_pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
-    if (!simulated) {
-      for (const arenaTag of this.arenaTags) {
-        globalScene.arena.removeTag(arenaTag);
-      }
-    }
-    return true;
-  }
-}
-
 export class PostSummonMessageAbAttr extends PostSummonAbAttr {
   private messageFunc: (pokemon: Pokemon) => string;
 
