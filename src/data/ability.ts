@@ -70,6 +70,7 @@ import { ReceivedMoveDamageMultiplierAbAttr } from "./abilities/received-move-da
 import { PostDefendAbAttr } from "./abilities/post-defend-ab-attr";
 import { PostStatStageChangeAbAttr } from "./abilities/post-stat-stage-change-ab-attr";
 import { IgnoreMoveEffectsAbAttr } from "./abilities/ignore-move-effect-ab-attr";
+import { PostDefendContactApplyStatusEffectAbAttr } from "./abilities/post-defend-contact-apply-status-effect-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -184,45 +185,6 @@ type AbAttrCondition = (pokemon: Pokemon) => boolean;
 type PokemonAttackCondition = (user: Pokemon | null, target: Pokemon | null, move: Move) => boolean;
 export type PokemonDefendCondition = (target: Pokemon, user: Pokemon, move: Move) => boolean;
 type PokemonStatStageChangeCondition = (target: Pokemon, statsChanged: BattleStat[], stages: number) => boolean;
-
-export class PostDefendContactApplyStatusEffectAbAttr extends PostDefendAbAttr {
-  public chance: integer;
-  private effects: StatusEffect[];
-
-  constructor(chance: integer, ...effects: StatusEffect[]) {
-    super();
-
-    this.chance = chance;
-    this.effects = effects;
-  }
-
-  override applyPostDefend(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
-    _hitResult: HitResult,
-    _args: any[],
-  ): boolean {
-    if (
-      move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
-      && !attacker.status
-      && (this.chance === -1 || pokemon.randSeedInt(100) < this.chance)
-      && !move.hitsSubstitute(attacker, pokemon)
-    ) {
-      const effect =
-        this.effects.length === 1 ? this.effects[0] : this.effects[pokemon.randSeedInt(this.effects.length)];
-      if (simulated) {
-        return attacker.canSetStatus(effect, true, false, pokemon);
-      } else {
-        return attacker.trySetStatus(effect, true, pokemon);
-      }
-    }
-
-    return false;
-  }
-}
 
 export class EffectSporeAbAttr extends PostDefendContactApplyStatusEffectAbAttr {
   constructor() {
