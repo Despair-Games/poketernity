@@ -80,7 +80,6 @@ import {
   PostDancingMoveAbAttr,
   PostDefendAbilityGiveAbAttr,
   PostDefendAbilitySwapAbAttr,
-  PostDefendContactDamageAbAttr,
   PostDefendMoveDisableAbAttr,
   PostDefendPerishSongAbAttr,
   PostDefendStealHeldItemAbAttr,
@@ -202,6 +201,7 @@ import { MoveEffectChanceMultiplierAbAttr } from "./abilities/move-effect-chance
 import { IgnoreMoveEffectsAbAttr } from "./abilities/ignore-move-effect-ab-attr";
 import { PostDefendApplyBattlerTagAbAttr } from "./abilities/post-defend-apply-battler-tag-ab-attr";
 import { PostDefendTypeChangeAbAttr } from "./abilities/post-defend-type-change-ab-attr";
+import { PostDefendContactDamageAbAttr } from "./abilities/post-defend-contact-damage-ab-attr";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {

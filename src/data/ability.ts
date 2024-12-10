@@ -185,45 +185,6 @@ type PokemonAttackCondition = (user: Pokemon | null, target: Pokemon | null, mov
 export type PokemonDefendCondition = (target: Pokemon, user: Pokemon, move: Move) => boolean;
 type PokemonStatStageChangeCondition = (target: Pokemon, statsChanged: BattleStat[], stages: number) => boolean;
 
-export class PostDefendContactDamageAbAttr extends PostDefendAbAttr {
-  private damageRatio: integer;
-
-  constructor(damageRatio: integer) {
-    super();
-
-    this.damageRatio = damageRatio;
-  }
-
-  override applyPostDefend(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
-    _hitResult: HitResult,
-    _args: any[],
-  ): boolean {
-    if (
-      !simulated
-      && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
-      && !attacker.hasAbilityWithAttr(BlockNonDirectDamageAbAttr)
-      && !move.hitsSubstitute(attacker, pokemon)
-    ) {
-      attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio)), HitResult.OTHER);
-      attacker.turnData.damageTaken += toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio));
-      return true;
-    }
-
-    return false;
-  }
-
-  override getTriggerMessage(pokemon: Pokemon, abilityName: string, ..._args: any[]): string {
-    return i18next.t("abilityTriggers:postDefendContactDamage", {
-      pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-      abilityName,
-    });
-  }
-}
 /**
  * @description: This ability applies the Perish Song tag to the attacking pokemon
  * and the defending pokemon if the move makes physical contact and neither pokemon
