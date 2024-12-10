@@ -34,7 +34,7 @@ import { Type } from "#enums/type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
 import { getPokemonNameWithAffix } from "../messages";
-import { BerryModifier, HitHealModifier, PokemonHeldItemModifier } from "../modifier/modifier";
+import { BerryModifier, HitHealModifier } from "../modifier/modifier";
 import { Command } from "../ui/command-ui-handler";
 import { ArenaTagSide } from "./arena-tag";
 import type { BattlerTag } from "./battler-tags";
@@ -63,7 +63,7 @@ import { PostSummonAbAttr } from "./abilities/post-summon-ab-attr";
 import type { PreAttackAbAttr } from "./abilities/pre-attack-ab-attr";
 import { type PreDefendAbAttr } from "./abilities/pre-defend-ab-attr";
 import { ReceivedMoveDamageMultiplierAbAttr } from "./abilities/received-move-damage-multiplier-ab-attr";
-import { PostDefendAbAttr } from "./abilities/post-defend-ab-attr";
+import type { PostDefendAbAttr } from "./abilities/post-defend-ab-attr";
 import type { PostStatStageChangeAbAttr } from "./abilities/post-stat-stage-change-ab-attr";
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import { FieldPreventExplosiveMovesAbAttr } from "./abilities/field-prevent-explosive-moves-ab-attr";
@@ -180,56 +180,6 @@ export class Ability implements Localizable {
 }
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
-
-export class PostDefendStealHeldItemAbAttr extends PostDefendAbAttr {
-  private condition?: PokemonDefendCondition;
-
-  constructor(condition?: PokemonDefendCondition) {
-    super();
-
-    this.condition = condition;
-  }
-
-  override applyPostDefend(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
-    hitResult: HitResult,
-    _args: any[],
-  ): boolean {
-    if (
-      !simulated
-      && hitResult < HitResult.NO_EFFECT
-      && (!this.condition || this.condition(pokemon, attacker, move))
-      && !move.hitsSubstitute(attacker, pokemon)
-    ) {
-      const heldItems = this.getTargetHeldItems(attacker).filter((i) => i.isTransferable);
-      if (heldItems.length) {
-        const stolenItem = heldItems[pokemon.randSeedInt(heldItems.length)];
-        if (globalScene.tryTransferHeldItemModifier(stolenItem, pokemon, false)) {
-          globalScene.queueMessage(
-            i18next.t("abilityTriggers:postDefendStealHeldItem", {
-              pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-              attackerName: attacker.name,
-              stolenItemType: stolenItem.type.name,
-            }),
-          );
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  getTargetHeldItems(target: Pokemon): PokemonHeldItemModifier[] {
-    return globalScene.findModifiers(
-      (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === target.id,
-      target.isPlayer(),
-    ) as PokemonHeldItemModifier[];
-  }
-}
 
 /**
  * Base class for defining all {@linkcode Ability} Attributes after a status effect has been set.
