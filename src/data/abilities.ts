@@ -68,7 +68,6 @@ import {
   PostFaintUnsuppressedWeatherFormChangeAbAttr,
   PostIntimidateStatStageChangeAbAttr,
   PostItemLostApplyBattlerTagAbAttr,
-  PostKnockOutStatStageChangeAbAttr,
   PostSummonAddBattlerTagAbAttr,
   PostSummonAllyHealAbAttr,
   PostSummonClearAllyStatStagesAbAttr,
@@ -123,6 +122,7 @@ import {
   UserFieldStatusEffectImmunityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { PostKnockOutStatStageChangeAbAttr } from "./abilities/post-knock-out-stat-stage-change-ab-attr";
 import { PostVictoryFormChangeAbAttr } from "./abilities/post-victory-form-change-ab-attr";
 import { PostVictoryStatStageChangeAbAttr } from "./abilities/post-victory-stat-stage-change-ab-attr";
 import { SynchronizeStatusAbAttr } from "./abilities/synchronize-status-ab-attr";

@@ -184,32 +184,6 @@ export class Ability implements Localizable {
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
 
-export class PostKnockOutStatStageChangeAbAttr extends PostKnockOutAbAttr {
-  private stat: BattleStat | ((p: Pokemon) => BattleStat);
-  private stages: number;
-
-  constructor(stat: BattleStat | ((p: Pokemon) => BattleStat), stages: number) {
-    super();
-
-    this.stat = stat;
-    this.stages = stages;
-  }
-
-  override applyPostKnockOut(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    _knockedOut: Pokemon,
-    _args: any[],
-  ): boolean {
-    const stat = typeof this.stat === "function" ? this.stat(pokemon) : this.stat;
-    if (!simulated) {
-      globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [stat], this.stages));
-    }
-    return true;
-  }
-}
-
 export class CopyFaintedAllyAbilityAbAttr extends PostKnockOutAbAttr {
   constructor() {
     super();
