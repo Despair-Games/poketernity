@@ -37,7 +37,6 @@ import type { BattlerTag } from "./battler-tags";
 import type Move from "./move";
 import { allMoves, AttackMove, MoveCategory, MoveFlags, MoveTarget, SelfStatusMove, StatusMove } from "./move";
 import { getPokeballName } from "./pokeball";
-import { SpeciesFormChangeManualTrigger } from "./pokemon-forms";
 import { AbAttr } from "./abilities/ab-attr";
 import type { PostBattleInitAbAttr } from "./abilities/post-battle-init-ab-attr";
 import { PostDamageAbAttr } from "./abilities/post-damage-ab-attr";
@@ -188,29 +187,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
     const weatherType = globalScene.arena.weather?.weatherType;
     return !!weatherType && weatherTypes.indexOf(weatherType) > -1;
   };
-}
-
-export class PostTurnFormChangeAbAttr extends PostTurnAbAttr {
-  private formFunc: (p: Pokemon) => integer;
-
-  constructor(formFunc: (p: Pokemon) => integer) {
-    super(true);
-
-    this.formFunc = formFunc;
-  }
-
-  override applyPostTurn(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
-    const formIndex = this.formFunc(pokemon);
-    if (formIndex !== pokemon.formIndex) {
-      if (!simulated) {
-        globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger, false);
-      }
-
-      return true;
-    }
-
-    return false;
-  }
 }
 
 /**

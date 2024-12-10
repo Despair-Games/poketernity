@@ -48,7 +48,6 @@ import {
   PostFaintUnsuppressedWeatherFormChangeAbAttr,
   PostItemLostApplyBattlerTagAbAttr,
   PostSummonStatStageChangeOnArenaAbAttr,
-  PostTurnFormChangeAbAttr,
   PostTurnHurtIfSleepingAbAttr,
   PreventBerryUseAbAttr,
   PreventBypassSpeedChanceAbAttr,
@@ -67,6 +66,7 @@ import {
   UnswappableAbilityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { PostTurnFormChangeAbAttr } from "./abilities/post-turn-form-change-ab-attr";
 import { SpeedBoostAbAttr } from "./abilities/speed-boost-ab-attr";
 import { MoodyAbAttr } from "./abilities/moody-ab-attr";
 import { PostTurnResetStatusAbAttr } from "./abilities/post-turn-reset-status-ab-attr";
