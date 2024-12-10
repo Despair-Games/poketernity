@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#app/battle";
-import { PostAttackApplyBattlerTagAbAttr } from "#app/data/ability";
+import { PostAttackApplyBattlerTagAbAttr } from "#app/data/abilities/post-attack-apply-battler-tag-ab-attr";
 import { FlinchAttr } from "#app/data/move";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
