@@ -37,16 +37,7 @@ import { Command } from "../ui/command-ui-handler";
 import { ArenaTagSide } from "./arena-tag";
 import type { BattlerTag } from "./battler-tags";
 import type Move from "./move";
-import {
-  allMoves,
-  AttackMove,
-  MoveCategory,
-  MoveFlags,
-  MoveTarget,
-  OneHitKOAttr,
-  SelfStatusMove,
-  StatusMove,
-} from "./move";
+import { allMoves, AttackMove, MoveCategory, MoveFlags, MoveTarget, SelfStatusMove, StatusMove } from "./move";
 import { getPokeballName } from "./pokeball";
 import { SpeciesFormChangeManualTrigger } from "./pokemon-forms";
 import { AbAttr } from "./abilities/ab-attr";
@@ -195,51 +186,6 @@ function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondition {
     const weatherType = globalScene.arena.weather?.weatherType;
     return !!weatherType && weatherTypes.indexOf(weatherType) > -1;
   };
-}
-
-export class ForewarnAbAttr extends PostSummonAbAttr {
-  constructor() {
-    super(true);
-  }
-
-  override applyPostSummon(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
-    let maxPowerSeen = 0;
-    let maxMove = "";
-    let movePower = 0;
-    for (const opponent of pokemon.getOpponents()) {
-      for (const move of opponent.moveset) {
-        if (move?.getMove() instanceof StatusMove) {
-          movePower = 1;
-        } else if (move?.getMove().hasAttr(OneHitKOAttr)) {
-          movePower = 150;
-        } else if (
-          move?.getMove().id === Moves.COUNTER
-          || move?.getMove().id === Moves.MIRROR_COAT
-          || move?.getMove().id === Moves.METAL_BURST
-        ) {
-          movePower = 120;
-        } else if (move?.getMove().power === -1) {
-          movePower = 80;
-        } else {
-          movePower = move?.getMove().power ?? 0;
-        }
-
-        if (movePower > maxPowerSeen) {
-          maxPowerSeen = movePower;
-          maxMove = move?.getName() ?? "";
-        }
-      }
-    }
-    if (!simulated) {
-      globalScene.queueMessage(
-        i18next.t("abilityTriggers:forewarn", {
-          pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-          moveName: maxMove,
-        }),
-      );
-    }
-    return true;
-  }
 }
 
 export class FriskAbAttr extends PostSummonAbAttr {

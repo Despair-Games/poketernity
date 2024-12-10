@@ -26,7 +26,6 @@ import {
   FetchBallAbAttr,
   FlinchStatStageChangeAbAttr,
   ForceSwitchOutImmunityAbAttr,
-  ForewarnAbAttr,
   FormBlockDamageAbAttr,
   FriskAbAttr,
   HealFromBerryUseAbAttr,
@@ -202,6 +201,7 @@ import { PostSummonCopyAllyStatsAbAttr } from "./abilities/post-summon-copy-ally
 import { PostSummonTransformAbAttr } from "./abilities/post-summon-transform-ab-attr";
 import { PostSummonWeatherSuppressedFormChangeAbAttr } from "./abilities/post-summon-weather-suppressed-form-change-ab-attr";
 import { ProtectStatAbAttr } from "./abilities/protect-stat-ab-attr";
+import { ForewarnAbAttr } from "./abilities/forewarn-ab-attr";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {
