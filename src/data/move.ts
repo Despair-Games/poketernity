@@ -4874,18 +4874,28 @@ export class StatusCategoryOnAllyAttr extends VariableMoveCategoryAttr {
   }
 }
 
+/**
+ * Attribute used for shell side arm that makes the move physical (and makes contact)
+ * if it would deal more damage as a physical attack
+ */
 export class ShellSideArmCategoryAttr extends VariableMoveCategoryAttr {
+  /**
+   * @param user - The Pokemon using shell side arm
+   * @param target - The Pokemon being attacked
+   * @param move - Shell side arm
+   * @param args - args[0] a {@linkcode NumberHolder} thhat represents {@linkcode MoveCategory}
+   * @returns true if the move should be physical
+   */
   override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
     const category = args[0] as NumberHolder;
 
     const predictedPhysDmg = target.getBaseDamage(user, move, MoveCategory.PHYSICAL, true, true);
     const predictedSpecDmg = target.getBaseDamage(user, move, MoveCategory.SPECIAL, true, true);
 
-    if (predictedPhysDmg > predictedSpecDmg) {
+    // Random chance of being physical or special if predicted damage is tied
+    if (predictedPhysDmg > predictedSpecDmg || (predictedPhysDmg === predictedSpecDmg && user.randSeedInt(2) === 0)) {
       category.value = MoveCategory.PHYSICAL;
-      return true;
-    } else if (predictedPhysDmg === predictedSpecDmg && user.randSeedInt(2) === 0) {
-      category.value = MoveCategory.PHYSICAL;
+      move.makesContact();
       return true;
     }
     return false;
@@ -11239,8 +11249,7 @@ export function initMoves() {
       .ignoresVirtual(),
     new AttackMove(Moves.SHELL_SIDE_ARM, Type.POISON, MoveCategory.SPECIAL, 90, 100, 10, 20, 0, 8)
       .attr(ShellSideArmCategoryAttr)
-      .attr(StatusEffectAttr, StatusEffect.POISON)
-      .partial(), // Physical version of the move does not make contact
+      .attr(StatusEffectAttr, StatusEffect.POISON),
     new AttackMove(Moves.MISTY_EXPLOSION, Type.FAIRY, MoveCategory.SPECIAL, 100, 100, 5, -1, 0, 8)
       .attr(SacrificialAttr)
       .target(MoveTarget.ALL_NEAR_OTHERS)
