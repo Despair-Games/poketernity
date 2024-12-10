@@ -43,7 +43,6 @@ import {
   FriskAbAttr,
   HealFromBerryUseAbAttr,
   IgnoreContactAbAttr,
-  IgnoreOpponentStatStagesAbAttr,
   IgnoreProtectOnContactAbAttr,
   IgnoreTypeImmunityAbAttr,
   IncreasePpAbAttr,
@@ -121,6 +120,7 @@ import {
   UserFieldStatusEffectImmunityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { IgnoreOpponentStatStagesAbAttr } from "./abilities/ignore-opponent-stat-stages-ab-attr";
 import { PostKnockOutStatStageChangeAbAttr } from "./abilities/post-knock-out-stat-stage-change-ab-attr";
 import { PostVictoryFormChangeAbAttr } from "./abilities/post-victory-form-change-ab-attr";
 import { PostVictoryStatStageChangeAbAttr } from "./abilities/post-victory-stat-stage-change-ab-attr";
