@@ -18,9 +18,9 @@ import {
   applyPostTerrainChangeAbAttrs,
   applyPostWeatherChangeAbAttrs,
   PostTerrainChangeAbAttr,
-  PostWeatherChangeAbAttr,
   TerrainEventTypeChangeAbAttr,
 } from "#app/data/ability";
+import { PostWeatherChangeAbAttr } from "#app/data/abilities/post-weather-change-ab-attr";
 import type Pokemon from "#app/field/pokemon";
 import Overrides from "#app/overrides";
 import { TagAddedEvent, TagRemovedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";

@@ -66,6 +66,7 @@ import type { PreApplyBattlerTagAbAttr } from "./abilities/pre-apply-battler-tag
 import { BlockNonDirectDamageAbAttr } from "./abilities/block-non-direct-damage-ab-attr";
 import type { PreWeatherEffectAbAttr } from "./abilities/pre-weather-effect-ab-attr";
 import type { PreWeatherDamageAbAttr } from "./abilities/pre-weather-damage-ab-attr";
+import { PostWeatherChangeAbAttr } from "./abilities/post-weather-change-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -186,18 +187,6 @@ function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondition {
     const weatherType = globalScene.arena.weather?.weatherType;
     return !!weatherType && weatherTypes.indexOf(weatherType) > -1;
   };
-}
-
-export class PostWeatherChangeAbAttr extends AbAttr {
-  applyPostWeatherChange(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    _weather: WeatherType,
-    _args: any[],
-  ): boolean {
-    return false;
-  }
 }
 
 /**
