@@ -71,6 +71,7 @@ import type { PostKnockOutAbAttr } from "./abilities/post-knock-out-ab-attr";
 import { PostSummonStatStageChangeAbAttr } from "./abilities/post-summon-stat-stage-change-ab-attr";
 import type { PreSwitchOutAbAttr } from "./abilities/pre-switch-out-ab-attr";
 import type { PreStatStageChangeAbAttr } from "./abilities/pre-stat-stage-change-ab-attr";
+import { PreSetStatusAbAttr } from "./abilities/pre-set-status-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -179,19 +180,6 @@ export class Ability implements Localizable {
 }
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
-
-export class PreSetStatusAbAttr extends AbAttr {
-  applyPreSetStatus(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    _effect: StatusEffect | undefined,
-    _cancelled: BooleanHolder,
-    _args: any[],
-  ): boolean {
-    return false;
-  }
-}
 
 /**
  * Provides immunity to status effects to specified targets.
