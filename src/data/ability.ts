@@ -189,12 +189,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
   };
 }
 
-export class UncopiableAbilityAbAttr extends AbAttr {
-  constructor() {
-    super(false);
-  }
-}
-
 export class UnsuppressableAbilityAbAttr extends AbAttr {
   constructor() {
     super(false);

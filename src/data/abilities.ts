@@ -27,10 +27,10 @@ import {
   PostSummonStatStageChangeOnArenaAbAttr,
   PreventBypassSpeedChanceAbAttr,
   TerrainEventTypeChangeAbAttr,
-  UncopiableAbilityAbAttr,
   UnsuppressableAbilityAbAttr,
   UnswappableAbilityAbAttr,
 } from "./ability";
+import { UncopiableAbilityAbAttr } from "./abilities/uncopiable-ability-ab-attr";
 import { InfiltratorAbAttr } from "./abilities/infiltrator-ab-attr";
 import { IgnoreProtectOnContactAbAttr } from "./abilities/ignore-protect-on-contact-ab-attr";
 import { AlwaysHitAbAttr } from "./abilities/always-hit-ab-attr";

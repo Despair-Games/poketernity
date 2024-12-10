@@ -40,10 +40,10 @@ import {
   applyPreAttackAbAttrs,
   applyPreDefendAbAttrs,
   PostDamageForceSwitchAbAttr,
-  UncopiableAbilityAbAttr,
   UnsuppressableAbilityAbAttr,
   UnswappableAbilityAbAttr,
 } from "./ability";
+import { UncopiableAbilityAbAttr } from "./abilities/uncopiable-ability-ab-attr";
 import { InfiltratorAbAttr } from "./abilities/infiltrator-ab-attr";
 import { IgnoreProtectOnContactAbAttr } from "./abilities/ignore-protect-on-contact-ab-attr";
 import { MoveAbilityBypassAbAttr } from "./abilities/move-ability-bypass-ab-attr";
