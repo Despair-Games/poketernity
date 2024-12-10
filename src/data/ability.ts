@@ -72,7 +72,7 @@ import { FieldPreventExplosiveMovesAbAttr } from "./abilities/field-prevent-expl
 import type { FieldMultiplyStatAbAttr } from "./abilities/field-multiply-stat-ab-attr";
 import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition";
 import type { PokemonDefendCondition } from "../@types/PokemonDefendCondition";
-import { MovePowerBoostAbAttr } from "./abilities/move-power-boost-ab-attr";
+import { MoveTypePowerBoostAbAttr } from "./abilities/move-type-power-boost-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -181,12 +181,6 @@ export class Ability implements Localizable {
 }
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
-
-export class MoveTypePowerBoostAbAttr extends MovePowerBoostAbAttr {
-  constructor(boostedType: Type, powerMultiplier?: number) {
-    super((pokemon, _defender, move) => pokemon?.getMoveType(move) === boostedType, powerMultiplier || 1.5);
-  }
-}
 
 export class LowHpMoveTypePowerBoostAbAttr extends MoveTypePowerBoostAbAttr {
   constructor(boostedType: Type) {
