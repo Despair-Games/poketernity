@@ -20,7 +20,6 @@ import {
   AlwaysHitAbAttr,
   ArenaTrapAbAttr,
   BlockRedirectAbAttr,
-  BypassBurnDamageReductionAbAttr,
   BypassSpeedChanceAbAttr,
   DoubleBerryEffectAbAttr,
   FlinchStatStageChangeAbAttr,
@@ -58,6 +57,7 @@ import {
   UnswappableAbilityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { BypassBurnDamageReductionAbAttr } from "./abilities/bypass-burn-damage-reduction-ab-attr";
 import { StatStageChangeCopyAbAttr } from "./abilities/stat-stage-change-copy-ab-attr";
 import { StatStageChangeMultiplierAbAttr } from "./abilities/stat-stage-change-multiplier-ab-attr";
 import { PostItemLostApplyBattlerTagAbAttr } from "./abilities/post-item-lost-apply-battler-tag-ab-attr";

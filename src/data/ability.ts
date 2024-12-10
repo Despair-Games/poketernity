@@ -189,24 +189,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
   };
 }
 
-export class BypassBurnDamageReductionAbAttr extends AbAttr {
-  constructor() {
-    super(false);
-  }
-
-  override apply(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    cancelled: BooleanHolder,
-    _args: any[],
-  ): boolean {
-    cancelled.value = true;
-
-    return true;
-  }
-}
-
 /**
  * Causes Pokemon to take reduced damage from the {@linkcode StatusEffect.BURN | Burn} status
  * @param multiplier Multiplied with the damage taken
