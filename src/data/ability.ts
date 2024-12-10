@@ -190,31 +190,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
   };
 }
 
-export class PostTurnHealAbAttr extends PostTurnAbAttr {
-  override applyPostTurn(pokemon: Pokemon, passive: boolean, simulated: boolean, _args: any[]): boolean {
-    if (!pokemon.isFullHp()) {
-      if (!simulated) {
-        const abilityName = (!passive ? pokemon.getAbility() : pokemon.getPassiveAbility()).name;
-        globalScene.unshiftPhase(
-          new PokemonHealPhase(
-            pokemon.getBattlerIndex(),
-            toDmgValue(pokemon.getMaxHp() / 16),
-            i18next.t("abilityTriggers:postTurnHeal", {
-              pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-              abilityName,
-            }),
-            true,
-          ),
-        );
-      }
-
-      return true;
-    }
-
-    return false;
-  }
-}
-
 export class PostTurnFormChangeAbAttr extends PostTurnAbAttr {
   private formFunc: (p: Pokemon) => integer;
 
