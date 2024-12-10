@@ -2037,9 +2037,21 @@ export class FlameBurstAttr extends MoveEffectAttr {
   }
 }
 
+/**
+ * Attr used for moves that faint the user but revive a different Pokemon
+ * @protected restorePP - whether or not PP is restored to the revived Pokemon. Lunar dance does this
+ * @protected moveMessage - the associated key for the move trigger message
+ * Used by healing wish and lunar dance
+ */
 export class SacrificialFullRestoreAttr extends SacrificialAttr {
-  constructor() {
+  protected restorePP: boolean;
+  protected moveTriggerMessage: string;
+
+  constructor(restorePP: boolean, moveTriggerMessage: string) {
     super();
+
+    this.restorePP = restorePP;
+    this.moveTriggerMessage = moveTriggerMessage;
   }
 
   override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
@@ -2057,11 +2069,13 @@ export class SacrificialFullRestoreAttr extends SacrificialAttr {
       new PokemonHealPhase(
         user.getBattlerIndex(),
         maxPartyMemberHp,
-        i18next.t("moveTriggers:sacrificialFullRestore", { pokemonName: getPokemonNameWithAffix(user) }),
+        i18next.t(this.moveTriggerMessage, { pokemonName: getPokemonNameWithAffix(user) }),
         true,
         false,
         false,
         true,
+        false,
+        this.restorePP,
       ),
       true,
     );
@@ -9578,8 +9592,9 @@ export function initMoves() {
       .attr(GyroBallPowerAttr)
       .ballBombMove(),
     new SelfStatusMove(Moves.HEALING_WISH, Type.PSYCHIC, -1, 10, -1, 0, 4)
-      .attr(SacrificialFullRestoreAttr)
-      .triageMove(),
+      .attr(SacrificialFullRestoreAttr, false, "moveTriggers:sacrificialFullRestore")
+      .triageMove()
+      .partial(), // Does not have the effect of being stored if the incoming Pokemon is already healthy
     new AttackMove(Moves.BRINE, Type.WATER, MoveCategory.SPECIAL, 65, 100, 10, -1, 0, 4).attr(
       MovePowerMultiplierAttr,
       (_user, target, _move) => (target.getHpRatio() < 0.5 ? 2 : 1),
@@ -9908,10 +9923,10 @@ export function initMoves() {
     new AttackMove(Moves.ROAR_OF_TIME, Type.DRAGON, MoveCategory.SPECIAL, 150, 90, 5, -1, 0, 4).attr(RechargeAttr),
     new AttackMove(Moves.SPACIAL_REND, Type.DRAGON, MoveCategory.SPECIAL, 100, 95, 5, -1, 0, 4).attr(HighCritAttr),
     new SelfStatusMove(Moves.LUNAR_DANCE, Type.PSYCHIC, -1, 10, -1, 0, 4)
-      .attr(SacrificialAttrOnHit)
+      .attr(SacrificialFullRestoreAttr, true, "moveTriggers:lunarDanceRestore")
       .danceMove()
       .triageMove()
-      .unimplemented(),
+      .partial(), // Does not have the effect of being stored if the incoming Pokemon is already perfectly healthy
     new AttackMove(Moves.CRUSH_GRIP, Type.NORMAL, MoveCategory.PHYSICAL, -1, 100, 5, -1, 0, 4).attr(
       OpponentHighHpPowerAttr,
       120,

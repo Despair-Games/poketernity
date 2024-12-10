@@ -22,6 +22,7 @@ export class PokemonHealPhase extends CommonAnimPhase {
   private revive: boolean;
   private healStatus: boolean;
   private preventFullHeal: boolean;
+  private fullRestorePP: boolean;
 
   constructor(
     battlerIndex: BattlerIndex,
@@ -32,6 +33,7 @@ export class PokemonHealPhase extends CommonAnimPhase {
     revive: boolean = false,
     healStatus: boolean = false,
     preventFullHeal: boolean = false,
+    fullRestorePP: boolean = false,
   ) {
     super(battlerIndex, undefined, CommonAnim.HEALTH_UP);
 
@@ -42,6 +44,7 @@ export class PokemonHealPhase extends CommonAnimPhase {
     this.revive = revive;
     this.healStatus = healStatus;
     this.preventFullHeal = preventFullHeal;
+    this.fullRestorePP = fullRestorePP;
   }
 
   override start() {
@@ -95,6 +98,13 @@ export class PokemonHealPhase extends CommonAnimPhase {
       if (this.healStatus && !this.revive && pokemon.status) {
         lastStatusEffect = pokemon.status.effect;
         pokemon.resetStatus();
+      }
+      if (this.fullRestorePP) {
+        for (const move of this.getPokemon().getMoveset()) {
+          if (move) {
+            move.ppUsed = 0;
+          }
+        }
       }
       pokemon.updateInfo().then(() => super.end());
     } else if (this.healStatus && !this.revive && pokemon.status) {
