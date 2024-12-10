@@ -197,7 +197,7 @@ export enum MoveFlags {
 type MoveConditionFunc = (user: Pokemon, target: Pokemon, move: Move) => boolean;
 type UserMoveConditionFunc = (user: Pokemon, move: Move) => boolean;
 
-export default class Move implements Localizable {
+export class Move implements Localizable {
   public id: Moves;
   public name: string;
   private _type: Type;
@@ -978,6 +978,8 @@ export default class Move implements Localizable {
     );
   }
 }
+
+export default Move;
 
 export class AttackMove extends Move {
   constructor(
