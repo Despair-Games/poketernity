@@ -60,8 +60,8 @@ import {
   UnsuppressableAbilityAbAttr,
   UnswappableAbilityAbAttr,
   UserFieldMoveTypePowerBoostAbAttr,
-  VariableMovePowerAbAttr,
 } from "./ability";
+import { VariableMovePowerAbAttr } from "./abilities/variable-move-power-ab-attr";
 import {
   AttackTypeBoosterModifier,
   BerryModifier,
