@@ -23,7 +23,6 @@ import {
   BypassBurnDamageReductionAbAttr,
   BypassSpeedChanceAbAttr,
   DoubleBerryEffectAbAttr,
-  FetchBallAbAttr,
   FlinchStatStageChangeAbAttr,
   ForceSwitchOutImmunityAbAttr,
   FormBlockDamageAbAttr,
@@ -202,6 +201,7 @@ import { PostWeatherLapseDamageAbAttr } from "./abilities/post-weather-lapse-dam
 import { PostTurnStatusHealAbAttr } from "./abilities/post-turn-status-heal-ab-attr";
 import { PostTurnLootAbAttr } from "./abilities/post-turn-loot-ab-attr";
 import { PostTurnHurtIfSleepingAbAttr } from "./abilities/post-turn-hurt-if-sleeping-ab-attr";
+import { FetchBallAbAttr } from "./abilities/fetch-ball-ab-attr";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {
