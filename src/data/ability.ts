@@ -188,39 +188,6 @@ type PokemonStatStageChangeCondition = (target: Pokemon, statsChanged: BattleSta
 
 type PreDefendAbAttrCondition = (pokemon: Pokemon, attacker: Pokemon, move: Move) => boolean;
 
-export class TypeImmunityStatStageChangeAbAttr extends TypeImmunityAbAttr {
-  private stat: BattleStat;
-  private stages: number;
-
-  constructor(immuneType: Type, stat: BattleStat, stages: number, condition?: AbAttrCondition) {
-    super(immuneType, condition);
-
-    this.stat = stat;
-    this.stages = stages;
-  }
-
-  override applyPreDefend(
-    pokemon: Pokemon,
-    passive: boolean,
-    simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
-    cancelled: BooleanHolder,
-    args: any[],
-  ): boolean {
-    const ret = super.applyPreDefend(pokemon, passive, simulated, attacker, move, cancelled, args);
-
-    if (ret) {
-      cancelled.value = true; // Suppresses "No Effect" message
-      if (!simulated) {
-        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [this.stat], this.stages));
-      }
-    }
-
-    return ret;
-  }
-}
-
 export class TypeImmunityAddBattlerTagAbAttr extends TypeImmunityAbAttr {
   private tagType: BattlerTagType;
   private turnCount: integer;
