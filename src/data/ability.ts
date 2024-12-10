@@ -184,12 +184,6 @@ export class Ability implements Localizable {
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
 
 /**
- * Provides immunity to BattlerTags {@linkcode BattlerTag} to the user.
- * @extends PreApplyBattlerTagImmunityAbAttr
- */
-export class BattlerTagImmunityAbAttr extends PreApplyBattlerTagImmunityAbAttr {}
-
-/**
  * Provides immunity to BattlerTags {@linkcode BattlerTag} to the user's field.
  * @extends PreApplyBattlerTagImmunityAbAttr
  */

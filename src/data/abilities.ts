@@ -19,7 +19,6 @@ import {
   allAbilities,
   AlwaysHitAbAttr,
   ArenaTrapAbAttr,
-  BattlerTagImmunityAbAttr,
   BlockCritAbAttr,
   BlockNonDirectDamageAbAttr,
   BlockOneHitKOAbAttr,
@@ -92,6 +91,7 @@ import {
   UserFieldBattlerTagImmunityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { BattlerTagImmunityAbAttr } from "./abilities/battler-tag-immunity-ab-attr";
 import { UserFieldStatusEffectImmunityAbAttr } from "./abilities/user-field-status-effect-immunity-ab-attr";
 import { StatusEffectImmunityAbAttr } from "./abilities/status-effect-immunity-ab-attr";
 import { ConfusionOnStatusEffectAbAttr } from "./abilities/confusion-on-status-effect-ab-attr";

@@ -160,7 +160,6 @@ import {
   ConditionalCritAbAttr,
   applyFieldStatMultiplierAbAttrs,
   UserFieldBattlerTagImmunityAbAttr,
-  BattlerTagImmunityAbAttr,
   applyCheckTrappedAbAttrs,
   CheckTrappedAbAttr,
   applyPostSetStatusAbAttrs,
@@ -169,6 +168,7 @@ import {
   applyPostItemLostAbAttrs,
   PostItemLostAbAttr,
 } from "#app/data/ability";
+import { BattlerTagImmunityAbAttr } from "#app/data/abilities/battler-tag-immunity-ab-attr";
 import { UserFieldStatusEffectImmunityAbAttr } from "#app/data/abilities/user-field-status-effect-immunity-ab-attr";
 import { StatusEffectImmunityAbAttr } from "#app/data/abilities/status-effect-immunity-ab-attr";
 import { CommanderAbAttr } from "#app/data/abilities/commander-ab-attr";
