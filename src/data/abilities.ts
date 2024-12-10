@@ -58,7 +58,6 @@ import {
   MoneyAbAttr,
   MoodyAbAttr,
   MoveAbilityBypassAbAttr,
-  MovePowerBoostAbAttr,
   MoveTypePowerBoostAbAttr,
   MultCritAbAttr,
   NoFusionAbilityAbAttr,
@@ -140,6 +139,7 @@ import {
   VariableMovePowerBoostAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { MovePowerBoostAbAttr } from "./abilities/move-power-boost-ab-attr";
 import { DamageBoostAbAttr } from "./abilities/damage-boost-ab-attr";
 import { AddSecondStrikeAbAttr } from "./abilities/add-second-strike-ab-attr";
 import { MoveTypeChangeAbAttr } from "./abilities/move-type-change-ab-attr";
