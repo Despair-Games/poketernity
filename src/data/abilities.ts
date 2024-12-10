@@ -17,7 +17,6 @@ import i18next from "i18next";
 import {
   Ability,
   allAbilities,
-  AlwaysHitAbAttr,
   BypassSpeedChanceAbAttr,
   FormBlockDamageAbAttr,
   IgnoreProtectOnContactAbAttr,
@@ -34,6 +33,7 @@ import {
   UnsuppressableAbilityAbAttr,
   UnswappableAbilityAbAttr,
 } from "./ability";
+import { AlwaysHitAbAttr } from "./abilities/always-hit-ab-attr";
 import { SuppressFieldAbilitiesAbAttr } from "./abilities/suppress-field-abilities-ab-attr";
 import { MoveAbilityBypassAbAttr } from "./abilities/move-ability-bypass-ab-attr";
 import { SyncEncounterNatureAbAttr } from "./abilities/sync-encounter-nature-ab-attr";

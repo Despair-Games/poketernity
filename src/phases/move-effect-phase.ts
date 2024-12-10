@@ -1,12 +1,12 @@
 import { BattlerIndex } from "#app/battle";
 import { globalScene } from "#app/global-scene";
 import {
-  AlwaysHitAbAttr,
   applyPostAttackAbAttrs,
   applyPostDamageAbAttrs,
   applyPostDefendAbAttrs,
   applyPreAttackAbAttrs,
 } from "#app/data/ability";
+import { AlwaysHitAbAttr } from "#app/data/abilities/always-hit-ab-attr";
 import { MaxMultiHitAbAttr } from "#app/data/abilities/max-multi-hit-ab-attr";
 import { PostAttackAbAttr } from "#app/data/abilities/post-attack-ab-attr";
 import { AddSecondStrikeAbAttr } from "#app/data/abilities/add-second-strike-ab-attr";
