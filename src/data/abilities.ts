@@ -32,7 +32,6 @@ import {
   NoFusionAbilityAbAttr,
   NoTransformAbilityAbAttr,
   PostDamageForceSwitchAbAttr,
-  PostFaintClearWeatherAbAttr,
   PostFaintContactDamageAbAttr,
   PostFaintHPDamageAbAttr,
   PostSummonStatStageChangeOnArenaAbAttr,
@@ -48,6 +47,7 @@ import {
   UnswappableAbilityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { PostFaintClearWeatherAbAttr } from "./abilities/post-faint-clear-weather-ab-attr";
 import { PostFaintUnsuppressedWeatherFormChangeAbAttr } from "./abilities/post-faint-unsuppressed-weather-form-change-ab-attr";
 import { MaxMultiHitAbAttr } from "./abilities/max-multi-hit-ab-attr";
 import { RunSuccessAbAttr } from "./abilities/run-success-ab-attr";
