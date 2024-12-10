@@ -69,6 +69,7 @@ import type { PostBattleInitAbAttr } from "./abilities/post-battle-init-ab-attr"
 import { PostDamageAbAttr } from "./abilities/post-damage-ab-attr";
 import { PostSummonAbAttr } from "./abilities/post-summon-ab-attr";
 import { PreAttackAbAttr } from "./abilities/pre-attack-ab-attr";
+import { PreDefendAbAttr } from "./abilities/pre-defend-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -185,20 +186,6 @@ type PokemonDefendCondition = (target: Pokemon, user: Pokemon, move: Move) => bo
 type PokemonStatStageChangeCondition = (target: Pokemon, statsChanged: BattleStat[], stages: number) => boolean;
 
 type PreDefendAbAttrCondition = (pokemon: Pokemon, attacker: Pokemon, move: Move) => boolean;
-
-export class PreDefendAbAttr extends AbAttr {
-  applyPreDefend(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    _attacker: Pokemon,
-    _move: Move | null,
-    _cancelled: BooleanHolder | null,
-    _args: any[],
-  ): boolean {
-    return false;
-  }
-}
 
 export class PreDefendFullHpEndureAbAttr extends PreDefendAbAttr {
   override applyPreDefend(
