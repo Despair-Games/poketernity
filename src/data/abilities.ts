@@ -20,7 +20,6 @@ import {
   BypassSpeedChanceAbAttr,
   FormBlockDamageAbAttr,
   IgnoreTypeImmunityAbAttr,
-  InfiltratorAbAttr,
   MoneyAbAttr,
   NoFusionAbilityAbAttr,
   NoTransformAbilityAbAttr,
@@ -32,6 +31,7 @@ import {
   UnsuppressableAbilityAbAttr,
   UnswappableAbilityAbAttr,
 } from "./ability";
+import { InfiltratorAbAttr } from "./abilities/infiltrator-ab-attr";
 import { IgnoreProtectOnContactAbAttr } from "./abilities/ignore-protect-on-contact-ab-attr";
 import { AlwaysHitAbAttr } from "./abilities/always-hit-ab-attr";
 import { SuppressFieldAbilitiesAbAttr } from "./abilities/suppress-field-abilities-ab-attr";

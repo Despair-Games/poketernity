@@ -154,10 +154,10 @@ import {
   applyFieldStatMultiplierAbAttrs,
   applyCheckTrappedAbAttrs,
   applyPostSetStatusAbAttrs,
-  InfiltratorAbAttr,
   applyPostDamageAbAttrs,
   applyPostItemLostAbAttrs,
 } from "#app/data/ability";
+import { InfiltratorAbAttr } from "#app/data/abilities/infiltrator-ab-attr";
 import { SuppressFieldAbilitiesAbAttr } from "#app/data/abilities/suppress-field-abilities-ab-attr";
 import { WeightMultiplierAbAttr } from "#app/data/abilities/weight-multiplier-ab-attr";
 import { CheckTrappedAbAttr } from "#app/data/abilities/check-trapped-ab-attr";
