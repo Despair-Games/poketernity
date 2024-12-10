@@ -2,7 +2,7 @@ import type { BattlerIndex } from "#app/battle";
 import { BattleType } from "#app/battle";
 import { getStatusEffectDescriptor, getStatusEffectHealText } from "#app/data/status-effect";
 import type { Weather } from "#app/data/weather";
-import { EFFECTIVE_STATS, getStatKey, Stat, type BattleStat } from "#app/enums/stat";
+import { EFFECTIVE_STATS, Stat, type BattleStat } from "#app/enums/stat";
 import { SwitchType } from "#app/enums/switch-type";
 import type Pokemon from "#app/field/pokemon";
 import type { EnemyPokemon, PokemonMove } from "#app/field/pokemon";
@@ -20,7 +20,7 @@ import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { SwitchPhase } from "#app/phases/switch-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import type { Constructor } from "#app/utils";
-import { BooleanHolder, isNullOrUndefined, NumberHolder, randSeedInt, randSeedItem, toDmgValue } from "#app/utils";
+import { BooleanHolder, NumberHolder, randSeedInt, randSeedItem, toDmgValue } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import type { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -70,7 +70,7 @@ import type { PostVictoryAbAttr } from "./abilities/post-victory-ab-attr";
 import type { PostKnockOutAbAttr } from "./abilities/post-knock-out-ab-attr";
 import { PostSummonStatStageChangeAbAttr } from "./abilities/post-summon-stat-stage-change-ab-attr";
 import type { PreSwitchOutAbAttr } from "./abilities/pre-switch-out-ab-attr";
-import { PreStatStageChangeAbAttr } from "./abilities/pre-stat-stage-change-ab-attr";
+import type { PreStatStageChangeAbAttr } from "./abilities/pre-stat-stage-change-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -179,54 +179,6 @@ export class Ability implements Localizable {
 }
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
-
-/**
- * Protect one or all {@linkcode BattleStat} from reductions caused by other Pokémon's moves and Abilities
- */
-export class ProtectStatAbAttr extends PreStatStageChangeAbAttr {
-  /** {@linkcode BattleStat} to protect or `undefined` if **all** {@linkcode BattleStat} are protected */
-  private protectedStat?: BattleStat;
-
-  constructor(protectedStat?: BattleStat) {
-    super();
-
-    this.protectedStat = protectedStat;
-  }
-
-  /**
-   * Apply the {@linkcode ProtectedStatAbAttr} to an interaction
-   * @param _pokemon
-   * @param _passive
-   * @param simulated
-   * @param stat the {@linkcode BattleStat} being affected
-   * @param cancelled The {@linkcode BooleanHolder} that will be set to true if the stat is protected
-   * @param _args
-   * @returns true if the stat is protected, false otherwise
-   */
-  override applyPreStatStageChange(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    stat: BattleStat,
-    cancelled: BooleanHolder,
-    _args: any[],
-  ): boolean {
-    if (isNullOrUndefined(this.protectedStat) || stat === this.protectedStat) {
-      cancelled.value = true;
-      return true;
-    }
-
-    return false;
-  }
-
-  override getTriggerMessage(pokemon: Pokemon, abilityName: string, ..._args: any[]): string {
-    return i18next.t("abilityTriggers:protectStat", {
-      pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-      abilityName,
-      statName: this.protectedStat ? i18next.t(getStatKey(this.protectedStat)) : i18next.t("battle:stats"),
-    });
-  }
-}
 
 /**
  * This attribute applies confusion to the target whenever the user

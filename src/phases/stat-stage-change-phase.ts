@@ -4,7 +4,6 @@ import {
   applyAbAttrs,
   applyPostStatStageChangeAbAttrs,
   applyPreStatStageChangeAbAttrs,
-  ProtectStatAbAttr,
   StatStageChangeCopyAbAttr,
   StatStageChangeMultiplierAbAttr,
 } from "#app/data/ability";
@@ -18,6 +17,7 @@ import i18next from "i18next";
 import { PokemonPhase } from "./pokemon-phase";
 import { Stat, type BattleStat, getStatKey, getStatStageChangeDescriptionKey } from "#enums/stat";
 import { PostStatStageChangeAbAttr } from "#app/data/abilities/post-stat-stage-change-ab-attr";
+import { ProtectStatAbAttr } from "#app/data/abilities/protect-stat-ab-attr";
 
 export type StatStageChangeCallback = (
   target: Pokemon | null,

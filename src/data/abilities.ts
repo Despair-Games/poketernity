@@ -75,7 +75,6 @@ import {
   PostWeatherLapseHealAbAttr,
   PreventBerryUseAbAttr,
   PreventBypassSpeedChanceAbAttr,
-  ProtectStatAbAttr,
   RedirectTypeMoveAbAttr,
   ReduceBerryUseThresholdAbAttr,
   ReduceBurnDamageAbAttr,
@@ -202,6 +201,7 @@ import { PostSummonCopyAbilityAbAttr } from "./abilities/post-summon-copy-abilit
 import { PostSummonCopyAllyStatsAbAttr } from "./abilities/post-summon-copy-ally-stats-ab-attr";
 import { PostSummonTransformAbAttr } from "./abilities/post-summon-transform-ab-attr";
 import { PostSummonWeatherSuppressedFormChangeAbAttr } from "./abilities/post-summon-weather-suppressed-form-change-ab-attr";
+import { ProtectStatAbAttr } from "./abilities/protect-stat-ab-attr";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {
