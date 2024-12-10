@@ -71,6 +71,7 @@ import { PreDefendAbAttr } from "./abilities/pre-defend-ab-attr";
 import { ReceivedMoveDamageMultiplierAbAttr } from "./abilities/received-move-damage-multiplier-ab-attr";
 import { PostDefendAbAttr } from "./abilities/post-defend-ab-attr";
 import { PostStatStageChangeAbAttr } from "./abilities/post-stat-stage-change-ab-attr";
+import { MoveImmunityAbAttr } from "./abilities/move-immunity-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -187,37 +188,6 @@ type PokemonDefendCondition = (target: Pokemon, user: Pokemon, move: Move) => bo
 type PokemonStatStageChangeCondition = (target: Pokemon, statsChanged: BattleStat[], stages: number) => boolean;
 
 type PreDefendAbAttrCondition = (pokemon: Pokemon, attacker: Pokemon, move: Move) => boolean;
-
-export class MoveImmunityAbAttr extends PreDefendAbAttr {
-  private immuneCondition: PreDefendAbAttrCondition;
-
-  constructor(immuneCondition: PreDefendAbAttrCondition) {
-    super(true);
-
-    this.immuneCondition = immuneCondition;
-  }
-
-  override applyPreDefend(
-    pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
-    cancelled: BooleanHolder,
-    _args: any[],
-  ): boolean {
-    if (this.immuneCondition(pokemon, attacker, move)) {
-      cancelled.value = true;
-      return true;
-    }
-
-    return false;
-  }
-
-  override getTriggerMessage(pokemon: Pokemon, _abilityName: string, ..._args: any[]): string {
-    return i18next.t("abilityTriggers:moveImmunity", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) });
-  }
-}
 
 /**
  * Reduces the accuracy of status moves used against the Pokémon with this ability to 50%.
