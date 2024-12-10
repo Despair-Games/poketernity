@@ -73,7 +73,6 @@ import {
   PostWeatherChangeFormChangeAbAttr,
   PostWeatherLapseDamageAbAttr,
   PostWeatherLapseHealAbAttr,
-  PreSwitchOutFormChangeAbAttr,
   PreventBerryUseAbAttr,
   PreventBypassSpeedChanceAbAttr,
   ProtectStatAbAttr,
@@ -97,6 +96,7 @@ import {
   UserFieldStatusEffectImmunityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { PreSwitchOutFormChangeAbAttr } from "./abilities/pre-switch-out-form-change-ab-attr";
 import { PreSwitchOutHealAbAttr } from "./abilities/pre-switch-out-heal-ab-attr";
 import { PreSwitchOutClearWeatherAbAttr } from "./abilities/pre-switch-out-clear-weather-ab-attr";
 import { PreSwitchOutResetStatusAbAttr } from "./abilities/pre-switch-out-reset-status-ab-attr";

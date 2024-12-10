@@ -69,7 +69,7 @@ import type { PostSetStatusAbAttr } from "./abilities/post-set-status-ab-attr";
 import type { PostVictoryAbAttr } from "./abilities/post-victory-ab-attr";
 import type { PostKnockOutAbAttr } from "./abilities/post-knock-out-ab-attr";
 import { PostSummonStatStageChangeAbAttr } from "./abilities/post-summon-stat-stage-change-ab-attr";
-import { PreSwitchOutAbAttr } from "./abilities/pre-switch-out-ab-attr";
+import type { PreSwitchOutAbAttr } from "./abilities/pre-switch-out-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -178,40 +178,6 @@ export class Ability implements Localizable {
 }
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
-
-/**
- * Attribute for form changes that occur on switching out
- * @extends PreSwitchOutAbAttr
- * @see {@linkcode applyPreSwitchOut}
- */
-export class PreSwitchOutFormChangeAbAttr extends PreSwitchOutAbAttr {
-  private formFunc: (p: Pokemon) => integer;
-
-  constructor(formFunc: (p: Pokemon) => integer) {
-    super();
-
-    this.formFunc = formFunc;
-  }
-
-  /**
-   * On switch out, trigger the form change to the one defined in the ability
-   * @param pokemon The pokemon switching out and changing form {@linkcode Pokemon}
-   * @param _passive N/A
-   * @param _args N/A
-   * @returns true if the form change was successful
-   */
-  override applyPreSwitchOut(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
-    const formIndex = this.formFunc(pokemon);
-    if (formIndex !== pokemon.formIndex) {
-      if (!simulated) {
-        globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger, false);
-      }
-      return true;
-    }
-
-    return false;
-  }
-}
 
 export class PreStatStageChangeAbAttr extends AbAttr {
   applyPreStatStageChange(
