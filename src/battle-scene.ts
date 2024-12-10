@@ -1002,7 +1002,7 @@ export default class BattleScene extends SceneBase {
   /**
    * Returns the ModifierBar of this scene, which is declared private and therefore not accessible elsewhere
    * @param isEnemy Whether to return the enemy's modifier bar
-   * @returns {ModifierBar}
+   * @returns The {@linkcode ModifierBar} of this scene
    */
   getModifierBar(isEnemy?: boolean): ModifierBar {
     return isEnemy ? this.enemyModifierBar : this.modifierBar;
@@ -2585,8 +2585,8 @@ export default class BattleScene extends SceneBase {
    * This method allows deferring the execution of a phase until certain conditions are met, which is useful for handling
    * situations like abilities and entry hazards that depend on specific game states.
    *
-   * @param {Phase} phase - The phase to be added to the conditional queue.
-   * @param {() => boolean} condition - A function that returns a boolean indicating whether the phase should be executed.
+   * @param phase The {@linkcode Phase} to be added to the conditional queue.
+   * @param condition A function that returns a boolean indicating whether the phase should be executed.
    *
    */
   pushConditionalPhase(phase: Phase, condition: () => boolean): void {

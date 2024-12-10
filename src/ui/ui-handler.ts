@@ -13,8 +13,8 @@ export default abstract class UiHandler {
   public active: boolean = false;
 
   /**
-   * @param {BattleScene} scene The same scene as everything else.
-   * @param {Mode} mode The mode of the UI element. These should be unique.
+   * @param scene The same scene as everything else.
+   * @param mode The mode of the UI element. These should be unique.
    */
   constructor(mode: Mode | null = null) {
     this.mode = mode;
