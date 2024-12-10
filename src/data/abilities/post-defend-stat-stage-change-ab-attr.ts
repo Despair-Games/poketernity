@@ -3,7 +3,7 @@ import { type HitResult, type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
-import { type PokemonDefendCondition } from "../ability";
+import { type PokemonDefendCondition } from "../../@types/PokemonDefendCondition";
 import { type Move } from "../move";
 
 export class PostDefendStatStageChangeAbAttr extends PostDefendAbAttr {

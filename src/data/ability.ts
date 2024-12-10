@@ -71,6 +71,7 @@ import { VariableMovePowerAbAttr } from "./abilities/variable-move-power-ab-attr
 import { FieldPreventExplosiveMovesAbAttr } from "./abilities/field-prevent-explosive-moves-ab-attr";
 import type { FieldMultiplyStatAbAttr } from "./abilities/field-multiply-stat-ab-attr";
 import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition";
+import type { PokemonDefendCondition } from "../@types/PokemonDefendCondition";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -180,8 +181,6 @@ export class Ability implements Localizable {
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
 
-// TODO: Can this be improved?
-export type PokemonDefendCondition = (target: Pokemon, user: Pokemon, move: Move) => boolean;
 export type PokemonStatStageChangeCondition = (target: Pokemon, statsChanged: BattleStat[], stages: number) => boolean;
 
 /**

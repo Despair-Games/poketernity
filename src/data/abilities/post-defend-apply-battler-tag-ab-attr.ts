@@ -4,7 +4,7 @@ import type { HitResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
-import type { PokemonDefendCondition } from "../ability";
+import type { PokemonDefendCondition } from "../../@types/PokemonDefendCondition";
 import type Move from "../move";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 

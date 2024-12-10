@@ -2,7 +2,7 @@ import type { ArenaTagType } from "#app/enums/arena-tag-type";
 import type Pokemon from "#app/field/pokemon";
 import type { HitResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import type { PokemonDefendCondition } from "../ability";
+import type { PokemonDefendCondition } from "../../@types/PokemonDefendCondition";
 import { type ArenaTrapTag, ArenaTagSide } from "../arena-tag";
 import type Move from "../move";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
