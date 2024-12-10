@@ -18,7 +18,6 @@ import {
   Ability,
   allAbilities,
   AlwaysHitAbAttr,
-  ArenaTrapAbAttr,
   BlockRedirectAbAttr,
   BypassSpeedChanceAbAttr,
   FlinchStatStageChangeAbAttr,
@@ -202,6 +201,7 @@ import { PostTurnLootAbAttr } from "./abilities/post-turn-loot-ab-attr";
 import { PostTurnHurtIfSleepingAbAttr } from "./abilities/post-turn-hurt-if-sleeping-ab-attr";
 import { FetchBallAbAttr } from "./abilities/fetch-ball-ab-attr";
 import { HealFromBerryUseAbAttr } from "./abilities/heal-from-berry-use-ab-attr";
+import { ArenaTrapAbAttr } from "./abilities/arena-trap-ab-attr";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {
