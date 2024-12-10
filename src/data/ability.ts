@@ -4,8 +4,8 @@ import type { Weather } from "#app/data/weather";
 import { type Stat, type BattleStat } from "#app/enums/stat";
 import { SwitchType } from "#app/enums/switch-type";
 import type Pokemon from "#app/field/pokemon";
-import type { EnemyPokemon, PokemonMove } from "#app/field/pokemon";
-import { HitResult, MoveResult, PlayerPokemon } from "#app/field/pokemon";
+import type { EnemyPokemon, PokemonMove, HitResult } from "#app/field/pokemon";
+import { MoveResult, PlayerPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { Localizable } from "#app/interfaces/locales";
 import { BattleEndPhase } from "#app/phases/battle-end-phase";
@@ -17,7 +17,6 @@ import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import type { Constructor, NumberHolder } from "#app/utils";
 import { BooleanHolder, toDmgValue } from "#app/utils";
 import { Abilities } from "#enums/abilities";
-import type { BattlerTagType } from "#enums/battler-tag-type";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
 import type { StatusEffect } from "#enums/status-effect";
@@ -37,12 +36,10 @@ import { PostDamageAbAttr } from "./abilities/post-damage-ab-attr";
 import { PostSummonAbAttr } from "./abilities/post-summon-ab-attr";
 import type { PreAttackAbAttr } from "./abilities/pre-attack-ab-attr";
 import { type PreDefendAbAttr } from "./abilities/pre-defend-ab-attr";
-import { ReceivedMoveDamageMultiplierAbAttr } from "./abilities/received-move-damage-multiplier-ab-attr";
 import type { PostDefendAbAttr } from "./abilities/post-defend-ab-attr";
 import type { PostStatStageChangeAbAttr } from "./abilities/post-stat-stage-change-ab-attr";
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import type { FieldMultiplyStatAbAttr } from "./abilities/field-multiply-stat-ab-attr";
-import type { PokemonDefendCondition } from "../@types/PokemonDefendCondition";
 import type { StatMultiplierAbAttr } from "./abilities/stat-multiplier-ab-attr";
 import type { PostAttackAbAttr } from "./abilities/post-attack-ab-attr";
 import type { PostSetStatusAbAttr } from "./abilities/post-set-status-ab-attr";
@@ -184,79 +181,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
     const weatherType = globalScene.arena.weather?.weatherType;
     return !!weatherType && weatherTypes.indexOf(weatherType) > -1;
   };
-}
-
-/**
- * Takes no damage from the first hit of a damaging move.
- * This is used in the Disguise and Ice Face abilities.
- * @extends ReceivedMoveDamageMultiplierAbAttr
- */
-export class FormBlockDamageAbAttr extends ReceivedMoveDamageMultiplierAbAttr {
-  private multiplier: number;
-  private tagType: BattlerTagType;
-  private recoilDamageFunc?: (pokemon: Pokemon) => number;
-  private triggerMessageFunc: (pokemon: Pokemon, abilityName: string) => string;
-
-  constructor(
-    condition: PokemonDefendCondition,
-    multiplier: number,
-    tagType: BattlerTagType,
-    triggerMessageFunc: (pokemon: Pokemon, abilityName: string) => string,
-    recoilDamageFunc?: (pokemon: Pokemon) => number,
-  ) {
-    super(condition, multiplier);
-
-    this.multiplier = multiplier;
-    this.tagType = tagType;
-    this.recoilDamageFunc = recoilDamageFunc;
-    this.triggerMessageFunc = triggerMessageFunc;
-  }
-
-  /**
-   * Applies the pre-defense ability to the Pokémon.
-   * Removes the appropriate `BattlerTagType` when hit by an attack and is in its defense form.
-   *
-   * @param pokemon The Pokémon with the ability.
-   * @param _passive n/a
-   * @param attacker The attacking Pokémon.
-   * @param move The move being used.
-   * @param _cancelled n/a
-   * @param args Additional arguments.
-   * @returns `true` if the immunity was applied.
-   */
-  override applyPreDefend(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
-    _cancelled: BooleanHolder,
-    args: any[],
-  ): boolean {
-    if (this.condition(pokemon, attacker, move) && !move.hitsSubstitute(attacker, pokemon)) {
-      if (!simulated) {
-        (args[0] as NumberHolder).value = this.multiplier;
-        pokemon.removeTag(this.tagType);
-        if (this.recoilDamageFunc) {
-          pokemon.damageAndUpdate(this.recoilDamageFunc(pokemon), HitResult.OTHER, false, false, true, true);
-        }
-      }
-      return true;
-    }
-
-    return false;
-  }
-
-  /**
-   * Gets the message triggered when the Pokémon avoids damage using the form-changing ability.
-   * @param pokemon The Pokémon with the ability.
-   * @param abilityName The name of the ability.
-   * @param _args n/a
-   * @returns The trigger message.
-   */
-  override getTriggerMessage(pokemon: Pokemon, abilityName: string, ..._args: any[]): string {
-    return this.triggerMessageFunc(pokemon, abilityName);
-  }
 }
 
 /**
