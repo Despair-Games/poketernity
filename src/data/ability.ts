@@ -70,6 +70,7 @@ import { PreAttackAbAttr } from "./abilities/pre-attack-ab-attr";
 import { PreDefendAbAttr } from "./abilities/pre-defend-ab-attr";
 import { ReceivedMoveDamageMultiplierAbAttr } from "./abilities/received-move-damage-multiplier-ab-attr";
 import { PostDefendAbAttr } from "./abilities/post-defend-ab-attr";
+import { PostStatStageChangeAbAttr } from "./abilities/post-stat-stage-change-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -186,19 +187,6 @@ type PokemonDefendCondition = (target: Pokemon, user: Pokemon, move: Move) => bo
 type PokemonStatStageChangeCondition = (target: Pokemon, statsChanged: BattleStat[], stages: number) => boolean;
 
 type PreDefendAbAttrCondition = (pokemon: Pokemon, attacker: Pokemon, move: Move) => boolean;
-
-export class PostStatStageChangeAbAttr extends AbAttr {
-  applyPostStatStageChange(
-    _pokemon: Pokemon,
-    _simulated: boolean,
-    _statsChanged: BattleStat[],
-    _stagesChanged: integer,
-    _selfTarget: boolean,
-    _args: any[],
-  ): boolean {
-    return false;
-  }
-}
 
 export class MoveImmunityAbAttr extends PreDefendAbAttr {
   private immuneCondition: PreDefendAbAttrCondition;
