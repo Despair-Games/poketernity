@@ -74,7 +74,7 @@ import type { StatMultiplierAbAttr } from "./abilities/stat-multiplier-ab-attr";
 import { PostAttackAbAttr } from "./abilities/post-attack-ab-attr";
 import type { PostSetStatusAbAttr } from "./abilities/post-set-status-ab-attr";
 import type { PostVictoryAbAttr } from "./abilities/post-victory-ab-attr";
-import { PostKnockOutAbAttr } from "./abilities/post-knock-out-ab-attr";
+import type { PostKnockOutAbAttr } from "./abilities/post-knock-out-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -183,35 +183,6 @@ export class Ability implements Localizable {
 }
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
-
-export class CopyFaintedAllyAbilityAbAttr extends PostKnockOutAbAttr {
-  constructor() {
-    super();
-  }
-
-  override applyPostKnockOut(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    knockedOut: Pokemon,
-    _args: any[],
-  ): boolean {
-    if (pokemon.isPlayer() === knockedOut.isPlayer() && !knockedOut.getAbility().hasAttr(UncopiableAbilityAbAttr)) {
-      if (!simulated) {
-        pokemon.summonData.ability = knockedOut.getAbility().id;
-        globalScene.queueMessage(
-          i18next.t("abilityTriggers:copyFaintedAllyAbility", {
-            pokemonNameWithAffix: getPokemonNameWithAffix(knockedOut),
-            abilityName: allAbilities[knockedOut.getAbility().id].name,
-          }),
-        );
-      }
-      return true;
-    }
-
-    return false;
-  }
-}
 
 /**
  * Ability attribute for ignoring the opponent's stat changes

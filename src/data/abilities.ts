@@ -33,7 +33,6 @@ import {
   CommanderAbAttr,
   ConditionalCritAbAttr,
   ConfusionOnStatusEffectAbAttr,
-  CopyFaintedAllyAbilityAbAttr,
   DoubleBerryEffectAbAttr,
   DownloadAbAttr,
   FetchBallAbAttr,
@@ -202,6 +201,7 @@ import { PokemonTypeChangeAbAttr } from "./abilities/pokemon-type-change-ab-attr
 import { FieldMoveTypePowerBoostAbAttr } from "./abilities/field-move-type-power-boost-ab-attr";
 import { PostAttackStealHeldItemAbAttr } from "./abilities/post-attack-steal-held-item-ab-attr";
 import { PostDefendStealHeldItemAbAttr } from "./abilities/post-defend-steal-held-item-ab-attr";
+import { CopyFaintedAllyAbilityAbAttr } from "./abilities/copy-fainted-ally-ability-ab-attr";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {
