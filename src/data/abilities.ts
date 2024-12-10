@@ -22,12 +22,12 @@ import {
   IgnoreTypeImmunityAbAttr,
   MoneyAbAttr,
   NoFusionAbilityAbAttr,
-  NoTransformAbilityAbAttr,
   PostDamageForceSwitchAbAttr,
   PostSummonStatStageChangeOnArenaAbAttr,
   PreventBypassSpeedChanceAbAttr,
   TerrainEventTypeChangeAbAttr,
 } from "./ability";
+import { NoTransformAbilityAbAttr } from "./abilities/no-transform-ability-ab-attr";
 import { UnswappableAbilityAbAttr } from "./abilities/unswappable-ability-ab-attr";
 import { UnsuppressableAbilityAbAttr } from "./abilities/unsuppressable-ability-ab-attr";
 import { UncopiableAbilityAbAttr } from "./abilities/uncopiable-ability-ab-attr";

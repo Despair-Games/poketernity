@@ -189,12 +189,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
   };
 }
 
-export class NoTransformAbilityAbAttr extends AbAttr {
-  constructor() {
-    super(false);
-  }
-}
-
 export class NoFusionAbilityAbAttr extends AbAttr {
   constructor() {
     super(false);
