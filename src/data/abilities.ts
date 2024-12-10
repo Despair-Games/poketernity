@@ -38,7 +38,6 @@ import {
   NoTransformAbilityAbAttr,
   PostBattleLootAbAttr,
   PostDamageForceSwitchAbAttr,
-  PostDancingMoveAbAttr,
   PostFaintClearWeatherAbAttr,
   PostFaintContactDamageAbAttr,
   PostFaintHPDamageAbAttr,
@@ -62,6 +61,7 @@ import {
   UnswappableAbilityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { PostDancingMoveAbAttr } from "./abilities/post-dancing-move-ab-attr";
 import { PostBiomeChangeTerrainChangeAbAttr } from "./abilities/post-biome-change-terrain-change-ab-attr";
 import { PostBiomeChangeWeatherChangeAbAttr } from "./abilities/post-biome-change-weather-change-ab-attr";
 import { PostTurnFormChangeAbAttr } from "./abilities/post-turn-form-change-ab-attr";
