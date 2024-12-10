@@ -178,7 +178,6 @@ import {
   PostSetStatusAbAttr,
   applyPostSetStatusAbAttrs,
   InfiltratorAbAttr,
-  AlliedFieldDamageReductionAbAttr,
   applyPostDamageAbAttrs,
   CommanderAbAttr,
   applyPostItemLostAbAttrs,
@@ -248,6 +247,7 @@ import { PostDamageAbAttr } from "#app/data/abilities/post-damage-ab-attr";
 import { PreDefendFullHpEndureAbAttr } from "#app/data/abilities/pre-defend-full-hp-endure-ab-attr";
 import { StabBoostAbAttr } from "#app/data/abilities/stab-boost-ab-attr";
 import { ReceivedMoveDamageMultiplierAbAttr } from "#app/data/abilities/received-move-damage-multiplier-ab-attr";
+import { AlliedFieldDamageReductionAbAttr } from "#app/data/abilities/allied-field-damage-reduction-ab-attr";
 
 export enum LearnMoveSituation {
   MISC,

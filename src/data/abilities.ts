@@ -18,7 +18,6 @@ import {
   Ability,
   AddSecondStrikeAbAttr,
   allAbilities,
-  AlliedFieldDamageReductionAbAttr,
   AllyMoveCategoryPowerBoostAbAttr,
   AlwaysHitAbAttr,
   ArenaTrapAbAttr,
@@ -201,6 +200,7 @@ import { PostBattleInitStatStageChangeAbAttr } from "./abilities/post-battle-ini
 import { PreDefendFullHpEndureAbAttr } from "./abilities/pre-defend-full-hp-endure-ab-attr";
 import { StabBoostAbAttr } from "./abilities/stab-boost-ab-attr";
 import { ReceivedMoveDamageMultiplierAbAttr } from "./abilities/received-move-damage-multiplier-ab-attr";
+import { AlliedFieldDamageReductionAbAttr } from "./abilities/allied-field-damage-reduction-ab-attr";
 
 type AbAttrCondition = (pokemon: Pokemon) => boolean;
 
