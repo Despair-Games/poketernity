@@ -40,7 +40,6 @@ import {
   applyPreAttackAbAttrs,
   applyPreDefendAbAttrs,
   ForceSwitchOutImmunityAbAttr,
-  HealFromBerryUseAbAttr,
   IgnoreProtectOnContactAbAttr,
   InfiltratorAbAttr,
   MaxMultiHitAbAttr,
@@ -111,6 +110,7 @@ import { ReverseDrainAbAttr } from "./abilities/reverse-drain-ab-attr";
 import { MoveEffectChanceMultiplierAbAttr } from "./abilities/move-effect-chance-multiplier-ab-attr";
 import { IgnoreMoveEffectsAbAttr } from "./abilities/ignore-move-effect-ab-attr";
 import { FieldMoveTypePowerBoostAbAttr } from "./abilities/field-move-type-power-boost-ab-attr";
+import { HealFromBerryUseAbAttr } from "./abilities/heal-from-berry-use-ab-attr";
 
 export enum MoveCategory {
   PHYSICAL,

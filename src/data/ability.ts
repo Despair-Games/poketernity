@@ -11,7 +11,6 @@ import type { Localizable } from "#app/interfaces/locales";
 import { BattleEndPhase } from "#app/phases/battle-end-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { NewBattlePhase } from "#app/phases/new-battle-phase";
-import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { SwitchPhase } from "#app/phases/switch-phase";
@@ -187,41 +186,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
     const weatherType = globalScene.arena.weather?.weatherType;
     return !!weatherType && weatherTypes.indexOf(weatherType) > -1;
   };
-}
-
-/**
- * A Pokemon with this ability heals by a percentage of their maximum hp after eating a berry
- * @param healPercent - Percent of Max HP to heal
- * @see {@linkcode apply()} for implementation
- */
-export class HealFromBerryUseAbAttr extends AbAttr {
-  /** Percent of Max HP to heal */
-  private healPercent: number;
-
-  constructor(healPercent: number) {
-    super();
-
-    // Clamp healPercent so its between [0,1].
-    this.healPercent = Math.max(Math.min(healPercent, 1), 0);
-  }
-
-  override apply(pokemon: Pokemon, passive: boolean, simulated: boolean, ..._args: [BooleanHolder, any[]]): boolean {
-    const { name: abilityName } = passive ? pokemon.getPassiveAbility() : pokemon.getAbility();
-    if (!simulated) {
-      globalScene.unshiftPhase(
-        new PokemonHealPhase(
-          pokemon.getBattlerIndex(),
-          toDmgValue(pokemon.getMaxHp() * this.healPercent),
-          i18next.t("abilityTriggers:healFromBerryUse", {
-            pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-            abilityName,
-          }),
-          true,
-        ),
-      );
-    }
-    return true;
-  }
 }
 
 export class RunSuccessAbAttr extends AbAttr {
