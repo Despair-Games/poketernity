@@ -82,7 +82,6 @@ import {
   SpeedBoostAbAttr,
   StatStageChangeCopyAbAttr,
   StatStageChangeMultiplierAbAttr,
-  StatusEffectImmunityAbAttr,
   SuppressFieldAbilitiesAbAttr,
   SuppressWeatherEffectAbAttr,
   SyncEncounterNatureAbAttr,
@@ -94,6 +93,7 @@ import {
   UserFieldStatusEffectImmunityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { StatusEffectImmunityAbAttr } from "./abilities/status-effect-immunity-ab-attr";
 import { ConfusionOnStatusEffectAbAttr } from "./abilities/confusion-on-status-effect-ab-attr";
 import { PreSwitchOutFormChangeAbAttr } from "./abilities/pre-switch-out-form-change-ab-attr";
 import { PreSwitchOutHealAbAttr } from "./abilities/pre-switch-out-heal-ab-attr";

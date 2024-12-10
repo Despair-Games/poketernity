@@ -183,12 +183,6 @@ export class Ability implements Localizable {
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
 
 /**
- * Provides immunity to status effects to the user.
- * @extends PreSetStatusEffectImmunityAbAttr
- */
-export class StatusEffectImmunityAbAttr extends PreSetStatusEffectImmunityAbAttr {}
-
-/**
  * Provides immunity to status effects to the user's field.
  * @extends PreSetStatusEffectImmunityAbAttr
  */

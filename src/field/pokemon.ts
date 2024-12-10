@@ -144,7 +144,6 @@ import {
   BlockCritAbAttr,
   BonusCritAbAttr,
   BypassBurnDamageReductionAbAttr,
-  StatusEffectImmunityAbAttr,
   WeightMultiplierAbAttr,
   allAbilities,
   applyAbAttrs,
@@ -171,6 +170,7 @@ import {
   applyPostItemLostAbAttrs,
   PostItemLostAbAttr,
 } from "#app/data/ability";
+import { StatusEffectImmunityAbAttr } from "#app/data/abilities/status-effect-immunity-ab-attr";
 import { CommanderAbAttr } from "#app/data/abilities/commander-ab-attr";
 import { IgnoreOpponentStatStagesAbAttr } from "#app/data/abilities/ignore-opponent-stat-stages-ab-attr";
 import { PostSetStatusAbAttr } from "#app/data/abilities/post-set-status-ab-attr";
