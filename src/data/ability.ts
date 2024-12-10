@@ -67,7 +67,7 @@ import { BlockNonDirectDamageAbAttr } from "./abilities/block-non-direct-damage-
 import type { PreWeatherEffectAbAttr } from "./abilities/pre-weather-effect-ab-attr";
 import type { PreWeatherDamageAbAttr } from "./abilities/pre-weather-damage-ab-attr";
 import type { PostWeatherChangeAbAttr } from "./abilities/post-weather-change-ab-attr";
-import { PostWeatherLapseAbAttr } from "./abilities/post-weather-lapse-ab-attr";
+import type { PostWeatherLapseAbAttr } from "./abilities/post-weather-lapse-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -188,41 +188,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
     const weatherType = globalScene.arena.weather?.weatherType;
     return !!weatherType && weatherTypes.indexOf(weatherType) > -1;
   };
-}
-
-export class PostWeatherLapseDamageAbAttr extends PostWeatherLapseAbAttr {
-  private damageFactor: integer;
-
-  constructor(damageFactor: integer, ...weatherTypes: WeatherType[]) {
-    super(...weatherTypes);
-
-    this.damageFactor = damageFactor;
-  }
-
-  override applyPostWeatherLapse(
-    pokemon: Pokemon,
-    passive: boolean,
-    simulated: boolean,
-    _weather: Weather,
-    _args: any[],
-  ): boolean {
-    if (pokemon.hasAbilityWithAttr(BlockNonDirectDamageAbAttr)) {
-      return false;
-    }
-
-    if (!simulated) {
-      const abilityName = (!passive ? pokemon.getAbility() : pokemon.getPassiveAbility()).name;
-      globalScene.queueMessage(
-        i18next.t("abilityTriggers:postWeatherLapseDamage", {
-          pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-          abilityName,
-        }),
-      );
-      pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / (16 / this.damageFactor)), HitResult.OTHER);
-    }
-
-    return true;
-  }
 }
 
 export class PostTerrainChangeAbAttr extends AbAttr {
