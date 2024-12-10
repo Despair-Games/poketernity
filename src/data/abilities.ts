@@ -44,7 +44,6 @@ import {
   RedirectTypeMoveAbAttr,
   ReduceBerryUseThresholdAbAttr,
   ReduceStatusEffectDurationAbAttr,
-  RunSuccessAbAttr,
   SuppressFieldAbilitiesAbAttr,
   SyncEncounterNatureAbAttr,
   TerrainEventTypeChangeAbAttr,
@@ -53,6 +52,7 @@ import {
   UnswappableAbilityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { RunSuccessAbAttr } from "./abilities/run-success-ab-attr";
 import { PreventBerryUseAbAttr } from "./abilities/prevent-berry-use-ab-attr";
 import { DoubleBerryEffectAbAttr } from "./abilities/double-berry-effect-ab-attr";
 import { ReduceBurnDamageAbAttr } from "./abilities/reduce-burn-damage-ab-attr";
