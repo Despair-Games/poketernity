@@ -9593,7 +9593,8 @@ export function initMoves() {
       .ballBombMove(),
     new SelfStatusMove(Moves.HEALING_WISH, Type.PSYCHIC, -1, 10, -1, 0, 4)
       .attr(SacrificialFullRestoreAttr, false, "moveTriggers:sacrificialFullRestore")
-      .triageMove(),
+      .triageMove()
+      .partial(), // Does not have the effect of being stored if the incoming Pokemon is already healthy
     new AttackMove(Moves.BRINE, Type.WATER, MoveCategory.SPECIAL, 65, 100, 10, -1, 0, 4).attr(
       MovePowerMultiplierAttr,
       (_user, target, _move) => (target.getHpRatio() < 0.5 ? 2 : 1),
@@ -9924,7 +9925,8 @@ export function initMoves() {
     new SelfStatusMove(Moves.LUNAR_DANCE, Type.PSYCHIC, -1, 10, -1, 0, 4)
       .attr(SacrificialFullRestoreAttr, true, "moveTriggers:lunarDanceRestore")
       .danceMove()
-      .triageMove(),
+      .triageMove()
+      .partial(), // Does not have the effect of being stored if the incoming Pokemon is already perfectly healthy
     new AttackMove(Moves.CRUSH_GRIP, Type.NORMAL, MoveCategory.PHYSICAL, -1, 100, 5, -1, 0, 4).attr(
       OpponentHighHpPowerAttr,
       120,
