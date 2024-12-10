@@ -6936,9 +6936,8 @@ export function initAbilities() {
     new Ability(Abilities.STENCH, 3).attr(
       PostAttackApplyBattlerTagAbAttr,
       false,
-      (user, target, move) =>
+      (_user, target, move) =>
         !move.hasAttr(FlinchAttr)
-        && !move.hitsSubstitute(user, target)
         && !target.turnData.acted
         && move.category !== MoveCategory.STATUS
         && (target.status

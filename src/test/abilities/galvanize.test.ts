@@ -1,10 +1,9 @@
 import { BattlerIndex } from "#app/battle";
 import { allMoves } from "#app/data/move";
 import { Type } from "#enums/type";
-import { Abilities } from "#app/enums/abilities";
-import { Moves } from "#app/enums/moves";
-import { Species } from "#app/enums/species";
-import { HitResult } from "#app/field/pokemon";
+import { Abilities } from "#enums/abilities";
+import { Moves } from "#enums/moves";
+import { Species } from "#enums/species";
 import GameManager from "#test/utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -96,7 +95,7 @@ describe("Abilities - Galvanize", () => {
     await game.phaseInterceptor.to("BerryPhase", false);
 
     expect(playerPokemon.getMoveType).not.toHaveLastReturnedWith(Type.ELECTRIC);
-    expect(enemyPokemon.getMoveEffectiveness).toHaveReturnedWith(HitResult.NO_EFFECT);
+    expect(enemyPokemon.getMoveEffectiveness).toHaveReturnedWith(0);
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
   });
 
@@ -125,6 +124,6 @@ describe("Abilities - Galvanize", () => {
       expect(enemyPokemon.hp).toBeLessThan(enemyStartingHp);
     }
 
-    expect(enemyPokemon.getMoveEffectiveness).not.toHaveReturnedWith(HitResult.NO_EFFECT);
+    expect(enemyPokemon.getMoveEffectiveness).not.toHaveReturnedWith(0);
   });
 });

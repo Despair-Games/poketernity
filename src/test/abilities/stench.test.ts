@@ -88,6 +88,6 @@ describe("Abilities - Stench", () => {
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("BerryPhase");
-    expect(abilityAttr.getChance).toHaveLastReturnedWith(0);
+    expect(abilityAttr.getChance).not.toHaveBeenCalled();
   });
 });

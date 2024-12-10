@@ -1,8 +1,7 @@
 import { BattlerIndex } from "#app/battle";
-import { Abilities } from "#app/enums/abilities";
-import { Moves } from "#app/enums/moves";
-import { Species } from "#app/enums/species";
-import { HitResult } from "#app/field/pokemon";
+import { Abilities } from "#enums/abilities";
+import { Moves } from "#enums/moves";
+import { Species } from "#enums/species";
 import GameManager from "#test/utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -92,7 +91,7 @@ describe("Abilities - Tera Shell", () => {
     game.move.select(Moves.SPLASH);
 
     await game.phaseInterceptor.to("BerryPhase", false);
-    expect(playerPokemon.getMoveEffectiveness).toHaveLastReturnedWith(HitResult.EFFECTIVE);
+    expect(playerPokemon.getMoveEffectiveness).toHaveLastReturnedWith(1);
     expect(playerPokemon.hp).toBe(playerPokemon.getMaxHp() - 40);
   });
 
@@ -112,7 +111,7 @@ describe("Abilities - Tera Shell", () => {
     await game.move.forceHit();
     for (let i = 0; i < 2; i++) {
       await game.phaseInterceptor.to("MoveEffectPhase");
-      expect(playerPokemon.getMoveEffectiveness).toHaveLastReturnedWith(HitResult.NOT_VERY_EFFECTIVE);
+      expect(playerPokemon.getMoveEffectiveness).toHaveLastReturnedWith(0.5);
     }
     expect(enemyPokemon.turnData.hitCount).toBe(2);
   });

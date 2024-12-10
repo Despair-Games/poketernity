@@ -11,7 +11,6 @@ import {
   MaxMultiHitAbAttr,
   PostAttackAbAttr,
   PostDamageAbAttr,
-  PostDamageForceSwitchAbAttr,
   PostDefendAbAttr,
 } from "#app/data/ability";
 import { ArenaTagSide, ConditionalProtectTag } from "#app/data/arena-tag";
@@ -206,19 +205,25 @@ export class MoveEffectPhase extends PokemonPhase {
       virtual: this.move.virtual,
     };
 
+    // Update hit checks for each target
     targets.forEach((t, i) => (this.hitChecks[i] = this.hitCheck(t)));
 
+    // If somehow none of this move's targets are on the field,
+    // log the move as a FAIL.
     if (!targets.some((t) => t.isActive(true))) {
       globalScene.queueMessage(i18next.t("battle:attackFailed"));
       this.moveHistoryEntry.result = MoveResult.FAIL;
     }
 
     if (this.hitChecks.some((hc) => hc[0] === HitCheckResult.HIT)) {
+      // Moves are logged as a SUCCESS if at least one target was successfully hit
       this.moveHistoryEntry.result = MoveResult.SUCCESS;
     } else {
       user.turnData.hitCount = 1;
       user.turnData.hitsLeft = 1;
 
+      // If all targets were missed, log the move as a MISS.
+      // Otherwise, log the move as a FAIL.
       if (this.hitChecks.every((hc) => hc[0] === HitCheckResult.MISS)) {
         this.moveHistoryEntry.result = MoveResult.MISS;
       } else {
@@ -286,6 +291,11 @@ export class MoveEffectPhase extends PokemonPhase {
     });
   }
 
+  /**
+   * Plays this phase's move's animation.
+   * @param user the {@linkcode Pokemon} using the move
+   * @returns the Promise playing the animation
+   */
   protected playMoveAnim(user: Pokemon): Promise<void> {
     return new Promise((resolve) => {
       const move = this.move.getMove();
@@ -298,10 +308,16 @@ export class MoveEffectPhase extends PokemonPhase {
     });
   }
 
+  /**
+   * Applies all move effects that trigger in the event of a successful hit.
+   * @param target the {@linkcode Pokemon} hit by this phase's move.
+   * @param effectiveness the effectiveness of the move (as previously evaluated in {@linkcode hitCheck})
+   */
   protected applyMoveEffects(target: Pokemon, effectiveness: TypeDamageMultiplier): void {
     const user = this.getUserPokemon();
     const move = this.move.getMove();
 
+    /** The first target hit by the move */
     const firstTarget = target === this.getTargets().find((_, i) => this.hitChecks[i][1] > 0);
 
     if (isNullOrUndefined(user)) {
@@ -323,6 +339,11 @@ export class MoveEffectPhase extends PokemonPhase {
     }
     if (this.lastHit) {
       globalScene.triggerPokemonFormChange(user, SpeciesFormChangePostMoveTrigger);
+
+      // Multi-hit check for Wimp Out/Emergency Exit
+      if (user.turnData.hitCount > 1) {
+        applyPostDamageAbAttrs(PostDamageAbAttr, target, 0, target.hasPassive(), false, [], user);
+      }
     }
   }
 
@@ -360,6 +381,7 @@ export class MoveEffectPhase extends PokemonPhase {
   /**
    * Apply the results of this phase's move to the given target
    * @param target The {@linkcode Pokemon} struck by the move
+   * @param effectiveness The effectiveness of the move (as determined previously in {@linkcode hitCheck})
    */
   protected applyMove(target: Pokemon, effectiveness: TypeDamageMultiplier): HitResult {
     /** The {@linkcode Pokemon} using the move */
@@ -436,14 +458,6 @@ export class MoveEffectPhase extends PokemonPhase {
         target.turnData.damageTaken += damage;
         target.battleData.hitCount++;
 
-        // Multi-Lens and Parental Bond check for Wimp Out/Emergency Exit
-        if (target.hasAbilityWithAttr(PostDamageForceSwitchAbAttr)) {
-          const multiHitModifier = user.getHeldItems().find((m) => m instanceof PokemonMultiHitModifier);
-          if (multiHitModifier || user.hasAbilityWithAttr(AddSecondStrikeAbAttr)) {
-            applyPostDamageAbAttrs(PostDamageAbAttr, target, damage, target.hasPassive(), false, [], user);
-          }
-        }
-
         const attackResult = {
           move: move.id,
           result: result as DamageResult,
@@ -491,6 +505,14 @@ export class MoveEffectPhase extends PokemonPhase {
     return result;
   }
 
+  /**
+   * Applies all effects aimed at the move's target.
+   * To be used when the target is successfully and directly hit by the move.
+   * @param user the {@linkcode Pokemon} using the move
+   * @param target the {@linkcode Pokemon} targeted by the move
+   * @param hitResult the {@linkcode HitResult} obtained from applying the move
+   * @param firstTarget `true` if the target is the first Pokemon hit by the attack
+   */
   protected applyOnTargetEffects(user: Pokemon, target: Pokemon, hitResult: HitResult, firstTarget: boolean): void {
     const move = this.move.getMove();
 
@@ -673,7 +695,12 @@ export class MoveEffectPhase extends PokemonPhase {
       return [HitCheckResult.PROTECTED, 0];
     }
 
+    /** If `true`, the default message "It doesn't affect {target}!" is suppressed. */
     const cancelNoEffectMessage = new BooleanHolder(false);
+    /**
+     * The effectiveness of the move against the given target.
+     * Accounts for type and move immunities from defensive typing, abilities, and other effects.
+     */
     const effectiveness = target.getMoveEffectiveness(user, move, false, false, cancelNoEffectMessage);
     if (effectiveness === 0) {
       return cancelNoEffectMessage.value
@@ -695,6 +722,7 @@ export class MoveEffectPhase extends PokemonPhase {
 
     const moveAccuracy = move.calculateBattleAccuracy(user, target);
 
+    // Sure-hit moves are encoded with an accuracy of -1
     if (moveAccuracy === -1) {
       return [HitCheckResult.HIT, effectiveness];
     }
