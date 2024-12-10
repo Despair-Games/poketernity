@@ -21,12 +21,12 @@ import {
   FormBlockDamageAbAttr,
   IgnoreTypeImmunityAbAttr,
   MoneyAbAttr,
-  NoFusionAbilityAbAttr,
   PostDamageForceSwitchAbAttr,
   PostSummonStatStageChangeOnArenaAbAttr,
   PreventBypassSpeedChanceAbAttr,
   TerrainEventTypeChangeAbAttr,
 } from "./ability";
+import { NoFusionAbilityAbAttr } from "./abilities/no-fusion-ability-ab-attr";
 import { NoTransformAbilityAbAttr } from "./abilities/no-transform-ability-ab-attr";
 import { UnswappableAbilityAbAttr } from "./abilities/unswappable-ability-ab-attr";
 import { UnsuppressableAbilityAbAttr } from "./abilities/unsuppressable-ability-ab-attr";
