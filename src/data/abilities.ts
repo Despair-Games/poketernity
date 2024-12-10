@@ -30,7 +30,6 @@ import {
   BypassBurnDamageReductionAbAttr,
   BypassSpeedChanceAbAttr,
   ChangeMovePriorityAbAttr,
-  CommanderAbAttr,
   ConditionalCritAbAttr,
   ConfusionOnStatusEffectAbAttr,
   DoubleBerryEffectAbAttr,
@@ -101,6 +100,7 @@ import {
   UserFieldStatusEffectImmunityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { CommanderAbAttr } from "./abilities/commander-ab-attr";
 import { PostSummonFormChangeByWeatherAbAttr } from "./abilities/post-summon-form-change-by-weather-ab-attr";
 import { PostSummonUserFieldRemoveStatusEffectAbAttr } from "./abilities/post-summon-user-field-remove-status-effect-ab-attr";
 import { PostSummonFormChangeAbAttr } from "./abilities/post-summon-form-change-ab-attr";

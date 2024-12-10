@@ -168,10 +168,10 @@ import {
   applyPostSetStatusAbAttrs,
   InfiltratorAbAttr,
   applyPostDamageAbAttrs,
-  CommanderAbAttr,
   applyPostItemLostAbAttrs,
   PostItemLostAbAttr,
 } from "#app/data/ability";
+import { CommanderAbAttr } from "#app/data/abilities/commander-ab-attr";
 import { IgnoreOpponentStatStagesAbAttr } from "#app/data/abilities/ignore-opponent-stat-stages-ab-attr";
 import { PostSetStatusAbAttr } from "#app/data/abilities/post-set-status-ab-attr";
 import { StatMultiplierAbAttr } from "#app/data/abilities/stat-multiplier-ab-attr";

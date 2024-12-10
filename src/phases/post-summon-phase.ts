@@ -1,6 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import type { BattlerIndex } from "#app/battle";
-import { applyAbAttrs, applyPostSummonAbAttrs, CommanderAbAttr } from "#app/data/ability";
+import { applyAbAttrs, applyPostSummonAbAttrs } from "#app/data/ability";
+import { CommanderAbAttr } from "#app/data/abilities/commander-ab-attr";
 import { ArenaTrapTag } from "#app/data/arena-tag";
 import { StatusEffect } from "#app/enums/status-effect";
 import { PokemonPhase } from "./pokemon-phase";
