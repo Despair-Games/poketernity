@@ -182,19 +182,6 @@ export class Ability implements Localizable {
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
 
-export class BonusCritAbAttr extends AbAttr {
-  override apply(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    _cancelled: BooleanHolder,
-    args: any[],
-  ): boolean {
-    (args[0] as BooleanHolder).value = true;
-    return true;
-  }
-}
-
 export class MultCritAbAttr extends AbAttr {
   public multAmount: number;
 

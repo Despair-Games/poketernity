@@ -24,7 +24,6 @@ import {
   BlockRedirectAbAttr,
   BlockStatusDamageAbAttr,
   BlockWeatherDamageAttr,
-  BonusCritAbAttr,
   BypassBurnDamageReductionAbAttr,
   BypassSpeedChanceAbAttr,
   ChangeMovePriorityAbAttr,
@@ -89,6 +88,7 @@ import {
   UnswappableAbilityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { BonusCritAbAttr } from "./abilities/bonus-crit-ab-attr";
 import { BlockCritAbAttr } from "./abilities/block-crit-ab-attr";
 import { UserFieldBattlerTagImmunityAbAttr } from "./abilities/user-field-battler-tag-immunity-ab-attr";
 import { BattlerTagImmunityAbAttr } from "./abilities/battler-tag-immunity-ab-attr";
