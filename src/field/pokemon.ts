@@ -148,13 +148,13 @@ import {
   applyPreAttackAbAttrs,
   applyPreDefendAbAttrs,
   applyPreSetStatusAbAttrs,
-  IgnoreTypeImmunityAbAttr,
   applyFieldStatMultiplierAbAttrs,
   applyCheckTrappedAbAttrs,
   applyPostSetStatusAbAttrs,
   applyPostDamageAbAttrs,
   applyPostItemLostAbAttrs,
 } from "#app/data/ability";
+import { IgnoreTypeImmunityAbAttr } from "#app/data/abilities/ignore-type-immunity-ab-attr";
 import { NoFusionAbilityAbAttr } from "#app/data/abilities/no-fusion-ability-ab-attr";
 import { UnsuppressableAbilityAbAttr } from "#app/data/abilities/unsuppressable-ability-ab-attr";
 import { InfiltratorAbAttr } from "#app/data/abilities/infiltrator-ab-attr";
