@@ -185,40 +185,6 @@ type PokemonAttackCondition = (user: Pokemon | null, target: Pokemon | null, mov
 export type PokemonDefendCondition = (target: Pokemon, user: Pokemon, move: Move) => boolean;
 type PokemonStatStageChangeCondition = (target: Pokemon, statsChanged: BattleStat[], stages: number) => boolean;
 
-export class PostDefendWeatherChangeAbAttr extends PostDefendAbAttr {
-  private weatherType: WeatherType;
-  protected condition?: PokemonDefendCondition;
-
-  constructor(weatherType: WeatherType, condition?: PokemonDefendCondition) {
-    super();
-
-    this.weatherType = weatherType;
-    this.condition = condition;
-  }
-
-  override applyPostDefend(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
-    _hitResult: HitResult,
-    _args: any[],
-  ): boolean {
-    if ((this.condition && !this.condition(pokemon, attacker, move)) || move.hitsSubstitute(attacker, pokemon)) {
-      return false;
-    }
-    if (!globalScene.arena.weather?.isImmutable()) {
-      if (simulated) {
-        return globalScene.arena.weather?.weatherType !== this.weatherType;
-      }
-      return globalScene.arena.trySetWeather(this.weatherType, true);
-    }
-
-    return false;
-  }
-}
-
 export class PostDefendAbilitySwapAbAttr extends PostDefendAbAttr {
   constructor() {
     super();
