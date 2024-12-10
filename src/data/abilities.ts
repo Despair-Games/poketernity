@@ -74,7 +74,6 @@ import {
   MoveTypePowerBoostAbAttr,
   MultCritAbAttr,
   NoFusionAbilityAbAttr,
-  NonSuperEffectiveImmunityAbAttr,
   NoTransformAbilityAbAttr,
   PokemonTypeChangeAbAttr,
   PostAttackApplyBattlerTagAbAttr,
@@ -202,6 +201,7 @@ import { TypeImmunityHealAbAttr } from "./abilities/type-immunity-heal-ab-attr";
 import { TypeImmunityStatStageChangeAbAttr } from "./abilities/type-immunity-stat-stage-change-ab-attr";
 import { TypeImmunityAddBattlerTagAbAttr } from "./abilities/type-immunity-add-battler-tag-ab-attr";
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
+import { NonSuperEffectiveImmunityAbAttr } from "./abilities/non-super-effective-immunity-ab-attr";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {

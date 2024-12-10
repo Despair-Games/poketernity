@@ -70,7 +70,6 @@ import { PostSummonAbAttr } from "./abilities/post-summon-ab-attr";
 import { PreAttackAbAttr } from "./abilities/pre-attack-ab-attr";
 import { PreDefendAbAttr } from "./abilities/pre-defend-ab-attr";
 import { ReceivedMoveDamageMultiplierAbAttr } from "./abilities/received-move-damage-multiplier-ab-attr";
-import { TypeImmunityAbAttr } from "./abilities/type-immunity-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -187,42 +186,6 @@ type PokemonDefendCondition = (target: Pokemon, user: Pokemon, move: Move) => bo
 type PokemonStatStageChangeCondition = (target: Pokemon, statsChanged: BattleStat[], stages: number) => boolean;
 
 type PreDefendAbAttrCondition = (pokemon: Pokemon, attacker: Pokemon, move: Move) => boolean;
-
-export class NonSuperEffectiveImmunityAbAttr extends TypeImmunityAbAttr {
-  constructor(condition?: AbAttrCondition) {
-    super(null, condition);
-  }
-
-  override applyPreDefend(
-    pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
-    cancelled: BooleanHolder,
-    args: any[],
-  ): boolean {
-    const modifierValue =
-      args.length > 0
-        ? (args[0] as NumberHolder).value
-        : pokemon.getAttackTypeEffectiveness(attacker.getMoveType(move), attacker, undefined, undefined, move);
-
-    if (move instanceof AttackMove && modifierValue < 2) {
-      cancelled.value = true; // Suppresses "No Effect" message
-      (args[0] as NumberHolder).value = 0;
-      return true;
-    }
-
-    return false;
-  }
-
-  override getTriggerMessage(pokemon: Pokemon, abilityName: string, ..._args: any[]): string {
-    return i18next.t("abilityTriggers:nonSuperEffectiveImmunity", {
-      pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-      abilityName,
-    });
-  }
-}
 
 /**
  * Attribute implementing the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Tera_Shell_(Ability) | Tera Shell}
