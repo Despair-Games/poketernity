@@ -67,7 +67,6 @@ import {
   PostSummonFormChangeByWeatherAbAttr,
   PostSummonStatStageChangeOnArenaAbAttr,
   PostSummonTransformAbAttr,
-  PostSummonUserFieldRemoveStatusEffectAbAttr,
   PostSummonWeatherSuppressedFormChangeAbAttr,
   PostTerrainChangeAddBattlerTagAttr,
   PostTurnFormChangeAbAttr,
@@ -106,6 +105,7 @@ import {
   UserFieldStatusEffectImmunityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { PostSummonUserFieldRemoveStatusEffectAbAttr } from "./abilities/post-summon-user-field-remove-status-effect-ab-attr";
 import { PostSummonFormChangeAbAttr } from "./abilities/post-summon-form-change-ab-attr";
 import { PostSummonTerrainChangeAbAttr } from "./abilities/post-summon-terrain-change-ab-attr";
 import { PostSummonWeatherChangeAbAttr } from "./abilities/post-summon-weather-change-ab-attr";
