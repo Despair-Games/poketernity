@@ -148,7 +148,6 @@ import {
   applyPreAttackAbAttrs,
   applyPreDefendAbAttrs,
   applyPreSetStatusAbAttrs,
-  UnsuppressableAbilityAbAttr,
   NoFusionAbilityAbAttr,
   IgnoreTypeImmunityAbAttr,
   applyFieldStatMultiplierAbAttrs,
@@ -157,6 +156,7 @@ import {
   applyPostDamageAbAttrs,
   applyPostItemLostAbAttrs,
 } from "#app/data/ability";
+import { UnsuppressableAbilityAbAttr } from "#app/data/abilities/unsuppressable-ability-ab-attr";
 import { InfiltratorAbAttr } from "#app/data/abilities/infiltrator-ab-attr";
 import { SuppressFieldAbilitiesAbAttr } from "#app/data/abilities/suppress-field-abilities-ab-attr";
 import { WeightMultiplierAbAttr } from "#app/data/abilities/weight-multiplier-ab-attr";

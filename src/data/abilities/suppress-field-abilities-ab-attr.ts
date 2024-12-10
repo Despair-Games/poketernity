@@ -1,6 +1,7 @@
 import type Pokemon from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
-import { type Ability, UnsuppressableAbilityAbAttr } from "../ability";
+import { type Ability } from "../ability";
+import { UnsuppressableAbilityAbAttr } from "./unsuppressable-ability-ab-attr";
 import { AbAttr } from "./ab-attr";
 
 export class SuppressFieldAbilitiesAbAttr extends AbAttr {
