@@ -5,7 +5,6 @@ import {
   BlockNonDirectDamageAbAttr,
   FlinchEffectAbAttr,
   ProtectStatAbAttr,
-  ReverseDrainAbAttr,
 } from "#app/data/ability";
 import { ChargeAnim, CommonAnim, CommonBattleAnim, MoveChargeAnim } from "#app/data/battle-anims";
 import type Move from "#app/data/move";
@@ -42,6 +41,7 @@ import { Species } from "#enums/species";
 import { EFFECTIVE_STATS, getStatKey, Stat, type BattleStat, type EffectiveStat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { WeatherType } from "#enums/weather-type";
+import { ReverseDrainAbAttr } from "./abilities/reverse-drain-ab-attr";
 
 export enum BattlerTagLapseType {
   FAINT,

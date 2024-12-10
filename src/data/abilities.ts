@@ -145,7 +145,6 @@ import {
   ReduceBerryUseThresholdAbAttr,
   ReduceBurnDamageAbAttr,
   ReduceStatusEffectDurationAbAttr,
-  ReverseDrainAbAttr,
   RunSuccessAbAttr,
   SpeedBoostAbAttr,
   StatMultiplierAbAttr,
@@ -202,6 +201,7 @@ import { FieldPriorityMoveImmunityAbAttr } from "./abilities/field-priority-move
 import { MoveImmunityAbAttr } from "./abilities/move-immunity-ab-attr";
 import { WonderSkinAbAttr } from "./abilities/wonder-skin-ab-attr";
 import { MoveImmunityStatStageChangeAbAttr } from "./abilities/move-immunity-stat-stage-change-ab-attr";
+import { ReverseDrainAbAttr } from "./abilities/reverse-drain-ab-attr";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {
