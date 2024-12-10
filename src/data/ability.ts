@@ -67,7 +67,6 @@ import type { PostItemLostAbAttr } from "./abilities/post-item-lost-ab-attr";
 import type { CheckTrappedAbAttr } from "./abilities/check-trapped-ab-attr";
 import { PostBattleAbAttr } from "./abilities/post-battle-ab-attr";
 import type { PostFaintAbAttr } from "./abilities/post-faint-ab-attr";
-import { RedirectMoveAbAttr } from "./abilities/redirect-move-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -188,19 +187,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
     const weatherType = globalScene.arena.weather?.weatherType;
     return !!weatherType && weatherTypes.indexOf(weatherType) > -1;
   };
-}
-
-export class RedirectTypeMoveAbAttr extends RedirectMoveAbAttr {
-  public type: Type;
-
-  constructor(type: Type) {
-    super();
-    this.type = type;
-  }
-
-  override canRedirect(moveId: Moves): boolean {
-    return super.canRedirect(moveId) && allMoves[moveId].type === this.type;
-  }
 }
 
 export class BlockRedirectAbAttr extends AbAttr {}

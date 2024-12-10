@@ -34,7 +34,6 @@ import {
   PostDamageForceSwitchAbAttr,
   PostSummonStatStageChangeOnArenaAbAttr,
   PreventBypassSpeedChanceAbAttr,
-  RedirectTypeMoveAbAttr,
   ReduceBerryUseThresholdAbAttr,
   ReduceStatusEffectDurationAbAttr,
   SuppressFieldAbilitiesAbAttr,
@@ -45,6 +44,7 @@ import {
   UnswappableAbilityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { RedirectTypeMoveAbAttr } from "./abilities/redirect-type-move-ab-attr";
 import { PostFaintClearWeatherAbAttr } from "./abilities/post-faint-clear-weather-ab-attr";
 import { PostFaintUnsuppressedWeatherFormChangeAbAttr } from "./abilities/post-faint-unsuppressed-weather-form-change-ab-attr";
 import { MaxMultiHitAbAttr } from "./abilities/max-multi-hit-ab-attr";
