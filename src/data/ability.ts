@@ -189,24 +189,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
   };
 }
 
-export class SyncEncounterNatureAbAttr extends AbAttr {
-  constructor() {
-    super(false);
-  }
-
-  override apply(
-    pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    _cancelled: BooleanHolder,
-    args: any[],
-  ): boolean {
-    (args[0] as Pokemon).setNature(pokemon.getNature());
-
-    return true;
-  }
-}
-
 export class MoveAbilityBypassAbAttr extends AbAttr {
   private moveIgnoreFunc: (pokemon: Pokemon, move: Move) => boolean;
 

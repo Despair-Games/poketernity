@@ -31,12 +31,12 @@ import {
   PostSummonStatStageChangeOnArenaAbAttr,
   PreventBypassSpeedChanceAbAttr,
   SuppressFieldAbilitiesAbAttr,
-  SyncEncounterNatureAbAttr,
   TerrainEventTypeChangeAbAttr,
   UncopiableAbilityAbAttr,
   UnsuppressableAbilityAbAttr,
   UnswappableAbilityAbAttr,
 } from "./ability";
+import { SyncEncounterNatureAbAttr } from "./abilities/sync-encounter-nature-ab-attr";
 import { WeightMultiplierAbAttr } from "./abilities/weight-multiplier-ab-attr";
 import { ReduceBerryUseThresholdAbAttr } from "./abilities/reduce-berry-use-threshold-ab-attr";
 import { ForceSwitchOutImmunityAbAttr } from "./abilities/force-switch-out-immunity-ab-attr";
