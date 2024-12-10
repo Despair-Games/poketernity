@@ -141,7 +141,7 @@ export class MoveEffectPhase extends PokemonPhase {
     const move = this.move.getMove();
 
     // Assume single target for override
-    applyMoveAttrs(OverrideMoveEffectAttr, user, this.getFirstTarget() ?? null, move, overridden, this.move.virtual);
+    applyMoveAttrs(OverrideMoveEffectAttr, user, this.getFirstTarget(), move, overridden, this.move.virtual);
     // If other effects were overridden, stop this phase before they can be applied
     if (overridden.value) {
       return this.end();
@@ -166,7 +166,7 @@ export class MoveEffectPhase extends PokemonPhase {
     if (user.turnData.hitsLeft === -1) {
       const hitCount = new NumberHolder(1);
       // Assume single target for multi hit
-      applyMoveAttrs(MultiHitAttr, user, this.getFirstTarget() ?? null, move, hitCount);
+      applyMoveAttrs(MultiHitAttr, user, this.getFirstTarget(), move, hitCount);
       // If Parental Bond is applicable, add another hit
       applyPreAttackAbAttrs(AddSecondStrikeAbAttr, user, null, move, false, hitCount, null);
       // If Multi-Lens is applicable, add hits equal to the number of held Multi-Lenses
@@ -196,9 +196,7 @@ export class MoveEffectPhase extends PokemonPhase {
     if (!targets.some((t) => t.isActive(true))) {
       globalScene.queueMessage(i18next.t("battle:attackFailed"));
       this.moveHistoryEntry.result = MoveResult.FAIL;
-    }
-
-    if (this.hitChecks.some((hc) => hc[0] === HitCheckResult.HIT)) {
+    } else if (this.hitChecks.some((hc) => hc[0] === HitCheckResult.HIT)) {
       // Moves are logged as a SUCCESS if at least one target was successfully hit
       this.moveHistoryEntry.result = MoveResult.SUCCESS;
     } else {
@@ -261,7 +259,7 @@ export class MoveEffectPhase extends PokemonPhase {
             break;
           case HitCheckResult.PENDING:
           case HitCheckResult.ERROR:
-            console.log(`Unexpected hit check result ${HitCheckResult[hitCheckResult]}. Aborting phase.`);
+            console.warn(`Unexpected hit check result ${HitCheckResult[hitCheckResult]}. Aborting phase.`);
             return this.end();
         }
       }
@@ -282,9 +280,12 @@ export class MoveEffectPhase extends PokemonPhase {
   protected playMoveAnim(user: Pokemon): Promise<void> {
     return new Promise((resolve) => {
       const move = this.move.getMove();
-      const firstTargetPokemon = this.getFirstTarget() ?? null;
+      const firstTargetPokemon = this.getFirstTarget();
+      if (!firstTargetPokemon) {
+        return resolve();
+      }
       const playOnEmptyField = globalScene.currentBattle?.mysteryEncounter?.hasBattleAnimationsWithoutTargets ?? false;
-      new MoveAnim(move.id, user, firstTargetPokemon!.getBattlerIndex(), playOnEmptyField).play(
+      new MoveAnim(move.id, user, firstTargetPokemon.getBattlerIndex(), playOnEmptyField).play(
         move.hitsSubstitute(user, firstTargetPokemon),
         () => resolve(),
       );
@@ -460,7 +461,8 @@ export class MoveEffectPhase extends PokemonPhase {
       globalScene.queueMessage(i18next.t("battle:hitResultCriticalHit"));
     }
 
-    // want to include is.Fainted() in case multi hit move ends early, still want to render message
+    // `.isFainted()` is here in case a multi hit move ends early
+    // we still want to queue the appropriate message
     if (user.turnData.hitsLeft === 1 || target.isFainted()) {
       switch (result) {
         case HitResult.SUPER_EFFECTIVE:
@@ -511,6 +513,13 @@ export class MoveEffectPhase extends PokemonPhase {
     this.applyHeldItemFlinchCheck(user, target, dealsDamage);
     this.applyOnGetHitAbEffects(user, target, hitResult);
     applyPostAttackAbAttrs(PostAttackAbAttr, user, target, move, hitResult);
+
+    // Apply status tokens if the user is an enemy Pokemon
+    if (!user.isPlayer() && move instanceof AttackMove) {
+      globalScene.applyShuffledModifiers(EnemyAttackStatusEffectChanceModifier, false, target);
+    }
+
+    // Apply Grip Claw's chance to steal an item from the target
     if (move instanceof AttackMove) {
       globalScene.applyModifiers(ContactHeldItemTransferChanceModifier, this.player, user, target);
     }
@@ -532,7 +541,7 @@ export class MoveEffectPhase extends PokemonPhase {
         // Queue message for number of hits made by multi-move
         // If multi-hit attack only hits once, still want to render a message
         const hitsTotal = user.turnData.hitCount - Math.max(user.turnData.hitsLeft, 0);
-        if (hitsTotal > 1 || (user.turnData.hitsLeft && user.turnData.hitsLeft > 0)) {
+        if (hitsTotal > 1 || user.turnData.hitsLeft > 0) {
           // If there are multiple hits, or if there are hits of the multi-hit move left
           globalScene.queueMessage(i18next.t("battle:attackHitsCount", { count: hitsTotal }));
         }
@@ -551,20 +560,10 @@ export class MoveEffectPhase extends PokemonPhase {
    * @param user - The {@linkcode Pokemon} using this phase's invoked move
    * @param target - {@linkcode Pokemon} the current target of this phase's invoked move
    * @param hitResult - The {@linkcode HitResult} of the attempted move
-   * @returns a `Promise` intended to be passed into a `then()` call.
    */
   protected applyOnGetHitAbEffects(user: Pokemon, target: Pokemon, hitResult: HitResult): void {
-    if (!target.isFainted() || target.canApplyAbility()) {
-      applyPostDefendAbAttrs(PostDefendAbAttr, target, user, this.move.getMove(), hitResult);
-
-      if (!this.move.getMove().hitsSubstitute(user, target)) {
-        if (!user.isPlayer() && this.move.getMove() instanceof AttackMove) {
-          globalScene.applyShuffledModifiers(EnemyAttackStatusEffectChanceModifier, false, target);
-        }
-
-        target.lapseTags(BattlerTagLapseType.AFTER_HIT);
-      }
-    }
+    applyPostDefendAbAttrs(PostDefendAbAttr, target, user, this.move.getMove(), hitResult);
+    target.lapseTags(BattlerTagLapseType.AFTER_HIT);
   }
 
   /**
@@ -572,7 +571,6 @@ export class MoveEffectPhase extends PokemonPhase {
    * @param user - The {@linkcode Pokemon} using this phase's invoked move
    * @param target - {@linkcode Pokemon} the current target of this phase's invoked move
    * @param dealsDamage - `true` if the attempted move successfully dealt damage
-   * @returns a function intended to be passed into a `then()` call.
    */
   protected applyHeldItemFlinchCheck(user: Pokemon, target: Pokemon, dealsDamage: boolean): void {
     if (this.move.getMove().hasAttr(FlinchAttr)) {
@@ -595,7 +593,8 @@ export class MoveEffectPhase extends PokemonPhase {
   /**
    * Resolves whether this phase's invoked move hits the given target
    * @param target - The {@linkcode Pokemon} targeted by the invoked move
-   * @returns `true` if the move hits the target
+   * @returns a {@linkcode HitCheckEntry} containing the attack's {@linkcode HitCheckResult}
+   * and {@linkcode TypeDamageMultiplier | effectiveness} against the target.
    */
   public hitCheck(target: Pokemon): HitCheckEntry {
     const user = this.getUserPokemon();
@@ -745,8 +744,8 @@ export class MoveEffectPhase extends PokemonPhase {
   }
 
   /** @returns The first target of this phase's invoked move */
-  public getFirstTarget(): Pokemon | undefined {
-    return this.getTargets()[0];
+  public getFirstTarget(): Pokemon | null {
+    return this.getTargets()[0] ?? null;
   }
 
   /** @returns A new `MoveEffectPhase` with the same properties as this phase */
