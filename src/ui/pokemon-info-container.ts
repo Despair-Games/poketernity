@@ -1,6 +1,5 @@
 import { getVariantTint } from "#app/data/variant";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
-import type BattleScene from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
 import { getGenderColor, getGenderShadowColor, getGenderSymbol } from "#app/data/gender";
 import { Gender } from "#enums/gender";
@@ -383,8 +382,8 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
         //If the player has *only* caught any shiny variant of this species, not a non-shiny
         this.pokemonShinyNewIcon.setVisible(true);
         this.pokemonShinyNewIcon.setText("(+)");
-        this.pokemonShinyNewIcon.setColor(getTextColor(TextStyle.SUMMARY_BLUE, false, this.scene.uiTheme));
-        this.pokemonShinyNewIcon.setShadowColor(getTextColor(TextStyle.SUMMARY_BLUE, true, this.scene.uiTheme));
+        this.pokemonShinyNewIcon.setColor(getTextColor(TextStyle.SUMMARY_BLUE, false, globalScene.uiTheme));
+        this.pokemonShinyNewIcon.setShadowColor(getTextColor(TextStyle.SUMMARY_BLUE, true, globalScene.uiTheme));
       } else {
         this.pokemonShinyNewIcon.setVisible(false);
       }
@@ -520,8 +519,4 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
       this.shown = false;
     });
   }
-}
-
-export default interface PokemonInfoContainer {
-  scene: BattleScene;
 }

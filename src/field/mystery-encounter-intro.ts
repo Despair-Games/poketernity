@@ -6,7 +6,6 @@ import { isNullOrUndefined } from "#app/utils";
 import { getSpriteKeysFromSpecies } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import type { Variant } from "#app/data/variant";
 import { doShinySparkleAnim } from "#app/field/anims";
-import type BattleScene from "#app/battle-scene";
 import PlayAnimationConfig = Phaser.Types.Animations.PlayAnimationConfig;
 
 type KnownFileRoot =
@@ -228,7 +227,7 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
         if (config.isPokemon) {
           globalScene.loadPokemonAtlas(config.spriteKey, config.fileRoot);
           if (config.isShiny) {
-            this.scene.loadPokemonVariantAssets(config.spriteKey, config.fileRoot, config.variant);
+            globalScene.loadPokemonVariantAssets(config.spriteKey, config.fileRoot, config.variant);
           }
         } else if (config.isItem) {
           globalScene.loadAtlas("items", "");
@@ -354,7 +353,7 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
    */
   playShinySparkles() {
     for (const sparkleConfig of this.shinySparkleSprites) {
-      this.scene.time.delayedCall(500, () => {
+      globalScene.time.delayedCall(500, () => {
         doShinySparkleAnim(sparkleConfig.sprite, sparkleConfig.variant);
       });
     }
@@ -518,11 +517,4 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
     });
     return super.setVisible(value);
   }
-}
-
-/**
- * Interface is required so as not to override {@link Phaser.GameObjects.Container.scene}
- */
-export default interface MysteryEncounterIntroVisuals {
-  scene: BattleScene;
 }

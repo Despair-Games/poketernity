@@ -1,7 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import type TouchControl from "#app/touch-controls";
 import type UI from "#app/ui/ui";
-import type { Scene } from "phaser";
 
 export const TOUCH_CONTROL_POSITIONS_LANDSCAPE = "touchControlPositionsLandscape";
 export const TOUCH_CONTROL_POSITIONS_PORTRAIT = "touchControlPositionsPortrait";
@@ -320,9 +319,8 @@ export default class MoveTouchControlsHandler {
    * Creates an overlay that covers the screen and allows the user to drag the touch controls around.
    * Also enables the toolbar for saving, resetting, and canceling the changes.
    * @param ui The UI of the game.
-   * @param scene The scene of the game.
    */
-  private createOverlay(ui: UI, _scene: Scene) {
+  private createOverlay(ui: UI) {
     const container = new Phaser.GameObjects.Container(globalScene, 0, 0);
     const overlay = new Phaser.GameObjects.Rectangle(
       globalScene,
@@ -345,15 +343,14 @@ export default class MoveTouchControlsHandler {
   /**
    * Allows the user to configure the touch controls by dragging buttons around the screen.
    * @param ui The UI of the game.
-   * @param scene The scene of the game.
    */
-  public enableConfigurationMode(ui: UI, scene: Scene) {
+  public enableConfigurationMode(ui: UI) {
     if (this.inConfigurationMode) {
       return;
     }
     this.inConfigurationMode = true;
     this.touchControls.disable();
-    this.createOverlay(ui, scene);
+    this.createOverlay(ui);
     this.createToolbar();
     // Create event listeners with a delay to prevent the touchstart event from being triggered immediately.
     setTimeout(() => {

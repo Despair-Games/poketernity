@@ -1534,7 +1534,6 @@ interface TrainerConfigs {
 
 /**
  * The function to get variable strength grunts
- * @param scene the singleton scene being passed in
  * @returns the correct TrainerPartyTemplate
  */
 function getEvilGruntPartyTemplate(): TrainerPartyTemplate {

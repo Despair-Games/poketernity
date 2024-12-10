@@ -1,10 +1,10 @@
-import type BattleScene from "#app/battle-scene";
 import { variantColorCache } from "#app/data/variant";
 import Pokemon from "../field/pokemon";
 import Trainer from "../field/trainer";
 import FieldSpritePipeline from "./field-sprite";
 import { rgbHexToRgba } from "#app/utils";
 import MysteryEncounterIntroVisuals from "../field/mystery-encounter-intro";
+import { globalScene } from "#app/global-scene";
 
 const spriteFragShader = `
 #ifdef GL_FRAGMENT_PRECISION_HIGH
@@ -394,7 +394,7 @@ export default class SpritePipeline extends FieldSpritePipeline {
     this.set4fv("tone", tone);
     this.bindTexture(this.game.textures.get("tera").source[0].glTexture!, 1); // TODO: is this bang correct?
 
-    if ((gameObject.scene as BattleScene).fusionPaletteSwaps) {
+    if (globalScene.fusionPaletteSwaps) {
       const spriteColors = ((ignoreOverride && data["spriteColorsBase"]) || data["spriteColors"] || []) as number[][];
       const fusionSpriteColors = ((ignoreOverride && data["fusionSpriteColorsBase"])
         || data["fusionSpriteColors"]

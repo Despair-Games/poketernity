@@ -1237,7 +1237,7 @@ export default class BattleScene extends SceneBase {
   /**
    * Generates a random number using the current battle's seed
    *
-   * This calls {@linkcode Battle.randSeedInt}(`scene`, {@linkcode range}, {@linkcode min}) in `src/battle.ts`
+   * This calls {@linkcode Battle.randSeedInt}({@linkcode range}, {@linkcode min}) in `src/battle.ts`
    * which calls {@linkcode randSeedInt randSeedInt}({@linkcode range}, {@linkcode min}) in `src/utils.ts`
    *
    * @param range How large of a range of random numbers to choose from. If {@linkcode range} <= 1, returns {@linkcode min}
@@ -3182,7 +3182,7 @@ export default class BattleScene extends SceneBase {
     return new Promise((resolve) => {
       Promise.allSettled(
         party.map((p) => {
-          if (p.scene) {
+          if (p) {
             p.calculateStats();
           }
           return p.updateInfo(instant);
@@ -3248,7 +3248,6 @@ export default class BattleScene extends SceneBase {
 
   /**
    * Apply all modifiers that match `modifierType` in a random order
-   * @param scene {@linkcode BattleScene} used to randomize the order of modifiers
    * @param modifierType The type of modifier to apply; must extend {@linkcode PersistentModifier}
    * @param player Whether to search the player (`true`) or the enemy (`false`); Defaults to `true`
    * @param ...args The list of arguments needed to invoke `modifierType.apply`

@@ -42,7 +42,6 @@ export class MysteryEncounterPhase extends Phase {
 
   /**
    * Mostly useful for having repeated queries during a single encounter, where the queries and options may differ each time
-   * @param scene
    * @param optionSelectSettings allows overriding the typical options of an encounter with new ones
    */
   constructor(optionSelectSettings?: OptionSelectSettings) {
@@ -306,7 +305,6 @@ export class MysteryEncounterBattlePhase extends Phase {
 
   /**
    * Gets intro battle message for new battle
-   * @param scene
    * @private
    */
   private getBattleMessage(): string {
@@ -336,7 +334,6 @@ export class MysteryEncounterBattlePhase extends Phase {
 
   /**
    * Queues {@linkcode SummonPhase}s for the new battle, and handles trainer animations/dialogue if it's a Trainer battle
-   * @param scene
    * @private
    */
   private doMysteryEncounterBattle() {
@@ -414,7 +411,6 @@ export class MysteryEncounterBattlePhase extends Phase {
 
   /**
    * Initiate {@linkcode SummonPhase}s, {@linkcode ScanIvsPhase}, {@linkcode PostSummonPhase}s, etc.
-   * @param scene
    * @private
    */
   private endBattleSetup() {

@@ -2359,11 +2359,10 @@ interface ModifierPool {
 
 /**
  * Used to check if the player has max of a given ball type in Classic
- * @param party The player's party, just used to access the scene
  * @param ballType The {@linkcode PokeballType} being checked
  * @returns boolean: true if the player has the maximum of a given ball type
  */
-function hasMaximumBalls(_party: Pokemon[], ballType: PokeballType): boolean {
+function hasMaximumBalls(ballType: PokeballType): boolean {
   return globalScene.gameMode.isClassic && globalScene.pokeballCounts[ballType] >= MAX_PER_TYPE_POKEBALLS;
 }
 
@@ -2371,7 +2370,7 @@ const modifierPool: ModifierPool = {
   [ModifierTier.COMMON]: [
     new WeightedModifierType(
       modifierTypes.POKEBALL,
-      (party: Pokemon[]) => (hasMaximumBalls(party, PokeballType.POKEBALL) ? 0 : 6),
+      (_party: Pokemon[]) => (hasMaximumBalls(PokeballType.POKEBALL) ? 0 : 6),
       6,
     ),
     new WeightedModifierType(modifierTypes.RARE_CANDY, 2),
@@ -2446,7 +2445,7 @@ const modifierPool: ModifierPool = {
   [ModifierTier.GREAT]: [
     new WeightedModifierType(
       modifierTypes.GREAT_BALL,
-      (party: Pokemon[]) => (hasMaximumBalls(party, PokeballType.GREAT_BALL) ? 0 : 6),
+      (_party: Pokemon[]) => (hasMaximumBalls(PokeballType.GREAT_BALL) ? 0 : 6),
       6,
     ),
     new WeightedModifierType(modifierTypes.PP_UP, 2),
@@ -2627,7 +2626,7 @@ const modifierPool: ModifierPool = {
   [ModifierTier.ULTRA]: [
     new WeightedModifierType(
       modifierTypes.ULTRA_BALL,
-      (party: Pokemon[]) => (hasMaximumBalls(party, PokeballType.ULTRA_BALL) ? 0 : 15),
+      (_party: Pokemon[]) => (hasMaximumBalls(PokeballType.ULTRA_BALL) ? 0 : 15),
       15,
     ),
     new WeightedModifierType(modifierTypes.MAX_LURE, lureWeightFunc(30, 4)),
@@ -2865,7 +2864,7 @@ const modifierPool: ModifierPool = {
   [ModifierTier.MASTER]: [
     new WeightedModifierType(
       modifierTypes.MASTER_BALL,
-      (party: Pokemon[]) => (hasMaximumBalls(party, PokeballType.MASTER_BALL) ? 0 : 24),
+      (_party: Pokemon[]) => (hasMaximumBalls(PokeballType.MASTER_BALL) ? 0 : 24),
       24,
     ),
     new WeightedModifierType(modifierTypes.SHINY_CHARM, 14),

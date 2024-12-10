@@ -100,14 +100,6 @@ export class MoveEffectPhase extends PokemonPhase {
       if (!isDelayedAttack) {
         return super.end();
       } else {
-        if (!user.scene) {
-          /**
-           * This happens if the Pokemon that used the delayed attack gets caught and released
-           * on the turn the attack would have triggered. Having access to the global scene
-           * in the future may solve this entirely, so for now we just cancel the hit
-           */
-          return super.end();
-        }
         if (isNullOrUndefined(user.turnData)) {
           user.resetTurnData();
         }

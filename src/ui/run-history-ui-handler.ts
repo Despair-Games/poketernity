@@ -1,4 +1,3 @@
-import type BattleScene from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
 import { GameModes } from "../game-mode";
 import { TextStyle, addTextObject } from "./text";
@@ -428,8 +427,4 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
 
     this.add(pokemonIconsContainer);
   }
-}
-
-interface RunEntryContainer {
-  scene: BattleScene;
 }

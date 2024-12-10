@@ -491,7 +491,6 @@ async function doNewTeamPostProcess(transformations: PokemonTransformation[]) {
 /**
  * Applies special changes to the newly transformed pokemon, such as passing previous moves, gaining egg moves, etc.
  * Returns whether the transformed pokemon unlocks a new starter for the player.
- * @param scene
  * @param previousPokemon
  * @param newPokemon
  * @param speciesRootForm
@@ -764,7 +763,6 @@ function doSideBySideTransformations(transformations: PokemonTransformation[]) {
 
 /**
  * Returns index of the new egg move within the Pokemon's moveset (not the index of the move in `speciesEggMoves`)
- * @param scene
  * @param newPokemon
  * @param speciesRootForm
  */
