@@ -65,7 +65,7 @@ import {
   SpeciesFormChangeWeatherTrigger,
 } from "./pokemon-forms";
 import { AbAttr } from "./abilities/ab-attr";
-import { PostBattleInitAbAttr } from "./abilities/post-battle-init-ab-attr";
+import type { PostBattleInitAbAttr } from "./abilities/post-battle-init-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -180,47 +180,6 @@ type AbAttrCondition = (pokemon: Pokemon) => boolean;
 type PokemonAttackCondition = (user: Pokemon | null, target: Pokemon | null, move: Move) => boolean;
 type PokemonDefendCondition = (target: Pokemon, user: Pokemon, move: Move) => boolean;
 type PokemonStatStageChangeCondition = (target: Pokemon, statsChanged: BattleStat[], stages: number) => boolean;
-
-export class PostBattleInitStatStageChangeAbAttr extends PostBattleInitAbAttr {
-  private stats: BattleStat[];
-  private stages: number;
-  private selfTarget: boolean;
-
-  constructor(stats: BattleStat[], stages: number, selfTarget?: boolean) {
-    super();
-
-    this.stats = stats;
-    this.stages = stages;
-    this.selfTarget = !!selfTarget;
-  }
-
-  override applyPostBattleInit(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
-    const statStageChangePhases: StatStageChangePhase[] = [];
-
-    if (!simulated) {
-      if (this.selfTarget) {
-        statStageChangePhases.push(new StatStageChangePhase(pokemon.getBattlerIndex(), true, this.stats, this.stages));
-      } else {
-        for (const opponent of pokemon.getOpponents()) {
-          statStageChangePhases.push(
-            new StatStageChangePhase(opponent.getBattlerIndex(), false, this.stats, this.stages),
-          );
-        }
-      }
-
-      for (const statStageChangePhase of statStageChangePhases) {
-        if (!this.selfTarget && !statStageChangePhase.getPokemon()?.summonData) {
-          globalScene.pushPhase(statStageChangePhase);
-        } else {
-          // TODO: This causes the ability bar to be shown at the wrong time
-          globalScene.unshiftPhase(statStageChangePhase);
-        }
-      }
-    }
-
-    return true;
-  }
-}
 
 type PreDefendAbAttrCondition = (pokemon: Pokemon, attacker: Pokemon, move: Move) => boolean;
 
