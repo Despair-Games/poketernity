@@ -185,41 +185,6 @@ type PokemonAttackCondition = (user: Pokemon | null, target: Pokemon | null, mov
 export type PokemonDefendCondition = (target: Pokemon, user: Pokemon, move: Move) => boolean;
 type PokemonStatStageChangeCondition = (target: Pokemon, statsChanged: BattleStat[], stages: number) => boolean;
 
-export class PostDefendApplyBattlerTagAbAttr extends PostDefendAbAttr {
-  private condition: PokemonDefendCondition;
-  private tagType: BattlerTagType;
-  constructor(condition: PokemonDefendCondition, tagType: BattlerTagType) {
-    super(true);
-
-    this.condition = condition;
-    this.tagType = tagType;
-  }
-
-  override applyPostDefend(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
-    _hitResult: HitResult,
-    _args: any[],
-  ): boolean {
-    if (this.condition(pokemon, attacker, move) && !move.hitsSubstitute(attacker, pokemon)) {
-      if (!pokemon.getTag(this.tagType) && !simulated) {
-        pokemon.addTag(this.tagType, undefined, undefined, pokemon.id);
-        globalScene.queueMessage(
-          i18next.t("abilityTriggers:windPowerCharged", {
-            pokemonName: getPokemonNameWithAffix(pokemon),
-            moveName: move.name,
-          }),
-        );
-      }
-      return true;
-    }
-    return false;
-  }
-}
-
 export class PostDefendTypeChangeAbAttr extends PostDefendAbAttr {
   override applyPostDefend(
     pokemon: Pokemon,
