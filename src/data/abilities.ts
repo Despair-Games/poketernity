@@ -16,7 +16,6 @@ import { isNullOrUndefined, NumberHolder, randSeedInt, toDmgValue } from "#app/u
 import i18next from "i18next";
 import {
   Ability,
-  AddSecondStrikeAbAttr,
   allAbilities,
   AllyMoveCategoryPowerBoostAbAttr,
   AlwaysHitAbAttr,
@@ -142,6 +141,7 @@ import {
   VariableMovePowerBoostAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { AddSecondStrikeAbAttr } from "./abilities/add-second-strike-ab-attr";
 import { MoveTypeChangeAbAttr } from "./abilities/move-type-change-ab-attr";
 import { FieldMultiplyStatAbAttr } from "./abilities/field-multiply-stat-ab-attr";
 import { FieldPreventExplosiveMovesAbAttr } from "./abilities/field-prevent-explosive-moves-ab-attr";

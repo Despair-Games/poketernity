@@ -1,7 +1,6 @@
 import { BattlerIndex } from "#app/battle";
 import { globalScene } from "#app/global-scene";
 import {
-  AddSecondStrikeAbAttr,
   AlwaysHitAbAttr,
   applyPostAttackAbAttrs,
   applyPostDamageAbAttrs,
@@ -10,6 +9,7 @@ import {
   MaxMultiHitAbAttr,
   PostAttackAbAttr,
 } from "#app/data/ability";
+import { AddSecondStrikeAbAttr } from "#app/data/abilities/add-second-strike-ab-attr";
 import { ArenaTagSide, ConditionalProtectTag } from "#app/data/arena-tag";
 import { MoveAnim } from "#app/data/battle-anims";
 import {
