@@ -66,6 +66,7 @@ import type { PostWeatherLapseAbAttr } from "./abilities/post-weather-lapse-ab-a
 import type { PostTerrainChangeAbAttr } from "./abilities/post-terrain-change-ab-attr";
 import type { PostTurnAbAttr } from "./abilities/post-turn-ab-attr";
 import type { PostMoveUsedAbAttr } from "./abilities/post-move-used-ab-attr";
+import { PostItemLostAbAttr } from "./abilities/post-item-lost-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -186,16 +187,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
     const weatherType = globalScene.arena.weather?.weatherType;
     return !!weatherType && weatherTypes.indexOf(weatherType) > -1;
   };
-}
-
-/**
- * Triggers after the Pokemon loses or consumes an item
- * @extends AbAttr
- */
-export class PostItemLostAbAttr extends AbAttr {
-  applyPostItemLost(_pokemon: Pokemon, _simulated: boolean, _args: any[]): boolean {
-    return false;
-  }
 }
 
 /**

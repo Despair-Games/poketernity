@@ -46,11 +46,11 @@ import {
   MaxMultiHitAbAttr,
   MoveAbilityBypassAbAttr,
   PostDamageForceSwitchAbAttr,
-  PostItemLostAbAttr,
   UncopiableAbilityAbAttr,
   UnsuppressableAbilityAbAttr,
   UnswappableAbilityAbAttr,
 } from "./ability";
+import { PostItemLostAbAttr } from "./abilities/post-item-lost-ab-attr";
 import { IgnoreContactAbAttr } from "./abilities/ignore-contact-ab-attr";
 import { ChangeMovePriorityAbAttr } from "./abilities/change-move-priority-ab-attr";
 import { BlockOneHitKOAbAttr } from "./abilities/block-one-hit-ko-ab-attr";

@@ -66,13 +66,8 @@ import {
   PokemonHeldItemModifierType,
 } from "#app/modifier/modifier-type";
 import AbilityBar from "#app/ui/ability-bar";
-import {
-  allAbilities,
-  applyAbAttrs,
-  applyPostBattleInitAbAttrs,
-  applyPostItemLostAbAttrs,
-  PostItemLostAbAttr,
-} from "#app/data/ability";
+import { allAbilities, applyAbAttrs, applyPostBattleInitAbAttrs, applyPostItemLostAbAttrs } from "#app/data/ability";
+import { PostItemLostAbAttr } from "./data/abilities/post-item-lost-ab-attr";
 import type { FixedBattleConfig } from "#app/battle";
 import Battle, { BattleType } from "#app/battle";
 import type { GameMode } from "#app/game-mode";

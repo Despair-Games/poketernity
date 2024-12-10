@@ -161,8 +161,8 @@ import {
   InfiltratorAbAttr,
   applyPostDamageAbAttrs,
   applyPostItemLostAbAttrs,
-  PostItemLostAbAttr,
 } from "#app/data/ability";
+import { PostItemLostAbAttr } from "#app/data/abilities/post-item-lost-ab-attr";
 import { ConditionalCritAbAttr } from "#app/data/abilities/conditional-crit-ab-attr";
 import { MultCritAbAttr } from "#app/data/abilities/mult-crit-ab-attr";
 import { BonusCritAbAttr } from "#app/data/abilities/bonus-crit-ab-attr";

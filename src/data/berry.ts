@@ -5,11 +5,11 @@ import { getStatusEffectHealText } from "./status-effect";
 import { NumberHolder, toDmgValue, randSeedInt } from "#app/utils";
 import {
   DoubleBerryEffectAbAttr,
-  PostItemLostAbAttr,
   ReduceBerryUseThresholdAbAttr,
   applyAbAttrs,
   applyPostItemLostAbAttrs,
 } from "./ability";
+import { PostItemLostAbAttr } from "./abilities/post-item-lost-ab-attr";
 import i18next from "i18next";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryType } from "#enums/berry-type";
