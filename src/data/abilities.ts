@@ -50,7 +50,6 @@ import {
   ForewarnAbAttr,
   FormBlockDamageAbAttr,
   FriskAbAttr,
-  FullHpResistTypeAbAttr,
   GorillaTacticsAbAttr,
   HealFromBerryUseAbAttr,
   IgnoreContactAbAttr,
@@ -202,6 +201,7 @@ import { TypeImmunityStatStageChangeAbAttr } from "./abilities/type-immunity-sta
 import { TypeImmunityAddBattlerTagAbAttr } from "./abilities/type-immunity-add-battler-tag-ab-attr";
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import { NonSuperEffectiveImmunityAbAttr } from "./abilities/non-super-effective-immunity-ab-attr";
+import { FullHpResistTypeAbAttr } from "./abilities/full-hp-resist-type-ab-attr";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {

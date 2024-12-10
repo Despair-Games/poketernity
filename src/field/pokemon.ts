@@ -171,7 +171,6 @@ import {
   UserFieldBattlerTagImmunityAbAttr,
   BattlerTagImmunityAbAttr,
   MoveTypeChangeAbAttr,
-  FullHpResistTypeAbAttr,
   applyCheckTrappedAbAttrs,
   CheckTrappedAbAttr,
   PostSetStatusAbAttr,
@@ -248,6 +247,7 @@ import { StabBoostAbAttr } from "#app/data/abilities/stab-boost-ab-attr";
 import { ReceivedMoveDamageMultiplierAbAttr } from "#app/data/abilities/received-move-damage-multiplier-ab-attr";
 import { AlliedFieldDamageReductionAbAttr } from "#app/data/abilities/allied-field-damage-reduction-ab-attr";
 import { TypeImmunityAbAttr } from "#app/data/abilities/type-immunity-ab-attr";
+import { FullHpResistTypeAbAttr } from "#app/data/abilities/full-hp-resist-type-ab-attr";
 
 export enum LearnMoveSituation {
   MISC,
