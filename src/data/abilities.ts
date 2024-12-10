@@ -57,7 +57,6 @@ import {
   ReduceBurnDamageAbAttr,
   ReduceStatusEffectDurationAbAttr,
   RunSuccessAbAttr,
-  SpeedBoostAbAttr,
   StatStageChangeCopyAbAttr,
   StatStageChangeMultiplierAbAttr,
   SuppressFieldAbilitiesAbAttr,
@@ -68,6 +67,7 @@ import {
   UnswappableAbilityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { SpeedBoostAbAttr } from "./abilities/speed-boost-ab-attr";
 import { MoodyAbAttr } from "./abilities/moody-ab-attr";
 import { PostTurnResetStatusAbAttr } from "./abilities/post-turn-reset-status-ab-attr";
 import { PostTerrainChangeAddBattlerTagAttr } from "./abilities/post-terrain-change-add-battler-tag-attr";

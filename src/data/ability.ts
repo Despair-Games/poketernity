@@ -190,23 +190,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
   };
 }
 
-export class SpeedBoostAbAttr extends PostTurnAbAttr {
-  constructor() {
-    super(true);
-  }
-
-  override applyPostTurn(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
-    if (!simulated) {
-      if (!pokemon.turnData.switchedInThisTurn && !pokemon.turnData.failedRunAway) {
-        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [Stat.SPD], 1));
-      } else {
-        return false;
-      }
-    }
-    return true;
-  }
-}
-
 export class PostTurnHealAbAttr extends PostTurnAbAttr {
   override applyPostTurn(pokemon: Pokemon, passive: boolean, simulated: boolean, _args: any[]): boolean {
     if (!pokemon.isFullHp()) {
