@@ -157,7 +157,6 @@ import {
   ReverseDrainAbAttr,
   RunSuccessAbAttr,
   SpeedBoostAbAttr,
-  StabBoostAbAttr,
   StatMultiplierAbAttr,
   StatStageChangeCopyAbAttr,
   StatStageChangeMultiplierAbAttr,
@@ -201,6 +200,7 @@ import { DoubleBattleChanceAbAttr } from "./abilities/double-battle-chance-ab-at
 import { PostBattleInitFormChangeAbAttr } from "./abilities/post-battle-init-form-change-ab-attr";
 import { PostBattleInitStatStageChangeAbAttr } from "./abilities/post-battle-init-stat-stage-change-ab-attr";
 import { PreDefendFullHpEndureAbAttr } from "./abilities/pre-defend-full-hp-endure-ab-attr";
+import { StabBoostAbAttr } from "./abilities/stab-boost-ab-attr";
 
 type AbAttrCondition = (pokemon: Pokemon) => boolean;
 
