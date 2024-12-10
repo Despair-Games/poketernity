@@ -88,9 +88,9 @@ import {
   UncopiableAbilityAbAttr,
   UnsuppressableAbilityAbAttr,
   UnswappableAbilityAbAttr,
-  UserFieldBattlerTagImmunityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { UserFieldBattlerTagImmunityAbAttr } from "./abilities/user-field-battler-tag-immunity-ab-attr";
 import { BattlerTagImmunityAbAttr } from "./abilities/battler-tag-immunity-ab-attr";
 import { UserFieldStatusEffectImmunityAbAttr } from "./abilities/user-field-status-effect-immunity-ab-attr";
 import { StatusEffectImmunityAbAttr } from "./abilities/status-effect-immunity-ab-attr";

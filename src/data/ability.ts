@@ -73,7 +73,6 @@ import type { PreSwitchOutAbAttr } from "./abilities/pre-switch-out-ab-attr";
 import type { PreStatStageChangeAbAttr } from "./abilities/pre-stat-stage-change-ab-attr";
 import type { PreSetStatusAbAttr } from "./abilities/pre-set-status-ab-attr";
 import type { PreApplyBattlerTagAbAttr } from "./abilities/pre-apply-battler-tag-ab-attr";
-import { PreApplyBattlerTagImmunityAbAttr } from "./abilities/pre-apply-battler-tag-immunnity-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -182,12 +181,6 @@ export class Ability implements Localizable {
 }
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
-
-/**
- * Provides immunity to BattlerTags {@linkcode BattlerTag} to the user's field.
- * @extends PreApplyBattlerTagImmunityAbAttr
- */
-export class UserFieldBattlerTagImmunityAbAttr extends PreApplyBattlerTagImmunityAbAttr {}
 
 /**
  * Provides immunity to critical hits
