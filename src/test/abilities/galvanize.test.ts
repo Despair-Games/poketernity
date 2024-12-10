@@ -38,13 +38,13 @@ describe("Abilities - Galvanize", () => {
   });
 
   it("should change Normal-type attacks to Electric type and boost their power", async () => {
-    await game.startBattle();
+    await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getMoveType");
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
-    vi.spyOn(enemyPokemon, "apply");
+    vi.spyOn(enemyPokemon, "getMoveEffectiveness");
 
     const move = allMoves[Moves.TACKLE];
     vi.spyOn(move, "calculateBattlePower");
@@ -54,7 +54,7 @@ describe("Abilities - Galvanize", () => {
     await game.phaseInterceptor.to("BerryPhase", false);
 
     expect(playerPokemon.getMoveType).toHaveLastReturnedWith(Type.ELECTRIC);
-    expect(enemyPokemon.apply).toHaveReturnedWith(HitResult.EFFECTIVE);
+    expect(enemyPokemon.getMoveEffectiveness).toHaveReturnedWith(1);
     expect(move.calculateBattlePower).toHaveReturnedWith(48);
     expect(enemyPokemon.hp).toBeLessThan(enemyPokemon.getMaxHp());
   });
@@ -62,13 +62,13 @@ describe("Abilities - Galvanize", () => {
   it("should cause Normal-type attacks to activate Volt Absorb", async () => {
     game.override.enemyAbility(Abilities.VOLT_ABSORB);
 
-    await game.startBattle();
+    await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getMoveType");
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
-    vi.spyOn(enemyPokemon, "apply");
+    vi.spyOn(enemyPokemon, "getMoveEffectiveness");
 
     enemyPokemon.hp = Math.floor(enemyPokemon.getMaxHp() * 0.8);
 
@@ -77,37 +77,37 @@ describe("Abilities - Galvanize", () => {
     await game.phaseInterceptor.to("BerryPhase", false);
 
     expect(playerPokemon.getMoveType).toHaveLastReturnedWith(Type.ELECTRIC);
-    expect(enemyPokemon.apply).toHaveReturnedWith(HitResult.NO_EFFECT);
+    expect(enemyPokemon.getMoveEffectiveness).toHaveReturnedWith(1);
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
   });
 
   it("should not change the type of variable-type moves", async () => {
     game.override.enemySpecies(Species.MIGHTYENA);
 
-    await game.startBattle([Species.ESPEON]);
+    await game.classicMode.startBattle([Species.ESPEON]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getMoveType");
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
-    vi.spyOn(enemyPokemon, "apply");
+    vi.spyOn(enemyPokemon, "getMoveEffectiveness");
 
     game.move.select(Moves.REVELATION_DANCE);
     await game.phaseInterceptor.to("BerryPhase", false);
 
     expect(playerPokemon.getMoveType).not.toHaveLastReturnedWith(Type.ELECTRIC);
-    expect(enemyPokemon.apply).toHaveReturnedWith(HitResult.NO_EFFECT);
+    expect(enemyPokemon.getMoveEffectiveness).toHaveReturnedWith(HitResult.NO_EFFECT);
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
   });
 
   it("should affect all hits of a Normal-type multi-hit move", async () => {
-    await game.startBattle();
+    await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getMoveType");
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
-    vi.spyOn(enemyPokemon, "apply");
+    vi.spyOn(enemyPokemon, "getMoveEffectiveness");
 
     game.move.select(Moves.FURY_SWIPES);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
@@ -125,6 +125,6 @@ describe("Abilities - Galvanize", () => {
       expect(enemyPokemon.hp).toBeLessThan(enemyStartingHp);
     }
 
-    expect(enemyPokemon.apply).not.toHaveReturnedWith(HitResult.NO_EFFECT);
+    expect(enemyPokemon.getMoveEffectiveness).not.toHaveReturnedWith(HitResult.NO_EFFECT);
   });
 });

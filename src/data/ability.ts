@@ -910,7 +910,7 @@ export class ReverseDrainAbAttr extends PostDefendAbAttr {
    * @returns true if healing should be reversed on a healing move, false otherwise.
    */
   override applyPostDefend(
-    pokemon: Pokemon,
+    _pokemon: Pokemon,
     _passive: boolean,
     simulated: boolean,
     attacker: Pokemon,
@@ -918,7 +918,7 @@ export class ReverseDrainAbAttr extends PostDefendAbAttr {
     _hitResult: HitResult,
     _args: any[],
   ): boolean {
-    if (move.hasAttr(HitHealAttr) && !move.hitsSubstitute(attacker, pokemon)) {
+    if (move.hasAttr(HitHealAttr)) {
       if (!simulated) {
         globalScene.queueMessage(
           i18next.t("abilityTriggers:reverseDrain", { pokemonNameWithAffix: getPokemonNameWithAffix(attacker) }),
@@ -962,7 +962,7 @@ export class PostDefendStatStageChangeAbAttr extends PostDefendAbAttr {
     _hitResult: HitResult,
     _args: any[],
   ): boolean {
-    if (this.condition(pokemon, attacker, move) && !move.hitsSubstitute(attacker, pokemon)) {
+    if (this.condition(pokemon, attacker, move)) {
       if (simulated) {
         return true;
       }
@@ -1031,7 +1031,6 @@ export class PostDefendHpGatedStatStageChangeAbAttr extends PostDefendAbAttr {
       this.condition(pokemon, attacker, move)
       && pokemon.hp <= hpGateFlat
       && pokemon.hp + damageReceived > hpGateFlat
-      && !move.hitsSubstitute(attacker, pokemon)
     ) {
       if (!simulated) {
         globalScene.unshiftPhase(
@@ -1070,7 +1069,7 @@ export class PostDefendApplyArenaTrapTagAbAttr extends PostDefendAbAttr {
     _hitResult: HitResult,
     _args: any[],
   ): boolean {
-    if (this.condition(pokemon, attacker, move) && !move.hitsSubstitute(attacker, pokemon)) {
+    if (this.condition(pokemon, attacker, move)) {
       const tag = globalScene.arena.getTag(this.tagType) as ArenaTrapTag;
       if (!globalScene.arena.getTag(this.tagType) || tag.layers < tag.maxLayers) {
         if (!simulated) {
@@ -1108,7 +1107,7 @@ export class PostDefendApplyBattlerTagAbAttr extends PostDefendAbAttr {
     _hitResult: HitResult,
     _args: any[],
   ): boolean {
-    if (this.condition(pokemon, attacker, move) && !move.hitsSubstitute(attacker, pokemon)) {
+    if (this.condition(pokemon, attacker, move)) {
       if (!pokemon.getTag(this.tagType) && !simulated) {
         pokemon.addTag(this.tagType, undefined, undefined, pokemon.id);
         globalScene.queueMessage(
@@ -1134,7 +1133,7 @@ export class PostDefendTypeChangeAbAttr extends PostDefendAbAttr {
     hitResult: HitResult,
     _args: any[],
   ): boolean {
-    if (hitResult < HitResult.NO_EFFECT && !move.hitsSubstitute(attacker, pokemon)) {
+    if (hitResult < HitResult.NO_EFFECT) {
       if (simulated) {
         return true;
       }
@@ -1168,15 +1167,15 @@ export class PostDefendTerrainChangeAbAttr extends PostDefendAbAttr {
   }
 
   override applyPostDefend(
-    pokemon: Pokemon,
+    _pokemon: Pokemon,
     _passive: boolean,
     simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
+    _attacker: Pokemon,
+    _move: Move,
     hitResult: HitResult,
     _args: any[],
   ): boolean {
-    if (hitResult < HitResult.NO_EFFECT && !move.hitsSubstitute(attacker, pokemon)) {
+    if (hitResult < HitResult.NO_EFFECT) {
       if (simulated) {
         return globalScene.arena.terrain?.terrainType !== (this.terrainType || undefined);
       } else {
@@ -1212,7 +1211,6 @@ export class PostDefendContactApplyStatusEffectAbAttr extends PostDefendAbAttr {
       move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
       && !attacker.status
       && (this.chance === -1 || pokemon.randSeedInt(100) < this.chance)
-      && !move.hitsSubstitute(attacker, pokemon)
     ) {
       const effect =
         this.effects.length === 1 ? this.effects[0] : this.effects[pokemon.randSeedInt(this.effects.length)];
@@ -1270,11 +1268,7 @@ export class PostDefendContactApplyTagChanceAbAttr extends PostDefendAbAttr {
     _hitResult: HitResult,
     _args: any[],
   ): boolean {
-    if (
-      move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
-      && pokemon.randSeedInt(100) < this.chance
-      && !move.hitsSubstitute(attacker, pokemon)
-    ) {
+    if (move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon) && pokemon.randSeedInt(100) < this.chance) {
       if (simulated) {
         return attacker.canAddTag(this.tagType);
       } else {
@@ -1301,15 +1295,11 @@ export class PostDefendCritStatStageChangeAbAttr extends PostDefendAbAttr {
     pokemon: Pokemon,
     _passive: boolean,
     simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
+    _attacker: Pokemon,
+    _move: Move,
     _hitResult: HitResult,
     _args: any[],
   ): boolean {
-    if (move.hitsSubstitute(attacker, pokemon)) {
-      return false;
-    }
-
     if (!simulated) {
       globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [this.stat], this.stages));
     }
@@ -1346,7 +1336,6 @@ export class PostDefendContactDamageAbAttr extends PostDefendAbAttr {
       !simulated
       && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
       && !attacker.hasAbilityWithAttr(BlockNonDirectDamageAbAttr)
-      && !move.hitsSubstitute(attacker, pokemon)
     ) {
       attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio)), HitResult.OTHER);
       attacker.turnData.damageTaken += toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio));
@@ -1388,7 +1377,7 @@ export class PostDefendPerishSongAbAttr extends PostDefendAbAttr {
     _hitResult: HitResult,
     _args: any[],
   ): boolean {
-    if (move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon) && !move.hitsSubstitute(attacker, pokemon)) {
+    if (move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)) {
       if (pokemon.getTag(BattlerTagType.PERISH_SONG) || attacker.getTag(BattlerTagType.PERISH_SONG)) {
         return false;
       } else {
@@ -1430,7 +1419,7 @@ export class PostDefendWeatherChangeAbAttr extends PostDefendAbAttr {
     _hitResult: HitResult,
     _args: any[],
   ): boolean {
-    if ((this.condition && !this.condition(pokemon, attacker, move)) || move.hitsSubstitute(attacker, pokemon)) {
+    if (this.condition && !this.condition(pokemon, attacker, move)) {
       return false;
     }
     if (!globalScene.arena.weather?.isImmutable()) {
@@ -1461,7 +1450,6 @@ export class PostDefendAbilitySwapAbAttr extends PostDefendAbAttr {
     if (
       move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
       && !attacker.getAbility().hasAttr(UnswappableAbilityAbAttr)
-      && !move.hitsSubstitute(attacker, pokemon)
     ) {
       if (!simulated) {
         const tempAbilityId = attacker.getAbility().id;
@@ -1502,7 +1490,6 @@ export class PostDefendAbilityGiveAbAttr extends PostDefendAbAttr {
       move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
       && !attacker.getAbility().hasAttr(UnsuppressableAbilityAbAttr)
       && !attacker.getAbility().hasAttr(PostDefendAbilityGiveAbAttr)
-      && !move.hitsSubstitute(attacker, pokemon)
     ) {
       if (!simulated) {
         attacker.summonData.ability = this.ability;
@@ -1542,7 +1529,7 @@ export class PostDefendMoveDisableAbAttr extends PostDefendAbAttr {
     _hitResult: HitResult,
     _args: any[],
   ): boolean {
-    if (attacker.getTag(BattlerTagType.DISABLED) === null && !move.hitsSubstitute(attacker, pokemon)) {
+    if (attacker.getTag(BattlerTagType.DISABLED) === null) {
       if (
         move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
         && (this.chance === -1 || pokemon.randSeedInt(100) < this.chance)
@@ -2293,7 +2280,7 @@ export class PostAttackApplyStatusEffectAbAttr extends PostAttackAbAttr {
     _hitResult: HitResult,
     _args: any[],
   ): boolean {
-    if (pokemon !== attacker && move.hitsSubstitute(attacker, pokemon)) {
+    if (pokemon !== attacker) {
       return false;
     }
 
@@ -3716,8 +3703,13 @@ export class BlockCritAbAttr extends AbAttr {
     _cancelled: BooleanHolder,
     args: any[],
   ): boolean {
-    (args[0] as BooleanHolder).value = true;
-    return true;
+    const isCritical = args[0] as BooleanHolder;
+
+    if (isCritical.value) {
+      isCritical.value = false;
+      return true;
+    }
+    return false;
   }
 }
 
