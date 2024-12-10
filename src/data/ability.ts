@@ -185,42 +185,6 @@ export class Ability implements Localizable {
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
 
-export class PostSummonAllyHealAbAttr extends PostSummonAbAttr {
-  private healRatio: number;
-  private showAnim: boolean;
-
-  constructor(healRatio: number, showAnim: boolean = false) {
-    super();
-
-    this.healRatio = healRatio || 4;
-    this.showAnim = showAnim;
-  }
-
-  override applyPostSummon(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
-    const target = pokemon.getAlly();
-    if (target?.isActive(true)) {
-      if (!simulated) {
-        globalScene.unshiftPhase(
-          new PokemonHealPhase(
-            target.getBattlerIndex(),
-            toDmgValue(pokemon.getMaxHp() / this.healRatio),
-            i18next.t("abilityTriggers:postSummonAllyHeal", {
-              pokemonNameWithAffix: getPokemonNameWithAffix(target),
-              pokemonName: pokemon.name,
-            }),
-            true,
-            !this.showAnim,
-          ),
-        );
-      }
-
-      return true;
-    }
-
-    return false;
-  }
-}
-
 /**
  * Resets an ally's temporary stat boots to zero with no regard to
  * whether this is a positive or negative change
