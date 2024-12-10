@@ -3440,7 +3440,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
    * Calculates whether the given move critically hits against this Pokemon
    * @param source the {@linkcode Pokemon} using the move
    * @param move the {@linkcode Move} being used
-   * @param simulated if `true`, the calculation is resolved quietly (e.g. without Ability pop-ups)
+   * @param simulated if `true`, the calculation is resolved without changing game state
    * @returns `true` if the move critically hits; `false` otherwise
    */
   getCriticalHitResult(source: Pokemon, move: Move, simulated: boolean = true): boolean {

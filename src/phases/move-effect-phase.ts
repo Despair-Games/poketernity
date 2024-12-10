@@ -66,26 +66,9 @@ import i18next from "i18next";
 import type { TypeDamageMultiplier } from "#app/data/type";
 import { DamageAchv } from "#app/system/achv";
 import { FaintPhase } from "#app/phases/faint-phase";
+import { HitCheckResult } from "#app/enums/hit-check-result";
 
 type HitCheckEntry = [HitCheckResult, TypeDamageMultiplier];
-
-/** Descriptor */
-export enum HitCheckResult {
-  /** Hit checks haven't been evaluated yet in this pass */
-  PENDING,
-  /** The move hits the target successfully */
-  HIT,
-  /** The move has no effect on the target */
-  NO_EFFECT,
-  /** The move has no effect on the target, but doesn't proc the default "no effect" message. */
-  NO_EFFECT_NO_MESSAGE,
-  /** The target protected itself against the move */
-  PROTECTED,
-  /** The move missed the target */
-  MISS,
-  /** The move failed unexpectedly */
-  ERROR,
-}
 
 export class MoveEffectPhase extends PokemonPhase {
   public move: PokemonMove;
@@ -644,7 +627,7 @@ export class MoveEffectPhase extends PokemonPhase {
     const alwaysHit =
       [user, target].some((p) => p.hasAbilityWithAttr(AlwaysHitAbAttr))
       || (user.getTag(BattlerTagType.IGNORE_ACCURACY)
-        && (user.getLastXMoves().find(() => true)?.targets || []).indexOf(target.getBattlerIndex()) !== -1)
+        && (user.getLastXMoves().find(() => true)?.targets ?? []).indexOf(target.getBattlerIndex()) !== -1)
       || !!target.getTag(BattlerTagType.ALWAYS_GET_HIT);
 
     const semiInvulnerableTag = target.getTag(SemiInvulnerableTag);
