@@ -42,13 +42,13 @@ import {
   ForceSwitchOutImmunityAbAttr,
   IgnoreProtectOnContactAbAttr,
   InfiltratorAbAttr,
-  MaxMultiHitAbAttr,
   MoveAbilityBypassAbAttr,
   PostDamageForceSwitchAbAttr,
   UncopiableAbilityAbAttr,
   UnsuppressableAbilityAbAttr,
   UnswappableAbilityAbAttr,
 } from "./ability";
+import { MaxMultiHitAbAttr } from "./abilities/max-multi-hit-ab-attr";
 import { PostItemLostAbAttr } from "./abilities/post-item-lost-ab-attr";
 import { IgnoreContactAbAttr } from "./abilities/ignore-contact-ab-attr";
 import { ChangeMovePriorityAbAttr } from "./abilities/change-move-priority-ab-attr";

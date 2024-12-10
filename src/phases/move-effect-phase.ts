@@ -6,8 +6,8 @@ import {
   applyPostDamageAbAttrs,
   applyPostDefendAbAttrs,
   applyPreAttackAbAttrs,
-  MaxMultiHitAbAttr,
 } from "#app/data/ability";
+import { MaxMultiHitAbAttr } from "#app/data/abilities/max-multi-hit-ab-attr";
 import { PostAttackAbAttr } from "#app/data/abilities/post-attack-ab-attr";
 import { AddSecondStrikeAbAttr } from "#app/data/abilities/add-second-strike-ab-attr";
 import { ArenaTagSide, ConditionalProtectTag } from "#app/data/arena-tag";

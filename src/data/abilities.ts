@@ -27,7 +27,6 @@ import {
   IgnoreTypeImmunityAbAttr,
   IncreasePpAbAttr,
   InfiltratorAbAttr,
-  MaxMultiHitAbAttr,
   MoneyAbAttr,
   MoveAbilityBypassAbAttr,
   NoFusionAbilityAbAttr,
@@ -51,6 +50,7 @@ import {
   UnswappableAbilityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { MaxMultiHitAbAttr } from "./abilities/max-multi-hit-ab-attr";
 import { RunSuccessAbAttr } from "./abilities/run-success-ab-attr";
 import { PreventBerryUseAbAttr } from "./abilities/prevent-berry-use-ab-attr";
 import { DoubleBerryEffectAbAttr } from "./abilities/double-berry-effect-ab-attr";
