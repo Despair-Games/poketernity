@@ -69,6 +69,7 @@ import type { PostSetStatusAbAttr } from "./abilities/post-set-status-ab-attr";
 import type { PostVictoryAbAttr } from "./abilities/post-victory-ab-attr";
 import type { PostKnockOutAbAttr } from "./abilities/post-knock-out-ab-attr";
 import { PostSummonStatStageChangeAbAttr } from "./abilities/post-summon-stat-stage-change-ab-attr";
+import { PreSwitchOutAbAttr } from "./abilities/pre-switch-out-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -177,16 +178,6 @@ export class Ability implements Localizable {
 }
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
-
-export class PreSwitchOutAbAttr extends AbAttr {
-  constructor() {
-    super(true);
-  }
-
-  applyPreSwitchOut(_pokemon: Pokemon, _passive: boolean, _simulated: boolean, _args: any[]): boolean {
-    return false;
-  }
-}
 
 export class PreSwitchOutResetStatusAbAttr extends PreSwitchOutAbAttr {
   override applyPreSwitchOut(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {

@@ -1,5 +1,6 @@
 import { globalScene } from "#app/global-scene";
-import { applyPreSwitchOutAbAttrs, PostDamageForceSwitchAbAttr, PreSwitchOutAbAttr } from "#app/data/ability";
+import { applyPreSwitchOutAbAttrs, PostDamageForceSwitchAbAttr } from "#app/data/ability";
+import { PreSwitchOutAbAttr } from "#app/data/abilities/pre-switch-out-ab-attr";
 import { allMoves, ForceSwitchOutAttr } from "#app/data/move";
 import { getPokeballTintColor } from "#app/data/pokeball";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";
