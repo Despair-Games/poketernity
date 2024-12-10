@@ -31,7 +31,6 @@ import {
   BypassSpeedChanceAbAttr,
   ChangeMovePriorityAbAttr,
   ConditionalCritAbAttr,
-  ConfusionOnStatusEffectAbAttr,
   DoubleBerryEffectAbAttr,
   FetchBallAbAttr,
   FlinchStatStageChangeAbAttr,
@@ -95,6 +94,7 @@ import {
   UserFieldStatusEffectImmunityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { ConfusionOnStatusEffectAbAttr } from "./abilities/confusion-on-status-effect-ab-attr";
 import { PreSwitchOutFormChangeAbAttr } from "./abilities/pre-switch-out-form-change-ab-attr";
 import { PreSwitchOutHealAbAttr } from "./abilities/pre-switch-out-heal-ab-attr";
 import { PreSwitchOutClearWeatherAbAttr } from "./abilities/pre-switch-out-clear-weather-ab-attr";

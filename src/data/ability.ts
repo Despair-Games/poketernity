@@ -64,7 +64,7 @@ import type { FieldMultiplyStatAbAttr } from "./abilities/field-multiply-stat-ab
 import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition";
 import type { PokemonDefendCondition } from "../@types/PokemonDefendCondition";
 import type { StatMultiplierAbAttr } from "./abilities/stat-multiplier-ab-attr";
-import { PostAttackAbAttr } from "./abilities/post-attack-ab-attr";
+import type { PostAttackAbAttr } from "./abilities/post-attack-ab-attr";
 import type { PostSetStatusAbAttr } from "./abilities/post-set-status-ab-attr";
 import type { PostVictoryAbAttr } from "./abilities/post-victory-ab-attr";
 import type { PostKnockOutAbAttr } from "./abilities/post-knock-out-ab-attr";
@@ -179,52 +179,6 @@ export class Ability implements Localizable {
 }
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
-
-/**
- * This attribute applies confusion to the target whenever the user
- * directly poisons them with a move, e.g. Poison Puppeteer.
- * Called in {@linkcode StatusEffectAttr}.
- * @extends PostAttackAbAttr
- * @see {@linkcode applyPostAttack}
- */
-export class ConfusionOnStatusEffectAbAttr extends PostAttackAbAttr {
-  /** List of effects to apply confusion after */
-  private effects: StatusEffect[];
-
-  constructor(...effects: StatusEffect[]) {
-    /** This effect does not require a damaging move */
-    super((_user, _target, _move) => true);
-    this.effects = effects;
-  }
-  /**
-   * Applies confusion to the target pokemon.
-   * @param pokemon {@link Pokemon} attacking
-   * @param _passive N/A
-   * @param defender {@link Pokemon} defending
-   * @param move {@link Move} used to apply status effect and confusion
-   * @param _hitResult N/A
-   * @param args [0] {@linkcode StatusEffect} applied by move
-   * @returns true if defender is confused
-   */
-  override applyPostAttackAfterMoveTypeCheck(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    defender: Pokemon,
-    move: Move,
-    _hitResult: HitResult,
-    args: any[],
-  ): boolean {
-    if (this.effects.indexOf(args[0]) > -1 && !defender.isFainted()) {
-      if (simulated) {
-        return defender.canAddTag(BattlerTagType.CONFUSED);
-      } else {
-        return defender.addTag(BattlerTagType.CONFUSED, pokemon.randSeedIntRange(2, 5), move.id, defender.id);
-      }
-    }
-    return false;
-  }
-}
 
 export class PreSetStatusAbAttr extends AbAttr {
   applyPreSetStatus(

@@ -42,7 +42,6 @@ import {
   BlockNonDirectDamageAbAttr,
   BlockOneHitKOAbAttr,
   ChangeMovePriorityAbAttr,
-  ConfusionOnStatusEffectAbAttr,
   ForceSwitchOutImmunityAbAttr,
   HealFromBerryUseAbAttr,
   IgnoreContactAbAttr,
@@ -56,6 +55,7 @@ import {
   UnsuppressableAbilityAbAttr,
   UnswappableAbilityAbAttr,
 } from "./ability";
+import { ConfusionOnStatusEffectAbAttr } from "./abilities/confusion-on-status-effect-ab-attr";
 import { AllyMoveCategoryPowerBoostAbAttr } from "./abilities/ally-move-category-power-boost-ab-attr";
 import { UserFieldMoveTypePowerBoostAbAttr } from "./abilities/user-field-move-type-power-boost-ab-attr";
 import { MoveTypeChangeAbAttr } from "./abilities/move-type-change-ab-attr";
