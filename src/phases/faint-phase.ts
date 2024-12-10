@@ -6,8 +6,8 @@ import {
   applyPostKnockOutAbAttrs,
   applyPostVictoryAbAttrs,
   PostFaintAbAttr,
-  PostKnockOutAbAttr,
 } from "#app/data/ability";
+import { PostKnockOutAbAttr } from "#app/data/abilities/post-knock-out-ab-attr";
 import { PostVictoryAbAttr } from "#app/data/abilities/post-victory-ab-attr";
 import type { DestinyBondTag, GrudgeTag } from "#app/data/battler-tags";
 import { BattlerTagLapseType } from "#app/data/battler-tags";

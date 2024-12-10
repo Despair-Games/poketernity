@@ -74,6 +74,7 @@ import type { StatMultiplierAbAttr } from "./abilities/stat-multiplier-ab-attr";
 import { PostAttackAbAttr } from "./abilities/post-attack-ab-attr";
 import type { PostSetStatusAbAttr } from "./abilities/post-set-status-ab-attr";
 import type { PostVictoryAbAttr } from "./abilities/post-victory-ab-attr";
+import { PostKnockOutAbAttr } from "./abilities/post-knock-out-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -182,18 +183,6 @@ export class Ability implements Localizable {
 }
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
-
-export class PostKnockOutAbAttr extends AbAttr {
-  applyPostKnockOut(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    _knockedOut: Pokemon,
-    _args: any[],
-  ): boolean {
-    return false;
-  }
-}
 
 export class PostKnockOutStatStageChangeAbAttr extends PostKnockOutAbAttr {
   private stat: BattleStat | ((p: Pokemon) => BattleStat);
