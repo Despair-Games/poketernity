@@ -1,4 +1,5 @@
-import { applyAbAttrs, PreventBerryUseAbAttr, HealFromBerryUseAbAttr } from "#app/data/ability";
+import { applyAbAttrs, HealFromBerryUseAbAttr } from "#app/data/ability";
+import { PreventBerryUseAbAttr } from "#app/data/abilities/prevent-berry-use-ab-attr";
 import { CommonAnim } from "#app/data/battle-anims";
 import { BerryUsedEvent } from "#app/events/battle-scene";
 import { getPokemonNameWithAffix } from "#app/messages";

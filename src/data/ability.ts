@@ -189,20 +189,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
   };
 }
 
-export class PreventBerryUseAbAttr extends AbAttr {
-  override apply(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    cancelled: BooleanHolder,
-    _args: any[],
-  ): boolean {
-    cancelled.value = true;
-
-    return true;
-  }
-}
-
 /**
  * A Pokemon with this ability heals by a percentage of their maximum hp after eating a berry
  * @param healPercent - Percent of Max HP to heal

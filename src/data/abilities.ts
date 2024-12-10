@@ -41,7 +41,6 @@ import {
   PostFaintHPDamageAbAttr,
   PostFaintUnsuppressedWeatherFormChangeAbAttr,
   PostSummonStatStageChangeOnArenaAbAttr,
-  PreventBerryUseAbAttr,
   PreventBypassSpeedChanceAbAttr,
   RedirectTypeMoveAbAttr,
   ReduceBerryUseThresholdAbAttr,
@@ -55,6 +54,7 @@ import {
   UnswappableAbilityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { PreventBerryUseAbAttr } from "./abilities/prevent-berry-use-ab-attr";
 import { DoubleBerryEffectAbAttr } from "./abilities/double-berry-effect-ab-attr";
 import { ReduceBurnDamageAbAttr } from "./abilities/reduce-burn-damage-ab-attr";
 import { BypassBurnDamageReductionAbAttr } from "./abilities/bypass-burn-damage-reduction-ab-attr";
