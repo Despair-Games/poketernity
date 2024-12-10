@@ -18,7 +18,6 @@ import {
   Ability,
   allAbilities,
   AlwaysHitAbAttr,
-  BlockRedirectAbAttr,
   BypassSpeedChanceAbAttr,
   FlinchStatStageChangeAbAttr,
   ForceSwitchOutImmunityAbAttr,
@@ -44,6 +43,7 @@ import {
   UnswappableAbilityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { BlockRedirectAbAttr } from "./abilities/block-redirect-ab-attr";
 import { RedirectTypeMoveAbAttr } from "./abilities/redirect-type-move-ab-attr";
 import { PostFaintClearWeatherAbAttr } from "./abilities/post-faint-clear-weather-ab-attr";
 import { PostFaintUnsuppressedWeatherFormChangeAbAttr } from "./abilities/post-faint-unsuppressed-weather-form-change-ab-attr";

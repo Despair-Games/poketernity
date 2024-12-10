@@ -4,10 +4,10 @@ import {
   applyAbAttrs,
   applyPostMoveUsedAbAttrs,
   applyPreAttackAbAttrs,
-  BlockRedirectAbAttr,
   IncreasePpAbAttr,
   ReduceStatusEffectDurationAbAttr,
 } from "#app/data/ability";
+import { BlockRedirectAbAttr } from "#app/data/abilities/block-redirect-ab-attr";
 import { RedirectMoveAbAttr } from "#app/data/abilities/redirect-move-ab-attr";
 import { PostMoveUsedAbAttr } from "#app/data/abilities/post-move-used-ab-attr";
 import type { DelayedAttackTag } from "#app/data/arena-tag";
