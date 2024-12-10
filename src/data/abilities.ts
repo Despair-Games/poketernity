@@ -51,7 +51,6 @@ import {
   PostSummonStatStageChangeOnArenaAbAttr,
   PostTurnFormChangeAbAttr,
   PostTurnHurtIfSleepingAbAttr,
-  PostTurnLootAbAttr,
   PreventBerryUseAbAttr,
   PreventBypassSpeedChanceAbAttr,
   RedirectTypeMoveAbAttr,
@@ -202,6 +201,7 @@ import { FriskAbAttr } from "./abilities/frisk-ab-attr";
 import { PostWeatherLapseHealAbAttr } from "./abilities/post-weather-lapse-heal-ab-attr";
 import { PostWeatherLapseDamageAbAttr } from "./abilities/post-weather-lapse-damage-ab-attr";
 import { PostTurnStatusHealAbAttr } from "./abilities/post-turn-status-heal-ab-attr";
+import { PostTurnLootAbAttr } from "./abilities/post-turn-loot-ab-attr";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {
