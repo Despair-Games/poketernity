@@ -7,8 +7,8 @@ import {
   applyPostVictoryAbAttrs,
   PostFaintAbAttr,
   PostKnockOutAbAttr,
-  PostVictoryAbAttr,
 } from "#app/data/ability";
+import { PostVictoryAbAttr } from "#app/data/abilities/post-victory-ab-attr";
 import type { DestinyBondTag, GrudgeTag } from "#app/data/battler-tags";
 import { BattlerTagLapseType } from "#app/data/battler-tags";
 import { classicFinalBossDialogue } from "#app/data/dialogue";

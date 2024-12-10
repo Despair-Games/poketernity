@@ -73,6 +73,7 @@ import type { PokemonDefendCondition } from "../@types/PokemonDefendCondition";
 import type { StatMultiplierAbAttr } from "./abilities/stat-multiplier-ab-attr";
 import { PostAttackAbAttr } from "./abilities/post-attack-ab-attr";
 import type { PostSetStatusAbAttr } from "./abilities/post-set-status-ab-attr";
+import { PostVictoryAbAttr } from "./abilities/post-victory-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -181,12 +182,6 @@ export class Ability implements Localizable {
 }
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
-
-export class PostVictoryAbAttr extends AbAttr {
-  applyPostVictory(_pokemon: Pokemon, _passive: boolean, _simulated: boolean, _args: any[]): boolean {
-    return false;
-  }
-}
 
 export class PostVictoryStatStageChangeAbAttr extends PostVictoryAbAttr {
   private stat: BattleStat | ((p: Pokemon) => BattleStat);
