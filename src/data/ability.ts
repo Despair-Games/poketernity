@@ -73,6 +73,7 @@ import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition"
 import type { PokemonDefendCondition } from "../@types/PokemonDefendCondition";
 import type { StatMultiplierAbAttr } from "./abilities/stat-multiplier-ab-attr";
 import { PostAttackAbAttr } from "./abilities/post-attack-ab-attr";
+import { PostAttackApplyStatusEffectAbAttr } from "./abilities/post-attack-apply-status-effect-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -181,50 +182,6 @@ export class Ability implements Localizable {
 }
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
-
-export class PostAttackApplyStatusEffectAbAttr extends PostAttackAbAttr {
-  private contactRequired: boolean;
-  private chance: integer;
-  private effects: StatusEffect[];
-
-  constructor(contactRequired: boolean, chance: integer, ...effects: StatusEffect[]) {
-    super();
-
-    this.contactRequired = contactRequired;
-    this.chance = chance;
-    this.effects = effects;
-  }
-
-  override applyPostAttackAfterMoveTypeCheck(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
-    _hitResult: HitResult,
-    _args: any[],
-  ): boolean {
-    if (pokemon !== attacker && move.hitsSubstitute(attacker, pokemon)) {
-      return false;
-    }
-
-    /**Status inflicted by abilities post attacking are also considered additional effects.*/
-    if (
-      !attacker.hasAbilityWithAttr(IgnoreMoveEffectsAbAttr)
-      && !simulated
-      && pokemon !== attacker
-      && (!this.contactRequired || move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon))
-      && pokemon.randSeedInt(100) < this.chance
-      && !pokemon.status
-    ) {
-      const effect =
-        this.effects.length === 1 ? this.effects[0] : this.effects[pokemon.randSeedInt(this.effects.length)];
-      return attacker.trySetStatus(effect, true, pokemon);
-    }
-
-    return simulated;
-  }
-}
 
 export class PostAttackContactApplyStatusEffectAbAttr extends PostAttackApplyStatusEffectAbAttr {
   constructor(chance: integer, ...effects: StatusEffect[]) {

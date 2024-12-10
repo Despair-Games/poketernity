@@ -58,7 +58,6 @@ import {
   NoFusionAbilityAbAttr,
   NoTransformAbilityAbAttr,
   PostAttackApplyBattlerTagAbAttr,
-  PostAttackApplyStatusEffectAbAttr,
   PostAttackContactApplyStatusEffectAbAttr,
   PostBattleLootAbAttr,
   PostBiomeChangeTerrainChangeAbAttr,
@@ -130,6 +129,7 @@ import {
   UserFieldStatusEffectImmunityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { PostAttackApplyStatusEffectAbAttr } from "./abilities/post-attack-apply-status-effect-ab-attr";
 import { GorillaTacticsAbAttr } from "./abilities/gorilla-tactics-ab-attr";
 import { StatMultiplierAbAttr } from "./abilities/stat-multiplier-ab-attr";
 import { AllyMoveCategoryPowerBoostAbAttr } from "./abilities/ally-move-category-power-boost-ab-attr";
