@@ -71,7 +71,6 @@ import { FieldPreventExplosiveMovesAbAttr } from "./abilities/field-prevent-expl
 import type { FieldMultiplyStatAbAttr } from "./abilities/field-multiply-stat-ab-attr";
 import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition";
 import type { PokemonDefendCondition } from "../@types/PokemonDefendCondition";
-import { FieldMovePowerBoostAbAttr } from "./abilities/field-move-power-boost-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -180,20 +179,6 @@ export class Ability implements Localizable {
 }
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
-
-/**
- * Boosts the power of moves in specified categories.
- * @extends FieldMovePowerBoostAbAttr
- */
-export class AllyMoveCategoryPowerBoostAbAttr extends FieldMovePowerBoostAbAttr {
-  /**
-   * @param boostedCategories - The categories of moves that will receive the power boost.
-   * @param powerMultiplier - The multiplier to apply to the move's power.
-   */
-  constructor(boostedCategories: MoveCategory[], powerMultiplier: number) {
-    super((_pokemon, _defender, move) => boostedCategories.includes(move.category), powerMultiplier);
-  }
-}
 
 export class StatMultiplierAbAttr extends AbAttr {
   private stat: BattleStat;

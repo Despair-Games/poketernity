@@ -17,7 +17,6 @@ import i18next from "i18next";
 import {
   Ability,
   allAbilities,
-  AllyMoveCategoryPowerBoostAbAttr,
   AlwaysHitAbAttr,
   ArenaTrapAbAttr,
   BattlerTagImmunityAbAttr,
@@ -134,6 +133,7 @@ import {
   UserFieldStatusEffectImmunityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { AllyMoveCategoryPowerBoostAbAttr } from "./abilities/ally-move-category-power-boost-ab-attr";
 import { UserFieldMoveTypePowerBoostAbAttr } from "./abilities/user-field-move-type-power-boost-ab-attr";
 import { VariableMovePowerBoostAbAttr } from "./abilities/variable-move-power-boost-ab-attr";
 import { LowHpMoveTypePowerBoostAbAttr } from "./abilities/low-hp-move-type-power-boost-ab-attr";

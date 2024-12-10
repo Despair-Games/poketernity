@@ -34,7 +34,6 @@ import type { ArenaTrapTag } from "./arena-tag";
 import { ArenaTagSide, WeakenMoveTypeTag } from "./arena-tag";
 import {
   allAbilities,
-  AllyMoveCategoryPowerBoostAbAttr,
   applyAbAttrs,
   applyPostAttackAbAttrs,
   applyPostItemLostAbAttrs,
@@ -57,6 +56,7 @@ import {
   UnsuppressableAbilityAbAttr,
   UnswappableAbilityAbAttr,
 } from "./ability";
+import { AllyMoveCategoryPowerBoostAbAttr } from "./abilities/ally-move-category-power-boost-ab-attr";
 import { UserFieldMoveTypePowerBoostAbAttr } from "./abilities/user-field-move-type-power-boost-ab-attr";
 import { MoveTypeChangeAbAttr } from "./abilities/move-type-change-ab-attr";
 import { FieldPreventExplosiveMovesAbAttr } from "./abilities/field-prevent-explosive-moves-ab-attr";
