@@ -46,7 +46,6 @@ import {
   PreventBypassSpeedChanceAbAttr,
   RedirectTypeMoveAbAttr,
   ReduceBerryUseThresholdAbAttr,
-  ReduceBurnDamageAbAttr,
   ReduceStatusEffectDurationAbAttr,
   RunSuccessAbAttr,
   SuppressFieldAbilitiesAbAttr,
@@ -57,6 +56,7 @@ import {
   UnswappableAbilityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { ReduceBurnDamageAbAttr } from "./abilities/reduce-burn-damage-ab-attr";
 import { BypassBurnDamageReductionAbAttr } from "./abilities/bypass-burn-damage-reduction-ab-attr";
 import { StatStageChangeCopyAbAttr } from "./abilities/stat-stage-change-copy-ab-attr";
 import { StatStageChangeMultiplierAbAttr } from "./abilities/stat-stage-change-multiplier-ab-attr";
