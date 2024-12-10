@@ -155,12 +155,12 @@ import {
   IgnoreTypeImmunityAbAttr,
   applyFieldStatMultiplierAbAttrs,
   applyCheckTrappedAbAttrs,
-  CheckTrappedAbAttr,
   applyPostSetStatusAbAttrs,
   InfiltratorAbAttr,
   applyPostDamageAbAttrs,
   applyPostItemLostAbAttrs,
 } from "#app/data/ability";
+import { CheckTrappedAbAttr } from "#app/data/abilities/check-trapped-ab-attr";
 import { BypassBurnDamageReductionAbAttr } from "#app/data/abilities/bypass-burn-damage-reduction-ab-attr";
 import { PostItemLostAbAttr } from "#app/data/abilities/post-item-lost-ab-attr";
 import { ConditionalCritAbAttr } from "#app/data/abilities/conditional-crit-ab-attr";
