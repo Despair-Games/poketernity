@@ -20,6 +20,7 @@ export class MoveHelper extends GameManagerHelper {
    * accuracy to -1, guaranteeing a hit.
    */
   public async forceHit(): Promise<void> {
+    await this.game.phaseInterceptor.to(MoveEffectPhase, false);
     const moveEffectPhase = this.game.scene.getCurrentPhase() as MoveEffectPhase;
     vi.spyOn(moveEffectPhase.move.getMove(), "calculateBattleAccuracy").mockReturnValue(-1);
   }
