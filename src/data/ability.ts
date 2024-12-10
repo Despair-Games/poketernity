@@ -190,44 +190,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
   };
 }
 
-export class PostWeatherLapseHealAbAttr extends PostWeatherLapseAbAttr {
-  private healFactor: integer;
-
-  constructor(healFactor: integer, ...weatherTypes: WeatherType[]) {
-    super(...weatherTypes);
-
-    this.healFactor = healFactor;
-  }
-
-  override applyPostWeatherLapse(
-    pokemon: Pokemon,
-    passive: boolean,
-    simulated: boolean,
-    _weather: Weather,
-    _args: any[],
-  ): boolean {
-    if (!pokemon.isFullHp()) {
-      const abilityName = (!passive ? pokemon.getAbility() : pokemon.getPassiveAbility()).name;
-      if (!simulated) {
-        globalScene.unshiftPhase(
-          new PokemonHealPhase(
-            pokemon.getBattlerIndex(),
-            toDmgValue(pokemon.getMaxHp() / (16 / this.healFactor)),
-            i18next.t("abilityTriggers:postWeatherLapseHeal", {
-              pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-              abilityName,
-            }),
-            true,
-          ),
-        );
-      }
-      return true;
-    }
-
-    return false;
-  }
-}
-
 export class PostWeatherLapseDamageAbAttr extends PostWeatherLapseAbAttr {
   private damageFactor: integer;
 
