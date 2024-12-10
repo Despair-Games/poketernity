@@ -186,24 +186,6 @@ export class Ability implements Localizable {
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
 
-export class PostSummonMessageAbAttr extends PostSummonAbAttr {
-  private messageFunc: (pokemon: Pokemon) => string;
-
-  constructor(messageFunc: (pokemon: Pokemon) => string) {
-    super(true);
-
-    this.messageFunc = messageFunc;
-  }
-
-  override applyPostSummon(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
-    if (!simulated) {
-      globalScene.queueMessage(this.messageFunc(pokemon));
-    }
-
-    return true;
-  }
-}
-
 export class PostSummonUnnamedMessageAbAttr extends PostSummonAbAttr {
   //Attr doesn't force pokemon name on the message
   private message: string;
