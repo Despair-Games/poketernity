@@ -73,7 +73,6 @@ import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition"
 import type { PokemonDefendCondition } from "../@types/PokemonDefendCondition";
 import type { StatMultiplierAbAttr } from "./abilities/stat-multiplier-ab-attr";
 import { PostAttackAbAttr } from "./abilities/post-attack-ab-attr";
-import { PostAttackApplyStatusEffectAbAttr } from "./abilities/post-attack-apply-status-effect-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -182,12 +181,6 @@ export class Ability implements Localizable {
 }
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
-
-export class PostAttackContactApplyStatusEffectAbAttr extends PostAttackApplyStatusEffectAbAttr {
-  constructor(chance: integer, ...effects: StatusEffect[]) {
-    super(true, chance, ...effects);
-  }
-}
 
 /**
  * Ability attribute that applies a battler tag to the target after an attack
