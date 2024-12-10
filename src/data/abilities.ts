@@ -90,7 +90,6 @@ import {
   PostDefendHpGatedStatStageChangeAbAttr,
   PostDefendMoveDisableAbAttr,
   PostDefendPerishSongAbAttr,
-  PostDefendStatStageChangeAbAttr,
   PostDefendStealHeldItemAbAttr,
   PostDefendTerrainChangeAbAttr,
   PostDefendTypeChangeAbAttr,
@@ -163,6 +162,7 @@ import {
   VariableMovePowerBoostAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { PostDefendStatStageChangeAbAttr } from "./abilities/post-defend-stat-stage-change-ab-attr";
 import { GroundedTag } from "./battler-tags";
 import type Move from "./move";
 import {
