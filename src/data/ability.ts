@@ -72,6 +72,7 @@ import { PostSummonStatStageChangeAbAttr } from "./abilities/post-summon-stat-st
 import type { PreSwitchOutAbAttr } from "./abilities/pre-switch-out-ab-attr";
 import type { PreStatStageChangeAbAttr } from "./abilities/pre-stat-stage-change-ab-attr";
 import type { PreSetStatusAbAttr } from "./abilities/pre-set-status-ab-attr";
+import { PreApplyBattlerTagAbAttr } from "./abilities/pre-apply-battler-tag-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -180,19 +181,6 @@ export class Ability implements Localizable {
 }
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
-
-export class PreApplyBattlerTagAbAttr extends AbAttr {
-  applyPreApplyBattlerTag(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    _tag: BattlerTag,
-    _cancelled: BooleanHolder,
-    _args: any[],
-  ): boolean {
-    return false;
-  }
-}
 
 /**
  * Provides immunity to BattlerTags {@linkcode BattlerTag} to specified targets.
