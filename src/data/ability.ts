@@ -29,7 +29,7 @@ import { HitHealModifier } from "../modifier/modifier";
 import { Command } from "../ui/command-ui-handler";
 import type { BattlerTag } from "./battler-tags";
 import type Move from "./move";
-import { allMoves, MoveCategory } from "./move";
+import { allMoves } from "./move";
 import { AbAttr } from "./abilities/ab-attr";
 import type { PostBattleInitAbAttr } from "./abilities/post-battle-init-ab-attr";
 import { PostDamageAbAttr } from "./abilities/post-damage-ab-attr";
@@ -181,62 +181,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
     const weatherType = globalScene.arena.weather?.weatherType;
     return !!weatherType && weatherTypes.indexOf(weatherType) > -1;
   };
-}
-
-/**
- * If a Pokémon with this Ability selects a damaging move, it has a 30% chance of going first in its priority bracket. If the Ability activates, this is announced at the start of the turn (after move selection).
- *
- * @extends AbAttr
- */
-export class BypassSpeedChanceAbAttr extends AbAttr {
-  public chance: integer;
-
-  /**
-   * @param {integer} chance probability of ability being active.
-   */
-  constructor(chance: integer) {
-    super(true);
-    this.chance = chance;
-  }
-
-  /**
-   * bypass move order in their priority bracket when pokemon choose damaging move
-   * @param {Pokemon} pokemon {@linkcode Pokemon}  the Pokemon applying this ability
-   * @param {boolean} _passive N/A
-   * @param {BooleanHolder} _cancelled N/A
-   * @param {any[]} args [0] {@linkcode BooleanHolder} set to true when the ability activated
-   * @returns {boolean} - whether the ability was activated.
-   */
-  override apply(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    _cancelled: BooleanHolder,
-    args: any[],
-  ): boolean {
-    if (simulated) {
-      return false;
-    }
-    const bypassSpeed = args[0] as BooleanHolder;
-
-    if (!bypassSpeed.value && pokemon.randSeedInt(100) < this.chance) {
-      const turnCommand = globalScene.currentBattle.turnCommands[pokemon.getBattlerIndex()];
-      const isCommandFight = turnCommand?.command === Command.FIGHT;
-      const move = turnCommand?.move?.move ? allMoves[turnCommand.move.move] : null;
-      const isDamageMove = move?.category === MoveCategory.PHYSICAL || move?.category === MoveCategory.SPECIAL;
-
-      if (isCommandFight && isDamageMove) {
-        bypassSpeed.value = true;
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  override getTriggerMessage(pokemon: Pokemon, _abilityName: string, ..._args: any[]): string {
-    return i18next.t("abilityTriggers:quickDraw", { pokemonName: getPokemonNameWithAffix(pokemon) });
-  }
 }
 
 /**

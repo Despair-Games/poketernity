@@ -17,7 +17,6 @@ import i18next from "i18next";
 import {
   Ability,
   allAbilities,
-  BypassSpeedChanceAbAttr,
   PostDamageForceSwitchAbAttr,
   PreventBypassSpeedChanceAbAttr,
   TerrainEventTypeChangeAbAttr,
@@ -202,6 +201,7 @@ import { ArenaTrapAbAttr } from "./abilities/arena-trap-ab-attr";
 import { PostBattleLootAbAttr } from "./abilities/post-battle-loot-ab-attr";
 import { PostFaintContactDamageAbAttr } from "./abilities/post-faint-contact-damage-ab-attr";
 import { PostFaintHPDamageAbAttr } from "./abilities/post-faint-hp-damage-ab-attr";
+import { BypassSpeedChanceAbAttr } from "./abilities/bypass-speed-chance-ab-attr";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {
