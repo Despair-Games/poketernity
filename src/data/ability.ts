@@ -64,7 +64,7 @@ import type { PostTurnAbAttr } from "./abilities/post-turn-ab-attr";
 import type { PostMoveUsedAbAttr } from "./abilities/post-move-used-ab-attr";
 import type { PostItemLostAbAttr } from "./abilities/post-item-lost-ab-attr";
 import type { CheckTrappedAbAttr } from "./abilities/check-trapped-ab-attr";
-import { PostBattleAbAttr } from "./abilities/post-battle-ab-attr";
+import type { PostBattleAbAttr } from "./abilities/post-battle-ab-attr";
 import type { PostFaintAbAttr } from "./abilities/post-faint-ab-attr";
 import { ForceSwitchOutImmunityAbAttr } from "./abilities/force-switch-out-immunity-ab-attr";
 
@@ -187,32 +187,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
     const weatherType = globalScene.arena.weather?.weatherType;
     return !!weatherType && weatherTypes.indexOf(weatherType) > -1;
   };
-}
-
-/**
- * Gives money to the user after the battle.
- *
- * @extends PostBattleAbAttr
- * @see {@linkcode applyPostBattle}
- */
-export class MoneyAbAttr extends PostBattleAbAttr {
-  constructor() {
-    super();
-  }
-
-  /**
-   * @param _pokemon {@linkcode Pokemon} that is the user of this ability.
-   * @param _passive N/A
-   * @param args - `[0]`: boolean for if the battle ended in a victory
-   * @returns `true` if successful
-   */
-  override applyPostBattle(_pokemon: Pokemon, _passive: boolean, simulated: boolean, args: any[]): boolean {
-    if (!simulated && args[0]) {
-      globalScene.currentBattle.moneyScattered += globalScene.getWaveMoneyAmount(0.2);
-      return true;
-    }
-    return false;
-  }
 }
 
 /**
