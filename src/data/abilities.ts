@@ -20,10 +20,10 @@ import {
   BypassSpeedChanceAbAttr,
   FormBlockDamageAbAttr,
   PostDamageForceSwitchAbAttr,
-  PostSummonStatStageChangeOnArenaAbAttr,
   PreventBypassSpeedChanceAbAttr,
   TerrainEventTypeChangeAbAttr,
 } from "./ability";
+import { PostSummonStatStageChangeOnArenaAbAttr } from "./abilities/post-summon-stat-stage-change-on-arena-ab-attr";
 import { MoneyAbAttr } from "./abilities/money-ab-attr";
 import { IgnoreTypeImmunityAbAttr } from "./abilities/ignore-type-immunity-ab-attr";
 import { NoFusionAbilityAbAttr } from "./abilities/no-fusion-ability-ab-attr";

@@ -1,7 +1,7 @@
 import type { BattlerIndex } from "#app/battle";
 import { BattleType } from "#app/battle";
 import type { Weather } from "#app/data/weather";
-import { Stat, type BattleStat } from "#app/enums/stat";
+import { type Stat, type BattleStat } from "#app/enums/stat";
 import { SwitchType } from "#app/enums/switch-type";
 import type Pokemon from "#app/field/pokemon";
 import type { EnemyPokemon, PokemonMove } from "#app/field/pokemon";
@@ -17,7 +17,6 @@ import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import type { Constructor, NumberHolder } from "#app/utils";
 import { BooleanHolder, toDmgValue } from "#app/utils";
 import { Abilities } from "#enums/abilities";
-import type { ArenaTagType } from "#enums/arena-tag-type";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
@@ -29,7 +28,6 @@ import i18next from "i18next";
 import { getPokemonNameWithAffix } from "../messages";
 import { HitHealModifier } from "../modifier/modifier";
 import { Command } from "../ui/command-ui-handler";
-import { ArenaTagSide } from "./arena-tag";
 import type { BattlerTag } from "./battler-tags";
 import type Move from "./move";
 import { allMoves, MoveCategory } from "./move";
@@ -50,7 +48,6 @@ import type { PostAttackAbAttr } from "./abilities/post-attack-ab-attr";
 import type { PostSetStatusAbAttr } from "./abilities/post-set-status-ab-attr";
 import type { PostVictoryAbAttr } from "./abilities/post-victory-ab-attr";
 import type { PostKnockOutAbAttr } from "./abilities/post-knock-out-ab-attr";
-import { PostSummonStatStageChangeAbAttr } from "./abilities/post-summon-stat-stage-change-ab-attr";
 import type { PreSwitchOutAbAttr } from "./abilities/pre-switch-out-ab-attr";
 import type { PreStatStageChangeAbAttr } from "./abilities/pre-stat-stage-change-ab-attr";
 import type { PreSetStatusAbAttr } from "./abilities/pre-set-status-ab-attr";
@@ -187,49 +184,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
     const weatherType = globalScene.arena.weather?.weatherType;
     return !!weatherType && weatherTypes.indexOf(weatherType) > -1;
   };
-}
-
-/**
- * Applies a stat change after a Pokémon is summoned,
- * conditioned on the presence of a specific arena tag.
- *
- * @extends PostSummonStatStageChangeAbAttr
- */
-export class PostSummonStatStageChangeOnArenaAbAttr extends PostSummonStatStageChangeAbAttr {
-  /**
-   * The type of arena tag that conditions the stat change.
-   * @private
-   */
-  private tagType: ArenaTagType;
-
-  /**
-   * Creates an instance of PostSummonStatStageChangeOnArenaAbAttr.
-   * Initializes the stat change to increase Attack by 1 stage if the specified arena tag is present.
-   *
-   * @param {ArenaTagType} tagType - The type of arena tag to check for.
-   */
-  constructor(tagType: ArenaTagType) {
-    super([Stat.ATK], 1, true, false);
-    this.tagType = tagType;
-  }
-
-  /**
-   * Applies the post-summon stat change if the specified arena tag is present on pokemon's side.
-   * This is used in Wind Rider ability.
-   *
-   * @param {Pokemon} pokemon - The Pokémon being summoned.
-   * @param {boolean} passive - Whether the effect is passive.
-   * @param {any[]} args - Additional arguments.
-   * @returns {boolean} - Returns true if the stat change was applied, otherwise false.
-   */
-  override applyPostSummon(pokemon: Pokemon, passive: boolean, simulated: boolean, args: any[]): boolean {
-    const side = pokemon.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
-
-    if (globalScene.arena.getTagOnSide(this.tagType, side)) {
-      return super.applyPostSummon(pokemon, passive, simulated, args);
-    }
-    return false;
-  }
 }
 
 /**
