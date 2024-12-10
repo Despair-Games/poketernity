@@ -65,7 +65,6 @@ import {
   PostItemLostApplyBattlerTagAbAttr,
   PostSummonCopyAbilityAbAttr,
   PostSummonCopyAllyStatsAbAttr,
-  PostSummonFormChangeAbAttr,
   PostSummonFormChangeByWeatherAbAttr,
   PostSummonStatStageChangeOnArenaAbAttr,
   PostSummonTransformAbAttr,
@@ -108,6 +107,7 @@ import {
   UserFieldStatusEffectImmunityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { PostSummonFormChangeAbAttr } from "./abilities/post-summon-form-change-ab-attr";
 import { PostSummonTerrainChangeAbAttr } from "./abilities/post-summon-terrain-change-ab-attr";
 import { PostSummonWeatherChangeAbAttr } from "./abilities/post-summon-weather-change-ab-attr";
 import { DownloadAbAttr } from "./abilities/download-ab-attr";
