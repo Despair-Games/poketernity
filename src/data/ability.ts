@@ -179,22 +179,6 @@ export class Ability implements Localizable {
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
 
-export class PreSwitchOutHealAbAttr extends PreSwitchOutAbAttr {
-  override applyPreSwitchOut(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
-    if (!pokemon.isFullHp()) {
-      if (!simulated) {
-        const healAmount = toDmgValue(pokemon.getMaxHp() * 0.33);
-        pokemon.heal(healAmount);
-        pokemon.updateInfo();
-      }
-
-      return true;
-    }
-
-    return false;
-  }
-}
-
 /**
  * Attribute for form changes that occur on switching out
  * @extends PreSwitchOutAbAttr
