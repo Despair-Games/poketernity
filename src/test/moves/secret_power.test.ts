@@ -12,7 +12,7 @@ import { BattlerIndex } from "#app/battle";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { ArenaTagSide } from "#app/data/arena-tag";
 import { allAbilities } from "#app/data/ability";
-import { MoveEffectChanceMultiplierAbAttr } from "#app/data/abilities/move-effect-chance-multiplier-ab-attr";
+import { MoveEffectChanceMultiplierAbAttr } from "#app/data/ab-attr/move-effect-chance-multiplier-ab-attr";
 
 describe("Moves - Secret Power", () => {
   let phaserGame: Phaser.Game;

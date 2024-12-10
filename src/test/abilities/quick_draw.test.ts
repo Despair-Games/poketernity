@@ -1,4 +1,4 @@
-import { BypassSpeedChanceAbAttr } from "#app/data/abilities/bypass-speed-chance-ab-attr";
+import { BypassSpeedChanceAbAttr } from "#app/data/ab-attr/bypass-speed-chance-ab-attr";
 import { allAbilities } from "#app/data/ability";
 import { FaintPhase } from "#app/phases/faint-phase";
 import { Abilities } from "#enums/abilities";

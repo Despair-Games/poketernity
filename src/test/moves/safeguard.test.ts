@@ -1,6 +1,6 @@
 import { BattlerIndex } from "#app/battle";
 import { allAbilities } from "#app/data/ability";
-import { PostDefendContactApplyStatusEffectAbAttr } from "#app/data/abilities/post-defend-contact-apply-status-effect-ab-attr";
+import { PostDefendContactApplyStatusEffectAbAttr } from "#app/data/ab-attr/post-defend-contact-apply-status-effect-ab-attr";
 import { Abilities } from "#app/enums/abilities";
 import { StatusEffect } from "#app/enums/status-effect";
 import GameManager from "#app/test/utils/gameManager";

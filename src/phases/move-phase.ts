@@ -1,11 +1,11 @@
 import { BattlerIndex } from "#app/battle";
 import { globalScene } from "#app/global-scene";
 import { applyAbAttrs, applyPostMoveUsedAbAttrs, applyPreAttackAbAttrs } from "#app/data/ability";
-import { IncreasePpAbAttr } from "#app/data/abilities/increase-pp-ab-attr";
-import { ReduceStatusEffectDurationAbAttr } from "#app/data/abilities/reduce-status-effect-duration-ab-attr";
-import { BlockRedirectAbAttr } from "#app/data/abilities/block-redirect-ab-attr";
-import { RedirectMoveAbAttr } from "#app/data/abilities/redirect-move-ab-attr";
-import { PostMoveUsedAbAttr } from "#app/data/abilities/post-move-used-ab-attr";
+import { IncreasePpAbAttr } from "#app/data/ab-attr/increase-pp-ab-attr";
+import { ReduceStatusEffectDurationAbAttr } from "#app/data/ab-attr/reduce-status-effect-duration-ab-attr";
+import { BlockRedirectAbAttr } from "#app/data/ab-attr/block-redirect-ab-attr";
+import { RedirectMoveAbAttr } from "#app/data/ab-attr/redirect-move-ab-attr";
+import { PostMoveUsedAbAttr } from "#app/data/ab-attr/post-move-used-ab-attr";
 import type { DelayedAttackTag } from "#app/data/arena-tag";
 import { CommonAnim } from "#app/data/battle-anims";
 import { BattlerTagLapseType, CenterOfAttentionTag } from "#app/data/battler-tags";
@@ -44,7 +44,7 @@ import { Moves } from "#enums/moves";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
 import { getTerrainBlockMessage } from "#app/data/terrain";
-import { PokemonTypeChangeAbAttr } from "#app/data/abilities/pokemon-type-change-ab-attr";
+import { PokemonTypeChangeAbAttr } from "#app/data/ab-attr/pokemon-type-change-ab-attr";
 
 export class MovePhase extends BattlePhase {
   protected _pokemon: Pokemon;

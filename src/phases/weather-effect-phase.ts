@@ -1,9 +1,9 @@
 import { globalScene } from "#app/global-scene";
 import { applyPreWeatherEffectAbAttrs, applyAbAttrs, applyPostWeatherLapseAbAttrs } from "#app/data/ability";
-import { PostWeatherLapseAbAttr } from "#app/data/abilities/post-weather-lapse-ab-attr";
-import { SuppressWeatherEffectAbAttr } from "#app/data/abilities/suppress-weather-effect-ab-attr";
-import { PreWeatherDamageAbAttr } from "#app/data/abilities/pre-weather-damage-ab-attr";
-import { BlockNonDirectDamageAbAttr } from "#app/data/abilities/block-non-direct-damage-ab-attr";
+import { PostWeatherLapseAbAttr } from "#app/data/ab-attr/post-weather-lapse-ab-attr";
+import { SuppressWeatherEffectAbAttr } from "#app/data/ab-attr/suppress-weather-effect-ab-attr";
+import { PreWeatherDamageAbAttr } from "#app/data/ab-attr/pre-weather-damage-ab-attr";
+import { BlockNonDirectDamageAbAttr } from "#app/data/ab-attr/block-non-direct-damage-ab-attr";
 import { CommonAnim } from "#app/data/battle-anims";
 import type { Weather } from "#app/data/weather";
 import { getWeatherDamageMessage, getWeatherLapseMessage } from "#app/data/weather";

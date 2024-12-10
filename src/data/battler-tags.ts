@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { allAbilities, applyAbAttrs } from "#app/data/ability";
-import { FlinchEffectAbAttr } from "./abilities/flinch-effect-ab-attr";
-import { BlockNonDirectDamageAbAttr } from "./abilities/block-non-direct-damage-ab-attr";
+import { FlinchEffectAbAttr } from "./ab-attr/flinch-effect-ab-attr";
+import { BlockNonDirectDamageAbAttr } from "./ab-attr/block-non-direct-damage-ab-attr";
 import { ChargeAnim, CommonAnim, CommonBattleAnim, MoveChargeAnim } from "#app/data/battle-anims";
 import type Move from "#app/data/move";
 import {
@@ -37,8 +37,8 @@ import { Species } from "#enums/species";
 import { EFFECTIVE_STATS, getStatKey, Stat, type BattleStat, type EffectiveStat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { WeatherType } from "#enums/weather-type";
-import { ReverseDrainAbAttr } from "./abilities/reverse-drain-ab-attr";
-import { ProtectStatAbAttr } from "./abilities/protect-stat-ab-attr";
+import { ReverseDrainAbAttr } from "./ab-attr/reverse-drain-ab-attr";
+import { ProtectStatAbAttr } from "./ab-attr/protect-stat-ab-attr";
 
 export enum BattlerTagLapseType {
   FAINT,

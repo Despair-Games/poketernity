@@ -6,10 +6,10 @@ import {
   applyPostDefendAbAttrs,
   applyPreAttackAbAttrs,
 } from "#app/data/ability";
-import { AlwaysHitAbAttr } from "#app/data/abilities/always-hit-ab-attr";
-import { MaxMultiHitAbAttr } from "#app/data/abilities/max-multi-hit-ab-attr";
-import { PostAttackAbAttr } from "#app/data/abilities/post-attack-ab-attr";
-import { AddSecondStrikeAbAttr } from "#app/data/abilities/add-second-strike-ab-attr";
+import { AlwaysHitAbAttr } from "#app/data/ab-attr/always-hit-ab-attr";
+import { MaxMultiHitAbAttr } from "#app/data/ab-attr/max-multi-hit-ab-attr";
+import { PostAttackAbAttr } from "#app/data/ab-attr/post-attack-ab-attr";
+import { AddSecondStrikeAbAttr } from "#app/data/ab-attr/add-second-strike-ab-attr";
 import { ArenaTagSide, ConditionalProtectTag } from "#app/data/arena-tag";
 import { MoveAnim } from "#app/data/battle-anims";
 import {
@@ -58,10 +58,10 @@ import { BooleanHolder, isNullOrUndefined, NumberHolder } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { Moves } from "#enums/moves";
 import i18next from "i18next";
-import { PostDamageAbAttr } from "#app/data/abilities/post-damage-ab-attr";
-import { TypeImmunityAbAttr } from "#app/data/abilities/type-immunity-ab-attr";
-import { PostDefendAbAttr } from "#app/data/abilities/post-defend-ab-attr";
-import { IgnoreMoveEffectsAbAttr } from "#app/data/abilities/ignore-move-effect-ab-attr";
+import { PostDamageAbAttr } from "#app/data/ab-attr/post-damage-ab-attr";
+import { TypeImmunityAbAttr } from "#app/data/ab-attr/type-immunity-ab-attr";
+import { PostDefendAbAttr } from "#app/data/ab-attr/post-defend-ab-attr";
+import { IgnoreMoveEffectsAbAttr } from "#app/data/ab-attr/ignore-move-effect-ab-attr";
 
 export class MoveEffectPhase extends PokemonPhase {
   public move: PokemonMove;
