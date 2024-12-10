@@ -154,7 +154,6 @@ import {
   SuppressFieldAbilitiesAbAttr,
   NoFusionAbilityAbAttr,
   IgnoreTypeImmunityAbAttr,
-  ConditionalCritAbAttr,
   applyFieldStatMultiplierAbAttrs,
   applyCheckTrappedAbAttrs,
   CheckTrappedAbAttr,
@@ -164,6 +163,7 @@ import {
   applyPostItemLostAbAttrs,
   PostItemLostAbAttr,
 } from "#app/data/ability";
+import { ConditionalCritAbAttr } from "#app/data/abilities/conditional-crit-ab-attr";
 import { MultCritAbAttr } from "#app/data/abilities/mult-crit-ab-attr";
 import { BonusCritAbAttr } from "#app/data/abilities/bonus-crit-ab-attr";
 import { BlockCritAbAttr } from "#app/data/abilities/block-crit-ab-attr";

@@ -27,7 +27,6 @@ import {
   BypassBurnDamageReductionAbAttr,
   BypassSpeedChanceAbAttr,
   ChangeMovePriorityAbAttr,
-  ConditionalCritAbAttr,
   DoubleBerryEffectAbAttr,
   FetchBallAbAttr,
   FlinchStatStageChangeAbAttr,
@@ -87,6 +86,7 @@ import {
   UnswappableAbilityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { ConditionalCritAbAttr } from "./abilities/conditional-crit-ab-attr";
 import { MultCritAbAttr } from "./abilities/mult-crit-ab-attr";
 import { BonusCritAbAttr } from "./abilities/bonus-crit-ab-attr";
 import { BlockCritAbAttr } from "./abilities/block-crit-ab-attr";
