@@ -16,7 +16,7 @@ export class GorillaTacticsAbAttr extends PostAttackAbAttr {
 
   /**
    *
-   * @param {Pokemon} pokemon the {@linkcode Pokemon} with this ability
+   * @param pokemon the {@linkcode Pokemon} with this ability
    * @param _passive n/a
    * @param simulated whether the ability is being simulated
    * @param _defender n/a

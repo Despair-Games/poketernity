@@ -223,7 +223,7 @@ function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondition {
  * Condition function to applied to abilities related to Sheer Force.
  * Checks if last move used against target was affected by a Sheer Force user and:
  * Disables: Color Change, Pickpocket, Berserk, Anger Shell
- * @returns {AbAttrCondition} If false disables the ability which the condition is applied to.
+ * @returns If `false` disables the ability which the condition is applied to.
  */
 function getSheerForceHitDisableAbCondition(): AbAttrCondition {
   return (pokemon: Pokemon) => {
@@ -314,8 +314,8 @@ function getAnticipationCondition(): AbAttrCondition {
  * Creates an ability condition that causes the ability to fail if that ability
  * has already been used by that pokemon that battle. It requires an ability to
  * be specified due to current limitations in how conditions on abilities work.
- * @param {Abilities} ability The ability to check if it's already been applied
- * @returns {AbAttrCondition} The condition
+ * @param ability The {@linkcode Abilities | ability} to check if it's already been applied
+ * @returns The {@linkcode AbAttrCondition | ability attribute condition}
  */
 function getOncePerBattleCondition(ability: Abilities): AbAttrCondition {
   return (pokemon: Pokemon) => {

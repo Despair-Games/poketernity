@@ -10,7 +10,7 @@ export class BlockStatusDamageAbAttr extends AbAttr {
   private effects: StatusEffect[];
 
   /**
-   * @param {StatusEffect[]} effects The status effect(s) that will be blocked from damaging the ability pokemon
+   * @param effects The {@linkcode StatusEffect | status effect(s)} that will be blocked from damaging the ability pokemon
    */
   constructor(...effects: StatusEffect[]) {
     super(false);
@@ -19,11 +19,11 @@ export class BlockStatusDamageAbAttr extends AbAttr {
   }
 
   /**
-   * @param {Pokemon} pokemon The pokemon with the ability
-   * @param {boolean} _passive N/A
-   * @param {BooleanHolder} cancelled Whether to cancel the status damage
-   * @param {any[]} _args N/A
-   * @returns Returns true if status damage is blocked
+   * @param pokemon The {@linkcode Pokemon} with the ability
+   * @param passive N/A
+   * @param cancelled {@linkcode BooleanHolder} whether to cancel the status damage
+   * @param N/A
+   * @returns Returns `true` if status damage is blocked
    */
   override apply(
     pokemon: Pokemon,

@@ -10,8 +10,8 @@ import { PostSummonAbAttr } from "./post-summon-ab-attr";
  */
 export class PostSummonWeatherSuppressedFormChangeAbAttr extends PostSummonAbAttr {
   /**
-   * Triggers {@linkcode Arena.triggerWeatherBasedFormChangesToNormal | triggerWeatherBasedFormChangesToNormal}
-   * @param {Pokemon} _pokemon the Pokemon with this ability
+   * Triggers {@linkcode globalScene.arena.triggerWeatherBasedFormChangesToNormal | triggerWeatherBasedFormChangesToNormal}
+   * @param _pokemon the {@linkcode Pokemon} with this ability
    * @param _passive n/a
    * @param _args n/a
    * @returns whether a Pokemon was reverted to its normal form

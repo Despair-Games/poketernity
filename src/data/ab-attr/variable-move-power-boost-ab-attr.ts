@@ -14,7 +14,7 @@ export class VariableMovePowerBoostAbAttr extends VariableMovePowerAbAttr {
 
   /**
    * @param mult A function which takes the user, target, and move, and returns the power multiplier. 1 means no multiplier.
-   * @param {boolean} showAbility Whether to show the ability when it activates.
+   * @param showAbility Whether to show the ability when it activates.
    */
   constructor(mult: (user: Pokemon, target: Pokemon, move: Move) => number, showAbility: boolean = true) {
     super(showAbility);

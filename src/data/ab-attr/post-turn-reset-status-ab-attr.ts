@@ -6,7 +6,7 @@ import { PostTurnAbAttr } from "./post-turn-ab-attr";
 
 /**
  * After the turn ends, resets the status of either the ability holder or their ally
- * @param {boolean} allyTarget Whether to target ally, defaults to false (self-target)
+ * @param allyTarget Whether to target ally, defaults to `false` (self-target)
  */
 export class PostTurnResetStatusAbAttr extends PostTurnAbAttr {
   private allyTarget: boolean;

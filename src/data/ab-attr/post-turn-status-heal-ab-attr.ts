@@ -14,7 +14,7 @@ export class PostTurnStatusHealAbAttr extends PostTurnAbAttr {
   private effects: StatusEffect[];
 
   /**
-   * @param {StatusEffect[]} effects The status effect(s) that will qualify healing the ability pokemon
+   * @param effects The {@linkcode StatusEffect | status effect(s)} that will qualify healing the ability pokemon
    */
   constructor(...effects: StatusEffect[]) {
     super(false);
@@ -23,10 +23,10 @@ export class PostTurnStatusHealAbAttr extends PostTurnAbAttr {
   }
 
   /**
-   * @param {Pokemon} pokemon The pokemon with the ability that will receive the healing
-   * @param {Boolean} passive N/A
-   * @param {any[]} _args N/A
-   * @returns Returns true if healed from status, false if not
+   * @param pokemon {@linkcode Pokemon} with the ability that will receive the healing
+   * @param passive N/A
+   * @param _args N/A
+   * @returns Returns `true` if healed from status, `false` if not
    */
   override applyPostTurn(pokemon: Pokemon, passive: boolean, simulated: boolean, _args: any[]): boolean {
     if (pokemon.status && this.effects.includes(pokemon.status.effect)) {

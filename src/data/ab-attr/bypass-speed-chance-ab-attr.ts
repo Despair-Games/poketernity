@@ -16,7 +16,7 @@ export class BypassSpeedChanceAbAttr extends AbAttr {
   public chance: integer;
 
   /**
-   * @param {integer} chance probability of ability being active.
+   * @param chance probability of ability being active.
    */
   constructor(chance: integer) {
     super(true);
@@ -25,11 +25,11 @@ export class BypassSpeedChanceAbAttr extends AbAttr {
 
   /**
    * bypass move order in their priority bracket when pokemon choose damaging move
-   * @param {Pokemon} pokemon {@linkcode Pokemon}  the Pokemon applying this ability
-   * @param {boolean} _passive N/A
-   * @param {BooleanHolder} _cancelled N/A
-   * @param {any[]} args [0] {@linkcode BooleanHolder} set to true when the ability activated
-   * @returns {boolean} - whether the ability was activated.
+   * @param pokemon {@linkcode Pokemon} applying this ability
+   * @param _passive N/A
+   * @param _cancelled N/A
+   * @param args [0] {@linkcode BooleanHolder} set to true when the ability activated
+   * @returns whether the ability was activated
    */
   override apply(
     pokemon: Pokemon,

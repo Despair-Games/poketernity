@@ -17,7 +17,7 @@ export class PostFaintClearWeatherAbAttr extends PostFaintAbAttr {
    * @param _move N/A
    * @param _hitResult N/A
    * @param _args N/A
-   * @returns {boolean} Returns true if the weather clears, otherwise false.
+   * @returns Returns true if the weather clears, otherwise false.
    */
   override applyPostFaint(
     pokemon: Pokemon,

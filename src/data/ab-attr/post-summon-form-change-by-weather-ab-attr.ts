@@ -22,11 +22,10 @@ export class PostSummonFormChangeByWeatherAbAttr extends PostSummonAbAttr {
   }
 
   /**
-   * Calls the {@linkcode BattleScene.triggerPokemonFormChange | triggerPokemonFormChange} for both
-   * {@linkcode SpeciesFormChange.SpeciesFormChangeWeatherTrigger | SpeciesFormChangeWeatherTrigger} and
-   * {@linkcode SpeciesFormChange.SpeciesFormChangeWeatherTrigger | SpeciesFormChangeRevertWeatherFormTrigger} if it
-   * is the specific Pokemon and ability
-   * @param {Pokemon} pokemon the Pokemon with this ability
+   * Calls the {@linkcode globalScene.triggerPokemonFormChange | triggerPokemonFormChange} for both
+   * {@linkcode SpeciesFormChangeWeatherTrigger} and {@linkcode SpeciesFormChangeWeatherTrigger}
+   * if it is the specific Pokemon and ability
+   * @param pokemon the {@linkcode Pokemon} with this ability
    * @param passive n/a
    * @param _args n/a
    * @returns whether the form change was triggered

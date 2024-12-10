@@ -22,7 +22,7 @@ export class PostSummonStatStageChangeOnArenaAbAttr extends PostSummonStatStageC
    * Creates an instance of PostSummonStatStageChangeOnArenaAbAttr.
    * Initializes the stat change to increase Attack by 1 stage if the specified arena tag is present.
    *
-   * @param {ArenaTagType} tagType - The type of arena tag to check for.
+   * @param tagType the {@linkcode ArenaTagType} to check for.
    */
   constructor(tagType: ArenaTagType) {
     super([Stat.ATK], 1, true, false);
@@ -33,10 +33,10 @@ export class PostSummonStatStageChangeOnArenaAbAttr extends PostSummonStatStageC
    * Applies the post-summon stat change if the specified arena tag is present on pokemon's side.
    * This is used in Wind Rider ability.
    *
-   * @param {Pokemon} pokemon - The Pokémon being summoned.
-   * @param {boolean} passive - Whether the effect is passive.
-   * @param {any[]} args - Additional arguments.
-   * @returns {boolean} - Returns true if the stat change was applied, otherwise false.
+   * @param pokemon The {@linkcode Pokemon} being summoned
+   * @param passive Whether the effect is passive
+   * @param args Additional arguments
+   * @returns Returns `true` if the stat change was applied, otherwise `false`
    */
   override applyPostSummon(pokemon: Pokemon, passive: boolean, simulated: boolean, args: any[]): boolean {
     const side = pokemon.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;

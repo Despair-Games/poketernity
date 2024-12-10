@@ -14,7 +14,7 @@ export class PreventBypassSpeedChanceAbAttr extends AbAttr {
   private condition: (pokemon: Pokemon, move: Move) => boolean;
 
   /**
-   * @param {function} condition - checks if a move meets certain conditions
+   * @param condition checks if a move meets certain conditions
    */
   constructor(condition: (pokemon: Pokemon, move: Move) => boolean) {
     super(true);

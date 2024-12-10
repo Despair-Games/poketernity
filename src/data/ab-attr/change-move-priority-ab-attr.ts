@@ -13,8 +13,8 @@ export class ChangeMovePriorityAbAttr extends AbAttr {
   private changeAmount: number;
 
   /**
-   * @param {(pokemon, move) => boolean} moveFunc applies priority-change to moves within a provided category
-   * @param {number} changeAmount the amount of priority added or subtracted
+   * @param moveFunc applies priority-change to moves within a provided category
+   * @param changeAmount the amount of priority added or subtracted
    */
   constructor(moveFunc: (pokemon: Pokemon, move: Move) => boolean, changeAmount: number) {
     super(true);

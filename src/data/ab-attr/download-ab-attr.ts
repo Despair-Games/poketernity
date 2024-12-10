@@ -11,7 +11,6 @@ import { PostSummonAbAttr } from "./post-summon-ab-attr";
  * @extends PostSummonAbAttr
  * @see {applyPostSummon}
  */
-
 export class DownloadAbAttr extends PostSummonAbAttr {
   private enemyDef: integer;
   private enemySpDef: integer;
@@ -21,10 +20,10 @@ export class DownloadAbAttr extends PostSummonAbAttr {
   /**
    * Checks to see if it is the opening turn (starting a new game), if so, Download won't work. This is because Download takes into account
    * vitamins and items, so it needs to use the Stat and the stat alone.
-   * @param {Pokemon} pokemon Pokemon that is using the move, as well as seeing the opposing pokemon.
-   * @param {boolean} _passive N/A
-   * @param {any[]} _args N/A
-   * @returns Returns true if ability is used successful, false if not.
+   * @param pokemon {@linkcode Pokemon} that is using the move, as well as seeing the opposing pokemon.
+   * @param _passive N/A
+   * @param _args N/A
+   * @returns Returns `true` if ability is used successful, `false` if not.
    */
   override applyPostSummon(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
     this.enemyDef = 0;
