@@ -75,7 +75,6 @@ import {
   PostSummonStatStageChangeOnArenaAbAttr,
   PostSummonTerrainChangeAbAttr,
   PostSummonTransformAbAttr,
-  PostSummonUnnamedMessageAbAttr,
   PostSummonUserFieldRemoveStatusEffectAbAttr,
   PostSummonWeatherChangeAbAttr,
   PostSummonWeatherSuppressedFormChangeAbAttr,
@@ -116,6 +115,7 @@ import {
   UserFieldStatusEffectImmunityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { PostSummonUnnamedMessageAbAttr } from "./abilities/post-summon-unnamed-message-ab-attr";
 import { PostSummonMessageAbAttr } from "./abilities/post-summon-message-ab-attr";
 import { PostSummonRemoveArenaTagAbAttr } from "./abilities/post-summon-remove-arena-tag-ab-attr";
 import { PostIntimidateStatStageChangeAbAttr } from "./abilities/post-intimidate-stat-stage-change-ab-attr";
