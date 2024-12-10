@@ -70,6 +70,7 @@ import { PostDamageAbAttr } from "./abilities/post-damage-ab-attr";
 import { PostSummonAbAttr } from "./abilities/post-summon-ab-attr";
 import { PreAttackAbAttr } from "./abilities/pre-attack-ab-attr";
 import { PreDefendAbAttr } from "./abilities/pre-defend-ab-attr";
+import { ReceivedMoveDamageMultiplierAbAttr } from "./abilities/received-move-damage-multiplier-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -186,36 +187,6 @@ type PokemonDefendCondition = (target: Pokemon, user: Pokemon, move: Move) => bo
 type PokemonStatStageChangeCondition = (target: Pokemon, statsChanged: BattleStat[], stages: number) => boolean;
 
 type PreDefendAbAttrCondition = (pokemon: Pokemon, attacker: Pokemon, move: Move) => boolean;
-
-export class ReceivedMoveDamageMultiplierAbAttr extends PreDefendAbAttr {
-  protected condition: PokemonDefendCondition;
-  private damageMultiplier: number;
-
-  constructor(condition: PokemonDefendCondition, damageMultiplier: number) {
-    super();
-
-    this.condition = condition;
-    this.damageMultiplier = damageMultiplier;
-  }
-
-  override applyPreDefend(
-    pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
-    _cancelled: BooleanHolder,
-    args: any[],
-  ): boolean {
-    if (this.condition(pokemon, attacker, move)) {
-      (args[0] as NumberHolder).value = toDmgValue((args[0] as NumberHolder).value * this.damageMultiplier);
-
-      return true;
-    }
-
-    return false;
-  }
-}
 
 /**
  * Reduces the damage dealt to an allied Pokemon. Used by Friend Guard.

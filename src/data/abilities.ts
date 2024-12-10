@@ -148,7 +148,6 @@ import {
   PreventBerryUseAbAttr,
   PreventBypassSpeedChanceAbAttr,
   ProtectStatAbAttr,
-  ReceivedMoveDamageMultiplierAbAttr,
   ReceivedTypeDamageMultiplierAbAttr,
   RedirectTypeMoveAbAttr,
   ReduceBerryUseThresholdAbAttr,
@@ -201,6 +200,7 @@ import { PostBattleInitFormChangeAbAttr } from "./abilities/post-battle-init-for
 import { PostBattleInitStatStageChangeAbAttr } from "./abilities/post-battle-init-stat-stage-change-ab-attr";
 import { PreDefendFullHpEndureAbAttr } from "./abilities/pre-defend-full-hp-endure-ab-attr";
 import { StabBoostAbAttr } from "./abilities/stab-boost-ab-attr";
+import { ReceivedMoveDamageMultiplierAbAttr } from "./abilities/received-move-damage-multiplier-ab-attr";
 
 type AbAttrCondition = (pokemon: Pokemon) => boolean;
 

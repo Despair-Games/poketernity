@@ -148,7 +148,6 @@ import {
   FieldPriorityMoveImmunityAbAttr,
   IgnoreOpponentStatStagesAbAttr,
   MoveImmunityAbAttr,
-  ReceivedMoveDamageMultiplierAbAttr,
   StatusEffectImmunityAbAttr,
   TypeImmunityAbAttr,
   WeightMultiplierAbAttr,
@@ -248,6 +247,7 @@ import type { AbAttr } from "#app/data/abilities/ab-attr";
 import { PostDamageAbAttr } from "#app/data/abilities/post-damage-ab-attr";
 import { PreDefendFullHpEndureAbAttr } from "#app/data/abilities/pre-defend-full-hp-endure-ab-attr";
 import { StabBoostAbAttr } from "#app/data/abilities/stab-boost-ab-attr";
+import { ReceivedMoveDamageMultiplierAbAttr } from "#app/data/abilities/received-move-damage-multiplier-ab-attr";
 
 export enum LearnMoveSituation {
   MISC,
