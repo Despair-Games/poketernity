@@ -56,7 +56,6 @@ import {
   PostTurnResetStatusAbAttr,
   PostTurnStatusHealAbAttr,
   PostWeatherChangeAddBattlerTagAttr,
-  PostWeatherChangeFormChangeAbAttr,
   PostWeatherLapseDamageAbAttr,
   PostWeatherLapseHealAbAttr,
   PreventBerryUseAbAttr,
@@ -77,6 +76,7 @@ import {
   UnswappableAbilityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { PostWeatherChangeFormChangeAbAttr } from "./abilities/post-weather-change-form-change-ab-attr";
 import { SuppressWeatherEffectAbAttr } from "./abilities/suppress-weather-effect-ab-attr";
 import { BlockWeatherDamageAttr } from "./abilities/block-weather-damage-attr";
 import { IgnoreContactAbAttr } from "./abilities/ignore-contact-ab-attr";
