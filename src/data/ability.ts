@@ -73,7 +73,7 @@ import type { PokemonDefendCondition } from "../@types/PokemonDefendCondition";
 import type { StatMultiplierAbAttr } from "./abilities/stat-multiplier-ab-attr";
 import { PostAttackAbAttr } from "./abilities/post-attack-ab-attr";
 import type { PostSetStatusAbAttr } from "./abilities/post-set-status-ab-attr";
-import { PostVictoryAbAttr } from "./abilities/post-victory-ab-attr";
+import type { PostVictoryAbAttr } from "./abilities/post-victory-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -182,28 +182,6 @@ export class Ability implements Localizable {
 }
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
-
-export class PostVictoryFormChangeAbAttr extends PostVictoryAbAttr {
-  private formFunc: (p: Pokemon) => integer;
-
-  constructor(formFunc: (p: Pokemon) => integer) {
-    super(true);
-
-    this.formFunc = formFunc;
-  }
-
-  override applyPostVictory(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
-    const formIndex = this.formFunc(pokemon);
-    if (formIndex !== pokemon.formIndex) {
-      if (!simulated) {
-        globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger, false);
-      }
-      return true;
-    }
-
-    return false;
-  }
-}
 
 export class PostKnockOutAbAttr extends AbAttr {
   applyPostKnockOut(
