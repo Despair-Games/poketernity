@@ -4313,7 +4313,7 @@ export class PresentPowerAttr extends VariablePowerAttr {
       (args[0] as NumberHolder).value = 120;
     } else if (80 < powerSeed && powerSeed <= 100) {
       // If this move is multi-hit, disable all other hits
-      user.turnData.hitCount -= user.turnData.hitsLeft - 1;
+      user.turnData.hitCount = 1;
       user.turnData.hitsLeft = 1;
       globalScene.unshiftPhase(
         new PokemonHealPhase(
