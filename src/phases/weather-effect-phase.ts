@@ -1,11 +1,11 @@
 import { globalScene } from "#app/global-scene";
 import {
   applyPreWeatherEffectAbAttrs,
-  SuppressWeatherEffectAbAttr,
   applyAbAttrs,
   applyPostWeatherLapseAbAttrs,
   PostWeatherLapseAbAttr,
 } from "#app/data/ability";
+import { SuppressWeatherEffectAbAttr } from "#app/data/abilities/suppress-weather-effect-ab-attr";
 import { PreWeatherDamageAbAttr } from "#app/data/abilities/pre-weather-damage-ab-attr";
 import { BlockNonDirectDamageAbAttr } from "#app/data/abilities/block-non-direct-damage-ab-attr";
 import { CommonAnim } from "#app/data/battle-anims";

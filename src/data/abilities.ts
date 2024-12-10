@@ -72,7 +72,6 @@ import {
   StatStageChangeCopyAbAttr,
   StatStageChangeMultiplierAbAttr,
   SuppressFieldAbilitiesAbAttr,
-  SuppressWeatherEffectAbAttr,
   SyncEncounterNatureAbAttr,
   TerrainEventTypeChangeAbAttr,
   UncopiableAbilityAbAttr,
@@ -80,6 +79,7 @@ import {
   UnswappableAbilityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { SuppressWeatherEffectAbAttr } from "./abilities/suppress-weather-effect-ab-attr";
 import { BlockWeatherDamageAttr } from "./abilities/block-weather-damage-attr";
 import { IgnoreContactAbAttr } from "./abilities/ignore-contact-ab-attr";
 import { ChangeMovePriorityAbAttr } from "./abilities/change-move-priority-ab-attr";

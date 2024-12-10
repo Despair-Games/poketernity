@@ -5,7 +5,7 @@ import { Type } from "#enums/type";
 import type Move from "./move";
 import { AttackMove } from "./move";
 import { randSeedInt } from "#app/utils";
-import { SuppressWeatherEffectAbAttr } from "./ability";
+import { SuppressWeatherEffectAbAttr } from "./abilities/suppress-weather-effect-ab-attr";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
 import type { Arena } from "#app/field/arena";
