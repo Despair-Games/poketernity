@@ -47,7 +47,6 @@ import {
   IgnoreTypeImmunityAbAttr,
   IncreasePpAbAttr,
   InfiltratorAbAttr,
-  IntimidateImmunityAbAttr,
   MaxMultiHitAbAttr,
   MoneyAbAttr,
   MoodyAbAttr,
@@ -202,6 +201,7 @@ import { FieldMoveTypePowerBoostAbAttr } from "./abilities/field-move-type-power
 import { PostAttackStealHeldItemAbAttr } from "./abilities/post-attack-steal-held-item-ab-attr";
 import { PostDefendStealHeldItemAbAttr } from "./abilities/post-defend-steal-held-item-ab-attr";
 import { CopyFaintedAllyAbilityAbAttr } from "./abilities/copy-fainted-ally-ability-ab-attr";
+import { IntimidateImmunityAbAttr } from "./abilities/intimidate-immunity-ab-attr";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {

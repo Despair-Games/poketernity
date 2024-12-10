@@ -75,6 +75,7 @@ import { PostAttackAbAttr } from "./abilities/post-attack-ab-attr";
 import type { PostSetStatusAbAttr } from "./abilities/post-set-status-ab-attr";
 import type { PostVictoryAbAttr } from "./abilities/post-victory-ab-attr";
 import type { PostKnockOutAbAttr } from "./abilities/post-knock-out-ab-attr";
+import { IntimidateImmunityAbAttr } from "./abilities/intimidate-immunity-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -183,30 +184,6 @@ export class Ability implements Localizable {
 }
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
-
-export class IntimidateImmunityAbAttr extends AbAttr {
-  constructor() {
-    super(false);
-  }
-
-  override apply(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    cancelled: BooleanHolder,
-    _args: any[],
-  ): boolean {
-    cancelled.value = true;
-    return true;
-  }
-
-  override getTriggerMessage(pokemon: Pokemon, abilityName: string, ..._args: any[]): string {
-    return i18next.t("abilityTriggers:intimidateImmunity", {
-      pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-      abilityName,
-    });
-  }
-}
 
 export class PostIntimidateStatStageChangeAbAttr extends AbAttr {
   private stats: BattleStat[];
