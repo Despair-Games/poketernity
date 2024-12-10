@@ -182,8 +182,6 @@ export class Ability implements Localizable {
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
 
-export class IgnoreContactAbAttr extends AbAttr {}
-
 export class PreWeatherEffectAbAttr extends AbAttr {
   applyPreWeatherEffect(
     _pokemon: Pokemon,

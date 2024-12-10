@@ -31,7 +31,6 @@ import {
   FormBlockDamageAbAttr,
   FriskAbAttr,
   HealFromBerryUseAbAttr,
-  IgnoreContactAbAttr,
   IgnoreProtectOnContactAbAttr,
   IgnoreTypeImmunityAbAttr,
   IncreasePpAbAttr,
@@ -82,6 +81,7 @@ import {
   UnswappableAbilityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { IgnoreContactAbAttr } from "./abilities/ignore-contact-ab-attr";
 import { ChangeMovePriorityAbAttr } from "./abilities/change-move-priority-ab-attr";
 import { BlockOneHitKOAbAttr } from "./abilities/block-one-hit-ko-ab-attr";
 import { BlockStatusDamageAbAttr } from "./abilities/block-status-damage-ab-attr";

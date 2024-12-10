@@ -41,7 +41,6 @@ import {
   applyPreDefendAbAttrs,
   ForceSwitchOutImmunityAbAttr,
   HealFromBerryUseAbAttr,
-  IgnoreContactAbAttr,
   IgnoreProtectOnContactAbAttr,
   InfiltratorAbAttr,
   MaxMultiHitAbAttr,
@@ -52,6 +51,7 @@ import {
   UnsuppressableAbilityAbAttr,
   UnswappableAbilityAbAttr,
 } from "./ability";
+import { IgnoreContactAbAttr } from "./abilities/ignore-contact-ab-attr";
 import { ChangeMovePriorityAbAttr } from "./abilities/change-move-priority-ab-attr";
 import { BlockOneHitKOAbAttr } from "./abilities/block-one-hit-ko-ab-attr";
 import { BlockNonDirectDamageAbAttr } from "./abilities/block-non-direct-damage-ab-attr";
