@@ -60,7 +60,6 @@ import {
   PostAttackApplyBattlerTagAbAttr,
   PostAttackApplyStatusEffectAbAttr,
   PostAttackContactApplyStatusEffectAbAttr,
-  PostAttackStealHeldItemAbAttr,
   PostBattleLootAbAttr,
   PostBiomeChangeTerrainChangeAbAttr,
   PostBiomeChangeWeatherChangeAbAttr,
@@ -202,6 +201,7 @@ import { PostDefendAbilityGiveAbAttr } from "./abilities/post-defend-ability-giv
 import { PostDefendMoveDisableAbAttr } from "./abilities/post-defend-move-disable-ab-attr";
 import { PokemonTypeChangeAbAttr } from "./abilities/pokemon-type-change-ab-attr";
 import { FieldMoveTypePowerBoostAbAttr } from "./abilities/field-move-type-power-boost-ab-attr";
+import { PostAttackStealHeldItemAbAttr } from "./abilities/post-attack-steal-held-item-ab-attr";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {

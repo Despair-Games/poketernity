@@ -182,55 +182,6 @@ export class Ability implements Localizable {
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
 
-export class PostAttackStealHeldItemAbAttr extends PostAttackAbAttr {
-  private stealCondition: PokemonAttackCondition | null;
-
-  constructor(stealCondition?: PokemonAttackCondition) {
-    super();
-
-    this.stealCondition = stealCondition ?? null;
-  }
-
-  override applyPostAttackAfterMoveTypeCheck(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    defender: Pokemon,
-    move: Move,
-    hitResult: HitResult,
-    _args: any[],
-  ): boolean {
-    if (
-      !simulated
-      && hitResult < HitResult.NO_EFFECT
-      && (!this.stealCondition || this.stealCondition(pokemon, defender, move))
-    ) {
-      const heldItems = this.getTargetHeldItems(defender).filter((i) => i.isTransferable);
-      if (heldItems.length) {
-        const stolenItem = heldItems[pokemon.randSeedInt(heldItems.length)];
-        if (globalScene.tryTransferHeldItemModifier(stolenItem, pokemon, false)) {
-          globalScene.queueMessage(
-            i18next.t("abilityTriggers:postAttackStealHeldItem", {
-              pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-              defenderName: defender.name,
-              stolenItemType: stolenItem.type.name,
-            }),
-          );
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  getTargetHeldItems(target: Pokemon): PokemonHeldItemModifier[] {
-    return globalScene.findModifiers(
-      (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === target.id,
-      target.isPlayer(),
-    ) as PokemonHeldItemModifier[];
-  }
-}
-
 export class PostAttackApplyStatusEffectAbAttr extends PostAttackAbAttr {
   private contactRequired: boolean;
   private chance: integer;
