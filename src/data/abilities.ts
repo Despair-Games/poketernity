@@ -147,7 +147,6 @@ import {
   PreventBerryUseAbAttr,
   PreventBypassSpeedChanceAbAttr,
   ProtectStatAbAttr,
-  ReceivedTypeDamageMultiplierAbAttr,
   RedirectTypeMoveAbAttr,
   ReduceBerryUseThresholdAbAttr,
   ReduceBurnDamageAbAttr,
@@ -201,6 +200,7 @@ import { PreDefendFullHpEndureAbAttr } from "./abilities/pre-defend-full-hp-endu
 import { StabBoostAbAttr } from "./abilities/stab-boost-ab-attr";
 import { ReceivedMoveDamageMultiplierAbAttr } from "./abilities/received-move-damage-multiplier-ab-attr";
 import { AlliedFieldDamageReductionAbAttr } from "./abilities/allied-field-damage-reduction-ab-attr";
+import { ReceivedTypeDamageMultiplierAbAttr } from "./abilities/received-type-damage-multiplier-ab-attr";
 
 type AbAttrCondition = (pokemon: Pokemon) => boolean;
 

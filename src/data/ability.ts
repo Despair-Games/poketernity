@@ -189,12 +189,6 @@ type PokemonStatStageChangeCondition = (target: Pokemon, statsChanged: BattleSta
 
 type PreDefendAbAttrCondition = (pokemon: Pokemon, attacker: Pokemon, move: Move) => boolean;
 
-export class ReceivedTypeDamageMultiplierAbAttr extends ReceivedMoveDamageMultiplierAbAttr {
-  constructor(moveType: Type, damageMultiplier: number) {
-    super((_target, user, move) => user.getMoveType(move) === moveType, damageMultiplier);
-  }
-}
-
 export class AttackTypeImmunityAbAttr extends TypeImmunityAbAttr {
   constructor(immuneType: Type, condition?: AbAttrCondition) {
     super(immuneType, condition);
