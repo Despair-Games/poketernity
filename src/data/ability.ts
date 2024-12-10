@@ -68,7 +68,7 @@ import type { PreWeatherEffectAbAttr } from "./abilities/pre-weather-effect-ab-a
 import type { PreWeatherDamageAbAttr } from "./abilities/pre-weather-damage-ab-attr";
 import type { PostWeatherChangeAbAttr } from "./abilities/post-weather-change-ab-attr";
 import type { PostWeatherLapseAbAttr } from "./abilities/post-weather-lapse-ab-attr";
-import { PostTerrainChangeAbAttr } from "./abilities/post-terrain-change-ab-attr";
+import type { PostTerrainChangeAbAttr } from "./abilities/post-terrain-change-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -189,38 +189,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
     const weatherType = globalScene.arena.weather?.weatherType;
     return !!weatherType && weatherTypes.indexOf(weatherType) > -1;
   };
-}
-
-export class PostTerrainChangeAddBattlerTagAttr extends PostTerrainChangeAbAttr {
-  private tagType: BattlerTagType;
-  private turnCount: integer;
-  private terrainTypes: TerrainType[];
-
-  constructor(tagType: BattlerTagType, turnCount: integer, ...terrainTypes: TerrainType[]) {
-    super();
-
-    this.tagType = tagType;
-    this.turnCount = turnCount;
-    this.terrainTypes = terrainTypes;
-  }
-
-  override applyPostTerrainChange(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    terrain: TerrainType,
-    _args: any[],
-  ): boolean {
-    if (!this.terrainTypes.find((t) => t === terrain)) {
-      return false;
-    }
-
-    if (simulated) {
-      return pokemon.canAddTag(this.tagType);
-    } else {
-      return pokemon.addTag(this.tagType, this.turnCount);
-    }
-  }
 }
 
 export class PostTurnAbAttr extends AbAttr {

@@ -49,7 +49,6 @@ import {
   PostFaintUnsuppressedWeatherFormChangeAbAttr,
   PostItemLostApplyBattlerTagAbAttr,
   PostSummonStatStageChangeOnArenaAbAttr,
-  PostTerrainChangeAddBattlerTagAttr,
   PostTurnFormChangeAbAttr,
   PostTurnHurtIfSleepingAbAttr,
   PostTurnLootAbAttr,
@@ -73,6 +72,7 @@ import {
   UnswappableAbilityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { PostTerrainChangeAddBattlerTagAttr } from "./abilities/post-terrain-change-add-battler-tag-attr";
 import { PostWeatherChangeAddBattlerTagAttr } from "./abilities/post-weather-change-add-battler-tag-ab-attr";
 import { PostWeatherChangeFormChangeAbAttr } from "./abilities/post-weather-change-form-change-ab-attr";
 import { SuppressWeatherEffectAbAttr } from "./abilities/suppress-weather-effect-ab-attr";
