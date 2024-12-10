@@ -189,9 +189,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
   };
 }
 
-/** Attribute for abilities that allow moves that make contact to ignore protection (i.e. Unseen Fist) */
-export class IgnoreProtectOnContactAbAttr extends AbAttr {}
-
 /**
  * Attribute implementing the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Infiltrator_(Ability) | Infiltrator}.
  * Allows the source's moves to bypass the effects of opposing Light Screen, Reflect, Aurora Veil, Safeguard, Mist, and Substitute.

@@ -39,13 +39,13 @@ import {
   applyPostItemLostAbAttrs,
   applyPreAttackAbAttrs,
   applyPreDefendAbAttrs,
-  IgnoreProtectOnContactAbAttr,
   InfiltratorAbAttr,
   PostDamageForceSwitchAbAttr,
   UncopiableAbilityAbAttr,
   UnsuppressableAbilityAbAttr,
   UnswappableAbilityAbAttr,
 } from "./ability";
+import { IgnoreProtectOnContactAbAttr } from "./abilities/ignore-protect-on-contact-ab-attr";
 import { MoveAbilityBypassAbAttr } from "./abilities/move-ability-bypass-ab-attr";
 import { ForceSwitchOutImmunityAbAttr } from "./abilities/force-switch-out-immunity-ab-attr";
 import { MaxMultiHitAbAttr } from "./abilities/max-multi-hit-ab-attr";
