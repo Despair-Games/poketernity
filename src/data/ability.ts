@@ -50,11 +50,7 @@ import {
   StatusMove,
 } from "./move";
 import { getPokeballName } from "./pokeball";
-import {
-  SpeciesFormChangeManualTrigger,
-  SpeciesFormChangeRevertWeatherFormTrigger,
-  SpeciesFormChangeWeatherTrigger,
-} from "./pokemon-forms";
+import { SpeciesFormChangeManualTrigger } from "./pokemon-forms";
 import { AbAttr } from "./abilities/ab-attr";
 import type { PostBattleInitAbAttr } from "./abilities/post-battle-init-ab-attr";
 import { PostDamageAbAttr } from "./abilities/post-damage-ab-attr";
@@ -183,50 +179,6 @@ export class Ability implements Localizable {
 }
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
-
-/**
- * Triggers weather-based form change when summoned into an active weather.
- * Used by Forecast and Flower Gift.
- * @extends PostSummonAbAttr
- */
-export class PostSummonFormChangeByWeatherAbAttr extends PostSummonAbAttr {
-  private ability: Abilities;
-
-  constructor(ability: Abilities) {
-    super(false);
-
-    this.ability = ability;
-  }
-
-  /**
-   * Calls the {@linkcode BattleScene.triggerPokemonFormChange | triggerPokemonFormChange} for both
-   * {@linkcode SpeciesFormChange.SpeciesFormChangeWeatherTrigger | SpeciesFormChangeWeatherTrigger} and
-   * {@linkcode SpeciesFormChange.SpeciesFormChangeWeatherTrigger | SpeciesFormChangeRevertWeatherFormTrigger} if it
-   * is the specific Pokemon and ability
-   * @param {Pokemon} pokemon the Pokemon with this ability
-   * @param passive n/a
-   * @param _args n/a
-   * @returns whether the form change was triggered
-   */
-  override applyPostSummon(pokemon: Pokemon, passive: boolean, simulated: boolean, _args: any[]): boolean {
-    const isCastformWithForecast =
-      pokemon.species.speciesId === Species.CASTFORM && this.ability === Abilities.FORECAST;
-    const isCherrimWithFlowerGift =
-      pokemon.species.speciesId === Species.CHERRIM && this.ability === Abilities.FLOWER_GIFT;
-
-    if (isCastformWithForecast || isCherrimWithFlowerGift) {
-      if (simulated) {
-        return simulated;
-      }
-
-      globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeWeatherTrigger);
-      globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeRevertWeatherFormTrigger);
-      queueShowAbility(pokemon, passive);
-      return true;
-    }
-    return false;
-  }
-}
 
 /**
  * Attribute implementing the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Commander_(Ability) | Commander}.
