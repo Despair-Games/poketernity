@@ -41,7 +41,6 @@ import {
   DownloadAbAttr,
   FetchBallAbAttr,
   FieldMoveTypePowerBoostAbAttr,
-  FieldMultiplyStatAbAttr,
   FlinchStatStageChangeAbAttr,
   ForceSwitchOutImmunityAbAttr,
   ForewarnAbAttr,
@@ -145,6 +144,7 @@ import {
   VariableMovePowerBoostAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { FieldMultiplyStatAbAttr } from "./abilities/field-multiply-stat-ab-attr";
 import { FieldPreventExplosiveMovesAbAttr } from "./abilities/field-prevent-explosive-moves-ab-attr";
 import { PostStatStageChangeStatStageChangeAbAttr } from "./abilities/post-stat-stage-change-stat-stage-change-ab-attr";
 import { PostDefendWeatherChangeAbAttr } from "./abilities/post-defend-weather-change-ab-attr";
