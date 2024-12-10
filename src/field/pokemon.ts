@@ -166,7 +166,6 @@ import {
   BattlerTagImmunityAbAttr,
   applyCheckTrappedAbAttrs,
   CheckTrappedAbAttr,
-  PostSetStatusAbAttr,
   applyPostSetStatusAbAttrs,
   InfiltratorAbAttr,
   applyPostDamageAbAttrs,
@@ -174,6 +173,7 @@ import {
   applyPostItemLostAbAttrs,
   PostItemLostAbAttr,
 } from "#app/data/ability";
+import { PostSetStatusAbAttr } from "#app/data/abilities/post-set-status-ab-attr";
 import { StatMultiplierAbAttr } from "#app/data/abilities/stat-multiplier-ab-attr";
 import { DamageBoostAbAttr } from "#app/data/abilities/damage-boost-ab-attr";
 import { AddSecondStrikeAbAttr } from "#app/data/abilities/add-second-strike-ab-attr";

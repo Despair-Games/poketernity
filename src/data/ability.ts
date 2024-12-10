@@ -72,6 +72,7 @@ import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition"
 import type { PokemonDefendCondition } from "../@types/PokemonDefendCondition";
 import type { StatMultiplierAbAttr } from "./abilities/stat-multiplier-ab-attr";
 import { PostAttackAbAttr } from "./abilities/post-attack-ab-attr";
+import { PostSetStatusAbAttr } from "./abilities/post-set-status-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -180,32 +181,6 @@ export class Ability implements Localizable {
 }
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
-
-/**
- * Base class for defining all {@linkcode Ability} Attributes after a status effect has been set.
- * @see {@linkcode applyPostSetStatus()}.
- */
-export class PostSetStatusAbAttr extends AbAttr {
-  /**
-   * Does nothing after a status condition is set.
-   * @param _pokemon {@linkcode Pokemon} that status condition was set on.
-   * @param _sourcePokemon {@linkcode Pokemon} that that set the status condition. Is `null` if status was not set by a Pokemon.
-   * @param _passive Whether this ability is a passive.
-   * @param _effect {@linkcode StatusEffect} that was set.
-   * @param _args Set of unique arguments needed by this attribute.
-   * @returns `true` if application of the ability succeeds.
-   */
-  applyPostSetStatus(
-    _pokemon: Pokemon,
-    _sourcePokemon: Pokemon | null = null,
-    _passive: boolean,
-    _effect: StatusEffect,
-    _simulated: boolean,
-    _args: any[],
-  ): boolean {
-    return false;
-  }
-}
 
 /**
  * If another Pokemon burns, paralyzes, poisons, or badly poisons this Pokemon,
