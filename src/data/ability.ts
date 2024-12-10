@@ -68,6 +68,7 @@ import { AbAttr } from "./abilities/ab-attr";
 import type { PostBattleInitAbAttr } from "./abilities/post-battle-init-ab-attr";
 import { PostDamageAbAttr } from "./abilities/post-damage-ab-attr";
 import { PostSummonAbAttr } from "./abilities/post-summon-ab-attr";
+import { PreAttackAbAttr } from "./abilities/pre-attack-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -1415,19 +1416,6 @@ export class PostStatStageChangeStatStageChangeAbAttr extends PostStatStageChang
       return true;
     }
 
-    return false;
-  }
-}
-
-export class PreAttackAbAttr extends AbAttr {
-  applyPreAttack(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    _defender: Pokemon | null,
-    _move: Move,
-    _args: any[],
-  ): boolean {
     return false;
   }
 }
