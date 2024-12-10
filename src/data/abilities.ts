@@ -81,7 +81,6 @@ import {
   PostDefendAbilityGiveAbAttr,
   PostDefendAbilitySwapAbAttr,
   PostDefendContactDamageAbAttr,
-  PostDefendCritStatStageChangeAbAttr,
   PostDefendMoveDisableAbAttr,
   PostDefendPerishSongAbAttr,
   PostDefendStealHeldItemAbAttr,
@@ -154,6 +153,7 @@ import {
   VariableMovePowerBoostAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { PostDefendCritStatStageChangeAbAttr } from "./abilities/post-defend-crit-stat-stage-change-ab-attr";
 import { PostDefendContactApplyTagChanceAbAttr } from "./abilities/post-defend-contact-apply-tag-chance-ab-attr";
 import { EffectSporeAbAttr } from "./abilities/effect-spore-ab-attr";
 import { PostDefendContactApplyStatusEffectAbAttr } from "./abilities/post-defend-contact-apply-status-effect-ab-attr";

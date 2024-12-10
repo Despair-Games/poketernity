@@ -70,6 +70,7 @@ import { ReceivedMoveDamageMultiplierAbAttr } from "./abilities/received-move-da
 import { PostDefendAbAttr } from "./abilities/post-defend-ab-attr";
 import { PostStatStageChangeAbAttr } from "./abilities/post-stat-stage-change-ab-attr";
 import { IgnoreMoveEffectsAbAttr } from "./abilities/ignore-move-effect-ab-attr";
+import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -178,50 +179,11 @@ export class Ability implements Localizable {
 }
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
-type AbAttrCondition = (pokemon: Pokemon) => boolean;
 
 // TODO: Can this be improved?
 type PokemonAttackCondition = (user: Pokemon | null, target: Pokemon | null, move: Move) => boolean;
 export type PokemonDefendCondition = (target: Pokemon, user: Pokemon, move: Move) => boolean;
 type PokemonStatStageChangeCondition = (target: Pokemon, statsChanged: BattleStat[], stages: number) => boolean;
-
-export class PostDefendCritStatStageChangeAbAttr extends PostDefendAbAttr {
-  private stat: BattleStat;
-  private stages: number;
-
-  constructor(stat: BattleStat, stages: number) {
-    super();
-
-    this.stat = stat;
-    this.stages = stages;
-  }
-
-  override applyPostDefend(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
-    _hitResult: HitResult,
-    _args: any[],
-  ): boolean {
-    if (move.hitsSubstitute(attacker, pokemon)) {
-      return false;
-    }
-
-    if (!simulated) {
-      globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [this.stat], this.stages));
-    }
-
-    return true;
-  }
-
-  override getCondition(): AbAttrCondition {
-    return (pokemon: Pokemon) =>
-      pokemon.turnData.attacksReceived.length !== 0
-      && pokemon.turnData.attacksReceived[pokemon.turnData.attacksReceived.length - 1].critical;
-  }
-}
 
 export class PostDefendContactDamageAbAttr extends PostDefendAbAttr {
   private damageRatio: integer;
