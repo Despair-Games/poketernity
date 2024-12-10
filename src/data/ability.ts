@@ -70,6 +70,7 @@ import type { PostVictoryAbAttr } from "./abilities/post-victory-ab-attr";
 import type { PostKnockOutAbAttr } from "./abilities/post-knock-out-ab-attr";
 import { PostSummonStatStageChangeAbAttr } from "./abilities/post-summon-stat-stage-change-ab-attr";
 import type { PreSwitchOutAbAttr } from "./abilities/pre-switch-out-ab-attr";
+import { PreStatStageChangeAbAttr } from "./abilities/pre-stat-stage-change-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -178,19 +179,6 @@ export class Ability implements Localizable {
 }
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
-
-export class PreStatStageChangeAbAttr extends AbAttr {
-  applyPreStatStageChange(
-    _pokemon: Pokemon | null,
-    _passive: boolean,
-    _simulated: boolean,
-    _stat: BattleStat,
-    _cancelled: BooleanHolder,
-    _args: any[],
-  ): boolean {
-    return false;
-  }
-}
 
 /**
  * Protect one or all {@linkcode BattleStat} from reductions caused by other Pokémon's moves and Abilities
