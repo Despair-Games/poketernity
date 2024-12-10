@@ -3182,9 +3182,7 @@ export default class BattleScene extends SceneBase {
     return new Promise((resolve) => {
       Promise.allSettled(
         party.map((p) => {
-          if (p) {
-            p.calculateStats();
-          }
+          p.calculateStats();
           return p.updateInfo(instant);
         }),
       ).then(() => resolve());
