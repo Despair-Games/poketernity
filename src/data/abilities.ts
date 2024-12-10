@@ -21,7 +21,6 @@ import {
   AllyMoveCategoryPowerBoostAbAttr,
   AlwaysHitAbAttr,
   ArenaTrapAbAttr,
-  AttackTypeImmunityAbAttr,
   BattlerTagImmunityAbAttr,
   BlockCritAbAttr,
   BlockNonDirectDamageAbAttr,
@@ -201,6 +200,7 @@ import { StabBoostAbAttr } from "./abilities/stab-boost-ab-attr";
 import { ReceivedMoveDamageMultiplierAbAttr } from "./abilities/received-move-damage-multiplier-ab-attr";
 import { AlliedFieldDamageReductionAbAttr } from "./abilities/allied-field-damage-reduction-ab-attr";
 import { ReceivedTypeDamageMultiplierAbAttr } from "./abilities/received-type-damage-multiplier-ab-attr";
+import { AttackTypeImmunityAbAttr } from "./abilities/attack-type-immunity-ab-attr";
 
 type AbAttrCondition = (pokemon: Pokemon) => boolean;
 
