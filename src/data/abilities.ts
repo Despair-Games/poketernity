@@ -23,7 +23,6 @@ import {
   BlockWeatherDamageAttr,
   BypassBurnDamageReductionAbAttr,
   BypassSpeedChanceAbAttr,
-  ChangeMovePriorityAbAttr,
   DoubleBerryEffectAbAttr,
   FetchBallAbAttr,
   FlinchStatStageChangeAbAttr,
@@ -83,6 +82,7 @@ import {
   UnswappableAbilityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { ChangeMovePriorityAbAttr } from "./abilities/change-move-priority-ab-attr";
 import { BlockOneHitKOAbAttr } from "./abilities/block-one-hit-ko-ab-attr";
 import { BlockStatusDamageAbAttr } from "./abilities/block-status-damage-ab-attr";
 import { BlockNonDirectDamageAbAttr } from "./abilities/block-non-direct-damage-ab-attr";
