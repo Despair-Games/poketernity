@@ -64,7 +64,6 @@ import {
   PostFaintHPDamageAbAttr,
   PostFaintUnsuppressedWeatherFormChangeAbAttr,
   PostItemLostApplyBattlerTagAbAttr,
-  PostSummonClearAllyStatStagesAbAttr,
   PostSummonCopyAbilityAbAttr,
   PostSummonCopyAllyStatsAbAttr,
   PostSummonFormChangeAbAttr,
@@ -202,6 +201,7 @@ import { PostDefendStealHeldItemAbAttr } from "./abilities/post-defend-steal-hel
 import { CopyFaintedAllyAbilityAbAttr } from "./abilities/copy-fainted-ally-ability-ab-attr";
 import { IntimidateImmunityAbAttr } from "./abilities/intimidate-immunity-ab-attr";
 import { PostSummonAllyHealAbAttr } from "./abilities/post-summon-ally-heal-ab-attr";
+import { PostSummonClearAllyStatStagesAbAttr } from "./abilities/post-summon-clear-ally-stat-stages-ab-attr";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {
