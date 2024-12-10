@@ -30,7 +30,7 @@ export class TurnStartPhase extends FieldPhase {
   /**
    * This orders the active Pokemon on the field by speed into an BattlerIndex array and returns that array.
    * It also checks for Trick Room and reverses the array if it is present.
-   * @returns {@linkcode BattlerIndex[]} the battle indices of all pokemon on the field ordered by speed
+   * @returns the battle indices of all pokemon on the field ordered by speed
    */
   getSpeedOrder(): BattlerIndex[] {
     const playerField = globalScene.getPlayerField().filter((p) => p.isActive()) as Pokemon[];
@@ -66,7 +66,7 @@ export class TurnStartPhase extends FieldPhase {
   /**
    * This takes the result of getSpeedOrder and applies priority / bypass speed attributes to it.
    * This also considers the priority levels of various commands and changes the result of getSpeedOrder based on such.
-   * @returns {@linkcode BattlerIndex[]} the final sequence of commands for this turn
+   * @returns the final sequence of commands for this turn
    */
   getCommandOrder(): BattlerIndex[] {
     let moveOrder = this.getSpeedOrder();
