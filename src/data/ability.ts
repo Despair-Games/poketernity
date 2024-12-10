@@ -189,32 +189,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
   };
 }
 
-/**
- * Ability attribute used for abilites that change the ability owner's weight
- * Used for Heavy Metal (doubling weight) and Light Metal (halving weight)
- */
-export class WeightMultiplierAbAttr extends AbAttr {
-  private multiplier: integer;
-
-  constructor(multiplier: integer) {
-    super();
-
-    this.multiplier = multiplier;
-  }
-
-  override apply(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    _cancelled: BooleanHolder,
-    args: any[],
-  ): boolean {
-    (args[0] as NumberHolder).value *= this.multiplier;
-
-    return true;
-  }
-}
-
 export class SyncEncounterNatureAbAttr extends AbAttr {
   constructor() {
     super(false);

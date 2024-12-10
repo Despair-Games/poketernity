@@ -36,8 +36,8 @@ import {
   UncopiableAbilityAbAttr,
   UnsuppressableAbilityAbAttr,
   UnswappableAbilityAbAttr,
-  WeightMultiplierAbAttr,
 } from "./ability";
+import { WeightMultiplierAbAttr } from "./abilities/weight-multiplier-ab-attr";
 import { ReduceBerryUseThresholdAbAttr } from "./abilities/reduce-berry-use-threshold-ab-attr";
 import { ForceSwitchOutImmunityAbAttr } from "./abilities/force-switch-out-immunity-ab-attr";
 import { IncreasePpAbAttr } from "./abilities/increase-pp-ab-attr";
