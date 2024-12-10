@@ -48,7 +48,6 @@ import {
   PostFaintUnsuppressedWeatherFormChangeAbAttr,
   PostItemLostApplyBattlerTagAbAttr,
   PostSummonStatStageChangeOnArenaAbAttr,
-  PostTurnHurtIfSleepingAbAttr,
   PreventBerryUseAbAttr,
   PreventBypassSpeedChanceAbAttr,
   RedirectTypeMoveAbAttr,
@@ -202,6 +201,7 @@ import { PostWeatherLapseHealAbAttr } from "./abilities/post-weather-lapse-heal-
 import { PostWeatherLapseDamageAbAttr } from "./abilities/post-weather-lapse-damage-ab-attr";
 import { PostTurnStatusHealAbAttr } from "./abilities/post-turn-status-heal-ab-attr";
 import { PostTurnLootAbAttr } from "./abilities/post-turn-loot-ab-attr";
+import { PostTurnHurtIfSleepingAbAttr } from "./abilities/post-turn-hurt-if-sleeping-ab-attr";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {
