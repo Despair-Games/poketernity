@@ -122,8 +122,8 @@ export function randSeedWeightedItem<T>(items: T[]): T {
 
 /**
  * Shuffle a list using the seeded rng. Utilises the Fisher-Yates algorithm.
- * @param {Array} items An array of items.
- * @returns {Array} A new shuffled array of items.
+ * @param items An array of items.
+ * @returns A new shuffled array of items.
  */
 export function randSeedShuffle<T>(items: T[]): T[] {
   if (items.length <= 1) {
@@ -406,8 +406,8 @@ export function rgbToHsv(r: integer, g: integer, b: integer) {
 
 /**
  * Compare color difference in RGB
- * @param {Array} rgb1 First RGB color in array
- * @param {Array} rgb2 Second RGB color in array
+ * @param rgb1 First RGB color in array
+ * @param rgb2 Second RGB color in array
  */
 export function deltaRgb(rgb1: integer[], rgb2: integer[]): integer {
   const [r1, g1, b1] = rgb1;

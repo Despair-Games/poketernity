@@ -67,7 +67,7 @@ export abstract class ArenaTag {
   /**
    * When given a arena tag or json representing one, load the data for it.
    * This is meant to be inherited from by any arena tag with custom attributes
-   * @param {ArenaTag | any} source An arena tag
+   * @param source - The {@linkcode ArenaTag} source to load from
    */
   loadTag(source: ArenaTag | any): void {
     this.turnCount = source.turnCount;
@@ -1229,7 +1229,7 @@ class ImprisonTag extends ArenaTrapTag {
 
   /**
    * This applies the effects of Imprison to any opposing Pokemon that switch into the field while the source Pokemon is still active
-   * @param {Pokemon} pokemon the Pokemon Imprison is applied to
+   * @param pokemon - the {@linkcode Pokemon} Imprison is applied to
    * @returns `true`
    */
   override activateTrap(pokemon: Pokemon): boolean {
@@ -1442,8 +1442,8 @@ export function getArenaTag(
 
 /**
  * When given a battler tag or json representing one, creates an actual ArenaTag object with the same data.
- * @param {ArenaTag | any} source An arena tag
- * @return {ArenaTag} The valid arena tag
+ * @param source - The source {@linkcode ArenaTag}
+ * @returns The valid {@linkcode ArenaTag}
  */
 export function loadArenaTag(source: ArenaTag | any): ArenaTag {
   const tag =
