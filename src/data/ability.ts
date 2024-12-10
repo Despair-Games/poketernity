@@ -189,29 +189,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
   };
 }
 
-export class ReduceBerryUseThresholdAbAttr extends AbAttr {
-  constructor() {
-    super();
-  }
-
-  override apply(
-    pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    _cancelled: BooleanHolder,
-    args: any[],
-  ): boolean {
-    const hpRatio = pokemon.getHpRatio();
-
-    if (args[0].value < hpRatio) {
-      args[0].value *= 2;
-      return args[0].value >= hpRatio;
-    }
-
-    return false;
-  }
-}
-
 /**
  * Ability attribute used for abilites that change the ability owner's weight
  * Used for Heavy Metal (doubling weight) and Light Metal (halving weight)

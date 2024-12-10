@@ -30,7 +30,6 @@ import {
   PostDamageForceSwitchAbAttr,
   PostSummonStatStageChangeOnArenaAbAttr,
   PreventBypassSpeedChanceAbAttr,
-  ReduceBerryUseThresholdAbAttr,
   SuppressFieldAbilitiesAbAttr,
   SyncEncounterNatureAbAttr,
   TerrainEventTypeChangeAbAttr,
@@ -39,6 +38,7 @@ import {
   UnswappableAbilityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { ReduceBerryUseThresholdAbAttr } from "./abilities/reduce-berry-use-threshold-ab-attr";
 import { ForceSwitchOutImmunityAbAttr } from "./abilities/force-switch-out-immunity-ab-attr";
 import { IncreasePpAbAttr } from "./abilities/increase-pp-ab-attr";
 import { FlinchStatStageChangeAbAttr } from "./abilities/flinch-stat-stage-change-ab-attr";
