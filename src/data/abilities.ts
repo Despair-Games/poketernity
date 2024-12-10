@@ -65,7 +65,6 @@ import {
   MoodyAbAttr,
   MoveAbilityBypassAbAttr,
   MoveEffectChanceMultiplierAbAttr,
-  MoveImmunityStatStageChangeAbAttr,
   MovePowerBoostAbAttr,
   MoveTypeChangeAbAttr,
   MoveTypePowerBoostAbAttr,
@@ -202,6 +201,7 @@ import { FullHpResistTypeAbAttr } from "./abilities/full-hp-resist-type-ab-attr"
 import { FieldPriorityMoveImmunityAbAttr } from "./abilities/field-priority-move-immunity-ab-attr";
 import { MoveImmunityAbAttr } from "./abilities/move-immunity-ab-attr";
 import { WonderSkinAbAttr } from "./abilities/wonder-skin-ab-attr";
+import { MoveImmunityStatStageChangeAbAttr } from "./abilities/move-immunity-stat-stage-change-ab-attr";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {

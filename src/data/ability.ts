@@ -71,7 +71,6 @@ import { PreDefendAbAttr } from "./abilities/pre-defend-ab-attr";
 import { ReceivedMoveDamageMultiplierAbAttr } from "./abilities/received-move-damage-multiplier-ab-attr";
 import { PostDefendAbAttr } from "./abilities/post-defend-ab-attr";
 import { PostStatStageChangeAbAttr } from "./abilities/post-stat-stage-change-ab-attr";
-import { MoveImmunityAbAttr } from "./abilities/move-immunity-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -187,35 +186,6 @@ type PokemonAttackCondition = (user: Pokemon | null, target: Pokemon | null, mov
 type PokemonDefendCondition = (target: Pokemon, user: Pokemon, move: Move) => boolean;
 type PokemonStatStageChangeCondition = (target: Pokemon, statsChanged: BattleStat[], stages: number) => boolean;
 
-type PreDefendAbAttrCondition = (pokemon: Pokemon, attacker: Pokemon, move: Move) => boolean;
-
-export class MoveImmunityStatStageChangeAbAttr extends MoveImmunityAbAttr {
-  private stat: BattleStat;
-  private stages: number;
-
-  constructor(immuneCondition: PreDefendAbAttrCondition, stat: BattleStat, stages: number) {
-    super(immuneCondition);
-    this.stat = stat;
-    this.stages = stages;
-  }
-
-  override applyPreDefend(
-    pokemon: Pokemon,
-    passive: boolean,
-    simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
-    cancelled: BooleanHolder,
-    args: any[],
-  ): boolean {
-    const ret = super.applyPreDefend(pokemon, passive, simulated, attacker, move, cancelled, args);
-    if (ret && !simulated) {
-      globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [this.stat], this.stages));
-    }
-
-    return ret;
-  }
-}
 /**
  * Class for abilities that make drain moves deal damage to user instead of healing them.
  * @extends PostDefendAbAttr
