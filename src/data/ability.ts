@@ -60,7 +60,7 @@ import { AbAttr } from "./abilities/ab-attr";
 import type { PostBattleInitAbAttr } from "./abilities/post-battle-init-ab-attr";
 import { PostDamageAbAttr } from "./abilities/post-damage-ab-attr";
 import { PostSummonAbAttr } from "./abilities/post-summon-ab-attr";
-import { PreAttackAbAttr } from "./abilities/pre-attack-ab-attr";
+import type { PreAttackAbAttr } from "./abilities/pre-attack-ab-attr";
 import { type PreDefendAbAttr } from "./abilities/pre-defend-ab-attr";
 import { ReceivedMoveDamageMultiplierAbAttr } from "./abilities/received-move-damage-multiplier-ab-attr";
 import { PostDefendAbAttr } from "./abilities/post-defend-ab-attr";
@@ -180,49 +180,6 @@ export class Ability implements Localizable {
 }
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
-
-/**
- * Class for abilities that boost the damage of moves
- * For abilities that boost the base power of moves, see VariableMovePowerAbAttr
- * @param damageMultiplier the amount to multiply the damage by
- * @param condition the condition for this ability to be applied
- */
-export class DamageBoostAbAttr extends PreAttackAbAttr {
-  private damageMultiplier: number;
-  private condition: PokemonAttackCondition;
-
-  constructor(damageMultiplier: number, condition: PokemonAttackCondition) {
-    super(true);
-    this.damageMultiplier = damageMultiplier;
-    this.condition = condition;
-  }
-
-  /**
-   *
-   * @param pokemon the attacker pokemon
-   * @param _passive N/A
-   * @param defender the target pokemon
-   * @param move the move used by the attacker pokemon
-   * @param args Utils.NumberHolder as damage
-   * @returns true if the function succeeds
-   */
-  override applyPreAttack(
-    pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    defender: Pokemon,
-    move: Move,
-    args: any[],
-  ): boolean {
-    if (this.condition(pokemon, defender, move)) {
-      const power = args[0] as NumberHolder;
-      power.value = Math.floor(power.value * this.damageMultiplier);
-      return true;
-    }
-
-    return false;
-  }
-}
 
 export class MovePowerBoostAbAttr extends VariableMovePowerAbAttr {
   private condition: PokemonAttackCondition;

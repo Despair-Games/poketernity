@@ -160,7 +160,6 @@ import {
   NoFusionAbilityAbAttr,
   MultCritAbAttr,
   IgnoreTypeImmunityAbAttr,
-  DamageBoostAbAttr,
   ConditionalCritAbAttr,
   applyFieldStatMultiplierAbAttrs,
   UserFieldStatusEffectImmunityAbAttr,
@@ -176,6 +175,7 @@ import {
   applyPostItemLostAbAttrs,
   PostItemLostAbAttr,
 } from "#app/data/ability";
+import { DamageBoostAbAttr } from "#app/data/abilities/damage-boost-ab-attr";
 import { AddSecondStrikeAbAttr } from "#app/data/abilities/add-second-strike-ab-attr";
 import { MoveTypeChangeAbAttr } from "#app/data/abilities/move-type-change-ab-attr";
 import { FieldMultiplyStatAbAttr } from "#app/data/abilities/field-multiply-stat-ab-attr";

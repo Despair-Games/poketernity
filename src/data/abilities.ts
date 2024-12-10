@@ -35,7 +35,6 @@ import {
   ConditionalCritAbAttr,
   ConfusionOnStatusEffectAbAttr,
   CopyFaintedAllyAbilityAbAttr,
-  DamageBoostAbAttr,
   DoubleBerryEffectAbAttr,
   DownloadAbAttr,
   FetchBallAbAttr,
@@ -141,6 +140,7 @@ import {
   VariableMovePowerBoostAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { DamageBoostAbAttr } from "./abilities/damage-boost-ab-attr";
 import { AddSecondStrikeAbAttr } from "./abilities/add-second-strike-ab-attr";
 import { MoveTypeChangeAbAttr } from "./abilities/move-type-change-ab-attr";
 import { FieldMultiplyStatAbAttr } from "./abilities/field-multiply-stat-ab-attr";
