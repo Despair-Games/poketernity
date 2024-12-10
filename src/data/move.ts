@@ -54,7 +54,6 @@ import {
   InfiltratorAbAttr,
   MaxMultiHitAbAttr,
   MoveAbilityBypassAbAttr,
-  MoveEffectChanceMultiplierAbAttr,
   MoveTypeChangeAbAttr,
   PostDamageForceSwitchAbAttr,
   PostItemLostAbAttr,
@@ -111,6 +110,7 @@ import { BlockItemTheftAbAttr } from "./abilities/block-item-theft-ab-attr";
 import { BlockRecoilDamageAttr } from "./abilities/block-recoil-damage-ab-attr";
 import { WonderSkinAbAttr } from "./abilities/wonder-skin-ab-attr";
 import { ReverseDrainAbAttr } from "./abilities/reverse-drain-ab-attr";
+import { MoveEffectChanceMultiplierAbAttr } from "./abilities/move-effect-chance-multiplier-ab-attr";
 
 export enum MoveCategory {
   PHYSICAL,
