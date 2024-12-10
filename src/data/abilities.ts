@@ -83,7 +83,6 @@ import {
   PostAttackApplyStatusEffectAbAttr,
   PostAttackContactApplyStatusEffectAbAttr,
   PostAttackStealHeldItemAbAttr,
-  PostBattleInitFormChangeAbAttr,
   PostBattleInitStatStageChangeAbAttr,
   PostBattleLootAbAttr,
   PostBiomeChangeTerrainChangeAbAttr,
@@ -201,6 +200,7 @@ import { IgnoreTypeStatusEffectImmunityAbAttr } from "./abilities/ignore-type-st
 import { BlockItemTheftAbAttr } from "./abilities/block-item-theft-ab-attr";
 import { BlockRecoilDamageAttr } from "./abilities/block-recoil-damage-ab-attr";
 import { DoubleBattleChanceAbAttr } from "./abilities/double-battle-chance-ab-attr";
+import { PostBattleInitFormChangeAbAttr } from "./abilities/post-battle-init-form-change-ab-attr";
 
 type AbAttrCondition = (pokemon: Pokemon) => boolean;
 

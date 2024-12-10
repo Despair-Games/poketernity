@@ -181,25 +181,6 @@ type PokemonAttackCondition = (user: Pokemon | null, target: Pokemon | null, mov
 type PokemonDefendCondition = (target: Pokemon, user: Pokemon, move: Move) => boolean;
 type PokemonStatStageChangeCondition = (target: Pokemon, statsChanged: BattleStat[], stages: number) => boolean;
 
-export class PostBattleInitFormChangeAbAttr extends PostBattleInitAbAttr {
-  private formFunc: (p: Pokemon) => integer;
-
-  constructor(formFunc: (p: Pokemon) => integer) {
-    super(true);
-
-    this.formFunc = formFunc;
-  }
-
-  override applyPostBattleInit(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
-    const formIndex = this.formFunc(pokemon);
-    if (formIndex !== pokemon.formIndex && !simulated) {
-      return globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger, false);
-    }
-
-    return false;
-  }
-}
-
 export class PostBattleInitStatStageChangeAbAttr extends PostBattleInitAbAttr {
   private stats: BattleStat[];
   private stages: number;
