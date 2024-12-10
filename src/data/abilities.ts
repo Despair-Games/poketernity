@@ -88,7 +88,6 @@ import {
   PostDefendMoveDisableAbAttr,
   PostDefendPerishSongAbAttr,
   PostDefendStealHeldItemAbAttr,
-  PostDefendTerrainChangeAbAttr,
   PostDefendWeatherChangeAbAttr,
   PostFaintClearWeatherAbAttr,
   PostFaintContactDamageAbAttr,
@@ -158,6 +157,7 @@ import {
   VariableMovePowerBoostAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { PostDefendTerrainChangeAbAttr } from "./abilities/post-defend-terrain-change-ab-attr";
 import { PostDefendApplyArenaTrapTagAbAttr } from "./abilities/post-defend-apply-arena-trap-tag-ab-attr";
 import { PostDefendHpGatedStatStageChangeAbAttr } from "./abilities/post-defend-hp-gated-stat-tage-change-ab-attr";
 import { PostDefendStatStageChangeAbAttr } from "./abilities/post-defend-stat-stage-change-ab-attr";

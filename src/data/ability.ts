@@ -185,36 +185,6 @@ type PokemonAttackCondition = (user: Pokemon | null, target: Pokemon | null, mov
 export type PokemonDefendCondition = (target: Pokemon, user: Pokemon, move: Move) => boolean;
 type PokemonStatStageChangeCondition = (target: Pokemon, statsChanged: BattleStat[], stages: number) => boolean;
 
-export class PostDefendTerrainChangeAbAttr extends PostDefendAbAttr {
-  private terrainType: TerrainType;
-
-  constructor(terrainType: TerrainType) {
-    super();
-
-    this.terrainType = terrainType;
-  }
-
-  override applyPostDefend(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
-    hitResult: HitResult,
-    _args: any[],
-  ): boolean {
-    if (hitResult < HitResult.NO_EFFECT && !move.hitsSubstitute(attacker, pokemon)) {
-      if (simulated) {
-        return globalScene.arena.terrain?.terrainType !== (this.terrainType || undefined);
-      } else {
-        return globalScene.arena.trySetTerrain(this.terrainType, true);
-      }
-    }
-
-    return false;
-  }
-}
-
 export class PostDefendContactApplyStatusEffectAbAttr extends PostDefendAbAttr {
   public chance: integer;
   private effects: StatusEffect[];
