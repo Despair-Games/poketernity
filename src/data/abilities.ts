@@ -21,7 +21,6 @@ import {
   ArenaTrapAbAttr,
   BlockOneHitKOAbAttr,
   BlockRedirectAbAttr,
-  BlockStatusDamageAbAttr,
   BlockWeatherDamageAttr,
   BypassBurnDamageReductionAbAttr,
   BypassSpeedChanceAbAttr,
@@ -85,6 +84,7 @@ import {
   UnswappableAbilityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { BlockStatusDamageAbAttr } from "./abilities/block-status-damage-ab-attr";
 import { BlockNonDirectDamageAbAttr } from "./abilities/block-non-direct-damage-ab-attr";
 import { ConditionalCritAbAttr } from "./abilities/conditional-crit-ab-attr";
 import { MultCritAbAttr } from "./abilities/mult-crit-ab-attr";

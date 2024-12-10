@@ -1,11 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import type { BattlerIndex } from "#app/battle";
-import {
-  applyAbAttrs,
-  applyPostDamageAbAttrs,
-  BlockStatusDamageAbAttr,
-  ReduceBurnDamageAbAttr,
-} from "#app/data/ability";
+import { applyAbAttrs, applyPostDamageAbAttrs, ReduceBurnDamageAbAttr } from "#app/data/ability";
+import { BlockStatusDamageAbAttr } from "#app/data/abilities/block-status-damage-ab-attr";
 import { BlockNonDirectDamageAbAttr } from "#app/data/abilities/block-non-direct-damage-ab-attr";
 import { CommonBattleAnim, CommonAnim } from "#app/data/battle-anims";
 import { getStatusEffectActivationText } from "#app/data/status-effect";
