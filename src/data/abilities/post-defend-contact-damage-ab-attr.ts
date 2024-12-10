@@ -3,7 +3,7 @@ import { HitResult } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { toDmgValue } from "#app/utils";
 import i18next from "i18next";
-import { BlockNonDirectDamageAbAttr } from "../ability";
+import { BlockNonDirectDamageAbAttr } from "./block-non-direct-damage-ab-attr";
 import type Move from "../move";
 import { MoveFlags } from "../move";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";

@@ -3,10 +3,10 @@ import type { BattlerIndex } from "#app/battle";
 import {
   applyAbAttrs,
   applyPostDamageAbAttrs,
-  BlockNonDirectDamageAbAttr,
   BlockStatusDamageAbAttr,
   ReduceBurnDamageAbAttr,
 } from "#app/data/ability";
+import { BlockNonDirectDamageAbAttr } from "#app/data/abilities/block-non-direct-damage-ab-attr";
 import { CommonBattleAnim, CommonAnim } from "#app/data/battle-anims";
 import { getStatusEffectActivationText } from "#app/data/status-effect";
 import { StatusEffect } from "#app/enums/status-effect";

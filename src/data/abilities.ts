@@ -19,7 +19,6 @@ import {
   allAbilities,
   AlwaysHitAbAttr,
   ArenaTrapAbAttr,
-  BlockNonDirectDamageAbAttr,
   BlockOneHitKOAbAttr,
   BlockRedirectAbAttr,
   BlockStatusDamageAbAttr,
@@ -86,6 +85,7 @@ import {
   UnswappableAbilityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { BlockNonDirectDamageAbAttr } from "./abilities/block-non-direct-damage-ab-attr";
 import { ConditionalCritAbAttr } from "./abilities/conditional-crit-ab-attr";
 import { MultCritAbAttr } from "./abilities/mult-crit-ab-attr";
 import { BonusCritAbAttr } from "./abilities/bonus-crit-ab-attr";

@@ -4,10 +4,10 @@ import {
   SuppressWeatherEffectAbAttr,
   PreWeatherDamageAbAttr,
   applyAbAttrs,
-  BlockNonDirectDamageAbAttr,
   applyPostWeatherLapseAbAttrs,
   PostWeatherLapseAbAttr,
 } from "#app/data/ability";
+import { BlockNonDirectDamageAbAttr } from "#app/data/abilities/block-non-direct-damage-ab-attr";
 import { CommonAnim } from "#app/data/battle-anims";
 import type { Weather } from "#app/data/weather";
 import { getWeatherDamageMessage, getWeatherLapseMessage } from "#app/data/weather";
