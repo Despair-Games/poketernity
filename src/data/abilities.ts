@@ -70,7 +70,6 @@ import {
   PostSummonCopyAllyStatsAbAttr,
   PostSummonFormChangeAbAttr,
   PostSummonFormChangeByWeatherAbAttr,
-  PostSummonStatStageChangeAbAttr,
   PostSummonStatStageChangeOnArenaAbAttr,
   PostSummonTerrainChangeAbAttr,
   PostSummonTransformAbAttr,
@@ -114,6 +113,7 @@ import {
   UserFieldStatusEffectImmunityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { PostSummonStatStageChangeAbAttr } from "./abilities/post-summon-stat-stage-change-ab-attr";
 import { PostSummonAddBattlerTagAbAttr } from "./abilities/post-summon-add-battler-tag-ab-attr";
 import { PostSummonUnnamedMessageAbAttr } from "./abilities/post-summon-unnamed-message-ab-attr";
 import { PostSummonMessageAbAttr } from "./abilities/post-summon-message-ab-attr";
