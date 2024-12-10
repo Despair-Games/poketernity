@@ -19,7 +19,6 @@ import {
   allAbilities,
   AlwaysHitAbAttr,
   BypassSpeedChanceAbAttr,
-  ForceSwitchOutImmunityAbAttr,
   FormBlockDamageAbAttr,
   IgnoreProtectOnContactAbAttr,
   IgnoreTypeImmunityAbAttr,
@@ -40,6 +39,7 @@ import {
   UnswappableAbilityAbAttr,
   WeightMultiplierAbAttr,
 } from "./ability";
+import { ForceSwitchOutImmunityAbAttr } from "./abilities/force-switch-out-immunity-ab-attr";
 import { IncreasePpAbAttr } from "./abilities/increase-pp-ab-attr";
 import { FlinchStatStageChangeAbAttr } from "./abilities/flinch-stat-stage-change-ab-attr";
 import { ReduceStatusEffectDurationAbAttr } from "./abilities/reduce-status-effect-duration-ab-attr";

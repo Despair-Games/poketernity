@@ -66,6 +66,7 @@ import type { PostItemLostAbAttr } from "./abilities/post-item-lost-ab-attr";
 import type { CheckTrappedAbAttr } from "./abilities/check-trapped-ab-attr";
 import { PostBattleAbAttr } from "./abilities/post-battle-ab-attr";
 import type { PostFaintAbAttr } from "./abilities/post-faint-ab-attr";
+import { ForceSwitchOutImmunityAbAttr } from "./abilities/force-switch-out-immunity-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -186,19 +187,6 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
     const weatherType = globalScene.arena.weather?.weatherType;
     return !!weatherType && weatherTypes.indexOf(weatherType) > -1;
   };
-}
-
-export class ForceSwitchOutImmunityAbAttr extends AbAttr {
-  override apply(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    cancelled: BooleanHolder,
-    _args: any[],
-  ): boolean {
-    cancelled.value = true;
-    return true;
-  }
 }
 
 export class ReduceBerryUseThresholdAbAttr extends AbAttr {
