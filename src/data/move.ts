@@ -6303,7 +6303,7 @@ export class RevivalBlessingAttr extends MoveEffectAttr {
       (user instanceof PlayerPokemon && globalScene.getPlayerParty().findIndex((p) => p.isFainted()) > -1)
       || (user instanceof EnemyPokemon
         && user.hasTrainer()
-        && globalScene.getEnemyParty().findIndex((p) => p.isFainted()) > -1);
+        && globalScene.getEnemyParty().findIndex((p) => p.isFainted() && !p.isBoss()) > -1);
   }
 
   override getUserBenefitScore(user: Pokemon, _target: Pokemon, _move: Move): number {
