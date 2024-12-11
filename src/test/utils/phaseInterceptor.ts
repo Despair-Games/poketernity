@@ -60,7 +60,7 @@ import { RibbonModifierRewardPhase } from "#app/phases/ribbon-modifier-reward-ph
 import { GameOverModifierRewardPhase } from "#app/phases/game-over-modifier-reward-phase";
 import { UnlockPhase } from "#app/phases/unlock-phase";
 import { PostGameOverPhase } from "#app/phases/post-game-over-phase";
-import { phaseManager } from "#app/phase-manager";
+import { phaseManager } from "#app/global-phase-manager";
 
 export interface PromptHandler {
   phaseTarget?: string;
@@ -415,7 +415,7 @@ export default class PhaseInterceptor {
 
   pop() {
     this.onHold.pop();
-    this.scene.shiftPhase();
+    phaseManager.shiftPhase();
   }
 
   /**
@@ -430,7 +430,7 @@ export default class PhaseInterceptor {
   shift(shouldRun: boolean = false): void {
     this.onHold.shift();
     if (shouldRun) {
-      this.scene.shiftPhase();
+      phaseManager.shiftPhase();
     }
   }
 

@@ -5,6 +5,7 @@ import GameManager from "#test/utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { TurnStartPhase } from "#app/phases/turn-start-phase";
+import { phaseManager } from "#app/global-phase-manager";
 
 describe("Abilities - Stall", () => {
   let phaserGame: Phaser.Game;
@@ -45,7 +46,7 @@ describe("Abilities - Stall", () => {
     game.move.select(Moves.QUICK_ATTACK);
 
     await game.phaseInterceptor.to(TurnStartPhase, false);
-    const phase = game.scene.getCurrentPhase() as TurnStartPhase;
+    const phase = phaseManager.getCurrentPhase() as TurnStartPhase;
     const speedOrder = phase.getSpeedOrder();
     const commandOrder = phase.getCommandOrder();
     // The player Pokemon (without Stall) goes first despite having lower speed than the opponent.
@@ -63,7 +64,7 @@ describe("Abilities - Stall", () => {
     game.move.select(Moves.TACKLE);
 
     await game.phaseInterceptor.to(TurnStartPhase, false);
-    const phase = game.scene.getCurrentPhase() as TurnStartPhase;
+    const phase = phaseManager.getCurrentPhase() as TurnStartPhase;
     const speedOrder = phase.getSpeedOrder();
     const commandOrder = phase.getCommandOrder();
     // The opponent Pokemon (with Stall) goes first because its move is still within a higher priority bracket than its opponent.
@@ -82,7 +83,7 @@ describe("Abilities - Stall", () => {
     game.move.select(Moves.TACKLE);
 
     await game.phaseInterceptor.to(TurnStartPhase, false);
-    const phase = game.scene.getCurrentPhase() as TurnStartPhase;
+    const phase = phaseManager.getCurrentPhase() as TurnStartPhase;
     const speedOrder = phase.getSpeedOrder();
     const commandOrder = phase.getCommandOrder();
 

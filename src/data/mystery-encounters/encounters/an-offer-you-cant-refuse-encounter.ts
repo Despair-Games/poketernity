@@ -25,7 +25,7 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { ModifierRewardPhase } from "#app/phases/modifier-reward-phase";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
 import i18next from "i18next";
-import { phaseManager } from "#app/phase-manager";
+import { phaseManager } from "#app/global-phase-manager";
 
 /** the i18n namespace for this encounter */
 const namespace = "mysteryEncounters/anOfferYouCantRefuse";

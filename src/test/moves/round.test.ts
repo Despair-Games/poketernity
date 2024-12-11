@@ -1,5 +1,6 @@
 import { BattlerIndex } from "#app/battle";
 import { allMoves } from "#app/data/move";
+import { phaseManager } from "#app/global-phase-manager";
 import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
@@ -54,7 +55,7 @@ describe("Moves - Round", () => {
 
     for (let i = 0; i < 4; i++) {
       await game.phaseInterceptor.to("MoveEffectPhase", false);
-      actualTurnOrder.push((game.scene.getCurrentPhase() as MoveEffectPhase).getUserPokemon()!.getBattlerIndex());
+      actualTurnOrder.push((phaseManager.getCurrentPhase() as MoveEffectPhase).getUserPokemon()!.getBattlerIndex());
       await game.phaseInterceptor.to("MoveEndPhase");
     }
 

@@ -3,7 +3,7 @@ import { applyPostBattleAbAttrs, PostBattleAbAttr } from "#app/data/ability";
 import { LapsingPersistentModifier, LapsingPokemonHeldItemModifier } from "#app/modifier/modifier";
 import { BattlePhase } from "./battle-phase";
 import { GameOverPhase } from "./game-over-phase";
-import { phaseManager } from "#app/phase-manager";
+import { phaseManager } from "#app/global-phase-manager";
 
 export class BattleEndPhase extends BattlePhase {
   /** If true, will increment battles won */

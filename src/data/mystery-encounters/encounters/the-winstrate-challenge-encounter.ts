@@ -34,7 +34,8 @@ import i18next from "i18next";
 import { ModifierTier } from "#app/modifier/modifier-tier";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { phaseManager, triggerPokemonFormChange } from "#app/phase-manager";
+import { triggerPokemonFormChange } from "#app/phase-manager-utils";
+import { phaseManager } from "#app/global-phase-manager";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/theWinstrateChallenge";

@@ -10,7 +10,8 @@ import { achvs } from "#app/system/achv";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { EggSummaryPhase } from "./egg-summary-phase";
 import { EggHatchData } from "#app/data/egg-hatch-data";
-import { queueMessage, phaseManager } from "#app/phase-manager";
+import { queueMessage } from "#app/phase-manager-utils";
+import { phaseManager } from "#app/global-phase-manager";
 
 /**
  * Phase that handles updating eggs, and hatching any ready eggs

@@ -17,7 +17,7 @@ import MessageUiHandler from "./message-ui-handler";
 import { TextStyle, addTextObject, getTextStyleOptions } from "./text";
 import { Mode } from "./ui";
 import { WindowVariant, addWindow } from "./ui-theme";
-import { phaseManager } from "#app/phase-manager";
+import { phaseManager } from "#app/global-phase-manager";
 
 enum MenuOptions {
   GAME_SETTINGS,

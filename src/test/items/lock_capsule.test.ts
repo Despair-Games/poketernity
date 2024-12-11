@@ -1,5 +1,6 @@
 import { Abilities } from "#app/enums/abilities";
 import { Moves } from "#app/enums/moves";
+import { phaseManager } from "#app/global-phase-manager";
 import { ModifierTier } from "#app/modifier/modifier-tier";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { Mode } from "#app/ui/ui";
@@ -34,7 +35,7 @@ describe("Items - Lock Capsule", () => {
 
   it("doesn't set the cost of common tier items to 0", async () => {
     await game.classicMode.startBattle();
-    game.scene.overridePhase(
+    phaseManager.overridePhase(
       new SelectModifierPhase(0, undefined, {
         guaranteedModifierTiers: [ModifierTier.COMMON, ModifierTier.COMMON, ModifierTier.COMMON],
         fillRemaining: false,
@@ -42,7 +43,7 @@ describe("Items - Lock Capsule", () => {
     );
 
     game.onNextPrompt("SelectModifierPhase", Mode.MODIFIER_SELECT, () => {
-      const selectModifierPhase = game.scene.getCurrentPhase() as SelectModifierPhase;
+      const selectModifierPhase = phaseManager.getCurrentPhase() as SelectModifierPhase;
       const rerollCost = selectModifierPhase.getRerollCost(true);
       expect(rerollCost).toBe(150);
     });

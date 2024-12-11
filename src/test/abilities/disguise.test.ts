@@ -1,4 +1,5 @@
 import { BattlerIndex } from "#app/battle";
+import { phaseManager } from "#app/global-phase-manager";
 import { toDmgValue } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
@@ -201,7 +202,7 @@ describe("Abilities - Disguise", () => {
     game.move.select(Moves.SHADOW_SNEAK);
     await game.toNextWave();
 
-    expect(game.scene.getCurrentPhase()?.constructor.name).toBe("CommandPhase");
+    expect(phaseManager.getCurrentPhase()?.constructor.name).toBe("CommandPhase");
     expect(game.scene.currentBattle.waveIndex).toBe(2);
   });
 

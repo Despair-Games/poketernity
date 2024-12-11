@@ -1,5 +1,6 @@
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { Status } from "#app/data/status-effect";
+import { phaseManager } from "#app/global-phase-manager";
 import { CommandPhase } from "#app/phases/command-phase";
 import { MessagePhase } from "#app/phases/message-phase";
 import {
@@ -80,9 +81,9 @@ export async function runMysteryEncounterToEnd(
 
     // If a battle is started, fast forward to end of the battle
     game.onNextPrompt("CommandPhase", Mode.COMMAND, () => {
-      game.scene.clearPhaseQueue();
-      game.scene.clearPhaseQueueSplice();
-      game.scene.unshiftPhase(new VictoryPhase(0));
+      phaseManager.clearPhaseQueue();
+      phaseManager.clearPhaseQueueSplice();
+      phaseManager.unshiftPhase(new VictoryPhase(0));
       game.endPhase();
     });
 
@@ -207,14 +208,14 @@ async function handleSecondaryOptionSelect(game: GameManager, pokemonNo: number,
  * @param runRewardsPhase
  */
 export async function skipBattleRunMysteryEncounterRewardsPhase(game: GameManager, runRewardsPhase: boolean = true) {
-  game.scene.clearPhaseQueue();
-  game.scene.clearPhaseQueueSplice();
+  phaseManager.clearPhaseQueue();
+  phaseManager.clearPhaseQueueSplice();
   game.scene.getEnemyParty().forEach((p) => {
     p.hp = 0;
     p.status = new Status(StatusEffect.FAINT);
     game.scene.field.remove(p);
   });
-  game.scene.pushPhase(new VictoryPhase(0));
+  phaseManager.pushPhase(new VictoryPhase(0));
   game.phaseInterceptor.superEndPhase();
   game.setMode(Mode.MESSAGE);
   await game.phaseInterceptor.to(MysteryEncounterRewardsPhase, runRewardsPhase);

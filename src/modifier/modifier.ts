@@ -55,7 +55,8 @@ import { Color, ShadowColor } from "#enums/color";
 import { FRIENDSHIP_GAIN_FROM_RARE_CANDY } from "#app/data/balance/starters";
 import { applyAbAttrs, CommanderAbAttr } from "#app/data/ability";
 import { globalScene } from "#app/global-scene";
-import { queueMessage, phaseManager, triggerPokemonFormChange } from "#app/phase-manager";
+import { queueMessage, triggerPokemonFormChange } from "#app/phase-manager-utils";
+import { phaseManager } from "#app/global-phase-manager";
 
 export type ModifierPredicate = (modifier: Modifier) => boolean;
 

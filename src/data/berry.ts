@@ -16,7 +16,8 @@ import { BerryType } from "#enums/berry-type";
 import { Stat, type BattleStat } from "#app/enums/stat";
 import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import { phaseManager, queueMessage } from "#app/phase-manager";
+import { queueMessage } from "#app/phase-manager-utils";
+import { phaseManager } from "#app/global-phase-manager";
 
 export function getBerryName(berryType: BerryType): string {
   return i18next.t(`berry:${BerryType[berryType]}.name`);

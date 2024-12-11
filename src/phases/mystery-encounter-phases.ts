@@ -26,7 +26,7 @@ import { IvScannerModifier } from "../modifier/modifier";
 import { Phase } from "../phase";
 import { Mode } from "../ui/ui";
 import { isNullOrUndefined, randSeedItem } from "#app/utils";
-import { phaseManager } from "#app/phase-manager";
+import { phaseManager } from "#app/global-phase-manager";
 
 /**
  * Will handle (in order):

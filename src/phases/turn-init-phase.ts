@@ -13,7 +13,8 @@ import { GameOverPhase } from "./game-over-phase";
 import { ToggleDoublePositionPhase } from "./toggle-double-position-phase";
 import { TurnStartPhase } from "./turn-start-phase";
 import { globalScene } from "#app/global-scene";
-import { phaseManager, queueMessage } from "#app/phase-manager";
+import { queueMessage } from "#app/phase-manager-utils";
+import { phaseManager } from "#app/global-phase-manager";
 
 export class TurnInitPhase extends FieldPhase {
   constructor() {

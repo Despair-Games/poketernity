@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import { phaseManager } from "#app/phase-manager";
+import { phaseManager } from "#app/global-phase-manager";
 import type { EndCardPhase } from "./end-card-phase";
 import { TitlePhase } from "./title-phase";
 

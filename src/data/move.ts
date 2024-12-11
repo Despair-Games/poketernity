@@ -107,7 +107,8 @@ import { applyChallenges, ChallengeType } from "./challenge";
 import { SwitchType } from "#enums/switch-type";
 import { StatusEffect } from "enums/status-effect";
 import { globalScene } from "#app/global-scene";
-import { phaseManager, queueMessage, triggerPokemonFormChange } from "#app/phase-manager";
+import { queueMessage, triggerPokemonFormChange } from "#app/phase-manager-utils";
+import { phaseManager } from "#app/global-phase-manager";
 
 export enum MoveCategory {
   PHYSICAL,

@@ -13,7 +13,8 @@ import { PostSummonPhase } from "./post-summon-phase";
 import { SummonPhase } from "./summon-phase";
 import { SubstituteTag } from "#app/data/battler-tags";
 import { SwitchType } from "#enums/switch-type";
-import { phaseManager, triggerPokemonFormChange } from "#app/phase-manager";
+import { triggerPokemonFormChange } from "#app/phase-manager-utils";
+import { phaseManager } from "#app/global-phase-manager";
 
 export class SwitchSummonPhase extends SummonPhase {
   private readonly switchType: SwitchType;

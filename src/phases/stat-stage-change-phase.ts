@@ -18,7 +18,8 @@ import { NumberHolder, BooleanHolder } from "#app/utils";
 import i18next from "i18next";
 import { PokemonPhase } from "./pokemon-phase";
 import { Stat, type BattleStat, getStatKey, getStatStageChangeDescriptionKey } from "#enums/stat";
-import { phaseManager, queueMessage } from "#app/phase-manager";
+import { queueMessage } from "#app/phase-manager-utils";
+import { phaseManager } from "#app/global-phase-manager";
 
 export type StatStageChangeCallback = (
   target: Pokemon | null,

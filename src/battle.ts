@@ -30,7 +30,7 @@ import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import type { CustomModifierSettings } from "#app/modifier/modifier-type";
 import { ModifierTier } from "#app/modifier/modifier-tier";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { queueMessage } from "#app/phase-manager";
+import { queueMessage } from "#app/phase-manager-utils";
 
 export enum ClassicFixedBossWaves {
   // TODO: other fixed wave battles should be added here

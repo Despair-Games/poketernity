@@ -1,4 +1,5 @@
 import { BattlerIndex } from "#app/battle";
+import { phaseManager } from "#app/global-phase-manager";
 import type { MovePhase } from "#app/phases/move-phase";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
@@ -44,14 +45,14 @@ describe("Abilities - Dancer", () => {
     await game.phaseInterceptor.to("MovePhase");
     // immediately copies ally move
     await game.phaseInterceptor.to("MovePhase", false);
-    let currentPhase = game.scene.getCurrentPhase() as MovePhase;
+    let currentPhase = phaseManager.getCurrentPhase() as MovePhase;
     expect(currentPhase.pokemon).toBe(oricorio);
     expect(currentPhase.move.moveId).toBe(Moves.SWORDS_DANCE);
     await game.phaseInterceptor.to("MoveEndPhase");
     await game.phaseInterceptor.to("MovePhase");
     // immediately copies enemy move
     await game.phaseInterceptor.to("MovePhase", false);
-    currentPhase = game.scene.getCurrentPhase() as MovePhase;
+    currentPhase = phaseManager.getCurrentPhase() as MovePhase;
     expect(currentPhase.pokemon).toBe(oricorio);
     expect(currentPhase.move.moveId).toBe(Moves.VICTORY_DANCE);
     await game.phaseInterceptor.to("BerryPhase");

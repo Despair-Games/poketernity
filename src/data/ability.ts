@@ -72,7 +72,8 @@ import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import { StatusEffect } from "#enums/status-effect";
 import { WeatherType } from "#enums/weather-type";
-import { phaseManager, queueMessage, triggerPokemonBattleAnim, triggerPokemonFormChange } from "#app/phase-manager";
+import { queueMessage, triggerPokemonBattleAnim, triggerPokemonFormChange } from "#app/phase-manager-utils";
+import { phaseManager } from "#app/global-phase-manager";
 
 export class Ability implements Localizable {
   public id: Abilities;

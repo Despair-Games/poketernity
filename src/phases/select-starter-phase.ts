@@ -12,7 +12,8 @@ import type { Starter } from "#app/ui/starter-select-ui-handler";
 import { Mode } from "#app/ui/ui";
 import type { Species } from "#enums/species";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
-import { phaseManager, triggerPokemonFormChange } from "#app/phase-manager";
+import { triggerPokemonFormChange } from "#app/phase-manager-utils";
+import { phaseManager } from "#app/global-phase-manager";
 
 export class SelectStarterPhase extends Phase {
   constructor() {

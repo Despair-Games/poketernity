@@ -42,7 +42,8 @@ import { Species } from "#enums/species";
 import { EFFECTIVE_STATS, getStatKey, Stat, type BattleStat, type EffectiveStat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { WeatherType } from "#enums/weather-type";
-import { phaseManager, queueMessage, triggerPokemonBattleAnim, triggerPokemonFormChange } from "#app/phase-manager";
+import { queueMessage, triggerPokemonBattleAnim, triggerPokemonFormChange } from "#app/phase-manager-utils";
+import { phaseManager } from "#app/global-phase-manager";
 
 export enum BattlerTagLapseType {
   FAINT,

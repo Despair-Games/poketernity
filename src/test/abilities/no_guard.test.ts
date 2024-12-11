@@ -1,4 +1,5 @@
 import { BattlerIndex } from "#app/battle";
+import { phaseManager } from "#app/global-phase-manager";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { Abilities } from "#enums/abilities";
@@ -43,7 +44,7 @@ describe("Abilities - No Guard", () => {
 
     await game.phaseInterceptor.to(MoveEffectPhase, false);
 
-    const moveEffectPhase = game.scene.getCurrentPhase() as MoveEffectPhase;
+    const moveEffectPhase = phaseManager.getCurrentPhase() as MoveEffectPhase;
     vi.spyOn(moveEffectPhase, "hitCheck");
 
     await game.phaseInterceptor.to(MoveEndPhase);

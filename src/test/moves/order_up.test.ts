@@ -9,6 +9,7 @@ import { Species } from "#enums/species";
 import GameManager from "#test/utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import * as PhaseManagerUtils from "#app/phase-manager-utils";
 
 describe("Moves - Order Up", () => {
   let phaserGame: Phaser.Game;
@@ -37,7 +38,7 @@ describe("Moves - Order Up", () => {
       .startingLevel(100)
       .enemyLevel(100);
 
-    vi.spyOn(game.scene, "triggerPokemonBattleAnim").mockReturnValue(true);
+    vi.spyOn(PhaseManagerUtils, "triggerPokemonBattleAnim").mockReturnValue(true);
   });
 
   it.each([
@@ -53,7 +54,10 @@ describe("Moves - Order Up", () => {
 
       const [tatsugiri, dondozo] = game.scene.getPlayerField();
 
-      expect(game.scene.triggerPokemonBattleAnim).toHaveBeenLastCalledWith(tatsugiri, PokemonAnimType.COMMANDER_APPLY);
+      expect(PhaseManagerUtils.triggerPokemonBattleAnim).toHaveBeenLastCalledWith(
+        tatsugiri,
+        PokemonAnimType.COMMANDER_APPLY,
+      );
       expect(dondozo.getTag(BattlerTagType.COMMANDED)).toBeDefined();
 
       game.move.select(Moves.ORDER_UP, 1, BattlerIndex.ENEMY);
@@ -73,7 +77,10 @@ describe("Moves - Order Up", () => {
 
     const [tatsugiri, dondozo] = game.scene.getPlayerField();
 
-    expect(game.scene.triggerPokemonBattleAnim).toHaveBeenLastCalledWith(tatsugiri, PokemonAnimType.COMMANDER_APPLY);
+    expect(PhaseManagerUtils.triggerPokemonBattleAnim).toHaveBeenLastCalledWith(
+      tatsugiri,
+      PokemonAnimType.COMMANDER_APPLY,
+    );
     expect(dondozo.getTag(BattlerTagType.COMMANDED)).toBeDefined();
 
     game.move.select(Moves.ORDER_UP, 1, BattlerIndex.ENEMY);

@@ -9,7 +9,8 @@ import { BattleEndPhase } from "./battle-end-phase";
 import { NewBattlePhase } from "./new-battle-phase";
 import { PokemonPhase } from "./pokemon-phase";
 import { globalScene } from "#app/global-scene";
-import { queueMessage, phaseManager } from "#app/phase-manager";
+import { queueMessage } from "#app/phase-manager-utils";
+import { phaseManager } from "#app/global-phase-manager";
 
 export class AttemptRunPhase extends PokemonPhase {
   /** For testing purposes: this is to force the pokemon to fail and escape */

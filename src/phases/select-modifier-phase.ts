@@ -30,7 +30,7 @@ import { isNullOrUndefined, NumberHolder } from "#app/utils";
 import { BattlePhase } from "./battle-phase";
 import Overrides from "#app/overrides";
 import type { CustomModifierSettings } from "#app/modifier/modifier-type";
-import { phaseManager } from "#app/phase-manager";
+import { phaseManager } from "#app/global-phase-manager";
 
 export class SelectModifierPhase extends BattlePhase {
   private rerollCount: number;

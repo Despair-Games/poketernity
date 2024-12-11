@@ -12,7 +12,7 @@ import { Color, ShadowColor } from "#app/enums/color";
 import { SelectStarterPhase } from "#app/phases/select-starter-phase";
 import { TitlePhase } from "#app/phases/title-phase";
 import { globalScene } from "#app/global-scene";
-import { phaseManager } from "#app/phase-manager";
+import { phaseManager } from "#app/global-phase-manager";
 
 /**
  * Handles all the UI for choosing optional challenges.

@@ -166,7 +166,8 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { FRIENDSHIP_GAIN_FROM_BATTLE } from "#app/data/balance/starters";
 import { StatusEffect } from "#enums/status-effect";
 import { globalScene, initGlobalScene } from "#app/global-scene";
-import { phaseManager, queueMessage, triggerPokemonFormChange } from "#app/phase-manager";
+import { queueMessage, triggerPokemonFormChange } from "./phase-manager-utils";
+import { phaseManager } from "./global-phase-manager";
 
 export const bypassLogin = import.meta.env.VITE_BYPASS_LOGIN === "1";
 

@@ -1,4 +1,5 @@
 import type BattleScene from "#app/battle-scene";
+import { phaseManager } from "#app/global-phase-manager";
 import { LoginPhase } from "#app/phases/login-phase";
 import { TitlePhase } from "#app/phases/title-phase";
 import { UnavailablePhase } from "#app/phases/unavailable-phase";
@@ -30,7 +31,7 @@ describe("Phases", () => {
   describe("LoginPhase", () => {
     it("should start the login phase", async () => {
       const loginPhase = new LoginPhase();
-      scene.unshiftPhase(loginPhase);
+      phaseManager.unshiftPhase(loginPhase);
       await game.phaseInterceptor.run(LoginPhase);
       expect(scene.ui.getMode()).to.equal(Mode.MESSAGE);
     });
@@ -39,7 +40,7 @@ describe("Phases", () => {
   describe("TitlePhase", () => {
     it("should start the title phase", async () => {
       const titlePhase = new TitlePhase();
-      scene.unshiftPhase(titlePhase);
+      phaseManager.unshiftPhase(titlePhase);
       await game.phaseInterceptor.run(TitlePhase);
       expect(scene.ui.getMode()).to.equal(Mode.TITLE);
     });
@@ -48,7 +49,7 @@ describe("Phases", () => {
   describe("UnavailablePhase", () => {
     it("should start the unavailable phase", async () => {
       const unavailablePhase = new UnavailablePhase();
-      scene.unshiftPhase(unavailablePhase);
+      phaseManager.unshiftPhase(unavailablePhase);
       await game.phaseInterceptor.run(UnavailablePhase);
       expect(scene.ui.getMode()).to.equal(Mode.UNAVAILABLE);
     }, 20000);

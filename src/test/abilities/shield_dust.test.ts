@@ -5,6 +5,7 @@ import {
   IgnoreMoveEffectsAbAttr,
   MoveEffectChanceMultiplierAbAttr,
 } from "#app/data/ability";
+import { phaseManager } from "#app/global-phase-manager";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { NumberHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
@@ -51,7 +52,7 @@ describe("Abilities - Shield Dust", () => {
     await game.phaseInterceptor.to(MoveEffectPhase, false);
 
     // Shield Dust negates secondary effect
-    const phase = game.scene.getCurrentPhase() as MoveEffectPhase;
+    const phase = phaseManager.getCurrentPhase() as MoveEffectPhase;
     const move = phase.move.getMove();
     expect(move.id).toBe(Moves.AIR_SLASH);
 

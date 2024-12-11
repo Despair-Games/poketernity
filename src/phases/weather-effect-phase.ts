@@ -17,6 +17,7 @@ import type Pokemon from "#app/field/pokemon";
 import { HitResult } from "#app/field/pokemon";
 import { BooleanHolder, toDmgValue } from "#app/utils";
 import { CommonAnimPhase } from "./common-anim-phase";
+import { queueMessage } from "#app/phase-manager-utils";
 
 export class WeatherEffectPhase extends CommonAnimPhase {
   public weather: Weather | null;

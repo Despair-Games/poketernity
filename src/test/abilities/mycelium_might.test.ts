@@ -7,6 +7,7 @@ import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { phaseManager } from "#app/global-phase-manager";
 
 describe("Abilities - Mycelium Might", () => {
   let phaserGame: Phaser.Game;
@@ -50,7 +51,7 @@ describe("Abilities - Mycelium Might", () => {
     game.move.select(Moves.BABY_DOLL_EYES);
 
     await game.phaseInterceptor.to(TurnStartPhase, false);
-    const phase = game.scene.getCurrentPhase() as TurnStartPhase;
+    const phase = phaseManager.getCurrentPhase() as TurnStartPhase;
     const speedOrder = phase.getSpeedOrder();
     const commandOrder = phase.getCommandOrder();
     // The opponent Pokemon (without Mycelium Might) goes first despite having lower speed than the player Pokemon.
@@ -74,7 +75,7 @@ describe("Abilities - Mycelium Might", () => {
     game.move.select(Moves.BABY_DOLL_EYES);
 
     await game.phaseInterceptor.to(TurnStartPhase, false);
-    const phase = game.scene.getCurrentPhase() as TurnStartPhase;
+    const phase = phaseManager.getCurrentPhase() as TurnStartPhase;
     const speedOrder = phase.getSpeedOrder();
     const commandOrder = phase.getCommandOrder();
     // The player Pokemon (with M.M.) goes first because its move is still within a higher priority bracket than its opponent.
@@ -95,7 +96,7 @@ describe("Abilities - Mycelium Might", () => {
     game.move.select(Moves.QUICK_ATTACK);
 
     await game.phaseInterceptor.to(TurnStartPhase, false);
-    const phase = game.scene.getCurrentPhase() as TurnStartPhase;
+    const phase = phaseManager.getCurrentPhase() as TurnStartPhase;
     const speedOrder = phase.getSpeedOrder();
     const commandOrder = phase.getCommandOrder();
     // The player Pokemon (with M.M.) goes first because it has a higher speed and did not use a status move.

@@ -30,7 +30,8 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { CommandPhase } from "#app/phases/command-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { globalScene } from "#app/global-scene";
-import { phaseManager, triggerPokemonFormChange } from "#app/phase-manager";
+import { triggerPokemonFormChange } from "#app/phase-manager-utils";
+import { phaseManager } from "#app/global-phase-manager";
 
 const defaultMessage = i18next.t("partyUiHandler:choosePokemon");
 

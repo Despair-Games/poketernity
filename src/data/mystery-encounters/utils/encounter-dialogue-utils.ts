@@ -4,6 +4,7 @@ import { getTextWithColors } from "#app/ui/text";
 import { UiTheme } from "#enums/ui-theme";
 import { isNullOrUndefined } from "#app/utils";
 import i18next from "i18next";
+import { queueMessage } from "#app/phase-manager-utils";
 
 /**
  * Will inject all relevant dialogue tokens that exist into i18n text.

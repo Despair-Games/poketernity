@@ -14,7 +14,8 @@ import { GameOverPhase } from "./game-over-phase";
 import { ShinySparklePhase } from "./shiny-sparkle-phase";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { globalScene } from "#app/global-scene";
-import { phaseManager, triggerPokemonFormChange } from "#app/phase-manager";
+import { triggerPokemonFormChange } from "#app/phase-manager-utils";
+import { phaseManager } from "#app/global-phase-manager";
 
 export class SummonPhase extends PartyMemberPokemonPhase {
   private loaded: boolean;

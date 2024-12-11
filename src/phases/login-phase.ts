@@ -9,7 +9,7 @@ import { executeIf, getCookie, removeCookie } from "#app/utils";
 import i18next, { t } from "i18next";
 import { SelectGenderPhase } from "./select-gender-phase";
 import { UnavailablePhase } from "./unavailable-phase";
-import { phaseManager } from "#app/phase-manager";
+import { phaseManager } from "#app/global-phase-manager";
 
 export class LoginPhase extends Phase {
   private showText: boolean;

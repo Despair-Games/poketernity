@@ -8,7 +8,8 @@ import { BooleanHolder } from "#app/utils";
 import { FieldPhase } from "./field-phase";
 import { CommonAnimPhase } from "./common-anim-phase";
 import { globalScene } from "#app/global-scene";
-import { queueMessage, phaseManager } from "#app/phase-manager";
+import { queueMessage } from "#app/phase-manager-utils";
+import { phaseManager } from "#app/global-phase-manager";
 
 /** The phase after attacks where the pokemon eat berries */
 export class BerryPhase extends FieldPhase {

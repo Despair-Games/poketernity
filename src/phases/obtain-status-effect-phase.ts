@@ -4,7 +4,7 @@ import { getStatusEffectObtainText, getStatusEffectOverlapText } from "#app/data
 import { StatusEffect } from "#app/enums/status-effect";
 import type Pokemon from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { queueMessage } from "#app/phase-manager";
+import { queueMessage } from "#app/phase-manager-utils";
 import { PokemonPhase } from "./pokemon-phase";
 
 export class ObtainStatusEffectPhase extends PokemonPhase {

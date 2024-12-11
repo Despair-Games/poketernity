@@ -1,3 +1,4 @@
+import { phaseManager } from "#app/global-phase-manager";
 import type { CommandPhase } from "#app/phases/command-phase";
 import { Command } from "#app/ui/command-ui-handler";
 import { Abilities } from "#enums/abilities";
@@ -64,7 +65,7 @@ describe("Abilities - Honey Gather", () => {
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "scene", "get").mockReturnValue(game.scene);
 
-    const commandPhase = game.scene.getCurrentPhase() as CommandPhase;
+    const commandPhase = phaseManager.getCurrentPhase() as CommandPhase;
     commandPhase.handleCommand(Command.RUN, 0);
     await game.toNextTurn();
 

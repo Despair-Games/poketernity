@@ -12,6 +12,7 @@ import { Species } from "#enums/species";
 import GameManager from "#test/utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import * as PhaseManagerUtils from "#app/phase-manager-utils";
 
 describe("Abilities - Commander", () => {
   let phaserGame: Phaser.Game;
@@ -40,7 +41,7 @@ describe("Abilities - Commander", () => {
       .enemyAbility(Abilities.BALL_FETCH)
       .enemyMoveset(Moves.TACKLE);
 
-    vi.spyOn(game.scene, "triggerPokemonBattleAnim").mockReturnValue(true);
+    vi.spyOn(PhaseManagerUtils, "triggerPokemonBattleAnim").mockReturnValue(true);
   });
 
   it("causes the source to jump into Dondozo's mouth, granting a stat boost and hiding the source", async () => {
@@ -50,7 +51,10 @@ describe("Abilities - Commander", () => {
 
     const affectedStats: EffectiveStat[] = [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD];
 
-    expect(game.scene.triggerPokemonBattleAnim).toHaveBeenLastCalledWith(tatsugiri, PokemonAnimType.COMMANDER_APPLY);
+    expect(PhaseManagerUtils.triggerPokemonBattleAnim).toHaveBeenLastCalledWith(
+      tatsugiri,
+      PokemonAnimType.COMMANDER_APPLY,
+    );
     expect(dondozo.getTag(BattlerTagType.COMMANDED)).toBeDefined();
     affectedStats.forEach((stat) => expect(dondozo.getStatStage(stat)).toBe(2));
 
@@ -78,7 +82,7 @@ describe("Abilities - Commander", () => {
     game.doSwitchPokemon(2);
 
     await game.phaseInterceptor.to("MovePhase", false);
-    expect(game.scene.triggerPokemonBattleAnim).toHaveBeenCalledWith(tatsugiri, PokemonAnimType.COMMANDER_APPLY);
+    expect(PhaseManagerUtils.triggerPokemonBattleAnim).toHaveBeenCalledWith(tatsugiri, PokemonAnimType.COMMANDER_APPLY);
 
     const dondozo = game.scene.getPlayerField()[1];
     expect(dondozo.getTag(BattlerTagType.COMMANDED)).toBeDefined();
@@ -93,7 +97,10 @@ describe("Abilities - Commander", () => {
 
     const [tatsugiri, dondozo] = game.scene.getPlayerField();
 
-    expect(game.scene.triggerPokemonBattleAnim).toHaveBeenLastCalledWith(tatsugiri, PokemonAnimType.COMMANDER_APPLY);
+    expect(PhaseManagerUtils.triggerPokemonBattleAnim).toHaveBeenLastCalledWith(
+      tatsugiri,
+      PokemonAnimType.COMMANDER_APPLY,
+    );
     expect(dondozo.getTag(BattlerTagType.COMMANDED)).toBeDefined();
 
     game.move.select(Moves.MEMENTO, 1, BattlerIndex.ENEMY);
@@ -107,7 +114,10 @@ describe("Abilities - Commander", () => {
 
     await game.phaseInterceptor.to("FaintPhase", false);
     expect(dondozo.getTag(BattlerTagType.COMMANDED)).toBeUndefined();
-    expect(game.scene.triggerPokemonBattleAnim).toHaveBeenLastCalledWith(dondozo, PokemonAnimType.COMMANDER_REMOVE);
+    expect(PhaseManagerUtils.triggerPokemonBattleAnim).toHaveBeenLastCalledWith(
+      dondozo,
+      PokemonAnimType.COMMANDER_REMOVE,
+    );
 
     await game.phaseInterceptor.to("BerryPhase", false);
     expect(tatsugiri.isFullHp()).toBeFalsy();
@@ -120,7 +130,10 @@ describe("Abilities - Commander", () => {
 
     const [tatsugiri, dondozo] = game.scene.getPlayerField();
 
-    expect(game.scene.triggerPokemonBattleAnim).toHaveBeenLastCalledWith(tatsugiri, PokemonAnimType.COMMANDER_APPLY);
+    expect(PhaseManagerUtils.triggerPokemonBattleAnim).toHaveBeenLastCalledWith(
+      tatsugiri,
+      PokemonAnimType.COMMANDER_APPLY,
+    );
     expect(dondozo.getTag(BattlerTagType.COMMANDED)).toBeDefined();
 
     game.move.select(Moves.SPLASH, 1);
@@ -138,7 +151,10 @@ describe("Abilities - Commander", () => {
 
     const [tatsugiri, dondozo] = game.scene.getPlayerField();
 
-    expect(game.scene.triggerPokemonBattleAnim).toHaveBeenLastCalledWith(tatsugiri, PokemonAnimType.COMMANDER_APPLY);
+    expect(PhaseManagerUtils.triggerPokemonBattleAnim).toHaveBeenLastCalledWith(
+      tatsugiri,
+      PokemonAnimType.COMMANDER_APPLY,
+    );
     expect(dondozo.getTag(BattlerTagType.COMMANDED)).toBeDefined();
 
     tatsugiri.addTag(BattlerTagType.SALT_CURED, 0, Moves.NONE, game.scene.getField()[BattlerIndex.ENEMY].id);
@@ -158,7 +174,10 @@ describe("Abilities - Commander", () => {
 
     const [tatsugiri, dondozo] = game.scene.getPlayerField();
 
-    expect(game.scene.triggerPokemonBattleAnim).toHaveBeenLastCalledWith(tatsugiri, PokemonAnimType.COMMANDER_APPLY);
+    expect(PhaseManagerUtils.triggerPokemonBattleAnim).toHaveBeenLastCalledWith(
+      tatsugiri,
+      PokemonAnimType.COMMANDER_APPLY,
+    );
     expect(dondozo.getTag(BattlerTagType.COMMANDED)).toBeDefined();
 
     game.move.select(Moves.SPLASH, 1);
@@ -176,7 +195,10 @@ describe("Abilities - Commander", () => {
 
     const [tatsugiri, dondozo] = game.scene.getPlayerField();
 
-    expect(game.scene.triggerPokemonBattleAnim).toHaveBeenLastCalledWith(tatsugiri, PokemonAnimType.COMMANDER_APPLY);
+    expect(PhaseManagerUtils.triggerPokemonBattleAnim).toHaveBeenLastCalledWith(
+      tatsugiri,
+      PokemonAnimType.COMMANDER_APPLY,
+    );
     expect(dondozo.getTag(BattlerTagType.COMMANDED)).toBeDefined();
 
     game.move.select(Moves.SPLASH, 1);

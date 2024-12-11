@@ -6,7 +6,8 @@ import { CommandPhase } from "./command-phase";
 import { PokemonPhase } from "./pokemon-phase";
 import i18next from "#app/plugins/i18n";
 import { allMoves } from "#app/data/move";
-import { queueMessage, phaseManager } from "#app/phase-manager";
+import { queueMessage } from "#app/phase-manager-utils";
+import { phaseManager } from "#app/global-phase-manager";
 
 export class SelectTargetPhase extends PokemonPhase {
   constructor(fieldIndex: number) {

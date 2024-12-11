@@ -62,7 +62,8 @@ import { BooleanHolder, executeIf, isNullOrUndefined, NumberHolder } from "#app/
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { Moves } from "#enums/moves";
 import i18next from "i18next";
-import { queueMessage, phaseManager, triggerPokemonFormChange } from "#app/phase-manager";
+import { queueMessage, triggerPokemonFormChange } from "#app/phase-manager-utils";
+import { phaseManager } from "#app/global-phase-manager";
 
 export class MoveEffectPhase extends PokemonPhase {
   public move: PokemonMove;

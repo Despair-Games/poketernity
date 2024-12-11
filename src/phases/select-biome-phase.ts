@@ -8,7 +8,7 @@ import { BattlePhase } from "./battle-phase";
 import { randSeedInt } from "#app/utils";
 import { PartyHealPhase } from "./party-heal-phase";
 import { SwitchBiomePhase } from "./switch-biome-phase";
-import { phaseManager } from "#app/phase-manager";
+import { phaseManager } from "#app/global-phase-manager";
 
 export class SelectBiomePhase extends BattlePhase {
   constructor() {

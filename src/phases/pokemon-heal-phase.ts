@@ -13,6 +13,7 @@ import { NumberHolder } from "#app/utils";
 import { CommonAnimPhase } from "./common-anim-phase";
 import { BattlerTagType } from "#app/enums/battler-tag-type";
 import type { HealBlockTag } from "#app/data/battler-tags";
+import { queueMessage } from "#app/phase-manager-utils";
 
 export class PokemonHealPhase extends CommonAnimPhase {
   private hpHealed: number;

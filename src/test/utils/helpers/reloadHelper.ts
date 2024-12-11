@@ -7,6 +7,7 @@ import { CommandPhase } from "#app/phases/command-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
 import type { SessionSaveData } from "#app/system/game-data";
 import type GameManager from "../gameManager";
+import { phaseManager } from "#app/global-phase-manager";
 
 /**
  * Helper to allow reloading sessions in unit tests.
@@ -35,7 +36,7 @@ export class ReloadHelper extends GameManagerHelper {
     const scene = this.game.scene;
     const titlePhase = new TitlePhase();
 
-    scene.clearPhaseQueue();
+    phaseManager.clearPhaseQueue();
 
     // Set the last saved session to the desired session data
     vi.spyOn(scene.gameData, "getSession").mockReturnValue(
@@ -43,7 +44,7 @@ export class ReloadHelper extends GameManagerHelper {
         resolve(this.sessionData);
       }),
     );
-    scene.unshiftPhase(titlePhase);
+    phaseManager.unshiftPhase(titlePhase);
     this.game.endPhase(); // End the currently ongoing battle
 
     titlePhase.loadSaveSlot(-1); // Load the desired session data

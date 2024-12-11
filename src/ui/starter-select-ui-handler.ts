@@ -78,7 +78,7 @@ import {
 } from "#app/utils";
 import type { Nature } from "#enums/nature";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
-import { phaseManager } from "#app/phase-manager";
+import { phaseManager } from "#app/global-phase-manager";
 
 export type StarterSelectCallback = (starters: Starter[]) => void;
 

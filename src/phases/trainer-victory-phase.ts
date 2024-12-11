@@ -11,7 +11,7 @@ import { TrainerSlot } from "#app/data/trainer-config";
 import { globalScene } from "#app/global-scene";
 import { Biome } from "#app/enums/biome";
 import { achvs } from "#app/system/achv";
-import { phaseManager } from "#app/phase-manager";
+import { phaseManager } from "#app/global-phase-manager";
 
 export class TrainerVictoryPhase extends BattlePhase {
   constructor() {

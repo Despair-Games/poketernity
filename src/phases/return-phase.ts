@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";
 import { SwitchType } from "#enums/switch-type";
 import { SwitchSummonPhase } from "./switch-summon-phase";
-import { triggerPokemonFormChange } from "#app/phase-manager";
+import { triggerPokemonFormChange } from "#app/phase-manager-utils";
 
 export class ReturnPhase extends SwitchSummonPhase {
   constructor(fieldIndex: number) {

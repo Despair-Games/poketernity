@@ -14,6 +14,7 @@ import { StatusEffect } from "#app/enums/status-effect";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BooleanHolder, NumberHolder } from "#app/utils";
 import { PokemonPhase } from "./pokemon-phase";
+import { queueMessage } from "#app/phase-manager-utils";
 
 export class PostTurnStatusEffectPhase extends PokemonPhase {
   constructor(battlerIndex: BattlerIndex) {
