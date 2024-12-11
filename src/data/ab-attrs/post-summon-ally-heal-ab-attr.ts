@@ -13,7 +13,7 @@ export class PostSummonAllyHealAbAttr extends PostSummonAbAttr {
   constructor(healRatio: number, showAnim: boolean = false) {
     super();
 
-    this.healRatio = healRatio || 4;
+    this.healRatio = healRatio;
     this.showAnim = showAnim;
   }
 

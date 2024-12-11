@@ -7,6 +7,7 @@ import { AbAttr } from "./ab-attr";
  * These abilities use this attribute:
  * - Battle Armor
  * - Shell Armor (Identical to Battle Armor in functionality, just has a different name)
+ * @extends AbAttr
  */
 export class BlockCritAbAttr extends AbAttr {
   override apply(

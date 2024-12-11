@@ -14,7 +14,8 @@ export class SyncEncounterNatureAbAttr extends AbAttr {
     _cancelled: BooleanHolder,
     args: any[],
   ): boolean {
-    (args[0] as Pokemon).setNature(pokemon.getNature());
+    const opponent: Pokemon = args[0];
+    opponent.setNature(pokemon.getNature());
 
     return true;
   }

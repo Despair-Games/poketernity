@@ -40,7 +40,8 @@ export class ConfusionOnStatusEffectAbAttr extends PostAttackAbAttr {
     _hitResult: HitResult,
     args: any[],
   ): boolean {
-    if (this.effects.indexOf(args[0]) > -1 && !defender.isFainted()) {
+    const effect: StatusEffect = args[0];
+    if (this.effects.indexOf(effect) > -1 && !defender.isFainted()) {
       if (simulated) {
         return defender.canAddTag(BattlerTagType.CONFUSED);
       } else {

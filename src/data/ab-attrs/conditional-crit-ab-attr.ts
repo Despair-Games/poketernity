@@ -31,13 +31,14 @@ export class ConditionalCritAbAttr extends AbAttr {
     _cancelled: BooleanHolder,
     args: any[],
   ): boolean {
-    const target = args[1] as Pokemon;
-    const move = args[2] as Move;
+    const critOnly: BooleanHolder = args[0];
+    const target: Pokemon = args[1];
+    const move: Move = args[2];
     if (!this.condition(pokemon, target, move)) {
       return false;
     }
 
-    (args[0] as BooleanHolder).value = true;
+    critOnly.value = true;
     return true;
   }
 }

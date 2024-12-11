@@ -55,7 +55,8 @@ export class FormBlockDamageAbAttr extends ReceivedMoveDamageMultiplierAbAttr {
   ): boolean {
     if (this.condition(pokemon, attacker, move) && !move.hitsSubstitute(attacker, pokemon)) {
       if (!simulated) {
-        (args[0] as NumberHolder).value = this.multiplier;
+        const damage: NumberHolder = args[0];
+        damage.value = this.multiplier;
         pokemon.removeTag(this.tagType);
         if (this.recoilDamageFunc) {
           pokemon.damageAndUpdate(this.recoilDamageFunc(pokemon), HitResult.OTHER, false, false, true, true);

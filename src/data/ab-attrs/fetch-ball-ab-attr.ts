@@ -10,9 +10,6 @@ import { PostTurnAbAttr } from "./post-turn-ab-attr";
  * @extends PostTurnAbAttr
  * @see {@linkcode applyPostTurn} */
 export class FetchBallAbAttr extends PostTurnAbAttr {
-  constructor() {
-    super();
-  }
   /**
    * Adds the last used Pokeball back into the player's inventory
    * @param pokemon {@linkcode Pokemon} with this ability
@@ -25,7 +22,7 @@ export class FetchBallAbAttr extends PostTurnAbAttr {
       return false;
     }
     const lastUsed = globalScene.currentBattle.lastUsedPokeball;
-    if (lastUsed !== null && !!pokemon.isPlayer) {
+    if (lastUsed !== null && pokemon.isPlayer()) {
       globalScene.pokeballCounts[lastUsed]++;
       globalScene.currentBattle.lastUsedPokeball = null;
       globalScene.queueMessage(

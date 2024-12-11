@@ -6,6 +6,7 @@ import { PreAttackAbAttr } from "./pre-attack-ab-attr";
 /**
  * Class for abilities that convert single-strike moves to two-strike moves (i.e. Parental Bond).
  * @param damageMultiplier the damage multiplier for the second strike, relative to the first.
+ * @extends PreAttackAbAttr
  */
 export class AddSecondStrikeAbAttr extends PreAttackAbAttr {
   private damageMultiplier: number;
@@ -17,11 +18,9 @@ export class AddSecondStrikeAbAttr extends PreAttackAbAttr {
   }
 
   /**
-   * If conditions are met, this doubles the move's hit count (via args[1])
-   * or multiplies the damage of secondary strikes (via args[2])
+   * If conditions are met, this increases the move's hit count (via args[0])
+   * or multiplies the damage of secondary strikes (via args[1])
    * @param pokemon the {@linkcode Pokemon} using the move
-   * @param _passive n/a
-   * @param _defender n/a
    * @param move the {@linkcode Move} used by the ability source
    * @param args Additional arguments:
    * - `[0]` the number of strikes this move currently has ({@linkcode NumberHolder})

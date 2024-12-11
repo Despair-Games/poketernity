@@ -1,6 +1,6 @@
 import type Pokemon from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
-import { type BattleStat, BATTLE_STATS } from "#enums/stat";
+import { type BattleStat, type EffectiveStat, BATTLE_STATS } from "#enums/stat";
 import { AbAttr } from "./ab-attr";
 
 /**
@@ -26,8 +26,10 @@ export class IgnoreOpponentStatStagesAbAttr extends AbAttr {
    * @returns true if the stat is ignored, false otherwise
    */
   override apply(_pokemon: Pokemon, _passive: boolean, _simulated: boolean, _cancelled: BooleanHolder, args: any[]) {
-    if (this.stats.includes(args[0])) {
-      (args[1] as BooleanHolder).value = true;
+    const stat: EffectiveStat = args[0];
+    const ignoreStatStage: BooleanHolder = args[1];
+    if (this.stats.includes(stat)) {
+      ignoreStatStage.value = true;
       return true;
     }
     return false;

@@ -1348,7 +1348,7 @@ export class MoveEffectAttr extends MoveAttr {
    * @param selfEffect `true` if move targets user.
    * @returns Move effect chance value.
    */
-  getMoveChance(user: Pokemon, target: Pokemon, move: Move, selfEffect?: Boolean, showAbility?: Boolean): number {
+  getMoveChance(user: Pokemon, target: Pokemon, move: Move, selfEffect: Boolean, showAbility: Boolean): number {
     const moveChance = new NumberHolder(this.effectChanceOverride ?? move.chance);
 
     applyAbAttrs(
@@ -5720,19 +5720,14 @@ export class JawLockAttr extends AddBattlerTagAttr {
       return false;
     }
 
-    const moveChance = this.getMoveChance(user, target, move, this.selfTarget);
-    if (moveChance < 0 || moveChance === 100 || user.randSeedInt(100) < moveChance) {
-      /**
-       * Add the tag to both the user and the target.
-       * The target's tag source is considered to be the user and vice versa
-       */
-      return (
-        target.addTag(BattlerTagType.TRAPPED, 1, move.id, user.id)
-        && user.addTag(BattlerTagType.TRAPPED, 1, move.id, target.id)
-      );
-    }
-
-    return false;
+    /**
+     * Add the tag to both the user and the target.
+     * The target's tag source is considered to be the user and vice versa
+     */
+    return (
+      target.addTag(BattlerTagType.TRAPPED, 1, move.id, user.id)
+      && user.addTag(BattlerTagType.TRAPPED, 1, move.id, target.id)
+    );
   }
 }
 

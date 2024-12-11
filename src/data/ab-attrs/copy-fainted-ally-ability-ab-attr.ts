@@ -7,10 +7,6 @@ import { PostKnockOutAbAttr } from "./post-knock-out-ab-attr";
 import { UncopiableAbilityAbAttr } from "./uncopiable-ability-ab-attr";
 
 export class CopyFaintedAllyAbilityAbAttr extends PostKnockOutAbAttr {
-  constructor() {
-    super();
-  }
-
   override applyPostKnockOut(
     pokemon: Pokemon,
     _passive: boolean,

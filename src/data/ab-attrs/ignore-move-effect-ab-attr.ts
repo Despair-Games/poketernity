@@ -21,11 +21,12 @@ export class IgnoreMoveEffectsAbAttr extends PreDefendAbAttr {
     _cancelled: BooleanHolder,
     args: any[],
   ): boolean {
-    if ((args[0] as NumberHolder).value <= 0) {
+    const effectChance: NumberHolder = args[0];
+    if (effectChance.value <= 0) {
       return false;
     }
 
-    (args[0] as NumberHolder).value = 0;
+    effectChance.value = 0;
     return true;
   }
 }

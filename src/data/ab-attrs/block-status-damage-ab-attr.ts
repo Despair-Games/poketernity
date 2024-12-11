@@ -5,13 +5,12 @@ import { AbAttr } from "./ab-attr";
 
 /**
  * This attribute will block any status damage that you put in the parameter.
+ * @param effects - The {@linkcode StatusEffect | status effect(s)} that will be blocked from damaging the ability pokemon
+ * @extends AbAttr
  */
 export class BlockStatusDamageAbAttr extends AbAttr {
   private effects: StatusEffect[];
 
-  /**
-   * @param effects The {@linkcode StatusEffect | status effect(s)} that will be blocked from damaging the ability pokemon
-   */
   constructor(...effects: StatusEffect[]) {
     super(false);
 

@@ -19,8 +19,10 @@ export class PostItemLostApplyBattlerTagAbAttr extends PostItemLostAbAttr {
    * @returns true if BattlerTag was applied
    */
   override applyPostItemLost(pokemon: Pokemon, simulated: boolean, _args: any[]): boolean {
-    if (!pokemon.getTag(this.tagType) && !simulated) {
-      pokemon.addTag(this.tagType);
+    if (!pokemon.getTag(this.tagType)) {
+      if (!simulated) {
+        pokemon.addTag(this.tagType);
+      }
       return true;
     }
     return false;

@@ -13,17 +13,11 @@ export class StatStageChangeCopyAbAttr extends AbAttr {
     _cancelled: BooleanHolder,
     args: any[],
   ): boolean {
+    const stats: BattleStat[] = args[0];
+    const stages: number = args[1];
     if (!simulated) {
       globalScene.unshiftPhase(
-        new StatStageChangePhase(
-          pokemon.getBattlerIndex(),
-          true,
-          args[0] as BattleStat[],
-          args[1] as number,
-          true,
-          false,
-          false,
-        ),
+        new StatStageChangePhase(pokemon.getBattlerIndex(), true, stats, stages, true, false, false),
       );
     }
     return true;

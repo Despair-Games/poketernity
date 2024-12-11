@@ -9,10 +9,6 @@ import { PostBattleAbAttr } from "./post-battle-ab-attr";
  * @see {@linkcode applyPostBattle}
  */
 export class MoneyAbAttr extends PostBattleAbAttr {
-  constructor() {
-    super();
-  }
-
   /**
    * @param _pokemon {@linkcode Pokemon} that is the user of this ability.
    * @param _passive N/A
@@ -20,7 +16,8 @@ export class MoneyAbAttr extends PostBattleAbAttr {
    * @returns `true` if successful
    */
   override applyPostBattle(_pokemon: Pokemon, _passive: boolean, simulated: boolean, args: any[]): boolean {
-    if (!simulated && args[0]) {
+    const isVictory: boolean = args[0];
+    if (!simulated && isVictory) {
       globalScene.currentBattle.moneyScattered += globalScene.getWaveMoneyAmount(0.2);
       return true;
     }

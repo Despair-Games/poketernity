@@ -18,7 +18,8 @@ export class MoveEffectChanceMultiplierAbAttr extends AbAttr {
   }
   /**
    * @param args [0]: {@linkcode NumberHolder} Move additional effect chance. Has to be higher than or equal to 0.
-   *             [1]: {@linkcode Moves } Move used by the ability user.
+   *             [1]: {@linkcode Moves} Move used by the ability user.
+   *             [4]: Whether to show the ability flyout or not
    */
   override apply(
     _pokemon: Pokemon,
@@ -27,16 +28,21 @@ export class MoveEffectChanceMultiplierAbAttr extends AbAttr {
     _cancelled: BooleanHolder,
     args: any[],
   ): boolean {
-    // Disable showAbility during getTargetBenefitScore
-    this.showAbility = args[4];
+    const moveChance: NumberHolder = args[0];
+    const move: Move = args[1];
+    // const target: Pokemon = args[2];
+    // const selfEffect: boolean = args[3];
+    const showAbility: boolean = args[4];
+
+    this.showAbility = showAbility;
 
     const exceptMoves = [Moves.ORDER_UP, Moves.ELECTRO_SHOT];
-    if ((args[0] as NumberHolder).value <= 0 || exceptMoves.includes((args[1] as Move).id)) {
+    if (moveChance.value <= 0 || exceptMoves.includes(move.id)) {
       return false;
     }
 
-    (args[0] as NumberHolder).value *= this.chanceMultiplier;
-    (args[0] as NumberHolder).value = Math.min((args[0] as NumberHolder).value, 100);
+    moveChance.value *= this.chanceMultiplier;
+    moveChance.value = Math.min(moveChance.value, 100);
     return true;
   }
 }

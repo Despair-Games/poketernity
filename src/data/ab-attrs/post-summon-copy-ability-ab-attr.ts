@@ -9,7 +9,10 @@ import i18next from "i18next";
 import { PostSummonAbAttr } from "./post-summon-ab-attr";
 import { UncopiableAbilityAbAttr } from "./uncopiable-ability-ab-attr";
 
-/** Attempts to copy a pokemon's ability */
+/**
+ * Attempts to copy a pokemon's ability
+ * @extends PostSummonAbAttr
+ */
 export class PostSummonCopyAbilityAbAttr extends PostSummonAbAttr {
   private target: Pokemon;
   private targetAbilityName: string;
@@ -23,23 +26,24 @@ export class PostSummonCopyAbilityAbAttr extends PostSummonAbAttr {
     let target: Pokemon;
     if (targets.length > 1) {
       globalScene.executeWithSeedOffset(() => (target = randSeedItem(targets)), globalScene.currentBattle.waveIndex);
+      target = target!;
     } else {
       target = targets[0];
     }
 
     if (
-      target!.getAbility().hasAttr(UncopiableAbilityAbAttr)
+      target.getAbility().hasAttr(UncopiableAbilityAbAttr)
       // Wonder Guard is normally uncopiable so has the attribute, but Trace specifically can copy it
-      && !(pokemon.hasAbility(Abilities.TRACE) && target!.getAbility().id === Abilities.WONDER_GUARD)
+      && !(pokemon.hasAbility(Abilities.TRACE) && target.getAbility().id === Abilities.WONDER_GUARD)
     ) {
       return false;
     }
 
     if (!simulated) {
-      this.target = target!;
-      this.targetAbilityName = allAbilities[target!.getAbility().id].name;
-      pokemon.summonData.ability = target!.getAbility().id;
-      setAbilityRevealed(target!);
+      this.target = target;
+      this.targetAbilityName = allAbilities[target.getAbility().id].name;
+      pokemon.summonData.ability = target.getAbility().id;
+      setAbilityRevealed(target);
       pokemon.updateInfo();
     }
 

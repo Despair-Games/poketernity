@@ -1,6 +1,6 @@
 import type Pokemon from "#app/field/pokemon";
 import type { BattlerTagType } from "#enums/battler-tag-type";
-import { WeatherType } from "#enums/weather-type";
+import type { WeatherType } from "#enums/weather-type";
 import { PostWeatherChangeAbAttr } from "./post-weather-change-ab-attr";
 
 export class PostWeatherChangeAddBattlerTagAttr extends PostWeatherChangeAbAttr {
@@ -23,10 +23,6 @@ export class PostWeatherChangeAddBattlerTagAttr extends PostWeatherChangeAbAttr 
     weather: WeatherType,
     _args: any[],
   ): boolean {
-    console.log(
-      this.weatherTypes.find((w) => weather === w),
-      WeatherType[weather],
-    );
     if (!this.weatherTypes.find((w) => weather === w)) {
       return false;
     }

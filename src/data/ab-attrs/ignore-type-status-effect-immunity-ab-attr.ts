@@ -5,7 +5,9 @@ import type { Type } from "#enums/type";
 import { AbAttr } from "./ab-attr";
 
 /**
- * Ignores the type immunity to Status Effects of the defender if the defender is of a certain type
+ * If the defender is normally immune to a status effect due to its type, ignore that immunity.
+ * Used by Corrosion
+ * @extends AbAttr
  */
 export class IgnoreTypeStatusEffectImmunityAbAttr extends AbAttr {
   private statusEffect: StatusEffect[];
@@ -25,7 +27,9 @@ export class IgnoreTypeStatusEffectImmunityAbAttr extends AbAttr {
     cancelled: BooleanHolder,
     args: any[],
   ): boolean {
-    if (this.statusEffect.includes(args[0] as StatusEffect) && this.defenderType.includes(args[1] as Type)) {
+    const effect: StatusEffect = args[0];
+    const defType: Type = args[1];
+    if (this.statusEffect.includes(effect) && this.defenderType.includes(defType)) {
       cancelled.value = true;
       return true;
     }

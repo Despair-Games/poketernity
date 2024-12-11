@@ -32,6 +32,7 @@ export class PostDefendContactDamageAbAttr extends PostDefendAbAttr {
       && !attacker.hasAbilityWithAttr(BlockNonDirectDamageAbAttr)
     ) {
       attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio)), HitResult.OTHER);
+      // TODO: This should be handled by `damageAndUpdate()`
       attacker.turnData.damageTaken += toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio));
       return true;
     }

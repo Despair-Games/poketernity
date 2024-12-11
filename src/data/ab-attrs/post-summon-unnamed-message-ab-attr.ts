@@ -2,8 +2,12 @@ import type Pokemon from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { PostSummonAbAttr } from "./post-summon-ab-attr";
 
+/**
+ * Displays the message for Cloud Nine and Air Lock.
+ * Doesn't display the pokemon's name.
+ * @extends PostSummonAbAttr
+ */
 export class PostSummonUnnamedMessageAbAttr extends PostSummonAbAttr {
-  //Attr doesn't force pokemon name on the message
   private message: string;
 
   constructor(message: string) {

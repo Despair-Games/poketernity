@@ -40,8 +40,9 @@ export class PostDefendHpGatedStatStageChangeAbAttr extends PostDefendAbAttr {
     _args: any[],
   ): boolean {
     const hpGateFlat: number = Math.ceil(pokemon.getMaxHp() * this.hpGate);
+    // TODO: Normalize `attacksReceived[]` checks
     const lastAttackReceived = pokemon.turnData.attacksReceived[pokemon.turnData.attacksReceived.length - 1];
-    const damageReceived = lastAttackReceived?.damage || 0;
+    const damageReceived = lastAttackReceived?.damage ?? 0;
 
     if (
       this.condition(pokemon, attacker, move)

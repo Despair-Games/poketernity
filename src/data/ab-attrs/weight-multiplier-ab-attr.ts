@@ -5,6 +5,7 @@ import { AbAttr } from "./ab-attr";
 /**
  * Ability attribute used for abilites that change the ability owner's weight
  * Used for Heavy Metal (doubling weight) and Light Metal (halving weight)
+ * @extends AbAttr
  */
 export class WeightMultiplierAbAttr extends AbAttr {
   private multiplier: number;
@@ -22,7 +23,8 @@ export class WeightMultiplierAbAttr extends AbAttr {
     _cancelled: BooleanHolder,
     args: any[],
   ): boolean {
-    (args[0] as NumberHolder).value *= this.multiplier;
+    const weight: NumberHolder = args[0];
+    weight.value *= this.multiplier;
 
     return true;
   }

@@ -29,8 +29,9 @@ export class ReceivedMoveDamageMultiplierAbAttr extends PreDefendAbAttr {
     _cancelled: BooleanHolder,
     args: any[],
   ): boolean {
+    const damage: NumberHolder = args[0];
     if (this.condition(pokemon, attacker, move)) {
-      (args[0] as NumberHolder).value = toDmgValue((args[0] as NumberHolder).value * this.damageMultiplier);
+      damage.value = toDmgValue(damage.value * this.damageMultiplier);
 
       return true;
     }

@@ -18,7 +18,8 @@ export class StatStageChangeMultiplierAbAttr extends AbAttr {
     _cancelled: BooleanHolder,
     args: any[],
   ): boolean {
-    (args[0] as NumberHolder).value *= this.multiplier;
+    const stages: NumberHolder = args[0];
+    stages.value *= this.multiplier;
 
     return true;
   }

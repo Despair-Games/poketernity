@@ -32,7 +32,7 @@ export class PostAttackApplyStatusEffectAbAttr extends PostAttackAbAttr {
       return false;
     }
 
-    /**Status inflicted by abilities post attacking are also considered additional effects.*/
+    // Status inflicted by abilities post attacking are also considered additional effects.
     if (
       !attacker.hasAbilityWithAttr(IgnoreMoveEffectsAbAttr)
       && !simulated

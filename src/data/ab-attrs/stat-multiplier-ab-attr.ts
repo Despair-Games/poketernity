@@ -8,14 +8,14 @@ import { AbAttr } from "./ab-attr";
 export class StatMultiplierAbAttr extends AbAttr {
   private stat: BattleStat;
   private multiplier: number;
-  private condition: PokemonAttackCondition | null;
+  private condition?: PokemonAttackCondition;
 
   constructor(stat: BattleStat, multiplier: number, condition?: PokemonAttackCondition) {
     super(false);
 
     this.stat = stat;
     this.multiplier = multiplier;
-    this.condition = condition ?? null;
+    this.condition = condition;
   }
 
   applyStatStage(

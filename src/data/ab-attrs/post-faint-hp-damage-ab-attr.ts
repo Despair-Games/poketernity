@@ -7,12 +7,9 @@ import { PostFaintAbAttr } from "./post-faint-ab-attr";
 
 /**
  * Attribute used for abilities (Innards Out) that damage the opponent based on how much HP the last attack used to knock out the owner of the ability.
+ * @extends PostFaintAbAttr
  */
 export class PostFaintHPDamageAbAttr extends PostFaintAbAttr {
-  constructor() {
-    super();
-  }
-
   override applyPostFaint(
     pokemon: Pokemon,
     _passive: boolean,
@@ -26,6 +23,7 @@ export class PostFaintHPDamageAbAttr extends PostFaintAbAttr {
       //If the mon didn't die to indirect damage
       const damage = pokemon.turnData.attacksReceived[0].damage;
       attacker.damageAndUpdate(damage, HitResult.OTHER);
+      // TODO: This should be handled by `damageAndUpdate()`
       attacker.turnData.damageTaken += damage;
     }
     return true;

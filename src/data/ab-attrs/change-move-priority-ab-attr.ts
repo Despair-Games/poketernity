@@ -30,11 +30,13 @@ export class ChangeMovePriorityAbAttr extends AbAttr {
     _cancelled: BooleanHolder,
     args: any[],
   ): boolean {
-    if (!this.moveFunc(pokemon, args[0] as Move)) {
+    const move: Move = args[0];
+    const priority: NumberHolder = args[1];
+    if (!this.moveFunc(pokemon, move)) {
       return false;
     }
 
-    (args[1] as NumberHolder).value += this.changeAmount;
+    priority.value += this.changeAmount;
     return true;
   }
 }

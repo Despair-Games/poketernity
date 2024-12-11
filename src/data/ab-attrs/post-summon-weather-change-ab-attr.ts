@@ -13,12 +13,9 @@ export class PostSummonWeatherChangeAbAttr extends PostSummonAbAttr {
   }
 
   override applyPostSummon(_pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
-    if (
-      this.weatherType === WeatherType.HEAVY_RAIN
-      || this.weatherType === WeatherType.HARSH_SUN
-      || this.weatherType === WeatherType.STRONG_WINDS
-      || !globalScene.arena.weather?.isImmutable()
-    ) {
+    // TODO: This seems backwards, shouldn't it check that it's not one of these weathers?
+    const legendaryWeather = [WeatherType.HEAVY_RAIN, WeatherType.HARSH_SUN, WeatherType.STRONG_WINDS];
+    if (legendaryWeather.includes(this.weatherType) || !globalScene.arena.weather?.isImmutable()) {
       if (simulated) {
         return globalScene.arena.weather?.weatherType !== this.weatherType;
       } else {

@@ -9,12 +9,12 @@ export class PostBattleInitStatStageChangeAbAttr extends PostBattleInitAbAttr {
   private stages: number;
   private selfTarget: boolean;
 
-  constructor(stats: BattleStat[], stages: number, selfTarget?: boolean) {
+  constructor(stats: BattleStat[], stages: number, selfTarget: boolean = false) {
     super();
 
     this.stats = stats;
     this.stages = stages;
-    this.selfTarget = !!selfTarget;
+    this.selfTarget = selfTarget;
   }
 
   override applyPostBattleInit(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {

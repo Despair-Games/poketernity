@@ -1,6 +1,5 @@
 import { getStatusEffectHealText } from "#app/data/status-effect";
 import type Pokemon from "#app/field/pokemon";
-import { PlayerPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { StatusEffect } from "#enums/status-effect";
@@ -8,6 +7,7 @@ import { PostSummonAbAttr } from "./post-summon-ab-attr";
 
 /**
  * Removes supplied status effects from the user's field.
+ * @extends PostSummonAbAttr
  */
 export class PostSummonUserFieldRemoveStatusEffectAbAttr extends PostSummonAbAttr {
   private statusEffect: StatusEffect[];
@@ -30,7 +30,7 @@ export class PostSummonUserFieldRemoveStatusEffectAbAttr extends PostSummonAbAtt
    * @returns A boolean or a promise that resolves to a boolean indicating the result of the ability application.
    */
   override applyPostSummon(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
-    const party = pokemon instanceof PlayerPokemon ? globalScene.getPlayerField() : globalScene.getEnemyField();
+    const party = pokemon.isPlayer() ? globalScene.getPlayerField() : globalScene.getEnemyField();
     const allowedParty = party.filter((p) => p.isAllowedInBattle());
 
     if (allowedParty.length < 1) {

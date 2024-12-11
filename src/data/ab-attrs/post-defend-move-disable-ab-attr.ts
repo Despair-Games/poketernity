@@ -7,8 +7,6 @@ import { PostDefendAbAttr } from "./post-defend-ab-attr";
 
 export class PostDefendMoveDisableAbAttr extends PostDefendAbAttr {
   private chance: number;
-  private attacker: Pokemon;
-  private move: Move;
 
   constructor(chance: number) {
     super();
@@ -34,9 +32,7 @@ export class PostDefendMoveDisableAbAttr extends PostDefendAbAttr {
           return true;
         }
 
-        this.attacker = attacker;
-        this.move = move;
-        this.attacker.addTag(BattlerTagType.DISABLED, 4, 0, pokemon.id);
+        attacker.addTag(BattlerTagType.DISABLED, 4, 0, pokemon.id);
         return true;
       }
     }

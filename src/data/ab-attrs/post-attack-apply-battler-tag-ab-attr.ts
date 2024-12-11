@@ -61,10 +61,8 @@ export class PostAttackApplyBattlerTagAbAttr extends PostAttackAbAttr {
     return false;
   }
 
-  /**
-   * Calculates the ability's activation chance based on the conditional stored in this.chance
-   */
-  getChance(attacker: Pokemon, target: Pokemon, move: Move): number {
+  /** This indirection function allows the tests to work. */
+  public getChance(attacker: Pokemon, target: Pokemon, move: Move): number {
     return this.chance(attacker, target, move);
   }
 }
