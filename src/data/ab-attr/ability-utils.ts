@@ -1,5 +1,6 @@
-import type Pokemon from "#app/field/pokemon";
+import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
+import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { Abilities } from "#enums/abilities";
 import { Species } from "#enums/species";
 
@@ -25,4 +26,9 @@ export function getPokemonWithWeatherBasedForms() {
         (p.hasAbility(Abilities.FORECAST) && p.species.speciesId === Species.CASTFORM)
         || (p.hasAbility(Abilities.FLOWER_GIFT) && p.species.speciesId === Species.CHERRIM),
     );
+}
+
+export function queueShowAbility(pokemon: Pokemon, passive: boolean): void {
+  globalScene.unshiftPhase(new ShowAbilityPhase(pokemon.id, passive));
+  globalScene.clearPhaseQueueSplice();
 }

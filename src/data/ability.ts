@@ -11,7 +11,6 @@ import type { Localizable } from "#app/interfaces/locales";
 import { BattleEndPhase } from "#app/phases/battle-end-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { NewBattlePhase } from "#app/phases/new-battle-phase";
-import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { SwitchPhase } from "#app/phases/switch-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import type { Constructor, NumberHolder } from "#app/utils";
@@ -58,6 +57,7 @@ import type { CheckTrappedAbAttr } from "./ab-attr/check-trapped-ab-attr";
 import type { PostBattleAbAttr } from "./ab-attr/post-battle-ab-attr";
 import type { PostFaintAbAttr } from "./ab-attr/post-faint-ab-attr";
 import { ForceSwitchOutImmunityAbAttr } from "./ab-attr/force-switch-out-immunity-ab-attr";
+import { queueShowAbility } from "./ab-attr/ability-utils";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -970,11 +970,6 @@ export function applyPostItemLostAbAttrs(
     (attr, _passive) => attr.applyPostItemLost(pokemon, simulated, args),
     args,
   );
-}
-
-export function queueShowAbility(pokemon: Pokemon, passive: boolean): void {
-  globalScene.unshiftPhase(new ShowAbilityPhase(pokemon.id, passive));
-  globalScene.clearPhaseQueueSplice();
 }
 
 export const allAbilities = [new Ability(Abilities.NONE, 3)];
