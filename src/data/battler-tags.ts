@@ -1,12 +1,7 @@
 import { globalScene } from "#app/global-scene";
-import {
-  allAbilities,
-  applyAbAttrs,
-  BlockNonDirectDamageAbAttr,
-  FlinchEffectAbAttr,
-  ProtectStatAbAttr,
-  ReverseDrainAbAttr,
-} from "#app/data/ability";
+import { allAbilities, applyAbAttrs } from "#app/data/ability";
+import { FlinchEffectAbAttr } from "./ab-attrs/flinch-effect-ab-attr";
+import { BlockNonDirectDamageAbAttr } from "./ab-attrs/block-non-direct-damage-ab-attr";
 import { ChargeAnim, CommonAnim, CommonBattleAnim, MoveChargeAnim } from "#app/data/battle-anims";
 import type Move from "#app/data/move";
 import {
@@ -42,6 +37,8 @@ import { Species } from "#enums/species";
 import { EFFECTIVE_STATS, getStatKey, Stat, type BattleStat, type EffectiveStat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { WeatherType } from "#enums/weather-type";
+import { ReverseDrainAbAttr } from "./ab-attrs/reverse-drain-ab-attr";
+import { ProtectStatAbAttr } from "./ab-attrs/protect-stat-ab-attr";
 
 export enum BattlerTagLapseType {
   FAINT,
@@ -1532,12 +1529,6 @@ export class ProtectedTag extends BattlerTag {
       globalScene.queueMessage(
         i18next.t("battlerTags:protectedLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       );
-
-      // Stop multi-hit moves early
-      const effectPhase = globalScene.getCurrentPhase();
-      if (effectPhase instanceof MoveEffectPhase) {
-        effectPhase.stopMultiHit(pokemon);
-      }
       return true;
     }
 

@@ -28,46 +28,39 @@ import {
   randSeedInt,
   getEnumValues,
   toReadableString,
+  type nil,
 } from "#app/utils";
 import { WeatherType } from "#enums/weather-type";
 import type { ArenaTrapTag } from "./arena-tag";
 import { ArenaTagSide, WeakenMoveTypeTag } from "./arena-tag";
 import {
   allAbilities,
-  AllyMoveCategoryPowerBoostAbAttr,
   applyAbAttrs,
   applyPostAttackAbAttrs,
   applyPostItemLostAbAttrs,
   applyPreAttackAbAttrs,
   applyPreDefendAbAttrs,
-  BlockItemTheftAbAttr,
-  BlockNonDirectDamageAbAttr,
-  BlockOneHitKOAbAttr,
-  BlockRecoilDamageAttr,
-  ChangeMovePriorityAbAttr,
-  ConfusionOnStatusEffectAbAttr,
-  FieldMoveTypePowerBoostAbAttr,
-  FieldPreventExplosiveMovesAbAttr,
-  ForceSwitchOutImmunityAbAttr,
-  HealFromBerryUseAbAttr,
-  IgnoreContactAbAttr,
-  IgnoreMoveEffectsAbAttr,
-  IgnoreProtectOnContactAbAttr,
-  InfiltratorAbAttr,
-  MaxMultiHitAbAttr,
-  MoveAbilityBypassAbAttr,
-  MoveEffectChanceMultiplierAbAttr,
-  MoveTypeChangeAbAttr,
   PostDamageForceSwitchAbAttr,
-  PostItemLostAbAttr,
-  ReverseDrainAbAttr,
-  UncopiableAbilityAbAttr,
-  UnsuppressableAbilityAbAttr,
-  UnswappableAbilityAbAttr,
-  UserFieldMoveTypePowerBoostAbAttr,
-  VariableMovePowerAbAttr,
-  WonderSkinAbAttr,
 } from "./ability";
+import { UnswappableAbilityAbAttr } from "./ab-attrs/unswappable-ability-ab-attr";
+import { UnsuppressableAbilityAbAttr } from "./ab-attrs/unsuppressable-ability-ab-attr";
+import { UncopiableAbilityAbAttr } from "./ab-attrs/uncopiable-ability-ab-attr";
+import { InfiltratorAbAttr } from "./ab-attrs/infiltrator-ab-attr";
+import { IgnoreProtectOnContactAbAttr } from "./ab-attrs/ignore-protect-on-contact-ab-attr";
+import { MoveAbilityBypassAbAttr } from "./ab-attrs/move-ability-bypass-ab-attr";
+import { ForceSwitchOutImmunityAbAttr } from "./ab-attrs/force-switch-out-immunity-ab-attr";
+import { MaxMultiHitAbAttr } from "./ab-attrs/max-multi-hit-ab-attr";
+import { PostItemLostAbAttr } from "./ab-attrs/post-item-lost-ab-attr";
+import { IgnoreContactAbAttr } from "./ab-attrs/ignore-contact-ab-attr";
+import { ChangeMovePriorityAbAttr } from "./ab-attrs/change-move-priority-ab-attr";
+import { BlockOneHitKOAbAttr } from "./ab-attrs/block-one-hit-ko-ab-attr";
+import { BlockNonDirectDamageAbAttr } from "./ab-attrs/block-non-direct-damage-ab-attr";
+import { ConfusionOnStatusEffectAbAttr } from "./ab-attrs/confusion-on-status-effect-ab-attr";
+import { AllyMoveCategoryPowerBoostAbAttr } from "./ab-attrs/ally-move-category-power-boost-ab-attr";
+import { UserFieldMoveTypePowerBoostAbAttr } from "./ab-attrs/user-field-move-type-power-boost-ab-attr";
+import { MoveTypeChangeAbAttr } from "./ab-attrs/move-type-change-ab-attr";
+import { FieldPreventExplosiveMovesAbAttr } from "./ab-attrs/field-prevent-explosive-moves-ab-attr";
+import { VariableMovePowerAbAttr } from "./ab-attrs/variable-move-power-ab-attr";
 import {
   AttackTypeBoosterModifier,
   BerryModifier,
@@ -111,6 +104,14 @@ import { RevivalBlessingPhase } from "#app/phases/revival-blessing-phase";
 import { LoadMoveAnimPhase } from "#app/phases/load-move-anim-phase";
 import { PokemonTransformPhase } from "#app/phases/pokemon-transform-phase";
 import { MoveAnimPhase } from "#app/phases/move-anim-phase";
+import { BlockItemTheftAbAttr } from "./ab-attrs/block-item-theft-ab-attr";
+import { BlockRecoilDamageAttr } from "./ab-attrs/block-recoil-damage-ab-attr";
+import { WonderSkinAbAttr } from "./ab-attrs/wonder-skin-ab-attr";
+import { ReverseDrainAbAttr } from "./ab-attrs/reverse-drain-ab-attr";
+import { MoveEffectChanceMultiplierAbAttr } from "./ab-attrs/move-effect-chance-multiplier-ab-attr";
+import { IgnoreMoveEffectsAbAttr } from "./ab-attrs/ignore-move-effect-ab-attr";
+import { FieldMoveTypePowerBoostAbAttr } from "./ab-attrs/field-move-type-power-boost-ab-attr";
+import { HealFromBerryUseAbAttr } from "./ab-attrs/heal-from-berry-use-ab-attr";
 
 export enum MoveCategory {
   PHYSICAL,
@@ -197,7 +198,7 @@ export enum MoveFlags {
 type MoveConditionFunc = (user: Pokemon, target: Pokemon, move: Move) => boolean;
 type UserMoveConditionFunc = (user: Pokemon, move: Move) => boolean;
 
-export default class Move implements Localizable {
+export class Move implements Localizable {
   public id: Moves;
   public name: string;
   private _type: Type;
@@ -393,6 +394,16 @@ export default class Move implements Localizable {
     return false;
   }
 
+  isFieldTarget(): boolean {
+    switch (this.moveTarget) {
+      case MoveTarget.BOTH_SIDES:
+      case MoveTarget.USER_SIDE:
+      case MoveTarget.ENEMY_SIDE:
+        return true;
+    }
+    return false;
+  }
+
   isChargingMove(): this is ChargingMove {
     return false;
   }
@@ -435,7 +446,7 @@ export default class Move implements Localizable {
    * @param target The {@linkcode Pokemon} targeted by this move
    * @returns `true` if the move can bypass the target's Substitute; `false` otherwise.
    */
-  hitsSubstitute(user: Pokemon, target: Pokemon | null): boolean {
+  hitsSubstitute(user: Pokemon, target: Pokemon | nil): boolean {
     if (
       [MoveTarget.USER, MoveTarget.USER_SIDE, MoveTarget.ENEMY_SIDE, MoveTarget.BOTH_SIDES].includes(this.moveTarget)
       || !target?.getTag(BattlerTagType.SUBSTITUTE)
@@ -979,6 +990,8 @@ export default class Move implements Localizable {
   }
 }
 
+export default Move;
+
 export class AttackMove extends Move {
   constructor(
     id: Moves,
@@ -1223,7 +1236,6 @@ export abstract class MoveAttr {
 export enum MoveEffectTrigger {
   PRE_APPLY,
   POST_APPLY,
-  HIT,
   /** Triggers one time after all target effects have applied */
   POST_TARGET,
 }
@@ -1751,7 +1763,7 @@ export class SacrificialAttr extends MoveEffectAttr {
  **/
 export class SacrificialAttrOnHit extends MoveEffectAttr {
   constructor() {
-    super(true, { trigger: MoveEffectTrigger.HIT });
+    super(true);
   }
 
   /**
@@ -2004,6 +2016,15 @@ export class PartyStatusCureAttr extends MoveEffectAttr {
  * @extends MoveEffectAttr
  */
 export class FlameBurstAttr extends MoveEffectAttr {
+  constructor() {
+    /**
+     * This is self-targeted to bypass immunity to target-facing secondary
+     * effects when the target has an active Substitute doll.
+     * TODO: Find a more intuitive way to implement Substitute bypassing.
+     */
+    super(true);
+  }
+
   /**
    * @param _user - n/a
    * @param target - The target Pokémon.
@@ -2245,7 +2266,7 @@ export class HitHealAttr extends MoveEffectAttr {
   private healStat: EffectiveStat | null;
 
   constructor(healRatio?: number | null, healStat?: EffectiveStat) {
-    super(true, { trigger: MoveEffectTrigger.HIT });
+    super(true);
 
     this.healRatio = healRatio ?? 0.5;
     this.healStat = healStat ?? null;
@@ -2456,7 +2477,7 @@ export class StatusEffectAttr extends MoveEffectAttr {
   public overrideStatus: boolean = false;
 
   constructor(effect: StatusEffect, selfTarget?: boolean, turnsRemaining?: number, overrideStatus: boolean = false) {
-    super(selfTarget, { trigger: MoveEffectTrigger.HIT });
+    super(selfTarget);
 
     this.effect = effect;
     this.turnsRemaining = turnsRemaining;
@@ -2464,10 +2485,6 @@ export class StatusEffectAttr extends MoveEffectAttr {
   }
 
   override apply(user: Pokemon, target: Pokemon, move: Move, _args: any[]): boolean {
-    if (!this.selfTarget && move.hitsSubstitute(user, target)) {
-      return false;
-    }
-
     const moveChance = this.getMoveChance(user, target, move, this.selfTarget, true);
     const statusCheck = moveChance < 0 || moveChance === 100 || user.randSeedInt(100) < moveChance;
     if (statusCheck) {
@@ -2533,7 +2550,7 @@ export class MultiStatusEffectAttr extends StatusEffectAttr {
 
 export class PsychoShiftEffectAttr extends MoveEffectAttr {
   constructor() {
-    super(false, { trigger: MoveEffectTrigger.HIT });
+    super(false);
   }
 
   /**
@@ -2573,7 +2590,7 @@ export class StealHeldItemChanceAttr extends MoveEffectAttr {
   private chance: number;
 
   constructor(chance: number) {
-    super(false, { trigger: MoveEffectTrigger.HIT });
+    super(false);
     this.chance = chance;
   }
 
@@ -2641,7 +2658,7 @@ export class RemoveHeldItemAttr extends MoveEffectAttr {
   private berriesOnly: boolean;
 
   constructor(berriesOnly: boolean) {
-    super(false, { trigger: MoveEffectTrigger.HIT });
+    super(false);
     this.berriesOnly = berriesOnly;
   }
 
@@ -2653,13 +2670,9 @@ export class RemoveHeldItemAttr extends MoveEffectAttr {
    * @param _args N/A
    * @returns `True` if an item was removed
    */
-  override apply(user: Pokemon, target: Pokemon, move: Move, _args: any[]): boolean {
+  override apply(user: Pokemon, target: Pokemon, _move: Move, _args: any[]): boolean {
     if (!this.berriesOnly && target.isPlayer()) {
       // "Wild Pokemon cannot knock off Player Pokemon's held items" (See Bulbapedia)
-      return false;
-    }
-
-    if (move.hitsSubstitute(user, target)) {
       return false;
     }
 
@@ -2729,8 +2742,8 @@ export class RemoveHeldItemAttr extends MoveEffectAttr {
  */
 export class EatBerryAttr extends MoveEffectAttr {
   protected chosenBerry: BerryModifier | undefined;
-  constructor() {
-    super(true, { trigger: MoveEffectTrigger.HIT });
+  constructor(selfTarget: boolean) {
+    super(selfTarget);
   }
   /**
    * Causes the target to eat a berry.
@@ -2745,17 +2758,19 @@ export class EatBerryAttr extends MoveEffectAttr {
       return false;
     }
 
-    const heldBerries = this.getTargetHeldBerries(target);
+    const pokemon = this.selfTarget ? user : target;
+
+    const heldBerries = this.getTargetHeldBerries(pokemon);
     if (heldBerries.length <= 0) {
       return false;
     }
     this.chosenBerry = heldBerries[user.randSeedInt(heldBerries.length)];
     const preserve = new BooleanHolder(false);
-    globalScene.applyModifiers(PreserveBerryModifier, target.isPlayer(), target, preserve); // check for berry pouch preservation
+    globalScene.applyModifiers(PreserveBerryModifier, pokemon.isPlayer(), pokemon, preserve); // check for berry pouch preservation
     if (!preserve.value) {
-      this.reduceBerryModifier(target);
+      this.reduceBerryModifier(pokemon);
     }
-    this.eatBerry(target);
+    this.eatBerry(pokemon);
     return true;
   }
 
@@ -2785,7 +2800,7 @@ export class EatBerryAttr extends MoveEffectAttr {
  */
 export class StealEatBerryAttr extends EatBerryAttr {
   constructor() {
-    super();
+    super(false);
   }
   /**
    * User steals a random berry from the target and then eats it.
@@ -2795,10 +2810,7 @@ export class StealEatBerryAttr extends EatBerryAttr {
    * @param _args Unused
    * @returns `true` if the function succeeds
    */
-  override apply(user: Pokemon, target: Pokemon, move: Move, _args: any[]): boolean {
-    if (move.hitsSubstitute(user, target)) {
-      return false;
-    }
+  override apply(user: Pokemon, target: Pokemon, _move: Move, _args: any[]): boolean {
     const cancelled = new BooleanHolder(false);
     applyAbAttrs(BlockItemTheftAbAttr, target, cancelled); // check for abilities that block item theft
     if (cancelled.value === true) {
@@ -2850,10 +2862,6 @@ export class HealStatusEffectAttr extends MoveEffectAttr {
    */
   override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
     if (!super.apply(user, target, move, args)) {
-      return false;
-    }
-
-    if (!this.selfTarget && move.hitsSubstitute(user, target)) {
       return false;
     }
 
@@ -3253,14 +3261,6 @@ export class StatStageChangeAttr extends MoveEffectAttr {
   }
 
   /**
-   * Indicates when the stat change should trigger
-   * @default MoveEffectTrigger.HIT
-   */
-  public override get trigger() {
-    return this.options?.trigger ?? MoveEffectTrigger.HIT;
-  }
-
-  /**
    * Attempts to change stats of the user or target (depending on value of selfTarget) if conditions are met
    * @param user {@linkcode Pokemon} the user of the move
    * @param target {@linkcode Pokemon} the target of the move
@@ -3270,10 +3270,6 @@ export class StatStageChangeAttr extends MoveEffectAttr {
    */
   override apply(user: Pokemon, target: Pokemon, move: Move, args?: any[]): boolean {
     if (!super.apply(user, target, move, args) || (this.condition && !this.condition(user, target, move))) {
-      return false;
-    }
-
-    if (!this.selfTarget && move.hitsSubstitute(user, target)) {
       return false;
     }
 
@@ -3583,7 +3579,7 @@ export class CutHpStatStageBoostAttr extends StatStageChangeAttr {
  */
 export class OrderUpStatBoostAttr extends MoveEffectAttr {
   constructor() {
-    super(true, { trigger: MoveEffectTrigger.HIT });
+    super(true);
   }
 
   override apply(user: Pokemon, _target: Pokemon, _move: Move, _args?: any[]): boolean {
@@ -3665,7 +3661,7 @@ export class ResetStatsAttr extends MoveEffectAttr {
     this.targetAllPokemon = targetAllPokemon;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move, _args: any[]): boolean {
+  override apply(_user: Pokemon, target: Pokemon, _move: Move, _args: any[]): boolean {
     if (this.targetAllPokemon) {
       // Target all pokemon on the field when Freezy Frost or Haze are used
       const activePokemon = globalScene.getField(true);
@@ -3673,12 +3669,8 @@ export class ResetStatsAttr extends MoveEffectAttr {
       globalScene.queueMessage(i18next.t("moveTriggers:statEliminated"));
     } else {
       // Affects only the single target when Clear Smog is used
-      if (!move.hitsSubstitute(user, target)) {
-        this.resetStats(target);
-        globalScene.queueMessage(
-          i18next.t("moveTriggers:resetStats", { pokemonName: getPokemonNameWithAffix(target) }),
-        );
-      }
+      this.resetStats(target);
+      globalScene.queueMessage(i18next.t("moveTriggers:resetStats", { pokemonName: getPokemonNameWithAffix(target) }));
     }
     return true;
   }
@@ -4333,7 +4325,8 @@ export class PresentPowerAttr extends VariablePowerAttr {
       (args[0] as NumberHolder).value = 120;
     } else if (80 < powerSeed && powerSeed <= 100) {
       // If this move is multi-hit, disable all other hits
-      user.stopMultiHit();
+      user.turnData.hitCount = 1;
+      user.turnData.hitsLeft = 1;
       globalScene.unshiftPhase(
         new PokemonHealPhase(
           target.getBattlerIndex(),
@@ -5461,7 +5454,7 @@ export class BypassRedirectAttr extends MoveAttr {
 
 export class FrenzyAttr extends MoveEffectAttr {
   constructor() {
-    super(true, { trigger: MoveEffectTrigger.HIT, lastHitOnly: true });
+    super(true, { lastHitOnly: true });
   }
 
   override canApply(user: Pokemon, target: Pokemon, _move: Move, _args: any[]) {
@@ -5542,7 +5535,6 @@ export class AddBattlerTagAttr extends MoveEffectAttr {
     turnCountMin: number = 0,
     turnCountMax?: number,
     lastHitOnly: boolean = false,
-    cancelOnFail: boolean = false,
   ) {
     super(selfTarget, { lastHitOnly: lastHitOnly });
 
@@ -5550,14 +5542,10 @@ export class AddBattlerTagAttr extends MoveEffectAttr {
     this.turnCountMin = turnCountMin;
     this.turnCountMax = turnCountMax !== undefined ? turnCountMax : turnCountMin;
     this.failOnOverlap = !!failOnOverlap;
-    this.cancelOnFail = cancelOnFail;
   }
 
   override canApply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    if (
-      !super.canApply(user, target, move, args)
-      || (this.cancelOnFail === true && user.getLastXMoves(1)[0]?.result === MoveResult.FAIL)
-    ) {
+    if (!super.canApply(user, target, move, args)) {
       return false;
     } else {
       return true;
@@ -5653,18 +5641,6 @@ export class AddBattlerTagAttr extends MoveEffectAttr {
 export class LeechSeedAttr extends AddBattlerTagAttr {
   constructor() {
     super(BattlerTagType.SEEDED);
-  }
-
-  /**
-   * Adds a Seeding effect to the target if the target does not have an active Substitute.
-   * @param user the {@linkcode Pokemon} using the move
-   * @param target the {@linkcode Pokemon} targeted by the move
-   * @param move the {@linkcode Move} invoking this effect
-   * @param args n/a
-   * @returns `true` if the effect successfully applies; `false` otherwise
-   */
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    return !move.hitsSubstitute(user, target) && super.apply(user, target, move, args);
   }
 }
 
@@ -5817,13 +5793,6 @@ export class FlinchAttr extends AddBattlerTagAttr {
   constructor() {
     super(BattlerTagType.FLINCHED, false);
   }
-
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    if (!move.hitsSubstitute(user, target)) {
-      return super.apply(user, target, move, args);
-    }
-    return false;
-  }
 }
 
 export class ConfuseAttr extends AddBattlerTagAttr {
@@ -5839,16 +5808,13 @@ export class ConfuseAttr extends AddBattlerTagAttr {
       return false;
     }
 
-    if (!move.hitsSubstitute(user, target)) {
-      return super.apply(user, target, move, args);
-    }
-    return false;
+    return super.apply(user, target, move, args);
   }
 }
 
 export class RechargeAttr extends AddBattlerTagAttr {
   constructor() {
-    super(BattlerTagType.RECHARGING, true, false, 1, 1, true, true);
+    super(BattlerTagType.RECHARGING, true, false, 1, 1, true);
   }
 }
 
@@ -6284,7 +6250,7 @@ export class AddPledgeEffectAttr extends AddArenaTagAttr {
  * @see {@linkcode apply}
  */
 export class RevivalBlessingAttr extends MoveEffectAttr {
-  constructor(_user?: boolean) {
+  constructor() {
     super(true);
   }
 
@@ -6523,15 +6489,11 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
   }
 
   getSwitchOutCondition(): MoveConditionFunc {
-    return (user, target, move) => {
+    return (user, target, _move) => {
       const switchOutTarget = this.selfSwitch ? user : target;
       const player = switchOutTarget instanceof PlayerPokemon;
 
       if (!this.selfSwitch) {
-        if (move.hitsSubstitute(user, target)) {
-          return false;
-        }
-
         // Dondozo with an allied Tatsugiri in its mouth cannot be forced out
         const commandedTag = switchOutTarget.getTag(BattlerTagType.COMMANDED);
         if (commandedTag?.getSourcePokemon()?.isActive(true)) {
@@ -6809,7 +6771,7 @@ export class ChangeTypeAttr extends MoveEffectAttr {
   private type: Type;
 
   constructor(type: Type) {
-    super(false, { trigger: MoveEffectTrigger.HIT });
+    super(false);
 
     this.type = type;
   }
@@ -6841,7 +6803,7 @@ export class AddTypeAttr extends MoveEffectAttr {
   private type: Type;
 
   constructor(type: Type) {
-    super(false, { trigger: MoveEffectTrigger.HIT });
+    super(false);
 
     this.type = type;
   }
@@ -7525,7 +7487,7 @@ export class AbilityChangeAttr extends MoveEffectAttr {
   public ability: Abilities;
 
   constructor(ability: Abilities, selfTarget?: boolean) {
-    super(selfTarget, { trigger: MoveEffectTrigger.HIT });
+    super(selfTarget);
 
     this.ability = ability;
   }
@@ -7561,7 +7523,7 @@ export class AbilityCopyAttr extends MoveEffectAttr {
   public copyToPartner: boolean;
 
   constructor(copyToPartner: boolean = false) {
-    super(false, { trigger: MoveEffectTrigger.HIT });
+    super(false);
 
     this.copyToPartner = copyToPartner;
   }
@@ -7614,7 +7576,7 @@ export class AbilityGiveAttr extends MoveEffectAttr {
   public copyToPartner: boolean;
 
   constructor() {
-    super(false, { trigger: MoveEffectTrigger.HIT });
+    super(false);
   }
 
   override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
@@ -7916,7 +7878,7 @@ export class DiscourageFrequentUseAttr extends MoveAttr {
 
 export class MoneyAttr extends MoveEffectAttr {
   constructor() {
-    super(true, { trigger: MoveEffectTrigger.HIT, firstHitOnly: true });
+    super(true, { firstHitOnly: true });
   }
 
   override apply(_user: Pokemon, _target: Pokemon, _move: Move): boolean {
@@ -7985,7 +7947,7 @@ export class StatusIfBoostedAttr extends MoveEffectAttr {
   public effect: StatusEffect;
 
   constructor(effect: StatusEffect) {
-    super(true, { trigger: MoveEffectTrigger.HIT });
+    super(true);
     this.effect = effect;
   }
 
@@ -11035,7 +10997,7 @@ export function initMoves() {
       .attr(JawLockAttr)
       .bitingMove(),
     new SelfStatusMove(Moves.STUFF_CHEEKS, Type.NORMAL, -1, 10, -1, 0, 8)
-      .attr(EatBerryAttr)
+      .attr(EatBerryAttr, true)
       .attr(StatStageChangeAttr, [Stat.DEF], 2, true)
       .condition((user) => {
         const userBerries = globalScene.findModifiers((m) => m instanceof BerryModifier, user.isPlayer());
@@ -11054,7 +11016,7 @@ export function initMoves() {
       .attr(MultiHitAttr, MultiHitType._2)
       .makesContact(false)
       .partial(), // smart targetting is unimplemented
-    new StatusMove(Moves.TEATIME, Type.NORMAL, -1, 10, -1, 0, 8).attr(EatBerryAttr).target(MoveTarget.ALL),
+    new StatusMove(Moves.TEATIME, Type.NORMAL, -1, 10, -1, 0, 8).attr(EatBerryAttr, false).target(MoveTarget.ALL),
     new StatusMove(Moves.OCTOLOCK, Type.FIGHTING, 100, 15, -1, 0, 8)
       .condition(failIfGhostTypeCondition)
       .attr(AddBattlerTagAttr, BattlerTagType.OCTOLOCK, false, true, 1),
