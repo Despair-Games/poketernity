@@ -5,7 +5,7 @@ import { BooleanHolder } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { BattleStat } from "#enums/stat";
 import { applyAbAttrs } from "../ability";
-import { queueShowAbility } from "./ability-utils";
+import { queueShowAbility } from "../ability-utils";
 import { IntimidateImmunityAbAttr } from "./intimidate-immunity-ab-attr";
 import { PostIntimidateStatStageChangeAbAttr } from "./post-intimidate-stat-stage-change-ab-attr";
 import { PostSummonAbAttr } from "./post-summon-ab-attr";

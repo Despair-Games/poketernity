@@ -2,7 +2,7 @@ import type Pokemon from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { Abilities } from "#enums/abilities";
 import { Species } from "#enums/species";
-import { queueShowAbility } from "./ability-utils";
+import { queueShowAbility } from "../ability-utils";
 import { SpeciesFormChangeRevertWeatherFormTrigger, SpeciesFormChangeWeatherTrigger } from "../pokemon-forms";
 import { PostSummonAbAttr } from "./post-summon-ab-attr";
 

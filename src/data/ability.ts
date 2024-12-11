@@ -57,7 +57,7 @@ import type { CheckTrappedAbAttr } from "./ab-attrs/check-trapped-ab-attr";
 import type { PostBattleAbAttr } from "./ab-attrs/post-battle-ab-attr";
 import type { PostFaintAbAttr } from "./ab-attrs/post-faint-ab-attr";
 import { ForceSwitchOutImmunityAbAttr } from "./ab-attrs/force-switch-out-immunity-ab-attr";
-import { queueShowAbility } from "./ab-attrs/ability-utils";
+import { queueShowAbility } from "./ability-utils";
 
 export class Ability implements Localizable {
   public id: Abilities;

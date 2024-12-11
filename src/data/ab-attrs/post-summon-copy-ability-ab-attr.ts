@@ -6,7 +6,7 @@ import { Abilities } from "#enums/abilities";
 import i18next from "i18next";
 import { allAbilities } from "../ability";
 import { UncopiableAbilityAbAttr } from "./uncopiable-ability-ab-attr";
-import { setAbilityRevealed } from "./ability-utils";
+import { setAbilityRevealed } from "../ability-utils";
 import { PostSummonAbAttr } from "./post-summon-ab-attr";
 
 /** Attempts to copy a pokemon's ability */
