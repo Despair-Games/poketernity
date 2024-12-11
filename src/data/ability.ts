@@ -65,13 +65,13 @@ export class Ability implements Localizable {
   private nameAppend: string;
   public name: string;
   public description: string;
-  public generation: integer;
+  public generation: number;
   public isBypassFaint: boolean;
   public isIgnorable: boolean;
   public attrs: AbAttr[];
   public conditions: AbAttrCondition[];
 
-  constructor(id: Abilities, generation: integer) {
+  constructor(id: Abilities, generation: number) {
     this.id = id;
 
     this.nameAppend = "";
@@ -579,6 +579,7 @@ export function applyStatMultiplierAbAttrs(
     args,
   );
 }
+
 export function applyPostSetStatusAbAttrs(
   attrType: Constructor<PostSetStatusAbAttr>,
   pokemon: Pokemon,
@@ -767,7 +768,7 @@ export function applyPostStatStageChangeAbAttrs(
   attrType: Constructor<PostStatStageChangeAbAttr>,
   pokemon: Pokemon,
   stats: BattleStat[],
-  stages: integer,
+  stages: number,
   selfTarget: boolean,
   simulated: boolean = false,
   ...args: any[]

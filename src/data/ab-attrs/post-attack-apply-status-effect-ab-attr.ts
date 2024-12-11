@@ -28,7 +28,7 @@ export class PostAttackApplyStatusEffectAbAttr extends PostAttackAbAttr {
     _hitResult: HitResult,
     _args: any[],
   ): boolean {
-    if (pokemon !== attacker && move.hitsSubstitute(attacker, pokemon)) {
+    if (pokemon !== attacker) {
       return false;
     }
 

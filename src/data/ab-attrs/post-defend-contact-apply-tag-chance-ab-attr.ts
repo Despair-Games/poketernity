@@ -27,11 +27,7 @@ export class PostDefendContactApplyTagChanceAbAttr extends PostDefendAbAttr {
     _hitResult: HitResult,
     _args: any[],
   ): boolean {
-    if (
-      move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
-      && pokemon.randSeedInt(100) < this.chance
-      && !move.hitsSubstitute(attacker, pokemon)
-    ) {
+    if (move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon) && pokemon.randSeedInt(100) < this.chance) {
       if (simulated) {
         return attacker.canAddTag(this.tagType);
       } else {

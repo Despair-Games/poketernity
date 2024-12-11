@@ -15,15 +15,15 @@ export class PostDefendTerrainChangeAbAttr extends PostDefendAbAttr {
   }
 
   override applyPostDefend(
-    pokemon: Pokemon,
+    _pokemon: Pokemon,
     _passive: boolean,
     simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
+    _attacker: Pokemon,
+    _move: Move,
     hitResult: HitResult,
     _args: any[],
   ): boolean {
-    if (hitResult < HitResult.NO_EFFECT && !move.hitsSubstitute(attacker, pokemon)) {
+    if (hitResult < HitResult.NO_EFFECT) {
       if (simulated) {
         return globalScene.arena.terrain?.terrainType !== (this.terrainType || undefined);
       } else {

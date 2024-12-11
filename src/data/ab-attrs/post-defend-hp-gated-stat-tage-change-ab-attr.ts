@@ -47,7 +47,6 @@ export class PostDefendHpGatedStatStageChangeAbAttr extends PostDefendAbAttr {
       this.condition(pokemon, attacker, move)
       && pokemon.hp <= hpGateFlat
       && pokemon.hp + damageReceived > hpGateFlat
-      && !move.hitsSubstitute(attacker, pokemon)
     ) {
       if (!simulated) {
         globalScene.unshiftPhase(

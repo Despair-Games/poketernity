@@ -22,15 +22,11 @@ export class PostDefendCritStatStageChangeAbAttr extends PostDefendAbAttr {
     pokemon: Pokemon,
     _passive: boolean,
     simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
+    _attacker: Pokemon,
+    _move: Move,
     _hitResult: HitResult,
     _args: any[],
   ): boolean {
-    if (move.hitsSubstitute(attacker, pokemon)) {
-      return false;
-    }
-
     if (!simulated) {
       globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [this.stat], this.stages));
     }

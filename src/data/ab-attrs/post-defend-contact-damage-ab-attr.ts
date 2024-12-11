@@ -30,7 +30,6 @@ export class PostDefendContactDamageAbAttr extends PostDefendAbAttr {
       !simulated
       && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
       && !attacker.hasAbilityWithAttr(BlockNonDirectDamageAbAttr)
-      && !move.hitsSubstitute(attacker, pokemon)
     ) {
       attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio)), HitResult.OTHER);
       attacker.turnData.damageTaken += toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio));

@@ -11,7 +11,6 @@ import { PostSummonAbAttr } from "./post-summon-ab-attr";
  * Used by Forecast and Flower Gift.
  * @extends PostSummonAbAttr
  */
-
 export class PostSummonFormChangeByWeatherAbAttr extends PostSummonAbAttr {
   private ability: Abilities;
 

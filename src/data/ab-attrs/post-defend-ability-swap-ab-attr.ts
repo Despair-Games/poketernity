@@ -24,7 +24,6 @@ export class PostDefendAbilitySwapAbAttr extends PostDefendAbAttr {
     if (
       move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
       && !attacker.getAbility().hasAttr(UnswappableAbilityAbAttr)
-      && !move.hitsSubstitute(attacker, pokemon)
     ) {
       if (!simulated) {
         const tempAbilityId = attacker.getAbility().id;

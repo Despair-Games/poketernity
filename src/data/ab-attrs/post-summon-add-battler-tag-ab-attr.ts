@@ -1,6 +1,7 @@
 import type Pokemon from "#app/field/pokemon";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import { PostSummonAbAttr } from "./post-summon-ab-attr";
+
 export class PostSummonAddBattlerTagAbAttr extends PostSummonAbAttr {
   private tagType: BattlerTagType;
   private turnCount: number;

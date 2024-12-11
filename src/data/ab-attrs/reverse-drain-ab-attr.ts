@@ -25,7 +25,7 @@ export class ReverseDrainAbAttr extends PostDefendAbAttr {
    * @returns true if healing should be reversed on a healing move, false otherwise.
    */
   override applyPostDefend(
-    pokemon: Pokemon,
+    _pokemon: Pokemon,
     _passive: boolean,
     simulated: boolean,
     attacker: Pokemon,
@@ -33,7 +33,7 @@ export class ReverseDrainAbAttr extends PostDefendAbAttr {
     _hitResult: HitResult,
     _args: any[],
   ): boolean {
-    if (move.hasAttr(HitHealAttr) && !move.hitsSubstitute(attacker, pokemon)) {
+    if (move.hasAttr(HitHealAttr)) {
       if (!simulated) {
         globalScene.queueMessage(
           i18next.t("abilityTriggers:reverseDrain", { pokemonNameWithAffix: getPokemonNameWithAffix(attacker) }),

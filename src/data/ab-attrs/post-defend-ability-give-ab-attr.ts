@@ -29,7 +29,6 @@ export class PostDefendAbilityGiveAbAttr extends PostDefendAbAttr {
       move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
       && !attacker.getAbility().hasAttr(UnsuppressableAbilityAbAttr)
       && !attacker.getAbility().hasAttr(PostDefendAbilityGiveAbAttr)
-      && !move.hitsSubstitute(attacker, pokemon)
     ) {
       if (!simulated) {
         attacker.summonData.ability = this.ability;

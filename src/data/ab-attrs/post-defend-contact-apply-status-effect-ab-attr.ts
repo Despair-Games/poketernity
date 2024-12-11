@@ -29,7 +29,6 @@ export class PostDefendContactApplyStatusEffectAbAttr extends PostDefendAbAttr {
       move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
       && !attacker.status
       && (this.chance === -1 || pokemon.randSeedInt(100) < this.chance)
-      && !move.hitsSubstitute(attacker, pokemon)
     ) {
       const effect =
         this.effects.length === 1 ? this.effects[0] : this.effects[pokemon.randSeedInt(this.effects.length)];

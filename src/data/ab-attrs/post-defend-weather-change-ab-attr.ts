@@ -26,7 +26,7 @@ export class PostDefendWeatherChangeAbAttr extends PostDefendAbAttr {
     _hitResult: HitResult,
     _args: any[],
   ): boolean {
-    if ((this.condition && !this.condition(pokemon, attacker, move)) || move.hitsSubstitute(attacker, pokemon)) {
+    if (this.condition && !this.condition(pokemon, attacker, move)) {
       return false;
     }
     if (!globalScene.arena.weather?.isImmutable()) {

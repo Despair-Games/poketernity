@@ -8,7 +8,6 @@ import { PostAttackAbAttr } from "./post-attack-ab-attr";
  * Ability attribute for Gorilla Tactics
  * @extends PostAttackAbAttr
  */
-
 export class GorillaTacticsAbAttr extends PostAttackAbAttr {
   constructor() {
     super((_user, _target, _move) => true, false);

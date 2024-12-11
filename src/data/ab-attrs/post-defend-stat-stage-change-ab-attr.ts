@@ -38,7 +38,7 @@ export class PostDefendStatStageChangeAbAttr extends PostDefendAbAttr {
     _hitResult: HitResult,
     _args: any[],
   ): boolean {
-    if (this.condition(pokemon, attacker, move) && !move.hitsSubstitute(attacker, pokemon)) {
+    if (this.condition(pokemon, attacker, move)) {
       if (simulated) {
         return true;
       }

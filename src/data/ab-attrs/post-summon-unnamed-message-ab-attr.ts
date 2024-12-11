@@ -2,10 +2,8 @@ import type Pokemon from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { PostSummonAbAttr } from "./post-summon-ab-attr";
 
-/**
- * Doesn't force pokemon name on the message
- */
 export class PostSummonUnnamedMessageAbAttr extends PostSummonAbAttr {
+  //Attr doesn't force pokemon name on the message
   private message: string;
 
   constructor(message: string) {

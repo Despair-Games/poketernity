@@ -4,5 +4,4 @@ import { PreAttackFieldMoveTypePowerBoostAbAttr } from "./pre-attack-field-move-
  * Boosts the power of a specific type of move for the user and its allies.
  * @extends PreAttackFieldMoveTypePowerBoostAbAttr
  */
-
 export class UserFieldMoveTypePowerBoostAbAttr extends PreAttackFieldMoveTypePowerBoostAbAttr {}

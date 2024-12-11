@@ -4,5 +4,4 @@ import { PreApplyBattlerTagImmunityAbAttr } from "./pre-apply-battler-tag-immunn
  * Provides immunity to BattlerTags {@linkcode BattlerTag} to the user.
  * @extends PreApplyBattlerTagImmunityAbAttr
  */
-
 export class BattlerTagImmunityAbAttr extends PreApplyBattlerTagImmunityAbAttr {}

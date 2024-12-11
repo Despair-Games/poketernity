@@ -6,7 +6,6 @@ import { PostSummonAbAttr } from "./post-summon-ab-attr";
 /**
  * Removes specified arena tags when a Pokemon is summoned.
  */
-
 export class PostSummonRemoveArenaTagAbAttr extends PostSummonAbAttr {
   private arenaTags: ArenaTagType[];
 

@@ -4,5 +4,4 @@ import { PreSetStatusEffectImmunityAbAttr } from "./pre-set-status-effect-immuni
  * Provides immunity to status effects to the user.
  * @extends PreSetStatusEffectImmunityAbAttr
  */
-
 export class StatusEffectImmunityAbAttr extends PreSetStatusEffectImmunityAbAttr {}

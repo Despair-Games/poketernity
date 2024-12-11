@@ -25,7 +25,7 @@ export class PostDefendMoveDisableAbAttr extends PostDefendAbAttr {
     _hitResult: HitResult,
     _args: any[],
   ): boolean {
-    if (attacker.getTag(BattlerTagType.DISABLED) === null && !move.hitsSubstitute(attacker, pokemon)) {
+    if (attacker.getTag(BattlerTagType.DISABLED) === null) {
       if (
         move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
         && (this.chance === -1 || pokemon.randSeedInt(100) < this.chance)

@@ -11,7 +11,6 @@ import { PostAttackAbAttr } from "./post-attack-ab-attr";
  * Abilities using this attribute:
  * - Stench
  */
-
 export class PostAttackApplyBattlerTagAbAttr extends PostAttackAbAttr {
   private contactRequired: boolean;
   private chance: (user: Pokemon, target: Pokemon, move: Move) => number;

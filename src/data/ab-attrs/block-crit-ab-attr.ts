@@ -16,7 +16,12 @@ export class BlockCritAbAttr extends AbAttr {
     _cancelled: BooleanHolder,
     args: any[],
   ): boolean {
-    (args[0] as BooleanHolder).value = true;
-    return true;
+    const isCritical = args[0] as BooleanHolder;
+
+    if (isCritical.value) {
+      isCritical.value = false;
+      return true;
+    }
+    return false;
   }
 }

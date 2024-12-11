@@ -8,7 +8,6 @@ import { VariableMovePowerAbAttr } from "./variable-move-power-ab-attr";
  * @extends VariableMovePowerAbAttr
  * @see {@link applyPreAttack}
  */
-
 export class VariableMovePowerBoostAbAttr extends VariableMovePowerAbAttr {
   private mult: (user: Pokemon, target: Pokemon, move: Move) => number;
 

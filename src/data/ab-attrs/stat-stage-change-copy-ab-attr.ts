@@ -4,6 +4,7 @@ import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import type { BooleanHolder } from "#app/utils";
 import type { BattleStat } from "#enums/stat";
 import { AbAttr } from "./ab-attr";
+
 export class StatStageChangeCopyAbAttr extends AbAttr {
   override apply(
     pokemon: Pokemon,
