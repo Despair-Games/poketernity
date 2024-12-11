@@ -2,7 +2,7 @@ import { addTextObject, TextStyle } from "./text";
 import { globalScene } from "#app/global-scene";
 import { ArenaTagSide, ArenaTrapTag } from "#app/data/arena-tag";
 import { WeatherType } from "#enums/weather-type";
-import { TerrainType } from "#app/data/terrain";
+import { TerrainType } from "#enums/terrain-type";
 import { addWindow, WindowVariant } from "./ui-theme";
 import type { ArenaEvent } from "#app/events/arena";
 import {

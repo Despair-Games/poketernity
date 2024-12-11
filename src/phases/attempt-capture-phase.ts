@@ -276,15 +276,14 @@ export class AttemptCapturePhase extends PokemonPhase {
           if (globalScene.getPlayerParty().filter((p) => p.isShiny()).length === PLAYER_PARTY_MAX_SIZE) {
             globalScene.validateAchv(achvs.SHINY_PARTY);
           }
-          Promise.all(modifiers.map((m) => globalScene.addModifier(m, true))).then(() => {
-            globalScene.updateModifiers(true);
-            removePokemon();
-            if (newPokemon) {
-              newPokemon.loadAssets().then(end);
-            } else {
-              end();
-            }
-          });
+          modifiers.forEach((m) => globalScene.addModifier(m, true));
+          globalScene.updateModifiers(true);
+          removePokemon();
+          if (newPokemon) {
+            newPokemon.loadAssets().then(end);
+          } else {
+            end();
+          }
         };
         Promise.all([pokemon.hideInfo(), globalScene.gameData.setPokemonCaught(pokemon)]).then(() => {
           if (globalScene.getPlayerParty().length === PLAYER_PARTY_MAX_SIZE) {

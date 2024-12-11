@@ -36,6 +36,7 @@ export class AddEnemyBuffModifierPhase extends Phase {
         true,
       );
     }
-    globalScene.updateModifiers(false, true).then(() => this.end());
+    globalScene.updateModifiers(false, true);
+    this.end();
   }
 }

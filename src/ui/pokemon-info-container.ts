@@ -2,7 +2,8 @@ import { getVariantTint } from "#app/data/variant";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 import type BattleScene from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
-import { Gender, getGenderColor, getGenderSymbol } from "../data/gender";
+import { getGenderColor, getGenderShadowColor, getGenderSymbol } from "#app/data/gender";
+import { Gender } from "#enums/gender";
 import { getNatureName } from "../data/nature";
 import { Type } from "#enums/type";
 import type Pokemon from "../field/pokemon";
@@ -255,7 +256,7 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
       if (pokemon.gender > Gender.GENDERLESS) {
         this.pokemonGenderText.setText(getGenderSymbol(pokemon.gender));
         this.pokemonGenderText.setColor(getGenderColor(pokemon.gender));
-        this.pokemonGenderText.setShadowColor(getGenderColor(pokemon.gender, true));
+        this.pokemonGenderText.setShadowColor(getGenderShadowColor(pokemon.gender));
         this.pokemonGenderText.setVisible(true);
 
         const newGender = BigInt(1 << pokemon.gender) * DexAttr.MALE;

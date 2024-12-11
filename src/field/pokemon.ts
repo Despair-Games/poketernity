@@ -107,7 +107,7 @@ import {
   PokemonMultiHitModifier,
 } from "#app/modifier/modifier";
 import { PokeballType } from "#enums/pokeball";
-import { Gender } from "#app/data/gender";
+import { Gender } from "#enums/gender";
 import { initMoveAnim, loadMoveAnimAssets } from "#app/data/battle-anims";
 import { Status, getRandomStatus } from "#app/data/status-effect";
 import type { SpeciesFormEvolution, SpeciesEvolutionCondition } from "#app/data/balance/pokemon-evolutions";
@@ -209,7 +209,7 @@ import {
   SpeciesFormChangePostMoveTrigger,
   SpeciesFormChangeStatusEffectTrigger,
 } from "#app/data/pokemon-forms";
-import { TerrainType } from "#app/data/terrain";
+import { TerrainType } from "#enums/terrain-type";
 import type { TrainerSlot } from "#app/data/trainer-config";
 import Overrides from "#app/overrides";
 import i18next from "i18next";
@@ -232,7 +232,6 @@ import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { ObtainStatusEffectPhase } from "#app/phases/obtain-status-effect-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
-import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
 import { Challenges } from "#enums/challenges";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
@@ -560,7 +559,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
 
   /**
    * Check if this pokemon is both not fainted and allowed to be in battle based on currently active challenges.
-   * @returns {boolean} `true` if pokemon is allowed in battle
+   * @returns `true` if pokemon is allowed in battle
    */
   public isAllowedInBattle(): boolean {
     return !this.isFainted() && this.isAllowedInChallenge();
@@ -569,7 +568,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
   /**
    * Check if this pokemon is allowed based on any active challenges.
    * It's usually better to call {@linkcode isAllowedInBattle()}
-   * @returns {boolean} `true` if pokemon is allowed in battle
+   * @returns `true` if pokemon is allowed in battle
    */
   public isAllowedInChallenge(): boolean {
     const challengeAllowed = new BooleanHolder(true);
@@ -601,7 +600,6 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
   /**
    * Sets the Pokemon's name. Only called when loading a Pokemon so this function needs to be called when
    * initializing hardcoded Pokemon or else it will not display the form index name properly.
-   * @returns n/a
    */
   generateName(): void {
     if (!this.fusionSpecies) {
@@ -1819,10 +1817,10 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
    * Checks whether a pokemon has the specified ability and it's in effect. Accounts for all the various
    * effects which can affect whether an ability will be present or in effect, and both passive and
    * non-passive. This is the primary way to check whether a pokemon has a particular ability.
-   * @param {Abilities} ability The ability to check for
-   * @param {boolean} canApply If false, it doesn't check whether the ability is currently active
-   * @param {boolean} ignoreOverride If true, it ignores ability changing effects
-   * @returns {boolean} Whether the ability is present and active
+   * @param ability The {@linkcode Abilities | ability} to check for
+   * @param canApply If false, it doesn't check whether the ability is currently active
+   * @param ignoreOverride If true, it ignores ability changing effects
+   * @returns Whether the ability is present and active
    */
   public hasAbility(ability: Abilities, canApply: boolean = true, ignoreOverride?: boolean): boolean {
     if (this.getAbility(ignoreOverride).id === ability && (!canApply || this.canApplyAbility())) {
@@ -1839,10 +1837,10 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
    * Accounts for all the various effects which can affect whether an ability will be present or
    * in effect, and both passive and non-passive. This is one of the two primary ways to check
    * whether a pokemon has a particular ability.
-   * @param {AbAttr} attrType The ability attribute to check for
-   * @param {boolean} canApply If false, it doesn't check whether the ability is currently active
-   * @param {boolean} ignoreOverride If true, it ignores ability changing effects
-   * @returns {boolean} Whether an ability with that attribute is present and active
+   * @param attrType The {@linkcode AbAttr | ability attribute} to check for
+   * @param canApply If false, it doesn't check whether the ability is currently active
+   * @param ignoreOverride If true, it ignores ability changing effects
+   * @returns Whether an ability with that attribute is present and active
    */
   public hasAbilityWithAttr(
     attrType: Constructor<AbAttr>,
@@ -2200,11 +2198,11 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
 
   /**
    * Gets all level up moves in a given range for a particular pokemon.
-   * @param {number} startingLevel Don't include moves below this level
-   * @param {boolean} includeEvolutionMoves Whether to include evolution moves
-   * @param {boolean} simulateEvolutionChain Whether to include moves from prior evolutions
-   * @param {boolean} includeRelearnerMoves Whether to include moves that would require a relearner. Note the move relearner inherently allows evolution moves
-   * @returns {LevelMoves} A list of moves and the levels they can be learned at
+   * @param startingLevel Don't include moves below this level
+   * @param includeEvolutionMoves Whether to include evolution moves
+   * @param simulateEvolutionChain Whether to include moves from prior evolutions
+   * @param includeRelearnerMoves Whether to include moves that would require a relearner. Note the move relearner inherently allows evolution moves
+   * @returns A {@linkcode LevelMoves | list of moves and the levels} they can be learned at
    */
   getLevelMoves(
     startingLevel?: number,
@@ -3868,8 +3866,8 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
   /**
    * Gets whether the given move is currently disabled for this Pokemon.
    *
-   * @param {Moves} moveId {@linkcode Moves} ID of the move to check
-   * @returns {boolean} `true` if the move is disabled for this Pokemon, otherwise `false`
+   * @param moveId ID of the {@linkcode Moves | move} to check
+   * @returns `true` if the move is disabled for this Pokemon, otherwise `false`
    *
    * @see {@linkcode MoveRestrictionBattlerTag}
    */
@@ -3880,11 +3878,11 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
   /**
    * Gets whether the given move is currently disabled for the user based on the player's target selection
    *
-   * @param {Moves} moveId {@linkcode Moves} ID of the move to check
-   * @param {Pokemon} user {@linkcode Pokemon} the move user
-   * @param {Pokemon} target {@linkcode Pokemon} the target of the move
+   * @param moveId ID of the {@linkcode Moves | move} to check
+   * @param user {@linkcode Pokemon} using the move
+   * @param target the {@linkcode Pokemon | target} of the move
    *
-   * @returns {boolean} `true` if the move is disabled for this Pokemon due to the player's target selection
+   * @returns `true` if the move is disabled for this Pokemon due to the player's target selection
    *
    * @see {@linkcode MoveRestrictionBattlerTag}
    */
@@ -3900,10 +3898,10 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
   /**
    * Gets the {@link MoveRestrictionBattlerTag} that is restricting a move, if it exists.
    *
-   * @param {Moves} moveId {@linkcode Moves} ID of the move to check
-   * @param {Pokemon} user {@linkcode Pokemon} the move user, optional and used when the target is a factor in the move's restricted status
-   * @param {Pokemon} target {@linkcode Pokemon} the target of the move, optional and used when the target is a factor in the move's restricted status
-   * @returns {MoveRestrictionBattlerTag | null} the first tag on this Pokemon that restricts the move, or `null` if the move is not restricted.
+   * @param moveId ID of the {@linkcode Moves | move} to check
+   * @param user {@linkcode Pokemon} using the move, used when the target is a factor in the move's restricted status
+   * @param target the {@linkcode Pokemon | target} of the move, used when the target is a factor in the move's restricted status
+   * @returns the first {@linkcode MoveRestrictionBattlerTag | tag} on this Pokemon that restricts the move, or `null` if the move is not restricted.
    */
   getRestrictingTag(moveId: Moves, user?: Pokemon, target?: Pokemon): MoveRestrictionBattlerTag | null {
     for (const tag of this.findTags((t) => t instanceof MoveRestrictionBattlerTag)) {
@@ -3951,7 +3949,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
 
   /**
    * If this Pokemon is using a multi-hit move, cancels all subsequent strikes
-   * @param {Pokemon} target If specified, this only cancels subsequent strikes against the given target
+   * @param target If specified, this only cancels subsequent strikes against the given {@linkcode Pokemon | target}
    */
   stopMultiHit(target?: Pokemon): void {
     const effectPhase = globalScene.getCurrentPhase();
@@ -5142,52 +5140,6 @@ export class PlayerPokemon extends Pokemon {
       this.friendship = Math.max(this.friendship + friendship, 0);
     }
   }
-  /**
-   * Handles Revival Blessing when used by player.
-   * @returns Promise to revive a pokemon.
-   * @see {@linkcode RevivalBlessingAttr}
-   */
-  revivalBlessing(): Promise<void> {
-    return new Promise((resolve) => {
-      globalScene.ui.setMode(
-        Mode.PARTY,
-        PartyUiMode.REVIVAL_BLESSING,
-        this.getFieldIndex(),
-        (slotIndex: number, _option: PartyOption) => {
-          if (slotIndex >= 0 && slotIndex < 6) {
-            const pokemon = globalScene.getPlayerParty()[slotIndex];
-            if (!pokemon || !pokemon.isFainted()) {
-              resolve();
-            }
-
-            pokemon.resetTurnData();
-            pokemon.resetStatus();
-            pokemon.heal(Math.min(toDmgValue(0.5 * pokemon.getMaxHp()), pokemon.getMaxHp()));
-            globalScene.queueMessage(i18next.t("moveTriggers:revivalBlessing", { pokemonName: pokemon.name }), 0, true);
-
-            if (globalScene.currentBattle.double && globalScene.getPlayerParty().length > 1) {
-              const allyPokemon = this.getAlly();
-              if (slotIndex <= 1) {
-                // Revived ally pokemon
-                globalScene.unshiftPhase(
-                  new SwitchSummonPhase(SwitchType.SWITCH, pokemon.getFieldIndex(), slotIndex, false, true),
-                );
-                globalScene.unshiftPhase(new ToggleDoublePositionPhase(true));
-              } else if (allyPokemon.isFainted()) {
-                // Revived party pokemon, and ally pokemon is fainted
-                globalScene.unshiftPhase(
-                  new SwitchSummonPhase(SwitchType.SWITCH, allyPokemon.getFieldIndex(), slotIndex, false, true),
-                );
-                globalScene.unshiftPhase(new ToggleDoublePositionPhase(true));
-              }
-            }
-          }
-          globalScene.ui.setMode(Mode.MESSAGE).then(() => resolve());
-        },
-        PartyUiHandler.FilterFainted,
-      );
-    });
-  }
 
   getPossibleEvolution(evolution: SpeciesFormEvolution | null): Promise<Pokemon> {
     if (!evolution) {
@@ -5461,73 +5413,64 @@ export class PlayerPokemon extends Pokemon {
    * Returns a Promise to fuse two PlayerPokemon together
    * @param pokemon The PlayerPokemon to fuse to this one
    */
-  fuse(pokemon: PlayerPokemon): Promise<void> {
-    return new Promise((resolve) => {
-      this.fusionSpecies = pokemon.species;
-      this.fusionFormIndex = pokemon.formIndex;
-      this.fusionAbilityIndex = pokemon.abilityIndex;
-      this.fusionShiny = pokemon.shiny;
-      this.fusionVariant = pokemon.variant;
-      this.fusionGender = pokemon.gender;
-      this.fusionLuck = pokemon.luck;
-      this.fusionCustomPokemonData = pokemon.customPokemonData;
-      if (pokemon.pauseEvolutions || this.pauseEvolutions) {
-        this.pauseEvolutions = true;
-      }
+  fuse(pokemon: PlayerPokemon): void {
+    this.fusionSpecies = pokemon.species;
+    this.fusionFormIndex = pokemon.formIndex;
+    this.fusionAbilityIndex = pokemon.abilityIndex;
+    this.fusionShiny = pokemon.shiny;
+    this.fusionVariant = pokemon.variant;
+    this.fusionGender = pokemon.gender;
+    this.fusionLuck = pokemon.luck;
+    this.fusionCustomPokemonData = pokemon.customPokemonData;
+    if (pokemon.pauseEvolutions || this.pauseEvolutions) {
+      this.pauseEvolutions = true;
+    }
 
-      globalScene.validateAchv(achvs.SPLICE);
-      globalScene.gameData.gameStats.pokemonFused++;
+    globalScene.validateAchv(achvs.SPLICE);
+    globalScene.gameData.gameStats.pokemonFused++;
 
-      // Store the average HP% that each Pokemon has
-      const maxHp = this.getMaxHp();
-      const newHpPercent = (pokemon.hp / pokemon.getMaxHp() + this.hp / maxHp) / 2;
+    // Store the average HP% that each Pokemon has
+    const maxHp = this.getMaxHp();
+    const newHpPercent = (pokemon.hp / pokemon.getMaxHp() + this.hp / maxHp) / 2;
 
-      this.generateName();
-      this.calculateStats();
+    this.generateName();
+    this.calculateStats();
 
-      // Set this Pokemon's HP to the average % of both fusion components
-      this.hp = Math.round(maxHp * newHpPercent);
-      if (!this.isFainted()) {
-        // If this Pokemon hasn't fainted, make sure the HP wasn't set over the new maximum
-        this.hp = Math.min(this.hp, maxHp);
-        this.status = getRandomStatus(this.status, pokemon.status); // Get a random valid status between the two
-      } else if (!pokemon.isFainted()) {
-        // If this Pokemon fainted but the other hasn't, make sure the HP wasn't set to zero
-        this.hp = Math.max(this.hp, 1);
-        this.status = pokemon.status; // Inherit the other Pokemon's status
-      }
+    // Set this Pokemon's HP to the average % of both fusion components
+    this.hp = Math.round(maxHp * newHpPercent);
+    if (!this.isFainted()) {
+      // If this Pokemon hasn't fainted, make sure the HP wasn't set over the new maximum
+      this.hp = Math.min(this.hp, maxHp);
+      this.status = getRandomStatus(this.status, pokemon.status); // Get a random valid status between the two
+    } else if (!pokemon.isFainted()) {
+      // If this Pokemon fainted but the other hasn't, make sure the HP wasn't set to zero
+      this.hp = Math.max(this.hp, 1);
+      this.status = pokemon.status; // Inherit the other Pokemon's status
+    }
 
-      this.generateCompatibleTms();
-      this.updateInfo(true);
-      const fusedPartyMemberIndex = globalScene.getPlayerParty().indexOf(pokemon);
-      let partyMemberIndex = globalScene.getPlayerParty().indexOf(this);
-      if (partyMemberIndex > fusedPartyMemberIndex) {
-        partyMemberIndex--;
-      }
-      const fusedPartyMemberHeldModifiers = globalScene.findModifiers(
-        (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === pokemon.id,
-        true,
-      ) as PokemonHeldItemModifier[];
-      const transferModifiers: Promise<boolean>[] = [];
-      for (const modifier of fusedPartyMemberHeldModifiers) {
-        transferModifiers.push(
-          globalScene.tryTransferHeldItemModifier(modifier, this, false, modifier.getStackCount(), true, true, false),
-        );
-      }
-      Promise.allSettled(transferModifiers).then(() => {
-        globalScene.updateModifiers(true, true).then(() => {
-          globalScene.removePartyMemberModifiers(fusedPartyMemberIndex);
-          globalScene.getPlayerParty().splice(fusedPartyMemberIndex, 1)[0];
-          const newPartyMemberIndex = globalScene.getPlayerParty().indexOf(this);
-          pokemon
-            .getMoveset(true)
-            .map((m: PokemonMove) => globalScene.unshiftPhase(new LearnMovePhase(newPartyMemberIndex, m.getMove().id)));
-          pokemon.destroy();
-          this.updateFusionPalette();
-          resolve();
-        });
-      });
-    });
+    this.generateCompatibleTms();
+    this.updateInfo(true);
+    const fusedPartyMemberIndex = globalScene.getPlayerParty().indexOf(pokemon);
+    let partyMemberIndex = globalScene.getPlayerParty().indexOf(this);
+    if (partyMemberIndex > fusedPartyMemberIndex) {
+      partyMemberIndex--;
+    }
+    const fusedPartyMemberHeldModifiers = globalScene.findModifiers(
+      (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === pokemon.id,
+      true,
+    ) as PokemonHeldItemModifier[];
+    for (const modifier of fusedPartyMemberHeldModifiers) {
+      globalScene.tryTransferHeldItemModifier(modifier, this, false, modifier.getStackCount(), true, true, false);
+    }
+    globalScene.updateModifiers(true, true);
+    globalScene.removePartyMemberModifiers(fusedPartyMemberIndex);
+    globalScene.getPlayerParty().splice(fusedPartyMemberIndex, 1)[0];
+    const newPartyMemberIndex = globalScene.getPlayerParty().indexOf(this);
+    pokemon
+      .getMoveset(true)
+      .map((m: PokemonMove) => globalScene.unshiftPhase(new LearnMovePhase(newPartyMemberIndex, m.getMove().id)));
+    pokemon.destroy();
+    this.updateFusionPalette();
   }
 
   unfuse(): Promise<void> {
@@ -6365,9 +6308,9 @@ export class PokemonMove {
    * Checks whether the move can be selected or performed by a Pokemon, without consideration for the move's targets.
    * The move is unusable if it is out of PP, restricted by an effect, or unimplemented.
    *
-   * @param {Pokemon} pokemon {@linkcode Pokemon} that would be using this move
-   * @param {boolean} ignorePp If `true`, skips the PP check
-   * @param {boolean} ignoreRestrictionTags If `true`, skips the check for move restriction tags (see {@link MoveRestrictionBattlerTag})
+   * @param pokemon {@linkcode Pokemon} that would be using this move
+   * @param ignorePp If `true`, skips the PP check
+   * @param ignoreRestrictionTags If `true`, skips the check for move restriction tags (see {@link MoveRestrictionBattlerTag})
    * @returns `true` if the move can be selected and used by the Pokemon, otherwise `false`.
    */
   isUsable(pokemon: Pokemon, ignorePp: boolean = false, ignoreRestrictionTags: boolean = false): boolean {
@@ -6388,7 +6331,7 @@ export class PokemonMove {
 
   /**
    * Sets {@link ppUsed} for this move and ensures the value does not exceed {@link getMovePp}
-   * @param {number} count Amount of PP to use
+   * @param count Amount of PP to use
    */
   usePp(count: number = 1) {
     this.ppUsed = Math.min(this.ppUsed + count, this.getMovePp());
@@ -6408,8 +6351,8 @@ export class PokemonMove {
 
   /**
    * Copies an existing move or creates a valid PokemonMove object from json representing one
-   * @param {PokemonMove | any} source The data for the move to copy
-   * @return {PokemonMove} A valid pokemonmove object
+   * @param source The data for the {@linkcode PokemonMove | move} to copy
+   * @return A valid {@linkcode PokemonMove} object
    */
   static loadMove(source: PokemonMove | any): PokemonMove {
     return new PokemonMove(source.moveId, source.ppUsed, source.ppUp, source.virtual, source.maxPpOverride);

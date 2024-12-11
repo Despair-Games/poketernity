@@ -136,9 +136,9 @@ export default class Trainer extends Phaser.GameObjects.Container {
 
   /**
    * Returns the name of the trainer based on the provided trainer slot and the option to include a title.
-   * @param {TrainerSlot} trainerSlot - The slot to determine which name to use. Defaults to TrainerSlot.NONE.
-   * @param {boolean} includeTitle - Whether to include the title in the returned name. Defaults to false.
-   * @returns {string} - The formatted name of the trainer.
+   * @param trainerSlot - The slot to determine which name to use. Defaults to TrainerSlot.NONE.
+   * @param includeTitle - Whether to include the title in the returned name. Defaults to false.
+   * @returns - The formatted name of the trainer.
    **/
   getName(trainerSlot: TrainerSlot = TrainerSlot.NONE, includeTitle: boolean = false): string {
     // Get the base title based on the trainer slot and variant.
@@ -508,8 +508,8 @@ export default class Trainer extends Phaser.GameObjects.Container {
 
   /**
    * Checks if the enemy trainer already has the Pokemon species in their party
-   * @param {PokemonSpecies} species {@linkcode PokemonSpecies}
-   * @param {PokemonSpecies} baseSpecies {@linkcode PokemonSpecies} - baseSpecies of the Pokemon if species is forced to evolve
+   * @param species {@linkcode PokemonSpecies}
+   * @param baseSpecies {@linkcode PokemonSpecies} - baseSpecies of the Pokemon if species is forced to evolve
    * @returns `true` if the species is already present in the party
    */
   checkDuplicateSpecies(species: PokemonSpecies, baseSpecies: PokemonSpecies): boolean {
