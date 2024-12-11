@@ -21,7 +21,7 @@ export enum SaveSlotUiMode {
   SAVE,
 }
 
-export type SaveSlotSelectCallback = (cursor: integer) => void;
+export type SaveSlotSelectCallback = (cursor: number) => void;
 
 export default class SaveSlotSelectUiHandler extends MessageUiHandler {
   private saveSlotSelectContainer: Phaser.GameObjects.Container;
@@ -33,7 +33,7 @@ export default class SaveSlotSelectUiHandler extends MessageUiHandler {
   private uiMode: SaveSlotUiMode;
   private saveSlotSelectCallback: SaveSlotSelectCallback | null;
 
-  private scrollCursor: integer = 0;
+  private scrollCursor: number = 0;
 
   private cursorObj: Phaser.GameObjects.Container | null;
 
@@ -219,11 +219,11 @@ export default class SaveSlotSelectUiHandler extends MessageUiHandler {
 
   override showText(
     text: string,
-    delay?: integer,
+    delay?: number,
     callback?: Function,
-    callbackDelay?: integer,
+    callbackDelay?: number,
     prompt?: boolean,
-    promptDelay?: integer,
+    promptDelay?: number,
   ) {
     super.showText(text, delay, callback, callbackDelay, prompt, promptDelay);
 
@@ -244,7 +244,7 @@ export default class SaveSlotSelectUiHandler extends MessageUiHandler {
    * @param prevSlotIndex index of the previous session occupied by the cursor, between `0` and `SESSION_SLOTS_COUNT - 1` - optional
    * @returns `true` if the cursor position has changed | `false` if it has not
    */
-  override setCursor(cursor: integer, prevSlotIndex?: integer): boolean {
+  override setCursor(cursor: number, prevSlotIndex?: number): boolean {
     const changed = super.setCursor(cursor);
 
     if (!this.cursorObj) {
@@ -292,7 +292,7 @@ export default class SaveSlotSelectUiHandler extends MessageUiHandler {
   /**
    * Helper function that resets the given session slot to its default central position
    */
-  revertSessionSlot(slotIndex: integer): void {
+  revertSessionSlot(slotIndex: number): void {
     const sessionSlot = this.sessionSlots[slotIndex];
     if (sessionSlot) {
       sessionSlot.setPosition(0, slotIndex * 56);
@@ -316,7 +316,7 @@ export default class SaveSlotSelectUiHandler extends MessageUiHandler {
    * @param prevSlotIndex index of the previous slot occupied by the cursor, between `0` and `SESSION_SLOTS_COUNT-1` - optional
    * @returns `true` if the cursor position has changed | `false` if it has not
    */
-  setScrollCursor(scrollCursor: integer, prevSlotIndex?: integer): boolean {
+  setScrollCursor(scrollCursor: number, prevSlotIndex?: number): boolean {
     const changed = scrollCursor !== this.scrollCursor;
 
     if (changed) {
@@ -356,13 +356,13 @@ export default class SaveSlotSelectUiHandler extends MessageUiHandler {
 }
 
 class SessionSlot extends Phaser.GameObjects.Container {
-  public slotId: integer;
+  public slotId: number;
   public hasData: boolean;
   private loadingLabel: Phaser.GameObjects.Text;
 
   public saveData: SessionSaveData;
 
-  constructor(slotId: integer) {
+  constructor(slotId: number) {
     super(globalScene, 0, slotId * 56);
 
     this.slotId = slotId;
@@ -397,7 +397,7 @@ class SessionSlot extends Phaser.GameObjects.Container {
     this.add(playTimeLabel);
 
     const pokemonIconsContainer = globalScene.add.container(144, 4);
-    data.party.forEach((p: PokemonData, i: integer) => {
+    data.party.forEach((p: PokemonData, i: number) => {
       const iconContainer = globalScene.add.container(26 * i, 0);
       iconContainer.setScale(0.75);
 

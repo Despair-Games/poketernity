@@ -11,11 +11,11 @@ export default class TextInterceptor {
 
   showText(
     text: string,
-    _delay?: integer,
+    _delay?: number,
     _callback?: Function,
-    _callbackDelay?: integer,
+    _callbackDelay?: number,
     _prompt?: boolean,
-    _promptDelay?: integer,
+    _promptDelay?: number,
   ): void {
     console.log(text);
     this.logs.push(text);
@@ -24,10 +24,10 @@ export default class TextInterceptor {
   showDialogue(
     text: string,
     name: string,
-    _delay?: integer,
+    _delay?: number,
     _callback?: Function,
-    _callbackDelay?: integer,
-    _promptDelay?: integer,
+    _callbackDelay?: number,
+    _promptDelay?: number,
   ): void {
     console.log(name, text);
     this.logs.push(name, text);

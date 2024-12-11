@@ -64,7 +64,7 @@ const expLevels = [
   ],
 ];
 
-export function getLevelTotalExp(level: integer, growthRate: GrowthRate): integer {
+export function getLevelTotalExp(level: number, growthRate: GrowthRate): number {
   if (level < 100) {
     const levelExp = expLevels[growthRate][level - 1];
     if (growthRate !== GrowthRate.MEDIUM_FAST) {
@@ -73,7 +73,7 @@ export function getLevelTotalExp(level: integer, growthRate: GrowthRate): intege
     return levelExp;
   }
 
-  let ret: integer;
+  let ret: number;
 
   switch (growthRate) {
     case GrowthRate.ERRATIC:
@@ -103,7 +103,7 @@ export function getLevelTotalExp(level: integer, growthRate: GrowthRate): intege
   return Math.floor(ret);
 }
 
-export function getLevelRelExp(level: integer, growthRate: GrowthRate): number {
+export function getLevelRelExp(level: number, growthRate: GrowthRate): number {
   return getLevelTotalExp(level, growthRate) - getLevelTotalExp(level - 1, growthRate);
 }
 

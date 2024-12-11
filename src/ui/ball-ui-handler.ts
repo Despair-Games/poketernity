@@ -124,7 +124,7 @@ export default class BallUiHandler extends UiHandler {
     );
   }
 
-  override setCursor(cursor: integer): boolean {
+  override setCursor(cursor: number): boolean {
     const ret = super.setCursor(cursor);
 
     if (!this.cursorObj) {
