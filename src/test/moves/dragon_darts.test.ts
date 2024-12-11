@@ -1,4 +1,5 @@
 import { BattlerIndex } from "#app/battle";
+import { MoveResult } from "#app/field/pokemon";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
@@ -23,7 +24,7 @@ describe("Moves - Dragon Darts", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.SPLASH, Moves.DRAGON_DARTS])
+      .moveset([Moves.SPLASH, Moves.DRAGON_DARTS, Moves.FOLLOW_ME])
       .ability(Abilities.BALL_FETCH)
       .battleType("double")
       .disableCrits()
@@ -235,6 +236,28 @@ describe("Moves - Dragon Darts", () => {
 
     enemyPokemon.forEach((p) => expect(p.isFullHp()).toBeFalsy());
     expect(player.turnData.hitCount).toBe(2);
+  });
+
+  it("should not redirect if the original target has the Center of Attention status", async () => {
+    game.override.enemyMoveset([Moves.DRAGON_DARTS, Moves.SPLASH]);
+
+    await game.classicMode.startBattle([Species.MAGIKARP, Species.CLEFFA]);
+
+    const playerPokemon = game.scene.getPlayerField();
+    const enemy1 = game.scene.getEnemyField()[0];
+
+    game.move.select(Moves.SPLASH, 0);
+    game.move.select(Moves.FOLLOW_ME, 1);
+
+    await game.forceEnemyMove(Moves.DRAGON_DARTS, BattlerIndex.PLAYER);
+    await game.forceEnemyMove(Moves.SPLASH);
+
+    await game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
+
+    await game.phaseInterceptor.to("BerryPhase", false);
+
+    playerPokemon.forEach((p) => expect(p.isFullHp()).toBeTruthy());
+    expect(enemy1.getLastXMoves()[0]?.result).toBe(MoveResult.FAIL);
   });
 
   // TODO: rework Pressure and implement this interaction

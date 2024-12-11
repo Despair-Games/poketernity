@@ -189,6 +189,7 @@ export class MoveEffectPhase extends PokemonPhase {
       && globalScene.currentBattle.double
       && user.turnData.hitsLeft % 2 === 1
       && targets[0] !== user.getAlly()
+      && !targets[0].getTag(BattlerTagType.CENTER_OF_ATTENTION)
     ) {
       const targetAlly = targets[0].getAlly();
       if (targetAlly.isActive(true)) {
@@ -210,6 +211,7 @@ export class MoveEffectPhase extends PokemonPhase {
       move.moveTarget === MoveTarget.SMART
       && globalScene.currentBattle.double
       && targets[0] !== user.getAlly()
+      && !targets[0].getTag(BattlerTagType.CENTER_OF_ATTENTION)
       && this.hitChecks[0][0] !== HitCheckResult.HIT
     ) {
       const targetAlly = targets[0].getAlly();
