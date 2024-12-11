@@ -922,8 +922,7 @@ export default class Move implements Localizable {
       aura.applyPreAttack(source, null, simulated, target, this, [power]);
     }
 
-    const alliedField: Pokemon[] =
-      source instanceof PlayerPokemon ? globalScene.getPlayerField() : globalScene.getEnemyField();
+    const alliedField: Pokemon[] = source.getField();
     alliedField.forEach((p) =>
       applyPreAttackAbAttrs(UserFieldMoveTypePowerBoostAbAttr, p, target, this, simulated, power),
     );

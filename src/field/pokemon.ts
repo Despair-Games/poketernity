@@ -2024,7 +2024,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       }
 
       if (!cancelledHolder.value) {
-        const defendingSidePlayField = this.isPlayer() ? globalScene.getPlayerField() : globalScene.getEnemyField();
+        const defendingSidePlayField = this.getField();
         defendingSidePlayField.forEach((p) =>
           applyPreDefendAbAttrs(FieldPriorityMoveImmunityAbAttr, p, source, move, cancelledHolder),
         );
@@ -2947,7 +2947,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   getAlly(): Pokemon {
-    return (this.isPlayer() ? globalScene.getPlayerField() : globalScene.getEnemyField())[this.getFieldIndex() ? 0 : 1];
+    return this.getField()[this.getFieldIndex() ? 0 : 1];
   }
 
   /**
@@ -2955,7 +2955,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
    *
    * @returns An array of Pokémon on the allied field.
    */
-  getAlliedField(): Pokemon[] {
+  getField(): Pokemon[] {
     return this instanceof PlayerPokemon ? globalScene.getPlayerField() : globalScene.getEnemyField();
   }
 
@@ -3587,7 +3587,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     const cancelled = new BooleanHolder(false);
     applyPreApplyBattlerTagAbAttrs(BattlerTagImmunityAbAttr, this, stubTag, cancelled, true);
 
-    const userField = this.getAlliedField();
+    const userField = this.getField();
     userField.forEach((pokemon) =>
       applyPreApplyBattlerTagAbAttrs(UserFieldBattlerTagImmunityAbAttr, pokemon, stubTag, cancelled, true),
     );
@@ -3607,7 +3607,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     const cancelled = new BooleanHolder(false);
     applyPreApplyBattlerTagAbAttrs(BattlerTagImmunityAbAttr, this, newTag, cancelled);
 
-    const userField = this.getAlliedField();
+    const userField = this.getField();
     userField.forEach((pokemon) =>
       applyPreApplyBattlerTagAbAttrs(UserFieldBattlerTagImmunityAbAttr, pokemon, newTag, cancelled),
     );
@@ -4146,7 +4146,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     const cancelled = new BooleanHolder(false);
     applyPreSetStatusAbAttrs(StatusEffectImmunityAbAttr, this, effect, cancelled, quiet);
 
-    const userField = this.getAlliedField();
+    const userField = this.getField();
     userField.forEach((pokemon) =>
       applyPreSetStatusAbAttrs(UserFieldStatusEffectImmunityAbAttr, pokemon, effect, cancelled, quiet),
     );
