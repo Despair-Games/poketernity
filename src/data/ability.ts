@@ -18,7 +18,6 @@ import type { Constructor, NumberHolder } from "#app/utils";
 import { BooleanHolder, toDmgValue } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
-import { Species } from "#enums/species";
 import type { StatusEffect } from "#enums/status-effect";
 import type { TerrainType } from "#enums/terrain-type";
 import type { WeatherType } from "#enums/weather-type";
@@ -976,19 +975,6 @@ export function applyPostItemLostAbAttrs(
 export function queueShowAbility(pokemon: Pokemon, passive: boolean): void {
   globalScene.unshiftPhase(new ShowAbilityPhase(pokemon.id, passive));
   globalScene.clearPhaseQueueSplice();
-}
-
-/**
- * Returns the Pokemon with weather-based forms
- */
-export function getPokemonWithWeatherBasedForms() {
-  return globalScene
-    .getField(true)
-    .filter(
-      (p) =>
-        (p.hasAbility(Abilities.FORECAST) && p.species.speciesId === Species.CASTFORM)
-        || (p.hasAbility(Abilities.FLOWER_GIFT) && p.species.speciesId === Species.CHERRIM),
-    );
 }
 
 export const allAbilities = [new Ability(Abilities.NONE, 3)];
