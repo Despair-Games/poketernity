@@ -91,7 +91,7 @@ export function addWindow(
   return window;
 }
 
-export function updateWindowType(windowTypeIndex: integer): void {
+export function updateWindowType(windowTypeIndex: number): void {
   const windowObjects: [Phaser.GameObjects.NineSlice, WindowVariant][] = [];
   const themedObjects: (Phaser.GameObjects.Image | Phaser.GameObjects.NineSlice)[] = [];
   const traverse = (object: any) => {

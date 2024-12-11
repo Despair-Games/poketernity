@@ -386,7 +386,7 @@ describe("Clowning Around - Mystery Encounter", () => {
 async function addItemToPokemon(
   scene: BattleScene,
   pokemon: Pokemon,
-  stackCount: integer,
+  stackCount: number,
   itemType: PokemonHeldItemModifierType,
 ) {
   const itemMod = itemType.newModifier(pokemon) as PokemonHeldItemModifier;

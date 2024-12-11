@@ -59,7 +59,7 @@ export default class RunInfoUiHandler extends UiHandler {
   private runResultContainer: Phaser.GameObjects.Container;
   private runInfoContainer: Phaser.GameObjects.Container;
   private partyContainer: Phaser.GameObjects.Container;
-  private statsBgWidth: integer;
+  private statsBgWidth: number;
 
   private hallofFameContainer: Phaser.GameObjects.Container;
   private endCardContainer: Phaser.GameObjects.Container;
@@ -635,7 +635,7 @@ export default class RunInfoUiHandler extends UiHandler {
     const luckValue = Phaser.Math.Clamp(
       this.runInfo.party
         .map((p) => p.toPokemon().getLuck())
-        .reduce((total: integer, value: integer) => (total += value), 0),
+        .reduce((total: number, value: number) => (total += value), 0),
       0,
       14,
     );
@@ -732,7 +732,7 @@ export default class RunInfoUiHandler extends UiHandler {
     const currentLanguage = i18next.resolvedLanguage ?? "en";
     const windowHeight = (globalScene.game.canvas.height / 6 - 23) / 6;
 
-    party.forEach((p: PokemonData, i: integer) => {
+    party.forEach((p: PokemonData, i: number) => {
       const pokemonInfoWindow = new RoundRectangle(globalScene, 0, 14, this.statsBgWidth * 2 + 10, windowHeight - 2, 3);
 
       const pokemon = p.toPokemon();

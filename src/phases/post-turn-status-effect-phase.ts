@@ -1,19 +1,16 @@
 import { globalScene } from "#app/global-scene";
 import type { BattlerIndex } from "#app/battle";
-import {
-  applyAbAttrs,
-  applyPostDamageAbAttrs,
-  BlockNonDirectDamageAbAttr,
-  BlockStatusDamageAbAttr,
-  PostDamageAbAttr,
-  ReduceBurnDamageAbAttr,
-} from "#app/data/ability";
+import { applyAbAttrs, applyPostDamageAbAttrs } from "#app/data/ability";
+import { ReduceBurnDamageAbAttr } from "#app/data/ab-attrs/reduce-burn-damage-ab-attr";
+import { BlockStatusDamageAbAttr } from "#app/data/ab-attrs/block-status-damage-ab-attr";
+import { BlockNonDirectDamageAbAttr } from "#app/data/ab-attrs/block-non-direct-damage-ab-attr";
 import { CommonBattleAnim, CommonAnim } from "#app/data/battle-anims";
 import { getStatusEffectActivationText } from "#app/data/status-effect";
 import { StatusEffect } from "#app/enums/status-effect";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BooleanHolder, NumberHolder } from "#app/utils";
 import { PokemonPhase } from "./pokemon-phase";
+import { PostDamageAbAttr } from "#app/data/ab-attrs/post-damage-ab-attr";
 
 export class PostTurnStatusEffectPhase extends PokemonPhase {
   constructor(battlerIndex: BattlerIndex) {

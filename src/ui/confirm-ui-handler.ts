@@ -6,16 +6,16 @@ import { Button } from "#enums/buttons";
 import { globalScene } from "#app/global-scene";
 
 export default class ConfirmUiHandler extends AbstractOptionSelectUiHandler {
-  public static readonly windowWidth: integer = 48;
+  public static readonly windowWidth: number = 48;
 
   private switchCheck: boolean;
-  private switchCheckCursor: integer;
+  private switchCheckCursor: number;
 
   constructor() {
     super(Mode.CONFIRM);
   }
 
-  getWindowWidth(): integer {
+  getWindowWidth(): number {
     return ConfirmUiHandler.windowWidth;
   }
 
@@ -51,7 +51,7 @@ export default class ConfirmUiHandler extends AbstractOptionSelectUiHandler {
             },
           },
         ],
-        delay: args.length >= 8 && args[7] !== null ? (args[7] as integer) : 0,
+        delay: args.length >= 8 && args[7] !== null ? (args[7] as number) : 0,
       };
 
       super.show([config]);
@@ -111,7 +111,7 @@ export default class ConfirmUiHandler extends AbstractOptionSelectUiHandler {
     return super.processInput(button);
   }
 
-  override setCursor(cursor: integer): boolean {
+  override setCursor(cursor: number): boolean {
     const ret = super.setCursor(cursor);
 
     if (ret && this.switchCheck) {

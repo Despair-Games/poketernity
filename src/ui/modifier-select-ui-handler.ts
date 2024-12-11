@@ -35,15 +35,15 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
   private moveInfoOverlay: MoveInfoOverlay;
   private moveInfoOverlayActive: boolean = false;
 
-  private rowCursor: integer = 0;
+  private rowCursor: number = 0;
   private player: boolean;
   /**
    * If reroll cost is negative, it is assumed there are 0 items in the shop.
    * It will cause reroll button to be disabled, and a "Continue" button to show in the place of shop items
    */
-  private rerollCost: integer;
-  private transferButtonWidth: integer;
-  private checkButtonWidth: integer;
+  private rerollCost: number;
+  private transferButtonWidth: number;
+  private checkButtonWidth: number;
 
   public options: ModifierOption[];
   public shopOptionsRows: ModifierOption[][];
@@ -205,7 +205,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
 
     this.rerollButtonContainer.setPositionRelative(this.lockRarityButtonContainer, 0, canLockRarities ? -12 : 0);
 
-    this.rerollCost = args[3] as integer;
+    this.rerollCost = args[3] as number;
 
     this.updateRerollCostText();
 
@@ -479,7 +479,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
     return success;
   }
 
-  override setCursor(cursor: integer): boolean {
+  override setCursor(cursor: number): boolean {
     const ui = this.getUi();
     const ret = super.setCursor(cursor);
 
@@ -558,7 +558,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
     return ret;
   }
 
-  setRowCursor(rowCursor: integer): boolean {
+  setRowCursor(rowCursor: number): boolean {
     const lastRowCursor = this.rowCursor;
 
     if (rowCursor !== lastRowCursor) {
@@ -589,7 +589,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
     return false;
   }
 
-  private getRowItems(rowCursor: integer): integer {
+  private getRowItems(rowCursor: number): number {
     switch (rowCursor) {
       case 0:
         return 3;
@@ -600,7 +600,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
     }
   }
 
-  setRerollCost(rerollCost: integer): void {
+  setRerollCost(rerollCost: number): void {
     this.rerollCost = rerollCost;
   }
 
@@ -774,7 +774,7 @@ class ModifierOption extends Phaser.GameObjects.Container {
     }
   }
 
-  show(remainingDuration: integer, upgradeCountOffset: integer) {
+  show(remainingDuration: number, upgradeCountOffset: number) {
     if (!this.modifierTypeOption.cost) {
       globalScene.tweens.add({
         targets: this.pb,
@@ -897,8 +897,8 @@ class ModifierOption extends Phaser.GameObjects.Container {
     });
   }
 
-  getPbAtlasKey(tierOffset: integer = 0) {
-    return getPokeballAtlasKey((this.modifierTypeOption.type?.tier! + tierOffset) as integer as PokeballType); // TODO: is this bang correct?
+  getPbAtlasKey(tierOffset: number = 0) {
+    return getPokeballAtlasKey((this.modifierTypeOption.type?.tier! + tierOffset) as number as PokeballType); // TODO: is this bang correct?
   }
 
   updateCostText(): void {
