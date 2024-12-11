@@ -136,21 +136,8 @@ import {
 } from "../data/battler-tags";
 import { WeatherType } from "#enums/weather-type";
 import { ArenaTagSide, NoCritTag, WeakenMoveScreenTag } from "#app/data/arena-tag";
-import type { Ability, AbAttr } from "#app/data/ability";
+import type { Ability } from "#app/data/ability";
 import {
-  StatMultiplierAbAttr,
-  BlockCritAbAttr,
-  BonusCritAbAttr,
-  BypassBurnDamageReductionAbAttr,
-  FieldPriorityMoveImmunityAbAttr,
-  IgnoreOpponentStatStagesAbAttr,
-  MoveImmunityAbAttr,
-  PreDefendFullHpEndureAbAttr,
-  ReceivedMoveDamageMultiplierAbAttr,
-  StabBoostAbAttr,
-  StatusEffectImmunityAbAttr,
-  TypeImmunityAbAttr,
-  WeightMultiplierAbAttr,
   allAbilities,
   applyAbAttrs,
   applyStatMultiplierAbAttrs,
@@ -158,34 +145,37 @@ import {
   applyPreAttackAbAttrs,
   applyPreDefendAbAttrs,
   applyPreSetStatusAbAttrs,
-  UnsuppressableAbilityAbAttr,
-  SuppressFieldAbilitiesAbAttr,
-  NoFusionAbilityAbAttr,
-  MultCritAbAttr,
-  IgnoreTypeImmunityAbAttr,
-  DamageBoostAbAttr,
-  IgnoreTypeStatusEffectImmunityAbAttr,
-  ConditionalCritAbAttr,
   applyFieldStatMultiplierAbAttrs,
-  FieldMultiplyStatAbAttr,
-  AddSecondStrikeAbAttr,
-  UserFieldStatusEffectImmunityAbAttr,
-  UserFieldBattlerTagImmunityAbAttr,
-  BattlerTagImmunityAbAttr,
-  MoveTypeChangeAbAttr,
-  FullHpResistTypeAbAttr,
   applyCheckTrappedAbAttrs,
-  CheckTrappedAbAttr,
-  PostSetStatusAbAttr,
   applyPostSetStatusAbAttrs,
-  InfiltratorAbAttr,
-  AlliedFieldDamageReductionAbAttr,
-  PostDamageAbAttr,
   applyPostDamageAbAttrs,
-  CommanderAbAttr,
   applyPostItemLostAbAttrs,
-  PostItemLostAbAttr,
 } from "#app/data/ability";
+import { IgnoreTypeImmunityAbAttr } from "#app/data/ab-attrs/ignore-type-immunity-ab-attr";
+import { NoFusionAbilityAbAttr } from "#app/data/ab-attrs/no-fusion-ability-ab-attr";
+import { UnsuppressableAbilityAbAttr } from "#app/data/ab-attrs/unsuppressable-ability-ab-attr";
+import { InfiltratorAbAttr } from "#app/data/ab-attrs/infiltrator-ab-attr";
+import { SuppressFieldAbilitiesAbAttr } from "#app/data/ab-attrs/suppress-field-abilities-ab-attr";
+import { WeightMultiplierAbAttr } from "#app/data/ab-attrs/weight-multiplier-ab-attr";
+import { CheckTrappedAbAttr } from "#app/data/ab-attrs/check-trapped-ab-attr";
+import { BypassBurnDamageReductionAbAttr } from "#app/data/ab-attrs/bypass-burn-damage-reduction-ab-attr";
+import { PostItemLostAbAttr } from "#app/data/ab-attrs/post-item-lost-ab-attr";
+import { ConditionalCritAbAttr } from "#app/data/ab-attrs/conditional-crit-ab-attr";
+import { MultCritAbAttr } from "#app/data/ab-attrs/mult-crit-ab-attr";
+import { BonusCritAbAttr } from "#app/data/ab-attrs/bonus-crit-ab-attr";
+import { BlockCritAbAttr } from "#app/data/ab-attrs/block-crit-ab-attr";
+import { UserFieldBattlerTagImmunityAbAttr } from "#app/data/ab-attrs/user-field-battler-tag-immunity-ab-attr";
+import { BattlerTagImmunityAbAttr } from "#app/data/ab-attrs/battler-tag-immunity-ab-attr";
+import { UserFieldStatusEffectImmunityAbAttr } from "#app/data/ab-attrs/user-field-status-effect-immunity-ab-attr";
+import { StatusEffectImmunityAbAttr } from "#app/data/ab-attrs/status-effect-immunity-ab-attr";
+import { CommanderAbAttr } from "#app/data/ab-attrs/commander-ab-attr";
+import { IgnoreOpponentStatStagesAbAttr } from "#app/data/ab-attrs/ignore-opponent-stat-stages-ab-attr";
+import { PostSetStatusAbAttr } from "#app/data/ab-attrs/post-set-status-ab-attr";
+import { StatMultiplierAbAttr } from "#app/data/ab-attrs/stat-multiplier-ab-attr";
+import { DamageBoostAbAttr } from "#app/data/ab-attrs/damage-boost-ab-attr";
+import { AddSecondStrikeAbAttr } from "#app/data/ab-attrs/add-second-strike-ab-attr";
+import { MoveTypeChangeAbAttr } from "#app/data/ab-attrs/move-type-change-ab-attr";
+import { FieldMultiplyStatAbAttr } from "#app/data/ab-attrs/field-multiply-stat-ab-attr";
 import type PokemonData from "#app/system/pokemon-data";
 import { BattlerIndex } from "#app/battle";
 import { Mode } from "#app/ui/ui";
@@ -243,6 +233,17 @@ import {
 import { Nature } from "#enums/nature";
 import { StatusEffect } from "#enums/status-effect";
 import { doShinySparkleAnim } from "#app/field/anims";
+import { IgnoreTypeStatusEffectImmunityAbAttr } from "#app/data/ab-attrs/ignore-type-status-effect-immunity-ab-attr";
+import type { AbAttr } from "#app/data/ab-attrs/ab-attr";
+import { PostDamageAbAttr } from "#app/data/ab-attrs/post-damage-ab-attr";
+import { PreDefendFullHpEndureAbAttr } from "#app/data/ab-attrs/pre-defend-full-hp-endure-ab-attr";
+import { StabBoostAbAttr } from "#app/data/ab-attrs/stab-boost-ab-attr";
+import { ReceivedMoveDamageMultiplierAbAttr } from "#app/data/ab-attrs/received-move-damage-multiplier-ab-attr";
+import { AlliedFieldDamageReductionAbAttr } from "#app/data/ab-attrs/allied-field-damage-reduction-ab-attr";
+import { TypeImmunityAbAttr } from "#app/data/ab-attrs/type-immunity-ab-attr";
+import { FullHpResistTypeAbAttr } from "#app/data/ab-attrs/full-hp-resist-type-ab-attr";
+import { FieldPriorityMoveImmunityAbAttr } from "#app/data/ab-attrs/field-priority-move-immunity-ab-attr";
+import { MoveImmunityAbAttr } from "#app/data/ab-attrs/move-immunity-ab-attr";
 
 export enum LearnMoveSituation {
   MISC,
@@ -259,7 +260,7 @@ export enum FieldPosition {
   RIGHT,
 }
 
-export default abstract class Pokemon extends Phaser.GameObjects.Container {
+export abstract class Pokemon extends Phaser.GameObjects.Container {
   public id: integer;
   public override name: string;
   public nickname: string;
@@ -4832,6 +4833,8 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     }
   }
 }
+
+export default Pokemon;
 
 /* export default interface Pokemon {
   scene: BattleScene

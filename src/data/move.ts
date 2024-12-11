@@ -35,40 +35,32 @@ import type { ArenaTrapTag } from "./arena-tag";
 import { ArenaTagSide, WeakenMoveTypeTag } from "./arena-tag";
 import {
   allAbilities,
-  AllyMoveCategoryPowerBoostAbAttr,
   applyAbAttrs,
   applyPostAttackAbAttrs,
   applyPostItemLostAbAttrs,
   applyPreAttackAbAttrs,
   applyPreDefendAbAttrs,
-  BlockItemTheftAbAttr,
-  BlockNonDirectDamageAbAttr,
-  BlockOneHitKOAbAttr,
-  BlockRecoilDamageAttr,
-  ChangeMovePriorityAbAttr,
-  ConfusionOnStatusEffectAbAttr,
-  FieldMoveTypePowerBoostAbAttr,
-  FieldPreventExplosiveMovesAbAttr,
-  ForceSwitchOutImmunityAbAttr,
-  HealFromBerryUseAbAttr,
-  IgnoreContactAbAttr,
-  IgnoreMoveEffectsAbAttr,
-  IgnoreProtectOnContactAbAttr,
-  InfiltratorAbAttr,
-  MaxMultiHitAbAttr,
-  MoveAbilityBypassAbAttr,
-  MoveEffectChanceMultiplierAbAttr,
-  MoveTypeChangeAbAttr,
   PostDamageForceSwitchAbAttr,
-  PostItemLostAbAttr,
-  ReverseDrainAbAttr,
-  UncopiableAbilityAbAttr,
-  UnsuppressableAbilityAbAttr,
-  UnswappableAbilityAbAttr,
-  UserFieldMoveTypePowerBoostAbAttr,
-  VariableMovePowerAbAttr,
-  WonderSkinAbAttr,
 } from "./ability";
+import { UnswappableAbilityAbAttr } from "./ab-attrs/unswappable-ability-ab-attr";
+import { UnsuppressableAbilityAbAttr } from "./ab-attrs/unsuppressable-ability-ab-attr";
+import { UncopiableAbilityAbAttr } from "./ab-attrs/uncopiable-ability-ab-attr";
+import { InfiltratorAbAttr } from "./ab-attrs/infiltrator-ab-attr";
+import { IgnoreProtectOnContactAbAttr } from "./ab-attrs/ignore-protect-on-contact-ab-attr";
+import { MoveAbilityBypassAbAttr } from "./ab-attrs/move-ability-bypass-ab-attr";
+import { ForceSwitchOutImmunityAbAttr } from "./ab-attrs/force-switch-out-immunity-ab-attr";
+import { MaxMultiHitAbAttr } from "./ab-attrs/max-multi-hit-ab-attr";
+import { PostItemLostAbAttr } from "./ab-attrs/post-item-lost-ab-attr";
+import { IgnoreContactAbAttr } from "./ab-attrs/ignore-contact-ab-attr";
+import { ChangeMovePriorityAbAttr } from "./ab-attrs/change-move-priority-ab-attr";
+import { BlockOneHitKOAbAttr } from "./ab-attrs/block-one-hit-ko-ab-attr";
+import { BlockNonDirectDamageAbAttr } from "./ab-attrs/block-non-direct-damage-ab-attr";
+import { ConfusionOnStatusEffectAbAttr } from "./ab-attrs/confusion-on-status-effect-ab-attr";
+import { AllyMoveCategoryPowerBoostAbAttr } from "./ab-attrs/ally-move-category-power-boost-ab-attr";
+import { UserFieldMoveTypePowerBoostAbAttr } from "./ab-attrs/user-field-move-type-power-boost-ab-attr";
+import { MoveTypeChangeAbAttr } from "./ab-attrs/move-type-change-ab-attr";
+import { FieldPreventExplosiveMovesAbAttr } from "./ab-attrs/field-prevent-explosive-moves-ab-attr";
+import { VariableMovePowerAbAttr } from "./ab-attrs/variable-move-power-ab-attr";
 import {
   AttackTypeBoosterModifier,
   BerryModifier,
@@ -112,6 +104,14 @@ import { RevivalBlessingPhase } from "#app/phases/revival-blessing-phase";
 import { LoadMoveAnimPhase } from "#app/phases/load-move-anim-phase";
 import { PokemonTransformPhase } from "#app/phases/pokemon-transform-phase";
 import { MoveAnimPhase } from "#app/phases/move-anim-phase";
+import { BlockItemTheftAbAttr } from "./ab-attrs/block-item-theft-ab-attr";
+import { BlockRecoilDamageAttr } from "./ab-attrs/block-recoil-damage-ab-attr";
+import { WonderSkinAbAttr } from "./ab-attrs/wonder-skin-ab-attr";
+import { ReverseDrainAbAttr } from "./ab-attrs/reverse-drain-ab-attr";
+import { MoveEffectChanceMultiplierAbAttr } from "./ab-attrs/move-effect-chance-multiplier-ab-attr";
+import { IgnoreMoveEffectsAbAttr } from "./ab-attrs/ignore-move-effect-ab-attr";
+import { FieldMoveTypePowerBoostAbAttr } from "./ab-attrs/field-move-type-power-boost-ab-attr";
+import { HealFromBerryUseAbAttr } from "./ab-attrs/heal-from-berry-use-ab-attr";
 
 export enum MoveCategory {
   PHYSICAL,
@@ -198,7 +198,7 @@ export enum MoveFlags {
 type MoveConditionFunc = (user: Pokemon, target: Pokemon, move: Move) => boolean;
 type UserMoveConditionFunc = (user: Pokemon, move: Move) => boolean;
 
-export default class Move implements Localizable {
+export class Move implements Localizable {
   public id: Moves;
   public name: string;
   private _type: Type;
@@ -989,6 +989,8 @@ export default class Move implements Localizable {
     );
   }
 }
+
+export default Move;
 
 export class AttackMove extends Move {
   constructor(
