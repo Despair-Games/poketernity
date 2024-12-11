@@ -191,12 +191,7 @@ export class MoveEffectPhase extends PokemonPhase {
     // Update hit checks for each target
     targets.forEach((t, i) => (this.hitChecks[i] = this.hitCheck(t)));
 
-    // If somehow none of this move's targets are on the field,
-    // log the move as a FAIL.
-    if (!targets.some((t) => t.isActive(true))) {
-      globalScene.queueMessage(i18next.t("battle:attackFailed"));
-      this.moveHistoryEntry.result = MoveResult.FAIL;
-    } else if (this.hitChecks.some((hc) => hc[0] === HitCheckResult.HIT)) {
+    if (this.hitChecks.some((hc) => hc[0] === HitCheckResult.HIT)) {
       // Moves are logged as a SUCCESS if at least one target was successfully hit
       this.moveHistoryEntry.result = MoveResult.SUCCESS;
     } else {
