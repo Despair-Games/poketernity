@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { applyAbAttrs } from "#app/data/ability";
-import { PostBiomeChangeAbAttr } from "#app/data/ab-attr/post-biome-change-ab-attr";
+import { PostBiomeChangeAbAttr } from "#app/data/ab-attrs/post-biome-change-ab-attr";
 import { getRandomWeatherType } from "#app/data/weather";
 import { NextEncounterPhase } from "./next-encounter-phase";
 

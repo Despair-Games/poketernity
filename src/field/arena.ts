@@ -14,8 +14,8 @@ import type { BattlerIndex } from "#app/battle";
 import { getTerrainClearMessage, getTerrainStartMessage, Terrain } from "#app/data/terrain";
 import { TerrainType } from "#enums/terrain-type";
 import { applyAbAttrs, applyPostTerrainChangeAbAttrs, applyPostWeatherChangeAbAttrs } from "#app/data/ability";
-import { PostTerrainChangeAbAttr } from "#app/data/ab-attr/post-terrain-change-ab-attr";
-import { PostWeatherChangeAbAttr } from "#app/data/ab-attr/post-weather-change-ab-attr";
+import { PostTerrainChangeAbAttr } from "#app/data/ab-attrs/post-terrain-change-ab-attr";
+import { PostWeatherChangeAbAttr } from "#app/data/ab-attrs/post-weather-change-ab-attr";
 import type Pokemon from "#app/field/pokemon";
 import Overrides from "#app/overrides";
 import { TagAddedEvent, TagRemovedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";
@@ -30,7 +30,7 @@ import { SpeciesFormChangeRevertWeatherFormTrigger, SpeciesFormChangeWeatherTrig
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { WeatherType } from "#enums/weather-type";
-import { TerrainEventTypeChangeAbAttr } from "#app/data/ab-attr/terrain-event-type-change-ab-attr";
+import { TerrainEventTypeChangeAbAttr } from "#app/data/ab-attrs/terrain-event-type-change-ab-attr";
 
 export class Arena {
   public biomeType: Biome;

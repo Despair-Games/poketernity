@@ -2,7 +2,7 @@ import { BattlerIndex, BattleType } from "#app/battle";
 import { globalScene } from "#app/global-scene";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
 import { applyAbAttrs } from "#app/data/ability";
-import { SyncEncounterNatureAbAttr } from "#app/data/ab-attr/sync-encounter-nature-ab-attr";
+import { SyncEncounterNatureAbAttr } from "#app/data/ab-attrs/sync-encounter-nature-ab-attr";
 import { initEncounterAnims, loadEncounterAnimAssets } from "#app/data/battle-anims";
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
 import { getEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";

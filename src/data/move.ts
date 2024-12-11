@@ -41,25 +41,25 @@ import {
   applyPreDefendAbAttrs,
   PostDamageForceSwitchAbAttr,
 } from "./ability";
-import { UnswappableAbilityAbAttr } from "./ab-attr/unswappable-ability-ab-attr";
-import { UnsuppressableAbilityAbAttr } from "./ab-attr/unsuppressable-ability-ab-attr";
-import { UncopiableAbilityAbAttr } from "./ab-attr/uncopiable-ability-ab-attr";
-import { InfiltratorAbAttr } from "./ab-attr/infiltrator-ab-attr";
-import { IgnoreProtectOnContactAbAttr } from "./ab-attr/ignore-protect-on-contact-ab-attr";
-import { MoveAbilityBypassAbAttr } from "./ab-attr/move-ability-bypass-ab-attr";
-import { ForceSwitchOutImmunityAbAttr } from "./ab-attr/force-switch-out-immunity-ab-attr";
-import { MaxMultiHitAbAttr } from "./ab-attr/max-multi-hit-ab-attr";
-import { PostItemLostAbAttr } from "./ab-attr/post-item-lost-ab-attr";
-import { IgnoreContactAbAttr } from "./ab-attr/ignore-contact-ab-attr";
-import { ChangeMovePriorityAbAttr } from "./ab-attr/change-move-priority-ab-attr";
-import { BlockOneHitKOAbAttr } from "./ab-attr/block-one-hit-ko-ab-attr";
-import { BlockNonDirectDamageAbAttr } from "./ab-attr/block-non-direct-damage-ab-attr";
-import { ConfusionOnStatusEffectAbAttr } from "./ab-attr/confusion-on-status-effect-ab-attr";
-import { AllyMoveCategoryPowerBoostAbAttr } from "./ab-attr/ally-move-category-power-boost-ab-attr";
-import { UserFieldMoveTypePowerBoostAbAttr } from "./ab-attr/user-field-move-type-power-boost-ab-attr";
-import { MoveTypeChangeAbAttr } from "./ab-attr/move-type-change-ab-attr";
-import { FieldPreventExplosiveMovesAbAttr } from "./ab-attr/field-prevent-explosive-moves-ab-attr";
-import { VariableMovePowerAbAttr } from "./ab-attr/variable-move-power-ab-attr";
+import { UnswappableAbilityAbAttr } from "./ab-attrs/unswappable-ability-ab-attr";
+import { UnsuppressableAbilityAbAttr } from "./ab-attrs/unsuppressable-ability-ab-attr";
+import { UncopiableAbilityAbAttr } from "./ab-attrs/uncopiable-ability-ab-attr";
+import { InfiltratorAbAttr } from "./ab-attrs/infiltrator-ab-attr";
+import { IgnoreProtectOnContactAbAttr } from "./ab-attrs/ignore-protect-on-contact-ab-attr";
+import { MoveAbilityBypassAbAttr } from "./ab-attrs/move-ability-bypass-ab-attr";
+import { ForceSwitchOutImmunityAbAttr } from "./ab-attrs/force-switch-out-immunity-ab-attr";
+import { MaxMultiHitAbAttr } from "./ab-attrs/max-multi-hit-ab-attr";
+import { PostItemLostAbAttr } from "./ab-attrs/post-item-lost-ab-attr";
+import { IgnoreContactAbAttr } from "./ab-attrs/ignore-contact-ab-attr";
+import { ChangeMovePriorityAbAttr } from "./ab-attrs/change-move-priority-ab-attr";
+import { BlockOneHitKOAbAttr } from "./ab-attrs/block-one-hit-ko-ab-attr";
+import { BlockNonDirectDamageAbAttr } from "./ab-attrs/block-non-direct-damage-ab-attr";
+import { ConfusionOnStatusEffectAbAttr } from "./ab-attrs/confusion-on-status-effect-ab-attr";
+import { AllyMoveCategoryPowerBoostAbAttr } from "./ab-attrs/ally-move-category-power-boost-ab-attr";
+import { UserFieldMoveTypePowerBoostAbAttr } from "./ab-attrs/user-field-move-type-power-boost-ab-attr";
+import { MoveTypeChangeAbAttr } from "./ab-attrs/move-type-change-ab-attr";
+import { FieldPreventExplosiveMovesAbAttr } from "./ab-attrs/field-prevent-explosive-moves-ab-attr";
+import { VariableMovePowerAbAttr } from "./ab-attrs/variable-move-power-ab-attr";
 import {
   AttackTypeBoosterModifier,
   BerryModifier,
@@ -103,14 +103,14 @@ import { RevivalBlessingPhase } from "#app/phases/revival-blessing-phase";
 import { LoadMoveAnimPhase } from "#app/phases/load-move-anim-phase";
 import { PokemonTransformPhase } from "#app/phases/pokemon-transform-phase";
 import { MoveAnimPhase } from "#app/phases/move-anim-phase";
-import { BlockItemTheftAbAttr } from "./ab-attr/block-item-theft-ab-attr";
-import { BlockRecoilDamageAttr } from "./ab-attr/block-recoil-damage-ab-attr";
-import { WonderSkinAbAttr } from "./ab-attr/wonder-skin-ab-attr";
-import { ReverseDrainAbAttr } from "./ab-attr/reverse-drain-ab-attr";
-import { MoveEffectChanceMultiplierAbAttr } from "./ab-attr/move-effect-chance-multiplier-ab-attr";
-import { IgnoreMoveEffectsAbAttr } from "./ab-attr/ignore-move-effect-ab-attr";
-import { FieldMoveTypePowerBoostAbAttr } from "./ab-attr/field-move-type-power-boost-ab-attr";
-import { HealFromBerryUseAbAttr } from "./ab-attr/heal-from-berry-use-ab-attr";
+import { BlockItemTheftAbAttr } from "./ab-attrs/block-item-theft-ab-attr";
+import { BlockRecoilDamageAttr } from "./ab-attrs/block-recoil-damage-ab-attr";
+import { WonderSkinAbAttr } from "./ab-attrs/wonder-skin-ab-attr";
+import { ReverseDrainAbAttr } from "./ab-attrs/reverse-drain-ab-attr";
+import { MoveEffectChanceMultiplierAbAttr } from "./ab-attrs/move-effect-chance-multiplier-ab-attr";
+import { IgnoreMoveEffectsAbAttr } from "./ab-attrs/ignore-move-effect-ab-attr";
+import { FieldMoveTypePowerBoostAbAttr } from "./ab-attrs/field-move-type-power-boost-ab-attr";
+import { HealFromBerryUseAbAttr } from "./ab-attrs/heal-from-berry-use-ab-attr";
 
 export enum MoveCategory {
   PHYSICAL,

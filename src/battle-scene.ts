@@ -67,7 +67,7 @@ import {
 } from "#app/modifier/modifier-type";
 import AbilityBar from "#app/ui/ability-bar";
 import { allAbilities, applyAbAttrs, applyPostBattleInitAbAttrs, applyPostItemLostAbAttrs } from "#app/data/ability";
-import { PostItemLostAbAttr } from "./data/ab-attr/post-item-lost-ab-attr";
+import { PostItemLostAbAttr } from "./data/ab-attrs/post-item-lost-ab-attr";
 import type { FixedBattleConfig } from "#app/battle";
 import Battle, { BattleType } from "#app/battle";
 import type { GameMode } from "#app/game-mode";
@@ -170,9 +170,9 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { FRIENDSHIP_GAIN_FROM_BATTLE } from "#app/data/balance/starters";
 import { StatusEffect } from "#enums/status-effect";
 import { globalScene, initGlobalScene } from "#app/global-scene";
-import { BlockItemTheftAbAttr } from "./data/ab-attr/block-item-theft-ab-attr";
-import { DoubleBattleChanceAbAttr } from "./data/ab-attr/double-battle-chance-ab-attr";
-import { PostBattleInitAbAttr } from "./data/ab-attr/post-battle-init-ab-attr";
+import { BlockItemTheftAbAttr } from "./data/ab-attrs/block-item-theft-ab-attr";
+import { DoubleBattleChanceAbAttr } from "./data/ab-attrs/double-battle-chance-ab-attr";
+import { PostBattleInitAbAttr } from "./data/ab-attrs/post-battle-init-ab-attr";
 
 export const bypassLogin = import.meta.env.VITE_BYPASS_LOGIN === "1";
 

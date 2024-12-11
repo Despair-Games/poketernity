@@ -1,5 +1,5 @@
 import { applyAbAttrs } from "#app/data/ability";
-import { RunSuccessAbAttr } from "#app/data/ab-attr/run-success-ab-attr";
+import { RunSuccessAbAttr } from "#app/data/ab-attrs/run-success-ab-attr";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import type { PlayerPokemon, EnemyPokemon } from "#app/field/pokemon";

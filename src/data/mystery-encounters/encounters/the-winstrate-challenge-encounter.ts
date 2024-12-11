@@ -34,7 +34,7 @@ import i18next from "i18next";
 import { ModifierTier } from "#app/modifier/modifier-tier";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { PostBattleInitAbAttr } from "#app/data/ab-attr/post-battle-init-ab-attr";
+import { PostBattleInitAbAttr } from "#app/data/ab-attrs/post-battle-init-ab-attr";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/theWinstrateChallenge";
