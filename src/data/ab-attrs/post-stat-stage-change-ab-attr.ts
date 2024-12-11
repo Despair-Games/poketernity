@@ -7,7 +7,7 @@ export class PostStatStageChangeAbAttr extends AbAttr {
     _pokemon: Pokemon,
     _simulated: boolean,
     _statsChanged: BattleStat[],
-    _stagesChanged: integer,
+    _stagesChanged: number,
     _selfTarget: boolean,
     _args: any[],
   ): boolean {

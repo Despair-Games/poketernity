@@ -8,10 +8,10 @@ import { PostAttackAbAttr } from "./post-attack-ab-attr";
 
 export class PostAttackApplyStatusEffectAbAttr extends PostAttackAbAttr {
   private contactRequired: boolean;
-  private chance: integer;
+  private chance: number;
   private effects: StatusEffect[];
 
-  constructor(contactRequired: boolean, chance: integer, ...effects: StatusEffect[]) {
+  constructor(contactRequired: boolean, chance: number, ...effects: StatusEffect[]) {
     super();
 
     this.contactRequired = contactRequired;

@@ -15,9 +15,9 @@ import { PostDefendAbAttr } from "./post-defend-ab-attr";
  * @extends {PostDefendAbAttr}
  */
 export class PostDefendPerishSongAbAttr extends PostDefendAbAttr {
-  private turns: integer;
+  private turns: number;
 
-  constructor(turns: integer) {
+  constructor(turns: number) {
     super();
 
     this.turns = turns;

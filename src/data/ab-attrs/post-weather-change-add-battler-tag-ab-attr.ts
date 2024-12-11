@@ -5,10 +5,10 @@ import { PostWeatherChangeAbAttr } from "./post-weather-change-ab-attr";
 
 export class PostWeatherChangeAddBattlerTagAttr extends PostWeatherChangeAbAttr {
   private tagType: BattlerTagType;
-  private turnCount: integer;
+  private turnCount: number;
   private weatherTypes: WeatherType[];
 
-  constructor(tagType: BattlerTagType, turnCount: integer, ...weatherTypes: WeatherType[]) {
+  constructor(tagType: BattlerTagType, turnCount: number, ...weatherTypes: WeatherType[]) {
     super();
 
     this.tagType = tagType;

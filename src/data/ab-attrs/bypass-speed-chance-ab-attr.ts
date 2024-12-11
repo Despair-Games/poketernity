@@ -13,12 +13,12 @@ import { AbAttr } from "./ab-attr";
  * @extends AbAttr
  */
 export class BypassSpeedChanceAbAttr extends AbAttr {
-  public chance: integer;
+  public chance: number;
 
   /**
    * @param chance probability of ability being active.
    */
-  constructor(chance: integer) {
+  constructor(chance: number) {
     super(true);
     this.chance = chance;
   }

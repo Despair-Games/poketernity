@@ -6,10 +6,10 @@ import { MoveFlags } from "../move";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 
 export class PostDefendContactApplyStatusEffectAbAttr extends PostDefendAbAttr {
-  public chance: integer;
+  public chance: number;
   private effects: StatusEffect[];
 
-  constructor(chance: integer, ...effects: StatusEffect[]) {
+  constructor(chance: number, ...effects: StatusEffect[]) {
     super();
 
     this.chance = chance;

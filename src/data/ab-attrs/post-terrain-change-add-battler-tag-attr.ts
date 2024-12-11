@@ -5,10 +5,10 @@ import { PostTerrainChangeAbAttr } from "./post-terrain-change-ab-attr";
 
 export class PostTerrainChangeAddBattlerTagAttr extends PostTerrainChangeAbAttr {
   private tagType: BattlerTagType;
-  private turnCount: integer;
+  private turnCount: number;
   private terrainTypes: TerrainType[];
 
-  constructor(tagType: BattlerTagType, turnCount: integer, ...terrainTypes: TerrainType[]) {
+  constructor(tagType: BattlerTagType, turnCount: number, ...terrainTypes: TerrainType[]) {
     super();
 
     this.tagType = tagType;

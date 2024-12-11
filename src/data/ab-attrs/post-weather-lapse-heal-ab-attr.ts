@@ -9,9 +9,9 @@ import type { Weather } from "../weather";
 import { PostWeatherLapseAbAttr } from "./post-weather-lapse-ab-attr";
 
 export class PostWeatherLapseHealAbAttr extends PostWeatherLapseAbAttr {
-  private healFactor: integer;
+  private healFactor: number;
 
-  constructor(healFactor: integer, ...weatherTypes: WeatherType[]) {
+  constructor(healFactor: number, ...weatherTypes: WeatherType[]) {
     super(...weatherTypes);
 
     this.healFactor = healFactor;

@@ -12,9 +12,9 @@ import { FieldPreventExplosiveMovesAbAttr } from "./field-prevent-explosive-move
 import { PostFaintAbAttr } from "./post-faint-ab-attr";
 
 export class PostFaintContactDamageAbAttr extends PostFaintAbAttr {
-  private damageRatio: integer;
+  private damageRatio: number;
 
-  constructor(damageRatio: integer) {
+  constructor(damageRatio: number) {
     super();
 
     this.damageRatio = damageRatio;

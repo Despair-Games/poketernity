@@ -3,9 +3,9 @@ import type { BooleanHolder, NumberHolder } from "#app/utils";
 import { AbAttr } from "./ab-attr";
 
 export class StatStageChangeMultiplierAbAttr extends AbAttr {
-  private multiplier: integer;
+  private multiplier: number;
 
-  constructor(multiplier: integer) {
+  constructor(multiplier: number) {
     super(true);
 
     this.multiplier = multiplier;

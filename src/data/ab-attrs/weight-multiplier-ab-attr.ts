@@ -7,9 +7,9 @@ import { AbAttr } from "./ab-attr";
  * Used for Heavy Metal (doubling weight) and Light Metal (halving weight)
  */
 export class WeightMultiplierAbAttr extends AbAttr {
-  private multiplier: integer;
+  private multiplier: number;
 
-  constructor(multiplier: integer) {
+  constructor(multiplier: number) {
     super();
 
     this.multiplier = multiplier;

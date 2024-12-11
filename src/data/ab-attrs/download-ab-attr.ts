@@ -12,9 +12,9 @@ import { PostSummonAbAttr } from "./post-summon-ab-attr";
  * @see {applyPostSummon}
  */
 export class DownloadAbAttr extends PostSummonAbAttr {
-  private enemyDef: integer;
-  private enemySpDef: integer;
-  private enemyCountTally: integer;
+  private enemyDef: number;
+  private enemySpDef: number;
+  private enemyCountTally: number;
   private stats: BattleStat[];
 
   /**

@@ -9,9 +9,9 @@ import { MoveFlags } from "../move";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 
 export class PostDefendContactDamageAbAttr extends PostDefendAbAttr {
-  private damageRatio: integer;
+  private damageRatio: number;
 
-  constructor(damageRatio: integer) {
+  constructor(damageRatio: number) {
     super();
 
     this.damageRatio = damageRatio;

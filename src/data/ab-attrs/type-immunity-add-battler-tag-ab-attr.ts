@@ -8,9 +8,9 @@ import { TypeImmunityAbAttr } from "./type-immunity-ab-attr";
 
 export class TypeImmunityAddBattlerTagAbAttr extends TypeImmunityAbAttr {
   private tagType: BattlerTagType;
-  private turnCount: integer;
+  private turnCount: number;
 
-  constructor(immuneType: Type, tagType: BattlerTagType, turnCount: integer, condition?: AbAttrCondition) {
+  constructor(immuneType: Type, tagType: BattlerTagType, turnCount: number, condition?: AbAttrCondition) {
     super(immuneType, condition);
 
     this.tagType = tagType;

@@ -6,11 +6,11 @@ import { MoveFlags } from "../move";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 
 export class PostDefendContactApplyTagChanceAbAttr extends PostDefendAbAttr {
-  private chance: integer;
+  private chance: number;
   private tagType: BattlerTagType;
-  private turnCount: integer | undefined;
+  private turnCount: number | undefined;
 
-  constructor(chance: integer, tagType: BattlerTagType, turnCount?: integer) {
+  constructor(chance: number, tagType: BattlerTagType, turnCount?: number) {
     super();
 
     this.tagType = tagType;

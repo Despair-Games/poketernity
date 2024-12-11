@@ -6,11 +6,11 @@ import { MoveFlags } from "../move";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 
 export class PostDefendMoveDisableAbAttr extends PostDefendAbAttr {
-  private chance: integer;
+  private chance: number;
   private attacker: Pokemon;
   private move: Move;
 
-  constructor(chance: integer) {
+  constructor(chance: number) {
     super();
 
     this.chance = chance;
