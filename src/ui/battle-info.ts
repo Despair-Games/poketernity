@@ -2,7 +2,8 @@ import type { EnemyPokemon, default as Pokemon } from "../field/pokemon";
 import { getLevelTotalExp, getLevelRelExp } from "../data/exp";
 import { getLocalizedSpriteKey, fixedInt } from "#app/utils";
 import { addTextObject, TextStyle } from "./text";
-import { getGenderSymbol, getGenderColor, Gender } from "../data/gender";
+import { getGenderSymbol, getGenderColor } from "#app/data/gender";
+import { Gender } from "#enums/gender";
 import { StatusEffect } from "#enums/status-effect";
 import { globalScene } from "#app/global-scene";
 import { getTypeRgb } from "#app/data/type";
@@ -22,17 +23,17 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
   private player: boolean;
   private mini: boolean;
   private boss: boolean;
-  private bossSegments: integer;
+  private bossSegments: number;
   private offset: boolean;
   private lastName: string | null;
   private lastTeraType: Type;
   private lastStatus: StatusEffect;
-  private lastHp: integer;
-  private lastMaxHp: integer;
+  private lastHp: number;
+  private lastMaxHp: number;
   private lastHpFrame: string | null;
-  private lastExp: integer;
-  private lastLevelExp: integer;
-  private lastLevel: integer;
+  private lastExp: number;
+  private lastLevelExp: number;
+  private lastLevel: number;
   private lastLevelCapped: boolean;
   private lastStats: string;
 
@@ -865,7 +866,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
     });
   }
 
-  setLevel(level: integer): void {
+  setLevel(level: number): void {
     const isCapped = level >= globalScene.getMaxExpLevel();
     this.levelNumbersContainer.removeAll(true);
     const levelStr = level.toString();
@@ -877,7 +878,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
     this.levelContainer.setX((this.player ? -41 : -50) - 8 * Math.max(levelStr.length - 3, 0));
   }
 
-  setHpNumbers(hp: integer, maxHp: integer): void {
+  setHpNumbers(hp: number, maxHp: number): void {
     if (!this.player || !globalScene) {
       return;
     }
@@ -894,7 +895,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
     }
   }
 
-  updateStats(stats: integer[]): void {
+  updateStats(stats: number[]): void {
     this.statOrder.map((s, i) => {
       if (s !== Stat.HP) {
         this.statNumbers[i].setFrame(stats[s - 1].toString());

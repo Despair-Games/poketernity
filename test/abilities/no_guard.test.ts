@@ -1,4 +1,5 @@
 import { BattlerIndex } from "#app/battle";
+import { HitCheckResult } from "#enums/hit-check-result";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { Abilities } from "#enums/abilities";
@@ -28,6 +29,7 @@ describe("Abilities - No Guard", () => {
       .moveset(Moves.ZAP_CANNON)
       .ability(Abilities.NO_GUARD)
       .enemyLevel(200)
+      .enemySpecies(Species.SNORLAX)
       .enemyAbility(Abilities.BALL_FETCH)
       .enemyMoveset(Moves.SPLASH);
   });
@@ -48,7 +50,7 @@ describe("Abilities - No Guard", () => {
 
     await game.phaseInterceptor.to(MoveEndPhase);
 
-    expect(moveEffectPhase.hitCheck).toHaveReturnedWith(true);
+    expect(moveEffectPhase.hitCheck).toHaveReturnedWith([HitCheckResult.HIT, 1]);
   });
 
   it("should guarantee double battle with any one LURE", async () => {

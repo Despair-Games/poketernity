@@ -20,7 +20,7 @@ export default class GameChallengesUiHandler extends UiHandler {
   private challengesContainer: Phaser.GameObjects.Container;
   private valuesContainer: Phaser.GameObjects.Container;
 
-  private scrollCursor: integer;
+  private scrollCursor: number;
 
   private optionsBg: Phaser.GameObjects.NineSlice;
 
@@ -481,7 +481,7 @@ export default class GameChallengesUiHandler extends UiHandler {
     return success;
   }
 
-  override setCursor(cursor: integer): boolean {
+  override setCursor(cursor: number): boolean {
     let ret = super.setCursor(cursor);
 
     if (!this.cursorObj) {
@@ -509,7 +509,7 @@ export default class GameChallengesUiHandler extends UiHandler {
     return ret;
   }
 
-  setScrollCursor(scrollCursor: integer): boolean {
+  setScrollCursor(scrollCursor: number): boolean {
     if (scrollCursor === this.scrollCursor) {
       return false;
     }

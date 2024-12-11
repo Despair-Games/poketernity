@@ -16,8 +16,8 @@ describe("Abilities - Flower Gift", () => {
 
   /**
    * Tests reverting to normal form when Cloud Nine/Air Lock is active on the field
-   * @param {GameManager} game The game manager instance
-   * @param {Abilities} ability The ability that is active on the field
+   * @param game The game manager instance
+   * @param ability The ability that is active on the field
    */
   const testRevertFormAgainstAbility = async (game: GameManager, ability: Abilities) => {
     game.override.starterForms({ [Species.CASTFORM]: SUNSHINE_FORM }).enemyAbility(ability);

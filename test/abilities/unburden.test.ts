@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#app/battle";
-import { PostItemLostAbAttr } from "#app/data/ability";
+import { PostItemLostAbAttr } from "#app/data/ab-attrs/post-item-lost-ab-attr";
 import { allMoves, StealHeldItemChanceAttr } from "#app/data/move";
 import type Pokemon from "#app/field/pokemon";
 import type { ContactHeldItemTransferChanceModifier } from "#app/modifier/modifier";
@@ -376,7 +376,7 @@ describe("Abilities - Unburden", () => {
     await game.forceEnemyMove(Moves.THIEF, BattlerIndex.PLAYER);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2]);
-    game.doSelectPartyPokemon(0, "MoveEffectPhase");
+    game.doSelectPartyPokemon(0, "RevivalBlessingPhase");
     await game.toNextTurn();
 
     expect(game.scene.getPlayerField()[0]).toBe(treecko);

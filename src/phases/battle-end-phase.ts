@@ -1,8 +1,9 @@
 import { globalScene } from "#app/global-scene";
-import { applyPostBattleAbAttrs, PostBattleAbAttr } from "#app/data/ability";
+import { applyPostBattleAbAttrs } from "#app/data/ability";
 import { LapsingPersistentModifier, LapsingPokemonHeldItemModifier } from "#app/modifier/modifier";
 import { BattlePhase } from "./battle-phase";
 import { GameOverPhase } from "./game-over-phase";
+import { PostBattleAbAttr } from "#app/data/ab-attrs/post-battle-ab-attr";
 
 export class BattleEndPhase extends BattlePhase {
   /** If true, will increment battles won */
@@ -68,6 +69,7 @@ export class BattleEndPhase extends BattlePhase {
       }
     }
 
-    globalScene.updateModifiers().then(() => this.end());
+    globalScene.updateModifiers();
+    this.end();
   }
 }

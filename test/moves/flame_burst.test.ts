@@ -1,7 +1,7 @@
+import { BattlerIndex } from "#app/battle";
 import { allAbilities } from "#app/data/ability";
 import { Abilities } from "#enums/abilities";
 import type Pokemon from "#app/field/pokemon";
-import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
 import GameManager from "#test/testUtils/gameManager";
@@ -46,12 +46,12 @@ describe("Moves - Flame Burst", () => {
   });
 
   it("inflicts damage to the target's ally equal to 1/16 of its max HP", async () => {
-    await game.startBattle([Species.PIKACHU, Species.PIKACHU]);
+    await game.classicMode.startBattle([Species.PIKACHU, Species.PIKACHU]);
     const [leftEnemy, rightEnemy] = game.scene.getEnemyField();
 
     game.move.select(Moves.FLAME_BURST, 0, leftEnemy.getBattlerIndex());
     game.move.select(Moves.SPLASH, 1);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(leftEnemy.hp).toBeLessThan(leftEnemy.getMaxHp());
     expect(rightEnemy.hp).toBe(rightEnemy.getMaxHp() - getEffectDamage(rightEnemy));
@@ -60,50 +60,103 @@ describe("Moves - Flame Burst", () => {
   it("does not inflict damage to the target's ally if the target was not affected by Flame Burst", async () => {
     game.override.enemyAbility(Abilities.FLASH_FIRE);
 
-    await game.startBattle([Species.PIKACHU, Species.PIKACHU]);
+    await game.classicMode.startBattle([Species.PIKACHU, Species.PIKACHU]);
     const [leftEnemy, rightEnemy] = game.scene.getEnemyField();
 
     game.move.select(Moves.FLAME_BURST, 0, leftEnemy.getBattlerIndex());
     game.move.select(Moves.SPLASH, 1);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(leftEnemy.hp).toBe(leftEnemy.getMaxHp());
     expect(rightEnemy.hp).toBe(rightEnemy.getMaxHp());
   });
 
   it("does not interact with the target ally's abilities", async () => {
-    await game.startBattle([Species.PIKACHU, Species.PIKACHU]);
+    await game.classicMode.startBattle([Species.PIKACHU, Species.PIKACHU]);
     const [leftEnemy, rightEnemy] = game.scene.getEnemyField();
 
     vi.spyOn(rightEnemy, "getAbility").mockReturnValue(allAbilities[Abilities.FLASH_FIRE]);
 
     game.move.select(Moves.FLAME_BURST, 0, leftEnemy.getBattlerIndex());
     game.move.select(Moves.SPLASH, 1);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(leftEnemy.hp).toBeLessThan(leftEnemy.getMaxHp());
     expect(rightEnemy.hp).toBe(rightEnemy.getMaxHp() - getEffectDamage(rightEnemy));
   });
 
   it("effect damage is prevented by Magic Guard", async () => {
-    await game.startBattle([Species.PIKACHU, Species.PIKACHU]);
+    await game.classicMode.startBattle([Species.PIKACHU, Species.PIKACHU]);
     const [leftEnemy, rightEnemy] = game.scene.getEnemyField();
 
     vi.spyOn(rightEnemy, "getAbility").mockReturnValue(allAbilities[Abilities.MAGIC_GUARD]);
 
     game.move.select(Moves.FLAME_BURST, 0, leftEnemy.getBattlerIndex());
     game.move.select(Moves.SPLASH, 1);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(leftEnemy.hp).toBeLessThan(leftEnemy.getMaxHp());
     expect(rightEnemy.hp).toBe(rightEnemy.getMaxHp());
   });
 
-  it(
-    "is not affected by protection moves and Endure",
-    async () => {
-      // TODO: update this test when it's possible to select move for each enemy
-    },
-    { skip: true },
-  );
+  it("effect damage should apply even when targeting a Substitute", async () => {
+    game.override.enemyMoveset([Moves.SUBSTITUTE, Moves.SPLASH]);
+
+    await game.classicMode.startBattle([Species.PIKACHU, Species.PIKACHU]);
+    const [leftEnemy, rightEnemy] = game.scene.getEnemyField();
+
+    game.move.select(Moves.FLAME_BURST, 0, leftEnemy.getBattlerIndex());
+    game.move.select(Moves.SPLASH, 1);
+
+    await game.forceEnemyMove(Moves.SUBSTITUTE);
+    await game.forceEnemyMove(Moves.SPLASH);
+
+    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
+
+    await game.phaseInterceptor.to("TurnEndPhase");
+
+    expect(rightEnemy.hp).toBe(rightEnemy.getMaxHp() - getEffectDamage(rightEnemy));
+  });
+
+  it("effect damage should bypass protection", async () => {
+    game.override.enemyMoveset([Moves.PROTECT, Moves.SPLASH]);
+
+    await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
+
+    const leftEnemy = game.scene.getEnemyField()[0];
+
+    game.move.select(Moves.FLAME_BURST, 0, BattlerIndex.ENEMY_2);
+    game.move.select(Moves.SPLASH, 1);
+
+    await game.forceEnemyMove(Moves.PROTECT);
+    await game.forceEnemyMove(Moves.SPLASH);
+
+    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
+
+    await game.phaseInterceptor.to("TurnEndPhase");
+
+    expect(leftEnemy.hp).toBe(leftEnemy.getMaxHp() - getEffectDamage(leftEnemy));
+  });
+
+  // TODO: fix Endure's interactions with effect damage to pass this test
+  it.skip("effect damage should bypass Endure", async () => {
+    game.override.enemyMoveset([Moves.ENDURE, Moves.SPLASH]);
+
+    await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
+
+    const leftEnemy = game.scene.getEnemyField()[0];
+    leftEnemy.hp = 1;
+
+    game.move.select(Moves.FLAME_BURST, 0, BattlerIndex.ENEMY_2);
+    game.move.select(Moves.SPLASH, 1);
+
+    await game.forceEnemyMove(Moves.ENDURE);
+    await game.forceEnemyMove(Moves.SPLASH);
+
+    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
+
+    await game.phaseInterceptor.to("TurnEndPhase");
+
+    expect(leftEnemy.isFainted(true)).toBeTruthy();
+  });
 });
