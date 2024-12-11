@@ -18,7 +18,7 @@ import { VariantTier } from "#enums/variant-tier";
 import { WeatherType } from "#enums/weather-type";
 
 /**
- * Overrides that are using when testing different in game situations
+ * Overrides that are used to test different in game situations
  *
  * Any override added here will be used instead of the value in {@linkcode DefaultOverrides}
  *
