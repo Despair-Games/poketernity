@@ -1,12 +1,12 @@
+import { applyAbAttrs } from "#app/data/ability";
+import type Move from "#app/data/move";
+import { MoveFlags } from "#app/data/move";
 import type Pokemon from "#app/field/pokemon";
 import { HitResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BooleanHolder, toDmgValue } from "#app/utils";
 import i18next from "i18next";
-import { applyAbAttrs } from "../ability";
-import type Move from "../move";
-import { MoveFlags } from "../move";
 import { BlockNonDirectDamageAbAttr } from "./block-non-direct-damage-ab-attr";
 import { FieldPreventExplosiveMovesAbAttr } from "./field-prevent-explosive-moves-ab-attr";
 import { PostFaintAbAttr } from "./post-faint-ab-attr";

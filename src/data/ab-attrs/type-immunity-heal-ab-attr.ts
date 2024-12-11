@@ -1,11 +1,11 @@
-import type { Type } from "#app/enums/type";
+import type Move from "#app/data/move";
 import type Pokemon from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";
 import { type BooleanHolder, toDmgValue } from "#app/utils";
+import type { Type } from "#enums/type";
 import i18next from "i18next";
-import type Move from "../move";
 import { TypeImmunityAbAttr } from "./type-immunity-ab-attr";
 
 export class TypeImmunityHealAbAttr extends TypeImmunityAbAttr {

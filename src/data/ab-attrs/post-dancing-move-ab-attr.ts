@@ -1,10 +1,10 @@
 import type { BattlerIndex } from "#app/battle";
+import { AttackMove, SelfStatusMove, StatusMove } from "#app/data/move";
 import type Pokemon from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { MovePhase } from "#app/phases/move-phase";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { AttackMove, SelfStatusMove, StatusMove } from "../move";
 import { PostMoveUsedAbAttr } from "./post-move-used-ab-attr";
 
 /**

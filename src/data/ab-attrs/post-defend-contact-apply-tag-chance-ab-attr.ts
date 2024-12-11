@@ -1,8 +1,8 @@
+import type Move from "#app/data/move";
+import { MoveFlags } from "#app/data/move";
 import type Pokemon from "#app/field/pokemon";
 import type { HitResult } from "#app/field/pokemon";
 import type { BattlerTagType } from "#enums/battler-tag-type";
-import type Move from "../move";
-import { MoveFlags } from "../move";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 
 export class PostDefendContactApplyTagChanceAbAttr extends PostDefendAbAttr {

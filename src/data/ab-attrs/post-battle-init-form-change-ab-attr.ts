@@ -1,6 +1,6 @@
+import { SpeciesFormChangeManualTrigger } from "#app/data/pokemon-forms";
 import type Pokemon from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { SpeciesFormChangeManualTrigger } from "../pokemon-forms";
 import { PostBattleInitAbAttr } from "./post-battle-init-ab-attr";
 
 export class PostBattleInitFormChangeAbAttr extends PostBattleInitAbAttr {

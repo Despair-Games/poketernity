@@ -1,5 +1,5 @@
-import type { BattleStat } from "#app/enums/stat";
 import type Pokemon from "#app/field/pokemon";
+import type { BattleStat } from "#enums/stat";
 import { AbAttr } from "./ab-attr";
 
 export class PostStatStageChangeAbAttr extends AbAttr {

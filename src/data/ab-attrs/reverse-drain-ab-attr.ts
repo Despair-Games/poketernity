@@ -1,9 +1,9 @@
+import { type Move, HitHealAttr } from "#app/data/move";
 import type Pokemon from "#app/field/pokemon";
 import type { HitResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
-import { type Move, HitHealAttr } from "../move";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 
 /**

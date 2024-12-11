@@ -1,8 +1,8 @@
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
-import type { Type } from "#app/enums/type";
+import { type Move, MoveCategory, NeutralDamageAgainstFlyingTypeMultiplierAttr } from "#app/data/move";
 import type Pokemon from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
-import { type Move, MoveCategory, NeutralDamageAgainstFlyingTypeMultiplierAttr } from "../move";
+import type { Type } from "#enums/type";
 import { TypeImmunityAbAttr } from "./type-immunity-ab-attr";
 
 export class AttackTypeImmunityAbAttr extends TypeImmunityAbAttr {

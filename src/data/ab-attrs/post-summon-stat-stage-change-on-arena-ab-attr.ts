@@ -1,8 +1,8 @@
+import { ArenaTagSide } from "#app/data/arena-tag";
 import type Pokemon from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { ArenaTagType } from "#enums/arena-tag-type";
 import { Stat } from "#enums/stat";
-import { ArenaTagSide } from "../arena-tag";
 import { PostSummonStatStageChangeAbAttr } from "./post-summon-stat-stage-change-ab-attr";
 
 /**

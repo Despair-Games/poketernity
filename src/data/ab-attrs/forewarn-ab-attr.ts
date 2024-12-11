@@ -1,9 +1,9 @@
+import { OneHitKOAttr, StatusMove } from "#app/data/move";
 import type Pokemon from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { Moves } from "#enums/moves";
 import i18next from "i18next";
-import { OneHitKOAttr, StatusMove } from "../move";
 import { PostSummonAbAttr } from "./post-summon-ab-attr";
 
 export class ForewarnAbAttr extends PostSummonAbAttr {

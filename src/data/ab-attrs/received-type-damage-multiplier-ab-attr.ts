@@ -1,4 +1,4 @@
-import type { Type } from "#app/enums/type";
+import type { Type } from "#enums/type";
 import { ReceivedMoveDamageMultiplierAbAttr } from "./received-move-damage-multiplier-ab-attr";
 
 export class ReceivedTypeDamageMultiplierAbAttr extends ReceivedMoveDamageMultiplierAbAttr {

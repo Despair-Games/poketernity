@@ -1,6 +1,6 @@
+import { SpeciesFormChangeManualTrigger } from "#app/data/pokemon-forms";
 import type Pokemon from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { SpeciesFormChangeManualTrigger } from "../pokemon-forms";
 import { PostVictoryAbAttr } from "./post-victory-ab-attr";
 
 export class PostVictoryFormChangeAbAttr extends PostVictoryAbAttr {

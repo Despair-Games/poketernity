@@ -1,8 +1,8 @@
+import { getPokemonWithWeatherBasedForms } from "#app/data/ability-utils";
+import type Move from "#app/data/move";
 import type Pokemon from "#app/field/pokemon";
 import type { HitResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import type Move from "../move";
-import { getPokemonWithWeatherBasedForms } from "../ability-utils";
 import { PostFaintAbAttr } from "./post-faint-ab-attr";
 
 /**

@@ -1,9 +1,9 @@
 import type { PreDefendAbAttrCondition } from "#app/@types/PreDefendAbAttrCondition";
+import type Move from "#app/data/move";
 import type Pokemon from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { BooleanHolder } from "#app/utils";
 import i18next from "i18next";
-import type Move from "../move";
 import { PreDefendAbAttr } from "./pre-defend-ab-attr";
 
 export class MoveImmunityAbAttr extends PreDefendAbAttr {

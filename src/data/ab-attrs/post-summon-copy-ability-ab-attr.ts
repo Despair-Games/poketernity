@@ -1,13 +1,13 @@
+import { allAbilities } from "#app/data/ability";
+import { setAbilityRevealed } from "#app/data/ability-utils";
 import type Pokemon from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { randSeedItem } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import i18next from "i18next";
-import { allAbilities } from "../ability";
-import { UncopiableAbilityAbAttr } from "./uncopiable-ability-ab-attr";
-import { setAbilityRevealed } from "../ability-utils";
 import { PostSummonAbAttr } from "./post-summon-ab-attr";
+import { UncopiableAbilityAbAttr } from "./uncopiable-ability-ab-attr";
 
 /** Attempts to copy a pokemon's ability */
 export class PostSummonCopyAbilityAbAttr extends PostSummonAbAttr {

@@ -1,10 +1,10 @@
+import { allMoves, MoveCategory } from "#app/data/move";
 import type Pokemon from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { Command } from "#app/ui/command-ui-handler";
 import type { BooleanHolder } from "#app/utils";
 import i18next from "i18next";
-import { allMoves, MoveCategory } from "../move";
 import { AbAttr } from "./ab-attr";
 
 /**

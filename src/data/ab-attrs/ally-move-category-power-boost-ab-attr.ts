@@ -1,4 +1,4 @@
-import type { MoveCategory } from "../move";
+import type { MoveCategory } from "#app/data/move";
 import { FieldMovePowerBoostAbAttr } from "./field-move-power-boost-ab-attr";
 
 /**

@@ -1,6 +1,6 @@
+import type { Weather } from "#app/data/weather";
 import type Pokemon from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
-import type { Weather } from "../weather";
 import { AbAttr } from "./ab-attr";
 
 export class PreWeatherEffectAbAttr extends AbAttr {

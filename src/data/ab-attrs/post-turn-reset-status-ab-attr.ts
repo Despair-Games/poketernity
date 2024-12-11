@@ -1,7 +1,7 @@
+import { getStatusEffectHealText } from "#app/data/status-effect";
 import type Pokemon from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { getStatusEffectHealText } from "../status-effect";
 import { PostTurnAbAttr } from "./post-turn-ab-attr";
 
 /**

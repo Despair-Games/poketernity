@@ -1,9 +1,9 @@
+import type Move from "#app/data/move";
 import type Pokemon from "#app/field/pokemon";
 import type { HitResult } from "#app/field/pokemon";
 import { Abilities } from "#enums/abilities";
 import { StatusEffect } from "#enums/status-effect";
 import { Type } from "#enums/type";
-import type Move from "../move";
 import { PostDefendContactApplyStatusEffectAbAttr } from "./post-defend-contact-apply-status-effect-ab-attr";
 
 export class EffectSporeAbAttr extends PostDefendContactApplyStatusEffectAbAttr {

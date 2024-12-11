@@ -1,12 +1,12 @@
+import type Move from "#app/data/move";
+import { MoveFlags } from "#app/data/move";
 import type Pokemon from "#app/field/pokemon";
 import type { HitResult } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { Abilities } from "#enums/abilities";
 import i18next from "i18next";
-import { UnsuppressableAbilityAbAttr } from "./unsuppressable-ability-ab-attr";
-import type Move from "../move";
-import { MoveFlags } from "../move";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
+import { UnsuppressableAbilityAbAttr } from "./unsuppressable-ability-ab-attr";
 
 export class PostDefendAbilityGiveAbAttr extends PostDefendAbAttr {
   private ability: Abilities;

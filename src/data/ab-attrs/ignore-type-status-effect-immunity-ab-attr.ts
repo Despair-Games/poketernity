@@ -1,7 +1,7 @@
-import type { StatusEffect } from "#app/enums/status-effect";
-import type { Type } from "#app/enums/type";
 import type Pokemon from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
+import type { StatusEffect } from "#enums/status-effect";
+import type { Type } from "#enums/type";
 import { AbAttr } from "./ab-attr";
 
 /**

@@ -1,7 +1,7 @@
+import type { Weather } from "#app/data/weather";
 import type Pokemon from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
 import type { WeatherType } from "#enums/weather-type";
-import type { Weather } from "../weather";
 import { PreWeatherDamageAbAttr } from "./pre-weather-damage-ab-attr";
 
 export class BlockWeatherDamageAttr extends PreWeatherDamageAbAttr {

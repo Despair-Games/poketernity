@@ -1,10 +1,10 @@
+import type Move from "#app/data/move";
+import { CopyMoveAttr, NaturePowerAttr, RandomMoveAttr, RandomMovesetMoveAttr } from "#app/data/move";
 import type Pokemon from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { Moves } from "#enums/moves";
 import { Type } from "#enums/type";
 import i18next from "i18next";
-import type Move from "../move";
-import { CopyMoveAttr, NaturePowerAttr, RandomMoveAttr, RandomMovesetMoveAttr } from "../move";
 import { PreAttackAbAttr } from "./pre-attack-ab-attr";
 
 /** Ability attribute for changing a pokemon's type before using a move */

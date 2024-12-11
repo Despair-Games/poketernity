@@ -1,8 +1,8 @@
+import type { PokemonStatStageChangeCondition } from "#app/@types/PokemonStatStageChangeCondition";
 import type Pokemon from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import type { BattleStat } from "#enums/stat";
-import type { PokemonStatStageChangeCondition } from "../../@types/PokemonStatStageChangeCondition";
 import { PostStatStageChangeAbAttr } from "./post-stat-stage-change-ab-attr";
 
 export class PostStatStageChangeStatStageChangeAbAttr extends PostStatStageChangeAbAttr {

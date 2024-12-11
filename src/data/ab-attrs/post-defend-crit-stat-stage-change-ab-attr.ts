@@ -1,10 +1,10 @@
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
+import type Move from "#app/data/move";
 import type Pokemon from "#app/field/pokemon";
 import type { HitResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import type { BattleStat } from "#enums/stat";
-import type Move from "../move";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 
 export class PostDefendCritStatStageChangeAbAttr extends PostDefendAbAttr {

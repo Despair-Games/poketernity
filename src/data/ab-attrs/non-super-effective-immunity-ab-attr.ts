@@ -1,9 +1,9 @@
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
+import { type Move, AttackMove } from "#app/data/move";
 import type Pokemon from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { BooleanHolder, NumberHolder } from "#app/utils";
 import i18next from "i18next";
-import { type Move, AttackMove } from "../move";
 import { TypeImmunityAbAttr } from "./type-immunity-ab-attr";
 
 export class NonSuperEffectiveImmunityAbAttr extends TypeImmunityAbAttr {

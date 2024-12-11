@@ -1,11 +1,11 @@
+import { applyAbAttrs } from "#app/data/ability";
+import { queueShowAbility } from "#app/data/ability-utils";
 import type Pokemon from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { BooleanHolder } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { BattleStat } from "#enums/stat";
-import { applyAbAttrs } from "../ability";
-import { queueShowAbility } from "../ability-utils";
 import { IntimidateImmunityAbAttr } from "./intimidate-immunity-ab-attr";
 import { PostIntimidateStatStageChangeAbAttr } from "./post-intimidate-stat-stage-change-ab-attr";
 import { PostSummonAbAttr } from "./post-summon-ab-attr";

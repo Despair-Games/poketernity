@@ -1,11 +1,11 @@
+import type Move from "#app/data/move";
+import { MoveFlags } from "#app/data/move";
 import type Pokemon from "#app/field/pokemon";
 import type { HitResult } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
-import { UnswappableAbilityAbAttr } from "./unswappable-ability-ab-attr";
-import type Move from "../move";
-import { MoveFlags } from "../move";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
+import { UnswappableAbilityAbAttr } from "./unswappable-ability-ab-attr";
 
 export class PostDefendAbilitySwapAbAttr extends PostDefendAbAttr {
   constructor() {

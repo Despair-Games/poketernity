@@ -1,10 +1,10 @@
+import { allAbilities } from "#app/data/ability";
 import type Pokemon from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
-import { allAbilities } from "../ability";
-import { UncopiableAbilityAbAttr } from "./uncopiable-ability-ab-attr";
 import { PostKnockOutAbAttr } from "./post-knock-out-ab-attr";
+import { UncopiableAbilityAbAttr } from "./uncopiable-ability-ab-attr";
 
 export class CopyFaintedAllyAbilityAbAttr extends PostKnockOutAbAttr {
   constructor() {

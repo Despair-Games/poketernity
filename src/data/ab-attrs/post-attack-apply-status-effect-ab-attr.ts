@@ -1,8 +1,8 @@
+import type Move from "#app/data/move";
+import { MoveFlags } from "#app/data/move";
 import type Pokemon from "#app/field/pokemon";
 import type { HitResult } from "#app/field/pokemon";
 import type { StatusEffect } from "#enums/status-effect";
-import type Move from "../move";
-import { MoveFlags } from "../move";
 import { IgnoreMoveEffectsAbAttr } from "./ignore-move-effect-ab-attr";
 import { PostAttackAbAttr } from "./post-attack-ab-attr";
 

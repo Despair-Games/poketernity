@@ -1,6 +1,6 @@
+import type Move from "#app/data/move";
 import type Pokemon from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
-import type Move from "../move";
 import { VariableMovePowerAbAttr } from "./variable-move-power-ab-attr";
 
 /**

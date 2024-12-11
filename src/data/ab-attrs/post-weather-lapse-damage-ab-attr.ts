@@ -1,3 +1,4 @@
+import type { Weather } from "#app/data/weather";
 import type Pokemon from "#app/field/pokemon";
 import { HitResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -5,7 +6,6 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { toDmgValue } from "#app/utils";
 import type { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
-import type { Weather } from "../weather";
 import { BlockNonDirectDamageAbAttr } from "./block-non-direct-damage-ab-attr";
 import { PostWeatherLapseAbAttr } from "./post-weather-lapse-ab-attr";
 

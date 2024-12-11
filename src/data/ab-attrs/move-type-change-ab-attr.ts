@@ -1,8 +1,8 @@
 import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition";
+import type Move from "#app/data/move";
 import type Pokemon from "#app/field/pokemon";
 import { NumberHolder } from "#app/utils";
 import type { Type } from "#enums/type";
-import type Move from "../move";
 import { PreAttackAbAttr } from "./pre-attack-ab-attr";
 
 export class MoveTypeChangeAbAttr extends PreAttackAbAttr {

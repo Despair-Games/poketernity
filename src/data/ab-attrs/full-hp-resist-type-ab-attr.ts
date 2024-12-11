@@ -1,8 +1,8 @@
+import { type Move, FixedDamageAttr } from "#app/data/move";
 import type Pokemon from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { type BooleanHolder, NumberHolder } from "#app/utils";
 import i18next from "i18next";
-import { type Move, FixedDamageAttr } from "../move";
 import { PreDefendAbAttr } from "./pre-defend-ab-attr";
 
 /**

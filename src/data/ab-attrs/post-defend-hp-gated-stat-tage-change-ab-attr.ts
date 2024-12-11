@@ -1,10 +1,10 @@
-import type { BattleStat } from "#app/enums/stat";
+import type { PokemonDefendCondition } from "#app/@types/PokemonDefendCondition";
+import type Move from "#app/data/move";
 import type Pokemon from "#app/field/pokemon";
 import type { HitResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import type { PokemonDefendCondition } from "../../@types/PokemonDefendCondition";
-import type Move from "../move";
+import type { BattleStat } from "#enums/stat";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 
 export class PostDefendHpGatedStatStageChangeAbAttr extends PostDefendAbAttr {

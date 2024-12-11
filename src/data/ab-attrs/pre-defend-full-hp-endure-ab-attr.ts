@@ -1,7 +1,7 @@
-import { BattlerTagType } from "#app/enums/battler-tag-type";
+import type Move from "#app/data/move";
 import type Pokemon from "#app/field/pokemon";
 import type { BooleanHolder, NumberHolder } from "#app/utils";
-import type Move from "../move";
+import { BattlerTagType } from "#enums/battler-tag-type";
 import { PreDefendAbAttr } from "./pre-defend-ab-attr";
 
 export class PreDefendFullHpEndureAbAttr extends PreDefendAbAttr {

@@ -1,9 +1,9 @@
-import { Type } from "#app/enums/type";
+import type Move from "#app/data/move";
 import type Pokemon from "#app/field/pokemon";
 import { HitResult } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { Type } from "#enums/type";
 import i18next from "i18next";
-import type Move from "../move";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 
 export class PostDefendTypeChangeAbAttr extends PostDefendAbAttr {

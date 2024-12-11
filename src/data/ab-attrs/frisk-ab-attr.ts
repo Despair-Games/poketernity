@@ -1,8 +1,8 @@
+import { setAbilityRevealed } from "#app/data/ability-utils";
 import type Pokemon from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
-import { setAbilityRevealed } from "../ability-utils";
 import { PostSummonAbAttr } from "./post-summon-ab-attr";
 
 export class FriskAbAttr extends PostSummonAbAttr {
