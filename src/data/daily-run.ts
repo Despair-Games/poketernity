@@ -10,7 +10,7 @@ import { speciesStarterCosts } from "#app/data/balance/starters";
 import { api } from "#app/plugins/api/api";
 
 export interface DailyRunConfig {
-  seed: integer;
+  seed: number;
   starters: Starter;
 }
 
@@ -41,7 +41,7 @@ export function getDailyRunStarters(seed: string): Starter[] {
         return;
       }
 
-      const starterCosts: integer[] = [];
+      const starterCosts: number[] = [];
       starterCosts.push(Math.min(Math.round(3.5 + Math.abs(randSeedGauss(1))), 8));
       starterCosts.push(randSeedInt(9 - starterCosts[0], 1));
       starterCosts.push(10 - (starterCosts[0] + starterCosts[1]));
@@ -65,7 +65,7 @@ export function getDailyRunStarters(seed: string): Starter[] {
   return starters;
 }
 
-function getDailyRunStarter(starterSpeciesForm: PokemonSpeciesForm, startingLevel: integer): Starter {
+function getDailyRunStarter(starterSpeciesForm: PokemonSpeciesForm, startingLevel: number): Starter {
   const starterSpecies =
     starterSpeciesForm instanceof PokemonSpecies ? starterSpeciesForm : getPokemonSpecies(starterSpeciesForm.speciesId);
   const formIndex = starterSpeciesForm instanceof PokemonSpecies ? undefined : starterSpeciesForm.formIndex;

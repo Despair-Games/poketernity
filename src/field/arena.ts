@@ -85,10 +85,10 @@ export class Arena {
   }
 
   randomSpecies(
-    waveIndex: integer,
-    level: integer,
-    attempt?: integer,
-    luckValue?: integer,
+    waveIndex: number,
+    level: number,
+    attempt?: number,
+    luckValue?: number,
     isBoss?: boolean,
   ): PokemonSpecies {
     const overrideSpecies = globalScene.gameMode.getOverrideSpecies(waveIndex);
@@ -189,7 +189,7 @@ export class Arena {
     return ret;
   }
 
-  randomTrainerType(waveIndex: integer, isBoss: boolean = false): TrainerType {
+  randomTrainerType(waveIndex: number, isBoss: boolean = false): TrainerType {
     const isTrainerBoss =
       !!this.trainerPool[BiomePoolTier.BOSS].length
       && (globalScene.gameMode.isTrainerBoss(waveIndex, this.biomeType, globalScene.offsetGym) || isBoss);
@@ -221,7 +221,7 @@ export class Arena {
     return !tierPool.length ? TrainerType.BREEDER : tierPool[randSeedInt(tierPool.length)];
   }
 
-  getSpeciesFormIndex(species: PokemonSpecies): integer {
+  getSpeciesFormIndex(species: PokemonSpecies): number {
     switch (species.speciesId) {
       case Species.BURMY:
       case Species.WORMADAM:
@@ -425,7 +425,7 @@ export class Arena {
    * Gets the denominator for the chance for a trainer spawn
    * @returns n where 1/n is the chance of a trainer battle
    */
-  getTrainerChance(): integer {
+  getTrainerChance(): number {
     switch (this.biomeType) {
       case Biome.METROPOLIS:
         return 2;
@@ -510,10 +510,10 @@ export class Arena {
     }
   }
 
-  overrideTint(): [integer, integer, integer] {
+  overrideTint(): [number, number, number] {
     switch (Overrides.ARENA_TINT_OVERRIDE) {
       case TimeOfDay.DUSK:
-        return [98, 48, 73].map((c) => Math.round((c + 128) / 2)) as [integer, integer, integer];
+        return [98, 48, 73].map((c) => Math.round((c + 128) / 2)) as [number, number, number];
         break;
       case TimeOfDay.NIGHT:
         return [64, 64, 64];
@@ -526,7 +526,7 @@ export class Arena {
     }
   }
 
-  getDayTint(): [integer, integer, integer] {
+  getDayTint(): [number, number, number] {
     if (Overrides.ARENA_TINT_OVERRIDE !== null) {
       return this.overrideTint();
     }
@@ -538,7 +538,7 @@ export class Arena {
     }
   }
 
-  getDuskTint(): [integer, integer, integer] {
+  getDuskTint(): [number, number, number] {
     if (Overrides.ARENA_TINT_OVERRIDE) {
       return this.overrideTint();
     }
@@ -548,11 +548,11 @@ export class Arena {
 
     switch (this.biomeType) {
       default:
-        return [98, 48, 73].map((c) => Math.round((c + 128) / 2)) as [integer, integer, integer];
+        return [98, 48, 73].map((c) => Math.round((c + 128) / 2)) as [number, number, number];
     }
   }
 
-  getNightTint(): [integer, integer, integer] {
+  getNightTint(): [number, number, number] {
     if (Overrides.ARENA_TINT_OVERRIDE) {
       return this.overrideTint();
     }
@@ -892,7 +892,7 @@ export function getBiomeHasProps(biomeType: Biome): boolean {
 export class ArenaBase extends Phaser.GameObjects.Container {
   public player: boolean;
   public biome: Biome;
-  public propValue: integer;
+  public propValue: number;
   public base: Phaser.GameObjects.Sprite;
   public props: Phaser.GameObjects.Sprite[];
 
@@ -914,7 +914,7 @@ export class ArenaBase extends Phaser.GameObjects.Container {
       : [];
   }
 
-  setBiome(biome: Biome, propValue?: integer): void {
+  setBiome(biome: Biome, propValue?: number): void {
     const hasProps = getBiomeHasProps(biome);
     const biomeKey = getBiomeKey(biome);
     const baseKey = `${biomeKey}_${this.player ? "a" : "b"}`;
