@@ -1529,12 +1529,6 @@ export class ProtectedTag extends BattlerTag {
       globalScene.queueMessage(
         i18next.t("battlerTags:protectedLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       );
-
-      // Stop multi-hit moves early
-      const effectPhase = globalScene.getCurrentPhase();
-      if (effectPhase instanceof MoveEffectPhase) {
-        effectPhase.stopMultiHit(pokemon);
-      }
       return true;
     }
 
