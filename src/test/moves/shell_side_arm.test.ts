@@ -73,6 +73,19 @@ describe("Moves - Shell Side Arm", () => {
     expect(shellSideArmAttr.apply).toHaveLastReturnedWith(false);
   });
 
+  it("should not make contact if the move becomes special", async () => {
+    game.override.enemySpecies(Species.SLOWBRO).enemyAbility(Abilities.ROUGH_SKIN);
+
+    await game.classicMode.startBattle([Species.XURKITREE]);
+
+    const player = game.scene.getPlayerPokemon()!;
+
+    game.move.select(Moves.SHELL_SIDE_ARM);
+    await game.toNextTurn();
+
+    expect(player.getMaxHp()).toBe(player.hp);
+  });
+
   it("respects stat stage changes when forecasting base damage", async () => {
     game.override.enemySpecies(Species.SNORLAX).enemyMoveset(Moves.COTTON_GUARD);
 

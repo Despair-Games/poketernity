@@ -4896,8 +4896,11 @@ export class ShellSideArmCategoryAttr extends VariableMoveCategoryAttr {
     if (predictedPhysDmg > predictedSpecDmg || (predictedPhysDmg === predictedSpecDmg && user.randSeedInt(2) === 0)) {
       category.value = MoveCategory.PHYSICAL;
       move.makesContact();
+      console.log("CONTACT");
       return true;
     }
+    move.makesContact(false);
+    console.log("NO CONTACT");
     return false;
   }
 }
