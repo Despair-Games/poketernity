@@ -168,19 +168,6 @@ export class Ability implements Localizable {
 
 type AbAttrApplyFunc<TAttr extends AbAttr> = (attr: TAttr, passive: boolean) => boolean;
 
-export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondition {
-  return () => {
-    if (!globalScene?.arena) {
-      return false;
-    }
-    if (globalScene.arena.weather?.isEffectSuppressed()) {
-      return false;
-    }
-    const weatherType = globalScene.arena.weather?.weatherType;
-    return !!weatherType && weatherTypes.indexOf(weatherType) > -1;
-  };
-}
-
 class ForceSwitchOutHelper {
   constructor(private switchType: SwitchType) {}
 

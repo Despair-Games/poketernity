@@ -1,7 +1,7 @@
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import type Pokemon from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
 import type { WeatherType } from "#enums/weather-type";
-import { getWeatherCondition } from "../ability";
 import type { Weather } from "../weather";
 import { AbAttr } from "./ab-attr";
 
@@ -28,3 +28,20 @@ export class PostWeatherLapseAbAttr extends AbAttr {
     return getWeatherCondition(...this.weatherTypes);
   }
 }
+
+//#region Helpers
+
+export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondition {
+  return () => {
+    if (!globalScene?.arena) {
+      return false;
+    }
+    if (globalScene.arena.weather?.isEffectSuppressed()) {
+      return false;
+    }
+    const weatherType = globalScene.arena.weather?.weatherType;
+    return !!weatherType && weatherTypes.indexOf(weatherType) > -1;
+  };
+}
+
+//#endregion
