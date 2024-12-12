@@ -1,3 +1,4 @@
+import { SETTINGS_LS_KEY } from "#app/constants";
 import { generalSettingsUiItems } from "#app/system/settings/settings-ui-items";
 import { SettingType } from "../../system/settings/settings";
 import type { Mode } from "../ui";
@@ -13,6 +14,6 @@ export default class SettingsUiHandler extends AbstractSettingsUiHandler {
   constructor(mode: Mode | null = null) {
     super(SettingType.GENERAL, mode, generalSettingsUiItems);
     this.title = "General";
-    this.localStorageKey = "settings";
+    this.localStorageKey = SETTINGS_LS_KEY;
   }
 }

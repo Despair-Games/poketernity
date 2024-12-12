@@ -1,4 +1,4 @@
-import { LOCALE_LS_KEY } from "#app/constants";
+import { LOCALE_LS_KEY, SETTINGS_LS_KEY } from "#app/constants";
 import { displaySettingUiItems } from "#app/system/settings/settings-ui-items";
 import { SettingKeys, SettingType } from "#app/system/settings/settings";
 import type { Mode } from "../ui";
@@ -102,6 +102,6 @@ export default class SettingsDisplayUiHandler extends AbstractSettingsUiHandler 
         }
       }
     }
-    this.localStorageKey = "settings";
+    this.localStorageKey = SETTINGS_LS_KEY;
   }
 }

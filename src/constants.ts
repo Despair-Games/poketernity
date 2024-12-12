@@ -17,12 +17,16 @@ export const SAVES_ZIP_PREFIX = "poketernity_";
 export const SAVE_FILE_EXTENSION = "txt";
 
 /** Prefix for local storage keys. */
-export const LS_PREFIX = "pkty";
+export const LS_PREFIX = "pky";
 
 /** Key for the local storage item storing the locale. */
 export const LOCALE_LS_KEY = `${LS_PREFIX}/locale`;
 
+/** Key for the local storage item storing the settings. */
 export const SETTINGS_LS_KEY = `${LS_PREFIX}/settings`;
+
+/** Key prefix for the local storage item storing the users data. */
+export const DATA_LS_KEY_PREFIX = `${LS_PREFIX}/data`;
 
 /** The ratio at which PRSFX sound volumes are played is adjusted since they are sigificantly louder. */
 export const PRSFX_SOUND_ADJUSTMENT_RATIO = 0.5;

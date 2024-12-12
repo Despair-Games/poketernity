@@ -13,6 +13,8 @@ import { MusicPreference } from "#app/enums/music-preference";
 import { ShopCursorTarget } from "#app/enums/shop-cursor-target";
 import { SpriteSet } from "#app/enums/sprite-set";
 import { UiTheme } from "#app/enums/ui-theme";
+import { Gender } from "#enums/gender";
+import { UiWindowType } from "#enums/ui-window-type";
 
 export const defaultGeneralSettings: GeneralSettings = {
   gameSpeed: 1,
@@ -30,9 +32,8 @@ export const defaultGeneralSettings: GeneralSettings = {
 };
 
 export const defaultDisplaySettings: DisplaySettings = {
-  language: "en",
   uiTheme: UiTheme.DEFAULT,
-  windowType: 0,
+  windowType: UiWindowType.RED_ORANGE,
   moneyFormat: MoneyFormat.NORMAL,
   damageNumbersMode: DamageNumbersMode.OFF,
   enableMoveAnimations: true,
@@ -46,7 +47,7 @@ export const defaultDisplaySettings: DisplaySettings = {
   timeOfDayAnimation: EaseType.NONE,
   spriteSet: SpriteSet.CONSISTENT,
   enableFusionPaletteSwaps: true,
-  // playerGender: Gender.MALE,
+  playerGender: Gender.MALE,
   enableTypeHints: false,
   showBgmBar: true,
   shopCursorTarget: ShopCursorTarget.REWARDS,

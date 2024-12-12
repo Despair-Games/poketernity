@@ -1,11 +1,11 @@
 import { LOCALE_LS_KEY } from "#app/constants";
+import { supportedLanguages } from "#app/system/settings/supported-languages";
 import { camelCaseToKebabCase } from "#app/utils";
 import i18next from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import HttpBackend from "i18next-http-backend";
 import processor, { KoreanPostpositionProcessor } from "i18next-korean-postposition-processor";
 import pkg from "../../package.json";
-import { supportedLanguages } from "#app/system/settings/supported-languages";
 
 //#region Interfaces/Types
 

@@ -12,6 +12,8 @@ import type { MusicPreference } from "#app/enums/music-preference";
 import type { ShopCursorTarget } from "#app/enums/shop-cursor-target";
 import type { SpriteSet } from "#app/enums/sprite-set";
 import type { UiTheme } from "#app/enums/ui-theme";
+import type { Gender } from "#enums/gender";
+import type { UiWindowType } from "#enums/ui-window-type";
 
 export interface Settings {
   general: GeneralSettings;
@@ -35,10 +37,8 @@ export interface GeneralSettings {
 }
 
 export interface DisplaySettings {
-  /** Controlled by i18n. */
-  language: string;
   uiTheme: UiTheme;
-  windowType: number;
+  windowType: UiWindowType;
   moneyFormat: MoneyFormat;
   damageNumbersMode: DamageNumbersMode;
   enableMoveAnimations: boolean;
@@ -52,7 +52,7 @@ export interface DisplaySettings {
   timeOfDayAnimation: EaseType;
   spriteSet: SpriteSet;
   enableFusionPaletteSwaps: boolean;
-  // playerGender: Gender;
+  playerGender: Gender;
   enableTypeHints: boolean;
   showBgmBar: boolean;
   shopCursorTarget: ShopCursorTarget;

@@ -140,7 +140,7 @@ export const generalSettingsUiItems: SettingsUiItem<GeneralSettingsKey>[] = [
 /**
  * UI items for display settings
  */
-export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey>[] = [
+export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey | "language">[] = [
   {
     key: "language",
     label: t("settings:language"),
