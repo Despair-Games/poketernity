@@ -2,7 +2,6 @@ import { Mode } from "#app/ui/ui";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
 import { hasTouchscreen } from "#app/touch-controls";
-import { updateWindowType } from "#app/ui/ui-theme";
 import type SettingsUiHandler from "#app/ui/settings/settings-ui-handler";
 import { PlayerGender } from "#enums/player-gender";
 import { LOCALE_LS_KEY } from "#app/constants";
@@ -730,9 +729,9 @@ export function setSetting(setting: string, value: number): boolean {
     // case SettingKeys.UI_Theme:
     //   globalScene.uiTheme = value;
     //   break;
-    case SettingKeys.Window_Type:
-      updateWindowType(parseInt(Setting[index].options[value].value));
-      break;
+    // case SettingKeys.Window_Type:
+    //   updateWindowType(parseInt(Setting[index].options[value].value));
+    //   break;
     // case SettingKeys.Tutorials:
     //   globalScene.enableTutorials = Setting[index].options[value].value === "On";
     //   break;
@@ -917,9 +916,9 @@ export function setSetting(setting: string, value: number): boolean {
         }
       }
       break;
-    case SettingKeys.Shop_Overlay_Opacity:
-      globalScene.updateShopOverlayOpacity(parseInt(Setting[index].options[value].value) * 0.01);
-      break;
+    // case SettingKeys.Shop_Overlay_Opacity:
+    //   globalScene.updateShopOverlayOpacity(parseInt(Setting[index].options[value].value) * 0.01);
+    //   break;
   }
 
   return true;
