@@ -2948,49 +2948,42 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * Gets the Pokémon on the allied field.
-   *
-   * @returns An array of Pokémon on the allied field.
+   * @returns the Pokemon on the allied field
    */
   getField(): Pokemon[] {
     return this instanceof PlayerPokemon ? globalScene.getPlayerField() : globalScene.getEnemyField();
   }
 
   /**
-   * Gets the party of the Pokémon
-   * @returns the party of the Pokémon
+   * @returns the party of the Pokemon
    */
   getParty(): Pokemon[] {
     return this instanceof PlayerPokemon ? globalScene.getPlayerParty() : globalScene.getEnemyParty();
   }
 
   /**
-   * Gets the {@linkcode ArenaTagSide} of the Pokémon
-   * @returns the {@linkcode ArenaTagSide} of the Pokémon
+   * @returns the {@linkcode ArenaTagSide} of the Pokemon
    */
   getArenaTagSide(): ArenaTagSide.PLAYER | ArenaTagSide.ENEMY {
     return this instanceof PlayerPokemon ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
   }
 
   /**
-   * Gets the opposing field of the Pokémon
-   * @returns the opposing field of the Pokémon
+   * @returns the Pokemon on the opposing field
    */
   getOpposingField(): Pokemon[] {
     return this.isPlayer() ? globalScene.getEnemyField() : globalScene.getPlayerField();
   }
 
   /**
-   * Gets the opposing party of the Pokémon
-   * @returns the opposing party of the Pokémon
+   * @returns the opposing party of the Pokemon
    */
   getOpposingParty(): Pokemon[] {
     return this.isPlayer() ? globalScene.getEnemyParty() : globalScene.getPlayerParty();
   }
 
   /**
-   * Gets the opposing {@linkcode ArenaTagSide} of the Pokémon
-   * @returns the opposing {@linkcode ArenaTagSide} of the Pokémon
+   * @returns the opposing {@linkcode ArenaTagSide} of the Pokemon
    */
   getOpposingArenaTagSide(): ArenaTagSide.ENEMY | ArenaTagSide.PLAYER {
     return this.isPlayer() ? ArenaTagSide.ENEMY : ArenaTagSide.PLAYER;
