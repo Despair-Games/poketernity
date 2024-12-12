@@ -203,7 +203,6 @@ export class MoveEffectPhase extends PokemonPhase {
     if (this.canApplySmartTargeting() && this.hitChecks[0][0] !== HitCheckResult.HIT) {
       const targetAlly = targets[0].getAlly();
       if (targetAlly.isActive(true)) {
-        console.log(`redirecting after failed hit check to ${BattlerIndex[targetAlly.getBattlerIndex()]}`);
         targets[0] = targetAlly;
         this.adjustedTargets = [targetAlly.getBattlerIndex()];
         this.hitChecks[0] = this.hitCheck(targets[0]);
