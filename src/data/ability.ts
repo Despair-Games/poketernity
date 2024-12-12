@@ -5819,7 +5819,7 @@ export class PostSummonStatStageChangeOnArenaAbAttr extends PostSummonStatStageC
    * @returns Returns `true` if the stat change was applied, otherwise `false`
    */
   override applyPostSummon(pokemon: Pokemon, passive: boolean, simulated: boolean, args: any[]): boolean {
-    const side = pokemon.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
+    const side = pokemon.getArenaSide();
 
     if (globalScene.arena.getTagOnSide(this.tagType, side)) {
       return super.applyPostSummon(pokemon, passive, simulated, args);

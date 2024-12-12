@@ -9,7 +9,7 @@ import {
   StatStageChangeCopyAbAttr,
   StatStageChangeMultiplierAbAttr,
 } from "#app/data/ability";
-import { ArenaTagSide, MistTag } from "#app/data/arena-tag";
+import { MistTag } from "#app/data/arena-tag";
 import type Pokemon from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { ResetNegativeStatStageModifier } from "#app/modifier/modifier";
@@ -95,13 +95,7 @@ export class StatStageChangePhase extends PokemonPhase {
 
       if (!this.selfTarget && stages.value < 0) {
         // TODO: add a reference to the source of the stat change to fix Infiltrator interaction
-        globalScene.arena.applyTagsForSide(
-          MistTag,
-          pokemon.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY,
-          false,
-          null,
-          cancelled,
-        );
+        globalScene.arena.applyTagsForSide(MistTag, pokemon.getArenaSide(), false, null, cancelled);
       }
 
       if (!cancelled.value && !this.selfTarget && stages.value < 0) {

@@ -1277,7 +1277,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
         }
         break;
       case Stat.SPD:
-        const side = this.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
+        const side = this.getArenaSide();
         if (globalScene.arena.getTagOnSide(ArenaTagType.TAILWIND, side)) {
           ret *= 2;
         }
@@ -1931,7 +1931,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       applyCheckTrappedAbAttrs(CheckTrappedAbAttr, opponent, trappedByAbility, this, trappedAbMessages, simulated),
     );
 
-    const side = this.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
+    const side = this.getArenaSide();
     return (
       trappedByAbility.value
       || !!this.getTag(TrappedTag)
@@ -2960,6 +2960,22 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
+   * Gets the party of the Pokémon
+   * @returns the party of the Pokémon
+   */
+  getParty(): Pokemon[] {
+    return this instanceof PlayerPokemon ? globalScene.getPlayerParty() : globalScene.getEnemyParty();
+  }
+
+  /**
+   * Gets the {@linkcode ArenaTagSide} of the Pokémon
+   * @returns the {@linkcode ArenaTagSide} of the Pokémon
+   */
+  getArenaSide(): ArenaTagSide.ENEMY | ArenaTagSide.PLAYER {
+    return this instanceof PlayerPokemon ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
+  }
+
+  /**
    * Calculates the stat stage multiplier of the user against an opponent.
    *
    * Note that this does not apply to evasion or accuracy
@@ -3164,7 +3180,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     effectiveness?: TypeDamageMultiplier,
   ): DamageCalculationResult {
     const damage = new NumberHolder(0);
-    const defendingSide = this.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
+    const defendingSide = this.getArenaSide();
 
     const variableCategory = new NumberHolder(move.category);
     applyMoveAttrs(VariableMoveCategoryAttr, source, this, move, variableCategory);
@@ -3443,7 +3459,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns `true` if the move critically hits; `false` otherwise
    */
   getCriticalHitResult(source: Pokemon, move: Move, simulated: boolean = true): boolean {
-    const defendingSide = this.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
+    const defendingSide = this.getArenaSide();
     const noCritTag = globalScene.arena.getTagOnSide(NoCritTag, defendingSide);
     if (noCritTag || Overrides.NEVER_CRIT_OVERRIDE || move.hasAttr(FixedDamageAttr)) {
       return false;
@@ -4257,7 +4273,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns `true` if this Pokemon is protected by Safeguard; `false` otherwise.
    */
   isSafeguarded(attacker: Pokemon): boolean {
-    const defendingSide = this.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
+    const defendingSide = this.getArenaSide();
     if (globalScene.arena.getTagOnSide(ArenaTagType.SAFEGUARD, defendingSide)) {
       const bypassed = new BooleanHolder(false);
       if (attacker) {
