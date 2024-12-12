@@ -1,6 +1,6 @@
-import type { Settings, SettingsUiItem } from "#app/@types/Settings";
+import type { SettingsCategory, SettingsUiItem } from "#app/@types/Settings";
 import { globalScene } from "#app/global-scene";
-import { Setting, SettingKeys, SettingType } from "#app/system/settings/settings";
+import { type Setting } from "#app/system/settings/settings";
 import { SettingsManager, settings as settingsManager } from "#app/system/settings/settings-manager";
 import MessageUiHandler from "#app/ui/message-ui-handler";
 import { ScrollBar } from "#app/ui/scroll-bar";
@@ -9,6 +9,7 @@ import NavigationMenu, { NavigationManager } from "#app/ui/settings/navigationMe
 import { TextStyle, addTextObject } from "#app/ui/text";
 import { Mode } from "#app/ui/ui";
 import { addWindow } from "#app/ui/ui-theme";
+import { capitalize } from "#app/utils";
 import { Button } from "#enums/buttons";
 import i18next from "i18next";
 
@@ -44,31 +45,17 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
   protected localStorageKey: string;
 
   protected uiItems: SettingsUiItem[];
-  protected category: keyof Settings;
+  protected category: SettingsCategory;
 
-  constructor(type: SettingType, mode: Mode | null = null, uiItems?: SettingsUiItem[]) {
-    super(mode);
-
-    if (!uiItems) {
-      this.settings = Setting.filter((s) => s.type === type && !s?.isHidden?.());
-    } else {
-      this.uiItems = uiItems;
-
-      switch (type) {
-        case SettingType.GENERAL:
-          this.category = "general";
-          break;
-        case SettingType.DISPLAY:
-          this.category = "display";
-          break;
-        case SettingType.AUDIO:
-          this.category = "audio";
-          break;
-      }
-    }
+  constructor(category: SettingsCategory, uiItems: SettingsUiItem[]) {
+    super(null);
+    this.category = category;
+    this.uiItems = uiItems;
+    this.category = category;
 
     this.reloadRequired = false;
     this.rowsToDisplay = 8;
+    this.title = capitalize(category);
   }
 
   /**
@@ -140,126 +127,74 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
     this.settingLabels = [];
     this.optionValueLabels = [];
 
-    if (!this.uiItems) {
-      this.reloadSettings = this.settings.filter((s) => s?.requireReload);
+    // this.reloadSettings = this.settings.filter((s) => s?.requireReload); // TODO: reactivate reload logic
+    this.uiItems.forEach((uiItem, i) => {
+      let settingName = uiItem.label;
+      if (uiItem?.requireReload) {
+        settingName += "*";
+      }
 
-      this.settings.forEach((setting, s) => {
-        let settingName = setting.label;
-        if (setting?.requireReload) {
-          settingName += ` (${i18next.t("settings:requireReload")})`;
-        }
+      this.settingLabels[i] = addTextObject(8, 28 + i * 16, settingName, TextStyle.SETTINGS_LABEL);
+      this.settingLabels[i].setOrigin(0, 0);
 
-        this.settingLabels[s] = addTextObject(8, 28 + s * 16, settingName, TextStyle.SETTINGS_LABEL);
-        this.settingLabels[s].setOrigin(0, 0);
-
-        this.optionsContainer.add(this.settingLabels[s]);
-        this.optionValueLabels.push(
-          setting.options.map((option, o) => {
-            const valueLabel = addTextObject(
-              0,
-              0,
-              option.label,
-              setting.default === o ? TextStyle.SETTINGS_SELECTED : TextStyle.SETTINGS_VALUE,
-            );
-            valueLabel.setOrigin(0, 0);
-
-            this.optionsContainer.add(valueLabel);
-
-            return valueLabel;
-          }),
-        );
-
-        const totalWidth = this.optionValueLabels[s].map((o) => o.width).reduce((total, width) => (total += width), 0);
-        const labelWidth = Math.max(78, this.settingLabels[s].displayWidth + 8);
-        const totalSpace = 297 - labelWidth - totalWidth / 6;
-        const optionSpacing = Math.floor(totalSpace / (this.optionValueLabels[s].length - 1));
-        let xOffset = 0;
-
-        for (const value of this.optionValueLabels[s]) {
-          value.setPositionRelative(this.settingLabels[s], labelWidth + xOffset, 0);
-          xOffset += value.width / 6 + optionSpacing;
-        }
-      });
-
-      this.optionCursors = this.settings.map((setting) => setting.default);
-      this.scrollBar = new ScrollBar(
-        this.optionsBg.width - 9,
-        this.optionsBg.y + 5,
-        4,
-        this.optionsBg.height - 11,
-        this.rowsToDisplay,
-      );
-      this.scrollBar.setTotalRows(this.settings.length);
-    } else {
-      // this.reloadSettings = this.settings.filter((s) => s?.requireReload);
-      this.uiItems.forEach((uiItem, i) => {
-        let settingName = uiItem.label;
-        if (uiItem?.requireReload) {
-          settingName += "*";
-        }
-
-        this.settingLabels[i] = addTextObject(8, 28 + i * 16, settingName, TextStyle.SETTINGS_LABEL);
-        this.settingLabels[i].setOrigin(0, 0);
-
-        this.optionsContainer.add(this.settingLabels[i]);
-        this.optionValueLabels.push(
-          uiItem.options.map((option) => {
-            const valueLabel = addTextObject(
-              0,
-              0,
-              option.label,
-              option.value === settingsManager[this.category][uiItem.key]
-                ? TextStyle.SETTINGS_SELECTED
-                : TextStyle.SETTINGS_VALUE,
-            );
-            valueLabel.setOrigin(0, 0);
-
-            this.optionsContainer.add(valueLabel);
-
-            return valueLabel;
-          }),
-        );
-
-        const totalWidth = this.optionValueLabels[i].map((o) => o.width).reduce((total, width) => (total += width), 0);
-
-        const labelWidth = Math.max(78, this.settingLabels[i].displayWidth + 8);
-
-        const totalSpace = 297 - labelWidth - totalWidth / 6;
-        const optionSpacing = Math.floor(totalSpace / (this.optionValueLabels[i].length - 1));
-
-        let xOffset = 0;
-
-        for (const value of this.optionValueLabels[i]) {
-          value.setPositionRelative(this.settingLabels[i], labelWidth + xOffset, 0);
-          xOffset += value.width / 6 + optionSpacing;
-        }
-      });
-
-      this.optionCursors = this.uiItems.map((setting) => {
-        const index = setting.options.findIndex((o) => {
-          return o.value === settingsManager[this.category][setting.key];
-        });
-        if (index < 0) {
-          console.warn(
-            "Could not find index for ",
-            setting.key,
-            setting.options.map((o) => o.value),
-            settingsManager[this.category],
-            setting.key,
+      this.optionsContainer.add(this.settingLabels[i]);
+      this.optionValueLabels.push(
+        uiItem.options.map((option) => {
+          const valueLabel = addTextObject(
+            0,
+            0,
+            option.label,
+            option.value === settingsManager[this.category][uiItem.key]
+              ? TextStyle.SETTINGS_SELECTED
+              : TextStyle.SETTINGS_VALUE,
           );
-        }
-        return index ?? 0;
-      });
+          valueLabel.setOrigin(0, 0);
 
-      this.scrollBar = new ScrollBar(
-        this.optionsBg.width - 9,
-        this.optionsBg.y + 5,
-        4,
-        this.optionsBg.height - 11,
-        this.rowsToDisplay,
+          this.optionsContainer.add(valueLabel);
+
+          return valueLabel;
+        }),
       );
-      this.scrollBar.setTotalRows(this.uiItems.length);
-    }
+
+      const totalWidth = this.optionValueLabels[i].map((o) => o.width).reduce((total, width) => (total += width), 0);
+
+      const labelWidth = Math.max(78, this.settingLabels[i].displayWidth + 8);
+
+      const totalSpace = 297 - labelWidth - totalWidth / 6;
+      const optionSpacing = Math.floor(totalSpace / (this.optionValueLabels[i].length - 1));
+
+      let xOffset = 0;
+
+      for (const value of this.optionValueLabels[i]) {
+        value.setPositionRelative(this.settingLabels[i], labelWidth + xOffset, 0);
+        xOffset += value.width / 6 + optionSpacing;
+      }
+    });
+
+    this.optionCursors = this.uiItems.map((setting) => {
+      const index = setting.options.findIndex((o) => {
+        return o.value === settingsManager[this.category][setting.key];
+      });
+      if (index < 0) {
+        console.warn(
+          "Could not find index for ",
+          setting.key,
+          setting.options.map((o) => o.value),
+          settingsManager[this.category],
+          setting.key,
+        );
+      }
+      return index ?? 0;
+    });
+
+    this.scrollBar = new ScrollBar(
+      this.optionsBg.width - 9,
+      this.optionsBg.y + 5,
+      4,
+      this.optionsBg.height - 11,
+      this.rowsToDisplay,
+    );
+    this.scrollBar.setTotalRows(this.uiItems.length);
 
     // Two-lines message box
     this.messageBoxContainer = globalScene.add.container(0, globalScene.scaledCanvas.height);
@@ -331,33 +266,20 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
     super.show(args);
     this.updateBindings();
 
-    const settings: object = localStorage.hasOwnProperty(this.localStorageKey)
-      ? JSON.parse(localStorage.getItem(this.localStorageKey)!)
-      : {}; // TODO: is this bang correct?
-
-    if (!this.uiItems) {
-      this.settings.forEach((setting, s) =>
-        this.setOptionCursor(
-          s,
-          settings.hasOwnProperty(setting.key) ? settings[setting.key] : this.settings[s].default,
-        ),
+    this.uiItems.forEach((item, s) => {
+      const index = item.options.findIndex(
+        (option) => option.value === settingsManager.settings[this.category][item.key],
       );
-    } else {
-      this.uiItems.forEach((item, s) => {
-        const index = item.options.findIndex(
-          (option) => option.value === settingsManager.settings[this.category][item.key],
+      if (index < 0) {
+        console.warn(
+          "Could not find index for ",
+          item.key,
+          item.options.map((o) => o.value),
+          settingsManager.settings[this.category][item.key],
         );
-        if (index < 0) {
-          console.warn(
-            "Could not find index for ",
-            item.key,
-            item.options.map((o) => o.value),
-            settingsManager.settings[this.category][item.key],
-          );
-        }
-        this.setOptionCursor(s, index > 0 ? index : 0);
-      });
-    }
+      }
+      this.setOptionCursor(s, index > 0 ? index : 0);
+    });
 
     this.settingsContainer.setVisible(true);
     this.setCursor(0);
@@ -443,10 +365,10 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
           success = this.navigationContainer.navigate(button);
           break;
         case Button.ACTION:
-          const setting: Setting = this.settings[cursor];
-          if (setting?.activatable) {
-            success = this.activateSetting(setting);
-          }
+          // const setting: Setting = this.settings[cursor];
+          // if (setting?.activatable) {
+          //   success = this.activateSetting(setting);
+          // }
           break;
       }
     }
@@ -464,14 +386,14 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
    * @param setting The setting to activate.
    * @returns Whether the setting was successfully activated.
    */
-  activateSetting(setting: Setting): boolean {
-    switch (setting.key) {
-      case SettingKeys.Move_Touch_Controls:
-        globalScene.inputController.moveTouchControlsHandler.enableConfigurationMode(this.getUi(), globalScene);
-        return true;
-    }
-    return false;
-  }
+  // activateSetting(setting: Setting): boolean {
+  //   switch (setting.key) {
+  //     case SettingKeys.Move_Touch_Controls:
+  //       globalScene.inputController.moveTouchControlsHandler.enableConfigurationMode(this.getUi(), globalScene);
+  //       return true;
+  //   }
+  //   return false;
+  // }
 
   /**
    * Set the cursor to the specified position.

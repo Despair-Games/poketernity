@@ -88,6 +88,8 @@ export interface SettingsUiItem<K = string> {
   isHidden?: () => boolean;
 }
 
+export type SettingsCategory = keyof Settings;
+
 export type GeneralSettingsKey = keyof GeneralSettings;
 
 /** All keys for the display settings + `"language"` */
@@ -98,7 +100,7 @@ export type AudioSettingsKey = keyof AudioSettings;
 export type AnySettingKey = GeneralSettingsKey | DisplaySettingsKey | AudioSettingsKey;
 
 export interface SettingsUpdateEventArgs {
-  category: keyof Settings;
+  category: SettingsCategory;
   key: AnySettingKey;
   value: string | number | boolean;
 }

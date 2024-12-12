@@ -645,3 +645,12 @@ export function camelCaseToKebabCase(str: string): string {
 export function isSupportedLanguage(key: string) {
   return supportedLanguages.some((l) => l.key === key);
 }
+
+/**
+ * Capitalizes the first letter of a string
+ * @param str The string to capitalize
+ * @returns The capitalized string
+ */
+export function capitalize(str: string) {
+  return String(str).charAt(0).toUpperCase() + String(str).slice(1);
+}

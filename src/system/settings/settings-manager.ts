@@ -1,4 +1,4 @@
-import type { Settings } from "#app/@types/Settings";
+import type { Settings, SettingsCategory } from "#app/@types/Settings";
 import { SETTINGS_LS_KEY } from "#app/constants";
 import { isNullOrUndefined } from "#app/utils";
 import { defaultSettings } from "./default-settings";
@@ -113,7 +113,7 @@ export class SettingsManager {
    * @param key the key of the setting
    * @param value the updated value
    */
-  update<C extends keyof Settings>(category: C, key: keyof Settings[C], value: any) {
+  update<C extends SettingsCategory>(category: C, key: keyof Settings[C], value: any) {
     if (!this._settings[category]) {
       this.eventBus.emit(SettingsManager.Event.UpdateFailed, { category, key, value });
       throw new Error(`Unknown category: ${category}`);
@@ -123,7 +123,6 @@ export class SettingsManager {
       this.eventBus.emit(SettingsManager.Event.UpdateFailed, { category, key, value });
       throw new Error(`Unknown key: ${category}.${String(key)}`);
     }
-    console.log("Updated setting:", category, key, value);
 
     this._settings[category][key] = value;
     this.eventBus.emit(SettingsManager.Event.Updated, { category, key, value });
