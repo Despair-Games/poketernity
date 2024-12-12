@@ -28,5 +28,11 @@ export const SETTINGS_LS_KEY = `${LS_PREFIX}/settings`;
 /** Key prefix for the local storage item storing the users data. */
 export const DATA_LS_KEY_PREFIX = `${LS_PREFIX}/data`;
 
+/** Key for the local storage item storing the keyboard mapping. */
+export const KEYBOARD_MAPPING_LS_KEY = `${LS_PREFIX}/keyboard/mapping`;
+
+/** Key for the local storage item storing the gamepad mapping. */
+export const GAMEPAD_MAPPING_LS_KEY = `${LS_PREFIX}/gamepad/mapping`;
+
 /** The ratio at which PRSFX sound volumes are played is adjusted since they are sigificantly louder. */
 export const PRSFX_SOUND_ADJUSTMENT_RATIO = 0.5;

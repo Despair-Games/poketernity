@@ -17,7 +17,7 @@ import { Gender } from "#enums/gender";
 import { UiWindowType } from "#enums/ui-window-type";
 
 export const defaultGeneralSettings: GeneralSettings = {
-  gameSpeed: 1,
+  gameSpeed: 2,
   hpBarSpeed: HpBarSpeed.DEFAULT,
   expGainsSpeed: ExpGainsSpeed.DEFAULT,
   partyExpNotificationMode: ExpNotification.DEFAULT,

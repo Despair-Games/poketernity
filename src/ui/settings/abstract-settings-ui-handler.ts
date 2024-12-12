@@ -123,10 +123,16 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
     cancelText.setOrigin(0, 0.15);
     cancelText.setPositionRelative(iconCancel, -cancelText.width / 6 - 2, 0);
 
-    const requiresReloadInfoText = addTextObject(0, 0, "*: Requires Reload", TextStyle.SUMMARY_GRAY, {
-      fontSize: "3rem",
-    });
-    requiresReloadInfoText.setOrigin(0, 0.15);
+    const requiresReloadInfoText = addTextObject(
+      0,
+      0,
+      `*: ${i18next.t("settings:requireReload")}`,
+      TextStyle.SUMMARY_GRAY,
+      {
+        fontSize: "5rem",
+      },
+    );
+    requiresReloadInfoText.setOrigin(0, 0.35);
     requiresReloadInfoText.setPositionRelative(actionsBg, 10, 10);
 
     this.optionsContainer = globalScene.add.container(0, 0);

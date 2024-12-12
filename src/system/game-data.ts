@@ -59,7 +59,7 @@ import { MysteryEncounterSaveData } from "#app/data/mystery-encounters/mystery-e
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { api } from "#app/plugins/api/api";
 import { ArenaTrapTag } from "#app/data/arena-tag";
-import { SAVE_FILE_EXTENSION } from "#app/constants";
+import { GAMEPAD_MAPPING_LS_KEY, KEYBOARD_MAPPING_LS_KEY, SAVE_FILE_EXTENSION } from "#app/constants";
 
 export const defaultStarterSpecies: Species[] = [
   Species.BULBASAUR,
@@ -795,15 +795,20 @@ export class GameData {
   public saveMappingConfigs(deviceName: string, config): boolean {
     const key = deviceName.toLowerCase(); // Convert the gamepad name to lowercase to use as a key
     let mappingConfigs: object = {}; // Initialize an empty object to hold the mapping configurations
-    if (localStorage.hasOwnProperty("mappingConfigs")) {
+    const lsMappingStr = localStorage.getItem(KEYBOARD_MAPPING_LS_KEY);
+    if (lsMappingStr) {
       // Check if 'mappingConfigs' exists in localStorage
-      mappingConfigs = JSON.parse(localStorage.getItem("mappingConfigs")!); // TODO: is this bang correct?
+      try {
+        mappingConfigs = JSON.parse(lsMappingStr); // TODO: is this bang correct?
+      } catch (err) {
+        console.error("Error parsing mapping configs from localStorage:", err);
+      }
     } // Parse the existing 'mappingConfigs' from localStorage
     if (!mappingConfigs[key]) {
       mappingConfigs[key] = {};
     } // If there is no configuration for the given key, create an empty object for it
     mappingConfigs[key].custom = config.custom; // Assign the custom configuration to the mapping configuration for the given key
-    localStorage.setItem("mappingConfigs", JSON.stringify(mappingConfigs)); // Save the updated mapping configurations back to localStorage
+    localStorage.setItem(KEYBOARD_MAPPING_LS_KEY, JSON.stringify(mappingConfigs)); // Save the updated mapping configurations back to localStorage
     return true; // Return true to indicate the operation was successful
   }
 
@@ -818,12 +823,13 @@ export class GameData {
    * for the corresponding gamepad or device key. The method then returns `true` to indicate success.
    */
   public loadMappingConfigs(): boolean {
-    if (!localStorage.hasOwnProperty("mappingConfigs")) {
+    const lsMappingStr = localStorage.getItem(KEYBOARD_MAPPING_LS_KEY);
+    if (!lsMappingStr) {
       // Check if 'mappingConfigs' exists in localStorage
       return false;
     } // If 'mappingConfigs' does not exist, return false
 
-    const mappingConfigs = JSON.parse(localStorage.getItem("mappingConfigs")!); // Parse the existing 'mappingConfigs' from localStorage // TODO: is this bang correct?
+    const mappingConfigs = JSON.parse(lsMappingStr); // Parse the existing 'mappingConfigs' from localStorage // TODO: is this bang correct?
 
     for (const key of Object.keys(mappingConfigs)) {
       // Iterate over the keys of the mapping configurations
@@ -834,11 +840,12 @@ export class GameData {
   }
 
   public resetMappingToFactory(): boolean {
-    if (!localStorage.hasOwnProperty("mappingConfigs")) {
+    const lsMappingStr = localStorage.getItem(KEYBOARD_MAPPING_LS_KEY);
+    if (!lsMappingStr) {
       // Check if 'mappingConfigs' exists in localStorage
       return false;
     } // If 'mappingConfigs' does not exist, return false
-    localStorage.removeItem("mappingConfigs");
+    localStorage.removeItem(KEYBOARD_MAPPING_LS_KEY);
     globalScene.inputController.resetConfigs();
     return true; // TODO: is `true` the correct return value?
   }
@@ -916,23 +923,33 @@ export class GameData {
       .map((setting) => setting as SettingGamepad)
       .forEach((setting) => setSettingGamepad(setting, settingGamepadDefaults[setting]));
 
-    if (!localStorage.hasOwnProperty("settingsGamepad")) {
+    const lsGamepadStr = localStorage.getItem(GAMEPAD_MAPPING_LS_KEY);
+    if (!lsGamepadStr) {
       return false;
     }
-    const settingsGamepad = JSON.parse(localStorage.getItem("settingsGamepad")!); // TODO: is this bang correct?
 
-    for (const setting of Object.keys(settingsGamepad)) {
-      setSettingGamepad(setting as SettingGamepad, settingsGamepad[setting]);
+    try {
+      const settingsGamepad = JSON.parse(lsGamepadStr);
+      for (const setting of Object.keys(settingsGamepad)) {
+        setSettingGamepad(setting as SettingGamepad, settingsGamepad[setting]);
+      }
+      return true;
+    } catch (err) {
+      console.error("Failed to parse gamepad settings", err);
+      return false;
     }
-
-    return true; // TODO: is `true` the correct return value?
   }
 
   public saveTutorialFlag(tutorial: Tutorial, flag: boolean): boolean {
     const key = getDataTypeKey(GameDataType.TUTORIALS);
     let tutorials: object = {};
-    if (localStorage.hasOwnProperty(key)) {
-      tutorials = JSON.parse(localStorage.getItem(key)!); // TODO: is this bang correct?
+    const lsItem = localStorage.getItem(key);
+    if (lsItem) {
+      try {
+        tutorials = JSON.parse(lsItem);
+      } catch (err) {
+        console.error("Error parsing tutorial flags from localStorage:", err);
+      }
     }
 
     Object.keys(Tutorial)

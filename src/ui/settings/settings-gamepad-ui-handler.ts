@@ -16,6 +16,7 @@ import { Device } from "#enums/devices";
 import { truncateString } from "#app/utils";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
+import { GAMEPAD_MAPPING_LS_KEY } from "#app/constants";
 
 /**
  * Class representing the settings UI handler for gamepads.
@@ -38,7 +39,7 @@ export default class SettingsGamepadUiHandler extends AbstractControlSettingsUiH
     this.settingDeviceOptions = settingGamepadOptions;
     this.configs = [pad_xbox360, pad_dualshock, pad_unlicensedSNES];
     this.commonSettingsCount = 2;
-    this.localStoragePropertyName = "settingsGamepad";
+    this.localStoragePropertyName = GAMEPAD_MAPPING_LS_KEY;
     this.settingBlacklisted = settingGamepadBlackList;
     this.device = Device.GAMEPAD;
   }
