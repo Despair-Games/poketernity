@@ -3,13 +3,10 @@ import type Pokemon from "../field/pokemon";
 import { HitResult } from "../field/pokemon";
 import { getStatusEffectHealText } from "./status-effect";
 import { NumberHolder, toDmgValue, randSeedInt } from "#app/utils";
-import {
-  DoubleBerryEffectAbAttr,
-  PostItemLostAbAttr,
-  ReduceBerryUseThresholdAbAttr,
-  applyAbAttrs,
-  applyPostItemLostAbAttrs,
-} from "./ability";
+import { applyAbAttrs, applyPostItemLostAbAttrs } from "./ability";
+import { ReduceBerryUseThresholdAbAttr } from "./ab-attrs/reduce-berry-use-threshold-ab-attr";
+import { DoubleBerryEffectAbAttr } from "./ab-attrs/double-berry-effect-ab-attr";
+import { PostItemLostAbAttr } from "./ab-attrs/post-item-lost-ab-attr";
 import i18next from "i18next";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryType } from "#enums/berry-type";

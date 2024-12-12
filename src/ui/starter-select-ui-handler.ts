@@ -85,7 +85,7 @@ export type StarterSelectCallback = (starters: Starter[]) => void;
 export interface Starter {
   species: PokemonSpecies;
   dexAttr: bigint;
-  abilityIndex: integer;
+  abilityIndex: number;
   passive: boolean;
   nature: Nature;
   moveset?: StarterMoveset;
@@ -96,8 +96,8 @@ export interface Starter {
 interface LanguageSetting {
   starterInfoTextSize: string;
   instructionTextSize: string;
-  starterInfoXPos?: integer;
-  starterInfoYOffset?: integer;
+  starterInfoXPos?: number;
+  starterInfoYOffset?: number;
 }
 
 const languageSettings: { [key: string]: LanguageSetting } = {
@@ -228,11 +228,11 @@ function findClosestStarterRow(index: number, numberOfRows: number) {
 
 interface SpeciesDetails {
   shiny?: boolean;
-  formIndex?: integer;
+  formIndex?: number;
   female?: boolean;
   variant?: Variant;
-  abilityIndex?: integer;
-  natureIndex?: integer;
+  abilityIndex?: number;
+  natureIndex?: number;
   forSeen?: boolean; // default = false
 }
 
@@ -316,7 +316,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
   private dexAttrCursor: bigint = 0n;
   private abilityCursor: number = -1;
   private natureCursor: number = -1;
-  private filterBarCursor: integer = 0;
+  private filterBarCursor: number = 0;
   private starterMoveset: StarterMoveset | null;
   private scrollCursor: number;
 
@@ -326,7 +326,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
   public starterSpecies: PokemonSpecies[] = [];
   private pokerusSpecies: PokemonSpecies[] = [];
   private starterAttr: bigint[] = [];
-  private starterAbilityIndexes: integer[] = [];
+  private starterAbilityIndexes: number[] = [];
   private starterNatures: Nature[] = [];
   private starterMovesets: StarterMoveset[] = [];
   private speciesStarterDexEntry: DexEntry | null;
@@ -1275,11 +1275,11 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
 
   override showText(
     text: string,
-    delay?: integer,
+    delay?: number,
     callback?: Function,
-    callbackDelay?: integer,
+    callbackDelay?: number,
     prompt?: boolean,
-    promptDelay?: integer,
+    promptDelay?: number,
     moveToTop?: boolean,
   ) {
     super.showText(text, delay, callback, callbackDelay, prompt, promptDelay);
@@ -2314,7 +2314,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
               const natureIndex = natures.indexOf(this.natureCursor);
               const newNature = natures[natureIndex < natures.length - 1 ? natureIndex + 1 : 0];
               // store cycled nature as default
-              starterAttributes.nature = newNature as unknown as integer;
+              starterAttributes.nature = newNature as unknown as number;
               this.setSpeciesDetails(this.lastSpecies, { natureIndex: newNature });
               success = true;
             }
@@ -2483,7 +2483,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     return [isDupe, removeIndex];
   }
 
-  addToParty(species: PokemonSpecies, dexAttr: bigint, abilityIndex: integer, nature: Nature, moveset: StarterMoveset) {
+  addToParty(species: PokemonSpecies, dexAttr: bigint, abilityIndex: number, nature: Nature, moveset: StarterMoveset) {
     const props = globalScene.gameData.getSpeciesDexAttrProps(species, dexAttr);
     this.starterIcons[this.starterSpecies.length].setTexture(
       species.getIconAtlasKey(props.formIndex, props.shiny, props.variant),
@@ -3081,7 +3081,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     });
   };
 
-  override setCursor(cursor: integer): boolean {
+  override setCursor(cursor: number): boolean {
     let changed = false;
 
     if (this.filterMode) {
@@ -3727,7 +3727,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         const availableStarterMoves = this.speciesStarterMoves.concat(
           speciesEggMoves.hasOwnProperty(species.speciesId)
             ? speciesEggMoves[species.speciesId].filter(
-                (_, em: integer) => globalScene.gameData.starterData[species.speciesId].eggMoves & (1 << em),
+                (_, em: number) => globalScene.gameData.starterData[species.speciesId].eggMoves & (1 << em),
               )
             : [],
         );
@@ -3904,11 +3904,11 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     }
   }
 
-  tryUpdateValue(add?: integer, addingToParty?: boolean): boolean {
+  tryUpdateValue(add?: number, addingToParty?: boolean): boolean {
     const value = this.starterSpecies
       .map((s) => s.generation)
       .reduce(
-        (total: integer, _gen: integer, i: integer) =>
+        (total: number, _gen: number, i: number) =>
           (total += globalScene.gameData.getSpeciesStarterValue(this.starterSpecies[i].speciesId)),
         0,
       );

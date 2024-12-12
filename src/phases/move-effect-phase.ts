@@ -1,17 +1,16 @@
 import { BattlerIndex } from "#app/battle";
-import { globalScene } from "#app/global-scene";
+import { AddSecondStrikeAbAttr } from "#app/data/ab-attrs/add-second-strike-ab-attr";
+import { AlwaysHitAbAttr } from "#app/data/ab-attrs/always-hit-ab-attr";
+import { IgnoreMoveEffectsAbAttr } from "#app/data/ab-attrs/ignore-move-effect-ab-attr";
+import { MaxMultiHitAbAttr } from "#app/data/ab-attrs/max-multi-hit-ab-attr";
+import { PostAttackAbAttr } from "#app/data/ab-attrs/post-attack-ab-attr";
+import { PostDamageAbAttr } from "#app/data/ab-attrs/post-damage-ab-attr";
+import { PostDefendAbAttr } from "#app/data/ab-attrs/post-defend-ab-attr";
 import {
-  AddSecondStrikeAbAttr,
-  AlwaysHitAbAttr,
   applyPostAttackAbAttrs,
   applyPostDamageAbAttrs,
   applyPostDefendAbAttrs,
   applyPreAttackAbAttrs,
-  IgnoreMoveEffectsAbAttr,
-  MaxMultiHitAbAttr,
-  PostAttackAbAttr,
-  PostDamageAbAttr,
-  PostDefendAbAttr,
 } from "#app/data/ability";
 import { ConditionalProtectTag } from "#app/data/arena-tag";
 import { MoveAnim } from "#app/data/battle-anims";
@@ -44,10 +43,11 @@ import {
   ToxicAccuracyAttr,
 } from "#app/data/move";
 import { SpeciesFormChangePostMoveTrigger } from "#app/data/pokemon-forms";
-import { Type } from "#enums/type";
-import type { DamageResult, PokemonMove, TurnMove } from "#app/field/pokemon";
+import type { TypeDamageMultiplier } from "#app/data/type";
 import type Pokemon from "#app/field/pokemon";
+import type { DamageResult, PokemonMove, TurnMove } from "#app/field/pokemon";
 import { HitResult, MoveResult } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import {
   ContactHeldItemTransferChanceModifier,
@@ -58,15 +58,15 @@ import {
   HitHealModifier,
   PokemonMultiHitModifier,
 } from "#app/modifier/modifier";
+import { FaintPhase } from "#app/phases/faint-phase";
 import { PokemonPhase } from "#app/phases/pokemon-phase";
+import { DamageAchv } from "#app/system/achv";
 import { BooleanHolder, isNullOrUndefined, NumberHolder } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import { HitCheckResult } from "#enums/hit-check-result";
 import { Moves } from "#enums/moves";
+import { Type } from "#enums/type";
 import i18next from "i18next";
-import type { TypeDamageMultiplier } from "#app/data/type";
-import { DamageAchv } from "#app/system/achv";
-import { FaintPhase } from "#app/phases/faint-phase";
-import { HitCheckResult } from "#app/enums/hit-check-result";
 
 type HitCheckEntry = [HitCheckResult, TypeDamageMultiplier];
 
@@ -87,15 +87,6 @@ export class MoveEffectPhase extends PokemonPhase {
   constructor(battlerIndex: BattlerIndex, targets: BattlerIndex[], move: PokemonMove) {
     super(battlerIndex);
     this.move = move;
-    /**
-     * In double battles, if the right Pokemon selects a spread move and the left Pokemon dies
-     * with no party members available to switch in, then the right Pokemon takes the index
-     * of the left Pokemon and gets hit unless this is checked.
-     */
-    if (targets.includes(battlerIndex) && this.move.getMove().moveTarget === MoveTarget.ALL_NEAR_OTHERS) {
-      const i = targets.indexOf(battlerIndex);
-      targets.splice(i, i + 1);
-    }
     this.targets = targets;
     this.hitChecks = Array(this.targets.length).fill([HitCheckResult.PENDING, 0]);
   }

@@ -14,9 +14,9 @@ import { TerrainType } from "#enums/terrain-type";
  */
 export class Terrain {
   public terrainType: TerrainType;
-  public turnsLeft: integer;
+  public turnsLeft: number;
 
-  constructor(terrainType: TerrainType, turnsLeft?: integer) {
+  constructor(terrainType: TerrainType, turnsLeft?: number) {
     this.terrainType = terrainType;
     this.turnsLeft = turnsLeft || 0;
   }

@@ -175,11 +175,11 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
 
   override showText(
     text: string,
-    delay?: integer | null,
+    delay?: number | null,
     callback?: Function | null,
-    callbackDelay?: integer | null,
+    callbackDelay?: number | null,
     prompt?: boolean | null,
-    promptDelay?: integer | null,
+    promptDelay?: number | null,
   ) {
     this.hideNameText();
     super.showText(text, delay, callback, callbackDelay, prompt, promptDelay);
@@ -188,11 +188,11 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
   override showDialogue(
     text: string,
     name?: string,
-    delay?: integer | null,
+    delay?: number | null,
     callback?: Function,
-    callbackDelay?: integer,
+    callbackDelay?: number,
     prompt?: boolean,
-    promptDelay?: integer,
+    promptDelay?: number,
   ) {
     if (name) {
       this.showNameText(name);
@@ -200,7 +200,7 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
     super.showDialogue(text, name, delay, callback, callbackDelay, prompt, promptDelay);
   }
 
-  promptLevelUpStats(partyMemberIndex: integer, prevStats: integer[], showTotals: boolean): Promise<void> {
+  promptLevelUpStats(partyMemberIndex: number, prevStats: number[], showTotals: boolean): Promise<void> {
     return new Promise((resolve) => {
       if (!globalScene.showLevelUpStats) {
         return resolve();
@@ -225,7 +225,7 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
     });
   }
 
-  promptIvs(pokemonId: integer, ivs: integer[], shownIvsCount: integer): Promise<void> {
+  promptIvs(pokemonId: number, ivs: number[], shownIvsCount: number): Promise<void> {
     return new Promise((resolve) => {
       globalScene.executeWithSeedOffset(() => {
         let levelUpStatsValuesText = "";
@@ -245,7 +245,7 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
     });
   }
 
-  getTopIvs(ivs: integer[], shownIvsCount: integer): Stat[] {
+  getTopIvs(ivs: number[], shownIvsCount: number): Stat[] {
     let shownStats: Stat[] = [];
     if (shownIvsCount < 6) {
       const statsPool = PERMANENT_STATS.slice();
@@ -260,7 +260,7 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
     return shownStats;
   }
 
-  getIvDescriptor(value: integer, typeIv: integer, pokemonId: integer): string {
+  getIvDescriptor(value: number, typeIv: number, pokemonId: number): string {
     const starterSpecies = globalScene.getPokemonById(pokemonId)!.species.getRootSpeciesId(); // we are using getRootSpeciesId() here because we want to check against the baby form, not the mid form if it exists
     const starterIvs: number[] = globalScene.gameData.dexData[starterSpecies].ivs;
     const uiTheme = globalScene.uiTheme; // Assuming uiTheme is accessible

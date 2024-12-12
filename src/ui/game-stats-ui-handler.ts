@@ -395,7 +395,7 @@ export default class GameStatsUiHandler extends UiHandler {
     return success;
   }
 
-  override setCursor(cursor: integer): boolean {
+  override setCursor(cursor: number): boolean {
     const ret = super.setCursor(cursor);
 
     if (ret) {
