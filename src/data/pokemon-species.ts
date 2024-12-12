@@ -130,6 +130,51 @@ export function getFusedSpeciesName(speciesAName: string, speciesBName: string):
   return `${speciesAPrefix || speciesBPrefix}${fragA}${fragB}${speciesBSuffix || speciesASuffix}`;
 }
 
+/**
+ * Returns a list of mythical Pokemon species IDs
+ */
+export function getMythicalPokemon(): Species[] {
+  return allSpecies.map((s) => {
+    if (s.category === SpeciesCategories.MYTHICAL) {
+      return s.speciesId;
+    }
+  }) as Species[];
+}
+
+/**
+ * Returns a list of Ultra Beasts
+ * @param includeLegends boolean value that determines if legendary UBs should be in the returned list
+ * @returns a list of Ultra Beast species IDs
+ */
+export function getUltraBeasts(includeLegends: boolean): Species[] {
+  const ultraBeastList = allSpecies.map((s) => {
+    if (s.category === SpeciesCategories.ULTRA_BEAST) {
+      return s.speciesId;
+    }
+  });
+  if (includeLegends) {
+    ultraBeastList.push(Species.COSMOG, Species.COSMOEM, Species.LUNALA, Species.SOLGALEO, Species.NECROZMA);
+  }
+  return ultraBeastList as Species[];
+}
+
+/**
+ * Returns a list of Paradox Pokemon
+ * @param includeLegends boolean value that determines if legendary Paradox Pokemon should be in the returned list
+ * @returns a list of Paradox Pokemon species IDs
+ */
+export function getParadoxPokemon(includeLegends: boolean): Species[] {
+  const paradoxList = allSpecies.map((s) => {
+    if (s.category === SpeciesCategories.PARADOX) {
+      return s.speciesId;
+    }
+  });
+  if (includeLegends) {
+    paradoxList.push(Species.MIRAIDON, Species.KORAIDON);
+  }
+  return paradoxList as Species[];
+}
+
 export type PokemonSpeciesFilter = (species: PokemonSpecies) => boolean;
 
 export abstract class PokemonSpeciesForm {
