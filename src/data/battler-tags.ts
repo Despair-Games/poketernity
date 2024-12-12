@@ -1751,9 +1751,7 @@ export class CenterOfAttentionTag extends BattlerTag {
 
   /** "Center of Attention" can't be added if an ally is already the Center of Attention. */
   override canAdd(pokemon: Pokemon): boolean {
-    const activeTeam = pokemon.getField();
-
-    return !activeTeam.find((p) => p.getTag(BattlerTagType.CENTER_OF_ATTENTION));
+    return !pokemon.getField().find((p) => p.getTag(BattlerTagType.CENTER_OF_ATTENTION));
   }
 
   override onAdd(pokemon: Pokemon): void {
