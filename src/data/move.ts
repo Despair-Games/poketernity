@@ -6102,22 +6102,11 @@ export class RemoveArenaTrapAttr extends MoveEffectAttr {
       globalScene.arena.removeTagOnSide(ArenaTagType.STEALTH_ROCK, ArenaTagSide.ENEMY);
       globalScene.arena.removeTagOnSide(ArenaTagType.STICKY_WEB, ArenaTagSide.ENEMY);
     } else {
-      globalScene.arena.removeTagOnSide(
-        ArenaTagType.SPIKES,
-        target.isPlayer() ? ArenaTagSide.ENEMY : ArenaTagSide.PLAYER,
-      );
-      globalScene.arena.removeTagOnSide(
-        ArenaTagType.TOXIC_SPIKES,
-        target.isPlayer() ? ArenaTagSide.ENEMY : ArenaTagSide.PLAYER,
-      );
-      globalScene.arena.removeTagOnSide(
-        ArenaTagType.STEALTH_ROCK,
-        target.isPlayer() ? ArenaTagSide.ENEMY : ArenaTagSide.PLAYER,
-      );
-      globalScene.arena.removeTagOnSide(
-        ArenaTagType.STICKY_WEB,
-        target.isPlayer() ? ArenaTagSide.ENEMY : ArenaTagSide.PLAYER,
-      );
+      const side = target.getOpposingArenaTagSide();
+      globalScene.arena.removeTagOnSide(ArenaTagType.SPIKES, side);
+      globalScene.arena.removeTagOnSide(ArenaTagType.TOXIC_SPIKES, side);
+      globalScene.arena.removeTagOnSide(ArenaTagType.STEALTH_ROCK, side);
+      globalScene.arena.removeTagOnSide(ArenaTagType.STICKY_WEB, side);
     }
 
     return true;
@@ -6146,18 +6135,10 @@ export class RemoveScreensAttr extends MoveEffectAttr {
       globalScene.arena.removeTagOnSide(ArenaTagType.LIGHT_SCREEN, ArenaTagSide.ENEMY);
       globalScene.arena.removeTagOnSide(ArenaTagType.AURORA_VEIL, ArenaTagSide.ENEMY);
     } else {
-      globalScene.arena.removeTagOnSide(
-        ArenaTagType.REFLECT,
-        target.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY,
-      );
-      globalScene.arena.removeTagOnSide(
-        ArenaTagType.LIGHT_SCREEN,
-        target.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY,
-      );
-      globalScene.arena.removeTagOnSide(
-        ArenaTagType.AURORA_VEIL,
-        target.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY,
-      );
+      const side = target.getArenaTagSide();
+      globalScene.arena.removeTagOnSide(ArenaTagType.REFLECT, side);
+      globalScene.arena.removeTagOnSide(ArenaTagType.LIGHT_SCREEN, side);
+      globalScene.arena.removeTagOnSide(ArenaTagType.AURORA_VEIL, side);
     }
 
     return true;

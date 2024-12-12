@@ -37,7 +37,6 @@ import {
   FixedDamageAttr,
 } from "./move";
 import type { ArenaTrapTag } from "./arena-tag";
-import { ArenaTagSide } from "./arena-tag";
 import { BerryModifier, HitHealModifier, PokemonHeldItemModifier } from "../modifier/modifier";
 import { TerrainType } from "#enums/terrain-type";
 import {
@@ -1073,13 +1072,7 @@ export class PostDefendApplyArenaTrapTagAbAttr extends PostDefendAbAttr {
       const tag = globalScene.arena.getTag(this.tagType) as ArenaTrapTag;
       if (!globalScene.arena.getTag(this.tagType) || tag.layers < tag.maxLayers) {
         if (!simulated) {
-          globalScene.arena.addTag(
-            this.tagType,
-            0,
-            undefined,
-            pokemon.id,
-            pokemon.isPlayer() ? ArenaTagSide.ENEMY : ArenaTagSide.PLAYER,
-          );
+          globalScene.arena.addTag(this.tagType, 0, undefined, pokemon.id, pokemon.getOpposingArenaTagSide());
         }
         return true;
       }

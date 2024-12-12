@@ -1924,7 +1924,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
      * Contains opposing Pokemon (Enemy/Player Pokemon) depending on perspective
      * Afterwards, it filters out Pokemon that have been switched out of the field so trapped abilities/moves do not trigger
      */
-    const opposingFieldUnfiltered = this.isPlayer() ? globalScene.getEnemyField() : globalScene.getPlayerField();
+    const opposingFieldUnfiltered = this.getOpposingField();
     const opposingField = opposingFieldUnfiltered.filter((enemyPkm) => enemyPkm.switchOutStatus === false);
 
     opposingField.forEach((opponent) =>
@@ -2933,9 +2933,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   getOpponents(): Pokemon[] {
-    return ((this.isPlayer() ? globalScene.getEnemyField() : globalScene.getPlayerField()) as Pokemon[]).filter((p) =>
-      p.isActive(),
-    );
+    return this.getOpposingField().filter((p) => p.isActive());
   }
 
   getOpponentDescriptor(): string {
@@ -2973,6 +2971,30 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
    */
   getArenaTagSide(): ArenaTagSide.ENEMY | ArenaTagSide.PLAYER {
     return this instanceof PlayerPokemon ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
+  }
+
+  /**
+   * Gets the opposing field of the Pokémon
+   * @returns the opposing field of the Pokémon
+   */
+  getOpposingField(): Pokemon[] {
+    return this.isPlayer() ? globalScene.getEnemyField() : globalScene.getPlayerField();
+  }
+
+  /**
+   * Gets the opposing party of the Pokémon
+   * @returns the opposing party of the Pokémon
+   */
+  getOpposingParty(): Pokemon[] {
+    return this.isPlayer() ? globalScene.getEnemyParty() : globalScene.getPlayerParty();
+  }
+
+  /**
+   * Gets the opposing {@linkcode ArenaTagSide} of the Pokémon
+   * @returns the opposing {@linkcode ArenaTagSide} of the Pokémon
+   */
+  getOpposingArenaTagSide(): ArenaTagSide.ENEMY | ArenaTagSide.PLAYER {
+    return this.isPlayer() ? ArenaTagSide.ENEMY : ArenaTagSide.PLAYER;
   }
 
   /**
