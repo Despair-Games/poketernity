@@ -17,7 +17,6 @@ import { ArenaTagSide, ConditionalProtectTag } from "#app/data/arena-tag";
 import { MoveAnim } from "#app/data/battle-anims";
 import {
   BattlerTagLapseType,
-  DamageProtectedTag,
   ProtectedTag,
   SemiInvulnerableTag,
   SubstituteTag,
@@ -184,13 +183,7 @@ export class MoveEffectPhase extends PokemonPhase {
      * and the move is being used in a double battle,
      * alternate the base target on every second hit.
      */
-    if (
-      move.moveTarget === MoveTarget.SMART
-      && globalScene.currentBattle.double
-      && user.turnData.hitsLeft % 2 === 1
-      && targets[0] !== user.getAlly()
-      && !targets[0].getTag(BattlerTagType.CENTER_OF_ATTENTION)
-    ) {
+    if (this.canApplySmartTargeting() && user.turnData.hitsLeft % 2 === 1) {
       const targetAlly = targets[0].getAlly();
       if (targetAlly.isActive(true)) {
         targets[0] = targetAlly;
@@ -199,7 +192,7 @@ export class MoveEffectPhase extends PokemonPhase {
     }
 
     // Update hit checks for each target
-    targets.forEach((t, i) => (this.hitChecks[i] = this.hitCheck(t)));
+    targets.forEach((t, i) => (this.hitChecks[i] = this.hitCheck(t, this.canApplySmartTargeting())));
 
     /**
      * If the move has smart targeting (i.e. the move is Dragon Darts),
@@ -207,13 +200,7 @@ export class MoveEffectPhase extends PokemonPhase {
      * and the move's current target was not successfully hit,
      * try to hit the target's ally.
      */
-    if (
-      move.moveTarget === MoveTarget.SMART
-      && globalScene.currentBattle.double
-      && targets[0] !== user.getAlly()
-      && !targets[0].getTag(BattlerTagType.CENTER_OF_ATTENTION)
-      && this.hitChecks[0][0] !== HitCheckResult.HIT
-    ) {
+    if (this.canApplySmartTargeting() && this.hitChecks[0][0] !== HitCheckResult.HIT) {
       const targetAlly = targets[0].getAlly();
       if (targetAlly.isActive(true)) {
         console.log(`redirecting after failed hit check to ${BattlerIndex[targetAlly.getBattlerIndex()]}`);
@@ -629,13 +616,26 @@ export class MoveEffectPhase extends PokemonPhase {
     }
   }
 
+  /** Determines if this phase's move can be redirected by smart targeting */
+  public canApplySmartTargeting(): boolean {
+    const target = this.getFirstTarget();
+
+    return (
+      this.move.getMove().moveTarget === MoveTarget.SMART
+      && globalScene.currentBattle.double
+      && target !== this.getUserPokemon()?.getAlly()
+      && !target?.getTag(BattlerTagType.CENTER_OF_ATTENTION)
+    );
+  }
+
   /**
    * Resolves whether this phase's invoked move hits the given target
    * @param target - The {@linkcode Pokemon} targeted by the invoked move
+   * @param simulated - If `true`, does not change game state during calculation
    * @returns a {@linkcode HitCheckEntry} containing the attack's {@linkcode HitCheckResult}
    * and {@linkcode TypeDamageMultiplier | effectiveness} against the target.
    */
-  public hitCheck(target: Pokemon): HitCheckEntry {
+  public hitCheck(target: Pokemon, simulated: boolean = false): HitCheckEntry {
     const user = this.getUserPokemon();
     const move = this.move.getMove();
 
@@ -694,7 +694,7 @@ export class MoveEffectPhase extends PokemonPhase {
       globalScene.arena.applyTagsForSide(
         ConditionalProtectTag,
         targetSide,
-        false,
+        simulated,
         hasConditionalProtectApplied,
         user,
         target,
@@ -707,10 +707,7 @@ export class MoveEffectPhase extends PokemonPhase {
     const isProtected =
       (bypassIgnoreProtect.value || !this.move.getMove().checkFlag(MoveFlags.IGNORE_PROTECT, user, target))
       && (hasConditionalProtectApplied.value
-        || (!target.findTags((t) => t instanceof DamageProtectedTag).length
-          && target.findTags((t) => t instanceof ProtectedTag).find((t) => target.lapseTag(t.tagType)))
-        || (this.move.getMove().category !== MoveCategory.STATUS
-          && target.findTags((t) => t instanceof DamageProtectedTag).find((t) => target.lapseTag(t.tagType))));
+        || target.findTags((t) => t instanceof ProtectedTag)[0]?.apply(target, simulated, user, move));
 
     if (isProtected) {
       return [HitCheckResult.PROTECTED, 0];
@@ -722,7 +719,8 @@ export class MoveEffectPhase extends PokemonPhase {
      * The effectiveness of the move against the given target.
      * Accounts for type and move immunities from defensive typing, abilities, and other effects.
      */
-    const effectiveness = target.getMoveEffectiveness(user, move, false, false, cancelNoEffectMessage);
+    const effectiveness = target.getMoveEffectiveness(user, move, false, simulated, cancelNoEffectMessage);
+
     if (effectiveness === 0) {
       return cancelNoEffectMessage.value
         ? [HitCheckResult.NO_EFFECT_NO_MESSAGE, effectiveness]

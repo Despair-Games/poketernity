@@ -260,6 +260,27 @@ describe("Moves - Dragon Darts", () => {
     expect(enemy1.getLastXMoves()[0]?.result).toBe(MoveResult.FAIL);
   });
 
+  it("should not trigger ability effects when redirecting", async () => {
+    game.override.enemyAbility(Abilities.VOLT_ABSORB).moveset([Moves.DRAGON_DARTS, Moves.ELECTRIFY]);
+
+    await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
+
+    const enemyPokemon = game.scene.getEnemyField();
+    enemyPokemon.forEach((p) => (p.hp = 100));
+    const enemyStartingHp = enemyPokemon.map((p) => p.hp);
+
+    game.move.select(Moves.DRAGON_DARTS, 0, BattlerIndex.ENEMY);
+    game.move.select(Moves.ELECTRIFY, 1, BattlerIndex.PLAYER);
+
+    await game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+
+    await game.phaseInterceptor.to("BerryPhase", false);
+
+    // Electrified Dragon Darts should have been redirected onto the second enemy, healing them
+    expect(enemyPokemon[0].hp).toBe(enemyStartingHp[0]);
+    expect(enemyPokemon[1].hp).toBeGreaterThan(enemyStartingHp[1]);
+  });
+
   // TODO: rework Pressure and implement this interaction
   it.todo("should deduct 1 extra PP for each targeted enemy with Pressure");
 
