@@ -12,7 +12,7 @@ import { globalScene } from "#app/global-scene";
 import SettingsDisplayUiHandler from "./ui/settings/settings-display-ui-handler";
 import SettingsAudioUiHandler from "./ui/settings/settings-audio-ui-handler";
 import RunInfoUiHandler from "./ui/run-info-ui-handler";
-import { settings } from "./data/settings/settings-manager";
+import { settings } from "./system/settings/settings-manager";
 
 type ActionKeys = Record<Button, () => void>;
 

@@ -79,7 +79,7 @@ import {
 } from "#app/utils";
 import type { Nature } from "#enums/nature";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
-import { settings } from "#app/data/settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 import { CandyUpgradeNotificationMode } from "#app/enums/candy-upgrade-notification-mode";
 import { CandyUpgradeDisplayMode } from "#app/enums/candy-upgrade-display";
 

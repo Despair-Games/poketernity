@@ -7,7 +7,7 @@ import type Move from "../data/move";
 import { MoveCategory } from "../data/move";
 import { Type } from "#enums/type";
 import i18next from "i18next";
-import { settings } from "#app/data/settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 
 export interface MoveInfoOverlaySettings {
   delayVisibility?: boolean; // if true, showing the overlay will only set it to active and populate the fields and the handler using this field has to manually call setVisible later.

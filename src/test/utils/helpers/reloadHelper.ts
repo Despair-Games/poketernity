@@ -7,7 +7,7 @@ import { CommandPhase } from "#app/phases/command-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
 import type { SessionSaveData } from "#app/system/game-data";
 import type GameManager from "../gameManager";
-import { settings } from "#app/data/settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 
 /**
  * Helper to allow reloading sessions in unit tests.

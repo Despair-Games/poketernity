@@ -3,7 +3,7 @@ import { type BattlerIndex } from "#app/battle";
 import { type DamageResult, HitResult } from "#app/field/pokemon";
 import { fixedInt } from "#app/utils";
 import { PokemonPhase } from "#app/phases/pokemon-phase";
-import { settings } from "#app/data/settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 
 export class DamageAnimPhase extends PokemonPhase {
   private amount: number;

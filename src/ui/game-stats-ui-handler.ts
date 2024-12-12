@@ -11,7 +11,7 @@ import { Button } from "#enums/buttons";
 import i18next from "i18next";
 import { UiTheme } from "#enums/ui-theme";
 import { globalScene } from "#app/global-scene";
-import { settings } from "#app/data/settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 
 interface DisplayStat {
   label_key?: string;

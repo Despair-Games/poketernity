@@ -9,7 +9,7 @@ import { BerryType } from "#enums/berry-type";
 import { Moves } from "#enums/moves";
 import { UiTheme } from "#enums/ui-theme";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { settings } from "#app/data/settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 
 /** Container for info about a {@linkcode Move} */
 interface MoveInfo {

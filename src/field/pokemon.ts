@@ -244,7 +244,7 @@ import { TypeImmunityAbAttr } from "#app/data/ab-attrs/type-immunity-ab-attr";
 import { FullHpResistTypeAbAttr } from "#app/data/ab-attrs/full-hp-resist-type-ab-attr";
 import { FieldPriorityMoveImmunityAbAttr } from "#app/data/ab-attrs/field-priority-move-immunity-ab-attr";
 import { MoveImmunityAbAttr } from "#app/data/ab-attrs/move-immunity-ab-attr";
-import { settings } from "#app/data/settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 import { SpriteSet } from "#enums/sprite-set";
 
 export enum LearnMoveSituation {

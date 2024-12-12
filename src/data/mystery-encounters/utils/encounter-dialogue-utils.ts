@@ -3,7 +3,7 @@ import type { TextStyle } from "#app/ui/text";
 import { getTextWithColors } from "#app/ui/text";
 import { isNullOrUndefined } from "#app/utils";
 import i18next from "i18next";
-import { settings } from "#app/data/settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 
 /**
  * Will inject all relevant dialogue tokens that exist into i18n text.

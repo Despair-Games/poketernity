@@ -3,7 +3,7 @@ import { globalScene } from "#app/global-scene";
 import { BattleSceneEventType } from "../events/battle-scene";
 import { EaseType } from "#enums/ease-type";
 import { TimeOfDay } from "#enums/time-of-day";
-import { settings } from "#app/data/settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 
 /** A small self contained UI element that displays the time of day as an icon */
 export default class TimeOfDayWidget extends Phaser.GameObjects.Container {

@@ -1,4 +1,4 @@
-import { settings } from "#app/data/settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 import { globalScene } from "#app/global-scene";
 import type Pokemon from "../field/pokemon";
 import { TextStyle, addTextObject } from "./text";

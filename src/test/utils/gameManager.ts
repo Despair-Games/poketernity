@@ -2,7 +2,7 @@ import { updateUserInfo } from "#app/account";
 import { BattlerIndex } from "#app/battle";
 import BattleScene from "#app/battle-scene";
 import { getMoveTargets } from "#app/data/move";
-import { settings } from "#app/data/settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
 import Trainer from "#app/field/trainer";
 import { GameModes, getGameMode } from "#app/game-mode";

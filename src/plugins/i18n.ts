@@ -5,7 +5,7 @@ import LanguageDetector from "i18next-browser-languagedetector";
 import HttpBackend from "i18next-http-backend";
 import processor, { KoreanPostpositionProcessor } from "i18next-korean-postposition-processor";
 import pkg from "../../package.json";
-import { supportedLanguages } from "#app/data/settings/supported-languages";
+import { supportedLanguages } from "#app/system/settings/supported-languages";
 
 //#region Interfaces/Types
 

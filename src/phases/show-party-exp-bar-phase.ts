@@ -6,7 +6,7 @@ import { NumberHolder } from "#app/utils";
 import { HidePartyExpBarPhase } from "./hide-party-exp-bar-phase";
 import { LevelUpPhase } from "./level-up-phase";
 import { PlayerPartyMemberPokemonPhase } from "./player-party-member-pokemon-phase";
-import { settings } from "#app/data/settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 
 export class ShowPartyExpBarPhase extends PlayerPartyMemberPokemonPhase {
   private expValue: number;

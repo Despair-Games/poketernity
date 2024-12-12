@@ -31,7 +31,7 @@ import { getStatKey } from "#enums/stat";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
 import { isPokemonValidForEncounterOptionSelection } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import type { Nature } from "#enums/nature";
-import { settings } from "#app/data/settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 
 /** The i18n namespace for the encounter */
 const namespace = "mysteryEncounters/trainingSession";

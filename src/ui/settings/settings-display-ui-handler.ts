@@ -1,5 +1,5 @@
 import { LOCALE_LS_KEY } from "#app/constants";
-import { displaySettingUiItems } from "#app/data/settings/settings-ui-items";
+import { displaySettingUiItems } from "#app/system/settings/settings-ui-items";
 import { SettingKeys, SettingType } from "#app/system/settings/settings";
 import type { Mode } from "../ui";
 import AbstractSettingsUiHandler from "./abstract-settings-ui-handler";

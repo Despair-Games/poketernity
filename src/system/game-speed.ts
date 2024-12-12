@@ -3,7 +3,7 @@ import type FadeIn from "phaser3-rex-plugins/plugins/audio/fade/FadeIn";
 import type FadeOut from "phaser3-rex-plugins/plugins/audio/fade/FadeOut";
 import { globalScene } from "#app/global-scene";
 import { FixedInt } from "#app/utils";
-import { settings } from "#app/data/settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 
 type FadeIn = typeof FadeIn;
 type FadeOut = typeof FadeOut;

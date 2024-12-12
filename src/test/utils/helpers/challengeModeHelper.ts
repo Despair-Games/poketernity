@@ -11,7 +11,7 @@ import { CommandPhase } from "#app/phases/command-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
 import type { Challenges } from "#enums/challenges";
 import { copyChallenge } from "data/challenge";
-import { settings } from "#app/data/settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 
 /**
  * Helper to handle Challenge mode specifics

@@ -31,7 +31,7 @@ import ChallengeData from "#app/system/challenge-data";
 import TrainerData from "#app/system/trainer-data";
 import ArenaData from "#app/system/arena-data";
 import { api } from "#app/plugins/api/api";
-import { settings } from "#app/data/settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 
 export class GameOverPhase extends BattlePhase {
   private isVictory: boolean;

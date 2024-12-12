@@ -165,7 +165,7 @@ import { globalScene, initGlobalScene } from "#app/global-scene";
 import { BlockItemTheftAbAttr } from "./data/ab-attrs/block-item-theft-ab-attr";
 import { DoubleBattleChanceAbAttr } from "./data/ab-attrs/double-battle-chance-ab-attr";
 import { PostBattleInitAbAttr } from "./data/ab-attrs/post-battle-init-ab-attr";
-import { settings, SettingsManager } from "./data/settings/settings-manager";
+import { settings, SettingsManager } from "./system/settings/settings-manager";
 import type { AnySettingKey, SettingsUpdateEventArgs } from "./@types/Settings";
 import { PRSFX_SOUND_ADJUSTMENT_RATIO } from "./constants";
 import { SpriteSet } from "#enums/sprite-set";

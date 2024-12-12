@@ -47,7 +47,7 @@ import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
 import { addPokemonDataToDexAndValidateAchievements } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import type { PokeballType } from "#enums/pokeball";
 import { doShinySparkleAnim } from "#app/field/anims";
-import { settings } from "#app/data/settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/globalTradeSystem";

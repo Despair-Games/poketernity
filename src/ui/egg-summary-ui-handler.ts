@@ -10,7 +10,7 @@ import ScrollableGridUiHandler from "./scrollable-grid-handler";
 import { HatchedPokemonContainer } from "./hatched-pokemon-container";
 import { ScrollBar } from "#app/ui/scroll-bar";
 import { globalScene } from "#app/global-scene";
-import { settings } from "#app/data/settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 import { EggSkipPreference } from "#enums/egg-skip-preference";
 
 const iconContainerX = 112;

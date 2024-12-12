@@ -8,7 +8,7 @@ import { Button } from "#enums/buttons";
 import i18next from "i18next";
 import type { Stat } from "#app/enums/stat";
 import { PERMANENT_STATS, getStatKey } from "#app/enums/stat";
-import { settings } from "#app/data/settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 
 export default class BattleMessageUiHandler extends MessageUiHandler {
   private levelUpStatsContainer: Phaser.GameObjects.Container;

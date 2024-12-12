@@ -2,7 +2,7 @@ import { addTextObject, TextStyle } from "./text";
 import i18next from "i18next";
 import { formatText } from "#app/utils";
 import { globalScene } from "#app/global-scene";
-import { settings } from "#app/data/settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 
 const hiddenX = -150;
 const shownX = 0;

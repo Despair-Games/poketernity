@@ -9,7 +9,7 @@ import type { CommandPhase } from "#app/phases/command-phase";
 import { globalScene } from "#app/global-scene";
 import { PokeballType } from "#app/enums/pokeball";
 import { getEnumLength } from "#app/utils";
-import { settings } from "#app/data/settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 
 export default class BallUiHandler extends UiHandler {
   private pokeballSelectContainer: Phaser.GameObjects.Container;

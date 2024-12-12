@@ -1,6 +1,6 @@
 import type BattleScene from "#app/battle-scene";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
-import { settings } from "#app/data/settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 import { ShopCursorTarget } from "#app/enums/shop-cursor-target";
 import { PlayerPokemon } from "#app/field/pokemon";
 import { ModifierTier } from "#app/modifier/modifier-tier";

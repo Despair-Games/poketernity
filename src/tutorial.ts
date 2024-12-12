@@ -4,7 +4,7 @@ import type UiHandler from "./ui/ui-handler";
 import { Mode } from "./ui/ui";
 import i18next from "i18next";
 import Overrides from "#app/overrides";
-import { settings } from "./data/settings/settings-manager";
+import { settings } from "./system/settings/settings-manager";
 
 export enum Tutorial {
   Intro = "INTRO",

@@ -6,7 +6,7 @@ import { addWindow } from "./ui-theme";
 import { rgbHexToRgba, fixedInt } from "#app/utils";
 import { argbFromRgba } from "@material/material-color-utilities";
 import { Button } from "#enums/buttons";
-import { settings } from "#app/data/settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 
 export interface OptionSelectConfig {
   xOffset?: number;

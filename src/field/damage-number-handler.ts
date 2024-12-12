@@ -5,7 +5,7 @@ import { HitResult } from "./pokemon";
 import { formatStat, fixedInt } from "#app/utils";
 import type { BattlerIndex } from "../battle";
 import { globalScene } from "#app/global-scene";
-import { settings } from "#app/data/settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 import { DamageNumbersMode } from "#app/enums/damage-numbers-mode";
 
 type TextAndShadowArr = [string | null, string | null];

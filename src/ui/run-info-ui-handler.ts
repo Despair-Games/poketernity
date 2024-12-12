@@ -26,7 +26,7 @@ import { SettingKeyboard } from "#app/system/settings/settings-keyboard";
 import { getBiomeName } from "#app/data/balance/biomes";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
-import { settings } from "#app/data/settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 
 /**
  * RunInfoUiMode indicates possible overlays of RunInfoUiHandler.

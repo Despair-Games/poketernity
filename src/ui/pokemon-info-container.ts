@@ -16,7 +16,7 @@ import { StatsContainer } from "./stats-container";
 import { TextStyle, addBBCodeTextObject, addTextObject, getTextColor } from "./text";
 import { addWindow } from "./ui-theme";
 import { Species } from "#enums/species";
-import { settings } from "#app/data/settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 
 interface LanguageSetting {
   infoContainerTextSize: string;

@@ -10,7 +10,7 @@ import { achvs } from "#app/system/achv";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { EggSummaryPhase } from "./egg-summary-phase";
 import { EggHatchData } from "#app/data/egg-hatch-data";
-import { settings } from "#app/data/settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 import { EggSkipPreference } from "#enums/egg-skip-preference";
 
 /**

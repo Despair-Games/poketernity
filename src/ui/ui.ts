@@ -54,7 +54,7 @@ import TestDialogueUiHandler from "#app/ui/test-dialogue-ui-handler";
 import AutoCompleteUiHandler from "./autocomplete-ui-handler";
 import { Device } from "#enums/devices";
 import MysteryEncounterUiHandler from "./mystery-encounter-ui-handler";
-import { settings } from "#app/data/settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 
 export enum Mode {
   MESSAGE,

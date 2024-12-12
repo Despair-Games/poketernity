@@ -14,7 +14,7 @@ import { PokemonPhase } from "./pokemon-phase";
 import { Stat, type BattleStat, getStatKey, getStatStageChangeDescriptionKey } from "#enums/stat";
 import { PostStatStageChangeAbAttr } from "#app/data/ab-attrs/post-stat-stage-change-ab-attr";
 import { ProtectStatAbAttr } from "#app/data/ab-attrs/protect-stat-ab-attr";
-import { settings } from "#app/data/settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 
 export type StatStageChangeCallback = (
   target: Pokemon | null,

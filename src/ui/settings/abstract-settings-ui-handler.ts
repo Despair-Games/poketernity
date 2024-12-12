@@ -11,7 +11,7 @@ import { Setting, SettingKeys } from "#app/system/settings/settings";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
 import type { Settings, SettingsUiItem } from "#app/@types/Settings";
-import { settings as settingsManager } from "#app/data/settings/settings-manager";
+import { settings as settingsManager } from "#app/system/settings/settings-manager";
 
 /**
  * Abstract class for handling UI elements related to settings.
@@ -548,7 +548,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
             this.reloadRequired = true;
           }
         } else {
-          settingsManager.update(this.category, setting.key as any, setting.options[cursor].value);
+          settingsManager.update(this.category, setting.key as never, setting.options[cursor].value);
         }
       };
 

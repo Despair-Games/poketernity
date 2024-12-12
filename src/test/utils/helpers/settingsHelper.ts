@@ -2,7 +2,7 @@ import { PlayerGender } from "#app/enums/player-gender";
 import { BattleStyle } from "#app/enums/battle-style";
 import { GameManagerHelper } from "./gameManagerHelper";
 import { ExpGainsSpeed } from "#app/enums/exp-gains-speed";
-import { settings } from "#app/data/settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 
 /**
  * Helper to handle settings for tests

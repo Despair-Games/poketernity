@@ -6,7 +6,7 @@ import InputText from "phaser3-rex-plugins/plugins/inputtext";
 import { globalScene } from "#app/global-scene";
 import { ModifierTier } from "../modifier/modifier-tier";
 import i18next from "#app/plugins/i18n";
-import { settings } from "#app/data/settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 
 export enum TextStyle {
   MESSAGE,

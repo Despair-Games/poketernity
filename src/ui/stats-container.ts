@@ -3,7 +3,7 @@ import { TextStyle, addBBCodeTextObject, addTextObject, getTextColor } from "./t
 import { PERMANENT_STATS, getStatKey } from "#app/enums/stat";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
-import { settings } from "#app/data/settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 
 const ivChartSize = 24;
 const ivChartStatCoordMultipliers = [

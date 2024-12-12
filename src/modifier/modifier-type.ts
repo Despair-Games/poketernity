@@ -10,7 +10,7 @@ import {
   SpeciesFormChangeCondition,
   SpeciesFormChangeItemTrigger,
 } from "#app/data/pokemon-forms";
-import { settings } from "#app/data/settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 import { getStatusEffectDescriptor } from "#app/data/status-effect";
 import type Pokemon from "#app/field/pokemon";
 import type { EnemyPokemon, PlayerPokemon, PokemonMove } from "#app/field/pokemon";

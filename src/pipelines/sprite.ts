@@ -4,7 +4,7 @@ import Trainer from "../field/trainer";
 import FieldSpritePipeline from "./field-sprite";
 import { rgbHexToRgba } from "#app/utils";
 import MysteryEncounterIntroVisuals from "../field/mystery-encounter-intro";
-import { settings } from "#app/data/settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 
 const spriteFragShader = `
 #ifdef GL_FRAGMENT_PRECISION_HIGH

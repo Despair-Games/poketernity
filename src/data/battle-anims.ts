@@ -8,7 +8,7 @@ import { Moves } from "#enums/moves";
 import { SubstituteTag } from "./battler-tags";
 import Phaser from "phaser";
 import { EncounterAnim } from "#enums/encounter-anims";
-import { settings } from "./settings/settings-manager";
+import { settings } from "../system/settings/settings-manager";
 
 export enum AnimFrameTarget {
   USER,

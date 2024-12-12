@@ -3,7 +3,7 @@ import { TextStyle, addTextObject } from "./text";
 import { Mode } from "./ui";
 import { Button } from "#enums/buttons";
 import { globalScene } from "#app/global-scene";
-import { settings } from "#app/data/settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 
 export default class EvolutionSceneHandler extends MessageUiHandler {
   public evolutionContainer: Phaser.GameObjects.Container;

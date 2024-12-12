@@ -17,7 +17,7 @@ import { ShopCursorTarget } from "#app/enums/shop-cursor-target";
 import { NumberHolder } from "#app/utils";
 import Phaser from "phaser";
 import type { PokeballType } from "#enums/pokeball";
-import { settings } from "#app/data/settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 
 export const SHOP_OPTIONS_ROW_LIMIT = 7;
 const SINGLE_SHOP_ROW_YOFFSET = 12;
