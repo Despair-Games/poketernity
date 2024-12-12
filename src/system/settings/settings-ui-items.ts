@@ -25,12 +25,12 @@ import { supportedLanguages } from "./supported-languages";
 //#region Helper Functions
 
 function useBoolOptions(
-  trueI18nKey: string = "settings:off",
-  falseI18nKey: string = "settings:on",
+  trueI18nKey: string = "settings:on",
+  falseI18nKey: string = "settings:off",
 ): SettingUiItemOption[] {
   return [
-    { value: true, label: t(trueI18nKey) },
     { value: false, label: t(falseI18nKey) },
+    { value: true, label: t(trueI18nKey) },
   ];
 }
 
