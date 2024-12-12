@@ -1277,7 +1277,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
         }
         break;
       case Stat.SPD:
-        const side = this.getArenaSide();
+        const side = this.getArenaTagSide();
         if (globalScene.arena.getTagOnSide(ArenaTagType.TAILWIND, side)) {
           ret *= 2;
         }
@@ -1931,7 +1931,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       applyCheckTrappedAbAttrs(CheckTrappedAbAttr, opponent, trappedByAbility, this, trappedAbMessages, simulated),
     );
 
-    const side = this.getArenaSide();
+    const side = this.getArenaTagSide();
     return (
       trappedByAbility.value
       || !!this.getTag(TrappedTag)
@@ -2971,7 +2971,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
    * Gets the {@linkcode ArenaTagSide} of the Pokémon
    * @returns the {@linkcode ArenaTagSide} of the Pokémon
    */
-  getArenaSide(): ArenaTagSide.ENEMY | ArenaTagSide.PLAYER {
+  getArenaTagSide(): ArenaTagSide.ENEMY | ArenaTagSide.PLAYER {
     return this instanceof PlayerPokemon ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
   }
 
@@ -3180,7 +3180,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     effectiveness?: TypeDamageMultiplier,
   ): DamageCalculationResult {
     const damage = new NumberHolder(0);
-    const defendingSide = this.getArenaSide();
+    const defendingSide = this.getArenaTagSide();
 
     const variableCategory = new NumberHolder(move.category);
     applyMoveAttrs(VariableMoveCategoryAttr, source, this, move, variableCategory);
@@ -3459,7 +3459,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns `true` if the move critically hits; `false` otherwise
    */
   getCriticalHitResult(source: Pokemon, move: Move, simulated: boolean = true): boolean {
-    const defendingSide = this.getArenaSide();
+    const defendingSide = this.getArenaTagSide();
     const noCritTag = globalScene.arena.getTagOnSide(NoCritTag, defendingSide);
     if (noCritTag || Overrides.NEVER_CRIT_OVERRIDE || move.hasAttr(FixedDamageAttr)) {
       return false;
@@ -4273,7 +4273,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns `true` if this Pokemon is protected by Safeguard; `false` otherwise.
    */
   isSafeguarded(attacker: Pokemon): boolean {
-    const defendingSide = this.getArenaSide();
+    const defendingSide = this.getArenaTagSide();
     if (globalScene.arena.getTagOnSide(ArenaTagType.SAFEGUARD, defendingSide)) {
       const bypassed = new BooleanHolder(false);
       if (attacker) {

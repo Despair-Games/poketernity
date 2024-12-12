@@ -106,7 +106,7 @@ describe("Moves - Light Screen", () => {
  */
 const getMockedMoveDamage = (defender: Pokemon, attacker: Pokemon, move: Move) => {
   const multiplierHolder = new NumberHolder(1);
-  const side = defender.getArenaSide();
+  const side = defender.getArenaTagSide();
 
   if (globalScene.arena.getTagOnSide(ArenaTagType.LIGHT_SCREEN, side)) {
     globalScene.arena.applyTagsForSide(

@@ -95,7 +95,7 @@ export class StatStageChangePhase extends PokemonPhase {
 
       if (!this.selfTarget && stages.value < 0) {
         // TODO: add a reference to the source of the stat change to fix Infiltrator interaction
-        globalScene.arena.applyTagsForSide(MistTag, pokemon.getArenaSide(), false, null, cancelled);
+        globalScene.arena.applyTagsForSide(MistTag, pokemon.getArenaTagSide(), false, null, cancelled);
       }
 
       if (!cancelled.value && !this.selfTarget && stages.value < 0) {

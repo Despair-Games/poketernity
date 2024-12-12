@@ -640,7 +640,7 @@ export class MoveEffectPhase extends PokemonPhase {
 
     // Check if the target is protected by any effect
     /** The {@linkcode ArenaTagSide} to which the target belongs */
-    const targetSide = target.getArenaSide();
+    const targetSide = target.getArenaTagSide();
     /** Has the invoked move been cancelled by conditional protection (e.g Quick Guard)? */
     const hasConditionalProtectApplied = new BooleanHolder(false);
     /** Does the applied conditional protection bypass Protect-ignoring effects? */

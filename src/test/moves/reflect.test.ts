@@ -106,7 +106,7 @@ describe("Moves - Reflect", () => {
  */
 const getMockedMoveDamage = (defender: Pokemon, attacker: Pokemon, move: Move) => {
   const multiplierHolder = new NumberHolder(1);
-  const side = defender.getArenaSide();
+  const side = defender.getArenaTagSide();
 
   if (globalScene.arena.getTagOnSide(ArenaTagType.REFLECT, side)) {
     globalScene.arena.applyTagsForSide(ArenaTagType.REFLECT, side, false, attacker, move.category, multiplierHolder);

@@ -1361,7 +1361,7 @@ export class MoveEffectAttr extends MoveAttr {
     );
 
     if ((!move.hasAttr(FlinchAttr) || moveChance.value <= move.chance) && !move.hasAttr(SecretPowerAttr)) {
-      const userSide = user.getArenaSide();
+      const userSide = user.getArenaTagSide();
       globalScene.arena.applyTagsForSide(ArenaTagType.WATER_FIRE_PLEDGE, userSide, false, moveChance);
     }
 
@@ -3133,7 +3133,7 @@ export class DelayedAttackAttr extends OverrideMoveEffectAttr {
           .replace("{USER}", getPokemonNameWithAffix(user)),
       );
       user.pushMoveHistory({ move: move.id, targets: [target.getBattlerIndex()], result: MoveResult.OTHER });
-      const side = target.getArenaSide();
+      const side = target.getArenaTagSide();
       globalScene.arena.addTag(this.tagType, 3, move.id, user.id, side, false, target.getBattlerIndex());
     } else {
       globalScene.queueMessage(
@@ -5989,7 +5989,7 @@ export class AddArenaTagAttr extends MoveEffectAttr {
       (move.chance < 0 || move.chance === 100 || user.randSeedInt(100) < move.chance)
       && user.getLastXMoves(1)[0]?.result === MoveResult.SUCCESS
     ) {
-      const side = (this.selfSideTarget ? user : target).getArenaSide();
+      const side = (this.selfSideTarget ? user : target).getArenaTagSide();
       globalScene.arena.addTag(this.tagType, this.turnCount, move.id, user.id, side);
       return true;
     }
@@ -5999,7 +5999,7 @@ export class AddArenaTagAttr extends MoveEffectAttr {
 
   override getCondition(): MoveConditionFunc | null {
     return this.failOnOverlap
-      ? (_user, target, _move) => !globalScene.arena.getTagOnSide(this.tagType, target.getArenaSide())
+      ? (_user, target, _move) => !globalScene.arena.getTagOnSide(this.tagType, target.getArenaTagSide())
       : null;
   }
 }
@@ -6025,7 +6025,7 @@ export class RemoveArenaTagsAttr extends MoveEffectAttr {
       return false;
     }
 
-    const side = (this.selfSideTarget ? user : target).getArenaSide();
+    const side = (this.selfSideTarget ? user : target).getArenaTagSide();
 
     for (const tagType of this.tagTypes) {
       globalScene.arena.removeTagOnSide(tagType, side);
@@ -6038,7 +6038,7 @@ export class RemoveArenaTagsAttr extends MoveEffectAttr {
 export class AddArenaTrapTagAttr extends AddArenaTagAttr {
   override getCondition(): MoveConditionFunc {
     return (user, target, _move) => {
-      const side = (this.selfSideTarget ? user : target).getArenaSide();
+      const side = (this.selfSideTarget ? user : target).getArenaTagSide();
       const tag = globalScene.arena.getTagOnSide(this.tagType, side) as ArenaTrapTag;
       if (!tag) {
         return true;
@@ -6062,7 +6062,7 @@ export class AddArenaTrapTagHitAttr extends AddArenaTagAttr {
    */
   override apply(user: Pokemon, target: Pokemon, move: Move, _args: any[]): boolean {
     const moveChance = this.getMoveChance(user, target, move, this.selfTarget, true);
-    const side = (this.selfSideTarget ? user : target).getArenaSide();
+    const side = (this.selfSideTarget ? user : target).getArenaTagSide();
     const tag = globalScene.arena.getTagOnSide(this.tagType, side) as ArenaTrapTag;
     if (
       (moveChance < 0 || moveChance === 100 || user.randSeedInt(100) < moveChance)
