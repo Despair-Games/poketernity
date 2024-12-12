@@ -1,5 +1,5 @@
 import type { PokemonDefendCondition } from "#app/@types/PokemonDefendCondition";
-import { type ArenaTrapTag, ArenaTagSide } from "#app/data/arena-tag";
+import { type ArenaTrapTag } from "#app/data/arena-tag";
 import type Move from "#app/data/move";
 import type Pokemon from "#app/field/pokemon";
 import type { HitResult } from "#app/field/pokemon";
@@ -31,13 +31,7 @@ export class PostDefendApplyArenaTrapTagAbAttr extends PostDefendAbAttr {
       const tag = globalScene.arena.getTag(this.tagType) as ArenaTrapTag;
       if (!globalScene.arena.getTag(this.tagType) || tag.layers < tag.maxLayers) {
         if (!simulated) {
-          globalScene.arena.addTag(
-            this.tagType,
-            0,
-            undefined,
-            pokemon.id,
-            pokemon.isPlayer() ? ArenaTagSide.ENEMY : ArenaTagSide.PLAYER,
-          );
+          globalScene.arena.addTag(this.tagType, 0, undefined, pokemon.id, pokemon.getOpposingArenaTagSide());
         }
         return true;
       }
