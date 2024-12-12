@@ -12,6 +12,7 @@ import { globalScene } from "#app/global-scene";
 import SettingsDisplayUiHandler from "./ui/settings/settings-display-ui-handler";
 import SettingsAudioUiHandler from "./ui/settings/settings-audio-ui-handler";
 import RunInfoUiHandler from "./ui/run-info-ui-handler";
+import { settings } from "./data/settings/settings-manager";
 
 type ActionKeys = Record<Button, () => void>;
 
@@ -71,7 +72,7 @@ export class UiInputs {
   }
 
   doVibration(inputSuccess: boolean, vibrationLength: number): void {
-    if (inputSuccess && globalScene.enableVibration && typeof navigator.vibrate !== "undefined") {
+    if (inputSuccess && settings.general.enableVibration && typeof navigator.vibrate !== "undefined") {
       navigator.vibrate(vibrationLength);
     }
   }
@@ -158,13 +159,13 @@ export class UiInputs {
   }
 
   buttonInfo(pressed: boolean = true): void {
-    if (globalScene.showMovesetFlyout) {
+    if (settings.display.showMovesetFlyout) {
       for (const p of globalScene.getField().filter((p) => p?.isActive(true))) {
         p.toggleFlyout(pressed);
       }
     }
 
-    if (globalScene.showArenaFlyout) {
+    if (settings.display.showArenaFlyout) {
       globalScene.ui.processInfoButton(pressed);
     }
   }
@@ -217,19 +218,19 @@ export class UiInputs {
 
   buttonSpeedChange(up = true): void {
     const settingGameSpeed = settingIndex(SettingKeys.Game_Speed);
-    if (up && globalScene.gameSpeed < 5) {
+    if (up && settings.general.gameSpeed < 5) {
       globalScene.gameData.saveSetting(
         SettingKeys.Game_Speed,
-        Setting[settingGameSpeed].options.findIndex((item) => item.label === `${globalScene.gameSpeed}x`) + 1,
+        Setting[settingGameSpeed].options.findIndex((item) => item.label === `${settings.general.gameSpeed}x`) + 1,
       );
       if (globalScene.ui?.getMode() === Mode.SETTINGS) {
         (globalScene.ui.getHandler() as SettingsUiHandler).show([]);
       }
-    } else if (!up && globalScene.gameSpeed > 1) {
+    } else if (!up && settings.general.gameSpeed > 1) {
       globalScene.gameData.saveSetting(
         SettingKeys.Game_Speed,
         Math.max(
-          Setting[settingGameSpeed].options.findIndex((item) => item.label === `${globalScene.gameSpeed}x`) - 1,
+          Setting[settingGameSpeed].options.findIndex((item) => item.label === `${settings.general.gameSpeed}x`) - 1,
           0,
         ),
       );

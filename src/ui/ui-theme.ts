@@ -1,6 +1,7 @@
 import { UiTheme } from "#enums/ui-theme";
 import { legacyCompatibleImages } from "#app/scene-base";
 import { globalScene } from "#app/global-scene";
+import { settings } from "#app/data/settings/settings-manager";
 
 export enum WindowVariant {
   NORMAL,
@@ -51,12 +52,12 @@ export function addWindow(
     windowVariant = WindowVariant.NORMAL;
   }
 
-  const borderSize = globalScene.uiTheme ? 6 : 8;
+  const borderSize = settings.display.uiTheme ? 6 : 8;
 
   const window = globalScene.add.nineslice(
     x,
     y,
-    `window_${globalScene.windowType}${getWindowVariantSuffix(windowVariant)}`,
+    `window_${settings.display.windowType}${getWindowVariantSuffix(windowVariant)}`,
     undefined,
     width,
     height,
@@ -126,11 +127,11 @@ export function updateWindowType(windowTypeIndex: number): void {
 
   traverse(globalScene);
 
-  globalScene.windowType = windowTypeIndex;
+  settings.display.windowType = windowTypeIndex;
 
   const rootStyle = document.documentElement.style;
   ["base", "light", "dark"].map((k, i) =>
-    rootStyle.setProperty(`--color-${k}`, windowTypeControlColors[globalScene.uiTheme][windowTypeIndex - 1][i]),
+    rootStyle.setProperty(`--color-${k}`, windowTypeControlColors[settings.display.uiTheme][windowTypeIndex - 1][i]),
   );
 
   const windowKey = `window_${windowTypeIndex}`;
@@ -153,7 +154,7 @@ export function addUiThemeOverrides(): void {
     frame?: string | number,
   ): Phaser.GameObjects.Image {
     let legacy = false;
-    if (typeof texture === "string" && globalScene.uiTheme && legacyCompatibleImages.includes(texture)) {
+    if (typeof texture === "string" && settings.display.uiTheme && legacyCompatibleImages.includes(texture)) {
       legacy = true;
       texture += "_legacy";
     }
@@ -176,7 +177,7 @@ export function addUiThemeOverrides(): void {
     frame?: string | number,
   ): Phaser.GameObjects.Sprite {
     let legacy = false;
-    if (typeof texture === "string" && globalScene.uiTheme && legacyCompatibleImages.includes(texture)) {
+    if (typeof texture === "string" && settings.display.uiTheme && legacyCompatibleImages.includes(texture)) {
       legacy = true;
       texture += "_legacy";
     }
@@ -205,7 +206,7 @@ export function addUiThemeOverrides(): void {
     bottomHeight?: number,
   ): Phaser.GameObjects.NineSlice {
     let legacy = false;
-    if (typeof texture === "string" && globalScene.uiTheme && legacyCompatibleImages.includes(texture)) {
+    if (typeof texture === "string" && settings.display.uiTheme && legacyCompatibleImages.includes(texture)) {
       legacy = true;
       texture += "_legacy";
     }

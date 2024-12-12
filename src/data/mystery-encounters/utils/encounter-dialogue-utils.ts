@@ -1,9 +1,9 @@
 import { globalScene } from "#app/global-scene";
 import type { TextStyle } from "#app/ui/text";
 import { getTextWithColors } from "#app/ui/text";
-import { UiTheme } from "#enums/ui-theme";
 import { isNullOrUndefined } from "#app/utils";
 import i18next from "i18next";
+import { settings } from "#app/data/settings/settings-manager";
 
 /**
  * Will inject all relevant dialogue tokens that exist into i18n text.
@@ -16,7 +16,7 @@ export function getEncounterText(keyOrString?: string, primaryStyle?: TextStyle)
     return null;
   }
 
-  const uiTheme = globalScene.uiTheme ?? UiTheme.DEFAULT;
+  const uiTheme = settings.display.uiTheme;
 
   let textString: string | null = getTextWithDialogueTokens(keyOrString);
 

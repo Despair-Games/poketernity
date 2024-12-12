@@ -244,6 +244,8 @@ import { TypeImmunityAbAttr } from "#app/data/ab-attrs/type-immunity-ab-attr";
 import { FullHpResistTypeAbAttr } from "#app/data/ab-attrs/full-hp-resist-type-ab-attr";
 import { FieldPriorityMoveImmunityAbAttr } from "#app/data/ab-attrs/field-priority-move-immunity-ab-attr";
 import { MoveImmunityAbAttr } from "#app/data/ab-attrs/move-immunity-ab-attr";
+import { settings } from "#app/data/settings/settings-manager";
+import { SpriteSet } from "#enums/sprite-set";
 
 export enum LearnMoveSituation {
   MISC,
@@ -681,7 +683,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
                   .replace(/_[1-3]$/, "");
                 let config = variantData;
                 const useExpSprite =
-                  globalScene.experimentalSprites
+                  settings.display.spriteSet === SpriteSet.MIXED
                   && globalScene.hasExpSprite(this.getBattleSpriteKey(isBackSprite, ignoreOverride));
                 battleSpritePath.split("/").map((p) => (config ? (config = config[p]) : null));
                 const variantSet: VariantSet = config as VariantSet;
@@ -3868,13 +3870,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           fusionCry = this.getFusionSpeciesForm().cry(
             Object.assign({ seek: Math.max(fusionCry.totalDuration * 0.4, 0) }, soundConfig),
           );
-          SoundFade.fadeIn(
-            scene,
-            fusionCry,
-            fixedInt(Math.ceil(duration * 0.2)),
-            scene.masterVolume * scene.fieldVolume,
-            0,
-          );
+          SoundFade.fadeIn(scene, fusionCry, fixedInt(Math.ceil(duration * 0.2)), settings.effectiveFieldVolume, 0);
         } catch (err) {
           console.error(err);
         }
@@ -3892,7 +3888,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const key = this.species.getCryKey(this.formIndex);
     let rate = 0.85;
     const cry = globalScene.playSound(key, { rate: rate }) as AnySound;
-    if (!cry || globalScene.fieldVolume === 0) {
+    if (!cry || settings.effectiveFieldVolume === 0) {
       return callback();
     }
     const sprite = this.getSprite();
@@ -3957,7 +3953,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     const fusionCryKey = this.fusionSpecies!.getCryKey(this.fusionFormIndex);
     let fusionCry = globalScene.playSound(fusionCryKey, { rate: rate }) as AnySound;
-    if (!cry || !fusionCry || globalScene.fieldVolume === 0) {
+    if (!cry || !fusionCry || settings.effectiveFieldVolume === 0) {
       return callback();
     }
     fusionCry.stop();
@@ -4010,7 +4006,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
             globalScene,
             fusionCry,
             fixedInt(Math.ceil((duration / rate) * 0.2)),
-            globalScene.masterVolume * globalScene.fieldVolume,
+            settings.effectiveFieldVolume,
             0,
           );
         }

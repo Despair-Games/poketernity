@@ -8,6 +8,7 @@ import { PlayerPartyMemberPokemonPhase } from "#app/phases/player-party-member-p
 import { LevelAchv } from "#app/system/achv";
 import { NumberHolder } from "#app/utils";
 import i18next from "i18next";
+import { settings } from "#app/data/settings/settings-manager";
 
 export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
   protected lastLevel: number;
@@ -33,7 +34,7 @@ export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
     const prevStats = this.pokemon.stats.slice(0);
     this.pokemon.calculateStats();
     this.pokemon.updateInfo();
-    if (globalScene.expParty === ExpNotification.DEFAULT) {
+    if (settings.general.partyExpNotificationMode === ExpNotification.DEFAULT) {
       globalScene.playSound("level_up_fanfare");
       globalScene.ui.showText(
         i18next.t("battle:levelUp", { pokemonName: getPokemonNameWithAffix(this.pokemon), level: this.level }),
@@ -46,7 +47,7 @@ export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
         null,
         true,
       );
-    } else if (globalScene.expParty === ExpNotification.SKIP) {
+    } else if (settings.general.partyExpNotificationMode === ExpNotification.SKIP) {
       this.end();
     } else {
       // we still want to display the stats if activated

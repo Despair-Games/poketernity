@@ -30,6 +30,7 @@ import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import type { CustomModifierSettings } from "#app/modifier/modifier-type";
 import { ModifierTier } from "#app/modifier/modifier-tier";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
+import { settings } from "./data/settings/settings-manager";
 
 export enum ClassicFixedBossWaves {
   // TODO: other fixed wave battles should be added here
@@ -238,7 +239,7 @@ export default class Battle {
       if (!this.started && this.trainer?.config.encounterBgm && this.trainer?.getEncounterMessages()?.length) {
         return `encounter_${this.trainer?.getEncounterBgm()}`;
       }
-      if (globalScene.musicPreference === MusicPreference.CONSISTENT) {
+      if (settings.audio.musicPreference === MusicPreference.CONSISTENT) {
         return this.trainer?.getBattleBgm() ?? null;
       } else {
         return this.trainer?.getMixedBattleBgm() ?? null;
@@ -255,7 +256,7 @@ export default class Battle {
         return "battle_final_encounter";
       }
       if (pokemon.species.legendary || pokemon.species.subLegendary || pokemon.species.mythical) {
-        if (globalScene.musicPreference === MusicPreference.CONSISTENT) {
+        if (settings.audio.musicPreference === MusicPreference.CONSISTENT) {
           switch (pokemon.species.speciesId) {
             case Species.REGIROCK:
             case Species.REGICE:
@@ -272,7 +273,7 @@ export default class Battle {
               }
               return "battle_legendary_unova";
           }
-        } else if (globalScene.musicPreference === MusicPreference.MIXED) {
+        } else if (settings.audio.musicPreference === MusicPreference.MIXED) {
           switch (pokemon.species.speciesId) {
             case Species.ARTICUNO:
             case Species.ZAPDOS:

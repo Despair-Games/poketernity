@@ -8,6 +8,7 @@ import { Moves } from "#enums/moves";
 import { SubstituteTag } from "./battler-tags";
 import Phaser from "phaser";
 import { EncounterAnim } from "#enums/encounter-anims";
+import { settings } from "./settings/settings-manager";
 
 export enum AnimFrameTarget {
   USER,
@@ -1005,7 +1006,7 @@ export abstract class BattleAnim {
       }
     };
 
-    if (!globalScene.moveAnimations && !this.playRegardlessOfIssues) {
+    if (!settings.display.enableMoveAnimations && !this.playRegardlessOfIssues) {
       return cleanUpAndComplete();
     }
 
@@ -1296,7 +1297,7 @@ export abstract class BattleAnim {
       }
     };
 
-    if (!globalScene.moveAnimations && !this.playRegardlessOfIssues) {
+    if (!settings.display.enableMoveAnimations && !this.playRegardlessOfIssues) {
       return cleanUpAndComplete();
     }
 

@@ -1,3 +1,4 @@
+import { settings } from "#app/data/settings/settings-manager";
 import { BattleStyle } from "#app/enums/battle-style";
 import type { Species } from "#app/enums/species";
 import { GameModes, getGameMode } from "#app/game-mode";
@@ -48,7 +49,7 @@ export class ClassicModeHelper extends GameManagerHelper {
   async startBattle(species?: Species[]): Promise<void> {
     await this.runToSummon(species);
 
-    if (this.game.scene.battleStyle === BattleStyle.SWITCH) {
+    if (settings.general.battleStyle === BattleStyle.SWITCH) {
       this.game.onNextPrompt(
         "CheckSwitchPhase",
         Mode.CONFIRM,

@@ -31,6 +31,7 @@ import ChallengeData from "#app/system/challenge-data";
 import TrainerData from "#app/system/trainer-data";
 import ArenaData from "#app/system/arena-data";
 import { api } from "#app/plugins/api/api";
+import { settings } from "#app/data/settings/settings-manager";
 
 export class GameOverPhase extends BattlePhase {
   private isVictory: boolean;
@@ -71,7 +72,7 @@ export class GameOverPhase extends BattlePhase {
         0,
         () => this.handleGameOver(),
       );
-    } else if (this.isVictory || !globalScene.enableRetries) {
+    } else if (this.isVictory || !settings.general.enableRetries) {
       this.handleGameOver();
     } else {
       globalScene.ui.showText(i18next.t("battle:retryBattle"), null, () => {

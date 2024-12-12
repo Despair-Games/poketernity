@@ -6,10 +6,12 @@ import { ScrollBar } from "#app/ui/scroll-bar";
 import { Button } from "#enums/buttons";
 import type { InputsIcons } from "#app/ui/settings/abstract-control-settings-ui-handler";
 import NavigationMenu, { NavigationManager } from "#app/ui/settings/navigationMenu";
-import type { SettingType } from "#app/system/settings/settings";
+import { SettingType } from "#app/system/settings/settings";
 import { Setting, SettingKeys } from "#app/system/settings/settings";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
+import type { Settings, SettingsUiItem } from "#app/@types/Settings";
+import { settings as settingsManager } from "#app/data/settings/settings-manager";
 
 /**
  * Abstract class for handling UI elements related to settings.
@@ -42,9 +44,30 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
   protected settings: Array<Setting>;
   protected localStorageKey: string;
 
-  constructor(type: SettingType, mode: Mode | null = null) {
+  protected uiItems: SettingsUiItem[];
+  protected category: keyof Settings;
+
+  constructor(type: SettingType, mode: Mode | null = null, uiItems?: SettingsUiItem[]) {
     super(mode);
-    this.settings = Setting.filter((s) => s.type === type && !s?.isHidden?.());
+
+    if (!uiItems) {
+      this.settings = Setting.filter((s) => s.type === type && !s?.isHidden?.());
+    } else {
+      this.uiItems = uiItems;
+
+      switch (type) {
+        case SettingType.GENERAL:
+          this.category = "general";
+          break;
+        case SettingType.DISPLAY:
+          this.category = "display";
+          break;
+        case SettingType.AUDIO:
+          this.category = "audio";
+          break;
+      }
+    }
+
     this.reloadRequired = false;
     this.rowsToDisplay = 8;
   }
@@ -101,64 +124,137 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
     cancelText.setOrigin(0, 0.15);
     cancelText.setPositionRelative(iconCancel, -cancelText.width / 6 - 2, 0);
 
+    const requiresReloadInfoText = addTextObject(0, 0, "*: Requires Reload", TextStyle.SUMMARY_GRAY, {
+      fontSize: "3rem",
+    });
+    requiresReloadInfoText.setOrigin(0, 0.15);
+    requiresReloadInfoText.setPositionRelative(actionsBg, 10, 10);
+
     this.optionsContainer = globalScene.add.container(0, 0);
 
     this.settingLabels = [];
     this.optionValueLabels = [];
 
-    this.reloadSettings = this.settings.filter((s) => s?.requireReload);
+    if (!this.uiItems) {
+      this.reloadSettings = this.settings.filter((s) => s?.requireReload);
 
-    this.settings.forEach((setting, s) => {
-      let settingName = setting.label;
-      if (setting?.requireReload) {
-        settingName += ` (${i18next.t("settings:requireReload")})`;
-      }
+      this.settings.forEach((setting, s) => {
+        let settingName = setting.label;
+        if (setting?.requireReload) {
+          settingName += ` (${i18next.t("settings:requireReload")})`;
+        }
 
-      this.settingLabels[s] = addTextObject(8, 28 + s * 16, settingName, TextStyle.SETTINGS_LABEL);
-      this.settingLabels[s].setOrigin(0, 0);
+        this.settingLabels[s] = addTextObject(8, 28 + s * 16, settingName, TextStyle.SETTINGS_LABEL);
+        this.settingLabels[s].setOrigin(0, 0);
 
-      this.optionsContainer.add(this.settingLabels[s]);
-      this.optionValueLabels.push(
-        setting.options.map((option, o) => {
-          const valueLabel = addTextObject(
-            0,
-            0,
-            option.label,
-            setting.default === o ? TextStyle.SETTINGS_SELECTED : TextStyle.SETTINGS_VALUE,
-          );
-          valueLabel.setOrigin(0, 0);
+        this.optionsContainer.add(this.settingLabels[s]);
+        this.optionValueLabels.push(
+          setting.options.map((option, o) => {
+            const valueLabel = addTextObject(
+              0,
+              0,
+              option.label,
+              setting.default === o ? TextStyle.SETTINGS_SELECTED : TextStyle.SETTINGS_VALUE,
+            );
+            valueLabel.setOrigin(0, 0);
 
-          this.optionsContainer.add(valueLabel);
+            this.optionsContainer.add(valueLabel);
 
-          return valueLabel;
-        }),
+            return valueLabel;
+          }),
+        );
+
+        const totalWidth = this.optionValueLabels[s].map((o) => o.width).reduce((total, width) => (total += width), 0);
+        const labelWidth = Math.max(78, this.settingLabels[s].displayWidth + 8);
+        const totalSpace = 297 - labelWidth - totalWidth / 6;
+        const optionSpacing = Math.floor(totalSpace / (this.optionValueLabels[s].length - 1));
+        let xOffset = 0;
+
+        for (const value of this.optionValueLabels[s]) {
+          value.setPositionRelative(this.settingLabels[s], labelWidth + xOffset, 0);
+          xOffset += value.width / 6 + optionSpacing;
+        }
+      });
+
+      this.optionCursors = this.settings.map((setting) => setting.default);
+      this.scrollBar = new ScrollBar(
+        this.optionsBg.width - 9,
+        this.optionsBg.y + 5,
+        4,
+        this.optionsBg.height - 11,
+        this.rowsToDisplay,
       );
+      this.scrollBar.setTotalRows(this.settings.length);
+    } else {
+      // this.reloadSettings = this.settings.filter((s) => s?.requireReload);
+      this.uiItems.forEach((uiItem, i) => {
+        let settingName = uiItem.label;
+        if (uiItem?.requireReload) {
+          settingName += " *";
+        }
 
-      const totalWidth = this.optionValueLabels[s].map((o) => o.width).reduce((total, width) => (total += width), 0);
+        this.settingLabels[i] = addTextObject(8, 28 + i * 16, settingName, TextStyle.SETTINGS_LABEL);
+        this.settingLabels[i].setOrigin(0, 0);
 
-      const labelWidth = Math.max(78, this.settingLabels[s].displayWidth + 8);
+        this.optionsContainer.add(this.settingLabels[i]);
+        this.optionValueLabels.push(
+          uiItem.options.map((option) => {
+            const valueLabel = addTextObject(
+              0,
+              0,
+              option.label,
+              option.value === settingsManager[this.category][uiItem.key]
+                ? TextStyle.SETTINGS_SELECTED
+                : TextStyle.SETTINGS_VALUE,
+            );
+            valueLabel.setOrigin(0, 0);
 
-      const totalSpace = 297 - labelWidth - totalWidth / 6;
-      const optionSpacing = Math.floor(totalSpace / (this.optionValueLabels[s].length - 1));
+            this.optionsContainer.add(valueLabel);
 
-      let xOffset = 0;
+            return valueLabel;
+          }),
+        );
 
-      for (const value of this.optionValueLabels[s]) {
-        value.setPositionRelative(this.settingLabels[s], labelWidth + xOffset, 0);
-        xOffset += value.width / 6 + optionSpacing;
-      }
-    });
+        const totalWidth = this.optionValueLabels[i].map((o) => o.width).reduce((total, width) => (total += width), 0);
 
-    this.optionCursors = this.settings.map((setting) => setting.default);
+        const labelWidth = Math.max(78, this.settingLabels[i].displayWidth + 8);
 
-    this.scrollBar = new ScrollBar(
-      this.optionsBg.width - 9,
-      this.optionsBg.y + 5,
-      4,
-      this.optionsBg.height - 11,
-      this.rowsToDisplay,
-    );
-    this.scrollBar.setTotalRows(this.settings.length);
+        const totalSpace = 297 - labelWidth - totalWidth / 6;
+        const optionSpacing = Math.floor(totalSpace / (this.optionValueLabels[i].length - 1));
+
+        let xOffset = 0;
+
+        for (const value of this.optionValueLabels[i]) {
+          value.setPositionRelative(this.settingLabels[i], labelWidth + xOffset, 0);
+          xOffset += value.width / 6 + optionSpacing;
+        }
+      });
+
+      this.optionCursors = this.uiItems.map((setting) => {
+        const index = setting.options.findIndex((o) => {
+          return o.value === settingsManager[this.category][setting.key];
+        });
+        if (index < 0) {
+          console.warn(
+            "Could not find index for ",
+            setting.key,
+            setting.options.map((o) => o.value),
+            settingsManager[this.category],
+            setting.key,
+          );
+        }
+        return index ?? 0;
+      });
+
+      this.scrollBar = new ScrollBar(
+        this.optionsBg.width - 9,
+        this.optionsBg.y + 5,
+        4,
+        this.optionsBg.height - 11,
+        this.rowsToDisplay,
+      );
+      this.scrollBar.setTotalRows(this.uiItems.length);
+    }
 
     // Two-lines message box
     this.messageBoxContainer = globalScene.add.container(0, globalScene.scaledCanvas.height);
@@ -186,6 +282,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
     this.settingsContainer.add(iconCancel);
     this.settingsContainer.add(actionText);
     this.settingsContainer.add(cancelText);
+    this.settingsContainer.add(requiresReloadInfoText);
     this.settingsContainer.add(this.messageBoxContainer);
 
     ui.add(this.settingsContainer);
@@ -233,9 +330,29 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
       ? JSON.parse(localStorage.getItem(this.localStorageKey)!)
       : {}; // TODO: is this bang correct?
 
-    this.settings.forEach((setting, s) =>
-      this.setOptionCursor(s, settings.hasOwnProperty(setting.key) ? settings[setting.key] : this.settings[s].default),
-    );
+    if (!this.uiItems) {
+      this.settings.forEach((setting, s) =>
+        this.setOptionCursor(
+          s,
+          settings.hasOwnProperty(setting.key) ? settings[setting.key] : this.settings[s].default,
+        ),
+      );
+    } else {
+      this.uiItems.forEach((item, s) => {
+        const index = item.options.findIndex(
+          (option) => option.value === settingsManager.settings[this.category][item.key],
+        );
+        if (index < 0) {
+          console.warn(
+            "Could not find index for ",
+            item.key,
+            item.options.map((o) => o.value),
+            settingsManager.settings[this.category][item.key],
+          );
+        }
+        this.setOptionCursor(s, index > 0 ? index : 0);
+      });
+    }
 
     this.settingsContainer.setVisible(true);
     this.setCursor(0);
@@ -384,30 +501,59 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
     if (settingIndex === -1) {
       settingIndex = this.cursor + this.scrollCursor;
     }
-    const setting = this.settings[settingIndex];
+    let setting: SettingsUiItem | Setting;
+    if (!this.uiItems) {
+      setting = this.settings[settingIndex] as Setting;
+    } else {
+      setting = this.uiItems[settingIndex] as SettingsUiItem;
+    }
 
     const lastCursor = this.optionCursors[settingIndex];
 
     const lastValueLabel = this.optionValueLabels[settingIndex][lastCursor];
-    lastValueLabel.setColor(this.getTextColor(TextStyle.SETTINGS_VALUE));
-    lastValueLabel.setShadowColor(this.getTextColor(TextStyle.SETTINGS_VALUE, true));
+    if (lastValueLabel) {
+      lastValueLabel.setColor(this.getTextColor(TextStyle.SETTINGS_VALUE));
+      lastValueLabel.setShadowColor(this.getTextColor(TextStyle.SETTINGS_VALUE, true));
+    } else {
+      console.warn(
+        "Could no determine lastValue label for ",
+        setting.key,
+        settingIndex,
+        lastCursor,
+        this.optionValueLabels[settingIndex].map((l) => l.text),
+      );
+    }
 
     this.optionCursors[settingIndex] = cursor;
 
     const newValueLabel = this.optionValueLabels[settingIndex][cursor];
-    newValueLabel.setColor(this.getTextColor(TextStyle.SETTINGS_SELECTED));
-    newValueLabel.setShadowColor(this.getTextColor(TextStyle.SETTINGS_SELECTED, true));
+    if (newValueLabel) {
+      newValueLabel.setColor(this.getTextColor(TextStyle.SETTINGS_SELECTED));
+      newValueLabel.setShadowColor(this.getTextColor(TextStyle.SETTINGS_SELECTED, true));
+    } else {
+      console.warn(
+        "Could no determine newValueLabel label for ",
+        setting.key,
+        settingIndex,
+        cursor,
+        this.optionValueLabels[settingIndex].map((l) => l.text),
+      );
+    }
 
     if (save) {
       const saveSetting = () => {
-        globalScene.gameData.saveSetting(setting.key, cursor);
-        if (setting.requireReload) {
-          this.reloadRequired = true;
+        if (!this.uiItems) {
+          globalScene.gameData.saveSetting(setting.key, cursor);
+          if (setting.requireReload) {
+            this.reloadRequired = true;
+          }
+        } else {
+          settingsManager.update(this.category, setting.key as any, setting.options[cursor].value);
         }
       };
 
       // For settings that ask for confirmation, display confirmation message and a Yes/No prompt before saving the setting
-      if (setting.options[cursor].needConfirmation) {
+      if (setting.options[cursor]?.needConfirmation) {
         const confirmUpdateSetting = () => {
           globalScene.ui.revertMode();
           this.showText("");
@@ -477,7 +623,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
     this.settingsContainer.setVisible(false);
     this.setScrollCursor(0);
     this.eraseCursor();
-    this.getUi().bgmBar.toggleBgmBar(globalScene.showBgmBar);
+    this.getUi().bgmBar.toggleBgmBar(settingsManager.display.showBgmBar);
     if (this.reloadRequired) {
       this.reloadRequired = false;
       globalScene.reset(true, false, true);

@@ -14,6 +14,7 @@ import BattleFlyout from "./battle-flyout";
 import { WindowVariant, addWindow } from "./ui-theme";
 import i18next from "i18next";
 import { ExpGainsSpeed } from "#app/enums/exp-gains-speed";
+import { settings } from "#app/data/settings/settings-manager";
 
 export default class BattleInfo extends Phaser.GameObjects.Container {
   public static readonly EXP_GAINS_DURATION_BASE = 1650;
@@ -185,7 +186,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
 
     this.hpBarSegmentDividers = [];
 
-    this.levelNumbersContainer = globalScene.add.container(9.5, globalScene.uiTheme ? 0 : -0.5);
+    this.levelNumbersContainer = globalScene.add.container(9.5, settings.display.uiTheme ? 0 : -0.5);
     this.levelNumbersContainer.setName("container_level");
     this.levelContainer.add(this.levelNumbersContainer);
 
@@ -576,7 +577,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
     }
 
     if (this.boss && this.bossSegments > 1) {
-      const uiTheme = globalScene.uiTheme;
+      const uiTheme = settings.display.uiTheme;
       const maxHp = pokemon.getMaxHp();
       for (let s = 1; s < this.bossSegments; s++) {
         const dividerX = (Math.round((maxHp / this.bossSegments) * s) / maxHp) * this.hpBar.width;
@@ -699,7 +700,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
 
       const updatePokemonHp = () => {
         let duration = !instant ? Phaser.Math.Clamp(Math.abs(this.lastHp - pokemon.hp) * 5, 250, 5000) : 0;
-        const speed = globalScene.hpBarSpeed;
+        const speed = settings.general.hpBarSpeed;
         if (speed) {
           duration = speed >= 3 ? 0 : duration / Math.pow(2, speed);
         }
@@ -825,7 +826,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
             * durationMultiplier
             * levelDurationMultiplier
           : 0;
-      const speed = globalScene.expGainsSpeed;
+      const speed = settings.general.expGainsSpeed;
       if (speed && speed >= ExpGainsSpeed.DEFAULT) {
         duration = speed >= ExpGainsSpeed.SKIP ? ExpGainsSpeed.DEFAULT : duration / Math.pow(2, speed);
       }
@@ -926,7 +927,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
     }
     this.currentEffectiveness = effectiveness;
 
-    if (!globalScene.typeHints || effectiveness === undefined || this.flyoutMenu?.flyoutVisible) {
+    if (!settings.display.enableTypeHints || effectiveness === undefined || this.flyoutMenu?.flyoutVisible) {
       this.effectivenessContainer.setVisible(false);
       return;
     }

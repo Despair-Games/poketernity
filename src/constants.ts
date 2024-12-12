@@ -21,3 +21,6 @@ export const LS_PREFIX = "pkty";
 
 /** Key for the local storage item storing the locale. */
 export const LOCALE_LS_KEY = `${LS_PREFIX}/locale`;
+
+/** The ratio at which PRSFX sound volumes are played is adjusted since they are sigificantly louder. */
+export const PRSFX_SOUND_ADJUSTMENT_RATIO = 0.5;

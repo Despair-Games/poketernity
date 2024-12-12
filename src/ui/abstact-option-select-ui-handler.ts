@@ -6,6 +6,7 @@ import { addWindow } from "./ui-theme";
 import { rgbHexToRgba, fixedInt } from "#app/utils";
 import { argbFromRgba } from "@material/material-color-utilities";
 import { Button } from "#enums/buttons";
+import { settings } from "#app/data/settings/settings-manager";
 
 export interface OptionSelectConfig {
   xOffset?: number;
@@ -71,7 +72,7 @@ export default abstract class AbstractOptionSelectUiHandler extends UiHandler {
 
     this.optionSelectIcons = [];
 
-    this.scale = getTextStyleOptions(TextStyle.WINDOW, globalScene.uiTheme).scale;
+    this.scale = getTextStyleOptions(TextStyle.WINDOW, settings.display.uiTheme).scale;
 
     this.setCursor(0);
   }

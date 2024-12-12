@@ -10,6 +10,7 @@ import {
   SpeciesFormChangeCondition,
   SpeciesFormChangeItemTrigger,
 } from "#app/data/pokemon-forms";
+import { settings } from "#app/data/settings/settings-manager";
 import { getStatusEffectDescriptor } from "#app/data/status-effect";
 import type Pokemon from "#app/field/pokemon";
 import type { EnemyPokemon, PlayerPokemon, PokemonMove } from "#app/field/pokemon";
@@ -1022,7 +1023,7 @@ export class MoneyRewardModifierType extends ModifierType {
   override getDescription(): string {
     const moneyAmount = new NumberHolder(globalScene.getWaveMoneyAmount(this.moneyMultiplier));
     globalScene.applyModifiers(MoneyMultiplierModifier, true, moneyAmount);
-    const formattedMoney = formatMoney(globalScene.moneyFormat, moneyAmount.value);
+    const formattedMoney = formatMoney(settings.display.moneyFormat, moneyAmount.value);
 
     return i18next.t("modifierType:ModifierType.MoneyRewardModifierType.description", {
       moneyMultiplier: i18next.t(this.moneyMultiplierDescriptorKey as any),
@@ -1145,7 +1146,7 @@ export class TmModifierType extends PokemonModifierType {
 
   override getDescription(): string {
     return i18next.t(
-      globalScene.enableMoveInfo
+      settings.display.enableMoveInfo
         ? "modifierType:ModifierType.TmModifierTypeWithInfo.description"
         : "modifierType:ModifierType.TmModifierType.description",
       { moveName: allMoves[this.moveId].name },

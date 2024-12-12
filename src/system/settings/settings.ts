@@ -3,12 +3,8 @@ import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
 import { hasTouchscreen } from "#app/touch-controls";
 import { updateWindowType } from "#app/ui/ui-theme";
-import { CandyUpgradeNotificationChangedEvent } from "#app/events/battle-scene";
 import type SettingsUiHandler from "#app/ui/settings/settings-ui-handler";
-import { EaseType } from "#enums/ease-type";
-import { MoneyFormat } from "#enums/money-format";
 import { PlayerGender } from "#enums/player-gender";
-import { ShopCursorTarget } from "#enums/shop-cursor-target";
 import { LOCALE_LS_KEY } from "#app/constants";
 
 const VOLUME_OPTIONS: SettingOption[] = new Array(11).fill(null).map((_, i) =>
@@ -84,21 +80,6 @@ const SHOP_CURSOR_TARGET_OPTIONS: SettingOption[] = [
     label: i18next.t("settings:checkTeam"),
   },
 ];
-
-const shopCursorTargetIndexMap = SHOP_CURSOR_TARGET_OPTIONS.map((option) => {
-  switch (option.value) {
-    case "Rewards":
-      return ShopCursorTarget.REWARDS;
-    case "Shop":
-      return ShopCursorTarget.SHOP;
-    case "Reroll":
-      return ShopCursorTarget.REROLL;
-    case "Check Team":
-      return ShopCursorTarget.CHECK_TEAM;
-    default:
-      throw new Error(`Unknown value: ${option.value}`);
-  }
-});
 
 /**
  * Types for helping separate settings to different menus
@@ -718,125 +699,125 @@ export function setSetting(setting: string, value: number): boolean {
     return false;
   }
   switch (Setting[index].key) {
-    case SettingKeys.Game_Speed:
-      globalScene.gameSpeed = parseFloat(Setting[index].options[value].value.replace("x", ""));
-      break;
-    case SettingKeys.Master_Volume:
-      globalScene.masterVolume = value ? parseInt(Setting[index].options[value].value) * 0.01 : 0;
-      globalScene.updateSoundVolume();
-      break;
-    case SettingKeys.BGM_Volume:
-      globalScene.bgmVolume = value ? parseInt(Setting[index].options[value].value) * 0.01 : 0;
-      globalScene.updateSoundVolume();
-      break;
-    case SettingKeys.Field_Volume:
-      globalScene.fieldVolume = value ? parseInt(Setting[index].options[value].value) * 0.01 : 0;
-      globalScene.updateSoundVolume();
-      break;
-    case SettingKeys.SE_Volume:
-      globalScene.seVolume = value ? parseInt(Setting[index].options[value].value) * 0.01 : 0;
-      globalScene.updateSoundVolume();
-      break;
-    case SettingKeys.UI_Volume:
-      globalScene.uiVolume = value ? parseInt(Setting[index].options[value].value) * 0.01 : 0;
-      break;
-    case SettingKeys.Music_Preference:
-      globalScene.musicPreference = value;
-      break;
-    case SettingKeys.Damage_Numbers:
-      globalScene.damageNumbersMode = value;
-      break;
-    case SettingKeys.UI_Theme:
-      globalScene.uiTheme = value;
-      break;
+    // case SettingKeys.Game_Speed:
+    //   globalScene.gameSpeed = parseFloat(Setting[index].options[value].value.replace("x", ""));
+    //   break;
+    // case SettingKeys.Master_Volume:
+    //   globalScene.masterVolume = value ? parseInt(Setting[index].options[value].value) * 0.01 : 0;
+    //   globalScene.updateSoundVolume();
+    //   break;
+    // case SettingKeys.BGM_Volume:
+    //   globalScene.bgmVolume = value ? parseInt(Setting[index].options[value].value) * 0.01 : 0;
+    //   globalScene.updateSoundVolume();
+    //   break;
+    // case SettingKeys.Field_Volume:
+    //   globalScene.fieldVolume = value ? parseInt(Setting[index].options[value].value) * 0.01 : 0;
+    //   globalScene.updateSoundVolume();
+    //   break;
+    // case SettingKeys.SE_Volume:
+    //   globalScene.seVolume = value ? parseInt(Setting[index].options[value].value) * 0.01 : 0;
+    //   globalScene.updateSoundVolume();
+    //   break;
+    // case SettingKeys.UI_Volume:
+    //   globalScene.uiVolume = value ? parseInt(Setting[index].options[value].value) * 0.01 : 0;
+    //   break;
+    // case SettingKeys.Music_Preference:
+    //   globalScene.musicPreference = value;
+    //   break;
+    // case SettingKeys.Damage_Numbers:
+    //   globalScene.damageNumbersMode = value;
+    //   break;
+    // case SettingKeys.UI_Theme:
+    //   globalScene.uiTheme = value;
+    //   break;
     case SettingKeys.Window_Type:
       updateWindowType(parseInt(Setting[index].options[value].value));
       break;
-    case SettingKeys.Tutorials:
-      globalScene.enableTutorials = Setting[index].options[value].value === "On";
-      break;
-    case SettingKeys.Move_Info:
-      globalScene.enableMoveInfo = Setting[index].options[value].value === "On";
-      break;
-    case SettingKeys.Enable_Retries:
-      globalScene.enableRetries = Setting[index].options[value].value === "On";
-      break;
-    case SettingKeys.Hide_IVs:
-      globalScene.hideIvs = Setting[index].options[value].value === "On";
-      break;
-    case SettingKeys.Skip_Seen_Dialogues:
-      globalScene.skipSeenDialogues = Setting[index].options[value].value === "On";
-      break;
-    case SettingKeys.Egg_Skip:
-      globalScene.eggSkipPreference = value;
-      break;
-    case SettingKeys.Battle_Style:
-      globalScene.battleStyle = value;
-      break;
-    case SettingKeys.Show_BGM_Bar:
-      globalScene.showBgmBar = Setting[index].options[value].value === "On";
-      break;
-    case SettingKeys.Candy_Upgrade_Notification:
-      if (globalScene.candyUpgradeNotification === value) {
-        break;
-      }
-      globalScene.candyUpgradeNotification = value;
-      globalScene.eventTarget.dispatchEvent(new CandyUpgradeNotificationChangedEvent(value));
-      break;
-    case SettingKeys.Candy_Upgrade_Display:
-      globalScene.candyUpgradeDisplay = value;
-    case SettingKeys.Money_Format:
-      switch (Setting[index].options[value].value) {
-        case "Normal":
-          globalScene.moneyFormat = MoneyFormat.NORMAL;
-          break;
-        case "Abbreviated":
-          globalScene.moneyFormat = MoneyFormat.ABBREVIATED;
-          break;
-      }
-      globalScene.updateMoneyText(false);
-      break;
-    case SettingKeys.Sprite_Set:
-      globalScene.experimentalSprites = !!value;
-      if (value) {
-        globalScene.initExpSprites();
-      }
-      break;
-    case SettingKeys.Move_Animations:
-      globalScene.moveAnimations = Setting[index].options[value].value === "On";
-      break;
-    case SettingKeys.Show_Moveset_Flyout:
-      globalScene.showMovesetFlyout = Setting[index].options[value].value === "On";
-      break;
-    case SettingKeys.Show_Arena_Flyout:
-      globalScene.showArenaFlyout = Setting[index].options[value].value === "On";
-      break;
-    case SettingKeys.Show_Time_Of_Day_Widget:
-      globalScene.showTimeOfDayWidget = Setting[index].options[value].value === "On";
-      break;
-    case SettingKeys.Time_Of_Day_Animation:
-      globalScene.timeOfDayAnimation =
-        Setting[index].options[value].value === "Bounce" ? EaseType.BOUNCE : EaseType.BACK;
-      break;
-    case SettingKeys.Show_Stats_on_Level_Up:
-      globalScene.showLevelUpStats = Setting[index].options[value].value === "On";
-      break;
-    case SettingKeys.Shop_Cursor_Target:
-      const selectedValue = shopCursorTargetIndexMap[value];
-      globalScene.shopCursorTarget = selectedValue;
-      break;
-    case SettingKeys.EXP_Gains_Speed:
-      globalScene.expGainsSpeed = value;
-      break;
-    case SettingKeys.EXP_Party_Display:
-      globalScene.expParty = value;
-      break;
-    case SettingKeys.HP_Bar_Speed:
-      globalScene.hpBarSpeed = value;
-      break;
-    case SettingKeys.Fusion_Palette_Swaps:
-      globalScene.fusionPaletteSwaps = !!value;
-      break;
+    // case SettingKeys.Tutorials:
+    //   globalScene.enableTutorials = Setting[index].options[value].value === "On";
+    //   break;
+    // case SettingKeys.Move_Info:
+    //   globalScene.enableMoveInfo = Setting[index].options[value].value === "On";
+    //   break;
+    // case SettingKeys.Enable_Retries:
+    //   globalScene.enableRetries = Setting[index].options[value].value === "On";
+    //   break;
+    // case SettingKeys.Hide_IVs:
+    //   globalScene.hideIvs = Setting[index].options[value].value === "On";
+    //   break;
+    // case SettingKeys.Skip_Seen_Dialogues:
+    //   globalScene.skipSeenDialogues = Setting[index].options[value].value === "On";
+    //   break;
+    // case SettingKeys.Egg_Skip:
+    //   globalScene.eggSkipPreference = value;
+    //   break;
+    // case SettingKeys.Battle_Style:
+    //   globalScene.battleStyle = value;
+    //   break;
+    // case SettingKeys.Show_BGM_Bar:
+    //   globalScene.showBgmBar = Setting[index].options[value].value === "On";
+    //   break;
+    // case SettingKeys.Candy_Upgrade_Notification:
+    //   if (globalScene.candyUpgradeNotification === value) {
+    //     break;
+    //   }
+    //   globalScene.candyUpgradeNotification = value;
+    //   globalScene.eventTarget.dispatchEvent(new CandyUpgradeNotificationChangedEvent(value));
+    //   break;
+    // case SettingKeys.Candy_Upgrade_Display:
+    //   globalScene.candyUpgradeDisplay = value;
+    // case SettingKeys.Money_Format:
+    //   switch (Setting[index].options[value].value) {
+    //     case "Normal":
+    //       globalScene.moneyFormat = MoneyFormat.NORMAL;
+    //       break;
+    //     case "Abbreviated":
+    //       globalScene.moneyFormat = MoneyFormat.ABBREVIATED;
+    //       break;
+    //   }
+    //   globalScene.updateMoneyText(false);
+    //   break;
+    // case SettingKeys.Sprite_Set:
+    //   globalScene.experimentalSprites = !!value;
+    //   if (value) {
+    //     globalScene.initExpSprites();
+    //   }
+    //   break;
+    // case SettingKeys.Move_Animations:
+    //   globalScene.moveAnimations = Setting[index].options[value].value === "On";
+    //   break;
+    // case SettingKeys.Show_Moveset_Flyout:
+    //   globalScene.showMovesetFlyout = Setting[index].options[value].value === "On";
+    //   break;
+    // case SettingKeys.Show_Arena_Flyout:
+    //   globalScene.showArenaFlyout = Setting[index].options[value].value === "On";
+    //   break;
+    // case SettingKeys.Show_Time_Of_Day_Widget:
+    //   globalScene.showTimeOfDayWidget = Setting[index].options[value].value === "On";
+    //   break;
+    // case SettingKeys.Time_Of_Day_Animation:
+    //   globalScene.timeOfDayAnimation =
+    //     Setting[index].options[value].value === "Bounce" ? EaseType.BOUNCE : EaseType.BACK;
+    //   break;
+    // case SettingKeys.Show_Stats_on_Level_Up:
+    //   globalScene.showLevelUpStats = Setting[index].options[value].value === "On";
+    //   break;
+    // case SettingKeys.Shop_Cursor_Target:
+    //   const selectedValue = shopCursorTargetIndexMap[value];
+    //   globalScene.shopCursorTarget = selectedValue;
+    //   break;
+    // case SettingKeys.EXP_Gains_Speed:
+    //   globalScene.expGainsSpeed = value;
+    //   break;
+    // case SettingKeys.EXP_Party_Display:
+    //   globalScene.expParty = value;
+    //   break;
+    // case SettingKeys.HP_Bar_Speed:
+    //   globalScene.hpBarSpeed = value;
+    //   break;
+    // case SettingKeys.Fusion_Palette_Swaps:
+    //   globalScene.fusionPaletteSwaps = !!value;
+    //   break;
     case SettingKeys.Player_Gender:
       if (globalScene.gameData) {
         const female = Setting[index].options[value].value === "Girl";
@@ -846,20 +827,20 @@ export function setSetting(setting: string, value: number): boolean {
         return false;
       }
       break;
-    case SettingKeys.Touch_Controls:
-      globalScene.enableTouchControls = Setting[index].options[value].value !== "Disabled" && hasTouchscreen();
-      const touchControls = document.getElementById("touchControls");
-      if (touchControls) {
-        touchControls.classList.toggle("visible", globalScene.enableTouchControls);
-      }
-      break;
-    case SettingKeys.Vibration:
-      globalScene.enableVibration = Setting[index].options[value].value !== "Disabled" && hasTouchscreen();
-      break;
-    case SettingKeys.Type_Hints:
-      globalScene.typeHints = Setting[index].options[value].value === "On";
-      break;
-    case SettingKeys.Language:
+      // case SettingKeys.Touch_Controls:
+      //   globalScene.enableTouchControls = Setting[index].options[value].value !== "Disabled" && hasTouchscreen();
+      //   const touchControls = document.getElementById("touchControls");
+      //   if (touchControls) {
+      //     touchControls.classList.toggle("visible", globalScene.enableTouchControls);
+      //   }
+      //   break;
+      // case SettingKeys.Vibration:
+      //   globalScene.enableVibration = Setting[index].options[value].value !== "Disabled" && hasTouchscreen();
+      //   break;
+      // case SettingKeys.Type_Hints:
+      //   globalScene.typeHints = Setting[index].options[value].value === "On";
+      //   break;
+      // case SettingKeys.Language:
       if (value) {
         if (globalScene.ui) {
           const cancelHandler = () => {

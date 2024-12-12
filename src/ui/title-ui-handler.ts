@@ -8,6 +8,7 @@ import { TimedEventDisplay } from "#app/timed-event-manager";
 import { version } from "../../package.json";
 import { api } from "#app/plugins/api/api";
 import { globalScene } from "#app/global-scene";
+import { settings } from "#app/data/settings/settings-manager";
 
 export default class TitleUiHandler extends OptionSelectUiHandler {
   /** If the stats can not be retrieved, use this fallback value */
@@ -48,7 +49,9 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
 
     this.playerCountLabel = addTextObject(
       globalScene.game.canvas.width / 6 - 2,
-      globalScene.game.canvas.height / 6 - 13 - 576 * getTextStyleOptions(TextStyle.WINDOW, globalScene.uiTheme).scale,
+      globalScene.game.canvas.height / 6
+        - 13
+        - 576 * getTextStyleOptions(TextStyle.WINDOW, settings.display.uiTheme).scale,
       `? ${i18next.t("menu:playersOnline")}`,
       TextStyle.MESSAGE,
       { fontSize: "54px" },
