@@ -1,10 +1,7 @@
-import { Mode } from "#app/ui/ui";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
 import { hasTouchscreen } from "#app/touch-controls";
-import type SettingsUiHandler from "#app/ui/settings/settings-ui-handler";
 import { PlayerGender } from "#enums/player-gender";
-import { LOCALE_LS_KEY } from "#app/constants";
 
 const VOLUME_OPTIONS: SettingOption[] = new Array(11).fill(null).map((_, i) =>
   i
@@ -826,96 +823,96 @@ export function setSetting(setting: string, value: number): boolean {
         return false;
       }
       break;
-      // case SettingKeys.Touch_Controls:
-      //   globalScene.enableTouchControls = Setting[index].options[value].value !== "Disabled" && hasTouchscreen();
-      //   const touchControls = document.getElementById("touchControls");
-      //   if (touchControls) {
-      //     touchControls.classList.toggle("visible", globalScene.enableTouchControls);
-      //   }
-      //   break;
-      // case SettingKeys.Vibration:
-      //   globalScene.enableVibration = Setting[index].options[value].value !== "Disabled" && hasTouchscreen();
-      //   break;
-      // case SettingKeys.Type_Hints:
-      //   globalScene.typeHints = Setting[index].options[value].value === "On";
-      //   break;
-      // case SettingKeys.Language:
-      if (value) {
-        if (globalScene.ui) {
-          const cancelHandler = () => {
-            globalScene.ui.revertMode();
-            (globalScene.ui.getHandler() as SettingsUiHandler).setOptionCursor(-1, 0, true);
-          };
-          const changeLocaleHandler = (locale: string): boolean => {
-            try {
-              i18next.changeLanguage(locale);
-              localStorage.setItem(LOCALE_LS_KEY, locale);
-              cancelHandler();
-              // Reload the whole game to apply the new locale since also some constants are translated
-              window.location.reload();
-              return true;
-            } catch (error) {
-              console.error("Error changing locale:", error);
-              return false;
-            }
-          };
-          globalScene.ui.setOverlayMode(Mode.OPTION_SELECT, {
-            options: [
-              {
-                label: "English",
-                handler: () => changeLocaleHandler("en"),
-              },
-              {
-                label: "Español (ES)",
-                handler: () => changeLocaleHandler("es-ES"),
-              },
-              {
-                label: "Italiano",
-                handler: () => changeLocaleHandler("it"),
-              },
-              {
-                label: "Français",
-                handler: () => changeLocaleHandler("fr"),
-              },
-              {
-                label: "Deutsch",
-                handler: () => changeLocaleHandler("de"),
-              },
-              {
-                label: "Português (BR)",
-                handler: () => changeLocaleHandler("pt-BR"),
-              },
-              {
-                label: "简体中文",
-                handler: () => changeLocaleHandler("zh-CN"),
-              },
-              {
-                label: "繁體中文",
-                handler: () => changeLocaleHandler("zh-TW"),
-              },
-              {
-                label: "한국어",
-                handler: () => changeLocaleHandler("ko"),
-              },
-              {
-                label: "日本語",
-                handler: () => changeLocaleHandler("ja"),
-              },
-              // {
-              //   label: "Català",
-              //   handler: () => changeLocaleHandler("ca-ES")
-              // },
-              {
-                label: i18next.t("settings:back"),
-                handler: () => cancelHandler(),
-              },
-            ],
-            maxOptions: 7,
-          });
-          return false;
-        }
-      }
-      break;
+    // case SettingKeys.Touch_Controls:
+    //   globalScene.enableTouchControls = Setting[index].options[value].value !== "Disabled" && hasTouchscreen();
+    //   const touchControls = document.getElementById("touchControls");
+    //   if (touchControls) {
+    //     touchControls.classList.toggle("visible", globalScene.enableTouchControls);
+    //   }
+    //   break;
+    // case SettingKeys.Vibration:
+    //   globalScene.enableVibration = Setting[index].options[value].value !== "Disabled" && hasTouchscreen();
+    //   break;
+    // case SettingKeys.Type_Hints:
+    //   globalScene.typeHints = Setting[index].options[value].value === "On";
+    //   break;
+    // case SettingKeys.Language:
+    // if (value) {
+    //   if (globalScene.ui) {
+    //     const cancelHandler = () => {
+    //       globalScene.ui.revertMode();
+    //       (globalScene.ui.getHandler() as SettingsUiHandler).setOptionCursor(-1, 0, true);
+    //     };
+    //     const changeLocaleHandler = (locale: string): boolean => {
+    //       try {
+    //         i18next.changeLanguage(locale);
+    //         localStorage.setItem(LOCALE_LS_KEY, locale);
+    //         cancelHandler();
+    //         // Reload the whole game to apply the new locale since also some constants are translated
+    //         window.location.reload();
+    //         return true;
+    //       } catch (error) {
+    //         console.error("Error changing locale:", error);
+    //         return false;
+    //       }
+    //     };
+    //     globalScene.ui.setOverlayMode(Mode.OPTION_SELECT, {
+    //       options: [
+    //         {
+    //           label: "English",
+    //           handler: () => changeLocaleHandler("en"),
+    //         },
+    //         {
+    //           label: "Español (ES)",
+    //           handler: () => changeLocaleHandler("es-ES"),
+    //         },
+    //         {
+    //           label: "Italiano",
+    //           handler: () => changeLocaleHandler("it"),
+    //         },
+    //         {
+    //           label: "Français",
+    //           handler: () => changeLocaleHandler("fr"),
+    //         },
+    //         {
+    //           label: "Deutsch",
+    //           handler: () => changeLocaleHandler("de"),
+    //         },
+    //         {
+    //           label: "Português (BR)",
+    //           handler: () => changeLocaleHandler("pt-BR"),
+    //         },
+    //         {
+    //           label: "简体中文",
+    //           handler: () => changeLocaleHandler("zh-CN"),
+    //         },
+    //         {
+    //           label: "繁體中文",
+    //           handler: () => changeLocaleHandler("zh-TW"),
+    //         },
+    //         {
+    //           label: "한국어",
+    //           handler: () => changeLocaleHandler("ko"),
+    //         },
+    //         {
+    //           label: "日本語",
+    //           handler: () => changeLocaleHandler("ja"),
+    //         },
+    //         // {
+    //         //   label: "Català",
+    //         //   handler: () => changeLocaleHandler("ca-ES")
+    //         // },
+    //         {
+    //           label: i18next.t("settings:back"),
+    //           handler: () => cancelHandler(),
+    //         },
+    //       ],
+    //       maxOptions: 7,
+    //     });
+    //     return false;
+    //   }
+    // }
+    // break;
     // case SettingKeys.Shop_Overlay_Opacity:
     //   globalScene.updateShopOverlayOpacity(parseInt(Setting[index].options[value].value) * 0.01);
     //   break;

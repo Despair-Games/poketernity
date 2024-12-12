@@ -19,7 +19,7 @@ import { MusicPreference } from "#app/enums/music-preference";
 import { ShopCursorTarget } from "#app/enums/shop-cursor-target";
 import { SpriteSet } from "#app/enums/sprite-set";
 import { UiTheme } from "#app/enums/ui-theme";
-import { t } from "i18next";
+import i18next, { t } from "i18next";
 import { supportedLanguages } from "./supported-languages";
 
 //#region Helper Functions
@@ -140,12 +140,22 @@ export const generalSettingsUiItems: SettingsUiItem<GeneralSettingsKey>[] = [
 /**
  * UI items for display settings
  */
-export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey | "language">[] = [
+export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey>[] = [
   {
     key: "language",
     label: t("settings:language"),
-    options: supportedLanguages.map(({ key, label }) => ({ value: key, label })),
+    options: [
+      {
+        label: supportedLanguages.find((l) => l.key === i18next.resolvedLanguage)?.label ?? "English",
+        value: 0,
+      },
+      {
+        label: t("settings:change"),
+        value: 1,
+      },
+    ],
     requireReload: true,
+
     // TODO: select through dialog menu
   },
   {

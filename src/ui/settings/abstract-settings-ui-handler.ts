@@ -1,17 +1,16 @@
-import { TextStyle, addTextObject } from "#app/ui/text";
-import { Mode } from "#app/ui/ui";
+import type { Settings, SettingsUiItem } from "#app/@types/Settings";
+import { globalScene } from "#app/global-scene";
+import { Setting, SettingKeys, SettingType } from "#app/system/settings/settings";
+import { SettingsManager, settings as settingsManager } from "#app/system/settings/settings-manager";
 import MessageUiHandler from "#app/ui/message-ui-handler";
-import { addWindow } from "#app/ui/ui-theme";
 import { ScrollBar } from "#app/ui/scroll-bar";
-import { Button } from "#enums/buttons";
 import type { InputsIcons } from "#app/ui/settings/abstract-control-settings-ui-handler";
 import NavigationMenu, { NavigationManager } from "#app/ui/settings/navigationMenu";
-import { SettingType } from "#app/system/settings/settings";
-import { Setting, SettingKeys } from "#app/system/settings/settings";
+import { TextStyle, addTextObject } from "#app/ui/text";
+import { Mode } from "#app/ui/ui";
+import { addWindow } from "#app/ui/ui-theme";
+import { Button } from "#enums/buttons";
 import i18next from "i18next";
-import { globalScene } from "#app/global-scene";
-import type { Settings, SettingsUiItem } from "#app/@types/Settings";
-import { settings as settingsManager } from "#app/system/settings/settings-manager";
 
 /**
  * Abstract class for handling UI elements related to settings.
@@ -190,7 +189,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
       this.uiItems.forEach((uiItem, i) => {
         let settingName = uiItem.label;
         if (uiItem?.requireReload) {
-          settingName += " *";
+          settingName += "*";
         }
 
         this.settingLabels[i] = addTextObject(8, 28 + i * 16, settingName, TextStyle.SETTINGS_LABEL);
@@ -548,7 +547,12 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
             this.reloadRequired = true;
           }
         } else {
-          settingsManager.update(this.category, setting.key as never, setting.options[cursor].value);
+          const value = setting.options[cursor].value;
+          if (this.category === "display" && setting.key === "language") {
+            settingsManager.eventBus.emit(SettingsManager.Event.ChangeLanguage, value);
+          } else {
+            settingsManager.update(this.category, setting.key as never, setting.options[cursor].value);
+          }
         }
       };
 
@@ -650,5 +654,9 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
   ) {
     this.messageBoxContainer.setVisible(!!text?.length);
     super.showText(text, delay, callback, callbackDelay, prompt, promptDelay);
+  }
+
+  updateOptionValueLabel(settingIndex: number, optionIndex: number, newLabel: string) {
+    this.optionValueLabels[settingIndex][optionIndex].setText(newLabel);
   }
 }

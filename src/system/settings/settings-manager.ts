@@ -24,6 +24,7 @@ export class SettingsManager {
     Loaded: "settings/loaded",
     Saved: "settings/saved",
     LoadFailed: "settings/load/failed",
+    ChangeLanguage: "settings/language/change",
   };
 
   /** Local storage key for peristing settings. */

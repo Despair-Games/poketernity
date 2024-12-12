@@ -1,8 +1,12 @@
 import { LOCALE_LS_KEY, SETTINGS_LS_KEY } from "#app/constants";
 import { displaySettingUiItems } from "#app/system/settings/settings-ui-items";
 import { SettingKeys, SettingType } from "#app/system/settings/settings";
-import type { Mode } from "../ui";
+import { Mode } from "../ui";
 import AbstractSettingsUiHandler from "./abstract-settings-ui-handler";
+import { settings, SettingsManager } from "#app/system/settings/settings-manager";
+import { globalScene } from "#app/global-scene";
+import i18next from "i18next";
+import { supportedLanguages } from "#app/system/settings/supported-languages";
 ("#app/inputs-controller");
 
 export default class SettingsDisplayUiHandler extends AbstractSettingsUiHandler {
@@ -102,6 +106,39 @@ export default class SettingsDisplayUiHandler extends AbstractSettingsUiHandler 
         }
       }
     }
+
     this.localStorageKey = SETTINGS_LS_KEY;
+
+    settings.eventBus.on(SettingsManager.Event.ChangeLanguage, () => {
+      const onCancel = () => {
+        console.log("cancelHandler!");
+        this.setOptionCursor(0, 0);
+        globalScene.ui.revertMode();
+        return false;
+      };
+
+      globalScene.ui.setOverlayMode(Mode.OPTION_SELECT, {
+        options: [
+          ...supportedLanguages.map((l) => {
+            return {
+              label: l.label,
+              handler: () => {
+                i18next.changeLanguage(l.key);
+                this.setOptionCursor(0, 0);
+                this.updateOptionValueLabel(0, 0, l.label);
+                globalScene.ui.revertMode();
+                window.location.reload();
+              },
+            };
+          }),
+          {
+            label: i18next.t("settings:back"),
+            handler: () => onCancel(),
+          },
+        ],
+        maxOptions: 7,
+        cancelHandler: onCancel.bind(this),
+      });
+    });
   }
 }

@@ -57,6 +57,7 @@ export interface DisplaySettings {
   showBgmBar: boolean;
   shopCursorTarget: ShopCursorTarget;
   shopOverlayOpacity: number;
+  language?: string;
 }
 
 export interface AudioSettings {
@@ -89,7 +90,8 @@ export interface SettingsUiItem<K = string> {
 
 export type GeneralSettingsKey = keyof GeneralSettings;
 
-export type DisplaySettingsKey = keyof DisplaySettings;
+/** All keys for the display settings + `"language"` */
+export type DisplaySettingsKey = keyof DisplaySettings | "language";
 
 export type AudioSettingsKey = keyof AudioSettings;
 

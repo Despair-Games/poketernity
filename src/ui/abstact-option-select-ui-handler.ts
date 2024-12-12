@@ -16,6 +16,7 @@ export interface OptionSelectConfig {
   delay?: number;
   noCancel?: boolean;
   supportHover?: boolean;
+  cancelHandler?: () => boolean;
 }
 
 export interface OptionSelectItem {
@@ -210,7 +211,9 @@ export default abstract class AbstractOptionSelectUiHandler extends UiHandler {
 
       success = true;
       if (button === Button.CANCEL) {
-        if (this.config?.maxOptions && this.config.options.length > this.config.maxOptions) {
+        if (this.config?.cancelHandler) {
+          return this.config.cancelHandler();
+        } else if (this.config?.maxOptions && this.config.options.length > this.config.maxOptions) {
           this.scrollCursor = this.config.options.length - this.config.maxOptions + 1;
           this.cursor = options.length - 1;
         } else if (!this.config?.noCancel) {
