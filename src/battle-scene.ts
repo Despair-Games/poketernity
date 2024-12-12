@@ -205,86 +205,7 @@ export default class BattleScene extends SceneBase {
 
   public sessionPlayTime: number | null = null;
   public lastSavePlayTime: number | null = null;
-  // public masterVolume: number = 0.5;
-  // public bgmVolume: number = 1;
-  // public fieldVolume: number = 1;
-  // public seVolume: number = 1;
-  // public uiVolume: number = 1;
-  // public gameSpeed: number = 1;
-  // public damageNumbersMode: number = 0;
   public reroll: boolean = false;
-  // public shopCursorTarget: number = ShopCursorTarget.REWARDS;
-  // public showMovesetFlyout: boolean = true;
-  // public showArenaFlyout: boolean = true;
-  // public showTimeOfDayWidget: boolean = true;
-  // public timeOfDayAnimation: EaseType = EaseType.NONE;
-  // public showLevelUpStats: boolean = true;
-  // public enableTutorials: boolean = import.meta.env.VITE_BYPASS_TUTORIAL === "1";
-  // public enableMoveInfo: boolean = true;
-  // public enableRetries: boolean = false;
-  // public hideIvs: boolean = false;
-  /**
-   * Determines the condition for a notification should be shown for Candy Upgrades
-   * - 0 = 'Off'
-   * - 1 = 'Passives Only'
-   * - 2 = 'On'
-   */
-  // public candyUpgradeNotification: number = 0;
-  /**
-   * Determines what type of notification is used for Candy Upgrades
-   * - 0 = 'Icon'
-   * - 1 = 'Animation'
-   */
-  // public candyUpgradeDisplay: number = 0;
-  // public moneyFormat: MoneyFormat = MoneyFormat.NORMAL;
-  // public uiTheme: UiTheme = UiTheme.DEFAULT;
-  // public windowType: number = 0;
-  // public experimentalSprites: boolean = false;
-  // public musicPreference: number = MusicPreference.MIXED;
-  // public moveAnimations: boolean = true;
-  // public expGainsSpeed: ExpGainsSpeed = ExpGainsSpeed.DEFAULT; // TODO: continue here!!!!!!!!!
-  // public skipSeenDialogues: boolean = false;
-  /**
-   * Determines if the egg hatching animation should be skipped
-   * - 0 = Never (never skip animation)
-   * - 1 = Ask (ask to skip animation when hatching 2 or more eggs)
-   * - 2 = Always (automatically skip animation when hatching 2 or more eggs)
-   */
-  // public eggSkipPreference: number = 0;
-
-  /**
-   * Defines the experience gain display mode.
-   *
-   * @remarks
-   * The `expParty` can have several modes:
-   * - `0` - Default: The normal experience gain display, nothing changed.
-   * - `1` - Level Up Notification: Displays the level up in the small frame instead of a message.
-   * - `2` - Skip: No level up frame nor message.
-   *
-   * Modes `1` and `2` are still compatible with stats display, level up, new move, etc.
-   * @default 0 - Uses the default normal experience gain display.
-   */
-  // public expParty: ExpNotification = 0;
-  // public hpBarSpeed: number = 0;
-  // public fusionPaletteSwaps: boolean = true;
-  // public enableTouchControls: boolean = false;
-  // public enableVibration: boolean = false;
-  // public showBgmBar: boolean = true;
-
-  /**
-   * Determines the selected battle style.
-   * - 0 = 'Switch'
-   * - 1 = 'Set' - The option to switch the active pokemon at the start of a battle will not display.
-   */
-  // public battleStyle: number = BattleStyle.SWITCH;
-
-  /**
-   * Defines whether or not to show type effectiveness hints
-   * - true: No hints
-   * - false: Show hints for moves
-   */
-  // public typeHints: boolean = false;
-
   public disableMenu: boolean = false;
 
   public gameData: GameData;
@@ -344,7 +265,6 @@ export default class BattleScene extends SceneBase {
   private fieldOverlay: Phaser.GameObjects.Rectangle;
   private shopOverlay: Phaser.GameObjects.Rectangle;
   private shopOverlayShown: boolean = false;
-  // private shopOverlayOpacity: number = 0.8;
 
   public modifiers: PersistentModifier[];
   private enemyModifiers: PersistentModifier[];
