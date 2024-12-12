@@ -1,4 +1,3 @@
-import { ArenaTagSide } from "#app/data/arena-tag";
 import type Pokemon from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { ArenaTagType } from "#enums/arena-tag-type";
@@ -39,9 +38,7 @@ export class PostSummonStatStageChangeOnArenaAbAttr extends PostSummonStatStageC
    * @returns Returns `true` if the stat change was applied, otherwise `false`
    */
   override applyPostSummon(pokemon: Pokemon, passive: boolean, simulated: boolean, args: any[]): boolean {
-    const side = pokemon.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
-
-    if (globalScene.arena.getTagOnSide(this.tagType, side)) {
+    if (globalScene.arena.getTagOnSide(this.tagType, pokemon.getArenaTagSide())) {
       return super.applyPostSummon(pokemon, passive, simulated, args);
     }
     return false;
