@@ -2968,7 +2968,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * Gets the {@linkcode ArenaTagSide} of the Pokémon
    * @returns the {@linkcode ArenaTagSide} of the Pokémon
    */
-  getArenaTagSide(): ArenaTagSide.ENEMY | ArenaTagSide.PLAYER {
+  getArenaTagSide(): ArenaTagSide.PLAYER | ArenaTagSide.ENEMY {
     return this instanceof PlayerPokemon ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
   }
 

@@ -6116,11 +6116,11 @@ export class RemoveArenaTrapAttr extends MoveEffectAttr {
       globalScene.arena.removeTagOnSide(ArenaTagType.STEALTH_ROCK, ArenaTagSide.ENEMY);
       globalScene.arena.removeTagOnSide(ArenaTagType.STICKY_WEB, ArenaTagSide.ENEMY);
     } else {
-      const side = target.getOpposingArenaTagSide();
-      globalScene.arena.removeTagOnSide(ArenaTagType.SPIKES, side);
-      globalScene.arena.removeTagOnSide(ArenaTagType.TOXIC_SPIKES, side);
-      globalScene.arena.removeTagOnSide(ArenaTagType.STEALTH_ROCK, side);
-      globalScene.arena.removeTagOnSide(ArenaTagType.STICKY_WEB, side);
+      const opposingSide = target.getOpposingArenaTagSide();
+      globalScene.arena.removeTagOnSide(ArenaTagType.SPIKES, opposingSide);
+      globalScene.arena.removeTagOnSide(ArenaTagType.TOXIC_SPIKES, opposingSide);
+      globalScene.arena.removeTagOnSide(ArenaTagType.STEALTH_ROCK, opposingSide);
+      globalScene.arena.removeTagOnSide(ArenaTagType.STICKY_WEB, opposingSide);
     }
 
     return true;
