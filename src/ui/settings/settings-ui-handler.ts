@@ -1,3 +1,4 @@
+import { generalSettingsUiItems } from "#app/system/settings/settings-ui-items";
 import { SettingType } from "../../system/settings/settings";
 import type { Mode } from "../ui";
 import AbstractSettingsUiHandler from "./abstract-settings-ui-handler";
@@ -10,7 +11,7 @@ export default class SettingsUiHandler extends AbstractSettingsUiHandler {
    * @param mode - The UI mode, optional.
    */
   constructor(mode: Mode | null = null) {
-    super(SettingType.GENERAL, mode);
+    super(SettingType.GENERAL, mode, generalSettingsUiItems);
     this.title = "General";
     this.localStorageKey = "settings";
   }

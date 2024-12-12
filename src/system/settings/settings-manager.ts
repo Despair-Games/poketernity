@@ -1,11 +1,13 @@
 import type { Settings } from "#app/@types/Settings";
+import { SETTINGS_LS_KEY } from "#app/constants";
 import { isNullOrUndefined } from "#app/utils";
 import { defaultSettings } from "./default-settings";
 
 //#region Types
 
 interface SettingsManagerInit {
-  localStorageKey?: string;
+  localStorageKey: string;
+  settings: Settings;
 }
 
 //#endregion
@@ -32,12 +34,12 @@ export class SettingsManager {
   /** Internal buffer for current settings. */
   private _settings: Settings;
 
-  constructor(init: SettingsManagerInit = {}) {
-    const { localStorageKey } = init;
+  constructor(init: SettingsManagerInit) {
+    const { localStorageKey, settings } = init;
 
     this.eventBus = new Phaser.Events.EventEmitter();
-    this.lsKey = localStorageKey ?? "poketernity/settings";
-    this._settings = defaultSettings;
+    this.lsKey = localStorageKey;
+    this._settings = settings;
 
     try {
       this.loadFromLocalStorage();
@@ -170,4 +172,4 @@ export class SettingsManager {
 /**
  * Singleton instance of {@linkcode SettingsManager}
  */
-export const settings = new SettingsManager();
+export const settings = new SettingsManager({ localStorageKey: SETTINGS_LS_KEY, settings: defaultSettings });
