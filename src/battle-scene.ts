@@ -173,7 +173,7 @@ import { globalScene, initGlobalScene } from "#app/global-scene";
 import { BlockItemTheftAbAttr } from "./data/ab-attrs/block-item-theft-ab-attr";
 import { DoubleBattleChanceAbAttr } from "./data/ab-attrs/double-battle-chance-ab-attr";
 import { PostBattleInitAbAttr } from "./data/ab-attrs/post-battle-init-ab-attr";
-import { bgmLoopPoints } from "./data/bgm-loop-points";
+import { bgmLoopPoint } from "./data/bgm-loop-point";
 
 export const bypassLogin = import.meta.env.VITE_BYPASS_LOGIN === "1";
 
@@ -2350,7 +2350,7 @@ export default class BattleScene extends SceneBase {
   }
 
   getBgmLoopPoint(bgmName: string): number {
-    return bgmLoopPoints[bgmName] ?? 0;
+    return bgmLoopPoint[bgmName] ?? 0;
   }
 
   toggleInvert(invert: boolean): void {

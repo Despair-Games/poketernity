@@ -1,4 +1,4 @@
-export const bgmLoopPoints = {
+export const bgmLoopPoint = {
   /** B2W2 Kanto Champion Battle */
   battle_kanto_champion: 13.95,
   /** B2W2 Johto Champion Battle */
