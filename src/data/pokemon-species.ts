@@ -131,48 +131,23 @@ export function getFusedSpeciesName(speciesAName: string, speciesBName: string):
 }
 
 /**
- * Returns a list of mythical Pokemon species IDs
+ * Returns a list of Pokemon in a specific category (ex. Mythical, UB, etc.)
+ * @param category the category used to make the list
+ * @param includeLegends boolean value that determines if legendaries should be in the returned list
+ * @returns a list of species IDs belonging to the category
  */
-export function getMythicalPokemon(): Species[] {
-  return allSpecies.map((s) => {
-    if (s.category === SpeciesCategories.MYTHICAL) {
-      return s.speciesId;
-    }
-  }) as Species[];
-}
-
-/**
- * Returns a list of Ultra Beasts
- * @param includeLegends boolean value that determines if legendary UBs should be in the returned list
- * @returns a list of Ultra Beast species IDs
- */
-export function getUltraBeasts(includeLegends: boolean): Species[] {
-  const ultraBeastList = allSpecies.map((s) => {
-    if (s.category === SpeciesCategories.ULTRA_BEAST) {
+export function getSpecialSpeciesList(category: SpeciesCategories, includeLegends?: boolean): Species[] {
+  const speciesList = allSpecies.map((s) => {
+    if (s.category === category) {
       return s.speciesId;
     }
   });
-  if (includeLegends) {
-    ultraBeastList.push(Species.COSMOG, Species.COSMOEM, Species.LUNALA, Species.SOLGALEO, Species.NECROZMA);
+  if (includeLegends && category === SpeciesCategories.ULTRA_BEAST) {
+    speciesList.push(Species.COSMOG, Species.COSMOEM, Species.LUNALA, Species.SOLGALEO, Species.NECROZMA);
+  } else if (includeLegends && category === SpeciesCategories.PARADOX) {
+    speciesList.push(Species.KORAIDON, Species.MIRAIDON);
   }
-  return ultraBeastList as Species[];
-}
-
-/**
- * Returns a list of Paradox Pokemon
- * @param includeLegends boolean value that determines if legendary Paradox Pokemon should be in the returned list
- * @returns a list of Paradox Pokemon species IDs
- */
-export function getParadoxPokemon(includeLegends: boolean): Species[] {
-  const paradoxList = allSpecies.map((s) => {
-    if (s.category === SpeciesCategories.PARADOX) {
-      return s.speciesId;
-    }
-  });
-  if (includeLegends) {
-    paradoxList.push(Species.MIRAIDON, Species.KORAIDON);
-  }
-  return paradoxList as Species[];
+  return speciesList as Species[];
 }
 
 export type PokemonSpeciesFilter = (species: PokemonSpecies) => boolean;

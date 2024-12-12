@@ -4,7 +4,7 @@ import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
 import { globalScene } from "#app/global-scene";
 import { modifierTypes } from "#app/modifier/modifier-type";
-import { getMythicalPokemon, getParadoxPokemon, getPokemonSpecies, getUltraBeasts } from "#app/data/pokemon-species";
+import { getPokemonSpecies, getSpecialSpeciesList } from "#app/data/pokemon-species";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
@@ -21,15 +21,16 @@ import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { PokemonFormChangeItemModifier } from "#app/modifier/modifier";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
 import { Challenges } from "#enums/challenges";
+import { SpeciesCategories } from "#app/enums/pokemon-species-categories";
 
 /** i18n namespace for encounter */
 const namespace = "mysteryEncounters/darkDeal";
 
 /** Exclude Ultra Beasts (includes Cosmog/Solgaleo/Lunala/Necrozma), Paradox (includes Miraidon/Koraidon), Eternatus, and Mythicals */
 const excludedBosses = [
-  ...getMythicalPokemon(),
-  ...getUltraBeasts(true),
-  ...getParadoxPokemon(true),
+  ...getSpecialSpeciesList(SpeciesCategories.MYTHICAL),
+  ...getSpecialSpeciesList(SpeciesCategories.ULTRA_BEAST, true),
+  ...getSpecialSpeciesList(SpeciesCategories.PARADOX, true),
   Species.ETERNATUS,
 ];
 
