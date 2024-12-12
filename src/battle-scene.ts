@@ -173,6 +173,7 @@ import { globalScene, initGlobalScene } from "#app/global-scene";
 import { BlockItemTheftAbAttr } from "./data/ab-attrs/block-item-theft-ab-attr";
 import { DoubleBattleChanceAbAttr } from "./data/ab-attrs/double-battle-chance-ab-attr";
 import { PostBattleInitAbAttr } from "./data/ab-attrs/post-battle-init-ab-attr";
+import { SpeciesCategories } from "./enums/pokemon-species-categories";
 
 export const bypassLogin = import.meta.env.VITE_BYPASS_LOGIN === "1";
 
@@ -1767,7 +1768,7 @@ export default class BattleScene extends SceneBase {
     }
 
     let isBoss: boolean | undefined;
-    if (forceBoss || (species && (species.subLegendary || species.legendary || species.mythical))) {
+    if (forceBoss || (species && species.category !== SpeciesCategories.NONE)) {
       isBoss = true;
     } else {
       this.executeWithSeedOffset(() => {

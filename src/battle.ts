@@ -30,6 +30,7 @@ import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import type { CustomModifierSettings } from "#app/modifier/modifier-type";
 import { ModifierTier } from "#app/modifier/modifier-tier";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
+import { SpeciesCategories } from "./enums/pokemon-species-categories";
 
 export enum ClassicFixedBossWaves {
   // TODO: other fixed wave battles should be added here
@@ -254,7 +255,7 @@ export default class Battle {
         }
         return "battle_final_encounter";
       }
-      if (pokemon.species.legendary || pokemon.species.subLegendary || pokemon.species.mythical) {
+      if (pokemon.species.category !== SpeciesCategories.NONE) {
         if (globalScene.musicPreference === MusicPreference.CONSISTENT) {
           switch (pokemon.species.speciesId) {
             case Species.REGIROCK:
@@ -267,7 +268,7 @@ export default class Battle {
             case Species.KYUREM:
               return "battle_legendary_kyurem";
             default:
-              if (pokemon.species.legendary) {
+              if (pokemon.species.category === SpeciesCategories.LEGENDARY) {
                 return "battle_legendary_res_zek";
               }
               return "battle_legendary_unova";
@@ -403,7 +404,7 @@ export default class Battle {
             case Species.PECHARUNT:
               return "battle_legendary_pecharunt";
             default:
-              if (pokemon.species.legendary) {
+              if (pokemon.species.category === SpeciesCategories.LEGENDARY) {
                 return "battle_legendary_res_zek";
               }
               return "battle_legendary_unova";

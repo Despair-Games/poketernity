@@ -47,6 +47,7 @@ import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
 import { addPokemonDataToDexAndValidateAchievements } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import type { PokeballType } from "#enums/pokeball";
 import { doShinySparkleAnim } from "#app/field/anims";
+import { SpeciesCategories } from "#app/enums/pokemon-species-categories";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/globalTradeSystem";
@@ -498,7 +499,7 @@ function getPokemonTradeOptions(): Map<number, EnemyPokemon[]> {
 
   globalScene.getPlayerParty().forEach((pokemon) => {
     // If the party member is legendary/mythical, the only trade options available are always pulled from generation-specific legendary trade pools
-    if (pokemon.species.legendary || pokemon.species.subLegendary || pokemon.species.mythical) {
+    if (pokemon.species.category !== SpeciesCategories.NONE) {
       const generation = pokemon.species.generation;
       const tradeOptions: EnemyPokemon[] = LEGENDARY_TRADE_POOLS[generation].map((s) => {
         const pokemonSpecies = getPokemonSpecies(s);
@@ -539,7 +540,7 @@ function generateTradeOption(alreadyUsedSpecies: PokemonSpecies[], originalBst?:
   while (isNullOrUndefined(newSpecies)) {
     // Get all non-legendary species that fall within the Bst range requirements
     let validSpecies = allSpecies.filter((s) => {
-      const isLegendaryOrMythical = s.legendary || s.subLegendary || s.mythical;
+      const isLegendaryOrMythical = s.category !== SpeciesCategories.NONE;
       const speciesBst = s.getBaseStatTotal();
       const bstInRange = speciesBst >= bstMin && speciesBst <= bstCap;
       return !isLegendaryOrMythical && bstInRange && !EXCLUDED_TRADE_SPECIES.includes(s.speciesId);

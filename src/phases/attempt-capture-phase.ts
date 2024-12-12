@@ -24,6 +24,7 @@ import type { PokeballType } from "#enums/pokeball";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
+import { SpeciesCategories } from "#app/enums/pokemon-species-categories";
 
 export class AttemptCapturePhase extends PokemonPhase {
   private pokeballType: PokeballType;
@@ -233,15 +234,15 @@ export class AttemptCapturePhase extends PokemonPhase {
       globalScene.validateAchv(achvs.HIDDEN_ABILITY);
     }
 
-    if (pokemon.species.subLegendary) {
+    if (pokemon.species.isSubLegendary()) {
       globalScene.validateAchv(achvs.CATCH_SUB_LEGENDARY);
     }
 
-    if (pokemon.species.legendary) {
+    if (pokemon.species.category === SpeciesCategories.LEGENDARY) {
       globalScene.validateAchv(achvs.CATCH_LEGENDARY);
     }
 
-    if (pokemon.species.mythical) {
+    if (pokemon.species.category === SpeciesCategories.MYTHICAL) {
       globalScene.validateAchv(achvs.CATCH_MYTHICAL);
     }
 

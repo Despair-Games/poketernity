@@ -16,6 +16,7 @@ import { fixedInt, getFrameMs, randInt } from "#app/utils";
 import type { EggLapsePhase } from "./egg-lapse-phase";
 import type { EggHatchData } from "#app/data/egg-hatch-data";
 import { doShinySparkleAnim } from "#app/field/anims";
+import { SpeciesCategories } from "#app/enums/pokemon-species-categories";
 
 /**
  * Class that represents egg hatching
@@ -337,13 +338,13 @@ export class EggHatchPhase extends Phase {
   doReveal(): void {
     // set the previous dex data so info container can show new unlocks in egg summary
     const isShiny = this.pokemon.isShiny();
-    if (this.pokemon.species.subLegendary) {
+    if (this.pokemon.species.isSubLegendary()) {
       globalScene.validateAchv(achvs.HATCH_SUB_LEGENDARY);
     }
-    if (this.pokemon.species.legendary) {
+    if (this.pokemon.species.category === SpeciesCategories.LEGENDARY) {
       globalScene.validateAchv(achvs.HATCH_LEGENDARY);
     }
-    if (this.pokemon.species.mythical) {
+    if (this.pokemon.species.category === SpeciesCategories.MYTHICAL) {
       globalScene.validateAchv(achvs.HATCH_MYTHICAL);
     }
     if (isShiny) {

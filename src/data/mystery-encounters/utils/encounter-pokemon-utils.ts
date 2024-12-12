@@ -38,6 +38,7 @@ import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import type { Abilities } from "#enums/abilities";
 import type { PokeballType } from "#enums/pokeball";
 import { StatusEffect } from "#enums/status-effect";
+import { SpeciesCategories } from "#app/enums/pokemon-species-categories";
 
 /** Will give +1 level every 10 waves */
 export const STANDARD_ENCOUNTER_BOOSTED_LEVEL_MODIFIER = 1;
@@ -250,7 +251,7 @@ export function getHighestStatTotalPlayerPokemon(
  * @param types - list of types to filter for
  * @param allowSubLegendary - whether or not sub legends are allowed
  * @param allowLegendary - whether or not legends are allowed
- * @param allowMythical - wehther or not mythicals are allowed
+ * @param allowMythical - whether or not mythicals are allowed
  * @returns a randomly generated Species (dfeault Bulbasaur if all filters fail)
  */
 export function getRandomSpeciesByStarterCost(
@@ -271,9 +272,9 @@ export function getRandomSpeciesByStarterCost(
       return (
         pokemonSpecies
         && (!excludedSpecies || !excludedSpecies.includes(s[0]))
-        && (allowSubLegendary || !pokemonSpecies.subLegendary)
-        && (allowLegendary || !pokemonSpecies.legendary)
-        && (allowMythical || !pokemonSpecies.mythical)
+        && (allowSubLegendary || !pokemonSpecies.isSubLegendary())
+        && (allowLegendary || !(pokemonSpecies.category !== SpeciesCategories.LEGENDARY))
+        && (allowMythical || !(pokemonSpecies.category !== SpeciesCategories.MYTHICAL))
       );
     })
     .map((s) => [getPokemonSpecies(s[0]), s[1]]);
@@ -648,15 +649,15 @@ export async function catchPokemon(
     globalScene.validateAchv(achvs.HIDDEN_ABILITY);
   }
 
-  if (pokemon.species.subLegendary) {
+  if (pokemon.species.category === SpeciesCategories.SUBLEGENDARY) {
     globalScene.validateAchv(achvs.CATCH_SUB_LEGENDARY);
   }
 
-  if (pokemon.species.legendary) {
+  if (pokemon.species.category === SpeciesCategories.LEGENDARY) {
     globalScene.validateAchv(achvs.CATCH_LEGENDARY);
   }
 
-  if (pokemon.species.mythical) {
+  if (pokemon.species.category === SpeciesCategories.MYTHICAL) {
     globalScene.validateAchv(achvs.CATCH_MYTHICAL);
   }
 
@@ -949,15 +950,15 @@ export async function addPokemonDataToDexAndValidateAchievements(pokemon: Player
     globalScene.validateAchv(achvs.HIDDEN_ABILITY);
   }
 
-  if (pokemon.species.subLegendary) {
+  if (pokemon.species.category === SpeciesCategories.SUBLEGENDARY) {
     globalScene.validateAchv(achvs.CATCH_SUB_LEGENDARY);
   }
 
-  if (pokemon.species.legendary) {
+  if (pokemon.species.category === SpeciesCategories.LEGENDARY) {
     globalScene.validateAchv(achvs.CATCH_LEGENDARY);
   }
 
-  if (pokemon.species.mythical) {
+  if (pokemon.species.category === SpeciesCategories.MYTHICAL) {
     globalScene.validateAchv(achvs.CATCH_MYTHICAL);
   }
 

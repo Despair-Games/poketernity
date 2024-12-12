@@ -43,6 +43,7 @@ import { Nature } from "#enums/nature";
 import type HeldModifierConfig from "#app/interfaces/held-modifier-config";
 import { trainerConfigs, TrainerPartyTemplate } from "#app/data/trainer-config";
 import { PartyMemberStrength } from "#enums/party-member-strength";
+import { SpeciesCategories } from "#app/enums/pokemon-species-categories";
 
 /** i18n namespace for encounter */
 const namespace = "mysteryEncounters/weirdDream";
@@ -540,15 +541,15 @@ async function postProcessTransformedPokemon(
       globalScene.validateAchv(achvs.HIDDEN_ABILITY);
     }
 
-    if (newPokemon.species.subLegendary) {
+    if (newPokemon.species.category === SpeciesCategories.SUBLEGENDARY) {
       globalScene.validateAchv(achvs.CATCH_SUB_LEGENDARY);
     }
 
-    if (newPokemon.species.legendary) {
+    if (newPokemon.species.category === SpeciesCategories.LEGENDARY) {
       globalScene.validateAchv(achvs.CATCH_LEGENDARY);
     }
 
-    if (newPokemon.species.mythical) {
+    if (newPokemon.species.category === SpeciesCategories.MYTHICAL) {
       globalScene.validateAchv(achvs.CATCH_MYTHICAL);
     }
 
