@@ -80,8 +80,8 @@ export interface SettingsUiItem<K = string> {
   key: K;
   label: string;
   options: SettingUiItemOption[];
-  /** @deprecated Use events instead */
-  requireReload?: boolean;
+  /** Indicates if a settings change requires a reload */
+  requiresReload?: boolean;
   /** @deprecated */
   activatable?: boolean;
   /** @deprecated Hidden items don't exist anymore. */

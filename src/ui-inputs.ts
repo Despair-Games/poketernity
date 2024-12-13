@@ -3,7 +3,6 @@ import { Mode } from "./ui/ui";
 import type { InputsController } from "./inputs-controller";
 import type MessageUiHandler from "./ui/message-ui-handler";
 import StarterSelectUiHandler from "./ui/starter-select-ui-handler";
-import { Setting, SettingKeys, settingIndex } from "./system/settings/settings";
 import SettingsUiHandler from "./ui/settings/settings-ui-handler";
 import { Button } from "#enums/buttons";
 import SettingsGamepadUiHandler from "./ui/settings/settings-gamepad-ui-handler";
@@ -217,23 +216,13 @@ export class UiInputs {
   }
 
   buttonSpeedChange(up = true): void {
-    const settingGameSpeed = settingIndex(SettingKeys.Game_Speed);
     if (up && settings.general.gameSpeed < 5) {
-      globalScene.gameData.saveSetting(
-        SettingKeys.Game_Speed,
-        Setting[settingGameSpeed].options.findIndex((item) => item.label === `${settings.general.gameSpeed}x`) + 1,
-      );
+      settings.update("general", "gameSpeed", settings.general.gameSpeed + 1);
       if (globalScene.ui?.getMode() === Mode.SETTINGS) {
         (globalScene.ui.getHandler() as SettingsUiHandler).show([]);
       }
     } else if (!up && settings.general.gameSpeed > 1) {
-      globalScene.gameData.saveSetting(
-        SettingKeys.Game_Speed,
-        Math.max(
-          Setting[settingGameSpeed].options.findIndex((item) => item.label === `${settings.general.gameSpeed}x`) - 1,
-          0,
-        ),
-      );
+      settings.update("general", "gameSpeed", Math.max(settings.general.gameSpeed - 1, 1));
       if (globalScene.ui?.getMode() === Mode.SETTINGS) {
         (globalScene.ui.getHandler() as SettingsUiHandler).show([]);
       }

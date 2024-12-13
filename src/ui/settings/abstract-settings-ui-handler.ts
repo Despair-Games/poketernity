@@ -1,6 +1,5 @@
 import type { SettingsCategory, SettingsUiItem } from "#app/@types/Settings";
 import { globalScene } from "#app/global-scene";
-import { type Setting } from "#app/system/settings/settings";
 import { SettingsManager, settings as settingsManager } from "#app/system/settings/settings-manager";
 import MessageUiHandler from "#app/ui/message-ui-handler";
 import { ScrollBar } from "#app/ui/scroll-bar";
@@ -36,12 +35,12 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
 
   private cursorObj: Phaser.GameObjects.NineSlice | null;
 
-  private reloadSettings: Array<Setting>;
+  // private reloadSettings: Array<Setting>;
+  private reloadSettings: Array<number | null> = [];
   private reloadRequired: boolean;
 
   protected rowsToDisplay: number;
   protected title: string;
-  protected settings: Array<Setting>;
   protected localStorageKey: string;
 
   protected uiItems: SettingsUiItem[];
@@ -130,7 +129,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
     // this.reloadSettings = this.settings.filter((s) => s?.requireReload); // TODO: reactivate reload logic
     this.uiItems.forEach((uiItem, i) => {
       let settingName = uiItem.label;
-      if (uiItem?.requireReload) {
+      if (uiItem?.requiresReload) {
         settingName += "*";
       }
 
@@ -171,17 +170,22 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
       }
     });
 
-    this.optionCursors = this.uiItems.map((setting) => {
-      const index = setting.options.findIndex((o) => {
-        return o.value === settingsManager[this.category][setting.key];
-      });
+    this.optionCursors = this.uiItems.map((uiItem) => {
+      const value = settingsManager[this.category][uiItem.key];
+      let index = 0;
+
+      if (value !== undefined) {
+        index = uiItem.options.findIndex((o) => {
+          return o.value === value;
+        });
+      }
+
       if (index < 0) {
         console.warn(
-          "Could not find index for ",
-          setting.key,
-          setting.options.map((o) => o.value),
-          settingsManager[this.category],
-          setting.key,
+          `Could not find index for ${uiItem.key}.`,
+          `\nExpected value: ${settingsManager[this.category][uiItem.key]}`,
+          `\nAvailable values:`,
+          uiItem.options,
         );
       }
       return index ?? 0;
@@ -266,16 +270,20 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
     super.show(args);
     this.updateBindings();
 
-    this.uiItems.forEach((item, s) => {
-      const index = item.options.findIndex(
-        (option) => option.value === settingsManager.settings[this.category][item.key],
-      );
+    this.uiItems.forEach((uiItem, s) => {
+      const value = settingsManager.settings[this.category][uiItem.key];
+      let index = 0;
+
+      if (value !== undefined) {
+        index = uiItem.options.findIndex((option) => option.value === value);
+      }
+
       if (index < 0) {
         console.warn(
-          "Could not find index for ",
-          item.key,
-          item.options.map((o) => o.value),
-          settingsManager.settings[this.category][item.key],
+          `Could not find index for ${uiItem.key}.`,
+          `\nExpected value: ${settingsManager[this.category][uiItem.key]}`,
+          `\nAvailable values:`,
+          uiItem.options,
         );
       }
       this.setOptionCursor(s, index > 0 ? index : 0);
@@ -307,11 +315,49 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
 
     let success = false;
 
+    /**
+     * Checks if the game is in a state where progress may be lost due to changes options with reloadRequired while at battle.
+     * @returns `false` if the warning process is triggered, `true` otherwise.
+     */
+    const progressLosing = (): boolean => {
+      if (this.reloadRequired && this.canLooseProgress()) {
+        this.showText(i18next.t("menuUiHandler:losingProgressionWarning"), undefined, () => {
+          ui.setOverlayMode(
+            Mode.CONFIRM,
+            () => {
+              NavigationManager.getInstance().reset();
+              // revert confirm mode.
+              globalScene.ui.revertMode();
+              // revert settings mode.
+              globalScene.ui.revertMode();
+            },
+            () => {
+              // if user don't want accept losing progress for reload, revert options with reloadRequired for no reload.
+              this.reloadSettings.forEach((s, i) => {
+                if (s !== null && s !== this.optionCursors[i]) {
+                  this.setOptionCursor(i, s, true);
+                }
+              });
+              globalScene.ui.revertMode();
+              this.showText("", 0);
+            },
+            false,
+            0,
+            0,
+          );
+        });
+        return false;
+      }
+      return true;
+    };
+
     if (button === Button.CANCEL) {
       success = true;
-      NavigationManager.getInstance().reset();
-      // Reverts UI to its previous state on cancel.
-      globalScene.ui.revertMode();
+      if (progressLosing()) {
+        NavigationManager.getInstance().reset();
+        // Reverts UI to its previous state on cancel.
+        globalScene.ui.revertMode();
+      }
     } else {
       const cursor = this.cursor + this.scrollCursor;
       switch (button) {
@@ -362,7 +408,9 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
           break;
         case Button.CYCLE_FORM:
         case Button.CYCLE_SHINY:
-          success = this.navigationContainer.navigate(button);
+          if (progressLosing()) {
+            success = this.navigationContainer.navigate(button);
+          }
           break;
         case Button.ACTION:
           // const setting: Setting = this.settings[cursor];
@@ -428,12 +476,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
     if (settingIndex === -1) {
       settingIndex = this.cursor + this.scrollCursor;
     }
-    let setting: SettingsUiItem | Setting;
-    if (!this.uiItems) {
-      setting = this.settings[settingIndex] as Setting;
-    } else {
-      setting = this.uiItems[settingIndex] as SettingsUiItem;
-    }
+    const uiItem = this.uiItems[settingIndex];
 
     const lastCursor = this.optionCursors[settingIndex];
 
@@ -444,7 +487,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
     } else {
       console.warn(
         "Could no determine lastValue label for ",
-        setting.key,
+        uiItem.key,
         settingIndex,
         lastCursor,
         this.optionValueLabels[settingIndex].map((l) => l.text),
@@ -460,7 +503,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
     } else {
       console.warn(
         "Could no determine newValueLabel label for ",
-        setting.key,
+        uiItem.key,
         settingIndex,
         cursor,
         this.optionValueLabels[settingIndex].map((l) => l.text),
@@ -468,28 +511,13 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
     }
 
     if (save) {
-      const saveSetting = () => {
-        if (!this.uiItems) {
-          globalScene.gameData.saveSetting(setting.key, cursor);
-          if (setting.requireReload) {
-            this.reloadRequired = true;
-          }
-        } else {
-          const value = setting.options[cursor].value;
-          if (this.category === "display" && setting.key === "language") {
-            settingsManager.eventBus.emit(SettingsManager.Event.ChangeLanguage, value);
-          } else {
-            settingsManager.update(this.category, setting.key as never, setting.options[cursor].value);
-          }
-        }
-      };
-
+      const value = uiItem.options[cursor].value;
       // For settings that ask for confirmation, display confirmation message and a Yes/No prompt before saving the setting
-      if (setting.options[cursor]?.needConfirmation) {
+      if (uiItem.options[cursor]?.needConfirmation) {
         const confirmUpdateSetting = () => {
           globalScene.ui.revertMode();
           this.showText("");
-          saveSetting();
+          this.handleSaveSetting(uiItem, value);
         };
         const cancelUpdateSetting = () => {
           globalScene.ui.revertMode();
@@ -499,12 +527,12 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
         };
 
         const confirmationMessage =
-          setting.options[cursor].confirmationMessage ?? i18next.t("settings:defaultConfirmMessage");
+          uiItem.options[cursor].confirmationMessage ?? i18next.t("settings:defaultConfirmMessage");
         globalScene.ui.showText(confirmationMessage, null, () => {
           globalScene.ui.setOverlayMode(Mode.CONFIRM, confirmUpdateSetting, cancelUpdateSetting, null, null, 1, 750);
         });
       } else {
-        saveSetting();
+        this.handleSaveSetting<typeof value>(uiItem, value);
       }
     }
 
@@ -586,5 +614,56 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
 
   updateOptionValueLabel(settingIndex: number, optionIndex: number, newLabel: string) {
     this.optionValueLabels[settingIndex][optionIndex].setText(newLabel);
+  }
+
+  private handleSaveSetting<V = any>(uiItem: SettingsUiItem, newValue: V) {
+    const { requiresReload, key, options } = uiItem;
+    console.log("handle save setting", uiItem, newValue, this.canLooseProgress());
+    if (this.category === "display" && uiItem.key === "language") {
+      settingsManager.eventBus.emit(SettingsManager.Event.ChangeLanguage, newValue);
+    } else {
+      if (requiresReload && this.canLooseProgress()) {
+        this.showConfirmReload(
+          () => {
+            settingsManager.updateAndReload(this.category, key as never, newValue);
+          },
+          () => {
+            const oldValue = settingsManager.settings[this.category][uiItem.key];
+            const oldOptionIndex = options.findIndex((option) => option.value === oldValue);
+            this.setOptionCursor(-1, Math.max(oldOptionIndex, 0), false);
+          },
+        );
+      } else {
+        settingsManager.update(this.category, key as never, newValue);
+      }
+    }
+  }
+
+  protected canLooseProgress() {
+    return globalScene.currentBattle && globalScene.currentBattle.turn > 1;
+  }
+
+  protected showConfirmReload(onConfirm: () => void, onCancel: () => void) {
+    this.showText(i18next.t("menuUiHandler:losingProgressionWarning"), undefined, () => {
+      globalScene.ui.setOverlayMode(
+        Mode.CONFIRM,
+        () => {
+          NavigationManager.getInstance().reset();
+          // revert confirm mode.
+          globalScene.ui.revertMode();
+          // revert settings mode.
+          globalScene.ui.revertMode();
+          onConfirm();
+        },
+        () => {
+          globalScene.ui.revertMode();
+          this.showText("", 0);
+          onCancel();
+        },
+        false,
+        0,
+        0,
+      );
+    });
   }
 }

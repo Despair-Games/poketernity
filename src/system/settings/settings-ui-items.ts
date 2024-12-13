@@ -154,7 +154,7 @@ export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey>[] = [
         value: 1,
       },
     ],
-    requireReload: true,
+    requiresReload: true,
 
     // TODO: select through dialog menu
   },
@@ -165,7 +165,7 @@ export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey>[] = [
       { value: UiTheme.DEFAULT, label: t("settings:default") },
       { value: UiTheme.LEGACY, label: t("settings:legacy") },
     ],
-    requireReload: true,
+    requiresReload: true,
   },
   {
     key: "windowType",
@@ -215,7 +215,7 @@ export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey>[] = [
       { value: CandyUpgradeDisplayMode.ICON, label: t("settings:icon") },
       { value: CandyUpgradeDisplayMode.ANIMATION, label: t("settings:animation") },
     ],
-    requireReload: true,
+    requiresReload: true,
   },
   {
     key: "enableMoveInfo",
@@ -252,7 +252,7 @@ export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey>[] = [
       { value: SpriteSet.CONSISTENT, label: t("settings:consistent") },
       { value: SpriteSet.MIXED, label: t("settings:mixedAnimated") },
     ],
-    requireReload: true,
+    requiresReload: true,
   },
   {
     key: "enableFusionPaletteSwaps",
@@ -294,7 +294,7 @@ export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey>[] = [
       value: Number((i * 0.1).toFixed(1)),
       label: `${(i + 1) * 10}`,
     })),
-    requireReload: false,
+    requiresReload: false,
   },
   // TODO:
 ];
@@ -335,6 +335,6 @@ export const audioSettingsUiItems: SettingsUiItem<AudioSettingsKey>[] = [
       { value: MusicPreference.CONSISTENT, label: t("settings:consistent") },
       { value: MusicPreference.MIXED, label: t("settings:mixed") },
     ],
-    requireReload: true,
+    requiresReload: true,
   },
 ];

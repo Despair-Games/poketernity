@@ -33,11 +33,14 @@ export default class SettingsDisplayUiHandler extends AbstractSettingsUiHandler 
             return {
               label: l.label,
               handler: () => {
-                i18next.changeLanguage(l.key);
-                this.setOptionCursor(0, 0);
-                this.updateOptionValueLabel(0, 0, l.label);
-                globalScene.ui.revertMode();
-                window.location.reload();
+                if (this.canLooseProgress()) {
+                  this.showConfirmReload(() => {
+                    i18next.changeLanguage(l.key);
+                    this.setOptionCursor(0, 0);
+                    this.updateOptionValueLabel(0, 0, l.label);
+                    window.location.reload();
+                  }, onCancel);
+                }
               },
             };
           }),

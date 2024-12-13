@@ -130,6 +130,18 @@ export class SettingsManager {
   }
 
   /**
+   * Exectues a window reload after updating the setting.
+   * @see The {@linkcode update} method for more information
+   * @param category The category of the setting
+   * @param key the key of the setting
+   * @param value the updated value
+   */
+  updateAndReload<C extends SettingsCategory>(category: C, key: keyof Settings[C], value: any) {
+    this.update(category, key, value);
+    window.location.reload();
+  }
+
+  /**
    * Saves settings to local storage item with the key: {@linkcode lsKey}
    */
   private saveToLocalStorage() {

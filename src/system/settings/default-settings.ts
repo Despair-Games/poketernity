@@ -44,7 +44,7 @@ export const defaultDisplaySettings: DisplaySettings = {
   showMovesetFlyout: true,
   showArenaFlyout: true,
   showTimeOfDayWidget: true,
-  timeOfDayAnimation: EaseType.NONE,
+  timeOfDayAnimation: EaseType.BOUNCE,
   spriteSet: SpriteSet.CONSISTENT,
   enableFusionPaletteSwaps: true,
   playerGender: Gender.MALE,
