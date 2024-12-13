@@ -1,4 +1,4 @@
-import ErrorInterceptor from "#test/testUtils/errorInterceptor";
+import { ErrorInterceptor } from "#test/testUtils/errorInterceptor";
 import UI, { Mode } from "#app/ui/ui";
 import { Phase } from "#app/phase";
 import { AttemptRunPhase } from "#app/phases/attempt-run-phase";
