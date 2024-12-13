@@ -1,4 +1,4 @@
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import type { WeatherType } from "#enums/weather-type";
 import { AbAttr } from "./ab-attr";
 

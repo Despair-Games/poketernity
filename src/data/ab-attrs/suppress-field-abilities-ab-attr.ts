@@ -1,5 +1,5 @@
 import { type Ability } from "#app/data/ability";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
 import { AbAttr } from "./ab-attr";
 import { UnsuppressableAbilityAbAttr } from "./unsuppressable-ability-ab-attr";

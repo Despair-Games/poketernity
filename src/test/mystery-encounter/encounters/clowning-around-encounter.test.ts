@@ -14,7 +14,7 @@ import {
 } from "#test/mystery-encounter/encounter-test-utils";
 import { Moves } from "#enums/moves";
 import type BattleScene from "#app/battle-scene";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon";
 import { Mode } from "#app/ui/ui";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";

@@ -1,5 +1,5 @@
 import type { Weather } from "#app/data/weather";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
 import { AbAttr } from "./ab-attr";
 

@@ -3,7 +3,7 @@ import { PreventBypassSpeedChanceAbAttr } from "#app/data/ab-attrs/prevent-bypas
 import { allMoves, MoveHeaderAttr } from "#app/data/move";
 import { Abilities } from "#app/enums/abilities";
 import { Stat } from "#app/enums/stat";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon";
 import { BypassSpeedChanceModifier } from "#app/modifier/modifier";
 import { Command } from "#app/ui/command-ui-handler";

@@ -1,5 +1,5 @@
 import { variantColorCache } from "#app/data/variant";
-import Pokemon from "../field/pokemon";
+import { Pokemon } from "../field/pokemon";
 import Trainer from "../field/trainer";
 import FieldSpritePipeline from "./field-sprite";
 import { rgbHexToRgba } from "#app/utils";

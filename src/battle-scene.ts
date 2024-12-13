@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import UI from "#app/ui/ui";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
 import type { PokemonSpeciesFilter } from "#app/data/pokemon-species";
 import type PokemonSpecies from "#app/data/pokemon-species";

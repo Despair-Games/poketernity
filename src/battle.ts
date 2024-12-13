@@ -17,7 +17,7 @@ import type { PokeballType } from "#enums/pokeball";
 import { trainerConfigs } from "#app/data/trainer-config";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import type { EnemyPokemon, PlayerPokemon, QueuedMove } from "#app/field/pokemon";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import type { Moves } from "#enums/moves";
 import { PlayerGender } from "#enums/player-gender";

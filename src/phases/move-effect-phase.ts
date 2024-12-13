@@ -44,7 +44,7 @@ import {
 } from "#app/data/move";
 import { SpeciesFormChangePostMoveTrigger } from "#app/data/pokemon-forms";
 import type { TypeDamageMultiplier } from "#app/data/type";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import type { DamageResult, PokemonMove, TurnMove } from "#app/field/pokemon";
 import { HitResult, MoveResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";

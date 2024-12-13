@@ -1,4 +1,4 @@
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import { PostSummonAbAttr } from "./post-summon-ab-attr";
 

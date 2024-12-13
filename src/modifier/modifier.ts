@@ -10,7 +10,7 @@ import {
   SpeciesFormChangeTeraTrigger,
 } from "#app/data/pokemon-forms";
 import { getStatusEffectHealText } from "#app/data/status-effect";
-import Pokemon, { type PlayerPokemon } from "#app/field/pokemon";
+import { Pokemon, type PlayerPokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import Overrides from "#app/overrides";
 import { EvolutionPhase } from "#app/phases/evolution-phase";

@@ -4,7 +4,7 @@ import type { SpeciesFormChange } from "#app/data/pokemon-forms";
 import { getSpeciesFormChangeMessage } from "#app/data/pokemon-forms";
 import { getTypeRgb } from "#app/data/type";
 import { BattlerTagType } from "#app/enums/battler-tag-type";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { EnemyPokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlePhase } from "./battle-phase";

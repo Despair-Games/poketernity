@@ -1,7 +1,7 @@
 import type { OptionTextDisplay } from "#app/data/mystery-encounters/mystery-encounter-dialogue";
 import type { Moves } from "#app/enums/moves";
 import type { PlayerPokemon } from "#app/field/pokemon";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { Type } from "#enums/type";
 import {

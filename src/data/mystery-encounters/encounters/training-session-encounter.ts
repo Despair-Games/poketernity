@@ -10,7 +10,7 @@ import {
 import { getNatureName } from "#app/data/nature";
 import { speciesStarterCosts } from "#app/data/balance/starters";
 import type { PlayerPokemon } from "#app/field/pokemon";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { AbilityAttr } from "#app/system/game-data";
 import PokemonData from "#app/system/pokemon-data";

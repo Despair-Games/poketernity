@@ -2,7 +2,7 @@ import BattleScene from "#app/battle-scene";
 import * as battleScene from "#app/battle-scene";
 import { SESSION_ID_COOKIE } from "#app/constants";
 import { MoveAnim } from "#app/data/battle-anims";
-import Pokemon from "#app/field/pokemon";
+import { Pokemon } from "#app/field/pokemon";
 import { setCookie } from "#app/utils";
 import { blobToString } from "#test/utils/gameManagerUtils";
 import { MockClock } from "#test/utils/mocks/mockClock";

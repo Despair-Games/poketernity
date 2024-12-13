@@ -11,7 +11,7 @@ import { SummaryUiMode } from "#app/ui/summary-ui-handler";
 import { Mode } from "#app/ui/ui";
 import i18next from "i18next";
 import { PlayerPartyMemberPokemonPhase } from "#app/phases/player-party-member-pokemon-phase";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 
 export enum LearnMoveType {

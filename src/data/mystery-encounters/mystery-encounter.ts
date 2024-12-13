@@ -1,6 +1,6 @@
 import type { EnemyPartyConfig } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import type { PlayerPokemon, PokemonMove } from "#app/field/pokemon";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import type { MysteryEncounterSpriteConfig } from "#app/field/mystery-encounter-intro";
 import MysteryEncounterIntroVisuals from "#app/field/mystery-encounter-intro";

@@ -5,7 +5,7 @@ import { getGenderColor, getGenderShadowColor, getGenderSymbol } from "#app/data
 import { Gender } from "#enums/gender";
 import { getNatureName } from "../data/nature";
 import { Type } from "#enums/type";
-import type Pokemon from "../field/pokemon";
+import type { Pokemon } from "../field/pokemon";
 import i18next from "i18next";
 import type { DexEntry, StarterDataEntry } from "../system/game-data";
 import { DexAttr } from "../system/game-data";
