@@ -281,6 +281,25 @@ describe("Moves - Dragon Darts", () => {
     expect(enemyPokemon[1].hp).toBeGreaterThan(enemyStartingHp[1]);
   });
 
+  it("should strike the target's ally on the second hit when the target faints to the first", async () => {
+    game.override.enemySpecies(Species.MAGIKARP).enemyLevel(1);
+
+    await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
+
+    const player = game.scene.getPlayerField()[0];
+    const enemyPokemon = game.scene.getEnemyField();
+
+    game.move.select(Moves.DRAGON_DARTS, 0, BattlerIndex.ENEMY);
+    game.move.select(Moves.SPLASH, 1);
+
+    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+
+    await game.phaseInterceptor.to("MoveEndPhase");
+
+    enemyPokemon.forEach((p) => expect(p.isFainted()).toBeTruthy());
+    expect(player.turnData.hitCount).toBe(2);
+  });
+
   // TODO: rework Pressure and implement this interaction
   it.todo("should deduct 1 extra PP for each targeted enemy with Pressure");
 

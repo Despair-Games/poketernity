@@ -543,6 +543,18 @@ export class MoveEffectPhase extends PokemonPhase {
 
   public override end(): void {
     const user = this.getUserPokemon();
+
+    /**
+     * If the move has smart targeting (e.g. Dragon Darts),
+     * and the original target fainted due to the first hit,
+     * redirect the next strike to the original target's ally.
+     */
+    if (this.canApplySmartTargeting()) {
+      const ogTarget = globalScene.getField().find((p) => p.getBattlerIndex() === this.targets[0]);
+      if (ogTarget?.isFainted() && ogTarget?.getAlly()?.isActive(true)) {
+        this.targets = [ogTarget?.getAlly().getBattlerIndex()];
+      }
+    }
     /**
      * If this phase isn't for the invoked move's last strike,
      * unshift another MoveEffectPhase for the next strike.
