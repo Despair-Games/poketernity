@@ -128,7 +128,18 @@ export const generalSettingsUiItems: SettingsUiItem<GeneralSettingsKey>[] = [
     key: "enableTouchControls",
     label: t("settings:touchControls"),
     options: useBoolOptions("settings:auto", "settings:disabled"),
-    // TODO: need confirmation here!
+    touchscreenOnly: true,
+  },
+  {
+    key: "moveTouchControls",
+    label: i18next.t("settings:moveTouchControls"),
+    options: [
+      {
+        value: "Configure",
+        label: i18next.t("settings:change"),
+      },
+    ],
+    touchscreenOnly: true,
   },
   {
     key: "enableVibration",

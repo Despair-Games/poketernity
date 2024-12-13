@@ -1,6 +1,6 @@
 import type { Settings, SettingsCategory } from "#app/@types/Settings";
 import { SETTINGS_LS_KEY } from "#app/constants";
-import { isNullOrUndefined } from "#app/utils";
+import { hasTouchscreen, isNullOrUndefined } from "#app/utils";
 import { defaultSettings } from "./default-settings";
 
 //#region Types
@@ -17,13 +17,9 @@ interface SettingsManagerInit {
  */
 export class SettingsManager {
   static readonly Event = {
-    Initialized: "settings/initialized",
-    InitFailed: "settings/init/failed",
     Updated: "settings/updated",
     UpdateFailed: "settings/update/failed",
-    Loaded: "settings/loaded",
     Saved: "settings/saved",
-    LoadFailed: "settings/load/failed",
     ChangeLanguage: "settings/language/change",
   };
 
@@ -44,10 +40,9 @@ export class SettingsManager {
 
     try {
       this.loadFromLocalStorage();
-      this.eventBus.emit(SettingsManager.Event.Initialized, this._settings, this.lsKey);
+      this.initTouchControls();
     } catch (err) {
       console.error("Settings manager init failed::", err);
-      this.eventBus.emit(SettingsManager.Event.InitFailed, { err }, this.lsKey);
     }
   }
 
@@ -171,11 +166,20 @@ export class SettingsManager {
         if (display) {
           this._settings.display = { ...this._settings.display, ...display };
         }
-
-        this.eventBus.emit(SettingsManager.Event.Loaded, this._settings, this.lsKey);
       } catch (err) {
         console.error("Error loading settings from local storage:", err);
-        this.eventBus.emit(SettingsManager.Event.LoadFailed, { err, raw: lsSettingsStr }, this.lsKey);
+      }
+    }
+  }
+
+  /**
+   * Helper method to make sure that touch controls are enabled initially if the user has a touchscreen
+   */
+  private initTouchControls() {
+    if (hasTouchscreen() && this.general.enableTouchControls) {
+      const touchControls = document.getElementById("touchControls");
+      if (touchControls) {
+        touchControls.classList.add("visible");
       }
     }
   }

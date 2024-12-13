@@ -27,7 +27,7 @@ export const defaultGeneralSettings: GeneralSettings = {
   enableRetries: false,
   hideIvScanner: false,
   enableTutorials: import.meta.env.VITE_BYPASS_TUTORIAL === "1",
-  enableTouchControls: false,
+  enableTouchControls: true, // auto
   enableVibration: false,
 };
 

@@ -82,15 +82,14 @@ export interface SettingsUiItem<K = string> {
   options: SettingUiItemOption[];
   /** Indicates if a settings change requires a reload */
   requiresReload?: boolean;
-  /** @deprecated */
-  activatable?: boolean;
-  /** @deprecated Hidden items don't exist anymore. */
-  isHidden?: () => boolean;
+  /** Wheter the setting is only available on devices supporting touchscreen. */
+  touchscreenOnly?: boolean;
 }
 
 export type SettingsCategory = keyof Settings;
 
-export type GeneralSettingsKey = keyof GeneralSettings;
+/** All keys for the general settings + `"moveTouchControls"` */
+export type GeneralSettingsKey = keyof GeneralSettings | "moveTouchControls";
 
 /** All keys for the display settings + `"language"` */
 export type DisplaySettingsKey = keyof DisplaySettings | "language";

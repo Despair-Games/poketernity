@@ -8,7 +8,7 @@ import NavigationMenu, { NavigationManager } from "#app/ui/settings/navigationMe
 import { TextStyle, addTextObject } from "#app/ui/text";
 import { Mode } from "#app/ui/ui";
 import { addWindow } from "#app/ui/ui-theme";
-import { capitalize } from "#app/utils";
+import { capitalize, hasTouchscreen } from "#app/utils";
 import { Button } from "#enums/buttons";
 import i18next from "i18next";
 
@@ -49,7 +49,13 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
   constructor(category: SettingsCategory, uiItems: SettingsUiItem[]) {
     super(null);
     this.category = category;
-    this.uiItems = uiItems;
+
+    if (!hasTouchscreen()) {
+      this.uiItems = uiItems.filter((uiItem) => !uiItem.touchscreenOnly);
+    } else {
+      this.uiItems = uiItems;
+    }
+
     this.category = category;
 
     this.reloadRequired = false;

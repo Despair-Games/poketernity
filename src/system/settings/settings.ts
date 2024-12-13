@@ -1,4 +1,4 @@
-import { hasTouchscreen } from "#app/touch-controls";
+import { hasTouchscreen } from "#app/utils";
 import i18next from "i18next";
 
 const VOLUME_OPTIONS: SettingOption[] = new Array(11).fill(null).map((_, i) =>
