@@ -164,7 +164,7 @@ export const bgmLoopPoint = {
   /** SWSH Trainer Battle */
   battle_macro_grunt: 11.56,
   /** SV Team Star Battle */
-  battle_star_grunt: 0.362,
+  battle_star_grunt: 133.362,
   /** BDSP Team Galactic Admin*/
   battle_galactic_admin: 11.997,
   /** SM Team Skull Admin*/
@@ -178,7 +178,7 @@ export const bgmLoopPoint = {
   /** ORAS Archie & Maxie Battle */
   battle_aqua_magma_boss: 14.847,
   /** BDSP Cyrus Battle */
-  battle_galactic_boss: 0.962,
+  battle_galactic_boss: 106.962,
   /** B2W2 Ghetsis Battle */
   battle_plasma_boss: 25.624,
   /** XY Lysandre Battle */
