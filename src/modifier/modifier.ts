@@ -2096,7 +2096,7 @@ export class PokemonInstantReviveModifier extends PokemonHeldItemModifier {
     pokemon.resetStatus(true, false, true);
 
     // Reapply Commander on the Pokemon's side of the field, if applicable
-    const field = pokemon.isPlayer() ? globalScene.getPlayerField() : globalScene.getEnemyField();
+    const field = pokemon.getField();
     field.forEach((p) => applyAbAttrs(CommanderAbAttr, p, null, false));
     return true;
   }

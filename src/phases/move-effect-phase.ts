@@ -12,7 +12,7 @@ import {
   applyPostDefendAbAttrs,
   applyPreAttackAbAttrs,
 } from "#app/data/ability";
-import { ArenaTagSide, ConditionalProtectTag } from "#app/data/arena-tag";
+import { ConditionalProtectTag } from "#app/data/arena-tag";
 import { MoveAnim } from "#app/data/battle-anims";
 import {
   BattlerTagLapseType,
@@ -87,15 +87,6 @@ export class MoveEffectPhase extends PokemonPhase {
   constructor(battlerIndex: BattlerIndex, targets: BattlerIndex[], move: PokemonMove) {
     super(battlerIndex);
     this.move = move;
-    /**
-     * In double battles, if the right Pokemon selects a spread move and the left Pokemon dies
-     * with no party members available to switch in, then the right Pokemon takes the index
-     * of the left Pokemon and gets hit unless this is checked.
-     */
-    if (targets.includes(battlerIndex) && this.move.getMove().moveTarget === MoveTarget.ALL_NEAR_OTHERS) {
-      const i = targets.indexOf(battlerIndex);
-      targets.splice(i, i + 1);
-    }
     this.targets = targets;
     this.hitChecks = Array(this.targets.length).fill([HitCheckResult.PENDING, 0]);
   }
@@ -640,7 +631,7 @@ export class MoveEffectPhase extends PokemonPhase {
 
     // Check if the target is protected by any effect
     /** The {@linkcode ArenaTagSide} to which the target belongs */
-    const targetSide = target.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
+    const targetSide = target.getArenaTagSide();
     /** Has the invoked move been cancelled by conditional protection (e.g Quick Guard)? */
     const hasConditionalProtectApplied = new BooleanHolder(false);
     /** Does the applied conditional protection bypass Protect-ignoring effects? */

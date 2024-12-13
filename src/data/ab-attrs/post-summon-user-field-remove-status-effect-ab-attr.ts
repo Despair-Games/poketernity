@@ -30,15 +30,14 @@ export class PostSummonUserFieldRemoveStatusEffectAbAttr extends PostSummonAbAtt
    * @returns A boolean or a promise that resolves to a boolean indicating the result of the ability application.
    */
   override applyPostSummon(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
-    const party = pokemon.isPlayer() ? globalScene.getPlayerField() : globalScene.getEnemyField();
-    const allowedParty = party.filter((p) => p.isAllowedInBattle());
+    const allowedPokemon = pokemon.getField().filter((p) => p.isAllowedInBattle());
 
-    if (allowedParty.length < 1) {
+    if (allowedPokemon.length < 1) {
       return false;
     }
 
     if (!simulated) {
-      for (const pokemon of allowedParty) {
+      for (const pokemon of allowedPokemon) {
         if (pokemon.status && this.statusEffect.includes(pokemon.status.effect)) {
           globalScene.queueMessage(getStatusEffectHealText(pokemon.status.effect, getPokemonNameWithAffix(pokemon)));
           pokemon.resetStatus(false);

@@ -922,8 +922,7 @@ export class Move implements Localizable {
       aura.applyPreAttack(source, null, simulated, target, this, [power]);
     }
 
-    const alliedField: Pokemon[] =
-      source instanceof PlayerPokemon ? globalScene.getPlayerField() : globalScene.getEnemyField();
+    const alliedField: Pokemon[] = source.getField();
     alliedField.forEach((p) =>
       applyPreAttackAbAttrs(UserFieldMoveTypePowerBoostAbAttr, p, target, this, simulated, power),
     );
@@ -1364,7 +1363,7 @@ export class MoveEffectAttr extends MoveAttr {
     );
 
     if ((!move.hasAttr(FlinchAttr) || moveChance.value <= move.chance) && !move.hasAttr(SecretPowerAttr)) {
-      const userSide = user.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
+      const userSide = user.getArenaTagSide();
       globalScene.arena.applyTagsForSide(ArenaTagType.WATER_FIRE_PLEDGE, userSide, false, moveChance);
     }
 
@@ -1980,7 +1979,7 @@ export class PartyStatusCureAttr extends MoveEffectAttr {
     if (!this.canApply(user, target, move, args)) {
       return false;
     }
-    const partyPokemon = user.isPlayer() ? globalScene.getPlayerParty() : globalScene.getEnemyParty();
+    const partyPokemon = user.getParty();
     partyPokemon.forEach((p) => this.cureStatus(p, user.id));
 
     if (this.message) {
@@ -2442,7 +2441,7 @@ export class MultiHitAttr extends MoveAttr {
       case MultiHitType._10:
         return 10;
       case MultiHitType.BEAT_UP:
-        const party = user.isPlayer() ? globalScene.getPlayerParty() : globalScene.getEnemyParty();
+        const party = user.getParty();
         // No status means the ally pokemon can contribute to Beat Up
         return party.reduce((total, pokemon) => {
           return (
@@ -3131,7 +3130,7 @@ export class DelayedAttackAttr extends OverrideMoveEffectAttr {
           .replace("{USER}", getPokemonNameWithAffix(user)),
       );
       user.pushMoveHistory({ move: move.id, targets: [target.getBattlerIndex()], result: MoveResult.OTHER });
-      const side = target.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
+      const side = target.getArenaTagSide();
       globalScene.arena.addTag(this.tagType, 3, move.id, user.id, side, false, target.getBattlerIndex());
     } else {
       globalScene.queueMessage(
@@ -3837,7 +3836,7 @@ export class MovePowerMultiplierAttr extends VariablePowerAttr {
  * @returns The base power of the Beat Up hit.
  */
 const beatUpFunc = (user: Pokemon, allyIndex: number): number => {
-  const party = user.isPlayer() ? globalScene.getPlayerParty() : globalScene.getEnemyParty();
+  const party = user.getParty();
 
   for (let i = allyIndex; i < party.length; i++) {
     const pokemon = party[i];
@@ -3864,7 +3863,7 @@ export class BeatUpAttr extends VariablePowerAttr {
   override apply(user: Pokemon, _target: Pokemon, _move: Move, args: any[]): boolean {
     const power = args[0] as NumberHolder;
 
-    const party = user.isPlayer() ? globalScene.getPlayerParty() : globalScene.getEnemyParty();
+    const party = user.getParty();
     const allyCount = party.filter((pokemon) => {
       return pokemon.id === user.id || !pokemon.status?.effect;
     }).length;
@@ -5999,7 +5998,7 @@ export class AddArenaTagAttr extends MoveEffectAttr {
       (move.chance < 0 || move.chance === 100 || user.randSeedInt(100) < move.chance)
       && user.getLastXMoves(1)[0]?.result === MoveResult.SUCCESS
     ) {
-      const side = (this.selfSideTarget ? user : target).isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
+      const side = (this.selfSideTarget ? user : target).getArenaTagSide();
       globalScene.arena.addTag(this.tagType, this.turnCount, move.id, user.id, side);
       return true;
     }
@@ -6009,8 +6008,7 @@ export class AddArenaTagAttr extends MoveEffectAttr {
 
   override getCondition(): MoveConditionFunc | null {
     return this.failOnOverlap
-      ? (_user, target, _move) =>
-          !globalScene.arena.getTagOnSide(this.tagType, target.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY)
+      ? (_user, target, _move) => !globalScene.arena.getTagOnSide(this.tagType, target.getArenaTagSide())
       : null;
   }
 }
@@ -6036,7 +6034,7 @@ export class RemoveArenaTagsAttr extends MoveEffectAttr {
       return false;
     }
 
-    const side = (this.selfSideTarget ? user : target).isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
+    const side = (this.selfSideTarget ? user : target).getArenaTagSide();
 
     for (const tagType of this.tagTypes) {
       globalScene.arena.removeTagOnSide(tagType, side);
@@ -6049,7 +6047,7 @@ export class RemoveArenaTagsAttr extends MoveEffectAttr {
 export class AddArenaTrapTagAttr extends AddArenaTagAttr {
   override getCondition(): MoveConditionFunc {
     return (user, target, _move) => {
-      const side = (this.selfSideTarget ? user : target).isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
+      const side = (this.selfSideTarget ? user : target).getArenaTagSide();
       const tag = globalScene.arena.getTagOnSide(this.tagType, side) as ArenaTrapTag;
       if (!tag) {
         return true;
@@ -6073,7 +6071,7 @@ export class AddArenaTrapTagHitAttr extends AddArenaTagAttr {
    */
   override apply(user: Pokemon, target: Pokemon, move: Move, _args: any[]): boolean {
     const moveChance = this.getMoveChance(user, target, move, this.selfTarget, true);
-    const side = (this.selfSideTarget ? user : target).isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
+    const side = (this.selfSideTarget ? user : target).getArenaTagSide();
     const tag = globalScene.arena.getTagOnSide(this.tagType, side) as ArenaTrapTag;
     if (
       (moveChance < 0 || moveChance === 100 || user.randSeedInt(100) < moveChance)
@@ -6113,22 +6111,11 @@ export class RemoveArenaTrapAttr extends MoveEffectAttr {
       globalScene.arena.removeTagOnSide(ArenaTagType.STEALTH_ROCK, ArenaTagSide.ENEMY);
       globalScene.arena.removeTagOnSide(ArenaTagType.STICKY_WEB, ArenaTagSide.ENEMY);
     } else {
-      globalScene.arena.removeTagOnSide(
-        ArenaTagType.SPIKES,
-        target.isPlayer() ? ArenaTagSide.ENEMY : ArenaTagSide.PLAYER,
-      );
-      globalScene.arena.removeTagOnSide(
-        ArenaTagType.TOXIC_SPIKES,
-        target.isPlayer() ? ArenaTagSide.ENEMY : ArenaTagSide.PLAYER,
-      );
-      globalScene.arena.removeTagOnSide(
-        ArenaTagType.STEALTH_ROCK,
-        target.isPlayer() ? ArenaTagSide.ENEMY : ArenaTagSide.PLAYER,
-      );
-      globalScene.arena.removeTagOnSide(
-        ArenaTagType.STICKY_WEB,
-        target.isPlayer() ? ArenaTagSide.ENEMY : ArenaTagSide.PLAYER,
-      );
+      const opposingSide = target.getOpposingArenaTagSide();
+      globalScene.arena.removeTagOnSide(ArenaTagType.SPIKES, opposingSide);
+      globalScene.arena.removeTagOnSide(ArenaTagType.TOXIC_SPIKES, opposingSide);
+      globalScene.arena.removeTagOnSide(ArenaTagType.STEALTH_ROCK, opposingSide);
+      globalScene.arena.removeTagOnSide(ArenaTagType.STICKY_WEB, opposingSide);
     }
 
     return true;
@@ -6157,18 +6144,10 @@ export class RemoveScreensAttr extends MoveEffectAttr {
       globalScene.arena.removeTagOnSide(ArenaTagType.LIGHT_SCREEN, ArenaTagSide.ENEMY);
       globalScene.arena.removeTagOnSide(ArenaTagType.AURORA_VEIL, ArenaTagSide.ENEMY);
     } else {
-      globalScene.arena.removeTagOnSide(
-        ArenaTagType.REFLECT,
-        target.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY,
-      );
-      globalScene.arena.removeTagOnSide(
-        ArenaTagType.LIGHT_SCREEN,
-        target.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY,
-      );
-      globalScene.arena.removeTagOnSide(
-        ArenaTagType.AURORA_VEIL,
-        target.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY,
-      );
+      const side = target.getArenaTagSide();
+      globalScene.arena.removeTagOnSide(ArenaTagType.REFLECT, side);
+      globalScene.arena.removeTagOnSide(ArenaTagType.LIGHT_SCREEN, side);
+      globalScene.arena.removeTagOnSide(ArenaTagType.AURORA_VEIL, side);
     }
 
     return true;
@@ -8092,7 +8071,7 @@ const failIfLastCondition: MoveConditionFunc = (_user: Pokemon, _target: Pokemon
   globalScene.phaseQueue.find((phase) => phase instanceof MovePhase) !== undefined;
 
 const failIfLastInPartyCondition: MoveConditionFunc = (user: Pokemon, _target: Pokemon, _move: Move) => {
-  const party: Pokemon[] = user.isPlayer() ? globalScene.getPlayerParty() : globalScene.getEnemyParty();
+  const party: Pokemon[] = user.getParty();
   return party.some((pokemon) => pokemon.isActive() && !pokemon.isOnField());
 };
 

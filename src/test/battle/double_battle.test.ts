@@ -1,8 +1,9 @@
+import { BattlerIndex } from "#app/battle";
 import { Status } from "#app/data/status-effect";
-import { Abilities } from "#enums/abilities";
 import { GameModes, getGameMode } from "#app/game-mode";
 import { BattleEndPhase } from "#app/phases/battle-end-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
+import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
@@ -28,13 +29,19 @@ describe("Double Battles", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
+    game.override
+      .battleType("double")
+      .moveset(Moves.SPLASH)
+      .enemyMoveset(Moves.SPLASH)
+      .enemySpecies(Species.MAGIKARP)
+      .ability(Abilities.BALL_FETCH)
+      .enemyAbility(Abilities.BALL_FETCH);
   });
 
   // double-battle player's pokemon both fainted in same round, then revive one, and next double battle summons two player's pokemon successfully.
   // (There were bugs that either only summon one when can summon two, player stuck in switchPhase etc)
   it("3v2 edge case: player summons 2 pokemon on the next battle after being fainted and revived", async () => {
-    game.override.battleType("double").enemyMoveset(Moves.SPLASH).moveset(Moves.SPLASH);
-    await game.startBattle([Species.BULBASAUR, Species.CHARIZARD, Species.SQUIRTLE]);
+    await game.classicMode.startBattle([Species.BULBASAUR, Species.CHARIZARD, Species.SQUIRTLE]);
 
     game.move.select(Moves.SPLASH);
     game.move.select(Moves.SPLASH, 1);
@@ -66,11 +73,7 @@ describe("Double Battles", () => {
       return rngSweepProgress * (max - min) + min;
     });
 
-    game.override
-      .enemyMoveset(Moves.SPLASH)
-      .moveset(Moves.SPLASH)
-      .enemyAbility(Abilities.BALL_FETCH)
-      .ability(Abilities.BALL_FETCH);
+    game.override.battleType(null);
 
     // Play through endless, waves 1 to 9, counting number of double battles from waves 2 to 9
     await game.classicMode.startBattle([Species.BULBASAUR]);
@@ -92,5 +95,18 @@ describe("Double Battles", () => {
 
     expect(doubleCount).toBe(1);
     expect(singleCount).toBe(DOUBLE_CHANCE - 1);
+  });
+
+  it("shouldn't hit itself if ally dies before move", async () => {
+    await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
+
+    const [, milotic] = game.scene.getPlayerField();
+
+    game.move.select(Moves.MEMENTO, 0, BattlerIndex.ENEMY);
+    game.move.select(Moves.SURF, 1);
+    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2]);
+    await game.toNextTurn();
+
+    expect(milotic.isFullHp()).toBe(true);
   });
 });
