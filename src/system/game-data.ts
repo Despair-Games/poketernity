@@ -799,7 +799,7 @@ export class GameData {
     if (lsMappingStr) {
       // Check if 'mappingConfigs' exists in localStorage
       try {
-        mappingConfigs = JSON.parse(lsMappingStr); // TODO: is this bang correct?
+        mappingConfigs = JSON.parse(lsMappingStr);
       } catch (err) {
         console.error("Error parsing mapping configs from localStorage:", err);
       }

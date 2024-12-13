@@ -40,7 +40,6 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
 
   protected rowsToDisplay: number;
   protected title: string;
-  protected localStorageKey: string;
 
   protected uiItems: SettingsUiItem[];
   protected category: SettingsCategory;
@@ -193,7 +192,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
           uiItem.options,
         );
       }
-      return index ?? 0;
+      return Math.max(index, 0);
     });
 
     this.scrollBar = new ScrollBar(
@@ -394,20 +393,6 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
   }
 
   /**
-   * Activate the specified setting if it is activatable.
-   * @param setting The setting to activate.
-   * @returns Whether the setting was successfully activated.
-   */
-  // activateSetting(setting: Setting): boolean {
-  //   switch (setting.key) {
-  //     case SettingKeys.Move_Touch_Controls:
-  //       globalScene.inputController.moveTouchControlsHandler.enableConfigurationMode(this.getUi(), globalScene);
-  //       return true;
-  //   }
-  //   return false;
-  // }
-
-  /**
    * Set the cursor to the specified position.
    *
    * @param cursor - The cursor position to set.
@@ -576,7 +561,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
     super.showText(text, delay, callback, callbackDelay, prompt, promptDelay);
   }
 
-  updateOptionValueLabel(settingIndex: number, optionIndex: number, newLabel: string) {
+  protected updateOptionValueLabel(settingIndex: number, optionIndex: number, newLabel: string) {
     this.optionValueLabels[settingIndex][optionIndex].setText(newLabel);
   }
 
@@ -593,7 +578,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
       });
     } else {
       if (requiresReload) {
-        if (this.canLooseProgress()) {
+        if (this.canLoseProgress()) {
           this.showConfirmReload(
             () => {
               settingsManager.updateAndReload(this.category, key as never, newValue);
@@ -613,7 +598,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
     }
   }
 
-  protected canLooseProgress() {
+  protected canLoseProgress() {
     return globalScene.currentBattle && globalScene.currentBattle.turn > 1;
   }
 

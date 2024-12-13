@@ -10,8 +10,8 @@ import type { HpBarSpeed } from "#app/enums/hp-bar-speed";
 import type { MoneyFormat } from "#app/enums/money-format";
 import type { MusicPreference } from "#app/enums/music-preference";
 import type { ShopCursorTarget } from "#app/enums/shop-cursor-target";
-import type { SpriteSet } from "#app/enums/sprite-set";
-import type { UiTheme } from "#app/enums/ui-theme";
+import type { SpriteSet } from "#enums/sprite-set";
+import type { UiTheme } from "#enums/ui-theme";
 import type { Gender } from "#enums/gender";
 import type { UiWindowType } from "#enums/ui-window-type";
 

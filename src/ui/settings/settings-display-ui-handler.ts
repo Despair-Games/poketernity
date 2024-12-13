@@ -1,5 +1,5 @@
 import type { SupportedLanguage } from "#app/@types/Language";
-import { LANGUAGE_MAX_OPTIONS, SETTINGS_LS_KEY } from "#app/constants";
+import { LANGUAGE_MAX_OPTIONS } from "#app/constants";
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import { displaySettingUiItems } from "#app/system/settings/settings-ui-items";
@@ -18,7 +18,6 @@ export default class SettingsDisplayUiHandler extends AbstractSettingsUiHandler 
    */
   constructor() {
     super("display", displaySettingUiItems);
-    this.localStorageKey = SETTINGS_LS_KEY;
 
     eventBus.on("language/change", () => {
       globalScene.ui.setOverlayMode(Mode.OPTION_SELECT, {
@@ -27,7 +26,7 @@ export default class SettingsDisplayUiHandler extends AbstractSettingsUiHandler 
             return {
               label: l.label,
               handler: () => {
-                if (this.canLooseProgress()) {
+                if (this.canLoseProgress()) {
                   this.showConfirmReload(
                     () => this.handleChangeLanguage(l),
                     () => this.handleCancelLanguageChange(),

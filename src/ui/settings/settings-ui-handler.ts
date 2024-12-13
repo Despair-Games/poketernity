@@ -1,4 +1,3 @@
-import { SETTINGS_LS_KEY } from "#app/constants";
 import { generalSettingsUiItems } from "#app/system/settings/settings-ui-items";
 import { hasTouchscreen, isLandscapeMode } from "#app/utils";
 import { t } from "i18next";
@@ -13,7 +12,6 @@ export default class SettingsUiHandler extends AbstractSettingsUiHandler {
    */
   constructor() {
     super("general", generalSettingsUiItems);
-    this.localStorageKey = SETTINGS_LS_KEY;
 
     window.addEventListener("resize", () => {
       this.updateMoveTouchControlsSettingsLabel();
