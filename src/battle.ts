@@ -255,7 +255,7 @@ export default class Battle {
         }
         return "battle_final_encounter";
       }
-      if (pokemon.species.category !== SpeciesCategories.NONE) {
+      if (pokemon.species.category !== SpeciesCategories.COMMON) {
         if (globalScene.musicPreference === MusicPreference.CONSISTENT) {
           switch (pokemon.species.speciesId) {
             case Species.REGIROCK:

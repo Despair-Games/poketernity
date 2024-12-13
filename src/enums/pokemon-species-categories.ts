@@ -1,5 +1,5 @@
 export enum SpeciesCategories {
-  NONE,
+  COMMON,
   ULTRA_BEAST,
   PARADOX,
   SUBLEGENDARY,

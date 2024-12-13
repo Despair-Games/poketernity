@@ -159,7 +159,7 @@ export class Arena {
 
       ret = getPokemonSpecies(species!);
 
-      if (ret.category !== SpeciesCategories.NONE) {
+      if (ret.category !== SpeciesCategories.COMMON) {
         switch (true) {
           case ret.baseTotal >= 720:
             regen = level < 90;

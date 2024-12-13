@@ -204,7 +204,7 @@ export class GameMode implements GameModeConfig {
     if (this.isDaily && this.isWaveFinal(waveIndex)) {
       const allFinalBossSpecies = allSpecies.filter(
         (s) =>
-          s.category !== SpeciesCategories.NONE
+          s.category !== SpeciesCategories.COMMON
           && s.baseTotal >= 600
           && s.speciesId !== Species.ETERNATUS
           && s.speciesId !== Species.ARCEUS,
