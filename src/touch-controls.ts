@@ -187,15 +187,6 @@ export default class TouchControl {
 }
 
 /**
- * Check if the device has a touchscreen.
- *
- * @returns `true` if the device has a touchscreen, otherwise `false`.
- */
-export function hasTouchscreen(): boolean {
-  return window.matchMedia("(hover: none), (pointer: coarse)").matches;
-}
-
-/**
  * Check if the device is a mobile device.
  *
  * @returns `true` if the device is a mobile device, otherwise `false`.

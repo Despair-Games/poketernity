@@ -654,3 +654,12 @@ export function isSupportedLanguage(key: string) {
 export function capitalize(str: string) {
   return String(str).charAt(0).toUpperCase() + String(str).slice(1);
 }
+
+/**
+ * Check if the device has a touchscreen.
+ *
+ * @returns `true` if the device has a touchscreen, otherwise `false`.
+ */
+export function hasTouchscreen(): boolean {
+  return window.matchMedia("(hover: none), (pointer: coarse)").matches;
+}
