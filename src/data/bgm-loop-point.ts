@@ -34,7 +34,7 @@ export const bgmLoopPoint = {
   /** SM Elite Four Battle */
   battle_alola_elite: 19.212,
   /** SWSH League Tournament Battle */
-  battle_galar_elite: 0.069,
+  battle_galar_elite: 164.069,
   /** SV Elite Four Battle */
   battle_paldea_elite: 12.77,
   /** SV BB League Elite */
@@ -56,9 +56,9 @@ export const bgmLoopPoint = {
   /** XY Kalos Gym Battle */
   battle_kalos_gym: 44.81,
   /** SWSH Galar Gym Battle */
-  battle_galar_gym: 0.262,
+  battle_galar_gym: 171.262,
   /** SV Paldea Gym Battle */
-  battle_paldea_gym: 0.489,
+  battle_paldea_gym: 127.489,
   /** XY Kanto Legendary Battle */
   battle_legendary_kanto: 32.966,
   /** HGSS Raikou Battle */
@@ -164,7 +164,7 @@ export const bgmLoopPoint = {
   /** SWSH Trainer Battle */
   battle_macro_grunt: 11.56,
   /** SV Team Star Battle */
-  battle_star_grunt: 0.362,
+  battle_star_grunt: 133.362,
   /** BDSP Team Galactic Admin*/
   battle_galactic_admin: 11.997,
   /** SM Team Skull Admin*/
@@ -178,7 +178,7 @@ export const bgmLoopPoint = {
   /** ORAS Archie & Maxie Battle */
   battle_aqua_magma_boss: 14.847,
   /** BDSP Cyrus Battle */
-  battle_galactic_boss: 0.962,
+  battle_galactic_boss: 106.962,
   /** B2W2 Ghetsis Battle */
   battle_plasma_boss: 25.624,
   /** XY Lysandre Battle */
