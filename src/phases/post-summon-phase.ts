@@ -1,11 +1,13 @@
 import { globalScene } from "#app/global-scene";
 import type { BattlerIndex } from "#app/battle";
-import { applyAbAttrs, applyPostSummonAbAttrs, CommanderAbAttr, PostSummonAbAttr } from "#app/data/ability";
+import { applyAbAttrs, applyPostSummonAbAttrs } from "#app/data/ability";
+import { CommanderAbAttr } from "#app/data/ab-attrs/commander-ab-attr";
 import { ArenaTrapTag } from "#app/data/arena-tag";
 import { StatusEffect } from "#app/enums/status-effect";
 import { PokemonPhase } from "./pokemon-phase";
 import { MysteryEncounterPostSummonTag } from "#app/data/battler-tags";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import { PostSummonAbAttr } from "#app/data/ab-attrs/post-summon-ab-attr";
 
 export class PostSummonPhase extends PokemonPhase {
   constructor(battlerIndex: BattlerIndex) {
@@ -31,7 +33,7 @@ export class PostSummonPhase extends PokemonPhase {
     }
 
     applyPostSummonAbAttrs(PostSummonAbAttr, pokemon);
-    const field = pokemon.isPlayer() ? globalScene.getPlayerField() : globalScene.getEnemyField();
+    const field = pokemon.getField();
     field.forEach((p) => applyAbAttrs(CommanderAbAttr, p, null, false));
 
     this.end();

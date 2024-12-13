@@ -1,12 +1,7 @@
 import { globalScene } from "#app/global-scene";
-import {
-  allAbilities,
-  applyAbAttrs,
-  BlockNonDirectDamageAbAttr,
-  FlinchEffectAbAttr,
-  ProtectStatAbAttr,
-  ReverseDrainAbAttr,
-} from "#app/data/ability";
+import { allAbilities, applyAbAttrs } from "#app/data/ability";
+import { FlinchEffectAbAttr } from "./ab-attrs/flinch-effect-ab-attr";
+import { BlockNonDirectDamageAbAttr } from "./ab-attrs/block-non-direct-damage-ab-attr";
 import { ChargeAnim, CommonAnim, CommonBattleAnim, MoveChargeAnim } from "#app/data/battle-anims";
 import type Move from "#app/data/move";
 import {
@@ -42,6 +37,8 @@ import { Species } from "#enums/species";
 import { EFFECTIVE_STATS, getStatKey, Stat, type BattleStat, type EffectiveStat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { WeatherType } from "#enums/weather-type";
+import { ReverseDrainAbAttr } from "./ab-attrs/reverse-drain-ab-attr";
+import { ProtectStatAbAttr } from "./ab-attrs/protect-stat-ab-attr";
 
 export enum BattlerTagLapseType {
   FAINT,
@@ -150,9 +147,9 @@ export abstract class MoveRestrictionBattlerTag extends BattlerTag {
   constructor(
     tagType: BattlerTagType,
     lapseType: BattlerTagLapseType | BattlerTagLapseType[],
-    turnCount: integer,
+    turnCount: number,
     sourceMove?: Moves,
-    sourceId?: integer,
+    sourceId?: number,
   ) {
     super(tagType, lapseType, turnCount, sourceMove, sourceId);
   }
@@ -1751,9 +1748,7 @@ export class CenterOfAttentionTag extends BattlerTag {
 
   /** "Center of Attention" can't be added if an ally is already the Center of Attention. */
   override canAdd(pokemon: Pokemon): boolean {
-    const activeTeam = pokemon.isPlayer() ? globalScene.getPlayerField() : globalScene.getEnemyField();
-
-    return !activeTeam.find((p) => p.getTag(BattlerTagType.CENTER_OF_ATTENTION));
+    return !pokemon.getField().find((p) => p.getTag(BattlerTagType.CENTER_OF_ATTENTION));
   }
 
   override onAdd(pokemon: Pokemon): void {
@@ -2768,7 +2763,7 @@ export class SubstituteTag extends BattlerTag {
   /** Is the source Pokemon "in focus," i.e. is it fully visible on the field? */
   public sourceInFocus: boolean;
 
-  constructor(sourceMove: Moves, sourceId: integer) {
+  constructor(sourceMove: Moves, sourceId: number) {
     super(
       BattlerTagType.SUBSTITUTE,
       [BattlerTagLapseType.PRE_MOVE, BattlerTagLapseType.AFTER_MOVE, BattlerTagLapseType.HIT],

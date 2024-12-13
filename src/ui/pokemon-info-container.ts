@@ -19,8 +19,8 @@ import { Species } from "#enums/species";
 
 interface LanguageSetting {
   infoContainerTextSize: string;
-  infoContainerLabelXPos?: integer;
-  infoContainerTextXPos?: integer;
+  infoContainerLabelXPos?: number;
+  infoContainerTextXPos?: number;
 }
 
 const languageSettings: { [key: string]: LanguageSetting } = {
@@ -396,7 +396,7 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
       }
 
       const starterSpeciesId = pokemon.species.getRootSpeciesId();
-      const originalIvs: integer[] | null = eggInfo
+      const originalIvs: number[] | null = eggInfo
         ? dexEntry.caughtAttr
           ? dexEntry.ivs
           : null

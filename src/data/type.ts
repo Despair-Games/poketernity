@@ -316,7 +316,7 @@ export function getTypeDamageMultiplierColor(
   }
 }
 
-export function getTypeRgb(type: Type): [integer, integer, integer] {
+export function getTypeRgb(type: Type): [number, number, number] {
   switch (type) {
     case Type.NORMAL:
       return [168, 168, 120];
