@@ -1,5 +1,4 @@
 import type BattleScene from "#app/battle-scene";
-import { ArenaTagSide } from "#app/data/arena-tag";
 import type Move from "#app/data/move";
 import { allMoves } from "#app/data/move";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -128,7 +127,7 @@ describe("Moves - Aurora Veil", () => {
  */
 const getMockedMoveDamage = (defender: Pokemon, attacker: Pokemon, move: Move) => {
   const multiplierHolder = new NumberHolder(1);
-  const side = defender.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
+  const side = defender.getArenaTagSide();
 
   if (globalScene.arena.getTagOnSide(ArenaTagType.AURORA_VEIL, side)) {
     globalScene.arena.applyTagsForSide(
