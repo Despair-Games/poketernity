@@ -15,6 +15,15 @@ const __dirname = path.dirname(__filename);
 const typeChoices = ["Move", "Ability", "Item", "Mystery Encounter"];
 
 /**
+ * Get the path to a given folder in the test directory
+ * @param  {...string} folders the subfolders to append to the base path
+ * @returns {string} the path to the requested folder
+ */
+function getTestFolderPath(...folders) {
+  return path.join(__dirname, "test", ...folders);
+}
+
+/**
  * Prompts the user to select a type via list.
  * @returns {Promise<{selectedOption: string}>} the selected type
  */
@@ -84,19 +93,19 @@ async function runInteractive() {
   let description;
   switch (type) {
     case "move":
-      dir = path.join(__dirname, "test", "moves");
+      dir = getTestFolderPath("moves");
       description = `Moves - ${formattedName}`;
       break;
     case "ability":
-      dir = path.join(__dirname, "test", "abilities");
+      dir = getTestFolderPath("abilities");
       description = `Abilities - ${formattedName}`;
       break;
     case "item":
-      dir = path.join(__dirname, "test", "items");
+      dir = getTestFolderPath("items");
       description = `Items - ${formattedName}`;
       break;
     case "mystery encounter":
-      dir = path.join(__dirname, "test", "mystery-encounter", "encounters");
+      dir = getTestFolderPath("mystery-encounter", "encounters");
       description = `Mystery Encounter - ${formattedName}`;
       break;
     default:
