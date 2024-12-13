@@ -1279,7 +1279,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         }
         break;
       case Stat.SPD:
-        const side = this.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
+        const side = this.getArenaTagSide();
         if (globalScene.arena.getTagOnSide(ArenaTagType.TAILWIND, side)) {
           ret *= 2;
         }
@@ -1926,14 +1926,14 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
      * Contains opposing Pokemon (Enemy/Player Pokemon) depending on perspective
      * Afterwards, it filters out Pokemon that have been switched out of the field so trapped abilities/moves do not trigger
      */
-    const opposingFieldUnfiltered = this.isPlayer() ? globalScene.getEnemyField() : globalScene.getPlayerField();
+    const opposingFieldUnfiltered = this.getOpposingField();
     const opposingField = opposingFieldUnfiltered.filter((enemyPkm) => enemyPkm.switchOutStatus === false);
 
     opposingField.forEach((opponent) =>
       applyCheckTrappedAbAttrs(CheckTrappedAbAttr, opponent, trappedByAbility, this, trappedAbMessages, simulated),
     );
 
-    const side = this.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
+    const side = this.getArenaTagSide();
     return (
       trappedByAbility.value
       || !!this.getTag(TrappedTag)
@@ -2026,7 +2026,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       }
 
       if (!cancelledHolder.value) {
-        const defendingSidePlayField = this.isPlayer() ? globalScene.getPlayerField() : globalScene.getEnemyField();
+        const defendingSidePlayField = this.getField();
         defendingSidePlayField.forEach((p) =>
           applyPreDefendAbAttrs(FieldPriorityMoveImmunityAbAttr, p, source, move, cancelledHolder),
         );
@@ -2931,9 +2931,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   getOpponents(): Pokemon[] {
-    return ((this.isPlayer() ? globalScene.getEnemyField() : globalScene.getPlayerField()) as Pokemon[]).filter((p) =>
-      p.isActive(),
-    );
+    return this.getOpposingField().filter((p) => p.isActive());
   }
 
   getOpponentDescriptor(): string {
@@ -2945,16 +2943,49 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   getAlly(): Pokemon {
-    return (this.isPlayer() ? globalScene.getPlayerField() : globalScene.getEnemyField())[this.getFieldIndex() ? 0 : 1];
+    return this.getField()[this.getFieldIndex() ? 0 : 1];
   }
 
   /**
-   * Gets the Pokémon on the allied field.
-   *
-   * @returns An array of Pokémon on the allied field.
+   * @returns the Pokemon on the allied field
    */
-  getAlliedField(): Pokemon[] {
+  getField(): Pokemon[] {
     return this instanceof PlayerPokemon ? globalScene.getPlayerField() : globalScene.getEnemyField();
+  }
+
+  /**
+   * @returns the party of the Pokemon
+   */
+  getParty(): Pokemon[] {
+    return this instanceof PlayerPokemon ? globalScene.getPlayerParty() : globalScene.getEnemyParty();
+  }
+
+  /**
+   * @returns the {@linkcode ArenaTagSide} of the Pokemon
+   */
+  getArenaTagSide(): ArenaTagSide.PLAYER | ArenaTagSide.ENEMY {
+    return this instanceof PlayerPokemon ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
+  }
+
+  /**
+   * @returns the Pokemon on the opposing field
+   */
+  getOpposingField(): Pokemon[] {
+    return this.isPlayer() ? globalScene.getEnemyField() : globalScene.getPlayerField();
+  }
+
+  /**
+   * @returns the opposing party of the Pokemon
+   */
+  getOpposingParty(): Pokemon[] {
+    return this.isPlayer() ? globalScene.getEnemyParty() : globalScene.getPlayerParty();
+  }
+
+  /**
+   * @returns the opposing {@linkcode ArenaTagSide} of the Pokemon
+   */
+  getOpposingArenaTagSide(): ArenaTagSide.ENEMY | ArenaTagSide.PLAYER {
+    return this.isPlayer() ? ArenaTagSide.ENEMY : ArenaTagSide.PLAYER;
   }
 
   /**
@@ -3162,7 +3193,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     effectiveness?: TypeDamageMultiplier,
   ): DamageCalculationResult {
     const damage = new NumberHolder(0);
-    const defendingSide = this.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
+    const defendingSide = this.getArenaTagSide();
 
     const variableCategory = new NumberHolder(move.category);
     applyMoveAttrs(VariableMoveCategoryAttr, source, this, move, variableCategory);
@@ -3441,7 +3472,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns `true` if the move critically hits; `false` otherwise
    */
   getCriticalHitResult(source: Pokemon, move: Move, simulated: boolean = true): boolean {
-    const defendingSide = this.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
+    const defendingSide = this.getArenaTagSide();
     const noCritTag = globalScene.arena.getTagOnSide(NoCritTag, defendingSide);
     if (noCritTag || Overrides.NEVER_CRIT_OVERRIDE || move.hasAttr(FixedDamageAttr)) {
       return false;
@@ -3585,7 +3616,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const cancelled = new BooleanHolder(false);
     applyPreApplyBattlerTagAbAttrs(BattlerTagImmunityAbAttr, this, stubTag, cancelled, true);
 
-    const userField = this.getAlliedField();
+    const userField = this.getField();
     userField.forEach((pokemon) =>
       applyPreApplyBattlerTagAbAttrs(UserFieldBattlerTagImmunityAbAttr, pokemon, stubTag, cancelled, true),
     );
@@ -3605,7 +3636,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const cancelled = new BooleanHolder(false);
     applyPreApplyBattlerTagAbAttrs(BattlerTagImmunityAbAttr, this, newTag, cancelled);
 
-    const userField = this.getAlliedField();
+    const userField = this.getField();
     userField.forEach((pokemon) =>
       applyPreApplyBattlerTagAbAttrs(UserFieldBattlerTagImmunityAbAttr, pokemon, newTag, cancelled),
     );
@@ -4144,7 +4175,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const cancelled = new BooleanHolder(false);
     applyPreSetStatusAbAttrs(StatusEffectImmunityAbAttr, this, effect, cancelled, quiet);
 
-    const userField = this.getAlliedField();
+    const userField = this.getField();
     userField.forEach((pokemon) =>
       applyPreSetStatusAbAttrs(UserFieldStatusEffectImmunityAbAttr, pokemon, effect, cancelled, quiet),
     );
@@ -4255,7 +4286,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns `true` if this Pokemon is protected by Safeguard; `false` otherwise.
    */
   isSafeguarded(attacker: Pokemon): boolean {
-    const defendingSide = this.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
+    const defendingSide = this.getArenaTagSide();
     if (globalScene.arena.getTagOnSide(ArenaTagType.SAFEGUARD, defendingSide)) {
       const bypassed = new BooleanHolder(false);
       if (attacker) {

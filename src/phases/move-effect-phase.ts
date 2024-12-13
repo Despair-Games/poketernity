@@ -12,7 +12,7 @@ import {
   applyPostDefendAbAttrs,
   applyPreAttackAbAttrs,
 } from "#app/data/ability";
-import { ArenaTagSide, ConditionalProtectTag } from "#app/data/arena-tag";
+import { ConditionalProtectTag } from "#app/data/arena-tag";
 import { MoveAnim } from "#app/data/battle-anims";
 import {
   BattlerTagLapseType,
@@ -631,7 +631,7 @@ export class MoveEffectPhase extends PokemonPhase {
 
     // Check if the target is protected by any effect
     /** The {@linkcode ArenaTagSide} to which the target belongs */
-    const targetSide = target.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
+    const targetSide = target.getArenaTagSide();
     /** Has the invoked move been cancelled by conditional protection (e.g Quick Guard)? */
     const hasConditionalProtectApplied = new BooleanHolder(false);
     /** Does the applied conditional protection bypass Protect-ignoring effects? */
