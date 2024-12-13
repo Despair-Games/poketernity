@@ -34,7 +34,7 @@ export const bgmLoopPoint = {
   /** SM Elite Four Battle */
   battle_alola_elite: 19.212,
   /** SWSH League Tournament Battle */
-  battle_galar_elite: 0.069,
+  battle_galar_elite: 164.069,
   /** SV Elite Four Battle */
   battle_paldea_elite: 12.77,
   /** SV BB League Elite */
@@ -56,9 +56,9 @@ export const bgmLoopPoint = {
   /** XY Kalos Gym Battle */
   battle_kalos_gym: 44.81,
   /** SWSH Galar Gym Battle */
-  battle_galar_gym: 0.262,
+  battle_galar_gym: 171.262,
   /** SV Paldea Gym Battle */
-  battle_paldea_gym: 0.489,
+  battle_paldea_gym: 127.489,
   /** XY Kanto Legendary Battle */
   battle_legendary_kanto: 32.966,
   /** HGSS Raikou Battle */
