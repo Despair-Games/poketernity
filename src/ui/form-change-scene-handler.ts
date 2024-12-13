@@ -4,15 +4,19 @@ import { Mode } from "./ui";
 import { Button } from "#enums/buttons";
 import { globalScene } from "#app/global-scene";
 
-export default class EvolutionSceneHandler extends MessageUiHandler {
-  public evolutionContainer: Phaser.GameObjects.Container;
+/**
+ * A handler for Pokemon form change and evolution scenes
+ * @extends MessageUiHandler
+ */
+export default class FormChangeSceneHandler extends MessageUiHandler {
+  public container: Phaser.GameObjects.Container;
   public messageBg: Phaser.GameObjects.Image;
   public messageContainer: Phaser.GameObjects.Container;
   public canCancel: boolean;
   public cancelled: boolean;
 
   constructor() {
-    super(Mode.EVOLUTION_SCENE);
+    super(Mode.FORM_CHANGE_SCENE);
   }
 
   setup() {
@@ -21,8 +25,8 @@ export default class EvolutionSceneHandler extends MessageUiHandler {
 
     const ui = this.getUi();
 
-    this.evolutionContainer = globalScene.add.container(0, -globalScene.game.canvas.height / 6);
-    ui.add(this.evolutionContainer);
+    this.container = globalScene.add.container(0, -globalScene.game.canvas.height / 6);
+    ui.add(this.container);
 
     const messageBg = globalScene.add.sprite(0, 0, "bg", globalScene.windowType);
     messageBg.setOrigin(0, 1);
@@ -51,7 +55,7 @@ export default class EvolutionSceneHandler extends MessageUiHandler {
   override show(_args: any[]): boolean {
     super.show(_args);
 
-    globalScene.ui.bringToTop(this.evolutionContainer);
+    globalScene.ui.bringToTop(this.container);
     globalScene.ui.bringToTop(this.messageBg);
     globalScene.ui.bringToTop(this.messageContainer);
     this.messageBg.setVisible(true);
@@ -67,16 +71,12 @@ export default class EvolutionSceneHandler extends MessageUiHandler {
     }
 
     const ui = this.getUi();
-    if (this.awaitingActionInput) {
-      if (button === Button.CANCEL || button === Button.ACTION) {
-        if (this.onActionInput) {
-          ui.playSelect();
-          const originalOnActionInput = this.onActionInput;
-          this.onActionInput = null;
-          originalOnActionInput();
-          return true;
-        }
-      }
+    if (this.awaitingActionInput && (button === Button.CANCEL || button === Button.ACTION) && this.onActionInput) {
+      ui.playSelect();
+      const originalOnActionInput = this.onActionInput;
+      this.onActionInput = null;
+      originalOnActionInput();
+      return true;
     }
 
     return false;
@@ -90,7 +90,7 @@ export default class EvolutionSceneHandler extends MessageUiHandler {
     this.clearText();
     this.canCancel = false;
     this.cancelled = false;
-    this.evolutionContainer.removeAll(true);
+    this.container.removeAll(true);
     this.messageContainer.setVisible(false);
     this.messageBg.setVisible(false);
   }

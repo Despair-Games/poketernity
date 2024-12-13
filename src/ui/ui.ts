@@ -11,7 +11,6 @@ import ModifierSelectUiHandler from "./modifier-select-ui-handler";
 import BallUiHandler from "./ball-ui-handler";
 import SummaryUiHandler from "./summary-ui-handler";
 import StarterSelectUiHandler from "./starter-select-ui-handler";
-import EvolutionSceneHandler from "./evolution-scene-handler";
 import TargetSelectUiHandler from "./target-select-ui-handler";
 import SettingsUiHandler from "./settings/settings-ui-handler";
 import SettingsGamepadUiHandler from "./settings/settings-gamepad-ui-handler";
@@ -54,6 +53,7 @@ import TestDialogueUiHandler from "#app/ui/test-dialogue-ui-handler";
 import AutoCompleteUiHandler from "./autocomplete-ui-handler";
 import { Device } from "#enums/devices";
 import MysteryEncounterUiHandler from "./mystery-encounter-ui-handler";
+import FormChangeSceneHandler from "./form-change-scene-handler";
 
 export enum Mode {
   MESSAGE,
@@ -67,7 +67,7 @@ export enum Mode {
   PARTY,
   SUMMARY,
   STARTER_SELECT,
-  EVOLUTION_SCENE,
+  FORM_CHANGE_SCENE,
   EGG_HATCH_SCENE,
   EGG_HATCH_SUMMARY,
   CONFIRM,
@@ -105,7 +105,7 @@ const transitionModes = [
   Mode.PARTY,
   Mode.SUMMARY,
   Mode.STARTER_SELECT,
-  Mode.EVOLUTION_SCENE,
+  Mode.FORM_CHANGE_SCENE,
   Mode.EGG_HATCH_SCENE,
   Mode.EGG_LIST,
   Mode.EGG_GACHA,
@@ -174,7 +174,7 @@ export default class UI extends Phaser.GameObjects.Container {
       new PartyUiHandler(),
       new SummaryUiHandler(),
       new StarterSelectUiHandler(),
-      new EvolutionSceneHandler(),
+      new FormChangeSceneHandler(),
       new EggHatchSceneHandler(),
       new EggSummaryUiHandler(),
       new ConfirmUiHandler(),
