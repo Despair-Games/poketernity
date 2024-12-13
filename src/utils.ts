@@ -663,3 +663,12 @@ export function capitalize(str: string) {
 export function hasTouchscreen(): boolean {
   return window.matchMedia("(hover: none), (pointer: coarse)").matches;
 }
+
+/**
+ * Check if the device is in landscape mode.
+ * @returns `true` if the device is in landscape mode, otherwise `false` which means it is in portrait mode.
+ */
+export function isLandscapeMode() {
+  const { width, height } = window.screen;
+  return width > height;
+}

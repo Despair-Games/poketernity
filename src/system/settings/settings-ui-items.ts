@@ -21,6 +21,7 @@ import { SpriteSet } from "#app/enums/sprite-set";
 import { UiTheme } from "#app/enums/ui-theme";
 import i18next, { t } from "i18next";
 import { supportedLanguages } from "./supported-languages";
+import { isLandscapeMode } from "#app/utils";
 
 //#region Helper Functions
 
@@ -135,8 +136,12 @@ export const generalSettingsUiItems: SettingsUiItem<GeneralSettingsKey>[] = [
     label: i18next.t("settings:moveTouchControls"),
     options: [
       {
-        value: "Configure",
-        label: i18next.t("settings:change"),
+        value: 0,
+        label: isLandscapeMode() ? i18next.t("settings:landscape") : i18next.t("settings:portrait"),
+      },
+      {
+        value: 1,
+        label: i18next.t("settings:change"), // TODO: translation
       },
     ],
     touchscreenOnly: true,
@@ -179,7 +184,7 @@ export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey>[] = [
     requiresReload: true,
   },
   {
-    key: "windowType",
+    key: "uiWindowType",
     label: t("settings:windowType"),
     options: Array.from({ length: 5 }).map((_, i) => ({ value: i + 1, label: `${i + 1}` })),
   },

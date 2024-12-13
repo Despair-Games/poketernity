@@ -25,7 +25,7 @@ export default class EvolutionSceneHandler extends MessageUiHandler {
     this.evolutionContainer = globalScene.add.container(0, -globalScene.game.canvas.height / 6);
     ui.add(this.evolutionContainer);
 
-    const messageBg = globalScene.add.sprite(0, 0, "bg", settings.display.windowType);
+    const messageBg = globalScene.add.sprite(0, 0, "bg", settings.display.uiWindowType);
     messageBg.setOrigin(0, 1);
     messageBg.setVisible(false);
     ui.add(messageBg);

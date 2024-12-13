@@ -1,6 +1,6 @@
 import type { Settings, SettingsCategory } from "#app/@types/Settings";
 import { SETTINGS_LS_KEY } from "#app/constants";
-import { hasTouchscreen, isNullOrUndefined } from "#app/utils";
+import { isNullOrUndefined } from "#app/utils";
 import { defaultSettings } from "./default-settings";
 
 //#region Types
@@ -21,6 +21,8 @@ export class SettingsManager {
     UpdateFailed: "settings/update/failed",
     Saved: "settings/saved",
     ChangeLanguage: "settings/language/change",
+    MoveTouchControls: "settings/touchControls/move",
+    SaveTouchControls: "settings/touchControls/save",
   };
 
   /** Local storage key for peristing settings. */
@@ -40,7 +42,6 @@ export class SettingsManager {
 
     try {
       this.loadFromLocalStorage();
-      this.initTouchControls();
     } catch (err) {
       console.error("Settings manager init failed::", err);
     }
@@ -168,18 +169,6 @@ export class SettingsManager {
         }
       } catch (err) {
         console.error("Error loading settings from local storage:", err);
-      }
-    }
-  }
-
-  /**
-   * Helper method to make sure that touch controls are enabled initially if the user has a touchscreen
-   */
-  private initTouchControls() {
-    if (hasTouchscreen() && this.general.enableTouchControls) {
-      const touchControls = document.getElementById("touchControls");
-      if (touchControls) {
-        touchControls.classList.add("visible");
       }
     }
   }

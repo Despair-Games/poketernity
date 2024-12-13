@@ -17,6 +17,8 @@ import TouchControl from "#app/touch-controls";
 import { Button } from "#enums/buttons";
 import { Device } from "#enums/devices";
 import MoveTouchControlsHandler from "./ui/settings/move-touch-controls-handler";
+import { settings, SettingsManager } from "./system/settings/settings-manager";
+import type { SettingsUpdateEventArgs } from "./@types/Settings";
 
 export interface DeviceMapping {
   [key: string]: number;
@@ -170,6 +172,13 @@ export class InputsController {
     }
     this.touchControls = new TouchControl();
     this.moveTouchControlsHandler = new MoveTouchControlsHandler(this.touchControls);
+
+    this.touchControls.render();
+    settings.eventBus.on(SettingsManager.Event.Updated, ({ category, key }: SettingsUpdateEventArgs) => {
+      if (category === "display" && ["uiWindowType", "uiTheme"].includes(key)) {
+        this.touchControls.render();
+      }
+    });
   }
 
   /**

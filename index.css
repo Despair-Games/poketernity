@@ -9,6 +9,66 @@ html {
   touch-action: none;
 }
 
+html[data-ui-theme="DEFAULT"][data-window-type="RED_ORANGE"] {
+  --color-base: #6b5a73;
+  --color-light: #DD5748;
+  --color-dark: #7E4955;
+}
+
+html[data-ui-theme="DEFAULT"][data-window-type="TEAL"] {
+  --color-base: #6b5a73;
+  --color-light: #48DDAA;
+  --color-dark: #4D7574;
+}
+
+html[data-ui-theme="DEFAULT"][data-window-type="LIGHT_GRAY"] {
+  --color-base: #6b5a73;
+  --color-light: #C5C5C5;
+  --color-dark: #766D7E;
+}
+
+html[data-ui-theme="DEFAULT"][data-window-type="GOLDENROD"] {
+  --color-base: #6b5a73;
+  --color-light: #EBC07C;
+  --color-dark: #836C66;
+}
+
+html[data-ui-theme="DEFAULT"][data-window-type="MEDIUM_GRAY"] {
+  --color-base: #686868;
+  --color-light: #E8E8E8;
+  --color-dark: #919191;
+}
+
+html[data-ui-theme="LEGACY"][data-window-type="RED_ORANGE"] {
+  --color-base: #706880;
+  --color-light: #8888c8;
+  --color-dark: #484868;
+}
+
+html[data-ui-theme="LEGACY"][data-window-type="TEAL"] {
+  --color-base: #d04028;
+  --color-light: #e0a028;
+  --color-dark: #902008;
+}
+
+html[data-ui-theme="LEGACY"][data-window-type="LIGHT_GRAY"] {
+  --color-base: #48b840;
+  --color-light: #88d880;
+  --color-dark: #089040;
+}
+
+html[data-ui-theme="LEGACY"][data-window-type="GOLDENROD"] {
+  --color-base: #2068d0;
+  --color-light: #80b0e0;
+  --color-dark: #104888;
+}
+
+html[data-ui-theme="LEGACY"][data-window-type="MEDIUM_GRAY"] {
+  --color-base: #706880;
+  --color-light: #8888c8;
+  --color-dark: #484868;
+}
+
 body {
   margin: 0;
   display: flex;

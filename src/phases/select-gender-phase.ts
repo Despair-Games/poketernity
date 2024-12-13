@@ -21,7 +21,6 @@ export class SelectGenderPhase extends Phase {
             handler: () => {
               globalScene.gameData.gender = PlayerGender.MALE;
               settings.update("display", "playerGender", PlayerGender.MALE);
-              // globalScene.gameData.saveSetting(SettingKeys.Player_Gender, 0);
               globalScene.gameData.saveSystem().then(() => this.end());
               return true;
             },
@@ -31,7 +30,6 @@ export class SelectGenderPhase extends Phase {
             handler: () => {
               globalScene.gameData.gender = PlayerGender.FEMALE;
               settings.update("display", "playerGender", PlayerGender.FEMALE);
-              // globalScene.gameData.saveSetting(SettingKeys.Player_Gender, 1);
               globalScene.gameData.saveSystem().then(() => this.end());
               return true;
             },

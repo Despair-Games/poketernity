@@ -337,7 +337,7 @@ export default class BattleScene extends SceneBase {
         }
       }
 
-      if (key === "windowType" && typeof value === "number") {
+      if (key === "uiWindowType" && typeof value === "number") {
         updateWindowType(value);
       }
     });

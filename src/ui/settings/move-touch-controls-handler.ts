@@ -1,4 +1,5 @@
 import { globalScene } from "#app/global-scene";
+import { settings, SettingsManager } from "#app/system/settings/settings-manager";
 import type TouchControl from "#app/touch-controls";
 import type UI from "#app/ui/ui";
 import type { Scene } from "phaser";
@@ -58,6 +59,10 @@ export default class MoveTouchControlsHandler {
       if (screenSize.width > screenSize.height !== this.isLandscapeMode) {
         this.changeOrientation(screenSize.width > screenSize.height);
       }
+    });
+
+    settings.eventBus.on(SettingsManager.Event.MoveTouchControls, () => {
+      this.enableConfigurationMode(globalScene.ui, globalScene);
     });
   }
 
@@ -120,6 +125,7 @@ export default class MoveTouchControlsHandler {
     saveButton.addEventListener("click", () => {
       this.saveCurrentPositions();
       this.disableConfigurationMode();
+      settings.eventBus.emit(SettingsManager.Event.SaveTouchControls);
     });
     resetButton.addEventListener("click", () => {
       this.resetPositions();

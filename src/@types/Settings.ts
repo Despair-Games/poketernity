@@ -38,7 +38,7 @@ export interface GeneralSettings {
 
 export interface DisplaySettings {
   uiTheme: UiTheme;
-  windowType: UiWindowType;
+  uiWindowType: UiWindowType;
   moneyFormat: MoneyFormat;
   damageNumbersMode: DamageNumbersMode;
   enableMoveAnimations: boolean;

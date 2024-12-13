@@ -1,6 +1,10 @@
 import { globalScene } from "#app/global-scene";
 import { Button } from "#enums/buttons";
 import EventEmitter = Phaser.Events.EventEmitter;
+import { hasTouchscreen } from "./utils";
+import { settings } from "./system/settings/settings-manager";
+import { UiTheme } from "./enums/ui-theme";
+import { UiWindowType } from "./enums/ui-window-type";
 
 const repeatInputDelayMillis = 250;
 
@@ -183,6 +187,20 @@ export default class TouchControl {
       button.classList.remove("active");
     }
     this.buttonLock = [];
+  }
+
+  /**
+   * Renders the touch controls if supported and enabled in the settings.
+   */
+  render() {
+    if (hasTouchscreen() && settings.general.enableTouchControls) {
+      document.documentElement.dataset.uiTheme = UiTheme[settings.display.uiTheme];
+      document.documentElement.dataset.windowType = UiWindowType[settings.display.uiWindowType];
+      const touchControls = document.getElementById("touchControls");
+      if (touchControls) {
+        touchControls.classList.add("visible");
+      }
+    }
   }
 }
 

@@ -35,8 +35,6 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
 
   private cursorObj: Phaser.GameObjects.NineSlice | null;
 
-  // private reloadSettings: Array<Setting>;
-  private reloadSettings: Array<number | null> = [];
   private reloadRequired: boolean;
 
   protected rowsToDisplay: number;
@@ -325,45 +323,10 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
      * Checks if the game is in a state where progress may be lost due to changes options with reloadRequired while at battle.
      * @returns `false` if the warning process is triggered, `true` otherwise.
      */
-    const progressLosing = (): boolean => {
-      if (this.reloadRequired && this.canLooseProgress()) {
-        this.showText(i18next.t("menuUiHandler:losingProgressionWarning"), undefined, () => {
-          ui.setOverlayMode(
-            Mode.CONFIRM,
-            () => {
-              NavigationManager.getInstance().reset();
-              // revert confirm mode.
-              globalScene.ui.revertMode();
-              // revert settings mode.
-              globalScene.ui.revertMode();
-            },
-            () => {
-              // if user don't want accept losing progress for reload, revert options with reloadRequired for no reload.
-              this.reloadSettings.forEach((s, i) => {
-                if (s !== null && s !== this.optionCursors[i]) {
-                  this.setOptionCursor(i, s, true);
-                }
-              });
-              globalScene.ui.revertMode();
-              this.showText("", 0);
-            },
-            false,
-            0,
-            0,
-          );
-        });
-        return false;
-      }
-      return true;
-    };
-
     if (button === Button.CANCEL) {
       success = true;
-      if (progressLosing()) {
-        NavigationManager.getInstance().reset();
-        // Reverts UI to its previous state on cancel.
-        globalScene.ui.revertMode();
-      }
+      NavigationManager.getInstance().reset();
+      globalScene.ui.revertMode();
     } else {
       const cursor = this.cursor + this.scrollCursor;
       switch (button) {
@@ -414,15 +377,9 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
           break;
         case Button.CYCLE_FORM:
         case Button.CYCLE_SHINY:
-          if (progressLosing()) {
-            success = this.navigationContainer.navigate(button);
-          }
+          success = this.navigationContainer.navigate(button);
           break;
         case Button.ACTION:
-          // const setting: Setting = this.settings[cursor];
-          // if (setting?.activatable) {
-          //   success = this.activateSetting(setting);
-          // }
           break;
       }
     }
@@ -624,21 +581,30 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
 
   private handleSaveSetting<V = any>(uiItem: SettingsUiItem, newValue: V) {
     const { requiresReload, key, options } = uiItem;
-    console.log("handle save setting", uiItem, newValue, this.canLooseProgress());
-    if (this.category === "display" && uiItem.key === "language") {
+
+    if (this.category === "display" && key === "language") {
       settingsManager.eventBus.emit(SettingsManager.Event.ChangeLanguage, newValue);
+    } else if (this.category === "general" && uiItem.key === "moveTouchControls") {
+      settingsManager.eventBus.emit(SettingsManager.Event.MoveTouchControls);
+      settingsManager.eventBus.once(SettingsManager.Event.SaveTouchControls, () => {
+        this.setOptionCursor(-1, 0, false);
+      });
     } else {
-      if (requiresReload && this.canLooseProgress()) {
-        this.showConfirmReload(
-          () => {
-            settingsManager.updateAndReload(this.category, key as never, newValue);
-          },
-          () => {
-            const oldValue = settingsManager.settings[this.category][uiItem.key];
-            const oldOptionIndex = options.findIndex((option) => option.value === oldValue);
-            this.setOptionCursor(-1, Math.max(oldOptionIndex, 0), false);
-          },
-        );
+      if (requiresReload) {
+        if (this.canLooseProgress()) {
+          this.showConfirmReload(
+            () => {
+              settingsManager.updateAndReload(this.category, key as never, newValue);
+            },
+            () => {
+              const oldValue = settingsManager.settings[this.category][uiItem.key];
+              const oldOptionIndex = options.findIndex((option) => option.value === oldValue);
+              this.setOptionCursor(-1, Math.max(oldOptionIndex, 0), false);
+            },
+          );
+        } else {
+          settingsManager.updateAndReload(this.category, key as never, newValue);
+        }
       } else {
         settingsManager.update(this.category, key as never, newValue);
       }
