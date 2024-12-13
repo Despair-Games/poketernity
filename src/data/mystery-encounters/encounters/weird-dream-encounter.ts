@@ -19,7 +19,7 @@ import type Pokemon from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon";
 import { NumberHolder, isNullOrUndefined, randSeedInt, randSeedShuffle } from "#app/utils";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { allSpecies, getPokemonSpecies } from "#app/data/pokemon-species";
+import { allSpecies, getPokemonSpecies, getSpecialSpeciesList } from "#app/data/pokemon-species";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { HiddenAbilityRateBoosterModifier, PokemonFormChangeItemModifier } from "#app/modifier/modifier";
 import { achvs } from "#app/system/achv";
@@ -52,48 +52,17 @@ const namespace = "mysteryEncounters/weirdDream";
 const EXCLUDED_TRANSFORMATION_SPECIES = [
   Species.ETERNATUS,
   /** UBs */
-  Species.NIHILEGO,
-  Species.BUZZWOLE,
-  Species.PHEROMOSA,
-  Species.XURKITREE,
-  Species.CELESTEELA,
-  Species.KARTANA,
-  Species.GUZZLORD,
-  Species.POIPOLE,
-  Species.NAGANADEL,
-  Species.STAKATAKA,
-  Species.BLACEPHALON,
+  ...getSpecialSpeciesList(SpeciesCategories.ULTRA_BEAST, false),
   /** Paradox */
-  Species.GREAT_TUSK,
-  Species.SCREAM_TAIL,
-  Species.BRUTE_BONNET,
-  Species.FLUTTER_MANE,
-  Species.SLITHER_WING,
-  Species.SANDY_SHOCKS,
-  Species.ROARING_MOON,
-  Species.WALKING_WAKE,
-  Species.GOUGING_FIRE,
-  Species.RAGING_BOLT,
-  Species.IRON_TREADS,
-  Species.IRON_BUNDLE,
-  Species.IRON_HANDS,
-  Species.IRON_JUGULIS,
-  Species.IRON_MOTH,
-  Species.IRON_THORNS,
-  Species.IRON_VALIANT,
-  Species.IRON_LEAVES,
-  Species.IRON_BOULDER,
-  Species.IRON_CROWN,
+  ...getSpecialSpeciesList(SpeciesCategories.PARADOX, false),
   /** These are banned so they don't appear in the < 570 BST pool */
   Species.COSMOG,
   Species.MELTAN,
   Species.KUBFU,
   Species.COSMOEM,
-  Species.POIPOLE,
   Species.TERAPAGOS,
   Species.TYPE_NULL,
   Species.CALYREX,
-  Species.NAGANADEL,
   Species.URSHIFU,
   Species.OGERPON,
   Species.OKIDOGI,
@@ -541,15 +510,15 @@ async function postProcessTransformedPokemon(
       globalScene.validateAchv(achvs.HIDDEN_ABILITY);
     }
 
-    if (newPokemon.species.category === SpeciesCategories.SUBLEGENDARY) {
+    if (newPokemon.species.isSubLegendary()) {
       globalScene.validateAchv(achvs.CATCH_SUB_LEGENDARY);
     }
 
-    if (newPokemon.species.category === SpeciesCategories.LEGENDARY) {
+    if (newPokemon.species.isLegendary()) {
       globalScene.validateAchv(achvs.CATCH_LEGENDARY);
     }
 
-    if (newPokemon.species.category === SpeciesCategories.MYTHICAL) {
+    if (newPokemon.species.isMythical()) {
       globalScene.validateAchv(achvs.CATCH_MYTHICAL);
     }
 

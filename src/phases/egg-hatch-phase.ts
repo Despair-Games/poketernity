@@ -16,7 +16,6 @@ import { fixedInt, getFrameMs, randInt } from "#app/utils";
 import type { EggLapsePhase } from "./egg-lapse-phase";
 import type { EggHatchData } from "#app/data/egg-hatch-data";
 import { doShinySparkleAnim } from "#app/field/anims";
-import { SpeciesCategories } from "#app/enums/pokemon-species-categories";
 
 /**
  * Class that represents egg hatching
@@ -341,10 +340,10 @@ export class EggHatchPhase extends Phase {
     if (this.pokemon.species.isSubLegendary()) {
       globalScene.validateAchv(achvs.HATCH_SUB_LEGENDARY);
     }
-    if (this.pokemon.species.category === SpeciesCategories.LEGENDARY) {
+    if (this.pokemon.species.isLegendary()) {
       globalScene.validateAchv(achvs.HATCH_LEGENDARY);
     }
-    if (this.pokemon.species.category === SpeciesCategories.MYTHICAL) {
+    if (this.pokemon.species.isMythical()) {
       globalScene.validateAchv(achvs.HATCH_MYTHICAL);
     }
     if (isShiny) {

@@ -22,7 +22,6 @@ import i18next from "i18next";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
-import { SpeciesCategories } from "#app/enums/pokemon-species-categories";
 
 export enum TrainerVariant {
   DEFAULT,
@@ -542,7 +541,7 @@ export default class Trainer extends Phaser.GameObjects.Container {
       if (playerField.length > 0) {
         for (const playerPokemon of playerField) {
           score += p.getMatchupScore(playerPokemon);
-          if (playerPokemon.species.category === SpeciesCategories.LEGENDARY) {
+          if (playerPokemon.species.isLegendary()) {
             score /= 2;
           }
         }

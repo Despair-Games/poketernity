@@ -60,7 +60,6 @@ import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { api } from "#app/plugins/api/api";
 import { ArenaTrapTag } from "#app/data/arena-tag";
 import { SAVE_FILE_EXTENSION } from "#app/constants";
-import { SpeciesCategories } from "#app/enums/pokemon-species-categories";
 
 export const defaultStarterSpecies: Species[] = [
   Species.BULBASAUR,
@@ -1724,9 +1723,9 @@ export class GameData {
       this.gameStats.pokemonSeen++;
       if (!trainer && pokemon.species.isSubLegendary()) {
         this.gameStats.subLegendaryPokemonSeen++;
-      } else if (!trainer && pokemon.species.category === SpeciesCategories.LEGENDARY) {
+      } else if (!trainer && pokemon.species.isLegendary()) {
         this.gameStats.legendaryPokemonSeen++;
-      } else if (!trainer && pokemon.species.category === SpeciesCategories.MYTHICAL) {
+      } else if (!trainer && pokemon.species.isMythical()) {
         this.gameStats.mythicalPokemonSeen++;
       }
       if (!trainer && pokemon.isShiny()) {
@@ -1809,9 +1808,9 @@ export class GameData {
           this.gameStats.pokemonCaught++;
           if (pokemon.species.isSubLegendary()) {
             this.gameStats.subLegendaryPokemonCaught++;
-          } else if (pokemon.species.category === SpeciesCategories.LEGENDARY) {
+          } else if (pokemon.species.isLegendary()) {
             this.gameStats.legendaryPokemonCaught++;
-          } else if (pokemon.species.category === SpeciesCategories.MYTHICAL) {
+          } else if (pokemon.species.isMythical()) {
             this.gameStats.mythicalPokemonCaught++;
           }
           if (pokemon.isShiny()) {
@@ -1822,9 +1821,9 @@ export class GameData {
           this.gameStats.pokemonHatched++;
           if (pokemon.species.isSubLegendary()) {
             this.gameStats.subLegendaryPokemonHatched++;
-          } else if (pokemon.species.category === SpeciesCategories.LEGENDARY) {
+          } else if (pokemon.species.isLegendary()) {
             this.gameStats.legendaryPokemonHatched++;
-          } else if (pokemon.species.category === SpeciesCategories.MYTHICAL) {
+          } else if (pokemon.species.isMythical()) {
             this.gameStats.mythicalPokemonHatched++;
           }
           if (pokemon.isShiny()) {

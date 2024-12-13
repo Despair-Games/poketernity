@@ -122,9 +122,9 @@ export class EggLapsePhase extends Phase {
     if (pokemon.species.category !== SpeciesCategories.NONE) {
       if (pokemon.species.isSubLegendary()) {
         globalScene.validateAchv(achvs.HATCH_SUB_LEGENDARY);
-      } else if (pokemon.species.category === SpeciesCategories.LEGENDARY) {
+      } else if (pokemon.species.isLegendary()) {
         globalScene.validateAchv(achvs.HATCH_LEGENDARY);
-      } else if (pokemon.species.category === SpeciesCategories.MYTHICAL) {
+      } else if (pokemon.species.isMythical()) {
         globalScene.validateAchv(achvs.HATCH_MYTHICAL);
       }
     }

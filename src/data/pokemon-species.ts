@@ -1096,6 +1096,22 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
       this.category,
     );
   }
+
+  /**
+   * Helper function that determines if the game would consider this Pokemon a legendary
+   * @returns true if the Pokemon is considered a legendary by the game
+   */
+  isLegendary() {
+    return this.category === SpeciesCategories.LEGENDARY;
+  }
+
+  /**
+   * Helper function that determines if the Pokemon is a mythical
+   * @returns true if the Pokemon is a mythical
+   */
+  isMythical() {
+    return this.category === SpeciesCategories.MYTHICAL;
+  }
 }
 
 export class PokemonForm extends PokemonSpeciesForm {
