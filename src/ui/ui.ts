@@ -300,7 +300,7 @@ export default class UI extends Phaser.GameObjects.Container {
     text: string,
     callbackDelay: number = 0,
     prompt: boolean = true,
-    promptDelay?: integer | null,
+    promptDelay?: number | null,
   ): Promise<void> {
     return new Promise<void>((resolve) => {
       this.showText(text ?? "", null, () => resolve(), callbackDelay, prompt, promptDelay);
@@ -309,11 +309,11 @@ export default class UI extends Phaser.GameObjects.Container {
 
   showText(
     text: string,
-    delay?: integer | null,
+    delay?: number | null,
     callback?: Function | null,
-    callbackDelay?: integer | null,
+    callbackDelay?: number | null,
     prompt?: boolean | null,
-    promptDelay?: integer | null,
+    promptDelay?: number | null,
   ): void {
     if (prompt && text.indexOf("$") > -1) {
       const messagePages = text.split(/\$/g).map((m) => m.trim());
@@ -336,10 +336,10 @@ export default class UI extends Phaser.GameObjects.Container {
   showDialogue(
     keyOrText: string,
     name: string | undefined,
-    delay: integer | null = 0,
+    delay: number | null = 0,
     callback: Function,
-    callbackDelay?: integer,
-    promptDelay?: integer,
+    callbackDelay?: number,
+    promptDelay?: number,
   ): void {
     // Get localized dialogue (if available)
     let hasi18n = false;
@@ -480,7 +480,7 @@ export default class UI extends Phaser.GameObjects.Container {
     }
   }
 
-  setCursor(cursor: integer): boolean {
+  setCursor(cursor: number): boolean {
     const changed = this.getHandler().setCursor(cursor);
     if (changed) {
       this.playSelect();
@@ -497,7 +497,7 @@ export default class UI extends Phaser.GameObjects.Container {
     globalScene.playSound("ui/error");
   }
 
-  fadeOut(duration: integer): Promise<void> {
+  fadeOut(duration: number): Promise<void> {
     return new Promise((resolve) => {
       if (this.overlayActive) {
         return resolve();
@@ -515,7 +515,7 @@ export default class UI extends Phaser.GameObjects.Container {
     });
   }
 
-  fadeIn(duration: integer): Promise<void> {
+  fadeIn(duration: number): Promise<void> {
     return new Promise((resolve) => {
       if (!this.overlayActive) {
         return resolve();

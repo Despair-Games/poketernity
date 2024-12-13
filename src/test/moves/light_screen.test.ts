@@ -1,5 +1,4 @@
 import type BattleScene from "#app/battle-scene";
-import { ArenaTagSide } from "#app/data/arena-tag";
 import type Move from "#app/data/move";
 import { allMoves } from "#app/data/move";
 import { Abilities } from "#app/enums/abilities";
@@ -107,7 +106,7 @@ describe("Moves - Light Screen", () => {
  */
 const getMockedMoveDamage = (defender: Pokemon, attacker: Pokemon, move: Move) => {
   const multiplierHolder = new NumberHolder(1);
-  const side = defender.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY;
+  const side = defender.getArenaTagSide();
 
   if (globalScene.arena.getTagOnSide(ArenaTagType.LIGHT_SCREEN, side)) {
     globalScene.arena.applyTagsForSide(

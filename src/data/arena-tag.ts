@@ -8,7 +8,9 @@ import type Pokemon from "#app/field/pokemon";
 import { HitResult, PokemonMove } from "#app/field/pokemon";
 import { StatusEffect } from "#enums/status-effect";
 import type { BattlerIndex } from "#app/battle";
-import { BlockNonDirectDamageAbAttr, InfiltratorAbAttr, ProtectStatAbAttr, applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/ability";
+import { InfiltratorAbAttr } from "./ab-attrs/infiltrator-ab-attr";
+import { BlockNonDirectDamageAbAttr } from "./ab-attrs/block-non-direct-damage-ab-attr";
 import { Stat } from "#enums/stat";
 import { CommonAnim, CommonBattleAnim } from "#app/data/battle-anims";
 import i18next from "i18next";
@@ -21,6 +23,7 @@ import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
+import { ProtectStatAbAttr } from "./ab-attrs/protect-stat-ab-attr";
 
 export enum ArenaTagSide {
   BOTH,
@@ -334,7 +337,7 @@ export class ConditionalProtectTag extends ArenaTag {
     arena: Arena,
     simulated: boolean,
     isProtected: BooleanHolder,
-    attacker: Pokemon,
+    _attacker: Pokemon,
     defender: Pokemon,
     moveId: Moves,
     ignoresProtectBypass: BooleanHolder,
@@ -343,8 +346,6 @@ export class ConditionalProtectTag extends ArenaTag {
       if (!isProtected.value) {
         isProtected.value = true;
         if (!simulated) {
-          attacker.stopMultiHit(defender);
-
           new CommonBattleAnim(CommonAnim.PROTECT, defender).play();
           globalScene.queueMessage(
             i18next.t("arenaTag:conditionalProtectApply", {
@@ -1109,7 +1110,7 @@ class TailwindTag extends ArenaTag {
     }
 
     const source = globalScene.getPokemonById(this.sourceId!); //TODO: this bang is questionable!
-    const party = (source?.isPlayer() ? globalScene.getPlayerField() : globalScene.getEnemyField()) ?? [];
+    const party = source?.getField() ?? [];
 
     for (const pokemon of party) {
       // Apply the CHARGED tag to party members with the WIND_POWER ability

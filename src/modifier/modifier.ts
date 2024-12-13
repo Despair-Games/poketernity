@@ -53,7 +53,8 @@ import {
 } from "./modifier-type";
 import { Color, ShadowColor } from "#enums/color";
 import { FRIENDSHIP_GAIN_FROM_RARE_CANDY } from "#app/data/balance/starters";
-import { applyAbAttrs, CommanderAbAttr } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/ability";
+import { CommanderAbAttr } from "#app/data/ab-attrs/commander-ab-attr";
 import { globalScene } from "#app/global-scene";
 
 export type ModifierPredicate = (modifier: Modifier) => boolean;
@@ -2091,7 +2092,7 @@ export class PokemonInstantReviveModifier extends PokemonHeldItemModifier {
     pokemon.resetStatus(true, false, true);
 
     // Reapply Commander on the Pokemon's side of the field, if applicable
-    const field = pokemon.isPlayer() ? globalScene.getPlayerField() : globalScene.getEnemyField();
+    const field = pokemon.getField();
     field.forEach((p) => applyAbAttrs(CommanderAbAttr, p, null, false));
     return true;
   }
