@@ -1,5 +1,6 @@
 import type { Settings, SettingsCategory } from "#app/@types/Settings";
 import { SETTINGS_LS_KEY } from "#app/constants";
+import { eventBus } from "#app/event-bus";
 import { isNullOrUndefined } from "#app/utils";
 import { defaultSettings } from "./default-settings";
 
@@ -15,20 +16,9 @@ interface SettingsManagerInit {
 /**
  * Manages game settings
  */
-export class SettingsManager {
-  static readonly Event = {
-    Updated: "settings/updated",
-    UpdateFailed: "settings/update/failed",
-    Saved: "settings/saved",
-    ChangeLanguage: "settings/language/change",
-    MoveTouchControls: "settings/touchControls/move",
-    SaveTouchControls: "settings/touchControls/save",
-  };
-
+class SettingsManager {
   /** Local storage key for peristing settings. */
   public readonly lsKey: string;
-  /** Event emitter for settings. */
-  public readonly eventBus: Phaser.Events.EventEmitter;
 
   /** Internal buffer for current settings. */
   private _settings: Settings;
@@ -36,7 +26,6 @@ export class SettingsManager {
   constructor(init: SettingsManagerInit) {
     const { localStorageKey, settings } = init;
 
-    this.eventBus = new Phaser.Events.EventEmitter();
     this.lsKey = localStorageKey;
     this._settings = settings;
 
@@ -111,17 +100,17 @@ export class SettingsManager {
    */
   update<C extends SettingsCategory>(category: C, key: keyof Settings[C], value: any) {
     if (!this._settings[category]) {
-      this.eventBus.emit(SettingsManager.Event.UpdateFailed, { category, key, value });
+      eventBus.emit("settings/update/failed", { category, key, value });
       throw new Error(`Unknown category: ${category}`);
     }
 
     if (isNullOrUndefined(this._settings[category][key])) {
-      this.eventBus.emit(SettingsManager.Event.UpdateFailed, { category, key, value });
+      eventBus.emit("settings/update/failed", { category, key, value });
       throw new Error(`Unknown key: ${category}.${String(key)}`);
     }
 
     this._settings[category][key] = value;
-    this.eventBus.emit(SettingsManager.Event.Updated, { category, key, value });
+    eventBus.emit("settings/updated", { category, key, value });
     this.saveToLocalStorage();
   }
 
@@ -142,7 +131,7 @@ export class SettingsManager {
    */
   private saveToLocalStorage() {
     localStorage.setItem(this.lsKey, JSON.stringify(this._settings));
-    this.eventBus.emit(SettingsManager.Event.Saved, this._settings, this.lsKey);
+    eventBus.emit("settings/saved", this._settings, this.lsKey);
   }
 
   /**

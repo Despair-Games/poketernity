@@ -1,6 +1,7 @@
 import type { SettingsCategory, SettingsUiItem } from "#app/@types/Settings";
+import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
-import { SettingsManager, settings as settingsManager } from "#app/system/settings/settings-manager";
+import { settings as settingsManager } from "#app/system/settings/settings-manager";
 import MessageUiHandler from "#app/ui/message-ui-handler";
 import { ScrollBar } from "#app/ui/scroll-bar";
 import type { InputsIcons } from "#app/ui/settings/abstract-control-settings-ui-handler";
@@ -581,12 +582,13 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
 
   private handleSaveSetting<V = any>(uiItem: SettingsUiItem, newValue: V) {
     const { requiresReload, key, options } = uiItem;
+    console.log("handle save setting", requiresReload, key, options);
 
     if (this.category === "display" && key === "language") {
-      settingsManager.eventBus.emit(SettingsManager.Event.ChangeLanguage, newValue);
+      eventBus.emit("language/change", newValue);
     } else if (this.category === "general" && uiItem.key === "moveTouchControls") {
-      settingsManager.eventBus.emit(SettingsManager.Event.MoveTouchControls);
-      settingsManager.eventBus.once(SettingsManager.Event.SaveTouchControls, () => {
+      eventBus.emit("touchControls/move/start");
+      eventBus.once("touchControls/move/end", () => {
         this.setOptionCursor(-1, 0, false);
       });
     } else {

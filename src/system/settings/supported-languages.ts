@@ -1,4 +1,6 @@
-export const supportedLanguages = [
+import type { SupportedLanguage } from "#app/@types/Language";
+
+export const supportedLanguages: SupportedLanguage[] = [
   {
     label: "English",
     key: "en",

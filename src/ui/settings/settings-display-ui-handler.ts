@@ -1,6 +1,7 @@
-import { SETTINGS_LS_KEY } from "#app/constants";
+import type { SupportedLanguage } from "#app/@types/Language";
+import { LANGUAGE_MAX_OPTIONS, SETTINGS_LS_KEY } from "#app/constants";
+import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
-import { settings, SettingsManager } from "#app/system/settings/settings-manager";
 import { displaySettingUiItems } from "#app/system/settings/settings-ui-items";
 import { supportedLanguages } from "#app/system/settings/supported-languages";
 import i18next from "i18next";
@@ -19,14 +20,7 @@ export default class SettingsDisplayUiHandler extends AbstractSettingsUiHandler 
     super("display", displaySettingUiItems);
     this.localStorageKey = SETTINGS_LS_KEY;
 
-    settings.eventBus.on(SettingsManager.Event.ChangeLanguage, () => {
-      const onCancel = () => {
-        console.log("cancelHandler!");
-        this.setOptionCursor(0, 0);
-        globalScene.ui.revertMode();
-        return false;
-      };
-
+    eventBus.on("language/change", () => {
       globalScene.ui.setOverlayMode(Mode.OPTION_SELECT, {
         options: [
           ...supportedLanguages.map((l) => {
@@ -34,24 +28,37 @@ export default class SettingsDisplayUiHandler extends AbstractSettingsUiHandler 
               label: l.label,
               handler: () => {
                 if (this.canLooseProgress()) {
-                  this.showConfirmReload(() => {
-                    i18next.changeLanguage(l.key);
-                    this.setOptionCursor(0, 0);
-                    this.updateOptionValueLabel(0, 0, l.label);
-                    window.location.reload();
-                  }, onCancel);
+                  this.showConfirmReload(
+                    () => this.handleChangeLanguage(l),
+                    () => this.handleCancelLanguageChange(),
+                  );
+                } else {
+                  this.handleChangeLanguage(l);
                 }
               },
             };
           }),
           {
             label: i18next.t("settings:back"),
-            handler: () => onCancel(),
+            handler: () => this.handleCancelLanguageChange(),
           },
         ],
-        maxOptions: 7,
-        cancelHandler: onCancel.bind(this),
+        maxOptions: LANGUAGE_MAX_OPTIONS,
+        cancelHandler: () => this.handleCancelLanguageChange(),
       });
     });
+  }
+
+  private handleCancelLanguageChange() {
+    this.setOptionCursor(0, 0);
+    globalScene.ui.revertMode();
+    return false;
+  }
+
+  private handleChangeLanguage(lan: SupportedLanguage) {
+    i18next.changeLanguage(lan.key);
+    this.setOptionCursor(0, 0);
+    this.updateOptionValueLabel(0, 0, lan.label);
+    window.location.reload();
   }
 }

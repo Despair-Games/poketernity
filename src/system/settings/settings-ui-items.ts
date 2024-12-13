@@ -22,12 +22,13 @@ import { UiTheme } from "#app/enums/ui-theme";
 import i18next, { t } from "i18next";
 import { supportedLanguages } from "./supported-languages";
 import { isLandscapeMode } from "#app/utils";
+import { PlayerGender } from "#app/enums/player-gender";
 
 //#region Helper Functions
 
 function useBoolOptions(
-  trueI18nKey: string = "settings:on",
   falseI18nKey: string = "settings:off",
+  trueI18nKey: string = "settings:on",
 ): SettingUiItemOption[] {
   return [
     { value: false, label: t(falseI18nKey) },
@@ -128,7 +129,7 @@ export const generalSettingsUiItems: SettingsUiItem<GeneralSettingsKey>[] = [
   {
     key: "enableTouchControls",
     label: t("settings:touchControls"),
-    options: useBoolOptions("settings:auto", "settings:disabled"),
+    options: useBoolOptions("settings:disabled", "settings:auto"),
     touchscreenOnly: true,
   },
   {
@@ -141,7 +142,7 @@ export const generalSettingsUiItems: SettingsUiItem<GeneralSettingsKey>[] = [
       },
       {
         value: 1,
-        label: i18next.t("settings:change"), // TODO: translation
+        label: i18next.t("settings:configure"),
       },
     ],
     touchscreenOnly: true,
@@ -149,7 +150,7 @@ export const generalSettingsUiItems: SettingsUiItem<GeneralSettingsKey>[] = [
   {
     key: "enableVibration",
     label: t("settings:vibrations"),
-    options: useBoolOptions("settings:auto", "settings:disabled"),
+    options: useBoolOptions("settings:disabled", "settings:auto"),
   },
 ];
 
@@ -275,14 +276,14 @@ export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey>[] = [
     label: t("settings:fusionPaletteSwaps"),
     options: useBoolOptions(),
   },
-  // {
-  //   key: "playerGender",
-  //   label: t("settings:playerGender"),
-  //   options: [
-  //     { value: PlayerGender.MALE, label: t("settings:boy") },
-  //     { value: PlayerGender.FEMALE, label: t("settings:girl") },
-  //   ],
-  // },
+  {
+    key: "playerGender",
+    label: t("settings:playerGender"),
+    options: [
+      { value: PlayerGender.MALE, label: t("settings:boy") },
+      { value: PlayerGender.FEMALE, label: t("settings:girl") },
+    ],
+  },
   {
     key: "enableTypeHints",
     label: t("settings:typeHints"),
@@ -310,9 +311,7 @@ export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey>[] = [
       value: Number((i * 0.1).toFixed(1)),
       label: `${(i + 1) * 10}`,
     })),
-    requiresReload: false,
   },
-  // TODO:
 ];
 
 /**

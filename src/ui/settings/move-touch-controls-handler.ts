@@ -1,5 +1,5 @@
+import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
-import { settings, SettingsManager } from "#app/system/settings/settings-manager";
 import type TouchControl from "#app/touch-controls";
 import type UI from "#app/ui/ui";
 import type { Scene } from "phaser";
@@ -61,7 +61,7 @@ export default class MoveTouchControlsHandler {
       }
     });
 
-    settings.eventBus.on(SettingsManager.Event.MoveTouchControls, () => {
+    eventBus.on("touchControls/move/start", () => {
       this.enableConfigurationMode(globalScene.ui, globalScene);
     });
   }
@@ -125,15 +125,20 @@ export default class MoveTouchControlsHandler {
     saveButton.addEventListener("click", () => {
       this.saveCurrentPositions();
       this.disableConfigurationMode();
-      settings.eventBus.emit(SettingsManager.Event.SaveTouchControls);
+      eventBus.emit("touchControls/move/save");
+      eventBus.emit("touchControls/move/end");
     });
     resetButton.addEventListener("click", () => {
       this.resetPositions();
+      eventBus.emit("touchControls/move/reset");
+      eventBus.emit("touchControls/move/end");
     });
     cancelButton.addEventListener("click", () => {
       const positions = this.getSavedPositionsOfCurrentOrientation();
       this.setPositions(positions);
       this.disableConfigurationMode();
+      eventBus.emit("touchControls/move/cancel");
+      eventBus.emit("touchControls/move/end");
     });
   }
 

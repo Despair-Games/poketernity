@@ -1,5 +1,7 @@
 import { SETTINGS_LS_KEY } from "#app/constants";
 import { generalSettingsUiItems } from "#app/system/settings/settings-ui-items";
+import { hasTouchscreen, isLandscapeMode } from "#app/utils";
+import { t } from "i18next";
 import AbstractSettingsUiHandler from "./abstract-settings-ui-handler";
 
 export default class SettingsUiHandler extends AbstractSettingsUiHandler {
@@ -12,5 +14,20 @@ export default class SettingsUiHandler extends AbstractSettingsUiHandler {
   constructor() {
     super("general", generalSettingsUiItems);
     this.localStorageKey = SETTINGS_LS_KEY;
+
+    window.addEventListener("resize", () => {
+      this.updateMoveTouchControlsSettingsLabel();
+    });
+  }
+
+  private updateMoveTouchControlsSettingsLabel() {
+    if (!hasTouchscreen()) return;
+
+    const settingIndex = this.uiItems.findIndex((uiItem) => uiItem.key === "moveTouchControls");
+    if (settingIndex === -1) {
+      console.warn("Could not find moveTouchControls setting label!");
+    }
+
+    this.updateOptionValueLabel(settingIndex, 0, isLandscapeMode() ? t("settings:landscape") : t("settings:portrait"));
   }
 }
