@@ -1769,7 +1769,7 @@ export default class BattleScene extends SceneBase {
     }
 
     let isBoss: boolean | undefined;
-    if (forceBoss || (species && species.category !== SpeciesCategories.COMMON)) {
+    if (forceBoss || (species && ![SpeciesCategories.COMMON, SpeciesCategories.PARADOX].includes(species.category))) {
       isBoss = true;
     } else {
       this.executeWithSeedOffset(() => {

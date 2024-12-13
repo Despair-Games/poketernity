@@ -38870,7 +38870,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.IRON_MOTH,
       9,
-      SpeciesCategories.COMMON,
+      SpeciesCategories.PARADOX,
       "Paradox Pokémon",
       Type.FIRE,
       Type.POISON,
@@ -38896,7 +38896,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.IRON_THORNS,
       9,
-      SpeciesCategories.COMMON,
+      SpeciesCategories.PARADOX,
       "Paradox Pokémon",
       Type.ROCK,
       Type.ELECTRIC,
