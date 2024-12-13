@@ -551,8 +551,8 @@ export class MoveEffectPhase extends PokemonPhase {
      */
     if (this.canApplySmartTargeting()) {
       const ogTarget = globalScene.getField().find((p) => p.getBattlerIndex() === this.targets[0]);
-      if (ogTarget?.isFainted() && ogTarget?.getAlly()?.isActive(true)) {
-        this.targets = [ogTarget?.getAlly().getBattlerIndex()];
+      if (ogTarget && ogTarget.isFainted() && ogTarget.getAlly()?.isActive(true)) {
+        this.targets = [ogTarget.getAlly().getBattlerIndex()];
       }
     }
     /**
