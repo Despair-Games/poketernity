@@ -1,4 +1,4 @@
-const MockConsoleLog = (_logDisabled = false, _phaseText = false) => {
+export const mockConsoleLog = (_logDisabled = false, _phaseText = false) => {
   let logs: any[] = [];
   const logDisabled: boolean = _logDisabled;
   const phaseText: boolean = _phaseText;
@@ -78,5 +78,3 @@ const MockConsoleLog = (_logDisabled = false, _phaseText = false) => {
     },
   };
 };
-
-export default MockConsoleLog;

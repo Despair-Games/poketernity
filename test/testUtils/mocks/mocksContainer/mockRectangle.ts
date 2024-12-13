@@ -1,6 +1,6 @@
 import type { MockGameObject } from "#test/testUtils/mocks/mockGameObject";
 
-export default class MockRectangle implements MockGameObject {
+export class MockRectangle implements MockGameObject {
   private fillColor;
   private scene;
   public list: MockGameObject[] = [];

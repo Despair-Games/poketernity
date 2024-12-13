@@ -12,7 +12,7 @@ interface LogEntry {
   button: any;
 }
 
-export default class InputsHandler {
+export class InputsHandler {
   private scene: BattleScene;
   private events: Phaser.Events.EventEmitter;
   private inputController: InputsController;

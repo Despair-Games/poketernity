@@ -3,7 +3,7 @@ import type { MockGameObject } from "#test/testUtils/mocks/mockGameObject";
 import Sprite = Phaser.GameObjects.Sprite;
 import Frame = Phaser.Textures.Frame;
 
-export default class MockSprite implements MockGameObject {
+export class MockSprite implements MockGameObject {
   private phaserSprite;
   public pipelineData;
   public texture;

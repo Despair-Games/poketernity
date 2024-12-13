@@ -6,13 +6,13 @@ import Pokemon from "#app/field/pokemon";
 import { setCookie } from "#app/utils";
 import { blobToString } from "#test/testUtils/gameManagerUtils";
 import { MockClock } from "#test/testUtils/mocks/mockClock";
-import mockConsoleLog from "#test/testUtils/mocks/mockConsoleLog";
+import { mockConsoleLog } from "#test/testUtils/mocks/mockConsoleLog";
 import { MockFetch } from "#test/testUtils/mocks/mockFetch";
 import { MockGameObjectCreator } from "#test/testUtils/mocks/mockGameObjectCreator";
-import MockImage from "#test/testUtils/mocks/mocksContainer/mockImage";
-import MockLoader from "#test/testUtils/mocks/mockLoader";
-import mockLocalStorage from "#test/testUtils/mocks/mockLocalStorage";
-import MockTextureManager from "#test/testUtils/mocks/mockTextureManager";
+import { MockImage } from "#test/testUtils/mocks/mocksContainer/mockImage";
+import { MockLoader } from "#test/testUtils/mocks/mockLoader";
+import { mockLocalStorage } from "#test/testUtils/mocks/mockLocalStorage";
+import { MockTextureManager } from "#test/testUtils/mocks/mockTextureManager";
 import { MockTimedEventManager } from "#test/testUtils/mocks/mockTimedEventManager";
 import fs from "fs";
 import Phaser from "phaser";
@@ -70,7 +70,7 @@ Phaser.GameObjects.NineSlice.prototype.setPositionRelative = setPositionRelative
 Phaser.GameObjects.Text.prototype.setPositionRelative = setPositionRelative;
 Phaser.GameObjects.Rectangle.prototype.setPositionRelative = setPositionRelative;
 
-export default class GameWrapper {
+export class GameWrapper {
   public game: Phaser.Game;
   public scene: BattleScene;
 

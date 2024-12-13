@@ -13,7 +13,7 @@ import { Mode } from "#app/ui/ui";
 import { Abilities } from "#enums/abilities";
 import { Button } from "#enums/buttons";
 import { Species } from "#enums/species";
-import GameManager from "#test/testUtils/gameManager";
+import { GameManager } from "#test/testUtils/gameManager";
 import i18next from "i18next";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";

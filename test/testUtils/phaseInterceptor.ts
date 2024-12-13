@@ -192,7 +192,7 @@ type PhaseString =
 
 type PhaseInterceptorPhase = PhaseClass | PhaseString;
 
-export default class PhaseInterceptor {
+export class PhaseInterceptor {
   public scene;
   public phases = {};
   public log: string[];

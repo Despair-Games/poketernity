@@ -22,8 +22,8 @@ import { TitlePhase } from "#app/phases/title-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
 import { TurnStartPhase } from "#app/phases/turn-start-phase";
-import ErrorInterceptor from "#test/testUtils/errorInterceptor";
-import type InputsHandler from "#test/testUtils/inputsHandler";
+import { ErrorInterceptor } from "#test/testUtils/errorInterceptor";
+import type { InputsHandler } from "#test/testUtils/inputsHandler";
 import type BattleMessageUiHandler from "#app/ui/battle-message-ui-handler";
 import type CommandUiHandler from "#app/ui/command-ui-handler";
 import type ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
@@ -40,7 +40,7 @@ import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PlayerGender } from "#enums/player-gender";
 import type { Species } from "#enums/species";
 import { generateStarter, waitUntil } from "#test/testUtils/gameManagerUtils";
-import GameWrapper from "#test/testUtils/gameWrapper";
+import { GameWrapper } from "#test/testUtils/gameWrapper";
 import { ChallengeModeHelper } from "#test/testUtils/helpers/challengeModeHelper";
 import { ClassicModeHelper } from "#test/testUtils/helpers/classicModeHelper";
 import { DailyModeHelper } from "#test/testUtils/helpers/dailyModeHelper";
@@ -49,8 +49,8 @@ import { MoveHelper } from "#test/testUtils/helpers/moveHelper";
 import { OverridesHelper } from "#test/testUtils/helpers/overridesHelper";
 import { ReloadHelper } from "#test/testUtils/helpers/reloadHelper";
 import { SettingsHelper } from "#test/testUtils/helpers/settingsHelper";
-import PhaseInterceptor from "#test/testUtils/phaseInterceptor";
-import TextInterceptor from "#test/testUtils/TextInterceptor";
+import { PhaseInterceptor } from "#test/testUtils/phaseInterceptor";
+import { TextInterceptor } from "#test/testUtils/TextInterceptor";
 import { AES, enc } from "crypto-js";
 import fs from "fs";
 import { expect, vi } from "vitest";
@@ -58,7 +58,7 @@ import { expect, vi } from "vitest";
 /**
  * Class to manage the game state and transitions between phases.
  */
-export default class GameManager {
+export class GameManager {
   public gameWrapper: GameWrapper;
   public scene: BattleScene;
   public phaseInterceptor: PhaseInterceptor;

@@ -1,6 +1,6 @@
 import { Species } from "#enums/species";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import GameManager from "#test/testUtils/gameManager";
+import { GameManager } from "#test/testUtils/gameManager";
 import { PokeballType } from "#enums/pokeball";
 import type BattleScene from "#app/battle-scene";
 import { Moves } from "#enums/moves";

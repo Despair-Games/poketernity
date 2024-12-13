@@ -9,7 +9,7 @@ import EggData from "#app/system/egg-data";
 import * as Utils from "#app/utils";
 import { isNullOrUndefined } from "#app/utils";
 import { Species } from "#enums/species";
-import GameManager from "#test/testUtils/gameManager";
+import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 

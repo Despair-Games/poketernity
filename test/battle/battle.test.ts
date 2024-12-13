@@ -16,7 +16,7 @@ import { SwitchPhase } from "#app/phases/switch-phase";
 import { TitlePhase } from "#app/phases/title-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
 import { VictoryPhase } from "#app/phases/victory-phase";
-import GameManager from "#test/testUtils/gameManager";
+import { GameManager } from "#test/testUtils/gameManager";
 import { generateStarter } from "#test/testUtils/gameManagerUtils";
 import { Mode } from "#app/ui/ui";
 import { Abilities } from "#enums/abilities";

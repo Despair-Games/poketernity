@@ -17,7 +17,7 @@ import {
 import { getPokemonSpecies } from "#app/data/pokemon-species";
 import { Type } from "#enums/type";
 import { MessagePhase } from "#app/phases/message-phase";
-import GameManager from "#test/testUtils/gameManager";
+import { GameManager } from "#test/testUtils/gameManager";
 import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
 import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils";

@@ -1,6 +1,6 @@
 import CacheManager = Phaser.Cache.CacheManager;
 
-export default class MockLoader {
+export class MockLoader {
   public cacheManager;
   constructor(scene) {
     this.cacheManager = new CacheManager(scene);

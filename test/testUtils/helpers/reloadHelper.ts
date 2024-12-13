@@ -5,7 +5,7 @@ import { BattleStyle } from "#enums/battle-style";
 import { CommandPhase } from "#app/phases/command-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
 import type { SessionSaveData } from "#app/system/game-data";
-import type GameManager from "#test/testUtils/gameManager";
+import type { GameManager } from "#test/testUtils/gameManager";
 import { GameManagerHelper } from "#test/testUtils/helpers/gameManagerHelper";
 
 /**
