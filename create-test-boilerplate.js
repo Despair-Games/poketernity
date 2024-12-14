@@ -1,5 +1,5 @@
 /**
- * This script creates a test boilerplate file in the appropriate 
+ * This script creates a test boilerplate file in the appropriate
  * directory based on the type selected.
  * @example npm run create-test
  */
@@ -13,6 +13,15 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const typeChoices = ["Move", "Ability", "Item", "Mystery Encounter"];
+
+/**
+ * Get the path to a given folder in the test directory
+ * @param  {...string} folders the subfolders to append to the base path
+ * @returns {string} the path to the requested folder
+ */
+function getTestFolderPath(...folders) {
+  return path.join(__dirname, "test", ...folders);
+}
 
 /**
  * Prompts the user to select a type via list.
@@ -74,7 +83,7 @@ async function runInteractive() {
   const fileName = fileNameAnswer.userInput
     .replace(/-+/g, "_") // Convert kebab-case (dashes) to underscores
     .replace(/([a-z])([A-Z])/g, "$1_$2") // Convert camelCase to snake_case
-    .replace(/\s+/g, '_') // Replace spaces with underscores
+    .replace(/\s+/g, "_") // Replace spaces with underscores
     .toLowerCase(); // Ensure all lowercase
   // Format the description for the test case
 
@@ -84,19 +93,19 @@ async function runInteractive() {
   let description;
   switch (type) {
     case "move":
-      dir = path.join(__dirname, "src", "test", "moves");
+      dir = getTestFolderPath("moves");
       description = `Moves - ${formattedName}`;
       break;
     case "ability":
-      dir = path.join(__dirname, "src", "test", "abilities");
+      dir = getTestFolderPath("abilities");
       description = `Abilities - ${formattedName}`;
       break;
     case "item":
-      dir = path.join(__dirname, "src", "test", "items");
+      dir = getTestFolderPath("items");
       description = `Items - ${formattedName}`;
       break;
     case "mystery encounter":
-      dir = path.join(__dirname, "src", "test", "mystery-encounter", "encounters");
+      dir = getTestFolderPath("mystery-encounter", "encounters");
       description = `Mystery Encounter - ${formattedName}`;
       break;
     default:
@@ -108,7 +117,7 @@ async function runInteractive() {
   const content = `import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
-import GameManager from "#test/utils/gameManager";
+import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 

@@ -1,15 +1,7 @@
 import Phaser from "phaser";
-import InvertPostFX from "./pipelines/invert";
-import { version } from "../package.json";
-import UIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin";
-import BBCodeTextPlugin from "phaser3-rex-plugins/plugins/bbcodetext-plugin";
-import InputTextPlugin from "phaser3-rex-plugins/plugins/inputtext-plugin";
-import TransitionImagePackPlugin from "phaser3-rex-plugins/templates/transitionimagepack/transitionimagepack-plugin";
-import { initI18n } from "./plugins/i18n";
-
 
 // Catch global errors and display them in an alert so users can report the issue.
-window.onerror = function (message, source, lineno, colno, error) {
+window.onerror = function (_message, _source, _lineno, _colno, error) {
   console.error(error);
   // const errorString = `Received unhandled error. Open browser console and click OK to see details.\nError: ${message}\nSource: ${source}\nLine: ${lineno}\nColumn: ${colno}\nStack: ${error.stack}`;
   //alert(errorString);
@@ -42,70 +34,29 @@ Phaser.GameObjects.Rectangle.prototype.setPositionRelative = setPositionRelative
 
 document.fonts.load("16px emerald").then(() => document.fonts.load("10px pkmnems"));
 
-let game;
-
 const startGame = async (manifest?: any) => {
-  await initI18n();
-  const LoadingScene = (await import("./loading-scene")).LoadingScene;
-  const BattleScene = (await import("./battle-scene")).default;
-  game = new Phaser.Game({
-    type: Phaser.WEBGL,
-    parent: "app",
-    scale: {
-      width: 1920,
-      height: 1080,
-      mode: Phaser.Scale.FIT
-    },
-    plugins: {
-      global: [{
-        key: "rexInputTextPlugin",
-        plugin: InputTextPlugin,
-        start: true
-      }, {
-        key: "rexBBCodeTextPlugin",
-        plugin: BBCodeTextPlugin,
-        start: true
-      }, {
-        key: "rexTransitionImagePackPlugin",
-        plugin: TransitionImagePackPlugin,
-        start: true
-      }],
-      scene: [{
-        key: "rexUI",
-        plugin: UIPlugin,
-        mapping: "rexUI"
-      }]
-    },
-    input: {
-      mouse: {
-        target: "app"
-      },
-      touch: {
-        target: "app"
-      },
-      gamepad: true
-    },
-    dom: {
-      createContainer: true
-    },
-    pixelArt: true,
-    pipeline: [ InvertPostFX ] as unknown as Phaser.Types.Core.PipelineConfig,
-    scene: [ LoadingScene, BattleScene ],
-    version: version
-  });
-  game.sound.pauseOnBlur = false;
-  if (manifest) {
-    game["manifest"] = manifest;
+  try {
+    const { initI18n } = await import("./plugins/i18n");
+    await initI18n();
+
+    const { game } = await import("./game");
+    game.sound.pauseOnBlur = false;
+
+    if (manifest) {
+      game["manifest"] = manifest;
+    }
+  } catch (err) {
+    console.error("Game failed to launch:", err);
+    alert("The game failed to launch. Please try again.\nFor more information, check the js console.");
   }
 };
 
 fetch("/manifest.json")
-  .then(res => res.json())
-  .then(jsonResponse => {
+  .then((res) => res.json())
+  .then((jsonResponse) => {
     startGame(jsonResponse.manifest);
-  }).catch(() => {
+  })
+  .catch(() => {
     // Manifest not found (likely local build)
     startGame();
   });
-
-export default game;

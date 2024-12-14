@@ -13,12 +13,12 @@ export default class CacheBustedLoaderPlugin extends Phaser.Loader.LoaderPlugin 
     manifest = manifestObj;
   }
 
-  addFile(file): void {
+  override addFile(file): void {
     if (!Array.isArray(file)) {
-      file = [ file ];
+      file = [file];
     }
 
-    file.forEach(item => {
+    file.forEach((item) => {
       if (manifest) {
         const timestamp = manifest[`/${item.url.replace(/\/\//g, "/")}`];
         if (timestamp) {

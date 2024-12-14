@@ -1,5 +1,5 @@
-import BattleScene from "../battle-scene";
-import * as Utils from "../utils";
+import { globalScene } from "#app/global-scene";
+import { MissingTextureKey } from "#app/utils";
 
 export default class CharSprite extends Phaser.GameObjects.Container {
   private sprite: Phaser.GameObjects.Sprite;
@@ -9,13 +9,13 @@ export default class CharSprite extends Phaser.GameObjects.Container {
   public variant: string;
   public shown: boolean;
 
-  constructor(scene: BattleScene) {
-    super(scene, (scene.game.canvas.width / 6) + 32, -42);
+  constructor() {
+    super(globalScene, globalScene.game.canvas.width / 6 + 32, -42);
   }
 
   setup(): void {
-    [ this.sprite, this.transitionSprite ] = new Array(2).fill(null).map(() => {
-      const ret = this.scene.add.sprite(0, 0, "", "");
+    [this.sprite, this.transitionSprite] = new Array(2).fill(null).map(() => {
+      const ret = globalScene.add.sprite(0, 0, "", "");
       ret.setOrigin(0.5, 1);
       this.add(ret);
       return ret;
@@ -28,7 +28,7 @@ export default class CharSprite extends Phaser.GameObjects.Container {
   }
 
   showCharacter(key: string, variant: string): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       if (!key.startsWith("c_")) {
         key = `c_${key}`;
       }
@@ -45,19 +45,19 @@ export default class CharSprite extends Phaser.GameObjects.Container {
 
       this.sprite.setTexture(key, variant);
 
-      (this.scene as BattleScene).fieldUI.bringToTop(this);
+      globalScene.fieldUI.bringToTop(this);
 
-      this.scene.tweens.add({
+      globalScene.tweens.add({
         targets: this,
-        x: (this.scene.game.canvas.width / 6) - 102,
+        x: globalScene.game.canvas.width / 6 - 102,
         duration: 750,
         ease: "Cubic.easeOut",
         onComplete: () => {
           resolve();
-        }
+        },
       });
 
-      this.setVisible(this.scene.textures.get(key).key !== Utils.MissingTextureKey);
+      this.setVisible(globalScene.textures.get(key).key !== MissingTextureKey);
       this.shown = true;
 
       this.key = key;
@@ -66,13 +66,13 @@ export default class CharSprite extends Phaser.GameObjects.Container {
   }
 
   setVariant(variant: string): Promise<void> {
-    return new Promise(resolve => {
-      (this.scene as BattleScene).fieldUI.bringToTop(this);
+    return new Promise((resolve) => {
+      globalScene.fieldUI.bringToTop(this);
 
       this.transitionSprite.setTexture(this.key, variant);
       this.transitionSprite.setAlpha(0);
       this.transitionSprite.setVisible(true);
-      this.scene.tweens.add({
+      globalScene.tweens.add({
         targets: this.transitionSprite,
         alpha: 1,
         duration: 250,
@@ -81,21 +81,21 @@ export default class CharSprite extends Phaser.GameObjects.Container {
           this.sprite.setTexture(this.key, variant);
           this.transitionSprite.setVisible(false);
           resolve();
-        }
+        },
       });
       this.variant = variant;
     });
   }
 
   hide(): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       if (!this.shown) {
         return resolve();
       }
 
-      this.scene.tweens.add({
+      globalScene.tweens.add({
         targets: this,
-        x: (this.scene.game.canvas.width / 6) + 32,
+        x: globalScene.game.canvas.width / 6 + 32,
         duration: 750,
         ease: "Cubic.easeIn",
         onComplete: () => {
@@ -103,7 +103,7 @@ export default class CharSprite extends Phaser.GameObjects.Container {
             this.setVisible(false);
           }
           resolve();
-        }
+        },
       });
 
       this.shown = false;

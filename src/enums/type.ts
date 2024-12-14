@@ -18,5 +18,5 @@ export enum Type {
   DRAGON,
   DARK,
   FAIRY,
-  STELLAR
+  STELLAR,
 }

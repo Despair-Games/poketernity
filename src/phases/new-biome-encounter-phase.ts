@@ -1,49 +1,52 @@
-import BattleScene from "#app/battle-scene";
-import { applyAbAttrs, PostBiomeChangeAbAttr } from "#app/data/ability";
+import { globalScene } from "#app/global-scene";
+import { applyAbAttrs } from "#app/data/ability";
+import { PostBiomeChangeAbAttr } from "#app/data/ab-attrs/post-biome-change-ab-attr";
 import { getRandomWeatherType } from "#app/data/weather";
 import { NextEncounterPhase } from "./next-encounter-phase";
 
 export class NewBiomeEncounterPhase extends NextEncounterPhase {
-  constructor(scene: BattleScene) {
-    super(scene);
+  constructor() {
+    super();
   }
 
-  doEncounter(): void {
-    this.scene.playBgm(undefined, true);
+  override doEncounter(): void {
+    globalScene.playBgm(undefined, true);
 
-    for (const pokemon of this.scene.getPlayerParty()) {
+    for (const pokemon of globalScene.getPlayerParty()) {
       if (pokemon) {
         pokemon.resetBattleData();
       }
     }
 
-    for (const pokemon of this.scene.getPlayerParty().filter(p => p.isOnField())) {
+    for (const pokemon of globalScene.getPlayerParty().filter((p) => p.isOnField())) {
       applyAbAttrs(PostBiomeChangeAbAttr, pokemon, null);
     }
 
-    const enemyField = this.scene.getEnemyField();
-    const moveTargets: any[]  = [ this.scene.arenaEnemy, enemyField ];
-    const mysteryEncounter = this.scene.currentBattle?.mysteryEncounter?.introVisuals;
+    const enemyField = globalScene.getEnemyField();
+    const moveTargets: any[] = [globalScene.arenaEnemy, enemyField];
+    const mysteryEncounter = globalScene.currentBattle?.mysteryEncounter?.introVisuals;
     if (mysteryEncounter) {
       moveTargets.push(mysteryEncounter);
     }
 
-    this.scene.tweens.add({
+    globalScene.tweens.add({
       targets: moveTargets.flat(),
       x: "+=300",
       duration: 2000,
       onComplete: () => {
-        if (!this.tryOverrideForBattleSpec()) {
+        if (globalScene.currentBattle.isClassicFinalBoss) {
+          this.displayFinalBossDialogue();
+        } else {
           this.doEncounterCommon();
         }
-      }
+      },
     });
   }
 
   /**
    * Set biome weather.
    */
-  trySetWeatherIfNewBiome(): void {
-    this.scene.arena.trySetWeather(getRandomWeatherType(this.scene.arena), false);
+  override trySetWeatherIfNewBiome(): void {
+    globalScene.arena.trySetWeather(getRandomWeatherType(globalScene.arena), false);
   }
 }
