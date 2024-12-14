@@ -133,7 +133,7 @@ export function getFusedSpeciesName(speciesAName: string, speciesBName: string):
 /**
  * Returns a list of Pokemon in a specific category (ex. Mythical, UB, etc.)
  * @param category the category used to make the list
- * @param includeLegends boolean value that determines if legendaries should be in the returned list
+ * @param includeLegends if `true`, AND if `category` is `PARADOX` or `ULTRA_BEAST`, then also include legendaries in the returned list
  * @returns a list of species IDs belonging to the category
  */
 export function getSpecialSpeciesList(category: SpeciesCategories, includeLegends?: boolean): Species[] {
