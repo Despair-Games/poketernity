@@ -30,8 +30,8 @@ import type { Variant, VariantSet } from "#app/data/variant";
 import { variantData } from "#app/data/variant";
 import { speciesStarterCosts, POKERUS_STARTER_COUNT } from "#app/data/balance/starters";
 import { SpeciesFormKey } from "#enums/species-form-key";
-import { SpeciesCategories } from "#app/enums/pokemon-species-categories";
-import { PokemonRegion } from "#app/enums/pokemon-regions";
+import { SpeciesCategories } from "#enums/pokemon-species-categories";
+import { PokemonRegion } from "#enums/pokemon-regions";
 
 /**
  * Gets the {@linkcode PokemonSpecies} object associated with the {@linkcode Species} enum given
