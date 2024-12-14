@@ -12,7 +12,7 @@ import { Biome } from "#enums/biome";
 import { Species } from "#enums/species";
 import { Challenges } from "./enums/challenges";
 import { globalScene } from "#app/global-scene";
-import { SpeciesCategories } from "./enums/pokemon-species-categories";
+import { SpeciesCategories } from "#enums/pokemon-species-categories";
 
 export enum GameModes {
   CLASSIC,

@@ -1,5 +1,5 @@
-import { SpeciesCategories } from "#app/enums/pokemon-species-categories";
-import { getSpecialSpeciesList } from "../pokemon-species";
+import { SpeciesCategories } from "#enums/pokemon-species-categories";
+import { getSpecialSpeciesList } from "#app/data/pokemon-species";
 
 /**
  * A list of all {@link https://bulbapedia.bulbagarden.net/wiki/Paradox_Pok%C3%A9mon | Paradox Pokemon}, NOT including the legendaries Miraidon and Koraidon.
