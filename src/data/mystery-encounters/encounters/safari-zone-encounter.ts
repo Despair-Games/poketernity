@@ -17,7 +17,7 @@ import { PokeballType } from "#enums/pokeball";
 import { PlayerGender } from "#enums/player-gender";
 import { NumberHolder, randSeedInt } from "#app/utils";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { getPokemonSpecies } from "#app/data/pokemon-species";
+import { getPokemonSpecies, getSpecialSpeciesList } from "#app/data/pokemon-species";
 import { MoneyRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
 import {
   doPlayerFlee,
@@ -32,7 +32,7 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { ScanIvsPhase } from "#app/phases/scan-ivs-phase";
 import { SummonPhase } from "#app/phases/summon-phase";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
-import { NON_LEGEND_PARADOX_POKEMON } from "#app/data/balance/special-species-groups";
+import { SpeciesCategories } from "#app/enums/pokemon-species-categories";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/safariZone";
@@ -571,6 +571,13 @@ async function doEndTurn(cursorIndex: number) {
  */
 export function getSafariSpeciesSpawn(): PokemonSpecies {
   return getPokemonSpecies(
-    getRandomSpeciesByStarterCost([0, 5], NON_LEGEND_PARADOX_POKEMON, undefined, false, false, false),
+    getRandomSpeciesByStarterCost(
+      [0, 5],
+      getSpecialSpeciesList(SpeciesCategories.PARADOX, false),
+      undefined,
+      false,
+      false,
+      false,
+    ),
   );
 }

@@ -1092,9 +1092,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
    * @returns true if the Pokemon is considered a sub-legendary by the game
    */
   isSubLegendary() {
-    return [SpeciesCategories.SUBLEGENDARY, SpeciesCategories.ULTRA_BEAST, SpeciesCategories.PARADOX].includes(
-      this.category,
-    );
+    return [SpeciesCategories.SUBLEGENDARY, SpeciesCategories.ULTRA_BEAST].includes(this.category);
   }
 
   /**
