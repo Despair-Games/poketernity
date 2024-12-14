@@ -43,7 +43,7 @@ import { Nature } from "#enums/nature";
 import type HeldModifierConfig from "#app/interfaces/held-modifier-config";
 import { trainerConfigs, TrainerPartyTemplate } from "#app/data/trainer-config";
 import { PartyMemberStrength } from "#enums/party-member-strength";
-import { SpeciesCategories } from "#app/enums/pokemon-species-categories";
+import { SpeciesCategories } from "#enums/pokemon-species-categories";
 
 /** i18n namespace for encounter */
 const namespace = "mysteryEncounters/weirdDream";
