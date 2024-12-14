@@ -48,28 +48,6 @@ import { SpeciesCategories } from "#enums/pokemon-species-categories";
 /** i18n namespace for encounter */
 const namespace = "mysteryEncounters/weirdDream";
 
-/** Exclude Ultra Beasts, Paradox, Eternatus, and all legendary/mythical/trio pokemon that are below 570 BST */
-const EXCLUDED_TRANSFORMATION_SPECIES = [
-  Species.ETERNATUS,
-  /** UBs */
-  ...getSpecialSpeciesList(SpeciesCategories.ULTRA_BEAST, false),
-  /** Paradox */
-  ...getSpecialSpeciesList(SpeciesCategories.PARADOX, false),
-  /** These are banned so they don't appear in the < 570 BST pool */
-  Species.COSMOG,
-  Species.MELTAN,
-  Species.KUBFU,
-  Species.COSMOEM,
-  Species.TERAPAGOS,
-  Species.TYPE_NULL,
-  Species.CALYREX,
-  Species.URSHIFU,
-  Species.OGERPON,
-  Species.OKIDOGI,
-  Species.MUNKIDORI,
-  Species.FEZANDIPITI,
-];
-
 const SUPER_LEGENDARY_BST_THRESHOLD = 600;
 const NON_LEGENDARY_BST_THRESHOLD = 570;
 
@@ -624,6 +602,27 @@ function getTransformedSpecies(
           || speciesBst < NON_LEGENDARY_BST_THRESHOLD
           || speciesBst > SUPER_LEGENDARY_BST_THRESHOLD)
         && (!hasPokemonBstHigherThan600 || speciesBst <= SUPER_LEGENDARY_BST_THRESHOLD);
+      /** Exclude Ultra Beasts, Paradox, Eternatus, and all legendary/mythical/trio pokemon that are below 570 BST */
+      const EXCLUDED_TRANSFORMATION_SPECIES = [
+        Species.ETERNATUS,
+        /** UBs */
+        ...getSpecialSpeciesList(SpeciesCategories.ULTRA_BEAST, false),
+        /** Paradox */
+        ...getSpecialSpeciesList(SpeciesCategories.PARADOX, false),
+        /** These are banned so they don't appear in the < 570 BST pool */
+        Species.COSMOG,
+        Species.MELTAN,
+        Species.KUBFU,
+        Species.COSMOEM,
+        Species.TERAPAGOS,
+        Species.TYPE_NULL,
+        Species.CALYREX,
+        Species.URSHIFU,
+        Species.OGERPON,
+        Species.OKIDOGI,
+        Species.MUNKIDORI,
+        Species.FEZANDIPITI,
+      ];
       return bstInRange && validBst && !EXCLUDED_TRANSFORMATION_SPECIES.includes(s.speciesId);
     });
 
