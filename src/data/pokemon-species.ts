@@ -8,7 +8,7 @@ import type { AnySound } from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
 import type { GameMode } from "#app/game-mode";
 import type { StarterMoveset } from "#app/system/game-data";
-import { randSeedInt, randSeedGauss, randSeedItem } from "#app/utils";
+import { randSeedInt, randSeedGauss, randSeedItem, isNullOrUndefined } from "#app/utils";
 import { uncatchableSpecies } from "#app/data/balance/biomes";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { GrowthRate } from "#app/data/exp";
@@ -137,11 +137,13 @@ export function getFusedSpeciesName(speciesAName: string, speciesBName: string):
  * @returns a list of species IDs belonging to the category
  */
 export function getSpecialSpeciesList(category: SpeciesCategories, includeLegends?: boolean): Species[] {
-  const speciesList = allSpecies.map((s) => {
-    if (s.category === category) {
-      return s.speciesId;
-    }
-  });
+  const speciesList = allSpecies
+    .map((s) => {
+      if (s.category === category) {
+        return s.speciesId;
+      }
+    })
+    .filter((s) => !isNullOrUndefined(s));
   if (includeLegends && category === SpeciesCategories.ULTRA_BEAST) {
     speciesList.push(Species.COSMOG, Species.COSMOEM, Species.LUNALA, Species.SOLGALEO, Species.NECROZMA);
   } else if (includeLegends && category === SpeciesCategories.PARADOX) {
