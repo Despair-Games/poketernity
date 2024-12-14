@@ -1110,6 +1110,14 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
   isMythical() {
     return this.category === SpeciesCategories.MYTHICAL;
   }
+
+  /**
+   * Helper function that determines if the Pokemon is a sublegendary, legendary, or mythical
+   * @returns `true` if the Pokemon is a sublegendary, legendary, or mythical
+   */
+  isLegendLike() {
+    return this.isSubLegendary() || this.isLegendary() || this.isMythical();
+  }
 }
 
 export class PokemonForm extends PokemonSpeciesForm {
@@ -31082,7 +31090,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.COSMOG,
       7,
-      SpeciesCategories.SUBLEGENDARY,
+      SpeciesCategories.LEGENDARY,
       "Nebula Pokémon",
       Type.PSYCHIC,
       null,
@@ -31108,7 +31116,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.COSMOEM,
       7,
-      SpeciesCategories.SUBLEGENDARY,
+      SpeciesCategories.LEGENDARY,
       "Protostar Pokémon",
       Type.PSYCHIC,
       null,

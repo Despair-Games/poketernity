@@ -30,7 +30,6 @@ import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import type { CustomModifierSettings } from "#app/modifier/modifier-type";
 import { ModifierTier } from "#app/modifier/modifier-tier";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { SpeciesCategories } from "./enums/pokemon-species-categories";
 
 export enum ClassicFixedBossWaves {
   // TODO: other fixed wave battles should be added here
@@ -255,7 +254,7 @@ export default class Battle {
         }
         return "battle_final_encounter";
       }
-      if (pokemon.species.category !== SpeciesCategories.COMMON) {
+      if (pokemon.species.isLegendLike()) {
         if (globalScene.musicPreference === MusicPreference.CONSISTENT) {
           switch (pokemon.species.speciesId) {
             case Species.REGIROCK:

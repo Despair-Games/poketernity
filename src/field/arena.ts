@@ -31,7 +31,6 @@ import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { WeatherType } from "#enums/weather-type";
 import { TerrainEventTypeChangeAbAttr } from "#app/data/ab-attrs/terrain-event-type-change-ab-attr";
-import { SpeciesCategories } from "#enums/pokemon-species-categories";
 
 export class Arena {
   public biomeType: Biome;
@@ -159,7 +158,7 @@ export class Arena {
 
       ret = getPokemonSpecies(species!);
 
-      if (ret.category !== SpeciesCategories.COMMON) {
+      if (ret.isLegendLike()) {
         switch (true) {
           case ret.baseTotal >= 720:
             regen = level < 90;

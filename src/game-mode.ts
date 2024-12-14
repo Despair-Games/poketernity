@@ -12,7 +12,6 @@ import { Biome } from "#enums/biome";
 import { Species } from "#enums/species";
 import { Challenges } from "./enums/challenges";
 import { globalScene } from "#app/global-scene";
-import { SpeciesCategories } from "#enums/pokemon-species-categories";
 
 export enum GameModes {
   CLASSIC,
@@ -204,10 +203,7 @@ export class GameMode implements GameModeConfig {
     if (this.isDaily && this.isWaveFinal(waveIndex)) {
       const allFinalBossSpecies = allSpecies.filter(
         (s) =>
-          s.category !== SpeciesCategories.COMMON
-          && s.baseTotal >= 600
-          && s.speciesId !== Species.ETERNATUS
-          && s.speciesId !== Species.ARCEUS,
+          s.isLegendLike() && s.baseTotal >= 600 && s.speciesId !== Species.ETERNATUS && s.speciesId !== Species.ARCEUS,
       );
       return randSeedItem(allFinalBossSpecies);
     }

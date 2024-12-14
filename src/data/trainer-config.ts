@@ -22,7 +22,6 @@ import { PartyMemberStrength } from "#enums/party-member-strength";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
 import { Gender } from "#enums/gender";
-import { SpeciesCategories } from "#enums/pokemon-species-categories";
 
 /** Minimum BST for Pokemon generated onto the Elite Four's teams */
 const ELITE_FOUR_MINIMUM_BST = 460;
@@ -321,8 +320,7 @@ export class TrainerConfig {
     this.mixedBattleBgm = "battle_trainer";
     this.victoryBgm = "victory_trainer";
     this.partyTemplates = [trainerPartyTemplates.TWO_AVG];
-    this.speciesFilter = (species) =>
-      (allowLegendaries || species.category === SpeciesCategories.COMMON) && !species.isTrainerForbidden();
+    this.speciesFilter = (species) => (allowLegendaries || !species.isLegendLike()) && !species.isTrainerForbidden();
   }
 
   getKey(): string {
@@ -1620,7 +1618,7 @@ function getSpeciesFilterRandomPartyMemberFunc(
   postProcess?: (EnemyPokemon: EnemyPokemon) => void,
 ): PartyMemberFunc {
   const speciesFilter = (species: PokemonSpecies): boolean => {
-    const notLegendary = species.category === SpeciesCategories.COMMON;
+    const notLegendary = !species.isLegendLike();
     return (allowLegendaries || notLegendary) && !species.isTrainerForbidden() && originalSpeciesFilter(species);
   };
 

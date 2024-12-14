@@ -10,7 +10,6 @@ import { achvs } from "#app/system/achv";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { EggSummaryPhase } from "./egg-summary-phase";
 import { EggHatchData } from "#app/data/egg-hatch-data";
-import { SpeciesCategories } from "#enums/pokemon-species-categories";
 
 /**
  * Phase that handles updating eggs, and hatching any ready eggs
@@ -119,7 +118,7 @@ export class EggLapsePhase extends Phase {
       pokemon.clearFusionSpecies();
     }
 
-    if (pokemon.species.category !== SpeciesCategories.COMMON) {
+    if (pokemon.species.isLegendLike()) {
       if (pokemon.species.isSubLegendary()) {
         globalScene.validateAchv(achvs.HATCH_SUB_LEGENDARY);
       } else if (pokemon.species.isLegendary()) {
