@@ -4,7 +4,7 @@ import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
 import { globalScene } from "#app/global-scene";
 import { modifierTypes } from "#app/modifier/modifier-type";
-import { getPokemonSpecies } from "#app/data/pokemon-species";
+import { getPokemonSpecies, getSpecialSpeciesList } from "#app/data/pokemon-species";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
@@ -21,75 +21,10 @@ import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { PokemonFormChangeItemModifier } from "#app/modifier/modifier";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
 import { Challenges } from "#enums/challenges";
+import { SpeciesCategories } from "#enums/pokemon-species-categories";
 
 /** i18n namespace for encounter */
 const namespace = "mysteryEncounters/darkDeal";
-
-/** Exclude Ultra Beasts (inludes Cosmog/Solgaleo/Lunala/Necrozma), Paradox (includes Miraidon/Koraidon), Eternatus, and Mythicals */
-const excludedBosses = [
-  Species.NECROZMA,
-  Species.COSMOG,
-  Species.COSMOEM,
-  Species.SOLGALEO,
-  Species.LUNALA,
-  Species.ETERNATUS,
-  Species.NIHILEGO,
-  Species.BUZZWOLE,
-  Species.PHEROMOSA,
-  Species.XURKITREE,
-  Species.CELESTEELA,
-  Species.KARTANA,
-  Species.GUZZLORD,
-  Species.POIPOLE,
-  Species.NAGANADEL,
-  Species.STAKATAKA,
-  Species.BLACEPHALON,
-  Species.GREAT_TUSK,
-  Species.SCREAM_TAIL,
-  Species.BRUTE_BONNET,
-  Species.FLUTTER_MANE,
-  Species.SLITHER_WING,
-  Species.SANDY_SHOCKS,
-  Species.ROARING_MOON,
-  Species.KORAIDON,
-  Species.WALKING_WAKE,
-  Species.GOUGING_FIRE,
-  Species.RAGING_BOLT,
-  Species.IRON_TREADS,
-  Species.IRON_BUNDLE,
-  Species.IRON_HANDS,
-  Species.IRON_JUGULIS,
-  Species.IRON_MOTH,
-  Species.IRON_THORNS,
-  Species.IRON_VALIANT,
-  Species.MIRAIDON,
-  Species.IRON_LEAVES,
-  Species.IRON_BOULDER,
-  Species.IRON_CROWN,
-  Species.MEW,
-  Species.CELEBI,
-  Species.DEOXYS,
-  Species.JIRACHI,
-  Species.DARKRAI,
-  Species.PHIONE,
-  Species.MANAPHY,
-  Species.ARCEUS,
-  Species.SHAYMIN,
-  Species.VICTINI,
-  Species.MELOETTA,
-  Species.KELDEO,
-  Species.GENESECT,
-  Species.DIANCIE,
-  Species.HOOPA,
-  Species.VOLCANION,
-  Species.MAGEARNA,
-  Species.MARSHADOW,
-  Species.ZERAORA,
-  Species.ZARUDE,
-  Species.MELTAN,
-  Species.MELMETAL,
-  Species.PECHARUNT,
-];
 
 /**
  * Dark Deal encounter.
@@ -180,6 +115,13 @@ export const DarkDealEncounter: MysteryEncounter = MysteryEncounterBuilder.withE
         // Starter egg tier, 35/50/10/5 %odds for tiers 6/7/8/9+
         const roll = randSeedInt(100);
         const starterTier: number | [number, number] = roll >= 65 ? 6 : roll >= 15 ? 7 : roll >= 5 ? 8 : [9, 10];
+        /** Exclude Ultra Beasts (includes Cosmog/Solgaleo/Lunala/Necrozma), Paradox (includes Miraidon/Koraidon), Eternatus, and Mythicals */
+        const excludedBosses = [
+          ...getSpecialSpeciesList(SpeciesCategories.MYTHICAL),
+          ...getSpecialSpeciesList(SpeciesCategories.ULTRA_BEAST, true),
+          ...getSpecialSpeciesList(SpeciesCategories.PARADOX, true),
+          Species.ETERNATUS,
+        ];
         const bossSpecies = getPokemonSpecies(getRandomSpeciesByStarterCost(starterTier, excludedBosses, bossTypes));
         const pokemonConfig: EnemyPokemonConfig = {
           species: bossSpecies,
