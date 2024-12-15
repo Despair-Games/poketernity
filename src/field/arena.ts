@@ -158,7 +158,7 @@ export class Arena {
 
       ret = getPokemonSpecies(species!);
 
-      if (ret.subLegendary || ret.legendary || ret.mythical) {
+      if (ret.isLegendLike()) {
         switch (true) {
           case ret.baseTotal >= 720:
             regen = level < 90;

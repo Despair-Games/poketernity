@@ -540,7 +540,7 @@ export default class Trainer extends Phaser.GameObjects.Container {
       if (playerField.length > 0) {
         for (const playerPokemon of playerField) {
           score += p.getMatchupScore(playerPokemon);
-          if (playerPokemon.species.legendary) {
+          if (playerPokemon.species.isLegendary()) {
             score /= 2;
           }
         }
