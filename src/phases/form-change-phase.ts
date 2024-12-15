@@ -27,7 +27,7 @@ export class FormChangePhase extends FormChangeBasePhase {
     this.modal = modal;
   }
 
-  public validate(): boolean {
+  public override validate(): boolean {
     return !!this.formChange;
   }
 
@@ -38,7 +38,7 @@ export class FormChangePhase extends FormChangeBasePhase {
     return globalScene.ui.setOverlayMode(Mode.FORM_CHANGE_SCENE);
   }
 
-  public doFormChange(): void {
+  public override doFormChange(): void {
     this.pokemon.getPossibleForm(this.formChange).then((formChangedPokemon) => {
       [this.pokemonFormChangeSprite, this.pokemonFormChangeTintSprite].map((sprite) => {
         const spriteKey = formChangedPokemon.getSpriteKey(true);
