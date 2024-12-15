@@ -37,7 +37,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
     this.fusionSpeciesEvolved = evolution instanceof FusionSpeciesFormEvolution;
   }
 
-  public validate(): boolean {
+  public override validate(): boolean {
     return !!this.evolution;
   }
 
@@ -46,7 +46,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
     this.preEvolvedPokemonName = getPokemonNameWithAffix(this.pokemon);
   }
 
-  public doFormChange(): void {
+  public override doFormChange(): void {
     globalScene.ui.showText(
       i18next.t("menu:evolving", { pokemonName: this.preEvolvedPokemonName }),
       null,
