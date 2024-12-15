@@ -623,7 +623,7 @@ export class MoveEffectPhase extends PokemonPhase {
     const target = this.getFirstTarget();
 
     return (
-      this.move.getMove().moveTarget === MoveTarget.SMART
+      this.move.getMove().moveTarget === MoveTarget.DRAGON_DARTS
       && globalScene.currentBattle.double
       && target !== this.getUserPokemon()?.getAlly()
       && !target?.getTag(BattlerTagType.CENTER_OF_ATTENTION)

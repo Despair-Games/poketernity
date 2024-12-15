@@ -147,8 +147,7 @@ export enum MoveTarget {
   BOTH_SIDES,
   PARTY,
   CURSE,
-  /** "Smart targeting" used for {@link https://bulbapedia.bulbagarden.net/wiki/Dragon_Darts_(move) | Dragon Darts} */
-  SMART,
+  DRAGON_DARTS,
 }
 
 export enum MoveFlags {
@@ -8346,7 +8345,7 @@ export function getMoveTargets(user: Pokemon, move: Moves): MoveTargetSet {
       break;
     case MoveTarget.NEAR_OTHER:
     case MoveTarget.OTHER:
-    case MoveTarget.SMART:
+    case MoveTarget.DRAGON_DARTS:
     case MoveTarget.ALL_NEAR_OTHERS:
     case MoveTarget.ALL_OTHERS:
       set = opponents.concat([user.getAlly()]);
@@ -11014,7 +11013,7 @@ export function initMoves() {
     new AttackMove(Moves.DRAGON_DARTS, Type.DRAGON, MoveCategory.PHYSICAL, 50, 100, 10, -1, 0, 8)
       .attr(MultiHitAttr, MultiHitType._2)
       .makesContact(false)
-      .target(MoveTarget.SMART)
+      .target(MoveTarget.DRAGON_DARTS)
       .edgeCase(), // see `dragon_darts.test.ts` for documented edge cases
     new StatusMove(Moves.TEATIME, Type.NORMAL, -1, 10, -1, 0, 8).attr(EatBerryAttr, false).target(MoveTarget.ALL),
     new StatusMove(Moves.OCTOLOCK, Type.FIGHTING, 100, 15, -1, 0, 8)
