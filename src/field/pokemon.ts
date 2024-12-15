@@ -7,6 +7,7 @@ import { variantColorCache } from "#app/data/variant";
 import { variantData } from "#app/data/variant";
 import BattleInfo, { PlayerBattleInfo, EnemyBattleInfo } from "#app/ui/battle-info";
 import type Move from "#app/data/move";
+import type { MoveAttr } from "#app/data/move";
 import {
   HighCritAttr,
   HitsTagAttr,
@@ -36,7 +37,8 @@ import {
   OneHitKOAccuracyAttr,
   RespectAttackTypeImmunityAttr,
   MoveTarget,
-  CombinedPledgeStabBoostAttr, IncrementMovePriorityAttr, MoveAttr,
+  CombinedPledgeStabBoostAttr,
+  IncrementMovePriorityAttr,
   VariableMoveTypeChartAttr,
 } from "#app/data/move";
 import type { PokemonSpeciesForm } from "#app/data/pokemon-species";
@@ -1496,9 +1498,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @param moves The list of moves to search for in the moveset.
    */
   hasMove(...moves: Moves[]): boolean {
-    return moves.some(moveId =>
-      this.getMoveset().some(mv => mv && mv.moveId === moveId)
-    );
+    return moves.some((moveId) => this.getMoveset().some((mv) => mv && mv.moveId === moveId));
   }
 
   /**
@@ -1507,7 +1507,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @param attrType The type of attribute to search for in the moveset.
    */
   hasMoveWithAttr(attrType: Constructor<MoveAttr>): boolean {
-    return this.getMoveset().some(mv => mv && mv.getMove().hasAttr(attrType));
+    return this.getMoveset().some((mv) => mv && mv.getMove().hasAttr(attrType));
   }
 
   /**
@@ -1518,15 +1518,20 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * overrides e.g. Mimic
    * @returns an array of {@linkcode PokemonMove | PokemonMoves} containing this Pokemon's attack moves
    */
-  getAttackMoves(usableOnly: boolean = false, revealedOnly: boolean = false, ignoreOverride: boolean = false): PokemonMove[] {
+  getAttackMoves(
+    usableOnly: boolean = false,
+    revealedOnly: boolean = false,
+    ignoreOverride: boolean = false,
+  ): PokemonMove[] {
     let nonNullMoveset = this.getMoveset(ignoreOverride).filter((pokemonMove) => pokemonMove !== null);
     if (revealedOnly) {
-      nonNullMoveset = nonNullMoveset.filter((pokemonMove) => this.battleData?.movesRevealed.includes(pokemonMove.moveId));
+      nonNullMoveset = nonNullMoveset.filter((pokemonMove) =>
+        this.battleData?.movesRevealed.includes(pokemonMove.moveId),
+      );
     }
     return nonNullMoveset.filter((pokemonMove) => {
       const move = pokemonMove.getMove();
-      return move && move.category !== MoveCategory.STATUS
-        && (!usableOnly || pokemonMove.isUsable(this));
+      return move && move.category !== MoveCategory.STATUS && (!usableOnly || pokemonMove.isUsable(this));
     });
   }
 
@@ -1564,9 +1569,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
       // simulated move category depends on the opponent's highest permanent stat
       // between Attack and Sp. Atk (if there's a tie, the move is physical)
-      const category = this.getStat(Stat.ATK) >= this.getStat(Stat.SPATK)
-        ? MoveCategory.PHYSICAL
-        : MoveCategory.SPECIAL;
+      const category =
+        this.getStat(Stat.ATK) >= this.getStat(Stat.SPATK) ? MoveCategory.PHYSICAL : MoveCategory.SPECIAL;
 
       const simulatedMove = new AttackMove(Moves.NONE, type, category, power, 100, 1, -1, 0, 0);
       estimatedAttackMoves.push(simulatedMove);
@@ -2224,9 +2228,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns the move's Attack Score
    */
   getAttackScore(target: Pokemon, move: Move): number {
-    const cachedMoveScore = this.moveScoreData.find(
-      (msd) => msd.moveId === move.id && msd.target === target
-    );
+    const cachedMoveScore = this.moveScoreData.find((msd) => msd.moveId === move.id && msd.target === target);
     if (!isNullOrUndefined(cachedMoveScore?.attackScore)) {
       return cachedMoveScore.attackScore;
     }
@@ -2234,7 +2236,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     let attackScore = 0;
 
     if (move.category !== MoveCategory.STATUS) {
-      const damage = target.getAttackDamage(this, move, !target.battleData?.abilityRevealed, false, move.hasAttr(CritOnlyAttr)).damage;
+      const damage = target.getAttackDamage(
+        this,
+        move,
+        !target.battleData?.abilityRevealed,
+        false,
+        move.hasAttr(CritOnlyAttr),
+      ).damage;
 
       if (damage >= target.hp) {
         const movePriority = new NumberHolder(move.priority);
@@ -2249,19 +2257,19 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           attackScore = 4;
         }
       } else {
-        const percentMaxHpDamage = damage / target.getMaxHp() * 100;
+        const percentMaxHpDamage = (damage / target.getMaxHp()) * 100;
         if (percentMaxHpDamage >= 80) {
           // Moves that deal 80% or more of max HP as damage are always (+2)
           attackScore = 2;
         } else if (percentMaxHpDamage >= 40) {
           // Moves that deal 40-79% damage are (+1) with a (%damage - 40)/40
           // probability of "tiering up" to (+2)
-          const tierUpChance = (Math.floor(percentMaxHpDamage) - 40) / 40 * 100;
+          const tierUpChance = ((Math.floor(percentMaxHpDamage) - 40) / 40) * 100;
           attackScore = 1 + (this.randSeedInt(100) < tierUpChance ? 1 : 0);
         } else if (percentMaxHpDamage > 0) {
           // Moves that deal 1-39% damage are (+0) with a %damage/40
           // probability of "tiering up" to (+1)
-          const tierUpChance = Math.floor(percentMaxHpDamage) / 40 * 100;
+          const tierUpChance = (Math.floor(percentMaxHpDamage) / 40) * 100;
           attackScore = this.randSeedInt(100) < tierUpChance ? 1 : 0;
         } else {
           attackScore = -1; // indicates a "bad" move, not meant to be a final score
@@ -2273,8 +2281,14 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
            * Moves that have an increased critical hit stage and only KO on a critical hit
            * gain a (+1) + (critChance chance of additional +1) bonus.
            */
-          const critDamage = target.getAttackDamage(this, move, !target.battleData?.abilityRevealed, false, true).damage;
-          const critChance = [ 24, 8, 2, 1 ][Math.max(0, Math.min(critStage))];
+          const critDamage = target.getAttackDamage(
+            this,
+            move,
+            !target.battleData?.abilityRevealed,
+            false,
+            true,
+          ).damage;
+          const critChance = [24, 8, 2, 1][Math.max(0, Math.min(critStage))];
 
           if (critDamage >= target.hp) {
             attackScore += 1 + (!this.randSeedInt(critChance) ? 1 : 0);
@@ -2303,9 +2317,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @see {@linkcode getAttackScore}
    */
   getExpectedAttackScore(target: Pokemon, move: Move): number {
-    const cachedMoveScore = this.moveScoreData.find(
-      (msd) => msd.moveId === move.id && msd.target === target
-    );
+    const cachedMoveScore = this.moveScoreData.find((msd) => msd.moveId === move.id && msd.target === target);
     if (!isNullOrUndefined(cachedMoveScore?.expectedAttackScore)) {
       return cachedMoveScore.expectedAttackScore;
     }
@@ -2313,7 +2325,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     let expectedAttackScore = 0;
 
     if (move.category !== MoveCategory.STATUS) {
-      const damage = target.getAttackDamage(this, move, !target.battleData?.abilityRevealed, false, move.hasAttr(CritOnlyAttr)).damage;
+      const damage = target.getAttackDamage(
+        this,
+        move,
+        !target.battleData?.abilityRevealed,
+        false,
+        move.hasAttr(CritOnlyAttr),
+      ).damage;
 
       if (damage >= target.hp) {
         const movePriority = new NumberHolder(move.priority);
@@ -2328,7 +2346,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           expectedAttackScore = 4;
         }
       } else {
-        const percentMaxHpDamage = damage / target.getMaxHp() * 100;
+        const percentMaxHpDamage = (damage / target.getMaxHp()) * 100;
         if (percentMaxHpDamage >= 80) {
           // Moves that deal 80% max HP damage or more are always (+2)
           expectedAttackScore = 2;
@@ -5760,7 +5778,15 @@ export class EnemyPokemon extends Pokemon {
     const currentSpeed = this.isActive(true)
       ? this.getEffectiveStat(Stat.SPD, opponent, undefined, false, !opponent.battleData?.abilityRevealed, false, true)
       : this.getStat(Stat.SPD, false);
-    const currentOpponentSpeed = opponent.getEffectiveStat(Stat.SPD, this, undefined, !this.battleData?.abilityRevealed, false, false, true);
+    const currentOpponentSpeed = opponent.getEffectiveStat(
+      Stat.SPD,
+      this,
+      undefined,
+      !this.battleData?.abilityRevealed,
+      false,
+      false,
+      true,
+    );
 
     /** 1 point bonus if this Pokemon outspeeds its opponent */
     const outspeedBonus = currentSpeed > currentOpponentSpeed ? 1 : 0;
@@ -5781,9 +5807,10 @@ export class EnemyPokemon extends Pokemon {
    * are currently on the field.
    */
   getAverageMatchupScore(): number {
-    const matchupScores = globalScene.getPlayerField()
-      .filter(opp => opp?.isActive(true))
-      .map(opp => this.getMatchupScore(opp));
+    const matchupScores = globalScene
+      .getPlayerField()
+      .filter((opp) => opp?.isActive(true))
+      .map((opp) => this.getMatchupScore(opp));
 
     return matchupScores.reduce((total, score) => total + score) / matchupScores.length;
   }

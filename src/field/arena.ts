@@ -4,14 +4,28 @@ import { biomePokemonPools, BiomePoolTier, biomeTrainerPools } from "#app/data/b
 import { type Constructor, randSeedInt } from "#app/utils";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
-import { getWeatherClearMessage, getWeatherFavoringAbilities, getWeatherFavoringMoves, getWeatherFavoringTypes, getWeatherStartMessage, Weather } from "#app/data/weather";
+import {
+  getWeatherClearMessage,
+  getWeatherFavoringAbilities,
+  getWeatherFavoringMoves,
+  getWeatherFavoringTypes,
+  getWeatherStartMessage,
+  Weather,
+} from "#app/data/weather";
 import { CommonAnim } from "#app/data/battle-anims";
 import type { Type } from "#enums/type";
 import type Move from "#app/data/move";
 import type { ArenaTag } from "#app/data/arena-tag";
 import { ArenaTagSide, ArenaTrapTag, getArenaTag } from "#app/data/arena-tag";
 import type { BattlerIndex } from "#app/battle";
-import { getTerrainFavoringAbilities, getTerrainFavoringMoves, getTerrainFavoringTypes, getTerrainClearMessage, getTerrainStartMessage, Terrain } from "#app/data/terrain";
+import {
+  getTerrainFavoringAbilities,
+  getTerrainFavoringMoves,
+  getTerrainFavoringTypes,
+  getTerrainClearMessage,
+  getTerrainStartMessage,
+  Terrain,
+} from "#app/data/terrain";
 import { TerrainType } from "#enums/terrain-type";
 import { applyAbAttrs, applyPostTerrainChangeAbAttrs, applyPostWeatherChangeAbAttrs } from "#app/data/ability";
 import { PostTerrainChangeAbAttr } from "#app/data/ab-attrs/post-terrain-change-ab-attr";
@@ -427,17 +441,19 @@ export class Arena {
    * @param player If `true`, evaluates the player party; if `false`, evaluates the enemy party.
    */
   public getPartyBenefitFromWeather(weatherType: WeatherType, player: boolean): number {
-    const party: Pokemon[] = player ? this.scene.getPlayerParty() : this.scene.getEnemyParty();
+    const party: Pokemon[] = player ? globalScene.getPlayerParty() : globalScene.getEnemyParty();
     const weatherFavoringTypes = getWeatherFavoringTypes(weatherType);
     const weatherFavoringAbilities = getWeatherFavoringAbilities(weatherType);
     const weatherFavoringMoves = getWeatherFavoringMoves(weatherType);
 
     let totalScore = 0;
     // Gain 1 point for each Pokemon with a favoring type, ability, or move.
-    party.forEach(pokemon => {
-      if (pokemon.getTypes().some(type => weatherFavoringTypes.includes(type))
-          || weatherFavoringAbilities.some(ability => pokemon.hasAbility(ability))
-          || weatherFavoringMoves.some(moveId => pokemon.getMoveset().some(mv => mv && mv.moveId === moveId))) {
+    party.forEach((pokemon) => {
+      if (
+        pokemon.getTypes().some((type) => weatherFavoringTypes.includes(type))
+        || weatherFavoringAbilities.some((ability) => pokemon.hasAbility(ability))
+        || weatherFavoringMoves.some((moveId) => pokemon.getMoveset().some((mv) => mv && mv.moveId === moveId))
+      ) {
         totalScore += 1;
       }
     });
@@ -451,17 +467,19 @@ export class Arena {
    * @param player If `true`, evaluates the player party; if `false`, evaluates the enemy party.
    */
   public getPartyBenefitFromTerrain(terrainType: TerrainType, player: boolean): number {
-    const party: Pokemon[] = player ? this.scene.getPlayerParty() : this.scene.getEnemyParty();
+    const party: Pokemon[] = player ? globalScene.getPlayerParty() : globalScene.getEnemyParty();
     const terrainFavoringTypes = getTerrainFavoringTypes(terrainType);
     const terrainFavoringAbilities = getTerrainFavoringAbilities(terrainType);
     const terrainFavoringMoves = getTerrainFavoringMoves(terrainType);
 
     let totalScore = 0;
     // Gain 1 point for each Pokemon with a favoring type, ability, or move.
-    party.forEach(pokemon => {
-      if (pokemon.getTypes().some(type => terrainFavoringTypes.includes(type))
-          || terrainFavoringAbilities.some(ability => pokemon.hasAbility(ability))
-          || terrainFavoringMoves.some(moveId => pokemon.getMoveset().some(mv => mv && mv.moveId === moveId))) {
+    party.forEach((pokemon) => {
+      if (
+        pokemon.getTypes().some((type) => terrainFavoringTypes.includes(type))
+        || terrainFavoringAbilities.some((ability) => pokemon.hasAbility(ability))
+        || terrainFavoringMoves.some((moveId) => pokemon.getMoveset().some((mv) => mv && mv.moveId === moveId))
+      ) {
         totalScore += 1;
       }
     });

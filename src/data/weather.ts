@@ -172,17 +172,17 @@ export function getWeatherFavoringTypes(weatherType: WeatherType): Type[] {
   switch (weatherType) {
     case WeatherType.SUNNY:
     case WeatherType.HARSH_SUN:
-      return [ Type.FIRE ];
+      return [Type.FIRE];
     case WeatherType.RAIN:
     case WeatherType.HEAVY_RAIN:
-      return [ Type.WATER ];
+      return [Type.WATER];
     case WeatherType.SANDSTORM:
-      return [ Type.ROCK, Type.GROUND, Type.STEEL ];
+      return [Type.ROCK, Type.GROUND, Type.STEEL];
     case WeatherType.HAIL:
     case WeatherType.SNOW:
-      return [ Type.ICE ];
+      return [Type.ICE];
     case WeatherType.STRONG_WINDS:
-      return [ Type.FLYING ];
+      return [Type.FLYING];
     default:
       return [];
   }
@@ -198,32 +198,22 @@ export function getWeatherFavoringAbilities(weatherType: WeatherType): Abilities
         Abilities.FLOWER_GIFT,
         Abilities.PROTOSYNTHESIS,
         Abilities.LEAF_GUARD,
-        Abilities.FORECAST
+        Abilities.FORECAST,
       ];
     case WeatherType.RAIN:
     case WeatherType.HEAVY_RAIN:
-      return [
-        Abilities.SWIFT_SWIM,
-        Abilities.HYDRATION,
-        Abilities.DRY_SKIN,
-        Abilities.FORECAST
-      ];
+      return [Abilities.SWIFT_SWIM, Abilities.HYDRATION, Abilities.DRY_SKIN, Abilities.FORECAST];
     case WeatherType.SANDSTORM:
       return [
         Abilities.SAND_FORCE,
         Abilities.SAND_VEIL,
         Abilities.SAND_RUSH,
         Abilities.MAGIC_GUARD,
-        Abilities.OVERCOAT
+        Abilities.OVERCOAT,
       ];
     case WeatherType.HAIL:
     case WeatherType.SNOW:
-      return [
-        Abilities.SLUSH_RUSH,
-        Abilities.ICE_BODY,
-        Abilities.SNOW_CLOAK,
-        Abilities.ICE_FACE
-      ];
+      return [Abilities.SLUSH_RUSH, Abilities.ICE_BODY, Abilities.SNOW_CLOAK, Abilities.ICE_FACE];
     default:
       return [];
   }
@@ -241,7 +231,7 @@ export function getWeatherFavoringMoves(weatherType: WeatherType): Moves[] {
         Moves.HYDRO_STEAM,
         Moves.MOONLIGHT,
         Moves.SYNTHESIS,
-        Moves.MORNING_SUN
+        Moves.MORNING_SUN,
       ];
     case WeatherType.RAIN:
     case WeatherType.HEAVY_RAIN:
@@ -252,20 +242,13 @@ export function getWeatherFavoringMoves(weatherType: WeatherType): Moves[] {
         Moves.BLEAKWIND_STORM,
         Moves.SANDSEAR_STORM,
         Moves.WILDBOLT_STORM,
-        Moves.ELECTRO_SHOT
+        Moves.ELECTRO_SHOT,
       ];
     case WeatherType.SANDSTORM:
-      return [
-        Moves.WEATHER_BALL,
-        Moves.SHORE_UP
-      ];
+      return [Moves.WEATHER_BALL, Moves.SHORE_UP];
     case WeatherType.HAIL:
     case WeatherType.SNOW:
-      return [
-        Moves.WEATHER_BALL,
-        Moves.BLIZZARD,
-        Moves.AURORA_VEIL
-      ];
+      return [Moves.WEATHER_BALL, Moves.BLIZZARD, Moves.AURORA_VEIL];
     default:
       return [];
   }
