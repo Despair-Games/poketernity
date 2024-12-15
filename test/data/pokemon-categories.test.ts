@@ -8,9 +8,8 @@ import { describe, expect, it } from "vitest";
  * {@link https://www.serebii.net/pokemon/legendary.shtml Serebii},
  * with the following exceptions:
  * 1. Ultra Beasts have their own category instead of being Sub-Legendary.
- * 2. Cosmog and Cosmoem are Sub-Legendary instead of Legendary (custom implementation).
- * 3. Eternal Floette and Bloodmoon Ursaluna are Sub-Legendary instead of Common (custom implementation).
- * 4. The Galarian variants of Articuno, Zapdos, and Moltres are Sub-Legendary (Serebii forgot to add them).
+ * 2. Eternal Floette and Bloodmoon Ursaluna are Sub-Legendary instead of Common (custom implementation).
+ * 3. The Galarian variants of Articuno, Zapdos, and Moltres are Sub-Legendary (Serebii forgot to add them).
  */
 describe("Pokemon Categories", () => {
   it("should have the correct Pokemon in the Sub-Legendary category", () => {
@@ -62,8 +61,6 @@ describe("Pokemon Categories", () => {
       Species.MUNKIDORI,
       Species.FEZANDIPITI,
       Species.OGERPON,
-      Species.COSMOG,
-      Species.COSMOEM,
       Species.ETERNAL_FLOETTE,
       Species.BLOODMOON_URSALUNA,
     ];
@@ -91,6 +88,8 @@ describe("Pokemon Categories", () => {
       Species.XERNEAS,
       Species.YVELTAL,
       Species.ZYGARDE,
+      Species.COSMOG,
+      Species.COSMOEM,
       Species.SOLGALEO,
       Species.LUNALA,
       Species.NECROZMA,
