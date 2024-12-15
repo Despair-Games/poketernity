@@ -124,4 +124,24 @@ describe("Moves - Spectral Thief", () => {
       expect(enemy.getStatStage(Stat.DEF)).toBe(0);
     },
   );
+
+  it("should not activate Defiant when stealing stat stages", async () => {
+    game.override.enemyAbility(Abilities.DEFIANT);
+
+    await game.classicMode.startBattle([Species.MAGIKARP]);
+
+    const player = game.scene.getPlayerPokemon()!;
+    const enemy = game.scene.getEnemyPokemon()!;
+
+    game.move.select(Moves.SPECTRAL_THIEF);
+    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+
+    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("MoveEffectPhase");
+
+    expect(player.getStatStage(Stat.DEF)).toBe(2);
+    expect(enemy.getStatStage(Stat.DEF)).toBe(0);
+    expect(enemy.getStatStage(Stat.ATK)).toBe(0);
+    expect(enemy.battleData.abilitiesApplied.includes(Abilities.DEFIANT)).toBeFalsy();
+  });
 });
