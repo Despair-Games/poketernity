@@ -852,7 +852,23 @@ export class Move implements Localizable {
     // const conditionScores = this.conditions.map((condition) => condition.getEffectScore(user, target, move))
     //   .reduce((total, score) => total + score);
 
-    return attrScores; // + conditionScores
+    return attrScores + this.getAccuracyPenalty();
+  }
+
+  /**
+   * Calculates the move's effect score penalty from low base accuracy.
+   * The lower the accuracy, the greater the penalty.
+   */
+  getAccuracyPenalty(): number {
+    if (this.accuracy === -1 || this.accuracy >= 80) {
+      return 0;
+    } else if (this.accuracy >= 70) {
+      return -1;
+    } else if (this.accuracy >= 50) {
+      return -2;
+    } else {
+      return -3;
+    }
   }
 
   /**
@@ -7739,6 +7755,11 @@ export class IgnoreAccuracyAttr extends AddBattlerTagAttr {
 
     return true;
   }
+
+  protected override getTagScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
+    const accPenalties = user.getMoveset().map((m) => m.getMove().getAccuracyPenalty());
+    return -1 * Math.min(...accPenalties);
+  }
 }
 
 export class PerishSongAttr extends AddBattlerTagAttr {
@@ -7762,6 +7783,10 @@ export class PerishSongAttr extends AddBattlerTagAttr {
     );
 
     return true;
+  }
+
+  protected override getTagScore(_user: EnemyPokemon, target: Pokemon, _move: Move): number {
+    return target.isTrapped() ? 2 : 1;
   }
 }
 
@@ -7793,6 +7818,18 @@ export class RemoveAllSubstitutesAttr extends MoveEffectAttr {
       .getField(true)
       .forEach((pokemon) => pokemon.findAndRemoveTags((tag) => tag.tagType === BattlerTagType.SUBSTITUTE));
     return true;
+  }
+
+  override getEffectScore(_user: EnemyPokemon, _target: Pokemon, _move: Move): number {
+    const subScores: number[] = globalScene.getField(true).map((p) => {
+      if (p.getTag(BattlerTagType.SUBSTITUTE)) {
+        return p.isPlayer() ? -2 : 1;
+      } else {
+        return 0;
+      }
+    });
+
+    return subScores.reduce((total, score) => total + score);
   }
 }
 
