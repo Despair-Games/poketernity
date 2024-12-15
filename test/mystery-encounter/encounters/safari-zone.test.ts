@@ -20,7 +20,7 @@ import {
 } from "#app/data/mystery-encounters/encounters/safari-zone-encounter";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { getSpecialSpeciesList } from "#app/data/pokemon-species";
-import { SpeciesCategories } from "#app/enums/pokemon-species-categories";
+import { SpeciesCategories } from "#enums/pokemon-species-categories";
 
 const namespace = "mysteryEncounters/safariZone";
 const defaultParty = [Species.LAPRAS, Species.GENGAR, Species.ABRA];

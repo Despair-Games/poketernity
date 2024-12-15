@@ -32,7 +32,7 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { ScanIvsPhase } from "#app/phases/scan-ivs-phase";
 import { SummonPhase } from "#app/phases/summon-phase";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
-import { SpeciesCategories } from "#app/enums/pokemon-species-categories";
+import { SpeciesCategories } from "#enums/pokemon-species-categories";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/safariZone";

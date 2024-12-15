@@ -21,7 +21,7 @@ import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils";
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases";
 import { getSpecialSpeciesList } from "#app/data/pokemon-species";
-import { SpeciesCategories } from "#app/enums/pokemon-species-categories";
+import { SpeciesCategories } from "#enums/pokemon-species-categories";
 
 const namespace = "mysteryEncounters/thePokemonSalesman";
 const defaultParty = [Species.LAPRAS, Species.GENGAR, Species.ABRA];
