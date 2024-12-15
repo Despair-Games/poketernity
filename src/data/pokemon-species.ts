@@ -132,7 +132,7 @@ export function getFusedSpeciesName(speciesAName: string, speciesBName: string):
 
 /**
  * Returns a list of Pokemon in a specific group (ex. Mythical, UB, etc.)
- * @param group the category used to make the list
+ * @param group the group used to make the list
  * @param includeLegends if `true`, AND if `group` is `PARADOX` or `ULTRA_BEAST`, then also include legendaries in the returned list
  * @returns a list of species IDs belonging to the group
  */
