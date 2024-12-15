@@ -112,6 +112,7 @@ import { MoveEffectChanceMultiplierAbAttr } from "./ab-attrs/move-effect-chance-
 import { IgnoreMoveEffectsAbAttr } from "./ab-attrs/ignore-move-effect-ab-attr";
 import { FieldMoveTypePowerBoostAbAttr } from "./ab-attrs/field-move-type-power-boost-ab-attr";
 import { HealFromBerryUseAbAttr } from "./ab-attrs/heal-from-berry-use-ab-attr";
+import { StatStageChangeMultiplierAbAttr } from "./ab-attrs/stat-stage-change-multiplier-ab-attr";
 
 export enum MoveCategory {
   PHYSICAL,
@@ -3679,6 +3680,46 @@ export class ResetStatsAttr extends MoveEffectAttr {
       pokemon.setStatStage(s, 0);
     }
     pokemon.updateInfo();
+  }
+}
+
+/**
+ * Attribute to steal the target's positive stat stages.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Spectral_Thief_(move) | Spectral Thief}.
+ */
+export class StealPositiveStatsAttr extends MoveEffectAttr {
+  constructor() {
+    super(false, { trigger: MoveEffectTrigger.PRE_APPLY });
+  }
+
+  /**
+   * Steals the given target's stat stages and adds them to the user
+   * @returns
+   */
+  override apply(user: Pokemon, target: Pokemon, _move: Move, _args?: any[]): boolean {
+    let statsStolen: boolean = false;
+    for (const s of BATTLE_STATS) {
+      if (target.getStatStage(s) > 0) {
+        const userStatChange = new NumberHolder(target.getStatStage(s));
+        applyAbAttrs(StatStageChangeMultiplierAbAttr, user, null, false, userStatChange);
+        user.setStatStage(s, user.getStatStage(s) + userStatChange.value);
+        target.setStatStage(s, 0);
+      }
+      user.updateInfo();
+      target.updateInfo();
+      statsStolen = true;
+    }
+
+    if (statsStolen) {
+      globalScene.queueMessage(
+        i18next.t("moveTriggers:stealPositiveStats", {
+          pokemonName: getPokemonNameWithAffix(user),
+          targetName: getPokemonNameWithAffix(target),
+        }),
+      );
+    }
+
+    return statsStolen;
   }
 }
 
@@ -10847,8 +10888,8 @@ export function initMoves() {
       RechargeAttr,
     ),
     new AttackMove(Moves.SPECTRAL_THIEF, Type.GHOST, MoveCategory.PHYSICAL, 90, 100, 10, -1, 0, 7)
-      .ignoresSubstitute()
-      .partial(), // Does not steal stats
+      .attr(StealPositiveStatsAttr)
+      .ignoresSubstitute(),
     new AttackMove(Moves.SUNSTEEL_STRIKE, Type.STEEL, MoveCategory.PHYSICAL, 100, 100, 5, -1, 0, 7).ignoresAbilities(),
     new AttackMove(Moves.MOONGEIST_BEAM, Type.GHOST, MoveCategory.SPECIAL, 100, 100, 5, -1, 0, 7).ignoresAbilities(),
     new StatusMove(Moves.TEARFUL_LOOK, Type.NORMAL, -1, 20, -1, 0, 7).attr(
