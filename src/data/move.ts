@@ -3694,7 +3694,7 @@ export class StealPositiveStatsAttr extends MoveEffectAttr {
 
   /**
    * Steals the given target's stat stages and adds them to the user
-   * @returns
+   * @returns `true` if any stat stages were stolen
    */
   override apply(user: Pokemon, target: Pokemon, _move: Move, _args?: any[]): boolean {
     let statsStolen: boolean = false;
@@ -3714,7 +3714,6 @@ export class StealPositiveStatsAttr extends MoveEffectAttr {
       globalScene.queueMessage(
         i18next.t("moveTriggers:stealPositiveStats", {
           pokemonName: getPokemonNameWithAffix(user),
-          targetName: getPokemonNameWithAffix(target),
         }),
       );
     }
