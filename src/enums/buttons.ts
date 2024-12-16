@@ -13,7 +13,7 @@ export enum Button {
   CYCLE_GENDER,
   CYCLE_ABILITY,
   CYCLE_NATURE,
-  V,
+  V, // currently unused
   SPEED_UP,
   SLOW_DOWN,
 }
