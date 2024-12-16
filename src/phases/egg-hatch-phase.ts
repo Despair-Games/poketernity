@@ -337,13 +337,13 @@ export class EggHatchPhase extends Phase {
   doReveal(): void {
     // set the previous dex data so info container can show new unlocks in egg summary
     const isShiny = this.pokemon.isShiny();
-    if (this.pokemon.species.subLegendary) {
+    if (this.pokemon.species.isSubLegendary()) {
       globalScene.validateAchv(achvs.HATCH_SUB_LEGENDARY);
     }
-    if (this.pokemon.species.legendary) {
+    if (this.pokemon.species.isLegendary()) {
       globalScene.validateAchv(achvs.HATCH_LEGENDARY);
     }
-    if (this.pokemon.species.mythical) {
+    if (this.pokemon.species.isMythical()) {
       globalScene.validateAchv(achvs.HATCH_MYTHICAL);
     }
     if (isShiny) {

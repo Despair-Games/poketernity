@@ -2518,9 +2518,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           return (
             pokemonEvolutions.hasOwnProperty(species.speciesId)
             && !pokemonPrevolutions.hasOwnProperty(species.speciesId)
-            && !species.subLegendary
-            && !species.legendary
-            && !species.mythical
+            && !species.isLegendLike()
             && !species.isTrainerForbidden()
             && species.speciesId !== this.species.speciesId
             && species.speciesId !== Species.DITTO

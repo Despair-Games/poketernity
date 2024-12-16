@@ -233,15 +233,15 @@ export class AttemptCapturePhase extends PokemonPhase {
       globalScene.validateAchv(achvs.HIDDEN_ABILITY);
     }
 
-    if (pokemon.species.subLegendary) {
+    if (pokemon.species.isSubLegendary()) {
       globalScene.validateAchv(achvs.CATCH_SUB_LEGENDARY);
     }
 
-    if (pokemon.species.legendary) {
+    if (pokemon.species.isLegendary()) {
       globalScene.validateAchv(achvs.CATCH_LEGENDARY);
     }
 
-    if (pokemon.species.mythical) {
+    if (pokemon.species.isMythical()) {
       globalScene.validateAchv(achvs.CATCH_MYTHICAL);
     }
 

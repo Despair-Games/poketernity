@@ -250,7 +250,7 @@ export function getHighestStatTotalPlayerPokemon(
  * @param types - list of types to filter for
  * @param allowSubLegendary - whether or not sub legends are allowed
  * @param allowLegendary - whether or not legends are allowed
- * @param allowMythical - wehther or not mythicals are allowed
+ * @param allowMythical - whether or not mythicals are allowed
  * @returns a randomly generated Species (dfeault Bulbasaur if all filters fail)
  */
 export function getRandomSpeciesByStarterCost(
@@ -271,9 +271,9 @@ export function getRandomSpeciesByStarterCost(
       return (
         pokemonSpecies
         && (!excludedSpecies || !excludedSpecies.includes(s[0]))
-        && (allowSubLegendary || !pokemonSpecies.subLegendary)
-        && (allowLegendary || !pokemonSpecies.legendary)
-        && (allowMythical || !pokemonSpecies.mythical)
+        && (allowSubLegendary || !pokemonSpecies.isSubLegendary())
+        && (allowLegendary || !pokemonSpecies.isLegendary())
+        && (allowMythical || !pokemonSpecies.isMythical())
       );
     })
     .map((s) => [getPokemonSpecies(s[0]), s[1]]);
@@ -648,15 +648,15 @@ export async function catchPokemon(
     globalScene.validateAchv(achvs.HIDDEN_ABILITY);
   }
 
-  if (pokemon.species.subLegendary) {
+  if (pokemon.species.isSubLegendary()) {
     globalScene.validateAchv(achvs.CATCH_SUB_LEGENDARY);
   }
 
-  if (pokemon.species.legendary) {
+  if (pokemon.species.isLegendary()) {
     globalScene.validateAchv(achvs.CATCH_LEGENDARY);
   }
 
-  if (pokemon.species.mythical) {
+  if (pokemon.species.isMythical()) {
     globalScene.validateAchv(achvs.CATCH_MYTHICAL);
   }
 
@@ -949,15 +949,15 @@ export async function addPokemonDataToDexAndValidateAchievements(pokemon: Player
     globalScene.validateAchv(achvs.HIDDEN_ABILITY);
   }
 
-  if (pokemon.species.subLegendary) {
+  if (pokemon.species.isSubLegendary()) {
     globalScene.validateAchv(achvs.CATCH_SUB_LEGENDARY);
   }
 
-  if (pokemon.species.legendary) {
+  if (pokemon.species.isLegendary()) {
     globalScene.validateAchv(achvs.CATCH_LEGENDARY);
   }
 
-  if (pokemon.species.mythical) {
+  if (pokemon.species.isMythical()) {
     globalScene.validateAchv(achvs.CATCH_MYTHICAL);
   }
 

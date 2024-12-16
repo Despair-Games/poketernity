@@ -255,7 +255,7 @@ export default class Battle {
         }
         return "battle_final_encounter";
       }
-      if (pokemon.species.legendary || pokemon.species.subLegendary || pokemon.species.mythical) {
+      if (pokemon.species.isLegendLike()) {
         if (settings.audio.musicPreference === MusicPreference.CONSISTENT) {
           switch (pokemon.species.speciesId) {
             case Species.REGIROCK:
@@ -268,7 +268,7 @@ export default class Battle {
             case Species.KYUREM:
               return "battle_legendary_kyurem";
             default:
-              if (pokemon.species.legendary) {
+              if (pokemon.species.isLegendary()) {
                 return "battle_legendary_res_zek";
               }
               return "battle_legendary_unova";
@@ -404,7 +404,7 @@ export default class Battle {
             case Species.PECHARUNT:
               return "battle_legendary_pecharunt";
             default:
-              if (pokemon.species.legendary) {
+              if (pokemon.species.isLegendary()) {
                 return "battle_legendary_res_zek";
               }
               return "battle_legendary_unova";

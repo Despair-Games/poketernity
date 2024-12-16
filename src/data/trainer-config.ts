@@ -320,9 +320,7 @@ export class TrainerConfig {
     this.mixedBattleBgm = "battle_trainer";
     this.victoryBgm = "victory_trainer";
     this.partyTemplates = [trainerPartyTemplates.TWO_AVG];
-    this.speciesFilter = (species) =>
-      (allowLegendaries || (!species.legendary && !species.subLegendary && !species.mythical))
-      && !species.isTrainerForbidden();
+    this.speciesFilter = (species) => (allowLegendaries || !species.isLegendLike()) && !species.isTrainerForbidden();
   }
 
   getKey(): string {
@@ -1620,7 +1618,7 @@ function getSpeciesFilterRandomPartyMemberFunc(
   postProcess?: (EnemyPokemon: EnemyPokemon) => void,
 ): PartyMemberFunc {
   const speciesFilter = (species: PokemonSpecies): boolean => {
-    const notLegendary = !species.legendary && !species.subLegendary && !species.mythical;
+    const notLegendary = !species.isLegendLike();
     return (allowLegendaries || notLegendary) && !species.isTrainerForbidden() && originalSpeciesFilter(species);
   };
 

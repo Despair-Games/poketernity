@@ -34,7 +34,7 @@ export const systemMigrators = [
       data.gameStats.subLegendaryPokemonCaught = 0;
       data.gameStats.subLegendaryPokemonHatched = 0;
       allSpecies
-        .filter((s) => s.subLegendary)
+        .filter((s) => s.isSubLegendary())
         .forEach((s) => {
           const dexEntry = data.dexData[s.speciesId];
           data.gameStats.subLegendaryPokemonSeen += dexEntry.seenCount;
