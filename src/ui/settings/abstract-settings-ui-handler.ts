@@ -565,7 +565,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
   }
 
   private handleSaveSetting<V = any>(uiItem: SettingsUiItem, newValue: V) {
-    const { requiresReload, key, options } = uiItem;
+    const { key, requiresReload } = uiItem;
 
     if (this.category === "display" && key === "language") {
       eventBus.emit("language/change", newValue);
@@ -577,19 +577,20 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
     } else {
       if (requiresReload) {
         if (this.canLoseProgress()) {
-          this.showConfirmReload(
-            () => {
-              settingsManager.updateAndReload(this.category, key as never, newValue);
-            },
-            () => {
-              const oldValue = settingsManager.settings[this.category][uiItem.key];
-              const oldOptionIndex = options.findIndex((option) => option.value === oldValue);
-              this.setOptionCursor(-1, Math.max(oldOptionIndex, 0), false);
-            },
+          this.showConfirm(
+            i18next.t("menuUiHandler:losingProgressionWarning"),
+            () => settingsManager.updateAndReload(this.category, key as never, newValue),
+            () => this.handleCancelConfirm(uiItem),
           );
         } else {
           settingsManager.updateAndReload(this.category, key as never, newValue);
         }
+      } else if (this.category === "general" && key === "enableTouchControls" && newValue === false) {
+        this.showConfirm(
+          i18next.t("settings:confirmDisableTouch"),
+          () => settingsManager.update(this.category, key as never, newValue),
+          () => this.handleCancelConfirm(uiItem),
+        );
       } else {
         settingsManager.update(this.category, key as never, newValue);
       }
@@ -600,8 +601,8 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
     return globalScene.currentBattle && globalScene.currentBattle.turn > 1;
   }
 
-  protected showConfirmReload(onConfirm: () => void, onCancel: () => void) {
-    this.showText(i18next.t("menuUiHandler:losingProgressionWarning"), undefined, () => {
+  protected showConfirm(text: string, onConfirm: () => void, onCancel?: () => void) {
+    this.showText(text, undefined, () => {
       globalScene.ui.setOverlayMode(
         Mode.CONFIRM,
         () => {
@@ -610,17 +611,26 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
           globalScene.ui.revertMode();
           // revert settings mode.
           globalScene.ui.revertMode();
+          this.showText("", 0);
           onConfirm();
         },
         () => {
           globalScene.ui.revertMode();
           this.showText("", 0);
-          onCancel();
+          onCancel && onCancel();
         },
         false,
         0,
         0,
       );
     });
+  }
+
+  protected handleCancelConfirm(uiItem: SettingsUiItem) {
+    const { options } = uiItem;
+
+    const oldValue = settingsManager.settings[this.category][uiItem.key];
+    const oldOptionIndex = options.findIndex((option) => option.value === oldValue);
+    this.setOptionCursor(-1, Math.max(oldOptionIndex, 0), false);
   }
 }

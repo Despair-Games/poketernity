@@ -28,7 +28,8 @@ export default class SettingsDisplayUiHandler extends AbstractSettingsUiHandler 
                 label: l.label,
                 handler: () => {
                   if (this.canLoseProgress()) {
-                    this.showConfirmReload(
+                    this.showConfirm(
+                      i18next.t("menuUiHandler:losingProgressionWarning"),
                       () => this.handleChangeLanguage(l),
                       () => this.handleCancelLanguageChange(),
                     );
