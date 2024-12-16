@@ -3,7 +3,7 @@ import { RunSuccessAbAttr } from "#app/data/ab-attrs/run-success-ab-attr";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import type { PlayerPokemon, EnemyPokemon } from "#app/field/pokemon";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import i18next from "i18next";
 import { NumberHolder } from "#app/utils";
 import { BattleEndPhase } from "./battle-end-phase";

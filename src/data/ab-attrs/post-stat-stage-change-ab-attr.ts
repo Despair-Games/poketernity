@@ -1,4 +1,4 @@
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import type { BattleStat } from "#enums/stat";
 import { AbAttr } from "./ab-attr";
 

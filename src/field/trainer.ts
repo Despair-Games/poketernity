@@ -1,4 +1,3 @@
-import type BattleScene from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
 import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
@@ -742,8 +741,4 @@ export default class Trainer extends Phaser.GameObjects.Container {
       }
     });
   }
-}
-
-export default interface Trainer {
-  scene: BattleScene;
 }
