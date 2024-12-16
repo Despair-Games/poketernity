@@ -1,5 +1,5 @@
 import type Move from "#app/data/move";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { AbAttr } from "./ab-attr";
 
 export class PreAttackAbAttr extends AbAttr {

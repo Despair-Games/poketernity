@@ -1,7 +1,7 @@
 import { BattlerIndex } from "#app/battle";
 import { allAbilities } from "#app/data/ability";
 import { Abilities } from "#enums/abilities";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";

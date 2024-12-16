@@ -1,4 +1,4 @@
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { toDmgValue } from "#app/utils";
 import { PreSwitchOutAbAttr } from "./pre-switch-out-ab-attr";
 

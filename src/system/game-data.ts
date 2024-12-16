@@ -3,7 +3,7 @@ import type { PokeballCounts } from "#app/battle-scene";
 import { bypassLogin } from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
 import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { allSpecies, getPokemonSpecies, noStarterFormKeys } from "#app/data/pokemon-species";
@@ -871,9 +871,9 @@ export class GameData {
     }
 
     if (device === Device.GAMEPAD) {
-      setSettingGamepad(setting as SettingGamepad, valueIndex); // Set the gamepad setting in the current scene
+      setSettingGamepad(setting as SettingGamepad, valueIndex);
     } else if (device === Device.KEYBOARD) {
-      setSettingKeyboard(setting as SettingKeyboard, valueIndex); // Set the keyboard setting in the current scene
+      setSettingKeyboard(setting as SettingKeyboard, valueIndex);
     }
 
     Object.keys(settingDefaults).forEach((s) => {
@@ -1721,11 +1721,11 @@ export class GameData {
     if (incrementCount) {
       dexEntry.seenCount++;
       this.gameStats.pokemonSeen++;
-      if (!trainer && pokemon.species.subLegendary) {
+      if (!trainer && pokemon.species.isSubLegendary()) {
         this.gameStats.subLegendaryPokemonSeen++;
-      } else if (!trainer && pokemon.species.legendary) {
+      } else if (!trainer && pokemon.species.isLegendary()) {
         this.gameStats.legendaryPokemonSeen++;
-      } else if (!trainer && pokemon.species.mythical) {
+      } else if (!trainer && pokemon.species.isMythical()) {
         this.gameStats.mythicalPokemonSeen++;
       }
       if (!trainer && pokemon.isShiny()) {
@@ -1806,11 +1806,11 @@ export class GameData {
         if (!fromEgg) {
           dexEntry.caughtCount++;
           this.gameStats.pokemonCaught++;
-          if (pokemon.species.subLegendary) {
+          if (pokemon.species.isSubLegendary()) {
             this.gameStats.subLegendaryPokemonCaught++;
-          } else if (pokemon.species.legendary) {
+          } else if (pokemon.species.isLegendary()) {
             this.gameStats.legendaryPokemonCaught++;
-          } else if (pokemon.species.mythical) {
+          } else if (pokemon.species.isMythical()) {
             this.gameStats.mythicalPokemonCaught++;
           }
           if (pokemon.isShiny()) {
@@ -1819,11 +1819,11 @@ export class GameData {
         } else {
           dexEntry.hatchedCount++;
           this.gameStats.pokemonHatched++;
-          if (pokemon.species.subLegendary) {
+          if (pokemon.species.isSubLegendary()) {
             this.gameStats.subLegendaryPokemonHatched++;
-          } else if (pokemon.species.legendary) {
+          } else if (pokemon.species.isLegendary()) {
             this.gameStats.legendaryPokemonHatched++;
-          } else if (pokemon.species.mythical) {
+          } else if (pokemon.species.isMythical()) {
             this.gameStats.mythicalPokemonHatched++;
           }
           if (pokemon.isShiny()) {

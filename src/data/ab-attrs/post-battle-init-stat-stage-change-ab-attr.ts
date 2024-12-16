@@ -1,5 +1,5 @@
 import type { BattleStat } from "#app/enums/stat";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { PostBattleInitAbAttr } from "./post-battle-init-ab-attr";

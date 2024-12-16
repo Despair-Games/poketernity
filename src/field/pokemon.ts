@@ -2516,9 +2516,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           return (
             pokemonEvolutions.hasOwnProperty(species.speciesId)
             && !pokemonPrevolutions.hasOwnProperty(species.speciesId)
-            && !species.subLegendary
-            && !species.legendary
-            && !species.mythical
+            && !species.isLegendLike()
             && !species.isTrainerForbidden()
             && species.speciesId !== this.species.speciesId
             && species.speciesId !== Species.DITTO
@@ -4756,7 +4754,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * Generates a random number using the current battle's seed, or the global seed if `globalScene.currentBattle` is falsy
    * <!-- @import "../battle".Battle -->
    * This calls either {@linkcode BattleScene.randBattleSeedInt}({@linkcode range}, {@linkcode min}) in `src/battle-scene.ts`
-   * which calls {@linkcode Battle.randSeedInt}(`scene`, {@linkcode range}, {@linkcode min}) in `src/battle.ts`
+   * which calls {@linkcode Battle.randSeedInt}({@linkcode range}, {@linkcode min}) in `src/battle.ts`
    * which calls {@linkcode randSeedInt randSeedInt}({@linkcode range}, {@linkcode min}) in `src/utils.ts`,
    * or it directly calls {@linkcode randSeedInt randSeedInt}({@linkcode range}, {@linkcode min}) in `src/utils.ts` if there is no current battle
    *
@@ -4862,12 +4860,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
   }
 }
-
-export default Pokemon;
-
-/* export default interface Pokemon {
-  scene: BattleScene
-} */
 
 export class PlayerPokemon extends Pokemon {
   public compatibleTms: Moves[];

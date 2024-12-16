@@ -112,7 +112,6 @@ export class GameMode implements GameModeConfig {
   }
 
   /**
-   * @param scene current BattleScene
    * @returns either:
    * - random biome for Daily mode
    * - override from overrides.ts
@@ -139,8 +138,8 @@ export class GameMode implements GameModeConfig {
   /**
    * Determines whether or not to generate a trainer
    * @param waveIndex the current floor the player is on (trainer sprites fail to generate on X1 floors)
-   * @param arena the arena that contains the scene and functions
-   * @returns true if a trainer should be generated, false otherwise
+   * @param arena the current {@linkcode Arena}
+   * @returns `true` if a trainer should be generated, `false` otherwise
    */
   isWaveTrainer(waveIndex: number, arena: Arena): boolean {
     /**
@@ -156,7 +155,6 @@ export class GameMode implements GameModeConfig {
        * Do not check X1 floors since there's a bug that stops trainer sprites from appearing
        * after a X0 full party heal
        */
-
       const trainerChance = arena.getTrainerChance();
       let allowTrainerBattle = true;
       if (trainerChance) {
@@ -203,10 +201,7 @@ export class GameMode implements GameModeConfig {
     if (this.isDaily && this.isWaveFinal(waveIndex)) {
       const allFinalBossSpecies = allSpecies.filter(
         (s) =>
-          (s.subLegendary || s.legendary || s.mythical)
-          && s.baseTotal >= 600
-          && s.speciesId !== Species.ETERNATUS
-          && s.speciesId !== Species.ARCEUS,
+          s.isLegendLike() && s.baseTotal >= 600 && s.speciesId !== Species.ETERNATUS && s.speciesId !== Species.ARCEUS,
       );
       return randSeedItem(allFinalBossSpecies);
     }

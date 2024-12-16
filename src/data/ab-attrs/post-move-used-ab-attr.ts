@@ -1,5 +1,5 @@
 import type { BattlerIndex } from "#app/battle";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon";
 import { AbAttr } from "./ab-attr";
 

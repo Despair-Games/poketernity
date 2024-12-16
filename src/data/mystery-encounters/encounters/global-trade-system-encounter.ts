@@ -25,7 +25,7 @@ import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/myst
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { NumberHolder, isNullOrUndefined, randInt, randSeedInt, randSeedShuffle } from "#app/utils";
 import type { PlayerPokemon } from "#app/field/pokemon";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { EnemyPokemon, PokemonMove } from "#app/field/pokemon";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import {
@@ -498,7 +498,7 @@ function getPokemonTradeOptions(): Map<number, EnemyPokemon[]> {
 
   globalScene.getPlayerParty().forEach((pokemon) => {
     // If the party member is legendary/mythical, the only trade options available are always pulled from generation-specific legendary trade pools
-    if (pokemon.species.legendary || pokemon.species.subLegendary || pokemon.species.mythical) {
+    if (pokemon.species.isLegendLike()) {
       const generation = pokemon.species.generation;
       const tradeOptions: EnemyPokemon[] = LEGENDARY_TRADE_POOLS[generation].map((s) => {
         const pokemonSpecies = getPokemonSpecies(s);
@@ -539,10 +539,10 @@ function generateTradeOption(alreadyUsedSpecies: PokemonSpecies[], originalBst?:
   while (isNullOrUndefined(newSpecies)) {
     // Get all non-legendary species that fall within the Bst range requirements
     let validSpecies = allSpecies.filter((s) => {
-      const isLegendaryOrMythical = s.legendary || s.subLegendary || s.mythical;
+      const isLegendLike = s.isLegendLike();
       const speciesBst = s.getBaseStatTotal();
       const bstInRange = speciesBst >= bstMin && speciesBst <= bstCap;
-      return !isLegendaryOrMythical && bstInRange && !EXCLUDED_TRADE_SPECIES.includes(s.speciesId);
+      return !isLegendLike && bstInRange && !EXCLUDED_TRADE_SPECIES.includes(s.speciesId);
     });
 
     // There must be at least 20 species available before it will choose one
@@ -620,7 +620,6 @@ function hideTradeBackground() {
 
 /**
  * Initiates an "evolution-like" animation to transform a previousPokemon (presumably from the player's party) into a new one, not necessarily an evolution species.
- * @param scene
  * @param tradedPokemon
  * @param receivedPokemon
  */
