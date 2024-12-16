@@ -2,7 +2,7 @@ import type { SupportedLanguage } from "#app/@types/Language";
 import { LANGUAGE_MAX_OPTIONS } from "#app/constants";
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
-import { displaySettingUiItems } from "#app/system/settings/settings-ui-items";
+import { displaySettingUiItems } from "#app/ui/settings/settings-ui-items";
 import { supportedLanguages } from "#app/system/settings/supported-languages";
 import i18next from "i18next";
 import { Mode } from "../ui";

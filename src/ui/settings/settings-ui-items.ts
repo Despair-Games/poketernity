@@ -20,7 +20,7 @@ import { ShopCursorTarget } from "#app/enums/shop-cursor-target";
 import { SpriteSet } from "#app/enums/sprite-set";
 import { UiTheme } from "#app/enums/ui-theme";
 import i18next, { t } from "i18next";
-import { supportedLanguages } from "./supported-languages";
+import { supportedLanguages } from "../../system/settings/supported-languages";
 import { isLandscapeMode } from "#app/utils";
 import { PlayerGender } from "#app/enums/player-gender";
 

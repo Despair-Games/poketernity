@@ -1,4 +1,4 @@
-import { audioSettingsUiItems } from "#app/system/settings/settings-ui-items";
+import { audioSettingsUiItems } from "#app/ui/settings/settings-ui-items";
 import AbstractSettingsUiHandler from "./abstract-settings-ui-handler";
 ("#app/inputs-controller");
 

@@ -1,4 +1,4 @@
-import { generalSettingsUiItems } from "#app/system/settings/settings-ui-items";
+import { generalSettingsUiItems } from "#app/ui/settings/settings-ui-items";
 import { hasTouchscreen, isLandscapeMode } from "#app/utils";
 import { t } from "i18next";
 import AbstractSettingsUiHandler from "./abstract-settings-ui-handler";
