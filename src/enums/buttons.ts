@@ -13,7 +13,8 @@ export enum Button {
   CYCLE_GENDER,
   CYCLE_ABILITY,
   CYCLE_NATURE,
-  V, // currently unused
+  /** Currently unused. Rename once a use is found. */
+  V,
   SPEED_UP,
   SLOW_DOWN,
 }
