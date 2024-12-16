@@ -16,7 +16,7 @@ import { TerrainType } from "#enums/terrain-type";
 import { applyAbAttrs, applyPostTerrainChangeAbAttrs, applyPostWeatherChangeAbAttrs } from "#app/data/ability";
 import { PostTerrainChangeAbAttr } from "#app/data/ab-attrs/post-terrain-change-ab-attr";
 import { PostWeatherChangeAbAttr } from "#app/data/ab-attrs/post-weather-change-ab-attr";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import Overrides from "#app/overrides";
 import { TagAddedEvent, TagRemovedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";
 import type { ArenaTagType } from "#enums/arena-tag-type";
@@ -158,7 +158,7 @@ export class Arena {
 
       ret = getPokemonSpecies(species!);
 
-      if (ret.subLegendary || ret.legendary || ret.mythical) {
+      if (ret.isLegendLike()) {
         switch (true) {
           case ret.baseTotal >= 720:
             regen = level < 90;

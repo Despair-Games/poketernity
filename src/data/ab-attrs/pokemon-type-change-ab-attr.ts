@@ -1,6 +1,6 @@
 import type Move from "#app/data/move";
 import { CopyMoveAttr, NaturePowerAttr, RandomMoveAttr, RandomMovesetMoveAttr } from "#app/data/move";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { Moves } from "#enums/moves";
 import { Type } from "#enums/type";

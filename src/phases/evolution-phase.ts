@@ -6,7 +6,7 @@ import { FusionSpeciesFormEvolution } from "#app/data/balance/pokemon-evolutions
 import { fixedInt } from "#app/utils";
 import { Mode } from "#app/ui/ui";
 import type { PlayerPokemon } from "#app/field/pokemon";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { LearnMoveSituation } from "#app/field/pokemon";
 import i18next from "i18next";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";

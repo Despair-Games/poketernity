@@ -1,6 +1,6 @@
 import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition";
 import type Move from "#app/data/move";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { NumberHolder } from "#app/utils";
 import type { Type } from "#enums/type";
 import { PreAttackAbAttr } from "./pre-attack-ab-attr";

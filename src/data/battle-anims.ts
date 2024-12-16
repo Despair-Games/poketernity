@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { AttackMove, BeakBlastHeaderAttr, DelayedAttackAttr, MoveFlags, SelfStatusMove, allMoves } from "./move";
-import type Pokemon from "../field/pokemon";
+import type { Pokemon } from "../field/pokemon";
 import { getFrameMs, getEnumKeys, getEnumValues, animationFileName, isNullOrUndefined } from "#app/utils";
 import type { BattlerIndex } from "../battle";
 import type { Element } from "json-stable-stringify";
@@ -618,7 +618,6 @@ function logMissingMoveAnim(move: Moves, ...optionalParams: any[]) {
 
 /**
  * Fetches animation configs to be used in a Mystery Encounter
- * @param scene
  * @param encounterAnim one or more animations to fetch
  */
 export async function initEncounterAnims(encounterAnim: EncounterAnim | EncounterAnim[]): Promise<void> {
@@ -697,7 +696,6 @@ export function loadCommonAnimAssets(startLoad?: boolean): Promise<void> {
 /**
  * Loads encounter animation assets to scene
  * MUST be called after {@linkcode initEncounterAnims()} to load all required animations properly
- * @param scene
  * @param startLoad
  */
 export async function loadEncounterAnimAssets(startLoad?: boolean): Promise<void> {
@@ -1257,8 +1255,6 @@ export abstract class BattleAnim {
   }
 
   /**
-   *
-   * @param scene
    * @param targetInitialX
    * @param targetInitialY
    * @param frameTimeMult

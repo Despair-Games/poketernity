@@ -1,7 +1,7 @@
 import type { PokemonDefendCondition } from "#app/@types/PokemonDefendCondition";
 import { type ArenaTrapTag } from "#app/data/arena-tag";
 import type Move from "#app/data/move";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import type { HitResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { ArenaTagType } from "#enums/arena-tag-type";

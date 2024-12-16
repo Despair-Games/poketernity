@@ -1,4 +1,4 @@
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { PreSwitchOutAbAttr } from "./pre-switch-out-ab-attr";
 
 export class PreSwitchOutResetStatusAbAttr extends PreSwitchOutAbAttr {
