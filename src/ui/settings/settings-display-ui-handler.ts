@@ -45,7 +45,6 @@ export default class SettingsDisplayUiHandler extends AbstractSettingsUiHandler 
           },
         ],
         maxOptions: LANGUAGE_MAX_OPTIONS,
-        cancelHandler: () => this.handleCancelLanguageChange(),
       });
     });
   }
