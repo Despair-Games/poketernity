@@ -1,4 +1,4 @@
-export enum SpeciesCategories {
+export enum SpeciesGroups {
   COMMON,
   ULTRA_BEAST,
   PARADOX,

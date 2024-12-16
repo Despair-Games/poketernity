@@ -2099,7 +2099,6 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                   this.pokemonCandyCountText.setText(`x${starterData.candyCount}`);
 
                   const egg = new Egg({
-                    scene: globalScene,
                     species: this.lastSpecies.speciesId,
                     sourceType: EggSourceType.SAME_SPECIES_EGG,
                   });

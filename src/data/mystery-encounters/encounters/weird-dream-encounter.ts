@@ -15,7 +15,7 @@ import {
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import type { PlayerPokemon } from "#app/field/pokemon";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon";
 import { NumberHolder, isNullOrUndefined, randSeedInt, randSeedShuffle } from "#app/utils";
 import type PokemonSpecies from "#app/data/pokemon-species";
@@ -43,7 +43,7 @@ import { Nature } from "#enums/nature";
 import type HeldModifierConfig from "#app/interfaces/held-modifier-config";
 import { trainerConfigs, TrainerPartyTemplate } from "#app/data/trainer-config";
 import { PartyMemberStrength } from "#enums/party-member-strength";
-import { SpeciesCategories } from "#enums/pokemon-species-categories";
+import { SpeciesGroups } from "#enums/pokemon-species-groups";
 
 /** i18n namespace for encounter */
 const namespace = "mysteryEncounters/weirdDream";
@@ -439,7 +439,6 @@ async function doNewTeamPostProcess(transformations: PokemonTransformation[]) {
 /**
  * Applies special changes to the newly transformed pokemon, such as passing previous moves, gaining egg moves, etc.
  * Returns whether the transformed pokemon unlocks a new starter for the player.
- * @param scene
  * @param previousPokemon
  * @param newPokemon
  * @param speciesRootForm
@@ -606,9 +605,9 @@ function getTransformedSpecies(
       const EXCLUDED_TRANSFORMATION_SPECIES = [
         Species.ETERNATUS,
         /** UBs */
-        ...getSpecialSpeciesList(SpeciesCategories.ULTRA_BEAST, false),
+        ...getSpecialSpeciesList(SpeciesGroups.ULTRA_BEAST, false),
         /** Paradox */
-        ...getSpecialSpeciesList(SpeciesCategories.PARADOX, false),
+        ...getSpecialSpeciesList(SpeciesGroups.PARADOX, false),
         /** These are banned so they don't appear in the < 570 BST pool */
         Species.COSMOG,
         Species.MELTAN,
@@ -733,7 +732,6 @@ function doSideBySideTransformations(transformations: PokemonTransformation[]) {
 
 /**
  * Returns index of the new egg move within the Pokemon's moveset (not the index of the move in `speciesEggMoves`)
- * @param scene
  * @param newPokemon
  * @param speciesRootForm
  */

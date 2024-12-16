@@ -6,7 +6,7 @@ import {
   setEncounterRewards,
   transitionMysteryEncounterIntroVisuals,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { EnemyPokemon, PokemonMove } from "#app/field/pokemon";
 import type { BerryModifierType, PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-type";
@@ -499,8 +499,6 @@ function doGreedentEatBerries() {
 }
 
 /**
- *
- * @param scene
  * @param isEat Default false. Will "create" pile when false, and remove pile when true.
  */
 function doBerrySpritePile(isEat: boolean = false) {

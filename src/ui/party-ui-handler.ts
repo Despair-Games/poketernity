@@ -1,5 +1,5 @@
 import type { PlayerPokemon, PokemonMove } from "#app/field/pokemon";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { MoveResult } from "#app/field/pokemon";
 import { addBBCodeTextObject, addTextObject, getTextColor, TextStyle } from "#app/ui/text";
 import { Command } from "#app/ui/command-ui-handler";

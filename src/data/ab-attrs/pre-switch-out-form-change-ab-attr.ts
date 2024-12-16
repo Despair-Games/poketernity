@@ -1,5 +1,5 @@
 import { SpeciesFormChangeManualTrigger } from "#app/data/pokemon-forms";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { PreSwitchOutAbAttr } from "./pre-switch-out-ab-attr";
 
