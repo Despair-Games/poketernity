@@ -22,21 +22,23 @@ export default class SettingsDisplayUiHandler extends AbstractSettingsUiHandler 
     eventBus.on("language/change", () => {
       globalScene.ui.setOverlayMode(Mode.OPTION_SELECT, {
         options: [
-          ...supportedLanguages.map((l) => {
-            return {
-              label: l.label,
-              handler: () => {
-                if (this.canLoseProgress()) {
-                  this.showConfirmReload(
-                    () => this.handleChangeLanguage(l),
-                    () => this.handleCancelLanguageChange(),
-                  );
-                } else {
-                  this.handleChangeLanguage(l);
-                }
-              },
-            };
-          }),
+          ...supportedLanguages
+            .filter((l) => l.key !== i18next.resolvedLanguage)
+            .map((l) => {
+              return {
+                label: l.label,
+                handler: () => {
+                  if (this.canLoseProgress()) {
+                    this.showConfirmReload(
+                      () => this.handleChangeLanguage(l),
+                      () => this.handleCancelLanguageChange(),
+                    );
+                  } else {
+                    this.handleChangeLanguage(l);
+                  }
+                },
+              };
+            }),
           {
             label: i18next.t("settings:back"),
             handler: () => this.handleCancelLanguageChange(),
