@@ -32,7 +32,7 @@ class SettingsManager {
     try {
       this.loadFromLocalStorage();
     } catch (err) {
-      console.error("Settings manager init failed::", err);
+      console.error("Settings manager init failed:", err);
     }
   }
 
@@ -62,6 +62,13 @@ class SettingsManager {
    */
   get audio() {
     return this._settings.audio;
+  }
+
+  /**
+   * Quick access to gamepad settings
+   */
+  get gamepad() {
+    return this._settings.gamepad;
   }
 
   /**
@@ -138,12 +145,12 @@ class SettingsManager {
    * Loads and populates settings from local storage item with the key: {@linkcode lsKey}
    */
   private loadFromLocalStorage() {
-    const lsSettingsStr = localStorage.getItem(this.lsKey);
+    const lsItem = localStorage.getItem(this.lsKey);
 
-    if (lsSettingsStr) {
+    if (lsItem) {
       try {
-        const lsSettings: Partial<Settings> = JSON.parse(lsSettingsStr);
-        const { general, audio, display } = lsSettings;
+        const lsSettings: Partial<Settings> = JSON.parse(lsItem);
+        const { general, audio, display, gamepad } = lsSettings;
 
         if (general) {
           this._settings.general = { ...this._settings.general, ...general };
@@ -155,6 +162,10 @@ class SettingsManager {
 
         if (display) {
           this._settings.display = { ...this._settings.display, ...display };
+        }
+
+        if (gamepad) {
+          this._settings.gamepad = { ...this._settings.gamepad, ...gamepad };
         }
       } catch (err) {
         console.error("Error loading settings from local storage:", err);

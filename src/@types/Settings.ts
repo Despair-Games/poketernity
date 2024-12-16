@@ -19,6 +19,7 @@ export interface Settings {
   general: GeneralSettings;
   audio: AudioSettings;
   display: DisplaySettings;
+  gamepad: GamepadSettings;
 }
 
 export interface GeneralSettings {
@@ -69,6 +70,11 @@ export interface AudioSettings {
   musicPreference: MusicPreference;
 }
 
+export interface GamepadSettings {
+  activeIndex: number;
+  enabled: boolean;
+}
+
 export type SettingUiItemOption = {
   value: number | string | boolean;
   label: string;
@@ -88,15 +94,20 @@ export interface SettingsUiItem<K = string> {
 
 export type SettingsCategory = keyof Settings;
 
-/** All keys for the general settings + `"moveTouchControls"` */
+/** All keys for all settings categories */
+export type AnySettingKey = GeneralSettingsKey | DisplaySettingsKey | AudioSettingsKey | GamepadSettingsKey;
+
+/** All keys for the general settings + `"moveTouchControls"`. */
 export type GeneralSettingsKey = keyof GeneralSettings | "moveTouchControls";
 
-/** All keys for the display settings + `"language"` */
+/** All keys for the display settings + `"language"`. */
 export type DisplaySettingsKey = keyof DisplaySettings | "language";
 
+/** All keys for the audio settings/ */
 export type AudioSettingsKey = keyof AudioSettings;
 
-export type AnySettingKey = GeneralSettingsKey | DisplaySettingsKey | AudioSettingsKey;
+/** All keys for the gamepad settings. */
+export type GamepadSettingsKey = keyof GamepadSettings;
 
 export interface SettingsUpdateEventArgs {
   category: SettingsCategory;

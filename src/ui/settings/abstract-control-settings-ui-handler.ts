@@ -10,6 +10,7 @@ import type { Device } from "#enums/devices";
 import { Button } from "#enums/buttons";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
+import { settings } from "#app/system/settings/settings-manager";
 
 export interface InputsIcons {
   [key: string]: Phaser.GameObjects.Sprite;
@@ -49,10 +50,10 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
   protected inputsIcons: InputsIcons;
   protected navigationIcons: InputsIcons;
   // list all the setting keys used in the selected layout (because dualshock has more buttons than xbox)
-  protected keys: Array<String>;
+  protected keys: Array<string>;
 
   // Store the specific settings related to key bindings for the current gamepad configuration.
-  protected bindingSettings: Array<String>;
+  protected bindingSettings: Array<string>;
 
   protected setting;
   protected settingBlacklisted;
@@ -78,14 +79,6 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
   constructor(mode: Mode | null = null) {
     super(mode);
     this.rowsToDisplay = 8;
-  }
-
-  getLocalStorageSetting(): object {
-    // Retrieve the settings from local storage or use an empty object if none exist.
-    const settings: object = localStorage.hasOwnProperty(this.localStoragePropertyName)
-      ? JSON.parse(localStorage.getItem(this.localStoragePropertyName)!)
-      : {}; // TODO: is this bang correct?
-    return settings;
   }
 
   private camelize(string: string): string {
@@ -343,15 +336,12 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
       return;
     }
 
-    // Retrieve the gamepad settings from local storage or use an empty object if none exist.
-    const settings: object = this.getLocalStorageSetting();
-
     // Update the cursor for each key based on the stored settings or default cursors.
     this.keys.forEach((key, index) => {
-      this.setOptionCursor(
-        index,
-        settings.hasOwnProperty(key as string) ? settings[key as string] : this.optionCursors[index],
-      );
+      console.log("update bindings", key, index, settings.gamepad[key]);
+      if (["enabled"].includes(key)) {
+        this.setOptionCursor(index, settings.gamepad[key] ? Number(settings.gamepad[key]) : this.optionCursors[index]);
+      }
     });
 
     // If the active configuration has no custom bindings set, exit the function early.
@@ -653,7 +643,8 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
     // Check if the setting is not part of the bindings (i.e., it's a regular setting).
     if (!this.bindingSettings.includes(setting) && !setting.includes("BUTTON_")) {
       // Get the label of the last selected option and revert its color to the default.
-      const lastValueLabel = this.optionValueLabels[settingIndex][lastCursor];
+      const lastValueLabel =
+        this.optionValueLabels[settingIndex][lastCursor] ?? this.optionValueLabels[settingIndex][0];
       lastValueLabel.setColor(this.getTextColor(TextStyle.WINDOW));
       lastValueLabel.setShadowColor(this.getTextColor(TextStyle.WINDOW, true));
 
@@ -661,7 +652,8 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
       this.optionCursors[settingIndex] = cursor;
 
       // Change the color of the new selected option to indicate it's selected.
-      const newValueLabel = this.optionValueLabels[settingIndex][cursor];
+      const newValueLabel = this.optionValueLabels[settingIndex][cursor] ?? this.optionValueLabels[settingIndex][0];
+
       newValueLabel.setColor(this.getTextColor(TextStyle.SETTINGS_SELECTED));
       newValueLabel.setShadowColor(this.getTextColor(TextStyle.SETTINGS_SELECTED, true));
     }

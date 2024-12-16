@@ -130,7 +130,6 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
     this.settingLabels = [];
     this.optionValueLabels = [];
 
-    // this.reloadSettings = this.settings.filter((s) => s?.requireReload); // TODO: reactivate reload logic
     this.uiItems.forEach((uiItem, i) => {
       let settingName = uiItem.label;
       if (uiItem?.requiresReload) {
@@ -567,7 +566,6 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
 
   private handleSaveSetting<V = any>(uiItem: SettingsUiItem, newValue: V) {
     const { requiresReload, key, options } = uiItem;
-    console.log("handle save setting", requiresReload, key, options);
 
     if (this.category === "display" && key === "language") {
       eventBus.emit("language/change", newValue);
