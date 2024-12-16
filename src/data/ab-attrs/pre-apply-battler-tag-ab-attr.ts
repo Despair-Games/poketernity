@@ -1,5 +1,5 @@
 import type { BattlerTag } from "#app/data/battler-tags";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
 import { AbAttr } from "./ab-attr";
 

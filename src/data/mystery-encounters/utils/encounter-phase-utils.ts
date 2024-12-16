@@ -8,7 +8,7 @@ import {
 } from "#app/data/mystery-encounters/mystery-encounters";
 import { showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import type { AiType, PlayerPokemon } from "#app/field/pokemon";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { FieldPosition, PokemonMove, PokemonSummonData } from "#app/field/pokemon";
 import type { CustomModifierSettings, ModifierType } from "#app/modifier/modifier-type";
 import {

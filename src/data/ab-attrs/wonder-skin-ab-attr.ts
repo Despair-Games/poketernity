@@ -1,5 +1,5 @@
 import { type Move, MoveCategory } from "#app/data/move";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder, NumberHolder } from "#app/utils";
 import { PreDefendAbAttr } from "./pre-defend-ab-attr";
 

@@ -1,6 +1,6 @@
 import type Move from "#app/data/move";
 import { MoveFlags } from "#app/data/move";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import type { HitResult } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlerTagType } from "#enums/battler-tag-type";

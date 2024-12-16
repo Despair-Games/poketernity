@@ -1,7 +1,7 @@
 import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition";
 import type Move from "#app/data/move";
 import { MoveCategory } from "#app/data/move";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import type { HitResult } from "#app/field/pokemon";
 import { AbAttr } from "./ab-attr";
 

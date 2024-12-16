@@ -1,4 +1,4 @@
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { type BooleanHolder, type NumberHolder, toDmgValue } from "#app/utils";
 import { AbAttr } from "./ab-attr";
 
