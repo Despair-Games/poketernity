@@ -61,7 +61,7 @@ export default class MoveTouchControlsHandler {
     });
 
     eventBus.on("touchControls/move/start", () => {
-      this.enableConfigurationMode(globalScene.ui, globalScene);
+      this.enableConfigurationMode(globalScene.ui);
     });
   }
 

@@ -400,7 +400,7 @@ export default class UI extends Phaser.GameObjects.Container {
 
   shouldSkipDialogue(i18nKey: string): boolean {
     if (i18next.exists(i18nKey)) {
-      if (settings.general.skipSeenDialogues && battleScene.gameData.getSeenDialogues()[i18nKey] === true) {
+      if (settings.general.skipSeenDialogues && globalScene.gameData.getSeenDialogues()[i18nKey] === true) {
         return true;
       }
     }
