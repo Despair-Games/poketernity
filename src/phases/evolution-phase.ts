@@ -17,6 +17,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 
 /**
  * A phase for handling Pokemon evolution
+ * For general form changes, @see {@linkcode FormChangePhase}
  * @extends FormChangeBasePhase
  */
 export class EvolutionPhase extends FormChangeBasePhase {
@@ -54,7 +55,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
         this.pokemon.cry();
 
         this.pokemon.getPossibleEvolution(this.evolution).then((evolvedPokemon) => {
-          [this.pokemonFormChangeSprite, this.pokemonFormChangeTintSprite].map((sprite) => {
+          [this.pokemonNewFormSprite, this.pokemonNewFormTintSprite].map((sprite) => {
             const spriteKey = evolvedPokemon.getSpriteKey(true);
             try {
               sprite.play(spriteKey);
@@ -107,8 +108,8 @@ export class EvolutionPhase extends FormChangeBasePhase {
                       globalScene.playSound("se/beam");
                       this.doArcDownward();
                       globalScene.time.delayedCall(1500, () => {
-                        this.pokemonFormChangeTintSprite.setScale(0.25);
-                        this.pokemonFormChangeTintSprite.setVisible(true);
+                        this.pokemonNewFormTintSprite.setScale(0.25);
+                        this.pokemonNewFormTintSprite.setVisible(true);
                         this.handler.canCancel = true;
                         this.doCycle(1).then((success) => {
                           if (success) {
@@ -138,7 +139,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
     this.pokemonSprite.setVisible(true);
     this.pokemonTintSprite.setScale(1);
     globalScene.tweens.add({
-      targets: [this.bgVideo, this.pokemonTintSprite, this.pokemonFormChangeSprite, this.pokemonFormChangeTintSprite],
+      targets: [this.bgVideo, this.pokemonTintSprite, this.pokemonNewFormSprite, this.pokemonNewFormTintSprite],
       alpha: 0,
       duration: 250,
       onComplete: () => {
@@ -195,7 +196,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
    */
   private handleSuccessEvolution(evolvedPokemon: Pokemon): void {
     globalScene.playSound("se/sparkle");
-    this.pokemonFormChangeSprite.setVisible(true);
+    this.pokemonNewFormSprite.setVisible(true);
     this.doCircleInward();
 
     const onEvolutionComplete = () => {
@@ -250,7 +251,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
             this.bgOverlay.setAlpha(1);
             this.bgVideo.setVisible(false);
             globalScene.tweens.add({
-              targets: [this.overlay, this.pokemonFormChangeTintSprite],
+              targets: [this.overlay, this.pokemonNewFormTintSprite],
               alpha: 0,
               duration: 2000,
               delay: 150,

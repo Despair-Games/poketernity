@@ -13,7 +13,8 @@ import { SpeciesFormKey } from "#enums/species-form-key";
 import { FormChangeBasePhase } from "./form-change-base-phase";
 
 /**
- * A phase for handling Pokemon form changes
+ * A phase for handling Pokemon specifically for form changes, this does not cover evolutions
+ * For evolutions, @see {@linkcode EvolutionPhase}
  * @extends FormChangeBasePhase
  */
 export class FormChangePhase extends FormChangeBasePhase {
@@ -40,7 +41,7 @@ export class FormChangePhase extends FormChangeBasePhase {
 
   public override doFormChange(): void {
     this.pokemon.getPossibleForm(this.formChange).then((formChangedPokemon) => {
-      [this.pokemonFormChangeSprite, this.pokemonFormChangeTintSprite].map((sprite) => {
+      [this.pokemonNewFormSprite, this.pokemonNewFormTintSprite].map((sprite) => {
         const spriteKey = formChangedPokemon.getSpriteKey(true);
         try {
           sprite.play(spriteKey);
@@ -92,8 +93,8 @@ export class FormChangePhase extends FormChangeBasePhase {
                   globalScene.playSound("se/beam");
                   this.doArcDownward();
                   globalScene.time.delayedCall(1000, () => {
-                    this.pokemonFormChangeTintSprite.setScale(0.25);
-                    this.pokemonFormChangeTintSprite.setVisible(true);
+                    this.pokemonNewFormTintSprite.setScale(0.25);
+                    this.pokemonNewFormTintSprite.setVisible(true);
                     this.doCycle(1, 1).then((_success) => {
                       this.handleFormChangeComplete(formChangedPokemon);
                     });
@@ -155,7 +156,7 @@ export class FormChangePhase extends FormChangeBasePhase {
     };
 
     globalScene.playSound("se/sparkle");
-    this.pokemonFormChangeSprite.setVisible(true);
+    this.pokemonNewFormSprite.setVisible(true);
     this.doCircleInward();
     globalScene.time.delayedCall(900, () => {
       this.pokemon.changeForm(this.formChange).then(() => {
@@ -174,7 +175,7 @@ export class FormChangePhase extends FormChangeBasePhase {
             this.bgOverlay.setAlpha(1);
             this.bgVideo.setVisible(false);
             globalScene.tweens.add({
-              targets: [this.overlay, this.pokemonFormChangeTintSprite],
+              targets: [this.overlay, this.pokemonNewFormTintSprite],
               alpha: 0,
               duration: 2000,
               delay: 150,

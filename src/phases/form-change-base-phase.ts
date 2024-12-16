@@ -23,8 +23,8 @@ export abstract class FormChangeBasePhase extends Phase {
   protected overlay: Phaser.GameObjects.Rectangle;
   protected pokemonSprite: Phaser.GameObjects.Sprite;
   protected pokemonTintSprite: Phaser.GameObjects.Sprite;
-  protected pokemonFormChangeSprite: Phaser.GameObjects.Sprite;
-  protected pokemonFormChangeTintSprite: Phaser.GameObjects.Sprite;
+  protected pokemonNewFormSprite: Phaser.GameObjects.Sprite;
+  protected pokemonNewFormTintSprite: Phaser.GameObjects.Sprite;
 
   constructor(pokemon: PlayerPokemon) {
     super();
@@ -88,14 +88,14 @@ export abstract class FormChangeBasePhase extends Phase {
 
       this.container.add((this.pokemonSprite = getPokemonSprite()));
       this.container.add((this.pokemonTintSprite = getPokemonSprite()));
-      this.container.add((this.pokemonFormChangeSprite = getPokemonSprite()));
-      this.container.add((this.pokemonFormChangeTintSprite = getPokemonSprite()));
+      this.container.add((this.pokemonNewFormSprite = getPokemonSprite()));
+      this.container.add((this.pokemonNewFormTintSprite = getPokemonSprite()));
 
       this.pokemonTintSprite.setAlpha(0);
       this.pokemonTintSprite.setTintFill(0xffffff);
-      this.pokemonFormChangeSprite.setVisible(false);
-      this.pokemonFormChangeTintSprite.setVisible(false);
-      this.pokemonFormChangeTintSprite.setTintFill(0xffffff);
+      this.pokemonNewFormSprite.setVisible(false);
+      this.pokemonNewFormTintSprite.setVisible(false);
+      this.pokemonNewFormTintSprite.setTintFill(0xffffff);
 
       this.overlay = globalScene.add.rectangle(
         0,
@@ -108,7 +108,7 @@ export abstract class FormChangeBasePhase extends Phase {
       this.overlay.setAlpha(0);
       globalScene.ui.add(this.overlay);
 
-      [this.pokemonSprite, this.pokemonTintSprite, this.pokemonFormChangeSprite, this.pokemonFormChangeTintSprite].map(
+      [this.pokemonSprite, this.pokemonTintSprite, this.pokemonNewFormSprite, this.pokemonNewFormTintSprite].map(
         (sprite) => {
           sprite.play(this.pokemon.getSpriteKey(true));
           sprite.setPipeline(globalScene.spritePipeline, {
@@ -250,7 +250,7 @@ export abstract class FormChangeBasePhase extends Phase {
         yoyo: !isLastCycle,
       });
       globalScene.tweens.add({
-        targets: this.pokemonFormChangeTintSprite,
+        targets: this.pokemonNewFormTintSprite,
         scale: 1,
         ease: "Cubic.easeInOut",
         duration: 500 / l,
