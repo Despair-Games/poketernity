@@ -172,8 +172,6 @@ export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey>[] = [
       },
     ],
     requiresReload: true,
-
-    // TODO: select through dialog menu
   },
   {
     key: "uiTheme",
