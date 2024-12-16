@@ -21,7 +21,7 @@ import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils";
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases";
 import { getSpecialSpeciesList } from "#app/data/pokemon-species";
-import { SpeciesCategories } from "#enums/pokemon-species-categories";
+import { SpeciesGroups } from "#enums/pokemon-species-groups";
 
 const namespace = "mysteryEncounters/thePokemonSalesman";
 const defaultParty = [Species.LAPRAS, Species.GENGAR, Species.ABRA];
@@ -204,7 +204,7 @@ describe("The Pokemon Salesman - Mystery Encounter", () => {
       for (let i = 0; i < NUM_ROLLS; i++) {
         rngSweepProgress = (2 * i + 1) / (2 * NUM_ROLLS);
         const simSpecies = getSalesmanSpeciesOffer().speciesId;
-        expect(getSpecialSpeciesList(SpeciesCategories.PARADOX, false)).not.toContain(simSpecies);
+        expect(getSpecialSpeciesList(SpeciesGroups.PARADOX, false)).not.toContain(simSpecies);
       }
     });
 
