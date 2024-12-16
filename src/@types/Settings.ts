@@ -1,18 +1,18 @@
-import type { BattleStyle } from "#app/enums/battle-style";
-import type { CandyUpgradeDisplayMode } from "#app/enums/candy-upgrade-display";
-import type { CandyUpgradeNotificationMode } from "#app/enums/candy-upgrade-notification-mode";
-import type { DamageNumbersMode } from "#app/enums/damage-numbers-mode";
-import type { EaseType } from "#app/enums/ease-type";
-import type { EggSkipPreference } from "#app/enums/egg-skip-preference";
-import type { ExpGainsSpeed } from "#app/enums/exp-gains-speed";
-import type { ExpNotification } from "#app/enums/exp-notification";
-import type { HpBarSpeed } from "#app/enums/hp-bar-speed";
-import type { MoneyFormat } from "#app/enums/money-format";
-import type { MusicPreference } from "#app/enums/music-preference";
-import type { ShopCursorTarget } from "#app/enums/shop-cursor-target";
+import type { BattleStyle } from "#enums/battle-style";
+import type { CandyUpgradeDisplayMode } from "#enums/candy-upgrade-display";
+import type { CandyUpgradeNotificationMode } from "#enums/candy-upgrade-notification-mode";
+import type { DamageNumbersMode } from "#enums/damage-numbers-mode";
+import type { EaseType } from "#enums/ease-type";
+import type { EggSkipPreference } from "#enums/egg-skip-preference";
+import type { ExpGainsSpeed } from "#enums/exp-gains-speed";
+import type { ExpNotification } from "#enums/exp-notification";
+import type { HpBarSpeed } from "#enums/hp-bar-speed";
+import type { MoneyFormat } from "#enums/money-format";
+import type { MusicPreference } from "#enums/music-preference";
+import type { ShopCursorTarget } from "#enums/shop-cursor-target";
+import type { Gender } from "#enums/gender";
 import type { SpriteSet } from "#enums/sprite-set";
 import type { UiTheme } from "#enums/ui-theme";
-import type { Gender } from "#enums/gender";
 import type { UiWindowType } from "#enums/ui-window-type";
 
 export interface Settings {
@@ -82,7 +82,7 @@ export interface SettingsUiItem<K = string> {
   options: SettingUiItemOption[];
   /** Indicates if a settings change requires a reload */
   requiresReload?: boolean;
-  /** Wheter the setting is only available on devices supporting touchscreen. */
+  /** Whether the setting is only available on devices supporting touchscreen. */
   touchscreenOnly?: boolean;
 }
 
