@@ -53,7 +53,7 @@ export default class SettingsDisplayUiHandler extends AbstractSettingsUiHandler 
   private handleCancelLanguageChange() {
     this.setOptionCursor(0, 0);
     globalScene.ui.revertMode();
-    return false;
+    return true;
   }
 
   private handleChangeLanguage(lan: SupportedLanguage) {
