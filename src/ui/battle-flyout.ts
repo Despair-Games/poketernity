@@ -1,4 +1,4 @@
-import type { default as Pokemon } from "../field/pokemon";
+import type { Pokemon } from "../field/pokemon";
 import { addTextObject, TextStyle } from "./text";
 import { fixedInt } from "#app/utils";
 import { globalScene } from "#app/global-scene";

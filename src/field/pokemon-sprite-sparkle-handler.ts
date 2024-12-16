@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import Pokemon from "./pokemon";
+import { Pokemon } from "./pokemon";
 import { fixedInt, randInt } from "#app/utils";
 
 export default class PokemonSpriteSparkleHandler {

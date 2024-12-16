@@ -1,5 +1,5 @@
 import type Move from "#app/data/move";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import type { HitResult } from "#app/field/pokemon";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { PostAttackAbAttr } from "./post-attack-ab-attr";

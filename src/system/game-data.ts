@@ -3,7 +3,7 @@ import type { PokeballCounts } from "#app/battle-scene";
 import { bypassLogin } from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
 import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { allSpecies, getPokemonSpecies, noStarterFormKeys } from "#app/data/pokemon-species";
@@ -851,9 +851,9 @@ export class GameData {
     }
 
     if (device === Device.GAMEPAD) {
-      setSettingGamepad(setting as SettingGamepad, valueIndex); // Set the gamepad setting in the current scene
+      setSettingGamepad(setting as SettingGamepad, valueIndex);
     } else if (device === Device.KEYBOARD) {
-      setSettingKeyboard(setting as SettingKeyboard, valueIndex); // Set the keyboard setting in the current scene
+      setSettingKeyboard(setting as SettingKeyboard, valueIndex);
     }
 
     Object.keys(settingDefaults).forEach((s) => {

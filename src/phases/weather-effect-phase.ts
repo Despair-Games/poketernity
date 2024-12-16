@@ -9,7 +9,7 @@ import type { Weather } from "#app/data/weather";
 import { getWeatherDamageMessage, getWeatherLapseMessage } from "#app/data/weather";
 import { BattlerTagType } from "#app/enums/battler-tag-type";
 import { WeatherType } from "#app/enums/weather-type";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { HitResult } from "#app/field/pokemon";
 import { BooleanHolder, toDmgValue } from "#app/utils";
 import { CommonAnimPhase } from "./common-anim-phase";

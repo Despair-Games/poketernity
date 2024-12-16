@@ -91,8 +91,6 @@ export class InputsController {
   /**
    * Initializes a new instance of the game control system, setting up initial state and configurations.
    *
-   * @param scene - The Phaser scene associated with this instance.
-   *
    * @remarks
    * This constructor initializes the game control system with necessary setups for handling inputs.
    * It prepares an interactions array indexed by button identifiers and configures default states for each button.
