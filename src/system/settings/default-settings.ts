@@ -26,7 +26,7 @@ export const defaultGeneralSettings: GeneralSettings = {
   battleStyle: BattleStyle.SWITCH,
   enableRetries: false,
   hideIvScanner: false,
-  enableTutorials: import.meta.env.VITE_BYPASS_TUTORIAL === "1",
+  enableTutorials: import.meta.env.VITE_BYPASS_TUTORIAL !== "1",
   enableTouchControls: true, // auto
   enableVibration: false,
 };
