@@ -24,7 +24,6 @@ If you have the motivation and experience with Typescript/Javascript (or are wil
 #### Code-Style
 
 We are using [prettier](https://prettier.io/) to format our code. It will run automatically during the pre-commit hook so don't worry about having to format the code manually properly.
-Just format it the way you like it for yourself and the code will automatically be committed the way it's supposed to be (Unless you deactived hooks...)
 
 #### Linting
 
