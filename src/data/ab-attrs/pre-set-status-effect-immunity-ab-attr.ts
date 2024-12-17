@@ -1,5 +1,5 @@
 import { getStatusEffectDescriptor } from "#app/data/status-effect";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { BooleanHolder } from "#app/utils";
 import type { StatusEffect } from "#enums/status-effect";

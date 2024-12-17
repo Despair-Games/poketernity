@@ -4,7 +4,7 @@ import { Type } from "#enums/type";
 import { BooleanHolder, NumberHolder, toDmgValue } from "#app/utils";
 import { MoveCategory, allMoves, MoveTarget } from "#app/data/move";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { HitResult, PokemonMove } from "#app/field/pokemon";
 import { StatusEffect } from "#enums/status-effect";
 import type { BattlerIndex } from "#app/battle";
@@ -82,7 +82,6 @@ export abstract class ArenaTag {
 
   /**
    * Helper function that retrieves the source Pokemon
-   * @param scene medium to retrieve the source Pokemon
    * @returns The source {@linkcode Pokemon} or `null` if none is found
    */
   public getSourcePokemon(): Pokemon | null {
@@ -91,7 +90,6 @@ export abstract class ArenaTag {
 
   /**
    * Helper function that retrieves the Pokemon affected
-   * @param scene - medium to retrieve the involved Pokemon
    * @returns list of PlayerPokemon or EnemyPokemon on the field
    */
   public getAffectedPokemon(): Pokemon[] {

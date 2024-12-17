@@ -1,4 +1,3 @@
-import type { default as BattleScene } from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
 import type UiHandler from "./ui-handler";
 import BattleMessageUiHandler from "./battle-message-ui-handler";
@@ -11,7 +10,6 @@ import ModifierSelectUiHandler from "./modifier-select-ui-handler";
 import BallUiHandler from "./ball-ui-handler";
 import SummaryUiHandler from "./summary-ui-handler";
 import StarterSelectUiHandler from "./starter-select-ui-handler";
-import EvolutionSceneHandler from "./evolution-scene-handler";
 import TargetSelectUiHandler from "./target-select-ui-handler";
 import SettingsUiHandler from "./settings/settings-ui-handler";
 import SettingsGamepadUiHandler from "./settings/settings-gamepad-ui-handler";
@@ -54,6 +52,7 @@ import TestDialogueUiHandler from "#app/ui/test-dialogue-ui-handler";
 import AutoCompleteUiHandler from "./autocomplete-ui-handler";
 import { Device } from "#enums/devices";
 import MysteryEncounterUiHandler from "./mystery-encounter-ui-handler";
+import FormChangeSceneHandler from "./form-change-scene-handler";
 
 export enum Mode {
   MESSAGE,
@@ -67,7 +66,7 @@ export enum Mode {
   PARTY,
   SUMMARY,
   STARTER_SELECT,
-  EVOLUTION_SCENE,
+  FORM_CHANGE_SCENE,
   EGG_HATCH_SCENE,
   EGG_HATCH_SUMMARY,
   CONFIRM,
@@ -105,7 +104,7 @@ const transitionModes = [
   Mode.PARTY,
   Mode.SUMMARY,
   Mode.STARTER_SELECT,
-  Mode.EVOLUTION_SCENE,
+  Mode.FORM_CHANGE_SCENE,
   Mode.EGG_HATCH_SCENE,
   Mode.EGG_LIST,
   Mode.EGG_GACHA,
@@ -174,7 +173,7 @@ export default class UI extends Phaser.GameObjects.Container {
       new PartyUiHandler(),
       new SummaryUiHandler(),
       new StarterSelectUiHandler(),
-      new EvolutionSceneHandler(),
+      new FormChangeSceneHandler(),
       new EggHatchSceneHandler(),
       new EggSummaryUiHandler(),
       new ConfirmUiHandler(),
@@ -275,12 +274,11 @@ export default class UI extends Phaser.GameObjects.Container {
       return false;
     }
 
-    const battleScene = globalScene as BattleScene;
     if ([Mode.CONFIRM, Mode.COMMAND, Mode.FIGHT, Mode.MESSAGE].includes(this.mode)) {
-      battleScene?.processInfoButton(pressed);
+      globalScene?.processInfoButton(pressed);
       return true;
     }
-    battleScene?.processInfoButton(false);
+    globalScene?.processInfoButton(false);
     return true;
   }
 
@@ -343,11 +341,10 @@ export default class UI extends Phaser.GameObjects.Container {
     callbackDelay?: number,
     promptDelay?: number,
   ): void {
-    const battleScene = globalScene as BattleScene;
     // Get localized dialogue (if available)
     let hasi18n = false;
     let text = keyOrText;
-    const genderIndex = battleScene.gameData.gender ?? PlayerGender.UNSET;
+    const genderIndex = globalScene.gameData.gender ?? PlayerGender.UNSET;
     const genderStr = PlayerGender[genderIndex].toLowerCase();
 
     if (i18next.exists(keyOrText)) {
@@ -364,7 +361,7 @@ export default class UI extends Phaser.GameObjects.Container {
       }
     }
     let showMessageAndCallback = () => {
-      hasi18n && battleScene.gameData.saveSeenDialogue(keyOrText);
+      hasi18n && globalScene.gameData.saveSeenDialogue(keyOrText);
       callback();
     };
     if (text.indexOf("$") > -1) {
@@ -401,10 +398,8 @@ export default class UI extends Phaser.GameObjects.Container {
   }
 
   shouldSkipDialogue(i18nKey: string): boolean {
-    const battleScene = globalScene as BattleScene;
-
     if (i18next.exists(i18nKey)) {
-      if (battleScene.skipSeenDialogues && battleScene.gameData.getSeenDialogues()[i18nKey] === true) {
+      if (globalScene.skipSeenDialogues && globalScene.gameData.getSeenDialogues()[i18nKey] === true) {
         return true;
       }
     }

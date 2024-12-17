@@ -1,6 +1,6 @@
 import { applyAbAttrs } from "#app/data/ability";
 import { queueShowAbility } from "#app/data/ability-utils";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { BooleanHolder } from "#app/utils";

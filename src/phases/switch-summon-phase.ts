@@ -5,7 +5,7 @@ import { allMoves, ForceSwitchOutAttr } from "#app/data/move";
 import { getPokeballTintColor } from "#app/data/pokeball";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";
 import { TrainerSlot } from "#app/data/trainer-config";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { SwitchEffectTransferModifier } from "#app/modifier/modifier";
 import { Command } from "#app/ui/command-ui-handler";
@@ -24,7 +24,6 @@ export class SwitchSummonPhase extends SummonPhase {
 
   /**
    * Constructor for creating a new SwitchSummonPhase
-   * @param scene {@linkcode BattleScene} the scene the phase is associated with
    * @param switchType the type of switch behavior
    * @param fieldIndex number representing position on the battle field
    * @param slotIndex number for the index of pokemon (in party of 6) to switch into
