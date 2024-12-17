@@ -21,6 +21,10 @@ If you have the motivation and experience with Typescript/Javascript (or are wil
    - _if you run into any errors, reach out in the **#dev-corner** channel in discord_
 2. Run `npm run start:dev` to locally run the project in `localhost:8000`
 
+#### Code-Style
+
+We are using [prettier](https://prettier.io/) to format our code. It will run automatically during the pre-commit hook so don't worry about having to format the code manually properly.
+
 #### Linting
 
 We're using ESLint as our common linter and formatter. It will run automatically during the pre-commit hook but if you would like to manually run it, use the `npm run eslint` script. To view the complete rules, check out the [eslint.config.js](./eslint.config.js) file.
