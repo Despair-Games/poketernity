@@ -8,7 +8,7 @@ import { RedirectMoveAbAttr } from "#app/data/ab-attrs/redirect-move-ab-attr";
 import { PostMoveUsedAbAttr } from "#app/data/ab-attrs/post-move-used-ab-attr";
 import type { DelayedAttackTag } from "#app/data/arena-tag";
 import { CommonAnim } from "#app/data/battle-anims";
-import { BattlerTagLapseType, CenterOfAttentionTag } from "#app/data/battler-tags";
+import { BattlerTagLapseType, CenterOfAttentionTag, SkyDropTag } from "#app/data/battler-tags";
 import {
   allMoves,
   applyMoveAttrs,
@@ -112,18 +112,24 @@ export class MovePhase extends BattlePhase {
     );
   }
 
-  /**Signifies the current move should fail but still use PP */
+  /** Signifies the current move should fail but still use PP */
   public fail(): void {
     this.failed = true;
   }
 
-  /**Signifies the current move should cancel and retain PP */
+  /** Signifies the current move should cancel and retain PP */
   public cancel(): void {
     this.cancelled = true;
   }
 
   public override start(): void {
     super.start();
+
+    // If the user is affected by another Pokemon's Sky Drop, skip the user's turn
+    const skyDropTag = this.pokemon.getTag(SkyDropTag);
+    if (skyDropTag && skyDropTag.sourceId !== this.pokemon.id) {
+      return this.end();
+    }
 
     console.log(Moves[this.move.moveId]);
 
@@ -406,7 +412,7 @@ export class MovePhase extends BattlePhase {
       applyPreAttackAbAttrs(PokemonTypeChangeAbAttr, this.pokemon, null, this.move.getMove());
 
       this.showMoveText();
-      globalScene.unshiftPhase(new MoveChargePhase(this.pokemon.getBattlerIndex(), this.targets[0], this.move));
+      globalScene.unshiftPhase(new MoveChargePhase(this.pokemon.getBattlerIndex(), this.targets, this.move));
     } else {
       this.pokemon.pushMoveHistory({
         move: this.move.moveId,

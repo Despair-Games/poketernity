@@ -437,6 +437,7 @@ describe("Abilities - Wimp Out", () => {
     expect(enemyPokemon.turnData.hitCount).toBe(2);
     confirmSwitch();
   });
+
   it("triggers after last hit of Parental Bond", async () => {
     game.override.enemyMoveset(Moves.TACKLE).enemyAbility(Abilities.PARENTAL_BOND);
     await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
@@ -491,6 +492,7 @@ describe("Abilities - Wimp Out", () => {
     const hasFled = enemyPokemon.switchOutStatus;
     expect(isVisible && !hasFled).toBe(true);
   });
+
   it("wimp out will not skip battles when triggered in a double battle", async () => {
     const wave = 2;
     game.override
@@ -517,5 +519,35 @@ describe("Abilities - Wimp Out", () => {
 
     await game.toNextWave();
     expect(game.scene.currentBattle.waveIndex).toBe(wave + 1);
+  });
+
+  it("wimp out will not activate if the source is carried by Sky Drop", async () => {
+    game.override
+      .battleType("double")
+      .enemySpecies(Species.WIMPOD)
+      .enemyAbility(Abilities.WIMP_OUT)
+      .enemyMoveset(Moves.SPLASH)
+      .ability(Abilities.NO_GUARD)
+      .moveset([Moves.SKY_DROP, Moves.FALSE_SWIPE])
+      .startingLevel(100)
+      .enemyLevel(10);
+
+    await game.classicMode.startBattle([Species.RAICHU, Species.PIKACHU]);
+
+    const player1 = game.scene.getPlayerField()[0];
+    const enemy1 = game.scene.getEnemyField()[0];
+
+    game.move.select(Moves.SKY_DROP, 0, BattlerIndex.ENEMY);
+    game.move.select(Moves.FALSE_SWIPE, 1, BattlerIndex.PLAYER);
+
+    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+
+    await game.phaseInterceptor.to("MoveEndPhase");
+    [player1, enemy1].forEach((p) => expect(p.getTag(BattlerTagType.SKY_DROP)).toBeDefined());
+
+    await game.phaseInterceptor.to("MoveEndPhase");
+    expect(game.phaseInterceptor.log).not.toContain("SwitchSummonPhase");
+    expect(enemy1.isActive(true)).toBeTruthy();
+    expect(enemy1.battleData.abilitiesApplied.includes(Abilities.WIMP_OUT)).toBeFalsy();
   });
 });

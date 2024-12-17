@@ -6,6 +6,7 @@ import {
   HelpingHandTag,
   SemiInvulnerableTag,
   ShellTrapTag,
+  SkyDropTag,
   StockpilingTag,
   SubstituteTag,
   TrappedTag,
@@ -214,7 +215,7 @@ export class Move implements Localizable {
   public priority: number;
   public generation: number;
   public attrs: MoveAttr[] = [];
-  private conditions: MoveCondition[] = [];
+  protected conditions: MoveCondition[] = [];
   /** The move's {@linkcode MoveFlags} */
   private flags: number = 0;
   private nameAppend: string = "";
@@ -1098,6 +1099,8 @@ function ChargeMove<TBase extends SubMove>(Base: TBase) {
 
     /** Move attributes that apply during the move's charging phase */
     public chargeAttrs: MoveAttr[] = [];
+    /** Does the move calculate its hit check during its charging phase? */
+    public hitCheckOnCharge: boolean = false;
 
     override isChargingMove(): this is ChargingMove {
       return true;
@@ -1156,7 +1159,22 @@ function ChargeMove<TBase extends SubMove>(Base: TBase) {
     chargeAttr<T extends Constructor<MoveAttr>>(ChargeAttrType: T, ...args: ConstructorParameters<T>): this {
       const chargeAttr = new ChargeAttrType(...args);
       this.chargeAttrs.push(chargeAttr);
+      let attrCondition = chargeAttr.getCondition();
+      if (attrCondition) {
+        if (typeof attrCondition === "function") {
+          attrCondition = new MoveCondition(attrCondition);
+        }
+        this.conditions.push(attrCondition);
+      }
+      return this;
+    }
 
+    /**
+     * Causes the move's hit check to also be calculated during its charging phase.
+     * @returns this {@linkcode Move} (for chaining API purposes)
+     */
+    doesHitCheckOnCharge(): this {
+      this.hitCheckOnCharge = true;
       return this;
     }
   };
@@ -1664,6 +1682,16 @@ export class SurviveDamageAttr extends ModifiedDamageAttr {
 
   override getUserBenefitScore(_user: Pokemon, target: Pokemon, _move: Move): number {
     return target.hp > 1 ? 0 : -20;
+  }
+}
+
+/**
+ * Attribute for moves that deal no damage to Flying-type Pokemon.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Sky_Drop_(move) | Sky Drop}
+ */
+export class NoDamageAgainstFlyingAttr extends ModifiedDamageAttr {
+  override getModifiedDamage(_user: Pokemon, target: Pokemon, _move: Move, damage: number): number {
+    return target.isOfType(Type.FLYING, true, true) ? 0 : damage;
   }
 }
 
@@ -5578,6 +5606,49 @@ export class SemiInvulnerableAttr extends MoveEffectAttr {
   }
 }
 
+/**
+ * Attribute implementing the charging phase effects of {@link https://bulbapedia.bulbagarden.net/wiki/Sky_Drop_(move) | Sky Drop}.
+ * Grants semi-invulnerability to the user and target and immobilizes the target.
+ */
+export class SkyDropAttr extends MoveEffectAttr {
+  /**
+   * Makes the user and target semi-invulnerable, immobilizes the target,
+   * and removes all of the target's queued moves (including Frenzy moves).
+   */
+  override apply(user: Pokemon, target: Pokemon, move: Move, args?: any[]): boolean {
+    if (!super.apply(user, target, move, args)) {
+      return false;
+    }
+
+    // Add Sky Drop tag to both user and target
+    [user, target].forEach((p) => p.addTag(BattlerTagType.SKY_DROP, 1, move.id, user.id));
+    // Clear the target's move queue
+    target.getMoveQueue().splice(0, target.getMoveQueue().length);
+    // Remove Frenzy from the target, if applicable
+    target.removeTag(BattlerTagType.FRENZY);
+    return true;
+  }
+
+  /**
+   * Sky Drop fails if:
+   * - Gravity is active on the field
+   * - The target is the user's ally
+   * - The target's weight is 200 kg or more.
+   * - The target is behind a substitute
+   * - The target is semi-invulnerable (from Dig, etc.)
+   * - The target is immobilized by another Pokemon's Sky Drop
+   */
+  override getCondition(): MoveConditionFunc {
+    return (user, target, move) =>
+      failOnGravityCondition(user, target, move)
+      && target.isPlayer() !== user.isPlayer()
+      && target.species.weight < 200
+      && !target.getTag(BattlerTagType.SUBSTITUTE)
+      && !target.getTag(SemiInvulnerableTag)
+      && (!target.getTag(SkyDropTag) || target.getTag(SkyDropTag)?.sourceId === user.id);
+  }
+}
+
 export class AddBattlerTagAttr extends MoveEffectAttr {
   public tagType: BattlerTagType;
   public turnCountMin: number;
@@ -8473,6 +8544,7 @@ export function initMoves() {
     new AttackMove(Moves.CUT, Type.NORMAL, MoveCategory.PHYSICAL, 50, 95, 30, -1, 0, 1).slicingMove(),
     new AttackMove(Moves.GUST, Type.FLYING, MoveCategory.SPECIAL, 40, 100, 35, -1, 0, 1)
       .attr(HitsTagForDoubleDamageAttr, BattlerTagType.FLYING)
+      .attr(HitsTagAttr, BattlerTagType.SKY_DROP)
       .windMove(),
     new AttackMove(Moves.WING_ATTACK, Type.FLYING, MoveCategory.PHYSICAL, 60, 100, 35, -1, 0, 1),
     new StatusMove(Moves.WHIRLWIND, Type.NORMAL, -1, 20, -1, -6, 1)
@@ -8686,7 +8758,8 @@ export function initMoves() {
     new AttackMove(Moves.THUNDER, Type.ELECTRIC, MoveCategory.SPECIAL, 110, 70, 10, 30, 0, 1)
       .attr(StatusEffectAttr, StatusEffect.PARALYSIS)
       .attr(ThunderAccuracyAttr)
-      .attr(HitsTagAttr, BattlerTagType.FLYING),
+      .attr(HitsTagAttr, BattlerTagType.FLYING)
+      .attr(HitsTagAttr, BattlerTagType.SKY_DROP),
     new AttackMove(Moves.ROCK_THROW, Type.ROCK, MoveCategory.PHYSICAL, 50, 90, 15, -1, 0, 1).makesContact(false),
     new AttackMove(Moves.EARTHQUAKE, Type.GROUND, MoveCategory.PHYSICAL, 100, 100, 10, -1, 0, 1)
       .attr(HitsTagForDoubleDamageAttr, BattlerTagType.UNDERGROUND)
@@ -9153,6 +9226,7 @@ export function initMoves() {
     new AttackMove(Moves.CROSS_CHOP, Type.FIGHTING, MoveCategory.PHYSICAL, 100, 80, 5, -1, 0, 2).attr(HighCritAttr),
     new AttackMove(Moves.TWISTER, Type.DRAGON, MoveCategory.SPECIAL, 40, 100, 20, 20, 0, 2)
       .attr(HitsTagForDoubleDamageAttr, BattlerTagType.FLYING)
+      .attr(HitsTagAttr, BattlerTagType.SKY_DROP)
       .attr(FlinchAttr)
       .windMove()
       .target(MoveTarget.ALL_NEAR_ENEMIES),
@@ -9466,6 +9540,7 @@ export function initMoves() {
     new AttackMove(Moves.EXTRASENSORY, Type.PSYCHIC, MoveCategory.SPECIAL, 80, 100, 20, 10, 0, 3).attr(FlinchAttr),
     new AttackMove(Moves.SKY_UPPERCUT, Type.FIGHTING, MoveCategory.PHYSICAL, 85, 90, 15, -1, 0, 3)
       .attr(HitsTagAttr, BattlerTagType.FLYING)
+      .attr(HitsTagAttr, BattlerTagType.SKY_DROP)
       .punchingMove(),
     new AttackMove(Moves.SAND_TOMB, Type.GROUND, MoveCategory.PHYSICAL, 35, 85, 15, -1, 0, 3)
       .attr(TrapAttr, BattlerTagType.SAND_TOMB)
@@ -10017,6 +10092,7 @@ export function initMoves() {
       .attr(AddBattlerTagAttr, BattlerTagType.INTERRUPTED)
       .attr(RemoveBattlerTagAttr, [BattlerTagType.FLYING, BattlerTagType.FLOATING, BattlerTagType.TELEKINESIS])
       .attr(HitsTagAttr, BattlerTagType.FLYING)
+      .attr(HitsTagAttr, BattlerTagType.SKY_DROP)
       .makesContact(false),
     new AttackMove(Moves.STORM_THROW, Type.FIGHTING, MoveCategory.PHYSICAL, 60, 100, 10, -1, 0, 5).attr(CritOnlyAttr),
     new AttackMove(Moves.FLAME_BURST, Type.FIRE, MoveCategory.SPECIAL, 70, 100, 15, -1, 0, 5).attr(FlameBurstAttr),
@@ -10107,11 +10183,11 @@ export function initMoves() {
     ),
     new ChargingAttackMove(Moves.SKY_DROP, Type.FLYING, MoveCategory.PHYSICAL, 60, 100, 10, -1, 0, 5)
       .chargeText(i18next.t("moveTriggers:tookTargetIntoSky", { pokemonName: "{USER}", targetName: "{TARGET}" }))
-      .chargeAttr(SemiInvulnerableAttr, BattlerTagType.FLYING)
-      .condition(failOnGravityCondition)
-      .condition((_user, target, _move) => !target.getTag(BattlerTagType.SUBSTITUTE))
-      .ignoresVirtual()
-      .partial(), // Should immobilize the target, Flying types should take no damage. cf https://bulbapedia.bulbagarden.net/wiki/Sky_Drop_(move) and https://www.smogon.com/dex/sv/moves/sky-drop/
+      .chargeAttr(SkyDropAttr)
+      .attr(NoDamageAgainstFlyingAttr)
+      .attr(BypassRedirectAttr)
+      .doesHitCheckOnCharge()
+      .ignoresVirtual(),
     new SelfStatusMove(Moves.SHIFT_GEAR, Type.STEEL, -1, 10, -1, 0, 5)
       .attr(StatStageChangeAttr, [Stat.ATK], 1, true)
       .attr(StatStageChangeAttr, [Stat.SPD], 2, true),
@@ -10252,6 +10328,7 @@ export function initMoves() {
       .attr(ThunderAccuracyAttr)
       .attr(ConfuseAttr)
       .attr(HitsTagAttr, BattlerTagType.FLYING)
+      .attr(HitsTagAttr, BattlerTagType.SKY_DROP)
       .windMove(),
     new AttackMove(Moves.HEAD_CHARGE, Type.NORMAL, MoveCategory.PHYSICAL, 120, 100, 15, -1, 0, 5)
       .attr(RecoilAttr)
@@ -10520,6 +10597,7 @@ export function initMoves() {
       .attr(NeutralDamageAgainstFlyingTypeMultiplierAttr)
       .attr(AddBattlerTagAttr, BattlerTagType.IGNORE_FLYING, false, false, 1, 1, true)
       .attr(HitsTagAttr, BattlerTagType.FLYING)
+      .attr(HitsTagAttr, BattlerTagType.SKY_DROP)
       .attr(HitsTagAttr, BattlerTagType.FLOATING)
       .attr(AddBattlerTagAttr, BattlerTagType.INTERRUPTED)
       .attr(RemoveBattlerTagAttr, [BattlerTagType.FLYING, BattlerTagType.FLOATING, BattlerTagType.TELEKINESIS])

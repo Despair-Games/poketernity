@@ -24,6 +24,7 @@ import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { ProtectStatAbAttr } from "./ab-attrs/protect-stat-ab-attr";
+import { SkyDropTag } from "./battler-tags";
 
 export enum ArenaTagSide {
   BOTH,
@@ -1077,11 +1078,19 @@ export class GravityTag extends ArenaTag {
   override onAdd(_arena: Arena): void {
     globalScene.queueMessage(i18next.t("arenaTag:gravityOnAdd"));
     globalScene.getField(true).forEach((pokemon) => {
-      if (pokemon !== null) {
-        pokemon.removeTag(BattlerTagType.FLOATING);
-        pokemon.removeTag(BattlerTagType.TELEKINESIS);
-        if (pokemon.getTag(BattlerTagType.FLYING)) {
-          pokemon.addTag(BattlerTagType.INTERRUPTED);
+      pokemon.removeTag(BattlerTagType.FLOATING);
+      pokemon.removeTag(BattlerTagType.TELEKINESIS);
+      if (pokemon.getTag(BattlerTagType.FLYING)) {
+        pokemon.addTag(BattlerTagType.INTERRUPTED);
+      }
+
+      // Remove Sky Drop's effect and cancel future use of the move.
+      const skyDropTag = pokemon.getTag(SkyDropTag);
+      pokemon.removeTag(BattlerTagType.SKY_DROP);
+      if (skyDropTag?.sourceId === pokemon.id) {
+        const queuedSkyDropIdx = pokemon.getMoveQueue().findIndex((mv) => mv.move === Moves.SKY_DROP);
+        if (queuedSkyDropIdx > -1) {
+          pokemon.getMoveQueue().splice(queuedSkyDropIdx, 1);
         }
       }
     });
