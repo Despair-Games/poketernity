@@ -6,7 +6,7 @@ import i18next from "i18next";
 import { PostSummonAbAttr } from "./post-summon-ab-attr";
 
 /**
- * Attempt to copy the stat changes on an ally pokemon
+ * Attempt to copy the stat changes on an ally pokemon. Used by Costar.
  * @extends PostSummonAbAttr
  */
 export class PostSummonCopyAllyStatsAbAttr extends PostSummonAbAttr {

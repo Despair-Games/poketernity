@@ -4,7 +4,7 @@ import type { ArenaTagType } from "#enums/arena-tag-type";
 import { PostSummonAbAttr } from "./post-summon-ab-attr";
 
 /**
- * Removes specified arena tags when a Pokemon is summoned.
+ * Removes specified arena tags when a Pokemon is summoned. Used by Screen Cleaner.
  * @extends PostSummonAbAttr
  */
 export class PostSummonRemoveArenaTagAbAttr extends PostSummonAbAttr {
