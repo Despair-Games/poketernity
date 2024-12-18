@@ -4,7 +4,7 @@ import { BattlerTagLapseType } from "#app/data/battler-tags";
 import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#app/enums/weather-type";
 import { TurnEndEvent } from "#app/events/battle-scene";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import {
   TurnHealModifier,

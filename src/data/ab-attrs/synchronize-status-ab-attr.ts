@@ -1,4 +1,4 @@
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { StatusEffect } from "#enums/status-effect";
 import { PostSetStatusAbAttr } from "./post-set-status-ab-attr";
 

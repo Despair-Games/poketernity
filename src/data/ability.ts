@@ -3,7 +3,7 @@ import { BattleType } from "#app/battle";
 import type { Weather } from "#app/data/weather";
 import { type Stat, type BattleStat } from "#app/enums/stat";
 import { SwitchType } from "#app/enums/switch-type";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import type { EnemyPokemon, PokemonMove, HitResult } from "#app/field/pokemon";
 import { MoveResult, PlayerPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";

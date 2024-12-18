@@ -1,6 +1,6 @@
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import type { Weather } from "#app/data/weather";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { WeatherType } from "#enums/weather-type";
 import { AbAttr } from "./ab-attr";

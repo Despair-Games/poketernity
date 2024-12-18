@@ -1,5 +1,5 @@
 import { allSpecies } from "#app/data/pokemon-species";
-import { SpeciesCategories } from "#enums/pokemon-species-categories";
+import { SpeciesGroups } from "#enums/pokemon-species-groups";
 import { Species } from "#enums/species";
 import { describe, expect, it } from "vitest";
 
@@ -7,12 +7,12 @@ import { describe, expect, it } from "vitest";
  * Note: We are currently applying the lists of Sub-Legendary, Legendary, and Mythical Pokemon compiled by
  * {@link https://www.serebii.net/pokemon/legendary.shtml Serebii},
  * with the following exceptions:
- * 1. Ultra Beasts have their own category instead of being Sub-Legendary.
+ * 1. Ultra Beasts are in their own group instead of being Sub-Legendary.
  * 2. Eternal Floette and Bloodmoon Ursaluna are Sub-Legendary instead of Common (custom implementation).
  * 3. The Galarian variants of Articuno, Zapdos, and Moltres are Sub-Legendary (Serebii forgot to add them).
  */
-describe("Pokemon Categories", () => {
-  it("should have the correct Pokemon in the Sub-Legendary category", () => {
+describe("Pokemon Groups", () => {
+  it("should have the correct Pokemon in the Sub-Legendary group", () => {
     const EXPECTED_SUB_LEGENDS = [
       Species.ARTICUNO,
       Species.ZAPDOS,
@@ -66,12 +66,12 @@ describe("Pokemon Categories", () => {
     ];
     for (const species of allSpecies) {
       const expectedSubLegend = EXPECTED_SUB_LEGENDS.includes(species.speciesId);
-      const actualSubLegend = species.category === SpeciesCategories.SUBLEGENDARY;
+      const actualSubLegend = species.group === SpeciesGroups.SUBLEGENDARY;
       expect(actualSubLegend).toBe(expectedSubLegend);
     }
   });
 
-  it("should have the correct Pokemon in the Legendary category", () => {
+  it("should have the correct Pokemon in the Legendary group", () => {
     const EXPECTED_LEGENDS = [
       Species.MEWTWO,
       Species.LUGIA,
@@ -103,12 +103,12 @@ describe("Pokemon Categories", () => {
     ];
     for (const species of allSpecies) {
       const expectedLegend = EXPECTED_LEGENDS.includes(species.speciesId);
-      const actualLegend = species.category === SpeciesCategories.LEGENDARY;
+      const actualLegend = species.group === SpeciesGroups.LEGENDARY;
       expect(actualLegend).toBe(expectedLegend);
     }
   });
 
-  it("should have the correct Pokemon in the Mythical category", () => {
+  it("should have the correct Pokemon in the Mythical group", () => {
     const EXPECTED_MYTHICALS = [
       Species.MEW,
       Species.CELEBI,
@@ -136,12 +136,12 @@ describe("Pokemon Categories", () => {
     ];
     for (const species of allSpecies) {
       const expectedMythical = EXPECTED_MYTHICALS.includes(species.speciesId);
-      const actualMythical = species.category === SpeciesCategories.MYTHICAL;
+      const actualMythical = species.group === SpeciesGroups.MYTHICAL;
       expect(actualMythical).toBe(expectedMythical);
     }
   });
 
-  it("should have the correct Pokemon in the Ultra Beast category", () => {
+  it("should have the correct Pokemon in the Ultra Beast group", () => {
     const EXPECTED_ULTRA_BEASTS = [
       Species.NIHILEGO,
       Species.BUZZWOLE,
@@ -157,12 +157,12 @@ describe("Pokemon Categories", () => {
     ];
     for (const species of allSpecies) {
       const expectedUltraBeast = EXPECTED_ULTRA_BEASTS.includes(species.speciesId);
-      const actualUltraBeast = species.category === SpeciesCategories.ULTRA_BEAST;
+      const actualUltraBeast = species.group === SpeciesGroups.ULTRA_BEAST;
       expect(actualUltraBeast).toBe(expectedUltraBeast);
     }
   });
 
-  it("should have the correct Pokemon in the Paradox category", () => {
+  it("should have the correct Pokemon in the Paradox group", () => {
     const EXPECTED_PARADOX = [
       Species.GREAT_TUSK,
       Species.SCREAM_TAIL,
@@ -187,7 +187,7 @@ describe("Pokemon Categories", () => {
     ];
     for (const species of allSpecies) {
       const expectedParadox = EXPECTED_PARADOX.includes(species.speciesId);
-      const actualParadox = species.category === SpeciesCategories.PARADOX;
+      const actualParadox = species.group === SpeciesGroups.PARADOX;
       expect(actualParadox).toBe(expectedParadox);
     }
   });

@@ -30,7 +30,7 @@ import type { Variant, VariantSet } from "#app/data/variant";
 import { variantData } from "#app/data/variant";
 import { speciesStarterCosts, POKERUS_STARTER_COUNT } from "#app/data/balance/starters";
 import { SpeciesFormKey } from "#enums/species-form-key";
-import { SpeciesCategories } from "#enums/pokemon-species-categories";
+import { SpeciesGroups } from "#enums/pokemon-species-groups";
 import { PokemonRegion } from "#enums/pokemon-regions";
 
 /**
@@ -131,22 +131,22 @@ export function getFusedSpeciesName(speciesAName: string, speciesBName: string):
 }
 
 /**
- * Returns a list of Pokemon in a specific category (ex. Mythical, UB, etc.)
- * @param category the category used to make the list
- * @param includeLegends if `true`, AND if `category` is `PARADOX` or `ULTRA_BEAST`, then also include legendaries in the returned list
- * @returns a list of species IDs belonging to the category
+ * Returns a list of Pokemon in a specific group (ex. Mythical, UB, etc.)
+ * @param group the group used to make the list
+ * @param includeLegends if `true`, AND if `group` is `PARADOX` or `ULTRA_BEAST`, then also include legendaries in the returned list
+ * @returns a list of species IDs belonging to the group
  */
-export function getSpecialSpeciesList(category: SpeciesCategories, includeLegends?: boolean): Species[] {
+export function getSpecialSpeciesList(group: SpeciesGroups, includeLegends?: boolean): Species[] {
   const speciesList = allSpecies
     .map((s) => {
-      if (s.category === category) {
+      if (s.group === group) {
         return s.speciesId;
       }
     })
     .filter((s) => !isNullOrUndefined(s));
-  if (includeLegends && category === SpeciesCategories.ULTRA_BEAST) {
+  if (includeLegends && group === SpeciesGroups.ULTRA_BEAST) {
     speciesList.push(Species.COSMOG, Species.COSMOEM, Species.LUNALA, Species.SOLGALEO, Species.NECROZMA);
-  } else if (includeLegends && category === SpeciesCategories.PARADOX) {
+  } else if (includeLegends && group === SpeciesGroups.PARADOX) {
     speciesList.push(Species.KORAIDON, Species.MIRAIDON);
   }
   return speciesList as Species[];
@@ -665,7 +665,7 @@ export abstract class PokemonSpeciesForm {
 
 export default class PokemonSpecies extends PokemonSpeciesForm implements Localizable {
   public name: string;
-  readonly category: SpeciesCategories;
+  readonly group: SpeciesGroups;
   readonly species: string;
   readonly growthRate: GrowthRate;
   readonly malePercent: number | null;
@@ -676,8 +676,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
   constructor(
     id: Species,
     generation: number,
-    category: SpeciesCategories,
-    species: string,
+    group: SpeciesGroups,
     type1: Type,
     type2: Type | null,
     height: number,
@@ -725,8 +724,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
     this.speciesId = id;
     this.formIndex = 0;
     this.generation = generation;
-    this.category = category;
-    this.species = species;
+    this.group = group;
     this.growthRate = growthRate;
     this.malePercent = malePercent;
     this.genderDiffs = genderDiffs;
@@ -1051,13 +1049,13 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
   getCompatibleFusionSpeciesFilter(): PokemonSpeciesFilter {
     const hasEvolution = pokemonEvolutions.hasOwnProperty(this.speciesId);
     const hasPrevolution = pokemonPrevolutions.hasOwnProperty(this.speciesId);
-    const category = this.category;
+    const category = this.group;
     return (species) => {
       return (
-        (category !== SpeciesCategories.COMMON
+        (category !== SpeciesGroups.COMMON
           || (pokemonEvolutions.hasOwnProperty(species.speciesId) === hasEvolution
             && pokemonPrevolutions.hasOwnProperty(species.speciesId) === hasPrevolution))
-        && species.category === category
+        && species.group === category
         && (this.isTrainerForbidden() || !species.isTrainerForbidden())
         && species.speciesId !== Species.DITTO
       );
@@ -1094,7 +1092,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
    * @returns true if the Pokemon is considered a sub-legendary by the game
    */
   isSubLegendary() {
-    return [SpeciesCategories.SUBLEGENDARY, SpeciesCategories.ULTRA_BEAST].includes(this.category);
+    return [SpeciesGroups.SUBLEGENDARY, SpeciesGroups.ULTRA_BEAST].includes(this.group);
   }
 
   /**
@@ -1102,7 +1100,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
    * @returns true if the Pokemon is considered a legendary by the game
    */
   isLegendary() {
-    return this.category === SpeciesCategories.LEGENDARY;
+    return this.group === SpeciesGroups.LEGENDARY;
   }
 
   /**
@@ -1110,7 +1108,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
    * @returns true if the Pokemon is a mythical
    */
   isMythical() {
-    return this.category === SpeciesCategories.MYTHICAL;
+    return this.group === SpeciesGroups.MYTHICAL;
   }
 
   /**
@@ -1212,7 +1210,6 @@ export const noStarterFormKeys: string[] = [
 
 /**
  * Method to get the daily list of starters with Pokerus.
- * @param scene {@linkcode BattleScene} used as part of RNG
  * @returns A list of starters with Pokerus
  */
 export function getPokerusStarters(): PokemonSpecies[] {
@@ -1242,8 +1239,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BULBASAUR,
       1,
-      SpeciesCategories.COMMON,
-      "Seed Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.POISON,
       0.7,
@@ -1268,8 +1264,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.IVYSAUR,
       1,
-      SpeciesCategories.COMMON,
-      "Seed Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.POISON,
       1,
@@ -1294,8 +1289,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.VENUSAUR,
       1,
-      SpeciesCategories.COMMON,
-      "Seed Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.POISON,
       2,
@@ -1389,8 +1383,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CHARMANDER,
       1,
-      SpeciesCategories.COMMON,
-      "Lizard Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       null,
       0.6,
@@ -1415,8 +1408,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CHARMELEON,
       1,
-      SpeciesCategories.COMMON,
-      "Flame Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       null,
       1.1,
@@ -1441,8 +1433,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CHARIZARD,
       1,
-      SpeciesCategories.COMMON,
-      "Flame Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       Type.FLYING,
       1.7,
@@ -1555,8 +1546,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SQUIRTLE,
       1,
-      SpeciesCategories.COMMON,
-      "Tiny Turtle Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.5,
@@ -1581,8 +1571,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.WARTORTLE,
       1,
-      SpeciesCategories.COMMON,
-      "Turtle Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       1,
@@ -1607,8 +1596,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BLASTOISE,
       1,
-      SpeciesCategories.COMMON,
-      "Shellfish Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       1.6,
@@ -1700,8 +1688,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CATERPIE,
       1,
-      SpeciesCategories.COMMON,
-      "Worm Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       null,
       0.3,
@@ -1726,8 +1713,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.METAPOD,
       1,
-      SpeciesCategories.COMMON,
-      "Cocoon Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       null,
       0.7,
@@ -1752,8 +1738,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BUTTERFREE,
       1,
-      SpeciesCategories.COMMON,
-      "Butterfly Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.FLYING,
       1.1,
@@ -1825,8 +1810,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.WEEDLE,
       1,
-      SpeciesCategories.COMMON,
-      "Hairy Bug Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.POISON,
       0.3,
@@ -1851,8 +1835,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.KAKUNA,
       1,
-      SpeciesCategories.COMMON,
-      "Cocoon Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.POISON,
       0.6,
@@ -1877,8 +1860,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BEEDRILL,
       1,
-      SpeciesCategories.COMMON,
-      "Poison Bee Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.POISON,
       1,
@@ -1949,8 +1931,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PIDGEY,
       1,
-      SpeciesCategories.COMMON,
-      "Tiny Bird Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.FLYING,
       0.3,
@@ -1975,8 +1956,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PIDGEOTTO,
       1,
-      SpeciesCategories.COMMON,
-      "Bird Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.FLYING,
       1.1,
@@ -2001,8 +1981,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PIDGEOT,
       1,
-      SpeciesCategories.COMMON,
-      "Bird Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.FLYING,
       1.5,
@@ -2073,8 +2052,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.RATTATA,
       1,
-      SpeciesCategories.COMMON,
-      "Mouse Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       0.3,
@@ -2099,8 +2077,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.RATICATE,
       1,
-      SpeciesCategories.COMMON,
-      "Mouse Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       0.7,
@@ -2125,8 +2102,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SPEAROW,
       1,
-      SpeciesCategories.COMMON,
-      "Tiny Bird Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.FLYING,
       0.3,
@@ -2151,8 +2127,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FEAROW,
       1,
-      SpeciesCategories.COMMON,
-      "Beak Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.FLYING,
       1.2,
@@ -2177,8 +2152,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.EKANS,
       1,
-      SpeciesCategories.COMMON,
-      "Snake Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       null,
       2,
@@ -2203,8 +2177,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ARBOK,
       1,
-      SpeciesCategories.COMMON,
-      "Cobra Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       null,
       3.5,
@@ -2229,8 +2202,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PIKACHU,
       1,
-      SpeciesCategories.COMMON,
-      "Mouse Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       null,
       0.4,
@@ -2469,8 +2441,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.RAICHU,
       1,
-      SpeciesCategories.COMMON,
-      "Mouse Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       null,
       0.8,
@@ -2495,8 +2466,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SANDSHREW,
       1,
-      SpeciesCategories.COMMON,
-      "Mouse Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       null,
       0.6,
@@ -2521,8 +2491,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SANDSLASH,
       1,
-      SpeciesCategories.COMMON,
-      "Mouse Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       null,
       1,
@@ -2547,8 +2516,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.NIDORAN_F,
       1,
-      SpeciesCategories.COMMON,
-      "Poison Pin Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       null,
       0.4,
@@ -2573,8 +2541,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.NIDORINA,
       1,
-      SpeciesCategories.COMMON,
-      "Poison Pin Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       null,
       0.8,
@@ -2599,8 +2566,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.NIDOQUEEN,
       1,
-      SpeciesCategories.COMMON,
-      "Drill Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       Type.GROUND,
       1.3,
@@ -2625,8 +2591,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.NIDORAN_M,
       1,
-      SpeciesCategories.COMMON,
-      "Poison Pin Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       null,
       0.5,
@@ -2651,8 +2616,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.NIDORINO,
       1,
-      SpeciesCategories.COMMON,
-      "Poison Pin Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       null,
       0.9,
@@ -2677,8 +2641,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.NIDOKING,
       1,
-      SpeciesCategories.COMMON,
-      "Drill Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       Type.GROUND,
       1.4,
@@ -2703,8 +2666,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CLEFAIRY,
       1,
-      SpeciesCategories.COMMON,
-      "Fairy Pokémon",
+      SpeciesGroups.COMMON,
       Type.FAIRY,
       null,
       0.6,
@@ -2729,8 +2691,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CLEFABLE,
       1,
-      SpeciesCategories.COMMON,
-      "Fairy Pokémon",
+      SpeciesGroups.COMMON,
       Type.FAIRY,
       null,
       1.3,
@@ -2755,8 +2716,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.VULPIX,
       1,
-      SpeciesCategories.COMMON,
-      "Fox Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       null,
       0.6,
@@ -2781,8 +2741,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.NINETALES,
       1,
-      SpeciesCategories.COMMON,
-      "Fox Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       null,
       1.1,
@@ -2807,8 +2766,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.JIGGLYPUFF,
       1,
-      SpeciesCategories.COMMON,
-      "Balloon Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.FAIRY,
       0.5,
@@ -2833,8 +2791,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.WIGGLYTUFF,
       1,
-      SpeciesCategories.COMMON,
-      "Balloon Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.FAIRY,
       1,
@@ -2859,8 +2816,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ZUBAT,
       1,
-      SpeciesCategories.COMMON,
-      "Bat Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       Type.FLYING,
       0.8,
@@ -2885,8 +2841,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GOLBAT,
       1,
-      SpeciesCategories.COMMON,
-      "Bat Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       Type.FLYING,
       1.6,
@@ -2911,8 +2866,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ODDISH,
       1,
-      SpeciesCategories.COMMON,
-      "Weed Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.POISON,
       0.5,
@@ -2937,8 +2891,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GLOOM,
       1,
-      SpeciesCategories.COMMON,
-      "Weed Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.POISON,
       0.8,
@@ -2963,8 +2916,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.VILEPLUME,
       1,
-      SpeciesCategories.COMMON,
-      "Flower Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.POISON,
       1.2,
@@ -2989,8 +2941,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PARAS,
       1,
-      SpeciesCategories.COMMON,
-      "Mushroom Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.GRASS,
       0.3,
@@ -3015,8 +2966,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PARASECT,
       1,
-      SpeciesCategories.COMMON,
-      "Mushroom Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.GRASS,
       1,
@@ -3041,8 +2991,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.VENONAT,
       1,
-      SpeciesCategories.COMMON,
-      "Insect Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.POISON,
       1,
@@ -3067,8 +3016,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.VENOMOTH,
       1,
-      SpeciesCategories.COMMON,
-      "Poison Moth Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.POISON,
       1.5,
@@ -3093,8 +3041,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DIGLETT,
       1,
-      SpeciesCategories.COMMON,
-      "Mole Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       null,
       0.2,
@@ -3119,8 +3066,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DUGTRIO,
       1,
-      SpeciesCategories.COMMON,
-      "Mole Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       null,
       0.7,
@@ -3145,8 +3091,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MEOWTH,
       1,
-      SpeciesCategories.COMMON,
-      "Scratch Cat Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       0.4,
@@ -3217,8 +3162,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PERSIAN,
       1,
-      SpeciesCategories.COMMON,
-      "Classy Cat Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       1,
@@ -3243,8 +3187,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PSYDUCK,
       1,
-      SpeciesCategories.COMMON,
-      "Duck Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.8,
@@ -3269,8 +3212,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GOLDUCK,
       1,
-      SpeciesCategories.COMMON,
-      "Duck Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       1.7,
@@ -3295,8 +3237,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MANKEY,
       1,
-      SpeciesCategories.COMMON,
-      "Pig Monkey Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIGHTING,
       null,
       0.5,
@@ -3321,8 +3262,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PRIMEAPE,
       1,
-      SpeciesCategories.COMMON,
-      "Pig Monkey Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIGHTING,
       null,
       1,
@@ -3347,8 +3287,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GROWLITHE,
       1,
-      SpeciesCategories.COMMON,
-      "Puppy Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       null,
       0.7,
@@ -3373,8 +3312,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ARCANINE,
       1,
-      SpeciesCategories.COMMON,
-      "Legendary Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       null,
       1.9,
@@ -3399,8 +3337,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.POLIWAG,
       1,
-      SpeciesCategories.COMMON,
-      "Tadpole Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.6,
@@ -3425,8 +3362,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.POLIWHIRL,
       1,
-      SpeciesCategories.COMMON,
-      "Tadpole Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       1,
@@ -3451,8 +3387,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.POLIWRATH,
       1,
-      SpeciesCategories.COMMON,
-      "Tadpole Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.FIGHTING,
       1.3,
@@ -3477,8 +3412,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ABRA,
       1,
-      SpeciesCategories.COMMON,
-      "Psi Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       null,
       0.9,
@@ -3503,8 +3437,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.KADABRA,
       1,
-      SpeciesCategories.COMMON,
-      "Psi Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       null,
       1.3,
@@ -3529,8 +3462,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ALAKAZAM,
       1,
-      SpeciesCategories.COMMON,
-      "Psi Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       null,
       1.5,
@@ -3602,8 +3534,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MACHOP,
       1,
-      SpeciesCategories.COMMON,
-      "Superpower Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIGHTING,
       null,
       0.8,
@@ -3628,8 +3559,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MACHOKE,
       1,
-      SpeciesCategories.COMMON,
-      "Superpower Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIGHTING,
       null,
       1.5,
@@ -3654,8 +3584,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MACHAMP,
       1,
-      SpeciesCategories.COMMON,
-      "Superpower Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIGHTING,
       null,
       1.6,
@@ -3726,8 +3655,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BELLSPROUT,
       1,
-      SpeciesCategories.COMMON,
-      "Flower Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.POISON,
       0.7,
@@ -3752,8 +3680,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.WEEPINBELL,
       1,
-      SpeciesCategories.COMMON,
-      "Flycatcher Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.POISON,
       1,
@@ -3778,8 +3705,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.VICTREEBEL,
       1,
-      SpeciesCategories.COMMON,
-      "Flycatcher Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.POISON,
       1.7,
@@ -3804,8 +3730,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TENTACOOL,
       1,
-      SpeciesCategories.COMMON,
-      "Jellyfish Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.POISON,
       0.9,
@@ -3830,8 +3755,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TENTACRUEL,
       1,
-      SpeciesCategories.COMMON,
-      "Jellyfish Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.POISON,
       1.6,
@@ -3856,8 +3780,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GEODUDE,
       1,
-      SpeciesCategories.COMMON,
-      "Rock Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.GROUND,
       0.4,
@@ -3882,8 +3805,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GRAVELER,
       1,
-      SpeciesCategories.COMMON,
-      "Rock Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.GROUND,
       1,
@@ -3908,8 +3830,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GOLEM,
       1,
-      SpeciesCategories.COMMON,
-      "Megaton Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.GROUND,
       1.4,
@@ -3934,8 +3855,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PONYTA,
       1,
-      SpeciesCategories.COMMON,
-      "Fire Horse Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       null,
       1,
@@ -3960,8 +3880,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.RAPIDASH,
       1,
-      SpeciesCategories.COMMON,
-      "Fire Horse Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       null,
       1.7,
@@ -3986,8 +3905,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SLOWPOKE,
       1,
-      SpeciesCategories.COMMON,
-      "Dopey Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.PSYCHIC,
       1.2,
@@ -4012,8 +3930,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SLOWBRO,
       1,
-      SpeciesCategories.COMMON,
-      "Hermit Crab Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.PSYCHIC,
       1.6,
@@ -4084,8 +4001,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MAGNEMITE,
       1,
-      SpeciesCategories.COMMON,
-      "Magnet Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       Type.STEEL,
       0.3,
@@ -4110,8 +4026,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MAGNETON,
       1,
-      SpeciesCategories.COMMON,
-      "Magnet Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       Type.STEEL,
       1,
@@ -4136,8 +4051,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FARFETCHD,
       1,
-      SpeciesCategories.COMMON,
-      "Wild Duck Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.FLYING,
       0.8,
@@ -4162,8 +4076,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DODUO,
       1,
-      SpeciesCategories.COMMON,
-      "Twin Bird Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.FLYING,
       1.4,
@@ -4188,8 +4101,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DODRIO,
       1,
-      SpeciesCategories.COMMON,
-      "Triple Bird Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.FLYING,
       1.8,
@@ -4214,8 +4126,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SEEL,
       1,
-      SpeciesCategories.COMMON,
-      "Sea Lion Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       1.1,
@@ -4240,8 +4151,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DEWGONG,
       1,
-      SpeciesCategories.COMMON,
-      "Sea Lion Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.ICE,
       1.7,
@@ -4266,8 +4176,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GRIMER,
       1,
-      SpeciesCategories.COMMON,
-      "Sludge Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       null,
       0.9,
@@ -4292,8 +4201,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MUK,
       1,
-      SpeciesCategories.COMMON,
-      "Sludge Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       null,
       1.2,
@@ -4318,8 +4226,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SHELLDER,
       1,
-      SpeciesCategories.COMMON,
-      "Bivalve Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.3,
@@ -4344,8 +4251,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CLOYSTER,
       1,
-      SpeciesCategories.COMMON,
-      "Bivalve Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.ICE,
       1.5,
@@ -4370,8 +4276,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GASTLY,
       1,
-      SpeciesCategories.COMMON,
-      "Gas Pokémon",
+      SpeciesGroups.COMMON,
       Type.GHOST,
       Type.POISON,
       1.3,
@@ -4396,8 +4301,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HAUNTER,
       1,
-      SpeciesCategories.COMMON,
-      "Gas Pokémon",
+      SpeciesGroups.COMMON,
       Type.GHOST,
       Type.POISON,
       1.6,
@@ -4422,8 +4326,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GENGAR,
       1,
-      SpeciesCategories.COMMON,
-      "Shadow Pokémon",
+      SpeciesGroups.COMMON,
       Type.GHOST,
       Type.POISON,
       1.5,
@@ -4515,8 +4418,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ONIX,
       1,
-      SpeciesCategories.COMMON,
-      "Rock Snake Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.GROUND,
       8.8,
@@ -4541,8 +4443,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DROWZEE,
       1,
-      SpeciesCategories.COMMON,
-      "Hypnosis Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       null,
       1,
@@ -4567,8 +4468,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HYPNO,
       1,
-      SpeciesCategories.COMMON,
-      "Hypnosis Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       null,
       1.6,
@@ -4593,8 +4493,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.KRABBY,
       1,
-      SpeciesCategories.COMMON,
-      "River Crab Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.4,
@@ -4619,8 +4518,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.KINGLER,
       1,
-      SpeciesCategories.COMMON,
-      "Pincer Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       1.3,
@@ -4691,8 +4589,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.VOLTORB,
       1,
-      SpeciesCategories.COMMON,
-      "Ball Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       null,
       0.5,
@@ -4717,8 +4614,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ELECTRODE,
       1,
-      SpeciesCategories.COMMON,
-      "Ball Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       null,
       1.2,
@@ -4743,8 +4639,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.EXEGGCUTE,
       1,
-      SpeciesCategories.COMMON,
-      "Egg Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.PSYCHIC,
       0.4,
@@ -4769,8 +4664,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.EXEGGUTOR,
       1,
-      SpeciesCategories.COMMON,
-      "Coconut Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.PSYCHIC,
       2,
@@ -4795,8 +4689,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CUBONE,
       1,
-      SpeciesCategories.COMMON,
-      "Lonely Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       null,
       0.4,
@@ -4821,8 +4714,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MAROWAK,
       1,
-      SpeciesCategories.COMMON,
-      "Bone Keeper Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       null,
       1,
@@ -4847,8 +4739,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HITMONLEE,
       1,
-      SpeciesCategories.COMMON,
-      "Kicking Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIGHTING,
       null,
       1.5,
@@ -4873,8 +4764,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HITMONCHAN,
       1,
-      SpeciesCategories.COMMON,
-      "Punching Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIGHTING,
       null,
       1.4,
@@ -4899,8 +4789,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LICKITUNG,
       1,
-      SpeciesCategories.COMMON,
-      "Licking Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       1.2,
@@ -4925,8 +4814,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.KOFFING,
       1,
-      SpeciesCategories.COMMON,
-      "Poison Gas Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       null,
       0.6,
@@ -4951,8 +4839,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.WEEZING,
       1,
-      SpeciesCategories.COMMON,
-      "Poison Gas Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       null,
       1.2,
@@ -4977,8 +4864,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.RHYHORN,
       1,
-      SpeciesCategories.COMMON,
-      "Spikes Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       Type.ROCK,
       1,
@@ -5003,8 +4889,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.RHYDON,
       1,
-      SpeciesCategories.COMMON,
-      "Drill Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       Type.ROCK,
       1.9,
@@ -5029,8 +4914,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CHANSEY,
       1,
-      SpeciesCategories.COMMON,
-      "Egg Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       1.1,
@@ -5055,8 +4939,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TANGELA,
       1,
-      SpeciesCategories.COMMON,
-      "Vine Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       1,
@@ -5081,8 +4964,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.KANGASKHAN,
       1,
-      SpeciesCategories.COMMON,
-      "Parent Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       2.2,
@@ -5153,8 +5035,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HORSEA,
       1,
-      SpeciesCategories.COMMON,
-      "Dragon Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.4,
@@ -5179,8 +5060,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SEADRA,
       1,
-      SpeciesCategories.COMMON,
-      "Dragon Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       1.2,
@@ -5205,8 +5085,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GOLDEEN,
       1,
-      SpeciesCategories.COMMON,
-      "Goldfish Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.6,
@@ -5231,8 +5110,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SEAKING,
       1,
-      SpeciesCategories.COMMON,
-      "Goldfish Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       1.3,
@@ -5257,8 +5135,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.STARYU,
       1,
-      SpeciesCategories.COMMON,
-      "Star Shape Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.8,
@@ -5283,8 +5160,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.STARMIE,
       1,
-      SpeciesCategories.COMMON,
-      "Mysterious Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.PSYCHIC,
       1.1,
@@ -5309,8 +5185,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MR_MIME,
       1,
-      SpeciesCategories.COMMON,
-      "Barrier Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       Type.FAIRY,
       1.3,
@@ -5335,8 +5210,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SCYTHER,
       1,
-      SpeciesCategories.COMMON,
-      "Mantis Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.FLYING,
       1.5,
@@ -5361,8 +5235,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.JYNX,
       1,
-      SpeciesCategories.COMMON,
-      "Human Shape Pokémon",
+      SpeciesGroups.COMMON,
       Type.ICE,
       Type.PSYCHIC,
       1.4,
@@ -5387,8 +5260,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ELECTABUZZ,
       1,
-      SpeciesCategories.COMMON,
-      "Electric Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       null,
       1.1,
@@ -5413,8 +5285,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MAGMAR,
       1,
-      SpeciesCategories.COMMON,
-      "Spitfire Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       null,
       1.3,
@@ -5439,8 +5310,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PINSIR,
       1,
-      SpeciesCategories.COMMON,
-      "Stag Beetle Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       null,
       1.5,
@@ -5511,8 +5381,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TAUROS,
       1,
-      SpeciesCategories.COMMON,
-      "Wild Bull Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       1.4,
@@ -5537,8 +5406,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MAGIKARP,
       1,
-      SpeciesCategories.COMMON,
-      "Fish Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.9,
@@ -5563,8 +5431,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GYARADOS,
       1,
-      SpeciesCategories.COMMON,
-      "Atrocious Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.FLYING,
       6.5,
@@ -5636,8 +5503,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LAPRAS,
       1,
-      SpeciesCategories.COMMON,
-      "Transport Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.ICE,
       2.5,
@@ -5708,8 +5574,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DITTO,
       1,
-      SpeciesCategories.COMMON,
-      "Transform Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       0.3,
@@ -5734,8 +5599,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.EEVEE,
       1,
-      SpeciesCategories.COMMON,
-      "Evolution Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       0.3,
@@ -5830,8 +5694,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.VAPOREON,
       1,
-      SpeciesCategories.COMMON,
-      "Bubble Jet Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       1,
@@ -5856,8 +5719,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.JOLTEON,
       1,
-      SpeciesCategories.COMMON,
-      "Lightning Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       null,
       0.8,
@@ -5882,8 +5744,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FLAREON,
       1,
-      SpeciesCategories.COMMON,
-      "Flame Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       null,
       0.9,
@@ -5908,8 +5769,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PORYGON,
       1,
-      SpeciesCategories.COMMON,
-      "Virtual Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       0.8,
@@ -5934,8 +5794,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.OMANYTE,
       1,
-      SpeciesCategories.COMMON,
-      "Spiral Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.WATER,
       0.4,
@@ -5960,8 +5819,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.OMASTAR,
       1,
-      SpeciesCategories.COMMON,
-      "Spiral Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.WATER,
       1,
@@ -5986,8 +5844,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.KABUTO,
       1,
-      SpeciesCategories.COMMON,
-      "Shellfish Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.WATER,
       0.5,
@@ -6012,8 +5869,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.KABUTOPS,
       1,
-      SpeciesCategories.COMMON,
-      "Shellfish Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.WATER,
       1.3,
@@ -6038,8 +5894,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.AERODACTYL,
       1,
-      SpeciesCategories.COMMON,
-      "Fossil Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.FLYING,
       1.8,
@@ -6110,8 +5965,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SNORLAX,
       1,
-      SpeciesCategories.COMMON,
-      "Sleeping Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       2.1,
@@ -6182,8 +6036,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ARTICUNO,
       1,
-      SpeciesCategories.SUBLEGENDARY,
-      "Freeze Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.ICE,
       Type.FLYING,
       1.7,
@@ -6208,8 +6061,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ZAPDOS,
       1,
-      SpeciesCategories.SUBLEGENDARY,
-      "Electric Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.ELECTRIC,
       Type.FLYING,
       1.6,
@@ -6234,8 +6086,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MOLTRES,
       1,
-      SpeciesCategories.SUBLEGENDARY,
-      "Flame Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.FIRE,
       Type.FLYING,
       2,
@@ -6260,8 +6111,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DRATINI,
       1,
-      SpeciesCategories.COMMON,
-      "Dragon Pokémon",
+      SpeciesGroups.COMMON,
       Type.DRAGON,
       null,
       1.8,
@@ -6286,8 +6136,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DRAGONAIR,
       1,
-      SpeciesCategories.COMMON,
-      "Dragon Pokémon",
+      SpeciesGroups.COMMON,
       Type.DRAGON,
       null,
       4,
@@ -6312,8 +6161,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DRAGONITE,
       1,
-      SpeciesCategories.COMMON,
-      "Dragon Pokémon",
+      SpeciesGroups.COMMON,
       Type.DRAGON,
       Type.FLYING,
       2.2,
@@ -6338,8 +6186,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MEWTWO,
       1,
-      SpeciesCategories.LEGENDARY,
-      "Genetic Pokémon",
+      SpeciesGroups.LEGENDARY,
       Type.PSYCHIC,
       null,
       2,
@@ -6431,8 +6278,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MEW,
       1,
-      SpeciesCategories.MYTHICAL,
-      "New Species Pokémon",
+      SpeciesGroups.MYTHICAL,
       Type.PSYCHIC,
       null,
       0.4,
@@ -6457,8 +6303,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CHIKORITA,
       2,
-      SpeciesCategories.COMMON,
-      "Leaf Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       0.9,
@@ -6483,8 +6328,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BAYLEEF,
       2,
-      SpeciesCategories.COMMON,
-      "Leaf Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       1.2,
@@ -6509,8 +6353,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MEGANIUM,
       2,
-      SpeciesCategories.COMMON,
-      "Herb Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       1.8,
@@ -6535,8 +6378,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CYNDAQUIL,
       2,
-      SpeciesCategories.COMMON,
-      "Fire Mouse Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       null,
       0.5,
@@ -6561,8 +6403,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.QUILAVA,
       2,
-      SpeciesCategories.COMMON,
-      "Volcano Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       null,
       0.9,
@@ -6587,8 +6428,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TYPHLOSION,
       2,
-      SpeciesCategories.COMMON,
-      "Volcano Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       null,
       1.7,
@@ -6613,8 +6453,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TOTODILE,
       2,
-      SpeciesCategories.COMMON,
-      "Big Jaw Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.6,
@@ -6639,8 +6478,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CROCONAW,
       2,
-      SpeciesCategories.COMMON,
-      "Big Jaw Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       1.1,
@@ -6665,8 +6503,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FERALIGATR,
       2,
-      SpeciesCategories.COMMON,
-      "Big Jaw Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       2.3,
@@ -6691,8 +6528,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SENTRET,
       2,
-      SpeciesCategories.COMMON,
-      "Scout Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       0.8,
@@ -6717,8 +6553,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FURRET,
       2,
-      SpeciesCategories.COMMON,
-      "Long Body Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       1.8,
@@ -6743,8 +6578,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HOOTHOOT,
       2,
-      SpeciesCategories.COMMON,
-      "Owl Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.FLYING,
       0.7,
@@ -6769,8 +6603,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.NOCTOWL,
       2,
-      SpeciesCategories.COMMON,
-      "Owl Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.FLYING,
       1.6,
@@ -6795,8 +6628,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LEDYBA,
       2,
-      SpeciesCategories.COMMON,
-      "Five Star Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.FLYING,
       1,
@@ -6821,8 +6653,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LEDIAN,
       2,
-      SpeciesCategories.COMMON,
-      "Five Star Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.FLYING,
       1.4,
@@ -6847,8 +6678,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SPINARAK,
       2,
-      SpeciesCategories.COMMON,
-      "String Spit Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.POISON,
       0.5,
@@ -6873,8 +6703,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ARIADOS,
       2,
-      SpeciesCategories.COMMON,
-      "Long Leg Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.POISON,
       1.1,
@@ -6899,8 +6728,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CROBAT,
       2,
-      SpeciesCategories.COMMON,
-      "Bat Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       Type.FLYING,
       1.8,
@@ -6925,8 +6753,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CHINCHOU,
       2,
-      SpeciesCategories.COMMON,
-      "Angler Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.ELECTRIC,
       0.5,
@@ -6951,8 +6778,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LANTURN,
       2,
-      SpeciesCategories.COMMON,
-      "Light Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.ELECTRIC,
       1.2,
@@ -6977,8 +6803,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PICHU,
       2,
-      SpeciesCategories.COMMON,
-      "Tiny Mouse Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       null,
       0.3,
@@ -7052,8 +6877,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CLEFFA,
       2,
-      SpeciesCategories.COMMON,
-      "Star Shape Pokémon",
+      SpeciesGroups.COMMON,
       Type.FAIRY,
       null,
       0.3,
@@ -7078,8 +6902,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.IGGLYBUFF,
       2,
-      SpeciesCategories.COMMON,
-      "Balloon Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.FAIRY,
       0.3,
@@ -7104,8 +6927,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TOGEPI,
       2,
-      SpeciesCategories.COMMON,
-      "Spike Ball Pokémon",
+      SpeciesGroups.COMMON,
       Type.FAIRY,
       null,
       0.3,
@@ -7130,8 +6952,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TOGETIC,
       2,
-      SpeciesCategories.COMMON,
-      "Happiness Pokémon",
+      SpeciesGroups.COMMON,
       Type.FAIRY,
       Type.FLYING,
       0.6,
@@ -7156,8 +6977,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.NATU,
       2,
-      SpeciesCategories.COMMON,
-      "Tiny Bird Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       Type.FLYING,
       0.2,
@@ -7182,8 +7002,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.XATU,
       2,
-      SpeciesCategories.COMMON,
-      "Mystic Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       Type.FLYING,
       1.5,
@@ -7208,8 +7027,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MAREEP,
       2,
-      SpeciesCategories.COMMON,
-      "Wool Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       null,
       0.6,
@@ -7234,8 +7052,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FLAAFFY,
       2,
-      SpeciesCategories.COMMON,
-      "Wool Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       null,
       0.8,
@@ -7260,8 +7077,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.AMPHAROS,
       2,
-      SpeciesCategories.COMMON,
-      "Light Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       null,
       1.4,
@@ -7332,8 +7148,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BELLOSSOM,
       2,
-      SpeciesCategories.COMMON,
-      "Flower Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       0.4,
@@ -7358,8 +7173,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MARILL,
       2,
-      SpeciesCategories.COMMON,
-      "Aqua Mouse Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.FAIRY,
       0.4,
@@ -7384,8 +7198,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.AZUMARILL,
       2,
-      SpeciesCategories.COMMON,
-      "Aqua Rabbit Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.FAIRY,
       0.8,
@@ -7410,8 +7223,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SUDOWOODO,
       2,
-      SpeciesCategories.COMMON,
-      "Imitation Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       null,
       1.2,
@@ -7436,8 +7248,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.POLITOED,
       2,
-      SpeciesCategories.COMMON,
-      "Frog Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       1.1,
@@ -7462,8 +7273,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HOPPIP,
       2,
-      SpeciesCategories.COMMON,
-      "Cottonweed Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.FLYING,
       0.4,
@@ -7488,8 +7298,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SKIPLOOM,
       2,
-      SpeciesCategories.COMMON,
-      "Cottonweed Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.FLYING,
       0.6,
@@ -7514,8 +7323,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.JUMPLUFF,
       2,
-      SpeciesCategories.COMMON,
-      "Cottonweed Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.FLYING,
       0.8,
@@ -7540,8 +7348,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.AIPOM,
       2,
-      SpeciesCategories.COMMON,
-      "Long Tail Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       0.8,
@@ -7566,8 +7373,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SUNKERN,
       2,
-      SpeciesCategories.COMMON,
-      "Seed Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       0.3,
@@ -7592,8 +7398,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SUNFLORA,
       2,
-      SpeciesCategories.COMMON,
-      "Sun Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       0.8,
@@ -7618,8 +7423,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.YANMA,
       2,
-      SpeciesCategories.COMMON,
-      "Clear Wing Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.FLYING,
       1.2,
@@ -7644,8 +7448,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.WOOPER,
       2,
-      SpeciesCategories.COMMON,
-      "Water Fish Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.GROUND,
       0.4,
@@ -7670,8 +7473,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.QUAGSIRE,
       2,
-      SpeciesCategories.COMMON,
-      "Water Fish Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.GROUND,
       1.4,
@@ -7696,8 +7498,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ESPEON,
       2,
-      SpeciesCategories.COMMON,
-      "Sun Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       null,
       0.9,
@@ -7722,8 +7523,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.UMBREON,
       2,
-      SpeciesCategories.COMMON,
-      "Moonlight Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       null,
       1,
@@ -7748,8 +7548,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MURKROW,
       2,
-      SpeciesCategories.COMMON,
-      "Darkness Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       Type.FLYING,
       0.5,
@@ -7774,8 +7573,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SLOWKING,
       2,
-      SpeciesCategories.COMMON,
-      "Royal Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.PSYCHIC,
       2,
@@ -7800,8 +7598,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MISDREAVUS,
       2,
-      SpeciesCategories.COMMON,
-      "Screech Pokémon",
+      SpeciesGroups.COMMON,
       Type.GHOST,
       null,
       0.7,
@@ -7826,8 +7623,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.UNOWN,
       2,
-      SpeciesCategories.COMMON,
-      "Symbol Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       null,
       0.5,
@@ -8525,8 +8321,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.WOBBUFFET,
       2,
-      SpeciesCategories.COMMON,
-      "Patient Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       null,
       1.3,
@@ -8551,8 +8346,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GIRAFARIG,
       2,
-      SpeciesCategories.COMMON,
-      "Long Neck Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.PSYCHIC,
       1.5,
@@ -8577,8 +8371,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PINECO,
       2,
-      SpeciesCategories.COMMON,
-      "Bagworm Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       null,
       0.6,
@@ -8603,8 +8396,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FORRETRESS,
       2,
-      SpeciesCategories.COMMON,
-      "Bagworm Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.STEEL,
       1.2,
@@ -8629,8 +8421,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DUNSPARCE,
       2,
-      SpeciesCategories.COMMON,
-      "Land Snake Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       1.5,
@@ -8655,8 +8446,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GLIGAR,
       2,
-      SpeciesCategories.COMMON,
-      "Fly Scorpion Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       Type.FLYING,
       1.1,
@@ -8681,8 +8471,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.STEELIX,
       2,
-      SpeciesCategories.COMMON,
-      "Iron Snake Pokémon",
+      SpeciesGroups.COMMON,
       Type.STEEL,
       Type.GROUND,
       9.2,
@@ -8754,8 +8543,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SNUBBULL,
       2,
-      SpeciesCategories.COMMON,
-      "Fairy Pokémon",
+      SpeciesGroups.COMMON,
       Type.FAIRY,
       null,
       0.6,
@@ -8780,8 +8568,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GRANBULL,
       2,
-      SpeciesCategories.COMMON,
-      "Fairy Pokémon",
+      SpeciesGroups.COMMON,
       Type.FAIRY,
       null,
       1.4,
@@ -8806,8 +8593,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.QWILFISH,
       2,
-      SpeciesCategories.COMMON,
-      "Balloon Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.POISON,
       0.5,
@@ -8832,8 +8618,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SCIZOR,
       2,
-      SpeciesCategories.COMMON,
-      "Pincer Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.STEEL,
       1.8,
@@ -8905,8 +8690,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SHUCKLE,
       2,
-      SpeciesCategories.COMMON,
-      "Mold Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.ROCK,
       0.6,
@@ -8931,8 +8715,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HERACROSS,
       2,
-      SpeciesCategories.COMMON,
-      "Single Horn Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.FIGHTING,
       1.5,
@@ -9004,8 +8787,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SNEASEL,
       2,
-      SpeciesCategories.COMMON,
-      "Sharp Claw Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       Type.ICE,
       0.9,
@@ -9030,8 +8812,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TEDDIURSA,
       2,
-      SpeciesCategories.COMMON,
-      "Little Bear Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       0.6,
@@ -9056,8 +8837,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.URSARING,
       2,
-      SpeciesCategories.COMMON,
-      "Hibernator Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       1.8,
@@ -9082,8 +8862,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SLUGMA,
       2,
-      SpeciesCategories.COMMON,
-      "Lava Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       null,
       0.7,
@@ -9108,8 +8887,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MAGCARGO,
       2,
-      SpeciesCategories.COMMON,
-      "Lava Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       Type.ROCK,
       0.8,
@@ -9134,8 +8912,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SWINUB,
       2,
-      SpeciesCategories.COMMON,
-      "Pig Pokémon",
+      SpeciesGroups.COMMON,
       Type.ICE,
       Type.GROUND,
       0.4,
@@ -9160,8 +8937,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PILOSWINE,
       2,
-      SpeciesCategories.COMMON,
-      "Swine Pokémon",
+      SpeciesGroups.COMMON,
       Type.ICE,
       Type.GROUND,
       1.1,
@@ -9186,8 +8962,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CORSOLA,
       2,
-      SpeciesCategories.COMMON,
-      "Coral Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.ROCK,
       0.6,
@@ -9212,8 +8987,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.REMORAID,
       2,
-      SpeciesCategories.COMMON,
-      "Jet Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.6,
@@ -9238,8 +9012,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.OCTILLERY,
       2,
-      SpeciesCategories.COMMON,
-      "Jet Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.9,
@@ -9264,8 +9037,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DELIBIRD,
       2,
-      SpeciesCategories.COMMON,
-      "Delivery Pokémon",
+      SpeciesGroups.COMMON,
       Type.ICE,
       Type.FLYING,
       0.9,
@@ -9290,8 +9062,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MANTINE,
       2,
-      SpeciesCategories.COMMON,
-      "Kite Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.FLYING,
       2.1,
@@ -9316,8 +9087,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SKARMORY,
       2,
-      SpeciesCategories.COMMON,
-      "Armor Bird Pokémon",
+      SpeciesGroups.COMMON,
       Type.STEEL,
       Type.FLYING,
       1.7,
@@ -9342,8 +9112,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HOUNDOUR,
       2,
-      SpeciesCategories.COMMON,
-      "Dark Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       Type.FIRE,
       0.6,
@@ -9368,8 +9137,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HOUNDOOM,
       2,
-      SpeciesCategories.COMMON,
-      "Dark Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       Type.FIRE,
       1.4,
@@ -9441,8 +9209,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.KINGDRA,
       2,
-      SpeciesCategories.COMMON,
-      "Dragon Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.DRAGON,
       1.8,
@@ -9467,8 +9234,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PHANPY,
       2,
-      SpeciesCategories.COMMON,
-      "Long Nose Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       null,
       0.5,
@@ -9493,8 +9259,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DONPHAN,
       2,
-      SpeciesCategories.COMMON,
-      "Armor Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       null,
       1.1,
@@ -9519,8 +9284,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PORYGON2,
       2,
-      SpeciesCategories.COMMON,
-      "Virtual Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       0.6,
@@ -9545,8 +9309,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.STANTLER,
       2,
-      SpeciesCategories.COMMON,
-      "Big Horn Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       1.4,
@@ -9571,8 +9334,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SMEARGLE,
       2,
-      SpeciesCategories.COMMON,
-      "Painter Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       1.2,
@@ -9597,8 +9359,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TYROGUE,
       2,
-      SpeciesCategories.COMMON,
-      "Scuffle Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIGHTING,
       null,
       0.7,
@@ -9623,8 +9384,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HITMONTOP,
       2,
-      SpeciesCategories.COMMON,
-      "Handstand Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIGHTING,
       null,
       1.4,
@@ -9649,8 +9409,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SMOOCHUM,
       2,
-      SpeciesCategories.COMMON,
-      "Kiss Pokémon",
+      SpeciesGroups.COMMON,
       Type.ICE,
       Type.PSYCHIC,
       0.4,
@@ -9675,8 +9434,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ELEKID,
       2,
-      SpeciesCategories.COMMON,
-      "Electric Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       null,
       0.6,
@@ -9701,8 +9459,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MAGBY,
       2,
-      SpeciesCategories.COMMON,
-      "Live Coal Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       null,
       0.7,
@@ -9727,8 +9484,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MILTANK,
       2,
-      SpeciesCategories.COMMON,
-      "Milk Cow Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       1.2,
@@ -9753,8 +9509,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BLISSEY,
       2,
-      SpeciesCategories.COMMON,
-      "Happiness Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       1.5,
@@ -9779,8 +9534,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.RAIKOU,
       2,
-      SpeciesCategories.SUBLEGENDARY,
-      "Thunder Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.ELECTRIC,
       null,
       1.9,
@@ -9805,8 +9559,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ENTEI,
       2,
-      SpeciesCategories.SUBLEGENDARY,
-      "Volcano Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.FIRE,
       null,
       2.1,
@@ -9831,8 +9584,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SUICUNE,
       2,
-      SpeciesCategories.SUBLEGENDARY,
-      "Aurora Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.WATER,
       null,
       2,
@@ -9857,8 +9609,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LARVITAR,
       2,
-      SpeciesCategories.COMMON,
-      "Rock Skin Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.GROUND,
       0.6,
@@ -9883,8 +9634,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PUPITAR,
       2,
-      SpeciesCategories.COMMON,
-      "Hard Shell Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.GROUND,
       1.2,
@@ -9909,8 +9659,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TYRANITAR,
       2,
-      SpeciesCategories.COMMON,
-      "Armor Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.DARK,
       2,
@@ -9981,8 +9730,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LUGIA,
       2,
-      SpeciesCategories.LEGENDARY,
-      "Diving Pokémon",
+      SpeciesGroups.LEGENDARY,
       Type.PSYCHIC,
       Type.FLYING,
       5.2,
@@ -10007,8 +9755,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HO_OH,
       2,
-      SpeciesCategories.LEGENDARY,
-      "Rainbow Pokémon",
+      SpeciesGroups.LEGENDARY,
       Type.FIRE,
       Type.FLYING,
       3.8,
@@ -10033,8 +9780,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CELEBI,
       2,
-      SpeciesCategories.MYTHICAL,
-      "Time Travel Pokémon",
+      SpeciesGroups.MYTHICAL,
       Type.PSYCHIC,
       Type.GRASS,
       0.6,
@@ -10059,8 +9805,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TREECKO,
       3,
-      SpeciesCategories.COMMON,
-      "Wood Gecko Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       0.5,
@@ -10085,8 +9830,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GROVYLE,
       3,
-      SpeciesCategories.COMMON,
-      "Wood Gecko Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       0.9,
@@ -10111,8 +9855,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SCEPTILE,
       3,
-      SpeciesCategories.COMMON,
-      "Forest Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       1.7,
@@ -10183,8 +9926,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TORCHIC,
       3,
-      SpeciesCategories.COMMON,
-      "Chick Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       null,
       0.4,
@@ -10209,8 +9951,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.COMBUSKEN,
       3,
-      SpeciesCategories.COMMON,
-      "Young Fowl Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       Type.FIGHTING,
       0.9,
@@ -10235,8 +9976,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BLAZIKEN,
       3,
-      SpeciesCategories.COMMON,
-      "Blaze Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       Type.FIGHTING,
       1.9,
@@ -10308,8 +10048,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MUDKIP,
       3,
-      SpeciesCategories.COMMON,
-      "Mud Fish Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.4,
@@ -10334,8 +10073,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MARSHTOMP,
       3,
-      SpeciesCategories.COMMON,
-      "Mud Fish Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.GROUND,
       0.7,
@@ -10360,8 +10098,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SWAMPERT,
       3,
-      SpeciesCategories.COMMON,
-      "Mud Fish Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.GROUND,
       1.5,
@@ -10432,8 +10169,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.POOCHYENA,
       3,
-      SpeciesCategories.COMMON,
-      "Bite Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       null,
       0.5,
@@ -10458,8 +10194,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MIGHTYENA,
       3,
-      SpeciesCategories.COMMON,
-      "Bite Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       null,
       1,
@@ -10484,8 +10219,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ZIGZAGOON,
       3,
-      SpeciesCategories.COMMON,
-      "Tiny Raccoon Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       0.4,
@@ -10510,8 +10244,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LINOONE,
       3,
-      SpeciesCategories.COMMON,
-      "Rushing Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       0.5,
@@ -10536,8 +10269,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.WURMPLE,
       3,
-      SpeciesCategories.COMMON,
-      "Worm Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       null,
       0.3,
@@ -10562,8 +10294,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SILCOON,
       3,
-      SpeciesCategories.COMMON,
-      "Cocoon Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       null,
       0.6,
@@ -10588,8 +10319,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BEAUTIFLY,
       3,
-      SpeciesCategories.COMMON,
-      "Butterfly Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.FLYING,
       1,
@@ -10614,8 +10344,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CASCOON,
       3,
-      SpeciesCategories.COMMON,
-      "Cocoon Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       null,
       0.7,
@@ -10640,8 +10369,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DUSTOX,
       3,
-      SpeciesCategories.COMMON,
-      "Poison Moth Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.POISON,
       1.2,
@@ -10666,8 +10394,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LOTAD,
       3,
-      SpeciesCategories.COMMON,
-      "Water Weed Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.GRASS,
       0.5,
@@ -10692,8 +10419,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LOMBRE,
       3,
-      SpeciesCategories.COMMON,
-      "Jolly Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.GRASS,
       1.2,
@@ -10718,8 +10444,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LUDICOLO,
       3,
-      SpeciesCategories.COMMON,
-      "Carefree Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.GRASS,
       1.5,
@@ -10744,8 +10469,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SEEDOT,
       3,
-      SpeciesCategories.COMMON,
-      "Acorn Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       0.5,
@@ -10770,8 +10494,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.NUZLEAF,
       3,
-      SpeciesCategories.COMMON,
-      "Wily Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.DARK,
       1,
@@ -10796,8 +10519,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SHIFTRY,
       3,
-      SpeciesCategories.COMMON,
-      "Wicked Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.DARK,
       1.3,
@@ -10822,8 +10544,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TAILLOW,
       3,
-      SpeciesCategories.COMMON,
-      "Tiny Swallow Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.FLYING,
       0.3,
@@ -10848,8 +10569,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SWELLOW,
       3,
-      SpeciesCategories.COMMON,
-      "Swallow Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.FLYING,
       0.7,
@@ -10874,8 +10594,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.WINGULL,
       3,
-      SpeciesCategories.COMMON,
-      "Seagull Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.FLYING,
       0.6,
@@ -10900,8 +10619,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PELIPPER,
       3,
-      SpeciesCategories.COMMON,
-      "Water Bird Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.FLYING,
       1.2,
@@ -10926,8 +10644,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.RALTS,
       3,
-      SpeciesCategories.COMMON,
-      "Feeling Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       Type.FAIRY,
       0.4,
@@ -10952,8 +10669,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.KIRLIA,
       3,
-      SpeciesCategories.COMMON,
-      "Emotion Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       Type.FAIRY,
       0.8,
@@ -10978,8 +10694,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GARDEVOIR,
       3,
-      SpeciesCategories.COMMON,
-      "Embrace Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       Type.FAIRY,
       1.6,
@@ -11050,8 +10765,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SURSKIT,
       3,
-      SpeciesCategories.COMMON,
-      "Pond Skater Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.WATER,
       0.5,
@@ -11076,8 +10790,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MASQUERAIN,
       3,
-      SpeciesCategories.COMMON,
-      "Eyeball Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.FLYING,
       0.8,
@@ -11102,8 +10815,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SHROOMISH,
       3,
-      SpeciesCategories.COMMON,
-      "Mushroom Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       0.4,
@@ -11128,8 +10840,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BRELOOM,
       3,
-      SpeciesCategories.COMMON,
-      "Mushroom Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.FIGHTING,
       1.2,
@@ -11154,8 +10865,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SLAKOTH,
       3,
-      SpeciesCategories.COMMON,
-      "Slacker Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       0.8,
@@ -11180,8 +10890,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.VIGOROTH,
       3,
-      SpeciesCategories.COMMON,
-      "Wild Monkey Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       1.4,
@@ -11206,8 +10915,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SLAKING,
       3,
-      SpeciesCategories.COMMON,
-      "Lazy Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       2,
@@ -11232,8 +10940,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.NINCADA,
       3,
-      SpeciesCategories.COMMON,
-      "Trainee Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.GROUND,
       0.5,
@@ -11258,8 +10965,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.NINJASK,
       3,
-      SpeciesCategories.COMMON,
-      "Ninja Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.FLYING,
       0.8,
@@ -11284,8 +10990,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SHEDINJA,
       3,
-      SpeciesCategories.COMMON,
-      "Shed Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.GHOST,
       0.8,
@@ -11310,8 +11015,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.WHISMUR,
       3,
-      SpeciesCategories.COMMON,
-      "Whisper Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       0.6,
@@ -11336,8 +11040,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LOUDRED,
       3,
-      SpeciesCategories.COMMON,
-      "Big Voice Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       1,
@@ -11362,8 +11065,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.EXPLOUD,
       3,
-      SpeciesCategories.COMMON,
-      "Loud Noise Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       1.5,
@@ -11388,8 +11090,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MAKUHITA,
       3,
-      SpeciesCategories.COMMON,
-      "Guts Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIGHTING,
       null,
       1,
@@ -11414,8 +11115,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HARIYAMA,
       3,
-      SpeciesCategories.COMMON,
-      "Arm Thrust Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIGHTING,
       null,
       2.3,
@@ -11440,8 +11140,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.AZURILL,
       3,
-      SpeciesCategories.COMMON,
-      "Polka Dot Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.FAIRY,
       0.2,
@@ -11466,8 +11165,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.NOSEPASS,
       3,
-      SpeciesCategories.COMMON,
-      "Compass Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       null,
       1,
@@ -11492,8 +11190,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SKITTY,
       3,
-      SpeciesCategories.COMMON,
-      "Kitten Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       0.6,
@@ -11518,8 +11215,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DELCATTY,
       3,
-      SpeciesCategories.COMMON,
-      "Prim Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       1.1,
@@ -11544,8 +11240,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SABLEYE,
       3,
-      SpeciesCategories.COMMON,
-      "Darkness Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       Type.GHOST,
       0.5,
@@ -11616,8 +11311,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MAWILE,
       3,
-      SpeciesCategories.COMMON,
-      "Deceiver Pokémon",
+      SpeciesGroups.COMMON,
       Type.STEEL,
       Type.FAIRY,
       0.6,
@@ -11688,8 +11382,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ARON,
       3,
-      SpeciesCategories.COMMON,
-      "Iron Armor Pokémon",
+      SpeciesGroups.COMMON,
       Type.STEEL,
       Type.ROCK,
       0.4,
@@ -11714,8 +11407,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LAIRON,
       3,
-      SpeciesCategories.COMMON,
-      "Iron Armor Pokémon",
+      SpeciesGroups.COMMON,
       Type.STEEL,
       Type.ROCK,
       0.9,
@@ -11740,8 +11432,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.AGGRON,
       3,
-      SpeciesCategories.COMMON,
-      "Iron Armor Pokémon",
+      SpeciesGroups.COMMON,
       Type.STEEL,
       Type.ROCK,
       2.1,
@@ -11812,8 +11503,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MEDITITE,
       3,
-      SpeciesCategories.COMMON,
-      "Meditate Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIGHTING,
       Type.PSYCHIC,
       0.6,
@@ -11838,8 +11528,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MEDICHAM,
       3,
-      SpeciesCategories.COMMON,
-      "Meditate Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIGHTING,
       Type.PSYCHIC,
       1.3,
@@ -11911,8 +11600,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ELECTRIKE,
       3,
-      SpeciesCategories.COMMON,
-      "Lightning Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       null,
       0.6,
@@ -11937,8 +11625,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MANECTRIC,
       3,
-      SpeciesCategories.COMMON,
-      "Discharge Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       null,
       1.5,
@@ -12009,8 +11696,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PLUSLE,
       3,
-      SpeciesCategories.COMMON,
-      "Cheering Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       null,
       0.4,
@@ -12035,8 +11721,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MINUN,
       3,
-      SpeciesCategories.COMMON,
-      "Cheering Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       null,
       0.4,
@@ -12061,8 +11746,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.VOLBEAT,
       3,
-      SpeciesCategories.COMMON,
-      "Firefly Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       null,
       0.7,
@@ -12087,8 +11771,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ILLUMISE,
       3,
-      SpeciesCategories.COMMON,
-      "Firefly Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       null,
       0.6,
@@ -12113,8 +11796,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ROSELIA,
       3,
-      SpeciesCategories.COMMON,
-      "Thorn Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.POISON,
       0.3,
@@ -12139,8 +11821,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GULPIN,
       3,
-      SpeciesCategories.COMMON,
-      "Stomach Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       null,
       0.4,
@@ -12165,8 +11846,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SWALOT,
       3,
-      SpeciesCategories.COMMON,
-      "Poison Bag Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       null,
       1.7,
@@ -12191,8 +11871,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CARVANHA,
       3,
-      SpeciesCategories.COMMON,
-      "Savage Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.DARK,
       0.8,
@@ -12217,8 +11896,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SHARPEDO,
       3,
-      SpeciesCategories.COMMON,
-      "Brutal Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.DARK,
       1.8,
@@ -12289,8 +11967,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.WAILMER,
       3,
-      SpeciesCategories.COMMON,
-      "Ball Whale Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       2,
@@ -12315,8 +11992,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.WAILORD,
       3,
-      SpeciesCategories.COMMON,
-      "Float Whale Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       14.5,
@@ -12341,8 +12017,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.NUMEL,
       3,
-      SpeciesCategories.COMMON,
-      "Numb Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       Type.GROUND,
       0.7,
@@ -12367,8 +12042,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CAMERUPT,
       3,
-      SpeciesCategories.COMMON,
-      "Eruption Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       Type.GROUND,
       1.9,
@@ -12439,8 +12113,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TORKOAL,
       3,
-      SpeciesCategories.COMMON,
-      "Coal Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       null,
       0.5,
@@ -12465,8 +12138,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SPOINK,
       3,
-      SpeciesCategories.COMMON,
-      "Bounce Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       null,
       0.7,
@@ -12491,8 +12163,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GRUMPIG,
       3,
-      SpeciesCategories.COMMON,
-      "Manipulate Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       null,
       0.9,
@@ -12517,8 +12188,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SPINDA,
       3,
-      SpeciesCategories.COMMON,
-      "Spot Panda Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       1.1,
@@ -12543,8 +12213,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TRAPINCH,
       3,
-      SpeciesCategories.COMMON,
-      "Ant Pit Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       null,
       0.7,
@@ -12569,8 +12238,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.VIBRAVA,
       3,
-      SpeciesCategories.COMMON,
-      "Vibration Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       Type.DRAGON,
       1.1,
@@ -12595,8 +12263,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FLYGON,
       3,
-      SpeciesCategories.COMMON,
-      "Mystic Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       Type.DRAGON,
       2,
@@ -12621,8 +12288,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CACNEA,
       3,
-      SpeciesCategories.COMMON,
-      "Cactus Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       0.4,
@@ -12647,8 +12313,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CACTURNE,
       3,
-      SpeciesCategories.COMMON,
-      "Scarecrow Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.DARK,
       1.3,
@@ -12673,8 +12338,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SWABLU,
       3,
-      SpeciesCategories.COMMON,
-      "Cotton Bird Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.FLYING,
       0.4,
@@ -12699,8 +12363,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ALTARIA,
       3,
-      SpeciesCategories.COMMON,
-      "Humming Pokémon",
+      SpeciesGroups.COMMON,
       Type.DRAGON,
       Type.FLYING,
       1.1,
@@ -12771,8 +12434,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ZANGOOSE,
       3,
-      SpeciesCategories.COMMON,
-      "Cat Ferret Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       1.3,
@@ -12797,8 +12459,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SEVIPER,
       3,
-      SpeciesCategories.COMMON,
-      "Fang Snake Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       null,
       2.7,
@@ -12823,8 +12484,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LUNATONE,
       3,
-      SpeciesCategories.COMMON,
-      "Meteorite Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.PSYCHIC,
       1,
@@ -12849,8 +12509,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SOLROCK,
       3,
-      SpeciesCategories.COMMON,
-      "Meteorite Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.PSYCHIC,
       1.2,
@@ -12875,8 +12534,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BARBOACH,
       3,
-      SpeciesCategories.COMMON,
-      "Whiskers Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.GROUND,
       0.4,
@@ -12901,8 +12559,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.WHISCASH,
       3,
-      SpeciesCategories.COMMON,
-      "Whiskers Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.GROUND,
       0.9,
@@ -12927,8 +12584,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CORPHISH,
       3,
-      SpeciesCategories.COMMON,
-      "Ruffian Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.6,
@@ -12953,8 +12609,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CRAWDAUNT,
       3,
-      SpeciesCategories.COMMON,
-      "Rogue Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.DARK,
       1.1,
@@ -12979,8 +12634,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BALTOY,
       3,
-      SpeciesCategories.COMMON,
-      "Clay Doll Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       Type.PSYCHIC,
       0.5,
@@ -13005,8 +12659,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CLAYDOL,
       3,
-      SpeciesCategories.COMMON,
-      "Clay Doll Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       Type.PSYCHIC,
       1.5,
@@ -13031,8 +12684,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LILEEP,
       3,
-      SpeciesCategories.COMMON,
-      "Sea Lily Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.GRASS,
       1,
@@ -13057,8 +12709,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CRADILY,
       3,
-      SpeciesCategories.COMMON,
-      "Barnacle Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.GRASS,
       1.5,
@@ -13083,8 +12734,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ANORITH,
       3,
-      SpeciesCategories.COMMON,
-      "Old Shrimp Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.BUG,
       0.7,
@@ -13109,8 +12759,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ARMALDO,
       3,
-      SpeciesCategories.COMMON,
-      "Plate Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.BUG,
       1.5,
@@ -13135,8 +12784,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FEEBAS,
       3,
-      SpeciesCategories.COMMON,
-      "Fish Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.6,
@@ -13161,8 +12809,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MILOTIC,
       3,
-      SpeciesCategories.COMMON,
-      "Tender Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       6.2,
@@ -13187,8 +12834,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CASTFORM,
       3,
-      SpeciesCategories.COMMON,
-      "Weather Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       0.3,
@@ -13301,8 +12947,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.KECLEON,
       3,
-      SpeciesCategories.COMMON,
-      "Color Swap Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       1,
@@ -13327,8 +12972,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SHUPPET,
       3,
-      SpeciesCategories.COMMON,
-      "Puppet Pokémon",
+      SpeciesGroups.COMMON,
       Type.GHOST,
       null,
       0.6,
@@ -13353,8 +12997,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BANETTE,
       3,
-      SpeciesCategories.COMMON,
-      "Marionette Pokémon",
+      SpeciesGroups.COMMON,
       Type.GHOST,
       null,
       1.1,
@@ -13425,8 +13068,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DUSKULL,
       3,
-      SpeciesCategories.COMMON,
-      "Requiem Pokémon",
+      SpeciesGroups.COMMON,
       Type.GHOST,
       null,
       0.8,
@@ -13451,8 +13093,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DUSCLOPS,
       3,
-      SpeciesCategories.COMMON,
-      "Beckon Pokémon",
+      SpeciesGroups.COMMON,
       Type.GHOST,
       null,
       1.6,
@@ -13477,8 +13118,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TROPIUS,
       3,
-      SpeciesCategories.COMMON,
-      "Fruit Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.FLYING,
       2,
@@ -13503,8 +13143,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CHIMECHO,
       3,
-      SpeciesCategories.COMMON,
-      "Wind Chime Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       null,
       0.6,
@@ -13529,8 +13168,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ABSOL,
       3,
-      SpeciesCategories.COMMON,
-      "Disaster Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       null,
       1.2,
@@ -13601,8 +13239,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.WYNAUT,
       3,
-      SpeciesCategories.COMMON,
-      "Bright Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       null,
       0.6,
@@ -13627,8 +13264,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SNORUNT,
       3,
-      SpeciesCategories.COMMON,
-      "Snow Hat Pokémon",
+      SpeciesGroups.COMMON,
       Type.ICE,
       null,
       0.7,
@@ -13653,8 +13289,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GLALIE,
       3,
-      SpeciesCategories.COMMON,
-      "Face Pokémon",
+      SpeciesGroups.COMMON,
       Type.ICE,
       null,
       1.5,
@@ -13725,8 +13360,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SPHEAL,
       3,
-      SpeciesCategories.COMMON,
-      "Clap Pokémon",
+      SpeciesGroups.COMMON,
       Type.ICE,
       Type.WATER,
       0.8,
@@ -13751,8 +13385,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SEALEO,
       3,
-      SpeciesCategories.COMMON,
-      "Ball Roll Pokémon",
+      SpeciesGroups.COMMON,
       Type.ICE,
       Type.WATER,
       1.1,
@@ -13777,8 +13410,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.WALREIN,
       3,
-      SpeciesCategories.COMMON,
-      "Ice Break Pokémon",
+      SpeciesGroups.COMMON,
       Type.ICE,
       Type.WATER,
       1.4,
@@ -13803,8 +13435,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CLAMPERL,
       3,
-      SpeciesCategories.COMMON,
-      "Bivalve Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.4,
@@ -13829,8 +13460,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HUNTAIL,
       3,
-      SpeciesCategories.COMMON,
-      "Deep Sea Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       1.7,
@@ -13855,8 +13485,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GOREBYSS,
       3,
-      SpeciesCategories.COMMON,
-      "South Sea Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       1.8,
@@ -13881,8 +13510,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.RELICANTH,
       3,
-      SpeciesCategories.COMMON,
-      "Longevity Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.ROCK,
       1,
@@ -13907,8 +13535,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LUVDISC,
       3,
-      SpeciesCategories.COMMON,
-      "Rendezvous Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.6,
@@ -13933,8 +13560,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BAGON,
       3,
-      SpeciesCategories.COMMON,
-      "Rock Head Pokémon",
+      SpeciesGroups.COMMON,
       Type.DRAGON,
       null,
       0.6,
@@ -13959,8 +13585,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SHELGON,
       3,
-      SpeciesCategories.COMMON,
-      "Endurance Pokémon",
+      SpeciesGroups.COMMON,
       Type.DRAGON,
       null,
       1.1,
@@ -13985,8 +13610,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SALAMENCE,
       3,
-      SpeciesCategories.COMMON,
-      "Dragon Pokémon",
+      SpeciesGroups.COMMON,
       Type.DRAGON,
       Type.FLYING,
       1.5,
@@ -14057,8 +13681,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BELDUM,
       3,
-      SpeciesCategories.COMMON,
-      "Iron Ball Pokémon",
+      SpeciesGroups.COMMON,
       Type.STEEL,
       Type.PSYCHIC,
       0.6,
@@ -14083,8 +13706,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.METANG,
       3,
-      SpeciesCategories.COMMON,
-      "Iron Claw Pokémon",
+      SpeciesGroups.COMMON,
       Type.STEEL,
       Type.PSYCHIC,
       1.2,
@@ -14109,8 +13731,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.METAGROSS,
       3,
-      SpeciesCategories.COMMON,
-      "Iron Leg Pokémon",
+      SpeciesGroups.COMMON,
       Type.STEEL,
       Type.PSYCHIC,
       1.6,
@@ -14181,8 +13802,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.REGIROCK,
       3,
-      SpeciesCategories.SUBLEGENDARY,
-      "Rock Peak Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.ROCK,
       null,
       1.7,
@@ -14207,8 +13827,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.REGICE,
       3,
-      SpeciesCategories.SUBLEGENDARY,
-      "Iceberg Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.ICE,
       null,
       1.8,
@@ -14233,8 +13852,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.REGISTEEL,
       3,
-      SpeciesCategories.SUBLEGENDARY,
-      "Iron Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.STEEL,
       null,
       1.9,
@@ -14259,8 +13877,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LATIAS,
       3,
-      SpeciesCategories.SUBLEGENDARY,
-      "Eon Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.DRAGON,
       Type.PSYCHIC,
       1.4,
@@ -14331,8 +13948,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LATIOS,
       3,
-      SpeciesCategories.SUBLEGENDARY,
-      "Eon Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.DRAGON,
       Type.PSYCHIC,
       2,
@@ -14403,8 +14019,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.KYOGRE,
       3,
-      SpeciesCategories.LEGENDARY,
-      "Sea Basin Pokémon",
+      SpeciesGroups.LEGENDARY,
       Type.WATER,
       null,
       4.5,
@@ -14475,8 +14090,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GROUDON,
       3,
-      SpeciesCategories.LEGENDARY,
-      "Continent Pokémon",
+      SpeciesGroups.LEGENDARY,
       Type.GROUND,
       null,
       3.5,
@@ -14547,8 +14161,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.RAYQUAZA,
       3,
-      SpeciesCategories.LEGENDARY,
-      "Sky High Pokémon",
+      SpeciesGroups.LEGENDARY,
       Type.DRAGON,
       Type.FLYING,
       7,
@@ -14619,8 +14232,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.JIRACHI,
       3,
-      SpeciesCategories.MYTHICAL,
-      "Wish Pokémon",
+      SpeciesGroups.MYTHICAL,
       Type.STEEL,
       Type.PSYCHIC,
       0.3,
@@ -14645,8 +14257,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DEOXYS,
       3,
-      SpeciesCategories.MYTHICAL,
-      "DNA Pokémon",
+      SpeciesGroups.MYTHICAL,
       Type.PSYCHIC,
       null,
       1.7,
@@ -14759,8 +14370,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TURTWIG,
       4,
-      SpeciesCategories.COMMON,
-      "Tiny Leaf Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       0.4,
@@ -14785,8 +14395,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GROTLE,
       4,
-      SpeciesCategories.COMMON,
-      "Grove Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       1.1,
@@ -14811,8 +14420,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TORTERRA,
       4,
-      SpeciesCategories.COMMON,
-      "Continent Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.GROUND,
       2.2,
@@ -14837,8 +14445,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CHIMCHAR,
       4,
-      SpeciesCategories.COMMON,
-      "Chimp Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       null,
       0.5,
@@ -14863,8 +14470,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MONFERNO,
       4,
-      SpeciesCategories.COMMON,
-      "Playful Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       Type.FIGHTING,
       0.9,
@@ -14889,8 +14495,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.INFERNAPE,
       4,
-      SpeciesCategories.COMMON,
-      "Flame Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       Type.FIGHTING,
       1.2,
@@ -14915,8 +14520,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PIPLUP,
       4,
-      SpeciesCategories.COMMON,
-      "Penguin Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.4,
@@ -14941,8 +14545,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PRINPLUP,
       4,
-      SpeciesCategories.COMMON,
-      "Penguin Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.8,
@@ -14967,8 +14570,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.EMPOLEON,
       4,
-      SpeciesCategories.COMMON,
-      "Emperor Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.STEEL,
       1.7,
@@ -14993,8 +14595,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.STARLY,
       4,
-      SpeciesCategories.COMMON,
-      "Starling Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.FLYING,
       0.3,
@@ -15019,8 +14620,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.STARAVIA,
       4,
-      SpeciesCategories.COMMON,
-      "Starling Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.FLYING,
       0.6,
@@ -15045,8 +14645,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.STARAPTOR,
       4,
-      SpeciesCategories.COMMON,
-      "Predator Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.FLYING,
       1.2,
@@ -15071,8 +14670,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BIDOOF,
       4,
-      SpeciesCategories.COMMON,
-      "Plump Mouse Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       0.5,
@@ -15097,8 +14695,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BIBAREL,
       4,
-      SpeciesCategories.COMMON,
-      "Beaver Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.WATER,
       1,
@@ -15123,8 +14720,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.KRICKETOT,
       4,
-      SpeciesCategories.COMMON,
-      "Cricket Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       null,
       0.3,
@@ -15149,8 +14745,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.KRICKETUNE,
       4,
-      SpeciesCategories.COMMON,
-      "Cricket Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       null,
       1,
@@ -15175,8 +14770,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SHINX,
       4,
-      SpeciesCategories.COMMON,
-      "Flash Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       null,
       0.5,
@@ -15201,8 +14795,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LUXIO,
       4,
-      SpeciesCategories.COMMON,
-      "Spark Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       null,
       0.9,
@@ -15227,8 +14820,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LUXRAY,
       4,
-      SpeciesCategories.COMMON,
-      "Gleam Eyes Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       null,
       1.4,
@@ -15253,8 +14845,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BUDEW,
       4,
-      SpeciesCategories.COMMON,
-      "Bud Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.POISON,
       0.2,
@@ -15279,8 +14870,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ROSERADE,
       4,
-      SpeciesCategories.COMMON,
-      "Bouquet Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.POISON,
       0.9,
@@ -15305,8 +14895,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CRANIDOS,
       4,
-      SpeciesCategories.COMMON,
-      "Head Butt Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       null,
       0.9,
@@ -15331,8 +14920,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.RAMPARDOS,
       4,
-      SpeciesCategories.COMMON,
-      "Head Butt Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       null,
       1.6,
@@ -15357,8 +14945,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SHIELDON,
       4,
-      SpeciesCategories.COMMON,
-      "Shield Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.STEEL,
       0.5,
@@ -15383,8 +14970,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BASTIODON,
       4,
-      SpeciesCategories.COMMON,
-      "Shield Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.STEEL,
       1.3,
@@ -15409,8 +14995,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BURMY,
       4,
-      SpeciesCategories.COMMON,
-      "Bagworm Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       null,
       0.2,
@@ -15508,8 +15093,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.WORMADAM,
       4,
-      SpeciesCategories.COMMON,
-      "Bagworm Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.GRASS,
       0.5,
@@ -15607,8 +15191,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MOTHIM,
       4,
-      SpeciesCategories.COMMON,
-      "Moth Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.FLYING,
       0.9,
@@ -15633,8 +15216,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.COMBEE,
       4,
-      SpeciesCategories.COMMON,
-      "Tiny Bee Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.FLYING,
       0.3,
@@ -15659,8 +15241,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.VESPIQUEN,
       4,
-      SpeciesCategories.COMMON,
-      "Beehive Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.FLYING,
       1.2,
@@ -15685,8 +15266,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PACHIRISU,
       4,
-      SpeciesCategories.COMMON,
-      "EleSquirrel Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       null,
       0.4,
@@ -15711,8 +15291,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BUIZEL,
       4,
-      SpeciesCategories.COMMON,
-      "Sea Weasel Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.7,
@@ -15737,8 +15316,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FLOATZEL,
       4,
-      SpeciesCategories.COMMON,
-      "Sea Weasel Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       1.1,
@@ -15763,8 +15341,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CHERUBI,
       4,
-      SpeciesCategories.COMMON,
-      "Cherry Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       0.4,
@@ -15789,8 +15366,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CHERRIM,
       4,
-      SpeciesCategories.COMMON,
-      "Blossom Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       0.5,
@@ -15861,8 +15437,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SHELLOS,
       4,
-      SpeciesCategories.COMMON,
-      "Sea Slug Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.3,
@@ -15936,8 +15511,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GASTRODON,
       4,
-      SpeciesCategories.COMMON,
-      "Sea Slug Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.GROUND,
       0.9,
@@ -16011,8 +15585,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.AMBIPOM,
       4,
-      SpeciesCategories.COMMON,
-      "Long Tail Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       1.2,
@@ -16037,8 +15610,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DRIFLOON,
       4,
-      SpeciesCategories.COMMON,
-      "Balloon Pokémon",
+      SpeciesGroups.COMMON,
       Type.GHOST,
       Type.FLYING,
       0.4,
@@ -16063,8 +15635,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DRIFBLIM,
       4,
-      SpeciesCategories.COMMON,
-      "Blimp Pokémon",
+      SpeciesGroups.COMMON,
       Type.GHOST,
       Type.FLYING,
       1.2,
@@ -16089,8 +15660,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BUNEARY,
       4,
-      SpeciesCategories.COMMON,
-      "Rabbit Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       0.4,
@@ -16115,8 +15685,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LOPUNNY,
       4,
-      SpeciesCategories.COMMON,
-      "Rabbit Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       1.2,
@@ -16187,8 +15756,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MISMAGIUS,
       4,
-      SpeciesCategories.COMMON,
-      "Magical Pokémon",
+      SpeciesGroups.COMMON,
       Type.GHOST,
       null,
       0.9,
@@ -16213,8 +15781,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HONCHKROW,
       4,
-      SpeciesCategories.COMMON,
-      "Big Boss Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       Type.FLYING,
       0.9,
@@ -16239,8 +15806,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GLAMEOW,
       4,
-      SpeciesCategories.COMMON,
-      "Catty Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       0.5,
@@ -16265,8 +15831,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PURUGLY,
       4,
-      SpeciesCategories.COMMON,
-      "Tiger Cat Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       1,
@@ -16291,8 +15856,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CHINGLING,
       4,
-      SpeciesCategories.COMMON,
-      "Bell Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       null,
       0.2,
@@ -16317,8 +15881,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.STUNKY,
       4,
-      SpeciesCategories.COMMON,
-      "Skunk Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       Type.DARK,
       0.4,
@@ -16343,8 +15906,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SKUNTANK,
       4,
-      SpeciesCategories.COMMON,
-      "Skunk Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       Type.DARK,
       1,
@@ -16369,8 +15931,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BRONZOR,
       4,
-      SpeciesCategories.COMMON,
-      "Bronze Pokémon",
+      SpeciesGroups.COMMON,
       Type.STEEL,
       Type.PSYCHIC,
       0.5,
@@ -16395,8 +15956,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BRONZONG,
       4,
-      SpeciesCategories.COMMON,
-      "Bronze Bell Pokémon",
+      SpeciesGroups.COMMON,
       Type.STEEL,
       Type.PSYCHIC,
       1.3,
@@ -16421,8 +15981,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BONSLY,
       4,
-      SpeciesCategories.COMMON,
-      "Bonsai Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       null,
       0.5,
@@ -16447,8 +16006,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MIME_JR,
       4,
-      SpeciesCategories.COMMON,
-      "Mime Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       Type.FAIRY,
       0.6,
@@ -16473,8 +16031,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HAPPINY,
       4,
-      SpeciesCategories.COMMON,
-      "Playhouse Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       0.6,
@@ -16499,8 +16056,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CHATOT,
       4,
-      SpeciesCategories.COMMON,
-      "Music Note Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.FLYING,
       0.5,
@@ -16525,8 +16081,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SPIRITOMB,
       4,
-      SpeciesCategories.COMMON,
-      "Forbidden Pokémon",
+      SpeciesGroups.COMMON,
       Type.GHOST,
       Type.DARK,
       1,
@@ -16551,8 +16106,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GIBLE,
       4,
-      SpeciesCategories.COMMON,
-      "Land Shark Pokémon",
+      SpeciesGroups.COMMON,
       Type.DRAGON,
       Type.GROUND,
       0.7,
@@ -16577,8 +16131,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GABITE,
       4,
-      SpeciesCategories.COMMON,
-      "Cave Pokémon",
+      SpeciesGroups.COMMON,
       Type.DRAGON,
       Type.GROUND,
       1.4,
@@ -16603,8 +16156,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GARCHOMP,
       4,
-      SpeciesCategories.COMMON,
-      "Mach Pokémon",
+      SpeciesGroups.COMMON,
       Type.DRAGON,
       Type.GROUND,
       1.9,
@@ -16676,8 +16228,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MUNCHLAX,
       4,
-      SpeciesCategories.COMMON,
-      "Big Eater Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       0.6,
@@ -16702,8 +16253,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.RIOLU,
       4,
-      SpeciesCategories.COMMON,
-      "Emanation Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIGHTING,
       null,
       0.7,
@@ -16728,8 +16278,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LUCARIO,
       4,
-      SpeciesCategories.COMMON,
-      "Aura Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIGHTING,
       Type.STEEL,
       1.2,
@@ -16800,8 +16349,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HIPPOPOTAS,
       4,
-      SpeciesCategories.COMMON,
-      "Hippo Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       null,
       0.8,
@@ -16826,8 +16374,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HIPPOWDON,
       4,
-      SpeciesCategories.COMMON,
-      "Heavyweight Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       null,
       2,
@@ -16852,8 +16399,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SKORUPI,
       4,
-      SpeciesCategories.COMMON,
-      "Scorpion Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       Type.BUG,
       0.8,
@@ -16878,8 +16424,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DRAPION,
       4,
-      SpeciesCategories.COMMON,
-      "Ogre Scorpion Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       Type.DARK,
       1.3,
@@ -16904,8 +16449,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CROAGUNK,
       4,
-      SpeciesCategories.COMMON,
-      "Toxic Mouth Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       Type.FIGHTING,
       0.7,
@@ -16930,8 +16474,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TOXICROAK,
       4,
-      SpeciesCategories.COMMON,
-      "Toxic Mouth Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       Type.FIGHTING,
       1.3,
@@ -16956,8 +16499,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CARNIVINE,
       4,
-      SpeciesCategories.COMMON,
-      "Bug Catcher Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       1.4,
@@ -16982,8 +16524,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FINNEON,
       4,
-      SpeciesCategories.COMMON,
-      "Wing Fish Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.4,
@@ -17008,8 +16549,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LUMINEON,
       4,
-      SpeciesCategories.COMMON,
-      "Neon Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       1.2,
@@ -17034,8 +16574,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MANTYKE,
       4,
-      SpeciesCategories.COMMON,
-      "Kite Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.FLYING,
       1,
@@ -17060,8 +16599,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SNOVER,
       4,
-      SpeciesCategories.COMMON,
-      "Frost Tree Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.ICE,
       1,
@@ -17086,8 +16624,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ABOMASNOW,
       4,
-      SpeciesCategories.COMMON,
-      "Frost Tree Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.ICE,
       2.2,
@@ -17159,8 +16696,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.WEAVILE,
       4,
-      SpeciesCategories.COMMON,
-      "Sharp Claw Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       Type.ICE,
       1.1,
@@ -17185,8 +16721,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MAGNEZONE,
       4,
-      SpeciesCategories.COMMON,
-      "Magnet Area Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       Type.STEEL,
       1.2,
@@ -17211,8 +16746,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LICKILICKY,
       4,
-      SpeciesCategories.COMMON,
-      "Licking Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       1.7,
@@ -17237,8 +16771,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.RHYPERIOR,
       4,
-      SpeciesCategories.COMMON,
-      "Drill Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       Type.ROCK,
       2.4,
@@ -17263,8 +16796,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TANGROWTH,
       4,
-      SpeciesCategories.COMMON,
-      "Vine Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       2,
@@ -17289,8 +16821,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ELECTIVIRE,
       4,
-      SpeciesCategories.COMMON,
-      "Thunderbolt Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       null,
       1.8,
@@ -17315,8 +16846,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MAGMORTAR,
       4,
-      SpeciesCategories.COMMON,
-      "Blast Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       null,
       1.6,
@@ -17341,8 +16871,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TOGEKISS,
       4,
-      SpeciesCategories.COMMON,
-      "Jubilee Pokémon",
+      SpeciesGroups.COMMON,
       Type.FAIRY,
       Type.FLYING,
       1.5,
@@ -17367,8 +16896,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.YANMEGA,
       4,
-      SpeciesCategories.COMMON,
-      "Ogre Darner Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.FLYING,
       1.9,
@@ -17393,8 +16921,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LEAFEON,
       4,
-      SpeciesCategories.COMMON,
-      "Verdant Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       1,
@@ -17419,8 +16946,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GLACEON,
       4,
-      SpeciesCategories.COMMON,
-      "Fresh Snow Pokémon",
+      SpeciesGroups.COMMON,
       Type.ICE,
       null,
       0.8,
@@ -17445,8 +16971,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GLISCOR,
       4,
-      SpeciesCategories.COMMON,
-      "Fang Scorpion Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       Type.FLYING,
       2,
@@ -17471,8 +16996,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MAMOSWINE,
       4,
-      SpeciesCategories.COMMON,
-      "Twin Tusk Pokémon",
+      SpeciesGroups.COMMON,
       Type.ICE,
       Type.GROUND,
       2.5,
@@ -17497,8 +17021,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PORYGON_Z,
       4,
-      SpeciesCategories.COMMON,
-      "Virtual Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       0.9,
@@ -17523,8 +17046,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GALLADE,
       4,
-      SpeciesCategories.COMMON,
-      "Blade Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       Type.FIGHTING,
       1.6,
@@ -17595,8 +17117,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PROBOPASS,
       4,
-      SpeciesCategories.COMMON,
-      "Compass Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.STEEL,
       1.4,
@@ -17621,8 +17142,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DUSKNOIR,
       4,
-      SpeciesCategories.COMMON,
-      "Gripper Pokémon",
+      SpeciesGroups.COMMON,
       Type.GHOST,
       null,
       2.2,
@@ -17647,8 +17167,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FROSLASS,
       4,
-      SpeciesCategories.COMMON,
-      "Snow Land Pokémon",
+      SpeciesGroups.COMMON,
       Type.ICE,
       Type.GHOST,
       1.3,
@@ -17673,8 +17192,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ROTOM,
       4,
-      SpeciesCategories.COMMON,
-      "Plasma Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       Type.GHOST,
       0.3,
@@ -17844,8 +17362,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.UXIE,
       4,
-      SpeciesCategories.SUBLEGENDARY,
-      "Knowledge Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.PSYCHIC,
       null,
       0.3,
@@ -17870,8 +17387,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MESPRIT,
       4,
-      SpeciesCategories.SUBLEGENDARY,
-      "Emotion Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.PSYCHIC,
       null,
       0.3,
@@ -17896,8 +17412,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.AZELF,
       4,
-      SpeciesCategories.SUBLEGENDARY,
-      "Willpower Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.PSYCHIC,
       null,
       0.3,
@@ -17922,8 +17437,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DIALGA,
       4,
-      SpeciesCategories.LEGENDARY,
-      "Temporal Pokémon",
+      SpeciesGroups.LEGENDARY,
       Type.STEEL,
       Type.DRAGON,
       5.4,
@@ -17994,8 +17508,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PALKIA,
       4,
-      SpeciesCategories.LEGENDARY,
-      "Spatial Pokémon",
+      SpeciesGroups.LEGENDARY,
       Type.WATER,
       Type.DRAGON,
       4.2,
@@ -18066,8 +17579,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HEATRAN,
       4,
-      SpeciesCategories.SUBLEGENDARY,
-      "Lava Dome Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.FIRE,
       Type.STEEL,
       1.7,
@@ -18092,8 +17604,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.REGIGIGAS,
       4,
-      SpeciesCategories.SUBLEGENDARY,
-      "Colossal Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.NORMAL,
       null,
       3.7,
@@ -18118,8 +17629,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GIRATINA,
       4,
-      SpeciesCategories.LEGENDARY,
-      "Renegade Pokémon",
+      SpeciesGroups.LEGENDARY,
       Type.GHOST,
       Type.DRAGON,
       4.5,
@@ -18190,8 +17700,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CRESSELIA,
       4,
-      SpeciesCategories.SUBLEGENDARY,
-      "Lunar Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.PSYCHIC,
       null,
       1.5,
@@ -18216,8 +17725,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PHIONE,
       4,
-      SpeciesCategories.MYTHICAL,
-      "Sea Drifter Pokémon",
+      SpeciesGroups.MYTHICAL,
       Type.WATER,
       null,
       0.4,
@@ -18242,8 +17750,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MANAPHY,
       4,
-      SpeciesCategories.MYTHICAL,
-      "Seafaring Pokémon",
+      SpeciesGroups.MYTHICAL,
       Type.WATER,
       null,
       0.3,
@@ -18268,8 +17775,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DARKRAI,
       4,
-      SpeciesCategories.MYTHICAL,
-      "Pitch-Black Pokémon",
+      SpeciesGroups.MYTHICAL,
       Type.DARK,
       null,
       1.5,
@@ -18294,8 +17800,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SHAYMIN,
       4,
-      SpeciesCategories.MYTHICAL,
-      "Gratitude Pokémon",
+      SpeciesGroups.MYTHICAL,
       Type.GRASS,
       null,
       0.2,
@@ -18366,8 +17871,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ARCEUS,
       4,
-      SpeciesCategories.MYTHICAL,
-      "Alpha Pokémon",
+      SpeciesGroups.MYTHICAL,
       Type.NORMAL,
       null,
       3.2,
@@ -18795,8 +18299,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.VICTINI,
       5,
-      SpeciesCategories.MYTHICAL,
-      "Victory Pokémon",
+      SpeciesGroups.MYTHICAL,
       Type.PSYCHIC,
       Type.FIRE,
       0.4,
@@ -18821,8 +18324,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SNIVY,
       5,
-      SpeciesCategories.COMMON,
-      "Grass Snake Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       0.6,
@@ -18847,8 +18349,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SERVINE,
       5,
-      SpeciesCategories.COMMON,
-      "Grass Snake Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       0.8,
@@ -18873,8 +18374,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SERPERIOR,
       5,
-      SpeciesCategories.COMMON,
-      "Regal Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       3.3,
@@ -18899,8 +18399,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TEPIG,
       5,
-      SpeciesCategories.COMMON,
-      "Fire Pig Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       null,
       0.5,
@@ -18925,8 +18424,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PIGNITE,
       5,
-      SpeciesCategories.COMMON,
-      "Fire Pig Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       Type.FIGHTING,
       1,
@@ -18951,8 +18449,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.EMBOAR,
       5,
-      SpeciesCategories.COMMON,
-      "Mega Fire Pig Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       Type.FIGHTING,
       1.6,
@@ -18977,8 +18474,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.OSHAWOTT,
       5,
-      SpeciesCategories.COMMON,
-      "Sea Otter Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.5,
@@ -19003,8 +18499,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DEWOTT,
       5,
-      SpeciesCategories.COMMON,
-      "Discipline Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.8,
@@ -19029,8 +18524,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SAMUROTT,
       5,
-      SpeciesCategories.COMMON,
-      "Formidable Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       1.5,
@@ -19055,8 +18549,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PATRAT,
       5,
-      SpeciesCategories.COMMON,
-      "Scout Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       0.5,
@@ -19081,8 +18574,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.WATCHOG,
       5,
-      SpeciesCategories.COMMON,
-      "Lookout Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       1.1,
@@ -19107,8 +18599,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LILLIPUP,
       5,
-      SpeciesCategories.COMMON,
-      "Puppy Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       0.4,
@@ -19133,8 +18624,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HERDIER,
       5,
-      SpeciesCategories.COMMON,
-      "Loyal Dog Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       0.9,
@@ -19159,8 +18649,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.STOUTLAND,
       5,
-      SpeciesCategories.COMMON,
-      "Big-Hearted Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       1.2,
@@ -19185,8 +18674,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PURRLOIN,
       5,
-      SpeciesCategories.COMMON,
-      "Devious Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       null,
       0.4,
@@ -19211,8 +18699,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LIEPARD,
       5,
-      SpeciesCategories.COMMON,
-      "Cruel Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       null,
       1.1,
@@ -19237,8 +18724,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PANSAGE,
       5,
-      SpeciesCategories.COMMON,
-      "Grass Monkey Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       0.6,
@@ -19263,8 +18749,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SIMISAGE,
       5,
-      SpeciesCategories.COMMON,
-      "Thorn Monkey Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       1.1,
@@ -19289,8 +18774,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PANSEAR,
       5,
-      SpeciesCategories.COMMON,
-      "High Temp Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       null,
       0.6,
@@ -19315,8 +18799,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SIMISEAR,
       5,
-      SpeciesCategories.COMMON,
-      "Ember Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       null,
       1,
@@ -19341,8 +18824,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PANPOUR,
       5,
-      SpeciesCategories.COMMON,
-      "Spray Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.6,
@@ -19367,8 +18849,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SIMIPOUR,
       5,
-      SpeciesCategories.COMMON,
-      "Geyser Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       1,
@@ -19393,8 +18874,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MUNNA,
       5,
-      SpeciesCategories.COMMON,
-      "Dream Eater Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       null,
       0.6,
@@ -19419,8 +18899,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MUSHARNA,
       5,
-      SpeciesCategories.COMMON,
-      "Drowsing Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       null,
       1.1,
@@ -19445,8 +18924,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PIDOVE,
       5,
-      SpeciesCategories.COMMON,
-      "Tiny Pigeon Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.FLYING,
       0.3,
@@ -19471,8 +18949,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TRANQUILL,
       5,
-      SpeciesCategories.COMMON,
-      "Wild Pigeon Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.FLYING,
       0.6,
@@ -19497,8 +18974,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.UNFEZANT,
       5,
-      SpeciesCategories.COMMON,
-      "Proud Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.FLYING,
       1.2,
@@ -19523,8 +18999,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BLITZLE,
       5,
-      SpeciesCategories.COMMON,
-      "Electrified Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       null,
       0.8,
@@ -19549,8 +19024,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ZEBSTRIKA,
       5,
-      SpeciesCategories.COMMON,
-      "Thunderbolt Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       null,
       1.6,
@@ -19575,8 +19049,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ROGGENROLA,
       5,
-      SpeciesCategories.COMMON,
-      "Mantle Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       null,
       0.4,
@@ -19601,8 +19074,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BOLDORE,
       5,
-      SpeciesCategories.COMMON,
-      "Ore Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       null,
       0.9,
@@ -19627,8 +19099,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GIGALITH,
       5,
-      SpeciesCategories.COMMON,
-      "Compressed Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       null,
       1.7,
@@ -19653,8 +19124,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.WOOBAT,
       5,
-      SpeciesCategories.COMMON,
-      "Bat Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       Type.FLYING,
       0.4,
@@ -19679,8 +19149,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SWOOBAT,
       5,
-      SpeciesCategories.COMMON,
-      "Courting Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       Type.FLYING,
       0.9,
@@ -19705,8 +19174,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DRILBUR,
       5,
-      SpeciesCategories.COMMON,
-      "Mole Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       null,
       0.3,
@@ -19731,8 +19199,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.EXCADRILL,
       5,
-      SpeciesCategories.COMMON,
-      "Subterrene Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       Type.STEEL,
       0.7,
@@ -19757,8 +19224,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.AUDINO,
       5,
-      SpeciesCategories.COMMON,
-      "Hearing Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       1.1,
@@ -19829,8 +19295,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TIMBURR,
       5,
-      SpeciesCategories.COMMON,
-      "Muscular Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIGHTING,
       null,
       0.6,
@@ -19855,8 +19320,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GURDURR,
       5,
-      SpeciesCategories.COMMON,
-      "Muscular Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIGHTING,
       null,
       1.2,
@@ -19881,8 +19345,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CONKELDURR,
       5,
-      SpeciesCategories.COMMON,
-      "Muscular Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIGHTING,
       null,
       1.4,
@@ -19907,8 +19370,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TYMPOLE,
       5,
-      SpeciesCategories.COMMON,
-      "Tadpole Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.5,
@@ -19933,8 +19395,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PALPITOAD,
       5,
-      SpeciesCategories.COMMON,
-      "Vibration Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.GROUND,
       0.8,
@@ -19959,8 +19420,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SEISMITOAD,
       5,
-      SpeciesCategories.COMMON,
-      "Vibration Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.GROUND,
       1.5,
@@ -19985,8 +19445,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.THROH,
       5,
-      SpeciesCategories.COMMON,
-      "Judo Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIGHTING,
       null,
       1.3,
@@ -20011,8 +19470,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SAWK,
       5,
-      SpeciesCategories.COMMON,
-      "Karate Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIGHTING,
       null,
       1.4,
@@ -20037,8 +19495,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SEWADDLE,
       5,
-      SpeciesCategories.COMMON,
-      "Sewing Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.GRASS,
       0.3,
@@ -20063,8 +19520,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SWADLOON,
       5,
-      SpeciesCategories.COMMON,
-      "Leaf-Wrapped Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.GRASS,
       0.5,
@@ -20089,8 +19545,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LEAVANNY,
       5,
-      SpeciesCategories.COMMON,
-      "Nurturing Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.GRASS,
       1.2,
@@ -20115,8 +19570,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.VENIPEDE,
       5,
-      SpeciesCategories.COMMON,
-      "Centipede Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.POISON,
       0.4,
@@ -20141,8 +19595,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.WHIRLIPEDE,
       5,
-      SpeciesCategories.COMMON,
-      "Curlipede Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.POISON,
       1.2,
@@ -20167,8 +19620,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SCOLIPEDE,
       5,
-      SpeciesCategories.COMMON,
-      "Megapede Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.POISON,
       2.5,
@@ -20193,8 +19645,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.COTTONEE,
       5,
-      SpeciesCategories.COMMON,
-      "Cotton Puff Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.FAIRY,
       0.3,
@@ -20219,8 +19670,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.WHIMSICOTT,
       5,
-      SpeciesCategories.COMMON,
-      "Windveiled Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.FAIRY,
       0.7,
@@ -20245,8 +19695,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PETILIL,
       5,
-      SpeciesCategories.COMMON,
-      "Bulb Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       0.5,
@@ -20271,8 +19720,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LILLIGANT,
       5,
-      SpeciesCategories.COMMON,
-      "Flowering Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       1.1,
@@ -20297,8 +19745,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BASCULIN,
       5,
-      SpeciesCategories.COMMON,
-      "Hostile Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       1,
@@ -20396,8 +19843,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SANDILE,
       5,
-      SpeciesCategories.COMMON,
-      "Desert Croc Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       Type.DARK,
       0.7,
@@ -20422,8 +19868,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.KROKOROK,
       5,
-      SpeciesCategories.COMMON,
-      "Desert Croc Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       Type.DARK,
       1,
@@ -20448,8 +19893,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.KROOKODILE,
       5,
-      SpeciesCategories.COMMON,
-      "Intimidation Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       Type.DARK,
       1.5,
@@ -20474,8 +19918,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DARUMAKA,
       5,
-      SpeciesCategories.COMMON,
-      "Zen Charm Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       null,
       0.6,
@@ -20500,8 +19943,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DARMANITAN,
       5,
-      SpeciesCategories.COMMON,
-      "Blazing Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       null,
       1.3,
@@ -20572,8 +20014,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MARACTUS,
       5,
-      SpeciesCategories.COMMON,
-      "Cactus Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       1,
@@ -20598,8 +20039,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DWEBBLE,
       5,
-      SpeciesCategories.COMMON,
-      "Rock Inn Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.ROCK,
       0.3,
@@ -20624,8 +20064,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CRUSTLE,
       5,
-      SpeciesCategories.COMMON,
-      "Stone Home Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.ROCK,
       1.4,
@@ -20650,8 +20089,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SCRAGGY,
       5,
-      SpeciesCategories.COMMON,
-      "Shedding Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       Type.FIGHTING,
       0.6,
@@ -20676,8 +20114,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SCRAFTY,
       5,
-      SpeciesCategories.COMMON,
-      "Hoodlum Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       Type.FIGHTING,
       1.1,
@@ -20702,8 +20139,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SIGILYPH,
       5,
-      SpeciesCategories.COMMON,
-      "Avianoid Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       Type.FLYING,
       1.4,
@@ -20728,8 +20164,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.YAMASK,
       5,
-      SpeciesCategories.COMMON,
-      "Spirit Pokémon",
+      SpeciesGroups.COMMON,
       Type.GHOST,
       null,
       0.5,
@@ -20754,8 +20189,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.COFAGRIGUS,
       5,
-      SpeciesCategories.COMMON,
-      "Coffin Pokémon",
+      SpeciesGroups.COMMON,
       Type.GHOST,
       null,
       1.7,
@@ -20780,8 +20214,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TIRTOUGA,
       5,
-      SpeciesCategories.COMMON,
-      "Prototurtle Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.ROCK,
       0.7,
@@ -20806,8 +20239,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CARRACOSTA,
       5,
-      SpeciesCategories.COMMON,
-      "Prototurtle Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.ROCK,
       1.2,
@@ -20832,8 +20264,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ARCHEN,
       5,
-      SpeciesCategories.COMMON,
-      "First Bird Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.FLYING,
       0.5,
@@ -20858,8 +20289,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ARCHEOPS,
       5,
-      SpeciesCategories.COMMON,
-      "First Bird Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.FLYING,
       1.4,
@@ -20884,8 +20314,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TRUBBISH,
       5,
-      SpeciesCategories.COMMON,
-      "Trash Bag Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       null,
       0.6,
@@ -20910,8 +20339,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GARBODOR,
       5,
-      SpeciesCategories.COMMON,
-      "Trash Heap Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       null,
       1.9,
@@ -20982,8 +20410,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ZORUA,
       5,
-      SpeciesCategories.COMMON,
-      "Tricky Fox Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       null,
       0.7,
@@ -21008,8 +20435,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ZOROARK,
       5,
-      SpeciesCategories.COMMON,
-      "Illusion Fox Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       null,
       1.6,
@@ -21034,8 +20460,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MINCCINO,
       5,
-      SpeciesCategories.COMMON,
-      "Chinchilla Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       0.4,
@@ -21060,8 +20485,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CINCCINO,
       5,
-      SpeciesCategories.COMMON,
-      "Scarf Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       0.5,
@@ -21086,8 +20510,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GOTHITA,
       5,
-      SpeciesCategories.COMMON,
-      "Fixation Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       null,
       0.4,
@@ -21112,8 +20535,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GOTHORITA,
       5,
-      SpeciesCategories.COMMON,
-      "Manipulate Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       null,
       0.7,
@@ -21138,8 +20560,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GOTHITELLE,
       5,
-      SpeciesCategories.COMMON,
-      "Astral Body Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       null,
       1.5,
@@ -21164,8 +20585,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SOLOSIS,
       5,
-      SpeciesCategories.COMMON,
-      "Cell Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       null,
       0.3,
@@ -21190,8 +20610,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DUOSION,
       5,
-      SpeciesCategories.COMMON,
-      "Mitosis Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       null,
       0.6,
@@ -21216,8 +20635,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.REUNICLUS,
       5,
-      SpeciesCategories.COMMON,
-      "Multiplying Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       null,
       1,
@@ -21242,8 +20660,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DUCKLETT,
       5,
-      SpeciesCategories.COMMON,
-      "Water Bird Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.FLYING,
       0.5,
@@ -21268,8 +20685,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SWANNA,
       5,
-      SpeciesCategories.COMMON,
-      "White Bird Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.FLYING,
       1.3,
@@ -21294,8 +20710,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.VANILLITE,
       5,
-      SpeciesCategories.COMMON,
-      "Fresh Snow Pokémon",
+      SpeciesGroups.COMMON,
       Type.ICE,
       null,
       0.4,
@@ -21320,8 +20735,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.VANILLISH,
       5,
-      SpeciesCategories.COMMON,
-      "Icy Snow Pokémon",
+      SpeciesGroups.COMMON,
       Type.ICE,
       null,
       1.1,
@@ -21346,8 +20760,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.VANILLUXE,
       5,
-      SpeciesCategories.COMMON,
-      "Snowstorm Pokémon",
+      SpeciesGroups.COMMON,
       Type.ICE,
       null,
       1.3,
@@ -21372,8 +20785,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DEERLING,
       5,
-      SpeciesCategories.COMMON,
-      "Season Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.GRASS,
       0.6,
@@ -21495,8 +20907,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SAWSBUCK,
       5,
-      SpeciesCategories.COMMON,
-      "Season Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.GRASS,
       1.9,
@@ -21618,8 +21029,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.EMOLGA,
       5,
-      SpeciesCategories.COMMON,
-      "Sky Squirrel Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       Type.FLYING,
       0.4,
@@ -21644,8 +21054,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.KARRABLAST,
       5,
-      SpeciesCategories.COMMON,
-      "Clamping Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       null,
       0.5,
@@ -21670,8 +21079,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ESCAVALIER,
       5,
-      SpeciesCategories.COMMON,
-      "Cavalry Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.STEEL,
       1,
@@ -21696,8 +21104,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FOONGUS,
       5,
-      SpeciesCategories.COMMON,
-      "Mushroom Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.POISON,
       0.2,
@@ -21722,8 +21129,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.AMOONGUSS,
       5,
-      SpeciesCategories.COMMON,
-      "Mushroom Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.POISON,
       0.6,
@@ -21748,8 +21154,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FRILLISH,
       5,
-      SpeciesCategories.COMMON,
-      "Floating Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.GHOST,
       1.2,
@@ -21774,8 +21179,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.JELLICENT,
       5,
-      SpeciesCategories.COMMON,
-      "Floating Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.GHOST,
       2.2,
@@ -21800,8 +21204,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ALOMOMOLA,
       5,
-      SpeciesCategories.COMMON,
-      "Caring Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       1.2,
@@ -21826,8 +21229,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.JOLTIK,
       5,
-      SpeciesCategories.COMMON,
-      "Attaching Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.ELECTRIC,
       0.1,
@@ -21852,8 +21254,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GALVANTULA,
       5,
-      SpeciesCategories.COMMON,
-      "EleSpider Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.ELECTRIC,
       0.8,
@@ -21878,8 +21279,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FERROSEED,
       5,
-      SpeciesCategories.COMMON,
-      "Thorn Seed Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.STEEL,
       0.6,
@@ -21904,8 +21304,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FERROTHORN,
       5,
-      SpeciesCategories.COMMON,
-      "Thorn Pod Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.STEEL,
       1,
@@ -21930,8 +21329,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.KLINK,
       5,
-      SpeciesCategories.COMMON,
-      "Gear Pokémon",
+      SpeciesGroups.COMMON,
       Type.STEEL,
       null,
       0.3,
@@ -21956,8 +21354,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.KLANG,
       5,
-      SpeciesCategories.COMMON,
-      "Gear Pokémon",
+      SpeciesGroups.COMMON,
       Type.STEEL,
       null,
       0.6,
@@ -21982,8 +21379,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.KLINKLANG,
       5,
-      SpeciesCategories.COMMON,
-      "Gear Pokémon",
+      SpeciesGroups.COMMON,
       Type.STEEL,
       null,
       0.6,
@@ -22008,8 +21404,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TYNAMO,
       5,
-      SpeciesCategories.COMMON,
-      "EleFish Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       null,
       0.2,
@@ -22034,8 +21429,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.EELEKTRIK,
       5,
-      SpeciesCategories.COMMON,
-      "EleFish Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       null,
       1.2,
@@ -22060,8 +21454,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.EELEKTROSS,
       5,
-      SpeciesCategories.COMMON,
-      "EleFish Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       null,
       2.1,
@@ -22086,8 +21479,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ELGYEM,
       5,
-      SpeciesCategories.COMMON,
-      "Cerebral Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       null,
       0.5,
@@ -22112,8 +21504,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BEHEEYEM,
       5,
-      SpeciesCategories.COMMON,
-      "Cerebral Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       null,
       1,
@@ -22138,8 +21529,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LITWICK,
       5,
-      SpeciesCategories.COMMON,
-      "Candle Pokémon",
+      SpeciesGroups.COMMON,
       Type.GHOST,
       Type.FIRE,
       0.3,
@@ -22164,8 +21554,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LAMPENT,
       5,
-      SpeciesCategories.COMMON,
-      "Lamp Pokémon",
+      SpeciesGroups.COMMON,
       Type.GHOST,
       Type.FIRE,
       0.6,
@@ -22190,8 +21579,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CHANDELURE,
       5,
-      SpeciesCategories.COMMON,
-      "Luring Pokémon",
+      SpeciesGroups.COMMON,
       Type.GHOST,
       Type.FIRE,
       1,
@@ -22216,8 +21604,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.AXEW,
       5,
-      SpeciesCategories.COMMON,
-      "Tusk Pokémon",
+      SpeciesGroups.COMMON,
       Type.DRAGON,
       null,
       0.6,
@@ -22242,8 +21629,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FRAXURE,
       5,
-      SpeciesCategories.COMMON,
-      "Axe Jaw Pokémon",
+      SpeciesGroups.COMMON,
       Type.DRAGON,
       null,
       1,
@@ -22268,8 +21654,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HAXORUS,
       5,
-      SpeciesCategories.COMMON,
-      "Axe Jaw Pokémon",
+      SpeciesGroups.COMMON,
       Type.DRAGON,
       null,
       1.8,
@@ -22294,8 +21679,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CUBCHOO,
       5,
-      SpeciesCategories.COMMON,
-      "Chill Pokémon",
+      SpeciesGroups.COMMON,
       Type.ICE,
       null,
       0.5,
@@ -22320,8 +21704,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BEARTIC,
       5,
-      SpeciesCategories.COMMON,
-      "Freezing Pokémon",
+      SpeciesGroups.COMMON,
       Type.ICE,
       null,
       2.6,
@@ -22346,8 +21729,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CRYOGONAL,
       5,
-      SpeciesCategories.COMMON,
-      "Crystallizing Pokémon",
+      SpeciesGroups.COMMON,
       Type.ICE,
       null,
       1.1,
@@ -22372,8 +21754,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SHELMET,
       5,
-      SpeciesCategories.COMMON,
-      "Snail Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       null,
       0.4,
@@ -22398,8 +21779,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ACCELGOR,
       5,
-      SpeciesCategories.COMMON,
-      "Shell Out Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       null,
       0.8,
@@ -22424,8 +21804,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.STUNFISK,
       5,
-      SpeciesCategories.COMMON,
-      "Trap Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       Type.ELECTRIC,
       0.7,
@@ -22450,8 +21829,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MIENFOO,
       5,
-      SpeciesCategories.COMMON,
-      "Martial Arts Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIGHTING,
       null,
       0.9,
@@ -22476,8 +21854,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MIENSHAO,
       5,
-      SpeciesCategories.COMMON,
-      "Martial Arts Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIGHTING,
       null,
       1.4,
@@ -22502,8 +21879,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DRUDDIGON,
       5,
-      SpeciesCategories.COMMON,
-      "Cave Pokémon",
+      SpeciesGroups.COMMON,
       Type.DRAGON,
       null,
       1.6,
@@ -22528,8 +21904,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GOLETT,
       5,
-      SpeciesCategories.COMMON,
-      "Automaton Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       Type.GHOST,
       1,
@@ -22554,8 +21929,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GOLURK,
       5,
-      SpeciesCategories.COMMON,
-      "Automaton Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       Type.GHOST,
       2.8,
@@ -22580,8 +21954,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PAWNIARD,
       5,
-      SpeciesCategories.COMMON,
-      "Sharp Blade Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       Type.STEEL,
       0.5,
@@ -22606,8 +21979,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BISHARP,
       5,
-      SpeciesCategories.COMMON,
-      "Sword Blade Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       Type.STEEL,
       1.6,
@@ -22632,8 +22004,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BOUFFALANT,
       5,
-      SpeciesCategories.COMMON,
-      "Bash Buffalo Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       1.6,
@@ -22658,8 +22029,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.RUFFLET,
       5,
-      SpeciesCategories.COMMON,
-      "Eaglet Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.FLYING,
       0.5,
@@ -22684,8 +22054,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BRAVIARY,
       5,
-      SpeciesCategories.COMMON,
-      "Valiant Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.FLYING,
       1.5,
@@ -22710,8 +22079,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.VULLABY,
       5,
-      SpeciesCategories.COMMON,
-      "Diapered Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       Type.FLYING,
       0.5,
@@ -22736,8 +22104,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MANDIBUZZ,
       5,
-      SpeciesCategories.COMMON,
-      "Bone Vulture Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       Type.FLYING,
       1.2,
@@ -22762,8 +22129,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HEATMOR,
       5,
-      SpeciesCategories.COMMON,
-      "Anteater Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       null,
       1.4,
@@ -22788,8 +22154,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DURANT,
       5,
-      SpeciesCategories.COMMON,
-      "Iron Ant Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.STEEL,
       0.3,
@@ -22814,8 +22179,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DEINO,
       5,
-      SpeciesCategories.COMMON,
-      "Irate Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       Type.DRAGON,
       0.8,
@@ -22840,8 +22204,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ZWEILOUS,
       5,
-      SpeciesCategories.COMMON,
-      "Hostile Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       Type.DRAGON,
       1.4,
@@ -22866,8 +22229,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HYDREIGON,
       5,
-      SpeciesCategories.COMMON,
-      "Brutal Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       Type.DRAGON,
       1.8,
@@ -22892,8 +22254,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LARVESTA,
       5,
-      SpeciesCategories.COMMON,
-      "Torch Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.FIRE,
       1.1,
@@ -22918,8 +22279,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.VOLCARONA,
       5,
-      SpeciesCategories.COMMON,
-      "Sun Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.FIRE,
       1.6,
@@ -22944,8 +22304,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.COBALION,
       5,
-      SpeciesCategories.SUBLEGENDARY,
-      "Iron Will Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.STEEL,
       Type.FIGHTING,
       2.1,
@@ -22970,8 +22329,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TERRAKION,
       5,
-      SpeciesCategories.SUBLEGENDARY,
-      "Cavern Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.ROCK,
       Type.FIGHTING,
       1.9,
@@ -22996,8 +22354,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.VIRIZION,
       5,
-      SpeciesCategories.SUBLEGENDARY,
-      "Grassland Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.GRASS,
       Type.FIGHTING,
       2,
@@ -23022,8 +22379,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TORNADUS,
       5,
-      SpeciesCategories.SUBLEGENDARY,
-      "Cyclone Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.FLYING,
       null,
       1.5,
@@ -23094,8 +22450,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.THUNDURUS,
       5,
-      SpeciesCategories.SUBLEGENDARY,
-      "Bolt Strike Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.ELECTRIC,
       Type.FLYING,
       1.5,
@@ -23166,8 +22521,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.RESHIRAM,
       5,
-      SpeciesCategories.LEGENDARY,
-      "Vast White Pokémon",
+      SpeciesGroups.LEGENDARY,
       Type.DRAGON,
       Type.FIRE,
       3.2,
@@ -23192,8 +22546,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ZEKROM,
       5,
-      SpeciesCategories.LEGENDARY,
-      "Deep Black Pokémon",
+      SpeciesGroups.LEGENDARY,
       Type.DRAGON,
       Type.ELECTRIC,
       2.9,
@@ -23218,8 +22571,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LANDORUS,
       5,
-      SpeciesCategories.SUBLEGENDARY,
-      "Abundance Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.GROUND,
       Type.FLYING,
       1.5,
@@ -23290,8 +22642,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.KYUREM,
       5,
-      SpeciesCategories.LEGENDARY,
-      "Boundary Pokémon",
+      SpeciesGroups.LEGENDARY,
       Type.DRAGON,
       Type.ICE,
       3,
@@ -23383,8 +22734,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.KELDEO,
       5,
-      SpeciesCategories.MYTHICAL,
-      "Colt Pokémon",
+      SpeciesGroups.MYTHICAL,
       Type.WATER,
       Type.FIGHTING,
       1.4,
@@ -23455,8 +22805,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MELOETTA,
       5,
-      SpeciesCategories.MYTHICAL,
-      "Melody Pokémon",
+      SpeciesGroups.MYTHICAL,
       Type.NORMAL,
       Type.PSYCHIC,
       0.6,
@@ -23530,8 +22879,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GENESECT,
       5,
-      SpeciesCategories.MYTHICAL,
-      "Paleozoic Pokémon",
+      SpeciesGroups.MYTHICAL,
       Type.BUG,
       Type.STEEL,
       1.5,
@@ -23665,8 +23013,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CHESPIN,
       6,
-      SpeciesCategories.COMMON,
-      "Spiny Nut Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       0.4,
@@ -23691,8 +23038,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.QUILLADIN,
       6,
-      SpeciesCategories.COMMON,
-      "Spiny Armor Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       0.7,
@@ -23717,8 +23063,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CHESNAUGHT,
       6,
-      SpeciesCategories.COMMON,
-      "Spiny Armor Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.FIGHTING,
       1.6,
@@ -23743,8 +23088,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FENNEKIN,
       6,
-      SpeciesCategories.COMMON,
-      "Fox Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       null,
       0.4,
@@ -23769,8 +23113,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BRAIXEN,
       6,
-      SpeciesCategories.COMMON,
-      "Fox Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       null,
       1,
@@ -23795,8 +23138,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DELPHOX,
       6,
-      SpeciesCategories.COMMON,
-      "Fox Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       Type.PSYCHIC,
       1.5,
@@ -23821,8 +23163,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FROAKIE,
       6,
-      SpeciesCategories.COMMON,
-      "Bubble Frog Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.3,
@@ -23896,8 +23237,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FROGADIER,
       6,
-      SpeciesCategories.COMMON,
-      "Bubble Frog Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.6,
@@ -23971,8 +23311,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GRENINJA,
       6,
-      SpeciesCategories.COMMON,
-      "Ninja Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.DARK,
       1.5,
@@ -24067,8 +23406,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BUNNELBY,
       6,
-      SpeciesCategories.COMMON,
-      "Digging Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       0.4,
@@ -24093,8 +23431,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DIGGERSBY,
       6,
-      SpeciesCategories.COMMON,
-      "Digging Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.GROUND,
       1,
@@ -24119,8 +23456,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FLETCHLING,
       6,
-      SpeciesCategories.COMMON,
-      "Tiny Robin Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.FLYING,
       0.3,
@@ -24145,8 +23481,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FLETCHINDER,
       6,
-      SpeciesCategories.COMMON,
-      "Ember Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       Type.FLYING,
       0.7,
@@ -24171,8 +23506,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TALONFLAME,
       6,
-      SpeciesCategories.COMMON,
-      "Scorching Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       Type.FLYING,
       1.2,
@@ -24197,8 +23531,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SCATTERBUG,
       6,
-      SpeciesCategories.COMMON,
-      "Scatterdust Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       null,
       0.3,
@@ -24704,8 +24037,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SPEWPA,
       6,
-      SpeciesCategories.COMMON,
-      "Scatterdust Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       null,
       0.3,
@@ -25211,8 +24543,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.VIVILLON,
       6,
-      SpeciesCategories.COMMON,
-      "Scale Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.FLYING,
       1.2,
@@ -25718,8 +25049,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LITLEO,
       6,
-      SpeciesCategories.COMMON,
-      "Lion Cub Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       Type.NORMAL,
       0.6,
@@ -25744,8 +25074,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PYROAR,
       6,
-      SpeciesCategories.COMMON,
-      "Royal Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       Type.NORMAL,
       1.5,
@@ -25770,8 +25099,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FLABEBE,
       6,
-      SpeciesCategories.COMMON,
-      "Single Bloom Pokémon",
+      SpeciesGroups.COMMON,
       Type.FAIRY,
       null,
       0.1,
@@ -25917,8 +25245,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FLOETTE,
       6,
-      SpeciesCategories.COMMON,
-      "Single Bloom Pokémon",
+      SpeciesGroups.COMMON,
       Type.FAIRY,
       null,
       0.2,
@@ -26064,8 +25391,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FLORGES,
       6,
-      SpeciesCategories.COMMON,
-      "Garden Pokémon",
+      SpeciesGroups.COMMON,
       Type.FAIRY,
       null,
       1.1,
@@ -26211,8 +25537,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SKIDDO,
       6,
-      SpeciesCategories.COMMON,
-      "Mount Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       0.9,
@@ -26237,8 +25562,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GOGOAT,
       6,
-      SpeciesCategories.COMMON,
-      "Mount Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       1.7,
@@ -26263,8 +25587,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PANCHAM,
       6,
-      SpeciesCategories.COMMON,
-      "Playful Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIGHTING,
       null,
       0.6,
@@ -26289,8 +25612,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PANGORO,
       6,
-      SpeciesCategories.COMMON,
-      "Daunting Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIGHTING,
       Type.DARK,
       2.1,
@@ -26315,8 +25637,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FURFROU,
       6,
-      SpeciesCategories.COMMON,
-      "Poodle Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       1.2,
@@ -26582,8 +25903,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ESPURR,
       6,
-      SpeciesCategories.COMMON,
-      "Restraint Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       null,
       0.3,
@@ -26608,8 +25928,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MEOWSTIC,
       6,
-      SpeciesCategories.COMMON,
-      "Constraint Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       null,
       0.6,
@@ -26683,8 +26002,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HONEDGE,
       6,
-      SpeciesCategories.COMMON,
-      "Sword Pokémon",
+      SpeciesGroups.COMMON,
       Type.STEEL,
       Type.GHOST,
       0.8,
@@ -26709,8 +26027,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DOUBLADE,
       6,
-      SpeciesCategories.COMMON,
-      "Sword Pokémon",
+      SpeciesGroups.COMMON,
       Type.STEEL,
       Type.GHOST,
       0.8,
@@ -26735,8 +26052,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.AEGISLASH,
       6,
-      SpeciesCategories.COMMON,
-      "Royal Sword Pokémon",
+      SpeciesGroups.COMMON,
       Type.STEEL,
       Type.GHOST,
       1.7,
@@ -26807,8 +26123,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SPRITZEE,
       6,
-      SpeciesCategories.COMMON,
-      "Perfume Pokémon",
+      SpeciesGroups.COMMON,
       Type.FAIRY,
       null,
       0.2,
@@ -26833,8 +26148,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.AROMATISSE,
       6,
-      SpeciesCategories.COMMON,
-      "Fragrance Pokémon",
+      SpeciesGroups.COMMON,
       Type.FAIRY,
       null,
       0.8,
@@ -26859,8 +26173,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SWIRLIX,
       6,
-      SpeciesCategories.COMMON,
-      "Cotton Candy Pokémon",
+      SpeciesGroups.COMMON,
       Type.FAIRY,
       null,
       0.4,
@@ -26885,8 +26198,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SLURPUFF,
       6,
-      SpeciesCategories.COMMON,
-      "Meringue Pokémon",
+      SpeciesGroups.COMMON,
       Type.FAIRY,
       null,
       0.8,
@@ -26911,8 +26223,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.INKAY,
       6,
-      SpeciesCategories.COMMON,
-      "Revolving Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       Type.PSYCHIC,
       0.4,
@@ -26937,8 +26248,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MALAMAR,
       6,
-      SpeciesCategories.COMMON,
-      "Overturning Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       Type.PSYCHIC,
       1.5,
@@ -26963,8 +26273,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BINACLE,
       6,
-      SpeciesCategories.COMMON,
-      "Two-Handed Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.WATER,
       0.5,
@@ -26989,8 +26298,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BARBARACLE,
       6,
-      SpeciesCategories.COMMON,
-      "Collective Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.WATER,
       1.3,
@@ -27015,8 +26323,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SKRELP,
       6,
-      SpeciesCategories.COMMON,
-      "Mock Kelp Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       Type.WATER,
       0.5,
@@ -27041,8 +26348,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DRAGALGE,
       6,
-      SpeciesCategories.COMMON,
-      "Mock Kelp Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       Type.DRAGON,
       1.8,
@@ -27067,8 +26373,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CLAUNCHER,
       6,
-      SpeciesCategories.COMMON,
-      "Water Gun Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.5,
@@ -27093,8 +26398,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CLAWITZER,
       6,
-      SpeciesCategories.COMMON,
-      "Howitzer Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       1.3,
@@ -27119,8 +26423,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HELIOPTILE,
       6,
-      SpeciesCategories.COMMON,
-      "Generator Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       Type.NORMAL,
       0.5,
@@ -27145,8 +26448,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HELIOLISK,
       6,
-      SpeciesCategories.COMMON,
-      "Generator Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       Type.NORMAL,
       1,
@@ -27171,8 +26473,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TYRUNT,
       6,
-      SpeciesCategories.COMMON,
-      "Royal Heir Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.DRAGON,
       0.8,
@@ -27197,8 +26498,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TYRANTRUM,
       6,
-      SpeciesCategories.COMMON,
-      "Despot Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.DRAGON,
       2.5,
@@ -27223,8 +26523,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.AMAURA,
       6,
-      SpeciesCategories.COMMON,
-      "Tundra Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.ICE,
       1.3,
@@ -27249,8 +26548,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.AURORUS,
       6,
-      SpeciesCategories.COMMON,
-      "Tundra Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.ICE,
       2.7,
@@ -27275,8 +26573,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SYLVEON,
       6,
-      SpeciesCategories.COMMON,
-      "Intertwining Pokémon",
+      SpeciesGroups.COMMON,
       Type.FAIRY,
       null,
       1,
@@ -27301,8 +26598,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HAWLUCHA,
       6,
-      SpeciesCategories.COMMON,
-      "Wrestling Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIGHTING,
       Type.FLYING,
       0.8,
@@ -27327,8 +26623,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DEDENNE,
       6,
-      SpeciesCategories.COMMON,
-      "Antenna Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       Type.FAIRY,
       0.2,
@@ -27353,8 +26648,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CARBINK,
       6,
-      SpeciesCategories.COMMON,
-      "Jewel Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.FAIRY,
       0.3,
@@ -27379,8 +26673,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GOOMY,
       6,
-      SpeciesCategories.COMMON,
-      "Soft Tissue Pokémon",
+      SpeciesGroups.COMMON,
       Type.DRAGON,
       null,
       0.3,
@@ -27405,8 +26698,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SLIGGOO,
       6,
-      SpeciesCategories.COMMON,
-      "Soft Tissue Pokémon",
+      SpeciesGroups.COMMON,
       Type.DRAGON,
       null,
       0.8,
@@ -27431,8 +26723,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GOODRA,
       6,
-      SpeciesCategories.COMMON,
-      "Dragon Pokémon",
+      SpeciesGroups.COMMON,
       Type.DRAGON,
       null,
       2,
@@ -27457,8 +26748,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.KLEFKI,
       6,
-      SpeciesCategories.COMMON,
-      "Key Ring Pokémon",
+      SpeciesGroups.COMMON,
       Type.STEEL,
       Type.FAIRY,
       0.2,
@@ -27483,8 +26773,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PHANTUMP,
       6,
-      SpeciesCategories.COMMON,
-      "Stump Pokémon",
+      SpeciesGroups.COMMON,
       Type.GHOST,
       Type.GRASS,
       0.4,
@@ -27509,8 +26798,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TREVENANT,
       6,
-      SpeciesCategories.COMMON,
-      "Elder Tree Pokémon",
+      SpeciesGroups.COMMON,
       Type.GHOST,
       Type.GRASS,
       1.5,
@@ -27535,8 +26823,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PUMPKABOO,
       6,
-      SpeciesCategories.COMMON,
-      "Pumpkin Pokémon",
+      SpeciesGroups.COMMON,
       Type.GHOST,
       Type.GRASS,
       0.4,
@@ -27658,8 +26945,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GOURGEIST,
       6,
-      SpeciesCategories.COMMON,
-      "Pumpkin Pokémon",
+      SpeciesGroups.COMMON,
       Type.GHOST,
       Type.GRASS,
       0.9,
@@ -27781,8 +27067,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BERGMITE,
       6,
-      SpeciesCategories.COMMON,
-      "Ice Chunk Pokémon",
+      SpeciesGroups.COMMON,
       Type.ICE,
       null,
       1,
@@ -27807,8 +27092,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.AVALUGG,
       6,
-      SpeciesCategories.COMMON,
-      "Iceberg Pokémon",
+      SpeciesGroups.COMMON,
       Type.ICE,
       null,
       2,
@@ -27833,8 +27117,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.NOIBAT,
       6,
-      SpeciesCategories.COMMON,
-      "Sound Wave Pokémon",
+      SpeciesGroups.COMMON,
       Type.FLYING,
       Type.DRAGON,
       0.5,
@@ -27859,8 +27142,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.NOIVERN,
       6,
-      SpeciesCategories.COMMON,
-      "Sound Wave Pokémon",
+      SpeciesGroups.COMMON,
       Type.FLYING,
       Type.DRAGON,
       1.5,
@@ -27885,8 +27167,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.XERNEAS,
       6,
-      SpeciesCategories.LEGENDARY,
-      "Life Pokémon",
+      SpeciesGroups.LEGENDARY,
       Type.FAIRY,
       null,
       3,
@@ -27957,8 +27238,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.YVELTAL,
       6,
-      SpeciesCategories.LEGENDARY,
-      "Destruction Pokémon",
+      SpeciesGroups.LEGENDARY,
       Type.DARK,
       Type.FLYING,
       5.8,
@@ -27983,8 +27263,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ZYGARDE,
       6,
-      SpeciesCategories.LEGENDARY,
-      "Order Pokémon",
+      SpeciesGroups.LEGENDARY,
       Type.DRAGON,
       Type.GROUND,
       5,
@@ -28150,8 +27429,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DIANCIE,
       6,
-      SpeciesCategories.MYTHICAL,
-      "Jewel Pokémon",
+      SpeciesGroups.MYTHICAL,
       Type.ROCK,
       Type.FAIRY,
       0.7,
@@ -28222,8 +27500,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HOOPA,
       6,
-      SpeciesCategories.MYTHICAL,
-      "Mischief Pokémon",
+      SpeciesGroups.MYTHICAL,
       Type.PSYCHIC,
       Type.GHOST,
       0.5,
@@ -28294,8 +27571,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.VOLCANION,
       6,
-      SpeciesCategories.MYTHICAL,
-      "Steam Pokémon",
+      SpeciesGroups.MYTHICAL,
       Type.FIRE,
       Type.WATER,
       1.7,
@@ -28320,8 +27596,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ROWLET,
       7,
-      SpeciesCategories.COMMON,
-      "Grass Quill Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.FLYING,
       0.3,
@@ -28346,8 +27621,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DARTRIX,
       7,
-      SpeciesCategories.COMMON,
-      "Blade Quill Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.FLYING,
       0.7,
@@ -28372,8 +27646,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DECIDUEYE,
       7,
-      SpeciesCategories.COMMON,
-      "Arrow Quill Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.GHOST,
       1.6,
@@ -28398,8 +27671,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LITTEN,
       7,
-      SpeciesCategories.COMMON,
-      "Fire Cat Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       null,
       0.4,
@@ -28424,8 +27696,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TORRACAT,
       7,
-      SpeciesCategories.COMMON,
-      "Fire Cat Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       null,
       0.7,
@@ -28450,8 +27721,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.INCINEROAR,
       7,
-      SpeciesCategories.COMMON,
-      "Heel Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       Type.DARK,
       1.8,
@@ -28476,8 +27746,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.POPPLIO,
       7,
-      SpeciesCategories.COMMON,
-      "Sea Lion Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.4,
@@ -28502,8 +27771,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BRIONNE,
       7,
-      SpeciesCategories.COMMON,
-      "Pop Star Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.6,
@@ -28528,8 +27796,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PRIMARINA,
       7,
-      SpeciesCategories.COMMON,
-      "Soloist Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.FAIRY,
       1.8,
@@ -28554,8 +27821,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PIKIPEK,
       7,
-      SpeciesCategories.COMMON,
-      "Woodpecker Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.FLYING,
       0.3,
@@ -28580,8 +27846,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TRUMBEAK,
       7,
-      SpeciesCategories.COMMON,
-      "Bugle Beak Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.FLYING,
       0.6,
@@ -28606,8 +27871,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TOUCANNON,
       7,
-      SpeciesCategories.COMMON,
-      "Cannon Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.FLYING,
       1.1,
@@ -28632,8 +27896,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.YUNGOOS,
       7,
-      SpeciesCategories.COMMON,
-      "Loitering Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       0.4,
@@ -28658,8 +27921,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GUMSHOOS,
       7,
-      SpeciesCategories.COMMON,
-      "Stakeout Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       0.7,
@@ -28684,8 +27946,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GRUBBIN,
       7,
-      SpeciesCategories.COMMON,
-      "Larva Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       null,
       0.4,
@@ -28710,8 +27971,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CHARJABUG,
       7,
-      SpeciesCategories.COMMON,
-      "Battery Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.ELECTRIC,
       0.5,
@@ -28736,8 +27996,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.VIKAVOLT,
       7,
-      SpeciesCategories.COMMON,
-      "Stag Beetle Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.ELECTRIC,
       1.5,
@@ -28762,8 +28021,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CRABRAWLER,
       7,
-      SpeciesCategories.COMMON,
-      "Boxing Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIGHTING,
       null,
       0.6,
@@ -28788,8 +28046,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CRABOMINABLE,
       7,
-      SpeciesCategories.COMMON,
-      "Woolly Crab Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIGHTING,
       Type.ICE,
       1.7,
@@ -28814,8 +28071,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ORICORIO,
       7,
-      SpeciesCategories.COMMON,
-      "Dancing Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       Type.FLYING,
       0.6,
@@ -28937,8 +28193,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CUTIEFLY,
       7,
-      SpeciesCategories.COMMON,
-      "Bee Fly Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.FAIRY,
       0.1,
@@ -28963,8 +28218,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.RIBOMBEE,
       7,
-      SpeciesCategories.COMMON,
-      "Bee Fly Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.FAIRY,
       0.2,
@@ -28989,8 +28243,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ROCKRUFF,
       7,
-      SpeciesCategories.COMMON,
-      "Puppy Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       null,
       0.5,
@@ -29064,8 +28317,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LYCANROC,
       7,
-      SpeciesCategories.COMMON,
-      "Wolf Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       null,
       0.8,
@@ -29163,8 +28415,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.WISHIWASHI,
       7,
-      SpeciesCategories.COMMON,
-      "Small Fry Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.2,
@@ -29235,8 +28486,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MAREANIE,
       7,
-      SpeciesCategories.COMMON,
-      "Brutal Star Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       Type.WATER,
       0.4,
@@ -29261,8 +28511,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TOXAPEX,
       7,
-      SpeciesCategories.COMMON,
-      "Brutal Star Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       Type.WATER,
       0.7,
@@ -29287,8 +28536,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MUDBRAY,
       7,
-      SpeciesCategories.COMMON,
-      "Donkey Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       null,
       1,
@@ -29313,8 +28561,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MUDSDALE,
       7,
-      SpeciesCategories.COMMON,
-      "Draft Horse Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       null,
       2.5,
@@ -29339,8 +28586,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DEWPIDER,
       7,
-      SpeciesCategories.COMMON,
-      "Water Bubble Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.BUG,
       0.3,
@@ -29365,8 +28611,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ARAQUANID,
       7,
-      SpeciesCategories.COMMON,
-      "Water Bubble Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.BUG,
       1.8,
@@ -29391,8 +28636,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FOMANTIS,
       7,
-      SpeciesCategories.COMMON,
-      "Sickle Grass Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       0.3,
@@ -29417,8 +28661,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LURANTIS,
       7,
-      SpeciesCategories.COMMON,
-      "Bloom Sickle Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       0.9,
@@ -29443,8 +28686,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MORELULL,
       7,
-      SpeciesCategories.COMMON,
-      "Illuminating Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.FAIRY,
       0.2,
@@ -29469,8 +28711,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SHIINOTIC,
       7,
-      SpeciesCategories.COMMON,
-      "Illuminating Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.FAIRY,
       1,
@@ -29495,8 +28736,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SALANDIT,
       7,
-      SpeciesCategories.COMMON,
-      "Toxic Lizard Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       Type.FIRE,
       0.6,
@@ -29521,8 +28761,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SALAZZLE,
       7,
-      SpeciesCategories.COMMON,
-      "Toxic Lizard Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       Type.FIRE,
       1.2,
@@ -29547,8 +28786,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.STUFFUL,
       7,
-      SpeciesCategories.COMMON,
-      "Flailing Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.FIGHTING,
       0.5,
@@ -29573,8 +28811,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BEWEAR,
       7,
-      SpeciesCategories.COMMON,
-      "Strong Arm Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.FIGHTING,
       2.1,
@@ -29599,8 +28836,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BOUNSWEET,
       7,
-      SpeciesCategories.COMMON,
-      "Fruit Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       0.3,
@@ -29625,8 +28861,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.STEENEE,
       7,
-      SpeciesCategories.COMMON,
-      "Fruit Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       0.7,
@@ -29651,8 +28886,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TSAREENA,
       7,
-      SpeciesCategories.COMMON,
-      "Fruit Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       1.2,
@@ -29677,8 +28911,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.COMFEY,
       7,
-      SpeciesCategories.COMMON,
-      "Posy Picker Pokémon",
+      SpeciesGroups.COMMON,
       Type.FAIRY,
       null,
       0.1,
@@ -29703,8 +28936,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ORANGURU,
       7,
-      SpeciesCategories.COMMON,
-      "Sage Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.PSYCHIC,
       1.5,
@@ -29729,8 +28961,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PASSIMIAN,
       7,
-      SpeciesCategories.COMMON,
-      "Teamwork Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIGHTING,
       null,
       2,
@@ -29755,8 +28986,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.WIMPOD,
       7,
-      SpeciesCategories.COMMON,
-      "Turn Tail Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.WATER,
       0.5,
@@ -29781,8 +29011,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GOLISOPOD,
       7,
-      SpeciesCategories.COMMON,
-      "Hard Scale Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.WATER,
       2,
@@ -29807,8 +29036,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SANDYGAST,
       7,
-      SpeciesCategories.COMMON,
-      "Sand Heap Pokémon",
+      SpeciesGroups.COMMON,
       Type.GHOST,
       Type.GROUND,
       0.5,
@@ -29833,8 +29061,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PALOSSAND,
       7,
-      SpeciesCategories.COMMON,
-      "Sand Castle Pokémon",
+      SpeciesGroups.COMMON,
       Type.GHOST,
       Type.GROUND,
       1.3,
@@ -29859,8 +29086,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PYUKUMUKU,
       7,
-      SpeciesCategories.COMMON,
-      "Sea Cucumber Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.3,
@@ -29885,8 +29111,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TYPE_NULL,
       7,
-      SpeciesCategories.SUBLEGENDARY,
-      "Synthetic Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.NORMAL,
       null,
       1.9,
@@ -29911,8 +29136,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SILVALLY,
       7,
-      SpeciesCategories.SUBLEGENDARY,
-      "Synthetic Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.NORMAL,
       null,
       2.3,
@@ -30319,8 +29543,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MINIOR,
       7,
-      SpeciesCategories.COMMON,
-      "Meteor Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.FLYING,
       0.3,
@@ -30682,8 +29905,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.KOMALA,
       7,
-      SpeciesCategories.COMMON,
-      "Drowsing Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       0.4,
@@ -30708,8 +29930,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TURTONATOR,
       7,
-      SpeciesCategories.COMMON,
-      "Blast Turtle Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       Type.DRAGON,
       2,
@@ -30734,8 +29955,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TOGEDEMARU,
       7,
-      SpeciesCategories.COMMON,
-      "Roly-Poly Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       Type.STEEL,
       0.3,
@@ -30760,8 +29980,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MIMIKYU,
       7,
-      SpeciesCategories.COMMON,
-      "Disguise Pokémon",
+      SpeciesGroups.COMMON,
       Type.GHOST,
       Type.FAIRY,
       0.2,
@@ -30832,8 +30051,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BRUXISH,
       7,
-      SpeciesCategories.COMMON,
-      "Gnash Teeth Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.PSYCHIC,
       0.9,
@@ -30858,8 +30076,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DRAMPA,
       7,
-      SpeciesCategories.COMMON,
-      "Placid Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.DRAGON,
       3,
@@ -30884,8 +30101,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DHELMISE,
       7,
-      SpeciesCategories.COMMON,
-      "Sea Creeper Pokémon",
+      SpeciesGroups.COMMON,
       Type.GHOST,
       Type.GRASS,
       3.9,
@@ -30910,8 +30126,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.JANGMO_O,
       7,
-      SpeciesCategories.COMMON,
-      "Scaly Pokémon",
+      SpeciesGroups.COMMON,
       Type.DRAGON,
       null,
       0.6,
@@ -30936,8 +30151,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HAKAMO_O,
       7,
-      SpeciesCategories.COMMON,
-      "Scaly Pokémon",
+      SpeciesGroups.COMMON,
       Type.DRAGON,
       Type.FIGHTING,
       1.2,
@@ -30962,8 +30176,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.KOMMO_O,
       7,
-      SpeciesCategories.COMMON,
-      "Scaly Pokémon",
+      SpeciesGroups.COMMON,
       Type.DRAGON,
       Type.FIGHTING,
       1.6,
@@ -30988,8 +30201,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TAPU_KOKO,
       7,
-      SpeciesCategories.SUBLEGENDARY,
-      "Land Spirit Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.ELECTRIC,
       Type.FAIRY,
       1.8,
@@ -31014,8 +30226,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TAPU_LELE,
       7,
-      SpeciesCategories.SUBLEGENDARY,
-      "Land Spirit Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.PSYCHIC,
       Type.FAIRY,
       1.2,
@@ -31040,8 +30251,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TAPU_BULU,
       7,
-      SpeciesCategories.SUBLEGENDARY,
-      "Land Spirit Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.GRASS,
       Type.FAIRY,
       1.9,
@@ -31066,8 +30276,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TAPU_FINI,
       7,
-      SpeciesCategories.SUBLEGENDARY,
-      "Land Spirit Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.WATER,
       Type.FAIRY,
       1.3,
@@ -31092,8 +30301,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.COSMOG,
       7,
-      SpeciesCategories.LEGENDARY,
-      "Nebula Pokémon",
+      SpeciesGroups.LEGENDARY,
       Type.PSYCHIC,
       null,
       0.2,
@@ -31118,8 +30326,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.COSMOEM,
       7,
-      SpeciesCategories.LEGENDARY,
-      "Protostar Pokémon",
+      SpeciesGroups.LEGENDARY,
       Type.PSYCHIC,
       null,
       0.1,
@@ -31144,8 +30351,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SOLGALEO,
       7,
-      SpeciesCategories.LEGENDARY,
-      "Sunne Pokémon",
+      SpeciesGroups.LEGENDARY,
       Type.PSYCHIC,
       Type.STEEL,
       3.4,
@@ -31170,8 +30376,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LUNALA,
       7,
-      SpeciesCategories.LEGENDARY,
-      "Moone Pokémon",
+      SpeciesGroups.LEGENDARY,
       Type.PSYCHIC,
       Type.GHOST,
       4,
@@ -31196,8 +30401,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.NIHILEGO,
       7,
-      SpeciesCategories.ULTRA_BEAST,
-      "Parasite Pokémon",
+      SpeciesGroups.ULTRA_BEAST,
       Type.ROCK,
       Type.POISON,
       1.2,
@@ -31222,8 +30426,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BUZZWOLE,
       7,
-      SpeciesCategories.ULTRA_BEAST,
-      "Swollen Pokémon",
+      SpeciesGroups.ULTRA_BEAST,
       Type.BUG,
       Type.FIGHTING,
       2.4,
@@ -31248,8 +30451,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PHEROMOSA,
       7,
-      SpeciesCategories.ULTRA_BEAST,
-      "Lissome Pokémon",
+      SpeciesGroups.ULTRA_BEAST,
       Type.BUG,
       Type.FIGHTING,
       1.8,
@@ -31274,8 +30476,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.XURKITREE,
       7,
-      SpeciesCategories.ULTRA_BEAST,
-      "Glowing Pokémon",
+      SpeciesGroups.ULTRA_BEAST,
       Type.ELECTRIC,
       null,
       3.8,
@@ -31300,8 +30501,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CELESTEELA,
       7,
-      SpeciesCategories.ULTRA_BEAST,
-      "Launch Pokémon",
+      SpeciesGroups.ULTRA_BEAST,
       Type.STEEL,
       Type.FLYING,
       9.2,
@@ -31326,8 +30526,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.KARTANA,
       7,
-      SpeciesCategories.ULTRA_BEAST,
-      "Drawn Sword Pokémon",
+      SpeciesGroups.ULTRA_BEAST,
       Type.GRASS,
       Type.STEEL,
       0.3,
@@ -31352,8 +30551,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GUZZLORD,
       7,
-      SpeciesCategories.ULTRA_BEAST,
-      "Junkivore Pokémon",
+      SpeciesGroups.ULTRA_BEAST,
       Type.DARK,
       Type.DRAGON,
       5.5,
@@ -31378,8 +30576,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.NECROZMA,
       7,
-      SpeciesCategories.LEGENDARY,
-      "Prism Pokémon",
+      SpeciesGroups.LEGENDARY,
       Type.PSYCHIC,
       null,
       2.4,
@@ -31492,8 +30689,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MAGEARNA,
       7,
-      SpeciesCategories.MYTHICAL,
-      "Artificial Pokémon",
+      SpeciesGroups.MYTHICAL,
       Type.STEEL,
       Type.FAIRY,
       1,
@@ -31567,8 +30763,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MARSHADOW,
       7,
-      SpeciesCategories.MYTHICAL,
-      "Gloomdweller Pokémon",
+      SpeciesGroups.MYTHICAL,
       Type.FIGHTING,
       Type.GHOST,
       0.7,
@@ -31639,8 +30834,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.POIPOLE,
       7,
-      SpeciesCategories.ULTRA_BEAST,
-      "Poison Pin Pokémon",
+      SpeciesGroups.ULTRA_BEAST,
       Type.POISON,
       null,
       0.6,
@@ -31665,8 +30859,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.NAGANADEL,
       7,
-      SpeciesCategories.ULTRA_BEAST,
-      "Poison Pin Pokémon",
+      SpeciesGroups.ULTRA_BEAST,
       Type.POISON,
       Type.DRAGON,
       3.6,
@@ -31691,8 +30884,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.STAKATAKA,
       7,
-      SpeciesCategories.ULTRA_BEAST,
-      "Rampart Pokémon",
+      SpeciesGroups.ULTRA_BEAST,
       Type.ROCK,
       Type.STEEL,
       5.5,
@@ -31717,8 +30909,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BLACEPHALON,
       7,
-      SpeciesCategories.ULTRA_BEAST,
-      "Fireworks Pokémon",
+      SpeciesGroups.ULTRA_BEAST,
       Type.FIRE,
       Type.GHOST,
       1.8,
@@ -31743,8 +30934,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ZERAORA,
       7,
-      SpeciesCategories.MYTHICAL,
-      "Thunderclap Pokémon",
+      SpeciesGroups.MYTHICAL,
       Type.ELECTRIC,
       null,
       1.5,
@@ -31769,8 +30959,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MELTAN,
       7,
-      SpeciesCategories.MYTHICAL,
-      "Hex Nut Pokémon",
+      SpeciesGroups.MYTHICAL,
       Type.STEEL,
       null,
       0.2,
@@ -31795,8 +30984,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MELMETAL,
       7,
-      SpeciesCategories.MYTHICAL,
-      "Hex Nut Pokémon",
+      SpeciesGroups.MYTHICAL,
       Type.STEEL,
       null,
       2.5,
@@ -31867,8 +31055,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GROOKEY,
       8,
-      SpeciesCategories.COMMON,
-      "Chimp Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       0.3,
@@ -31893,8 +31080,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.THWACKEY,
       8,
-      SpeciesCategories.COMMON,
-      "Beat Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       0.7,
@@ -31919,8 +31105,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.RILLABOOM,
       8,
-      SpeciesCategories.COMMON,
-      "Drummer Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       2.1,
@@ -31991,8 +31176,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SCORBUNNY,
       8,
-      SpeciesCategories.COMMON,
-      "Rabbit Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       null,
       0.3,
@@ -32017,8 +31201,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.RABOOT,
       8,
-      SpeciesCategories.COMMON,
-      "Rabbit Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       null,
       0.6,
@@ -32043,8 +31226,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CINDERACE,
       8,
-      SpeciesCategories.COMMON,
-      "Striker Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       null,
       1.4,
@@ -32115,8 +31297,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SOBBLE,
       8,
-      SpeciesCategories.COMMON,
-      "Water Lizard Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.3,
@@ -32141,8 +31322,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DRIZZILE,
       8,
-      SpeciesCategories.COMMON,
-      "Water Lizard Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.7,
@@ -32167,8 +31347,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.INTELEON,
       8,
-      SpeciesCategories.COMMON,
-      "Secret Agent Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       1.9,
@@ -32239,8 +31418,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SKWOVET,
       8,
-      SpeciesCategories.COMMON,
-      "Cheeky Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       0.3,
@@ -32265,8 +31443,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GREEDENT,
       8,
-      SpeciesCategories.COMMON,
-      "Greedy Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       0.6,
@@ -32291,8 +31468,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ROOKIDEE,
       8,
-      SpeciesCategories.COMMON,
-      "Tiny Bird Pokémon",
+      SpeciesGroups.COMMON,
       Type.FLYING,
       null,
       0.2,
@@ -32317,8 +31493,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CORVISQUIRE,
       8,
-      SpeciesCategories.COMMON,
-      "Raven Pokémon",
+      SpeciesGroups.COMMON,
       Type.FLYING,
       null,
       0.8,
@@ -32343,8 +31518,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CORVIKNIGHT,
       8,
-      SpeciesCategories.COMMON,
-      "Raven Pokémon",
+      SpeciesGroups.COMMON,
       Type.FLYING,
       Type.STEEL,
       2.2,
@@ -32415,8 +31589,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BLIPBUG,
       8,
-      SpeciesCategories.COMMON,
-      "Larva Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       null,
       0.4,
@@ -32441,8 +31614,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DOTTLER,
       8,
-      SpeciesCategories.COMMON,
-      "Radome Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.PSYCHIC,
       0.4,
@@ -32467,8 +31639,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ORBEETLE,
       8,
-      SpeciesCategories.COMMON,
-      "Seven Spot Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.PSYCHIC,
       0.4,
@@ -32539,8 +31710,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.NICKIT,
       8,
-      SpeciesCategories.COMMON,
-      "Fox Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       null,
       0.6,
@@ -32565,8 +31735,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.THIEVUL,
       8,
-      SpeciesCategories.COMMON,
-      "Fox Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       null,
       1.2,
@@ -32591,8 +31760,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GOSSIFLEUR,
       8,
-      SpeciesCategories.COMMON,
-      "Flowering Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       0.4,
@@ -32617,8 +31785,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ELDEGOSS,
       8,
-      SpeciesCategories.COMMON,
-      "Cotton Bloom Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       0.5,
@@ -32643,8 +31810,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.WOOLOO,
       8,
-      SpeciesCategories.COMMON,
-      "Sheep Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       0.6,
@@ -32669,8 +31835,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DUBWOOL,
       8,
-      SpeciesCategories.COMMON,
-      "Sheep Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       1.3,
@@ -32695,8 +31860,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CHEWTLE,
       8,
-      SpeciesCategories.COMMON,
-      "Snapping Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.3,
@@ -32721,8 +31885,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DREDNAW,
       8,
-      SpeciesCategories.COMMON,
-      "Bite Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.ROCK,
       1,
@@ -32793,8 +31956,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.YAMPER,
       8,
-      SpeciesCategories.COMMON,
-      "Puppy Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       null,
       0.3,
@@ -32819,8 +31981,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BOLTUND,
       8,
-      SpeciesCategories.COMMON,
-      "Dog Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       null,
       1,
@@ -32845,8 +32006,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ROLYCOLY,
       8,
-      SpeciesCategories.COMMON,
-      "Coal Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       null,
       0.3,
@@ -32871,8 +32031,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CARKOL,
       8,
-      SpeciesCategories.COMMON,
-      "Coal Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.FIRE,
       1.1,
@@ -32897,8 +32056,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.COALOSSAL,
       8,
-      SpeciesCategories.COMMON,
-      "Coal Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.FIRE,
       2.8,
@@ -32969,8 +32127,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.APPLIN,
       8,
-      SpeciesCategories.COMMON,
-      "Apple Core Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.DRAGON,
       0.2,
@@ -32995,8 +32152,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FLAPPLE,
       8,
-      SpeciesCategories.COMMON,
-      "Apple Wing Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.DRAGON,
       0.3,
@@ -33067,8 +32223,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.APPLETUN,
       8,
-      SpeciesCategories.COMMON,
-      "Apple Nectar Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.DRAGON,
       0.4,
@@ -33139,8 +32294,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SILICOBRA,
       8,
-      SpeciesCategories.COMMON,
-      "Sand Snake Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       null,
       2.2,
@@ -33165,8 +32319,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SANDACONDA,
       8,
-      SpeciesCategories.COMMON,
-      "Sand Snake Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       null,
       3.8,
@@ -33237,8 +32390,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CRAMORANT,
       8,
-      SpeciesCategories.COMMON,
-      "Gulp Pokémon",
+      SpeciesGroups.COMMON,
       Type.FLYING,
       Type.WATER,
       0.8,
@@ -33330,8 +32482,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ARROKUDA,
       8,
-      SpeciesCategories.COMMON,
-      "Rush Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.5,
@@ -33356,8 +32507,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BARRASKEWDA,
       8,
-      SpeciesCategories.COMMON,
-      "Skewer Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       1.3,
@@ -33382,8 +32532,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TOXEL,
       8,
-      SpeciesCategories.COMMON,
-      "Baby Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       Type.POISON,
       0.4,
@@ -33408,8 +32557,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TOXTRICITY,
       8,
-      SpeciesCategories.COMMON,
-      "Punk Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       Type.POISON,
       1.6,
@@ -33504,8 +32652,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SIZZLIPEDE,
       8,
-      SpeciesCategories.COMMON,
-      "Radiator Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       Type.BUG,
       0.7,
@@ -33530,8 +32677,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CENTISKORCH,
       8,
-      SpeciesCategories.COMMON,
-      "Radiator Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       Type.BUG,
       3,
@@ -33602,8 +32748,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CLOBBOPUS,
       8,
-      SpeciesCategories.COMMON,
-      "Tantrum Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIGHTING,
       null,
       0.6,
@@ -33628,8 +32773,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GRAPPLOCT,
       8,
-      SpeciesCategories.COMMON,
-      "Jujitsu Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIGHTING,
       null,
       1.6,
@@ -33654,8 +32798,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SINISTEA,
       8,
-      SpeciesCategories.COMMON,
-      "Black Tea Pokémon",
+      SpeciesGroups.COMMON,
       Type.GHOST,
       null,
       0.1,
@@ -33729,8 +32872,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.POLTEAGEIST,
       8,
-      SpeciesCategories.COMMON,
-      "Black Tea Pokémon",
+      SpeciesGroups.COMMON,
       Type.GHOST,
       null,
       0.2,
@@ -33804,8 +32946,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HATENNA,
       8,
-      SpeciesCategories.COMMON,
-      "Calm Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       null,
       0.4,
@@ -33830,8 +32971,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HATTREM,
       8,
-      SpeciesCategories.COMMON,
-      "Serene Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       null,
       0.6,
@@ -33856,8 +32996,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HATTERENE,
       8,
-      SpeciesCategories.COMMON,
-      "Silent Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       Type.FAIRY,
       2.1,
@@ -33928,8 +33067,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.IMPIDIMP,
       8,
-      SpeciesCategories.COMMON,
-      "Wily Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       Type.FAIRY,
       0.4,
@@ -33954,8 +33092,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MORGREM,
       8,
-      SpeciesCategories.COMMON,
-      "Devious Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       Type.FAIRY,
       0.8,
@@ -33980,8 +33117,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GRIMMSNARL,
       8,
-      SpeciesCategories.COMMON,
-      "Bulk Up Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       Type.FAIRY,
       1.5,
@@ -34052,8 +33188,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.OBSTAGOON,
       8,
-      SpeciesCategories.COMMON,
-      "Blocking Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       Type.NORMAL,
       1.6,
@@ -34078,8 +33213,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PERRSERKER,
       8,
-      SpeciesCategories.COMMON,
-      "Viking Pokémon",
+      SpeciesGroups.COMMON,
       Type.STEEL,
       null,
       0.8,
@@ -34104,8 +33238,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CURSOLA,
       8,
-      SpeciesCategories.COMMON,
-      "Coral Pokémon",
+      SpeciesGroups.COMMON,
       Type.GHOST,
       null,
       1,
@@ -34130,8 +33263,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SIRFETCHD,
       8,
-      SpeciesCategories.COMMON,
-      "Wild Duck Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIGHTING,
       null,
       0.8,
@@ -34156,8 +33288,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MR_RIME,
       8,
-      SpeciesCategories.COMMON,
-      "Comedian Pokémon",
+      SpeciesGroups.COMMON,
       Type.ICE,
       Type.PSYCHIC,
       1.5,
@@ -34182,8 +33313,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.RUNERIGUS,
       8,
-      SpeciesCategories.COMMON,
-      "Grudge Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       Type.GHOST,
       1.6,
@@ -34208,8 +33338,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MILCERY,
       8,
-      SpeciesCategories.COMMON,
-      "Cream Pokémon",
+      SpeciesGroups.COMMON,
       Type.FAIRY,
       null,
       0.2,
@@ -34234,8 +33363,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ALCREMIE,
       8,
-      SpeciesCategories.COMMON,
-      "Cream Pokémon",
+      SpeciesGroups.COMMON,
       Type.FAIRY,
       null,
       0.3,
@@ -34498,8 +33626,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FALINKS,
       8,
-      SpeciesCategories.COMMON,
-      "Formation Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIGHTING,
       null,
       3,
@@ -34524,8 +33651,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PINCURCHIN,
       8,
-      SpeciesCategories.COMMON,
-      "Sea Urchin Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       null,
       0.3,
@@ -34550,8 +33676,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SNOM,
       8,
-      SpeciesCategories.COMMON,
-      "Worm Pokémon",
+      SpeciesGroups.COMMON,
       Type.ICE,
       Type.BUG,
       0.3,
@@ -34576,8 +33701,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FROSMOTH,
       8,
-      SpeciesCategories.COMMON,
-      "Frost Moth Pokémon",
+      SpeciesGroups.COMMON,
       Type.ICE,
       Type.BUG,
       1.3,
@@ -34602,8 +33726,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.STONJOURNER,
       8,
-      SpeciesCategories.COMMON,
-      "Big Rock Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       null,
       2.5,
@@ -34628,8 +33751,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.EISCUE,
       8,
-      SpeciesCategories.COMMON,
-      "Penguin Pokémon",
+      SpeciesGroups.COMMON,
       Type.ICE,
       null,
       1.4,
@@ -34700,8 +33822,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.INDEEDEE,
       8,
-      SpeciesCategories.COMMON,
-      "Emotion Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       Type.NORMAL,
       0.9,
@@ -34775,8 +33896,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MORPEKO,
       8,
-      SpeciesCategories.COMMON,
-      "Two-Sided Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       Type.DARK,
       0.3,
@@ -34847,8 +33967,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CUFANT,
       8,
-      SpeciesCategories.COMMON,
-      "Copperderm Pokémon",
+      SpeciesGroups.COMMON,
       Type.STEEL,
       null,
       1.2,
@@ -34873,8 +33992,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.COPPERAJAH,
       8,
-      SpeciesCategories.COMMON,
-      "Copperderm Pokémon",
+      SpeciesGroups.COMMON,
       Type.STEEL,
       null,
       3,
@@ -34945,8 +34063,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DRACOZOLT,
       8,
-      SpeciesCategories.COMMON,
-      "Fossil Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       Type.DRAGON,
       1.8,
@@ -34971,8 +34088,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ARCTOZOLT,
       8,
-      SpeciesCategories.COMMON,
-      "Fossil Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       Type.ICE,
       2.3,
@@ -34997,8 +34113,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DRACOVISH,
       8,
-      SpeciesCategories.COMMON,
-      "Fossil Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.DRAGON,
       2.3,
@@ -35023,8 +34138,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ARCTOVISH,
       8,
-      SpeciesCategories.COMMON,
-      "Fossil Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.ICE,
       2,
@@ -35049,8 +34163,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DURALUDON,
       8,
-      SpeciesCategories.COMMON,
-      "Alloy Pokémon",
+      SpeciesGroups.COMMON,
       Type.STEEL,
       Type.DRAGON,
       1.8,
@@ -35121,8 +34234,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DREEPY,
       8,
-      SpeciesCategories.COMMON,
-      "Lingering Pokémon",
+      SpeciesGroups.COMMON,
       Type.DRAGON,
       Type.GHOST,
       0.5,
@@ -35147,8 +34259,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DRAKLOAK,
       8,
-      SpeciesCategories.COMMON,
-      "Caretaker Pokémon",
+      SpeciesGroups.COMMON,
       Type.DRAGON,
       Type.GHOST,
       1.4,
@@ -35173,8 +34284,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DRAGAPULT,
       8,
-      SpeciesCategories.COMMON,
-      "Stealth Pokémon",
+      SpeciesGroups.COMMON,
       Type.DRAGON,
       Type.GHOST,
       3,
@@ -35199,8 +34309,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ZACIAN,
       8,
-      SpeciesCategories.LEGENDARY,
-      "Warrior Pokémon",
+      SpeciesGroups.LEGENDARY,
       Type.FAIRY,
       null,
       2.8,
@@ -35271,8 +34380,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ZAMAZENTA,
       8,
-      SpeciesCategories.LEGENDARY,
-      "Warrior Pokémon",
+      SpeciesGroups.LEGENDARY,
       Type.FIGHTING,
       null,
       2.9,
@@ -35343,8 +34451,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ETERNATUS,
       8,
-      SpeciesCategories.LEGENDARY,
-      "Gigantic Pokémon",
+      SpeciesGroups.LEGENDARY,
       Type.POISON,
       Type.DRAGON,
       20,
@@ -35415,8 +34522,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.KUBFU,
       8,
-      SpeciesCategories.SUBLEGENDARY,
-      "Wushu Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.FIGHTING,
       null,
       0.6,
@@ -35441,8 +34547,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.URSHIFU,
       8,
-      SpeciesCategories.SUBLEGENDARY,
-      "Wushu Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.FIGHTING,
       Type.DARK,
       1.9,
@@ -35558,8 +34663,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ZARUDE,
       8,
-      SpeciesCategories.MYTHICAL,
-      "Rogue Monkey Pokémon",
+      SpeciesGroups.MYTHICAL,
       Type.DARK,
       Type.GRASS,
       1.8,
@@ -35633,8 +34737,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.REGIELEKI,
       8,
-      SpeciesCategories.SUBLEGENDARY,
-      "Electron Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.ELECTRIC,
       null,
       1.2,
@@ -35659,8 +34762,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.REGIDRAGO,
       8,
-      SpeciesCategories.SUBLEGENDARY,
-      "Dragon Orb Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.DRAGON,
       null,
       2.1,
@@ -35685,8 +34787,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GLASTRIER,
       8,
-      SpeciesCategories.SUBLEGENDARY,
-      "Wild Horse Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.ICE,
       null,
       2.2,
@@ -35711,8 +34812,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SPECTRIER,
       8,
-      SpeciesCategories.SUBLEGENDARY,
-      "Swift Horse Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.GHOST,
       null,
       2,
@@ -35737,8 +34837,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CALYREX,
       8,
-      SpeciesCategories.LEGENDARY,
-      "King Pokémon",
+      SpeciesGroups.LEGENDARY,
       Type.PSYCHIC,
       Type.GRASS,
       1.1,
@@ -35830,8 +34929,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.WYRDEER,
       8,
-      SpeciesCategories.COMMON,
-      "Big Horn Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.PSYCHIC,
       1.8,
@@ -35856,8 +34954,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.KLEAVOR,
       8,
-      SpeciesCategories.COMMON,
-      "Axe Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.ROCK,
       1.8,
@@ -35882,8 +34979,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.URSALUNA,
       8,
-      SpeciesCategories.COMMON,
-      "Peat Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       Type.NORMAL,
       2.4,
@@ -35908,8 +35004,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BASCULEGION,
       8,
-      SpeciesCategories.COMMON,
-      "Big Fish Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.GHOST,
       3,
@@ -35983,8 +35078,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SNEASLER,
       8,
-      SpeciesCategories.COMMON,
-      "Free Climb Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIGHTING,
       Type.POISON,
       1.3,
@@ -36009,8 +35103,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.OVERQWIL,
       8,
-      SpeciesCategories.COMMON,
-      "Pin Cluster Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       Type.POISON,
       2.5,
@@ -36035,8 +35128,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ENAMORUS,
       8,
-      SpeciesCategories.SUBLEGENDARY,
-      "Love-Hate Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.FAIRY,
       Type.FLYING,
       1.6,
@@ -36107,8 +35199,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SPRIGATITO,
       9,
-      SpeciesCategories.COMMON,
-      "Grass Cat Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       0.4,
@@ -36133,8 +35224,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FLORAGATO,
       9,
-      SpeciesCategories.COMMON,
-      "Grass Cat Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       0.9,
@@ -36159,8 +35249,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MEOWSCARADA,
       9,
-      SpeciesCategories.COMMON,
-      "Magician Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.DARK,
       1.5,
@@ -36185,8 +35274,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FUECOCO,
       9,
-      SpeciesCategories.COMMON,
-      "Fire Croc Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       null,
       0.4,
@@ -36211,8 +35299,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CROCALOR,
       9,
-      SpeciesCategories.COMMON,
-      "Fire Croc Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       null,
       1,
@@ -36237,8 +35324,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SKELEDIRGE,
       9,
-      SpeciesCategories.COMMON,
-      "Singer Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       Type.GHOST,
       1.6,
@@ -36263,8 +35349,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.QUAXLY,
       9,
-      SpeciesCategories.COMMON,
-      "Duckling Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       0.5,
@@ -36289,8 +35374,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.QUAXWELL,
       9,
-      SpeciesCategories.COMMON,
-      "Practicing Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       1.2,
@@ -36315,8 +35399,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.QUAQUAVAL,
       9,
-      SpeciesCategories.COMMON,
-      "Dancer Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.FIGHTING,
       1.8,
@@ -36341,8 +35424,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LECHONK,
       9,
-      SpeciesCategories.COMMON,
-      "Hog Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       0.5,
@@ -36367,8 +35449,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.OINKOLOGNE,
       9,
-      SpeciesCategories.COMMON,
-      "Hog Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       1,
@@ -36442,8 +35523,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TAROUNTULA,
       9,
-      SpeciesCategories.COMMON,
-      "String Ball Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       null,
       0.3,
@@ -36468,8 +35548,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SPIDOPS,
       9,
-      SpeciesCategories.COMMON,
-      "Trap Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       null,
       1,
@@ -36494,8 +35573,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.NYMBLE,
       9,
-      SpeciesCategories.COMMON,
-      "Grasshopper Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       null,
       0.2,
@@ -36520,8 +35598,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.LOKIX,
       9,
-      SpeciesCategories.COMMON,
-      "Grasshopper Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.DARK,
       1,
@@ -36546,8 +35623,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PAWMI,
       9,
-      SpeciesCategories.COMMON,
-      "Mouse Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       null,
       0.3,
@@ -36572,8 +35648,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PAWMO,
       9,
-      SpeciesCategories.COMMON,
-      "Mouse Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       Type.FIGHTING,
       0.4,
@@ -36598,8 +35673,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PAWMOT,
       9,
-      SpeciesCategories.COMMON,
-      "Hands-On Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       Type.FIGHTING,
       0.9,
@@ -36624,8 +35698,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TANDEMAUS,
       9,
-      SpeciesCategories.COMMON,
-      "Couple Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       0.3,
@@ -36650,8 +35723,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MAUSHOLD,
       9,
-      SpeciesCategories.COMMON,
-      "Family Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       0.3,
@@ -36719,8 +35791,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FIDOUGH,
       9,
-      SpeciesCategories.COMMON,
-      "Puppy Pokémon",
+      SpeciesGroups.COMMON,
       Type.FAIRY,
       null,
       0.3,
@@ -36745,8 +35816,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DACHSBUN,
       9,
-      SpeciesCategories.COMMON,
-      "Dog Pokémon",
+      SpeciesGroups.COMMON,
       Type.FAIRY,
       null,
       0.5,
@@ -36771,8 +35841,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SMOLIV,
       9,
-      SpeciesCategories.COMMON,
-      "Olive Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.NORMAL,
       0.3,
@@ -36797,8 +35866,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DOLLIV,
       9,
-      SpeciesCategories.COMMON,
-      "Olive Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.NORMAL,
       0.6,
@@ -36823,8 +35891,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ARBOLIVA,
       9,
-      SpeciesCategories.COMMON,
-      "Olive Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.NORMAL,
       1.4,
@@ -36849,8 +35916,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SQUAWKABILLY,
       9,
-      SpeciesCategories.COMMON,
-      "Parrot Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.FLYING,
       0.6,
@@ -36972,8 +36038,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.NACLI,
       9,
-      SpeciesCategories.COMMON,
-      "Rock Salt Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       null,
       0.4,
@@ -36998,8 +36063,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.NACLSTACK,
       9,
-      SpeciesCategories.COMMON,
-      "Rock Salt Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       null,
       0.6,
@@ -37024,8 +36088,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GARGANACL,
       9,
-      SpeciesCategories.COMMON,
-      "Rock Salt Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       null,
       2.3,
@@ -37050,8 +36113,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CHARCADET,
       9,
-      SpeciesCategories.COMMON,
-      "Fire Child Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       null,
       0.6,
@@ -37076,8 +36138,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ARMAROUGE,
       9,
-      SpeciesCategories.COMMON,
-      "Fire Warrior Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       Type.PSYCHIC,
       1.5,
@@ -37102,8 +36163,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CERULEDGE,
       9,
-      SpeciesCategories.COMMON,
-      "Fire Blades Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       Type.GHOST,
       1.6,
@@ -37128,8 +36188,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TADBULB,
       9,
-      SpeciesCategories.COMMON,
-      "EleTadpole Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       null,
       0.3,
@@ -37154,8 +36213,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BELLIBOLT,
       9,
-      SpeciesCategories.COMMON,
-      "EleFrog Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       null,
       1.2,
@@ -37180,8 +36238,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.WATTREL,
       9,
-      SpeciesCategories.COMMON,
-      "Storm Petrel Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       Type.FLYING,
       0.4,
@@ -37206,8 +36263,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.KILOWATTREL,
       9,
-      SpeciesCategories.COMMON,
-      "Frigatebird Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       Type.FLYING,
       1.4,
@@ -37232,8 +36288,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MASCHIFF,
       9,
-      SpeciesCategories.COMMON,
-      "Rascal Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       null,
       0.5,
@@ -37258,8 +36313,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MABOSSTIFF,
       9,
-      SpeciesCategories.COMMON,
-      "Boss Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       null,
       1.1,
@@ -37284,8 +36338,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SHROODLE,
       9,
-      SpeciesCategories.COMMON,
-      "Toxic Mouse Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       Type.NORMAL,
       0.2,
@@ -37310,8 +36363,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GRAFAIAI,
       9,
-      SpeciesCategories.COMMON,
-      "Toxic Monkey Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       Type.NORMAL,
       0.7,
@@ -37336,8 +36388,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BRAMBLIN,
       9,
-      SpeciesCategories.COMMON,
-      "Tumbleweed Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.GHOST,
       0.6,
@@ -37362,8 +36413,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BRAMBLEGHAST,
       9,
-      SpeciesCategories.COMMON,
-      "Tumbleweed Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.GHOST,
       1.2,
@@ -37388,8 +36438,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TOEDSCOOL,
       9,
-      SpeciesCategories.COMMON,
-      "Woodear Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       Type.GRASS,
       0.9,
@@ -37414,8 +36463,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TOEDSCRUEL,
       9,
-      SpeciesCategories.COMMON,
-      "Woodear Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       Type.GRASS,
       1.9,
@@ -37440,8 +36488,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.KLAWF,
       9,
-      SpeciesCategories.COMMON,
-      "Ambush Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       null,
       1.3,
@@ -37466,8 +36513,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CAPSAKID,
       9,
-      SpeciesCategories.COMMON,
-      "Spicy Pepper Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       null,
       0.3,
@@ -37492,8 +36538,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SCOVILLAIN,
       9,
-      SpeciesCategories.COMMON,
-      "Spicy Pepper Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.FIRE,
       0.9,
@@ -37518,8 +36563,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.RELLOR,
       9,
-      SpeciesCategories.COMMON,
-      "Rolling Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       null,
       0.2,
@@ -37544,8 +36588,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.RABSCA,
       9,
-      SpeciesCategories.COMMON,
-      "Rolling Pokémon",
+      SpeciesGroups.COMMON,
       Type.BUG,
       Type.PSYCHIC,
       0.3,
@@ -37570,8 +36613,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FLITTLE,
       9,
-      SpeciesCategories.COMMON,
-      "Frill Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       null,
       0.2,
@@ -37596,8 +36638,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ESPATHRA,
       9,
-      SpeciesCategories.COMMON,
-      "Ostrich Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       null,
       1.9,
@@ -37622,8 +36663,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TINKATINK,
       9,
-      SpeciesCategories.COMMON,
-      "Metalsmith Pokémon",
+      SpeciesGroups.COMMON,
       Type.FAIRY,
       Type.STEEL,
       0.4,
@@ -37648,8 +36688,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TINKATUFF,
       9,
-      SpeciesCategories.COMMON,
-      "Hammer Pokémon",
+      SpeciesGroups.COMMON,
       Type.FAIRY,
       Type.STEEL,
       0.7,
@@ -37674,8 +36713,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TINKATON,
       9,
-      SpeciesCategories.COMMON,
-      "Hammer Pokémon",
+      SpeciesGroups.COMMON,
       Type.FAIRY,
       Type.STEEL,
       0.7,
@@ -37700,8 +36738,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.WIGLETT,
       9,
-      SpeciesCategories.COMMON,
-      "Garden Eel Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       1.2,
@@ -37726,8 +36763,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.WUGTRIO,
       9,
-      SpeciesCategories.COMMON,
-      "Garden Eel Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       1.2,
@@ -37752,8 +36788,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BOMBIRDIER,
       9,
-      SpeciesCategories.COMMON,
-      "Item Drop Pokémon",
+      SpeciesGroups.COMMON,
       Type.FLYING,
       Type.DARK,
       1.5,
@@ -37778,8 +36813,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FINIZEN,
       9,
-      SpeciesCategories.COMMON,
-      "Dolphin Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       1.3,
@@ -37804,8 +36838,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PALAFIN,
       9,
-      SpeciesCategories.COMMON,
-      "Dolphin Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       1.3,
@@ -37876,8 +36909,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.VAROOM,
       9,
-      SpeciesCategories.COMMON,
-      "Single-Cyl Pokémon",
+      SpeciesGroups.COMMON,
       Type.STEEL,
       Type.POISON,
       1,
@@ -37902,8 +36934,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.REVAVROOM,
       9,
-      SpeciesCategories.COMMON,
-      "Multi-Cyl Pokémon",
+      SpeciesGroups.COMMON,
       Type.STEEL,
       Type.POISON,
       1.8,
@@ -38058,8 +37089,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CYCLIZAR,
       9,
-      SpeciesCategories.COMMON,
-      "Mount Pokémon",
+      SpeciesGroups.COMMON,
       Type.DRAGON,
       Type.NORMAL,
       1.6,
@@ -38084,8 +37114,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ORTHWORM,
       9,
-      SpeciesCategories.COMMON,
-      "Earthworm Pokémon",
+      SpeciesGroups.COMMON,
       Type.STEEL,
       null,
       2.5,
@@ -38110,8 +37139,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GLIMMET,
       9,
-      SpeciesCategories.COMMON,
-      "Ore Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.POISON,
       0.7,
@@ -38136,8 +37164,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GLIMMORA,
       9,
-      SpeciesCategories.COMMON,
-      "Ore Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.POISON,
       1.5,
@@ -38162,8 +37189,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GREAVARD,
       9,
-      SpeciesCategories.COMMON,
-      "Ghost Dog Pokémon",
+      SpeciesGroups.COMMON,
       Type.GHOST,
       null,
       0.6,
@@ -38188,8 +37214,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HOUNDSTONE,
       9,
-      SpeciesCategories.COMMON,
-      "Ghost Dog Pokémon",
+      SpeciesGroups.COMMON,
       Type.GHOST,
       null,
       2,
@@ -38214,8 +37239,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FLAMIGO,
       9,
-      SpeciesCategories.COMMON,
-      "Synchronize Pokémon",
+      SpeciesGroups.COMMON,
       Type.FLYING,
       Type.FIGHTING,
       1.6,
@@ -38240,8 +37264,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CETODDLE,
       9,
-      SpeciesCategories.COMMON,
-      "Terra Whale Pokémon",
+      SpeciesGroups.COMMON,
       Type.ICE,
       null,
       1.2,
@@ -38266,8 +37289,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CETITAN,
       9,
-      SpeciesCategories.COMMON,
-      "Terra Whale Pokémon",
+      SpeciesGroups.COMMON,
       Type.ICE,
       null,
       4.5,
@@ -38292,8 +37314,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.VELUZA,
       9,
-      SpeciesCategories.COMMON,
-      "Jettison Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.PSYCHIC,
       2.5,
@@ -38318,8 +37339,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DONDOZO,
       9,
-      SpeciesCategories.COMMON,
-      "Big Catfish Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       null,
       12,
@@ -38344,8 +37364,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TATSUGIRI,
       9,
-      SpeciesCategories.COMMON,
-      "Mimicry Pokémon",
+      SpeciesGroups.COMMON,
       Type.DRAGON,
       Type.WATER,
       0.3,
@@ -38443,8 +37462,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ANNIHILAPE,
       9,
-      SpeciesCategories.COMMON,
-      "Rage Monkey Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIGHTING,
       Type.GHOST,
       1.2,
@@ -38469,8 +37487,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CLODSIRE,
       9,
-      SpeciesCategories.COMMON,
-      "Spiny Fish Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       Type.GROUND,
       1.8,
@@ -38495,8 +37512,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FARIGIRAF,
       9,
-      SpeciesCategories.COMMON,
-      "Long Neck Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.PSYCHIC,
       3.2,
@@ -38521,8 +37537,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DUDUNSPARCE,
       9,
-      SpeciesCategories.COMMON,
-      "Land Snake Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       null,
       3.6,
@@ -38592,8 +37607,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.KINGAMBIT,
       9,
-      SpeciesCategories.COMMON,
-      "Big Blade Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       Type.STEEL,
       2,
@@ -38618,8 +37632,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GREAT_TUSK,
       9,
-      SpeciesCategories.PARADOX,
-      "Paradox Pokémon",
+      SpeciesGroups.PARADOX,
       Type.GROUND,
       Type.FIGHTING,
       2.2,
@@ -38644,8 +37657,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SCREAM_TAIL,
       9,
-      SpeciesCategories.PARADOX,
-      "Paradox Pokémon",
+      SpeciesGroups.PARADOX,
       Type.FAIRY,
       Type.PSYCHIC,
       1.2,
@@ -38670,8 +37682,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BRUTE_BONNET,
       9,
-      SpeciesCategories.PARADOX,
-      "Paradox Pokémon",
+      SpeciesGroups.PARADOX,
       Type.GRASS,
       Type.DARK,
       1.2,
@@ -38696,8 +37707,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FLUTTER_MANE,
       9,
-      SpeciesCategories.PARADOX,
-      "Paradox Pokémon",
+      SpeciesGroups.PARADOX,
       Type.GHOST,
       Type.FAIRY,
       1.4,
@@ -38722,8 +37732,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SLITHER_WING,
       9,
-      SpeciesCategories.PARADOX,
-      "Paradox Pokémon",
+      SpeciesGroups.PARADOX,
       Type.BUG,
       Type.FIGHTING,
       3.2,
@@ -38748,8 +37757,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SANDY_SHOCKS,
       9,
-      SpeciesCategories.PARADOX,
-      "Paradox Pokémon",
+      SpeciesGroups.PARADOX,
       Type.ELECTRIC,
       Type.GROUND,
       2.3,
@@ -38774,8 +37782,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.IRON_TREADS,
       9,
-      SpeciesCategories.PARADOX,
-      "Paradox Pokémon",
+      SpeciesGroups.PARADOX,
       Type.GROUND,
       Type.STEEL,
       0.9,
@@ -38800,8 +37807,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.IRON_BUNDLE,
       9,
-      SpeciesCategories.PARADOX,
-      "Paradox Pokémon",
+      SpeciesGroups.PARADOX,
       Type.ICE,
       Type.WATER,
       0.6,
@@ -38826,8 +37832,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.IRON_HANDS,
       9,
-      SpeciesCategories.PARADOX,
-      "Paradox Pokémon",
+      SpeciesGroups.PARADOX,
       Type.FIGHTING,
       Type.ELECTRIC,
       1.8,
@@ -38852,8 +37857,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.IRON_JUGULIS,
       9,
-      SpeciesCategories.PARADOX,
-      "Paradox Pokémon",
+      SpeciesGroups.PARADOX,
       Type.DARK,
       Type.FLYING,
       1.3,
@@ -38878,8 +37882,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.IRON_MOTH,
       9,
-      SpeciesCategories.PARADOX,
-      "Paradox Pokémon",
+      SpeciesGroups.PARADOX,
       Type.FIRE,
       Type.POISON,
       1.2,
@@ -38904,8 +37907,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.IRON_THORNS,
       9,
-      SpeciesCategories.PARADOX,
-      "Paradox Pokémon",
+      SpeciesGroups.PARADOX,
       Type.ROCK,
       Type.ELECTRIC,
       1.6,
@@ -38930,8 +37932,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FRIGIBAX,
       9,
-      SpeciesCategories.COMMON,
-      "Ice Fin Pokémon",
+      SpeciesGroups.COMMON,
       Type.DRAGON,
       Type.ICE,
       0.5,
@@ -38956,8 +37957,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ARCTIBAX,
       9,
-      SpeciesCategories.COMMON,
-      "Ice Fin Pokémon",
+      SpeciesGroups.COMMON,
       Type.DRAGON,
       Type.ICE,
       0.8,
@@ -38982,8 +37982,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BAXCALIBUR,
       9,
-      SpeciesCategories.COMMON,
-      "Ice Dragon Pokémon",
+      SpeciesGroups.COMMON,
       Type.DRAGON,
       Type.ICE,
       2.1,
@@ -39008,8 +38007,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GIMMIGHOUL,
       9,
-      SpeciesCategories.COMMON,
-      "Coin Chest Pokémon",
+      SpeciesGroups.COMMON,
       Type.GHOST,
       null,
       0.3,
@@ -39083,8 +38081,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GHOLDENGO,
       9,
-      SpeciesCategories.COMMON,
-      "Coin Entity Pokémon",
+      SpeciesGroups.COMMON,
       Type.STEEL,
       Type.GHOST,
       1.2,
@@ -39109,8 +38106,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.WO_CHIEN,
       9,
-      SpeciesCategories.SUBLEGENDARY,
-      "Ruinous Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.DARK,
       Type.GRASS,
       1.5,
@@ -39135,8 +38131,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CHIEN_PAO,
       9,
-      SpeciesCategories.SUBLEGENDARY,
-      "Ruinous Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.DARK,
       Type.ICE,
       1.9,
@@ -39161,8 +38156,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TING_LU,
       9,
-      SpeciesCategories.SUBLEGENDARY,
-      "Ruinous Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.DARK,
       Type.GROUND,
       2.7,
@@ -39187,8 +38181,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.CHI_YU,
       9,
-      SpeciesCategories.SUBLEGENDARY,
-      "Ruinous Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.DARK,
       Type.FIRE,
       0.4,
@@ -39213,8 +38206,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ROARING_MOON,
       9,
-      SpeciesCategories.PARADOX,
-      "Paradox Pokémon",
+      SpeciesGroups.PARADOX,
       Type.DRAGON,
       Type.DARK,
       2,
@@ -39239,8 +38231,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.IRON_VALIANT,
       9,
-      SpeciesCategories.PARADOX,
-      "Paradox Pokémon",
+      SpeciesGroups.PARADOX,
       Type.FAIRY,
       Type.FIGHTING,
       1.4,
@@ -39265,8 +38256,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.KORAIDON,
       9,
-      SpeciesCategories.LEGENDARY,
-      "Paradox Pokémon",
+      SpeciesGroups.LEGENDARY,
       Type.FIGHTING,
       Type.DRAGON,
       2.5,
@@ -39412,8 +38402,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MIRAIDON,
       9,
-      SpeciesCategories.LEGENDARY,
-      "Paradox Pokémon",
+      SpeciesGroups.LEGENDARY,
       Type.ELECTRIC,
       Type.DRAGON,
       3.5,
@@ -39559,8 +38548,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.WALKING_WAKE,
       9,
-      SpeciesCategories.PARADOX,
-      "Paradox Pokémon",
+      SpeciesGroups.PARADOX,
       Type.WATER,
       Type.DRAGON,
       3.5,
@@ -39585,8 +38573,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.IRON_LEAVES,
       9,
-      SpeciesCategories.PARADOX,
-      "Paradox Pokémon",
+      SpeciesGroups.PARADOX,
       Type.GRASS,
       Type.PSYCHIC,
       1.5,
@@ -39611,8 +38598,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.DIPPLIN,
       9,
-      SpeciesCategories.COMMON,
-      "Candy Apple Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.DRAGON,
       0.4,
@@ -39637,8 +38623,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.POLTCHAGEIST,
       9,
-      SpeciesCategories.COMMON,
-      "Matcha Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.GHOST,
       0.1,
@@ -39712,8 +38697,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.SINISTCHA,
       9,
-      SpeciesCategories.COMMON,
-      "Matcha Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.GHOST,
       0.2,
@@ -39781,8 +38765,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.OKIDOGI,
       9,
-      SpeciesCategories.SUBLEGENDARY,
-      "Retainer Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.POISON,
       Type.FIGHTING,
       1.8,
@@ -39807,8 +38790,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.MUNKIDORI,
       9,
-      SpeciesCategories.SUBLEGENDARY,
-      "Retainer Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.POISON,
       Type.PSYCHIC,
       1,
@@ -39833,8 +38815,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.FEZANDIPITI,
       9,
-      SpeciesCategories.SUBLEGENDARY,
-      "Retainer Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.POISON,
       Type.FAIRY,
       1.4,
@@ -39859,8 +38840,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.OGERPON,
       9,
-      SpeciesCategories.SUBLEGENDARY,
-      "Mask Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.GRASS,
       null,
       1.2,
@@ -40057,8 +39037,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ARCHALUDON,
       9,
-      SpeciesCategories.COMMON,
-      "Alloy Pokémon",
+      SpeciesGroups.COMMON,
       Type.STEEL,
       Type.DRAGON,
       2,
@@ -40083,8 +39062,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HYDRAPPLE,
       9,
-      SpeciesCategories.COMMON,
-      "Apple Hydra Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.DRAGON,
       1.8,
@@ -40109,8 +39087,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GOUGING_FIRE,
       9,
-      SpeciesCategories.PARADOX,
-      "Paradox Pokémon",
+      SpeciesGroups.PARADOX,
       Type.FIRE,
       Type.DRAGON,
       3.5,
@@ -40135,8 +39112,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.RAGING_BOLT,
       9,
-      SpeciesCategories.PARADOX,
-      "Paradox Pokémon",
+      SpeciesGroups.PARADOX,
       Type.ELECTRIC,
       Type.DRAGON,
       5.2,
@@ -40161,8 +39137,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.IRON_BOULDER,
       9,
-      SpeciesCategories.PARADOX,
-      "Paradox Pokémon",
+      SpeciesGroups.PARADOX,
       Type.ROCK,
       Type.PSYCHIC,
       1.5,
@@ -40187,8 +39162,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.IRON_CROWN,
       9,
-      SpeciesCategories.PARADOX,
-      "Paradox Pokémon",
+      SpeciesGroups.PARADOX,
       Type.STEEL,
       Type.PSYCHIC,
       1.6,
@@ -40213,8 +39187,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.TERAPAGOS,
       9,
-      SpeciesCategories.LEGENDARY,
-      "Tera Pokémon",
+      SpeciesGroups.LEGENDARY,
       Type.NORMAL,
       null,
       0.2,
@@ -40306,8 +39279,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PECHARUNT,
       9,
-      SpeciesCategories.MYTHICAL,
-      "Subjugation Pokémon",
+      SpeciesGroups.MYTHICAL,
       Type.POISON,
       Type.GHOST,
       0.3,
@@ -40332,8 +39304,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ALOLA_RATTATA,
       7,
-      SpeciesCategories.COMMON,
-      "Mouse Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       Type.NORMAL,
       0.3,
@@ -40358,8 +39329,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ALOLA_RATICATE,
       7,
-      SpeciesCategories.COMMON,
-      "Mouse Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       Type.NORMAL,
       0.7,
@@ -40384,8 +39354,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ALOLA_RAICHU,
       7,
-      SpeciesCategories.COMMON,
-      "Mouse Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       Type.PSYCHIC,
       0.7,
@@ -40410,8 +39379,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ALOLA_SANDSHREW,
       7,
-      SpeciesCategories.COMMON,
-      "Mouse Pokémon",
+      SpeciesGroups.COMMON,
       Type.ICE,
       Type.STEEL,
       0.7,
@@ -40436,8 +39404,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ALOLA_SANDSLASH,
       7,
-      SpeciesCategories.COMMON,
-      "Mouse Pokémon",
+      SpeciesGroups.COMMON,
       Type.ICE,
       Type.STEEL,
       1.2,
@@ -40462,8 +39429,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ALOLA_VULPIX,
       7,
-      SpeciesCategories.COMMON,
-      "Fox Pokémon",
+      SpeciesGroups.COMMON,
       Type.ICE,
       null,
       0.6,
@@ -40488,8 +39454,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ALOLA_NINETALES,
       7,
-      SpeciesCategories.COMMON,
-      "Fox Pokémon",
+      SpeciesGroups.COMMON,
       Type.ICE,
       Type.FAIRY,
       1.1,
@@ -40514,8 +39479,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ALOLA_DIGLETT,
       7,
-      SpeciesCategories.COMMON,
-      "Mole Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       Type.STEEL,
       0.2,
@@ -40540,8 +39504,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ALOLA_DUGTRIO,
       7,
-      SpeciesCategories.COMMON,
-      "Mole Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       Type.STEEL,
       0.7,
@@ -40566,8 +39529,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ALOLA_MEOWTH,
       7,
-      SpeciesCategories.COMMON,
-      "Scratch Cat Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       null,
       0.4,
@@ -40592,8 +39554,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ALOLA_PERSIAN,
       7,
-      SpeciesCategories.COMMON,
-      "Classy Cat Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       null,
       1.1,
@@ -40618,8 +39579,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ALOLA_GEODUDE,
       7,
-      SpeciesCategories.COMMON,
-      "Rock Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.ELECTRIC,
       0.4,
@@ -40644,8 +39604,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ALOLA_GRAVELER,
       7,
-      SpeciesCategories.COMMON,
-      "Rock Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.ELECTRIC,
       1,
@@ -40670,8 +39629,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ALOLA_GOLEM,
       7,
-      SpeciesCategories.COMMON,
-      "Megaton Pokémon",
+      SpeciesGroups.COMMON,
       Type.ROCK,
       Type.ELECTRIC,
       1.7,
@@ -40696,8 +39654,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ALOLA_GRIMER,
       7,
-      SpeciesCategories.COMMON,
-      "Sludge Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       Type.DARK,
       0.7,
@@ -40722,8 +39679,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ALOLA_MUK,
       7,
-      SpeciesCategories.COMMON,
-      "Sludge Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       Type.DARK,
       1,
@@ -40748,8 +39704,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ALOLA_EXEGGUTOR,
       7,
-      SpeciesCategories.COMMON,
-      "Coconut Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.DRAGON,
       10.9,
@@ -40774,8 +39729,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ALOLA_MAROWAK,
       7,
-      SpeciesCategories.COMMON,
-      "Bone Keeper Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       Type.GHOST,
       1,
@@ -40800,8 +39754,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.ETERNAL_FLOETTE,
       6,
-      SpeciesCategories.SUBLEGENDARY,
-      "Single Bloom Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.FAIRY,
       null,
       0.2,
@@ -40826,8 +39779,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GALAR_MEOWTH,
       8,
-      SpeciesCategories.COMMON,
-      "Scratch Cat Pokémon",
+      SpeciesGroups.COMMON,
       Type.STEEL,
       null,
       0.4,
@@ -40852,8 +39804,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GALAR_PONYTA,
       8,
-      SpeciesCategories.COMMON,
-      "Fire Horse Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       null,
       0.8,
@@ -40878,8 +39829,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GALAR_RAPIDASH,
       8,
-      SpeciesCategories.COMMON,
-      "Fire Horse Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       Type.FAIRY,
       1.7,
@@ -40904,8 +39854,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GALAR_SLOWPOKE,
       8,
-      SpeciesCategories.COMMON,
-      "Dopey Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       null,
       1.2,
@@ -40930,8 +39879,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GALAR_SLOWBRO,
       8,
-      SpeciesCategories.COMMON,
-      "Hermit Crab Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       Type.PSYCHIC,
       1.6,
@@ -40956,8 +39904,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GALAR_FARFETCHD,
       8,
-      SpeciesCategories.COMMON,
-      "Wild Duck Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIGHTING,
       null,
       0.8,
@@ -40982,8 +39929,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GALAR_WEEZING,
       8,
-      SpeciesCategories.COMMON,
-      "Poison Gas Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       Type.FAIRY,
       3,
@@ -41008,8 +39954,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GALAR_MR_MIME,
       8,
-      SpeciesCategories.COMMON,
-      "Barrier Pokémon",
+      SpeciesGroups.COMMON,
       Type.ICE,
       Type.PSYCHIC,
       1.4,
@@ -41034,8 +39979,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GALAR_ARTICUNO,
       8,
-      SpeciesCategories.SUBLEGENDARY,
-      "Freeze Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.PSYCHIC,
       Type.FLYING,
       1.7,
@@ -41060,8 +40004,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GALAR_ZAPDOS,
       8,
-      SpeciesCategories.SUBLEGENDARY,
-      "Electric Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.FIGHTING,
       Type.FLYING,
       1.6,
@@ -41086,8 +40029,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GALAR_MOLTRES,
       8,
-      SpeciesCategories.SUBLEGENDARY,
-      "Flame Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.DARK,
       Type.FLYING,
       2,
@@ -41112,8 +40054,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GALAR_SLOWKING,
       8,
-      SpeciesCategories.COMMON,
-      "Royal Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       Type.PSYCHIC,
       1.8,
@@ -41138,8 +40079,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GALAR_CORSOLA,
       8,
-      SpeciesCategories.COMMON,
-      "Coral Pokémon",
+      SpeciesGroups.COMMON,
       Type.GHOST,
       null,
       0.6,
@@ -41164,8 +40104,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GALAR_ZIGZAGOON,
       8,
-      SpeciesCategories.COMMON,
-      "Tiny Raccoon Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       Type.NORMAL,
       0.4,
@@ -41190,8 +40129,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GALAR_LINOONE,
       8,
-      SpeciesCategories.COMMON,
-      "Rushing Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       Type.NORMAL,
       0.5,
@@ -41216,8 +40154,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GALAR_DARUMAKA,
       8,
-      SpeciesCategories.COMMON,
-      "Zen Charm Pokémon",
+      SpeciesGroups.COMMON,
       Type.ICE,
       null,
       0.7,
@@ -41242,8 +40179,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GALAR_DARMANITAN,
       8,
-      SpeciesCategories.COMMON,
-      "Blazing Pokémon",
+      SpeciesGroups.COMMON,
       Type.ICE,
       null,
       1.7,
@@ -41314,8 +40250,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GALAR_YAMASK,
       8,
-      SpeciesCategories.COMMON,
-      "Spirit Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       Type.GHOST,
       0.5,
@@ -41340,8 +40275,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.GALAR_STUNFISK,
       8,
-      SpeciesCategories.COMMON,
-      "Trap Pokémon",
+      SpeciesGroups.COMMON,
       Type.GROUND,
       Type.STEEL,
       0.7,
@@ -41366,8 +40300,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HISUI_GROWLITHE,
       8,
-      SpeciesCategories.COMMON,
-      "Puppy Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       Type.ROCK,
       0.8,
@@ -41392,8 +40325,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HISUI_ARCANINE,
       8,
-      SpeciesCategories.COMMON,
-      "Legendary Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       Type.ROCK,
       2,
@@ -41418,8 +40350,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HISUI_VOLTORB,
       8,
-      SpeciesCategories.COMMON,
-      "Ball Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       Type.GRASS,
       0.5,
@@ -41444,8 +40375,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HISUI_ELECTRODE,
       8,
-      SpeciesCategories.COMMON,
-      "Ball Pokémon",
+      SpeciesGroups.COMMON,
       Type.ELECTRIC,
       Type.GRASS,
       1.2,
@@ -41470,8 +40400,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HISUI_TYPHLOSION,
       8,
-      SpeciesCategories.COMMON,
-      "Volcano Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIRE,
       Type.GHOST,
       1.6,
@@ -41496,8 +40425,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HISUI_QWILFISH,
       8,
-      SpeciesCategories.COMMON,
-      "Balloon Pokémon",
+      SpeciesGroups.COMMON,
       Type.DARK,
       Type.POISON,
       0.5,
@@ -41522,8 +40450,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HISUI_SNEASEL,
       8,
-      SpeciesCategories.COMMON,
-      "Sharp Claw Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIGHTING,
       Type.POISON,
       0.9,
@@ -41548,8 +40475,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HISUI_SAMUROTT,
       8,
-      SpeciesCategories.COMMON,
-      "Formidable Pokémon",
+      SpeciesGroups.COMMON,
       Type.WATER,
       Type.DARK,
       1.5,
@@ -41574,8 +40500,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HISUI_LILLIGANT,
       8,
-      SpeciesCategories.COMMON,
-      "Flowering Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.FIGHTING,
       1.2,
@@ -41600,8 +40525,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HISUI_ZORUA,
       8,
-      SpeciesCategories.COMMON,
-      "Tricky Fox Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.GHOST,
       0.7,
@@ -41626,8 +40550,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HISUI_ZOROARK,
       8,
-      SpeciesCategories.COMMON,
-      "Illusion Fox Pokémon",
+      SpeciesGroups.COMMON,
       Type.NORMAL,
       Type.GHOST,
       1.6,
@@ -41652,8 +40575,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HISUI_BRAVIARY,
       8,
-      SpeciesCategories.COMMON,
-      "Valiant Pokémon",
+      SpeciesGroups.COMMON,
       Type.PSYCHIC,
       Type.FLYING,
       1.7,
@@ -41678,8 +40600,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HISUI_SLIGGOO,
       8,
-      SpeciesCategories.COMMON,
-      "Soft Tissue Pokémon",
+      SpeciesGroups.COMMON,
       Type.STEEL,
       Type.DRAGON,
       0.7,
@@ -41704,8 +40625,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HISUI_GOODRA,
       8,
-      SpeciesCategories.COMMON,
-      "Dragon Pokémon",
+      SpeciesGroups.COMMON,
       Type.STEEL,
       Type.DRAGON,
       1.7,
@@ -41730,8 +40650,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HISUI_AVALUGG,
       8,
-      SpeciesCategories.COMMON,
-      "Iceberg Pokémon",
+      SpeciesGroups.COMMON,
       Type.ICE,
       Type.ROCK,
       1.4,
@@ -41756,8 +40675,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.HISUI_DECIDUEYE,
       8,
-      SpeciesCategories.COMMON,
-      "Arrow Quill Pokémon",
+      SpeciesGroups.COMMON,
       Type.GRASS,
       Type.FIGHTING,
       1.6,
@@ -41782,8 +40700,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PALDEA_TAUROS,
       9,
-      SpeciesCategories.COMMON,
-      "Wild Bull Pokémon",
+      SpeciesGroups.COMMON,
       Type.FIGHTING,
       null,
       1.4,
@@ -41881,8 +40798,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.PALDEA_WOOPER,
       9,
-      SpeciesCategories.COMMON,
-      "Water Fish Pokémon",
+      SpeciesGroups.COMMON,
       Type.POISON,
       Type.GROUND,
       0.4,
@@ -41907,8 +40823,7 @@ export function initSpecies() {
     new PokemonSpecies(
       Species.BLOODMOON_URSALUNA,
       9,
-      SpeciesCategories.SUBLEGENDARY,
-      "Peat Pokémon",
+      SpeciesGroups.SUBLEGENDARY,
       Type.GROUND,
       Type.NORMAL,
       2.7,

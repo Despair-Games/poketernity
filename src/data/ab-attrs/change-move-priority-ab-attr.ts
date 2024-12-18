@@ -1,5 +1,5 @@
 import type Move from "#app/data/move";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder, NumberHolder } from "#app/utils";
 import { AbAttr } from "./ab-attr";
 

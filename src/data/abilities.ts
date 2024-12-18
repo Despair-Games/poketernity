@@ -8,7 +8,7 @@ import { StatusEffect } from "#app/enums/status-effect";
 import { TerrainType } from "#app/enums/terrain-type";
 import { Type } from "#app/enums/type";
 import { WeatherType } from "#app/enums/weather-type";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { MovePhase } from "#app/phases/move-phase";

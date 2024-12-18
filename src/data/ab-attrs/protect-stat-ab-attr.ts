@@ -1,4 +1,4 @@
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { isNullOrUndefined, type BooleanHolder } from "#app/utils";
 import { getStatKey, type BattleStat } from "#enums/stat";

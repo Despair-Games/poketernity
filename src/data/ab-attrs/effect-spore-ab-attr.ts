@@ -1,5 +1,5 @@
 import type Move from "#app/data/move";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import type { HitResult } from "#app/field/pokemon";
 import { Abilities } from "#enums/abilities";
 import { StatusEffect } from "#enums/status-effect";

@@ -1,6 +1,6 @@
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import { type Move, MoveTarget } from "#app/data/move";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder, NumberHolder } from "#app/utils";
 import type { Type } from "#enums/type";
 import { PreDefendAbAttr } from "./pre-defend-ab-attr";

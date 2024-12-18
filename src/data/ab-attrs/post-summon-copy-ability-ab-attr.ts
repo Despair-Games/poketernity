@@ -1,6 +1,6 @@
 import { allAbilities } from "#app/data/ability";
 import { setAbilityRevealed } from "#app/data/ability-utils";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { randSeedItem } from "#app/utils";
