@@ -30,6 +30,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { CommandPhase } from "#app/phases/command-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { globalScene } from "#app/global-scene";
+import { labelMoves } from "./partyUtils/relearnMoveMode";
 
 const defaultMessage = i18next.t("partyUiHandler:choosePokemon");
 
@@ -427,7 +428,7 @@ export default class PartyUiHandler extends MessageUiHandler {
             partySlot.slotDescriptionLabel.setVisible(true);
           }
 
-          this.clearOptions();
+          this.hideOptions();
           ui.playSelect();
           return true;
         } else if (this.partyUiMode === PartyUiMode.REMEMBER_MOVE_MODIFIER && option !== PartyOption.CANCEL) {
@@ -436,9 +437,9 @@ export default class PartyUiHandler extends MessageUiHandler {
           const filterResult = (this.selectFilter as PokemonSelectFilter)(pokemon);
           if (filterResult === null) {
             this.selectCallback?.(this.cursor, option);
-            this.clearOptions();
+            this.hideOptions();
           } else {
-            this.clearOptions();
+            this.hideOptions();
             this.showText(filterResult as string, undefined, () => this.showText("", 0), undefined, true);
           }
           ui.playSelect();
@@ -475,7 +476,7 @@ export default class PartyUiHandler extends MessageUiHandler {
           }
           if (filterResult === null) {
             if (this.partyUiMode !== PartyUiMode.SPLICE) {
-              this.clearOptions();
+              this.hideOptions();
             }
             if (this.selectCallback && this.partyUiMode !== PartyUiMode.CHECK) {
               if (option === PartyOption.TRANSFER) {
@@ -507,7 +508,7 @@ export default class PartyUiHandler extends MessageUiHandler {
                 } else {
                   this.startTransfer();
                 }
-                this.clearOptions();
+                this.hideOptions();
               } else if (option === PartyOption.RELEASE) {
                 this.doRelease(this.cursor);
               } else {
@@ -543,15 +544,15 @@ export default class PartyUiHandler extends MessageUiHandler {
             }
             return true;
           } else {
-            this.clearOptions();
+            this.hideOptions();
             this.showText(filterResult as string, undefined, () => this.showText("", 0), undefined, true);
           }
         } else if (option === PartyOption.SUMMARY) {
           ui.playSelect();
-          ui.setModeWithoutClear(Mode.SUMMARY, pokemon).then(() => this.clearOptions());
+          ui.setModeWithoutClear(Mode.SUMMARY, pokemon).then(() => this.hideOptions());
           return true;
         } else if (option === PartyOption.UNPAUSE_EVOLUTION) {
-          this.clearOptions();
+          this.hideOptions();
           ui.playSelect();
           pokemon.pauseEvolutions = !pokemon.pauseEvolutions;
           this.showText(
@@ -565,7 +566,7 @@ export default class PartyUiHandler extends MessageUiHandler {
             true,
           );
         } else if (option === PartyOption.UNSPLICE) {
-          this.clearOptions();
+          this.hideOptions();
           ui.playSelect();
           this.showText(
             i18next.t("partyUiHandler:unspliceConfirmation", {
@@ -602,7 +603,7 @@ export default class PartyUiHandler extends MessageUiHandler {
             },
           );
         } else if (option === PartyOption.RELEASE) {
-          this.clearOptions();
+          this.hideOptions();
           ui.playSelect();
           if (this.cursor >= globalScene.currentBattle.getBattlerCount() || !pokemon.isAllowedInBattle()) {
             this.blockInput = true;
@@ -629,7 +630,7 @@ export default class PartyUiHandler extends MessageUiHandler {
           }
           return true;
         } else if (option === PartyOption.RENAME) {
-          this.clearOptions();
+          this.hideOptions();
           ui.playSelect();
           ui.setModeWithoutClear(
             Mode.RENAME_POKEMON,
@@ -658,7 +659,7 @@ export default class PartyUiHandler extends MessageUiHandler {
           return true;
         }
       } else if (button === Button.CANCEL) {
-        this.clearOptions();
+        this.hideOptions();
         ui.playSelect();
         return true;
       } else {
@@ -925,7 +926,7 @@ export default class PartyUiHandler extends MessageUiHandler {
 
     this.optionsMode = true;
 
-    let optionsMessage = i18next.t("partyUiHandler:doWhatWithThisPokemon");
+    let optionsMessage: string;
 
     switch (this.partyUiMode) {
       case PartyUiMode.MOVE_MODIFIER:
@@ -935,38 +936,77 @@ export default class PartyUiHandler extends MessageUiHandler {
         if (!this.transferMode) {
           optionsMessage = i18next.t("partyUiHandler:changeQuantity");
         }
+        /** When an item is being selected for transfer, the message box is taller as the message occupies two lines */
+        this.partyMessageBox.setSize(262 - Math.max(this.optionsBg.displayWidth - 56, 0), 42);
         break;
       case PartyUiMode.SPLICE:
         if (!this.transferMode) {
           optionsMessage = i18next.t("partyUiHandler:selectAnotherPokemonToSplice");
         }
         break;
+      default:
+        optionsMessage = i18next.t("partyUiHandler:doWhatWithThisPokemon");
+        break;
     }
 
-    this.showText(optionsMessage, 0);
+    this.showText(optionsMessage!, 0);
 
     this.updateOptions();
 
     /** When an item is being selected for transfer, the message box is taller as the message occupies two lines */
-    if (this.partyUiMode === PartyUiMode.MODIFIER_TRANSFER) {
-      this.partyMessageBox.setSize(262 - Math.max(this.optionsBg.displayWidth - 56, 0), 42);
-    } else {
+    if (this.partyUiMode !== PartyUiMode.MODIFIER_TRANSFER) {
       this.partyMessageBox.setSize(262 - Math.max(this.optionsBg.displayWidth - 56, 0), 30);
     }
-
     this.setCursor(0);
   }
 
-  updateOptions(): void {
-    const pokemon = globalScene.getPlayerParty()[this.cursor];
+  clearOptions(): void {
+    this.options.splice(0, this.options.length);
+    this.optionsContainer.removeAll(true);
+    this.eraseOptionsCursor();
+  }
 
-    const learnableLevelMoves =
-      this.partyUiMode === PartyUiMode.REMEMBER_MOVE_MODIFIER ? pokemon.getLearnableLevelMoves() : [];
-
-    if (this.partyUiMode === PartyUiMode.REMEMBER_MOVE_MODIFIER && learnableLevelMoves?.length) {
-      // show the move overlay with info for the first move
-      this.moveInfoOverlay.show(allMoves[learnableLevelMoves[0]]);
+  retrieveOptions(pokemon: Pokemon, optionTexts: BBCodeText[]) {
+    switch (this.partyUiMode) {
+      case PartyUiMode.REMEMBER_MOVE_MODIFIER:
+        const learnableLevelMoves = pokemon.getLearnableLevelMoves();
+        this.options.push(...learnableLevelMoves);
+        if (this.options.length > 0) {
+          this.moveInfoOverlay.show(allMoves[learnableLevelMoves[0]]);
+        }
+        labelMoves(learnableLevelMoves, this.optionsContainer, optionTexts);
     }
+  }
+
+  updateOptions(): void {
+    if (this.options.length > 0) {
+      this.clearOptions();
+    }
+
+    const pokemon = globalScene.getPlayerParty()[this.cursor];
+    const optionTexts: BBCodeText[] = [];
+    this.retrieveOptions(pokemon, optionTexts);
+
+    this.optionsScrollTotal = this.options.length;
+    let optionStartIndex = this.optionsScrollCursor;
+    let optionEndIndex = Math.min(
+      this.optionsScrollTotal,
+      optionStartIndex + (!optionStartIndex || this.optionsScrollCursor + 8 >= this.optionsScrollTotal ? 8 : 7),
+    );
+
+    this.optionsScroll = this.optionsScrollTotal > 9;
+
+    this.options.push(PartyOption.CANCEL);
+
+    this.optionsBg = addWindow(0, 0, 0, 16 * this.options.length + 13);
+    this.optionsBg.setOrigin(1, 1);
+
+    this.optionsContainer.add(this.optionsBg);
+
+    optionStartIndex = 0;
+    optionEndIndex = this.options.length;
+
+    let widestOptionWidth = 0;
 
     const itemModifiers =
       this.partyUiMode === PartyUiMode.MODIFIER_TRANSFER
@@ -974,12 +1014,6 @@ export default class PartyUiHandler extends MessageUiHandler {
             (m) => m instanceof PokemonHeldItemModifier && m.isTransferable && m.pokemonId === pokemon.id,
           ) as PokemonHeldItemModifier[])
         : [];
-
-    if (this.options.length) {
-      this.options.splice(0, this.options.length);
-      this.optionsContainer.removeAll(true);
-      this.eraseOptionsCursor();
-    }
 
     let formChangeItemModifiers: PokemonFormChangeItemModifier[] | undefined;
 
@@ -1082,11 +1116,6 @@ export default class PartyUiHandler extends MessageUiHandler {
       for (let m = 0; m < pokemon.moveset.length; m++) {
         this.options.push(PartyOption.MOVE_1 + m);
       }
-    } else if (this.partyUiMode === PartyUiMode.REMEMBER_MOVE_MODIFIER) {
-      const learnableMoves = pokemon.getLearnableLevelMoves();
-      for (let m = 0; m < learnableMoves.length; m++) {
-        this.options.push(m);
-      }
     } else {
       for (let im = 0; im < itemModifiers.length; im++) {
         this.options.push(im);
@@ -1095,15 +1124,6 @@ export default class PartyUiHandler extends MessageUiHandler {
         this.options.push(PartyOption.ALL);
       }
     }
-
-    this.optionsScrollTotal = this.options.length;
-    let optionStartIndex = this.optionsScrollCursor;
-    let optionEndIndex = Math.min(
-      this.optionsScrollTotal,
-      optionStartIndex + (!optionStartIndex || this.optionsScrollCursor + 8 >= this.optionsScrollTotal ? 8 : 7),
-    );
-
-    this.optionsScroll = this.optionsScrollTotal > 9;
 
     if (this.optionsScroll) {
       this.options.splice(optionEndIndex, this.optionsScrollTotal);
@@ -1115,19 +1135,6 @@ export default class PartyUiHandler extends MessageUiHandler {
         this.options.push(PartyOption.SCROLL_DOWN);
       }
     }
-
-    this.options.push(PartyOption.CANCEL);
-
-    this.optionsBg = addWindow(0, 0, 0, 16 * this.options.length + 13);
-    this.optionsBg.setOrigin(1, 1);
-
-    this.optionsContainer.add(this.optionsBg);
-
-    optionStartIndex = 0;
-    optionEndIndex = this.options.length;
-
-    let widestOptionWidth = 0;
-    const optionTexts: BBCodeText[] = [];
 
     for (let o = optionStartIndex; o < optionEndIndex; o++) {
       const option = this.options[this.options.length - (o + 1)];
@@ -1172,7 +1179,7 @@ export default class PartyUiHandler extends MessageUiHandler {
             break;
         }
       } else if (this.partyUiMode === PartyUiMode.REMEMBER_MOVE_MODIFIER) {
-        const move = learnableLevelMoves[option];
+        const move = pokemon.getLearnableLevelMoves()[option];
         optionName = allMoves[move].name;
         altText = !pokemon
           .getSpeciesForm()
@@ -1327,7 +1334,7 @@ export default class PartyUiHandler extends MessageUiHandler {
     );
   }
 
-  clearOptions() {
+  hideOptions() {
     // hide the overlay
     this.moveInfoOverlay.clear();
     this.optionsMode = false;
