@@ -26,13 +26,7 @@ export class PostDefendStealHeldItemAbAttr extends PostDefendAbAttr {
     hitResult: HitResult,
     _args: any[],
   ): boolean {
-    if (
-      !simulated
-      && hitResult < HitResult.NO_EFFECT
-      && (!this.condition || this.condition(pokemon, attacker, move))
-      // TODO: remove this?
-      && !move.hitsSubstitute(attacker, pokemon)
-    ) {
+    if (!simulated && hitResult < HitResult.NO_EFFECT && (!this.condition || this.condition(pokemon, attacker, move))) {
       const heldItems = this.getTargetHeldItems(attacker).filter((i) => i.isTransferable);
       if (heldItems.length) {
         const stolenItem = heldItems[pokemon.randSeedInt(heldItems.length)];
