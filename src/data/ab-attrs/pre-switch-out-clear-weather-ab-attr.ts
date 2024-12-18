@@ -39,7 +39,7 @@ export class PreSwitchOutClearWeatherAbAttr extends PreSwitchOutAbAttr {
       && globalScene
         .getField(true)
         .filter((p) => p !== pokemon)
-        .filter((p) => p.hasAbility(weatherAbility)).length === 0
+        .some((p) => p.hasAbility(weatherAbility))
     ) {
       turnOffWeather = true;
     }

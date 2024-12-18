@@ -14,7 +14,7 @@ export class PostBattleLootAbAttr extends PostBattleAbAttr {
     const postBattleLoot = globalScene.currentBattle.postBattleLoot;
     const isVictory: boolean = args[0];
 
-    if (!simulated && postBattleLoot.length && isVictory) {
+    if (!simulated && postBattleLoot.length > 0 && isVictory) {
       const randItem = randSeedItem(postBattleLoot);
       if (globalScene.tryTransferHeldItemModifier(randItem, pokemon, true, 1, true, undefined, false)) {
         postBattleLoot.splice(postBattleLoot.indexOf(randItem), 1);
