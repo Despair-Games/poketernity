@@ -5,7 +5,7 @@ import { PostSummonAbAttr } from "./post-summon-ab-attr";
 
 /**
  * Removes specified arena tags when a Pokemon is summoned. Used by Screen Cleaner.
- * @param arenaTags {@linkcode ArenaTagType[]} - the arena tags to be removed
+ * @param arenaTags - The {@linkcode ArenaTagType | arena tags} to be removed
  * @extends PostSummonAbAttr
  */
 export class PostSummonRemoveArenaTagAbAttr extends PostSummonAbAttr {
