@@ -36,7 +36,7 @@ export class PreSwitchOutClearWeatherAbAttr extends PreSwitchOutAbAttr {
     if (
       weatherAbility
       && pokemon.hasAbility(weatherAbility)
-      && globalScene
+      && !globalScene
         .getField(true)
         .filter((p) => p !== pokemon)
         .some((p) => p.hasAbility(weatherAbility))
