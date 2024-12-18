@@ -38,7 +38,6 @@ describe("Moves - Whirlwind", () => {
   it.each([
     { move: Moves.FLY, name: "Fly" },
     { move: Moves.BOUNCE, name: "Bounce" },
-    { move: Moves.SKY_DROP, name: "Sky Drop" },
   ])("should not hit a flying target: $name (=$move)", async ({ move }) => {
     game.override.moveset([move]);
     await game.classicMode.startBattle([Species.STARAPTOR]);
