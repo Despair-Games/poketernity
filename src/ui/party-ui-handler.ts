@@ -5,7 +5,7 @@ import { addBBCodeTextObject, addTextObject, getTextColor, TextStyle } from "#ap
 import { Command } from "#app/ui/command-ui-handler";
 import MessageUiHandler from "#app/ui/message-ui-handler";
 import { Mode } from "#app/ui/ui";
-import { BooleanHolder, toReadableString, randInt, getLocalizedSpriteKey } from "#app/utils";
+import { BooleanHolder, toReadableString, randItem, getLocalizedSpriteKey } from "#app/utils";
 import {
   PokemonFormChangeItemModifier,
   PokemonHeldItemModifier,
@@ -1273,29 +1273,25 @@ export default class PartyUiHandler extends MessageUiHandler {
     );
   }
 
+  /**
+   * This selects a random message to display when a player releases a Pokemon
+   * @param pokemonName
+   * @returns string containing the farewell message
+   */
   getReleaseMessage(pokemonName: string): string {
-    const rand = randInt(128);
-    if (rand < 20) {
-      return i18next.t("partyUiHandler:goodbye", { pokemonName: pokemonName });
-    } else if (rand < 40) {
-      return i18next.t("partyUiHandler:byebye", { pokemonName: pokemonName });
-    } else if (rand < 60) {
-      return i18next.t("partyUiHandler:farewell", { pokemonName: pokemonName });
-    } else if (rand < 80) {
-      return i18next.t("partyUiHandler:soLong", { pokemonName: pokemonName });
-    } else if (rand < 100) {
-      return i18next.t("partyUiHandler:thisIsWhereWePart", { pokemonName: pokemonName });
-    } else if (rand < 108) {
-      return i18next.t("partyUiHandler:illMissYou", { pokemonName: pokemonName });
-    } else if (rand < 116) {
-      return i18next.t("partyUiHandler:illNeverForgetYou", { pokemonName: pokemonName });
-    } else if (rand < 124) {
-      return i18next.t("partyUiHandler:untilWeMeetAgain", { pokemonName: pokemonName });
-    } else if (rand < 127) {
-      return i18next.t("partyUiHandler:sayonara", { pokemonName: pokemonName });
-    } else {
-      return i18next.t("partyUiHandler:smellYaLater", { pokemonName: pokemonName });
-    }
+    const goodbyeKeys = [
+      "partyUiHandler:goodbye",
+      "partyUiHandler:byebye",
+      "partyUiHandler:farewell",
+      "partyUiHandler:soLong",
+      "partyUiHandler:thisIsWhereWePart",
+      "partyUiHandler:illMissYou",
+      "partyUiHandler:illNeverForgetYou",
+      "partyUiHandler:untilWeMeetAgain",
+      "partyUiHandler:sayonara",
+      "partyUiHandler:smellYaLater",
+    ];
+    return i18next.t(randItem(goodbyeKeys), { pokemonName: pokemonName });
   }
 
   getFormChangeItemsModifiers(pokemon: Pokemon) {
