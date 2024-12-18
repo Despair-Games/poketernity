@@ -305,4 +305,7 @@ describe("Moves - Dragon Darts", () => {
 
   // TODO: implement this interaction (good luck lol)
   it.todo("should respect immunity from Dark types when invoked by a Prankster-boosted Metronome");
+
+  // TODO: fix this interaction (Wimp Out can only trigger from the second hit)
+  it.todo("should activate a target's Wimp Out with only the first hit");
 });
