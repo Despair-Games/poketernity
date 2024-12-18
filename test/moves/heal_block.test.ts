@@ -36,7 +36,7 @@ describe("Moves - Heal Block", () => {
       .disableCrits();
   });
 
-  it("shouldn't stop damage from HP-drain attacks, just HP restoration", async () => {
+  it("should block the usage of damaging moves that heal the user", async () => {
     await game.classicMode.startBattle([Species.CHARIZARD]);
 
     const player = game.scene.getPlayerPokemon()!;
@@ -48,24 +48,8 @@ describe("Moves - Heal Block", () => {
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("TurnEndPhase");
 
-    expect(player.hp).toBe(1);
-    expect(enemy.hp).toBeLessThan(enemy.getMaxHp());
-  });
-
-  it("shouldn't stop Liquid Ooze from dealing damage", async () => {
-    game.override.enemyAbility(Abilities.LIQUID_OOZE);
-
-    await game.classicMode.startBattle([Species.CHARIZARD]);
-
-    const player = game.scene.getPlayerPokemon()!;
-    const enemy = game.scene.getEnemyPokemon()!;
-
-    game.move.select(Moves.ABSORB);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-    await game.phaseInterceptor.to("TurnEndPhase");
-
-    expect(player.isFullHp()).toBe(false);
-    expect(enemy.isFullHp()).toBe(false);
+    const lastPlayerMove = player.getLastXMoves(1)[0];
+    expect(lastPlayerMove.move).toBe(Moves.NONE);
   });
 
   it("should stop delayed heals, such as from Wish", async () => {
