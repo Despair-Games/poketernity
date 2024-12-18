@@ -528,11 +528,12 @@ describe("Abilities - Wimp Out", () => {
       .enemyAbility(Abilities.WIMP_OUT)
       .enemyMoveset(Moves.SPLASH)
       .ability(Abilities.NO_GUARD)
+      .passiveAbility(Abilities.PURE_POWER)
       .moveset([Moves.SKY_DROP, Moves.FALSE_SWIPE])
       .startingLevel(100)
       .enemyLevel(10);
 
-    await game.classicMode.startBattle([Species.RAICHU, Species.PIKACHU]);
+    await game.classicMode.startBattle([Species.HAPPINY, Species.KARTANA]);
 
     const player1 = game.scene.getPlayerField()[0];
     const enemy1 = game.scene.getEnemyField()[0];
@@ -546,6 +547,8 @@ describe("Abilities - Wimp Out", () => {
     [player1, enemy1].forEach((p) => expect(p.getTag(BattlerTagType.SKY_DROP)).toBeDefined());
 
     await game.phaseInterceptor.to("MoveEndPhase");
+
+    expect(player1.getHpRatio()).toBeLessThanOrEqual(0.5);
     expect(game.phaseInterceptor.log).not.toContain("SwitchSummonPhase");
     expect(enemy1.isActive(true)).toBeTruthy();
     expect(enemy1.battleData.abilitiesApplied.includes(Abilities.WIMP_OUT)).toBeFalsy();
