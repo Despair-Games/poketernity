@@ -23,7 +23,7 @@ export class PostFaintHPDamageAbAttr extends PostFaintAbAttr {
       //If the mon didn't die to indirect damage
       const damage = pokemon.turnData.attacksReceived[0].damage;
       attacker.damageAndUpdate(damage, HitResult.OTHER);
-      // TODO: This should be handled by `damageAndUpdate()`
+      // TODO: This should be handled by `damage()`
       attacker.turnData.damageTaken += damage;
     }
     return true;

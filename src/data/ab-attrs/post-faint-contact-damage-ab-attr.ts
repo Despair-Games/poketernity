@@ -39,7 +39,7 @@ export class PostFaintContactDamageAbAttr extends PostFaintAbAttr {
       }
       if (!simulated) {
         attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio)), HitResult.OTHER);
-        // TODO: This should be handled by `damageAndUpdate()`
+        // TODO: This should be handled by `damage()`
         attacker.turnData.damageTaken += toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio));
       }
       return true;
