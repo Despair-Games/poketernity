@@ -21,7 +21,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import type { Moves } from "#enums/moves";
 import { PlayerGender } from "#enums/player-gender";
-import { MusicPreference } from "#app/system/settings/settings";
+import { MusicPreference } from "#enums/music-preference";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
 import i18next from "#app/plugins/i18n";

@@ -16,9 +16,10 @@ import type { SettingKeyboard } from "#app/system/settings/settings-keyboard";
 import TouchControl from "#app/touch-controls";
 import { Button } from "#enums/buttons";
 import { Device } from "#enums/devices";
-import MoveTouchControlsHandler from "./ui/settings/move-touch-controls-handler";
-import type { SettingsUpdateEventArgs } from "./@types/Settings";
-import { eventBus } from "./event-bus";
+import MoveTouchControlsHandler from "#app/ui/settings/move-touch-controls-handler";
+import type { SettingsUpdateEventArgs } from "#app/@types/Settings";
+import { eventBus } from "#app/event-bus";
+import { settings } from "#app/system/settings/settings-manager";
 
 export interface DeviceMapping {
   [key: string]: number;
@@ -168,13 +169,18 @@ export class InputsController {
       globalScene.input.keyboard?.on("keydown", this.keyboardKeyDown, this);
       globalScene.input.keyboard?.on("keyup", this.keyboardKeyUp, this);
     }
+
     this.touchControls = new TouchControl();
     this.moveTouchControlsHandler = new MoveTouchControlsHandler(this.touchControls);
-
     this.touchControls.render();
-    eventBus.on("settings/updated", ({ category, key }: SettingsUpdateEventArgs) => {
+
+    this.setGamepadSupport(settings.gamepad.enabled);
+
+    eventBus.on("settings/updated", ({ category, key, value }: SettingsUpdateEventArgs) => {
       if (category === "display" && ["uiWindowType", "uiTheme"].includes(key)) {
         this.touchControls.render();
+      } else if (category === "gamepad" && key === "enabled") {
+        this.setGamepadSupport(value as boolean);
       }
     });
   }

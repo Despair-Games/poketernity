@@ -1,7 +1,9 @@
 import type { Settings, SettingsCategory } from "#app/@types/Settings";
 import { SETTINGS_LS_KEY } from "#app/constants";
 import { eventBus } from "#app/event-bus";
+import { version } from "../../../package.json";
 import { isNullOrUndefined } from "#app/utils";
+import { applySettingsVersionMigration } from "#app/system/version_migration/version_converter";
 import { defaultSettings } from "./default-settings";
 
 //#region Types
@@ -17,7 +19,7 @@ interface SettingsManagerInit {
  * Manages game settings
  */
 class SettingsManager {
-  /** Local storage key for peristing settings. */
+  /** Local storage key for persisting settings. */
   public readonly lsKey: string;
 
   /** Internal buffer for current settings. */
@@ -118,6 +120,7 @@ class SettingsManager {
 
     this._settings[category][key] = value;
     eventBus.emit("settings/updated", { category, key, value });
+
     this.saveToLocalStorage();
   }
 
@@ -137,6 +140,7 @@ class SettingsManager {
    * Saves settings to local storage item with the key: {@linkcode lsKey}
    */
   private saveToLocalStorage() {
+    this._settings["gameVersion"] = version;
     localStorage.setItem(this.lsKey, JSON.stringify(this._settings));
     eventBus.emit("settings/saved", this._settings, this.lsKey);
   }
@@ -150,6 +154,9 @@ class SettingsManager {
     if (lsItem) {
       try {
         const lsSettings: Partial<Settings> = JSON.parse(lsItem);
+
+        applySettingsVersionMigration(lsSettings);
+
         const { general, audio, display, gamepad } = lsSettings;
 
         if (general) {

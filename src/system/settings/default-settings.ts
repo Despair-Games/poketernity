@@ -63,7 +63,7 @@ export const defaultAudioSettings: AudioSettings = {
   musicPreference: MusicPreference.MIXED,
 };
 
-export const deafultGamepadSettings: GamepadSettings = {
+export const defaultGamepadSettings: GamepadSettings = {
   activeIndex: 0,
   enabled: true,
 };
@@ -72,5 +72,5 @@ export const defaultSettings: Settings = {
   general: defaultGeneralSettings,
   display: defaultDisplaySettings,
   audio: defaultAudioSettings,
-  gamepad: deafultGamepadSettings,
+  gamepad: defaultGamepadSettings,
 };

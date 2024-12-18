@@ -1,4 +1,3 @@
-import { SettingKeys } from "#app/system/settings/settings";
 import type { SystemSaveData, SessionSaveData } from "#app/system/game-data";
 import { AbilityAttr, defaultStarterSpecies, DexAttr } from "#app/system/game-data";
 import { allSpecies } from "#app/data/pokemon-species";
@@ -83,20 +82,7 @@ export const systemMigrators = [
   },
 ] as const;
 
-export const settingsMigrators = [
-  /**
-   * Migrate from "REROLL_TARGET" property to {@linkcode
-   * SettingKeys.Shop_Cursor_Target}.
-   * @param data the `settings` object
-   */
-  function fixRerollTarget(data: Object) {
-    if (data.hasOwnProperty("REROLL_TARGET") && !data.hasOwnProperty(SettingKeys.Shop_Cursor_Target)) {
-      data[SettingKeys.Shop_Cursor_Target] = data["REROLL_TARGET"];
-      delete data["REROLL_TARGET"];
-      localStorage.setItem("settings", JSON.stringify(data));
-    }
-  },
-] as const;
+export const settingsMigrators = [] as const;
 
 export const sessionMigrators = [
   /**

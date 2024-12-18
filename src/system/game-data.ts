@@ -18,7 +18,6 @@ import { GameModes, getGameMode } from "#app/game-mode";
 import { BattleType } from "#app/battle";
 import TrainerData from "#app/system/trainer-data";
 import { trainerConfigs } from "#app/data/trainer-config";
-import { resetSettings, setSetting } from "#app/system/settings/settings";
 import { achvs } from "#app/system/achv";
 import EggData from "#app/system/egg-data";
 import type { Egg } from "#app/data/egg";
@@ -50,11 +49,7 @@ import { WeatherType } from "#enums/weather-type";
 import { TerrainType } from "#enums/terrain-type";
 import { ReloadSessionPhase } from "#app/phases/reload-session-phase";
 import { RUN_HISTORY_LIMIT } from "#app/ui/run-history-ui-handler";
-import {
-  applySessionVersionMigration,
-  applySystemVersionMigration,
-  applySettingsVersionMigration,
-} from "./version_migration/version_converter";
+import { applySessionVersionMigration, applySystemVersionMigration } from "./version_migration/version_converter";
 import { MysteryEncounterSaveData } from "#app/data/mystery-encounters/mystery-encounter-save-data";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { api } from "#app/plugins/api/api";
@@ -351,7 +346,6 @@ export class GameData {
   public unlockPity: number[];
 
   constructor() {
-    this.loadSettings();
     this.loadMappingConfigs();
     this.trainerId = randInt(65536);
     this.secretId = randInt(65536);
@@ -857,38 +851,16 @@ export class GameData {
     }
 
     Object.keys(settingDefaults).forEach((s) => {
-      // Iterate over the default gamepad settings
+      // Iterate over the default settings
       if (s === setting) {
         // If the current setting matches, update its value
         settingsControls[s] = valueIndex;
       }
     });
 
-    // localStorage.setItem(localStoragePropertyName, JSON.stringify(settingsControls)); // Save the updated gamepad settings back to localStorage
+    //localStorage.setItem(localStoragePropertyName, JSON.stringify(settingsControls));
 
     return true; // Return true to indicate the operation was successful
-  }
-
-  /**
-   * Loads Settings from local storage if available
-   * @returns true if succesful, false if not
-   */
-  private loadSettings(): boolean {
-    resetSettings();
-
-    if (!localStorage.hasOwnProperty("settings")) {
-      return false;
-    }
-
-    const settings = JSON.parse(localStorage.getItem("settings")!); // TODO: is this bang correct?
-
-    applySettingsVersionMigration(settings);
-
-    for (const setting of Object.keys(settings)) {
-      setSetting(setting, settings[setting]);
-    }
-
-    return true; // TODO: is `true` the correct return value?
   }
 
   public saveTutorialFlag(tutorial: Tutorial, flag: boolean): boolean {

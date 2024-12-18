@@ -337,9 +337,8 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
 
     // Update the cursor for each key based on the stored settings or default cursors.
     this.keys.forEach((key, index) => {
-      console.log("update bindings", key, index, settings.gamepad[key]);
       if (["enabled"].includes(key)) {
-        this.setOptionCursor(index, settings.gamepad[key] ? Number(settings.gamepad[key]) : this.optionCursors[index]);
+        this.setOptionCursor(index, settings.gamepad[key] ? Number(!settings.gamepad[key]) : this.optionCursors[index]);
       }
     });
 
