@@ -12,7 +12,7 @@ import { AbAttr } from "./ab-attr";
 export class ConditionalCritAbAttr extends AbAttr {
   private readonly condition: PokemonAttackCondition;
 
-  constructor(condition: PokemonAttackCondition, _checkUser?: Boolean) {
+  constructor(condition: PokemonAttackCondition) {
     super();
 
     this.condition = condition;
@@ -20,9 +20,10 @@ export class ConditionalCritAbAttr extends AbAttr {
 
   /**
    * @param pokemon {@linkcode Pokemon} user.
-   * @param args [0] {@linkcode BooleanHolder} If true critical hit is guaranteed.
-   *             [1] {@linkcode Pokemon} Target.
-   *             [2] {@linkcode Move} used by ability user.
+   * @param args -
+   * - [0] {@linkcode BooleanHolder} Set to `true` if it should be a critical hit.
+   * - [1] {@linkcode Pokemon} Target.
+   * - [2] {@linkcode Move} used by ability user.
    */
   override apply(
     pokemon: Pokemon,
@@ -31,14 +32,14 @@ export class ConditionalCritAbAttr extends AbAttr {
     _cancelled: BooleanHolder,
     args: any[],
   ): boolean {
-    const critOnly: BooleanHolder = args[0];
+    const isCritical: BooleanHolder = args[0];
     const target: Pokemon = args[1];
     const move: Move = args[2];
     if (!this.condition(pokemon, target, move)) {
       return false;
     }
 
-    critOnly.value = true;
+    isCritical.value = true;
     return true;
   }
 }
