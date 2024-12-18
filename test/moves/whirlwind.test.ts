@@ -10,6 +10,7 @@ import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { Status } from "#app/data/status-effect";
 import { StatusEffect } from "#enums/status-effect";
+import { BattlerIndex } from "#app/battle";
 
 describe("Moves - Whirlwind", () => {
   let phaserGame: Phaser.Game;
@@ -51,6 +52,25 @@ describe("Moves - Whirlwind", () => {
 
     expect(staraptor.findTag((t) => t.tagType === BattlerTagType.FLYING)).toBeDefined();
     expect(game.scene.getEnemyPokemon()!.getLastXMoves(1)[0].result).toBe(MoveResult.MISS);
+  });
+
+  it("should not hit a target carried by Sky Drop", async () => {
+    game.override.battleType("double").moveset([Moves.SKY_DROP, Moves.WHIRLWIND]).enemyMoveset(Moves.SPLASH);
+
+    await game.classicMode.startBattle([Species.STARAPTOR, Species.PIDGEOT]);
+
+    const [staraptor, pidgeot] = game.scene.getPlayerField()!;
+    const enemyPokemon = game.scene.getEnemyField();
+
+    game.move.select(Moves.SKY_DROP, 0, BattlerIndex.ENEMY);
+    game.move.select(Moves.WHIRLWIND, 1, BattlerIndex.ENEMY);
+
+    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+
+    await game.phaseInterceptor.to("BerryPhase", false);
+
+    [staraptor, enemyPokemon[0]].forEach((p) => expect(p.getTag(BattlerTagType.SKY_DROP)).toBeDefined());
+    expect(pidgeot.getLastXMoves()[0]?.result).toBe(MoveResult.MISS);
   });
 
   it("should force switches randomly", async () => {
