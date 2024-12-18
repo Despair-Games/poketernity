@@ -23,6 +23,7 @@ export class PostTurnHurtIfSleepingAbAttr extends PostTurnAbAttr {
    * @returns `true` if any opponents are sleeping
    */
   override applyPostTurn(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
+    let hadEffect = false;
     for (const opp of pokemon.getOpponents()) {
       if (
         (opp.status?.effect === StatusEffect.SLEEP || opp.hasAbility(Abilities.COMATOSE))
@@ -35,9 +36,9 @@ export class PostTurnHurtIfSleepingAbAttr extends PostTurnAbAttr {
             i18next.t("abilityTriggers:badDreams", { pokemonName: getPokemonNameWithAffix(opp) }),
           );
         }
-        return true;
+        hadEffect = true;
       }
     }
-    return false;
+    return hadEffect;
   }
 }
