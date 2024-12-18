@@ -10,12 +10,7 @@ import {
   applyPreAttackAbAttrs,
 } from "#app/data/ability";
 import { MoveAnim } from "#app/data/battle-anims";
-import {
-  BattlerTagLapseType,
-  SkyDropTag,
-  SubstituteTag,
-  TypeBoostTag
-} from "#app/data/battler-tags";
+import { BattlerTagLapseType, SkyDropTag, SubstituteTag, TypeBoostTag } from "#app/data/battler-tags";
 import type { MoveAttr } from "#app/data/move";
 import {
   applyFilteredMoveAttrs,
@@ -56,7 +51,7 @@ import { HitCheckResult } from "#enums/hit-check-result";
 import { Moves } from "#enums/moves";
 import i18next from "i18next";
 import { HitCheckPhase } from "#app/phases/hit-check-phase";
-import type { BattlerIndex } from "#app/battle.js";
+import type { BattlerIndex } from "#app/battle";
 
 export class MoveEffectPhase extends HitCheckPhase {
   private moveHistoryEntry: TurnMove;
@@ -614,7 +609,7 @@ export class MoveEffectPhase extends HitCheckPhase {
       }
     });
   }
-  
+
   /** @returns An array of all {@linkcode Pokemon} targeted by this phase's invoked move */
   public override getTargets(): Pokemon[] {
     const targets = this.adjustedTargets ?? this.targets;

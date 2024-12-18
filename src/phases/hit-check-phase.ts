@@ -2,8 +2,8 @@ import { BattlerIndex } from "#app/battle";
 import { AlwaysHitAbAttr } from "#app/data/ab-attrs/always-hit-ab-attr";
 import { MaxMultiHitAbAttr } from "#app/data/ab-attrs/max-multi-hit-ab-attr";
 import { ConditionalProtectTag } from "#app/data/arena-tag";
-import { DamageProtectedTag, SemiInvulnerableTag, ProtectedTag, SkyDropTag } from "#app/data/battler-tags";
-import { MoveFlags, MoveTarget, HitsTagAttr, ToxicAccuracyAttr, MoveCategory, OneHitKOAttr } from "#app/data/move";
+import { SemiInvulnerableTag, ProtectedTag, SkyDropTag } from "#app/data/battler-tags";
+import { MoveFlags, MoveTarget, HitsTagAttr, ToxicAccuracyAttr, OneHitKOAttr } from "#app/data/move";
 import type { TypeDamageMultiplier } from "#app/data/type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitCheckResult } from "#enums/hit-check-result";
@@ -37,10 +37,11 @@ export abstract class HitCheckPhase extends PokemonPhase {
   /**
    * Resolves whether this phase's invoked move hits the given target
    * @param target - The {@linkcode Pokemon} targeted by the invoked move
+   * @param simulated - If `true`, does not change game state during calculation (default `false`)
    * @returns a {@linkcode HitCheckEntry} containing the attack's {@linkcode HitCheckResult}
    * and {@linkcode TypeDamageMultiplier | effectiveness} against the target.
    */
-  public hitCheck(target: Pokemon): HitCheckEntry {
+  public hitCheck(target: Pokemon, simulated: boolean = false): HitCheckEntry {
     const user = this.getUserPokemon();
     const move = this.move.getMove();
 
@@ -70,7 +71,7 @@ export abstract class HitCheckPhase extends PokemonPhase {
     const alwaysHit =
       [user, target].some((p) => p.hasAbilityWithAttr(AlwaysHitAbAttr))
       || (user.getTag(BattlerTagType.IGNORE_ACCURACY)
-        && (user.getLastXMoves().find(() => true)?.targets ?? []).indexOf(target.getBattlerIndex()) !== -1)
+        && (user.getLastXMoves()[0]?.targets ?? []).indexOf(target.getBattlerIndex()) !== -1)
       || !!target.getTag(BattlerTagType.ALWAYS_GET_HIT);
 
     const semiInvulnerableTag = target.getTag(SemiInvulnerableTag) ?? target.getTag(SkyDropTag);
@@ -99,7 +100,7 @@ export abstract class HitCheckPhase extends PokemonPhase {
       globalScene.arena.applyTagsForSide(
         ConditionalProtectTag,
         targetSide,
-        false,
+        simulated,
         hasConditionalProtectApplied,
         user,
         target,
@@ -112,10 +113,7 @@ export abstract class HitCheckPhase extends PokemonPhase {
     const isProtected =
       (bypassIgnoreProtect.value || !this.move.getMove().checkFlag(MoveFlags.IGNORE_PROTECT, user, target))
       && (hasConditionalProtectApplied.value
-        || (!target.findTags((t) => t instanceof DamageProtectedTag).length
-          && target.findTags((t) => t instanceof ProtectedTag).find((t) => target.lapseTag(t.tagType)))
-        || (this.move.getMove().category !== MoveCategory.STATUS
-          && target.findTags((t) => t instanceof DamageProtectedTag).find((t) => target.lapseTag(t.tagType))));
+        || target.findTags((t) => t instanceof ProtectedTag)[0]?.apply(target, simulated, user, move));
 
     if (isProtected) {
       return [HitCheckResult.PROTECTED, 0];
@@ -127,7 +125,7 @@ export abstract class HitCheckPhase extends PokemonPhase {
      * The effectiveness of the move against the given target.
      * Accounts for type and move immunities from defensive typing, abilities, and other effects.
      */
-    const effectiveness = target.getMoveEffectiveness(user, move, false, false, cancelNoEffectMessage);
+    const effectiveness = target.getMoveEffectiveness(user, move, false, simulated, cancelNoEffectMessage);
     if (effectiveness === 0) {
       return cancelNoEffectMessage.value
         ? [HitCheckResult.NO_EFFECT_NO_MESSAGE, effectiveness]
