@@ -498,7 +498,7 @@ function getPokemonTradeOptions(): Map<number, EnemyPokemon[]> {
 
   globalScene.getPlayerParty().forEach((pokemon) => {
     // If the party member is legendary/mythical, the only trade options available are always pulled from generation-specific legendary trade pools
-    if (pokemon.species.legendary || pokemon.species.subLegendary || pokemon.species.mythical) {
+    if (pokemon.species.isLegendLike()) {
       const generation = pokemon.species.generation;
       const tradeOptions: EnemyPokemon[] = LEGENDARY_TRADE_POOLS[generation].map((s) => {
         const pokemonSpecies = getPokemonSpecies(s);
@@ -539,10 +539,10 @@ function generateTradeOption(alreadyUsedSpecies: PokemonSpecies[], originalBst?:
   while (isNullOrUndefined(newSpecies)) {
     // Get all non-legendary species that fall within the Bst range requirements
     let validSpecies = allSpecies.filter((s) => {
-      const isLegendaryOrMythical = s.legendary || s.subLegendary || s.mythical;
+      const isLegendLike = s.isLegendLike();
       const speciesBst = s.getBaseStatTotal();
       const bstInRange = speciesBst >= bstMin && speciesBst <= bstCap;
-      return !isLegendaryOrMythical && bstInRange && !EXCLUDED_TRADE_SPECIES.includes(s.speciesId);
+      return !isLegendLike && bstInRange && !EXCLUDED_TRADE_SPECIES.includes(s.speciesId);
     });
 
     // There must be at least 20 species available before it will choose one

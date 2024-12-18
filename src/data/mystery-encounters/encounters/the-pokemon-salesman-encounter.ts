@@ -15,7 +15,7 @@ import {
   getSpriteKeysFromPokemon,
 } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { getPokemonSpecies } from "#app/data/pokemon-species";
+import { getPokemonSpecies, getSpecialSpeciesList } from "#app/data/pokemon-species";
 import { speciesStarterCosts } from "#app/data/balance/starters";
 import { Species } from "#enums/species";
 import { PokeballType } from "#enums/pokeball";
@@ -28,7 +28,7 @@ import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
 import { Abilities } from "#enums/abilities";
-import { NON_LEGEND_PARADOX_POKEMON } from "#app/data/balance/special-species-groups";
+import { SpeciesCategories } from "#enums/pokemon-species-categories";
 
 /** the i18n namespace for this encounter */
 const namespace = "mysteryEncounters/thePokemonSalesman";
@@ -185,6 +185,13 @@ export const ThePokemonSalesmanEncounter: MysteryEncounter = MysteryEncounterBui
  */
 export function getSalesmanSpeciesOffer(): PokemonSpecies {
   return getPokemonSpecies(
-    getRandomSpeciesByStarterCost([0, 5], NON_LEGEND_PARADOX_POKEMON, undefined, false, false, false),
+    getRandomSpeciesByStarterCost(
+      [0, 5],
+      getSpecialSpeciesList(SpeciesCategories.PARADOX, false),
+      undefined,
+      false,
+      false,
+      false,
+    ),
   );
 }
