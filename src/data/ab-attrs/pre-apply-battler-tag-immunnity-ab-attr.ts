@@ -11,7 +11,7 @@ import { PreApplyBattlerTagAbAttr } from "./pre-apply-battler-tag-ab-attr";
  * @extends PreApplyBattlerTagAbAttr
  */
 export class PreApplyBattlerTagImmunityAbAttr extends PreApplyBattlerTagAbAttr {
-  private immuneTagTypes: BattlerTagType[];
+  private readonly immuneTagTypes: BattlerTagType[];
   private battlerTag: BattlerTag;
 
   constructor(immuneTagTypes: BattlerTagType | BattlerTagType[]) {

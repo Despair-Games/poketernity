@@ -10,7 +10,7 @@ import { PostSummonAbAttr } from "./post-summon-ab-attr";
  * @extends PostSummonAbAttr
  */
 export class PostSummonUserFieldRemoveStatusEffectAbAttr extends PostSummonAbAttr {
-  private statusEffect: StatusEffect[];
+  private readonly statusEffect: StatusEffect[];
 
   /**
    * @param statusEffect - The status effects to be removed from the user's field.

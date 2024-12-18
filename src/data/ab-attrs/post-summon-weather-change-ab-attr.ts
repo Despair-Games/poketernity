@@ -9,7 +9,7 @@ import { PostSummonAbAttr } from "./post-summon-ab-attr";
  * @extends PostSummonAbAttr
  */
 export class PostSummonWeatherChangeAbAttr extends PostSummonAbAttr {
-  private weatherType: WeatherType;
+  private readonly weatherType: WeatherType;
 
   constructor(weatherType: WeatherType) {
     super();

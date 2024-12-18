@@ -13,7 +13,7 @@ import { AbAttr } from "./ab-attr";
  */
 export class HealFromBerryUseAbAttr extends AbAttr {
   /** Percent of Max HP to heal */
-  private healPercent: number;
+  private readonly healPercent: number;
 
   constructor(healPercent: number) {
     super();

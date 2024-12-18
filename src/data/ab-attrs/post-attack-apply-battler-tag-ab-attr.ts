@@ -12,9 +12,9 @@ import { PostAttackAbAttr } from "./post-attack-ab-attr";
  * - Stench
  */
 export class PostAttackApplyBattlerTagAbAttr extends PostAttackAbAttr {
-  private contactRequired: boolean;
-  private chance: (user: Pokemon, target: Pokemon, move: Move) => number;
-  private effects: BattlerTagType[];
+  private readonly contactRequired: boolean;
+  private readonly chance: (user: Pokemon, target: Pokemon, move: Move) => number;
+  private readonly effects: BattlerTagType[];
 
   constructor(
     contactRequired: boolean,

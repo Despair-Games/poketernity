@@ -6,9 +6,9 @@ import type { BattlerTagType } from "#enums/battler-tag-type";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 
 export class PostDefendContactApplyTagChanceAbAttr extends PostDefendAbAttr {
-  private chance: number;
-  private tagType: BattlerTagType;
-  private turnCount: number | undefined;
+  private readonly chance: number;
+  private readonly tagType: BattlerTagType;
+  private readonly turnCount: number | undefined;
 
   constructor(chance: number, tagType: BattlerTagType, turnCount?: number) {
     super();

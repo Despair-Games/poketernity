@@ -9,7 +9,7 @@ import { PreDefendAbAttr } from "./pre-defend-ab-attr";
  * @see {@linkcode applyPreDefend}
  */
 export class AlliedFieldDamageReductionAbAttr extends PreDefendAbAttr {
-  private damageMultiplier: number;
+  private readonly damageMultiplier: number;
 
   constructor(damageMultiplier: number) {
     super();

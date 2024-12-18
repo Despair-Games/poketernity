@@ -4,8 +4,8 @@ import type { Type } from "#enums/type";
 import { AbAttr } from "./ab-attr";
 
 export class IgnoreTypeImmunityAbAttr extends AbAttr {
-  private defenderType: Type;
-  private allowedMoveTypes: Type[];
+  private readonly defenderType: Type;
+  private readonly allowedMoveTypes: Type[];
 
   constructor(defenderType: Type, allowedMoveTypes: Type[]) {
     super(true);

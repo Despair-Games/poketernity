@@ -9,18 +9,16 @@ import { PostTurnAbAttr } from "./post-turn-ab-attr";
 
 /**
  * After the turn ends, try to create an extra item
+ * @param itemType - The type of item to create
+ * @param procChance - Chance to create an item
+ * @see {@linkcode applyPostTurn()}
  * @extends PostTurnAbAttr
  */
 export class PostTurnLootAbAttr extends PostTurnAbAttr {
-  /**
-   * @param itemType - The type of item to create
-   * @param procChance - Chance to create an item
-   * @see {@linkcode applyPostTurn()}
-   */
   constructor(
     /** Extend itemType to add more options */
-    private itemType: "EATEN_BERRIES" | "HELD_BERRIES",
-    private procChance: (pokemon: Pokemon) => number,
+    private readonly itemType: "EATEN_BERRIES" | "HELD_BERRIES",
+    private readonly procChance: (pokemon: Pokemon) => number,
   ) {
     super();
   }

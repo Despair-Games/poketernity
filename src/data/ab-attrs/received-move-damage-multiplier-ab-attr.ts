@@ -10,8 +10,8 @@ type PokemonDefendCondition = (target: Pokemon, user: Pokemon, move: Move) => bo
 //#endregion
 
 export class ReceivedMoveDamageMultiplierAbAttr extends PreDefendAbAttr {
-  protected condition: PokemonDefendCondition;
-  private damageMultiplier: number;
+  protected readonly condition: PokemonDefendCondition;
+  private readonly damageMultiplier: number;
 
   constructor(condition: PokemonDefendCondition, damageMultiplier: number) {
     super();

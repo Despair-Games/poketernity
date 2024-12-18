@@ -7,8 +7,8 @@ import i18next from "i18next";
 import { PostSummonAbAttr } from "./post-summon-ab-attr";
 
 export class PostSummonAllyHealAbAttr extends PostSummonAbAttr {
-  private healRatio: number;
-  private showAnim: boolean;
+  private readonly healRatio: number;
+  private readonly showAnim: boolean;
 
   constructor(healRatio: number, showAnim: boolean = false) {
     super();

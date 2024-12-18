@@ -13,7 +13,7 @@ import { PostTurnAbAttr } from "./post-turn-ab-attr";
  * @extends PostTurnAbAttr
  */
 export class PostTurnStatusHealAbAttr extends PostTurnAbAttr {
-  private effects: StatusEffect[];
+  private readonly effects: StatusEffect[];
 
   constructor(...effects: StatusEffect[]) {
     super(false);

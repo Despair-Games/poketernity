@@ -8,7 +8,7 @@ import { AbAttr } from "./ab-attr";
  * @param stats the stats that should be ignored
  */
 export class IgnoreOpponentStatStagesAbAttr extends AbAttr {
-  private stats: readonly BattleStat[];
+  private readonly stats: readonly BattleStat[];
 
   constructor(stats?: BattleStat[]) {
     super(false);

@@ -10,8 +10,8 @@ import { AbAttr } from "./ab-attr";
  * @extends AbAttr
  */
 export class IgnoreTypeStatusEffectImmunityAbAttr extends AbAttr {
-  private statusEffect: StatusEffect[];
-  private defenderType: Type[];
+  private readonly statusEffect: StatusEffect[];
+  private readonly defenderType: Type[];
 
   constructor(statusEffect: StatusEffect[], defenderType: Type[]) {
     super(true);

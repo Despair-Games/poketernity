@@ -12,7 +12,7 @@ import { PreSetStatusAbAttr } from "./pre-set-status-ab-attr";
  * @extends PreSetStatusAbAttr
  */
 export class PreSetStatusEffectImmunityAbAttr extends PreSetStatusAbAttr {
-  private immuneEffects: StatusEffect[];
+  private readonly immuneEffects: StatusEffect[];
 
   constructor(...immuneEffects: StatusEffect[]) {
     super();

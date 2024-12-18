@@ -9,7 +9,7 @@ import { PreAttackAbAttr } from "./pre-attack-ab-attr";
  * @extends PreAttackAbAttr
  */
 export class AddSecondStrikeAbAttr extends PreAttackAbAttr {
-  private damageMultiplier: number;
+  private readonly damageMultiplier: number;
 
   constructor(damageMultiplier: number) {
     super(false);

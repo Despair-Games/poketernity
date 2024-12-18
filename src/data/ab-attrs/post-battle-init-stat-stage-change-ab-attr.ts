@@ -5,9 +5,9 @@ import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { PostBattleInitAbAttr } from "./post-battle-init-ab-attr";
 
 export class PostBattleInitStatStageChangeAbAttr extends PostBattleInitAbAttr {
-  private stats: BattleStat[];
-  private stages: number;
-  private selfTarget: boolean;
+  private readonly stats: BattleStat[];
+  private readonly stages: number;
+  private readonly selfTarget: boolean;
 
   constructor(stats: BattleStat[], stages: number, selfTarget: boolean = false) {
     super();

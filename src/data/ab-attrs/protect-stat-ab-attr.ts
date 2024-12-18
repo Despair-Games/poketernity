@@ -11,7 +11,7 @@ import { PreStatStageChangeAbAttr } from "./pre-stat-stage-change-ab-attr";
  */
 export class ProtectStatAbAttr extends PreStatStageChangeAbAttr {
   /** {@linkcode BattleStat} to protect or `undefined` if **all** {@linkcode BattleStat} are protected */
-  private protectedStat?: BattleStat;
+  private readonly protectedStat?: BattleStat;
 
   constructor(protectedStat?: BattleStat) {
     super();

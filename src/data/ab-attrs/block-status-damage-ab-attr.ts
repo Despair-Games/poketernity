@@ -9,7 +9,7 @@ import { AbAttr } from "./ab-attr";
  * @extends AbAttr
  */
 export class BlockStatusDamageAbAttr extends AbAttr {
-  private effects: StatusEffect[];
+  private readonly effects: StatusEffect[];
 
   constructor(...effects: StatusEffect[]) {
     super(false);

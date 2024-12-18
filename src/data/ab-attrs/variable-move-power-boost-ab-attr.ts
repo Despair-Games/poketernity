@@ -5,17 +5,17 @@ import { VariableMovePowerAbAttr } from "./variable-move-power-ab-attr";
 
 /**
  * Abilities which cause a variable amount of power increase.
- * @param mult A function which takes the user, target, and move, and returns the power multiplier. `1` means no multiplier.
- * @param showAbility Whether to show the ability when it activates.
+ * @param multFunc A function which takes the user, target, and move, and returns the power multiplier. `1` means no multiplier.
+ * @param showAbility Whether to show the ability when it activates. Default `true`
  * @extends VariableMovePowerAbAttr
  * @see {@link applyPreAttack}
  */
 export class VariableMovePowerBoostAbAttr extends VariableMovePowerAbAttr {
-  private mult: (user: Pokemon, target: Pokemon, move: Move) => number;
+  private readonly multFunc: (user: Pokemon, target: Pokemon, move: Move) => number;
 
-  constructor(mult: (user: Pokemon, target: Pokemon, move: Move) => number, showAbility: boolean = true) {
+  constructor(multFunc: (user: Pokemon, target: Pokemon, move: Move) => number, showAbility: boolean = true) {
     super(showAbility);
-    this.mult = mult;
+    this.multFunc = multFunc;
   }
 
   /**
@@ -29,7 +29,7 @@ export class VariableMovePowerBoostAbAttr extends VariableMovePowerAbAttr {
     move: Move,
     args: any[],
   ): boolean {
-    const multiplier = this.mult(pokemon, defender, move);
+    const multiplier = this.multFunc(pokemon, defender, move);
     const power: NumberHolder = args[0];
     if (multiplier !== 1) {
       power.value *= multiplier;

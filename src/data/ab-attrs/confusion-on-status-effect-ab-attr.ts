@@ -14,7 +14,7 @@ import { PostAttackAbAttr } from "./post-attack-ab-attr";
  */
 export class ConfusionOnStatusEffectAbAttr extends PostAttackAbAttr {
   /** List of effects to apply confusion after */
-  private effects: StatusEffect[];
+  private readonly effects: StatusEffect[];
 
   constructor(...effects: StatusEffect[]) {
     /** This effect does not require a damaging move */

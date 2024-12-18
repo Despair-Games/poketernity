@@ -7,7 +7,7 @@ import { PostItemLostAbAttr } from "./post-item-lost-ab-attr";
  * @extends PostItemLostAbAttr
  */
 export class PostItemLostApplyBattlerTagAbAttr extends PostItemLostAbAttr {
-  private tagType: BattlerTagType;
+  private readonly tagType: BattlerTagType;
   constructor(tagType: BattlerTagType) {
     super(true);
     this.tagType = tagType;

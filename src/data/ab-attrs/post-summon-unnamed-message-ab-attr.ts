@@ -8,7 +8,7 @@ import { PostSummonAbAttr } from "./post-summon-ab-attr";
  * @extends PostSummonAbAttr
  */
 export class PostSummonUnnamedMessageAbAttr extends PostSummonAbAttr {
-  private message: string;
+  private readonly message: string;
 
   constructor(message: string) {
     super(true);

@@ -9,7 +9,7 @@ import { BlockNonDirectDamageAbAttr } from "./block-non-direct-damage-ab-attr";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 
 export class PostDefendContactDamageAbAttr extends PostDefendAbAttr {
-  private damageRatio: number;
+  private readonly damageRatio: number;
 
   constructor(damageRatio: number) {
     super();

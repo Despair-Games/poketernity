@@ -6,7 +6,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 
 export class PostDefendMoveDisableAbAttr extends PostDefendAbAttr {
-  private chance: number;
+  private readonly chance: number;
 
   constructor(chance: number) {
     super();

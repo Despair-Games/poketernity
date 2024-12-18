@@ -4,7 +4,7 @@ import { globalScene } from "#app/global-scene";
 import { PostVictoryAbAttr } from "./post-victory-ab-attr";
 
 export class PostVictoryFormChangeAbAttr extends PostVictoryAbAttr {
-  private formFunc: (p: Pokemon) => integer;
+  private readonly formFunc: (p: Pokemon) => integer;
 
   constructor(formFunc: (p: Pokemon) => integer) {
     super(true);

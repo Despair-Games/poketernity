@@ -8,7 +8,7 @@ import { AbAttr } from "./ab-attr";
  * @extends AbAttr
  */
 export class WeightMultiplierAbAttr extends AbAttr {
-  private multiplier: number;
+  private readonly multiplier: number;
 
   constructor(multiplier: number) {
     super();

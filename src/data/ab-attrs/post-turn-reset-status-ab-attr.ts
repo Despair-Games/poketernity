@@ -10,7 +10,7 @@ import { PostTurnAbAttr } from "./post-turn-ab-attr";
  * @extends PostTurnAbAttr
  */
 export class PostTurnResetStatusAbAttr extends PostTurnAbAttr {
-  private allyTarget: boolean;
+  private readonly allyTarget: boolean;
   private target: Pokemon;
 
   constructor(allyTarget: boolean = false) {

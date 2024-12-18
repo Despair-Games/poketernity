@@ -12,10 +12,10 @@ import { ReceivedMoveDamageMultiplierAbAttr } from "./received-move-damage-multi
  * @extends ReceivedMoveDamageMultiplierAbAttr
  */
 export class FormBlockDamageAbAttr extends ReceivedMoveDamageMultiplierAbAttr {
-  private multiplier: number;
-  private tagType: BattlerTagType;
-  private recoilDamageFunc?: (pokemon: Pokemon) => number;
-  private triggerMessageFunc: (pokemon: Pokemon, abilityName: string) => string;
+  private readonly multiplier: number;
+  private readonly tagType: BattlerTagType;
+  private readonly recoilDamageFunc?: (pokemon: Pokemon) => number;
+  private readonly triggerMessageFunc: (pokemon: Pokemon, abilityName: string) => string;
 
   constructor(
     condition: PokemonDefendCondition,

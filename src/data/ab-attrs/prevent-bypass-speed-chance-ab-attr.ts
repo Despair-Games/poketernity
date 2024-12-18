@@ -13,7 +13,7 @@ import { AbAttr } from "./ab-attr";
  * @extends AbAttr
  */
 export class PreventBypassSpeedChanceAbAttr extends AbAttr {
-  private condition: (pokemon: Pokemon, move: Move) => boolean;
+  private readonly condition: (pokemon: Pokemon, move: Move) => boolean;
 
   constructor(condition: (pokemon: Pokemon, move: Move) => boolean) {
     super(true);

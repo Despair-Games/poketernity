@@ -8,8 +8,8 @@ import type { BattleStat } from "#enums/stat";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 
 export class PostDefendCritStatStageChangeAbAttr extends PostDefendAbAttr {
-  private stat: BattleStat;
-  private stages: number;
+  private readonly stat: BattleStat;
+  private readonly stages: number;
 
   constructor(stat: BattleStat, stages: number) {
     super();

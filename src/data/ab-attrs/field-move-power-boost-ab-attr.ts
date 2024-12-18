@@ -9,8 +9,8 @@ import { AbAttr } from "./ab-attr";
  * @extends AbAttr
  */
 export class FieldMovePowerBoostAbAttr extends AbAttr {
-  private condition: PokemonAttackCondition;
-  private powerMultiplier: number;
+  private readonly condition: PokemonAttackCondition;
+  private readonly powerMultiplier: number;
 
   /**
    * @param condition - A function that determines whether the power boost condition is met.

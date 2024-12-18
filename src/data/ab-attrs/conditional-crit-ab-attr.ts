@@ -10,7 +10,7 @@ import { AbAttr } from "./ab-attr";
  * @see {@linkcode apply}
  */
 export class ConditionalCritAbAttr extends AbAttr {
-  private condition: PokemonAttackCondition;
+  private readonly condition: PokemonAttackCondition;
 
   constructor(condition: PokemonAttackCondition, _checkUser?: Boolean) {
     super();

@@ -11,9 +11,9 @@ import { AbAttr } from "./ab-attr";
  * @see {@link BooleanHolder}
  */
 export class FieldMultiplyStatAbAttr extends AbAttr {
-  private stat: Stat;
-  private multiplier: number;
-  private canStack: boolean;
+  private readonly stat: Stat;
+  private readonly multiplier: number;
+  private readonly canStack: boolean;
 
   constructor(stat: Stat, multiplier: number, canStack: boolean = false) {
     super(false);

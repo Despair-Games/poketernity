@@ -6,8 +6,8 @@ import type { BattleStat } from "#enums/stat";
 import { FlinchEffectAbAttr } from "./flinch-effect-ab-attr";
 
 export class FlinchStatStageChangeAbAttr extends FlinchEffectAbAttr {
-  private stats: BattleStat[];
-  private stages: number;
+  private readonly stats: BattleStat[];
+  private readonly stages: number;
 
   constructor(stats: BattleStat[], stages: number) {
     super();

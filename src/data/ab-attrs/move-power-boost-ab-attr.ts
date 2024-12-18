@@ -5,8 +5,8 @@ import type { NumberHolder } from "#app/utils";
 import { VariableMovePowerAbAttr } from "./variable-move-power-ab-attr";
 
 export class MovePowerBoostAbAttr extends VariableMovePowerAbAttr {
-  private condition: PokemonAttackCondition;
-  private powerMultiplier: number;
+  private readonly condition: PokemonAttackCondition;
+  private readonly powerMultiplier: number;
 
   constructor(condition: PokemonAttackCondition, powerMultiplier: number, showAbility: boolean = true) {
     super(showAbility);

@@ -9,7 +9,7 @@ import i18next from "i18next";
 import { PostWeatherLapseAbAttr } from "./post-weather-lapse-ab-attr";
 
 export class PostWeatherLapseHealAbAttr extends PostWeatherLapseAbAttr {
-  private healFactor: number;
+  private readonly healFactor: number;
 
   constructor(healFactor: number, ...weatherTypes: WeatherType[]) {
     super(...weatherTypes);

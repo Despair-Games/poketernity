@@ -10,7 +10,7 @@ import { AbAttr } from "./ab-attr";
  * @see {@linkcode apply}
  */
 export class MoveEffectChanceMultiplierAbAttr extends AbAttr {
-  private chanceMultiplier: number;
+  private readonly chanceMultiplier: number;
 
   constructor(chanceMultiplier: number) {
     super(true);

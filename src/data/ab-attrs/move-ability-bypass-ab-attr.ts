@@ -4,7 +4,7 @@ import type { BooleanHolder } from "#app/utils";
 import { AbAttr } from "./ab-attr";
 
 export class MoveAbilityBypassAbAttr extends AbAttr {
-  private moveIgnoreFunc: (pokemon: Pokemon, move: Move) => boolean;
+  private readonly moveIgnoreFunc: (pokemon: Pokemon, move: Move) => boolean;
 
   constructor(moveIgnoreFunc?: (pokemon: Pokemon, move: Move) => boolean) {
     super(false);

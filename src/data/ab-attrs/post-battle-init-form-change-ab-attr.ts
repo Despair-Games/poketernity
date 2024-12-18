@@ -4,7 +4,7 @@ import { globalScene } from "#app/global-scene";
 import { PostBattleInitAbAttr } from "./post-battle-init-ab-attr";
 
 export class PostBattleInitFormChangeAbAttr extends PostBattleInitAbAttr {
-  private formFunc: (p: Pokemon) => integer;
+  private readonly formFunc: (p: Pokemon) => integer;
 
   constructor(formFunc: (p: Pokemon) => integer) {
     super(true);

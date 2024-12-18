@@ -7,9 +7,9 @@ import { PreAttackAbAttr } from "./pre-attack-ab-attr";
 
 export class MoveTypeChangeAbAttr extends PreAttackAbAttr {
   constructor(
-    private newType: Type,
-    private powerMultiplier: number,
-    private condition?: PokemonAttackCondition,
+    private readonly newType: Type,
+    private readonly powerMultiplier: number,
+    private readonly condition?: PokemonAttackCondition,
   ) {
     super(true);
   }

@@ -9,7 +9,7 @@ import { AbAttr } from "./ab-attr";
  * @see {@linkcode apply}
  */
 export class ReduceStatusEffectDurationAbAttr extends AbAttr {
-  private statusEffect: StatusEffect;
+  private readonly statusEffect: StatusEffect;
 
   constructor(statusEffect: StatusEffect) {
     super(true);

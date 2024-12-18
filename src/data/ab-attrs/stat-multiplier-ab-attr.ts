@@ -6,9 +6,9 @@ import type { BattleStat } from "#enums/stat";
 import { AbAttr } from "./ab-attr";
 
 export class StatMultiplierAbAttr extends AbAttr {
-  private stat: BattleStat;
-  private multiplier: number;
-  private condition?: PokemonAttackCondition;
+  private readonly stat: BattleStat;
+  private readonly multiplier: number;
+  private readonly condition?: PokemonAttackCondition;
 
   constructor(stat: BattleStat, multiplier: number, condition?: PokemonAttackCondition) {
     super(false);

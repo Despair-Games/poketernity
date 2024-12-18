@@ -9,7 +9,7 @@ import i18next from "i18next";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 
 export class PostDefendStealHeldItemAbAttr extends PostDefendAbAttr {
-  private condition?: PokemonDefendCondition;
+  private readonly condition?: PokemonDefendCondition;
 
   constructor(condition?: PokemonDefendCondition) {
     super();

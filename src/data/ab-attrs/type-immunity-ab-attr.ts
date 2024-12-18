@@ -12,8 +12,8 @@ import { PreDefendAbAttr } from "./pre-defend-ab-attr";
  * @see {@linkcode getCondition}
  */
 export class TypeImmunityAbAttr extends PreDefendAbAttr {
-  private immuneType: Type | null;
-  private condition: AbAttrCondition | null;
+  private readonly immuneType: Type | null;
+  private readonly condition: AbAttrCondition | null;
 
   constructor(immuneType: Type | null, condition?: AbAttrCondition) {
     super();

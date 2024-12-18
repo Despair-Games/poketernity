@@ -7,9 +7,9 @@ import { IgnoreMoveEffectsAbAttr } from "./ignore-move-effect-ab-attr";
 import { PostAttackAbAttr } from "./post-attack-ab-attr";
 
 export class PostAttackApplyStatusEffectAbAttr extends PostAttackAbAttr {
-  private contactRequired: boolean;
-  private chance: number;
-  private effects: StatusEffect[];
+  private readonly contactRequired: boolean;
+  private readonly chance: number;
+  private readonly effects: StatusEffect[];
 
   constructor(contactRequired: boolean, chance: number, ...effects: StatusEffect[]) {
     super();

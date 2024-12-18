@@ -12,7 +12,7 @@ type ArenaTrapCondition = (user: Pokemon, target: Pokemon) => boolean;
  * @see {@linkcode applyCheckTrapped}
  */
 export class CheckTrappedAbAttr extends AbAttr {
-  protected arenaTrapCondition: ArenaTrapCondition;
+  protected readonly arenaTrapCondition: ArenaTrapCondition;
   constructor(condition: ArenaTrapCondition) {
     super(false);
     this.arenaTrapCondition = condition;
