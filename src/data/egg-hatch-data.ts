@@ -1,6 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import type { PlayerPokemon } from "#app/field/pokemon";
-import type { DexEntry, StarterDataEntry } from "#app/@types/SystemData";
+import type { DexEntry } from "#app/@types/DexData";
+import type { StarterDataEntry } from "#app/@types/StarterData";
 
 /**
  * Stores data associated with a specific egg and the hatched pokemon

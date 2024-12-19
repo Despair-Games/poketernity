@@ -9,6 +9,9 @@ import type ChallengeData from "#app/system/challenge-data";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import type { MysteryEncounterSaveData } from "#app/data/mystery-encounters/mystery-encounter-save-data";
 
+/**
+ * Save data for a run, as defined server-side
+ */
 export interface SessionSaveData {
   seed: string;
   playTime: number;
@@ -27,6 +30,7 @@ export interface SessionSaveData {
   gameVersion: string;
   timestamp: number;
   challenges: ChallengeData[];
-  mysteryEncounterType: MysteryEncounterType | -1; // Only defined when current wave is ME,
+  /** Only defined when the current wave is a ME */
+  mysteryEncounterType: MysteryEncounterType | -1;
   mysteryEncounterSaveData: MysteryEncounterSaveData;
 }

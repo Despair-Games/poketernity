@@ -58,18 +58,10 @@ import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { api } from "#app/plugins/api/api";
 import { ArenaTrapTag } from "#app/data/arena-tag";
 import { SAVE_FILE_EXTENSION } from "#app/constants";
-import type {
-  AchvUnlocks,
-  DexAttrProps,
-  DexData,
-  DexEntry,
-  StarterData,
-  SystemSaveData,
-  Unlocks,
-  VoucherCounts,
-  VoucherUnlocks,
-} from "#app/@types/SystemData";
-import { AbilityAttr, DexAttr } from "#app/@types/SystemData";
+import type { AchvUnlocks, SystemSaveData, Unlocks, VoucherCounts, VoucherUnlocks } from "#app/@types/SystemData";
+import { AbilityAttr, DexAttr } from "#app/data/dex-attributes";
+import type { StarterData } from "#app/@types/StarterData";
+import type { DexData, DexEntry } from "#app/@types/DexData";
 import type { SessionSaveData } from "#app/@types/SessionData";
 import { defaultStarterSpecies } from "#app/data/balance/default-starters";
 
@@ -115,6 +107,16 @@ export interface RunEntry {
   isVictory: boolean;
   /*Automatically set to false at the moment - implementation TBD*/
   isFavorite: boolean;
+}
+
+/**
+ * An translation of a Pokemon's dex entry to human readable format
+ */
+export interface DexAttrProps {
+  shiny: boolean;
+  female: boolean;
+  variant: Variant;
+  formIndex: number;
 }
 
 export interface StarterAttributes {

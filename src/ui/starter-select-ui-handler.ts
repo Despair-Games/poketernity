@@ -24,10 +24,11 @@ import { getStarterValueFriendshipCap, speciesStarterCosts, POKERUS_STARTER_COUN
 import { starterPassiveAbilities } from "#app/data/balance/passives";
 import { Type } from "#enums/type";
 import { GameModes } from "#app/game-mode";
-import type { StarterAttributes, StarterPreferences } from "#app/system/game-data";
+import type { DexAttrProps, StarterAttributes, StarterPreferences } from "#app/system/game-data";
 import { StarterPrefs } from "#app/system/game-data";
-import type { StarterMoveset, DexEntry, DexAttrProps } from "#app/@types/SystemData";
-import { DexAttr, AbilityAttr } from "#app/@types/SystemData";
+import type { DexEntry } from "#app/@types/DexData";
+import type { StarterMoveset } from "#app/@types/StarterData";
+import { DexAttr, AbilityAttr } from "#app/data/dex-attributes";
 import { Tutorial, handleTutorial } from "#app/tutorial";
 import type { OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler";
 import MessageUiHandler from "#app/ui/message-ui-handler";
