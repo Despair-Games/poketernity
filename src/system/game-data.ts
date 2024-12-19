@@ -100,6 +100,16 @@ export function decrypt(data: string, bypassLogin: boolean): string {
   );
 }
 
+/**
+ * A translation of a Pokemon's dex entry to human readable format
+ */
+export interface DexAttrProps {
+  shiny: boolean;
+  female: boolean;
+  variant: Variant;
+  formIndex: number;
+}
+
 export type RunHistoryData = Record<number, RunEntry>;
 
 export interface RunEntry {
@@ -107,16 +117,6 @@ export interface RunEntry {
   isVictory: boolean;
   /*Automatically set to false at the moment - implementation TBD*/
   isFavorite: boolean;
-}
-
-/**
- * An translation of a Pokemon's dex entry to human readable format
- */
-export interface DexAttrProps {
-  shiny: boolean;
-  female: boolean;
-  variant: Variant;
-  formIndex: number;
 }
 
 export interface StarterAttributes {
