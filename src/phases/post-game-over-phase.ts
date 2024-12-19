@@ -12,30 +12,29 @@ export class PostGameOverPhase extends Phase {
     this.endCardPhase = endCardPhase;
   }
 
-  override start() {
+  public override start(): void {
     super.start();
+    const { gameData, sessionSlotId, ui } = globalScene;
 
-    const saveAndReset = () => {
-      globalScene.gameData.saveAll(true, true, true).then((success) => {
+    const saveAndReset = (): void => {
+      gameData.saveAll(true, true, true).then((success) => {
         if (!success) {
           return globalScene.reset(true);
         }
-        globalScene.gameData
-          .tryClearSession(globalScene.sessionSlotId)
-          .then((success: boolean | [boolean, boolean]) => {
-            if (!success[0]) {
-              return globalScene.reset(true);
-            }
-            globalScene.reset();
-            globalScene.unshiftPhase(new TitlePhase());
-            this.end();
-          });
+        gameData.tryClearSession(sessionSlotId).then((success: boolean | [boolean, boolean]) => {
+          if (!success[0]) {
+            return globalScene.reset(true);
+          }
+          globalScene.reset();
+          globalScene.unshiftPhase(new TitlePhase());
+          this.end();
+        });
       });
     };
 
     if (this.endCardPhase) {
-      globalScene.ui.fadeOut(500).then(() => {
-        globalScene.ui.getMessageHandler().bg.setVisible(true);
+      ui.fadeOut(500).then(() => {
+        ui.getMessageHandler().bg.setVisible(true);
 
         this.endCardPhase?.endCard.destroy();
         this.endCardPhase?.text.destroy();

@@ -1,13 +1,13 @@
 import { globalScene } from "#app/global-scene";
 
 export class Phase {
-  start() {
+  public start(): void {
     if (globalScene.abilityBar.shown) {
       globalScene.abilityBar.resetAutoHideTimer();
     }
   }
 
-  end() {
+  public end(): void {
     globalScene.shiftPhase();
   }
 }

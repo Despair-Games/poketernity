@@ -66,34 +66,37 @@ export class GameOverPhase extends BattlePhase {
     } else if (this.isVictory || !globalScene.enableRetries) {
       this.handleGameOver();
     } else {
+      const reloadGame = (): void => {
+        ui.fadeOut(1250).then(() => {
+          globalScene.reset();
+          globalScene.clearPhaseQueue();
+          gameData.loadSession(globalScene.sessionSlotId).then(() => {
+            globalScene.pushPhase(new EncounterPhase(true));
+
+            const availablePartyMembers = globalScene.getPokemonAllowedInBattle().length;
+
+            globalScene.pushPhase(new SummonPhase(0, true, true));
+            if (currentBattle.double && availablePartyMembers > 1) {
+              globalScene.pushPhase(new SummonPhase(1, true, true));
+            }
+            // TODO: Should this also check `!gameMode.isDaily` like in `TitlePhase.end()`?
+            if (currentBattle.waveIndex > 1 && currentBattle.battleType !== BattleType.TRAINER) {
+              globalScene.pushPhase(new CheckSwitchPhase(0, currentBattle.double));
+              if (currentBattle.double && availablePartyMembers > 1) {
+                globalScene.pushPhase(new CheckSwitchPhase(1, currentBattle.double));
+              }
+            }
+
+            ui.fadeIn(1250);
+            this.end();
+          });
+        });
+      };
+
       ui.showText(i18next.t("battle:retryBattle"), null, () => {
         ui.setMode(
           Mode.CONFIRM,
-          () => {
-            ui.fadeOut(1250).then(() => {
-              globalScene.reset();
-              globalScene.clearPhaseQueue();
-              gameData.loadSession(globalScene.sessionSlotId).then(() => {
-                globalScene.pushPhase(new EncounterPhase(true));
-
-                const availablePartyMembers = globalScene.getPokemonAllowedInBattle().length;
-
-                globalScene.pushPhase(new SummonPhase(0));
-                if (currentBattle.double && availablePartyMembers > 1) {
-                  globalScene.pushPhase(new SummonPhase(1));
-                }
-                if (currentBattle.waveIndex > 1 && currentBattle.battleType !== BattleType.TRAINER) {
-                  globalScene.pushPhase(new CheckSwitchPhase(0, currentBattle.double));
-                  if (currentBattle.double && availablePartyMembers > 1) {
-                    globalScene.pushPhase(new CheckSwitchPhase(1, currentBattle.double));
-                  }
-                }
-
-                ui.fadeIn(1250);
-                this.end();
-              });
-            });
-          },
+          () => reloadGame(),
           () => this.handleGameOver(),
           false,
           0,
@@ -106,10 +109,12 @@ export class GameOverPhase extends BattlePhase {
 
   protected handleGameOver(): void {
     const { gameData, gameMode, ui } = globalScene;
+
     const doGameOver = (newClear: boolean): void => {
       globalScene.disableMenu = true;
       globalScene.time.delayedCall(1000, () => {
         let firstClear = false;
+
         if (this.isVictory && newClear) {
           if (gameMode.isClassic) {
             firstClear = globalScene.validateAchv(achvs.CLASSIC_VICTORY);
@@ -131,6 +136,7 @@ export class GameOverPhase extends BattlePhase {
         globalScene.fadeOutBgm(fadeDuration, true);
         const activeBattlers = globalScene.getField().filter((p) => p?.isActive(true));
         activeBattlers.map((p) => p.hideInfo());
+
         ui.fadeOut(fadeDuration).then(() => {
           activeBattlers.map((a) => a.setVisible(false));
           globalScene.setFieldScale(1, true);
@@ -148,10 +154,12 @@ export class GameOverPhase extends BattlePhase {
               for (const species of this.firstRibbons) {
                 globalScene.unshiftPhase(new RibbonModifierRewardPhase(modifierTypes.VOUCHER_PLUS, species));
               }
+
               if (!firstClear) {
                 globalScene.unshiftPhase(new GameOverModifierRewardPhase(modifierTypes.VOUCHER_PREMIUM));
               }
             }
+
             this.getRunHistoryEntry().then((runHistoryEntry) => {
               gameData.saveRunHistory(runHistoryEntry, this.isVictory);
               globalScene.pushPhase(new PostGameOverPhase(endCardPhase));
@@ -161,6 +169,11 @@ export class GameOverPhase extends BattlePhase {
 
           if (this.isVictory && gameMode.isClassic) {
             const dialogueKey = "miscDialogue:ending";
+            const displayEndCard = (): void => {
+              const endCardPhase = new EndCardPhase();
+              globalScene.unshiftPhase(endCardPhase);
+              clear(endCardPhase);
+            };
 
             if (!ui.shouldSkipDialogue(dialogueKey)) {
               ui.fadeIn(500).then(() => {
@@ -168,34 +181,28 @@ export class GameOverPhase extends BattlePhase {
                 const genderStr = PlayerGender[genderIndex].toLowerCase();
                 // Dialogue has to be retrieved so that the rival's expressions can be loaded and shown via getCharVariantFromDialogue
                 const dialogue = i18next.t(dialogueKey, { context: genderStr });
+                const rivalName =
+                  gameData.gender === PlayerGender.FEMALE
+                    ? trainerConfigs[TrainerType.RIVAL].name
+                    : trainerConfigs[TrainerType.RIVAL].nameFemale;
+
                 globalScene.charSprite
                   .showCharacter(
                     `rival_${gameData.gender === PlayerGender.FEMALE ? "m" : "f"}`,
                     getCharVariantFromDialogue(dialogue),
                   )
                   .then(() => {
-                    ui.showDialogue(
-                      dialogueKey,
-                      gameData.gender === PlayerGender.FEMALE
-                        ? trainerConfigs[TrainerType.RIVAL].name
-                        : trainerConfigs[TrainerType.RIVAL].nameFemale,
-                      null,
-                      () => {
-                        ui.fadeOut(500).then(() => {
-                          globalScene.charSprite.hide().then(() => {
-                            const endCardPhase = new EndCardPhase();
-                            globalScene.unshiftPhase(endCardPhase);
-                            clear(endCardPhase);
-                          });
+                    ui.showDialogue(dialogueKey, rivalName, null, () => {
+                      ui.fadeOut(500).then(() => {
+                        globalScene.charSprite.hide().then(() => {
+                          displayEndCard();
                         });
-                      },
-                    );
+                      });
+                    });
                   });
               });
             } else {
-              const endCardPhase = new EndCardPhase();
-              globalScene.unshiftPhase(endCardPhase);
-              clear(endCardPhase);
+              displayEndCard();
             }
           } else {
             clear();
@@ -223,20 +230,24 @@ export class GameOverPhase extends BattlePhase {
   }
 
   protected handleUnlocks(): void {
-    const { gameData } = globalScene;
-    if (this.isVictory && globalScene.gameMode.isClassic) {
+    const { gameData, gameMode } = globalScene;
+
+    if (this.isVictory && gameMode.isClassic) {
       if (!gameData.unlocks[Unlockables.ENDLESS_MODE]) {
         globalScene.unshiftPhase(new UnlockPhase(Unlockables.ENDLESS_MODE));
       }
+
       if (
         globalScene.getPlayerParty().filter((p) => p.fusionSpecies).length
         && !gameData.unlocks[Unlockables.SPLICED_ENDLESS_MODE]
       ) {
         globalScene.unshiftPhase(new UnlockPhase(Unlockables.SPLICED_ENDLESS_MODE));
       }
+
       if (!gameData.unlocks[Unlockables.MINI_BLACK_HOLE]) {
         globalScene.unshiftPhase(new UnlockPhase(Unlockables.MINI_BLACK_HOLE));
       }
+
       if (
         !gameData.unlocks[Unlockables.EVIOLITE]
         && globalScene.getPlayerParty().some((p) => p.getSpeciesForm(true).speciesId in pokemonEvolutions)
@@ -260,15 +271,17 @@ export class GameOverPhase extends BattlePhase {
    * @returns A promise containing the {@linkcode SessionSaveData}
    */
   private async getRunHistoryEntry(): Promise<SessionSaveData> {
-    const preWaveSessionData = await globalScene.gameData.getSession(globalScene.sessionSlotId);
-    const sessionSaveData = globalScene.gameData.getSessionSaveData();
+    const { currentBattle, gameData } = globalScene;
+
+    const preWaveSessionData = await gameData.getSession(globalScene.sessionSlotId);
+    const sessionSaveData = gameData.getSessionSaveData();
+
     if (preWaveSessionData) {
       sessionSaveData.modifiers = preWaveSessionData.modifiers;
       sessionSaveData.enemyModifiers = preWaveSessionData.enemyModifiers;
     }
-    sessionSaveData.trainer = globalScene.currentBattle.trainer
-      ? new TrainerData(globalScene.currentBattle.trainer)
-      : null;
+    sessionSaveData.trainer = currentBattle.trainer ? new TrainerData(currentBattle.trainer) : null;
+
     return sessionSaveData;
   }
 }
