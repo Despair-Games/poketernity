@@ -90,6 +90,10 @@ export class BattlerTag {
     return --this.turnCount > 0;
   }
 
+  apply(_pokemon: Pokemon, _simulated: boolean, ..._args: unknown[]): boolean {
+    return true;
+  }
+
   getDescriptor(): string {
     return "";
   }
@@ -1522,21 +1526,26 @@ export class ProtectedTag extends BattlerTag {
     );
   }
 
-  override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
-    if (lapseType === BattlerTagLapseType.CUSTOM) {
+  override apply(pokemon: Pokemon, simulated: boolean, ..._args: unknown[]): boolean {
+    if (!simulated) {
       new CommonBattleAnim(CommonAnim.PROTECT, pokemon).play();
       globalScene.queueMessage(
         i18next.t("battlerTags:protectedLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       );
-      return true;
     }
-
-    return super.lapse(pokemon, lapseType);
+    return true;
   }
 }
 
 /** Base class for `BattlerTag`s that block damaging moves but not status moves */
-export class DamageProtectedTag extends ProtectedTag {}
+export class DamageProtectedTag extends ProtectedTag {
+  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
+    if (attacker.getMoveCategory(pokemon, move) !== MoveCategory.STATUS) {
+      return super.apply(pokemon, simulated);
+    }
+    return false;
+  }
+}
 
 /**
  * `BattlerTag` class for moves that block damaging moves damage the enemy if the enemy's move makes contact
@@ -1560,20 +1569,17 @@ export class ContactDamageProtectedTag extends ProtectedTag {
     this.damageRatio = source.damageRatio;
   }
 
-  override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
-    const ret = super.lapse(pokemon, lapseType);
-
-    if (lapseType === BattlerTagLapseType.CUSTOM) {
-      const effectPhase = globalScene.getCurrentPhase();
-      if (effectPhase instanceof MoveEffectPhase && effectPhase.move.getMove().hasFlag(MoveFlags.MAKES_CONTACT)) {
-        const attacker = effectPhase.getPokemon();
-        if (!attacker.hasAbilityWithAttr(BlockNonDirectDamageAbAttr)) {
-          attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio)), HitResult.OTHER);
-        }
-      }
+  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
+    if (!super.apply(pokemon, simulated, attacker, move)) {
+      return false;
     }
 
-    return ret;
+    if (!simulated && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, null)) {
+      if (!attacker.hasAbilityWithAttr(BlockNonDirectDamageAbAttr)) {
+        attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio)), HitResult.OTHER);
+      }
+    }
+    return true;
   }
 }
 
@@ -1602,18 +1608,15 @@ export class ContactStatStageChangeProtectedTag extends DamageProtectedTag {
     this.levels = source.levels;
   }
 
-  override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
-    const ret = super.lapse(pokemon, lapseType);
-
-    if (lapseType === BattlerTagLapseType.CUSTOM) {
-      const effectPhase = globalScene.getCurrentPhase();
-      if (effectPhase instanceof MoveEffectPhase && effectPhase.move.getMove().hasFlag(MoveFlags.MAKES_CONTACT)) {
-        const attacker = effectPhase.getPokemon();
-        globalScene.unshiftPhase(new StatStageChangePhase(attacker.getBattlerIndex(), false, [this.stat], this.levels));
-      }
+  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
+    if (!super.apply(pokemon, simulated, attacker, move)) {
+      return false;
     }
 
-    return ret;
+    if (!simulated && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, null)) {
+      globalScene.unshiftPhase(new StatStageChangePhase(attacker.getBattlerIndex(), false, [this.stat], this.levels));
+    }
+    return true;
   }
 }
 
@@ -1622,18 +1625,15 @@ export class ContactPoisonProtectedTag extends ProtectedTag {
     super(sourceMove, BattlerTagType.BANEFUL_BUNKER);
   }
 
-  override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
-    const ret = super.lapse(pokemon, lapseType);
-
-    if (lapseType === BattlerTagLapseType.CUSTOM) {
-      const effectPhase = globalScene.getCurrentPhase();
-      if (effectPhase instanceof MoveEffectPhase && effectPhase.move.getMove().hasFlag(MoveFlags.MAKES_CONTACT)) {
-        const attacker = effectPhase.getPokemon();
-        attacker.trySetStatus(StatusEffect.POISON, true, pokemon);
-      }
+  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
+    if (!super.apply(pokemon, simulated, attacker, move)) {
+      return false;
     }
 
-    return ret;
+    if (!simulated && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, null)) {
+      attacker.trySetStatus(StatusEffect.POISON, true, pokemon);
+    }
+    return true;
   }
 }
 
@@ -1646,18 +1646,15 @@ export class ContactBurnProtectedTag extends DamageProtectedTag {
     super(sourceMove, BattlerTagType.BURNING_BULWARK);
   }
 
-  override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
-    const ret = super.lapse(pokemon, lapseType);
-
-    if (lapseType === BattlerTagLapseType.CUSTOM) {
-      const effectPhase = globalScene.getCurrentPhase();
-      if (effectPhase instanceof MoveEffectPhase && effectPhase.move.getMove().hasFlag(MoveFlags.MAKES_CONTACT)) {
-        const attacker = effectPhase.getPokemon();
-        attacker.trySetStatus(StatusEffect.BURN, true);
-      }
+  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
+    if (!super.apply(pokemon, simulated, attacker, move)) {
+      return false;
     }
 
-    return ret;
+    if (!simulated && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, null)) {
+      attacker.trySetStatus(StatusEffect.BURN, true);
+    }
+    return true;
   }
 }
 
@@ -2615,10 +2612,10 @@ export class HealBlockTag extends MoveRestrictionBattlerTag {
   /**
    * Checks if a move is disabled under Heal Block
    * @param move {@linkcode Moves} the move ID
-   * @returns `true` if the move has a TRIAGE_MOVE flag and is a status move
+   * @returns `true` if the move has a TRIAGE_MOVE flag
    */
   override isMoveRestricted(move: Moves): boolean {
-    if (allMoves[move].hasFlag(MoveFlags.TRIAGE_MOVE) && allMoves[move].category === MoveCategory.STATUS) {
+    if (allMoves[move].hasFlag(MoveFlags.TRIAGE_MOVE)) {
       return true;
     }
     return false;
