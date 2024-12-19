@@ -11,7 +11,7 @@ export class ShowAbilityPhase extends PokemonPhase {
     this.passive = passive;
   }
 
-  override start() {
+  public override start(): void {
     super.start();
 
     const pokemon = this.getPokemon();
@@ -19,7 +19,7 @@ export class ShowAbilityPhase extends PokemonPhase {
     if (pokemon) {
       globalScene.abilityBar.showAbility(pokemon, this.passive);
 
-      if (pokemon?.battleData) {
+      if (pokemon.battleData) {
         pokemon.battleData.abilityRevealed = true;
       }
     }

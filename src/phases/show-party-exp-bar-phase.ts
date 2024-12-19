@@ -18,8 +18,11 @@ export class ShowPartyExpBarPhase extends PlayerPartyMemberPokemonPhase {
   public override start(): void {
     super.start();
 
+    const { expParty, expGainsSpeed, partyExpBar } = globalScene;
+
     const pokemon = this.getPokemon();
     const exp = new NumberHolder(this.expValue);
+
     globalScene.applyModifiers(ExpBoosterModifier, true, exp);
     exp.value = Math.floor(exp.value);
 
@@ -31,24 +34,24 @@ export class ShowPartyExpBarPhase extends PlayerPartyMemberPokemonPhase {
     }
     pokemon.updateInfo();
 
-    if (globalScene.expParty === ExpNotification.SKIP) {
+    if (expParty === ExpNotification.SKIP) {
       this.end();
-    } else if (globalScene.expParty === ExpNotification.ONLY_LEVEL_UP) {
+    } else if (expParty === ExpNotification.ONLY_LEVEL_UP) {
       if (newLevel > lastLevel) {
         // this means if we level up
         // instead of displaying the exp gain in the small frame, we display the new level
         // we use the same method for mode 0 & 1, by giving a parameter saying to display the exp or the level
-        globalScene.partyExpBar
-          .showPokemonExp(pokemon, exp.value, globalScene.expParty === ExpNotification.ONLY_LEVEL_UP, newLevel)
+        partyExpBar
+          .showPokemonExp(pokemon, exp.value, expParty === ExpNotification.ONLY_LEVEL_UP, newLevel)
           .then(() => {
-            setTimeout(() => this.end(), 800 / Math.pow(2, globalScene.expGainsSpeed));
+            setTimeout(() => this.end(), 800 / Math.pow(2, expGainsSpeed));
           });
       } else {
         this.end();
       }
-    } else if (globalScene.expGainsSpeed < ExpGainsSpeed.SKIP) {
-      globalScene.partyExpBar.showPokemonExp(pokemon, exp.value, false, newLevel).then(() => {
-        setTimeout(() => this.end(), 500 / Math.pow(2, globalScene.expGainsSpeed));
+    } else if (expGainsSpeed < ExpGainsSpeed.SKIP) {
+      partyExpBar.showPokemonExp(pokemon, exp.value, false, newLevel).then(() => {
+        setTimeout(() => this.end(), 500 / Math.pow(2, expGainsSpeed));
       });
     } else {
       this.end();

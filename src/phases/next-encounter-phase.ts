@@ -9,7 +9,7 @@ export class NextEncounterPhase extends EncounterPhase {
   protected override doEncounter(): void {
     const { arena, arenaEnemy, arenaNextEnemy, currentBattle, field, lastEnemyTrainer, lastMysteryEncounter, tweens } =
       globalScene;
-    const { mysteryEncounter } = currentBattle;
+    const { isClassicFinalBoss, mysteryEncounter, trainer } = currentBattle;
 
     globalScene.playBgm(undefined, true);
 
@@ -23,7 +23,8 @@ export class NextEncounterPhase extends EncounterPhase {
     arenaNextEnemy.setVisible(true);
 
     const enemyField = globalScene.getEnemyField();
-    const moveTargets: any[] = [arenaEnemy, arenaNextEnemy, currentBattle.trainer, enemyField, lastEnemyTrainer];
+    const moveTargets: any[] = [arenaEnemy, arenaNextEnemy, trainer, enemyField, lastEnemyTrainer];
+
     const lastEncounterVisuals = lastMysteryEncounter?.introVisuals;
     if (lastEncounterVisuals) {
       moveTargets.push(lastEncounterVisuals);
@@ -63,7 +64,7 @@ export class NextEncounterPhase extends EncounterPhase {
           }
         }
 
-        if (currentBattle.isClassicFinalBoss) {
+        if (isClassicFinalBoss) {
           this.displayFinalBossDialogue();
         } else {
           this.doEncounterCommon();

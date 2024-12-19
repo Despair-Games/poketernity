@@ -16,12 +16,14 @@ export class PartyHealPhase extends BattlePhase {
 
   public override start(): void {
     super.start();
+    const { time, ui } = globalScene;
 
     const bgmPlaying = globalScene.isBgmPlaying();
     if (bgmPlaying) {
       globalScene.fadeOutBgm(1000, false);
     }
-    globalScene.ui.fadeOut(1000).then(() => {
+
+    ui.fadeOut(1000).then(() => {
       for (const pokemon of globalScene.getPlayerParty()) {
         pokemon.hp = pokemon.getMaxHp();
         pokemon.resetStatus();
@@ -31,12 +33,12 @@ export class PartyHealPhase extends BattlePhase {
         pokemon.updateInfo(true);
       }
       const healSong = globalScene.playSoundWithoutBgm("heal");
-      globalScene.time.delayedCall(healSong.totalDuration * 1000, () => {
+      time.delayedCall(healSong.totalDuration * 1000, () => {
         healSong.destroy();
         if (this.resumeBgm && bgmPlaying) {
           globalScene.playBgm();
         }
-        globalScene.ui.fadeIn(500).then(() => this.end());
+        ui.fadeIn(500).then(() => this.end());
       });
     });
   }

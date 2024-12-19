@@ -80,7 +80,7 @@ export class SwitchPhase extends BattlePhase {
           // Remove any pre-existing PostSummonPhase under the same field index.
           // Pre-existing PostSummonPhases may occur when this phase is invoked during a prompt to switch at the start of a wave.
           globalScene.tryRemovePhase(
-            (p) => p instanceof PostSummonPhase && p.player && p.fieldIndex === this.fieldIndex,
+            (p) => p instanceof PostSummonPhase && p.isPlayer && p.fieldIndex === this.fieldIndex,
           );
           const switchType = option === PartyOption.PASS_BATON ? SwitchType.BATON_PASS : this.switchType;
           globalScene.unshiftPhase(new SwitchSummonPhase(switchType, fieldIndex, slotIndex, this.doReturn));

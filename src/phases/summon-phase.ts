@@ -23,7 +23,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
     this.loaded = loaded;
   }
 
-  override start() {
+  public override start(): void {
     super.start();
 
     this.preSummon();
@@ -32,7 +32,9 @@ export class SummonPhase extends PartyMemberPokemonPhase {
   /**
    * Sends out a Pokemon before the battle begins and shows the appropriate messages
    */
-  preSummon(): void {
+  protected preSummon(): void {
+    const { currentBattle, gameData, pbTray, pbTrayEnemy, time, trainer, tweens, ui } = globalScene;
+
     const partyMember = this.getPokemon();
     // If the Pokemon about to be sent out is fainted, illegal under a challenge, or no longer in the party for some reason, switch to the first non-fainted legal Pokemon
     if (!partyMember.isAllowedInBattle() || (this.player && !this.getParty().some((p) => p.id === partyMember.id))) {
@@ -54,8 +56,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
         console.error("All available Pokemon were fainted or illegal!");
         globalScene.clearPhaseQueue();
         globalScene.unshiftPhase(new GameOverPhase());
-        this.end();
-        return;
+        return this.end();
       }
 
       // Swaps the fainted Pokemon and the first non-fainted legal Pokemon in the party
@@ -70,42 +71,39 @@ export class SummonPhase extends PartyMemberPokemonPhase {
     }
 
     if (this.player) {
-      globalScene.ui.showText(
-        i18next.t("battle:playerGo", { pokemonName: getPokemonNameWithAffix(this.getPokemon()) }),
-      );
-      if (this.player) {
-        globalScene.pbTray.hide();
-      }
-      globalScene.trainer.setTexture(
-        `trainer_${globalScene.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`,
-      );
-      globalScene.time.delayedCall(562, () => {
-        globalScene.trainer.setFrame("2");
-        globalScene.time.delayedCall(64, () => {
-          globalScene.trainer.setFrame("3");
+      ui.showText(i18next.t("battle:playerGo", { pokemonName: getPokemonNameWithAffix(this.getPokemon()) }));
+      pbTray.hide();
+      trainer.setTexture(`trainer_${gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`);
+
+      time.delayedCall(562, () => {
+        trainer.setFrame("2");
+        time.delayedCall(64, () => {
+          trainer.setFrame("3");
         });
       });
-      globalScene.tweens.add({
-        targets: globalScene.trainer,
+
+      tweens.add({
+        targets: trainer,
         x: -36,
         duration: 1000,
-        onComplete: () => globalScene.trainer.setVisible(false),
+        onComplete: () => trainer.setVisible(false),
       });
-      globalScene.time.delayedCall(750, () => this.summon());
+
+      time.delayedCall(750, () => this.summon());
     } else if (
-      globalScene.currentBattle.battleType === BattleType.TRAINER
-      || globalScene.currentBattle.mysteryEncounter?.encounterMode === MysteryEncounterMode.TRAINER_BATTLE
+      currentBattle.battleType === BattleType.TRAINER
+      || currentBattle.mysteryEncounter?.encounterMode === MysteryEncounterMode.TRAINER_BATTLE
     ) {
-      const trainerName = globalScene.currentBattle.trainer?.getName(
+      const trainerName = currentBattle.trainer?.getName(
         !(this.fieldIndex % 2) ? TrainerSlot.TRAINER : TrainerSlot.TRAINER_PARTNER,
       );
       const pokemonName = this.getPokemon().getNameToRender();
       const message = i18next.t("battle:trainerSendOut", { trainerName, pokemonName });
 
-      globalScene.pbTrayEnemy.hide();
-      globalScene.ui.showText(message, null, () => this.summon());
-    } else if (globalScene.currentBattle.isBattleMysteryEncounter()) {
-      globalScene.pbTrayEnemy.hide();
+      pbTrayEnemy.hide();
+      ui.showText(message, null, () => this.summon());
+    } else if (currentBattle.isBattleMysteryEncounter()) {
+      pbTrayEnemy.hide();
       this.summonWild();
     }
   }
@@ -113,7 +111,8 @@ export class SummonPhase extends PartyMemberPokemonPhase {
   /**
    * Enemy trainer or player trainer will do animations to throw Pokeball and summon a Pokemon to the field.
    */
-  summon(): void {
+  protected summon(): void {
+    const { add, currentBattle, field, time, tweens } = globalScene;
     const pokemon = this.getPokemon();
 
     const pokeball = globalScene.addFieldSprite(
@@ -124,14 +123,14 @@ export class SummonPhase extends PartyMemberPokemonPhase {
     );
     pokeball.setVisible(false);
     pokeball.setOrigin(0.5, 0.625);
-    globalScene.field.add(pokeball);
+    field.add(pokeball);
 
     if (this.fieldIndex === 1) {
       pokemon.setFieldPosition(FieldPosition.RIGHT, 0);
     } else {
       const availablePartyMembers = this.getParty().filter((p) => p.isAllowedInBattle()).length;
       pokemon.setFieldPosition(
-        !globalScene.currentBattle.double || availablePartyMembers === 1 ? FieldPosition.CENTER : FieldPosition.LEFT,
+        !currentBattle.double || availablePartyMembers === 1 ? FieldPosition.CENTER : FieldPosition.LEFT,
       );
     }
 
@@ -139,19 +138,19 @@ export class SummonPhase extends PartyMemberPokemonPhase {
 
     pokeball.setVisible(true);
 
-    globalScene.tweens.add({
+    tweens.add({
       targets: pokeball,
       duration: 650,
       x: (this.player ? 100 : 236) + fpOffset[0],
     });
 
-    globalScene.tweens.add({
+    tweens.add({
       targets: pokeball,
       duration: 150,
       ease: "Cubic.easeOut",
       y: (this.player ? 70 : 34) + fpOffset[1],
       onComplete: () => {
-        globalScene.tweens.add({
+        tweens.add({
           targets: pokeball,
           duration: 500,
           ease: "Cubic.easeIn",
@@ -160,18 +159,23 @@ export class SummonPhase extends PartyMemberPokemonPhase {
           onComplete: () => {
             globalScene.playSound("se/pb_rel");
             pokeball.destroy();
-            globalScene.add.existing(pokemon);
-            globalScene.field.add(pokemon);
+
+            add.existing(pokemon);
+            field.add(pokemon);
+
             if (!this.player) {
               const playerPokemon = globalScene.getPlayerPokemon() as Pokemon;
               if (playerPokemon?.isOnField()) {
-                globalScene.field.moveBelow(pokemon, playerPokemon);
+                field.moveBelow(pokemon, playerPokemon);
               }
-              globalScene.currentBattle.seenEnemyPartyMemberIds.add(pokemon.id);
+              currentBattle.seenEnemyPartyMemberIds.add(pokemon.id);
             }
+
             addPokeballOpenParticles(pokemon.x, pokemon.y - 16, pokemon.pokeball);
+
             globalScene.updateModifiers(this.player);
             globalScene.updateFieldScale();
+
             pokemon.showInfo();
             pokemon.playAnim();
             pokemon.setVisible(true);
@@ -179,8 +183,9 @@ export class SummonPhase extends PartyMemberPokemonPhase {
             pokemon.setScale(0.5);
             pokemon.tint(getPokeballTintColor(pokemon.pokeball));
             pokemon.untint(250, "Sine.easeIn");
+
             globalScene.updateFieldScale();
-            globalScene.tweens.add({
+            tweens.add({
               targets: pokemon,
               duration: 250,
               ease: "Sine.easeIn",
@@ -189,7 +194,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
                 pokemon.cry(pokemon.getHpRatio() > 0.25 ? undefined : { rate: 0.85 });
                 pokemon.getSprite().clearTint();
                 pokemon.resetSummonData();
-                globalScene.time.delayedCall(1000, () => this.end());
+                time.delayedCall(1000, () => this.end());
               },
             });
           },
@@ -203,7 +208,8 @@ export class SummonPhase extends PartyMemberPokemonPhase {
    * Wild Pokemon will ease and fade in onto the field, then perform standard summon behavior.
    * Currently only used by Mystery Encounters, as all other battle types pre-summon wild pokemon before screen transitions.
    */
-  summonWild(): void {
+  protected summonWild(): void {
+    const { add, currentBattle, field, time, tweens } = globalScene;
     const pokemon = this.getPokemon();
 
     if (this.fieldIndex === 1) {
@@ -211,21 +217,24 @@ export class SummonPhase extends PartyMemberPokemonPhase {
     } else {
       const availablePartyMembers = this.getParty().filter((p) => !p.isFainted()).length;
       pokemon.setFieldPosition(
-        !globalScene.currentBattle.double || availablePartyMembers === 1 ? FieldPosition.CENTER : FieldPosition.LEFT,
+        !currentBattle.double || availablePartyMembers === 1 ? FieldPosition.CENTER : FieldPosition.LEFT,
       );
     }
 
-    globalScene.add.existing(pokemon);
-    globalScene.field.add(pokemon);
+    add.existing(pokemon);
+    field.add(pokemon);
+
     if (!this.player) {
       const playerPokemon = globalScene.getPlayerPokemon() as Pokemon;
       if (playerPokemon?.isOnField()) {
-        globalScene.field.moveBelow(pokemon, playerPokemon);
+        field.moveBelow(pokemon, playerPokemon);
       }
-      globalScene.currentBattle.seenEnemyPartyMemberIds.add(pokemon.id);
+      currentBattle.seenEnemyPartyMemberIds.add(pokemon.id);
     }
+
     globalScene.updateModifiers(this.player);
     globalScene.updateFieldScale();
+
     pokemon.showInfo();
     pokemon.playAnim();
     pokemon.setVisible(true);
@@ -239,7 +248,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
     pokemon.alpha = 0;
 
     // Ease pokemon in
-    globalScene.tweens.add({
+    tweens.add({
       targets: pokemon,
       x: "-=16",
       y: "+=16",
@@ -252,12 +261,12 @@ export class SummonPhase extends PartyMemberPokemonPhase {
         pokemon.getSprite().clearTint();
         pokemon.resetSummonData();
         globalScene.updateFieldScale();
-        globalScene.time.delayedCall(1000, () => this.end());
+        time.delayedCall(1000, () => this.end());
       },
     });
   }
 
-  onEnd(): void {
+  protected onEnd(): void {
     const pokemon = this.getPokemon();
 
     if (pokemon.isShiny()) {
@@ -276,11 +285,11 @@ export class SummonPhase extends PartyMemberPokemonPhase {
     }
   }
 
-  queuePostSummon(): void {
+  protected queuePostSummon(): void {
     globalScene.pushPhase(new PostSummonPhase(this.getPokemon().getBattlerIndex()));
   }
 
-  override end() {
+  public override end(): void {
     this.onEnd();
 
     super.end();

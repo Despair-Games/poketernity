@@ -3,7 +3,6 @@ import { globalScene } from "#app/global-scene";
 import { BattlePhase } from "#app/phases/battle-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
-import type { PartyOption } from "#app/ui/party-ui-handler";
 import PartyUiHandler, { PartyUiMode } from "#app/ui/party-ui-handler";
 import { Mode } from "#app/ui/ui";
 import { toDmgValue } from "#app/utils";
@@ -13,6 +12,7 @@ import i18next from "i18next";
 /**
  * Sets the Party UI and handles the effect of Revival Blessing
  * when used by one of the player's Pokemon.
+ * @extends BattlePhase
  */
 export class RevivalBlessingPhase extends BattlePhase {
   constructor(protected readonly user: PlayerPokemon) {
@@ -24,7 +24,7 @@ export class RevivalBlessingPhase extends BattlePhase {
       Mode.PARTY,
       PartyUiMode.REVIVAL_BLESSING,
       this.user.getFieldIndex(),
-      (slotIndex: number, _option: PartyOption) => {
+      (slotIndex: number) => {
         if (slotIndex >= 0 && slotIndex < 6) {
           const pokemon = globalScene.getPlayerParty()[slotIndex];
           if (!pokemon || !pokemon.isFainted()) {

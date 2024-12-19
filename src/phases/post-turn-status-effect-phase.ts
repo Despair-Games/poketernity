@@ -17,10 +17,12 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
     super(battlerIndex);
   }
 
-  override start() {
+  public override start(): void {
     const pokemon = this.getPokemon();
+
     if (pokemon?.isActive(true) && pokemon.status && pokemon.status.isPostTurn() && !pokemon.switchOutStatus) {
       pokemon.status.incrementTurn();
+
       const cancelled = new BooleanHolder(false);
       applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, cancelled);
       applyAbAttrs(BlockStatusDamageAbAttr, pokemon, cancelled);
@@ -29,6 +31,7 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
         globalScene.queueMessage(
           getStatusEffectActivationText(pokemon.status.effect, getPokemonNameWithAffix(pokemon)),
         );
+
         const damage = new NumberHolder(0);
         switch (pokemon.status.effect) {
           case StatusEffect.POISON:
@@ -42,22 +45,22 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
             applyAbAttrs(ReduceBurnDamageAbAttr, pokemon, null, false, damage);
             break;
         }
+
         if (damage.value) {
           // Set preventEndure flag to avoid pokemon surviving thanks to focus band, sturdy, endure ...
           globalScene.damageNumberHandler.add(this.getPokemon(), pokemon.damage(damage.value, false, true));
           pokemon.updateInfo();
           applyPostDamageAbAttrs(PostDamageAbAttr, pokemon, damage.value, pokemon.hasPassive(), false, []);
         }
+
         new CommonBattleAnim(CommonAnim.POISON + (pokemon.status.effect - 1), pokemon).play(false, () => this.end());
-      } else {
-        this.end();
       }
-    } else {
-      this.end();
     }
+
+    this.end();
   }
 
-  override end() {
+  public override end(): void {
     if (globalScene.currentBattle.isClassicFinalBoss) {
       globalScene.initFinalBossPhaseTwo(this.getPokemon());
     } else {

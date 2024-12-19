@@ -21,7 +21,6 @@ import {
   SubstituteTag,
   TypeBoostTag,
 } from "#app/data/battler-tags";
-import type { MoveAttr } from "#app/data/move";
 import {
   applyFilteredMoveAttrs,
   applyMoveAttrs,
@@ -40,6 +39,7 @@ import {
   OneHitKOAttr,
   OverrideMoveEffectAttr,
   ToxicAccuracyAttr,
+  type MoveAttr,
 } from "#app/data/move";
 import { SpeciesFormChangePostMoveTrigger } from "#app/data/pokemon-forms";
 import type { TypeDamageMultiplier } from "#app/data/type";
@@ -78,7 +78,7 @@ export class MoveEffectPhase extends PokemonPhase {
   private readonly hitChecks: HitCheckEntry[];
   private moveHistoryEntry: TurnMove;
 
-  /** MOVE EFFECT TRIGGER CONDITIONS */
+  // MOVE EFFECT TRIGGER CONDITIONS
 
   /** Is this the first strike of a move? */
   private firstHit: boolean;
@@ -528,7 +528,7 @@ export class MoveEffectPhase extends PokemonPhase {
 
     // Apply Grip Claw's chance to steal an item from the target
     if (move instanceof AttackMove) {
-      globalScene.applyModifiers(ContactHeldItemTransferChanceModifier, this.player, user, target);
+      globalScene.applyModifiers(ContactHeldItemTransferChanceModifier, this.isPlayer, user, target);
     }
   }
 
@@ -564,7 +564,7 @@ export class MoveEffectPhase extends PokemonPhase {
           // If there are multiple hits, or if there are hits of the multi-hit move left
           globalScene.queueMessage(i18next.t("battle:attackHitsCount", { count: hitsTotal }));
         }
-        globalScene.applyModifiers(HitHealModifier, this.player, user);
+        globalScene.applyModifiers(HitHealModifier, this.isPlayer, user);
         // Clear all cached move effectiveness values among targets
         this.getTargets().forEach((target) => (target.turnData.moveEffectiveness = null));
       }
@@ -765,7 +765,7 @@ export class MoveEffectPhase extends PokemonPhase {
     if (this.battlerIndex > BattlerIndex.ENEMY_2) {
       return globalScene.getPokemonById(this.battlerIndex);
     }
-    return (this.player ? globalScene.getPlayerField() : globalScene.getEnemyField())[this.fieldIndex];
+    return (this.isPlayer ? globalScene.getPlayerField() : globalScene.getEnemyField())[this.fieldIndex];
   }
 
   /** @returns An array of all {@linkcode Pokemon} targeted by this phase's invoked move */

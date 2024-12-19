@@ -6,6 +6,7 @@ import { isNullOrUndefined } from "#app/utils";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import { Species } from "#enums/species";
 
+// TODO: This should probably be made into an abstract base class
 export class PokemonAnimPhase extends BattlePhase {
   /** The type of animation to play in this phase */
   protected readonly key: PokemonAnimType;
@@ -22,7 +23,7 @@ export class PokemonAnimPhase extends BattlePhase {
     this.fieldAssets = fieldAssets;
   }
 
-  override start(): void {
+  public override start(): void {
     super.start();
 
     switch (this.key) {
@@ -50,19 +51,21 @@ export class PokemonAnimPhase extends BattlePhase {
   }
 
   private doSubstituteAddAnim(): void {
+    const { field, tweens } = globalScene;
+
     const substitute = this.pokemon.getTag(SubstituteTag);
     if (isNullOrUndefined(substitute)) {
       return this.end();
     }
 
-    const getSprite = () => {
+    const getSprite = (): Phaser.GameObjects.Sprite => {
       const sprite = globalScene.addFieldSprite(
         this.pokemon.x + this.pokemon.getSprite().x,
         this.pokemon.y + this.pokemon.getSprite().y,
         `pkmn${this.pokemon.isPlayer() ? "__back" : ""}__sub`,
       );
       sprite.setOrigin(0.5, 1);
-      globalScene.field.add(sprite);
+      field.add(sprite);
       return sprite;
     };
 
@@ -75,12 +78,12 @@ export class PokemonAnimPhase extends BattlePhase {
     subTintSprite.setScale(0.01);
 
     if (this.pokemon.isPlayer()) {
-      globalScene.field.bringToTop(this.pokemon);
+      field.bringToTop(this.pokemon);
     }
 
     globalScene.playSound("PRSFX- Transform");
 
-    globalScene.tweens.add({
+    tweens.add({
       targets: this.pokemon,
       duration: 500,
       x: this.pokemon.x + this.pokemon.getSubstituteOffset()[0],
@@ -89,7 +92,7 @@ export class PokemonAnimPhase extends BattlePhase {
       ease: "Sine.easeIn",
     });
 
-    globalScene.tweens.add({
+    tweens.add({
       targets: subTintSprite,
       delay: 250,
       scale: subScale,
@@ -97,7 +100,7 @@ export class PokemonAnimPhase extends BattlePhase {
       duration: 500,
       onComplete: () => {
         subSprite.setVisible(true);
-        globalScene.tweens.add({
+        tweens.add({
           targets: subTintSprite,
           delay: 250,
           alpha: 0,
@@ -172,6 +175,8 @@ export class PokemonAnimPhase extends BattlePhase {
   }
 
   private doSubstituteRemoveAnim(): void {
+    const { field, time, tweens } = globalScene;
+
     if (this.fieldAssets.length !== 1) {
       return this.end();
     }
@@ -181,14 +186,14 @@ export class PokemonAnimPhase extends BattlePhase {
       return this.end();
     }
 
-    const getSprite = () => {
+    const getSprite = (): Phaser.GameObjects.Sprite => {
       const sprite = globalScene.addFieldSprite(
         subSprite.x,
         subSprite.y,
         `pkmn${this.pokemon.isPlayer() ? "__back" : ""}__sub`,
       );
       sprite.setOrigin(0.5, 1);
-      globalScene.field.add(sprite);
+      field.add(sprite);
       return sprite;
     };
 
@@ -198,14 +203,14 @@ export class PokemonAnimPhase extends BattlePhase {
     subTintSprite.setTintFill(0xffffff);
     subTintSprite.setScale(subScale);
 
-    globalScene.tweens.add({
+    tweens.add({
       targets: subTintSprite,
       alpha: 1,
       ease: "Sine.easeInOut",
       duration: 500,
       onComplete: () => {
         subSprite.destroy();
-        const flashTimer = globalScene.time.addEvent({
+        const flashTimer = time.addEvent({
           delay: 100,
           repeat: 7,
           startAt: 200,
@@ -214,14 +219,14 @@ export class PokemonAnimPhase extends BattlePhase {
 
             subTintSprite.setVisible(flashTimer.repeatCount % 2 === 0);
             if (!flashTimer.repeatCount) {
-              globalScene.tweens.add({
+              tweens.add({
                 targets: subTintSprite,
                 scale: 0.01,
                 ease: "Sine.cubicEaseIn",
                 duration: 500,
               });
 
-              globalScene.tweens.add({
+              tweens.add({
                 targets: this.pokemon,
                 x: this.pokemon.x - this.pokemon.getSubstituteOffset()[0],
                 y: this.pokemon.y - this.pokemon.getSubstituteOffset()[1],
@@ -242,11 +247,13 @@ export class PokemonAnimPhase extends BattlePhase {
   }
 
   private doCommanderApplyAnim(): void {
-    if (!globalScene.currentBattle?.double) {
+    const { currentBattle, field, tweens } = globalScene;
+
+    if (!currentBattle?.double) {
       return this.end();
     }
-    const dondozo = this.pokemon.getAlly();
 
+    const dondozo = this.pokemon.getAlly();
     if (dondozo?.species?.speciesId !== Species.DONDOZO) {
       return this.end();
     }
@@ -254,7 +261,7 @@ export class PokemonAnimPhase extends BattlePhase {
     const tatsugiriX = this.pokemon.x + this.pokemon.getSprite().x;
     const tatsugiriY = this.pokemon.y + this.pokemon.getSprite().y;
 
-    const getSourceSprite = () => {
+    const getSourceSprite = (): Phaser.GameObjects.Sprite => {
       const sprite = globalScene.addPokemonSprite(
         this.pokemon,
         tatsugiriX,
@@ -272,7 +279,7 @@ export class PokemonAnimPhase extends BattlePhase {
       sprite.setPipelineData("ignoreFieldPos", true);
       sprite.setOrigin(0.5, 1);
       this.pokemon.getSprite().on("animationupdate", (_anim, frame) => sprite.setFrame(frame.textureFrame));
-      globalScene.field.add(sprite);
+      field.add(sprite);
       return sprite;
     };
 
@@ -285,15 +292,15 @@ export class PokemonAnimPhase extends BattlePhase {
 
     globalScene.playSound("se/pb_throw");
 
-    globalScene.tweens.add({
+    tweens.add({
       targets: sourceSprite,
       duration: 375,
       scale: 0.5,
       x: { value: tatsugiriX + (dondozoFpOffset[0] - sourceFpOffset[0]) / 2, ease: "Linear" },
       y: { value: (this.pokemon.isPlayer() ? 100 : 65) + sourceFpOffset[1], ease: "Sine.easeOut" },
       onComplete: () => {
-        globalScene.field.bringToTop(dondozo);
-        globalScene.tweens.add({
+        field.bringToTop(dondozo);
+        tweens.add({
           targets: sourceSprite,
           duration: 375,
           scale: 0.01,
@@ -302,7 +309,7 @@ export class PokemonAnimPhase extends BattlePhase {
           onComplete: () => {
             sourceSprite.destroy();
             globalScene.playSound("battle_anims/PRSFX- Liquidation1.wav");
-            globalScene.tweens.add({
+            tweens.add({
               targets: dondozo,
               duration: 250,
               ease: "Sine.easeInOut",
@@ -317,6 +324,8 @@ export class PokemonAnimPhase extends BattlePhase {
   }
 
   private doCommanderRemoveAnim(): void {
+    const { field, tweens } = globalScene;
+
     // Note: unlike the other Commander animation, this is played through the
     // Dondozo instead of the Tatsugiri.
     const tatsugiri = this.pokemon.getAlly();
@@ -333,9 +342,11 @@ export class PokemonAnimPhase extends BattlePhase {
       tatsugiri.getSprite()!.frame.name,
       true,
     );
+
     ["spriteColors", "fusionSpriteColors"].map(
       (k) => (tatsuSprite.pipelineData[k] = tatsugiri.getSprite().pipelineData[k]),
     );
+
     tatsuSprite.setPipelineData("spriteKey", tatsugiri.getBattleSpriteKey());
     tatsuSprite.setPipelineData("shiny", tatsugiri.shiny);
     tatsuSprite.setPipelineData("variant", tatsugiri.variant);
@@ -345,11 +356,11 @@ export class PokemonAnimPhase extends BattlePhase {
     tatsuSprite.setOrigin(0.5, 1);
     tatsuSprite.setScale(0.01);
 
-    globalScene.field.add(tatsuSprite);
-    globalScene.field.bringToTop(this.pokemon);
+    field.add(tatsuSprite);
+    field.bringToTop(this.pokemon);
     tatsuSprite.setVisible(true);
 
-    globalScene.tweens.add({
+    tweens.add({
       targets: this.pokemon,
       duration: 250,
       ease: "Sine.easeInOut",
@@ -357,7 +368,7 @@ export class PokemonAnimPhase extends BattlePhase {
       yoyo: true,
       onComplete: () => {
         globalScene.playSound("battle_anims/PRSFX- Liquidation4.wav");
-        globalScene.tweens.add({
+        tweens.add({
           targets: tatsuSprite,
           duration: 500,
           scale: 1,

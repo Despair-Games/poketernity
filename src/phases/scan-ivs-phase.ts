@@ -17,8 +17,10 @@ export class ScanIvsPhase extends PokemonPhase {
     this.shownIvs = shownIvs;
   }
 
-  override start() {
+  public override start(): void {
     super.start();
+
+    const { gameData, hideIvs, ui, uiTheme } = globalScene;
 
     if (!this.shownIvs) {
       return this.end();
@@ -29,14 +31,17 @@ export class ScanIvsPhase extends PokemonPhase {
     let enemyIvs: number[] = [];
     let statsContainer: Phaser.GameObjects.Sprite[] = [];
     let statsContainerLabels: Phaser.GameObjects.Sprite[] = [];
+
     const enemyField = globalScene.getEnemyField();
-    const uiTheme = globalScene.uiTheme; // Assuming uiTheme is accessible
     for (let e = 0; e < enemyField.length; e++) {
       enemyIvs = enemyField[e].ivs;
-      const currentIvs = globalScene.gameData.dexData[enemyField[e].species.getRootSpeciesId()].ivs; // we are using getRootSpeciesId() here because we want to check against the baby form, not the mid form if it exists
-      const ivsToShow = globalScene.ui.getMessageHandler().getTopIvs(enemyIvs, this.shownIvs);
+      // we are using getRootSpeciesId() here because we want to check against the baby form, not the mid form if it exists
+      const currentIvs = gameData.dexData[enemyField[e].species.getRootSpeciesId()].ivs;
+      const ivsToShow = ui.getMessageHandler().getTopIvs(enemyIvs, this.shownIvs);
+
       statsContainer = enemyField[e].getBattleInfo().getStatsValueContainer().list as Phaser.GameObjects.Sprite[];
       statsContainerLabels = statsContainer.filter((m) => m.name.indexOf("icon_stat_label") >= 0);
+
       for (let s = 0; s < statsContainerLabels.length; s++) {
         const ivStat = Stat[statsContainerLabels[s].frame.name];
         if (enemyIvs[ivStat] > currentIvs[ivStat] && ivsToShow.indexOf(Number(ivStat)) >= 0) {
@@ -51,26 +56,25 @@ export class ScanIvsPhase extends PokemonPhase {
       }
     }
 
-    if (!globalScene.hideIvs) {
-      globalScene.ui.showText(
+    if (!hideIvs) {
+      ui.showText(
         i18next.t("battle:ivScannerUseQuestion", { pokemonName: getPokemonNameWithAffix(pokemon) }),
         null,
         () => {
-          globalScene.ui.setMode(
+          ui.setMode(
             Mode.CONFIRM,
             () => {
-              globalScene.ui.setMode(Mode.MESSAGE);
-              globalScene.ui.clearText();
+              ui.setMode(Mode.MESSAGE);
+              ui.clearText();
               new CommonBattleAnim(CommonAnim.LOCK_ON, pokemon, pokemon).play(false, () => {
-                globalScene.ui
-                  .getMessageHandler()
+                ui.getMessageHandler()
                   .promptIvs(pokemon.id, pokemon.ivs, this.shownIvs)
                   .then(() => this.end());
               });
             },
             () => {
-              globalScene.ui.setMode(Mode.MESSAGE);
-              globalScene.ui.clearText();
+              ui.setMode(Mode.MESSAGE);
+              ui.clearText();
               this.end();
             },
           );

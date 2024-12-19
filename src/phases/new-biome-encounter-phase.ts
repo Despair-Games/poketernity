@@ -10,6 +10,8 @@ import { NextEncounterPhase } from "./next-encounter-phase";
  */
 export class NewBiomeEncounterPhase extends NextEncounterPhase {
   protected override doEncounter(): void {
+    const { arenaEnemy, currentBattle, tweens } = globalScene;
+
     globalScene.playBgm(undefined, true);
 
     for (const pokemon of globalScene.getPlayerParty()) {
@@ -23,18 +25,19 @@ export class NewBiomeEncounterPhase extends NextEncounterPhase {
     }
 
     const enemyField = globalScene.getEnemyField();
-    const moveTargets: any[] = [globalScene.arenaEnemy, enemyField];
-    const mysteryEncounter = globalScene.currentBattle?.mysteryEncounter?.introVisuals;
+    const moveTargets: any[] = [arenaEnemy, enemyField];
+
+    const mysteryEncounter = currentBattle?.mysteryEncounter?.introVisuals;
     if (mysteryEncounter) {
       moveTargets.push(mysteryEncounter);
     }
 
-    globalScene.tweens.add({
+    tweens.add({
       targets: moveTargets.flat(),
       x: "+=300",
       duration: 2000,
       onComplete: () => {
-        if (globalScene.currentBattle.isClassicFinalBoss) {
+        if (currentBattle.isClassicFinalBoss) {
           this.displayFinalBossDialogue();
         } else {
           this.doEncounterCommon();

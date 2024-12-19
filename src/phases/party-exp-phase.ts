@@ -2,8 +2,9 @@ import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 
 /**
- * Provides EXP to the player's party *without* doing any Pokemon defeated checks or queueing extraneous post-battle phases
- * Intended to be used as a more 1-off phase to provide exp to the party (such as during MEs), rather than cleanup a battle entirely
+ * Provides EXP to the player's party *without* doing any Pokemon defeated checks or queueing extraneous post-battle phases.
+ *
+ * Intended to be used as a more 1-off phase to provide exp to the party (such as during MEs), rather than cleanup a battle entirely.
  * @extends Phase
  */
 export class PartyExpPhase extends Phase {

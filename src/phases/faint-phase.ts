@@ -71,13 +71,13 @@ export class FaintPhase extends PokemonPhase {
     if (!this.preventEndure) {
       const instantReviveModifier = globalScene.applyModifier(
         PokemonInstantReviveModifier,
-        this.player,
+        this.isPlayer,
         faintPokemon,
       ) as PokemonInstantReviveModifier;
 
       if (instantReviveModifier) {
         faintPokemon.loseHeldItem(instantReviveModifier);
-        globalScene.updateModifiers(this.player);
+        globalScene.updateModifiers(this.isPlayer);
         return this.end();
       }
     }
@@ -91,7 +91,7 @@ export class FaintPhase extends PokemonPhase {
       }
     });
 
-    if (globalScene.currentBattle.isClassicFinalBoss && !this.player) {
+    if (globalScene.currentBattle.isClassicFinalBoss && !this.isPlayer) {
       this.handleFinalBossFaint();
     } else {
       this.doFaint();
@@ -149,7 +149,7 @@ export class FaintPhase extends PokemonPhase {
       }
     }
 
-    if (this.player) {
+    if (this.isPlayer) {
       /** The total number of Pokemon in the player's party that can legally fight */
       const legalPlayerPokemon = globalScene.getPokemonAllowedInBattle();
       /** The total number of legal player Pokemon that aren't currently on the field */

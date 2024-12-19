@@ -14,7 +14,7 @@ export class RibbonModifierRewardPhase extends ModifierRewardPhase {
     this.species = species;
   }
 
-  override doReward(): Promise<void> {
+  protected override doReward(): Promise<void> {
     return new Promise<void>((resolve) => {
       const newModifier = this.modifierType.newModifier();
       globalScene.addModifier(newModifier);
