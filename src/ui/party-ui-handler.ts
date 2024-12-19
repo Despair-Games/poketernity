@@ -30,7 +30,8 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { CommandPhase } from "#app/phases/command-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { globalScene } from "#app/global-scene";
-import { labelMoves } from "./partyUtils/relearnMoveMode";
+import { determineMoveSource } from "./partyUtils/relearnMoveMode";
+import { MoveSource } from "#enums/move-source";
 
 const defaultMessage = i18next.t("partyUiHandler:choosePokemon");
 
@@ -966,7 +967,7 @@ export default class PartyUiHandler extends MessageUiHandler {
     this.eraseOptionsCursor();
   }
 
-  retrieveOptions(pokemon: Pokemon, optionTexts: BBCodeText[]) {
+  retrieveOptions(pokemon: Pokemon) {
     switch (this.partyUiMode) {
       case PartyUiMode.REMEMBER_MOVE_MODIFIER:
         const learnableLevelMoves = pokemon.getLearnableLevelMoves();
@@ -974,7 +975,7 @@ export default class PartyUiHandler extends MessageUiHandler {
         if (this.options.length > 0) {
           this.moveInfoOverlay.show(allMoves[learnableLevelMoves[0]]);
         }
-        labelMoves(learnableLevelMoves, this.optionsContainer, optionTexts);
+        return;
     }
   }
 
@@ -984,29 +985,90 @@ export default class PartyUiHandler extends MessageUiHandler {
     }
 
     const pokemon = globalScene.getPlayerParty()[this.cursor];
-    const optionTexts: BBCodeText[] = [];
-    this.retrieveOptions(pokemon, optionTexts);
 
-    this.optionsScrollTotal = this.options.length;
-    let optionStartIndex = this.optionsScrollCursor;
-    let optionEndIndex = Math.min(
-      this.optionsScrollTotal,
-      optionStartIndex + (!optionStartIndex || this.optionsScrollCursor + 8 >= this.optionsScrollTotal ? 8 : 7),
-    );
+    if (this.partyUiMode === PartyUiMode.REMEMBER_MOVE_MODIFIER) {
+      const learnableLevelMoves = pokemon.getLearnableLevelMoves();
+      this.options.push(...learnableLevelMoves);
+      if (this.options.length > 0) {
+        this.moveInfoOverlay.show(allMoves[learnableLevelMoves[this.cursor]]);
+      }
+      this.optionsScrollTotal = this.options.length;
+      let optionStartIndex = this.optionsScrollCursor;
+      let optionEndIndex = Math.min(
+        this.optionsScrollTotal,
+        optionStartIndex + (!optionStartIndex || this.optionsScrollCursor + 8 >= this.optionsScrollTotal ? 8 : 7),
+      );
 
-    this.optionsScroll = this.optionsScrollTotal > 9;
+      this.optionsScroll = this.optionsScrollTotal > 9;
 
-    this.options.push(PartyOption.CANCEL);
+      if (this.optionsScroll) {
+        this.options.splice(optionEndIndex, this.optionsScrollTotal);
+        this.options.splice(0, optionStartIndex);
+        if (optionStartIndex) {
+          this.options.unshift(PartyOption.SCROLL_UP);
+        }
+        if (optionEndIndex < this.optionsScrollTotal) {
+          this.options.push(PartyOption.SCROLL_DOWN);
+        }
+      }
+      this.options.push(PartyOption.CANCEL);
+      this.optionsBg = addWindow(0, 0, 0, 16 * this.options.length + 13);
+      this.optionsBg.setOrigin(1, 1);
 
-    this.optionsBg = addWindow(0, 0, 0, 16 * this.options.length + 13);
-    this.optionsBg.setOrigin(1, 1);
+      this.optionsContainer.add(this.optionsBg);
 
-    this.optionsContainer.add(this.optionsBg);
+      optionStartIndex = 0;
+      optionEndIndex = this.options.length;
 
-    optionStartIndex = 0;
-    optionEndIndex = this.options.length;
+      let widestOptionWidth = 0;
+      const optionTexts: BBCodeText[] = [];
 
-    let widestOptionWidth = 0;
+      for (let o = optionStartIndex; o < optionEndIndex; o++) {
+        const option = this.options[this.options.length - (o + 1)];
+        let altTextColor = false;
+        let optionName: string = "";
+        if ([PartyOption.CANCEL, PartyOption.SCROLL_UP, PartyOption.SCROLL_DOWN].includes(option)) {
+          switch (option) {
+            case PartyOption.CANCEL:
+              optionName = i18next.t(`partyUiHandler:${PartyOption[option]}`);
+              break;
+            case PartyOption.SCROLL_UP:
+              optionName = "↑";
+              break;
+            case PartyOption.SCROLL_DOWN:
+              optionName = "↓";
+              break;
+          }
+        } else {
+          optionName = allMoves[option].name;
+          const moveSource = determineMoveSource(pokemon, allMoves[option].id);
+          if (moveSource !== MoveSource.LEVEL_UP) {
+            altTextColor = true;
+          }
+          console.log(option);
+        }
+        const yCoord = -6 - 16 * o;
+        const optionText = addBBCodeTextObject(0, yCoord - 16, optionName, TextStyle.WINDOW, { maxLines: 1 });
+        if (altTextColor) {
+          optionText.setColor("#40c8f8");
+          optionText.setShadowColor("#006090");
+        }
+        optionText.setOrigin(0, 0);
+        optionText.setText(`[shadow]${optionText.text}[/shadow]`);
+
+        optionTexts.push(optionText);
+
+        widestOptionWidth = Math.max(optionText.displayWidth, widestOptionWidth);
+
+        this.optionsContainer.add(optionText);
+      }
+
+      this.optionsBg.width = Math.max(widestOptionWidth + 24, 94);
+      for (const optionText of optionTexts) {
+        optionText.x = 15 - this.optionsBg.width;
+      }
+      return;
+    }
 
     const itemModifiers =
       this.partyUiMode === PartyUiMode.MODIFIER_TRANSFER
@@ -1019,7 +1081,6 @@ export default class PartyUiHandler extends MessageUiHandler {
 
     if (
       this.partyUiMode !== PartyUiMode.MOVE_MODIFIER
-      && this.partyUiMode !== PartyUiMode.REMEMBER_MOVE_MODIFIER
       && (this.transferMode || this.partyUiMode !== PartyUiMode.MODIFIER_TRANSFER)
     ) {
       switch (this.partyUiMode) {
@@ -1125,6 +1186,15 @@ export default class PartyUiHandler extends MessageUiHandler {
       }
     }
 
+    this.optionsScrollTotal = this.options.length;
+    let optionStartIndex = this.optionsScrollCursor;
+    let optionEndIndex = Math.min(
+      this.optionsScrollTotal,
+      optionStartIndex + (!optionStartIndex || this.optionsScrollCursor + 8 >= this.optionsScrollTotal ? 8 : 7),
+    );
+
+    this.optionsScroll = this.optionsScrollTotal > 9;
+
     if (this.optionsScroll) {
       this.options.splice(optionEndIndex, this.optionsScrollTotal);
       this.options.splice(0, optionStartIndex);
@@ -1136,17 +1206,30 @@ export default class PartyUiHandler extends MessageUiHandler {
       }
     }
 
+    this.options.push(PartyOption.CANCEL);
+
+    this.optionsBg = addWindow(0, 0, 0, 16 * this.options.length + 13);
+    this.optionsBg.setOrigin(1, 1);
+
+    this.optionsContainer.add(this.optionsBg);
+
+    optionStartIndex = 0;
+    optionEndIndex = this.options.length;
+
+    let widestOptionWidth = 0;
+    const optionTexts: BBCodeText[] = [];
+
     for (let o = optionStartIndex; o < optionEndIndex; o++) {
       const option = this.options[this.options.length - (o + 1)];
-      let altText = false;
+      const altText = false;
       let optionName: string;
       if (option === PartyOption.SCROLL_UP) {
         optionName = "↑";
       } else if (option === PartyOption.SCROLL_DOWN) {
         optionName = "↓";
       } else if (
-        (this.partyUiMode !== PartyUiMode.REMEMBER_MOVE_MODIFIER
-          && (this.partyUiMode !== PartyUiMode.MODIFIER_TRANSFER || this.transferMode))
+        this.partyUiMode !== PartyUiMode.MODIFIER_TRANSFER
+        || this.transferMode
         || option === PartyOption.CANCEL
       ) {
         switch (option) {
@@ -1178,13 +1261,6 @@ export default class PartyUiHandler extends MessageUiHandler {
             }
             break;
         }
-      } else if (this.partyUiMode === PartyUiMode.REMEMBER_MOVE_MODIFIER) {
-        const move = pokemon.getLearnableLevelMoves()[option];
-        optionName = allMoves[move].name;
-        altText = !pokemon
-          .getSpeciesForm()
-          .getLevelMoves()
-          .find((plm) => plm[1] === move);
       } else if (option === PartyOption.ALL) {
         optionName = i18next.t("partyUiHandler:ALL");
       } else {

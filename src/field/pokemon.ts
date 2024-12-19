@@ -244,15 +244,7 @@ import { TypeImmunityAbAttr } from "#app/data/ab-attrs/type-immunity-ab-attr";
 import { FullHpResistTypeAbAttr } from "#app/data/ab-attrs/full-hp-resist-type-ab-attr";
 import { FieldPriorityMoveImmunityAbAttr } from "#app/data/ab-attrs/field-priority-move-immunity-ab-attr";
 import { MoveImmunityAbAttr } from "#app/data/ab-attrs/move-immunity-ab-attr";
-
-export enum LearnMoveSituation {
-  MISC,
-  LEVEL_UP,
-  RELEARN,
-  EVOLUTION,
-  EVOLUTION_FUSED, // If fusionSpecies has Evolved
-  EVOLUTION_FUSED_BASE, // If fusion's base species has Evolved
-}
+import { MoveSource } from "#enums/move-source";
 
 export enum FieldPosition {
   CENTER,
@@ -2219,14 +2211,14 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     includeEvolutionMoves: boolean = false,
     simulateEvolutionChain: boolean = false,
     includeRelearnerMoves: boolean = false,
-    learnSituation: LearnMoveSituation = LearnMoveSituation.MISC,
+    moveSource: MoveSource = MoveSource.DEFAULT,
   ): LevelMoves {
     const ret: LevelMoves = [];
     let levelMoves: LevelMoves = [];
     if (!startingLevel) {
       startingLevel = this.level;
     }
-    if (learnSituation === LearnMoveSituation.EVOLUTION_FUSED && this.fusionSpecies) {
+    if (moveSource === MoveSource.FUSION_EVOLUTION && this.fusionSpecies) {
       // For fusion evolutions, get ONLY the moves of the component mon that evolved
       levelMoves = this.getFusionSpeciesForm(true)
         .getLevelMoves()
@@ -2269,7 +2261,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
               || lm[0] > 0,
           );
       }
-      if (this.fusionSpecies && learnSituation !== LearnMoveSituation.EVOLUTION_FUSED_BASE) {
+      if (this.fusionSpecies && moveSource !== MoveSource.EVOLUTION) {
         // For fusion evolutions, get ONLY the moves of the component mon that evolved
         if (simulateEvolutionChain) {
           const fusionEvolutionChain = this.fusionSpecies.getSimulatedEvolutionChain(

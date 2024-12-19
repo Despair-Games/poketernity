@@ -7,7 +7,7 @@ import { fixedInt } from "#app/utils";
 import { Mode } from "#app/ui/ui";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
-import { LearnMoveSituation } from "#app/field/pokemon";
+import { MoveSource } from "#enums/move-source";
 import i18next from "i18next";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
 import { EndEvolutionPhase } from "#app/phases/end-evolution-phase";
@@ -227,13 +227,9 @@ export class EvolutionPhase extends FormChangeBasePhase {
       this.handler.canCancel = false;
 
       this.pokemon.evolve(this.evolution, this.pokemon.species).then(() => {
-        const learnSituation: LearnMoveSituation = this.fusionSpeciesEvolved
-          ? LearnMoveSituation.EVOLUTION_FUSED
-          : this.pokemon.fusionSpecies
-            ? LearnMoveSituation.EVOLUTION_FUSED_BASE
-            : LearnMoveSituation.EVOLUTION;
+        const moveSource: MoveSource = this.fusionSpeciesEvolved ? MoveSource.FUSION_EVOLUTION : MoveSource.EVOLUTION;
         const levelMoves = this.pokemon
-          .getLevelMoves(this.lastLevel + 1, true, false, false, learnSituation)
+          .getLevelMoves(this.lastLevel + 1, true, false, false, moveSource)
           .filter((lm) => lm[0] === EVOLVE_MOVE);
         for (const lm of levelMoves) {
           globalScene.unshiftPhase(new LearnMovePhase(globalScene.getPlayerParty().indexOf(this.pokemon), lm[1]));
