@@ -5,7 +5,7 @@ import { isNullOrUndefined, fixedInt } from "#app/utils";
 import { getMoveTargets } from "../data/move";
 import { Button } from "#enums/buttons";
 import type { Moves } from "#enums/moves";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import type { ModifierBar } from "#app/modifier/modifier";
 import { SubstituteTag } from "#app/data/battler-tags";
 import { globalScene } from "#app/global-scene";
@@ -41,7 +41,7 @@ export default class TargetSelectUiHandler extends UiHandler {
 
     super.show(args);
 
-    this.fieldIndex = args[0] as integer;
+    this.fieldIndex = args[0] as number;
     this.move = args[1] as Moves;
     this.targetSelectCallback = args[2] as TargetSelectCallback;
     const user = globalScene.getPlayerField()[this.fieldIndex];
@@ -131,7 +131,7 @@ export default class TargetSelectUiHandler extends UiHandler {
     return success;
   }
 
-  override setCursor(cursor: integer): boolean {
+  override setCursor(cursor: number): boolean {
     const singleTarget = globalScene.getField()[cursor];
     const multipleTargets = this.targets.map((index) => globalScene.getField()[index]);
 

@@ -15,11 +15,11 @@ import {
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import type { PlayerPokemon } from "#app/field/pokemon";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon";
 import { NumberHolder, isNullOrUndefined, randSeedInt, randSeedShuffle } from "#app/utils";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { allSpecies, getPokemonSpecies } from "#app/data/pokemon-species";
+import { allSpecies, getPokemonSpecies, getSpecialSpeciesList } from "#app/data/pokemon-species";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { HiddenAbilityRateBoosterModifier, PokemonFormChangeItemModifier } from "#app/modifier/modifier";
 import { achvs } from "#app/system/achv";
@@ -43,62 +43,10 @@ import { Nature } from "#enums/nature";
 import type HeldModifierConfig from "#app/interfaces/held-modifier-config";
 import { trainerConfigs, TrainerPartyTemplate } from "#app/data/trainer-config";
 import { PartyMemberStrength } from "#enums/party-member-strength";
+import { SpeciesGroups } from "#enums/pokemon-species-groups";
 
 /** i18n namespace for encounter */
 const namespace = "mysteryEncounters/weirdDream";
-
-/** Exclude Ultra Beasts, Paradox, Eternatus, and all legendary/mythical/trio pokemon that are below 570 BST */
-const EXCLUDED_TRANSFORMATION_SPECIES = [
-  Species.ETERNATUS,
-  /** UBs */
-  Species.NIHILEGO,
-  Species.BUZZWOLE,
-  Species.PHEROMOSA,
-  Species.XURKITREE,
-  Species.CELESTEELA,
-  Species.KARTANA,
-  Species.GUZZLORD,
-  Species.POIPOLE,
-  Species.NAGANADEL,
-  Species.STAKATAKA,
-  Species.BLACEPHALON,
-  /** Paradox */
-  Species.GREAT_TUSK,
-  Species.SCREAM_TAIL,
-  Species.BRUTE_BONNET,
-  Species.FLUTTER_MANE,
-  Species.SLITHER_WING,
-  Species.SANDY_SHOCKS,
-  Species.ROARING_MOON,
-  Species.WALKING_WAKE,
-  Species.GOUGING_FIRE,
-  Species.RAGING_BOLT,
-  Species.IRON_TREADS,
-  Species.IRON_BUNDLE,
-  Species.IRON_HANDS,
-  Species.IRON_JUGULIS,
-  Species.IRON_MOTH,
-  Species.IRON_THORNS,
-  Species.IRON_VALIANT,
-  Species.IRON_LEAVES,
-  Species.IRON_BOULDER,
-  Species.IRON_CROWN,
-  /** These are banned so they don't appear in the < 570 BST pool */
-  Species.COSMOG,
-  Species.MELTAN,
-  Species.KUBFU,
-  Species.COSMOEM,
-  Species.POIPOLE,
-  Species.TERAPAGOS,
-  Species.TYPE_NULL,
-  Species.CALYREX,
-  Species.NAGANADEL,
-  Species.URSHIFU,
-  Species.OGERPON,
-  Species.OKIDOGI,
-  Species.MUNKIDORI,
-  Species.FEZANDIPITI,
-];
 
 const SUPER_LEGENDARY_BST_THRESHOLD = 600;
 const NON_LEGENDARY_BST_THRESHOLD = 570;
@@ -455,7 +403,7 @@ async function doNewTeamPostProcess(transformations: PokemonTransformation[]) {
     // Copy old items to new pokemon
     for (const item of transformation.heldItems) {
       item.pokemonId = newPokemon.id;
-      await globalScene.addModifier(item, false, false, false, true);
+      globalScene.addModifier(item, false, false, false, true);
     }
     // Any pokemon that is below 570 BST gets +20 permanent BST to 3 stats
     if (shouldGetOldGateau(newPokemon)) {
@@ -466,7 +414,7 @@ async function doNewTeamPostProcess(transformations: PokemonTransformation[]) {
         ?.withIdFromFunc(modifierTypes.MYSTERY_ENCOUNTER_OLD_GATEAU);
       const modifier = modType?.newModifier(newPokemon);
       if (modifier) {
-        await globalScene.addModifier(modifier, false, false, false, true);
+        globalScene.addModifier(modifier, false, false, false, true);
       }
     }
 
@@ -491,7 +439,6 @@ async function doNewTeamPostProcess(transformations: PokemonTransformation[]) {
 /**
  * Applies special changes to the newly transformed pokemon, such as passing previous moves, gaining egg moves, etc.
  * Returns whether the transformed pokemon unlocks a new starter for the player.
- * @param scene
  * @param previousPokemon
  * @param newPokemon
  * @param speciesRootForm
@@ -540,15 +487,15 @@ async function postProcessTransformedPokemon(
       globalScene.validateAchv(achvs.HIDDEN_ABILITY);
     }
 
-    if (newPokemon.species.subLegendary) {
+    if (newPokemon.species.isSubLegendary()) {
       globalScene.validateAchv(achvs.CATCH_SUB_LEGENDARY);
     }
 
-    if (newPokemon.species.legendary) {
+    if (newPokemon.species.isLegendary()) {
       globalScene.validateAchv(achvs.CATCH_LEGENDARY);
     }
 
-    if (newPokemon.species.mythical) {
+    if (newPokemon.species.isMythical()) {
       globalScene.validateAchv(achvs.CATCH_MYTHICAL);
     }
 
@@ -654,6 +601,27 @@ function getTransformedSpecies(
           || speciesBst < NON_LEGENDARY_BST_THRESHOLD
           || speciesBst > SUPER_LEGENDARY_BST_THRESHOLD)
         && (!hasPokemonBstHigherThan600 || speciesBst <= SUPER_LEGENDARY_BST_THRESHOLD);
+      /** Exclude Ultra Beasts, Paradox, Eternatus, and all legendary/mythical/trio pokemon that are below 570 BST */
+      const EXCLUDED_TRANSFORMATION_SPECIES = [
+        Species.ETERNATUS,
+        /** UBs */
+        ...getSpecialSpeciesList(SpeciesGroups.ULTRA_BEAST, false),
+        /** Paradox */
+        ...getSpecialSpeciesList(SpeciesGroups.PARADOX, false),
+        /** These are banned so they don't appear in the < 570 BST pool */
+        Species.COSMOG,
+        Species.MELTAN,
+        Species.KUBFU,
+        Species.COSMOEM,
+        Species.TERAPAGOS,
+        Species.TYPE_NULL,
+        Species.CALYREX,
+        Species.URSHIFU,
+        Species.OGERPON,
+        Species.OKIDOGI,
+        Species.MUNKIDORI,
+        Species.FEZANDIPITI,
+      ];
       return bstInRange && validBst && !EXCLUDED_TRANSFORMATION_SPECIES.includes(s.speciesId);
     });
 
@@ -764,7 +732,6 @@ function doSideBySideTransformations(transformations: PokemonTransformation[]) {
 
 /**
  * Returns index of the new egg move within the Pokemon's moveset (not the index of the move in `speciesEggMoves`)
- * @param scene
  * @param newPokemon
  * @param speciesRootForm
  */

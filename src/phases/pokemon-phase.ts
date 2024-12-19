@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#app/battle";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { FieldPhase } from "./field-phase";
 

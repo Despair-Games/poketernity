@@ -1,11 +1,11 @@
 import { getVariantTint } from "#app/data/variant";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
-import type BattleScene from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
-import { Gender, getGenderColor, getGenderSymbol } from "../data/gender";
+import { getGenderColor, getGenderShadowColor, getGenderSymbol } from "#app/data/gender";
+import { Gender } from "#enums/gender";
 import { getNatureName } from "../data/nature";
 import { Type } from "#enums/type";
-import type Pokemon from "../field/pokemon";
+import type { Pokemon } from "../field/pokemon";
 import i18next from "i18next";
 import type { DexEntry, StarterDataEntry } from "../system/game-data";
 import { DexAttr } from "../system/game-data";
@@ -18,8 +18,8 @@ import { Species } from "#enums/species";
 
 interface LanguageSetting {
   infoContainerTextSize: string;
-  infoContainerLabelXPos?: integer;
-  infoContainerTextXPos?: integer;
+  infoContainerLabelXPos?: number;
+  infoContainerTextXPos?: number;
 }
 
 const languageSettings: { [key: string]: LanguageSetting } = {
@@ -255,7 +255,7 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
       if (pokemon.gender > Gender.GENDERLESS) {
         this.pokemonGenderText.setText(getGenderSymbol(pokemon.gender));
         this.pokemonGenderText.setColor(getGenderColor(pokemon.gender));
-        this.pokemonGenderText.setShadowColor(getGenderColor(pokemon.gender, true));
+        this.pokemonGenderText.setShadowColor(getGenderShadowColor(pokemon.gender));
         this.pokemonGenderText.setVisible(true);
 
         const newGender = BigInt(1 << pokemon.gender) * DexAttr.MALE;
@@ -382,8 +382,8 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
         //If the player has *only* caught any shiny variant of this species, not a non-shiny
         this.pokemonShinyNewIcon.setVisible(true);
         this.pokemonShinyNewIcon.setText("(+)");
-        this.pokemonShinyNewIcon.setColor(getTextColor(TextStyle.SUMMARY_BLUE, false, this.scene.uiTheme));
-        this.pokemonShinyNewIcon.setShadowColor(getTextColor(TextStyle.SUMMARY_BLUE, true, this.scene.uiTheme));
+        this.pokemonShinyNewIcon.setColor(getTextColor(TextStyle.SUMMARY_BLUE, false, globalScene.uiTheme));
+        this.pokemonShinyNewIcon.setShadowColor(getTextColor(TextStyle.SUMMARY_BLUE, true, globalScene.uiTheme));
       } else {
         this.pokemonShinyNewIcon.setVisible(false);
       }
@@ -395,7 +395,7 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
       }
 
       const starterSpeciesId = pokemon.species.getRootSpeciesId();
-      const originalIvs: integer[] | null = eggInfo
+      const originalIvs: number[] | null = eggInfo
         ? dexEntry.caughtAttr
           ? dexEntry.ivs
           : null
@@ -519,8 +519,4 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
       this.shown = false;
     });
   }
-}
-
-export default interface PokemonInfoContainer {
-  scene: BattleScene;
 }

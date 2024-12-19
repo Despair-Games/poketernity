@@ -1,4 +1,3 @@
-import type BattleScene from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
 import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
@@ -32,14 +31,14 @@ export enum TrainerVariant {
 export default class Trainer extends Phaser.GameObjects.Container {
   public config: TrainerConfig;
   public variant: TrainerVariant;
-  public partyTemplateIndex: integer;
+  public partyTemplateIndex: number;
   public override name: string;
   public partnerName: string;
 
   constructor(
     trainerType: TrainerType,
     variant: TrainerVariant,
-    partyTemplateIndex?: integer,
+    partyTemplateIndex?: number,
     name?: string,
     partnerName?: string,
     trainerConfigOverride?: TrainerConfig,
@@ -136,9 +135,9 @@ export default class Trainer extends Phaser.GameObjects.Container {
 
   /**
    * Returns the name of the trainer based on the provided trainer slot and the option to include a title.
-   * @param {TrainerSlot} trainerSlot - The slot to determine which name to use. Defaults to TrainerSlot.NONE.
-   * @param {boolean} includeTitle - Whether to include the title in the returned name. Defaults to false.
-   * @returns {string} - The formatted name of the trainer.
+   * @param trainerSlot - The slot to determine which name to use. Defaults to TrainerSlot.NONE.
+   * @param includeTitle - Whether to include the title in the returned name. Defaults to false.
+   * @returns - The formatted name of the trainer.
    **/
   getName(trainerSlot: TrainerSlot = TrainerSlot.NONE, includeTitle: boolean = false): string {
     // Get the base title based on the trainer slot and variant.
@@ -244,7 +243,7 @@ export default class Trainer extends Phaser.GameObjects.Container {
     return this.config.partyTemplates[this.partyTemplateIndex];
   }
 
-  getPartyLevels(waveIndex: integer): integer[] {
+  getPartyLevels(waveIndex: number): number[] {
     const ret: number[] = [];
     const partyTemplate = this.getPartyTemplate();
 
@@ -292,7 +291,7 @@ export default class Trainer extends Phaser.GameObjects.Container {
     return ret;
   }
 
-  genPartyMember(index: integer): EnemyPokemon {
+  genPartyMember(index: number): EnemyPokemon {
     const battle = globalScene.currentBattle;
     const level = battle.enemyLevels?.[index]!; // TODO: is this bang correct?
 
@@ -428,7 +427,7 @@ export default class Trainer extends Phaser.GameObjects.Container {
     return ret!; // TODO: is this bang correct?
   }
 
-  genNewPartyMemberSpecies(level: integer, strength: PartyMemberStrength, attempt?: integer): PokemonSpecies {
+  genNewPartyMemberSpecies(level: number, strength: PartyMemberStrength, attempt?: number): PokemonSpecies {
     const battle = globalScene.currentBattle;
     const template = this.getPartyTemplate();
 
@@ -508,8 +507,8 @@ export default class Trainer extends Phaser.GameObjects.Container {
 
   /**
    * Checks if the enemy trainer already has the Pokemon species in their party
-   * @param {PokemonSpecies} species {@linkcode PokemonSpecies}
-   * @param {PokemonSpecies} baseSpecies {@linkcode PokemonSpecies} - baseSpecies of the Pokemon if species is forced to evolve
+   * @param species {@linkcode PokemonSpecies}
+   * @param baseSpecies {@linkcode PokemonSpecies} - baseSpecies of the Pokemon if species is forced to evolve
    * @returns `true` if the species is already present in the party
    */
   checkDuplicateSpecies(species: PokemonSpecies, baseSpecies: PokemonSpecies): boolean {
@@ -524,7 +523,7 @@ export default class Trainer extends Phaser.GameObjects.Container {
   getPartyMemberMatchupScores(
     trainerSlot: TrainerSlot = TrainerSlot.NONE,
     forSwitch: boolean = false,
-  ): [integer, integer][] {
+  ): [number, number][] {
     if (trainerSlot && !this.isDouble()) {
       trainerSlot = TrainerSlot.NONE;
     }
@@ -541,7 +540,7 @@ export default class Trainer extends Phaser.GameObjects.Container {
       if (playerField.length > 0) {
         for (const playerPokemon of playerField) {
           score += p.getMatchupScore(playerPokemon);
-          if (playerPokemon.species.legendary) {
+          if (playerPokemon.species.isLegendary()) {
             score /= 2;
           }
         }
@@ -554,12 +553,12 @@ export default class Trainer extends Phaser.GameObjects.Container {
       }
 
       return [party.indexOf(p), score];
-    }) as [integer, integer][];
+    }) as [number, number][];
 
     return partyMemberScores;
   }
 
-  getSortedPartyMemberMatchupScores(partyMemberScores: [integer, integer][] = this.getPartyMemberMatchupScores()) {
+  getSortedPartyMemberMatchupScores(partyMemberScores: [number, number][] = this.getPartyMemberMatchupScores()) {
     const sortedPartyMemberScores = partyMemberScores.slice(0);
     sortedPartyMemberScores.sort((a, b) => {
       const scoreA = a[1];
@@ -572,8 +571,8 @@ export default class Trainer extends Phaser.GameObjects.Container {
 
   getNextSummonIndex(
     trainerSlot: TrainerSlot = TrainerSlot.NONE,
-    partyMemberScores: [integer, integer][] = this.getPartyMemberMatchupScores(trainerSlot),
-  ): integer {
+    partyMemberScores: [number, number][] = this.getPartyMemberMatchupScores(trainerSlot),
+  ): number {
     if (trainerSlot && !this.isDouble()) {
       trainerSlot = TrainerSlot.NONE;
     }
@@ -585,7 +584,7 @@ export default class Trainer extends Phaser.GameObjects.Container {
       .map((pms) => pms[0]);
 
     if (maxScorePartyMemberIndexes.length > 1) {
-      let rand: integer;
+      let rand: number;
       globalScene.executeWithSeedOffset(
         () => (rand = randSeedInt(maxScorePartyMemberIndexes.length)),
         globalScene.currentBattle.turn << 2,
@@ -596,7 +595,7 @@ export default class Trainer extends Phaser.GameObjects.Container {
     return maxScorePartyMemberIndexes[0];
   }
 
-  getPartyMemberModifierChanceMultiplier(index: integer): number {
+  getPartyMemberModifierChanceMultiplier(index: number): number {
     switch (this.getPartyTemplate().getStrength(index)) {
       case PartyMemberStrength.WEAKER:
         return 0.75;
@@ -701,7 +700,7 @@ export default class Trainer extends Phaser.GameObjects.Container {
     return ret;
   }
 
-  tint(color: number, alpha?: number, duration?: integer, ease?: string): void {
+  tint(color: number, alpha?: number, duration?: number, ease?: string): void {
     const tintSprites = this.getTintSprites();
     tintSprites.map((tintSprite) => {
       tintSprite.setTintFill(color);
@@ -722,7 +721,7 @@ export default class Trainer extends Phaser.GameObjects.Container {
     });
   }
 
-  untint(duration: integer, ease?: string): void {
+  untint(duration: number, ease?: string): void {
     const tintSprites = this.getTintSprites();
     tintSprites.map((tintSprite) => {
       if (duration) {
@@ -742,8 +741,4 @@ export default class Trainer extends Phaser.GameObjects.Container {
       }
     });
   }
-}
-
-export default interface Trainer {
-  scene: BattleScene;
 }

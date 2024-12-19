@@ -1,16 +1,11 @@
 import { BattlerIndex } from "#app/battle";
 import { globalScene } from "#app/global-scene";
-import {
-  applyAbAttrs,
-  applyPostMoveUsedAbAttrs,
-  applyPreAttackAbAttrs,
-  BlockRedirectAbAttr,
-  IncreasePpAbAttr,
-  PokemonTypeChangeAbAttr,
-  PostMoveUsedAbAttr,
-  RedirectMoveAbAttr,
-  ReduceStatusEffectDurationAbAttr,
-} from "#app/data/ability";
+import { applyAbAttrs, applyPostMoveUsedAbAttrs, applyPreAttackAbAttrs } from "#app/data/ability";
+import { IncreasePpAbAttr } from "#app/data/ab-attrs/increase-pp-ab-attr";
+import { ReduceStatusEffectDurationAbAttr } from "#app/data/ab-attrs/reduce-status-effect-duration-ab-attr";
+import { BlockRedirectAbAttr } from "#app/data/ab-attrs/block-redirect-ab-attr";
+import { RedirectMoveAbAttr } from "#app/data/ab-attrs/redirect-move-ab-attr";
+import { PostMoveUsedAbAttr } from "#app/data/ab-attrs/post-move-used-ab-attr";
 import type { DelayedAttackTag } from "#app/data/arena-tag";
 import { CommonAnim } from "#app/data/battle-anims";
 import { BattlerTagLapseType, CenterOfAttentionTag } from "#app/data/battler-tags";
@@ -29,10 +24,9 @@ import {
 import { SpeciesFormChangePreMoveTrigger } from "#app/data/pokemon-forms";
 import { getStatusEffectActivationText, getStatusEffectHealText } from "#app/data/status-effect";
 import { Type } from "#enums/type";
-import { getTerrainBlockMessage } from "#app/data/weather";
 import { MoveUsedEvent } from "#app/events/battle-scene";
 import type { PokemonMove } from "#app/field/pokemon";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { MoveResult } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import Overrides from "#app/overrides";
@@ -49,6 +43,8 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { Moves } from "#enums/moves";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
+import { getTerrainBlockMessage } from "#app/data/terrain";
+import { PokemonTypeChangeAbAttr } from "#app/data/ab-attrs/pokemon-type-change-ab-attr";
 
 /**
  * Resolves the following:
@@ -545,7 +541,7 @@ export class MovePhase extends BattlePhase {
         // counterattack will redirect to remaining ally if original attacker faints
         if (globalScene.currentBattle.double && this.move.getMove().hasFlag(MoveFlags.REDIRECT_COUNTER)) {
           if (globalScene.getField()[this.targets[0]].hp === 0) {
-            const opposingField = this.pokemon.isPlayer() ? globalScene.getEnemyField() : globalScene.getPlayerField();
+            const opposingField = this.pokemon.getOpposingField();
             this.targets[0] = opposingField.find((p) => p.hp > 0)?.getBattlerIndex() ?? BattlerIndex.ATTACKER;
           }
         }

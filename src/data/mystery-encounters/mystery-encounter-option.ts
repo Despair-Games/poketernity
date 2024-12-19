@@ -1,7 +1,7 @@
 import type { OptionTextDisplay } from "#app/data/mystery-encounters/mystery-encounter-dialogue";
 import type { Moves } from "#app/enums/moves";
 import type { PlayerPokemon } from "#app/field/pokemon";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { Type } from "#enums/type";
 import {
@@ -84,7 +84,6 @@ export default class MysteryEncounterOption implements IMysteryEncounterOption {
 
   /**
    * Returns true if all {@linkcode EncounterRequirement}s for the option are met
-   * @param scene
    */
   meetsRequirements(): boolean {
     return (
@@ -96,7 +95,6 @@ export default class MysteryEncounterOption implements IMysteryEncounterOption {
 
   /**
    * Returns true if all PRIMARY {@linkcode EncounterRequirement}s for the option are met
-   * @param scene
    * @param pokemon
    */
   pokemonMeetsPrimaryRequirements(pokemon: Pokemon): boolean {
@@ -114,7 +112,6 @@ export default class MysteryEncounterOption implements IMysteryEncounterOption {
    * AND there is a valid Pokemon assigned to {@linkcode primaryPokemon}.
    * If both {@linkcode primaryPokemonRequirements} and {@linkcode secondaryPokemonRequirements} are defined,
    * can cause scenarios where there are not enough Pokemon that are sufficient for all requirements.
-   * @param scene
    */
   meetsPrimaryRequirementAndPrimaryPokemonSelected(): boolean {
     if (!this.primaryPokemonRequirements || this.primaryPokemonRequirements.length === 0) {
@@ -173,7 +170,6 @@ export default class MysteryEncounterOption implements IMysteryEncounterOption {
    * AND there is a valid Pokemon assigned to {@linkcode secondaryPokemon} (if applicable).
    * If both {@linkcode primaryPokemonRequirements} and {@linkcode secondaryPokemonRequirements} are defined,
    * can cause scenarios where there are not enough Pokemon that are sufficient for all requirements.
-   * @param scene
    */
   meetsSupportingRequirementAndSupportingPokemonSelected(): boolean {
     if (!this.secondaryPokemonRequirements || this.secondaryPokemonRequirements.length === 0) {

@@ -1,5 +1,4 @@
 import i18next from "i18next";
-import type BattleScene from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
 import { getEnumKeys, executeIf } from "#app/utils";
 import { TextStyle, addTextObject } from "./text";
@@ -7,10 +6,10 @@ import { WindowVariant, addWindow } from "./ui-theme";
 import { api } from "#app/plugins/api/api";
 
 export interface RankingEntry {
-  rank: integer;
+  rank: number;
   username: string;
-  score: integer;
-  wave: integer;
+  score: number;
+  wave: number;
 }
 
 // Don't forget to update translations when adding a new category
@@ -29,8 +28,8 @@ export class DailyRunScoreboard extends Phaser.GameObjects.Container {
   private pageNumberLabel: Phaser.GameObjects.Text;
   private nextPageButton: Phaser.GameObjects.Sprite;
 
-  private pageCount: integer;
-  private page: integer;
+  private pageCount: number;
+  private page: number;
   private category: ScoreboardCategory;
 
   private _isUpdating: boolean;
@@ -45,16 +44,16 @@ export class DailyRunScoreboard extends Phaser.GameObjects.Container {
   /**
    * Sets the updating state and updates button states accordingly.
    * If value is true (updating), disables the buttons; if false, enables the buttons.
-   * @param {boolean} value - The new updating state.
+   * @param value - The new updating state.
    */
-  set isUpdating(value) {
+  set isUpdating(value: boolean) {
     this._isUpdating = value;
     this.setButtonsState(!value);
   }
 
   /**
    * Gets the current updating state.
-   * @returns {boolean} - The current updating state.
+   * @returns - The current updating state.
    */
   get isUpdating() {
     return this._isUpdating;
@@ -185,7 +184,7 @@ export class DailyRunScoreboard extends Phaser.GameObjects.Container {
       ),
     );
 
-    rankings.forEach((r: RankingEntry, i: integer) => {
+    rankings.forEach((r: RankingEntry, i: number) => {
       const entryContainer = getEntry(r.rank.toString(), r.username, r.score.toString(), r.wave.toString());
       entryContainer.setY((i + 1) * 9);
       this.rankingsContainer.add(entryContainer);
@@ -201,10 +200,10 @@ export class DailyRunScoreboard extends Phaser.GameObjects.Container {
    * The method fetches the total page count if necessary, followed by fetching the rankings for the specified category
    * and page. It updates the UI with the fetched rankings or shows an appropriate message if no rankings are found.
    *
-   * @param {ScoreboardCategory} [category=this.category] - The category to fetch rankings for. Defaults to the current category.
-   * @param {number} [page=this.page] - The page number to fetch. Defaults to the current page.
+   * @param category - The category to fetch rankings for. Defaults to the current category.
+   * @param page - The page number to fetch. Defaults to the current page.
    */
-  override update(category: ScoreboardCategory = this.category, page: integer = this.page) {
+  override update(category: ScoreboardCategory = this.category, page: number = this.page) {
     if (this.isUpdating) {
       return;
     }
@@ -248,7 +247,7 @@ export class DailyRunScoreboard extends Phaser.GameObjects.Container {
 
   /**
    * Sets the state of the navigation buttons.
-   * @param {boolean} [enabled=true] - Whether the buttons should be enabled or disabled.
+   * @param enabled - Whether the buttons should be enabled or disabled.
    */
   setButtonsState(enabled: boolean = true) {
     const buttons = [
@@ -267,8 +266,4 @@ export class DailyRunScoreboard extends Phaser.GameObjects.Container {
       button.setAlpha(alphaValue);
     });
   }
-}
-
-export interface DailyRunScoreboard {
-  scene: BattleScene;
 }

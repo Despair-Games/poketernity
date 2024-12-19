@@ -1,16 +1,10 @@
 import { globalScene } from "#app/global-scene";
 import type { BattlerIndex } from "#app/battle";
-import {
-  applyAbAttrs,
-  applyPostStatStageChangeAbAttrs,
-  applyPreStatStageChangeAbAttrs,
-  PostStatStageChangeAbAttr,
-  ProtectStatAbAttr,
-  StatStageChangeCopyAbAttr,
-  StatStageChangeMultiplierAbAttr,
-} from "#app/data/ability";
-import { ArenaTagSide, MistTag } from "#app/data/arena-tag";
-import type Pokemon from "#app/field/pokemon";
+import { applyAbAttrs, applyPostStatStageChangeAbAttrs, applyPreStatStageChangeAbAttrs } from "#app/data/ability";
+import { StatStageChangeCopyAbAttr } from "#app/data/ab-attrs/stat-stage-change-copy-ab-attr";
+import { StatStageChangeMultiplierAbAttr } from "#app/data/ab-attrs/stat-stage-change-multiplier-ab-attr";
+import { MistTag } from "#app/data/arena-tag";
+import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { ResetNegativeStatStageModifier } from "#app/modifier/modifier";
 import { handleTutorial, Tutorial } from "#app/tutorial";
@@ -18,6 +12,8 @@ import { NumberHolder, BooleanHolder } from "#app/utils";
 import i18next from "i18next";
 import { PokemonPhase } from "./pokemon-phase";
 import { Stat, type BattleStat, getStatKey, getStatStageChangeDescriptionKey } from "#enums/stat";
+import { PostStatStageChangeAbAttr } from "#app/data/ab-attrs/post-stat-stage-change-ab-attr";
+import { ProtectStatAbAttr } from "#app/data/ab-attrs/protect-stat-ab-attr";
 
 export type StatStageChangeCallback = (
   target: Pokemon | null,
@@ -95,13 +91,7 @@ export class StatStageChangePhase extends PokemonPhase {
 
       if (!this.selfTarget && stages.value < 0) {
         // TODO: add a reference to the source of the stat change to fix Infiltrator interaction
-        globalScene.arena.applyTagsForSide(
-          MistTag,
-          pokemon.isPlayer() ? ArenaTagSide.PLAYER : ArenaTagSide.ENEMY,
-          false,
-          null,
-          cancelled,
-        );
+        globalScene.arena.applyTagsForSide(MistTag, pokemon.getArenaTagSide(), false, null, cancelled);
       }
 
       if (!cancelled.value && !this.selfTarget && stages.value < 0) {

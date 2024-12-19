@@ -14,11 +14,11 @@
 ```js
 /**
  * Changes the type-based weather modifier if this move's power would be reduced by it
- * @param user {@linkcode Pokemon} using this move
- * @param target {@linkcode Pokemon} target of this move
- * @param move {@linkcode Move} being used
- * @param args [0] {@linkcode Utils.NumberHolder} for arenaAttackTypeMultiplier
- * @returns true if the function succeeds
+ * @param user - The {@linkcode Pokemon} using this move
+ * @param target - The {@linkcode Pokemon | target} of this move
+ * @param move - {@linkcode Move} being used
+ * @param args - [0] {@linkcode Utils.NumberHolder} for arenaAttackTypeMultiplier
+ * @returns `true` if the function succeeds
  */
 apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
 }

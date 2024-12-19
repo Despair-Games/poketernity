@@ -2,7 +2,7 @@ import { initMoveAnim, loadMoveAnimAssets } from "#app/data/battle-anims";
 import type Move from "#app/data/move";
 import { allMoves } from "#app/data/move";
 import { SpeciesFormChangeMoveLearnedTrigger } from "#app/data/pokemon-forms";
-import type Pokemon from "#app/field/pokemon";
+import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import Overrides from "#app/overrides";
@@ -13,6 +13,7 @@ import { SummaryUiMode } from "#app/ui/summary-ui-handler";
 import { Mode } from "#app/ui/ui";
 import { Moves } from "#enums/moves";
 import i18next from "i18next";
+import FormChangeSceneHandler from "#app/ui/form-change-scene-handler";
 
 export enum LearnMoveType {
   /** For learning a move via level-up, evolution, or other non-item-based event */
@@ -55,7 +56,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
     }
 
     this.messageMode =
-      globalScene.ui.getHandler() instanceof EvolutionSceneHandler ? Mode.EVOLUTION_SCENE : Mode.MESSAGE;
+      globalScene.ui.getHandler() instanceof FormChangeSceneHandler ? Mode.FORM_CHANGE_SCENE : Mode.MESSAGE;
     globalScene.ui.setMode(this.messageMode);
     // If the Pokemon has less than 4 moves, the new move is added to the largest empty moveset index
     // If it has 4 moves, the phase then checks if the player wants to replace the move itself.
@@ -217,7 +218,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
         globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeMoveLearnedTrigger, true);
         this.end();
       },
-      this.messageMode === Mode.EVOLUTION_SCENE ? 1000 : undefined,
+      this.messageMode === Mode.FORM_CHANGE_SCENE ? 1000 : undefined,
       true,
     );
   }

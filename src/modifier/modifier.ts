@@ -10,7 +10,7 @@ import {
   SpeciesFormChangeTeraTrigger,
 } from "#app/data/pokemon-forms";
 import { getStatusEffectHealText } from "#app/data/status-effect";
-import Pokemon, { type PlayerPokemon } from "#app/field/pokemon";
+import { Pokemon, type PlayerPokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import Overrides from "#app/overrides";
 import { EvolutionPhase } from "#app/phases/evolution-phase";
@@ -53,7 +53,8 @@ import {
 } from "./modifier-type";
 import { Color, ShadowColor } from "#enums/color";
 import { FRIENDSHIP_GAIN_FROM_RARE_CANDY } from "#app/data/balance/starters";
-import { applyAbAttrs, CommanderAbAttr } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/ability";
+import { CommanderAbAttr } from "#app/data/ab-attrs/commander-ab-attr";
 import { globalScene } from "#app/global-scene";
 
 export type ModifierPredicate = (modifier: Modifier) => boolean;
@@ -97,8 +98,8 @@ export class ModifierBar extends Phaser.GameObjects.Container {
 
   /**
    * Method to update content displayed in {@linkcode ModifierBar}
-   * @param {PersistentModifier[]} modifiers - The list of modifiers to be displayed in the {@linkcode ModifierBar}
-   * @param {boolean} hideHeldItems - If set to "true", only modifiers not assigned to a Pokémon are displayed
+   * @param modifiers - The list of modifiers to be displayed in the {@linkcode ModifierBar}
+   * @param hideHeldItems - If set to "true", only modifiers not assigned to a Pokémon are displayed
    */
   updateModifiers(modifiers: PersistentModifier[], hideHeldItems: boolean = false) {
     this.removeAll(true);
@@ -187,7 +188,7 @@ export abstract class Modifier {
    * Handles applying of {@linkcode Modifier}
    * @param args collection of all passed parameters
    */
-  abstract apply(...args: unknown[]): boolean | Promise<boolean>;
+  abstract apply(...args: unknown[]): boolean;
 }
 
 export abstract class PersistentModifier extends Modifier {
@@ -304,7 +305,6 @@ export class AddPokeballModifier extends ConsumableModifier {
 
   /**
    * Applies {@linkcode AddPokeballModifier}
-   * @param battleScene {@linkcode BattleScene}
    * @returns always `true`
    */
   override apply(): boolean {
@@ -331,7 +331,6 @@ export class AddVoucherModifier extends ConsumableModifier {
 
   /**
    * Applies {@linkcode AddVoucherModifier}
-   * @param battleScene {@linkcode BattleScene}
    * @returns always `true`
    */
   override apply(): boolean {
@@ -372,7 +371,6 @@ export abstract class LapsingPersistentModifier extends PersistentModifier {
    * or, if one was found, it will refresh {@linkcode battleCount}.
    * @param modifiers {@linkcode PersistentModifier} array of the player's modifiers
    * @param _virtual N/A
-   * @param _scene N/A
    * @returns `true` if the modifier was successfully added or applied, false otherwise
    */
   override add(modifiers: PersistentModifier[], _virtual: boolean): boolean {
@@ -808,7 +806,6 @@ export abstract class LapsingPokemonHeldItemModifier extends PokemonHeldItemModi
 
   /**
    * Retrieve the {@linkcode Modifier | Modifiers} icon as a {@linkcode Phaser.GameObjects.Container | Container}
-   * @param scene The {@linkcode BattleScene}
    * @param forSummary `true` if the icon is for the summary screen
    * @returns the icon as a {@linkcode Phaser.GameObjects.Container | Container}
    */
@@ -2095,7 +2092,7 @@ export class PokemonInstantReviveModifier extends PokemonHeldItemModifier {
     pokemon.resetStatus(true, false, true);
 
     // Reapply Commander on the Pokemon's side of the field, if applicable
-    const field = pokemon.isPlayer() ? globalScene.getPlayerField() : globalScene.getEnemyField();
+    const field = pokemon.getField();
     field.forEach((p) => applyAbAttrs(CommanderAbAttr, p, null, false));
     return true;
   }
@@ -2180,7 +2177,7 @@ export abstract class ConsumablePokemonModifier extends ConsumableModifier {
    * @param playerPokemon The {@linkcode PlayerPokemon} that consumes the item
    * @param args Additional arguments passed to {@linkcode ConsumablePokemonModifier.apply}
    */
-  abstract override apply(playerPokemon: PlayerPokemon, ...args: unknown[]): boolean | Promise<boolean>;
+  abstract override apply(playerPokemon: PlayerPokemon, ...args: unknown[]): boolean;
 
   getPokemon() {
     return globalScene.getPlayerParty().find((p) => p.id === this.pokemonId);
@@ -2527,8 +2524,8 @@ export class FusePokemonModifier extends ConsumablePokemonModifier {
    * @param playerPokemon2 {@linkcode PlayerPokemon} that should be fused with {@linkcode playerPokemon}
    * @returns always Promise<true>
    */
-  override async apply(playerPokemon: PlayerPokemon, playerPokemon2: PlayerPokemon): Promise<boolean> {
-    await playerPokemon.fuse(playerPokemon2);
+  override apply(playerPokemon: PlayerPokemon, playerPokemon2: PlayerPokemon): boolean {
+    playerPokemon.fuse(playerPokemon2);
     return true;
   }
 }
@@ -3405,8 +3402,6 @@ export abstract class HeldItemTransferModifier extends PokemonHeldItemModifier {
       .reduce((highestTier, tier) => Math.max(tier!, highestTier), 0); // TODO: is this bang correct?
     let tierItemModifiers = itemModifiers.filter((m) => m.type.getOrInferTier(poolType) === highestItemTier);
 
-    const heldItemTransferPromises: Promise<void>[] = [];
-
     for (let i = 0; i < transferredItemCount; i++) {
       if (!tierItemModifiers.length) {
         while (highestItemTier-- && !tierItemModifiers.length) {
@@ -3418,21 +3413,15 @@ export abstract class HeldItemTransferModifier extends PokemonHeldItemModifier {
       }
       const randItemIndex = pokemon.randSeedInt(itemModifiers.length);
       const randItem = itemModifiers[randItemIndex];
-      heldItemTransferPromises.push(
-        globalScene.tryTransferHeldItemModifier(randItem, pokemon, false).then((success) => {
-          if (success) {
-            transferredModifierTypes.push(randItem.type);
-            itemModifiers.splice(randItemIndex, 1);
-          }
-        }),
-      );
+      if (globalScene.tryTransferHeldItemModifier(randItem, pokemon, false)) {
+        transferredModifierTypes.push(randItem.type);
+        itemModifiers.splice(randItemIndex, 1);
+      }
     }
 
-    Promise.all(heldItemTransferPromises).then(() => {
-      for (const mt of transferredModifierTypes) {
-        globalScene.queueMessage(this.getTransferMessage(pokemon, targetPokemon, mt));
-      }
-    });
+    for (const mt of transferredModifierTypes) {
+      globalScene.queueMessage(this.getTransferMessage(pokemon, targetPokemon, mt));
+    }
 
     return !!transferredModifierTypes.length;
   }
@@ -3609,7 +3598,6 @@ export class TempExtraModifierModifier extends LapsingPersistentModifier {
    * If no existing Silver Pokeballs are found, will add a new one.
    * @param modifiers {@linkcode PersistentModifier} array of the player's modifiers
    * @param _virtual N/A
-   * @param scene
    * @returns true if the modifier was successfully added or applied, false otherwise
    */
   override add(modifiers: PersistentModifier[], _virtual: boolean): boolean {
@@ -3956,7 +3944,6 @@ export class EnemyFusionChanceModifier extends EnemyPersistentModifier {
  * Uses either `MODIFIER_OVERRIDE` in overrides.ts to set {@linkcode PersistentModifier}s for either:
  *  - The player
  *  - The enemy
- * @param scene current {@linkcode BattleScene}
  * @param isPlayer {@linkcode boolean} for whether the player (`true`) or enemy (`false`) is being overridden
  */
 export function overrideModifiers(isPlayer: boolean = true): void {
@@ -3998,7 +3985,6 @@ export function overrideModifiers(isPlayer: boolean = true): void {
  * Uses either `HELD_ITEMS_OVERRIDE` in overrides.ts to set {@linkcode PokemonHeldItemModifier}s for either:
  *  - The first member of the player's team when starting a new game
  *  - An enemy {@linkcode Pokemon} being spawned in
- * @param scene current {@linkcode BattleScene}
  * @param pokemon {@linkcode Pokemon} whose held items are being overridden
  * @param isPlayer {@linkcode boolean} for whether the {@linkcode pokemon} is the player's (`true`) or an enemy (`false`)
  */

@@ -1,10 +1,10 @@
-import type BattleScene from "#app/battle-scene";
 import { variantColorCache } from "#app/data/variant";
-import Pokemon from "../field/pokemon";
+import { Pokemon } from "../field/pokemon";
 import Trainer from "../field/trainer";
 import FieldSpritePipeline from "./field-sprite";
 import { rgbHexToRgba } from "#app/utils";
 import MysteryEncounterIntroVisuals from "../field/mystery-encounter-intro";
+import { globalScene } from "#app/global-scene";
 
 const spriteFragShader = `
 #ifdef GL_FRAGMENT_PRECISION_HIGH
@@ -351,7 +351,7 @@ export default class SpritePipeline extends FieldSpritePipeline {
 
     const data = sprite.pipelineData;
     const tone = data["tone"] as number[];
-    const teraColor = (data["teraColor"] as integer[]) ?? [0, 0, 0];
+    const teraColor = (data["teraColor"] as number[]) ?? [0, 0, 0];
     const hasShadow = data["hasShadow"] as boolean;
     const yShadowOffset = data["yShadowOffset"] as number;
     const ignoreFieldPos = data["ignoreFieldPos"] as boolean;
@@ -394,15 +394,15 @@ export default class SpritePipeline extends FieldSpritePipeline {
     this.set4fv("tone", tone);
     this.bindTexture(this.game.textures.get("tera").source[0].glTexture!, 1); // TODO: is this bang correct?
 
-    if ((gameObject.scene as BattleScene).fusionPaletteSwaps) {
+    if (globalScene.fusionPaletteSwaps) {
       const spriteColors = ((ignoreOverride && data["spriteColorsBase"]) || data["spriteColors"] || []) as number[][];
       const fusionSpriteColors = ((ignoreOverride && data["fusionSpriteColorsBase"])
         || data["fusionSpriteColors"]
         || []) as number[][];
 
       const emptyColors = [0, 0, 0, 0];
-      const flatSpriteColors: integer[] = [];
-      const flatFusionSpriteColors: integer[] = [];
+      const flatSpriteColors: number[] = [];
+      const flatFusionSpriteColors: number[] = [];
       for (let c = 0; c < 32; c++) {
         flatSpriteColors.splice(
           flatSpriteColors.length,
@@ -426,7 +426,7 @@ export default class SpritePipeline extends FieldSpritePipeline {
       const sprite = gameObject as Phaser.GameObjects.Sprite;
       const data = sprite.pipelineData;
 
-      const variant: integer = data.hasOwnProperty("variant")
+      const variant: number = data.hasOwnProperty("variant")
         ? data["variant"]
         : sprite.parentContainer instanceof Pokemon
           ? sprite.parentContainer.variant
@@ -434,7 +434,7 @@ export default class SpritePipeline extends FieldSpritePipeline {
       let variantColors;
 
       const emptyColors = [0, 0, 0, 0];
-      const flatBaseColors: integer[] = [];
+      const flatBaseColors: number[] = [];
       const flatVariantColors: number[] = [];
 
       if (

@@ -1,6 +1,6 @@
 import { TextStyle, addTextObject } from "../ui/text";
 import type { DamageResult } from "./pokemon";
-import type Pokemon from "./pokemon";
+import type { Pokemon } from "./pokemon";
 import { HitResult } from "./pokemon";
 import { formatStat, fixedInt } from "#app/utils";
 import type { BattlerIndex } from "../battle";
@@ -17,7 +17,7 @@ export default class DamageNumberHandler {
 
   add(
     target: Pokemon,
-    amount: integer,
+    amount: number,
     result: DamageResult | HitResult.HEAL = HitResult.EFFECTIVE,
     critical: boolean = false,
   ): void {

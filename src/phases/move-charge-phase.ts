@@ -1,7 +1,7 @@
 import type { BattlerIndex } from "#app/battle";
 import { MoveChargeAnim } from "#app/data/battle-anims";
 import { applyMoveChargeAttrs, InstantChargeAttr, MoveEffectAttr } from "#app/data/move";
-import type Pokemon from "#app/field/pokemon";
+import { type Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon";
 import { MoveResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -44,10 +44,9 @@ export class MoveChargePhase extends PokemonPhase {
     new MoveChargeAnim(move.chargeAnim, move.id, user).play(false, () => {
       move.showChargeText(user, target);
 
-      applyMoveChargeAttrs(MoveEffectAttr, user, target, move).then(() => {
-        user.addTag(BattlerTagType.CHARGING, 1, move.id, user.id);
-        this.checkInstantCharge();
-      });
+      applyMoveChargeAttrs(MoveEffectAttr, user, target, move);
+      user.addTag(BattlerTagType.CHARGING, 1, move.id, user.id);
+      this.checkInstantCharge();
     });
   }
 

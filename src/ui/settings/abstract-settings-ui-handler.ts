@@ -345,7 +345,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
   activateSetting(setting: Setting): boolean {
     switch (setting.key) {
       case SettingKeys.Move_Touch_Controls:
-        globalScene.inputController.moveTouchControlsHandler.enableConfigurationMode(this.getUi(), globalScene);
+        globalScene.inputController.moveTouchControlsHandler.enableConfigurationMode(this.getUi());
         return true;
     }
     return false;
@@ -496,11 +496,11 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
 
   override showText(
     text: string,
-    delay?: integer,
+    delay?: number,
     callback?: Function,
-    callbackDelay?: integer,
+    callbackDelay?: number,
     prompt?: boolean,
-    promptDelay?: integer,
+    promptDelay?: number,
   ) {
     this.messageBoxContainer.setVisible(!!text?.length);
     super.showText(text, delay, callback, callbackDelay, prompt, promptDelay);

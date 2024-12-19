@@ -8,7 +8,7 @@ import {
 } from "#app/data/mystery-encounters/mystery-encounters";
 import { showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import type { AiType, PlayerPokemon } from "#app/field/pokemon";
-import type Pokemon from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import { FieldPosition, PokemonMove, PokemonSummonData } from "#app/field/pokemon";
 import type { CustomModifierSettings, ModifierType } from "#app/modifier/modifier-type";
 import {
@@ -33,7 +33,7 @@ import { Biome } from "#enums/biome";
 import type { TrainerType } from "#enums/trainer-type";
 import i18next from "i18next";
 import Trainer, { TrainerVariant } from "#app/field/trainer";
-import type { Gender } from "#app/data/gender";
+import type { Gender } from "#enums/gender";
 import type { Nature } from "#enums/nature";
 import type { Moves } from "#enums/moves";
 import { initMoveAnim, loadMoveAnimAssets } from "#app/data/battle-anims";

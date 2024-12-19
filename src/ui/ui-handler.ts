@@ -8,13 +8,12 @@ import type { Button } from "#enums/buttons";
  * A basic abstract class to act as a holder and processor for UI elements.
  */
 export default abstract class UiHandler {
-  protected mode: integer | null;
-  protected cursor: integer = 0;
+  protected mode: number | null;
+  protected cursor: number = 0;
   public active: boolean = false;
 
   /**
-   * @param {BattleScene} scene The same scene as everything else.
-   * @param {Mode} mode The mode of the UI element. These should be unique.
+   * @param mode The mode of the UI element. These should be unique.
    */
   constructor(mode: Mode | null = null) {
     this.mode = mode;
@@ -38,11 +37,11 @@ export default abstract class UiHandler {
     return getTextColor(style, shadow, globalScene.uiTheme);
   }
 
-  getCursor(): integer {
+  getCursor(): number {
     return this.cursor;
   }
 
-  setCursor(cursor: integer): boolean {
+  setCursor(cursor: number): boolean {
     const changed = this.cursor !== cursor;
     if (changed) {
       this.cursor = cursor;

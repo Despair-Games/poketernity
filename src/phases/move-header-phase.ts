@@ -1,5 +1,5 @@
 import { applyMoveAttrs, MoveHeaderAttr } from "#app/data/move";
-import type Pokemon from "#app/field/pokemon";
+import { type Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon";
 import { BattlePhase } from "./battle-phase";
 
@@ -26,9 +26,8 @@ export class MoveHeaderPhase extends BattlePhase {
     super.start();
 
     if (this.canMove()) {
-      applyMoveAttrs(MoveHeaderAttr, this.pokemon, null, this.move.getMove()).then(() => this.end());
-    } else {
-      this.end();
+      applyMoveAttrs(MoveHeaderAttr, this.pokemon, null, this.move.getMove());
     }
+    this.end();
   }
 }
