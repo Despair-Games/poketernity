@@ -15,14 +15,15 @@ import { BattlerTagType } from "#app/enums/battler-tag-type";
 import type { HealBlockTag } from "#app/data/battler-tags";
 
 export class PokemonHealPhase extends CommonAnimPhase {
-  private hpHealed: number;
+  // TODO: Replace with named parameters pattern
+  private readonly hpHealed: number;
   private message: string | null;
-  private showFullHpMessage: boolean;
-  private skipAnim: boolean;
-  private revive: boolean;
-  private healStatus: boolean;
-  private preventFullHeal: boolean;
-  private fullRestorePP: boolean;
+  private readonly showFullHpMessage: boolean;
+  private readonly skipAnim: boolean;
+  private readonly revive: boolean;
+  private readonly healStatus: boolean;
+  private readonly preventFullHeal: boolean;
+  private readonly fullRestorePP: boolean;
 
   constructor(
     battlerIndex: BattlerIndex,

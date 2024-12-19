@@ -1,22 +1,21 @@
 import type { BattlerIndex } from "#app/battle";
 import { BattleType, ClassicFixedBossWaves } from "#app/battle";
-import type { CustomModifierSettings } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-type";
-import { BattleEndPhase } from "./battle-end-phase";
-import { NewBattlePhase } from "./new-battle-phase";
-import { PokemonPhase } from "./pokemon-phase";
+import { handleMysteryEncounterVictory } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import { globalScene } from "#app/global-scene";
+import { modifierTypes, type CustomModifierSettings } from "#app/modifier/modifier-type";
 import { AddEnemyBuffModifierPhase } from "./add-enemy-buff-modifier-phase";
+import { BattleEndPhase } from "./battle-end-phase";
 import { EggLapsePhase } from "./egg-lapse-phase";
 import { GameOverPhase } from "./game-over-phase";
 import { ModifierRewardPhase } from "./modifier-reward-phase";
+import { NewBattlePhase } from "./new-battle-phase";
+import { PokemonPhase } from "./pokemon-phase";
 import { SelectModifierPhase } from "./select-modifier-phase";
 import { TrainerVictoryPhase } from "./trainer-victory-phase";
-import { handleMysteryEncounterVictory } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { globalScene } from "#app/global-scene";
 
 export class VictoryPhase extends PokemonPhase {
   /** If true, indicates that the phase is intended for EXP purposes only, and not to continue a battle to next phase */
-  isExpOnly: boolean;
+  public readonly isExpOnly: boolean;
 
   constructor(battlerIndex: BattlerIndex | number, isExpOnly: boolean = false) {
     super(battlerIndex);

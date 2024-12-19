@@ -10,7 +10,7 @@ import { BattlePhase } from "./battle-phase";
  * @extends BattlePhase
  */
 export class MoneyRewardPhase extends BattlePhase {
-  private moneyMultiplier: number;
+  private readonly moneyMultiplier: number;
 
   constructor(moneyMultiplier: number) {
     super();

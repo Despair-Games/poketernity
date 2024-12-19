@@ -2,7 +2,7 @@ import type { AnySound } from "#app/battle-scene";
 import type { Egg } from "#app/data/egg";
 import type { EggHatchData } from "#app/data/egg-hatch-data";
 import { EggCountChangedEvent } from "#app/events/egg";
-import { doShinySparkleAnim } from "#app/field/anims";
+import { doShinySparkleAnim, sin } from "#app/field/anims";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -13,7 +13,7 @@ import EggCounterContainer from "#app/ui/egg-counter-container";
 import type EggHatchSceneHandler from "#app/ui/egg-hatch-scene-handler";
 import PokemonInfoContainer from "#app/ui/pokemon-info-container";
 import { Mode } from "#app/ui/ui";
-import { getFrameMs, randInt, sin } from "#app/utils";
+import { getFrameMs, randInt } from "#app/utils";
 import i18next from "i18next";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 
@@ -22,7 +22,7 @@ import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
  */
 export class EggHatchPhase extends Phase {
   /** The egg that is hatching */
-  private egg: Egg;
+  private readonly egg: Egg;
   /** The new EggHatchData for the egg/pokemon that hatches */
   private eggHatchData: EggHatchData;
 
@@ -67,7 +67,7 @@ export class EggHatchPhase extends Phase {
 
   /** The sound effect being played when the egg is hatched */
   private evolutionBgm: AnySound;
-  private eggLapsePhase: EggLapsePhase;
+  private readonly eggLapsePhase: EggLapsePhase;
 
   constructor(hatchScene: EggLapsePhase, egg: Egg, eggsToHatchCount: number) {
     super();

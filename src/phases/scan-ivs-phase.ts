@@ -1,15 +1,15 @@
-import { globalScene } from "#app/global-scene";
 import type { BattlerIndex } from "#app/battle";
-import { CommonBattleAnim, CommonAnim } from "#app/data/battle-anims";
-import { Stat } from "#app/enums/stat";
+import { CommonAnim, CommonBattleAnim } from "#app/data/battle-anims";
+import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { getTextColor, TextStyle } from "#app/ui/text";
 import { Mode } from "#app/ui/ui";
+import { Stat } from "#enums/stat";
 import i18next from "i18next";
 import { PokemonPhase } from "./pokemon-phase";
 
 export class ScanIvsPhase extends PokemonPhase {
-  private shownIvs: number;
+  private readonly shownIvs: number;
 
   constructor(battlerIndex: BattlerIndex, shownIvs: number) {
     super(battlerIndex);

@@ -4,6 +4,8 @@ import { Command } from "#app/ui/command-ui-handler";
 import { Abilities } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { FieldPhase } from "./field-phase";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type { EnemyPokemon, Pokemon } from "#app/field/pokemon";
 
 /**
  * Phase for determining an enemy AI's action for the next turn.
@@ -15,7 +17,7 @@ import { FieldPhase } from "./field-phase";
  * @see {@linkcode EnemyPokemon.getNextMove}
  */
 export class EnemyCommandPhase extends FieldPhase {
-  protected fieldIndex: number;
+  protected readonly fieldIndex: number;
   protected skipTurn: boolean = false;
 
   constructor(fieldIndex: number) {

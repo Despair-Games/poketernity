@@ -1,11 +1,11 @@
 import { BattlerIndex } from "#app/battle";
-import { globalScene } from "#app/global-scene";
-import { applyAbAttrs, applyPostMoveUsedAbAttrs, applyPreAttackAbAttrs } from "#app/data/ability";
-import { IncreasePpAbAttr } from "#app/data/ab-attrs/increase-pp-ab-attr";
-import { ReduceStatusEffectDurationAbAttr } from "#app/data/ab-attrs/reduce-status-effect-duration-ab-attr";
 import { BlockRedirectAbAttr } from "#app/data/ab-attrs/block-redirect-ab-attr";
-import { RedirectMoveAbAttr } from "#app/data/ab-attrs/redirect-move-ab-attr";
+import { IncreasePpAbAttr } from "#app/data/ab-attrs/increase-pp-ab-attr";
+import { PokemonTypeChangeAbAttr } from "#app/data/ab-attrs/pokemon-type-change-ab-attr";
 import { PostMoveUsedAbAttr } from "#app/data/ab-attrs/post-move-used-ab-attr";
+import { RedirectMoveAbAttr } from "#app/data/ab-attrs/redirect-move-ab-attr";
+import { ReduceStatusEffectDurationAbAttr } from "#app/data/ab-attrs/reduce-status-effect-duration-ab-attr";
+import { applyAbAttrs, applyPostMoveUsedAbAttrs, applyPreAttackAbAttrs } from "#app/data/ability";
 import type { DelayedAttackTag } from "#app/data/arena-tag";
 import { CommonAnim } from "#app/data/battle-anims";
 import { BattlerTagLapseType, CenterOfAttentionTag } from "#app/data/battler-tags";
@@ -23,11 +23,11 @@ import {
 } from "#app/data/move";
 import { SpeciesFormChangePreMoveTrigger } from "#app/data/pokemon-forms";
 import { getStatusEffectActivationText, getStatusEffectHealText } from "#app/data/status-effect";
-import { Type } from "#enums/type";
+import { getTerrainBlockMessage } from "#app/data/terrain";
 import { MoveUsedEvent } from "#app/events/battle-scene";
-import type { PokemonMove } from "#app/field/pokemon";
-import type { Pokemon } from "#app/field/pokemon";
+import type { Pokemon, PokemonMove } from "#app/field/pokemon";
 import { MoveResult } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import Overrides from "#app/overrides";
 import { BattlePhase } from "#app/phases/battle-phase";
@@ -42,9 +42,8 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { Moves } from "#enums/moves";
 import { StatusEffect } from "#enums/status-effect";
+import { Type } from "#enums/type";
 import i18next from "i18next";
-import { getTerrainBlockMessage } from "#app/data/terrain";
-import { PokemonTypeChangeAbAttr } from "#app/data/ab-attrs/pokemon-type-change-ab-attr";
 
 /**
  * Resolves the following:

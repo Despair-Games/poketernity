@@ -1,16 +1,16 @@
-import { applyPreWeatherEffectAbAttrs, applyAbAttrs, applyPostWeatherLapseAbAttrs } from "#app/data/ability";
-import { PostWeatherLapseAbAttr } from "#app/data/ab-attrs/post-weather-lapse-ab-attr";
-import { SuppressWeatherEffectAbAttr } from "#app/data/ab-attrs/suppress-weather-effect-ab-attr";
-import { PreWeatherDamageAbAttr } from "#app/data/ab-attrs/pre-weather-damage-ab-attr";
 import { BlockNonDirectDamageAbAttr } from "#app/data/ab-attrs/block-non-direct-damage-ab-attr";
+import { PostWeatherLapseAbAttr } from "#app/data/ab-attrs/post-weather-lapse-ab-attr";
+import { PreWeatherDamageAbAttr } from "#app/data/ab-attrs/pre-weather-damage-ab-attr";
+import { SuppressWeatherEffectAbAttr } from "#app/data/ab-attrs/suppress-weather-effect-ab-attr";
+import { applyAbAttrs, applyPostWeatherLapseAbAttrs, applyPreWeatherEffectAbAttrs } from "#app/data/ability";
 import { CommonAnim } from "#app/data/battle-anims";
 import { type Weather, getWeatherDamageMessage, getWeatherLapseMessage } from "#app/data/weather";
-import { BattlerTagType } from "#app/enums/battler-tag-type";
-import { WeatherType } from "#app/enums/weather-type";
 import type { Pokemon } from "#app/field/pokemon";
 import { HitResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { BooleanHolder, toDmgValue } from "#app/utils";
+import { BattlerTagType } from "#enums/battler-tag-type";
+import { WeatherType } from "#enums/weather-type";
 import { CommonAnimPhase } from "./common-anim-phase";
 
 export class WeatherEffectPhase extends CommonAnimPhase {
@@ -20,7 +20,7 @@ export class WeatherEffectPhase extends CommonAnimPhase {
     super(
       undefined,
       undefined,
-      CommonAnim.SUNNY + ((globalScene?.arena?.weather?.weatherType || WeatherType.NONE) - 1),
+      CommonAnim.SUNNY + ((globalScene?.arena?.weather?.weatherType ?? WeatherType.NONE) - 1),
     );
     this.weather = globalScene?.arena?.weather;
   }

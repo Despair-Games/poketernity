@@ -19,8 +19,8 @@ import { type EvolutionPhase } from "#app/phases/evolution-phase";
  * @extends FormChangeBasePhase
  */
 export class FormChangePhase extends FormChangeBasePhase {
-  private formChange: SpeciesFormChange;
-  private modal: boolean;
+  private readonly formChange: SpeciesFormChange;
+  private readonly modal: boolean;
 
   constructor(pokemon: PlayerPokemon, formChange: SpeciesFormChange, modal: boolean) {
     super(pokemon);

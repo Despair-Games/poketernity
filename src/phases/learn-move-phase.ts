@@ -8,11 +8,11 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import Overrides from "#app/overrides";
 import { PlayerPartyMemberPokemonPhase } from "#app/phases/player-party-member-pokemon-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
+import FormChangeSceneHandler from "#app/ui/form-change-scene-handler";
 import { SummaryUiMode } from "#app/ui/summary-ui-handler";
 import { Mode } from "#app/ui/ui";
 import { Moves } from "#enums/moves";
 import i18next from "i18next";
-import FormChangeSceneHandler from "#app/ui/form-change-scene-handler";
 
 export enum LearnMoveType {
   /** For learning a move via level-up, evolution, or other non-item-based event */
@@ -24,10 +24,10 @@ export enum LearnMoveType {
 }
 
 export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
-  private moveId: Moves;
+  private readonly moveId: Moves;
   private messageMode: Mode;
-  private learnMoveType: LearnMoveType;
-  private cost: number;
+  private readonly learnMoveType: LearnMoveType;
+  private readonly cost: number;
 
   constructor(
     partyMemberIndex: number,

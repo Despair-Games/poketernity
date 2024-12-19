@@ -1,9 +1,9 @@
-import { globalScene } from "#app/global-scene";
 import type { BattlerIndex } from "#app/battle";
+import { globalScene } from "#app/global-scene";
 import { PokemonPhase } from "./pokemon-phase";
 
 export class ShowAbilityPhase extends PokemonPhase {
-  private passive: boolean;
+  private readonly passive: boolean;
 
   constructor(battlerIndex: BattlerIndex, passive: boolean = false) {
     super(battlerIndex);

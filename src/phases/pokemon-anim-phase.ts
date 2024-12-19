@@ -1,6 +1,6 @@
-import { globalScene } from "#app/global-scene";
 import { SubstituteTag } from "#app/data/battler-tags";
 import type { Pokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
 import { BattlePhase } from "#app/phases/battle-phase";
 import { isNullOrUndefined } from "#app/utils";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
@@ -8,11 +8,11 @@ import { Species } from "#enums/species";
 
 export class PokemonAnimPhase extends BattlePhase {
   /** The type of animation to play in this phase */
-  protected key: PokemonAnimType;
+  protected readonly key: PokemonAnimType;
   /** The Pokemon to which this animation applies */
-  protected pokemon: Pokemon;
+  protected readonly pokemon: Pokemon;
   /** Any other field sprites affected by this animation */
-  protected fieldAssets: Phaser.GameObjects.Sprite[];
+  protected readonly fieldAssets: Phaser.GameObjects.Sprite[];
 
   constructor(key: PokemonAnimType, pokemon: Pokemon, fieldAssets: Phaser.GameObjects.Sprite[] = []) {
     super();

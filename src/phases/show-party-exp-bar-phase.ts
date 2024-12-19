@@ -1,13 +1,13 @@
-import { ExpGainsSpeed } from "#app/enums/exp-gains-speed";
-import { ExpNotification } from "#app/enums/exp-notification";
 import { globalScene } from "#app/global-scene";
 import { ExpBoosterModifier } from "#app/modifier/modifier";
 import { NumberHolder } from "#app/utils";
+import { ExpGainsSpeed } from "#enums/exp-gains-speed";
+import { ExpNotification } from "#enums/exp-notification";
 import { LevelUpPhase } from "./level-up-phase";
 import { PlayerPartyMemberPokemonPhase } from "./player-party-member-pokemon-phase";
 
 export class ShowPartyExpBarPhase extends PlayerPartyMemberPokemonPhase {
-  private expValue: number;
+  private readonly expValue: number;
 
   constructor(partyMemberIndex: number, expValue: number) {
     super(partyMemberIndex);

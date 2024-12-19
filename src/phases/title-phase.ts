@@ -1,9 +1,9 @@
 import { loggedInUser } from "#app/account";
 import { BattleType } from "#app/battle";
 import { fetchDailyRunSeed, getDailyRunStarters } from "#app/data/daily-run";
-import { Gender } from "#enums/gender";
 import { getBiomeKey } from "#app/field/arena";
 import { GameMode, GameModes, getGameMode } from "#app/game-mode";
+import { globalScene } from "#app/global-scene";
 import type { Modifier } from "#app/modifier/modifier";
 import {
   getDailyRunStarterModifiers,
@@ -19,13 +19,13 @@ import type { OptionSelectConfig, OptionSelectItem } from "#app/ui/abstact-optio
 import { SaveSlotUiMode } from "#app/ui/save-slot-select-ui-handler";
 import { Mode } from "#app/ui/ui";
 import { isLocal, isLocalServerConnected } from "#app/utils";
+import { Gender } from "#enums/gender";
 import i18next from "i18next";
 import { CheckSwitchPhase } from "./check-switch-phase";
 import { EncounterPhase } from "./encounter-phase";
 import { SelectChallengePhase } from "./select-challenge-phase";
 import { SelectStarterPhase } from "./select-starter-phase";
 import { SummonPhase } from "./summon-phase";
-import { globalScene } from "#app/global-scene";
 
 export class TitlePhase extends Phase {
   private loaded: boolean = false;

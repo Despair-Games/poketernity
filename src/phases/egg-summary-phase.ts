@@ -9,7 +9,7 @@ import { Mode } from "#app/ui/ui";
  * Phase is handled mostly by the egg-hatch-scene-handler UI
  */
 export class EggSummaryPhase extends Phase {
-  private eggHatchData: EggHatchData[];
+  private readonly eggHatchData: EggHatchData[];
 
   constructor(eggHatchData: EggHatchData[]) {
     super();

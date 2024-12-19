@@ -7,9 +7,9 @@ import { Phase } from "#app/phase";
  * @extends Phase
  */
 export class PartyExpPhase extends Phase {
-  protected expValue: number;
-  protected useWaveIndexMultiplier?: boolean;
-  protected pokemonParticipantIds?: Set<number>;
+  protected readonly expValue: number;
+  protected readonly useWaveIndexMultiplier?: boolean;
+  protected readonly pokemonParticipantIds?: Set<number>;
 
   constructor(expValue: number, useWaveIndexMultiplier?: boolean, pokemonParticipantIds?: Set<number>) {
     super();
@@ -19,9 +19,6 @@ export class PartyExpPhase extends Phase {
     this.pokemonParticipantIds = pokemonParticipantIds;
   }
 
-  /**
-   * Gives EXP to the party
-   */
   public override start(): void {
     super.start();
 

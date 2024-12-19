@@ -6,8 +6,8 @@ import { Phase } from "#app/phase";
  */
 export class MoveAnimPhase<Anim extends MoveAnim> extends Phase {
   constructor(
-    protected anim: Anim,
-    protected onSubstitute: boolean = false,
+    protected readonly anim: Anim,
+    protected readonly onSubstitute: boolean = false,
   ) {
     super();
   }

@@ -26,7 +26,7 @@ import i18next from "i18next";
 
 /** Handles catching a pokemon after the player throws a ball */
 export class AttemptCapturePhase extends PokemonPhase {
-  private pokeballType: PokeballType;
+  private readonly pokeballType: PokeballType;
   private pokeball: Phaser.GameObjects.Sprite;
   private originalY: number;
 
@@ -221,7 +221,7 @@ export class AttemptCapturePhase extends PokemonPhase {
   }
 
   public catch(): void {
-    const { pokemonInfoContainer, ui } = globalScene;
+    const { gameData, pokemonInfoContainer, ui } = globalScene;
 
     const pokemon = this.getPokemon() as EnemyPokemon;
 
@@ -249,7 +249,7 @@ export class AttemptCapturePhase extends PokemonPhase {
 
     pokemonInfoContainer.show(pokemon, true);
 
-    globalScene.gameData.updateSpeciesDexIvs(pokemon.species.getRootSpeciesId(true), pokemon.ivs);
+    gameData.updateSpeciesDexIvs(pokemon.species.getRootSpeciesId(true), pokemon.ivs);
 
     ui.showText(
       i18next.t("battle:pokemonCaught", { pokemonName: getPokemonNameWithAffix(pokemon) }),
@@ -287,7 +287,7 @@ export class AttemptCapturePhase extends PokemonPhase {
             end();
           }
         };
-        Promise.all([pokemon.hideInfo(), globalScene.gameData.setPokemonCaught(pokemon)]).then(() => {
+        Promise.all([pokemon.hideInfo(), gameData.setPokemonCaught(pokemon)]).then(() => {
           if (globalScene.getPlayerParty().length === PLAYER_PARTY_MAX_SIZE) {
             const promptRelease = (): void => {
               ui.showText(i18next.t("battle:partyFull", { pokemonName: pokemon.getNameToRender() }), null, () => {

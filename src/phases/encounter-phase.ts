@@ -1,7 +1,7 @@
 import { BattlerIndex, BattleType } from "#app/battle";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
-import { applyAbAttrs } from "#app/data/ability";
 import { SyncEncounterNatureAbAttr } from "#app/data/ab-attrs/sync-encounter-nature-ab-attr";
+import { applyAbAttrs } from "#app/data/ability";
 import { initEncounterAnims, loadEncounterAnimAssets } from "#app/data/battle-anims";
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
 import { WEIGHT_INCREMENT_ON_SPAWN_MISS } from "#app/data/mystery-encounters/mystery-encounters";
@@ -27,7 +27,6 @@ import Overrides from "#app/overrides";
 import { BattlePhase } from "#app/phases/battle-phase";
 import { CheckSwitchPhase } from "#app/phases/check-switch-phase";
 import { GameOverPhase } from "#app/phases/game-over-phase";
-import { MysteryEncounterPhase } from "./mystery-encounter-phases/mystery-encounter-phase";
 import { PostSummonPhase } from "#app/phases/post-summon-phase";
 import { ReturnPhase } from "#app/phases/return-phase";
 import { ScanIvsPhase } from "#app/phases/scan-ivs-phase";
@@ -43,9 +42,10 @@ import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { PlayerGender } from "#enums/player-gender";
 import { Species } from "#enums/species";
 import i18next from "i18next";
+import { MysteryEncounterPhase } from "./mystery-encounter-phases/mystery-encounter-phase";
 
 export class EncounterPhase extends BattlePhase {
-  private loaded: boolean;
+  private readonly loaded: boolean;
 
   constructor(loaded: boolean = false) {
     super();

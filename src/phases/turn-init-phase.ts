@@ -5,6 +5,7 @@ import {
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { TurnInitEvent } from "#app/events/battle-scene";
 import type { PlayerPokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
 import i18next from "i18next";
 import { CommandPhase } from "./command-phase";
 import { EnemyCommandPhase } from "./enemy-command-phase";
@@ -12,13 +13,8 @@ import { FieldPhase } from "./field-phase";
 import { GameOverPhase } from "./game-over-phase";
 import { ToggleDoublePositionPhase } from "./toggle-double-position-phase";
 import { TurnStartPhase } from "./turn-start-phase";
-import { globalScene } from "#app/global-scene";
 
 export class TurnInitPhase extends FieldPhase {
-  constructor() {
-    super();
-  }
-
   override start() {
     super.start();
 

@@ -1,8 +1,8 @@
 import type { BattlerIndex } from "#app/battle";
-import { BattlerTagType } from "#enums/battler-tag-type";
-import { EFFECTIVE_STATS, BATTLE_STATS } from "#enums/stat";
 import { PokemonMove } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
+import { BattlerTagType } from "#enums/battler-tag-type";
+import { BATTLE_STATS, EFFECTIVE_STATS } from "#enums/stat";
 import { PokemonPhase } from "./pokemon-phase";
 
 /**
@@ -10,8 +10,8 @@ import { PokemonPhase } from "./pokemon-phase";
  * Used for Transform (move) and Imposter (ability)
  */
 export class PokemonTransformPhase extends PokemonPhase {
-  protected targetIndex: BattlerIndex;
-  private playSound: boolean;
+  protected readonly targetIndex: BattlerIndex;
+  private readonly playSound: boolean;
 
   constructor(userIndex: BattlerIndex, targetIndex: BattlerIndex, playSound: boolean = false) {
     super(userIndex);

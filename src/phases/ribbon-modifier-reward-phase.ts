@@ -1,12 +1,12 @@
-import { globalScene } from "#app/global-scene";
 import type PokemonSpecies from "#app/data/pokemon-species";
+import { globalScene } from "#app/global-scene";
 import type { ModifierTypeFunc } from "#app/modifier/modifier-type";
 import { Mode } from "#app/ui/ui";
 import i18next from "i18next";
 import { ModifierRewardPhase } from "./modifier-reward-phase";
 
 export class RibbonModifierRewardPhase extends ModifierRewardPhase {
-  private species: PokemonSpecies;
+  private readonly species: PokemonSpecies;
 
   constructor(modifierTypeFunc: ModifierTypeFunc, species: PokemonSpecies) {
     super(modifierTypeFunc);

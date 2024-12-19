@@ -8,7 +8,7 @@ import { PlayerPartyMemberPokemonPhase } from "./player-party-member-pokemon-pha
 
 /** Grants a player pokemon EXP and pushes a {@linkcode LevelUpPhase} if it leveled up */
 export class ExpPhase extends PlayerPartyMemberPokemonPhase {
-  private expValue: number;
+  private readonly expValue: number;
 
   constructor(partyMemberIndex: number, expValue: number) {
     super(partyMemberIndex);

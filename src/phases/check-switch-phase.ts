@@ -11,9 +11,9 @@ import i18next from "i18next";
 
 /** Handles the prompt to switch pokemon at the start of a battle when the player is playing in Switch mode */
 export class CheckSwitchPhase extends BattlePhase {
-  protected fieldIndex: number;
+  protected readonly fieldIndex: number;
   /** Whether to use the pokemon's name or "Pokemon" when displaying the dialog box */
-  protected useName: boolean;
+  protected readonly useName: boolean;
 
   constructor(fieldIndex: number, useName: boolean) {
     super();

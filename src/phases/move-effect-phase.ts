@@ -43,8 +43,7 @@ import {
 } from "#app/data/move";
 import { SpeciesFormChangePostMoveTrigger } from "#app/data/pokemon-forms";
 import type { TypeDamageMultiplier } from "#app/data/type";
-import type { Pokemon } from "#app/field/pokemon";
-import type { DamageResult, PokemonMove, TurnMove } from "#app/field/pokemon";
+import type { DamageResult, Pokemon, PokemonMove, TurnMove } from "#app/field/pokemon";
 import { HitResult, MoveResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -70,13 +69,13 @@ import i18next from "i18next";
 type HitCheckEntry = [HitCheckResult, TypeDamageMultiplier];
 
 export class MoveEffectPhase extends PokemonPhase {
-  public move: PokemonMove;
+  public readonly move: PokemonMove;
   /** The original targets of the move */
   protected targets: BattlerIndex[];
   /** The targets of the move after dynamic adjustments, e.g. from Dragon Darts */
   private adjustedTargets: BattlerIndex[] | null = null;
 
-  private hitChecks: HitCheckEntry[];
+  private readonly hitChecks: HitCheckEntry[];
   private moveHistoryEntry: TurnMove;
 
   /** MOVE EFFECT TRIGGER CONDITIONS */

@@ -30,7 +30,7 @@ import i18next from "i18next";
 
 export class GameOverPhase extends BattlePhase {
   private isVictory: boolean;
-  private firstRibbons: PokemonSpecies[] = [];
+  private readonly firstRibbons: PokemonSpecies[] = [];
 
   constructor(isVictory: boolean = false) {
     super();

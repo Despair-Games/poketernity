@@ -1,22 +1,18 @@
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
-import { TrainerType } from "#app/enums/trainer-type";
+import { TrainerSlot } from "#app/data/trainer-config";
+import { globalScene } from "#app/global-scene";
 import { modifierTypes } from "#app/modifier/modifier-type";
+import { achvs } from "#app/system/achv";
 import { vouchers } from "#app/system/voucher";
-import i18next from "i18next";
 import { randSeedItem } from "#app/utils";
+import { Biome } from "#enums/biome";
+import { TrainerType } from "#enums/trainer-type";
+import i18next from "i18next";
 import { BattlePhase } from "./battle-phase";
 import { ModifierRewardPhase } from "./modifier-reward-phase";
 import { MoneyRewardPhase } from "./money-reward-phase";
-import { TrainerSlot } from "#app/data/trainer-config";
-import { globalScene } from "#app/global-scene";
-import { Biome } from "#app/enums/biome";
-import { achvs } from "#app/system/achv";
 
 export class TrainerVictoryPhase extends BattlePhase {
-  constructor() {
-    super();
-  }
-
   override start() {
     globalScene.disableMenu = true;
 

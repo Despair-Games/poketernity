@@ -4,7 +4,7 @@ import { Mode } from "#app/ui/ui";
 import { fixedInt } from "#app/utils";
 
 export class ReloadSessionPhase extends Phase {
-  private systemDataStr?: string;
+  private readonly systemDataStr?: string;
 
   constructor(systemDataStr?: string) {
     super();

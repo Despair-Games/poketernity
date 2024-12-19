@@ -6,8 +6,8 @@ import { PokemonPhase } from "#app/phases/pokemon-phase";
 /** Displays damage numbers and plays move hit SFX during battle */
 export class DamageAnimPhase extends PokemonPhase {
   private amount: number;
-  private damageResult: DamageResult;
-  private critical: boolean;
+  private readonly damageResult: DamageResult;
+  private readonly critical: boolean;
 
   constructor(
     battlerIndex: BattlerIndex,

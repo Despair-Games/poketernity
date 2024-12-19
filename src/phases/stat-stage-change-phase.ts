@@ -1,19 +1,19 @@
-import { globalScene } from "#app/global-scene";
 import type { BattlerIndex } from "#app/battle";
-import { applyAbAttrs, applyPostStatStageChangeAbAttrs, applyPreStatStageChangeAbAttrs } from "#app/data/ability";
+import { PostStatStageChangeAbAttr } from "#app/data/ab-attrs/post-stat-stage-change-ab-attr";
+import { ProtectStatAbAttr } from "#app/data/ab-attrs/protect-stat-ab-attr";
 import { StatStageChangeCopyAbAttr } from "#app/data/ab-attrs/stat-stage-change-copy-ab-attr";
 import { StatStageChangeMultiplierAbAttr } from "#app/data/ab-attrs/stat-stage-change-multiplier-ab-attr";
+import { applyAbAttrs, applyPostStatStageChangeAbAttrs, applyPreStatStageChangeAbAttrs } from "#app/data/ability";
 import { MistTag } from "#app/data/arena-tag";
 import type { Pokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { ResetNegativeStatStageModifier } from "#app/modifier/modifier";
 import { handleTutorial, Tutorial } from "#app/tutorial";
-import { NumberHolder, BooleanHolder } from "#app/utils";
+import { BooleanHolder, NumberHolder } from "#app/utils";
+import { getStatKey, getStatStageChangeDescriptionKey, Stat, type BattleStat } from "#enums/stat";
 import i18next from "i18next";
 import { PokemonPhase } from "./pokemon-phase";
-import { Stat, type BattleStat, getStatKey, getStatStageChangeDescriptionKey } from "#enums/stat";
-import { PostStatStageChangeAbAttr } from "#app/data/ab-attrs/post-stat-stage-change-ab-attr";
-import { ProtectStatAbAttr } from "#app/data/ab-attrs/protect-stat-ab-attr";
 
 export type StatStageChangeCallback = (
   target: Pokemon | null,
@@ -22,13 +22,13 @@ export type StatStageChangeCallback = (
 ) => void;
 
 export class StatStageChangePhase extends PokemonPhase {
-  private stats: BattleStat[];
-  private selfTarget: boolean;
+  private readonly stats: BattleStat[];
+  private readonly selfTarget: boolean;
   private stages: number;
-  private showMessage: boolean;
-  private ignoreAbilities: boolean;
-  private canBeCopied: boolean;
-  private onChange: StatStageChangeCallback | null;
+  private readonly showMessage: boolean;
+  private readonly ignoreAbilities: boolean;
+  private readonly canBeCopied: boolean;
+  private readonly onChange: StatStageChangeCallback | null;
 
   constructor(
     battlerIndex: BattlerIndex,

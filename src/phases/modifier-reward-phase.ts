@@ -5,7 +5,7 @@ import i18next from "i18next";
 import { BattlePhase } from "./battle-phase";
 
 export class ModifierRewardPhase extends BattlePhase {
-  protected modifierType: ModifierType;
+  protected readonly modifierType: ModifierType;
 
   constructor(modifierTypeFunc: ModifierTypeFunc) {
     super();

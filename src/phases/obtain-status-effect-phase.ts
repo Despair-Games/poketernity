@@ -13,10 +13,10 @@ import { PokemonPhase } from "./pokemon-phase";
  */
 export class ObtainStatusEffectPhase extends PokemonPhase {
   // TODO: Should this be able to be undefined? Early return if so?
-  private statusEffect?: StatusEffect;
-  private turnsRemaining?: number;
-  private sourceText?: string | null;
-  private sourcePokemon?: Pokemon | null;
+  private readonly statusEffect?: StatusEffect;
+  private readonly turnsRemaining?: number;
+  private readonly sourceText?: string | null;
+  private readonly sourcePokemon?: Pokemon | null;
 
   constructor(
     battlerIndex: BattlerIndex,

@@ -1,19 +1,19 @@
-import { globalScene } from "#app/global-scene";
 import { SemiInvulnerableTag } from "#app/data/battler-tags";
 import type { SpeciesFormChange } from "#app/data/pokemon-forms";
 import { getSpeciesFormChangeMessage } from "#app/data/pokemon-forms";
 import { getTypeRgb } from "#app/data/type";
-import { BattlerTagType } from "#app/enums/battler-tag-type";
 import type { Pokemon } from "#app/field/pokemon";
 import { EnemyPokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { BattlerTagType } from "#enums/battler-tag-type";
 import { BattlePhase } from "./battle-phase";
 import { MovePhase } from "./move-phase";
 import { PokemonHealPhase } from "./pokemon-heal-phase";
 
 export class QuietFormChangePhase extends BattlePhase {
-  protected pokemon: Pokemon;
-  protected formChange: SpeciesFormChange;
+  protected readonly pokemon: Pokemon;
+  protected readonly formChange: SpeciesFormChange;
 
   constructor(pokemon: Pokemon, formChange: SpeciesFormChange) {
     super();

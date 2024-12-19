@@ -17,9 +17,9 @@ import { BattlerTagType } from "#enums/battler-tag-type";
  */
 export class MoveChargePhase extends PokemonPhase {
   /** The move instance that this phase applies */
-  public move: PokemonMove;
+  public readonly move: PokemonMove;
   /** The field index targeted by the move (Charging moves assume single target) */
-  public targetIndex: BattlerIndex;
+  public readonly targetIndex: BattlerIndex;
 
   constructor(battlerIndex: BattlerIndex, targetIndex: BattlerIndex, move: PokemonMove) {
     super(battlerIndex);

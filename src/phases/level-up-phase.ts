@@ -19,9 +19,9 @@ import i18next from "i18next";
  * - Pushes an {@linkcode EvolutionPhase} if the pokemon should evolve
  */
 export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
-  protected lastLevel: number;
-  protected level: number;
-  protected pokemon: PlayerPokemon = this.getPlayerPokemon();
+  protected readonly lastLevel: number;
+  protected readonly level: number;
+  protected readonly pokemon: PlayerPokemon = this.getPlayerPokemon();
 
   constructor(partyMemberIndex: number, lastLevel: number, level: number) {
     super(partyMemberIndex);

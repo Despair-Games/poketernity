@@ -1,13 +1,19 @@
-import { applyAbAttrs } from "#app/data/ability";
+import { BattlerIndex } from "#app/battle";
+import { BypassSpeedChanceAbAttr } from "#app/data/ab-attrs/bypass-speed-chance-ab-attr";
 import { PreventBypassSpeedChanceAbAttr } from "#app/data/ab-attrs/prevent-bypass-speed-chance-ab-attr";
+import { applyAbAttrs } from "#app/data/ability";
+import { TrickRoomTag } from "#app/data/arena-tag";
 import { allMoves, MoveHeaderAttr } from "#app/data/move";
-import { Abilities } from "#app/enums/abilities";
-import { Stat } from "#app/enums/stat";
 import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
 import { BypassSpeedChanceModifier } from "#app/modifier/modifier";
+import { CheckStatusEffectPhase } from "#app/phases/check-status-effect-phase";
 import { Command } from "#app/ui/command-ui-handler";
-import { randSeedShuffle, BooleanHolder } from "#app/utils";
+import { BooleanHolder, randSeedShuffle } from "#app/utils";
+import { Abilities } from "#enums/abilities";
+import { Stat } from "#enums/stat";
+import { SwitchType } from "#enums/switch-type";
 import { AttemptCapturePhase } from "./attempt-capture-phase";
 import { AttemptRunPhase } from "./attempt-run-phase";
 import { BerryPhase } from "./berry-phase";
@@ -17,18 +23,8 @@ import { MovePhase } from "./move-phase";
 import { SwitchSummonPhase } from "./switch-summon-phase";
 import { TurnEndPhase } from "./turn-end-phase";
 import { WeatherEffectPhase } from "./weather-effect-phase";
-import { CheckStatusEffectPhase } from "#app/phases/check-status-effect-phase";
-import { BattlerIndex } from "#app/battle";
-import { TrickRoomTag } from "#app/data/arena-tag";
-import { SwitchType } from "#enums/switch-type";
-import { globalScene } from "#app/global-scene";
-import { BypassSpeedChanceAbAttr } from "#app/data/ab-attrs/bypass-speed-chance-ab-attr";
 
 export class TurnStartPhase extends FieldPhase {
-  constructor() {
-    super();
-  }
-
   /**
    * This orders the active Pokemon on the field by speed into an BattlerIndex array and returns that array.
    * It also checks for Trick Room and reverses the array if it is present.

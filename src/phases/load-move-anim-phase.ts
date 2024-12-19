@@ -8,7 +8,7 @@ import { Phase } from "#app/phase";
  * isn't already loaded (e.g. for Metronome)
  */
 export class LoadMoveAnimPhase extends Phase {
-  constructor(protected moveId: Moves) {
+  constructor(protected readonly moveId: Moves) {
     super();
   }
 

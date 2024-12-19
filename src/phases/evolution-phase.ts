@@ -21,14 +21,14 @@ import { type FormChangePhase } from "#app/phases/form-change-phase";
  * @extends FormChangeBasePhase
  */
 export class EvolutionPhase extends FormChangeBasePhase {
-  protected lastLevel: number;
+  protected readonly lastLevel: number;
 
   private preEvolvedPokemonName: string;
 
-  private evolution: SpeciesFormEvolution | null;
+  private readonly evolution: SpeciesFormEvolution | null;
   private evolutionBgm: AnySound;
   /** `true` if the secondary species of a fused pokemon is evolving */
-  private fusionSpeciesEvolved: boolean;
+  private readonly fusionSpeciesEvolved: boolean;
 
   constructor(pokemon: PlayerPokemon, evolution: SpeciesFormEvolution | null, lastLevel: number) {
     super(pokemon);

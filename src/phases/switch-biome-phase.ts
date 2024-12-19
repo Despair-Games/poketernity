@@ -1,10 +1,10 @@
-import { globalScene } from "#app/global-scene";
-import type { Biome } from "#app/enums/biome";
 import { getBiomeKey } from "#app/field/arena";
+import { globalScene } from "#app/global-scene";
+import type { Biome } from "#enums/biome";
 import { BattlePhase } from "./battle-phase";
 
 export class SwitchBiomePhase extends BattlePhase {
-  private nextBiome: Biome;
+  private readonly nextBiome: Biome;
 
   constructor(nextBiome: Biome) {
     super();

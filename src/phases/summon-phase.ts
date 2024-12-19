@@ -2,21 +2,21 @@ import { BattleType } from "#app/battle";
 import { getPokeballAtlasKey, getPokeballTintColor } from "#app/data/pokeball";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";
 import { TrainerSlot } from "#app/data/trainer-config";
-import { PlayerGender } from "#app/enums/player-gender";
 import { addPokeballOpenParticles } from "#app/field/anims";
 import type { Pokemon } from "#app/field/pokemon";
 import { FieldPosition } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
+import { PlayerGender } from "#enums/player-gender";
 import i18next from "i18next";
+import { GameOverPhase } from "./game-over-phase";
 import { PartyMemberPokemonPhase } from "./party-member-pokemon-phase";
 import { PostSummonPhase } from "./post-summon-phase";
-import { GameOverPhase } from "./game-over-phase";
 import { ShinySparklePhase } from "./shiny-sparkle-phase";
-import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
-import { globalScene } from "#app/global-scene";
 
 export class SummonPhase extends PartyMemberPokemonPhase {
-  private loaded: boolean;
+  private readonly loaded: boolean;
 
   constructor(fieldIndex: number, player: boolean = true, loaded: boolean = false) {
     super(fieldIndex, player);

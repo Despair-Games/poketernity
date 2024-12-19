@@ -11,7 +11,7 @@ import { SelectGenderPhase } from "./select-gender-phase";
 import { UnavailablePhase } from "./unavailable-phase";
 
 export class LoginPhase extends Phase {
-  private showText: boolean;
+  private readonly showText: boolean;
 
   constructor(showText: boolean = true) {
     super();

@@ -6,7 +6,7 @@ import { Mode } from "#app/ui/ui";
 import i18next from "i18next";
 
 export class UnlockPhase extends Phase {
-  private unlockable: Unlockables;
+  private readonly unlockable: Unlockables;
 
   constructor(unlockable: Unlockables) {
     super();

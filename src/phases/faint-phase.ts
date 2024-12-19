@@ -1,9 +1,9 @@
 import type { BattlerIndex } from "#app/battle";
 import { BattleType } from "#app/battle";
-import { applyPostFaintAbAttrs, applyPostKnockOutAbAttrs, applyPostVictoryAbAttrs } from "#app/data/ability";
 import { PostFaintAbAttr } from "#app/data/ab-attrs/post-faint-ab-attr";
 import { PostKnockOutAbAttr } from "#app/data/ab-attrs/post-knock-out-ab-attr";
 import { PostVictoryAbAttr } from "#app/data/ab-attrs/post-victory-ab-attr";
+import { applyPostFaintAbAttrs, applyPostKnockOutAbAttrs, applyPostVictoryAbAttrs } from "#app/data/ability";
 import { FRIENDSHIP_LOSS_FROM_FAINT } from "#app/data/balance/starters";
 import type { DestinyBondTag, GrudgeTag } from "#app/data/battler-tags";
 import { BattlerTagLapseType } from "#app/data/battler-tags";
@@ -29,16 +29,16 @@ import { VictoryPhase } from "./victory-phase";
 
 export class FaintPhase extends PokemonPhase {
   /** Whether or not enduring (for this phase's purposes, Reviver Seed) should be prevented */
-  private preventEndure: boolean;
+  private readonly preventEndure: boolean;
 
   /** Destiny Bond tag belonging to the currently fainting Pokemon, if applicable */
-  private destinyTag?: DestinyBondTag | null;
+  private readonly destinyTag?: DestinyBondTag | null;
 
   /** Grudge tag belonging to the currently fainting Pokemon, if applicable */
-  private grudgeTag?: GrudgeTag | null;
+  private readonly grudgeTag?: GrudgeTag | null;
 
   /** The source Pokemon that dealt fatal damage */
-  private source?: Pokemon;
+  private readonly source?: Pokemon;
 
   constructor(
     battlerIndex: BattlerIndex,

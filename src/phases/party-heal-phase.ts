@@ -6,7 +6,7 @@ import { BattlePhase } from "./battle-phase";
  * @extends BattlePhase
  */
 export class PartyHealPhase extends BattlePhase {
-  private resumeBgm: boolean;
+  private readonly resumeBgm: boolean;
 
   constructor(resumeBgm: boolean) {
     super();

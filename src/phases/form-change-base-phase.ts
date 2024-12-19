@@ -1,5 +1,5 @@
 import { getTypeRgb } from "#app/data/type";
-import { sin, cos } from "#app/field/anims";
+import { cos, sin } from "#app/field/anims";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";

@@ -8,8 +8,8 @@ import { BattlePhase } from "./battle-phase";
  * @extends BattlePhase
  */
 export class MoveHeaderPhase extends BattlePhase {
-  public pokemon: Pokemon;
-  public move: PokemonMove;
+  public readonly pokemon: Pokemon;
+  public readonly move: PokemonMove;
 
   constructor(pokemon: Pokemon, move: PokemonMove) {
     super();

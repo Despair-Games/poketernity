@@ -1,19 +1,4 @@
 import { globalScene } from "#app/global-scene";
-import type { ModifierTier } from "#app/modifier/modifier-tier";
-import type { ModifierTypeOption, ModifierType } from "#app/modifier/modifier-type";
-import {
-  regenerateModifierPoolThresholds,
-  getPlayerShopModifierTypeOptionsForWave,
-  PokemonModifierType,
-  FusePokemonModifierType,
-  PokemonMoveModifierType,
-  TmModifierType,
-  RememberMoveModifierType,
-  PokemonPpRestoreModifierType,
-  PokemonPpUpModifierType,
-  ModifierPoolType,
-  getPlayerModifierTypeOptions,
-} from "#app/modifier/modifier-type";
 import type { Modifier } from "#app/modifier/modifier";
 import {
   ExtraModifierModifier,
@@ -21,21 +6,35 @@ import {
   PokemonHeldItemModifier,
   TempExtraModifierModifier,
 } from "#app/modifier/modifier";
+import type { ModifierTier } from "#app/modifier/modifier-tier";
+import type { CustomModifierSettings, ModifierType, ModifierTypeOption } from "#app/modifier/modifier-type";
+import {
+  FusePokemonModifierType,
+  getPlayerModifierTypeOptions,
+  getPlayerShopModifierTypeOptionsForWave,
+  ModifierPoolType,
+  PokemonModifierType,
+  PokemonMoveModifierType,
+  PokemonPpRestoreModifierType,
+  PokemonPpUpModifierType,
+  regenerateModifierPoolThresholds,
+  RememberMoveModifierType,
+  TmModifierType,
+} from "#app/modifier/modifier-type";
+import Overrides from "#app/overrides";
 import type ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
 import { SHOP_OPTIONS_ROW_LIMIT } from "#app/ui/modifier-select-ui-handler";
-import PartyUiHandler, { PartyUiMode, PartyOption } from "#app/ui/party-ui-handler";
+import PartyUiHandler, { PartyOption, PartyUiMode } from "#app/ui/party-ui-handler";
 import { Mode } from "#app/ui/ui";
+import { isNullOrUndefined, NumberHolder } from "#app/utils";
 import i18next from "i18next";
 import { BattlePhase } from "./battle-phase";
-import Overrides from "#app/overrides";
-import type { CustomModifierSettings } from "#app/modifier/modifier-type";
-import { isNullOrUndefined, NumberHolder } from "#app/utils";
 
 export class SelectModifierPhase extends BattlePhase {
-  private rerollCount: number;
-  private modifierTiers?: ModifierTier[];
-  private customModifierSettings?: CustomModifierSettings;
-  private isCopy: boolean;
+  private readonly rerollCount: number;
+  private readonly modifierTiers?: ModifierTier[];
+  private readonly customModifierSettings?: CustomModifierSettings;
+  private readonly isCopy: boolean;
 
   private typeOptions: ModifierTypeOption[];
 

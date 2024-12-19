@@ -6,7 +6,7 @@ import { PostTurnStatusEffectPhase } from "#app/phases/post-turn-status-effect-p
 /** Queues a {@linkcode PostTurnStatusEffectPhase} for every active pokemon that needs one */
 export class CheckStatusEffectPhase extends Phase {
   /** The pokemon being checked, ordered by turn order */
-  private activePokemon: BattlerIndex[];
+  private readonly activePokemon: BattlerIndex[];
 
   constructor(activePokemon: BattlerIndex[]) {
     super();
