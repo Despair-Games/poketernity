@@ -8,7 +8,6 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import Overrides from "#app/overrides";
 import { PlayerPartyMemberPokemonPhase } from "#app/phases/player-party-member-pokemon-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import EvolutionSceneHandler from "#app/ui/evolution-scene-handler";
 import { SummaryUiMode } from "#app/ui/summary-ui-handler";
 import { Mode } from "#app/ui/ui";
 import { Moves } from "#enums/moves";
