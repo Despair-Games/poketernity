@@ -1527,7 +1527,7 @@ export class TrainerConfig {
 
 let t = 0;
 
-interface TrainerConfigs {
+export interface TrainerConfigs {
   [key: number]: TrainerConfig;
 }
 
@@ -1535,7 +1535,7 @@ interface TrainerConfigs {
  * The function to get variable strength grunts
  * @returns the correct TrainerPartyTemplate
  */
-function getEvilGruntPartyTemplate(): TrainerPartyTemplate {
+export function getEvilGruntPartyTemplate(): TrainerPartyTemplate {
   const waveIndex = globalScene.currentBattle?.waveIndex;
   if (waveIndex < 40) {
     return trainerPartyTemplates.TWO_AVG;
@@ -1550,7 +1550,7 @@ function getEvilGruntPartyTemplate(): TrainerPartyTemplate {
   }
 }
 
-function getWavePartyTemplate(...templates: TrainerPartyTemplate[]) {
+export function getWavePartyTemplate(...templates: TrainerPartyTemplate[]) {
   return templates[
     Math.min(
       Math.max(
@@ -1611,7 +1611,7 @@ export function getRandomPartyMemberFunc(
   };
 }
 
-function getSpeciesFilterRandomPartyMemberFunc(
+export function getSpeciesFilterRandomPartyMemberFunc(
   originalSpeciesFilter: PokemonSpeciesFilter,
   trainerSlot: TrainerSlot = TrainerSlot.TRAINER,
   allowLegendaries?: boolean,
