@@ -7,7 +7,7 @@ import i18next from "i18next";
 import type { AnySound } from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
 import type { GameMode } from "#app/game-mode";
-import type { StarterMoveset } from "#app/system/game-data";
+import type { StarterMoveset } from "#app/@types/SystemData";
 import { randSeedInt, randSeedGauss, randSeedItem, isNullOrUndefined } from "#app/utils";
 import { uncatchableSpecies } from "#app/data/balance/biomes";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
