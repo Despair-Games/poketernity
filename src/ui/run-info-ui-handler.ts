@@ -323,11 +323,12 @@ export default class RunInfoUiHandler extends UiHandler {
         pokeball.setPosition(58 + (i % row_limit) * 8, i <= 2 ? 18 : 25);
         enemyContainer.add(pokeball);
       });
-      const trainerObj = this.runInfo.trainer!.toTrainer(); // TODO: resolve bang
+      // TODO: resolve bang
+      const trainerObj = this.runInfo.trainer!.toTrainer();
       const RIVAL_TRAINER_ID_THRESHOLD = 375;
       let trainerName = "";
+      // TODO: resolve bang
       if (this.runInfo.trainer!.trainerType >= RIVAL_TRAINER_ID_THRESHOLD) {
-        // TODO: resolve bang
         trainerName =
           trainerObj.variant === TrainerVariant.FEMALE
             ? i18next.t("trainerNames:rival_female")
@@ -462,14 +463,16 @@ export default class RunInfoUiHandler extends UiHandler {
    */
   private showTrainerSprites(enemyContainer: Phaser.GameObjects.Container) {
     // Creating the trainer sprite and adding it to enemyContainer
-    const tObj = this.runInfo.trainer!.toTrainer(); // TODO: resolve bang
+    // TODO: resolve bang
+    const tObj = this.runInfo.trainer!.toTrainer();
     // Loads trainer assets on demand, as they are not loaded by default in the scene
+    // TODO: resolve bang
     tObj.config.loadAssets(this.runInfo.trainer!.variant).then(() => {
       // TODO: resolve bang
-      const tObjSpriteKey = tObj.config.getSpriteKey(this.runInfo.trainer!.variant === TrainerVariant.FEMALE, false); // TODO: resolve bang
+      const tObjSpriteKey = tObj.config.getSpriteKey(this.runInfo.trainer!.variant === TrainerVariant.FEMALE, false);
       const tObjSprite = globalScene.add.sprite(0, 5, tObjSpriteKey);
+      // TODO: resolve bang
       if (this.runInfo.trainer!.variant === TrainerVariant.DOUBLE && !tObj.config.doubleOnly) {
-        // TODO: resolve bang
         const doubleContainer = globalScene.add.container(5, 8);
         tObjSprite.setPosition(-3, -3);
         const tObjPartnerSpriteKey = tObj.config.getSpriteKey(true, true);
