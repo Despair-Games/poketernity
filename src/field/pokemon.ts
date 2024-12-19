@@ -3727,7 +3727,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return false;
     }
     const tags = this.summonData.tags;
-    const tagsToRemove = tags.filter((t) => tagFilter(t));
+    const tagsToRemove = this.findTags(tagFilter);
     for (const tag of tagsToRemove) {
       tag.turnCount = 0;
       tag.onRemove(this);
