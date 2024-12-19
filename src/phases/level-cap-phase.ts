@@ -3,7 +3,10 @@ import { Mode } from "#app/ui/ui";
 import i18next from "i18next";
 import { FieldPhase } from "./field-phase";
 
-/** Displays the message for when the player reaches the level cap with a pokemon */
+/**
+ * Displays the message for when the player reaches the level cap with a pokemon
+ * @extends FieldPhase
+ */
 export class LevelCapPhase extends FieldPhase {
   public override start(): void {
     super.start();

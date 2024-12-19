@@ -47,7 +47,7 @@ export class MessagePhase extends Phase {
         this.speaker,
         null,
         () => this.end(),
-        this.callbackDelay || (this.prompt ? 0 : 1500),
+        this.callbackDelay ?? (this.prompt ? 0 : 1500),
         this.promptDelay ?? 0,
       );
     } else {
@@ -55,7 +55,7 @@ export class MessagePhase extends Phase {
         this.text,
         null,
         () => this.end(),
-        this.callbackDelay || (this.prompt ? 0 : 1500),
+        this.callbackDelay ?? (this.prompt ? 0 : 1500),
         this.prompt,
         this.promptDelay,
       );

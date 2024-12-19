@@ -32,9 +32,10 @@ export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
 
   public override start(): void {
     super.start();
+    const { expParty, gameData, ui } = globalScene;
 
-    if (this.level > globalScene.gameData.gameStats.highestLevel) {
-      globalScene.gameData.gameStats.highestLevel = this.level;
+    if (this.level > gameData.gameStats.highestLevel) {
+      gameData.gameStats.highestLevel = this.level;
     }
 
     globalScene.validateAchvs(LevelAchv, new NumberHolder(this.level));
@@ -43,27 +44,25 @@ export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
     this.pokemon.calculateStats();
     this.pokemon.updateInfo();
 
-    if (globalScene.expParty === ExpNotification.DEFAULT) {
-      globalScene.playSound("level_up_fanfare");
-      globalScene.ui.showText(
-        i18next.t("battle:levelUp", { pokemonName: getPokemonNameWithAffix(this.pokemon), level: this.level }),
-        null,
-        () =>
-          globalScene.ui
-            .getMessageHandler()
-            .promptLevelUpStats(this.partyMemberIndex, prevStats, false)
-            .then(() => this.end()),
-        null,
-        true,
-      );
-    } else if (globalScene.expParty === ExpNotification.SKIP) {
-      this.end();
-    } else {
-      // we still want to display the stats if activated
-      globalScene.ui
+    const promptLevelUpStats = (): Promise<void> =>
+      ui
         .getMessageHandler()
         .promptLevelUpStats(this.partyMemberIndex, prevStats, false)
         .then(() => this.end());
+
+    if (expParty === ExpNotification.DEFAULT) {
+      globalScene.playSound("level_up_fanfare");
+
+      const levelUpText = i18next.t("battle:levelUp", {
+        pokemonName: getPokemonNameWithAffix(this.pokemon),
+        level: this.level,
+      });
+      ui.showText(levelUpText, null, () => promptLevelUpStats(), null, true);
+    } else if (expParty === ExpNotification.SKIP) {
+      this.end();
+    } else {
+      // we still want to display the stats if activated
+      promptLevelUpStats();
     }
   }
 

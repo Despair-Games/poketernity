@@ -13,7 +13,7 @@ import { ModifierRewardPhase } from "./modifier-reward-phase";
 import { MoneyRewardPhase } from "./money-reward-phase";
 
 export class TrainerVictoryPhase extends BattlePhase {
-  override start() {
+  public override start(): void {
     globalScene.disableMenu = true;
 
     globalScene.playBgm(globalScene.currentBattle.trainer?.config.victoryBgm);
@@ -69,9 +69,9 @@ export class TrainerVictoryPhase extends BattlePhase {
         );
         message = message!; // tell TS compiler it's defined now
 
-        const showMessage = () => {
+        const showMessage = (): void => {
           const originalFunc = showMessageOrEnd;
-          showMessageOrEnd = () =>
+          showMessageOrEnd = (): void =>
             globalScene.ui.showDialogue(
               message,
               globalScene.currentBattle.trainer?.getName(TrainerSlot.TRAINER, true),
@@ -81,11 +81,11 @@ export class TrainerVictoryPhase extends BattlePhase {
 
           showMessageOrEnd();
         };
-        let showMessageOrEnd = () => this.end();
+        let showMessageOrEnd = (): void => this.end();
         if (victoryMessages?.length) {
           if (globalScene.currentBattle.trainer?.config.hasCharSprite && !globalScene.ui.shouldSkipDialogue(message)) {
             const originalFunc = showMessageOrEnd;
-            showMessageOrEnd = () =>
+            showMessageOrEnd = (): Promise<void> =>
               globalScene.charSprite.hide().then(() => globalScene.hideFieldOverlay(250).then(() => originalFunc()));
             globalScene
               .showFieldOverlay(500)
