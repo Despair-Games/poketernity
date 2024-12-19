@@ -5,8 +5,7 @@ import { SuppressWeatherEffectAbAttr } from "#app/data/ab-attrs/suppress-weather
 import { applyAbAttrs, applyPostWeatherLapseAbAttrs, applyPreWeatherEffectAbAttrs } from "#app/data/ability";
 import { CommonAnim } from "#app/data/battle-anims";
 import { type Weather, getWeatherDamageMessage, getWeatherLapseMessage } from "#app/data/weather";
-import type { Pokemon } from "#app/field/pokemon";
-import { HitResult } from "#app/field/pokemon";
+import { HitResult, type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { BooleanHolder, toDmgValue } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";

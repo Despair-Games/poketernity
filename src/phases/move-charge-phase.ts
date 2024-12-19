@@ -1,9 +1,8 @@
 import type { BattlerIndex } from "#app/battle";
 import { MoveChargeAnim } from "#app/data/battle-anims";
 import { applyMoveChargeAttrs, InstantChargeAttr, MoveEffectAttr } from "#app/data/move";
-import { type Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon";
-import { MoveResult } from "#app/field/pokemon";
+import { MoveResult, type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { MovePhase } from "#app/phases/move-phase";

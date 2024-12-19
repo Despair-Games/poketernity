@@ -1,5 +1,4 @@
-import type { BattlerIndex } from "#app/battle";
-import { BattleType, ClassicFixedBossWaves } from "#app/battle";
+import { BattleType, ClassicFixedBossWaves, type BattlerIndex } from "#app/battle";
 import { handleMysteryEncounterVictory } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { globalScene } from "#app/global-scene";
 import { modifierTypes, type CustomModifierSettings } from "#app/modifier/modifier-type";

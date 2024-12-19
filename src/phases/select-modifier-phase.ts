@@ -1,13 +1,12 @@
 import { globalScene } from "#app/global-scene";
-import type { Modifier } from "#app/modifier/modifier";
 import {
   ExtraModifierModifier,
   HealShopCostModifier,
   PokemonHeldItemModifier,
   TempExtraModifierModifier,
+  type Modifier,
 } from "#app/modifier/modifier";
 import type { ModifierTier } from "#app/modifier/modifier-tier";
-import type { CustomModifierSettings, ModifierType, ModifierTypeOption } from "#app/modifier/modifier-type";
 import {
   FusePokemonModifierType,
   getPlayerModifierTypeOptions,
@@ -20,6 +19,9 @@ import {
   regenerateModifierPoolThresholds,
   RememberMoveModifierType,
   TmModifierType,
+  type CustomModifierSettings,
+  type ModifierType,
+  type ModifierTypeOption,
 } from "#app/modifier/modifier-type";
 import Overrides from "#app/overrides";
 import type ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";

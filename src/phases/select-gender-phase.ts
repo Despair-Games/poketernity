@@ -1,8 +1,8 @@
 import { globalScene } from "#app/global-scene";
-import { PlayerGender } from "#app/enums/player-gender";
 import { Phase } from "#app/phase";
 import { SettingKeys } from "#app/system/settings/settings";
 import { Mode } from "#app/ui/ui";
+import { PlayerGender } from "#enums/player-gender";
 import i18next from "i18next";
 
 export class SelectGenderPhase extends Phase {

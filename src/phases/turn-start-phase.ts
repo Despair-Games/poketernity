@@ -4,8 +4,7 @@ import { PreventBypassSpeedChanceAbAttr } from "#app/data/ab-attrs/prevent-bypas
 import { applyAbAttrs } from "#app/data/ability";
 import { TrickRoomTag } from "#app/data/arena-tag";
 import { allMoves, MoveHeaderAttr } from "#app/data/move";
-import type { Pokemon } from "#app/field/pokemon";
-import { PokemonMove } from "#app/field/pokemon";
+import { PokemonMove, type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { BypassSpeedChanceModifier } from "#app/modifier/modifier";
 import { CheckStatusEffectPhase } from "#app/phases/check-status-effect-phase";

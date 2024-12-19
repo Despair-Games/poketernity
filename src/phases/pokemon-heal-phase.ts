@@ -1,18 +1,17 @@
-import { globalScene } from "#app/global-scene";
 import type { BattlerIndex } from "#app/battle";
 import { CommonAnim } from "#app/data/battle-anims";
+import type { HealBlockTag } from "#app/data/battler-tags";
 import { getStatusEffectHealText } from "#app/data/status-effect";
-import { StatusEffect } from "#app/enums/status-effect";
-import type { DamageResult } from "#app/field/pokemon";
-import { HitResult } from "#app/field/pokemon";
+import { HitResult, type DamageResult } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { HealingBoosterModifier } from "#app/modifier/modifier";
 import { HealAchv } from "#app/system/achv";
-import i18next from "i18next";
 import { NumberHolder } from "#app/utils";
+import { BattlerTagType } from "#enums/battler-tag-type";
+import { StatusEffect } from "#enums/status-effect";
+import i18next from "i18next";
 import { CommonAnimPhase } from "./common-anim-phase";
-import { BattlerTagType } from "#app/enums/battler-tag-type";
-import type { HealBlockTag } from "#app/data/battler-tags";
 
 export class PokemonHealPhase extends CommonAnimPhase {
   // TODO: Replace with named parameters pattern

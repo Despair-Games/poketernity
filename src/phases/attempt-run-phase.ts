@@ -1,5 +1,5 @@
-import { applyAbAttrs } from "#app/data/ability";
 import { RunSuccessAbAttr } from "#app/data/ab-attrs/run-success-ab-attr";
+import { applyAbAttrs } from "#app/data/ability";
 import type { EnemyPokemon, PlayerPokemon, Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { BattleEndPhase } from "#app/phases/battle-end-phase";

@@ -10,13 +10,13 @@ import { BattlerTagLapseType } from "#app/data/battler-tags";
 import { classicFinalBossDialogue } from "#app/data/dialogue";
 import { allMoves, PostVictoryStatStageChangeAttr } from "#app/data/move";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";
-import { StatusEffect } from "#app/enums/status-effect";
 import type { EnemyPokemon, Pokemon } from "#app/field/pokemon";
 import { HitResult, PlayerPokemon, PokemonMove } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { PokemonInstantReviveModifier } from "#app/modifier/modifier";
 import { isNullOrUndefined } from "#app/utils";
+import { StatusEffect } from "#enums/status-effect";
 import { SwitchType } from "#enums/switch-type";
 import i18next from "i18next";
 import { DamageAnimPhase } from "./damage-anim-phase";
@@ -222,7 +222,7 @@ export class FaintPhase extends PokemonPhase {
     });
   }
 
-  handleFinalBossFaint(): void {
+  protected handleFinalBossFaint(): void {
     const enemy = this.getPokemon();
     if (enemy.formIndex > 0) {
       globalScene.ui.showDialogue(classicFinalBossDialogue.secondStageWin, enemy.species.name, null, () =>

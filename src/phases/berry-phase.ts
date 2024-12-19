@@ -1,5 +1,6 @@
-import { applyAbAttrs } from "#app/data/ability";
+import { HealFromBerryUseAbAttr } from "#app/data/ab-attrs/heal-from-berry-use-ab-attr";
 import { PreventBerryUseAbAttr } from "#app/data/ab-attrs/prevent-berry-use-ab-attr";
+import { applyAbAttrs } from "#app/data/ability";
 import { CommonAnim } from "#app/data/battle-anims";
 import { BerryUsedEvent } from "#app/events/battle-scene";
 import { globalScene } from "#app/global-scene";
@@ -9,7 +10,6 @@ import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { FieldPhase } from "#app/phases/field-phase";
 import { BooleanHolder } from "#app/utils";
 import i18next from "i18next";
-import { HealFromBerryUseAbAttr } from "#app/data/ab-attrs/heal-from-berry-use-ab-attr";
 
 /** The phase after attacks where the pokemon eat berries */
 export class BerryPhase extends FieldPhase {

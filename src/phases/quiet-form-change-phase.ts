@@ -1,9 +1,7 @@
 import { SemiInvulnerableTag } from "#app/data/battler-tags";
-import type { SpeciesFormChange } from "#app/data/pokemon-forms";
-import { getSpeciesFormChangeMessage } from "#app/data/pokemon-forms";
+import { getSpeciesFormChangeMessage, type SpeciesFormChange } from "#app/data/pokemon-forms";
 import { getTypeRgb } from "#app/data/type";
-import type { Pokemon } from "#app/field/pokemon";
-import { EnemyPokemon } from "#app/field/pokemon";
+import { EnemyPokemon, type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlerTagType } from "#enums/battler-tag-type";
