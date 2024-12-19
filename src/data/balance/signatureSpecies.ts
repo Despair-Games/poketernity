@@ -1,4 +1,4 @@
-import { Species } from "#app/enums/species";
+import { Species } from "#enums/species";
 
 type SignatureSpecies = {
   [key in string]: (Species | Species[])[];
