@@ -10,10 +10,12 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { EndEvolutionPhase } from "./end-evolution-phase";
 import { FormChangeBasePhase } from "./form-change-base-phase";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { type EvolutionPhase } from "#app/phases/evolution-phase";
 
 /**
  * A phase for handling Pokemon form changes, this does not cover evolutions
- * @see EvolutionPhase for evolutions
+ * @see {@linkcode EvolutionPhase} for evolutions
  * @extends FormChangeBasePhase
  */
 export class FormChangePhase extends FormChangeBasePhase {
@@ -192,7 +194,7 @@ export class FormChangePhase extends FormChangeBasePhase {
 
   public override end(): void {
     const { ui } = globalScene;
-    
+
     this.pokemon.findAndRemoveTags((t) => t.tagType === BattlerTagType.AUTOTOMIZED);
     if (this.modal) {
       ui.revertMode().then(() => {

@@ -9,14 +9,15 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { EndEvolutionPhase } from "#app/phases/end-evolution-phase";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
 import { Mode } from "#app/ui/ui";
-import { fixedInt } from "#app/utils";
 import i18next from "i18next";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 import { FormChangeBasePhase } from "./form-change-base-phase";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { type FormChangePhase } from "#app/phases/form-change-phase";
 
 /**
  * A phase for handling Pokemon evolution
- * @see FormChangePhase for general form changes
+ * @see {@linkcode FormChangePhase} for general form changes
  * @extends FormChangeBasePhase
  */
 export class EvolutionPhase extends FormChangeBasePhase {
@@ -49,7 +50,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
 
   public override doFormChange(): void {
     const { time, tweens, ui } = globalScene;
-    
+
     ui.showText(
       i18next.t("menu:evolving", { pokemonName: this.preEvolvedPokemonName }),
       null,
@@ -222,9 +223,9 @@ export class EvolutionPhase extends FormChangeBasePhase {
             () => this.end(),
             null,
             true,
-            fixedInt(4000),
+            4000,
           );
-          time.delayedCall(fixedInt(4250), () => globalScene.playBgm());
+          time.delayedCall(4250, () => globalScene.playBgm());
         });
       });
     };
