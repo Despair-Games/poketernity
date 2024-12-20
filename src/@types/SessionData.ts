@@ -26,7 +26,8 @@ export interface SessionSaveData {
   score: number;
   waveIndex: number;
   battleType: BattleType;
-  trainer: TrainerData;
+  /** Only defined when the current wave is a trainer battle */
+  trainer: TrainerData | null;
   gameVersion: string;
   timestamp: number;
   challenges: ChallengeData[];
