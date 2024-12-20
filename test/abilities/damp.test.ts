@@ -29,14 +29,19 @@ describe("Abilities - Damp", () => {
       .enemyAbility(Abilities.BALL_FETCH);
   });
 
-  it("Damp should prevent all Pokemon from using self-KO attacking moves", async () => {
-    game.override.moveset([Moves.SPLASH, Moves.EXPLOSION]).battleType("double").enemyMoveset([Moves.EXPLOSION]);
+  it.each([
+    { moveName: "Explosion", move: Moves.EXPLOSION },
+    { moveName: "Self-Destruct", move: Moves.SELF_DESTRUCT },
+    { moveName: "Misty Explosion", move: Moves.MISTY_EXPLOSION },
+    { moveName: "Mind Blown", move: Moves.MIND_BLOWN },
+  ])("Damp should prevent the move $moveName", async ({ move }) => {
+    game.override.moveset([Moves.SPLASH, move]).battleType("double").enemyMoveset(move);
     await game.classicMode.startBattle([Species.FEEBAS, Species.ABRA]);
     const playerPokemon2 = game.scene.getPlayerField()[1];
     const enemyPokemon1 = game.scene.getEnemyField()[0];
 
     game.move.select(Moves.SPLASH);
-    game.move.select(Moves.EXPLOSION, 1);
+    game.move.select(move, 1);
     await game.phaseInterceptor.to("BerryPhase");
 
     const player2MoveResult = playerPokemon2.getMoveHistory()[0];

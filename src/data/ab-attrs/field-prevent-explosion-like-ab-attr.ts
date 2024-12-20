@@ -38,7 +38,10 @@ export class FieldPreventExplosionLikeAbAttr extends AbAttr {
    */
   override getTriggerMessage(_pokemon: Pokemon, _abilityName: string, ..._args: any[]): string | null {
     if (this.moveUser && this.moveName) {
-      return i18next.t("moveTriggers:cannotUseMove", { pokemonName: this.moveUser, moveName: this.moveName });
+      const message = i18next.t("moveTriggers:cannotUseMove", { pokemonName: this.moveUser, moveName: this.moveName });
+      this.moveUser = null;
+      this.moveName = null;
+      return message;
     }
     return null;
   }
