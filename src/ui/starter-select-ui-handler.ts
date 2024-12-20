@@ -329,7 +329,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
   private starterMovesets: StarterMoveset[] = [];
   private speciesStarterDexEntry: DexEntry | null;
   private speciesStarterMoves: Moves[];
-  private canCycleShiny: boolean;
+  private canToggleShiny: boolean;
   private canCycleForm: boolean;
   private canCycleGender: boolean;
   private canCycleAbility: boolean;
@@ -2165,7 +2165,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         );
         switch (button) {
           case Button.CYCLE_SHINY:
-            if (this.canCycleShiny || this.canCycleVariant) {
+            if (this.canToggleShiny || this.canCycleVariant) {
               success = this.handleCycleShiny(starterAttributes, props);
             }
             break;
@@ -2403,7 +2403,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
    * @returns `true` if the 'success' sound effect should be played
    */
   handleCycleShiny(starterPrefs: StarterAttributes, props: DexAttrProps): boolean {
-    if ((!props.shiny && this.canCycleShiny) || (props.shiny && !this.canCycleVariant)) {
+    if ((!props.shiny && this.canToggleShiny) || (props.shiny && !this.canCycleVariant)) {
       return this.toggleShinyState(starterPrefs);
     } else if (props.shiny && this.canCycleVariant) {
       // Find next unlocked variant
@@ -2411,7 +2411,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       let variant = previousVariant;
       do {
         variant = (variant + 1) % 3;
-        if (variant === 0 && this.canCycleShiny) {
+        if (variant === 0 && this.canToggleShiny) {
           // If we cycled back to the first variant and have the non shiny form unlocked
           // we disable shiny state instead of looking through the other variants
           return this.toggleShinyState(starterPrefs);
@@ -2435,7 +2435,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
    * @returns `true` if the 'success' sound effect should be played
    */
   toggleShinyState(starterPrefs: StarterAttributes): boolean {
-    if (!this.canCycleShiny) {
+    if (!this.canToggleShiny) {
       return false;
     }
 
@@ -2677,7 +2677,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     }
 
     if (this.speciesStarterDexEntry?.caughtAttr) {
-      if (this.canCycleShiny || this.canCycleVariant) {
+      if (this.canToggleShiny || this.canCycleVariant) {
         this.updateButtonIcon(SettingKeyboard.Button_Cycle_Shiny, gamepadType, this.shinyIconElement, this.shinyLabel);
       }
       if (this.canCycleForm) {
@@ -3589,7 +3589,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         const isVariant2Caught = isShinyCaught && !!(caughtAttr & DexAttr.VARIANT_2);
         const isVariant3Caught = isShinyCaught && !!(caughtAttr & DexAttr.VARIANT_3);
 
-        this.canCycleShiny = isNonShinyCaught && isShinyCaught;
+        this.canToggleShiny = isNonShinyCaught && isShinyCaught;
         this.canCycleVariant = [isVariant1Caught, isVariant2Caught, isVariant3Caught].filter((v) => v).length > 1;
 
         const isMaleCaught = !!(caughtAttr & DexAttr.MALE);
