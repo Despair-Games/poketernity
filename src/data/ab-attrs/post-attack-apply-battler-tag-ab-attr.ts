@@ -2,7 +2,7 @@ import type Move from "#app/data/move";
 import { MoveFlags } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { HitResult } from "#app/field/pokemon";
-import { BattlerTagType } from "#enums/battler-tag-type";
+import type { BattlerTagType } from "#enums/battler-tag-type";
 import { IgnoreMoveEffectsAbAttr } from "./ignore-move-effect-ab-attr";
 import { PostAttackAbAttr } from "./post-attack-ab-attr";
 
@@ -39,19 +39,18 @@ export class PostAttackApplyBattlerTagAbAttr extends PostAttackAbAttr {
   ): boolean {
     /**
      * The battler tag is only applied to the target if
-     * - The attacker does not have a secondary ability that suppresses move effects
+     * - The target does not have a secondary ability that suppresses move effects
      * - The target is not the attacker
      * - If a contact move is required to activate the ability, the move should make contact
-     * - If the target is behind a substitute, the move must be able to bypass the substitute
+     * - If the target is behind a substitute, the move must be able to bypass the substitute (checked in move-effect-phase.ts)
      * - The game rolls successfully based on the chance
      *
      * Note: Battler tags inflicted by abilities post attacking are also considered additional effects of moves.
      */
     if (
-      !attacker.hasAbilityWithAttr(IgnoreMoveEffectsAbAttr)
+      !target.hasAbilityWithAttr(IgnoreMoveEffectsAbAttr)
       && target.id !== attacker.id
       && (!this.contactRequired || move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, target))
-      && (target.getTag(BattlerTagType.SUBSTITUTE) ? move.hitsSubstitute(attacker, target) : true)
       && target.randSeedInt(100) < this.getChance(attacker, target, move)
     ) {
       const effect =

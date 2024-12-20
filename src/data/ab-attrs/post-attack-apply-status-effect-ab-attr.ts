@@ -8,7 +8,7 @@ import { PostAttackAbAttr } from "./post-attack-ab-attr";
 
 export class PostAttackApplyStatusEffectAbAttr extends PostAttackAbAttr {
   private contactRequired: boolean;
-  private chance: number;
+  public readonly chance: number;
   private effects: StatusEffect[];
 
   constructor(contactRequired: boolean, chance: number, ...effects: StatusEffect[]) {
@@ -20,32 +20,37 @@ export class PostAttackApplyStatusEffectAbAttr extends PostAttackAbAttr {
   }
 
   override applyPostAttackAfterMoveTypeCheck(
-    pokemon: Pokemon,
+    attacker: Pokemon,
     _passive: boolean,
     simulated: boolean,
-    attacker: Pokemon,
+    target: Pokemon,
     move: Move,
     _hitResult: HitResult,
     _args: any[],
   ): boolean {
-    if (pokemon !== attacker) {
-      return false;
-    }
-
-    /**Status inflicted by abilities post attacking are also considered additional effects.*/
+    /**
+     * The status is only applied to the target if
+     * - The target does not have a secondary ability that suppresses move effects
+     * - The target is not the attacker
+     * - If a contact move is required to activate the ability, the move should make contact
+     * - If the target is behind a substitute, the move must be able to bypass the substitute (checked in move-effect-phase.ts)
+     * - The game rolls successfully based on the chance
+     * - The target is not already statused
+     *
+     * Note: Status inflicted by abilities post attacking are also considered additional effects of moves.
+     */
     if (
-      !attacker.hasAbilityWithAttr(IgnoreMoveEffectsAbAttr)
-      && !simulated
-      && pokemon !== attacker
-      && (!this.contactRequired || move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon))
-      && pokemon.randSeedInt(100) < this.chance
-      && !pokemon.status
+      !target.hasAbilityWithAttr(IgnoreMoveEffectsAbAttr)
+      && target.id !== attacker.id
+      && (!this.contactRequired || move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, target))
+      && target.randSeedInt(100) < this.chance
+      && !target.status
     ) {
       const effect =
-        this.effects.length === 1 ? this.effects[0] : this.effects[pokemon.randSeedInt(this.effects.length)];
-      return attacker.trySetStatus(effect, true, pokemon);
+        this.effects.length === 1 ? this.effects[0] : this.effects[attacker.randSeedInt(this.effects.length)];
+      return simulated || target.trySetStatus(effect, true, attacker);
     }
 
-    return simulated;
+    return false;
   }
 }
