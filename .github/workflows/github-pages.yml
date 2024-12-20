@@ -15,7 +15,7 @@ jobs:
   pages:
     name: Github Pages
     if: github.repository == 'despair-games/poketernity'
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env:
       api-dir: ./
 
@@ -26,13 +26,9 @@ jobs:
       - name: Checkout repository for Typedoc
         uses: actions/checkout@v3
         with:
+          token: ${{ secrets.ORG_PAT }} 
           submodules: "recursive"
           path: poketernity_docs
-
-      - name: Install OS package
-        run: |
-          sudo apt update
-          sudo apt install -y git openssh-client
 
       - name: Setup Node 20.13.1
         uses: actions/setup-node@v1
