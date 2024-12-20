@@ -2406,15 +2406,15 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     if ((!props.shiny && this.canCycleShiny) || (props.shiny && !this.canCycleVariant)) {
       return this.toggleShinyState(starterPrefs);
     } else if (props.shiny && this.canCycleVariant) {
-      // Find next variant
+      // Find next unlocked variant
       const previousVariant = isNullOrUndefined(starterPrefs.variant) ? props.variant : starterPrefs.variant;
       let variant = previousVariant;
       do {
-        variant++;
-        // If we don't have the non shiny form unlocked we may need to cycle back to the first variant
-        // In other cases the loop will end if variant goes over the limit,
-        if (!this.canCycleShiny) {
-          variant = variant % 3;
+        variant = (variant + 1) % 3;
+        if (variant === 0 && this.canCycleShiny) {
+          // If we cycled back to the first variant and have the non shiny form unlocked
+          // we disable shiny state instead of looking through the other variants
+          return this.toggleShinyState(starterPrefs);
         }
         if (variant === 0 && this.speciesStarterDexEntry!.caughtAttr & DexAttr.DEFAULT_VARIANT) {
           return this.switchToVariant(starterPrefs, variant);
@@ -2423,9 +2423,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         } else if (variant === 2 && this.speciesStarterDexEntry!.caughtAttr & DexAttr.VARIANT_3) {
           return this.switchToVariant(starterPrefs, variant);
         }
-      } while (variant < 2 && variant !== previousVariant);
-      // No next variant unlocked, switch shiny status off
-      return this.toggleShinyState(starterPrefs);
+      } while (variant !== previousVariant);
     }
     return false;
   }
