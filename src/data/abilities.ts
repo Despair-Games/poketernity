@@ -113,7 +113,7 @@ import { DamageBoostAbAttr } from "./ab-attrs/damage-boost-ab-attr";
 import { AddSecondStrikeAbAttr } from "./ab-attrs/add-second-strike-ab-attr";
 import { MoveTypeChangeAbAttr } from "./ab-attrs/move-type-change-ab-attr";
 import { FieldMultiplyStatAbAttr } from "./ab-attrs/field-multiply-stat-ab-attr";
-import { FieldPreventExplosiveMovesAbAttr } from "./ab-attrs/field-prevent-explosive-moves-ab-attr";
+import { FieldPreventExplosionLikeAbAttr } from "./ab-attrs/field-prevent-explosive-moves-ab-attr";
 import { PostStatStageChangeStatStageChangeAbAttr } from "./ab-attrs/post-stat-stage-change-stat-stage-change-ab-attr";
 import { PostDefendWeatherChangeAbAttr } from "./ab-attrs/post-defend-weather-change-ab-attr";
 import { PostDefendCritStatStageChangeAbAttr } from "./ab-attrs/post-defend-crit-stat-stage-change-ab-attr";
@@ -345,7 +345,7 @@ export function initAbilities() {
     new Ability(Abilities.SPEED_BOOST, 3).attr(SpeedBoostAbAttr),
     new Ability(Abilities.BATTLE_ARMOR, 3).attr(BlockCritAbAttr).ignorable(),
     new Ability(Abilities.STURDY, 3).attr(PreDefendFullHpEndureAbAttr).attr(BlockOneHitKOAbAttr).ignorable(),
-    new Ability(Abilities.DAMP, 3).attr(FieldPreventExplosiveMovesAbAttr).ignorable(),
+    new Ability(Abilities.DAMP, 3).attr(FieldPreventExplosionLikeAbAttr).ignorable(),
     new Ability(Abilities.LIMBER, 3).attr(StatusEffectImmunityAbAttr, StatusEffect.PARALYSIS).ignorable(),
     new Ability(Abilities.SAND_VEIL, 3)
       .attr(StatMultiplierAbAttr, Stat.EVA, 1.2)
