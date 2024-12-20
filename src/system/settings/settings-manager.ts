@@ -31,11 +31,7 @@ class SettingsManager {
     this.lsKey = localStorageKey;
     this._settings = settings;
 
-    try {
-      this.loadFromLocalStorage();
-    } catch (err) {
-      console.error("Settings manager init failed:", err);
-    }
+    this.loadFromLocalStorage();
   }
 
   /**

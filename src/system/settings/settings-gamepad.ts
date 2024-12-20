@@ -85,7 +85,7 @@ export const settingGamepadBlackList = [
 export function setSettingGamepad(setting: SettingGamepad, value: number): boolean {
   switch (setting) {
     case SettingGamepad.Gamepad_Support:
-      // TODO update when setting gets localized
+      // TODO update when this gets localized
       settings.update("gamepad", "enabled", settingGamepadOptions[setting][value] !== "Disabled");
       break;
     case SettingGamepad.Button_Action:
