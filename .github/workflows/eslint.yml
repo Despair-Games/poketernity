@@ -23,6 +23,7 @@ jobs:
       - name: Check out Git repository # Step to check out the repository
         uses: actions/checkout@v4 # Use the checkout action version 4
         with:
+          token: ${{ secrets.ORG_PAT }} 
           submodules: "recursive"
 
       - name: Set up Node.js # Step to set up Node.js environment

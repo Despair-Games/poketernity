@@ -26,6 +26,7 @@ jobs:
       - name: Checkout repository for Typedoc
         uses: actions/checkout@v3
         with:
+          token: ${{ secrets.ORG_PAT }} 
           submodules: "recursive"
           path: poketernity_docs
 
