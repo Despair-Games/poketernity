@@ -8098,16 +8098,11 @@ const failIfSingleBattle: MoveConditionFunc = (_user, _target, _move) => globalS
 
 const failIfDampCondition: MoveConditionFunc = (user, _target, move) => {
   const cancelled = new BooleanHolder(false);
-  const simulated = new BooleanHolder(false);
   globalScene
     .getField(true)
-    .map((p) => applyAbAttrs(FieldPreventExplosionLikeAbAttr, p, cancelled, undefined, simulated));
-  // Queue a message if an ability prevented usage of the move
-  if (cancelled.value && !simulated) {
-    globalScene.queueMessage(
-      i18next.t("moveTriggers:cannotUseMove", { pokemonName: getPokemonNameWithAffix(user), moveName: move.name }),
+    .map((p) =>
+      applyAbAttrs(FieldPreventExplosionLikeAbAttr, p, cancelled, undefined, getPokemonNameWithAffix(user), move.name),
     );
-  }
   return !cancelled.value;
 };
 
