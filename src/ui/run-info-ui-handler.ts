@@ -5,7 +5,13 @@ import { TextStyle, addTextObject, addBBCodeTextObject, getTextColor } from "./t
 import { Mode } from "./ui";
 import { addWindow } from "./ui-theme";
 import { getPokeballAtlasKey } from "#app/data/pokeball";
-import { formatLargeNumber, getPlayTimeString, formatMoney, formatFancyLargeNumber } from "#app/utils";
+import {
+  formatLargeNumber,
+  getPlayTimeString,
+  formatMoney,
+  formatFancyLargeNumber,
+  isNullOrUndefined,
+} from "#app/utils";
 import type PokemonData from "../system/pokemon-data";
 import i18next from "i18next";
 import { Button } from "../enums/buttons";
@@ -313,7 +319,7 @@ export default class RunInfoUiHandler extends UiHandler {
       } else if (this.runInfo.enemyParty.length === 2) {
         this.parseWildDoubleDefeat(enemyContainer);
       }
-    } else if (this.runInfo.battleType === BattleType.TRAINER) {
+    } else if (this.runInfo.battleType === BattleType.TRAINER && !isNullOrUndefined(this.runInfo.trainer)) {
       this.showTrainerSprites(enemyContainer);
       const row_limit = 3;
       this.runInfo.enemyParty.forEach((p, i) => {
@@ -460,13 +466,17 @@ export default class RunInfoUiHandler extends UiHandler {
    * @param enemyContainer a Phaser Container that should hold enemy sprites
    */
   private showTrainerSprites(enemyContainer: Phaser.GameObjects.Container) {
+    if (isNullOrUndefined(this.runInfo.trainer)) {
+      console.warn("Missing TrainerData in session data, cannot render trainer sprites");
+      return;
+    }
     // Creating the trainer sprite and adding it to enemyContainer
     const tObj = this.runInfo.trainer.toTrainer();
     // Loads trainer assets on demand, as they are not loaded by default in the scene
     tObj.config.loadAssets(this.runInfo.trainer.variant).then(() => {
-      const tObjSpriteKey = tObj.config.getSpriteKey(this.runInfo.trainer.variant === TrainerVariant.FEMALE, false);
+      const tObjSpriteKey = tObj.config.getSpriteKey(this.runInfo.trainer!.variant === TrainerVariant.FEMALE, false);
       const tObjSprite = globalScene.add.sprite(0, 5, tObjSpriteKey);
-      if (this.runInfo.trainer.variant === TrainerVariant.DOUBLE && !tObj.config.doubleOnly) {
+      if (this.runInfo.trainer!.variant === TrainerVariant.DOUBLE && !tObj.config.doubleOnly) {
         const doubleContainer = globalScene.add.container(5, 8);
         tObjSprite.setPosition(-3, -3);
         const tObjPartnerSpriteKey = tObj.config.getSpriteKey(true, true);
