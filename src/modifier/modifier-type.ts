@@ -1,7 +1,8 @@
 import { EvolutionItem, pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
 import { tmPoolTiers, tmSpecies } from "#app/data/balance/tms";
 import { getBerryEffectDescription, getBerryName } from "#app/data/berry";
-import { allMoves, AttackMove, selfStatLowerMoves } from "#app/data/move";
+import { allMoves, selfStatLowerMoves } from "#app/data/move";
+import { AttackMove } from "#app/data/attack-move";
 import { getNatureName, getNatureStatMultiplier } from "#app/data/nature";
 import { getPokeballCatchMultiplier, getPokeballName, MAX_PER_TYPE_POKEBALLS } from "#app/data/pokeball";
 import {

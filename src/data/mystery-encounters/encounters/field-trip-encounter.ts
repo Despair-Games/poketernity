@@ -1,4 +1,4 @@
-import { MoveCategory } from "#app/data/move";
+import { MoveCategory } from "#app/enums/move-category";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import {
   generateModifierTypeOption,

@@ -30,7 +30,7 @@ import PokemonData from "#app/system/pokemon-data";
 import { isNullOrUndefined, randSeedInt } from "#app/utils";
 import type { Moves } from "#enums/moves";
 import { BattlerIndex } from "#app/battle";
-import { SelfStatusMove } from "#app/data/move";
+import { SelfStatusMove } from "#app/data/self-status-move";
 import { PokeballType } from "#enums/pokeball";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { queueEncounterMessage } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";

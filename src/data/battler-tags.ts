@@ -3,16 +3,13 @@ import { allAbilities, applyAbAttrs } from "#app/data/ability";
 import { FlinchEffectAbAttr } from "./ab-attrs/flinch-effect-ab-attr";
 import { BlockNonDirectDamageAbAttr } from "./ab-attrs/block-non-direct-damage-ab-attr";
 import { ChargeAnim, CommonAnim, CommonBattleAnim, MoveChargeAnim } from "#app/data/battle-anims";
-import type Move from "#app/data/move";
-import {
-  allMoves,
-  applyMoveAttrs,
-  ConsecutiveUseDoublePowerAttr,
-  HealOnAllyAttr,
-  MoveCategory,
-  MoveFlags,
-  StatusCategoryOnAllyAttr,
-} from "#app/data/move";
+import type { Move } from "#app/data/move";
+import { allMoves, applyMoveAttrs } from "#app/data/move";
+import { StatusCategoryOnAllyAttr } from "./move-attrs/status-category-on-ally-attr";
+import { ConsecutiveUseDoublePowerAttr } from "./move-attrs/consecutive-use-double-power-attr";
+import { HealOnAllyAttr } from "./move-attrs/heal-on-ally-attr";
+import { MoveFlags } from "../enums/move-flags";
+import { MoveCategory } from "../enums/move-category";
 import { SpeciesFormChangeManualTrigger } from "#app/data/pokemon-forms";
 import { getStatusEffectHealText } from "#app/data/status-effect";
 import { TerrainType } from "#enums/terrain-type";

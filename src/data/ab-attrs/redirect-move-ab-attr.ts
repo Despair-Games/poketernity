@@ -1,4 +1,5 @@
-import { allMoves, MoveTarget } from "#app/data/move";
+import { allMoves } from "#app/data/move";
+import { MoveTarget } from "../../enums/move-target";
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder, NumberHolder } from "#app/utils";
 import type { Moves } from "#enums/moves";
