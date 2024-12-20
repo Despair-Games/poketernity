@@ -15,7 +15,7 @@ jobs:
   pages:
     name: Github Pages
     if: github.repository == 'despair-games/poketernity'
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env:
       api-dir: ./
 

@@ -17,7 +17,7 @@ on:
 jobs:
   run-linters: # Define a job named "run-linters"
     name: Run linters # Human-readable name for the job
-    runs-on: ubuntu-latest # Specify the latest Ubuntu runner for the job
+    runs-on: self-hosted # Specify the latest Ubuntu runner for the job
 
     steps:
       - name: Check out Git repository # Step to check out the repository
