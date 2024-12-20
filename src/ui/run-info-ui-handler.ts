@@ -466,17 +466,18 @@ export default class RunInfoUiHandler extends UiHandler {
    * @param enemyContainer a Phaser Container that should hold enemy sprites
    */
   private showTrainerSprites(enemyContainer: Phaser.GameObjects.Container) {
-    if (isNullOrUndefined(this.runInfo.trainer)) {
+    const { trainer } = this.runInfo;
+    if (isNullOrUndefined(trainer)) {
       console.warn("Missing TrainerData in session data, cannot render trainer sprites");
       return;
     }
     // Creating the trainer sprite and adding it to enemyContainer
-    const tObj = this.runInfo.trainer.toTrainer();
+    const tObj = trainer.toTrainer();
     // Loads trainer assets on demand, as they are not loaded by default in the scene
-    tObj.config.loadAssets(this.runInfo.trainer.variant).then(() => {
-      const tObjSpriteKey = tObj.config.getSpriteKey(this.runInfo.trainer!.variant === TrainerVariant.FEMALE, false);
+    tObj.config.loadAssets(trainer.variant).then(() => {
+      const tObjSpriteKey = tObj.config.getSpriteKey(trainer.variant === TrainerVariant.FEMALE, false);
       const tObjSprite = globalScene.add.sprite(0, 5, tObjSpriteKey);
-      if (this.runInfo.trainer!.variant === TrainerVariant.DOUBLE && !tObj.config.doubleOnly) {
+      if (trainer.variant === TrainerVariant.DOUBLE && !tObj.config.doubleOnly) {
         const doubleContainer = globalScene.add.container(5, 8);
         tObjSprite.setPosition(-3, -3);
         const tObjPartnerSpriteKey = tObj.config.getSpriteKey(true, true);
