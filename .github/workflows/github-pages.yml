@@ -23,20 +23,11 @@ jobs:
       fail-fast: false
 
     steps:
-      - name: Install git on container
-        run: |
-          sudo apt update
-          sudo apt install -y git
       - name: Checkout repository for Typedoc
         uses: actions/checkout@v3
         with:
           submodules: "recursive"
           path: poketernity_docs
-
-      - name: Install OS package
-        run: |
-          sudo apt update
-          sudo apt install -y git openssh-client
 
       - name: Setup Node 20.13.1
         uses: actions/setup-node@v1
