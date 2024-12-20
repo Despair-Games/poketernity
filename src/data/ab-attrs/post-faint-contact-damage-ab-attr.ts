@@ -8,7 +8,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { BooleanHolder, toDmgValue } from "#app/utils";
 import i18next from "i18next";
 import { BlockNonDirectDamageAbAttr } from "./block-non-direct-damage-ab-attr";
-import { FieldPreventExplosionLikeAbAttr } from "./field-prevent-explosive-moves-ab-attr";
+import { FieldPreventExplosionLikeAbAttr } from "./field-prevent-explosion-like-ab-attr";
 import { PostFaintAbAttr } from "./post-faint-ab-attr";
 
 export class PostFaintContactDamageAbAttr extends PostFaintAbAttr {

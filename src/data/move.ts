@@ -59,7 +59,7 @@ import { ConfusionOnStatusEffectAbAttr } from "./ab-attrs/confusion-on-status-ef
 import { AllyMoveCategoryPowerBoostAbAttr } from "./ab-attrs/ally-move-category-power-boost-ab-attr";
 import { UserFieldMoveTypePowerBoostAbAttr } from "./ab-attrs/user-field-move-type-power-boost-ab-attr";
 import { MoveTypeChangeAbAttr } from "./ab-attrs/move-type-change-ab-attr";
-import { FieldPreventExplosionLikeAbAttr } from "./ab-attrs/field-prevent-explosive-moves-ab-attr";
+import { FieldPreventExplosionLikeAbAttr } from "./ab-attrs/field-prevent-explosion-like-ab-attr";
 import { VariableMovePowerAbAttr } from "./ab-attrs/variable-move-power-ab-attr";
 import {
   AttackTypeBoosterModifier,
@@ -8098,9 +8098,12 @@ const failIfSingleBattle: MoveConditionFunc = (_user, _target, _move) => globalS
 
 const failIfDampCondition: MoveConditionFunc = (user, _target, move) => {
   const cancelled = new BooleanHolder(false);
-  globalScene.getField(true).map((p) => applyAbAttrs(FieldPreventExplosionLikeAbAttr, p, cancelled));
+  const simulated = new BooleanHolder(false);
+  globalScene
+    .getField(true)
+    .map((p) => applyAbAttrs(FieldPreventExplosionLikeAbAttr, p, cancelled, undefined, simulated));
   // Queue a message if an ability prevented usage of the move
-  if (cancelled.value) {
+  if (cancelled.value && !simulated) {
     globalScene.queueMessage(
       i18next.t("moveTriggers:cannotUseMove", { pokemonName: getPokemonNameWithAffix(user), moveName: move.name }),
     );

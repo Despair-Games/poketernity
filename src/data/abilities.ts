@@ -113,7 +113,7 @@ import { DamageBoostAbAttr } from "./ab-attrs/damage-boost-ab-attr";
 import { AddSecondStrikeAbAttr } from "./ab-attrs/add-second-strike-ab-attr";
 import { MoveTypeChangeAbAttr } from "./ab-attrs/move-type-change-ab-attr";
 import { FieldMultiplyStatAbAttr } from "./ab-attrs/field-multiply-stat-ab-attr";
-import { FieldPreventExplosionLikeAbAttr } from "./ab-attrs/field-prevent-explosive-moves-ab-attr";
+import { FieldPreventExplosionLikeAbAttr } from "./ab-attrs/field-prevent-explosion-like-ab-attr";
 import { PostStatStageChangeStatStageChangeAbAttr } from "./ab-attrs/post-stat-stage-change-stat-stage-change-ab-attr";
 import { PostDefendWeatherChangeAbAttr } from "./ab-attrs/post-defend-weather-change-ab-attr";
 import { PostDefendCritStatStageChangeAbAttr } from "./ab-attrs/post-defend-crit-stat-stage-change-ab-attr";

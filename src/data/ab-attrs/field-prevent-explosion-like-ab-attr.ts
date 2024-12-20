@@ -10,14 +10,22 @@ import { AbAttr } from "./ab-attr";
  * - Damp
  */
 export class FieldPreventExplosionLikeAbAttr extends AbAttr {
+  /**
+   * Applies the effects of the AbAttr when it is called in @linkcode {failIfDampCondition}
+   * @param cancelled a booleanHolder object that determines if the move should fail
+   * @param args[0] contains a booleanHolder object that determines if the move is simulated or not
+   * @returns
+   */
   override apply(
     _pokemon: Pokemon,
     _passive: boolean,
     simulated: boolean,
     cancelled: BooleanHolder,
-    _args: any[],
+    args: any[],
   ): boolean {
+    const simulatedCheck = args[0] as BooleanHolder;
+    simulatedCheck.value = simulated ?? false;
     cancelled.value = true;
-    return simulated ? false : true;
+    return true;
   }
 }
