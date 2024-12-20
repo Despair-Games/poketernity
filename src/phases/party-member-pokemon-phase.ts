@@ -19,6 +19,10 @@ export abstract class PartyMemberPokemonPhase extends FieldPhase {
     return this.player ? globalScene.getPlayerParty() : globalScene.getEnemyParty();
   }
 
+  public getField(): Pokemon[] {
+    return this.player ? globalScene.getPlayerField() : globalScene.getEnemyField();
+  }
+
   public getPokemon(): Pokemon {
     return this.getParty()[this.partyMemberIndex];
   }

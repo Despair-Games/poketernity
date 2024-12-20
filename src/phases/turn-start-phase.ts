@@ -29,7 +29,7 @@ export class TurnStartPhase extends FieldPhase {
    * It also checks for Trick Room and reverses the array if it is present.
    * @returns the battle indices of all pokemon on the field ordered by speed
    */
-  getSpeedOrder(): BattlerIndex[] {
+  public getSpeedOrder(): BattlerIndex[] {
     const playerField = globalScene.getPlayerField().filter((p) => p.isActive()) as Pokemon[];
     const enemyField = globalScene.getEnemyField().filter((p) => p.isActive()) as Pokemon[];
 
@@ -65,7 +65,7 @@ export class TurnStartPhase extends FieldPhase {
    * This also considers the priority levels of various commands and changes the result of getSpeedOrder based on such.
    * @returns the final sequence of commands for this turn
    */
-  getCommandOrder(): BattlerIndex[] {
+  public getCommandOrder(): BattlerIndex[] {
     let moveOrder = this.getSpeedOrder();
     // The creation of the battlerBypassSpeed object contains checks for the ability Quick Draw and the held item Quick Claw
     // The ability Mycelium Might disables Quick Claw's activation when using a status move
@@ -135,7 +135,7 @@ export class TurnStartPhase extends FieldPhase {
     return moveOrder;
   }
 
-  override start() {
+  public override start(): void {
     super.start();
 
     const field = globalScene.getField();
@@ -160,64 +160,67 @@ export class TurnStartPhase extends FieldPhase {
           }
           const move =
             pokemon.getMoveset().find((m) => m.moveId === queuedMove.move && m.ppUsed < m.getMovePp())
-            || new PokemonMove(queuedMove.move);
+            ?? new PokemonMove(queuedMove.move);
           if (move.getMove().hasAttr(MoveHeaderAttr)) {
             globalScene.unshiftPhase(new MoveHeaderPhase(pokemon, move));
           }
           if (pokemon.isPlayer()) {
             if (turnCommand.cursor === -1) {
-              globalScene.pushPhase(new MovePhase(pokemon, turnCommand.targets || turnCommand.move!.targets, move)); //TODO: is the bang correct here?
+              globalScene.pushPhase(new MovePhase(pokemon, turnCommand.targets ?? queuedMove.targets, move));
             } else {
               const playerPhase = new MovePhase(
                 pokemon,
-                turnCommand.targets || turnCommand.move!.targets,
+                turnCommand.targets ?? queuedMove.targets,
                 move,
                 false,
                 queuedMove.ignorePP,
-              ); //TODO: is the bang correct here?
+              );
               globalScene.pushPhase(playerPhase);
             }
           } else {
             globalScene.pushPhase(
-              new MovePhase(
-                pokemon,
-                turnCommand.targets || turnCommand.move!.targets,
-                move,
-                false,
-                queuedMove.ignorePP,
-              ),
-            ); //TODO: is the bang correct here?
+              new MovePhase(pokemon, turnCommand.targets ?? queuedMove.targets, move, false, queuedMove.ignorePP),
+            );
           }
           break;
         case Command.BALL:
-          globalScene.unshiftPhase(new AttemptCapturePhase(turnCommand.targets![0] % 2, turnCommand.cursor!)); //TODO: is the bang correct here?
+          if (turnCommand.targets && turnCommand.targets[0] && turnCommand.cursor) {
+            globalScene.unshiftPhase(new AttemptCapturePhase(turnCommand.targets[0] % 2, turnCommand.cursor));
+          } else {
+            console.error("Error encountered when trying to throw Pokeball!");
+            console.error(turnCommand);
+          }
           break;
         case Command.POKEMON:
           const switchType = turnCommand.args?.[0] ? SwitchType.BATON_PASS : SwitchType.SWITCH;
-          globalScene.unshiftPhase(
-            new SwitchSummonPhase(switchType, pokemon.getFieldIndex(), turnCommand.cursor!, true, pokemon.isPlayer()),
-          );
+          if (turnCommand.cursor) {
+            globalScene.unshiftPhase(
+              new SwitchSummonPhase(switchType, pokemon.getFieldIndex(), turnCommand.cursor, true, pokemon.isPlayer()),
+            );
+          } else {
+            console.error("Error encountered when trying to switch Pokemon!");
+            console.error(turnCommand);
+          }
           break;
         case Command.RUN:
           let runningPokemon = pokemon;
           if (globalScene.currentBattle.double) {
             const playerActivePokemon = field.filter((pokemon) => {
-              if (!!pokemon) {
+              if (pokemon) {
                 return pokemon.isPlayer() && pokemon.isActive();
               } else {
                 return;
               }
             });
-            // if only one pokemon is alive, use that one
+
             if (playerActivePokemon.length > 1) {
-              // find which active pokemon has faster speed
               const fasterPokemon =
                 playerActivePokemon[0].getStat(Stat.SPD) > playerActivePokemon[1].getStat(Stat.SPD)
                   ? playerActivePokemon[0]
                   : playerActivePokemon[1];
-              // check if either active pokemon has the ability "Run Away"
+
               const hasRunAway = playerActivePokemon.find((p) => p.hasAbility(Abilities.RUN_AWAY));
-              runningPokemon = hasRunAway !== undefined ? hasRunAway : fasterPokemon;
+              runningPokemon = hasRunAway ?? fasterPokemon;
             }
           }
           globalScene.unshiftPhase(new AttemptRunPhase(runningPokemon.getFieldIndex()));
@@ -228,14 +231,14 @@ export class TurnStartPhase extends FieldPhase {
     globalScene.pushPhase(new WeatherEffectPhase());
     globalScene.pushPhase(new BerryPhase());
 
-    /** Add a new phase to check who should be taking status damage */
+    // Add a new phase to check who should be taking status damage
     globalScene.pushPhase(new CheckStatusEffectPhase(moveOrder));
 
     globalScene.pushPhase(new TurnEndPhase());
 
     /**
      * this.end() will call shiftPhase(), which dumps everything from PrependQueue (aka everything that is unshifted()) to the front
-     * of the queue and dequeues to start the next phase
+     * of the queue and dequeues to start the next phase.
      * this is important since stuff like SwitchSummon, AttemptRun, AttemptCapture Phases break the "flow" and should take precedence
      */
     this.end();

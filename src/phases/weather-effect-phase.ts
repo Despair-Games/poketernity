@@ -24,7 +24,7 @@ export class WeatherEffectPhase extends CommonAnimPhase {
     this.weather = globalScene?.arena?.weather;
   }
 
-  override start() {
+  public override start(): void {
     // Update weather state with any changes that occurred during the turn
     this.weather = globalScene?.arena?.weather;
 
@@ -44,7 +44,7 @@ export class WeatherEffectPhase extends CommonAnimPhase {
       );
 
       if (!cancelled.value) {
-        const inflictDamage = (pokemon: Pokemon) => {
+        const inflictDamage = (pokemon: Pokemon): void => {
           const cancelled = new BooleanHolder(false);
 
           applyPreWeatherEffectAbAttrs(PreWeatherDamageAbAttr, pokemon, weather, cancelled);

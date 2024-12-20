@@ -19,19 +19,22 @@ import { FieldPhase } from "./field-phase";
 import { PokemonHealPhase } from "./pokemon-heal-phase";
 
 export class TurnEndPhase extends FieldPhase {
-  override start() {
+  public override start(): void {
     super.start();
 
-    globalScene.currentBattle.incrementTurn();
-    globalScene.eventTarget.dispatchEvent(new TurnEndEvent(globalScene.currentBattle.turn));
+    const { arena, currentBattle, eventTarget } = globalScene;
+    const { terrain, weather } = arena;
 
-    const handlePokemon = (pokemon: Pokemon) => {
+    currentBattle.incrementTurn();
+    eventTarget.dispatchEvent(new TurnEndEvent(currentBattle.turn));
+
+    const handlePokemon = (pokemon: Pokemon): void => {
       if (!pokemon.switchOutStatus) {
         pokemon.lapseTags(BattlerTagLapseType.TURN_END);
 
         globalScene.applyModifiers(TurnHealModifier, pokemon.isPlayer(), pokemon);
 
-        if (globalScene.arena.terrain?.terrainType === TerrainType.GRASSY && pokemon.isGrounded()) {
+        if (terrain?.terrainType === TerrainType.GRASSY && pokemon.isGrounded()) {
           globalScene.unshiftPhase(
             new PokemonHealPhase(
               pokemon.getBattlerIndex(),
@@ -60,15 +63,15 @@ export class TurnEndPhase extends FieldPhase {
 
     this.executeForAll(handlePokemon);
 
-    globalScene.arena.lapseTags();
+    arena.lapseTags();
 
-    if (globalScene.arena.weather && !globalScene.arena.weather.lapse()) {
-      globalScene.arena.trySetWeather(WeatherType.NONE, false);
-      globalScene.arena.triggerWeatherBasedFormChangesToNormal();
+    if (weather && !weather.lapse()) {
+      arena.trySetWeather(WeatherType.NONE, false);
+      arena.triggerWeatherBasedFormChangesToNormal();
     }
 
-    if (globalScene.arena.terrain && !globalScene.arena.terrain.lapse()) {
-      globalScene.arena.trySetTerrain(TerrainType.NONE, false);
+    if (terrain && !terrain.lapse()) {
+      arena.trySetTerrain(TerrainType.NONE, false);
     }
 
     this.end();

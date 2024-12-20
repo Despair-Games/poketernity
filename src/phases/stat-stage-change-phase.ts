@@ -16,7 +16,7 @@ import i18next from "i18next";
 import { PokemonPhase } from "./pokemon-phase";
 
 export type StatStageChangeCallback = (changed: BattleStat[], relativeChanges: number[], target?: Pokemon) => void;
-
+// TODO: merge old branch that modifies this
 export class StatStageChangePhase extends PokemonPhase {
   private readonly stats: BattleStat[];
   private readonly selfTarget: boolean;

@@ -15,8 +15,10 @@ import { ToggleDoublePositionPhase } from "./toggle-double-position-phase";
 import { TurnStartPhase } from "./turn-start-phase";
 
 export class TurnInitPhase extends FieldPhase {
-  override start() {
+  public override start(): void {
     super.start();
+
+    const { currentBattle } = globalScene;
 
     globalScene.getPlayerField().forEach((p) => {
       // If this pokemon is in play and evolved into something illegal under the current challenge, force a switch
@@ -30,8 +32,8 @@ export class TurnInitPhase extends FieldPhase {
           globalScene.clearPhaseQueue();
           globalScene.unshiftPhase(new GameOverPhase());
         } else if (
-          allowedPokemon.length >= globalScene.currentBattle.getBattlerCount()
-          || (globalScene.currentBattle.double && !allowedPokemon[0].isActive(true))
+          allowedPokemon.length >= currentBattle.getBattlerCount()
+          || (currentBattle.double && !allowedPokemon[0].isActive(true))
         ) {
           // If there is at least one pokemon in the back that is legal to switch in, force a switch.
           p.switchOut();
@@ -40,7 +42,7 @@ export class TurnInitPhase extends FieldPhase {
           // This should only happen in double battles.
           p.leaveField();
         }
-        if (allowedPokemon.length === 1 && globalScene.currentBattle.double) {
+        if (allowedPokemon.length === 1 && currentBattle.double) {
           globalScene.unshiftPhase(new ToggleDoublePositionPhase(true));
         }
       }
@@ -52,14 +54,19 @@ export class TurnInitPhase extends FieldPhase {
 
     // If true, will skip remainder of current phase (and not queue CommandPhases etc.)
     if (handleMysteryEncounterTurnStartEffects()) {
-      this.end();
-      return;
+      return this.end();
     }
 
     globalScene.getField().forEach((pokemon, i) => {
-      if (pokemon?.isActive()) {
+      // How would this even be possible?
+      if (!pokemon) {
+        console.warn("Pokemon missing in TurnInitPhase!");
+        return;
+      }
+
+      if (pokemon.isActive()) {
         if (pokemon.isPlayer()) {
-          globalScene.currentBattle.addParticipant(pokemon as PlayerPokemon);
+          currentBattle.addParticipant(pokemon as PlayerPokemon);
         }
 
         pokemon.resetTurnData();

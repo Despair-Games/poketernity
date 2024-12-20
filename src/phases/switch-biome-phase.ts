@@ -12,48 +12,55 @@ export class SwitchBiomePhase extends BattlePhase {
     this.nextBiome = nextBiome;
   }
 
-  override start() {
+  public override start(): void {
     super.start();
 
-    if (this.nextBiome === undefined) {
-      return this.end();
-    }
+    const {
+      arenaBg,
+      arenaBgTransition,
+      arenaEnemy,
+      arenaNextEnemy,
+      arenaPlayer,
+      arenaPlayerTransition,
+      lastEnemyTrainer,
+      tweens,
+    } = globalScene;
 
-    globalScene.tweens.add({
-      targets: [globalScene.arenaEnemy, globalScene.lastEnemyTrainer],
+    tweens.add({
+      targets: [arenaEnemy, lastEnemyTrainer],
       x: "+=300",
       duration: 2000,
       onComplete: () => {
-        globalScene.arenaEnemy.setX(globalScene.arenaEnemy.x - 600);
+        arenaEnemy.setX(arenaEnemy.x - 600);
 
         globalScene.newArena(this.nextBiome);
 
         const biomeKey = getBiomeKey(this.nextBiome);
         const bgTexture = `${biomeKey}_bg`;
-        globalScene.arenaBgTransition.setTexture(bgTexture);
-        globalScene.arenaBgTransition.setAlpha(0);
-        globalScene.arenaBgTransition.setVisible(true);
-        globalScene.arenaPlayerTransition.setBiome(this.nextBiome);
-        globalScene.arenaPlayerTransition.setAlpha(0);
-        globalScene.arenaPlayerTransition.setVisible(true);
+        arenaBgTransition.setTexture(bgTexture);
+        arenaBgTransition.setAlpha(0);
+        arenaBgTransition.setVisible(true);
+        arenaPlayerTransition.setBiome(this.nextBiome);
+        arenaPlayerTransition.setAlpha(0);
+        arenaPlayerTransition.setVisible(true);
 
-        globalScene.tweens.add({
-          targets: [globalScene.arenaPlayer, globalScene.arenaBgTransition, globalScene.arenaPlayerTransition],
+        tweens.add({
+          targets: [arenaPlayer, arenaBgTransition, arenaPlayerTransition],
           duration: 1000,
           delay: 1000,
           ease: "Sine.easeInOut",
-          alpha: (target: any) => (target === globalScene.arenaPlayer ? 0 : 1),
+          alpha: (target: unknown) => (target === arenaPlayer ? 0 : 1),
           onComplete: () => {
-            globalScene.arenaBg.setTexture(bgTexture);
-            globalScene.arenaPlayer.setBiome(this.nextBiome);
-            globalScene.arenaPlayer.setAlpha(1);
-            globalScene.arenaEnemy.setBiome(this.nextBiome);
-            globalScene.arenaEnemy.setAlpha(1);
-            globalScene.arenaNextEnemy.setBiome(this.nextBiome);
-            globalScene.arenaBgTransition.setVisible(false);
-            globalScene.arenaPlayerTransition.setVisible(false);
-            if (globalScene.lastEnemyTrainer) {
-              globalScene.lastEnemyTrainer.destroy();
+            arenaBg.setTexture(bgTexture);
+            arenaPlayer.setBiome(this.nextBiome);
+            arenaPlayer.setAlpha(1);
+            arenaEnemy.setBiome(this.nextBiome);
+            arenaEnemy.setAlpha(1);
+            arenaNextEnemy.setBiome(this.nextBiome);
+            arenaBgTransition.setVisible(false);
+            arenaPlayerTransition.setVisible(false);
+            if (lastEnemyTrainer) {
+              lastEnemyTrainer.destroy();
             }
 
             this.end();

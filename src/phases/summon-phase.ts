@@ -94,9 +94,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
       currentBattle.battleType === BattleType.TRAINER
       || currentBattle.mysteryEncounter?.encounterMode === MysteryEncounterMode.TRAINER_BATTLE
     ) {
-      const trainerName = currentBattle.trainer?.getName(
-        !(this.fieldIndex % 2) ? TrainerSlot.TRAINER : TrainerSlot.TRAINER_PARTNER,
-      );
+      const trainerName = currentBattle.trainer?.getName(this.getTrainerSlot());
       const pokemonName = this.getPokemon().getNameToRender();
       const message = i18next.t("battle:trainerSendOut", { trainerName, pokemonName });
 
@@ -287,6 +285,10 @@ export class SummonPhase extends PartyMemberPokemonPhase {
 
   protected queuePostSummon(): void {
     globalScene.pushPhase(new PostSummonPhase(this.getPokemon().getBattlerIndex()));
+  }
+
+  public getTrainerSlot(): TrainerSlot {
+    return !(this.fieldIndex % 2) ? TrainerSlot.TRAINER : TrainerSlot.TRAINER_PARTNER;
   }
 
   public override end(): void {

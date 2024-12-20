@@ -13,17 +13,19 @@ export class UnlockPhase extends Phase {
     this.unlockable = unlockable;
   }
 
-  override start(): void {
-    globalScene.time.delayedCall(2000, () => {
-      globalScene.gameData.unlocks[this.unlockable] = true;
+  public override start(): void {
+    const { arenaBg, gameData, time, ui } = globalScene;
+
+    time.delayedCall(2000, () => {
+      gameData.unlocks[this.unlockable] = true;
       // Sound loaded into game as is
       globalScene.playSound("level_up_fanfare");
-      globalScene.ui.setMode(Mode.MESSAGE);
-      globalScene.ui.showText(
+      ui.setMode(Mode.MESSAGE);
+      ui.showText(
         i18next.t("battle:unlockedSomething", { unlockedThing: getUnlockableName(this.unlockable) }),
         null,
         () => {
-          globalScene.time.delayedCall(1500, () => globalScene.arenaBg.setVisible(true));
+          time.delayedCall(1500, () => arenaBg.setVisible(true));
           this.end();
         },
         null,

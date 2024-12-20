@@ -40,6 +40,7 @@ export class SelectModifierPhase extends BattlePhase {
 
   private typeOptions: ModifierTypeOption[];
 
+  // TODO: Use options pattern
   constructor(
     rerollCount: number = 0,
     modifierTiers?: ModifierTier[],

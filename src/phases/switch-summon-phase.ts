@@ -54,16 +54,12 @@ export class SwitchSummonPhase extends SummonPhase {
       }
 
       if (this.slotIndex > -1) {
-        this.showEnemyTrainer(!(this.fieldIndex % 2) ? TrainerSlot.TRAINER : TrainerSlot.TRAINER_PARTNER);
+        this.showEnemyTrainer(this.getTrainerSlot());
         pbTrayEnemy.showPbTray(globalScene.getEnemyParty());
       }
     }
 
-    if (
-      !this.doReturn
-      || (this.slotIndex !== -1
-        && !(this.player ? globalScene.getPlayerParty() : globalScene.getEnemyParty())[this.slotIndex])
-    ) {
+    if (!this.doReturn || (this.slotIndex !== -1 && !this.getParty()[this.slotIndex])) {
       if (this.player) {
         return this.switchAndSummon();
       } else {
@@ -73,9 +69,7 @@ export class SwitchSummonPhase extends SummonPhase {
     }
 
     const pokemon = this.getPokemon();
-    (this.player ? globalScene.getEnemyField() : globalScene.getPlayerField()).forEach((opposingPokemon: Pokemon) =>
-      opposingPokemon.removeTagsBySourceId(pokemon.id),
-    );
+    this.getField().forEach((opposingPokemon: Pokemon) => opposingPokemon.removeTagsBySourceId(pokemon.id));
 
     if (this.switchType === SwitchType.SWITCH || this.switchType === SwitchType.INITIAL_SWITCH) {
       const substitute = pokemon.getTag(SubstituteTag);
@@ -94,7 +88,7 @@ export class SwitchSummonPhase extends SummonPhase {
       this.player
         ? i18next.t("battle:playerComeBack", { pokemonName: getPokemonNameWithAffix(pokemon) })
         : i18next.t("battle:trainerComeBack", {
-            trainerName: trainer?.getName(!(this.fieldIndex % 2) ? TrainerSlot.TRAINER : TrainerSlot.TRAINER_PARTNER),
+            trainerName: trainer?.getName(this.getTrainerSlot()),
             pokemonName: pokemon.getNameToRender(),
           }),
     );
@@ -120,7 +114,7 @@ export class SwitchSummonPhase extends SummonPhase {
     this.lastPokemon = this.getPokemon();
     applyPreSwitchOutAbAttrs(PreSwitchOutAbAttr, this.lastPokemon);
     if (this.switchType === SwitchType.BATON_PASS && switchedInPokemon) {
-      (this.player ? globalScene.getEnemyField() : globalScene.getPlayerField()).forEach((opposingPokemon: Pokemon) =>
+      this.getField().forEach((opposingPokemon: Pokemon) =>
         opposingPokemon.transferTagsBySourceId(this.lastPokemon.id, switchedInPokemon.id),
       );
 
@@ -156,9 +150,7 @@ export class SwitchSummonPhase extends SummonPhase {
           this.player
             ? i18next.t("battle:playerGo", { pokemonName: getPokemonNameWithAffix(switchedInPokemon) })
             : i18next.t("battle:trainerGo", {
-                trainerName: globalScene.currentBattle.trainer?.getName(
-                  !(this.fieldIndex % 2) ? TrainerSlot.TRAINER : TrainerSlot.TRAINER_PARTNER,
-                ),
+                trainerName: globalScene.currentBattle.trainer?.getName(this.getTrainerSlot()),
                 pokemonName: this.getPokemon().getNameToRender(),
               }),
         );
@@ -166,7 +158,7 @@ export class SwitchSummonPhase extends SummonPhase {
          * If this switch is passing a Substitute, make the switched Pokemon match the returned Pokemon's state as it left.
          * Otherwise, clear any persisting tags on the returned Pokemon.
          */
-        if (this.switchType === SwitchType.BATON_PASS || this.switchType === SwitchType.SHED_TAIL) {
+        if ([SwitchType.BATON_PASS, SwitchType.SHED_TAIL].includes(this.switchType)) {
           const substitute = this.lastPokemon.getTag(SubstituteTag);
           if (substitute) {
             switchedInPokemon.x += this.lastPokemon.getSubstituteOffset()[0];
@@ -197,29 +189,35 @@ export class SwitchSummonPhase extends SummonPhase {
 
     const pokemon = this.getPokemon();
 
+    if (!pokemon) {
+      console.warn("Pokemon is missing in SwitchSummonPhase!");
+      this.lastPokemon?.resetSummonData();
+      globalScene.arena.triggerWeatherBasedFormChanges();
+      return;
+    }
+
     const moveId = globalScene.currentBattle.lastMove;
     const lastUsedMove = moveId ? allMoves[moveId] : undefined;
 
     const currentCommand = globalScene.currentBattle.turnCommands[this.fieldIndex]?.command;
-    const lastPokemonIsForceSwitchedAndNotFainted =
-      lastUsedMove?.hasAttr(ForceSwitchOutAttr) && !this.lastPokemon.isFainted();
-    const lastPokemonHasForceSwitchAbAttr =
-      this.lastPokemon.hasAbilityWithAttr(PostDamageForceSwitchAbAttr) && !this.lastPokemon.isFainted();
 
     // Compensate for turn spent summoning
-    // Or compensate for force switch move if switched out pokemon is not fainted
+    // Or compensate for force switch move/ability if switched out pokemon is not fainted
+    // TODO: This should check whether the force switch ability actually activated or something,
+    // currently this improperly triggers if a pokemon with a force switch ability is summoned normally
     if (
       currentCommand === Command.POKEMON
-      || lastPokemonIsForceSwitchedAndNotFainted
-      || lastPokemonHasForceSwitchAbAttr
+      || (!this.lastPokemon.isFainted()
+        && (lastUsedMove?.hasAttr(ForceSwitchOutAttr)
+          || this.lastPokemon.hasAbilityWithAttr(PostDamageForceSwitchAbAttr)))
     ) {
       pokemon.battleSummonData.turnCount--;
       pokemon.battleSummonData.waveTurnCount--;
     }
 
-    if (this.switchType === SwitchType.BATON_PASS && pokemon) {
+    if (this.switchType === SwitchType.BATON_PASS) {
       pokemon.transferSummon(this.lastPokemon);
-    } else if (this.switchType === SwitchType.SHED_TAIL && pokemon) {
+    } else if (this.switchType === SwitchType.SHED_TAIL) {
       const subTag = this.lastPokemon.getTag(SubstituteTag);
       if (subTag) {
         pokemon.summonData.tags.push(subTag);

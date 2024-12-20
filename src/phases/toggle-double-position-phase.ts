@@ -11,7 +11,7 @@ export class ToggleDoublePositionPhase extends BattlePhase {
     this.double = double;
   }
 
-  override start() {
+  public override start(): void {
     super.start();
 
     const playerPokemon = globalScene.getPlayerField().find((p) => p.isActive(true));
