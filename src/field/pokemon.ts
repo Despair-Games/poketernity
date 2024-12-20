@@ -3487,7 +3487,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       const critChance = [24, 8, 2, 1][Math.max(0, Math.min(this.getCritStage(source, move, false), 3))];
       isCritical.value = critChance === 1 || !globalScene.randBattleSeedInt(critChance);
     }
-    applyAbAttrs(BlockCritAbAttr, this, null, simulated, isCritical);
+    // If the above rolls positively for a critical hit, then the game checks if any crit-blocking abilities would nullify the result.
+    if (isCritical.value) {
+      applyAbAttrs(BlockCritAbAttr, this, null, simulated, isCritical);
+    }
 
     return isCritical.value;
   }
