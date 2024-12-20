@@ -20,8 +20,8 @@ jobs:
     steps:
       - name: Install git on container
         run: |
-          apt update
-          apt install -y git
+          sudo apt update
+          sudo apt install -y git
       - name: Check out Git repository
         uses: actions/checkout@v4
         with:

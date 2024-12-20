@@ -22,8 +22,8 @@ jobs:
     steps:
       - name: Install git on container
         run: |
-          apt update
-          apt install -y git
+          sudo apt update
+          sudo apt install -y git
       - name: Check out Git repository # Step to check out the repository
         uses: actions/checkout@v4 # Use the checkout action version 4
         with:
