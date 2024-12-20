@@ -5617,7 +5617,7 @@ export class AddBattlerTagAttr extends MoveEffectAttr {
 
   /**
    * The maximum number of turns the tag is active.
-   * Defaults to {@linkcode turnCountMin} if not defined.
+   * @default turnCountMin
    */
   public get turnCountMax() {
     return this.options?.turnCountMax ?? this.turnCountMin;
