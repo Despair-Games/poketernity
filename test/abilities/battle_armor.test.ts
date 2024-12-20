@@ -6,7 +6,7 @@ import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
-describe("Abilities - Battle Armor", () => {
+describe("Abilities - Battle Armor/Shell Armor", () => {
   // This test also provides coverage for Shell Armor, which functions identically to Battle Armor
   let phaserGame: Phaser.Game;
   let game: GameManager;
@@ -25,7 +25,6 @@ describe("Abilities - Battle Armor", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([Moves.SPLASH])
-      .ability(Abilities.BATTLE_ARMOR)
       .startingLevel(50)
       .battleType("single")
       .enemySpecies(Species.MAGIKARP)
@@ -33,7 +32,11 @@ describe("Abilities - Battle Armor", () => {
       .enemyMoveset(Moves.WICKED_BLOW);
   });
 
-  it("Battle Armor prevents critical hits, even gauranteed ones", async () => {
+  it.each([
+    { abilityName: "Battle Armor", ability: Abilities.BATTLE_ARMOR },
+    { abilityName: "Shell Armor", ability: Abilities.SHELL_ARMOR },
+  ])("$abilityName prevents all critical hits", async ({ ability }) => {
+    game.override.ability(ability);
     await game.classicMode.startBattle([Species.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon();
 
