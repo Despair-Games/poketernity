@@ -18,6 +18,10 @@ jobs:
     name: Shard ${{ inputs.shard }} of ${{ inputs.totalShards }}
     runs-on: self-hosted
     steps:
+      - name: Install git on container
+        run: |
+          apt update
+          apt install -y git
       - name: Check out Git repository
         uses: actions/checkout@v4
         with:

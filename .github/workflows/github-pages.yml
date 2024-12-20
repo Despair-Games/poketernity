@@ -23,6 +23,10 @@ jobs:
       fail-fast: false
 
     steps:
+      - name: Install git on container
+        run: |
+          apt update
+          apt install -y git
       - name: Checkout repository for Typedoc
         uses: actions/checkout@v3
         with:

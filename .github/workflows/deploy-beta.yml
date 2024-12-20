@@ -11,6 +11,10 @@ jobs:
     # if: github.repository == 'despair-games/poketernity'
     runs-on: self-hosted
     steps:
+      - name: Install git on container
+        run: |
+          apt update
+          apt install -y git
       - uses: actions/checkout@v4
         with:
           submodules: "recursive"
