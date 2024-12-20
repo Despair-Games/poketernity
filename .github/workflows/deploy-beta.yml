@@ -7,12 +7,13 @@ on:
 
 jobs:
   deploy:
-    if:false
+    if: false
     # if: github.repository == 'despair-games/poketernity'
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
         with:
+          token: ${{ secrets.ORG_PAT }} 
           submodules: "recursive"
       - uses: actions/setup-node@v4
         with:
