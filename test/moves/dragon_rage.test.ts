@@ -95,13 +95,14 @@ describe("Moves - Dragon Rage", () => {
     expect(enemyPokemon.getInverseHp()).toBe(dragonRageDamage);
   });
 
-  it("ignores criticals", async () => {
-    partyPokemon.addTag(BattlerTagType.ALWAYS_CRIT, 99);
+  it("Dragon Rage can never critical hit", async () => {
+    partyPokemon.addTag(BattlerTagType.ALWAYS_CRIT, 99, Moves.NONE, 0);
 
     game.move.select(Moves.DRAGON_RAGE);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("BerryPhase");
 
-    expect(enemyPokemon.getInverseHp()).toBe(dragonRageDamage);
+    const lastAttackReceived = enemyPokemon.turnData.attacksReceived[0];
+    expect(lastAttackReceived.isCritical).toBe(false);
   });
 
   it("ignores damage modification from abilities, for example ICE_SCALES", async () => {

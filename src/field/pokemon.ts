@@ -6058,7 +6058,7 @@ export interface AttackMoveResult {
   move: Moves;
   result: DamageResult;
   damage: number;
-  critical: boolean;
+  isCritical: boolean;
   sourceId: number;
   sourceBattlerIndex: BattlerIndex;
 }

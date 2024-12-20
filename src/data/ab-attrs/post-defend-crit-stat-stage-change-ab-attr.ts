@@ -37,6 +37,6 @@ export class PostDefendCritStatStageChangeAbAttr extends PostDefendAbAttr {
   override getCondition(): AbAttrCondition {
     return (pokemon: Pokemon) =>
       pokemon.turnData.attacksReceived.length !== 0
-      && pokemon.turnData.attacksReceived[pokemon.turnData.attacksReceived.length - 1].critical;
+      && pokemon.turnData.attacksReceived[pokemon.turnData.attacksReceived.length - 1].isCritical;
   }
 }

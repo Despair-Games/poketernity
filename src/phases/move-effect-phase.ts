@@ -201,6 +201,7 @@ export class MoveEffectPhase extends PokemonPhase {
       move: this.move.moveId,
       targets: this.adjustedTargets ?? this.targets,
       result: MoveResult.PENDING,
+      isCrit: false,
       virtual: this.move.virtual,
     };
 
@@ -454,7 +455,7 @@ export class MoveEffectPhase extends PokemonPhase {
           move: move.id,
           result: result as DamageResult,
           damage: damage,
-          critical: isCritical,
+          isCritical: isCritical,
           sourceId: user.id,
           sourceBattlerIndex: user.getBattlerIndex(),
         };
