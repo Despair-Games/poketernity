@@ -1378,7 +1378,7 @@ export default class BattleScene extends SceneBase {
   newBattle(
     waveIndex?: number,
     battleType?: BattleType,
-    trainerData?: TrainerData,
+    trainerData?: TrainerData | null,
     double?: boolean,
     mysteryEncounterType?: MysteryEncounterType,
   ): Battle {
@@ -1394,7 +1394,7 @@ export default class BattleScene extends SceneBase {
 
     const playerField = this.getPlayerField();
 
-    if (this.gameMode.isFixedBattle(newWaveIndex) && trainerData === undefined) {
+    if (this.gameMode.isFixedBattle(newWaveIndex) && isNullOrUndefined(trainerData)) {
       battleConfig = this.gameMode.getFixedBattle(newWaveIndex);
       newDouble = battleConfig.double;
       newBattleType = battleConfig.battleType;
@@ -1434,7 +1434,7 @@ export default class BattleScene extends SceneBase {
           : randSeedInt(2)
             ? TrainerVariant.FEMALE
             : TrainerVariant.DEFAULT;
-        newTrainer = trainerData !== undefined ? trainerData.toTrainer() : new Trainer(trainerType, variant);
+        newTrainer = !isNullOrUndefined(trainerData) ? trainerData.toTrainer() : new Trainer(trainerType, variant);
         this.field.add(newTrainer);
       }
 
