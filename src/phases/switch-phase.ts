@@ -71,6 +71,7 @@ export class SwitchPhase extends BattlePhase {
         ? this.fieldIndex
         : 0;
 
+    // Cat was here
     globalScene.ui.setMode(
       Mode.PARTY,
       this.isModal ? PartyUiMode.FAINT_SWITCH : PartyUiMode.POST_BATTLE_SWITCH,
