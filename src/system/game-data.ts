@@ -40,7 +40,7 @@ import { StatusEffect } from "#enums/status-effect";
 import ChallengeData from "#app/system/challenge-data";
 import { Device } from "#enums/devices";
 import { GameDataType } from "#enums/game-data-type";
-import { PlayerGender } from "#enums/player-gender";
+import type { PlayerGender } from "#enums/player-gender";
 import type { Species } from "#enums/species";
 import { applyChallenges, ChallengeType } from "#app/data/challenge";
 import { WeatherType } from "#enums/weather-type";
