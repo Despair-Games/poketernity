@@ -1,5 +1,7 @@
-import type { SystemSaveData, SessionSaveData } from "#app/system/game-data";
-import { AbilityAttr, defaultStarterSpecies, DexAttr } from "#app/system/game-data";
+import type { SessionSaveData } from "#app/@types/SessionData";
+import type { SystemSaveData } from "#app/@types/SystemData";
+import { AbilityAttr, DexAttr } from "#app/data/dex-attributes";
+import { defaultStarterSpecies } from "#app/data/balance/default-starters";
 import { allSpecies } from "#app/data/pokemon-species";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import { isNullOrUndefined } from "#app/utils";
