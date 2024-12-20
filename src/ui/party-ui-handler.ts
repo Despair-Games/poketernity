@@ -720,8 +720,7 @@ export default class PartyUiHandler extends MessageUiHandler {
         // show move description
         if (this.partyUiMode === PartyUiMode.REMEMBER_MOVE_MODIFIER) {
           const option = this.options[this.optionsCursor];
-          const pokemon = globalScene.getPlayerParty()[this.cursor];
-          const move = allMoves[pokemon.getLearnableLevelMoves()[option]];
+          const move = allMoves[option];
           if (move) {
             this.moveInfoOverlay.show(move);
           } else {
@@ -1045,7 +1044,6 @@ export default class PartyUiHandler extends MessageUiHandler {
           if (moveSource !== MoveSource.LEVEL_UP) {
             altTextColor = true;
           }
-          console.log(option);
         }
         const yCoord = -6 - 16 * o;
         const optionText = addBBCodeTextObject(0, yCoord - 16, optionName, TextStyle.WINDOW, { maxLines: 1 });

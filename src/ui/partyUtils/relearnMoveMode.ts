@@ -2,15 +2,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { Moves } from "#app/enums/moves";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { tmSpecies } from "#app/data/balance/tms";
-
-export enum MoveSource {
-  LEVEL_UP,
-  FUSION_LEVEL_UP,
-  EGG,
-  TM,
-  FUSION_TM,
-  MYSTERY_ENCOUNTER,
-}
+import { MoveSource } from "#enums/move-source";
 
 export function retrieveMoveList(pokemon: Pokemon): Moves[] {
   return pokemon.getLearnableLevelMoves();
