@@ -1,9 +1,18 @@
-
 /* Global */
 :root {
   --color-base: hsl(0, 0%, 55%);
   --color-light: hsl(0, 0%, 90%);
   --color-dark: hsl(0, 0%, 10%);
+}
+
+@font-face {
+  font-family: "emerald";
+  src: url("/fonts/pokemon-emerald-pro.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "pkmnems";
+  src: url("/fonts/pkmnems.ttf") format("truetype");
 }
 
 html {
