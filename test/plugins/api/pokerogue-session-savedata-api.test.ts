@@ -7,7 +7,7 @@ import type {
   UpdateSessionSavedataRequest,
 } from "#app/@types/SessionSavedataApi";
 import { SessionSavedataApi } from "#app/plugins/api/session-savedata-api";
-import type { SessionSaveData } from "#app/system/game-data";
+import type { SessionSaveData } from "#app/@types/SessionData";
 import { getApiBaseUrl } from "#test/testUtils/testUtils";
 import { http, HttpResponse } from "msw";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";

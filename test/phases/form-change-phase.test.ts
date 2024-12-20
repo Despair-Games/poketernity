@@ -46,7 +46,7 @@ describe("Form Change Phase", () => {
     // Give Zacian a Rusted Sword
     const rustedSwordType = generateModifierType(modifierTypes.RARE_FORM_CHANGE_ITEM)!;
     const rustedSword = rustedSwordType.newModifier(zacian);
-    await game.scene.addModifier(rustedSword);
+    game.scene.addModifier(rustedSword);
 
     game.move.select(Moves.SPLASH);
     await game.toNextTurn();
