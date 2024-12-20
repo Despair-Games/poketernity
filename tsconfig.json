@@ -10,15 +10,16 @@
     "sourceMap": false,
     "strict": false,
     "rootDir": ".",
+    "baseUrl": "./src",
     "paths": {
       "#enums/*": [
-        "./src/enums/*.ts"
+        "./enums/*.ts"
       ],
       "#app/*": [
-        "./src/*.ts"
+        "./*.ts"
       ],
       "#test/*": [
-        "./test/*.ts"
+        "../test/*.ts"
       ]
     },
     "outDir": "./build",
