@@ -9,8 +9,8 @@ import {
   TrainerSlot,
   trainerConfigs,
   trainerPartyTemplates,
-  signatureSpecies,
 } from "#app/data/trainer-config";
+import { signatureSpecies } from "#app/data/balance/signatureSpecies";
 import type { EnemyPokemon } from "#app/field/pokemon";
 import { randSeedWeightedItem, randSeedItem, randSeedInt } from "#app/utils";
 import type { PersistentModifier } from "#app/modifier/modifier";

@@ -24,7 +24,7 @@ import { isLocal, isLocalServerConnected } from "#app/utils";
 import { PlayerGender } from "#enums/player-gender";
 import { TrainerType } from "#enums/trainer-type";
 import i18next from "i18next";
-import type { SessionSaveData } from "#app/system/game-data";
+import type { SessionSaveData } from "#app/@types/SessionData";
 import PersistentModifierData from "#app/system/modifier-data";
 import PokemonData from "#app/system/pokemon-data";
 import ChallengeData from "#app/system/challenge-data";
