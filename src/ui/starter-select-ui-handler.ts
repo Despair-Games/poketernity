@@ -2413,12 +2413,14 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
           // we disable shiny state instead of looking through the other variants
           return this.toggleShinyState(starterPrefs);
         }
-        if (variant === 0 && this.speciesStarterDexEntry!.caughtAttr & DexAttr.DEFAULT_VARIANT) {
-          return this.switchToVariant(starterPrefs, variant);
-        } else if (variant === 1 && this.speciesStarterDexEntry!.caughtAttr & DexAttr.VARIANT_2) {
-          return this.switchToVariant(starterPrefs, variant);
-        } else if (variant === 2 && this.speciesStarterDexEntry!.caughtAttr & DexAttr.VARIANT_3) {
-          return this.switchToVariant(starterPrefs, variant);
+        if (!isNullOrUndefined(this.speciesStarterDexEntry)) {
+          if (variant === 0 && this.speciesStarterDexEntry.caughtAttr & DexAttr.DEFAULT_VARIANT) {
+            return this.switchToVariant(starterPrefs, variant);
+          } else if (variant === 1 && this.speciesStarterDexEntry.caughtAttr & DexAttr.VARIANT_2) {
+            return this.switchToVariant(starterPrefs, variant);
+          } else if (variant === 2 && this.speciesStarterDexEntry.caughtAttr & DexAttr.VARIANT_3) {
+            return this.switchToVariant(starterPrefs, variant);
+          }
         }
       } while (variant !== previousVariant);
     }
@@ -2476,10 +2478,10 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     }
 
     starterPrefs.variant = newVariant; // store the selected variant
-    this.setSpeciesDetails(this.lastSpecies, { variant: newVariant as Variant });
+    this.setSpeciesDetails(this.lastSpecies, { variant: newVariant });
     // Cycle tint based on current sprite tint
-    const tint = getVariantTint(newVariant as Variant);
-    this.pokemonShinyIcon.setFrame(getVariantTierForVariant(newVariant as Variant));
+    const tint = getVariantTint(newVariant);
+    this.pokemonShinyIcon.setFrame(getVariantTierForVariant(newVariant));
     this.pokemonShinyIcon.setTint(tint);
     return true;
   }
@@ -4165,7 +4167,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         props += BigInt(Math.pow(2, this.starterPreferences[speciesId]?.variant)) * DexAttr.DEFAULT_VARIANT;
       } else {
         /* This calculates the correct variant if there's no starter preferences for it.
-         * either the highest tier variant (default) or lowest tier variant
+         * Gets either the highest tier variant (default) or lowest tier variant
          */
         if (getRarestVariant) {
           if ((caughtAttr & DexAttr.VARIANT_3) > 0) {
