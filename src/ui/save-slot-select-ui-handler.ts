@@ -3,7 +3,7 @@ import { globalScene } from "#app/global-scene";
 import { Button } from "#enums/buttons";
 import { GameMode } from "../game-mode";
 import * as Modifier from "../modifier/modifier";
-import type { SessionSaveData } from "../system/game-data";
+import type { SessionSaveData } from "#app/@types/SessionData";
 import type PokemonData from "../system/pokemon-data";
 import { isNullOrUndefined, fixedInt, getPlayTimeString, formatLargeNumber } from "#app/utils";
 import MessageUiHandler from "./message-ui-handler";

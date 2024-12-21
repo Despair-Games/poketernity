@@ -2,7 +2,7 @@ import type { BooleanHolder, NumberHolder } from "#app/utils";
 import { randSeedItem } from "#app/utils";
 import i18next from "i18next";
 import type { DexAttrProps, GameData } from "#app/system/game-data";
-import { defaultStarterSpecies } from "#app/system/game-data";
+import { defaultStarterSpecies } from "#app/data/balance/default-starters";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpecies, getPokemonSpeciesForm } from "#app/data/pokemon-species";
 import { speciesStarterCosts } from "#app/data/balance/starters";

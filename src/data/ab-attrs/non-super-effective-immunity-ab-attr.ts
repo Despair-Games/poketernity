@@ -6,28 +6,29 @@ import type { BooleanHolder, NumberHolder } from "#app/utils";
 import i18next from "i18next";
 import { TypeImmunityAbAttr } from "./type-immunity-ab-attr";
 
+/**
+ * Used by Wonder Guard
+ * @extends TypeImmunityAbAttr
+ */
 export class NonSuperEffectiveImmunityAbAttr extends TypeImmunityAbAttr {
   constructor(condition?: AbAttrCondition) {
     super(null, condition);
   }
 
   override applyPreDefend(
-    pokemon: Pokemon,
+    _pokemon: Pokemon,
     _passive: boolean,
     _simulated: boolean,
-    attacker: Pokemon,
+    _attacker: Pokemon,
     move: Move,
     cancelled: BooleanHolder,
     args: any[],
   ): boolean {
-    const modifierValue =
-      args.length > 0
-        ? (args[0] as NumberHolder).value
-        : pokemon.getAttackTypeEffectiveness(attacker.getMoveType(move), attacker, undefined, undefined, move);
+    const typeMultiplier: NumberHolder = args[0];
 
-    if (move instanceof AttackMove && modifierValue < 2) {
+    if (move instanceof AttackMove && typeMultiplier.value < 2) {
       cancelled.value = true; // Suppresses "No Effect" message
-      (args[0] as NumberHolder).value = 0;
+      typeMultiplier.value = 0;
       return true;
     }
 

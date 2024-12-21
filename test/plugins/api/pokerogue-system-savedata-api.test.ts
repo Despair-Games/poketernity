@@ -5,7 +5,7 @@ import type {
   VerifySystemSavedataResponse,
 } from "#app/@types/SystemSavedataApi";
 import { SystemSavedataApi } from "#app/plugins/api/system-savedata-api";
-import type { SystemSaveData } from "#app/system/game-data";
+import type { SystemSaveData } from "#app/@types/SystemData";
 import { getApiBaseUrl } from "#test/testUtils/testUtils";
 import { http, HttpResponse } from "msw";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";

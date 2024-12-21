@@ -9,7 +9,7 @@ import { PreSwitchOutAbAttr } from "./pre-switch-out-ab-attr";
  * @see {@linkcode applyPreSwitchOut}
  */
 export class PreSwitchOutFormChangeAbAttr extends PreSwitchOutAbAttr {
-  private formFunc: (p: Pokemon) => integer;
+  private readonly formFunc: (p: Pokemon) => integer;
 
   constructor(formFunc: (p: Pokemon) => integer) {
     super();

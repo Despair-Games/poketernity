@@ -6,9 +6,9 @@ import type { BattleStat } from "#enums/stat";
 import { PostStatStageChangeAbAttr } from "./post-stat-stage-change-ab-attr";
 
 export class PostStatStageChangeStatStageChangeAbAttr extends PostStatStageChangeAbAttr {
-  private condition: PokemonStatStageChangeCondition;
-  private statsToChange: BattleStat[];
-  private stages: number;
+  private readonly condition: PokemonStatStageChangeCondition;
+  private readonly statsToChange: BattleStat[];
+  private readonly stages: number;
 
   constructor(condition: PokemonStatStageChangeCondition, statsToChange: BattleStat[], stages: number) {
     super(true);
