@@ -10,7 +10,8 @@ export class DoubleBerryEffectAbAttr extends AbAttr {
     _cancelled: BooleanHolder,
     args: any[],
   ): boolean {
-    (args[0] as NumberHolder).value *= 2;
+    const berryEffect: NumberHolder = args[0];
+    berryEffect.value *= 2;
 
     return true;
   }

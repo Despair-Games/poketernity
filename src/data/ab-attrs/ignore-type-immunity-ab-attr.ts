@@ -4,8 +4,8 @@ import type { Type } from "#enums/type";
 import { AbAttr } from "./ab-attr";
 
 export class IgnoreTypeImmunityAbAttr extends AbAttr {
-  private defenderType: Type;
-  private allowedMoveTypes: Type[];
+  private readonly defenderType: Type;
+  private readonly allowedMoveTypes: Type[];
 
   constructor(defenderType: Type, allowedMoveTypes: Type[]) {
     super(true);
@@ -20,7 +20,9 @@ export class IgnoreTypeImmunityAbAttr extends AbAttr {
     cancelled: BooleanHolder,
     args: any[],
   ): boolean {
-    if (this.defenderType === (args[1] as Type) && this.allowedMoveTypes.includes(args[0] as Type)) {
+    const moveType: Type = args[0];
+    const defType: Type = args[1];
+    if (this.defenderType === defType && this.allowedMoveTypes.includes(moveType)) {
       cancelled.value = true;
       return true;
     }

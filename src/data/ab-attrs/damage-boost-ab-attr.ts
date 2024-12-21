@@ -11,8 +11,8 @@ import { PreAttackAbAttr } from "./pre-attack-ab-attr";
  * @param condition the condition for this ability to be applied
  */
 export class DamageBoostAbAttr extends PreAttackAbAttr {
-  private damageMultiplier: number;
-  private condition: PokemonAttackCondition;
+  private readonly damageMultiplier: number;
+  private readonly condition: PokemonAttackCondition;
 
   constructor(damageMultiplier: number, condition: PokemonAttackCondition) {
     super(true);

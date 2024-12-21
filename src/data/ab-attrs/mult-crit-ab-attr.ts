@@ -3,7 +3,7 @@ import type { BooleanHolder, NumberHolder } from "#app/utils";
 import { AbAttr } from "./ab-attr";
 
 export class MultCritAbAttr extends AbAttr {
-  public multAmount: number;
+  public readonly multAmount: number;
 
   constructor(multAmount: number) {
     super(true);

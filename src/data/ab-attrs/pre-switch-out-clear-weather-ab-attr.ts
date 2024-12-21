@@ -6,6 +6,7 @@ import { PreSwitchOutAbAttr } from "./pre-switch-out-ab-attr";
 
 /**
  * Clears Desolate Land/Primordial Sea/Delta Stream upon the Pokemon switching out.
+ * @extends PreSwitchOutAbAttr
  */
 export class PreSwitchOutClearWeatherAbAttr extends PreSwitchOutAbAttr {
   /**
@@ -17,42 +18,30 @@ export class PreSwitchOutClearWeatherAbAttr extends PreSwitchOutAbAttr {
   override applyPreSwitchOut(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
     const weatherType = globalScene.arena.weather?.weatherType;
     let turnOffWeather = false;
+    let weatherAbility: Abilities | null = null;
 
     // Clear weather only if user's ability matches the weather and no other pokemon has the ability.
     switch (weatherType) {
       case WeatherType.HARSH_SUN:
-        if (
-          pokemon.hasAbility(Abilities.DESOLATE_LAND)
-          && globalScene
-            .getField(true)
-            .filter((p) => p !== pokemon)
-            .filter((p) => p.hasAbility(Abilities.DESOLATE_LAND)).length === 0
-        ) {
-          turnOffWeather = true;
-        }
+        weatherAbility = Abilities.DESOLATE_LAND;
         break;
       case WeatherType.HEAVY_RAIN:
-        if (
-          pokemon.hasAbility(Abilities.PRIMORDIAL_SEA)
-          && globalScene
-            .getField(true)
-            .filter((p) => p !== pokemon)
-            .filter((p) => p.hasAbility(Abilities.PRIMORDIAL_SEA)).length === 0
-        ) {
-          turnOffWeather = true;
-        }
+        weatherAbility = Abilities.PRIMORDIAL_SEA;
         break;
       case WeatherType.STRONG_WINDS:
-        if (
-          pokemon.hasAbility(Abilities.DELTA_STREAM)
-          && globalScene
-            .getField(true)
-            .filter((p) => p !== pokemon)
-            .filter((p) => p.hasAbility(Abilities.DELTA_STREAM)).length === 0
-        ) {
-          turnOffWeather = true;
-        }
+        weatherAbility = Abilities.DELTA_STREAM;
         break;
+    }
+
+    if (
+      weatherAbility
+      && pokemon.hasAbility(weatherAbility)
+      && !globalScene
+        .getField(true)
+        .filter((p) => p !== pokemon)
+        .some((p) => p.hasAbility(weatherAbility))
+    ) {
+      turnOffWeather = true;
     }
 
     if (simulated) {

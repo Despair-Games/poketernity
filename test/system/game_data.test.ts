@@ -1,6 +1,6 @@
 import * as BattleScene from "#app/battle-scene";
 import { api } from "#app/plugins/api/api";
-import type { SessionSaveData } from "#app/system/game-data";
+import type { SessionSaveData } from "#app/@types/SessionData";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
 import { GameManager } from "#test/testUtils/gameManager";

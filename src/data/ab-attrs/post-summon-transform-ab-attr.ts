@@ -8,12 +8,9 @@ import { PostSummonAbAttr } from "./post-summon-ab-attr";
 
 /**
  * Used by Imposter
+ * @extends PostSummonAbAttr
  */
 export class PostSummonTransformAbAttr extends PostSummonAbAttr {
-  constructor() {
-    super(true);
-  }
-
   override applyPostSummon(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
     const targets = pokemon.getOpponents();
     if (simulated || !targets.length) {
