@@ -95,7 +95,7 @@ describe("Moves - Dragon Rage", () => {
     expect(enemyPokemon.getInverseHp()).toBe(dragonRageDamage);
   });
 
-  it("Dragon Rage can never critical hit", async () => {
+  it("should prevent critical hits", async () => {
     partyPokemon.addTag(BattlerTagType.ALWAYS_CRIT, 99, Moves.NONE, 0);
 
     game.move.select(Moves.DRAGON_RAGE);
