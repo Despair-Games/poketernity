@@ -25,7 +25,7 @@ export abstract class AbAttr {
   }
 
   getCondition(): AbAttrCondition | null {
-    return this.extraCondition || null;
+    return this.extraCondition ?? null;
   }
 
   addCondition(condition: AbAttrCondition): AbAttr {

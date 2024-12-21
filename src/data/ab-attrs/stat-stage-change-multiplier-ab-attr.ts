@@ -3,7 +3,7 @@ import type { BooleanHolder, NumberHolder } from "#app/utils";
 import { AbAttr } from "./ab-attr";
 
 export class StatStageChangeMultiplierAbAttr extends AbAttr {
-  private multiplier: number;
+  private readonly multiplier: number;
 
   constructor(multiplier: number) {
     super(true);
@@ -18,7 +18,8 @@ export class StatStageChangeMultiplierAbAttr extends AbAttr {
     _cancelled: BooleanHolder,
     args: any[],
   ): boolean {
-    (args[0] as NumberHolder).value *= this.multiplier;
+    const stages: NumberHolder = args[0];
+    stages.value *= this.multiplier;
 
     return true;
   }

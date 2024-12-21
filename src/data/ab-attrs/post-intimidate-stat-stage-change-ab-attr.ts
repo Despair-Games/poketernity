@@ -6,15 +6,15 @@ import type { BattleStat } from "#enums/stat";
 import { AbAttr } from "./ab-attr";
 
 export class PostIntimidateStatStageChangeAbAttr extends AbAttr {
-  private stats: BattleStat[];
-  private stages: number;
-  private overwrites: boolean;
+  private readonly stats: BattleStat[];
+  private readonly stages: number;
+  private readonly overwrites: boolean;
 
-  constructor(stats: BattleStat[], stages: number, overwrites?: boolean) {
+  constructor(stats: BattleStat[], stages: number, overwrites: boolean = false) {
     super(true);
     this.stats = stats;
     this.stages = stages;
-    this.overwrites = !!overwrites;
+    this.overwrites = overwrites;
   }
 
   override apply(

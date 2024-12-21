@@ -9,7 +9,7 @@ import { AbAttr } from "./ab-attr";
  * @see {@linkcode apply}
  */
 export class ReduceStatusEffectDurationAbAttr extends AbAttr {
-  private statusEffect: StatusEffect;
+  private readonly statusEffect: StatusEffect;
 
   constructor(statusEffect: StatusEffect) {
     super(true);
@@ -31,11 +31,13 @@ export class ReduceStatusEffectDurationAbAttr extends AbAttr {
     _cancelled: BooleanHolder,
     args: any[],
   ): boolean {
-    if (!(args[1] instanceof NumberHolder)) {
+    const statusEffect: StatusEffect = args[0];
+    const turnsRemaining = args[1];
+    if (!(turnsRemaining instanceof NumberHolder)) {
       return false;
     }
-    if (args[0] === this.statusEffect) {
-      args[1].value -= 1;
+    if (statusEffect === this.statusEffect) {
+      turnsRemaining.value -= 1;
       return true;
     }
 

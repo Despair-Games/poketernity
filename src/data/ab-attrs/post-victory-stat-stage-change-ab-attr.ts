@@ -5,8 +5,8 @@ import type { BattleStat } from "#enums/stat";
 import { PostVictoryAbAttr } from "./post-victory-ab-attr";
 
 export class PostVictoryStatStageChangeAbAttr extends PostVictoryAbAttr {
-  private stat: BattleStat | ((p: Pokemon) => BattleStat);
-  private stages: number;
+  private readonly stat: BattleStat | ((p: Pokemon) => BattleStat);
+  private readonly stages: number;
 
   constructor(stat: BattleStat | ((p: Pokemon) => BattleStat), stages: number) {
     super();
