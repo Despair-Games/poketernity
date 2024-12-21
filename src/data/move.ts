@@ -63,7 +63,7 @@ import { SelfStatusMove } from "#app/data/self-status-move";
 import { type ChargingMove, ChargingAttackMove, ChargingSelfStatusMove } from "#app/data/charge-move";
 import type { MoveAttr } from "#app/data/move-attrs/move-attr";
 import { MoveEffectTrigger } from "#enums/move-effect-trigger";
-import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
+import { MoveEffectAttr, type MoveEffectAttrOptions } from "#app/data/move-attrs/move-effect-attr";
 import { MessageHeaderAttr } from "#app/data/move-attrs/message-header-attr";
 import { AddBattlerTagHeaderAttr } from "#app/data/move-attrs/add-battler-tag-header-attr";
 import { BeakBlastHeaderAttr } from "#app/data/move-attrs/beak-blast-header-attr";
@@ -1066,27 +1066,49 @@ export const frenzyMissFunc: UserMoveConditionFunc = (user: Pokemon, move: Move)
   return true;
 };
 
+interface AddBattlerTagAttrOptions extends MoveEffectAttrOptions {
+  /** Should the move fail if the target already has a tag of the same type? */
+  failOnOverlap?: boolean;
+  /** The minimum number of turns the tag is active */
+  turnCountMin?: number;
+  /** The maximum number of turns the tag is active (inclusive) */
+  turnCountMax?: number;
+}
+
 export class AddBattlerTagAttr extends MoveEffectAttr {
   public tagType: BattlerTagType;
-  public turnCountMin: number;
-  public turnCountMax: number;
-  protected cancelOnFail: boolean;
-  private failOnOverlap: boolean;
+  protected override options?: AddBattlerTagAttrOptions;
 
-  constructor(
-    tagType: BattlerTagType,
-    selfTarget: boolean = false,
-    failOnOverlap: boolean = false,
-    turnCountMin: number = 0,
-    turnCountMax?: number,
-    lastHitOnly: boolean = false,
-  ) {
-    super(selfTarget, { lastHitOnly: lastHitOnly });
+  constructor(tagType: BattlerTagType, selfTarget: boolean = false, options?: AddBattlerTagAttrOptions) {
+    super(selfTarget);
 
     this.tagType = tagType;
-    this.turnCountMin = turnCountMin;
-    this.turnCountMax = turnCountMax !== undefined ? turnCountMax : turnCountMin;
-    this.failOnOverlap = !!failOnOverlap;
+    this.options = options;
+  }
+
+  /**
+   * If `true`, causes the move to fail if the target already
+   * has a tag of the same type.
+   * @default false
+   */
+  public get failOnOverlap() {
+    return this.options?.failOnOverlap ?? false;
+  }
+
+  /**
+   * The minimum number of turns the tag is active
+   * @default 0
+   */
+  public get turnCountMin() {
+    return this.options?.turnCountMin ?? 0;
+  }
+
+  /**
+   * The maximum number of turns the tag is active.
+   * @default turnCountMin
+   */
+  public get turnCountMax() {
+    return this.options?.turnCountMax ?? this.turnCountMin;
   }
 
   override canApply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
@@ -1302,7 +1324,7 @@ export class FlinchAttr extends AddBattlerTagAttr {
 
 export class ConfuseAttr extends AddBattlerTagAttr {
   constructor(selfTarget?: boolean) {
-    super(BattlerTagType.CONFUSED, selfTarget, false, 2, 5);
+    super(BattlerTagType.CONFUSED, selfTarget, { turnCountMin: 2, turnCountMax: 5 });
   }
 
   override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
@@ -1319,13 +1341,13 @@ export class ConfuseAttr extends AddBattlerTagAttr {
 
 export class RechargeAttr extends AddBattlerTagAttr {
   constructor() {
-    super(BattlerTagType.RECHARGING, true, false, 1, 1, true);
+    super(BattlerTagType.RECHARGING, true, { turnCountMin: 1, lastHitOnly: true });
   }
 }
 
 export class TrapAttr extends AddBattlerTagAttr {
   constructor(tagType: BattlerTagType) {
-    super(tagType, false, false, 4, 5);
+    super(tagType, false, { turnCountMin: 4, turnCountMax: 5 });
   }
 }
 
@@ -1357,7 +1379,7 @@ export class ProtectAttr extends AddBattlerTagAttr {
 
 export class IgnoreAccuracyAttr extends AddBattlerTagAttr {
   constructor() {
-    super(BattlerTagType.IGNORE_ACCURACY, true, false, 2);
+    super(BattlerTagType.IGNORE_ACCURACY, true, { turnCountMin: 2 });
   }
 
   override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
@@ -1378,7 +1400,10 @@ export class IgnoreAccuracyAttr extends AddBattlerTagAttr {
 
 export class FaintCountdownAttr extends AddBattlerTagAttr {
   constructor() {
-    super(BattlerTagType.PERISH_SONG, false, true, 4);
+    super(BattlerTagType.PERISH_SONG, false, {
+      failOnOverlap: true,
+      turnCountMin: 4,
+    });
   }
 
   override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
@@ -1952,7 +1977,7 @@ export class UpperHandCondition extends MoveCondition {
  */
 export class ExposedMoveAttr extends AddBattlerTagAttr {
   constructor(tagType: BattlerTagType) {
-    super(tagType, false, true);
+    super(tagType, false, { failOnOverlap: true });
   }
 
   /**
@@ -2187,7 +2212,7 @@ export function initMoves() {
     new StatusMove(Moves.SUPERSONIC, Type.NORMAL, 55, 20, -1, 0, 1).attr(ConfuseAttr).soundBased(),
     new AttackMove(Moves.SONIC_BOOM, Type.NORMAL, MoveCategory.SPECIAL, -1, 90, 20, -1, 0, 1).attr(FixedDamageAttr, 20),
     new StatusMove(Moves.DISABLE, Type.NORMAL, 100, 20, -1, 0, 1)
-      .attr(AddBattlerTagAttr, BattlerTagType.DISABLED, false, true)
+      .attr(AddBattlerTagAttr, BattlerTagType.DISABLED, false, { failOnOverlap: true })
       .condition(
         (_user, target, _move) =>
           target
@@ -2354,7 +2379,7 @@ export function initMoves() {
     new SelfStatusMove(Moves.RECOVER, Type.NORMAL, -1, 5, -1, 0, 1).attr(HealAttr, 0.5).triageMove(),
     new SelfStatusMove(Moves.HARDEN, Type.NORMAL, -1, 30, -1, 0, 1).attr(StatStageChangeAttr, [Stat.DEF], 1, true),
     new SelfStatusMove(Moves.MINIMIZE, Type.NORMAL, -1, 10, -1, 0, 1)
-      .attr(AddBattlerTagAttr, BattlerTagType.MINIMIZED, true, false)
+      .attr(AddBattlerTagAttr, BattlerTagType.MINIMIZED, true)
       .attr(StatStageChangeAttr, [Stat.EVA], 2, true),
     new StatusMove(Moves.SMOKESCREEN, Type.NORMAL, 100, 20, -1, 0, 1).attr(StatStageChangeAttr, [Stat.ACC], -1),
     new StatusMove(Moves.CONFUSE_RAY, Type.GHOST, 100, 10, -1, 0, 1).attr(ConfuseAttr),
@@ -2377,7 +2402,7 @@ export function initMoves() {
       AddBattlerTagAttr,
       BattlerTagType.CRIT_BOOST,
       true,
-      true,
+      { failOnOverlap: true },
     ),
     new AttackMove(Moves.BIDE, Type.NORMAL, MoveCategory.PHYSICAL, -1, -1, 10, -1, 1, 1)
       .ignoresVirtual()
@@ -2534,7 +2559,7 @@ export function initMoves() {
     ),
     new StatusMove(Moves.SPIDER_WEB, Type.BUG, -1, 10, -1, 0, 2)
       .condition(failIfGhostTypeCondition)
-      .attr(AddBattlerTagAttr, BattlerTagType.TRAPPED, false, true, 1),
+      .attr(AddBattlerTagAttr, BattlerTagType.TRAPPED, false, { failOnOverlap: true }),
     new StatusMove(Moves.MIND_READER, Type.NORMAL, -1, 5, -1, 0, 2).attr(IgnoreAccuracyAttr),
     new StatusMove(Moves.NIGHTMARE, Type.GHOST, 100, 15, -1, 0, 2)
       .attr(AddBattlerTagAttr, BattlerTagType.NIGHTMARE)
@@ -2677,7 +2702,7 @@ export function initMoves() {
     ),
     new StatusMove(Moves.MEAN_LOOK, Type.NORMAL, -1, 5, -1, 0, 2)
       .condition(failIfGhostTypeCondition)
-      .attr(AddBattlerTagAttr, BattlerTagType.TRAPPED, false, true, 1),
+      .attr(AddBattlerTagAttr, BattlerTagType.TRAPPED, false, { failOnOverlap: true }),
     new StatusMove(Moves.ATTRACT, Type.NORMAL, 100, 15, -1, 0, 2)
       .attr(AddBattlerTagAttr, BattlerTagType.INFATUATED)
       .ignoresSubstitute()
@@ -2730,7 +2755,7 @@ export function initMoves() {
       .condition(failIfLastInPartyCondition)
       .hidesUser(),
     new StatusMove(Moves.ENCORE, Type.NORMAL, 100, 5, -1, 0, 2)
-      .attr(AddBattlerTagAttr, BattlerTagType.ENCORE, false, true)
+      .attr(AddBattlerTagAttr, BattlerTagType.ENCORE, false, { failOnOverlap: true })
       .ignoresSubstitute()
       .condition((user, target, _move) => new EncoreTag(user.id).canAdd(target)),
     new AttackMove(Moves.PURSUIT, Type.DARK, MoveCategory.PHYSICAL, 40, 100, 20, -1, 0, 2).partial(), // No effect implemented
@@ -2856,7 +2881,7 @@ export function initMoves() {
     new StatusMove(Moves.TORMENT, Type.DARK, 100, 15, -1, 0, 3)
       .ignoresSubstitute()
       .edgeCase() // Incomplete implementation because of Uproar's partial implementation
-      .attr(AddBattlerTagAttr, BattlerTagType.TORMENT, false, true, 1),
+      .attr(AddBattlerTagAttr, BattlerTagType.TORMENT, false, { failOnOverlap: true }),
     new StatusMove(Moves.FLATTER, Type.DARK, 100, 15, -1, 0, 3)
       .attr(StatStageChangeAttr, [Stat.SPATK], 1)
       .attr(ConfuseAttr),
@@ -2895,10 +2920,10 @@ export function initMoves() {
     new StatusMove(Moves.NATURE_POWER, Type.NORMAL, -1, 20, -1, 0, 3).attr(NaturePowerAttr).ignoresVirtual(),
     new SelfStatusMove(Moves.CHARGE, Type.ELECTRIC, -1, 20, -1, 0, 3)
       .attr(StatStageChangeAttr, [Stat.SPDEF], 1, true)
-      .attr(AddBattlerTagAttr, BattlerTagType.CHARGED, true, false),
+      .attr(AddBattlerTagAttr, BattlerTagType.CHARGED, true),
     new StatusMove(Moves.TAUNT, Type.DARK, 100, 20, -1, 0, 3)
       .ignoresSubstitute()
-      .attr(AddBattlerTagAttr, BattlerTagType.TAUNT, false, true, 4),
+      .attr(AddBattlerTagAttr, BattlerTagType.TAUNT, false, { failOnOverlap: true, turnCountMin: 4 }),
     new StatusMove(Moves.HELPING_HAND, Type.NORMAL, -1, 20, -1, 5, 3)
       .attr(AddBattlerTagAttr, BattlerTagType.HELPING_HAND)
       .ignoresSubstitute()
@@ -2911,8 +2936,8 @@ export function initMoves() {
       .attr(AddArenaTagAttr, ArenaTagType.WISH, 2, true),
     new SelfStatusMove(Moves.ASSIST, Type.NORMAL, -1, 20, -1, 0, 3).attr(RandomMovesetMoveAttr, true).ignoresVirtual(),
     new SelfStatusMove(Moves.INGRAIN, Type.GRASS, -1, 20, -1, 0, 3)
-      .attr(AddBattlerTagAttr, BattlerTagType.INGRAIN, true, true)
-      .attr(AddBattlerTagAttr, BattlerTagType.IGNORE_FLYING, true, true)
+      .attr(AddBattlerTagAttr, BattlerTagType.INGRAIN, true, { failOnOverlap: true })
+      .attr(AddBattlerTagAttr, BattlerTagType.IGNORE_FLYING, true, { failOnOverlap: true })
       .attr(RemoveBattlerTagAttr, [BattlerTagType.FLOATING], true),
     new AttackMove(Moves.SUPERPOWER, Type.FIGHTING, MoveCategory.PHYSICAL, 120, 100, 5, -1, 0, 3).attr(
       StatStageChangeAttr,
@@ -2929,7 +2954,7 @@ export function initMoves() {
       RemoveScreensAttr,
     ),
     new StatusMove(Moves.YAWN, Type.NORMAL, -1, 10, -1, 0, 3)
-      .attr(AddBattlerTagAttr, BattlerTagType.DROWSY, false, true)
+      .attr(AddBattlerTagAttr, BattlerTagType.DROWSY, false, { failOnOverlap: true })
       .condition((user, target, _move) => !target.status && !target.isSafeguarded(user)),
     new AttackMove(Moves.KNOCK_OFF, Type.DARK, MoveCategory.PHYSICAL, 65, 100, 20, -1, 0, 3)
       .attr(MovePowerMultiplierAttr, (_user, target, _move) =>
@@ -2962,13 +2987,9 @@ export function initMoves() {
             || user.status.effect === StatusEffect.TOXIC
             || user.status.effect === StatusEffect.BURN),
       ),
-    new SelfStatusMove(Moves.GRUDGE, Type.GHOST, -1, 5, -1, 0, 3).attr(
-      AddBattlerTagAttr,
-      BattlerTagType.GRUDGE,
-      true,
-      undefined,
-      1,
-    ),
+    new SelfStatusMove(Moves.GRUDGE, Type.GHOST, -1, 5, -1, 0, 3).attr(AddBattlerTagAttr, BattlerTagType.GRUDGE, true, {
+      turnCountMin: 1,
+    }),
     new SelfStatusMove(Moves.SNATCH, Type.DARK, -1, 10, -1, 4, 3).unimplemented(),
     new AttackMove(Moves.SECRET_POWER, Type.NORMAL, MoveCategory.PHYSICAL, 70, 100, 20, 30, 0, 3)
       .makesContact(false)
@@ -3113,7 +3134,7 @@ export function initMoves() {
     new SelfStatusMove(Moves.IRON_DEFENSE, Type.STEEL, -1, 15, -1, 0, 3).attr(StatStageChangeAttr, [Stat.DEF], 2, true),
     new StatusMove(Moves.BLOCK, Type.NORMAL, -1, 5, -1, 0, 3)
       .condition(failIfGhostTypeCondition)
-      .attr(AddBattlerTagAttr, BattlerTagType.TRAPPED, false, true, 1),
+      .attr(AddBattlerTagAttr, BattlerTagType.TRAPPED, false, { failOnOverlap: true, turnCountMin: 1 }),
     new StatusMove(Moves.HOWL, Type.NORMAL, -1, 40, -1, 0, 3)
       .attr(StatStageChangeAttr, [Stat.ATK], 1)
       .soundBased()
@@ -3190,7 +3211,7 @@ export function initMoves() {
     ),
     new SelfStatusMove(Moves.ROOST, Type.FLYING, -1, 5, -1, 0, 4)
       .attr(HealAttr, 0.5)
-      .attr(AddBattlerTagAttr, BattlerTagType.ROOSTED, true, false)
+      .attr(AddBattlerTagAttr, BattlerTagType.ROOSTED, true)
       .triageMove(),
     new StatusMove(Moves.GRAVITY, Type.PSYCHIC, -1, 5, -1, 0, 4)
       .ignoresProtect()
@@ -3283,7 +3304,7 @@ export function initMoves() {
       .makesContact()
       .attr(LessPPMorePowerAttr),
     new StatusMove(Moves.HEAL_BLOCK, Type.PSYCHIC, 100, 15, -1, 0, 4)
-      .attr(AddBattlerTagAttr, BattlerTagType.HEAL_BLOCK, false, true, 5)
+      .attr(AddBattlerTagAttr, BattlerTagType.HEAL_BLOCK, false, { failOnOverlap: true, turnCountMin: 5 })
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new AttackMove(Moves.WRING_OUT, Type.NORMAL, MoveCategory.SPECIAL, -1, 100, 5, -1, 0, 4)
       .attr(OpponentHighHpPowerAttr, 120)
@@ -3337,10 +3358,10 @@ export function initMoves() {
       AddBattlerTagAttr,
       BattlerTagType.AQUA_RING,
       true,
-      true,
+      { failOnOverlap: true },
     ),
     new SelfStatusMove(Moves.MAGNET_RISE, Type.ELECTRIC, -1, 10, -1, 0, 4)
-      .attr(AddBattlerTagAttr, BattlerTagType.FLOATING, true, true, 5)
+      .attr(AddBattlerTagAttr, BattlerTagType.FLOATING, true, { failOnOverlap: true, turnCountMin: 5 })
       .condition(
         (user, _target, _move) =>
           !globalScene.arena.getTag(ArenaTagType.GRAVITY)
@@ -3631,14 +3652,14 @@ export function initMoves() {
           isNullOrUndefined(target.getTag(BattlerTagType.INGRAIN))
           && isNullOrUndefined(target.getTag(BattlerTagType.IGNORE_FLYING)),
       )
-      .attr(AddBattlerTagAttr, BattlerTagType.TELEKINESIS, false, true, 3)
-      .attr(AddBattlerTagAttr, BattlerTagType.FLOATING, false, true, 3),
+      .attr(AddBattlerTagAttr, BattlerTagType.TELEKINESIS, false, { failOnOverlap: true, turnCountMin: 3 })
+      .attr(AddBattlerTagAttr, BattlerTagType.FLOATING, false, { failOnOverlap: true, turnCountMin: 3 }),
     new StatusMove(Moves.MAGIC_ROOM, Type.PSYCHIC, -1, 10, -1, 0, 5)
       .ignoresProtect()
       .target(MoveTarget.BOTH_SIDES)
       .unimplemented(),
     new AttackMove(Moves.SMACK_DOWN, Type.ROCK, MoveCategory.PHYSICAL, 50, 100, 15, 100, 0, 5)
-      .attr(AddBattlerTagAttr, BattlerTagType.IGNORE_FLYING, false, false, 1, 1, true)
+      .attr(AddBattlerTagAttr, BattlerTagType.IGNORE_FLYING, false, { lastHitOnly: true })
       .attr(AddBattlerTagAttr, BattlerTagType.INTERRUPTED)
       .attr(RemoveBattlerTagAttr, [BattlerTagType.FLYING, BattlerTagType.FLOATING, BattlerTagType.TELEKINESIS])
       .attr(HitsTagAttr, BattlerTagType.FLYING)
@@ -4029,7 +4050,7 @@ export function initMoves() {
       AddBattlerTagAttr,
       BattlerTagType.ELECTRIFIED,
       false,
-      true,
+      { failOnOverlap: true },
     ),
     new AttackMove(Moves.PLAY_ROUGH, Type.FAIRY, MoveCategory.PHYSICAL, 90, 90, 10, 10, 0, 6).attr(
       StatStageChangeAttr,
@@ -4095,7 +4116,7 @@ export function initMoves() {
       })
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new StatusMove(Moves.POWDER, Type.BUG, 100, 20, -1, 1, 6)
-      .attr(AddBattlerTagAttr, BattlerTagType.POWDER, false, true)
+      .attr(AddBattlerTagAttr, BattlerTagType.POWDER, false, { failOnOverlap: true })
       .ignoresSubstitute()
       .powderMove(),
     new ChargingSelfStatusMove(Moves.GEOMANCY, Type.FAIRY, -1, 10, -1, 0, 6)
@@ -4143,7 +4164,7 @@ export function initMoves() {
       .triageMove(),
     new AttackMove(Moves.THOUSAND_ARROWS, Type.GROUND, MoveCategory.PHYSICAL, 90, 100, 10, -1, 0, 6)
       .attr(NeutralDamageAgainstFlyingTypeMultiplierAttr)
-      .attr(AddBattlerTagAttr, BattlerTagType.IGNORE_FLYING, false, false, 1, 1, true)
+      .attr(AddBattlerTagAttr, BattlerTagType.IGNORE_FLYING, false, { lastHitOnly: true })
       .attr(HitsTagAttr, BattlerTagType.FLYING)
       .attr(HitsTagAttr, BattlerTagType.FLOATING)
       .attr(AddBattlerTagAttr, BattlerTagType.INTERRUPTED)
@@ -4151,7 +4172,7 @@ export function initMoves() {
       .makesContact(false)
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new AttackMove(Moves.THOUSAND_WAVES, Type.GROUND, MoveCategory.PHYSICAL, 90, 100, 10, -1, 0, 6)
-      .attr(AddBattlerTagAttr, BattlerTagType.TRAPPED, false, false, 1, 1, true)
+      .attr(AddBattlerTagAttr, BattlerTagType.TRAPPED, false, { lastHitOnly: true })
       .makesContact(false)
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new AttackMove(Moves.LANDS_WRATH, Type.GROUND, MoveCategory.PHYSICAL, 90, 100, 10, -1, 0, 6)
@@ -4298,7 +4319,7 @@ export function initMoves() {
       .attr(ProtectAttr, BattlerTagType.BANEFUL_BUNKER)
       .condition(failIfLastCondition),
     new AttackMove(Moves.SPIRIT_SHACKLE, Type.GHOST, MoveCategory.PHYSICAL, 80, 100, 10, 100, 0, 7)
-      .attr(AddBattlerTagAttr, BattlerTagType.TRAPPED, false, false, 1, 1, true)
+      .attr(AddBattlerTagAttr, BattlerTagType.TRAPPED, false, { lastHitOnly: true })
       .makesContact(false),
     new AttackMove(Moves.DARKEST_LARIAT, Type.DARK, MoveCategory.PHYSICAL, 85, 100, 10, -1, 0, 7).attr(
       IgnoreOpponentStatStagesAttr,
@@ -4342,7 +4363,6 @@ export function initMoves() {
       AddBattlerTagAttr,
       BattlerTagType.ALWAYS_CRIT,
       true,
-      false,
     ),
     new StatusMove(Moves.GEAR_UP, Type.STEEL, -1, 20, -1, 0, 7)
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.SPATK], 1, false, {
@@ -4369,10 +4389,7 @@ export function initMoves() {
       AddBattlerTagAttr,
       BattlerTagType.TRAPPED,
       false,
-      false,
-      1,
-      1,
-      true,
+      { lastHitOnly: true },
     ),
     new StatusMove(Moves.PSYCHIC_TERRAIN, Type.PSYCHIC, -1, 10, -1, 0, 7)
       .attr(TerrainChangeAttr, TerrainType.PSYCHIC)
@@ -4396,7 +4413,7 @@ export function initMoves() {
         return userTypes.includes(Type.FIRE);
       })
       .attr(HealStatusEffectAttr, true, StatusEffect.FREEZE)
-      .attr(AddBattlerTagAttr, BattlerTagType.BURNED_UP, true, false)
+      .attr(AddBattlerTagAttr, BattlerTagType.BURNED_UP, true)
       .attr(RemoveTypeAttr, Type.FIRE, (user) => {
         globalScene.queueMessage(
           i18next.t("moveTriggers:burnedItselfOut", { pokemonName: getPokemonNameWithAffix(user) }),
@@ -4668,7 +4685,7 @@ export function initMoves() {
       .edgeCase(), // Stuff Cheeks should not be selectable when the user does not have a berry, see wiki
     new SelfStatusMove(Moves.NO_RETREAT, Type.FIGHTING, -1, 5, -1, 0, 8)
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD], 1, true)
-      .attr(AddBattlerTagAttr, BattlerTagType.NO_RETREAT, true, false)
+      .attr(AddBattlerTagAttr, BattlerTagType.NO_RETREAT, true)
       .condition((user, _target, _move) => user.getTag(TrappedTag)?.sourceMove !== Moves.NO_RETREAT), // fails if the user is currently trapped by No Retreat
     new StatusMove(Moves.TAR_SHOT, Type.ROCK, 100, 15, -1, 0, 8)
       .attr(StatStageChangeAttr, [Stat.SPD], -1)
@@ -4682,7 +4699,7 @@ export function initMoves() {
     new StatusMove(Moves.TEATIME, Type.NORMAL, -1, 10, -1, 0, 8).attr(EatBerryAttr, false).target(MoveTarget.ALL),
     new StatusMove(Moves.OCTOLOCK, Type.FIGHTING, 100, 15, -1, 0, 8)
       .condition(failIfGhostTypeCondition)
-      .attr(AddBattlerTagAttr, BattlerTagType.OCTOLOCK, false, true, 1),
+      .attr(AddBattlerTagAttr, BattlerTagType.OCTOLOCK, false, { failOnOverlap: true }),
     new AttackMove(Moves.BOLT_BEAK, Type.ELECTRIC, MoveCategory.PHYSICAL, 85, 100, 10, -1, 0, 8).attr(
       FirstAttackDoublePowerAttr,
     ),
@@ -5219,8 +5236,8 @@ export function initMoves() {
       .checkAllHits(),
     new AttackMove(Moves.ICE_SPINNER, Type.ICE, MoveCategory.PHYSICAL, 80, 100, 15, -1, 0, 9).attr(ClearTerrainAttr),
     new AttackMove(Moves.GLAIVE_RUSH, Type.DRAGON, MoveCategory.PHYSICAL, 120, 100, 5, -1, 0, 9)
-      .attr(AddBattlerTagAttr, BattlerTagType.ALWAYS_GET_HIT, true, false, 0, 0, true)
-      .attr(AddBattlerTagAttr, BattlerTagType.RECEIVE_DOUBLE_DAMAGE, true, false, 0, 0, true)
+      .attr(AddBattlerTagAttr, BattlerTagType.ALWAYS_GET_HIT, true, { lastHitOnly: true })
+      .attr(AddBattlerTagAttr, BattlerTagType.RECEIVE_DOUBLE_DAMAGE, true, { lastHitOnly: true })
       .condition((_user, target, _move) => {
         return !(
           target.getTag(BattlerTagType.PROTECTED)?.tagType === "PROTECTED"
@@ -5365,7 +5382,7 @@ export function initMoves() {
         const userTypes = user.getTypes(true);
         return userTypes.includes(Type.ELECTRIC);
       })
-      .attr(AddBattlerTagAttr, BattlerTagType.DOUBLE_SHOCKED, true, false)
+      .attr(AddBattlerTagAttr, BattlerTagType.DOUBLE_SHOCKED, true)
       .attr(RemoveTypeAttr, Type.ELECTRIC, (user) => {
         globalScene.queueMessage(
           i18next.t("moveTriggers:usedUpAllElectricity", { pokemonName: getPokemonNameWithAffix(user) }),
@@ -5418,7 +5435,7 @@ export function initMoves() {
       .target(MoveTarget.ALL_NEAR_ENEMIES)
       .triageMove(),
     new AttackMove(Moves.SYRUP_BOMB, Type.GRASS, MoveCategory.SPECIAL, 60, 85, 10, -1, 0, 9)
-      .attr(AddBattlerTagAttr, BattlerTagType.SYRUP_BOMB, false, false, 3)
+      .attr(AddBattlerTagAttr, BattlerTagType.SYRUP_BOMB, false, { turnCountMin: 3 })
       .ballBombMove(),
     new AttackMove(Moves.IVY_CUDGEL, Type.GRASS, MoveCategory.PHYSICAL, 100, 100, 10, -1, 0, 9)
       .attr(IvyCudgelTypeAttr)
@@ -5469,7 +5486,7 @@ export function initMoves() {
       100,
     ),
     new StatusMove(Moves.DRAGON_CHEER, Type.DRAGON, -1, 15, -1, 0, 9)
-      .attr(AddBattlerTagAttr, BattlerTagType.DRAGON_CHEER, false, true)
+      .attr(AddBattlerTagAttr, BattlerTagType.DRAGON_CHEER, false, { failOnOverlap: true })
       .target(MoveTarget.NEAR_ALLY),
     new AttackMove(Moves.ALLURING_VOICE, Type.FAIRY, MoveCategory.SPECIAL, 80, 100, 10, -1, 0, 9)
       .attr(AddBattlerTagIfBoostedAttr, BattlerTagType.CONFUSED)
@@ -5487,7 +5504,7 @@ export function initMoves() {
       .recklessMove(),
     new AttackMove(Moves.PSYCHIC_NOISE, Type.PSYCHIC, MoveCategory.SPECIAL, 75, 100, 10, -1, 0, 9)
       .soundBased()
-      .attr(AddBattlerTagAttr, BattlerTagType.HEAL_BLOCK, false, false, 2),
+      .attr(AddBattlerTagAttr, BattlerTagType.HEAL_BLOCK, false, { turnCountMin: 2 }),
     new AttackMove(Moves.UPPER_HAND, Type.FIGHTING, MoveCategory.PHYSICAL, 65, 100, 15, 100, 3, 9)
       .attr(FlinchAttr)
       .condition(new UpperHandCondition()),
