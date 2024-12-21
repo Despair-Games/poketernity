@@ -179,8 +179,8 @@ export class InputsController {
     eventBus.on("settings/updated", ({ category, key, value }: SettingsUpdateEventArgs) => {
       if (category === "display" && ["uiWindowType", "uiTheme"].includes(key)) {
         this.touchControls.render();
-      } else if (category === "gamepad" && key === "enabled") {
-        this.setGamepadSupport(value as boolean);
+      } else if (category === "gamepad" && key === "enabled" && typeof value === "boolean") {
+        this.setGamepadSupport(value);
       }
     });
   }
