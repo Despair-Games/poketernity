@@ -338,8 +338,15 @@ export default class BattleScene extends SceneBase {
         }
       }
 
+      // If window type gets changed, update window colors
       if (key === "uiWindowType" && typeof value === "number") {
         updateWindowType(value);
+      }
+
+      // If gender gets changed, update trainer sprite
+      if (key === "playerGender" && typeof value === "number") {
+        const female = value === PlayerGender.FEMALE;
+        this.trainer.setTexture(this.trainer.texture.key.replace(female ? "m" : "f", female ? "f" : "m"));
       }
     });
   }
