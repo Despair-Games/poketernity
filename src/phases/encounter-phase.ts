@@ -38,6 +38,7 @@ import { Species } from "#enums/species";
 import { overrideHeldItems, overrideModifiers } from "#app/modifier/modifier";
 import i18next from "i18next";
 import { WEIGHT_INCREMENT_ON_SPAWN_MISS } from "#app/data/mystery-encounters/mystery-encounters";
+import { settings } from "#app/system/settings/settings-manager";
 
 export class EncounterPhase extends BattlePhase {
   private loaded: boolean;
@@ -615,7 +616,7 @@ export class EncounterPhase extends BattlePhase {
               ? i18next.t("battleSpecDialogue:key", { count: count, ordinal: true })
               : "";
           const cycleCount = count.toLocaleString() + ordinalUsed;
-          const genderIndex = gameData.gender ?? PlayerGender.UNSET;
+          const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
           const genderStr = PlayerGender[genderIndex].toLowerCase();
           const encounterDialogue = i18next.t(localizationKey, { context: genderStr, cycleCount: cycleCount });
           if (!gameData.getSeenDialogues()[localizationKey]) {

@@ -33,6 +33,7 @@ import { ScanIvsPhase } from "#app/phases/scan-ivs-phase";
 import { SummonPhase } from "#app/phases/summon-phase";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
+import { settings } from "#app/system/settings/settings-manager";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/safariZone";
@@ -362,7 +363,7 @@ async function throwBait(pokemon: EnemyPokemon): Promise<boolean> {
 
   return new Promise((resolve) => {
     globalScene.trainer.setTexture(
-      `trainer_${globalScene.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`,
+      `trainer_${settings.display.playerGender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`,
     );
     globalScene.time.delayedCall(TRAINER_THROW_ANIMATION_TIMES[0], () => {
       globalScene.playSound("se/pb_throw");
@@ -373,7 +374,7 @@ async function throwBait(pokemon: EnemyPokemon): Promise<boolean> {
         globalScene.trainer.setFrame("3");
         globalScene.time.delayedCall(TRAINER_THROW_ANIMATION_TIMES[2], () => {
           globalScene.trainer.setTexture(
-            `trainer_${globalScene.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back`,
+            `trainer_${settings.display.playerGender === PlayerGender.FEMALE ? "f" : "m"}_back`,
           );
         });
       });
@@ -431,7 +432,7 @@ async function throwMud(pokemon: EnemyPokemon): Promise<boolean> {
 
   return new Promise((resolve) => {
     globalScene.trainer.setTexture(
-      `trainer_${globalScene.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`,
+      `trainer_${settings.display.playerGender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`,
     );
     globalScene.time.delayedCall(TRAINER_THROW_ANIMATION_TIMES[0], () => {
       globalScene.playSound("se/pb_throw");
@@ -442,7 +443,7 @@ async function throwMud(pokemon: EnemyPokemon): Promise<boolean> {
         globalScene.trainer.setFrame("3");
         globalScene.time.delayedCall(TRAINER_THROW_ANIMATION_TIMES[2], () => {
           globalScene.trainer.setTexture(
-            `trainer_${globalScene.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back`,
+            `trainer_${settings.display.playerGender === PlayerGender.FEMALE ? "f" : "m"}_back`,
           );
         });
       });

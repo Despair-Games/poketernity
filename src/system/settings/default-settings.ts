@@ -19,7 +19,7 @@ import { MusicPreference } from "#app/enums/music-preference";
 import { ShopCursorTarget } from "#app/enums/shop-cursor-target";
 import { SpriteSet } from "#app/enums/sprite-set";
 import { UiTheme } from "#app/enums/ui-theme";
-import { Gender } from "#enums/gender";
+import { PlayerGender } from "#enums/player-gender";
 import { UiWindowType } from "#enums/ui-window-type";
 
 export const defaultGeneralSettings: GeneralSettings = {
@@ -53,7 +53,7 @@ export const defaultDisplaySettings: DisplaySettings = {
   timeOfDayAnimation: EaseType.BOUNCE,
   spriteSet: SpriteSet.CONSISTENT,
   enableFusionPaletteSwaps: true,
-  playerGender: Gender.MALE,
+  playerGender: PlayerGender.MALE,
   enableTypeHints: false,
   showBgmBar: true,
   shopCursorTarget: ShopCursorTarget.REWARDS,

@@ -1,8 +1,9 @@
 import { globalScene } from "#app/global-scene";
-import { Achv, getAchievementDescription } from "../system/achv";
-import { Voucher } from "../system/voucher";
-import { TextStyle, addTextObject } from "./text";
+import { Achv, getAchievementDescription } from "#app/system/achv";
+import { Voucher } from "#app/system/voucher";
+import { TextStyle, addTextObject } from "#app/ui/text";
 import type { PlayerGender } from "#enums/player-gender";
+import { settings } from "#app/system/settings/settings-manager";
 
 export default class AchvBar extends Phaser.GameObjects.Container {
   private defaultWidth: number;
@@ -21,7 +22,7 @@ export default class AchvBar extends Phaser.GameObjects.Container {
 
   constructor() {
     super(globalScene, globalScene.game.canvas.width / 6, 0);
-    this.playerGender = globalScene.gameData.gender;
+    this.playerGender = settings.display.playerGender;
   }
 
   setup(): void {

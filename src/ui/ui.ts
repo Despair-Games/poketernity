@@ -345,7 +345,7 @@ export default class UI extends Phaser.GameObjects.Container {
     // Get localized dialogue (if available)
     let hasi18n = false;
     let text = keyOrText;
-    const genderIndex = globalScene.gameData.gender ?? PlayerGender.UNSET;
+    const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
     const genderStr = PlayerGender[genderIndex].toLowerCase();
 
     if (i18next.exists(keyOrText)) {

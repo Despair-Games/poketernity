@@ -40,7 +40,7 @@ import { StatusEffect } from "#enums/status-effect";
 import ChallengeData from "#app/system/challenge-data";
 import { Device } from "#enums/devices";
 import { GameDataType } from "#enums/game-data-type";
-import type { PlayerGender } from "#enums/player-gender";
+import { PlayerGender } from "#enums/player-gender";
 import type { Species } from "#enums/species";
 import { applyChallenges, ChallengeType } from "#app/data/challenge";
 import { WeatherType } from "#enums/weather-type";
@@ -59,6 +59,7 @@ import type { StarterData } from "#app/@types/StarterData";
 import type { DexData, DexEntry } from "#app/@types/DexData";
 import type { SessionSaveData } from "#app/@types/SessionData";
 import { defaultStarterSpecies } from "#app/data/balance/default-starters";
+import { settings } from "#app/system/settings/settings-manager";
 
 const saveKey = "x0i2O7WRiANTqPmZ"; // Temporary; secure encryption is not yet necessary
 
@@ -190,8 +191,6 @@ export class GameData {
   public trainerId: number;
   public secretId: number;
 
-  public gender: PlayerGender;
-
   public dexData: DexData;
   private defaultDexData: DexData | null;
 
@@ -242,7 +241,7 @@ export class GameData {
     return {
       trainerId: this.trainerId,
       secretId: this.secretId,
-      gender: this.gender,
+      gender: settings.display.playerGender,
       dexData: this.dexData,
       starterData: this.starterData,
       gameStats: this.gameStats,
@@ -376,8 +375,6 @@ export class GameData {
         this.trainerId = systemData.trainerId;
         this.secretId = systemData.secretId;
 
-        this.gender = systemData.gender;
-
         if (!systemData.starterData) {
           this.initStarterData();
 
@@ -453,6 +450,10 @@ export class GameData {
         this.consolidateDexData(this.dexData);
         this.defaultDexData = null;
 
+        // Ensure that the player gender in settings matches the player gender in system data
+        if (systemData.gender !== PlayerGender.UNSET && systemData.gender !== settings.display.playerGender) {
+          settings.update("display", "playerGender", systemData.gender);
+        }
         resolve(true);
       } catch (err) {
         console.error(err);

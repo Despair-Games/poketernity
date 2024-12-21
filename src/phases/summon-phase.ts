@@ -14,6 +14,7 @@ import { GameOverPhase } from "./game-over-phase";
 import { ShinySparklePhase } from "./shiny-sparkle-phase";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { globalScene } from "#app/global-scene";
+import { settings } from "#app/system/settings/settings-manager";
 
 export class SummonPhase extends PartyMemberPokemonPhase {
   private loaded: boolean;
@@ -78,7 +79,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
         globalScene.pbTray.hide();
       }
       globalScene.trainer.setTexture(
-        `trainer_${globalScene.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`,
+        `trainer_${settings.display.playerGender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`,
       );
       globalScene.time.delayedCall(562, () => {
         globalScene.trainer.setFrame("2");

@@ -9,6 +9,7 @@ import { executeIf, getCookie, removeCookie } from "#app/utils";
 import i18next, { t } from "i18next";
 import { SelectGenderPhase } from "./select-gender-phase";
 import { UnavailablePhase } from "./unavailable-phase";
+import { settings } from "#app/system/settings/settings-manager";
 
 export class LoginPhase extends Phase {
   private showText: boolean;
@@ -113,7 +114,7 @@ export class LoginPhase extends Phase {
   override end(): void {
     globalScene.ui.setMode(Mode.MESSAGE);
 
-    if (!globalScene.gameData.gender) {
+    if (!settings.display.playerGender) {
       globalScene.unshiftPhase(new SelectGenderPhase());
     }
 
