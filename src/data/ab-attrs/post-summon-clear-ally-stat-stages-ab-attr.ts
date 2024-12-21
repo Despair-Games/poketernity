@@ -8,16 +8,13 @@ import { PostSummonAbAttr } from "./post-summon-ab-attr";
 /**
  * Resets an ally's temporary stat boots to zero with no regard to
  * whether this is a positive or negative change
+ *
+ * Used by Curious Medicine
  * @param pokemon The {@link Pokemon} with this {@link AbAttr}
- * @param passive N/A
- * @param args N/A
- * @returns if the move was successful
+ * @extends PostSummonAbAttr
+ * @see {@linkcode applyPostSummon}
  */
 export class PostSummonClearAllyStatStagesAbAttr extends PostSummonAbAttr {
-  constructor() {
-    super();
-  }
-
   override applyPostSummon(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
     const target = pokemon.getAlly();
     if (target?.isActive(true)) {

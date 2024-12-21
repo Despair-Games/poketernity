@@ -5,7 +5,10 @@ import { BATTLE_STATS } from "#enums/stat";
 import i18next from "i18next";
 import { PostSummonAbAttr } from "./post-summon-ab-attr";
 
-/** Attempt to copy the stat changes on an ally pokemon */
+/**
+ * Attempt to copy the stat changes on an ally pokemon. Used by Costar.
+ * @extends PostSummonAbAttr
+ */
 export class PostSummonCopyAllyStatsAbAttr extends PostSummonAbAttr {
   override applyPostSummon(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
     if (!globalScene.currentBattle.double) {

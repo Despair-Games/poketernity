@@ -7,10 +7,11 @@ import { PreStatStageChangeAbAttr } from "./pre-stat-stage-change-ab-attr";
 
 /**
  * Protect one or all {@linkcode BattleStat} from reductions caused by other Pokémon's moves and Abilities
+ * @extends PreStatStageChangeAbAttr
  */
 export class ProtectStatAbAttr extends PreStatStageChangeAbAttr {
   /** {@linkcode BattleStat} to protect or `undefined` if **all** {@linkcode BattleStat} are protected */
-  private protectedStat?: BattleStat;
+  private readonly protectedStat?: BattleStat;
 
   constructor(protectedStat?: BattleStat) {
     super();

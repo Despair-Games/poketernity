@@ -4,7 +4,7 @@ import type { TerrainType } from "#enums/terrain-type";
 import { PostSummonAbAttr } from "./post-summon-ab-attr";
 
 export class PostSummonTerrainChangeAbAttr extends PostSummonAbAttr {
-  private terrainType: TerrainType;
+  private readonly terrainType: TerrainType;
 
   constructor(terrainType: TerrainType) {
     super();

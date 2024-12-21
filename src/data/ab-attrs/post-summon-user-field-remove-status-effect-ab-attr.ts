@@ -6,10 +6,11 @@ import type { StatusEffect } from "#enums/status-effect";
 import { PostSummonAbAttr } from "./post-summon-ab-attr";
 
 /**
- * Removes supplied status effects from the user's field.
+ * Removes supplied status effects from the user's field. Used by Pastel Veil.
+ * @extends PostSummonAbAttr
  */
 export class PostSummonUserFieldRemoveStatusEffectAbAttr extends PostSummonAbAttr {
-  private statusEffect: StatusEffect[];
+  private readonly statusEffect: StatusEffect[];
 
   /**
    * @param statusEffect - The status effects to be removed from the user's field.
