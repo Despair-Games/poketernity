@@ -1,8 +1,9 @@
 import type { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import type { Move, MoveConditionFunc } from "#app/data/move";
+import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
+import type { MoveConditionFunc } from "../move-conditions";
 
 export class WeatherChangeAttr extends MoveEffectAttr {
   private weatherType: WeatherType;

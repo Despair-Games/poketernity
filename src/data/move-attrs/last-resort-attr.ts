@@ -1,7 +1,8 @@
 import type { Moves } from "#enums/moves";
 import type { Pokemon } from "#app/field/pokemon";
-import type { MoveConditionFunc, Move } from "#app/data/move";
+import type { Move } from "#app/data/move";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";
+import type { MoveConditionFunc } from "../move-conditions";
 
 export class LastResortAttr extends MoveAttr {
   override getCondition(): MoveConditionFunc {

@@ -1,8 +1,9 @@
 import { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import type { Move, MoveConditionFunc } from "#app/data/move";
+import type { Move } from "#app/data/move";
 import { ForceSwitchOutAttr } from "#app/data/move-attrs/force-switch-out-attr";
+import type { MoveConditionFunc } from "../move-conditions";
 
 export class ChillyReceptionAttr extends ForceSwitchOutAttr {
   override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {

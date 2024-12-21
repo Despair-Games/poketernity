@@ -1,7 +1,7 @@
 import type { Pokemon } from "../field/pokemon";
 import type { Move } from "./move";
 import { Type } from "#enums/type";
-import { ProtectAttr } from "./move";
+import { ProtectAttr } from "./move-attrs/protect-attr";
 import type { BattlerIndex } from "#app/battle";
 import i18next from "i18next";
 import { getPokemonNameWithAffix } from "#app/messages";

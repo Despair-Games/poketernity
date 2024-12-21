@@ -2,8 +2,9 @@ import type { Pokemon } from "#app/field/pokemon";
 import { BooleanHolder } from "#app/utils";
 import { BlockOneHitKOAbAttr } from "#app/data/ab-attrs/block-one-hit-ko-ab-attr";
 import { applyAbAttrs } from "#app/data/ability";
-import type { Move, MoveConditionFunc } from "#app/data/move";
+import type { Move } from "#app/data/move";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";
+import type { MoveConditionFunc } from "../move-conditions";
 
 export class OneHitKOAttr extends MoveAttr {
   override apply(_user: Pokemon, target: Pokemon, _move: Move, args: any[]): boolean {

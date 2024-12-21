@@ -6,8 +6,9 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { MovePhase } from "#app/phases/move-phase";
 import i18next from "i18next";
-import { type Move, type MoveConditionFunc, allMoves } from "#app/data/move";
+import { type Move, allMoves } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
+import type { MoveConditionFunc } from "../move-conditions";
 
 /**
  * Attribute used for moves that causes the target to repeat their last used move.

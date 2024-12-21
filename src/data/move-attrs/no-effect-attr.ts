@@ -1,6 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
-import type { UserMoveConditionFunc, Move } from "#app/data/move";
+import type { Move } from "#app/data/move";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";
+import type { UserMoveConditionFunc } from "../move-conditions";
 
 export class NoEffectAttr extends MoveAttr {
   private noEffectFunc: UserMoveConditionFunc;

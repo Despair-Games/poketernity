@@ -1,7 +1,8 @@
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
-import type { Move, MoveConditionFunc } from "#app/data/move";
+import type { Move } from "#app/data/move";
 import { FixedDamageAttr } from "#app/data/move-attrs/fixed-damage-attr";
+import type { MoveConditionFunc } from "../move-conditions";
 
 export class MatchHpAttr extends FixedDamageAttr {
   constructor() {

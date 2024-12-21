@@ -1,6 +1,7 @@
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { Pokemon } from "#app/field/pokemon";
-import { type Move, applyMoveAttrs, AddBattlerTagAttr } from "#app/data/move";
+import { type Move, applyMoveAttrs } from "#app/data/move";
+import { AddBattlerTagAttr } from "./add-battler-tag-attr";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
 export class FrenzyAttr extends MoveEffectAttr {

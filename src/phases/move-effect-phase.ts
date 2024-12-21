@@ -22,7 +22,8 @@ import {
   TypeBoostTag,
 } from "#app/data/battler-tags";
 import type { MoveAttr } from "#app/data/move-attrs/move-attr";
-import { applyFilteredMoveAttrs, applyMoveAttrs, FlinchAttr } from "#app/data/move";
+import { applyFilteredMoveAttrs, applyMoveAttrs } from "#app/data/move";
+import { FlinchAttr } from "#app/data/move-attrs/flinch-attr";
 import { HitsTagAttr } from "#app/data/move-attrs/hits-tag-attr";
 import { NoEffectAttr } from "#app/data/move-attrs/no-effect-attr";
 import { MissEffectAttr } from "#app/data/move-attrs/miss-effect-attr";

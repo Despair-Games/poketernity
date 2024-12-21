@@ -1,6 +1,7 @@
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { Pokemon } from "#app/field/pokemon";
-import { AddBattlerTagAttr, type Move } from "#app/data/move";
+import { type Move } from "#app/data/move";
+import { AddBattlerTagAttr } from "./add-battler-tag-attr";
 
 /**
  * Attribute to apply a battler tag to the target if they have had their stats boosted this turn.
@@ -8,7 +9,7 @@ import { AddBattlerTagAttr, type Move } from "#app/data/move";
  */
 export class AddBattlerTagIfBoostedAttr extends AddBattlerTagAttr {
   constructor(tag: BattlerTagType) {
-    super(tag, false, false, 2, 5);
+    super(tag, false, { turnCountMin: 2, turnCountMax: 5 });
   }
 
   /**

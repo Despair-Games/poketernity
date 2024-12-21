@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { DelayedAttackAttr, allMoves } from "./move";
+import { allMoves } from "./move";
 import { BeakBlastHeaderAttr } from "./move-attrs/beak-blast-header-attr";
 import { SelfStatusMove } from "./self-status-move";
 import { AttackMove } from "./attack-move";
@@ -12,6 +12,7 @@ import { Moves } from "#enums/moves";
 import { SubstituteTag } from "./battler-tags";
 import Phaser from "phaser";
 import { EncounterAnim } from "#enums/encounter-anims";
+import { DelayedAttackAttr } from "./move-attrs/delayed-attack-attr";
 
 export enum AnimFrameTarget {
   USER,

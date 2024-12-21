@@ -6,9 +6,10 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { toReadableString, NumberHolder } from "#app/utils";
 import i18next from "i18next";
 import { applyChallenges, ChallengeType } from "#app/data/challenge";
-import { type Move, allMoves, type MoveConditionFunc } from "#app/data/move";
+import { type Move, allMoves } from "#app/data/move";
 import { getTypeDamageMultiplier } from "#app/data/type";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
+import type { MoveConditionFunc } from "../move-conditions";
 
 /**
  * Attribute used for Conversion 2, to convert the user's type to a random type that resists the target's last used move.

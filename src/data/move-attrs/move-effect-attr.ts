@@ -8,7 +8,8 @@ import { NumberHolder } from "#app/utils";
 import { IgnoreMoveEffectsAbAttr } from "#app/data/ab-attrs/ignore-move-effect-ab-attr";
 import { MoveEffectChanceMultiplierAbAttr } from "#app/data/ab-attrs/move-effect-chance-multiplier-ab-attr";
 import { applyAbAttrs, applyPreDefendAbAttrs } from "#app/data/ability";
-import { type Move, FlinchAttr } from "#app/data/move";
+import { type Move } from "#app/data/move";
+import { FlinchAttr } from "./flinch-attr";
 import { SecretPowerAttr } from "#app/data/move-attrs/secret-power-attr";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";
 

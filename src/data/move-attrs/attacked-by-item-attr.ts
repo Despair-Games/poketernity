@@ -2,8 +2,9 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
-import type { MoveConditionFunc, Move } from "#app/data/move";
+import type { Move } from "#app/data/move";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";
+import type { MoveConditionFunc } from "../move-conditions";
 
 /**
  * The move only works if the target has a transferable held item

@@ -5,7 +5,8 @@ import { StatusEffect } from "#enums/status-effect";
 import { TerrainType } from "#enums/terrain-type";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { type Move, AddBattlerTagAttr } from "#app/data/move";
+import { type Move } from "#app/data/move";
+import { AddBattlerTagAttr } from "./add-battler-tag-attr";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import { StatStageChangeAttr } from "#app/data/move-attrs/stat-stage-change-attr";
 import { StatusEffectAttr } from "#app/data/move-attrs/status-effect-attr";
@@ -130,7 +131,7 @@ export class SecretPowerAttr extends MoveEffectAttr {
       case Biome.GRAVEYARD:
       case Biome.ABYSS:
       case Biome.SPACE:
-        secondaryEffect = new AddBattlerTagAttr(BattlerTagType.FLINCHED, false, true);
+        secondaryEffect = new AddBattlerTagAttr(BattlerTagType.FLINCHED, false);
         break;
       case Biome.END:
         secondaryEffect = new StatStageChangeAttr([Stat.DEF], -1, false);

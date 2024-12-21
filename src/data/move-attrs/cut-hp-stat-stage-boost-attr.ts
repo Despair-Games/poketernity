@@ -1,8 +1,9 @@
 import type { BattleStat } from "#enums/stat";
 import { type Pokemon, HitResult } from "#app/field/pokemon";
 import { toDmgValue } from "#app/utils";
-import type { Move, MoveConditionFunc } from "#app/data/move";
+import type { Move } from "#app/data/move";
 import { StatStageChangeAttr } from "#app/data/move-attrs/stat-stage-change-attr";
+import type { MoveConditionFunc } from "../move-conditions";
 
 export class CutHpStatStageBoostAttr extends StatStageChangeAttr {
   private cutRatio: number;

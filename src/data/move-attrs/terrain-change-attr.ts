@@ -1,8 +1,9 @@
 import type { TerrainType } from "#enums/terrain-type";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import type { Move, MoveConditionFunc } from "#app/data/move";
+import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
+import type { MoveConditionFunc } from "../move-conditions";
 
 export class TerrainChangeAttr extends MoveEffectAttr {
   private terrainType: TerrainType;

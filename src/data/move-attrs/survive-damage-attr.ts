@@ -1,6 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
-import type { Move, MoveConditionFunc } from "#app/data/move";
+import type { Move } from "#app/data/move";
 import { ModifiedDamageAttr } from "#app/data/move-attrs/modified-damage-attr";
+import type { MoveConditionFunc } from "../move-conditions";
 
 export class SurviveDamageAttr extends ModifiedDamageAttr {
   override getModifiedDamage(_user: Pokemon, target: Pokemon, _move: Move, damage: number): number {

@@ -126,7 +126,8 @@ import { PostDefendHpGatedStatStageChangeAbAttr } from "./ab-attrs/post-defend-h
 import { PostDefendStatStageChangeAbAttr } from "./ab-attrs/post-defend-stat-stage-change-ab-attr";
 import { GroundedTag } from "./battler-tags";
 import type { Move } from "./move";
-import { allMoves, applyMoveAttrs, FlinchAttr } from "./move";
+import { allMoves, applyMoveAttrs } from "./move";
+import { FlinchAttr } from "./move-attrs/flinch-attr";
 import { VariableMoveTypeAttr } from "./move-attrs/variable-move-type-attr";
 import { VariablePowerAttr } from "./move-attrs/variable-power-attr";
 import { OneHitKOAttr } from "./move-attrs/one-hit-ko-attr";

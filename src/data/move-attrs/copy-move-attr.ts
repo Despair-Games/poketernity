@@ -1,23 +1,9 @@
 import { type Pokemon, type PlayerPokemon, PokemonMove } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { MovePhase } from "#app/phases/move-phase";
-import { type MoveConditionFunc, allMoves, type Move, getMoveTargets } from "#app/data/move";
+import { type Move, getMoveTargets } from "#app/data/move";
 import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
-
-const lastMoveCopiableCondition: MoveConditionFunc = (_user, _target, _move) => {
-  const copiableMove = globalScene.currentBattle.lastMove;
-
-  if (!copiableMove) {
-    return false;
-  }
-
-  if (allMoves[copiableMove].isChargingMove()) {
-    return false;
-  }
-
-  // TODO: Add last turn of Bide
-  return true;
-};
+import { lastMoveCopiableCondition, type MoveConditionFunc } from "../move-conditions";
 
 export class CopyMoveAttr extends OverrideMoveEffectAttr {
   override apply(user: Pokemon, target: Pokemon, _move: Move, _args: any[]): boolean {

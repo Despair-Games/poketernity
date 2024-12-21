@@ -16,8 +16,9 @@ import { BooleanHolder } from "#app/utils";
 import i18next from "i18next";
 import { ForceSwitchOutImmunityAbAttr } from "#app/data/ab-attrs/force-switch-out-immunity-ab-attr";
 import { PostDamageForceSwitchAbAttr, applyAbAttrs } from "#app/data/ability";
-import type { Move, MoveConditionFunc } from "#app/data/move";
+import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
+import type { MoveConditionFunc } from "../move-conditions";
 
 export class ForceSwitchOutAttr extends MoveEffectAttr {
   constructor(

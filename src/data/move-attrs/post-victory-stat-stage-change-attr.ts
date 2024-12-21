@@ -1,8 +1,9 @@
 import type { BattleStat } from "#enums/stat";
 import type { Pokemon } from "#app/field/pokemon";
-import type { MoveConditionFunc, Move } from "#app/data/move";
+import type { Move } from "#app/data/move";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";
 import { StatStageChangeAttr } from "#app/data/move-attrs/stat-stage-change-attr";
+import type { MoveConditionFunc } from "../move-conditions";
 
 export class PostVictoryStatStageChangeAttr extends MoveAttr {
   private stats: BattleStat[];

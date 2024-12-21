@@ -9,7 +9,7 @@ import { PostMoveUsedAbAttr } from "#app/data/ab-attrs/post-move-used-ab-attr";
 import type { DelayedAttackTag } from "#app/data/arena-tag";
 import { CommonAnim } from "#app/data/battle-anims";
 import { BattlerTagLapseType, CenterOfAttentionTag } from "#app/data/battler-tags";
-import { allMoves, applyMoveAttrs, DelayedAttackAttr, frenzyMissFunc } from "#app/data/move";
+import { allMoves, applyMoveAttrs, frenzyMissFunc } from "#app/data/move";
 import { CopyMoveAttr } from "#app/data/move-attrs/copy-move-attr";
 import { BypassRedirectAttr } from "#app/data/move-attrs/bypass-redirect-attr";
 import { BypassSleepAttr } from "#app/data/move-attrs/bypass-sleep-attr";
@@ -40,6 +40,7 @@ import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
 import { getTerrainBlockMessage } from "#app/data/terrain";
 import { PokemonTypeChangeAbAttr } from "#app/data/ab-attrs/pokemon-type-change-ab-attr";
+import { DelayedAttackAttr } from "#app/data/move-attrs/delayed-attack-attr";
 
 export class MovePhase extends BattlePhase {
   protected _pokemon: Pokemon;

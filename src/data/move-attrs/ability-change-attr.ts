@@ -5,9 +5,10 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
 import { UnsuppressableAbilityAbAttr } from "#app/data/ab-attrs/unsuppressable-ability-ab-attr";
 import { allAbilities } from "#app/data/ability";
-import type { Move, MoveConditionFunc } from "#app/data/move";
+import type { Move } from "#app/data/move";
 import { SpeciesFormChangeRevertWeatherFormTrigger } from "#app/data/pokemon-forms";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
+import type { MoveConditionFunc } from "../move-conditions";
 
 export class AbilityChangeAttr extends MoveEffectAttr {
   public ability: Abilities;

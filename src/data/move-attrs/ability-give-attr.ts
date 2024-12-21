@@ -5,8 +5,9 @@ import i18next from "i18next";
 import { UncopiableAbilityAbAttr } from "#app/data/ab-attrs/uncopiable-ability-ab-attr";
 import { UnsuppressableAbilityAbAttr } from "#app/data/ab-attrs/unsuppressable-ability-ab-attr";
 import { allAbilities } from "#app/data/ability";
-import type { Move, MoveConditionFunc } from "#app/data/move";
+import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
+import type { MoveConditionFunc } from "../move-conditions";
 
 export class AbilityGiveAttr extends MoveEffectAttr {
   public copyToPartner: boolean;

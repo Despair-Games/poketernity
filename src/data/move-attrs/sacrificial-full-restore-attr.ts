@@ -3,8 +3,9 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";
 import i18next from "i18next";
-import type { Move, MoveConditionFunc } from "#app/data/move";
+import type { Move } from "#app/data/move";
 import { SacrificialAttr } from "#app/data/move-attrs/sacrificial-attr";
+import type { MoveConditionFunc } from "../move-conditions";
 
 /**
  * Attr used for moves that faint the user but revive a different Pokemon

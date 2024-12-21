@@ -3,8 +3,9 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
-import type { Move, MoveConditionFunc } from "#app/data/move";
+import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
+import type { MoveConditionFunc } from "../move-conditions";
 
 /**
  *  Attribute used for moves that reduce PP of the target's last used move.

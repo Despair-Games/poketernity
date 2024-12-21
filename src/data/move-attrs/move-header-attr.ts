@@ -7,7 +7,7 @@ import { MoveAttr } from "#app/data/move-attrs/move-attr";
  * (e.g. adding a battler tag).
  */
 
-export abstract class MoveHeaderAttr extends MoveAttr {
+export class MoveHeaderAttr extends MoveAttr {
   constructor() {
     super(true);
   }

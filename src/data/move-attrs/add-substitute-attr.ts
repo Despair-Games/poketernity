@@ -4,8 +4,9 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { BooleanHolder } from "#app/utils";
 import i18next from "i18next";
 import { SubstituteTag } from "#app/data/battler-tags";
-import type { Move, MoveConditionFunc } from "#app/data/move";
+import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
+import type { MoveConditionFunc } from "../move-conditions";
 
 /**
  * Attribute to put in a {@link https://bulbapedia.bulbagarden.net/wiki/Substitute_(doll) | Substitute Doll}
