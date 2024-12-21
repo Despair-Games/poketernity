@@ -9,8 +9,8 @@ import i18next from "i18next";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 
 export class PostDefendApplyBattlerTagAbAttr extends PostDefendAbAttr {
-  private condition: PokemonDefendCondition;
-  private tagType: BattlerTagType;
+  private readonly condition: PokemonDefendCondition;
+  private readonly tagType: BattlerTagType;
   constructor(condition: PokemonDefendCondition, tagType: BattlerTagType) {
     super(true);
 

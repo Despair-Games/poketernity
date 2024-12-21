@@ -7,11 +7,11 @@ import type { BattleStat } from "#enums/stat";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 
 export class PostDefendStatStageChangeAbAttr extends PostDefendAbAttr {
-  private condition: PokemonDefendCondition;
-  private stat: BattleStat;
-  private stages: number;
-  private selfTarget: boolean;
-  private allOthers: boolean;
+  private readonly condition: PokemonDefendCondition;
+  private readonly stat: BattleStat;
+  private readonly stages: number;
+  private readonly selfTarget: boolean;
+  private readonly allOthers: boolean;
 
   constructor(
     condition: PokemonDefendCondition,

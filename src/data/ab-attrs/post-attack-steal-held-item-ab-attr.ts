@@ -9,12 +9,12 @@ import i18next from "i18next";
 import { PostAttackAbAttr } from "./post-attack-ab-attr";
 
 export class PostAttackStealHeldItemAbAttr extends PostAttackAbAttr {
-  private stealCondition: PokemonAttackCondition | null;
+  private readonly stealCondition?: PokemonAttackCondition;
 
   constructor(stealCondition?: PokemonAttackCondition) {
     super();
 
-    this.stealCondition = stealCondition ?? null;
+    this.stealCondition = stealCondition;
   }
 
   override applyPostAttackAfterMoveTypeCheck(

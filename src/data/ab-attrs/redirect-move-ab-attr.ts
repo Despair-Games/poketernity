@@ -12,7 +12,8 @@ export class RedirectMoveAbAttr extends AbAttr {
     _cancelled: BooleanHolder,
     args: any[],
   ): boolean {
-    if (this.canRedirect(args[0] as Moves)) {
+    const move: Moves = args[0];
+    if (this.canRedirect(move)) {
       const target = args[1] as NumberHolder;
       const newTarget = pokemon.getBattlerIndex();
       if (target.value !== newTarget) {
