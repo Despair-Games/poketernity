@@ -14,8 +14,8 @@ export class FieldPreventExplosionLikeAbAttr extends AbAttr {
   private moveUser: string | null;
   private moveName: string | null;
   /**
-   * Applies the effects of the AbAttr when it is called in @linkcode {failIfDampCondition}
-   * @param cancelled a booleanHolder object that determines if the move should fail
+   * Applies the effects of the AbAttr when it is called in {@linkcode failIfDampCondition}
+   * @param cancelled a {@linkcode BooleanHolder} that determines if the move should fail
    * @param args[0] contains the name of the move's user
    * @param args[1] contains the move's name if present
    */
