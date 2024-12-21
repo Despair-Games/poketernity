@@ -1,0 +1,13 @@
+{
+  "recommendations": [
+    "mikestead.dotenv",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "vitest.explorer",
+    "usernamehw.errorlens",
+    "eamodio.gitlens",
+    "mutsuntsai.jsdoc-link",
+    "yoavbls.pretty-ts-errors",
+    "github.vscode-pull-request-github",
+  ]
+}

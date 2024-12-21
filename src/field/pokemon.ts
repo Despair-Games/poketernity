@@ -185,8 +185,8 @@ import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 import type { LevelMoves } from "#app/data/balance/pokemon-level-moves";
 import { EVOLVE_MOVE, RELEARN_MOVE } from "#app/data/balance/pokemon-level-moves";
 import { achvs } from "#app/system/achv";
-import type { StarterDataEntry, StarterMoveset } from "#app/system/game-data";
-import { DexAttr } from "#app/system/game-data";
+import type { StarterDataEntry, StarterMoveset } from "#app/@types/StarterData";
+import { DexAttr } from "#app/data/dex-attributes";
 import { QuantizerCelebi, argbFromRgba, rgbaFromArgb } from "@material/material-color-utilities";
 import { getNatureStatMultiplier } from "#app/data/nature";
 import type { SpeciesFormChange } from "#app/data/pokemon-forms";
@@ -3719,7 +3719,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return false;
     }
     const tags = this.summonData.tags;
-    const tagsToRemove = tags.filter((t) => tagFilter(t));
+    const tagsToRemove = this.findTags(tagFilter);
     for (const tag of tagsToRemove) {
       tag.turnCount = 0;
       tag.onRemove(this);

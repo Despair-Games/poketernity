@@ -10,12 +10,9 @@ import { PostSummonAbAttr } from "./post-summon-ab-attr";
 /**
  * This applies a terrain-based type change to the Pokemon.
  * Used by Mimicry.
+ * @extends PostSummonAbAttr
  */
 export class TerrainEventTypeChangeAbAttr extends PostSummonAbAttr {
-  constructor() {
-    super(true);
-  }
-
   override apply(
     pokemon: Pokemon,
     _passive: boolean,
@@ -74,6 +71,7 @@ export class TerrainEventTypeChangeAbAttr extends PostSummonAbAttr {
    */
   override applyPostSummon(pokemon: Pokemon, passive: boolean, simulated: boolean, _args: any[]): boolean {
     if (globalScene.arena.getTerrainType() !== TerrainType.NONE) {
+      // TODO: `apply()` probably shouldn't be used this way
       return this.apply(pokemon, passive, simulated, new BooleanHolder(false), []);
     }
     return false;

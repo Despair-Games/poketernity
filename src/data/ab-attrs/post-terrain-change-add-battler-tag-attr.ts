@@ -4,9 +4,9 @@ import type { TerrainType } from "#enums/terrain-type";
 import { PostTerrainChangeAbAttr } from "./post-terrain-change-ab-attr";
 
 export class PostTerrainChangeAddBattlerTagAttr extends PostTerrainChangeAbAttr {
-  private tagType: BattlerTagType;
-  private turnCount: number;
-  private terrainTypes: TerrainType[];
+  private readonly tagType: BattlerTagType;
+  private readonly turnCount: number;
+  private readonly terrainTypes: TerrainType[];
 
   constructor(tagType: BattlerTagType, turnCount: number, ...terrainTypes: TerrainType[]) {
     super();
