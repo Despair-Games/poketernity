@@ -15,11 +15,19 @@ import type { SpriteSet } from "#enums/sprite-set";
 import type { UiTheme } from "#enums/ui-theme";
 import type { UiWindowType } from "#enums/ui-window-type";
 
-export interface Settings {
+export interface Settings extends UserFacingSettings {
+  meta: MetaSettings;
+}
+
+export interface UserFacingSettings {
   general: GeneralSettings;
   audio: AudioSettings;
   display: DisplaySettings;
   gamepad: GamepadSettings;
+}
+
+export interface MetaSettings {
+  gameVersion: string;
 }
 
 export interface GeneralSettings {
@@ -92,7 +100,7 @@ export interface SettingsUiItem<K = string> {
   touchscreenOnly?: boolean;
 }
 
-export type SettingsCategory = keyof Settings;
+export type SettingsCategory = keyof UserFacingSettings;
 
 /** All keys for all settings categories */
 export type AnySettingKey = GeneralSettingsKey | DisplaySettingsKey | AudioSettingsKey | GamepadSettingsKey;

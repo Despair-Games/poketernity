@@ -1,4 +1,10 @@
-import type { AudioSettings, DisplaySettings, GamepadSettings, GeneralSettings, Settings } from "#app/@types/Settings";
+import type {
+  AudioSettings,
+  DisplaySettings,
+  GamepadSettings,
+  GeneralSettings,
+  UserFacingSettings,
+} from "#app/@types/Settings";
 import { BattleStyle } from "#app/enums/battle-style";
 import { CandyUpgradeDisplayMode } from "#app/enums/candy-upgrade-display";
 import { CandyUpgradeNotificationMode } from "#app/enums/candy-upgrade-notification-mode";
@@ -68,7 +74,7 @@ export const defaultGamepadSettings: GamepadSettings = {
   enabled: true,
 };
 
-export const defaultSettings: Settings = {
+export const defaultSettings: UserFacingSettings = {
   general: defaultGeneralSettings,
   display: defaultDisplaySettings,
   audio: defaultAudioSettings,

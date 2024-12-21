@@ -1,4 +1,4 @@
-import type { Settings, SettingsCategory } from "#app/@types/Settings";
+import type { UserFacingSettings, SettingsCategory, Settings } from "#app/@types/Settings";
 import { SETTINGS_LS_KEY } from "#app/constants";
 import { eventBus } from "#app/event-bus";
 import { version } from "../../../package.json";
@@ -10,7 +10,7 @@ import { defaultSettings } from "./default-settings";
 
 interface SettingsManagerInit {
   localStorageKey: string;
-  settings: Settings;
+  settings: UserFacingSettings;
 }
 
 //#endregion
@@ -29,7 +29,12 @@ class SettingsManager {
     const { localStorageKey, settings } = init;
 
     this.lsKey = localStorageKey;
-    this._settings = settings;
+    this._settings = {
+      meta: {
+        gameVersion: version,
+      },
+      ...settings,
+    };
 
     this.loadFromLocalStorage();
   }
@@ -39,6 +44,13 @@ class SettingsManager {
    */
   get settings() {
     return this._settings;
+  }
+
+  /**
+   * Quick access to meta settings
+   */
+  get meta() {
+    return this._settings.meta;
   }
 
   /**
@@ -103,7 +115,7 @@ class SettingsManager {
    * @param key the key of the setting
    * @param value the updated value
    */
-  update<C extends SettingsCategory>(category: C, key: keyof Settings[C], value: any) {
+  update<C extends SettingsCategory>(category: C, key: keyof UserFacingSettings[C], value: any) {
     if (!this._settings[category]) {
       eventBus.emit("settings/update/failed", { category, key, value });
       throw new Error(`Unknown category: ${category}`);
@@ -127,7 +139,7 @@ class SettingsManager {
    * @param key the key of the setting
    * @param value the updated value
    */
-  updateAndReload<C extends SettingsCategory>(category: C, key: keyof Settings[C], value: any) {
+  updateAndReload<C extends SettingsCategory>(category: C, key: keyof UserFacingSettings[C], value: any) {
     this.update(category, key, value);
     window.location.reload();
   }
@@ -136,7 +148,6 @@ class SettingsManager {
    * Saves settings to local storage item with the key: {@linkcode lsKey}
    */
   private saveToLocalStorage() {
-    this._settings["gameVersion"] = version;
     localStorage.setItem(this.lsKey, JSON.stringify(this._settings));
     eventBus.emit("settings/saved", this._settings, this.lsKey);
   }
@@ -149,7 +160,7 @@ class SettingsManager {
 
     if (lsItem) {
       try {
-        const lsSettings: Partial<Settings> = JSON.parse(lsItem);
+        const lsSettings: Partial<UserFacingSettings> = JSON.parse(lsItem);
 
         applySettingsVersionMigration(lsSettings);
 

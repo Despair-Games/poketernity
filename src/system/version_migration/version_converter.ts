@@ -61,7 +61,7 @@ export function applySessionVersionMigration(data: SessionSaveData) {
  * @see {@link SettingsVersionConverter}
  */
 export function applySettingsVersionMigration(data: Object) {
-  const gameVersion: string = data.hasOwnProperty("gameVersion") ? data["gameVersion"] : "1.0.0";
+  const gameVersion: string = data.hasOwnProperty("meta") ? (data["meta"]["gameVersion"] ?? "1.0.0") : "1.0.0";
   const curVersion = gameVersion.split(".").map((value) => parseInt(value));
 
   if (!curVersion.every((value, index) => value === LATEST_VERSION[index])) {
