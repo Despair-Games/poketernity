@@ -33,10 +33,11 @@ export class FieldPreventExplosionLikeAbAttr extends AbAttr {
   }
 
   /**
+   * UNUSED - Can be used once move conditional checking differentiates between simulated and non-simulated checks
    * Returns an ability activation message in cases where Damp prevents the usage of a move
    * @returns the appropriate trigger message or null
    */
-  override getTriggerMessage(_pokemon: Pokemon, _abilityName: string, ..._args: any[]): string | null {
+  _getTriggerMessage(_pokemon: Pokemon, _abilityName: string, ..._args: any[]): string | null {
     if (this.moveUser && this.moveName) {
       const message = i18next.t("moveTriggers:cannotUseMove", { pokemonName: this.moveUser, moveName: this.moveName });
       this.moveUser = null;
