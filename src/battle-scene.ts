@@ -348,6 +348,11 @@ export default class BattleScene extends SceneBase {
         const female = value === PlayerGender.FEMALE;
         this.trainer.setTexture(this.trainer.texture.key.replace(female ? "m" : "f", female ? "f" : "m"));
       }
+
+      // Shop overlay opacity changed, update it
+      if (key === "shopOverlayOpacity" && typeof value === "number") {
+        this.updateShopOverlayOpacity(value);
+      }
     });
   }
 
@@ -1878,8 +1883,6 @@ export default class BattleScene extends SceneBase {
   }
 
   updateShopOverlayOpacity(value: number): void {
-    settings.update("display", "shopOverlayOpacity", value);
-
     if (this.shopOverlayShown) {
       this.shopOverlay.setAlpha(value);
     }

@@ -306,7 +306,7 @@ export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey>[] = [
     key: "shopOverlayOpacity",
     label: t("settings:shopOverlayOpacity"),
     options: Array.from({ length: 9 }).map((_, i) => ({
-      value: Number((i * 0.1).toFixed(1)),
+      value: Number(((i + 1) * 0.1).toFixed(1)),
       label: `${(i + 1) * 10}`,
     })),
   },
