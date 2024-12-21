@@ -12,7 +12,7 @@ import {
   regenerateModifierPoolThresholds,
 } from "#app/modifier/modifier-type";
 import { Phase } from "#app/phase";
-import type { SessionSaveData } from "#app/system/game-data";
+import type { SessionSaveData } from "#app/@types/SessionData";
 import { Unlockables } from "#app/system/unlockables";
 import { vouchers } from "#app/system/voucher";
 import type { OptionSelectConfig, OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler";

@@ -7,7 +7,7 @@ import type {
   UpdateSessionSavedataRequest,
 } from "#app/@types/SessionSavedataApi";
 import { ApiBase } from "#app/plugins/api/api-base";
-import type { SessionSaveData } from "#app/system/game-data";
+import type { SessionSaveData } from "#app/@types/SessionData";
 
 /**
  * A wrapper for session savedata API requests.

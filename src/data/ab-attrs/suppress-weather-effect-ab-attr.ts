@@ -4,12 +4,12 @@ import type { BooleanHolder } from "#app/utils";
 import { PreWeatherEffectAbAttr } from "./pre-weather-effect-ab-attr";
 
 export class SuppressWeatherEffectAbAttr extends PreWeatherEffectAbAttr {
-  public affectsImmutable: boolean;
+  public readonly affectsImmutable: boolean;
 
-  constructor(affectsImmutable?: boolean) {
+  constructor(affectsImmutable: boolean = false) {
     super();
 
-    this.affectsImmutable = !!affectsImmutable;
+    this.affectsImmutable = affectsImmutable;
   }
 
   override applyPreWeatherEffect(

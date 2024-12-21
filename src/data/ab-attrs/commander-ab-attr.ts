@@ -15,10 +15,6 @@ import { AbAttr } from "./ab-attr";
  * causing attacks that target the source to always miss.
  */
 export class CommanderAbAttr extends AbAttr {
-  constructor() {
-    super(true);
-  }
-
   override apply(pokemon: Pokemon, _passive: boolean, simulated: boolean, _cancelled: null, _args: any[]): boolean {
     // TODO: Should this work with X + Dondozo fusions?
     if (globalScene.currentBattle?.double && pokemon.getAlly()?.species.speciesId === Species.DONDOZO) {

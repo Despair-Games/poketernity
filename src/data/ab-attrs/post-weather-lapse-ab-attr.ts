@@ -6,7 +6,7 @@ import type { WeatherType } from "#enums/weather-type";
 import { AbAttr } from "./ab-attr";
 
 export class PostWeatherLapseAbAttr extends AbAttr {
-  protected weatherTypes: WeatherType[];
+  protected readonly weatherTypes: WeatherType[];
 
   constructor(...weatherTypes: WeatherType[]) {
     super();

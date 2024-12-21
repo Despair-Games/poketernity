@@ -12,10 +12,10 @@ import { ReceivedMoveDamageMultiplierAbAttr } from "./received-move-damage-multi
  * @extends ReceivedMoveDamageMultiplierAbAttr
  */
 export class FormBlockDamageAbAttr extends ReceivedMoveDamageMultiplierAbAttr {
-  private multiplier: number;
-  private tagType: BattlerTagType;
-  private recoilDamageFunc?: (pokemon: Pokemon) => number;
-  private triggerMessageFunc: (pokemon: Pokemon, abilityName: string) => string;
+  private readonly multiplier: number;
+  private readonly tagType: BattlerTagType;
+  private readonly recoilDamageFunc?: (pokemon: Pokemon) => number;
+  private readonly triggerMessageFunc: (pokemon: Pokemon, abilityName: string) => string;
 
   constructor(
     condition: PokemonDefendCondition,
@@ -55,7 +55,8 @@ export class FormBlockDamageAbAttr extends ReceivedMoveDamageMultiplierAbAttr {
   ): boolean {
     if (this.condition(pokemon, attacker, move) && !move.hitsSubstitute(attacker, pokemon)) {
       if (!simulated) {
-        (args[0] as NumberHolder).value = this.multiplier;
+        const damage: NumberHolder = args[0];
+        damage.value = this.multiplier;
         pokemon.removeTag(this.tagType);
         if (this.recoilDamageFunc) {
           pokemon.damageAndUpdate(this.recoilDamageFunc(pokemon), HitResult.OTHER, false, false, true, true);

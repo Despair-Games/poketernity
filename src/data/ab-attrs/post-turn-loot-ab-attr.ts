@@ -9,25 +9,23 @@ import { PostTurnAbAttr } from "./post-turn-ab-attr";
 
 /**
  * After the turn ends, try to create an extra item
+ * @param itemType - The type of item to create
+ * @param procChance - Chance to create an item
+ * @see {@linkcode applyPostTurn()}
+ * @extends PostTurnAbAttr
  */
 export class PostTurnLootAbAttr extends PostTurnAbAttr {
-  /**
-   * @param itemType - The type of item to create
-   * @param procChance - Chance to create an item
-   * @see {@linkcode applyPostTurn()}
-   */
   constructor(
     /** Extend itemType to add more options */
-    private itemType: "EATEN_BERRIES" | "HELD_BERRIES",
-    private procChance: (pokemon: Pokemon) => number,
+    private readonly itemType: "EATEN_BERRIES" | "HELD_BERRIES",
+    private readonly procChance: (pokemon: Pokemon) => number,
   ) {
     super();
   }
 
   override applyPostTurn(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
     const pass = Phaser.Math.RND.realInRange(0, 1);
-    // Clamp procChance to [0, 1]. Skip if didn't proc (less than pass)
-    if (Math.max(Math.min(this.procChance(pokemon), 1), 0) < pass) {
+    if (Phaser.Math.Clamp(this.procChance(pokemon), 0, 1) < pass) {
       return false;
     }
 

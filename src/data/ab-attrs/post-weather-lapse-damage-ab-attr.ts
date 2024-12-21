@@ -10,7 +10,7 @@ import { BlockNonDirectDamageAbAttr } from "./block-non-direct-damage-ab-attr";
 import { PostWeatherLapseAbAttr } from "./post-weather-lapse-ab-attr";
 
 export class PostWeatherLapseDamageAbAttr extends PostWeatherLapseAbAttr {
-  private damageFactor: number;
+  private readonly damageFactor: number;
 
   constructor(damageFactor: number, ...weatherTypes: WeatherType[]) {
     super(...weatherTypes);

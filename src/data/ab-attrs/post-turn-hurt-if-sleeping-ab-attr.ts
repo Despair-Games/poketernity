@@ -11,6 +11,7 @@ import { PostTurnAbAttr } from "./post-turn-ab-attr";
 
 /**
  * Attribute used for abilities (Bad Dreams) that damages the opponents for being asleep
+ * @extends PostTurnAbAttr
  */
 export class PostTurnHurtIfSleepingAbAttr extends PostTurnAbAttr {
   /**
@@ -22,7 +23,7 @@ export class PostTurnHurtIfSleepingAbAttr extends PostTurnAbAttr {
    * @returns `true` if any opponents are sleeping
    */
   override applyPostTurn(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
-    let hadEffect: boolean = false;
+    let hadEffect = false;
     for (const opp of pokemon.getOpponents()) {
       if (
         (opp.status?.effect === StatusEffect.SLEEP || opp.hasAbility(Abilities.COMATOSE))
