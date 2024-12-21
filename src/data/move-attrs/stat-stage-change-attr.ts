@@ -3,7 +3,7 @@ import { type BattleStat, Stat } from "#enums/stat";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import { AttackMove } from "#app/data/attack-move";
+import { AttackMove } from "../move";
 import type { Move } from "#app/data/move";
 import { type MoveEffectAttrOptions, MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import type { MoveConditionFunc } from "../move-conditions";

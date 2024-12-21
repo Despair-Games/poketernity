@@ -1,7 +1,7 @@
 import type { BattlerIndex } from "#app/battle";
-import { SelfStatusMove } from "../self-status-move";
-import { StatusMove } from "../status-move";
-import { AttackMove } from "../attack-move";
+import { SelfStatusMove } from "../move";
+import { StatusMove } from "../move";
+import { AttackMove } from "../move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";

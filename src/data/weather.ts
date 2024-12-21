@@ -3,7 +3,7 @@ import { getPokemonNameWithAffix } from "../messages";
 import type { Pokemon } from "../field/pokemon";
 import { Type } from "#enums/type";
 import type { Move } from "./move";
-import { AttackMove } from "./attack-move";
+import { AttackMove } from "./move";
 import { randSeedInt } from "#app/utils";
 import { SuppressWeatherEffectAbAttr } from "./ab-attrs/suppress-weather-effect-ab-attr";
 import i18next from "i18next";

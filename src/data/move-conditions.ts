@@ -11,7 +11,8 @@ import i18next from "i18next";
 import { FieldPreventExplosiveMovesAbAttr } from "./ab-attrs/field-prevent-explosive-moves-ab-attr";
 import { applyAbAttrs } from "./ability";
 import { StockpilingTag } from "./battler-tags";
-import { allMoves, type Move } from "./move";
+import { type Move } from "./move";
+import { allMoves } from "./move";
 import { MoveCategory } from "#enums/move-category";
 import { Command } from "#app/ui/command-ui-handler";
 

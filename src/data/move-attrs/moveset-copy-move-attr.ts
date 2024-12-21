@@ -2,7 +2,8 @@ import { type Pokemon, PokemonMove } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
-import { type Move, allMoves } from "../move";
+import { type Move } from "../move";
+import { allMoves } from "../move";
 import { targetMoveCopiableCondition, type MoveConditionFunc } from "../move-conditions";
 import { OverrideMoveEffectAttr } from "./override-move-effect-attr";
 

@@ -6,7 +6,8 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { MovePhase } from "#app/phases/move-phase";
 import i18next from "i18next";
-import { type Move, allMoves } from "#app/data/move";
+import { type Move } from "#app/data/move";
+import { allMoves } from "../move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import type { MoveConditionFunc } from "../move-conditions";
 

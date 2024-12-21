@@ -33,7 +33,7 @@ import { OneHitKOAttr } from "#app/data/move-attrs/one-hit-ko-attr";
 import { MultiHitAttr } from "#app/data/move-attrs/multi-hit-attr";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import { MoveEffectTrigger } from "#enums/move-effect-trigger";
-import { AttackMove } from "#app/data/attack-move";
+import { AttackMove } from "#app/data/move";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveTarget } from "#enums/move-target";
 import { MoveCategory } from "#enums/move-category";

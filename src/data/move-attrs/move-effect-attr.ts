@@ -9,8 +9,6 @@ import { IgnoreMoveEffectsAbAttr } from "#app/data/ab-attrs/ignore-move-effect-a
 import { MoveEffectChanceMultiplierAbAttr } from "#app/data/ab-attrs/move-effect-chance-multiplier-ab-attr";
 import { applyAbAttrs, applyPreDefendAbAttrs } from "#app/data/ability";
 import { type Move } from "#app/data/move";
-import { FlinchAttr } from "./flinch-attr";
-import { SecretPowerAttr } from "#app/data/move-attrs/secret-power-attr";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";
 
 export interface MoveEffectAttrOptions {
@@ -136,10 +134,8 @@ export class MoveEffectAttr extends MoveAttr {
       showAbility,
     );
 
-    if ((!move.hasAttr(FlinchAttr) || moveChance.value <= move.chance) && !move.hasAttr(SecretPowerAttr)) {
-      const userSide = user.getArenaTagSide();
-      globalScene.arena.applyTagsForSide(ArenaTagType.WATER_FIRE_PLEDGE, userSide, false, moveChance);
-    }
+    const userSide = user.getArenaTagSide();
+    globalScene.arena.applyTagsForSide(ArenaTagType.WATER_FIRE_PLEDGE, userSide, false, moveChance);
 
     if (!selfEffect) {
       applyPreDefendAbAttrs(IgnoreMoveEffectsAbAttr, target, user, null, null, false, moveChance);

@@ -20,11 +20,11 @@ import { Type } from "#enums/type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
 import { isNullOrUndefined } from "util";
-import { AttackMove } from "./attack-move";
+import { allMoves, crashDamageFunc, frenzyMissFunc, selfStatLowerMoves, type Move } from "./move";
+import { AttackMove } from "./move";
 import { ChargeAnim } from "./battle-anims";
 import { EncoreTag, StockpilingTag, SemiInvulnerableTag, ShellTrapTag, TrappedTag } from "./battler-tags";
-import { ChargingAttackMove, ChargingSelfStatusMove } from "./charge-move";
-import { allMoves, crashDamageFunc, frenzyMissFunc, type Move, selfStatLowerMoves } from "./move";
+import { ChargingAttackMove, ChargingSelfStatusMove } from "./move";
 import { AbilityChangeAttr } from "./move-attrs/ability-change-attr";
 import { AbilityCopyAttr } from "./move-attrs/ability-copy-attr";
 import { AbilityGiveAttr } from "./move-attrs/ability-give-attr";
@@ -237,9 +237,9 @@ import {
   unknownTypeCondition,
   UpperHandCondition,
 } from "./move-conditions";
-import { SelfStatusMove } from "./self-status-move";
+import { SelfStatusMove } from "./move";
 import { isNonVolatileStatusEffect, getNonVolatileStatusEffects } from "./status-effect";
-import { StatusMove } from "./status-move";
+import { StatusMove } from "./move";
 
 export function initMoves() {
   allMoves.push(

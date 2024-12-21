@@ -1,8 +1,8 @@
 import { globalScene } from "#app/global-scene";
 import { allMoves } from "./move";
 import { BeakBlastHeaderAttr } from "./move-attrs/beak-blast-header-attr";
-import { SelfStatusMove } from "./self-status-move";
-import { AttackMove } from "./attack-move";
+import { SelfStatusMove } from "./move";
+import { AttackMove } from "./move";
 import { MoveFlags } from "../enums/move-flags";
 import type { Pokemon } from "../field/pokemon";
 import { getFrameMs, getEnumKeys, getEnumValues, animationFileName, isNullOrUndefined } from "#app/utils";

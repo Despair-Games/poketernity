@@ -35,7 +35,6 @@ import { WonderSkinAbAttr } from "./ab-attrs/wonder-skin-ab-attr";
 import { applyAbAttrs, applyPreAttackAbAttrs, applyPreDefendAbAttrs } from "./ability";
 import { WeakenMoveTypeTag } from "./arena-tag";
 import { HelpingHandTag, TypeBoostTag } from "./battler-tags";
-import type { ChargingMove } from "./charge-move";
 import { IncrementMovePriorityAttr } from "./move-attrs/increment-move-priority-attr";
 import type { MoveAttr } from "./move-attrs/move-attr";
 import { MultiHitAttr } from "./move-attrs/multi-hit-attr";
@@ -48,7 +47,11 @@ import { VariablePowerAttr } from "./move-attrs/variable-power-attr";
 import { VariableTargetAttr } from "./move-attrs/variable-target-attr";
 import type { MoveConditionFunc, UserMoveConditionFunc } from "./move-conditions";
 import { MoveCondition } from "./move-conditions";
-import { SelfStatusMove } from "./self-status-move";
+import { Stat } from "#enums/stat";
+import { StatusEffect } from "#enums/status-effect";
+import { HealStatusEffectAttr } from "./move-attrs/heal-status-effect-attr";
+import { VariableAtkAttr } from "./move-attrs/variable-atk-attr";
+import { ChargeAnim } from "./battle-anims";
 
 export abstract class Move implements Localizable {
   public id: Moves;
@@ -840,6 +843,180 @@ export abstract class Move implements Localizable {
     );
   }
 }
+
+export class AttackMove extends Move {
+  constructor(
+    id: Moves,
+    type: Type,
+    category: MoveCategory,
+    power: number,
+    accuracy: number,
+    pp: number,
+    chance: number,
+    priority: number,
+    generation: number,
+  ) {
+    super(id, type, category, MoveTarget.NEAR_OTHER, power, accuracy, pp, chance, priority, generation);
+
+    /**
+     * {@link https://bulbapedia.bulbagarden.net/wiki/Freeze_(status_condition)}
+     * > All damaging Fire-type moves can now thaw a frozen target, regardless of whether or not they have a chance to burn;
+     */
+    if (this.type === Type.FIRE) {
+      this.addAttr(new HealStatusEffectAttr(false, StatusEffect.FREEZE));
+    }
+  }
+
+  override getTargetBenefitScore(user: Pokemon, target: Pokemon, move: Move): number {
+    let ret = super.getTargetBenefitScore(user, target, move);
+
+    let attackScore = 0;
+
+    const effectiveness = target.getAttackTypeEffectiveness(this.type, user, undefined, undefined, this);
+    attackScore = Math.pow(effectiveness - 1, 2) * effectiveness < 1 ? -2 : 2;
+    if (attackScore) {
+      if (this.category === MoveCategory.PHYSICAL) {
+        const atk = new NumberHolder(user.getEffectiveStat(Stat.ATK, target));
+        applyMoveAttrs(VariableAtkAttr, user, target, move, atk);
+        if (atk.value > user.getEffectiveStat(Stat.SPATK, target)) {
+          const statRatio = user.getEffectiveStat(Stat.SPATK, target) / atk.value;
+          if (statRatio <= 0.75) {
+            attackScore *= 2;
+          } else if (statRatio <= 0.875) {
+            attackScore *= 1.5;
+          }
+        }
+      } else {
+        const spAtk = new NumberHolder(user.getEffectiveStat(Stat.SPATK, target));
+        applyMoveAttrs(VariableAtkAttr, user, target, move, spAtk);
+        if (spAtk.value > user.getEffectiveStat(Stat.ATK, target)) {
+          const statRatio = user.getEffectiveStat(Stat.ATK, target) / spAtk.value;
+          if (statRatio <= 0.75) {
+            attackScore *= 2;
+          } else if (statRatio <= 0.875) {
+            attackScore *= 1.5;
+          }
+        }
+      }
+
+      const power = new NumberHolder(this.power);
+      applyMoveAttrs(VariablePowerAttr, user, target, move, power);
+
+      attackScore += Math.floor(power.value / 5);
+    }
+
+    ret -= attackScore;
+
+    return ret;
+  }
+}
+
+export class StatusMove extends Move {
+  constructor(
+    id: Moves,
+    type: Type,
+    accuracy: number,
+    pp: number,
+    chance: number,
+    priority: number,
+    generation: number,
+  ) {
+    super(id, type, MoveCategory.STATUS, MoveTarget.NEAR_OTHER, -1, accuracy, pp, chance, priority, generation);
+  }
+}
+
+export class SelfStatusMove extends Move {
+  constructor(
+    id: Moves,
+    type: Type,
+    accuracy: number,
+    pp: number,
+    chance: number,
+    priority: number,
+    generation: number,
+  ) {
+    super(id, type, MoveCategory.STATUS, MoveTarget.USER, -1, accuracy, pp, chance, priority, generation);
+  }
+}
+
+type SubMove = new (...args: any[]) => Move;
+function ChargeMove<TBase extends SubMove>(Base: TBase) {
+  return class extends Base {
+    /** The animation to play during the move's charging phase */
+    public readonly chargeAnim: ChargeAnim = ChargeAnim[`${Moves[this.id]}_CHARGING`];
+    /** The message to show during the move's charging phase */
+    private _chargeText: string;
+
+    /** Move attributes that apply during the move's charging phase */
+    public chargeAttrs: MoveAttr[] = [];
+
+    override isChargingMove(): this is ChargingMove {
+      return true;
+    }
+
+    /**
+     * Sets the text to be displayed during this move's charging phase.
+     * References to the user Pokemon should be written as "{USER}", and
+     * references to the target Pokemon should be written as "{TARGET}".
+     * @param chargeText the text to set
+     * @returns this {@linkcode Move} (for chaining API purposes)
+     */
+    chargeText(chargeText: string): this {
+      this._chargeText = chargeText;
+      return this;
+    }
+
+    /**
+     * Queues the charge text to display to the player
+     * @param user the {@linkcode Pokemon} using this move
+     * @param target the {@linkcode Pokemon} targeted by this move (optional)
+     */
+    showChargeText(user: Pokemon, target?: Pokemon): void {
+      globalScene.queueMessage(
+        this._chargeText
+          .replace("{USER}", getPokemonNameWithAffix(user))
+          .replace("{TARGET}", getPokemonNameWithAffix(target)),
+      );
+    }
+
+    /**
+     * Gets all charge attributes of the given attribute type.
+     * @param attrType any attribute that extends {@linkcode MoveAttr}
+     * @returns Array of attributes that match `attrType`, or an empty array if
+     * no matches are found.
+     */
+    getChargeAttrs<T extends MoveAttr>(attrType: Constructor<T>): T[] {
+      return this.chargeAttrs.filter((attr): attr is T => attr instanceof attrType);
+    }
+
+    /**
+     * Checks if this move has an attribute of the given type.
+     * @param attrType any attribute that extends {@linkcode MoveAttr}
+     * @returns `true` if a matching attribute is found; `false` otherwise
+     */
+    hasChargeAttr<T extends MoveAttr>(attrType: Constructor<T>): boolean {
+      return this.chargeAttrs.some((attr) => attr instanceof attrType);
+    }
+
+    /**
+     * Adds an attribute to this move to be applied during the move's charging phase
+     * @param ChargeAttrType the type of {@linkcode MoveAttr} being added
+     * @param args the parameters to construct the given {@linkcode MoveAttr} with
+     * @returns this {@linkcode Move} (for chaining API purposes)
+     */
+    chargeAttr<T extends Constructor<MoveAttr>>(ChargeAttrType: T, ...args: ConstructorParameters<T>): this {
+      const chargeAttr = new ChargeAttrType(...args);
+      this.chargeAttrs.push(chargeAttr);
+
+      return this;
+    }
+  };
+}
+
+export class ChargingAttackMove extends ChargeMove(AttackMove) {}
+export class ChargingSelfStatusMove extends ChargeMove(SelfStatusMove) {}
+
+export type ChargingMove = ChargingAttackMove | ChargingSelfStatusMove;
 
 export const crashDamageFunc = (user: Pokemon, _move: Move) => {
   const cancelled = new BooleanHolder(false);

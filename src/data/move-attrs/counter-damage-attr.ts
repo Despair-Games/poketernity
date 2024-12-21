@@ -1,6 +1,7 @@
 import type { Pokemon, AttackMoveResult } from "#app/field/pokemon";
 import { type NumberHolder, toDmgValue } from "#app/utils";
-import { type Move, allMoves } from "#app/data/move";
+import { type Move } from "#app/data/move";
+import { allMoves } from "../move";
 import { FixedDamageAttr } from "#app/data/move-attrs/fixed-damage-attr";
 import type { MoveConditionFunc } from "../move-conditions";
 
