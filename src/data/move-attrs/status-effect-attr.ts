@@ -14,8 +14,14 @@ export class StatusEffectAttr extends MoveEffectAttr {
   public turnsRemaining?: number;
   public overrideStatus: boolean = false;
 
-  constructor(effect: StatusEffect, selfTarget?: boolean, turnsRemaining?: number, overrideStatus: boolean = false) {
-    super(selfTarget);
+  constructor(
+    effect: StatusEffect,
+    selfTarget?: boolean,
+    turnsRemaining?: number,
+    overrideStatus: boolean = false,
+    effectChanceOverride?: number,
+  ) {
+    super(selfTarget, { effectChanceOverride: effectChanceOverride });
 
     this.effect = effect;
     this.turnsRemaining = turnsRemaining;

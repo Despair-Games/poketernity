@@ -22,7 +22,7 @@ export class FlinchAttr extends AddBattlerTagAttr {
     selfEffect?: Boolean,
     showAbility?: Boolean,
   ): number {
-    const moveChance = new NumberHolder(move.chance);
+    const moveChance = new NumberHolder(this.effectChanceOverride ?? move.chance);
 
     applyAbAttrs(
       MoveEffectChanceMultiplierAbAttr,

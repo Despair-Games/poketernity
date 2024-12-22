@@ -31,15 +31,19 @@ export class SecretPowerAttr extends MoveEffectAttr {
     if (!super.apply(user, target, move, args)) {
       return false;
     }
-    let secondaryEffect: MoveEffectAttr;
-    const terrain = globalScene.arena.getTerrainType();
-    if (terrain !== TerrainType.NONE) {
-      secondaryEffect = this.determineTerrainEffect(terrain);
-    } else {
-      const biome = globalScene.arena.biomeType;
-      secondaryEffect = this.determineBiomeEffect(biome);
+    const chance = this.getMoveChance(user, target, move, false);
+    if (chance < 0 || user.randSeedInt(100) < chance) {
+      let secondaryEffect: MoveEffectAttr;
+      const terrain = globalScene.arena.getTerrainType();
+      if (terrain !== TerrainType.NONE) {
+        secondaryEffect = this.determineTerrainEffect(terrain);
+      } else {
+        const biome = globalScene.arena.biomeType;
+        secondaryEffect = this.determineBiomeEffect(biome);
+      }
+      return secondaryEffect.apply(user, target, move, []);
     }
-    return secondaryEffect.apply(user, target, move, []);
+    return false;
   }
 
   /**
@@ -59,16 +63,16 @@ export class SecretPowerAttr extends MoveEffectAttr {
     switch (terrain) {
       case TerrainType.ELECTRIC:
       default:
-        secondaryEffect = new StatusEffectAttr(StatusEffect.PARALYSIS, false);
+        secondaryEffect = new StatusEffectAttr(StatusEffect.PARALYSIS, false, undefined, undefined, -1);
         break;
       case TerrainType.MISTY:
-        secondaryEffect = new StatStageChangeAttr([Stat.SPATK], -1, false);
+        secondaryEffect = new StatStageChangeAttr([Stat.SPATK], -1, false, { effectChanceOverride: -1 });
         break;
       case TerrainType.GRASSY:
-        secondaryEffect = new StatusEffectAttr(StatusEffect.SLEEP, false);
+        secondaryEffect = new StatusEffectAttr(StatusEffect.SLEEP, false, undefined, undefined, -1);
         break;
       case TerrainType.PSYCHIC:
-        secondaryEffect = new StatStageChangeAttr([Stat.SPD], -1, false);
+        secondaryEffect = new StatStageChangeAttr([Stat.SPD], -1, false, { effectChanceOverride: -1 });
         break;
     }
     return secondaryEffect;
@@ -100,45 +104,45 @@ export class SecretPowerAttr extends MoveEffectAttr {
       case Biome.FOREST:
       case Biome.JUNGLE:
       case Biome.MEADOW:
-        secondaryEffect = new StatusEffectAttr(StatusEffect.SLEEP, false);
+        secondaryEffect = new StatusEffectAttr(StatusEffect.SLEEP, false, undefined, undefined, -1);
         break;
       case Biome.SWAMP:
       case Biome.MOUNTAIN:
       case Biome.TEMPLE:
       case Biome.RUINS:
-        secondaryEffect = new StatStageChangeAttr([Stat.SPD], -1, false);
+        secondaryEffect = new StatStageChangeAttr([Stat.SPD], -1, false, { effectChanceOverride: -1 });
         break;
       case Biome.ICE_CAVE:
       case Biome.SNOWY_FOREST:
-        secondaryEffect = new StatusEffectAttr(StatusEffect.FREEZE, false);
+        secondaryEffect = new StatusEffectAttr(StatusEffect.FREEZE, false, undefined, undefined, -1);
         break;
       case Biome.VOLCANO:
-        secondaryEffect = new StatusEffectAttr(StatusEffect.BURN, false);
+        secondaryEffect = new StatusEffectAttr(StatusEffect.BURN, false, undefined, undefined, -1);
         break;
       case Biome.FAIRY_CAVE:
-        secondaryEffect = new StatStageChangeAttr([Stat.SPATK], -1, false);
+        secondaryEffect = new StatStageChangeAttr([Stat.SPATK], -1, false, { effectChanceOverride: -1 });
         break;
       case Biome.DESERT:
       case Biome.CONSTRUCTION_SITE:
       case Biome.BEACH:
       case Biome.ISLAND:
       case Biome.BADLANDS:
-        secondaryEffect = new StatStageChangeAttr([Stat.ACC], -1, false);
+        secondaryEffect = new StatStageChangeAttr([Stat.ACC], -1, false, { effectChanceOverride: -1 });
         break;
       case Biome.SEA:
       case Biome.LAKE:
       case Biome.SEABED:
-        secondaryEffect = new StatStageChangeAttr([Stat.ATK], -1, false);
+        secondaryEffect = new StatStageChangeAttr([Stat.ATK], -1, false, { effectChanceOverride: -1 });
         break;
       case Biome.CAVE:
       case Biome.WASTELAND:
       case Biome.GRAVEYARD:
       case Biome.ABYSS:
       case Biome.SPACE:
-        secondaryEffect = new AddBattlerTagAttr(BattlerTagType.FLINCHED, false);
+        secondaryEffect = new AddBattlerTagAttr(BattlerTagType.FLINCHED, false, { effectChanceOverride: -1 });
         break;
       case Biome.END:
-        secondaryEffect = new StatStageChangeAttr([Stat.DEF], -1, false);
+        secondaryEffect = new StatStageChangeAttr([Stat.DEF], -1, false, { effectChanceOverride: -1 });
         break;
       case Biome.TOWN:
       case Biome.METROPOLIS:
@@ -148,7 +152,7 @@ export class SecretPowerAttr extends MoveEffectAttr {
       case Biome.LABORATORY:
       case Biome.POWER_PLANT:
       default:
-        secondaryEffect = new StatusEffectAttr(StatusEffect.PARALYSIS, false);
+        secondaryEffect = new StatusEffectAttr(StatusEffect.PARALYSIS, false, undefined, undefined, -1);
         break;
     }
     return secondaryEffect;
