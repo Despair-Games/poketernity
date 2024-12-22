@@ -8,7 +8,6 @@ import { AbAttr } from "./ab-attr";
 /**
  * Ability attribute that multiplies a Pokemon's stat by a factor
  * Abilities with this attribute:
-```
 +-----------------------+-------+--------+----------------------------------+
 |        Ability        | Stat  | Factor |              Notes               |
 +-----------------------+-------+--------+----------------------------------+
@@ -35,10 +34,9 @@ import { AbAttr } from "./ab-attr";
 | Grass Pelt            | DEF   |    1.5 | In grassy terrain only           |
 | Slush Rush            | SPD   |      2 | In snow/hail only                |
 | Surge Surfer          | SPD   |      2 | In electric terrain only         |
-| Orichalum Pulse       | ATK   |    1.3 | In sun only                      |
-| Hadron Engine         | SPATK |    1.3 | In electric terrain only         |
+| Orichalum Pulse       | ATK   |   1.33 | In sun only                      |
+| Hadron Engine         | SPATK |   1.33 | In electric terrain only         |
 +-----------------------+-------+--------+----------------------------------+
-```
  */
 export class StatMultiplierAbAttr extends AbAttr {
   private readonly stat: BattleStat;
