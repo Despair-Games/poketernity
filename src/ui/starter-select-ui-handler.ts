@@ -2467,7 +2467,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
   }
 
   /**
-   * Switch the current Pokemon the the given variant and update the starter preferences
+   * Switch the current Pokemon to the given variant and update the starter preferences
    * @param starterPrefs the current user picked preferences for the selected Pokemon
    * @param newVariant the variant to set for the Pokemon
    * @returns `true` if the 'success' sound effect should be played
