@@ -1,5 +1,5 @@
 import type { BattlerIndex } from "#app/battle";
-import { type Pokemon, HitResult } from "#app/field/pokemon";
+import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { Localizable } from "#app/interfaces/locales";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -9,7 +9,7 @@ import {
   AttackTypeBoosterModifier,
 } from "#app/modifier/modifier";
 import type { Constructor, nil } from "#app/utils";
-import { BooleanHolder, NumberHolder, toDmgValue } from "#app/utils";
+import { BooleanHolder, NumberHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -21,7 +21,6 @@ import { Type } from "#enums/type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
 import { AllyMoveCategoryPowerBoostAbAttr } from "./ab-attrs/ally-move-category-power-boost-ab-attr";
-import { BlockNonDirectDamageAbAttr } from "./ab-attrs/block-non-direct-damage-ab-attr";
 import { ChangeMovePriorityAbAttr } from "./ab-attrs/change-move-priority-ab-attr";
 import { FieldMoveTypePowerBoostAbAttr } from "./ab-attrs/field-move-type-power-boost-ab-attr";
 import { IgnoreContactAbAttr } from "./ab-attrs/ignore-contact-ab-attr";
@@ -45,7 +44,7 @@ import { TypelessAttr } from "./move-attrs/typeless-attr";
 import { VariableAccuracyAttr } from "./move-attrs/variable-accuracy-attr";
 import { VariablePowerAttr } from "./move-attrs/variable-power-attr";
 import { VariableTargetAttr } from "./move-attrs/variable-target-attr";
-import type { MoveConditionFunc, UserMoveConditionFunc } from "./move-conditions";
+import type { MoveConditionFunc } from "./move-conditions";
 import { MoveCondition } from "./move-conditions";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
@@ -940,6 +939,7 @@ export class SelfStatusMove extends Move {
 }
 
 type SubMove = new (...args: any[]) => Move;
+
 function ChargeMove<TBase extends SubMove>(Base: TBase) {
   return class extends Base {
     /** The animation to play during the move's charging phase */
@@ -1017,31 +1017,6 @@ export class ChargingAttackMove extends ChargeMove(AttackMove) {}
 export class ChargingSelfStatusMove extends ChargeMove(SelfStatusMove) {}
 
 export type ChargingMove = ChargingAttackMove | ChargingSelfStatusMove;
-
-export const crashDamageFunc = (user: Pokemon, _move: Move) => {
-  const cancelled = new BooleanHolder(false);
-  applyAbAttrs(BlockNonDirectDamageAbAttr, user, cancelled);
-  if (cancelled.value) {
-    return false;
-  }
-
-  user.damageAndUpdate(toDmgValue(user.getMaxHp() / 2), HitResult.OTHER, false, true);
-  globalScene.queueMessage(
-    i18next.t("moveTriggers:keptGoingAndCrashed", { pokemonName: getPokemonNameWithAffix(user) }),
-  );
-  user.turnData.damageTaken += toDmgValue(user.getMaxHp() / 2);
-
-  return true;
-};
-
-export const frenzyMissFunc: UserMoveConditionFunc = (user: Pokemon, move: Move) => {
-  while (user.getMoveQueue().length && user.getMoveQueue()[0].move === move.id) {
-    user.getMoveQueue().shift();
-  }
-  user.removeTag(BattlerTagType.FRENZY); // FRENZY tag should be disrupted on miss/no effect
-
-  return true;
-};
 
 export type MoveAttrFilter = (attr: MoveAttr) => boolean;
 
