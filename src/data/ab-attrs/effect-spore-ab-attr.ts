@@ -19,10 +19,6 @@ export class EffectSporeAbAttr extends PostDefendAbAttr {
   private PARA_THRESHOLD = 10 + this.SLEEP_THRESHOLD;
   private PSN_THRESHOLD = 9 + this.PARA_THRESHOLD;
 
-  constructor() {
-    super();
-  }
-
   /**
    * Identical code to PostDefendContactApplyStatusEffectAbAttr's applyPostDefend() but it contains two conditional checks.
    * Effect Spore cannot affect the attacker if the attacker is Grass-type or has the ability Overcoat
