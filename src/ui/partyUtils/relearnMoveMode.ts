@@ -3,6 +3,7 @@ import type { Moves } from "#app/enums/moves";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { tmSpecies } from "#app/data/balance/tms";
 import { MoveSource } from "#enums/move-source";
+import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 
 export function retrieveMoveList(pokemon: Pokemon): Moves[] {
   return pokemon.getLearnableLevelMoves();
@@ -31,4 +32,15 @@ export function determineMoveSource(pokemon: Pokemon, move: Moves): MoveSource {
     }
   }
   return MoveSource.MYSTERY_ENCOUNTER;
+}
+
+/**
+ *
+ * @param textObj
+ */
+export function setMoveColor(textObj: BBCodeText, moveSource: MoveSource): void {
+  if (moveSource) {
+    textObj.setColor("#40c8f8");
+    textObj.setShadowColor("#006090");
+  }
 }
