@@ -17,7 +17,7 @@ import { AbAttr } from "./ab-attr";
 | Chlorophyll           | SPD   |      2 | In sun only                      |
 | Huge Power/Pure Power | ATK   |      2 |                                  |
 | Hustle                | ATK   |    1.5 |                                  |
-|                       | ACC   |    0.8 |                                  |
+|                       | ACC   |    0.8 | Applies to Physical moves only   |
 | Plus                  | SPATK |    1.5 | Needs ally with Minus            |
 | Minus                 | SPATK |    1.5 | Needs ally with Plus             |
 | Guts                  | ATK   |    1.5 | Needs to have status             |
