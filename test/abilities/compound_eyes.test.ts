@@ -39,7 +39,7 @@ describe("Abilities - Compound Eyes", () => {
     game.move.select(Moves.HYPNOSIS);
     await game.phaseInterceptor.to("BerryPhase");
 
-    expect(pokemon.getAccuracyMultiplier).toHaveLastReturnedWith(5325 / 4096);
+    expect(pokemon.getAccuracyMultiplier).toHaveLastReturnedWith(1.3);
   });
 
   it("should not affect the accuracy of one-hit KO moves", async () => {
