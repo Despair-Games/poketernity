@@ -360,10 +360,10 @@ describe("Moves - Sky Drop", () => {
 
     [tatsugiri, enemy1].forEach((p) => expect(p.getTag(BattlerTagType.SKY_DROP)).toBeUndefined());
     expect(tatsugiri.getMoveQueue().length).toBe(0);
-    expect(tatsugiri.getTag(BattlerTagType.CHARGING)).toBeFalsy();
+    expect(enemy1.getTag(BattlerTagType.CHARGING)).toBeUndefined();
 
     const dondozo = game.scene.getPlayerField()[0];
 
-    expect(dondozo.getTag(BattlerTagType.COMMANDED)).toBeTruthy();
+    expect(dondozo.getTag(BattlerTagType.COMMANDED)).toBeDefined();
   });
 });

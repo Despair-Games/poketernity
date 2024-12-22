@@ -483,11 +483,12 @@ export class MoveEffectPhase extends HitCheckPhase {
     const skyDropTagId = target.getTag(BattlerTagType.SKY_DROP)?.sourceId;
     if (skyDropTagId) {
       globalScene.getField(true).forEach((p) => {
-        if (p.getTag(BattlerTagType.SKY_DROP)?.sourceId === skyDropTagId) {
+        if (p && p.getTag(BattlerTagType.SKY_DROP)?.sourceId === skyDropTagId) {
           // Cancel the Sky Drop user's next use of Sky Drop
-          if (p.getTag(BattlerTagType.SKY_DROP)?.sourceId === p.id) {
-            globalScene.tryRemovePhase((phase) => phase instanceof MovePhase && phase.pokemon === p);
+          if (skyDropTagId === p.id) {
+            globalScene.tryRemovePhase((phase) => phase instanceof MovePhase && phase.pokemon.id === p.id);
             p.getMoveQueue().shift();
+            p.removeTag(BattlerTagType.CHARGING);
           }
           p.removeTag(BattlerTagType.SKY_DROP);
         }
