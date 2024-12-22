@@ -3,8 +3,8 @@ import type { BattlerTagType } from "#enums/battler-tag-type";
 import { PostSummonAbAttr } from "./post-summon-ab-attr";
 
 export class PostSummonAddBattlerTagAbAttr extends PostSummonAbAttr {
-  private tagType: BattlerTagType;
-  private turnCount: number;
+  private readonly tagType: BattlerTagType;
+  private readonly turnCount: number;
 
   constructor(tagType: BattlerTagType, turnCount: number, showAbility?: boolean) {
     super(showAbility);

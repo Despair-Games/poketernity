@@ -5,7 +5,7 @@ import type { WeatherType } from "#enums/weather-type";
 import { PostBiomeChangeAbAttr } from "./post-biome-change-ab-attr";
 
 export class PostBiomeChangeWeatherChangeAbAttr extends PostBiomeChangeAbAttr {
-  private weatherType: WeatherType;
+  private readonly weatherType: WeatherType;
 
   constructor(weatherType: WeatherType) {
     super();

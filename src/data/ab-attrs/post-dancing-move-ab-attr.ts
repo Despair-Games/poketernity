@@ -18,7 +18,7 @@ export class PostDancingMoveAbAttr extends PostMoveUsedAbAttr {
    * @param dancer {@linkcode Pokemon} with Dancer ability
    * @param move {@linkcode PokemonMove} Dancing move used by the source
    * @param source {@linkcode Pokemon} that used the dancing move
-   * @param targets {@linkcode BattlerIndex}Targets of the dancing move
+   * @param targets {@linkcode BattlerIndex} Targets of the dancing move
    * @param _args N/A
    *
    * @return true if the Dancer ability was resolved

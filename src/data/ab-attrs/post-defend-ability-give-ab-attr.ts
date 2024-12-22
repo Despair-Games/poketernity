@@ -9,7 +9,7 @@ import { PostDefendAbAttr } from "./post-defend-ab-attr";
 import { UnsuppressableAbilityAbAttr } from "./unsuppressable-ability-ab-attr";
 
 export class PostDefendAbilityGiveAbAttr extends PostDefendAbAttr {
-  private ability: Abilities;
+  private readonly ability: Abilities;
 
   constructor(ability: Abilities) {
     super();

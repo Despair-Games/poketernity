@@ -10,7 +10,8 @@ export class RunSuccessAbAttr extends AbAttr {
     _cancelled: BooleanHolder,
     args: any[],
   ): boolean {
-    (args[0] as NumberHolder).value = 256;
+    const escapeChance: NumberHolder = args[0];
+    escapeChance.value = 256;
 
     return true;
   }

@@ -14,17 +14,15 @@ import { CheckTrappedAbAttr } from "./check-trapped-ab-attr";
  */
 export class ArenaTrapAbAttr extends CheckTrappedAbAttr {
   /**
-   * Checks if enemy Pokemon is trapped by an Arena Trap-esque ability
-   * If the enemy is a Ghost type, it is not trapped
-   * If the enemy has the ability Run Away, it is not trapped.
-   * If the user has Magnet Pull and the enemy is not a Steel type, it is not trapped.
-   * If the user has Arena Trap and the enemy is not grounded, it is not trapped.
+   * Checks if enemy Pokemon is trapped by an Arena Trap-esque ability:
+   * - If the enemy is a Ghost type, it is not trapped
+   * - If the enemy has the ability Run Away, it is not trapped.
+   * - If the user has Magnet Pull and the enemy is not a Steel type, it is not trapped.
+   * - If the user has Arena Trap and the enemy is not grounded, it is not trapped.
    * @param pokemon The {@link Pokemon} with this {@link AbAttr}
-   * @param _passive N/A
    * @param trapped {@link BooleanHolder} indicating whether the other Pokemon is trapped or not
    * @param otherPokemon The {@link Pokemon} that is affected by an Arena Trap ability
-   * @param _args N/A
-   * @returns if enemy Pokemon is trapped or not
+   * @returns `true` if enemy Pokemon is trapped
    */
   override applyCheckTrapped(
     pokemon: Pokemon,

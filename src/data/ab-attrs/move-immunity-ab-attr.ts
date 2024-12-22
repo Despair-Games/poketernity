@@ -7,7 +7,7 @@ import i18next from "i18next";
 import { PreDefendAbAttr } from "./pre-defend-ab-attr";
 
 export class MoveImmunityAbAttr extends PreDefendAbAttr {
-  private immuneCondition: PreDefendAbAttrCondition;
+  private readonly immuneCondition: PreDefendAbAttrCondition;
 
   constructor(immuneCondition: PreDefendAbAttrCondition) {
     super(true);
