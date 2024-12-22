@@ -6,7 +6,7 @@ import type { TerrainType } from "#enums/terrain-type";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 
 export class PostDefendTerrainChangeAbAttr extends PostDefendAbAttr {
-  private terrainType: TerrainType;
+  private readonly terrainType: TerrainType;
 
   constructor(terrainType: TerrainType) {
     super();

@@ -4,7 +4,7 @@ import type { Type } from "#enums/type";
 import { RedirectMoveAbAttr } from "./redirect-move-ab-attr";
 
 export class RedirectTypeMoveAbAttr extends RedirectMoveAbAttr {
-  public type: Type;
+  public readonly type: Type;
 
   constructor(type: Type) {
     super();

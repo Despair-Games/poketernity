@@ -14,7 +14,7 @@ import { AbAttr } from "./ab-attr";
  * @extends AbAttr
  */
 export class BypassSpeedChanceAbAttr extends AbAttr {
-  public chance: number;
+  public readonly chance: number;
 
   /**
    * @param chance probability of ability being active.

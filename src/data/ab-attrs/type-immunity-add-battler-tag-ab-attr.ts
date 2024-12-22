@@ -7,8 +7,8 @@ import type { Type } from "#enums/type";
 import { TypeImmunityAbAttr } from "./type-immunity-ab-attr";
 
 export class TypeImmunityAddBattlerTagAbAttr extends TypeImmunityAbAttr {
-  private tagType: BattlerTagType;
-  private turnCount: number;
+  private readonly tagType: BattlerTagType;
+  private readonly turnCount: number;
 
   constructor(immuneType: Type, tagType: BattlerTagType, turnCount: number, condition?: AbAttrCondition) {
     super(immuneType, condition);

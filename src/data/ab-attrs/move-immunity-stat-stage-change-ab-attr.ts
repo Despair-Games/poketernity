@@ -8,8 +8,8 @@ import type { BattleStat } from "#enums/stat";
 import { MoveImmunityAbAttr } from "./move-immunity-ab-attr";
 
 export class MoveImmunityStatStageChangeAbAttr extends MoveImmunityAbAttr {
-  private stat: BattleStat;
-  private stages: number;
+  private readonly stat: BattleStat;
+  private readonly stages: number;
 
   constructor(immuneCondition: PreDefendAbAttrCondition, stat: BattleStat, stages: number) {
     super(immuneCondition);

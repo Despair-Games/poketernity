@@ -11,8 +11,8 @@ import { PostWeatherChangeAbAttr } from "./post-weather-change-ab-attr";
  * @extends PostWeatherChangeAbAttr
  */
 export class PostWeatherChangeFormChangeAbAttr extends PostWeatherChangeAbAttr {
-  private ability: Abilities;
-  private formRevertingWeathers: WeatherType[];
+  private readonly ability: Abilities;
+  private readonly formRevertingWeathers: WeatherType[];
 
   constructor(ability: Abilities, formRevertingWeathers: WeatherType[]) {
     super(false);

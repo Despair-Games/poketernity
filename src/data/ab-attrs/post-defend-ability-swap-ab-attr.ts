@@ -8,10 +8,6 @@ import { PostDefendAbAttr } from "./post-defend-ab-attr";
 import { UnswappableAbilityAbAttr } from "./unswappable-ability-ab-attr";
 
 export class PostDefendAbilitySwapAbAttr extends PostDefendAbAttr {
-  constructor() {
-    super();
-  }
-
   override applyPostDefend(
     pokemon: Pokemon,
     _passive: boolean,

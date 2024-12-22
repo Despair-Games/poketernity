@@ -10,13 +10,12 @@ import { Type } from "#enums/type";
 import i18next from "i18next";
 import { PreAttackAbAttr } from "./pre-attack-ab-attr";
 
-/** Ability attribute for changing a pokemon's type before using a move */
+/**
+ * Ability attribute for changing a pokemon's type before using a move
+ * @extends PreAttackAbAttr
+ */
 export class PokemonTypeChangeAbAttr extends PreAttackAbAttr {
   private moveType: Type;
-
-  constructor() {
-    super(true);
-  }
 
   override applyPreAttack(
     pokemon: Pokemon,

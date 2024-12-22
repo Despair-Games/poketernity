@@ -9,7 +9,7 @@ import { BlockNonDirectDamageAbAttr } from "./block-non-direct-damage-ab-attr";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 
 export class PostDefendContactDamageAbAttr extends PostDefendAbAttr {
-  private damageRatio: number;
+  private readonly damageRatio: number;
 
   constructor(damageRatio: number) {
     super();
@@ -32,6 +32,7 @@ export class PostDefendContactDamageAbAttr extends PostDefendAbAttr {
       && !attacker.hasAbilityWithAttr(BlockNonDirectDamageAbAttr)
     ) {
       attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio)), HitResult.OTHER);
+      // TODO: This should be handled by `damage()`
       attacker.turnData.damageTaken += toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio));
       return true;
     }

@@ -6,7 +6,7 @@ import type { HitResult } from "#app/field/pokemon";
 import { AbAttr } from "./ab-attr";
 
 export class PostAttackAbAttr extends AbAttr {
-  private attackCondition: PokemonAttackCondition;
+  private readonly attackCondition: PokemonAttackCondition;
 
   /** The default attackCondition requires that the selected move is a damaging move */
   constructor(

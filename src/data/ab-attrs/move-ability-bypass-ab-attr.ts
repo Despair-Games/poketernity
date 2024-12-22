@@ -4,12 +4,12 @@ import type { BooleanHolder } from "#app/utils";
 import { AbAttr } from "./ab-attr";
 
 export class MoveAbilityBypassAbAttr extends AbAttr {
-  private moveIgnoreFunc: (pokemon: Pokemon, move: Move) => boolean;
+  private readonly moveIgnoreFunc: (pokemon: Pokemon, move: Move) => boolean;
 
   constructor(moveIgnoreFunc?: (pokemon: Pokemon, move: Move) => boolean) {
     super(false);
 
-    this.moveIgnoreFunc = moveIgnoreFunc || ((_pokemon, _move) => true);
+    this.moveIgnoreFunc = moveIgnoreFunc ?? ((_pokemon, _move) => true);
   }
 
   override apply(
@@ -19,7 +19,8 @@ export class MoveAbilityBypassAbAttr extends AbAttr {
     cancelled: BooleanHolder,
     args: any[],
   ): boolean {
-    if (this.moveIgnoreFunc(pokemon, args[0] as Move)) {
+    const move: Move = args[0];
+    if (this.moveIgnoreFunc(pokemon, move)) {
       cancelled.value = true;
       return true;
     }

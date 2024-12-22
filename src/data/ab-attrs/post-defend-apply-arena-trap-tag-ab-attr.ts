@@ -8,8 +8,8 @@ import type { ArenaTagType } from "#enums/arena-tag-type";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 
 export class PostDefendApplyArenaTrapTagAbAttr extends PostDefendAbAttr {
-  private condition: PokemonDefendCondition;
-  private tagType: ArenaTagType;
+  private readonly condition: PokemonDefendCondition;
+  private readonly tagType: ArenaTagType;
 
   constructor(condition: PokemonDefendCondition, tagType: ArenaTagType) {
     super(true);

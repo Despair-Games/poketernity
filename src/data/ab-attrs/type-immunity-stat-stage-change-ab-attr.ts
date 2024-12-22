@@ -9,8 +9,8 @@ import type { Type } from "#enums/type";
 import { TypeImmunityAbAttr } from "./type-immunity-ab-attr";
 
 export class TypeImmunityStatStageChangeAbAttr extends TypeImmunityAbAttr {
-  private stat: BattleStat;
-  private stages: number;
+  private readonly stat: BattleStat;
+  private readonly stages: number;
 
   constructor(immuneType: Type, stat: BattleStat, stages: number, condition?: AbAttrCondition) {
     super(immuneType, condition);

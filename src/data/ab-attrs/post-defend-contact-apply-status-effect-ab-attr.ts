@@ -6,8 +6,8 @@ import type { StatusEffect } from "#enums/status-effect";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 
 export class PostDefendContactApplyStatusEffectAbAttr extends PostDefendAbAttr {
-  public chance: number;
-  private effects: StatusEffect[];
+  public readonly chance: number;
+  private readonly effects: StatusEffect[];
 
   constructor(chance: number, ...effects: StatusEffect[]) {
     super();
