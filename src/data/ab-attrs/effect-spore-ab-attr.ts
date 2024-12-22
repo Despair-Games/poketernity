@@ -15,9 +15,6 @@ import { randSeedInt } from "#app/utils";
  */
 export class EffectSporeAbAttr extends PostDefendAbAttr {
   public readonly chance = 30;
-  private SLEEP_THRESHOLD = 11;
-  private PARA_THRESHOLD = 10 + this.SLEEP_THRESHOLD;
-  private PSN_THRESHOLD = 9 + this.PARA_THRESHOLD;
 
   /**
    * Identical code to PostDefendContactApplyStatusEffectAbAttr's applyPostDefend() but it contains two conditional checks.
@@ -53,11 +50,14 @@ export class EffectSporeAbAttr extends PostDefendAbAttr {
    * @returns a status effect that is either sleep, paralysis, or poison
    */
   private getStatus(roll: number): StatusEffect {
-    if (roll < this.SLEEP_THRESHOLD) {
+    const SLEEP_THRESHOLD = 11;
+    const PARA_THRESHOLD = 10 + SLEEP_THRESHOLD;
+    const PSN_THRESHOLD = 9 + PARA_THRESHOLD;
+    if (roll < SLEEP_THRESHOLD) {
       return StatusEffect.SLEEP;
-    } else if (roll < this.PARA_THRESHOLD) {
+    } else if (roll < PARA_THRESHOLD) {
       return StatusEffect.PARALYSIS;
-    } else if (roll < this.PSN_THRESHOLD) {
+    } else if (roll < PSN_THRESHOLD) {
       return StatusEffect.POISON;
     }
     return StatusEffect.NONE;
