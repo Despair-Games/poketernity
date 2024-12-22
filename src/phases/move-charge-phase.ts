@@ -32,16 +32,11 @@ export class MoveChargePhase extends HitCheckPhase {
 
     const targetHitCheck = move.hitCheckOnCharge ? this.hitCheck(target)[0] : HitCheckResult.HIT;
 
-    if (targetHitCheck !== HitCheckResult.HIT) {
+    if ([HitCheckResult.HIT, HitCheckResult.MISS].includes(targetHitCheck)) {
       switch (targetHitCheck) {
         case HitCheckResult.NO_EFFECT:
           globalScene.queueMessage(
             i18next.t("battle:hitResultNoEffect", { pokemonName: getPokemonNameWithAffix(target) }),
-          );
-          break;
-        case HitCheckResult.MISS:
-          globalScene.queueMessage(
-            i18next.t("battle:attackMissed", { pokemonNameWithAffix: getPokemonNameWithAffix(target) }),
           );
           break;
         case HitCheckResult.PENDING:
