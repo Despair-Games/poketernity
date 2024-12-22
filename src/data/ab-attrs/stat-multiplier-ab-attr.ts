@@ -8,6 +8,7 @@ import { AbAttr } from "./ab-attr";
 /**
  * Ability attribute that multiplies a Pokemon's stat by a factor
  * Abilities with this attribute:
+ ```
 +-----------------------+-------+--------+----------------------------------+
 |        Ability        | Stat  | Factor |              Notes               |
 +-----------------------+-------+--------+----------------------------------+
@@ -37,6 +38,7 @@ import { AbAttr } from "./ab-attr";
 | Orichalum Pulse       | ATK   |   1.33 | In sun only                      |
 | Hadron Engine         | SPATK |   1.33 | In electric terrain only         |
 +-----------------------+-------+--------+----------------------------------+
+```
  */
 export class StatMultiplierAbAttr extends AbAttr {
   private readonly stat: BattleStat;
