@@ -26,8 +26,8 @@ export class FieldPreventExplosionLikeAbAttr extends AbAttr {
     cancelled: BooleanHolder,
     args: any[],
   ): boolean {
-    this.moveUser = args[0] ?? null;
-    this.moveName = args[1] ?? null;
+    this.moveUser = args[0];
+    this.moveName = args[1];
     cancelled.value = true;
     return true;
   }

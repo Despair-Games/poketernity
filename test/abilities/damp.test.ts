@@ -34,7 +34,7 @@ describe("Abilities - Damp", () => {
     { moveName: "Self-Destruct", move: Moves.SELF_DESTRUCT },
     { moveName: "Misty Explosion", move: Moves.MISTY_EXPLOSION },
     { moveName: "Mind Blown", move: Moves.MIND_BLOWN },
-  ])("Damp should prevent the move $moveName", async ({ move }) => {
+  ])("should prevent the move $moveName from being used", async ({ move }) => {
     game.override.moveset([Moves.SPLASH, move]).battleType("double").enemyMoveset(move);
     await game.classicMode.startBattle([Species.FEEBAS, Species.ABRA]);
     const playerPokemon2 = game.scene.getPlayerField()[1];
@@ -50,7 +50,7 @@ describe("Abilities - Damp", () => {
     expect(enemy1MoveResult.result).toBe(MoveResult.FAIL);
   });
 
-  it("Damp should prevent damage from the ability Aftermath", async () => {
+  it("should prevent damage from the ability Aftermath", async () => {
     game.override
       .startingLevel(100)
       .moveset(Moves.TACKLE)
