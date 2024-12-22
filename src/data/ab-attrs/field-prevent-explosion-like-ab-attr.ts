@@ -11,8 +11,8 @@ import i18next from "i18next";
  * - Damp
  */
 export class FieldPreventExplosionLikeAbAttr extends AbAttr {
-  private moveUser: string | null;
-  private moveName: string | null;
+  private moveUser: string;
+  private moveName: string;
   /**
    * Applies the effects of the AbAttr when it is called in {@linkcode failIfDampCondition}
    * @param cancelled a {@linkcode BooleanHolder} that determines if the move should fail
@@ -40,8 +40,6 @@ export class FieldPreventExplosionLikeAbAttr extends AbAttr {
   _getTriggerMessage(_pokemon: Pokemon, _abilityName: string, ..._args: any[]): string | null {
     if (this.moveUser && this.moveName) {
       const message = i18next.t("moveTriggers:cannotUseMove", { pokemonName: this.moveUser, moveName: this.moveName });
-      this.moveUser = null;
-      this.moveName = null;
       return message;
     }
     return null;
