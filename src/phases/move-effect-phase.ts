@@ -541,8 +541,8 @@ export class MoveEffectPhase extends PokemonPhase {
      * and the original target fainted due to the first hit,
      * redirect the next strike to the original target's ally.
      */
-    if (this.canApplySmartTargeting()) {
-      const ogTarget = globalScene.getField().find((p) => p.getBattlerIndex() === this.targets[0]);
+    if (this.move.getMove().moveTarget === MoveTarget.DRAGON_DARTS) {
+      const ogTarget = globalScene.getFieldPokemonByBattlerIndex(this.targets[0]);
       if (ogTarget && ogTarget.isFainted() && ogTarget.getAlly()?.isActive(true)) {
         this.targets = [ogTarget.getAlly().getBattlerIndex()];
       }
@@ -613,11 +613,13 @@ export class MoveEffectPhase extends PokemonPhase {
   /** Determines if this phase's move can be redirected by smart targeting */
   public canApplySmartTargeting(): boolean {
     const target = this.getFirstTarget();
+    const targetAlly = target?.getAlly();
 
     return (
       this.move.getMove().moveTarget === MoveTarget.DRAGON_DARTS
-      && globalScene.currentBattle.double
-      && target !== this.getUserPokemon()?.getAlly()
+      && !isNullOrUndefined(targetAlly)
+      && targetAlly.isActive(true)
+      && targetAlly !== this.getUserPokemon()
       && !target?.getTag(BattlerTagType.CENTER_OF_ATTENTION)
     );
   }

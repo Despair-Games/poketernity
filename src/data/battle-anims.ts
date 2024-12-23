@@ -1431,7 +1431,7 @@ export class MoveAnim extends BattleAnim {
   public move: Moves;
 
   constructor(move: Moves, user: Pokemon, target: BattlerIndex, playOnEmptyField: boolean = false) {
-    super(user, globalScene.getField()[target], playOnEmptyField);
+    super(user, globalScene.getFieldPokemonByBattlerIndex(target), playOnEmptyField);
 
     this.move = move;
   }

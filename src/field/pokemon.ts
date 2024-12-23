@@ -5613,10 +5613,9 @@ export class EnemyPokemon extends Pokemon {
               return false;
             }
 
-            const fieldPokemon = globalScene.getField();
             const moveTargets = getMoveTargets(this, move.id)
-              .targets.map((ind) => fieldPokemon[ind])
-              .filter((p) => this.isPlayer() !== p.isPlayer());
+              .targets.map((ind) => globalScene.getFieldPokemonByBattlerIndex(ind))
+              .filter((p) => !isNullOrUndefined(p) && this.isPlayer() !== p.isPlayer()) as Pokemon[];
             // Only considers critical hits for crit-only moves or when this Pokemon is under the effect of Laser Focus
             const isCritical = move.hasAttr(CritOnlyAttr) || !!this.getTag(BattlerTagType.ALWAYS_CRIT);
 
@@ -5658,7 +5657,7 @@ export class EnemyPokemon extends Pokemon {
                 break;
               }
 
-              const target = globalScene.getField()[mt];
+              const target = globalScene.getFieldPokemonByBattlerIndex(mt)!;
               /**
                * The "target score" of a move is given by the move's user benefit score + the move's target benefit score.
                * If the target is an ally, the target benefit score is multiplied by -1.

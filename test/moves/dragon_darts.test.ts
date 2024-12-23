@@ -300,6 +300,19 @@ describe("Moves - Dragon Darts", () => {
     expect(player.turnData.hitCount).toBe(2);
   });
 
+  it("should not crash when used in a 1v2 battle", async () => {
+    game.override.enemyMoveset(Moves.DRAGON_DARTS);
+    await game.classicMode.startBattle([Species.SHUCKLE]);
+
+    game.move.select(Moves.DRAGON_DARTS);
+
+    await game.toNextTurn();
+
+    for (const pokemon of game.scene.getField()) {
+      expect(pokemon.isFullHp()).toBe(false);
+    }
+  });
+
   // TODO: rework Pressure and implement this interaction
   it.todo("should deduct 1 extra PP for each targeted enemy with Pressure");
 
