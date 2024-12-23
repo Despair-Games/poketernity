@@ -540,10 +540,17 @@ export class MoveEffectPhase extends PokemonPhase {
      * If the move has smart targeting (e.g. Dragon Darts),
      * and the original target fainted due to the first hit,
      * redirect the next strike to the original target's ally.
+     * Note: We do NOT use `canApplySmartTargeting()` here,
+     * due to a quirk where `getFirstTarget()` returns `undefined` if the target is fainted.
      */
     if (this.move.getMove().moveTarget === MoveTarget.DRAGON_DARTS) {
       const ogTarget = globalScene.getFieldPokemonByBattlerIndex(this.targets[0]);
-      if (ogTarget && ogTarget.isFainted() && ogTarget.getAlly()?.isActive(true)) {
+      if (
+        ogTarget
+        && ogTarget.isFainted()
+        && ogTarget.getAlly()?.isActive(true)
+        && ogTarget.getAlly().id !== this.getUserPokemon()?.id
+      ) {
         this.targets = [ogTarget.getAlly().getBattlerIndex()];
       }
     }
