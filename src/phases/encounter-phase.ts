@@ -24,7 +24,7 @@ import {
 } from "#app/modifier/modifier";
 import { ModifierPoolType, regenerateModifierPoolThresholds } from "#app/modifier/modifier-type";
 import Overrides from "#app/overrides";
-import { BattlePhase } from "#app/phases/battle-phase";
+import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { CheckSwitchPhase } from "#app/phases/check-switch-phase";
 import { GameOverPhase } from "#app/phases/game-over-phase";
 import { PostSummonPhase } from "#app/phases/post-summon-phase";

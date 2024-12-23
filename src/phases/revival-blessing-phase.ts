@@ -1,6 +1,6 @@
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { BattlePhase } from "#app/phases/battle-phase";
+import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
 import PartyUiHandler, { PartyUiMode } from "#app/ui/party-ui-handler";
@@ -12,6 +12,7 @@ import i18next from "i18next";
 /**
  * Sets the Party UI and handles the effect of Revival Blessing
  * when used by one of the player's Pokemon.
+ *
  * @extends BattlePhase
  */
 export class RevivalBlessingPhase extends BattlePhase {

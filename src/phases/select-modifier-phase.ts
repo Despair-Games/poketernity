@@ -30,7 +30,7 @@ import PartyUiHandler, { PartyOption, PartyUiMode } from "#app/ui/party-ui-handl
 import { Mode } from "#app/ui/ui";
 import { isNullOrUndefined, NumberHolder } from "#app/utils";
 import i18next from "i18next";
-import { BattlePhase } from "./battle-phase";
+import { BattlePhase } from "./abstract-battle-phase";
 
 export class SelectModifierPhase extends BattlePhase {
   private readonly rerollCount: number;

@@ -8,7 +8,7 @@ import { randSeedItem } from "#app/utils";
 import { Biome } from "#enums/biome";
 import { TrainerType } from "#enums/trainer-type";
 import i18next from "i18next";
-import { BattlePhase } from "./battle-phase";
+import { BattlePhase } from "./abstract-battle-phase";
 import { ModifierRewardPhase } from "./modifier-reward-phase";
 import { MoneyRewardPhase } from "./money-reward-phase";
 

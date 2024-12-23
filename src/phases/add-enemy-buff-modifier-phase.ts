@@ -8,7 +8,10 @@ import {
 } from "#app/modifier/modifier-type";
 import { Phase } from "#app/phase";
 
-/** Adds buff tokens to enemy pokemon in endless mode based on the current wave. */
+/**
+ * Adds buff tokens to enemy pokemon in endless mode based on the current wave.
+ * @extends Phase
+ */
 export class AddEnemyBuffModifierPhase extends Phase {
   public override start(): void {
     super.start();

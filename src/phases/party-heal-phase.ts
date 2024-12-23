@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { BattlePhase } from "./battle-phase";
+import { BattlePhase } from "./abstract-battle-phase";
 
 /**
  * Fully heals the player's party, usually occurs after every 10th wave

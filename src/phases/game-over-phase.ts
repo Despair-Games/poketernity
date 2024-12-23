@@ -9,7 +9,7 @@ import { trainerConfigs } from "#app/data/trainer-config";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { modifierTypes } from "#app/modifier/modifier-type";
-import { BattlePhase } from "#app/phases/battle-phase";
+import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { CheckSwitchPhase } from "#app/phases/check-switch-phase";
 import { EncounterPhase } from "#app/phases/encounter-phase";
 import { EndCardPhase } from "#app/phases/end-card-phase";

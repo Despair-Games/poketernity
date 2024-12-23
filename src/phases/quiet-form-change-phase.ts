@@ -5,7 +5,7 @@ import { EnemyPokemon, type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { BattlePhase } from "./battle-phase";
+import { BattlePhase } from "./abstract-battle-phase";
 import { MovePhase } from "./move-phase";
 import { PokemonHealPhase } from "./pokemon-heal-phase";
 

@@ -3,6 +3,7 @@ import { Phase } from "#app/phase";
 
 /**
  * Plays the given {@linkcode MoveAnim} sequentially.
+ * @extends Phase
  */
 export class MoveAnimPhase<Anim extends MoveAnim> extends Phase {
   constructor(

@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { BattlePhase } from "./battle-phase";
+import { BattlePhase } from "./abstract-battle-phase";
 
 /**
  * Triggers a new battle

@@ -24,7 +24,10 @@ import { type PokeballType } from "#enums/pokeball";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
 
-/** Handles catching a pokemon after the player throws a ball */
+/**
+ * Handles catching a pokemon after the player throws a ball
+ * @extends PokemonPhase
+ */
 export class AttemptCapturePhase extends PokemonPhase {
   private readonly pokeballType: PokeballType;
   private pokeball: Phaser.GameObjects.Sprite;

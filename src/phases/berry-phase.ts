@@ -11,7 +11,10 @@ import { FieldPhase } from "#app/phases/abstract-field-phase";
 import { BooleanHolder } from "#app/utils";
 import i18next from "i18next";
 
-/** The phase after attacks where the pokemon eat berries */
+/**
+ * The phase after attacks where the pokemon eat berries
+ * @extends FieldPhase
+ */
 export class BerryPhase extends FieldPhase {
   public override start(): void {
     super.start();

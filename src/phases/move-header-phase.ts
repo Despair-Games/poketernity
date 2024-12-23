@@ -1,6 +1,6 @@
 import { applyMoveAttrs, MoveHeaderAttr } from "#app/data/move";
 import { type Pokemon, type PokemonMove } from "#app/field/pokemon";
-import { BattlePhase } from "./battle-phase";
+import { BattlePhase } from "./abstract-battle-phase";
 
 /**
  * Applies {@linkcode MoveHeaderAttr}s

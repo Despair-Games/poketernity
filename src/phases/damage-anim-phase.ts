@@ -3,7 +3,10 @@ import { type DamageResult, HitResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 
-/** Displays damage numbers and plays move hit SFX during battle */
+/**
+ * Displays damage numbers and plays move hit SFX during battle
+ * @extends PokemonPhase
+ */
 export class DamageAnimPhase extends PokemonPhase {
   private amount: number;
   private readonly damageResult: DamageResult;

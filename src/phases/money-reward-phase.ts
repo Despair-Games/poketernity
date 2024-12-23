@@ -3,7 +3,7 @@ import { MoneyMultiplierModifier } from "#app/modifier/modifier";
 import { NumberHolder } from "#app/utils";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import i18next from "i18next";
-import { BattlePhase } from "./battle-phase";
+import { BattlePhase } from "./abstract-battle-phase";
 
 /**
  * Grants the player money at the end of a wave

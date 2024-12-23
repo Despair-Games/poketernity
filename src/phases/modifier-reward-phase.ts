@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import type { ModifierType, ModifierTypeFunc } from "#app/modifier/modifier-type";
 import { getModifierType } from "#app/modifier/modifier-type";
 import i18next from "i18next";
-import { BattlePhase } from "./battle-phase";
+import { BattlePhase } from "./abstract-battle-phase";
 
 export class ModifierRewardPhase extends BattlePhase {
   protected readonly modifierType: ModifierType;

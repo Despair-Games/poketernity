@@ -5,7 +5,7 @@ import type { OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler"
 import { Mode } from "#app/ui/ui";
 import { randSeedInt } from "#app/utils";
 import { Biome } from "#enums/biome";
-import { BattlePhase } from "./battle-phase";
+import { BattlePhase } from "./abstract-battle-phase";
 import { PartyHealPhase } from "./party-heal-phase";
 import { SwitchBiomePhase } from "./switch-biome-phase";
 

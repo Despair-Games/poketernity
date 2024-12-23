@@ -10,7 +10,10 @@ import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
 
-/** Handles the player attempting to run away from a wild battle */
+/**
+ * Handles the player attempting to run away from a wild battle
+ * @extends PokemonPhase
+ */
 export class AttemptRunPhase extends PokemonPhase {
   /** For testing purposes: this is to force the pokemon to fail to escape */
   public forceFailEscape = false; // TODO: replace with a new override

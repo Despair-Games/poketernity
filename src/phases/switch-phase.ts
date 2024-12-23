@@ -2,13 +2,15 @@ import { globalScene } from "#app/global-scene";
 import PartyUiHandler, { PartyOption, PartyUiMode } from "#app/ui/party-ui-handler";
 import { Mode } from "#app/ui/ui";
 import { SwitchType } from "#enums/switch-type";
-import { BattlePhase } from "./battle-phase";
+import { BattlePhase } from "./abstract-battle-phase";
 import { PostSummonPhase } from "./post-summon-phase";
 import { SwitchSummonPhase } from "./switch-summon-phase";
 
 /**
  * Opens the party selector UI and transitions into a {@linkcode SwitchSummonPhase}
  * for the player (if a switch would be valid for the current battle state).
+ *
+ * @extends BattlePhase
  */
 export class SwitchPhase extends BattlePhase {
   protected readonly fieldIndex: number;

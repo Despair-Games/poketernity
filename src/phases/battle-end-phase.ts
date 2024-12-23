@@ -2,10 +2,13 @@ import { PostBattleAbAttr } from "#app/data/ab-attrs/post-battle-ab-attr";
 import { applyPostBattleAbAttrs } from "#app/data/ability";
 import { globalScene } from "#app/global-scene";
 import { LapsingPersistentModifier, LapsingPokemonHeldItemModifier } from "#app/modifier/modifier";
-import { BattlePhase } from "#app/phases/battle-phase";
+import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { GameOverPhase } from "#app/phases/game-over-phase";
 
-/** Handles the effects that need to trigger after a battle ends (game stats updates, reducing item turn count, etc) */
+/**
+ * Handles the effects that need to trigger after a battle ends (game stats updates, reducing item turn count, etc)
+ * @extends BattlePhase
+ */
 export class BattleEndPhase extends BattlePhase {
   /** If true, will increment battles won */
   public readonly isVictory: boolean;

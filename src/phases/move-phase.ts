@@ -29,7 +29,7 @@ import { MoveResult, type Pokemon, type PokemonMove } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import Overrides from "#app/overrides";
-import { BattlePhase } from "#app/phases/battle-phase";
+import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { MoveChargePhase } from "#app/phases/move-charge-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
@@ -59,6 +59,7 @@ import i18next from "i18next";
  *
  * If the move is successful then a {@linkcode MoveEffectPhase} is queued.
  * Regardless of success, a {@linkcode MoveEndPhase} is queued.
+ *
  * @extends BattlePhase
  */
 export class MovePhase extends BattlePhase {

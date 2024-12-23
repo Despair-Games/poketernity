@@ -12,8 +12,10 @@ import { EggHatchPhase } from "./egg-hatch-phase";
 import { EggSummaryPhase } from "./egg-summary-phase";
 
 /**
- * Phase that handles updating eggs, and hatching any ready eggs
- * Also handles prompts for skipping animation, and calling the egg summary phase
+ * Phase that handles updating eggs, and hatching any ready eggs.
+ * Also handles prompts for skipping animation, and calling the egg summary phase.
+ *
+ * @extends Phase
  */
 export class EggLapsePhase extends Phase {
   private eggHatchData: EggHatchData[] = [];

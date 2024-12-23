@@ -6,7 +6,10 @@ import i18next from "i18next";
 import { LevelUpPhase } from "./level-up-phase";
 import { PlayerPartyMemberPokemonPhase } from "./abstract-player-party-member-pokemon-phase";
 
-/** Grants a player pokemon EXP and pushes a {@linkcode LevelUpPhase} if it leveled up */
+/**
+ * Grants a player pokemon EXP and pushes a {@linkcode LevelUpPhase} if it leveled up
+ * @extends PlayerPartyMemberPokemonPhase
+ */
 export class ExpPhase extends PlayerPartyMemberPokemonPhase {
   private readonly expValue: number;
 

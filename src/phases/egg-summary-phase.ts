@@ -4,9 +4,11 @@ import { Phase } from "#app/phase";
 import { Mode } from "#app/ui/ui";
 
 /**
- * Class that represents the egg summary phase
- * It does some of the function for updating egg data
- * Phase is handled mostly by the egg-hatch-scene-handler UI
+ * Class that represents the egg summary phase.
+ * It does some of the function for updating egg data.
+ * Phase is handled mostly by the egg-hatch-scene-handler UI.
+ *
+ * @extends Phase
  */
 export class EggSummaryPhase extends Phase {
   private readonly eggHatchData: EggHatchData[];
