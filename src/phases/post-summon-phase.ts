@@ -7,7 +7,7 @@ import { MysteryEncounterPostSummonTag } from "#app/data/battler-tags";
 import { globalScene } from "#app/global-scene";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { StatusEffect } from "#enums/status-effect";
-import { PokemonPhase } from "./pokemon-phase";
+import { PokemonPhase } from "./abstract-pokemon-phase";
 
 export class PostSummonPhase extends PokemonPhase {
   constructor(battlerIndex: BattlerIndex) {

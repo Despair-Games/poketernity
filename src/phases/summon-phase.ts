@@ -10,7 +10,7 @@ import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { PlayerGender } from "#enums/player-gender";
 import i18next from "i18next";
 import { GameOverPhase } from "./game-over-phase";
-import { PartyMemberPokemonPhase } from "./party-member-pokemon-phase";
+import { PartyMemberPokemonPhase } from "./abstract-party-member-pokemon-phase";
 import { PostSummonPhase } from "./post-summon-phase";
 import { ShinySparklePhase } from "./shiny-sparkle-phase";
 
@@ -37,7 +37,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
 
     const partyMember = this.getPokemon();
     // If the Pokemon about to be sent out is fainted, illegal under a challenge, or no longer in the party for some reason, switch to the first non-fainted legal Pokemon
-    if (!partyMember.isAllowedInBattle() || (this.player && !this.getParty().some((p) => p.id === partyMember.id))) {
+    if (!partyMember.isAllowedInBattle() || (this.isPlayer && !this.getParty().some((p) => p.id === partyMember.id))) {
       console.warn(
         "The Pokemon about to be sent out is fainted or illegal under a challenge. Attempting to resolve...",
       );
@@ -70,7 +70,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
       );
     }
 
-    if (this.player) {
+    if (this.isPlayer) {
       ui.showText(i18next.t("battle:playerGo", { pokemonName: getPokemonNameWithAffix(this.getPokemon()) }));
       pbTray.hide();
       trainer.setTexture(`trainer_${gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`);
@@ -114,8 +114,8 @@ export class SummonPhase extends PartyMemberPokemonPhase {
     const pokemon = this.getPokemon();
 
     const pokeball = globalScene.addFieldSprite(
-      this.player ? 36 : 248,
-      this.player ? 80 : 44,
+      this.isPlayer ? 36 : 248,
+      this.isPlayer ? 80 : 44,
       "pb",
       getPokeballAtlasKey(pokemon.pokeball),
     );
@@ -139,21 +139,21 @@ export class SummonPhase extends PartyMemberPokemonPhase {
     tweens.add({
       targets: pokeball,
       duration: 650,
-      x: (this.player ? 100 : 236) + fpOffset[0],
+      x: (this.isPlayer ? 100 : 236) + fpOffset[0],
     });
 
     tweens.add({
       targets: pokeball,
       duration: 150,
       ease: "Cubic.easeOut",
-      y: (this.player ? 70 : 34) + fpOffset[1],
+      y: (this.isPlayer ? 70 : 34) + fpOffset[1],
       onComplete: () => {
         tweens.add({
           targets: pokeball,
           duration: 500,
           ease: "Cubic.easeIn",
           angle: 1440,
-          y: (this.player ? 132 : 86) + fpOffset[1],
+          y: (this.isPlayer ? 132 : 86) + fpOffset[1],
           onComplete: () => {
             globalScene.playSound("se/pb_rel");
             pokeball.destroy();
@@ -161,7 +161,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
             add.existing(pokemon);
             field.add(pokemon);
 
-            if (!this.player) {
+            if (!this.isPlayer) {
               const playerPokemon = globalScene.getPlayerPokemon() as Pokemon;
               if (playerPokemon?.isOnField()) {
                 field.moveBelow(pokemon, playerPokemon);
@@ -171,7 +171,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
 
             addPokeballOpenParticles(pokemon.x, pokemon.y - 16, pokemon.pokeball);
 
-            globalScene.updateModifiers(this.player);
+            globalScene.updateModifiers(this.isPlayer);
             globalScene.updateFieldScale();
 
             pokemon.showInfo();
@@ -222,7 +222,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
     add.existing(pokemon);
     field.add(pokemon);
 
-    if (!this.player) {
+    if (!this.isPlayer) {
       const playerPokemon = globalScene.getPlayerPokemon() as Pokemon;
       if (playerPokemon?.isOnField()) {
         field.moveBelow(pokemon, playerPokemon);
@@ -230,7 +230,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
       currentBattle.seenEnemyPartyMemberIds.add(pokemon.id);
     }
 
-    globalScene.updateModifiers(this.player);
+    globalScene.updateModifiers(this.isPlayer);
     globalScene.updateFieldScale();
 
     pokemon.showInfo();

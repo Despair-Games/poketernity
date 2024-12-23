@@ -6,7 +6,7 @@ import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import Overrides from "#app/overrides";
-import { PlayerPartyMemberPokemonPhase } from "#app/phases/player-party-member-pokemon-phase";
+import { PlayerPartyMemberPokemonPhase } from "#app/phases/abstract-player-party-member-pokemon-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import FormChangeSceneHandler from "#app/ui/form-change-scene-handler";
 import { SummaryUiMode } from "#app/ui/summary-ui-handler";

@@ -1,6 +1,6 @@
 import type { BattlerIndex } from "#app/battle";
 import { globalScene } from "#app/global-scene";
-import { PokemonPhase } from "./pokemon-phase";
+import { PokemonPhase } from "./abstract-pokemon-phase";
 
 export class ShowAbilityPhase extends PokemonPhase {
   private readonly passive: boolean;

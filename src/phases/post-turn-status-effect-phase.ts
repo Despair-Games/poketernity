@@ -10,7 +10,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BooleanHolder, NumberHolder } from "#app/utils";
 import { StatusEffect } from "#enums/status-effect";
-import { PokemonPhase } from "./pokemon-phase";
+import { PokemonPhase } from "./abstract-pokemon-phase";
 
 export class PostTurnStatusEffectPhase extends PokemonPhase {
   constructor(battlerIndex: BattlerIndex) {

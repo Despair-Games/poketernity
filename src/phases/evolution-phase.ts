@@ -11,7 +11,8 @@ import { LearnMovePhase } from "#app/phases/learn-move-phase";
 import { Mode } from "#app/ui/ui";
 import i18next from "i18next";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
-import { FormChangeBasePhase } from "./form-change-base-phase";
+import { FormChangeBasePhase } from "./abstract-form-change-base-phase";
+// tsdoc imports
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { type FormChangePhase } from "#app/phases/form-change-phase";
 

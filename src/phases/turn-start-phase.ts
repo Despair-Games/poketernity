@@ -16,7 +16,7 @@ import { SwitchType } from "#enums/switch-type";
 import { AttemptCapturePhase } from "./attempt-capture-phase";
 import { AttemptRunPhase } from "./attempt-run-phase";
 import { BerryPhase } from "./berry-phase";
-import { FieldPhase } from "./field-phase";
+import { FieldPhase } from "./abstract-field-phase";
 import { MoveHeaderPhase } from "./move-header-phase";
 import { MovePhase } from "./move-phase";
 import { SwitchSummonPhase } from "./switch-summon-phase";

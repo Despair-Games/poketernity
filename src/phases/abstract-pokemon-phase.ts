@@ -1,7 +1,7 @@
 import { BattlerIndex } from "#app/battle";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { FieldPhase } from "./field-phase";
+import { FieldPhase } from "./abstract-field-phase";
 
 export abstract class PokemonPhase extends FieldPhase {
   protected battlerIndex: BattlerIndex | number;
@@ -31,5 +31,13 @@ export abstract class PokemonPhase extends FieldPhase {
       return globalScene.getPokemonById(this.battlerIndex)!; //TODO: is this bang correct?
     }
     return globalScene.getField()[this.battlerIndex];
+  }
+
+  public getParty(): Pokemon[] {
+    return this.isPlayer ? globalScene.getPlayerParty() : globalScene.getEnemyParty();
+  }
+
+  public getField(): Pokemon[] {
+    return this.isPlayer ? globalScene.getPlayerField() : globalScene.getEnemyField();
   }
 }

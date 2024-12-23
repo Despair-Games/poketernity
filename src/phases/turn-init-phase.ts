@@ -9,7 +9,7 @@ import { globalScene } from "#app/global-scene";
 import i18next from "i18next";
 import { CommandPhase } from "./command-phase";
 import { EnemyCommandPhase } from "./enemy-command-phase";
-import { FieldPhase } from "./field-phase";
+import { FieldPhase } from "./abstract-field-phase";
 import { GameOverPhase } from "./game-over-phase";
 import { ToggleDoublePositionPhase } from "./toggle-double-position-phase";
 import { TurnStartPhase } from "./turn-start-phase";

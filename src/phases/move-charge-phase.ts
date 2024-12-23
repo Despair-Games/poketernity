@@ -6,7 +6,7 @@ import { MoveResult, type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { MovePhase } from "#app/phases/move-phase";
-import { PokemonPhase } from "#app/phases/pokemon-phase";
+import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { BooleanHolder } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 

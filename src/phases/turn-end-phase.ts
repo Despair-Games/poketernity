@@ -15,7 +15,7 @@ import {
 import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
-import { FieldPhase } from "./field-phase";
+import { FieldPhase } from "./abstract-field-phase";
 import { PokemonHealPhase } from "./pokemon-heal-phase";
 
 export class TurnEndPhase extends FieldPhase {

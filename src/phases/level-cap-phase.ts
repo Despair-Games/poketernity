@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { Mode } from "#app/ui/ui";
 import i18next from "i18next";
-import { FieldPhase } from "./field-phase";
+import { FieldPhase } from "./abstract-field-phase";
 
 /**
  * Displays the message for when the player reaches the level cap with a pokemon

@@ -9,7 +9,7 @@ import { Mode } from "#app/ui/ui";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { EndEvolutionPhase } from "./end-evolution-phase";
-import { FormChangeBasePhase } from "./form-change-base-phase";
+import { FormChangeBasePhase } from "./abstract-form-change-base-phase";
 // tsdoc imports
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { type EvolutionPhase } from "#app/phases/evolution-phase";

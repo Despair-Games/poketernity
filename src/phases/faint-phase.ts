@@ -21,7 +21,7 @@ import { SwitchType } from "#enums/switch-type";
 import i18next from "i18next";
 import { DamageAnimPhase } from "./damage-anim-phase";
 import { GameOverPhase } from "./game-over-phase";
-import { PokemonPhase } from "./pokemon-phase";
+import { PokemonPhase } from "./abstract-pokemon-phase";
 import { SwitchPhase } from "./switch-phase";
 import { SwitchSummonPhase } from "./switch-summon-phase";
 import { ToggleDoublePositionPhase } from "./toggle-double-position-phase";

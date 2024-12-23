@@ -46,7 +46,7 @@ export class SwitchSummonPhase extends SummonPhase {
     const { currentBattle, pbTrayEnemy, time, tweens, ui } = globalScene;
     const { trainer } = currentBattle;
 
-    if (!this.player) {
+    if (!this.isPlayer) {
       if (this.slotIndex === -1 && trainer) {
         this.slotIndex = trainer.getNextSummonIndex(
           !this.fieldIndex ? TrainerSlot.TRAINER : TrainerSlot.TRAINER_PARTNER,
@@ -60,7 +60,7 @@ export class SwitchSummonPhase extends SummonPhase {
     }
 
     if (!this.doReturn || (this.slotIndex !== -1 && !this.getParty()[this.slotIndex])) {
-      if (this.player) {
+      if (this.isPlayer) {
         return this.switchAndSummon();
       } else {
         time.delayedCall(750, () => this.switchAndSummon());
@@ -85,7 +85,7 @@ export class SwitchSummonPhase extends SummonPhase {
     }
 
     ui.showText(
-      this.player
+      this.isPlayer
         ? i18next.t("battle:playerComeBack", { pokemonName: getPokemonNameWithAffix(pokemon) })
         : i18next.t("battle:trainerComeBack", {
             trainerName: trainer?.getName(this.getTrainerSlot()),
@@ -109,7 +109,7 @@ export class SwitchSummonPhase extends SummonPhase {
   }
 
   protected switchAndSummon(): void {
-    const party = this.player ? this.getParty() : globalScene.getEnemyParty();
+    const party = this.isPlayer ? this.getParty() : globalScene.getEnemyParty();
     const switchedInPokemon = party[this.slotIndex];
     this.lastPokemon = this.getPokemon();
     applyPreSwitchOutAbAttrs(PreSwitchOutAbAttr, this.lastPokemon);
@@ -147,7 +147,7 @@ export class SwitchSummonPhase extends SummonPhase {
 
       const showTextAndSummon = (): void => {
         globalScene.ui.showText(
-          this.player
+          this.isPlayer
             ? i18next.t("battle:playerGo", { pokemonName: getPokemonNameWithAffix(switchedInPokemon) })
             : i18next.t("battle:trainerGo", {
                 trainerName: globalScene.currentBattle.trainer?.getName(this.getTrainerSlot()),
@@ -170,7 +170,7 @@ export class SwitchSummonPhase extends SummonPhase {
         }
         this.summon();
       };
-      if (this.player) {
+      if (this.isPlayer) {
         showTextAndSummon();
       } else {
         globalScene.time.delayedCall(1500, () => {

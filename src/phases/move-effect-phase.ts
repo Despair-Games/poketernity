@@ -57,7 +57,7 @@ import {
   PokemonMultiHitModifier,
 } from "#app/modifier/modifier";
 import { FaintPhase } from "#app/phases/faint-phase";
-import { PokemonPhase } from "#app/phases/pokemon-phase";
+import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { DamageAchv } from "#app/system/achv";
 import { BooleanHolder, isNullOrUndefined, NumberHolder } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";

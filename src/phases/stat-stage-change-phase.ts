@@ -13,10 +13,10 @@ import { handleTutorial, Tutorial } from "#app/tutorial";
 import { BooleanHolder, NumberHolder } from "#app/utils";
 import { getStatKey, getStatStageChangeDescriptionKey, Stat, type BattleStat } from "#enums/stat";
 import i18next from "i18next";
-import { PokemonPhase } from "./pokemon-phase";
+import { PokemonPhase } from "./abstract-pokemon-phase";
 
 export type StatStageChangeCallback = (changed: BattleStat[], relativeChanges: number[], target?: Pokemon) => void;
-// TODO: merge old branch that modifies this
+
 export class StatStageChangePhase extends PokemonPhase {
   private readonly stats: BattleStat[];
   private readonly selfTarget: boolean;

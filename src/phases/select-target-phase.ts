@@ -6,7 +6,7 @@ import { Command } from "#app/ui/command-ui-handler";
 import { Mode } from "#app/ui/ui";
 import { Moves } from "#enums/moves";
 import { CommandPhase } from "./command-phase";
-import { PokemonPhase } from "./pokemon-phase";
+import { PokemonPhase } from "./abstract-pokemon-phase";
 
 export class SelectTargetPhase extends PokemonPhase {
   constructor(fieldIndex: number) {

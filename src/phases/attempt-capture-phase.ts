@@ -14,7 +14,7 @@ import { type EnemyPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { PokemonHeldItemModifier } from "#app/modifier/modifier";
-import { PokemonPhase } from "#app/phases/pokemon-phase";
+import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { VictoryPhase } from "#app/phases/victory-phase";
 import { achvs } from "#app/system/achv";
 import { type PartyOption, PartyUiMode } from "#app/ui/party-ui-handler";
