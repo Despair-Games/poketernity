@@ -179,8 +179,9 @@ import { FieldMultiplyStatAbAttr } from "#app/data/ab-attrs/field-multiply-stat-
 import type PokemonData from "#app/system/pokemon-data";
 import { BattlerIndex } from "#app/battle";
 import { Mode } from "#app/ui/ui";
-import type { PartyOption } from "#app/ui/party-ui-handler";
-import PartyUiHandler, { PartyUiMode } from "#app/ui/party-ui-handler";
+import PartyUiHandler from "#app/ui/party-ui-handler";
+import type { PartyOption } from "#app/ui/partyUtils/definitions";
+import { PartyUiMode } from "#app/ui/partyUtils/definitions";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 import type { LevelMoves } from "#app/data/balance/pokemon-level-moves";
 import { EVOLVE_MOVE, RELEARN_MOVE } from "#app/data/balance/pokemon-level-moves";

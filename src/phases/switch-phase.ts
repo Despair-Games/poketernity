@@ -1,5 +1,6 @@
 import { globalScene } from "#app/global-scene";
-import PartyUiHandler, { PartyOption, PartyUiMode } from "#app/ui/party-ui-handler";
+import PartyUiHandler from "#app/ui/party-ui-handler";
+import { PartyOption, PartyUiMode } from "#app/ui/partyUtils/definitions";
 import { Mode } from "#app/ui/ui";
 import { SwitchType } from "#enums/switch-type";
 import { BattlePhase } from "./battle-phase";

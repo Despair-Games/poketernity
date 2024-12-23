@@ -15,8 +15,8 @@ import { addPokeballCaptureStars, addPokeballOpenParticles } from "#app/field/an
 import { getStatusEffectCatchRateMultiplier } from "#app/data/status-effect";
 import { achvs } from "#app/system/achv";
 import { Mode } from "#app/ui/ui";
-import type { PartyOption } from "#app/ui/party-ui-handler";
-import { PartyUiMode } from "#app/ui/party-ui-handler";
+import type { PartyOption } from "#app/ui/partyUtils/definitions";
+import { PartyUiMode } from "#app/ui/partyUtils/definitions";
 import { Species } from "#enums/species";
 import type { Type } from "#enums/type";
 import type PokemonSpecies from "#app/data/pokemon-species";

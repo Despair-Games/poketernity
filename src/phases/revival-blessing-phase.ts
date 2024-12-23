@@ -1,7 +1,7 @@
 import { SwitchType } from "#enums/switch-type";
 import { globalScene } from "#app/global-scene";
-import type { PartyOption } from "#app/ui/party-ui-handler";
-import PartyUiHandler, { PartyUiMode } from "#app/ui/party-ui-handler";
+import type { PartyOption } from "#app/ui/partyUtils/definitions";
+import { PartyUiMode } from "#app/ui/partyUtils/definitions";
 import { Mode } from "#app/ui/ui";
 import i18next from "i18next";
 import * as Utils from "#app/utils";
