@@ -2440,16 +2440,9 @@ export class StockpilingTag extends BattlerTag {
 
       // Attempt to increase DEF and SPDEF by one stage, keeping track of successful changes.
       globalScene.unshiftPhase(
-        new StatStageChangePhase(
-          pokemon.getBattlerIndex(),
-          true,
-          [Stat.SPDEF, Stat.DEF],
-          1,
-          true,
-          false,
-          true,
-          this.onStatStagesChanged,
-        ),
+        new StatStageChangePhase(pokemon.getBattlerIndex(), true, [Stat.SPDEF, Stat.DEF], 1, {
+          onChange: this.onStatStagesChanged,
+        }),
       );
     }
   }
@@ -2467,15 +2460,11 @@ export class StockpilingTag extends BattlerTag {
     const spDefChange = this.statChangeCounts[Stat.SPDEF];
 
     if (defChange) {
-      globalScene.unshiftPhase(
-        new StatStageChangePhase(pokemon.getBattlerIndex(), true, [Stat.DEF], -defChange, true, false, true),
-      );
+      globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [Stat.DEF], -defChange));
     }
 
     if (spDefChange) {
-      globalScene.unshiftPhase(
-        new StatStageChangePhase(pokemon.getBattlerIndex(), true, [Stat.SPDEF], -spDefChange, true, false, true),
-      );
+      globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [Stat.SPDEF], -spDefChange));
     }
   }
 }
@@ -3108,9 +3097,7 @@ export class SyrupBombTag extends BattlerTag {
     globalScene.queueMessage(
       i18next.t("battlerTags:syrupBombLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
-    globalScene.unshiftPhase(
-      new StatStageChangePhase(pokemon.getBattlerIndex(), true, [Stat.SPD], -1, true, false, true),
-    );
+    globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [Stat.SPD], -1));
     return --this.turnCount > 0;
   }
 }
