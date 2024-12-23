@@ -10489,8 +10489,7 @@ export function initMoves() {
     new StatusMove(Moves.FLOWER_SHIELD, Type.FAIRY, -1, 10, -1, 0, 6)
       .target(MoveTarget.ALL)
       .attr(StatStageChangeAttr, [Stat.DEF], 1, false, {
-        condition: (_user, target, _move) =>
-          target.getTypes().includes(Type.GRASS) && !target.getTag(SemiInvulnerableTag),
+        condition: (_user, target, _move) => target.getTypes().includes(Type.GRASS) && !target.isSemiInvulnerable(),
       }),
     new StatusMove(Moves.GRASSY_TERRAIN, Type.GRASS, -1, 10, -1, 0, 6)
       .attr(TerrainChangeAttr, TerrainType.GRASSY)
