@@ -7,24 +7,29 @@ import { Phase } from "#app/phase";
 import { Mode } from "#app/ui/ui";
 import { isNullOrUndefined } from "#app/utils";
 import { MysteryEncounterOptionSelectedPhase } from "./option-selected-phase";
+// tsdoc imports
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import type MysteryEncounterDialogue from "#app/data/mystery-encounters/mystery-encounter-dialogue";
+import type { OptionTextDisplay } from "#app/data/mystery-encounters/mystery-encounter-dialogue";
+/* eslint-enable @typescript-eslint/no-unused-vars */
 
 /**
  * Will handle (in order):
  * - Clearing of phase queues to enter the Mystery Encounter game state
  * - Management of session data related to MEs
  * - Initialization of ME option select menu and UI
- * - Execute {@linkcode MysteryEncounter.onPreOptionPhase} logic if it exists for the selected option
- * - Display any `OptionTextDisplay.selected` type dialogue that is set in the {@linkcode MysteryEncounterDialogue} dialogue tree for selected option
+ * - Execute {@linkcode MysteryEncounterOption.onPreOptionPhase} logic if it exists for the selected option
+ * - Display any {@linkcode OptionTextDisplay.selected} type dialogue that is set in the {@linkcode MysteryEncounterDialogue} dialogue tree for selected option
  * - Queuing of the {@linkcode MysteryEncounterOptionSelectedPhase}
+ *
+ * @extends Phase
  */
-
 export class MysteryEncounterPhase extends Phase {
   private readonly FIRST_DIALOGUE_PROMPT_DELAY = 300;
   protected optionSelectSettings?: OptionSelectSettings;
 
   /**
    * Mostly useful for having repeated queries during a single encounter, where the queries and options may differ each time
-   * @param scene
    * @param optionSelectSettings allows overriding the typical options of an encounter with new ones
    */
   constructor(optionSelectSettings?: OptionSelectSettings) {

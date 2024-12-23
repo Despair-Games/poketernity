@@ -2,10 +2,13 @@ import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { PostMysteryEncounterPhase } from "./post-mystery-encounter-phase";
+// tsdoc imports
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 
 /**
  * Will handle (in order):
- * - doContinueEncounter() callback for continuous encounters with back-to-back battles (this should push/shift its own phases as needed)
+ * - {@linkcode MysteryEncounter.doContinueEncounter()} callback for continuous encounters with back-to-back battles (this should push/shift its own phases as needed)
  *
  * OR
  *
@@ -13,6 +16,8 @@ import { PostMysteryEncounterPhase } from "./post-mystery-encounter-phase";
  * - Any encounter reward logic that is set within {@linkcode MysteryEncounter.doEncounterRewards}
  * - Otherwise, can add a no-reward-item shop with only Potions, etc. if addHealPhase is true
  * - Queuing of the {@linkcode PostMysteryEncounterPhase}
+ *
+ * @extends Phase
  */
 export class MysteryEncounterRewardsPhase extends Phase {
   protected addHealPhase: boolean;

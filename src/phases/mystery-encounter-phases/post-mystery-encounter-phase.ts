@@ -5,13 +5,18 @@ import { Phase } from "#app/phase";
 import { NewBattlePhase } from "#app/phases/new-battle-phase";
 import { Mode } from "#app/ui/ui";
 import { isNullOrUndefined } from "#app/utils";
+// tsdoc imports
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
 
 /**
  * Will handle (in order):
- * - {@linkcode MysteryEncounter.onPostOptionSelect} logic (based on an option that was selected)
+ * - {@linkcode MysteryEncounterOption.onPostOptionPhase} logic (based on an option that was selected)
  * - Showing any outro dialogue messages
  * - Cleanup of any leftover intro visuals
  * - Queuing of the next wave
+ *
+ * @extends Phase
  */
 export class PostMysteryEncounterPhase extends Phase {
   private readonly FIRST_DIALOGUE_PROMPT_DELAY = 750;
@@ -19,7 +24,7 @@ export class PostMysteryEncounterPhase extends Phase {
     globalScene.currentBattle.mysteryEncounter?.selectedOption?.onPostOptionPhase;
 
   /**
-   * Runs {@linkcode MysteryEncounter.onPostOptionSelect} then continues encounter
+   * Runs {@linkcode MysteryEncounterOption.onPostOptionPhase} then continues encounter
    */
   public override start(): void {
     super.start();

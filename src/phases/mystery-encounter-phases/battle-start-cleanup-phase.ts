@@ -7,14 +7,24 @@ import { SwitchPhase } from "#app/phases/switch-phase";
 import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { SwitchType } from "#enums/switch-type";
+// tsdoc imports
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
+import { type handleMysteryEncounterBattleStartEffects } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import { type TurnEndPhase } from "#app/phases/turn-end-phase";
+/* eslint-enable @typescript-eslint/no-unused-vars */
 
 /**
- * Runs at the beginning of an Encounter's battle
+ * Runs at the beginning of an Encounter's battle.
+ *
  * Will clean up any residual flinches, Endure, etc. that are left over from {@linkcode MysteryEncounter.startOfBattleEffects}
+ *
  * Will also handle Game Overs, switches, etc. that could happen from {@linkcode handleMysteryEncounterBattleStartEffects}
- * See {@linkcode TurnEndPhase} for more details
+ *
+ * @see {@linkcode TurnEndPhase} for more details
+ *
+ * @extends Phase
  */
-
 export class MysteryEncounterBattleStartCleanupPhase extends Phase {
   /**
    * Cleans up `TURN_END` tags, any {@linkcode PostTurnStatusEffectPhase}s, checks for Pokemon switches, then continues

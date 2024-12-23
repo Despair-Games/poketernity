@@ -12,6 +12,9 @@ import { randSeedItem } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import i18next from "i18next";
+// tsdoc imports
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type { PostSummonPhase } from "#app/phases/post-summon-phase";
 
 /**
  * Will handle (in order):
@@ -19,6 +22,8 @@ import i18next from "i18next";
  * - Showing intro dialogue for an enemy trainer or wild Pokemon
  * - Sliding in the visuals for enemy trainer or wild Pokemon, as well as handling summoning animations
  * - Queue the {@linkcode SummonPhase}s, {@linkcode PostSummonPhase}s, etc., required to initialize the phase queue for a battle
+ *
+ * @extends Phase
  */
 export class MysteryEncounterBattlePhase extends Phase {
   protected disableSwitch: boolean;
@@ -44,6 +49,7 @@ export class MysteryEncounterBattlePhase extends Phase {
   private getBattleMessage(): string {
     const { currentBattle } = globalScene;
     const { double, mysteryEncounter, trainer } = currentBattle;
+
     const encounterMode = mysteryEncounter?.encounterMode;
     const enemyField = globalScene.getEnemyField();
 
@@ -70,6 +76,7 @@ export class MysteryEncounterBattlePhase extends Phase {
   private doMysteryEncounterBattle(): void {
     const { currentBattle, ui } = globalScene;
     const { double, mysteryEncounter, trainer } = currentBattle;
+
     const encounterMode = mysteryEncounter?.encounterMode;
     if (encounterMode === MysteryEncounterMode.WILD_BATTLE || encounterMode === MysteryEncounterMode.BOSS_BATTLE) {
       if (encounterMode === MysteryEncounterMode.BOSS_BATTLE) {
@@ -147,6 +154,7 @@ export class MysteryEncounterBattlePhase extends Phase {
   private endBattleSetup(): void {
     const { currentBattle } = globalScene;
     const { double, mysteryEncounter } = currentBattle;
+
     const encounterMode = mysteryEncounter?.encounterMode;
     const enemyField = globalScene.getEnemyField();
 
@@ -204,6 +212,7 @@ export class MysteryEncounterBattlePhase extends Phase {
   private showEnemyTrainer(): void {
     const { currentBattle, tweens } = globalScene;
     const { trainer } = currentBattle;
+
     if (!trainer) {
       return;
     }
@@ -228,6 +237,7 @@ export class MysteryEncounterBattlePhase extends Phase {
   private hideEnemyTrainer(): void {
     const { currentBattle, tweens } = globalScene;
     const { trainer } = currentBattle;
+
     tweens.add({
       targets: trainer,
       x: "+=16",
