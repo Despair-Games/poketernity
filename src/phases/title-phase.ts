@@ -201,7 +201,7 @@ export class TitlePhase extends Phase {
   }
 
   public initDailyRun(): void {
-    const { arena, gameData, gameMode, time, ui } = globalScene;
+    const { arena, gameData, time, ui } = globalScene;
 
     ui.setMode(Mode.SAVE_SLOT, SaveSlotUiMode.SAVE, (slotId: number) => {
       globalScene.clearPhaseQueue();
@@ -212,7 +212,8 @@ export class TitlePhase extends Phase {
       globalScene.sessionSlotId = slotId;
 
       const generateDaily = (seed: string): void => {
-        globalScene.gameMode = getGameMode(GameModes.DAILY);
+        const gameMode = getGameMode(GameModes.DAILY);
+        globalScene.gameMode = gameMode;
 
         globalScene.setSeed(seed);
         globalScene.resetSeed(0);
