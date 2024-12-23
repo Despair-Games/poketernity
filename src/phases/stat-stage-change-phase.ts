@@ -148,7 +148,7 @@ export class StatStageChangePhase extends PokemonPhase {
       const existingPhase = globalScene.findPhase(
         (p) => p instanceof StatStageChangePhase && p.battlerIndex === this.battlerIndex,
       );
-      if (!(existingPhase instanceof StatStageChangePhase)) {
+      if (!existingPhase) {
         // Apply White Herb if needed
         const whiteHerb = globalScene.applyModifier(
           ResetNegativeStatStageModifier,
