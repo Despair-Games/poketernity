@@ -48,9 +48,9 @@ describe("Abilities - Compound Eyes", () => {
     const pokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(pokemon, "getAccuracyMultiplier");
 
-    game.move.select(Moves.HYPNOSIS);
+    game.move.select(Moves.SHEER_COLD);
     await game.phaseInterceptor.to("BerryPhase");
 
-    expect(pokemon.getAccuracyMultiplier).not.toHaveBeenCalled();
+    expect(pokemon.getAccuracyMultiplier).toHaveLastReturnedWith(1);
   });
 });
