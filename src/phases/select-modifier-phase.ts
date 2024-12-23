@@ -32,6 +32,13 @@ import { isNullOrUndefined, NumberHolder } from "#app/utils";
 import i18next from "i18next";
 import { BattlePhase } from "./abstract-battle-phase";
 
+interface SelectModifierPhaseOptions {
+  rerollCount?: number;
+  modifierTiers?: ModifierTier[];
+  customModifierSettings?: CustomModifierSettings;
+  isCopy?: boolean;
+}
+
 export class SelectModifierPhase extends BattlePhase {
   private readonly rerollCount: number;
   private readonly modifierTiers?: ModifierTier[];
@@ -40,19 +47,19 @@ export class SelectModifierPhase extends BattlePhase {
 
   private typeOptions: ModifierTypeOption[];
 
-  // TODO: Use options pattern
   constructor(
-    rerollCount: number = 0,
-    modifierTiers?: ModifierTier[],
-    customModifierSettings?: CustomModifierSettings,
-    isCopy: boolean = false,
+    options?: SelectModifierPhaseOptions,
+    // rerollCount: number = 0,
+    // modifierTiers?: ModifierTier[],
+    // customModifierSettings?: CustomModifierSettings,
+    // isCopy: boolean = false,
   ) {
     super();
 
-    this.rerollCount = rerollCount;
-    this.modifierTiers = modifierTiers;
-    this.customModifierSettings = customModifierSettings;
-    this.isCopy = isCopy;
+    this.rerollCount = options?.rerollCount ?? 0;
+    this.modifierTiers = options?.modifierTiers;
+    this.customModifierSettings = options?.customModifierSettings;
+    this.isCopy = options?.isCopy ?? false;
   }
 
   public override start(): void {
@@ -130,10 +137,10 @@ export class SelectModifierPhase extends BattlePhase {
               } else {
                 globalScene.reroll = true;
                 globalScene.unshiftPhase(
-                  new SelectModifierPhase(
-                    this.rerollCount + 1,
-                    this.typeOptions.map((o) => o.type?.tier).filter((t) => t !== undefined),
-                  ),
+                  new SelectModifierPhase({
+                    rerollCount: this.rerollCount + 1,
+                    modifierTiers: this.typeOptions.map((o) => o.type?.tier).filter((t) => t !== undefined),
+                  }),
                 );
 
                 ui.clearText();
@@ -430,15 +437,15 @@ export class SelectModifierPhase extends BattlePhase {
   }
 
   protected copy(): SelectModifierPhase {
-    return new SelectModifierPhase(
-      this.rerollCount,
-      this.modifierTiers,
-      {
+    return new SelectModifierPhase({
+      rerollCount: this.rerollCount,
+      modifierTiers: this.modifierTiers,
+      customModifierSettings: {
         guaranteedModifierTypeOptions: this.typeOptions,
         rerollMultiplier: this.customModifierSettings?.rerollMultiplier,
         allowLuckUpgrades: false,
       },
-      true,
-    );
+      isCopy: true,
+    });
   }
 }

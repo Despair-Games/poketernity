@@ -62,7 +62,9 @@ export class VictoryPhase extends PokemonPhase {
         }
 
         if (waveIndex % 10) {
-          globalScene.pushPhase(new SelectModifierPhase(undefined, undefined, this.getFixedBattleCustomModifiers()));
+          globalScene.pushPhase(
+            new SelectModifierPhase({ customModifierSettings: this.getFixedBattleCustomModifiers() }),
+          );
         } else if (isDaily) {
           globalScene.pushPhase(new ModifierRewardPhase(modifierTypes.EXP_CHARM));
 
