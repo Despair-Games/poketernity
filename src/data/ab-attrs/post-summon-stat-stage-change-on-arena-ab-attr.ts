@@ -1,13 +1,18 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { ArenaTagType } from "#enums/arena-tag-type";
-import { Stat } from "#enums/stat";
+import { Stat, type BattleStat } from "#enums/stat";
 import { PostSummonStatStageChangeAbAttr } from "./post-summon-stat-stage-change-ab-attr";
 
 /**
  * Applies a stat change after a Pokémon is summoned,
  * conditioned on the presence of a specific arena tag.
  *
+ * Used by Wind Rider.
+ *
+ * @param tagType the {@linkcode ArenaTagType} to check for
+ * @param stats an array of {@linkcode BattleStat}s to change. Defaults to {@linkcode Stat.ATK}
+ * @param stages how much to change the stat(s) by. Defaults to 1
  * @extends PostSummonStatStageChangeAbAttr
  */
 export class PostSummonStatStageChangeOnArenaAbAttr extends PostSummonStatStageChangeAbAttr {
@@ -15,16 +20,10 @@ export class PostSummonStatStageChangeOnArenaAbAttr extends PostSummonStatStageC
    * The type of arena tag that conditions the stat change.
    * @private
    */
-  private tagType: ArenaTagType;
+  private readonly tagType: ArenaTagType;
 
-  /**
-   * Creates an instance of PostSummonStatStageChangeOnArenaAbAttr.
-   * Initializes the stat change to increase Attack by 1 stage if the specified arena tag is present.
-   *
-   * @param tagType the {@linkcode ArenaTagType} to check for.
-   */
-  constructor(tagType: ArenaTagType) {
-    super([Stat.ATK], 1, true, false);
+  constructor(tagType: ArenaTagType, stats: BattleStat[] = [Stat.ATK], stages: number = 1) {
+    super(stats, stages, true, false);
     this.tagType = tagType;
   }
 

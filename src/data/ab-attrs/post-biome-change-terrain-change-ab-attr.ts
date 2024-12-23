@@ -5,7 +5,7 @@ import type { TerrainType } from "#enums/terrain-type";
 import { PostBiomeChangeAbAttr } from "./post-biome-change-ab-attr";
 
 export class PostBiomeChangeTerrainChangeAbAttr extends PostBiomeChangeAbAttr {
-  private terrainType: TerrainType;
+  private readonly terrainType: TerrainType;
 
   constructor(terrainType: TerrainType) {
     super();

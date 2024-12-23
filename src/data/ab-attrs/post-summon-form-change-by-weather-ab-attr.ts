@@ -12,7 +12,7 @@ import { PostSummonAbAttr } from "./post-summon-ab-attr";
  * @extends PostSummonAbAttr
  */
 export class PostSummonFormChangeByWeatherAbAttr extends PostSummonAbAttr {
-  private ability: Abilities;
+  private readonly ability: Abilities;
 
   constructor(ability: Abilities) {
     super(false);

@@ -5,7 +5,7 @@ import type { WeatherType } from "#enums/weather-type";
 import { PreWeatherDamageAbAttr } from "./pre-weather-damage-ab-attr";
 
 export class BlockWeatherDamageAttr extends PreWeatherDamageAbAttr {
-  private weatherTypes: WeatherType[];
+  private readonly weatherTypes: WeatherType[];
 
   constructor(...weatherTypes: WeatherType[]) {
     super();

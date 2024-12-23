@@ -10,7 +10,8 @@ export class BonusCritAbAttr extends AbAttr {
     _cancelled: BooleanHolder,
     args: any[],
   ): boolean {
-    (args[0] as BooleanHolder).value = true;
+    const bonusCrit: BooleanHolder = args[0];
+    bonusCrit.value = true;
     return true;
   }
 }

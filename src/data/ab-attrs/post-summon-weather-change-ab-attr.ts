@@ -1,10 +1,15 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { WeatherType } from "#enums/weather-type";
+import type { WeatherType } from "#enums/weather-type";
 import { PostSummonAbAttr } from "./post-summon-ab-attr";
 
+/**
+ * Changes the weather if possible when a pokemon is summoned.
+ * @param weatherType The {@linkcode WeatherType} to set
+ * @extends PostSummonAbAttr
+ */
 export class PostSummonWeatherChangeAbAttr extends PostSummonAbAttr {
-  private weatherType: WeatherType;
+  private readonly weatherType: WeatherType;
 
   constructor(weatherType: WeatherType) {
     super();
@@ -13,19 +18,10 @@ export class PostSummonWeatherChangeAbAttr extends PostSummonAbAttr {
   }
 
   override applyPostSummon(_pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
-    if (
-      this.weatherType === WeatherType.HEAVY_RAIN
-      || this.weatherType === WeatherType.HARSH_SUN
-      || this.weatherType === WeatherType.STRONG_WINDS
-      || !globalScene.arena.weather?.isImmutable()
-    ) {
-      if (simulated) {
-        return globalScene.arena.weather?.weatherType !== this.weatherType;
-      } else {
-        return globalScene.arena.trySetWeather(this.weatherType, true);
-      }
+    if (simulated) {
+      return globalScene.arena.weather?.weatherType !== this.weatherType;
+    } else {
+      return globalScene.arena.trySetWeather(this.weatherType, true);
     }
-
-    return false;
   }
 }
