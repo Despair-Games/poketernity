@@ -54,10 +54,12 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
         }
 
         new CommonBattleAnim(CommonAnim.POISON + (pokemon.status.effect - 1), pokemon).play(false, () => this.end());
+      } else {
+        this.end();
       }
+    } else {
+      this.end();
     }
-
-    this.end();
   }
 
   public override end(): void {
