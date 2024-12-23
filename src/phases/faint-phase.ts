@@ -138,7 +138,7 @@ export class FaintPhase extends PokemonPhase {
       const defeatSource = globalScene.getPokemonById(pokemon.turnData.attacksReceived[0].sourceId);
       if (defeatSource?.isOnField()) {
         applyPostVictoryAbAttrs(PostVictoryAbAttr, defeatSource);
-        // TODO: Shouldn't this be `applyMoveAttrs(PostVictoryStatStageChangeAttr, ...);` instead?
+        // TODO: Refactor Fell Stinger
         const pvmove = allMoves[pokemon.turnData.attacksReceived[0].move];
         const pvattrs = pvmove.getAttrs(PostVictoryStatStageChangeAttr);
         if (pvattrs.length) {

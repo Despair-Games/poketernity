@@ -183,7 +183,7 @@ export class EggHatchPhase extends Phase {
           }
         });
 
-        // TODO: Do we need these `if (hatched)` checks?
+        // TODO: Is there a better way to handle these `if (hatched)` checks?
         globalScene.time.delayedCall(2000, () => {
           if (this.hatched) {
             return;

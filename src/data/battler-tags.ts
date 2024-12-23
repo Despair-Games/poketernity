@@ -921,15 +921,13 @@ export class SeedTag extends BattlerTag {
           const damage = pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 8));
           const reverseDrain = pokemon.hasAbilityWithAttr(ReverseDrainAbAttr, false);
           globalScene.unshiftPhase(
-            new PokemonHealPhase(
-              source.getBattlerIndex(),
-              !reverseDrain ? damage : damage * -1,
-              !reverseDrain
+            new PokemonHealPhase(source.getBattlerIndex(), !reverseDrain ? damage : damage * -1, {
+              message: !reverseDrain
                 ? i18next.t("battlerTags:seededLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) })
                 : i18next.t("battlerTags:seededLapseShed", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
-              false,
-              true,
-            ),
+              showFullHpMessage: false,
+              skipAnim: true,
+            }),
           );
         }
       }
@@ -1220,12 +1218,9 @@ export class IngrainTag extends TrappedTag {
 
     if (ret) {
       globalScene.unshiftPhase(
-        new PokemonHealPhase(
-          pokemon.getBattlerIndex(),
-          toDmgValue(pokemon.getMaxHp() / 16),
-          i18next.t("battlerTags:ingrainLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
-          true,
-        ),
+        new PokemonHealPhase(pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() / 16), {
+          message: i18next.t("battlerTags:ingrainLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+        }),
       );
     }
 
@@ -1280,15 +1275,12 @@ export class AquaRingTag extends BattlerTag {
 
     if (ret) {
       globalScene.unshiftPhase(
-        new PokemonHealPhase(
-          pokemon.getBattlerIndex(),
-          toDmgValue(pokemon.getMaxHp() / 16),
-          i18next.t("battlerTags:aquaRingLapse", {
+        new PokemonHealPhase(pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() / 16), {
+          message: i18next.t("battlerTags:aquaRingLapse", {
             moveName: this.getMoveName(),
             pokemonName: getPokemonNameWithAffix(pokemon),
           }),
-          true,
-        ),
+        }),
       );
     }
 

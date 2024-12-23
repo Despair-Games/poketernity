@@ -1935,13 +1935,10 @@ export class HealAttr extends MoveEffectAttr {
    */
   addHealPhase(target: Pokemon, healRatio: number) {
     globalScene.unshiftPhase(
-      new PokemonHealPhase(
-        target.getBattlerIndex(),
-        toDmgValue(target.getMaxHp() * healRatio),
-        i18next.t("moveTriggers:healHp", { pokemonName: getPokemonNameWithAffix(target) }),
-        true,
-        !this.showAnim,
-      ),
+      new PokemonHealPhase(target.getBattlerIndex(), toDmgValue(target.getMaxHp() * healRatio), {
+        message: i18next.t("moveTriggers:healHp", { pokemonName: getPokemonNameWithAffix(target) }),
+        skipAnim: !this.showAnim,
+      }),
     );
   }
 
@@ -2083,17 +2080,11 @@ export class SacrificialFullRestoreAttr extends SacrificialAttr {
       .reduce((maxHp: number, hp: number) => Math.max(hp, maxHp), 0);
 
     globalScene.pushPhase(
-      new PokemonHealPhase(
-        user.getBattlerIndex(),
-        maxPartyMemberHp,
-        i18next.t(this.moveTriggerMessage, { pokemonName: getPokemonNameWithAffix(user) }),
-        true,
-        false,
-        false,
-        true,
-        false,
-        this.restorePP,
-      ),
+      new PokemonHealPhase(user.getBattlerIndex(), maxPartyMemberHp, {
+        message: i18next.t(this.moveTriggerMessage, { pokemonName: getPokemonNameWithAffix(user) }),
+        healStatus: true,
+        fullRestorePP: this.restorePP,
+      }),
       true,
     );
 
@@ -2305,7 +2296,13 @@ export class HitHealAttr extends MoveEffectAttr {
         message = "";
       }
     }
-    globalScene.unshiftPhase(new PokemonHealPhase(user.getBattlerIndex(), healAmount, message, false, true));
+    globalScene.unshiftPhase(
+      new PokemonHealPhase(user.getBattlerIndex(), healAmount, {
+        message: message,
+        showFullHpMessage: false,
+        skipAnim: true,
+      }),
+    );
     return true;
   }
 
@@ -4369,12 +4366,9 @@ export class PresentPowerAttr extends VariablePowerAttr {
       user.turnData.hitCount = 1;
       user.turnData.hitsLeft = 1;
       globalScene.unshiftPhase(
-        new PokemonHealPhase(
-          target.getBattlerIndex(),
-          toDmgValue(target.getMaxHp() / 4),
-          i18next.t("moveTriggers:regainedHealth", { pokemonName: getPokemonNameWithAffix(target) }),
-          true,
-        ),
+        new PokemonHealPhase(target.getBattlerIndex(), toDmgValue(target.getMaxHp() / 4), {
+          message: i18next.t("moveTriggers:regainedHealth", { pokemonName: getPokemonNameWithAffix(target) }),
+        }),
       );
     }
 

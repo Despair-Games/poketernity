@@ -36,12 +36,9 @@ export class TurnEndPhase extends FieldPhase {
 
         if (terrain?.terrainType === TerrainType.GRASSY && pokemon.isGrounded()) {
           globalScene.unshiftPhase(
-            new PokemonHealPhase(
-              pokemon.getBattlerIndex(),
-              Math.max(pokemon.getMaxHp() >> 4, 1),
-              i18next.t("battle:turnEndHpRestore", { pokemonName: getPokemonNameWithAffix(pokemon) }),
-              true,
-            ),
+            new PokemonHealPhase(pokemon.getBattlerIndex(), Math.max(pokemon.getMaxHp() >> 4, 1), {
+              message: i18next.t("battle:turnEndHpRestore", { pokemonName: getPokemonNameWithAffix(pokemon) }),
+            }),
           );
         }
 

@@ -13,10 +13,19 @@ import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
 import { CommonAnimPhase } from "./common-anim-phase";
 
+interface PokemonHealPhaseOptions {
+  message?: string;
+  showFullHpMessage?: boolean;
+  skipAnim?: boolean;
+  revive?: boolean;
+  healStatus?: boolean;
+  preventFullHeal?: boolean;
+  fullRestorePP?: boolean;
+}
+
 export class PokemonHealPhase extends CommonAnimPhase {
-  // TODO: Replace with named parameters pattern
   private readonly hpHealed: number;
-  private message: string | null;
+  private message?: string;
   private readonly showFullHpMessage: boolean;
   private readonly skipAnim: boolean;
   private readonly revive: boolean;
@@ -24,27 +33,17 @@ export class PokemonHealPhase extends CommonAnimPhase {
   private readonly preventFullHeal: boolean;
   private readonly fullRestorePP: boolean;
 
-  constructor(
-    battlerIndex: BattlerIndex,
-    hpHealed: number,
-    message: string | null,
-    showFullHpMessage: boolean,
-    skipAnim: boolean = false,
-    revive: boolean = false,
-    healStatus: boolean = false,
-    preventFullHeal: boolean = false,
-    fullRestorePP: boolean = false,
-  ) {
+  constructor(battlerIndex: BattlerIndex, hpHealed: number, options?: PokemonHealPhaseOptions) {
     super(battlerIndex, undefined, CommonAnim.HEALTH_UP);
 
     this.hpHealed = hpHealed;
-    this.message = message;
-    this.showFullHpMessage = showFullHpMessage;
-    this.skipAnim = skipAnim;
-    this.revive = revive;
-    this.healStatus = healStatus;
-    this.preventFullHeal = preventFullHeal;
-    this.fullRestorePP = fullRestorePP;
+    this.message = options?.message;
+    this.showFullHpMessage = options?.showFullHpMessage ?? true;
+    this.skipAnim = options?.skipAnim ?? false;
+    this.revive = options?.revive ?? false;
+    this.healStatus = options?.healStatus ?? false;
+    this.preventFullHeal = options?.preventFullHeal ?? false;
+    this.fullRestorePP = options?.fullRestorePP ?? false;
   }
 
   public override start(): void {
@@ -71,7 +70,8 @@ export class PokemonHealPhase extends CommonAnimPhase {
 
     if (healBlock && this.hpHealed > 0) {
       globalScene.queueMessage(healBlock.onActivation(pokemon));
-      this.message = null;
+      // TODO: is this necessary?
+      delete this.message;
       return super.end();
     } else if (healOrDamage) {
       const hpRestoreMultiplier = new NumberHolder(1);

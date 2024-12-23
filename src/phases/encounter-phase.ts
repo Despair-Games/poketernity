@@ -369,10 +369,12 @@ export class EncounterPhase extends BattlePhase {
   }
 
   protected doEncounterCommon(showEncounterMessage: boolean = true): void {
-    const { currentBattle, ui } = globalScene;
+    const { charSprite, currentBattle, pbTray, pbTrayEnemy, ui } = globalScene;
+    const { battleType, double, mysteryEncounter, trainer, waveIndex } = currentBattle;
+
     const enemyField = globalScene.getEnemyField();
 
-    if (currentBattle.battleType === BattleType.WILD) {
+    if (battleType === BattleType.WILD) {
       enemyField.forEach((enemyPokemon) => {
         enemyPokemon.untint(100, "Sine.easeOut");
         enemyPokemon.cry();
@@ -387,21 +389,20 @@ export class EncounterPhase extends BattlePhase {
       } else {
         this.end();
       }
-    } else if (currentBattle.battleType === BattleType.TRAINER) {
-      const trainer = currentBattle.trainer;
-      trainer?.untint(100, "Sine.easeOut");
-      trainer?.playAnim();
+    } else if (battleType === BattleType.TRAINER && trainer) {
+      trainer.untint(100, "Sine.easeOut");
+      trainer.playAnim();
 
       const doSummon = (): void => {
         currentBattle.started = true;
         globalScene.playBgm(undefined);
-        globalScene.pbTray.showPbTray(globalScene.getPlayerParty());
-        globalScene.pbTrayEnemy.showPbTray(globalScene.getEnemyParty());
+        pbTray.showPbTray(globalScene.getPlayerParty());
+        pbTrayEnemy.showPbTray(globalScene.getEnemyParty());
         const doTrainerSummon = (): void => {
           this.hideEnemyTrainer();
           const availablePartyMembers = globalScene.getEnemyParty().filter((p) => !p.isFainted()).length;
           globalScene.unshiftPhase(new SummonPhase(0, false));
-          if (globalScene.currentBattle.double && availablePartyMembers > 1) {
+          if (double && availablePartyMembers > 1) {
             globalScene.unshiftPhase(new SummonPhase(1, false));
           }
           this.end();
@@ -413,39 +414,38 @@ export class EncounterPhase extends BattlePhase {
         }
       };
 
-      const encounterMessages = currentBattle.trainer?.getEncounterMessages();
+      const encounterMessages = trainer.getEncounterMessages();
 
-      if (!encounterMessages?.length) {
+      if (!encounterMessages.length) {
         doSummon();
       } else {
         let message: string;
-        globalScene.executeWithSeedOffset(() => (message = randSeedItem(encounterMessages)), currentBattle.waveIndex);
+        globalScene.executeWithSeedOffset(() => (message = randSeedItem(encounterMessages)), waveIndex);
         message = message!; // tell TS compiler it's defined now
         const showDialogueAndSummon = (): void => {
-          ui.showDialogue(message, trainer?.getName(TrainerSlot.NONE, true), null, () => {
-            globalScene.charSprite.hide().then(() => globalScene.hideFieldOverlay(250).then(() => doSummon()));
+          ui.showDialogue(message, trainer.getName(TrainerSlot.NONE, true), null, () => {
+            charSprite.hide().then(() => globalScene.hideFieldOverlay(250).then(() => doSummon()));
           });
         };
-        if (currentBattle.trainer?.config.hasCharSprite && !ui.shouldSkipDialogue(message)) {
+        if (trainer.config.hasCharSprite && !ui.shouldSkipDialogue(message)) {
           globalScene
             .showFieldOverlay(500)
             .then(() =>
-              globalScene.charSprite
-                .showCharacter(trainer?.getKey()!, getCharVariantFromDialogue(encounterMessages[0]))
+              charSprite
+                .showCharacter(trainer.getKey(), getCharVariantFromDialogue(encounterMessages[0]))
                 .then(() => showDialogueAndSummon()),
-            ); // TODO: is this bang correct?
+            );
         } else {
           showDialogueAndSummon();
         }
       }
-    } else if (currentBattle.isBattleMysteryEncounter() && currentBattle.mysteryEncounter) {
-      const encounter = currentBattle.mysteryEncounter;
-      const introVisuals = encounter.introVisuals;
+    } else if (currentBattle.isBattleMysteryEncounter() && mysteryEncounter) {
+      const { introVisuals } = mysteryEncounter;
       introVisuals?.playAnim();
 
-      if (encounter.onVisualsStart) {
-        encounter.onVisualsStart();
-      } else if (encounter.spriteConfigs && introVisuals) {
+      if (mysteryEncounter.onVisualsStart) {
+        mysteryEncounter.onVisualsStart();
+      } else if (mysteryEncounter.spriteConfigs && introVisuals) {
         // If the encounter doesn't have any special visual intro, show sparkle for shiny Pokemon
         introVisuals.playShinySparkles();
       }
@@ -460,7 +460,7 @@ export class EncounterPhase extends BattlePhase {
         };
 
         if (showEncounterMessage) {
-          const introDialogue = encounter.dialogue.intro;
+          const introDialogue = mysteryEncounter.dialogue.intro;
           if (!introDialogue) {
             doShowEncounterOptions();
           } else {
@@ -495,7 +495,7 @@ export class EncounterPhase extends BattlePhase {
       } else {
         doTrainerExclamation();
         ui.showDialogue(encounterMessage, "???", null, () => {
-          globalScene.charSprite.hide().then(() => globalScene.hideFieldOverlay(250).then(() => doEncounter()));
+          charSprite.hide().then(() => globalScene.hideFieldOverlay(250).then(() => doEncounter()));
         });
       }
     }
@@ -503,6 +503,7 @@ export class EncounterPhase extends BattlePhase {
 
   public override end(): void {
     const { currentBattle, gameMode } = globalScene;
+    const { battleType, double, waveIndex } = currentBattle;
     const enemyField = globalScene.getEnemyField();
 
     enemyField.forEach((enemyPokemon, e) => {
@@ -512,8 +513,7 @@ export class EncounterPhase extends BattlePhase {
       // This sets Eternatus' held item to be untransferrable, preventing it from being stolen
       if (
         enemyPokemon.species.speciesId === Species.ETERNATUS
-        && (gameMode.isBattleClassicFinalBoss(currentBattle.waveIndex)
-          || gameMode.isEndlessMajorBoss(currentBattle.waveIndex))
+        && (gameMode.isBattleClassicFinalBoss(waveIndex) || gameMode.isEndlessMajorBoss(waveIndex))
       ) {
         const enemyMBH = globalScene.findModifier(
           (m) => m instanceof TurnHeldItemTransferModifier,
@@ -527,7 +527,7 @@ export class EncounterPhase extends BattlePhase {
       }
     });
 
-    if (![BattleType.TRAINER, BattleType.MYSTERY_ENCOUNTER].includes(currentBattle.battleType)) {
+    if (![BattleType.TRAINER, BattleType.MYSTERY_ENCOUNTER].includes(battleType)) {
       enemyField.map((p) =>
         globalScene.pushConditionalPhase(new PostSummonPhase(p.getBattlerIndex()), () => {
           if (!globalScene.getPlayerParty().length) {
@@ -538,7 +538,7 @@ export class EncounterPhase extends BattlePhase {
             globalScene.getPlayerParty().filter((p) => !p.isFainted()).length,
             2,
           );
-          if (currentBattle.double) {
+          if (double) {
             return pokemonsOnFieldCount === requiredPokemonsOnField;
           }
           return pokemonsOnFieldCount === 1;
@@ -561,7 +561,7 @@ export class EncounterPhase extends BattlePhase {
         globalScene.pushPhase(new SummonPhase(0));
       }
 
-      if (currentBattle.double) {
+      if (double) {
         if (availablePartyMembers.length > 1) {
           globalScene.pushPhase(new ToggleDoublePositionPhase(true));
           if (!availablePartyMembers[1].isOnField()) {
@@ -575,12 +575,12 @@ export class EncounterPhase extends BattlePhase {
         globalScene.pushPhase(new ToggleDoublePositionPhase(false));
       }
 
-      if (currentBattle.battleType !== BattleType.TRAINER && (currentBattle.waveIndex > 1 || !gameMode.isDaily)) {
-        const minPartySize = currentBattle.double ? 2 : 1;
+      if (battleType !== BattleType.TRAINER && (waveIndex > 1 || !gameMode.isDaily)) {
+        const minPartySize = double ? 2 : 1;
         if (availablePartyMembers.length > minPartySize) {
-          globalScene.pushPhase(new CheckSwitchPhase(0, currentBattle.double));
-          if (currentBattle.double) {
-            globalScene.pushPhase(new CheckSwitchPhase(1, currentBattle.double));
+          globalScene.pushPhase(new CheckSwitchPhase(0, double));
+          if (double) {
+            globalScene.pushPhase(new CheckSwitchPhase(1, double));
           }
         }
       }

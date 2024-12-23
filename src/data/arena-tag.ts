@@ -558,7 +558,7 @@ class WishTag extends ArenaTag {
     const target = globalScene.getField()[this.battlerIndex];
     if (target?.isActive(true)) {
       globalScene.queueMessage(this.triggerMessage);
-      globalScene.unshiftPhase(new PokemonHealPhase(target.getBattlerIndex(), this.healHp, null, true, false));
+      globalScene.unshiftPhase(new PokemonHealPhase(target.getBattlerIndex(), this.healHp));
     }
   }
 }
