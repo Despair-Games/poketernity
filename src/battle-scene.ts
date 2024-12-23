@@ -959,6 +959,10 @@ export default class BattleScene extends SceneBase {
     return party.slice(0, Math.min(party.length, this.currentBattle?.double ? 2 : 1));
   }
 
+  /**
+   * Returns a list of all Pokemon currently on the field, potentially including fainted ones.
+   * @param activeOnly If `true`, only return Pokemon which are active (e.g., not fainted). Default `false`.
+   */
   public getField(activeOnly: boolean = false): Pokemon[] {
     let ret: Pokemon[] = this.getPlayerField();
     ret = ret.concat(this.getEnemyField());
