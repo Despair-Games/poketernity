@@ -63,7 +63,6 @@ export class EncounterPhase extends BattlePhase {
       enemyLevels,
       enemyParty,
       isClassicFinalBoss,
-      mysteryEncounter,
       mysteryEncounterType,
       trainer,
       waveIndex,
@@ -83,12 +82,14 @@ export class EncounterPhase extends BattlePhase {
     const loadEnemyAssets: Promise<void>[] = [];
 
     // Generate and Init Mystery Encounter
-    if (currentBattle.isBattleMysteryEncounter() && !mysteryEncounter) {
+    if (currentBattle.isBattleMysteryEncounter() && !currentBattle.mysteryEncounter) {
       globalScene.executeWithSeedOffset(() => {
         const currentSessionEncounterType = mysteryEncounterType;
         currentBattle.mysteryEncounter = globalScene.getMysteryEncounter(currentSessionEncounterType);
       }, waveIndex * 16);
     }
+
+    const mysteryEncounter = currentBattle.mysteryEncounter;
     if (mysteryEncounter) {
       // If ME has an onInit() function, call it
       // Usually used for calculating rand data before initializing anything visual
