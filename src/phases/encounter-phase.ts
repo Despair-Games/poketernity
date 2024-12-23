@@ -56,7 +56,18 @@ export class EncounterPhase extends BattlePhase {
   public override start(): void {
     super.start();
 
-    const { currentBattle, field, gameData, gameMode } = globalScene;
+    const { arena, currentBattle, field, gameData, gameMode, load, ui } = globalScene;
+    const {
+      battleType,
+      double,
+      enemyLevels,
+      enemyParty,
+      isClassicFinalBoss,
+      mysteryEncounter,
+      mysteryEncounterType,
+      trainer,
+      waveIndex,
+    } = currentBattle;
 
     globalScene.updateGameInfo();
 
@@ -65,20 +76,19 @@ export class EncounterPhase extends BattlePhase {
     globalScene.eventTarget.dispatchEvent(new EncounterPhaseEvent());
 
     // Failsafe if players somehow skip floor 200 in classic mode
-    if (gameMode.isClassic && currentBattle.waveIndex > 200) {
+    if (gameMode.isClassic && waveIndex > 200) {
       globalScene.unshiftPhase(new GameOverPhase());
     }
 
     const loadEnemyAssets: Promise<void>[] = [];
 
     // Generate and Init Mystery Encounter
-    if (currentBattle.isBattleMysteryEncounter() && !currentBattle.mysteryEncounter) {
+    if (currentBattle.isBattleMysteryEncounter() && !mysteryEncounter) {
       globalScene.executeWithSeedOffset(() => {
-        const currentSessionEncounterType = currentBattle.mysteryEncounterType;
+        const currentSessionEncounterType = mysteryEncounterType;
         currentBattle.mysteryEncounter = globalScene.getMysteryEncounter(currentSessionEncounterType);
-      }, currentBattle.waveIndex * 16);
+      }, waveIndex * 16);
     }
-    const mysteryEncounter = currentBattle.mysteryEncounter;
     if (mysteryEncounter) {
       // If ME has an onInit() function, call it
       // Usually used for calculating rand data before initializing anything visual
@@ -88,7 +98,7 @@ export class EncounterPhase extends BattlePhase {
           mysteryEncounter.onInit();
         }
         mysteryEncounter.populateDialogueTokensFromRequirements();
-      }, currentBattle.waveIndex);
+      }, waveIndex);
 
       // Add any special encounter animations to load
       if (mysteryEncounter.encounterAnimations && mysteryEncounter.encounterAnimations.length > 0) {
@@ -104,21 +114,21 @@ export class EncounterPhase extends BattlePhase {
 
     let totalBst = 0;
 
-    currentBattle.enemyLevels?.every((level, e) => {
+    enemyLevels?.every((level, e) => {
       if (currentBattle.isBattleMysteryEncounter()) {
         // Skip enemy loading for MEs, those are loaded elsewhere
         return false;
       }
       if (!this.loaded) {
-        if (currentBattle.battleType === BattleType.TRAINER && currentBattle.trainer) {
-          currentBattle.enemyParty[e] = currentBattle.trainer.genPartyMember(e);
+        if (battleType === BattleType.TRAINER && trainer) {
+          currentBattle.enemyParty[e] = trainer.genPartyMember(e);
         } else {
-          let enemySpecies = globalScene.randomSpecies(currentBattle.waveIndex, level, true);
+          let enemySpecies = globalScene.randomSpecies(waveIndex, level, true);
           // If player has golden bug net, rolls 10% chance to replace non-boss wave wild species from the golden bug net bug pool
           if (
             globalScene.findModifier((m) => m instanceof BoostBugSpawnModifier)
-            && !gameMode.isBoss(currentBattle.waveIndex)
-            && globalScene.arena.biomeType !== Biome.END
+            && !gameMode.isBoss(waveIndex)
+            && arena.biomeType !== Biome.END
             && randSeedInt(10) === 0
           ) {
             enemySpecies = getGoldenBugNetSpecies(level);
@@ -127,22 +137,22 @@ export class EncounterPhase extends BattlePhase {
             enemySpecies,
             level,
             TrainerSlot.NONE,
-            !!globalScene.getEncounterBossSegments(currentBattle.waveIndex, level, enemySpecies),
+            !!globalScene.getEncounterBossSegments(waveIndex, level, enemySpecies),
           );
-          if (currentBattle.isClassicFinalBoss) {
+          if (isClassicFinalBoss) {
             currentBattle.enemyParty[e].ivs = new Array(6).fill(31);
           }
           globalScene
             .getPlayerParty()
-            .slice(0, !currentBattle.double ? 1 : 2)
+            .slice(0, !double ? 1 : 2)
             .reverse()
             .forEach((playerPokemon) => {
-              applyAbAttrs(SyncEncounterNatureAbAttr, playerPokemon, null, false, currentBattle.enemyParty[e]);
+              applyAbAttrs(SyncEncounterNatureAbAttr, playerPokemon, null, false, enemyParty[e]);
             });
         }
       }
       const enemyPokemon = globalScene.getEnemyParty()[e];
-      if (e < (currentBattle.double ? 2 : 1)) {
+      if (e < (double ? 2 : 1)) {
         enemyPokemon.setX(-66 + enemyPokemon.getFieldPositionOffset()[0]);
         enemyPokemon.resetSummonData();
       }
@@ -157,9 +167,9 @@ export class EncounterPhase extends BattlePhase {
       }
 
       if (enemyPokemon.species.speciesId === Species.ETERNATUS) {
-        if (currentBattle.isClassicFinalBoss) {
+        if (isClassicFinalBoss) {
           enemyPokemon.setBoss();
-        } else if (!(currentBattle.waveIndex % 1000)) {
+        } else if (!(waveIndex % 1000)) {
           enemyPokemon.formIndex = 1;
           enemyPokemon.updateScale();
         }
@@ -183,35 +193,33 @@ export class EncounterPhase extends BattlePhase {
       globalScene.validateAchv(achvs.SHINY_PARTY);
     }
 
-    if (currentBattle.battleType === BattleType.TRAINER && currentBattle.trainer) {
-      loadEnemyAssets.push(currentBattle.trainer.loadAssets().then(() => currentBattle.trainer!.initSprite()));
+    if (battleType === BattleType.TRAINER && trainer) {
+      loadEnemyAssets.push(trainer.loadAssets().then(() => trainer.initSprite()));
     } else if (currentBattle.isBattleMysteryEncounter()) {
-      if (currentBattle.mysteryEncounter?.introVisuals) {
+      if (mysteryEncounter?.introVisuals) {
         loadEnemyAssets.push(
-          currentBattle.mysteryEncounter.introVisuals
-            .loadAssets()
-            .then(() => currentBattle.mysteryEncounter!.introVisuals!.initSprite()),
+          mysteryEncounter.introVisuals.loadAssets().then(() => mysteryEncounter.introVisuals?.initSprite()),
         );
       }
-      if (currentBattle.mysteryEncounter?.loadAssets && currentBattle.mysteryEncounter.loadAssets.length > 0) {
-        loadEnemyAssets.push(...currentBattle.mysteryEncounter.loadAssets);
+      if (mysteryEncounter?.loadAssets && mysteryEncounter.loadAssets.length > 0) {
+        loadEnemyAssets.push(...mysteryEncounter.loadAssets);
       }
       // Load Mystery Encounter Exclamation bubble and sfx
       loadEnemyAssets.push(
         new Promise<void>((resolve) => {
           globalScene.loadSe("GEN8- Exclaim", "battle_anims", "GEN8- Exclaim.wav");
           globalScene.loadImage("encounter_exclaim", "mystery-encounters");
-          globalScene.load.once(Phaser.Loader.Events.COMPLETE, () => resolve());
-          if (!globalScene.load.isLoading()) {
-            globalScene.load.start();
+          load.once(Phaser.Loader.Events.COMPLETE, () => resolve());
+          if (!load.isLoading()) {
+            load.start();
           }
         }),
       );
     } else {
       const overridedBossSegments = Overrides.OPP_HEALTH_SEGMENTS_OVERRIDE > 1;
       // for double battles, reduce the health segments for boss Pokemon unless there is an override
-      if (!overridedBossSegments && currentBattle.enemyParty.filter((p) => p.isBoss()).length > 1) {
-        for (const enemyPokemon of currentBattle.enemyParty) {
+      if (!overridedBossSegments && enemyParty.filter((p) => p.isBoss()).length > 1) {
+        for (const enemyPokemon of enemyParty) {
           // If the enemy pokemon is a boss and wasn't populated from data source, then update the number of segments
           if (enemyPokemon.isBoss() && !enemyPokemon.isPopulatedFromDataSource) {
             enemyPokemon.setBoss(
@@ -225,12 +233,12 @@ export class EncounterPhase extends BattlePhase {
     }
 
     Promise.all(loadEnemyAssets).then(() => {
-      currentBattle.enemyParty.every((enemyPokemon, index) => {
+      enemyParty.every((enemyPokemon, index) => {
         if (currentBattle.isBattleMysteryEncounter()) {
           return false;
         }
-        if (index < (currentBattle.double ? 2 : 1)) {
-          if (currentBattle.battleType === BattleType.WILD) {
+        if (index < (double ? 2 : 1)) {
+          if (battleType === BattleType.WILD) {
             field.add(enemyPokemon);
             currentBattle.seenEnemyPartyMemberIds.add(enemyPokemon.id);
             const playerPokemon = globalScene.getPlayerPokemon();
@@ -238,21 +246,21 @@ export class EncounterPhase extends BattlePhase {
               field.moveBelow(enemyPokemon as Pokemon, playerPokemon);
             }
             enemyPokemon.tint(0, 0.5);
-          } else if (currentBattle.battleType === BattleType.TRAINER) {
+          } else if (battleType === BattleType.TRAINER) {
             enemyPokemon.setVisible(false);
-            currentBattle.trainer?.tint(0, 0.5);
+            trainer?.tint(0, 0.5);
           }
-          if (currentBattle.double) {
+          if (double) {
             enemyPokemon.setFieldPosition(index ? FieldPosition.RIGHT : FieldPosition.LEFT);
           }
         }
         return true;
       });
 
-      if (!this.loaded && currentBattle.battleType !== BattleType.MYSTERY_ENCOUNTER) {
+      if (!this.loaded && battleType !== BattleType.MYSTERY_ENCOUNTER) {
         regenerateModifierPoolThresholds(
           globalScene.getEnemyField(),
-          currentBattle.battleType === BattleType.TRAINER ? ModifierPoolType.TRAINER : ModifierPoolType.WILD,
+          battleType === BattleType.TRAINER ? ModifierPoolType.TRAINER : ModifierPoolType.WILD,
         );
         globalScene.generateEnemyModifiers();
         overrideModifiers(false);
@@ -261,21 +269,19 @@ export class EncounterPhase extends BattlePhase {
         });
       }
 
-      globalScene.ui.setMode(Mode.MESSAGE).then(() => {
+      ui.setMode(Mode.MESSAGE).then(() => {
         if (!this.loaded) {
           // Set weather before session gets saved to ensure it's properly added to session data
           this.trySetWeatherIfNewBiome();
           // Game currently syncs to server on waves X1 and X6, or after 5 minutes have passed without a save
-          gameData
-            .saveAll(true, currentBattle.waveIndex % 5 === 1 || (globalScene.lastSavePlayTime ?? 0) >= 300)
-            .then((success) => {
-              globalScene.disableMenu = false;
-              if (!success) {
-                return globalScene.reset(true);
-              }
-              this.doEncounter();
-              globalScene.resetSeed();
-            });
+          gameData.saveAll(true, waveIndex % 5 === 1 || (globalScene.lastSavePlayTime ?? 0) >= 300).then((success) => {
+            globalScene.disableMenu = false;
+            if (!success) {
+              return globalScene.reset(true);
+            }
+            this.doEncounter();
+            globalScene.resetSeed();
+          });
         } else {
           this.doEncounter();
           globalScene.resetSeed();
@@ -289,15 +295,15 @@ export class EncounterPhase extends BattlePhase {
     globalScene.updateModifiers(false);
     globalScene.setFieldScale(1);
 
-    const { currentBattle } = globalScene;
-    const { battleType, waveIndex } = currentBattle;
+    const { arenaEnemy, arenaPlayer, currentBattle, mysteryEncounterSaveData, tweens } = globalScene;
+    const { battleType, isClassicFinalBoss, waveIndex } = currentBattle;
     if (
       globalScene.isMysteryEncounterValidForWave(battleType, waveIndex)
       && !currentBattle.isBattleMysteryEncounter()
     ) {
       // Increment ME spawn chance if an ME could have spawned but did not
       // Only do this AFTER session has been saved to avoid duplicating increments
-      globalScene.mysteryEncounterSaveData.encounterSpawnChance += WEIGHT_INCREMENT_ON_SPAWN_MISS;
+      mysteryEncounterSaveData.encounterSpawnChance += WEIGHT_INCREMENT_ON_SPAWN_MISS;
     }
 
     for (const pokemon of globalScene.getPlayerParty()) {
@@ -307,18 +313,13 @@ export class EncounterPhase extends BattlePhase {
     }
 
     const enemyField = globalScene.getEnemyField();
-    globalScene.tweens.add({
-      targets: [
-        globalScene.arenaEnemy,
-        currentBattle.trainer,
-        enemyField,
-        globalScene.arenaPlayer,
-        globalScene.trainer,
-      ].flat(),
-      x: (_target, _key, value, fieldIndex: number) => (fieldIndex < 2 + enemyField.length ? value + 300 : value - 300),
+    tweens.add({
+      targets: [arenaEnemy, currentBattle.trainer, enemyField, arenaPlayer, globalScene.trainer].flat(),
+      x: (_target, _key, value: number, fieldIndex: number) =>
+        fieldIndex < 2 + enemyField.length ? value + 300 : value - 300,
       duration: 2000,
       onComplete: () => {
-        if (globalScene.currentBattle.isClassicFinalBoss) {
+        if (isClassicFinalBoss) {
           this.displayFinalBossDialogue();
         } else {
           this.doEncounterCommon();
@@ -332,7 +333,7 @@ export class EncounterPhase extends BattlePhase {
       if (enterFromRight) {
         encounterIntroVisuals.x += 500;
       }
-      globalScene.tweens.add({
+      tweens.add({
         targets: encounterIntroVisuals,
         x: enterFromRight ? "-=200" : "+=300",
         duration: 2000,
