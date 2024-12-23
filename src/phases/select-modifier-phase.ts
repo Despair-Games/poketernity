@@ -47,13 +47,7 @@ export class SelectModifierPhase extends BattlePhase {
 
   private typeOptions: ModifierTypeOption[];
 
-  constructor(
-    options?: SelectModifierPhaseOptions,
-    // rerollCount: number = 0,
-    // modifierTiers?: ModifierTier[],
-    // customModifierSettings?: CustomModifierSettings,
-    // isCopy: boolean = false,
-  ) {
+  constructor(options?: SelectModifierPhaseOptions) {
     super();
 
     this.rerollCount = options?.rerollCount ?? 0;
