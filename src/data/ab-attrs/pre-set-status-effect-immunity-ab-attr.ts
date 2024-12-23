@@ -8,13 +8,12 @@ import { PreSetStatusAbAttr } from "./pre-set-status-ab-attr";
 
 /**
  * Provides immunity to status effects to specified targets.
+ * @param immuneEffects - The status effects to which the Pokémon is immune.
+ * @extends PreSetStatusAbAttr
  */
 export class PreSetStatusEffectImmunityAbAttr extends PreSetStatusAbAttr {
-  private immuneEffects: StatusEffect[];
+  private readonly immuneEffects: StatusEffect[];
 
-  /**
-   * @param immuneEffects - The status effects to which the Pokémon is immune.
-   */
   constructor(...immuneEffects: StatusEffect[]) {
     super();
 

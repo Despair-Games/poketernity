@@ -3,7 +3,7 @@ import { GameModes } from "../game-mode";
 import { TextStyle, addTextObject } from "./text";
 import { Mode } from "./ui";
 import { addWindow } from "./ui-theme";
-import { fixedInt, formatLargeNumber } from "#app/utils";
+import { fixedInt, formatLargeNumber, isNullOrUndefined } from "#app/utils";
 import type PokemonData from "../system/pokemon-data";
 import MessageUiHandler from "./message-ui-handler";
 import i18next from "i18next";
@@ -329,8 +329,8 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
         });
         this.add(enemyContainer);
       } else if (
-        data.battleType === BattleType.TRAINER
-        || (data.battleType === BattleType.MYSTERY_ENCOUNTER && data.trainer)
+        (data.battleType === BattleType.TRAINER || data.battleType === BattleType.MYSTERY_ENCOUNTER)
+        && !isNullOrUndefined(data.trainer)
       ) {
         // Defeats from Trainers show the trainer's title and name
         // TODO: resolve bang

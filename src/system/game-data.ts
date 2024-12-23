@@ -1,5 +1,4 @@
 import i18next from "i18next";
-import type { PokeballCounts } from "#app/battle-scene";
 import { bypassLogin } from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
 import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
@@ -42,9 +41,8 @@ import { StatusEffect } from "#enums/status-effect";
 import ChallengeData from "#app/system/challenge-data";
 import { Device } from "#enums/devices";
 import { GameDataType } from "#enums/game-data-type";
-import type { Moves } from "#enums/moves";
 import { PlayerGender } from "#enums/player-gender";
-import { Species } from "#enums/species";
+import type { Species } from "#enums/species";
 import { applyChallenges, ChallengeType } from "#app/data/challenge";
 import { WeatherType } from "#enums/weather-type";
 import { TerrainType } from "#enums/terrain-type";
@@ -60,36 +58,12 @@ import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { api } from "#app/plugins/api/api";
 import { ArenaTrapTag } from "#app/data/arena-tag";
 import { SAVE_FILE_EXTENSION } from "#app/constants";
-
-export const defaultStarterSpecies: Species[] = [
-  Species.BULBASAUR,
-  Species.CHARMANDER,
-  Species.SQUIRTLE,
-  Species.CHIKORITA,
-  Species.CYNDAQUIL,
-  Species.TOTODILE,
-  Species.TREECKO,
-  Species.TORCHIC,
-  Species.MUDKIP,
-  Species.TURTWIG,
-  Species.CHIMCHAR,
-  Species.PIPLUP,
-  Species.SNIVY,
-  Species.TEPIG,
-  Species.OSHAWOTT,
-  Species.CHESPIN,
-  Species.FENNEKIN,
-  Species.FROAKIE,
-  Species.ROWLET,
-  Species.LITTEN,
-  Species.POPPLIO,
-  Species.GROOKEY,
-  Species.SCORBUNNY,
-  Species.SOBBLE,
-  Species.SPRIGATITO,
-  Species.FUECOCO,
-  Species.QUAXLY,
-];
+import type { AchvUnlocks, SystemSaveData, Unlocks, VoucherCounts, VoucherUnlocks } from "#app/@types/SystemData";
+import { AbilityAttr, DexAttr } from "#app/data/dex-attributes";
+import type { StarterData } from "#app/@types/StarterData";
+import type { DexData, DexEntry } from "#app/@types/DexData";
+import type { SessionSaveData } from "#app/@types/SessionData";
+import { defaultStarterSpecies } from "#app/data/balance/default-starters";
 
 const saveKey = "x0i2O7WRiANTqPmZ"; // Temporary; secure encryption is not yet necessary
 
@@ -126,99 +100,15 @@ export function decrypt(data: string, bypassLogin: boolean): string {
   );
 }
 
-export interface SystemSaveData {
-  trainerId: number;
-  secretId: number;
-  gender: PlayerGender;
-  dexData: DexData;
-  starterData: StarterData;
-  gameStats: GameStats;
-  unlocks: Unlocks;
-  achvUnlocks: AchvUnlocks;
-  voucherUnlocks: VoucherUnlocks;
-  voucherCounts: VoucherCounts;
-  eggs: EggData[];
-  gameVersion: string;
-  timestamp: number;
-  eggPity: number[];
-  unlockPity: number[];
-}
-
-export interface SessionSaveData {
-  seed: string;
-  playTime: number;
-  gameMode: GameModes;
-  party: PokemonData[];
-  enemyParty: PokemonData[];
-  modifiers: PersistentModifierData[];
-  enemyModifiers: PersistentModifierData[];
-  arena: ArenaData;
-  pokeballCounts: PokeballCounts;
-  money: number;
-  score: number;
-  waveIndex: number;
-  battleType: BattleType;
-  trainer: TrainerData | null;
-  gameVersion: string;
-  timestamp: number;
-  challenges: ChallengeData[];
-  mysteryEncounterType: MysteryEncounterType | -1; // Only defined when current wave is ME,
-  mysteryEncounterSaveData: MysteryEncounterSaveData;
-}
-
-interface Unlocks {
-  [key: number]: boolean;
-}
-
-interface AchvUnlocks {
-  [key: string]: number;
-}
-
-interface VoucherUnlocks {
-  [key: string]: number;
-}
-
-export interface VoucherCounts {
-  [type: string]: number;
-}
-
-export interface DexData {
-  [key: number]: DexEntry;
-}
-
-export interface DexEntry {
-  seenAttr: bigint;
-  caughtAttr: bigint;
-  natureAttr: number;
-  seenCount: number;
-  caughtCount: number;
-  hatchedCount: number;
-  ivs: number[];
-}
-
-export const DexAttr = {
-  NON_SHINY: 1n,
-  SHINY: 2n,
-  MALE: 4n,
-  FEMALE: 8n,
-  DEFAULT_VARIANT: 16n,
-  VARIANT_2: 32n,
-  VARIANT_3: 64n,
-  DEFAULT_FORM: 128n,
-};
-
+/**
+ * A translation of a Pokemon's dex entry to human readable format
+ */
 export interface DexAttrProps {
   shiny: boolean;
   female: boolean;
   variant: Variant;
   formIndex: number;
 }
-
-export const AbilityAttr = {
-  ABILITY_1: 1,
-  ABILITY_2: 2,
-  ABILITY_HIDDEN: 4,
-};
 
 export type RunHistoryData = Record<number, RunEntry>;
 
@@ -227,16 +117,6 @@ export interface RunEntry {
   isVictory: boolean;
   /*Automatically set to false at the moment - implementation TBD*/
   isFavorite: boolean;
-}
-
-export type StarterMoveset = [Moves] | [Moves, Moves] | [Moves, Moves, Moves] | [Moves, Moves, Moves, Moves];
-
-export interface StarterFormMoveData {
-  [key: number]: StarterMoveset;
-}
-
-export interface StarterMoveData {
-  [key: number]: StarterMoveset | StarterFormMoveData;
 }
 
 export interface StarterAttributes {
@@ -283,21 +163,6 @@ export class StarterPrefs {
       StarterPrefers_private_latest = pStr;
     }
   }
-}
-
-export interface StarterDataEntry {
-  moveset: StarterMoveset | StarterFormMoveData | null;
-  eggMoves: number;
-  candyCount: number;
-  friendship: number;
-  abilityAttr: number;
-  passiveAttr: number;
-  valueReduction: number;
-  classicWinCount: number;
-}
-
-export interface StarterData {
-  [key: number]: StarterDataEntry;
 }
 
 export interface TutorialFlags {

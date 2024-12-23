@@ -6,10 +6,6 @@ import i18next from "i18next";
 import { PostSummonAbAttr } from "./post-summon-ab-attr";
 
 export class FriskAbAttr extends PostSummonAbAttr {
-  constructor() {
-    super(true);
-  }
-
   override applyPostSummon(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
     if (!simulated) {
       for (const opponent of pokemon.getOpponents()) {

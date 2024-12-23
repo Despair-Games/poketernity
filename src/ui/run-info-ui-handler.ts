@@ -1,11 +1,17 @@
 import { GameModes } from "../game-mode";
 import UiHandler from "./ui-handler";
-import type { SessionSaveData } from "../system/game-data";
+import type { SessionSaveData } from "#app/@types/SessionData";
 import { TextStyle, addTextObject, addBBCodeTextObject, getTextColor } from "./text";
 import { Mode } from "./ui";
 import { addWindow } from "./ui-theme";
 import { getPokeballAtlasKey } from "#app/data/pokeball";
-import { formatLargeNumber, getPlayTimeString, formatMoney, formatFancyLargeNumber } from "#app/utils";
+import {
+  formatLargeNumber,
+  getPlayTimeString,
+  formatMoney,
+  formatFancyLargeNumber,
+  isNullOrUndefined,
+} from "#app/utils";
 import type PokemonData from "../system/pokemon-data";
 import i18next from "i18next";
 import { Button } from "../enums/buttons";
@@ -313,7 +319,7 @@ export default class RunInfoUiHandler extends UiHandler {
       } else if (this.runInfo.enemyParty.length === 2) {
         this.parseWildDoubleDefeat(enemyContainer);
       }
-    } else if (this.runInfo.battleType === BattleType.TRAINER) {
+    } else if (this.runInfo.battleType === BattleType.TRAINER && !isNullOrUndefined(this.runInfo.trainer)) {
       this.showTrainerSprites(enemyContainer);
       const row_limit = 3;
       this.runInfo.enemyParty.forEach((p, i) => {
@@ -462,17 +468,18 @@ export default class RunInfoUiHandler extends UiHandler {
    * @param enemyContainer a Phaser Container that should hold enemy sprites
    */
   private showTrainerSprites(enemyContainer: Phaser.GameObjects.Container) {
+    const { trainer } = this.runInfo;
+    if (isNullOrUndefined(trainer)) {
+      console.warn("Missing TrainerData in session data, cannot render trainer sprites");
+      return;
+    }
     // Creating the trainer sprite and adding it to enemyContainer
-    // TODO: resolve bang
-    const tObj = this.runInfo.trainer!.toTrainer();
+    const tObj = trainer.toTrainer();
     // Loads trainer assets on demand, as they are not loaded by default in the scene
-    // TODO: resolve bang
-    tObj.config.loadAssets(this.runInfo.trainer!.variant).then(() => {
-      // TODO: resolve bang
-      const tObjSpriteKey = tObj.config.getSpriteKey(this.runInfo.trainer!.variant === TrainerVariant.FEMALE, false);
+    tObj.config.loadAssets(trainer.variant).then(() => {
+      const tObjSpriteKey = tObj.config.getSpriteKey(trainer.variant === TrainerVariant.FEMALE, false);
       const tObjSprite = globalScene.add.sprite(0, 5, tObjSpriteKey);
-      // TODO: resolve bang
-      if (this.runInfo.trainer!.variant === TrainerVariant.DOUBLE && !tObj.config.doubleOnly) {
+      if (trainer.variant === TrainerVariant.DOUBLE && !tObj.config.doubleOnly) {
         const doubleContainer = globalScene.add.container(5, 8);
         tObjSprite.setPosition(-3, -3);
         const tObjPartnerSpriteKey = tObj.config.getSpriteKey(true, true);
