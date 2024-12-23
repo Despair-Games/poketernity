@@ -69,7 +69,7 @@ export class SwitchSummonPhase extends SummonPhase {
     }
 
     const pokemon = this.getPokemon();
-    this.getField().forEach((opposingPokemon: Pokemon) => opposingPokemon.removeTagsBySourceId(pokemon.id));
+    this.getOpposingField().forEach((opposingPokemon: Pokemon) => opposingPokemon.removeTagsBySourceId(pokemon.id));
 
     if (this.switchType === SwitchType.SWITCH || this.switchType === SwitchType.INITIAL_SWITCH) {
       const substitute = pokemon.getTag(SubstituteTag);
@@ -114,7 +114,7 @@ export class SwitchSummonPhase extends SummonPhase {
     this.lastPokemon = this.getPokemon();
     applyPreSwitchOutAbAttrs(PreSwitchOutAbAttr, this.lastPokemon);
     if (this.switchType === SwitchType.BATON_PASS && switchedInPokemon) {
-      this.getField().forEach((opposingPokemon: Pokemon) =>
+      this.getOpposingField().forEach((opposingPokemon: Pokemon) =>
         opposingPokemon.transferTagsBySourceId(this.lastPokemon.id, switchedInPokemon.id),
       );
 
