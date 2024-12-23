@@ -12,19 +12,32 @@
     "rootDir": ".",
     "baseUrl": "./src",
     "paths": {
-      "#enums/*": ["./enums/*.ts"],
-      "#app/*": ["*.ts"],
-      "#app": ["."],
-      "#test/*": ["../test/*.ts"]
+      "#enums/*": [
+        "./enums/*.ts"
+      ],
+      "#app/*": [
+        "./*.ts"
+      ],
+      "#test/*": [
+        "../test/*.ts"
+      ]
     },
     "outDir": "./build",
     "noEmit": true
   },
   "typedocOptions": {
-    "entryPoints": ["./src"],
+    "entryPoints": [
+      "./src"
+    ],
     "entryPointStrategy": "expand",
     "exclude": "**/*+.test.ts",
     "out": "typedoc"
   },
-  "exclude": ["node_modules", "dist", "vite.config.ts", "vitest.config.ts", "vitest.workspace.ts"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "vite.config.ts",
+    "vitest.config.ts",
+    "vitest.workspace.ts"
+  ]
 }
