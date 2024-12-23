@@ -1,3 +1,4 @@
+import type { SessionSaveData } from "#app/@types/SessionData";
 import { clientSessionId } from "#app/account";
 import { BattleType } from "#app/battle";
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
@@ -19,7 +20,6 @@ import { SummonPhase } from "#app/phases/summon-phase";
 import { UnlockPhase } from "#app/phases/unlock-phase";
 import { api } from "#app/plugins/api/api";
 import { achvs, ChallengeAchv } from "#app/system/achv";
-import type { SessionSaveData } from "#app/system/game-data";
 import TrainerData from "#app/system/trainer-data";
 import { Unlockables } from "#app/system/unlockables";
 import { Mode } from "#app/ui/ui";
@@ -27,13 +27,6 @@ import { isLocal, isLocalServerConnected } from "#app/utils";
 import { PlayerGender } from "#enums/player-gender";
 import { TrainerType } from "#enums/trainer-type";
 import i18next from "i18next";
-import type { SessionSaveData } from "#app/@types/SessionData";
-import PersistentModifierData from "#app/system/modifier-data";
-import PokemonData from "#app/system/pokemon-data";
-import ChallengeData from "#app/system/challenge-data";
-import TrainerData from "#app/system/trainer-data";
-import ArenaData from "#app/system/arena-data";
-import { api } from "#app/plugins/api/api";
 
 export class GameOverPhase extends BattlePhase {
   private isVictory: boolean;

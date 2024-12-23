@@ -991,7 +991,7 @@ export class GameData {
           const battle = globalScene.newBattle(
             sessionData.waveIndex,
             battleType,
-            sessionData.trainer!, // TODO: resolve bang
+            sessionData.trainer,
             battleType === BattleType.TRAINER
               ? trainerConfig?.doubleOnly || sessionData.trainer?.variant === TrainerVariant.DOUBLE
               : sessionData.enemyParty.length > 1,

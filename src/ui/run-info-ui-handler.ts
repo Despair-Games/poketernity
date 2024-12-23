@@ -329,12 +329,10 @@ export default class RunInfoUiHandler extends UiHandler {
         pokeball.setPosition(58 + (i % row_limit) * 8, i <= 2 ? 18 : 25);
         enemyContainer.add(pokeball);
       });
-      // TODO: resolve bang
-      const trainerObj = this.runInfo.trainer!.toTrainer();
+      const trainerObj = this.runInfo.trainer.toTrainer();
       const RIVAL_TRAINER_ID_THRESHOLD = 375;
       let trainerName = "";
-      // TODO: resolve bang
-      if (this.runInfo.trainer!.trainerType >= RIVAL_TRAINER_ID_THRESHOLD) {
+      if (this.runInfo.trainer.trainerType >= RIVAL_TRAINER_ID_THRESHOLD) {
         trainerName =
           trainerObj.variant === TrainerVariant.FEMALE
             ? i18next.t("trainerNames:rival_female")
