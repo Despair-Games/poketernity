@@ -32,7 +32,7 @@ export class MoveChargePhase extends HitCheckPhase {
 
     const targetHitCheck = move.hitCheckOnCharge ? this.hitCheck(target)[0] : HitCheckResult.HIT;
 
-    if ([HitCheckResult.HIT, HitCheckResult.MISS].includes(targetHitCheck)) {
+    if (![HitCheckResult.HIT, HitCheckResult.MISS].includes(targetHitCheck)) {
       switch (targetHitCheck) {
         case HitCheckResult.NO_EFFECT:
           globalScene.queueMessage(
