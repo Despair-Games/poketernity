@@ -2220,8 +2220,8 @@ export class GroundedTag extends BattlerTag {
    * @param pokemon the Pokemon being grounded
    */
   override onAdd(pokemon: Pokemon) {
-    const isSmackDownOrThousandWaves = [Moves.SMACK_DOWN, Moves.THOUSAND_WAVES].includes(this.sourceMove);
-    if (isSmackDownOrThousandWaves && !pokemon.isGrounded()) {
+    const isSmackDownOrThousandArrows = [Moves.SMACK_DOWN, Moves.THOUSAND_ARROWS].includes(this.sourceMove);
+    if (isSmackDownOrThousandArrows && !pokemon.isGrounded()) {
       globalScene.queueMessage(
         i18next.t("battlerTags:smackDown", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       );
