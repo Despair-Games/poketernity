@@ -50,7 +50,7 @@ export class GameOverPhase extends BattlePhase {
 
     // Handle Mystery Encounter special Game Over cases
     // Situations such as when player lost a battle, but it isn't treated as full Game Over
-    if (!this.isVictory && !currentBattle.mysteryEncounter?.onGameOver?.()) {
+    if (!this.isVictory && currentBattle.mysteryEncounter?.onGameOver && !currentBattle.mysteryEncounter.onGameOver()) {
       return this.end();
     }
 
