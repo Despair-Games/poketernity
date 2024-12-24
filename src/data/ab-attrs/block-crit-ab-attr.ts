@@ -19,6 +19,7 @@ export class BlockCritAbAttr extends AbAttr {
   ): boolean {
     const isCritical = args[0] as BooleanHolder;
 
+    // Only if isCritical is `true`, then the game checks if any crit-blocking abilities would nullify the result.
     if (isCritical.value) {
       isCritical.value = false;
       return true;

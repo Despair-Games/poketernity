@@ -433,7 +433,7 @@ export class MoveEffectPhase extends HitCheckPhase {
           move: move.id,
           result: result as DamageResult,
           damage: damage,
-          critical: isCritical,
+          isCritical: isCritical,
           sourceId: user.id,
           sourceBattlerIndex: user.getBattlerIndex(),
         };

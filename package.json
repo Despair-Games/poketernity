@@ -82,11 +82,5 @@
   },
   "engines": {
     "node": ">=20.0.0"
-  },
-  "imports": {
-    "#enums/*": "./src/enums/*.ts",
-    "#app": "./src/main.ts",
-    "#app/*": "./src/*.ts",
-    "#test/*": "./test/*.ts"
   }
 }
