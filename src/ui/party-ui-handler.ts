@@ -1,17 +1,12 @@
 import type { PlayerPokemon, PokemonMove } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
-import { MoveResult } from "#app/field/pokemon";
 import { addBBCodeTextObject, addTextObject, getTextColor, TextStyle } from "#app/ui/text";
 import { Command } from "#app/ui/command-ui-handler";
 import MessageUiHandler from "#app/ui/message-ui-handler";
 import { Mode } from "#app/ui/ui";
 import { BooleanHolder, toReadableString, randItem } from "#app/utils";
-import {
-  PokemonFormChangeItemModifier,
-  PokemonHeldItemModifier,
-  SwitchEffectTransferModifier,
-} from "#app/modifier/modifier";
-import { allMoves, ForceSwitchOutAttr } from "#app/data/move";
+import { PokemonFormChangeItemModifier, PokemonHeldItemModifier } from "#app/modifier/modifier";
+import { allMoves } from "#app/data/move";
 import PokemonIconAnimHandler from "#app/ui/pokemon-icon-anim-handler";
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
 import { addWindow } from "#app/ui/ui-theme";
@@ -40,6 +35,7 @@ import type {
   PokemonMoveSelectFilter,
   PokemonSelectFilter,
 } from "#app/ui/partyUtils/definitions";
+import { getSwitchOption } from "./partyUtils/switchMode";
 
 const defaultMessage = i18next.t("partyUiHandler:choosePokemon");
 
@@ -642,7 +638,10 @@ export default class PartyUiHandler extends MessageUiHandler {
           }
           this.showOptions();
           ui.playSelect();
-        } else if (this.partyUiMode === PartyUiMode.FAINT_SWITCH || this.partyUiMode === PartyUiMode.REVIVAL_BLESSING) {
+        } else if (
+          this.partyUiMode === PartyUiMode.FORCED_SWITCH
+          || this.partyUiMode === PartyUiMode.REVIVAL_BLESSING
+        ) {
           ui.playError();
         } else {
           return this.processInput(Button.CANCEL);
@@ -655,7 +654,10 @@ export default class PartyUiHandler extends MessageUiHandler {
         ) {
           this.clearTransfer();
           ui.playSelect();
-        } else if (this.partyUiMode !== PartyUiMode.FAINT_SWITCH && this.partyUiMode !== PartyUiMode.REVIVAL_BLESSING) {
+        } else if (
+          this.partyUiMode !== PartyUiMode.FORCED_SWITCH
+          && this.partyUiMode !== PartyUiMode.REVIVAL_BLESSING
+        ) {
           if (this.selectCallback) {
             const selectCallback = this.selectCallback;
             this.selectCallback = null;
@@ -966,36 +968,9 @@ export default class PartyUiHandler extends MessageUiHandler {
     ) {
       switch (this.partyUiMode) {
         case PartyUiMode.SWITCH:
-        case PartyUiMode.FAINT_SWITCH:
+        case PartyUiMode.FORCED_SWITCH:
         case PartyUiMode.POST_BATTLE_SWITCH:
-          if (this.cursor >= globalScene.currentBattle.getBattlerCount()) {
-            const allowBatonModifierSwitch =
-              this.partyUiMode !== PartyUiMode.FAINT_SWITCH
-              && globalScene.findModifier(
-                (m) =>
-                  m instanceof SwitchEffectTransferModifier
-                  && (m as SwitchEffectTransferModifier).pokemonId === globalScene.getPlayerField()[this.fieldIndex].id,
-              );
-
-            const moveHistory = globalScene.getPlayerField()[this.fieldIndex].getMoveHistory();
-            const isBatonPassMove =
-              this.partyUiMode === PartyUiMode.FAINT_SWITCH
-              && moveHistory.length
-              && allMoves[moveHistory[moveHistory.length - 1].move].getAttrs(ForceSwitchOutAttr)[0]?.isBatonPass()
-              && moveHistory[moveHistory.length - 1].result === MoveResult.SUCCESS;
-
-            // isBatonPassMove and allowBatonModifierSwitch shouldn't ever be true
-            // at the same time, because they both explicitly check for a mutually
-            // exclusive partyUiMode. But better safe than sorry.
-            this.options.push(
-              isBatonPassMove && !allowBatonModifierSwitch ? PartyOption.PASS_BATON : PartyOption.SEND_OUT,
-            );
-            if (allowBatonModifierSwitch && !isBatonPassMove) {
-              // the BATON modifier gives an extra switch option for
-              // pokemon-command switches, allowing buffs to be optionally passed
-              this.options.push(PartyOption.PASS_BATON);
-            }
-          }
+          getSwitchOption(this.partyUiMode);
           break;
         case PartyUiMode.REVIVAL_BLESSING:
           this.options.push(PartyOption.REVIVE);

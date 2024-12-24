@@ -75,7 +75,7 @@ export class SwitchPhase extends BattlePhase {
     // Cat was here
     globalScene.ui.setMode(
       Mode.PARTY,
-      this.isModal ? PartyUiMode.FAINT_SWITCH : PartyUiMode.POST_BATTLE_SWITCH,
+      this.isModal ? PartyUiMode.FORCED_SWITCH : PartyUiMode.POST_BATTLE_SWITCH,
       fieldIndex,
       (slotIndex: number, option: PartyOption) => {
         if (slotIndex >= globalScene.currentBattle.getBattlerCount() && slotIndex < 6) {

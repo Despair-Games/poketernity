@@ -15,7 +15,7 @@ export enum PartyUiMode {
    * Indicates that the party UI is open because of a faint or other forced
    * switch (eg, move effect). This type of switch cannot be cancelled.
    */
-  FAINT_SWITCH,
+  FORCED_SWITCH,
   /**
    * Indicates that the party UI is open because of a start-of-encounter optional
    * switch. This type of switch can be cancelled.
