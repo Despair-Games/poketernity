@@ -6,7 +6,7 @@ import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { allMoves } from "#app/data/move";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { FlinchAttr } from "#app/data/move";
+import { FlinchAttr } from "#app/data/move-attrs/flinch-attr";
 
 describe("Abilities - Serene Grace", () => {
   let phaserGame: Phaser.Game;

@@ -1,6 +1,6 @@
 import { applyAbAttrs } from "#app/data/ability";
-import type Move from "#app/data/move";
-import { MoveFlags } from "#app/data/move";
+import type { Move } from "#app/data/move";
+import { MoveFlags } from "../../enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
 import { HitResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -8,7 +8,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { BooleanHolder, toDmgValue } from "#app/utils";
 import i18next from "i18next";
 import { BlockNonDirectDamageAbAttr } from "./block-non-direct-damage-ab-attr";
-import { FieldPreventExplosiveMovesAbAttr } from "./field-prevent-explosive-moves-ab-attr";
+import { FieldPreventExplosionLikeAbAttr } from "./field-prevent-explosion-like-ab-attr";
 import { PostFaintAbAttr } from "./post-faint-ab-attr";
 
 export class PostFaintContactDamageAbAttr extends PostFaintAbAttr {
@@ -32,7 +32,7 @@ export class PostFaintContactDamageAbAttr extends PostFaintAbAttr {
     if (move && attacker && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)) {
       //If the mon didn't die to indirect damage
       const cancelled = new BooleanHolder(false);
-      globalScene.getField(true).map((p) => applyAbAttrs(FieldPreventExplosiveMovesAbAttr, p, cancelled, simulated));
+      globalScene.getField(true).map((p) => applyAbAttrs(FieldPreventExplosionLikeAbAttr, p, cancelled, simulated));
       applyAbAttrs(BlockNonDirectDamageAbAttr, attacker, cancelled, simulated);
       if (cancelled.value) {
         return false;
