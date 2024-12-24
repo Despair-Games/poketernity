@@ -10,12 +10,7 @@ import {
   applyPreAttackAbAttrs,
 } from "#app/data/ability";
 import { MoveAnim } from "#app/data/battle-anims";
-import {
-  BattlerTagLapseType,
-  SkyDropTag,
-  SubstituteTag,
-  TypeBoostTag,
-} from "#app/data/battler-tags";
+import { BattlerTagLapseType, SkyDropTag, SubstituteTag, TypeBoostTag } from "#app/data/battler-tags";
 import type { MoveAttr } from "#app/data/move-attrs/move-attr";
 import { applyFilteredMoveAttrs, applyMoveAttrs } from "#app/data/move";
 import { FlinchAttr } from "#app/data/move-attrs/flinch-attr";

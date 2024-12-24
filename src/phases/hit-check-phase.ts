@@ -3,7 +3,6 @@ import { AlwaysHitAbAttr } from "#app/data/ab-attrs/always-hit-ab-attr";
 import { MaxMultiHitAbAttr } from "#app/data/ab-attrs/max-multi-hit-ab-attr";
 import { ConditionalProtectTag } from "#app/data/arena-tag";
 import { SemiInvulnerableTag, ProtectedTag, SkyDropTag } from "#app/data/battler-tags";
-import { MoveFlags, MoveTarget, HitsTagAttr, ToxicAccuracyAttr, OneHitKOAttr } from "#app/data/move";
 import type { TypeDamageMultiplier } from "#app/data/type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitCheckResult } from "#enums/hit-check-result";
@@ -12,6 +11,11 @@ import type { Pokemon, PokemonMove } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { BooleanHolder } from "#app/utils";
 import { PokemonPhase } from "#app/phases/pokemon-phase";
+import { HitsTagAttr } from "#app/data/move-attrs/hits-tag-attr";
+import { OneHitKOAttr } from "#app/data/move-attrs/one-hit-ko-attr";
+import { ToxicAccuracyAttr } from "#app/data/move-attrs/toxic-accuracy-attr";
+import { MoveFlags } from "#enums/move-flags";
+import { MoveTarget } from "#enums/move-target";
 
 type HitCheckEntry = [HitCheckResult, TypeDamageMultiplier];
 
