@@ -33,8 +33,28 @@ describe("Abilities - Static", () => {
       .enemyMoveset([Moves.TACKLE, Moves.WATER_GUN]);
   });
 
+  it("should paralyze an attacking Pokemon if contact is made", async () => {
+    await game.classicMode.startBattle([Species.FEEBAS]);
+    const pokemon = game.scene.getPlayerPokemon();
+    vi.spyOn(
+      pokemon
+        ?.getAbility()
+        .getAttrs(PostDefendContactApplyStatusEffectAbAttr)[0] as PostDefendContactApplyStatusEffectAbAttr,
+      "chance",
+      "get",
+    ).mockReturnValue(100);
+
+    game.move.select(Moves.SPLASH);
+    await game.forceEnemyMove(Moves.TACKLE);
+    await game.phaseInterceptor.to("BerryPhase");
+
+    const attacker = game.scene.getEnemyPokemon();
+    expect(attacker?.status?.effect).toBe(StatusEffect.PARALYSIS);
+  });
+
   it("can paralyze a Ground-type Pokemon", async () => {
-    await game.classicMode.startBattle([Species.DIGLETT]);
+    game.override.enemySpecies(Species.DIGLETT);
+    await game.classicMode.startBattle([Species.FEEBAS]);
     const pokemon = game.scene.getPlayerPokemon();
     vi.spyOn(
       pokemon

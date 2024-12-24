@@ -7,6 +7,7 @@ import { PostDefendAbAttr } from "./post-defend-ab-attr";
 
 /**
  * Ability attribute that inflicts a status on the attacking Pokemon if the attacker used a contact move on the ability holder
+```
 +--------------+-----------+----------+
 | Ability Name |  Status   | % Chance |
 +--------------+-----------+----------+
@@ -14,11 +15,19 @@ import { PostDefendAbAttr } from "./post-defend-ab-attr";
 | Flame Body   | Burn      |       30 |
 | Poison Point | Poison    |       30 |
 +--------------+-----------+----------+ 
- */
+```
+Currently, all abilities that use this attribute only inflict one status effect each. 
+The code is future-proofed so that it can accept a list of multiple status effects though. 
+*/
 export class PostDefendContactApplyStatusEffectAbAttr extends PostDefendAbAttr {
   public readonly chance: number;
   private readonly effects: StatusEffect[] = [];
 
+  /**
+   * PostDefendContactApplyStatusEffectAbAttr takes an activation chance and a status effect/list of status effects that should be applied following a passing roll.
+   * @param chance a percentage chance of the ability attribute's activation
+   * @param effects the status effect(s) to be applied to the attacker
+   */
   constructor(chance: number, effects: StatusEffect | StatusEffect[]) {
     super();
 

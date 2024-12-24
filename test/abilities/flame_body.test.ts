@@ -3,7 +3,9 @@ import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { PostDefendContactApplyStatusEffectAbAttr } from "#app/data/ab-attrs/post-defend-contact-apply-status-effect-ab-attr";
+import { StatusEffect } from "#enums/status-effect";
 
 describe("Abilities - Flame Body", () => {
   let phaserGame: Phaser.Game;
@@ -23,7 +25,7 @@ describe("Abilities - Flame Body", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([Moves.SPLASH])
-      .ability(Abilities.BALL_FETCH)
+      .ability(Abilities.FLAME_BODY)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
@@ -31,12 +33,41 @@ describe("Abilities - Flame Body", () => {
       .enemyMoveset(Moves.SPLASH);
   });
 
-  it("should do X", async () => {
+  it("should paralyze an attacking Pokemon if contact is made", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
+    const pokemon = game.scene.getPlayerPokemon();
+    vi.spyOn(
+      pokemon
+        ?.getAbility()
+        .getAttrs(PostDefendContactApplyStatusEffectAbAttr)[0] as PostDefendContactApplyStatusEffectAbAttr,
+      "chance",
+      "get",
+    ).mockReturnValue(100);
 
     game.move.select(Moves.SPLASH);
+    await game.forceEnemyMove(Moves.TACKLE);
     await game.phaseInterceptor.to("BerryPhase");
 
-    expect(true).toBe(true);
+    const attacker = game.scene.getEnemyPokemon();
+    expect(attacker?.status?.effect).toBe(StatusEffect.BURN);
+  });
+
+  it("should not activate from a non-contact attack", async () => {
+    await game.classicMode.startBattle([Species.FEEBAS]);
+    const pokemon = game.scene.getPlayerPokemon();
+    vi.spyOn(
+      pokemon
+        ?.getAbility()
+        .getAttrs(PostDefendContactApplyStatusEffectAbAttr)[0] as PostDefendContactApplyStatusEffectAbAttr,
+      "chance",
+      "get",
+    ).mockReturnValue(100);
+
+    game.move.select(Moves.SPLASH);
+    await game.forceEnemyMove(Moves.WATER_GUN);
+    await game.phaseInterceptor.to("BerryPhase");
+
+    const attacker = game.scene.getEnemyPokemon();
+    expect(attacker?.status).toBeUndefined();
   });
 });
