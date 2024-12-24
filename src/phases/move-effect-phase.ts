@@ -21,26 +21,22 @@ import {
   SubstituteTag,
   TypeBoostTag,
 } from "#app/data/battler-tags";
-import type { MoveAttr } from "#app/data/move";
-import {
-  applyFilteredMoveAttrs,
-  applyMoveAttrs,
-  AttackMove,
-  DelayedAttackAttr,
-  FlinchAttr,
-  HitsTagAttr,
-  MissEffectAttr,
-  MoveCategory,
-  MoveEffectAttr,
-  MoveEffectTrigger,
-  MoveFlags,
-  MoveTarget,
-  MultiHitAttr,
-  NoEffectAttr,
-  OneHitKOAttr,
-  OverrideMoveEffectAttr,
-  ToxicAccuracyAttr,
-} from "#app/data/move";
+import type { MoveAttr } from "#app/data/move-attrs/move-attr";
+import { applyFilteredMoveAttrs, applyMoveAttrs } from "#app/data/move";
+import { FlinchAttr } from "#app/data/move-attrs/flinch-attr";
+import { HitsTagAttr } from "#app/data/move-attrs/hits-tag-attr";
+import { NoEffectAttr } from "#app/data/move-attrs/no-effect-attr";
+import { MissEffectAttr } from "#app/data/move-attrs/miss-effect-attr";
+import { ToxicAccuracyAttr } from "#app/data/move-attrs/toxic-accuracy-attr";
+import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
+import { OneHitKOAttr } from "#app/data/move-attrs/one-hit-ko-attr";
+import { MultiHitAttr } from "#app/data/move-attrs/multi-hit-attr";
+import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
+import { MoveEffectTrigger } from "#enums/move-effect-trigger";
+import { AttackMove } from "#app/data/move";
+import { MoveFlags } from "#enums/move-flags";
+import { MoveTarget } from "#enums/move-target";
+import { MoveCategory } from "#enums/move-category";
 import { SpeciesFormChangePostMoveTrigger } from "#app/data/pokemon-forms";
 import type { TypeDamageMultiplier } from "#app/data/type";
 import type { Pokemon } from "#app/field/pokemon";
@@ -66,6 +62,7 @@ import { HitCheckResult } from "#enums/hit-check-result";
 import { Moves } from "#enums/moves";
 import { Type } from "#enums/type";
 import i18next from "i18next";
+import { DelayedAttackAttr } from "#app/data/move-attrs/delayed-attack-attr";
 
 type HitCheckEntry = [HitCheckResult, TypeDamageMultiplier];
 

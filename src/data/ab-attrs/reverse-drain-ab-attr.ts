@@ -1,10 +1,11 @@
-import { type Move, HitHealAttr } from "#app/data/move";
+import { type Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { HitResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
+import { HitHealAttr } from "../move-attrs/hit-heal-attr";
 
 /**
  * Class for abilities that make drain moves deal damage to user instead of healing them.

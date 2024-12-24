@@ -4,7 +4,6 @@ import { initLoggedInUser } from "#app/account";
 import { initBiomes } from "#app/data/balance/biomes";
 import { initEggMoves } from "#app/data/balance/egg-moves";
 import { initPokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
-import { initMoves } from "#app/data/move";
 import { initMysteryEncounters } from "#app/data/mystery-encounters/mystery-encounters";
 import { initPokemonForms } from "#app/data/pokemon-forms";
 import { initSpecies } from "#app/data/pokemon-species";
@@ -13,6 +12,7 @@ import { initVouchers } from "#app/system/voucher";
 import { initStatsKeys } from "#app/ui/game-stats-ui-handler";
 import { afterAll, beforeAll, vi } from "vitest";
 import { initAbilities } from "#app/data/abilities";
+import { initMoves } from "#app/data/all-moves";
 
 /** Set the timezone to UTC for tests. */
 process.env.TZ = "UTC";
