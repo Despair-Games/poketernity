@@ -38,6 +38,6 @@ export class PostDefendCritStatStageChangeAbAttr extends PostDefendAbAttr {
     return (pokemon: Pokemon) =>
       pokemon.turnData.attacksReceived.length !== 0
       // TODO: Normalize `attacksReceived[]` checks
-      && pokemon.turnData.attacksReceived[pokemon.turnData.attacksReceived.length - 1].critical;
+      && pokemon.turnData.attacksReceived[pokemon.turnData.attacksReceived.length - 1].isCritical;
   }
 }
