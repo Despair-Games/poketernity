@@ -17,7 +17,7 @@ import { PostDefendAbAttr } from "./post-defend-ab-attr";
  */
 export class PostDefendContactApplyStatusEffectAbAttr extends PostDefendAbAttr {
   public readonly chance: number;
-  private readonly effects: StatusEffect[];
+  private readonly effects: StatusEffect[] = [];
 
   constructor(chance: number, effects: StatusEffect | StatusEffect[]) {
     super();
