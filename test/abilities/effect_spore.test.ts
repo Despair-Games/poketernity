@@ -39,7 +39,8 @@ describe("Abilities - Effect Spore", () => {
     const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(EffectSporeAbAttr)[0]!;
     vi.spyOn(abilityAttr, "applyPostDefend");
 
-    game.move.select(Moves.TACKLE);
+    game.move.select(Moves.SPLASH);
+    await game.forceEnemyMove(Moves.TACKLE);
     await game.move.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
@@ -53,7 +54,8 @@ describe("Abilities - Effect Spore", () => {
     const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(EffectSporeAbAttr)[0]!;
     vi.spyOn(abilityAttr, "applyPostDefend");
 
-    game.move.select(Moves.TACKLE);
+    game.move.select(Moves.SPLASH);
+    await game.forceEnemyMove(Moves.TACKLE);
     await game.move.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
@@ -66,7 +68,8 @@ describe("Abilities - Effect Spore", () => {
     const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(EffectSporeAbAttr)[0]!;
     vi.spyOn(abilityAttr, "applyPostDefend");
 
-    game.move.select(Moves.WATER_GUN);
+    game.move.select(Moves.SPLASH);
+    await game.forceEnemyMove(Moves.WATER_GUN);
     await game.move.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
