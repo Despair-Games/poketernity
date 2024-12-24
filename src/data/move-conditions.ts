@@ -7,14 +7,13 @@ import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { StatusEffect } from "#enums/status-effect";
 import { Type } from "#enums/type";
-import i18next from "i18next";
-import { FieldPreventExplosiveMovesAbAttr } from "./ab-attrs/field-prevent-explosive-moves-ab-attr";
 import { applyAbAttrs } from "./ability";
 import { StockpilingTag } from "./battler-tags";
 import { type Move } from "./move";
 import { allMoves } from "./move";
 import { MoveCategory } from "#enums/move-category";
 import { Command } from "#app/ui/command-ui-handler";
+import { FieldPreventExplosionLikeAbAttr } from "./ab-attrs/field-prevent-explosion-like-ab-attr";
 
 export type MoveConditionFunc = (user: Pokemon, target: Pokemon, move: Move) => boolean;
 export type UserMoveConditionFunc = (user: Pokemon, move: Move) => boolean;
@@ -106,13 +105,11 @@ export const failIfSingleBattle: MoveConditionFunc = (_user, _target, _move) => 
 
 export const failIfDampCondition: MoveConditionFunc = (user, _target, move) => {
   const cancelled = new BooleanHolder(false);
-  globalScene.getField(true).map((p) => applyAbAttrs(FieldPreventExplosiveMovesAbAttr, p, cancelled));
-  // Queue a message if an ability prevented usage of the move
-  if (cancelled.value) {
-    globalScene.queueMessage(
-      i18next.t("moveTriggers:cannotUseMove", { pokemonName: getPokemonNameWithAffix(user), moveName: move.name }),
+  globalScene
+    .getField(true)
+    .map((p) =>
+      applyAbAttrs(FieldPreventExplosionLikeAbAttr, p, cancelled, undefined, getPokemonNameWithAffix(user), move.name),
     );
-  }
   return !cancelled.value;
 };
 
