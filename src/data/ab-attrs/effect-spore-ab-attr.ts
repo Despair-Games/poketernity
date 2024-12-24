@@ -10,14 +10,16 @@ import { randSeedInt } from "#app/utils";
 
 /**
  * Effect Spore's ability attribute
+ *
  * When a Pokémon with this Ability is hit by a move that makes contact, there is a 9% chance of poison, 10% chance of paralysis, and 11% chance of sleep.
- * The total sum of these chances is 30%,
+ * The total sum of these chances is 30%.
+ * @extends PostDefendAbAttr
  */
 export class EffectSporeAbAttr extends PostDefendAbAttr {
   public readonly chance = 30;
 
   /**
-   * Identical code to PostDefendContactApplyStatusEffectAbAttr's applyPostDefend() but it contains two conditional checks.
+   * Identical code to {@linkcode PostDefendContactApplyStatusEffectAbAttr}'s `applyPostDefend()` but it contains two conditional checks.
    * Effect Spore cannot affect the attacker if the attacker is Grass-type or has the ability Overcoat
    */
   override applyPostDefend(
