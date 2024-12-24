@@ -34,7 +34,7 @@ export class EffectSporeAbAttr extends PostDefendAbAttr {
     if (attacker.hasAbility(Abilities.OVERCOAT) || attacker.isOfType(Type.GRASS)) {
       return false;
     }
-    const roll = randSeedInt(100);
+    const roll = pokemon.randSeedInt(100);
     if (move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon) && !attacker.status && roll < this.chance) {
       const statusEffect = this.getStatus(roll);
       if (simulated) {
