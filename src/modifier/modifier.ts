@@ -2444,7 +2444,7 @@ export class RememberMoveModifier extends ConsumablePokemonModifier {
     globalScene.unshiftPhase(
       new LearnMovePhase(
         globalScene.getPlayerParty().indexOf(playerPokemon),
-        playerPokemon.getLearnableLevelMoves()[this.levelMoveIndex],
+        this.levelMoveIndex,
         LearnMoveType.MEMORY,
         cost,
       ),

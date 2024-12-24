@@ -1,5 +1,6 @@
 import { globalScene } from "#app/global-scene";
-import PartyUiHandler, { PartyOption, PartyUiMode } from "#app/ui/party-ui-handler";
+import PartyUiHandler from "#app/ui/party-ui-handler";
+import { PartyOption, PartyUiMode } from "#app/ui/partyUtils/definitions";
 import { Mode } from "#app/ui/ui";
 import { SwitchType } from "#enums/switch-type";
 import { BattlePhase } from "./battle-phase";
@@ -71,9 +72,10 @@ export class SwitchPhase extends BattlePhase {
         ? this.fieldIndex
         : 0;
 
+    // Cat was here
     globalScene.ui.setMode(
       Mode.PARTY,
-      this.isModal ? PartyUiMode.FAINT_SWITCH : PartyUiMode.POST_BATTLE_SWITCH,
+      this.isModal ? PartyUiMode.FORCED_SWITCH : PartyUiMode.POST_BATTLE_SWITCH,
       fieldIndex,
       (slotIndex: number, option: PartyOption) => {
         if (slotIndex >= globalScene.currentBattle.getBattlerCount() && slotIndex < 6) {

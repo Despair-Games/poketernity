@@ -26,8 +26,8 @@ import {
 } from "#app/phases/mystery-encounter-phases";
 import type PokemonData from "#app/system/pokemon-data";
 import type { OptionSelectConfig, OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler";
-import type { PartyOption, PokemonSelectFilter } from "#app/ui/party-ui-handler";
-import { PartyUiMode } from "#app/ui/party-ui-handler";
+import type { PartyOption, PokemonSelectFilter } from "#app/ui/partyUtils/definitions";
+import { PartyUiMode } from "#app/ui/partyUtils/definitions";
 import { Mode } from "#app/ui/ui";
 import { isNullOrUndefined, randSeedInt, randomString } from "#app/utils";
 import type { BattlerTagType } from "#enums/battler-tag-type";

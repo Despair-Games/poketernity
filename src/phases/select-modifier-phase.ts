@@ -23,7 +23,8 @@ import {
 } from "#app/modifier/modifier";
 import type ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
 import { SHOP_OPTIONS_ROW_LIMIT } from "#app/ui/modifier-select-ui-handler";
-import PartyUiHandler, { PartyUiMode, PartyOption } from "#app/ui/party-ui-handler";
+import PartyUiHandler from "#app/ui/party-ui-handler";
+import { PartyUiMode, PartyOption } from "#app/ui/partyUtils/definitions";
 import { Mode } from "#app/ui/ui";
 import i18next from "i18next";
 import { isNullOrUndefined, NumberHolder } from "#app/utils";

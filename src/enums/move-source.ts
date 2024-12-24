@@ -1,0 +1,11 @@
+export enum MoveSource {
+  DEFAULT,
+  LEVEL_UP,
+  EGG,
+  TM,
+  EVOLUTION,
+  FUSION_TM,
+  FUSION_LEVEL_UP,
+  FUSION_EVOLUTION,
+  MYSTERY_ENCOUNTER,
+}

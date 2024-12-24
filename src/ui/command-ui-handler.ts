@@ -1,5 +1,6 @@
 import { addTextObject, TextStyle } from "./text";
-import PartyUiHandler, { PartyUiMode } from "./party-ui-handler";
+import PartyUiHandler from "./party-ui-handler";
+import { PartyUiMode } from "./partyUtils/definitions";
 import { Mode } from "./ui";
 import UiHandler from "./ui-handler";
 import i18next from "i18next";

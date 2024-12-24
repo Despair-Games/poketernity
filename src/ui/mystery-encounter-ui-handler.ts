@@ -4,7 +4,7 @@ import UiHandler from "./ui-handler";
 import { Button } from "#enums/buttons";
 import { addWindow, WindowVariant } from "./ui-theme";
 import type { MysteryEncounterPhase } from "../phases/mystery-encounter-phases";
-import { PartyUiMode } from "./party-ui-handler";
+import { PartyUiMode } from "#app/ui/partyUtils/definitions";
 import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
 import { fixedInt, isNullOrUndefined } from "#app/utils";
 import { getPokeballAtlasKey } from "../data/pokeball";
