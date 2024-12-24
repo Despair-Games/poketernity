@@ -2227,7 +2227,7 @@ export class GroundedTag extends BattlerTag {
 
     if (isSmackDownOrThousandArrows && wasNotGrounded) {
       globalScene.queueMessage(
-        i18next.t("battlerTags:smackDown", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+        i18next.t("battlerTags:groundedSmackDown", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       );
     }
   }
