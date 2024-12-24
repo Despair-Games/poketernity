@@ -10,23 +10,24 @@ import {
   applyPreAttackAbAttrs,
 } from "#app/data/ability";
 import { MoveAnim } from "#app/data/battle-anims";
-import { BattlerTagLapseType, SkyDropTag, SubstituteTag, TypeBoostTag } from "#app/data/battler-tags";
-import type { MoveAttr } from "#app/data/move";
 import {
-  applyFilteredMoveAttrs,
-  applyMoveAttrs,
-  AttackMove,
-  DelayedAttackAttr,
-  FlinchAttr,
-  MissEffectAttr,
-  MoveCategory,
-  MoveEffectAttr,
-  MoveEffectTrigger,
-  MoveTarget,
-  MultiHitAttr,
-  NoEffectAttr,
-  OverrideMoveEffectAttr,
-} from "#app/data/move";
+  BattlerTagLapseType,
+  SkyDropTag,
+  SubstituteTag,
+  TypeBoostTag,
+} from "#app/data/battler-tags";
+import type { MoveAttr } from "#app/data/move-attrs/move-attr";
+import { applyFilteredMoveAttrs, applyMoveAttrs } from "#app/data/move";
+import { FlinchAttr } from "#app/data/move-attrs/flinch-attr";
+import { NoEffectAttr } from "#app/data/move-attrs/no-effect-attr";
+import { MissEffectAttr } from "#app/data/move-attrs/miss-effect-attr";
+import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
+import { MultiHitAttr } from "#app/data/move-attrs/multi-hit-attr";
+import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
+import { MoveEffectTrigger } from "#enums/move-effect-trigger";
+import { AttackMove } from "#app/data/move";
+import { MoveTarget } from "#enums/move-target";
+import { MoveCategory } from "#enums/move-category";
 import { SpeciesFormChangePostMoveTrigger } from "#app/data/pokemon-forms";
 import type { TypeDamageMultiplier } from "#app/data/type";
 import type { Pokemon } from "#app/field/pokemon";
@@ -50,6 +51,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitCheckResult } from "#enums/hit-check-result";
 import { Moves } from "#enums/moves";
 import i18next from "i18next";
+import { DelayedAttackAttr } from "#app/data/move-attrs/delayed-attack-attr";
 import { HitCheckPhase } from "#app/phases/hit-check-phase";
 import type { BattlerIndex } from "#app/battle";
 import { MovePhase } from "./move-phase";

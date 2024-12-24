@@ -24,7 +24,7 @@ import i18next from "i18next";
 import { getPokemonNameWithAffix } from "../messages";
 import { HitHealModifier } from "../modifier/modifier";
 import type { BattlerTag } from "./battler-tags";
-import type Move from "./move";
+import type { Move } from "./move";
 import { allMoves } from "./move";
 import type { AbAttr } from "./ab-attrs/ab-attr";
 import type { PostBattleInitAbAttr } from "./ab-attrs/post-battle-init-ab-attr";

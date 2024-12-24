@@ -1,5 +1,5 @@
-import type Move from "#app/data/move";
-import { allMoves } from "#app/data/move";
+import type { Move } from "#app/data/move";
+import { allMoves } from "../move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { Command } from "#app/ui/command-ui-handler";
