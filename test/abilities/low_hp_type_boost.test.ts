@@ -8,7 +8,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vite
 import { Stat } from "#enums/stat";
 import { allMoves } from "#app/data/move";
 
-describe("Abilities - Low Hp Type Boost", () => {
+describe("Abilities - Overgrow/Blaze/Torrent/Swarm", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
 
@@ -34,48 +34,28 @@ describe("Abilities - Low Hp Type Boost", () => {
   });
 
   it.each([
-    { abilityName: "Overgrow", ability: Abilities.OVERGROW },
-    { abilityName: "Blaze", ability: Abilities.BLAZE },
-    { abilityName: "Torrent", ability: Abilities.TORRENT },
-    { abilityName: "Swarm", ability: Abilities.SWARM },
+    { abilityName: "Overgrow", ability: Abilities.OVERGROW, move: Moves.LEAFAGE },
+    { abilityName: "Blaze", ability: Abilities.BLAZE, move: Moves.EMBER },
+    { abilityName: "Torrent", ability: Abilities.TORRENT, move: Moves.WATER_GUN },
+    { abilityName: "Swarm", ability: Abilities.SWARM, move: Moves.BUG_BITE },
   ])(
     "$abilityName should multiply the user's attacking stat by 1.5 if it uses a move of the relevant type at low HP",
-    async ({ ability }) => {
+    async ({ ability, move }) => {
       game.override.ability(ability);
       await game.classicMode.startBattle([Species.RATTATA]);
       const playerPokemon = game.scene.getPlayerPokemon()!;
       playerPokemon.hp = playerPokemon.getMaxHp() * 0.33 - 1;
       vi.spyOn(playerPokemon, "getEffectiveStat");
 
-      const moveId = getMove(ability);
-      game.move.select(moveId);
+      game.move.select(move);
       await game.move.forceHit();
       await game.phaseInterceptor.to("BerryPhase");
 
       const playerStat =
-        allMoves[moveId].category === MoveCategory.PHYSICAL
+        allMoves[move].category === MoveCategory.PHYSICAL
           ? playerPokemon.stats[Stat.ATK]
           : playerPokemon.stats[Stat.SPATK];
       expect(playerPokemon.getEffectiveStat).toHaveLastReturnedWith(Math.floor(playerStat * 1.5));
     },
   );
 });
-
-/**
- * Helper function that determines which move should be used based on the tested ability
- * @param ability the ability used in the test
- * @returns the move that should be used in the test
- */
-function getMove(ability: Abilities): Moves {
-  switch (ability) {
-    case Abilities.OVERGROW:
-      return Moves.LEAFAGE;
-    case Abilities.BLAZE:
-      return Moves.EMBER;
-    case Abilities.TORRENT:
-      return Moves.WATER_GUN;
-    case Abilities.SWARM:
-      return Moves.BUG_BITE;
-  }
-  return Moves.NONE;
-}
