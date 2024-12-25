@@ -302,6 +302,7 @@ export class TitlePhase extends Phase {
 
   public override end(): void {
     const { arena, currentBattle, gameData } = globalScene;
+    const { battleType, double, waveIndex } = currentBattle;
 
     if (!this.loaded && !globalScene.gameMode.isDaily) {
       arena.preloadBgm();
@@ -322,19 +323,16 @@ export class TitlePhase extends Phase {
       const availablePartyMembers = globalScene.getPokemonAllowedInBattle().length;
 
       globalScene.pushPhase(new SummonPhase(0, true, true));
-      if (currentBattle.double && availablePartyMembers > 1) {
+      if (double && availablePartyMembers > 1) {
         globalScene.pushPhase(new SummonPhase(1, true, true));
       }
 
-      if (
-        currentBattle.battleType !== BattleType.TRAINER
-        && (currentBattle.waveIndex > 1 || !globalScene.gameMode.isDaily)
-      ) {
-        const minPartySize = currentBattle.double ? 2 : 1;
+      if (battleType !== BattleType.TRAINER && (waveIndex > 1 || !globalScene.gameMode.isDaily)) {
+        const minPartySize = double ? 2 : 1;
         if (availablePartyMembers > minPartySize) {
-          globalScene.pushPhase(new CheckSwitchPhase(0, currentBattle.double));
-          if (currentBattle.double) {
-            globalScene.pushPhase(new CheckSwitchPhase(1, currentBattle.double));
+          globalScene.pushPhase(new CheckSwitchPhase(0, double));
+          if (double) {
+            globalScene.pushPhase(new CheckSwitchPhase(1, double));
           }
         }
       }
