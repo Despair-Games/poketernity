@@ -21,7 +21,6 @@ import { Unlockables } from "#app/system/unlockables";
 import { Mode } from "#app/ui/ui";
 import { isLocal, isLocalServerConnected } from "#app/utils";
 import { PlayerGender } from "#enums/player-gender";
-import { TrainerType } from "#enums/trainer-type";
 import i18next from "i18next";
 import type { SessionSaveData } from "#app/@types/SessionData";
 import PersistentModifierData from "#app/system/modifier-data";
@@ -30,7 +29,6 @@ import ChallengeData from "#app/system/challenge-data";
 import TrainerData from "#app/system/trainer-data";
 import ArenaData from "#app/system/arena-data";
 import { api } from "#app/plugins/api/api";
-import { rivalTrainerConfigs } from "#app/data/balance/trainer-configs/rival-trainer-configs";
 
 export class GameOverPhase extends BattlePhase {
   private isVictory: boolean;
@@ -186,9 +184,7 @@ export class GameOverPhase extends BattlePhase {
                   .then(() => {
                     globalScene.ui.showDialogue(
                       dialogueKey,
-                      globalScene.gameData.gender === PlayerGender.FEMALE
-                        ? rivalTrainerConfigs[TrainerType.RIVAL].name
-                        : rivalTrainerConfigs[TrainerType.RIVAL].nameFemale,
+                      globalScene.gameData.gender === PlayerGender.FEMALE ? "Finn" : "Ivy",
                       null,
                       () => {
                         globalScene.ui.fadeOut(500).then(() => {

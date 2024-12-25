@@ -1,4 +1,3 @@
-import { startingWave } from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
 import type { ModifierTypeFunc } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-type";
@@ -8,7 +7,6 @@ import type { PokemonSpeciesFilter } from "#app/data/pokemon-species";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
 import type { Type } from "#enums/type";
-import { doubleBattleDialogue } from "#app/data/dialogue";
 import type { PersistentModifier } from "#app/modifier/modifier";
 import { TrainerVariant } from "#app/field/trainer";
 import { getIsInitialized, initI18n } from "#app/plugins/i18n";
@@ -16,6 +14,8 @@ import i18next from "i18next";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
+import Overrides from "#app/overrides";
+
 /** Minimum BST for Pokemon generated onto the Elite Four's teams */
 const ELITE_FOUR_MINIMUM_BST = 460;
 /** Minimum BST for Pokemon generated onto the E4 Champion's team */
@@ -513,18 +513,22 @@ export class TrainerConfig {
     return this;
   }
 
+  // TODO: move this into dialogue.ts
   /**
    * Sets the encounter and victory messages for double trainers.
    * @param nameDouble - The name of the pair (e.g. "red_blue_double").
    */
   setDoubleMessages(nameDouble: string) {
     // Check if there is double battle dialogue for this trainer
-    if (doubleBattleDialogue[nameDouble]) {
-      // Set encounter and victory messages for double trainers
-      this.doubleEncounterMessages = doubleBattleDialogue[nameDouble].encounter;
-      this.doubleVictoryMessages = doubleBattleDialogue[nameDouble].victory;
-      this.doubleDefeatMessages = doubleBattleDialogue[nameDouble].defeat;
-    }
+    // if (doubleBattleDialogue[nameDouble]) {
+    //   // Set encounter and victory messages for double trainers
+    //   this.doubleEncounterMessages = doubleBattleDialogue[nameDouble].encounter;
+    //   this.doubleVictoryMessages = doubleBattleDialogue[nameDouble].victory;
+    //   this.doubleDefeatMessages = doubleBattleDialogue[nameDouble].defeat;
+    // }
+    this.doubleEncounterMessages = [nameDouble];
+    this.doubleVictoryMessages = [nameDouble];
+    this.doubleDefeatMessages = [nameDouble];
   }
 
   /**
@@ -1541,12 +1545,12 @@ export function getEvilGruntPartyTemplate(): TrainerPartyTemplate {
 }
 
 export function getWavePartyTemplate(...templates: TrainerPartyTemplate[]) {
+  const wave = Overrides.STARTING_WAVE_OVERRIDE || 1;
   return templates[
     Math.min(
       Math.max(
         Math.ceil(
-          (globalScene.gameMode.getWaveForDifficulty(globalScene.currentBattle?.waveIndex || startingWave, true) - 20)
-            / 30,
+          (globalScene.gameMode.getWaveForDifficulty(globalScene.currentBattle?.waveIndex || wave, true) - 20) / 30,
         ),
         0,
       ),
