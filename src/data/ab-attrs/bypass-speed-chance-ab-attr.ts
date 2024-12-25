@@ -1,4 +1,4 @@
-import { allMoves } from "../move";
+import { allMoves } from "#app/data/all-moves";
 import { MoveCategory } from "../../enums/move-category";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";

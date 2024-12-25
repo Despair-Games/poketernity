@@ -3,7 +3,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
 import { type Move } from "../move";
-import { allMoves } from "../move";
+import { allMoves } from "#app/data/all-moves";
 import { targetMoveCopiableCondition, type MoveConditionFunc } from "../move-conditions";
 import { OverrideMoveEffectAttr } from "./override-move-effect-attr";
 

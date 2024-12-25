@@ -19,8 +19,8 @@ import { TerrainType } from "#enums/terrain-type";
 import { Type } from "#enums/type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
-import { isNullOrUndefined } from "util";
-import { allMoves, selfStatLowerMoves, type Move } from "./move";
+import { isNullOrUndefined } from "utils";
+import { selfStatLowerMoves, type Move } from "./move";
 import { AttackMove } from "./move";
 import { ChargeAnim } from "./battle-anims";
 import { EncoreTag, StockpilingTag, SemiInvulnerableTag, ShellTrapTag, TrappedTag } from "./battler-tags";
@@ -242,8 +242,11 @@ import { isNonVolatileStatusEffect, getNonVolatileStatusEffects } from "./status
 import { StatusMove } from "./move";
 import { crashDamageFunc, frenzyMissFunc } from "./move-utils";
 
+export const allMoves: Move[] = [];
+
 export function initMoves() {
   allMoves.push(
+    new SelfStatusMove(Moves.NONE, Type.NORMAL, MoveCategory.STATUS, -1, -1, 0, 1),
     new AttackMove(Moves.POUND, Type.NORMAL, MoveCategory.PHYSICAL, 40, 100, 35, -1, 0, 1),
     new AttackMove(Moves.KARATE_CHOP, Type.FIGHTING, MoveCategory.PHYSICAL, 50, 100, 25, -1, 0, 1).attr(HighCritAttr),
     new AttackMove(Moves.DOUBLE_SLAP, Type.NORMAL, MoveCategory.PHYSICAL, 15, 85, 10, -1, 0, 1).attr(MultiHitAttr),
@@ -3348,7 +3351,7 @@ export function initMoves() {
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.SPATK], -1, true, {
         condition: (user, _target, _move) => user.isTerastallized() && user.isOfType(Type.STELLAR),
       })
-      .partial() /** Does not ignore abilities that affect stats, relevant in determining the move's category {@see TeraMoveCategoryAttr} */,
+      .partial(), // Does not ignore abilities that affect stats, relevant in determining the move's category {@see TeraMoveCategoryAttr}
     new SelfStatusMove(Moves.SILK_TRAP, Type.BUG, -1, 10, -1, 4, 9)
       .attr(ProtectAttr, BattlerTagType.SILK_TRAP)
       .condition(failIfLastCondition),
@@ -3612,7 +3615,7 @@ export function initMoves() {
           ? MoveTarget.ALL_NEAR_ENEMIES
           : MoveTarget.NEAR_OTHER,
       )
-      .partial() /** Does not ignore abilities that affect stats, relevant in determining the move's category {@see TeraMoveCategoryAttr} */,
+      .partial(), // Does not ignore abilities that affect stats, relevant in determining the move's category {@see TeraMoveCategoryAttr}
     new AttackMove(Moves.FICKLE_BEAM, Type.DRAGON, MoveCategory.SPECIAL, 80, 100, 5, 30, 0, 9)
       .attr(PreMoveMessageAttr, doublePowerChanceMessageFunc)
       .attr(DoublePowerChanceAttr),

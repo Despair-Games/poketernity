@@ -1,4 +1,4 @@
-import { allMoves } from "#app/data/move";
+import { allMoves } from "#app/data/all-moves";
 import { StatusEffect } from "#enums/status-effect";
 import { CommandPhase } from "#app/phases/command-phase";
 import { Abilities } from "#enums/abilities";
