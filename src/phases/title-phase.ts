@@ -301,9 +301,9 @@ export class TitlePhase extends Phase {
   }
 
   public override end(): void {
-    const { arena, currentBattle, gameData, gameMode } = globalScene;
+    const { arena, currentBattle, gameData } = globalScene;
 
-    if (!this.loaded && !gameMode.isDaily) {
+    if (!this.loaded && !globalScene.gameMode.isDaily) {
       arena.preloadBgm();
       globalScene.gameMode = getGameMode(this.gameMode);
       if (this.gameMode === GameModes.CHALLENGE) {
@@ -311,7 +311,7 @@ export class TitlePhase extends Phase {
       } else {
         globalScene.pushPhase(new SelectStarterPhase());
       }
-      globalScene.newArena(gameMode.getStartingBiome());
+      globalScene.newArena(globalScene.gameMode.getStartingBiome());
     } else {
       globalScene.playBgm();
     }
@@ -326,7 +326,10 @@ export class TitlePhase extends Phase {
         globalScene.pushPhase(new SummonPhase(1, true, true));
       }
 
-      if (currentBattle.battleType !== BattleType.TRAINER && (currentBattle.waveIndex > 1 || !gameMode.isDaily)) {
+      if (
+        currentBattle.battleType !== BattleType.TRAINER
+        && (currentBattle.waveIndex > 1 || !globalScene.gameMode.isDaily)
+      ) {
         const minPartySize = currentBattle.double ? 2 : 1;
         if (availablePartyMembers > minPartySize) {
           globalScene.pushPhase(new CheckSwitchPhase(0, currentBattle.double));

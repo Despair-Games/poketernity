@@ -57,16 +57,8 @@ export class EncounterPhase extends BattlePhase {
     super.start();
 
     const { arena, currentBattle, field, gameData, gameMode, load, ui } = globalScene;
-    const {
-      battleType,
-      double,
-      enemyLevels,
-      enemyParty,
-      isClassicFinalBoss,
-      mysteryEncounterType,
-      trainer,
-      waveIndex,
-    } = currentBattle;
+    const { battleType, double, enemyLevels, isClassicFinalBoss, mysteryEncounterType, trainer, waveIndex } =
+      currentBattle;
 
     globalScene.updateGameInfo();
 
@@ -148,7 +140,7 @@ export class EncounterPhase extends BattlePhase {
             .slice(0, !double ? 1 : 2)
             .reverse()
             .forEach((playerPokemon) => {
-              applyAbAttrs(SyncEncounterNatureAbAttr, playerPokemon, null, false, enemyParty[e]);
+              applyAbAttrs(SyncEncounterNatureAbAttr, playerPokemon, null, false, currentBattle.enemyParty[e]);
             });
         }
       }
@@ -219,8 +211,8 @@ export class EncounterPhase extends BattlePhase {
     } else {
       const overridedBossSegments = Overrides.OPP_HEALTH_SEGMENTS_OVERRIDE > 1;
       // for double battles, reduce the health segments for boss Pokemon unless there is an override
-      if (!overridedBossSegments && enemyParty.filter((p) => p.isBoss()).length > 1) {
-        for (const enemyPokemon of enemyParty) {
+      if (!overridedBossSegments && currentBattle.enemyParty.filter((p) => p.isBoss()).length > 1) {
+        for (const enemyPokemon of currentBattle.enemyParty) {
           // If the enemy pokemon is a boss and wasn't populated from data source, then update the number of segments
           if (enemyPokemon.isBoss() && !enemyPokemon.isPopulatedFromDataSource) {
             enemyPokemon.setBoss(
@@ -234,7 +226,7 @@ export class EncounterPhase extends BattlePhase {
     }
 
     Promise.all(loadEnemyAssets).then(() => {
-      enemyParty.every((enemyPokemon, index) => {
+      currentBattle.enemyParty.every((enemyPokemon, index) => {
         if (currentBattle.isBattleMysteryEncounter()) {
           return false;
         }

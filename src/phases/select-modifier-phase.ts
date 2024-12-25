@@ -59,7 +59,7 @@ export class SelectModifierPhase extends BattlePhase {
   public override start(): void {
     super.start();
 
-    const { currentBattle, lockModifierTiers, money, ui } = globalScene;
+    const { currentBattle, money, ui } = globalScene;
     const { waveIndex } = currentBattle;
 
     if (!this.rerollCount && !this.isCopy) {
@@ -109,7 +109,7 @@ export class SelectModifierPhase extends BattlePhase {
                 this.isPlayer(),
                 this.typeOptions,
                 modifierSelectCallback,
-                this.getRerollCost(lockModifierTiers),
+                this.getRerollCost(globalScene.lockModifierTiers),
               ),
           );
         });
@@ -118,7 +118,7 @@ export class SelectModifierPhase extends BattlePhase {
 
       let modifierType: ModifierType | undefined;
       let cost: number | undefined;
-      const rerollCost = this.getRerollCost(lockModifierTiers);
+      const rerollCost = this.getRerollCost(globalScene.lockModifierTiers);
 
       switch (rowCursor) {
         // TODO: There must be a way to replace these magic numbers...
@@ -183,7 +183,7 @@ export class SelectModifierPhase extends BattlePhase {
                       this.isPlayer(),
                       this.typeOptions,
                       modifierSelectCallback,
-                      this.getRerollCost(lockModifierTiers),
+                      this.getRerollCost(globalScene.lockModifierTiers),
                     );
                   }
                 },
@@ -197,7 +197,7 @@ export class SelectModifierPhase extends BattlePhase {
                   this.isPlayer(),
                   this.typeOptions,
                   modifierSelectCallback,
-                  this.getRerollCost(lockModifierTiers),
+                  this.getRerollCost(globalScene.lockModifierTiers),
                 );
               });
               break;
@@ -208,9 +208,9 @@ export class SelectModifierPhase extends BattlePhase {
                 return false;
               }
 
-              globalScene.lockModifierTiers = !lockModifierTiers;
+              globalScene.lockModifierTiers = !globalScene.lockModifierTiers;
               const uiHandler = ui.getHandler<ModifierSelectUiHandler>();
-              uiHandler.setRerollCost(this.getRerollCost(lockModifierTiers));
+              uiHandler.setRerollCost(this.getRerollCost(globalScene.lockModifierTiers));
               uiHandler.updateLockRaritiesText();
               uiHandler.updateRerollCostText();
               return false;
@@ -301,7 +301,7 @@ export class SelectModifierPhase extends BattlePhase {
                   this.isPlayer(),
                   this.typeOptions,
                   modifierSelectCallback,
-                  this.getRerollCost(lockModifierTiers),
+                  this.getRerollCost(globalScene.lockModifierTiers),
                 );
               }
             },
@@ -342,7 +342,7 @@ export class SelectModifierPhase extends BattlePhase {
                   this.isPlayer(),
                   this.typeOptions,
                   modifierSelectCallback,
-                  this.getRerollCost(lockModifierTiers),
+                  this.getRerollCost(globalScene.lockModifierTiers),
                 );
               }
             },
@@ -370,7 +370,7 @@ export class SelectModifierPhase extends BattlePhase {
       this.isPlayer(),
       this.typeOptions,
       modifierSelectCallback,
-      this.getRerollCost(lockModifierTiers),
+      this.getRerollCost(globalScene.lockModifierTiers),
     );
   }
 

@@ -99,16 +99,17 @@ export class FaintPhase extends PokemonPhase {
   }
 
   protected doFaint(): void {
-    const { currentBattle } = globalScene;
+    const { currentBattle, field, tweens } = globalScene;
+    const { battleType, double, enemyFaintsHistory, playerFaintsHistory, turn } = currentBattle;
     const pokemon = this.getPokemon();
 
     // Track total times pokemon have been KO'd for supreme overlord/last respects
     if (pokemon.isPlayer()) {
       currentBattle.playerFaints += 1;
-      currentBattle.playerFaintsHistory.push({ pokemon: pokemon, turn: currentBattle.turn });
+      playerFaintsHistory.push({ pokemon: pokemon, turn: turn });
     } else {
       currentBattle.enemyFaints += 1;
-      currentBattle.enemyFaintsHistory.push({ pokemon: pokemon, turn: currentBattle.turn });
+      enemyFaintsHistory.push({ pokemon: pokemon, turn: turn });
     }
 
     globalScene.queueMessage(
@@ -156,7 +157,7 @@ export class FaintPhase extends PokemonPhase {
       const legalPlayerPartyPokemon = legalPlayerPokemon.filter((p) => !p.isActive(true));
       if (!legalPlayerPokemon.length) {
         globalScene.unshiftPhase(new GameOverPhase());
-      } else if (currentBattle.double && legalPlayerPokemon.length === 1 && legalPlayerPartyPokemon.length === 0) {
+      } else if (double && legalPlayerPokemon.length === 1 && legalPlayerPartyPokemon.length === 0) {
         /**
          * If the player has exactly one Pokemon in total at this point in a double battle, and that Pokemon
          * is already on the field, push a phase that moves that Pokemon to center position.
@@ -171,7 +172,7 @@ export class FaintPhase extends PokemonPhase {
       }
     } else {
       globalScene.unshiftPhase(new VictoryPhase(this.battlerIndex));
-      if ([BattleType.TRAINER, BattleType.MYSTERY_ENCOUNTER].includes(currentBattle.battleType)) {
+      if ([BattleType.TRAINER, BattleType.MYSTERY_ENCOUNTER].includes(battleType)) {
         const hasReservePartyMember = !!globalScene
           .getEnemyParty()
           .filter((p) => p.isActive() && !p.isOnField() && p.trainerSlot === (pokemon as EnemyPokemon).trainerSlot)
@@ -183,7 +184,7 @@ export class FaintPhase extends PokemonPhase {
     }
 
     // in double battles redirect potential moves off fainted pokemon
-    if (currentBattle.double) {
+    if (double) {
       const allyPokemon = pokemon.getAlly();
       globalScene.redirectPokemonMoves(pokemon, allyPokemon);
     }
@@ -194,7 +195,7 @@ export class FaintPhase extends PokemonPhase {
       }
       pokemon.hideInfo();
       globalScene.playSound("se/faint");
-      globalScene.tweens.add({
+      tweens.add({
         targets: pokemon,
         duration: 500,
         y: pokemon.y + 150,
@@ -215,7 +216,7 @@ export class FaintPhase extends PokemonPhase {
             globalScene.addFaintedEnemyScore(pokemon as EnemyPokemon);
             currentBattle.addPostBattleLoot(pokemon as EnemyPokemon);
           }
-          globalScene.field.remove(pokemon);
+          field.remove(pokemon);
           this.end();
         },
       });
