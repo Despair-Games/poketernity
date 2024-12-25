@@ -6,7 +6,7 @@ import { LoadMoveAnimPhase } from "#app/phases/load-move-anim-phase";
 import { MovePhase } from "#app/phases/move-phase";
 import { getEnumValues } from "#app/utils";
 import { type Move, getMoveTargets } from "#app/data/move";
-import { allMoves } from "../move";
+import { allMoves } from "#app/data/all-moves";
 import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
 
 export class RandomMoveAttr extends OverrideMoveEffectAttr {
