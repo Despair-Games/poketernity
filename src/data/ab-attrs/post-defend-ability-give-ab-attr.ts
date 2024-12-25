@@ -1,5 +1,5 @@
-import type Move from "#app/data/move";
-import { MoveFlags } from "#app/data/move";
+import type { Move } from "#app/data/move";
+import { MoveFlags } from "../../enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
 import type { HitResult } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -9,7 +9,7 @@ import { PostDefendAbAttr } from "./post-defend-ab-attr";
 import { UnsuppressableAbilityAbAttr } from "./unsuppressable-ability-ab-attr";
 
 export class PostDefendAbilityGiveAbAttr extends PostDefendAbAttr {
-  private ability: Abilities;
+  private readonly ability: Abilities;
 
   constructor(ability: Abilities) {
     super();

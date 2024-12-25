@@ -51,7 +51,7 @@ import { initGameSpeed } from "#app/system/game-speed";
 import { Arena, ArenaBase } from "#app/field/arena";
 import { GameData } from "#app/system/game-data";
 import { addTextObject, getTextColor, TextStyle } from "#app/ui/text";
-import { allMoves } from "#app/data/move";
+import { allMoves } from "./data/move";
 import { MusicPreference } from "#app/system/settings/settings";
 import {
   getDefaultModifierTypeForTier,
@@ -1377,7 +1377,7 @@ export default class BattleScene extends SceneBase {
   newBattle(
     waveIndex?: number,
     battleType?: BattleType,
-    trainerData?: TrainerData,
+    trainerData?: TrainerData | null,
     double?: boolean,
     mysteryEncounterType?: MysteryEncounterType,
   ): Battle {
@@ -1393,7 +1393,7 @@ export default class BattleScene extends SceneBase {
 
     const playerField = this.getPlayerField();
 
-    if (this.gameMode.isFixedBattle(newWaveIndex) && trainerData === undefined) {
+    if (this.gameMode.isFixedBattle(newWaveIndex) && isNullOrUndefined(trainerData)) {
       battleConfig = this.gameMode.getFixedBattle(newWaveIndex);
       newDouble = battleConfig.double;
       newBattleType = battleConfig.battleType;
@@ -1433,7 +1433,7 @@ export default class BattleScene extends SceneBase {
           : randSeedInt(2)
             ? TrainerVariant.FEMALE
             : TrainerVariant.DEFAULT;
-        newTrainer = trainerData !== undefined ? trainerData.toTrainer() : new Trainer(trainerType, variant);
+        newTrainer = !isNullOrUndefined(trainerData) ? trainerData.toTrainer() : new Trainer(trainerType, variant);
         this.field.add(newTrainer);
       }
 

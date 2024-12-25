@@ -1,4 +1,5 @@
-import { allMoves, MoveCategory } from "#app/data/move";
+import { allMoves } from "../move";
+import { MoveCategory } from "../../enums/move-category";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -13,7 +14,7 @@ import { AbAttr } from "./ab-attr";
  * @extends AbAttr
  */
 export class BypassSpeedChanceAbAttr extends AbAttr {
-  public chance: number;
+  public readonly chance: number;
 
   /**
    * @param chance probability of ability being active.

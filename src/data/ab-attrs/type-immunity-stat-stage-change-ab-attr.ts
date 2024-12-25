@@ -1,5 +1,5 @@
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
-import type Move from "#app/data/move";
+import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
@@ -9,8 +9,8 @@ import type { Type } from "#enums/type";
 import { TypeImmunityAbAttr } from "./type-immunity-ab-attr";
 
 export class TypeImmunityStatStageChangeAbAttr extends TypeImmunityAbAttr {
-  private stat: BattleStat;
-  private stages: number;
+  private readonly stat: BattleStat;
+  private readonly stages: number;
 
   constructor(immuneType: Type, stat: BattleStat, stages: number, condition?: AbAttrCondition) {
     super(immuneType, condition);

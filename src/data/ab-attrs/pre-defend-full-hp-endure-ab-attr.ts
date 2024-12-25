@@ -1,4 +1,4 @@
-import type Move from "#app/data/move";
+import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder, NumberHolder } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -14,12 +14,12 @@ export class PreDefendFullHpEndureAbAttr extends PreDefendAbAttr {
     _cancelled: BooleanHolder,
     args: any[],
   ): boolean {
+    const damage: NumberHolder = args[0];
     if (
       pokemon.isFullHp()
-      && pokemon.getMaxHp() > 1 //Checks if pokemon has wonder_guard (which forces 1hp)
-      && (args[0] as NumberHolder).value >= pokemon.hp
+      && pokemon.getMaxHp() > 1 // Checks if pokemon has Wonder Guard (which forces 1hp)
+      && damage.value >= pokemon.hp
     ) {
-      //Damage >= hp
       return simulated || pokemon.addTag(BattlerTagType.STURDY, 1);
     }
 

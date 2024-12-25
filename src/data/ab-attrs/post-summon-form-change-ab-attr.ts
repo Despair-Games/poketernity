@@ -4,7 +4,7 @@ import { globalScene } from "#app/global-scene";
 import { PostSummonAbAttr } from "./post-summon-ab-attr";
 
 export class PostSummonFormChangeAbAttr extends PostSummonAbAttr {
-  private formFunc: (p: Pokemon) => integer;
+  private readonly formFunc: (p: Pokemon) => integer;
 
   constructor(formFunc: (p: Pokemon) => integer) {
     super(true);

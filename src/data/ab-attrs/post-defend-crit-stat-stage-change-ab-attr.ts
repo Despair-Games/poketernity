@@ -1,5 +1,5 @@
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
-import type Move from "#app/data/move";
+import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { HitResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -8,8 +8,8 @@ import type { BattleStat } from "#enums/stat";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 
 export class PostDefendCritStatStageChangeAbAttr extends PostDefendAbAttr {
-  private stat: BattleStat;
-  private stages: number;
+  private readonly stat: BattleStat;
+  private readonly stages: number;
 
   constructor(stat: BattleStat, stages: number) {
     super();
@@ -37,6 +37,7 @@ export class PostDefendCritStatStageChangeAbAttr extends PostDefendAbAttr {
   override getCondition(): AbAttrCondition {
     return (pokemon: Pokemon) =>
       pokemon.turnData.attacksReceived.length !== 0
-      && pokemon.turnData.attacksReceived[pokemon.turnData.attacksReceived.length - 1].critical;
+      // TODO: Normalize `attacksReceived[]` checks
+      && pokemon.turnData.attacksReceived[pokemon.turnData.attacksReceived.length - 1].isCritical;
   }
 }

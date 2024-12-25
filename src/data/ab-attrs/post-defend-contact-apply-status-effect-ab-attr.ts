@@ -1,13 +1,13 @@
-import type Move from "#app/data/move";
-import { MoveFlags } from "#app/data/move";
+import type { Move } from "#app/data/move";
+import { MoveFlags } from "../../enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
 import type { HitResult } from "#app/field/pokemon";
 import type { StatusEffect } from "#enums/status-effect";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 
 export class PostDefendContactApplyStatusEffectAbAttr extends PostDefendAbAttr {
-  public chance: number;
-  private effects: StatusEffect[];
+  public readonly chance: number;
+  private readonly effects: StatusEffect[];
 
   constructor(chance: number, ...effects: StatusEffect[]) {
     super();

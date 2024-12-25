@@ -1,5 +1,7 @@
 import type { BattlerIndex } from "#app/battle";
-import { AttackMove, SelfStatusMove, StatusMove } from "#app/data/move";
+import { SelfStatusMove } from "../move";
+import { StatusMove } from "../move";
+import { AttackMove } from "../move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -18,7 +20,7 @@ export class PostDancingMoveAbAttr extends PostMoveUsedAbAttr {
    * @param dancer {@linkcode Pokemon} with Dancer ability
    * @param move {@linkcode PokemonMove} Dancing move used by the source
    * @param source {@linkcode Pokemon} that used the dancing move
-   * @param targets {@linkcode BattlerIndex}Targets of the dancing move
+   * @param targets {@linkcode BattlerIndex} Targets of the dancing move
    * @param _args N/A
    *
    * @return true if the Dancer ability was resolved

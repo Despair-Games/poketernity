@@ -11,18 +11,18 @@ import { PostIntimidateStatStageChangeAbAttr } from "./post-intimidate-stat-stag
 import { PostSummonAbAttr } from "./post-summon-ab-attr";
 
 export class PostSummonStatStageChangeAbAttr extends PostSummonAbAttr {
-  private stats: BattleStat[];
-  private stages: number;
-  private selfTarget: boolean;
-  private intimidate: boolean;
+  private readonly stats: BattleStat[];
+  private readonly stages: number;
+  private readonly selfTarget: boolean;
+  private readonly intimidate: boolean;
 
-  constructor(stats: BattleStat[], stages: number, selfTarget?: boolean, intimidate?: boolean) {
+  constructor(stats: BattleStat[], stages: number, selfTarget: boolean = false, intimidate: boolean = false) {
     super(false);
 
     this.stats = stats;
     this.stages = stages;
-    this.selfTarget = !!selfTarget;
-    this.intimidate = !!intimidate;
+    this.selfTarget = selfTarget;
+    this.intimidate = intimidate;
   }
 
   override applyPostSummon(pokemon: Pokemon, passive: boolean, simulated: boolean, _args: any[]): boolean {

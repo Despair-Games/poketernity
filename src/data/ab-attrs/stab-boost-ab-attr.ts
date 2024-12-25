@@ -10,8 +10,9 @@ export class StabBoostAbAttr extends AbAttr {
     _cancelled: BooleanHolder,
     args: any[],
   ): boolean {
-    if ((args[0] as NumberHolder).value > 1) {
-      (args[0] as NumberHolder).value += 0.5;
+    const stabMultiplier: NumberHolder = args[0];
+    if (stabMultiplier.value > 1) {
+      stabMultiplier.value += 0.5;
       return true;
     }
 

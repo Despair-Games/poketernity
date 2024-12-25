@@ -1,5 +1,5 @@
 import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition";
-import type Move from "#app/data/move";
+import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
 import { PreAttackAbAttr } from "./pre-attack-ab-attr";
@@ -11,8 +11,8 @@ import { PreAttackAbAttr } from "./pre-attack-ab-attr";
  * @param condition the condition for this ability to be applied
  */
 export class DamageBoostAbAttr extends PreAttackAbAttr {
-  private damageMultiplier: number;
-  private condition: PokemonAttackCondition;
+  private readonly damageMultiplier: number;
+  private readonly condition: PokemonAttackCondition;
 
   constructor(damageMultiplier: number, condition: PokemonAttackCondition) {
     super(true);

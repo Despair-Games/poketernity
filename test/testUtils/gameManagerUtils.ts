@@ -5,7 +5,7 @@ import { Gender } from "#enums/gender";
 import { getPokemonSpecies, getPokemonSpeciesForm } from "#app/data/pokemon-species";
 import { PlayerPokemon } from "#app/field/pokemon";
 import { GameModes, getGameMode } from "#app/game-mode";
-import type { StarterMoveset } from "#app/system/game-data";
+import type { StarterMoveset } from "#app/@types/StarterData";
 import type { Starter } from "#app/ui/starter-select-ui-handler";
 import { Moves } from "#enums/moves";
 import type { Species } from "#enums/species";
