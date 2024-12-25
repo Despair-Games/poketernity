@@ -21,7 +21,7 @@ The code is future-proofed so that it can accept a list of multiple status effec
 */
 export class PostDefendContactApplyStatusEffectAbAttr extends PostDefendAbAttr {
   public readonly chance: number;
-  private readonly effects: StatusEffect[] = [];
+  private readonly statusEffects: StatusEffect[] = [];
 
   /**
    * PostDefendContactApplyStatusEffectAbAttr takes an activation chance and a status effect/list of status effects that should be applied following a passing roll.
@@ -32,7 +32,7 @@ export class PostDefendContactApplyStatusEffectAbAttr extends PostDefendAbAttr {
     super();
 
     this.chance = chance;
-    this.effects = this.effects.concat(effects);
+    this.statusEffects = this.statusEffects.concat(effects);
   }
 
   override applyPostDefend(
@@ -50,7 +50,9 @@ export class PostDefendContactApplyStatusEffectAbAttr extends PostDefendAbAttr {
       && (this.chance === -1 || pokemon.randSeedInt(100) < this.chance)
     ) {
       const status =
-        this.effects.length === 1 ? this.effects[0] : this.effects[pokemon.randSeedInt(this.effects.length)];
+        this.statusEffects.length === 1
+          ? this.statusEffects[0]
+          : this.statusEffects[pokemon.randSeedInt(this.statusEffects.length)];
       if (simulated) {
         return attacker.canSetStatus(status, true, false, pokemon);
       } else {

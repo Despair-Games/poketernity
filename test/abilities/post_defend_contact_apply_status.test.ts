@@ -6,8 +6,9 @@ import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { PostDefendContactApplyStatusEffectAbAttr } from "#app/data/ab-attrs/post-defend-contact-apply-status-effect-ab-attr";
 import { StatusEffect } from "#enums/status-effect";
+import { Type } from "#enums/type";
 
-describe("Abilities - Flame Body", () => {
+describe("Abilities - Flame Body/Poison Point/Static", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
 
@@ -25,15 +26,19 @@ describe("Abilities - Flame Body", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([Moves.SPLASH])
-      .ability(Abilities.FLAME_BODY)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH);
+      .enemyMoveset([Moves.TACKLE, Moves.WATER_GUN]);
   });
 
-  it("should paralyze an attacking Pokemon if contact is made", async () => {
+  it.each([
+    { abilityName: "Flame Body", ability: Abilities.FLAME_BODY, status: StatusEffect.BURN },
+    { abilityName: "Poison Point", ability: Abilities.POISON_POINT, status: StatusEffect.POISON },
+    { abilityName: "Static", ability: Abilities.STATIC, status: StatusEffect.PARALYSIS },
+  ])("$abilityName should status an attacking, applicable Pokemon if contact is made", async ({ ability, status }) => {
+    game.override.ability(ability);
     await game.classicMode.startBattle([Species.FEEBAS]);
     const pokemon = game.scene.getPlayerPokemon();
     vi.spyOn(
@@ -49,10 +54,15 @@ describe("Abilities - Flame Body", () => {
     await game.phaseInterceptor.to("BerryPhase");
 
     const attacker = game.scene.getEnemyPokemon();
-    expect(attacker?.status?.effect).toBe(StatusEffect.BURN);
+    expect(attacker?.status?.effect).toBe(status);
   });
 
-  it("should not activate from a non-contact attack", async () => {
+  it.each([
+    { abilityName: "Poison Point", ability: Abilities.POISON_POINT, status: StatusEffect.POISON },
+    { abilityName: "Static", ability: Abilities.STATIC, status: StatusEffect.PARALYSIS },
+    { abilityName: "Flame Body", ability: Abilities.FLAME_BODY, status: StatusEffect.BURN },
+  ])("$abilityName should not activate from a non-contact attack", async ({ ability }) => {
+    game.override.ability(ability);
     await game.classicMode.startBattle([Species.FEEBAS]);
     const pokemon = game.scene.getPlayerPokemon();
     vi.spyOn(
@@ -69,5 +79,26 @@ describe("Abilities - Flame Body", () => {
 
     const attacker = game.scene.getEnemyPokemon();
     expect(attacker?.status).toBeUndefined();
+  });
+
+  it("Static can paralyze a Ground-type Pokemon", async () => {
+    game.override.ability(Abilities.STATIC).enemySpecies(Species.DIGLETT);
+    await game.classicMode.startBattle([Species.FEEBAS]);
+    const pokemon = game.scene.getPlayerPokemon()!;
+    vi.spyOn(
+      pokemon
+        ?.getAbility()
+        .getAttrs(PostDefendContactApplyStatusEffectAbAttr)[0] as PostDefendContactApplyStatusEffectAbAttr,
+      "chance",
+      "get",
+    ).mockReturnValue(100);
+
+    game.move.select(Moves.SPLASH);
+    await game.forceEnemyMove(Moves.TACKLE);
+    await game.phaseInterceptor.to("BerryPhase");
+
+    const attacker = game.scene.getEnemyPokemon();
+    expect(attacker?.getTypes()).toContain(Type.GROUND);
+    expect(attacker?.status?.effect).toBe(StatusEffect.PARALYSIS);
   });
 });
