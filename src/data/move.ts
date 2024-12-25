@@ -51,6 +51,7 @@ import { StatusEffect } from "#enums/status-effect";
 import { HealStatusEffectAttr } from "./move-attrs/heal-status-effect-attr";
 import { VariableAtkAttr } from "./move-attrs/variable-atk-attr";
 import { ChargeAnim } from "./battle-anims";
+import { allMoves } from "#app/data/all-moves";
 
 export abstract class Move implements Localizable {
   public id: Moves;
@@ -1161,7 +1162,5 @@ export function getMoveTargets(user: Pokemon, move: Moves): MoveTargetSet {
     multiple,
   };
 }
-
-export const allMoves: Move[] = [new SelfStatusMove(Moves.NONE, Type.NORMAL, MoveCategory.STATUS, -1, -1, 0, 1)];
 
 export const selfStatLowerMoves: Moves[] = [];

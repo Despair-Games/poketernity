@@ -5,7 +5,7 @@ import { BlockNonDirectDamageAbAttr } from "./ab-attrs/block-non-direct-damage-a
 import { ChargeAnim, CommonAnim, CommonBattleAnim, MoveChargeAnim } from "#app/data/battle-anims";
 import type { Move } from "#app/data/move";
 import { applyMoveAttrs } from "#app/data/move";
-import { allMoves } from "./move";
+import { allMoves } from "#app/data/all-moves";
 import { StatusCategoryOnAllyAttr } from "./move-attrs/status-category-on-ally-attr";
 import { ConsecutiveUseDoublePowerAttr } from "./move-attrs/consecutive-use-double-power-attr";
 import { HealOnAllyAttr } from "./move-attrs/heal-on-ally-attr";

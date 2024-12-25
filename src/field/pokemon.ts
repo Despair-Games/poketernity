@@ -8,7 +8,7 @@ import { variantData } from "#app/data/variant";
 import BattleInfo, { PlayerBattleInfo, EnemyBattleInfo } from "#app/ui/battle-info";
 import type { Move } from "#app/data/move";
 import { applyMoveAttrs, getMoveTargets } from "#app/data/move";
-import { allMoves } from "#app/data/move";
+import { allMoves } from "#app/data/all-moves";
 import { RechargeAttr } from "#app/data/move-attrs/recharge-attr";
 import { HitsTagAttr } from "#app/data/move-attrs/hits-tag-attr";
 import { TypelessAttr } from "#app/data/move-attrs/typeless-attr";
