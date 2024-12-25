@@ -3,8 +3,8 @@ import { ExpBoosterModifier } from "#app/modifier/modifier";
 import { NumberHolder } from "#app/utils";
 import { ExpGainsSpeed } from "#enums/exp-gains-speed";
 import { ExpNotification } from "#enums/exp-notification";
-import { LevelUpPhase } from "./level-up-phase";
 import { PlayerPartyMemberPokemonPhase } from "./abstract-player-party-member-pokemon-phase";
+import { LevelUpPhase } from "./level-up-phase";
 
 export class ShowPartyExpBarPhase extends PlayerPartyMemberPokemonPhase {
   private readonly expValue: number;

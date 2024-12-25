@@ -1,7 +1,8 @@
 import { PreSwitchOutAbAttr } from "#app/data/ab-attrs/pre-switch-out-ab-attr";
 import { applyPreSwitchOutAbAttrs, PostDamageForceSwitchAbAttr } from "#app/data/ability";
-import { SubstituteTag } from "#app/data/battler-tags";
 import { allMoves } from "#app/data/all-moves";
+import { SubstituteTag } from "#app/data/battler-tags";
+import { ForceSwitchOutAttr } from "#app/data/move-attrs/force-switch-out-attr";
 import { getPokeballTintColor } from "#app/data/pokeball";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";
 import { TrainerSlot } from "#app/data/trainer-config";
@@ -14,7 +15,6 @@ import { SwitchType } from "#enums/switch-type";
 import i18next from "i18next";
 import { PostSummonPhase } from "./post-summon-phase";
 import { SummonPhase } from "./summon-phase";
-import { ForceSwitchOutAttr } from "#app/data/move-attrs/force-switch-out-attr";
 
 export class SwitchSummonPhase extends SummonPhase {
   private readonly switchType: SwitchType;

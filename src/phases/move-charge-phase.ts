@@ -6,9 +6,9 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import type { PokemonMove } from "#app/field/pokemon";
 import { MoveResult, type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
+import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { MovePhase } from "#app/phases/move-phase";
-import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { BooleanHolder } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 

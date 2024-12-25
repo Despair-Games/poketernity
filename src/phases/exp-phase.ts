@@ -3,8 +3,8 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { ExpBoosterModifier } from "#app/modifier/modifier";
 import { NumberHolder } from "#app/utils";
 import i18next from "i18next";
-import { LevelUpPhase } from "./level-up-phase";
 import { PlayerPartyMemberPokemonPhase } from "./abstract-player-party-member-pokemon-phase";
+import { LevelUpPhase } from "./level-up-phase";
 
 /**
  * Grants a player pokemon EXP and pushes a {@linkcode LevelUpPhase} if it leveled up

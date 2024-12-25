@@ -6,8 +6,8 @@ import { BerryUsedEvent } from "#app/events/battle-scene";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BerryModifier } from "#app/modifier/modifier";
-import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { FieldPhase } from "#app/phases/abstract-field-phase";
+import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { BooleanHolder } from "#app/utils";
 import i18next from "i18next";
 

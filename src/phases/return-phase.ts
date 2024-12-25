@@ -1,5 +1,5 @@
-import { globalScene } from "#app/global-scene";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";
+import { globalScene } from "#app/global-scene";
 import { SwitchType } from "#enums/switch-type";
 import { SwitchSummonPhase } from "./switch-summon-phase";
 

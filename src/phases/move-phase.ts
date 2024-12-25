@@ -6,17 +6,18 @@ import { PostMoveUsedAbAttr } from "#app/data/ab-attrs/post-move-used-ab-attr";
 import { RedirectMoveAbAttr } from "#app/data/ab-attrs/redirect-move-ab-attr";
 import { ReduceStatusEffectDurationAbAttr } from "#app/data/ab-attrs/reduce-status-effect-duration-ab-attr";
 import { applyAbAttrs, applyPostMoveUsedAbAttrs, applyPreAttackAbAttrs } from "#app/data/ability";
+import { allMoves } from "#app/data/all-moves";
 import type { DelayedAttackTag } from "#app/data/arena-tag";
 import { CommonAnim } from "#app/data/battle-anims";
 import { BattlerTagLapseType, CenterOfAttentionTag } from "#app/data/battler-tags";
 import { applyMoveAttrs } from "#app/data/move";
-import { allMoves } from "#app/data/all-moves";
-import { CopyMoveAttr } from "#app/data/move-attrs/copy-move-attr";
 import { BypassRedirectAttr } from "#app/data/move-attrs/bypass-redirect-attr";
 import { BypassSleepAttr } from "#app/data/move-attrs/bypass-sleep-attr";
+import { CopyMoveAttr } from "#app/data/move-attrs/copy-move-attr";
+import { DelayedAttackAttr } from "#app/data/move-attrs/delayed-attack-attr";
 import { HealStatusEffectAttr } from "#app/data/move-attrs/heal-status-effect-attr";
 import { PreMoveMessageAttr } from "#app/data/move-attrs/pre-move-message-attr";
-import { MoveFlags } from "#app/enums/move-flags";
+import { frenzyMissFunc } from "#app/data/move-utils";
 import { SpeciesFormChangePreMoveTrigger } from "#app/data/pokemon-forms";
 import { getStatusEffectActivationText, getStatusEffectHealText } from "#app/data/status-effect";
 import { getTerrainBlockMessage } from "#app/data/terrain";
@@ -35,12 +36,11 @@ import { BooleanHolder, NumberHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import { MoveFlags } from "#enums/move-flags";
 import { Moves } from "#enums/moves";
 import { StatusEffect } from "#enums/status-effect";
 import { Type } from "#enums/type";
 import i18next from "i18next";
-import { DelayedAttackAttr } from "#app/data/move-attrs/delayed-attack-attr";
-import { frenzyMissFunc } from "#app/data/move-utils";
 
 /**
  * Resolves the following:

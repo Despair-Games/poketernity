@@ -1,13 +1,12 @@
 import type { BattlerIndex } from "#app/battle";
-import { allMoves } from "#app/data/move";
+import { allMoves } from "#app/data/all-moves";
 import { globalScene } from "#app/global-scene";
-import i18next from "#app/plugins/i18n";
 import { Command } from "#app/ui/command-ui-handler";
 import { Mode } from "#app/ui/ui";
 import { Moves } from "#enums/moves";
+import i18next from "i18next";
+import { PokemonPhase } from "./abstract-pokemon-phase";
 import { CommandPhase } from "./command-phase";
-import { PokemonPhase } from "./pokemon-phase";
-import { allMoves } from "#app/data/all-moves";
 
 export class SelectTargetPhase extends PokemonPhase {
   constructor(fieldIndex: number) {

@@ -2,13 +2,13 @@ import { BattleType, ClassicFixedBossWaves, type BattlerIndex } from "#app/battl
 import { handleMysteryEncounterVictory } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { globalScene } from "#app/global-scene";
 import { modifierTypes, type CustomModifierSettings } from "#app/modifier/modifier-type";
+import { PokemonPhase } from "./abstract-pokemon-phase";
 import { AddEnemyBuffModifierPhase } from "./add-enemy-buff-modifier-phase";
 import { BattleEndPhase } from "./battle-end-phase";
 import { EggLapsePhase } from "./egg-lapse-phase";
 import { GameOverPhase } from "./game-over-phase";
 import { ModifierRewardPhase } from "./modifier-reward-phase";
 import { NewBattlePhase } from "./new-battle-phase";
-import { PokemonPhase } from "./abstract-pokemon-phase";
 import { SelectModifierPhase } from "./select-modifier-phase";
 import { TrainerVictoryPhase } from "./trainer-victory-phase";
 

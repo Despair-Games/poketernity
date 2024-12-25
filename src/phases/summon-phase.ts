@@ -9,8 +9,8 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { PlayerGender } from "#enums/player-gender";
 import i18next from "i18next";
-import { GameOverPhase } from "./game-over-phase";
 import { PartyMemberPokemonPhase } from "./abstract-party-member-pokemon-phase";
+import { GameOverPhase } from "./game-over-phase";
 import { PostSummonPhase } from "./post-summon-phase";
 import { ShinySparklePhase } from "./shiny-sparkle-phase";
 
