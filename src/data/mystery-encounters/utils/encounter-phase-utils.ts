@@ -42,7 +42,7 @@ import { initMoveAnim, loadMoveAnimAssets } from "#app/data/battle-anims";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { Status } from "#app/data/status-effect";
 import type { TrainerConfig } from "#app/data/trainer-config";
-import { trainerConfigs, TrainerSlot } from "#app/data/trainer-config";
+import { TrainerSlot } from "#app/data/trainer-config";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import type { IEggOptions } from "#app/data/egg";
 import { Egg } from "#app/data/egg";
@@ -58,6 +58,7 @@ import { PartyExpPhase } from "#app/phases/party-exp-phase";
 import type { Variant } from "#app/data/variant";
 import { StatusEffect } from "#enums/status-effect";
 import { globalScene } from "#app/global-scene";
+import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 
 /**
  * Animates exclamation sprite over trainer's head at start of encounter
@@ -154,7 +155,7 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
       globalScene.currentBattle.trainer.destroy();
     }
 
-    trainerConfig = partyTrainerConfig ? partyTrainerConfig : trainerConfigs[trainerType!];
+    trainerConfig = partyTrainerConfig ? partyTrainerConfig : allTrainerConfigs[trainerType!];
 
     const doubleTrainer = trainerConfig.doubleOnly || (trainerConfig.hasDouble && !!partyConfig.doubleBattle);
     doubleBattle = doubleTrainer;

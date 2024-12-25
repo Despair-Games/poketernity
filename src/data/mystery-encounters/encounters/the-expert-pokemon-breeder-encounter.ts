@@ -5,7 +5,6 @@ import {
   initBattleWithEnemyConfig,
   setEncounterRewards,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { trainerConfigs } from "#app/data/trainer-config";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
 import { randSeedShuffle } from "#app/utils";
@@ -33,6 +32,7 @@ import { modifierTypes } from "#app/modifier/modifier-type";
 import { Type } from "#enums/type";
 import { getPokeballTintColor } from "#app/data/pokeball";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
+import { meTrainerConfigs } from "#app/data/balance/trainer-configs/me-trainer-configs";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/theExpertPokemonBreeder";
@@ -430,7 +430,7 @@ export const TheExpertPokemonBreederEncounter: MysteryEncounter = MysteryEncount
 function getPartyConfig(): EnemyPartyConfig {
   // Bug type superfan trainer config
   const waveIndex = globalScene.currentBattle.waveIndex;
-  const breederConfig = trainerConfigs[TrainerType.EXPERT_POKEMON_BREEDER].clone();
+  const breederConfig = meTrainerConfigs[TrainerType.EXPERT_POKEMON_BREEDER].clone();
   breederConfig.name = i18next.t(trainerNameKey);
 
   // First mon is *always* this special cleffa

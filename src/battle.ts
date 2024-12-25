@@ -14,7 +14,6 @@ import Trainer, { TrainerVariant } from "./field/trainer";
 import type { GameMode } from "./game-mode";
 import { MoneyMultiplierModifier, PokemonHeldItemModifier } from "./modifier/modifier";
 import type { PokeballType } from "#enums/pokeball";
-import { trainerConfigs } from "#app/data/trainer-config";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import type { EnemyPokemon, PlayerPokemon, QueuedMove } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
@@ -30,6 +29,7 @@ import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import type { CustomModifierSettings } from "#app/modifier/modifier-type";
 import { ModifierTier } from "#app/modifier/modifier-tier";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
+import { allTrainerConfigs } from "./data/balance/trainer-configs/all-trainer-configs";
 
 export enum ClassicFixedBossWaves {
   // TODO: other fixed wave battles should be added here
@@ -556,7 +556,7 @@ function getRandomTrainerFunc(
     ];
     const isEvilTeamGrunt = evilTeamGrunts.includes(trainerTypes[rand]);
 
-    if (trainerConfigs[trainerTypes[rand]].hasDouble && isEvilTeamGrunt) {
+    if (allTrainerConfigs[trainerTypes[rand]].hasDouble && isEvilTeamGrunt) {
       return new Trainer(trainerTypes[rand], randInt(3) === 0 ? TrainerVariant.DOUBLE : trainerGender);
     }
 

@@ -3,8 +3,7 @@ import { AchvTier, achvs, getAchievementDescription } from "./achv";
 import type { PlayerGender } from "#enums/player-gender";
 import { TrainerType } from "#enums/trainer-type";
 import type { ConditionFn } from "#app/@types/common";
-import { trainerConfigs } from "#app/data/trainer-config";
-
+import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 export enum VoucherType {
   REGULAR,
   PLUS,
@@ -101,18 +100,18 @@ export function initVouchers() {
     vouchers[achv.id] = new Voucher(voucherType, getAchievementDescription(achv.localizationKey));
   }
 
-  const bossTrainerTypes = Object.keys(trainerConfigs).filter(
+  const bossTrainerTypes = Object.keys(allTrainerConfigs).filter(
     (tt) =>
-      trainerConfigs[tt].isBoss
-      && trainerConfigs[tt].getDerivedType() !== TrainerType.RIVAL
-      && trainerConfigs[tt].hasVoucher,
+      allTrainerConfigs[tt].isBoss
+      && allTrainerConfigs[tt].getDerivedType() !== TrainerType.RIVAL
+      && allTrainerConfigs[tt].hasVoucher,
   );
 
   for (const trainerType of bossTrainerTypes) {
-    const voucherType = trainerConfigs[trainerType].moneyMultiplier < 10 ? VoucherType.PLUS : VoucherType.PREMIUM;
+    const voucherType = allTrainerConfigs[trainerType].moneyMultiplier < 10 ? VoucherType.PLUS : VoucherType.PREMIUM;
     const key = TrainerType[trainerType];
-    const trainerName = trainerConfigs[trainerType].name;
-    const trainer = trainerConfigs[trainerType];
+    const trainerName = allTrainerConfigs[trainerType].name;
+    const trainer = allTrainerConfigs[trainerType];
     const title = trainer.title ? ` (${trainer.title})` : "";
     vouchers[key] = new Voucher(voucherType, `${i18next.t("voucher:defeatTrainer", { trainerName })} ${title}`);
   }

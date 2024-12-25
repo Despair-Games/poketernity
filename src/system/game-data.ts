@@ -17,7 +17,6 @@ import { Unlockables } from "#app/system/unlockables";
 import { GameModes, getGameMode } from "#app/game-mode";
 import { BattleType } from "#app/battle";
 import TrainerData from "#app/system/trainer-data";
-import { trainerConfigs } from "#app/data/trainer-config";
 import { resetSettings, setSetting, SettingKeys } from "#app/system/settings/settings";
 import { achvs } from "#app/system/achv";
 import EggData from "#app/system/egg-data";
@@ -60,6 +59,7 @@ import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { api } from "#app/plugins/api/api";
 import { ArenaTrapTag } from "#app/data/arena-tag";
 import { SAVE_FILE_EXTENSION } from "#app/constants";
+import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 
 export const defaultStarterSpecies: Species[] = [
   Species.BULBASAUR,
@@ -616,7 +616,7 @@ export class GameData {
        * Note: Might have to be migrated to `api.ts`
        *
       const response = await Utils.apiFetch("savedata/runHistory", true);
-      const data = await response.json();
+      const data = await responseon();
       */
       const lsItemKey = `runHistoryData_${loggedInUser?.username}`;
       const lsItem = localStorage.getItem(lsItemKey);
@@ -1119,7 +1119,7 @@ export class GameData {
           globalScene.newArena(sessionData.arena.biome);
 
           const battleType = sessionData.battleType || 0;
-          const trainerConfig = sessionData.trainer ? trainerConfigs[sessionData.trainer.trainerType] : null;
+          const trainerConfig = sessionData.trainer ? allTrainerConfigs[sessionData.trainer.trainerType] : null;
           const mysteryEncounterType =
             sessionData.mysteryEncounterType !== -1 ? sessionData.mysteryEncounterType : undefined;
           const battle = globalScene.newBattle(

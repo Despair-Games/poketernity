@@ -3,7 +3,6 @@ import { TrainerType } from "#app/enums/trainer-type";
 import type { TrainerConfigs } from "../../trainer-config";
 import { getRandomPartyMemberFunc, TrainerConfig, TrainerSlot } from "../../trainer-config";
 import { signatureSpecies } from "../signatureSpecies";
-
 let t = TrainerType.BLUE;
 export const championTrainerConfigs: TrainerConfigs = {
   [TrainerType.BLUE]: new TrainerConfig(t)

@@ -5,7 +5,6 @@ import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
-import { trainerConfigs } from "#app/data/trainer-config";
 import type { Pokemon } from "#app/field/pokemon";
 import { modifierTypes } from "#app/modifier/modifier-type";
 import { BattlePhase } from "#app/phases/battle-phase";
@@ -31,6 +30,7 @@ import ChallengeData from "#app/system/challenge-data";
 import TrainerData from "#app/system/trainer-data";
 import ArenaData from "#app/system/arena-data";
 import { api } from "#app/plugins/api/api";
+import { rivalTrainerConfigs } from "#app/data/balance/trainer-configs/rival-trainer-configs";
 
 export class GameOverPhase extends BattlePhase {
   private isVictory: boolean;
@@ -187,8 +187,8 @@ export class GameOverPhase extends BattlePhase {
                     globalScene.ui.showDialogue(
                       dialogueKey,
                       globalScene.gameData.gender === PlayerGender.FEMALE
-                        ? trainerConfigs[TrainerType.RIVAL].name
-                        : trainerConfigs[TrainerType.RIVAL].nameFemale,
+                        ? rivalTrainerConfigs[TrainerType.RIVAL].name
+                        : rivalTrainerConfigs[TrainerType.RIVAL].nameFemale,
                       null,
                       () => {
                         globalScene.ui.fadeOut(500).then(() => {
