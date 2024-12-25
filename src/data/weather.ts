@@ -2,7 +2,7 @@ import { Biome } from "#enums/biome";
 import { getPokemonNameWithAffix } from "../messages";
 import type { Pokemon } from "../field/pokemon";
 import { Type } from "#enums/type";
-import type Move from "./move";
+import type { Move } from "./move";
 import { AttackMove } from "./move";
 import { randSeedInt } from "#app/utils";
 import { SuppressWeatherEffectAbAttr } from "./ab-attrs/suppress-weather-effect-ab-attr";

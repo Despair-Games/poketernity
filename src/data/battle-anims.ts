@@ -1,5 +1,9 @@
 import { globalScene } from "#app/global-scene";
-import { AttackMove, BeakBlastHeaderAttr, DelayedAttackAttr, MoveFlags, SelfStatusMove, allMoves } from "./move";
+import { allMoves } from "#app/data/all-moves";
+import { BeakBlastHeaderAttr } from "./move-attrs/beak-blast-header-attr";
+import { SelfStatusMove } from "./move";
+import { AttackMove } from "./move";
+import { MoveFlags } from "../enums/move-flags";
 import type { Pokemon } from "../field/pokemon";
 import { getFrameMs, getEnumKeys, getEnumValues, animationFileName, isNullOrUndefined } from "#app/utils";
 import type { BattlerIndex } from "../battle";
@@ -8,6 +12,7 @@ import { Moves } from "#enums/moves";
 import { SubstituteTag } from "./battler-tags";
 import Phaser from "phaser";
 import { EncounterAnim } from "#enums/encounter-anims";
+import { DelayedAttackAttr } from "./move-attrs/delayed-attack-attr";
 
 export enum AnimFrameTarget {
   USER,

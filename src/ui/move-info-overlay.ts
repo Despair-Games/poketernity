@@ -3,8 +3,8 @@ import { globalScene } from "#app/global-scene";
 import { TextStyle, addTextObject } from "./text";
 import { addWindow } from "./ui-theme";
 import { getLocalizedSpriteKey, fixedInt } from "#app/utils";
-import type Move from "../data/move";
-import { MoveCategory } from "../data/move";
+import type { Move } from "../data/move";
+import { MoveCategory } from "#app/enums/move-category";
 import { Type } from "#enums/type";
 import i18next from "i18next";
 

@@ -9,18 +9,14 @@ import { applyAbAttrs, applyPostMoveUsedAbAttrs, applyPreAttackAbAttrs } from "#
 import type { DelayedAttackTag } from "#app/data/arena-tag";
 import { CommonAnim } from "#app/data/battle-anims";
 import { BattlerTagLapseType, CenterOfAttentionTag } from "#app/data/battler-tags";
-import {
-  allMoves,
-  applyMoveAttrs,
-  BypassRedirectAttr,
-  BypassSleepAttr,
-  CopyMoveAttr,
-  DelayedAttackAttr,
-  frenzyMissFunc,
-  HealStatusEffectAttr,
-  MoveFlags,
-  PreMoveMessageAttr,
-} from "#app/data/move";
+import { applyMoveAttrs } from "#app/data/move";
+import { allMoves } from "#app/data/all-moves";
+import { CopyMoveAttr } from "#app/data/move-attrs/copy-move-attr";
+import { BypassRedirectAttr } from "#app/data/move-attrs/bypass-redirect-attr";
+import { BypassSleepAttr } from "#app/data/move-attrs/bypass-sleep-attr";
+import { HealStatusEffectAttr } from "#app/data/move-attrs/heal-status-effect-attr";
+import { PreMoveMessageAttr } from "#app/data/move-attrs/pre-move-message-attr";
+import { MoveFlags } from "#app/enums/move-flags";
 import { SpeciesFormChangePreMoveTrigger } from "#app/data/pokemon-forms";
 import { getStatusEffectActivationText, getStatusEffectHealText } from "#app/data/status-effect";
 import { getTerrainBlockMessage } from "#app/data/terrain";
@@ -43,6 +39,8 @@ import { Moves } from "#enums/moves";
 import { StatusEffect } from "#enums/status-effect";
 import { Type } from "#enums/type";
 import i18next from "i18next";
+import { DelayedAttackAttr } from "#app/data/move-attrs/delayed-attack-attr";
+import { frenzyMissFunc } from "#app/data/move-utils";
 
 /**
  * Resolves the following:

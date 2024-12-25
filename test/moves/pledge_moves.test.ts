@@ -1,7 +1,8 @@
 import { BattlerIndex } from "#app/battle";
 import { allAbilities } from "#app/data/ability";
 import { ArenaTagSide } from "#app/data/arena-tag";
-import { allMoves, FlinchAttr } from "#app/data/move";
+import { allMoves } from "#app/data/all-moves";
+import { FlinchAttr } from "#app/data/move-attrs/flinch-attr";
 import { Type } from "#enums/type";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { Stat } from "#enums/stat";
