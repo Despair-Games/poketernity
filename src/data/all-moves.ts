@@ -19,7 +19,7 @@ import { TerrainType } from "#enums/terrain-type";
 import { Type } from "#enums/type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
-import { isNullOrUndefined } from "utils";
+import { isNullOrUndefined } from "#app/utils";
 import { selfStatLowerMoves, type Move } from "./move";
 import { AttackMove } from "./move";
 import { ChargeAnim } from "./battle-anims";
