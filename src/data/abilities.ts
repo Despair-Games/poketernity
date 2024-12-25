@@ -127,7 +127,7 @@ import { PostDefendStatStageChangeAbAttr } from "./ab-attrs/post-defend-stat-sta
 import { GroundedTag } from "./battler-tags";
 import type { Move } from "./move";
 import { applyMoveAttrs } from "./move";
-import { allMoves } from "./move";
+import { allMoves } from "#app/data/all-moves";
 import { FlinchAttr } from "./move-attrs/flinch-attr";
 import { VariableMoveTypeAttr } from "./move-attrs/variable-move-type-attr";
 import { VariablePowerAttr } from "./move-attrs/variable-power-attr";

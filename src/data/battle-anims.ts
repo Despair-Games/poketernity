@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { allMoves } from "./move";
+import { allMoves } from "#app/data/all-moves";
 import { BeakBlastHeaderAttr } from "./move-attrs/beak-blast-header-attr";
 import { SelfStatusMove } from "./move";
 import { AttackMove } from "./move";

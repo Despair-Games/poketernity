@@ -8,7 +8,7 @@ import { PostVictoryAbAttr } from "#app/data/ab-attrs/post-victory-ab-attr";
 import type { DestinyBondTag, GrudgeTag } from "#app/data/battler-tags";
 import { BattlerTagLapseType } from "#app/data/battler-tags";
 import { classicFinalBossDialogue } from "#app/data/dialogue";
-import { allMoves } from "#app/data/move";
+import { allMoves } from "#app/data/all-moves";
 import { PostVictoryStatStageChangeAttr } from "#app/data/move-attrs/post-victory-stat-stage-change-attr";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";
 import { StatusEffect } from "#app/enums/status-effect";
