@@ -41,7 +41,7 @@ import { AbAttr } from "./ab-attr";
 ```
  */
 export class StatMultiplierAbAttr extends AbAttr {
-  private readonly stat: BattleStat;
+  public stat: BattleStat;
   private readonly multiplier: number;
   private readonly condition?: PokemonAttackCondition;
 
