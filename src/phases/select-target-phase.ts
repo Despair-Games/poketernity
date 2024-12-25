@@ -1,13 +1,11 @@
 import type { BattlerIndex } from "#app/battle";
 import { allMoves } from "#app/data/all-moves";
 import { globalScene } from "#app/global-scene";
-import { Command } from "#app/ui/command-ui-handler";
 import { Mode } from "#app/ui/ui";
 import { Moves } from "#enums/moves";
 import i18next from "i18next";
 import { PokemonPhase } from "./abstract-pokemon-phase";
 import { CommandPhase } from "./command-phase";
-import { isNullOrUndefined } from "#app/utils";
 
 export class SelectTargetPhase extends PokemonPhase {
   constructor(fieldIndex: number) {
@@ -45,12 +43,6 @@ export class SelectTargetPhase extends PokemonPhase {
         if (turnCommand) {
           turnCommand.targets = targets;
         }
-      }
-
-      // required for null check
-      const idx = this.fieldIndex - 1;
-      if (turnCommand?.command === Command.BALL && this.fieldIndex && !isNullOrUndefined(turnCommands[idx])) {
-        turnCommands[idx].skip = true;
       }
 
       this.end();
