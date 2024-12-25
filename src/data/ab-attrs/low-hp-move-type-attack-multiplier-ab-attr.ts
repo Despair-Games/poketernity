@@ -22,7 +22,7 @@ import { MoveCategory } from "#enums/move-category";
  * ```
  * @extends StatMultiplierAbAttr
  */
-export class LowHpMoveTypePowerBoostAbAttr extends StatMultiplierAbAttr {
+export class LowHpMoveTypeAttackMultiplierAbAttr extends StatMultiplierAbAttr {
   /**
    * The constructor defaults to Stat.ATK since at the moment of the attribute's construction, the game does not know what move will be used.
    */
