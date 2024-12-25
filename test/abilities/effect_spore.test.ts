@@ -1,5 +1,5 @@
 import { EffectSporeAbAttr } from "#app/data/ab-attrs/effect-spore-ab-attr";
-import { allMoves } from "#app/data/move";
+import { allMoves } from "#app/data/all-moves";
 import { HitResult } from "#app/field/pokemon";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";

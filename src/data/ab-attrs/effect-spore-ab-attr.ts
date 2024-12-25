@@ -5,7 +5,7 @@ import { Abilities } from "#enums/abilities";
 import { StatusEffect } from "#enums/status-effect";
 import { Type } from "#enums/type";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
-import { MoveFlags } from "#app/data/move";
+import { MoveFlags } from "#enums/move-flags";
 
 /**
  * Effect Spore's ability attribute
