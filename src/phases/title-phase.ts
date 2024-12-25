@@ -302,7 +302,6 @@ export class TitlePhase extends Phase {
 
   public override end(): void {
     const { arena, currentBattle, gameData } = globalScene;
-    const { battleType, double, waveIndex } = currentBattle;
 
     if (!this.loaded && !globalScene.gameMode.isDaily) {
       arena.preloadBgm();
@@ -320,6 +319,7 @@ export class TitlePhase extends Phase {
     globalScene.pushPhase(new EncounterPhase(this.loaded));
 
     if (this.loaded) {
+      const { battleType, double, waveIndex } = currentBattle;
       const availablePartyMembers = globalScene.getPokemonAllowedInBattle().length;
 
       globalScene.pushPhase(new SummonPhase(0, true, true));

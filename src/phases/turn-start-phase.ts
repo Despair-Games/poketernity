@@ -10,7 +10,7 @@ import { globalScene } from "#app/global-scene";
 import { BypassSpeedChanceModifier } from "#app/modifier/modifier";
 import { CheckStatusEffectPhase } from "#app/phases/check-status-effect-phase";
 import { Command } from "#app/ui/command-ui-handler";
-import { BooleanHolder, randSeedShuffle } from "#app/utils";
+import { BooleanHolder, isNullOrUndefined, randSeedShuffle } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { Stat } from "#enums/stat";
 import { SwitchType } from "#enums/switch-type";
@@ -185,7 +185,7 @@ export class TurnStartPhase extends FieldPhase {
           }
           break;
         case Command.BALL:
-          if (turnCommand.targets && turnCommand.targets[0] && turnCommand.cursor) {
+          if (!isNullOrUndefined(turnCommand.targets) && !isNullOrUndefined(turnCommand.cursor)) {
             globalScene.unshiftPhase(new AttemptCapturePhase(turnCommand.targets[0] % 2, turnCommand.cursor));
           } else {
             console.error("Error encountered when trying to throw Pokeball!");
@@ -194,7 +194,7 @@ export class TurnStartPhase extends FieldPhase {
           break;
         case Command.POKEMON:
           const switchType = turnCommand.args?.[0] ? SwitchType.BATON_PASS : SwitchType.SWITCH;
-          if (turnCommand.cursor) {
+          if (!isNullOrUndefined(turnCommand.cursor)) {
             globalScene.unshiftPhase(
               new SwitchSummonPhase(switchType, pokemon.getFieldIndex(), turnCommand.cursor, true, pokemon.isPlayer()),
             );

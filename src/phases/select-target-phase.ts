@@ -7,6 +7,7 @@ import { Moves } from "#enums/moves";
 import i18next from "i18next";
 import { PokemonPhase } from "./abstract-pokemon-phase";
 import { CommandPhase } from "./command-phase";
+import { isNullOrUndefined } from "#app/utils";
 
 export class SelectTargetPhase extends PokemonPhase {
   constructor(fieldIndex: number) {
@@ -46,8 +47,10 @@ export class SelectTargetPhase extends PokemonPhase {
         }
       }
 
-      if (turnCommand?.command === Command.BALL && this.fieldIndex) {
-        turnCommands[this.fieldIndex - 1]!.skip = true; //TODO: is the bang correct here?
+      // required for null check
+      const idx = this.fieldIndex - 1;
+      if (turnCommand?.command === Command.BALL && this.fieldIndex && !isNullOrUndefined(turnCommands[idx])) {
+        turnCommands[idx].skip = true;
       }
 
       this.end();
