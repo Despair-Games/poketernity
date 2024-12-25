@@ -20,6 +20,7 @@ import { MoveCategory } from "#enums/move-category";
 | Swarm        | Bug   |
 +--------------+-------+
  * ```
+ * @extends StatMultiplierAbAttr
  */
 export class LowHpMoveTypePowerBoostAbAttr extends StatMultiplierAbAttr {
   /**

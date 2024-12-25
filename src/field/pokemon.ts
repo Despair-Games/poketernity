@@ -1249,11 +1249,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         break;
       }
     }
-    console.log(statValue);
     if (!ignoreAbility) {
       applyStatMultiplierAbAttrs(StatMultiplierAbAttr, this, stat, statValue, simulated, move);
     }
-    console.log(statValue);
 
     let ret =
       statValue.value * this.getStatStageMultiplier(stat, opponent, move, ignoreOppAbility, isCritical, simulated);
