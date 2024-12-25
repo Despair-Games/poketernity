@@ -85,7 +85,7 @@ export class StatStageChangeAttr extends MoveEffectAttr {
           this.selfTarget,
           this.stats,
           stages,
-          this.showMessage,
+          { showMessage: this.showMessage },
         ),
       );
       return true;
