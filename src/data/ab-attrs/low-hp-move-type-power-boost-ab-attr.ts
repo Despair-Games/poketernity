@@ -41,7 +41,7 @@ export class LowHpMoveTypePowerBoostAbAttr extends StatMultiplierAbAttr {
     statValue: NumberHolder,
     args: any[],
   ): boolean {
-    const move = args[0] as Move;
+    const move: Move = args[0];
     // The class variable `stat` is checked and possibly changed to special attack when the game now has access to the move used at the moment.
     this.stat = move && move.category === MoveCategory.SPECIAL ? Stat.SPATK : Stat.ATK;
     return super.applyStatStage(pokemon, passive, simulated, stat, statValue, args);
