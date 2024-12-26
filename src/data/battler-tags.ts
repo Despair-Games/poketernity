@@ -808,7 +808,7 @@ export class DestinyBondTag extends BattlerTag {
 }
 
 export class InfatuatedTag extends BattlerTag {
-  public ACTIVATION_CHANCE: number = (1 / 2) * 100;
+  public readonly ACTIVATION_CHANCE: number = (1 / 2) * 100;
 
   constructor(sourceMove: number, sourceId: number) {
     super(BattlerTagType.INFATUATED, BattlerTagLapseType.MOVE, 1, sourceMove, sourceId);
