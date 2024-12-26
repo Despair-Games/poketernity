@@ -269,6 +269,7 @@ export class CommandPhase extends FieldPhase {
 
             if (isNullOrUndefined(targetPokemon)) {
               failCatch("battle:noPokeballTarget"); // TODO: needs locales
+              console.warn("Enemy Pokemon is missing when trying to throw Pokeball!");
             } else if (
               targetPokemon.isBoss()
               && targetPokemon.bossSegmentIndex >= 1
