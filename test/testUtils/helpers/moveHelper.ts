@@ -64,7 +64,7 @@ export class MoveHelper extends GameManagerHelper {
   }
 
   /**
-   * Forces the Paralysis or Freeze status to activate on the next move by temporarily mocking {@linkcode Overrides.STATUS_ACTIVATION_OVERRIDE},
+   * Forces the statuses Paralysis, Freeze, Sleep, Confusion, or Infatuation to activate on the next move by temporarily mocking {@linkcode Overrides.STATUS_ACTIVATION_OVERRIDE},
    * advancing to the next `MovePhase`, and then resetting the override to `null`
    * @param activated - `true` to force the status to activate, `false` to force the status to not activate (will cause Freeze to heal)
    */
@@ -72,17 +72,6 @@ export class MoveHelper extends GameManagerHelper {
     vi.spyOn(Overrides, "STATUS_ACTIVATION_OVERRIDE", "get").mockReturnValue(activated);
     await this.game.phaseInterceptor.to("MovePhase");
     vi.spyOn(Overrides, "STATUS_ACTIVATION_OVERRIDE", "get").mockReturnValue(null);
-  }
-
-  /**
-   * Forces the Confusion battler tag to activate on the next move by temporarily mocking Overrides
-   * advancing to the next `MovePhase`, and then resetting the override to `null`
-   * @param activated - `true` to force the status to activate, `false` to force the status to not activate
-   */
-  public async forceConfusionActivation(activated: boolean): Promise<void> {
-    vi.spyOn(Overrides, "CONFUSION_ACTIVATION_OVERRIDE", "get").mockReturnValue(activated);
-    await this.game.phaseInterceptor.to("MovePhase");
-    vi.spyOn(Overrides, "CONFUSION_ACTIVATION_OVERRIDE", "get").mockReturnValue(null);
   }
 
   /**

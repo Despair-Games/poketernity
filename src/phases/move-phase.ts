@@ -217,7 +217,10 @@ export class MovePhase extends BattlePhase {
           );
           this.pokemon.status.sleepTurnsRemaining = turnsRemaining.value;
           healed = this.pokemon.status.sleepTurnsRemaining <= 0;
-          activated = !healed && !this.pokemon.getTag(BattlerTagType.BYPASS_SLEEP);
+          activated =
+            !healed
+            && !this.pokemon.getTag(BattlerTagType.BYPASS_SLEEP)
+            && Overrides.STATUS_ACTIVATION_OVERRIDE !== false;
           break;
         case StatusEffect.FREEZE:
           healed =

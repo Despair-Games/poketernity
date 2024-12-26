@@ -715,7 +715,7 @@ export class ConfusedTag extends BattlerTag {
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
     const ret =
       (lapseType !== BattlerTagLapseType.CUSTOM && super.lapse(pokemon, lapseType))
-      || (Overrides.CONFUSION_ACTIVATION_OVERRIDE ?? false);
+      || (Overrides.STATUS_ACTIVATION_OVERRIDE ?? false);
 
     if (ret) {
       globalScene.queueMessage(
@@ -723,7 +723,7 @@ export class ConfusedTag extends BattlerTag {
       );
       globalScene.unshiftPhase(new CommonAnimPhase(pokemon.getBattlerIndex(), undefined, CommonAnim.CONFUSION));
 
-      const damage = this.getDamage(pokemon, Overrides.CONFUSION_ACTIVATION_OVERRIDE ?? false);
+      const damage = this.getDamage(pokemon, Overrides.STATUS_ACTIVATION_OVERRIDE ?? false);
       if (damage > 0) {
         globalScene.queueMessage(i18next.t("battlerTags:confusedLapseHurtItself"));
         pokemon.damageAndUpdate(damage);
@@ -808,6 +808,8 @@ export class DestinyBondTag extends BattlerTag {
 }
 
 export class InfatuatedTag extends BattlerTag {
+  public ACTIVATION_CHANCE: number = (1 / 2) * 100;
+
   constructor(sourceMove: number, sourceId: number) {
     super(BattlerTagType.INFATUATED, BattlerTagLapseType.MOVE, 1, sourceMove, sourceId);
   }
@@ -859,7 +861,10 @@ export class InfatuatedTag extends BattlerTag {
       );
       globalScene.unshiftPhase(new CommonAnimPhase(pokemon.getBattlerIndex(), undefined, CommonAnim.ATTRACT));
 
-      if (pokemon.randSeedInt(2)) {
+      if (
+        pokemon.randSeedInt(100) < this.ACTIVATION_CHANCE
+        && (isNullOrUndefined(Overrides.STATUS_ACTIVATION_OVERRIDE) || Overrides.STATUS_ACTIVATION_OVERRIDE)
+      ) {
         globalScene.queueMessage(
           i18next.t("battlerTags:infatuatedLapseImmobilize", {
             pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),

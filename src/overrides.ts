@@ -88,10 +88,13 @@ class DefaultOverrides {
   readonly BYPASS_TUTORIAL_SKIP_OVERRIDE: boolean = false;
   /** Set to `true` to be able to re-earn already unlocked achievements */
   readonly ACHIEVEMENTS_REUNLOCK_OVERRIDE: boolean = false;
-  /** Set to `true` to force Paralysis and Freeze to always activate, or `false` to force them to not activate */
+  /** Forces the activation/non-activation of various statuses
+   * - Paralysis: set to 'true' to always activate, 'false' to do the opposite
+   * - Freeze: set to 'true' to keep the Pokemon frozen, 'false' to defrost
+   * - Confusion: set to 'true' to keep the Pokemon confused and force self-damage, set to 'false' to keep the Pokemon confused but prevent self-damage
+   * - Infatuated: set to 'true' to force its activation, set to 'false' to do the opposite
+   */
   readonly STATUS_ACTIVATION_OVERRIDE: boolean | null = null;
-  /** Set to `true` to force Confusion to always activate, or `false` to force them to not activate */
-  readonly CONFUSION_ACTIVATION_OVERRIDE: boolean | null = null;
 
   // ----------------
   // PLAYER OVERRIDES

@@ -438,7 +438,7 @@ export class OverridesHelper extends GameManagerHelper {
   }
 
   /**
-   * Override statuses (Paralysis and Freeze) to always or never activate
+   * Override the statuses Paralysis, Freeze, Sleep, Confusion, or Infatuation  to always or never activate
    * @param activate - `true` to force activation, `false` to force no activation, `null` to disable the override
    * @returns `this`
    */
@@ -448,21 +448,6 @@ export class OverridesHelper extends GameManagerHelper {
       this.log(`Paralysis and Freeze forced to ${activate ? "always" : "never"} activate!`);
     } else {
       this.log("Status activation override disabled!");
-    }
-    return this;
-  }
-
-  /**
-   * Override Confusion battler tag to always or never activate
-   * @param activate - `true` to force activation, `false` to force no activation, `null` to disable the override
-   * @returns `this`
-   */
-  public confusionActivation(activate: boolean | null): this {
-    vi.spyOn(Overrides, "CONFUSION_ACTIVATION_OVERRIDE", "get").mockReturnValue(activate);
-    if (activate !== null) {
-      this.log(`Confusion forced to ${activate ? "always" : "never"} activate!`);
-    } else {
-      this.log("Confusion activation override disabled!");
     }
     return this;
   }
