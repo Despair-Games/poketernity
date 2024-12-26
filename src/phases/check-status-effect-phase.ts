@@ -2,6 +2,7 @@ import { PostTurnStatusEffectPhase } from "#app/phases/post-turn-status-effect-p
 import { Phase } from "#app/phase";
 import type { BattlerIndex } from "#app/battle";
 import { globalScene } from "#app/global-scene";
+import { isNullOrUndefined } from "#app/utils";
 
 export class CheckStatusEffectPhase extends Phase {
   private order: BattlerIndex[];
@@ -11,9 +12,9 @@ export class CheckStatusEffectPhase extends Phase {
   }
 
   override start() {
-    const field = globalScene.getField();
     for (const o of this.order) {
-      if (field[o].status && field[o].status.isPostTurn()) {
+      const pokemon = globalScene.getFieldPokemonByBattlerIndex(o);
+      if (!isNullOrUndefined(pokemon) && pokemon.status && pokemon.status.isPostTurn()) {
         globalScene.unshiftPhase(new PostTurnStatusEffectPhase(o));
       }
     }

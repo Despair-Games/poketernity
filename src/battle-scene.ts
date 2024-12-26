@@ -68,7 +68,7 @@ import {
 import AbilityBar from "#app/ui/ability-bar";
 import { allAbilities, applyAbAttrs, applyPostBattleInitAbAttrs, applyPostItemLostAbAttrs } from "#app/data/ability";
 import { PostItemLostAbAttr } from "./data/ab-attrs/post-item-lost-ab-attr";
-import type { FixedBattleConfig } from "#app/battle";
+import type { BattlerIndex, FixedBattleConfig } from "#app/battle";
 import Battle, { BattleType } from "#app/battle";
 import type { GameMode } from "#app/game-mode";
 import { GameModes, getGameMode } from "#app/game-mode";
@@ -959,13 +959,23 @@ export default class BattleScene extends SceneBase {
     return party.slice(0, Math.min(party.length, this.currentBattle?.double ? 2 : 1));
   }
 
+  /**
+   * Returns a list of all Pokemon currently on the field, potentially including fainted ones.
+   * @param activeOnly If `true`, only return Pokemon which are active (e.g., not fainted). Default `false`.
+   */
   public getField(activeOnly: boolean = false): Pokemon[] {
-    const ret = new Array(4).fill(null);
-    const playerField = this.getPlayerField();
-    const enemyField = this.getEnemyField();
-    ret.splice(0, playerField.length, ...playerField);
-    ret.splice(2, enemyField.length, ...enemyField);
-    return activeOnly ? ret.filter((p) => p?.isActive()) : ret;
+    let ret: Pokemon[] = this.getPlayerField();
+    ret = ret.concat(this.getEnemyField());
+    return activeOnly ? ret.filter((p) => p.isActive()) : ret;
+  }
+
+  /**
+   * Returns the Pokemon currently on the field that has a certain battler index, or `undefined` if no such Pokemon exists.
+   * This function is allowed to return non-active (e.g., fainted) Pokemon.
+   * @param battlerIndex The battler index to search for.
+   */
+  public getFieldPokemonByBattlerIndex(battlerIndex: BattlerIndex): Pokemon | undefined {
+    return this.getField().find((p) => p.getBattlerIndex() === battlerIndex);
   }
 
   /**
