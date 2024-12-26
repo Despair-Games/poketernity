@@ -713,12 +713,9 @@ export class ConfusedTag extends BattlerTag {
   }
 
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
-    /** Prevent the Pokemon from snapping out of confusion */
-    if (Overrides.CONFUSION_ACTIVATION_OVERRIDE) {
-      return true;
-    }
-
-    const ret = lapseType !== BattlerTagLapseType.CUSTOM && super.lapse(pokemon, lapseType);
+    const ret =
+      (lapseType !== BattlerTagLapseType.CUSTOM && super.lapse(pokemon, lapseType))
+      || (Overrides.CONFUSION_ACTIVATION_OVERRIDE ?? false);
 
     if (ret) {
       globalScene.queueMessage(
@@ -734,7 +731,6 @@ export class ConfusedTag extends BattlerTag {
         (globalScene.getCurrentPhase() as MovePhase).cancel();
       }
     }
-
     return ret;
   }
 
