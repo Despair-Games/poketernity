@@ -75,6 +75,17 @@ export class MoveHelper extends GameManagerHelper {
   }
 
   /**
+   * Forces the Confusion battler tag to activate on the next move by temporarily mocking Overrides
+   * advancing to the next `MovePhase`, and then resetting the override to `null`
+   * @param activated - `true` to force the status to activate, `false` to force the status to not activate
+   */
+  public async forceConfusionActivation(activated: boolean): Promise<void> {
+    vi.spyOn(Overrides, "CONFUSION_ACTIVATION_OVERRIDE", "get").mockReturnValue(activated);
+    await this.game.phaseInterceptor.to("MovePhase");
+    vi.spyOn(Overrides, "CONFUSION_ACTIVATION_OVERRIDE", "get").mockReturnValue(null);
+  }
+
+  /**
    * Used when the normal moveset override can't be used (such as when it's necessary to check updated properties of the moveset).
    * @param pokemon - The pokemon being modified
    * @param moveset - The moveset to use

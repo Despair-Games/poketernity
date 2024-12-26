@@ -90,6 +90,8 @@ class DefaultOverrides {
   readonly ACHIEVEMENTS_REUNLOCK_OVERRIDE: boolean = false;
   /** Set to `true` to force Paralysis and Freeze to always activate, or `false` to force them to not activate */
   readonly STATUS_ACTIVATION_OVERRIDE: boolean | null = null;
+  /** Set to `true` to force Confusion to always activate, or `false` to force them to not activate */
+  readonly CONFUSION_ACTIVATION_OVERRIDE: boolean | null = null;
 
   // ----------------
   // PLAYER OVERRIDES

@@ -37,6 +37,7 @@ import { StatusEffect } from "#enums/status-effect";
 import { WeatherType } from "#enums/weather-type";
 import { ReverseDrainAbAttr } from "./ab-attrs/reverse-drain-ab-attr";
 import { ProtectStatAbAttr } from "./ab-attrs/protect-stat-ab-attr";
+import Overrides from "#app/overrides";
 
 export enum BattlerTagLapseType {
   FAINT,
@@ -677,6 +678,7 @@ export class InterruptedTag extends BattlerTag {
  * BattlerTag that represents the {@link https://bulbapedia.bulbagarden.net/wiki/Confusion_(status_condition) Confusion} status condition
  */
 export class ConfusedTag extends BattlerTag {
+  public ACTIVATION_CHANCE: number = (1 / 3) * 100;
   constructor(turnCount: number, sourceMove: Moves) {
     super(BattlerTagType.CONFUSED, BattlerTagLapseType.MOVE, turnCount, sourceMove, undefined, true);
   }
@@ -711,6 +713,11 @@ export class ConfusedTag extends BattlerTag {
   }
 
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
+    /** Prevent the Pokemon from snapping out of confusion */
+    if (Overrides.CONFUSION_ACTIVATION_OVERRIDE) {
+      return true;
+    }
+
     const ret = lapseType !== BattlerTagLapseType.CUSTOM && super.lapse(pokemon, lapseType);
 
     if (ret) {
@@ -719,13 +726,8 @@ export class ConfusedTag extends BattlerTag {
       );
       globalScene.unshiftPhase(new CommonAnimPhase(pokemon.getBattlerIndex(), undefined, CommonAnim.CONFUSION));
 
-      // 1/3 chance of hitting self with a 40 base power move
-      if (pokemon.randSeedInt(3) === 0) {
-        const atk = pokemon.getEffectiveStat(Stat.ATK);
-        const def = pokemon.getEffectiveStat(Stat.DEF);
-        const damage = toDmgValue(
-          ((((2 * pokemon.level) / 5 + 2) * 40 * atk) / def / 50 + 2) * (pokemon.randSeedIntRange(85, 100) / 100),
-        );
+      const damage = this.getDamage(pokemon, Overrides.CONFUSION_ACTIVATION_OVERRIDE ?? false);
+      if (damage > 0) {
         globalScene.queueMessage(i18next.t("battlerTags:confusedLapseHurtItself"));
         pokemon.damageAndUpdate(damage);
         pokemon.battleData.hitCount++;
@@ -734,6 +736,24 @@ export class ConfusedTag extends BattlerTag {
     }
 
     return ret;
+  }
+
+  /**
+   * Helper function for checking if Confusion activates and retrieving self-inflicted damage from confusion
+   * @param pokemon the confused Pokemon
+   * @param forceActivation boolean value used in tests to force status
+   * @returns the amount of damage inflicted
+   */
+  public getDamage(pokemon: Pokemon, forceActivation?: boolean | null): number {
+    // 1/3 chance of hitting self with a 40 base power move
+    if (pokemon.randSeedInt(100) < this.ACTIVATION_CHANCE || forceActivation) {
+      const atk = pokemon.getEffectiveStat(Stat.ATK);
+      const def = pokemon.getEffectiveStat(Stat.DEF);
+      return toDmgValue(
+        ((((2 * pokemon.level) / 5 + 2) * 40 * atk) / def / 50 + 2) * (pokemon.randSeedIntRange(85, 100) / 100),
+      );
+    }
+    return 0;
   }
 
   override getDescriptor(): string {
