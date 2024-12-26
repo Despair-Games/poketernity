@@ -723,7 +723,7 @@ export class ConfusedTag extends BattlerTag {
       );
       globalScene.unshiftPhase(new CommonAnimPhase(pokemon.getBattlerIndex(), undefined, CommonAnim.CONFUSION));
 
-      const damage = this.getDamage(pokemon, Overrides.STATUS_ACTIVATION_OVERRIDE ?? false);
+      const damage = this.getDamage(pokemon);
       if (damage > 0) {
         globalScene.queueMessage(i18next.t("battlerTags:confusedLapseHurtItself"));
         pokemon.damageAndUpdate(damage);
@@ -740,9 +740,12 @@ export class ConfusedTag extends BattlerTag {
    * @param forceActivation boolean value used in tests to force status
    * @returns the amount of damage inflicted
    */
-  public getDamage(pokemon: Pokemon, forceActivation?: boolean | null): number {
+  public getDamage(pokemon: Pokemon): number {
     // 1/3 chance of hitting self with a 40 base power move
-    if (pokemon.randSeedInt(100) < this.ACTIVATION_CHANCE && (isNullOrUndefined(forceActivation) || forceActivation)) {
+    if (
+      pokemon.randSeedInt(100) < this.ACTIVATION_CHANCE
+      && (isNullOrUndefined(Overrides.STATUS_ACTIVATION_OVERRIDE) || Overrides.STATUS_ACTIVATION_OVERRIDE)
+    ) {
       const atk = pokemon.getEffectiveStat(Stat.ATK);
       const def = pokemon.getEffectiveStat(Stat.DEF);
       return toDmgValue(
