@@ -196,6 +196,7 @@ import { PostFaintContactDamageAbAttr } from "./ab-attrs/post-faint-contact-dama
 import { PostFaintHPDamageAbAttr } from "./ab-attrs/post-faint-hp-damage-ab-attr";
 import { BypassSpeedChanceAbAttr } from "./ab-attrs/bypass-speed-chance-ab-attr";
 import { TerrainEventTypeChangeAbAttr } from "./ab-attrs/terrain-event-type-change-ab-attr";
+import { ReceivedTypeAttackMultiplierAbAttr } from "./ab-attrs/received-type-attack-multiplier-ab-attr";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {
@@ -461,8 +462,8 @@ export function initAbilities() {
         i18next.t("abilityTriggers:postSummonPressure", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       ),
     new Ability(Abilities.THICK_FAT, 3)
-      .attr(ReceivedTypeDamageMultiplierAbAttr, Type.FIRE, 0.5)
-      .attr(ReceivedTypeDamageMultiplierAbAttr, Type.ICE, 0.5)
+      .attr(ReceivedTypeAttackMultiplierAbAttr, Type.FIRE, 0.5)
+      .attr(ReceivedTypeAttackMultiplierAbAttr, Type.ICE, 0.5)
       .ignorable(),
     new Ability(Abilities.EARLY_BIRD, 3).attr(ReduceStatusEffectDurationAbAttr, StatusEffect.SLEEP),
     new Ability(Abilities.FLAME_BODY, 3)
