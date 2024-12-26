@@ -268,7 +268,6 @@ export class CommandPhase extends FieldPhase {
             const targetPokemon = globalScene.getEnemyField().find((p) => p.isActive(true));
 
             if (isNullOrUndefined(targetPokemon)) {
-              failCatch("battle:noPokeballTarget"); // TODO: needs locales
               console.warn("Enemy Pokemon is missing when trying to throw Pokeball!");
             } else if (
               targetPokemon.isBoss()
@@ -277,8 +276,6 @@ export class CommandPhase extends FieldPhase {
               && cursor < PokeballType.MASTER_BALL
             ) {
               failCatch("battle:noPokeballStrong");
-            } else if (0 /* targetPokemon.isSemiInvulnerable() */) {
-              failCatch("battle:noPokeballSemiInvulnerable"); // TODO: needs locales
             } else {
               currentBattle.turnCommands[this.fieldIndex] = {
                 command: Command.BALL,
