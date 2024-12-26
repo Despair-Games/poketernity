@@ -1,4 +1,4 @@
-import type { ArenaTagType } from "#enums/arena-tag-type";
+import { ArenaTagType } from "#enums/arena-tag-type";
 import { type Pokemon, MoveResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -8,6 +8,8 @@ import i18next from "i18next";
 import { type ChargeAnim, MoveChargeAnim } from "#app/data/battle-anims";
 import type { Move } from "#app/data/move";
 import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
+import type { DelayedAttackTag } from "../arena-tag";
+import type { MoveConditionFunc } from "../move-conditions";
 
 /**
  * Attack Move that doesn't hit the turn it is played and doesn't allow for multiple
@@ -18,14 +20,12 @@ import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effec
  * @param chargeText The text to display when the move is used
  */
 export class DelayedAttackAttr extends OverrideMoveEffectAttr {
-  public tagType: ArenaTagType;
   public chargeAnim: ChargeAnim;
   private chargeText: string;
 
-  constructor(tagType: ArenaTagType, chargeAnim: ChargeAnim, chargeText: string) {
+  constructor(chargeAnim: ChargeAnim, chargeText: string) {
     super();
 
-    this.tagType = tagType;
     this.chargeAnim = chargeAnim;
     this.chargeText = chargeText;
   }
@@ -36,8 +36,8 @@ export class DelayedAttackAttr extends OverrideMoveEffectAttr {
       return true;
     }
 
-    const overridden = args[0] as BooleanHolder;
-    const virtual = args[1] as boolean;
+    const overridden: BooleanHolder = args[0];
+    const virtual: boolean = args[1];
 
     if (!virtual) {
       overridden.value = true;
@@ -48,8 +48,14 @@ export class DelayedAttackAttr extends OverrideMoveEffectAttr {
           .replace("{USER}", getPokemonNameWithAffix(user)),
       );
       user.pushMoveHistory({ move: move.id, targets: [target.getBattlerIndex()], result: MoveResult.OTHER });
-      const side = target.getArenaTagSide();
-      globalScene.arena.addTag(this.tagType, 3, move.id, user.id, side, false, target.getBattlerIndex());
+      // Add a Delayed Attack tag to the arena if it doesn't already exist
+      globalScene.arena.addTag(ArenaTagType.DELAYED_ATTACK, user.id);
+      // Queue an attack on the added (or existing) tag
+      const tag = globalScene.arena.getTag(ArenaTagType.DELAYED_ATTACK) as DelayedAttackTag;
+      if (tag) {
+        tag.addAttack(user, move.id, target.getBattlerIndex());
+      }
+      return true;
     } else {
       globalScene.queueMessage(
         i18next.t("moveTriggers:tookMoveAttack", {
@@ -59,5 +65,12 @@ export class DelayedAttackAttr extends OverrideMoveEffectAttr {
       );
     }
     return true;
+  }
+
+  override getCondition(): MoveConditionFunc {
+    return (_user, target, _move) => {
+      const delayedAttackTag = globalScene.arena.getTag(ArenaTagType.DELAYED_ATTACK) as DelayedAttackTag;
+      return !delayedAttackTag?.attacks.some((attack) => attack.targetIndex === target.getBattlerIndex());
+    };
   }
 }

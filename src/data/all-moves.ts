@@ -994,7 +994,6 @@ export function initMoves() {
       .ignoresProtect()
       .attr(
         DelayedAttackAttr,
-        ArenaTagType.FUTURE_SIGHT,
         ChargeAnim.FUTURE_SIGHT_CHARGING,
         i18next.t("moveTriggers:foresawAnAttack", { pokemonName: "{USER}" }),
       ),
@@ -1359,7 +1358,6 @@ export function initMoves() {
       .ignoresProtect()
       .attr(
         DelayedAttackAttr,
-        ArenaTagType.DOOM_DESIRE,
         ChargeAnim.DOOM_DESIRE_CHARGING,
         i18next.t("moveTriggers:choseDoomDesireAsDestiny", { pokemonName: "{USER}" }),
       ),

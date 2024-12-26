@@ -31,7 +31,7 @@ export class PostDefendApplyArenaTrapTagAbAttr extends PostDefendAbAttr {
       const tag = globalScene.arena.getTag(this.tagType) as ArenaTrapTag;
       if (!globalScene.arena.getTag(this.tagType) || tag.layers < tag.maxLayers) {
         if (!simulated) {
-          globalScene.arena.addTag(this.tagType, 0, undefined, pokemon.id, pokemon.getOpposingArenaTagSide());
+          globalScene.arena.addTag(this.tagType, pokemon.id, undefined, undefined, pokemon.getOpposingArenaTagSide());
         }
         return true;
       }

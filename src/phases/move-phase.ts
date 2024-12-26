@@ -6,7 +6,6 @@ import { ReduceStatusEffectDurationAbAttr } from "#app/data/ab-attrs/reduce-stat
 import { BlockRedirectAbAttr } from "#app/data/ab-attrs/block-redirect-ab-attr";
 import { RedirectMoveAbAttr } from "#app/data/ab-attrs/redirect-move-ab-attr";
 import { PostMoveUsedAbAttr } from "#app/data/ab-attrs/post-move-used-ab-attr";
-import type { DelayedAttackTag } from "#app/data/arena-tag";
 import { CommonAnim } from "#app/data/battle-anims";
 import { BattlerTagLapseType, CenterOfAttentionTag } from "#app/data/battler-tags";
 import { applyMoveAttrs } from "#app/data/move";
@@ -34,14 +33,12 @@ import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { BooleanHolder, NumberHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
-import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { Moves } from "#enums/moves";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
 import { getTerrainBlockMessage } from "#app/data/terrain";
 import { PokemonTypeChangeAbAttr } from "#app/data/ab-attrs/pokemon-type-change-ab-attr";
-import { DelayedAttackAttr } from "#app/data/move-attrs/delayed-attack-attr";
 import { frenzyMissFunc } from "#app/data/move-utils";
 
 export class MovePhase extends BattlePhase {
@@ -275,32 +272,6 @@ export class MovePhase extends BattlePhase {
 
     // form changes happen even before we know that the move wll execute.
     globalScene.triggerPokemonFormChange(this.pokemon, SpeciesFormChangePreMoveTrigger);
-
-    const isDelayedAttack = this.move.getMove().hasAttr(DelayedAttackAttr);
-    if (isDelayedAttack) {
-      // Check the player side arena if future sight is active
-      const futureSightTags = globalScene.arena.findTags((t) => t.tagType === ArenaTagType.FUTURE_SIGHT);
-      const doomDesireTags = globalScene.arena.findTags((t) => t.tagType === ArenaTagType.DOOM_DESIRE);
-      let fail = false;
-      const currentTargetIndex = targets[0].getBattlerIndex();
-      for (const tag of futureSightTags) {
-        if ((tag as DelayedAttackTag).targetIndex === currentTargetIndex) {
-          fail = true;
-          break;
-        }
-      }
-      for (const tag of doomDesireTags) {
-        if ((tag as DelayedAttackTag).targetIndex === currentTargetIndex) {
-          fail = true;
-          break;
-        }
-      }
-      if (fail) {
-        this.showMoveText();
-        this.showFailedText();
-        return this.end();
-      }
-    }
 
     this.showMoveText();
 
