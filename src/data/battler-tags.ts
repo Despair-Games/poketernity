@@ -26,7 +26,7 @@ import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import type { StatStageChangeCallback } from "#app/phases/stat-stage-change-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import i18next from "#app/plugins/i18n";
-import { BooleanHolder, getFrameMs, NumberHolder, toDmgValue } from "#app/utils";
+import { BooleanHolder, getFrameMs, isNullOrUndefined, NumberHolder, toDmgValue } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { Moves } from "#enums/moves";
@@ -742,7 +742,7 @@ export class ConfusedTag extends BattlerTag {
    */
   public getDamage(pokemon: Pokemon, forceActivation?: boolean | null): number {
     // 1/3 chance of hitting self with a 40 base power move
-    if (pokemon.randSeedInt(100) < this.ACTIVATION_CHANCE || forceActivation) {
+    if (pokemon.randSeedInt(100) < this.ACTIVATION_CHANCE && (isNullOrUndefined(forceActivation) || forceActivation)) {
       const atk = pokemon.getEffectiveStat(Stat.ATK);
       const def = pokemon.getEffectiveStat(Stat.DEF);
       return toDmgValue(
