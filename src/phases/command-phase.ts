@@ -13,6 +13,7 @@ import { FieldPhase } from "#app/phases/abstract-field-phase";
 import { SelectTargetPhase } from "#app/phases/select-target-phase";
 import { Command } from "#app/ui/command-ui-handler";
 import { Mode } from "#app/ui/ui";
+import { isNullOrUndefined } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -238,84 +239,45 @@ export class CommandPhase extends FieldPhase {
             .some((p) => !globalScene.gameData.dexData[p.species.speciesId].caughtAttr)
           && gameData.getStarterCount((d) => !!d.caughtAttr) < Object.keys(speciesStarterCosts).length - 1;
 
+        const failCatchCallback = (): void => {
+          ui.showText("", 0);
+          ui.setMode(Mode.COMMAND, this.fieldIndex);
+        };
+        const failCatch = (i18nKey: string): void => {
+          ui.setMode(Mode.COMMAND, this.fieldIndex);
+          ui.setMode(Mode.MESSAGE);
+          ui.showText(i18next.t(i18nKey), null, () => failCatchCallback(), null, true);
+        };
+
         if (arena.biomeType === Biome.END && (!gameMode.isClassic || gameMode.isFreshStartChallenge() || notInDex)) {
-          ui.setMode(Mode.COMMAND, this.fieldIndex);
-          ui.setMode(Mode.MESSAGE);
-          ui.showText(
-            i18next.t("battle:noPokeballForce"),
-            null,
-            () => {
-              ui.showText("", 0);
-              ui.setMode(Mode.COMMAND, this.fieldIndex);
-            },
-            null,
-            true,
-          );
+          failCatch("battle:noPokeballForce");
         } else if (battleType === BattleType.TRAINER) {
-          ui.setMode(Mode.COMMAND, this.fieldIndex);
-          ui.setMode(Mode.MESSAGE);
-          ui.showText(
-            i18next.t("battle:noPokeballTrainer"),
-            null,
-            () => {
-              ui.showText("", 0);
-              ui.setMode(Mode.COMMAND, this.fieldIndex);
-            },
-            null,
-            true,
-          );
+          failCatch("battle:noPokeballTrainer");
         } else if (currentBattle.isBattleMysteryEncounter() && !mysteryEncounter!.catchAllowed) {
-          ui.setMode(Mode.COMMAND, this.fieldIndex);
-          ui.setMode(Mode.MESSAGE);
-          ui.showText(
-            i18next.t("battle:noPokeballMysteryEncounter"),
-            null,
-            () => {
-              ui.showText("", 0);
-              ui.setMode(Mode.COMMAND, this.fieldIndex);
-            },
-            null,
-            true,
-          );
+          failCatch("battle:noPokeballMysteryEncounter");
         } else {
           const targets = globalScene
             .getEnemyField()
             .filter((p) => p.isActive(true))
             .map((p) => p.getBattlerIndex());
+
           if (targets.length > 1) {
-            ui.setMode(Mode.COMMAND, this.fieldIndex);
-            ui.setMode(Mode.MESSAGE);
-            ui.showText(
-              i18next.t("battle:noPokeballMulti"),
-              null,
-              () => {
-                ui.showText("", 0);
-                ui.setMode(Mode.COMMAND, this.fieldIndex);
-              },
-              null,
-              true,
-            );
+            failCatch("battle:noPokeballMulti");
           } else if (cursor < 5) {
             // TODO: when would `cursor` be greater than 4?
             const targetPokemon = globalScene.getEnemyField().find((p) => p.isActive(true));
-            if (
+
+            if (isNullOrUndefined(targetPokemon)) {
+              failCatch("battle:noPokeballTarget"); // TODO: needs locales
+            } else if (
               targetPokemon?.isBoss()
-              && targetPokemon?.bossSegmentIndex >= 1
-              && !targetPokemon?.hasAbility(Abilities.WONDER_GUARD, false, true)
+              && targetPokemon.bossSegmentIndex >= 1
+              && !targetPokemon.hasAbility(Abilities.WONDER_GUARD, false, true)
               && cursor < PokeballType.MASTER_BALL
             ) {
-              ui.setMode(Mode.COMMAND, this.fieldIndex);
-              ui.setMode(Mode.MESSAGE);
-              ui.showText(
-                i18next.t("battle:noPokeballStrong"),
-                null,
-                () => {
-                  ui.showText("", 0);
-                  ui.setMode(Mode.COMMAND, this.fieldIndex);
-                },
-                null,
-                true,
-              );
+              failCatch("battle:noPokeballStrong");
+            } else if (0 /* targetPokemon.isSemiInvulnerable() */) {
+              failCatch("battle:noPokeballSemiInvulnerable"); // TODO: needs locales
             } else {
               currentBattle.turnCommands[this.fieldIndex] = {
                 command: Command.BALL,
