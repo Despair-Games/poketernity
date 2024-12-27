@@ -1,6 +1,6 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { Type } from "#enums/type";
-import type { Move } from "../move";
+import type { Move } from "#app/data/move";
 import { ModifiedDamageAttr } from "./modified-damage-attr";
 
 /**

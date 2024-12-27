@@ -58,7 +58,7 @@ import type { PostBattleAbAttr } from "./ab-attrs/post-battle-ab-attr";
 import type { PostFaintAbAttr } from "./ab-attrs/post-faint-ab-attr";
 import { ForceSwitchOutImmunityAbAttr } from "./ab-attrs/force-switch-out-immunity-ab-attr";
 import { queueShowAbility } from "./ability-utils";
-import { BattlerTagType } from "#app/enums/battler-tag-type";
+import { BattlerTagType } from "#enums/battler-tag-type";
 
 export class Ability implements Localizable {
   public id: Abilities;
