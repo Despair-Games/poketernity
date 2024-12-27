@@ -2212,6 +2212,25 @@ export class GroundedTag extends BattlerTag {
   constructor(tagType: BattlerTagType, lapseType: BattlerTagLapseType, sourceMove: Moves) {
     super(tagType, lapseType, 1, sourceMove);
   }
+
+  /**
+   * Smack Down and Thousand Arrows have special messages when knocking an ungrounded Pokemon down
+   * @param pokemon the Pokemon being grounded
+   */
+  override onAdd(pokemon: Pokemon) {
+    const isSmackDownOrThousandArrows = [Moves.SMACK_DOWN, Moves.THOUSAND_ARROWS].includes(this.sourceMove);
+    const wasNotGrounded =
+      pokemon.isOfType(Type.FLYING, true, true)
+      || pokemon.hasAbility(Abilities.LEVITATE)
+      || pokemon.getTag(BattlerTagType.FLOATING)
+      || pokemon.getTag(SemiInvulnerableTag);
+
+    if (isSmackDownOrThousandArrows && wasNotGrounded) {
+      globalScene.queueMessage(
+        i18next.t("battlerTags:groundedSmackDown", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+      );
+    }
+  }
 }
 
 /**
