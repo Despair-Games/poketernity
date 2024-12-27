@@ -76,6 +76,8 @@ export class InputsController {
   public events: Phaser.Events.EventEmitter;
 
   private buttonLock: Button[] = new Array();
+
+  // TODO interactions and configs are defined as maps but used as objects
   private interactions: Map<Button, Map<string, boolean>> = new Map();
   private configs: Map<string, InterfaceConfig> = new Map();
 
@@ -590,12 +592,24 @@ export class InputsController {
     this.configs[selectedDevice].custom = mappingConfigs.custom;
   }
 
-  resetConfigs(): void {
-    this.configs = new Map();
-    if (this.getGamepadsName()?.length) {
-      this.setupGamepad(this.selectedDevice[Device.GAMEPAD]);
+  /**
+   * Reset the mapping config for the selected device.
+   * If it's a Gamepad, only reset the config for the one currently in use
+   * @param device the {@linkcode Device} to reset config for
+   */
+  resetConfig(device: Device): void {
+    const deviceName = this.selectedDevice[device];
+    if (this.configs[deviceName]) {
+      delete this.configs[deviceName];
+      switch (device) {
+        case Device.KEYBOARD:
+          this.setupKeyboard();
+          break;
+        case Device.GAMEPAD:
+          this.setupGamepad(deviceName);
+          break;
+      }
     }
-    this.setupKeyboard();
   }
 
   /**

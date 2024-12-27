@@ -672,14 +672,31 @@ export class GameData {
     return true; // Return true to indicate the operation was successful
   }
 
-  public resetMappingToFactory(): boolean {
+  /**
+   * Reset the mappings for the given device to its default values
+   * If it's a gamepad, only reset the one currently in use
+   * @returns `true` if the operation was successful, `false` otherwise
+   */
+  public resetMappingToFactory(device: Device): boolean {
+    const deviceName = globalScene.inputController?.selectedDevice[device];
     const lsMappingStr = localStorage.getItem(MAPPING_CONFIG_LS_KEY);
     if (!lsMappingStr) {
-      // Check if 'mappingConfigs' exists in localStorage
+      // no config found
       return false;
-    } // If 'mappingConfigs' does not exist, return false
-    localStorage.removeItem(MAPPING_CONFIG_LS_KEY);
-    globalScene.inputController.resetConfigs();
+    }
+    let mappingConfigs = {};
+    try {
+      mappingConfigs = JSON.parse(lsMappingStr);
+    } catch (err) {
+      console.error("Error parsing mapping configs from localStorage:", err);
+    }
+    if (mappingConfigs.hasOwnProperty(deviceName)) {
+      // Delete the config for this device and update local storage
+      delete mappingConfigs[deviceName];
+      localStorage.setItem(MAPPING_CONFIG_LS_KEY, JSON.stringify(mappingConfigs));
+      // Tell the inputcontroller to update
+      globalScene.inputController.resetConfig(device);
+    }
     return true; // TODO: is `true` the correct return value?
   }
 
