@@ -715,7 +715,7 @@ export class ConfusedTag extends BattlerTag {
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
     const ret =
       (lapseType !== BattlerTagLapseType.CUSTOM && super.lapse(pokemon, lapseType))
-      || Overrides.STATUS_ACTIVATION_OVERRIDE === true;
+      || !isNullOrUndefined(Overrides.STATUS_ACTIVATION_OVERRIDE);
 
     if (ret) {
       globalScene.queueMessage(
@@ -742,8 +742,7 @@ export class ConfusedTag extends BattlerTag {
   public getDamage(pokemon: Pokemon): number {
     // 1/3 chance of hitting self with a 40 base power move
     if (
-      (pokemon.randSeedInt(100) < this.ACTIVATION_CHANCE
-        && Overrides.STATUS_ACTIVATION_OVERRIDE !== false)
+      (pokemon.randSeedInt(100) < this.ACTIVATION_CHANCE && Overrides.STATUS_ACTIVATION_OVERRIDE !== false)
       || Overrides.STATUS_ACTIVATION_OVERRIDE === true
     ) {
       const atk = pokemon.getEffectiveStat(Stat.ATK);
@@ -865,8 +864,7 @@ export class InfatuatedTag extends BattlerTag {
       globalScene.unshiftPhase(new CommonAnimPhase(pokemon.getBattlerIndex(), undefined, CommonAnim.ATTRACT));
 
       if (
-        (pokemon.randSeedInt(100) < this.ACTIVATION_CHANCE
-          && Overrides.STATUS_ACTIVATION_OVERRIDE !== false)
+        (pokemon.randSeedInt(100) < this.ACTIVATION_CHANCE && Overrides.STATUS_ACTIVATION_OVERRIDE !== false)
         || Overrides.STATUS_ACTIVATION_OVERRIDE === true
       ) {
         globalScene.queueMessage(
