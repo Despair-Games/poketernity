@@ -557,7 +557,7 @@ class WishTag extends ArenaTag {
   }
 
   override onRemove(_arena: Arena): void {
-    const target = globalScene.getField()[this.battlerIndex];
+    const target = globalScene.getFieldPokemonByBattlerIndex(this.battlerIndex);
     if (target?.isActive(true)) {
       globalScene.queueMessage(this.triggerMessage);
       globalScene.unshiftPhase(new PokemonHealPhase(target.getBattlerIndex(), this.healHp, null, true, false));
