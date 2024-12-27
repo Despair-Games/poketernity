@@ -6,7 +6,21 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
 import { getWeatherCondition } from "../abilities";
 
-export class WeatherBasedSpeedMultiplierAbAttr extends StatMultiplierAbAttr {
+/**
+ * Ability attribute that doubles speed if specific weather(s) are active
+ * Abilities with this attribute:
+ * ```
++-------------+------------------+
+|   Ability   |    Weather(s)    |
++-------------+------------------+
+| Chlorophyll | Sun, Harsh Sun   |
+| Swift Swim  | Rain, Heavy Rain |
+| Sand Rush   | Sandstorm        |
+| Slush Rush  | Hail, Snow       |
++-------------+------------------+
+ * ```
+ */
+export class WeatherBasedSpeedDoublerAbAttr extends StatMultiplierAbAttr {
   private weather: WeatherType[] = [];
 
   constructor(weather: WeatherType | WeatherType[]) {
@@ -22,7 +36,7 @@ export class WeatherBasedSpeedMultiplierAbAttr extends StatMultiplierAbAttr {
     statValue: NumberHolder,
     args: any[],
   ): boolean {
-    if (getWeatherCondition(...this.weather)) {
+    if (getWeatherCondition(...this.weather)(pokemon)) {
       return super.applyStatStage(pokemon, passive, simulated, stat, statValue, args);
     }
     return false;

@@ -196,6 +196,7 @@ import { PostFaintContactDamageAbAttr } from "./ab-attrs/post-faint-contact-dama
 import { PostFaintHPDamageAbAttr } from "./ab-attrs/post-faint-hp-damage-ab-attr";
 import { BypassSpeedChanceAbAttr } from "./ab-attrs/bypass-speed-chance-ab-attr";
 import { TerrainEventTypeChangeAbAttr } from "./ab-attrs/terrain-event-type-change-ab-attr";
+import { WeatherBasedSpeedDoublerAbAttr } from "./ab-attrs/weather-based-speed-doubler-ab-attr";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {
@@ -414,12 +415,14 @@ export function initAbilities() {
       .attr(TypeImmunityStatStageChangeAbAttr, Type.ELECTRIC, Stat.SPATK, 1)
       .ignorable(),
     new Ability(Abilities.SERENE_GRACE, 3).attr(MoveEffectChanceMultiplierAbAttr, 2),
-    new Ability(Abilities.SWIFT_SWIM, 3)
-      .attr(StatMultiplierAbAttr, Stat.SPD, 2)
-      .condition(getWeatherCondition(WeatherType.RAIN, WeatherType.HEAVY_RAIN)),
-    new Ability(Abilities.CHLOROPHYLL, 3)
-      .attr(StatMultiplierAbAttr, Stat.SPD, 2)
-      .condition(getWeatherCondition(WeatherType.SUNNY, WeatherType.HARSH_SUN)),
+    new Ability(Abilities.SWIFT_SWIM, 3).attr(WeatherBasedSpeedDoublerAbAttr, [
+      WeatherType.RAIN,
+      WeatherType.HEAVY_RAIN,
+    ]),
+    new Ability(Abilities.CHLOROPHYLL, 3).attr(WeatherBasedSpeedDoublerAbAttr, [
+      WeatherType.SUNNY,
+      WeatherType.HARSH_SUN,
+    ]),
     new Ability(Abilities.ILLUMINATE, 3)
       .attr(ProtectStatAbAttr, Stat.ACC)
       .attr(DoubleBattleChanceAbAttr)
@@ -818,9 +821,8 @@ export function initAbilities() {
     new Ability(Abilities.REGENERATOR, 5).attr(PreSwitchOutHealAbAttr),
     new Ability(Abilities.BIG_PECKS, 5).attr(ProtectStatAbAttr, Stat.DEF).ignorable(),
     new Ability(Abilities.SAND_RUSH, 5)
-      .attr(StatMultiplierAbAttr, Stat.SPD, 2)
-      .attr(BlockWeatherDamageAttr, WeatherType.SANDSTORM)
-      .condition(getWeatherCondition(WeatherType.SANDSTORM)),
+      .attr(WeatherBasedSpeedDoublerAbAttr, [WeatherType.SANDSTORM])
+      .attr(BlockWeatherDamageAttr, WeatherType.SANDSTORM),
     new Ability(Abilities.WONDER_SKIN, 5).attr(WonderSkinAbAttr).ignorable(),
     new Ability(Abilities.ANALYTIC, 5).attr(
       MovePowerBoostAbAttr,
@@ -1078,9 +1080,7 @@ export function initAbilities() {
         1,
       )
       .condition(getSheerForceHitDisableAbCondition()),
-    new Ability(Abilities.SLUSH_RUSH, 7)
-      .attr(StatMultiplierAbAttr, Stat.SPD, 2)
-      .condition(getWeatherCondition(WeatherType.HAIL, WeatherType.SNOW)),
+    new Ability(Abilities.SLUSH_RUSH, 7).attr(WeatherBasedSpeedDoublerAbAttr, [WeatherType.HAIL, WeatherType.SNOW]),
     new Ability(Abilities.LONG_REACH, 7).attr(IgnoreContactAbAttr),
     new Ability(Abilities.LIQUID_VOICE, 7).attr(MoveTypeChangeAbAttr, Type.WATER, 1, (_user, _target, move) =>
       move.hasFlag(MoveFlags.SOUND_BASED),
