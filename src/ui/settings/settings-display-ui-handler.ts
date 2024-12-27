@@ -34,14 +34,16 @@ export default class SettingsDisplayUiHandler extends AbstractSettingsUiHandler 
                       () => this.handleCancelLanguageChange(),
                     );
                   } else {
-                    this.handleChangeLanguage(l);
+                    return this.handleChangeLanguage(l);
                   }
                 },
               };
             }),
           {
             label: i18next.t("settings:back"),
-            handler: () => this.handleCancelLanguageChange(),
+            handler: () => {
+              return this.handleCancelLanguageChange();
+            },
           },
         ],
         maxOptions: LANGUAGE_MAX_OPTIONS,
@@ -60,5 +62,6 @@ export default class SettingsDisplayUiHandler extends AbstractSettingsUiHandler 
     this.setOptionCursor(0, 0);
     this.updateOptionValueLabel(0, 0, lan.label);
     window.location.reload();
+    return true;
   }
 }
