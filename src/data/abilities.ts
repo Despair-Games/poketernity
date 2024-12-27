@@ -204,7 +204,7 @@ function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   };
 }
 
-function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondition {
+export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondition {
   return () => {
     if (!globalScene?.arena) {
       return false;
