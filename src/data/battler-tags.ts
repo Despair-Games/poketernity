@@ -678,7 +678,7 @@ export class InterruptedTag extends BattlerTag {
  * BattlerTag that represents the {@link https://bulbapedia.bulbagarden.net/wiki/Confusion_(status_condition) Confusion} status condition
  */
 export class ConfusedTag extends BattlerTag {
-  public readonly ACTIVATION_CHANCE: number = Math.floor(100 * (1 / 3));
+  public readonly ACTIVATION_CHANCE: number = 33;
   constructor(turnCount: number, sourceMove: Moves) {
     super(BattlerTagType.CONFUSED, BattlerTagLapseType.MOVE, turnCount, sourceMove, undefined, true);
   }
