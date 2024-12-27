@@ -67,7 +67,6 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
   protected rowsToDisplay: number;
   protected device: Device;
 
-  abstract saveSettingToLocalStorage(setting, cursor): void;
   abstract setSetting(setting, value: number): boolean;
 
   /**
@@ -658,7 +657,7 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
 
     // If the save flag is set, save the setting to local storage
     if (save) {
-      this.saveSettingToLocalStorage(setting, cursor);
+      this.setSetting(setting, cursor);
     }
 
     return true; // Return true to indicate the cursor was successfully updated.

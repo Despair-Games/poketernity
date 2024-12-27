@@ -696,37 +696,13 @@ export class GameData {
    * to update the specified setting with the new value. Finally, it saves the updated settings back
    * to localStorage and returns `true` to indicate success.
    */
-  public saveControlSetting(
-    device: Device,
-    localStoragePropertyName: string,
-    setting: SettingGamepad | SettingKeyboard,
-    settingDefaults,
-    valueIndex: number,
-  ): boolean {
-    let settingsControls: object = {}; // Initialize an empty object to hold the gamepad settings
-
-    if (localStorage.hasOwnProperty(localStoragePropertyName)) {
-      // Check if 'settingsControls' exists in localStorage
-      settingsControls = JSON.parse(localStorage.getItem(localStoragePropertyName)!); // Parse the existing 'settingsControls' from localStorage // TODO: is this bang correct?
-    }
-
+  public saveControlSetting(device: Device, setting: SettingGamepad | SettingKeyboard, valueIndex: number): boolean {
     if (device === Device.GAMEPAD) {
-      setSettingGamepad(setting as SettingGamepad, valueIndex);
+      return setSettingGamepad(setting as SettingGamepad, valueIndex);
     } else if (device === Device.KEYBOARD) {
-      setSettingKeyboard(setting as SettingKeyboard, valueIndex);
+      return setSettingKeyboard(setting as SettingKeyboard, valueIndex);
     }
-
-    Object.keys(settingDefaults).forEach((s) => {
-      // Iterate over the default settings
-      if (s === setting) {
-        // If the current setting matches, update its value
-        settingsControls[s] = valueIndex;
-      }
-    });
-
-    //localStorage.setItem(localStoragePropertyName, JSON.stringify(settingsControls));
-
-    return true; // Return true to indicate the operation was successful
+    return false;
   }
 
   public saveTutorialFlag(tutorial: Tutorial, flag: boolean): boolean {
