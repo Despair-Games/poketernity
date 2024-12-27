@@ -7,7 +7,7 @@ import { BattlerTagLapseType, BindTag, SubstituteTag } from "#app/data/battler-t
 import { Moves } from "#enums/moves";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import * as messages from "#app/messages";
-import { allMoves } from "#app/data/move";
+import { allMoves } from "#app/data/all-moves";
 import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
 
 describe("BattlerTag - SubstituteTag", () => {

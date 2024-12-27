@@ -113,7 +113,7 @@ import { DamageBoostAbAttr } from "./ab-attrs/damage-boost-ab-attr";
 import { AddSecondStrikeAbAttr } from "./ab-attrs/add-second-strike-ab-attr";
 import { MoveTypeChangeAbAttr } from "./ab-attrs/move-type-change-ab-attr";
 import { FieldMultiplyStatAbAttr } from "./ab-attrs/field-multiply-stat-ab-attr";
-import { FieldPreventExplosiveMovesAbAttr } from "./ab-attrs/field-prevent-explosive-moves-ab-attr";
+import { FieldPreventExplosionLikeAbAttr } from "./ab-attrs/field-prevent-explosion-like-ab-attr";
 import { PostStatStageChangeStatStageChangeAbAttr } from "./ab-attrs/post-stat-stage-change-stat-stage-change-ab-attr";
 import { PostDefendWeatherChangeAbAttr } from "./ab-attrs/post-defend-weather-change-ab-attr";
 import { PostDefendCritStatStageChangeAbAttr } from "./ab-attrs/post-defend-crit-stat-stage-change-ab-attr";
@@ -125,18 +125,16 @@ import { PostDefendApplyArenaTrapTagAbAttr } from "./ab-attrs/post-defend-apply-
 import { PostDefendHpGatedStatStageChangeAbAttr } from "./ab-attrs/post-defend-hp-gated-stat-tage-change-ab-attr";
 import { PostDefendStatStageChangeAbAttr } from "./ab-attrs/post-defend-stat-stage-change-ab-attr";
 import { GroundedTag } from "./battler-tags";
-import type Move from "./move";
-import {
-  allMoves,
-  applyMoveAttrs,
-  AttackMove,
-  FlinchAttr,
-  MoveCategory,
-  MoveFlags,
-  OneHitKOAttr,
-  VariableMoveTypeAttr,
-  VariablePowerAttr,
-} from "./move";
+import type { Move } from "./move";
+import { applyMoveAttrs } from "./move";
+import { allMoves } from "#app/data/all-moves";
+import { FlinchAttr } from "./move-attrs/flinch-attr";
+import { VariableMoveTypeAttr } from "./move-attrs/variable-move-type-attr";
+import { VariablePowerAttr } from "./move-attrs/variable-power-attr";
+import { OneHitKOAttr } from "./move-attrs/one-hit-ko-attr";
+import { AttackMove } from "./move";
+import { MoveFlags } from "../enums/move-flags";
+import { MoveCategory } from "../enums/move-category";
 import { getNonVolatileStatusEffects } from "./status-effect";
 import { IgnoreTypeStatusEffectImmunityAbAttr } from "./ab-attrs/ignore-type-status-effect-immunity-ab-attr";
 import { BlockItemTheftAbAttr } from "./ab-attrs/block-item-theft-ab-attr";
@@ -345,7 +343,7 @@ export function initAbilities() {
     new Ability(Abilities.SPEED_BOOST, 3).attr(SpeedBoostAbAttr),
     new Ability(Abilities.BATTLE_ARMOR, 3).attr(BlockCritAbAttr).ignorable(),
     new Ability(Abilities.STURDY, 3).attr(PreDefendFullHpEndureAbAttr).attr(BlockOneHitKOAbAttr).ignorable(),
-    new Ability(Abilities.DAMP, 3).attr(FieldPreventExplosiveMovesAbAttr).ignorable(),
+    new Ability(Abilities.DAMP, 3).attr(FieldPreventExplosionLikeAbAttr).ignorable(),
     new Ability(Abilities.LIMBER, 3).attr(StatusEffectImmunityAbAttr, StatusEffect.PARALYSIS).ignorable(),
     new Ability(Abilities.SAND_VEIL, 3)
       .attr(StatMultiplierAbAttr, Stat.EVA, 1.2)

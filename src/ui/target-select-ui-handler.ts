@@ -132,8 +132,8 @@ export default class TargetSelectUiHandler extends UiHandler {
   }
 
   override setCursor(cursor: number): boolean {
-    const singleTarget = globalScene.getField()[cursor];
-    const multipleTargets = this.targets.map((index) => globalScene.getField()[index]);
+    const singleTarget = globalScene.getFieldPokemonByBattlerIndex(cursor)!;
+    const multipleTargets = this.targets.map((index) => globalScene.getFieldPokemonByBattlerIndex(index)!);
 
     this.targetsHighlighted = this.isMultipleTargets ? multipleTargets : [singleTarget];
 

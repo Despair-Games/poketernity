@@ -16,32 +16,27 @@ import { ConditionalProtectTag } from "#app/data/arena-tag";
 import { MoveAnim } from "#app/data/battle-anims";
 import {
   BattlerTagLapseType,
-  DamageProtectedTag,
   ProtectedTag,
   SemiInvulnerableTag,
   SubstituteTag,
   TypeBoostTag,
 } from "#app/data/battler-tags";
-import type { MoveAttr } from "#app/data/move";
-import {
-  applyFilteredMoveAttrs,
-  applyMoveAttrs,
-  AttackMove,
-  DelayedAttackAttr,
-  FlinchAttr,
-  HitsTagAttr,
-  MissEffectAttr,
-  MoveCategory,
-  MoveEffectAttr,
-  MoveEffectTrigger,
-  MoveFlags,
-  MoveTarget,
-  MultiHitAttr,
-  NoEffectAttr,
-  OneHitKOAttr,
-  OverrideMoveEffectAttr,
-  ToxicAccuracyAttr,
-} from "#app/data/move";
+import type { MoveAttr } from "#app/data/move-attrs/move-attr";
+import { applyFilteredMoveAttrs, applyMoveAttrs } from "#app/data/move";
+import { FlinchAttr } from "#app/data/move-attrs/flinch-attr";
+import { HitsTagAttr } from "#app/data/move-attrs/hits-tag-attr";
+import { NoEffectAttr } from "#app/data/move-attrs/no-effect-attr";
+import { MissEffectAttr } from "#app/data/move-attrs/miss-effect-attr";
+import { ToxicAccuracyAttr } from "#app/data/move-attrs/toxic-accuracy-attr";
+import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
+import { OneHitKOAttr } from "#app/data/move-attrs/one-hit-ko-attr";
+import { MultiHitAttr } from "#app/data/move-attrs/multi-hit-attr";
+import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
+import { MoveEffectTrigger } from "#enums/move-effect-trigger";
+import { AttackMove } from "#app/data/move";
+import { MoveFlags } from "#enums/move-flags";
+import { MoveTarget } from "#enums/move-target";
+import { MoveCategory } from "#enums/move-category";
 import { SpeciesFormChangePostMoveTrigger } from "#app/data/pokemon-forms";
 import type { TypeDamageMultiplier } from "#app/data/type";
 import type { Pokemon } from "#app/field/pokemon";
@@ -67,12 +62,16 @@ import { HitCheckResult } from "#enums/hit-check-result";
 import { Moves } from "#enums/moves";
 import { Type } from "#enums/type";
 import i18next from "i18next";
+import { DelayedAttackAttr } from "#app/data/move-attrs/delayed-attack-attr";
 
 type HitCheckEntry = [HitCheckResult, TypeDamageMultiplier];
 
 export class MoveEffectPhase extends PokemonPhase {
   public move: PokemonMove;
+  /** The original targets of the move */
   protected targets: BattlerIndex[];
+  /** The targets of the move after dynamic adjustments, e.g. from Dragon Darts */
+  private adjustedTargets: BattlerIndex[] | null = null;
 
   private hitChecks: HitCheckEntry[];
   private moveHistoryEntry: TurnMove;
@@ -160,19 +159,47 @@ export class MoveEffectPhase extends PokemonPhase {
     }
 
     /**
+     * If the move has smart targeting (i.e. the move is Dragon Darts),
+     * and the move is being used in a double battle,
+     * alternate the base target on every second hit.
+     */
+    if (this.canApplySmartTargeting() && user.turnData.hitsLeft % 2 === 1) {
+      const targetAlly = targets[0].getAlly();
+      if (targetAlly.isActive(true)) {
+        targets[0] = targetAlly;
+        this.adjustedTargets = [targetAlly.getBattlerIndex()];
+      }
+    }
+
+    // Update hit checks for each target
+    targets.forEach((t, i) => (this.hitChecks[i] = this.hitCheck(t, this.canApplySmartTargeting())));
+
+    /**
+     * If the move has smart targeting (i.e. the move is Dragon Darts),
+     * the move is being used in a double battle,
+     * and the move's current target was not successfully hit,
+     * try to hit the target's ally.
+     */
+    if (this.canApplySmartTargeting() && this.hitChecks[0][0] !== HitCheckResult.HIT) {
+      const targetAlly = targets[0].getAlly();
+      if (targetAlly.isActive(true)) {
+        targets[0] = targetAlly;
+        this.adjustedTargets = [targetAlly.getBattlerIndex()];
+        this.hitChecks[0] = this.hitCheck(targets[0]);
+      }
+    }
+
+    /**
      * Log to be entered into the user's move history once the move result is resolved.
      * Note that `result` (a {@linkcode MoveResult}) logs whether the move was successfully
-     * used in the sense of "Does it have an effect on the user?".
+     * used in the sense of "Did it affect any of the targets?".
      */
     this.moveHistoryEntry = {
       move: this.move.moveId,
-      targets: this.targets,
+      targets: this.adjustedTargets ?? this.targets,
       result: MoveResult.PENDING,
       virtual: this.move.virtual,
     };
-
-    // Update hit checks for each target
-    targets.forEach((t, i) => (this.hitChecks[i] = this.hitCheck(t)));
 
     if (this.hitChecks.some((hc) => hc[0] === HitCheckResult.HIT)) {
       // Moves are logged as a SUCCESS if at least one target was successfully hit
@@ -424,7 +451,7 @@ export class MoveEffectPhase extends PokemonPhase {
           move: move.id,
           result: result as DamageResult,
           damage: damage,
-          critical: isCritical,
+          isCritical: isCritical,
           sourceId: user.id,
           sourceBattlerIndex: user.getBattlerIndex(),
         };
@@ -505,6 +532,25 @@ export class MoveEffectPhase extends PokemonPhase {
 
   public override end(): void {
     const user = this.getUserPokemon();
+
+    /**
+     * If the move has smart targeting (e.g. Dragon Darts),
+     * and the original target fainted due to the first hit,
+     * redirect the next strike to the original target's ally.
+     * Note: We do NOT use `canApplySmartTargeting()` here,
+     * due to a quirk where `getFirstTarget()` returns `undefined` if the target is fainted.
+     */
+    if (this.move.getMove().moveTarget === MoveTarget.DRAGON_DARTS) {
+      const ogTarget = globalScene.getFieldPokemonByBattlerIndex(this.targets[0]);
+      if (
+        ogTarget
+        && ogTarget.isFainted()
+        && ogTarget.getAlly()?.isActive(true)
+        && ogTarget.getAlly().id !== this.getUserPokemon()?.id
+      ) {
+        this.targets = [ogTarget.getAlly().getBattlerIndex()];
+      }
+    }
     /**
      * If this phase isn't for the invoked move's last strike,
      * unshift another MoveEffectPhase for the next strike.
@@ -568,13 +614,28 @@ export class MoveEffectPhase extends PokemonPhase {
     }
   }
 
+  /** Determines if this phase's move can be redirected by smart targeting */
+  public canApplySmartTargeting(): boolean {
+    const target = this.getFirstTarget();
+    const targetAlly = target?.getAlly();
+
+    return (
+      this.move.getMove().moveTarget === MoveTarget.DRAGON_DARTS
+      && !isNullOrUndefined(targetAlly)
+      && targetAlly.isActive(true)
+      && targetAlly !== this.getUserPokemon()
+      && !target?.getTag(BattlerTagType.CENTER_OF_ATTENTION)
+    );
+  }
+
   /**
    * Resolves whether this phase's invoked move hits the given target
    * @param target - The {@linkcode Pokemon} targeted by the invoked move
+   * @param simulated - If `true`, does not change game state during calculation
    * @returns a {@linkcode HitCheckEntry} containing the attack's {@linkcode HitCheckResult}
    * and {@linkcode TypeDamageMultiplier | effectiveness} against the target.
    */
-  public hitCheck(target: Pokemon): HitCheckEntry {
+  public hitCheck(target: Pokemon, simulated: boolean = false): HitCheckEntry {
     const user = this.getUserPokemon();
     const move = this.move.getMove();
 
@@ -604,7 +665,7 @@ export class MoveEffectPhase extends PokemonPhase {
     const alwaysHit =
       [user, target].some((p) => p.hasAbilityWithAttr(AlwaysHitAbAttr))
       || (user.getTag(BattlerTagType.IGNORE_ACCURACY)
-        && (user.getLastXMoves().find(() => true)?.targets ?? []).indexOf(target.getBattlerIndex()) !== -1)
+        && (user.getLastXMoves()[0]?.targets ?? []).indexOf(target.getBattlerIndex()) !== -1)
       || !!target.getTag(BattlerTagType.ALWAYS_GET_HIT);
 
     const semiInvulnerableTag = target.getTag(SemiInvulnerableTag);
@@ -633,7 +694,7 @@ export class MoveEffectPhase extends PokemonPhase {
       globalScene.arena.applyTagsForSide(
         ConditionalProtectTag,
         targetSide,
-        false,
+        simulated,
         hasConditionalProtectApplied,
         user,
         target,
@@ -646,10 +707,7 @@ export class MoveEffectPhase extends PokemonPhase {
     const isProtected =
       (bypassIgnoreProtect.value || !this.move.getMove().checkFlag(MoveFlags.IGNORE_PROTECT, user, target))
       && (hasConditionalProtectApplied.value
-        || (!target.findTags((t) => t instanceof DamageProtectedTag).length
-          && target.findTags((t) => t instanceof ProtectedTag).find((t) => target.lapseTag(t.tagType)))
-        || (this.move.getMove().category !== MoveCategory.STATUS
-          && target.findTags((t) => t instanceof DamageProtectedTag).find((t) => target.lapseTag(t.tagType))));
+        || target.findTags((t) => t instanceof ProtectedTag)[0]?.apply(target, simulated, user, move));
 
     if (isProtected) {
       return [HitCheckResult.PROTECTED, 0];
@@ -661,7 +719,8 @@ export class MoveEffectPhase extends PokemonPhase {
      * The effectiveness of the move against the given target.
      * Accounts for type and move immunities from defensive typing, abilities, and other effects.
      */
-    const effectiveness = target.getMoveEffectiveness(user, move, false, false, cancelNoEffectMessage);
+    const effectiveness = target.getMoveEffectiveness(user, move, false, simulated, cancelNoEffectMessage);
+
     if (effectiveness === 0) {
       return cancelNoEffectMessage.value
         ? [HitCheckResult.NO_EFFECT_NO_MESSAGE, effectiveness]
@@ -718,7 +777,8 @@ export class MoveEffectPhase extends PokemonPhase {
 
   /** @returns An array of all {@linkcode Pokemon} targeted by this phase's invoked move */
   public getTargets(): Pokemon[] {
-    return globalScene.getField(true).filter((p) => this.targets.indexOf(p.getBattlerIndex()) > -1);
+    const targets = this.adjustedTargets ?? this.targets;
+    return globalScene.getField(true).filter((p) => targets.indexOf(p.getBattlerIndex()) > -1);
   }
 
   /** @returns The first target of this phase's invoked move */

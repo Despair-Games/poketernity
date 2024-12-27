@@ -1,4 +1,4 @@
-import type Move from "#app/data/move";
+import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder, NumberHolder } from "#app/utils";
 import { PreDefendAbAttr } from "./pre-defend-ab-attr";
@@ -21,11 +21,12 @@ export class IgnoreMoveEffectsAbAttr extends PreDefendAbAttr {
     _cancelled: BooleanHolder,
     args: any[],
   ): boolean {
-    if ((args[0] as NumberHolder).value <= 0) {
+    const effectChance: NumberHolder = args[0];
+    if (effectChance.value <= 0) {
       return false;
     }
 
-    (args[0] as NumberHolder).value = 0;
+    effectChance.value = 0;
     return true;
   }
 }

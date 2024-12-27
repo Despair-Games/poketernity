@@ -1,14 +1,12 @@
-import type Move from "#app/data/move";
-import { MoveFlags } from "#app/data/move";
+import type { Move } from "#app/data/move";
+import { MoveFlags } from "../../enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
 import type { HitResult } from "#app/field/pokemon";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 
 export class PostDefendMoveDisableAbAttr extends PostDefendAbAttr {
-  private chance: number;
-  private attacker: Pokemon;
-  private move: Move;
+  private readonly chance: number;
 
   constructor(chance: number) {
     super();
@@ -34,9 +32,7 @@ export class PostDefendMoveDisableAbAttr extends PostDefendAbAttr {
           return true;
         }
 
-        this.attacker = attacker;
-        this.move = move;
-        this.attacker.addTag(BattlerTagType.DISABLED, 4, 0, pokemon.id);
+        attacker.addTag(BattlerTagType.DISABLED, 4, 0, pokemon.id);
         return true;
       }
     }

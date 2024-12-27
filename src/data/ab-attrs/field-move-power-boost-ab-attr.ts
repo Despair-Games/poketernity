@@ -1,5 +1,5 @@
 import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition";
-import type Move from "#app/data/move";
+import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
 import { AbAttr } from "./ab-attr";
@@ -9,8 +9,8 @@ import { AbAttr } from "./ab-attr";
  * @extends AbAttr
  */
 export class FieldMovePowerBoostAbAttr extends AbAttr {
-  private condition: PokemonAttackCondition;
-  private powerMultiplier: number;
+  private readonly condition: PokemonAttackCondition;
+  private readonly powerMultiplier: number;
 
   /**
    * @param condition - A function that determines whether the power boost condition is met.
@@ -31,7 +31,8 @@ export class FieldMovePowerBoostAbAttr extends AbAttr {
     args: any[],
   ): boolean {
     if (this.condition(pokemon, defender, move)) {
-      (args[0] as NumberHolder).value *= this.powerMultiplier;
+      const movePower: NumberHolder = args[0];
+      movePower.value *= this.powerMultiplier;
 
       return true;
     }

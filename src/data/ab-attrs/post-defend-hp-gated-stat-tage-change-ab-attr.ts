@@ -1,5 +1,5 @@
 import type { PokemonDefendCondition } from "#app/@types/PokemonDefendCondition";
-import type Move from "#app/data/move";
+import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { HitResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -8,11 +8,11 @@ import type { BattleStat } from "#enums/stat";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 
 export class PostDefendHpGatedStatStageChangeAbAttr extends PostDefendAbAttr {
-  private condition: PokemonDefendCondition;
-  private hpGate: number;
-  private stats: BattleStat[];
-  private stages: number;
-  private selfTarget: boolean;
+  private readonly condition: PokemonDefendCondition;
+  private readonly hpGate: number;
+  private readonly stats: BattleStat[];
+  private readonly stages: number;
+  private readonly selfTarget: boolean;
 
   constructor(
     condition: PokemonDefendCondition,
@@ -40,8 +40,9 @@ export class PostDefendHpGatedStatStageChangeAbAttr extends PostDefendAbAttr {
     _args: any[],
   ): boolean {
     const hpGateFlat: number = Math.ceil(pokemon.getMaxHp() * this.hpGate);
+    // TODO: Normalize `attacksReceived[]` checks
     const lastAttackReceived = pokemon.turnData.attacksReceived[pokemon.turnData.attacksReceived.length - 1];
-    const damageReceived = lastAttackReceived?.damage || 0;
+    const damageReceived = lastAttackReceived?.damage ?? 0;
 
     if (
       this.condition(pokemon, attacker, move)

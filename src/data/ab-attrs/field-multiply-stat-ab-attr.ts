@@ -11,9 +11,9 @@ import { AbAttr } from "./ab-attr";
  * @see {@link BooleanHolder}
  */
 export class FieldMultiplyStatAbAttr extends AbAttr {
-  private stat: Stat;
-  private multiplier: number;
-  private canStack: boolean;
+  private readonly stat: Stat;
+  private readonly multiplier: number;
+  private readonly canStack: boolean;
 
   constructor(stat: Stat, multiplier: number, canStack: boolean = false) {
     super(false);
@@ -24,15 +24,15 @@ export class FieldMultiplyStatAbAttr extends AbAttr {
   }
 
   /**
-   * applyFieldStat: Tries to multiply a Pokemon's Stat
-   * @param _pokemon {@linkcode Pokemon} the Pokemon using this ability
-   * @param _passive {@linkcode boolean} unused
-   * @param stat {@linkcode Stat} the type of the checked stat
+   * Tries to multiply a Pokemon's Stat
+   * @param _pokemon N/A
+   * @param _passive N/A
+   * @param stat The {@linkcode Stat} being checked
    * @param statValue {@linkcode NumberHolder} the value of the checked stat
-   * @param checkedPokemon {@linkcode Pokemon} the Pokemon this ability is targeting
+   * @param checkedPokemon The {@linkcode Pokemon} this ability is targeting
    * @param hasApplied {@linkcode BooleanHolder} whether or not another multiplier has been applied to this stat
-   * @param _args unused
-   * @returns true if this changed the checked stat, false otherwise.
+   * @param _args N/A
+   * @returns `true` if this changed the checked stat, `false` otherwise.
    */
   applyFieldStat(
     _pokemon: Pokemon,

@@ -6,39 +6,36 @@ import type { Variant, VariantSet } from "#app/data/variant";
 import { variantColorCache } from "#app/data/variant";
 import { variantData } from "#app/data/variant";
 import BattleInfo, { PlayerBattleInfo, EnemyBattleInfo } from "#app/ui/battle-info";
-import type Move from "#app/data/move";
-import {
-  HighCritAttr,
-  HitsTagAttr,
-  applyMoveAttrs,
-  FixedDamageAttr,
-  VariableAtkAttr,
-  allMoves,
-  MoveCategory,
-  TypelessAttr,
-  CritOnlyAttr,
-  getMoveTargets,
-  OneHitKOAttr,
-  VariableMoveTypeAttr,
-  VariableDefAttr,
-  AttackMove,
-  ModifiedDamageAttr,
-  VariableMoveTypeMultiplierAttr,
-  IgnoreOpponentStatStagesAttr,
-  SacrificialAttr,
-  VariableMoveCategoryAttr,
-  CounterDamageAttr,
-  StatStageChangeAttr,
-  RechargeAttr,
-  IgnoreWeatherTypeDebuffAttr,
-  BypassBurnDamageReductionAttr,
-  SacrificialAttrOnHit,
-  OneHitKOAccuracyAttr,
-  RespectAttackTypeImmunityAttr,
-  MoveTarget,
-  CombinedPledgeStabBoostAttr,
-  VariableMoveTypeChartAttr,
-} from "#app/data/move";
+import type { Move } from "#app/data/move";
+import { applyMoveAttrs, getMoveTargets } from "#app/data/move";
+import { allMoves } from "#app/data/all-moves";
+import { RechargeAttr } from "#app/data/move-attrs/recharge-attr";
+import { HitsTagAttr } from "#app/data/move-attrs/hits-tag-attr";
+import { TypelessAttr } from "#app/data/move-attrs/typeless-attr";
+import { OneHitKOAccuracyAttr } from "#app/data/move-attrs/one-hit-ko-accuracy-attr";
+import { VariableMoveTypeChartAttr } from "#app/data/move-attrs/variable-move-type-chart-attr";
+import { VariableMoveTypeMultiplierAttr } from "#app/data/move-attrs/variable-move-type-multiplier-attr";
+import { VariableMoveTypeAttr } from "#app/data/move-attrs/variable-move-type-attr";
+import { VariableMoveCategoryAttr } from "#app/data/move-attrs/variable-move-category-attr";
+import { VariableDefAttr } from "#app/data/move-attrs/variable-def-attr";
+import { VariableAtkAttr } from "#app/data/move-attrs/variable-atk-attr";
+import { CombinedPledgeStabBoostAttr } from "#app/data/move-attrs/combined-pledge-stab-boost-attr";
+import { StatStageChangeAttr } from "#app/data/move-attrs/stat-stage-change-attr";
+import { OneHitKOAttr } from "#app/data/move-attrs/one-hit-ko-attr";
+import { BypassBurnDamageReductionAttr } from "#app/data/move-attrs/bypass-burn-damage-reduction-attr";
+import { IgnoreWeatherTypeDebuffAttr } from "#app/data/move-attrs/ignore-weather-type-debuff-attr";
+import { SacrificialAttrOnHit } from "#app/data/move-attrs/sacrificial-attr-on-hit";
+import { SacrificialAttr } from "#app/data/move-attrs/sacrificial-attr";
+import { ModifiedDamageAttr } from "#app/data/move-attrs/modified-damage-attr";
+import { CounterDamageAttr } from "#app/data/move-attrs/counter-damage-attr";
+import { FixedDamageAttr } from "#app/data/move-attrs/fixed-damage-attr";
+import { CritOnlyAttr } from "#app/data/move-attrs/crit-only-attr";
+import { HighCritAttr } from "#app/data/move-attrs/high-crit-attr";
+import { IgnoreOpponentStatStagesAttr } from "#app/data/move-attrs/ignore-opponent-stat-stages-attr";
+import { RespectAttackTypeImmunityAttr } from "#app/data/move-attrs/respect-attack-type-immunity-attr";
+import { AttackMove } from "#app/data/move";
+import { MoveTarget } from "#enums/move-target";
+import { MoveCategory } from "#enums/move-category";
 import type { PokemonSpeciesForm } from "#app/data/pokemon-species";
 import {
   default as PokemonSpecies,
@@ -185,8 +182,8 @@ import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 import type { LevelMoves } from "#app/data/balance/pokemon-level-moves";
 import { EVOLVE_MOVE, RELEARN_MOVE } from "#app/data/balance/pokemon-level-moves";
 import { achvs } from "#app/system/achv";
-import type { StarterDataEntry, StarterMoveset } from "#app/system/game-data";
-import { DexAttr } from "#app/system/game-data";
+import type { StarterDataEntry, StarterMoveset } from "#app/@types/StarterData";
+import { DexAttr } from "#app/data/dex-attributes";
 import { QuantizerCelebi, argbFromRgba, rgbaFromArgb } from "@material/material-color-utilities";
 import { getNatureStatMultiplier } from "#app/data/nature";
 import type { SpeciesFormChange } from "#app/data/pokemon-forms";
@@ -3489,6 +3486,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       const critChance = [24, 8, 2, 1][Math.max(0, Math.min(this.getCritStage(source, move, false), 3))];
       isCritical.value = critChance === 1 || !globalScene.randBattleSeedInt(critChance);
     }
+
     applyAbAttrs(BlockCritAbAttr, this, null, simulated, isCritical);
 
     return isCritical.value;
@@ -3729,7 +3727,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return false;
     }
     const tags = this.summonData.tags;
-    const tagsToRemove = tags.filter((t) => tagFilter(t));
+    const tagsToRemove = this.findTags(tagFilter);
     for (const tag of tagsToRemove) {
       tag.turnCount = 0;
       tag.onRemove(this);
@@ -5609,10 +5607,9 @@ export class EnemyPokemon extends Pokemon {
               return false;
             }
 
-            const fieldPokemon = globalScene.getField();
             const moveTargets = getMoveTargets(this, move.id)
-              .targets.map((ind) => fieldPokemon[ind])
-              .filter((p) => this.isPlayer() !== p.isPlayer());
+              .targets.map((ind) => globalScene.getFieldPokemonByBattlerIndex(ind))
+              .filter((p) => !isNullOrUndefined(p) && this.isPlayer() !== p.isPlayer()) as Pokemon[];
             // Only considers critical hits for crit-only moves or when this Pokemon is under the effect of Laser Focus
             const isCritical = move.hasAttr(CritOnlyAttr) || !!this.getTag(BattlerTagType.ALWAYS_CRIT);
 
@@ -5654,7 +5651,7 @@ export class EnemyPokemon extends Pokemon {
                 break;
               }
 
-              const target = globalScene.getField()[mt];
+              const target = globalScene.getFieldPokemonByBattlerIndex(mt)!;
               /**
                * The "target score" of a move is given by the move's user benefit score + the move's target benefit score.
                * If the target is an ally, the target benefit score is multiplied by -1.
@@ -6054,7 +6051,7 @@ export interface AttackMoveResult {
   move: Moves;
   result: DamageResult;
   damage: number;
-  critical: boolean;
+  isCritical: boolean;
   sourceId: number;
   sourceBattlerIndex: BattlerIndex;
 }

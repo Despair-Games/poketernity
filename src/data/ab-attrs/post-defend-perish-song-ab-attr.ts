@@ -1,5 +1,5 @@
-import type Move from "#app/data/move";
-import { MoveFlags } from "#app/data/move";
+import type { Move } from "#app/data/move";
+import { MoveFlags } from "../../enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
 import type { HitResult } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -8,14 +8,13 @@ import i18next from "i18next";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 
 /**
- * @description: This ability applies the Perish Song tag to the attacking pokemon
- * and the defending pokemon if the move makes physical contact and neither pokemon
- * already has the Perish Song tag.
- * @class PostDefendPerishSongAbAttr
- * @extends {PostDefendAbAttr}
+ * This ability applies the Perish Song tag to the attacking pokemon
+ * and the defending pokemon if the move makes physical contact and
+ * at least one pokemon doesn't already have the Perish Song tag.
+ * @extends PostDefendAbAttr
  */
 export class PostDefendPerishSongAbAttr extends PostDefendAbAttr {
-  private turns: number;
+  private readonly turns: number;
 
   constructor(turns: number) {
     super();
@@ -33,7 +32,7 @@ export class PostDefendPerishSongAbAttr extends PostDefendAbAttr {
     _args: any[],
   ): boolean {
     if (move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)) {
-      if (pokemon.getTag(BattlerTagType.PERISH_SONG) || attacker.getTag(BattlerTagType.PERISH_SONG)) {
+      if (pokemon.getTag(BattlerTagType.PERISH_SONG) && attacker.getTag(BattlerTagType.PERISH_SONG)) {
         return false;
       } else {
         if (!simulated) {

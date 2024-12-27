@@ -1,5 +1,5 @@
 import type { PokemonDefendCondition } from "#app/@types/PokemonDefendCondition";
-import type Move from "#app/data/move";
+import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { HitResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -9,8 +9,8 @@ import i18next from "i18next";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 
 export class PostDefendApplyBattlerTagAbAttr extends PostDefendAbAttr {
-  private condition: PokemonDefendCondition;
-  private tagType: BattlerTagType;
+  private readonly condition: PokemonDefendCondition;
+  private readonly tagType: BattlerTagType;
   constructor(condition: PokemonDefendCondition, tagType: BattlerTagType) {
     super(true);
 

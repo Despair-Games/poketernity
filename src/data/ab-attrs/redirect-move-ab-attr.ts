@@ -1,4 +1,5 @@
-import { allMoves, MoveTarget } from "#app/data/move";
+import { allMoves } from "#app/data/all-moves";
+import { MoveTarget } from "../../enums/move-target";
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder, NumberHolder } from "#app/utils";
 import type { Moves } from "#enums/moves";
@@ -12,7 +13,8 @@ export class RedirectMoveAbAttr extends AbAttr {
     _cancelled: BooleanHolder,
     args: any[],
   ): boolean {
-    if (this.canRedirect(args[0] as Moves)) {
+    const move: Moves = args[0];
+    if (this.canRedirect(move)) {
       const target = args[1] as NumberHolder;
       const newTarget = pokemon.getBattlerIndex();
       if (target.value !== newTarget) {

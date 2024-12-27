@@ -26,7 +26,8 @@ export class ReduceBurnDamageAbAttr extends AbAttr {
     _cancelled: BooleanHolder,
     args: any[],
   ): boolean {
-    (args[0] as NumberHolder).value = toDmgValue((args[0] as NumberHolder).value * this.multiplier);
+    const damage: NumberHolder = args[0];
+    damage.value = toDmgValue(damage.value * this.multiplier);
 
     return true;
   }

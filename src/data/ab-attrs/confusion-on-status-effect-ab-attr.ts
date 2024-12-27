@@ -1,4 +1,4 @@
-import type Move from "#app/data/move";
+import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { HitResult } from "#app/field/pokemon";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -14,7 +14,7 @@ import { PostAttackAbAttr } from "./post-attack-ab-attr";
  */
 export class ConfusionOnStatusEffectAbAttr extends PostAttackAbAttr {
   /** List of effects to apply confusion after */
-  private effects: StatusEffect[];
+  private readonly effects: StatusEffect[];
 
   constructor(...effects: StatusEffect[]) {
     /** This effect does not require a damaging move */
@@ -40,7 +40,8 @@ export class ConfusionOnStatusEffectAbAttr extends PostAttackAbAttr {
     _hitResult: HitResult,
     args: any[],
   ): boolean {
-    if (this.effects.indexOf(args[0]) > -1 && !defender.isFainted()) {
+    const effect: StatusEffect = args[0];
+    if (this.effects.includes(effect) && !defender.isFainted()) {
       if (simulated) {
         return defender.canAddTag(BattlerTagType.CONFUSED);
       } else {

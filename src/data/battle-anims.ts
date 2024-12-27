@@ -1,14 +1,18 @@
 import { globalScene } from "#app/global-scene";
-import { AttackMove, BeakBlastHeaderAttr, DelayedAttackAttr, MoveFlags, SelfStatusMove, allMoves } from "./move";
-import type { Pokemon } from "../field/pokemon";
+import { allMoves } from "#app/data/all-moves";
+import { BeakBlastHeaderAttr } from "./move-attrs/beak-blast-header-attr";
+import { SelfStatusMove } from "./move";
+import { AttackMove } from "./move";
+import { MoveFlags } from "#enums/move-flags";
+import type { Pokemon } from "#app/field/pokemon";
 import { getFrameMs, getEnumKeys, getEnumValues, animationFileName, isNullOrUndefined } from "#app/utils";
-import type { BattlerIndex } from "../battle";
-import type { Element } from "json-stable-stringify";
+import type { BattlerIndex } from "#app/battle";
 import { Moves } from "#enums/moves";
 import { SubstituteTag } from "./battler-tags";
 import Phaser from "phaser";
 import { EncounterAnim } from "#enums/encounter-anims";
 import { settings } from "#app/system/settings/settings-manager";
+import { DelayedAttackAttr } from "./move-attrs/delayed-attack-attr";
 
 export enum AnimFrameTarget {
   USER,
@@ -1432,7 +1436,7 @@ export class MoveAnim extends BattleAnim {
   public move: Moves;
 
   constructor(move: Moves, user: Pokemon, target: BattlerIndex, playOnEmptyField: boolean = false) {
-    super(user, globalScene.getField()[target], playOnEmptyField);
+    super(user, globalScene.getFieldPokemonByBattlerIndex(target), playOnEmptyField);
 
     this.move = move;
   }
@@ -1689,80 +1693,4 @@ export async function populateAnims() {
       }
     }
   }
-
-  // used in commented code
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const animReplacer = (k, v) => {
-    if (k === "id" && !v) {
-      return undefined;
-    }
-    if (v instanceof Map) {
-      return Object.fromEntries(v);
-    }
-    if (v instanceof AnimTimedEvent) {
-      v["eventType"] = v.getEventType();
-    }
-    return v;
-  };
-
-  const animConfigProps = ["id", "graphic", "frames", "frameTimedEvents", "position", "hue"];
-  const animFrameProps = [
-    "x",
-    "y",
-    "zoomX",
-    "zoomY",
-    "angle",
-    "mirror",
-    "visible",
-    "blendType",
-    "target",
-    "graphicFrame",
-    "opacity",
-    "color",
-    "tone",
-    "flash",
-    "locked",
-    "priority",
-    "focus",
-  ];
-  const propSets = [animConfigProps, animFrameProps];
-
-  // used in commented code
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const animComparator = (a: Element, b: Element) => {
-    let props: string[];
-    for (let p = 0; p < propSets.length; p++) {
-      props = propSets[p];
-      const ai = props.indexOf(a.key);
-      if (ai === -1) {
-        continue;
-      }
-      const bi = props.indexOf(b.key);
-
-      return ai < bi ? -1 : ai > bi ? 1 : 0;
-    }
-
-    return 0;
-  };
-
-  /*for (let ma of moveAnims.keys()) {
-        const data = moveAnims.get(ma);
-        (async () => {
-            await fs.writeFile(`../public/battle-anims/${Moves[ma].toLowerCase().replace(/\_/g, '-')}.json`, stringify(data, { replacer: animReplacer, cmp: animComparator, space: '  ' }));
-        })();
-    }
-
-    for (let ca of chargeAnims.keys()) {
-        const data = chargeAnims.get(ca);
-        (async () => {
-            await fs.writeFile(`../public/battle-anims/${chargeAnimNames[chargeAnimIds.indexOf(ca)].replace(/\_/g, '-')}.json`, stringify(data, { replacer: animReplacer, cmp: animComparator, space: '  ' }));
-        })();
-    }
-
-    for (let cma of commonAnims.keys()) {
-        const data = commonAnims.get(cma);
-        (async () => {
-            await fs.writeFile(`../public/battle-anims/common-${commonAnimNames[commonAnimIds.indexOf(cma)].replace(/\_/g, '-')}.json`, stringify(data, { replacer: animReplacer, cmp: animComparator, space: '  ' }));
-        })();
-    }*/
 }

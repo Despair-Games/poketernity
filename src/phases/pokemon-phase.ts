@@ -30,6 +30,6 @@ export abstract class PokemonPhase extends FieldPhase {
     if (this.battlerIndex > BattlerIndex.ENEMY_2) {
       return globalScene.getPokemonById(this.battlerIndex)!; //TODO: is this bang correct?
     }
-    return globalScene.getField()[this.battlerIndex]!; //TODO: is this bang correct?
+    return globalScene.getFieldPokemonByBattlerIndex(this.battlerIndex)!; //TODO: is this bang correct?
   }
 }

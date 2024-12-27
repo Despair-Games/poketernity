@@ -1,12 +1,12 @@
 import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition";
-import type Move from "#app/data/move";
+import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
 import { VariableMovePowerAbAttr } from "./variable-move-power-ab-attr";
 
 export class MovePowerBoostAbAttr extends VariableMovePowerAbAttr {
-  private condition: PokemonAttackCondition;
-  private powerMultiplier: number;
+  private readonly condition: PokemonAttackCondition;
+  private readonly powerMultiplier: number;
 
   constructor(condition: PokemonAttackCondition, powerMultiplier: number, showAbility: boolean = true) {
     super(showAbility);
@@ -23,7 +23,8 @@ export class MovePowerBoostAbAttr extends VariableMovePowerAbAttr {
     args: any[],
   ): boolean {
     if (this.condition(pokemon, defender, move)) {
-      (args[0] as NumberHolder).value *= this.powerMultiplier;
+      const power: NumberHolder = args[0];
+      power.value *= this.powerMultiplier;
 
       return true;
     }

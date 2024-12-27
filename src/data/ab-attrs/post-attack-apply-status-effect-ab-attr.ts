@@ -1,5 +1,5 @@
-import type Move from "#app/data/move";
-import { MoveFlags } from "#app/data/move";
+import type { Move } from "#app/data/move";
+import { MoveFlags } from "../../enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
 import type { HitResult } from "#app/field/pokemon";
 import type { StatusEffect } from "#enums/status-effect";
@@ -7,9 +7,9 @@ import { IgnoreMoveEffectsAbAttr } from "./ignore-move-effect-ab-attr";
 import { PostAttackAbAttr } from "./post-attack-ab-attr";
 
 export class PostAttackApplyStatusEffectAbAttr extends PostAttackAbAttr {
-  private contactRequired: boolean;
-  private chance: number;
-  private effects: StatusEffect[];
+  private readonly contactRequired: boolean;
+  private readonly chance: number;
+  private readonly effects: StatusEffect[];
 
   constructor(contactRequired: boolean, chance: number, ...effects: StatusEffect[]) {
     super();
@@ -32,7 +32,7 @@ export class PostAttackApplyStatusEffectAbAttr extends PostAttackAbAttr {
       return false;
     }
 
-    /**Status inflicted by abilities post attacking are also considered additional effects.*/
+    // Status inflicted by abilities post attacking are also considered additional effects.
     if (
       !attacker.hasAbilityWithAttr(IgnoreMoveEffectsAbAttr)
       && !simulated

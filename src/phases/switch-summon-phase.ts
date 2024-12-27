@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { applyPreSwitchOutAbAttrs, PostDamageForceSwitchAbAttr } from "#app/data/ability";
 import { PreSwitchOutAbAttr } from "#app/data/ab-attrs/pre-switch-out-ab-attr";
-import { allMoves, ForceSwitchOutAttr } from "#app/data/move";
+import { allMoves } from "#app/data/all-moves";
 import { getPokeballTintColor } from "#app/data/pokeball";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";
 import { TrainerSlot } from "#app/data/trainer-config";
@@ -14,6 +14,7 @@ import { PostSummonPhase } from "./post-summon-phase";
 import { SummonPhase } from "./summon-phase";
 import { SubstituteTag } from "#app/data/battler-tags";
 import { SwitchType } from "#enums/switch-type";
+import { ForceSwitchOutAttr } from "#app/data/move-attrs/force-switch-out-attr";
 
 export class SwitchSummonPhase extends SummonPhase {
   private readonly switchType: SwitchType;

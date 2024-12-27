@@ -2,11 +2,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
 import { AbAttr } from "./ab-attr";
 
-//#region Types
-
 type ArenaTrapCondition = (user: Pokemon, target: Pokemon) => boolean;
-
-//#endregion
 
 /**
  * Base class for checking if a Pokemon is trapped by arena trap
@@ -16,7 +12,7 @@ type ArenaTrapCondition = (user: Pokemon, target: Pokemon) => boolean;
  * @see {@linkcode applyCheckTrapped}
  */
 export class CheckTrappedAbAttr extends AbAttr {
-  protected arenaTrapCondition: ArenaTrapCondition;
+  protected readonly arenaTrapCondition: ArenaTrapCondition;
   constructor(condition: ArenaTrapCondition) {
     super(false);
     this.arenaTrapCondition = condition;

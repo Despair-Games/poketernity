@@ -1,5 +1,5 @@
 import type { PokemonDefendCondition } from "#app/@types/PokemonDefendCondition";
-import type Move from "#app/data/move";
+import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { HitResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -9,7 +9,7 @@ import i18next from "i18next";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 
 export class PostDefendStealHeldItemAbAttr extends PostDefendAbAttr {
-  private condition?: PokemonDefendCondition;
+  private readonly condition?: PokemonDefendCondition;
 
   constructor(condition?: PokemonDefendCondition) {
     super();
@@ -26,12 +26,7 @@ export class PostDefendStealHeldItemAbAttr extends PostDefendAbAttr {
     hitResult: HitResult,
     _args: any[],
   ): boolean {
-    if (
-      !simulated
-      && hitResult < HitResult.NO_EFFECT
-      && (!this.condition || this.condition(pokemon, attacker, move))
-      && !move.hitsSubstitute(attacker, pokemon)
-    ) {
+    if (!simulated && hitResult < HitResult.NO_EFFECT && (!this.condition || this.condition(pokemon, attacker, move))) {
       const heldItems = this.getTargetHeldItems(attacker).filter((i) => i.isTransferable);
       if (heldItems.length) {
         const stolenItem = heldItems[pokemon.randSeedInt(heldItems.length)];

@@ -3,16 +3,14 @@ import { allAbilities, applyAbAttrs } from "#app/data/ability";
 import { FlinchEffectAbAttr } from "./ab-attrs/flinch-effect-ab-attr";
 import { BlockNonDirectDamageAbAttr } from "./ab-attrs/block-non-direct-damage-ab-attr";
 import { ChargeAnim, CommonAnim, CommonBattleAnim, MoveChargeAnim } from "#app/data/battle-anims";
-import type Move from "#app/data/move";
-import {
-  allMoves,
-  applyMoveAttrs,
-  ConsecutiveUseDoublePowerAttr,
-  HealOnAllyAttr,
-  MoveCategory,
-  MoveFlags,
-  StatusCategoryOnAllyAttr,
-} from "#app/data/move";
+import type { Move } from "#app/data/move";
+import { applyMoveAttrs } from "#app/data/move";
+import { allMoves } from "#app/data/all-moves";
+import { StatusCategoryOnAllyAttr } from "./move-attrs/status-category-on-ally-attr";
+import { ConsecutiveUseDoublePowerAttr } from "./move-attrs/consecutive-use-double-power-attr";
+import { HealOnAllyAttr } from "./move-attrs/heal-on-ally-attr";
+import { MoveFlags } from "../enums/move-flags";
+import { MoveCategory } from "../enums/move-category";
 import { SpeciesFormChangeManualTrigger } from "#app/data/pokemon-forms";
 import { getStatusEffectHealText } from "#app/data/status-effect";
 import { TerrainType } from "#enums/terrain-type";
@@ -88,6 +86,10 @@ export class BattlerTag {
 
   lapse(_pokemon: Pokemon, _lapseType: BattlerTagLapseType): boolean {
     return --this.turnCount > 0;
+  }
+
+  apply(_pokemon: Pokemon, _simulated: boolean, ..._args: unknown[]): boolean {
+    return true;
   }
 
   getDescriptor(): string {
@@ -1522,21 +1524,26 @@ export class ProtectedTag extends BattlerTag {
     );
   }
 
-  override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
-    if (lapseType === BattlerTagLapseType.CUSTOM) {
+  override apply(pokemon: Pokemon, simulated: boolean, ..._args: unknown[]): boolean {
+    if (!simulated) {
       new CommonBattleAnim(CommonAnim.PROTECT, pokemon).play();
       globalScene.queueMessage(
         i18next.t("battlerTags:protectedLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       );
-      return true;
     }
-
-    return super.lapse(pokemon, lapseType);
+    return true;
   }
 }
 
 /** Base class for `BattlerTag`s that block damaging moves but not status moves */
-export class DamageProtectedTag extends ProtectedTag {}
+export class DamageProtectedTag extends ProtectedTag {
+  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
+    if (attacker.getMoveCategory(pokemon, move) !== MoveCategory.STATUS) {
+      return super.apply(pokemon, simulated);
+    }
+    return false;
+  }
+}
 
 /**
  * `BattlerTag` class for moves that block damaging moves damage the enemy if the enemy's move makes contact
@@ -1560,20 +1567,17 @@ export class ContactDamageProtectedTag extends ProtectedTag {
     this.damageRatio = source.damageRatio;
   }
 
-  override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
-    const ret = super.lapse(pokemon, lapseType);
-
-    if (lapseType === BattlerTagLapseType.CUSTOM) {
-      const effectPhase = globalScene.getCurrentPhase();
-      if (effectPhase instanceof MoveEffectPhase && effectPhase.move.getMove().hasFlag(MoveFlags.MAKES_CONTACT)) {
-        const attacker = effectPhase.getPokemon();
-        if (!attacker.hasAbilityWithAttr(BlockNonDirectDamageAbAttr)) {
-          attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio)), HitResult.OTHER);
-        }
-      }
+  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
+    if (!super.apply(pokemon, simulated, attacker, move)) {
+      return false;
     }
 
-    return ret;
+    if (!simulated && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, null)) {
+      if (!attacker.hasAbilityWithAttr(BlockNonDirectDamageAbAttr)) {
+        attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio)), HitResult.OTHER);
+      }
+    }
+    return true;
   }
 }
 
@@ -1602,18 +1606,15 @@ export class ContactStatStageChangeProtectedTag extends DamageProtectedTag {
     this.levels = source.levels;
   }
 
-  override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
-    const ret = super.lapse(pokemon, lapseType);
-
-    if (lapseType === BattlerTagLapseType.CUSTOM) {
-      const effectPhase = globalScene.getCurrentPhase();
-      if (effectPhase instanceof MoveEffectPhase && effectPhase.move.getMove().hasFlag(MoveFlags.MAKES_CONTACT)) {
-        const attacker = effectPhase.getPokemon();
-        globalScene.unshiftPhase(new StatStageChangePhase(attacker.getBattlerIndex(), false, [this.stat], this.levels));
-      }
+  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
+    if (!super.apply(pokemon, simulated, attacker, move)) {
+      return false;
     }
 
-    return ret;
+    if (!simulated && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, null)) {
+      globalScene.unshiftPhase(new StatStageChangePhase(attacker.getBattlerIndex(), false, [this.stat], this.levels));
+    }
+    return true;
   }
 }
 
@@ -1622,18 +1623,15 @@ export class ContactPoisonProtectedTag extends ProtectedTag {
     super(sourceMove, BattlerTagType.BANEFUL_BUNKER);
   }
 
-  override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
-    const ret = super.lapse(pokemon, lapseType);
-
-    if (lapseType === BattlerTagLapseType.CUSTOM) {
-      const effectPhase = globalScene.getCurrentPhase();
-      if (effectPhase instanceof MoveEffectPhase && effectPhase.move.getMove().hasFlag(MoveFlags.MAKES_CONTACT)) {
-        const attacker = effectPhase.getPokemon();
-        attacker.trySetStatus(StatusEffect.POISON, true, pokemon);
-      }
+  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
+    if (!super.apply(pokemon, simulated, attacker, move)) {
+      return false;
     }
 
-    return ret;
+    if (!simulated && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, null)) {
+      attacker.trySetStatus(StatusEffect.POISON, true, pokemon);
+    }
+    return true;
   }
 }
 
@@ -1646,18 +1644,15 @@ export class ContactBurnProtectedTag extends DamageProtectedTag {
     super(sourceMove, BattlerTagType.BURNING_BULWARK);
   }
 
-  override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
-    const ret = super.lapse(pokemon, lapseType);
-
-    if (lapseType === BattlerTagLapseType.CUSTOM) {
-      const effectPhase = globalScene.getCurrentPhase();
-      if (effectPhase instanceof MoveEffectPhase && effectPhase.move.getMove().hasFlag(MoveFlags.MAKES_CONTACT)) {
-        const attacker = effectPhase.getPokemon();
-        attacker.trySetStatus(StatusEffect.BURN, true);
-      }
+  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
+    if (!super.apply(pokemon, simulated, attacker, move)) {
+      return false;
     }
 
-    return ret;
+    if (!simulated && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, null)) {
+      attacker.trySetStatus(StatusEffect.BURN, true);
+    }
+    return true;
   }
 }
 
@@ -2216,6 +2211,25 @@ export class RemovedTypeTag extends BattlerTag {
 export class GroundedTag extends BattlerTag {
   constructor(tagType: BattlerTagType, lapseType: BattlerTagLapseType, sourceMove: Moves) {
     super(tagType, lapseType, 1, sourceMove);
+  }
+
+  /**
+   * Smack Down and Thousand Arrows have special messages when knocking an ungrounded Pokemon down
+   * @param pokemon the Pokemon being grounded
+   */
+  override onAdd(pokemon: Pokemon) {
+    const isSmackDownOrThousandArrows = [Moves.SMACK_DOWN, Moves.THOUSAND_ARROWS].includes(this.sourceMove);
+    const wasNotGrounded =
+      pokemon.isOfType(Type.FLYING, true, true)
+      || pokemon.hasAbility(Abilities.LEVITATE)
+      || pokemon.getTag(BattlerTagType.FLOATING)
+      || pokemon.getTag(SemiInvulnerableTag);
+
+    if (isSmackDownOrThousandArrows && wasNotGrounded) {
+      globalScene.queueMessage(
+        i18next.t("battlerTags:groundedSmackDown", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+      );
+    }
   }
 }
 
