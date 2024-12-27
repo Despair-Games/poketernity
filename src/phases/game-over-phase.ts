@@ -184,6 +184,7 @@ export class GameOverPhase extends BattlePhase {
                   .then(() => {
                     globalScene.ui.showDialogue(
                       dialogueKey,
+                      // TODO: remove hardcoded rival names
                       globalScene.gameData.gender === PlayerGender.FEMALE ? "Finn" : "Ivy",
                       null,
                       () => {

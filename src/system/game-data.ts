@@ -481,7 +481,7 @@ export class GameData {
        * Note: Might have to be migrated to `api.ts`
        *
       const response = await Utils.apiFetch("savedata/runHistory", true);
-      const data = await responseon();
+      const data = await response.json();
       */
       const lsItemKey = `runHistoryData_${loggedInUser?.username}`;
       const lsItem = localStorage.getItem(lsItemKey);

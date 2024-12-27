@@ -4,6 +4,7 @@ import type { PlayerGender } from "#enums/player-gender";
 import { TrainerType } from "#enums/trainer-type";
 import type { ConditionFn } from "#app/@types/common";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
+
 export enum VoucherType {
   REGULAR,
   PLUS,
