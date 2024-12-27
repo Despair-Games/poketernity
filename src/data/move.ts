@@ -818,10 +818,8 @@ export abstract class Move implements Localizable {
    * Currently used for {@link https://bulbapedia.bulbagarden.net/wiki/Parental_Bond_(Ability) | Parental Bond}
    * and {@linkcode PokemonMultiHitModifier | Multi-Lens}.
    * @param user The {@linkcode Pokemon} using the move
-   * @param restrictSpread `true` if the enhancing effect
-   * should not affect multi-target moves (default `false`)
    */
-  canBeMultiStrikeEnhanced(user: Pokemon, restrictSpread: boolean = false): boolean {
+  canBeMultiStrikeEnhanced(user: Pokemon): boolean {
     // Multi-strike enhancers...
 
     // ...cannot enhance moves that hit multiple targets
@@ -835,7 +833,7 @@ export abstract class Move implements Localizable {
     const exceptMoves: Moves[] = [Moves.FLING, Moves.UPROAR, Moves.ROLLOUT, Moves.ICE_BALL, Moves.ENDEAVOR];
 
     return (
-      (!restrictSpread || !isMultiTarget)
+      !isMultiTarget
       && !this.isChargingMove()
       && !exceptAttrs.some((attr) => this.hasAttr(attr))
       && !exceptMoves.some((id) => this.id === id)
