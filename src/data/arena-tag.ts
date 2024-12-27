@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import type { Arena } from "#app/field/arena";
 import { Type } from "#enums/type";
 import { BooleanHolder, NumberHolder, toDmgValue } from "#app/utils";
-import { allMoves } from "./move";
+import { allMoves } from "#app/data/all-moves";
 import { MoveTarget } from "../enums/move-target";
 import { MoveCategory } from "../enums/move-category";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -557,7 +557,7 @@ class WishTag extends ArenaTag {
   }
 
   override onRemove(_arena: Arena): void {
-    const target = globalScene.getField()[this.battlerIndex];
+    const target = globalScene.getFieldPokemonByBattlerIndex(this.battlerIndex);
     if (target?.isActive(true)) {
       globalScene.queueMessage(this.triggerMessage);
       globalScene.unshiftPhase(new PokemonHealPhase(target.getBattlerIndex(), this.healHp, null, true, false));

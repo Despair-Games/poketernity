@@ -10,7 +10,7 @@ import { Type } from "#enums/type";
 import { applyAbAttrs } from "./ability";
 import { StockpilingTag } from "./battler-tags";
 import { type Move } from "./move";
-import { allMoves } from "./move";
+import { allMoves } from "#app/data/all-moves";
 import { MoveCategory } from "#enums/move-category";
 import { Command } from "#app/ui/command-ui-handler";
 import { FieldPreventExplosionLikeAbAttr } from "./ab-attrs/field-prevent-explosion-like-ab-attr";

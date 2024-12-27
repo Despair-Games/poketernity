@@ -1,4 +1,3 @@
-import { BattlerIndex } from "#app/battle";
 import {
   handleMysteryEncounterBattleStartEffects,
   handleMysteryEncounterTurnStartEffects,
@@ -60,7 +59,8 @@ export class TurnInitPhase extends FieldPhase {
       return;
     }
 
-    globalScene.getField().forEach((pokemon, i) => {
+    globalScene.getField().forEach((pokemon) => {
+      const fieldIndex = pokemon.getFieldIndex();
       if (pokemon?.isActive()) {
         if (pokemon.isPlayer()) {
           globalScene.currentBattle.addParticipant(pokemon as PlayerPokemon);
@@ -68,7 +68,7 @@ export class TurnInitPhase extends FieldPhase {
 
         pokemon.resetTurnData();
 
-        globalScene.pushPhase(pokemon.isPlayer() ? new CommandPhase(i) : new EnemyCommandPhase(i - BattlerIndex.ENEMY));
+        globalScene.pushPhase(pokemon.isPlayer() ? new CommandPhase(fieldIndex) : new EnemyCommandPhase(fieldIndex));
       }
     });
 

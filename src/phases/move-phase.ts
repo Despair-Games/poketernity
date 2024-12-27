@@ -10,7 +10,7 @@ import type { DelayedAttackTag } from "#app/data/arena-tag";
 import { CommonAnim } from "#app/data/battle-anims";
 import { BattlerTagLapseType, CenterOfAttentionTag } from "#app/data/battler-tags";
 import { applyMoveAttrs } from "#app/data/move";
-import { allMoves } from "#app/data/move";
+import { allMoves } from "#app/data/all-moves";
 import { CopyMoveAttr } from "#app/data/move-attrs/copy-move-attr";
 import { BypassRedirectAttr } from "#app/data/move-attrs/bypass-redirect-attr";
 import { BypassSleepAttr } from "#app/data/move-attrs/bypass-sleep-attr";
@@ -521,7 +521,7 @@ export class MovePhase extends BattlePhase {
         // account for metal burst and comeuppance hitting remaining targets in double battles
         // counterattack will redirect to remaining ally if original attacker faints
         if (globalScene.currentBattle.double && this.move.getMove().hasFlag(MoveFlags.REDIRECT_COUNTER)) {
-          if (globalScene.getField()[this.targets[0]].hp === 0) {
+          if (!globalScene.getFieldPokemonByBattlerIndex(this.targets[0])?.hp) {
             const opposingField = this.pokemon.getOpposingField();
             this.targets[0] = opposingField.find((p) => p.hp > 0)?.getBattlerIndex() ?? BattlerIndex.ATTACKER;
           }

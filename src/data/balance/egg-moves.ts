@@ -1,4 +1,4 @@
-import { allMoves } from "../move";
+import { allMoves } from "#app/data/all-moves";
 import { getEnumKeys, getEnumValues } from "#app/utils";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";

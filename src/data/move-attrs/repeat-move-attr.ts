@@ -7,7 +7,7 @@ import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { MovePhase } from "#app/phases/move-phase";
 import i18next from "i18next";
 import { type Move } from "#app/data/move";
-import { allMoves } from "../move";
+import { allMoves } from "#app/data/all-moves";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import type { MoveConditionFunc } from "../move-conditions";
 
