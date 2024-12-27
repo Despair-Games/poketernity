@@ -3,7 +3,6 @@ import { SETTINGS_LS_KEY } from "#app/constants";
 import { eventBus } from "#app/event-bus";
 import { version } from "../../../package.json";
 import { isNullOrUndefined } from "#app/utils";
-import { applySettingsVersionMigration } from "#app/system/version_migration/version_converter";
 import { defaultSettings } from "./default-settings";
 
 //#region Types
@@ -162,7 +161,8 @@ class SettingsManager {
       try {
         const lsSettings: Partial<UserFacingSettings> = JSON.parse(lsItem);
 
-        applySettingsVersionMigration(lsSettings);
+        // TODO figure out what to do with settings migration
+        // applySettingsVersionMigration(lsSettings);
 
         const { general, audio, display, gamepad } = lsSettings;
 

@@ -20,7 +20,7 @@ import { ShopCursorTarget } from "#app/enums/shop-cursor-target";
 import { SpriteSet } from "#app/enums/sprite-set";
 import { UiTheme } from "#app/enums/ui-theme";
 import i18next, { t } from "i18next";
-import { supportedLanguages } from "../../system/settings/supported-languages";
+import { supportedLanguages } from "#app/system/settings/supported-languages";
 import { isLandscapeMode } from "#app/utils";
 import { PlayerGender } from "#app/enums/player-gender";
 
@@ -134,15 +134,15 @@ export const generalSettingsUiItems: SettingsUiItem<GeneralSettingsKey>[] = [
   },
   {
     key: "moveTouchControls",
-    label: i18next.t("settings:moveTouchControls"),
+    label: t("settings:moveTouchControls"),
     options: [
       {
         value: 0,
-        label: isLandscapeMode() ? i18next.t("settings:landscape") : i18next.t("settings:portrait"),
+        label: isLandscapeMode() ? t("settings:landscape") : t("settings:portrait"),
       },
       {
         value: 1,
-        label: i18next.t("settings:configure"),
+        label: t("settings:configure"),
       },
     ],
     touchscreenOnly: true,
