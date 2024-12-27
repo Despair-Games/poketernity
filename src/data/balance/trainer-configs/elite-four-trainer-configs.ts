@@ -1,8 +1,7 @@
-import { TrainerType } from "#app/enums/trainer-type";
-import { Type } from "#app/enums/type";
-import type { TrainerConfigs } from "../../trainer-config";
-import { TrainerConfig } from "../../trainer-config";
-import { signatureSpecies } from "../signatureSpecies";
+import { signatureSpecies } from "#app/data/balance/signatureSpecies";
+import { TrainerConfig, type TrainerConfigs } from "#app/data/trainer-config";
+import { TrainerType } from "#enums/trainer-type";
+import { Type } from "#enums/type";
 
 let t = TrainerType.LORELEI;
 export const eliteFourTrainerConfigs: TrainerConfigs = {

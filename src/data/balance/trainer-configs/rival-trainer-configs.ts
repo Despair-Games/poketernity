@@ -1,18 +1,18 @@
+import { pokemonEvolutions, pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { PokeballType } from "#app/enums/pokeball";
-import { Species } from "#app/enums/species";
-import { TrainerType } from "#app/enums/trainer-type";
-import { modifierTypes } from "#app/modifier/modifier-type";
-import type { PersistentModifier } from "#app/modifier/modifier";
-import type { TrainerConfigs } from "../../trainer-config";
 import {
   getRandomPartyMemberFunc,
   getSpeciesFilterRandomPartyMemberFunc,
   TrainerConfig,
   trainerPartyTemplates,
   TrainerSlot,
-} from "../../trainer-config";
-import { pokemonEvolutions, pokemonPrevolutions } from "../pokemon-evolutions";
+  type TrainerConfigs,
+} from "#app/data/trainer-config";
+import type { PersistentModifier } from "#app/modifier/modifier";
+import { modifierTypes } from "#app/modifier/modifier-type";
+import { PokeballType } from "#enums/pokeball";
+import { Species } from "#enums/species";
+import { TrainerType } from "#enums/trainer-type";
 
 let t = TrainerType.RIVAL;
 export const rivalTrainerConfigs: TrainerConfigs = {

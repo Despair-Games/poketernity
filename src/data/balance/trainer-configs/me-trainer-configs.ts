@@ -1,7 +1,3 @@
-import { PokeballType } from "#app/enums/pokeball";
-import { Species } from "#app/enums/species";
-import { TrainerType } from "#app/enums/trainer-type";
-import type { TrainerConfigs } from "../../trainer-config";
 import {
   getRandomPartyMemberFunc,
   TrainerConfig,
@@ -9,8 +5,12 @@ import {
   TrainerPartyTemplate,
   trainerPartyTemplates,
   TrainerSlot,
-} from "../../trainer-config";
-import { PartyMemberStrength } from "#app/enums/party-member-strength";
+  type TrainerConfigs,
+} from "#app/data/trainer-config";
+import { PartyMemberStrength } from "#enums/party-member-strength";
+import { PokeballType } from "#enums/pokeball";
+import { Species } from "#enums/species";
+import { TrainerType } from "#enums/trainer-type";
 
 let t = TrainerType.BUCK;
 export const meTrainerConfigs: TrainerConfigs = {

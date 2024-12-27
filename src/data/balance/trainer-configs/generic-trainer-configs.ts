@@ -1,8 +1,4 @@
-import { Moves } from "#app/enums/moves";
-import { Species } from "#app/enums/species";
-import { TrainerType } from "#app/enums/trainer-type";
-import { Type } from "#app/enums/type";
-import type { TrainerConfigs } from "../../trainer-config";
+import { tmSpecies } from "#app/data/balance/tms";
 import {
   getRandomPartyMemberFunc,
   getWavePartyTemplate,
@@ -10,8 +6,12 @@ import {
   trainerPartyTemplates,
   TrainerPoolTier,
   TrainerSlot,
-} from "../../trainer-config";
-import { tmSpecies } from "../tms";
+  type TrainerConfigs,
+} from "#app/data/trainer-config";
+import { Moves } from "#enums/moves";
+import { Species } from "#enums/species";
+import { TrainerType } from "#enums/trainer-type";
+import { Type } from "#enums/type";
 
 let t = 0;
 export const genericTrainerConfigs: TrainerConfigs = {

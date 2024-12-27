@@ -1,12 +1,11 @@
-import { Gender } from "#app/enums/gender";
-import { PokeballType } from "#app/enums/pokeball";
-import { Species } from "#app/enums/species";
-import { TrainerType } from "#app/enums/trainer-type";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { getRandomPartyMemberFunc, TrainerConfig, TrainerSlot, type TrainerConfigs } from "#app/data/trainer-config";
 import type { PersistentModifier } from "#app/modifier/modifier";
+import { modifierTypes } from "#app/modifier/modifier-type";
 import { randSeedInt } from "#app/utils";
-import type { TrainerConfigs } from "../../trainer-config";
-import { getRandomPartyMemberFunc, TrainerConfig, TrainerSlot } from "../../trainer-config";
+import { Gender } from "#enums/gender";
+import { PokeballType } from "#enums/pokeball";
+import { Species } from "#enums/species";
+import { TrainerType } from "#enums/trainer-type";
 
 let t = TrainerType.ROCKET_BOSS_GIOVANNI_1;
 export const evilBossTrainerConfigs: TrainerConfigs = {
