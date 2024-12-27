@@ -4,13 +4,13 @@ import type { BattleStat } from "#enums/stat";
 import { Stat } from "#enums/stat";
 import type { Pokemon } from "#app/field/pokemon";
 import type { Move } from "../move";
-import type { NumberHolder } from "#app/utils";
+import { isNullOrUndefined, type NumberHolder } from "#app/utils";
 import { MoveCategory } from "#enums/move-category";
 
 /**
  * Ability attribute that multiplies the ability holder's attack/special attack stat (depends on the move's category) by 1.5 if it uses a move of a specific type at less than 1/3 HP
  * These abilities use this attribute:
- * ```
+ * ```text
 +--------------+-------+
 | Ability Name | Type  |
 +--------------+-------+
@@ -41,9 +41,11 @@ export class LowHpMoveTypeAttackMultiplierAbAttr extends StatMultiplierAbAttr {
     statValue: NumberHolder,
     args: any[],
   ): boolean {
-    const move: Move = args[0];
-    // The class variable `stat` is checked and possibly changed to special attack when the game now has access to the move used at the moment.
-    this.stat = move && move.category === MoveCategory.SPECIAL ? Stat.SPATK : Stat.ATK;
+    const move: Move | null = args[0];
+    const target: Pokemon | null = args[1];
+    const category =
+      !isNullOrUndefined(move) && !isNullOrUndefined(target) ? pokemon.getMoveCategory(target, move) : move?.category;
+    this.stat = category === MoveCategory.SPECIAL ? Stat.SPATK : Stat.ATK;
     return super.applyStatStage(pokemon, passive, simulated, stat, statValue, args);
   }
 }

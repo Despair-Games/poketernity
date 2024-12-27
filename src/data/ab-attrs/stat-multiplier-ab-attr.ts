@@ -8,7 +8,7 @@ import { AbAttr } from "./ab-attr";
 /**
  * Ability attribute that multiplies a Pokemon's stat by a factor
  * Abilities with this attribute:
- ```
+ ```text
 +-----------------------+-------+--------+----------------------------------+
 |        Ability        | Stat  | Factor |              Notes               |
 +-----------------------+-------+--------+----------------------------------+
