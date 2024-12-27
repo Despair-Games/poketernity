@@ -6,7 +6,7 @@ import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { Stat } from "#enums/stat";
-import { allMoves } from "#app/data/move";
+import { allMoves } from "#app/data/all-moves";
 
 describe("Abilities - Overgrow/Blaze/Torrent/Swarm", () => {
   let phaserGame: Phaser.Game;
