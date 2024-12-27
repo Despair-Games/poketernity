@@ -106,7 +106,7 @@ import { StatMultiplierAbAttr } from "./ab-attrs/stat-multiplier-ab-attr";
 import { AllyMoveCategoryPowerBoostAbAttr } from "./ab-attrs/ally-move-category-power-boost-ab-attr";
 import { UserFieldMoveTypePowerBoostAbAttr } from "./ab-attrs/user-field-move-type-power-boost-ab-attr";
 import { VariableMovePowerBoostAbAttr } from "./ab-attrs/variable-move-power-boost-ab-attr";
-import { LowHpMoveTypeAttackMultiplierAbAttr as LowHpMoveTypeAttackMultiplierAbAttr } from "./ab-attrs/low-hp-move-type-attack-multiplier-ab-attr";
+import { LowHpMoveTypeAttackMultiplierAbAttr } from "./ab-attrs/low-hp-move-type-attack-multiplier-ab-attr";
 import { MoveTypePowerBoostAbAttr } from "./ab-attrs/move-type-power-boost-ab-attr";
 import { MovePowerBoostAbAttr } from "./ab-attrs/move-power-boost-ab-attr";
 import { DamageBoostAbAttr } from "./ab-attrs/damage-boost-ab-attr";
