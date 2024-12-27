@@ -349,6 +349,11 @@ export default class BattleScene extends SceneBase {
         this.trainer.setTexture(this.trainer.texture.key.replace(female ? "m" : "f", female ? "f" : "m"));
       }
 
+      // Money format changed, update it
+      if (key === "moneyFormat" && typeof value === "number") {
+        this.updateMoneyText(false);
+      }
+
       // Shop overlay opacity changed, update it
       if (key === "shopOverlayOpacity" && typeof value === "number") {
         this.updateShopOverlayOpacity(value);
