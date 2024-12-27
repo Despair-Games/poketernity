@@ -678,7 +678,7 @@ export class InterruptedTag extends BattlerTag {
  * BattlerTag that represents the {@link https://bulbapedia.bulbagarden.net/wiki/Confusion_(status_condition) Confusion} status condition
  */
 export class ConfusedTag extends BattlerTag {
-  public readonly ACTIVATION_CHANCE: number = (1 / 3) * 100;
+  public readonly ACTIVATION_CHANCE: number = Math.floor(100 * (1 / 3));
   constructor(turnCount: number, sourceMove: Moves) {
     super(BattlerTagType.CONFUSED, BattlerTagLapseType.MOVE, turnCount, sourceMove, undefined, true);
   }
@@ -715,7 +715,7 @@ export class ConfusedTag extends BattlerTag {
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
     const ret =
       (lapseType !== BattlerTagLapseType.CUSTOM && super.lapse(pokemon, lapseType))
-      || (Overrides.STATUS_ACTIVATION_OVERRIDE ?? false);
+      || Overrides.STATUS_ACTIVATION_OVERRIDE === true;
 
     if (ret) {
       globalScene.queueMessage(
@@ -743,8 +743,9 @@ export class ConfusedTag extends BattlerTag {
   public getDamage(pokemon: Pokemon): number {
     // 1/3 chance of hitting self with a 40 base power move
     if (
-      pokemon.randSeedInt(100) < this.ACTIVATION_CHANCE
-      && (isNullOrUndefined(Overrides.STATUS_ACTIVATION_OVERRIDE) || Overrides.STATUS_ACTIVATION_OVERRIDE)
+      (pokemon.randSeedInt(100) < this.ACTIVATION_CHANCE
+        && Overrides.STATUS_ACTIVATION_OVERRIDE !== false)
+      || Overrides.STATUS_ACTIVATION_OVERRIDE === true
     ) {
       const atk = pokemon.getEffectiveStat(Stat.ATK);
       const def = pokemon.getEffectiveStat(Stat.DEF);
@@ -811,7 +812,7 @@ export class DestinyBondTag extends BattlerTag {
 }
 
 export class InfatuatedTag extends BattlerTag {
-  public readonly ACTIVATION_CHANCE: number = (1 / 2) * 100;
+  public readonly ACTIVATION_CHANCE: number = 100 * (1 / 2);
 
   constructor(sourceMove: number, sourceId: number) {
     super(BattlerTagType.INFATUATED, BattlerTagLapseType.MOVE, 1, sourceMove, sourceId);
@@ -865,8 +866,9 @@ export class InfatuatedTag extends BattlerTag {
       globalScene.unshiftPhase(new CommonAnimPhase(pokemon.getBattlerIndex(), undefined, CommonAnim.ATTRACT));
 
       if (
-        pokemon.randSeedInt(100) < this.ACTIVATION_CHANCE
-        && (isNullOrUndefined(Overrides.STATUS_ACTIVATION_OVERRIDE) || Overrides.STATUS_ACTIVATION_OVERRIDE)
+        (pokemon.randSeedInt(100) < this.ACTIVATION_CHANCE
+          && Overrides.STATUS_ACTIVATION_OVERRIDE !== false)
+        || Overrides.STATUS_ACTIVATION_OVERRIDE === true
       ) {
         globalScene.queueMessage(
           i18next.t("battlerTags:infatuatedLapseImmobilize", {
