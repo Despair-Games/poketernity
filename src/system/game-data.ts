@@ -31,14 +31,11 @@ import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { allMoves } from "#app/data/all-moves";
 import { TrainerVariant } from "#app/field/trainer";
 import type { Variant } from "#app/data/variant";
-import { setSettingGamepad, type SettingGamepad } from "#app/system/settings/settings-gamepad";
-import type { SettingKeyboard } from "#app/system/settings/settings-keyboard";
-import { setSettingKeyboard } from "#app/system/settings/settings-keyboard";
 import { TagAddedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";
 import * as Modifier from "#app/modifier/modifier";
 import { StatusEffect } from "#enums/status-effect";
 import ChallengeData from "#app/system/challenge-data";
-import { Device } from "#enums/devices";
+import type { Device } from "#enums/devices";
 import { GameDataType } from "#enums/game-data-type";
 import { PlayerGender } from "#enums/player-gender";
 import type { Species } from "#enums/species";
@@ -698,28 +695,6 @@ export class GameData {
       globalScene.inputController.resetConfig(device);
     }
     return true; // TODO: is `true` the correct return value?
-  }
-
-  /**
-   * Saves a gamepad setting to localStorage.
-   *
-   * @param setting - The gamepad setting to save.
-   * @param valueIndex - The index of the value to set for the gamepad setting.
-   * @returns `true` if the setting is successfully saved.
-   *
-   * @remarks
-   * This method initializes an empty object for gamepad settings if none exist in localStorage.
-   * It then updates the setting in the current scene and iterates over the default gamepad settings
-   * to update the specified setting with the new value. Finally, it saves the updated settings back
-   * to localStorage and returns `true` to indicate success.
-   */
-  public saveControlSetting(device: Device, setting: SettingGamepad | SettingKeyboard, valueIndex: number): boolean {
-    if (device === Device.GAMEPAD) {
-      return setSettingGamepad(setting as SettingGamepad, valueIndex);
-    } else if (device === Device.KEYBOARD) {
-      return setSettingKeyboard(setting as SettingKeyboard, valueIndex);
-    }
-    return false;
   }
 
   public saveTutorialFlag(tutorial: Tutorial, flag: boolean): boolean {
