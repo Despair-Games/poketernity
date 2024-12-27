@@ -27,7 +27,7 @@ export class LowHpMoveTypeAttackMultiplierAbAttr extends StatMultiplierAbAttr {
    * The constructor defaults to Stat.ATK since at the moment of the attribute's construction, the game does not know what move will be used.
    */
   constructor(boostedType: Type) {
-    const condition = (pokemon: Pokemon, _target: Pokemon, move: Move) => {
+    const condition = (pokemon: Pokemon, _target: Pokemon, move: Move): boolean => {
       return pokemon.getHpRatio() <= 0.33 && move.type === boostedType;
     };
     super(Stat.ATK, 1.5, condition);
