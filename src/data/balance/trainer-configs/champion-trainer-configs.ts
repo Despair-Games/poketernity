@@ -1,8 +1,8 @@
-import { Species } from "#app/enums/species";
-import { TrainerType } from "#app/enums/trainer-type";
-import type { TrainerConfigs } from "../../trainer-config";
-import { getRandomPartyMemberFunc, TrainerConfig, TrainerSlot } from "../../trainer-config";
-import { signatureSpecies } from "../signatureSpecies";
+import { signatureSpecies } from "#app/data/balance/signatureSpecies";
+import { getRandomPartyMemberFunc, TrainerConfig, TrainerSlot, type TrainerConfigs } from "#app/data/trainer-config";
+import { Species } from "#enums/species";
+import { TrainerType } from "#enums/trainer-type";
+
 let t = TrainerType.BLUE;
 export const championTrainerConfigs: TrainerConfigs = {
   [TrainerType.BLUE]: new TrainerConfig(t)

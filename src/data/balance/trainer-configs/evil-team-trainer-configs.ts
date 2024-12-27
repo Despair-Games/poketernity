@@ -1,15 +1,15 @@
-import { Moves } from "#app/enums/moves";
-import { Species } from "#app/enums/species";
-import { TrainerType } from "#app/enums/trainer-type";
-import { PokemonMove } from "#app/field/pokemon";
-import type { TrainerConfigs } from "../../trainer-config";
 import {
   getEvilGruntPartyTemplate,
   getRandomPartyMemberFunc,
   TrainerConfig,
   TrainerPoolTier,
   TrainerSlot,
-} from "../../trainer-config";
+  type TrainerConfigs,
+} from "#app/data/trainer-config";
+import { PokemonMove } from "#app/field/pokemon";
+import { Moves } from "#enums/moves";
+import { Species } from "#enums/species";
+import { TrainerType } from "#enums/trainer-type";
 
 let t = TrainerType.ROCKET_GRUNT;
 export const evilTeamTrainerConfigsConfigs: TrainerConfigs = {
