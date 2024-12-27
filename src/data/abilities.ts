@@ -745,12 +745,9 @@ export function initAbilities() {
       .attr(MoveEffectChanceMultiplierAbAttr, 0), // Should disable life orb, eject button, red card, kee/maranga berry if they get implemented
     new Ability(Abilities.CONTRARY, 5).attr(StatStageChangeMultiplierAbAttr, -1).ignorable(),
     new Ability(Abilities.UNNERVE, 5).attr(PreventBerryUseAbAttr),
-    new Ability(Abilities.DEFIANT, 5).attr(
-      PostStatStageChangeStatStageChangeAbAttr,
-      (_target, _statsChanged, stages) => stages < 0,
-      [Stat.ATK],
-      2,
-    ),
+    new Ability(Abilities.DEFIANT, 5)
+      .attr(PostStatStageChangeStatStageChangeAbAttr, (_target, _statsChanged, stages) => stages < 0, [Stat.ATK], 2)
+      .edgeCase(), // Should not boost stats if switching into court changed sticky web
     new Ability(Abilities.DEFEATIST, 5)
       .attr(StatMultiplierAbAttr, Stat.ATK, 0.5)
       .attr(StatMultiplierAbAttr, Stat.SPATK, 0.5)
@@ -912,12 +909,9 @@ export function initAbilities() {
         (pokemon, attacker, move) => pokemon !== attacker && move.hasFlag(MoveFlags.BALLBOMB_MOVE),
       )
       .ignorable(),
-    new Ability(Abilities.COMPETITIVE, 6).attr(
-      PostStatStageChangeStatStageChangeAbAttr,
-      (_target, _statsChanged, stages) => stages < 0,
-      [Stat.SPATK],
-      2,
-    ),
+    new Ability(Abilities.COMPETITIVE, 6)
+      .attr(PostStatStageChangeStatStageChangeAbAttr, (_target, _statsChanged, stages) => stages < 0, [Stat.SPATK], 2)
+      .edgeCase(), // Should not boost stats if switching into court changed sticky web
     new Ability(Abilities.STRONG_JAW, 6).attr(
       MovePowerBoostAbAttr,
       (_user, _target, move) => move.hasFlag(MoveFlags.BITING_MOVE),

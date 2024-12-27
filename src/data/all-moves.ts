@@ -2876,7 +2876,11 @@ export function initMoves() {
       ArenaTagType.STICKY_WEB,
       ArenaTagType.TAILWIND,
       ArenaTagType.TOXIC_SPIKES,
-    ]),
+      ArenaTagType.SAFEGUARD,
+      ArenaTagType.GRASS_WATER_PLEDGE,
+      ArenaTagType.FIRE_GRASS_PLEDGE,
+      ArenaTagType.WATER_FIRE_PLEDGE,
+    ]), // G-max moves are not implemented but this should also swap steelsurge, vine lash, wildfire, and cannonade
     new AttackMove(Moves.MAX_FLARE, Type.FIRE, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.NEAR_ENEMY)
       .unimplemented()
