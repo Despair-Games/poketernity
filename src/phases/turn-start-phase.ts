@@ -1,6 +1,7 @@
 import { applyAbAttrs } from "#app/data/ability";
 import { PreventBypassSpeedChanceAbAttr } from "#app/data/ab-attrs/prevent-bypass-speed-chance-ab-attr";
-import { allMoves, MoveHeaderAttr } from "#app/data/move";
+import { allMoves } from "#app/data/all-moves";
+import { MoveHeaderAttr } from "#app/data/move-attrs/move-header-attr";
 import { Abilities } from "#app/enums/abilities";
 import { Stat } from "#app/enums/stat";
 import type { Pokemon } from "#app/field/pokemon";
@@ -143,13 +144,12 @@ export class TurnStartPhase extends FieldPhase {
   override start() {
     super.start();
 
-    const field = globalScene.getField();
     const moveOrder = this.getCommandOrder();
 
     let orderIndex = 0;
 
     for (const o of moveOrder) {
-      const pokemon = field[o];
+      const pokemon = globalScene.getFieldPokemonByBattlerIndex(o)!;
       const turnCommand = globalScene.currentBattle.turnCommands[o];
 
       if (turnCommand?.skip) {
@@ -206,7 +206,7 @@ export class TurnStartPhase extends FieldPhase {
         case Command.RUN:
           let runningPokemon = pokemon;
           if (globalScene.currentBattle.double) {
-            const playerActivePokemon = field.filter((pokemon) => {
+            const playerActivePokemon = globalScene.getField().filter((pokemon) => {
               if (!!pokemon) {
                 return pokemon.isPlayer() && pokemon.isActive();
               } else {

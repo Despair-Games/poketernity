@@ -141,7 +141,7 @@ describe("Abilities - Commander", () => {
     expect(game.scene.triggerPokemonBattleAnim).toHaveBeenLastCalledWith(tatsugiri, PokemonAnimType.COMMANDER_APPLY);
     expect(dondozo.getTag(BattlerTagType.COMMANDED)).toBeDefined();
 
-    tatsugiri.addTag(BattlerTagType.SALT_CURED, 0, Moves.NONE, game.scene.getField()[BattlerIndex.ENEMY].id);
+    tatsugiri.addTag(BattlerTagType.SALT_CURED, 0, Moves.NONE, game.scene.getEnemyPokemon()!.id);
 
     game.move.select(Moves.SPLASH, 1);
 

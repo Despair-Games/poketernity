@@ -1,4 +1,5 @@
-import { type Move, FixedDamageAttr } from "#app/data/move";
+import { type Move } from "#app/data/move";
+import { FixedDamageAttr } from "../move-attrs/fixed-damage-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { type BooleanHolder, NumberHolder } from "#app/utils";

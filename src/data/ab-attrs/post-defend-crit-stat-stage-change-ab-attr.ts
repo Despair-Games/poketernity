@@ -1,5 +1,5 @@
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
-import type Move from "#app/data/move";
+import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { HitResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -38,6 +38,6 @@ export class PostDefendCritStatStageChangeAbAttr extends PostDefendAbAttr {
     return (pokemon: Pokemon) =>
       pokemon.turnData.attacksReceived.length !== 0
       // TODO: Normalize `attacksReceived[]` checks
-      && pokemon.turnData.attacksReceived[pokemon.turnData.attacksReceived.length - 1].critical;
+      && pokemon.turnData.attacksReceived[pokemon.turnData.attacksReceived.length - 1].isCritical;
   }
 }
