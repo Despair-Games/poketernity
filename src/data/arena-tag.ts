@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import type { Arena } from "#app/field/arena";
 import { Type } from "#enums/type";
-import { BooleanHolder, NumberHolder, toDmgValue } from "#app/utils";
+import { BooleanHolder, isNullOrUndefined, NumberHolder, toDmgValue } from "#app/utils";
 import { allMoves } from "#app/data/all-moves";
 import { MoveTarget } from "../enums/move-target";
 import { MoveCategory } from "../enums/move-category";
@@ -861,55 +861,69 @@ class ToxicSpikesTag extends ArenaTrapTag {
   }
 }
 
+/**
+ * Interface representing a delayed attack command.
+ * @see {@linkcode DelayedAttackTag}
+ */
 interface DelayedAttack {
-  source: Pokemon | null;
+  sourceId: number;
   move: Moves;
   targetIndex: BattlerIndex;
   turnCount: number;
 }
 
 /**
- * Arena Tag class for delayed attacks, such as {@linkcode Moves.FUTURE_SIGHT} or {@linkcode Moves.DOOM_DESIRE}.
- * Delays the attack's effect by a set amount of turns, usually 3 (including the turn the move is used),
+ * Arena Tag class for delayed attacks from {@link https://bulbapedia.bulbagarden.net/wiki/Future_Sight_(move) Future Sight}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Doom_Desire_(move) Doom Desire}.
+ * Delays the attack's effect by 3 turns (including the turn the move is used),
  * and deals damage after the turn count is reached.
  */
 export class DelayedAttackTag extends ArenaTag {
-  public attacks: DelayedAttack[];
+  /** Contains all queued delayed attacks on the field */
+  public delayedAttacks: DelayedAttack[];
 
   constructor() {
     super(ArenaTagType.DELAYED_ATTACK, 3);
 
-    this.attacks = [];
+    this.delayedAttacks = [];
   }
 
   public addAttack(source: Pokemon, move: Moves, targetIndex: BattlerIndex): void {
-    this.attacks.push({ source, move, targetIndex, turnCount: 3 });
+    this.delayedAttacks.push({ sourceId: source.id, move, targetIndex, turnCount: 3 });
+    this.turnCount = 3;
   }
 
   override lapse(_arena: Arena): boolean {
-    this.attacks.forEach((attack) => {
+    this.delayedAttacks.forEach((attack) => {
       attack.turnCount--;
 
-      if (attack.source && attack.turnCount <= 0) {
+      if (!isNullOrUndefined(globalScene.getPokemonById(attack.sourceId)) && attack.turnCount <= 0) {
         const target = globalScene.getField(true).find((p) => attack.targetIndex === p.getBattlerIndex());
         if (target) {
           globalScene.unshiftPhase(
-            new MoveEffectPhase(attack.source.id, [attack.targetIndex], new PokemonMove(attack.move, 0, 0, true)),
+            new MoveEffectPhase(attack.sourceId, [attack.targetIndex], new PokemonMove(attack.move, 0, 0, true)),
           );
         } else if (globalScene.currentBattle.double) {
           const redirectIndex = attack.targetIndex + (attack.targetIndex % 2 === 0 ? 1 : -1);
           globalScene.unshiftPhase(
-            new MoveEffectPhase(attack.source.id, [redirectIndex], new PokemonMove(attack.move, 0, 0, true)),
+            new MoveEffectPhase(attack.sourceId, [redirectIndex], new PokemonMove(attack.move, 0, 0, true)),
           );
         }
       }
     });
 
-    this.attacks = this.attacks.filter((attack) => attack.source && attack.turnCount > 0);
-    return this.attacks.length > 0;
+    this.delayedAttacks = this.delayedAttacks.filter(
+      (attack) => !isNullOrUndefined(globalScene.getPokemonById(attack.sourceId)) && attack.turnCount > 0,
+    );
+    return this.delayedAttacks.length > 0;
   }
 
   override onRemove(_arena: Arena): void {}
+
+  override loadTag(source: ArenaTag | any): void {
+    super.loadTag(source);
+    this.delayedAttacks = source.delayedAttacks;
+  }
 }
 
 /**

@@ -8,8 +8,8 @@ import i18next from "i18next";
 import { type ChargeAnim, MoveChargeAnim } from "#app/data/battle-anims";
 import type { Move } from "#app/data/move";
 import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
-import type { DelayedAttackTag } from "../arena-tag";
-import type { MoveConditionFunc } from "../move-conditions";
+import type { DelayedAttackTag } from "#app/data/arena-tag";
+import type { MoveConditionFunc } from "#app/data/move-conditions";
 
 /**
  * Attack Move that doesn't hit the turn it is played and doesn't allow for multiple
@@ -30,6 +30,17 @@ export class DelayedAttackAttr extends OverrideMoveEffectAttr {
     this.chargeText = chargeText;
   }
 
+  /**
+   * Queues a delayed attack against the given target, adding an arena tag
+   * for the effect if it doesn't already exist.
+   * @param user the {@linkcode Pokemon} using the move
+   * @param target the {@linkcode Pokemon} targeted by the move.
+   * @param move the {@linkcode Move} being used.
+   * @param args additional arguments for this function:
+   * - `[0]` a {@linkcode BooleanHolder} that becomes `true` if other move effects in the turn are overridden.
+   * - `[1]` `true` if the move is used virtually (i.e. for the move's "attack phase"); `false` otherwise.
+   * @see {@linkcode DelayedAttackTag}
+   */
   override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
     // Edge case for the move applied on a pokemon that has fainted
     if (!target) {
@@ -67,10 +78,11 @@ export class DelayedAttackAttr extends OverrideMoveEffectAttr {
     return true;
   }
 
+  /** Delayed attacks fail if another delayed attack is already queued against the target */
   override getCondition(): MoveConditionFunc {
     return (_user, target, _move) => {
       const delayedAttackTag = globalScene.arena.getTag(ArenaTagType.DELAYED_ATTACK) as DelayedAttackTag;
-      return !delayedAttackTag?.attacks.some((attack) => attack.targetIndex === target.getBattlerIndex());
+      return !delayedAttackTag?.delayedAttacks.some((attack) => attack.targetIndex === target.getBattlerIndex());
     };
   }
 }
