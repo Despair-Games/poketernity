@@ -85,6 +85,6 @@ describe("Abilities - Fluffy", () => {
 
     const damageResult = abilitySpy.mock.results[0].value as DamageCalculationResult;
     expect(allMoves[Moves.TACKLE].hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
-    expect(damageResult.finalDamage).toBe(damageResult.postMultiplierDamage);
+    expect(damageResult.finalDamage).toBe(Math.floor(damageResult.postMultiplierDamage! * 0.5) * 2);
   });
 });
