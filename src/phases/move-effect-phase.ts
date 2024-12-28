@@ -390,7 +390,7 @@ export class MoveEffectPhase extends PokemonPhase {
       user,
       move,
       false,
-      !user.isActive(true),
+      false,
       isCritical,
       false,
       effectiveness,
