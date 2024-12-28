@@ -967,7 +967,7 @@ export function initAbilities() {
     ),
     new Ability(Abilities.GOOEY, 6).attr(
       PostDefendStatStageChangeAbAttr,
-      (_target, _user, move) => move.hasFlag(MoveFlags.MAKES_CONTACT),
+      (target, user, move) => move.checkFlag(MoveFlags.MAKES_CONTACT, user, target),
       Stat.SPD,
       -1,
       false,
@@ -1206,7 +1206,7 @@ export function initAbilities() {
     new Ability(Abilities.SOUL_HEART, 7).attr(PostKnockOutStatStageChangeAbAttr, Stat.SPATK, 1),
     new Ability(Abilities.TANGLING_HAIR, 7).attr(
       PostDefendStatStageChangeAbAttr,
-      (_target, _user, move) => move.hasFlag(MoveFlags.MAKES_CONTACT),
+      (target, user, move) => move.checkFlag(MoveFlags.MAKES_CONTACT, user, target),
       Stat.SPD,
       -1,
       false,
