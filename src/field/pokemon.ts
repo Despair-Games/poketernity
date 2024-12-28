@@ -715,8 +715,16 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const spritePath = `./images/pokemon/variant/${battleSpritePath}.json`;
     return globalScene
       .cachedFetch(spritePath)
+      .then((res) => {
+        // Prevent the JSON from processing if it failed to load
+        if (!res.ok) {
+          console.warn(`Failed to load sprite variant ${battleSpritePath}:`, res.status, res.statusText, res.url);
+          return;
+        }
+        return res.json();
+      })
       .catch((error) => {
-        console.error(`Failed to load sprite variant ${battleSpritePath}`, error);
+        console.warn(`Failed to load sprite variant ${battleSpritePath}:`, error);
       })
       .then((c) => {
         if (!isNullOrUndefined(c)) {
