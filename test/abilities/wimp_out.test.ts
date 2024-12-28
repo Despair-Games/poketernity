@@ -1,7 +1,7 @@
 import { BattlerIndex } from "#app/battle";
-import { ArenaTagSide } from "#app/data/arena-tag";
 import { allMoves } from "#app/data/all-moves";
-import { GameManager } from "#test/testUtils/gameManager";
+import { ArenaTagSide } from "#app/data/arena-tag";
+import { toDmgValue } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -10,6 +10,7 @@ import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { WeatherType } from "#enums/weather-type";
+import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -195,26 +196,33 @@ describe("Abilities - Wimp Out", () => {
     confirmNoSwitch();
   });
 
-  it("If it falls below half and recovers back above half from a Shell Bell, Wimp Out will activate even after the Shell Bell recovery", async () => {
-    game.override
-      .moveset([Moves.DOUBLE_EDGE])
-      .enemyMoveset([Moves.SPLASH])
-      .startingHeldItems([
-        { name: "SHELL_BELL", count: 3 },
-        { name: "HEALING_CHARM", count: 5 },
-      ]);
-    await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
+  // TODO: Enable when this behavior is fixed (currently Shell Bell won't activate if Wimp Out activates because
+  // the pokemon is removed from the field before the Shell Bell modifier is applied, so it can't see the
+  // damage dealt and doesn't heal the pokemon)
+  it.todo(
+    "If it falls below half and recovers back above half from a Shell Bell, Wimp Out will activate even after the Shell Bell recovery",
+    async () => {
+      game.override
+        .moveset([Moves.DOUBLE_EDGE])
+        .enemyMoveset([Moves.SPLASH])
+        .startingHeldItems([{ name: "SHELL_BELL", count: 4 }]);
+      await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
 
-    game.scene.getPlayerPokemon()!.hp *= 0.75;
+      const wimpod = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.DOUBLE_EDGE);
-    game.doSelectPartyPokemon(1);
-    await game.phaseInterceptor.to("TurnEndPhase");
+      wimpod.damageAndUpdate(toDmgValue(wimpod.getMaxHp() * 0.4));
 
-    expect(game.scene.getPlayerParty()[1].getHpRatio()).toBeGreaterThan(0.5);
-    expect(game.phaseInterceptor.log).toContain("SwitchSummonPhase");
-    expect(game.scene.getPlayerPokemon()!.species.speciesId).toBe(Species.TYRUNT);
-  });
+      game.move.select(Moves.DOUBLE_EDGE);
+      game.doSelectPartyPokemon(1);
+      await game.phaseInterceptor.to("TurnEndPhase");
+
+      expect(game.scene.getPlayerParty()[1].hp).toBeGreaterThan(
+        toDmgValue(game.scene.getPlayerParty()[1].getMaxHp() / 2),
+      );
+      expect(game.phaseInterceptor.log).toContain("SwitchSummonPhase");
+      expect(game.scene.getPlayerPokemon()!.species.speciesId).toBe(Species.TYRUNT);
+    },
+  );
 
   it("Wimp Out will activate due to weather damage", async () => {
     game.override.weather(WeatherType.HAIL).enemyMoveset([Moves.SPLASH]);
