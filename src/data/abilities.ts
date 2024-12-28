@@ -99,7 +99,6 @@ import { PostVictoryFormChangeAbAttr } from "./ab-attrs/post-victory-form-change
 import { PostVictoryStatStageChangeAbAttr } from "./ab-attrs/post-victory-stat-stage-change-ab-attr";
 import { SynchronizeStatusAbAttr } from "./ab-attrs/synchronize-status-ab-attr";
 import { PostAttackApplyBattlerTagAbAttr } from "./ab-attrs/post-attack-apply-battler-tag-ab-attr";
-import { PostAttackContactApplyStatusEffectAbAttr } from "./ab-attrs/post-attack-contact-apply-status-effect-ab-attr";
 import { PostAttackApplyStatusEffectAbAttr } from "./ab-attrs/post-attack-apply-status-effect-ab-attr";
 import { GorillaTacticsAbAttr } from "./ab-attrs/gorilla-tactics-ab-attr";
 import { StatMultiplierAbAttr } from "./ab-attrs/stat-multiplier-ab-attr";
@@ -814,7 +813,9 @@ export function initAbilities() {
         (pokemon, attacker, move) => pokemon !== attacker && move.hasFlag(MoveFlags.POWDER_MOVE),
       )
       .ignorable(),
-    new Ability(Abilities.POISON_TOUCH, 5).attr(PostAttackContactApplyStatusEffectAbAttr, 30, StatusEffect.POISON),
+    new Ability(Abilities.POISON_TOUCH, 5)
+      .attr(PostAttackApplyStatusEffectAbAttr, true, 30, StatusEffect.POISON)
+      .edgeCase(), // Does not inflict poison if user gets inflicted with target's Mummy
     new Ability(Abilities.REGENERATOR, 5).attr(PreSwitchOutHealAbAttr),
     new Ability(Abilities.BIG_PECKS, 5).attr(ProtectStatAbAttr, Stat.DEF).ignorable(),
     new Ability(Abilities.SAND_RUSH, 5)
@@ -1622,7 +1623,9 @@ export function initAbilities() {
       .ignorable(),
     new Ability(Abilities.SUPERSWEET_SYRUP, 9).attr(PostSummonStatStageChangeAbAttr, [Stat.EVA], -1),
     new Ability(Abilities.HOSPITALITY, 9).attr(PostSummonAllyHealAbAttr, 4, true),
-    new Ability(Abilities.TOXIC_CHAIN, 9).attr(PostAttackApplyStatusEffectAbAttr, false, 30, StatusEffect.TOXIC),
+    new Ability(Abilities.TOXIC_CHAIN, 9)
+      .attr(PostAttackApplyStatusEffectAbAttr, false, 30, StatusEffect.TOXIC)
+      .edgeCase(), // Does not inflict poison if user gets inflicted with target's Mummy
     new Ability(Abilities.EMBODY_ASPECT_TEAL, 9)
       .attr(PostBattleInitStatStageChangeAbAttr, [Stat.SPD], 1, true)
       .attr(UncopiableAbilityAbAttr)
