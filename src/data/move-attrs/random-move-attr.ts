@@ -9,6 +9,9 @@ import { type Move, getMoveTargets } from "#app/data/move";
 import { allMoves } from "#app/data/all-moves";
 import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
 
+/**
+ * Uses a random move. Used for Metronome
+ */
 export class RandomMoveAttr extends OverrideMoveEffectAttr {
   /**
    * This function exists solely to allow tests to override the randomly selected move by mocking this function.
@@ -24,6 +27,10 @@ export class RandomMoveAttr extends OverrideMoveEffectAttr {
     const moveId = this.getMoveOverride() ?? moveIds[user.randSeedInt(moveIds.length)];
 
     const moveTargets = getMoveTargets(user, moveId);
+    // Metronome cannot target one's ally
+    const allyBattlerIndex = user.getAlly()?.getBattlerIndex();
+    moveTargets.targets = moveTargets.targets.filter((bi) => bi !== allyBattlerIndex);
+
     if (!moveTargets.targets.length) {
       return false;
     }
