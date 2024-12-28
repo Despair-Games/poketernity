@@ -707,20 +707,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * Gracefully handle errors loading a variant sprite.
-   *
-   * @param cacheKey the cache key for the variant color sprite
-   * @param attemptedSpritePath the sprite path that failed to load
-   * @param battleSpritePath the filename of the sprite
-   * @param optionalParams any additional params to log
-   */
-  async fallbackVariantColor(attemptedSpritePath: string, ...optionalParams: any[]) {
-    console.warn(`Could not load ${attemptedSpritePath}!`, ...optionalParams);
-  }
-
-  /**
    * Attempt to process variant sprite.
-   *
    * @param cacheKey the cache key for the variant color sprite
    * @param battleSpritePath the filename of the sprite
    */
@@ -728,15 +715,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const spritePath = `./images/pokemon/variant/${battleSpritePath}.json`;
     return globalScene
       .cachedFetch(spritePath)
-      .then((res) => {
-        // Prevent the JSON from processing if it failed to load
-        if (!res.ok) {
-          return this.fallbackVariantColor(cacheKey, res.url, battleSpritePath, res.status, res.statusText);
-        }
-        return res.json();
-      })
       .catch((error) => {
-        return this.fallbackVariantColor(cacheKey, spritePath, battleSpritePath, error);
+        console.error(`Failed to load sprite variant ${battleSpritePath}`, error);
       })
       .then((c) => {
         if (!isNullOrUndefined(c)) {
