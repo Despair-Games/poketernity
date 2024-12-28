@@ -125,18 +125,16 @@ import { PostDefendApplyArenaTrapTagAbAttr } from "./ab-attrs/post-defend-apply-
 import { PostDefendHpGatedStatStageChangeAbAttr } from "./ab-attrs/post-defend-hp-gated-stat-tage-change-ab-attr";
 import { PostDefendStatStageChangeAbAttr } from "./ab-attrs/post-defend-stat-stage-change-ab-attr";
 import { GroundedTag } from "./battler-tags";
-import type Move from "./move";
-import {
-  allMoves,
-  applyMoveAttrs,
-  AttackMove,
-  FlinchAttr,
-  MoveCategory,
-  MoveFlags,
-  OneHitKOAttr,
-  VariableMoveTypeAttr,
-  VariablePowerAttr,
-} from "./move";
+import type { Move } from "./move";
+import { applyMoveAttrs } from "./move";
+import { allMoves } from "#app/data/all-moves";
+import { FlinchAttr } from "./move-attrs/flinch-attr";
+import { VariableMoveTypeAttr } from "./move-attrs/variable-move-type-attr";
+import { VariablePowerAttr } from "./move-attrs/variable-power-attr";
+import { OneHitKOAttr } from "./move-attrs/one-hit-ko-attr";
+import { AttackMove } from "./move";
+import { MoveFlags } from "../enums/move-flags";
+import { MoveCategory } from "../enums/move-category";
 import { getNonVolatileStatusEffects } from "./status-effect";
 import { IgnoreTypeStatusEffectImmunityAbAttr } from "./ab-attrs/ignore-type-status-effect-immunity-ab-attr";
 import { BlockItemTheftAbAttr } from "./ab-attrs/block-item-theft-ab-attr";

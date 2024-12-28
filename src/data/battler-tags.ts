@@ -3,16 +3,14 @@ import { allAbilities, applyAbAttrs } from "#app/data/ability";
 import { FlinchEffectAbAttr } from "./ab-attrs/flinch-effect-ab-attr";
 import { BlockNonDirectDamageAbAttr } from "./ab-attrs/block-non-direct-damage-ab-attr";
 import { ChargeAnim, CommonAnim, CommonBattleAnim, MoveChargeAnim } from "#app/data/battle-anims";
-import type Move from "#app/data/move";
-import {
-  allMoves,
-  applyMoveAttrs,
-  ConsecutiveUseDoublePowerAttr,
-  HealOnAllyAttr,
-  MoveCategory,
-  MoveFlags,
-  StatusCategoryOnAllyAttr,
-} from "#app/data/move";
+import type { Move } from "#app/data/move";
+import { applyMoveAttrs } from "#app/data/move";
+import { allMoves } from "#app/data/all-moves";
+import { StatusCategoryOnAllyAttr } from "./move-attrs/status-category-on-ally-attr";
+import { ConsecutiveUseDoublePowerAttr } from "./move-attrs/consecutive-use-double-power-attr";
+import { HealOnAllyAttr } from "./move-attrs/heal-on-ally-attr";
+import { MoveFlags } from "../enums/move-flags";
+import { MoveCategory } from "../enums/move-category";
 import { SpeciesFormChangeManualTrigger } from "#app/data/pokemon-forms";
 import { getStatusEffectHealText } from "#app/data/status-effect";
 import { TerrainType } from "#enums/terrain-type";
@@ -2213,6 +2211,25 @@ export class RemovedTypeTag extends BattlerTag {
 export class GroundedTag extends BattlerTag {
   constructor(tagType: BattlerTagType, lapseType: BattlerTagLapseType, sourceMove: Moves) {
     super(tagType, lapseType, 1, sourceMove);
+  }
+
+  /**
+   * Smack Down and Thousand Arrows have special messages when knocking an ungrounded Pokemon down
+   * @param pokemon the Pokemon being grounded
+   */
+  override onAdd(pokemon: Pokemon) {
+    const isSmackDownOrThousandArrows = [Moves.SMACK_DOWN, Moves.THOUSAND_ARROWS].includes(this.sourceMove);
+    const wasNotGrounded =
+      pokemon.isOfType(Type.FLYING, true, true)
+      || pokemon.hasAbility(Abilities.LEVITATE)
+      || pokemon.getTag(BattlerTagType.FLOATING)
+      || pokemon.getTag(SemiInvulnerableTag);
+
+    if (isSmackDownOrThousandArrows && wasNotGrounded) {
+      globalScene.queueMessage(
+        i18next.t("battlerTags:groundedSmackDown", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+      );
+    }
   }
 }
 

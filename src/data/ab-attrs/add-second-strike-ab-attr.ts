@@ -1,4 +1,4 @@
-import type Move from "#app/data/move";
+import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
 import { PreAttackAbAttr } from "./pre-attack-ab-attr";
@@ -38,7 +38,7 @@ export class AddSecondStrikeAbAttr extends PreAttackAbAttr {
     const hitCount = args[0] as NumberHolder;
     const multiplier = args[1] as NumberHolder;
 
-    if (move.canBeMultiStrikeEnhanced(pokemon, true)) {
+    if (move.canBeMultiStrikeEnhanced(pokemon)) {
       this.showAbility = !!hitCount?.value;
       if (hitCount?.value) {
         hitCount.value += 1;

@@ -11,7 +11,7 @@ import {
   PokemonHeldItemModifier,
   SwitchEffectTransferModifier,
 } from "#app/modifier/modifier";
-import { allMoves, ForceSwitchOutAttr } from "#app/data/move";
+import { allMoves } from "#app/data/all-moves";
 import { getGenderColor, getGenderShadowColor, getGenderSymbol } from "#app/data/gender";
 import { StatusEffect } from "#enums/status-effect";
 import PokemonIconAnimHandler, { PokemonIconAnimMode } from "#app/ui/pokemon-icon-anim-handler";
@@ -30,6 +30,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { CommandPhase } from "#app/phases/command-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { globalScene } from "#app/global-scene";
+import { ForceSwitchOutAttr } from "#app/data/move-attrs/force-switch-out-attr";
 
 const defaultMessage = i18next.t("partyUiHandler:choosePokemon");
 

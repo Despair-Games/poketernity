@@ -1,5 +1,5 @@
 import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition";
-import type Move from "#app/data/move";
+import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
 import { AbAttr } from "./ab-attr";
