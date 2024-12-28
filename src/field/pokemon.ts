@@ -1250,7 +1250,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       }
     }
     if (!ignoreAbility) {
-      applyStatMultiplierAbAttrs(StatMultiplierAbAttr, this, stat, statValue, simulated);
+      applyStatMultiplierAbAttrs(StatMultiplierAbAttr, this, stat, statValue, simulated, move, opponent);
     }
 
     let ret =
@@ -3125,7 +3125,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       source.getEffectiveStat(
         isPhysical ? Stat.ATK : Stat.SPATK,
         this,
-        undefined,
+        move,
         ignoreSourceAbility,
         ignoreAbility,
         isCritical,

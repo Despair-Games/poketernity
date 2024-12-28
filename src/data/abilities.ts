@@ -105,7 +105,7 @@ import { StatMultiplierAbAttr } from "./ab-attrs/stat-multiplier-ab-attr";
 import { AllyMoveCategoryPowerBoostAbAttr } from "./ab-attrs/ally-move-category-power-boost-ab-attr";
 import { UserFieldMoveTypePowerBoostAbAttr } from "./ab-attrs/user-field-move-type-power-boost-ab-attr";
 import { VariableMovePowerBoostAbAttr } from "./ab-attrs/variable-move-power-boost-ab-attr";
-import { LowHpMoveTypePowerBoostAbAttr } from "./ab-attrs/low-hp-move-type-power-boost-ab-attr";
+import { LowHpMoveTypeAttackMultiplierAbAttr } from "./ab-attrs/low-hp-move-type-attack-multiplier-ab-attr";
 import { MoveTypePowerBoostAbAttr } from "./ab-attrs/move-type-power-boost-ab-attr";
 import { MovePowerBoostAbAttr } from "./ab-attrs/move-power-boost-ab-attr";
 import { DamageBoostAbAttr } from "./ab-attrs/damage-boost-ab-attr";
@@ -519,10 +519,10 @@ export function initAbilities() {
       )
       .ignorable(),
     new Ability(Abilities.LIQUID_OOZE, 3).attr(ReverseDrainAbAttr),
-    new Ability(Abilities.OVERGROW, 3).attr(LowHpMoveTypePowerBoostAbAttr, Type.GRASS),
-    new Ability(Abilities.BLAZE, 3).attr(LowHpMoveTypePowerBoostAbAttr, Type.FIRE),
-    new Ability(Abilities.TORRENT, 3).attr(LowHpMoveTypePowerBoostAbAttr, Type.WATER),
-    new Ability(Abilities.SWARM, 3).attr(LowHpMoveTypePowerBoostAbAttr, Type.BUG),
+    new Ability(Abilities.OVERGROW, 3).attr(LowHpMoveTypeAttackMultiplierAbAttr, Type.GRASS),
+    new Ability(Abilities.BLAZE, 3).attr(LowHpMoveTypeAttackMultiplierAbAttr, Type.FIRE),
+    new Ability(Abilities.TORRENT, 3).attr(LowHpMoveTypeAttackMultiplierAbAttr, Type.WATER),
+    new Ability(Abilities.SWARM, 3).attr(LowHpMoveTypeAttackMultiplierAbAttr, Type.BUG),
     new Ability(Abilities.ROCK_HEAD, 3).attr(BlockRecoilDamageAttr),
     new Ability(Abilities.DROUGHT, 3)
       .attr(PostSummonWeatherChangeAbAttr, WeatherType.SUNNY)
