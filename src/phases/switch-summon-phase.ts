@@ -1,7 +1,6 @@
 import { PreSwitchOutAbAttr } from "#app/data/ab-attrs/pre-switch-out-ab-attr";
 import { applyPreSwitchOutAbAttrs } from "#app/data/ability";
 import { SubstituteTag } from "#app/data/battler-tags";
-import { ForceSwitchOutAttr } from "#app/data/move-attrs/force-switch-out-attr";
 import { getPokeballTintColor } from "#app/data/pokeball";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";
 import { TrainerSlot } from "#app/data/trainer-config";
@@ -194,10 +193,8 @@ export class SwitchSummonPhase extends SummonPhase {
       globalScene.arena.triggerWeatherBasedFormChanges();
       return;
     }
-    // Compensate for turn spent summoning
-    // Or compensate for force switch move/ability if switched out pokemon is not fainted
-    // TODO: This should check whether the force switch ability actually activated or something,
-    // currently this improperly triggers if a pokemon with a force switch ability is summoned normally
+
+    // Compensate for mid-turn summoning so that Fake Out/etc work properly
     if (this.switchType !== SwitchType.INITIAL_SWITCH) {
       pokemon.battleSummonData.turnCount--;
       pokemon.battleSummonData.waveTurnCount--;

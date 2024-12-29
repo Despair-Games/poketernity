@@ -1,6 +1,7 @@
 import { BattlerIndex } from "#app/battle";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
+import type { nil } from "#app/utils";
 import { FieldPhase } from "./abstract-field-phase";
 
 export abstract class PokemonPhase extends FieldPhase {
@@ -27,10 +28,14 @@ export abstract class PokemonPhase extends FieldPhase {
   }
 
   public getPokemon(): Pokemon {
+    let pokemon: Pokemon | nil;
     if (this.battlerIndex > BattlerIndex.ENEMY_2) {
-      return globalScene.getPokemonById(this.battlerIndex)!; //TODO: is this bang correct?
+      pokemon = globalScene.getPokemonById(this.battlerIndex);
+    } else {
+      pokemon = globalScene.getFieldPokemonByBattlerIndex(this.battlerIndex);
     }
-    return globalScene.getFieldPokemonByBattlerIndex(this.battlerIndex)!; //TODO: is this bang correct?
+    // TODO: Remove this bang
+    return pokemon!;
   }
 
   public getParty(): Pokemon[] {

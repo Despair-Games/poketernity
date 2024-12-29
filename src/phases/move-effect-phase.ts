@@ -541,8 +541,7 @@ export class MoveEffectPhase extends PokemonPhase {
     if (this.move.getMove().moveTarget === MoveTarget.DRAGON_DARTS) {
       const ogTarget = globalScene.getFieldPokemonByBattlerIndex(this.targets[0]);
       if (
-        ogTarget
-        && ogTarget.isFainted()
+        ogTarget?.isFainted()
         && ogTarget.getAlly()?.isActive(true)
         && ogTarget.getAlly().id !== this.getUserPokemon()?.id
       ) {

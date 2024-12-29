@@ -19,20 +19,24 @@ export class SelectTargetPhase extends PokemonPhase {
     const { turnCommands } = currentBattle;
 
     const turnCommand = turnCommands[this.fieldIndex];
-    const move = turnCommand?.move?.move;
+    const move = turnCommand?.move?.move ?? Moves.NONE;
 
     ui.setMode(Mode.TARGET_SELECT, this.fieldIndex, move, (targets: BattlerIndex[]) => {
       ui.setMode(Mode.MESSAGE);
 
-      const user = globalScene.getFieldPokemonByBattlerIndex(this.fieldIndex)!;
-      const firstTarget = globalScene.getFieldPokemonByBattlerIndex(targets[0])!;
-      const moveObject = allMoves[move ?? Moves.NONE];
+      const user = globalScene.getFieldPokemonByBattlerIndex(this.fieldIndex);
+      const firstTarget = globalScene.getFieldPokemonByBattlerIndex(targets[0]);
+      const moveObject = allMoves[move];
 
-      if (moveObject && user.isMoveTargetRestricted(moveObject.id, user, firstTarget)) {
-        const errorMessage = user
-          .getRestrictingTag(move ?? Moves.NONE, user, firstTarget)
-          ?.selectionDeniedText(user, moveObject.id);
-        globalScene.queueMessage(i18next.t(errorMessage ?? "", { moveName: moveObject.name }), 0, true);
+      // TODO: Resolve bang
+      if (user?.isMoveTargetRestricted(moveObject.id, user, firstTarget!)) {
+        const errorMessage = user.getRestrictingTag(move, user, firstTarget)?.selectionDeniedText(user, moveObject.id);
+
+        globalScene.queueMessage(
+          errorMessage ?? i18next.t("battle:moveCannotBeSelected", { moveName: allMoves[move].name }),
+          0,
+          true,
+        );
         targets = [];
       }
 

@@ -144,6 +144,7 @@ export class TurnStartPhase extends FieldPhase {
     let orderIndex = 0;
 
     for (const o of moveOrder) {
+      // TODO: Resolve bang
       const pokemon = globalScene.getFieldPokemonByBattlerIndex(o)!;
       const turnCommand = globalScene.currentBattle.turnCommands[o];
 
