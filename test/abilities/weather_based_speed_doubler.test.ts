@@ -77,4 +77,18 @@ describe("Abilities - Chlorophyll/Swift Swim/Sand Rush/Slush Rush", () => {
 
     expect(pokemon.getEffectiveStat(Stat.SPD)).toBe(pokemon.stats[Stat.SPD]);
   });
+
+  it.each([
+    { abilityName: "Swift Swim", ability: Abilities.SWIFT_SWIM, weather: WeatherType.RAIN },
+    { abilityName: "Chlorophyll", ability: Abilities.CHLOROPHYLL, weather: WeatherType.SUNNY },
+    { abilityName: "Sand Rush", ability: Abilities.SAND_RUSH, weather: WeatherType.SANDSTORM },
+    { abilityName: "Slush Rush", ability: Abilities.SLUSH_RUSH, weather: WeatherType.SNOW },
+  ])("$abilityName should not activate if the current weather is being suppressed", async ({ ability, weather }) => {
+    game.override.ability(ability).weather(weather).enemyAbility(Abilities.CLOUD_NINE);
+    await game.classicMode.startBattle([Species.FEEBAS]);
+
+    const pokemon = game.scene.getPlayerPokemon()!;
+
+    expect(pokemon.getEffectiveStat(Stat.SPD)).toBe(pokemon.stats[Stat.SPD]);
+  });
 });
