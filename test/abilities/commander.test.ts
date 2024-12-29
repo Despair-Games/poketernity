@@ -217,7 +217,7 @@ describe("Abilities - Commander", () => {
     expect(enemy.isFullHp()).toBeTruthy();
   });
 
-  it("should increase the chance of double battles", async () => {
+  it("should have the custom effect of increasing chances of double battles", async () => {
     game.override.startingWave(2);
     vi.spyOn(game.scene, "getDoubleBattleChance");
     await game.classicMode.startBattle([Species.TATSUGIRI, Species.DONDOZO]);
