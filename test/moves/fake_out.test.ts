@@ -26,7 +26,7 @@ describe("Moves - Fake Out", () => {
     game.override
       .battleType("single")
       .enemySpecies(Species.CORVIKNIGHT)
-      .moveset([Moves.FAKE_OUT, Moves.SPLASH, Moves.MEMENTO])
+      .moveset([Moves.FAKE_OUT, Moves.SPLASH])
       .enemyMoveset(Moves.SPLASH)
       .enemyLevel(10)
       .startingLevel(10) // prevent LevelUpPhase from happening
