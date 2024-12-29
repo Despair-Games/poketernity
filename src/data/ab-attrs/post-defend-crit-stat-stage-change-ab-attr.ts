@@ -7,6 +7,11 @@ import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import type { BattleStat } from "#enums/stat";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 
+/**
+ * Attribute that prompts a stat stage change after the ability holder received a critical hit
+ * Abilities using this attribute are:
+ * - Anger Point
+ */
 export class PostDefendCritStatStageChangeAbAttr extends PostDefendAbAttr {
   private readonly stat: BattleStat;
   private readonly stages: number;
