@@ -67,6 +67,8 @@ export class TurnInitPhase extends FieldPhase {
         }
 
         pokemon.resetTurnData();
+        pokemon.battleSummonData.turnCount++;
+        pokemon.battleSummonData.waveTurnCount++;
 
         globalScene.pushPhase(pokemon.isPlayer() ? new CommandPhase(fieldIndex) : new EnemyCommandPhase(fieldIndex));
       }

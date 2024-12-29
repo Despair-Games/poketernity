@@ -26,7 +26,7 @@ describe("Moves - Fake Out", () => {
     game.override
       .battleType("single")
       .enemySpecies(Species.CORVIKNIGHT)
-      .moveset([Moves.FAKE_OUT, Moves.SPLASH])
+      .moveset([Moves.FAKE_OUT, Moves.SPLASH, Moves.MEMENTO])
       .enemyMoveset(Moves.SPLASH)
       .enemyLevel(10)
       .startingLevel(10) // prevent LevelUpPhase from happening
@@ -104,6 +104,7 @@ describe("Moves - Fake Out", () => {
     { moveId: Moves.U_TURN, moveName: "U-turn" },
     { moveId: Moves.BATON_PASS, moveName: "Baton Pass" },
     { moveId: Moves.SHED_TAIL, moveName: "Shed Tail" },
+    { moveId: Moves.MEMENTO, moveName: "a teammate fainting" },
   ])("can be used after the user is sent out via $moveName", async ({ moveId }) => {
     game.override.moveset([Moves.FAKE_OUT, moveId]);
 
