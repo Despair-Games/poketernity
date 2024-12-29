@@ -3,6 +3,9 @@ import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { BattlerTagType } from "#enums/battler-tag-type";
+import { MoveResult } from "#app/field/pokemon";
+import { Abilities } from "#enums/abilities";
 
 describe("Moves - Fake Out", () => {
   let phaserGame: Phaser.Game;
@@ -96,4 +99,57 @@ describe("Moves - Fake Out", () => {
 
     expect(enemy2.hp).toBeLessThan(enemy2.getMaxHp());
   }, 20000);
+
+  it.each([
+    { moveId: Moves.U_TURN, moveName: "U-turn" },
+    { moveId: Moves.BATON_PASS, moveName: "Baton Pass" },
+    { moveId: Moves.SHED_TAIL, moveName: "Shed Tail" },
+  ])("can be used after the user is sent out via $moveName", async ({ moveId }) => {
+    game.override.moveset([Moves.FAKE_OUT, moveId]);
+
+    await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
+
+    game.move.select(moveId);
+    game.doSelectPartyPokemon(1);
+
+    await game.toNextTurn();
+
+    const player = game.scene.getPlayerPokemon()!;
+    const enemy = game.scene.getEnemyPokemon()!;
+
+    expect(player.species.speciesId).toBe(Species.MAGIKARP);
+    const enemyStartingHp = enemy.hp;
+
+    game.move.select(Moves.FAKE_OUT);
+
+    await game.phaseInterceptor.to("MoveEndPhase");
+    expect(enemy.hp).toBeLessThan(enemyStartingHp);
+    expect(enemy.getTag(BattlerTagType.FLINCHED)).toBeDefined();
+    expect(player.turnData.acted).toBeTruthy();
+    expect(player.getLastXMoves()[0]?.result).toBe(MoveResult.SUCCESS);
+  });
+
+  it("can be used after the user is sent out via Wimp Out", async () => {
+    game.override.ability(Abilities.WIMP_OUT).enemyLevel(100).enemyMoveset(Moves.FALSE_SWIPE);
+
+    await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
+
+    game.move.select(Moves.SPLASH);
+    game.doSelectPartyPokemon(1);
+
+    await game.toNextTurn();
+
+    const player = game.scene.getPlayerPokemon()!;
+    const enemy = game.scene.getEnemyPokemon()!;
+
+    expect(player.species.speciesId).toBe(Species.MAGIKARP);
+
+    game.move.select(Moves.FAKE_OUT);
+
+    await game.phaseInterceptor.to("MoveEndPhase");
+    expect(enemy.isFullHp()).toBeFalsy();
+    expect(enemy.getTag(BattlerTagType.FLINCHED)).toBeDefined();
+    expect(player.turnData.acted).toBeTruthy();
+    expect(player.getLastXMoves()[0]?.result).toBe(MoveResult.SUCCESS);
+  });
 });
