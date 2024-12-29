@@ -513,7 +513,9 @@ export class TrainerConfig {
     return this;
   }
 
-  // TODO: move this into dialogue.ts
+  /**
+   * TODO: Move this into dialogue.ts's initTrainerTypeDialogue function
+   */
   /**
    * Sets the encounter and victory messages for double trainers.
    * @param nameDouble - The name of the pair (e.g. "red_blue_double").
