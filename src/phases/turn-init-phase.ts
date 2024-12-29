@@ -58,10 +58,6 @@ export class TurnInitPhase extends FieldPhase {
 
     globalScene.getField().forEach((pokemon) => {
       const fieldIndex = pokemon.getFieldIndex();
-      // `BattleScene.getField()` can contain `null` values, which is dumb
-      if (!pokemon) {
-        return;
-      }
 
       if (pokemon.isActive()) {
         if (pokemon.isPlayer()) {
