@@ -1296,7 +1296,7 @@ export function initMoves() {
     new SelfStatusMove(Moves.IRON_DEFENSE, Type.STEEL, -1, 15, -1, 0, 3).attr(StatStageChangeAttr, [Stat.DEF], 2, true),
     new StatusMove(Moves.BLOCK, Type.NORMAL, -1, 5, -1, 0, 3)
       .condition(failIfGhostTypeCondition)
-      .attr(AddBattlerTagAttr, BattlerTagType.TRAPPED, false, { failOnOverlap: true, turnCountMin: 1 })
+      .attr(AddBattlerTagAttr, BattlerTagType.TRAPPED, false, { failOnOverlap: true })
       .ignoresProtect(),
     new StatusMove(Moves.HOWL, Type.NORMAL, -1, 40, -1, 0, 3)
       .attr(StatStageChangeAttr, [Stat.ATK], 1)
