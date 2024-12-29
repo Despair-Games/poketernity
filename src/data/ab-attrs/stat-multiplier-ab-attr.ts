@@ -8,7 +8,7 @@ import { AbAttr } from "./ab-attr";
 /**
  * Ability attribute that multiplies a Pokemon's stat by a factor
  * Abilities with this attribute:
- ```
+ ```text
 +-----------------------+-------+--------+----------------------------------+
 |        Ability        | Stat  | Factor |              Notes               |
 +-----------------------+-------+--------+----------------------------------+
@@ -41,7 +41,7 @@ import { AbAttr } from "./ab-attr";
 ```
  */
 export class StatMultiplierAbAttr extends AbAttr {
-  private readonly stat: BattleStat;
+  public stat: BattleStat;
   private readonly multiplier: number;
   private readonly condition?: PokemonAttackCondition;
 
