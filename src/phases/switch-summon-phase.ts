@@ -1,6 +1,5 @@
 import { PreSwitchOutAbAttr } from "#app/data/ab-attrs/pre-switch-out-ab-attr";
-import { applyPreSwitchOutAbAttrs, PostDamageForceSwitchAbAttr } from "#app/data/ability";
-import { allMoves } from "#app/data/all-moves";
+import { applyPreSwitchOutAbAttrs } from "#app/data/ability";
 import { SubstituteTag } from "#app/data/battler-tags";
 import { ForceSwitchOutAttr } from "#app/data/move-attrs/force-switch-out-attr";
 import { getPokeballTintColor } from "#app/data/pokeball";
@@ -10,7 +9,6 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { SwitchEffectTransferModifier } from "#app/modifier/modifier";
-import { Command } from "#app/ui/command-ui-handler";
 import { SwitchType } from "#enums/switch-type";
 import i18next from "i18next";
 import { PostSummonPhase } from "./post-summon-phase";
@@ -196,24 +194,15 @@ export class SwitchSummonPhase extends SummonPhase {
       globalScene.arena.triggerWeatherBasedFormChanges();
       return;
     }
-
-    const moveId = globalScene.currentBattle.lastMove;
-    const lastUsedMove = moveId ? allMoves[moveId] : undefined;
-
-    const currentCommand = globalScene.currentBattle.turnCommands[this.fieldIndex]?.command;
-
     // Compensate for turn spent summoning
     // Or compensate for force switch move/ability if switched out pokemon is not fainted
     // TODO: This should check whether the force switch ability actually activated or something,
     // currently this improperly triggers if a pokemon with a force switch ability is summoned normally
-    if (
-      currentCommand === Command.POKEMON
-      || (!this.lastPokemon.isFainted()
-        && (lastUsedMove?.hasAttr(ForceSwitchOutAttr)
-          || this.lastPokemon.hasAbilityWithAttr(PostDamageForceSwitchAbAttr)))
-    ) {
+    if (this.switchType !== SwitchType.INITIAL_SWITCH) {
       pokemon.battleSummonData.turnCount--;
       pokemon.battleSummonData.waveTurnCount--;
+      pokemon.resetTurnData();
+      pokemon.turnData.switchedInThisTurn = true;
     }
 
     if (this.switchType === SwitchType.BATON_PASS) {
@@ -223,11 +212,6 @@ export class SwitchSummonPhase extends SummonPhase {
       if (subTag) {
         pokemon.summonData.tags.push(subTag);
       }
-    }
-
-    if (this.switchType !== SwitchType.INITIAL_SWITCH) {
-      pokemon.resetTurnData();
-      pokemon.turnData.switchedInThisTurn = true;
     }
 
     this.lastPokemon?.resetSummonData();

@@ -1,4 +1,3 @@
-import { BattlerIndex } from "#app/battle";
 import {
   handleMysteryEncounterBattleStartEffects,
   handleMysteryEncounterTurnStartEffects,
@@ -57,7 +56,8 @@ export class TurnInitPhase extends FieldPhase {
       return this.end();
     }
 
-    globalScene.getField().forEach((pokemon, i) => {
+    globalScene.getField().forEach((pokemon) => {
+      const fieldIndex = pokemon.getFieldIndex();
       // `BattleScene.getField()` can contain `null` values, which is dumb
       if (!pokemon) {
         return;
@@ -70,7 +70,7 @@ export class TurnInitPhase extends FieldPhase {
 
         pokemon.resetTurnData();
 
-        globalScene.pushPhase(pokemon.isPlayer() ? new CommandPhase(i) : new EnemyCommandPhase(i - BattlerIndex.ENEMY));
+        globalScene.pushPhase(pokemon.isPlayer() ? new CommandPhase(fieldIndex) : new EnemyCommandPhase(fieldIndex));
       }
     });
 

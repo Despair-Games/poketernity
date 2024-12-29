@@ -26,7 +26,7 @@ import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import type { StatStageChangeCallback } from "#app/phases/stat-stage-change-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import i18next from "#app/plugins/i18n";
-import { BooleanHolder, getFrameMs, NumberHolder, toDmgValue } from "#app/utils";
+import { BooleanHolder, getFrameMs, isNullOrUndefined, NumberHolder, toDmgValue } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { Moves } from "#enums/moves";
@@ -37,6 +37,7 @@ import { StatusEffect } from "#enums/status-effect";
 import { WeatherType } from "#enums/weather-type";
 import { ReverseDrainAbAttr } from "./ab-attrs/reverse-drain-ab-attr";
 import { ProtectStatAbAttr } from "./ab-attrs/protect-stat-ab-attr";
+import Overrides from "#app/overrides";
 
 export enum BattlerTagLapseType {
   FAINT,
@@ -677,6 +678,7 @@ export class InterruptedTag extends BattlerTag {
  * BattlerTag that represents the {@link https://bulbapedia.bulbagarden.net/wiki/Confusion_(status_condition) Confusion} status condition
  */
 export class ConfusedTag extends BattlerTag {
+  public readonly ACTIVATION_CHANCE: number = 33;
   constructor(turnCount: number, sourceMove: Moves) {
     super(BattlerTagType.CONFUSED, BattlerTagLapseType.MOVE, turnCount, sourceMove, undefined, true);
   }
@@ -711,7 +713,9 @@ export class ConfusedTag extends BattlerTag {
   }
 
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
-    const ret = lapseType !== BattlerTagLapseType.CUSTOM && super.lapse(pokemon, lapseType);
+    const ret =
+      (lapseType !== BattlerTagLapseType.CUSTOM && super.lapse(pokemon, lapseType))
+      || !isNullOrUndefined(Overrides.STATUS_ACTIVATION_OVERRIDE);
 
     if (ret) {
       globalScene.queueMessage(
@@ -719,21 +723,35 @@ export class ConfusedTag extends BattlerTag {
       );
       globalScene.unshiftPhase(new CommonAnimPhase(pokemon.getBattlerIndex(), undefined, CommonAnim.CONFUSION));
 
-      // 1/3 chance of hitting self with a 40 base power move
-      if (pokemon.randSeedInt(3) === 0) {
-        const atk = pokemon.getEffectiveStat(Stat.ATK);
-        const def = pokemon.getEffectiveStat(Stat.DEF);
-        const damage = toDmgValue(
-          ((((2 * pokemon.level) / 5 + 2) * 40 * atk) / def / 50 + 2) * (pokemon.randSeedIntRange(85, 100) / 100),
-        );
+      const damage = this.getDamage(pokemon);
+      if (damage > 0) {
         globalScene.queueMessage(i18next.t("battlerTags:confusedLapseHurtItself"));
         pokemon.damageAndUpdate(damage);
         pokemon.battleData.hitCount++;
         (globalScene.getCurrentPhase() as MovePhase).cancel();
       }
     }
-
     return ret;
+  }
+
+  /**
+   * Helper function for checking if Confusion activates and retrieving self-inflicted damage from confusion
+   * @param pokemon the confused Pokemon
+   * @returns the amount of damage inflicted
+   */
+  public getDamage(pokemon: Pokemon): number {
+    // 1/3 chance of hitting self with a 40 base power move
+    if (
+      (pokemon.randSeedInt(100) < this.ACTIVATION_CHANCE && Overrides.STATUS_ACTIVATION_OVERRIDE !== false)
+      || Overrides.STATUS_ACTIVATION_OVERRIDE === true
+    ) {
+      const atk = pokemon.getEffectiveStat(Stat.ATK);
+      const def = pokemon.getEffectiveStat(Stat.DEF);
+      return toDmgValue(
+        ((((2 * pokemon.level) / 5 + 2) * 40 * atk) / def / 50 + 2) * (pokemon.randSeedIntRange(85, 100) / 100),
+      );
+    }
+    return 0;
   }
 
   override getDescriptor(): string {
@@ -792,6 +810,8 @@ export class DestinyBondTag extends BattlerTag {
 }
 
 export class InfatuatedTag extends BattlerTag {
+  public readonly ACTIVATION_CHANCE: number = 100 * (1 / 2);
+
   constructor(sourceMove: number, sourceId: number) {
     super(BattlerTagType.INFATUATED, BattlerTagLapseType.MOVE, 1, sourceMove, sourceId);
   }
@@ -843,7 +863,10 @@ export class InfatuatedTag extends BattlerTag {
       );
       globalScene.unshiftPhase(new CommonAnimPhase(pokemon.getBattlerIndex(), undefined, CommonAnim.ATTRACT));
 
-      if (pokemon.randSeedInt(2)) {
+      if (
+        (pokemon.randSeedInt(100) < this.ACTIVATION_CHANCE && Overrides.STATUS_ACTIVATION_OVERRIDE !== false)
+        || Overrides.STATUS_ACTIVATION_OVERRIDE === true
+      ) {
         globalScene.queueMessage(
           i18next.t("battlerTags:infatuatedLapseImmobilize", {
             pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
@@ -2203,6 +2226,25 @@ export class RemovedTypeTag extends BattlerTag {
 export class GroundedTag extends BattlerTag {
   constructor(tagType: BattlerTagType, lapseType: BattlerTagLapseType, sourceMove: Moves) {
     super(tagType, lapseType, 1, sourceMove);
+  }
+
+  /**
+   * Smack Down and Thousand Arrows have special messages when knocking an ungrounded Pokemon down
+   * @param pokemon the Pokemon being grounded
+   */
+  override onAdd(pokemon: Pokemon) {
+    const isSmackDownOrThousandArrows = [Moves.SMACK_DOWN, Moves.THOUSAND_ARROWS].includes(this.sourceMove);
+    const wasNotGrounded =
+      pokemon.isOfType(Type.FLYING, true, true)
+      || pokemon.hasAbility(Abilities.LEVITATE)
+      || pokemon.getTag(BattlerTagType.FLOATING)
+      || pokemon.getTag(SemiInvulnerableTag);
+
+    if (isSmackDownOrThousandArrows && wasNotGrounded) {
+      globalScene.queueMessage(
+        i18next.t("battlerTags:groundedSmackDown", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+      );
+    }
   }
 }
 
