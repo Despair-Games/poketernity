@@ -9,7 +9,7 @@ import type { Move } from "#app/data/move";
 import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
 
 export class NaturePowerAttr extends OverrideMoveEffectAttr {
-  override apply(user: Pokemon, target: Pokemon, _move: Move, _args: any[]): boolean {
+  override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
     let moveId;
     switch (globalScene.arena.getTerrainType()) {
       // this allows terrains to 'override' the biome move

@@ -26,7 +26,7 @@ export class FlameBurstAttr extends MoveEffectAttr {
    * @param _args - n/a
    * @returns A boolean indicating whether the effect was successfully applied.
    */
-  override apply(_user: Pokemon, target: Pokemon, _move: Move, _args: any[]): boolean {
+  override apply(_user: Pokemon, target: Pokemon, _move: Move): boolean {
     const targetAlly = target.getAlly();
     const cancelled = new BooleanHolder(false);
 

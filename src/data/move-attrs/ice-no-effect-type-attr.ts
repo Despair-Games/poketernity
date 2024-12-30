@@ -13,8 +13,7 @@ export class IceNoEffectTypeAttr extends VariableMoveTypeMultiplierAttr {
    * @param args `[0]` a {@linkcode NumberHolder | NumberHolder} containing a type effectiveness multiplier
    * @returns `true` if this Ice-type immunity applies; `false` otherwise
    */
-  override apply(_user: Pokemon, target: Pokemon, _move: Move, args: any[]): boolean {
-    const multiplier = args[0] as NumberHolder;
+  override apply(_user: Pokemon, target: Pokemon, _move: Move, multiplier: NumberHolder): boolean {
     if (target.isOfType(Type.ICE)) {
       multiplier.value = 0;
       return true;

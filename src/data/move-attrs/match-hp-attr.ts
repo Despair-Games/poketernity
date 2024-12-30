@@ -9,8 +9,8 @@ export class MatchHpAttr extends FixedDamageAttr {
     super(0);
   }
 
-  override apply(user: Pokemon, target: Pokemon, _move: Move, args: any[]): boolean {
-    (args[0] as NumberHolder).value = target.hp - user.hp;
+  override apply(user: Pokemon, target: Pokemon, _move: Move, damage: NumberHolder): boolean {
+    damage.value = target.hp - user.hp;
 
     return true;
   }

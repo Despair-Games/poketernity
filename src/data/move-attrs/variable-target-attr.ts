@@ -12,9 +12,8 @@ export class VariableTargetAttr extends MoveAttr {
     this.targetChangeFunc = targetChange;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    const targetVal = args[0] as NumberHolder;
-    targetVal.value = this.targetChangeFunc(user, target, move);
+  override apply(user: Pokemon, target: Pokemon, move: Move, newTarget: NumberHolder): boolean {
+    newTarget.value = this.targetChangeFunc(user, target, move);
     return true;
   }
 }

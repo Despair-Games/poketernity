@@ -9,7 +9,7 @@ export abstract class WeatherHealAttr extends HealAttr {
     super(0.5);
   }
 
-  override apply(user: Pokemon, _target: Pokemon, _move: Move, _args: any[]): boolean {
+  override apply(user: Pokemon, _target: Pokemon, _move: Move): boolean {
     let healRatio = 0.5;
     if (!globalScene.arena.weather?.isEffectSuppressed()) {
       const weatherType = globalScene.arena.weather?.weatherType || WeatherType.NONE;

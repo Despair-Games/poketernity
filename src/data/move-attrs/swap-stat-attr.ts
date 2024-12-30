@@ -31,8 +31,8 @@ export class SwapStatAttr extends MoveEffectAttr {
    * @param args N/A
    * @returns true if attribute application succeeds
    */
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    if (super.apply(user, target, move, args)) {
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+    if (super.apply(user, target, move)) {
       const temp = user.getStat(this.stat, false);
       user.setStat(this.stat, target.getStat(this.stat, false), false);
       target.setStat(this.stat, temp, false);

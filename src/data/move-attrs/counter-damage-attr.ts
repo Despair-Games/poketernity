@@ -18,11 +18,11 @@ export class CounterDamageAttr extends FixedDamageAttr {
     this.multiplier = multiplier;
   }
 
-  override apply(user: Pokemon, _target: Pokemon, _move: Move, args: any[]): boolean {
-    const damage = user.turnData.attacksReceived
+  override apply(user: Pokemon, _target: Pokemon, _move: Move, damage: NumberHolder): boolean {
+    const damageTaken = user.turnData.attacksReceived
       .filter((ar) => this.moveFilter(allMoves[ar.move]))
       .reduce((total: number, ar: AttackMoveResult) => total + ar.damage, 0);
-    (args[0] as NumberHolder).value = toDmgValue(damage * this.multiplier);
+    damage.value = toDmgValue(damageTaken * this.multiplier);
 
     return true;
   }

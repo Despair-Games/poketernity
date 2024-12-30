@@ -12,7 +12,7 @@ export class TargetHalfHpDamageAttr extends FixedDamageAttr {
     super(0);
   }
 
-  override apply(user: Pokemon, target: Pokemon, _move: Move, args: any[]): boolean {
+  override apply(user: Pokemon, target: Pokemon, _move: Move, damage: NumberHolder): boolean {
     // first, determine if the hit is coming from multi lens or not
     const lensCount =
       user
@@ -21,7 +21,7 @@ export class TargetHalfHpDamageAttr extends FixedDamageAttr {
         ?.getStackCount() ?? 0;
     if (lensCount <= 0) {
       // no multi lenses; we can just halve the target's hp and call it a day
-      (args[0] as NumberHolder).value = toDmgValue(target.hp / 2);
+      damage.value = toDmgValue(target.hp / 2);
       return true;
     }
 
@@ -32,12 +32,12 @@ export class TargetHalfHpDamageAttr extends FixedDamageAttr {
         this.initialHp = target.hp;
       default:
         // multi lens added hit; use initialHp tracker to ensure correct damage
-        (args[0] as NumberHolder).value = toDmgValue(this.initialHp / 2);
+        damage.value = toDmgValue(this.initialHp / 2);
         return true;
         break;
       case lensCount + 1:
         // parental bond added hit; calc damage as normal
-        (args[0] as NumberHolder).value = toDmgValue(target.hp / 2);
+        damage.value = toDmgValue(target.hp / 2);
         return true;
         break;
     }

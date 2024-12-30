@@ -25,11 +25,10 @@ export class HalfSacrificialAttr extends MoveEffectAttr {
    * @param user {@linkcode Pokemon} that used the move
    * @param target N/A
    * @param move {@linkcode Move} with this attribute
-   * @param args N/A
    * @returns true if the function succeeds
    */
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    if (!super.apply(user, target, move, args)) {
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+    if (!super.apply(user, target, move)) {
       return false;
     }
 

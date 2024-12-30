@@ -17,9 +17,8 @@ export class BypassBurnDamageReductionAttr extends MoveAttr {
    * @param args [0] {@linkcode BooleanHolder} for burnDamageReductionCancelled
    * @returns true if the function succeeds
    */
-  override apply(_user: Pokemon, _target: Pokemon, _move: Move, args: any[]): boolean {
-    (args[0] as BooleanHolder).value = true;
-
+  override apply(_user: Pokemon, _target: Pokemon, _move: Move, burnDamageReductionCancelled: BooleanHolder): boolean {
+    burnDamageReductionCancelled.value = true;
     return true;
   }
 }

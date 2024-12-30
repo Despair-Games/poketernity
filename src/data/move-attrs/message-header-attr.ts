@@ -16,7 +16,7 @@ export class MessageHeaderAttr extends MoveHeaderAttr {
     this.message = message;
   }
 
-  override apply(user: Pokemon, _target: Pokemon, move: Move, _args: any[]): boolean {
+  override apply(user: Pokemon, _target: Pokemon, move: Move): boolean {
     const message = typeof this.message === "string" ? this.message : this.message(user, move);
 
     if (message) {

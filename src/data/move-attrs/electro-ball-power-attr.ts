@@ -20,9 +20,7 @@ export class ElectroBallPowerAttr extends VariablePowerAttr {
    * @param args N/A
    * @returns true if the function succeeds
    */
-  override apply(user: Pokemon, target: Pokemon, _move: Move, args: any[]): boolean {
-    const power = args[0] as NumberHolder;
-
+  override apply(user: Pokemon, target: Pokemon, _move: Move, power: NumberHolder): boolean {
     const statRatio = target.getEffectiveStat(Stat.SPD) / user.getEffectiveStat(Stat.SPD);
     const statThresholds = [0.25, 1 / 3, 0.5, 1, -1];
     const statThresholdPowers = [150, 120, 80, 60, 40];

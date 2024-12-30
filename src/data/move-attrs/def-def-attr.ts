@@ -9,8 +9,8 @@ export class DefDefAttr extends VariableDefAttr {
     super();
   }
 
-  override apply(user: Pokemon, target: Pokemon, _move: Move, args: any[]): boolean {
-    (args[0] as NumberHolder).value = target.getEffectiveStat(Stat.DEF, user);
+  override apply(user: Pokemon, target: Pokemon, _move: Move, defendingStat: NumberHolder): boolean {
+    defendingStat.value = target.getEffectiveStat(Stat.DEF, user);
     return true;
   }
 }

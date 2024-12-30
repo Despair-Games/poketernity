@@ -17,9 +17,7 @@ export class ShellSideArmCategoryAttr extends VariableMoveCategoryAttr {
    * @param args - args[0] a {@linkcode NumberHolder} thhat represents {@linkcode MoveCategory}
    * @returns true if the move should be physical
    */
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    const category = args[0] as NumberHolder;
-
+  override apply(user: Pokemon, target: Pokemon, move: Move, category: NumberHolder): boolean {
     const predictedPhysDmg = target.getBaseDamage(user, move, MoveCategory.PHYSICAL, true, true);
     const predictedSpecDmg = target.getBaseDamage(user, move, MoveCategory.SPECIAL, true, true);
 

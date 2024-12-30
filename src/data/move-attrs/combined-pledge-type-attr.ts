@@ -1,7 +1,7 @@
 import { Moves } from "#enums/moves";
 import { Type } from "#enums/type";
 import type { Pokemon } from "#app/field/pokemon";
-import { NumberHolder } from "#app/utils";
+import type { NumberHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
 import { VariableMoveTypeAttr } from "#app/data/move-attrs/variable-move-type-attr";
 
@@ -10,12 +10,7 @@ import { VariableMoveTypeAttr } from "#app/data/move-attrs/variable-move-type-at
  * @extends VariableMoveTypeAttr
  */
 export class CombinedPledgeTypeAttr extends VariableMoveTypeAttr {
-  override apply(user: Pokemon, _target: Pokemon, move: Move, args: any[]): boolean {
-    const moveType = args[0];
-    if (!(moveType instanceof NumberHolder)) {
-      return false;
-    }
-
+  override apply(user: Pokemon, _target: Pokemon, move: Move, moveType: NumberHolder): boolean {
     const combinedPledgeMove = user.turnData.combiningPledge;
     if (!combinedPledgeMove) {
       return false;

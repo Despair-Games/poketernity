@@ -8,8 +8,8 @@ export class UserHpDamageAttr extends FixedDamageAttr {
     super(0);
   }
 
-  override apply(user: Pokemon, _target: Pokemon, _move: Move, args: any[]): boolean {
-    (args[0] as NumberHolder).value = user.hp;
+  override apply(user: Pokemon, _target: Pokemon, _move: Move, damage: NumberHolder): boolean {
+    damage.value = user.hp;
 
     return true;
   }

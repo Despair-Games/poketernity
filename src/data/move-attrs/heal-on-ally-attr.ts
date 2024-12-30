@@ -16,9 +16,9 @@ export class HealOnAllyAttr extends HealAttr {
    * @param args N/A
    * @returns true if the function succeeds
    */
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (user.getAlly() === target) {
-      super.apply(user, target, move, args);
+      super.apply(user, target, move);
       return true;
     }
 

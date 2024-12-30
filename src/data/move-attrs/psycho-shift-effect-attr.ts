@@ -15,7 +15,7 @@ export class PsychoShiftEffectAttr extends MoveEffectAttr {
    * Psycho Shift takes the user's status effect and passes it onto the target. The user is then healed after the move has been successfully executed.
    * @returns `true` if Psycho Shift's effect is able to be applied to the target
    */
-  override apply(user: Pokemon, target: Pokemon, _move: Move, _args: any[]): boolean {
+  override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
     const statusToApply: StatusEffect | undefined =
       user.status?.effect ?? (user.hasAbility(Abilities.COMATOSE) ? StatusEffect.SLEEP : undefined);
 

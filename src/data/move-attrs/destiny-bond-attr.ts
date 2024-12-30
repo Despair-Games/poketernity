@@ -25,7 +25,7 @@ export class DestinyBondAttr extends MoveEffectAttr {
    * @param _args N/A
    * @returns true
    */
-  override apply(user: Pokemon, _target: Pokemon, move: Move, _args: any[]): boolean {
+  override apply(user: Pokemon, _target: Pokemon, move: Move): boolean {
     globalScene.queueMessage(
       `${i18next.t("moveTriggers:tryingToTakeFoeDown", { pokemonName: getPokemonNameWithAffix(user) })}`,
     );

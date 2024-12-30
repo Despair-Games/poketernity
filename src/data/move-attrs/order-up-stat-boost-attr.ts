@@ -18,7 +18,7 @@ export class OrderUpStatBoostAttr extends MoveEffectAttr {
     super(true);
   }
 
-  override apply(user: Pokemon, _target: Pokemon, _move: Move, _args?: any[]): boolean {
+  override apply(user: Pokemon, _target: Pokemon, _move: Move): boolean {
     const commandedTag = user.getTag(CommandedTag);
     if (!commandedTag) {
       return false;

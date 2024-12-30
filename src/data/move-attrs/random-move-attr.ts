@@ -17,7 +17,7 @@ export class RandomMoveAttr extends OverrideMoveEffectAttr {
     return null;
   }
 
-  override apply(user: Pokemon, target: Pokemon, _move: Move, _args: any[]): boolean {
+  override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
     const moveIds = getEnumValues(Moves).filter(
       (m) => !allMoves[m].hasFlag(MoveFlags.IGNORE_VIRTUAL) && !allMoves[m].name.endsWith(" (N)"),
     );

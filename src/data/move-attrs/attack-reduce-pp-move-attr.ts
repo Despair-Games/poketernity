@@ -21,12 +21,12 @@ export class AttackReducePpMoveAttr extends ReducePpMoveAttr {
    * @param args N/A
    * @returns `true`
    */
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     const lastMove = target.getLastXMoves().find(() => true);
     if (lastMove) {
       const movesetMove = target.getMoveset().find((m) => m.moveId === lastMove.move);
       if (Boolean(movesetMove?.getPpRatio())) {
-        super.apply(user, target, move, args);
+        super.apply(user, target, move);
       }
     }
 

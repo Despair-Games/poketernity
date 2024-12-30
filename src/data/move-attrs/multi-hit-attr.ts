@@ -42,15 +42,15 @@ export class MultiHitAttr extends MoveAttr {
    * @param user {@linkcode Pokemon} that used the attack
    * @param target {@linkcode Pokemon} targeted by the attack
    * @param move {@linkcode Move} being used
-   * @param args [0] {@linkcode NumberHolder} storing the hit count of the attack
+   * @param hitCount {@linkcode NumberHolder} storing the hit count of the attack
    * @returns True
    */
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
+  override apply(user: Pokemon, target: Pokemon, move: Move, hitCount: NumberHolder): boolean {
     const hitType = new NumberHolder(this.intrinsicMultiHitType);
     applyMoveAttrs(ChangeMultiHitTypeAttr, user, target, move, hitType);
     this.multiHitType = hitType.value;
 
-    (args[0] as NumberHolder).value = this.getHitCount(user, target);
+    hitCount.value = this.getHitCount(user, target);
     return true;
   }
 

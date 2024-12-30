@@ -19,14 +19,11 @@ export class AlwaysHitMinimizeAttr extends VariableAccuracyAttr {
    * @param args [0] Accuracy of the move to be modified
    * @returns true if the function succeeds
    */
-  override apply(_user: Pokemon, target: Pokemon, _move: Move, args: any[]): boolean {
+  override apply(_user: Pokemon, target: Pokemon, _move: Move, accuracy: NumberHolder): boolean {
     if (target.getTag(BattlerTagType.MINIMIZED)) {
-      const accuracy = args[0] as NumberHolder;
       accuracy.value = -1;
-
       return true;
     }
-
     return false;
   }
 }

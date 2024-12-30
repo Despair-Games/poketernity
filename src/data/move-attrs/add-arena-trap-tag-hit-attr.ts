@@ -16,7 +16,7 @@ export class AddArenaTrapTagHitAttr extends AddArenaTagAttr {
    * @param target {@linkcode Pokemon} target of this move
    * @param move {@linkcode Move} being used
    */
-  override apply(user: Pokemon, target: Pokemon, move: Move, _args: any[]): boolean {
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     const moveChance = this.getMoveChance(user, target, move, this.selfTarget, true);
     const side = (this.selfSideTarget ? user : target).getArenaTagSide();
     const tag = globalScene.arena.getTagOnSide(this.tagType, side) as ArenaTrapTag;

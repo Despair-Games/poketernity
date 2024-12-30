@@ -29,15 +29,15 @@ export class IncrementMovePriorityAttr extends MoveAttr {
    * @param user {@linkcode Pokemon} using this move
    * @param target {@linkcode Pokemon} target of this move
    * @param move {@linkcode Move} being used
-   * @param args [0] {@linkcode NumberHolder} for move priority.
+   * @param priority {@linkcode NumberHolder} containing the move's priority for this turn.
    * @returns true if function succeeds
    */
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
+  override apply(user: Pokemon, target: Pokemon, move: Move, priority: NumberHolder): boolean {
     if (!this.moveIncrementFunc(user, target, move)) {
       return false;
     }
 
-    (args[0] as NumberHolder).value += this.increaseAmount;
+    priority.value += this.increaseAmount;
     return true;
   }
 }

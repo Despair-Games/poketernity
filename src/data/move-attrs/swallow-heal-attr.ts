@@ -9,7 +9,7 @@ import { HealAttr } from "#app/data/move-attrs/heal-attr";
  * @extends HealAttr
  */
 export class SwallowHealAttr extends HealAttr {
-  override apply(user: Pokemon, _target: Pokemon, _move: Move, _args: any[]): boolean {
+  override apply(user: Pokemon, _target: Pokemon, _move: Move): boolean {
     const stockpilingTag = user.getTag(StockpilingTag);
 
     if (stockpilingTag && stockpilingTag.stockpiledCount > 0) {

@@ -12,7 +12,7 @@ export class NoEffectAttr extends MoveAttr {
     this.noEffectFunc = noEffectFunc;
   }
 
-  override apply(user: Pokemon, _target: Pokemon, move: Move, _args: any[]): boolean {
+  override apply(user: Pokemon, _target: Pokemon, move: Move): boolean {
     this.noEffectFunc(user, move);
     return true;
   }

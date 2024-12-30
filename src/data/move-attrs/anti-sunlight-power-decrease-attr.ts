@@ -6,9 +6,8 @@ import type { Move } from "#app/data/move";
 import { VariablePowerAttr } from "#app/data/move-attrs/variable-power-attr";
 
 export class AntiSunlightPowerDecreaseAttr extends VariablePowerAttr {
-  override apply(_user: Pokemon, _target: Pokemon, _move: Move, args: any[]): boolean {
+  override apply(_user: Pokemon, _target: Pokemon, _move: Move, power: NumberHolder): boolean {
     if (!globalScene.arena.weather?.isEffectSuppressed()) {
-      const power = args[0] as NumberHolder;
       const weatherType = globalScene.arena.weather?.weatherType || WeatherType.NONE;
       switch (weatherType) {
         case WeatherType.RAIN:

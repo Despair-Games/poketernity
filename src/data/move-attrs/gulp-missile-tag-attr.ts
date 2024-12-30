@@ -20,11 +20,10 @@ export class GulpMissileTagAttr extends MoveEffectAttr {
    * @param user The Pokemon using the move.
    * @param _target N/A
    * @param move The move being used.
-   * @param _args N/A
    * @returns Whether the BattlerTag is applied.
    */
-  override apply(user: Pokemon, _target: Pokemon, move: Move, _args: any[]): boolean {
-    if (!super.apply(user, _target, move, _args)) {
+  override apply(user: Pokemon, _target: Pokemon, move: Move): boolean {
+    if (!super.apply(user, _target, move)) {
       return false;
     }
 

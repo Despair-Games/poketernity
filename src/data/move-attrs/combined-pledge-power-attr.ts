@@ -1,5 +1,5 @@
 import type { Pokemon } from "#app/field/pokemon";
-import { NumberHolder } from "#app/utils";
+import type { NumberHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
 import { VariablePowerAttr } from "#app/data/move-attrs/variable-power-attr";
 
@@ -8,11 +8,7 @@ import { VariablePowerAttr } from "#app/data/move-attrs/variable-power-attr";
  * move from an ally.
  */
 export class CombinedPledgePowerAttr extends VariablePowerAttr {
-  override apply(user: Pokemon, _target: Pokemon, move: Move, args: any[]): boolean {
-    const power = args[0];
-    if (!(power instanceof NumberHolder)) {
-      return false;
-    }
+  override apply(user: Pokemon, _target: Pokemon, move: Move, power: NumberHolder): boolean {
     const combinedPledgeMove = user.turnData.combiningPledge;
 
     if (combinedPledgeMove && combinedPledgeMove !== move.id) {

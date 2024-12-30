@@ -96,7 +96,7 @@ export class MoveEffectAttr extends MoveAttr {
    * @param _args Set of unique arguments needed by this attribute
    * @returns true if basic application of the ability attribute should be possible
    */
-  canApply(user: Pokemon, target: Pokemon, move: Move, _args?: any[]) {
+  canApply(user: Pokemon, target: Pokemon, move: Move) {
     return (
       !!(this.selfTarget ? user.hp && !user.getTag(BattlerTagType.FRENZY) : target.hp)
       && (this.selfTarget
@@ -106,8 +106,8 @@ export class MoveEffectAttr extends MoveAttr {
   }
 
   /** Applies move effects so long as they are able based on {@linkcode canApply} */
-  override apply(user: Pokemon, target: Pokemon, move: Move, args?: any[]): boolean {
-    return this.canApply(user, target, move, args);
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+    return this.canApply(user, target, move);
   }
 
   /**

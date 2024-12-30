@@ -49,16 +49,16 @@ export class AddBattlerTagAttr extends MoveEffectAttr {
     return this.options?.turnCountMax ?? this.turnCountMin;
   }
 
-  override canApply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    if (!super.canApply(user, target, move, args)) {
+  override canApply(user: Pokemon, target: Pokemon, move: Move): boolean {
+    if (!super.canApply(user, target, move)) {
       return false;
     } else {
       return true;
     }
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    if (!super.apply(user, target, move, args)) {
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+    if (!super.apply(user, target, move)) {
       return false;
     }
 

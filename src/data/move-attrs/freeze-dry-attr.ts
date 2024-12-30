@@ -8,10 +8,7 @@ import { VariableMoveTypeChartAttr } from "#app/data/move-attrs/variable-move-ty
  * This class forces Freeze-Dry to be super effective against Water Type.
  */
 export class FreezeDryAttr extends VariableMoveTypeChartAttr {
-  override apply(_user: Pokemon, _target: Pokemon, _move: Move, args: any[]): boolean {
-    const multiplier = args[0] as NumberHolder;
-    const defType = args[1] as Type;
-
+  override apply(_user: Pokemon, _target: Pokemon, _move: Move, multiplier: NumberHolder, defType: Type): boolean {
     if (defType === Type.WATER) {
       multiplier.value = 2;
       return true;

@@ -31,8 +31,7 @@ export class LastMoveDoublePowerAttr extends VariablePowerAttr {
    * @param args [0] {@linkcode NumberHolder} that holds the resulting power of the move
    * @returns true if attribute application succeeds, false otherwise
    */
-  override apply(user: Pokemon, _target: Pokemon, _move: Move, args: any[]): boolean {
-    const power = args[0] as NumberHolder;
+  override apply(user: Pokemon, _target: Pokemon, _move: Move, power: NumberHolder): boolean {
     const enemy = user.getOpponent(0);
     const pokemonActed: Pokemon[] = [];
 

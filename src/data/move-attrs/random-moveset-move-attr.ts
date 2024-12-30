@@ -15,7 +15,7 @@ export class RandomMovesetMoveAttr extends OverrideMoveEffectAttr {
     this.enemyMoveset = enemyMoveset!; // TODO: is this bang correct?
   }
 
-  override apply(user: Pokemon, target: Pokemon, _move: Move, _args: any[]): boolean {
+  override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
     const moveset = (!this.enemyMoveset ? user : target).getMoveset();
     const moves = moveset.filter((m) => !m.getMove().hasFlag(MoveFlags.IGNORE_VIRTUAL));
     if (moves.length) {

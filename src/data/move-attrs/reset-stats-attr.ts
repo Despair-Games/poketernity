@@ -13,7 +13,7 @@ export class ResetStatsAttr extends MoveEffectAttr {
     this.targetAllPokemon = targetAllPokemon;
   }
 
-  override apply(_user: Pokemon, target: Pokemon, _move: Move, _args: any[]): boolean {
+  override apply(_user: Pokemon, target: Pokemon, _move: Move): boolean {
     if (this.targetAllPokemon) {
       // Target all pokemon on the field when Freezy Frost or Haze are used
       const activePokemon = globalScene.getField(true);

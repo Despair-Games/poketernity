@@ -15,13 +15,10 @@ export class TeraBlastPowerAttr extends VariablePowerAttr {
    * @param user {@linkcode Pokemon} the Pokemon using this move
    * @param _target n/a
    * @param _move {@linkcode Move} the Move with this attribute (i.e. Tera Blast)
-   * @param args
-   *   - [0] {@linkcode NumberHolder} the applied move's power, factoring in
-   *       previously applied power modifiers.
+   * @param power {@linkcode NumberHolder} containing the move's power for the turn
    * @returns
    */
-  override apply(user: Pokemon, _target: Pokemon, _move: Move, args: any[]): boolean {
-    const power = args[0] as NumberHolder;
+  override apply(user: Pokemon, _target: Pokemon, _move: Move, power: NumberHolder): boolean {
     if (user.isTerastallized() && user.getTeraType() === Type.STELLAR) {
       power.value = 100;
       return true;

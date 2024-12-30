@@ -7,12 +7,11 @@ import { MoveAttr } from "#app/data/move-attrs/move-attr";
 import type { MoveConditionFunc } from "../move-conditions";
 
 export class OneHitKOAttr extends MoveAttr {
-  override apply(_user: Pokemon, target: Pokemon, _move: Move, args: any[]): boolean {
+  override apply(_user: Pokemon, target: Pokemon, _move: Move, isOneHitKo: BooleanHolder): boolean {
     if (target.isBossImmune()) {
       return false;
     }
-
-    (args[0] as BooleanHolder).value = true;
+    isOneHitKo.value = true;
 
     return true;
   }

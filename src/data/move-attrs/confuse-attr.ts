@@ -12,7 +12,7 @@ export class ConfuseAttr extends AddBattlerTagAttr {
     super(BattlerTagType.CONFUSED, selfTarget, { turnCountMin: 2, turnCountMax: 5 });
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!this.selfTarget && target.isSafeguarded(user)) {
       if (move.category === MoveCategory.STATUS) {
         globalScene.queueMessage(i18next.t("moveTriggers:safeguard", { targetName: getPokemonNameWithAffix(target) }));
@@ -20,6 +20,6 @@ export class ConfuseAttr extends AddBattlerTagAttr {
       return false;
     }
 
-    return super.apply(user, target, move, args);
+    return super.apply(user, target, move);
   }
 }

@@ -12,8 +12,7 @@ export class MovePowerMultiplierAttr extends VariablePowerAttr {
     this.powerMultiplierFunc = powerMultiplier;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    const power = args[0] as NumberHolder;
+  override apply(user: Pokemon, target: Pokemon, move: Move, power: NumberHolder): boolean {
     power.value *= this.powerMultiplierFunc(user, target, move);
 
     return true;

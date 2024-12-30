@@ -12,9 +12,7 @@ export class FriendshipPowerAttr extends VariablePowerAttr {
     this.invert = !!invert;
   }
 
-  override apply(user: Pokemon, _target: Pokemon, _move: Move, args: any[]): boolean {
-    const power = args[0] as NumberHolder;
-
+  override apply(user: Pokemon, _target: Pokemon, _move: Move, power: NumberHolder): boolean {
     const friendshipPower = Math.floor(
       Math.min(user instanceof PlayerPokemon ? user.friendship : user.species.baseFriendship, 255) / 2.5,
     );

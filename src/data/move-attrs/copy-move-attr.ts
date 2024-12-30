@@ -6,7 +6,7 @@ import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effec
 import { lastMoveCopiableCondition, type MoveConditionFunc } from "../move-conditions";
 
 export class CopyMoveAttr extends OverrideMoveEffectAttr {
-  override apply(user: Pokemon, target: Pokemon, _move: Move, _args: any[]): boolean {
+  override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
     const lastMove = globalScene.currentBattle.lastMove;
 
     const moveTargets = getMoveTargets(user, lastMove);

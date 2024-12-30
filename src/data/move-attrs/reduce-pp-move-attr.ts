@@ -27,7 +27,7 @@ export class ReducePpMoveAttr extends MoveEffectAttr {
    * @param _args N/A
    * @returns `true`
    */
-  override apply(_user: Pokemon, target: Pokemon, _move: Move, _args: any[]): boolean {
+  override apply(_user: Pokemon, target: Pokemon, _move: Move): boolean {
     // Null checks can be skipped due to condition function
     const lastMove = target.getLastXMoves()[0];
     const movesetMove = target.getMoveset().find((m) => m.moveId === lastMove.move)!;

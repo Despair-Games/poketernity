@@ -8,7 +8,6 @@ import { ChargeAnim } from "#app/data/battle-anims";
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Beak_Blast_(move) | Beak Blast}
  * @see {@linkcode BeakBlastChargingTag}
  */
-
 export class BeakBlastHeaderAttr extends AddBattlerTagHeaderAttr {
   /** Required to initialize Beak Blast's charge animation correctly */
   public chargeAnim = ChargeAnim.BEAK_BLAST_CHARGING;

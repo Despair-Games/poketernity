@@ -6,9 +6,8 @@ import { type Move } from "../move";
 import { allMoves } from "#app/data/all-moves";
 import { targetMoveCopiableCondition, type MoveConditionFunc } from "../move-conditions";
 import { OverrideMoveEffectAttr } from "./override-move-effect-attr";
-
 export class MovesetCopyMoveAttr extends OverrideMoveEffectAttr {
-  override apply(user: Pokemon, target: Pokemon, move: Move, _args: any[]): boolean {
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     const targetMoves = target.getMoveHistory().filter((m) => !m.virtual);
     if (!targetMoves.length) {
       return false;

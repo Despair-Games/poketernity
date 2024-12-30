@@ -4,9 +4,8 @@ import type { Move } from "#app/data/move";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";
 
 export class ModifiedDamageAttr extends MoveAttr {
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    const initialDamage = args[0] as NumberHolder;
-    initialDamage.value = this.getModifiedDamage(user, target, move, initialDamage.value);
+  override apply(user: Pokemon, target: Pokemon, move: Move, damage: NumberHolder): boolean {
+    damage.value = this.getModifiedDamage(user, target, move, damage.value);
 
     return true;
   }

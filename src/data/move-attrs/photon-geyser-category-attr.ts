@@ -6,9 +6,7 @@ import type { Move } from "#app/data/move";
 import { VariableMoveCategoryAttr } from "#app/data/move-attrs/variable-move-category-attr";
 
 export class PhotonGeyserCategoryAttr extends VariableMoveCategoryAttr {
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    const category = args[0] as NumberHolder;
-
+  override apply(user: Pokemon, target: Pokemon, move: Move, category: NumberHolder): boolean {
     if (user.getEffectiveStat(Stat.ATK, target, move) > user.getEffectiveStat(Stat.SPATK, target, move)) {
       category.value = MoveCategory.PHYSICAL;
       return true;

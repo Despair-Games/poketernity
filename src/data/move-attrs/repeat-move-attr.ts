@@ -30,7 +30,7 @@ export class RepeatMoveAttr extends MoveEffectAttr {
    * @param _args N/A
    * @returns `true` if the move succeeds
    */
-  override apply(user: Pokemon, target: Pokemon, _move: Move, _args: any[]): boolean {
+  override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
     // get the last move used (excluding status based failures) as well as the corresponding moveset slot
     const lastMove = target.getLastXMoves(-1).find((m) => m.move !== Moves.NONE)!;
     const movesetMove = target.getMoveset().find((m) => m?.moveId === lastMove.move)!;

@@ -2,7 +2,7 @@ import { TerrainType } from "#enums/terrain-type";
 import { Type } from "#enums/type";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { NumberHolder } from "#app/utils";
+import type { NumberHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
 import { VariableMoveTypeAttr } from "#app/data/move-attrs/variable-move-type-attr";
 
@@ -19,12 +19,7 @@ export class TerrainPulseTypeAttr extends VariableMoveTypeAttr {
    * @param args [0] {@linkcode NumberHolder} The move's type to be modified
    * @returns true if the function succeeds
    */
-  override apply(user: Pokemon, _target: Pokemon, _move: Move, args: any[]): boolean {
-    const moveType = args[0];
-    if (!(moveType instanceof NumberHolder)) {
-      return false;
-    }
-
+  override apply(user: Pokemon, _target: Pokemon, _move: Move, moveType: NumberHolder): boolean {
     if (!user.isGrounded()) {
       return false;
     }

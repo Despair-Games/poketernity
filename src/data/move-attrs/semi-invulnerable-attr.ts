@@ -25,8 +25,8 @@ export class SemiInvulnerableAttr extends MoveEffectAttr {
    * @param args n/a
    * @returns `true` if semi-invulnerability was successfully granted; `false` otherwise.
    */
-  override apply(user: Pokemon, target: Pokemon, move: Move, args?: any[]): boolean {
-    if (!super.apply(user, target, move, args)) {
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+    if (!super.apply(user, target, move)) {
       return false;
     }
 

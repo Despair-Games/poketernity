@@ -20,13 +20,13 @@ export class OpponentHighHpPowerAttr extends VariablePowerAttr {
   /**
    * Changes the base power of the move to be the target's HP ratio times the maxBasePower with a min value of 1
    * @param _user n/a
-   * @param target the Pokemon being attacked
+   * @param target the {@linkcode Pokemon} being attacked
    * @param _move n/a
-   * @param args holds the base power of the move at args[0]
+   * @param power a {@linkcode NumberHolder} containing the move's power for the turn
    * @returns true
    */
-  override apply(_user: Pokemon, target: Pokemon, _move: Move, args: any[]): boolean {
-    (args[0] as NumberHolder).value = toDmgValue(this.maxBasePower * target.getHpRatio());
+  override apply(_user: Pokemon, target: Pokemon, _move: Move, power: NumberHolder): boolean {
+    power.value = toDmgValue(this.maxBasePower * target.getHpRatio());
 
     return true;
   }

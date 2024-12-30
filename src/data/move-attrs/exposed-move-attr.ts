@@ -27,8 +27,8 @@ export class ExposedMoveAttr extends AddBattlerTagAttr {
    * @param args N/A
    * @returns `true` if the function succeeds
    */
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    if (!super.apply(user, target, move, args)) {
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+    if (!super.apply(user, target, move)) {
       return false;
     }
 

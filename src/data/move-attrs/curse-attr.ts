@@ -10,7 +10,7 @@ import type { Move } from "../move";
 import { MoveEffectAttr } from "./move-effect-attr";
 
 export class CurseAttr extends MoveEffectAttr {
-  override apply(user: Pokemon, target: Pokemon, move: Move, _args: any[]): boolean {
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (user.getTypes(true).includes(Type.GHOST)) {
       if (target.getTag(BattlerTagType.CURSED)) {
         globalScene.queueMessage(i18next.t("battle:attackFailed"));

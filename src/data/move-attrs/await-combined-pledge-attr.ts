@@ -27,14 +27,12 @@ export class AwaitCombinedPledgeAttr extends OverrideMoveEffectAttr {
    * effects should be overridden this turn.
    * @returns `true` if base move effects were overridden; `false` otherwise
    */
-  override apply(user: Pokemon, _target: Pokemon, move: Move, args: any[]): boolean {
+  override apply(user: Pokemon, _target: Pokemon, move: Move, overridden: BooleanHolder): boolean {
     if (user.turnData.combiningPledge) {
       // "The two moves have become one!\nIt's a combined move!"
       globalScene.queueMessage(i18next.t("moveTriggers:combiningPledge"));
       return false;
     }
-
-    const overridden = args[0] as BooleanHolder;
 
     const allyMovePhase = globalScene.findPhase<MovePhase>(
       (phase) => phase instanceof MovePhase && phase.pokemon.isPlayer() === user.isPlayer(),

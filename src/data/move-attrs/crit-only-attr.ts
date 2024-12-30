@@ -4,8 +4,8 @@ import type { Move } from "#app/data/move";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";
 
 export class CritOnlyAttr extends MoveAttr {
-  override apply(_user: Pokemon, _target: Pokemon, _move: Move, args: any[]): boolean {
-    (args[0] as BooleanHolder).value = true;
+  override apply(_user: Pokemon, _target: Pokemon, _move: Move, isCritical: BooleanHolder): boolean {
+    isCritical.value = true;
 
     return true;
   }

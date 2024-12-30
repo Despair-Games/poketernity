@@ -13,8 +13,8 @@ export class JawLockAttr extends AddBattlerTagAttr {
     super(BattlerTagType.TRAPPED);
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    if (!super.canApply(user, target, move, args)) {
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+    if (!super.canApply(user, target, move)) {
       return false;
     }
 

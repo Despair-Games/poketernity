@@ -12,8 +12,8 @@ export class FixedDamageAttr extends MoveAttr {
     this.damage = damage;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    (args[0] as NumberHolder).value = this.getDamage(user, target, move);
+  override apply(user: Pokemon, target: Pokemon, move: Move, damage: NumberHolder): boolean {
+    damage.value = this.getDamage(user, target, move);
 
     return true;
   }

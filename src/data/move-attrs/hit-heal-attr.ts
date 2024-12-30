@@ -37,7 +37,7 @@ export class HitHealAttr extends MoveEffectAttr {
    * @param _args N/A
    * @returns true if the function succeeds
    */
-  override apply(user: Pokemon, target: Pokemon, _move: Move, _args: any[]): boolean {
+  override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
     let healAmount = 0;
     let message = "";
     const reverseDrain = target.hasAbilityWithAttr(ReverseDrainAbAttr, false);

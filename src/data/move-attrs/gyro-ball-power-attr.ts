@@ -19,8 +19,7 @@ export class GyroBallPowerAttr extends VariablePowerAttr {
    * @param args N/A
    * @returns true if the function succeeds
    */
-  override apply(user: Pokemon, target: Pokemon, _move: Move, args: any[]): boolean {
-    const power = args[0] as NumberHolder;
+  override apply(user: Pokemon, target: Pokemon, _move: Move, power: NumberHolder): boolean {
     const userSpeed = user.getEffectiveStat(Stat.SPD);
     if (userSpeed < 1) {
       // Gen 6+ always have 1 base power

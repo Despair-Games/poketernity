@@ -11,12 +11,11 @@ export class SheerColdAccuracyAttr extends OneHitKOAccuracyAttr {
    * @param user Pokemon that is using the move; checks the Pokemon's level.
    * @param target Pokemon that is receiving the move; checks the Pokemon's level.
    * @param _move N/A
-   * @param args Uses the accuracy argument, allowing to change it from either 0 if it doesn't pass
+   * @param accuracy Uses the accuracy argument, allowing to change it from either 0 if it doesn't pass
    * the first if/else, or 30/20 depending on the type of the user Pokemon.
    * @returns Returns true if move is successful, false if misses.
    */
-  override apply(user: Pokemon, target: Pokemon, _move: Move, args: any[]): boolean {
-    const accuracy = args[0] as NumberHolder;
+  override apply(user: Pokemon, target: Pokemon, _move: Move, accuracy: NumberHolder): boolean {
     if (user.level < target.level) {
       accuracy.value = 0;
     } else {

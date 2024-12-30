@@ -16,7 +16,7 @@ export class AddBattlerTagHeaderAttr extends MoveHeaderAttr {
     this.tagType = tagType;
   }
 
-  override apply(user: Pokemon, _target: Pokemon, _move: Move, _args: any[]): boolean {
+  override apply(user: Pokemon, _target: Pokemon, _move: Move): boolean {
     user.addTag(this.tagType);
     return true;
   }

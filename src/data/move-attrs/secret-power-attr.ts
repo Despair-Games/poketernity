@@ -27,8 +27,8 @@ export class SecretPowerAttr extends MoveEffectAttr {
    * Used to apply the secondary effect to the target Pokemon
    * @returns `true` if a secondary effect is successfully applied
    */
-  override apply(user: Pokemon, target: Pokemon, move: Move, args?: any[]): boolean {
-    if (!super.apply(user, target, move, args)) {
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+    if (!super.apply(user, target, move)) {
       return false;
     }
     const chance = this.getMoveChance(user, target, move, false);
@@ -41,7 +41,7 @@ export class SecretPowerAttr extends MoveEffectAttr {
         const biome = globalScene.arena.biomeType;
         secondaryEffect = this.determineBiomeEffect(biome);
       }
-      return secondaryEffect.apply(user, target, move, []);
+      return secondaryEffect.apply(user, target, move);
     }
     return false;
   }
