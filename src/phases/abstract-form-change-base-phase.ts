@@ -147,7 +147,7 @@ export abstract class FormChangeBasePhase extends Phase {
     });
   }
 
-  public doSpiralUpwardParticle(trigIndex: integer): void {
+  public doSpiralUpwardParticle(trigIndex: number): void {
     const initialX = this.baseBgImg.displayWidth / 2;
     const particle = globalScene.add.image(initialX, 0, "evo_sparkle");
     this.container.add(particle);

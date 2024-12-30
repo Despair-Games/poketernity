@@ -2079,7 +2079,6 @@ export class PokemonInstantReviveModifier extends PokemonHeldItemModifier {
           typeName: this.type.name,
         }),
         showFullHpMessage: false,
-        skipAnim: false,
         revive: true,
       }),
     );

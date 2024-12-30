@@ -161,9 +161,20 @@ export class CommandPhase extends FieldPhase {
     const { arena, currentBattle, gameData, gameMode, ui } = globalScene;
     const { battleType, mysteryEncounter } = currentBattle;
 
+    const failCatchRunCallback = (): void => {
+      ui.showText("", 0);
+      ui.setMode(Mode.COMMAND, this.fieldIndex);
+    };
+    const failCatchRun = (i18nKey: string): void => {
+      ui.setMode(Mode.COMMAND, this.fieldIndex);
+      ui.setMode(Mode.MESSAGE);
+      ui.showText(i18next.t(i18nKey), null, () => failCatchRunCallback(), null, true);
+    };
+
     switch (command) {
       case Command.FIGHT:
-        const ignorePp: boolean = args[0];
+        const ignorePp: boolean | undefined = args[0];
+        const targets: MoveTargetSet | undefined = args[1];
         const useStruggle = cursor > -1 && !playerPokemon.getMoveset().filter((m) => m.isUsable(playerPokemon)).length;
 
         if (cursor === -1 || playerPokemon.trySelectMove(cursor, ignorePp) || useStruggle) {
@@ -178,7 +189,7 @@ export class CommandPhase extends FieldPhase {
             move: { move: moveId, targets: [], ignorePP: ignorePp },
             args: args,
           };
-          const moveTargets = getMoveTargets(playerPokemon, moveId);
+          const moveTargets: MoveTargetSet = targets ?? getMoveTargets(playerPokemon, moveId);
 
           if (!moveId) {
             turnCommand.targets = [this.fieldIndex];
@@ -239,22 +250,12 @@ export class CommandPhase extends FieldPhase {
             .some((p) => !globalScene.gameData.dexData[p.species.speciesId].caughtAttr)
           && gameData.getStarterCount((d) => !!d.caughtAttr) < Object.keys(speciesStarterCosts).length - 1;
 
-        const failCatchCallback = (): void => {
-          ui.showText("", 0);
-          ui.setMode(Mode.COMMAND, this.fieldIndex);
-        };
-        const failCatch = (i18nKey: string): void => {
-          ui.setMode(Mode.COMMAND, this.fieldIndex);
-          ui.setMode(Mode.MESSAGE);
-          ui.showText(i18next.t(i18nKey), null, () => failCatchCallback(), null, true);
-        };
-
         if (arena.biomeType === Biome.END && (!gameMode.isClassic || gameMode.isFreshStartChallenge() || notInDex)) {
-          failCatch("battle:noPokeballForce");
+          failCatchRun("battle:noPokeballForce");
         } else if (battleType === BattleType.TRAINER) {
-          failCatch("battle:noPokeballTrainer");
+          failCatchRun("battle:noPokeballTrainer");
         } else if (currentBattle.isBattleMysteryEncounter() && !mysteryEncounter!.catchAllowed) {
-          failCatch("battle:noPokeballMysteryEncounter");
+          failCatchRun("battle:noPokeballMysteryEncounter");
         } else {
           const targets = globalScene
             .getEnemyField()
@@ -262,21 +263,20 @@ export class CommandPhase extends FieldPhase {
             .map((p) => p.getBattlerIndex());
 
           if (targets.length > 1) {
-            failCatch("battle:noPokeballMulti");
-          } else if (cursor < 5) {
-            // TODO: when would `cursor` be greater than 4?
+            failCatchRun("battle:noPokeballMulti");
+          } else if (cursor < Object.keys(globalScene.pokeballCounts).length) {
             const targetPokemon = globalScene.getEnemyField().find((p) => p.isActive(true));
 
             if (isNullOrUndefined(targetPokemon)) {
               console.warn("Enemy Pokemon is missing when trying to throw Pokeball!");
-              failCatch("battle:noPokeballForce");
+              failCatchRun("battle:noPokeballForce");
             } else if (
               targetPokemon.isBoss()
               && targetPokemon.bossSegmentIndex >= 1
               && !targetPokemon.hasAbility(Abilities.WONDER_GUARD, false, true)
               && cursor < PokeballType.MASTER_BALL
             ) {
-              failCatch("battle:noPokeballStrong");
+              failCatchRun("battle:noPokeballStrong");
             } else {
               currentBattle.turnCommands[this.fieldIndex] = {
                 command: Command.BALL,
@@ -293,34 +293,14 @@ export class CommandPhase extends FieldPhase {
         break;
       case Command.RUN:
         if (arena.biomeType === Biome.END || mysteryEncounter?.fleeAllowed === false) {
-          ui.setMode(Mode.COMMAND, this.fieldIndex);
-          ui.setMode(Mode.MESSAGE);
-          ui.showText(
-            i18next.t("battle:noEscapeForce"),
-            null,
-            () => {
-              ui.showText("", 0);
-              ui.setMode(Mode.COMMAND, this.fieldIndex);
-            },
-            null,
-            true,
-          );
+          failCatchRun("battle:noEscapeForce");
+          break;
         } else if (
           battleType === BattleType.TRAINER
           || mysteryEncounter?.encounterMode === MysteryEncounterMode.TRAINER_BATTLE
         ) {
-          ui.setMode(Mode.COMMAND, this.fieldIndex);
-          ui.setMode(Mode.MESSAGE);
-          ui.showText(
-            i18next.t("battle:noEscapeTrainer"),
-            null,
-            () => {
-              ui.showText("", 0);
-              ui.setMode(Mode.COMMAND, this.fieldIndex);
-            },
-            null,
-            true,
-          );
+          failCatchRun("battle:noEscapeTrainer");
+          break;
         }
       case Command.POKEMON:
         const isSwitch = command === Command.POKEMON;
