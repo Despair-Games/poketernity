@@ -122,10 +122,6 @@ describe("Moves - Future Sight", () => {
     expect(enemy.hp).toBe(1);
   });
 
-  it.todo("should not apply the user's abilities when dealing damage if the user is inactive");
-
-  it.todo("should not apply the user's held items when dealing damage if the user is inactive");
-
   it("can be used twice in the same turn against different targets", async () => {
     game.override.battleType("double");
 
@@ -205,4 +201,12 @@ describe("Moves - Future Sight", () => {
     await game.phaseInterceptor.to("MoveEffectPhase");
     expect(enemyPokemon[1].isFainted()).toBeTruthy();
   });
+
+  // TODO: Implement these properties and fill in these tests
+
+  it.todo("should not apply the user's abilities when dealing damage if the user is inactive");
+
+  it.todo("should not apply the user's held items when dealing damage if the user is inactive");
+
+  it.todo("should invoke the move's first phase when called by Metronome");
 });

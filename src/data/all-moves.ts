@@ -990,7 +990,7 @@ export function initMoves() {
       .attr(StatStageChangeAttr, [Stat.SPDEF], -1)
       .ballBombMove(),
     new AttackMove(Moves.FUTURE_SIGHT, Type.PSYCHIC, MoveCategory.SPECIAL, 120, 100, 10, -1, 0, 2)
-      .partial() // cannot be used on multiple Pokemon on the same side in a double battle, hits immediately when called by Metronome/etc, should not apply abilities or held items if user is off the field
+      .partial() // hits immediately when called by Metronome/etc, should not apply abilities or held items if user is off the field
       .ignoresProtect()
       .attr(
         DelayedAttackAttr,
