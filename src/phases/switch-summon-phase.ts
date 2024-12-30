@@ -199,8 +199,6 @@ export class SwitchSummonPhase extends SummonPhase {
 
     const pokemon = this.getPokemon();
 
-    // Compensate for turn spent summoning
-    // Or compensate for force switch move if switched out pokemon is not fainted
     if (this.switchType !== SwitchType.INITIAL_SWITCH) {
       pokemon.resetTurnData();
       pokemon.turnData.switchedInThisTurn = true;
