@@ -425,7 +425,7 @@ export default class BattleScene extends SceneBase {
   /**
    * Load the variant assets for the given sprite and stores them in {@linkcode variantColorCache}
    */
-  loadPokemonVariantAssets(spriteKey: string, fileRoot: string, variant?: Variant): Promise<void> {
+  public async loadPokemonVariantAssets(spriteKey: string, fileRoot: string, variant?: Variant): Promise<void> {
     const useExpSprite = this.experimentalSprites && this.hasExpSprite(spriteKey);
     if (useExpSprite) {
       fileRoot = `exp/${fileRoot}`;
