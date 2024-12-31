@@ -143,7 +143,7 @@ export class CommandPhase extends FieldPhase {
    * @param command - {@linkcode Command.FIGHT}
    * @param cursor - Cursor index for the selected Move
    * @param ignorePp - `true` if the move shouldn't use PP
-   * @param targets - (optional, unused) {@linkcode MoveTargetSet} containing the queued moves targets (ie: from rollout, etc)
+   * @param targets - (optional) {@linkcode MoveTargetSet} containing the queued moves targets (ie: from rollout, etc)
    * @returns `true` if the command was successful
    */
   public handleCommand(command: Command.FIGHT, cursor: number, ignorePp?: boolean, targets?: MoveTargetSet): boolean;
