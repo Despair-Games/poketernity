@@ -53,4 +53,17 @@ describe("Abilities - Anger Point", () => {
 
     expect(pokemon?.getStatStage(Stat.ATK)).toBe(0);
   });
+
+  it("should activate multiple times if it receives multiple critical hits in a single turn", async () => {
+    game.override.enemyAbility(Abilities.PARENTAL_BOND);
+    await game.classicMode.startBattle([Species.FEEBAS]);
+    const pokemon = game.scene.getPlayerPokemon();
+    pokemon?.setStatStage(Stat.ATK, -6);
+
+    game.move.select(Moves.SPLASH);
+    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    await game.phaseInterceptor.to("BerryPhase");
+
+    expect(pokemon?.getStatStage(Stat.ATK)).toBe(6);
+  });
 });
