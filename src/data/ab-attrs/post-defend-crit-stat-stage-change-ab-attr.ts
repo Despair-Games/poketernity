@@ -1,4 +1,4 @@
-import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
+import { Stat } from "#enums/stat";
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { HitResult } from "#app/field/pokemon";
@@ -27,22 +27,22 @@ export class PostDefendCritStatStageChangeAbAttr extends PostDefendAbAttr {
     pokemon: Pokemon,
     _passive: boolean,
     simulated: boolean,
-    _attacker: Pokemon,
+    attacker: Pokemon,
     _move: Move,
     _hitResult: HitResult,
     _args: any[],
   ): boolean {
-    if (!simulated) {
-      globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [this.stat], this.stages));
-    }
-
-    return true;
-  }
-
-  override getCondition(): AbAttrCondition {
-    return (pokemon: Pokemon) =>
+    if (
       pokemon.turnData.attacksReceived.length !== 0
-      // TODO: Normalize `attacksReceived[]` checks
-      && pokemon.turnData.attacksReceived[pokemon.turnData.attacksReceived.length - 1].isCritical;
+      && pokemon.turnData.attacksReceived.some((p) => p.isCritical && p.sourceId === attacker.id)
+      && pokemon.summonData.statStages[Stat.ATK] < 6
+    ) {
+      if (!simulated) {
+        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [this.stat], this.stages));
+      }
+      return true;
+    } else {
+      return false;
+    }
   }
 }
