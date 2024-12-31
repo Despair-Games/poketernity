@@ -90,11 +90,10 @@ export class MoveEffectAttr extends MoveAttr {
   /**
    * Determines whether the {@linkcode Move}'s effects are valid to {@linkcode apply}
    * @virtual
-   * @param user {@linkcode Pokemon} using the move
-   * @param target {@linkcode Pokemon} target of the move
-   * @param move {@linkcode Move} with this attribute
-   * @param _args Set of unique arguments needed by this attribute
-   * @returns true if basic application of the ability attribute should be possible
+   * @param user the {@linkcode Pokemon} using the move
+   * @param target the {@linkcode Pokemon} targeted by the move
+   * @param move the {@linkcode Move} being used
+   * @returns `true` if effects can apply
    */
   canApply(user: Pokemon, target: Pokemon, move: Move) {
     return (
@@ -105,19 +104,29 @@ export class MoveEffectAttr extends MoveAttr {
     );
   }
 
-  /** Applies move effects so long as they are able based on {@linkcode canApply} */
+  /**
+   * Applies move effects if conditions are met to apply them.
+   * @param user the {@linkcode Pokemon} using the move
+   * @param target the {@linkcode Pokemon} targeted by the move
+   * @param move the {@linkcode Move} being used
+   * @returns `true` if effects have applied successfully
+   * @see {@linkcode canApply}
+   */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     return this.canApply(user, target, move);
   }
 
   /**
-   * Gets the used move's additional effect chance.
-   * Chance is modified by {@linkcode MoveEffectChanceMultiplierAbAttr} and {@linkcode IgnoreMoveEffectsAbAttr}.
-   * @param user {@linkcode Pokemon} using this move
-   * @param target {@linkcode Pokemon | Target} of this move
-   * @param move {@linkcode Move} being used
+   * Gets the used move's additional effect chance after modifications from:
+   * - the user's Sheer Force and/or Serene Grace
+   * - the target's Shield Dust
+   * - the "rainbow effect" from combining Water Pledge and Fire Pledge
+   * @param user the {@linkcode Pokemon} using this move
+   * @param target the {@linkcode Pokemon} targeted by the move
+   * @param move the {@linkcode Move} being used
    * @param selfEffect `true` if move targets user.
-   * @returns Move effect chance value.
+   * @returns The final percent chance of this attribute's effect applying. If negative, the
+   * effect is guaranteed to apply.
    */
   getMoveChance(user: Pokemon, target: Pokemon, move: Move, selfEffect: boolean, showAbility?: boolean): number {
     const moveChance = new NumberHolder(this.effectChanceOverride ?? move.chance);

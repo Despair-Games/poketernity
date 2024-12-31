@@ -24,12 +24,7 @@ export class SwapStatAttr extends MoveEffectAttr {
 
   /**
    * Swaps the user's and target's corresponding current
-   * {@linkcode EffectiveStat | stat} values
-   * @param user the {@linkcode Pokemon} that used the move
-   * @param target the {@linkcode Pokemon} that the move was used on
-   * @param move N/A
-   * @param args N/A
-   * @returns true if attribute application succeeds
+   * {@linkcode EffectiveStat stat} values
    */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (super.apply(user, target, move)) {

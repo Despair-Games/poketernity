@@ -17,6 +17,13 @@ export class RandomMoveAttr extends OverrideMoveEffectAttr {
     return null;
   }
 
+  /**
+   * Invokes a random move and uses it virtually on a random legal target
+   * @param user the {@linkcode Pokemon} using the move
+   * @param target the {@linkcode Pokemon} targeted by the move
+   * @param _move n/a
+   * @returns `true` if a move was successfully invoked
+   */
   override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
     const moveIds = getEnumValues(Moves).filter(
       (m) => !allMoves[m].hasFlag(MoveFlags.IGNORE_VIRTUAL) && !allMoves[m].name.endsWith(" (N)"),

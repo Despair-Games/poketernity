@@ -23,14 +23,7 @@ export class ShiftStatAttr extends MoveEffectAttr {
     this.statToSwitchWith = statToSwitchWith;
   }
 
-  /**
-   * Switches the user's stats based on the {@linkcode statToSwitch} and {@linkcode statToSwitchWith} attributes.
-   * @param user the {@linkcode Pokemon} that used the move
-   * @param target n/a
-   * @param move n/a
-   * @param args n/a
-   * @returns whether the effect was applied
-   */
+  /** Switches the user's stats based on the {@linkcode statToSwitch} and {@linkcode statToSwitchWith} attributes. */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

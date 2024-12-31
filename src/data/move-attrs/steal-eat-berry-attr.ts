@@ -17,13 +17,8 @@ export class StealEatBerryAttr extends EatBerryAttr {
   constructor() {
     super(false);
   }
-  /**
-   * User steals a random berry from the target and then eats it.
-   * @param user Pokemon that used the move and will eat the stolen berry
-   * @param target Pokemon that will have its berry stolen
-   * @param move Move being used
-   * @returns `true` if the function succeeds
-   */
+
+  /** User steals a random berry from the target and then eats it. */
   override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
     const cancelled = new BooleanHolder(false);
     applyAbAttrs(BlockItemTheftAbAttr, target, cancelled); // check for abilities that block item theft

@@ -26,12 +26,7 @@ export class HealStatusEffectAttr extends MoveEffectAttr {
     this.effects = [effects].flat(1);
   }
 
-  /**
-   * @param user {@linkcode Pokemon} source of the move
-   * @param target {@linkcode Pokemon} target of the move
-   * @param move the {@linkcode Move} being used
-   * @returns true if the status is cured
-   */
+  /** Cures the target of any status effects included in this attribute's {@linkcode effects}. */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

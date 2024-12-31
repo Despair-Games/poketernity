@@ -16,6 +16,7 @@ export class MessageHeaderAttr extends MoveHeaderAttr {
     this.message = message;
   }
 
+  /** Queues a message at the start of the turn */
   override apply(user: Pokemon, _target: Pokemon, move: Move): boolean {
     const message = typeof this.message === "string" ? this.message : this.message(user, move);
 

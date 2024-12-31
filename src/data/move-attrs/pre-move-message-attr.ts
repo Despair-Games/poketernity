@@ -11,6 +11,13 @@ export class PreMoveMessageAttr extends MoveAttr {
     this.message = message;
   }
 
+  /**
+   * Queues a message before the move is used
+   * @param user the {@linkcode Pokemon} using the move
+   * @param target the {@linkcode Pokemon} targeted by the move
+   * @param move the {@linkcode Move} being used
+   * @returns `true` if the message is queued successfully
+   */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     const message = typeof this.message === "string" ? (this.message as string) : this.message(user, target, move);
     if (message) {

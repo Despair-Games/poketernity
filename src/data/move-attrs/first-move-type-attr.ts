@@ -11,6 +11,7 @@ export class FirstMoveTypeAttr extends MoveEffectAttr {
     super(true);
   }
 
+  /** Changes the user's type to match that of the first move in its moveset */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

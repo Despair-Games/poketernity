@@ -4,14 +4,7 @@ import type { Move } from "#app/data/move";
 import { VariablePowerAttr } from "#app/data/move-attrs/variable-power-attr";
 
 export class LessPPMorePowerAttr extends VariablePowerAttr {
-  /**
-   * Power up moves when less PP user has
-   * @param user {@linkcode Pokemon} using this move
-   * @param _target {@linkcode Pokemon} target of this move
-   * @param move {@linkcode Move} being used
-   * @param power {@linkcode NumberHolder} of power
-   * @returns true if the function succeeds
-   */
+  /** Sets power inversely proportional to the given move's remaining PP */
   override apply(user: Pokemon, _target: Pokemon, move: Move, power: NumberHolder): boolean {
     const ppMax = move.pp;
     const ppUsed = user.moveset.find((m) => m.moveId === move.id)?.ppUsed ?? 0;

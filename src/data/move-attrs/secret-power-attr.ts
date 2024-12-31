@@ -24,8 +24,8 @@ export class SecretPowerAttr extends MoveEffectAttr {
   }
 
   /**
-   * Used to apply the secondary effect to the target Pokemon
-   * @returns `true` if a secondary effect is successfully applied
+   * Applies a secondary effect based on the current active terrain,
+   * or the current biome if no terrain is active.
    */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {

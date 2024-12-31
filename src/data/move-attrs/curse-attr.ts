@@ -10,6 +10,12 @@ import type { Move } from "../move";
 import { MoveEffectAttr } from "./move-effect-attr";
 
 export class CurseAttr extends MoveEffectAttr {
+  /**
+   * If the user is Ghost-type, this adds a {@linkcode BattlerTagType.CURSED Curse} to the target
+   * at the cost of half of the user's maximum HP.
+   * Otherwise, this increases the user's Attack and Defense by one stage
+   * and decreases the user's Speed by one stage.
+   */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (user.getTypes(true).includes(Type.GHOST)) {
       if (target.getTag(BattlerTagType.CURSED)) {

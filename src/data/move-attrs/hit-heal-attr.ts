@@ -27,15 +27,11 @@ export class HitHealAttr extends MoveEffectAttr {
     this.healRatio = healRatio ?? 0.5;
     this.healStat = healStat ?? null;
   }
+
   /**
    * Heals the user the determined amount and possibly displays a message about regaining health.
    * If the target has the {@linkcode ReverseDrainAbAttr}, all healing is instead converted
    * to damage to the user.
-   * @param user {@linkcode Pokemon} using this move
-   * @param target {@linkcode Pokemon} target of this move
-   * @param _move {@linkcode Move} being used
-   * @param _args N/A
-   * @returns true if the function succeeds
    */
   override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
     let healAmount = 0;

@@ -14,6 +14,10 @@ export class RemoveArenaTrapAttr extends MoveEffectAttr {
     this.targetBothSides = targetBothSides;
   }
 
+  /**
+   * Removes hazards from either the user's (?) side of the field
+   * or both sides of the field, depending on {@linkcode targetBothSides}
+   */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

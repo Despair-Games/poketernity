@@ -25,6 +25,7 @@ export class PostVictoryStatStageChangeAttr extends MoveAttr {
     this.condition = condition;
     this.showMessage = showMessage;
   }
+
   applyPostVictory(user: Pokemon, target: Pokemon, move: Move): void {
     if (this.condition && !this.condition(user, target, move)) {
       return;

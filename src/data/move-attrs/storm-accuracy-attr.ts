@@ -12,6 +12,7 @@ import { VariableAccuracyAttr } from "#app/data/move-attrs/variable-accuracy-att
  * @extends VariableAccuracyAttr
  */
 export class StormAccuracyAttr extends VariableAccuracyAttr {
+  /** Changes the move's accuracy to always hit when rain or heavy rain is active */
   override apply(_user: Pokemon, _target: Pokemon, _move: Move, accuracy: NumberHolder): boolean {
     if (!globalScene.arena.weather?.isEffectSuppressed()) {
       const weatherType = globalScene.arena.weather?.weatherType || WeatherType.NONE;

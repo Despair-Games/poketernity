@@ -6,6 +6,10 @@ import type { Move } from "#app/data/move";
 import { VariableMoveTypeAttr } from "#app/data/move-attrs/variable-move-type-attr";
 
 export class RagingBullTypeAttr extends VariableMoveTypeAttr {
+  /**
+   * If the user is a Paldean Tauros (or a fusion with the species),
+   * changes the given move's type according to the Tauros' form.
+   */
   override apply(user: Pokemon, _target: Pokemon, _move: Move, moveType: NumberHolder): boolean {
     if ([user.species.speciesId, user.fusionSpecies?.speciesId].includes(Species.PALDEA_TAUROS)) {
       const form = user.species.speciesId === Species.PALDEA_TAUROS ? user.formIndex : user.fusionSpecies?.formIndex;

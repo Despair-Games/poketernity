@@ -12,13 +12,8 @@ import { VariablePowerAttr } from "#app/data/move-attrs/variable-power-attr";
 
 export class ElectroBallPowerAttr extends VariablePowerAttr {
   /**
-   * Move that deals more damage the faster {@linkcode Stat.SPD}
-   * the user is compared to the target.
-   * @param user Pokemon that used the move
-   * @param target The target of the move
-   * @param _move Move with this attribute
-   * @param args N/A
-   * @returns true if the function succeeds
+   * Sets the given move's power proportional to the user's
+   * {@linkcode Stat.SPD Speed} compared to the target.
    */
   override apply(user: Pokemon, target: Pokemon, _move: Move, power: NumberHolder): boolean {
     const statRatio = target.getEffectiveStat(Stat.SPD) / user.getEffectiveStat(Stat.SPD);

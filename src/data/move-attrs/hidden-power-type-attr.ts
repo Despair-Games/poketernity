@@ -10,6 +10,7 @@ import { VariableMoveTypeAttr } from "#app/data/move-attrs/variable-move-type-at
  * @extends VariableMoveTypeAttr
  */
 export class HiddenPowerTypeAttr extends VariableMoveTypeAttr {
+  /** Modifies the given move's type based on the user's IVs */
   override apply(user: Pokemon, _target: Pokemon, _move: Move, moveType: NumberHolder): boolean {
     const iv_val = Math.floor(
       (((user.ivs[Stat.HP] & 1)

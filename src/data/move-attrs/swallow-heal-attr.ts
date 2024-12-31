@@ -9,6 +9,7 @@ import { HealAttr } from "#app/data/move-attrs/heal-attr";
  * @extends HealAttr
  */
 export class SwallowHealAttr extends HealAttr {
+  /** Restores health to the user based on the user's stockpiled count */
   override apply(user: Pokemon, _target: Pokemon, _move: Move): boolean {
     const stockpilingTag = user.getTag(StockpilingTag);
 

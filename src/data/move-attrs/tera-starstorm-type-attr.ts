@@ -10,14 +10,7 @@ import { VariableMoveTypeAttr } from "#app/data/move-attrs/variable-move-type-at
  * @extends VariableMoveTypeAttr
  */
 export class TeraStarstormTypeAttr extends VariableMoveTypeAttr {
-  /**
-   *
-   * @param user the {@linkcode Pokemon} using the move
-   * @param _target n/a
-   * @param _move n/a
-   * @param args[0] {@linkcode NumberHolder} the move type
-   * @returns `true` if the move type is changed to {@linkcode Type.STELLAR}, `false` otherwise
-   */
+  /** Changes the given move's type to {@linkcode Type.STELLAR Stellar} if the user is terastallized */
   override apply(user: Pokemon, _target: Pokemon, _move: Move, moveType: NumberHolder): boolean {
     if (
       user.isTerastallized()

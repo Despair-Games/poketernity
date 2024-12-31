@@ -12,9 +12,8 @@ import { AddArenaTagAttr } from "./add-arena-tag-attr";
  */
 export class AddArenaTrapTagHitAttr extends AddArenaTagAttr {
   /**
-   * @param user {@linkcode Pokemon} using this move
-   * @param target {@linkcode Pokemon} target of this move
-   * @param move {@linkcode Move} being used
+   * Adds the attributes {@linkcode ArenaTrapTag} to the field if the move successfully hits.
+   * Can be negated by {@link https://bulbapedia.bulbagarden.net/wiki/Sheer_Force_(Ability) Sheer Force}.
    */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     const moveChance = this.getMoveChance(user, target, move, this.selfTarget, true);

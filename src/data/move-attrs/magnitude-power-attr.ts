@@ -30,6 +30,7 @@ export const magnitudeMessageFunc = (_user: Pokemon, _target: Pokemon, _move: Mo
 };
 
 export class MagnitudePowerAttr extends VariablePowerAttr {
+  /** Set's the given move's power based on randomly assigned Magnitude level */
   override apply(_user: Pokemon, _target: Pokemon, _move: Move, power: NumberHolder): boolean {
     const magnitudeThresholds = [5, 15, 35, 65, 75, 95];
     const magnitudePowers = [10, 30, 50, 70, 90, 100, 110, 150];

@@ -13,23 +13,27 @@ import { MoveEffectAttr } from "./move-effect-attr";
  * @see {@linkcode apply}
  */
 export class SwapArenaTagsAttr extends MoveEffectAttr {
-  public SwapTags: ArenaTagType[];
+  public swappableTags: ArenaTagType[];
 
   constructor(SwapTags: ArenaTagType[]) {
     super(true);
-    this.SwapTags = SwapTags;
+    this.swappableTags = SwapTags;
   }
 
+  /** Swaps sides of all arena tags that are {@linkcode SwapTags swappable} */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;
     }
 
     const tagPlayerTemp = globalScene.arena.findTagsOnSide(
-      (t) => this.SwapTags.includes(t.tagType),
+      (t) => this.swappableTags.includes(t.tagType),
       ArenaTagSide.PLAYER,
     );
-    const tagEnemyTemp = globalScene.arena.findTagsOnSide((t) => this.SwapTags.includes(t.tagType), ArenaTagSide.ENEMY);
+    const tagEnemyTemp = globalScene.arena.findTagsOnSide(
+      (t) => this.swappableTags.includes(t.tagType),
+      ArenaTagSide.ENEMY,
+    );
 
     if (tagPlayerTemp) {
       for (const swapTagsType of tagPlayerTemp) {

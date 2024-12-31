@@ -12,6 +12,12 @@ export class TargetHalfHpDamageAttr extends FixedDamageAttr {
     super(0);
   }
 
+  /**
+   * Sets damage equal to half the target's remaining HP.
+   * If this move is boosted by {@linkcode PokemonMultiHitModifier Multi-Lens},
+   * damage is adjusted such that the combined damage of all hits
+   * is equal to half the target's remaining HP.
+   */
   override apply(user: Pokemon, target: Pokemon, _move: Move, damage: NumberHolder): boolean {
     // first, determine if the hit is coming from multi lens or not
     const lensCount =
@@ -34,12 +40,10 @@ export class TargetHalfHpDamageAttr extends FixedDamageAttr {
         // multi lens added hit; use initialHp tracker to ensure correct damage
         damage.value = toDmgValue(this.initialHp / 2);
         return true;
-        break;
       case lensCount + 1:
         // parental bond added hit; calc damage as normal
         damage.value = toDmgValue(target.hp / 2);
         return true;
-        break;
     }
   }
 

@@ -9,6 +9,10 @@ export abstract class WeatherHealAttr extends HealAttr {
     super(0.5);
   }
 
+  /**
+   * Restores the user's HP.
+   * The heal ratio varies based on the active weather
+   */
   override apply(user: Pokemon, _target: Pokemon, _move: Move): boolean {
     let healRatio = 0.5;
     if (!globalScene.arena.weather?.isEffectSuppressed()) {

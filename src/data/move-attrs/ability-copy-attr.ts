@@ -18,6 +18,10 @@ export class AbilityCopyAttr extends MoveEffectAttr {
     this.copyToPartner = copyToPartner;
   }
 
+  /**
+   * Copies the target's ability onto the user
+   * (and the user's ally if {@linkcode copyToPartner} is `true`)
+   */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

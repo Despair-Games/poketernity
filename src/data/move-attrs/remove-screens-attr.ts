@@ -14,6 +14,7 @@ export class RemoveScreensAttr extends MoveEffectAttr {
     this.targetBothSides = targetBothSides;
   }
 
+  /** Removes the effects of Reflect, Light Screen, and Aurora Veil */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

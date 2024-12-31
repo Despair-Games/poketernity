@@ -16,6 +16,7 @@ export class SpitUpPowerAttr extends VariablePowerAttr {
     this.multiplier = multiplier;
   }
 
+  /** Sets the given move's power according to the user's stockpiled count */
   override apply(user: Pokemon, _target: Pokemon, _move: Move, power: NumberHolder): boolean {
     const stockpilingTag = user.getTag(StockpilingTag);
 

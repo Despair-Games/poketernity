@@ -4,6 +4,7 @@ import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
 export class HpSplitAttr extends MoveEffectAttr {
+  /** Sets the user and target's HP to the average of the two */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

@@ -14,13 +14,7 @@ export class SacrificialAttr extends MoveEffectAttr {
     super(true, { trigger: MoveEffectTrigger.POST_TARGET });
   }
 
-  /**
-   * Deals damage to the user equal to their current hp
-   * @param user {@linkcode Pokemon} that used the move
-   * @param _target {@linkcode Pokemon} target of the move
-   * @param _move {@linkcode Move} with this attribute
-   * @returns true if the function succeeds
-   **/
+  /** Deals damage to the user equal to their current hp */
   override apply(user: Pokemon, _target: Pokemon, _move: Move): boolean {
     user.damageAndUpdate(user.hp, HitResult.OTHER, false, true, true);
     user.turnData.damageTaken += user.hp;

@@ -10,13 +10,7 @@ import { VariableMoveCategoryAttr } from "#app/data/move-attrs/variable-move-cat
  * @see {@linkcode apply}
  */
 export class StatusCategoryOnAllyAttr extends VariableMoveCategoryAttr {
-  /**
-   * @param user {@linkcode Pokemon} using the move
-   * @param target {@linkcode Pokemon} target of the move
-   * @param _move {@linkcode Move} with this attribute
-   * @param category {@linkcode NumberHolder} containing the move's category for the turn
-   * @returns true if the function succeeds
-   */
+  /** Sets the move's category to {@linkcode MoveCategory.STATUS Status} if the target is the user's ally */
   override apply(user: Pokemon, target: Pokemon, _move: Move, category: NumberHolder): boolean {
     if (user.getAlly() === target) {
       category.value = MoveCategory.STATUS;

@@ -20,6 +20,7 @@ export class RemoveArenaTagsAttr extends MoveEffectAttr {
     this.selfSideTarget = selfSideTarget;
   }
 
+  /** Removes arena tags of types matching {@linkcode tagTypes} from the user or target's side */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

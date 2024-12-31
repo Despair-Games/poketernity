@@ -12,6 +12,7 @@ export class RemoveBattlerTagAttr extends MoveEffectAttr {
     this.tagTypes = tagTypes;
   }
 
+  /** Removes tags of type included in {@linkcode tagTypes} from the target (if any exist) */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

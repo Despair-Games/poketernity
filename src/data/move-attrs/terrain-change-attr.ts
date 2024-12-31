@@ -14,6 +14,7 @@ export class TerrainChangeAttr extends MoveEffectAttr {
     this.terrainType = terrainType;
   }
 
+  /** Sets the attribute's terrain on the field */
   override apply(_user: Pokemon, _target: Pokemon, _move: Move): boolean {
     return globalScene.arena.trySetTerrain(this.terrainType, true, true);
   }

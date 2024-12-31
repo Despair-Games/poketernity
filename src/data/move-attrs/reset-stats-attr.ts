@@ -13,6 +13,11 @@ export class ResetStatsAttr extends MoveEffectAttr {
     this.targetAllPokemon = targetAllPokemon;
   }
 
+  /**
+   * If {@linkcode targetAllPokemon} is `true`, resets the stat stages
+   * of all active Pokemon on the field.
+   * Otherwise, resets the stat stages of the given target.
+   */
   override apply(_user: Pokemon, target: Pokemon, _move: Move): boolean {
     if (this.targetAllPokemon) {
       // Target all pokemon on the field when Freezy Frost or Haze are used

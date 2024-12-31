@@ -15,14 +15,7 @@ export class RemoveAllSubstitutesAttr extends MoveEffectAttr {
     super(true);
   }
 
-  /**
-   * Remove's the Substitute Doll effect from all active Pokemon on the field
-   * @param user {@linkcode Pokemon} the Pokemon using this move
-   * @param target n/a
-   * @param move {@linkcode Move} the move applying this effect
-   * @param args n/a
-   * @returns `true` if the effect successfully applies
-   */
+  /** Removes the Substitute Doll effect from all active Pokemon on the field */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

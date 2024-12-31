@@ -9,6 +9,7 @@ export class ClearTerrainAttr extends MoveEffectAttr {
     super();
   }
 
+  /** Clears all terrain from the field */
   override apply(_user: Pokemon, _target: Pokemon, _move: Move): boolean {
     return globalScene.arena.trySetTerrain(TerrainType.NONE, true, true);
   }

@@ -63,14 +63,7 @@ export class StatStageChangeAttr extends MoveEffectAttr {
     return this.options?.showMessage ?? true;
   }
 
-  /**
-   * Attempts to change stats of the user or target (depending on value of selfTarget) if conditions are met
-   * @param user {@linkcode Pokemon} the user of the move
-   * @param target {@linkcode Pokemon} the target of the move
-   * @param move {@linkcode Move} the move
-   * @param args unused
-   * @returns whether stat stages were changed
-   */
+  /** Attempts to change stats of the user or target (depending on value of selfTarget) if conditions are met */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move) || (this.condition && !this.condition(user, target, move))) {
       return false;

@@ -6,6 +6,10 @@ import type { Move } from "#app/data/move";
 import { VariableMoveTypeAttr } from "#app/data/move-attrs/variable-move-type-attr";
 
 export class IvyCudgelTypeAttr extends VariableMoveTypeAttr {
+  /**
+   * If the user is Ogerpon or a fusion with Ogerpon, sets the move's
+   * type based on Ogerpon's form.
+   */
   override apply(user: Pokemon, _target: Pokemon, _move: Move, moveType: NumberHolder): boolean {
     if ([user.species.speciesId, user.fusionSpecies?.speciesId].includes(Species.OGERPON)) {
       const form = user.species.speciesId === Species.OGERPON ? user.formIndex : user.fusionSpecies?.formIndex;

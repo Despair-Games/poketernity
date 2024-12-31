@@ -13,6 +13,7 @@ export class FrenzyAttr extends MoveEffectAttr {
     return !(this.selfTarget ? user : target).isFainted();
   }
 
+  /** Adds or progresses the user's {@linkcode BattlerTagType.FRENZY Frenzy} status */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

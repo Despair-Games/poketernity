@@ -17,6 +17,7 @@ export class ChangeTypeAttr extends MoveEffectAttr {
     this.type = type;
   }
 
+  /** Changes the target's type to this attribute's set {@linkcode Type} */
   override apply(_user: Pokemon, target: Pokemon, _move: Move): boolean {
     target.summonData.types = [this.type];
     target.updateInfo();

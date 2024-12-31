@@ -21,15 +21,7 @@ export class RepeatMoveAttr extends MoveEffectAttr {
     super(false, { trigger: MoveEffectTrigger.POST_APPLY }); // needed to ensure correct protect interaction
   }
 
-  /**
-   * Forces the target to re-use their last used move again
-   *
-   * @param user {@linkcode Pokemon} that used the attack
-   * @param target {@linkcode Pokemon} targeted by the attack
-   * @param _move N/A
-   * @param _args N/A
-   * @returns `true` if the move succeeds
-   */
+  /** Forces the target to re-use their last used move */
   override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
     // get the last move used (excluding status based failures) as well as the corresponding moveset slot
     const lastMove = target.getLastXMoves(-1).find((m) => m.move !== Moves.NONE)!;

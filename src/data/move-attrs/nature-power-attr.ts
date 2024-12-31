@@ -9,6 +9,10 @@ import type { Move } from "#app/data/move";
 import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
 
 export class NaturePowerAttr extends OverrideMoveEffectAttr {
+  /**
+   * Invokes another move based on the current biome.
+   * If terrain is active, the move is based on the active terrain instead.
+   */
   override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
     let moveId;
     switch (globalScene.arena.getTerrainType()) {

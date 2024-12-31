@@ -17,14 +17,7 @@ export class DestinyBondAttr extends MoveEffectAttr {
     super(true, { trigger: MoveEffectTrigger.PRE_APPLY });
   }
 
-  /**
-   * Applies {@linkcode BattlerTagType.DESTINY_BOND} to the user.
-   * @param user {@linkcode Pokemon} that is having the tag applied to.
-   * @param _target {@linkcode Pokemon} N/A
-   * @param move {@linkcode Move} {@linkcode Move.DESTINY_BOND}
-   * @param _args N/A
-   * @returns true
-   */
+  /** Applies {@linkcode BattlerTagType.DESTINY_BOND} to the user. */
   override apply(user: Pokemon, _target: Pokemon, move: Move): boolean {
     globalScene.queueMessage(
       `${i18next.t("moveTriggers:tryingToTakeFoeDown", { pokemonName: getPokemonNameWithAffix(user) })}`,

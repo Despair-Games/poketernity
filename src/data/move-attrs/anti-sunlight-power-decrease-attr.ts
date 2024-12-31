@@ -6,6 +6,7 @@ import type { Move } from "#app/data/move";
 import { VariablePowerAttr } from "#app/data/move-attrs/variable-power-attr";
 
 export class AntiSunlightPowerDecreaseAttr extends VariablePowerAttr {
+  /** Halves the given move's power if Rain, Hail, Snow, or a Sandstorm is active */
   override apply(_user: Pokemon, _target: Pokemon, _move: Move, power: NumberHolder): boolean {
     if (!globalScene.arena.weather?.isEffectSuppressed()) {
       const weatherType = globalScene.arena.weather?.weatherType || WeatherType.NONE;

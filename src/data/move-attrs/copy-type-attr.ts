@@ -12,6 +12,7 @@ export class CopyTypeAttr extends MoveEffectAttr {
     super(false);
   }
 
+  /** Modifies the user's types to match those of the target */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

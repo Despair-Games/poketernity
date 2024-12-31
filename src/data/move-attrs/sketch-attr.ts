@@ -20,15 +20,11 @@ export class SketchAttr extends MoveEffectAttr {
   constructor() {
     super(true);
   }
-  /**
-   * User copies the opponent's last used move, if possible
-   * @param user Pokemon that used the move and will replace Sketch with the copied move
-   * @param target Pokemon that the user wants to copy a move from
-   * @param move Move being used
-   * @param args Unused
-   * @returns `true` if the function succeeds, otherwise `false`
-   */
 
+  /**
+   * Copies the target's last used move into the user's moveset,
+   * permanently replacing the given move.
+   */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

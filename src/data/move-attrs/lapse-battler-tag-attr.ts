@@ -12,6 +12,7 @@ export class LapseBattlerTagAttr extends MoveEffectAttr {
     this.tagTypes = tagTypes;
   }
 
+  /** Lapses the target's battler tags that match this attribute's {@linkcode tagTypes tag types} */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

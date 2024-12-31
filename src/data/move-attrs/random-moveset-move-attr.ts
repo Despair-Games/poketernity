@@ -15,6 +15,14 @@ export class RandomMovesetMoveAttr extends OverrideMoveEffectAttr {
     this.enemyMoveset = enemyMoveset!; // TODO: is this bang correct?
   }
 
+  /**
+   * Invokes a random move from the user or enemy's moveset, using it
+   * against a random legal target
+   * @param user the {@linkcode Pokemon} using the move
+   * @param target the {@linkcode Pokemon} targeted by the move
+   * @param _move the {@linkcode Move} being used
+   * @returns `true` if a move is successfully invoked
+   */
   override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
     const moveset = (!this.enemyMoveset ? user : target).getMoveset();
     const moves = moveset.filter((m) => !m.getMove().hasFlag(MoveFlags.IGNORE_VIRTUAL));

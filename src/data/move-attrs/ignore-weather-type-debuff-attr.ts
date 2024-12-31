@@ -22,10 +22,7 @@ export class IgnoreWeatherTypeDebuffAttr extends MoveAttr {
   }
   /**
    * Changes the type-based weather modifier if this move's power would be reduced by it
-   * @param _user {@linkcode Pokemon} that used the move
-   * @param _target N/A
-   * @param _move {@linkcode Move} with this attribute
-   * @param args [0] {@linkcode NumberHolder} for arenaAttackTypeMultiplier
+   * @param weatherModifier {@linkcode NumberHolder} for arenaAttackTypeMultiplier
    * @returns true if the function succeeds
    */
   override apply(_user: Pokemon, _target: Pokemon, _move: Move, weatherModifier: NumberHolder): boolean {

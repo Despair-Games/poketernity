@@ -11,6 +11,7 @@ export class IgnoreAccuracyAttr extends AddBattlerTagAttr {
     super(BattlerTagType.IGNORE_ACCURACY, true, { turnCountMin: 2 });
   }
 
+  /** Adds an effect that prevents the user from missing the target for the next 2 turns */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

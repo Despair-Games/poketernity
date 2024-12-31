@@ -12,6 +12,7 @@ export class MultiStatusEffectAttr extends StatusEffectAttr {
     this.effects = effects;
   }
 
+  /** Randomly applies one of this attribute's {@linkcode effects status effects} onto the target */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     this.effect = randSeedItem(this.effects);
     const result = super.apply(user, target, move);

@@ -16,13 +16,7 @@ const countPositiveStatStages = (pokemon: Pokemon): number => {
  * Attribute that increases power based on the amount of positive stat stage increases.
  */
 export class PositiveStatStagePowerAttr extends VariablePowerAttr {
-  /**
-   * @param user The pokemon that is being used to calculate the amount of positive stats
-   * @param _target N/A
-   * @param _move N/A
-   * @param power The argument for VariablePowerAttr, accumulates and sets the amount of power multiplied by stats
-   * @returns Returns `true` if attribute is applied
-   */
+  /** Increases power by 20 * the number of the user's positive stat stages */
   override apply(user: Pokemon, _target: Pokemon, _move: Move, power: NumberHolder): boolean {
     const positiveStatStages: number = countPositiveStatStages(user);
 
@@ -40,13 +34,7 @@ export class PunishmentPowerAttr extends VariablePowerAttr {
   private PUNISHMENT_MIN_BASE_POWER = 60;
   private PUNISHMENT_MAX_BASE_POWER = 200;
 
-  /**
-   * @param _user N/A
-   * @param target The pokemon that the move is being used against, as well as calculating the stats for the min/max base power
-   * @param _move N/A
-   * @param power The value that is being changed due to VariablePowerAttr
-   * @returns Returns true if attribute is applied
-   */
+  /** Increases power by 20 * the number of the target's stat stages */
   override apply(_user: Pokemon, target: Pokemon, _move: Move, power: NumberHolder): boolean {
     const positiveStatStages: number = countPositiveStatStages(target);
     power.value = Math.min(this.PUNISHMENT_MAX_BASE_POWER, this.PUNISHMENT_MIN_BASE_POWER + positiveStatStages * 20);

@@ -19,14 +19,7 @@ export class ExposedMoveAttr extends AddBattlerTagAttr {
     super(tagType, false, { failOnOverlap: true });
   }
 
-  /**
-   * Applies {@linkcode ExposedTag} to the target.
-   * @param user {@linkcode Pokemon} using this move
-   * @param target {@linkcode Pokemon} target of this move
-   * @param move {@linkcode Move} being used
-   * @param args N/A
-   * @returns `true` if the function succeeds
-   */
+  /** Applies {@linkcode ExposedTag} to the target. */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

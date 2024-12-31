@@ -18,6 +18,10 @@ export class CounterDamageAttr extends FixedDamageAttr {
     this.multiplier = multiplier;
   }
 
+  /**
+   * Modifies damage based on the damage received by the user from attacks
+   * that satisfy this attribute's {@linkcode moveFilter move filter}
+   */
   override apply(user: Pokemon, _target: Pokemon, _move: Move, damage: NumberHolder): boolean {
     const damageTaken = user.turnData.attacksReceived
       .filter((ar) => this.moveFilter(allMoves[ar.move]))

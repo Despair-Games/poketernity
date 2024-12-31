@@ -14,7 +14,7 @@ export class BypassBurnDamageReductionAttr extends MoveAttr {
    * @param _user N/A
    * @param _target N/A
    * @param _move {@linkcode Move} with this attribute
-   * @param args [0] {@linkcode BooleanHolder} for burnDamageReductionCancelled
+   * @param burnDamageReductionCancelled set to `true` to disable the damage penalty from Burn
    * @returns true if the function succeeds
    */
   override apply(_user: Pokemon, _target: Pokemon, _move: Move, burnDamageReductionCancelled: BooleanHolder): boolean {

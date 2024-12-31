@@ -6,9 +6,10 @@ import { ForceSwitchOutAttr } from "#app/data/move-attrs/force-switch-out-attr";
 import type { MoveConditionFunc } from "../move-conditions";
 
 export class ChillyReceptionAttr extends ForceSwitchOutAttr {
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
+  /** Sets the weather to Snow, then attempts a forced switch on the user */
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     globalScene.arena.trySetWeather(WeatherType.SNOW, true);
-    return super.apply(user, target, move, args);
+    return super.apply(user, target, move);
   }
 
   override getCondition(): MoveConditionFunc {

@@ -16,10 +16,8 @@ export class StatusIfBoostedAttr extends MoveEffectAttr {
   }
 
   /**
-   * @param user {@linkcode Pokemon} using this move
-   * @param target {@linkcode Pokemon} target of this move
-   * @param _move {@linkcode Move} N/A
-   * @returns true
+   * Applies a {@linkcode effect status effect} to the target if the
+   * target has had its stat stages increased this turn.
    */
   override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
     if (target.turnData.statStagesIncreased) {

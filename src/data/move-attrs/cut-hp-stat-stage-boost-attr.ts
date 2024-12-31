@@ -21,6 +21,7 @@ export class CutHpStatStageBoostAttr extends StatStageChangeAttr {
     this.messageCallback = messageCallback;
   }
 
+  /** Sacrifices a set ratio of the user's maximum HP to grant a stat stage boost */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     user.damageAndUpdate(toDmgValue(user.getMaxHp() / this.cutRatio), HitResult.OTHER, false, true);
     user.updateInfo();

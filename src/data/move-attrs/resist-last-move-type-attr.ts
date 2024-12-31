@@ -25,14 +25,7 @@ export class ResistLastMoveTypeAttr extends MoveEffectAttr {
   constructor() {
     super(true);
   }
-  /**
-   * User changes its type to a random type that resists the target's last used move
-   * @param user Pokemon that used the move and will change types
-   * @param target Opposing pokemon that recently used a move
-   * @param move Move being used
-   * @param args Unused
-   * @returns `true` if the function succeeds
-   */
+  /** Changes the user's type to a random type that resists the target's last used move */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

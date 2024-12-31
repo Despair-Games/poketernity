@@ -19,6 +19,7 @@ export class AbilityChangeAttr extends MoveEffectAttr {
     this.ability = ability;
   }
 
+  /** Changes the target's ability to this attribute's set ability */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

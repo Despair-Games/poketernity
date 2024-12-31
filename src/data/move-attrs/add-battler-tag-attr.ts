@@ -49,14 +49,7 @@ export class AddBattlerTagAttr extends MoveEffectAttr {
     return this.options?.turnCountMax ?? this.turnCountMin;
   }
 
-  override canApply(user: Pokemon, target: Pokemon, move: Move): boolean {
-    if (!super.canApply(user, target, move)) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
+  /** Adds a {@linkcode BattlerTag} to the target of the attribute's {@linkcode BattlerTagType tag type}. */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

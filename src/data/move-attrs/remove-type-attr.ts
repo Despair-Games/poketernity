@@ -14,6 +14,11 @@ export class RemoveTypeAttr extends MoveEffectAttr {
     this.messageCallback = messageCallback;
   }
 
+  /**
+   * Removes this attributes specified {@linkcode removedType type} from the user.
+   * If the user has no remaining type after removal, this also
+   * makes the user {@linkcode Type.UNKNOWN typeless}.
+   */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

@@ -8,6 +8,7 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import type { MoveConditionFunc } from "../move-conditions";
 
 export class SwitchAbilitiesAttr extends MoveEffectAttr {
+  /** Swaps the user and target's abilities (if both are swappable) */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

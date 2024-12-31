@@ -6,7 +6,6 @@ import { MoveAttr } from "#app/data/move-attrs/move-attr";
  * They can be used to apply effects to the field (e.g. queueing a message) or to the user
  * (e.g. adding a battler tag).
  */
-
 export class MoveHeaderAttr extends MoveAttr {
   constructor() {
     super(true);

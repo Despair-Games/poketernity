@@ -13,6 +13,10 @@ export class CopyBiomeTypeAttr extends MoveEffectAttr {
     super(true);
   }
 
+  /**
+   * Changes the user's type based on the current biome.
+   * If terrain is active, this changes the user's type to match the terrain instead.
+   */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

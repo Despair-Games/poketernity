@@ -16,7 +16,6 @@ import { MoveAttr } from "#app/data/move-attrs/move-attr";
  * @extends MoveAttr
  * @see {@linkcode apply}
  */
-
 export class MultiHitAttr extends MoveAttr {
   /** This move's intrinsic multi-hit type. It should never be modified. */
   private readonly intrinsicMultiHitType: MultiHitType;

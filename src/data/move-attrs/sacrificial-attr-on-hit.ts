@@ -13,13 +13,7 @@ export class SacrificialAttrOnHit extends MoveEffectAttr {
     super(true);
   }
 
-  /**
-   * Deals damage to the user equal to their current hp if the move lands
-   * @param user {@linkcode Pokemon} that used the move
-   * @param target {@linkcode Pokemon} target of the move
-   * @param move {@linkcode Move} with this attribute
-   * @returns true if the function succeeds
-   **/
+  /** Deals damage to the user equal to their current hp if the move lands */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     // If the move fails to hit a target, then the user does not faint and the function returns false
     if (!super.apply(user, target, move)) {

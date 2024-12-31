@@ -4,6 +4,7 @@ import type { Move } from "#app/data/move";
 import { VariablePowerAttr } from "#app/data/move-attrs/variable-power-attr";
 
 export class CompareWeightPowerAttr extends VariablePowerAttr {
+  /** Modifies the given move's power based on the user's weight relative to the target */
   override apply(user: Pokemon, target: Pokemon, _move: Move, power: NumberHolder): boolean {
     const userWeight = user.getWeight();
     const targetWeight = target.getWeight();

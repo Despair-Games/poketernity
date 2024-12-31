@@ -22,6 +22,7 @@ export class RecoilAttr extends MoveEffectAttr {
     this.unblockable = unblockable;
   }
 
+  /** Applies recoil damage to the user. */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

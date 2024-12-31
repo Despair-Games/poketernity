@@ -6,6 +6,10 @@ import type { Move } from "#app/data/move";
 import { VariableMoveTypeMultiplierAttr } from "#app/data/move-attrs/variable-move-type-multiplier-attr";
 
 export class NeutralDamageAgainstFlyingTypeMultiplierAttr extends VariableMoveTypeMultiplierAttr {
+  /**
+   * If the target is Flying-type and is not grounded by another effect,
+   * sets the given move's type effectiveness multiplier to 1.
+   */
   override apply(_user: Pokemon, target: Pokemon, _move: Move, multiplier: NumberHolder): boolean {
     if (!target.getTag(BattlerTagType.IGNORE_FLYING)) {
       //When a flying type is hit, the first hit is always 1x multiplier.

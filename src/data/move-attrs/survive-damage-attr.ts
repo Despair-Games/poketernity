@@ -4,6 +4,7 @@ import { ModifiedDamageAttr } from "#app/data/move-attrs/modified-damage-attr";
 import type { MoveConditionFunc } from "../move-conditions";
 
 export class SurviveDamageAttr extends ModifiedDamageAttr {
+  /** Restricts damage to leave the target at 1 HP */
   override getModifiedDamage(_user: Pokemon, target: Pokemon, _move: Move, damage: number): number {
     return Math.min(damage, target.hp - 1);
   }

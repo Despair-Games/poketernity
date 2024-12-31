@@ -14,6 +14,7 @@ export class FaintCountdownAttr extends AddBattlerTagAttr {
     });
   }
 
+  /** Applies the effects of {@linkcode BattlerTagType.PERISH_SONG Perish Song} to the given target */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

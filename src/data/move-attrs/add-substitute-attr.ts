@@ -24,14 +24,7 @@ export class AddSubstituteAttr extends MoveEffectAttr {
     this.hpCost = hpCost;
   }
 
-  /**
-   * Removes 1/4 of the user's maximum HP (rounded down) to create a substitute for the user
-   * @param user the {@linkcode Pokemon} that used the move.
-   * @param target n/a
-   * @param move the {@linkcode Move} with this attribute.
-   * @param args n/a
-   * @returns true if the attribute successfully applies, false otherwise
-   */
+  /** Removes 1/4 of the user's maximum HP (rounded down) to create a substitute for the user */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

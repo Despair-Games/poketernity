@@ -11,11 +11,9 @@ import { VariableMoveCategoryAttr } from "#app/data/move-attrs/variable-move-cat
  */
 export class ShellSideArmCategoryAttr extends VariableMoveCategoryAttr {
   /**
-   * @param user - The Pokemon using shell side arm
-   * @param target - The Pokemon being attacked
-   * @param move - Shell side arm
-   * @param args - args[0] a {@linkcode NumberHolder} thhat represents {@linkcode MoveCategory}
-   * @returns true if the move should be physical
+   * Changes the given move's category according to which attacking
+   * category would deal more damage to the target.
+   * If the move becomes physical, this also sets the move to make contact
    */
   override apply(user: Pokemon, target: Pokemon, move: Move, category: NumberHolder): boolean {
     const predictedPhysDmg = target.getBaseDamage(user, move, MoveCategory.PHYSICAL, true, true);
@@ -28,7 +26,8 @@ export class ShellSideArmCategoryAttr extends VariableMoveCategoryAttr {
       return true;
     }
 
-    /** MoveFlags are not reset every turn so if this flag is set it needs to be reset if the move is a special attack
+    /**
+     * MoveFlags are not reset every turn so if this flag is set it needs to be reset if the move is a special attack
      * Need the if check for unit tests
      */
     if (move.hasFlag(MoveFlags.MAKES_CONTACT)) {

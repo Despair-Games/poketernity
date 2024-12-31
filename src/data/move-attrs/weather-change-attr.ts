@@ -14,6 +14,7 @@ export class WeatherChangeAttr extends MoveEffectAttr {
     this.weatherType = weatherType;
   }
 
+  /** Sets the weather on the field */
   override apply(_user: Pokemon, _target: Pokemon, _move: Move): boolean {
     return globalScene.arena.trySetWeather(this.weatherType, true);
   }

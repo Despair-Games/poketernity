@@ -10,6 +10,7 @@ export class AcupressureStatStageChangeAttr extends MoveEffectAttr {
     super();
   }
 
+  /** Increases a random stat on the user by 2 stages */
   override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
     const randStats = BATTLE_STATS.filter((s) => target.getStatStage(s) < 6);
     if (randStats.length > 0) {

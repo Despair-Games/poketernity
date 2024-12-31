@@ -8,6 +8,10 @@ import type { Move } from "#app/data/move";
 import { VariablePowerAttr } from "#app/data/move-attrs/variable-power-attr";
 
 export class PresentPowerAttr extends VariablePowerAttr {
+  /**
+   * Sets the move's power based on one of four Presents,
+   * with one of which healing the target for 25% of its maximum HP
+   */
   override apply(user: Pokemon, target: Pokemon, _move: Move, power: NumberHolder): boolean {
     /**
      * If this move is multi-hit, and this attribute is applied to any hit

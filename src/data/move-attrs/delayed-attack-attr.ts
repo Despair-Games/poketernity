@@ -30,6 +30,11 @@ export class DelayedAttackAttr extends OverrideMoveEffectAttr {
     this.chargeText = chargeText;
   }
 
+  /**
+   * If used virtually, this queues a message and proceeds normally.
+   * Otherwise, this adds a delayed attack to the field and cancels other move effects
+   * for the current attack.
+   */
   override apply(user: Pokemon, target: Pokemon, move: Move, overridden: BooleanHolder, virtual: boolean): boolean {
     // Edge case for the move applied on a pokemon that has fainted
     if (!target) {

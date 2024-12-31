@@ -12,13 +12,7 @@ import { VariableMoveTypeAttr } from "#app/data/move-attrs/variable-move-type-at
  * @extends VariableMoveTypeAttr
  */
 export class TerrainPulseTypeAttr extends VariableMoveTypeAttr {
-  /**
-   * @param user {@linkcode Pokemon} using this move
-   * @param _target N/A
-   * @param _move N/A
-   * @param args [0] {@linkcode NumberHolder} The move's type to be modified
-   * @returns true if the function succeeds
-   */
+  /** Changes the given move's type to match the current terrain. */
   override apply(user: Pokemon, _target: Pokemon, _move: Move, moveType: NumberHolder): boolean {
     if (!user.isGrounded()) {
       return false;

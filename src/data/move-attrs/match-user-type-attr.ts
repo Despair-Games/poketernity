@@ -1,14 +1,12 @@
 import { Type } from "#enums/type";
 import type { Pokemon } from "#app/field/pokemon";
-import { NumberHolder } from "#app/utils";
+import type { NumberHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
 import { VariableMoveTypeAttr } from "#app/data/move-attrs/variable-move-type-attr";
 
 export class MatchUserTypeAttr extends VariableMoveTypeAttr {
+  /** Sets the given move's type to the user's primary type */
   override apply(user: Pokemon, _target: Pokemon, _move: Move, moveType: NumberHolder): boolean {
-    if (!(moveType instanceof NumberHolder)) {
-      return false;
-    }
     const userTypes = user.getTypes(true);
 
     if (userTypes.includes(Type.STELLAR)) {

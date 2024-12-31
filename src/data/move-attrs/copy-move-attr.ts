@@ -6,6 +6,7 @@ import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effec
 import { lastMoveCopiableCondition, type MoveConditionFunc } from "../move-conditions";
 
 export class CopyMoveAttr extends OverrideMoveEffectAttr {
+  /** Copies the last move used in battle and invokes it against random target(s) */
   override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
     const lastMove = globalScene.currentBattle.lastMove;
 

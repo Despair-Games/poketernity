@@ -7,6 +7,15 @@ import { MoveAttr } from "#app/data/move-attrs/move-attr";
 import type { MoveConditionFunc } from "../move-conditions";
 
 export class OneHitKOAttr extends MoveAttr {
+  /**
+   * If the target is not a Boss, flags the given move as a one-hit KO
+   * @param _user the {@linkcode Pokemon} using the move
+   * @param target the {@linkcode Pokemon} targeted by the move
+   * @param _move the {@linkcode Move} being used
+   * @param isOneHitKo a {@linkcode BooleanHolder} containing a flag which, if set to `true`, marks
+   * the current attack as a one-hit KO
+   * @returns `true` if the move is flagged as a one-hit KO
+   */
   override apply(_user: Pokemon, target: Pokemon, _move: Move, isOneHitKo: BooleanHolder): boolean {
     if (target.isBossImmune()) {
       return false;

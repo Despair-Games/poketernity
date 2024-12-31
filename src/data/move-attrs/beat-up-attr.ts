@@ -28,14 +28,7 @@ const beatUpFunc = (user: Pokemon, allyIndex: number): number => {
 };
 
 export class BeatUpAttr extends VariablePowerAttr {
-  /**
-   * Gets the next party member to contribute to a Beat Up hit, and calculates the base power for it.
-   * @param user Pokemon that used the move
-   * @param _target N/A
-   * @param _move Move with this attribute
-   * @param power A {@linkcode NumberHolder} containing the move's power for the turn
-   * @returns true if the function succeeds
-   */
+  /** Modifies base power according to the party Pokemon that contributes to the current hit. */
   override apply(user: Pokemon, _target: Pokemon, _move: Move, power: NumberHolder): boolean {
     const party = user.getParty();
     const allyCount = party.filter((pokemon) => {

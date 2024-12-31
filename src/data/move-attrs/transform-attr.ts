@@ -8,6 +8,12 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
 /** Used by Transform */
 export class TransformAttr extends MoveEffectAttr {
+  /**
+   * Transforms the user into a copy of the target,
+   * copying the target's species, form, ability, gender, moveset, and
+   * all effective stats (except HP)
+   * @see {@linkcode PokemonTransformPhase}
+   */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

@@ -30,12 +30,7 @@ export class BoostHealAttr extends HealAttr {
     this.condition = condition;
   }
 
-  /**
-   * @param user {@linkcode Pokemon} using the move
-   * @param target {@linkcode Pokemon} target of the move
-   * @param move {@linkcode Move} with this attribute
-   * @returns true if the move was successful
-   */
+  /** Heals the given target. The heal ratio is boosted if this attribute's {@linkcode condition} is met. */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     const healRatio: number = (this.condition ? this.condition(user, target, move) : false)
       ? this.boostedHealRatio

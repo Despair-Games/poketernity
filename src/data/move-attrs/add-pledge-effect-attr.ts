@@ -17,6 +17,10 @@ export class AddPledgeEffectAttr extends AddArenaTagAttr {
     this.requiredPledge = requiredPledge;
   }
 
+  /**
+   * Adds the attribute's arena tag to the field if the required Pledge
+   * combination was used this turn.
+   */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (user.turnData.combiningPledge === this.requiredPledge) {
       return super.apply(user, target, move);

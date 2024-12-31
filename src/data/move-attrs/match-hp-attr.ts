@@ -9,6 +9,7 @@ export class MatchHpAttr extends FixedDamageAttr {
     super(0);
   }
 
+  /** Sets damage such that the target will be brought down to the user's HP */
   override apply(user: Pokemon, target: Pokemon, _move: Move, damage: NumberHolder): boolean {
     damage.value = target.hp - user.hp;
 

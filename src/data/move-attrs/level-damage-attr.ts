@@ -7,6 +7,7 @@ export class LevelDamageAttr extends FixedDamageAttr {
     super(0);
   }
 
+  /** Damage is equal to the user's level */
   override getDamage(user: Pokemon, _target: Pokemon, _move: Move): number {
     return user.level;
   }

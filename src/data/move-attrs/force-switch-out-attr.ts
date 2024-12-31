@@ -32,6 +32,10 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
     return this.switchType === SwitchType.BATON_PASS;
   }
 
+  /**
+   * If conditions to switch out are met, forces the target
+   * (or user if {@linkcode selfSwitch} is `true`) to switch out
+   */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     // Check if the move category is not STATUS or if the switch out condition is not met
     if (!this.getSwitchOutCondition()(user, target, move)) {

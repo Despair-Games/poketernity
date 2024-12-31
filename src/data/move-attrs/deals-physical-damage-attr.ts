@@ -4,11 +4,16 @@ import type { NumberHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
 import { VariableDefAttr } from "#app/data/move-attrs/variable-def-attr";
 
-export class DefDefAttr extends VariableDefAttr {
+/**
+ * Attribute for Special attacks that deal physical damage,
+ * e.g. {@link https://bulbapedia.bulbagarden.net/wiki/Psyshock_(move) Psyshock}
+ */
+export class DealsPhysicalDamageAttr extends VariableDefAttr {
   constructor() {
     super();
   }
 
+  /** Overrides the target's defending stat to equal the target's Defense */
   override apply(user: Pokemon, target: Pokemon, _move: Move, defendingStat: NumberHolder): boolean {
     defendingStat.value = target.getEffectiveStat(Stat.DEF, user);
     return true;

@@ -25,6 +25,10 @@ export class HealAttr extends MoveEffectAttr {
     this.showAnim = !!showAnim;
   }
 
+  /**
+   * Heals the target (or user if self-targeted)
+   * by the attribute's {@linkcode healRatio}.
+   */
   override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
     this.addHealPhase(this.selfTarget ? user : target, this.healRatio);
     return true;

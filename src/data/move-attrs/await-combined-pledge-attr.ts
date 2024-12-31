@@ -19,13 +19,6 @@ export class AwaitCombinedPledgeAttr extends OverrideMoveEffectAttr {
   /**
    * If the user's ally is set to use a different move with this attribute,
    * defer this move's effects for a combined move on the ally's turn.
-   * @param user the {@linkcode Pokemon} using this move
-   * @param _target n/a
-   * @param move the {@linkcode Move} being used
-   * @param args
-   * - [0] a {@linkcode BooleanHolder} indicating whether the move's base
-   * effects should be overridden this turn.
-   * @returns `true` if base move effects were overridden; `false` otherwise
    */
   override apply(user: Pokemon, _target: Pokemon, move: Move, overridden: BooleanHolder): boolean {
     if (user.turnData.combiningPledge) {

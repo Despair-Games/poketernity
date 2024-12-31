@@ -12,6 +12,15 @@ export class VariableTargetAttr extends MoveAttr {
     this.targetChangeFunc = targetChange;
   }
 
+  /**
+   * Changes the move's target according to this attribute's
+   * {@linkcode targetChangeFunc}
+   * @param user the {@linkcode Pokemon} using the move
+   * @param target the {@linkcode Pokemon} targeted by the move
+   * @param move the {@linkcode Move} being used
+   * @param newTarget a {@linkcode NumberHolder} containing the move's adjusted target
+   * @returns `true`
+   */
   override apply(user: Pokemon, target: Pokemon, move: Move, newTarget: NumberHolder): boolean {
     newTarget.value = this.targetChangeFunc(user, target, move);
     return true;

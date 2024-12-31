@@ -17,14 +17,7 @@ export class EatBerryAttr extends MoveEffectAttr {
   constructor(selfTarget: boolean) {
     super(selfTarget);
   }
-  /**
-   * Causes the target to eat a berry.
-   * @param user {@linkcode Pokemon} Pokemon that used the move
-   * @param target {@linkcode Pokemon} Pokemon that will eat a berry
-   * @param move {@linkcode Move} The move being used
-   * @param args Unused
-   * @returns `true` if the function succeeds
-   */
+  /** Causes the target to eat a berry. */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

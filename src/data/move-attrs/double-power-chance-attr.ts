@@ -23,6 +23,7 @@ export const doublePowerChanceMessageFunc = (user: Pokemon, _target: Pokemon, mo
 };
 
 export class DoublePowerChanceAttr extends VariablePowerAttr {
+  /** Applies a `move.chance` percent chance to double the given move's power */
   override apply(_user: Pokemon, _target: Pokemon, move: Move, power: NumberHolder): boolean {
     let rand: number;
     globalScene.executeWithSeedOffset(

@@ -19,13 +19,7 @@ export class FlameBurstAttr extends MoveEffectAttr {
     super(true);
   }
 
-  /**
-   * @param _user - n/a
-   * @param target - The target Pokémon.
-   * @param _move - n/a
-   * @param _args - n/a
-   * @returns A boolean indicating whether the effect was successfully applied.
-   */
+  /** If the target has an active ally, damages the ally by 1/16 of its maximum HP */
   override apply(_user: Pokemon, target: Pokemon, _move: Move): boolean {
     const targetAlly = target.getAlly();
     const cancelled = new BooleanHolder(false);

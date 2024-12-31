@@ -8,6 +8,15 @@ export class VariableDefAttr extends MoveAttr {
     super();
   }
 
+  /**
+   * Changes the defensive stat used in the current attack's damage calculation
+   * @param _user the {@linkcode Pokemon} using the move
+   * @param _target the {@linkcode Pokemon} targeted by the move
+   * @param _move the {@linkcode Move} being used
+   * @param _defendingStat a {@linkcode NumberHolder} containing the defensive stat
+   * used in the current attack's damage calculation.
+   * @returns `true` if the defensive stat is modified by this attribute
+   */
   override apply(_user: Pokemon, _target: Pokemon, _move: Move, _defendingStat: NumberHolder): boolean {
     return false;
   }

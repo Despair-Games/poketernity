@@ -16,6 +16,7 @@ export class AddTypeAttr extends MoveEffectAttr {
     this.type = type;
   }
 
+  /** Adds this attribute's type to the given target */
   override apply(_user: Pokemon, target: Pokemon, _move: Move): boolean {
     target.summonData.addedType = this.type;
     target.updateInfo();

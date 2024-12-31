@@ -8,16 +8,10 @@ import { VariableMoveTypeAttr } from "#app/data/move-attrs/variable-move-type-at
  * @extends VariableMoveTypeAttr
  */
 export class TeraBlastTypeAttr extends VariableMoveTypeAttr {
-  /**
-   * @param user {@linkcode Pokemon} the user of the move
-   * @param _target {@linkcode Pokemon} N/A
-   * @param _move {@linkcode Move} the move with this attribute
-   * @param args `[0]` the move's type to be modified
-   * @returns `true` if the move's type was modified; `false` otherwise
-   */
+  /** Changes the given move's type to match the user's tera type */
   override apply(user: Pokemon, _target: Pokemon, _move: Move, moveType: NumberHolder): boolean {
     if (user.isTerastallized()) {
-      moveType.value = user.getTeraType(); // changes move type to tera type
+      moveType.value = user.getTeraType();
       return true;
     }
 

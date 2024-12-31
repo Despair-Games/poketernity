@@ -12,6 +12,7 @@ export class ConfuseAttr extends AddBattlerTagAttr {
     super(BattlerTagType.CONFUSED, selfTarget, { turnCountMin: 2, turnCountMax: 5 });
   }
 
+  /** Confuses the user or target, depending on if this attribute is self-targeted */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!this.selfTarget && target.isSafeguarded(user)) {
       if (move.category === MoveCategory.STATUS) {

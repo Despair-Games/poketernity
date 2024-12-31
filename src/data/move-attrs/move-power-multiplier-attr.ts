@@ -12,6 +12,7 @@ export class MovePowerMultiplierAttr extends VariablePowerAttr {
     this.powerMultiplierFunc = powerMultiplier;
   }
 
+  /** Multiplies the given move's power by a value obtained from this attribute's multiplier function */
   override apply(user: Pokemon, target: Pokemon, move: Move, power: NumberHolder): boolean {
     power.value *= this.powerMultiplierFunc(user, target, move);
 

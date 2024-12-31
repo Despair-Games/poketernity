@@ -22,12 +22,9 @@ export class RevivalBlessingAttr extends MoveEffectAttr {
   }
 
   /**
-   *
-   * @param user {@linkcode Pokemon} using this move
-   * @param _target {@linkcode Pokemon} target of this move
-   * @param _move {@linkcode Move} being used
-   * @param _args N/A
-   * @returns 'true' if the function succeeds
+   * If the user is a player Pokemon, allows the player to select a
+   * fainted Pokemon in their party to revive to half of its maximum HP.
+   * Otherwise, revives a random Pokemon in the user's party.
    */
   override apply(user: Pokemon, _target: Pokemon, _move: Move): boolean {
     // If user is player, checks if the user has fainted pokemon

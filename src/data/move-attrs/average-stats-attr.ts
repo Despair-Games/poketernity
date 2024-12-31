@@ -29,11 +29,6 @@ export class AverageStatsAttr extends MoveEffectAttr {
    * Takes the average of the user's and target's corresponding {@linkcode stat}
    * values and sets those stats to the corresponding average for both
    * temporarily.
-   * @param user the {@linkcode Pokemon} that used the move
-   * @param target the {@linkcode Pokemon} that the move was used on
-   * @param move N/A
-   * @param args N/A
-   * @returns true if attribute application succeeds
    */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (super.apply(user, target, move)) {

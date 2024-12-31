@@ -6,7 +6,7 @@ import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
 /**
- * Attribute for the "combo" effect of {@link https://bulbapedia.bulbagarden.net/wiki/Round_(move) | Round}.
+ * Attribute for the "combo" effect of {@link https://bulbapedia.bulbagarden.net/wiki/Round_(move) Round}.
  * Preempts the next move in the turn order with the first instance of any Pokemon
  * using Round. Also marks the Pokemon using the cued Round to double the move's power.
  * @extends MoveEffectAttr
@@ -17,6 +17,7 @@ export class CueNextRoundAttr extends MoveEffectAttr {
     super(true, { lastHitOnly: true });
   }
 
+  /** Manipulates turn order so that the next use of Round precedes other moves this turn */
   override apply(_user: Pokemon, _target: Pokemon, _move: Move): boolean {
     const nextRoundPhase = globalScene.findPhase<MovePhase>(
       (phase) => phase instanceof MovePhase && phase.move.moveId === Moves.ROUND,

@@ -12,6 +12,13 @@ export class NoEffectAttr extends MoveAttr {
     this.noEffectFunc = noEffectFunc;
   }
 
+  /**
+   * Applies this attribute's on-no-effect function
+   * @param user the {@linkcode Pokemon} using the move
+   * @param _target n/a
+   * @param move the {@linkcode Move} being used
+   * @returns `true`
+   */
   override apply(user: Pokemon, _target: Pokemon, move: Move): boolean {
     this.noEffectFunc(user, move);
     return true;

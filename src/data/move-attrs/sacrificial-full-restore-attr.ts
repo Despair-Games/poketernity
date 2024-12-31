@@ -24,6 +24,7 @@ export class SacrificialFullRestoreAttr extends SacrificialAttr {
     this.moveTriggerMessage = moveTriggerMessage;
   }
 
+  /** Sacrifices the user to fully heal the {@linkcode Pokemon} that takes its place */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;
