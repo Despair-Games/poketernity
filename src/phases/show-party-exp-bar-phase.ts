@@ -59,7 +59,6 @@ export class ShowPartyExpBarPhase extends PlayerPartyMemberPokemonPhase {
   }
 
   public override end(): void {
-    globalScene.partyExpBar.hide();
-    super.end();
+    globalScene.partyExpBar.hide().then(() => super.end());
   }
 }
