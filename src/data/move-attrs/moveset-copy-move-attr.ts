@@ -6,6 +6,7 @@ import { type Move } from "../move";
 import { allMoves } from "#app/data/all-moves";
 import { targetMoveCopiableCondition, type MoveConditionFunc } from "../move-conditions";
 import { OverrideMoveEffectAttr } from "./override-move-effect-attr";
+
 export class MovesetCopyMoveAttr extends OverrideMoveEffectAttr {
   /**
    * Copies the target's last used move into the user's moveset,
