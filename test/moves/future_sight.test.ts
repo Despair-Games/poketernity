@@ -25,7 +25,7 @@ describe("Moves - Future Sight", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.FUTURE_SIGHT, Moves.SPLASH])
+      .moveset([Moves.FUTURE_SIGHT, Moves.SPLASH, Moves.DOOM_DESIRE])
       .battleType("single")
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
@@ -134,7 +134,7 @@ describe("Moves - Future Sight", () => {
     await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(game.scene.arena.getTag(ArenaTagType.DELAYED_ATTACK)).toBeDefined();
-    enemyPokemon.forEach((p) => expect(p.isFullHp()).toBeDefined());
+    enemyPokemon.forEach((p) => expect(p.isFullHp()).toBeTruthy());
 
     await passTurns(2, true);
 
@@ -158,7 +158,7 @@ describe("Moves - Future Sight", () => {
   });
 
   it("can be used alongside Doom Desire against different targets", async () => {
-    game.override.battleType("double").moveset([Moves.FUTURE_SIGHT, Moves.DOOM_DESIRE, Moves.SPLASH]);
+    game.override.battleType("double");
 
     await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
 
