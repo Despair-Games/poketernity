@@ -1,8 +1,16 @@
 # Pokéternity
 
-Pokéternity is a browser based Pokémon fangame heavily inspired by the roguelite genre. Battle endlessly while gathering stacking items, exploring many different biomes, fighting trainers, bosses, and more!
+Pokéternity is a fork of PokéRogue, the popular browser based Pokémon fangame heavily inspired by the roguelite genre, led and designed by artists and developers. We hope to introduce many new gameplay features and quality-of-life improvements while still maintaining our roguelite influences. 
+
+## Planned Features and Changes
+- A new story and cast of characters
+- New and better biomes!
+- Improvements in enemy team-building and AI
+- New modes and challenges inspired from Pokémon's Battle Frontier
 
 # Contributing
+
+Our contributors make Pokéternity possible. Discussions about balance, gameplay, and new features will be public. In addition, like many open-source, contributor-driven projects, we aim to have a transparent and accessible decision-making process,
 
 ## 🛠️ Development
 
