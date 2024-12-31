@@ -6170,7 +6170,7 @@ export interface DamageCalculationResult {
   cancelled: boolean;
   /** The effectiveness of the move */
   result: HitResult;
-  /** The base damage of the move */
+  /** The attack's base damage, as determined by the source's level, move power, and Attack stat as well as the target Pokemon's Defense stat */
   baseDamage?: number;
   /** The calculated damage of the move before any post-calculation factors are applied */
   postMultiplierDamage?: number;

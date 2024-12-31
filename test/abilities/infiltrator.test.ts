@@ -49,11 +49,11 @@ describe("Abilities - Infiltrator", () => {
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
-    const preScreenDmg = enemy.getAttackDamage(player, allMoves[move]).damage;
+    const preScreenDmg = enemy.getAttackDamage(player, allMoves[move]).finalDamage;
 
     game.scene.arena.addTag(tagType, 1, Moves.NONE, enemy.id, ArenaTagSide.ENEMY, true);
 
-    const postScreenDmg = enemy.getAttackDamage(player, allMoves[move]).damage;
+    const postScreenDmg = enemy.getAttackDamage(player, allMoves[move]).finalDamage;
 
     expect(postScreenDmg).toBe(preScreenDmg);
     expect(player.battleData.abilitiesApplied[0]).toBe(Abilities.INFILTRATOR);

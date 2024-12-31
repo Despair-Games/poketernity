@@ -45,7 +45,7 @@ describe("Battle Mechanics - Damage Calculation", () => {
 
     // expected base damage = [(2*level/5 + 2) * power * playerATK / enemyDEF / 50] + 2
     //                      = 31.8666...
-    expect(enemyPokemon.getAttackDamage(playerPokemon, allMoves[Moves.TACKLE]).damage).toBeCloseTo(31);
+    expect(enemyPokemon.getAttackDamage(playerPokemon, allMoves[Moves.TACKLE]).finalDamage).toBeCloseTo(31);
   });
 
   it("Attacks deal 1 damage at minimum", async () => {
@@ -71,7 +71,7 @@ describe("Battle Mechanics - Damage Calculation", () => {
     const magikarp = game.scene.getPlayerPokemon()!;
     const dragonite = game.scene.getEnemyPokemon()!;
 
-    expect(dragonite.getAttackDamage(magikarp, allMoves[Moves.DRAGON_RAGE]).damage).toBe(40);
+    expect(dragonite.getAttackDamage(magikarp, allMoves[Moves.DRAGON_RAGE]).finalDamage).toBe(40);
   });
 
   it("One-hit KO moves ignore damage multipliers", async () => {
@@ -82,7 +82,7 @@ describe("Battle Mechanics - Damage Calculation", () => {
     const magikarp = game.scene.getPlayerPokemon()!;
     const aggron = game.scene.getEnemyPokemon()!;
 
-    expect(aggron.getAttackDamage(magikarp, allMoves[Moves.FISSURE]).damage).toBe(aggron.hp);
+    expect(aggron.getAttackDamage(magikarp, allMoves[Moves.FISSURE]).finalDamage).toBe(aggron.hp);
   });
 
   it("When the user fails to use Jump Kick with Wonder Guard ability, the damage should be 1.", async () => {
