@@ -1250,7 +1250,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       }
     }
     if (!ignoreAbility) {
-      applyStatMultiplierAbAttrs(StatMultiplierAbAttr, this, stat, statValue, simulated);
+      applyStatMultiplierAbAttrs(StatMultiplierAbAttr, this, stat, statValue, simulated, move, opponent);
     }
 
     let ret =
@@ -1862,7 +1862,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       weightRemoved = 100 * autotomizedTag!.autotomizeCount;
     }
     const minWeight = 0.1;
-    const weight = new NumberHolder(this.species.weight - weightRemoved);
+    const weight = new NumberHolder(this.getSpeciesForm().weight - weightRemoved);
 
     // This will trigger the ability overlay so only call this function when necessary
     applyAbAttrs(WeightMultiplierAbAttr, this, null, false, weight);
@@ -3125,7 +3125,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       source.getEffectiveStat(
         isPhysical ? Stat.ATK : Stat.SPATK,
         this,
-        undefined,
+        move,
         ignoreSourceAbility,
         ignoreAbility,
         isCritical,
@@ -5206,6 +5206,7 @@ export class PlayerPokemon extends Pokemon {
         newPokemon.moveset = this.moveset.slice();
         newPokemon.moveset = this.copyMoveset();
         newPokemon.luck = this.luck;
+        newPokemon.gender = Gender.GENDERLESS;
         newPokemon.metLevel = this.metLevel;
         newPokemon.metBiome = this.metBiome;
         newPokemon.metSpecies = this.metSpecies;
