@@ -137,6 +137,7 @@ export class CommandPhase extends FieldPhase {
    * @param command - Which of {@linkcode Command.BALL} or {@linkcode Command.RUN} was chosen
    * @param cursor - Cursor index for the selected Pokeball
    * @returns `true` if the command was successful
+   * @overload
    */
   public handleCommand(command: Command.BALL | Command.RUN, cursor: number): boolean;
   /**
@@ -145,6 +146,7 @@ export class CommandPhase extends FieldPhase {
    * @param ignorePp - `true` if the move shouldn't use PP
    * @param targets - (optional) {@linkcode MoveTargetSet} containing the queued moves targets (ie: from rollout, etc)
    * @returns `true` if the command was successful
+   * @overload
    */
   public handleCommand(command: Command.FIGHT, cursor: number, ignorePp?: boolean, targets?: MoveTargetSet): boolean;
   /**
@@ -152,6 +154,7 @@ export class CommandPhase extends FieldPhase {
    * @param cursor - Cursor index for the selected Pokemon
    * @param isBaton - `true` if the pokemon being switched out is holding the Baton item
    * @returns `true` if the command was successful
+   * @overload
    */
   public handleCommand(command: Command.POKEMON, cursor: number, isBaton: boolean): boolean;
   public handleCommand(command: Command, cursor: number, ...args: any[]): boolean {
