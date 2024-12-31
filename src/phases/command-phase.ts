@@ -157,7 +157,7 @@ export class CommandPhase extends FieldPhase {
    * @overload
    */
   public handleCommand(command: Command.POKEMON, cursor: number, isBaton: boolean): boolean;
-  public handleCommand(command: Command, cursor: number, ...args: any[]): boolean {
+  public handleCommand(command: Command, cursor: number, ...args: unknown[]): boolean {
     const playerPokemon = globalScene.getPlayerField()[this.fieldIndex];
     let success: boolean = false;
 
