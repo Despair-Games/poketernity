@@ -77,7 +77,7 @@ export class MoveChargePhase extends PokemonPhase {
   }
 
   public getUserPokemon(): Pokemon {
-    return (this.isPlayer ? globalScene.getPlayerField() : globalScene.getEnemyField())[this.fieldIndex];
+    return this.getField()[this.fieldIndex];
   }
 
   public getTargetPokemon(): Pokemon | undefined {

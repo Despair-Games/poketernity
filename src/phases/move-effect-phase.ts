@@ -769,7 +769,7 @@ export class MoveEffectPhase extends PokemonPhase {
     if (this.battlerIndex > BattlerIndex.ENEMY_2) {
       return globalScene.getPokemonById(this.battlerIndex);
     }
-    return (this.isPlayer ? globalScene.getPlayerField() : globalScene.getEnemyField())[this.fieldIndex];
+    return this.getField()[this.fieldIndex];
   }
 
   /** @returns An array of all {@linkcode Pokemon} targeted by this phase's invoked move */

@@ -4,7 +4,7 @@ import i18next from "i18next";
 import { FieldPhase } from "./abstract-field-phase";
 
 /**
- * Displays the message for when the player reaches the level cap with a pokemon
+ * Displays the message for when the level cap increases
  * @extends FieldPhase
  */
 export class LevelCapPhase extends FieldPhase {

@@ -107,7 +107,7 @@ export class SwitchSummonPhase extends SummonPhase {
   }
 
   protected switchAndSummon(): void {
-    const party = this.isPlayer ? this.getParty() : globalScene.getEnemyParty();
+    const party = this.getParty();
     const switchedInPokemon = party[this.slotIndex];
     this.lastPokemon = this.getPokemon();
     applyPreSwitchOutAbAttrs(PreSwitchOutAbAttr, this.lastPokemon);

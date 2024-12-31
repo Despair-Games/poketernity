@@ -127,7 +127,7 @@ export class GameOverPhase extends BattlePhase {
                 this.awardRibbon(pokemon, true);
               }
             }
-          } else if (gameMode.isDaily && newClear) {
+          } else if (gameMode.isDaily) {
             gameData.gameStats.dailyRunSessionsWon++;
           }
         }
