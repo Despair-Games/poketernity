@@ -116,18 +116,18 @@ export class SwitchSummonPhase extends SummonPhase {
         opposingPokemon.transferTagsBySourceId(this.lastPokemon.id, switchedInPokemon.id),
       );
 
-      const baton = globalScene.findModifier(
+      const switchedInPokemonHeldBaton = globalScene.findModifier(
         (m) => m instanceof SwitchEffectTransferModifier && m.pokemonId === switchedInPokemon.id,
       );
 
-      if (!baton) {
-        const batonPassModifier = globalScene.findModifier(
+      if (!switchedInPokemonHeldBaton) {
+        const lastPokemonHeldBaton = globalScene.findModifier(
           (m) => m instanceof SwitchEffectTransferModifier && m.pokemonId === this.lastPokemon.id,
         ) as SwitchEffectTransferModifier;
 
-        if (batonPassModifier) {
+        if (lastPokemonHeldBaton) {
           globalScene.tryTransferHeldItemModifier(
-            batonPassModifier,
+            lastPokemonHeldBaton,
             switchedInPokemon,
             false,
             undefined,
