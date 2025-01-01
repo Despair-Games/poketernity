@@ -34,7 +34,7 @@ describe("Abilities - Slush Rush", () => {
       .enemyMoveset(Moves.SPLASH);
   });
 
-  it("should still take damage from hail", async () => {
+  it("should not block damage from hail", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
     const pokemon = game.scene.getPlayerPokemon();
 
