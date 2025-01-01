@@ -38,11 +38,19 @@ export abstract class PokemonPhase extends FieldPhase {
     return pokemon!;
   }
 
-  public getParty(): Pokemon[] {
+  public getAlliedParty(): Pokemon[] {
     return this.isPlayer ? globalScene.getPlayerParty() : globalScene.getEnemyParty();
   }
 
-  public getField(): Pokemon[] {
+  public getOpposingParty(): Pokemon[] {
+    return this.isPlayer ? globalScene.getEnemyParty() : globalScene.getPlayerParty();
+  }
+
+  public getAlliedField(): Pokemon[] {
     return this.isPlayer ? globalScene.getPlayerField() : globalScene.getEnemyField();
+  }
+
+  public getOpposingField(): Pokemon[] {
+    return this.isPlayer ? globalScene.getEnemyField() : globalScene.getPlayerField();
   }
 }

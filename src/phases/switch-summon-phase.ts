@@ -57,7 +57,7 @@ export class SwitchSummonPhase extends SummonPhase {
       }
     }
 
-    if (!this.doReturn || (this.slotIndex !== -1 && !this.getParty()[this.slotIndex])) {
+    if (!this.doReturn || (this.slotIndex !== -1 && !this.getAlliedParty()[this.slotIndex])) {
       if (this.isPlayer) {
         return this.switchAndSummon();
       } else {
@@ -107,7 +107,7 @@ export class SwitchSummonPhase extends SummonPhase {
   }
 
   protected switchAndSummon(): void {
-    const party = this.getParty();
+    const party = this.getAlliedParty();
     const switchedInPokemon = party[this.slotIndex];
     this.lastPokemon = this.getPokemon();
     applyPreSwitchOutAbAttrs(PreSwitchOutAbAttr, this.lastPokemon);

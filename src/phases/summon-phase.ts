@@ -37,7 +37,10 @@ export class SummonPhase extends PartyMemberPokemonPhase {
 
     const partyMember = this.getPokemon();
     // If the Pokemon about to be sent out is fainted, illegal under a challenge, or no longer in the party for some reason, switch to the first non-fainted legal Pokemon
-    if (!partyMember.isAllowedInBattle() || (this.isPlayer && !this.getParty().some((p) => p.id === partyMember.id))) {
+    if (
+      !partyMember.isAllowedInBattle()
+      || (this.isPlayer && !this.getAlliedParty().some((p) => p.id === partyMember.id))
+    ) {
       console.warn(
         "The Pokemon about to be sent out is fainted or illegal under a challenge. Attempting to resolve...",
       );
@@ -47,7 +50,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
         partyMember.leaveField();
       }
 
-      const party = this.getParty();
+      const party = this.getAlliedParty();
 
       // Find the first non-fainted Pokemon index above the current one
       const legalIndex = party.findIndex((p, i) => i > this.partyMemberIndex && p.isAllowedInBattle());
@@ -126,7 +129,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
     if (this.fieldIndex === 1) {
       pokemon.setFieldPosition(FieldPosition.RIGHT, 0);
     } else {
-      const availablePartyMembers = this.getParty().filter((p) => p.isAllowedInBattle()).length;
+      const availablePartyMembers = this.getAlliedParty().filter((p) => p.isAllowedInBattle()).length;
       pokemon.setFieldPosition(
         !currentBattle.double || availablePartyMembers === 1 ? FieldPosition.CENTER : FieldPosition.LEFT,
       );
@@ -213,7 +216,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
     if (this.fieldIndex === 1) {
       pokemon.setFieldPosition(FieldPosition.RIGHT, 0);
     } else {
-      const availablePartyMembers = this.getParty().filter((p) => !p.isFainted()).length;
+      const availablePartyMembers = this.getAlliedParty().filter((p) => !p.isFainted()).length;
       pokemon.setFieldPosition(
         !currentBattle.double || availablePartyMembers === 1 ? FieldPosition.CENTER : FieldPosition.LEFT,
       );

@@ -2,24 +2,29 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { FieldPhase } from "./abstract-field-phase";
 
+// TODO: Delete this class and replace its uses with `PokemonPhase`
 export abstract class PartyMemberPokemonPhase extends FieldPhase {
   protected partyMemberIndex: number;
   protected fieldIndex: number;
   protected isPlayer: boolean;
 
-  constructor(partyMemberIndex: number, player: boolean) {
+  constructor(partyMemberIndex: number, isPlayer: boolean) {
     super();
 
     this.partyMemberIndex = partyMemberIndex;
     this.fieldIndex = partyMemberIndex < globalScene.currentBattle.getBattlerCount() ? partyMemberIndex : -1;
-    this.isPlayer = player;
+    this.isPlayer = isPlayer;
   }
 
-  public getParty(): Pokemon[] {
+  public getAlliedParty(): Pokemon[] {
     return this.isPlayer ? globalScene.getPlayerParty() : globalScene.getEnemyParty();
   }
 
-  public getField(): Pokemon[] {
+  public getOpposingParty(): Pokemon[] {
+    return this.isPlayer ? globalScene.getEnemyParty() : globalScene.getPlayerParty();
+  }
+
+  public getAlliedField(): Pokemon[] {
     return this.isPlayer ? globalScene.getPlayerField() : globalScene.getEnemyField();
   }
 
@@ -28,6 +33,6 @@ export abstract class PartyMemberPokemonPhase extends FieldPhase {
   }
 
   public getPokemon(): Pokemon {
-    return this.getParty()[this.partyMemberIndex];
+    return this.getAlliedParty()[this.partyMemberIndex];
   }
 }

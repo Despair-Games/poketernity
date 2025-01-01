@@ -1,7 +1,6 @@
 import type { BattlerIndex } from "#app/battle";
 import type { CommonAnim } from "#app/data/battle-anims";
 import { CommonBattleAnim } from "#app/data/battle-anims";
-import { globalScene } from "#app/global-scene";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 
 export class CommonAnimPhase extends PokemonPhase {
@@ -20,10 +19,7 @@ export class CommonAnimPhase extends PokemonPhase {
   }
 
   public override start(): void {
-    const target =
-      this.targetIndex !== undefined
-        ? (this.isPlayer ? globalScene.getEnemyField() : globalScene.getPlayerField())[this.targetIndex]
-        : this.getPokemon();
+    const target = this.targetIndex !== undefined ? this.getOpposingField()[this.targetIndex] : this.getPokemon();
     new CommonBattleAnim(this.anim, this.getPokemon(), target).play(false, () => {
       this.end();
     });
