@@ -1,6 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { Mode } from "#app/ui/ui";
+import { fixedInt } from "#app/utils";
 
 export class ReloadSessionPhase extends Phase {
   private readonly systemDataStr?: string;
@@ -19,7 +20,7 @@ export class ReloadSessionPhase extends Phase {
     let delayElapsed = false;
     let loaded = false;
 
-    time.delayedCall(1500, () => {
+    time.delayedCall(fixedInt(1500), () => {
       if (loaded) {
         this.end();
       } else {

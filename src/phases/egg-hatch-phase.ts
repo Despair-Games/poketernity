@@ -13,7 +13,7 @@ import EggCounterContainer from "#app/ui/egg-counter-container";
 import type EggHatchSceneHandler from "#app/ui/egg-hatch-scene-handler";
 import PokemonInfoContainer from "#app/ui/pokemon-info-container";
 import { Mode } from "#app/ui/ui";
-import { getFrameMs, randInt } from "#app/utils";
+import { fixedInt, getFrameMs, randInt } from "#app/utils";
 import i18next from "i18next";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 
@@ -303,15 +303,17 @@ export class EggHatchPhase extends Phase {
     this.canSkip = false;
     this.hatched = true;
     if (this.evolutionBgm) {
-      SoundFade.fadeOut(globalScene, this.evolutionBgm, 100);
+      SoundFade.fadeOut(globalScene, this.evolutionBgm, fixedInt(100));
     }
     for (let e = 0; e < 5; e++) {
-      globalScene.time.delayedCall(375 * e, () => globalScene.playSound("se/egg_hatch", { volume: 1 - e * 0.2 }));
+      globalScene.time.delayedCall(fixedInt(375) * e, () =>
+        globalScene.playSound("se/egg_hatch", { volume: 1 - e * 0.2 }),
+      );
     }
     this.eggLightraysOverlay.setVisible(true);
     this.eggLightraysOverlay.play("egg_lightrays");
     globalScene.tweens.add({
-      duration: 125,
+      duration: fixedInt(125),
       targets: this.eggHatchOverlay,
       alpha: 1,
       ease: "Cubic.easeIn",
@@ -320,7 +322,7 @@ export class EggHatchPhase extends Phase {
         this.canSkip = true;
       },
     });
-    globalScene.time.delayedCall(1500, () => {
+    globalScene.time.delayedCall(fixedInt(1500), () => {
       this.canSkip = false;
       if (!this.skipped) {
         this.doReveal();
@@ -362,16 +364,16 @@ export class EggHatchPhase extends Phase {
     this.pokemonSprite.setPipelineData("variant", this.pokemon.variant);
     this.pokemonSprite.setVisible(true);
 
-    globalScene.time.delayedCall(250, () => {
+    globalScene.time.delayedCall(fixedInt(250), () => {
       this.eggsToHatchCount--;
       this.eggHatchHandler.eventTarget.dispatchEvent(new EggCountChangedEvent(this.eggsToHatchCount));
       this.pokemon.cry();
       if (isShiny) {
-        globalScene.time.delayedCall(500, () => {
+        globalScene.time.delayedCall(fixedInt(500), () => {
           doShinySparkleAnim(this.pokemonShinySparkle, this.pokemon.variant);
         });
       }
-      globalScene.time.delayedCall((isShiny ? 750 : 250) + (!this.skipped ? 1000 : 0), () => {
+      globalScene.time.delayedCall(fixedInt((isShiny ? 750 : 250) + (!this.skipped ? 1000 : 0)), () => {
         this.infoContainer.show(this.pokemon, false, this.skipped ? 2 : 1);
 
         globalScene.playSoundWithoutBgm("evolution_fanfare");
@@ -396,7 +398,7 @@ export class EggHatchPhase extends Phase {
       });
     });
     globalScene.tweens.add({
-      duration: this.skipped ? 500 : 3000,
+      duration: fixedInt(this.skipped ? 500 : 3000),
       targets: this.eggHatchOverlay,
       alpha: 0,
       ease: "Cubic.easeOut",

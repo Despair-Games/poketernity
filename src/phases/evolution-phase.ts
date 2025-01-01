@@ -15,6 +15,7 @@ import { FormChangeBasePhase } from "./abstract-form-change-base-phase";
 // tsdoc imports
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { type FormChangePhase } from "#app/phases/form-change-phase";
+import { fixedInt } from "#app/utils";
 
 /**
  * A phase for handling Pokemon evolution
@@ -224,9 +225,9 @@ export class EvolutionPhase extends FormChangeBasePhase {
             () => this.end(),
             null,
             true,
-            4000,
+            fixedInt(4000),
           );
-          time.delayedCall(4250, () => globalScene.playBgm());
+          time.delayedCall(fixedInt(4250), () => globalScene.playBgm());
         });
       });
     };
