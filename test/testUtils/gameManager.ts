@@ -22,8 +22,6 @@ import { TitlePhase } from "#app/phases/title-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
 import { TurnStartPhase } from "#app/phases/turn-start-phase";
-import { ErrorInterceptor } from "#test/testUtils/errorInterceptor";
-import type { InputsHandler } from "#test/testUtils/inputsHandler";
 import type BattleMessageUiHandler from "#app/ui/battle-message-ui-handler";
 import type CommandUiHandler from "#app/ui/command-ui-handler";
 import type ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
@@ -39,6 +37,7 @@ import type { Moves } from "#enums/moves";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PlayerGender } from "#enums/player-gender";
 import type { Species } from "#enums/species";
+import { ErrorInterceptor } from "#test/testUtils/errorInterceptor";
 import { generateStarter, waitUntil } from "#test/testUtils/gameManagerUtils";
 import { GameWrapper } from "#test/testUtils/gameWrapper";
 import { ChallengeModeHelper } from "#test/testUtils/helpers/challengeModeHelper";
@@ -47,8 +46,10 @@ import { DailyModeHelper } from "#test/testUtils/helpers/dailyModeHelper";
 import { ModifierHelper } from "#test/testUtils/helpers/modifiersHelper";
 import { MoveHelper } from "#test/testUtils/helpers/moveHelper";
 import { OverridesHelper } from "#test/testUtils/helpers/overridesHelper";
+import { PokemonHelper } from "#test/testUtils/helpers/pokemonHelper";
 import { ReloadHelper } from "#test/testUtils/helpers/reloadHelper";
 import { SettingsHelper } from "#test/testUtils/helpers/settingsHelper";
+import type { InputsHandler } from "#test/testUtils/inputsHandler";
 import { PhaseInterceptor } from "#test/testUtils/phaseInterceptor";
 import { TextInterceptor } from "#test/testUtils/TextInterceptor";
 import { AES, enc } from "crypto-js";
@@ -72,6 +73,7 @@ export class GameManager {
   public readonly settings: SettingsHelper;
   public readonly reload: ReloadHelper;
   public readonly modifiers: ModifierHelper;
+  public readonly pokemon: PokemonHelper;
 
   /**
    * Creates an instance of GameManager.
@@ -95,6 +97,7 @@ export class GameManager {
     this.settings = new SettingsHelper(this);
     this.reload = new ReloadHelper(this);
     this.modifiers = new ModifierHelper(this);
+    this.pokemon = new PokemonHelper(this);
 
     // Disables Mystery Encounters on all tests (can be overridden at test level)
     this.override.mysteryEncounterChance(0);
