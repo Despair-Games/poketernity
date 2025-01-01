@@ -24,7 +24,6 @@ describe("Moves - Will-O-Wisp", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.WILL_O_WISP, Moves.SPLASH])
       .ability(Abilities.BALL_FETCH)
       .battleType("single")
       .disableCrits()
@@ -36,16 +35,16 @@ describe("Moves - Will-O-Wisp", () => {
   it("should burn the opponent", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    const enemy = game.scene.getEnemyPokemon()!;
+    const enemy = game.pokemon.getEnemyPokemon();
 
-    game.move.select(Moves.WILL_O_WISP);
+    game.move.useMove(Moves.WILL_O_WISP);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.move.forceHit();
     await game.toNextTurn();
 
     expect(enemy.status?.effect).toBe(StatusEffect.BURN);
 
-    game.move.select(Moves.SPLASH);
+    game.move.useMove(Moves.SPLASH);
     await game.toNextTurn();
 
     expect(enemy.status?.effect).toBe(StatusEffect.BURN);
