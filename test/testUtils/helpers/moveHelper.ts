@@ -1,6 +1,5 @@
 import type { BattlerIndex } from "#app/battle";
-import type { Pokemon } from "#app/field/pokemon";
-import { PokemonMove } from "#app/field/pokemon";
+import { PokemonMove, type Pokemon } from "#app/field/pokemon";
 import Overrides from "#app/overrides";
 import type { CommandPhase } from "#app/phases/command-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
@@ -46,9 +45,9 @@ export class MoveHelper extends GameManagerHelper {
    * Select the move to be used by the given Pokemon(-index). Triggers during the next {@linkcode CommandPhase}
    * @param move - the move to use
    * @param pkmIndex - the pokemon index. Relevant for double-battles only (defaults to 0)
-   * @param targetIndex - The {@linkcode BattlerIndex} of the Pokemon to target for single-target moves, or `null` if a manual call to `selectTarget()` is required
+   * @param targetIndex - (optional) The {@linkcode BattlerIndex} of the Pokemon to target for single-target moves, or `null` if a manual call to `selectTarget()` is required
    */
-  public select(move: Moves, pkmIndex: 0 | 1 = 0, targetIndex?: BattlerIndex | null) {
+  public select(move: Moves, pkmIndex: 0 | 1 = 0, targetIndex?: BattlerIndex | null): void {
     const movePosition = getMovePosition(this.game.scene, pkmIndex, move);
 
     this.game.onNextPrompt("CommandPhase", Mode.COMMAND, () => {
@@ -61,6 +60,32 @@ export class MoveHelper extends GameManagerHelper {
     if (targetIndex !== null) {
       this.game.selectTarget(movePosition, targetIndex);
     }
+  }
+
+  /**
+   * Modifies a player pokemon's moveset to contain only the selected move and then
+   * selects it to be used during the next {@linkcode CommandPhase}.
+   *
+   * Warning: Will disable the player moveset override if it is enabled!
+   * @param move - the move to use
+   * @param pkmIndex - the pokemon index. Relevant for double-battles only (defaults to 0)
+   * @param targetIndex - (optional) The {@linkcode BattlerIndex} of the Pokemon to target for single-target moves, or `null` if a manual call to `selectTarget()` is required
+   */
+  public useMove(move: Moves, pkmIndex: 0 | 1 = 0, targetIndex?: BattlerIndex | null): void {
+    const movesetOverride = Array.isArray(Overrides.MOVESET_OVERRIDE)
+      ? Overrides.MOVESET_OVERRIDE
+      : [Overrides.MOVESET_OVERRIDE];
+    if (movesetOverride.length > 0) {
+      Overrides.MOVESET_OVERRIDE = [];
+      console.warn(
+        "Warning: Player moveset override disabled! Do not use the moveset override when using this function!",
+      );
+    }
+
+    const pokemon = this.game.scene.getPlayerField()[pkmIndex];
+    pokemon.moveset = [new PokemonMove(move)];
+
+    this.select(move, pkmIndex, targetIndex);
   }
 
   /**
