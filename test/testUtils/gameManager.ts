@@ -99,7 +99,7 @@ export class GameManager {
     this.phaseInterceptor = new PhaseInterceptor(this.scene);
 
     if (!firstTimeScene) {
-      this.scene.reset(false);
+      this.scene.reset();
       (this.scene.ui.handlers[Mode.STARTER_SELECT] as StarterSelectUiHandler).clearStarterPreferences();
       this.scene.gameData = new GameData();
       this.scene.clearAllPhases();
