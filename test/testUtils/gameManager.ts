@@ -353,6 +353,9 @@ export class GameManager {
    * given target (if applicable).
    * @param moveId {@linkcode Moves} the move the enemy will use
    * @param target {@linkcode BattlerIndex} the target on which the enemy will use the given move
+   * @deprecated Use {@linkcode MoveHelper.selectEnemyMove | this.move.selectEnemyMove} instead for
+   * identical functionality, or {@linkcode MoveHelper.forceEnemyMove | this.move.forceEnemyMove} which will
+   * overwrite the enemy pokemon's moveset (and disable the global moveset override if it's active)
    */
   async forceEnemyMove(moveId: Moves, target?: BattlerIndex) {
     // Wait for the next EnemyCommandPhase to start
