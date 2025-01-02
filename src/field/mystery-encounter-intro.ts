@@ -22,7 +22,6 @@ type KnownFileRoot =
   | "pokeball"
   | "pokemon"
   | "pokemon/back"
-  | "pokemon/exp"
   | "pokemon/female"
   | "pokemon/icons"
   | "pokemon/input"

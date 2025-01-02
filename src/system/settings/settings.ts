@@ -795,10 +795,6 @@ export function setSetting(setting: string, value: number): boolean {
       globalScene.updateMoneyText(false);
       break;
     case SettingKeys.Sprite_Set:
-      globalScene.experimentalSprites = !!value;
-      if (value) {
-        globalScene.initExpSprites();
-      }
       break;
     case SettingKeys.Move_Animations:
       globalScene.moveAnimations = Setting[index].options[value].value === "On";
