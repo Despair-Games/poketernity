@@ -261,9 +261,9 @@ describe("Moves - Freeze-Dry", () => {
 
   it("should deal 2x damage to Water type during inverse battle", async () => {
     game.overridesHelper.moveset([Moves.FREEZE_DRY]).enemySpecies(Species.MAGIKARP);
-    game.challengeMode.addChallenge(Challenges.INVERSE_BATTLE, 1, 1);
+    game.challengeModeHelper.addChallenge(Challenges.INVERSE_BATTLE, 1, 1);
 
-    await game.challengeMode.startBattle();
+    await game.challengeModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
@@ -277,9 +277,9 @@ describe("Moves - Freeze-Dry", () => {
 
   it("should deal 2x damage to Water type during inverse battle under Normalize", async () => {
     game.overridesHelper.moveset([Moves.FREEZE_DRY]).ability(Abilities.NORMALIZE).enemySpecies(Species.MAGIKARP);
-    game.challengeMode.addChallenge(Challenges.INVERSE_BATTLE, 1, 1);
+    game.challengeModeHelper.addChallenge(Challenges.INVERSE_BATTLE, 1, 1);
 
-    await game.challengeMode.startBattle();
+    await game.challengeModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
@@ -293,9 +293,9 @@ describe("Moves - Freeze-Dry", () => {
 
   it("should deal 2x damage to Water type during inverse battle under Electrify", async () => {
     game.overridesHelper.moveset([Moves.FREEZE_DRY]).enemySpecies(Species.MAGIKARP).enemyMoveset([Moves.ELECTRIFY]);
-    game.challengeMode.addChallenge(Challenges.INVERSE_BATTLE, 1, 1);
+    game.challengeModeHelper.addChallenge(Challenges.INVERSE_BATTLE, 1, 1);
 
-    await game.challengeMode.startBattle();
+    await game.challengeModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
@@ -310,9 +310,9 @@ describe("Moves - Freeze-Dry", () => {
   it("should deal 1x damage to water/flying type during inverse battle under Electrify", async () => {
     game.overridesHelper.enemyMoveset([Moves.ELECTRIFY]).enemySpecies(Species.GYARADOS);
 
-    game.challengeMode.addChallenge(Challenges.INVERSE_BATTLE, 1, 1);
+    game.challengeModeHelper.addChallenge(Challenges.INVERSE_BATTLE, 1, 1);
 
-    await game.challengeMode.startBattle();
+    await game.challengeModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");

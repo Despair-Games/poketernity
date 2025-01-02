@@ -26,7 +26,7 @@ describe("UI - Type Hints", () => {
 
   beforeEach(async () => {
     game = new GameManager(phaserGame);
-    game.settings.typeHints(true); //activate type hints
+    game.settingsHelper.typeHints(true); //activate type hints
     game.overridesHelper.battleType("single").startingLevel(100).startingWave(1).enemyMoveset(Moves.SPLASH);
   });
 
@@ -38,7 +38,7 @@ describe("UI - Type Hints", () => {
       .enemySpecies(Species.FLORGES)
       .enemyMoveset(Moves.SPLASH)
       .moveset([Moves.DRAGON_CLAW]);
-    game.settings.typeHints(true); //activate type hints
+    game.settingsHelper.typeHints(true); //activate type hints
 
     await game.startBattle([Species.RAYQUAZA]);
 

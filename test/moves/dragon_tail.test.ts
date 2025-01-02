@@ -230,8 +230,8 @@ describe("Moves - Dragon Tail", () => {
   it("should not force a switch to a challenge-ineligible Pokemon", async () => {
     game.overridesHelper.enemyMoveset(Moves.DRAGON_TAIL).startingLevel(100).enemyLevel(1);
     // Mono-Water challenge, Eevee is ineligible
-    game.challengeMode.addChallenge(Challenges.SINGLE_TYPE, Type.WATER + 1, 0);
-    await game.challengeMode.startBattle([Species.LAPRAS, Species.EEVEE, Species.TOXAPEX, Species.PRIMARINA]);
+    game.challengeModeHelper.addChallenge(Challenges.SINGLE_TYPE, Type.WATER + 1, 0);
+    await game.challengeModeHelper.startBattle([Species.LAPRAS, Species.EEVEE, Species.TOXAPEX, Species.PRIMARINA]);
 
     const [lapras, eevee, toxapex, primarina] = game.scene.getPlayerParty();
 

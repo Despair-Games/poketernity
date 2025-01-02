@@ -40,7 +40,7 @@ describe("UI - Battle Info", () => {
   it.each([ExpGainsSpeed.FAST, ExpGainsSpeed.FASTER, ExpGainsSpeed.SKIP])(
     "should increase exp gains animation by 2^%i",
     async (expGainsSpeed) => {
-      game.settings.expGainsSpeed(expGainsSpeed);
+      game.settingsHelper.expGainsSpeed(expGainsSpeed);
       vi.spyOn(Math, "pow");
 
       await game.classicModeHelper.startBattle([Species.CHARIZARD]);

@@ -35,7 +35,7 @@ describe("Reload", () => {
 
     const preReloadRngState = Phaser.Math.RND.state();
 
-    await game.reload.reloadSession();
+    await game.reloadHelper.reloadSession();
 
     const postReloadRngState = Phaser.Math.RND.state();
 
@@ -50,7 +50,7 @@ describe("Reload", () => {
       .disableTrainerWaves()
       .moveset([Moves.SPLASH])
       .enemyMoveset(Moves.SPLASH);
-    await game.dailyMode.startBattle();
+    await game.dailyModeHelper.startBattle();
 
     // Transition from Wave 10 to Wave 11 in order to trigger biome switch
     game.moveHelper.select(Moves.SPLASH);
@@ -67,7 +67,7 @@ describe("Reload", () => {
 
     const preReloadRngState = Phaser.Math.RND.state();
 
-    await game.reload.reloadSession();
+    await game.reloadHelper.reloadSession();
 
     const postReloadRngState = Phaser.Math.RND.state();
 
@@ -93,7 +93,7 @@ describe("Reload", () => {
 
     const preReloadWeather = game.scene.arena.weather;
 
-    await game.reload.reloadSession();
+    await game.reloadHelper.reloadSession();
 
     const postReloadWeather = game.scene.arena.weather;
 
@@ -101,11 +101,11 @@ describe("Reload", () => {
   }, 20000);
 
   it("should not have RNG inconsistencies at a Daily run wild Pokemon fight", async () => {
-    await game.dailyMode.startBattle();
+    await game.dailyModeHelper.startBattle();
 
     const preReloadRngState = Phaser.Math.RND.state();
 
-    await game.reload.reloadSession();
+    await game.reloadHelper.reloadSession();
 
     const postReloadRngState = Phaser.Math.RND.state();
 
@@ -114,11 +114,11 @@ describe("Reload", () => {
 
   it("should not have RNG inconsistencies at a Daily run double battle", async () => {
     game.overridesHelper.battleType("double");
-    await game.dailyMode.startBattle();
+    await game.dailyModeHelper.startBattle();
 
     const preReloadRngState = Phaser.Math.RND.state();
 
-    await game.reload.reloadSession();
+    await game.reloadHelper.reloadSession();
 
     const postReloadRngState = Phaser.Math.RND.state();
 
@@ -127,11 +127,11 @@ describe("Reload", () => {
 
   it("should not have RNG inconsistencies at a Daily run Gym Leader fight", async () => {
     game.overridesHelper.battleType("single").startingWave(40);
-    await game.dailyMode.startBattle();
+    await game.dailyModeHelper.startBattle();
 
     const preReloadRngState = Phaser.Math.RND.state();
 
-    await game.reload.reloadSession();
+    await game.reloadHelper.reloadSession();
 
     const postReloadRngState = Phaser.Math.RND.state();
 
@@ -140,11 +140,11 @@ describe("Reload", () => {
 
   it("should not have RNG inconsistencies at a Daily run regular trainer fight", async () => {
     game.overridesHelper.battleType("single").startingWave(45);
-    await game.dailyMode.startBattle();
+    await game.dailyModeHelper.startBattle();
 
     const preReloadRngState = Phaser.Math.RND.state();
 
-    await game.reload.reloadSession();
+    await game.reloadHelper.reloadSession();
 
     const postReloadRngState = Phaser.Math.RND.state();
 
@@ -157,7 +157,7 @@ describe("Reload", () => {
 
     const preReloadRngState = Phaser.Math.RND.state();
 
-    await game.reload.reloadSession();
+    await game.reloadHelper.reloadSession();
 
     const postReloadRngState = Phaser.Math.RND.state();
 

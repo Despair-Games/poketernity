@@ -67,11 +67,11 @@ export class GameManager {
   public readonly overridesHelper: OverridesHelper;
   public readonly moveHelper: MoveHelper;
   public readonly classicModeHelper: ClassicModeHelper;
-  public readonly dailyMode: DailyModeHelper;
-  public readonly challengeMode: ChallengeModeHelper;
-  public readonly settings: SettingsHelper;
-  public readonly reload: ReloadHelper;
-  public readonly modifiers: ModifierHelper;
+  public readonly dailyModeHelper: DailyModeHelper;
+  public readonly challengeModeHelper: ChallengeModeHelper;
+  public readonly settingsHelper: SettingsHelper;
+  public readonly reloadHelper: ReloadHelper;
+  public readonly modifierHelper: ModifierHelper;
 
   /**
    * Creates an instance of GameManager.
@@ -90,11 +90,11 @@ export class GameManager {
     this.overridesHelper = new OverridesHelper(this);
     this.moveHelper = new MoveHelper(this);
     this.classicModeHelper = new ClassicModeHelper(this);
-    this.dailyMode = new DailyModeHelper(this);
-    this.challengeMode = new ChallengeModeHelper(this);
-    this.settings = new SettingsHelper(this);
-    this.reload = new ReloadHelper(this);
-    this.modifiers = new ModifierHelper(this);
+    this.dailyModeHelper = new DailyModeHelper(this);
+    this.challengeModeHelper = new ChallengeModeHelper(this);
+    this.settingsHelper = new SettingsHelper(this);
+    this.reloadHelper = new ReloadHelper(this);
+    this.modifierHelper = new ModifierHelper(this);
 
     // Disables Mystery Encounters on all tests (can be overridden at test level)
     this.overridesHelper.mysteryEncounterChance(0);
@@ -161,7 +161,7 @@ export class GameManager {
     this.scene.hpBarSpeed = 3;
     this.scene.enableTutorials = false;
     this.scene.gameData.gender = PlayerGender.MALE; // set initial player gender
-    this.scene.battleStyle = this.settings.battleStyle;
+    this.scene.battleStyle = this.settingsHelper.battleStyle;
     this.scene.fieldVolume = 0;
   }
 

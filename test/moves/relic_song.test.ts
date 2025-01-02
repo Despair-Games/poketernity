@@ -48,8 +48,8 @@ describe("Moves - Relic Song", () => {
   });
 
   it("doesn't swap Meloetta's form during a mono-type challenge", async () => {
-    game.challengeMode.addChallenge(Challenges.SINGLE_TYPE, Type.PSYCHIC + 1, 0);
-    await game.challengeMode.startBattle([Species.MELOETTA]);
+    game.challengeModeHelper.addChallenge(Challenges.SINGLE_TYPE, Type.PSYCHIC + 1, 0);
+    await game.challengeModeHelper.startBattle([Species.MELOETTA]);
 
     const meloetta = game.scene.getPlayerPokemon()!;
 
