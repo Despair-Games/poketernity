@@ -24,7 +24,7 @@ describe("Escape chance calculations", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemySpecies(Species.BULBASAUR)
       .enemyAbility(Abilities.INSOMNIA)
@@ -32,7 +32,7 @@ describe("Escape chance calculations", () => {
   });
 
   it("single non-boss opponent", async () => {
-    await game.classicMode.startBattle([Species.BULBASAUR]);
+    await game.classicModeHelper.startBattle([Species.BULBASAUR]);
 
     const playerPokemon = game.scene.getPlayerField();
     const enemyField = game.scene.getEnemyField();
@@ -93,8 +93,8 @@ describe("Escape chance calculations", () => {
   }, 20000);
 
   it("double non-boss opponent", async () => {
-    game.override.battleType("double");
-    await game.classicMode.startBattle([Species.BULBASAUR, Species.ABOMASNOW]);
+    game.overridesHelper.battleType("double");
+    await game.classicModeHelper.startBattle([Species.BULBASAUR, Species.ABOMASNOW]);
 
     const playerPokemon = game.scene.getPlayerField();
     const enemyField = game.scene.getEnemyField();
@@ -175,8 +175,8 @@ describe("Escape chance calculations", () => {
   }, 20000);
 
   it("single boss opponent", async () => {
-    game.override.startingWave(10);
-    await game.classicMode.startBattle([Species.BULBASAUR]);
+    game.overridesHelper.startingWave(10);
+    await game.classicModeHelper.startBattle([Species.BULBASAUR]);
 
     const playerPokemon = game.scene.getPlayerField()!;
     const enemyField = game.scene.getEnemyField()!;
@@ -250,9 +250,9 @@ describe("Escape chance calculations", () => {
   }, 20000);
 
   it("double boss opponent", async () => {
-    game.override.battleType("double");
-    game.override.startingWave(10);
-    await game.classicMode.startBattle([Species.BULBASAUR, Species.ABOMASNOW]);
+    game.overridesHelper.battleType("double");
+    game.overridesHelper.startingWave(10);
+    await game.classicModeHelper.startBattle([Species.BULBASAUR, Species.ABOMASNOW]);
 
     const playerPokemon = game.scene.getPlayerField();
     const enemyField = game.scene.getEnemyField();

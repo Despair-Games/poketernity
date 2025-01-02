@@ -24,11 +24,11 @@ describe("Moves - Growth", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("single");
-    game.override.enemyAbility(Abilities.MOXIE);
-    game.override.ability(Abilities.INSOMNIA);
-    game.override.moveset([Moves.GROWTH]);
-    game.override.enemyMoveset(Moves.SPLASH);
+    game.overridesHelper.battleType("single");
+    game.overridesHelper.enemyAbility(Abilities.MOXIE);
+    game.overridesHelper.ability(Abilities.INSOMNIA);
+    game.overridesHelper.moveset([Moves.GROWTH]);
+    game.overridesHelper.enemyMoveset(Moves.SPLASH);
   });
 
   it("should raise SPATK stat stage by 1", async () => {
@@ -38,7 +38,7 @@ describe("Moves - Growth", () => {
 
     expect(playerPokemon.getStatStage(Stat.SPATK)).toBe(0);
 
-    game.move.select(Moves.GROWTH);
+    game.moveHelper.select(Moves.GROWTH);
     await game.phaseInterceptor.runFrom(EnemyCommandPhase).to(TurnInitPhase);
 
     expect(playerPokemon.getStatStage(Stat.SPATK)).toBe(1);

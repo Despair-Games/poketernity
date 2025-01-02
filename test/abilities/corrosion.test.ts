@@ -21,7 +21,7 @@ describe("Abilities - Corrosion", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.SPLASH])
       .battleType("single")
       .disableCrits()
@@ -31,14 +31,14 @@ describe("Abilities - Corrosion", () => {
   });
 
   it("If a Poison- or Steel-type Pokémon with this Ability poisons a target with Synchronize, Synchronize does not gain the ability to poison Poison- or Steel-type Pokémon.", async () => {
-    game.override.ability(Abilities.SYNCHRONIZE);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    game.overridesHelper.ability(Abilities.SYNCHRONIZE);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon();
     const enemyPokemon = game.scene.getEnemyPokemon();
     expect(playerPokemon!.status).toBeUndefined();
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to("BerryPhase");
     expect(playerPokemon!.status).toBeDefined();
     expect(enemyPokemon!.status).toBeUndefined();

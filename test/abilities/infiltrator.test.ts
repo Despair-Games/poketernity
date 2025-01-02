@@ -27,7 +27,7 @@ describe("Abilities - Infiltrator", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.TACKLE, Moves.WATER_GUN, Moves.SPORE, Moves.BABY_DOLL_EYES])
       .ability(Abilities.INFILTRATOR)
       .battleType("single")
@@ -44,7 +44,7 @@ describe("Abilities - Infiltrator", () => {
     { effectName: "Reflect", tagType: ArenaTagType.REFLECT, move: Moves.TACKLE },
     { effectName: "Aurora Veil", tagType: ArenaTagType.AURORA_VEIL, move: Moves.TACKLE },
   ])("should bypass the target's $effectName", async ({ tagType, move }) => {
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
@@ -60,14 +60,14 @@ describe("Abilities - Infiltrator", () => {
   });
 
   it("should bypass the target's Safeguard", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
     game.scene.arena.addTag(ArenaTagType.SAFEGUARD, 1, Moves.NONE, enemy.id, ArenaTagSide.ENEMY, true);
 
-    game.move.select(Moves.SPORE);
+    game.moveHelper.select(Moves.SPORE);
 
     await game.phaseInterceptor.to("BerryPhase", false);
     expect(enemy.status?.effect).toBe(StatusEffect.SLEEP);
@@ -76,14 +76,14 @@ describe("Abilities - Infiltrator", () => {
 
   // TODO: fix this interaction to pass this test
   it.todo("should bypass the target's Mist", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
     game.scene.arena.addTag(ArenaTagType.MIST, 1, Moves.NONE, enemy.id, ArenaTagSide.ENEMY, true);
 
-    game.move.select(Moves.BABY_DOLL_EYES);
+    game.moveHelper.select(Moves.BABY_DOLL_EYES);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(enemy.getStatStage(Stat.ATK)).toBe(-1);
@@ -91,14 +91,14 @@ describe("Abilities - Infiltrator", () => {
   });
 
   it("should bypass the target's Substitute", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
     enemy.addTag(BattlerTagType.SUBSTITUTE, 1, Moves.NONE, enemy.id);
 
-    game.move.select(Moves.BABY_DOLL_EYES);
+    game.moveHelper.select(Moves.BABY_DOLL_EYES);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(enemy.getStatStage(Stat.ATK)).toBe(-1);

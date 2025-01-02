@@ -25,15 +25,15 @@ describe("Moves - Purify", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("single");
+    game.overridesHelper.battleType("single");
 
-    game.override.starterSpecies(Species.PYUKUMUKU);
-    game.override.startingLevel(10);
-    game.override.moveset([Moves.PURIFY, Moves.SIZZLY_SLIDE]);
+    game.overridesHelper.starterSpecies(Species.PYUKUMUKU);
+    game.overridesHelper.startingLevel(10);
+    game.overridesHelper.moveset([Moves.PURIFY, Moves.SIZZLY_SLIDE]);
 
-    game.override.enemySpecies(Species.MAGIKARP);
-    game.override.enemyLevel(10);
-    game.override.enemyMoveset([Moves.SPLASH, Moves.NONE, Moves.NONE, Moves.NONE]);
+    game.overridesHelper.enemySpecies(Species.MAGIKARP);
+    game.overridesHelper.enemyLevel(10);
+    game.overridesHelper.enemyMoveset([Moves.SPLASH, Moves.NONE, Moves.NONE, Moves.NONE]);
   });
 
   test("Purify heals opponent status effect and restores user hp", async () => {
@@ -45,7 +45,7 @@ describe("Moves - Purify", () => {
     playerPokemon.hp = playerPokemon.getMaxHp() - 1;
     enemyPokemon.status = new Status(StatusEffect.BURN);
 
-    game.move.select(Moves.PURIFY);
+    game.moveHelper.select(Moves.PURIFY);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to(MoveEndPhase);
 
@@ -61,7 +61,7 @@ describe("Moves - Purify", () => {
     playerPokemon.hp = playerPokemon.getMaxHp() - 1;
     const playerInitialHp = playerPokemon.hp;
 
-    game.move.select(Moves.PURIFY);
+    game.moveHelper.select(Moves.PURIFY);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to(MoveEndPhase);
 

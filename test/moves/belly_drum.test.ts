@@ -29,7 +29,7 @@ describe("Moves - BELLY DRUM", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .starterSpecies(Species.MAGIKARP)
       .enemySpecies(Species.SNORLAX)
       .startingLevel(100)
@@ -47,7 +47,7 @@ describe("Moves - BELLY DRUM", () => {
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const hpLost = toDmgValue(leadPokemon.getMaxHp() / RATIO);
 
-    game.move.select(Moves.BELLY_DRUM);
+    game.moveHelper.select(Moves.BELLY_DRUM);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(leadPokemon.hp).toBe(leadPokemon.getMaxHp() - hpLost);
@@ -64,7 +64,7 @@ describe("Moves - BELLY DRUM", () => {
     leadPokemon.setStatStage(Stat.ATK, -3);
     leadPokemon.setStatStage(Stat.SPATK, 6);
 
-    game.move.select(Moves.BELLY_DRUM);
+    game.moveHelper.select(Moves.BELLY_DRUM);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(leadPokemon.hp).toBe(leadPokemon.getMaxHp() - hpLost);
@@ -79,7 +79,7 @@ describe("Moves - BELLY DRUM", () => {
 
     leadPokemon.setStatStage(Stat.ATK, 6);
 
-    game.move.select(Moves.BELLY_DRUM);
+    game.moveHelper.select(Moves.BELLY_DRUM);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(leadPokemon.hp).toBe(leadPokemon.getMaxHp());
@@ -93,7 +93,7 @@ describe("Moves - BELLY DRUM", () => {
     const hpLost = toDmgValue(leadPokemon.getMaxHp() / RATIO);
     leadPokemon.hp = hpLost - PREDAMAGE;
 
-    game.move.select(Moves.BELLY_DRUM);
+    game.moveHelper.select(Moves.BELLY_DRUM);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(leadPokemon.hp).toBe(hpLost - PREDAMAGE);

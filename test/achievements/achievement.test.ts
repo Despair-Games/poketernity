@@ -112,12 +112,12 @@ describe("RibbonAchv", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.moveset([]);
-    game.override.startingLevel(0);
-    game.override.starterSpecies(0);
-    game.override.enemyMoveset([]);
-    game.override.enemySpecies(0);
-    game.override.startingWave(0);
+    game.overridesHelper.moveset([]);
+    game.overridesHelper.startingLevel(0);
+    game.overridesHelper.starterSpecies(0);
+    game.overridesHelper.enemyMoveset([]);
+    game.overridesHelper.enemySpecies(0);
+    game.overridesHelper.startingWave(0);
     scene = game.scene;
   });
 

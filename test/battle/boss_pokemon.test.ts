@@ -25,7 +25,7 @@ describe("Boss Pokemon / Shields", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override
+    game.overridesHelper
       .battleType("single")
       .disableTrainerWaves()
       .disableCrits()
@@ -63,9 +63,9 @@ describe("Boss Pokemon / Shields", () => {
   });
 
   it("should reduce the number of shields if we are in a double battle", async () => {
-    game.override.battleType("double").startingWave(150); // Floor 150 > 2 shields / 3 health segments
+    game.overridesHelper.battleType("double").startingWave(150); // Floor 150 > 2 shields / 3 health segments
 
-    await game.classicMode.startBattle([Species.MEWTWO]);
+    await game.classicModeHelper.startBattle([Species.MEWTWO]);
 
     const boss1: EnemyPokemon = game.scene.getEnemyParty()[0]!;
     const boss2: EnemyPokemon = game.scene.getEnemyParty()[1]!;
@@ -76,9 +76,9 @@ describe("Boss Pokemon / Shields", () => {
   });
 
   it("shields should stop overflow damage and give stat stage boosts when broken", async () => {
-    game.override.startingWave(150); // Floor 150 > 2 shields / 3 health segments
+    game.overridesHelper.startingWave(150); // Floor 150 > 2 shields / 3 health segments
 
-    await game.classicMode.startBattle([Species.MEWTWO]);
+    await game.classicModeHelper.startBattle([Species.MEWTWO]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     const segmentHp = enemyPokemon.getMaxHp() / enemyPokemon.bossSegments;
@@ -86,7 +86,7 @@ describe("Boss Pokemon / Shields", () => {
     expect(enemyPokemon.bossSegments).toBe(3);
     expect(getTotalStatStageBoosts(enemyPokemon)).toBe(0);
 
-    game.move.select(Moves.SUPER_FANG); // Enough to break the first shield
+    game.moveHelper.select(Moves.SUPER_FANG); // Enough to break the first shield
     await game.toNextTurn();
 
     // Broke 1st of 2 shields, health at 2/3rd
@@ -95,7 +95,7 @@ describe("Boss Pokemon / Shields", () => {
     // Breaking the shield gives a +1 boost to ATK, DEF, SP ATK, SP DEF or SPD
     expect(getTotalStatStageBoosts(enemyPokemon)).toBe(1);
 
-    game.move.select(Moves.FALSE_SWIPE); // Enough to break last shield but not kill
+    game.moveHelper.select(Moves.FALSE_SWIPE); // Enough to break last shield but not kill
     await game.toNextTurn();
 
     expect(enemyPokemon.bossSegmentIndex).toBe(0);
@@ -105,9 +105,9 @@ describe("Boss Pokemon / Shields", () => {
   });
 
   it("breaking multiple shields at once requires extra damage", async () => {
-    game.override.battleType("double").enemyHealthSegments(5);
+    game.overridesHelper.battleType("double").enemyHealthSegments(5);
 
-    await game.classicMode.startBattle([Species.MEWTWO]);
+    await game.classicModeHelper.startBattle([Species.MEWTWO]);
 
     // In this test we want to break through 3 shields at once
     const brokenShields = 3;
@@ -140,9 +140,9 @@ describe("Boss Pokemon / Shields", () => {
   it("the number of stat stage boosts is consistent when several shields are broken at once", async () => {
     const shieldsToBreak = 4;
 
-    game.override.battleType("double").enemyHealthSegments(shieldsToBreak + 1);
+    game.overridesHelper.battleType("double").enemyHealthSegments(shieldsToBreak + 1);
 
-    await game.classicMode.startBattle([Species.MEWTWO]);
+    await game.classicModeHelper.startBattle([Species.MEWTWO]);
 
     const boss1: EnemyPokemon = game.scene.getEnemyParty()[0]!;
     const boss1SegmentHp = boss1.getMaxHp() / boss1.bossSegments;
@@ -160,7 +160,7 @@ describe("Boss Pokemon / Shields", () => {
       expect(boss1.bossSegmentIndex).toBe(shieldsToBreak - i);
       expect(boss1.hp).toBe(boss1.getMaxHp() - toDmgValue(boss1SegmentHp * i));
       // Do nothing and go to next turn so that the StatStageChangePhase gets applied
-      game.move.select(Moves.SPLASH);
+      game.moveHelper.select(Moves.SPLASH);
       await game.toNextTurn();
       // All broken shields give +1 stat boost, except the last two that gives +2
       totalStatStages += i >= shieldsToBreak - 1 ? 2 : 1;
@@ -181,22 +181,22 @@ describe("Boss Pokemon / Shields", () => {
     expect(boss2.bossSegmentIndex).toBe(0);
     expect(boss2.hp).toBe(boss2.getMaxHp() - toDmgValue(boss2SegmentHp * shieldsToBreak));
     // Do nothing and go to next turn so that the StatStageChangePhase gets applied
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
     expect(getTotalStatStageBoosts(boss2)).toBe(totalStatStages);
   });
 
   it("the boss enduring does not proc an extra stat boost", async () => {
-    game.override.enemyHealthSegments(2).enemyAbility(Abilities.STURDY);
+    game.overridesHelper.enemyHealthSegments(2).enemyAbility(Abilities.STURDY);
 
-    await game.classicMode.startBattle([Species.MEWTWO]);
+    await game.classicModeHelper.startBattle([Species.MEWTWO]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     expect(enemyPokemon.isBoss()).toBe(true);
     expect(enemyPokemon.bossSegments).toBe(2);
     expect(getTotalStatStageBoosts(enemyPokemon)).toBe(0);
 
-    game.move.select(Moves.PSYCHIC);
+    game.moveHelper.select(Moves.PSYCHIC);
     await game.toNextTurn();
 
     // Enemy survived with Sturdy

@@ -27,13 +27,13 @@ describe("Abilities - Moxie", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     const moveToUse = Moves.AERIAL_ACE;
-    game.override.battleType("single");
-    game.override.enemySpecies(Species.RATTATA);
-    game.override.enemyAbility(Abilities.MOXIE);
-    game.override.ability(Abilities.MOXIE);
-    game.override.startingLevel(2000);
-    game.override.moveset([moveToUse]);
-    game.override.enemyMoveset(Moves.SPLASH);
+    game.overridesHelper.battleType("single");
+    game.overridesHelper.enemySpecies(Species.RATTATA);
+    game.overridesHelper.enemyAbility(Abilities.MOXIE);
+    game.overridesHelper.ability(Abilities.MOXIE);
+    game.overridesHelper.startingLevel(2000);
+    game.overridesHelper.moveset([moveToUse]);
+    game.overridesHelper.enemyMoveset(Moves.SPLASH);
   });
 
   it("should raise ATK stat stage by 1 when winning a battle", async () => {
@@ -44,7 +44,7 @@ describe("Abilities - Moxie", () => {
 
     expect(playerPokemon.getStatStage(Stat.ATK)).toBe(0);
 
-    game.move.select(moveToUse);
+    game.moveHelper.select(moveToUse);
     await game.phaseInterceptor.runFrom(EnemyCommandPhase).to(VictoryPhase);
 
     expect(playerPokemon.getStatStage(Stat.ATK)).toBe(1);
@@ -54,7 +54,7 @@ describe("Abilities - Moxie", () => {
   it.todo(
     "should raise ATK stat stage by 1 when defeating an ally Pokemon",
     async () => {
-      game.override.battleType("double");
+      game.overridesHelper.battleType("double");
       const moveToUse = Moves.AERIAL_ACE;
       await game.startBattle([Species.MIGHTYENA, Species.MIGHTYENA]);
 
@@ -64,7 +64,7 @@ describe("Abilities - Moxie", () => {
 
       secondPokemon.hp = 1;
 
-      game.move.select(moveToUse);
+      game.moveHelper.select(moveToUse);
       game.selectTarget(BattlerIndex.PLAYER_2);
 
       await game.phaseInterceptor.to(TurnEndPhase);

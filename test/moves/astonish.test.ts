@@ -27,13 +27,13 @@ describe("Moves - Astonish", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("single");
-    game.override.moveset([Moves.ASTONISH, Moves.SPLASH]);
-    game.override.enemySpecies(Species.BLASTOISE);
-    game.override.enemyAbility(Abilities.INSOMNIA);
-    game.override.enemyMoveset([Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE]);
-    game.override.startingLevel(100);
-    game.override.enemyLevel(100);
+    game.overridesHelper.battleType("single");
+    game.overridesHelper.moveset([Moves.ASTONISH, Moves.SPLASH]);
+    game.overridesHelper.enemySpecies(Species.BLASTOISE);
+    game.overridesHelper.enemyAbility(Abilities.INSOMNIA);
+    game.overridesHelper.enemyMoveset([Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE]);
+    game.overridesHelper.startingLevel(100);
+    game.overridesHelper.enemyLevel(100);
 
     vi.spyOn(allMoves[Moves.ASTONISH], "chance", "get").mockReturnValue(100);
   });
@@ -45,7 +45,7 @@ describe("Moves - Astonish", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.ASTONISH);
+    game.moveHelper.select(Moves.ASTONISH);
 
     await game.phaseInterceptor.to(MoveEndPhase, false);
 
@@ -58,7 +58,7 @@ describe("Moves - Astonish", () => {
 
     await game.phaseInterceptor.to(CommandPhase, false);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.phaseInterceptor.to(BerryPhase, false);
 

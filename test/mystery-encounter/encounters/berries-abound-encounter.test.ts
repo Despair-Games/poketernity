@@ -39,7 +39,7 @@ describe("Berries Abound - Mystery Encounter", () => {
   beforeEach(async () => {
     game = new GameManager(phaserGame);
     scene = game.scene;
-    game.override
+    game.overridesHelper
       .mysteryEncounterChance(100)
       .mysteryEncounterTier(MysteryEncounterTier.COMMON)
       .startingWave(defaultWave)
@@ -173,7 +173,7 @@ describe("Berries Abound - Mystery Encounter", () => {
     });
 
     it("should start battle if fastest pokemon is slower than boss below wave 50", async () => {
-      game.override.startingWave(41);
+      game.overridesHelper.startingWave(41);
       const encounterTextSpy = vi.spyOn(EncounterDialogueUtils, "showEncounterText");
       await game.runToMysteryEncounter(MysteryEncounterType.BERRIES_ABOUND, defaultParty);
 
@@ -197,7 +197,7 @@ describe("Berries Abound - Mystery Encounter", () => {
     });
 
     it("should start battle if fastest pokemon is slower than boss above wave 50", async () => {
-      game.override.startingWave(57);
+      game.overridesHelper.startingWave(57);
       const encounterTextSpy = vi.spyOn(EncounterDialogueUtils, "showEncounterText");
       await game.runToMysteryEncounter(MysteryEncounterType.BERRIES_ABOUND, defaultParty);
 

@@ -21,7 +21,7 @@ describe("Abilities - Wonder Guard", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.TACKLE, Moves.THUNDERBOLT])
       .ability(Abilities.BALL_FETCH)
       .battleType("single")
@@ -32,22 +32,22 @@ describe("Abilities - Wonder Guard", () => {
   });
 
   it("should prevent damage from attacks that aren't >=2x effectiveness", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(enemy.hp).toBe(1);
   });
 
   it("should not prevent damage from attacks that are >=2x effectiveness", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.THUNDERBOLT);
+    game.moveHelper.select(Moves.THUNDERBOLT);
     await game.phaseInterceptor.to("BattleEndPhase");
 
     expect(enemy.isFainted()).toBe(true);

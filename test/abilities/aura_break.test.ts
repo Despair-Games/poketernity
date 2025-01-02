@@ -24,22 +24,22 @@ describe("Abilities - Aura Break", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("single");
-    game.override.moveset([Moves.MOONBLAST, Moves.DARK_PULSE, Moves.MOONBLAST, Moves.DARK_PULSE]);
-    game.override.enemyMoveset(Moves.SPLASH);
-    game.override.enemyAbility(Abilities.AURA_BREAK);
-    game.override.enemySpecies(Species.SHUCKLE);
+    game.overridesHelper.battleType("single");
+    game.overridesHelper.moveset([Moves.MOONBLAST, Moves.DARK_PULSE, Moves.MOONBLAST, Moves.DARK_PULSE]);
+    game.overridesHelper.enemyMoveset(Moves.SPLASH);
+    game.overridesHelper.enemyAbility(Abilities.AURA_BREAK);
+    game.overridesHelper.enemySpecies(Species.SHUCKLE);
   });
 
   it("reverses the effect of Fairy Aura", async () => {
     const moveToCheck = allMoves[Moves.MOONBLAST];
     const basePower = moveToCheck.power;
 
-    game.override.ability(Abilities.FAIRY_AURA);
+    game.overridesHelper.ability(Abilities.FAIRY_AURA);
     vi.spyOn(moveToCheck, "calculateBattlePower");
 
-    await game.classicMode.startBattle([Species.PIKACHU]);
-    game.move.select(Moves.MOONBLAST);
+    await game.classicModeHelper.startBattle([Species.PIKACHU]);
+    game.moveHelper.select(Moves.MOONBLAST);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(moveToCheck.calculateBattlePower).toHaveReturnedWith(expect.closeTo(basePower * auraBreakMultiplier));
@@ -49,11 +49,11 @@ describe("Abilities - Aura Break", () => {
     const moveToCheck = allMoves[Moves.DARK_PULSE];
     const basePower = moveToCheck.power;
 
-    game.override.ability(Abilities.DARK_AURA);
+    game.overridesHelper.ability(Abilities.DARK_AURA);
     vi.spyOn(moveToCheck, "calculateBattlePower");
 
-    await game.classicMode.startBattle([Species.PIKACHU]);
-    game.move.select(Moves.DARK_PULSE);
+    await game.classicModeHelper.startBattle([Species.PIKACHU]);
+    game.moveHelper.select(Moves.DARK_PULSE);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(moveToCheck.calculateBattlePower).toHaveReturnedWith(expect.closeTo(basePower * auraBreakMultiplier));
@@ -63,11 +63,11 @@ describe("Abilities - Aura Break", () => {
     const moveToCheck = allMoves[Moves.MOONBLAST];
     const basePower = moveToCheck.power;
 
-    game.override.ability(Abilities.BALL_FETCH);
+    game.overridesHelper.ability(Abilities.BALL_FETCH);
     vi.spyOn(moveToCheck, "calculateBattlePower");
 
-    await game.classicMode.startBattle([Species.PIKACHU]);
-    game.move.select(Moves.MOONBLAST);
+    await game.classicModeHelper.startBattle([Species.PIKACHU]);
+    game.moveHelper.select(Moves.MOONBLAST);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(moveToCheck.calculateBattlePower).toHaveReturnedWith(basePower);

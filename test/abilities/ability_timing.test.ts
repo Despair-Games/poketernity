@@ -26,7 +26,7 @@ describe("Ability Timing", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.INTIMIDATE)
@@ -35,8 +35,8 @@ describe("Ability Timing", () => {
   });
 
   it("should trigger after switch check", async () => {
-    game.settings.battleStyle = BattleStyle.SWITCH;
-    await game.classicMode.runToSummon([Species.EEVEE, Species.FEEBAS]);
+    game.settingsHelper.battleStyle = BattleStyle.SWITCH;
+    await game.classicModeHelper.runToSummon([Species.EEVEE, Species.FEEBAS]);
 
     game.onNextPrompt(
       "CheckSwitchPhase",

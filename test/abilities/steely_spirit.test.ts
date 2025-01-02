@@ -26,16 +26,16 @@ describe("Abilities - Steely Spirit", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("double");
-    game.override.enemySpecies(Species.SHUCKLE);
-    game.override.enemyAbility(Abilities.BALL_FETCH);
-    game.override.moveset([Moves.IRON_HEAD, Moves.SPLASH]);
-    game.override.enemyMoveset(Moves.SPLASH);
+    game.overridesHelper.battleType("double");
+    game.overridesHelper.enemySpecies(Species.SHUCKLE);
+    game.overridesHelper.enemyAbility(Abilities.BALL_FETCH);
+    game.overridesHelper.moveset([Moves.IRON_HEAD, Moves.SPLASH]);
+    game.overridesHelper.enemyMoveset(Moves.SPLASH);
     vi.spyOn(allMoves[moveToCheck], "calculateBattlePower");
   });
 
   it("increases Steel-type moves' power used by the user and its allies by 50%", async () => {
-    await game.classicMode.startBattle([Species.PIKACHU, Species.SHUCKLE]);
+    await game.classicModeHelper.startBattle([Species.PIKACHU, Species.SHUCKLE]);
     const boostSource = game.scene.getPlayerField()[1];
     const enemyToCheck = game.scene.getEnemyPokemon()!;
 
@@ -43,15 +43,15 @@ describe("Abilities - Steely Spirit", () => {
 
     expect(boostSource.hasAbility(Abilities.STEELY_SPIRIT)).toBe(true);
 
-    game.move.select(moveToCheck, 0, enemyToCheck.getBattlerIndex());
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(moveToCheck, 0, enemyToCheck.getBattlerIndex());
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(allMoves[moveToCheck].calculateBattlePower).toHaveReturnedWith(ironHeadPower * steelySpiritMultiplier);
   });
 
   it("stacks if multiple users with this ability are on the field.", async () => {
-    await game.classicMode.startBattle([Species.PIKACHU, Species.PIKACHU]);
+    await game.classicModeHelper.startBattle([Species.PIKACHU, Species.PIKACHU]);
     const enemyToCheck = game.scene.getEnemyPokemon()!;
 
     game.scene.getPlayerField().forEach((p) => {
@@ -60,8 +60,8 @@ describe("Abilities - Steely Spirit", () => {
 
     expect(game.scene.getPlayerField().every((p) => p.hasAbility(Abilities.STEELY_SPIRIT))).toBe(true);
 
-    game.move.select(moveToCheck, 0, enemyToCheck.getBattlerIndex());
-    game.move.select(moveToCheck, 1, enemyToCheck.getBattlerIndex());
+    game.moveHelper.select(moveToCheck, 0, enemyToCheck.getBattlerIndex());
+    game.moveHelper.select(moveToCheck, 1, enemyToCheck.getBattlerIndex());
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(allMoves[moveToCheck].calculateBattlePower).toHaveReturnedWith(
@@ -70,7 +70,7 @@ describe("Abilities - Steely Spirit", () => {
   });
 
   it("does not take effect when suppressed", async () => {
-    await game.classicMode.startBattle([Species.PIKACHU, Species.SHUCKLE]);
+    await game.classicModeHelper.startBattle([Species.PIKACHU, Species.SHUCKLE]);
     const boostSource = game.scene.getPlayerField()[1];
     const enemyToCheck = game.scene.getEnemyPokemon()!;
 
@@ -82,22 +82,22 @@ describe("Abilities - Steely Spirit", () => {
     expect(boostSource.hasAbility(Abilities.STEELY_SPIRIT)).toBe(false);
     expect(boostSource.summonData.abilitySuppressed).toBe(true);
 
-    game.move.select(moveToCheck, 0, enemyToCheck.getBattlerIndex());
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(moveToCheck, 0, enemyToCheck.getBattlerIndex());
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(allMoves[moveToCheck].calculateBattlePower).toHaveReturnedWith(ironHeadPower);
   });
 
   it("affects variable-type moves if their resolved type is Steel", async () => {
-    game.override.ability(Abilities.STEELY_SPIRIT).moveset([Moves.REVELATION_DANCE]);
+    game.overridesHelper.ability(Abilities.STEELY_SPIRIT).moveset([Moves.REVELATION_DANCE]);
 
     const revelationDance = allMoves[Moves.REVELATION_DANCE];
     vi.spyOn(revelationDance, "calculateBattlePower");
 
-    await game.classicMode.startBattle([Species.KLINKLANG]);
+    await game.classicModeHelper.startBattle([Species.KLINKLANG]);
 
-    game.move.select(Moves.REVELATION_DANCE);
+    game.moveHelper.select(Moves.REVELATION_DANCE);
 
     await game.phaseInterceptor.to("MoveEffectPhase");
 

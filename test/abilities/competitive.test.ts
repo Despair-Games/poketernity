@@ -24,7 +24,7 @@ describe("Abilities - Competitive", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemySpecies(Species.BEEDRILL)
       .enemyMoveset(Moves.TICKLE)
@@ -34,10 +34,10 @@ describe("Abilities - Competitive", () => {
   });
 
   it("lower atk and def by 1 via tickle, then increase spatk by 4 via competitive", async () => {
-    await game.classicMode.startBattle([Species.FLYGON]);
+    await game.classicModeHelper.startBattle([Species.FLYGON]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to(TurnInitPhase);
 
     expect(playerPokemon.getStatStage(Stat.ATK)).toBe(-1);
@@ -46,11 +46,11 @@ describe("Abilities - Competitive", () => {
   });
 
   it("lowering your own stats should not trigger competitive", async () => {
-    game.override.enemyMoveset(Moves.SPLASH);
-    await game.classicMode.startBattle([Species.FLYGON]);
+    game.overridesHelper.enemyMoveset(Moves.SPLASH);
+    await game.classicModeHelper.startBattle([Species.FLYGON]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
-    game.move.select(Moves.CLOSE_COMBAT);
+    game.moveHelper.select(Moves.CLOSE_COMBAT);
     await game.phaseInterceptor.to(TurnInitPhase);
 
     expect(playerPokemon.getStatStage(Stat.SPDEF)).toBe(-1);
@@ -59,11 +59,11 @@ describe("Abilities - Competitive", () => {
   });
 
   it("white herb should remove only the negative effects", async () => {
-    game.override.startingHeldItems([{ name: "WHITE_HERB" }]);
-    await game.classicMode.startBattle([Species.FLYGON]);
+    game.overridesHelper.startingHeldItems([{ name: "WHITE_HERB" }]);
+    await game.classicModeHelper.startBattle([Species.FLYGON]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to(TurnInitPhase);
 
     expect(playerPokemon.getStatStage(Stat.ATK)).toBe(0);

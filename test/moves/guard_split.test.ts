@@ -23,7 +23,7 @@ describe("Moves - Guard Split", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemyAbility(Abilities.NONE)
       .enemySpecies(Species.MEW)
@@ -33,7 +33,7 @@ describe("Moves - Guard Split", () => {
   });
 
   it("should average the user's DEF and SPDEF stats with those of the target", async () => {
-    game.override.enemyMoveset(Moves.SPLASH);
+    game.overridesHelper.enemyMoveset(Moves.SPLASH);
     await game.startBattle([Species.INDEEDEE]);
 
     const player = game.scene.getPlayerPokemon()!;
@@ -42,7 +42,7 @@ describe("Moves - Guard Split", () => {
     const avgDef = Math.floor((player.getStat(Stat.DEF, false) + enemy.getStat(Stat.DEF, false)) / 2);
     const avgSpDef = Math.floor((player.getStat(Stat.SPDEF, false) + enemy.getStat(Stat.SPDEF, false)) / 2);
 
-    game.move.select(Moves.GUARD_SPLIT);
+    game.moveHelper.select(Moves.GUARD_SPLIT);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(player.getStat(Stat.DEF, false)).toBe(avgDef);
@@ -53,7 +53,7 @@ describe("Moves - Guard Split", () => {
   }, 20000);
 
   it("should be idempotent", async () => {
-    game.override.enemyMoveset([Moves.GUARD_SPLIT]);
+    game.overridesHelper.enemyMoveset([Moves.GUARD_SPLIT]);
     await game.startBattle([Species.INDEEDEE]);
 
     const player = game.scene.getPlayerPokemon()!;
@@ -62,10 +62,10 @@ describe("Moves - Guard Split", () => {
     const avgDef = Math.floor((player.getStat(Stat.DEF, false) + enemy.getStat(Stat.DEF, false)) / 2);
     const avgSpDef = Math.floor((player.getStat(Stat.SPDEF, false) + enemy.getStat(Stat.SPDEF, false)) / 2);
 
-    game.move.select(Moves.GUARD_SPLIT);
+    game.moveHelper.select(Moves.GUARD_SPLIT);
     await game.phaseInterceptor.to(TurnEndPhase);
 
-    game.move.select(Moves.GUARD_SPLIT);
+    game.moveHelper.select(Moves.GUARD_SPLIT);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(player.getStat(Stat.DEF, false)).toBe(avgDef);

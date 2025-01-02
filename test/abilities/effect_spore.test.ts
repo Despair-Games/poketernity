@@ -25,7 +25,7 @@ describe("Abilities - Effect Spore", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.SPLASH])
       .ability(Abilities.EFFECT_SPORE)
       .battleType("single")
@@ -39,15 +39,15 @@ describe("Abilities - Effect Spore", () => {
   });
 
   it("should have a chance of inflicting a status effect if user is hit with a contact move", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(EffectSporeAbAttr)[0]!;
     vi.spyOn(abilityAttr, "applyPostDefend");
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.TACKLE);
-    await game.move.forceHit();
+    await game.moveHelper.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(abilityAttr.applyPostDefend).toHaveLastReturnedWith(true);
@@ -55,51 +55,51 @@ describe("Abilities - Effect Spore", () => {
   });
 
   it("should not affect Pokemon with the ability Overcoat", async () => {
-    game.override.enemyAbility(Abilities.OVERCOAT);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    game.overridesHelper.enemyAbility(Abilities.OVERCOAT);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(EffectSporeAbAttr)[0]!;
     vi.spyOn(abilityAttr, "applyPostDefend");
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.TACKLE);
-    await game.move.forceHit();
+    await game.moveHelper.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(abilityAttr.applyPostDefend).toHaveLastReturnedWith(false);
   });
 
   it("should not affect Grass-type Pokemon", async () => {
-    game.override.enemySpecies(Species.TREECKO);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    game.overridesHelper.enemySpecies(Species.TREECKO);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(EffectSporeAbAttr)[0]!;
     vi.spyOn(abilityAttr, "applyPostDefend");
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.TACKLE);
-    await game.move.forceHit();
+    await game.moveHelper.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(abilityAttr.applyPostDefend).toHaveLastReturnedWith(false);
   });
 
   it("should require contact to activate", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(EffectSporeAbAttr)[0]!;
     vi.spyOn(abilityAttr, "applyPostDefend");
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.WATER_GUN);
-    await game.move.forceHit();
+    await game.moveHelper.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(abilityAttr.applyPostDefend).toHaveLastReturnedWith(false);
   });
 
   it("should have correct chances of inflicting sleep (11%), paralysis (10%), and poison (9%)", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;

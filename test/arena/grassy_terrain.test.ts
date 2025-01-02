@@ -21,7 +21,7 @@ describe("Arena - Grassy Terrain", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .disableCrits()
       .enemyLevel(1)
@@ -33,35 +33,35 @@ describe("Arena - Grassy Terrain", () => {
   });
 
   it("halves the damage of Earthquake", async () => {
-    await game.classicMode.startBattle([Species.TAUROS]);
+    await game.classicModeHelper.startBattle([Species.TAUROS]);
 
     const eq = allMoves[Moves.EARTHQUAKE];
     vi.spyOn(eq, "calculateBattlePower");
 
-    game.move.select(Moves.EARTHQUAKE);
+    game.moveHelper.select(Moves.EARTHQUAKE);
     await game.toNextTurn();
 
     expect(eq.calculateBattlePower).toHaveReturnedWith(100);
 
-    game.move.select(Moves.GRASSY_TERRAIN);
+    game.moveHelper.select(Moves.GRASSY_TERRAIN);
     await game.toNextTurn();
 
-    game.move.select(Moves.EARTHQUAKE);
+    game.moveHelper.select(Moves.EARTHQUAKE);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(eq.calculateBattlePower).toHaveReturnedWith(50);
   });
 
   it("Does not halve the damage of Earthquake if opponent is not grounded", async () => {
-    await game.classicMode.startBattle([Species.NINJASK]);
+    await game.classicModeHelper.startBattle([Species.NINJASK]);
 
     const eq = allMoves[Moves.EARTHQUAKE];
     vi.spyOn(eq, "calculateBattlePower");
 
-    game.move.select(Moves.GRASSY_TERRAIN);
+    game.moveHelper.select(Moves.GRASSY_TERRAIN);
     await game.toNextTurn();
 
-    game.move.select(Moves.EARTHQUAKE);
+    game.moveHelper.select(Moves.EARTHQUAKE);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(eq.calculateBattlePower).toHaveReturnedWith(100);

@@ -24,7 +24,7 @@ describe("Moves - Alluring Voice", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
@@ -38,11 +38,11 @@ describe("Moves - Alluring Voice", () => {
   });
 
   it("should confuse the opponent if their stat stages were raised", async () => {
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.ALLURING_VOICE);
+    game.moveHelper.select(Moves.ALLURING_VOICE);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to(BerryPhase);
 

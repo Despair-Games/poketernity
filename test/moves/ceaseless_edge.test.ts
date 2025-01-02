@@ -26,25 +26,25 @@ describe("Moves - Ceaseless Edge", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("single");
-    game.override.enemySpecies(Species.RATTATA);
-    game.override.enemyAbility(Abilities.RUN_AWAY);
-    game.override.enemyPassiveAbility(Abilities.RUN_AWAY);
-    game.override.startingLevel(100);
-    game.override.enemyLevel(100);
-    game.override.moveset([Moves.CEASELESS_EDGE, Moves.SPLASH, Moves.ROAR]);
-    game.override.enemyMoveset(Moves.SPLASH);
+    game.overridesHelper.battleType("single");
+    game.overridesHelper.enemySpecies(Species.RATTATA);
+    game.overridesHelper.enemyAbility(Abilities.RUN_AWAY);
+    game.overridesHelper.enemyPassiveAbility(Abilities.RUN_AWAY);
+    game.overridesHelper.startingLevel(100);
+    game.overridesHelper.enemyLevel(100);
+    game.overridesHelper.moveset([Moves.CEASELESS_EDGE, Moves.SPLASH, Moves.ROAR]);
+    game.overridesHelper.enemyMoveset(Moves.SPLASH);
     vi.spyOn(allMoves[Moves.CEASELESS_EDGE], "accuracy", "get").mockReturnValue(100);
   });
 
   test("move should hit and apply spikes", async () => {
-    await game.classicMode.startBattle([Species.ILLUMISE]);
+    await game.classicModeHelper.startBattle([Species.ILLUMISE]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     const enemyStartingHp = enemyPokemon.hp;
 
-    game.move.select(Moves.CEASELESS_EDGE);
+    game.moveHelper.select(Moves.CEASELESS_EDGE);
 
     await game.phaseInterceptor.to(MoveEffectPhase, false);
     // Spikes should not have any layers before move effect is applied
@@ -59,14 +59,14 @@ describe("Moves - Ceaseless Edge", () => {
   });
 
   test("move should hit twice with multi lens and apply two layers of spikes", async () => {
-    game.override.startingHeldItems([{ name: "MULTI_LENS" }]);
-    await game.classicMode.startBattle([Species.ILLUMISE]);
+    game.overridesHelper.startingHeldItems([{ name: "MULTI_LENS" }]);
+    await game.classicModeHelper.startBattle([Species.ILLUMISE]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     const enemyStartingHp = enemyPokemon.hp;
 
-    game.move.select(Moves.CEASELESS_EDGE);
+    game.moveHelper.select(Moves.CEASELESS_EDGE);
 
     await game.phaseInterceptor.to(MoveEffectPhase, false);
     // Spikes should not have any layers before move effect is applied
@@ -81,12 +81,12 @@ describe("Moves - Ceaseless Edge", () => {
   });
 
   test("trainer - move should hit twice, apply two layers of spikes, force switch opponent - opponent takes damage", async () => {
-    game.override.startingHeldItems([{ name: "MULTI_LENS" }]);
-    game.override.startingWave(25);
+    game.overridesHelper.startingHeldItems([{ name: "MULTI_LENS" }]);
+    game.overridesHelper.startingWave(25);
 
-    await game.classicMode.startBattle([Species.ILLUMISE]);
+    await game.classicModeHelper.startBattle([Species.ILLUMISE]);
 
-    game.move.select(Moves.CEASELESS_EDGE);
+    game.moveHelper.select(Moves.CEASELESS_EDGE);
     await game.phaseInterceptor.to(MoveEffectPhase, false);
     // Spikes should not have any layers before move effect is applied
     const tagBefore = game.scene.arena.getTagOnSide(ArenaTagType.SPIKES, ArenaTagSide.ENEMY) as ArenaTrapTag;
@@ -100,7 +100,7 @@ describe("Moves - Ceaseless Edge", () => {
     const hpBeforeSpikes = game.scene.currentBattle.enemyParty[1].hp;
     // Check HP of pokemon that WILL BE switched in (index 1)
     game.forceEnemyToSwitch();
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to(TurnEndPhase, false);
     expect(game.scene.currentBattle.enemyParty[0].hp).toBeLessThan(hpBeforeSpikes);
   });

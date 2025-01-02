@@ -37,10 +37,10 @@ describe("Global Trade System - Mystery Encounter", () => {
   beforeEach(async () => {
     game = new GameManager(phaserGame);
     scene = game.scene;
-    game.override.mysteryEncounterChance(100);
-    game.override.startingWave(defaultWave);
-    game.override.startingBiome(defaultBiome);
-    game.override.disableTrainerWaves();
+    game.overridesHelper.mysteryEncounterChance(100);
+    game.overridesHelper.startingWave(defaultWave);
+    game.overridesHelper.startingBiome(defaultBiome);
+    game.overridesHelper.disableTrainerWaves();
 
     const biomeMap = new Map<Biome, MysteryEncounterType[]>([
       [Biome.VOLCANO, [MysteryEncounterType.MYSTERIOUS_CHALLENGERS]],
@@ -85,8 +85,8 @@ describe("Global Trade System - Mystery Encounter", () => {
   });
 
   it("should not spawn outside of CIVILIZATION_ENCOUNTER_BIOMES", async () => {
-    game.override.mysteryEncounterTier(MysteryEncounterTier.COMMON);
-    game.override.startingBiome(Biome.VOLCANO);
+    game.overridesHelper.mysteryEncounterTier(MysteryEncounterTier.COMMON);
+    game.overridesHelper.startingBiome(Biome.VOLCANO);
     await game.runToMysteryEncounter();
 
     expect(scene.currentBattle?.mysteryEncounter?.encounterType).not.toBe(MysteryEncounterType.GLOBAL_TRADE_SYSTEM);
@@ -179,7 +179,7 @@ describe("Global Trade System - Mystery Encounter", () => {
 
     it("Should roll for shiny twice, with random variant and associated luck", async () => {
       // This ensures that the first shiny roll gets ignored, to test the ME rerolling for shiny
-      game.override.enemyShiny(false);
+      game.overridesHelper.enemyShiny(false);
 
       await game.runToMysteryEncounter(MysteryEncounterType.GLOBAL_TRADE_SYSTEM, defaultParty);
 

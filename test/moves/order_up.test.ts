@@ -26,7 +26,7 @@ describe("Moves - Order Up", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset(Moves.ORDER_UP)
       .ability(Abilities.COMMANDER)
       .battleType("double")
@@ -47,16 +47,16 @@ describe("Moves - Order Up", () => {
   ])(
     "should raise the user's $statName when the user is commanded by a $formName Tatsugiri",
     async ({ formIndex, stat }) => {
-      game.override.starterForms({ [Species.TATSUGIRI]: formIndex });
+      game.overridesHelper.starterForms({ [Species.TATSUGIRI]: formIndex });
 
-      await game.classicMode.startBattle([Species.TATSUGIRI, Species.DONDOZO]);
+      await game.classicModeHelper.startBattle([Species.TATSUGIRI, Species.DONDOZO]);
 
       const [tatsugiri, dondozo] = game.scene.getPlayerField();
 
       expect(game.scene.triggerPokemonBattleAnim).toHaveBeenLastCalledWith(tatsugiri, PokemonAnimType.COMMANDER_APPLY);
       expect(dondozo.getTag(BattlerTagType.COMMANDED)).toBeDefined();
 
-      game.move.select(Moves.ORDER_UP, 1, BattlerIndex.ENEMY);
+      game.moveHelper.select(Moves.ORDER_UP, 1, BattlerIndex.ENEMY);
       expect(game.scene.currentBattle.turnCommands[0]?.skip).toBeTruthy();
 
       await game.phaseInterceptor.to("BerryPhase", false);
@@ -67,16 +67,16 @@ describe("Moves - Order Up", () => {
   );
 
   it("should be boosted by Sheer Force while still applying a stat boost", async () => {
-    game.override.passiveAbility(Abilities.SHEER_FORCE).starterForms({ [Species.TATSUGIRI]: 0 });
+    game.overridesHelper.passiveAbility(Abilities.SHEER_FORCE).starterForms({ [Species.TATSUGIRI]: 0 });
 
-    await game.classicMode.startBattle([Species.TATSUGIRI, Species.DONDOZO]);
+    await game.classicModeHelper.startBattle([Species.TATSUGIRI, Species.DONDOZO]);
 
     const [tatsugiri, dondozo] = game.scene.getPlayerField();
 
     expect(game.scene.triggerPokemonBattleAnim).toHaveBeenLastCalledWith(tatsugiri, PokemonAnimType.COMMANDER_APPLY);
     expect(dondozo.getTag(BattlerTagType.COMMANDED)).toBeDefined();
 
-    game.move.select(Moves.ORDER_UP, 1, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.ORDER_UP, 1, BattlerIndex.ENEMY);
     expect(game.scene.currentBattle.turnCommands[0]?.skip).toBeTruthy();
 
     await game.phaseInterceptor.to("BerryPhase", false);

@@ -21,7 +21,7 @@ describe("Abilities - Dry Skin", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .disableCrits()
       .enemyAbility(Abilities.DRY_SKIN)
@@ -33,59 +33,59 @@ describe("Abilities - Dry Skin", () => {
   });
 
   it("during sunlight, lose 1/8 of maximum health at the end of each turn", async () => {
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
 
     // first turn
-    game.move.select(Moves.SUNNY_DAY);
+    game.moveHelper.select(Moves.SUNNY_DAY);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemy.hp).toBeLessThan(enemy.getMaxHp());
 
     // second turn
     enemy.hp = enemy.getMaxHp();
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemy.hp).toBeLessThan(enemy.getMaxHp());
   });
 
   it("during rain, gain 1/8 of maximum health at the end of each turn", async () => {
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
 
     enemy.hp = 1;
 
     // first turn
-    game.move.select(Moves.RAIN_DANCE);
+    game.moveHelper.select(Moves.RAIN_DANCE);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemy.hp).toBeGreaterThan(1);
 
     // second turn
     enemy.hp = 1;
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemy.hp).toBeGreaterThan(1);
   });
 
   it("opposing fire attacks do 25% more damage", async () => {
-    game.override.moveset([Moves.FLAMETHROWER]);
-    await game.classicMode.startBattle();
+    game.overridesHelper.moveset([Moves.FLAMETHROWER]);
+    await game.classicModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
     const initialHP = 1000;
     enemy.hp = initialHP;
 
     // first turn
-    game.move.select(Moves.FLAMETHROWER);
+    game.moveHelper.select(Moves.FLAMETHROWER);
     await game.phaseInterceptor.to("TurnEndPhase");
     const fireDamageTakenWithDrySkin = initialHP - enemy.hp;
 
     enemy.hp = initialHP;
-    game.override.enemyAbility(Abilities.NONE);
+    game.overridesHelper.enemyAbility(Abilities.NONE);
 
     // second turn
-    game.move.select(Moves.FLAMETHROWER);
+    game.moveHelper.select(Moves.FLAMETHROWER);
     await game.phaseInterceptor.to("TurnEndPhase");
     const fireDamageTakenWithoutDrySkin = initialHP - enemy.hp;
 
@@ -93,49 +93,49 @@ describe("Abilities - Dry Skin", () => {
   });
 
   it("opposing water attacks heal 1/4 of maximum health and deal no damage", async () => {
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
 
     enemy.hp = 1;
 
-    game.move.select(Moves.WATER_GUN);
+    game.moveHelper.select(Moves.WATER_GUN);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemy.hp).toBeGreaterThan(1);
   });
 
   it("opposing water attacks do not heal if they were protected from", async () => {
-    game.override.enemyMoveset([Moves.PROTECT]);
+    game.overridesHelper.enemyMoveset([Moves.PROTECT]);
 
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
 
     enemy.hp = 1;
 
-    game.move.select(Moves.WATER_GUN);
+    game.moveHelper.select(Moves.WATER_GUN);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemy.hp).toBe(1);
   });
 
   it("multi-strike water attacks only heal once", async () => {
-    game.override.moveset([Moves.WATER_GUN, Moves.WATER_SHURIKEN]);
+    game.overridesHelper.moveset([Moves.WATER_GUN, Moves.WATER_SHURIKEN]);
 
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
 
     enemy.hp = 1;
 
     // first turn
-    game.move.select(Moves.WATER_SHURIKEN);
+    game.moveHelper.select(Moves.WATER_SHURIKEN);
     await game.phaseInterceptor.to("TurnEndPhase");
     const healthGainedFromWaterShuriken = enemy.hp - 1;
 
     enemy.hp = 1;
 
     // second turn
-    game.move.select(Moves.WATER_GUN);
+    game.moveHelper.select(Moves.WATER_GUN);
     await game.phaseInterceptor.to("TurnEndPhase");
     const healthGainedFromWaterGun = enemy.hp - 1;
 
@@ -143,15 +143,15 @@ describe("Abilities - Dry Skin", () => {
   });
 
   it("opposing water moves still heal regardless of accuracy check", async () => {
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.WATER_GUN);
+    game.moveHelper.select(Moves.WATER_GUN);
     enemy.hp = enemy.hp - 1;
     await game.phaseInterceptor.to("MoveEffectPhase");
 
-    await game.move.forceMiss();
+    await game.moveHelper.forceMiss();
     await game.phaseInterceptor.to("BerryPhase", false);
     expect(enemy.hp).toBe(enemy.getMaxHp());
   });

@@ -22,7 +22,7 @@ describe("Moves - Lucky Chant", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override
+    game.overridesHelper
       .battleType("single")
       .moveset([Moves.LUCKY_CHANT, Moves.SPLASH, Moves.FOLLOW_ME])
       .enemySpecies(Species.SNORLAX)
@@ -33,12 +33,12 @@ describe("Moves - Lucky Chant", () => {
   });
 
   it("should prevent critical hits from moves", async () => {
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    await game.classicModeHelper.startBattle([Species.CHARIZARD]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.LUCKY_CHANT);
-    await game.move.forceHit();
+    game.moveHelper.select(Moves.LUCKY_CHANT);
+    await game.moveHelper.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
     const lastAttackReceived = playerPokemon.turnData.attacksReceived[0];
@@ -46,16 +46,16 @@ describe("Moves - Lucky Chant", () => {
   });
 
   it("should prevent critical hits against the user's ally", async () => {
-    game.override.battleType("double");
+    game.overridesHelper.battleType("double");
 
-    await game.classicMode.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
+    await game.classicModeHelper.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
 
     const playerPokemon = game.scene.getPlayerField();
 
-    game.move.select(Moves.FOLLOW_ME);
-    game.move.select(Moves.LUCKY_CHANT, 1);
-    await game.move.forceHit();
-    await game.move.forceHit();
+    game.moveHelper.select(Moves.FOLLOW_ME);
+    game.moveHelper.select(Moves.LUCKY_CHANT, 1);
+    await game.moveHelper.forceHit();
+    await game.moveHelper.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
     const attacksReceivedA = playerPokemon[0].turnData.attacksReceived[0];
@@ -65,17 +65,17 @@ describe("Moves - Lucky Chant", () => {
   });
 
   it("should prevent critical hits from field effects", async () => {
-    game.override.enemyMoveset([Moves.TACKLE]);
+    game.overridesHelper.enemyMoveset([Moves.TACKLE]);
 
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    await game.classicModeHelper.startBattle([Species.CHARIZARD]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     enemyPokemon.addTag(BattlerTagType.ALWAYS_CRIT, 3, Moves.NONE, 0);
 
-    game.move.select(Moves.LUCKY_CHANT);
-    await game.move.forceHit();
+    game.moveHelper.select(Moves.LUCKY_CHANT);
+    await game.moveHelper.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
     const lastAttackReceived = playerPokemon.turnData.attacksReceived[0];

@@ -23,7 +23,7 @@ describe("Moves - Fake Out", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemySpecies(Species.CORVIKNIGHT)
       .moveset([Moves.FAKE_OUT, Moves.SPLASH])
@@ -34,17 +34,17 @@ describe("Moves - Fake Out", () => {
   });
 
   it("can only be used on the first turn a pokemon is sent out in a battle", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.FAKE_OUT);
+    game.moveHelper.select(Moves.FAKE_OUT);
     await game.toNextTurn();
 
     expect(enemy.hp).toBeLessThan(enemy.getMaxHp());
     const postTurnOneHp = enemy.hp;
 
-    game.move.select(Moves.FAKE_OUT);
+    game.moveHelper.select(Moves.FAKE_OUT);
     await game.toNextTurn();
 
     expect(enemy.hp).toBe(postTurnOneHp);
@@ -52,27 +52,27 @@ describe("Moves - Fake Out", () => {
 
   // This is a game-specific buff to Fake Out
   it("can be used at the start of every wave even if the pokemon wasn't recalled", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
     enemy.damageAndUpdate(enemy.getMaxHp() - 1);
 
-    game.move.select(Moves.FAKE_OUT);
+    game.moveHelper.select(Moves.FAKE_OUT);
     await game.toNextWave();
 
-    game.move.select(Moves.FAKE_OUT);
+    game.moveHelper.select(Moves.FAKE_OUT);
     await game.toNextTurn();
 
     expect(game.scene.getEnemyPokemon()!.isFullHp()).toBe(false);
   }, 20000);
 
   it("can be used again if recalled and sent back out", async () => {
-    game.override.startingWave(4);
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
+    game.overridesHelper.startingWave(4);
+    await game.classicModeHelper.startBattle([Species.FEEBAS, Species.MAGIKARP]);
 
     const enemy1 = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.FAKE_OUT);
+    game.moveHelper.select(Moves.FAKE_OUT);
     await game.phaseInterceptor.to("MoveEndPhase");
 
     expect(enemy1.hp).toBeLessThan(enemy1.getMaxHp());
@@ -80,7 +80,7 @@ describe("Moves - Fake Out", () => {
     await game.doKillOpponents();
     await game.toNextWave();
 
-    game.move.select(Moves.FAKE_OUT);
+    game.moveHelper.select(Moves.FAKE_OUT);
     await game.toNextTurn();
 
     const enemy2 = game.scene.getEnemyPokemon()!;
@@ -94,7 +94,7 @@ describe("Moves - Fake Out", () => {
     game.doSwitchPokemon(1);
     await game.toNextTurn();
 
-    game.move.select(Moves.FAKE_OUT);
+    game.moveHelper.select(Moves.FAKE_OUT);
     await game.toNextTurn();
 
     expect(enemy2.hp).toBeLessThan(enemy2.getMaxHp());
@@ -105,11 +105,11 @@ describe("Moves - Fake Out", () => {
     { moveId: Moves.BATON_PASS, moveName: "Baton Pass" },
     { moveId: Moves.SHED_TAIL, moveName: "Shed Tail" },
   ])("can be used after the user is sent out via $moveName", async ({ moveId }) => {
-    game.override.moveset([Moves.FAKE_OUT, moveId]);
+    game.overridesHelper.moveset([Moves.FAKE_OUT, moveId]);
 
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS, Species.MAGIKARP]);
 
-    game.move.select(moveId);
+    game.moveHelper.select(moveId);
     game.doSelectPartyPokemon(1);
 
     await game.toNextTurn();
@@ -120,7 +120,7 @@ describe("Moves - Fake Out", () => {
     expect(player.species.speciesId).toBe(Species.MAGIKARP);
     const enemyStartingHp = enemy.hp;
 
-    game.move.select(Moves.FAKE_OUT);
+    game.moveHelper.select(Moves.FAKE_OUT);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(enemy.hp).toBeLessThan(enemyStartingHp);
@@ -130,11 +130,11 @@ describe("Moves - Fake Out", () => {
   });
 
   it("can be used after the user is sent out via Wimp Out", async () => {
-    game.override.ability(Abilities.WIMP_OUT).enemyLevel(100).enemyMoveset(Moves.FALSE_SWIPE);
+    game.overridesHelper.ability(Abilities.WIMP_OUT).enemyLevel(100).enemyMoveset(Moves.FALSE_SWIPE);
 
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS, Species.MAGIKARP]);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     game.doSelectPartyPokemon(1);
 
     await game.toNextTurn();
@@ -144,7 +144,7 @@ describe("Moves - Fake Out", () => {
 
     expect(player.species.speciesId).toBe(Species.MAGIKARP);
 
-    game.move.select(Moves.FAKE_OUT);
+    game.moveHelper.select(Moves.FAKE_OUT);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(enemy.isFullHp()).toBeFalsy();

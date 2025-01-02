@@ -24,7 +24,7 @@ describe("Abilities - Overgrow/Blaze/Torrent/Swarm", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.SNORLAX)
@@ -40,14 +40,14 @@ describe("Abilities - Overgrow/Blaze/Torrent/Swarm", () => {
   ])(
     "$abilityName should multiply the user's attack stat by 1.5 if it uses a physical move of the relevant type at low HP",
     async ({ ability, move }) => {
-      game.override.ability(ability).moveset(move);
-      await game.classicMode.startBattle([Species.RATTATA]);
+      game.overridesHelper.ability(ability).moveset(move);
+      await game.classicModeHelper.startBattle([Species.RATTATA]);
       const playerPokemon = game.scene.getPlayerPokemon()!;
       playerPokemon.hp = playerPokemon.getMaxHp() * 0.33 - 1;
       vi.spyOn(playerPokemon, "getEffectiveStat");
 
-      game.move.select(move);
-      await game.move.forceHit();
+      game.moveHelper.select(move);
+      await game.moveHelper.forceHit();
       await game.phaseInterceptor.to("BerryPhase");
 
       expect(playerPokemon.getEffectiveStat).toHaveLastReturnedWith(Math.floor(playerPokemon.stats[Stat.ATK] * 1.5));
@@ -62,14 +62,14 @@ describe("Abilities - Overgrow/Blaze/Torrent/Swarm", () => {
   ])(
     "$abilityName should multiply the user's sp. attack stat by 1.5 if it uses a special move of the relevant type at low HP",
     async ({ ability, move }) => {
-      game.override.ability(ability).moveset(move);
-      await game.classicMode.startBattle([Species.RATTATA]);
+      game.overridesHelper.ability(ability).moveset(move);
+      await game.classicModeHelper.startBattle([Species.RATTATA]);
       const playerPokemon = game.scene.getPlayerPokemon()!;
       playerPokemon.hp = playerPokemon.getMaxHp() * 0.33 - 1;
       vi.spyOn(playerPokemon, "getEffectiveStat");
 
-      game.move.select(move);
-      await game.move.forceHit();
+      game.moveHelper.select(move);
+      await game.moveHelper.forceHit();
       await game.phaseInterceptor.to("BerryPhase");
 
       expect(playerPokemon.getEffectiveStat).toHaveLastReturnedWith(Math.floor(playerPokemon.stats[Stat.SPATK] * 1.5));
@@ -84,13 +84,13 @@ describe("Abilities - Overgrow/Blaze/Torrent/Swarm", () => {
   ])(
     "$abilityName should not take effect if the ability-holder is above the HP threshold",
     async ({ ability, move }) => {
-      game.override.ability(ability).moveset(move);
-      await game.classicMode.startBattle([Species.RATTATA]);
+      game.overridesHelper.ability(ability).moveset(move);
+      await game.classicModeHelper.startBattle([Species.RATTATA]);
       const playerPokemon = game.scene.getPlayerPokemon()!;
       vi.spyOn(playerPokemon, "getEffectiveStat");
 
-      game.move.select(move);
-      await game.move.forceHit();
+      game.moveHelper.select(move);
+      await game.moveHelper.forceHit();
       await game.phaseInterceptor.to("BerryPhase");
 
       const statUsed =
@@ -107,14 +107,14 @@ describe("Abilities - Overgrow/Blaze/Torrent/Swarm", () => {
     { abilityName: "Torrent", ability: Abilities.TORRENT },
     { abilityName: "Swarm", ability: Abilities.SWARM },
   ])("$abilityName should not take effect if the move used is of an incompatible type", async ({ ability }) => {
-    game.override.ability(ability).moveset(Moves.TACKLE);
-    await game.classicMode.startBattle([Species.RATTATA]);
+    game.overridesHelper.ability(ability).moveset(Moves.TACKLE);
+    await game.classicModeHelper.startBattle([Species.RATTATA]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
     playerPokemon.hp = playerPokemon.getMaxHp() * 0.33 - 1;
     vi.spyOn(playerPokemon, "getEffectiveStat");
 
-    game.move.select(Moves.TACKLE);
-    await game.move.forceHit();
+    game.moveHelper.select(Moves.TACKLE);
+    await game.moveHelper.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(playerPokemon.getEffectiveStat).toHaveLastReturnedWith(Math.floor(playerPokemon.stats[Stat.ATK]));

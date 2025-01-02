@@ -23,7 +23,7 @@ describe("Moves - Lash Out", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
@@ -38,9 +38,9 @@ describe("Moves - Lash Out", () => {
 
   it("should deal double damage if the user's stat stages were lowered this turn", async () => {
     vi.spyOn(allMoves[Moves.LASH_OUT], "calculateBattlePower");
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
-    game.move.select(Moves.LASH_OUT);
+    game.moveHelper.select(Moves.LASH_OUT);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("BerryPhase");
 

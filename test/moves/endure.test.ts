@@ -21,7 +21,7 @@ describe("Moves - Endure", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.THUNDER, Moves.BULLET_SEED, Moves.TOXIC])
       .ability(Abilities.SKILL_LINK)
       .startingLevel(100)
@@ -33,31 +33,31 @@ describe("Moves - Endure", () => {
   });
 
   it("should let the pokemon survive with 1 HP", async () => {
-    await game.classicMode.startBattle([Species.ARCEUS]);
+    await game.classicModeHelper.startBattle([Species.ARCEUS]);
 
-    game.move.select(Moves.THUNDER);
+    game.moveHelper.select(Moves.THUNDER);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(game.scene.getEnemyPokemon()!.hp).toBe(1);
   });
 
   it("should let the pokemon survive with 1 HP when hit with a multihit move", async () => {
-    await game.classicMode.startBattle([Species.ARCEUS]);
+    await game.classicModeHelper.startBattle([Species.ARCEUS]);
 
-    game.move.select(Moves.BULLET_SEED);
+    game.moveHelper.select(Moves.BULLET_SEED);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(game.scene.getEnemyPokemon()!.hp).toBe(1);
   });
 
   it("shouldn't prevent fainting from indirect damage", async () => {
-    game.override.enemyLevel(100);
-    await game.classicMode.startBattle([Species.ARCEUS]);
+    game.overridesHelper.enemyLevel(100);
+    await game.classicModeHelper.startBattle([Species.ARCEUS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
     enemy.hp = 2;
 
-    game.move.select(Moves.TOXIC);
+    game.moveHelper.select(Moves.TOXIC);
     await game.phaseInterceptor.to("VictoryPhase");
 
     expect(enemy.isFainted()).toBe(true);

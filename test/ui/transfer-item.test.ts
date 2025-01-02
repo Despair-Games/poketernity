@@ -28,21 +28,21 @@ describe("UI - Transfer Items", () => {
 
   beforeEach(async () => {
     game = new GameManager(phaserGame);
-    game.override.battleType("single");
-    game.override.startingLevel(100);
-    game.override.startingWave(1);
-    game.override.startingHeldItems([
+    game.overridesHelper.battleType("single");
+    game.overridesHelper.startingLevel(100);
+    game.overridesHelper.startingWave(1);
+    game.overridesHelper.startingHeldItems([
       { name: "BERRY", count: 1, type: BerryType.SITRUS },
       { name: "BERRY", count: 2, type: BerryType.APICOT },
       { name: "BERRY", count: 2, type: BerryType.LUM },
     ]);
-    game.override.moveset([Moves.DRAGON_CLAW]);
-    game.override.enemySpecies(Species.MAGIKARP);
-    game.override.enemyMoveset([Moves.SPLASH]);
+    game.overridesHelper.moveset([Moves.DRAGON_CLAW]);
+    game.overridesHelper.enemySpecies(Species.MAGIKARP);
+    game.overridesHelper.enemyMoveset([Moves.SPLASH]);
 
     await game.startBattle([Species.RAYQUAZA, Species.RAYQUAZA, Species.RAYQUAZA]);
 
-    game.move.select(Moves.DRAGON_CLAW);
+    game.moveHelper.select(Moves.DRAGON_CLAW);
 
     game.onNextPrompt("SelectModifierPhase", Mode.MODIFIER_SELECT, () => {
       expect(game.scene.ui.getHandler()).toBeInstanceOf(ModifierSelectUiHandler);

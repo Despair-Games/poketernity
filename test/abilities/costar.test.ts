@@ -24,28 +24,28 @@ describe("Abilities - COSTAR", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("double");
-    game.override.ability(Abilities.COSTAR);
-    game.override.moveset([Moves.SPLASH, Moves.NASTY_PLOT]);
-    game.override.enemyMoveset(Moves.SPLASH);
+    game.overridesHelper.battleType("double");
+    game.overridesHelper.ability(Abilities.COSTAR);
+    game.overridesHelper.moveset([Moves.SPLASH, Moves.NASTY_PLOT]);
+    game.overridesHelper.enemyMoveset(Moves.SPLASH);
   });
 
   test("ability copies positive stat stages", async () => {
-    game.override.enemyAbility(Abilities.BALL_FETCH);
+    game.overridesHelper.enemyAbility(Abilities.BALL_FETCH);
 
     await game.startBattle([Species.MAGIKARP, Species.MAGIKARP, Species.FLAMIGO]);
 
     let [leftPokemon, rightPokemon] = game.scene.getPlayerField();
 
-    game.move.select(Moves.NASTY_PLOT);
+    game.moveHelper.select(Moves.NASTY_PLOT);
     await game.phaseInterceptor.to(CommandPhase);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.toNextTurn();
 
     expect(leftPokemon.getStatStage(Stat.SPATK)).toBe(2);
     expect(rightPokemon.getStatStage(Stat.SPATK)).toBe(0);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to(CommandPhase);
     game.doSwitchPokemon(2);
     await game.phaseInterceptor.to(MessagePhase);
@@ -56,7 +56,7 @@ describe("Abilities - COSTAR", () => {
   });
 
   test("ability copies negative stat stages", async () => {
-    game.override.enemyAbility(Abilities.INTIMIDATE);
+    game.overridesHelper.enemyAbility(Abilities.INTIMIDATE);
 
     await game.startBattle([Species.MAGIKARP, Species.MAGIKARP, Species.FLAMIGO]);
 
@@ -65,7 +65,7 @@ describe("Abilities - COSTAR", () => {
     expect(leftPokemon.getStatStage(Stat.ATK)).toBe(-2);
     expect(leftPokemon.getStatStage(Stat.ATK)).toBe(-2);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to(CommandPhase);
     game.doSwitchPokemon(2);
     await game.phaseInterceptor.to(MessagePhase);

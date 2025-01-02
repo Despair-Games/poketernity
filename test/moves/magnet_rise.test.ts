@@ -23,20 +23,20 @@ describe("Moves - Magnet Rise", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("single");
-    game.override.starterSpecies(Species.MAGNEZONE);
-    game.override.enemySpecies(Species.RATTATA);
-    game.override.enemyMoveset([Moves.DRILL_RUN, Moves.DRILL_RUN, Moves.DRILL_RUN, Moves.DRILL_RUN]);
-    game.override.disableCrits();
-    game.override.enemyLevel(1);
-    game.override.moveset([moveToUse, Moves.SPLASH, Moves.GRAVITY, Moves.BATON_PASS]);
+    game.overridesHelper.battleType("single");
+    game.overridesHelper.starterSpecies(Species.MAGNEZONE);
+    game.overridesHelper.enemySpecies(Species.RATTATA);
+    game.overridesHelper.enemyMoveset([Moves.DRILL_RUN, Moves.DRILL_RUN, Moves.DRILL_RUN, Moves.DRILL_RUN]);
+    game.overridesHelper.disableCrits();
+    game.overridesHelper.enemyLevel(1);
+    game.overridesHelper.moveset([moveToUse, Moves.SPLASH, Moves.GRAVITY, Moves.BATON_PASS]);
   });
 
   it("MAGNET RISE", async () => {
     await game.startBattle();
 
     const startingHp = game.scene.getPlayerParty()[0].hp;
-    game.move.select(moveToUse);
+    game.moveHelper.select(moveToUse);
     await game.phaseInterceptor.to(TurnEndPhase);
     const finalHp = game.scene.getPlayerParty()[0].hp;
     const hpLost = finalHp - startingHp;
@@ -47,12 +47,12 @@ describe("Moves - Magnet Rise", () => {
     await game.startBattle();
 
     const startingHp = game.scene.getPlayerParty()[0].hp;
-    game.move.select(moveToUse);
+    game.moveHelper.select(moveToUse);
     await game.phaseInterceptor.to(CommandPhase);
     let finalHp = game.scene.getPlayerParty()[0].hp;
     let hpLost = finalHp - startingHp;
     expect(hpLost).toBe(0);
-    game.move.select(Moves.GRAVITY);
+    game.moveHelper.select(Moves.GRAVITY);
     await game.phaseInterceptor.to(TurnEndPhase);
     finalHp = game.scene.getPlayerParty()[0].hp;
     hpLost = finalHp - startingHp;

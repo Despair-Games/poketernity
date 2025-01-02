@@ -22,7 +22,7 @@ describe("Moves - Psycho Shift", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.PSYCHO_SHIFT])
       .ability(Abilities.BALL_FETCH)
       .statusEffect(StatusEffect.POISON)
@@ -35,13 +35,13 @@ describe("Moves - Psycho Shift", () => {
   });
 
   it("If Psycho Shift is used on a Pokémon with Synchronize, the user of Psycho Shift will already be afflicted with a status condition when Synchronize activates", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon();
     const enemyPokemon = game.scene.getEnemyPokemon();
     expect(enemyPokemon?.status).toBeUndefined();
 
-    game.move.select(Moves.PSYCHO_SHIFT);
+    game.moveHelper.select(Moves.PSYCHO_SHIFT);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(playerPokemon?.status).toBeNull();
     expect(enemyPokemon?.status).toBeDefined();

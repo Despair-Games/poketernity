@@ -27,15 +27,15 @@ describe("Moves - Swallow", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override.battleType("single");
+    game.overridesHelper.battleType("single");
 
-    game.override.enemySpecies(Species.RATTATA);
-    game.override.enemyMoveset(Moves.SPLASH);
-    game.override.enemyAbility(Abilities.NONE);
-    game.override.enemyLevel(2000);
+    game.overridesHelper.enemySpecies(Species.RATTATA);
+    game.overridesHelper.enemyMoveset(Moves.SPLASH);
+    game.overridesHelper.enemyAbility(Abilities.NONE);
+    game.overridesHelper.enemyLevel(2000);
 
-    game.override.moveset([Moves.SWALLOW, Moves.SWALLOW, Moves.SWALLOW, Moves.SWALLOW]);
-    game.override.ability(Abilities.NONE);
+    game.overridesHelper.moveset([Moves.SWALLOW, Moves.SWALLOW, Moves.SWALLOW, Moves.SWALLOW]);
+    game.overridesHelper.ability(Abilities.NONE);
   });
 
   describe("consumes all stockpile stacks to heal (scaling with stacks)", () => {
@@ -57,7 +57,7 @@ describe("Moves - Swallow", () => {
 
       vi.spyOn(pokemon, "heal");
 
-      game.move.select(Moves.SWALLOW);
+      game.moveHelper.select(Moves.SWALLOW);
       await game.phaseInterceptor.to(TurnInitPhase);
 
       expect(pokemon.heal).toHaveBeenCalledOnce();
@@ -85,7 +85,7 @@ describe("Moves - Swallow", () => {
 
       vi.spyOn(pokemon, "heal");
 
-      game.move.select(Moves.SWALLOW);
+      game.moveHelper.select(Moves.SWALLOW);
       await game.phaseInterceptor.to(TurnInitPhase);
 
       expect(pokemon.heal).toHaveBeenCalledOnce();
@@ -114,7 +114,7 @@ describe("Moves - Swallow", () => {
 
       vi.spyOn(pokemon, "heal");
 
-      game.move.select(Moves.SWALLOW);
+      game.moveHelper.select(Moves.SWALLOW);
       await game.phaseInterceptor.to(TurnInitPhase);
 
       expect(pokemon.heal).toHaveBeenCalledOnce();
@@ -132,7 +132,7 @@ describe("Moves - Swallow", () => {
     const stockpilingTag = pokemon.getTag(StockpilingTag)!;
     expect(stockpilingTag).toBeUndefined();
 
-    game.move.select(Moves.SWALLOW);
+    game.moveHelper.select(Moves.SWALLOW);
     await game.phaseInterceptor.to(TurnInitPhase);
 
     expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({ move: Moves.SWALLOW, result: MoveResult.FAIL });
@@ -148,7 +148,7 @@ describe("Moves - Swallow", () => {
       const stockpilingTag = pokemon.getTag(StockpilingTag)!;
       expect(stockpilingTag).toBeDefined();
 
-      game.move.select(Moves.SWALLOW);
+      game.moveHelper.select(Moves.SWALLOW);
       await game.phaseInterceptor.to(MovePhase);
 
       expect(pokemon.getStatStage(Stat.DEF)).toBe(1);
@@ -182,7 +182,7 @@ describe("Moves - Swallow", () => {
         [Stat.SPDEF]: 2,
       };
 
-      game.move.select(Moves.SWALLOW);
+      game.moveHelper.select(Moves.SWALLOW);
 
       await game.phaseInterceptor.to(TurnInitPhase);
 

@@ -28,7 +28,7 @@ describe("Abilities - BATTLE BOND", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .startingWave(4) // Leads to arena reset on Wave 5 trainer battle
       .ability(Abilities.BATTLE_BOND)
@@ -41,7 +41,7 @@ describe("Abilities - BATTLE BOND", () => {
   });
 
   it("check if fainted pokemon switches to base form on arena reset", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP, Species.GRENINJA]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP, Species.GRENINJA]);
 
     const greninja = game.scene.getPlayerParty()[1];
     expect(greninja.formIndex).toBe(ashForm);
@@ -50,7 +50,7 @@ describe("Abilities - BATTLE BOND", () => {
     greninja.status = new Status(StatusEffect.FAINT);
     expect(greninja.isFainted()).toBe(true);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.doKillOpponents();
     await game.phaseInterceptor.to("TurnEndPhase");
     game.doSelectModifier();
@@ -60,7 +60,7 @@ describe("Abilities - BATTLE BOND", () => {
   });
 
   it("should not keep buffing Water Shuriken after Greninja switches to base form", async () => {
-    await game.classicMode.startBattle([Species.GRENINJA]);
+    await game.classicModeHelper.startBattle([Species.GRENINJA]);
 
     const waterShuriken = allMoves[Moves.WATER_SHURIKEN];
     vi.spyOn(waterShuriken, "calculateBattlePower");
@@ -76,7 +76,7 @@ describe("Abilities - BATTLE BOND", () => {
     let expectedBattlePower = 20;
     let expectedMultiHitType = MultiHitType._3;
 
-    game.move.select(Moves.WATER_SHURIKEN);
+    game.moveHelper.select(Moves.WATER_SHURIKEN);
     await game.phaseInterceptor.to("BerryPhase", false);
     expect(waterShuriken.calculateBattlePower).toHaveLastReturnedWith(expectedBattlePower);
     expect(actualMultiHitType).toBe(expectedMultiHitType);
@@ -88,7 +88,7 @@ describe("Abilities - BATTLE BOND", () => {
     expectedBattlePower = 15;
     expectedMultiHitType = MultiHitType._2_TO_5;
 
-    game.move.select(Moves.WATER_SHURIKEN);
+    game.moveHelper.select(Moves.WATER_SHURIKEN);
     await game.phaseInterceptor.to("BerryPhase", false);
     expect(waterShuriken.calculateBattlePower).toHaveLastReturnedWith(expectedBattlePower);
     expect(actualMultiHitType).toBe(expectedMultiHitType);

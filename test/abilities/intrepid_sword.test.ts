@@ -22,14 +22,14 @@ describe("Abilities - Intrepid Sword", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("single");
-    game.override.enemySpecies(Species.ZACIAN);
-    game.override.enemyAbility(Abilities.INTREPID_SWORD);
-    game.override.ability(Abilities.INTREPID_SWORD);
+    game.overridesHelper.battleType("single");
+    game.overridesHelper.enemySpecies(Species.ZACIAN);
+    game.overridesHelper.enemyAbility(Abilities.INTREPID_SWORD);
+    game.overridesHelper.ability(Abilities.INTREPID_SWORD);
   });
 
   it("should raise ATK stat stage by 1 on entry", async () => {
-    await game.classicMode.runToSummon([Species.ZACIAN]);
+    await game.classicModeHelper.runToSummon([Species.ZACIAN]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;

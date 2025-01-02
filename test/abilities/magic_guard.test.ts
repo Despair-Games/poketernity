@@ -30,21 +30,21 @@ describe("Abilities - Magic Guard", () => {
     game = new GameManager(phaserGame);
 
     /** Player Pokemon overrides */
-    game.override.ability(Abilities.MAGIC_GUARD);
-    game.override.moveset([Moves.SPLASH]);
-    game.override.startingLevel(100);
+    game.overridesHelper.ability(Abilities.MAGIC_GUARD);
+    game.overridesHelper.moveset([Moves.SPLASH]);
+    game.overridesHelper.startingLevel(100);
 
     /** Enemy Pokemon overrides */
-    game.override.enemySpecies(Species.SNORLAX);
-    game.override.enemyAbility(Abilities.INSOMNIA);
-    game.override.enemyMoveset(Moves.SPLASH);
-    game.override.enemyLevel(100);
+    game.overridesHelper.enemySpecies(Species.SNORLAX);
+    game.overridesHelper.enemyAbility(Abilities.INSOMNIA);
+    game.overridesHelper.enemyMoveset(Moves.SPLASH);
+    game.overridesHelper.enemyLevel(100);
   });
 
   //Bulbapedia Reference: https://bulbapedia.bulbagarden.net/wiki/Magic_Guard_(Ability)
 
   it("ability should prevent damage caused by weather", async () => {
-    game.override.weather(WeatherType.SANDSTORM);
+    game.overridesHelper.weather(WeatherType.SANDSTORM);
 
     await game.startBattle([Species.MAGIKARP]);
 
@@ -53,7 +53,7 @@ describe("Abilities - Magic Guard", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     expect(enemyPokemon).toBeDefined();
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -68,13 +68,13 @@ describe("Abilities - Magic Guard", () => {
 
   it("ability should prevent damage caused by status effects but other non-damage effects still apply", async () => {
     //Toxic keeps track of the turn counters -> important that Magic Guard keeps track of post-Toxic turns
-    game.override.statusEffect(StatusEffect.POISON);
+    game.overridesHelper.statusEffect(StatusEffect.POISON);
 
     await game.startBattle([Species.MAGIKARP]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -88,14 +88,14 @@ describe("Abilities - Magic Guard", () => {
   });
 
   it("ability effect should not persist when the ability is replaced", async () => {
-    game.override.enemyMoveset([Moves.WORRY_SEED, Moves.WORRY_SEED, Moves.WORRY_SEED, Moves.WORRY_SEED]);
-    game.override.statusEffect(StatusEffect.POISON);
+    game.overridesHelper.enemyMoveset([Moves.WORRY_SEED, Moves.WORRY_SEED, Moves.WORRY_SEED, Moves.WORRY_SEED]);
+    game.overridesHelper.statusEffect(StatusEffect.POISON);
 
     await game.startBattle([Species.MAGIKARP]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -107,12 +107,12 @@ describe("Abilities - Magic Guard", () => {
   });
 
   it("Magic Guard prevents damage caused by burn but other non-damaging effects are still applied", async () => {
-    game.override.enemyStatusEffect(StatusEffect.BURN);
-    game.override.enemyAbility(Abilities.MAGIC_GUARD);
+    game.overridesHelper.enemyStatusEffect(StatusEffect.BURN);
+    game.overridesHelper.enemyAbility(Abilities.MAGIC_GUARD);
 
     await game.startBattle([Species.MAGIKARP]);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -129,12 +129,12 @@ describe("Abilities - Magic Guard", () => {
   });
 
   it("Magic Guard prevents damage caused by toxic but other non-damaging effects are still applied", async () => {
-    game.override.enemyStatusEffect(StatusEffect.TOXIC);
-    game.override.enemyAbility(Abilities.MAGIC_GUARD);
+    game.overridesHelper.enemyStatusEffect(StatusEffect.TOXIC);
+    game.overridesHelper.enemyAbility(Abilities.MAGIC_GUARD);
 
     await game.startBattle([Species.MAGIKARP]);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -162,7 +162,7 @@ describe("Abilities - Magic Guard", () => {
     await game.startBattle([Species.MAGIKARP]);
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -187,7 +187,7 @@ describe("Abilities - Magic Guard", () => {
     await game.startBattle([Species.MAGIKARP]);
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -207,12 +207,12 @@ describe("Abilities - Magic Guard", () => {
 
   it("Magic Guard prevents against damage from volatile status effects", async () => {
     await game.startBattle([Species.DUSKULL]);
-    game.override.moveset([Moves.CURSE]);
-    game.override.enemyAbility(Abilities.MAGIC_GUARD);
+    game.overridesHelper.moveset([Moves.CURSE]);
+    game.overridesHelper.enemyAbility(Abilities.MAGIC_GUARD);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.CURSE);
+    game.moveHelper.select(Moves.CURSE);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -230,13 +230,13 @@ describe("Abilities - Magic Guard", () => {
   });
 
   it("Magic Guard prevents crash damage", async () => {
-    game.override.moveset([Moves.HIGH_JUMP_KICK]);
+    game.overridesHelper.moveset([Moves.HIGH_JUMP_KICK]);
     await game.startBattle([Species.MAGIKARP]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.HIGH_JUMP_KICK);
-    await game.move.forceMiss();
+    game.moveHelper.select(Moves.HIGH_JUMP_KICK);
+    await game.moveHelper.forceMiss();
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -248,12 +248,12 @@ describe("Abilities - Magic Guard", () => {
   });
 
   it("Magic Guard prevents damage from recoil", async () => {
-    game.override.moveset([Moves.TAKE_DOWN]);
+    game.overridesHelper.moveset([Moves.TAKE_DOWN]);
     await game.startBattle([Species.MAGIKARP]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.TAKE_DOWN);
+    game.moveHelper.select(Moves.TAKE_DOWN);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -265,12 +265,12 @@ describe("Abilities - Magic Guard", () => {
   });
 
   it("Magic Guard does not prevent damage from Struggle's recoil", async () => {
-    game.override.moveset([Moves.STRUGGLE]);
+    game.overridesHelper.moveset([Moves.STRUGGLE]);
     await game.startBattle([Species.MAGIKARP]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.STRUGGLE);
+    game.moveHelper.select(Moves.STRUGGLE);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -283,12 +283,12 @@ describe("Abilities - Magic Guard", () => {
 
   //This tests different move attributes than the recoil tests above
   it("Magic Guard prevents self-damage from attacking moves", async () => {
-    game.override.moveset([Moves.STEEL_BEAM]);
+    game.overridesHelper.moveset([Moves.STEEL_BEAM]);
     await game.startBattle([Species.MAGIKARP]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.STEEL_BEAM);
+    game.moveHelper.select(Moves.STEEL_BEAM);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -310,12 +310,12 @@ describe("Abilities - Magic Guard", () => {
 */
 
   it("Magic Guard does not prevent self-damage from non-attacking moves", async () => {
-    game.override.moveset([Moves.BELLY_DRUM]);
+    game.overridesHelper.moveset([Moves.BELLY_DRUM]);
     await game.startBattle([Species.MAGIKARP]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.BELLY_DRUM);
+    game.moveHelper.select(Moves.BELLY_DRUM);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -328,16 +328,16 @@ describe("Abilities - Magic Guard", () => {
 
   it("Magic Guard prevents damage from abilities with PostTurnHurtIfSleepingAbAttr", async () => {
     //Tests the ability Bad Dreams
-    game.override.statusEffect(StatusEffect.SLEEP);
+    game.overridesHelper.statusEffect(StatusEffect.SLEEP);
     //enemy pokemon is given Spore just in case player pokemon somehow awakens during test
-    game.override.enemyMoveset([Moves.SPORE, Moves.SPORE, Moves.SPORE, Moves.SPORE]);
-    game.override.enemyAbility(Abilities.BAD_DREAMS);
+    game.overridesHelper.enemyMoveset([Moves.SPORE, Moves.SPORE, Moves.SPORE, Moves.SPORE]);
+    game.overridesHelper.enemyAbility(Abilities.BAD_DREAMS);
 
     await game.startBattle([Species.MAGIKARP]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -352,8 +352,8 @@ describe("Abilities - Magic Guard", () => {
 
   it("Magic Guard prevents damage from abilities with PostFaintContactDamageAbAttr", async () => {
     //Tests the abilities Innards Out/Aftermath
-    game.override.moveset([Moves.TACKLE]);
-    game.override.enemyAbility(Abilities.AFTERMATH);
+    game.overridesHelper.moveset([Moves.TACKLE]);
+    game.overridesHelper.enemyAbility(Abilities.AFTERMATH);
 
     await game.startBattle([Species.MAGIKARP]);
 
@@ -362,7 +362,7 @@ describe("Abilities - Magic Guard", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     enemyPokemon.hp = 1;
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     /**
@@ -376,8 +376,8 @@ describe("Abilities - Magic Guard", () => {
 
   it("Magic Guard prevents damage from abilities with PostDefendContactDamageAbAttr", async () => {
     //Tests the abilities Iron Barbs/Rough Skin
-    game.override.moveset([Moves.TACKLE]);
-    game.override.enemyAbility(Abilities.IRON_BARBS);
+    game.overridesHelper.moveset([Moves.TACKLE]);
+    game.overridesHelper.enemyAbility(Abilities.IRON_BARBS);
 
     await game.startBattle([Species.MAGIKARP]);
 
@@ -385,7 +385,7 @@ describe("Abilities - Magic Guard", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     /**
@@ -399,8 +399,8 @@ describe("Abilities - Magic Guard", () => {
 
   it("Magic Guard prevents damage from abilities with ReverseDrainAbAttr", async () => {
     //Tests the ability Liquid Ooze
-    game.override.moveset([Moves.ABSORB]);
-    game.override.enemyAbility(Abilities.LIQUID_OOZE);
+    game.overridesHelper.moveset([Moves.ABSORB]);
+    game.overridesHelper.enemyAbility(Abilities.LIQUID_OOZE);
 
     await game.startBattle([Species.MAGIKARP]);
 
@@ -408,7 +408,7 @@ describe("Abilities - Magic Guard", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.ABSORB);
+    game.moveHelper.select(Moves.ABSORB);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     /**
@@ -422,12 +422,12 @@ describe("Abilities - Magic Guard", () => {
 
   it("Magic Guard prevents HP loss from abilities with PostWeatherLapseDamageAbAttr", async () => {
     //Tests the abilities Solar Power/Dry Skin
-    game.override.passiveAbility(Abilities.SOLAR_POWER);
-    game.override.weather(WeatherType.SUNNY);
+    game.overridesHelper.passiveAbility(Abilities.SOLAR_POWER);
+    game.overridesHelper.weather(WeatherType.SUNNY);
 
     await game.startBattle([Species.MAGIKARP]);
     const leadPokemon = game.scene.getPlayerPokemon()!;
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     /**

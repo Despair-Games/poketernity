@@ -324,7 +324,7 @@ describe("Status Effects", () => {
     beforeEach(() => {
       game = new GameManager(phaserGame);
 
-      game.override
+      game.overridesHelper
         .enemySpecies(Species.MAGIKARP)
         .enemyMoveset(Moves.SPLASH)
         .enemyAbility(Abilities.BALL_FETCH)
@@ -334,10 +334,10 @@ describe("Status Effects", () => {
     });
 
     it("causes the pokemon's move to fail when activated", async () => {
-      await game.classicMode.startBattle([Species.FEEBAS]);
+      await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
-      game.move.select(Moves.QUICK_ATTACK);
-      await game.move.forceStatusActivation(true);
+      game.moveHelper.select(Moves.QUICK_ATTACK);
+      await game.moveHelper.forceStatusActivation(true);
       await game.toNextTurn();
 
       expect(game.scene.getEnemyPokemon()!.isFullHp()).toBe(true);
@@ -361,7 +361,7 @@ describe("Status Effects", () => {
 
     beforeEach(() => {
       game = new GameManager(phaserGame);
-      game.override
+      game.overridesHelper
         .moveset([Moves.SPLASH])
         .ability(Abilities.BALL_FETCH)
         .battleType("single")
@@ -372,28 +372,28 @@ describe("Status Effects", () => {
     });
 
     it("should last the appropriate number of turns", async () => {
-      await game.classicMode.startBattle([Species.FEEBAS]);
+      await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
       const player = game.scene.getPlayerPokemon()!;
       player.status = new Status(StatusEffect.SLEEP, 0, 4);
 
-      game.move.select(Moves.SPLASH);
+      game.moveHelper.select(Moves.SPLASH);
       await game.toNextTurn();
 
       expect(player.status.effect).toBe(StatusEffect.SLEEP);
 
-      game.move.select(Moves.SPLASH);
+      game.moveHelper.select(Moves.SPLASH);
       await game.toNextTurn();
 
       expect(player.status.effect).toBe(StatusEffect.SLEEP);
 
-      game.move.select(Moves.SPLASH);
+      game.moveHelper.select(Moves.SPLASH);
       await game.toNextTurn();
 
       expect(player.status.effect).toBe(StatusEffect.SLEEP);
       expect(player.getLastXMoves(1)[0].result).toBe(MoveResult.FAIL);
 
-      game.move.select(Moves.SPLASH);
+      game.moveHelper.select(Moves.SPLASH);
       await game.toNextTurn();
 
       expect(player.status?.effect).toBeUndefined();

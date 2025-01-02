@@ -42,7 +42,7 @@ describe("Teleporting Hijinks - Mystery Encounter", () => {
     game = new GameManager(phaserGame);
     scene = game.scene;
     scene.money = 20000;
-    game.override
+    game.overridesHelper
       .mysteryEncounterChance(100)
       .startingWave(defaultWave)
       .startingBiome(defaultBiome)
@@ -75,8 +75,8 @@ describe("Teleporting Hijinks - Mystery Encounter", () => {
   });
 
   it("should run in waves that are X1", async () => {
-    game.override.startingWave(11);
-    game.override.mysteryEncounterTier(MysteryEncounterTier.COMMON);
+    game.overridesHelper.startingWave(11);
+    game.overridesHelper.mysteryEncounterTier(MysteryEncounterTier.COMMON);
 
     await game.runToMysteryEncounter();
 
@@ -84,8 +84,8 @@ describe("Teleporting Hijinks - Mystery Encounter", () => {
   });
 
   it("should run in waves that are X2", async () => {
-    game.override.startingWave(32);
-    game.override.mysteryEncounterTier(MysteryEncounterTier.COMMON);
+    game.overridesHelper.startingWave(32);
+    game.overridesHelper.mysteryEncounterTier(MysteryEncounterTier.COMMON);
 
     await game.runToMysteryEncounter();
 
@@ -93,8 +93,8 @@ describe("Teleporting Hijinks - Mystery Encounter", () => {
   });
 
   it("should run in waves that are X3", async () => {
-    game.override.startingWave(23);
-    game.override.mysteryEncounterTier(MysteryEncounterTier.COMMON);
+    game.overridesHelper.startingWave(23);
+    game.overridesHelper.mysteryEncounterTier(MysteryEncounterTier.COMMON);
 
     await game.runToMysteryEncounter();
 
@@ -102,7 +102,7 @@ describe("Teleporting Hijinks - Mystery Encounter", () => {
   });
 
   it("should NOT run in waves that are not X1, X2, or X3", async () => {
-    game.override.startingWave(54);
+    game.overridesHelper.startingWave(54);
 
     await game.runToMysteryEncounter();
 
@@ -188,7 +188,7 @@ describe("Teleporting Hijinks - Mystery Encounter", () => {
     });
 
     it("should start a battle against an extra enraged boss above wave 50", { retry: 5 }, async () => {
-      game.override.startingWave(56);
+      game.overridesHelper.startingWave(56);
       await game.runToMysteryEncounter(MysteryEncounterType.TELEPORTING_HIJINKS, defaultParty);
       await runMysteryEncounterToEnd(game, 1, undefined, true);
       const enemyField = scene.getEnemyField();
@@ -260,7 +260,7 @@ describe("Teleporting Hijinks - Mystery Encounter", () => {
     });
 
     it("should start a battle against an extra enraged boss above wave 50", { retry: 5 }, async () => {
-      game.override.startingWave(56);
+      game.overridesHelper.startingWave(56);
       await game.runToMysteryEncounter(MysteryEncounterType.TELEPORTING_HIJINKS, [Species.PIKACHU]);
       await runMysteryEncounterToEnd(game, 2, undefined, true);
       const enemyField = scene.getEnemyField();

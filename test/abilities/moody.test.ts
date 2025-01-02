@@ -23,7 +23,7 @@ describe("Abilities - Moody", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemySpecies(Species.RATTATA)
       .enemyAbility(Abilities.BALL_FETCH)
@@ -33,10 +33,10 @@ describe("Abilities - Moody", () => {
   });
 
   it("should increase one stat stage by 2 and decrease a different stat stage by 1", async () => {
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     // Find the increased and decreased stats, make sure they are different.
@@ -50,14 +50,14 @@ describe("Abilities - Moody", () => {
   });
 
   it("should only increase one stat stage by 2 if all stat stages are at -6", async () => {
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
     // Set all stat stages to -6
     vi.spyOn(playerPokemon.summonData, "statStages", "get").mockReturnValue(new Array(BATTLE_STATS.length).fill(-6));
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     // Should increase one stat stage by 2 (from -6, meaning it will be -4)
@@ -68,14 +68,14 @@ describe("Abilities - Moody", () => {
   });
 
   it("should only decrease one stat stage by 1 stage if all stat stages are at 6", async () => {
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
     // Set all stat stages to 6
     vi.spyOn(playerPokemon.summonData, "statStages", "get").mockReturnValue(new Array(BATTLE_STATS.length).fill(6));
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     // Should decrease one stat stage by 1 (from 6, meaning it will be 5)

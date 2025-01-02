@@ -26,7 +26,7 @@ describe("Items - Grip Claw", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override
+    game.overridesHelper
       .battleType("double")
       .moveset([Moves.TACKLE, Moves.SPLASH, Moves.ATTRACT])
       .startingHeldItems([{ name: "GRIP_CLAW", count: 1 }])
@@ -42,7 +42,7 @@ describe("Items - Grip Claw", () => {
   });
 
   it("should steal items on contact and only from the attack target", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS, Species.MILOTIC]);
 
     const [playerPokemon] = game.scene.getPlayerField();
 
@@ -56,8 +56,8 @@ describe("Items - Grip Claw", () => {
     const enemy2HeldItemCount = getHeldItemCount(enemyPokemon[1]);
     expect(enemy2HeldItemCount).toBeGreaterThan(0);
 
-    game.move.select(Moves.TACKLE, 0, BattlerIndex.ENEMY_2);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.TACKLE, 0, BattlerIndex.ENEMY_2);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -71,7 +71,7 @@ describe("Items - Grip Claw", () => {
   });
 
   it("should not steal items when using a targetted, non attack move", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS, Species.MILOTIC]);
 
     const [playerPokemon] = game.scene.getPlayerField();
 
@@ -85,8 +85,8 @@ describe("Items - Grip Claw", () => {
     const enemy2HeldItemCount = getHeldItemCount(enemyPokemon[1]);
     expect(enemy2HeldItemCount).toBeGreaterThan(0);
 
-    game.move.select(Moves.ATTRACT, 0, BattlerIndex.ENEMY_2);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.ATTRACT, 0, BattlerIndex.ENEMY_2);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 

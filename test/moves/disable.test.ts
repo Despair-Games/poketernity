@@ -22,7 +22,7 @@ describe("Moves - Disable", () => {
 
   beforeEach(async () => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .ability(Abilities.BALL_FETCH)
       .enemyAbility(Abilities.BALL_FETCH)
@@ -33,11 +33,11 @@ describe("Moves - Disable", () => {
   });
 
   it("restricts moves", async () => {
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const enemyMon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.DISABLE);
+    game.moveHelper.select(Moves.DISABLE);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
@@ -46,12 +46,12 @@ describe("Moves - Disable", () => {
   });
 
   it("fails if enemy has no move history", async () => {
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const playerMon = game.scene.getPlayerPokemon()!;
     const enemyMon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.DISABLE);
+    game.moveHelper.select(Moves.DISABLE);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toNextTurn();
 
@@ -60,15 +60,15 @@ describe("Moves - Disable", () => {
   }, 20000);
 
   it("causes STRUGGLE if all usable moves are disabled", async () => {
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const enemyMon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.DISABLE);
+    game.moveHelper.select(Moves.DISABLE);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     const enemyHistory = enemyMon.getMoveHistory();
@@ -78,13 +78,13 @@ describe("Moves - Disable", () => {
   }, 20000);
 
   it("cannot disable STRUGGLE", async () => {
-    game.override.enemyMoveset([Moves.STRUGGLE]);
-    await game.classicMode.startBattle();
+    game.overridesHelper.enemyMoveset([Moves.STRUGGLE]);
+    await game.classicModeHelper.startBattle();
 
     const playerMon = game.scene.getPlayerPokemon()!;
     const enemyMon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.DISABLE);
+    game.moveHelper.select(Moves.DISABLE);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
@@ -94,15 +94,15 @@ describe("Moves - Disable", () => {
   }, 20000);
 
   it("interrupts target's move when target moves after", async () => {
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const enemyMon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     // Both mons just used Splash last turn; now have player use Disable.
-    game.move.select(Moves.DISABLE);
+    game.moveHelper.select(Moves.DISABLE);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toNextTurn();
 
@@ -113,12 +113,12 @@ describe("Moves - Disable", () => {
   }, 20000);
 
   it("disables NATURE POWER, not the move invoked by it", async () => {
-    game.override.enemyMoveset([Moves.NATURE_POWER]);
-    await game.classicMode.startBattle();
+    game.overridesHelper.enemyMoveset([Moves.NATURE_POWER]);
+    await game.classicModeHelper.startBattle();
 
     const enemyMon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.DISABLE);
+    game.moveHelper.select(Moves.DISABLE);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 

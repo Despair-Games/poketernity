@@ -25,11 +25,11 @@ describe("Items - Thick Club", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override.battleType("single");
+    game.overridesHelper.battleType("single");
   });
 
   it("THICK_CLUB activates in battle correctly", async () => {
-    game.override.startingHeldItems([{ name: "SPECIES_STAT_BOOSTER", type: "THICK_CLUB" }]);
+    game.overridesHelper.startingHeldItems([{ name: "SPECIES_STAT_BOOSTER", type: "THICK_CLUB" }]);
     const consoleSpy = vi.spyOn(console, "log");
     await game.startBattle([Species.CUBONE]);
 

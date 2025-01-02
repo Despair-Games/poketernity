@@ -24,18 +24,18 @@ describe("Abilities - Screen Cleaner", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("single");
-    game.override.ability(Abilities.SCREEN_CLEANER);
-    game.override.enemySpecies(Species.SHUCKLE);
+    game.overridesHelper.battleType("single");
+    game.overridesHelper.ability(Abilities.SCREEN_CLEANER);
+    game.overridesHelper.enemySpecies(Species.SHUCKLE);
   });
 
   it("removes Aurora Veil", async () => {
-    game.override.moveset([Moves.HAIL]);
-    game.override.enemyMoveset([Moves.AURORA_VEIL, Moves.AURORA_VEIL, Moves.AURORA_VEIL, Moves.AURORA_VEIL]);
+    game.overridesHelper.moveset([Moves.HAIL]);
+    game.overridesHelper.enemyMoveset([Moves.AURORA_VEIL, Moves.AURORA_VEIL, Moves.AURORA_VEIL, Moves.AURORA_VEIL]);
 
     await game.startBattle([Species.MAGIKARP, Species.MAGIKARP]);
 
-    game.move.select(Moves.HAIL);
+    game.moveHelper.select(Moves.HAIL);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(game.scene.arena.getTag(ArenaTagType.AURORA_VEIL)).toBeDefined();
@@ -48,11 +48,11 @@ describe("Abilities - Screen Cleaner", () => {
   });
 
   it("removes Light Screen", async () => {
-    game.override.enemyMoveset([Moves.LIGHT_SCREEN, Moves.LIGHT_SCREEN, Moves.LIGHT_SCREEN, Moves.LIGHT_SCREEN]);
+    game.overridesHelper.enemyMoveset([Moves.LIGHT_SCREEN, Moves.LIGHT_SCREEN, Moves.LIGHT_SCREEN, Moves.LIGHT_SCREEN]);
 
     await game.startBattle([Species.MAGIKARP, Species.MAGIKARP]);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(game.scene.arena.getTag(ArenaTagType.LIGHT_SCREEN)).toBeDefined();
@@ -65,11 +65,11 @@ describe("Abilities - Screen Cleaner", () => {
   });
 
   it("removes Reflect", async () => {
-    game.override.enemyMoveset([Moves.REFLECT, Moves.REFLECT, Moves.REFLECT, Moves.REFLECT]);
+    game.overridesHelper.enemyMoveset([Moves.REFLECT, Moves.REFLECT, Moves.REFLECT, Moves.REFLECT]);
 
     await game.startBattle([Species.MAGIKARP, Species.MAGIKARP]);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(game.scene.arena.getTag(ArenaTagType.REFLECT)).toBeDefined();

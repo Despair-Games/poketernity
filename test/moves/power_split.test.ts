@@ -23,7 +23,7 @@ describe("Moves - Power Split", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemyAbility(Abilities.NONE)
       .enemySpecies(Species.MEW)
@@ -33,7 +33,7 @@ describe("Moves - Power Split", () => {
   });
 
   it("should average the user's ATK and SPATK stats with those of the target", async () => {
-    game.override.enemyMoveset(Moves.SPLASH);
+    game.overridesHelper.enemyMoveset(Moves.SPLASH);
     await game.startBattle([Species.INDEEDEE]);
 
     const player = game.scene.getPlayerPokemon()!;
@@ -42,7 +42,7 @@ describe("Moves - Power Split", () => {
     const avgAtk = Math.floor((player.getStat(Stat.ATK, false) + enemy.getStat(Stat.ATK, false)) / 2);
     const avgSpAtk = Math.floor((player.getStat(Stat.SPATK, false) + enemy.getStat(Stat.SPATK, false)) / 2);
 
-    game.move.select(Moves.POWER_SPLIT);
+    game.moveHelper.select(Moves.POWER_SPLIT);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(player.getStat(Stat.ATK, false)).toBe(avgAtk);
@@ -53,7 +53,7 @@ describe("Moves - Power Split", () => {
   }, 20000);
 
   it("should be idempotent", async () => {
-    game.override.enemyMoveset([Moves.POWER_SPLIT]);
+    game.overridesHelper.enemyMoveset([Moves.POWER_SPLIT]);
     await game.startBattle([Species.INDEEDEE]);
 
     const player = game.scene.getPlayerPokemon()!;
@@ -62,10 +62,10 @@ describe("Moves - Power Split", () => {
     const avgAtk = Math.floor((player.getStat(Stat.ATK, false) + enemy.getStat(Stat.ATK, false)) / 2);
     const avgSpAtk = Math.floor((player.getStat(Stat.SPATK, false) + enemy.getStat(Stat.SPATK, false)) / 2);
 
-    game.move.select(Moves.POWER_SPLIT);
+    game.moveHelper.select(Moves.POWER_SPLIT);
     await game.phaseInterceptor.to(TurnEndPhase);
 
-    game.move.select(Moves.POWER_SPLIT);
+    game.moveHelper.select(Moves.POWER_SPLIT);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(player.getStat(Stat.ATK, false)).toBe(avgAtk);

@@ -22,7 +22,7 @@ describe("Abilities - Arena Trap", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset(Moves.SPLASH)
       .ability(Abilities.ARENA_TRAP)
       .enemySpecies(Species.RALTS)
@@ -32,13 +32,13 @@ describe("Abilities - Arena Trap", () => {
 
   // TODO: Enable test when Issue #935 is addressed
   it.todo("should not allow grounded Pokémon to flee", async () => {
-    game.override.battleType("single");
+    game.overridesHelper.battleType("single");
 
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon();
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.toNextTurn();
 
@@ -46,9 +46,9 @@ describe("Abilities - Arena Trap", () => {
   });
 
   it("should guarantee double battle with any one LURE", async () => {
-    game.override.startingModifier([{ name: "LURE" }]).startingWave(2);
+    game.overridesHelper.startingModifier([{ name: "LURE" }]).startingWave(2);
 
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     expect(game.scene.getEnemyField().length).toBe(2);
   });
@@ -60,26 +60,26 @@ describe("Abilities - Arena Trap", () => {
    * Note: It should be able to switch out/run away
    */
   it("should lift if pokemon with this ability leaves the field", async () => {
-    game.override
+    game.overridesHelper
       .battleType("double")
       .enemyMoveset(Moves.SPLASH)
       .moveset([Moves.ROAR, Moves.SPLASH])
       .ability(Abilities.BALL_FETCH);
-    await game.classicMode.startBattle([Species.MAGIKARP, Species.SUDOWOODO, Species.LUNATONE]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP, Species.SUDOWOODO, Species.LUNATONE]);
 
     const [enemy1, enemy2] = game.scene.getEnemyField();
     const [player1, player2] = game.scene.getPlayerField();
 
     vi.spyOn(enemy1, "getAbility").mockReturnValue(allAbilities[Abilities.ARENA_TRAP]);
 
-    game.move.select(Moves.ROAR);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.ROAR);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     // This runs the fist command phase where the moves are selected
     await game.toNextTurn();
     // During the next command phase the player pokemons should not be trapped anymore
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.toNextTurn();
 
     expect(player1.isTrapped()).toBe(false);

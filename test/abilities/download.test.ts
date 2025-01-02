@@ -22,7 +22,7 @@ describe("Abilities - Download", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.SPLASH])
       .ability(Abilities.DOWNLOAD)
       .battleType("single")
@@ -32,24 +32,24 @@ describe("Abilities - Download", () => {
   });
 
   it("should boost special attack if the enemy's defense is higher", async () => {
-    game.override.enemySpecies(Species.STEELIX);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    game.overridesHelper.enemySpecies(Species.STEELIX);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     const player = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to("TurnStartPhase");
 
     expect(player.getStatStage(Stat.SPATK)).toBe(1);
   });
 
   it("should boost attack if the enemy's special defense is higher", async () => {
-    game.override.enemySpecies(Species.REGICE);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    game.overridesHelper.enemySpecies(Species.REGICE);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     const player = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to("TurnStartPhase");
 
     expect(player.getStatStage(Stat.ATK)).toBe(1);

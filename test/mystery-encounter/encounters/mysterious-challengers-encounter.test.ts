@@ -41,10 +41,10 @@ describe("Mysterious Challengers - Mystery Encounter", () => {
   beforeEach(async () => {
     game = new GameManager(phaserGame);
     scene = game.scene;
-    game.override.mysteryEncounterChance(100);
-    game.override.startingWave(defaultWave);
-    game.override.startingBiome(defaultBiome);
-    game.override.disableTrainerWaves();
+    game.overridesHelper.mysteryEncounterChance(100);
+    game.overridesHelper.startingWave(defaultWave);
+    game.overridesHelper.startingBiome(defaultBiome);
+    game.overridesHelper.disableTrainerWaves();
 
     const biomeMap = new Map<Biome, MysteryEncounterType[]>([[Biome.VOLCANO, [MysteryEncounterType.FIGHT_OR_FLIGHT]]]);
     HUMAN_TRANSITABLE_BIOMES.forEach((biome) => {
@@ -75,8 +75,8 @@ describe("Mysterious Challengers - Mystery Encounter", () => {
   });
 
   it("should not spawn outside of HUMAN_TRANSITABLE_BIOMES", async () => {
-    game.override.mysteryEncounterTier(MysteryEncounterTier.GREAT);
-    game.override.startingBiome(Biome.VOLCANO);
+    game.overridesHelper.mysteryEncounterTier(MysteryEncounterTier.GREAT);
+    game.overridesHelper.startingBiome(Biome.VOLCANO);
     await game.runToMysteryEncounter();
 
     expect(scene.currentBattle?.mysteryEncounter?.encounterType).not.toBe(MysteryEncounterType.MYSTERIOUS_CHALLENGERS);

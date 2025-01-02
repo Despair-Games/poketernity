@@ -23,7 +23,7 @@ describe("Abilities - Honey Gather", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.SPLASH, Moves.ROAR, Moves.THUNDERBOLT])
       .startingLevel(100)
       .ability(Abilities.HONEY_GATHER)
@@ -36,20 +36,20 @@ describe("Abilities - Honey Gather", () => {
   });
 
   it("should give money when winning a battle", async () => {
-    await game.classicMode.startBattle([Species.MILOTIC]);
+    await game.classicModeHelper.startBattle([Species.MILOTIC]);
     game.scene.money = 1000;
 
-    game.move.select(Moves.THUNDERBOLT);
+    game.moveHelper.select(Moves.THUNDERBOLT);
     await game.toNextWave();
 
     expect(game.scene.money).toBeGreaterThan(1000);
   });
 
   it("should not give money when the enemy pokemon flees", async () => {
-    await game.classicMode.startBattle([Species.MILOTIC]);
+    await game.classicModeHelper.startBattle([Species.MILOTIC]);
     game.scene.money = 1000;
 
-    game.move.select(Moves.ROAR);
+    game.moveHelper.select(Moves.ROAR);
     await game.toNextTurn();
 
     expect(game.scene.money).toBe(1000);
@@ -57,7 +57,7 @@ describe("Abilities - Honey Gather", () => {
   });
 
   it("should not give money when the player flees", async () => {
-    await game.classicMode.startBattle([Species.MILOTIC]);
+    await game.classicModeHelper.startBattle([Species.MILOTIC]);
     game.scene.money = 1000;
 
     // something weird is going on with the test framework, so this is required to prevent a crash

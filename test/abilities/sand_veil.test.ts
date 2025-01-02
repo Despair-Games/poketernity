@@ -28,13 +28,13 @@ describe("Abilities - Sand Veil", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.moveset([Moves.SPLASH]);
-    game.override.enemySpecies(Species.MEOWSCARADA);
-    game.override.enemyAbility(Abilities.INSOMNIA);
-    game.override.enemyMoveset([Moves.TWISTER, Moves.TWISTER, Moves.TWISTER, Moves.TWISTER]);
-    game.override.startingLevel(100);
-    game.override.enemyLevel(100);
-    game.override.weather(WeatherType.SANDSTORM).battleType("double");
+    game.overridesHelper.moveset([Moves.SPLASH]);
+    game.overridesHelper.enemySpecies(Species.MEOWSCARADA);
+    game.overridesHelper.enemyAbility(Abilities.INSOMNIA);
+    game.overridesHelper.enemyMoveset([Moves.TWISTER, Moves.TWISTER, Moves.TWISTER, Moves.TWISTER]);
+    game.overridesHelper.startingLevel(100);
+    game.overridesHelper.enemyLevel(100);
+    game.overridesHelper.weather(WeatherType.SANDSTORM).battleType("double");
   });
 
   test("ability should increase the evasiveness of the source", async () => {
@@ -58,11 +58,11 @@ describe("Abilities - Sand Veil", () => {
     expect(leadPokemon[0].hasAbility(Abilities.SAND_VEIL)).toBe(true);
     expect(leadPokemon[1].hasAbility(Abilities.SAND_VEIL)).toBe(false);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.phaseInterceptor.to(CommandPhase);
 
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.phaseInterceptor.to(MoveEffectPhase, false);
 

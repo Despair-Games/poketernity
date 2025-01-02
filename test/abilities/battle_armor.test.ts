@@ -23,7 +23,7 @@ describe("Abilities - Battle Armor/Shell Armor", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.SPLASH])
       .startingLevel(50)
       .battleType("single")
@@ -36,12 +36,12 @@ describe("Abilities - Battle Armor/Shell Armor", () => {
     { abilityName: "Battle Armor", ability: Abilities.BATTLE_ARMOR },
     { abilityName: "Shell Armor", ability: Abilities.SHELL_ARMOR },
   ])("$abilityName prevents all critical hits", async ({ ability }) => {
-    game.override.ability(ability);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    game.overridesHelper.ability(ability);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon();
 
-    game.move.select(Moves.SPLASH);
-    await game.move.forceHit();
+    game.moveHelper.select(Moves.SPLASH);
+    await game.moveHelper.forceHit();
     await game.setTurnOrder[(BattlerIndex.ENEMY, BattlerIndex.PLAYER)];
     await game.phaseInterceptor.to("BerryPhase");
 

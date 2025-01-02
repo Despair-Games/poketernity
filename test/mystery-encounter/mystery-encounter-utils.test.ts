@@ -48,12 +48,12 @@ describe("Mystery Encounter Utils", () => {
   describe("getRandomPlayerPokemon", () => {
     it("gets a random pokemon from player party", () => {
       // Seeds are calculated to return index 0 first, 1 second (if both pokemon are legal)
-      game.override.seed("random");
+      game.overridesHelper.seed("random");
 
       let result = getRandomPlayerPokemon();
       expect(result.species.speciesId).toBe(Species.MANAPHY);
 
-      game.override.seed("random2");
+      game.overridesHelper.seed("random2");
 
       result = getRandomPlayerPokemon();
       expect(result.species.speciesId).toBe(Species.ARCEUS);
@@ -68,12 +68,12 @@ describe("Mystery Encounter Utils", () => {
       });
 
       // Seeds are calculated to return index 0 first, 1 second (if both pokemon are legal)
-      game.override.seed("random");
+      game.overridesHelper.seed("random");
 
       let result = getRandomPlayerPokemon();
       expect(result.species.speciesId).toBe(Species.MANAPHY);
 
-      game.override.seed("random2");
+      game.overridesHelper.seed("random2");
 
       result = getRandomPlayerPokemon();
       expect(result.species.speciesId).toBe(Species.ARCEUS);
@@ -87,12 +87,12 @@ describe("Mystery Encounter Utils", () => {
       party[0].updateInfo();
 
       // Seeds are calculated to return index 0 first, 1 second (if both pokemon are legal)
-      game.override.seed("random");
+      game.overridesHelper.seed("random");
 
       let result = getRandomPlayerPokemon(true);
       expect(result.species.speciesId).toBe(Species.MANAPHY);
 
-      game.override.seed("random2");
+      game.overridesHelper.seed("random2");
 
       result = getRandomPlayerPokemon(true);
       expect(result.species.speciesId).toBe(Species.MANAPHY);
@@ -106,12 +106,12 @@ describe("Mystery Encounter Utils", () => {
       party[0].updateInfo();
 
       // Seeds are calculated to return index 0 first, 1 second (if both pokemon are legal)
-      game.override.seed("random");
+      game.overridesHelper.seed("random");
 
       let result = getRandomPlayerPokemon(true, false);
       expect(result.species.speciesId).toBe(Species.MANAPHY);
 
-      game.override.seed("random2");
+      game.overridesHelper.seed("random2");
 
       result = getRandomPlayerPokemon(true, false);
       expect(result.species.speciesId).toBe(Species.MANAPHY);
@@ -125,12 +125,12 @@ describe("Mystery Encounter Utils", () => {
       party[0].updateInfo();
 
       // Seeds are calculated to return index 0 first, 1 second (if both pokemon are legal)
-      game.override.seed("random");
+      game.overridesHelper.seed("random");
 
       let result = getRandomPlayerPokemon(true, false, true);
       expect(result.species.speciesId).toBe(Species.ARCEUS);
 
-      game.override.seed("random2");
+      game.overridesHelper.seed("random2");
 
       result = getRandomPlayerPokemon(true, false, true);
       expect(result.species.speciesId).toBe(Species.ARCEUS);

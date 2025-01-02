@@ -21,7 +21,7 @@ describe("Abilities - Illuminate", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset(Moves.SPLASH)
       .ability(Abilities.ILLUMINATE)
       .enemyAbility(Abilities.BALL_FETCH)
@@ -29,15 +29,15 @@ describe("Abilities - Illuminate", () => {
   });
 
   it("should prevent ACC stat stage from being lowered", async () => {
-    game.override.battleType("single");
+    game.overridesHelper.battleType("single");
 
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const player = game.scene.getPlayerPokemon()!;
 
     expect(player.getStatStage(Stat.ACC)).toBe(0);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.toNextTurn();
 
@@ -45,9 +45,9 @@ describe("Abilities - Illuminate", () => {
   });
 
   it("should guarantee double battle with any one LURE", async () => {
-    game.override.startingModifier([{ name: "LURE" }]).startingWave(2);
+    game.overridesHelper.startingModifier([{ name: "LURE" }]).startingWave(2);
 
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     expect(game.scene.getEnemyField().length).toBe(2);
   });

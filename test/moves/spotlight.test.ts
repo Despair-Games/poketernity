@@ -22,22 +22,22 @@ describe("Moves - Spotlight", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("double");
-    game.override.starterSpecies(Species.AMOONGUSS);
-    game.override.enemySpecies(Species.SNORLAX);
-    game.override.startingLevel(100);
-    game.override.enemyLevel(100);
-    game.override.moveset([Moves.FOLLOW_ME, Moves.RAGE_POWDER, Moves.SPOTLIGHT, Moves.QUICK_ATTACK]);
-    game.override.enemyMoveset([Moves.FOLLOW_ME, Moves.SPLASH]);
+    game.overridesHelper.battleType("double");
+    game.overridesHelper.starterSpecies(Species.AMOONGUSS);
+    game.overridesHelper.enemySpecies(Species.SNORLAX);
+    game.overridesHelper.startingLevel(100);
+    game.overridesHelper.enemyLevel(100);
+    game.overridesHelper.moveset([Moves.FOLLOW_ME, Moves.RAGE_POWDER, Moves.SPOTLIGHT, Moves.QUICK_ATTACK]);
+    game.overridesHelper.enemyMoveset([Moves.FOLLOW_ME, Moves.SPLASH]);
   });
 
   test("move should redirect attacks to the target", async () => {
-    await game.classicMode.startBattle([Species.AMOONGUSS, Species.CHARIZARD]);
+    await game.classicModeHelper.startBattle([Species.AMOONGUSS, Species.CHARIZARD]);
 
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.move.select(Moves.SPOTLIGHT, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.QUICK_ATTACK, 1, BattlerIndex.ENEMY_2);
+    game.moveHelper.select(Moves.SPOTLIGHT, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.QUICK_ATTACK, 1, BattlerIndex.ENEMY_2);
 
     await game.forceEnemyMove(Moves.SPLASH);
     await game.forceEnemyMove(Moves.SPLASH);
@@ -49,12 +49,12 @@ describe("Moves - Spotlight", () => {
   });
 
   test("move should cause other redirection moves to fail", async () => {
-    await game.classicMode.startBattle([Species.AMOONGUSS, Species.CHARIZARD]);
+    await game.classicModeHelper.startBattle([Species.AMOONGUSS, Species.CHARIZARD]);
 
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.move.select(Moves.SPOTLIGHT, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.QUICK_ATTACK, 1, BattlerIndex.ENEMY_2);
+    game.moveHelper.select(Moves.SPOTLIGHT, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.QUICK_ATTACK, 1, BattlerIndex.ENEMY_2);
 
     await game.forceEnemyMove(Moves.SPLASH);
     await game.forceEnemyMove(Moves.FOLLOW_ME);

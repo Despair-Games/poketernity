@@ -22,7 +22,7 @@ describe("Moves - Sparkly Swirl", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .enemySpecies(Species.SHUCKLE)
       .enemyLevel(100)
       .enemyMoveset(Moves.SPLASH)
@@ -34,8 +34,8 @@ describe("Moves - Sparkly Swirl", () => {
   });
 
   it("should cure status effect of the user, its ally, and all party pokemon", async () => {
-    game.override.battleType("double").statusEffect(StatusEffect.BURN);
-    await game.classicMode.startBattle([Species.RATTATA, Species.RATTATA, Species.RATTATA]);
+    game.overridesHelper.battleType("double").statusEffect(StatusEffect.BURN);
+    await game.classicModeHelper.startBattle([Species.RATTATA, Species.RATTATA, Species.RATTATA]);
     const [leftPlayer, rightPlayer, partyPokemon] = game.scene.getPlayerParty();
     const leftOpp = game.scene.getEnemyPokemon()!;
 
@@ -43,9 +43,9 @@ describe("Moves - Sparkly Swirl", () => {
     vi.spyOn(rightPlayer, "resetStatus");
     vi.spyOn(partyPokemon, "resetStatus");
 
-    game.move.select(Moves.SPARKLY_SWIRL, 0, leftOpp.getBattlerIndex());
+    game.moveHelper.select(Moves.SPARKLY_SWIRL, 0, leftOpp.getBattlerIndex());
     await game.phaseInterceptor.to(CommandPhase);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.toNextTurn();
 
     expect(leftPlayer.resetStatus).toHaveBeenCalledOnce();
@@ -58,16 +58,16 @@ describe("Moves - Sparkly Swirl", () => {
   });
 
   it("should not cure status effect of the target/target's allies", async () => {
-    game.override.battleType("double").enemyStatusEffect(StatusEffect.BURN);
-    await game.classicMode.startBattle([Species.RATTATA, Species.RATTATA]);
+    game.overridesHelper.battleType("double").enemyStatusEffect(StatusEffect.BURN);
+    await game.classicModeHelper.startBattle([Species.RATTATA, Species.RATTATA]);
     const [leftOpp, rightOpp] = game.scene.getEnemyField();
 
     vi.spyOn(leftOpp, "resetStatus");
     vi.spyOn(rightOpp, "resetStatus");
 
-    game.move.select(Moves.SPARKLY_SWIRL, 0, leftOpp.getBattlerIndex());
+    game.moveHelper.select(Moves.SPARKLY_SWIRL, 0, leftOpp.getBattlerIndex());
     await game.phaseInterceptor.to(CommandPhase);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.toNextTurn();
 
     expect(leftOpp.resetStatus).toHaveBeenCalledTimes(0);

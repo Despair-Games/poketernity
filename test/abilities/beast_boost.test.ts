@@ -23,7 +23,7 @@ describe("Abilities - Beast Boost", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemySpecies(Species.BULBASAUR)
       .enemyAbility(Abilities.BEAST_BOOST)
@@ -34,7 +34,7 @@ describe("Abilities - Beast Boost", () => {
   });
 
   it("should prefer highest stat to boost its corresponding stat stage by 1 when winning a battle", async () => {
-    await game.classicMode.startBattle([Species.SLOWBRO]);
+    await game.classicModeHelper.startBattle([Species.SLOWBRO]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     // Set the pokemon's highest stat to DEF, so it should be picked by Beast Boost
@@ -43,16 +43,16 @@ describe("Abilities - Beast Boost", () => {
 
     expect(playerPokemon.getStatStage(Stat.DEF)).toBe(0);
 
-    game.move.select(Moves.FLAMETHROWER);
+    game.moveHelper.select(Moves.FLAMETHROWER);
     await game.phaseInterceptor.to("VictoryPhase");
 
     expect(playerPokemon.getStatStage(Stat.DEF)).toBe(1);
   }, 20000);
 
   it("should use in-battle overriden stats when determining the stat stage to raise by 1", async () => {
-    game.override.enemyMoveset([Moves.GUARD_SPLIT]);
+    game.overridesHelper.enemyMoveset([Moves.GUARD_SPLIT]);
 
-    await game.classicMode.startBattle([Species.SLOWBRO]);
+    await game.classicModeHelper.startBattle([Species.SLOWBRO]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     // If the opponent uses Guard Split, the pokemon's second highest stat (SPATK) should be chosen
@@ -60,7 +60,7 @@ describe("Abilities - Beast Boost", () => {
 
     expect(playerPokemon.getStatStage(Stat.SPATK)).toBe(0);
 
-    game.move.select(Moves.FLAMETHROWER);
+    game.moveHelper.select(Moves.FLAMETHROWER);
 
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("VictoryPhase");
@@ -70,7 +70,7 @@ describe("Abilities - Beast Boost", () => {
 
   it("should have order preference in case of stat ties", async () => {
     // Order preference follows the order of EFFECTIVE_STAT
-    await game.classicMode.startBattle([Species.SLOWBRO]);
+    await game.classicModeHelper.startBattle([Species.SLOWBRO]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
@@ -79,7 +79,7 @@ describe("Abilities - Beast Boost", () => {
 
     expect(playerPokemon.getStatStage(Stat.SPATK)).toBe(0);
 
-    game.move.select(Moves.FLAMETHROWER);
+    game.moveHelper.select(Moves.FLAMETHROWER);
 
     await game.phaseInterceptor.to("VictoryPhase");
 

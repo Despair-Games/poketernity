@@ -26,11 +26,11 @@ describe("Abilities - Battery", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("double");
-    game.override.enemySpecies(Species.SHUCKLE);
-    game.override.enemyAbility(Abilities.BALL_FETCH);
-    game.override.moveset([Moves.TACKLE, Moves.BREAKING_SWIPE, Moves.SPLASH, Moves.DAZZLING_GLEAM]);
-    game.override.enemyMoveset(Moves.SPLASH);
+    game.overridesHelper.battleType("double");
+    game.overridesHelper.enemySpecies(Species.SHUCKLE);
+    game.overridesHelper.enemyAbility(Abilities.BALL_FETCH);
+    game.overridesHelper.moveset([Moves.TACKLE, Moves.BREAKING_SWIPE, Moves.SPLASH, Moves.DAZZLING_GLEAM]);
+    game.overridesHelper.enemyMoveset(Moves.SPLASH);
   });
 
   it("raises the power of allies' special moves by 30%", async () => {
@@ -41,8 +41,8 @@ describe("Abilities - Battery", () => {
 
     await game.startBattle([Species.PIKACHU, Species.CHARJABUG]);
 
-    game.move.select(Moves.DAZZLING_GLEAM);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.DAZZLING_GLEAM);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.phaseInterceptor.to(MoveEffectPhase);
 
     expect(moveToCheck.calculateBattlePower).toHaveReturnedWith(basePower * batteryMultiplier);
@@ -56,8 +56,8 @@ describe("Abilities - Battery", () => {
 
     await game.startBattle([Species.PIKACHU, Species.CHARJABUG]);
 
-    game.move.select(Moves.BREAKING_SWIPE);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.BREAKING_SWIPE);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.phaseInterceptor.to(MoveEffectPhase);
 
     expect(moveToCheck.calculateBattlePower).toHaveReturnedWith(basePower);
@@ -71,8 +71,8 @@ describe("Abilities - Battery", () => {
 
     await game.startBattle([Species.CHARJABUG, Species.PIKACHU]);
 
-    game.move.select(Moves.DAZZLING_GLEAM);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.DAZZLING_GLEAM);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(moveToCheck.calculateBattlePower).toHaveReturnedWith(basePower);

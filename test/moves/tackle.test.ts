@@ -24,21 +24,21 @@ describe("Moves - Tackle", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     const moveToUse = Moves.TACKLE;
-    game.override.battleType("single");
-    game.override.enemySpecies(Species.MAGIKARP);
-    game.override.startingLevel(1);
-    game.override.startingWave(97);
-    game.override.moveset([moveToUse]);
-    game.override.enemyMoveset([Moves.GROWTH, Moves.GROWTH, Moves.GROWTH, Moves.GROWTH]);
-    game.override.disableCrits();
+    game.overridesHelper.battleType("single");
+    game.overridesHelper.enemySpecies(Species.MAGIKARP);
+    game.overridesHelper.startingLevel(1);
+    game.overridesHelper.startingWave(97);
+    game.overridesHelper.moveset([moveToUse]);
+    game.overridesHelper.enemyMoveset([Moves.GROWTH, Moves.GROWTH, Moves.GROWTH, Moves.GROWTH]);
+    game.overridesHelper.disableCrits();
   });
 
   it("TACKLE against ghost", async () => {
     const moveToUse = Moves.TACKLE;
-    game.override.enemySpecies(Species.GENGAR);
+    game.overridesHelper.enemySpecies(Species.GENGAR);
     await game.startBattle([Species.MIGHTYENA]);
     const hpOpponent = game.scene.currentBattle.enemyParty[0].hp;
-    game.move.select(moveToUse);
+    game.moveHelper.select(moveToUse);
     await game.phaseInterceptor.runFrom(EnemyCommandPhase).to(TurnEndPhase);
     const hpLost = hpOpponent - game.scene.currentBattle.enemyParty[0].hp;
     expect(hpLost).toBe(0);
@@ -52,7 +52,7 @@ describe("Moves - Tackle", () => {
 
     const hpOpponent = game.scene.currentBattle.enemyParty[0].hp;
 
-    game.move.select(moveToUse);
+    game.moveHelper.select(moveToUse);
     await game.phaseInterceptor.runFrom(EnemyCommandPhase).to(TurnEndPhase);
     const hpLost = hpOpponent - game.scene.currentBattle.enemyParty[0].hp;
     expect(hpLost).toBeGreaterThan(0);

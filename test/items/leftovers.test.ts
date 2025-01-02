@@ -23,14 +23,14 @@ describe("Items - Leftovers", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("single");
-    game.override.startingLevel(2000);
-    game.override.ability(Abilities.UNNERVE);
-    game.override.moveset([Moves.SPLASH]);
-    game.override.enemySpecies(Species.SHUCKLE);
-    game.override.enemyAbility(Abilities.UNNERVE);
-    game.override.enemyMoveset([Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE]);
-    game.override.startingHeldItems([{ name: "LEFTOVERS", count: 1 }]);
+    game.overridesHelper.battleType("single");
+    game.overridesHelper.startingLevel(2000);
+    game.overridesHelper.ability(Abilities.UNNERVE);
+    game.overridesHelper.moveset([Moves.SPLASH]);
+    game.overridesHelper.enemySpecies(Species.SHUCKLE);
+    game.overridesHelper.enemyAbility(Abilities.UNNERVE);
+    game.overridesHelper.enemyMoveset([Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE]);
+    game.overridesHelper.startingHeldItems([{ name: "LEFTOVERS", count: 1 }]);
   });
 
   it("leftovers works", async () => {
@@ -44,7 +44,7 @@ describe("Items - Leftovers", () => {
     // We should have full hp
     expect(leadPokemon.isFullHp()).toBe(true);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     // We should have less hp after the attack
     await game.phaseInterceptor.to(DamageAnimPhase, false);

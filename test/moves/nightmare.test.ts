@@ -23,7 +23,7 @@ describe("Moves - Nightmare", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemySpecies(Species.RATTATA)
       .enemyMoveset(Moves.SPLASH)
@@ -34,18 +34,18 @@ describe("Moves - Nightmare", () => {
   });
 
   it("lowers enemy hp by 1/4 each turn while asleep", async () => {
-    await game.classicMode.startBattle([Species.HYPNO]);
+    await game.classicModeHelper.startBattle([Species.HYPNO]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     const enemyMaxHP = enemyPokemon.hp;
 
-    game.move.select(Moves.NIGHTMARE);
+    game.moveHelper.select(Moves.NIGHTMARE);
     await game.toNextTurn();
 
     expect(enemyPokemon.hp).toBe(enemyMaxHP - Math.floor(enemyMaxHP / 4));
 
     // take a second turn to make sure damage occurs again
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     expect(enemyPokemon.hp).toBe(enemyMaxHP - Math.floor(enemyMaxHP / 4) - Math.floor(enemyMaxHP / 4));

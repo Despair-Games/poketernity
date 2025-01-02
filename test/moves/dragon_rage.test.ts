@@ -31,19 +31,19 @@ describe("Moves - Dragon Rage", () => {
   beforeEach(async () => {
     game = new GameManager(phaserGame);
 
-    game.override.battleType("single");
+    game.overridesHelper.battleType("single");
 
-    game.override.starterSpecies(Species.SNORLAX);
-    game.override.moveset([Moves.DRAGON_RAGE]);
-    game.override.ability(Abilities.BALL_FETCH);
-    game.override.passiveAbility(Abilities.BALL_FETCH);
-    game.override.startingLevel(100);
+    game.overridesHelper.starterSpecies(Species.SNORLAX);
+    game.overridesHelper.moveset([Moves.DRAGON_RAGE]);
+    game.overridesHelper.ability(Abilities.BALL_FETCH);
+    game.overridesHelper.passiveAbility(Abilities.BALL_FETCH);
+    game.overridesHelper.startingLevel(100);
 
-    game.override.enemySpecies(Species.SNORLAX);
-    game.override.enemyMoveset(Moves.SPLASH);
-    game.override.enemyAbility(Abilities.BALL_FETCH);
-    game.override.enemyPassiveAbility(Abilities.BALL_FETCH);
-    game.override.enemyLevel(100);
+    game.overridesHelper.enemySpecies(Species.SNORLAX);
+    game.overridesHelper.enemyMoveset(Moves.SPLASH);
+    game.overridesHelper.enemyAbility(Abilities.BALL_FETCH);
+    game.overridesHelper.enemyPassiveAbility(Abilities.BALL_FETCH);
+    game.overridesHelper.enemyLevel(100);
 
     await game.startBattle();
 
@@ -56,40 +56,40 @@ describe("Moves - Dragon Rage", () => {
   });
 
   it("ignores weaknesses", async () => {
-    game.override.disableCrits();
+    game.overridesHelper.disableCrits();
     vi.spyOn(enemyPokemon, "getTypes").mockReturnValue([Type.DRAGON]);
 
-    game.move.select(Moves.DRAGON_RAGE);
+    game.moveHelper.select(Moves.DRAGON_RAGE);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(enemyPokemon.getInverseHp()).toBe(dragonRageDamage);
   });
 
   it("ignores resistances", async () => {
-    game.override.disableCrits();
+    game.overridesHelper.disableCrits();
     vi.spyOn(enemyPokemon, "getTypes").mockReturnValue([Type.STEEL]);
 
-    game.move.select(Moves.DRAGON_RAGE);
+    game.moveHelper.select(Moves.DRAGON_RAGE);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(enemyPokemon.getInverseHp()).toBe(dragonRageDamage);
   });
 
   it("ignores SPATK stat stages", async () => {
-    game.override.disableCrits();
+    game.overridesHelper.disableCrits();
     partyPokemon.setStatStage(Stat.SPATK, 2);
 
-    game.move.select(Moves.DRAGON_RAGE);
+    game.moveHelper.select(Moves.DRAGON_RAGE);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(enemyPokemon.getInverseHp()).toBe(dragonRageDamage);
   });
 
   it("ignores stab", async () => {
-    game.override.disableCrits();
+    game.overridesHelper.disableCrits();
     vi.spyOn(partyPokemon, "getTypes").mockReturnValue([Type.DRAGON]);
 
-    game.move.select(Moves.DRAGON_RAGE);
+    game.moveHelper.select(Moves.DRAGON_RAGE);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(enemyPokemon.getInverseHp()).toBe(dragonRageDamage);
@@ -98,7 +98,7 @@ describe("Moves - Dragon Rage", () => {
   it("should prevent critical hits", async () => {
     partyPokemon.addTag(BattlerTagType.ALWAYS_CRIT, 99, Moves.NONE, 0);
 
-    game.move.select(Moves.DRAGON_RAGE);
+    game.moveHelper.select(Moves.DRAGON_RAGE);
     await game.phaseInterceptor.to("BerryPhase");
 
     const lastAttackReceived = enemyPokemon.turnData.attacksReceived[0];
@@ -106,10 +106,10 @@ describe("Moves - Dragon Rage", () => {
   });
 
   it("ignores damage modification from abilities, for example ICE_SCALES", async () => {
-    game.override.disableCrits();
-    game.override.enemyAbility(Abilities.ICE_SCALES);
+    game.overridesHelper.disableCrits();
+    game.overridesHelper.enemyAbility(Abilities.ICE_SCALES);
 
-    game.move.select(Moves.DRAGON_RAGE);
+    game.moveHelper.select(Moves.DRAGON_RAGE);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(enemyPokemon.getInverseHp()).toBe(dragonRageDamage);

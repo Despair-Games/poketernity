@@ -23,7 +23,7 @@ describe("Moves - Freeze-Dry", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
@@ -34,12 +34,12 @@ describe("Moves - Freeze-Dry", () => {
   });
 
   it("should deal 2x damage to pure water types", async () => {
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
@@ -47,13 +47,13 @@ describe("Moves - Freeze-Dry", () => {
   });
 
   it("should deal 4x damage to water/flying types", async () => {
-    game.override.enemySpecies(Species.WINGULL);
-    await game.classicMode.startBattle();
+    game.overridesHelper.enemySpecies(Species.WINGULL);
+    await game.classicModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
@@ -61,13 +61,13 @@ describe("Moves - Freeze-Dry", () => {
   });
 
   it("should deal 1x damage to water/fire types", async () => {
-    game.override.enemySpecies(Species.VOLCANION);
-    await game.classicMode.startBattle();
+    game.overridesHelper.enemySpecies(Species.VOLCANION);
+    await game.classicModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
@@ -78,21 +78,21 @@ describe("Moves - Freeze-Dry", () => {
    * Freeze drys forced super effectiveness should overwrite wonder guard
    */
   it("should deal 2x dmg against soaked wonder guard target", async () => {
-    game.override
+    game.overridesHelper
       .enemySpecies(Species.SHEDINJA)
       .enemyMoveset(Moves.SPLASH)
       .starterSpecies(Species.MAGIKARP)
       .moveset([Moves.SOAK, Moves.FREEZE_DRY]);
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.SOAK);
+    game.moveHelper.select(Moves.SOAK);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toNextTurn();
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(enemy.getMoveEffectiveness).toHaveReturnedWith(2);
@@ -100,16 +100,16 @@ describe("Moves - Freeze-Dry", () => {
   });
 
   it("should deal 8x damage to water/ground/grass type under Forest's Curse", async () => {
-    game.override.enemySpecies(Species.QUAGSIRE);
-    await game.classicMode.startBattle();
+    game.overridesHelper.enemySpecies(Species.QUAGSIRE);
+    await game.classicModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.FORESTS_CURSE);
+    game.moveHelper.select(Moves.FORESTS_CURSE);
     await game.toNextTurn();
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
@@ -117,13 +117,13 @@ describe("Moves - Freeze-Dry", () => {
   });
 
   it("should deal 2x damage to steel type terastallized into water", async () => {
-    game.override.enemySpecies(Species.SKARMORY).enemyHeldItems([{ name: "TERA_SHARD", type: Type.WATER }]);
-    await game.classicMode.startBattle();
+    game.overridesHelper.enemySpecies(Species.SKARMORY).enemyHeldItems([{ name: "TERA_SHARD", type: Type.WATER }]);
+    await game.classicModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
@@ -131,13 +131,13 @@ describe("Moves - Freeze-Dry", () => {
   });
 
   it("should deal 0.5x damage to water type terastallized into fire", async () => {
-    game.override.enemySpecies(Species.PELIPPER).enemyHeldItems([{ name: "TERA_SHARD", type: Type.FIRE }]);
-    await game.classicMode.startBattle();
+    game.overridesHelper.enemySpecies(Species.PELIPPER).enemyHeldItems([{ name: "TERA_SHARD", type: Type.FIRE }]);
+    await game.classicModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
@@ -145,16 +145,16 @@ describe("Moves - Freeze-Dry", () => {
   });
 
   it("should deal 0.5x damage to water type Terapagos with Tera Shell", async () => {
-    game.override.enemySpecies(Species.TERAPAGOS).enemyAbility(Abilities.TERA_SHELL);
-    await game.classicMode.startBattle();
+    game.overridesHelper.enemySpecies(Species.TERAPAGOS).enemyAbility(Abilities.TERA_SHELL);
+    await game.classicModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.SOAK);
+    game.moveHelper.select(Moves.SOAK);
     await game.toNextTurn();
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
@@ -162,13 +162,13 @@ describe("Moves - Freeze-Dry", () => {
   });
 
   it("should deal 2x damage to water type under Normalize", async () => {
-    game.override.ability(Abilities.NORMALIZE);
-    await game.classicMode.startBattle();
+    game.overridesHelper.ability(Abilities.NORMALIZE);
+    await game.classicModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
@@ -176,13 +176,13 @@ describe("Moves - Freeze-Dry", () => {
   });
 
   it("should deal 0.25x damage to rock/steel type under Normalize", async () => {
-    game.override.ability(Abilities.NORMALIZE).enemySpecies(Species.SHIELDON);
-    await game.classicMode.startBattle();
+    game.overridesHelper.ability(Abilities.NORMALIZE).enemySpecies(Species.SHIELDON);
+    await game.classicModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
@@ -190,13 +190,13 @@ describe("Moves - Freeze-Dry", () => {
   });
 
   it("should deal 0x damage to water/ghost type under Normalize", async () => {
-    game.override.ability(Abilities.NORMALIZE).enemySpecies(Species.JELLICENT);
-    await game.classicMode.startBattle();
+    game.overridesHelper.ability(Abilities.NORMALIZE).enemySpecies(Species.JELLICENT);
+    await game.classicModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("BerryPhase");
 
@@ -204,13 +204,13 @@ describe("Moves - Freeze-Dry", () => {
   });
 
   it("should deal 2x damage to water type under Electrify", async () => {
-    game.override.enemyMoveset([Moves.ELECTRIFY]);
-    await game.classicMode.startBattle();
+    game.overridesHelper.enemyMoveset([Moves.ELECTRIFY]);
+    await game.classicModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("BerryPhase");
 
@@ -218,13 +218,13 @@ describe("Moves - Freeze-Dry", () => {
   });
 
   it("should deal 4x damage to water/flying type under Electrify", async () => {
-    game.override.enemyMoveset([Moves.ELECTRIFY]).enemySpecies(Species.GYARADOS);
-    await game.classicMode.startBattle();
+    game.overridesHelper.enemyMoveset([Moves.ELECTRIFY]).enemySpecies(Species.GYARADOS);
+    await game.classicModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("BerryPhase");
 
@@ -232,13 +232,13 @@ describe("Moves - Freeze-Dry", () => {
   });
 
   it("should deal 0x damage to water/ground type under Electrify", async () => {
-    game.override.enemyMoveset([Moves.ELECTRIFY]).enemySpecies(Species.BARBOACH);
-    await game.classicMode.startBattle();
+    game.overridesHelper.enemyMoveset([Moves.ELECTRIFY]).enemySpecies(Species.BARBOACH);
+    await game.classicModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("BerryPhase");
 
@@ -246,13 +246,13 @@ describe("Moves - Freeze-Dry", () => {
   });
 
   it("should deal 0.25x damage to Grass/Dragon type under Electrify", async () => {
-    game.override.enemyMoveset([Moves.ELECTRIFY]).enemySpecies(Species.FLAPPLE);
-    await game.classicMode.startBattle();
+    game.overridesHelper.enemyMoveset([Moves.ELECTRIFY]).enemySpecies(Species.FLAPPLE);
+    await game.classicModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("BerryPhase");
 
@@ -260,15 +260,15 @@ describe("Moves - Freeze-Dry", () => {
   });
 
   it("should deal 2x damage to Water type during inverse battle", async () => {
-    game.override.moveset([Moves.FREEZE_DRY]).enemySpecies(Species.MAGIKARP);
-    game.challengeMode.addChallenge(Challenges.INVERSE_BATTLE, 1, 1);
+    game.overridesHelper.moveset([Moves.FREEZE_DRY]).enemySpecies(Species.MAGIKARP);
+    game.challengeModeHelper.addChallenge(Challenges.INVERSE_BATTLE, 1, 1);
 
-    await game.challengeMode.startBattle();
+    await game.challengeModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
@@ -276,15 +276,15 @@ describe("Moves - Freeze-Dry", () => {
   });
 
   it("should deal 2x damage to Water type during inverse battle under Normalize", async () => {
-    game.override.moveset([Moves.FREEZE_DRY]).ability(Abilities.NORMALIZE).enemySpecies(Species.MAGIKARP);
-    game.challengeMode.addChallenge(Challenges.INVERSE_BATTLE, 1, 1);
+    game.overridesHelper.moveset([Moves.FREEZE_DRY]).ability(Abilities.NORMALIZE).enemySpecies(Species.MAGIKARP);
+    game.challengeModeHelper.addChallenge(Challenges.INVERSE_BATTLE, 1, 1);
 
-    await game.challengeMode.startBattle();
+    await game.challengeModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
@@ -292,15 +292,15 @@ describe("Moves - Freeze-Dry", () => {
   });
 
   it("should deal 2x damage to Water type during inverse battle under Electrify", async () => {
-    game.override.moveset([Moves.FREEZE_DRY]).enemySpecies(Species.MAGIKARP).enemyMoveset([Moves.ELECTRIFY]);
-    game.challengeMode.addChallenge(Challenges.INVERSE_BATTLE, 1, 1);
+    game.overridesHelper.moveset([Moves.FREEZE_DRY]).enemySpecies(Species.MAGIKARP).enemyMoveset([Moves.ELECTRIFY]);
+    game.challengeModeHelper.addChallenge(Challenges.INVERSE_BATTLE, 1, 1);
 
-    await game.challengeMode.startBattle();
+    await game.challengeModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
@@ -308,16 +308,16 @@ describe("Moves - Freeze-Dry", () => {
   });
 
   it("should deal 1x damage to water/flying type during inverse battle under Electrify", async () => {
-    game.override.enemyMoveset([Moves.ELECTRIFY]).enemySpecies(Species.GYARADOS);
+    game.overridesHelper.enemyMoveset([Moves.ELECTRIFY]).enemySpecies(Species.GYARADOS);
 
-    game.challengeMode.addChallenge(Challenges.INVERSE_BATTLE, 1, 1);
+    game.challengeModeHelper.addChallenge(Challenges.INVERSE_BATTLE, 1, 1);
 
-    await game.challengeMode.startBattle();
+    await game.challengeModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("BerryPhase");
 

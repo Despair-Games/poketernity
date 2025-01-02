@@ -27,17 +27,19 @@ describe("Items - Double Battle Chance Boosters", () => {
   });
 
   it("should guarantee double battle with 2 unique tiers", async () => {
-    game.override.startingModifier([{ name: "LURE" }, { name: "SUPER_LURE" }]).startingWave(2);
+    game.overridesHelper.startingModifier([{ name: "LURE" }, { name: "SUPER_LURE" }]).startingWave(2);
 
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     expect(game.scene.getEnemyField().length).toBe(2);
   });
 
   it("should guarantee double boss battle with 3 unique tiers", async () => {
-    game.override.startingModifier([{ name: "LURE" }, { name: "SUPER_LURE" }, { name: "MAX_LURE" }]).startingWave(10);
+    game.overridesHelper
+      .startingModifier([{ name: "LURE" }, { name: "SUPER_LURE" }, { name: "MAX_LURE" }])
+      .startingWave(10);
 
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const enemyField = game.scene.getEnemyField();
 
@@ -47,15 +49,15 @@ describe("Items - Double Battle Chance Boosters", () => {
   });
 
   it("should renew how many battles are left of existing booster when picking up new booster of same tier", async () => {
-    game.override
+    game.overridesHelper
       .startingModifier([{ name: "LURE" }])
       .itemRewards([{ name: "LURE" }])
       .moveset(Moves.SPLASH)
       .startingLevel(200);
 
-    await game.classicMode.startBattle([Species.PIKACHU]);
+    await game.classicModeHelper.startBattle([Species.PIKACHU]);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.doKillOpponents();
 

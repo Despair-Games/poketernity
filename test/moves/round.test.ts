@@ -24,7 +24,7 @@ describe("Moves - Round", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.SPLASH, Moves.ROUND])
       .ability(Abilities.BALL_FETCH)
       .battleType("double")
@@ -37,13 +37,13 @@ describe("Moves - Round", () => {
   });
 
   it("should cue other instances of Round together in Speed order", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP, Species.FEEBAS]);
 
     const round = allMoves[Moves.ROUND];
     const spy = vi.spyOn(round, "calculateBattlePower");
 
-    game.move.select(Moves.ROUND, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.ROUND, 1, BattlerIndex.ENEMY_2);
+    game.moveHelper.select(Moves.ROUND, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.ROUND, 1, BattlerIndex.ENEMY_2);
 
     await game.forceEnemyMove(Moves.ROUND, BattlerIndex.PLAYER);
     await game.forceEnemyMove(Moves.SPLASH);

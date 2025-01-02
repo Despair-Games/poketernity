@@ -29,16 +29,16 @@ describe("Evolution", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override.battleType("single");
+    game.overridesHelper.battleType("single");
 
-    game.override.enemySpecies(Species.MAGIKARP);
-    game.override.enemyAbility(Abilities.BALL_FETCH);
+    game.overridesHelper.enemySpecies(Species.MAGIKARP);
+    game.overridesHelper.enemyAbility(Abilities.BALL_FETCH);
 
-    game.override.startingLevel(60);
+    game.overridesHelper.startingLevel(60);
   });
 
   it("should keep hidden ability after evolving", async () => {
-    await game.classicMode.runToSummon([Species.EEVEE, Species.TRAPINCH]);
+    await game.classicModeHelper.runToSummon([Species.EEVEE, Species.TRAPINCH]);
 
     const eevee = game.scene.getPlayerParty()[0];
     const trapinch = game.scene.getPlayerParty()[1];
@@ -53,7 +53,7 @@ describe("Evolution", () => {
   });
 
   it("should keep same ability slot after evolving", async () => {
-    await game.classicMode.runToSummon([Species.BULBASAUR, Species.CHARMANDER]);
+    await game.classicModeHelper.runToSummon([Species.BULBASAUR, Species.CHARMANDER]);
 
     const bulbasaur = game.scene.getPlayerParty()[0];
     const charmander = game.scene.getPlayerParty()[1];
@@ -68,7 +68,7 @@ describe("Evolution", () => {
   });
 
   it("should handle illegal abilityIndex values", async () => {
-    await game.classicMode.runToSummon([Species.SQUIRTLE]);
+    await game.classicModeHelper.runToSummon([Species.SQUIRTLE]);
 
     const squirtle = game.scene.getPlayerPokemon()!;
     squirtle.abilityIndex = 5;
@@ -78,7 +78,7 @@ describe("Evolution", () => {
   });
 
   it("should handle nincada's unique evolution", async () => {
-    await game.classicMode.runToSummon([Species.NINCADA]);
+    await game.classicModeHelper.runToSummon([Species.NINCADA]);
 
     const nincada = game.scene.getPlayerPokemon()!;
     nincada.abilityIndex = 2;
@@ -103,7 +103,7 @@ describe("Evolution", () => {
   });
 
   it("should increase both HP and max HP when evolving", async () => {
-    game.override
+    game.overridesHelper
       .moveset([Moves.SURF])
       .enemySpecies(Species.GOLEM)
       .enemyMoveset(Moves.SPLASH)
@@ -123,7 +123,7 @@ describe("Evolution", () => {
 
     expect(golem.hp).toBe(1);
 
-    game.move.select(Moves.SURF);
+    game.moveHelper.select(Moves.SURF);
     await game.phaseInterceptor.to("EndEvolutionPhase");
 
     expect(totodile.hp).toBe(totodile.getMaxHp());
@@ -131,7 +131,7 @@ describe("Evolution", () => {
   });
 
   it("should not fully heal HP when evolving", async () => {
-    game.override
+    game.overridesHelper
       .moveset([Moves.SURF])
       .enemySpecies(Species.GOLEM)
       .enemyMoveset(Moves.SPLASH)
@@ -153,7 +153,7 @@ describe("Evolution", () => {
 
     expect(golem.hp).toBe(1);
 
-    game.move.select(Moves.SURF);
+    game.moveHelper.select(Moves.SURF);
     await game.phaseInterceptor.to("EndEvolutionPhase");
 
     expect(cyndaquil.getMaxHp()).toBeGreaterThan(maxHpBefore);

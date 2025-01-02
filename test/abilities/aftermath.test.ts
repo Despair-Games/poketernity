@@ -22,7 +22,7 @@ describe("Abilities - Aftermath", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.GIGA_IMPACT, Moves.HYPER_BEAM])
       .ability(Abilities.NO_GUARD)
       .startingLevel(50)
@@ -34,34 +34,34 @@ describe("Abilities - Aftermath", () => {
   });
 
   it("should cause the attacker to take damage equal to 25% of their max HP when fainted by a contact move", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     const player = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.GIGA_IMPACT);
+    game.moveHelper.select(Moves.GIGA_IMPACT);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(player.hp).toBe(toDmgValue((player.getMaxHp() * 3) / 4));
   });
 
   it("should not cause the attacker to take damage when fainted by a non-contact move", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     const player = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.HYPER_BEAM);
+    game.moveHelper.select(Moves.HYPER_BEAM);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(player.isFullHp()).toBe(true);
   });
 
   it("should not cause the attacker to take damage when it has Magic Guard", async () => {
-    game.override.passiveAbility(Abilities.MAGIC_GUARD);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    game.overridesHelper.passiveAbility(Abilities.MAGIC_GUARD);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     const player = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.GIGA_IMPACT);
+    game.moveHelper.select(Moves.GIGA_IMPACT);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(player.isFullHp()).toBe(true);

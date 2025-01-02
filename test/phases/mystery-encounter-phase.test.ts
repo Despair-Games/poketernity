@@ -27,10 +27,10 @@ describe("Mystery Encounter Phases", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.startingWave(11);
-    game.override.mysteryEncounterChance(100);
+    game.overridesHelper.startingWave(11);
+    game.overridesHelper.mysteryEncounterChance(100);
     // Seed guarantees wild encounter to be replaced by ME
-    game.override.seed("test");
+    game.overridesHelper.seed("test");
   });
 
   describe("MysteryEncounterPhase", () => {

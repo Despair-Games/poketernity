@@ -22,7 +22,7 @@ describe("Abilities - Mimicry", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.SPLASH])
       .ability(Abilities.MIMICRY)
       .battleType("single")
@@ -32,11 +32,11 @@ describe("Abilities - Mimicry", () => {
   });
 
   it("Mimicry activates after the Pokémon with Mimicry is switched in while terrain is present, or whenever there is a change in terrain", async () => {
-    game.override.enemyAbility(Abilities.MISTY_SURGE);
-    await game.classicMode.startBattle([Species.FEEBAS, Species.ABRA]);
+    game.overridesHelper.enemyAbility(Abilities.MISTY_SURGE);
+    await game.classicModeHelper.startBattle([Species.FEEBAS, Species.ABRA]);
 
     const [playerPokemon1, playerPokemon2] = game.scene.getPlayerParty();
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
     expect(playerPokemon1.getTypes().includes(Type.FAIRY)).toBe(true);
 
@@ -47,14 +47,14 @@ describe("Abilities - Mimicry", () => {
   });
 
   it("Pokemon should revert back to its original, root type once terrain ends", async () => {
-    game.override
+    game.overridesHelper
       .moveset([Moves.SPLASH, Moves.TRANSFORM])
       .enemyAbility(Abilities.MIMICRY)
       .enemyMoveset([Moves.SPLASH, Moves.PSYCHIC_TERRAIN]);
-    await game.classicMode.startBattle([Species.REGIELEKI]);
+    await game.classicModeHelper.startBattle([Species.REGIELEKI]);
 
     const playerPokemon = game.scene.getPlayerPokemon();
-    game.move.select(Moves.TRANSFORM);
+    game.moveHelper.select(Moves.TRANSFORM);
     await game.forceEnemyMove(Moves.PSYCHIC_TERRAIN);
     await game.toNextTurn();
     expect(playerPokemon?.getTypes().includes(Type.PSYCHIC)).toBe(true);
@@ -63,24 +63,24 @@ describe("Abilities - Mimicry", () => {
       game.scene.arena.terrain.turnsLeft = 1;
     }
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.toNextTurn();
     expect(playerPokemon?.getTypes().includes(Type.ELECTRIC)).toBe(true);
   });
 
   it("If the Pokemon is under the effect of a type-adding move and an equivalent terrain activates, the move's effect disappears", async () => {
-    game.override.enemyMoveset([Moves.FORESTS_CURSE, Moves.GRASSY_TERRAIN]);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    game.overridesHelper.enemyMoveset([Moves.FORESTS_CURSE, Moves.GRASSY_TERRAIN]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon();
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.FORESTS_CURSE);
     await game.toNextTurn();
 
     expect(playerPokemon?.summonData.addedType).toBe(Type.GRASS);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.GRASSY_TERRAIN);
     await game.phaseInterceptor.to("TurnEndPhase");
 

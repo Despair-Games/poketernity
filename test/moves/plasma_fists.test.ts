@@ -23,7 +23,7 @@ describe("Moves - Plasma Fists", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.PLASMA_FISTS, Moves.TACKLE])
       .battleType("double")
       .startingLevel(100)
@@ -34,13 +34,13 @@ describe("Moves - Plasma Fists", () => {
   });
 
   it("should convert all subsequent Normal-type attacks to Electric-type", async () => {
-    await game.classicMode.startBattle([Species.DUSCLOPS, Species.BLASTOISE]);
+    await game.classicModeHelper.startBattle([Species.DUSCLOPS, Species.BLASTOISE]);
 
     const field = game.scene.getField(true);
     field.forEach((p) => vi.spyOn(p, "getMoveType"));
 
-    game.move.select(Moves.PLASMA_FISTS, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.TACKLE, 1, BattlerIndex.ENEMY_2);
+    game.moveHelper.select(Moves.PLASMA_FISTS, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.TACKLE, 1, BattlerIndex.ENEMY_2);
 
     await game.forceEnemyMove(Moves.TACKLE, BattlerIndex.PLAYER);
     await game.forceEnemyMove(Moves.TACKLE, BattlerIndex.PLAYER_2);
@@ -56,15 +56,15 @@ describe("Moves - Plasma Fists", () => {
   });
 
   it("should not affect Normal-type attacks boosted by Pixilate", async () => {
-    game.override.battleType("single").enemyAbility(Abilities.PIXILATE);
+    game.overridesHelper.battleType("single").enemyAbility(Abilities.PIXILATE);
 
-    await game.classicMode.startBattle([Species.ONIX]);
+    await game.classicModeHelper.startBattle([Species.ONIX]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "getMoveType");
 
-    game.move.select(Moves.PLASMA_FISTS);
+    game.moveHelper.select(Moves.PLASMA_FISTS);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("BerryPhase", false);
@@ -74,15 +74,15 @@ describe("Moves - Plasma Fists", () => {
   });
 
   it("should affect moves that become Normal type due to Normalize", async () => {
-    game.override.battleType("single").enemyAbility(Abilities.NORMALIZE).enemyMoveset(Moves.WATER_GUN);
+    game.overridesHelper.battleType("single").enemyAbility(Abilities.NORMALIZE).enemyMoveset(Moves.WATER_GUN);
 
-    await game.classicMode.startBattle([Species.DUSCLOPS]);
+    await game.classicModeHelper.startBattle([Species.DUSCLOPS]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "getMoveType");
 
-    game.move.select(Moves.PLASMA_FISTS);
+    game.moveHelper.select(Moves.PLASMA_FISTS);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("BerryPhase", false);

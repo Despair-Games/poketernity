@@ -23,7 +23,7 @@ describe("Abilities - Sand Rush", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .weather(WeatherType.SANDSTORM)
       .moveset([Moves.SPLASH])
       .ability(Abilities.SAND_RUSH)
@@ -35,10 +35,10 @@ describe("Abilities - Sand Rush", () => {
   });
 
   it("should block damage from sandstorm", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
     const pokemon = game.scene.getPlayerPokemon();
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(pokemon?.isFullHp()).toBe(true);

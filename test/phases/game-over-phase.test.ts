@@ -24,7 +24,7 @@ describe("Game Over Phase", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.MEMENTO, Moves.ICE_BEAM, Moves.SPLASH])
       .ability(Abilities.BALL_FETCH)
       .battleType("single")
@@ -37,16 +37,16 @@ describe("Game Over Phase", () => {
   });
 
   it("winning a run should give rewards", async () => {
-    await game.classicMode.startBattle([Species.BULBASAUR]);
+    await game.classicModeHelper.startBattle([Species.BULBASAUR]);
     vi.spyOn(game.scene, "validateAchv");
 
     // Note: `game.doKillOpponents()` does not properly handle final boss
     // Final boss phase 1
-    game.move.select(Moves.ICE_BEAM);
+    game.moveHelper.select(Moves.ICE_BEAM);
     await game.toNextTurn();
 
     // Final boss phase 2
-    game.move.select(Moves.ICE_BEAM);
+    game.moveHelper.select(Moves.ICE_BEAM);
     await game.phaseInterceptor.to("PostGameOverPhase", false);
 
     // The game refused to actually give the vouchers during tests,
@@ -60,10 +60,10 @@ describe("Game Over Phase", () => {
   });
 
   it("losing a run should not give rewards", async () => {
-    await game.classicMode.startBattle([Species.BULBASAUR]);
+    await game.classicModeHelper.startBattle([Species.BULBASAUR]);
     vi.spyOn(game.scene, "validateAchv");
 
-    game.move.select(Moves.MEMENTO);
+    game.moveHelper.select(Moves.MEMENTO);
     await game.phaseInterceptor.to("PostGameOverPhase", false);
 
     expect(game.phaseInterceptor.log.includes("GameOverPhase")).toBe(true);

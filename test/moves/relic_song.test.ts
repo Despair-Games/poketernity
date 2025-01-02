@@ -22,7 +22,7 @@ describe("Moves - Relic Song", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.RELIC_SONG, Moves.SPLASH])
       .battleType("single")
       .enemyAbility(Abilities.BALL_FETCH)
@@ -32,30 +32,30 @@ describe("Moves - Relic Song", () => {
   });
 
   it("swaps Meloetta's form between Aria and Pirouette", async () => {
-    await game.classicMode.startBattle([Species.MELOETTA]);
+    await game.classicModeHelper.startBattle([Species.MELOETTA]);
 
     const meloetta = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.RELIC_SONG);
+    game.moveHelper.select(Moves.RELIC_SONG);
     await game.toNextTurn();
 
     expect(meloetta.formIndex).toBe(1);
 
-    game.move.select(Moves.RELIC_SONG);
+    game.moveHelper.select(Moves.RELIC_SONG);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(meloetta.formIndex).toBe(0);
   });
 
   it("doesn't swap Meloetta's form during a mono-type challenge", async () => {
-    game.challengeMode.addChallenge(Challenges.SINGLE_TYPE, Type.PSYCHIC + 1, 0);
-    await game.challengeMode.startBattle([Species.MELOETTA]);
+    game.challengeModeHelper.addChallenge(Challenges.SINGLE_TYPE, Type.PSYCHIC + 1, 0);
+    await game.challengeModeHelper.startBattle([Species.MELOETTA]);
 
     const meloetta = game.scene.getPlayerPokemon()!;
 
     expect(meloetta.formIndex).toBe(0);
 
-    game.move.select(Moves.RELIC_SONG);
+    game.moveHelper.select(Moves.RELIC_SONG);
     await game.phaseInterceptor.to("BerryPhase");
     await game.toNextTurn();
 
@@ -63,12 +63,12 @@ describe("Moves - Relic Song", () => {
   });
 
   it("doesn't swap Meloetta's form during biome change (arena reset)", async () => {
-    game.override.starterForms({ [Species.MELOETTA]: 1 }).startingWave(10);
-    await game.classicMode.startBattle([Species.MELOETTA]);
+    game.overridesHelper.starterForms({ [Species.MELOETTA]: 1 }).startingWave(10);
+    await game.classicModeHelper.startBattle([Species.MELOETTA]);
 
     const meloetta = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.doKillOpponents();
     await game.toNextWave();
 

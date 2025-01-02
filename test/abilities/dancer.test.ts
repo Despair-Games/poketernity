@@ -23,7 +23,7 @@ describe("Abilities - Dancer", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("double")
       .moveset([Moves.SWORDS_DANCE, Moves.SPLASH])
       .enemySpecies(Species.MAGIKARP)
@@ -34,12 +34,12 @@ describe("Abilities - Dancer", () => {
   // Reference Link: https://bulbapedia.bulbagarden.net/wiki/Dancer_(Ability)
 
   it("triggers when dance moves are used, doesn't consume extra PP", async () => {
-    await game.classicMode.startBattle([Species.ORICORIO, Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.ORICORIO, Species.FEEBAS]);
 
     const [oricorio] = game.scene.getPlayerField();
 
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.SWORDS_DANCE, 1);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SWORDS_DANCE, 1);
     await game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
     await game.phaseInterceptor.to("MovePhase");
     // immediately copies ally move

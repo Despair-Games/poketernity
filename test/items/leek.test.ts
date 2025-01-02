@@ -23,7 +23,7 @@ describe("Items - Leek", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override
+    game.overridesHelper
       .enemySpecies(Species.MAGIKARP)
       .enemyMoveset([Moves.SPLASH, Moves.SPLASH, Moves.SPLASH, Moves.SPLASH])
       .startingHeldItems([{ name: "LEEK" }])
@@ -38,7 +38,7 @@ describe("Items - Leek", () => {
 
     vi.spyOn(enemyMember, "getCritStage");
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -52,7 +52,7 @@ describe("Items - Leek", () => {
 
     vi.spyOn(enemyMember, "getCritStage");
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -66,7 +66,7 @@ describe("Items - Leek", () => {
 
     vi.spyOn(enemyMember, "getCritStage");
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -94,7 +94,7 @@ describe("Items - Leek", () => {
 
     vi.spyOn(enemyMember, "getCritStage");
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -122,7 +122,7 @@ describe("Items - Leek", () => {
 
     vi.spyOn(enemyMember, "getCritStage");
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -136,7 +136,7 @@ describe("Items - Leek", () => {
 
     vi.spyOn(enemyMember, "getCritStage");
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 

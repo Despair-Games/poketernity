@@ -55,10 +55,10 @@ describe("Clowning Around - Mystery Encounter", () => {
   beforeEach(async () => {
     game = new GameManager(phaserGame);
     scene = game.scene;
-    game.override.mysteryEncounterChance(100);
-    game.override.startingWave(defaultWave);
-    game.override.startingBiome(defaultBiome);
-    game.override.disableTrainerWaves();
+    game.overridesHelper.mysteryEncounterChance(100);
+    game.overridesHelper.startingWave(defaultWave);
+    game.overridesHelper.startingBiome(defaultBiome);
+    game.overridesHelper.disableTrainerWaves();
 
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(
       new Map<Biome, MysteryEncounterType[]>([[Biome.CAVE, [MysteryEncounterType.CLOWNING_AROUND]]]),
@@ -91,7 +91,7 @@ describe("Clowning Around - Mystery Encounter", () => {
   });
 
   it("should not run below wave 80", async () => {
-    game.override.startingWave(79);
+    game.overridesHelper.startingWave(79);
 
     await game.runToMysteryEncounter();
 

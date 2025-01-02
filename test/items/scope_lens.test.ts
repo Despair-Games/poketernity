@@ -22,7 +22,7 @@ describe("Items - Scope Lens", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override
+    game.overridesHelper
       .enemySpecies(Species.MAGIKARP)
       .enemyMoveset(Moves.SPLASH)
       .moveset([Moves.POUND])
@@ -37,7 +37,7 @@ describe("Items - Scope Lens", () => {
 
     vi.spyOn(enemyPokemon, "getCritStage");
 
-    game.move.select(Moves.POUND);
+    game.moveHelper.select(Moves.POUND);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 

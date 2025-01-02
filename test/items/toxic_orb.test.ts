@@ -23,7 +23,7 @@ describe("Items - Toxic orb", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemySpecies(Species.MAGIKARP)
       .ability(Abilities.BALL_FETCH)
@@ -40,12 +40,12 @@ describe("Items - Toxic orb", () => {
   });
 
   it("should badly poison the holder", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     const player = game.scene.getPlayerPokemon()!;
     expect(player.getHeldItems()[0].type.id).toBe("TOXIC_ORB");
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.phaseInterceptor.to("TurnEndPhase");
     await game.phaseInterceptor.to("MessagePhase");

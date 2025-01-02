@@ -22,7 +22,7 @@ describe("Abilities - Damp", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .ability(Abilities.DAMP)
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
@@ -35,13 +35,13 @@ describe("Abilities - Damp", () => {
     { moveName: "Misty Explosion", move: Moves.MISTY_EXPLOSION },
     { moveName: "Mind Blown", move: Moves.MIND_BLOWN },
   ])("should prevent the move $moveName from being used", async ({ move }) => {
-    game.override.moveset([Moves.SPLASH, move]).battleType("double").enemyMoveset(move);
-    await game.classicMode.startBattle([Species.FEEBAS, Species.ABRA]);
+    game.overridesHelper.moveset([Moves.SPLASH, move]).battleType("double").enemyMoveset(move);
+    await game.classicModeHelper.startBattle([Species.FEEBAS, Species.ABRA]);
     const playerPokemon2 = game.scene.getPlayerField()[1];
     const enemyPokemon1 = game.scene.getEnemyField()[0];
 
-    game.move.select(Moves.SPLASH);
-    game.move.select(move, 1);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(move, 1);
     await game.phaseInterceptor.to("BerryPhase");
 
     const player2MoveResult = playerPokemon2.getMoveHistory()[0];
@@ -51,17 +51,17 @@ describe("Abilities - Damp", () => {
   });
 
   it("should prevent damage from the ability Aftermath", async () => {
-    game.override
+    game.overridesHelper
       .startingLevel(100)
       .moveset(Moves.TACKLE)
       .battleType("single")
       .enemyMoveset([Moves.SPLASH])
       .enemyAbility(Abilities.AFTERMATH);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon();
     const enemyPokemon = game.scene.getEnemyPokemon();
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(playerPokemon?.isFullHp()).toBe(true);

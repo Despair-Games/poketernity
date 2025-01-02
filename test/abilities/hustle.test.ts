@@ -23,7 +23,7 @@ describe("Abilities - Hustle", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .ability(Abilities.HUSTLE)
       .moveset([Moves.TACKLE, Moves.GIGA_DRAIN, Moves.FISSURE])
       .disableCrits()
@@ -34,40 +34,40 @@ describe("Abilities - Hustle", () => {
   });
 
   it("increases the user's Attack stat by 50%", async () => {
-    await game.classicMode.startBattle([Species.PIKACHU]);
+    await game.classicModeHelper.startBattle([Species.PIKACHU]);
     const pikachu = game.scene.getPlayerPokemon()!;
     const atk = pikachu.stats[Stat.ATK];
 
     vi.spyOn(pikachu, "getEffectiveStat");
 
-    game.move.select(Moves.TACKLE);
-    await game.move.forceHit();
+    game.moveHelper.select(Moves.TACKLE);
+    await game.moveHelper.forceHit();
     await game.phaseInterceptor.to("DamageAnimPhase");
 
     expect(pikachu.getEffectiveStat).toHaveReturnedWith(Math.floor(atk * 1.5));
   });
 
   it("lowers the accuracy of the user's physical moves by 20%", async () => {
-    await game.classicMode.startBattle([Species.PIKACHU]);
+    await game.classicModeHelper.startBattle([Species.PIKACHU]);
     const pikachu = game.scene.getPlayerPokemon()!;
 
     vi.spyOn(pikachu, "getAccuracyMultiplier");
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(pikachu.getAccuracyMultiplier).toHaveReturnedWith(0.8);
   });
 
   it("does not affect non-physical moves", async () => {
-    await game.classicMode.startBattle([Species.PIKACHU]);
+    await game.classicModeHelper.startBattle([Species.PIKACHU]);
     const pikachu = game.scene.getPlayerPokemon()!;
     const spatk = pikachu.stats[Stat.SPATK];
 
     vi.spyOn(pikachu, "getEffectiveStat");
     vi.spyOn(pikachu, "getAccuracyMultiplier");
 
-    game.move.select(Moves.GIGA_DRAIN);
+    game.moveHelper.select(Moves.GIGA_DRAIN);
     await game.phaseInterceptor.to("DamageAnimPhase");
 
     expect(pikachu.getEffectiveStat).toHaveReturnedWith(spatk);
@@ -75,17 +75,17 @@ describe("Abilities - Hustle", () => {
   });
 
   it("does not affect OHKO moves", async () => {
-    game.override.startingLevel(100);
-    game.override.enemyLevel(30);
+    game.overridesHelper.startingLevel(100);
+    game.overridesHelper.enemyLevel(30);
 
-    await game.classicMode.startBattle([Species.PIKACHU]);
+    await game.classicModeHelper.startBattle([Species.PIKACHU]);
     const pikachu = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     vi.spyOn(pikachu, "getAccuracyMultiplier");
     vi.spyOn(allMoves[Moves.FISSURE], "calculateBattleAccuracy");
 
-    game.move.select(Moves.FISSURE);
+    game.moveHelper.select(Moves.FISSURE);
     await game.phaseInterceptor.to("DamageAnimPhase");
 
     expect(enemyPokemon.turnData.damageTaken).toBe(enemyPokemon.getMaxHp());

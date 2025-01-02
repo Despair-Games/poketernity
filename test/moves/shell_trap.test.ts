@@ -26,7 +26,7 @@ describe("Moves - Shell Trap", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("double")
       .moveset([Moves.SHELL_TRAP, Moves.SPLASH, Moves.BULLDOZE])
       .enemySpecies(Species.SNORLAX)
@@ -43,8 +43,8 @@ describe("Moves - Shell Trap", () => {
     const playerPokemon = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.SHELL_TRAP, 1);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SHELL_TRAP, 1);
 
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
 
@@ -59,15 +59,15 @@ describe("Moves - Shell Trap", () => {
   });
 
   it("should fail if the user is only hit by special attacks", async () => {
-    game.override.enemyMoveset([Moves.SWIFT]);
+    game.overridesHelper.enemyMoveset([Moves.SWIFT]);
 
     await game.startBattle([Species.CHARIZARD, Species.TURTONATOR]);
 
     const playerPokemon = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.SHELL_TRAP, 1);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SHELL_TRAP, 1);
 
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
 
@@ -82,15 +82,15 @@ describe("Moves - Shell Trap", () => {
   });
 
   it("should fail if the user isn't hit with any attack", async () => {
-    game.override.enemyMoveset(Moves.SPLASH);
+    game.overridesHelper.enemyMoveset(Moves.SPLASH);
 
     await game.startBattle([Species.CHARIZARD, Species.TURTONATOR]);
 
     const playerPokemon = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.SHELL_TRAP, 1);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SHELL_TRAP, 1);
 
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
 
@@ -105,15 +105,15 @@ describe("Moves - Shell Trap", () => {
   });
 
   it("should not activate from an ally's attack", async () => {
-    game.override.enemyMoveset(Moves.SPLASH);
+    game.overridesHelper.enemyMoveset(Moves.SPLASH);
 
     await game.startBattle([Species.BLASTOISE, Species.CHARIZARD]);
 
     const playerPokemon = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.move.select(Moves.SHELL_TRAP);
-    game.move.select(Moves.BULLDOZE, 1);
+    game.moveHelper.select(Moves.SHELL_TRAP);
+    game.moveHelper.select(Moves.BULLDOZE, 1);
 
     await game.phaseInterceptor.to(MoveEndPhase);
 
@@ -128,7 +128,7 @@ describe("Moves - Shell Trap", () => {
   });
 
   it("should not activate from a subsequent physical attack", async () => {
-    game.override.battleType("single");
+    game.overridesHelper.battleType("single");
     vi.spyOn(allMoves[Moves.RAZOR_LEAF], "priority", "get").mockReturnValue(-4);
 
     await game.startBattle([Species.CHARIZARD]);
@@ -136,7 +136,7 @@ describe("Moves - Shell Trap", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.SHELL_TRAP);
+    game.moveHelper.select(Moves.SHELL_TRAP);
 
     await game.phaseInterceptor.to(BerryPhase, false);
 

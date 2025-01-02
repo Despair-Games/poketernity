@@ -23,7 +23,7 @@ describe("Moves - Electrify", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset(Moves.ELECTRIFY)
       .battleType("single")
       .startingLevel(100)
@@ -34,13 +34,13 @@ describe("Moves - Electrify", () => {
   });
 
   it("should convert attacks to Electric type", async () => {
-    await game.classicMode.startBattle([Species.EXCADRILL]);
+    await game.classicModeHelper.startBattle([Species.EXCADRILL]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "getMoveType");
 
-    game.move.select(Moves.ELECTRIFY);
+    game.moveHelper.select(Moves.ELECTRIFY);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
@@ -50,15 +50,15 @@ describe("Moves - Electrify", () => {
   });
 
   it("should override type changes from abilities", async () => {
-    game.override.enemyAbility(Abilities.PIXILATE);
+    game.overridesHelper.enemyAbility(Abilities.PIXILATE);
 
-    await game.classicMode.startBattle([Species.EXCADRILL]);
+    await game.classicModeHelper.startBattle([Species.EXCADRILL]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(enemyPokemon, "getMoveType");
 
-    game.move.select(Moves.ELECTRIFY);
+    game.moveHelper.select(Moves.ELECTRIFY);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 

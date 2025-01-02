@@ -25,7 +25,7 @@ describe("Moves - Solar Beam", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset(Moves.SOLAR_BEAM)
       .battleType("single")
       .startingLevel(100)
@@ -36,12 +36,12 @@ describe("Moves - Solar Beam", () => {
   });
 
   it("should deal damage in two turns if no weather is active", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.SOLAR_BEAM);
+    game.moveHelper.select(Moves.SOLAR_BEAM);
 
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(playerPokemon.getTag(BattlerTagType.CHARGING)).toBeDefined();
@@ -62,14 +62,14 @@ describe("Moves - Solar Beam", () => {
     { weatherType: WeatherType.SUNNY, name: "Sun" },
     { weatherType: WeatherType.HARSH_SUN, name: "Harsh Sun" },
   ])("should deal damage in one turn if $name is active", async ({ weatherType }) => {
-    game.override.weather(weatherType);
+    game.overridesHelper.weather(weatherType);
 
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.SOLAR_BEAM);
+    game.moveHelper.select(Moves.SOLAR_BEAM);
 
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(playerPokemon.getTag(BattlerTagType.CHARGING)).toBeUndefined();
@@ -85,15 +85,15 @@ describe("Moves - Solar Beam", () => {
     { weatherType: WeatherType.RAIN, name: "Rain" },
     { weatherType: WeatherType.HEAVY_RAIN, name: "Heavy Rain" },
   ])("should have its power halved in $name", async ({ weatherType }) => {
-    game.override.weather(weatherType);
+    game.overridesHelper.weather(weatherType);
 
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     const solarBeam = allMoves[Moves.SOLAR_BEAM];
 
     vi.spyOn(solarBeam, "calculateBattlePower");
 
-    game.move.select(Moves.SOLAR_BEAM);
+    game.moveHelper.select(Moves.SOLAR_BEAM);
 
     await game.phaseInterceptor.to("TurnEndPhase");
     await game.phaseInterceptor.to("TurnEndPhase");

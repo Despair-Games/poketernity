@@ -29,7 +29,7 @@ describe("Items - Temporary Stat Stage Boosters", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemySpecies(Species.SHUCKLE)
       .enemyMoveset(Moves.SPLASH)
@@ -39,13 +39,13 @@ describe("Items - Temporary Stat Stage Boosters", () => {
   });
 
   it("should provide a x1.3 stat stage multiplier", async () => {
-    await game.classicMode.startBattle([Species.PIKACHU]);
+    await game.classicModeHelper.startBattle([Species.PIKACHU]);
 
     const partyMember = game.scene.getPlayerPokemon()!;
 
     vi.spyOn(partyMember, "getStatStageMultiplier");
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
 
     await game.phaseInterceptor.runFrom("EnemyCommandPhase").to(TurnEndPhase);
 
@@ -53,20 +53,22 @@ describe("Items - Temporary Stat Stage Boosters", () => {
   }, 20000);
 
   it("should increase existing ACC stat stage by 1 for X_ACCURACY only", async () => {
-    game.override.startingModifier([{ name: "TEMP_STAT_STAGE_BOOSTER", type: Stat.ACC }]).ability(Abilities.SIMPLE);
+    game.overridesHelper
+      .startingModifier([{ name: "TEMP_STAT_STAGE_BOOSTER", type: Stat.ACC }])
+      .ability(Abilities.SIMPLE);
 
-    await game.classicMode.startBattle([Species.PIKACHU]);
+    await game.classicModeHelper.startBattle([Species.PIKACHU]);
 
     const partyMember = game.scene.getPlayerPokemon()!;
 
     vi.spyOn(partyMember, "getAccuracyMultiplier");
 
     // Raise ACC by +2 stat stages
-    game.move.select(Moves.HONE_CLAWS);
+    game.moveHelper.select(Moves.HONE_CLAWS);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -75,18 +77,18 @@ describe("Items - Temporary Stat Stage Boosters", () => {
   }, 20000);
 
   it("should increase existing stat stage multiplier by 3/10 for the rest of the boosters", async () => {
-    await game.classicMode.startBattle([Species.PIKACHU]);
+    await game.classicModeHelper.startBattle([Species.PIKACHU]);
 
     const partyMember = game.scene.getPlayerPokemon()!;
 
     vi.spyOn(partyMember, "getStatStageMultiplier");
 
     // Raise ATK by +1 stat stage
-    game.move.select(Moves.HONE_CLAWS);
+    game.moveHelper.select(Moves.HONE_CLAWS);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -95,12 +97,12 @@ describe("Items - Temporary Stat Stage Boosters", () => {
   }, 20000);
 
   it("should not increase past maximum stat stage multiplier", async () => {
-    game.override.startingModifier([
+    game.overridesHelper.startingModifier([
       { name: "TEMP_STAT_STAGE_BOOSTER", type: Stat.ACC },
       { name: "TEMP_STAT_STAGE_BOOSTER", type: Stat.ATK },
     ]);
 
-    await game.classicMode.startBattle([Species.PIKACHU]);
+    await game.classicModeHelper.startBattle([Species.PIKACHU]);
 
     const partyMember = game.scene.getPlayerPokemon()!;
 
@@ -110,7 +112,7 @@ describe("Items - Temporary Stat Stage Boosters", () => {
     // Set all stat stages to 6
     vi.spyOn(partyMember.summonData, "statStages", "get").mockReturnValue(new Array(BATTLE_STATS.length).fill(6));
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -119,11 +121,11 @@ describe("Items - Temporary Stat Stage Boosters", () => {
   }, 20000);
 
   it("should renew how many battles are left of existing booster when picking up new booster of same type", async () => {
-    game.override.startingLevel(200).itemRewards([{ name: "TEMP_STAT_STAGE_BOOSTER", type: Stat.ATK }]);
+    game.overridesHelper.startingLevel(200).itemRewards([{ name: "TEMP_STAT_STAGE_BOOSTER", type: Stat.ATK }]);
 
-    await game.classicMode.startBattle([Species.PIKACHU]);
+    await game.classicModeHelper.startBattle([Species.PIKACHU]);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.doKillOpponents();
 

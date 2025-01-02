@@ -27,7 +27,7 @@ describe("Moves - Heal Block", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.ABSORB, Moves.WISH, Moves.SPLASH, Moves.AQUA_RING])
       .enemyMoveset(Moves.HEAL_BLOCK)
       .ability(Abilities.NO_GUARD)
@@ -37,14 +37,14 @@ describe("Moves - Heal Block", () => {
   });
 
   it("should block the usage of damaging moves that heal the user", async () => {
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    await game.classicModeHelper.startBattle([Species.CHARIZARD]);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
     player.damageAndUpdate(enemy.getMaxHp() - 1);
 
-    game.move.select(Moves.ABSORB);
+    game.moveHelper.select(Moves.ABSORB);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -53,18 +53,18 @@ describe("Moves - Heal Block", () => {
   });
 
   it("should stop delayed heals, such as from Wish", async () => {
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    await game.classicModeHelper.startBattle([Species.CHARIZARD]);
 
     const player = game.scene.getPlayerPokemon()!;
 
     player.damageAndUpdate(player.getMaxHp() - 1);
 
-    game.move.select(Moves.WISH);
+    game.moveHelper.select(Moves.WISH);
     await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(game.scene.arena.getTagOnSide(ArenaTagType.WISH, ArenaTagSide.PLAYER)).toBeDefined();
     while (game.scene.arena.getTagOnSide(ArenaTagType.WISH, ArenaTagSide.PLAYER)) {
-      game.move.select(Moves.SPLASH);
+      game.moveHelper.select(Moves.SPLASH);
       await game.phaseInterceptor.to("TurnEndPhase");
     }
 
@@ -72,28 +72,28 @@ describe("Moves - Heal Block", () => {
   });
 
   it("should prevent Grassy Terrain from restoring HP", async () => {
-    game.override.enemyAbility(Abilities.GRASSY_SURGE);
+    game.overridesHelper.enemyAbility(Abilities.GRASSY_SURGE);
 
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    await game.classicModeHelper.startBattle([Species.CHARIZARD]);
 
     const player = game.scene.getPlayerPokemon()!;
 
     player.damageAndUpdate(player.getMaxHp() - 1);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(player.hp).toBe(1);
   });
 
   it("should prevent healing from heal-over-time moves", async () => {
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    await game.classicModeHelper.startBattle([Species.CHARIZARD]);
 
     const player = game.scene.getPlayerPokemon()!;
 
     player.damageAndUpdate(player.getMaxHp() - 1);
 
-    game.move.select(Moves.AQUA_RING);
+    game.moveHelper.select(Moves.AQUA_RING);
     await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(player.getTag(BattlerTagType.AQUA_RING)).toBeDefined();
@@ -101,29 +101,29 @@ describe("Moves - Heal Block", () => {
   });
 
   it("should prevent abilities from restoring HP", async () => {
-    game.override.weather(WeatherType.RAIN).ability(Abilities.RAIN_DISH);
+    game.overridesHelper.weather(WeatherType.RAIN).ability(Abilities.RAIN_DISH);
 
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    await game.classicModeHelper.startBattle([Species.CHARIZARD]);
 
     const player = game.scene.getPlayerPokemon()!;
 
     player.damageAndUpdate(player.getMaxHp() - 1);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(player.hp).toBe(1);
   });
 
   it("should stop healing from items", async () => {
-    game.override.startingHeldItems([{ name: "LEFTOVERS" }]);
+    game.overridesHelper.startingHeldItems([{ name: "LEFTOVERS" }]);
 
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    await game.classicModeHelper.startBattle([Species.CHARIZARD]);
 
     const player = game.scene.getPlayerPokemon()!;
     player.damageAndUpdate(player.getMaxHp() - 1);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(player.hp).toBe(1);

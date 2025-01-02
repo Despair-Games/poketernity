@@ -28,7 +28,7 @@ describe("Moves - Scale Shot", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.SCALE_SHOT])
       .battleType("single")
       .disableCrits()
@@ -39,11 +39,11 @@ describe("Moves - Scale Shot", () => {
   });
 
   it("applies stat changes after last hit", async () => {
-    game.override.enemySpecies(Species.FORRETRESS);
+    game.overridesHelper.enemySpecies(Species.FORRETRESS);
 
-    await game.classicMode.startBattle([Species.MINCCINO]);
+    await game.classicModeHelper.startBattle([Species.MINCCINO]);
     const minccino = game.scene.getPlayerPokemon()!;
-    game.move.select(Moves.SCALE_SHOT);
+    game.moveHelper.select(Moves.SCALE_SHOT);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
@@ -65,14 +65,14 @@ describe("Moves - Scale Shot", () => {
     const moveToCheck = allMoves[Moves.SCALE_SHOT];
     const basePower = moveToCheck.power;
 
-    game.override.enemySpecies(Species.WOBBUFFET);
+    game.overridesHelper.enemySpecies(Species.WOBBUFFET);
 
     vi.spyOn(moveToCheck, "calculateBattlePower");
 
-    await game.classicMode.startBattle([Species.MINCCINO]);
+    await game.classicModeHelper.startBattle([Species.MINCCINO]);
     const minccino = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SCALE_SHOT);
+    game.moveHelper.select(Moves.SCALE_SHOT);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     //effect not nullified by sheer force

@@ -24,7 +24,7 @@ describe("Moves - Encore", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.SPLASH, Moves.ENCORE])
       .ability(Abilities.BALL_FETCH)
       .battleType("single")
@@ -37,17 +37,17 @@ describe("Moves - Encore", () => {
   });
 
   it("should prevent the target from using any move except the last used move", async () => {
-    await game.classicMode.startBattle([Species.SNORLAX]);
+    await game.classicModeHelper.startBattle([Species.SNORLAX]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.ENCORE);
+    game.moveHelper.select(Moves.ENCORE);
     await game.forceEnemyMove(Moves.SPLASH);
 
     await game.toNextTurn();
     expect(enemyPokemon.getTag(BattlerTagType.ENCORE)).toBeDefined();
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     // The enemy AI would normally be inclined to use Tackle, but should be
     // forced into using Splash.
     await game.phaseInterceptor.to("BerryPhase", false);
@@ -63,20 +63,20 @@ describe("Moves - Encore", () => {
       { moveId: Moves.ENCORE, name: "Encore", delay: false },
       { moveId: Moves.STRUGGLE, name: "Struggle", delay: false },
     ])("$name", async ({ moveId, delay }) => {
-      game.override.enemyMoveset(moveId);
+      game.overridesHelper.enemyMoveset(moveId);
 
-      await game.classicMode.startBattle([Species.SNORLAX]);
+      await game.classicModeHelper.startBattle([Species.SNORLAX]);
 
       const playerPokemon = game.scene.getPlayerPokemon()!;
       const enemyPokemon = game.scene.getEnemyPokemon()!;
 
       if (delay) {
-        game.move.select(Moves.SPLASH);
+        game.moveHelper.select(Moves.SPLASH);
         await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
         await game.toNextTurn();
       }
 
-      game.move.select(Moves.ENCORE);
+      game.moveHelper.select(Moves.ENCORE);
 
       const turnOrder = delay ? [BattlerIndex.PLAYER, BattlerIndex.ENEMY] : [BattlerIndex.ENEMY, BattlerIndex.PLAYER];
       await game.setTurnOrder(turnOrder);
@@ -89,23 +89,23 @@ describe("Moves - Encore", () => {
 
   it("Pokemon under both Encore and Torment should alternate between Struggle and restricted move", async () => {
     const turnOrder = [BattlerIndex.ENEMY, BattlerIndex.PLAYER];
-    game.override.moveset([Moves.ENCORE, Moves.TORMENT, Moves.SPLASH]);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    game.overridesHelper.moveset([Moves.ENCORE, Moves.TORMENT, Moves.SPLASH]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
-    game.move.select(Moves.ENCORE);
+    game.moveHelper.select(Moves.ENCORE);
     await game.setTurnOrder(turnOrder);
     await game.phaseInterceptor.to("BerryPhase");
     expect(enemyPokemon?.getTag(BattlerTagType.ENCORE)).toBeDefined();
 
     await game.toNextTurn();
-    game.move.select(Moves.TORMENT);
+    game.moveHelper.select(Moves.TORMENT);
     await game.setTurnOrder(turnOrder);
     await game.phaseInterceptor.to("BerryPhase");
     expect(enemyPokemon?.getTag(BattlerTagType.TORMENT)).toBeDefined();
 
     await game.toNextTurn();
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.setTurnOrder(turnOrder);
     await game.phaseInterceptor.to("BerryPhase");
     const lastMove = enemyPokemon?.getLastXMoves()[0];

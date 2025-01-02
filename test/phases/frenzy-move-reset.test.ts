@@ -24,7 +24,7 @@ describe("Frenzy Move Reset", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .disableCrits()
       .starterSpecies(Species.MAGIKARP)
@@ -50,20 +50,20 @@ describe("Frenzy Move Reset", () => {
    *
    */
   it("should cancel frenzy move if move fails turn 2", async () => {
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.THRASH);
+    game.moveHelper.select(Moves.THRASH);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.move.forceStatusActivation(false);
+    await game.moveHelper.forceStatusActivation(false);
     await game.toNextTurn();
 
     expect(playerPokemon.summonData.moveQueue.length).toBe(2);
     expect(playerPokemon.summonData.tags.some((tag) => tag.tagType === BattlerTagType.FRENZY)).toBe(true);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.move.forceStatusActivation(true);
+    await game.moveHelper.forceStatusActivation(true);
     await game.toNextTurn();
 
     expect(playerPokemon.summonData.moveQueue.length).toBe(0);

@@ -33,20 +33,20 @@ describe("Moves - Reflect", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     globalScene = game.scene;
-    game.override.battleType("single");
-    game.override.ability(Abilities.NONE);
-    game.override.moveset([Moves.ABSORB, Moves.ROCK_SLIDE, Moves.TACKLE]);
-    game.override.enemyLevel(100);
-    game.override.enemySpecies(Species.MAGIKARP);
-    game.override.enemyMoveset([Moves.REFLECT, Moves.REFLECT, Moves.REFLECT, Moves.REFLECT]);
-    game.override.disableCrits();
+    game.overridesHelper.battleType("single");
+    game.overridesHelper.ability(Abilities.NONE);
+    game.overridesHelper.moveset([Moves.ABSORB, Moves.ROCK_SLIDE, Moves.TACKLE]);
+    game.overridesHelper.enemyLevel(100);
+    game.overridesHelper.enemySpecies(Species.MAGIKARP);
+    game.overridesHelper.enemyMoveset([Moves.REFLECT, Moves.REFLECT, Moves.REFLECT, Moves.REFLECT]);
+    game.overridesHelper.disableCrits();
   });
 
   it("reduces damage of physical attacks by half in a single battle", async () => {
     const moveToUse = Moves.TACKLE;
     await game.startBattle([Species.SHUCKLE]);
 
-    game.move.select(moveToUse);
+    game.moveHelper.select(moveToUse);
 
     await game.phaseInterceptor.to(TurnEndPhase);
     const mockedDmg = getMockedMoveDamage(
@@ -59,13 +59,13 @@ describe("Moves - Reflect", () => {
   });
 
   it("reduces damage of physical attacks by a third in a double battle", async () => {
-    game.override.battleType("double");
+    game.overridesHelper.battleType("double");
 
     const moveToUse = Moves.ROCK_SLIDE;
     await game.startBattle([Species.SHUCKLE, Species.SHUCKLE]);
 
-    game.move.select(moveToUse);
-    game.move.select(moveToUse, 1);
+    game.moveHelper.select(moveToUse);
+    game.moveHelper.select(moveToUse, 1);
 
     await game.phaseInterceptor.to(TurnEndPhase);
     const mockedDmg = getMockedMoveDamage(
@@ -81,7 +81,7 @@ describe("Moves - Reflect", () => {
     const moveToUse = Moves.ABSORB;
     await game.startBattle([Species.SHUCKLE]);
 
-    game.move.select(moveToUse);
+    game.moveHelper.select(moveToUse);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 

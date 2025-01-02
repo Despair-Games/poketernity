@@ -21,7 +21,7 @@ describe("Moves - Power Shift", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.POWER_SHIFT, Moves.BULK_UP])
       .battleType("single")
       .ability(Abilities.BALL_FETCH)
@@ -30,14 +30,14 @@ describe("Moves - Power Shift", () => {
   });
 
   it("switches the user's raw Attack stat with its raw Defense stat", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
     playerPokemon.setStat(Stat.ATK, 10, false);
     playerPokemon.setStat(Stat.DEF, 20, false);
 
-    game.move.select(Moves.BULK_UP);
+    game.moveHelper.select(Moves.BULK_UP);
 
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -47,7 +47,7 @@ describe("Moves - Power Shift", () => {
 
     await game.toNextTurn();
 
-    game.move.select(Moves.POWER_SHIFT);
+    game.moveHelper.select(Moves.POWER_SHIFT);
 
     await game.phaseInterceptor.to("TurnEndPhase");
 

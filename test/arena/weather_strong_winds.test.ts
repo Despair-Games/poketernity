@@ -24,68 +24,68 @@ describe("Weather - Strong Winds", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("single");
-    game.override.startingLevel(10);
-    game.override.enemySpecies(Species.TAILLOW);
-    game.override.enemyAbility(Abilities.DELTA_STREAM);
-    game.override.moveset([Moves.THUNDERBOLT, Moves.ICE_BEAM, Moves.ROCK_SLIDE]);
+    game.overridesHelper.battleType("single");
+    game.overridesHelper.startingLevel(10);
+    game.overridesHelper.enemySpecies(Species.TAILLOW);
+    game.overridesHelper.enemyAbility(Abilities.DELTA_STREAM);
+    game.overridesHelper.moveset([Moves.THUNDERBOLT, Moves.ICE_BEAM, Moves.ROCK_SLIDE]);
   });
 
   it("electric type move is not very effective on Rayquaza", async () => {
-    game.override.enemySpecies(Species.RAYQUAZA);
+    game.overridesHelper.enemySpecies(Species.RAYQUAZA);
 
-    await game.classicMode.startBattle([Species.PIKACHU]);
+    await game.classicModeHelper.startBattle([Species.PIKACHU]);
     const pikachu = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.THUNDERBOLT);
+    game.moveHelper.select(Moves.THUNDERBOLT);
 
     await game.phaseInterceptor.to(TurnStartPhase);
     expect(enemy.getAttackTypeEffectiveness(allMoves[Moves.THUNDERBOLT].type, pikachu)).toBe(0.5);
   });
 
   it("electric type move is neutral for flying type pokemon", async () => {
-    await game.classicMode.startBattle([Species.PIKACHU]);
+    await game.classicModeHelper.startBattle([Species.PIKACHU]);
     const pikachu = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.THUNDERBOLT);
+    game.moveHelper.select(Moves.THUNDERBOLT);
 
     await game.phaseInterceptor.to(TurnStartPhase);
     expect(enemy.getAttackTypeEffectiveness(allMoves[Moves.THUNDERBOLT].type, pikachu)).toBe(1);
   });
 
   it("ice type move is neutral for flying type pokemon", async () => {
-    await game.classicMode.startBattle([Species.PIKACHU]);
+    await game.classicModeHelper.startBattle([Species.PIKACHU]);
     const pikachu = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.ICE_BEAM);
+    game.moveHelper.select(Moves.ICE_BEAM);
 
     await game.phaseInterceptor.to(TurnStartPhase);
     expect(enemy.getAttackTypeEffectiveness(allMoves[Moves.ICE_BEAM].type, pikachu)).toBe(1);
   });
 
   it("rock type move is neutral for flying type pokemon", async () => {
-    await game.classicMode.startBattle([Species.PIKACHU]);
+    await game.classicModeHelper.startBattle([Species.PIKACHU]);
     const pikachu = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.ROCK_SLIDE);
+    game.moveHelper.select(Moves.ROCK_SLIDE);
 
     await game.phaseInterceptor.to(TurnStartPhase);
     expect(enemy.getAttackTypeEffectiveness(allMoves[Moves.ROCK_SLIDE].type, pikachu)).toBe(1);
   });
 
   it("weather goes away when last trainer pokemon dies to indirect damage", async () => {
-    game.override.enemyStatusEffect(StatusEffect.POISON);
+    game.overridesHelper.enemyStatusEffect(StatusEffect.POISON);
 
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     const enemy = game.scene.getEnemyPokemon()!;
     enemy.hp = 1;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(game.scene.arena.weather?.weatherType).toBeUndefined();

@@ -26,7 +26,7 @@ describe("Abilities - Disguise", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemySpecies(Species.MIMIKYU)
       .enemyMoveset(Moves.SPLASH)
@@ -35,7 +35,7 @@ describe("Abilities - Disguise", () => {
   });
 
   it("takes no damage from attacking move and transforms to Busted form, takes 1/8 max HP damage from the disguise breaking", async () => {
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const mimikyu = game.scene.getEnemyPokemon()!;
     const maxHp = mimikyu.getMaxHp();
@@ -43,7 +43,7 @@ describe("Abilities - Disguise", () => {
 
     expect(mimikyu.formIndex).toBe(disguisedForm);
 
-    game.move.select(Moves.SHADOW_SNEAK);
+    game.moveHelper.select(Moves.SHADOW_SNEAK);
 
     await game.phaseInterceptor.to("MoveEndPhase");
 
@@ -52,13 +52,13 @@ describe("Abilities - Disguise", () => {
   });
 
   it("doesn't break disguise when attacked with ineffective move", async () => {
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const mimikyu = game.scene.getEnemyPokemon()!;
 
     expect(mimikyu.formIndex).toBe(disguisedForm);
 
-    game.move.select(Moves.VACUUM_WAVE);
+    game.moveHelper.select(Moves.VACUUM_WAVE);
 
     await game.phaseInterceptor.to("MoveEndPhase");
 
@@ -66,9 +66,9 @@ describe("Abilities - Disguise", () => {
   });
 
   it("takes no damage from the first hit of a multihit move and transforms to Busted form, then takes damage from the second hit", async () => {
-    game.override.moveset([Moves.SURGING_STRIKES]);
-    game.override.enemyLevel(5);
-    await game.classicMode.startBattle();
+    game.overridesHelper.moveset([Moves.SURGING_STRIKES]);
+    game.overridesHelper.enemyLevel(5);
+    await game.classicModeHelper.startBattle();
 
     const mimikyu = game.scene.getEnemyPokemon()!;
     const maxHp = mimikyu.getMaxHp();
@@ -76,7 +76,7 @@ describe("Abilities - Disguise", () => {
 
     expect(mimikyu.formIndex).toBe(disguisedForm);
 
-    game.move.select(Moves.SURGING_STRIKES);
+    game.moveHelper.select(Moves.SURGING_STRIKES);
 
     // First hit
     await game.phaseInterceptor.to("MoveEffectPhase");
@@ -90,12 +90,12 @@ describe("Abilities - Disguise", () => {
   });
 
   it("takes effects from status moves and damage from status effects", async () => {
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const mimikyu = game.scene.getEnemyPokemon()!;
     expect(mimikyu.hp).toBe(mimikyu.getMaxHp());
 
-    game.move.select(Moves.TOXIC_THREAD);
+    game.moveHelper.select(Moves.TOXIC_THREAD);
 
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -106,16 +106,16 @@ describe("Abilities - Disguise", () => {
   });
 
   it("persists form change when switched out", async () => {
-    game.override.enemyMoveset([Moves.SHADOW_SNEAK]);
-    game.override.starterSpecies(0);
+    game.overridesHelper.enemyMoveset([Moves.SHADOW_SNEAK]);
+    game.overridesHelper.starterSpecies(0);
 
-    await game.classicMode.startBattle([Species.MIMIKYU, Species.FURRET]);
+    await game.classicModeHelper.startBattle([Species.MIMIKYU, Species.FURRET]);
 
     const mimikyu = game.scene.getPlayerPokemon()!;
     const maxHp = mimikyu.getMaxHp();
     const disguiseDamage = toDmgValue(maxHp / 8);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -131,16 +131,16 @@ describe("Abilities - Disguise", () => {
   });
 
   it("persists form change when wave changes with no arena reset", async () => {
-    game.override.starterSpecies(0);
-    game.override.starterForms({
+    game.overridesHelper.starterSpecies(0);
+    game.overridesHelper.starterForms({
       [Species.MIMIKYU]: bustedForm,
     });
-    await game.classicMode.startBattle([Species.FURRET, Species.MIMIKYU]);
+    await game.classicModeHelper.startBattle([Species.FURRET, Species.MIMIKYU]);
 
     const mimikyu = game.scene.getPlayerParty()[1]!;
     expect(mimikyu.formIndex).toBe(bustedForm);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.doKillOpponents();
     await game.toNextWave();
 
@@ -148,19 +148,19 @@ describe("Abilities - Disguise", () => {
   });
 
   it("reverts to Disguised form on arena reset", async () => {
-    game.override.startingWave(4);
-    game.override.starterSpecies(Species.MIMIKYU);
-    game.override.starterForms({
+    game.overridesHelper.startingWave(4);
+    game.overridesHelper.starterSpecies(Species.MIMIKYU);
+    game.overridesHelper.starterForms({
       [Species.MIMIKYU]: bustedForm,
     });
 
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const mimikyu = game.scene.getPlayerPokemon()!;
 
     expect(mimikyu.formIndex).toBe(bustedForm);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.doKillOpponents();
     await game.toNextWave();
 
@@ -168,23 +168,23 @@ describe("Abilities - Disguise", () => {
   });
 
   it("reverts to Disguised form on biome change when fainted", async () => {
-    game.override.startingWave(10);
-    game.override.starterSpecies(0);
-    game.override.starterForms({
+    game.overridesHelper.startingWave(10);
+    game.overridesHelper.starterSpecies(0);
+    game.overridesHelper.starterForms({
       [Species.MIMIKYU]: bustedForm,
     });
 
-    await game.classicMode.startBattle([Species.MIMIKYU, Species.FURRET]);
+    await game.classicModeHelper.startBattle([Species.MIMIKYU, Species.FURRET]);
 
     const mimikyu1 = game.scene.getPlayerPokemon()!;
 
     expect(mimikyu1.formIndex).toBe(bustedForm);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.killPokemon(mimikyu1);
     game.doSelectPartyPokemon(1);
     await game.toNextTurn();
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.doKillOpponents();
     await game.phaseInterceptor.to("PartyHealPhase");
 
@@ -192,13 +192,13 @@ describe("Abilities - Disguise", () => {
   });
 
   it("doesn't faint twice when fainting due to Disguise break damage, nor prevent faint from Disguise break damage if using Endure", async () => {
-    game.override.enemyMoveset([Moves.ENDURE]);
-    await game.classicMode.startBattle();
+    game.overridesHelper.enemyMoveset([Moves.ENDURE]);
+    await game.classicModeHelper.startBattle();
 
     const mimikyu = game.scene.getEnemyPokemon()!;
     mimikyu.hp = 1;
 
-    game.move.select(Moves.SHADOW_SNEAK);
+    game.moveHelper.select(Moves.SHADOW_SNEAK);
     await game.toNextWave();
 
     expect(game.scene.getCurrentPhase()?.constructor.name).toBe("CommandPhase");
@@ -206,16 +206,16 @@ describe("Abilities - Disguise", () => {
   });
 
   it("activates when Aerilate circumvents immunity to the move's base type", async () => {
-    game.override.ability(Abilities.AERILATE);
-    game.override.moveset([Moves.TACKLE]);
+    game.overridesHelper.ability(Abilities.AERILATE);
+    game.overridesHelper.moveset([Moves.TACKLE]);
 
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const mimikyu = game.scene.getEnemyPokemon()!;
     const maxHp = mimikyu.getMaxHp();
     const disguiseDamage = toDmgValue(maxHp / 8);
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
 
     await game.phaseInterceptor.to("MoveEndPhase");
 
@@ -224,10 +224,10 @@ describe("Abilities - Disguise", () => {
   });
 
   it("doesn't trigger if user is behind a substitute", async () => {
-    game.override.enemyMoveset(Moves.SUBSTITUTE).moveset(Moves.POWER_TRIP);
-    await game.classicMode.startBattle();
+    game.overridesHelper.enemyMoveset(Moves.SUBSTITUTE).moveset(Moves.POWER_TRIP);
+    await game.classicModeHelper.startBattle();
 
-    game.move.select(Moves.POWER_TRIP);
+    game.moveHelper.select(Moves.POWER_TRIP);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 

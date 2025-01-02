@@ -24,7 +24,7 @@ describe("Form Change Phase", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.SPLASH])
       .ability(Abilities.BALL_FETCH)
       .battleType("single")
@@ -35,7 +35,7 @@ describe("Form Change Phase", () => {
   });
 
   it("Zacian should successfully change into Crowned form", async () => {
-    await game.classicMode.startBattle([Species.ZACIAN]);
+    await game.classicModeHelper.startBattle([Species.ZACIAN]);
 
     // Before the form change: Should be Hero form
     const zacian = game.scene.getPlayerParty()[0];
@@ -48,7 +48,7 @@ describe("Form Change Phase", () => {
     const rustedSword = rustedSwordType.newModifier(zacian);
     game.scene.addModifier(rustedSword);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     // After the form change: Should be Crowned form

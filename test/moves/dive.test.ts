@@ -25,7 +25,7 @@ describe("Moves - Dive", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset(Moves.DIVE)
       .battleType("single")
       .startingLevel(100)
@@ -36,12 +36,12 @@ describe("Moves - Dive", () => {
   });
 
   it("should make the user semi-invulnerable, then attack over 2 turns", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.DIVE);
+    game.moveHelper.select(Moves.DIVE);
 
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(playerPokemon.getTag(BattlerTagType.UNDERWATER)).toBeDefined();
@@ -60,14 +60,14 @@ describe("Moves - Dive", () => {
   });
 
   it("should not allow the user to evade attacks from Pokemon with No Guard", async () => {
-    game.override.enemyAbility(Abilities.NO_GUARD);
+    game.overridesHelper.enemyAbility(Abilities.NO_GUARD);
 
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.DIVE);
+    game.moveHelper.select(Moves.DIVE);
 
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(playerPokemon.hp).toBeLessThan(playerPokemon.getMaxHp());
@@ -75,13 +75,13 @@ describe("Moves - Dive", () => {
   });
 
   it("should not expend PP when the attack phase is cancelled", async () => {
-    game.override.enemyAbility(Abilities.NO_GUARD).enemyMoveset(Moves.SPORE);
+    game.overridesHelper.enemyAbility(Abilities.NO_GUARD).enemyMoveset(Moves.SPORE);
 
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.DIVE);
+    game.moveHelper.select(Moves.DIVE);
 
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(playerPokemon.getTag(BattlerTagType.UNDERWATER)).toBeUndefined();
@@ -92,14 +92,14 @@ describe("Moves - Dive", () => {
   });
 
   it("should trigger on-contact post-defend ability effects", async () => {
-    game.override.enemyAbility(Abilities.ROUGH_SKIN).enemyMoveset(Moves.SPLASH);
+    game.overridesHelper.enemyAbility(Abilities.ROUGH_SKIN).enemyMoveset(Moves.SPLASH);
 
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.DIVE);
+    game.moveHelper.select(Moves.DIVE);
 
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -109,14 +109,14 @@ describe("Moves - Dive", () => {
   });
 
   it("should cancel attack after Harsh Sunlight is set", async () => {
-    game.override.enemyMoveset(Moves.SPLASH);
+    game.overridesHelper.enemyMoveset(Moves.SPLASH);
 
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.DIVE);
+    game.moveHelper.select(Moves.DIVE);
 
     await game.phaseInterceptor.to("TurnEndPhase");
     await game.phaseInterceptor.to("TurnStartPhase", false);

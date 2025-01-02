@@ -25,12 +25,12 @@ describe("Moves - Steamroller", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.moveset([Moves.STEAMROLLER]).battleType("single").enemyAbility(Abilities.BALL_FETCH);
+    game.overridesHelper.moveset([Moves.STEAMROLLER]).battleType("single").enemyAbility(Abilities.BALL_FETCH);
   });
 
   it("should always hit a minimzed target with double damage", async () => {
-    game.override.enemySpecies(Species.DITTO).enemyMoveset(Moves.MINIMIZE);
-    await game.classicMode.startBattle([Species.IRON_BOULDER]);
+    game.overridesHelper.enemySpecies(Species.DITTO).enemyMoveset(Moves.MINIMIZE);
+    await game.classicModeHelper.startBattle([Species.IRON_BOULDER]);
 
     const ditto = game.scene.getEnemyPokemon()!;
     vi.spyOn(ditto, "getAttackDamage");
@@ -40,11 +40,11 @@ describe("Moves - Steamroller", () => {
     const ironBoulder = game.scene.getPlayerPokemon()!;
     vi.spyOn(ironBoulder, "getAccuracyMultiplier");
     // Turn 1
-    game.move.select(Moves.STEAMROLLER);
+    game.moveHelper.select(Moves.STEAMROLLER);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toNextTurn();
     // Turn 2
-    game.move.select(Moves.STEAMROLLER);
+    game.moveHelper.select(Moves.STEAMROLLER);
     await game.toNextTurn();
 
     const [dmgCalcTurn1, dmgCalcTurn2]: DamageCalculationResult[] = vi

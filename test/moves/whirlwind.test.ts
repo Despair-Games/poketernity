@@ -27,7 +27,7 @@ describe("Moves - Whirlwind", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .moveset(Moves.SPLASH)
       .enemyAbility(Abilities.BALL_FETCH)
@@ -40,12 +40,12 @@ describe("Moves - Whirlwind", () => {
     { move: Moves.BOUNCE, name: "Bounce" },
     { move: Moves.SKY_DROP, name: "Sky Drop" },
   ])("should not hit a flying target: $name (=$move)", async ({ move }) => {
-    game.override.moveset([move]);
-    await game.classicMode.startBattle([Species.STARAPTOR]);
+    game.overridesHelper.moveset([move]);
+    await game.classicModeHelper.startBattle([Species.STARAPTOR]);
 
     const staraptor = game.scene.getPlayerPokemon()!;
 
-    game.move.select(move);
+    game.moveHelper.select(move);
     await game.forceEnemyMove(Moves.WHIRLWIND);
 
     await game.phaseInterceptor.to("BerryPhase", false);
@@ -55,7 +55,7 @@ describe("Moves - Whirlwind", () => {
   });
 
   it("should force switches randomly", async () => {
-    await game.classicMode.startBattle([Species.BULBASAUR, Species.CHARMANDER, Species.SQUIRTLE]);
+    await game.classicModeHelper.startBattle([Species.BULBASAUR, Species.CHARMANDER, Species.SQUIRTLE]);
 
     const [bulbasaur, charmander, squirtle] = game.scene.getPlayerParty();
 
@@ -63,7 +63,7 @@ describe("Moves - Whirlwind", () => {
     vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: number = 0) => {
       return min;
     });
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.WHIRLWIND);
     await game.toNextTurn();
 
@@ -75,7 +75,7 @@ describe("Moves - Whirlwind", () => {
     vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: number = 0) => {
       return min + 1;
     });
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.WHIRLWIND);
     await game.toNextTurn();
 
@@ -86,8 +86,8 @@ describe("Moves - Whirlwind", () => {
 
   it("should not force a switch to a challenge-ineligible Pokemon", async () => {
     // Mono-Water challenge, Eevee is ineligible
-    game.challengeMode.addChallenge(Challenges.SINGLE_TYPE, Type.WATER + 1, 0);
-    await game.challengeMode.startBattle([Species.LAPRAS, Species.EEVEE, Species.TOXAPEX, Species.PRIMARINA]);
+    game.challengeModeHelper.addChallenge(Challenges.SINGLE_TYPE, Type.WATER + 1, 0);
+    await game.challengeModeHelper.startBattle([Species.LAPRAS, Species.EEVEE, Species.TOXAPEX, Species.PRIMARINA]);
 
     const [lapras, eevee, toxapex, primarina] = game.scene.getPlayerParty();
 
@@ -95,7 +95,7 @@ describe("Moves - Whirlwind", () => {
     vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: number = 0) => {
       return min;
     });
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.WHIRLWIND);
     await game.toNextTurn();
 
@@ -106,7 +106,7 @@ describe("Moves - Whirlwind", () => {
   });
 
   it("should not force a switch to a fainted Pokemon", async () => {
-    await game.classicMode.startBattle([Species.LAPRAS, Species.EEVEE, Species.TOXAPEX, Species.PRIMARINA]);
+    await game.classicModeHelper.startBattle([Species.LAPRAS, Species.EEVEE, Species.TOXAPEX, Species.PRIMARINA]);
 
     const [lapras, eevee, toxapex, primarina] = game.scene.getPlayerParty();
 
@@ -114,7 +114,7 @@ describe("Moves - Whirlwind", () => {
     eevee.hp = 0;
     eevee.status = new Status(StatusEffect.FAINT);
     expect(eevee.isFainted()).toBe(true);
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.toNextTurn();
 
@@ -122,7 +122,7 @@ describe("Moves - Whirlwind", () => {
     vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: number = 0) => {
       return min;
     });
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.WHIRLWIND);
     await game.toNextTurn();
 
@@ -133,7 +133,7 @@ describe("Moves - Whirlwind", () => {
   });
 
   it("should not force a switch if there are no available Pokemon to switch into", async () => {
-    await game.classicMode.startBattle([Species.LAPRAS, Species.EEVEE]);
+    await game.classicModeHelper.startBattle([Species.LAPRAS, Species.EEVEE]);
 
     const [lapras, eevee] = game.scene.getPlayerParty();
 
@@ -141,7 +141,7 @@ describe("Moves - Whirlwind", () => {
     eevee.hp = 0;
     eevee.status = new Status(StatusEffect.FAINT);
     expect(eevee.isFainted()).toBe(true);
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.toNextTurn();
 
@@ -149,7 +149,7 @@ describe("Moves - Whirlwind", () => {
     vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: number = 0) => {
       return min;
     });
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.WHIRLWIND);
     await game.toNextTurn();
 

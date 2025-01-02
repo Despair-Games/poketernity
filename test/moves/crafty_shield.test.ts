@@ -26,16 +26,16 @@ describe("Moves - Crafty Shield", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override.battleType("double");
+    game.overridesHelper.battleType("double");
 
-    game.override.moveset([Moves.CRAFTY_SHIELD, Moves.SPLASH, Moves.SWORDS_DANCE]);
+    game.overridesHelper.moveset([Moves.CRAFTY_SHIELD, Moves.SPLASH, Moves.SWORDS_DANCE]);
 
-    game.override.enemySpecies(Species.SNORLAX);
-    game.override.enemyMoveset([Moves.GROWL]);
-    game.override.enemyAbility(Abilities.INSOMNIA);
+    game.overridesHelper.enemySpecies(Species.SNORLAX);
+    game.overridesHelper.enemyMoveset([Moves.GROWL]);
+    game.overridesHelper.enemyAbility(Abilities.INSOMNIA);
 
-    game.override.startingLevel(100);
-    game.override.enemyLevel(100);
+    game.overridesHelper.startingLevel(100);
+    game.overridesHelper.enemyLevel(100);
   });
 
   test("should protect the user and allies from status moves", async () => {
@@ -43,11 +43,11 @@ describe("Moves - Crafty Shield", () => {
 
     const leadPokemon = game.scene.getPlayerField();
 
-    game.move.select(Moves.CRAFTY_SHIELD);
+    game.moveHelper.select(Moves.CRAFTY_SHIELD);
 
     await game.phaseInterceptor.to(CommandPhase);
 
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.phaseInterceptor.to(BerryPhase, false);
 
@@ -55,17 +55,17 @@ describe("Moves - Crafty Shield", () => {
   });
 
   test("should not protect the user and allies from attack moves", async () => {
-    game.override.enemyMoveset([Moves.TACKLE]);
+    game.overridesHelper.enemyMoveset([Moves.TACKLE]);
 
     await game.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
 
     const leadPokemon = game.scene.getPlayerField();
 
-    game.move.select(Moves.CRAFTY_SHIELD);
+    game.moveHelper.select(Moves.CRAFTY_SHIELD);
 
     await game.phaseInterceptor.to(CommandPhase);
 
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.phaseInterceptor.to(BerryPhase, false);
 
@@ -73,18 +73,18 @@ describe("Moves - Crafty Shield", () => {
   });
 
   test("should protect the user and allies from moves that ignore other protection", async () => {
-    game.override.enemySpecies(Species.DUSCLOPS);
-    game.override.enemyMoveset([Moves.CURSE]);
+    game.overridesHelper.enemySpecies(Species.DUSCLOPS);
+    game.overridesHelper.enemyMoveset([Moves.CURSE]);
 
     await game.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
 
     const leadPokemon = game.scene.getPlayerField();
 
-    game.move.select(Moves.CRAFTY_SHIELD);
+    game.moveHelper.select(Moves.CRAFTY_SHIELD);
 
     await game.phaseInterceptor.to(CommandPhase);
 
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.phaseInterceptor.to(BerryPhase, false);
 
@@ -96,11 +96,11 @@ describe("Moves - Crafty Shield", () => {
 
     const leadPokemon = game.scene.getPlayerField();
 
-    game.move.select(Moves.CRAFTY_SHIELD);
+    game.moveHelper.select(Moves.CRAFTY_SHIELD);
 
     await game.phaseInterceptor.to(CommandPhase);
 
-    game.move.select(Moves.SWORDS_DANCE, 1);
+    game.moveHelper.select(Moves.SWORDS_DANCE, 1);
 
     await game.phaseInterceptor.to(BerryPhase, false);
 

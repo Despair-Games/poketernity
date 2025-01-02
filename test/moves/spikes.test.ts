@@ -21,7 +21,7 @@ describe("Moves - Spikes", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
@@ -33,10 +33,10 @@ describe("Moves - Spikes", () => {
   it("should not damage the team that set them", async () => {
     await game.startBattle([Species.MIGHTYENA, Species.POOCHYENA]);
 
-    game.move.select(Moves.SPIKES);
+    game.moveHelper.select(Moves.SPIKES);
     await game.toNextTurn();
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     game.doSwitchPokemon(1);
@@ -50,13 +50,13 @@ describe("Moves - Spikes", () => {
   }, 20000);
 
   it("should damage opposing pokemon that are forced to switch in", async () => {
-    game.override.startingWave(5);
+    game.overridesHelper.startingWave(5);
     await game.startBattle([Species.MIGHTYENA, Species.POOCHYENA]);
 
-    game.move.select(Moves.SPIKES);
+    game.moveHelper.select(Moves.SPIKES);
     await game.toNextTurn();
 
-    game.move.select(Moves.ROAR);
+    game.moveHelper.select(Moves.ROAR);
     await game.toNextTurn();
 
     const enemy = game.scene.getEnemyParty()[0];
@@ -64,13 +64,13 @@ describe("Moves - Spikes", () => {
   }, 20000);
 
   it("should damage opposing pokemon that choose to switch in", async () => {
-    game.override.startingWave(5);
+    game.overridesHelper.startingWave(5);
     await game.startBattle([Species.MIGHTYENA, Species.POOCHYENA]);
 
-    game.move.select(Moves.SPIKES);
+    game.moveHelper.select(Moves.SPIKES);
     await game.toNextTurn();
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     game.forceEnemyToSwitch();
     await game.toNextTurn();
 

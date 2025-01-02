@@ -23,7 +23,7 @@ describe("Moves - Heart Swap", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemyAbility(Abilities.BALL_FETCH)
       .enemyMoveset(Moves.SPLASH)
@@ -34,14 +34,14 @@ describe("Moves - Heart Swap", () => {
   });
 
   it("should swap all of the user's stat stages with the target's", async () => {
-    await game.classicMode.startBattle([Species.MANAPHY]);
+    await game.classicModeHelper.startBattle([Species.MANAPHY]);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
     vi.spyOn(enemy.summonData, "statStages", "get").mockReturnValue(new Array(BATTLE_STATS.length).fill(1));
 
-    game.move.select(Moves.HEART_SWAP);
+    game.moveHelper.select(Moves.HEART_SWAP);
 
     await game.phaseInterceptor.to(MoveEndPhase);
 

@@ -21,7 +21,7 @@ describe("Moves - Foresight", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .disableCrits()
       .enemySpecies(Species.GASTLY)
       .enemyMoveset(Moves.SPLASH)
@@ -35,34 +35,34 @@ describe("Moves - Foresight", () => {
 
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.QUICK_ATTACK);
+    game.moveHelper.select(Moves.QUICK_ATTACK);
     await game.toNextTurn();
     expect(enemy.hp).toBe(enemy.getMaxHp());
 
-    game.move.select(Moves.FORESIGHT);
+    game.moveHelper.select(Moves.FORESIGHT);
     await game.toNextTurn();
-    game.move.select(Moves.QUICK_ATTACK);
+    game.moveHelper.select(Moves.QUICK_ATTACK);
     await game.toNextTurn();
 
     expect(enemy.hp).toBeLessThan(enemy.getMaxHp());
     enemy.hp = enemy.getMaxHp();
 
-    game.move.select(Moves.MACH_PUNCH);
+    game.moveHelper.select(Moves.MACH_PUNCH);
     await game.phaseInterceptor.to(MoveEffectPhase);
 
     expect(enemy.hp).toBeLessThan(enemy.getMaxHp());
   });
 
   it("should ignore target's evasiveness boosts", async () => {
-    game.override.enemyMoveset([Moves.MINIMIZE]);
+    game.overridesHelper.enemyMoveset([Moves.MINIMIZE]);
     await game.startBattle();
 
     const pokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(pokemon, "getAccuracyMultiplier");
 
-    game.move.select(Moves.FORESIGHT);
+    game.moveHelper.select(Moves.FORESIGHT);
     await game.toNextTurn();
-    game.move.select(Moves.QUICK_ATTACK);
+    game.moveHelper.select(Moves.QUICK_ATTACK);
     await game.phaseInterceptor.to(MoveEffectPhase);
 
     expect(pokemon.getAccuracyMultiplier).toHaveReturnedWith(1);

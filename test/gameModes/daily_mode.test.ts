@@ -30,7 +30,7 @@ describe("Daily Mode", () => {
   });
 
   it("should initialize properly", async () => {
-    await game.dailyMode.runToSummon();
+    await game.dailyModeHelper.runToSummon();
 
     const party = game.scene.getPlayerParty();
     expect(party).toHaveLength(3);
@@ -54,7 +54,7 @@ describe("Shop modifications", async () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override
+    game.overridesHelper
       .startingWave(9)
       .startingBiome(Biome.ICE_CAVE)
       .battleType("single")
@@ -62,34 +62,34 @@ describe("Shop modifications", async () => {
       .disableTrainerWaves()
       .moveset([Moves.SPLASH])
       .enemyMoveset(Moves.SPLASH);
-    game.modifiers.addCheck("EVIOLITE").addCheck("MINI_BLACK_HOLE");
+    game.modifierHelper.addCheck("EVIOLITE").addCheck("MINI_BLACK_HOLE");
     vi.spyOn(api.daily, "getSeed").mockResolvedValue("test-seed");
   });
 
   afterEach(() => {
     game.phaseInterceptor.restoreOg();
-    game.modifiers.clearChecks();
+    game.modifierHelper.clearChecks();
   });
 
   it("should not have Eviolite and Mini Black Hole available in Classic if not unlocked", async () => {
-    await game.classicMode.startBattle([Species.BULBASAUR]);
-    game.move.select(Moves.SPLASH);
+    await game.classicModeHelper.startBattle([Species.BULBASAUR]);
+    game.moveHelper.select(Moves.SPLASH);
     await game.doKillOpponents();
     await game.phaseInterceptor.to("BattleEndPhase");
     game.onNextPrompt("SelectModifierPhase", Mode.MODIFIER_SELECT, () => {
       expect(game.scene.ui.getHandler()).toBeInstanceOf(ModifierSelectUiHandler);
-      game.modifiers.testCheck("EVIOLITE", false).testCheck("MINI_BLACK_HOLE", false);
+      game.modifierHelper.testCheck("EVIOLITE", false).testCheck("MINI_BLACK_HOLE", false);
     });
   });
 
   it("should have Eviolite and Mini Black Hole available in Daily", async () => {
-    await game.dailyMode.startBattle();
-    game.move.select(Moves.SPLASH);
+    await game.dailyModeHelper.startBattle();
+    game.moveHelper.select(Moves.SPLASH);
     await game.doKillOpponents();
     await game.phaseInterceptor.to("BattleEndPhase");
     game.onNextPrompt("SelectModifierPhase", Mode.MODIFIER_SELECT, () => {
       expect(game.scene.ui.getHandler()).toBeInstanceOf(ModifierSelectUiHandler);
-      game.modifiers.testCheck("EVIOLITE", true).testCheck("MINI_BLACK_HOLE", true);
+      game.modifierHelper.testCheck("EVIOLITE", true).testCheck("MINI_BLACK_HOLE", true);
     });
   });
 });

@@ -26,74 +26,74 @@ describe("Moves - Tidy Up", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("single");
-    game.override.enemySpecies(Species.MAGIKARP);
-    game.override.enemyAbility(Abilities.BALL_FETCH);
-    game.override.enemyMoveset(Moves.SPLASH);
-    game.override.starterSpecies(Species.FEEBAS);
-    game.override.ability(Abilities.BALL_FETCH);
-    game.override.moveset([Moves.TIDY_UP]);
-    game.override.startingLevel(50);
+    game.overridesHelper.battleType("single");
+    game.overridesHelper.enemySpecies(Species.MAGIKARP);
+    game.overridesHelper.enemyAbility(Abilities.BALL_FETCH);
+    game.overridesHelper.enemyMoveset(Moves.SPLASH);
+    game.overridesHelper.starterSpecies(Species.FEEBAS);
+    game.overridesHelper.ability(Abilities.BALL_FETCH);
+    game.overridesHelper.moveset([Moves.TIDY_UP]);
+    game.overridesHelper.startingLevel(50);
   });
 
   it("spikes are cleared", async () => {
-    game.override.moveset([Moves.SPIKES, Moves.TIDY_UP]);
-    game.override.enemyMoveset([Moves.SPIKES, Moves.SPIKES, Moves.SPIKES, Moves.SPIKES]);
-    await game.classicMode.startBattle();
+    game.overridesHelper.moveset([Moves.SPIKES, Moves.TIDY_UP]);
+    game.overridesHelper.enemyMoveset([Moves.SPIKES, Moves.SPIKES, Moves.SPIKES, Moves.SPIKES]);
+    await game.classicModeHelper.startBattle();
 
-    game.move.select(Moves.SPIKES);
+    game.moveHelper.select(Moves.SPIKES);
     await game.phaseInterceptor.to(TurnEndPhase);
-    game.move.select(Moves.TIDY_UP);
+    game.moveHelper.select(Moves.TIDY_UP);
     await game.phaseInterceptor.to(MoveEndPhase);
     expect(game.scene.arena.getTag(ArenaTagType.SPIKES)).toBeUndefined();
   }, 20000);
 
   it("stealth rocks are cleared", async () => {
-    game.override.moveset([Moves.STEALTH_ROCK, Moves.TIDY_UP]);
-    game.override.enemyMoveset([Moves.STEALTH_ROCK, Moves.STEALTH_ROCK, Moves.STEALTH_ROCK, Moves.STEALTH_ROCK]);
-    await game.classicMode.startBattle();
+    game.overridesHelper.moveset([Moves.STEALTH_ROCK, Moves.TIDY_UP]);
+    game.overridesHelper.enemyMoveset([Moves.STEALTH_ROCK, Moves.STEALTH_ROCK, Moves.STEALTH_ROCK, Moves.STEALTH_ROCK]);
+    await game.classicModeHelper.startBattle();
 
-    game.move.select(Moves.STEALTH_ROCK);
+    game.moveHelper.select(Moves.STEALTH_ROCK);
     await game.phaseInterceptor.to(TurnEndPhase);
-    game.move.select(Moves.TIDY_UP);
+    game.moveHelper.select(Moves.TIDY_UP);
     await game.phaseInterceptor.to(MoveEndPhase);
     expect(game.scene.arena.getTag(ArenaTagType.STEALTH_ROCK)).toBeUndefined();
   }, 20000);
 
   it("toxic spikes are cleared", async () => {
-    game.override.moveset([Moves.TOXIC_SPIKES, Moves.TIDY_UP]);
-    game.override.enemyMoveset([Moves.TOXIC_SPIKES, Moves.TOXIC_SPIKES, Moves.TOXIC_SPIKES, Moves.TOXIC_SPIKES]);
-    await game.classicMode.startBattle();
+    game.overridesHelper.moveset([Moves.TOXIC_SPIKES, Moves.TIDY_UP]);
+    game.overridesHelper.enemyMoveset([Moves.TOXIC_SPIKES, Moves.TOXIC_SPIKES, Moves.TOXIC_SPIKES, Moves.TOXIC_SPIKES]);
+    await game.classicModeHelper.startBattle();
 
-    game.move.select(Moves.TOXIC_SPIKES);
+    game.moveHelper.select(Moves.TOXIC_SPIKES);
     await game.phaseInterceptor.to(TurnEndPhase);
-    game.move.select(Moves.TIDY_UP);
+    game.moveHelper.select(Moves.TIDY_UP);
     await game.phaseInterceptor.to(MoveEndPhase);
     expect(game.scene.arena.getTag(ArenaTagType.TOXIC_SPIKES)).toBeUndefined();
   }, 20000);
 
   it("sticky webs are cleared", async () => {
-    game.override.moveset([Moves.STICKY_WEB, Moves.TIDY_UP]);
-    game.override.enemyMoveset([Moves.STICKY_WEB, Moves.STICKY_WEB, Moves.STICKY_WEB, Moves.STICKY_WEB]);
+    game.overridesHelper.moveset([Moves.STICKY_WEB, Moves.TIDY_UP]);
+    game.overridesHelper.enemyMoveset([Moves.STICKY_WEB, Moves.STICKY_WEB, Moves.STICKY_WEB, Moves.STICKY_WEB]);
 
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
-    game.move.select(Moves.STICKY_WEB);
+    game.moveHelper.select(Moves.STICKY_WEB);
     await game.phaseInterceptor.to(TurnEndPhase);
-    game.move.select(Moves.TIDY_UP);
+    game.moveHelper.select(Moves.TIDY_UP);
     await game.phaseInterceptor.to(MoveEndPhase);
     expect(game.scene.arena.getTag(ArenaTagType.STICKY_WEB)).toBeUndefined();
   }, 20000);
 
   it("substitutes are cleared", async () => {
-    game.override.moveset([Moves.SUBSTITUTE, Moves.TIDY_UP]);
-    game.override.enemyMoveset([Moves.SUBSTITUTE, Moves.SUBSTITUTE, Moves.SUBSTITUTE, Moves.SUBSTITUTE]);
+    game.overridesHelper.moveset([Moves.SUBSTITUTE, Moves.TIDY_UP]);
+    game.overridesHelper.enemyMoveset([Moves.SUBSTITUTE, Moves.SUBSTITUTE, Moves.SUBSTITUTE, Moves.SUBSTITUTE]);
 
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
-    game.move.select(Moves.SUBSTITUTE);
+    game.moveHelper.select(Moves.SUBSTITUTE);
     await game.phaseInterceptor.to(TurnEndPhase);
-    game.move.select(Moves.TIDY_UP);
+    game.moveHelper.select(Moves.TIDY_UP);
     await game.phaseInterceptor.to(MoveEndPhase);
 
     const pokemon = [game.scene.getPlayerPokemon()!, game.scene.getEnemyPokemon()!];
@@ -104,14 +104,14 @@ describe("Moves - Tidy Up", () => {
   }, 20000);
 
   it("user's stats are raised with no traps set", async () => {
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
     expect(playerPokemon.getStatStage(Stat.ATK)).toBe(0);
     expect(playerPokemon.getStatStage(Stat.SPD)).toBe(0);
 
-    game.move.select(Moves.TIDY_UP);
+    game.moveHelper.select(Moves.TIDY_UP);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(playerPokemon.getStatStage(Stat.ATK)).toBe(1);

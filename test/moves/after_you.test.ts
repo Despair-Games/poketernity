@@ -24,7 +24,7 @@ describe("Moves - After You", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("double")
       .enemyLevel(5)
       .enemySpecies(Species.PIKACHU)
@@ -35,10 +35,10 @@ describe("Moves - After You", () => {
   });
 
   it("makes the target move immediately after the user", async () => {
-    await game.classicMode.startBattle([Species.REGIELEKI, Species.SHUCKLE]);
+    await game.classicModeHelper.startBattle([Species.REGIELEKI, Species.SHUCKLE]);
 
-    game.move.select(Moves.AFTER_YOU, 0, BattlerIndex.PLAYER_2);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.AFTER_YOU, 0, BattlerIndex.PLAYER_2);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.phaseInterceptor.to("MoveEffectPhase");
     await game.phaseInterceptor.to(MovePhase, false);
@@ -48,11 +48,11 @@ describe("Moves - After You", () => {
   });
 
   it("fails if target already moved", async () => {
-    game.override.enemySpecies(Species.SHUCKLE);
-    await game.classicMode.startBattle([Species.REGIELEKI, Species.PIKACHU]);
+    game.overridesHelper.enemySpecies(Species.SHUCKLE);
+    await game.classicModeHelper.startBattle([Species.REGIELEKI, Species.PIKACHU]);
 
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.AFTER_YOU, 1, BattlerIndex.PLAYER);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.AFTER_YOU, 1, BattlerIndex.PLAYER);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     await game.phaseInterceptor.to("MoveEndPhase");

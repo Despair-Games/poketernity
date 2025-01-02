@@ -21,7 +21,7 @@ describe("Moves - Future Sight", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .startingLevel(50)
       .moveset([Moves.FUTURE_SIGHT, Moves.SPLASH])
       .battleType("single")
@@ -31,13 +31,13 @@ describe("Moves - Future Sight", () => {
   });
 
   it("hits 2 turns after use, ignores user switch out", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS, Species.MILOTIC]);
 
-    game.move.select(Moves.FUTURE_SIGHT);
+    game.moveHelper.select(Moves.FUTURE_SIGHT);
     await game.toNextTurn();
     game.doSwitchPokemon(1);
     await game.toNextTurn();
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     expect(game.scene.getEnemyPokemon()!.isFullHp()).toBe(false);

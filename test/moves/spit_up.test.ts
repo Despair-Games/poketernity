@@ -30,15 +30,15 @@ describe("Moves - Spit Up", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override.battleType("single");
+    game.overridesHelper.battleType("single");
 
-    game.override.enemySpecies(Species.RATTATA);
-    game.override.enemyMoveset(Moves.SPLASH);
-    game.override.enemyAbility(Abilities.NONE);
-    game.override.enemyLevel(2000);
+    game.overridesHelper.enemySpecies(Species.RATTATA);
+    game.overridesHelper.enemyMoveset(Moves.SPLASH);
+    game.overridesHelper.enemyAbility(Abilities.NONE);
+    game.overridesHelper.enemyLevel(2000);
 
-    game.override.moveset(new Array(4).fill(spitUp.id));
-    game.override.ability(Abilities.NONE);
+    game.overridesHelper.moveset(new Array(4).fill(spitUp.id));
+    game.overridesHelper.ability(Abilities.NONE);
 
     vi.spyOn(spitUp, "calculateBattlePower");
   });
@@ -57,7 +57,7 @@ describe("Moves - Spit Up", () => {
       expect(stockpilingTag).toBeDefined();
       expect(stockpilingTag.stockpiledCount).toBe(stacksToSetup);
 
-      game.move.select(Moves.SPIT_UP);
+      game.moveHelper.select(Moves.SPIT_UP);
       await game.phaseInterceptor.to(TurnInitPhase);
 
       expect(spitUp.calculateBattlePower).toHaveBeenCalledOnce();
@@ -80,7 +80,7 @@ describe("Moves - Spit Up", () => {
       expect(stockpilingTag).toBeDefined();
       expect(stockpilingTag.stockpiledCount).toBe(stacksToSetup);
 
-      game.move.select(Moves.SPIT_UP);
+      game.moveHelper.select(Moves.SPIT_UP);
       await game.phaseInterceptor.to(TurnInitPhase);
 
       expect(spitUp.calculateBattlePower).toHaveBeenCalledOnce();
@@ -104,7 +104,7 @@ describe("Moves - Spit Up", () => {
       expect(stockpilingTag).toBeDefined();
       expect(stockpilingTag.stockpiledCount).toBe(stacksToSetup);
 
-      game.move.select(Moves.SPIT_UP);
+      game.moveHelper.select(Moves.SPIT_UP);
       await game.phaseInterceptor.to(TurnInitPhase);
 
       expect(spitUp.calculateBattlePower).toHaveBeenCalledOnce();
@@ -122,7 +122,7 @@ describe("Moves - Spit Up", () => {
     const stockpilingTag = pokemon.getTag(StockpilingTag)!;
     expect(stockpilingTag).toBeUndefined();
 
-    game.move.select(Moves.SPIT_UP);
+    game.moveHelper.select(Moves.SPIT_UP);
     await game.phaseInterceptor.to(TurnInitPhase);
 
     expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({ move: Moves.SPIT_UP, result: MoveResult.FAIL });
@@ -140,7 +140,7 @@ describe("Moves - Spit Up", () => {
       const stockpilingTag = pokemon.getTag(StockpilingTag)!;
       expect(stockpilingTag).toBeDefined();
 
-      game.move.select(Moves.SPIT_UP);
+      game.moveHelper.select(Moves.SPIT_UP);
       await game.phaseInterceptor.to(MovePhase);
 
       expect(pokemon.getStatStage(Stat.DEF)).toBe(1);
@@ -176,7 +176,7 @@ describe("Moves - Spit Up", () => {
         [Stat.SPDEF]: 2,
       };
 
-      game.move.select(Moves.SPIT_UP);
+      game.moveHelper.select(Moves.SPIT_UP);
       await game.phaseInterceptor.to(TurnInitPhase);
 
       expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({

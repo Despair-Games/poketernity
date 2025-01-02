@@ -23,14 +23,18 @@ describe("Moves - Toxic", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("single").moveset(Moves.TOXIC).enemySpecies(Species.MAGIKARP).enemyMoveset(Moves.SPLASH);
+    game.overridesHelper
+      .battleType("single")
+      .moveset(Moves.TOXIC)
+      .enemySpecies(Species.MAGIKARP)
+      .enemyMoveset(Moves.SPLASH);
   });
 
   it("should be guaranteed to hit if user is Poison-type", async () => {
     vi.spyOn(allMoves[Moves.TOXIC], "accuracy", "get").mockReturnValue(0);
-    await game.classicMode.startBattle([Species.TOXAPEX]);
+    await game.classicModeHelper.startBattle([Species.TOXAPEX]);
 
-    game.move.select(Moves.TOXIC);
+    game.moveHelper.select(Moves.TOXIC);
     await game.phaseInterceptor.to("BerryPhase", false);
 
     expect(game.scene.getEnemyPokemon()!.status?.effect).toBe(StatusEffect.TOXIC);
@@ -38,9 +42,9 @@ describe("Moves - Toxic", () => {
 
   it("may miss if user is not Poison-type", async () => {
     vi.spyOn(allMoves[Moves.TOXIC], "accuracy", "get").mockReturnValue(0);
-    await game.classicMode.startBattle([Species.UMBREON]);
+    await game.classicModeHelper.startBattle([Species.UMBREON]);
 
-    game.move.select(Moves.TOXIC);
+    game.moveHelper.select(Moves.TOXIC);
     await game.phaseInterceptor.to("BerryPhase", false);
 
     expect(game.scene.getEnemyPokemon()!.status).toBeUndefined();
@@ -48,10 +52,10 @@ describe("Moves - Toxic", () => {
 
   it("should hit semi-invulnerable targets if user is Poison-type", async () => {
     vi.spyOn(allMoves[Moves.TOXIC], "accuracy", "get").mockReturnValue(0);
-    game.override.enemyMoveset(Moves.FLY);
-    await game.classicMode.startBattle([Species.TOXAPEX]);
+    game.overridesHelper.enemyMoveset(Moves.FLY);
+    await game.classicModeHelper.startBattle([Species.TOXAPEX]);
 
-    game.move.select(Moves.TOXIC);
+    game.moveHelper.select(Moves.TOXIC);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -60,10 +64,10 @@ describe("Moves - Toxic", () => {
 
   it("should miss semi-invulnerable targets if user is not Poison-type", async () => {
     vi.spyOn(allMoves[Moves.TOXIC], "accuracy", "get").mockReturnValue(-1);
-    game.override.enemyMoveset(Moves.FLY);
-    await game.classicMode.startBattle([Species.UMBREON]);
+    game.overridesHelper.enemyMoveset(Moves.FLY);
+    await game.classicModeHelper.startBattle([Species.UMBREON]);
 
-    game.move.select(Moves.TOXIC);
+    game.moveHelper.select(Moves.TOXIC);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -71,11 +75,11 @@ describe("Moves - Toxic", () => {
   });
 
   it("moves other than Toxic should not hit semi-invulnerable targets even if user is Poison-type", async () => {
-    game.override.moveset(Moves.SWIFT);
-    game.override.enemyMoveset(Moves.FLY);
-    await game.classicMode.startBattle([Species.TOXAPEX]);
+    game.overridesHelper.moveset(Moves.SWIFT);
+    game.overridesHelper.enemyMoveset(Moves.FLY);
+    await game.classicModeHelper.startBattle([Species.TOXAPEX]);
 
-    game.move.select(Moves.SWIFT);
+    game.moveHelper.select(Moves.SWIFT);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("BerryPhase", false);
 

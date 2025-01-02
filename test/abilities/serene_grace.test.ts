@@ -24,7 +24,7 @@ describe("Abilities - Serene Grace", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .disableCrits()
       .battleType("single")
       .ability(Abilities.SERENE_GRACE)
@@ -36,15 +36,15 @@ describe("Abilities - Serene Grace", () => {
   });
 
   it("Serene Grace should double the secondary effect chance of a move", async () => {
-    await game.classicMode.startBattle([Species.SHUCKLE]);
+    await game.classicModeHelper.startBattle([Species.SHUCKLE]);
 
     const airSlashMove = allMoves[Moves.AIR_SLASH];
     const airSlashFlinchAttr = airSlashMove.getAttrs(FlinchAttr)[0];
     vi.spyOn(airSlashFlinchAttr, "getMoveChance");
 
-    game.move.select(Moves.AIR_SLASH);
+    game.moveHelper.select(Moves.AIR_SLASH);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.move.forceHit();
+    await game.moveHelper.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(airSlashFlinchAttr.getMoveChance).toHaveLastReturnedWith(60);

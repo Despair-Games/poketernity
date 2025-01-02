@@ -23,16 +23,16 @@ describe("Moves - Haze", () => {
     beforeEach(() => {
       game = new GameManager(phaserGame);
 
-      game.override.battleType("single");
+      game.overridesHelper.battleType("single");
 
-      game.override.enemySpecies(Species.RATTATA);
-      game.override.enemyLevel(100);
-      game.override.enemyMoveset(Moves.SPLASH);
-      game.override.enemyAbility(Abilities.NONE);
+      game.overridesHelper.enemySpecies(Species.RATTATA);
+      game.overridesHelper.enemyLevel(100);
+      game.overridesHelper.enemyMoveset(Moves.SPLASH);
+      game.overridesHelper.enemyAbility(Abilities.NONE);
 
-      game.override.startingLevel(100);
-      game.override.moveset([Moves.HAZE, Moves.SWORDS_DANCE, Moves.CHARM, Moves.SPLASH]);
-      game.override.ability(Abilities.NONE);
+      game.overridesHelper.startingLevel(100);
+      game.overridesHelper.moveset([Moves.HAZE, Moves.SWORDS_DANCE, Moves.CHARM, Moves.SPLASH]);
+      game.overridesHelper.ability(Abilities.NONE);
     });
 
     it("should reset all stat changes of all Pokemon on field", async () => {
@@ -43,16 +43,16 @@ describe("Moves - Haze", () => {
       expect(user.getStatStage(Stat.ATK)).toBe(0);
       expect(enemy.getStatStage(Stat.ATK)).toBe(0);
 
-      game.move.select(Moves.SWORDS_DANCE);
+      game.moveHelper.select(Moves.SWORDS_DANCE);
       await game.phaseInterceptor.to(TurnInitPhase);
 
-      game.move.select(Moves.CHARM);
+      game.moveHelper.select(Moves.CHARM);
       await game.phaseInterceptor.to(TurnInitPhase);
 
       expect(user.getStatStage(Stat.ATK)).toBe(2);
       expect(enemy.getStatStage(Stat.ATK)).toBe(-2);
 
-      game.move.select(Moves.HAZE);
+      game.moveHelper.select(Moves.HAZE);
       await game.phaseInterceptor.to(TurnInitPhase);
 
       expect(user.getStatStage(Stat.ATK)).toBe(0);

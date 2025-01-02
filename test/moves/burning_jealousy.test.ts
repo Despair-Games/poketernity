@@ -24,7 +24,7 @@ describe("Moves - Burning Jealousy", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
@@ -38,11 +38,11 @@ describe("Moves - Burning Jealousy", () => {
   });
 
   it("should burn the opponent if their stat stages were raised", async () => {
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.BURNING_JEALOUSY);
+    game.moveHelper.select(Moves.BURNING_JEALOUSY);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("BerryPhase");
 
@@ -50,13 +50,13 @@ describe("Moves - Burning Jealousy", () => {
   });
 
   it("should still burn the opponent if their stat stages were both raised and lowered in the same turn", async () => {
-    game.override.starterSpecies(0).battleType("double");
-    await game.classicMode.startBattle([Species.FEEBAS, Species.ABRA]);
+    game.overridesHelper.starterSpecies(0).battleType("double");
+    await game.classicModeHelper.startBattle([Species.FEEBAS, Species.ABRA]);
 
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.BURNING_JEALOUSY);
-    game.move.select(Moves.GROWL, 1);
+    game.moveHelper.select(Moves.BURNING_JEALOUSY);
+    game.moveHelper.select(Moves.GROWL, 1);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
     await game.phaseInterceptor.to("BerryPhase");
 
@@ -64,12 +64,12 @@ describe("Moves - Burning Jealousy", () => {
   });
 
   it("should ignore stat stages raised by IMPOSTER", async () => {
-    game.override.enemySpecies(Species.DITTO).enemyAbility(Abilities.IMPOSTER).enemyMoveset(Moves.SPLASH);
-    await game.classicMode.startBattle();
+    game.overridesHelper.enemySpecies(Species.DITTO).enemyAbility(Abilities.IMPOSTER).enemyMoveset(Moves.SPLASH);
+    await game.classicModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.BURNING_JEALOUSY);
+    game.moveHelper.select(Moves.BURNING_JEALOUSY);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(enemy.status?.effect).toBeUndefined();
@@ -77,15 +77,15 @@ describe("Moves - Burning Jealousy", () => {
 
   // TODO: Make this test if WP is implemented
   it.todo("should ignore weakness policy", async () => {
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
   });
 
   it("should be boosted by Sheer Force even if opponent didn't raise stat stages", async () => {
-    game.override.ability(Abilities.SHEER_FORCE).enemyMoveset(Moves.SPLASH);
+    game.overridesHelper.ability(Abilities.SHEER_FORCE).enemyMoveset(Moves.SPLASH);
     vi.spyOn(allMoves[Moves.BURNING_JEALOUSY], "calculateBattlePower");
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
-    game.move.select(Moves.BURNING_JEALOUSY);
+    game.moveHelper.select(Moves.BURNING_JEALOUSY);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(allMoves[Moves.BURNING_JEALOUSY].calculateBattlePower).toHaveReturnedWith(

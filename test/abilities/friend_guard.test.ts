@@ -25,7 +25,7 @@ describe("Moves - Friend Guard", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("double")
       .enemyAbility(Abilities.BALL_FETCH)
       .enemyMoveset([Moves.TACKLE, Moves.SPLASH, Moves.DRAGON_RAGE])
@@ -35,14 +35,14 @@ describe("Moves - Friend Guard", () => {
   });
 
   it("should reduce damage that other allied Pokémon receive from attacks (from any Pokémon) by 25%", async () => {
-    await game.classicMode.startBattle([Species.BULBASAUR, Species.CHARMANDER]);
+    await game.classicModeHelper.startBattle([Species.BULBASAUR, Species.CHARMANDER]);
     const [player1, player2] = game.scene.getPlayerField();
     const spy = vi.spyOn(player1, "getAttackDamage");
 
     const enemy1 = game.scene.getEnemyField()[0];
 
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.forceEnemyMove(Moves.TACKLE, BattlerIndex.PLAYER);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.toNextTurn();
@@ -54,8 +54,8 @@ describe("Moves - Friend Guard", () => {
 
     vi.spyOn(player2, "getAbility").mockReturnValue(allAbilities[Abilities.FRIEND_GUARD]);
 
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.forceEnemyMove(Moves.TACKLE, BattlerIndex.PLAYER);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.toNextTurn();
@@ -69,13 +69,13 @@ describe("Moves - Friend Guard", () => {
   });
 
   it("should NOT reduce damage to pokemon with friend guard", async () => {
-    await game.classicMode.startBattle([Species.BULBASAUR, Species.CHARMANDER]);
+    await game.classicModeHelper.startBattle([Species.BULBASAUR, Species.CHARMANDER]);
 
     const player2 = game.scene.getPlayerField()[1];
     const spy = vi.spyOn(player2, "getAttackDamage");
 
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.forceEnemyMove(Moves.TACKLE, BattlerIndex.PLAYER_2);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.toNextTurn();
@@ -84,8 +84,8 @@ describe("Moves - Friend Guard", () => {
 
     vi.spyOn(player2, "getAbility").mockReturnValue(allAbilities[Abilities.FRIEND_GUARD]);
 
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.forceEnemyMove(Moves.TACKLE, BattlerIndex.PLAYER_2);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.toNextTurn();
@@ -95,13 +95,13 @@ describe("Moves - Friend Guard", () => {
   });
 
   it("should NOT reduce damage from fixed damage attacks", async () => {
-    await game.classicMode.startBattle([Species.BULBASAUR, Species.CHARMANDER]);
+    await game.classicModeHelper.startBattle([Species.BULBASAUR, Species.CHARMANDER]);
 
     const [player1, player2] = game.scene.getPlayerField();
     const spy = vi.spyOn(player1, "getAttackDamage");
 
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.forceEnemyMove(Moves.DRAGON_RAGE, BattlerIndex.PLAYER);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.toNextTurn();
@@ -111,8 +111,8 @@ describe("Moves - Friend Guard", () => {
 
     vi.spyOn(player2, "getAbility").mockReturnValue(allAbilities[Abilities.FRIEND_GUARD]);
 
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.forceEnemyMove(Moves.DRAGON_RAGE, BattlerIndex.PLAYER);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.toNextTurn();

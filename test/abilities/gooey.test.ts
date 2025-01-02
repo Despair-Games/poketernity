@@ -24,7 +24,7 @@ describe("Abilities - Gooey/Tangling Hair", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.TACKLE, Moves.EMBER, Moves.DOUBLE_IRON_BASH])
       .ability(Abilities.BALL_FETCH)
       .battleType("single")
@@ -39,11 +39,11 @@ describe("Abilities - Gooey/Tangling Hair", () => {
   ])(
     "$abilityName should decrease the attacker's speed by 1 stage if the attacker uses a contact move",
     async ({ ability }) => {
-      game.override.enemyAbility(ability);
-      await game.classicMode.startBattle([Species.FEEBAS]);
+      game.overridesHelper.enemyAbility(ability);
+      await game.classicModeHelper.startBattle([Species.FEEBAS]);
       const pokemon = game.scene.getPlayerPokemon()!;
 
-      game.move.select(Moves.TACKLE);
+      game.moveHelper.select(Moves.TACKLE);
       await game.phaseInterceptor.to("BerryPhase");
 
       expect(allMoves[Moves.TACKLE].hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
@@ -57,11 +57,11 @@ describe("Abilities - Gooey/Tangling Hair", () => {
   ])(
     "$abilityName should not activate if the attacker has the ability Long Reach and uses a contact move",
     async ({ ability }) => {
-      game.override.ability(Abilities.LONG_REACH).enemyAbility(ability);
-      await game.classicMode.startBattle([Species.FEEBAS]);
+      game.overridesHelper.ability(Abilities.LONG_REACH).enemyAbility(ability);
+      await game.classicModeHelper.startBattle([Species.FEEBAS]);
       const pokemon = game.scene.getPlayerPokemon()!;
 
-      game.move.select(Moves.TACKLE);
+      game.moveHelper.select(Moves.TACKLE);
       await game.phaseInterceptor.to("BerryPhase");
 
       expect(allMoves[Moves.TACKLE].hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
@@ -75,11 +75,11 @@ describe("Abilities - Gooey/Tangling Hair", () => {
   ])(
     "$abilityName should not affect the attacker's speed if the attacker does not use a contact move",
     async ({ ability }) => {
-      game.override.enemyAbility(ability);
-      await game.classicMode.startBattle([Species.FEEBAS]);
+      game.overridesHelper.enemyAbility(ability);
+      await game.classicModeHelper.startBattle([Species.FEEBAS]);
       const pokemon = game.scene.getPlayerPokemon()!;
 
-      game.move.select(Moves.EMBER);
+      game.moveHelper.select(Moves.EMBER);
       await game.phaseInterceptor.to("BerryPhase");
 
       expect(allMoves[Moves.EMBER].hasFlag(MoveFlags.MAKES_CONTACT)).toBe(false);
@@ -91,11 +91,11 @@ describe("Abilities - Gooey/Tangling Hair", () => {
     { abilityName: "Gooey", ability: Abilities.GOOEY },
     { abilityName: "Tangling Hair", ability: Abilities.TANGLING_HAIR },
   ])("$abilityName should activate per hit of a contact-making multi-strike move", async ({ ability }) => {
-    game.override.enemyAbility(ability);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    game.overridesHelper.enemyAbility(ability);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
     const pokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.DOUBLE_IRON_BASH);
+    game.moveHelper.select(Moves.DOUBLE_IRON_BASH);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(allMoves[Moves.DOUBLE_IRON_BASH].hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);

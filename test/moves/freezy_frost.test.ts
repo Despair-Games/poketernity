@@ -23,7 +23,7 @@ describe("Moves - Freezy Frost", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemySpecies(Species.RATTATA)
       .enemyLevel(100)
@@ -37,17 +37,17 @@ describe("Moves - Freezy Frost", () => {
   });
 
   it("should clear stat changes of user and opponent", async () => {
-    await game.classicMode.startBattle([Species.SHUCKLE]);
+    await game.classicModeHelper.startBattle([Species.SHUCKLE]);
     const user = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.HOWL);
+    game.moveHelper.select(Moves.HOWL);
     await game.toNextTurn();
 
     expect(user.getStatStage(Stat.ATK)).toBe(1);
     expect(enemy.getStatStage(Stat.ATK)).toBe(1);
 
-    game.move.select(Moves.FREEZY_FROST);
+    game.moveHelper.select(Moves.FREEZY_FROST);
     await game.toNextTurn();
 
     expect(user.getStatStage(Stat.ATK)).toBe(0);
@@ -55,30 +55,30 @@ describe("Moves - Freezy Frost", () => {
   });
 
   it("should clear all stat changes even when enemy uses the move", async () => {
-    game.override.enemyMoveset([Moves.FREEZY_FROST, Moves.FREEZY_FROST, Moves.FREEZY_FROST, Moves.FREEZY_FROST]);
-    await game.classicMode.startBattle([Species.SHUCKLE]); // Shuckle for slower Howl on first turn so Freezy Frost doesn't affect it.
+    game.overridesHelper.enemyMoveset([Moves.FREEZY_FROST, Moves.FREEZY_FROST, Moves.FREEZY_FROST, Moves.FREEZY_FROST]);
+    await game.classicModeHelper.startBattle([Species.SHUCKLE]); // Shuckle for slower Howl on first turn so Freezy Frost doesn't affect it.
     const user = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.HOWL);
+    game.moveHelper.select(Moves.HOWL);
     await game.toNextTurn();
 
     const userAtkBefore = user.getStatStage(Stat.ATK);
     expect(userAtkBefore).toBe(1);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
     expect(user.getStatStage(Stat.ATK)).toBe(0);
   });
 
   it("should clear all stat changes in double battle", async () => {
-    game.override.battleType("double");
-    await game.classicMode.startBattle([Species.SHUCKLE, Species.RATTATA]);
+    game.overridesHelper.battleType("double");
+    await game.classicModeHelper.startBattle([Species.SHUCKLE, Species.RATTATA]);
     const [leftPlayer, rightPlayer] = game.scene.getPlayerField();
     const [leftOpp, rightOpp] = game.scene.getEnemyField();
 
-    game.move.select(Moves.HOWL, 0);
+    game.moveHelper.select(Moves.HOWL, 0);
     await game.phaseInterceptor.to(CommandPhase);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.toNextTurn();
 
     expect(leftPlayer.getStatStage(Stat.ATK)).toBe(1);
@@ -86,9 +86,9 @@ describe("Moves - Freezy Frost", () => {
     expect(leftOpp.getStatStage(Stat.ATK)).toBe(2); // Both enemies use Howl
     expect(rightOpp.getStatStage(Stat.ATK)).toBe(2);
 
-    game.move.select(Moves.FREEZY_FROST, 0, leftOpp.getBattlerIndex());
+    game.moveHelper.select(Moves.FREEZY_FROST, 0, leftOpp.getBattlerIndex());
     await game.phaseInterceptor.to(CommandPhase);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.toNextTurn();
 
     expect(leftPlayer.getStatStage(Stat.ATK)).toBe(0);

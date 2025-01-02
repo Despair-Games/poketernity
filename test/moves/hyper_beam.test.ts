@@ -26,14 +26,14 @@ describe("Moves - Hyper Beam", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override.battleType("single");
-    game.override.ability(Abilities.BALL_FETCH);
-    game.override.enemySpecies(Species.SNORLAX);
-    game.override.enemyAbility(Abilities.BALL_FETCH);
-    game.override.enemyMoveset([Moves.SPLASH]);
-    game.override.enemyLevel(100);
+    game.overridesHelper.battleType("single");
+    game.overridesHelper.ability(Abilities.BALL_FETCH);
+    game.overridesHelper.enemySpecies(Species.SNORLAX);
+    game.overridesHelper.enemyAbility(Abilities.BALL_FETCH);
+    game.overridesHelper.enemyMoveset([Moves.SPLASH]);
+    game.overridesHelper.enemyLevel(100);
 
-    game.override.moveset([Moves.HYPER_BEAM, Moves.TACKLE]);
+    game.overridesHelper.moveset([Moves.HYPER_BEAM, Moves.TACKLE]);
     vi.spyOn(allMoves[Moves.HYPER_BEAM], "accuracy", "get").mockReturnValue(100);
   });
 
@@ -43,7 +43,7 @@ describe("Moves - Hyper Beam", () => {
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.HYPER_BEAM);
+    game.moveHelper.select(Moves.HYPER_BEAM);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -58,7 +58,7 @@ describe("Moves - Hyper Beam", () => {
     expect(enemyPokemon.hp).toBe(enemyPostAttackHp);
     expect(leadPokemon.getTag(BattlerTagType.RECHARGING)).toBeUndefined();
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
 
     await game.phaseInterceptor.to(BerryPhase, false);
 

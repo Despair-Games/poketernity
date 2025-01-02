@@ -23,7 +23,7 @@ describe("Moves - Torment", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemyAbility(Abilities.BALL_FETCH)
       .enemyMoveset([Moves.TORMENT, Moves.SPLASH])
@@ -34,12 +34,12 @@ describe("Moves - Torment", () => {
   });
 
   it("Pokemon should not be able to use the same move consecutively", async () => {
-    await game.classicMode.startBattle([Species.CHANSEY]);
+    await game.classicModeHelper.startBattle([Species.CHANSEY]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
     // First turn, Player Pokemon uses Tackle successfully
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
     await game.forceEnemyMove(Moves.TORMENT);
     await game.toNextTurn();
     const move1 = playerPokemon.getLastXMoves(1)[0]!;
@@ -48,14 +48,14 @@ describe("Moves - Torment", () => {
     expect(playerPokemon?.getTag(BattlerTagType.TORMENT)).toBeDefined();
 
     // Second turn, Torment forces Struggle to occur
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.toNextTurn();
     const move2 = playerPokemon.getLastXMoves(1)[0]!;
     expect(move2.move).toBe(Moves.STRUGGLE);
 
     // Third turn, Tackle can be used.
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.phaseInterceptor.to(TurnEndPhase);
     const move3 = playerPokemon.getLastXMoves(1)[0]!;

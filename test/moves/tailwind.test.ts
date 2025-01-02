@@ -24,9 +24,9 @@ describe("Moves - Tailwind", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("double");
-    game.override.moveset([Moves.TAILWIND, Moves.SPLASH, Moves.PETAL_BLIZZARD, Moves.SANDSTORM]);
-    game.override.enemyMoveset(Moves.SPLASH);
+    game.overridesHelper.battleType("double");
+    game.overridesHelper.moveset([Moves.TAILWIND, Moves.SPLASH, Moves.PETAL_BLIZZARD, Moves.SANDSTORM]);
+    game.overridesHelper.enemyMoveset(Moves.SPLASH);
   });
 
   it("doubles the Speed stat of the Pokemons on its side", async () => {
@@ -40,8 +40,8 @@ describe("Moves - Tailwind", () => {
     expect(magikarp.getEffectiveStat(Stat.SPD)).equal(magikarpSpd);
     expect(meowth.getEffectiveStat(Stat.SPD)).equal(meowthSpd);
 
-    game.move.select(Moves.TAILWIND);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.TAILWIND);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -51,30 +51,30 @@ describe("Moves - Tailwind", () => {
   });
 
   it("lasts for 4 turns", async () => {
-    game.override.battleType("single");
+    game.overridesHelper.battleType("single");
 
     await game.startBattle([Species.MAGIKARP]);
 
-    game.move.select(Moves.TAILWIND);
+    game.moveHelper.select(Moves.TAILWIND);
     await game.toNextTurn();
     expect(game.scene.arena.getTagOnSide(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeDefined();
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
     expect(game.scene.arena.getTagOnSide(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeDefined();
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
     expect(game.scene.arena.getTagOnSide(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeDefined();
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     expect(game.scene.arena.getTagOnSide(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeUndefined();
   });
 
   it("does not affect the opposing side", async () => {
-    game.override.battleType("single");
+    game.overridesHelper.battleType("single");
 
     await game.startBattle([Species.MAGIKARP]);
 
@@ -89,7 +89,7 @@ describe("Moves - Tailwind", () => {
     expect(game.scene.arena.getTagOnSide(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeUndefined();
     expect(game.scene.arena.getTagOnSide(ArenaTagType.TAILWIND, ArenaTagSide.ENEMY)).toBeUndefined();
 
-    game.move.select(Moves.TAILWIND);
+    game.moveHelper.select(Moves.TAILWIND);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 

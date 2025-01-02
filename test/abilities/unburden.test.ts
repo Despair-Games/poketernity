@@ -42,7 +42,7 @@ describe("Abilities - Unburden", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .startingLevel(1)
       .ability(Abilities.UNBURDEN)
@@ -66,15 +66,15 @@ describe("Abilities - Unburden", () => {
   });
 
   it("should activate when a berry is eaten", async () => {
-    game.override.enemyMoveset(Moves.FALSE_SWIPE);
-    await game.classicMode.startBattle([Species.TREECKO]);
+    game.overridesHelper.enemyMoveset(Moves.FALSE_SWIPE);
+    await game.classicModeHelper.startBattle([Species.TREECKO]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const playerHeldItems = getHeldItemCount(playerPokemon);
     const initialPlayerSpeed = playerPokemon.getStat(Stat.SPD);
 
     // Player gets hit by False Swipe and eats its own Sitrus Berry
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     expect(getHeldItemCount(playerPokemon)).toBeLessThan(playerHeldItems);
@@ -82,15 +82,15 @@ describe("Abilities - Unburden", () => {
   });
 
   it("should activate when a berry is eaten, even if Berry Pouch preserves the berry", async () => {
-    game.override.enemyMoveset(Moves.FALSE_SWIPE).startingModifier([{ name: "BERRY_POUCH", count: 5850 }]);
-    await game.classicMode.startBattle([Species.TREECKO]);
+    game.overridesHelper.enemyMoveset(Moves.FALSE_SWIPE).startingModifier([{ name: "BERRY_POUCH", count: 5850 }]);
+    await game.classicModeHelper.startBattle([Species.TREECKO]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const playerHeldItems = getHeldItemCount(playerPokemon);
     const initialPlayerSpeed = playerPokemon.getStat(Stat.SPD);
 
     // Player gets hit by False Swipe and eats its own Sitrus Berry
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     expect(getHeldItemCount(playerPokemon)).toBe(playerHeldItems);
@@ -98,7 +98,7 @@ describe("Abilities - Unburden", () => {
   });
 
   it("should activate for the target, and not the stealer, when a berry is stolen", async () => {
-    await game.classicMode.startBattle([Species.TREECKO]);
+    await game.classicModeHelper.startBattle([Species.TREECKO]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const initialPlayerSpeed = playerPokemon.getStat(Stat.SPD);
@@ -107,7 +107,7 @@ describe("Abilities - Unburden", () => {
     const initialEnemySpeed = enemyPokemon.getStat(Stat.SPD);
 
     // Player uses Pluck and eats the opponent's berry
-    game.move.select(Moves.PLUCK);
+    game.moveHelper.select(Moves.PLUCK);
     await game.toNextTurn();
 
     expect(getHeldItemCount(enemyPokemon)).toBeLessThan(enemyHeldItemCt);
@@ -116,14 +116,14 @@ describe("Abilities - Unburden", () => {
   });
 
   it("should activate when an item is knocked off", async () => {
-    await game.classicMode.startBattle([Species.TREECKO]);
+    await game.classicModeHelper.startBattle([Species.TREECKO]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     const enemyHeldItemCt = getHeldItemCount(enemyPokemon);
     const initialEnemySpeed = enemyPokemon.getStat(Stat.SPD);
 
     // Player uses Knock Off and removes the opponent's item
-    game.move.select(Moves.KNOCK_OFF);
+    game.moveHelper.select(Moves.KNOCK_OFF);
     await game.toNextTurn();
 
     expect(getHeldItemCount(enemyPokemon)).toBeLessThan(enemyHeldItemCt);
@@ -131,15 +131,15 @@ describe("Abilities - Unburden", () => {
   });
 
   it("should activate when an item is stolen via attacking ability", async () => {
-    game.override.ability(Abilities.MAGICIAN).startingHeldItems([]); // Remove player's full stacks of held items so it can steal opponent's held items
-    await game.classicMode.startBattle([Species.TREECKO]);
+    game.overridesHelper.ability(Abilities.MAGICIAN).startingHeldItems([]); // Remove player's full stacks of held items so it can steal opponent's held items
+    await game.classicModeHelper.startBattle([Species.TREECKO]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     const enemyHeldItemCt = getHeldItemCount(enemyPokemon);
     const initialEnemySpeed = enemyPokemon.getStat(Stat.SPD);
 
     // Player steals the opponent's item via ability Magician
-    game.move.select(Moves.FALSE_SWIPE);
+    game.moveHelper.select(Moves.FALSE_SWIPE);
     await game.toNextTurn();
 
     expect(getHeldItemCount(enemyPokemon)).toBeLessThan(enemyHeldItemCt);
@@ -147,15 +147,15 @@ describe("Abilities - Unburden", () => {
   });
 
   it("should activate when an item is stolen via defending ability", async () => {
-    game.override.enemyAbility(Abilities.PICKPOCKET).enemyHeldItems([]); // Remove opponent's full stacks of held items so it can steal player's held items
-    await game.classicMode.startBattle([Species.TREECKO]);
+    game.overridesHelper.enemyAbility(Abilities.PICKPOCKET).enemyHeldItems([]); // Remove opponent's full stacks of held items so it can steal player's held items
+    await game.classicModeHelper.startBattle([Species.TREECKO]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const playerHeldItems = getHeldItemCount(playerPokemon);
     const initialPlayerSpeed = playerPokemon.getStat(Stat.SPD);
 
     // Player's item gets stolen via ability Pickpocket
-    game.move.select(Moves.FALSE_SWIPE);
+    game.moveHelper.select(Moves.FALSE_SWIPE);
     await game.toNextTurn();
 
     expect(getHeldItemCount(playerPokemon)).toBeLessThan(playerHeldItems);
@@ -163,15 +163,15 @@ describe("Abilities - Unburden", () => {
   });
 
   it("should activate when an item is stolen via move", async () => {
-    game.override.moveset(Moves.THIEF).startingHeldItems([]); // Remove player's full stacks of held items so it can steal opponent's held items
-    await game.classicMode.startBattle([Species.TREECKO]);
+    game.overridesHelper.moveset(Moves.THIEF).startingHeldItems([]); // Remove player's full stacks of held items so it can steal opponent's held items
+    await game.classicModeHelper.startBattle([Species.TREECKO]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     const enemyHeldItemCt = getHeldItemCount(enemyPokemon);
     const initialEnemySpeed = enemyPokemon.getStat(Stat.SPD);
 
     // Player uses Thief and steals the opponent's item
-    game.move.select(Moves.THIEF);
+    game.moveHelper.select(Moves.THIEF);
     await game.toNextTurn();
 
     expect(getHeldItemCount(enemyPokemon)).toBeLessThan(enemyHeldItemCt);
@@ -179,8 +179,8 @@ describe("Abilities - Unburden", () => {
   });
 
   it("should activate when an item is stolen via grip claw", async () => {
-    game.override.startingHeldItems([{ name: "GRIP_CLAW", count: 1 }]);
-    await game.classicMode.startBattle([Species.TREECKO]);
+    game.overridesHelper.startingHeldItems([{ name: "GRIP_CLAW", count: 1 }]);
+    await game.classicModeHelper.startBattle([Species.TREECKO]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const gripClaw = playerPokemon.getHeldItems()[0] as ContactHeldItemTransferChanceModifier;
@@ -191,7 +191,7 @@ describe("Abilities - Unburden", () => {
     const initialEnemySpeed = enemyPokemon.getStat(Stat.SPD);
 
     // Player steals the opponent's item using Grip Claw
-    game.move.select(Moves.FALSE_SWIPE);
+    game.moveHelper.select(Moves.FALSE_SWIPE);
     await game.toNextTurn();
 
     expect(getHeldItemCount(enemyPokemon)).toBeLessThan(enemyHeldItemCt);
@@ -199,15 +199,15 @@ describe("Abilities - Unburden", () => {
   });
 
   it("should not activate when a neutralizing ability is present", async () => {
-    game.override.enemyAbility(Abilities.NEUTRALIZING_GAS).enemyMoveset(Moves.FALSE_SWIPE);
-    await game.classicMode.startBattle([Species.TREECKO]);
+    game.overridesHelper.enemyAbility(Abilities.NEUTRALIZING_GAS).enemyMoveset(Moves.FALSE_SWIPE);
+    await game.classicModeHelper.startBattle([Species.TREECKO]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const playerHeldItems = getHeldItemCount(playerPokemon);
     const initialPlayerSpeed = playerPokemon.getStat(Stat.SPD);
 
     // Player gets hit by False Swipe and eats Sitrus Berry, which should not trigger Unburden
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     expect(getHeldItemCount(playerPokemon)).toBeLessThan(playerHeldItems);
@@ -216,8 +216,8 @@ describe("Abilities - Unburden", () => {
   });
 
   it("should activate when a move that consumes a berry is used", async () => {
-    game.override.moveset(Moves.STUFF_CHEEKS);
-    await game.classicMode.startBattle([Species.TREECKO]);
+    game.overridesHelper.moveset(Moves.STUFF_CHEEKS);
+    await game.classicModeHelper.startBattle([Species.TREECKO]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const playerHeldItemCt = getHeldItemCount(playerPokemon);
@@ -225,7 +225,7 @@ describe("Abilities - Unburden", () => {
 
     // Player uses Stuff Cheeks and eats its own berry
     // Caution: Do not test this using opponent, there is a known issue where opponent can randomly generate with Salac Berry
-    game.move.select(Moves.STUFF_CHEEKS);
+    game.moveHelper.select(Moves.STUFF_CHEEKS);
     await game.toNextTurn();
 
     expect(getHeldItemCount(playerPokemon)).toBeLessThan(playerHeldItemCt);
@@ -233,8 +233,8 @@ describe("Abilities - Unburden", () => {
   });
 
   it("should deactivate temporarily when a neutralizing gas user is on the field", async () => {
-    game.override.battleType("double").ability(Abilities.NONE); // Disable ability override so that we can properly set abilities below
-    await game.classicMode.startBattle([Species.TREECKO, Species.MEOWTH, Species.WEEZING]);
+    game.overridesHelper.battleType("double").ability(Abilities.NONE); // Disable ability override so that we can properly set abilities below
+    await game.classicModeHelper.startBattle([Species.TREECKO, Species.MEOWTH, Species.WEEZING]);
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [treecko, _meowth, weezing] = game.scene.getPlayerParty();
@@ -244,8 +244,8 @@ describe("Abilities - Unburden", () => {
     const initialPlayerSpeed = treecko.getStat(Stat.SPD);
 
     // Turn 1: Treecko gets hit by False Swipe and eats Sitrus Berry, activating Unburden
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.forceEnemyMove(Moves.FALSE_SWIPE, 0);
     await game.forceEnemyMove(Moves.FALSE_SWIPE, 0);
     await game.phaseInterceptor.to("TurnEndPhase");
@@ -255,7 +255,7 @@ describe("Abilities - Unburden", () => {
 
     // Turn 2: Switch Meowth to Weezing, activating Neutralizing Gas
     await game.toNextTurn();
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     game.doSwitchPokemon(2);
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -264,7 +264,7 @@ describe("Abilities - Unburden", () => {
 
     // Turn 3: Switch Weezing to Meowth, deactivating Neutralizing Gas
     await game.toNextTurn();
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     game.doSwitchPokemon(2);
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -273,8 +273,8 @@ describe("Abilities - Unburden", () => {
   });
 
   it("should not activate when passing a baton to a teammate switching in", async () => {
-    game.override.startingHeldItems([{ name: "BATON" }]).moveset(Moves.BATON_PASS);
-    await game.classicMode.startBattle([Species.TREECKO, Species.PURRLOIN]);
+    game.overridesHelper.startingHeldItems([{ name: "BATON" }]).moveset(Moves.BATON_PASS);
+    await game.classicModeHelper.startBattle([Species.TREECKO, Species.PURRLOIN]);
 
     const [treecko, purrloin] = game.scene.getPlayerParty();
     const initialTreeckoSpeed = treecko.getStat(Stat.SPD);
@@ -283,7 +283,7 @@ describe("Abilities - Unburden", () => {
     vi.spyOn(unburdenAttr, "applyPostItemLost");
 
     // Player uses Baton Pass, which also passes the Baton item
-    game.move.select(Moves.BATON_PASS);
+    game.moveHelper.select(Moves.BATON_PASS);
     game.doSelectPartyPokemon(1);
     await game.toNextTurn();
 
@@ -295,15 +295,15 @@ describe("Abilities - Unburden", () => {
   });
 
   it("should not speed up a Pokemon after it loses the ability Unburden", async () => {
-    game.override.enemyMoveset([Moves.FALSE_SWIPE, Moves.WORRY_SEED]);
-    await game.classicMode.startBattle([Species.PURRLOIN]);
+    game.overridesHelper.enemyMoveset([Moves.FALSE_SWIPE, Moves.WORRY_SEED]);
+    await game.classicModeHelper.startBattle([Species.PURRLOIN]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const playerHeldItems = getHeldItemCount(playerPokemon);
     const initialPlayerSpeed = playerPokemon.getStat(Stat.SPD);
 
     // Turn 1: Get hit by False Swipe and eat Sitrus Berry, activating Unburden
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.FALSE_SWIPE);
     await game.toNextTurn();
 
@@ -311,7 +311,7 @@ describe("Abilities - Unburden", () => {
     expect(playerPokemon.getEffectiveStat(Stat.SPD)).toBe(initialPlayerSpeed * 2);
 
     // Turn 2: Get hit by Worry Seed, deactivating Unburden
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.WORRY_SEED);
     await game.toNextTurn();
 
@@ -320,15 +320,15 @@ describe("Abilities - Unburden", () => {
   });
 
   it("should activate when a reviver seed is used", async () => {
-    game.override.startingHeldItems([{ name: "REVIVER_SEED" }]).enemyMoveset([Moves.WING_ATTACK]);
-    await game.classicMode.startBattle([Species.TREECKO]);
+    game.overridesHelper.startingHeldItems([{ name: "REVIVER_SEED" }]).enemyMoveset([Moves.WING_ATTACK]);
+    await game.classicModeHelper.startBattle([Species.TREECKO]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const playerHeldItems = getHeldItemCount(playerPokemon);
     const initialPlayerSpeed = playerPokemon.getStat(Stat.SPD);
 
     // Turn 1: Get hit by Wing Attack and faint, activating Reviver Seed
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     expect(getHeldItemCount(playerPokemon)).toBeLessThan(playerHeldItems);
@@ -337,14 +337,14 @@ describe("Abilities - Unburden", () => {
 
   // test for `.bypassFaint()` - singles
   it("shouldn't persist when revived normally if activated while fainting", async () => {
-    game.override.enemyMoveset([Moves.SPLASH, Moves.THIEF]);
-    await game.classicMode.startBattle([Species.TREECKO, Species.FEEBAS]);
+    game.overridesHelper.enemyMoveset([Moves.SPLASH, Moves.THIEF]);
+    await game.classicModeHelper.startBattle([Species.TREECKO, Species.FEEBAS]);
 
     const treecko = game.scene.getPlayerPokemon()!;
     const treeckoInitialHeldItems = getHeldItemCount(treecko);
     const initialSpeed = treecko.getStat(Stat.SPD);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.THIEF);
     game.doSelectPartyPokemon(1);
     await game.toNextTurn();
@@ -361,19 +361,19 @@ describe("Abilities - Unburden", () => {
 
   // test for `.bypassFaint()` - doubles
   it("shouldn't persist when revived by revival blessing if activated while fainting", async () => {
-    game.override
+    game.overridesHelper
       .battleType("double")
       .enemyMoveset([Moves.SPLASH, Moves.THIEF])
       .moveset([Moves.SPLASH, Moves.REVIVAL_BLESSING])
       .startingHeldItems([{ name: "WIDE_LENS" }]);
-    await game.classicMode.startBattle([Species.TREECKO, Species.FEEBAS, Species.MILOTIC]);
+    await game.classicModeHelper.startBattle([Species.TREECKO, Species.FEEBAS, Species.MILOTIC]);
 
     const treecko = game.scene.getPlayerField()[0];
     const treeckoInitialHeldItems = getHeldItemCount(treecko);
     const initialSpeed = treecko.getStat(Stat.SPD);
 
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.REVIVAL_BLESSING, 1);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.REVIVAL_BLESSING, 1);
     await game.forceEnemyMove(Moves.THIEF, BattlerIndex.PLAYER);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2]);

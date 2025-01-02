@@ -29,7 +29,7 @@ describe("Abilities - Sap Sipper", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .disableCrits()
       .ability(Abilities.SAP_SIPPER)
@@ -41,14 +41,14 @@ describe("Abilities - Sap Sipper", () => {
   it("raises ATK stat stage by 1 and block effects when activated against a grass attack", async () => {
     const moveToUse = Moves.LEAFAGE;
 
-    game.override.moveset(moveToUse);
+    game.overridesHelper.moveset(moveToUse);
 
-    await game.classicMode.startBattle([Species.BULBASAUR]);
+    await game.classicModeHelper.startBattle([Species.BULBASAUR]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     const initialEnemyHp = enemyPokemon.hp;
 
-    game.move.select(moveToUse);
+    game.moveHelper.select(moveToUse);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -59,13 +59,13 @@ describe("Abilities - Sap Sipper", () => {
   it("raises ATK stat stage by 1 and block effects when activated against a grass status move", async () => {
     const moveToUse = Moves.SPORE;
 
-    game.override.moveset(moveToUse);
+    game.overridesHelper.moveset(moveToUse);
 
-    await game.classicMode.startBattle([Species.BULBASAUR]);
+    await game.classicModeHelper.startBattle([Species.BULBASAUR]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(moveToUse);
+    game.moveHelper.select(moveToUse);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -76,11 +76,11 @@ describe("Abilities - Sap Sipper", () => {
   it("do not activate against status moves that target the field", async () => {
     const moveToUse = Moves.GRASSY_TERRAIN;
 
-    game.override.moveset(moveToUse);
+    game.overridesHelper.moveset(moveToUse);
 
-    await game.classicMode.startBattle([Species.BULBASAUR]);
+    await game.classicModeHelper.startBattle([Species.BULBASAUR]);
 
-    game.move.select(moveToUse);
+    game.moveHelper.select(moveToUse);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -92,14 +92,14 @@ describe("Abilities - Sap Sipper", () => {
   it("activate once against multi-hit grass attacks", async () => {
     const moveToUse = Moves.BULLET_SEED;
 
-    game.override.moveset(moveToUse);
+    game.overridesHelper.moveset(moveToUse);
 
-    await game.classicMode.startBattle([Species.BULBASAUR]);
+    await game.classicModeHelper.startBattle([Species.BULBASAUR]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     const initialEnemyHp = enemyPokemon.hp;
 
-    game.move.select(moveToUse);
+    game.moveHelper.select(moveToUse);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -110,13 +110,13 @@ describe("Abilities - Sap Sipper", () => {
   it("do not activate against status moves that target the user", async () => {
     const moveToUse = Moves.SPIKY_SHIELD;
 
-    game.override.moveset(moveToUse);
+    game.overridesHelper.moveset(moveToUse);
 
-    await game.classicMode.startBattle([Species.BULBASAUR]);
+    await game.classicModeHelper.startBattle([Species.BULBASAUR]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(moveToUse);
+    game.moveHelper.select(moveToUse);
 
     await game.phaseInterceptor.to(MoveEndPhase);
 
@@ -136,14 +136,14 @@ describe("Abilities - Sap Sipper", () => {
     ) as RandomMoveAttr;
     vi.spyOn(randomMoveAttr, "getMoveOverride").mockReturnValue(Moves.BULLET_SEED);
 
-    game.override.moveset(moveToUse);
+    game.overridesHelper.moveset(moveToUse);
 
-    await game.classicMode.startBattle([Species.BULBASAUR]);
+    await game.classicModeHelper.startBattle([Species.BULBASAUR]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     const initialEnemyHp = enemyPokemon.hp;
 
-    game.move.select(moveToUse);
+    game.moveHelper.select(moveToUse);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -152,16 +152,16 @@ describe("Abilities - Sap Sipper", () => {
   });
 
   it("still activates regardless of accuracy check", async () => {
-    game.override.moveset(Moves.LEAF_BLADE);
+    game.overridesHelper.moveset(Moves.LEAF_BLADE);
 
-    await game.classicMode.startBattle([Species.BULBASAUR]);
+    await game.classicModeHelper.startBattle([Species.BULBASAUR]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.LEAF_BLADE);
+    game.moveHelper.select(Moves.LEAF_BLADE);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
-    await game.move.forceMiss();
+    await game.moveHelper.forceMiss();
     await game.phaseInterceptor.to("BerryPhase", false);
     expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(1);
   });

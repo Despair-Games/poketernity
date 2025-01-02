@@ -22,7 +22,7 @@ describe("Moves - Throat Chop", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset(Array(4).fill(Moves.GROWL))
       .battleType("single")
       .ability(Abilities.BALL_FETCH)
@@ -32,11 +32,11 @@ describe("Moves - Throat Chop", () => {
   });
 
   it("prevents the target from using sound-based moves for two turns", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.GROWL);
+    game.moveHelper.select(Moves.GROWL);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     // First turn, move is interrupted
@@ -46,7 +46,7 @@ describe("Moves - Throat Chop", () => {
     // Second turn, struggle if no valid moves
     await game.toNextTurn();
 
-    game.move.select(Moves.GROWL);
+    game.moveHelper.select(Moves.GROWL);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("MoveEndPhase");

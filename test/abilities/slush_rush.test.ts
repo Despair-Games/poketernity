@@ -23,7 +23,7 @@ describe("Abilities - Slush Rush", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .weather(WeatherType.HAIL)
       .moveset([Moves.SPLASH])
       .ability(Abilities.SLUSH_RUSH)
@@ -35,10 +35,10 @@ describe("Abilities - Slush Rush", () => {
   });
 
   it("should not block damage from hail", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
     const pokemon = game.scene.getPlayerPokemon();
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(pokemon?.isFullHp()).toBe(false);

@@ -26,16 +26,16 @@ describe("Moves - Mat Block", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override.battleType("double");
+    game.overridesHelper.battleType("double");
 
-    game.override.moveset([Moves.MAT_BLOCK, Moves.SPLASH]);
+    game.overridesHelper.moveset([Moves.MAT_BLOCK, Moves.SPLASH]);
 
-    game.override.enemySpecies(Species.SNORLAX);
-    game.override.enemyMoveset([Moves.TACKLE]);
-    game.override.enemyAbility(Abilities.INSOMNIA);
+    game.overridesHelper.enemySpecies(Species.SNORLAX);
+    game.overridesHelper.enemyMoveset([Moves.TACKLE]);
+    game.overridesHelper.enemyAbility(Abilities.INSOMNIA);
 
-    game.override.startingLevel(100);
-    game.override.enemyLevel(100);
+    game.overridesHelper.startingLevel(100);
+    game.overridesHelper.enemyLevel(100);
   });
 
   test("should protect the user and allies from attack moves", async () => {
@@ -43,11 +43,11 @@ describe("Moves - Mat Block", () => {
 
     const leadPokemon = game.scene.getPlayerField();
 
-    game.move.select(Moves.MAT_BLOCK);
+    game.moveHelper.select(Moves.MAT_BLOCK);
 
     await game.phaseInterceptor.to(CommandPhase);
 
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.phaseInterceptor.to(BerryPhase, false);
 
@@ -55,17 +55,17 @@ describe("Moves - Mat Block", () => {
   });
 
   test("should not protect the user and allies from status moves", async () => {
-    game.override.enemyMoveset([Moves.GROWL]);
+    game.overridesHelper.enemyMoveset([Moves.GROWL]);
 
     await game.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
 
     const leadPokemon = game.scene.getPlayerField();
 
-    game.move.select(Moves.MAT_BLOCK);
+    game.moveHelper.select(Moves.MAT_BLOCK);
 
     await game.phaseInterceptor.to(CommandPhase);
 
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.phaseInterceptor.to(BerryPhase, false);
 
@@ -77,18 +77,18 @@ describe("Moves - Mat Block", () => {
 
     const leadPokemon = game.scene.getPlayerField();
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to(CommandPhase);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
     const leadStartingHp = leadPokemon.map((p) => p.hp);
 
     await game.phaseInterceptor.to(CommandPhase, false);
-    game.move.select(Moves.MAT_BLOCK);
+    game.moveHelper.select(Moves.MAT_BLOCK);
     await game.phaseInterceptor.to(CommandPhase);
-    game.move.select(Moves.MAT_BLOCK, 1);
+    game.moveHelper.select(Moves.MAT_BLOCK, 1);
 
     await game.phaseInterceptor.to(BerryPhase, false);
 

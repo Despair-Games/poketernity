@@ -23,7 +23,7 @@ describe("Moves - Guard Swap", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemyAbility(Abilities.BALL_FETCH)
       .enemyMoveset(Moves.SPLASH)
@@ -34,14 +34,14 @@ describe("Moves - Guard Swap", () => {
   });
 
   it("should swap the user's DEF and SPDEF stat stages with the target's", async () => {
-    await game.classicMode.startBattle([Species.INDEEDEE]);
+    await game.classicModeHelper.startBattle([Species.INDEEDEE]);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
     vi.spyOn(enemy.summonData, "statStages", "get").mockReturnValue(new Array(BATTLE_STATS.length).fill(1));
 
-    game.move.select(Moves.GUARD_SWAP);
+    game.moveHelper.select(Moves.GUARD_SWAP);
 
     await game.phaseInterceptor.to(MoveEndPhase);
 

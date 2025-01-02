@@ -22,32 +22,32 @@ describe("Abilities - Sand Spit", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("single");
-    game.override.disableCrits();
+    game.overridesHelper.battleType("single");
+    game.overridesHelper.disableCrits();
 
-    game.override.enemySpecies(Species.MAGIKARP);
-    game.override.enemyAbility(Abilities.BALL_FETCH);
+    game.overridesHelper.enemySpecies(Species.MAGIKARP);
+    game.overridesHelper.enemyAbility(Abilities.BALL_FETCH);
 
-    game.override.starterSpecies(Species.SILICOBRA);
-    game.override.ability(Abilities.SAND_SPIT);
-    game.override.moveset([Moves.SPLASH, Moves.COIL]);
+    game.overridesHelper.starterSpecies(Species.SILICOBRA);
+    game.overridesHelper.ability(Abilities.SAND_SPIT);
+    game.overridesHelper.moveset([Moves.SPLASH, Moves.COIL]);
   });
 
   it("should trigger when hit with damaging move", async () => {
-    game.override.enemyMoveset([Moves.TACKLE]);
+    game.overridesHelper.enemyMoveset([Moves.TACKLE]);
     await game.startBattle();
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     expect(game.scene.arena.weather?.weatherType).toBe(WeatherType.SANDSTORM);
   }, 20000);
 
   it("should not trigger when targetted with status moves", async () => {
-    game.override.enemyMoveset([Moves.GROWL]);
+    game.overridesHelper.enemyMoveset([Moves.GROWL]);
     await game.startBattle();
 
-    game.move.select(Moves.COIL);
+    game.moveHelper.select(Moves.COIL);
     await game.toNextTurn();
 
     expect(game.scene.arena.weather?.weatherType).not.toBe(WeatherType.SANDSTORM);
