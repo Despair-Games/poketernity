@@ -60,7 +60,7 @@ export const defaultAudioSettings: AudioSettings = {
   fieldVolume: 1,
   soundEffectsVolume: 1,
   uiVolume: 1,
-  musicPreference: MusicPreference.MIXED,
+  musicPreference: MusicPreference.ALLGENS,
 };
 
 export const deafultGamepadSettings: GamepadSettings = {

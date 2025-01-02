@@ -10,6 +10,7 @@ import * as Utils from "#app/utils";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { Gender } from "#enums/gender";
 
 describe("Evolution", () => {
   let phaserGame: Phaser.Game;
@@ -82,12 +83,15 @@ describe("Evolution", () => {
     const nincada = game.scene.getPlayerPokemon()!;
     nincada.abilityIndex = 2;
     nincada.metBiome = -1;
+    nincada.gender = Gender.FEMALE;
 
     nincada.evolve(pokemonEvolutions[Species.NINCADA][0], nincada.getSpeciesForm());
     const ninjask = game.scene.getPlayerParty()[0];
     const shedinja = game.scene.getPlayerParty()[1];
     expect(ninjask.abilityIndex).toBe(2);
     expect(shedinja.abilityIndex).toBe(1);
+    expect(ninjask.gender).toBe(Gender.FEMALE);
+    expect(shedinja.gender).toBe(Gender.GENDERLESS);
     // Regression test
     expect(shedinja.metBiome).toBe(-1);
   });

@@ -345,8 +345,8 @@ export const audioSettingsUiItems: SettingsUiItem<AudioSettingsKey>[] = [
     key: "musicPreference",
     label: t("settings:musicPreference"),
     options: [
-      { value: MusicPreference.CONSISTENT, label: t("settings:consistent") },
-      { value: MusicPreference.MIXED, label: t("settings:mixed") },
+      { value: MusicPreference.GENFIVE, label: t("settings:musicGenFive") },
+      { value: MusicPreference.ALLGENS, label: t("settings:musicAllGens") },
     ],
     requiresReload: true,
   },

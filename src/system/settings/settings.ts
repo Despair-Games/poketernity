@@ -1,4 +1,5 @@
 import { hasTouchscreen } from "#app/utils";
+import { MusicPreference } from "#enums/music-preference";
 import i18next from "i18next";
 
 const VOLUME_OPTIONS: SettingOption[] = new Array(11).fill(null).map((_, i) =>
@@ -150,11 +151,6 @@ export const SettingKeys = {
   Move_Touch_Controls: "MOVE_TOUCH_CONTROLS",
   Shop_Overlay_Opacity: "SHOP_OVERLAY_OPACITY",
 };
-
-export enum MusicPreference {
-  CONSISTENT,
-  MIXED,
-}
 
 /**
  * All Settings not related to controls
@@ -634,15 +630,15 @@ export const Setting: Array<Setting> = [
     label: i18next.t("settings:musicPreference"),
     options: [
       {
-        value: "Consistent",
-        label: i18next.t("settings:consistent"),
+        value: "Gen V + PMD",
+        label: i18next.t("settings:musicGenFive"),
       },
       {
-        value: "Mixed",
-        label: i18next.t("settings:mixed"),
+        value: "All Gens",
+        label: i18next.t("settings:musicAllGens"),
       },
     ],
-    default: MusicPreference.MIXED,
+    default: MusicPreference.ALLGENS,
     type: SettingType.AUDIO,
     requireReload: true,
   },
