@@ -201,7 +201,7 @@ export class TitlePhase extends Phase {
   }
 
   public initDailyRun(): void {
-    const { arena, gameData, time, ui } = globalScene;
+    const { gameData, time, ui } = globalScene;
 
     ui.setMode(Mode.SAVE_SLOT, SaveSlotUiMode.SAVE, (slotId: number) => {
       globalScene.clearPhaseQueue();
@@ -272,7 +272,7 @@ export class TitlePhase extends Phase {
         Promise.all(loadPokemonAssets).then(() => {
           time.delayedCall(500, () => globalScene.playBgm());
           gameData.gameStats.dailyRunSessionsPlayed++;
-          globalScene.newArena(gameMode.getStartingBiome());
+          const arena = globalScene.newArena(gameMode.getStartingBiome());
           globalScene.newBattle();
           arena.init();
           globalScene.sessionPlayTime = 0;
