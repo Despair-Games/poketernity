@@ -168,7 +168,6 @@ import { PostBattleInitAbAttr } from "./data/ab-attrs/post-battle-init-ab-attr";
 import { settings } from "./system/settings/settings-manager";
 import type { AnySettingKey, SettingsUpdateEventArgs } from "./@types/Settings";
 import { PRSFX_SOUND_ADJUSTMENT_RATIO } from "./constants";
-import { SpriteSet } from "#enums/sprite-set";
 import { bgmLoopPoint } from "./data/bgm-loop-point";
 import { eventBus } from "./event-bus";
 

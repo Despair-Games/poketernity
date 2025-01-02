@@ -11,7 +11,6 @@ import { HpBarSpeed } from "#app/enums/hp-bar-speed";
 import { MoneyFormat } from "#app/enums/money-format";
 import { MusicPreference } from "#app/enums/music-preference";
 import { ShopCursorTarget } from "#app/enums/shop-cursor-target";
-import { SpriteSet } from "#app/enums/sprite-set";
 import { UiTheme } from "#app/enums/ui-theme";
 import { Gender } from "#enums/gender";
 import { UiWindowType } from "#enums/ui-window-type";
@@ -45,7 +44,6 @@ export const defaultDisplaySettings: DisplaySettings = {
   showArenaFlyout: true,
   showTimeOfDayWidget: true,
   timeOfDayAnimation: EaseType.BOUNCE,
-  spriteSet: SpriteSet.CONSISTENT,
   enableFusionPaletteSwaps: true,
   playerGender: Gender.MALE,
   enableTypeHints: false,

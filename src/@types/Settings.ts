@@ -11,7 +11,6 @@ import type { MoneyFormat } from "#enums/money-format";
 import type { MusicPreference } from "#enums/music-preference";
 import type { ShopCursorTarget } from "#enums/shop-cursor-target";
 import type { Gender } from "#enums/gender";
-import type { SpriteSet } from "#enums/sprite-set";
 import type { UiTheme } from "#enums/ui-theme";
 import type { UiWindowType } from "#enums/ui-window-type";
 
@@ -51,7 +50,6 @@ export interface DisplaySettings {
   showArenaFlyout: boolean;
   showTimeOfDayWidget: boolean;
   timeOfDayAnimation: EaseType;
-  spriteSet: SpriteSet;
   enableFusionPaletteSwaps: boolean;
   playerGender: Gender;
   enableTypeHints: boolean;
