@@ -10,7 +10,7 @@ import { PostDefendAbAttr } from "./post-defend-ab-attr";
 /**
  * Attribute that prompts a stat stage change after the ability holder received a critical hit
  * Abilities using this attribute are:
- * - Anger Point
+ * - Anger Point: Maximizes Attack stat
  */
 export class PostDefendCritStatStageChangeAbAttr extends PostDefendAbAttr {
   private readonly stat: BattleStat;
@@ -32,9 +32,11 @@ export class PostDefendCritStatStageChangeAbAttr extends PostDefendAbAttr {
     _hitResult: HitResult,
     _args: any[],
   ): boolean {
+    const attacksReceivedEntry = pokemon.turnData.attacksReceived[0];
     if (
       pokemon.turnData.attacksReceived.length !== 0
-      && pokemon.turnData.attacksReceived.some((p) => p.isCritical && p.sourceId === attacker.id)
+      && attacksReceivedEntry.isCritical
+      && attacksReceivedEntry.sourceId === attacker.id
       && pokemon.summonData.statStages[Stat.ATK] < 6
     ) {
       if (!simulated) {
