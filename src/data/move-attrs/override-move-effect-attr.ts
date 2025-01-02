@@ -3,6 +3,11 @@ import type { Move } from "#app/data/move";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";
 import type { BooleanHolder } from "#app/utils";
 
+/**
+ * Attribute to apply effects that cancel the standard
+ * move effect chain in {@linkcode MoveEffectPhase}.
+ * @extends MoveAttr
+ */
 export class OverrideMoveEffectAttr extends MoveAttr {
   /**
    * Applies effects that may cancel the subsequent effect

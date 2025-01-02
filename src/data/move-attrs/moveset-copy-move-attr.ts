@@ -7,11 +7,13 @@ import { allMoves } from "#app/data/all-moves";
 import { targetMoveCopiableCondition, type MoveConditionFunc } from "../move-conditions";
 import { OverrideMoveEffectAttr } from "./override-move-effect-attr";
 
+/**
+ * Attribute to copy the target's last used move into the user's moveset,
+ * temporarily replacing the move with this attribute.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Mimic_(move) Mimic}.
+ * @extends OverrideMoveEffectAttr
+ */
 export class MovesetCopyMoveAttr extends OverrideMoveEffectAttr {
-  /**
-   * Copies the target's last used move into the user's moveset,
-   * taking the place of the given move.
-   */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     const targetMoves = target.getMoveHistory().filter((m) => !m.virtual);
     if (!targetMoves.length) {

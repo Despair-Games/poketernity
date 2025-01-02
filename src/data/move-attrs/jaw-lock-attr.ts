@@ -13,11 +13,6 @@ export class JawLockAttr extends AddBattlerTagAttr {
     super(BattlerTagType.TRAPPED);
   }
 
-  /**
-   * Traps both the user and target.
-   * If one affected Pokemon is removed from the field, the other
-   * loses the trapping effect.
-   */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.canApply(user, target, move)) {
       return false;

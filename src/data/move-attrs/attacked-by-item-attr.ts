@@ -7,14 +7,11 @@ import { MoveAttr } from "#app/data/move-attrs/move-attr";
 import type { MoveConditionFunc } from "../move-conditions";
 
 /**
- * The move only works if the target has a transferable held item
+ * Attribute to cause the move to fail if the target is not holding an item.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Poltergeist_(move) Poltergeist}.
  * @extends MoveAttr
- * @see {@linkcode getCondition}
  */
 export class AttackedByItemAttr extends MoveAttr {
-  /**
-   * @returns the {@linkcode MoveConditionFunc} for this {@linkcode Move}
-   */
   override getCondition(): MoveConditionFunc {
     return (_user: Pokemon, target: Pokemon, _move: Move) => {
       const heldItems = target.getHeldItems().filter((i) => i.isTransferable);

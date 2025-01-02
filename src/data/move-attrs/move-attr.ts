@@ -8,7 +8,6 @@ import type { MoveCondition, MoveConditionFunc } from "../move-conditions";
  * @abstract
  * @see {@linkcode apply}
  */
-
 export abstract class MoveAttr {
   /** Should this {@linkcode Move} target the user? */
   public selfTarget: boolean;

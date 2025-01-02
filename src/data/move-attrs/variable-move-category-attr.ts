@@ -3,6 +3,11 @@ import type { Move } from "#app/data/move";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";
 import type { NumberHolder } from "#app/utils";
 
+/**
+ * Attribute to modify a move's category (Physical, Special, or Status)
+ * based on game state.
+ * @extends MoveAttr
+ */
 export class VariableMoveCategoryAttr extends MoveAttr {
   /**
    * Modifies the given move's category based on game state

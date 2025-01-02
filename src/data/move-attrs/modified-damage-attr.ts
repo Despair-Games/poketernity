@@ -3,6 +3,12 @@ import type { NumberHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";
 
+/**
+ * Attribute to modify a move's damage after all other damage
+ * modifiers are accounted for.
+ * @extends MoveAttr
+ * @see {@linkcode getModifiedDamage}
+ */
 export class ModifiedDamageAttr extends MoveAttr {
   /**
    * Modifies damage after damage is otherwise fully calculated.

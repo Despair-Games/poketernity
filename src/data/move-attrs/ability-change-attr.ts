@@ -10,6 +10,12 @@ import { SpeciesFormChangeRevertWeatherFormTrigger } from "#app/data/pokemon-for
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import type { MoveConditionFunc } from "../move-conditions";
 
+/**
+ * Attribute to change a target's ability to a set ability.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Worry_Seed_(move) Worry Seed}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Simple_Beam_(move) Simple Beam}.
+ * @extends MoveEffectAttr
+ */
 export class AbilityChangeAttr extends MoveEffectAttr {
   public ability: Abilities;
 
@@ -19,7 +25,6 @@ export class AbilityChangeAttr extends MoveEffectAttr {
     this.ability = ability;
   }
 
-  /** Changes the target's ability to this attribute's set ability */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

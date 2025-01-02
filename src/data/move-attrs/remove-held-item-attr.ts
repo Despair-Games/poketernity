@@ -25,7 +25,6 @@ export class RemoveHeldItemAttr extends MoveEffectAttr {
     this.berriesOnly = berriesOnly;
   }
 
-  /** Removes a random held item (or berry) from the target */
   override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
     if (!this.berriesOnly && target.isPlayer()) {
       // "Wild Pokemon cannot knock off Player Pokemon's held items" (See Bulbapedia)

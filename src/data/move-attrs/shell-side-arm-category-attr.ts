@@ -7,14 +7,10 @@ import { VariableMoveCategoryAttr } from "#app/data/move-attrs/variable-move-cat
 
 /**
  * Attribute used for shell side arm that makes the move physical (and makes contact)
- * if it would deal more damage as a physical attack
+ * if it would deal more damage as a physical attack.
+ * @extends VariableMoveCategoryAttr
  */
 export class ShellSideArmCategoryAttr extends VariableMoveCategoryAttr {
-  /**
-   * Changes the given move's category according to which attacking
-   * category would deal more damage to the target.
-   * If the move becomes physical, this also sets the move to make contact
-   */
   override apply(user: Pokemon, target: Pokemon, move: Move, category: NumberHolder): boolean {
     const predictedPhysDmg = target.getBaseDamage(user, move, MoveCategory.PHYSICAL, true, true);
     const predictedSpecDmg = target.getBaseDamage(user, move, MoveCategory.SPECIAL, true, true);

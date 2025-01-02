@@ -17,7 +17,6 @@ export class CueNextRoundAttr extends MoveEffectAttr {
     super(true, { lastHitOnly: true });
   }
 
-  /** Manipulates turn order so that the next use of Round precedes other moves this turn */
   override apply(_user: Pokemon, _target: Pokemon, _move: Move): boolean {
     const nextRoundPhase = globalScene.findPhase<MovePhase>(
       (phase) => phase instanceof MovePhase && phase.move.moveId === Moves.ROUND,

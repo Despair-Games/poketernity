@@ -8,9 +8,9 @@ import type { Move } from "../move";
 import { MoveEffectAttr } from "./move-effect-attr";
 
 /**
- * Swaps arena effects between the player and enemy side
+ * Swaps arena effects between the player and enemy side.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Court_Change_(move) Court Change}
  * @extends MoveEffectAttr
- * @see {@linkcode apply}
  */
 export class SwapArenaTagsAttr extends MoveEffectAttr {
   public swappableTags: ArenaTagType[];
@@ -20,7 +20,6 @@ export class SwapArenaTagsAttr extends MoveEffectAttr {
     this.swappableTags = SwapTags;
   }
 
-  /** Swaps sides of all arena tags that are {@linkcode SwapTags swappable} */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

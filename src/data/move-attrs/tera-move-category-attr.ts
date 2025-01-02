@@ -13,10 +13,6 @@ import { VariableMoveCategoryAttr } from "#app/data/move-attrs/variable-move-cat
  * @extends VariableMoveCategoryAttr
  */
 export class TeraMoveCategoryAttr extends VariableMoveCategoryAttr {
-  /**
-   * If the user is terastallized, changes the move's category based on
-   * which of the user's corresponding offensive stats is highest
-   */
   override apply(user: Pokemon, target: Pokemon, _move: Move, category: NumberHolder): boolean {
     if (user.isTerastallized() && user.getEffectiveStat(Stat.ATK, target) > user.getEffectiveStat(Stat.SPATK, target)) {
       category.value = MoveCategory.PHYSICAL;

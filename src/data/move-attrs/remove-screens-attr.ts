@@ -6,6 +6,12 @@ import { ArenaTagSide } from "../arena-tag";
 import type { Move } from "../move";
 import { MoveEffectAttr } from "./move-effect-attr";
 
+/**
+ * Attribute to remove the effects of
+ * {@link https://bulbapedia.bulbagarden.net/wiki/Light_Screen_(move) Light Screen}
+ * and similar effects.
+ * @extends MoveEffectAttr
+ */
 export class RemoveScreensAttr extends MoveEffectAttr {
   private targetBothSides: boolean;
 
@@ -14,7 +20,6 @@ export class RemoveScreensAttr extends MoveEffectAttr {
     this.targetBothSides = targetBothSides;
   }
 
-  /** Removes the effects of Reflect, Light Screen, and Aurora Veil */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

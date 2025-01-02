@@ -6,14 +6,14 @@ import i18next from "i18next";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
-/** Used by Transform */
+/**
+ * Attribute to transform the user into the target,
+ * copying its species, form, ability, moveset, and stats (except for HP).
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Transform_(move) Transform}.
+ * @extends MoveEffectAttr
+ * @see {@linkcode PokemonTransformPhase}
+ */
 export class TransformAttr extends MoveEffectAttr {
-  /**
-   * Transforms the user into a copy of the target,
-   * copying the target's species, form, ability, gender, moveset, and
-   * all effective stats (except HP)
-   * @see {@linkcode PokemonTransformPhase}
-   */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

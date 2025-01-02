@@ -6,6 +6,11 @@ import type { Move } from "#app/data/move";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";
 import type { MoveConditionFunc } from "../move-conditions";
 
+/**
+ * Attribute to mark a move as a {@link https://bulbapedia.bulbagarden.net/wiki/One-hit_knockout_move one-hit knockout}
+ * if the target is not a Boss Pokemon.
+ * @extends MoveAttr
+ */
 export class OneHitKOAttr extends MoveAttr {
   /**
    * If the target is not a Boss, flags the given move as a one-hit KO

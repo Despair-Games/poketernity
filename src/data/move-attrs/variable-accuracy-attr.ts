@@ -3,6 +3,10 @@ import type { Move } from "#app/data/move";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";
 import type { NumberHolder } from "#app/utils";
 
+/**
+ * Attribute to modify move accuracy based on game state.
+ * @extends MoveAttr
+ */
 export class VariableAccuracyAttr extends MoveAttr {
   /**
    * Modifies the given move's accuracy based on game state

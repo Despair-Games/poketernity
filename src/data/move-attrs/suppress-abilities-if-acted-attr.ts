@@ -5,14 +5,10 @@ import { SuppressAbilitiesAttr } from "#app/data/move-attrs/suppress-abilities-a
 
 /**
  * Applies the effects of {@linkcode SuppressAbilitiesAttr} if the target has already moved this turn.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Core_Enforcer_(move) Core Enforcer}.
  * @extends MoveEffectAttr
- * @see {@linkcode Moves.CORE_ENFORCER} (the move which uses this effect)
  */
 export class SuppressAbilitiesIfActedAttr extends MoveEffectAttr {
-  /**
-   * If the target has already acted this turn, apply a {@linkcode SuppressAbilitiesAttr} effect unless the
-   * ability cannot be suppressed. This is a secondary effect and has no bearing on the success or failure of the move.
-   */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

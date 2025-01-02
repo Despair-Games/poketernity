@@ -4,15 +4,15 @@ import { ReducePpMoveAttr } from "#app/data/move-attrs/reduce-pp-move-attr";
 import type { MoveConditionFunc } from "../move-conditions";
 
 /**
- *  Attribute used for moves that damage target, and then reduce PP of the target's last used move.
- *  Used for {@linkcode https://bulbapedia.bulbagarden.net/wiki/Eerie_Spell_(move) Eerie Spell}.
+ * Attribute to reduce the PP of the target's last move after attacking.
+ * Used for {@linkcode https://bulbapedia.bulbagarden.net/wiki/Eerie_Spell_(move) Eerie Spell}.
+ * @extends ReducePpMoveAttr
  */
 export class AttackReducePpMoveAttr extends ReducePpMoveAttr {
   constructor(reduction: number) {
     super(reduction);
   }
 
-  /** Reduces the PP of the target's last move (if applicable) */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     const lastMove = target.getLastXMoves().find(() => true);
     if (lastMove) {

@@ -8,8 +8,9 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import type { MoveConditionFunc } from "../move-conditions";
 
 /**
- *  Attribute used for moves that reduce PP of the target's last used move.
- *  Used for Spite.
+ * Attribute used for moves that reduce PP of the target's last used move.
+ * Used for Spite.
+ * @extends MoveEffectAttr
  */
 export class ReducePpMoveAttr extends MoveEffectAttr {
   protected reduction: number;

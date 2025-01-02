@@ -27,8 +27,14 @@ const beatUpFunc = (user: Pokemon, allyIndex: number): number => {
   return 0;
 };
 
+/**
+ * Attribute to modify the base power of a hit according to the party Pokemon
+ * contributing to the hit.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Beat_Up_(move) Beat Up}.
+ * @extends VariablePowerAttr
+ * @see {@linkcode beatUpFunc}
+ */
 export class BeatUpAttr extends VariablePowerAttr {
-  /** Modifies base power according to the party Pokemon that contributes to the current hit. */
   override apply(user: Pokemon, _target: Pokemon, _move: Move, power: NumberHolder): boolean {
     const party = user.getParty();
     const allyCount = party.filter((pokemon) => {

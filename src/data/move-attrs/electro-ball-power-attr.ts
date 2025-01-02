@@ -5,16 +5,13 @@ import type { Move } from "#app/data/move";
 import { VariablePowerAttr } from "#app/data/move-attrs/variable-power-attr";
 
 /**
- * Attribute used for Electro Ball move.
+ * Attribute implementing {@link https://bulbapedia.bulbagarden.net/wiki/Electro_Ball_(move) Electro Ball}'s
+ * move power modifier.
+ * Sets the move's power proportional to the user's
+ * {@linkcode Stat.SPD Speed} compared to the target.
  * @extends VariablePowerAttr
- * @see {@linkcode apply}
  **/
-
 export class ElectroBallPowerAttr extends VariablePowerAttr {
-  /**
-   * Sets the given move's power proportional to the user's
-   * {@linkcode Stat.SPD Speed} compared to the target.
-   */
   override apply(user: Pokemon, target: Pokemon, _move: Move, power: NumberHolder): boolean {
     const statRatio = target.getEffectiveStat(Stat.SPD) / user.getEffectiveStat(Stat.SPD);
     const statThresholds = [0.25, 1 / 3, 0.5, 1, -1];

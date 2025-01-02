@@ -9,6 +9,13 @@ import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import type { MoveConditionFunc } from "../move-conditions";
 
+/**
+ * Attribute to copy the target's ability onto the
+ * user (and, optionally, the user's ally).
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Role_Play_(move) Role Play}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Doodle_(move) Doodle}.
+ * @extends MoveEffectAttr
+ */
 export class AbilityCopyAttr extends MoveEffectAttr {
   public copyToPartner: boolean;
 
@@ -18,10 +25,6 @@ export class AbilityCopyAttr extends MoveEffectAttr {
     this.copyToPartner = copyToPartner;
   }
 
-  /**
-   * Copies the target's ability onto the user
-   * (and the user's ally if {@linkcode copyToPartner} is `true`)
-   */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

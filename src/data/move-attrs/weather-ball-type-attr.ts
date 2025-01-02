@@ -6,8 +6,12 @@ import type { NumberHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
 import { VariableMoveTypeAttr } from "#app/data/move-attrs/variable-move-type-attr";
 
+/**
+ * Attribute to change a move's type to match the active weather.
+ * Used by {@link https://bulbapedia.bulbagarden.net/wiki/Weather_Ball_(move) Weather Ball}.
+ * @extends VariableMoveTypeAttr
+ */
 export class WeatherBallTypeAttr extends VariableMoveTypeAttr {
-  /** Changes the move's type according to the active weather */
   override apply(_user: Pokemon, _target: Pokemon, _move: Move, moveType: NumberHolder): boolean {
     if (!globalScene.arena.weather?.isEffectSuppressed()) {
       switch (globalScene.arena.weather?.weatherType) {

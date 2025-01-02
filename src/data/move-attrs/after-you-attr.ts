@@ -6,9 +6,13 @@ import i18next from "i18next";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
-/** Attribute for {@link https://bulbapedia.bulbagarden.net/wiki/After_You_(move) After You}'s turn order manipulation effect. */
+/**
+ * Attribute to allow the target to move immediately after the user
+ * if the target hasn't moved yet this turn.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/After_You_(move) After You}.
+ * @extends MoveEffectAttr
+ */
 export class AfterYouAttr extends MoveEffectAttr {
-  /** Allows the target of this move to act immediately after the user */
   override apply(_user: Pokemon, target: Pokemon, _move: Move): boolean {
     globalScene.queueMessage(i18next.t("moveTriggers:afterYou", { targetName: getPokemonNameWithAffix(target) }));
 

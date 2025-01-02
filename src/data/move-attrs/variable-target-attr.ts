@@ -3,6 +3,10 @@ import type { NumberHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";
 
+/**
+ * Attribute to change a move's legal target set based on game state.
+ * @extends MoveAttr
+ */
 export class VariableTargetAttr extends MoveAttr {
   private targetChangeFunc: (user: Pokemon, target: Pokemon, move: Move) => number;
 

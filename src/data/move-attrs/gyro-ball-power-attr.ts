@@ -10,10 +10,6 @@ import { VariablePowerAttr } from "#app/data/move-attrs/variable-power-attr";
  * @extends VariablePowerAttr
  **/
 export class GyroBallPowerAttr extends VariablePowerAttr {
-  /**
-   * Sets the given move's power proportional to the target's
-   * {@linkcode Stat.SPD Speed} compared to the user
-   */
   override apply(user: Pokemon, target: Pokemon, _move: Move, power: NumberHolder): boolean {
     const userSpeed = user.getEffectiveStat(Stat.SPD);
     if (userSpeed < 1) {

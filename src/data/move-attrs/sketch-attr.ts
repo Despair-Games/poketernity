@@ -15,16 +15,13 @@ import { MoveEffectAttr } from "./move-effect-attr";
  * Fails if the opponent has not yet used a move.
  * Fails if used on an uncopiable move, listed in unsketchableMoves in getCondition
  * Fails if the move is already in the user's moveset
+ * @extends MoveEffectAttr
  */
 export class SketchAttr extends MoveEffectAttr {
   constructor() {
     super(true);
   }
 
-  /**
-   * Copies the target's last used move into the user's moveset,
-   * permanently replacing the given move.
-   */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

@@ -5,13 +5,11 @@ import type { Move } from "#app/data/move";
 import { VariableAccuracyAttr } from "#app/data/move-attrs/variable-accuracy-attr";
 
 /**
- * Attribute used for moves which never miss
- * against Pokemon with the {@linkcode BattlerTagType.MINIMIZED}
+ * Attribute to guarantee hits against Pokemon
+ * that are {@linkcode BattlerTagType.MINIMIZED minimized}.
  * @extends VariableAccuracyAttr
- * @see {@linkcode apply}
  */
 export class AlwaysHitMinimizeAttr extends VariableAccuracyAttr {
-  /** Sets move accuracy to guarantee a hit if the target is {@linkcode BattlerTagType.MINIMIZED minimized}. */
   override apply(_user: Pokemon, target: Pokemon, _move: Move, accuracy: NumberHolder): boolean {
     if (target.getTag(BattlerTagType.MINIMIZED)) {
       accuracy.value = -1;

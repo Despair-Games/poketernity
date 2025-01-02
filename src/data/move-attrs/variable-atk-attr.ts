@@ -3,6 +3,11 @@ import type { Move } from "#app/data/move";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";
 import type { NumberHolder } from "#app/utils";
 
+/**
+ * Attribute to change the offensive stat used for
+ * a move's damage calculations.
+ * @extends MoveAttr
+ */
 export class VariableAtkAttr extends MoveAttr {
   constructor() {
     super();

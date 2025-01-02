@@ -4,20 +4,17 @@ import type { NumberHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
 import { VariableAtkAttr } from "#app/data/move-attrs/variable-atk-attr";
 
+/**
+ * Attribute to change the attacking stat used for the move
+ * to the user's Defense.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Body_Press_(move) Body Press}.
+ * @extends VariableAtkAttr
+ */
 export class DefAtkAttr extends VariableAtkAttr {
   constructor() {
     super();
   }
 
-  /**
-   * Changes the attacking stat for the given attack to the user's Defense
-   * @param user the {@linkcode Pokemon} using the move
-   * @param target the {@linkcode Pokemon} targeted by the move
-   * @param _move n/a
-   * @param attackingStat a {@linkcode NumberHolder} containing the offensive stat
-   * used for the current attack
-   * @returns `true`
-   */
   override apply(user: Pokemon, target: Pokemon, _move: Move, attackingStat: NumberHolder): boolean {
     attackingStat.value = user.getEffectiveStat(Stat.DEF, target);
     return true;

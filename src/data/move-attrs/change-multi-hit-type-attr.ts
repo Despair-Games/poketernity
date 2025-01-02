@@ -3,6 +3,10 @@ import type { Move } from "#app/data/move";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";
 import type { NumberHolder } from "#app/utils";
 
+/**
+ * Attribute to change a move's multi-hit type in certain game states.
+ * @extends MoveAttr
+ */
 export class ChangeMultiHitTypeAttr extends MoveAttr {
   /**
    * Changes the given move's multi-hit type

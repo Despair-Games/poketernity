@@ -5,6 +5,10 @@ import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import type { MoveConditionFunc } from "../move-conditions";
 
+/**
+ * Attribute to set weather of a specified type on the field.
+ * @extends MoveEffectAttr
+ */
 export class WeatherChangeAttr extends MoveEffectAttr {
   private weatherType: WeatherType;
 
@@ -14,7 +18,6 @@ export class WeatherChangeAttr extends MoveEffectAttr {
     this.weatherType = weatherType;
   }
 
-  /** Sets the weather on the field */
   override apply(_user: Pokemon, _target: Pokemon, _move: Move): boolean {
     return globalScene.arena.trySetWeather(this.weatherType, true);
   }

@@ -8,15 +8,17 @@ import i18next from "i18next";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
+/**
+ * Attribute to change the user's type based on the current biome.
+ * If terrain is active, the user's type is changed to match the terrain instead.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Camouflage_(move) Camouflage}.
+ * @extends MoveEffectAttr
+ */
 export class CopyBiomeTypeAttr extends MoveEffectAttr {
   constructor() {
     super(true);
   }
 
-  /**
-   * Changes the user's type based on the current biome.
-   * If terrain is active, this changes the user's type to match the terrain instead.
-   */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

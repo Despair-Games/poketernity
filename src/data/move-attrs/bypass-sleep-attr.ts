@@ -4,14 +4,13 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { Move } from "#app/data/move";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";
 
+/**
+ * Attribute to allow the user to use the associated move while asleep.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Snore_(move) Snore}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Sleep_Talk_(move) Sleep Talk}.
+ * @extends MoveAttr
+ */
 export class BypassSleepAttr extends MoveAttr {
-  /**
-   * Allows the user to move while asleep for the rest of the turn
-   * @param user the {@linkcode Pokemon} using the move
-   * @param _target N/A
-   * @param move the {@linkcode Move} being used
-   * @returns `true` if the user's sleep status exists and is bypassed
-   */
   override apply(user: Pokemon, _target: Pokemon, move: Move): boolean {
     if (user.status?.effect === StatusEffect.SLEEP) {
       user.addTag(BattlerTagType.BYPASS_SLEEP, 1, move.id, user.id);

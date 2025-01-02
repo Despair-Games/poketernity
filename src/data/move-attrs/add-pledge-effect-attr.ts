@@ -7,6 +7,7 @@ import { AddArenaTagAttr } from "./add-arena-tag-attr";
 /**
  * Attribute that adds a secondary effect to the field when two unique Pledge moves
  * are combined. The effect added varies based on the two Pledge moves combined.
+ * @extends AddArenaTagAttr
  */
 export class AddPledgeEffectAttr extends AddArenaTagAttr {
   private readonly requiredPledge: Moves;
@@ -17,10 +18,6 @@ export class AddPledgeEffectAttr extends AddArenaTagAttr {
     this.requiredPledge = requiredPledge;
   }
 
-  /**
-   * Adds the attribute's arena tag to the field if the required Pledge
-   * combination was used this turn.
-   */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (user.turnData.combiningPledge === this.requiredPledge) {
       return super.apply(user, target, move);

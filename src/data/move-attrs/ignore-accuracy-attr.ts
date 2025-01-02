@@ -6,12 +6,17 @@ import i18next from "i18next";
 import type { Move } from "../move";
 import { AddBattlerTagAttr } from "./add-battler-tag-attr";
 
+/**
+ * Attribute to add an effect that prevents the user from missing
+ * its moves for the next 2 turns.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Lock-On_(move) Lock-On}.
+ * @extends AddBattlerTagAttr
+ */
 export class IgnoreAccuracyAttr extends AddBattlerTagAttr {
   constructor() {
     super(BattlerTagType.IGNORE_ACCURACY, true, { turnCountMin: 2 });
   }
 
-  /** Adds an effect that prevents the user from missing the target for the next 2 turns */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

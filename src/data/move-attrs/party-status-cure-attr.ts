@@ -10,9 +10,7 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 /**
  * Cures the user's party of non-volatile status conditions, ie. Heal Bell, Aromatherapy
  * @extends MoveEffectAttr
- * @see {@linkcode apply}
  */
-
 export class PartyStatusCureAttr extends MoveEffectAttr {
   /** Message to display after using move */
   private message: string | null;
@@ -34,7 +32,6 @@ export class PartyStatusCureAttr extends MoveEffectAttr {
     return !!isTargetValid;
   }
 
-  /** Cures the status of all Pokemon in the user's party */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!this.canApply(user, target, move)) {
       return false;

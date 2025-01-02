@@ -26,11 +26,12 @@ export interface MoveEffectAttrOptions {
   /** Overrides the secondary effect chance for this attr if set. */
   effectChanceOverride?: number;
 }
-/** Base class defining all Move Effect Attributes
+
+/**
+ * Base class defining all Move Effect Attributes
  * @extends MoveAttr
  * @see {@linkcode apply}
  */
-
 export class MoveEffectAttr extends MoveAttr {
   /**
    * A container for this attribute's optional parameters

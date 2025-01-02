@@ -10,11 +10,6 @@ import { VariableAccuracyAttr } from "#app/data/move-attrs/variable-accuracy-att
  * @extends VariableAccuracyAttr
  */
 export class ThunderAccuracyAttr extends VariableAccuracyAttr {
-  /**
-   * Changes the given move's accuracy according to the active weather:
-   * - If the active weather is Sun or Harsh Sun, reduce accuracy to 50
-   * - If the active weather is Rain or Heavy Rain, change accuracy to guarantee a hit
-   */
   override apply(_user: Pokemon, _target: Pokemon, _move: Move, accuracy: NumberHolder): boolean {
     if (!globalScene.arena.weather?.isEffectSuppressed()) {
       const weatherType = globalScene.arena.weather?.weatherType || WeatherType.NONE;

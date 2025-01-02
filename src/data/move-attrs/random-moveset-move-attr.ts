@@ -6,6 +6,13 @@ import { MovePhase } from "#app/phases/move-phase";
 import { type Move, getMoveTargets } from "#app/data/move";
 import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
 
+/**
+ * Attribute to invoke a random move from the user or enemy's moveset
+ * and use it against a random legal target.
+ * Used by {@link https://bulbapedia.bulbagarden.net/wiki/Sleep_Talk_(move) Sleep Talk}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Assist_(move) Assist}.
+ * @extends OverrideMoveEffectAttr
+ */
 export class RandomMovesetMoveAttr extends OverrideMoveEffectAttr {
   private enemyMoveset: boolean | null;
 

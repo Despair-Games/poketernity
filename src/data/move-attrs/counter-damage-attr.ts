@@ -7,6 +7,13 @@ import type { MoveConditionFunc } from "../move-conditions";
 
 type MoveFilter = (move: Move) => boolean;
 
+/**
+ * Attribute to modify damage based on the damage received by the user from attacks
+ * that satisfy a given {@linkcode moveFilter move filter}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Variations_of_Counter variants of Counter},
+ * including Metal Burst and Comeuppance.
+ * @extends FixedDamageAttr
+ */
 export class CounterDamageAttr extends FixedDamageAttr {
   private moveFilter: MoveFilter;
   private multiplier: number;
@@ -18,10 +25,6 @@ export class CounterDamageAttr extends FixedDamageAttr {
     this.multiplier = multiplier;
   }
 
-  /**
-   * Modifies damage based on the damage received by the user from attacks
-   * that satisfy this attribute's {@linkcode moveFilter move filter}
-   */
   override apply(user: Pokemon, _target: Pokemon, _move: Move, damage: NumberHolder): boolean {
     const damageTaken = user.turnData.attacksReceived
       .filter((ar) => this.moveFilter(allMoves[ar.move]))

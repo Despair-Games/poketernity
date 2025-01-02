@@ -6,6 +6,7 @@ import type { Type } from "#enums/type";
 
 /**
  * Attribute for moves which have a custom type chart interaction.
+ * @extends MoveAttr
  */
 export class VariableMoveTypeChartAttr extends MoveAttr {
   /**

@@ -5,8 +5,8 @@ import { MoveAttr } from "#app/data/move-attrs/move-attr";
 import type { UserMoveConditionFunc } from "../move-conditions";
 
 /**
- * Attribute that allows charge moves to resolve in 1 turn under a given condition.
- * Should only be used for {@linkcode ChargingMove | ChargingMoves} as a `chargeAttr`.
+ * Attribute that allows charge moves to resolve in 1 turn under a set condition.
+ * Should only be used for {@linkcode ChargingMove charge moves} as a `chargeAttr`.
  * @extends MoveAttr
  */
 export class InstantChargeAttr extends MoveAttr {

@@ -5,8 +5,13 @@ import { type Move, getMoveTargets } from "#app/data/move";
 import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
 import { lastMoveCopiableCondition, type MoveConditionFunc } from "../move-conditions";
 
+/**
+ * Attribute to copy the last move used in battle and invoke it against random target(s).
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Mirror_Move_(move) Mirror Move}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Copycat_(move) Copycat}.
+ * @extends OverrideMoveEffectAttr
+ */
 export class CopyMoveAttr extends OverrideMoveEffectAttr {
-  /** Copies the last move used in battle and invokes it against random target(s) */
   override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
     const lastMove = globalScene.currentBattle.lastMove;
 

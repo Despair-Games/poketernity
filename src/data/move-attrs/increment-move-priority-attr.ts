@@ -4,11 +4,9 @@ import type { Move } from "#app/data/move";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";
 
 /**
- * Attribute used for moves that change priority in a turn given a condition,
- * e.g. Grassy Glide
- * Called when move order is calculated in {@linkcode TurnStartPhase}.
+ * Attribute used for moves that change priority in a turn given a condition.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Grassy_Glide_(move) Grassy Glide}.
  * @extends MoveAttr
- * @see {@linkcode apply}
  */
 
 export class IncrementMovePriorityAttr extends MoveAttr {

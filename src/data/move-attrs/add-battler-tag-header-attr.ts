@@ -5,7 +5,7 @@ import { MoveHeaderAttr } from "#app/data/move-attrs/move-header-attr";
 
 /**
  * Header attribute to add a battler tag to the user at the beginning of a turn.
- * @see {@linkcode MoveHeaderAttr}
+ * @extends MoveHeaderAttr
  */
 export class AddBattlerTagHeaderAttr extends MoveHeaderAttr {
   private tagType: BattlerTagType;
@@ -15,7 +15,6 @@ export class AddBattlerTagHeaderAttr extends MoveHeaderAttr {
     this.tagType = tagType;
   }
 
-  /** Adds a battler tag to the user at the start of the turn */
   override apply(user: Pokemon, _target: Pokemon, _move: Move): boolean {
     user.addTag(this.tagType);
     return true;

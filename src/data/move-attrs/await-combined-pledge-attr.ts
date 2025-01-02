@@ -9,17 +9,15 @@ import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effec
 
 /**
  * Attribute that cancels the associated move's effects when set to be combined with the user's ally's
- * subsequent move this turn. Used for Grass Pledge, Water Pledge, and Fire Pledge.
+ * subsequent move this turn.
+ * Used for the {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Pledge_moves Pledge moves}.
  * @extends OverrideMoveEffectAttr
  */
 export class AwaitCombinedPledgeAttr extends OverrideMoveEffectAttr {
   constructor() {
     super(true);
   }
-  /**
-   * If the user's ally is set to use a different move with this attribute,
-   * defer this move's effects for a combined move on the ally's turn.
-   */
+
   override apply(user: Pokemon, _target: Pokemon, move: Move, overridden: BooleanHolder): boolean {
     if (user.turnData.combiningPledge) {
       // "The two moves have become one!\nIt's a combined move!"

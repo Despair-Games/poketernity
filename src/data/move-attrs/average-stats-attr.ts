@@ -7,15 +7,16 @@ import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
 /**
- * Attribute used for status moves, namely Power Split and Guard Split,
- * that take the average of a user's and target's corresponding
- * stats and assign that average back to each corresponding stat.
+ * Attribute to temporarily set certain stats of the user and
+ * target to the average between the two.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Power_Split_(move) Power Split}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Guard_Split_(move) Guard Split}.
  * @extends MoveEffectAttr
- * @see {@linkcode apply}
  */
 export class AverageStatsAttr extends MoveEffectAttr {
   /** The stats to be averaged individually between the user and the target */
   private stats: readonly EffectiveStat[];
+  /** The key to a localized message to show after the effect applies */
   private msgKey: string;
 
   constructor(stats: readonly EffectiveStat[], msgKey: string) {
@@ -25,11 +26,6 @@ export class AverageStatsAttr extends MoveEffectAttr {
     this.msgKey = msgKey;
   }
 
-  /**
-   * Takes the average of the user's and target's corresponding {@linkcode stat}
-   * values and sets those stats to the corresponding average for both
-   * temporarily.
-   */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (super.apply(user, target, move)) {
       for (const s of this.stats) {

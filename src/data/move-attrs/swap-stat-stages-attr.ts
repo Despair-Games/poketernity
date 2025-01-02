@@ -23,10 +23,6 @@ export class SwapStatStagesAttr extends MoveEffectAttr {
     this.stats = stats;
   }
 
-  /**
-   * For all {@linkcode stats}, swaps the user's and target's corresponding stat
-   * stage.
-   */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (super.apply(user, target, move)) {
       for (const s of this.stats) {

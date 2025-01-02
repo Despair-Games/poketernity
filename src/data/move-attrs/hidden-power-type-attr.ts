@@ -6,11 +6,11 @@ import type { Move } from "#app/data/move";
 import { VariableMoveTypeAttr } from "#app/data/move-attrs/variable-move-type-attr";
 
 /**
- * Changes type based on the user's IVs
+ * Attribute to change the move's type based on the user's IVs.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Hidden_Power_(move) Hidden Power}
  * @extends VariableMoveTypeAttr
  */
 export class HiddenPowerTypeAttr extends VariableMoveTypeAttr {
-  /** Modifies the given move's type based on the user's IVs */
   override apply(user: Pokemon, _target: Pokemon, _move: Move, moveType: NumberHolder): boolean {
     const iv_val = Math.floor(
       (((user.ivs[Stat.HP] & 1)

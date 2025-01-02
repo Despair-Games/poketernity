@@ -9,17 +9,15 @@ import { AddBattlerTagAttr } from "./add-battler-tag-attr";
 /**
  * Drops the target's immunity to types it is immune to
  * and makes its evasiveness be ignored during accuracy
- * checks. Used by: {@linkcode Moves.ODOR_SLEUTH | Odor Sleuth}, {@linkcode Moves.MIRACLE_EYE | Miracle Eye} and {@linkcode Moves.FORESIGHT | Foresight}
- *
+ * checks.
+ * Used by: {@linkcode Moves.ODOR_SLEUTH | Odor Sleuth}, {@linkcode Moves.MIRACLE_EYE | Miracle Eye} and {@linkcode Moves.FORESIGHT | Foresight}
  * @extends AddBattlerTagAttr
- * @see {@linkcode apply}
  */
 export class ExposedMoveAttr extends AddBattlerTagAttr {
   constructor(tagType: BattlerTagType) {
     super(tagType, false, { failOnOverlap: true });
   }
 
-  /** Applies {@linkcode ExposedTag} to the target. */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

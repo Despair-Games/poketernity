@@ -7,12 +7,16 @@ import i18next from "i18next";
 import type { Move } from "../move";
 import { AddBattlerTagAttr } from "./add-battler-tag-attr";
 
+/**
+ * Attribute to {@link https://bulbapedia.bulbagarden.net/wiki/Confusion_(status_condition) confuse}
+ * the user or target.
+ * @extends AddBattlerTagAttr
+ */
 export class ConfuseAttr extends AddBattlerTagAttr {
   constructor(selfTarget?: boolean) {
     super(BattlerTagType.CONFUSED, selfTarget, { turnCountMin: 2, turnCountMax: 5 });
   }
 
-  /** Confuses the user or target, depending on if this attribute is self-targeted */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!this.selfTarget && target.isSafeguarded(user)) {
       if (move.category === MoveCategory.STATUS) {

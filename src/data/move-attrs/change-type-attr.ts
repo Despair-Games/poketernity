@@ -8,6 +8,12 @@ import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import type { MoveConditionFunc } from "../move-conditions";
 
+/**
+ * Attribute to change the target's type to a set type.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Soak_(move) Soak}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Magic_Powder_(move) Magic Powder}.
+ * @extends MoveEffectAttr
+ */
 export class ChangeTypeAttr extends MoveEffectAttr {
   private type: Type;
 
@@ -17,7 +23,6 @@ export class ChangeTypeAttr extends MoveEffectAttr {
     this.type = type;
   }
 
-  /** Changes the target's type to this attribute's set {@linkcode Type} */
   override apply(_user: Pokemon, target: Pokemon, _move: Move): boolean {
     target.summonData.types = [this.type];
     target.updateInfo();

@@ -6,8 +6,12 @@ import i18next from "i18next";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
+/**
+ * Attribute to invert the target's stat stages.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Topsy-Turvy_(move) Topsy-Turvy}.
+ * @extends MoveEffectAttr
+ */
 export class InvertStatsAttr extends MoveEffectAttr {
-  /** Inverts the target's stat stages */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

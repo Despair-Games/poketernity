@@ -9,6 +9,11 @@ import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import type { MoveConditionFunc } from "../move-conditions";
 
+/**
+ * Attribute to give the user's ability to the target.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Entrainment_(move) Entrainment}.
+ * @extends MoveEffectAttr
+ */
 export class AbilityGiveAttr extends MoveEffectAttr {
   constructor() {
     super(false);

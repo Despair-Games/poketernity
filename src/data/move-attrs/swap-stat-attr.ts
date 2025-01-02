@@ -10,7 +10,6 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
  * Attribute used for status moves, namely Speed Swap,
  * that swaps the user's and target's corresponding stats.
  * @extends MoveEffectAttr
- * @see {@linkcode apply}
  */
 export class SwapStatAttr extends MoveEffectAttr {
   /** The stat to be swapped between the user and the target */
@@ -22,10 +21,6 @@ export class SwapStatAttr extends MoveEffectAttr {
     this.stat = stat;
   }
 
-  /**
-   * Swaps the user's and target's corresponding current
-   * {@linkcode EffectiveStat stat} values
-   */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (super.apply(user, target, move)) {
       const temp = user.getStat(this.stat, false);

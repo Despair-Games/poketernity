@@ -9,7 +9,7 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import type { MoveConditionFunc } from "../move-conditions";
 
 /**
- * Attribute to put in a {@link https://bulbapedia.bulbagarden.net/wiki/Substitute_(doll) | Substitute Doll}
+ * Attribute to put in a {@link https://bulbapedia.bulbagarden.net/wiki/Substitute_(doll) Substitute Doll}
  * for the user.
  * @extends MoveEffectAttr
  * @see {@linkcode apply}
@@ -24,7 +24,6 @@ export class AddSubstituteAttr extends MoveEffectAttr {
     this.hpCost = hpCost;
   }
 
-  /** Removes 1/4 of the user's maximum HP (rounded down) to create a substitute for the user */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

@@ -7,6 +7,7 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
 /**
  * Applies damage to the target's ally equal to 1/16 of that ally's max HP.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Flame_Burst_(move)}.
  * @extends MoveEffectAttr
  */
 export class FlameBurstAttr extends MoveEffectAttr {
@@ -19,7 +20,6 @@ export class FlameBurstAttr extends MoveEffectAttr {
     super(true);
   }
 
-  /** If the target has an active ally, damages the ally by 1/16 of its maximum HP */
   override apply(_user: Pokemon, target: Pokemon, _move: Move): boolean {
     const targetAlly = target.getAlly();
     const cancelled = new BooleanHolder(false);

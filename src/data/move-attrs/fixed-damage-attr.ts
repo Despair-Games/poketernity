@@ -3,6 +3,11 @@ import type { NumberHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";
 
+/**
+ * Attribute to modify move damage to a fixed value.
+ * @extends MoveAttr
+ * @see {@linkcode getDamage}
+ */
 export class FixedDamageAttr extends MoveAttr {
   private damage: number;
 
@@ -33,7 +38,7 @@ export class FixedDamageAttr extends MoveAttr {
    * @param _move the {@linkcode Move} being used
    * @returns the damage to set
    */
-  getDamage(_user: Pokemon, _target: Pokemon, _move: Move): number {
+  public getDamage(_user: Pokemon, _target: Pokemon, _move: Move): number {
     return this.damage;
   }
 }

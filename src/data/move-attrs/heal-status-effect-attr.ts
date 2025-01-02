@@ -9,9 +9,9 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import { getStatusEffectHealText } from "#app/data/status-effect";
 
 /**
- * Move attribute that signals that the move should cure a status effect
+ * Move attribute to cure a set of {@linkcode StatusEffect status effects}
+ * from the user or target, depending on if the effect is {@linkcode selfTarget self-targeted}.
  * @extends MoveEffectAttr
- * @see {@linkcode apply()}
  */
 export class HealStatusEffectAttr extends MoveEffectAttr {
   /** List of Status Effects to cure */
@@ -26,7 +26,6 @@ export class HealStatusEffectAttr extends MoveEffectAttr {
     this.effects = [effects].flat(1);
   }
 
-  /** Cures the target of any status effects included in this attribute's {@linkcode effects}. */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

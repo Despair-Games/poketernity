@@ -9,10 +9,10 @@ import { VariableMoveTypeAttr } from "#app/data/move-attrs/variable-move-type-at
 /**
  * Changes the move's type to match the current terrain.
  * Has no effect if the user is not grounded.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Terrain_Pulse_(move) Terrain Pulse}.
  * @extends VariableMoveTypeAttr
  */
 export class TerrainPulseTypeAttr extends VariableMoveTypeAttr {
-  /** Changes the given move's type to match the current terrain. */
   override apply(user: Pokemon, _target: Pokemon, _move: Move, moveType: NumberHolder): boolean {
     if (!user.isGrounded()) {
       return false;

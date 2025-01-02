@@ -16,17 +16,15 @@ import { MoveEffectChanceMultiplierAbAttr } from "../ab-attrs/move-effect-chance
 import { applyAbAttrs, applyPreDefendAbAttrs } from "../ability";
 
 /**
- * Attribute used to determine the Biome/Terrain-based secondary effect of Secret Power
+ * Attribute used to determine the Biome/Terrain-based secondary
+ * effect of {@link https://bulbapedia.bulbagarden.net/wiki/Secret_Power_(move) Secret Power}.
+ * @extends MoveEffectAttr
  */
 export class SecretPowerAttr extends MoveEffectAttr {
   constructor() {
     super(false);
   }
 
-  /**
-   * Applies a secondary effect based on the current active terrain,
-   * or the current biome if no terrain is active.
-   */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

@@ -20,7 +20,6 @@ export class StealHeldItemChanceAttr extends MoveEffectAttr {
     this.chance = chance;
   }
 
-  /** Gives the user a {@linkcode chance} to steal a held item from the target */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (move.hitsSubstitute(user, target)) {
       return false;

@@ -3,6 +3,10 @@ import type { BooleanHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";
 
+/**
+ * Attribute to guarantee that the move critically hits.
+ * @extends MoveAttr
+ */
 export class CritOnlyAttr extends MoveAttr {
   /**
    * Guarantees critical hits when the given move is used

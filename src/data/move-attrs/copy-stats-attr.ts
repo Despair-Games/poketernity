@@ -7,11 +7,13 @@ import i18next from "i18next";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
+/**
+ * Attribute to copy the target's stat stages onto the user.
+ * This also copies critical hit stages from Focus Energy or Lansat Berries.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Psych_Up_(move) Psych Up}.
+ * @extends MoveEffectAttr
+ */
 export class CopyStatsAttr extends MoveEffectAttr {
-  /**
-   * Copies the target's stat stages onto the user.
-   * This also copies critical hit stages from Focus Energy or Lansat Berries
-   */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

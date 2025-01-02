@@ -4,6 +4,14 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
+/**
+ * Attribute to remove a set type from the user after the move is used.
+ * If the user has no remaining type after removal, this makes the user
+ * {@linkcode Type.UNKNOWN typeless} instead.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Burn_Up_(move) Burn Up}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Double_Shock_(move) Double Shock}.
+ * @extends MoveEffectAttr
+ */
 export class RemoveTypeAttr extends MoveEffectAttr {
   private removedType: Type;
   private messageCallback: ((user: Pokemon) => void) | undefined;
@@ -14,11 +22,6 @@ export class RemoveTypeAttr extends MoveEffectAttr {
     this.messageCallback = messageCallback;
   }
 
-  /**
-   * Removes this attributes specified {@linkcode removedType type} from the user.
-   * If the user has no remaining type after removal, this also
-   * makes the user {@linkcode Type.UNKNOWN typeless}.
-   */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;
