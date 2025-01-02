@@ -24,15 +24,15 @@ describe("Weather - Strong Winds", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("single");
-    game.override.startingLevel(10);
-    game.override.enemySpecies(Species.TAILLOW);
-    game.override.enemyAbility(Abilities.DELTA_STREAM);
-    game.override.moveset([Moves.THUNDERBOLT, Moves.ICE_BEAM, Moves.ROCK_SLIDE]);
+    game.overridesHelper.battleType("single");
+    game.overridesHelper.startingLevel(10);
+    game.overridesHelper.enemySpecies(Species.TAILLOW);
+    game.overridesHelper.enemyAbility(Abilities.DELTA_STREAM);
+    game.overridesHelper.moveset([Moves.THUNDERBOLT, Moves.ICE_BEAM, Moves.ROCK_SLIDE]);
   });
 
   it("electric type move is not very effective on Rayquaza", async () => {
-    game.override.enemySpecies(Species.RAYQUAZA);
+    game.overridesHelper.enemySpecies(Species.RAYQUAZA);
 
     await game.classicMode.startBattle([Species.PIKACHU]);
     const pikachu = game.scene.getPlayerPokemon()!;
@@ -78,7 +78,7 @@ describe("Weather - Strong Winds", () => {
   });
 
   it("weather goes away when last trainer pokemon dies to indirect damage", async () => {
-    game.override.enemyStatusEffect(StatusEffect.POISON);
+    game.overridesHelper.enemyStatusEffect(StatusEffect.POISON);
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 

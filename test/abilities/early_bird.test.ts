@@ -24,7 +24,7 @@ describe("Abilities - Early Bird", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.REST, Moves.BELLY_DRUM, Moves.SPLASH])
       .ability(Abilities.EARLY_BIRD)
       .battleType("single")

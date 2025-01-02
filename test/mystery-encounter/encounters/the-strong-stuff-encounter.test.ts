@@ -47,7 +47,7 @@ describe("The Strong Stuff - Mystery Encounter", () => {
   beforeEach(async () => {
     game = new GameManager(phaserGame);
     scene = game.scene;
-    game.override
+    game.overridesHelper
       .mysteryEncounterChance(100)
       .startingWave(defaultWave)
       .startingBiome(defaultBiome)
@@ -83,8 +83,8 @@ describe("The Strong Stuff - Mystery Encounter", () => {
   });
 
   it("should not spawn outside of CAVE biome", async () => {
-    game.override.mysteryEncounterTier(MysteryEncounterTier.COMMON);
-    game.override.startingBiome(Biome.MOUNTAIN);
+    game.overridesHelper.mysteryEncounterTier(MysteryEncounterTier.COMMON);
+    game.overridesHelper.startingBiome(Biome.MOUNTAIN);
     await game.runToMysteryEncounter();
 
     expect(scene.currentBattle?.mysteryEncounter?.encounterType).not.toBe(MysteryEncounterType.THE_STRONG_STUFF);

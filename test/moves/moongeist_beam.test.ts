@@ -23,7 +23,7 @@ describe("Moves - Moongeist Beam", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.MOONGEIST_BEAM, Moves.METRONOME])
       .ability(Abilities.BALL_FETCH)
       .startingLevel(200)

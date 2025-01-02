@@ -29,7 +29,7 @@ describe("UI - Battle Info", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.GUILLOTINE, Moves.SPLASH])
       .battleType("single")
       .enemyAbility(Abilities.BALL_FETCH)

@@ -21,7 +21,7 @@ describe("Moves - Obstruct", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemySpecies(Species.MAGIKARP)
       .enemyMoveset(Moves.TACKLE)
@@ -60,7 +60,7 @@ describe("Moves - Obstruct", () => {
   });
 
   it("protects from non-contact damaging moves and doesn't lower the opponent's defense by 2 stages", async () => {
-    game.override.enemyMoveset(Moves.WATER_GUN);
+    game.overridesHelper.enemyMoveset(Moves.WATER_GUN);
     await game.classicMode.startBattle();
 
     game.move.select(Moves.OBSTRUCT);
@@ -74,7 +74,7 @@ describe("Moves - Obstruct", () => {
   });
 
   it("doesn't protect from status moves", async () => {
-    game.override.enemyMoveset(Moves.GROWL);
+    game.overridesHelper.enemyMoveset(Moves.GROWL);
     await game.classicMode.startBattle();
 
     game.move.select(Moves.OBSTRUCT);
@@ -86,7 +86,7 @@ describe("Moves - Obstruct", () => {
   });
 
   it("doesn't reduce the stats of an opponent with Clear Body/etc", async () => {
-    game.override.enemyAbility(Abilities.CLEAR_BODY);
+    game.overridesHelper.enemyAbility(Abilities.CLEAR_BODY);
     await game.classicMode.startBattle();
 
     game.move.select(Moves.OBSTRUCT);

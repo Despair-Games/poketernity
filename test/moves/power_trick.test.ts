@@ -24,7 +24,7 @@ describe("Moves - Power Trick", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemyAbility(Abilities.BALL_FETCH)
       .enemyMoveset(Moves.SPLASH)
@@ -72,7 +72,7 @@ describe("Moves - Power Trick", () => {
 
   it("should pass effect when using BATON_PASS", async () => {
     await game.classicMode.startBattle([Species.SHUCKLE, Species.SHUCKLE]);
-    await game.override.moveset([Moves.POWER_TRICK, Moves.BATON_PASS]);
+    await game.overridesHelper.moveset([Moves.POWER_TRICK, Moves.BATON_PASS]);
 
     const player = game.scene.getPlayerPokemon()!;
     player.addTag(BattlerTagType.POWER_TRICK);
@@ -93,7 +93,7 @@ describe("Moves - Power Trick", () => {
 
   it("should remove effect after using Transform", async () => {
     await game.classicMode.startBattle([Species.SHUCKLE, Species.SHUCKLE]);
-    await game.override.moveset([Moves.POWER_TRICK, Moves.TRANSFORM]);
+    await game.overridesHelper.moveset([Moves.POWER_TRICK, Moves.TRANSFORM]);
 
     const player = game.scene.getPlayerPokemon()!;
     player.addTag(BattlerTagType.POWER_TRICK);

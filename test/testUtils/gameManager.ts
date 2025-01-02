@@ -64,7 +64,7 @@ export class GameManager {
   public phaseInterceptor: PhaseInterceptor;
   public textInterceptor: TextInterceptor;
   public inputsHandler: InputsHandler;
-  public readonly override: OverridesHelper;
+  public readonly overridesHelper: OverridesHelper;
   public readonly move: MoveHelper;
   public readonly classicMode: ClassicModeHelper;
   public readonly dailyMode: DailyModeHelper;
@@ -87,7 +87,7 @@ export class GameManager {
     this.phaseInterceptor = new PhaseInterceptor(this.scene);
     this.textInterceptor = new TextInterceptor(this.scene);
     this.gameWrapper.setScene(this.scene);
-    this.override = new OverridesHelper(this);
+    this.overridesHelper = new OverridesHelper(this);
     this.move = new MoveHelper(this);
     this.classicMode = new ClassicModeHelper(this);
     this.dailyMode = new DailyModeHelper(this);
@@ -97,7 +97,7 @@ export class GameManager {
     this.modifiers = new ModifierHelper(this);
 
     // Disables Mystery Encounters on all tests (can be overridden at test level)
-    this.override.mysteryEncounterChance(0);
+    this.overridesHelper.mysteryEncounterChance(0);
   }
 
   /**
@@ -203,8 +203,8 @@ export class GameManager {
    */
   async runToMysteryEncounter(encounterType?: MysteryEncounterType, species?: Species[]) {
     if (!isNullOrUndefined(encounterType)) {
-      this.override.disableTrainerWaves();
-      this.override.mysteryEncounter(encounterType);
+      this.overridesHelper.disableTrainerWaves();
+      this.overridesHelper.mysteryEncounter(encounterType);
     }
 
     await this.runToTitle();

@@ -27,7 +27,7 @@ describe("Moves - Toxic Spikes", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .startingWave(5)
       .enemySpecies(Species.RATTATA)
@@ -117,7 +117,7 @@ describe("Moves - Toxic Spikes", () => {
   });
 
   it("should persist through reload", async () => {
-    game.override.startingWave(1);
+    game.overridesHelper.startingWave(1);
     const gameData = new GameData();
 
     await game.classicMode.runToSummon([Species.MIGHTYENA]);

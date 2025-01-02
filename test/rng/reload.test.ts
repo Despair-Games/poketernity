@@ -43,7 +43,7 @@ describe("Reload", () => {
   }, 20000);
 
   it("should not have RNG inconsistencies after a biome switch", async () => {
-    game.override
+    game.overridesHelper
       .startingWave(10)
       .battleType("single")
       .startingLevel(100) // Avoid levelling up
@@ -75,7 +75,7 @@ describe("Reload", () => {
   }, 20000);
 
   it("should not have weather inconsistencies after a biome switch", async () => {
-    game.override
+    game.overridesHelper
       .startingWave(10)
       .startingBiome(Biome.ICE_CAVE) // Will lead to Snowy Forest with randomly generated weather
       .battleType("single")
@@ -113,7 +113,7 @@ describe("Reload", () => {
   }, 20000);
 
   it("should not have RNG inconsistencies at a Daily run double battle", async () => {
-    game.override.battleType("double");
+    game.overridesHelper.battleType("double");
     await game.dailyMode.startBattle();
 
     const preReloadRngState = Phaser.Math.RND.state();
@@ -126,7 +126,7 @@ describe("Reload", () => {
   }, 20000);
 
   it("should not have RNG inconsistencies at a Daily run Gym Leader fight", async () => {
-    game.override.battleType("single").startingWave(40);
+    game.overridesHelper.battleType("single").startingWave(40);
     await game.dailyMode.startBattle();
 
     const preReloadRngState = Phaser.Math.RND.state();
@@ -139,7 +139,7 @@ describe("Reload", () => {
   }, 20000);
 
   it("should not have RNG inconsistencies at a Daily run regular trainer fight", async () => {
-    game.override.battleType("single").startingWave(45);
+    game.overridesHelper.battleType("single").startingWave(45);
     await game.dailyMode.startBattle();
 
     const preReloadRngState = Phaser.Math.RND.state();
@@ -152,7 +152,7 @@ describe("Reload", () => {
   }, 20000);
 
   it("should not have RNG inconsistencies at a Daily run wave 50 Boss fight", async () => {
-    game.override.battleType("single").startingWave(50);
+    game.overridesHelper.battleType("single").startingWave(50);
     await game.runToFinalBossEncounter([Species.BULBASAUR], GameModes.DAILY);
 
     const preReloadRngState = Phaser.Math.RND.state();

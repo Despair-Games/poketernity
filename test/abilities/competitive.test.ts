@@ -24,7 +24,7 @@ describe("Abilities - Competitive", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemySpecies(Species.BEEDRILL)
       .enemyMoveset(Moves.TICKLE)
@@ -46,7 +46,7 @@ describe("Abilities - Competitive", () => {
   });
 
   it("lowering your own stats should not trigger competitive", async () => {
-    game.override.enemyMoveset(Moves.SPLASH);
+    game.overridesHelper.enemyMoveset(Moves.SPLASH);
     await game.classicMode.startBattle([Species.FLYGON]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
@@ -59,7 +59,7 @@ describe("Abilities - Competitive", () => {
   });
 
   it("white herb should remove only the negative effects", async () => {
-    game.override.startingHeldItems([{ name: "WHITE_HERB" }]);
+    game.overridesHelper.startingHeldItems([{ name: "WHITE_HERB" }]);
     await game.classicMode.startBattle([Species.FLYGON]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;

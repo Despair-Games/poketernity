@@ -22,7 +22,7 @@ describe("Moves - Grudge", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.EMBER, Moves.SPLASH])
       .ability(Abilities.BALL_FETCH)
       .battleType("single")
@@ -67,7 +67,7 @@ describe("Moves - Grudge", () => {
 
   it("should not reduce the opponent's PP if the user dies to weather/indirect damage", async () => {
     // Opponent will be reduced to 1 HP by False Swipe, then faint to Sandstorm
-    game.override
+    game.overridesHelper
       .moveset([Moves.FALSE_SWIPE])
       .startingLevel(100)
       .ability(Abilities.SAND_STREAM)

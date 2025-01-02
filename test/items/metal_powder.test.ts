@@ -25,11 +25,11 @@ describe("Items - Metal Powder", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override.battleType("single");
+    game.overridesHelper.battleType("single");
   });
 
   it("METAL_POWDER activates in battle correctly", async () => {
-    game.override.startingHeldItems([{ name: "SPECIES_STAT_BOOSTER", type: "METAL_POWDER" }]);
+    game.overridesHelper.startingHeldItems([{ name: "SPECIES_STAT_BOOSTER", type: "METAL_POWDER" }]);
     const consoleSpy = vi.spyOn(console, "log");
     await game.startBattle([Species.DITTO]);
 

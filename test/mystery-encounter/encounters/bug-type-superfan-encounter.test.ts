@@ -150,10 +150,10 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
   beforeEach(async () => {
     game = new GameManager(phaserGame);
     scene = game.scene;
-    game.override.mysteryEncounterChance(100);
-    game.override.startingWave(defaultWave);
-    game.override.startingBiome(defaultBiome);
-    game.override.disableTrainerWaves();
+    game.overridesHelper.mysteryEncounterChance(100);
+    game.overridesHelper.startingWave(defaultWave);
+    game.overridesHelper.startingBiome(defaultBiome);
+    game.overridesHelper.disableTrainerWaves();
 
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(
       new Map<Biome, MysteryEncounterType[]>([[Biome.CAVE, [MysteryEncounterType.BUG_TYPE_SUPERFAN]]]),
@@ -236,7 +236,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
     });
 
     it("should start battle against the Bug-Type Superfan with wave 50 party template", async () => {
-      game.override.startingWave(43);
+      game.overridesHelper.startingWave(43);
       await game.runToMysteryEncounter(MysteryEncounterType.BUG_TYPE_SUPERFAN, defaultParty);
       await runMysteryEncounterToEnd(game, 1, undefined, true);
 
@@ -250,7 +250,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
     });
 
     it("should start battle against the Bug-Type Superfan with wave 70 party template", async () => {
-      game.override.startingWave(61);
+      game.overridesHelper.startingWave(61);
       await game.runToMysteryEncounter(MysteryEncounterType.BUG_TYPE_SUPERFAN, defaultParty);
       await runMysteryEncounterToEnd(game, 1, undefined, true);
 
@@ -265,7 +265,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
     });
 
     it("should start battle against the Bug-Type Superfan with wave 100 party template", async () => {
-      game.override.startingWave(81);
+      game.overridesHelper.startingWave(81);
       await game.runToMysteryEncounter(MysteryEncounterType.BUG_TYPE_SUPERFAN, defaultParty);
       await runMysteryEncounterToEnd(game, 1, undefined, true);
 
@@ -281,7 +281,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
     });
 
     it("should start battle against the Bug-Type Superfan with wave 120 party template", async () => {
-      game.override.startingWave(111);
+      game.overridesHelper.startingWave(111);
       await game.runToMysteryEncounter(MysteryEncounterType.BUG_TYPE_SUPERFAN, defaultParty);
       await runMysteryEncounterToEnd(game, 1, undefined, true);
 
@@ -299,7 +299,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
     });
 
     it("should start battle against the Bug-Type Superfan with wave 140 party template", async () => {
-      game.override.startingWave(131);
+      game.overridesHelper.startingWave(131);
       await game.runToMysteryEncounter(MysteryEncounterType.BUG_TYPE_SUPERFAN, defaultParty);
       await runMysteryEncounterToEnd(game, 1, undefined, true);
 
@@ -317,7 +317,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
     });
 
     it("should start battle against the Bug-Type Superfan with wave 160 party template", async () => {
-      game.override.startingWave(151);
+      game.overridesHelper.startingWave(151);
       await game.runToMysteryEncounter(MysteryEncounterType.BUG_TYPE_SUPERFAN, defaultParty);
       await runMysteryEncounterToEnd(game, 1, undefined, true);
 
@@ -335,7 +335,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
     });
 
     it("should start battle against the Bug-Type Superfan with wave 180 party template", async () => {
-      game.override.startingWave(171);
+      game.overridesHelper.startingWave(171);
       await game.runToMysteryEncounter(MysteryEncounterType.BUG_TYPE_SUPERFAN, defaultParty);
       await runMysteryEncounterToEnd(game, 1, undefined, true);
 
@@ -543,7 +543,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
     });
 
     it("should remove the gifted item and proceed to rewards screen", async () => {
-      game.override.startingHeldItems([{ name: "GRIP_CLAW", count: 1 }]);
+      game.overridesHelper.startingHeldItems([{ name: "GRIP_CLAW", count: 1 }]);
       await game.runToMysteryEncounter(MysteryEncounterType.BUG_TYPE_SUPERFAN, [Species.BUTTERFREE]);
 
       const gripClawCountBefore =
@@ -568,7 +568,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
     });
 
     it("should leave encounter without battle", async () => {
-      game.override.startingHeldItems([{ name: "GRIP_CLAW", count: 1 }]);
+      game.overridesHelper.startingHeldItems([{ name: "GRIP_CLAW", count: 1 }]);
       const leaveEncounterWithoutBattleSpy = vi.spyOn(encounterPhaseUtils, "leaveEncounterWithoutBattle");
 
       await game.runToMysteryEncounter(MysteryEncounterType.BUG_TYPE_SUPERFAN, [Species.BUTTERFREE]);

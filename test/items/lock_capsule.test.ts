@@ -24,7 +24,7 @@ describe("Items - Lock Capsule", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override
+    game.overridesHelper
       .battleType("single")
       .startingLevel(200)
       .moveset([Moves.SURF])

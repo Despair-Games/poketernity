@@ -25,12 +25,12 @@ describe("Moves - Roost", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("single");
-    game.override.enemySpecies(Species.RELICANTH);
-    game.override.startingLevel(100);
-    game.override.enemyLevel(100);
-    game.override.enemyMoveset(Moves.EARTHQUAKE);
-    game.override.moveset([Moves.ROOST, Moves.BURN_UP, Moves.DOUBLE_SHOCK]);
+    game.overridesHelper.battleType("single");
+    game.overridesHelper.enemySpecies(Species.RELICANTH);
+    game.overridesHelper.startingLevel(100);
+    game.overridesHelper.enemyLevel(100);
+    game.overridesHelper.enemyMoveset(Moves.EARTHQUAKE);
+    game.overridesHelper.moveset([Moves.ROOST, Moves.BURN_UP, Moves.DOUBLE_SHOCK]);
   });
 
   /**
@@ -119,7 +119,7 @@ describe("Moves - Roost", () => {
   });
 
   test("Pokemon with levitate after using roost should lose flying type but still be unaffected by ground moves", async () => {
-    game.override.starterForms({ [Species.ROTOM]: 4 });
+    game.overridesHelper.starterForms({ [Species.ROTOM]: 4 });
     await game.classicMode.startBattle([Species.ROTOM]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const playerPokemonStartingHP = playerPokemon.hp;
@@ -179,7 +179,7 @@ describe("Moves - Roost", () => {
   });
 
   test("An electric/flying type that uses double shock, then roost should be typeless until end of turn", async () => {
-    game.override.enemySpecies(Species.ZEKROM);
+    game.overridesHelper.enemySpecies(Species.ZEKROM);
     await game.classicMode.startBattle([Species.ZAPDOS]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const playerPokemonStartingHP = playerPokemon.hp;
@@ -215,7 +215,7 @@ describe("Moves - Roost", () => {
   });
 
   test("Dual Type Pokemon afflicted with Forests Curse/Trick or Treat and post roost will become dual type and then become 3 type at end of turn", async () => {
-    game.override.enemyMoveset([
+    game.overridesHelper.enemyMoveset([
       Moves.TRICK_OR_TREAT,
       Moves.TRICK_OR_TREAT,
       Moves.TRICK_OR_TREAT,

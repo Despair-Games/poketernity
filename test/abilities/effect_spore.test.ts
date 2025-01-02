@@ -25,7 +25,7 @@ describe("Abilities - Effect Spore", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.SPLASH])
       .ability(Abilities.EFFECT_SPORE)
       .battleType("single")
@@ -55,7 +55,7 @@ describe("Abilities - Effect Spore", () => {
   });
 
   it("should not affect Pokemon with the ability Overcoat", async () => {
-    game.override.enemyAbility(Abilities.OVERCOAT);
+    game.overridesHelper.enemyAbility(Abilities.OVERCOAT);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(EffectSporeAbAttr)[0]!;
@@ -70,7 +70,7 @@ describe("Abilities - Effect Spore", () => {
   });
 
   it("should not affect Grass-type Pokemon", async () => {
-    game.override.enemySpecies(Species.TREECKO);
+    game.overridesHelper.enemySpecies(Species.TREECKO);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(EffectSporeAbAttr)[0]!;

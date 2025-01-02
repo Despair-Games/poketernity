@@ -22,8 +22,8 @@ export class ClassicModeHelper extends GameManagerHelper {
   async runToSummon(species?: Species[]): Promise<void> {
     await this.game.runToTitle();
 
-    if (this.game.override.disableShinies) {
-      this.game.override.shiny(false).enemyShiny(false);
+    if (this.game.overridesHelper.disableShinies) {
+      this.game.overridesHelper.shiny(false).enemyShiny(false);
     }
 
     this.game.onNextPrompt("TitlePhase", Mode.TITLE, () => {
@@ -35,7 +35,7 @@ export class ClassicModeHelper extends GameManagerHelper {
     });
 
     await this.game.phaseInterceptor.to(EncounterPhase);
-    if (overrides.OPP_HELD_ITEMS_OVERRIDE.length === 0 && this.game.override.removeEnemyStartingItems) {
+    if (overrides.OPP_HELD_ITEMS_OVERRIDE.length === 0 && this.game.overridesHelper.removeEnemyStartingItems) {
       this.game.removeEnemyHeldItems();
     }
   }

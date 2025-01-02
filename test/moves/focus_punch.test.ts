@@ -26,7 +26,7 @@ describe("Moves - Focus Punch", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .ability(Abilities.UNNERVE)
       .moveset([Moves.FOCUS_PUNCH])
@@ -60,7 +60,7 @@ describe("Moves - Focus Punch", () => {
   });
 
   it("should fail if the user is hit", async () => {
-    game.override.enemyMoveset([Moves.TACKLE]);
+    game.overridesHelper.enemyMoveset([Moves.TACKLE]);
 
     await game.startBattle([Species.CHARIZARD]);
 
@@ -84,7 +84,7 @@ describe("Moves - Focus Punch", () => {
   });
 
   it("should be cancelled if the user falls asleep mid-turn", async () => {
-    game.override.enemyMoveset([Moves.SPORE]);
+    game.overridesHelper.enemyMoveset([Moves.SPORE]);
 
     await game.startBattle([Species.CHARIZARD]);
 
@@ -105,7 +105,7 @@ describe("Moves - Focus Punch", () => {
 
   it("should not queue its pre-move message before an enemy switches", async () => {
     /** Guarantee a Trainer battle with multiple enemy Pokemon */
-    game.override.startingWave(25);
+    game.overridesHelper.startingWave(25);
 
     await game.startBattle([Species.CHARIZARD]);
 

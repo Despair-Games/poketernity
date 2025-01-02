@@ -23,7 +23,7 @@ describe("Moves - Tar Shot", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemyAbility(Abilities.BALL_FETCH)
       .enemyMoveset(Moves.SPLASH)
@@ -83,7 +83,7 @@ describe("Moves - Tar Shot", () => {
   });
 
   it("does not double the effectiveness of Fire-type moves against a Pokémon that is Terastallized", async () => {
-    game.override.enemyHeldItems([{ name: "TERA_SHARD", type: Type.GRASS }]).enemySpecies(Species.SPRIGATITO);
+    game.overridesHelper.enemyHeldItems([{ name: "TERA_SHARD", type: Type.GRASS }]).enemySpecies(Species.SPRIGATITO);
     await game.classicMode.startBattle([Species.PIKACHU]);
 
     const enemy = game.scene.getEnemyPokemon()!;
@@ -105,7 +105,7 @@ describe("Moves - Tar Shot", () => {
   });
 
   it("doubles the effectiveness of Fire-type moves against a Pokémon that is already under the effects of Tar Shot before it Terastallized", async () => {
-    game.override.enemySpecies(Species.SPRIGATITO);
+    game.overridesHelper.enemySpecies(Species.SPRIGATITO);
     await game.classicMode.startBattle([Species.PIKACHU]);
 
     const enemy = game.scene.getEnemyPokemon()!;
@@ -119,7 +119,7 @@ describe("Moves - Tar Shot", () => {
 
     await game.toNextTurn();
 
-    game.override.enemyHeldItems([{ name: "TERA_SHARD", type: Type.GRASS }]);
+    game.overridesHelper.enemyHeldItems([{ name: "TERA_SHARD", type: Type.GRASS }]);
 
     game.move.select(Moves.FIRE_PUNCH);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);

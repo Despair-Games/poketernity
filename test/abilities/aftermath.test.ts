@@ -22,7 +22,7 @@ describe("Abilities - Aftermath", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.GIGA_IMPACT, Moves.HYPER_BEAM])
       .ability(Abilities.NO_GUARD)
       .startingLevel(50)
@@ -56,7 +56,7 @@ describe("Abilities - Aftermath", () => {
   });
 
   it("should not cause the attacker to take damage when it has Magic Guard", async () => {
-    game.override.passiveAbility(Abilities.MAGIC_GUARD);
+    game.overridesHelper.passiveAbility(Abilities.MAGIC_GUARD);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const player = game.scene.getPlayerPokemon()!;

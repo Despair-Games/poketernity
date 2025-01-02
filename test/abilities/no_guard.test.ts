@@ -25,7 +25,7 @@ describe("Abilities - No Guard", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset(Moves.ZAP_CANNON)
       .ability(Abilities.NO_GUARD)
       .enemyLevel(200)
@@ -35,7 +35,7 @@ describe("Abilities - No Guard", () => {
   });
 
   it("should make moves always hit regardless of move accuracy", async () => {
-    game.override.battleType("single");
+    game.overridesHelper.battleType("single");
 
     await game.classicMode.startBattle([Species.REGIELEKI]);
 
@@ -54,7 +54,7 @@ describe("Abilities - No Guard", () => {
   });
 
   it("should guarantee double battle with any one LURE", async () => {
-    game.override.startingModifier([{ name: "LURE" }]).startingWave(2);
+    game.overridesHelper.startingModifier([{ name: "LURE" }]).startingWave(2);
 
     await game.classicMode.startBattle();
 

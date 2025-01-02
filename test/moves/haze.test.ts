@@ -23,16 +23,16 @@ describe("Moves - Haze", () => {
     beforeEach(() => {
       game = new GameManager(phaserGame);
 
-      game.override.battleType("single");
+      game.overridesHelper.battleType("single");
 
-      game.override.enemySpecies(Species.RATTATA);
-      game.override.enemyLevel(100);
-      game.override.enemyMoveset(Moves.SPLASH);
-      game.override.enemyAbility(Abilities.NONE);
+      game.overridesHelper.enemySpecies(Species.RATTATA);
+      game.overridesHelper.enemyLevel(100);
+      game.overridesHelper.enemyMoveset(Moves.SPLASH);
+      game.overridesHelper.enemyAbility(Abilities.NONE);
 
-      game.override.startingLevel(100);
-      game.override.moveset([Moves.HAZE, Moves.SWORDS_DANCE, Moves.CHARM, Moves.SPLASH]);
-      game.override.ability(Abilities.NONE);
+      game.overridesHelper.startingLevel(100);
+      game.overridesHelper.moveset([Moves.HAZE, Moves.SWORDS_DANCE, Moves.CHARM, Moves.SPLASH]);
+      game.overridesHelper.ability(Abilities.NONE);
     });
 
     it("should reset all stat changes of all Pokemon on field", async () => {

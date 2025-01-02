@@ -23,7 +23,7 @@ describe("Abilities - Battle Armor/Shell Armor", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.SPLASH])
       .startingLevel(50)
       .battleType("single")
@@ -36,7 +36,7 @@ describe("Abilities - Battle Armor/Shell Armor", () => {
     { abilityName: "Battle Armor", ability: Abilities.BATTLE_ARMOR },
     { abilityName: "Shell Armor", ability: Abilities.SHELL_ARMOR },
   ])("$abilityName prevents all critical hits", async ({ ability }) => {
-    game.override.ability(ability);
+    game.overridesHelper.ability(ability);
     await game.classicMode.startBattle([Species.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon();
 

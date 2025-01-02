@@ -24,7 +24,7 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.SPLASH])
       .battleType("single")
       .disableCrits()
@@ -38,7 +38,7 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
     { abilityName: "Poison Point", ability: Abilities.POISON_POINT, status: StatusEffect.POISON },
     { abilityName: "Static", ability: Abilities.STATIC, status: StatusEffect.PARALYSIS },
   ])("$abilityName should status an attacking, applicable Pokemon if contact is made", async ({ ability, status }) => {
-    game.override.ability(ability);
+    game.overridesHelper.ability(ability);
     await game.classicMode.startBattle([Species.FEEBAS]);
     const pokemon = game.scene.getPlayerPokemon();
     vi.spyOn(
@@ -62,7 +62,7 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
     { abilityName: "Static", ability: Abilities.STATIC, status: StatusEffect.PARALYSIS },
     { abilityName: "Flame Body", ability: Abilities.FLAME_BODY, status: StatusEffect.BURN },
   ])("$abilityName should not activate from a non-contact attack", async ({ ability }) => {
-    game.override.ability(ability);
+    game.overridesHelper.ability(ability);
     await game.classicMode.startBattle([Species.FEEBAS]);
     const pokemon = game.scene.getPlayerPokemon();
     vi.spyOn(
@@ -82,7 +82,7 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
   });
 
   it("Static can paralyze a Ground-type Pokemon", async () => {
-    game.override.ability(Abilities.STATIC).enemySpecies(Species.DIGLETT);
+    game.overridesHelper.ability(Abilities.STATIC).enemySpecies(Species.DIGLETT);
     await game.classicMode.startBattle([Species.FEEBAS]);
     const pokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(

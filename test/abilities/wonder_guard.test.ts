@@ -21,7 +21,7 @@ describe("Abilities - Wonder Guard", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.TACKLE, Moves.THUNDERBOLT])
       .ability(Abilities.BALL_FETCH)
       .battleType("single")

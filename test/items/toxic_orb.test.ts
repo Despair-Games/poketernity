@@ -23,7 +23,7 @@ describe("Items - Toxic orb", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemySpecies(Species.MAGIKARP)
       .ability(Abilities.BALL_FETCH)

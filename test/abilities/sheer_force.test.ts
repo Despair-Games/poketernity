@@ -26,7 +26,7 @@ describe("Abilities - Sheer Force", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .ability(Abilities.SHEER_FORCE)
       .enemySpecies(Species.ONIX)
@@ -38,7 +38,7 @@ describe("Abilities - Sheer Force", () => {
   const SHEER_FORCE_MULT = 5461 / 4096;
 
   it("Sheer Force should boost the power of the move but disable secondary effects", async () => {
-    game.override.moveset([Moves.AIR_SLASH]);
+    game.overridesHelper.moveset([Moves.AIR_SLASH]);
     await game.classicMode.startBattle([Species.SHUCKLE]);
 
     const airSlashMove = allMoves[Moves.AIR_SLASH];
@@ -57,7 +57,7 @@ describe("Abilities - Sheer Force", () => {
   });
 
   it("Sheer Force does not affect the base damage or secondary effects of binding moves", async () => {
-    game.override.moveset([Moves.BIND]);
+    game.overridesHelper.moveset([Moves.BIND]);
     await game.classicMode.startBattle([Species.SHUCKLE]);
 
     const bindMove = allMoves[Moves.BIND];
@@ -73,7 +73,7 @@ describe("Abilities - Sheer Force", () => {
   }, 20000);
 
   it("Sheer Force does not boost the base damage of moves with no secondary effect", async () => {
-    game.override.moveset([Moves.TACKLE]);
+    game.overridesHelper.moveset([Moves.TACKLE]);
     await game.classicMode.startBattle([Species.PIDGEOT]);
 
     const tackleMove = allMoves[Moves.TACKLE];
@@ -88,7 +88,7 @@ describe("Abilities - Sheer Force", () => {
   });
 
   it("Sheer Force can disable the on-hit activation of specific abilities", async () => {
-    game.override
+    game.overridesHelper
       .moveset([Moves.HEADBUTT])
       .enemySpecies(Species.SQUIRTLE)
       .enemyLevel(10)
@@ -114,7 +114,7 @@ describe("Abilities - Sheer Force", () => {
 
   it("Two Pokemon with abilities disabled by Sheer Force hitting each other should not cause a crash", async () => {
     const moveToUse = Moves.CRUNCH;
-    game.override
+    game.overridesHelper
       .enemyAbility(Abilities.COLOR_CHANGE)
       .ability(Abilities.COLOR_CHANGE)
       .moveset(moveToUse)
@@ -138,7 +138,7 @@ describe("Abilities - Sheer Force", () => {
   });
 
   it("Sheer Force should disable Meloetta's transformation from Relic Song", async () => {
-    game.override
+    game.overridesHelper
       .ability(Abilities.SHEER_FORCE)
       .moveset([Moves.RELIC_SONG])
       .enemyMoveset([Moves.SPLASH])

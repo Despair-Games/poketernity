@@ -21,7 +21,7 @@ function testMoveEffectiveness(
 ): void {
   // Suppress getPokemonNameWithAffix because it calls on a null battle spec
   vi.spyOn(Messages, "getPokemonNameWithAffix").mockReturnValue("");
-  game.override.enemyAbility(targetAbility).enemyHeldItems([{ name: "TERA_SHARD", type: teraType }]);
+  game.overridesHelper.enemyAbility(targetAbility).enemyHeldItems([{ name: "TERA_SHARD", type: teraType }]);
 
   const user = game.scene.addPlayerPokemon(getPokemonSpecies(Species.SNORLAX), 5);
   const target = game.scene.addEnemyPokemon(getPokemonSpecies(targetSpecies), 5, TrainerSlot.NONE);
@@ -46,7 +46,7 @@ describe("Moves - Type Effectiveness", () => {
     game = new GameManager(phaserGame);
     TerastallizeModifier.prototype.apply = (_args) => true;
 
-    game.override.ability(Abilities.BALL_FETCH);
+    game.overridesHelper.ability(Abilities.BALL_FETCH);
   });
 
   afterEach(() => {
@@ -87,12 +87,12 @@ describe("Moves - Type Effectiveness", () => {
     testMoveEffectiveness(game, Moves.SLEEP_POWDER, Species.SNORLAX, 0, Abilities.BALL_FETCH, Type.GRASS));
 
   it("Prankster-boosted status moves have no effect on Dark-type Pokemon", () => {
-    game.override.ability(Abilities.PRANKSTER);
+    game.overridesHelper.ability(Abilities.PRANKSTER);
     testMoveEffectiveness(game, Moves.BABY_DOLL_EYES, Species.MIGHTYENA, 0);
   });
 
   it("Prankster-boosted status moves have no effect on Tera-Dark Pokemon", () => {
-    game.override.ability(Abilities.PRANKSTER);
+    game.overridesHelper.ability(Abilities.PRANKSTER);
     testMoveEffectiveness(game, Moves.BABY_DOLL_EYES, Species.SNORLAX, 0, Abilities.BALL_FETCH, Type.DARK);
   });
 });

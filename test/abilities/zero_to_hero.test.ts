@@ -26,7 +26,7 @@ describe("Abilities - ZERO TO HERO", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .moveset(Moves.SPLASH)
       .enemyMoveset(Moves.SPLASH)
@@ -34,8 +34,8 @@ describe("Abilities - ZERO TO HERO", () => {
   });
 
   it("should swap to base form on arena reset", async () => {
-    game.override.startingWave(4);
-    game.override.starterForms({
+    game.overridesHelper.startingWave(4);
+    game.overridesHelper.starterForms({
       [Species.PALAFIN]: heroForm,
     });
 
@@ -85,7 +85,7 @@ describe("Abilities - ZERO TO HERO", () => {
   });
 
   it("should stay hero form if fainted and then revived", async () => {
-    game.override.starterForms({
+    game.overridesHelper.starterForms({
       [Species.PALAFIN]: heroForm,
     });
 

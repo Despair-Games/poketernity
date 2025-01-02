@@ -22,7 +22,7 @@ describe("Moves - Relic Song", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.RELIC_SONG, Moves.SPLASH])
       .battleType("single")
       .enemyAbility(Abilities.BALL_FETCH)
@@ -63,7 +63,7 @@ describe("Moves - Relic Song", () => {
   });
 
   it("doesn't swap Meloetta's form during biome change (arena reset)", async () => {
-    game.override.starterForms({ [Species.MELOETTA]: 1 }).startingWave(10);
+    game.overridesHelper.starterForms({ [Species.MELOETTA]: 1 }).startingWave(10);
     await game.classicMode.startBattle([Species.MELOETTA]);
 
     const meloetta = game.scene.getPlayerPokemon()!;

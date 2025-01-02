@@ -30,15 +30,15 @@ describe("Moves - Fusion Flare and Fusion Bolt", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.moveset([fusionFlare.id, fusionBolt.id]);
-    game.override.startingLevel(1);
+    game.overridesHelper.moveset([fusionFlare.id, fusionBolt.id]);
+    game.overridesHelper.startingLevel(1);
 
-    game.override.enemySpecies(Species.RESHIRAM);
-    game.override.enemyMoveset([Moves.REST, Moves.REST, Moves.REST, Moves.REST]);
+    game.overridesHelper.enemySpecies(Species.RESHIRAM);
+    game.overridesHelper.enemyMoveset([Moves.REST, Moves.REST, Moves.REST, Moves.REST]);
 
-    game.override.battleType("double");
-    game.override.startingWave(97);
-    game.override.disableCrits();
+    game.overridesHelper.battleType("double");
+    game.overridesHelper.startingWave(97);
+    game.overridesHelper.disableCrits();
 
     vi.spyOn(fusionFlare, "calculateBattlePower");
     vi.spyOn(fusionBolt, "calculateBattlePower");
@@ -110,7 +110,7 @@ describe("Moves - Fusion Flare and Fusion Bolt", () => {
   }, 20000);
 
   it("FUSION_FLARE should not double power of subsequent FUSION_BOLT if a move succeeded in between", async () => {
-    game.override.enemyMoveset([Moves.SPLASH, Moves.SPLASH, Moves.SPLASH, Moves.SPLASH]);
+    game.overridesHelper.enemyMoveset([Moves.SPLASH, Moves.SPLASH, Moves.SPLASH, Moves.SPLASH]);
     await game.startBattle([Species.ZEKROM, Species.ZEKROM]);
 
     game.move.select(fusionFlare.id, 0, BattlerIndex.ENEMY);
@@ -155,7 +155,7 @@ describe("Moves - Fusion Flare and Fusion Bolt", () => {
   }, 20000);
 
   it("FUSION_FLARE and FUSION_BOLT alternating throughout turn should double power of subsequent moves", async () => {
-    game.override.enemyMoveset([fusionFlare.id, fusionFlare.id, fusionFlare.id, fusionFlare.id]);
+    game.overridesHelper.enemyMoveset([fusionFlare.id, fusionFlare.id, fusionFlare.id, fusionFlare.id]);
     await game.startBattle([Species.ZEKROM, Species.ZEKROM]);
 
     const party = game.scene.getPlayerParty();
@@ -209,7 +209,7 @@ describe("Moves - Fusion Flare and Fusion Bolt", () => {
   }, 20000);
 
   it("FUSION_FLARE and FUSION_BOLT alternating throughout turn should double power of subsequent moves if moves are aimed at allies", async () => {
-    game.override.enemyMoveset([fusionFlare.id, fusionFlare.id, fusionFlare.id, fusionFlare.id]);
+    game.overridesHelper.enemyMoveset([fusionFlare.id, fusionFlare.id, fusionFlare.id, fusionFlare.id]);
     await game.startBattle([Species.ZEKROM, Species.ZEKROM]);
 
     const party = game.scene.getPlayerParty();

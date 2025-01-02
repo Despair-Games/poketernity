@@ -24,7 +24,7 @@ describe("Moves - Round", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.SPLASH, Moves.ROUND])
       .ability(Abilities.BALL_FETCH)
       .battleType("double")

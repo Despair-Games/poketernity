@@ -25,7 +25,7 @@ describe("Moves - Solar Beam", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset(Moves.SOLAR_BEAM)
       .battleType("single")
       .startingLevel(100)
@@ -62,7 +62,7 @@ describe("Moves - Solar Beam", () => {
     { weatherType: WeatherType.SUNNY, name: "Sun" },
     { weatherType: WeatherType.HARSH_SUN, name: "Harsh Sun" },
   ])("should deal damage in one turn if $name is active", async ({ weatherType }) => {
-    game.override.weather(weatherType);
+    game.overridesHelper.weather(weatherType);
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
@@ -85,7 +85,7 @@ describe("Moves - Solar Beam", () => {
     { weatherType: WeatherType.RAIN, name: "Rain" },
     { weatherType: WeatherType.HEAVY_RAIN, name: "Heavy Rain" },
   ])("should have its power halved in $name", async ({ weatherType }) => {
-    game.override.weather(weatherType);
+    game.overridesHelper.weather(weatherType);
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 

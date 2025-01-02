@@ -24,7 +24,7 @@ describe("Frenzy Move Reset", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .disableCrits()
       .starterSpecies(Species.MAGIKARP)

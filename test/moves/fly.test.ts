@@ -26,7 +26,7 @@ describe("Moves - Fly", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset(Moves.FLY)
       .battleType("single")
       .startingLevel(100)
@@ -63,7 +63,7 @@ describe("Moves - Fly", () => {
   });
 
   it("should not allow the user to evade attacks from Pokemon with No Guard", async () => {
-    game.override.enemyAbility(Abilities.NO_GUARD);
+    game.overridesHelper.enemyAbility(Abilities.NO_GUARD);
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
@@ -78,7 +78,7 @@ describe("Moves - Fly", () => {
   });
 
   it("should not expend PP when the attack phase is cancelled", async () => {
-    game.override.enemyAbility(Abilities.NO_GUARD).enemyMoveset(Moves.SPORE);
+    game.overridesHelper.enemyAbility(Abilities.NO_GUARD).enemyMoveset(Moves.SPORE);
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
@@ -95,7 +95,7 @@ describe("Moves - Fly", () => {
   });
 
   it("should be cancelled when another Pokemon uses Gravity", async () => {
-    game.override.enemyMoveset([Moves.SPLASH, Moves.GRAVITY]);
+    game.overridesHelper.enemyMoveset([Moves.SPLASH, Moves.GRAVITY]);
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 

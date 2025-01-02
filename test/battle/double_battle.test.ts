@@ -29,7 +29,7 @@ describe("Double Battles", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("double")
       .moveset(Moves.SPLASH)
       .enemyMoveset(Moves.SPLASH)
@@ -73,7 +73,7 @@ describe("Double Battles", () => {
       return rngSweepProgress * (max - min) + min;
     });
 
-    game.override.battleType(null);
+    game.overridesHelper.battleType(null);
 
     // Play through endless, waves 1 to 9, counting number of double battles from waves 2 to 9
     await game.classicMode.startBattle([Species.BULBASAUR]);

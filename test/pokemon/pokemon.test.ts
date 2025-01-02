@@ -37,7 +37,7 @@ describe("Spec - Pokemon", () => {
     let scene: BattleScene;
 
     beforeEach(async () => {
-      game.override.enemySpecies(Species.ZUBAT);
+      game.overridesHelper.enemySpecies(Species.ZUBAT);
       await game.classicMode.runToSummon([Species.ABRA, Species.ABRA, Species.ABRA, Species.ABRA, Species.ABRA]); // 5 Abra, only 1 slot left
       scene = game.scene;
     });
@@ -67,7 +67,7 @@ describe("Spec - Pokemon", () => {
   });
 
   it("should not share tms between different forms", async () => {
-    game.override.starterForms({ [Species.ROTOM]: 4 });
+    game.overridesHelper.starterForms({ [Species.ROTOM]: 4 });
 
     await game.classicMode.startBattle([Species.ROTOM]);
 

@@ -23,7 +23,7 @@ describe("Abilities - Stakeout", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.SPLASH, Moves.SURF])
       .ability(Abilities.STAKEOUT)
       .battleType("single")

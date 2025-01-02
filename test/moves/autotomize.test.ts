@@ -22,7 +22,7 @@ describe("Moves - Autotomize", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.AUTOTOMIZE, Moves.KINGS_SHIELD, Moves.FALSE_SWIPE])
       .battleType("single")
       .enemyAbility(Abilities.BALL_FETCH)
@@ -96,7 +96,7 @@ describe("Moves - Autotomize", () => {
     async () => {
       const baseLightGroudonWeight = 475;
       const autotomizeLightGroudonWeight = 425;
-      game.override.ability(Abilities.LIGHT_METAL);
+      game.overridesHelper.ability(Abilities.LIGHT_METAL);
       await game.classicMode.startBattle([Species.GROUDON]);
       const playerPokemon = game.scene.getPlayerPokemon()!;
       expect(playerPokemon.getWeight()).toBe(baseLightGroudonWeight);

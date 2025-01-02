@@ -22,7 +22,7 @@ describe("Items - Eviolite", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override.battleType("single").startingHeldItems([{ name: "EVIOLITE" }]);
+    game.overridesHelper.battleType("single").startingHeldItems([{ name: "EVIOLITE" }]);
   });
 
   it("should provide 50% boost to DEF and SPDEF for unevolved, unfused pokemon", async () => {
@@ -188,7 +188,7 @@ describe("Items - Eviolite", () => {
   });
 
   it("should not provide a boost for Gigantamax Pokémon", async () => {
-    game.override.starterForms({
+    game.overridesHelper.starterForms({
       [Species.PIKACHU]: 8,
       [Species.EEVEE]: 2,
       [Species.DURALUDON]: 1,

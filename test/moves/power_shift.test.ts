@@ -21,7 +21,7 @@ describe("Moves - Power Shift", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.POWER_SHIFT, Moves.BULK_UP])
       .battleType("single")
       .ability(Abilities.BALL_FETCH)

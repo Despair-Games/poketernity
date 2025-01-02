@@ -24,7 +24,7 @@ describe("Classic Final Boss", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .startingWave(FinalWave.Classic)
       .startingBiome(Biome.END)
       .disableCrits()
@@ -46,7 +46,7 @@ describe("Classic Final Boss", () => {
   });
 
   it("should NOT spawn Eternatus before wave 200 in END biome", async () => {
-    game.override.startingWave(FinalWave.Classic - 1);
+    game.overridesHelper.startingWave(FinalWave.Classic - 1);
     await game.runToFinalBossEncounter([Species.BIDOOF], GameModes.CLASSIC);
 
     expect(game.scene.currentBattle.waveIndex).not.toBe(FinalWave.Classic);
@@ -55,7 +55,7 @@ describe("Classic Final Boss", () => {
   });
 
   it("should NOT spawn Eternatus outside of END biome", async () => {
-    game.override.startingBiome(Biome.FOREST);
+    game.overridesHelper.startingBiome(Biome.FOREST);
     await game.runToFinalBossEncounter([Species.BIDOOF], GameModes.CLASSIC);
 
     expect(game.scene.currentBattle.waveIndex).toBe(FinalWave.Classic);
@@ -99,7 +99,7 @@ describe("Classic Final Boss", () => {
   });
 
   it("should change form on status damage down to last boss fragment", async () => {
-    game.override.ability(Abilities.NO_GUARD);
+    game.overridesHelper.ability(Abilities.NO_GUARD);
 
     await game.runToFinalBossEncounter([Species.BIDOOF], GameModes.CLASSIC);
     await game.phaseInterceptor.to("CommandPhase");

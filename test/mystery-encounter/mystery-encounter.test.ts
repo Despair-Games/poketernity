@@ -24,8 +24,8 @@ describe("Mystery Encounters", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     scene = game.scene;
-    game.override.startingWave(11);
-    game.override.mysteryEncounterChance(100);
+    game.overridesHelper.startingWave(11);
+    game.overridesHelper.mysteryEncounterChance(100);
   });
 
   it("Spawns a mystery encounter", async () => {
@@ -39,7 +39,7 @@ describe("Mystery Encounters", () => {
   });
 
   it("Encounters should not run below wave 10", async () => {
-    game.override.startingWave(9);
+    game.overridesHelper.startingWave(9);
 
     await game.runToMysteryEncounter();
 
@@ -47,7 +47,7 @@ describe("Mystery Encounters", () => {
   });
 
   it("Encounters should not run above wave 180", async () => {
-    game.override.startingWave(181);
+    game.overridesHelper.startingWave(181);
 
     await game.runToMysteryEncounter();
 

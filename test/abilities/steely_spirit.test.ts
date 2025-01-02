@@ -26,11 +26,11 @@ describe("Abilities - Steely Spirit", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("double");
-    game.override.enemySpecies(Species.SHUCKLE);
-    game.override.enemyAbility(Abilities.BALL_FETCH);
-    game.override.moveset([Moves.IRON_HEAD, Moves.SPLASH]);
-    game.override.enemyMoveset(Moves.SPLASH);
+    game.overridesHelper.battleType("double");
+    game.overridesHelper.enemySpecies(Species.SHUCKLE);
+    game.overridesHelper.enemyAbility(Abilities.BALL_FETCH);
+    game.overridesHelper.moveset([Moves.IRON_HEAD, Moves.SPLASH]);
+    game.overridesHelper.enemyMoveset(Moves.SPLASH);
     vi.spyOn(allMoves[moveToCheck], "calculateBattlePower");
   });
 
@@ -90,7 +90,7 @@ describe("Abilities - Steely Spirit", () => {
   });
 
   it("affects variable-type moves if their resolved type is Steel", async () => {
-    game.override.ability(Abilities.STEELY_SPIRIT).moveset([Moves.REVELATION_DANCE]);
+    game.overridesHelper.ability(Abilities.STEELY_SPIRIT).moveset([Moves.REVELATION_DANCE]);
 
     const revelationDance = allMoves[Moves.REVELATION_DANCE];
     vi.spyOn(revelationDance, "calculateBattlePower");

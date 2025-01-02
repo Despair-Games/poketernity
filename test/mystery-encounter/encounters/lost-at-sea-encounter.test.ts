@@ -37,10 +37,10 @@ describe("Lost at Sea - Mystery Encounter", () => {
   beforeEach(async () => {
     game = new GameManager(phaserGame);
     scene = game.scene;
-    game.override.mysteryEncounterChance(100);
-    game.override.startingWave(defaultWave);
-    game.override.startingBiome(defaultBiome);
-    game.override.disableTrainerWaves();
+    game.overridesHelper.mysteryEncounterChance(100);
+    game.overridesHelper.startingWave(defaultWave);
+    game.overridesHelper.startingBiome(defaultBiome);
+    game.overridesHelper.disableTrainerWaves();
 
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(
       new Map<Biome, MysteryEncounterType[]>([
@@ -70,8 +70,8 @@ describe("Lost at Sea - Mystery Encounter", () => {
   });
 
   it("should not spawn outside of sea biome", async () => {
-    game.override.mysteryEncounterTier(MysteryEncounterTier.COMMON);
-    game.override.startingBiome(Biome.MOUNTAIN);
+    game.overridesHelper.mysteryEncounterTier(MysteryEncounterTier.COMMON);
+    game.overridesHelper.startingBiome(Biome.MOUNTAIN);
     await game.runToMysteryEncounter();
 
     expect(game.scene.currentBattle.mysteryEncounter?.encounterType).not.toBe(MysteryEncounterType.LOST_AT_SEA);
@@ -127,7 +127,7 @@ describe("Lost at Sea - Mystery Encounter", () => {
     });
 
     it("should leave encounter without battle", async () => {
-      game.override.startingWave(33);
+      game.overridesHelper.startingWave(33);
       const leaveEncounterWithoutBattleSpy = vi.spyOn(EncounterPhaseUtils, "leaveEncounterWithoutBattle");
 
       await game.runToMysteryEncounter(MysteryEncounterType.LOST_AT_SEA, defaultParty);
@@ -178,7 +178,7 @@ describe("Lost at Sea - Mystery Encounter", () => {
     it("should award exp to flyable PKM (Pidgeot)", async () => {
       const laprasBaseExp = 187;
       const wave = 33;
-      game.override.startingWave(wave);
+      game.overridesHelper.startingWave(wave);
 
       await game.runToMysteryEncounter(MysteryEncounterType.LOST_AT_SEA, defaultParty);
       const party = game.scene.getPlayerParty();
@@ -192,7 +192,7 @@ describe("Lost at Sea - Mystery Encounter", () => {
     });
 
     it("should leave encounter without battle", async () => {
-      game.override.startingWave(33);
+      game.overridesHelper.startingWave(33);
       const leaveEncounterWithoutBattleSpy = vi.spyOn(EncounterPhaseUtils, "leaveEncounterWithoutBattle");
 
       await game.runToMysteryEncounter(MysteryEncounterType.LOST_AT_SEA, defaultParty);
@@ -239,7 +239,7 @@ describe("Lost at Sea - Mystery Encounter", () => {
     });
 
     it("should damage all (allowed in battle) party PKM by 25%", async () => {
-      game.override.startingWave(33);
+      game.overridesHelper.startingWave(33);
 
       await game.runToMysteryEncounter(MysteryEncounterType.LOST_AT_SEA, defaultParty);
 
@@ -263,7 +263,7 @@ describe("Lost at Sea - Mystery Encounter", () => {
     });
 
     it("should leave encounter without battle", async () => {
-      game.override.startingWave(33);
+      game.overridesHelper.startingWave(33);
       const leaveEncounterWithoutBattleSpy = vi.spyOn(EncounterPhaseUtils, "leaveEncounterWithoutBattle");
 
       await game.runToMysteryEncounter(MysteryEncounterType.LOST_AT_SEA, defaultParty);

@@ -24,12 +24,12 @@ describe("Moves - Thousand Arrows", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("single");
-    game.override.enemySpecies(Species.TOGETIC);
-    game.override.startingLevel(100);
-    game.override.enemyLevel(100);
-    game.override.moveset([Moves.THOUSAND_ARROWS]);
-    game.override.enemyMoveset([Moves.SPLASH, Moves.SPLASH, Moves.SPLASH, Moves.SPLASH]);
+    game.overridesHelper.battleType("single");
+    game.overridesHelper.enemySpecies(Species.TOGETIC);
+    game.overridesHelper.startingLevel(100);
+    game.overridesHelper.enemyLevel(100);
+    game.overridesHelper.moveset([Moves.THOUSAND_ARROWS]);
+    game.overridesHelper.enemyMoveset([Moves.SPLASH, Moves.SPLASH, Moves.SPLASH, Moves.SPLASH]);
   });
 
   it("move should hit and ground Flying-type targets", async () => {
@@ -50,8 +50,8 @@ describe("Moves - Thousand Arrows", () => {
   });
 
   it("move should hit and ground targets with Levitate", async () => {
-    game.override.enemySpecies(Species.SNORLAX);
-    game.override.enemyAbility(Abilities.LEVITATE);
+    game.overridesHelper.enemySpecies(Species.SNORLAX);
+    game.overridesHelper.enemyAbility(Abilities.LEVITATE);
 
     await game.startBattle([Species.ILLUMISE]);
 
@@ -70,7 +70,7 @@ describe("Moves - Thousand Arrows", () => {
   });
 
   it("move should hit and ground targets under the effects of Magnet Rise", async () => {
-    game.override.enemySpecies(Species.SNORLAX);
+    game.overridesHelper.enemySpecies(Species.SNORLAX);
 
     await game.startBattle([Species.ILLUMISE]);
 

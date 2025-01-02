@@ -24,15 +24,15 @@ describe("Abilities - Sturdy", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("single");
+    game.overridesHelper.battleType("single");
 
-    game.override.starterSpecies(Species.LUCARIO);
-    game.override.startingLevel(100);
-    game.override.moveset([Moves.CLOSE_COMBAT, Moves.FISSURE]);
+    game.overridesHelper.starterSpecies(Species.LUCARIO);
+    game.overridesHelper.startingLevel(100);
+    game.overridesHelper.moveset([Moves.CLOSE_COMBAT, Moves.FISSURE]);
 
-    game.override.enemySpecies(Species.ARON);
-    game.override.enemyLevel(5);
-    game.override.enemyAbility(Abilities.STURDY);
+    game.overridesHelper.enemySpecies(Species.ARON);
+    game.overridesHelper.enemyLevel(5);
+    game.overridesHelper.enemyAbility(Abilities.STURDY);
   });
 
   test("Sturdy activates when user is at full HP", async () => {
@@ -65,7 +65,7 @@ describe("Abilities - Sturdy", () => {
   });
 
   test("Sturdy is ignored by pokemon with `Abilities.MOLD_BREAKER`", async () => {
-    game.override.ability(Abilities.MOLD_BREAKER);
+    game.overridesHelper.ability(Abilities.MOLD_BREAKER);
 
     await game.startBattle();
     game.move.select(Moves.CLOSE_COMBAT);

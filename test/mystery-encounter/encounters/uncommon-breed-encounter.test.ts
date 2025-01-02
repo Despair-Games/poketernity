@@ -46,7 +46,7 @@ describe("Uncommon Breed - Mystery Encounter", () => {
   beforeEach(async () => {
     game = new GameManager(phaserGame);
     scene = game.scene;
-    game.override
+    game.overridesHelper
       .mysteryEncounterChance(100)
       .mysteryEncounterTier(MysteryEncounterTier.COMMON)
       .startingWave(defaultWave)
@@ -141,7 +141,7 @@ describe("Uncommon Breed - Mystery Encounter", () => {
     });
 
     it.skip("should start a fight against the boss above wave 50", async () => {
-      game.override.startingWave(57);
+      game.overridesHelper.startingWave(57);
       const phaseSpy = vi.spyOn(scene, "pushPhase");
       const unshiftPhaseSpy = vi.spyOn(scene, "unshiftPhase");
       await game.runToMysteryEncounter(MysteryEncounterType.UNCOMMON_BREED, defaultParty);

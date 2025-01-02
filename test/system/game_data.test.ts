@@ -20,7 +20,7 @@ describe("System - Game Data", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.SPLASH])
       .battleType("single")
       .enemyAbility(Abilities.BALL_FETCH)

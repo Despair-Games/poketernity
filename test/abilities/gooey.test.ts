@@ -24,7 +24,7 @@ describe("Abilities - Gooey/Tangling Hair", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.TACKLE, Moves.EMBER, Moves.DOUBLE_IRON_BASH])
       .ability(Abilities.BALL_FETCH)
       .battleType("single")
@@ -39,7 +39,7 @@ describe("Abilities - Gooey/Tangling Hair", () => {
   ])(
     "$abilityName should decrease the attacker's speed by 1 stage if the attacker uses a contact move",
     async ({ ability }) => {
-      game.override.enemyAbility(ability);
+      game.overridesHelper.enemyAbility(ability);
       await game.classicMode.startBattle([Species.FEEBAS]);
       const pokemon = game.scene.getPlayerPokemon()!;
 
@@ -57,7 +57,7 @@ describe("Abilities - Gooey/Tangling Hair", () => {
   ])(
     "$abilityName should not activate if the attacker has the ability Long Reach and uses a contact move",
     async ({ ability }) => {
-      game.override.ability(Abilities.LONG_REACH).enemyAbility(ability);
+      game.overridesHelper.ability(Abilities.LONG_REACH).enemyAbility(ability);
       await game.classicMode.startBattle([Species.FEEBAS]);
       const pokemon = game.scene.getPlayerPokemon()!;
 
@@ -75,7 +75,7 @@ describe("Abilities - Gooey/Tangling Hair", () => {
   ])(
     "$abilityName should not affect the attacker's speed if the attacker does not use a contact move",
     async ({ ability }) => {
-      game.override.enemyAbility(ability);
+      game.overridesHelper.enemyAbility(ability);
       await game.classicMode.startBattle([Species.FEEBAS]);
       const pokemon = game.scene.getPlayerPokemon()!;
 
@@ -91,7 +91,7 @@ describe("Abilities - Gooey/Tangling Hair", () => {
     { abilityName: "Gooey", ability: Abilities.GOOEY },
     { abilityName: "Tangling Hair", ability: Abilities.TANGLING_HAIR },
   ])("$abilityName should activate per hit of a contact-making multi-strike move", async ({ ability }) => {
-    game.override.enemyAbility(ability);
+    game.overridesHelper.enemyAbility(ability);
     await game.classicMode.startBattle([Species.FEEBAS]);
     const pokemon = game.scene.getPlayerPokemon()!;
 

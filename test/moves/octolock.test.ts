@@ -24,7 +24,7 @@ describe("Moves - Octolock", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemySpecies(Species.MAGIKARP)
       .enemyMoveset(Moves.SPLASH)
@@ -55,7 +55,7 @@ describe("Moves - Octolock", () => {
   });
 
   it("if target pokemon has BIG_PECKS, should only lower SPDEF stat stage by 1", async () => {
-    game.override.enemyAbility(Abilities.BIG_PECKS);
+    game.overridesHelper.enemyAbility(Abilities.BIG_PECKS);
     await game.classicMode.startBattle([Species.GRAPPLOCT]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -69,7 +69,7 @@ describe("Moves - Octolock", () => {
   });
 
   it("if target pokemon has WHITE_SMOKE, should not reduce any stat stages", async () => {
-    game.override.enemyAbility(Abilities.WHITE_SMOKE);
+    game.overridesHelper.enemyAbility(Abilities.WHITE_SMOKE);
     await game.classicMode.startBattle([Species.GRAPPLOCT]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -83,7 +83,7 @@ describe("Moves - Octolock", () => {
   });
 
   it("if target pokemon has CLEAR_BODY, should not reduce any stat stages", async () => {
-    game.override.enemyAbility(Abilities.CLEAR_BODY);
+    game.overridesHelper.enemyAbility(Abilities.CLEAR_BODY);
     await game.classicMode.startBattle([Species.GRAPPLOCT]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -112,7 +112,7 @@ describe("Moves - Octolock", () => {
   });
 
   it("does not work on ghost type pokemon", async () => {
-    game.override.enemyMoveset(Moves.OCTOLOCK);
+    game.overridesHelper.enemyMoveset(Moves.OCTOLOCK);
     await game.classicMode.startBattle([Species.GASTLY]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;

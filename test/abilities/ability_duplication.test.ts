@@ -22,7 +22,7 @@ describe("Ability Duplication", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.SPLASH])
       .battleType("single")
       .ability(Abilities.HUGE_POWER)
@@ -31,7 +31,7 @@ describe("Ability Duplication", () => {
   });
 
   it("huge power should only be applied once if both normal and passive", async () => {
-    game.override.passiveAbility(Abilities.HUGE_POWER);
+    game.overridesHelper.passiveAbility(Abilities.HUGE_POWER);
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
@@ -44,7 +44,7 @@ describe("Ability Duplication", () => {
   });
 
   it("huge power should stack with pure power", async () => {
-    game.override.passiveAbility(Abilities.PURE_POWER);
+    game.overridesHelper.passiveAbility(Abilities.PURE_POWER);
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 

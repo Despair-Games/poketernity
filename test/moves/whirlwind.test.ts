@@ -27,7 +27,7 @@ describe("Moves - Whirlwind", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .moveset(Moves.SPLASH)
       .enemyAbility(Abilities.BALL_FETCH)
@@ -40,7 +40,7 @@ describe("Moves - Whirlwind", () => {
     { move: Moves.BOUNCE, name: "Bounce" },
     { move: Moves.SKY_DROP, name: "Sky Drop" },
   ])("should not hit a flying target: $name (=$move)", async ({ move }) => {
-    game.override.moveset([move]);
+    game.overridesHelper.moveset([move]);
     await game.classicMode.startBattle([Species.STARAPTOR]);
 
     const staraptor = game.scene.getPlayerPokemon()!;

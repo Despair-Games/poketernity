@@ -22,7 +22,7 @@ describe("Moves - Miracle Eye", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .disableCrits()
       .enemySpecies(Species.UMBREON)
       .enemyMoveset(Moves.SPLASH)

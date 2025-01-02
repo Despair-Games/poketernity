@@ -27,11 +27,11 @@ describe("UI - Type Hints", () => {
   beforeEach(async () => {
     game = new GameManager(phaserGame);
     game.settings.typeHints(true); //activate type hints
-    game.override.battleType("single").startingLevel(100).startingWave(1).enemyMoveset(Moves.SPLASH);
+    game.overridesHelper.battleType("single").startingLevel(100).startingWave(1).enemyMoveset(Moves.SPLASH);
   });
 
   it("check immunity color", async () => {
-    game.override
+    game.overridesHelper
       .battleType("single")
       .startingLevel(100)
       .startingWave(1)
@@ -63,7 +63,7 @@ describe("UI - Type Hints", () => {
   });
 
   it("check status move color", async () => {
-    game.override.enemySpecies(Species.FLORGES).moveset([Moves.GROWL]);
+    game.overridesHelper.enemySpecies(Species.FLORGES).moveset([Moves.GROWL]);
 
     await game.startBattle([Species.RAYQUAZA]);
 

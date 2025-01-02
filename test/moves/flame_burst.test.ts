@@ -35,14 +35,14 @@ describe("Moves - Flame Burst", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("double");
-    game.override.moveset([Moves.FLAME_BURST, Moves.SPLASH]);
-    game.override.disableCrits();
-    game.override.ability(Abilities.UNNERVE);
-    game.override.startingWave(4);
-    game.override.enemySpecies(Species.SHUCKLE);
-    game.override.enemyAbility(Abilities.BALL_FETCH);
-    game.override.enemyMoveset([Moves.SPLASH]);
+    game.overridesHelper.battleType("double");
+    game.overridesHelper.moveset([Moves.FLAME_BURST, Moves.SPLASH]);
+    game.overridesHelper.disableCrits();
+    game.overridesHelper.ability(Abilities.UNNERVE);
+    game.overridesHelper.startingWave(4);
+    game.overridesHelper.enemySpecies(Species.SHUCKLE);
+    game.overridesHelper.enemyAbility(Abilities.BALL_FETCH);
+    game.overridesHelper.enemyMoveset([Moves.SPLASH]);
   });
 
   it("inflicts damage to the target's ally equal to 1/16 of its max HP", async () => {
@@ -58,7 +58,7 @@ describe("Moves - Flame Burst", () => {
   });
 
   it("does not inflict damage to the target's ally if the target was not affected by Flame Burst", async () => {
-    game.override.enemyAbility(Abilities.FLASH_FIRE);
+    game.overridesHelper.enemyAbility(Abilities.FLASH_FIRE);
 
     await game.classicMode.startBattle([Species.PIKACHU, Species.PIKACHU]);
     const [leftEnemy, rightEnemy] = game.scene.getEnemyField();
@@ -100,7 +100,7 @@ describe("Moves - Flame Burst", () => {
   });
 
   it("effect damage should apply even when targeting a Substitute", async () => {
-    game.override.enemyMoveset([Moves.SUBSTITUTE, Moves.SPLASH]);
+    game.overridesHelper.enemyMoveset([Moves.SUBSTITUTE, Moves.SPLASH]);
 
     await game.classicMode.startBattle([Species.PIKACHU, Species.PIKACHU]);
     const [leftEnemy, rightEnemy] = game.scene.getEnemyField();
@@ -119,7 +119,7 @@ describe("Moves - Flame Burst", () => {
   });
 
   it("effect damage should bypass protection", async () => {
-    game.override.enemyMoveset([Moves.PROTECT, Moves.SPLASH]);
+    game.overridesHelper.enemyMoveset([Moves.PROTECT, Moves.SPLASH]);
 
     await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
 
@@ -140,7 +140,7 @@ describe("Moves - Flame Burst", () => {
 
   // TODO: fix Endure's interactions with effect damage to pass this test
   it.skip("effect damage should bypass Endure", async () => {
-    game.override.enemyMoveset([Moves.ENDURE, Moves.SPLASH]);
+    game.overridesHelper.enemyMoveset([Moves.ENDURE, Moves.SPLASH]);
 
     await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
 

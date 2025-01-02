@@ -25,7 +25,7 @@ describe("Abilities - Galvanize", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override
+    game.overridesHelper
       .battleType("single")
       .startingLevel(100)
       .ability(Abilities.GALVANIZE)
@@ -59,7 +59,7 @@ describe("Abilities - Galvanize", () => {
   });
 
   it("should cause Normal-type attacks to activate Volt Absorb", async () => {
-    game.override.enemyAbility(Abilities.VOLT_ABSORB);
+    game.overridesHelper.enemyAbility(Abilities.VOLT_ABSORB);
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
@@ -81,7 +81,7 @@ describe("Abilities - Galvanize", () => {
   });
 
   it("should not change the type of variable-type moves", async () => {
-    game.override.enemySpecies(Species.MIGHTYENA);
+    game.overridesHelper.enemySpecies(Species.MIGHTYENA);
 
     await game.classicMode.startBattle([Species.ESPEON]);
 

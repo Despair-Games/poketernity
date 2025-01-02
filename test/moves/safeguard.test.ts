@@ -25,7 +25,7 @@ describe("Moves - Safeguard", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemySpecies(Species.DRATINI)
       .enemyMoveset([Moves.SAFEGUARD])
@@ -59,7 +59,7 @@ describe("Moves - Safeguard", () => {
   });
 
   it("protects from confusion", async () => {
-    game.override.moveset([Moves.CONFUSE_RAY]);
+    game.overridesHelper.moveset([Moves.CONFUSE_RAY]);
     await game.classicMode.startBattle();
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -71,7 +71,7 @@ describe("Moves - Safeguard", () => {
   });
 
   it("protects ally from status", async () => {
-    game.override.battleType("double");
+    game.overridesHelper.battleType("double");
 
     await game.classicMode.startBattle();
 
@@ -114,7 +114,7 @@ describe("Moves - Safeguard", () => {
   });
 
   it("doesn't protect from self-inflicted via Rest or Flame Orb", async () => {
-    game.override.enemyHeldItems([{ name: "FLAME_ORB" }]);
+    game.overridesHelper.enemyHeldItems([{ name: "FLAME_ORB" }]);
     await game.classicMode.startBattle();
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -125,7 +125,7 @@ describe("Moves - Safeguard", () => {
 
     expect(enemyPokemon.status?.effect).toEqual(StatusEffect.BURN);
 
-    game.override.enemyMoveset([Moves.REST]);
+    game.overridesHelper.enemyMoveset([Moves.REST]);
     // Force the moveset to update mid-battle
     // TODO: Remove after enemy AI rework is in
     enemyPokemon.getMoveset();
@@ -137,7 +137,7 @@ describe("Moves - Safeguard", () => {
   });
 
   it("protects from ability-inflicted status", async () => {
-    game.override.ability(Abilities.STATIC);
+    game.overridesHelper.ability(Abilities.STATIC);
     vi.spyOn(
       allAbilities[Abilities.STATIC].getAttrs(PostDefendContactApplyStatusEffectAbAttr)[0],
       "chance",
@@ -149,7 +149,7 @@ describe("Moves - Safeguard", () => {
     game.move.select(Moves.SPLASH);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
-    game.override.enemyMoveset([Moves.TACKLE]);
+    game.overridesHelper.enemyMoveset([Moves.TACKLE]);
     game.move.select(Moves.SPLASH);
     await game.toNextTurn();
 

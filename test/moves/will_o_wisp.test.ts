@@ -23,7 +23,7 @@ describe("Moves - Will-O-Wisp", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.WILL_O_WISP, Moves.SPLASH])
       .ability(Abilities.BALL_FETCH)
       .battleType("single")

@@ -27,7 +27,7 @@ describe("Moves - Triple Arrows", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .ability(Abilities.BALL_FETCH)
       .moveset([Moves.TRIPLE_ARROWS])
       .battleType("single")
@@ -50,7 +50,7 @@ describe("Moves - Triple Arrows", () => {
   });
 
   it("is affected normally by Serene Grace", async () => {
-    game.override.ability(Abilities.SERENE_GRACE);
+    game.overridesHelper.ability(Abilities.SERENE_GRACE);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     game.move.select(Moves.TRIPLE_ARROWS);

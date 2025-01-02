@@ -54,7 +54,7 @@ describe("Shop modifications", async () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override
+    game.overridesHelper
       .startingWave(9)
       .startingBiome(Biome.ICE_CAVE)
       .battleType("single")

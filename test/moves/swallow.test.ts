@@ -27,15 +27,15 @@ describe("Moves - Swallow", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override.battleType("single");
+    game.overridesHelper.battleType("single");
 
-    game.override.enemySpecies(Species.RATTATA);
-    game.override.enemyMoveset(Moves.SPLASH);
-    game.override.enemyAbility(Abilities.NONE);
-    game.override.enemyLevel(2000);
+    game.overridesHelper.enemySpecies(Species.RATTATA);
+    game.overridesHelper.enemyMoveset(Moves.SPLASH);
+    game.overridesHelper.enemyAbility(Abilities.NONE);
+    game.overridesHelper.enemyLevel(2000);
 
-    game.override.moveset([Moves.SWALLOW, Moves.SWALLOW, Moves.SWALLOW, Moves.SWALLOW]);
-    game.override.ability(Abilities.NONE);
+    game.overridesHelper.moveset([Moves.SWALLOW, Moves.SWALLOW, Moves.SWALLOW, Moves.SWALLOW]);
+    game.overridesHelper.ability(Abilities.NONE);
   });
 
   describe("consumes all stockpile stacks to heal (scaling with stacks)", () => {

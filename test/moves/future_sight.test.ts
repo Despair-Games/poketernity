@@ -21,7 +21,7 @@ describe("Moves - Future Sight", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .startingLevel(50)
       .moveset([Moves.FUTURE_SIGHT, Moves.SPLASH])
       .battleType("single")

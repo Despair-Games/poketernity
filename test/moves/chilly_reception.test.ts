@@ -23,7 +23,7 @@ describe("Moves - Chilly Reception", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .moveset([Moves.CHILLY_RECEPTION, Moves.SNOWSCAPE])
       .enemyMoveset(Array(4).fill(Moves.SPLASH))
@@ -69,7 +69,7 @@ describe("Moves - Chilly Reception", () => {
 
   // enemy uses another move and weather doesn't change
   it("check case - enemy not selecting chilly reception doesn't change weather ", async () => {
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemyMoveset([Moves.CHILLY_RECEPTION, Moves.TACKLE])
       .enemyAbility(Abilities.NONE)
@@ -85,7 +85,7 @@ describe("Moves - Chilly Reception", () => {
   });
 
   it("enemy trainer - expected behavior ", async () => {
-    game.override
+    game.overridesHelper
       .battleType("single")
       .startingWave(8)
       .enemyMoveset(Array(4).fill(Moves.CHILLY_RECEPTION))

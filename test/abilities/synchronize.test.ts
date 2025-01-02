@@ -23,7 +23,7 @@ describe("Abilities - Synchronize", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override
+    game.overridesHelper
       .battleType("single")
       .startingLevel(100)
       .enemySpecies(Species.MAGIKARP)
@@ -66,7 +66,7 @@ describe("Abilities - Synchronize", () => {
   });
 
   it("does not trigger when Pokemon is statused by Toxic Spikes", async () => {
-    game.override
+    game.overridesHelper
       .ability(Abilities.SYNCHRONIZE)
       .enemyAbility(Abilities.BALL_FETCH)
       .enemyMoveset(Array(4).fill(Moves.TOXIC_SPIKES));

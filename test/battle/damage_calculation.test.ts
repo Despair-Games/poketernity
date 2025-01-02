@@ -23,7 +23,7 @@ describe("Battle Mechanics - Damage Calculation", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemySpecies(Species.SNORLAX)
       .enemyAbility(Abilities.BALL_FETCH)
@@ -49,7 +49,7 @@ describe("Battle Mechanics - Damage Calculation", () => {
   });
 
   it("Attacks deal 1 damage at minimum", async () => {
-    game.override.startingLevel(1).enemySpecies(Species.AGGRON);
+    game.overridesHelper.startingLevel(1).enemySpecies(Species.AGGRON);
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
@@ -64,7 +64,7 @@ describe("Battle Mechanics - Damage Calculation", () => {
   });
 
   it("Fixed-damage moves ignore damage multipliers", async () => {
-    game.override.enemySpecies(Species.DRAGONITE).enemyAbility(Abilities.MULTISCALE);
+    game.overridesHelper.enemySpecies(Species.DRAGONITE).enemyAbility(Abilities.MULTISCALE);
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
@@ -75,7 +75,7 @@ describe("Battle Mechanics - Damage Calculation", () => {
   });
 
   it("One-hit KO moves ignore damage multipliers", async () => {
-    game.override.enemySpecies(Species.AGGRON).enemyAbility(Abilities.MULTISCALE);
+    game.overridesHelper.enemySpecies(Species.AGGRON).enemyAbility(Abilities.MULTISCALE);
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
@@ -86,7 +86,7 @@ describe("Battle Mechanics - Damage Calculation", () => {
   });
 
   it("When the user fails to use Jump Kick with Wonder Guard ability, the damage should be 1.", async () => {
-    game.override.enemySpecies(Species.GASTLY).ability(Abilities.WONDER_GUARD);
+    game.overridesHelper.enemySpecies(Species.GASTLY).ability(Abilities.WONDER_GUARD);
 
     await game.classicMode.startBattle([Species.SHEDINJA]);
 
@@ -101,7 +101,10 @@ describe("Battle Mechanics - Damage Calculation", () => {
 
   it("Charizard with odd HP survives Stealth Rock damage twice", async () => {
     game.scene.arena.addTag(ArenaTagType.STEALTH_ROCK, 1, Moves.STEALTH_ROCK, 0);
-    game.override.seed("Charizard Stealth Rock test").enemySpecies(Species.CHARIZARD).enemyAbility(Abilities.BLAZE);
+    game.overridesHelper
+      .seed("Charizard Stealth Rock test")
+      .enemySpecies(Species.CHARIZARD)
+      .enemyAbility(Abilities.BLAZE);
 
     await game.classicMode.startBattle([Species.PIKACHU]);
 

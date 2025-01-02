@@ -24,12 +24,12 @@ describe("Abilities - Wonder Skin", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("single");
-    game.override.moveset([Moves.TACKLE, Moves.CHARM]);
-    game.override.ability(Abilities.BALL_FETCH);
-    game.override.enemySpecies(Species.SHUCKLE);
-    game.override.enemyAbility(Abilities.WONDER_SKIN);
-    game.override.enemyMoveset(Moves.SPLASH);
+    game.overridesHelper.battleType("single");
+    game.overridesHelper.moveset([Moves.TACKLE, Moves.CHARM]);
+    game.overridesHelper.ability(Abilities.BALL_FETCH);
+    game.overridesHelper.enemySpecies(Species.SHUCKLE);
+    game.overridesHelper.enemyAbility(Abilities.WONDER_SKIN);
+    game.overridesHelper.enemyMoveset(Moves.SPLASH);
   });
 
   it("lowers accuracy of status moves to 50%", async () => {
@@ -62,7 +62,7 @@ describe("Abilities - Wonder Skin", () => {
     it(`does not affect pokemon with ${allAbilities[ability].name}`, async () => {
       const moveToCheck = allMoves[Moves.CHARM];
 
-      game.override.ability(ability);
+      game.overridesHelper.ability(ability);
       vi.spyOn(moveToCheck, "calculateBattleAccuracy");
 
       await game.startBattle([Species.PIKACHU]);

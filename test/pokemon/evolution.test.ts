@@ -29,12 +29,12 @@ describe("Evolution", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override.battleType("single");
+    game.overridesHelper.battleType("single");
 
-    game.override.enemySpecies(Species.MAGIKARP);
-    game.override.enemyAbility(Abilities.BALL_FETCH);
+    game.overridesHelper.enemySpecies(Species.MAGIKARP);
+    game.overridesHelper.enemyAbility(Abilities.BALL_FETCH);
 
-    game.override.startingLevel(60);
+    game.overridesHelper.startingLevel(60);
   });
 
   it("should keep hidden ability after evolving", async () => {
@@ -103,7 +103,7 @@ describe("Evolution", () => {
   });
 
   it("should increase both HP and max HP when evolving", async () => {
-    game.override
+    game.overridesHelper
       .moveset([Moves.SURF])
       .enemySpecies(Species.GOLEM)
       .enemyMoveset(Moves.SPLASH)
@@ -131,7 +131,7 @@ describe("Evolution", () => {
   });
 
   it("should not fully heal HP when evolving", async () => {
-    game.override
+    game.overridesHelper
       .moveset([Moves.SURF])
       .enemySpecies(Species.GOLEM)
       .enemyMoveset(Moves.SPLASH)

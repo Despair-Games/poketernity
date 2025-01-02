@@ -28,18 +28,18 @@ describe("Moves - Fissure", () => {
   beforeEach(async () => {
     game = new GameManager(phaserGame);
 
-    game.override.battleType("single");
-    game.override.disableCrits();
+    game.overridesHelper.battleType("single");
+    game.overridesHelper.disableCrits();
 
-    game.override.starterSpecies(Species.SNORLAX);
-    game.override.moveset([Moves.FISSURE]);
-    game.override.passiveAbility(Abilities.BALL_FETCH);
-    game.override.startingLevel(100);
+    game.overridesHelper.starterSpecies(Species.SNORLAX);
+    game.overridesHelper.moveset([Moves.FISSURE]);
+    game.overridesHelper.passiveAbility(Abilities.BALL_FETCH);
+    game.overridesHelper.startingLevel(100);
 
-    game.override.enemySpecies(Species.SNORLAX);
-    game.override.enemyMoveset(Moves.SPLASH);
-    game.override.enemyPassiveAbility(Abilities.BALL_FETCH);
-    game.override.enemyLevel(100);
+    game.overridesHelper.enemySpecies(Species.SNORLAX);
+    game.overridesHelper.enemyMoveset(Moves.SPLASH);
+    game.overridesHelper.enemyPassiveAbility(Abilities.BALL_FETCH);
+    game.overridesHelper.enemyLevel(100);
 
     await game.startBattle();
 
@@ -52,8 +52,8 @@ describe("Moves - Fissure", () => {
   });
 
   it("ignores damage modification from abilities, for example FUR_COAT", async () => {
-    game.override.ability(Abilities.NO_GUARD);
-    game.override.enemyAbility(Abilities.FUR_COAT);
+    game.overridesHelper.ability(Abilities.NO_GUARD);
+    game.overridesHelper.enemyAbility(Abilities.FUR_COAT);
 
     game.move.select(Moves.FISSURE);
     await game.phaseInterceptor.to(DamageAnimPhase, true);

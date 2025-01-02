@@ -22,7 +22,7 @@ describe("Moves - Disable", () => {
 
   beforeEach(async () => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .ability(Abilities.BALL_FETCH)
       .enemyAbility(Abilities.BALL_FETCH)
@@ -78,7 +78,7 @@ describe("Moves - Disable", () => {
   }, 20000);
 
   it("cannot disable STRUGGLE", async () => {
-    game.override.enemyMoveset([Moves.STRUGGLE]);
+    game.overridesHelper.enemyMoveset([Moves.STRUGGLE]);
     await game.classicMode.startBattle();
 
     const playerMon = game.scene.getPlayerPokemon()!;
@@ -113,7 +113,7 @@ describe("Moves - Disable", () => {
   }, 20000);
 
   it("disables NATURE POWER, not the move invoked by it", async () => {
-    game.override.enemyMoveset([Moves.NATURE_POWER]);
+    game.overridesHelper.enemyMoveset([Moves.NATURE_POWER]);
     await game.classicMode.startBattle();
 
     const enemyMon = game.scene.getEnemyPokemon()!;

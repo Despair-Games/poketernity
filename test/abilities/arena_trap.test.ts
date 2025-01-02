@@ -22,7 +22,7 @@ describe("Abilities - Arena Trap", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset(Moves.SPLASH)
       .ability(Abilities.ARENA_TRAP)
       .enemySpecies(Species.RALTS)
@@ -32,7 +32,7 @@ describe("Abilities - Arena Trap", () => {
 
   // TODO: Enable test when Issue #935 is addressed
   it.todo("should not allow grounded Pokémon to flee", async () => {
-    game.override.battleType("single");
+    game.overridesHelper.battleType("single");
 
     await game.classicMode.startBattle();
 
@@ -46,7 +46,7 @@ describe("Abilities - Arena Trap", () => {
   });
 
   it("should guarantee double battle with any one LURE", async () => {
-    game.override.startingModifier([{ name: "LURE" }]).startingWave(2);
+    game.overridesHelper.startingModifier([{ name: "LURE" }]).startingWave(2);
 
     await game.classicMode.startBattle();
 
@@ -60,7 +60,7 @@ describe("Abilities - Arena Trap", () => {
    * Note: It should be able to switch out/run away
    */
   it("should lift if pokemon with this ability leaves the field", async () => {
-    game.override
+    game.overridesHelper
       .battleType("double")
       .enemyMoveset(Moves.SPLASH)
       .moveset([Moves.ROAR, Moves.SPLASH])

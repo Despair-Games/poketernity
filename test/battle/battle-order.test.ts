@@ -24,11 +24,11 @@ describe("Battle order", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("single");
-    game.override.enemySpecies(Species.MEWTWO);
-    game.override.enemyAbility(Abilities.INSOMNIA);
-    game.override.ability(Abilities.INSOMNIA);
-    game.override.moveset([Moves.TACKLE]);
+    game.overridesHelper.battleType("single");
+    game.overridesHelper.enemySpecies(Species.MEWTWO);
+    game.overridesHelper.enemyAbility(Abilities.INSOMNIA);
+    game.overridesHelper.ability(Abilities.INSOMNIA);
+    game.overridesHelper.moveset([Moves.TACKLE]);
   });
 
   it("opponent faster than player 50 vs 150", async () => {
@@ -70,7 +70,7 @@ describe("Battle order", () => {
   }, 20000);
 
   it("double - both opponents faster than player 50/50 vs 150/150", async () => {
-    game.override.battleType("double");
+    game.overridesHelper.battleType("double");
     await game.startBattle([Species.BULBASAUR, Species.BLASTOISE]);
 
     const playerPokemon = game.scene.getPlayerField();
@@ -94,7 +94,7 @@ describe("Battle order", () => {
   }, 20000);
 
   it("double - speed tie except 1 - 100/100 vs 100/150", async () => {
-    game.override.battleType("double");
+    game.overridesHelper.battleType("double");
     await game.startBattle([Species.BULBASAUR, Species.BLASTOISE]);
 
     const playerPokemon = game.scene.getPlayerField();
@@ -118,7 +118,7 @@ describe("Battle order", () => {
   }, 20000);
 
   it("double - speed tie 100/150 vs 100/150", async () => {
-    game.override.battleType("double");
+    game.overridesHelper.battleType("double");
     await game.startBattle([Species.BULBASAUR, Species.BLASTOISE]);
 
     const playerPokemon = game.scene.getPlayerField();

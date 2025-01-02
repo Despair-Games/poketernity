@@ -23,7 +23,7 @@ describe("Moves - Nightmare", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemySpecies(Species.RATTATA)
       .enemyMoveset(Moves.SPLASH)

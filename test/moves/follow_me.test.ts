@@ -24,14 +24,14 @@ describe("Moves - Follow Me", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("double");
-    game.override.starterSpecies(Species.AMOONGUSS);
-    game.override.ability(Abilities.BALL_FETCH);
-    game.override.enemySpecies(Species.SNORLAX);
-    game.override.startingLevel(100);
-    game.override.enemyLevel(100);
-    game.override.moveset([Moves.FOLLOW_ME, Moves.RAGE_POWDER, Moves.SPOTLIGHT, Moves.QUICK_ATTACK]);
-    game.override.enemyMoveset([Moves.TACKLE, Moves.FOLLOW_ME, Moves.SPLASH]);
+    game.overridesHelper.battleType("double");
+    game.overridesHelper.starterSpecies(Species.AMOONGUSS);
+    game.overridesHelper.ability(Abilities.BALL_FETCH);
+    game.overridesHelper.enemySpecies(Species.SNORLAX);
+    game.overridesHelper.startingLevel(100);
+    game.overridesHelper.enemyLevel(100);
+    game.overridesHelper.moveset([Moves.FOLLOW_ME, Moves.RAGE_POWDER, Moves.SPOTLIGHT, Moves.QUICK_ATTACK]);
+    game.overridesHelper.enemyMoveset([Moves.TACKLE, Moves.FOLLOW_ME, Moves.SPLASH]);
   });
 
   test("move should redirect enemy attacks to the user", async () => {
@@ -73,8 +73,8 @@ describe("Moves - Follow Me", () => {
   });
 
   test("move effect should be bypassed by Stalwart", async () => {
-    game.override.ability(Abilities.STALWART);
-    game.override.moveset([Moves.QUICK_ATTACK]);
+    game.overridesHelper.ability(Abilities.STALWART);
+    game.overridesHelper.moveset([Moves.QUICK_ATTACK]);
 
     await game.classicMode.startBattle([Species.AMOONGUSS, Species.CHARIZARD]);
 
@@ -95,7 +95,7 @@ describe("Moves - Follow Me", () => {
   });
 
   test("move effect should be bypassed by Snipe Shot", async () => {
-    game.override.moveset([Moves.SNIPE_SHOT]);
+    game.overridesHelper.moveset([Moves.SNIPE_SHOT]);
 
     await game.classicMode.startBattle([Species.AMOONGUSS, Species.CHARIZARD]);
 

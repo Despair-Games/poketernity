@@ -38,7 +38,7 @@ describe("An Offer You Can't Refuse - Mystery Encounter", () => {
   beforeEach(async () => {
     game = new GameManager(phaserGame);
     scene = game.scene;
-    game.override
+    game.overridesHelper
       .mysteryEncounterChance(100)
       .startingWave(defaultWave)
       .startingBiome(defaultBiome)
@@ -79,8 +79,8 @@ describe("An Offer You Can't Refuse - Mystery Encounter", () => {
   });
 
   it("should not spawn outside of HUMAN_TRANSITABLE_BIOMES", async () => {
-    game.override.mysteryEncounterTier(MysteryEncounterTier.GREAT);
-    game.override.startingBiome(Biome.VOLCANO);
+    game.overridesHelper.mysteryEncounterTier(MysteryEncounterTier.GREAT);
+    game.overridesHelper.startingBiome(Biome.VOLCANO);
     await game.runToMysteryEncounter();
 
     expect(scene.currentBattle?.mysteryEncounter?.encounterType).not.toBe(
@@ -208,7 +208,7 @@ describe("An Offer You Can't Refuse - Mystery Encounter", () => {
     });
 
     it("should award EXP to a pokemon with a move in EXTORTION_MOVES", async () => {
-      game.override.ability(Abilities.SYNCHRONIZE); // Not an extortion ability, so we can test extortion move
+      game.overridesHelper.ability(Abilities.SYNCHRONIZE); // Not an extortion ability, so we can test extortion move
       await game.runToMysteryEncounter(MysteryEncounterType.AN_OFFER_YOU_CANT_REFUSE, [Species.ABRA]);
       const party = scene.getPlayerParty();
       const abra = party.find((pkm) => pkm.species.speciesId === Species.ABRA)!;

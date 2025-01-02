@@ -27,7 +27,7 @@ describe("Moves - Heal Block", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.ABSORB, Moves.WISH, Moves.SPLASH, Moves.AQUA_RING])
       .enemyMoveset(Moves.HEAL_BLOCK)
       .ability(Abilities.NO_GUARD)
@@ -72,7 +72,7 @@ describe("Moves - Heal Block", () => {
   });
 
   it("should prevent Grassy Terrain from restoring HP", async () => {
-    game.override.enemyAbility(Abilities.GRASSY_SURGE);
+    game.overridesHelper.enemyAbility(Abilities.GRASSY_SURGE);
 
     await game.classicMode.startBattle([Species.CHARIZARD]);
 
@@ -101,7 +101,7 @@ describe("Moves - Heal Block", () => {
   });
 
   it("should prevent abilities from restoring HP", async () => {
-    game.override.weather(WeatherType.RAIN).ability(Abilities.RAIN_DISH);
+    game.overridesHelper.weather(WeatherType.RAIN).ability(Abilities.RAIN_DISH);
 
     await game.classicMode.startBattle([Species.CHARIZARD]);
 
@@ -116,7 +116,7 @@ describe("Moves - Heal Block", () => {
   });
 
   it("should stop healing from items", async () => {
-    game.override.startingHeldItems([{ name: "LEFTOVERS" }]);
+    game.overridesHelper.startingHeldItems([{ name: "LEFTOVERS" }]);
 
     await game.classicMode.startBattle([Species.CHARIZARD]);
 

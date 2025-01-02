@@ -21,7 +21,7 @@ describe("Endless Boss", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.startingBiome(Biome.END).disableCrits();
+    game.overridesHelper.startingBiome(Biome.END).disableCrits();
   });
 
   afterEach(() => {
@@ -29,7 +29,7 @@ describe("Endless Boss", () => {
   });
 
   it(`should spawn a minor boss every ${EndlessBossWave.Minor} waves in END biome in Endless`, async () => {
-    game.override.startingWave(EndlessBossWave.Minor);
+    game.overridesHelper.startingWave(EndlessBossWave.Minor);
     await game.runToFinalBossEncounter([Species.BIDOOF], GameModes.ENDLESS);
 
     expect(game.scene.currentBattle.waveIndex).toBe(EndlessBossWave.Minor);
@@ -41,7 +41,7 @@ describe("Endless Boss", () => {
   });
 
   it(`should spawn a major boss every ${EndlessBossWave.Major} waves in END biome in Endless`, async () => {
-    game.override.startingWave(EndlessBossWave.Major);
+    game.overridesHelper.startingWave(EndlessBossWave.Major);
     await game.runToFinalBossEncounter([Species.BIDOOF], GameModes.ENDLESS);
 
     expect(game.scene.currentBattle.waveIndex).toBe(EndlessBossWave.Major);
@@ -53,7 +53,7 @@ describe("Endless Boss", () => {
   });
 
   it(`should spawn a minor boss every ${EndlessBossWave.Minor} waves in END biome in Spliced Endless`, async () => {
-    game.override.startingWave(EndlessBossWave.Minor);
+    game.overridesHelper.startingWave(EndlessBossWave.Minor);
     await game.runToFinalBossEncounter([Species.BIDOOF], GameModes.SPLICED_ENDLESS);
 
     expect(game.scene.currentBattle.waveIndex).toBe(EndlessBossWave.Minor);
@@ -65,7 +65,7 @@ describe("Endless Boss", () => {
   });
 
   it(`should spawn a major boss every ${EndlessBossWave.Major} waves in END biome in Spliced Endless`, async () => {
-    game.override.startingWave(EndlessBossWave.Major);
+    game.overridesHelper.startingWave(EndlessBossWave.Major);
     await game.runToFinalBossEncounter([Species.BIDOOF], GameModes.SPLICED_ENDLESS);
 
     expect(game.scene.currentBattle.waveIndex).toBe(EndlessBossWave.Major);
@@ -77,7 +77,7 @@ describe("Endless Boss", () => {
   });
 
   it(`should NOT spawn major or minor boss outside wave ${EndlessBossWave.Minor}s in END biome`, async () => {
-    game.override.startingWave(EndlessBossWave.Minor - 1);
+    game.overridesHelper.startingWave(EndlessBossWave.Minor - 1);
     await game.runToFinalBossEncounter([Species.BIDOOF], GameModes.ENDLESS);
 
     expect(game.scene.currentBattle.waveIndex).not.toBe(EndlessBossWave.Minor);

@@ -31,7 +31,7 @@ describe("Items - Dire Hit", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override
+    game.overridesHelper
       .enemySpecies(Species.MAGIKARP)
       .enemyMoveset(Moves.SPLASH)
       .moveset([Moves.POUND])
@@ -54,7 +54,7 @@ describe("Items - Dire Hit", () => {
   }, 20000);
 
   it("should renew how many battles are left of existing DIRE_HIT when picking up new DIRE_HIT", async () => {
-    game.override.itemRewards([{ name: "DIRE_HIT" }]);
+    game.overridesHelper.itemRewards([{ name: "DIRE_HIT" }]);
 
     await game.startBattle([Species.PIKACHU]);
 

@@ -26,7 +26,7 @@ describe("Moves - Beak Blast", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .ability(Abilities.UNNERVE)
       .moveset([Moves.BEAK_BLAST])
@@ -53,7 +53,7 @@ describe("Moves - Beak Blast", () => {
   });
 
   it("should still charge and burn opponents if the user is sleeping", async () => {
-    game.override.statusEffect(StatusEffect.SLEEP);
+    game.overridesHelper.statusEffect(StatusEffect.SLEEP);
 
     await game.startBattle([Species.BLASTOISE]);
 
@@ -70,7 +70,7 @@ describe("Moves - Beak Blast", () => {
   });
 
   it("should not burn attackers that don't make contact", async () => {
-    game.override.enemyMoveset([Moves.WATER_GUN]);
+    game.overridesHelper.enemyMoveset([Moves.WATER_GUN]);
 
     await game.startBattle([Species.BLASTOISE]);
 
@@ -87,7 +87,7 @@ describe("Moves - Beak Blast", () => {
   });
 
   it("should only hit twice with Multi-Lens", async () => {
-    game.override.startingHeldItems([{ name: "MULTI_LENS", count: 1 }]);
+    game.overridesHelper.startingHeldItems([{ name: "MULTI_LENS", count: 1 }]);
 
     await game.startBattle([Species.BLASTOISE]);
 
@@ -100,7 +100,7 @@ describe("Moves - Beak Blast", () => {
   });
 
   it("should be blocked by Protect", async () => {
-    game.override.enemyMoveset([Moves.PROTECT]);
+    game.overridesHelper.enemyMoveset([Moves.PROTECT]);
 
     await game.startBattle([Species.BLASTOISE]);
 

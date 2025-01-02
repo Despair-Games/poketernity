@@ -21,7 +21,7 @@ describe("Moves - Gigaton Hammer", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemySpecies(Species.MAGIKARP)
       .starterSpecies(Species.FEEBAS)
@@ -55,7 +55,7 @@ describe("Moves - Gigaton Hammer", () => {
   }, 20000);
 
   it("can be used again if recalled and sent back out", async () => {
-    game.override.startingWave(4);
+    game.overridesHelper.startingWave(4);
     await game.classicMode.startBattle();
 
     const enemy1 = game.scene.getEnemyPokemon()!;

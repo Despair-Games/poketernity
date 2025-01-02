@@ -32,7 +32,7 @@ describe("Moves - Destiny Bond", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .ability(Abilities.UNNERVE) // Pre-emptively prevent flakiness from opponent berries
       .enemySpecies(Species.RATTATA)
@@ -45,7 +45,7 @@ describe("Moves - Destiny Bond", () => {
   it("should KO the opponent on the same turn", async () => {
     const moveToUse = Moves.TACKLE;
 
-    game.override.moveset(moveToUse);
+    game.overridesHelper.moveset(moveToUse);
     await game.classicMode.startBattle(defaultParty);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
@@ -62,7 +62,7 @@ describe("Moves - Destiny Bond", () => {
   it("should KO the opponent on the next turn", async () => {
     const moveToUse = Moves.TACKLE;
 
-    game.override.moveset([Moves.SPLASH, moveToUse]);
+    game.overridesHelper.moveset([Moves.SPLASH, moveToUse]);
     await game.classicMode.startBattle(defaultParty);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
@@ -88,7 +88,7 @@ describe("Moves - Destiny Bond", () => {
   it("should fail if used twice in a row", async () => {
     const moveToUse = Moves.TACKLE;
 
-    game.override.moveset([Moves.SPLASH, moveToUse]);
+    game.overridesHelper.moveset([Moves.SPLASH, moveToUse]);
     await game.classicMode.startBattle(defaultParty);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
@@ -115,7 +115,7 @@ describe("Moves - Destiny Bond", () => {
     // Opponent will be reduced to 1 HP by False Swipe, then faint to Sandstorm
     const moveToUse = Moves.FALSE_SWIPE;
 
-    game.override.moveset(moveToUse).ability(Abilities.SAND_STREAM);
+    game.overridesHelper.moveset(moveToUse).ability(Abilities.SAND_STREAM);
     await game.classicMode.startBattle(defaultParty);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
@@ -132,7 +132,7 @@ describe("Moves - Destiny Bond", () => {
   it("should not KO the opponent if the user had another turn", async () => {
     const moveToUse = Moves.TACKLE;
 
-    game.override.moveset([Moves.SPORE, moveToUse]);
+    game.overridesHelper.moveset([Moves.SPORE, moveToUse]);
     await game.classicMode.startBattle(defaultParty);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
@@ -157,7 +157,7 @@ describe("Moves - Destiny Bond", () => {
   });
 
   it("should not KO an ally", async () => {
-    game.override.moveset([Moves.DESTINY_BOND, Moves.CRUNCH]).battleType("double");
+    game.overridesHelper.moveset([Moves.DESTINY_BOND, Moves.CRUNCH]).battleType("double");
     await game.classicMode.startBattle([Species.SHEDINJA, Species.BULBASAUR, Species.SQUIRTLE]);
 
     const enemyPokemon0 = game.scene.getEnemyField()[0];
@@ -181,7 +181,7 @@ describe("Moves - Destiny Bond", () => {
     const moveToUse = Moves.CEASELESS_EDGE;
     vi.spyOn(allMoves[moveToUse], "accuracy", "get").mockReturnValue(100);
 
-    game.override.moveset(moveToUse);
+    game.overridesHelper.moveset(moveToUse);
     await game.classicMode.startBattle(defaultParty);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
@@ -201,7 +201,7 @@ describe("Moves - Destiny Bond", () => {
   });
 
   it("should not cause a crash if the user is KO'd by Pledge moves", async () => {
-    game.override.moveset([Moves.GRASS_PLEDGE, Moves.WATER_PLEDGE]).battleType("double");
+    game.overridesHelper.moveset([Moves.GRASS_PLEDGE, Moves.WATER_PLEDGE]).battleType("double");
     await game.classicMode.startBattle(defaultParty);
 
     const enemyPokemon0 = game.scene.getEnemyField()[0];
@@ -231,7 +231,7 @@ describe("Moves - Destiny Bond", () => {
   it("should not allow the opponent to revive via Reviver Seed", async () => {
     const moveToUse = Moves.TACKLE;
 
-    game.override.moveset(moveToUse).startingHeldItems([{ name: "REVIVER_SEED" }]);
+    game.overridesHelper.moveset(moveToUse).startingHeldItems([{ name: "REVIVER_SEED" }]);
     await game.classicMode.startBattle(defaultParty);
 
     const enemyPokemon = game.scene.getEnemyPokemon();

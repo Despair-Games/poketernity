@@ -22,14 +22,14 @@ describe("Moves - Gastro Acid", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("double");
-    game.override.startingLevel(1);
-    game.override.enemyLevel(100);
-    game.override.ability(Abilities.NONE);
-    game.override.moveset([Moves.GASTRO_ACID, Moves.WATER_GUN, Moves.SPLASH, Moves.CORE_ENFORCER]);
-    game.override.enemySpecies(Species.BIDOOF);
-    game.override.enemyMoveset(Moves.SPLASH);
-    game.override.enemyAbility(Abilities.WATER_ABSORB);
+    game.overridesHelper.battleType("double");
+    game.overridesHelper.startingLevel(1);
+    game.overridesHelper.enemyLevel(100);
+    game.overridesHelper.ability(Abilities.NONE);
+    game.overridesHelper.moveset([Moves.GASTRO_ACID, Moves.WATER_GUN, Moves.SPLASH, Moves.CORE_ENFORCER]);
+    game.overridesHelper.enemySpecies(Species.BIDOOF);
+    game.overridesHelper.enemyMoveset(Moves.SPLASH);
+    game.overridesHelper.enemyAbility(Abilities.WATER_ABSORB);
   });
 
   it("suppresses effect of ability", async () => {
@@ -61,7 +61,7 @@ describe("Moves - Gastro Acid", () => {
   });
 
   it("fails if used on an enemy with an already-suppressed ability", async () => {
-    game.override.battleType("single");
+    game.overridesHelper.battleType("single");
 
     await game.startBattle();
 

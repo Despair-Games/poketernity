@@ -23,7 +23,7 @@ describe("Moves - Electrify", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset(Moves.ELECTRIFY)
       .battleType("single")
       .startingLevel(100)
@@ -50,7 +50,7 @@ describe("Moves - Electrify", () => {
   });
 
   it("should override type changes from abilities", async () => {
-    game.override.enemyAbility(Abilities.PIXILATE);
+    game.overridesHelper.enemyAbility(Abilities.PIXILATE);
 
     await game.classicMode.startBattle([Species.EXCADRILL]);
 

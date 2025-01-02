@@ -24,7 +24,7 @@ describe("Moves - Encore", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.SPLASH, Moves.ENCORE])
       .ability(Abilities.BALL_FETCH)
       .battleType("single")
@@ -63,7 +63,7 @@ describe("Moves - Encore", () => {
       { moveId: Moves.ENCORE, name: "Encore", delay: false },
       { moveId: Moves.STRUGGLE, name: "Struggle", delay: false },
     ])("$name", async ({ moveId, delay }) => {
-      game.override.enemyMoveset(moveId);
+      game.overridesHelper.enemyMoveset(moveId);
 
       await game.classicMode.startBattle([Species.SNORLAX]);
 
@@ -89,7 +89,7 @@ describe("Moves - Encore", () => {
 
   it("Pokemon under both Encore and Torment should alternate between Struggle and restricted move", async () => {
     const turnOrder = [BattlerIndex.ENEMY, BattlerIndex.PLAYER];
-    game.override.moveset([Moves.ENCORE, Moves.TORMENT, Moves.SPLASH]);
+    game.overridesHelper.moveset([Moves.ENCORE, Moves.TORMENT, Moves.SPLASH]);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const enemyPokemon = game.scene.getEnemyPokemon();

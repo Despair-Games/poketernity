@@ -24,7 +24,7 @@ describe("Moves - Revival Blessing", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.SPLASH, Moves.REVIVAL_BLESSING, Moves.MEMENTO])
       .ability(Abilities.BALL_FETCH)
       .battleType("single")
@@ -57,7 +57,7 @@ describe("Moves - Revival Blessing", () => {
   });
 
   it("should revive a random fainted enemy when used by an enemy Trainer", async () => {
-    game.override.enemyMoveset(Moves.REVIVAL_BLESSING).startingWave(8);
+    game.overridesHelper.enemyMoveset(Moves.REVIVAL_BLESSING).startingWave(8);
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
@@ -87,7 +87,7 @@ describe("Moves - Revival Blessing", () => {
   });
 
   it("should revive a player pokemon and immediately send it back out if used in the same turn it fainted in doubles", async () => {
-    game.override
+    game.overridesHelper
       .battleType("double")
       .enemyMoveset([Moves.SPLASH, Moves.FISSURE])
       .enemyAbility(Abilities.NO_GUARD)

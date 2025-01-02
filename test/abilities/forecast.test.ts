@@ -29,7 +29,7 @@ describe("Abilities - Forecast", () => {
    * @param initialForm The initial form pre form change
    */
   const testWeatherFormChange = async (game: GameManager, weather: WeatherType, form: number, initialForm?: number) => {
-    game.override.weather(weather).starterForms({ [Species.CASTFORM]: initialForm });
+    game.overridesHelper.weather(weather).starterForms({ [Species.CASTFORM]: initialForm });
     await game.startBattle([Species.CASTFORM]);
 
     game.move.select(Moves.SPLASH);
@@ -43,7 +43,7 @@ describe("Abilities - Forecast", () => {
    * @param ability The ability that is active on the field
    */
   const testRevertFormAgainstAbility = async (game: GameManager, ability: Abilities) => {
-    game.override.starterForms({ [Species.CASTFORM]: SUNNY_FORM }).enemyAbility(ability);
+    game.overridesHelper.starterForms({ [Species.CASTFORM]: SUNNY_FORM }).enemyAbility(ability);
     await game.startBattle([Species.CASTFORM]);
 
     game.move.select(Moves.SPLASH);
@@ -63,7 +63,7 @@ describe("Abilities - Forecast", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.SPLASH, Moves.RAIN_DANCE, Moves.SUNNY_DAY, Moves.TACKLE])
       .enemySpecies(Species.MAGIKARP)
       .enemyMoveset(Moves.SPLASH)
@@ -73,7 +73,7 @@ describe("Abilities - Forecast", () => {
   it(
     "changes form based on weather",
     async () => {
-      game.override
+      game.overridesHelper
         .moveset([Moves.RAIN_DANCE, Moves.SUNNY_DAY, Moves.SNOWSCAPE, Moves.SPLASH])
         .battleType("double")
         .starterForms({
@@ -116,7 +116,7 @@ describe("Abilities - Forecast", () => {
 
       expect(castform.formIndex).toBe(SNOWY_FORM);
 
-      game.override.moveset([Moves.HAIL, Moves.SANDSTORM, Moves.SNOWSCAPE, Moves.SPLASH]);
+      game.overridesHelper.moveset([Moves.HAIL, Moves.SANDSTORM, Moves.SNOWSCAPE, Moves.SPLASH]);
 
       game.move.select(Moves.SANDSTORM);
       game.move.select(Moves.SPLASH, 1);
@@ -200,7 +200,7 @@ describe("Abilities - Forecast", () => {
   });
 
   it("has no effect on Pokémon other than Castform", async () => {
-    game.override.enemyAbility(Abilities.FORECAST).enemySpecies(Species.SHUCKLE);
+    game.overridesHelper.enemyAbility(Abilities.FORECAST).enemySpecies(Species.SHUCKLE);
     await game.startBattle([Species.CASTFORM]);
 
     game.move.select(Moves.RAIN_DANCE);
@@ -211,7 +211,7 @@ describe("Abilities - Forecast", () => {
   });
 
   it("reverts to Normal Form when Castform loses Forecast, changes form to match the weather when it regains it", async () => {
-    game.override
+    game.overridesHelper
       .moveset([Moves.SKILL_SWAP, Moves.WORRY_SEED, Moves.SPLASH])
       .weather(WeatherType.RAIN)
       .battleType("double");
@@ -242,7 +242,7 @@ describe("Abilities - Forecast", () => {
   });
 
   it("reverts to Normal Form when Forecast is suppressed, changes form to match the weather when it regains it", async () => {
-    game.override.enemyMoveset([Moves.GASTRO_ACID]).weather(WeatherType.RAIN);
+    game.overridesHelper.enemyMoveset([Moves.GASTRO_ACID]).weather(WeatherType.RAIN);
     await game.startBattle([Species.CASTFORM, Species.PIKACHU]);
     const castform = game.scene.getPlayerPokemon()!;
 
@@ -273,7 +273,7 @@ describe("Abilities - Forecast", () => {
   });
 
   it("does not change Castform's form until after Stealth Rock deals damage", async () => {
-    game.override.weather(WeatherType.RAIN).enemyMoveset([Moves.STEALTH_ROCK]);
+    game.overridesHelper.weather(WeatherType.RAIN).enemyMoveset([Moves.STEALTH_ROCK]);
     await game.startBattle([Species.PIKACHU, Species.CASTFORM]);
 
     // First turn - set up stealth rock
@@ -296,7 +296,7 @@ describe("Abilities - Forecast", () => {
   });
 
   it("should be in Normal Form after the user is switched out", async () => {
-    game.override.weather(WeatherType.RAIN);
+    game.overridesHelper.weather(WeatherType.RAIN);
 
     await game.startBattle([Species.CASTFORM, Species.MAGIKARP]);
     const castform = game.scene.getPlayerPokemon()!;

@@ -23,11 +23,11 @@ describe("Abilities - Wind Power", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("single");
-    game.override.enemySpecies(Species.SHIFTRY);
-    game.override.enemyAbility(Abilities.WIND_POWER);
-    game.override.moveset([Moves.TAILWIND, Moves.SPLASH, Moves.PETAL_BLIZZARD, Moves.SANDSTORM]);
-    game.override.enemyMoveset(Moves.SPLASH);
+    game.overridesHelper.battleType("single");
+    game.overridesHelper.enemySpecies(Species.SHIFTRY);
+    game.overridesHelper.enemyAbility(Abilities.WIND_POWER);
+    game.overridesHelper.moveset([Moves.TAILWIND, Moves.SPLASH, Moves.PETAL_BLIZZARD, Moves.SANDSTORM]);
+    game.overridesHelper.enemyMoveset(Moves.SPLASH);
   });
 
   it("it becomes charged when hit by wind moves", async () => {
@@ -43,8 +43,8 @@ describe("Abilities - Wind Power", () => {
   });
 
   it("it becomes charged when Tailwind takes effect on its side", async () => {
-    game.override.ability(Abilities.WIND_POWER);
-    game.override.enemySpecies(Species.MAGIKARP);
+    game.overridesHelper.ability(Abilities.WIND_POWER);
+    game.overridesHelper.enemySpecies(Species.MAGIKARP);
 
     await game.startBattle([Species.SHIFTRY]);
     const shiftry = game.scene.getPlayerPokemon()!;
@@ -58,8 +58,8 @@ describe("Abilities - Wind Power", () => {
   });
 
   it("does not become charged when Tailwind takes effect on opposing side", async () => {
-    game.override.enemySpecies(Species.MAGIKARP);
-    game.override.ability(Abilities.WIND_POWER);
+    game.overridesHelper.enemySpecies(Species.MAGIKARP);
+    game.overridesHelper.ability(Abilities.WIND_POWER);
 
     await game.startBattle([Species.SHIFTRY]);
     const magikarp = game.scene.getEnemyPokemon()!;
@@ -77,7 +77,7 @@ describe("Abilities - Wind Power", () => {
   });
 
   it("does not interact with Sandstorm", async () => {
-    game.override.enemySpecies(Species.MAGIKARP);
+    game.overridesHelper.enemySpecies(Species.MAGIKARP);
 
     await game.startBattle([Species.SHIFTRY]);
     const shiftry = game.scene.getPlayerPokemon()!;

@@ -23,7 +23,7 @@ describe("Moves - Metal Burst", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.METAL_BURST, Moves.FISSURE, Moves.PRECIPICE_BLADES])
       .ability(Abilities.PURE_POWER)
       .startingLevel(10)

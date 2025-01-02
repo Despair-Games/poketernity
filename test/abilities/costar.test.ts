@@ -24,14 +24,14 @@ describe("Abilities - COSTAR", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("double");
-    game.override.ability(Abilities.COSTAR);
-    game.override.moveset([Moves.SPLASH, Moves.NASTY_PLOT]);
-    game.override.enemyMoveset(Moves.SPLASH);
+    game.overridesHelper.battleType("double");
+    game.overridesHelper.ability(Abilities.COSTAR);
+    game.overridesHelper.moveset([Moves.SPLASH, Moves.NASTY_PLOT]);
+    game.overridesHelper.enemyMoveset(Moves.SPLASH);
   });
 
   test("ability copies positive stat stages", async () => {
-    game.override.enemyAbility(Abilities.BALL_FETCH);
+    game.overridesHelper.enemyAbility(Abilities.BALL_FETCH);
 
     await game.startBattle([Species.MAGIKARP, Species.MAGIKARP, Species.FLAMIGO]);
 
@@ -56,7 +56,7 @@ describe("Abilities - COSTAR", () => {
   });
 
   test("ability copies negative stat stages", async () => {
-    game.override.enemyAbility(Abilities.INTIMIDATE);
+    game.overridesHelper.enemyAbility(Abilities.INTIMIDATE);
 
     await game.startBattle([Species.MAGIKARP, Species.MAGIKARP, Species.FLAMIGO]);
 

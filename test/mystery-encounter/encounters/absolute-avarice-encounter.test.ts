@@ -38,10 +38,10 @@ describe("Absolute Avarice - Mystery Encounter", () => {
   beforeEach(async () => {
     game = new GameManager(phaserGame);
     scene = game.scene;
-    game.override.mysteryEncounterChance(100);
-    game.override.startingWave(defaultWave);
-    game.override.startingBiome(defaultBiome);
-    game.override.disableTrainerWaves();
+    game.overridesHelper.mysteryEncounterChance(100);
+    game.overridesHelper.startingWave(defaultWave);
+    game.overridesHelper.startingBiome(defaultBiome);
+    game.overridesHelper.disableTrainerWaves();
 
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(
       new Map<Biome, MysteryEncounterType[]>([
@@ -71,8 +71,8 @@ describe("Absolute Avarice - Mystery Encounter", () => {
   });
 
   it("should not spawn outside of proper biomes", async () => {
-    game.override.mysteryEncounterTier(MysteryEncounterTier.GREAT);
-    game.override.startingBiome(Biome.VOLCANO);
+    game.overridesHelper.mysteryEncounterTier(MysteryEncounterTier.GREAT);
+    game.overridesHelper.startingBiome(Biome.VOLCANO);
     await game.runToMysteryEncounter();
 
     expect(game.scene.currentBattle.mysteryEncounter?.encounterType).not.toBe(MysteryEncounterType.ABSOLUTE_AVARICE);
@@ -87,8 +87,8 @@ describe("Absolute Avarice - Mystery Encounter", () => {
   });
 
   it("should spawn if player has enough berries", async () => {
-    game.override.mysteryEncounterTier(MysteryEncounterTier.GREAT);
-    game.override.startingHeldItems([
+    game.overridesHelper.mysteryEncounterTier(MysteryEncounterTier.GREAT);
+    game.overridesHelper.startingHeldItems([
       { name: "BERRY", count: 2, type: BerryType.SITRUS },
       { name: "BERRY", count: 3, type: BerryType.GANLON },
     ]);
@@ -99,7 +99,7 @@ describe("Absolute Avarice - Mystery Encounter", () => {
   });
 
   it("should remove all player's berries at the start of the encounter", async () => {
-    game.override.startingHeldItems([
+    game.overridesHelper.startingHeldItems([
       { name: "BERRY", count: 2, type: BerryType.SITRUS },
       { name: "BERRY", count: 3, type: BerryType.GANLON },
     ]);
@@ -184,7 +184,7 @@ describe("Absolute Avarice - Mystery Encounter", () => {
     });
 
     it("Should return 3 (2/5ths floored) berries if 8 were stolen", { retry: 5 }, async () => {
-      game.override.startingHeldItems([
+      game.overridesHelper.startingHeldItems([
         { name: "BERRY", count: 2, type: BerryType.SITRUS },
         { name: "BERRY", count: 3, type: BerryType.GANLON },
         { name: "BERRY", count: 3, type: BerryType.APICOT },
@@ -204,7 +204,7 @@ describe("Absolute Avarice - Mystery Encounter", () => {
     });
 
     it("Should return 2 (2/5ths floored) berries if 7 were stolen", { retry: 5 }, async () => {
-      game.override.startingHeldItems([
+      game.overridesHelper.startingHeldItems([
         { name: "BERRY", count: 2, type: BerryType.SITRUS },
         { name: "BERRY", count: 3, type: BerryType.GANLON },
         { name: "BERRY", count: 2, type: BerryType.APICOT },

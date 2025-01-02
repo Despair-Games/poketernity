@@ -25,11 +25,11 @@ describe("Moves - Steamroller", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.moveset([Moves.STEAMROLLER]).battleType("single").enemyAbility(Abilities.BALL_FETCH);
+    game.overridesHelper.moveset([Moves.STEAMROLLER]).battleType("single").enemyAbility(Abilities.BALL_FETCH);
   });
 
   it("should always hit a minimzed target with double damage", async () => {
-    game.override.enemySpecies(Species.DITTO).enemyMoveset(Moves.MINIMIZE);
+    game.overridesHelper.enemySpecies(Species.DITTO).enemyMoveset(Moves.MINIMIZE);
     await game.classicMode.startBattle([Species.IRON_BOULDER]);
 
     const ditto = game.scene.getEnemyPokemon()!;

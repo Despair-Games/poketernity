@@ -23,7 +23,7 @@ describe("Moves - Diamond Storm", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.DIAMOND_STORM])
       .battleType("single")
       .enemySpecies(Species.MAGIKARP)
@@ -32,7 +32,7 @@ describe("Moves - Diamond Storm", () => {
   });
 
   it("should only increase defense once even if hitting 2 pokemon", async () => {
-    game.override.battleType("double");
+    game.overridesHelper.battleType("double");
     const diamondStorm = allMoves[Moves.DIAMOND_STORM];
     vi.spyOn(diamondStorm, "chance", "get").mockReturnValue(100);
     vi.spyOn(diamondStorm, "accuracy", "get").mockReturnValue(100);

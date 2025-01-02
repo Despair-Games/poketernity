@@ -24,9 +24,9 @@ describe("Moves - Tailwind", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("double");
-    game.override.moveset([Moves.TAILWIND, Moves.SPLASH, Moves.PETAL_BLIZZARD, Moves.SANDSTORM]);
-    game.override.enemyMoveset(Moves.SPLASH);
+    game.overridesHelper.battleType("double");
+    game.overridesHelper.moveset([Moves.TAILWIND, Moves.SPLASH, Moves.PETAL_BLIZZARD, Moves.SANDSTORM]);
+    game.overridesHelper.enemyMoveset(Moves.SPLASH);
   });
 
   it("doubles the Speed stat of the Pokemons on its side", async () => {
@@ -51,7 +51,7 @@ describe("Moves - Tailwind", () => {
   });
 
   it("lasts for 4 turns", async () => {
-    game.override.battleType("single");
+    game.overridesHelper.battleType("single");
 
     await game.startBattle([Species.MAGIKARP]);
 
@@ -74,7 +74,7 @@ describe("Moves - Tailwind", () => {
   });
 
   it("does not affect the opposing side", async () => {
-    game.override.battleType("single");
+    game.overridesHelper.battleType("single");
 
     await game.startBattle([Species.MAGIKARP]);
 

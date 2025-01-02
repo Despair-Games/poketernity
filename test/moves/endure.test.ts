@@ -21,7 +21,7 @@ describe("Moves - Endure", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.THUNDER, Moves.BULLET_SEED, Moves.TOXIC])
       .ability(Abilities.SKILL_LINK)
       .startingLevel(100)
@@ -51,7 +51,7 @@ describe("Moves - Endure", () => {
   });
 
   it("shouldn't prevent fainting from indirect damage", async () => {
-    game.override.enemyLevel(100);
+    game.overridesHelper.enemyLevel(100);
     await game.classicMode.startBattle([Species.ARCEUS]);
 
     const enemy = game.scene.getEnemyPokemon()!;

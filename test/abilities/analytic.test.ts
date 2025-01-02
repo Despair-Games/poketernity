@@ -23,7 +23,7 @@ describe("Abilities - Analytic", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.SPLASH, Moves.TACKLE])
       .ability(Abilities.ANALYTIC)
       .battleType("single")
@@ -53,7 +53,7 @@ describe("Abilities - Analytic", () => {
   });
 
   it("should increase damage only if the user moves last in doubles", async () => {
-    game.override.battleType("double");
+    game.overridesHelper.battleType("double");
     await game.classicMode.startBattle([Species.GENGAR, Species.SHUCKLE]);
 
     const [enemy] = game.scene.getEnemyField();

@@ -30,7 +30,7 @@ describe("Moves - Pledge Moves", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("double")
       .startingLevel(100)
       .moveset([Moves.FIRE_PLEDGE, Moves.GRASS_PLEDGE, Moves.WATER_PLEDGE, Moves.SPLASH])
@@ -87,7 +87,7 @@ describe("Moves - Pledge Moves", () => {
   });
 
   it("Fire Pledge - should not combine with an enemy's Pledge move", async () => {
-    game.override.battleType("single").enemyMoveset(Moves.GRASS_PLEDGE);
+    game.overridesHelper.battleType("single").enemyMoveset(Moves.GRASS_PLEDGE);
 
     await game.classicMode.startBattle([Species.CHARIZARD]);
 
@@ -139,7 +139,7 @@ describe("Moves - Pledge Moves", () => {
   });
 
   it("Fire Pledge - should combine with Water Pledge to form a 150-power Water-type attack that creates a 'rainbow'", async () => {
-    game.override.moveset([Moves.FIRE_PLEDGE, Moves.WATER_PLEDGE, Moves.FIERY_DANCE, Moves.SPLASH]);
+    game.overridesHelper.moveset([Moves.FIRE_PLEDGE, Moves.WATER_PLEDGE, Moves.FIERY_DANCE, Moves.SPLASH]);
 
     await game.classicMode.startBattle([Species.BLASTOISE, Species.VENUSAUR]);
 
@@ -222,7 +222,7 @@ describe("Moves - Pledge Moves", () => {
   });
 
   it("Pledge Moves - 'rainbow' effect should not stack with Serene Grace when applied to flinching moves", async () => {
-    game.override
+    game.overridesHelper
       .ability(Abilities.SERENE_GRACE)
       .moveset([Moves.FIRE_PLEDGE, Moves.WATER_PLEDGE, Moves.IRON_HEAD, Moves.SPLASH]);
 
@@ -247,7 +247,7 @@ describe("Moves - Pledge Moves", () => {
   });
 
   it("Pledge Moves - should have no effect when the second ally's move is cancelled", async () => {
-    game.override.enemyMoveset([Moves.SPLASH, Moves.SPORE]);
+    game.overridesHelper.enemyMoveset([Moves.SPLASH, Moves.SPORE]);
 
     await game.classicMode.startBattle([Species.BLASTOISE, Species.CHARIZARD]);
 
@@ -284,7 +284,7 @@ describe("Moves - Pledge Moves", () => {
   });
 
   it("Pledge Moves - should not ignore redirection from another Pokemon's Follow Me", async () => {
-    game.override.enemyMoveset([Moves.FOLLOW_ME, Moves.SPLASH]);
+    game.overridesHelper.enemyMoveset([Moves.FOLLOW_ME, Moves.SPLASH]);
     await game.classicMode.startBattle([Species.BLASTOISE, Species.CHARIZARD]);
 
     game.move.select(Moves.WATER_PLEDGE, 0, BattlerIndex.ENEMY);

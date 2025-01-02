@@ -26,7 +26,7 @@ describe("Moves - Order Up", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset(Moves.ORDER_UP)
       .ability(Abilities.COMMANDER)
       .battleType("double")
@@ -47,7 +47,7 @@ describe("Moves - Order Up", () => {
   ])(
     "should raise the user's $statName when the user is commanded by a $formName Tatsugiri",
     async ({ formIndex, stat }) => {
-      game.override.starterForms({ [Species.TATSUGIRI]: formIndex });
+      game.overridesHelper.starterForms({ [Species.TATSUGIRI]: formIndex });
 
       await game.classicMode.startBattle([Species.TATSUGIRI, Species.DONDOZO]);
 
@@ -67,7 +67,7 @@ describe("Moves - Order Up", () => {
   );
 
   it("should be boosted by Sheer Force while still applying a stat boost", async () => {
-    game.override.passiveAbility(Abilities.SHEER_FORCE).starterForms({ [Species.TATSUGIRI]: 0 });
+    game.overridesHelper.passiveAbility(Abilities.SHEER_FORCE).starterForms({ [Species.TATSUGIRI]: 0 });
 
     await game.classicMode.startBattle([Species.TATSUGIRI, Species.DONDOZO]);
 

@@ -23,7 +23,7 @@ describe("Moves - Fake Out", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemySpecies(Species.CORVIKNIGHT)
       .moveset([Moves.FAKE_OUT, Moves.SPLASH])
@@ -67,7 +67,7 @@ describe("Moves - Fake Out", () => {
   }, 20000);
 
   it("can be used again if recalled and sent back out", async () => {
-    game.override.startingWave(4);
+    game.overridesHelper.startingWave(4);
     await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
 
     const enemy1 = game.scene.getEnemyPokemon()!;
@@ -105,7 +105,7 @@ describe("Moves - Fake Out", () => {
     { moveId: Moves.BATON_PASS, moveName: "Baton Pass" },
     { moveId: Moves.SHED_TAIL, moveName: "Shed Tail" },
   ])("can be used after the user is sent out via $moveName", async ({ moveId }) => {
-    game.override.moveset([Moves.FAKE_OUT, moveId]);
+    game.overridesHelper.moveset([Moves.FAKE_OUT, moveId]);
 
     await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
 
@@ -130,7 +130,7 @@ describe("Moves - Fake Out", () => {
   });
 
   it("can be used after the user is sent out via Wimp Out", async () => {
-    game.override.ability(Abilities.WIMP_OUT).enemyLevel(100).enemyMoveset(Moves.FALSE_SWIPE);
+    game.overridesHelper.ability(Abilities.WIMP_OUT).enemyLevel(100).enemyMoveset(Moves.FALSE_SWIPE);
 
     await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
 

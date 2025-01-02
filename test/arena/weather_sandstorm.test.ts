@@ -23,7 +23,7 @@ describe("Weather - Sandstorm", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .weather(WeatherType.SANDSTORM)
       .battleType("single")
       .moveset(Moves.SPLASH)
@@ -44,7 +44,7 @@ describe("Weather - Sandstorm", () => {
   });
 
   it("does not inflict damage to a Pokemon that is underwater (Dive) or underground (Dig)", async () => {
-    game.override.moveset([Moves.DIVE]);
+    game.overridesHelper.moveset([Moves.DIVE]);
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
     game.move.select(Moves.DIVE);
@@ -59,7 +59,7 @@ describe("Weather - Sandstorm", () => {
   });
 
   it("does not inflict damage to Rock, Ground and Steel type Pokemon", async () => {
-    game.override
+    game.overridesHelper
       .battleType("double")
       .enemySpecies(Species.SANDSHREW)
       .ability(Abilities.BALL_FETCH)

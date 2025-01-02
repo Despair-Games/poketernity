@@ -23,7 +23,7 @@ describe("Moves - Aromatherapy", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.AROMATHERAPY, Moves.SPLASH])
       .statusEffect(StatusEffect.BURN)
       .battleType("double")
@@ -54,7 +54,7 @@ describe("Moves - Aromatherapy", () => {
   });
 
   it("should not cure status effect of the target/target's allies", async () => {
-    game.override.enemyStatusEffect(StatusEffect.BURN);
+    game.overridesHelper.enemyStatusEffect(StatusEffect.BURN);
     await game.classicMode.startBattle([Species.RATTATA, Species.RATTATA]);
     const [leftOpp, rightOpp] = game.scene.getEnemyField();
 
@@ -77,7 +77,7 @@ describe("Moves - Aromatherapy", () => {
   });
 
   it("should not cure status effect of allies ON FIELD with Sap Sipper, should still cure allies in party", async () => {
-    game.override.ability(Abilities.SAP_SIPPER);
+    game.overridesHelper.ability(Abilities.SAP_SIPPER);
     await game.classicMode.startBattle([Species.RATTATA, Species.RATTATA, Species.RATTATA]);
     const [leftPlayer, rightPlayer, partyPokemon] = game.scene.getPlayerParty();
 

@@ -24,7 +24,7 @@ describe("Moves - SYRUP BOMB", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemySpecies(Species.SNORLAX)
       .enemyAbility(Abilities.BALL_FETCH)
@@ -62,7 +62,7 @@ describe("Moves - SYRUP BOMB", () => {
   });
 
   it("does not affect Pokemon with the ability Bulletproof", async () => {
-    game.override.enemyAbility(Abilities.BULLETPROOF);
+    game.overridesHelper.enemyAbility(Abilities.BULLETPROOF);
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const targetPokemon = game.scene.getEnemyPokemon()!;

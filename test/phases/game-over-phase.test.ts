@@ -24,7 +24,7 @@ describe("Game Over Phase", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.MEMENTO, Moves.ICE_BEAM, Moves.SPLASH])
       .ability(Abilities.BALL_FETCH)
       .battleType("single")

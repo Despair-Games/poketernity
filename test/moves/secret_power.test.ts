@@ -30,7 +30,7 @@ describe("Moves - Secret Power", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.SECRET_POWER])
       .ability(Abilities.BALL_FETCH)
       .battleType("single")
@@ -41,7 +41,7 @@ describe("Moves - Secret Power", () => {
   });
 
   it("Secret Power checks for an active terrain first then looks at the biome for its secondary effect", async () => {
-    game.override.startingBiome(Biome.VOLCANO).enemyMoveset([Moves.SPLASH, Moves.MISTY_TERRAIN]);
+    game.overridesHelper.startingBiome(Biome.VOLCANO).enemyMoveset([Moves.SPLASH, Moves.MISTY_TERRAIN]);
     vi.spyOn(allMoves[Moves.SECRET_POWER], "chance", "get").mockReturnValue(100);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
@@ -61,7 +61,7 @@ describe("Moves - Secret Power", () => {
   });
 
   it("Secret Power's effect chance is doubled by Serene Grace, but not by the 'rainbow' effect from Fire/Water Pledge", async () => {
-    game.override
+    game.overridesHelper
       .moveset([Moves.FIRE_PLEDGE, Moves.WATER_PLEDGE, Moves.SECRET_POWER, Moves.SPLASH])
       .ability(Abilities.SERENE_GRACE)
       .enemyMoveset([Moves.SPLASH])

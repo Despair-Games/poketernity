@@ -22,7 +22,7 @@ describe("Moves - Psycho Shift", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.PSYCHO_SHIFT])
       .ability(Abilities.BALL_FETCH)
       .statusEffect(StatusEffect.POISON)

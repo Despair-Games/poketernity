@@ -25,7 +25,7 @@ describe("Boss Pokemon / Shields", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override
+    game.overridesHelper
       .battleType("single")
       .disableTrainerWaves()
       .disableCrits()
@@ -63,7 +63,7 @@ describe("Boss Pokemon / Shields", () => {
   });
 
   it("should reduce the number of shields if we are in a double battle", async () => {
-    game.override.battleType("double").startingWave(150); // Floor 150 > 2 shields / 3 health segments
+    game.overridesHelper.battleType("double").startingWave(150); // Floor 150 > 2 shields / 3 health segments
 
     await game.classicMode.startBattle([Species.MEWTWO]);
 
@@ -76,7 +76,7 @@ describe("Boss Pokemon / Shields", () => {
   });
 
   it("shields should stop overflow damage and give stat stage boosts when broken", async () => {
-    game.override.startingWave(150); // Floor 150 > 2 shields / 3 health segments
+    game.overridesHelper.startingWave(150); // Floor 150 > 2 shields / 3 health segments
 
     await game.classicMode.startBattle([Species.MEWTWO]);
 
@@ -105,7 +105,7 @@ describe("Boss Pokemon / Shields", () => {
   });
 
   it("breaking multiple shields at once requires extra damage", async () => {
-    game.override.battleType("double").enemyHealthSegments(5);
+    game.overridesHelper.battleType("double").enemyHealthSegments(5);
 
     await game.classicMode.startBattle([Species.MEWTWO]);
 
@@ -140,7 +140,7 @@ describe("Boss Pokemon / Shields", () => {
   it("the number of stat stage boosts is consistent when several shields are broken at once", async () => {
     const shieldsToBreak = 4;
 
-    game.override.battleType("double").enemyHealthSegments(shieldsToBreak + 1);
+    game.overridesHelper.battleType("double").enemyHealthSegments(shieldsToBreak + 1);
 
     await game.classicMode.startBattle([Species.MEWTWO]);
 
@@ -187,7 +187,7 @@ describe("Boss Pokemon / Shields", () => {
   });
 
   it("the boss enduring does not proc an extra stat boost", async () => {
-    game.override.enemyHealthSegments(2).enemyAbility(Abilities.STURDY);
+    game.overridesHelper.enemyHealthSegments(2).enemyAbility(Abilities.STURDY);
 
     await game.classicMode.startBattle([Species.MEWTWO]);
 

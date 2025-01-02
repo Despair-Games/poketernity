@@ -324,7 +324,7 @@ describe("Status Effects", () => {
     beforeEach(() => {
       game = new GameManager(phaserGame);
 
-      game.override
+      game.overridesHelper
         .enemySpecies(Species.MAGIKARP)
         .enemyMoveset(Moves.SPLASH)
         .enemyAbility(Abilities.BALL_FETCH)
@@ -361,7 +361,7 @@ describe("Status Effects", () => {
 
     beforeEach(() => {
       game = new GameManager(phaserGame);
-      game.override
+      game.overridesHelper
         .moveset([Moves.SPLASH])
         .ability(Abilities.BALL_FETCH)
         .battleType("single")

@@ -24,13 +24,13 @@ describe("Moves - Make It Rain", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("double");
-    game.override.moveset([Moves.MAKE_IT_RAIN, Moves.SPLASH]);
-    game.override.enemySpecies(Species.SNORLAX);
-    game.override.enemyAbility(Abilities.INSOMNIA);
-    game.override.enemyMoveset(Moves.SPLASH);
-    game.override.startingLevel(100);
-    game.override.enemyLevel(100);
+    game.overridesHelper.battleType("double");
+    game.overridesHelper.moveset([Moves.MAKE_IT_RAIN, Moves.SPLASH]);
+    game.overridesHelper.enemySpecies(Species.SNORLAX);
+    game.overridesHelper.enemyAbility(Abilities.INSOMNIA);
+    game.overridesHelper.enemyMoveset(Moves.SPLASH);
+    game.overridesHelper.startingLevel(100);
+    game.overridesHelper.enemyLevel(100);
   });
 
   it("should only lower SPATK stat stage by 1 once in a double battle", async () => {
@@ -47,8 +47,8 @@ describe("Moves - Make It Rain", () => {
   });
 
   it("should apply effects even if the target faints", async () => {
-    game.override.enemyLevel(1); // ensures the enemy will faint
-    game.override.battleType("single");
+    game.overridesHelper.enemyLevel(1); // ensures the enemy will faint
+    game.overridesHelper.battleType("single");
 
     await game.startBattle([Species.CHARIZARD]);
 
@@ -64,7 +64,7 @@ describe("Moves - Make It Rain", () => {
   });
 
   it("should reduce Sp. Atk. once after KOing two enemies", async () => {
-    game.override.enemyLevel(1); // ensures the enemy will faint
+    game.overridesHelper.enemyLevel(1); // ensures the enemy will faint
 
     await game.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
 

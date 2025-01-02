@@ -21,7 +21,7 @@ describe("Abilities - Illuminate", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset(Moves.SPLASH)
       .ability(Abilities.ILLUMINATE)
       .enemyAbility(Abilities.BALL_FETCH)
@@ -29,7 +29,7 @@ describe("Abilities - Illuminate", () => {
   });
 
   it("should prevent ACC stat stage from being lowered", async () => {
-    game.override.battleType("single");
+    game.overridesHelper.battleType("single");
 
     await game.classicMode.startBattle();
 
@@ -45,7 +45,7 @@ describe("Abilities - Illuminate", () => {
   });
 
   it("should guarantee double battle with any one LURE", async () => {
-    game.override.startingModifier([{ name: "LURE" }]).startingWave(2);
+    game.overridesHelper.startingModifier([{ name: "LURE" }]).startingWave(2);
 
     await game.classicMode.startBattle();
 

@@ -32,7 +32,7 @@ describe("SelectModifierPhase", () => {
     game = new GameManager(phaserGame);
     scene = game.scene;
 
-    game.override
+    game.overridesHelper
       .moveset([Moves.FISSURE, Moves.SPLASH])
       .ability(Abilities.NO_GUARD)
       .startingLevel(200)
@@ -109,7 +109,7 @@ describe("SelectModifierPhase", () => {
   });
 
   it.todo("should generate random modifiers of same tier for reroll with reroll lock", async () => {
-    game.override.startingModifier([{ name: "LOCK_CAPSULE" }]);
+    game.overridesHelper.startingModifier([{ name: "LOCK_CAPSULE" }]);
     await game.classicMode.startBattle([Species.ABRA, Species.VOLCARONA]);
     scene.money = 1000000;
     // Just use fully random seed for this test

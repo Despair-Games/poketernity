@@ -24,7 +24,7 @@ describe("Escape chance calculations", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemySpecies(Species.BULBASAUR)
       .enemyAbility(Abilities.INSOMNIA)
@@ -93,7 +93,7 @@ describe("Escape chance calculations", () => {
   }, 20000);
 
   it("double non-boss opponent", async () => {
-    game.override.battleType("double");
+    game.overridesHelper.battleType("double");
     await game.classicMode.startBattle([Species.BULBASAUR, Species.ABOMASNOW]);
 
     const playerPokemon = game.scene.getPlayerField();
@@ -175,7 +175,7 @@ describe("Escape chance calculations", () => {
   }, 20000);
 
   it("single boss opponent", async () => {
-    game.override.startingWave(10);
+    game.overridesHelper.startingWave(10);
     await game.classicMode.startBattle([Species.BULBASAUR]);
 
     const playerPokemon = game.scene.getPlayerField()!;
@@ -250,8 +250,8 @@ describe("Escape chance calculations", () => {
   }, 20000);
 
   it("double boss opponent", async () => {
-    game.override.battleType("double");
-    game.override.startingWave(10);
+    game.overridesHelper.battleType("double");
+    game.overridesHelper.startingWave(10);
     await game.classicMode.startBattle([Species.BULBASAUR, Species.ABOMASNOW]);
 
     const playerPokemon = game.scene.getPlayerField();

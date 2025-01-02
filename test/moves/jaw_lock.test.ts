@@ -28,7 +28,7 @@ describe("Moves - Jaw Lock", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemySpecies(Species.SNORLAX)
       .enemyAbility(Abilities.INSOMNIA)
@@ -60,7 +60,7 @@ describe("Moves - Jaw Lock", () => {
   });
 
   it("should not trap either pokemon if the target faints", async () => {
-    game.override.enemyLevel(1);
+    game.overridesHelper.enemyLevel(1);
     await game.startBattle([Species.BULBASAUR]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
@@ -107,7 +107,7 @@ describe("Moves - Jaw Lock", () => {
   });
 
   it("should not trap other targets after the first target is trapped", async () => {
-    game.override.battleType("double");
+    game.overridesHelper.battleType("double");
 
     await game.startBattle([Species.CHARMANDER, Species.BULBASAUR]);
 
@@ -136,7 +136,7 @@ describe("Moves - Jaw Lock", () => {
   });
 
   it("should not trap either pokemon if the target is protected", async () => {
-    game.override.enemyMoveset([Moves.PROTECT]);
+    game.overridesHelper.enemyMoveset([Moves.PROTECT]);
 
     await game.startBattle([Species.BULBASAUR]);
 

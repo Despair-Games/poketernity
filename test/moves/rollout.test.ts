@@ -23,19 +23,19 @@ describe("Moves - Rollout", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.disableCrits();
-    game.override.battleType("single");
-    game.override.starterSpecies(Species.RATTATA);
-    game.override.ability(Abilities.BALL_FETCH);
-    game.override.enemySpecies(Species.BIDOOF);
-    game.override.enemyAbility(Abilities.BALL_FETCH);
-    game.override.startingLevel(100);
-    game.override.enemyLevel(100);
-    game.override.enemyMoveset(Moves.SPLASH);
+    game.overridesHelper.disableCrits();
+    game.overridesHelper.battleType("single");
+    game.overridesHelper.starterSpecies(Species.RATTATA);
+    game.overridesHelper.ability(Abilities.BALL_FETCH);
+    game.overridesHelper.enemySpecies(Species.BIDOOF);
+    game.overridesHelper.enemyAbility(Abilities.BALL_FETCH);
+    game.overridesHelper.startingLevel(100);
+    game.overridesHelper.enemyLevel(100);
+    game.overridesHelper.enemyMoveset(Moves.SPLASH);
   });
 
   it("should double it's dmg on sequential uses but reset after 5", async () => {
-    game.override.moveset([Moves.ROLLOUT]);
+    game.overridesHelper.moveset([Moves.ROLLOUT]);
     vi.spyOn(allMoves[Moves.ROLLOUT], "accuracy", "get").mockReturnValue(100); //always hit
 
     const variance = 5;

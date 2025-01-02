@@ -27,15 +27,15 @@ describe("Moves - Stockpile", () => {
     beforeEach(() => {
       game = new GameManager(phaserGame);
 
-      game.override.battleType("single");
+      game.overridesHelper.battleType("single");
 
-      game.override.enemySpecies(Species.RATTATA);
-      game.override.enemyMoveset(Moves.SPLASH);
-      game.override.enemyAbility(Abilities.NONE);
+      game.overridesHelper.enemySpecies(Species.RATTATA);
+      game.overridesHelper.enemyMoveset(Moves.SPLASH);
+      game.overridesHelper.enemyAbility(Abilities.NONE);
 
-      game.override.startingLevel(2000);
-      game.override.moveset([Moves.STOCKPILE, Moves.SPLASH]);
-      game.override.ability(Abilities.NONE);
+      game.overridesHelper.startingLevel(2000);
+      game.overridesHelper.moveset([Moves.STOCKPILE, Moves.SPLASH]);
+      game.overridesHelper.ability(Abilities.NONE);
     });
 
     it("gains a stockpile stack and raises user's DEF and SPDEF stat stages by 1 on each use, fails at max stacks (3)", async () => {

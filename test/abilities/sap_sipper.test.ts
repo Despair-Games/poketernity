@@ -29,7 +29,7 @@ describe("Abilities - Sap Sipper", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .disableCrits()
       .ability(Abilities.SAP_SIPPER)
@@ -41,7 +41,7 @@ describe("Abilities - Sap Sipper", () => {
   it("raises ATK stat stage by 1 and block effects when activated against a grass attack", async () => {
     const moveToUse = Moves.LEAFAGE;
 
-    game.override.moveset(moveToUse);
+    game.overridesHelper.moveset(moveToUse);
 
     await game.classicMode.startBattle([Species.BULBASAUR]);
 
@@ -59,7 +59,7 @@ describe("Abilities - Sap Sipper", () => {
   it("raises ATK stat stage by 1 and block effects when activated against a grass status move", async () => {
     const moveToUse = Moves.SPORE;
 
-    game.override.moveset(moveToUse);
+    game.overridesHelper.moveset(moveToUse);
 
     await game.classicMode.startBattle([Species.BULBASAUR]);
 
@@ -76,7 +76,7 @@ describe("Abilities - Sap Sipper", () => {
   it("do not activate against status moves that target the field", async () => {
     const moveToUse = Moves.GRASSY_TERRAIN;
 
-    game.override.moveset(moveToUse);
+    game.overridesHelper.moveset(moveToUse);
 
     await game.classicMode.startBattle([Species.BULBASAUR]);
 
@@ -92,7 +92,7 @@ describe("Abilities - Sap Sipper", () => {
   it("activate once against multi-hit grass attacks", async () => {
     const moveToUse = Moves.BULLET_SEED;
 
-    game.override.moveset(moveToUse);
+    game.overridesHelper.moveset(moveToUse);
 
     await game.classicMode.startBattle([Species.BULBASAUR]);
 
@@ -110,7 +110,7 @@ describe("Abilities - Sap Sipper", () => {
   it("do not activate against status moves that target the user", async () => {
     const moveToUse = Moves.SPIKY_SHIELD;
 
-    game.override.moveset(moveToUse);
+    game.overridesHelper.moveset(moveToUse);
 
     await game.classicMode.startBattle([Species.BULBASAUR]);
 
@@ -136,7 +136,7 @@ describe("Abilities - Sap Sipper", () => {
     ) as RandomMoveAttr;
     vi.spyOn(randomMoveAttr, "getMoveOverride").mockReturnValue(Moves.BULLET_SEED);
 
-    game.override.moveset(moveToUse);
+    game.overridesHelper.moveset(moveToUse);
 
     await game.classicMode.startBattle([Species.BULBASAUR]);
 
@@ -152,7 +152,7 @@ describe("Abilities - Sap Sipper", () => {
   });
 
   it("still activates regardless of accuracy check", async () => {
-    game.override.moveset(Moves.LEAF_BLADE);
+    game.overridesHelper.moveset(Moves.LEAF_BLADE);
 
     await game.classicMode.startBattle([Species.BULBASAUR]);
 

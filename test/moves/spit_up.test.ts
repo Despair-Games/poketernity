@@ -30,15 +30,15 @@ describe("Moves - Spit Up", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override.battleType("single");
+    game.overridesHelper.battleType("single");
 
-    game.override.enemySpecies(Species.RATTATA);
-    game.override.enemyMoveset(Moves.SPLASH);
-    game.override.enemyAbility(Abilities.NONE);
-    game.override.enemyLevel(2000);
+    game.overridesHelper.enemySpecies(Species.RATTATA);
+    game.overridesHelper.enemyMoveset(Moves.SPLASH);
+    game.overridesHelper.enemyAbility(Abilities.NONE);
+    game.overridesHelper.enemyLevel(2000);
 
-    game.override.moveset(new Array(4).fill(spitUp.id));
-    game.override.ability(Abilities.NONE);
+    game.overridesHelper.moveset(new Array(4).fill(spitUp.id));
+    game.overridesHelper.ability(Abilities.NONE);
 
     vi.spyOn(spitUp, "calculateBattlePower");
   });

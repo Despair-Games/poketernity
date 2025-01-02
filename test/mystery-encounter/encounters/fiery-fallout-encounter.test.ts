@@ -49,7 +49,7 @@ describe("Fiery Fallout - Mystery Encounter", () => {
   beforeEach(async () => {
     game = new GameManager(phaserGame);
     scene = game.scene;
-    game.override
+    game.overridesHelper
       .mysteryEncounterChance(100)
       .startingWave(defaultWave)
       .startingBiome(defaultBiome)
@@ -84,14 +84,14 @@ describe("Fiery Fallout - Mystery Encounter", () => {
   });
 
   it("should not spawn outside of volcano biome", async () => {
-    game.override.startingBiome(Biome.MOUNTAIN);
+    game.overridesHelper.startingBiome(Biome.MOUNTAIN);
     await game.runToMysteryEncounter();
 
     expect(scene.currentBattle?.mysteryEncounter?.encounterType).not.toBe(MysteryEncounterType.FIERY_FALLOUT);
   });
 
   it("should not run below wave 41", async () => {
-    game.override.startingWave(38);
+    game.overridesHelper.startingWave(38);
 
     await game.runToMysteryEncounter();
 

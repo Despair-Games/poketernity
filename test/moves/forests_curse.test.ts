@@ -22,7 +22,7 @@ describe("Moves - Forest's Curse", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.FORESTS_CURSE, Moves.TRICK_OR_TREAT])
       .ability(Abilities.BALL_FETCH)
       .battleType("single")

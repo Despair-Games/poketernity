@@ -24,16 +24,16 @@ describe("Moves - Baneful Bunker", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override.battleType("single");
+    game.overridesHelper.battleType("single");
 
-    game.override.moveset(Moves.SLASH);
+    game.overridesHelper.moveset(Moves.SLASH);
 
-    game.override.enemySpecies(Species.SNORLAX);
-    game.override.enemyAbility(Abilities.INSOMNIA);
-    game.override.enemyMoveset(Moves.BANEFUL_BUNKER);
+    game.overridesHelper.enemySpecies(Species.SNORLAX);
+    game.overridesHelper.enemyAbility(Abilities.INSOMNIA);
+    game.overridesHelper.enemyMoveset(Moves.BANEFUL_BUNKER);
 
-    game.override.startingLevel(100);
-    game.override.enemyLevel(100);
+    game.overridesHelper.startingLevel(100);
+    game.overridesHelper.enemyLevel(100);
   });
   test("should protect the user and poison attackers that make contact", async () => {
     await game.classicMode.startBattle([Species.CHARIZARD]);
@@ -64,7 +64,7 @@ describe("Moves - Baneful Bunker", () => {
   });
 
   test("should not poison attackers that don't make contact", async () => {
-    game.override.moveset(Moves.FLASH_CANNON);
+    game.overridesHelper.moveset(Moves.FLASH_CANNON);
     await game.classicMode.startBattle([Species.CHARIZARD]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;

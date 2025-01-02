@@ -26,7 +26,7 @@ describe("Moves - Shell Side Arm", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.SHELL_SIDE_ARM, Moves.SPLASH])
       .battleType("single")
       .startingLevel(100)
@@ -36,7 +36,7 @@ describe("Moves - Shell Side Arm", () => {
   });
 
   it("becomes a physical attack if forecasted to deal more damage as physical", async () => {
-    game.override.enemySpecies(Species.SNORLAX);
+    game.overridesHelper.enemySpecies(Species.SNORLAX);
 
     await game.classicMode.startBattle([Species.RAMPARDOS]);
 
@@ -49,7 +49,7 @@ describe("Moves - Shell Side Arm", () => {
   });
 
   it("should make contact if the move becomes physical", async () => {
-    game.override.enemySpecies(Species.SNORLAX).enemyAbility(Abilities.ROUGH_SKIN);
+    game.overridesHelper.enemySpecies(Species.SNORLAX).enemyAbility(Abilities.ROUGH_SKIN);
 
     await game.classicMode.startBattle([Species.RAMPARDOS]);
 
@@ -62,7 +62,7 @@ describe("Moves - Shell Side Arm", () => {
   });
 
   it("remains a special attack if forecasted to deal more damage as special", async () => {
-    game.override.enemySpecies(Species.SLOWBRO);
+    game.overridesHelper.enemySpecies(Species.SLOWBRO);
 
     await game.classicMode.startBattle([Species.XURKITREE]);
 
@@ -75,7 +75,7 @@ describe("Moves - Shell Side Arm", () => {
   });
 
   it("should not make contact if the move becomes special", async () => {
-    game.override.enemySpecies(Species.SLOWBRO).enemyAbility(Abilities.ROUGH_SKIN);
+    game.overridesHelper.enemySpecies(Species.SLOWBRO).enemyAbility(Abilities.ROUGH_SKIN);
 
     await game.classicMode.startBattle([Species.XURKITREE]);
 
@@ -88,7 +88,7 @@ describe("Moves - Shell Side Arm", () => {
   });
 
   it("respects stat stage changes when forecasting base damage", async () => {
-    game.override.enemySpecies(Species.SNORLAX).enemyMoveset(Moves.COTTON_GUARD);
+    game.overridesHelper.enemySpecies(Species.SNORLAX).enemyMoveset(Moves.COTTON_GUARD);
 
     await game.classicMode.startBattle([Species.MANAPHY]);
 

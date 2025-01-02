@@ -22,7 +22,7 @@ describe("Items - Scope Lens", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override
+    game.overridesHelper
       .enemySpecies(Species.MAGIKARP)
       .enemyMoveset(Moves.SPLASH)
       .moveset([Moves.POUND])

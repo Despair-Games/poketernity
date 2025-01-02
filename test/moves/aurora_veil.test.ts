@@ -34,14 +34,14 @@ describe("Moves - Aurora Veil", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     globalScene = game.scene;
-    game.override.battleType("single");
-    game.override.ability(Abilities.NONE);
-    game.override.moveset([Moves.ABSORB, Moves.ROCK_SLIDE, Moves.TACKLE]);
-    game.override.enemyLevel(100);
-    game.override.enemySpecies(Species.MAGIKARP);
-    game.override.enemyMoveset([Moves.AURORA_VEIL, Moves.AURORA_VEIL, Moves.AURORA_VEIL, Moves.AURORA_VEIL]);
-    game.override.disableCrits();
-    game.override.weather(WeatherType.HAIL);
+    game.overridesHelper.battleType("single");
+    game.overridesHelper.ability(Abilities.NONE);
+    game.overridesHelper.moveset([Moves.ABSORB, Moves.ROCK_SLIDE, Moves.TACKLE]);
+    game.overridesHelper.enemyLevel(100);
+    game.overridesHelper.enemySpecies(Species.MAGIKARP);
+    game.overridesHelper.enemyMoveset([Moves.AURORA_VEIL, Moves.AURORA_VEIL, Moves.AURORA_VEIL, Moves.AURORA_VEIL]);
+    game.overridesHelper.disableCrits();
+    game.overridesHelper.weather(WeatherType.HAIL);
   });
 
   it("reduces damage of physical attacks by half in a single battle", async () => {
@@ -61,7 +61,7 @@ describe("Moves - Aurora Veil", () => {
   });
 
   it("reduces damage of physical attacks by a third in a double battle", async () => {
-    game.override.battleType("double");
+    game.overridesHelper.battleType("double");
 
     const moveToUse = Moves.ROCK_SLIDE;
     await game.startBattle([Species.SHUCKLE, Species.SHUCKLE]);
@@ -97,7 +97,7 @@ describe("Moves - Aurora Veil", () => {
   });
 
   it("reduces damage of special attacks by a third in a double battle", async () => {
-    game.override.battleType("double");
+    game.overridesHelper.battleType("double");
 
     const moveToUse = Moves.DAZZLING_GLEAM;
     await game.startBattle([Species.SHUCKLE, Species.SHUCKLE]);

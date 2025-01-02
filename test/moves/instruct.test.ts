@@ -30,7 +30,7 @@ describe("Moves - Instruct", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemySpecies(Species.SHUCKLE)
       .enemyAbility(Abilities.NO_GUARD)
@@ -77,7 +77,7 @@ describe("Moves - Instruct", () => {
   });
 
   it("should repeat ally's attack on enemy", async () => {
-    game.override.battleType("double").moveset([]);
+    game.overridesHelper.battleType("double").moveset([]);
     await game.classicMode.startBattle([Species.AMOONGUSS, Species.SHUCKLE]);
 
     const [amoonguss, shuckle] = game.scene.getPlayerField();
@@ -97,7 +97,7 @@ describe("Moves - Instruct", () => {
 
   // TODO: Enable test case once gigaton hammer (and blood moon) is fixed
   it.todo("should repeat enemy's Gigaton Hammer", async () => {
-    game.override.enemyLevel(5);
+    game.overridesHelper.enemyLevel(5);
     await game.classicMode.startBattle([Species.AMOONGUSS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
@@ -111,7 +111,7 @@ describe("Moves - Instruct", () => {
   });
 
   it("should respect enemy's status condition", async () => {
-    game.override.moveset([Moves.THUNDER_WAVE, Moves.INSTRUCT]).enemyMoveset([Moves.SPLASH, Moves.SONIC_BOOM]);
+    game.overridesHelper.moveset([Moves.THUNDER_WAVE, Moves.INSTRUCT]).enemyMoveset([Moves.SPLASH, Moves.SONIC_BOOM]);
     await game.classicMode.startBattle([Species.AMOONGUSS]);
 
     game.move.select(Moves.THUNDER_WAVE);
@@ -135,7 +135,7 @@ describe("Moves - Instruct", () => {
   });
 
   it("should not repeat enemy's out of pp move", async () => {
-    game.override.enemySpecies(Species.UNOWN);
+    game.overridesHelper.enemySpecies(Species.UNOWN);
     await game.classicMode.startBattle([Species.AMOONGUSS]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -154,7 +154,7 @@ describe("Moves - Instruct", () => {
   });
 
   it("should fail if no move has yet been used by target", async () => {
-    game.override.enemyMoveset(Moves.SPLASH);
+    game.overridesHelper.enemyMoveset(Moves.SPLASH);
     await game.classicMode.startBattle([Species.AMOONGUSS]);
 
     game.move.select(Moves.INSTRUCT);
@@ -166,7 +166,7 @@ describe("Moves - Instruct", () => {
   });
 
   it("should attempt to call enemy's disabled move, but move use itself should fail", async () => {
-    game.override.moveset([Moves.INSTRUCT, Moves.DISABLE]).battleType("double");
+    game.overridesHelper.moveset([Moves.INSTRUCT, Moves.DISABLE]).battleType("double");
     await game.classicMode.startBattle([Species.AMOONGUSS, Species.DROWZEE]);
 
     const [enemy1, enemy2] = game.scene.getEnemyField();
@@ -208,7 +208,7 @@ describe("Moves - Instruct", () => {
   });
 
   it("should not repeat enemy's charging move", async () => {
-    game.override.enemyMoveset([Moves.SONIC_BOOM, Moves.HYPER_BEAM]).enemyLevel(5);
+    game.overridesHelper.enemyMoveset([Moves.SONIC_BOOM, Moves.HYPER_BEAM]).enemyLevel(5);
     await game.classicMode.startBattle([Species.SHUCKLE]);
 
     const player = game.scene.getPlayerPokemon()!;
@@ -232,7 +232,7 @@ describe("Moves - Instruct", () => {
   });
 
   it("should not repeat dance move not known by target", async () => {
-    game.override
+    game.overridesHelper
       .battleType("double")
       .moveset([Moves.INSTRUCT, Moves.FIERY_DANCE])
       .enemyMoveset(Moves.SPLASH)
@@ -250,7 +250,7 @@ describe("Moves - Instruct", () => {
   });
 
   it("should cause multi-hit moves to hit the appropriate number of times in singles", async () => {
-    game.override.enemyAbility(Abilities.SKILL_LINK).enemyMoveset(Moves.BULLET_SEED);
+    game.overridesHelper.enemyAbility(Abilities.SKILL_LINK).enemyMoveset(Moves.BULLET_SEED);
     await game.classicMode.startBattle([Species.BULBASAUR]);
 
     const player = game.scene.getPlayerPokemon()!;
@@ -273,7 +273,7 @@ describe("Moves - Instruct", () => {
   });
 
   it("should cause multi-hit moves to hit the appropriate number of times in doubles", async () => {
-    game.override
+    game.overridesHelper
       .battleType("double")
       .enemyAbility(Abilities.SKILL_LINK)
       .enemyMoveset([Moves.BULLET_SEED, Moves.SPLASH])

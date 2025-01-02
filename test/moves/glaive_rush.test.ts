@@ -22,7 +22,7 @@ describe("Moves - Glaive Rush", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
@@ -61,7 +61,7 @@ describe("Moves - Glaive Rush", () => {
   });
 
   it("interacts properly with multi-lens", async () => {
-    game.override.startingHeldItems([{ name: "MULTI_LENS", count: 2 }]).enemyMoveset([Moves.AVALANCHE]);
+    game.overridesHelper.startingHeldItems([{ name: "MULTI_LENS", count: 2 }]).enemyMoveset([Moves.AVALANCHE]);
     await game.classicMode.startBattle();
 
     const player = game.scene.getPlayerPokemon()!;
@@ -81,7 +81,7 @@ describe("Moves - Glaive Rush", () => {
   });
 
   it("secondary effects only last until next move", async () => {
-    game.override.enemyMoveset([Moves.SHADOW_SNEAK]);
+    game.overridesHelper.enemyMoveset([Moves.SHADOW_SNEAK]);
     await game.classicMode.startBattle();
 
     const player = game.scene.getPlayerPokemon()!;
@@ -106,7 +106,7 @@ describe("Moves - Glaive Rush", () => {
   });
 
   it("secondary effects are removed upon switching", async () => {
-    game.override.enemyMoveset([Moves.SHADOW_SNEAK]).starterSpecies(0);
+    game.overridesHelper.enemyMoveset([Moves.SHADOW_SNEAK]).starterSpecies(0);
     await game.classicMode.startBattle([Species.KLINK, Species.FEEBAS]);
 
     const player = game.scene.getPlayerPokemon()!;
@@ -127,7 +127,7 @@ describe("Moves - Glaive Rush", () => {
   });
 
   it("secondary effects don't activate if move fails", async () => {
-    game.override.moveset([Moves.SHADOW_SNEAK, Moves.PROTECT, Moves.SPLASH, Moves.GLAIVE_RUSH]);
+    game.overridesHelper.moveset([Moves.SHADOW_SNEAK, Moves.PROTECT, Moves.SPLASH, Moves.GLAIVE_RUSH]);
     await game.classicMode.startBattle();
 
     const player = game.scene.getPlayerPokemon()!;
@@ -141,7 +141,7 @@ describe("Moves - Glaive Rush", () => {
 
     game.move.select(Moves.SHADOW_SNEAK);
     await game.phaseInterceptor.to("TurnEndPhase");
-    game.override.enemyMoveset([Moves.SPLASH]);
+    game.overridesHelper.enemyMoveset([Moves.SPLASH]);
     const damagedHP1 = 1000 - enemy.hp;
     enemy.hp = 1000;
 

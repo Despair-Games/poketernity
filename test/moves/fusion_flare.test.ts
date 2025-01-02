@@ -24,15 +24,15 @@ describe("Moves - Fusion Flare", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.moveset([fusionFlare]);
-    game.override.startingLevel(1);
+    game.overridesHelper.moveset([fusionFlare]);
+    game.overridesHelper.startingLevel(1);
 
-    game.override.enemySpecies(Species.RATTATA);
-    game.override.enemyMoveset([Moves.REST, Moves.REST, Moves.REST, Moves.REST]);
+    game.overridesHelper.enemySpecies(Species.RATTATA);
+    game.overridesHelper.enemyMoveset([Moves.REST, Moves.REST, Moves.REST, Moves.REST]);
 
-    game.override.battleType("single");
-    game.override.startingWave(97);
-    game.override.disableCrits();
+    game.overridesHelper.battleType("single");
+    game.overridesHelper.startingWave(97);
+    game.overridesHelper.disableCrits();
   });
 
   it("should thaw freeze status condition", async () => {

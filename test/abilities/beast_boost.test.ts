@@ -23,7 +23,7 @@ describe("Abilities - Beast Boost", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemySpecies(Species.BULBASAUR)
       .enemyAbility(Abilities.BEAST_BOOST)
@@ -50,7 +50,7 @@ describe("Abilities - Beast Boost", () => {
   }, 20000);
 
   it("should use in-battle overriden stats when determining the stat stage to raise by 1", async () => {
-    game.override.enemyMoveset([Moves.GUARD_SPLIT]);
+    game.overridesHelper.enemyMoveset([Moves.GUARD_SPLIT]);
 
     await game.classicMode.startBattle([Species.SLOWBRO]);
 

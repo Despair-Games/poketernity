@@ -24,7 +24,7 @@ describe("Abilities - Heatproof", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.CHARMANDER)
@@ -49,7 +49,7 @@ describe("Abilities - Heatproof", () => {
     const heatproofDamage = initialHP - enemy.hp;
 
     enemy.hp = initialHP;
-    game.override.enemyAbility(Abilities.BALL_FETCH);
+    game.overridesHelper.enemyAbility(Abilities.BALL_FETCH);
 
     game.move.select(Moves.FLAMETHROWER);
     await game.phaseInterceptor.to(TurnEndPhase);
@@ -60,7 +60,7 @@ describe("Abilities - Heatproof", () => {
   });
 
   it("reduces Burn damage by half", async () => {
-    game.override.enemyStatusEffect(StatusEffect.BURN).enemySpecies(Species.ABRA);
+    game.overridesHelper.enemyStatusEffect(StatusEffect.BURN).enemySpecies(Species.ABRA);
     await game.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;

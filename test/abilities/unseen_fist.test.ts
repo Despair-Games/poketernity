@@ -24,12 +24,12 @@ describe("Abilities - Unseen Fist", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("single");
-    game.override.starterSpecies(Species.URSHIFU);
-    game.override.enemySpecies(Species.SNORLAX);
-    game.override.enemyMoveset([Moves.PROTECT, Moves.PROTECT, Moves.PROTECT, Moves.PROTECT]);
-    game.override.startingLevel(100);
-    game.override.enemyLevel(100);
+    game.overridesHelper.battleType("single");
+    game.overridesHelper.starterSpecies(Species.URSHIFU);
+    game.overridesHelper.enemySpecies(Species.SNORLAX);
+    game.overridesHelper.enemyMoveset([Moves.PROTECT, Moves.PROTECT, Moves.PROTECT, Moves.PROTECT]);
+    game.overridesHelper.startingLevel(100);
+    game.overridesHelper.enemyLevel(100);
   });
 
   it("should cause a contact move to ignore Protect", () =>
@@ -39,7 +39,7 @@ describe("Abilities - Unseen Fist", () => {
     testUnseenFistHitResult(game, Moves.ABSORB, Moves.PROTECT, false));
 
   it("should not apply if the source has Long Reach", () => {
-    game.override.passiveAbility(Abilities.LONG_REACH);
+    game.overridesHelper.passiveAbility(Abilities.LONG_REACH);
     testUnseenFistHitResult(game, Moves.QUICK_ATTACK, Moves.PROTECT, false);
   });
 
@@ -50,8 +50,8 @@ describe("Abilities - Unseen Fist", () => {
     testUnseenFistHitResult(game, Moves.BULLDOZE, Moves.WIDE_GUARD, false));
 
   it("should cause a contact move to ignore Protect, but not Substitute", async () => {
-    game.override.enemyLevel(1);
-    game.override.moveset([Moves.TACKLE]);
+    game.overridesHelper.enemyLevel(1);
+    game.overridesHelper.moveset([Moves.TACKLE]);
 
     await game.startBattle();
 
@@ -73,8 +73,8 @@ async function testUnseenFistHitResult(
   protectMove: Moves,
   shouldSucceed: boolean = true,
 ): Promise<void> {
-  game.override.moveset([attackMove]);
-  game.override.enemyMoveset([protectMove, protectMove, protectMove, protectMove]);
+  game.overridesHelper.moveset([attackMove]);
+  game.overridesHelper.enemyMoveset([protectMove, protectMove, protectMove, protectMove]);
 
   await game.startBattle();
 

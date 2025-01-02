@@ -23,16 +23,16 @@ describe("Moves - Fusion Bolt", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.moveset([fusionBolt]);
-    game.override.startingLevel(1);
+    game.overridesHelper.moveset([fusionBolt]);
+    game.overridesHelper.startingLevel(1);
 
-    game.override.enemySpecies(Species.RESHIRAM);
-    game.override.enemyAbility(Abilities.ROUGH_SKIN);
-    game.override.enemyMoveset([Moves.SPLASH, Moves.SPLASH, Moves.SPLASH, Moves.SPLASH]);
+    game.overridesHelper.enemySpecies(Species.RESHIRAM);
+    game.overridesHelper.enemyAbility(Abilities.ROUGH_SKIN);
+    game.overridesHelper.enemyMoveset([Moves.SPLASH, Moves.SPLASH, Moves.SPLASH, Moves.SPLASH]);
 
-    game.override.battleType("single");
-    game.override.startingWave(97);
-    game.override.disableCrits();
+    game.overridesHelper.battleType("single");
+    game.overridesHelper.startingWave(97);
+    game.overridesHelper.disableCrits();
   });
 
   it("should not make contact", async () => {

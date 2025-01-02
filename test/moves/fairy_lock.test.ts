@@ -23,7 +23,7 @@ describe("Moves - Fairy Lock", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.FAIRY_LOCK, Moves.SPLASH])
       .ability(Abilities.BALL_FETCH)
       .battleType("double")
@@ -93,7 +93,7 @@ describe("Moves - Fairy Lock", () => {
   });
 
   it("Phasing moves will still switch out", async () => {
-    game.override.enemyMoveset([Moves.SPLASH, Moves.WHIRLWIND]);
+    game.overridesHelper.enemyMoveset([Moves.SPLASH, Moves.WHIRLWIND]);
     await game.classicMode.startBattle([Species.KLEFKI, Species.TYRUNT, Species.ZYGARDE]);
 
     game.move.select(Moves.FAIRY_LOCK);
@@ -120,7 +120,7 @@ describe("Moves - Fairy Lock", () => {
   });
 
   it("If a Pokemon faints and is replaced the replacement is also trapped", async () => {
-    game.override.moveset([Moves.FAIRY_LOCK, Moves.SPLASH, Moves.MEMENTO]);
+    game.overridesHelper.moveset([Moves.FAIRY_LOCK, Moves.SPLASH, Moves.MEMENTO]);
     await game.classicMode.startBattle([Species.KLEFKI, Species.GUZZLORD, Species.TYRUNT, Species.ZYGARDE]);
 
     game.move.select(Moves.FAIRY_LOCK);

@@ -21,7 +21,7 @@ describe("Abilities - Pickpocket", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.SPLASH, Moves.SUBSTITUTE])
       .ability(Abilities.PICKPOCKET)
       .startingLevel(20)
@@ -44,7 +44,7 @@ describe("Abilities - Pickpocket", () => {
   });
 
   it("should not steal the enemy's held item when hit by a non-contact move", async () => {
-    game.override.enemyMoveset(Moves.EMBER);
+    game.overridesHelper.enemyMoveset(Moves.EMBER);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     game.move.select(Moves.SPLASH);

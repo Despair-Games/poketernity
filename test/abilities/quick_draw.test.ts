@@ -24,16 +24,16 @@ describe("Abilities - Quick Draw", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("single");
+    game.overridesHelper.battleType("single");
 
-    game.override.starterSpecies(Species.MAGIKARP);
-    game.override.ability(Abilities.QUICK_DRAW);
-    game.override.moveset([Moves.TACKLE, Moves.TAIL_WHIP]);
+    game.overridesHelper.starterSpecies(Species.MAGIKARP);
+    game.overridesHelper.ability(Abilities.QUICK_DRAW);
+    game.overridesHelper.moveset([Moves.TACKLE, Moves.TAIL_WHIP]);
 
-    game.override.enemyLevel(100);
-    game.override.enemySpecies(Species.MAGIKARP);
-    game.override.enemyAbility(Abilities.BALL_FETCH);
-    game.override.enemyMoveset([Moves.TACKLE]);
+    game.overridesHelper.enemyLevel(100);
+    game.overridesHelper.enemySpecies(Species.MAGIKARP);
+    game.overridesHelper.enemyAbility(Abilities.BALL_FETCH);
+    game.overridesHelper.enemyMoveset([Moves.TACKLE]);
 
     vi.spyOn(allAbilities[Abilities.QUICK_DRAW].getAttrs(BypassSpeedChanceAbAttr)[0], "chance", "get").mockReturnValue(
       100,
@@ -81,7 +81,7 @@ describe("Abilities - Quick Draw", () => {
   );
 
   test("does not increase priority", async () => {
-    game.override.enemyMoveset([Moves.EXTREME_SPEED]);
+    game.overridesHelper.enemyMoveset([Moves.EXTREME_SPEED]);
 
     await game.startBattle();
 

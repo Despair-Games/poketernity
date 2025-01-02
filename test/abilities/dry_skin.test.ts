@@ -21,7 +21,7 @@ describe("Abilities - Dry Skin", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .disableCrits()
       .enemyAbility(Abilities.DRY_SKIN)
@@ -69,7 +69,7 @@ describe("Abilities - Dry Skin", () => {
   });
 
   it("opposing fire attacks do 25% more damage", async () => {
-    game.override.moveset([Moves.FLAMETHROWER]);
+    game.overridesHelper.moveset([Moves.FLAMETHROWER]);
     await game.classicMode.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
@@ -82,7 +82,7 @@ describe("Abilities - Dry Skin", () => {
     const fireDamageTakenWithDrySkin = initialHP - enemy.hp;
 
     enemy.hp = initialHP;
-    game.override.enemyAbility(Abilities.NONE);
+    game.overridesHelper.enemyAbility(Abilities.NONE);
 
     // second turn
     game.move.select(Moves.FLAMETHROWER);
@@ -105,7 +105,7 @@ describe("Abilities - Dry Skin", () => {
   });
 
   it("opposing water attacks do not heal if they were protected from", async () => {
-    game.override.enemyMoveset([Moves.PROTECT]);
+    game.overridesHelper.enemyMoveset([Moves.PROTECT]);
 
     await game.classicMode.startBattle();
 
@@ -119,7 +119,7 @@ describe("Abilities - Dry Skin", () => {
   });
 
   it("multi-strike water attacks only heal once", async () => {
-    game.override.moveset([Moves.WATER_GUN, Moves.WATER_SHURIKEN]);
+    game.overridesHelper.moveset([Moves.WATER_GUN, Moves.WATER_SHURIKEN]);
 
     await game.classicMode.startBattle();
 

@@ -23,7 +23,7 @@ describe("Abilities - Honey Gather", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.SPLASH, Moves.ROAR, Moves.THUNDERBOLT])
       .startingLevel(100)
       .ability(Abilities.HONEY_GATHER)

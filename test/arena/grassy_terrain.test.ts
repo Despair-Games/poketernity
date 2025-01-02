@@ -21,7 +21,7 @@ describe("Arena - Grassy Terrain", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .disableCrits()
       .enemyLevel(1)

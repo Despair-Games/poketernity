@@ -21,7 +21,7 @@ describe("Moves - Spikes", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
@@ -50,7 +50,7 @@ describe("Moves - Spikes", () => {
   }, 20000);
 
   it("should damage opposing pokemon that are forced to switch in", async () => {
-    game.override.startingWave(5);
+    game.overridesHelper.startingWave(5);
     await game.startBattle([Species.MIGHTYENA, Species.POOCHYENA]);
 
     game.move.select(Moves.SPIKES);
@@ -64,7 +64,7 @@ describe("Moves - Spikes", () => {
   }, 20000);
 
   it("should damage opposing pokemon that choose to switch in", async () => {
-    game.override.startingWave(5);
+    game.overridesHelper.startingWave(5);
     await game.startBattle([Species.MIGHTYENA, Species.POOCHYENA]);
 
     game.move.select(Moves.SPIKES);

@@ -23,7 +23,7 @@ describe("Abilities - Dancer", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("double")
       .moveset([Moves.SWORDS_DANCE, Moves.SPLASH])
       .enemySpecies(Species.MAGIKARP)

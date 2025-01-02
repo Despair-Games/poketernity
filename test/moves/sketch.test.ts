@@ -26,7 +26,7 @@ describe("Moves - Sketch", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .ability(Abilities.BALL_FETCH)
       .battleType("single")
       .disableCrits()
@@ -57,7 +57,7 @@ describe("Moves - Sketch", () => {
   });
 
   it("Sketch should retrieve the most recent valid move from its target history", async () => {
-    game.override.enemyStatusEffect(StatusEffect.PARALYSIS);
+    game.overridesHelper.enemyStatusEffect(StatusEffect.PARALYSIS);
     await game.classicMode.startBattle([Species.REGIELEKI]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -85,7 +85,7 @@ describe("Moves - Sketch", () => {
     ) as RandomMoveAttr;
     vi.spyOn(randomMoveAttr, "getMoveOverride").mockReturnValue(Moves.FALSE_SWIPE);
 
-    game.override.enemyMoveset([Moves.METRONOME]);
+    game.overridesHelper.enemyMoveset([Moves.METRONOME]);
     await game.classicMode.startBattle([Species.REGIELEKI]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
     playerPokemon.moveset = [new PokemonMove(Moves.SKETCH)];

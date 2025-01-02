@@ -22,7 +22,7 @@ describe("Weather - Hail", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .weather(WeatherType.HAIL)
       .battleType("single")
       .moveset(Moves.SPLASH)
@@ -44,7 +44,7 @@ describe("Weather - Hail", () => {
   });
 
   it("does not inflict damage to a Pokemon that is underwater (Dive) or underground (Dig)", async () => {
-    game.override.moveset([Moves.DIG]);
+    game.overridesHelper.moveset([Moves.DIG]);
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
     game.move.select(Moves.DIG);

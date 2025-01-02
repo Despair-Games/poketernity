@@ -24,7 +24,7 @@ describe("Moves - Geomancy", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset(Moves.GEOMANCY)
       .battleType("single")
       .startingLevel(100)

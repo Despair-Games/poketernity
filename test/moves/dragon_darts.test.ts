@@ -24,7 +24,7 @@ describe("Moves - Dragon Darts", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.SPLASH, Moves.DRAGON_DARTS, Moves.FOLLOW_ME])
       .ability(Abilities.BALL_FETCH)
       .battleType("double")
@@ -37,7 +37,7 @@ describe("Moves - Dragon Darts", () => {
   });
 
   it("should hit the same enemy twice in a single battle", async () => {
-    game.override.battleType("single");
+    game.overridesHelper.battleType("single");
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
@@ -95,7 +95,7 @@ describe("Moves - Dragon Darts", () => {
   });
 
   it("should hit an opponent twice if the other opponent is type immune", async () => {
-    game.override.enemyMoveset([Moves.DRAGON_DARTS, Moves.SPLASH]);
+    game.overridesHelper.enemyMoveset([Moves.DRAGON_DARTS, Moves.SPLASH]);
 
     await game.classicMode.startBattle([Species.MAGIKARP, Species.CLEFFA]);
 
@@ -121,7 +121,7 @@ describe("Moves - Dragon Darts", () => {
   });
 
   it("should hit an enemy twice if the other enemy is protected", async () => {
-    game.override.enemyMoveset([Moves.PROTECT, Moves.SPLASH]);
+    game.overridesHelper.enemyMoveset([Moves.PROTECT, Moves.SPLASH]);
 
     await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
 
@@ -147,7 +147,7 @@ describe("Moves - Dragon Darts", () => {
   });
 
   it("should hit an enemy twice if the other enemy is semi-invulnerable", async () => {
-    game.override.enemyMoveset([Moves.DIG, Moves.SPLASH]);
+    game.overridesHelper.enemyMoveset([Moves.DIG, Moves.SPLASH]);
 
     await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
 
@@ -171,7 +171,7 @@ describe("Moves - Dragon Darts", () => {
   });
 
   it("should hit Dondozo twice if its ally is a commanding Tatsugiri", async () => {
-    game.override.enemyMoveset([Moves.DRAGON_DARTS, Moves.SPLASH]).ability(Abilities.COMMANDER);
+    game.overridesHelper.enemyMoveset([Moves.DRAGON_DARTS, Moves.SPLASH]).ability(Abilities.COMMANDER);
     vi.spyOn(game.scene, "triggerPokemonBattleAnim").mockReturnValue(true);
 
     await game.classicMode.startBattle([Species.TATSUGIRI, Species.DONDOZO]);
@@ -218,7 +218,7 @@ describe("Moves - Dragon Darts", () => {
   });
 
   it("should not be protected against by Wide Guard", async () => {
-    game.override.enemyMoveset([Moves.WIDE_GUARD, Moves.SPLASH]);
+    game.overridesHelper.enemyMoveset([Moves.WIDE_GUARD, Moves.SPLASH]);
 
     await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
 
@@ -240,7 +240,7 @@ describe("Moves - Dragon Darts", () => {
   });
 
   it("should not redirect if the original target has the Center of Attention status", async () => {
-    game.override.enemyMoveset([Moves.DRAGON_DARTS, Moves.SPLASH]);
+    game.overridesHelper.enemyMoveset([Moves.DRAGON_DARTS, Moves.SPLASH]);
 
     await game.classicMode.startBattle([Species.MAGIKARP, Species.CLEFFA]);
 
@@ -262,7 +262,7 @@ describe("Moves - Dragon Darts", () => {
   });
 
   it("should not trigger ability effects when redirecting", async () => {
-    game.override.enemyAbility(Abilities.VOLT_ABSORB).moveset([Moves.DRAGON_DARTS, Moves.ELECTRIFY]);
+    game.overridesHelper.enemyAbility(Abilities.VOLT_ABSORB).moveset([Moves.DRAGON_DARTS, Moves.ELECTRIFY]);
 
     await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
 
@@ -283,7 +283,7 @@ describe("Moves - Dragon Darts", () => {
   });
 
   it("should strike the target's ally on the second hit when the target faints to the first", async () => {
-    game.override.enemySpecies(Species.MAGIKARP).enemyLevel(1);
+    game.overridesHelper.enemySpecies(Species.MAGIKARP).enemyLevel(1);
 
     await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
 
@@ -302,7 +302,7 @@ describe("Moves - Dragon Darts", () => {
   });
 
   it("should not strike the user on the second hit if the user's ally faints to the first", async () => {
-    game.override.startingHeldItems([{ name: "ATTACK_TYPE_BOOSTER", type: Type.DRAGON, count: 99 }]);
+    game.overridesHelper.startingHeldItems([{ name: "ATTACK_TYPE_BOOSTER", type: Type.DRAGON, count: 99 }]);
 
     await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
 
@@ -320,7 +320,7 @@ describe("Moves - Dragon Darts", () => {
   });
 
   it("should not crash when used in a 1v2 battle", async () => {
-    game.override.enemyMoveset(Moves.DRAGON_DARTS);
+    game.overridesHelper.enemyMoveset(Moves.DRAGON_DARTS);
     await game.classicMode.startBattle([Species.SHUCKLE]);
 
     game.move.select(Moves.DRAGON_DARTS);

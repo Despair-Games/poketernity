@@ -49,11 +49,11 @@ describe("Enemy Commands - Move Selection", () => {
     game = new GameManager(phaserGame);
     globalScene = game.scene;
 
-    game.override.ability(Abilities.BALL_FETCH).enemyAbility(Abilities.BALL_FETCH);
+    game.overridesHelper.ability(Abilities.BALL_FETCH).enemyAbility(Abilities.BALL_FETCH);
   });
 
   it("should never use Status moves if an attack can KO", async () => {
-    game.override
+    game.overridesHelper
       .enemySpecies(Species.ETERNATUS)
       .enemyMoveset([Moves.ETERNABEAM, Moves.SLUDGE_BOMB, Moves.DRAGON_DANCE, Moves.COSMIC_POWER])
       .startingLevel(1)
@@ -77,7 +77,7 @@ describe("Enemy Commands - Move Selection", () => {
   });
 
   it("should not select Last Resort if it would fail, even if the move KOs otherwise", async () => {
-    game.override
+    game.overridesHelper
       .enemySpecies(Species.KANGASKHAN)
       .enemyMoveset([Moves.LAST_RESORT, Moves.GIGA_IMPACT, Moves.SPLASH, Moves.SWORDS_DANCE])
       .startingLevel(1)

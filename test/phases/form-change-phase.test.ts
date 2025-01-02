@@ -24,7 +24,7 @@ describe("Form Change Phase", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.SPLASH])
       .ability(Abilities.BALL_FETCH)
       .battleType("single")

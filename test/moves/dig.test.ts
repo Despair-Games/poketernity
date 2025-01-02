@@ -25,7 +25,7 @@ describe("Moves - Dig", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset(Moves.DIG)
       .battleType("single")
       .startingLevel(100)
@@ -60,7 +60,7 @@ describe("Moves - Dig", () => {
   });
 
   it("should not allow the user to evade attacks from Pokemon with No Guard", async () => {
-    game.override.enemyAbility(Abilities.NO_GUARD);
+    game.overridesHelper.enemyAbility(Abilities.NO_GUARD);
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
@@ -75,7 +75,7 @@ describe("Moves - Dig", () => {
   });
 
   it("should not expend PP when the attack phase is cancelled", async () => {
-    game.override.enemyAbility(Abilities.NO_GUARD).enemyMoveset(Moves.SPORE);
+    game.overridesHelper.enemyAbility(Abilities.NO_GUARD).enemyMoveset(Moves.SPORE);
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 

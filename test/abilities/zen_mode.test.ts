@@ -25,7 +25,7 @@ describe("Abilities - ZEN MODE", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
@@ -85,8 +85,8 @@ describe("Abilities - ZEN MODE", () => {
   });
 
   it("should switch to base form on arena reset", async () => {
-    game.override.startingWave(4);
-    game.override.starterForms({
+    game.overridesHelper.startingWave(4);
+    game.overridesHelper.starterForms({
       [Species.DARMANITAN]: zenForm,
     });
 

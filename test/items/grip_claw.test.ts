@@ -26,7 +26,7 @@ describe("Items - Grip Claw", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override
+    game.overridesHelper
       .battleType("double")
       .moveset([Moves.TACKLE, Moves.SPLASH, Moves.ATTRACT])
       .startingHeldItems([{ name: "GRIP_CLAW", count: 1 }])

@@ -24,7 +24,7 @@ describe("Moves - Spectral Thief", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.SPECTRAL_THIEF])
       .ability(Abilities.BALL_FETCH)
       .battleType("single")
@@ -58,7 +58,7 @@ describe("Moves - Spectral Thief", () => {
   });
 
   it("should not steal negative stat stages from the target", async () => {
-    game.override.enemyMoveset(Moves.SHELL_SMASH);
+    game.overridesHelper.enemyMoveset(Moves.SHELL_SMASH);
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
@@ -83,7 +83,7 @@ describe("Moves - Spectral Thief", () => {
   });
 
   it("should steal stat stages even if the target has Clear Body", async () => {
-    game.override.enemyAbility(Abilities.CLEAR_BODY);
+    game.overridesHelper.enemyAbility(Abilities.CLEAR_BODY);
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
@@ -107,7 +107,7 @@ describe("Moves - Spectral Thief", () => {
   ])(
     "$abilityName should multiply the stolen stat stages from this effect by $multiplier",
     async ({ abilityId, multiplier }) => {
-      game.override.ability(abilityId);
+      game.overridesHelper.ability(abilityId);
 
       await game.classicMode.startBattle([Species.MAGIKARP]);
 
@@ -126,7 +126,7 @@ describe("Moves - Spectral Thief", () => {
   );
 
   it("should not activate Defiant when stealing stat stages", async () => {
-    game.override.enemyAbility(Abilities.DEFIANT);
+    game.overridesHelper.enemyAbility(Abilities.DEFIANT);
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 

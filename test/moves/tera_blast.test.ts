@@ -27,7 +27,7 @@ describe("Moves - Tera Blast", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override
+    game.overridesHelper
       .battleType("single")
       .disableCrits()
       .starterSpecies(Species.FEEBAS)
@@ -43,7 +43,7 @@ describe("Moves - Tera Blast", () => {
   });
 
   it("changes type to match user's tera type", async () => {
-    game.override.enemySpecies(Species.FURRET).startingHeldItems([{ name: "TERA_SHARD", type: Type.FIGHTING }]);
+    game.overridesHelper.enemySpecies(Species.FURRET).startingHeldItems([{ name: "TERA_SHARD", type: Type.FIGHTING }]);
     await game.classicMode.startBattle();
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "getMoveEffectiveness");
@@ -56,7 +56,7 @@ describe("Moves - Tera Blast", () => {
   }, 20000);
 
   it("increases power if user is Stellar tera type", async () => {
-    game.override.startingHeldItems([{ name: "TERA_SHARD", type: Type.STELLAR }]);
+    game.overridesHelper.startingHeldItems([{ name: "TERA_SHARD", type: Type.STELLAR }]);
 
     await game.classicMode.startBattle();
 
@@ -68,7 +68,7 @@ describe("Moves - Tera Blast", () => {
   }, 20000);
 
   it("is super effective against terastallized targets if user is Stellar tera type", async () => {
-    game.override.startingHeldItems([{ name: "TERA_SHARD", type: Type.STELLAR }]);
+    game.overridesHelper.startingHeldItems([{ name: "TERA_SHARD", type: Type.STELLAR }]);
 
     await game.classicMode.startBattle();
 
@@ -87,7 +87,7 @@ describe("Moves - Tera Blast", () => {
   it.todo(
     "uses the higher stat of the user's Atk and SpAtk for damage calculation",
     async () => {
-      game.override.enemyAbility(Abilities.TOXIC_DEBRIS);
+      game.overridesHelper.enemyAbility(Abilities.TOXIC_DEBRIS);
       await game.classicMode.startBattle();
 
       const playerPokemon = game.scene.getPlayerPokemon()!;
@@ -102,7 +102,7 @@ describe("Moves - Tera Blast", () => {
   );
 
   it("causes stat drops if user is Stellar tera type", async () => {
-    game.override.startingHeldItems([{ name: "TERA_SHARD", type: Type.STELLAR }]);
+    game.overridesHelper.startingHeldItems([{ name: "TERA_SHARD", type: Type.STELLAR }]);
     await game.classicMode.startBattle();
 
     const playerPokemon = game.scene.getPlayerPokemon()!;

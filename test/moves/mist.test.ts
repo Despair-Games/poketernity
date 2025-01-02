@@ -22,7 +22,7 @@ describe("Moves - Mist", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.MIST, Moves.SPLASH])
       .ability(Abilities.BALL_FETCH)
       .battleType("double")

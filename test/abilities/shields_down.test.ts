@@ -25,17 +25,17 @@ describe("Abilities - SHIELDS DOWN", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     const moveToUse = Moves.SPLASH;
-    game.override.battleType("single");
-    game.override.ability(Abilities.SHIELDS_DOWN);
-    game.override.moveset([moveToUse]);
-    game.override.enemyMoveset([Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE]);
+    game.overridesHelper.battleType("single");
+    game.overridesHelper.ability(Abilities.SHIELDS_DOWN);
+    game.overridesHelper.moveset([moveToUse]);
+    game.overridesHelper.enemyMoveset([Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE]);
   });
 
   test("check if fainted pokemon switched to base form on arena reset", async () => {
     const meteorForm = 0,
       coreForm = 7;
-    game.override.startingWave(4);
-    game.override.starterForms({
+    game.overridesHelper.startingWave(4);
+    game.overridesHelper.starterForms({
       [Species.MINIOR]: coreForm,
     });
 

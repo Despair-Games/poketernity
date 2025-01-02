@@ -23,7 +23,7 @@ describe("Moves - Speed Swap", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemyAbility(Abilities.NONE)
       .enemyMoveset(Moves.SPLASH)

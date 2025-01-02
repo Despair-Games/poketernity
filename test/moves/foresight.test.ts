@@ -21,7 +21,7 @@ describe("Moves - Foresight", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .disableCrits()
       .enemySpecies(Species.GASTLY)
       .enemyMoveset(Moves.SPLASH)
@@ -54,7 +54,7 @@ describe("Moves - Foresight", () => {
   });
 
   it("should ignore target's evasiveness boosts", async () => {
-    game.override.enemyMoveset([Moves.MINIMIZE]);
+    game.overridesHelper.enemyMoveset([Moves.MINIMIZE]);
     await game.startBattle();
 
     const pokemon = game.scene.getPlayerPokemon()!;

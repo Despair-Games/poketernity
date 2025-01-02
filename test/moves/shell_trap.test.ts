@@ -26,7 +26,7 @@ describe("Moves - Shell Trap", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("double")
       .moveset([Moves.SHELL_TRAP, Moves.SPLASH, Moves.BULLDOZE])
       .enemySpecies(Species.SNORLAX)
@@ -59,7 +59,7 @@ describe("Moves - Shell Trap", () => {
   });
 
   it("should fail if the user is only hit by special attacks", async () => {
-    game.override.enemyMoveset([Moves.SWIFT]);
+    game.overridesHelper.enemyMoveset([Moves.SWIFT]);
 
     await game.startBattle([Species.CHARIZARD, Species.TURTONATOR]);
 
@@ -82,7 +82,7 @@ describe("Moves - Shell Trap", () => {
   });
 
   it("should fail if the user isn't hit with any attack", async () => {
-    game.override.enemyMoveset(Moves.SPLASH);
+    game.overridesHelper.enemyMoveset(Moves.SPLASH);
 
     await game.startBattle([Species.CHARIZARD, Species.TURTONATOR]);
 
@@ -105,7 +105,7 @@ describe("Moves - Shell Trap", () => {
   });
 
   it("should not activate from an ally's attack", async () => {
-    game.override.enemyMoveset(Moves.SPLASH);
+    game.overridesHelper.enemyMoveset(Moves.SPLASH);
 
     await game.startBattle([Species.BLASTOISE, Species.CHARIZARD]);
 
@@ -128,7 +128,7 @@ describe("Moves - Shell Trap", () => {
   });
 
   it("should not activate from a subsequent physical attack", async () => {
-    game.override.battleType("single");
+    game.overridesHelper.battleType("single");
     vi.spyOn(allMoves[Moves.RAZOR_LEAF], "priority", "get").mockReturnValue(-4);
 
     await game.startBattle([Species.CHARIZARD]);

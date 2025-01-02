@@ -24,7 +24,7 @@ describe("Moves - Telekinesis", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.TELEKINESIS, Moves.TACKLE, Moves.MUD_SHOT, Moves.SMACK_DOWN])
       .battleType("single")
       .enemySpecies(Species.SNORLAX)
@@ -68,7 +68,7 @@ describe("Moves - Telekinesis", () => {
   });
 
   it("Telekinesis can still affect Pokemon that have been transformed into invalid Pokemon", async () => {
-    game.override.enemyMoveset(Moves.TRANSFORM);
+    game.overridesHelper.enemyMoveset(Moves.TRANSFORM);
     await game.classicMode.startBattle([Species.DIGLETT]);
 
     const enemyOpponent = game.scene.getEnemyPokemon()!;
@@ -98,7 +98,7 @@ describe("Moves - Telekinesis", () => {
   });
 
   it("Ingrain will remove the floating effect of Telekinesis, but not the 100% hit", async () => {
-    game.override.enemyMoveset([Moves.SPLASH, Moves.INGRAIN]);
+    game.overridesHelper.enemyMoveset([Moves.SPLASH, Moves.INGRAIN]);
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;

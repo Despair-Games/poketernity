@@ -22,7 +22,7 @@ describe("Abilities - Mimicry", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.SPLASH])
       .ability(Abilities.MIMICRY)
       .battleType("single")
@@ -32,7 +32,7 @@ describe("Abilities - Mimicry", () => {
   });
 
   it("Mimicry activates after the Pokémon with Mimicry is switched in while terrain is present, or whenever there is a change in terrain", async () => {
-    game.override.enemyAbility(Abilities.MISTY_SURGE);
+    game.overridesHelper.enemyAbility(Abilities.MISTY_SURGE);
     await game.classicMode.startBattle([Species.FEEBAS, Species.ABRA]);
 
     const [playerPokemon1, playerPokemon2] = game.scene.getPlayerParty();
@@ -47,7 +47,7 @@ describe("Abilities - Mimicry", () => {
   });
 
   it("Pokemon should revert back to its original, root type once terrain ends", async () => {
-    game.override
+    game.overridesHelper
       .moveset([Moves.SPLASH, Moves.TRANSFORM])
       .enemyAbility(Abilities.MIMICRY)
       .enemyMoveset([Moves.SPLASH, Moves.PSYCHIC_TERRAIN]);
@@ -70,7 +70,7 @@ describe("Abilities - Mimicry", () => {
   });
 
   it("If the Pokemon is under the effect of a type-adding move and an equivalent terrain activates, the move's effect disappears", async () => {
-    game.override.enemyMoveset([Moves.FORESTS_CURSE, Moves.GRASSY_TERRAIN]);
+    game.overridesHelper.enemyMoveset([Moves.FORESTS_CURSE, Moves.GRASSY_TERRAIN]);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon();

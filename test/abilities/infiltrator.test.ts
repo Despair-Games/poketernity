@@ -27,7 +27,7 @@ describe("Abilities - Infiltrator", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.TACKLE, Moves.WATER_GUN, Moves.SPORE, Moves.BABY_DOLL_EYES])
       .ability(Abilities.INFILTRATOR)
       .battleType("single")

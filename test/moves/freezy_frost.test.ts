@@ -23,7 +23,7 @@ describe("Moves - Freezy Frost", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemySpecies(Species.RATTATA)
       .enemyLevel(100)
@@ -55,7 +55,7 @@ describe("Moves - Freezy Frost", () => {
   });
 
   it("should clear all stat changes even when enemy uses the move", async () => {
-    game.override.enemyMoveset([Moves.FREEZY_FROST, Moves.FREEZY_FROST, Moves.FREEZY_FROST, Moves.FREEZY_FROST]);
+    game.overridesHelper.enemyMoveset([Moves.FREEZY_FROST, Moves.FREEZY_FROST, Moves.FREEZY_FROST, Moves.FREEZY_FROST]);
     await game.classicMode.startBattle([Species.SHUCKLE]); // Shuckle for slower Howl on first turn so Freezy Frost doesn't affect it.
     const user = game.scene.getPlayerPokemon()!;
 
@@ -71,7 +71,7 @@ describe("Moves - Freezy Frost", () => {
   });
 
   it("should clear all stat changes in double battle", async () => {
-    game.override.battleType("double");
+    game.overridesHelper.battleType("double");
     await game.classicMode.startBattle([Species.SHUCKLE, Species.RATTATA]);
     const [leftPlayer, rightPlayer] = game.scene.getPlayerField();
     const [leftOpp, rightOpp] = game.scene.getEnemyField();

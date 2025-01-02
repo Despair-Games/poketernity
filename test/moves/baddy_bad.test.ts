@@ -20,7 +20,7 @@ describe("Moves - Baddy Bad", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.SPLASH])
       .battleType("single")
       .enemySpecies(Species.MAGIKARP)
@@ -30,7 +30,7 @@ describe("Moves - Baddy Bad", () => {
   });
 
   it("should not activate Reflect if the move fails due to Protect", async () => {
-    game.override.enemyMoveset(Moves.PROTECT);
+    game.overridesHelper.enemyMoveset(Moves.PROTECT);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     game.move.select(Moves.BADDY_BAD);

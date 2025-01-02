@@ -23,7 +23,7 @@ describe("Moves - Plasma Fists", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.PLASMA_FISTS, Moves.TACKLE])
       .battleType("double")
       .startingLevel(100)
@@ -56,7 +56,7 @@ describe("Moves - Plasma Fists", () => {
   });
 
   it("should not affect Normal-type attacks boosted by Pixilate", async () => {
-    game.override.battleType("single").enemyAbility(Abilities.PIXILATE);
+    game.overridesHelper.battleType("single").enemyAbility(Abilities.PIXILATE);
 
     await game.classicMode.startBattle([Species.ONIX]);
 
@@ -74,7 +74,7 @@ describe("Moves - Plasma Fists", () => {
   });
 
   it("should affect moves that become Normal type due to Normalize", async () => {
-    game.override.battleType("single").enemyAbility(Abilities.NORMALIZE).enemyMoveset(Moves.WATER_GUN);
+    game.overridesHelper.battleType("single").enemyAbility(Abilities.NORMALIZE).enemyMoveset(Moves.WATER_GUN);
 
     await game.classicMode.startBattle([Species.DUSCLOPS]);
 

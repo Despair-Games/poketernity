@@ -24,7 +24,7 @@ describe("Abilities - Stench", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .ability(Abilities.STENCH)
       .moveset([Moves.TACKLE, Moves.SPLASH, Moves.HEADBUTT])
       .battleType("single")
@@ -71,7 +71,7 @@ describe("Abilities - Stench", () => {
   });
 
   it("Stench should not bypass the enemy Pokemon's substitute under normal conditions", async () => {
-    game.override.enemyMoveset([Moves.SPLASH, Moves.SUBSTITUTE]);
+    game.overridesHelper.enemyMoveset([Moves.SPLASH, Moves.SUBSTITUTE]);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon();
@@ -92,7 +92,7 @@ describe("Abilities - Stench", () => {
   });
 
   it("Stench should not apply against a target with Shield Dust, unless the attack ignores abilities", async () => {
-    game.override.enemyAbility(Abilities.SHIELD_DUST).moveset([Moves.TACKLE, Moves.MOONGEIST_BEAM]);
+    game.overridesHelper.enemyAbility(Abilities.SHIELD_DUST).moveset([Moves.TACKLE, Moves.MOONGEIST_BEAM]);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;

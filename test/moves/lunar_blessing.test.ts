@@ -22,14 +22,14 @@ describe("Moves - Lunar Blessing", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override.battleType("double");
+    game.overridesHelper.battleType("double");
 
-    game.override.enemySpecies(Species.SHUCKLE);
-    game.override.enemyMoveset(Moves.SPLASH);
-    game.override.enemyAbility(Abilities.BALL_FETCH);
+    game.overridesHelper.enemySpecies(Species.SHUCKLE);
+    game.overridesHelper.enemyMoveset(Moves.SPLASH);
+    game.overridesHelper.enemyAbility(Abilities.BALL_FETCH);
 
-    game.override.moveset([Moves.LUNAR_BLESSING, Moves.SPLASH]);
-    game.override.ability(Abilities.BALL_FETCH);
+    game.overridesHelper.moveset([Moves.LUNAR_BLESSING, Moves.SPLASH]);
+    game.overridesHelper.ability(Abilities.BALL_FETCH);
   });
 
   it("should restore 25% HP of the user and its ally", async () => {
@@ -60,7 +60,7 @@ describe("Moves - Lunar Blessing", () => {
   });
 
   it("should cure status effect of the user and its ally", async () => {
-    game.override.statusEffect(StatusEffect.BURN);
+    game.overridesHelper.statusEffect(StatusEffect.BURN);
     await game.startBattle([Species.RATTATA, Species.RATTATA]);
     const [leftPlayer, rightPlayer] = game.scene.getPlayerField();
 

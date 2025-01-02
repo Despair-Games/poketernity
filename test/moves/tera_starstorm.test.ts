@@ -23,7 +23,7 @@ describe("Moves - Tera Starstorm", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.TERA_STARSTORM, Moves.SPLASH])
       .battleType("double")
       .enemyAbility(Abilities.BALL_FETCH)
@@ -34,7 +34,7 @@ describe("Moves - Tera Starstorm", () => {
   });
 
   it("changes type to Stellar when used by Terapagos in its Stellar Form", async () => {
-    game.override.battleType("single");
+    game.overridesHelper.battleType("single");
     await game.classicMode.startBattle([Species.TERAPAGOS]);
 
     const terapagos = game.scene.getPlayerPokemon()!;

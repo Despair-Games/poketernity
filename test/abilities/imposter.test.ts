@@ -24,7 +24,7 @@ describe("Abilities - Imposter", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemySpecies(Species.MEW)
       .enemyLevel(200)
@@ -75,7 +75,7 @@ describe("Abilities - Imposter", () => {
   });
 
   it("should copy in-battle overridden stats", async () => {
-    game.override.enemyMoveset([Moves.POWER_SPLIT]);
+    game.overridesHelper.enemyMoveset([Moves.POWER_SPLIT]);
 
     await game.classicMode.startBattle([Species.DITTO]);
 
@@ -96,7 +96,7 @@ describe("Abilities - Imposter", () => {
   });
 
   it("should set each move's pp to a maximum of 5", async () => {
-    game.override.enemyMoveset([Moves.SWORDS_DANCE, Moves.GROWL, Moves.SKETCH, Moves.RECOVER]);
+    game.overridesHelper.enemyMoveset([Moves.SWORDS_DANCE, Moves.GROWL, Moves.SKETCH, Moves.RECOVER]);
 
     await game.classicMode.startBattle([Species.DITTO]);
     const player = game.scene.getPlayerPokemon()!;

@@ -22,7 +22,7 @@ describe("Moves - Taunt", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemyAbility(Abilities.BALL_FETCH)
       .enemyMoveset([Moves.TAUNT, Moves.SPLASH])

@@ -25,16 +25,16 @@ describe("Moves - Quick Guard", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override.battleType("double");
+    game.overridesHelper.battleType("double");
 
-    game.override.moveset([Moves.QUICK_GUARD, Moves.SPLASH, Moves.FOLLOW_ME]);
+    game.overridesHelper.moveset([Moves.QUICK_GUARD, Moves.SPLASH, Moves.FOLLOW_ME]);
 
-    game.override.enemySpecies(Species.SNORLAX);
-    game.override.enemyMoveset([Moves.QUICK_ATTACK]);
-    game.override.enemyAbility(Abilities.INSOMNIA);
+    game.overridesHelper.enemySpecies(Species.SNORLAX);
+    game.overridesHelper.enemyMoveset([Moves.QUICK_ATTACK]);
+    game.overridesHelper.enemyAbility(Abilities.INSOMNIA);
 
-    game.override.startingLevel(100);
-    game.override.enemyLevel(100);
+    game.overridesHelper.startingLevel(100);
+    game.overridesHelper.enemyLevel(100);
   });
 
   test("should protect the user and allies from priority moves", async () => {
@@ -51,8 +51,8 @@ describe("Moves - Quick Guard", () => {
   });
 
   test("should protect the user and allies from Prankster-boosted moves", async () => {
-    game.override.enemyAbility(Abilities.PRANKSTER);
-    game.override.enemyMoveset([Moves.GROWL]);
+    game.overridesHelper.enemyAbility(Abilities.PRANKSTER);
+    game.overridesHelper.enemyMoveset([Moves.GROWL]);
 
     await game.classicMode.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
 
@@ -67,7 +67,7 @@ describe("Moves - Quick Guard", () => {
   });
 
   test("should stop subsequent hits of a multi-hit priority move", async () => {
-    game.override.enemyMoveset([Moves.WATER_SHURIKEN]);
+    game.overridesHelper.enemyMoveset([Moves.WATER_SHURIKEN]);
 
     await game.classicMode.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
 
@@ -84,8 +84,8 @@ describe("Moves - Quick Guard", () => {
   });
 
   test("should fail if the user is the last to move in the turn", async () => {
-    game.override.battleType("single");
-    game.override.enemyMoveset([Moves.QUICK_GUARD]);
+    game.overridesHelper.battleType("single");
+    game.overridesHelper.enemyMoveset([Moves.QUICK_GUARD]);
 
     await game.classicMode.startBattle([Species.CHARIZARD]);
 

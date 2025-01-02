@@ -22,7 +22,7 @@ describe("Abilities - Download", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.SPLASH])
       .ability(Abilities.DOWNLOAD)
       .battleType("single")
@@ -32,7 +32,7 @@ describe("Abilities - Download", () => {
   });
 
   it("should boost special attack if the enemy's defense is higher", async () => {
-    game.override.enemySpecies(Species.STEELIX);
+    game.overridesHelper.enemySpecies(Species.STEELIX);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const player = game.scene.getPlayerPokemon()!;
@@ -44,7 +44,7 @@ describe("Abilities - Download", () => {
   });
 
   it("should boost attack if the enemy's special defense is higher", async () => {
-    game.override.enemySpecies(Species.REGICE);
+    game.overridesHelper.enemySpecies(Species.REGICE);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const player = game.scene.getPlayerPokemon()!;

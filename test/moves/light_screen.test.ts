@@ -33,13 +33,13 @@ describe("Moves - Light Screen", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     globalScene = game.scene;
-    game.override.battleType("single");
-    game.override.ability(Abilities.NONE);
-    game.override.moveset([Moves.ABSORB, Moves.DAZZLING_GLEAM, Moves.TACKLE]);
-    game.override.enemyLevel(100);
-    game.override.enemySpecies(Species.MAGIKARP);
-    game.override.enemyMoveset([Moves.LIGHT_SCREEN, Moves.LIGHT_SCREEN, Moves.LIGHT_SCREEN, Moves.LIGHT_SCREEN]);
-    game.override.disableCrits();
+    game.overridesHelper.battleType("single");
+    game.overridesHelper.ability(Abilities.NONE);
+    game.overridesHelper.moveset([Moves.ABSORB, Moves.DAZZLING_GLEAM, Moves.TACKLE]);
+    game.overridesHelper.enemyLevel(100);
+    game.overridesHelper.enemySpecies(Species.MAGIKARP);
+    game.overridesHelper.enemyMoveset([Moves.LIGHT_SCREEN, Moves.LIGHT_SCREEN, Moves.LIGHT_SCREEN, Moves.LIGHT_SCREEN]);
+    game.overridesHelper.disableCrits();
   });
 
   it("reduces damage of special attacks by half in a single battle", async () => {
@@ -60,7 +60,7 @@ describe("Moves - Light Screen", () => {
   });
 
   it("reduces damage of special attacks by a third in a double battle", async () => {
-    game.override.battleType("double");
+    game.overridesHelper.battleType("double");
 
     const moveToUse = Moves.DAZZLING_GLEAM;
     await game.startBattle([Species.SHUCKLE, Species.SHUCKLE]);

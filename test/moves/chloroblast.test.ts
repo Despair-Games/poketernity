@@ -21,7 +21,7 @@ describe("Moves - Chloroblast", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .moveset([Moves.CHLOROBLAST])
       .ability(Abilities.BALL_FETCH)
       .battleType("single")

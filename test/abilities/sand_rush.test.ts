@@ -23,7 +23,7 @@ describe("Abilities - Sand Rush", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .weather(WeatherType.SANDSTORM)
       .moveset([Moves.SPLASH])
       .ability(Abilities.SAND_RUSH)

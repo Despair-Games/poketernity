@@ -22,7 +22,7 @@ describe("Moves - Lucky Chant", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override
+    game.overridesHelper
       .battleType("single")
       .moveset([Moves.LUCKY_CHANT, Moves.SPLASH, Moves.FOLLOW_ME])
       .enemySpecies(Species.SNORLAX)
@@ -46,7 +46,7 @@ describe("Moves - Lucky Chant", () => {
   });
 
   it("should prevent critical hits against the user's ally", async () => {
-    game.override.battleType("double");
+    game.overridesHelper.battleType("double");
 
     await game.classicMode.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
 
@@ -65,7 +65,7 @@ describe("Moves - Lucky Chant", () => {
   });
 
   it("should prevent critical hits from field effects", async () => {
-    game.override.enemyMoveset([Moves.TACKLE]);
+    game.overridesHelper.enemyMoveset([Moves.TACKLE]);
 
     await game.classicMode.startBattle([Species.CHARIZARD]);
 

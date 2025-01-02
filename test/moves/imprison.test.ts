@@ -22,7 +22,7 @@ describe("Moves - Imprison", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .enemyAbility(Abilities.BALL_FETCH)
       .enemyMoveset([Moves.IMPRISON, Moves.SPLASH, Moves.GROWL])
@@ -81,7 +81,7 @@ describe("Moves - Imprison", () => {
   });
 
   it("The effects of Imprison only end when the source is no longer active", async () => {
-    game.override.moveset([Moves.SPLASH, Moves.IMPRISON]);
+    game.overridesHelper.moveset([Moves.SPLASH, Moves.IMPRISON]);
     await game.classicMode.startBattle([Species.REGIELEKI, Species.BULBASAUR]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;

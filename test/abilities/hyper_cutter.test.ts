@@ -22,7 +22,7 @@ describe("Abilities - Hyper Cutter", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("single")
       .moveset([Moves.SAND_ATTACK, Moves.NOBLE_ROAR, Moves.DEFOG, Moves.OCTOLOCK])
       .ability(Abilities.BALL_FETCH)
@@ -46,7 +46,7 @@ describe("Abilities - Hyper Cutter", () => {
     await game.toNextTurn();
     game.move.select(Moves.SAND_ATTACK);
     await game.toNextTurn();
-    game.override.moveset([Moves.STRING_SHOT]);
+    game.overridesHelper.moveset([Moves.STRING_SHOT]);
     game.move.select(Moves.STRING_SHOT);
     await game.toNextTurn();
 

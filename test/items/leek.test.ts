@@ -23,7 +23,7 @@ describe("Items - Leek", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
 
-    game.override
+    game.overridesHelper
       .enemySpecies(Species.MAGIKARP)
       .enemyMoveset([Moves.SPLASH, Moves.SPLASH, Moves.SPLASH, Moves.SPLASH])
       .startingHeldItems([{ name: "LEEK" }])

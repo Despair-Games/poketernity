@@ -24,7 +24,7 @@ describe("Moves - After You", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override
+    game.overridesHelper
       .battleType("double")
       .enemyLevel(5)
       .enemySpecies(Species.PIKACHU)
@@ -48,7 +48,7 @@ describe("Moves - After You", () => {
   });
 
   it("fails if target already moved", async () => {
-    game.override.enemySpecies(Species.SHUCKLE);
+    game.overridesHelper.enemySpecies(Species.SHUCKLE);
     await game.classicMode.startBattle([Species.REGIELEKI, Species.PIKACHU]);
 
     game.move.select(Moves.SPLASH);
