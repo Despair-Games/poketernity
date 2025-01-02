@@ -56,8 +56,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
         console.error("All available Pokemon were fainted or illegal!");
         globalScene.clearPhaseQueue();
         globalScene.unshiftPhase(new GameOverPhase());
-        this.end();
-        return;
+        return this.end();
       }
 
       // Swaps the fainted Pokemon and the first non-fainted legal Pokemon in the party

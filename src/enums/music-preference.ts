@@ -1,4 +1,4 @@
 export enum MusicPreference {
-  CONSISTENT,
-  MIXED,
+  GENFIVE,
+  ALLGENS,
 }

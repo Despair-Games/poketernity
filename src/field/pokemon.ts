@@ -242,7 +242,6 @@ import { FullHpResistTypeAbAttr } from "#app/data/ab-attrs/full-hp-resist-type-a
 import { FieldPriorityMoveImmunityAbAttr } from "#app/data/ab-attrs/field-priority-move-immunity-ab-attr";
 import { MoveImmunityAbAttr } from "#app/data/ab-attrs/move-immunity-ab-attr";
 import { settings } from "#app/system/settings/settings-manager";
-import { SpriteSet } from "#enums/sprite-set";
 
 export enum LearnMoveSituation {
   MISC,
@@ -679,15 +678,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
                   .replace("variant/", "")
                   .replace(/_[1-3]$/, "");
                 let config = variantData;
-                const useExpSprite =
-                  settings.display.spriteSet === SpriteSet.MIXED
-                  && globalScene.hasExpSprite(this.getBattleSpriteKey(isBackSprite, ignoreOverride));
                 battleSpritePath.split("/").map((p) => (config ? (config = config[p]) : null));
                 const variantSet: VariantSet = config as VariantSet;
                 if (variantSet && variantSet[this.variant] === 1) {
                   const cacheKey = this.getBattleSpriteKey(isBackSprite);
                   if (!variantColorCache.hasOwnProperty(cacheKey)) {
-                    await this.populateVariantColorCache(cacheKey, useExpSprite, battleSpritePath);
+                    await this.populateVariantColorCache(cacheKey, battleSpritePath);
                   }
                 }
                 resolve();
@@ -712,55 +708,24 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * Gracefully handle errors loading a variant sprite. Log if it fails and attempt to fall back on
-   * non-experimental sprites before giving up.
-   *
-   * @param cacheKey the cache key for the variant color sprite
-   * @param attemptedSpritePath the sprite path that failed to load
-   * @param useExpSprite was the attempted sprite experimental
-   * @param battleSpritePath the filename of the sprite
-   * @param optionalParams any additional params to log
-   */
-  async fallbackVariantColor(
-    cacheKey: string,
-    attemptedSpritePath: string,
-    useExpSprite: boolean,
-    battleSpritePath: string,
-    ...optionalParams: any[]
-  ) {
-    console.warn(`Could not load ${attemptedSpritePath}!`, ...optionalParams);
-    if (useExpSprite) {
-      await this.populateVariantColorCache(cacheKey, false, battleSpritePath);
-    }
-  }
-
-  /**
    * Attempt to process variant sprite.
-   *
    * @param cacheKey the cache key for the variant color sprite
-   * @param useExpSprite should the experimental sprite be used
    * @param battleSpritePath the filename of the sprite
    */
-  async populateVariantColorCache(cacheKey: string, useExpSprite: boolean, battleSpritePath: string) {
-    const spritePath = `./images/pokemon/variant/${useExpSprite ? "exp/" : ""}${battleSpritePath}.json`;
+  async populateVariantColorCache(cacheKey: string, battleSpritePath: string) {
+    const spritePath = `./images/pokemon/variant/${battleSpritePath}.json`;
     return globalScene
       .cachedFetch(spritePath)
       .then((res) => {
         // Prevent the JSON from processing if it failed to load
         if (!res.ok) {
-          return this.fallbackVariantColor(
-            cacheKey,
-            res.url,
-            useExpSprite,
-            battleSpritePath,
-            res.status,
-            res.statusText,
-          );
+          console.warn(`Failed to load sprite variant ${battleSpritePath}:`, res.status, res.statusText, res.url);
+          return;
         }
         return res.json();
       })
       .catch((error) => {
-        return this.fallbackVariantColor(cacheKey, spritePath, useExpSprite, battleSpritePath, error);
+        console.warn(`Failed to load sprite variant ${battleSpritePath}:`, error);
       })
       .then((c) => {
         if (!isNullOrUndefined(c)) {
@@ -1252,7 +1217,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       }
     }
     if (!ignoreAbility) {
-      applyStatMultiplierAbAttrs(StatMultiplierAbAttr, this, stat, statValue, simulated);
+      applyStatMultiplierAbAttrs(StatMultiplierAbAttr, this, stat, statValue, simulated, move, opponent);
     }
 
     let ret =
@@ -1864,7 +1829,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       weightRemoved = 100 * autotomizedTag!.autotomizeCount;
     }
     const minWeight = 0.1;
-    const weight = new NumberHolder(this.species.weight - weightRemoved);
+    const weight = new NumberHolder(this.getSpeciesForm().weight - weightRemoved);
 
     // This will trigger the ability overlay so only call this function when necessary
     applyAbAttrs(WeightMultiplierAbAttr, this, null, false, weight);
@@ -3127,7 +3092,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       source.getEffectiveStat(
         isPhysical ? Stat.ATK : Stat.SPATK,
         this,
-        undefined,
+        move,
         ignoreSourceAbility,
         ignoreAbility,
         isCritical,
@@ -5199,6 +5164,7 @@ export class PlayerPokemon extends Pokemon {
         newPokemon.moveset = this.moveset.slice();
         newPokemon.moveset = this.copyMoveset();
         newPokemon.luck = this.luck;
+        newPokemon.gender = Gender.GENDERLESS;
         newPokemon.metLevel = this.metLevel;
         newPokemon.metBiome = this.metBiome;
         newPokemon.metSpecies = this.metSpecies;

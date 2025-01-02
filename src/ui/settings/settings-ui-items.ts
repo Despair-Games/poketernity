@@ -17,7 +17,6 @@ import { HpBarSpeed } from "#app/enums/hp-bar-speed";
 import { MoneyFormat } from "#app/enums/money-format";
 import { MusicPreference } from "#app/enums/music-preference";
 import { ShopCursorTarget } from "#app/enums/shop-cursor-target";
-import { SpriteSet } from "#app/enums/sprite-set";
 import { UiTheme } from "#app/enums/ui-theme";
 import i18next, { t } from "i18next";
 import { supportedLanguages } from "#app/system/settings/supported-languages";
@@ -261,15 +260,6 @@ export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey>[] = [
     ],
   },
   {
-    key: "spriteSet",
-    label: t("settings:spriteSet"),
-    options: [
-      { value: SpriteSet.CONSISTENT, label: t("settings:consistent") },
-      { value: SpriteSet.MIXED, label: t("settings:mixedAnimated") },
-    ],
-    requiresReload: true,
-  },
-  {
     key: "enableFusionPaletteSwaps",
     label: t("settings:fusionPaletteSwaps"),
     options: useBoolOptions(),
@@ -345,8 +335,8 @@ export const audioSettingsUiItems: SettingsUiItem<AudioSettingsKey>[] = [
     key: "musicPreference",
     label: t("settings:musicPreference"),
     options: [
-      { value: MusicPreference.CONSISTENT, label: t("settings:consistent") },
-      { value: MusicPreference.MIXED, label: t("settings:mixed") },
+      { value: MusicPreference.GENFIVE, label: t("settings:musicGenFive") },
+      { value: MusicPreference.ALLGENS, label: t("settings:musicAllGens") },
     ],
     requiresReload: true,
   },
