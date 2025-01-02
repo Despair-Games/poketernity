@@ -35,7 +35,7 @@ export class AddArenaTagAttr extends MoveEffectAttr {
       && user.getLastXMoves(1)[0]?.result === MoveResult.SUCCESS
     ) {
       const side = (this.selfSideTarget ? user : target).getArenaTagSide();
-      globalScene.arena.addTag(this.tagType, this.turnCount, move.id, user.id, side);
+      globalScene.arena.addTag(this.tagType, user.id, this.turnCount, move.id, side);
       return true;
     }
 

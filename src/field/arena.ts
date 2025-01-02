@@ -625,12 +625,11 @@ export class Arena {
    */
   addTag(
     tagType: ArenaTagType,
-    turnCount: number,
-    sourceMove: Moves | undefined,
     sourceId: number,
+    turnCount: number = 0,
+    sourceMove?: Moves,
     side: ArenaTagSide = ArenaTagSide.BOTH,
     quiet: boolean = false,
-    targetIndex?: BattlerIndex,
   ): boolean {
     const existingTag = this.getTagOnSide(tagType, side);
     if (existingTag) {
@@ -645,7 +644,7 @@ export class Arena {
     }
 
     // creates a new tag object
-    const newTag = getArenaTag(tagType, turnCount || 0, sourceMove, sourceId, targetIndex, side);
+    const newTag = getArenaTag(tagType, sourceId, turnCount, sourceMove, side);
     if (newTag) {
       this.tags.push(newTag);
       newTag.onAdd(this, quiet);

@@ -13,6 +13,7 @@ import { SelectModifierPhase } from "./select-modifier-phase";
 import { TrainerVictoryPhase } from "./trainer-victory-phase";
 import { handleMysteryEncounterVictory } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { globalScene } from "#app/global-scene";
+import { ArenaTagType } from "#enums/arena-tag-type";
 
 export class VictoryPhase extends PokemonPhase {
   /** If true, indicates that the phase is intended for EXP purposes only, and not to continue a battle to next phase */
@@ -47,6 +48,9 @@ export class VictoryPhase extends PokemonPhase {
         .getEnemyParty()
         .find((p) => (globalScene.currentBattle.battleType === BattleType.WILD ? p.isOnField() : !p?.isFainted(true)))
     ) {
+      // clear all queued delayed attacks (e.g. from Future Sight)
+      globalScene.arena.removeTag(ArenaTagType.DELAYED_ATTACK);
+
       globalScene.pushPhase(new BattleEndPhase(true));
       if (globalScene.currentBattle.battleType === BattleType.TRAINER) {
         globalScene.pushPhase(new TrainerVictoryPhase());
