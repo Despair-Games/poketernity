@@ -242,7 +242,7 @@ export default class BattleScene extends SceneBase {
   public moneyFormat: MoneyFormat = MoneyFormat.NORMAL;
   public uiTheme: UiTheme = UiTheme.DEFAULT;
   public windowType: number = 0;
-  public musicPreference: number = MusicPreference.MIXED;
+  public musicPreference: number = MusicPreference.ALLGENS;
   public moveAnimations: boolean = true;
   public expGainsSpeed: ExpGainsSpeed = ExpGainsSpeed.DEFAULT;
   public skipSeenDialogues: boolean = false;
