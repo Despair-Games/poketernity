@@ -31,7 +31,7 @@ describe("Abilities - Illuminate", () => {
   it("should prevent ACC stat stage from being lowered", async () => {
     game.overridesHelper.battleType("single");
 
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const player = game.scene.getPlayerPokemon()!;
 
@@ -47,7 +47,7 @@ describe("Abilities - Illuminate", () => {
   it("should guarantee double battle with any one LURE", async () => {
     game.overridesHelper.startingModifier([{ name: "LURE" }]).startingWave(2);
 
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     expect(game.scene.getEnemyField().length).toBe(2);
   });

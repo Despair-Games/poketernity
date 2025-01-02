@@ -37,7 +37,7 @@ describe("Abilities - Galvanize", () => {
   });
 
   it("should change Normal-type attacks to Electric type and boost their power", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getMoveType");
@@ -61,7 +61,7 @@ describe("Abilities - Galvanize", () => {
   it("should cause Normal-type attacks to activate Volt Absorb", async () => {
     game.overridesHelper.enemyAbility(Abilities.VOLT_ABSORB);
 
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getMoveType");
@@ -83,7 +83,7 @@ describe("Abilities - Galvanize", () => {
   it("should not change the type of variable-type moves", async () => {
     game.overridesHelper.enemySpecies(Species.MIGHTYENA);
 
-    await game.classicMode.startBattle([Species.ESPEON]);
+    await game.classicModeHelper.startBattle([Species.ESPEON]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getMoveType");
@@ -100,7 +100,7 @@ describe("Abilities - Galvanize", () => {
   });
 
   it("should affect all hits of a Normal-type multi-hit move", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getMoveType");

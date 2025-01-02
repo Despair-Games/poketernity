@@ -34,7 +34,7 @@ describe("Weather - Strong Winds", () => {
   it("electric type move is not very effective on Rayquaza", async () => {
     game.overridesHelper.enemySpecies(Species.RAYQUAZA);
 
-    await game.classicMode.startBattle([Species.PIKACHU]);
+    await game.classicModeHelper.startBattle([Species.PIKACHU]);
     const pikachu = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
@@ -45,7 +45,7 @@ describe("Weather - Strong Winds", () => {
   });
 
   it("electric type move is neutral for flying type pokemon", async () => {
-    await game.classicMode.startBattle([Species.PIKACHU]);
+    await game.classicModeHelper.startBattle([Species.PIKACHU]);
     const pikachu = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
@@ -56,7 +56,7 @@ describe("Weather - Strong Winds", () => {
   });
 
   it("ice type move is neutral for flying type pokemon", async () => {
-    await game.classicMode.startBattle([Species.PIKACHU]);
+    await game.classicModeHelper.startBattle([Species.PIKACHU]);
     const pikachu = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
@@ -67,7 +67,7 @@ describe("Weather - Strong Winds", () => {
   });
 
   it("rock type move is neutral for flying type pokemon", async () => {
-    await game.classicMode.startBattle([Species.PIKACHU]);
+    await game.classicModeHelper.startBattle([Species.PIKACHU]);
     const pikachu = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
@@ -80,7 +80,7 @@ describe("Weather - Strong Winds", () => {
   it("weather goes away when last trainer pokemon dies to indirect damage", async () => {
     game.overridesHelper.enemyStatusEffect(StatusEffect.POISON);
 
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     const enemy = game.scene.getEnemyPokemon()!;
     enemy.hp = 1;

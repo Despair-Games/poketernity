@@ -34,7 +34,7 @@ describe("Moves - Will-O-Wisp", () => {
   });
 
   it("should burn the opponent", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
 

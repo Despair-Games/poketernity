@@ -32,7 +32,7 @@ describe("Moves - Chloroblast", () => {
   });
 
   it("should not deal recoil damage if the opponent uses protect", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     game.moveHelper.select(Moves.CHLOROBLAST);
     await game.phaseInterceptor.to("BerryPhase");

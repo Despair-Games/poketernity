@@ -33,7 +33,7 @@ describe("Moves - Lucky Chant", () => {
   });
 
   it("should prevent critical hits from moves", async () => {
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    await game.classicModeHelper.startBattle([Species.CHARIZARD]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
@@ -48,7 +48,7 @@ describe("Moves - Lucky Chant", () => {
   it("should prevent critical hits against the user's ally", async () => {
     game.overridesHelper.battleType("double");
 
-    await game.classicMode.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
+    await game.classicModeHelper.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
 
     const playerPokemon = game.scene.getPlayerField();
 
@@ -67,7 +67,7 @@ describe("Moves - Lucky Chant", () => {
   it("should prevent critical hits from field effects", async () => {
     game.overridesHelper.enemyMoveset([Moves.TACKLE]);
 
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    await game.classicModeHelper.startBattle([Species.CHARIZARD]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;

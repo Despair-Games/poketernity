@@ -36,7 +36,7 @@ describe("Moves - Baton Pass", () => {
 
   it("transfers all stat stages when player uses it", async () => {
     // arrange
-    await game.classicMode.startBattle([Species.RAICHU, Species.SHUCKLE]);
+    await game.classicModeHelper.startBattle([Species.RAICHU, Species.SHUCKLE]);
 
     // round 1 - buff
     game.moveHelper.select(Moves.NASTY_PLOT);
@@ -60,7 +60,7 @@ describe("Moves - Baton Pass", () => {
   it("passes stat stage buffs when AI uses it", async () => {
     // arrange
     game.overridesHelper.startingWave(5).enemyMoveset(new Array(4).fill([Moves.NASTY_PLOT]));
-    await game.classicMode.startBattle([Species.RAICHU, Species.SHUCKLE]);
+    await game.classicModeHelper.startBattle([Species.RAICHU, Species.SHUCKLE]);
 
     // round 1 - ai buffs
     game.moveHelper.select(Moves.SPLASH);
@@ -91,7 +91,7 @@ describe("Moves - Baton Pass", () => {
 
   it("doesn't transfer effects that aren't transferrable", async () => {
     game.overridesHelper.enemyMoveset([Moves.SALT_CURE]);
-    await game.classicMode.startBattle([Species.PIKACHU, Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.PIKACHU, Species.FEEBAS]);
 
     const [player1, player2] = game.scene.getPlayerParty();
 
@@ -108,7 +108,7 @@ describe("Moves - Baton Pass", () => {
   it("doesn't allow binding effects from the user to persist", async () => {
     game.overridesHelper.moveset([Moves.FIRE_SPIN, Moves.BATON_PASS]);
 
-    await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP, Species.FEEBAS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
 

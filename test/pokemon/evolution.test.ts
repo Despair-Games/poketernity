@@ -38,7 +38,7 @@ describe("Evolution", () => {
   });
 
   it("should keep hidden ability after evolving", async () => {
-    await game.classicMode.runToSummon([Species.EEVEE, Species.TRAPINCH]);
+    await game.classicModeHelper.runToSummon([Species.EEVEE, Species.TRAPINCH]);
 
     const eevee = game.scene.getPlayerParty()[0];
     const trapinch = game.scene.getPlayerParty()[1];
@@ -53,7 +53,7 @@ describe("Evolution", () => {
   });
 
   it("should keep same ability slot after evolving", async () => {
-    await game.classicMode.runToSummon([Species.BULBASAUR, Species.CHARMANDER]);
+    await game.classicModeHelper.runToSummon([Species.BULBASAUR, Species.CHARMANDER]);
 
     const bulbasaur = game.scene.getPlayerParty()[0];
     const charmander = game.scene.getPlayerParty()[1];
@@ -68,7 +68,7 @@ describe("Evolution", () => {
   });
 
   it("should handle illegal abilityIndex values", async () => {
-    await game.classicMode.runToSummon([Species.SQUIRTLE]);
+    await game.classicModeHelper.runToSummon([Species.SQUIRTLE]);
 
     const squirtle = game.scene.getPlayerPokemon()!;
     squirtle.abilityIndex = 5;
@@ -78,7 +78,7 @@ describe("Evolution", () => {
   });
 
   it("should handle nincada's unique evolution", async () => {
-    await game.classicMode.runToSummon([Species.NINCADA]);
+    await game.classicModeHelper.runToSummon([Species.NINCADA]);
 
     const nincada = game.scene.getPlayerPokemon()!;
     nincada.abilityIndex = 2;

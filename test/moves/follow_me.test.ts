@@ -35,7 +35,7 @@ describe("Moves - Follow Me", () => {
   });
 
   test("move should redirect enemy attacks to the user", async () => {
-    await game.classicMode.startBattle([Species.AMOONGUSS, Species.CHARIZARD]);
+    await game.classicModeHelper.startBattle([Species.AMOONGUSS, Species.CHARIZARD]);
 
     const playerPokemon = game.scene.getPlayerField();
 
@@ -53,7 +53,7 @@ describe("Moves - Follow Me", () => {
   });
 
   test("move should redirect enemy attacks to the first ally that uses it", async () => {
-    await game.classicMode.startBattle([Species.AMOONGUSS, Species.CHARIZARD]);
+    await game.classicModeHelper.startBattle([Species.AMOONGUSS, Species.CHARIZARD]);
 
     const playerPokemon = game.scene.getPlayerField();
 
@@ -76,7 +76,7 @@ describe("Moves - Follow Me", () => {
     game.overridesHelper.ability(Abilities.STALWART);
     game.overridesHelper.moveset([Moves.QUICK_ATTACK]);
 
-    await game.classicMode.startBattle([Species.AMOONGUSS, Species.CHARIZARD]);
+    await game.classicModeHelper.startBattle([Species.AMOONGUSS, Species.CHARIZARD]);
 
     const enemyPokemon = game.scene.getEnemyField();
 
@@ -97,7 +97,7 @@ describe("Moves - Follow Me", () => {
   test("move effect should be bypassed by Snipe Shot", async () => {
     game.overridesHelper.moveset([Moves.SNIPE_SHOT]);
 
-    await game.classicMode.startBattle([Species.AMOONGUSS, Species.CHARIZARD]);
+    await game.classicModeHelper.startBattle([Species.AMOONGUSS, Species.CHARIZARD]);
 
     const enemyPokemon = game.scene.getEnemyField();
 

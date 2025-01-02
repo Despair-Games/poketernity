@@ -66,7 +66,7 @@ export class GameManager {
   public inputsHandler: InputsHandler;
   public readonly overridesHelper: OverridesHelper;
   public readonly moveHelper: MoveHelper;
-  public readonly classicMode: ClassicModeHelper;
+  public readonly classicModeHelper: ClassicModeHelper;
   public readonly dailyMode: DailyModeHelper;
   public readonly challengeMode: ChallengeModeHelper;
   public readonly settings: SettingsHelper;
@@ -89,7 +89,7 @@ export class GameManager {
     this.gameWrapper.setScene(this.scene);
     this.overridesHelper = new OverridesHelper(this);
     this.moveHelper = new MoveHelper(this);
-    this.classicMode = new ClassicModeHelper(this);
+    this.classicModeHelper = new ClassicModeHelper(this);
     this.dailyMode = new DailyModeHelper(this);
     this.challengeMode = new ChallengeModeHelper(this);
     this.settings = new SettingsHelper(this);
@@ -247,7 +247,7 @@ export class GameManager {
    * @returns A promise that resolves when the battle is started.
    */
   async startBattle(species?: Species[]) {
-    await this.classicMode.runToSummon(species);
+    await this.classicModeHelper.runToSummon(species);
 
     if (this.scene.battleStyle === BattleStyle.SWITCH) {
       this.onNextPrompt(

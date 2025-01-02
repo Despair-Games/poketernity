@@ -32,7 +32,7 @@ describe("Abilities - Compound Eyes", () => {
 
   it("should multiply the accuracy of a move by 1.3", async () => {
     game.overridesHelper.moveset(Moves.HYPNOSIS);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
     const pokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(pokemon, "getAccuracyMultiplier");
 
@@ -44,7 +44,7 @@ describe("Abilities - Compound Eyes", () => {
 
   it("should not affect the accuracy of one-hit KO moves", async () => {
     game.overridesHelper.moveset(Moves.SHEER_COLD);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
     const pokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(pokemon, "getAccuracyMultiplier");
 

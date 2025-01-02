@@ -38,7 +38,7 @@ describe("Moves - Shell Side Arm", () => {
   it("becomes a physical attack if forecasted to deal more damage as physical", async () => {
     game.overridesHelper.enemySpecies(Species.SNORLAX);
 
-    await game.classicMode.startBattle([Species.RAMPARDOS]);
+    await game.classicModeHelper.startBattle([Species.RAMPARDOS]);
 
     vi.spyOn(shellSideArmAttr, "apply");
 
@@ -51,7 +51,7 @@ describe("Moves - Shell Side Arm", () => {
   it("should make contact if the move becomes physical", async () => {
     game.overridesHelper.enemySpecies(Species.SNORLAX).enemyAbility(Abilities.ROUGH_SKIN);
 
-    await game.classicMode.startBattle([Species.RAMPARDOS]);
+    await game.classicModeHelper.startBattle([Species.RAMPARDOS]);
 
     const player = game.scene.getPlayerPokemon()!;
 
@@ -64,7 +64,7 @@ describe("Moves - Shell Side Arm", () => {
   it("remains a special attack if forecasted to deal more damage as special", async () => {
     game.overridesHelper.enemySpecies(Species.SLOWBRO);
 
-    await game.classicMode.startBattle([Species.XURKITREE]);
+    await game.classicModeHelper.startBattle([Species.XURKITREE]);
 
     vi.spyOn(shellSideArmAttr, "apply");
 
@@ -77,7 +77,7 @@ describe("Moves - Shell Side Arm", () => {
   it("should not make contact if the move becomes special", async () => {
     game.overridesHelper.enemySpecies(Species.SLOWBRO).enemyAbility(Abilities.ROUGH_SKIN);
 
-    await game.classicMode.startBattle([Species.XURKITREE]);
+    await game.classicModeHelper.startBattle([Species.XURKITREE]);
 
     const player = game.scene.getPlayerPokemon()!;
 
@@ -90,7 +90,7 @@ describe("Moves - Shell Side Arm", () => {
   it("respects stat stage changes when forecasting base damage", async () => {
     game.overridesHelper.enemySpecies(Species.SNORLAX).enemyMoveset(Moves.COTTON_GUARD);
 
-    await game.classicMode.startBattle([Species.MANAPHY]);
+    await game.classicModeHelper.startBattle([Species.MANAPHY]);
 
     vi.spyOn(shellSideArmAttr, "apply");
 

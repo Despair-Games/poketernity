@@ -32,7 +32,7 @@ describe("Moves - Aromatherapy", () => {
   });
 
   it("should cure status effect of the user, its ally, and all party pokemon", async () => {
-    await game.classicMode.startBattle([Species.RATTATA, Species.RATTATA, Species.RATTATA]);
+    await game.classicModeHelper.startBattle([Species.RATTATA, Species.RATTATA, Species.RATTATA]);
     const [leftPlayer, rightPlayer, partyPokemon] = game.scene.getPlayerParty();
 
     vi.spyOn(leftPlayer, "resetStatus");
@@ -55,7 +55,7 @@ describe("Moves - Aromatherapy", () => {
 
   it("should not cure status effect of the target/target's allies", async () => {
     game.overridesHelper.enemyStatusEffect(StatusEffect.BURN);
-    await game.classicMode.startBattle([Species.RATTATA, Species.RATTATA]);
+    await game.classicModeHelper.startBattle([Species.RATTATA, Species.RATTATA]);
     const [leftOpp, rightOpp] = game.scene.getEnemyField();
 
     vi.spyOn(leftOpp, "resetStatus");
@@ -78,7 +78,7 @@ describe("Moves - Aromatherapy", () => {
 
   it("should not cure status effect of allies ON FIELD with Sap Sipper, should still cure allies in party", async () => {
     game.overridesHelper.ability(Abilities.SAP_SIPPER);
-    await game.classicMode.startBattle([Species.RATTATA, Species.RATTATA, Species.RATTATA]);
+    await game.classicModeHelper.startBattle([Species.RATTATA, Species.RATTATA, Species.RATTATA]);
     const [leftPlayer, rightPlayer, partyPokemon] = game.scene.getPlayerParty();
 
     vi.spyOn(leftPlayer, "resetStatus");

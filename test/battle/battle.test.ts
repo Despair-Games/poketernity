@@ -296,7 +296,7 @@ describe("Test Battle Phase", () => {
       .startingBiome(Biome.LAKE)
       .moveset([moveToUse]);
     game.overridesHelper.enemyMoveset([Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE]);
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
     const waveIndex = game.scene.currentBattle.waveIndex;
     game.moveHelper.select(moveToUse);
 

@@ -35,7 +35,7 @@ describe("Form Change Phase", () => {
   });
 
   it("Zacian should successfully change into Crowned form", async () => {
-    await game.classicMode.startBattle([Species.ZACIAN]);
+    await game.classicModeHelper.startBattle([Species.ZACIAN]);
 
     // Before the form change: Should be Hero form
     const zacian = game.scene.getPlayerParty()[0];

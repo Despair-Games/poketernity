@@ -41,7 +41,7 @@ describe("Moves - Protect", () => {
   });
 
   test("should protect the user from attacks", async () => {
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    await game.classicModeHelper.startBattle([Species.CHARIZARD]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
@@ -56,7 +56,7 @@ describe("Moves - Protect", () => {
     game.overridesHelper.enemyMoveset([Moves.CEASELESS_EDGE]);
     vi.spyOn(allMoves[Moves.CEASELESS_EDGE], "accuracy", "get").mockReturnValue(100);
 
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    await game.classicModeHelper.startBattle([Species.CHARIZARD]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
@@ -71,7 +71,7 @@ describe("Moves - Protect", () => {
   test("should protect the user from status moves", async () => {
     game.overridesHelper.enemyMoveset([Moves.CHARM]);
 
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    await game.classicModeHelper.startBattle([Species.CHARIZARD]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
@@ -85,7 +85,7 @@ describe("Moves - Protect", () => {
   test("should stop subsequent hits of a multi-hit move", async () => {
     game.overridesHelper.enemyMoveset([Moves.TACHYON_CUTTER]);
 
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    await game.classicModeHelper.startBattle([Species.CHARIZARD]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -101,7 +101,7 @@ describe("Moves - Protect", () => {
   test("certain moves can bypass protect", async () => {
     game.overridesHelper.enemyMoveset([Moves.BLOCK]);
 
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    await game.classicModeHelper.startBattle([Species.CHARIZARD]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
@@ -115,7 +115,7 @@ describe("Moves - Protect", () => {
   test("should fail if the user is the last to move in the turn", async () => {
     game.overridesHelper.enemyMoveset([Moves.PROTECT]);
 
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    await game.classicModeHelper.startBattle([Species.CHARIZARD]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;

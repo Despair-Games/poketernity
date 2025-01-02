@@ -34,7 +34,7 @@ describe("Moves - Electrify", () => {
   });
 
   it("should convert attacks to Electric type", async () => {
-    await game.classicMode.startBattle([Species.EXCADRILL]);
+    await game.classicModeHelper.startBattle([Species.EXCADRILL]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -52,7 +52,7 @@ describe("Moves - Electrify", () => {
   it("should override type changes from abilities", async () => {
     game.overridesHelper.enemyAbility(Abilities.PIXILATE);
 
-    await game.classicMode.startBattle([Species.EXCADRILL]);
+    await game.classicModeHelper.startBattle([Species.EXCADRILL]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getPlayerPokemon()!;

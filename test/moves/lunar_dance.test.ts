@@ -31,7 +31,7 @@ describe("Moves - Lunar Dance", () => {
   });
 
   it("should full restore HP, PP and status of switched in pokemon, then fail second use because no remaining backup pokemon in party", async () => {
-    await game.classicMode.startBattle([Species.BULBASAUR, Species.ODDISH, Species.RATTATA]);
+    await game.classicModeHelper.startBattle([Species.BULBASAUR, Species.ODDISH, Species.RATTATA]);
 
     const [bulbasaur, oddish, rattata] = game.scene.getPlayerParty();
     game.moveHelper.changeMoveset(bulbasaur, [Moves.LUNAR_DANCE, Moves.SPLASH]);

@@ -34,7 +34,7 @@ describe("Abilities - Arena Trap", () => {
   it.todo("should not allow grounded Pokémon to flee", async () => {
     game.overridesHelper.battleType("single");
 
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon();
 
@@ -48,7 +48,7 @@ describe("Abilities - Arena Trap", () => {
   it("should guarantee double battle with any one LURE", async () => {
     game.overridesHelper.startingModifier([{ name: "LURE" }]).startingWave(2);
 
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     expect(game.scene.getEnemyField().length).toBe(2);
   });
@@ -65,7 +65,7 @@ describe("Abilities - Arena Trap", () => {
       .enemyMoveset(Moves.SPLASH)
       .moveset([Moves.ROAR, Moves.SPLASH])
       .ability(Abilities.BALL_FETCH);
-    await game.classicMode.startBattle([Species.MAGIKARP, Species.SUDOWOODO, Species.LUNATONE]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP, Species.SUDOWOODO, Species.LUNATONE]);
 
     const [enemy1, enemy2] = game.scene.getEnemyField();
     const [player1, player2] = game.scene.getPlayerField();

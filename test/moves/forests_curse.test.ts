@@ -33,7 +33,7 @@ describe("Moves - Forest's Curse", () => {
   });
 
   it("will replace the added type from Trick Or Treat", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
     game.moveHelper.select(Moves.TRICK_OR_TREAT);

@@ -38,7 +38,7 @@ describe("Moves - Quick Guard", () => {
   });
 
   test("should protect the user and allies from priority moves", async () => {
-    await game.classicMode.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
+    await game.classicModeHelper.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
 
     const playerPokemon = game.scene.getPlayerField();
 
@@ -54,7 +54,7 @@ describe("Moves - Quick Guard", () => {
     game.overridesHelper.enemyAbility(Abilities.PRANKSTER);
     game.overridesHelper.enemyMoveset([Moves.GROWL]);
 
-    await game.classicMode.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
+    await game.classicModeHelper.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
 
     const playerPokemon = game.scene.getPlayerField();
 
@@ -69,7 +69,7 @@ describe("Moves - Quick Guard", () => {
   test("should stop subsequent hits of a multi-hit priority move", async () => {
     game.overridesHelper.enemyMoveset([Moves.WATER_SHURIKEN]);
 
-    await game.classicMode.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
+    await game.classicModeHelper.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
 
     const playerPokemon = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
@@ -87,7 +87,7 @@ describe("Moves - Quick Guard", () => {
     game.overridesHelper.battleType("single");
     game.overridesHelper.enemyMoveset([Moves.QUICK_GUARD]);
 
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    await game.classicModeHelper.startBattle([Species.CHARIZARD]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;

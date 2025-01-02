@@ -68,7 +68,7 @@ describe("Abilities - Wimp Out", () => {
 
   it("triggers regenerator passive single time when switching out with wimp out", async () => {
     game.overridesHelper.passiveAbility(Abilities.REGENERATOR).startingLevel(5).enemyLevel(100);
-    await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
+    await game.classicModeHelper.startBattle([Species.WIMPOD, Species.TYRUNT]);
 
     const wimpod = game.scene.getPlayerPokemon()!;
 
@@ -82,7 +82,7 @@ describe("Abilities - Wimp Out", () => {
 
   it("It makes wild pokemon flee if triggered", async () => {
     game.overridesHelper.enemyAbility(Abilities.WIMP_OUT);
-    await game.classicMode.startBattle([Species.GOLISOPOD, Species.TYRUNT]);
+    await game.classicModeHelper.startBattle([Species.GOLISOPOD, Species.TYRUNT]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     enemyPokemon.hp *= 0.52;
@@ -96,7 +96,7 @@ describe("Abilities - Wimp Out", () => {
   });
 
   it("Does not trigger when HP already below half", async () => {
-    await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
+    await game.classicModeHelper.startBattle([Species.WIMPOD, Species.TYRUNT]);
     const wimpod = game.scene.getPlayerPokemon()!;
     wimpod.hp = 5;
 
@@ -109,7 +109,7 @@ describe("Abilities - Wimp Out", () => {
 
   it("Trapping moves do not prevent Wimp Out from activating.", async () => {
     game.overridesHelper.enemyMoveset([Moves.SPIRIT_SHACKLE]).startingLevel(53).enemyLevel(45);
-    await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
+    await game.classicModeHelper.startBattle([Species.WIMPOD, Species.TYRUNT]);
 
     game.moveHelper.select(Moves.SPLASH);
     game.doSelectPartyPokemon(1);
@@ -124,7 +124,7 @@ describe("Abilities - Wimp Out", () => {
 
   it("If this Ability activates due to being hit by U-turn or Volt Switch, the user of that move will not be switched out.", async () => {
     game.overridesHelper.startingLevel(95).enemyMoveset([Moves.U_TURN]);
-    await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
+    await game.classicModeHelper.startBattle([Species.WIMPOD, Species.TYRUNT]);
 
     game.moveHelper.select(Moves.SPLASH);
     game.doSelectPartyPokemon(1);
@@ -138,7 +138,7 @@ describe("Abilities - Wimp Out", () => {
 
   it("If this Ability does not activate due to being hit by U-turn or Volt Switch, the user of that move will be switched out.", async () => {
     game.overridesHelper.startingLevel(190).startingWave(8).enemyMoveset([Moves.U_TURN]);
-    await game.classicMode.startBattle([Species.GOLISOPOD, Species.TYRUNT]);
+    await game.classicModeHelper.startBattle([Species.GOLISOPOD, Species.TYRUNT]);
     const RIVAL_NINJASK1 = game.scene.getEnemyPokemon()?.id;
     game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to("BerryPhase", false);
@@ -147,7 +147,7 @@ describe("Abilities - Wimp Out", () => {
 
   it("Dragon Tail and Circle Throw switch out Pokémon before the Ability activates.", async () => {
     game.overridesHelper.startingLevel(69).enemyMoveset([Moves.DRAGON_TAIL]);
-    await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
+    await game.classicModeHelper.startBattle([Species.WIMPOD, Species.TYRUNT]);
 
     const wimpod = game.scene.getPlayerPokemon()!;
 
@@ -164,7 +164,7 @@ describe("Abilities - Wimp Out", () => {
 
   it("triggers when recoil damage is taken", async () => {
     game.overridesHelper.moveset([Moves.HEAD_SMASH]).enemyMoveset([Moves.SPLASH]);
-    await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
+    await game.classicModeHelper.startBattle([Species.WIMPOD, Species.TYRUNT]);
 
     game.moveHelper.select(Moves.HEAD_SMASH);
     game.doSelectPartyPokemon(1);
@@ -175,7 +175,7 @@ describe("Abilities - Wimp Out", () => {
 
   it("It does not activate when the Pokémon cuts its own HP", async () => {
     game.overridesHelper.moveset([Moves.SUBSTITUTE]).enemyMoveset([Moves.SPLASH]);
-    await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
+    await game.classicModeHelper.startBattle([Species.WIMPOD, Species.TYRUNT]);
 
     const wimpod = game.scene.getPlayerPokemon()!;
     wimpod.hp *= 0.52;
@@ -188,7 +188,7 @@ describe("Abilities - Wimp Out", () => {
 
   it("Does not trigger when neutralized", async () => {
     game.overridesHelper.enemyAbility(Abilities.NEUTRALIZING_GAS).startingLevel(5);
-    await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
+    await game.classicModeHelper.startBattle([Species.WIMPOD, Species.TYRUNT]);
 
     game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to("TurnEndPhase");
@@ -206,7 +206,7 @@ describe("Abilities - Wimp Out", () => {
         .moveset([Moves.DOUBLE_EDGE])
         .enemyMoveset([Moves.SPLASH])
         .startingHeldItems([{ name: "SHELL_BELL", count: 4 }]);
-      await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
+      await game.classicModeHelper.startBattle([Species.WIMPOD, Species.TYRUNT]);
 
       const wimpod = game.scene.getPlayerPokemon()!;
 
@@ -226,7 +226,7 @@ describe("Abilities - Wimp Out", () => {
 
   it("Wimp Out will activate due to weather damage", async () => {
     game.overridesHelper.weather(WeatherType.HAIL).enemyMoveset([Moves.SPLASH]);
-    await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
+    await game.classicModeHelper.startBattle([Species.WIMPOD, Species.TYRUNT]);
 
     game.scene.getPlayerPokemon()!.hp *= 0.51;
 
@@ -239,7 +239,7 @@ describe("Abilities - Wimp Out", () => {
 
   it("Does not trigger when enemy has sheer force", async () => {
     game.overridesHelper.enemyAbility(Abilities.SHEER_FORCE).enemyMoveset(Moves.SLUDGE_BOMB).startingLevel(95);
-    await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
+    await game.classicModeHelper.startBattle([Species.WIMPOD, Species.TYRUNT]);
 
     game.scene.getPlayerPokemon()!.hp *= 0.51;
 
@@ -251,7 +251,7 @@ describe("Abilities - Wimp Out", () => {
 
   it("Wimp Out will activate due to post turn status damage", async () => {
     game.overridesHelper.statusEffect(StatusEffect.POISON).enemyMoveset([Moves.SPLASH]);
-    await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
+    await game.classicModeHelper.startBattle([Species.WIMPOD, Species.TYRUNT]);
 
     game.scene.getPlayerPokemon()!.hp *= 0.51;
 
@@ -264,7 +264,7 @@ describe("Abilities - Wimp Out", () => {
 
   it("Wimp Out will activate due to bad dreams", async () => {
     game.overridesHelper.statusEffect(StatusEffect.SLEEP).enemyAbility(Abilities.BAD_DREAMS);
-    await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
+    await game.classicModeHelper.startBattle([Species.WIMPOD, Species.TYRUNT]);
 
     game.scene.getPlayerPokemon()!.hp *= 0.52;
 
@@ -277,7 +277,7 @@ describe("Abilities - Wimp Out", () => {
 
   it("Wimp Out will activate due to leech seed", async () => {
     game.overridesHelper.enemyMoveset([Moves.LEECH_SEED]);
-    await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
+    await game.classicModeHelper.startBattle([Species.WIMPOD, Species.TYRUNT]);
     game.scene.getPlayerPokemon()!.hp *= 0.52;
 
     game.moveHelper.select(Moves.SPLASH);
@@ -289,7 +289,7 @@ describe("Abilities - Wimp Out", () => {
 
   it("Wimp Out will activate due to curse damage", async () => {
     game.overridesHelper.enemySpecies(Species.DUSKNOIR).enemyMoveset([Moves.CURSE]);
-    await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
+    await game.classicModeHelper.startBattle([Species.WIMPOD, Species.TYRUNT]);
     game.scene.getPlayerPokemon()!.hp *= 0.52;
 
     game.moveHelper.select(Moves.SPLASH);
@@ -301,7 +301,7 @@ describe("Abilities - Wimp Out", () => {
 
   it("Wimp Out will activate due to salt cure damage", async () => {
     game.overridesHelper.enemySpecies(Species.NACLI).enemyMoveset([Moves.SALT_CURE]).enemyLevel(1);
-    await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
+    await game.classicModeHelper.startBattle([Species.WIMPOD, Species.TYRUNT]);
     game.scene.getPlayerPokemon()!.hp *= 0.7;
 
     game.moveHelper.select(Moves.SPLASH);
@@ -313,7 +313,7 @@ describe("Abilities - Wimp Out", () => {
 
   it("Wimp Out will activate due to damaging trap damage", async () => {
     game.overridesHelper.enemySpecies(Species.MAGIKARP).enemyMoveset([Moves.WHIRLPOOL]).enemyLevel(1);
-    await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
+    await game.classicModeHelper.startBattle([Species.WIMPOD, Species.TYRUNT]);
     game.scene.getPlayerPokemon()!.hp *= 0.55;
 
     game.moveHelper.select(Moves.SPLASH);
@@ -331,7 +331,7 @@ describe("Abilities - Wimp Out", () => {
       .enemyMoveset([Moves.LEECH_SEED])
       .weather(WeatherType.HAIL)
       .statusEffect(StatusEffect.POISON);
-    await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
+    await game.classicModeHelper.startBattle([Species.WIMPOD, Species.TYRUNT]);
     game.scene.getPlayerPokemon()!.hp *= 0.51;
 
     game.moveHelper.select(Moves.SPLASH);
@@ -348,7 +348,7 @@ describe("Abilities - Wimp Out", () => {
       .enemyAbility(Abilities.WIMP_OUT)
       .enemyMoveset([Moves.SPLASH])
       .enemyLevel(1);
-    await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
+    await game.classicModeHelper.startBattle([Species.WIMPOD, Species.TYRUNT]);
     const enemyLeadPokemon = game.scene.getEnemyParty()[0];
     const enemySecPokemon = game.scene.getEnemyParty()[1];
 
@@ -373,7 +373,7 @@ describe("Abilities - Wimp Out", () => {
       .enemyAbility(Abilities.AFTERMATH)
       .enemyMoveset([Moves.SPLASH])
       .enemyLevel(1);
-    await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
+    await game.classicModeHelper.startBattle([Species.WIMPOD, Species.TYRUNT]);
     game.scene.getPlayerPokemon()!.hp *= 0.51;
 
     game.moveHelper.select(Moves.THUNDER_PUNCH);
@@ -387,7 +387,7 @@ describe("Abilities - Wimp Out", () => {
     game.scene.arena.addTag(ArenaTagType.STEALTH_ROCK, 1, Moves.STEALTH_ROCK, 0, ArenaTagSide.ENEMY);
     game.scene.arena.addTag(ArenaTagType.SPIKES, 1, Moves.SPIKES, 0, ArenaTagSide.ENEMY);
     game.overridesHelper.enemySpecies(Species.CENTISKORCH).enemyAbility(Abilities.WIMP_OUT).startingWave(4);
-    await game.classicMode.startBattle([Species.TYRUNT]);
+    await game.classicModeHelper.startBattle([Species.TYRUNT]);
 
     expect(game.phaseInterceptor.log).not.toContain("MovePhase");
     expect(game.phaseInterceptor.log).toContain("BattleEndPhase");
@@ -395,7 +395,7 @@ describe("Abilities - Wimp Out", () => {
 
   it("Wimp Out will activate due to Nightmare", async () => {
     game.overridesHelper.enemyMoveset([Moves.NIGHTMARE]).statusEffect(StatusEffect.SLEEP);
-    await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
+    await game.classicModeHelper.startBattle([Species.WIMPOD, Species.TYRUNT]);
     game.scene.getPlayerPokemon()!.hp *= 0.65;
 
     game.moveHelper.select(Moves.SPLASH);
@@ -407,7 +407,7 @@ describe("Abilities - Wimp Out", () => {
 
   it("triggers status on the wimp out user before a new pokemon is switched in", async () => {
     game.overridesHelper.enemyMoveset(Moves.SLUDGE_BOMB).startingLevel(80);
-    await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
+    await game.classicModeHelper.startBattle([Species.WIMPOD, Species.TYRUNT]);
     vi.spyOn(allMoves[Moves.SLUDGE_BOMB], "chance", "get").mockReturnValue(100);
 
     game.moveHelper.select(Moves.SPLASH);
@@ -420,7 +420,7 @@ describe("Abilities - Wimp Out", () => {
 
   it("triggers after last hit of multi hit move", async () => {
     game.overridesHelper.enemyMoveset(Moves.BULLET_SEED).enemyAbility(Abilities.SKILL_LINK);
-    await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
+    await game.classicModeHelper.startBattle([Species.WIMPOD, Species.TYRUNT]);
 
     game.scene.getPlayerPokemon()!.hp *= 0.51;
 
@@ -436,7 +436,7 @@ describe("Abilities - Wimp Out", () => {
 
   it("triggers after last hit of multi hit move (multi lens)", async () => {
     game.overridesHelper.enemyMoveset(Moves.TACKLE).enemyHeldItems([{ name: "MULTI_LENS", count: 1 }]);
-    await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
+    await game.classicModeHelper.startBattle([Species.WIMPOD, Species.TYRUNT]);
 
     game.scene.getPlayerPokemon()!.hp *= 0.51;
 
@@ -451,7 +451,7 @@ describe("Abilities - Wimp Out", () => {
   });
   it("triggers after last hit of Parental Bond", async () => {
     game.overridesHelper.enemyMoveset(Moves.TACKLE).enemyAbility(Abilities.PARENTAL_BOND);
-    await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
+    await game.classicModeHelper.startBattle([Species.WIMPOD, Species.TYRUNT]);
 
     game.scene.getPlayerPokemon()!.hp *= 0.51;
 
@@ -470,7 +470,7 @@ describe("Abilities - Wimp Out", () => {
     "Wimp Out will not activate if the Pokémon's HP falls below half due to hurting itself in confusion",
     async () => {
       game.overridesHelper.moveset([Moves.SWORDS_DANCE]).enemyMoveset([Moves.SWAGGER]);
-      await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
+      await game.classicModeHelper.startBattle([Species.WIMPOD, Species.TYRUNT]);
       const playerPokemon = game.scene.getPlayerPokemon()!;
       playerPokemon.hp *= 0.51;
       playerPokemon.setStatStage(Stat.ATK, 6);
@@ -489,7 +489,7 @@ describe("Abilities - Wimp Out", () => {
 
   it("should not activate on wave X0 bosses", async () => {
     game.overridesHelper.enemyAbility(Abilities.WIMP_OUT).startingLevel(5850).startingWave(10);
-    await game.classicMode.startBattle([Species.GOLISOPOD]);
+    await game.classicModeHelper.startBattle([Species.GOLISOPOD]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -514,7 +514,7 @@ describe("Abilities - Wimp Out", () => {
       .enemyLevel(1)
       .battleType("double")
       .startingWave(wave);
-    await game.classicMode.startBattle([Species.RAICHU, Species.PIKACHU]);
+    await game.classicModeHelper.startBattle([Species.RAICHU, Species.PIKACHU]);
     const [wimpod0, wimpod1] = game.scene.getEnemyField();
 
     game.moveHelper.select(Moves.FALSE_SWIPE, 0, BattlerIndex.ENEMY);

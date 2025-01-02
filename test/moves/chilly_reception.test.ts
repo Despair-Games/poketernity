@@ -32,7 +32,7 @@ describe("Moves - Chilly Reception", () => {
   });
 
   it("should still change the weather if user can't switch out", async () => {
-    await game.classicMode.startBattle([Species.SLOWKING]);
+    await game.classicModeHelper.startBattle([Species.SLOWKING]);
 
     game.moveHelper.select(Moves.CHILLY_RECEPTION);
 
@@ -41,7 +41,7 @@ describe("Moves - Chilly Reception", () => {
   });
 
   it("should switch out even if it's snowing", async () => {
-    await game.classicMode.startBattle([Species.SLOWKING, Species.MEOWTH]);
+    await game.classicModeHelper.startBattle([Species.SLOWKING, Species.MEOWTH]);
     // first turn set up snow with snowscape, try chilly reception on second turn
     game.moveHelper.select(Moves.SNOWSCAPE);
     await game.phaseInterceptor.to("BerryPhase", false);
@@ -57,7 +57,7 @@ describe("Moves - Chilly Reception", () => {
   });
 
   it("happy case - switch out and weather changes", async () => {
-    await game.classicMode.startBattle([Species.SLOWKING, Species.MEOWTH]);
+    await game.classicModeHelper.startBattle([Species.SLOWKING, Species.MEOWTH]);
 
     game.moveHelper.select(Moves.CHILLY_RECEPTION);
     game.doSelectPartyPokemon(1);
@@ -75,7 +75,7 @@ describe("Moves - Chilly Reception", () => {
       .enemyAbility(Abilities.NONE)
       .moveset(Array(4).fill(Moves.SPLASH));
 
-    await game.classicMode.startBattle([Species.SLOWKING, Species.MEOWTH]);
+    await game.classicModeHelper.startBattle([Species.SLOWKING, Species.MEOWTH]);
 
     game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.TACKLE);
@@ -93,7 +93,7 @@ describe("Moves - Chilly Reception", () => {
       .enemySpecies(Species.MAGIKARP)
       .moveset([Moves.SPLASH, Moves.THUNDERBOLT]);
 
-    await game.classicMode.startBattle([Species.JOLTEON]);
+    await game.classicModeHelper.startBattle([Species.JOLTEON]);
     const RIVAL_MAGIKARP1 = game.scene.getEnemyPokemon()?.id;
 
     game.moveHelper.select(Moves.SPLASH);

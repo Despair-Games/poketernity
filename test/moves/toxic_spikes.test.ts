@@ -38,7 +38,7 @@ describe("Moves - Toxic Spikes", () => {
   });
 
   it("should not affect the opponent if they do not switch", async () => {
-    await game.classicMode.runToSummon([Species.MIGHTYENA, Species.POOCHYENA]);
+    await game.classicModeHelper.runToSummon([Species.MIGHTYENA, Species.POOCHYENA]);
 
     const enemy = game.scene.getEnemyField()[0];
 
@@ -54,7 +54,7 @@ describe("Moves - Toxic Spikes", () => {
   });
 
   it("should poison the opponent if they switch into 1 layer", async () => {
-    await game.classicMode.runToSummon([Species.MIGHTYENA]);
+    await game.classicModeHelper.runToSummon([Species.MIGHTYENA]);
 
     game.moveHelper.select(Moves.TOXIC_SPIKES);
     await game.phaseInterceptor.to("TurnEndPhase");
@@ -68,7 +68,7 @@ describe("Moves - Toxic Spikes", () => {
   });
 
   it("should badly poison the opponent if they switch into 2 layers", async () => {
-    await game.classicMode.runToSummon([Species.MIGHTYENA]);
+    await game.classicModeHelper.runToSummon([Species.MIGHTYENA]);
 
     game.moveHelper.select(Moves.TOXIC_SPIKES);
     await game.phaseInterceptor.to("TurnEndPhase");
@@ -83,7 +83,7 @@ describe("Moves - Toxic Spikes", () => {
   });
 
   it("should be removed if a grounded poison pokemon switches in", async () => {
-    await game.classicMode.runToSummon([Species.MUK, Species.PIDGEY]);
+    await game.classicModeHelper.runToSummon([Species.MUK, Species.PIDGEY]);
 
     const muk = game.scene.getPlayerPokemon()!;
 
@@ -106,7 +106,7 @@ describe("Moves - Toxic Spikes", () => {
   });
 
   it("shouldn't create multiple layers per use in doubles", async () => {
-    await game.classicMode.runToSummon([Species.MIGHTYENA, Species.POOCHYENA]);
+    await game.classicModeHelper.runToSummon([Species.MIGHTYENA, Species.POOCHYENA]);
 
     game.moveHelper.select(Moves.TOXIC_SPIKES);
     await game.phaseInterceptor.to("TurnEndPhase");
@@ -120,7 +120,7 @@ describe("Moves - Toxic Spikes", () => {
     game.overridesHelper.startingWave(1);
     const gameData = new GameData();
 
-    await game.classicMode.runToSummon([Species.MIGHTYENA]);
+    await game.classicModeHelper.runToSummon([Species.MIGHTYENA]);
 
     game.moveHelper.select(Moves.TOXIC_SPIKES);
     await game.phaseInterceptor.to("TurnEndPhase");

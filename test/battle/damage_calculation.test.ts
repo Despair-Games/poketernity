@@ -35,7 +35,7 @@ describe("Battle Mechanics - Damage Calculation", () => {
   });
 
   it("Tackle deals expected base damage", async () => {
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    await game.classicModeHelper.startBattle([Species.CHARIZARD]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getEffectiveStat").mockReturnValue(80);
@@ -51,7 +51,7 @@ describe("Battle Mechanics - Damage Calculation", () => {
   it("Attacks deal 1 damage at minimum", async () => {
     game.overridesHelper.startingLevel(1).enemySpecies(Species.AGGRON);
 
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     const aggron = game.scene.getEnemyPokemon()!;
 
@@ -66,7 +66,7 @@ describe("Battle Mechanics - Damage Calculation", () => {
   it("Fixed-damage moves ignore damage multipliers", async () => {
     game.overridesHelper.enemySpecies(Species.DRAGONITE).enemyAbility(Abilities.MULTISCALE);
 
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     const magikarp = game.scene.getPlayerPokemon()!;
     const dragonite = game.scene.getEnemyPokemon()!;
@@ -77,7 +77,7 @@ describe("Battle Mechanics - Damage Calculation", () => {
   it("One-hit KO moves ignore damage multipliers", async () => {
     game.overridesHelper.enemySpecies(Species.AGGRON).enemyAbility(Abilities.MULTISCALE);
 
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     const magikarp = game.scene.getPlayerPokemon()!;
     const aggron = game.scene.getEnemyPokemon()!;
@@ -88,7 +88,7 @@ describe("Battle Mechanics - Damage Calculation", () => {
   it("When the user fails to use Jump Kick with Wonder Guard ability, the damage should be 1.", async () => {
     game.overridesHelper.enemySpecies(Species.GASTLY).ability(Abilities.WONDER_GUARD);
 
-    await game.classicMode.startBattle([Species.SHEDINJA]);
+    await game.classicModeHelper.startBattle([Species.SHEDINJA]);
 
     const shedinja = game.scene.getPlayerPokemon()!;
 
@@ -106,7 +106,7 @@ describe("Battle Mechanics - Damage Calculation", () => {
       .enemySpecies(Species.CHARIZARD)
       .enemyAbility(Abilities.BLAZE);
 
-    await game.classicMode.startBattle([Species.PIKACHU]);
+    await game.classicModeHelper.startBattle([Species.PIKACHU]);
 
     const charizard = game.scene.getEnemyPokemon()!;
 

@@ -43,7 +43,7 @@ describe("Arena - Gravity", () => {
     vi.spyOn(moveToCheck, "calculateBattleAccuracy");
 
     // Setup Gravity on first turn
-    await game.classicMode.startBattle([Species.PIKACHU]);
+    await game.classicModeHelper.startBattle([Species.PIKACHU]);
     game.moveHelper.select(Moves.GRAVITY);
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -64,7 +64,7 @@ describe("Arena - Gravity", () => {
     vi.spyOn(moveToCheck, "calculateBattleAccuracy");
 
     // Setup Gravity on first turn
-    await game.classicMode.startBattle([Species.PIKACHU]);
+    await game.classicModeHelper.startBattle([Species.PIKACHU]);
     game.moveHelper.select(Moves.GRAVITY);
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -82,7 +82,7 @@ describe("Arena - Gravity", () => {
     it("can be hit by ground-type moves now", async () => {
       game.overridesHelper.enemySpecies(Species.PIDGEOT).moveset([Moves.GRAVITY, Moves.EARTHQUAKE]);
 
-      await game.classicMode.startBattle([Species.PIKACHU]);
+      await game.classicModeHelper.startBattle([Species.PIKACHU]);
 
       const pidgeot = game.scene.getEnemyPokemon()!;
       vi.spyOn(pidgeot, "getAttackTypeEffectiveness");
@@ -111,7 +111,7 @@ describe("Arena - Gravity", () => {
     it("keeps super-effective moves super-effective after using gravity", async () => {
       game.overridesHelper.enemySpecies(Species.PIDGEOT).moveset([Moves.GRAVITY, Moves.THUNDERBOLT]);
 
-      await game.classicMode.startBattle([Species.PIKACHU]);
+      await game.classicModeHelper.startBattle([Species.PIKACHU]);
 
       const pidgeot = game.scene.getEnemyPokemon()!;
       vi.spyOn(pidgeot, "getAttackTypeEffectiveness");
@@ -134,7 +134,7 @@ describe("Arena - Gravity", () => {
   it("cancels Fly if its user is semi-invulnerable", async () => {
     game.overridesHelper.enemySpecies(Species.SNORLAX).enemyMoveset(Moves.FLY).moveset([Moves.GRAVITY, Moves.SPLASH]);
 
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    await game.classicModeHelper.startBattle([Species.CHARIZARD]);
 
     const charizard = game.scene.getPlayerPokemon()!;
     const snorlax = game.scene.getEnemyPokemon()!;

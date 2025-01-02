@@ -36,7 +36,7 @@ describe("Moves - U-turn", () => {
     // arrange
     const playerHp = 1;
     game.overridesHelper.ability(Abilities.REGENERATOR);
-    await game.classicMode.startBattle([Species.RAICHU, Species.SHUCKLE]);
+    await game.classicModeHelper.startBattle([Species.RAICHU, Species.SHUCKLE]);
     game.scene.getPlayerPokemon()!.hp = playerHp;
 
     // act
@@ -55,7 +55,7 @@ describe("Moves - U-turn", () => {
   it("triggers rough skin on the u-turn user before a new pokemon is switched in", async () => {
     // arrange
     game.overridesHelper.enemyAbility(Abilities.ROUGH_SKIN);
-    await game.classicMode.startBattle([Species.RAICHU, Species.SHUCKLE]);
+    await game.classicModeHelper.startBattle([Species.RAICHU, Species.SHUCKLE]);
 
     // act
     game.moveHelper.select(Moves.U_TURN);
@@ -73,7 +73,7 @@ describe("Moves - U-turn", () => {
   it("triggers contact abilities on the u-turn user (eg poison point) before a new pokemon is switched in", async () => {
     // arrange
     game.overridesHelper.enemyAbility(Abilities.POISON_POINT);
-    await game.classicMode.startBattle([Species.RAICHU, Species.SHUCKLE]);
+    await game.classicModeHelper.startBattle([Species.RAICHU, Species.SHUCKLE]);
     vi.spyOn(game.scene.getEnemyPokemon()!, "randSeedInt").mockReturnValue(0);
 
     // act
@@ -90,7 +90,7 @@ describe("Moves - U-turn", () => {
 
   it("still forces a switch if u-turn KO's the opponent", async () => {
     game.overridesHelper.startingLevel(1000); // Ensure that U-Turn KO's the opponent
-    await game.classicMode.startBattle([Species.RAICHU, Species.SHUCKLE]);
+    await game.classicModeHelper.startBattle([Species.RAICHU, Species.SHUCKLE]);
     const enemy = game.scene.getEnemyPokemon()!;
 
     // KO the opponent with U-Turn

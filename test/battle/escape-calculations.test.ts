@@ -32,7 +32,7 @@ describe("Escape chance calculations", () => {
   });
 
   it("single non-boss opponent", async () => {
-    await game.classicMode.startBattle([Species.BULBASAUR]);
+    await game.classicModeHelper.startBattle([Species.BULBASAUR]);
 
     const playerPokemon = game.scene.getPlayerField();
     const enemyField = game.scene.getEnemyField();
@@ -94,7 +94,7 @@ describe("Escape chance calculations", () => {
 
   it("double non-boss opponent", async () => {
     game.overridesHelper.battleType("double");
-    await game.classicMode.startBattle([Species.BULBASAUR, Species.ABOMASNOW]);
+    await game.classicModeHelper.startBattle([Species.BULBASAUR, Species.ABOMASNOW]);
 
     const playerPokemon = game.scene.getPlayerField();
     const enemyField = game.scene.getEnemyField();
@@ -176,7 +176,7 @@ describe("Escape chance calculations", () => {
 
   it("single boss opponent", async () => {
     game.overridesHelper.startingWave(10);
-    await game.classicMode.startBattle([Species.BULBASAUR]);
+    await game.classicModeHelper.startBattle([Species.BULBASAUR]);
 
     const playerPokemon = game.scene.getPlayerField()!;
     const enemyField = game.scene.getEnemyField()!;
@@ -252,7 +252,7 @@ describe("Escape chance calculations", () => {
   it("double boss opponent", async () => {
     game.overridesHelper.battleType("double");
     game.overridesHelper.startingWave(10);
-    await game.classicMode.startBattle([Species.BULBASAUR, Species.ABOMASNOW]);
+    await game.classicModeHelper.startBattle([Species.BULBASAUR, Species.ABOMASNOW]);
 
     const playerPokemon = game.scene.getPlayerField();
     const enemyField = game.scene.getEnemyField();

@@ -32,7 +32,7 @@ describe("Moves - Toxic", () => {
 
   it("should be guaranteed to hit if user is Poison-type", async () => {
     vi.spyOn(allMoves[Moves.TOXIC], "accuracy", "get").mockReturnValue(0);
-    await game.classicMode.startBattle([Species.TOXAPEX]);
+    await game.classicModeHelper.startBattle([Species.TOXAPEX]);
 
     game.moveHelper.select(Moves.TOXIC);
     await game.phaseInterceptor.to("BerryPhase", false);
@@ -42,7 +42,7 @@ describe("Moves - Toxic", () => {
 
   it("may miss if user is not Poison-type", async () => {
     vi.spyOn(allMoves[Moves.TOXIC], "accuracy", "get").mockReturnValue(0);
-    await game.classicMode.startBattle([Species.UMBREON]);
+    await game.classicModeHelper.startBattle([Species.UMBREON]);
 
     game.moveHelper.select(Moves.TOXIC);
     await game.phaseInterceptor.to("BerryPhase", false);
@@ -53,7 +53,7 @@ describe("Moves - Toxic", () => {
   it("should hit semi-invulnerable targets if user is Poison-type", async () => {
     vi.spyOn(allMoves[Moves.TOXIC], "accuracy", "get").mockReturnValue(0);
     game.overridesHelper.enemyMoveset(Moves.FLY);
-    await game.classicMode.startBattle([Species.TOXAPEX]);
+    await game.classicModeHelper.startBattle([Species.TOXAPEX]);
 
     game.moveHelper.select(Moves.TOXIC);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
@@ -65,7 +65,7 @@ describe("Moves - Toxic", () => {
   it("should miss semi-invulnerable targets if user is not Poison-type", async () => {
     vi.spyOn(allMoves[Moves.TOXIC], "accuracy", "get").mockReturnValue(-1);
     game.overridesHelper.enemyMoveset(Moves.FLY);
-    await game.classicMode.startBattle([Species.UMBREON]);
+    await game.classicModeHelper.startBattle([Species.UMBREON]);
 
     game.moveHelper.select(Moves.TOXIC);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
@@ -77,7 +77,7 @@ describe("Moves - Toxic", () => {
   it("moves other than Toxic should not hit semi-invulnerable targets even if user is Poison-type", async () => {
     game.overridesHelper.moveset(Moves.SWIFT);
     game.overridesHelper.enemyMoveset(Moves.FLY);
-    await game.classicMode.startBattle([Species.TOXAPEX]);
+    await game.classicModeHelper.startBattle([Species.TOXAPEX]);
 
     game.moveHelper.select(Moves.SWIFT);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);

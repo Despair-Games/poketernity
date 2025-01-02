@@ -32,7 +32,7 @@ describe("Moves - Throat Chop", () => {
   });
 
   it("prevents the target from using sound-based moves for two turns", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     const enemy = game.scene.getEnemyPokemon()!;
 

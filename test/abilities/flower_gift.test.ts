@@ -21,7 +21,7 @@ describe("Abilities - Flower Gift", () => {
    */
   const testRevertFormAgainstAbility = async (game: GameManager, ability: Abilities) => {
     game.overridesHelper.starterForms({ [Species.CASTFORM]: SUNSHINE_FORM }).enemyAbility(ability);
-    await game.classicMode.startBattle([Species.CASTFORM]);
+    await game.classicModeHelper.startBattle([Species.CASTFORM]);
 
     game.moveHelper.select(Moves.SPLASH);
 
@@ -50,7 +50,7 @@ describe("Abilities - Flower Gift", () => {
   // TODO: Uncomment expect statements when the ability is implemented - currently does not increase stats of allies
   it("increases the ATK and SPDEF stat stages of the Pokémon with this Ability and its allies by 1.5× during Harsh Sunlight", async () => {
     game.overridesHelper.battleType("double");
-    await game.classicMode.startBattle([Species.CHERRIM, Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.CHERRIM, Species.MAGIKARP]);
 
     const [cherrim] = game.scene.getPlayerField();
     const cherrimAtkStat = cherrim.getEffectiveStat(Stat.ATK);
@@ -74,7 +74,7 @@ describe("Abilities - Flower Gift", () => {
 
   it("changes the Pokemon's form during Harsh Sunlight", async () => {
     game.overridesHelper.weather(WeatherType.HARSH_SUN);
-    await game.classicMode.startBattle([Species.CHERRIM]);
+    await game.classicModeHelper.startBattle([Species.CHERRIM]);
 
     const cherrim = game.scene.getPlayerPokemon()!;
     expect(cherrim.formIndex).toBe(SUNSHINE_FORM);
@@ -93,7 +93,7 @@ describe("Abilities - Flower Gift", () => {
   it("reverts to Overcast Form when the Pokémon loses Flower Gift, changes form under Harsh Sunlight/Sunny when it regains it", async () => {
     game.overridesHelper.enemyMoveset([Moves.SKILL_SWAP]).weather(WeatherType.HARSH_SUN);
 
-    await game.classicMode.startBattle([Species.CHERRIM]);
+    await game.classicModeHelper.startBattle([Species.CHERRIM]);
 
     const cherrim = game.scene.getPlayerPokemon()!;
 
@@ -112,7 +112,7 @@ describe("Abilities - Flower Gift", () => {
   it("reverts to Overcast Form when the Flower Gift is suppressed, changes form under Harsh Sunlight/Sunny when it regains it", async () => {
     game.overridesHelper.enemyMoveset([Moves.GASTRO_ACID]).weather(WeatherType.HARSH_SUN);
 
-    await game.classicMode.startBattle([Species.CHERRIM, Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.CHERRIM, Species.MAGIKARP]);
 
     const cherrim = game.scene.getPlayerPokemon()!;
 
@@ -140,7 +140,7 @@ describe("Abilities - Flower Gift", () => {
   it("should be in Overcast Form after the user is switched out", async () => {
     game.overridesHelper.weather(WeatherType.SUNNY);
 
-    await game.classicMode.startBattle([Species.CASTFORM, Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.CASTFORM, Species.MAGIKARP]);
     const cherrim = game.scene.getPlayerPokemon()!;
 
     expect(cherrim.formIndex).toBe(SUNSHINE_FORM);

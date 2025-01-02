@@ -35,7 +35,7 @@ describe("Moves - Tera Starstorm", () => {
 
   it("changes type to Stellar when used by Terapagos in its Stellar Form", async () => {
     game.overridesHelper.battleType("single");
-    await game.classicMode.startBattle([Species.TERAPAGOS]);
+    await game.classicModeHelper.startBattle([Species.TERAPAGOS]);
 
     const terapagos = game.scene.getPlayerPokemon()!;
 
@@ -49,7 +49,7 @@ describe("Moves - Tera Starstorm", () => {
   });
 
   it("targets both opponents in a double battle when used by Terapagos in its Stellar Form", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP, Species.TERAPAGOS]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP, Species.TERAPAGOS]);
 
     game.moveHelper.select(Moves.TERA_STARSTORM, 0, BattlerIndex.ENEMY);
     game.moveHelper.select(Moves.TERA_STARSTORM, 1);
@@ -68,7 +68,7 @@ describe("Moves - Tera Starstorm", () => {
   });
 
   it("applies the effects when Terapagos in Stellar Form is fused with another Pokemon", async () => {
-    await game.classicMode.startBattle([Species.TERAPAGOS, Species.CHARMANDER, Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.TERAPAGOS, Species.CHARMANDER, Species.MAGIKARP]);
 
     const fusionedMon = game.scene.getPlayerParty()[0];
     const magikarp = game.scene.getPlayerParty()[2];

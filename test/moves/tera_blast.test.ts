@@ -44,7 +44,7 @@ describe("Moves - Tera Blast", () => {
 
   it("changes type to match user's tera type", async () => {
     game.overridesHelper.enemySpecies(Species.FURRET).startingHeldItems([{ name: "TERA_SHARD", type: Type.FIGHTING }]);
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "getMoveEffectiveness");
 
@@ -58,7 +58,7 @@ describe("Moves - Tera Blast", () => {
   it("increases power if user is Stellar tera type", async () => {
     game.overridesHelper.startingHeldItems([{ name: "TERA_SHARD", type: Type.STELLAR }]);
 
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     game.moveHelper.select(Moves.TERA_BLAST);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
@@ -70,7 +70,7 @@ describe("Moves - Tera Blast", () => {
   it("is super effective against terastallized targets if user is Stellar tera type", async () => {
     game.overridesHelper.startingHeldItems([{ name: "TERA_SHARD", type: Type.STELLAR }]);
 
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "getMoveEffectiveness");
@@ -88,7 +88,7 @@ describe("Moves - Tera Blast", () => {
     "uses the higher stat of the user's Atk and SpAtk for damage calculation",
     async () => {
       game.overridesHelper.enemyAbility(Abilities.TOXIC_DEBRIS);
-      await game.classicMode.startBattle();
+      await game.classicModeHelper.startBattle();
 
       const playerPokemon = game.scene.getPlayerPokemon()!;
       playerPokemon.stats[Stat.ATK] = 100;
@@ -103,7 +103,7 @@ describe("Moves - Tera Blast", () => {
 
   it("causes stat drops if user is Stellar tera type", async () => {
     game.overridesHelper.startingHeldItems([{ name: "TERA_SHARD", type: Type.STELLAR }]);
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 

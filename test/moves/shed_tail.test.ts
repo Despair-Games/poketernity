@@ -32,7 +32,7 @@ describe("Moves - Shed Tail", () => {
   });
 
   it("transfers a Substitute doll to the switched in Pokemon", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP, Species.FEEBAS]);
 
     const magikarp = game.scene.getPlayerPokemon()!;
 
@@ -56,7 +56,7 @@ describe("Moves - Shed Tail", () => {
   });
 
   it("should fail if no ally is available to switch in", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     const magikarp = game.scene.getPlayerPokemon()!;
     expect(game.scene.getPlayerParty().length).toBe(1);

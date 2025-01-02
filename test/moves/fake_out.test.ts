@@ -34,7 +34,7 @@ describe("Moves - Fake Out", () => {
   });
 
   it("can only be used on the first turn a pokemon is sent out in a battle", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
 
@@ -52,7 +52,7 @@ describe("Moves - Fake Out", () => {
 
   // This is a game-specific buff to Fake Out
   it("can be used at the start of every wave even if the pokemon wasn't recalled", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
     enemy.damageAndUpdate(enemy.getMaxHp() - 1);
@@ -68,7 +68,7 @@ describe("Moves - Fake Out", () => {
 
   it("can be used again if recalled and sent back out", async () => {
     game.overridesHelper.startingWave(4);
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS, Species.MAGIKARP]);
 
     const enemy1 = game.scene.getEnemyPokemon()!;
 
@@ -107,7 +107,7 @@ describe("Moves - Fake Out", () => {
   ])("can be used after the user is sent out via $moveName", async ({ moveId }) => {
     game.overridesHelper.moveset([Moves.FAKE_OUT, moveId]);
 
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS, Species.MAGIKARP]);
 
     game.moveHelper.select(moveId);
     game.doSelectPartyPokemon(1);
@@ -132,7 +132,7 @@ describe("Moves - Fake Out", () => {
   it("can be used after the user is sent out via Wimp Out", async () => {
     game.overridesHelper.ability(Abilities.WIMP_OUT).enemyLevel(100).enemyMoveset(Moves.FALSE_SWIPE);
 
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS, Species.MAGIKARP]);
 
     game.moveHelper.select(Moves.SPLASH);
     game.doSelectPartyPokemon(1);

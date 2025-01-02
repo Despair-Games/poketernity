@@ -31,7 +31,7 @@ describe("Moves - Rage Powder", () => {
   });
 
   test("move effect should be bypassed by Grass type", async () => {
-    await game.classicMode.startBattle([Species.AMOONGUSS, Species.VENUSAUR]);
+    await game.classicModeHelper.startBattle([Species.AMOONGUSS, Species.VENUSAUR]);
 
     const enemyPokemon = game.scene.getEnemyField();
 
@@ -52,7 +52,7 @@ describe("Moves - Rage Powder", () => {
     game.overridesHelper.ability(Abilities.OVERCOAT);
 
     // Test with two non-Grass type player Pokemon
-    await game.classicMode.startBattle([Species.BLASTOISE, Species.CHARIZARD]);
+    await game.classicModeHelper.startBattle([Species.BLASTOISE, Species.CHARIZARD]);
 
     const enemyPokemon = game.scene.getEnemyField();
 

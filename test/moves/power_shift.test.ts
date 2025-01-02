@@ -30,7 +30,7 @@ describe("Moves - Power Shift", () => {
   });
 
   it("switches the user's raw Attack stat with its raw Defense stat", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 

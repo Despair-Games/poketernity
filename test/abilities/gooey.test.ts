@@ -40,7 +40,7 @@ describe("Abilities - Gooey/Tangling Hair", () => {
     "$abilityName should decrease the attacker's speed by 1 stage if the attacker uses a contact move",
     async ({ ability }) => {
       game.overridesHelper.enemyAbility(ability);
-      await game.classicMode.startBattle([Species.FEEBAS]);
+      await game.classicModeHelper.startBattle([Species.FEEBAS]);
       const pokemon = game.scene.getPlayerPokemon()!;
 
       game.moveHelper.select(Moves.TACKLE);
@@ -58,7 +58,7 @@ describe("Abilities - Gooey/Tangling Hair", () => {
     "$abilityName should not activate if the attacker has the ability Long Reach and uses a contact move",
     async ({ ability }) => {
       game.overridesHelper.ability(Abilities.LONG_REACH).enemyAbility(ability);
-      await game.classicMode.startBattle([Species.FEEBAS]);
+      await game.classicModeHelper.startBattle([Species.FEEBAS]);
       const pokemon = game.scene.getPlayerPokemon()!;
 
       game.moveHelper.select(Moves.TACKLE);
@@ -76,7 +76,7 @@ describe("Abilities - Gooey/Tangling Hair", () => {
     "$abilityName should not affect the attacker's speed if the attacker does not use a contact move",
     async ({ ability }) => {
       game.overridesHelper.enemyAbility(ability);
-      await game.classicMode.startBattle([Species.FEEBAS]);
+      await game.classicModeHelper.startBattle([Species.FEEBAS]);
       const pokemon = game.scene.getPlayerPokemon()!;
 
       game.moveHelper.select(Moves.EMBER);
@@ -92,7 +92,7 @@ describe("Abilities - Gooey/Tangling Hair", () => {
     { abilityName: "Tangling Hair", ability: Abilities.TANGLING_HAIR },
   ])("$abilityName should activate per hit of a contact-making multi-strike move", async ({ ability }) => {
     game.overridesHelper.enemyAbility(ability);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
     const pokemon = game.scene.getPlayerPokemon()!;
 
     game.moveHelper.select(Moves.DOUBLE_IRON_BASH);

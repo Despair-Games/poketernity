@@ -47,7 +47,7 @@ describe("Moves - Roost", () => {
    */
 
   test("Non flying type uses roost -> no type change, took damage", async () => {
-    await game.classicMode.startBattle([Species.DUNSPARCE]);
+    await game.classicModeHelper.startBattle([Species.DUNSPARCE]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const playerPokemonStartingHP = playerPokemon.hp;
     game.moveHelper.select(Moves.ROOST);
@@ -71,7 +71,7 @@ describe("Moves - Roost", () => {
   });
 
   test("Pure flying type -> becomes normal after roost and takes damage from ground moves -> regains flying", async () => {
-    await game.classicMode.startBattle([Species.TORNADUS]);
+    await game.classicModeHelper.startBattle([Species.TORNADUS]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const playerPokemonStartingHP = playerPokemon.hp;
     game.moveHelper.select(Moves.ROOST);
@@ -95,7 +95,7 @@ describe("Moves - Roost", () => {
   });
 
   test("Dual X/flying type -> becomes type X after roost and takes damage from ground moves -> regains flying", async () => {
-    await game.classicMode.startBattle([Species.HAWLUCHA]);
+    await game.classicModeHelper.startBattle([Species.HAWLUCHA]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const playerPokemonStartingHP = playerPokemon.hp;
     game.moveHelper.select(Moves.ROOST);
@@ -120,7 +120,7 @@ describe("Moves - Roost", () => {
 
   test("Pokemon with levitate after using roost should lose flying type but still be unaffected by ground moves", async () => {
     game.overridesHelper.starterForms({ [Species.ROTOM]: 4 });
-    await game.classicMode.startBattle([Species.ROTOM]);
+    await game.classicModeHelper.startBattle([Species.ROTOM]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const playerPokemonStartingHP = playerPokemon.hp;
     game.moveHelper.select(Moves.ROOST);
@@ -144,7 +144,7 @@ describe("Moves - Roost", () => {
   });
 
   test("A fire/flying type that uses burn up, then roost should be typeless until end of turn", async () => {
-    await game.classicMode.startBattle([Species.MOLTRES]);
+    await game.classicModeHelper.startBattle([Species.MOLTRES]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const playerPokemonStartingHP = playerPokemon.hp;
     game.moveHelper.select(Moves.BURN_UP);
@@ -180,7 +180,7 @@ describe("Moves - Roost", () => {
 
   test("An electric/flying type that uses double shock, then roost should be typeless until end of turn", async () => {
     game.overridesHelper.enemySpecies(Species.ZEKROM);
-    await game.classicMode.startBattle([Species.ZAPDOS]);
+    await game.classicModeHelper.startBattle([Species.ZAPDOS]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const playerPokemonStartingHP = playerPokemon.hp;
     game.moveHelper.select(Moves.DOUBLE_SHOCK);
@@ -221,7 +221,7 @@ describe("Moves - Roost", () => {
       Moves.TRICK_OR_TREAT,
       Moves.TRICK_OR_TREAT,
     ]);
-    await game.classicMode.startBattle([Species.MOLTRES]);
+    await game.classicModeHelper.startBattle([Species.MOLTRES]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
     game.moveHelper.select(Moves.ROOST);
     await game.phaseInterceptor.to(MoveEffectPhase);

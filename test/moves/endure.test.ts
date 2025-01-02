@@ -33,7 +33,7 @@ describe("Moves - Endure", () => {
   });
 
   it("should let the pokemon survive with 1 HP", async () => {
-    await game.classicMode.startBattle([Species.ARCEUS]);
+    await game.classicModeHelper.startBattle([Species.ARCEUS]);
 
     game.moveHelper.select(Moves.THUNDER);
     await game.phaseInterceptor.to("BerryPhase");
@@ -42,7 +42,7 @@ describe("Moves - Endure", () => {
   });
 
   it("should let the pokemon survive with 1 HP when hit with a multihit move", async () => {
-    await game.classicMode.startBattle([Species.ARCEUS]);
+    await game.classicModeHelper.startBattle([Species.ARCEUS]);
 
     game.moveHelper.select(Moves.BULLET_SEED);
     await game.phaseInterceptor.to("BerryPhase");
@@ -52,7 +52,7 @@ describe("Moves - Endure", () => {
 
   it("shouldn't prevent fainting from indirect damage", async () => {
     game.overridesHelper.enemyLevel(100);
-    await game.classicMode.startBattle([Species.ARCEUS]);
+    await game.classicModeHelper.startBattle([Species.ARCEUS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
     enemy.hp = 2;

@@ -42,7 +42,7 @@ describe("Items - Grip Claw", () => {
   });
 
   it("should steal items on contact and only from the attack target", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS, Species.MILOTIC]);
 
     const [playerPokemon] = game.scene.getPlayerField();
 
@@ -71,7 +71,7 @@ describe("Items - Grip Claw", () => {
   });
 
   it("should not steal items when using a targetted, non attack move", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS, Species.MILOTIC]);
 
     const [playerPokemon] = game.scene.getPlayerField();
 

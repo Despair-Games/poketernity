@@ -35,7 +35,7 @@ describe("Moves - Camouflage", () => {
   });
 
   it("Camouflage should look at terrain first when selecting a type to change into", async () => {
-    await game.classicMode.startBattle([Species.SHUCKLE]);
+    await game.classicModeHelper.startBattle([Species.SHUCKLE]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 

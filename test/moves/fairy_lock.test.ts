@@ -34,7 +34,7 @@ describe("Moves - Fairy Lock", () => {
   });
 
   it("Applies Fairy Lock tag for two turns", async () => {
-    await game.classicMode.startBattle([Species.KLEFKI, Species.TYRUNT]);
+    await game.classicModeHelper.startBattle([Species.KLEFKI, Species.TYRUNT]);
     const playerPokemon = game.scene.getPlayerField();
     const enemyField = game.scene.getEnemyField();
 
@@ -66,7 +66,7 @@ describe("Moves - Fairy Lock", () => {
   });
 
   it("Ghost types can escape Fairy Lock", async () => {
-    await game.classicMode.startBattle([Species.DUSKNOIR, Species.GENGAR, Species.TYRUNT]);
+    await game.classicModeHelper.startBattle([Species.DUSKNOIR, Species.GENGAR, Species.TYRUNT]);
 
     game.moveHelper.select(Moves.FAIRY_LOCK);
     game.moveHelper.select(Moves.SPLASH, 1);
@@ -94,7 +94,7 @@ describe("Moves - Fairy Lock", () => {
 
   it("Phasing moves will still switch out", async () => {
     game.overridesHelper.enemyMoveset([Moves.SPLASH, Moves.WHIRLWIND]);
-    await game.classicMode.startBattle([Species.KLEFKI, Species.TYRUNT, Species.ZYGARDE]);
+    await game.classicModeHelper.startBattle([Species.KLEFKI, Species.TYRUNT, Species.ZYGARDE]);
 
     game.moveHelper.select(Moves.FAIRY_LOCK);
     game.moveHelper.select(Moves.SPLASH, 1);
@@ -121,7 +121,7 @@ describe("Moves - Fairy Lock", () => {
 
   it("If a Pokemon faints and is replaced the replacement is also trapped", async () => {
     game.overridesHelper.moveset([Moves.FAIRY_LOCK, Moves.SPLASH, Moves.MEMENTO]);
-    await game.classicMode.startBattle([Species.KLEFKI, Species.GUZZLORD, Species.TYRUNT, Species.ZYGARDE]);
+    await game.classicModeHelper.startBattle([Species.KLEFKI, Species.GUZZLORD, Species.TYRUNT, Species.ZYGARDE]);
 
     game.moveHelper.select(Moves.FAIRY_LOCK);
     game.moveHelper.select(Moves.MEMENTO, 1);

@@ -32,7 +32,7 @@ describe("Moves - Spotlight", () => {
   });
 
   test("move should redirect attacks to the target", async () => {
-    await game.classicMode.startBattle([Species.AMOONGUSS, Species.CHARIZARD]);
+    await game.classicModeHelper.startBattle([Species.AMOONGUSS, Species.CHARIZARD]);
 
     const enemyPokemon = game.scene.getEnemyField();
 
@@ -49,7 +49,7 @@ describe("Moves - Spotlight", () => {
   });
 
   test("move should cause other redirection moves to fail", async () => {
-    await game.classicMode.startBattle([Species.AMOONGUSS, Species.CHARIZARD]);
+    await game.classicModeHelper.startBattle([Species.AMOONGUSS, Species.CHARIZARD]);
 
     const enemyPokemon = game.scene.getEnemyField();
 

@@ -37,7 +37,7 @@ describe("Abilities - Ice Face", () => {
   });
 
   it("takes no damage from physical move and transforms to Noice", async () => {
-    await game.classicMode.startBattle([Species.HITMONLEE]);
+    await game.classicModeHelper.startBattle([Species.HITMONLEE]);
 
     game.moveHelper.select(Moves.TACKLE);
 
@@ -53,7 +53,7 @@ describe("Abilities - Ice Face", () => {
   it("takes no damage from the first hit of multihit physical move and transforms to Noice", async () => {
     game.overridesHelper.moveset([Moves.SURGING_STRIKES]);
     game.overridesHelper.enemyLevel(1);
-    await game.classicMode.startBattle([Species.HITMONLEE]);
+    await game.classicModeHelper.startBattle([Species.HITMONLEE]);
 
     game.moveHelper.select(Moves.SURGING_STRIKES);
 
@@ -79,7 +79,7 @@ describe("Abilities - Ice Face", () => {
   });
 
   it("takes damage from special moves", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     game.moveHelper.select(Moves.ICE_BEAM);
 
@@ -93,7 +93,7 @@ describe("Abilities - Ice Face", () => {
   });
 
   it("takes effects from status moves", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     game.moveHelper.select(Moves.TOXIC_THREAD);
 
@@ -109,7 +109,7 @@ describe("Abilities - Ice Face", () => {
     game.overridesHelper.moveset([Moves.QUICK_ATTACK]);
     game.overridesHelper.enemyMoveset([Moves.HAIL, Moves.HAIL, Moves.HAIL, Moves.HAIL]);
 
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     game.moveHelper.select(Moves.QUICK_ATTACK);
 
@@ -131,7 +131,7 @@ describe("Abilities - Ice Face", () => {
     game.overridesHelper.enemyMoveset([Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE]);
     game.overridesHelper.moveset([Moves.SNOWSCAPE]);
 
-    await game.classicMode.startBattle([Species.EISCUE, Species.NINJASK]);
+    await game.classicModeHelper.startBattle([Species.EISCUE, Species.NINJASK]);
 
     game.moveHelper.select(Moves.SNOWSCAPE);
 
@@ -158,7 +158,7 @@ describe("Abilities - Ice Face", () => {
     game.overridesHelper.enemySpecies(Species.SHUCKLE);
     game.overridesHelper.enemyMoveset([Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE]);
 
-    await game.classicMode.startBattle([Species.EISCUE]);
+    await game.classicModeHelper.startBattle([Species.EISCUE]);
 
     game.moveHelper.select(Moves.HAIL);
     const eiscue = game.scene.getPlayerPokemon()!;
@@ -177,7 +177,7 @@ describe("Abilities - Ice Face", () => {
   it("persists form change when switched out", async () => {
     game.overridesHelper.enemyMoveset([Moves.QUICK_ATTACK, Moves.QUICK_ATTACK, Moves.QUICK_ATTACK, Moves.QUICK_ATTACK]);
 
-    await game.classicMode.startBattle([Species.EISCUE, Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.EISCUE, Species.MAGIKARP]);
 
     game.moveHelper.select(Moves.ICE_BEAM);
 
@@ -206,7 +206,7 @@ describe("Abilities - Ice Face", () => {
       [Species.EISCUE]: noiceForm,
     });
 
-    await game.classicMode.startBattle([Species.EISCUE]);
+    await game.classicModeHelper.startBattle([Species.EISCUE]);
 
     const eiscue = game.scene.getPlayerPokemon()!;
 
@@ -225,7 +225,7 @@ describe("Abilities - Ice Face", () => {
 
   it("doesn't trigger if user is behind a substitute", async () => {
     game.overridesHelper.enemyMoveset(Moves.SUBSTITUTE).moveset(Moves.POWER_TRIP);
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     game.moveHelper.select(Moves.POWER_TRIP);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
@@ -237,7 +237,7 @@ describe("Abilities - Ice Face", () => {
   it("cannot be suppressed", async () => {
     game.overridesHelper.moveset([Moves.GASTRO_ACID]);
 
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     game.moveHelper.select(Moves.GASTRO_ACID);
 
@@ -253,7 +253,7 @@ describe("Abilities - Ice Face", () => {
   it("cannot be swapped with another ability", async () => {
     game.overridesHelper.moveset([Moves.SKILL_SWAP]);
 
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     game.moveHelper.select(Moves.SKILL_SWAP);
 
@@ -269,7 +269,7 @@ describe("Abilities - Ice Face", () => {
   it("cannot be copied", async () => {
     game.overridesHelper.ability(Abilities.TRACE);
 
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     game.moveHelper.select(Moves.SIMPLE_BEAM);
 

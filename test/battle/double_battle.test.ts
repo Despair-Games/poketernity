@@ -41,7 +41,7 @@ describe("Double Battles", () => {
   // double-battle player's pokemon both fainted in same round, then revive one, and next double battle summons two player's pokemon successfully.
   // (There were bugs that either only summon one when can summon two, player stuck in switchPhase etc)
   it("3v2 edge case: player summons 2 pokemon on the next battle after being fainted and revived", async () => {
-    await game.classicMode.startBattle([Species.BULBASAUR, Species.CHARIZARD, Species.SQUIRTLE]);
+    await game.classicModeHelper.startBattle([Species.BULBASAUR, Species.CHARIZARD, Species.SQUIRTLE]);
 
     game.moveHelper.select(Moves.SPLASH);
     game.moveHelper.select(Moves.SPLASH, 1);
@@ -76,7 +76,7 @@ describe("Double Battles", () => {
     game.overridesHelper.battleType(null);
 
     // Play through endless, waves 1 to 9, counting number of double battles from waves 2 to 9
-    await game.classicMode.startBattle([Species.BULBASAUR]);
+    await game.classicModeHelper.startBattle([Species.BULBASAUR]);
     game.scene.gameMode = getGameMode(GameModes.ENDLESS);
 
     for (let i = 0; i < DOUBLE_CHANCE; i++) {
@@ -98,7 +98,7 @@ describe("Double Battles", () => {
   });
 
   it("shouldn't hit itself if ally dies before move", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS, Species.MILOTIC]);
 
     const [, milotic] = game.scene.getPlayerField();
 

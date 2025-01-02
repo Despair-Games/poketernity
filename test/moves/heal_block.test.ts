@@ -37,7 +37,7 @@ describe("Moves - Heal Block", () => {
   });
 
   it("should block the usage of damaging moves that heal the user", async () => {
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    await game.classicModeHelper.startBattle([Species.CHARIZARD]);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
@@ -53,7 +53,7 @@ describe("Moves - Heal Block", () => {
   });
 
   it("should stop delayed heals, such as from Wish", async () => {
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    await game.classicModeHelper.startBattle([Species.CHARIZARD]);
 
     const player = game.scene.getPlayerPokemon()!;
 
@@ -74,7 +74,7 @@ describe("Moves - Heal Block", () => {
   it("should prevent Grassy Terrain from restoring HP", async () => {
     game.overridesHelper.enemyAbility(Abilities.GRASSY_SURGE);
 
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    await game.classicModeHelper.startBattle([Species.CHARIZARD]);
 
     const player = game.scene.getPlayerPokemon()!;
 
@@ -87,7 +87,7 @@ describe("Moves - Heal Block", () => {
   });
 
   it("should prevent healing from heal-over-time moves", async () => {
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    await game.classicModeHelper.startBattle([Species.CHARIZARD]);
 
     const player = game.scene.getPlayerPokemon()!;
 
@@ -103,7 +103,7 @@ describe("Moves - Heal Block", () => {
   it("should prevent abilities from restoring HP", async () => {
     game.overridesHelper.weather(WeatherType.RAIN).ability(Abilities.RAIN_DISH);
 
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    await game.classicModeHelper.startBattle([Species.CHARIZARD]);
 
     const player = game.scene.getPlayerPokemon()!;
 
@@ -118,7 +118,7 @@ describe("Moves - Heal Block", () => {
   it("should stop healing from items", async () => {
     game.overridesHelper.startingHeldItems([{ name: "LEFTOVERS" }]);
 
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    await game.classicModeHelper.startBattle([Species.CHARIZARD]);
 
     const player = game.scene.getPlayerPokemon()!;
     player.damageAndUpdate(player.getMaxHp() - 1);

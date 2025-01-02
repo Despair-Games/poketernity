@@ -33,7 +33,7 @@ describe("Abilities - Mimicry", () => {
 
   it("Mimicry activates after the Pokémon with Mimicry is switched in while terrain is present, or whenever there is a change in terrain", async () => {
     game.overridesHelper.enemyAbility(Abilities.MISTY_SURGE);
-    await game.classicMode.startBattle([Species.FEEBAS, Species.ABRA]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS, Species.ABRA]);
 
     const [playerPokemon1, playerPokemon2] = game.scene.getPlayerParty();
     game.moveHelper.select(Moves.SPLASH);
@@ -51,7 +51,7 @@ describe("Abilities - Mimicry", () => {
       .moveset([Moves.SPLASH, Moves.TRANSFORM])
       .enemyAbility(Abilities.MIMICRY)
       .enemyMoveset([Moves.SPLASH, Moves.PSYCHIC_TERRAIN]);
-    await game.classicMode.startBattle([Species.REGIELEKI]);
+    await game.classicModeHelper.startBattle([Species.REGIELEKI]);
 
     const playerPokemon = game.scene.getPlayerPokemon();
     game.moveHelper.select(Moves.TRANSFORM);
@@ -71,7 +71,7 @@ describe("Abilities - Mimicry", () => {
 
   it("If the Pokemon is under the effect of a type-adding move and an equivalent terrain activates, the move's effect disappears", async () => {
     game.overridesHelper.enemyMoveset([Moves.FORESTS_CURSE, Moves.GRASSY_TERRAIN]);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon();
     game.moveHelper.select(Moves.SPLASH);

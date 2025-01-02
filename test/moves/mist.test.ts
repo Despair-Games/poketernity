@@ -33,7 +33,7 @@ describe("Moves - Mist", () => {
   });
 
   it("should prevent the user's side from having stats lowered", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP, Species.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerField();
 

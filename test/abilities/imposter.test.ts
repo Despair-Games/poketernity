@@ -36,7 +36,7 @@ describe("Abilities - Imposter", () => {
   });
 
   it("should copy species, ability, gender, all stats except HP, all stat stages, moveset, and types of target", async () => {
-    await game.classicMode.startBattle([Species.DITTO]);
+    await game.classicModeHelper.startBattle([Species.DITTO]);
 
     game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to(TurnEndPhase);
@@ -77,7 +77,7 @@ describe("Abilities - Imposter", () => {
   it("should copy in-battle overridden stats", async () => {
     game.overridesHelper.enemyMoveset([Moves.POWER_SPLIT]);
 
-    await game.classicMode.startBattle([Species.DITTO]);
+    await game.classicModeHelper.startBattle([Species.DITTO]);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
@@ -98,7 +98,7 @@ describe("Abilities - Imposter", () => {
   it("should set each move's pp to a maximum of 5", async () => {
     game.overridesHelper.enemyMoveset([Moves.SWORDS_DANCE, Moves.GROWL, Moves.SKETCH, Moves.RECOVER]);
 
-    await game.classicMode.startBattle([Species.DITTO]);
+    await game.classicModeHelper.startBattle([Species.DITTO]);
     const player = game.scene.getPlayerPokemon()!;
 
     game.moveHelper.select(Moves.TACKLE);

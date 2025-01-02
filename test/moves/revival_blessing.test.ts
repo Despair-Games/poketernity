@@ -35,7 +35,7 @@ describe("Moves - Revival Blessing", () => {
   });
 
   it("should revive a selected fainted Pokemon when used by the player", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS, Species.MAGIKARP]);
 
     game.moveHelper.select(Moves.MEMENTO);
     game.doSelectPartyPokemon(1, "SwitchPhase");
@@ -59,7 +59,7 @@ describe("Moves - Revival Blessing", () => {
   it("should revive a random fainted enemy when used by an enemy Trainer", async () => {
     game.overridesHelper.enemyMoveset(Moves.REVIVAL_BLESSING).startingWave(8);
 
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     game.moveHelper.select(Moves.SPLASH);
     await game.doKillOpponents();
@@ -76,7 +76,7 @@ describe("Moves - Revival Blessing", () => {
   });
 
   it("should fail when there are no fainted Pokemon to target", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS, Species.MAGIKARP]);
 
     game.moveHelper.select(Moves.REVIVAL_BLESSING);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
@@ -92,7 +92,7 @@ describe("Moves - Revival Blessing", () => {
       .enemyMoveset([Moves.SPLASH, Moves.FISSURE])
       .enemyAbility(Abilities.NO_GUARD)
       .enemyLevel(100);
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC, Species.GYARADOS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS, Species.MILOTIC, Species.GYARADOS]);
 
     const feebas = game.scene.getPlayerField()[0];
 

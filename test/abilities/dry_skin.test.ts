@@ -33,7 +33,7 @@ describe("Abilities - Dry Skin", () => {
   });
 
   it("during sunlight, lose 1/8 of maximum health at the end of each turn", async () => {
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
 
@@ -50,7 +50,7 @@ describe("Abilities - Dry Skin", () => {
   });
 
   it("during rain, gain 1/8 of maximum health at the end of each turn", async () => {
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
 
@@ -70,7 +70,7 @@ describe("Abilities - Dry Skin", () => {
 
   it("opposing fire attacks do 25% more damage", async () => {
     game.overridesHelper.moveset([Moves.FLAMETHROWER]);
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
     const initialHP = 1000;
@@ -93,7 +93,7 @@ describe("Abilities - Dry Skin", () => {
   });
 
   it("opposing water attacks heal 1/4 of maximum health and deal no damage", async () => {
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
 
@@ -107,7 +107,7 @@ describe("Abilities - Dry Skin", () => {
   it("opposing water attacks do not heal if they were protected from", async () => {
     game.overridesHelper.enemyMoveset([Moves.PROTECT]);
 
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
 
@@ -121,7 +121,7 @@ describe("Abilities - Dry Skin", () => {
   it("multi-strike water attacks only heal once", async () => {
     game.overridesHelper.moveset([Moves.WATER_GUN, Moves.WATER_SHURIKEN]);
 
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
 
@@ -143,7 +143,7 @@ describe("Abilities - Dry Skin", () => {
   });
 
   it("opposing water moves still heal regardless of accuracy check", async () => {
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
 

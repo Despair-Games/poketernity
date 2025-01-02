@@ -39,7 +39,7 @@ describe("Moves - Fly", () => {
   });
 
   it("should make the user semi-invulnerable, then attack over 2 turns", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -65,7 +65,7 @@ describe("Moves - Fly", () => {
   it("should not allow the user to evade attacks from Pokemon with No Guard", async () => {
     game.overridesHelper.enemyAbility(Abilities.NO_GUARD);
 
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -80,7 +80,7 @@ describe("Moves - Fly", () => {
   it("should not expend PP when the attack phase is cancelled", async () => {
     game.overridesHelper.enemyAbility(Abilities.NO_GUARD).enemyMoveset(Moves.SPORE);
 
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
@@ -97,7 +97,7 @@ describe("Moves - Fly", () => {
   it("should be cancelled when another Pokemon uses Gravity", async () => {
     game.overridesHelper.enemyMoveset([Moves.SPLASH, Moves.GRAVITY]);
 
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;

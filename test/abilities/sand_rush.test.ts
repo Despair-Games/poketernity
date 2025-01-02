@@ -35,7 +35,7 @@ describe("Abilities - Sand Rush", () => {
   });
 
   it("should block damage from sandstorm", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
     const pokemon = game.scene.getPlayerPokemon();
 
     game.moveHelper.select(Moves.SPLASH);

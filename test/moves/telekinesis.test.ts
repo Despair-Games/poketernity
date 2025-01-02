@@ -34,7 +34,7 @@ describe("Moves - Telekinesis", () => {
   });
 
   it("Telekinesis makes the affected vulnerable to most attacking moves regardless of accuracy", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     const enemyOpponent = game.scene.getEnemyPokemon()!;
 
@@ -51,7 +51,7 @@ describe("Moves - Telekinesis", () => {
   });
 
   it("Telekinesis makes the affected airborne and immune to most Ground-moves", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     const enemyOpponent = game.scene.getEnemyPokemon()!;
 
@@ -69,7 +69,7 @@ describe("Moves - Telekinesis", () => {
 
   it("Telekinesis can still affect Pokemon that have been transformed into invalid Pokemon", async () => {
     game.overridesHelper.enemyMoveset(Moves.TRANSFORM);
-    await game.classicMode.startBattle([Species.DIGLETT]);
+    await game.classicModeHelper.startBattle([Species.DIGLETT]);
 
     const enemyOpponent = game.scene.getEnemyPokemon()!;
 
@@ -81,7 +81,7 @@ describe("Moves - Telekinesis", () => {
   });
 
   it("Moves like Smack Down and 1000 Arrows remove all effects of Telekinesis from the target Pokemon", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     const enemyOpponent = game.scene.getEnemyPokemon()!;
 
@@ -99,7 +99,7 @@ describe("Moves - Telekinesis", () => {
 
   it("Ingrain will remove the floating effect of Telekinesis, but not the 100% hit", async () => {
     game.overridesHelper.enemyMoveset([Moves.SPLASH, Moves.INGRAIN]);
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyOpponent = game.scene.getEnemyPokemon()!;

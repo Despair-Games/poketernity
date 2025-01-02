@@ -34,7 +34,7 @@ describe("Moves - Tar Shot", () => {
   });
 
   it("lowers the target's Speed stat by one stage and doubles the effectiveness of Fire-type moves used on the target", async () => {
-    await game.classicMode.startBattle([Species.PIKACHU]);
+    await game.classicModeHelper.startBattle([Species.PIKACHU]);
 
     const enemy = game.scene.getEnemyPokemon()!;
 
@@ -55,7 +55,7 @@ describe("Moves - Tar Shot", () => {
   });
 
   it("will not double the effectiveness of Fire-type moves used on a target that is already under the effect of Tar Shot (but may still lower its Speed)", async () => {
-    await game.classicMode.startBattle([Species.PIKACHU]);
+    await game.classicModeHelper.startBattle([Species.PIKACHU]);
 
     const enemy = game.scene.getEnemyPokemon()!;
 
@@ -84,7 +84,7 @@ describe("Moves - Tar Shot", () => {
 
   it("does not double the effectiveness of Fire-type moves against a Pokémon that is Terastallized", async () => {
     game.overridesHelper.enemyHeldItems([{ name: "TERA_SHARD", type: Type.GRASS }]).enemySpecies(Species.SPRIGATITO);
-    await game.classicMode.startBattle([Species.PIKACHU]);
+    await game.classicModeHelper.startBattle([Species.PIKACHU]);
 
     const enemy = game.scene.getEnemyPokemon()!;
 
@@ -106,7 +106,7 @@ describe("Moves - Tar Shot", () => {
 
   it("doubles the effectiveness of Fire-type moves against a Pokémon that is already under the effects of Tar Shot before it Terastallized", async () => {
     game.overridesHelper.enemySpecies(Species.SPRIGATITO);
-    await game.classicMode.startBattle([Species.PIKACHU]);
+    await game.classicModeHelper.startBattle([Species.PIKACHU]);
 
     const enemy = game.scene.getEnemyPokemon()!;
 

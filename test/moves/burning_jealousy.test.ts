@@ -38,7 +38,7 @@ describe("Moves - Burning Jealousy", () => {
   });
 
   it("should burn the opponent if their stat stages were raised", async () => {
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
 
@@ -51,7 +51,7 @@ describe("Moves - Burning Jealousy", () => {
 
   it("should still burn the opponent if their stat stages were both raised and lowered in the same turn", async () => {
     game.overridesHelper.starterSpecies(0).battleType("double");
-    await game.classicMode.startBattle([Species.FEEBAS, Species.ABRA]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS, Species.ABRA]);
 
     const enemy = game.scene.getEnemyPokemon()!;
 
@@ -65,7 +65,7 @@ describe("Moves - Burning Jealousy", () => {
 
   it("should ignore stat stages raised by IMPOSTER", async () => {
     game.overridesHelper.enemySpecies(Species.DITTO).enemyAbility(Abilities.IMPOSTER).enemyMoveset(Moves.SPLASH);
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
 
@@ -77,13 +77,13 @@ describe("Moves - Burning Jealousy", () => {
 
   // TODO: Make this test if WP is implemented
   it.todo("should ignore weakness policy", async () => {
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
   });
 
   it("should be boosted by Sheer Force even if opponent didn't raise stat stages", async () => {
     game.overridesHelper.ability(Abilities.SHEER_FORCE).enemyMoveset(Moves.SPLASH);
     vi.spyOn(allMoves[Moves.BURNING_JEALOUSY], "calculateBattlePower");
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     game.moveHelper.select(Moves.BURNING_JEALOUSY);
     await game.phaseInterceptor.to("BerryPhase");

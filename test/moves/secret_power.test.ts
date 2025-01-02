@@ -43,7 +43,7 @@ describe("Moves - Secret Power", () => {
   it("Secret Power checks for an active terrain first then looks at the biome for its secondary effect", async () => {
     game.overridesHelper.startingBiome(Biome.VOLCANO).enemyMoveset([Moves.SPLASH, Moves.MISTY_TERRAIN]);
     vi.spyOn(allMoves[Moves.SECRET_POWER], "chance", "get").mockReturnValue(100);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -66,7 +66,7 @@ describe("Moves - Secret Power", () => {
       .ability(Abilities.SERENE_GRACE)
       .enemyMoveset([Moves.SPLASH])
       .battleType("double");
-    await game.classicMode.startBattle([Species.BLASTOISE, Species.CHARIZARD]);
+    await game.classicModeHelper.startBattle([Species.BLASTOISE, Species.CHARIZARD]);
 
     const sereneGraceAttr = allAbilities[Abilities.SERENE_GRACE].getAttrs(MoveEffectChanceMultiplierAbAttr)[0];
     vi.spyOn(sereneGraceAttr, "apply");

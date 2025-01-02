@@ -40,7 +40,7 @@ describe("Moves - Triple Arrows", () => {
   });
 
   it("has a 30% flinch chance and 50% defense drop chance", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     game.moveHelper.select(Moves.TRIPLE_ARROWS);
     await game.phaseInterceptor.to("BerryPhase");
@@ -51,7 +51,7 @@ describe("Moves - Triple Arrows", () => {
 
   it("is affected normally by Serene Grace", async () => {
     game.overridesHelper.ability(Abilities.SERENE_GRACE);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     game.moveHelper.select(Moves.TRIPLE_ARROWS);
     await game.phaseInterceptor.to("BerryPhase");

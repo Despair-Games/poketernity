@@ -31,7 +31,7 @@ describe("Moves - Future Sight", () => {
   });
 
   it("hits 2 turns after use, ignores user switch out", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS, Species.MILOTIC]);
 
     game.moveHelper.select(Moves.FUTURE_SIGHT);
     await game.toNextTurn();

@@ -37,7 +37,7 @@ describe("Abilities - Shield Dust", () => {
   });
 
   it("Shield Dust", async () => {
-    await game.classicMode.startBattle([Species.PIDGEOT]);
+    await game.classicModeHelper.startBattle([Species.PIDGEOT]);
 
     game.scene.getEnemyPokemon()!.stats[Stat.SPDEF] = 10000;
     expect(game.scene.getPlayerPokemon()!.formIndex).toBe(0);

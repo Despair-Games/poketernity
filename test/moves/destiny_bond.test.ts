@@ -46,7 +46,7 @@ describe("Moves - Destiny Bond", () => {
     const moveToUse = Moves.TACKLE;
 
     game.overridesHelper.moveset(moveToUse);
-    await game.classicMode.startBattle(defaultParty);
+    await game.classicModeHelper.startBattle(defaultParty);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
     const playerPokemon = game.scene.getPlayerPokemon();
@@ -63,7 +63,7 @@ describe("Moves - Destiny Bond", () => {
     const moveToUse = Moves.TACKLE;
 
     game.overridesHelper.moveset([Moves.SPLASH, moveToUse]);
-    await game.classicMode.startBattle(defaultParty);
+    await game.classicModeHelper.startBattle(defaultParty);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
     const playerPokemon = game.scene.getPlayerPokemon();
@@ -89,7 +89,7 @@ describe("Moves - Destiny Bond", () => {
     const moveToUse = Moves.TACKLE;
 
     game.overridesHelper.moveset([Moves.SPLASH, moveToUse]);
-    await game.classicMode.startBattle(defaultParty);
+    await game.classicModeHelper.startBattle(defaultParty);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
     const playerPokemon = game.scene.getPlayerPokemon();
@@ -116,7 +116,7 @@ describe("Moves - Destiny Bond", () => {
     const moveToUse = Moves.FALSE_SWIPE;
 
     game.overridesHelper.moveset(moveToUse).ability(Abilities.SAND_STREAM);
-    await game.classicMode.startBattle(defaultParty);
+    await game.classicModeHelper.startBattle(defaultParty);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
     const playerPokemon = game.scene.getPlayerPokemon();
@@ -133,7 +133,7 @@ describe("Moves - Destiny Bond", () => {
     const moveToUse = Moves.TACKLE;
 
     game.overridesHelper.moveset([Moves.SPORE, moveToUse]);
-    await game.classicMode.startBattle(defaultParty);
+    await game.classicModeHelper.startBattle(defaultParty);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
     const playerPokemon = game.scene.getPlayerPokemon();
@@ -158,7 +158,7 @@ describe("Moves - Destiny Bond", () => {
 
   it("should not KO an ally", async () => {
     game.overridesHelper.moveset([Moves.DESTINY_BOND, Moves.CRUNCH]).battleType("double");
-    await game.classicMode.startBattle([Species.SHEDINJA, Species.BULBASAUR, Species.SQUIRTLE]);
+    await game.classicModeHelper.startBattle([Species.SHEDINJA, Species.BULBASAUR, Species.SQUIRTLE]);
 
     const enemyPokemon0 = game.scene.getEnemyField()[0];
     const enemyPokemon1 = game.scene.getEnemyField()[1];
@@ -182,7 +182,7 @@ describe("Moves - Destiny Bond", () => {
     vi.spyOn(allMoves[moveToUse], "accuracy", "get").mockReturnValue(100);
 
     game.overridesHelper.moveset(moveToUse);
-    await game.classicMode.startBattle(defaultParty);
+    await game.classicModeHelper.startBattle(defaultParty);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
     const playerPokemon = game.scene.getPlayerPokemon();
@@ -202,7 +202,7 @@ describe("Moves - Destiny Bond", () => {
 
   it("should not cause a crash if the user is KO'd by Pledge moves", async () => {
     game.overridesHelper.moveset([Moves.GRASS_PLEDGE, Moves.WATER_PLEDGE]).battleType("double");
-    await game.classicMode.startBattle(defaultParty);
+    await game.classicModeHelper.startBattle(defaultParty);
 
     const enemyPokemon0 = game.scene.getEnemyField()[0];
     const enemyPokemon1 = game.scene.getEnemyField()[1];
@@ -232,7 +232,7 @@ describe("Moves - Destiny Bond", () => {
     const moveToUse = Moves.TACKLE;
 
     game.overridesHelper.moveset(moveToUse).startingHeldItems([{ name: "REVIVER_SEED" }]);
-    await game.classicMode.startBattle(defaultParty);
+    await game.classicModeHelper.startBattle(defaultParty);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
     const playerPokemon = game.scene.getPlayerPokemon();

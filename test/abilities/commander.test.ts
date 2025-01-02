@@ -44,7 +44,7 @@ describe("Abilities - Commander", () => {
   });
 
   it("causes the source to jump into Dondozo's mouth, granting a stat boost and hiding the source", async () => {
-    await game.classicMode.startBattle([Species.TATSUGIRI, Species.DONDOZO]);
+    await game.classicModeHelper.startBattle([Species.TATSUGIRI, Species.DONDOZO]);
 
     const [tatsugiri, dondozo] = game.scene.getPlayerField();
 
@@ -70,7 +70,7 @@ describe("Abilities - Commander", () => {
   it("should activate when a Dondozo switches in and cancel the source's move", async () => {
     game.overridesHelper.enemyMoveset(Moves.SPLASH);
 
-    await game.classicMode.startBattle([Species.TATSUGIRI, Species.MAGIKARP, Species.DONDOZO]);
+    await game.classicModeHelper.startBattle([Species.TATSUGIRI, Species.MAGIKARP, Species.DONDOZO]);
 
     const tatsugiri = game.scene.getPlayerField()[0];
 
@@ -89,7 +89,7 @@ describe("Abilities - Commander", () => {
   });
 
   it("source should reenter the field when Dondozo faints", async () => {
-    await game.classicMode.startBattle([Species.TATSUGIRI, Species.DONDOZO]);
+    await game.classicModeHelper.startBattle([Species.TATSUGIRI, Species.DONDOZO]);
 
     const [tatsugiri, dondozo] = game.scene.getPlayerField();
 
@@ -116,7 +116,7 @@ describe("Abilities - Commander", () => {
   it("source should still take damage from Poison while hidden", async () => {
     game.overridesHelper.statusEffect(StatusEffect.POISON).enemyMoveset(Moves.SPLASH);
 
-    await game.classicMode.startBattle([Species.TATSUGIRI, Species.DONDOZO]);
+    await game.classicModeHelper.startBattle([Species.TATSUGIRI, Species.DONDOZO]);
 
     const [tatsugiri, dondozo] = game.scene.getPlayerField();
 
@@ -134,7 +134,7 @@ describe("Abilities - Commander", () => {
   it("source should still take damage from Salt Cure while hidden", async () => {
     game.overridesHelper.enemyMoveset(Moves.SPLASH);
 
-    await game.classicMode.startBattle([Species.TATSUGIRI, Species.DONDOZO]);
+    await game.classicModeHelper.startBattle([Species.TATSUGIRI, Species.DONDOZO]);
 
     const [tatsugiri, dondozo] = game.scene.getPlayerField();
 
@@ -154,7 +154,7 @@ describe("Abilities - Commander", () => {
   it("source should still take damage from Sandstorm while hidden", async () => {
     game.overridesHelper.weather(WeatherType.SANDSTORM).enemyMoveset(Moves.SPLASH);
 
-    await game.classicMode.startBattle([Species.TATSUGIRI, Species.DONDOZO]);
+    await game.classicModeHelper.startBattle([Species.TATSUGIRI, Species.DONDOZO]);
 
     const [tatsugiri, dondozo] = game.scene.getPlayerField();
 
@@ -172,7 +172,7 @@ describe("Abilities - Commander", () => {
   it("should make Dondozo immune to being forced out", async () => {
     game.overridesHelper.enemyMoveset([Moves.SPLASH, Moves.WHIRLWIND]);
 
-    await game.classicMode.startBattle([Species.TATSUGIRI, Species.DONDOZO]);
+    await game.classicModeHelper.startBattle([Species.TATSUGIRI, Species.DONDOZO]);
 
     const [tatsugiri, dondozo] = game.scene.getPlayerField();
 
@@ -194,7 +194,7 @@ describe("Abilities - Commander", () => {
   it("should interrupt the source's semi-invulnerability", async () => {
     game.overridesHelper.moveset([Moves.SPLASH, Moves.DIVE]).enemyMoveset(Moves.SPLASH);
 
-    await game.classicMode.startBattle([Species.TATSUGIRI, Species.MAGIKARP, Species.DONDOZO]);
+    await game.classicModeHelper.startBattle([Species.TATSUGIRI, Species.MAGIKARP, Species.DONDOZO]);
 
     const tatsugiri = game.scene.getPlayerField()[0];
 
@@ -220,7 +220,7 @@ describe("Abilities - Commander", () => {
   it("should have the custom effect of increasing chances of double battles", async () => {
     game.overridesHelper.startingWave(2);
     vi.spyOn(game.scene, "getDoubleBattleChance");
-    await game.classicMode.startBattle([Species.TATSUGIRI, Species.DONDOZO]);
+    await game.classicModeHelper.startBattle([Species.TATSUGIRI, Species.DONDOZO]);
 
     expect(game.scene.getDoubleBattleChance).toHaveLastReturnedWith(2);
   });

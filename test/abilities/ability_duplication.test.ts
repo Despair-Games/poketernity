@@ -33,7 +33,7 @@ describe("Ability Duplication", () => {
   it("huge power should only be applied once if both normal and passive", async () => {
     game.overridesHelper.passiveAbility(Abilities.HUGE_POWER);
 
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     const [magikarp] = game.scene.getPlayerField();
     const magikarpAttack = magikarp.getEffectiveStat(Stat.ATK);
@@ -46,7 +46,7 @@ describe("Ability Duplication", () => {
   it("huge power should stack with pure power", async () => {
     game.overridesHelper.passiveAbility(Abilities.PURE_POWER);
 
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP]);
 
     const [magikarp] = game.scene.getPlayerField();
     const magikarpAttack = magikarp.getEffectiveStat(Stat.ATK);

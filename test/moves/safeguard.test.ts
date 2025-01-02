@@ -37,7 +37,7 @@ describe("Moves - Safeguard", () => {
   });
 
   it("protects from damaging moves with additional effects", async () => {
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
     const enemy = game.scene.getEnemyPokemon()!;
 
     game.moveHelper.select(Moves.NUZZLE);
@@ -48,7 +48,7 @@ describe("Moves - Safeguard", () => {
   });
 
   it("protects from status moves", async () => {
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     game.moveHelper.select(Moves.SPORE);
@@ -60,7 +60,7 @@ describe("Moves - Safeguard", () => {
 
   it("protects from confusion", async () => {
     game.overridesHelper.moveset([Moves.CONFUSE_RAY]);
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     game.moveHelper.select(Moves.CONFUSE_RAY);
@@ -73,7 +73,7 @@ describe("Moves - Safeguard", () => {
   it("protects ally from status", async () => {
     game.overridesHelper.battleType("double");
 
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     game.moveHelper.select(Moves.SPORE, 0, BattlerIndex.ENEMY_2);
     game.moveHelper.select(Moves.NUZZLE, 1, BattlerIndex.ENEMY_2);
@@ -89,7 +89,7 @@ describe("Moves - Safeguard", () => {
   });
 
   it("protects from Yawn", async () => {
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     game.moveHelper.select(Moves.YAWN);
@@ -100,7 +100,7 @@ describe("Moves - Safeguard", () => {
   });
 
   it("doesn't protect from already existing Yawn", async () => {
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     game.moveHelper.select(Moves.YAWN);
@@ -115,7 +115,7 @@ describe("Moves - Safeguard", () => {
 
   it("doesn't protect from self-inflicted via Rest or Flame Orb", async () => {
     game.overridesHelper.enemyHeldItems([{ name: "FLAME_ORB" }]);
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     game.moveHelper.select(Moves.SPLASH);
@@ -143,7 +143,7 @@ describe("Moves - Safeguard", () => {
       "chance",
       "get",
     ).mockReturnValue(100);
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     game.moveHelper.select(Moves.SPLASH);

@@ -37,7 +37,7 @@ describe("Moves - Round", () => {
   });
 
   it("should cue other instances of Round together in Speed order", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP, Species.FEEBAS]);
 
     const round = allMoves[Moves.ROUND];
     const spy = vi.spyOn(round, "calculateBattlePower");

@@ -43,7 +43,7 @@ describe("Abilities - Sap Sipper", () => {
 
     game.overridesHelper.moveset(moveToUse);
 
-    await game.classicMode.startBattle([Species.BULBASAUR]);
+    await game.classicModeHelper.startBattle([Species.BULBASAUR]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     const initialEnemyHp = enemyPokemon.hp;
@@ -61,7 +61,7 @@ describe("Abilities - Sap Sipper", () => {
 
     game.overridesHelper.moveset(moveToUse);
 
-    await game.classicMode.startBattle([Species.BULBASAUR]);
+    await game.classicModeHelper.startBattle([Species.BULBASAUR]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -78,7 +78,7 @@ describe("Abilities - Sap Sipper", () => {
 
     game.overridesHelper.moveset(moveToUse);
 
-    await game.classicMode.startBattle([Species.BULBASAUR]);
+    await game.classicModeHelper.startBattle([Species.BULBASAUR]);
 
     game.moveHelper.select(moveToUse);
 
@@ -94,7 +94,7 @@ describe("Abilities - Sap Sipper", () => {
 
     game.overridesHelper.moveset(moveToUse);
 
-    await game.classicMode.startBattle([Species.BULBASAUR]);
+    await game.classicModeHelper.startBattle([Species.BULBASAUR]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     const initialEnemyHp = enemyPokemon.hp;
@@ -112,7 +112,7 @@ describe("Abilities - Sap Sipper", () => {
 
     game.overridesHelper.moveset(moveToUse);
 
-    await game.classicMode.startBattle([Species.BULBASAUR]);
+    await game.classicModeHelper.startBattle([Species.BULBASAUR]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
@@ -138,7 +138,7 @@ describe("Abilities - Sap Sipper", () => {
 
     game.overridesHelper.moveset(moveToUse);
 
-    await game.classicMode.startBattle([Species.BULBASAUR]);
+    await game.classicModeHelper.startBattle([Species.BULBASAUR]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     const initialEnemyHp = enemyPokemon.hp;
@@ -154,7 +154,7 @@ describe("Abilities - Sap Sipper", () => {
   it("still activates regardless of accuracy check", async () => {
     game.overridesHelper.moveset(Moves.LEAF_BLADE);
 
-    await game.classicMode.startBattle([Species.BULBASAUR]);
+    await game.classicModeHelper.startBattle([Species.BULBASAUR]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 

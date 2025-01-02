@@ -25,7 +25,7 @@ describe("Spec - Pokemon", () => {
   });
 
   it("should not crash when trying to set status of undefined", async () => {
-    await game.classicMode.runToSummon([Species.ABRA]);
+    await game.classicModeHelper.runToSummon([Species.ABRA]);
 
     const pkm = game.scene.getPlayerPokemon()!;
     expect(pkm).toBeDefined();
@@ -38,7 +38,7 @@ describe("Spec - Pokemon", () => {
 
     beforeEach(async () => {
       game.overridesHelper.enemySpecies(Species.ZUBAT);
-      await game.classicMode.runToSummon([Species.ABRA, Species.ABRA, Species.ABRA, Species.ABRA, Species.ABRA]); // 5 Abra, only 1 slot left
+      await game.classicModeHelper.runToSummon([Species.ABRA, Species.ABRA, Species.ABRA, Species.ABRA, Species.ABRA]); // 5 Abra, only 1 slot left
       scene = game.scene;
     });
 
@@ -69,7 +69,7 @@ describe("Spec - Pokemon", () => {
   it("should not share tms between different forms", async () => {
     game.overridesHelper.starterForms({ [Species.ROTOM]: 4 });
 
-    await game.classicMode.startBattle([Species.ROTOM]);
+    await game.classicModeHelper.startBattle([Species.ROTOM]);
 
     const fanRotom = game.scene.getPlayerPokemon()!;
 
@@ -78,7 +78,7 @@ describe("Spec - Pokemon", () => {
   });
 
   it("should provide Eevee with 3 defined abilities", async () => {
-    await game.classicMode.runToSummon([Species.EEVEE]);
+    await game.classicModeHelper.runToSummon([Species.EEVEE]);
     const eevee = game.scene.getPlayerPokemon()!;
 
     expect(eevee.getSpeciesForm().getAbilityCount()).toBe(3);
@@ -89,7 +89,7 @@ describe("Spec - Pokemon", () => {
   });
 
   it("should set Eeeve abilityIndex between 0-2", async () => {
-    await game.classicMode.runToSummon([Species.EEVEE]);
+    await game.classicModeHelper.runToSummon([Species.EEVEE]);
     const eevee = game.scene.getPlayerPokemon()!;
 
     expect(eevee.abilityIndex).toBeGreaterThanOrEqual(0);

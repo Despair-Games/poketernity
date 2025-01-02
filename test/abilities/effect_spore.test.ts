@@ -39,7 +39,7 @@ describe("Abilities - Effect Spore", () => {
   });
 
   it("should have a chance of inflicting a status effect if user is hit with a contact move", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(EffectSporeAbAttr)[0]!;
     vi.spyOn(abilityAttr, "applyPostDefend");
@@ -56,7 +56,7 @@ describe("Abilities - Effect Spore", () => {
 
   it("should not affect Pokemon with the ability Overcoat", async () => {
     game.overridesHelper.enemyAbility(Abilities.OVERCOAT);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(EffectSporeAbAttr)[0]!;
     vi.spyOn(abilityAttr, "applyPostDefend");
@@ -71,7 +71,7 @@ describe("Abilities - Effect Spore", () => {
 
   it("should not affect Grass-type Pokemon", async () => {
     game.overridesHelper.enemySpecies(Species.TREECKO);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(EffectSporeAbAttr)[0]!;
     vi.spyOn(abilityAttr, "applyPostDefend");
@@ -85,7 +85,7 @@ describe("Abilities - Effect Spore", () => {
   });
 
   it("should require contact to activate", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(EffectSporeAbAttr)[0]!;
     vi.spyOn(abilityAttr, "applyPostDefend");
@@ -99,7 +99,7 @@ describe("Abilities - Effect Spore", () => {
   });
 
   it("should have correct chances of inflicting sleep (11%), paralysis (10%), and poison (9%)", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;

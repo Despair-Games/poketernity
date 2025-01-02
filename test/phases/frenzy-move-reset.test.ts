@@ -50,7 +50,7 @@ describe("Frenzy Move Reset", () => {
    *
    */
   it("should cancel frenzy move if move fails turn 2", async () => {
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 

@@ -32,7 +32,7 @@ describe("Abilities - Wonder Guard", () => {
   });
 
   it("should prevent damage from attacks that aren't >=2x effectiveness", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
 
@@ -43,7 +43,7 @@ describe("Abilities - Wonder Guard", () => {
   });
 
   it("should not prevent damage from attacks that are >=2x effectiveness", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
 

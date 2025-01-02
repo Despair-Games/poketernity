@@ -34,7 +34,7 @@ describe("Abilities - Aftermath", () => {
   });
 
   it("should cause the attacker to take damage equal to 25% of their max HP when fainted by a contact move", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     const player = game.scene.getPlayerPokemon()!;
 
@@ -45,7 +45,7 @@ describe("Abilities - Aftermath", () => {
   });
 
   it("should not cause the attacker to take damage when fainted by a non-contact move", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     const player = game.scene.getPlayerPokemon()!;
 
@@ -57,7 +57,7 @@ describe("Abilities - Aftermath", () => {
 
   it("should not cause the attacker to take damage when it has Magic Guard", async () => {
     game.overridesHelper.passiveAbility(Abilities.MAGIC_GUARD);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicModeHelper.startBattle([Species.FEEBAS]);
 
     const player = game.scene.getPlayerPokemon()!;
 

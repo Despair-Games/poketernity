@@ -37,7 +37,7 @@ describe("Abilities - No Guard", () => {
   it("should make moves always hit regardless of move accuracy", async () => {
     game.overridesHelper.battleType("single");
 
-    await game.classicMode.startBattle([Species.REGIELEKI]);
+    await game.classicModeHelper.startBattle([Species.REGIELEKI]);
 
     game.moveHelper.select(Moves.ZAP_CANNON);
 
@@ -56,7 +56,7 @@ describe("Abilities - No Guard", () => {
   it("should guarantee double battle with any one LURE", async () => {
     game.overridesHelper.startingModifier([{ name: "LURE" }]).startingWave(2);
 
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     expect(game.scene.getEnemyField().length).toBe(2);
   });

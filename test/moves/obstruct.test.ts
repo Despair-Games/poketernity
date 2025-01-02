@@ -32,7 +32,7 @@ describe("Moves - Obstruct", () => {
   });
 
   it("protects from contact damaging moves and lowers the opponent's defense by 2 stages", async () => {
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     game.moveHelper.select(Moves.OBSTRUCT);
     await game.phaseInterceptor.to("BerryPhase");
@@ -45,7 +45,7 @@ describe("Moves - Obstruct", () => {
   });
 
   it("bypasses accuracy checks when applying protection and defense reduction", async () => {
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     game.moveHelper.select(Moves.OBSTRUCT);
     await game.phaseInterceptor.to("MoveEffectPhase");
@@ -61,7 +61,7 @@ describe("Moves - Obstruct", () => {
 
   it("protects from non-contact damaging moves and doesn't lower the opponent's defense by 2 stages", async () => {
     game.overridesHelper.enemyMoveset(Moves.WATER_GUN);
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     game.moveHelper.select(Moves.OBSTRUCT);
     await game.phaseInterceptor.to("BerryPhase");
@@ -75,7 +75,7 @@ describe("Moves - Obstruct", () => {
 
   it("doesn't protect from status moves", async () => {
     game.overridesHelper.enemyMoveset(Moves.GROWL);
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     game.moveHelper.select(Moves.OBSTRUCT);
     await game.phaseInterceptor.to("BerryPhase");
@@ -87,7 +87,7 @@ describe("Moves - Obstruct", () => {
 
   it("doesn't reduce the stats of an opponent with Clear Body/etc", async () => {
     game.overridesHelper.enemyAbility(Abilities.CLEAR_BODY);
-    await game.classicMode.startBattle();
+    await game.classicModeHelper.startBattle();
 
     game.moveHelper.select(Moves.OBSTRUCT);
     await game.phaseInterceptor.to("BerryPhase");

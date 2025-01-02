@@ -33,7 +33,7 @@ describe("Arena - Grassy Terrain", () => {
   });
 
   it("halves the damage of Earthquake", async () => {
-    await game.classicMode.startBattle([Species.TAUROS]);
+    await game.classicModeHelper.startBattle([Species.TAUROS]);
 
     const eq = allMoves[Moves.EARTHQUAKE];
     vi.spyOn(eq, "calculateBattlePower");
@@ -53,7 +53,7 @@ describe("Arena - Grassy Terrain", () => {
   });
 
   it("Does not halve the damage of Earthquake if opponent is not grounded", async () => {
-    await game.classicMode.startBattle([Species.NINJASK]);
+    await game.classicModeHelper.startBattle([Species.NINJASK]);
 
     const eq = allMoves[Moves.EARTHQUAKE];
     vi.spyOn(eq, "calculateBattlePower");

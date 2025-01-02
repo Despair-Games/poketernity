@@ -31,7 +31,7 @@ describe("Moves - Dragon Cheer", () => {
   });
 
   it("increases the user's allies' critical hit ratio by one stage", async () => {
-    await game.classicMode.startBattle([Species.DRAGONAIR, Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.DRAGONAIR, Species.MAGIKARP]);
 
     const enemy = game.scene.getEnemyField()[0];
 
@@ -48,7 +48,7 @@ describe("Moves - Dragon Cheer", () => {
   });
 
   it("increases the user's Dragon-type allies' critical hit ratio by two stages", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP, Species.DRAGONAIR]);
+    await game.classicModeHelper.startBattle([Species.MAGIKARP, Species.DRAGONAIR]);
 
     const enemy = game.scene.getEnemyField()[0];
 
@@ -65,7 +65,7 @@ describe("Moves - Dragon Cheer", () => {
   });
 
   it("applies the effect based on the allies' type upon use of the move, and do not change if the allies' type changes later in battle", async () => {
-    await game.classicMode.startBattle([Species.DRAGONAIR, Species.MAGIKARP]);
+    await game.classicModeHelper.startBattle([Species.DRAGONAIR, Species.MAGIKARP]);
 
     const magikarp = game.scene.getPlayerField()[1];
     const enemy = game.scene.getEnemyField()[0];

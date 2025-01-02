@@ -34,7 +34,7 @@ describe("Abilities - Tera Shell", () => {
   });
 
   it("should change the effectiveness of non-resisted attacks when the source is at full HP", async () => {
-    await game.classicMode.startBattle([Species.SNORLAX]);
+    await game.classicModeHelper.startBattle([Species.SNORLAX]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getMoveEffectiveness");
@@ -55,7 +55,7 @@ describe("Abilities - Tera Shell", () => {
   it("should not override type immunities", async () => {
     game.overridesHelper.enemyMoveset([Moves.SHADOW_SNEAK]);
 
-    await game.classicMode.startBattle([Species.SNORLAX]);
+    await game.classicModeHelper.startBattle([Species.SNORLAX]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getMoveEffectiveness");
@@ -69,7 +69,7 @@ describe("Abilities - Tera Shell", () => {
   it("should not override type multipliers less than 0.5x", async () => {
     game.overridesHelper.enemyMoveset([Moves.QUICK_ATTACK]);
 
-    await game.classicMode.startBattle([Species.AGGRON]);
+    await game.classicModeHelper.startBattle([Species.AGGRON]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getMoveEffectiveness");
@@ -83,7 +83,7 @@ describe("Abilities - Tera Shell", () => {
   it("should not affect the effectiveness of fixed-damage moves", async () => {
     game.overridesHelper.enemyMoveset([Moves.DRAGON_RAGE]);
 
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    await game.classicModeHelper.startBattle([Species.CHARIZARD]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getMoveEffectiveness");
@@ -98,7 +98,7 @@ describe("Abilities - Tera Shell", () => {
   it("should change the effectiveness of all strikes of a multi-strike move", async () => {
     game.overridesHelper.enemyMoveset([Moves.DOUBLE_HIT]);
 
-    await game.classicMode.startBattle([Species.SNORLAX]);
+    await game.classicModeHelper.startBattle([Species.SNORLAX]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getMoveEffectiveness");
