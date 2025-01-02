@@ -238,7 +238,7 @@ export default class Battle {
       if (!this.started && this.trainer?.config.encounterBgm && this.trainer?.getEncounterMessages()?.length) {
         return `encounter_${this.trainer?.getEncounterBgm()}`;
       }
-      if (globalScene.musicPreference === MusicPreference.CONSISTENT) {
+      if (globalScene.musicPreference === MusicPreference.GENFIVE) {
         return this.trainer?.getBattleBgm() ?? null;
       } else {
         return this.trainer?.getMixedBattleBgm() ?? null;
@@ -255,7 +255,7 @@ export default class Battle {
         return "battle_final_encounter";
       }
       if (pokemon.species.isLegendLike()) {
-        if (globalScene.musicPreference === MusicPreference.CONSISTENT) {
+        if (globalScene.musicPreference === MusicPreference.GENFIVE) {
           switch (pokemon.species.speciesId) {
             case Species.REGIROCK:
             case Species.REGICE:
@@ -272,7 +272,7 @@ export default class Battle {
               }
               return "battle_legendary_unova";
           }
-        } else if (globalScene.musicPreference === MusicPreference.MIXED) {
+        } else if (globalScene.musicPreference === MusicPreference.ALLGENS) {
           switch (pokemon.species.speciesId) {
             case Species.ARTICUNO:
             case Species.ZAPDOS:
