@@ -36,7 +36,7 @@ describe("Abilities - Mimicry", () => {
     await game.classicMode.startBattle([Species.FEEBAS, Species.ABRA]);
 
     const [playerPokemon1, playerPokemon2] = game.scene.getPlayerParty();
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
     expect(playerPokemon1.getTypes().includes(Type.FAIRY)).toBe(true);
 
@@ -54,7 +54,7 @@ describe("Abilities - Mimicry", () => {
     await game.classicMode.startBattle([Species.REGIELEKI]);
 
     const playerPokemon = game.scene.getPlayerPokemon();
-    game.move.select(Moves.TRANSFORM);
+    game.moveHelper.select(Moves.TRANSFORM);
     await game.forceEnemyMove(Moves.PSYCHIC_TERRAIN);
     await game.toNextTurn();
     expect(playerPokemon?.getTypes().includes(Type.PSYCHIC)).toBe(true);
@@ -63,7 +63,7 @@ describe("Abilities - Mimicry", () => {
       game.scene.arena.terrain.turnsLeft = 1;
     }
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.toNextTurn();
     expect(playerPokemon?.getTypes().includes(Type.ELECTRIC)).toBe(true);
@@ -74,13 +74,13 @@ describe("Abilities - Mimicry", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon();
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.FORESTS_CURSE);
     await game.toNextTurn();
 
     expect(playerPokemon?.summonData.addedType).toBe(Type.GRASS);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.GRASSY_TERRAIN);
     await game.phaseInterceptor.to("TurnEndPhase");
 

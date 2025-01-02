@@ -44,7 +44,7 @@ describe("Moves - Dragon Darts", () => {
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.DRAGON_DARTS);
+    game.moveHelper.select(Moves.DRAGON_DARTS);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     for (let i = 0; i < 2; i++) {
@@ -62,8 +62,8 @@ describe("Moves - Dragon Darts", () => {
     const player = game.scene.getPlayerField()[0];
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.move.select(Moves.DRAGON_DARTS, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.DRAGON_DARTS, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
@@ -79,8 +79,8 @@ describe("Moves - Dragon Darts", () => {
     const [player1, player2] = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.move.select(Moves.DRAGON_DARTS, 0, BattlerIndex.PLAYER_2);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.DRAGON_DARTS, 0, BattlerIndex.PLAYER_2);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
@@ -102,8 +102,8 @@ describe("Moves - Dragon Darts", () => {
     const [magikarp, cleffa] = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.move.select(Moves.SPLASH, 0);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH, 0);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.forceEnemyMove(Moves.DRAGON_DARTS, BattlerIndex.PLAYER_2);
     await game.forceEnemyMove(Moves.SPLASH);
@@ -128,8 +128,8 @@ describe("Moves - Dragon Darts", () => {
     const magikarp = game.scene.getPlayerField()[0];
     const enemy2 = game.scene.getEnemyField()[1];
 
-    game.move.select(Moves.DRAGON_DARTS, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.DRAGON_DARTS, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.forceEnemyMove(Moves.PROTECT);
     await game.forceEnemyMove(Moves.SPLASH);
@@ -154,8 +154,8 @@ describe("Moves - Dragon Darts", () => {
     const magikarp = game.scene.getPlayerField()[0];
     const enemy2 = game.scene.getEnemyField()[1];
 
-    game.move.select(Moves.DRAGON_DARTS, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.DRAGON_DARTS, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.forceEnemyMove(Moves.DIG, BattlerIndex.PLAYER);
     await game.forceEnemyMove(Moves.SPLASH);
@@ -179,7 +179,7 @@ describe("Moves - Dragon Darts", () => {
     const [tatsugiri, dondozo] = game.scene.getPlayerField();
     const enemy1 = game.scene.getEnemyField()[0];
 
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.forceEnemyMove(Moves.DRAGON_DARTS, BattlerIndex.PLAYER);
     await game.forceEnemyMove(Moves.SPLASH);
@@ -201,12 +201,12 @@ describe("Moves - Dragon Darts", () => {
     const magikarp = game.scene.getPlayerField()[0];
     const [enemy1, enemy2] = game.scene.getEnemyField();
 
-    game.move.select(Moves.DRAGON_DARTS, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.DRAGON_DARTS, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
-    await game.move.forceMiss(true);
+    await game.moveHelper.forceMiss(true);
 
     for (let i = 0; i < 2; i++) {
       const enemy2StartingHp = enemy2.hp;
@@ -225,8 +225,8 @@ describe("Moves - Dragon Darts", () => {
     const player = game.scene.getPlayerField()[0];
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.move.select(Moves.DRAGON_DARTS, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.DRAGON_DARTS, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.forceEnemyMove(Moves.WIDE_GUARD);
     await game.forceEnemyMove(Moves.SPLASH);
@@ -247,8 +247,8 @@ describe("Moves - Dragon Darts", () => {
     const playerPokemon = game.scene.getPlayerField();
     const enemy1 = game.scene.getEnemyField()[0];
 
-    game.move.select(Moves.SPLASH, 0);
-    game.move.select(Moves.FOLLOW_ME, 1);
+    game.moveHelper.select(Moves.SPLASH, 0);
+    game.moveHelper.select(Moves.FOLLOW_ME, 1);
 
     await game.forceEnemyMove(Moves.DRAGON_DARTS, BattlerIndex.PLAYER);
     await game.forceEnemyMove(Moves.SPLASH);
@@ -270,8 +270,8 @@ describe("Moves - Dragon Darts", () => {
     enemyPokemon.forEach((p) => (p.hp = 100));
     const enemyStartingHp = enemyPokemon.map((p) => p.hp);
 
-    game.move.select(Moves.DRAGON_DARTS, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.ELECTRIFY, 1, BattlerIndex.PLAYER);
+    game.moveHelper.select(Moves.DRAGON_DARTS, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.ELECTRIFY, 1, BattlerIndex.PLAYER);
 
     await game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
@@ -290,8 +290,8 @@ describe("Moves - Dragon Darts", () => {
     const player = game.scene.getPlayerField()[0];
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.move.select(Moves.DRAGON_DARTS, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.DRAGON_DARTS, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
@@ -309,8 +309,8 @@ describe("Moves - Dragon Darts", () => {
     const [player1, player2] = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.move.select(Moves.DRAGON_DARTS, 0, BattlerIndex.PLAYER_2);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.DRAGON_DARTS, 0, BattlerIndex.PLAYER_2);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -323,7 +323,7 @@ describe("Moves - Dragon Darts", () => {
     game.overridesHelper.enemyMoveset(Moves.DRAGON_DARTS);
     await game.classicMode.startBattle([Species.SHUCKLE]);
 
-    game.move.select(Moves.DRAGON_DARTS);
+    game.moveHelper.select(Moves.DRAGON_DARTS);
 
     await game.toNextTurn();
 

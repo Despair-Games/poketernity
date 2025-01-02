@@ -86,7 +86,7 @@ describe("Boss Pokemon / Shields", () => {
     expect(enemyPokemon.bossSegments).toBe(3);
     expect(getTotalStatStageBoosts(enemyPokemon)).toBe(0);
 
-    game.move.select(Moves.SUPER_FANG); // Enough to break the first shield
+    game.moveHelper.select(Moves.SUPER_FANG); // Enough to break the first shield
     await game.toNextTurn();
 
     // Broke 1st of 2 shields, health at 2/3rd
@@ -95,7 +95,7 @@ describe("Boss Pokemon / Shields", () => {
     // Breaking the shield gives a +1 boost to ATK, DEF, SP ATK, SP DEF or SPD
     expect(getTotalStatStageBoosts(enemyPokemon)).toBe(1);
 
-    game.move.select(Moves.FALSE_SWIPE); // Enough to break last shield but not kill
+    game.moveHelper.select(Moves.FALSE_SWIPE); // Enough to break last shield but not kill
     await game.toNextTurn();
 
     expect(enemyPokemon.bossSegmentIndex).toBe(0);
@@ -160,7 +160,7 @@ describe("Boss Pokemon / Shields", () => {
       expect(boss1.bossSegmentIndex).toBe(shieldsToBreak - i);
       expect(boss1.hp).toBe(boss1.getMaxHp() - toDmgValue(boss1SegmentHp * i));
       // Do nothing and go to next turn so that the StatStageChangePhase gets applied
-      game.move.select(Moves.SPLASH);
+      game.moveHelper.select(Moves.SPLASH);
       await game.toNextTurn();
       // All broken shields give +1 stat boost, except the last two that gives +2
       totalStatStages += i >= shieldsToBreak - 1 ? 2 : 1;
@@ -181,7 +181,7 @@ describe("Boss Pokemon / Shields", () => {
     expect(boss2.bossSegmentIndex).toBe(0);
     expect(boss2.hp).toBe(boss2.getMaxHp() - toDmgValue(boss2SegmentHp * shieldsToBreak));
     // Do nothing and go to next turn so that the StatStageChangePhase gets applied
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
     expect(getTotalStatStageBoosts(boss2)).toBe(totalStatStages);
   });
@@ -196,7 +196,7 @@ describe("Boss Pokemon / Shields", () => {
     expect(enemyPokemon.bossSegments).toBe(2);
     expect(getTotalStatStageBoosts(enemyPokemon)).toBe(0);
 
-    game.move.select(Moves.PSYCHIC);
+    game.moveHelper.select(Moves.PSYCHIC);
     await game.toNextTurn();
 
     // Enemy survived with Sturdy

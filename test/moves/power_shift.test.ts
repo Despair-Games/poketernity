@@ -37,7 +37,7 @@ describe("Moves - Power Shift", () => {
     playerPokemon.setStat(Stat.ATK, 10, false);
     playerPokemon.setStat(Stat.DEF, 20, false);
 
-    game.move.select(Moves.BULK_UP);
+    game.moveHelper.select(Moves.BULK_UP);
 
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -47,7 +47,7 @@ describe("Moves - Power Shift", () => {
 
     await game.toNextTurn();
 
-    game.move.select(Moves.POWER_SHIFT);
+    game.moveHelper.select(Moves.POWER_SHIFT);
 
     await game.phaseInterceptor.to("TurnEndPhase");
 

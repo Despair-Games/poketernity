@@ -46,7 +46,7 @@ describe("Items - Dire Hit", () => {
 
     vi.spyOn(enemyPokemon, "getCritStage");
 
-    game.move.select(Moves.POUND);
+    game.moveHelper.select(Moves.POUND);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -58,7 +58,7 @@ describe("Items - Dire Hit", () => {
 
     await game.startBattle([Species.PIKACHU]);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.doKillOpponents();
 

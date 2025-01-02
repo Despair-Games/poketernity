@@ -48,7 +48,7 @@ describe("Moves - Beat Up", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     let enemyStartingHp = enemyPokemon.hp;
 
-    game.move.select(Moves.BEAT_UP);
+    game.moveHelper.select(Moves.BEAT_UP);
 
     await game.phaseInterceptor.to(MoveEffectPhase);
 
@@ -76,7 +76,7 @@ describe("Moves - Beat Up", () => {
 
     game.scene.getPlayerParty()[1].trySetStatus(StatusEffect.BURN);
 
-    game.move.select(Moves.BEAT_UP);
+    game.moveHelper.select(Moves.BEAT_UP);
 
     await game.phaseInterceptor.to(MoveEffectPhase);
 

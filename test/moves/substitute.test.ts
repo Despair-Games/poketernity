@@ -51,7 +51,7 @@ describe("Moves - Substitute", () => {
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SUBSTITUTE);
+    game.moveHelper.select(Moves.SUBSTITUTE);
 
     await game.phaseInterceptor.to("MoveEndPhase", false);
 
@@ -65,7 +65,7 @@ describe("Moves - Substitute", () => {
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SUBSTITUTE);
+    game.moveHelper.select(Moves.SUBSTITUTE);
 
     await game.phaseInterceptor.to("MoveEndPhase", false);
 
@@ -88,7 +88,7 @@ describe("Moves - Substitute", () => {
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SUBSTITUTE);
+    game.moveHelper.select(Moves.SUBSTITUTE);
 
     await game.phaseInterceptor.to("MoveEndPhase", false);
 
@@ -109,7 +109,7 @@ describe("Moves - Substitute", () => {
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SUBSTITUTE);
+    game.moveHelper.select(Moves.SUBSTITUTE);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -124,7 +124,7 @@ describe("Moves - Substitute", () => {
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SUBSTITUTE);
+    game.moveHelper.select(Moves.SUBSTITUTE);
 
     await game.phaseInterceptor.to("MoveEndPhase");
 
@@ -145,7 +145,7 @@ describe("Moves - Substitute", () => {
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SUBSTITUTE);
+    game.moveHelper.select(Moves.SUBSTITUTE);
 
     await game.phaseInterceptor.to("MoveEndPhase");
 
@@ -163,12 +163,12 @@ describe("Moves - Substitute", () => {
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SUBSTITUTE);
+    game.moveHelper.select(Moves.SUBSTITUTE);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     await game.toNextTurn();
 
-    game.move.select(Moves.SWORDS_DANCE);
+    game.moveHelper.select(Moves.SWORDS_DANCE);
 
     await game.phaseInterceptor.to("MoveEndPhase", false);
 
@@ -185,7 +185,7 @@ describe("Moves - Substitute", () => {
 
     leadPokemon.addTag(BattlerTagType.SUBSTITUTE, 0, Moves.NONE, leadPokemon.id);
 
-    game.move.select(Moves.LIGHT_SCREEN);
+    game.moveHelper.select(Moves.LIGHT_SCREEN);
 
     await game.toNextTurn();
 
@@ -201,7 +201,7 @@ describe("Moves - Substitute", () => {
     const leadPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(leadPokemon, "getMoveEffectiveness");
 
-    game.move.select(Moves.SUBSTITUTE);
+    game.moveHelper.select(Moves.SUBSTITUTE);
 
     await game.toNextTurn();
 
@@ -220,7 +220,7 @@ describe("Moves - Substitute", () => {
       p.addTag(BattlerTagType.SUBSTITUTE, 0, Moves.NONE, p.id);
     });
 
-    game.move.select(Moves.TRICK_ROOM);
+    game.moveHelper.select(Moves.TRICK_ROOM);
 
     await game.toNextTurn();
 
@@ -240,7 +240,7 @@ describe("Moves - Substitute", () => {
 
     leadPokemon.addTag(BattlerTagType.SUBSTITUTE, 0, Moves.NONE, leadPokemon.id);
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -257,7 +257,7 @@ describe("Moves - Substitute", () => {
 
     leadPokemon.addTag(BattlerTagType.SUBSTITUTE, 0, Moves.NONE, leadPokemon.id);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -274,7 +274,7 @@ describe("Moves - Substitute", () => {
 
     leadPokemon.addTag(BattlerTagType.SUBSTITUTE, 0, Moves.NONE, leadPokemon.id);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -290,7 +290,7 @@ describe("Moves - Substitute", () => {
 
     leadPokemon.addTag(BattlerTagType.SUBSTITUTE, 0, Moves.NONE, leadPokemon.id);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -308,7 +308,7 @@ describe("Moves - Substitute", () => {
 
     leadPokemon.addTag(BattlerTagType.SUBSTITUTE, 0, Moves.NONE, leadPokemon.id);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -326,7 +326,7 @@ describe("Moves - Substitute", () => {
     enemyPokemon.addTag(BattlerTagType.SUBSTITUTE, 0, Moves.NONE, enemyPokemon.id);
     const enemyNumItems = enemyPokemon.getHeldItems().length;
 
-    game.move.select(Moves.KNOCK_OFF);
+    game.moveHelper.select(Moves.KNOCK_OFF);
 
     await game.phaseInterceptor.to("MoveEndPhase", false);
 
@@ -344,7 +344,7 @@ describe("Moves - Substitute", () => {
 
     leadPokemon.addTag(BattlerTagType.SUBSTITUTE, 0, Moves.NONE, leadPokemon.id);
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
 
     await game.phaseInterceptor.to("MoveEndPhase", false);
     const enemyPostAttackHp = enemyPokemon.hp;
@@ -364,7 +364,7 @@ describe("Moves - Substitute", () => {
 
     leadPokemon.addTag(BattlerTagType.SUBSTITUTE, 0, Moves.NONE, leadPokemon.id);
 
-    game.move.select(Moves.SWORDS_DANCE);
+    game.moveHelper.select(Moves.SWORDS_DANCE);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -381,7 +381,7 @@ describe("Moves - Substitute", () => {
 
     leadPokemon.addTag(BattlerTagType.SUBSTITUTE, 0, Moves.NONE, leadPokemon.id);
 
-    game.move.select(Moves.SWORDS_DANCE);
+    game.moveHelper.select(Moves.SWORDS_DANCE);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -419,7 +419,7 @@ describe("Moves - Substitute", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.SUBSTITUTE);
+    game.moveHelper.select(Moves.SUBSTITUTE);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -440,7 +440,7 @@ describe("Moves - Substitute", () => {
 
     playerPokemon.addTag(BattlerTagType.SUBSTITUTE, 0, Moves.NONE, playerPokemon.id);
 
-    game.move.select(Moves.FOCUS_PUNCH);
+    game.moveHelper.select(Moves.FOCUS_PUNCH);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -458,7 +458,7 @@ describe("Moves - Substitute", () => {
 
     playerPokemon.addTag(BattlerTagType.SUBSTITUTE, 0, Moves.NONE, playerPokemon.id);
 
-    game.move.select(Moves.SHELL_TRAP);
+    game.moveHelper.select(Moves.SHELL_TRAP);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -476,7 +476,7 @@ describe("Moves - Substitute", () => {
 
     playerPokemon.addTag(BattlerTagType.SUBSTITUTE, 0, Moves.NONE, playerPokemon.id);
 
-    game.move.select(Moves.BEAK_BLAST);
+    game.moveHelper.select(Moves.BEAK_BLAST);
 
     await game.phaseInterceptor.to("MoveEndPhase");
 
@@ -494,7 +494,7 @@ describe("Moves - Substitute", () => {
 
     playerPokemon.addTag(BattlerTagType.SUBSTITUTE, 0, Moves.NONE, playerPokemon.id);
 
-    game.move.select(Moves.COUNTER);
+    game.moveHelper.select(Moves.COUNTER);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -511,10 +511,10 @@ describe("Moves - Substitute", () => {
 
     playerPokemon.addTag(BattlerTagType.SUBSTITUTE, 0, Moves.NONE, playerPokemon.id);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]); // enemy uses Sappy Seed first
-    await game.move.forceHit(); // forces Sappy Seed to hit
+    await game.moveHelper.forceHit(); // forces Sappy Seed to hit
     await game.phaseInterceptor.to("MoveEndPhase");
 
     expect(playerPokemon.getTag(BattlerTagType.SEEDED)).toBeUndefined();

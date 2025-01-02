@@ -44,7 +44,7 @@ describe("Moves - FILLET AWAY", () => {
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const hpLost = toDmgValue(leadPokemon.getMaxHp() / RATIO);
 
-    game.move.select(Moves.FILLET_AWAY);
+    game.moveHelper.select(Moves.FILLET_AWAY);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(leadPokemon.hp).toBe(leadPokemon.getMaxHp() - hpLost);
@@ -63,7 +63,7 @@ describe("Moves - FILLET AWAY", () => {
     leadPokemon.setStatStage(Stat.ATK, 6);
     leadPokemon.setStatStage(Stat.SPATK, 3);
 
-    game.move.select(Moves.FILLET_AWAY);
+    game.moveHelper.select(Moves.FILLET_AWAY);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(leadPokemon.hp).toBe(leadPokemon.getMaxHp() - hpLost);
@@ -81,7 +81,7 @@ describe("Moves - FILLET AWAY", () => {
     leadPokemon.setStatStage(Stat.SPATK, 6);
     leadPokemon.setStatStage(Stat.SPD, 6);
 
-    game.move.select(Moves.FILLET_AWAY);
+    game.moveHelper.select(Moves.FILLET_AWAY);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(leadPokemon.hp).toBe(leadPokemon.getMaxHp());
@@ -97,7 +97,7 @@ describe("Moves - FILLET AWAY", () => {
     const hpLost = toDmgValue(leadPokemon.getMaxHp() / RATIO);
     leadPokemon.hp = hpLost - PREDAMAGE;
 
-    game.move.select(Moves.FILLET_AWAY);
+    game.moveHelper.select(Moves.FILLET_AWAY);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(leadPokemon.hp).toBe(hpLost - PREDAMAGE);

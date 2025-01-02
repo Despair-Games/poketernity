@@ -43,7 +43,7 @@ describe("Moves - Clangorous Soul", () => {
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const hpLost = Math.floor(leadPokemon.getMaxHp() / RATIO);
 
-    game.move.select(Moves.CLANGOROUS_SOUL);
+    game.moveHelper.select(Moves.CLANGOROUS_SOUL);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(leadPokemon.hp).toBe(leadPokemon.getMaxHp() - hpLost);
@@ -66,7 +66,7 @@ describe("Moves - Clangorous Soul", () => {
     leadPokemon.setStatStage(Stat.SPATK, 6);
     leadPokemon.setStatStage(Stat.SPDEF, 4);
 
-    game.move.select(Moves.CLANGOROUS_SOUL);
+    game.moveHelper.select(Moves.CLANGOROUS_SOUL);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(leadPokemon.hp).toBe(leadPokemon.getMaxHp() - hpLost);
@@ -88,7 +88,7 @@ describe("Moves - Clangorous Soul", () => {
     leadPokemon.setStatStage(Stat.SPDEF, 6);
     leadPokemon.setStatStage(Stat.SPD, 6);
 
-    game.move.select(Moves.CLANGOROUS_SOUL);
+    game.moveHelper.select(Moves.CLANGOROUS_SOUL);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(leadPokemon.hp).toBe(leadPokemon.getMaxHp());
@@ -106,7 +106,7 @@ describe("Moves - Clangorous Soul", () => {
     const hpLost = Math.floor(leadPokemon.getMaxHp() / RATIO);
     leadPokemon.hp = hpLost - PREDAMAGE;
 
-    game.move.select(Moves.CLANGOROUS_SOUL);
+    game.moveHelper.select(Moves.CLANGOROUS_SOUL);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(leadPokemon.hp).toBe(hpLost - PREDAMAGE);

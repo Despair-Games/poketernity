@@ -40,14 +40,14 @@ describe("Moves - Octolock", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     // use Octolock and advance to init phase of next turn to check for stat changes
-    game.move.select(Moves.OCTOLOCK);
+    game.moveHelper.select(Moves.OCTOLOCK);
     await game.toNextTurn();
 
     expect(enemyPokemon.getStatStage(Stat.DEF)).toBe(-1);
     expect(enemyPokemon.getStatStage(Stat.SPDEF)).toBe(-1);
 
     // take a second turn to make sure stat changes occur again
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     expect(enemyPokemon.getStatStage(Stat.DEF)).toBe(-2);
@@ -61,7 +61,7 @@ describe("Moves - Octolock", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     // use Octolock and advance to init phase of next turn to check for stat changes
-    game.move.select(Moves.OCTOLOCK);
+    game.moveHelper.select(Moves.OCTOLOCK);
     await game.toNextTurn();
 
     expect(enemyPokemon.getStatStage(Stat.DEF)).toBe(0);
@@ -75,7 +75,7 @@ describe("Moves - Octolock", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     // use Octolock and advance to init phase of next turn to check for stat changes
-    game.move.select(Moves.OCTOLOCK);
+    game.moveHelper.select(Moves.OCTOLOCK);
     await game.toNextTurn();
 
     expect(enemyPokemon.getStatStage(Stat.DEF)).toBe(0);
@@ -89,7 +89,7 @@ describe("Moves - Octolock", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     // use Octolock and advance to init phase of next turn to check for stat changes
-    game.move.select(Moves.OCTOLOCK);
+    game.moveHelper.select(Moves.OCTOLOCK);
     await game.toNextTurn();
 
     expect(enemyPokemon.getStatStage(Stat.DEF)).toBe(0);
@@ -104,7 +104,7 @@ describe("Moves - Octolock", () => {
     // before Octolock - enemy should not be trapped
     expect(enemyPokemon.findTag((t) => t instanceof TrappedTag)).toBeUndefined();
 
-    game.move.select(Moves.OCTOLOCK);
+    game.moveHelper.select(Moves.OCTOLOCK);
 
     // after Octolock - enemy should be trapped
     await game.phaseInterceptor.to("MoveEndPhase");
@@ -120,7 +120,7 @@ describe("Moves - Octolock", () => {
     // before Octolock - player should not be trapped
     expect(playerPokemon.findTag((t) => t instanceof TrappedTag)).toBeUndefined();
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     // after Octolock - player should still not be trapped, and no stat loss
@@ -137,9 +137,9 @@ describe("Moves - Octolock", () => {
     // before Octolock - pokemon should not be trapped
     expect(enemy.findTag((t) => t instanceof TrappedTag)).toBeUndefined();
 
-    game.move.select(Moves.TRICK_OR_TREAT);
+    game.moveHelper.select(Moves.TRICK_OR_TREAT);
     await game.toNextTurn();
-    game.move.select(Moves.OCTOLOCK);
+    game.moveHelper.select(Moves.OCTOLOCK);
     await game.toNextTurn();
 
     // after Octolock - pokemon should still not be trapped, and no stat loss

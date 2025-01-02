@@ -56,7 +56,7 @@ describe("SelectModifierPhase", () => {
 
   it("should generate random modifiers", async () => {
     await game.classicMode.startBattle([Species.ABRA, Species.VOLCARONA]);
-    game.move.select(Moves.FISSURE);
+    game.moveHelper.select(Moves.FISSURE);
     await game.phaseInterceptor.to("SelectModifierPhase");
 
     expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
@@ -90,7 +90,7 @@ describe("SelectModifierPhase", () => {
     scene.money = 1000000;
     scene.shopCursorTarget = 0;
 
-    game.move.select(Moves.FISSURE);
+    game.moveHelper.select(Moves.FISSURE);
     await game.phaseInterceptor.to("SelectModifierPhase");
 
     // TODO: nagivate the ui to reroll somehow
@@ -120,7 +120,7 @@ describe("SelectModifierPhase", () => {
       scene.rngCounter = 0;
     });
 
-    game.move.select(Moves.FISSURE);
+    game.moveHelper.select(Moves.FISSURE);
     await game.phaseInterceptor.to("SelectModifierPhase");
 
     expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
@@ -163,7 +163,7 @@ describe("SelectModifierPhase", () => {
     };
     const selectModifierPhase = new SelectModifierPhase(0, undefined, customModifiers);
     scene.unshiftPhase(selectModifierPhase);
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to("SelectModifierPhase");
 
     expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
@@ -200,7 +200,7 @@ describe("SelectModifierPhase", () => {
 
     const selectModifierPhase = new SelectModifierPhase(0, undefined, customModifiers);
     scene.unshiftPhase(selectModifierPhase);
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to("SelectModifierPhase");
 
     expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
@@ -239,7 +239,7 @@ describe("SelectModifierPhase", () => {
     };
     const selectModifierPhase = new SelectModifierPhase(0, undefined, customModifiers);
     scene.unshiftPhase(selectModifierPhase);
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.run(SelectModifierPhase);
 
     expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
@@ -263,7 +263,7 @@ describe("SelectModifierPhase", () => {
     };
     const selectModifierPhase = new SelectModifierPhase(0, undefined, customModifiers);
     scene.unshiftPhase(selectModifierPhase);
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.run(SelectModifierPhase);
 
     expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);

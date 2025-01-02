@@ -41,7 +41,7 @@ describe("Moves - Tail whip", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     expect(enemyPokemon.getStatStage(Stat.DEF)).toBe(0);
 
-    game.move.select(moveToUse);
+    game.moveHelper.select(moveToUse);
     await game.phaseInterceptor.runFrom(EnemyCommandPhase).to(TurnInitPhase);
 
     expect(enemyPokemon.getStatStage(Stat.DEF)).toBe(-1);

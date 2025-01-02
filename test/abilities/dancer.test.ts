@@ -38,8 +38,8 @@ describe("Abilities - Dancer", () => {
 
     const [oricorio] = game.scene.getPlayerField();
 
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.SWORDS_DANCE, 1);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SWORDS_DANCE, 1);
     await game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
     await game.phaseInterceptor.to("MovePhase");
     // immediately copies ally move

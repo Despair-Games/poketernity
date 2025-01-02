@@ -98,7 +98,7 @@ describe("Abilities - Intimidate", () => {
     expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(-1);
     expect(playerPokemon.getStatStage(Stat.ATK)).toBe(-1);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(-1);
@@ -115,7 +115,7 @@ describe("Abilities - Intimidate", () => {
     expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(-1);
     expect(playerPokemon.getStatStage(Stat.ATK)).toBe(-1);
 
-    game.move.select(getMovePosition(game.scene, 0, Moves.SPLASH));
+    game.moveHelper.select(getMovePosition(game.scene, 0, Moves.SPLASH));
     await game.toNextTurn();
 
     enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -123,7 +123,7 @@ describe("Abilities - Intimidate", () => {
     expect(playerPokemon.getStatStage(Stat.ATK)).toBe(-2);
     expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(0);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     enemyPokemon = game.scene.getEnemyPokemon()!;

@@ -44,7 +44,7 @@ describe("Moves - Fly", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.FLY);
+    game.moveHelper.select(Moves.FLY);
 
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(playerPokemon.getTag(BattlerTagType.FLYING)).toBeDefined();
@@ -70,7 +70,7 @@ describe("Moves - Fly", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.FLY);
+    game.moveHelper.select(Moves.FLY);
 
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(playerPokemon.hp).toBeLessThan(playerPokemon.getMaxHp());
@@ -84,7 +84,7 @@ describe("Moves - Fly", () => {
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.FLY);
+    game.moveHelper.select(Moves.FLY);
 
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(playerPokemon.getTag(BattlerTagType.FLYING)).toBeUndefined();
@@ -102,7 +102,7 @@ describe("Moves - Fly", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.FLY);
+    game.moveHelper.select(Moves.FLY);
 
     await game.forceEnemyMove(Moves.SPLASH);
 

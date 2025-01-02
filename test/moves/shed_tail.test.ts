@@ -36,7 +36,7 @@ describe("Moves - Shed Tail", () => {
 
     const magikarp = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SHED_TAIL);
+    game.moveHelper.select(Moves.SHED_TAIL);
     game.doSelectPartyPokemon(1);
 
     await game.phaseInterceptor.to("TurnEndPhase", false);
@@ -61,7 +61,7 @@ describe("Moves - Shed Tail", () => {
     const magikarp = game.scene.getPlayerPokemon()!;
     expect(game.scene.getPlayerParty().length).toBe(1);
 
-    game.move.select(Moves.SHED_TAIL);
+    game.moveHelper.select(Moves.SHED_TAIL);
 
     await game.phaseInterceptor.to("TurnEndPhase", false);
 

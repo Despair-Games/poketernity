@@ -42,11 +42,11 @@ describe("Game Over Phase", () => {
 
     // Note: `game.doKillOpponents()` does not properly handle final boss
     // Final boss phase 1
-    game.move.select(Moves.ICE_BEAM);
+    game.moveHelper.select(Moves.ICE_BEAM);
     await game.toNextTurn();
 
     // Final boss phase 2
-    game.move.select(Moves.ICE_BEAM);
+    game.moveHelper.select(Moves.ICE_BEAM);
     await game.phaseInterceptor.to("PostGameOverPhase", false);
 
     // The game refused to actually give the vouchers during tests,
@@ -63,7 +63,7 @@ describe("Game Over Phase", () => {
     await game.classicMode.startBattle([Species.BULBASAUR]);
     vi.spyOn(game.scene, "validateAchv");
 
-    game.move.select(Moves.MEMENTO);
+    game.moveHelper.select(Moves.MEMENTO);
     await game.phaseInterceptor.to("PostGameOverPhase", false);
 
     expect(game.phaseInterceptor.log.includes("GameOverPhase")).toBe(true);

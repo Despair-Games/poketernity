@@ -38,7 +38,7 @@ describe("Abilities - Sand Rush", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
     const pokemon = game.scene.getPlayerPokemon();
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(pokemon?.isFullHp()).toBe(true);

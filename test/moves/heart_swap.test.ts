@@ -41,7 +41,7 @@ describe("Moves - Heart Swap", () => {
 
     vi.spyOn(enemy.summonData, "statStages", "get").mockReturnValue(new Array(BATTLE_STATS.length).fill(1));
 
-    game.move.select(Moves.HEART_SWAP);
+    game.moveHelper.select(Moves.HEART_SWAP);
 
     await game.phaseInterceptor.to(MoveEndPhase);
 

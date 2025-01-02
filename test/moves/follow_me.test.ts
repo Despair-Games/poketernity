@@ -39,8 +39,8 @@ describe("Moves - Follow Me", () => {
 
     const playerPokemon = game.scene.getPlayerField();
 
-    game.move.select(Moves.FOLLOW_ME);
-    game.move.select(Moves.QUICK_ATTACK, 1, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.FOLLOW_ME);
+    game.moveHelper.select(Moves.QUICK_ATTACK, 1, BattlerIndex.ENEMY);
 
     // Force both enemies to target the player Pokemon that did not use Follow Me
     await game.forceEnemyMove(Moves.TACKLE, BattlerIndex.PLAYER_2);
@@ -57,8 +57,8 @@ describe("Moves - Follow Me", () => {
 
     const playerPokemon = game.scene.getPlayerField();
 
-    game.move.select(Moves.FOLLOW_ME);
-    game.move.select(Moves.FOLLOW_ME, 1);
+    game.moveHelper.select(Moves.FOLLOW_ME);
+    game.moveHelper.select(Moves.FOLLOW_ME, 1);
 
     // Each player is targeted by an enemy
     await game.forceEnemyMove(Moves.TACKLE, BattlerIndex.PLAYER);
@@ -80,8 +80,8 @@ describe("Moves - Follow Me", () => {
 
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.move.select(Moves.QUICK_ATTACK, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.QUICK_ATTACK, 1, BattlerIndex.ENEMY_2);
+    game.moveHelper.select(Moves.QUICK_ATTACK, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.QUICK_ATTACK, 1, BattlerIndex.ENEMY_2);
 
     // Target doesn't need to be specified if the move is self-targeted
     await game.forceEnemyMove(Moves.FOLLOW_ME);
@@ -101,8 +101,8 @@ describe("Moves - Follow Me", () => {
 
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.move.select(Moves.SNIPE_SHOT, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.SNIPE_SHOT, 1, BattlerIndex.ENEMY_2);
+    game.moveHelper.select(Moves.SNIPE_SHOT, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.SNIPE_SHOT, 1, BattlerIndex.ENEMY_2);
 
     await game.forceEnemyMove(Moves.FOLLOW_ME);
     await game.forceEnemyMove(Moves.SPLASH);

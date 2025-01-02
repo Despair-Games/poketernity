@@ -43,7 +43,7 @@ describe("Abilities - Beast Boost", () => {
 
     expect(playerPokemon.getStatStage(Stat.DEF)).toBe(0);
 
-    game.move.select(Moves.FLAMETHROWER);
+    game.moveHelper.select(Moves.FLAMETHROWER);
     await game.phaseInterceptor.to("VictoryPhase");
 
     expect(playerPokemon.getStatStage(Stat.DEF)).toBe(1);
@@ -60,7 +60,7 @@ describe("Abilities - Beast Boost", () => {
 
     expect(playerPokemon.getStatStage(Stat.SPATK)).toBe(0);
 
-    game.move.select(Moves.FLAMETHROWER);
+    game.moveHelper.select(Moves.FLAMETHROWER);
 
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("VictoryPhase");
@@ -79,7 +79,7 @@ describe("Abilities - Beast Boost", () => {
 
     expect(playerPokemon.getStatStage(Stat.SPATK)).toBe(0);
 
-    game.move.select(Moves.FLAMETHROWER);
+    game.moveHelper.select(Moves.FLAMETHROWER);
 
     await game.phaseInterceptor.to("VictoryPhase");
 

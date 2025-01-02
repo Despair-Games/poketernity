@@ -43,16 +43,16 @@ describe("Moves - Haze", () => {
       expect(user.getStatStage(Stat.ATK)).toBe(0);
       expect(enemy.getStatStage(Stat.ATK)).toBe(0);
 
-      game.move.select(Moves.SWORDS_DANCE);
+      game.moveHelper.select(Moves.SWORDS_DANCE);
       await game.phaseInterceptor.to(TurnInitPhase);
 
-      game.move.select(Moves.CHARM);
+      game.moveHelper.select(Moves.CHARM);
       await game.phaseInterceptor.to(TurnInitPhase);
 
       expect(user.getStatStage(Stat.ATK)).toBe(2);
       expect(enemy.getStatStage(Stat.ATK)).toBe(-2);
 
-      game.move.select(Moves.HAZE);
+      game.moveHelper.select(Moves.HAZE);
       await game.phaseInterceptor.to(TurnInitPhase);
 
       expect(user.getStatStage(Stat.ATK)).toBe(0);

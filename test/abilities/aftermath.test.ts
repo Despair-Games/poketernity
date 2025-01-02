@@ -38,7 +38,7 @@ describe("Abilities - Aftermath", () => {
 
     const player = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.GIGA_IMPACT);
+    game.moveHelper.select(Moves.GIGA_IMPACT);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(player.hp).toBe(toDmgValue((player.getMaxHp() * 3) / 4));
@@ -49,7 +49,7 @@ describe("Abilities - Aftermath", () => {
 
     const player = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.HYPER_BEAM);
+    game.moveHelper.select(Moves.HYPER_BEAM);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(player.isFullHp()).toBe(true);
@@ -61,7 +61,7 @@ describe("Abilities - Aftermath", () => {
 
     const player = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.GIGA_IMPACT);
+    game.moveHelper.select(Moves.GIGA_IMPACT);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(player.isFullHp()).toBe(true);

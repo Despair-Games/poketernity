@@ -43,11 +43,11 @@ describe("Moves - Mat Block", () => {
 
     const leadPokemon = game.scene.getPlayerField();
 
-    game.move.select(Moves.MAT_BLOCK);
+    game.moveHelper.select(Moves.MAT_BLOCK);
 
     await game.phaseInterceptor.to(CommandPhase);
 
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.phaseInterceptor.to(BerryPhase, false);
 
@@ -61,11 +61,11 @@ describe("Moves - Mat Block", () => {
 
     const leadPokemon = game.scene.getPlayerField();
 
-    game.move.select(Moves.MAT_BLOCK);
+    game.moveHelper.select(Moves.MAT_BLOCK);
 
     await game.phaseInterceptor.to(CommandPhase);
 
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.phaseInterceptor.to(BerryPhase, false);
 
@@ -77,18 +77,18 @@ describe("Moves - Mat Block", () => {
 
     const leadPokemon = game.scene.getPlayerField();
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to(CommandPhase);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
     const leadStartingHp = leadPokemon.map((p) => p.hp);
 
     await game.phaseInterceptor.to(CommandPhase, false);
-    game.move.select(Moves.MAT_BLOCK);
+    game.moveHelper.select(Moves.MAT_BLOCK);
     await game.phaseInterceptor.to(CommandPhase);
-    game.move.select(Moves.MAT_BLOCK, 1);
+    game.moveHelper.select(Moves.MAT_BLOCK, 1);
 
     await game.phaseInterceptor.to(BerryPhase, false);
 

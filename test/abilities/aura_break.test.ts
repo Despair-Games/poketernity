@@ -39,7 +39,7 @@ describe("Abilities - Aura Break", () => {
     vi.spyOn(moveToCheck, "calculateBattlePower");
 
     await game.classicMode.startBattle([Species.PIKACHU]);
-    game.move.select(Moves.MOONBLAST);
+    game.moveHelper.select(Moves.MOONBLAST);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(moveToCheck.calculateBattlePower).toHaveReturnedWith(expect.closeTo(basePower * auraBreakMultiplier));
@@ -53,7 +53,7 @@ describe("Abilities - Aura Break", () => {
     vi.spyOn(moveToCheck, "calculateBattlePower");
 
     await game.classicMode.startBattle([Species.PIKACHU]);
-    game.move.select(Moves.DARK_PULSE);
+    game.moveHelper.select(Moves.DARK_PULSE);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(moveToCheck.calculateBattlePower).toHaveReturnedWith(expect.closeTo(basePower * auraBreakMultiplier));
@@ -67,7 +67,7 @@ describe("Abilities - Aura Break", () => {
     vi.spyOn(moveToCheck, "calculateBattlePower");
 
     await game.classicMode.startBattle([Species.PIKACHU]);
-    game.move.select(Moves.MOONBLAST);
+    game.moveHelper.select(Moves.MOONBLAST);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(moveToCheck.calculateBattlePower).toHaveReturnedWith(basePower);

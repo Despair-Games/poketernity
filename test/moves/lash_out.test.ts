@@ -40,7 +40,7 @@ describe("Moves - Lash Out", () => {
     vi.spyOn(allMoves[Moves.LASH_OUT], "calculateBattlePower");
     await game.classicMode.startBattle();
 
-    game.move.select(Moves.LASH_OUT);
+    game.moveHelper.select(Moves.LASH_OUT);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("BerryPhase");
 

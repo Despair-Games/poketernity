@@ -35,8 +35,8 @@ describe("Abilities - Sweet Veil", () => {
   it("prevents the user and its allies from falling asleep", async () => {
     await game.startBattle([Species.SWIRLIX, Species.MAGIKARP]);
 
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -47,8 +47,8 @@ describe("Abilities - Sweet Veil", () => {
     game.overridesHelper.enemyMoveset(Moves.SPLASH);
     await game.startBattle([Species.SWIRLIX, Species.MAGIKARP]);
 
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.REST, 1);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.REST, 1);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -59,8 +59,8 @@ describe("Abilities - Sweet Veil", () => {
     game.overridesHelper.enemyMoveset([Moves.YAWN, Moves.YAWN, Moves.YAWN, Moves.YAWN]);
     await game.startBattle([Species.SWIRLIX, Species.MAGIKARP]);
 
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -75,15 +75,15 @@ describe("Abilities - Sweet Veil", () => {
 
     await game.startBattle([Species.SHUCKLE, Species.SHUCKLE, Species.SWIRLIX]);
 
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.YAWN, 1, BattlerIndex.PLAYER);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.YAWN, 1, BattlerIndex.PLAYER);
 
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(game.scene.getPlayerField().some((p) => !!p.getTag(BattlerTagType.DROWSY))).toBe(true);
 
     await game.phaseInterceptor.to(CommandPhase);
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     game.doSwitchPokemon(2);
 
     expect(game.scene.getPlayerField().every((p) => p.status?.effect)).toBe(false);

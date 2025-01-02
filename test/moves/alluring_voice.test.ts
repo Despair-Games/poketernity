@@ -42,7 +42,7 @@ describe("Moves - Alluring Voice", () => {
 
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.ALLURING_VOICE);
+    game.moveHelper.select(Moves.ALLURING_VOICE);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to(BerryPhase);
 

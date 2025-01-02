@@ -44,7 +44,7 @@ describe("Moves - Heal Block", () => {
 
     player.damageAndUpdate(enemy.getMaxHp() - 1);
 
-    game.move.select(Moves.ABSORB);
+    game.moveHelper.select(Moves.ABSORB);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -59,12 +59,12 @@ describe("Moves - Heal Block", () => {
 
     player.damageAndUpdate(player.getMaxHp() - 1);
 
-    game.move.select(Moves.WISH);
+    game.moveHelper.select(Moves.WISH);
     await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(game.scene.arena.getTagOnSide(ArenaTagType.WISH, ArenaTagSide.PLAYER)).toBeDefined();
     while (game.scene.arena.getTagOnSide(ArenaTagType.WISH, ArenaTagSide.PLAYER)) {
-      game.move.select(Moves.SPLASH);
+      game.moveHelper.select(Moves.SPLASH);
       await game.phaseInterceptor.to("TurnEndPhase");
     }
 
@@ -80,7 +80,7 @@ describe("Moves - Heal Block", () => {
 
     player.damageAndUpdate(player.getMaxHp() - 1);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(player.hp).toBe(1);
@@ -93,7 +93,7 @@ describe("Moves - Heal Block", () => {
 
     player.damageAndUpdate(player.getMaxHp() - 1);
 
-    game.move.select(Moves.AQUA_RING);
+    game.moveHelper.select(Moves.AQUA_RING);
     await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(player.getTag(BattlerTagType.AQUA_RING)).toBeDefined();
@@ -109,7 +109,7 @@ describe("Moves - Heal Block", () => {
 
     player.damageAndUpdate(player.getMaxHp() - 1);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(player.hp).toBe(1);
@@ -123,7 +123,7 @@ describe("Moves - Heal Block", () => {
     const player = game.scene.getPlayerPokemon()!;
     player.damageAndUpdate(player.getMaxHp() - 1);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(player.hp).toBe(1);

@@ -43,8 +43,8 @@ describe("Double Battles", () => {
   it("3v2 edge case: player summons 2 pokemon on the next battle after being fainted and revived", async () => {
     await game.classicMode.startBattle([Species.BULBASAUR, Species.CHARIZARD, Species.SQUIRTLE]);
 
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     for (const pokemon of game.scene.getPlayerField()) {
       pokemon.hp = 0;
@@ -82,7 +82,7 @@ describe("Double Battles", () => {
     for (let i = 0; i < DOUBLE_CHANCE; i++) {
       rngSweepProgress = (i + 0.5) / DOUBLE_CHANCE;
 
-      game.move.select(Moves.SPLASH);
+      game.moveHelper.select(Moves.SPLASH);
       await game.doKillOpponents();
       await game.toNextWave();
 
@@ -102,8 +102,8 @@ describe("Double Battles", () => {
 
     const [, milotic] = game.scene.getPlayerField();
 
-    game.move.select(Moves.MEMENTO, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.SURF, 1);
+    game.moveHelper.select(Moves.MEMENTO, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.SURF, 1);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2]);
     await game.toNextTurn();
 

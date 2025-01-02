@@ -36,13 +36,13 @@ describe("Moves - Retaliate", () => {
   it("increases power if ally died previous turn", async () => {
     vi.spyOn(retaliate, "calculateBattlePower");
     await game.startBattle([Species.ABRA, Species.COBALION]);
-    game.move.select(Moves.RETALIATE);
+    game.moveHelper.select(Moves.RETALIATE);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(retaliate.calculateBattlePower).toHaveLastReturnedWith(70);
     game.doSelectPartyPokemon(1);
 
     await game.toNextTurn();
-    game.move.select(Moves.RETALIATE);
+    game.moveHelper.select(Moves.RETALIATE);
     await game.phaseInterceptor.to("MoveEffectPhase");
     expect(retaliate.calculateBattlePower).toHaveReturnedWith(140);
   });

@@ -41,7 +41,7 @@ describe("Moves - Power Swap", () => {
 
     vi.spyOn(enemy.summonData, "statStages", "get").mockReturnValue(new Array(BATTLE_STATS.length).fill(1));
 
-    game.move.select(Moves.POWER_SWAP);
+    game.moveHelper.select(Moves.POWER_SWAP);
 
     await game.phaseInterceptor.to(MoveEndPhase);
 

@@ -55,7 +55,7 @@ describe("Moves - Fissure", () => {
     game.overridesHelper.ability(Abilities.NO_GUARD);
     game.overridesHelper.enemyAbility(Abilities.FUR_COAT);
 
-    game.move.select(Moves.FISSURE);
+    game.moveHelper.select(Moves.FISSURE);
     await game.phaseInterceptor.to(DamageAnimPhase, true);
 
     expect(enemyPokemon.isFainted()).toBe(true);
@@ -66,7 +66,7 @@ describe("Moves - Fissure", () => {
 
     partyPokemon.setStatStage(Stat.ACC, -6);
 
-    game.move.select(Moves.FISSURE);
+    game.moveHelper.select(Moves.FISSURE);
 
     // wait for TurnEndPhase instead of DamagePhase as fissure might not actually inflict damage
     await game.phaseInterceptor.to(TurnEndPhase);
@@ -79,7 +79,7 @@ describe("Moves - Fissure", () => {
 
     enemyPokemon.setStatStage(Stat.EVA, 6);
 
-    game.move.select(Moves.FISSURE);
+    game.moveHelper.select(Moves.FISSURE);
 
     // wait for TurnEndPhase instead of DamagePhase as fissure might not actually inflict damage
     await game.phaseInterceptor.to(TurnEndPhase);

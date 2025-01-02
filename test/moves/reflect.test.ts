@@ -46,7 +46,7 @@ describe("Moves - Reflect", () => {
     const moveToUse = Moves.TACKLE;
     await game.startBattle([Species.SHUCKLE]);
 
-    game.move.select(moveToUse);
+    game.moveHelper.select(moveToUse);
 
     await game.phaseInterceptor.to(TurnEndPhase);
     const mockedDmg = getMockedMoveDamage(
@@ -64,8 +64,8 @@ describe("Moves - Reflect", () => {
     const moveToUse = Moves.ROCK_SLIDE;
     await game.startBattle([Species.SHUCKLE, Species.SHUCKLE]);
 
-    game.move.select(moveToUse);
-    game.move.select(moveToUse, 1);
+    game.moveHelper.select(moveToUse);
+    game.moveHelper.select(moveToUse, 1);
 
     await game.phaseInterceptor.to(TurnEndPhase);
     const mockedDmg = getMockedMoveDamage(
@@ -81,7 +81,7 @@ describe("Moves - Reflect", () => {
     const moveToUse = Moves.ABSORB;
     await game.startBattle([Species.SHUCKLE]);
 
-    game.move.select(moveToUse);
+    game.moveHelper.select(moveToUse);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 

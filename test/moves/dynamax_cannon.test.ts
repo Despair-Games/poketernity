@@ -45,7 +45,7 @@ describe("Moves - Dynamax Cannon", () => {
     game.overridesHelper.enemyLevel(1);
     await game.startBattle([Species.ETERNATUS]);
 
-    game.move.select(dynamaxCannon.id);
+    game.moveHelper.select(dynamaxCannon.id);
 
     await game.phaseInterceptor.to(MoveEffectPhase, false);
     expect((game.scene.getCurrentPhase() as MoveEffectPhase).move.moveId).toBe(dynamaxCannon.id);
@@ -57,7 +57,7 @@ describe("Moves - Dynamax Cannon", () => {
     game.overridesHelper.enemyLevel(10);
     await game.startBattle([Species.ETERNATUS]);
 
-    game.move.select(dynamaxCannon.id);
+    game.moveHelper.select(dynamaxCannon.id);
 
     await game.phaseInterceptor.to(MoveEffectPhase, false);
     expect((game.scene.getCurrentPhase() as MoveEffectPhase).move.moveId).toBe(dynamaxCannon.id);
@@ -69,7 +69,7 @@ describe("Moves - Dynamax Cannon", () => {
     game.overridesHelper.enemyLevel(101);
     await game.startBattle([Species.ETERNATUS]);
 
-    game.move.select(dynamaxCannon.id);
+    game.moveHelper.select(dynamaxCannon.id);
 
     await game.phaseInterceptor.to(MoveEffectPhase, false);
     const phase = game.scene.getCurrentPhase() as MoveEffectPhase;
@@ -84,7 +84,7 @@ describe("Moves - Dynamax Cannon", () => {
     game.overridesHelper.enemyLevel(102);
     await game.startBattle([Species.ETERNATUS]);
 
-    game.move.select(dynamaxCannon.id);
+    game.moveHelper.select(dynamaxCannon.id);
 
     await game.phaseInterceptor.to(MoveEffectPhase, false);
     const phase = game.scene.getCurrentPhase() as MoveEffectPhase;
@@ -99,7 +99,7 @@ describe("Moves - Dynamax Cannon", () => {
     game.overridesHelper.enemyLevel(103);
     await game.startBattle([Species.ETERNATUS]);
 
-    game.move.select(dynamaxCannon.id);
+    game.moveHelper.select(dynamaxCannon.id);
 
     await game.phaseInterceptor.to(MoveEffectPhase, false);
     const phase = game.scene.getCurrentPhase() as MoveEffectPhase;
@@ -114,7 +114,7 @@ describe("Moves - Dynamax Cannon", () => {
     game.overridesHelper.enemyLevel(104);
     await game.startBattle([Species.ETERNATUS]);
 
-    game.move.select(dynamaxCannon.id);
+    game.moveHelper.select(dynamaxCannon.id);
 
     await game.phaseInterceptor.to(MoveEffectPhase, false);
     const phase = game.scene.getCurrentPhase() as MoveEffectPhase;
@@ -129,7 +129,7 @@ describe("Moves - Dynamax Cannon", () => {
     game.overridesHelper.enemyLevel(105);
     await game.startBattle([Species.ETERNATUS]);
 
-    game.move.select(dynamaxCannon.id);
+    game.moveHelper.select(dynamaxCannon.id);
 
     await game.phaseInterceptor.to(MoveEffectPhase, false);
     const phase = game.scene.getCurrentPhase() as MoveEffectPhase;
@@ -144,7 +144,7 @@ describe("Moves - Dynamax Cannon", () => {
     game.overridesHelper.enemyLevel(999);
     await game.startBattle([Species.ETERNATUS]);
 
-    game.move.select(dynamaxCannon.id);
+    game.moveHelper.select(dynamaxCannon.id);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to(MoveEffectPhase, false);

@@ -38,7 +38,7 @@ describe("Moves - Diamond Storm", () => {
     vi.spyOn(diamondStorm, "accuracy", "get").mockReturnValue(100);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    game.move.select(Moves.DIAMOND_STORM);
+    game.moveHelper.select(Moves.DIAMOND_STORM);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(game.scene.getPlayerPokemon()!.getStatStage(Stat.DEF)).toBe(2);

@@ -39,7 +39,7 @@ describe("Abilities - No Guard", () => {
 
     await game.classicMode.startBattle([Species.REGIELEKI]);
 
-    game.move.select(Moves.ZAP_CANNON);
+    game.moveHelper.select(Moves.ZAP_CANNON);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 

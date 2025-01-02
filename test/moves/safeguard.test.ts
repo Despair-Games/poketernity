@@ -40,7 +40,7 @@ describe("Moves - Safeguard", () => {
     await game.classicMode.startBattle();
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.NUZZLE);
+    game.moveHelper.select(Moves.NUZZLE);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
@@ -51,7 +51,7 @@ describe("Moves - Safeguard", () => {
     await game.classicMode.startBattle();
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.SPORE);
+    game.moveHelper.select(Moves.SPORE);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
@@ -63,7 +63,7 @@ describe("Moves - Safeguard", () => {
     await game.classicMode.startBattle();
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.CONFUSE_RAY);
+    game.moveHelper.select(Moves.CONFUSE_RAY);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
@@ -75,8 +75,8 @@ describe("Moves - Safeguard", () => {
 
     await game.classicMode.startBattle();
 
-    game.move.select(Moves.SPORE, 0, BattlerIndex.ENEMY_2);
-    game.move.select(Moves.NUZZLE, 1, BattlerIndex.ENEMY_2);
+    game.moveHelper.select(Moves.SPORE, 0, BattlerIndex.ENEMY_2);
+    game.moveHelper.select(Moves.NUZZLE, 1, BattlerIndex.ENEMY_2);
 
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
 
@@ -92,7 +92,7 @@ describe("Moves - Safeguard", () => {
     await game.classicMode.startBattle();
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.YAWN);
+    game.moveHelper.select(Moves.YAWN);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
@@ -103,11 +103,11 @@ describe("Moves - Safeguard", () => {
     await game.classicMode.startBattle();
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.YAWN);
+    game.moveHelper.select(Moves.YAWN);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toNextTurn();
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     expect(enemyPokemon.status?.effect).toEqual(StatusEffect.SLEEP);
@@ -118,7 +118,7 @@ describe("Moves - Safeguard", () => {
     await game.classicMode.startBattle();
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
     enemyPokemon.damageAndUpdate(1);
@@ -129,7 +129,7 @@ describe("Moves - Safeguard", () => {
     // Force the moveset to update mid-battle
     // TODO: Remove after enemy AI rework is in
     enemyPokemon.getMoveset();
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     enemyPokemon.damageAndUpdate(1);
     await game.toNextTurn();
 
@@ -146,11 +146,11 @@ describe("Moves - Safeguard", () => {
     await game.classicMode.startBattle();
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
     game.overridesHelper.enemyMoveset([Moves.TACKLE]);
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     expect(enemyPokemon.status).toBeUndefined();

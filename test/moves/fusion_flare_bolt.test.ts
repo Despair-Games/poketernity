@@ -47,8 +47,8 @@ describe("Moves - Fusion Flare and Fusion Bolt", () => {
   it("FUSION_FLARE should double power of subsequent FUSION_BOLT", async () => {
     await game.startBattle([Species.ZEKROM, Species.ZEKROM]);
 
-    game.move.select(fusionFlare.id, 0, BattlerIndex.ENEMY);
-    game.move.select(fusionBolt.id, 1, BattlerIndex.ENEMY);
+    game.moveHelper.select(fusionFlare.id, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(fusionBolt.id, 1, BattlerIndex.ENEMY);
 
     // Force user party to act before enemy party
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
@@ -67,8 +67,8 @@ describe("Moves - Fusion Flare and Fusion Bolt", () => {
   it("FUSION_BOLT should double power of subsequent FUSION_FLARE", async () => {
     await game.startBattle([Species.ZEKROM, Species.ZEKROM]);
 
-    game.move.select(fusionBolt.id, 0, BattlerIndex.ENEMY);
-    game.move.select(fusionFlare.id, 1, BattlerIndex.ENEMY);
+    game.moveHelper.select(fusionBolt.id, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(fusionFlare.id, 1, BattlerIndex.ENEMY);
 
     // Force user party to act before enemy party
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
@@ -87,8 +87,8 @@ describe("Moves - Fusion Flare and Fusion Bolt", () => {
   it("FUSION_FLARE should double power of subsequent FUSION_BOLT if a move failed in between", async () => {
     await game.startBattle([Species.ZEKROM, Species.ZEKROM]);
 
-    game.move.select(fusionFlare.id, 0, BattlerIndex.PLAYER);
-    game.move.select(fusionBolt.id, 1, BattlerIndex.PLAYER);
+    game.moveHelper.select(fusionFlare.id, 0, BattlerIndex.PLAYER);
+    game.moveHelper.select(fusionBolt.id, 1, BattlerIndex.PLAYER);
 
     // Force first enemy to act (and fail) in between party
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY]);
@@ -113,8 +113,8 @@ describe("Moves - Fusion Flare and Fusion Bolt", () => {
     game.overridesHelper.enemyMoveset([Moves.SPLASH, Moves.SPLASH, Moves.SPLASH, Moves.SPLASH]);
     await game.startBattle([Species.ZEKROM, Species.ZEKROM]);
 
-    game.move.select(fusionFlare.id, 0, BattlerIndex.ENEMY);
-    game.move.select(fusionBolt.id, 1, BattlerIndex.ENEMY);
+    game.moveHelper.select(fusionFlare.id, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(fusionBolt.id, 1, BattlerIndex.ENEMY);
 
     // Force first enemy to act in between party
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY]);
@@ -137,8 +137,8 @@ describe("Moves - Fusion Flare and Fusion Bolt", () => {
   it("FUSION_FLARE should double power of subsequent FUSION_BOLT if moves are aimed at allies", async () => {
     await game.startBattle([Species.ZEKROM, Species.RESHIRAM]);
 
-    game.move.select(fusionBolt.id, 0, BattlerIndex.PLAYER_2);
-    game.move.select(fusionFlare.id, 1, BattlerIndex.PLAYER);
+    game.moveHelper.select(fusionBolt.id, 0, BattlerIndex.PLAYER_2);
+    game.moveHelper.select(fusionFlare.id, 1, BattlerIndex.PLAYER);
 
     // Force user party to act before enemy party
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
@@ -181,8 +181,8 @@ describe("Moves - Fusion Flare and Fusion Bolt", () => {
     vi.spyOn(party[1], "stats", "get").mockReturnValue(stats.player[0].map((val, i) => (i === Stat.SPDEF ? 250 : val)));
     vi.spyOn(party[1], "stats", "get").mockReturnValue(stats.player[1].map((val, i) => (i === Stat.SPDEF ? 250 : val)));
 
-    game.move.select(fusionBolt.id, 0, BattlerIndex.ENEMY);
-    game.move.select(fusionBolt.id, 1, BattlerIndex.ENEMY);
+    game.moveHelper.select(fusionBolt.id, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(fusionBolt.id, 1, BattlerIndex.ENEMY);
 
     // Force first enemy to act in between party
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY]);
@@ -235,8 +235,8 @@ describe("Moves - Fusion Flare and Fusion Bolt", () => {
     vi.spyOn(party[1], "stats", "get").mockReturnValue(stats.player[0].map((val, i) => (i === Stat.SPDEF ? 250 : val)));
     vi.spyOn(party[1], "stats", "get").mockReturnValue(stats.player[1].map((val, i) => (i === Stat.SPDEF ? 250 : val)));
 
-    game.move.select(fusionBolt.id, 0, BattlerIndex.PLAYER_2);
-    game.move.select(fusionBolt.id, 1, BattlerIndex.PLAYER);
+    game.moveHelper.select(fusionBolt.id, 0, BattlerIndex.PLAYER_2);
+    game.moveHelper.select(fusionBolt.id, 1, BattlerIndex.PLAYER);
 
     // Force first enemy to act in between party
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY]);

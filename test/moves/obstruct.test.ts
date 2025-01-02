@@ -34,7 +34,7 @@ describe("Moves - Obstruct", () => {
   it("protects from contact damaging moves and lowers the opponent's defense by 2 stages", async () => {
     await game.classicMode.startBattle();
 
-    game.move.select(Moves.OBSTRUCT);
+    game.moveHelper.select(Moves.OBSTRUCT);
     await game.phaseInterceptor.to("BerryPhase");
 
     const player = game.scene.getPlayerPokemon()!;
@@ -47,9 +47,9 @@ describe("Moves - Obstruct", () => {
   it("bypasses accuracy checks when applying protection and defense reduction", async () => {
     await game.classicMode.startBattle();
 
-    game.move.select(Moves.OBSTRUCT);
+    game.moveHelper.select(Moves.OBSTRUCT);
     await game.phaseInterceptor.to("MoveEffectPhase");
-    await game.move.forceMiss();
+    await game.moveHelper.forceMiss();
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
@@ -63,7 +63,7 @@ describe("Moves - Obstruct", () => {
     game.overridesHelper.enemyMoveset(Moves.WATER_GUN);
     await game.classicMode.startBattle();
 
-    game.move.select(Moves.OBSTRUCT);
+    game.moveHelper.select(Moves.OBSTRUCT);
     await game.phaseInterceptor.to("BerryPhase");
 
     const player = game.scene.getPlayerPokemon()!;
@@ -77,7 +77,7 @@ describe("Moves - Obstruct", () => {
     game.overridesHelper.enemyMoveset(Moves.GROWL);
     await game.classicMode.startBattle();
 
-    game.move.select(Moves.OBSTRUCT);
+    game.moveHelper.select(Moves.OBSTRUCT);
     await game.phaseInterceptor.to("BerryPhase");
 
     const player = game.scene.getPlayerPokemon()!;
@@ -89,7 +89,7 @@ describe("Moves - Obstruct", () => {
     game.overridesHelper.enemyAbility(Abilities.CLEAR_BODY);
     await game.classicMode.startBattle();
 
-    game.move.select(Moves.OBSTRUCT);
+    game.moveHelper.select(Moves.OBSTRUCT);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(game.scene.getEnemyPokemon()!.getStatStage(Stat.DEF)).toBe(0);

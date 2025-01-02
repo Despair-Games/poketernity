@@ -37,15 +37,15 @@ describe("Abilities - COSTAR", () => {
 
     let [leftPokemon, rightPokemon] = game.scene.getPlayerField();
 
-    game.move.select(Moves.NASTY_PLOT);
+    game.moveHelper.select(Moves.NASTY_PLOT);
     await game.phaseInterceptor.to(CommandPhase);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.toNextTurn();
 
     expect(leftPokemon.getStatStage(Stat.SPATK)).toBe(2);
     expect(rightPokemon.getStatStage(Stat.SPATK)).toBe(0);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to(CommandPhase);
     game.doSwitchPokemon(2);
     await game.phaseInterceptor.to(MessagePhase);
@@ -65,7 +65,7 @@ describe("Abilities - COSTAR", () => {
     expect(leftPokemon.getStatStage(Stat.ATK)).toBe(-2);
     expect(leftPokemon.getStatStage(Stat.ATK)).toBe(-2);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to(CommandPhase);
     game.doSwitchPokemon(2);
     await game.phaseInterceptor.to(MessagePhase);

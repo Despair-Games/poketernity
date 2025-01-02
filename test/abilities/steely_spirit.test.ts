@@ -43,8 +43,8 @@ describe("Abilities - Steely Spirit", () => {
 
     expect(boostSource.hasAbility(Abilities.STEELY_SPIRIT)).toBe(true);
 
-    game.move.select(moveToCheck, 0, enemyToCheck.getBattlerIndex());
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(moveToCheck, 0, enemyToCheck.getBattlerIndex());
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(allMoves[moveToCheck].calculateBattlePower).toHaveReturnedWith(ironHeadPower * steelySpiritMultiplier);
@@ -60,8 +60,8 @@ describe("Abilities - Steely Spirit", () => {
 
     expect(game.scene.getPlayerField().every((p) => p.hasAbility(Abilities.STEELY_SPIRIT))).toBe(true);
 
-    game.move.select(moveToCheck, 0, enemyToCheck.getBattlerIndex());
-    game.move.select(moveToCheck, 1, enemyToCheck.getBattlerIndex());
+    game.moveHelper.select(moveToCheck, 0, enemyToCheck.getBattlerIndex());
+    game.moveHelper.select(moveToCheck, 1, enemyToCheck.getBattlerIndex());
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(allMoves[moveToCheck].calculateBattlePower).toHaveReturnedWith(
@@ -82,8 +82,8 @@ describe("Abilities - Steely Spirit", () => {
     expect(boostSource.hasAbility(Abilities.STEELY_SPIRIT)).toBe(false);
     expect(boostSource.summonData.abilitySuppressed).toBe(true);
 
-    game.move.select(moveToCheck, 0, enemyToCheck.getBattlerIndex());
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(moveToCheck, 0, enemyToCheck.getBattlerIndex());
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(allMoves[moveToCheck].calculateBattlePower).toHaveReturnedWith(ironHeadPower);
@@ -97,7 +97,7 @@ describe("Abilities - Steely Spirit", () => {
 
     await game.classicMode.startBattle([Species.KLINKLANG]);
 
-    game.move.select(Moves.REVELATION_DANCE);
+    game.moveHelper.select(Moves.REVELATION_DANCE);
 
     await game.phaseInterceptor.to("MoveEffectPhase");
 

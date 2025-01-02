@@ -37,7 +37,7 @@ describe("Abilities - Illuminate", () => {
 
     expect(player.getStatStage(Stat.ACC)).toBe(0);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.toNextTurn();
 

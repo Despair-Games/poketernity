@@ -43,8 +43,8 @@ describe("Moves - Shell Trap", () => {
     const playerPokemon = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.SHELL_TRAP, 1);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SHELL_TRAP, 1);
 
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
 
@@ -66,8 +66,8 @@ describe("Moves - Shell Trap", () => {
     const playerPokemon = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.SHELL_TRAP, 1);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SHELL_TRAP, 1);
 
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
 
@@ -89,8 +89,8 @@ describe("Moves - Shell Trap", () => {
     const playerPokemon = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.SHELL_TRAP, 1);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SHELL_TRAP, 1);
 
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
 
@@ -112,8 +112,8 @@ describe("Moves - Shell Trap", () => {
     const playerPokemon = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.move.select(Moves.SHELL_TRAP);
-    game.move.select(Moves.BULLDOZE, 1);
+    game.moveHelper.select(Moves.SHELL_TRAP);
+    game.moveHelper.select(Moves.BULLDOZE, 1);
 
     await game.phaseInterceptor.to(MoveEndPhase);
 
@@ -136,7 +136,7 @@ describe("Moves - Shell Trap", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.SHELL_TRAP);
+    game.moveHelper.select(Moves.SHELL_TRAP);
 
     await game.phaseInterceptor.to(BerryPhase, false);
 

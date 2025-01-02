@@ -37,7 +37,7 @@ describe("Moves - Thousand Arrows", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.THOUSAND_ARROWS);
+    game.moveHelper.select(Moves.THOUSAND_ARROWS);
 
     await game.phaseInterceptor.to(MoveEffectPhase, false);
     // Enemy should not be grounded before move effect is applied
@@ -57,7 +57,7 @@ describe("Moves - Thousand Arrows", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.THOUSAND_ARROWS);
+    game.moveHelper.select(Moves.THOUSAND_ARROWS);
 
     await game.phaseInterceptor.to(MoveEffectPhase, false);
     // Enemy should not be grounded before move effect is applied
@@ -78,7 +78,7 @@ describe("Moves - Thousand Arrows", () => {
 
     enemyPokemon.addTag(BattlerTagType.FLOATING, undefined, Moves.MAGNET_RISE);
 
-    game.move.select(Moves.THOUSAND_ARROWS);
+    game.moveHelper.select(Moves.THOUSAND_ARROWS);
 
     await game.phaseInterceptor.to(BerryPhase, false);
 

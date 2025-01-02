@@ -39,8 +39,8 @@ describe("Moves - Metal Burst", () => {
 
     const [, enemy2] = game.scene.getEnemyField();
 
-    game.move.select(Moves.METAL_BURST);
-    game.move.select(Moves.FISSURE, 1, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.METAL_BURST);
+    game.moveHelper.select(Moves.FISSURE, 1, BattlerIndex.ENEMY);
 
     await game.forceEnemyMove(Moves.TACKLE, BattlerIndex.PLAYER);
     await game.forceEnemyMove(Moves.TACKLE, BattlerIndex.PLAYER_2);
@@ -48,7 +48,7 @@ describe("Moves - Metal Burst", () => {
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
-    await game.move.forceHit();
+    await game.moveHelper.forceHit();
     await game.phaseInterceptor.to("MoveEndPhase");
     await game.phaseInterceptor.to("MoveEndPhase");
 
@@ -60,8 +60,8 @@ describe("Moves - Metal Burst", () => {
 
     const [enemy1, enemy2] = game.scene.getEnemyField();
 
-    game.move.select(Moves.METAL_BURST);
-    game.move.select(Moves.PRECIPICE_BLADES, 1);
+    game.moveHelper.select(Moves.METAL_BURST);
+    game.moveHelper.select(Moves.PRECIPICE_BLADES, 1);
 
     await game.forceEnemyMove(Moves.TACKLE, BattlerIndex.PLAYER);
     await game.forceEnemyMove(Moves.TACKLE, BattlerIndex.PLAYER_2);
@@ -69,7 +69,7 @@ describe("Moves - Metal Burst", () => {
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
-    await game.move.forceHit();
+    await game.moveHelper.forceHit();
     await game.phaseInterceptor.to("MoveEndPhase");
     await game.phaseInterceptor.to("BerryPhase");
 

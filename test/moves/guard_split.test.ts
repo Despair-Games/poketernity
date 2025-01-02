@@ -42,7 +42,7 @@ describe("Moves - Guard Split", () => {
     const avgDef = Math.floor((player.getStat(Stat.DEF, false) + enemy.getStat(Stat.DEF, false)) / 2);
     const avgSpDef = Math.floor((player.getStat(Stat.SPDEF, false) + enemy.getStat(Stat.SPDEF, false)) / 2);
 
-    game.move.select(Moves.GUARD_SPLIT);
+    game.moveHelper.select(Moves.GUARD_SPLIT);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(player.getStat(Stat.DEF, false)).toBe(avgDef);
@@ -62,10 +62,10 @@ describe("Moves - Guard Split", () => {
     const avgDef = Math.floor((player.getStat(Stat.DEF, false) + enemy.getStat(Stat.DEF, false)) / 2);
     const avgSpDef = Math.floor((player.getStat(Stat.SPDEF, false) + enemy.getStat(Stat.SPDEF, false)) / 2);
 
-    game.move.select(Moves.GUARD_SPLIT);
+    game.moveHelper.select(Moves.GUARD_SPLIT);
     await game.phaseInterceptor.to(TurnEndPhase);
 
-    game.move.select(Moves.GUARD_SPLIT);
+    game.moveHelper.select(Moves.GUARD_SPLIT);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(player.getStat(Stat.DEF, false)).toBe(avgDef);

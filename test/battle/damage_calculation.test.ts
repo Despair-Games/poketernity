@@ -55,7 +55,7 @@ describe("Battle Mechanics - Damage Calculation", () => {
 
     const aggron = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -92,7 +92,7 @@ describe("Battle Mechanics - Damage Calculation", () => {
 
     const shedinja = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.JUMP_KICK);
+    game.moveHelper.select(Moves.JUMP_KICK);
 
     await game.phaseInterceptor.to("DamageAnimPhase");
 

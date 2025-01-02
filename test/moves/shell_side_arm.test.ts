@@ -42,7 +42,7 @@ describe("Moves - Shell Side Arm", () => {
 
     vi.spyOn(shellSideArmAttr, "apply");
 
-    game.move.select(Moves.SHELL_SIDE_ARM);
+    game.moveHelper.select(Moves.SHELL_SIDE_ARM);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(shellSideArmAttr.apply).toHaveLastReturnedWith(true);
@@ -55,7 +55,7 @@ describe("Moves - Shell Side Arm", () => {
 
     const player = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SHELL_SIDE_ARM);
+    game.moveHelper.select(Moves.SHELL_SIDE_ARM);
     await game.toNextTurn();
 
     expect(player.getMaxHp()).toBeGreaterThan(player.hp);
@@ -68,7 +68,7 @@ describe("Moves - Shell Side Arm", () => {
 
     vi.spyOn(shellSideArmAttr, "apply");
 
-    game.move.select(Moves.SHELL_SIDE_ARM);
+    game.moveHelper.select(Moves.SHELL_SIDE_ARM);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(shellSideArmAttr.apply).toHaveLastReturnedWith(false);
@@ -81,7 +81,7 @@ describe("Moves - Shell Side Arm", () => {
 
     const player = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SHELL_SIDE_ARM);
+    game.moveHelper.select(Moves.SHELL_SIDE_ARM);
     await game.toNextTurn();
 
     expect(player.getMaxHp()).toBe(player.hp);
@@ -94,10 +94,10 @@ describe("Moves - Shell Side Arm", () => {
 
     vi.spyOn(shellSideArmAttr, "apply");
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
-    game.move.select(Moves.SHELL_SIDE_ARM);
+    game.moveHelper.select(Moves.SHELL_SIDE_ARM);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("BerryPhase", false);
 

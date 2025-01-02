@@ -43,7 +43,7 @@ describe("Moves - Scale Shot", () => {
 
     await game.classicMode.startBattle([Species.MINCCINO]);
     const minccino = game.scene.getPlayerPokemon()!;
-    game.move.select(Moves.SCALE_SHOT);
+    game.moveHelper.select(Moves.SCALE_SHOT);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
@@ -72,7 +72,7 @@ describe("Moves - Scale Shot", () => {
     await game.classicMode.startBattle([Species.MINCCINO]);
     const minccino = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SCALE_SHOT);
+    game.moveHelper.select(Moves.SCALE_SHOT);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     //effect not nullified by sheer force

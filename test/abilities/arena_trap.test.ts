@@ -38,7 +38,7 @@ describe("Abilities - Arena Trap", () => {
 
     const enemy = game.scene.getEnemyPokemon();
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.toNextTurn();
 
@@ -72,14 +72,14 @@ describe("Abilities - Arena Trap", () => {
 
     vi.spyOn(enemy1, "getAbility").mockReturnValue(allAbilities[Abilities.ARENA_TRAP]);
 
-    game.move.select(Moves.ROAR);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.ROAR);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     // This runs the fist command phase where the moves are selected
     await game.toNextTurn();
     // During the next command phase the player pokemons should not be trapped anymore
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.toNextTurn();
 
     expect(player1.isTrapped()).toBe(false);

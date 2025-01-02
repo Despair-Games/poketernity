@@ -45,7 +45,7 @@ describe("Moves - Focus Punch", () => {
 
     const enemyStartingHp = enemyPokemon.hp;
 
-    game.move.select(Moves.FOCUS_PUNCH);
+    game.moveHelper.select(Moves.FOCUS_PUNCH);
 
     await game.phaseInterceptor.to(MessagePhase);
 
@@ -69,7 +69,7 @@ describe("Moves - Focus Punch", () => {
 
     const enemyStartingHp = enemyPokemon.hp;
 
-    game.move.select(Moves.FOCUS_PUNCH);
+    game.moveHelper.select(Moves.FOCUS_PUNCH);
 
     await game.phaseInterceptor.to(MessagePhase);
 
@@ -91,7 +91,7 @@ describe("Moves - Focus Punch", () => {
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.FOCUS_PUNCH);
+    game.moveHelper.select(Moves.FOCUS_PUNCH);
 
     await game.phaseInterceptor.to(MessagePhase); // Header message
 
@@ -110,7 +110,7 @@ describe("Moves - Focus Punch", () => {
     await game.startBattle([Species.CHARIZARD]);
 
     game.forceEnemyToSwitch();
-    game.move.select(Moves.FOCUS_PUNCH);
+    game.moveHelper.select(Moves.FOCUS_PUNCH);
 
     await game.phaseInterceptor.to(TurnStartPhase);
 

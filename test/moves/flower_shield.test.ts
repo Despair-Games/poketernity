@@ -43,7 +43,7 @@ describe("Moves - Flower Shield", () => {
     expect(magikarp.getStatStage(Stat.DEF)).toBe(0);
     expect(cherrim.getStatStage(Stat.DEF)).toBe(0);
 
-    game.move.select(Moves.FLOWER_SHIELD);
+    game.moveHelper.select(Moves.FLOWER_SHIELD);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(magikarp.getStatStage(Stat.DEF)).toBe(0);
@@ -62,8 +62,8 @@ describe("Moves - Flower Shield", () => {
     grassPokemons.forEach((p) => expect(p.getStatStage(Stat.DEF)).toBe(0));
     nonGrassPokemons.forEach((p) => expect(p.getStatStage(Stat.DEF)).toBe(0));
 
-    game.move.select(Moves.FLOWER_SHIELD);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.FLOWER_SHIELD);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     grassPokemons.forEach((p) => expect(p.getStatStage(Stat.DEF)).toBe(1));
@@ -86,7 +86,7 @@ describe("Moves - Flower Shield", () => {
     expect(cherrim.getStatStage(Stat.DEF)).toBe(0);
     expect(paras.getTag(SemiInvulnerableTag)).toBeUndefined;
 
-    game.move.select(Moves.FLOWER_SHIELD);
+    game.moveHelper.select(Moves.FLOWER_SHIELD);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(paras.getTag(SemiInvulnerableTag)).toBeDefined();
@@ -104,7 +104,7 @@ describe("Moves - Flower Shield", () => {
     expect(enemy.getStatStage(Stat.DEF)).toBe(0);
     expect(ally.getStatStage(Stat.DEF)).toBe(0);
 
-    game.move.select(Moves.FLOWER_SHIELD);
+    game.moveHelper.select(Moves.FLOWER_SHIELD);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(enemy.getStatStage(Stat.DEF)).toBe(0);

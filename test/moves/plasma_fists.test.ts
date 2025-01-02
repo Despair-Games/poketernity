@@ -39,8 +39,8 @@ describe("Moves - Plasma Fists", () => {
     const field = game.scene.getField(true);
     field.forEach((p) => vi.spyOn(p, "getMoveType"));
 
-    game.move.select(Moves.PLASMA_FISTS, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.TACKLE, 1, BattlerIndex.ENEMY_2);
+    game.moveHelper.select(Moves.PLASMA_FISTS, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.TACKLE, 1, BattlerIndex.ENEMY_2);
 
     await game.forceEnemyMove(Moves.TACKLE, BattlerIndex.PLAYER);
     await game.forceEnemyMove(Moves.TACKLE, BattlerIndex.PLAYER_2);
@@ -64,7 +64,7 @@ describe("Moves - Plasma Fists", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "getMoveType");
 
-    game.move.select(Moves.PLASMA_FISTS);
+    game.moveHelper.select(Moves.PLASMA_FISTS);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("BerryPhase", false);
@@ -82,7 +82,7 @@ describe("Moves - Plasma Fists", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "getMoveType");
 
-    game.move.select(Moves.PLASMA_FISTS);
+    game.moveHelper.select(Moves.PLASMA_FISTS);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("BerryPhase", false);

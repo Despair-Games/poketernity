@@ -48,7 +48,7 @@ describe("Form Change Phase", () => {
     const rustedSword = rustedSwordType.newModifier(zacian);
     game.scene.addModifier(rustedSword);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     // After the form change: Should be Crowned form

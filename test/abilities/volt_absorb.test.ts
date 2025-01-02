@@ -44,7 +44,7 @@ describe("Abilities - Volt Absorb", () => {
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(moveToUse);
+    game.moveHelper.select(moveToUse);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -63,12 +63,12 @@ describe("Abilities - Volt Absorb", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.THUNDERBOLT);
+    game.moveHelper.select(Moves.THUNDERBOLT);
     enemyPokemon.hp = enemyPokemon.hp - 1;
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
-    await game.move.forceMiss();
+    await game.moveHelper.forceMiss();
     await game.phaseInterceptor.to("BerryPhase", false);
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
   });
@@ -83,7 +83,7 @@ describe("Abilities - Volt Absorb", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.THUNDERBOLT);
+    game.moveHelper.select(Moves.THUNDERBOLT);
     enemyPokemon.hp = enemyPokemon.hp - 1;
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 

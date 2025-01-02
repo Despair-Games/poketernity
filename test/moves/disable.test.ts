@@ -37,7 +37,7 @@ describe("Moves - Disable", () => {
 
     const enemyMon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.DISABLE);
+    game.moveHelper.select(Moves.DISABLE);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
@@ -51,7 +51,7 @@ describe("Moves - Disable", () => {
     const playerMon = game.scene.getPlayerPokemon()!;
     const enemyMon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.DISABLE);
+    game.moveHelper.select(Moves.DISABLE);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toNextTurn();
 
@@ -64,11 +64,11 @@ describe("Moves - Disable", () => {
 
     const enemyMon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.DISABLE);
+    game.moveHelper.select(Moves.DISABLE);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     const enemyHistory = enemyMon.getMoveHistory();
@@ -84,7 +84,7 @@ describe("Moves - Disable", () => {
     const playerMon = game.scene.getPlayerPokemon()!;
     const enemyMon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.DISABLE);
+    game.moveHelper.select(Moves.DISABLE);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
@@ -98,11 +98,11 @@ describe("Moves - Disable", () => {
 
     const enemyMon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     // Both mons just used Splash last turn; now have player use Disable.
-    game.move.select(Moves.DISABLE);
+    game.moveHelper.select(Moves.DISABLE);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toNextTurn();
 
@@ -118,7 +118,7 @@ describe("Moves - Disable", () => {
 
     const enemyMon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.DISABLE);
+    game.moveHelper.select(Moves.DISABLE);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 

@@ -44,7 +44,7 @@ describe("Moves - Ceaseless Edge", () => {
 
     const enemyStartingHp = enemyPokemon.hp;
 
-    game.move.select(Moves.CEASELESS_EDGE);
+    game.moveHelper.select(Moves.CEASELESS_EDGE);
 
     await game.phaseInterceptor.to(MoveEffectPhase, false);
     // Spikes should not have any layers before move effect is applied
@@ -66,7 +66,7 @@ describe("Moves - Ceaseless Edge", () => {
 
     const enemyStartingHp = enemyPokemon.hp;
 
-    game.move.select(Moves.CEASELESS_EDGE);
+    game.moveHelper.select(Moves.CEASELESS_EDGE);
 
     await game.phaseInterceptor.to(MoveEffectPhase, false);
     // Spikes should not have any layers before move effect is applied
@@ -86,7 +86,7 @@ describe("Moves - Ceaseless Edge", () => {
 
     await game.classicMode.startBattle([Species.ILLUMISE]);
 
-    game.move.select(Moves.CEASELESS_EDGE);
+    game.moveHelper.select(Moves.CEASELESS_EDGE);
     await game.phaseInterceptor.to(MoveEffectPhase, false);
     // Spikes should not have any layers before move effect is applied
     const tagBefore = game.scene.arena.getTagOnSide(ArenaTagType.SPIKES, ArenaTagSide.ENEMY) as ArenaTrapTag;
@@ -100,7 +100,7 @@ describe("Moves - Ceaseless Edge", () => {
     const hpBeforeSpikes = game.scene.currentBattle.enemyParty[1].hp;
     // Check HP of pokemon that WILL BE switched in (index 1)
     game.forceEnemyToSwitch();
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to(TurnEndPhase, false);
     expect(game.scene.currentBattle.enemyParty[0].hp).toBeLessThan(hpBeforeSpikes);
   });

@@ -42,7 +42,7 @@ describe("Moves - Triple Arrows", () => {
   it("has a 30% flinch chance and 50% defense drop chance", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    game.move.select(Moves.TRIPLE_ARROWS);
+    game.moveHelper.select(Moves.TRIPLE_ARROWS);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(flinchAttr.getMoveChance).toHaveReturnedWith(30);
@@ -53,7 +53,7 @@ describe("Moves - Triple Arrows", () => {
     game.overridesHelper.ability(Abilities.SERENE_GRACE);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    game.move.select(Moves.TRIPLE_ARROWS);
+    game.moveHelper.select(Moves.TRIPLE_ARROWS);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(flinchAttr.getMoveChance).toHaveReturnedWith(60);

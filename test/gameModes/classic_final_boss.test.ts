@@ -83,7 +83,7 @@ describe("Classic Final Boss", () => {
     expect(eternatus.bossSegments).toBe(4);
     expect(eternatus.bossSegmentIndex).toBe(3);
 
-    game.move.select(Moves.DRAGON_PULSE);
+    game.moveHelper.select(Moves.DRAGON_PULSE);
     await game.toNextTurn();
 
     // Eternatus phase 2: changed form, healed and restored its shields
@@ -112,7 +112,7 @@ describe("Classic Final Boss", () => {
     expect(eternatus.bossSegments).toBe(4);
     expect(eternatus.bossSegmentIndex).toBe(3);
 
-    game.move.select(Moves.WILL_O_WISP);
+    game.moveHelper.select(Moves.WILL_O_WISP);
     await game.toNextTurn();
     expect(eternatus.status?.effect).toBe(StatusEffect.BURN);
 
@@ -120,13 +120,13 @@ describe("Classic Final Boss", () => {
     const lastShieldHp = Math.ceil(phase1Hp / eternatus.bossSegments);
     // Stall until the burn is one hit away from breaking the last shield
     while (eternatus.hp - tickDamage > lastShieldHp) {
-      game.move.select(Moves.SPLASH);
+      game.moveHelper.select(Moves.SPLASH);
       await game.toNextTurn();
     }
 
     expect(eternatus.bossSegmentIndex).toBe(1);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     // Eternatus phase 2: changed form, healed and restored its shields

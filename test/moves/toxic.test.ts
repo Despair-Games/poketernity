@@ -34,7 +34,7 @@ describe("Moves - Toxic", () => {
     vi.spyOn(allMoves[Moves.TOXIC], "accuracy", "get").mockReturnValue(0);
     await game.classicMode.startBattle([Species.TOXAPEX]);
 
-    game.move.select(Moves.TOXIC);
+    game.moveHelper.select(Moves.TOXIC);
     await game.phaseInterceptor.to("BerryPhase", false);
 
     expect(game.scene.getEnemyPokemon()!.status?.effect).toBe(StatusEffect.TOXIC);
@@ -44,7 +44,7 @@ describe("Moves - Toxic", () => {
     vi.spyOn(allMoves[Moves.TOXIC], "accuracy", "get").mockReturnValue(0);
     await game.classicMode.startBattle([Species.UMBREON]);
 
-    game.move.select(Moves.TOXIC);
+    game.moveHelper.select(Moves.TOXIC);
     await game.phaseInterceptor.to("BerryPhase", false);
 
     expect(game.scene.getEnemyPokemon()!.status).toBeUndefined();
@@ -55,7 +55,7 @@ describe("Moves - Toxic", () => {
     game.overridesHelper.enemyMoveset(Moves.FLY);
     await game.classicMode.startBattle([Species.TOXAPEX]);
 
-    game.move.select(Moves.TOXIC);
+    game.moveHelper.select(Moves.TOXIC);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -67,7 +67,7 @@ describe("Moves - Toxic", () => {
     game.overridesHelper.enemyMoveset(Moves.FLY);
     await game.classicMode.startBattle([Species.UMBREON]);
 
-    game.move.select(Moves.TOXIC);
+    game.moveHelper.select(Moves.TOXIC);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -79,7 +79,7 @@ describe("Moves - Toxic", () => {
     game.overridesHelper.enemyMoveset(Moves.FLY);
     await game.classicMode.startBattle([Species.TOXAPEX]);
 
-    game.move.select(Moves.SWIFT);
+    game.moveHelper.select(Moves.SWIFT);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("BerryPhase", false);
 

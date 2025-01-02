@@ -38,7 +38,7 @@ describe("Abilities - Corrosion", () => {
     const enemyPokemon = game.scene.getEnemyPokemon();
     expect(playerPokemon!.status).toBeUndefined();
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to("BerryPhase");
     expect(playerPokemon!.status).toBeDefined();
     expect(enemyPokemon!.status).toBeUndefined();

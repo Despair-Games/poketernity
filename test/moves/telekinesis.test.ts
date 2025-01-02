@@ -38,14 +38,14 @@ describe("Moves - Telekinesis", () => {
 
     const enemyOpponent = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.TELEKINESIS);
+    game.moveHelper.select(Moves.TELEKINESIS);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemyOpponent.getTag(BattlerTagType.TELEKINESIS)).toBeDefined();
     expect(enemyOpponent.getTag(BattlerTagType.FLOATING)).toBeDefined();
 
     await game.toNextTurn();
     vi.spyOn(allMoves[Moves.TACKLE], "accuracy", "get").mockReturnValue(0);
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemyOpponent.isFullHp()).toBe(false);
   });
@@ -55,14 +55,14 @@ describe("Moves - Telekinesis", () => {
 
     const enemyOpponent = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.TELEKINESIS);
+    game.moveHelper.select(Moves.TELEKINESIS);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemyOpponent.getTag(BattlerTagType.TELEKINESIS)).toBeDefined();
     expect(enemyOpponent.getTag(BattlerTagType.FLOATING)).toBeDefined();
 
     await game.toNextTurn();
     vi.spyOn(allMoves[Moves.MUD_SHOT], "accuracy", "get").mockReturnValue(100);
-    game.move.select(Moves.MUD_SHOT);
+    game.moveHelper.select(Moves.MUD_SHOT);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemyOpponent.isFullHp()).toBe(true);
   });
@@ -73,7 +73,7 @@ describe("Moves - Telekinesis", () => {
 
     const enemyOpponent = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.TELEKINESIS);
+    game.moveHelper.select(Moves.TELEKINESIS);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemyOpponent.getTag(BattlerTagType.TELEKINESIS)).toBeDefined();
     expect(enemyOpponent.getTag(BattlerTagType.FLOATING)).toBeDefined();
@@ -85,13 +85,13 @@ describe("Moves - Telekinesis", () => {
 
     const enemyOpponent = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.TELEKINESIS);
+    game.moveHelper.select(Moves.TELEKINESIS);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemyOpponent.getTag(BattlerTagType.TELEKINESIS)).toBeDefined();
     expect(enemyOpponent.getTag(BattlerTagType.FLOATING)).toBeDefined();
 
     await game.toNextTurn();
-    game.move.select(Moves.SMACK_DOWN);
+    game.moveHelper.select(Moves.SMACK_DOWN);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemyOpponent.getTag(BattlerTagType.TELEKINESIS)).toBeUndefined();
     expect(enemyOpponent.getTag(BattlerTagType.FLOATING)).toBeUndefined();
@@ -104,7 +104,7 @@ describe("Moves - Telekinesis", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyOpponent = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.TELEKINESIS);
+    game.moveHelper.select(Moves.TELEKINESIS);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemyOpponent.getTag(BattlerTagType.TELEKINESIS)).toBeDefined();
@@ -112,7 +112,7 @@ describe("Moves - Telekinesis", () => {
 
     await game.toNextTurn();
     vi.spyOn(allMoves[Moves.MUD_SHOT], "accuracy", "get").mockReturnValue(0);
-    game.move.select(Moves.MUD_SHOT);
+    game.moveHelper.select(Moves.MUD_SHOT);
     await game.forceEnemyMove(Moves.INGRAIN);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemyOpponent.getTag(BattlerTagType.TELEKINESIS)).toBeDefined();

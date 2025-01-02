@@ -56,7 +56,7 @@ describe("Moves - Stockpile", () => {
           await game.phaseInterceptor.to(CommandPhase);
         }
 
-        game.move.select(Moves.STOCKPILE);
+        game.moveHelper.select(Moves.STOCKPILE);
         await game.phaseInterceptor.to(TurnInitPhase);
 
         const stockpilingTag = user.getTag(StockpilingTag)!;
@@ -93,7 +93,7 @@ describe("Moves - Stockpile", () => {
       expect(user.getStatStage(Stat.DEF)).toBe(6);
       expect(user.getStatStage(Stat.SPDEF)).toBe(6);
 
-      game.move.select(Moves.STOCKPILE);
+      game.moveHelper.select(Moves.STOCKPILE);
       await game.phaseInterceptor.to(TurnInitPhase);
 
       const stockpilingTag = user.getTag(StockpilingTag)!;
@@ -105,7 +105,7 @@ describe("Moves - Stockpile", () => {
       // do it again, just for good measure
       await game.phaseInterceptor.to(CommandPhase);
 
-      game.move.select(Moves.STOCKPILE);
+      game.moveHelper.select(Moves.STOCKPILE);
       await game.phaseInterceptor.to(TurnInitPhase);
 
       const stockpilingTagAgain = user.getTag(StockpilingTag)!;

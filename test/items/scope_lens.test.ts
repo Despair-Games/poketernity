@@ -37,7 +37,7 @@ describe("Items - Scope Lens", () => {
 
     vi.spyOn(enemyPokemon, "getCritStage");
 
-    game.move.select(Moves.POUND);
+    game.moveHelper.select(Moves.POUND);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 

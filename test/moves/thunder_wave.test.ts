@@ -38,8 +38,8 @@ describe("Moves - Thunder Wave", () => {
 
     const enemyPokemon: EnemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.THUNDER_WAVE);
-    await game.move.forceHit();
+    game.moveHelper.select(Moves.THUNDER_WAVE);
+    await game.moveHelper.forceHit();
     await game.phaseInterceptor.to("BerryPhase", false);
 
     expect(enemyPokemon.status?.effect).toBe(StatusEffect.PARALYSIS);
@@ -51,8 +51,8 @@ describe("Moves - Thunder Wave", () => {
 
     const enemyPokemon: EnemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.THUNDER_WAVE);
-    await game.move.forceHit();
+    game.moveHelper.select(Moves.THUNDER_WAVE);
+    await game.moveHelper.forceHit();
     await game.phaseInterceptor.to("BerryPhase", false);
 
     expect(enemyPokemon.status).toBeUndefined();
@@ -64,8 +64,8 @@ describe("Moves - Thunder Wave", () => {
 
     const enemyPokemon: EnemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.THUNDER_WAVE);
-    await game.move.forceHit();
+    game.moveHelper.select(Moves.THUNDER_WAVE);
+    await game.moveHelper.forceHit();
     await game.phaseInterceptor.to("BerryPhase", false);
 
     expect(enemyPokemon.status?.effect).not.toBe(StatusEffect.PARALYSIS);
@@ -77,8 +77,8 @@ describe("Moves - Thunder Wave", () => {
 
     const enemyPokemon: EnemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.THUNDER_WAVE);
-    await game.move.forceHit();
+    game.moveHelper.select(Moves.THUNDER_WAVE);
+    await game.moveHelper.forceHit();
     await game.phaseInterceptor.to("BerryPhase", false);
 
     expect(enemyPokemon.status?.effect).toBe(StatusEffect.PARALYSIS);
@@ -90,8 +90,8 @@ describe("Moves - Thunder Wave", () => {
 
     const enemyPokemon: EnemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.THUNDER_WAVE);
-    await game.move.forceHit();
+    game.moveHelper.select(Moves.THUNDER_WAVE);
+    await game.moveHelper.forceHit();
     await game.phaseInterceptor.to("BerryPhase", false);
 
     expect(enemyPokemon.status).toBeUndefined();

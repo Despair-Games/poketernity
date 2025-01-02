@@ -42,7 +42,7 @@ describe("Moves - Burning Jealousy", () => {
 
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.BURNING_JEALOUSY);
+    game.moveHelper.select(Moves.BURNING_JEALOUSY);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("BerryPhase");
 
@@ -55,8 +55,8 @@ describe("Moves - Burning Jealousy", () => {
 
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.BURNING_JEALOUSY);
-    game.move.select(Moves.GROWL, 1);
+    game.moveHelper.select(Moves.BURNING_JEALOUSY);
+    game.moveHelper.select(Moves.GROWL, 1);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
     await game.phaseInterceptor.to("BerryPhase");
 
@@ -69,7 +69,7 @@ describe("Moves - Burning Jealousy", () => {
 
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.BURNING_JEALOUSY);
+    game.moveHelper.select(Moves.BURNING_JEALOUSY);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(enemy.status?.effect).toBeUndefined();
@@ -85,7 +85,7 @@ describe("Moves - Burning Jealousy", () => {
     vi.spyOn(allMoves[Moves.BURNING_JEALOUSY], "calculateBattlePower");
     await game.classicMode.startBattle();
 
-    game.move.select(Moves.BURNING_JEALOUSY);
+    game.moveHelper.select(Moves.BURNING_JEALOUSY);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(allMoves[Moves.BURNING_JEALOUSY].calculateBattlePower).toHaveReturnedWith(

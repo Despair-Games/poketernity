@@ -41,7 +41,7 @@ describe("Abilities - ZEN MODE", () => {
     const darmanitan = game.scene.getPlayerPokemon()!;
     expect(darmanitan.formIndex).toBe(baseForm);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     expect(darmanitan.getHpRatio()).toBeLessThan(1);
@@ -56,7 +56,7 @@ describe("Abilities - ZEN MODE", () => {
     darmanitan.hp = darmanitan.getMaxHp() / 2 + 1;
     expect(darmanitan.formIndex).toBe(baseForm);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     expect(darmanitan.getHpRatio()).toBeLessThan(0.5);
@@ -69,13 +69,13 @@ describe("Abilities - ZEN MODE", () => {
     darmanitan.hp = darmanitan.getMaxHp() / 2 + 1;
     expect(darmanitan.formIndex).toBe(baseForm);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     expect(darmanitan.getHpRatio()).toBeLessThan(0.5);
     expect(darmanitan.formIndex).toBe(zenForm);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.killPokemon(darmanitan);
     game.doSelectPartyPokemon(1);
     await game.toNextTurn();
@@ -100,7 +100,7 @@ describe("Abilities - ZEN MODE", () => {
     darmanitan.status = new Status(StatusEffect.FAINT);
     expect(darmanitan.isFainted()).toBe(true);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.doKillOpponents();
     await game.toNextWave();
 

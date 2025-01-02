@@ -43,11 +43,11 @@ describe("Moves - Crafty Shield", () => {
 
     const leadPokemon = game.scene.getPlayerField();
 
-    game.move.select(Moves.CRAFTY_SHIELD);
+    game.moveHelper.select(Moves.CRAFTY_SHIELD);
 
     await game.phaseInterceptor.to(CommandPhase);
 
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.phaseInterceptor.to(BerryPhase, false);
 
@@ -61,11 +61,11 @@ describe("Moves - Crafty Shield", () => {
 
     const leadPokemon = game.scene.getPlayerField();
 
-    game.move.select(Moves.CRAFTY_SHIELD);
+    game.moveHelper.select(Moves.CRAFTY_SHIELD);
 
     await game.phaseInterceptor.to(CommandPhase);
 
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.phaseInterceptor.to(BerryPhase, false);
 
@@ -80,11 +80,11 @@ describe("Moves - Crafty Shield", () => {
 
     const leadPokemon = game.scene.getPlayerField();
 
-    game.move.select(Moves.CRAFTY_SHIELD);
+    game.moveHelper.select(Moves.CRAFTY_SHIELD);
 
     await game.phaseInterceptor.to(CommandPhase);
 
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.phaseInterceptor.to(BerryPhase, false);
 
@@ -96,11 +96,11 @@ describe("Moves - Crafty Shield", () => {
 
     const leadPokemon = game.scene.getPlayerField();
 
-    game.move.select(Moves.CRAFTY_SHIELD);
+    game.moveHelper.select(Moves.CRAFTY_SHIELD);
 
     await game.phaseInterceptor.to(CommandPhase);
 
-    game.move.select(Moves.SWORDS_DANCE, 1);
+    game.moveHelper.select(Moves.SWORDS_DANCE, 1);
 
     await game.phaseInterceptor.to(BerryPhase, false);
 

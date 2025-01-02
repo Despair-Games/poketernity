@@ -37,7 +37,7 @@ describe("Abilities - Download", () => {
 
     const player = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to("TurnStartPhase");
 
     expect(player.getStatStage(Stat.SPATK)).toBe(1);
@@ -49,7 +49,7 @@ describe("Abilities - Download", () => {
 
     const player = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to("TurnStartPhase");
 
     expect(player.getStatStage(Stat.ATK)).toBe(1);

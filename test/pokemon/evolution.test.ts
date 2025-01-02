@@ -123,7 +123,7 @@ describe("Evolution", () => {
 
     expect(golem.hp).toBe(1);
 
-    game.move.select(Moves.SURF);
+    game.moveHelper.select(Moves.SURF);
     await game.phaseInterceptor.to("EndEvolutionPhase");
 
     expect(totodile.hp).toBe(totodile.getMaxHp());
@@ -153,7 +153,7 @@ describe("Evolution", () => {
 
     expect(golem.hp).toBe(1);
 
-    game.move.select(Moves.SURF);
+    game.moveHelper.select(Moves.SURF);
     await game.phaseInterceptor.to("EndEvolutionPhase");
 
     expect(cyndaquil.getMaxHp()).toBeGreaterThan(maxHpBefore);

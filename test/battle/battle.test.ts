@@ -100,7 +100,7 @@ describe("Test Battle Phase", () => {
     game.overridesHelper.enemyAbility(Abilities.HYDRATION);
     game.overridesHelper.enemyMoveset([Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE]);
     await game.startBattle();
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
     await game.phaseInterceptor.runFrom(EnemyCommandPhase).to(SelectModifierPhase, false);
   }, 20000);
 
@@ -114,7 +114,7 @@ describe("Test Battle Phase", () => {
     game.overridesHelper.enemyMoveset([Moves.TAIL_WHIP, Moves.TAIL_WHIP, Moves.TAIL_WHIP, Moves.TAIL_WHIP]);
     game.overridesHelper.battleType("single");
     await game.startBattle();
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
     await game.phaseInterceptor.runFrom(EnemyCommandPhase).to(TurnInitPhase, false);
   }, 20000);
 
@@ -258,7 +258,7 @@ describe("Test Battle Phase", () => {
     game.overridesHelper.enemyMoveset([Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE]);
     await game.startBattle([Species.DARMANITAN, Species.CHARIZARD]);
 
-    game.move.select(moveToUse);
+    game.moveHelper.select(moveToUse);
     await game.phaseInterceptor.to(DamageAnimPhase, false);
     await game.killPokemon(game.scene.currentBattle.enemyParty[0]);
     expect(game.scene.currentBattle.enemyParty[0].isFainted()).toBe(true);
@@ -278,7 +278,7 @@ describe("Test Battle Phase", () => {
     game.overridesHelper.enemyMoveset([Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE]);
     await game.startBattle();
     const turn = game.scene.currentBattle.turn;
-    game.move.select(moveToUse);
+    game.moveHelper.select(moveToUse);
     await game.toNextTurn();
     expect(game.scene.currentBattle.turn).toBeGreaterThan(turn);
   }, 20000);
@@ -298,7 +298,7 @@ describe("Test Battle Phase", () => {
     game.overridesHelper.enemyMoveset([Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE]);
     await game.classicMode.startBattle();
     const waveIndex = game.scene.currentBattle.waveIndex;
-    game.move.select(moveToUse);
+    game.moveHelper.select(moveToUse);
 
     vi.spyOn(game.scene.arena, "trySetWeather");
     await game.doKillOpponents();
@@ -321,7 +321,7 @@ describe("Test Battle Phase", () => {
 
     await game.startBattle();
     game.scene.getPlayerPokemon()!.hp = 1;
-    game.move.select(moveToUse);
+    game.moveHelper.select(moveToUse);
 
     await game.phaseInterceptor.to(BattleEndPhase);
     game.doRevivePokemon(0); // pretend max revive was picked

@@ -44,14 +44,14 @@ describe("Abilities - Heatproof", () => {
     const initialHP = 1000;
     enemy.hp = initialHP;
 
-    game.move.select(Moves.FLAMETHROWER);
+    game.moveHelper.select(Moves.FLAMETHROWER);
     await game.phaseInterceptor.to(TurnEndPhase);
     const heatproofDamage = initialHP - enemy.hp;
 
     enemy.hp = initialHP;
     game.overridesHelper.enemyAbility(Abilities.BALL_FETCH);
 
-    game.move.select(Moves.FLAMETHROWER);
+    game.moveHelper.select(Moves.FLAMETHROWER);
     await game.phaseInterceptor.to(TurnEndPhase);
     const regularDamage = initialHP - enemy.hp;
 
@@ -65,7 +65,7 @@ describe("Abilities - Heatproof", () => {
 
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     // Normal burn damage is /16

@@ -48,7 +48,7 @@ describe("Abilities - Galvanize", () => {
     const move = allMoves[Moves.TACKLE];
     vi.spyOn(move, "calculateBattlePower");
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -71,7 +71,7 @@ describe("Abilities - Galvanize", () => {
 
     enemyPokemon.hp = Math.floor(enemyPokemon.getMaxHp() * 0.8);
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -91,7 +91,7 @@ describe("Abilities - Galvanize", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "getMoveEffectiveness");
 
-    game.move.select(Moves.REVELATION_DANCE);
+    game.moveHelper.select(Moves.REVELATION_DANCE);
     await game.phaseInterceptor.to("BerryPhase", false);
 
     expect(playerPokemon.getMoveType).not.toHaveLastReturnedWith(Type.ELECTRIC);
@@ -108,9 +108,9 @@ describe("Abilities - Galvanize", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "getMoveEffectiveness");
 
-    game.move.select(Moves.FURY_SWIPES);
+    game.moveHelper.select(Moves.FURY_SWIPES);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.move.forceHit();
+    await game.moveHelper.forceHit();
 
     await game.phaseInterceptor.to("MoveEffectPhase");
     expect(playerPokemon.turnData.hitCount).toBeGreaterThan(1);

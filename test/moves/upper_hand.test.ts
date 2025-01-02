@@ -41,7 +41,7 @@ describe("Moves - Upper Hand", () => {
     const feebas = game.scene.getPlayerPokemon()!;
     const magikarp = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.UPPER_HAND);
+    game.moveHelper.select(Moves.UPPER_HAND);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(feebas.getLastXMoves()[0].result).toBe(MoveResult.SUCCESS);
@@ -59,7 +59,7 @@ describe("Moves - Upper Hand", () => {
 
     const feebas = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.UPPER_HAND);
+    game.moveHelper.select(Moves.UPPER_HAND);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(feebas.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
@@ -73,7 +73,7 @@ describe("Moves - Upper Hand", () => {
     const feebas = game.scene.getPlayerPokemon()!;
     const magikarp = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.UPPER_HAND);
+    game.moveHelper.select(Moves.UPPER_HAND);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(feebas.getLastXMoves()[0].result).toBe(MoveResult.SUCCESS);
@@ -88,7 +88,7 @@ describe("Moves - Upper Hand", () => {
 
     const feebas = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.UPPER_HAND);
+    game.moveHelper.select(Moves.UPPER_HAND);
 
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("BerryPhase");

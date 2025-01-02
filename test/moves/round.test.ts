@@ -42,8 +42,8 @@ describe("Moves - Round", () => {
     const round = allMoves[Moves.ROUND];
     const spy = vi.spyOn(round, "calculateBattlePower");
 
-    game.move.select(Moves.ROUND, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.ROUND, 1, BattlerIndex.ENEMY_2);
+    game.moveHelper.select(Moves.ROUND, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.ROUND, 1, BattlerIndex.ENEMY_2);
 
     await game.forceEnemyMove(Moves.ROUND, BattlerIndex.PLAYER);
     await game.forceEnemyMove(Moves.SPLASH);

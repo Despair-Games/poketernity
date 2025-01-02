@@ -44,7 +44,7 @@ describe("Abilities - Moxie", () => {
 
     expect(playerPokemon.getStatStage(Stat.ATK)).toBe(0);
 
-    game.move.select(moveToUse);
+    game.moveHelper.select(moveToUse);
     await game.phaseInterceptor.runFrom(EnemyCommandPhase).to(VictoryPhase);
 
     expect(playerPokemon.getStatStage(Stat.ATK)).toBe(1);
@@ -64,7 +64,7 @@ describe("Abilities - Moxie", () => {
 
       secondPokemon.hp = 1;
 
-      game.move.select(moveToUse);
+      game.moveHelper.select(moveToUse);
       game.selectTarget(BattlerIndex.PLAYER_2);
 
       await game.phaseInterceptor.to(TurnEndPhase);

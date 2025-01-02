@@ -29,7 +29,7 @@ describe("Learn Move Phase", () => {
     await game.startBattle([Species.BULBASAUR]);
     const pokemon = game.scene.getPlayerPokemon()!;
     const newMovePos = pokemon?.getMoveset().length;
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.doKillOpponents();
     await game.phaseInterceptor.to(LearnMovePhase);
     const levelMove = pokemon.getLevelMoves(5)[0];

@@ -41,7 +41,7 @@ describe("Moves - Power Trick", () => {
     const baseATK = player.getStat(Stat.ATK, false);
     const baseDEF = player.getStat(Stat.DEF, false);
 
-    game.move.select(Moves.POWER_TRICK);
+    game.moveHelper.select(Moves.POWER_TRICK);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -57,11 +57,11 @@ describe("Moves - Power Trick", () => {
     const baseATK = player.getStat(Stat.ATK, false);
     const baseDEF = player.getStat(Stat.DEF, false);
 
-    game.move.select(Moves.POWER_TRICK);
+    game.moveHelper.select(Moves.POWER_TRICK);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
-    game.move.select(Moves.POWER_TRICK);
+    game.moveHelper.select(Moves.POWER_TRICK);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -77,7 +77,7 @@ describe("Moves - Power Trick", () => {
     const player = game.scene.getPlayerPokemon()!;
     player.addTag(BattlerTagType.POWER_TRICK);
 
-    game.move.select(Moves.BATON_PASS);
+    game.moveHelper.select(Moves.BATON_PASS);
     game.doSelectPartyPokemon(1);
 
     await game.phaseInterceptor.to(TurnEndPhase);
@@ -98,7 +98,7 @@ describe("Moves - Power Trick", () => {
     const player = game.scene.getPlayerPokemon()!;
     player.addTag(BattlerTagType.POWER_TRICK);
 
-    game.move.select(Moves.TRANSFORM);
+    game.moveHelper.select(Moves.TRANSFORM);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 

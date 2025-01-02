@@ -38,7 +38,7 @@ describe("Abilities - Wonder Skin", () => {
     vi.spyOn(moveToCheck, "calculateBattleAccuracy");
 
     await game.startBattle([Species.PIKACHU]);
-    game.move.select(Moves.CHARM);
+    game.moveHelper.select(Moves.CHARM);
     await game.phaseInterceptor.to(MoveEffectPhase);
 
     expect(moveToCheck.calculateBattleAccuracy).toHaveReturnedWith(50);
@@ -50,7 +50,7 @@ describe("Abilities - Wonder Skin", () => {
     vi.spyOn(moveToCheck, "calculateBattleAccuracy");
 
     await game.startBattle([Species.PIKACHU]);
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
     await game.phaseInterceptor.to(MoveEffectPhase);
 
     expect(moveToCheck.calculateBattleAccuracy).toHaveReturnedWith(100);
@@ -66,7 +66,7 @@ describe("Abilities - Wonder Skin", () => {
       vi.spyOn(moveToCheck, "calculateBattleAccuracy");
 
       await game.startBattle([Species.PIKACHU]);
-      game.move.select(Moves.CHARM);
+      game.moveHelper.select(Moves.CHARM);
       await game.phaseInterceptor.to(MoveEffectPhase);
 
       expect(moveToCheck.calculateBattleAccuracy).toHaveReturnedWith(100);

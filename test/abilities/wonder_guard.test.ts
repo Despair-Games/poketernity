@@ -36,7 +36,7 @@ describe("Abilities - Wonder Guard", () => {
 
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(enemy.hp).toBe(1);
@@ -47,7 +47,7 @@ describe("Abilities - Wonder Guard", () => {
 
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.THUNDERBOLT);
+    game.moveHelper.select(Moves.THUNDERBOLT);
     await game.phaseInterceptor.to("BattleEndPhase");
 
     expect(enemy.isFainted()).toBe(true);

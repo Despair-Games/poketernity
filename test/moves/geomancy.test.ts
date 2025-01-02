@@ -40,7 +40,7 @@ describe("Moves - Geomancy", () => {
     const player = game.scene.getPlayerPokemon()!;
     const affectedStats: EffectiveStat[] = [Stat.SPATK, Stat.SPDEF, Stat.SPD];
 
-    game.move.select(Moves.GEOMANCY);
+    game.moveHelper.select(Moves.GEOMANCY);
 
     await game.phaseInterceptor.to("TurnEndPhase");
     affectedStats.forEach((stat) => expect(player.getStatStage(stat)).toBe(0));
@@ -61,7 +61,7 @@ describe("Moves - Geomancy", () => {
     const player = game.scene.getPlayerPokemon()!;
     const affectedStats: EffectiveStat[] = [Stat.SPATK, Stat.SPDEF, Stat.SPD];
 
-    game.move.select(Moves.GEOMANCY);
+    game.moveHelper.select(Moves.GEOMANCY);
 
     await game.phaseInterceptor.to("MoveEndPhase", false);
     await game.doKillOpponents();

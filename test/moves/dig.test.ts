@@ -41,7 +41,7 @@ describe("Moves - Dig", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.DIG);
+    game.moveHelper.select(Moves.DIG);
 
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(playerPokemon.getTag(BattlerTagType.UNDERGROUND)).toBeDefined();
@@ -67,7 +67,7 @@ describe("Moves - Dig", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.DIG);
+    game.moveHelper.select(Moves.DIG);
 
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(playerPokemon.hp).toBeLessThan(playerPokemon.getMaxHp());
@@ -81,7 +81,7 @@ describe("Moves - Dig", () => {
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.DIG);
+    game.moveHelper.select(Moves.DIG);
 
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(playerPokemon.getTag(BattlerTagType.UNDERGROUND)).toBeUndefined();
@@ -99,7 +99,7 @@ describe("Moves - Dig", () => {
 
     const preDigEarthquakeDmg = playerPokemon.getAttackDamage(enemyPokemon, allMoves[Moves.EARTHQUAKE]).damage;
 
-    game.move.select(Moves.DIG);
+    game.moveHelper.select(Moves.DIG);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("MoveEffectPhase");

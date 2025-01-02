@@ -41,17 +41,17 @@ describe("Abilities - Stakeout", () => {
 
     const [enemy1] = game.scene.getEnemyParty();
 
-    game.move.select(Moves.SURF);
+    game.moveHelper.select(Moves.SURF);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.toNextTurn();
     const damage1 = enemy1.getInverseHp();
     enemy1.hp = enemy1.getMaxHp();
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     game.forceEnemyToSwitch();
     await game.toNextTurn();
 
-    game.move.select(Moves.SURF);
+    game.moveHelper.select(Moves.SURF);
     game.forceEnemyToSwitch();
     await game.toNextTurn();
 
@@ -64,17 +64,17 @@ describe("Abilities - Stakeout", () => {
 
     const [enemy1] = game.scene.getEnemyParty();
 
-    game.move.select(Moves.SURF);
+    game.moveHelper.select(Moves.SURF);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.toNextTurn();
     const damage1 = enemy1.getInverseHp();
     enemy1.hp = enemy1.getMaxHp();
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.FLIP_TURN);
     await game.toNextTurn();
 
-    game.move.select(Moves.SURF);
+    game.moveHelper.select(Moves.SURF);
     await game.forceEnemyMove(Moves.FLIP_TURN);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();

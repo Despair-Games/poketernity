@@ -41,7 +41,7 @@ describe("Moves - Double Team", () => {
     vi.spyOn(enemy, "getAccuracyMultiplier");
     expect(ally.getStatStage(Stat.EVA)).toBe(0);
 
-    game.move.select(Moves.DOUBLE_TEAM);
+    game.moveHelper.select(Moves.DOUBLE_TEAM);
     await game.phaseInterceptor.to(TurnEndPhase);
     await game.toNextTurn();
 

@@ -40,8 +40,8 @@ describe("Abilities - Battle Armor/Shell Armor", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon();
 
-    game.move.select(Moves.SPLASH);
-    await game.move.forceHit();
+    game.moveHelper.select(Moves.SPLASH);
+    await game.moveHelper.forceHit();
     await game.setTurnOrder[(BattlerIndex.ENEMY, BattlerIndex.PLAYER)];
     await game.phaseInterceptor.to("BerryPhase");
 

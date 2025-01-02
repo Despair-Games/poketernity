@@ -43,7 +43,7 @@ describe("Moves - Dragon Tail", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.DRAGON_TAIL);
+    game.moveHelper.select(Moves.DRAGON_TAIL);
 
     await game.phaseInterceptor.to("BerryPhase");
 
@@ -62,7 +62,7 @@ describe("Moves - Dragon Tail", () => {
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.DRAGON_TAIL);
+    game.moveHelper.select(Moves.DRAGON_TAIL);
 
     await game.phaseInterceptor.to("BerryPhase");
 
@@ -81,8 +81,8 @@ describe("Moves - Dragon Tail", () => {
     const enemyLeadPokemon = game.scene.getEnemyParty()[0]!;
     const enemySecPokemon = game.scene.getEnemyParty()[1]!;
 
-    game.move.select(Moves.DRAGON_TAIL, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.DRAGON_TAIL, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -94,8 +94,8 @@ describe("Moves - Dragon Tail", () => {
     expect(leadPokemon.hp).toBeLessThan(leadPokemon.getMaxHp());
 
     // second turn
-    game.move.select(Moves.FLAMETHROWER, 0, BattlerIndex.ENEMY_2);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.FLAMETHROWER, 0, BattlerIndex.ENEMY_2);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.phaseInterceptor.to("BerryPhase");
     expect(enemySecPokemon.hp).toBeLessThan(enemySecPokemon.getMaxHp());
@@ -111,9 +111,9 @@ describe("Moves - Dragon Tail", () => {
     const enemyLeadPokemon = game.scene.getEnemyParty()[0]!;
     const enemySecPokemon = game.scene.getEnemyParty()[1]!;
 
-    game.move.select(Moves.DRAGON_TAIL, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.DRAGON_TAIL, 0, BattlerIndex.ENEMY);
     // target the same pokemon, second move should be redirected after first flees
-    game.move.select(Moves.DRAGON_TAIL, 1, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.DRAGON_TAIL, 1, BattlerIndex.ENEMY);
 
     await game.phaseInterceptor.to("BerryPhase");
 
@@ -134,7 +134,7 @@ describe("Moves - Dragon Tail", () => {
 
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.DRAGON_TAIL);
+    game.moveHelper.select(Moves.DRAGON_TAIL);
     await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(enemy.isFullHp()).toBe(false);
@@ -144,7 +144,7 @@ describe("Moves - Dragon Tail", () => {
     game.overridesHelper.startingWave(5).startingLevel(1000); // To make sure Dragon Tail KO's the opponent
     await game.classicMode.startBattle([Species.DRATINI]);
 
-    game.move.select(Moves.DRAGON_TAIL);
+    game.moveHelper.select(Moves.DRAGON_TAIL);
 
     await game.toNextTurn();
 
@@ -166,7 +166,7 @@ describe("Moves - Dragon Tail", () => {
       .startingLevel(1000); // To make sure Dragon Tail KO's the opponent
     await game.classicMode.startBattle([Species.DRATINI]);
 
-    game.move.select(Moves.DRAGON_TAIL);
+    game.moveHelper.select(Moves.DRAGON_TAIL);
 
     await game.toNextTurn();
 
@@ -184,7 +184,7 @@ describe("Moves - Dragon Tail", () => {
       .enemyLevel(1000); // To make sure Dragon Tail KO's the player
     await game.classicMode.startBattle([Species.DRATINI, Species.BULBASAUR]);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.toNextTurn();
 
@@ -205,7 +205,7 @@ describe("Moves - Dragon Tail", () => {
     vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: number = 0) => {
       return min;
     });
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.DRAGON_TAIL);
     await game.toNextTurn();
 
@@ -218,7 +218,7 @@ describe("Moves - Dragon Tail", () => {
     vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: number = 0) => {
       return min + 1;
     });
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     expect(bulbasaur.isOnField()).toBe(false);
@@ -239,7 +239,7 @@ describe("Moves - Dragon Tail", () => {
     vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: number = 0) => {
       return min;
     });
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     expect(lapras.isOnField()).toBe(false);
@@ -259,7 +259,7 @@ describe("Moves - Dragon Tail", () => {
     eevee.hp = 0;
     eevee.status = new Status(StatusEffect.FAINT);
     expect(eevee.isFainted()).toBe(true);
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.toNextTurn();
 
@@ -267,7 +267,7 @@ describe("Moves - Dragon Tail", () => {
     vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: number = 0) => {
       return min;
     });
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.DRAGON_TAIL);
     await game.toNextTurn();
 
@@ -288,7 +288,7 @@ describe("Moves - Dragon Tail", () => {
     eevee.hp = 0;
     eevee.status = new Status(StatusEffect.FAINT);
     expect(eevee.isFainted()).toBe(true);
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.toNextTurn();
 
@@ -296,7 +296,7 @@ describe("Moves - Dragon Tail", () => {
     vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: number = 0) => {
       return min;
     });
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.DRAGON_TAIL);
     await game.toNextTurn();
 

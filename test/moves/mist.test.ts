@@ -37,8 +37,8 @@ describe("Moves - Mist", () => {
 
     const playerPokemon = game.scene.getPlayerField();
 
-    game.move.select(Moves.MIST, 0);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.MIST, 0);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.phaseInterceptor.to("BerryPhase");
 

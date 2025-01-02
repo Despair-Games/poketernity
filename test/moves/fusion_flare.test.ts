@@ -40,7 +40,7 @@ describe("Moves - Fusion Flare", () => {
 
     const partyMember = game.scene.getPlayerPokemon()!;
 
-    game.move.select(fusionFlare);
+    game.moveHelper.select(fusionFlare);
 
     await game.phaseInterceptor.to(TurnStartPhase, false);
 

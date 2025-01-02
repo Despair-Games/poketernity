@@ -40,8 +40,8 @@ describe("Moves - Tailwind", () => {
     expect(magikarp.getEffectiveStat(Stat.SPD)).equal(magikarpSpd);
     expect(meowth.getEffectiveStat(Stat.SPD)).equal(meowthSpd);
 
-    game.move.select(Moves.TAILWIND);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.TAILWIND);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -55,19 +55,19 @@ describe("Moves - Tailwind", () => {
 
     await game.startBattle([Species.MAGIKARP]);
 
-    game.move.select(Moves.TAILWIND);
+    game.moveHelper.select(Moves.TAILWIND);
     await game.toNextTurn();
     expect(game.scene.arena.getTagOnSide(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeDefined();
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
     expect(game.scene.arena.getTagOnSide(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeDefined();
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
     expect(game.scene.arena.getTagOnSide(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeDefined();
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     expect(game.scene.arena.getTagOnSide(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeUndefined();
@@ -89,7 +89,7 @@ describe("Moves - Tailwind", () => {
     expect(game.scene.arena.getTagOnSide(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeUndefined();
     expect(game.scene.arena.getTagOnSide(ArenaTagType.TAILWIND, ArenaTagSide.ENEMY)).toBeUndefined();
 
-    game.move.select(Moves.TAILWIND);
+    game.moveHelper.select(Moves.TAILWIND);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 

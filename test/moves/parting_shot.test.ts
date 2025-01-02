@@ -40,7 +40,7 @@ describe("Moves - Parting Shot", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     expect(enemyPokemon).toBeDefined();
 
-    game.move.select(Moves.PARTING_SHOT);
+    game.moveHelper.select(Moves.PARTING_SHOT);
 
     await game.phaseInterceptor.to(BerryPhase, false);
     expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(0);
@@ -55,7 +55,7 @@ describe("Moves - Parting Shot", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     expect(enemyPokemon).toBeDefined();
 
-    game.move.select(Moves.PARTING_SHOT);
+    game.moveHelper.select(Moves.PARTING_SHOT);
 
     await game.phaseInterceptor.to(BerryPhase, false);
     expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(0);
@@ -71,19 +71,19 @@ describe("Moves - Parting Shot", () => {
       await game.startBattle([Species.MEOWTH, Species.MEOWTH, Species.MEOWTH, Species.MURKROW, Species.ABRA]);
 
       // use Memento 3 times to debuff enemy
-      game.move.select(Moves.MEMENTO);
+      game.moveHelper.select(Moves.MEMENTO);
       await game.phaseInterceptor.to(FaintPhase);
       expect(game.scene.getPlayerParty()[0].isFainted()).toBe(true);
       game.doSelectPartyPokemon(1);
 
       await game.phaseInterceptor.to(TurnInitPhase, false);
-      game.move.select(Moves.MEMENTO);
+      game.moveHelper.select(Moves.MEMENTO);
       await game.phaseInterceptor.to(FaintPhase);
       expect(game.scene.getPlayerParty()[0].isFainted()).toBe(true);
       game.doSelectPartyPokemon(2);
 
       await game.phaseInterceptor.to(TurnInitPhase, false);
-      game.move.select(Moves.MEMENTO);
+      game.moveHelper.select(Moves.MEMENTO);
       await game.phaseInterceptor.to(FaintPhase);
       expect(game.scene.getPlayerParty()[0].isFainted()).toBe(true);
       game.doSelectPartyPokemon(3);
@@ -97,7 +97,7 @@ describe("Moves - Parting Shot", () => {
       expect(enemyPokemon.getStatStage(Stat.SPATK)).toBe(-6);
 
       // now parting shot should fail
-      game.move.select(Moves.PARTING_SHOT);
+      game.moveHelper.select(Moves.PARTING_SHOT);
 
       await game.phaseInterceptor.to(BerryPhase, false);
       expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(-6);
@@ -116,7 +116,7 @@ describe("Moves - Parting Shot", () => {
       const enemyPokemon = game.scene.getEnemyPokemon()!;
       expect(enemyPokemon).toBeDefined();
 
-      game.move.select(Moves.PARTING_SHOT);
+      game.moveHelper.select(Moves.PARTING_SHOT);
 
       await game.phaseInterceptor.to(BerryPhase, false);
       expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(0);
@@ -135,7 +135,7 @@ describe("Moves - Parting Shot", () => {
       const enemyPokemon = game.scene.getEnemyPokemon()!;
       expect(enemyPokemon).toBeDefined();
 
-      game.move.select(Moves.PARTING_SHOT);
+      game.moveHelper.select(Moves.PARTING_SHOT);
 
       await game.phaseInterceptor.to(BerryPhase, false);
       expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(0);
@@ -153,7 +153,7 @@ describe("Moves - Parting Shot", () => {
       const enemyPokemon = game.scene.getEnemyPokemon()!;
       expect(enemyPokemon).toBeDefined();
 
-      game.move.select(Moves.PARTING_SHOT);
+      game.moveHelper.select(Moves.PARTING_SHOT);
 
       await game.phaseInterceptor.to(BerryPhase, false);
       expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(-1);
@@ -167,7 +167,7 @@ describe("Moves - Parting Shot", () => {
     "Parting shot regularly not fail if no party available to switch - party fainted",
     async () => {
       await game.startBattle([Species.MURKROW, Species.MEOWTH]);
-      game.move.select(Moves.SPLASH);
+      game.moveHelper.select(Moves.SPLASH);
 
       // intentionally kill party pokemon, switch to second slot (now 1 party mon is fainted)
       await game.killPokemon(game.scene.getPlayerParty()[0]);
@@ -176,7 +176,7 @@ describe("Moves - Parting Shot", () => {
       game.doSelectPartyPokemon(1);
 
       await game.phaseInterceptor.to(TurnInitPhase, false);
-      game.move.select(Moves.PARTING_SHOT);
+      game.moveHelper.select(Moves.PARTING_SHOT);
 
       await game.phaseInterceptor.to(BerryPhase, false);
       const enemyPokemon = game.scene.getEnemyPokemon()!;

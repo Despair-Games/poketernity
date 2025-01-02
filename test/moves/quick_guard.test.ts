@@ -42,8 +42,8 @@ describe("Moves - Quick Guard", () => {
 
     const playerPokemon = game.scene.getPlayerField();
 
-    game.move.select(Moves.QUICK_GUARD);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.QUICK_GUARD);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -58,8 +58,8 @@ describe("Moves - Quick Guard", () => {
 
     const playerPokemon = game.scene.getPlayerField();
 
-    game.move.select(Moves.QUICK_GUARD);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.QUICK_GUARD);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -74,8 +74,8 @@ describe("Moves - Quick Guard", () => {
     const playerPokemon = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.move.select(Moves.QUICK_GUARD);
-    game.move.select(Moves.FOLLOW_ME, 1);
+    game.moveHelper.select(Moves.QUICK_GUARD);
+    game.moveHelper.select(Moves.FOLLOW_ME, 1);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -92,7 +92,7 @@ describe("Moves - Quick Guard", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.QUICK_GUARD);
+    game.moveHelper.select(Moves.QUICK_GUARD);
 
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 

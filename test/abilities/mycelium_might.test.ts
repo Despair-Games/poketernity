@@ -47,7 +47,7 @@ describe("Abilities - Mycelium Might", () => {
     const playerIndex = game.scene.getPlayerPokemon()?.getBattlerIndex();
     const enemyIndex = enemyPokemon?.getBattlerIndex();
 
-    game.move.select(Moves.BABY_DOLL_EYES);
+    game.moveHelper.select(Moves.BABY_DOLL_EYES);
 
     await game.phaseInterceptor.to(TurnStartPhase, false);
     const phase = game.scene.getCurrentPhase() as TurnStartPhase;
@@ -71,7 +71,7 @@ describe("Abilities - Mycelium Might", () => {
     const playerIndex = game.scene.getPlayerPokemon()?.getBattlerIndex();
     const enemyIndex = enemyPokemon?.getBattlerIndex();
 
-    game.move.select(Moves.BABY_DOLL_EYES);
+    game.moveHelper.select(Moves.BABY_DOLL_EYES);
 
     await game.phaseInterceptor.to(TurnStartPhase, false);
     const phase = game.scene.getCurrentPhase() as TurnStartPhase;
@@ -92,7 +92,7 @@ describe("Abilities - Mycelium Might", () => {
     const playerIndex = game.scene.getPlayerPokemon()!.getBattlerIndex();
     const enemyIndex = game.scene.getEnemyPokemon()!.getBattlerIndex();
 
-    game.move.select(Moves.QUICK_ATTACK);
+    game.moveHelper.select(Moves.QUICK_ATTACK);
 
     await game.phaseInterceptor.to(TurnStartPhase, false);
     const phase = game.scene.getCurrentPhase() as TurnStartPhase;

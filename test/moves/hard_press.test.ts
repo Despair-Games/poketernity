@@ -37,7 +37,7 @@ describe("Moves - Hard Press", () => {
   it("should return 100 power if target HP ratio is at 100%", async () => {
     await game.startBattle([Species.PIKACHU]);
 
-    game.move.select(Moves.HARD_PRESS);
+    game.moveHelper.select(Moves.HARD_PRESS);
     await game.phaseInterceptor.to(MoveEffectPhase);
 
     expect(moveToCheck.calculateBattlePower).toHaveReturnedWith(100);
@@ -50,7 +50,7 @@ describe("Moves - Hard Press", () => {
 
     vi.spyOn(enemy, "getHpRatio").mockReturnValue(targetHpRatio);
 
-    game.move.select(Moves.HARD_PRESS);
+    game.moveHelper.select(Moves.HARD_PRESS);
     await game.phaseInterceptor.to(MoveEffectPhase);
 
     expect(moveToCheck.calculateBattlePower).toHaveReturnedWith(50);
@@ -63,7 +63,7 @@ describe("Moves - Hard Press", () => {
 
     vi.spyOn(enemy, "getHpRatio").mockReturnValue(targetHpRatio);
 
-    game.move.select(Moves.HARD_PRESS);
+    game.moveHelper.select(Moves.HARD_PRESS);
     await game.phaseInterceptor.to(MoveEffectPhase);
 
     expect(moveToCheck.calculateBattlePower).toHaveReturnedWith(1);
@@ -76,7 +76,7 @@ describe("Moves - Hard Press", () => {
 
     vi.spyOn(enemy, "getHpRatio").mockReturnValue(targetHpRatio);
 
-    game.move.select(Moves.HARD_PRESS);
+    game.moveHelper.select(Moves.HARD_PRESS);
     await game.phaseInterceptor.to(MoveEffectPhase);
 
     expect(moveToCheck.calculateBattlePower).toHaveReturnedWith(1);

@@ -43,9 +43,9 @@ describe("Moves - Sparkly Swirl", () => {
     vi.spyOn(rightPlayer, "resetStatus");
     vi.spyOn(partyPokemon, "resetStatus");
 
-    game.move.select(Moves.SPARKLY_SWIRL, 0, leftOpp.getBattlerIndex());
+    game.moveHelper.select(Moves.SPARKLY_SWIRL, 0, leftOpp.getBattlerIndex());
     await game.phaseInterceptor.to(CommandPhase);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.toNextTurn();
 
     expect(leftPlayer.resetStatus).toHaveBeenCalledOnce();
@@ -65,9 +65,9 @@ describe("Moves - Sparkly Swirl", () => {
     vi.spyOn(leftOpp, "resetStatus");
     vi.spyOn(rightOpp, "resetStatus");
 
-    game.move.select(Moves.SPARKLY_SWIRL, 0, leftOpp.getBattlerIndex());
+    game.moveHelper.select(Moves.SPARKLY_SWIRL, 0, leftOpp.getBattlerIndex());
     await game.phaseInterceptor.to(CommandPhase);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.toNextTurn();
 
     expect(leftOpp.resetStatus).toHaveBeenCalledTimes(0);

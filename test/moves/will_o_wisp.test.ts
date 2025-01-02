@@ -38,14 +38,14 @@ describe("Moves - Will-O-Wisp", () => {
 
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.WILL_O_WISP);
+    game.moveHelper.select(Moves.WILL_O_WISP);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.move.forceHit();
+    await game.moveHelper.forceHit();
     await game.toNextTurn();
 
     expect(enemy.status?.effect).toBe(StatusEffect.BURN);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     expect(enemy.status?.effect).toBe(StatusEffect.BURN);

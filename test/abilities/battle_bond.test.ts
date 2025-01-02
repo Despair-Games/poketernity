@@ -50,7 +50,7 @@ describe("Abilities - BATTLE BOND", () => {
     greninja.status = new Status(StatusEffect.FAINT);
     expect(greninja.isFainted()).toBe(true);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.doKillOpponents();
     await game.phaseInterceptor.to("TurnEndPhase");
     game.doSelectModifier();
@@ -76,7 +76,7 @@ describe("Abilities - BATTLE BOND", () => {
     let expectedBattlePower = 20;
     let expectedMultiHitType = MultiHitType._3;
 
-    game.move.select(Moves.WATER_SHURIKEN);
+    game.moveHelper.select(Moves.WATER_SHURIKEN);
     await game.phaseInterceptor.to("BerryPhase", false);
     expect(waterShuriken.calculateBattlePower).toHaveLastReturnedWith(expectedBattlePower);
     expect(actualMultiHitType).toBe(expectedMultiHitType);
@@ -88,7 +88,7 @@ describe("Abilities - BATTLE BOND", () => {
     expectedBattlePower = 15;
     expectedMultiHitType = MultiHitType._2_TO_5;
 
-    game.move.select(Moves.WATER_SHURIKEN);
+    game.moveHelper.select(Moves.WATER_SHURIKEN);
     await game.phaseInterceptor.to("BerryPhase", false);
     expect(waterShuriken.calculateBattlePower).toHaveLastReturnedWith(expectedBattlePower);
     expect(actualMultiHitType).toBe(expectedMultiHitType);

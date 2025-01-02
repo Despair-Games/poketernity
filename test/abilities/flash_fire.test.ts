@@ -41,7 +41,7 @@ describe("Abilities - Flash Fire", () => {
 
     const blissey = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to(TurnEndPhase);
     expect(blissey.hp).toBe(blissey.getMaxHp());
   }, 20000);
@@ -52,7 +52,7 @@ describe("Abilities - Flash Fire", () => {
 
     const blissey = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.PROTECT);
+    game.moveHelper.select(Moves.PROTECT);
     await game.phaseInterceptor.to(TurnEndPhase);
     expect(blissey!.getTag(BattlerTagType.FIRE_BOOST)).toBeUndefined();
   }, 20000);
@@ -63,10 +63,10 @@ describe("Abilities - Flash Fire", () => {
 
     const blissey = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SPLASH);
-    await game.move.forceHit();
+    game.moveHelper.select(Moves.SPLASH);
+    await game.moveHelper.forceHit();
     await game.phaseInterceptor.to(MovePhase, false);
-    await game.move.forceHit();
+    await game.moveHelper.forceHit();
 
     await game.phaseInterceptor.to(TurnEndPhase);
     expect(blissey!.getTag(BattlerTagType.FIRE_BOOST)).toBeDefined();
@@ -79,7 +79,7 @@ describe("Abilities - Flash Fire", () => {
 
     const blissey = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.phaseInterceptor.to(TurnEndPhase);
     expect(blissey!.getTag(BattlerTagType.FIRE_BOOST)).toBeDefined();
@@ -90,7 +90,7 @@ describe("Abilities - Flash Fire", () => {
     await game.classicMode.startBattle([Species.BLISSEY, Species.CHANSEY]);
 
     // ensure use baton pass after enemy moved
-    game.move.select(Moves.BATON_PASS);
+    game.moveHelper.select(Moves.BATON_PASS);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     game.doSelectPartyPokemon(1);
@@ -110,7 +110,7 @@ describe("Abilities - Flash Fire", () => {
     blissey.hp = initialHP;
 
     // first turn
-    game.move.select(Moves.EMBER);
+    game.moveHelper.select(Moves.EMBER);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to(TurnEndPhase);
     const originalDmg = initialHP - blissey.hp;
@@ -119,7 +119,7 @@ describe("Abilities - Flash Fire", () => {
     blissey.hp = initialHP;
 
     // second turn
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to(TurnEndPhase);
     const flashFireDmg = initialHP - blissey.hp;
 
@@ -137,10 +137,10 @@ describe("Abilities - Flash Fire", () => {
     blissey.hp = initialHP;
 
     // first turn
-    game.move.select(Moves.FIRE_PLEDGE);
+    game.moveHelper.select(Moves.FIRE_PLEDGE);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
-    await game.move.forceMiss();
+    await game.moveHelper.forceMiss();
     await game.phaseInterceptor.to(TurnEndPhase);
     const originalDmg = initialHP - blissey.hp;
 
@@ -148,7 +148,7 @@ describe("Abilities - Flash Fire", () => {
     blissey.hp = initialHP;
 
     // second turn
-    game.move.select(Moves.FIRE_PLEDGE);
+    game.moveHelper.select(Moves.FIRE_PLEDGE);
     await game.phaseInterceptor.to(TurnEndPhase);
     const flashFireDmg = initialHP - blissey.hp;
 

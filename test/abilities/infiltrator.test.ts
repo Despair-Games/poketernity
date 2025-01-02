@@ -67,7 +67,7 @@ describe("Abilities - Infiltrator", () => {
 
     game.scene.arena.addTag(ArenaTagType.SAFEGUARD, 1, Moves.NONE, enemy.id, ArenaTagSide.ENEMY, true);
 
-    game.move.select(Moves.SPORE);
+    game.moveHelper.select(Moves.SPORE);
 
     await game.phaseInterceptor.to("BerryPhase", false);
     expect(enemy.status?.effect).toBe(StatusEffect.SLEEP);
@@ -83,7 +83,7 @@ describe("Abilities - Infiltrator", () => {
 
     game.scene.arena.addTag(ArenaTagType.MIST, 1, Moves.NONE, enemy.id, ArenaTagSide.ENEMY, true);
 
-    game.move.select(Moves.BABY_DOLL_EYES);
+    game.moveHelper.select(Moves.BABY_DOLL_EYES);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(enemy.getStatStage(Stat.ATK)).toBe(-1);
@@ -98,7 +98,7 @@ describe("Abilities - Infiltrator", () => {
 
     enemy.addTag(BattlerTagType.SUBSTITUTE, 1, Moves.NONE, enemy.id);
 
-    game.move.select(Moves.BABY_DOLL_EYES);
+    game.moveHelper.select(Moves.BABY_DOLL_EYES);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(enemy.getStatStage(Stat.ATK)).toBe(-1);

@@ -23,7 +23,7 @@ describe("Abilities - Flower Gift", () => {
     game.overridesHelper.starterForms({ [Species.CASTFORM]: SUNSHINE_FORM }).enemyAbility(ability);
     await game.classicMode.startBattle([Species.CASTFORM]);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     expect(game.scene.getPlayerPokemon()?.formIndex).toBe(OVERCAST_FORM);
   };
@@ -59,8 +59,8 @@ describe("Abilities - Flower Gift", () => {
     // const magikarpAtkStat = magikarp.getEffectiveStat(Stat.ATK);;
     // const magikarpSpDefStat = magikarp.getEffectiveStat(Stat.SPDEF);
 
-    game.move.select(Moves.SUNNY_DAY, 0);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SUNNY_DAY, 0);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     await game.phaseInterceptor.to("TurnEndPhase");
@@ -79,7 +79,7 @@ describe("Abilities - Flower Gift", () => {
     const cherrim = game.scene.getPlayerPokemon()!;
     expect(cherrim.formIndex).toBe(SUNSHINE_FORM);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
   });
 
   it("reverts to Overcast Form if a Pokémon on the field has Air Lock", async () => {
@@ -97,7 +97,7 @@ describe("Abilities - Flower Gift", () => {
 
     const cherrim = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SKILL_SWAP);
+    game.moveHelper.select(Moves.SKILL_SWAP);
 
     await game.phaseInterceptor.to("TurnStartPhase");
     expect(cherrim.formIndex).toBe(SUNSHINE_FORM);
@@ -118,7 +118,7 @@ describe("Abilities - Flower Gift", () => {
 
     expect(cherrim.formIndex).toBe(SUNSHINE_FORM);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("TurnEndPhase");
 

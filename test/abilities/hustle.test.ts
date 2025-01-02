@@ -40,8 +40,8 @@ describe("Abilities - Hustle", () => {
 
     vi.spyOn(pikachu, "getEffectiveStat");
 
-    game.move.select(Moves.TACKLE);
-    await game.move.forceHit();
+    game.moveHelper.select(Moves.TACKLE);
+    await game.moveHelper.forceHit();
     await game.phaseInterceptor.to("DamageAnimPhase");
 
     expect(pikachu.getEffectiveStat).toHaveReturnedWith(Math.floor(atk * 1.5));
@@ -53,7 +53,7 @@ describe("Abilities - Hustle", () => {
 
     vi.spyOn(pikachu, "getAccuracyMultiplier");
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(pikachu.getAccuracyMultiplier).toHaveReturnedWith(0.8);
@@ -67,7 +67,7 @@ describe("Abilities - Hustle", () => {
     vi.spyOn(pikachu, "getEffectiveStat");
     vi.spyOn(pikachu, "getAccuracyMultiplier");
 
-    game.move.select(Moves.GIGA_DRAIN);
+    game.moveHelper.select(Moves.GIGA_DRAIN);
     await game.phaseInterceptor.to("DamageAnimPhase");
 
     expect(pikachu.getEffectiveStat).toHaveReturnedWith(spatk);
@@ -85,7 +85,7 @@ describe("Abilities - Hustle", () => {
     vi.spyOn(pikachu, "getAccuracyMultiplier");
     vi.spyOn(allMoves[Moves.FISSURE], "calculateBattleAccuracy");
 
-    game.move.select(Moves.FISSURE);
+    game.moveHelper.select(Moves.FISSURE);
     await game.phaseInterceptor.to("DamageAnimPhase");
 
     expect(enemyPokemon.turnData.damageTaken).toBe(enemyPokemon.getMaxHp());

@@ -39,7 +39,7 @@ describe("Abilities - Ice Face", () => {
   it("takes no damage from physical move and transforms to Noice", async () => {
     await game.classicMode.startBattle([Species.HITMONLEE]);
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
 
     await game.phaseInterceptor.to(MoveEndPhase);
 
@@ -55,7 +55,7 @@ describe("Abilities - Ice Face", () => {
     game.overridesHelper.enemyLevel(1);
     await game.classicMode.startBattle([Species.HITMONLEE]);
 
-    game.move.select(Moves.SURGING_STRIKES);
+    game.moveHelper.select(Moves.SURGING_STRIKES);
 
     const eiscue = game.scene.getEnemyPokemon()!;
     expect(eiscue.getTag(BattlerTagType.ICE_FACE)).toBeDefined();
@@ -81,7 +81,7 @@ describe("Abilities - Ice Face", () => {
   it("takes damage from special moves", async () => {
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
-    game.move.select(Moves.ICE_BEAM);
+    game.moveHelper.select(Moves.ICE_BEAM);
 
     await game.phaseInterceptor.to(MoveEndPhase);
 
@@ -95,7 +95,7 @@ describe("Abilities - Ice Face", () => {
   it("takes effects from status moves", async () => {
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
-    game.move.select(Moves.TOXIC_THREAD);
+    game.moveHelper.select(Moves.TOXIC_THREAD);
 
     await game.phaseInterceptor.to(MoveEndPhase);
 
@@ -111,7 +111,7 @@ describe("Abilities - Ice Face", () => {
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
-    game.move.select(Moves.QUICK_ATTACK);
+    game.moveHelper.select(Moves.QUICK_ATTACK);
 
     await game.phaseInterceptor.to(MoveEndPhase);
 
@@ -133,7 +133,7 @@ describe("Abilities - Ice Face", () => {
 
     await game.classicMode.startBattle([Species.EISCUE, Species.NINJASK]);
 
-    game.move.select(Moves.SNOWSCAPE);
+    game.moveHelper.select(Moves.SNOWSCAPE);
 
     await game.phaseInterceptor.to(TurnEndPhase);
     let eiscue = game.scene.getPlayerPokemon()!;
@@ -160,7 +160,7 @@ describe("Abilities - Ice Face", () => {
 
     await game.classicMode.startBattle([Species.EISCUE]);
 
-    game.move.select(Moves.HAIL);
+    game.moveHelper.select(Moves.HAIL);
     const eiscue = game.scene.getPlayerPokemon()!;
 
     await game.phaseInterceptor.to(QuietFormChangePhase);
@@ -179,7 +179,7 @@ describe("Abilities - Ice Face", () => {
 
     await game.classicMode.startBattle([Species.EISCUE, Species.MAGIKARP]);
 
-    game.move.select(Moves.ICE_BEAM);
+    game.moveHelper.select(Moves.ICE_BEAM);
 
     await game.phaseInterceptor.to(TurnEndPhase);
     let eiscue = game.scene.getPlayerPokemon()!;
@@ -213,7 +213,7 @@ describe("Abilities - Ice Face", () => {
     expect(eiscue.formIndex).toBe(noiceForm);
     expect(eiscue.getTag(BattlerTagType.ICE_FACE)).toBeUndefined();
 
-    game.move.select(Moves.ICE_BEAM);
+    game.moveHelper.select(Moves.ICE_BEAM);
     await game.doKillOpponents();
     await game.phaseInterceptor.to(TurnEndPhase);
     game.doSelectModifier();
@@ -227,7 +227,7 @@ describe("Abilities - Ice Face", () => {
     game.overridesHelper.enemyMoveset(Moves.SUBSTITUTE).moveset(Moves.POWER_TRIP);
     await game.classicMode.startBattle();
 
-    game.move.select(Moves.POWER_TRIP);
+    game.moveHelper.select(Moves.POWER_TRIP);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
@@ -239,7 +239,7 @@ describe("Abilities - Ice Face", () => {
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
-    game.move.select(Moves.GASTRO_ACID);
+    game.moveHelper.select(Moves.GASTRO_ACID);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -255,7 +255,7 @@ describe("Abilities - Ice Face", () => {
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
-    game.move.select(Moves.SKILL_SWAP);
+    game.moveHelper.select(Moves.SKILL_SWAP);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -271,7 +271,7 @@ describe("Abilities - Ice Face", () => {
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
-    game.move.select(Moves.SIMPLE_BEAM);
+    game.moveHelper.select(Moves.SIMPLE_BEAM);
 
     await game.phaseInterceptor.to(TurnInitPhase);
 

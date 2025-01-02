@@ -36,13 +36,13 @@ describe("Moves - Miracle Eye", () => {
 
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.CONFUSION);
+    game.moveHelper.select(Moves.CONFUSION);
     await game.toNextTurn();
     expect(enemy.hp).toBe(enemy.getMaxHp());
 
-    game.move.select(Moves.MIRACLE_EYE);
+    game.moveHelper.select(Moves.MIRACLE_EYE);
     await game.toNextTurn();
-    game.move.select(Moves.CONFUSION);
+    game.moveHelper.select(Moves.CONFUSION);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to(MoveEffectPhase);
 

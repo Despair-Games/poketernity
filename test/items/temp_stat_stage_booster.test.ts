@@ -45,7 +45,7 @@ describe("Items - Temporary Stat Stage Boosters", () => {
 
     vi.spyOn(partyMember, "getStatStageMultiplier");
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
 
     await game.phaseInterceptor.runFrom("EnemyCommandPhase").to(TurnEndPhase);
 
@@ -64,11 +64,11 @@ describe("Items - Temporary Stat Stage Boosters", () => {
     vi.spyOn(partyMember, "getAccuracyMultiplier");
 
     // Raise ACC by +2 stat stages
-    game.move.select(Moves.HONE_CLAWS);
+    game.moveHelper.select(Moves.HONE_CLAWS);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -84,11 +84,11 @@ describe("Items - Temporary Stat Stage Boosters", () => {
     vi.spyOn(partyMember, "getStatStageMultiplier");
 
     // Raise ATK by +1 stat stage
-    game.move.select(Moves.HONE_CLAWS);
+    game.moveHelper.select(Moves.HONE_CLAWS);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -112,7 +112,7 @@ describe("Items - Temporary Stat Stage Boosters", () => {
     // Set all stat stages to 6
     vi.spyOn(partyMember.summonData, "statStages", "get").mockReturnValue(new Array(BATTLE_STATS.length).fill(6));
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -125,7 +125,7 @@ describe("Items - Temporary Stat Stage Boosters", () => {
 
     await game.classicMode.startBattle([Species.PIKACHU]);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.doKillOpponents();
 

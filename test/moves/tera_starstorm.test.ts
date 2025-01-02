@@ -41,7 +41,7 @@ describe("Moves - Tera Starstorm", () => {
 
     vi.spyOn(terapagos, "getMoveType");
 
-    game.move.select(Moves.TERA_STARSTORM);
+    game.moveHelper.select(Moves.TERA_STARSTORM);
     await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(terapagos.isTerastallized()).toBe(true);
@@ -51,8 +51,8 @@ describe("Moves - Tera Starstorm", () => {
   it("targets both opponents in a double battle when used by Terapagos in its Stellar Form", async () => {
     await game.classicMode.startBattle([Species.MAGIKARP, Species.TERAPAGOS]);
 
-    game.move.select(Moves.TERA_STARSTORM, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.TERA_STARSTORM, 1);
+    game.moveHelper.select(Moves.TERA_STARSTORM, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.TERA_STARSTORM, 1);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
@@ -84,8 +84,8 @@ describe("Moves - Tera Starstorm", () => {
 
     vi.spyOn(fusionedMon, "getMoveType");
 
-    game.move.select(Moves.TERA_STARSTORM, 0);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.TERA_STARSTORM, 0);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.phaseInterceptor.to("TurnEndPhase");
 
     // Fusion and terastallized

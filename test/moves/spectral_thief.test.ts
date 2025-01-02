@@ -43,7 +43,7 @@ describe("Moves - Spectral Thief", () => {
     const enemy = game.scene.getEnemyPokemon()!;
     const spy = vi.spyOn(enemy, "getAttackDamage");
 
-    game.move.select(Moves.SPECTRAL_THIEF);
+    game.moveHelper.select(Moves.SPECTRAL_THIEF);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
@@ -65,7 +65,7 @@ describe("Moves - Spectral Thief", () => {
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.SPECTRAL_THIEF);
+    game.moveHelper.select(Moves.SPECTRAL_THIEF);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
@@ -90,7 +90,7 @@ describe("Moves - Spectral Thief", () => {
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.SPECTRAL_THIEF);
+    game.moveHelper.select(Moves.SPECTRAL_THIEF);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
@@ -114,7 +114,7 @@ describe("Moves - Spectral Thief", () => {
       const player = game.scene.getPlayerPokemon()!;
       const enemy = game.scene.getEnemyPokemon()!;
 
-      game.move.select(Moves.SPECTRAL_THIEF);
+      game.moveHelper.select(Moves.SPECTRAL_THIEF);
       await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
       await game.phaseInterceptor.to("MoveEndPhase");
@@ -133,7 +133,7 @@ describe("Moves - Spectral Thief", () => {
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.SPECTRAL_THIEF);
+    game.moveHelper.select(Moves.SPECTRAL_THIEF);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.phaseInterceptor.to("MoveEndPhase");

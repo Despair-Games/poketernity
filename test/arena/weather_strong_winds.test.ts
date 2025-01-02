@@ -38,7 +38,7 @@ describe("Weather - Strong Winds", () => {
     const pikachu = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.THUNDERBOLT);
+    game.moveHelper.select(Moves.THUNDERBOLT);
 
     await game.phaseInterceptor.to(TurnStartPhase);
     expect(enemy.getAttackTypeEffectiveness(allMoves[Moves.THUNDERBOLT].type, pikachu)).toBe(0.5);
@@ -49,7 +49,7 @@ describe("Weather - Strong Winds", () => {
     const pikachu = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.THUNDERBOLT);
+    game.moveHelper.select(Moves.THUNDERBOLT);
 
     await game.phaseInterceptor.to(TurnStartPhase);
     expect(enemy.getAttackTypeEffectiveness(allMoves[Moves.THUNDERBOLT].type, pikachu)).toBe(1);
@@ -60,7 +60,7 @@ describe("Weather - Strong Winds", () => {
     const pikachu = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.ICE_BEAM);
+    game.moveHelper.select(Moves.ICE_BEAM);
 
     await game.phaseInterceptor.to(TurnStartPhase);
     expect(enemy.getAttackTypeEffectiveness(allMoves[Moves.ICE_BEAM].type, pikachu)).toBe(1);
@@ -71,7 +71,7 @@ describe("Weather - Strong Winds", () => {
     const pikachu = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.ROCK_SLIDE);
+    game.moveHelper.select(Moves.ROCK_SLIDE);
 
     await game.phaseInterceptor.to(TurnStartPhase);
     expect(enemy.getAttackTypeEffectiveness(allMoves[Moves.ROCK_SLIDE].type, pikachu)).toBe(1);
@@ -85,7 +85,7 @@ describe("Weather - Strong Winds", () => {
     const enemy = game.scene.getEnemyPokemon()!;
     enemy.hp = 1;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(game.scene.arena.weather?.weatherType).toBeUndefined();

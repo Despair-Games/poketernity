@@ -46,10 +46,10 @@ describe("Abilities - Sheer Force", () => {
     const airSlashFlinchAttr = airSlashMove.getAttrs(FlinchAttr)[0];
     vi.spyOn(airSlashFlinchAttr, "getMoveChance");
 
-    game.move.select(Moves.AIR_SLASH);
+    game.moveHelper.select(Moves.AIR_SLASH);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.move.forceHit();
+    await game.moveHelper.forceHit();
     await game.phaseInterceptor.to("BerryPhase", false);
 
     expect(airSlashMove.calculateBattlePower).toHaveLastReturnedWith(airSlashMove.power * SHEER_FORCE_MULT);
@@ -63,10 +63,10 @@ describe("Abilities - Sheer Force", () => {
     const bindMove = allMoves[Moves.BIND];
     vi.spyOn(bindMove, "calculateBattlePower");
 
-    game.move.select(Moves.BIND);
+    game.moveHelper.select(Moves.BIND);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.move.forceHit();
+    await game.moveHelper.forceHit();
     await game.phaseInterceptor.to("BerryPhase", false);
 
     expect(bindMove.calculateBattlePower).toHaveLastReturnedWith(bindMove.power);
@@ -79,9 +79,9 @@ describe("Abilities - Sheer Force", () => {
     const tackleMove = allMoves[Moves.TACKLE];
     vi.spyOn(tackleMove, "calculateBattlePower");
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.move.forceHit();
+    await game.moveHelper.forceHit();
     await game.phaseInterceptor.to("BerryPhase", false);
 
     expect(tackleMove.calculateBattlePower).toHaveLastReturnedWith(tackleMove.power);
@@ -101,10 +101,10 @@ describe("Abilities - Sheer Force", () => {
     const headbuttFlinchAttr = headbuttMove.getAttrs(FlinchAttr)[0];
     vi.spyOn(headbuttFlinchAttr, "getMoveChance");
 
-    game.move.select(Moves.HEADBUTT);
+    game.moveHelper.select(Moves.HEADBUTT);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.move.forceHit();
+    await game.moveHelper.forceHit();
     await game.phaseInterceptor.to("BerryPhase", false);
 
     expect(enemyPokemon?.getTypes()[0]).toBe(Type.WATER);
@@ -128,7 +128,7 @@ describe("Abilities - Sheer Force", () => {
     pidgeot.stats[Stat.DEF] = 10000;
     onix.stats[Stat.DEF] = 10000;
 
-    game.move.select(moveToUse);
+    game.moveHelper.select(moveToUse);
     await game.toNextTurn();
 
     // Check that both Pokemon's Color Change activated
@@ -148,7 +148,7 @@ describe("Abilities - Sheer Force", () => {
     const playerPokemon = game.scene.getPlayerPokemon();
     const formKeyStart = playerPokemon?.getFormKey();
 
-    game.move.select(Moves.RELIC_SONG);
+    game.moveHelper.select(Moves.RELIC_SONG);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(formKeyStart).toBe(playerPokemon?.getFormKey());
   });

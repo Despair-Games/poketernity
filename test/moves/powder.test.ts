@@ -46,7 +46,7 @@ describe("Moves - Powder", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     enemyPokemon.moveset = [new PokemonMove(Moves.EMBER)];
 
-    game.move.select(Moves.POWDER);
+    game.moveHelper.select(Moves.POWDER);
 
     await game.phaseInterceptor.to(BerryPhase, false);
     expect(enemyPokemon.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
@@ -55,7 +55,7 @@ describe("Moves - Powder", () => {
 
     await game.toNextTurn();
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.phaseInterceptor.to(BerryPhase, false);
     expect(enemyPokemon.getLastXMoves()[0].result).toBe(MoveResult.SUCCESS);
@@ -70,7 +70,7 @@ describe("Moves - Powder", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.POWDER);
+    game.moveHelper.select(Moves.POWDER);
 
     await game.phaseInterceptor.to(BerryPhase, false);
     expect(enemyPokemon.getLastXMoves()[0].result).toBe(MoveResult.SUCCESS);
@@ -84,7 +84,7 @@ describe("Moves - Powder", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.POWDER);
+    game.moveHelper.select(Moves.POWDER);
 
     await game.phaseInterceptor.to(BerryPhase, false);
     expect(enemyPokemon.getLastXMoves()[0].result).toBe(MoveResult.SUCCESS);
@@ -98,7 +98,7 @@ describe("Moves - Powder", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.POWDER);
+    game.moveHelper.select(Moves.POWDER);
 
     await game.phaseInterceptor.to(BerryPhase, false);
     expect(enemyPokemon.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
@@ -112,7 +112,7 @@ describe("Moves - Powder", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.POWDER);
+    game.moveHelper.select(Moves.POWDER);
 
     await game.phaseInterceptor.to(BerryPhase, false);
     expect(enemyPokemon.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
@@ -126,7 +126,7 @@ describe("Moves - Powder", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.POWDER);
+    game.moveHelper.select(Moves.POWDER);
 
     await game.phaseInterceptor.to(BerryPhase, false);
     expect(enemyPokemon.status?.effect).not.toBe(StatusEffect.FREEZE);
@@ -141,7 +141,7 @@ describe("Moves - Powder", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.POWDER);
+    game.moveHelper.select(Moves.POWDER);
 
     await game.phaseInterceptor.to(BerryPhase, false);
     expect(enemyPokemon.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
@@ -158,15 +158,15 @@ describe("Moves - Powder", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     // Turn 1: Roar away 1 opponent
-    game.move.select(Moves.ROAR, 0, BattlerIndex.ENEMY_2);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.ROAR, 0, BattlerIndex.ENEMY_2);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.toNextTurn();
     await game.toNextTurn(); // Requires game.toNextTurn() twice due to double battle
 
     // Turn 2: Enemy should activate Powder twice: From using Ember, and from copying Fiery Dance via Dancer
     playerPokemon.hp = playerPokemon.getMaxHp();
-    game.move.select(Moves.FIERY_DANCE, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.POWDER, 1, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.FIERY_DANCE, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.POWDER, 1, BattlerIndex.ENEMY);
 
     await game.phaseInterceptor.to(MoveEffectPhase);
     const enemyStartingHp = enemyPokemon.hp;
@@ -190,7 +190,7 @@ describe("Moves - Powder", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.POWDER);
+    game.moveHelper.select(Moves.POWDER);
 
     await game.phaseInterceptor.to(BerryPhase, false);
     expect(enemyPokemon.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
@@ -205,7 +205,7 @@ describe("Moves - Powder", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.POWDER);
+    game.moveHelper.select(Moves.POWDER);
 
     await game.phaseInterceptor.to(BerryPhase, false);
     expect(enemyPokemon.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
@@ -219,7 +219,7 @@ describe("Moves - Powder", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.POWDER);
+    game.moveHelper.select(Moves.POWDER);
 
     await game.phaseInterceptor.to(BerryPhase, false);
     expect(enemyPokemon.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
@@ -232,8 +232,8 @@ describe("Moves - Powder", () => {
     await game.classicMode.startBattle([Species.CHARIZARD, Species.CHARIZARD]);
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.POWDER, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.POWDER, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.forceEnemyMove(Moves.GRASS_PLEDGE, BattlerIndex.PLAYER);
     await game.forceEnemyMove(Moves.FIRE_PLEDGE, BattlerIndex.PLAYER);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2, BattlerIndex.ENEMY]);
@@ -249,8 +249,8 @@ describe("Moves - Powder", () => {
     await game.classicMode.startBattle([Species.CHARIZARD, Species.CHARIZARD]);
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.POWDER, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.POWDER, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.forceEnemyMove(Moves.FIRE_PLEDGE, BattlerIndex.PLAYER);
     await game.forceEnemyMove(Moves.WATER_PLEDGE, BattlerIndex.PLAYER);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
@@ -266,8 +266,8 @@ describe("Moves - Powder", () => {
     await game.classicMode.startBattle([Species.CHARIZARD, Species.CHARIZARD]);
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.POWDER, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.POWDER, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.forceEnemyMove(Moves.FIRE_PLEDGE, BattlerIndex.PLAYER);
     await game.forceEnemyMove(Moves.WATER_PLEDGE, BattlerIndex.PLAYER);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2, BattlerIndex.ENEMY]);

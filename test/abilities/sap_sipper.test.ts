@@ -48,7 +48,7 @@ describe("Abilities - Sap Sipper", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     const initialEnemyHp = enemyPokemon.hp;
 
-    game.move.select(moveToUse);
+    game.moveHelper.select(moveToUse);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -65,7 +65,7 @@ describe("Abilities - Sap Sipper", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(moveToUse);
+    game.moveHelper.select(moveToUse);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -80,7 +80,7 @@ describe("Abilities - Sap Sipper", () => {
 
     await game.classicMode.startBattle([Species.BULBASAUR]);
 
-    game.move.select(moveToUse);
+    game.moveHelper.select(moveToUse);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -99,7 +99,7 @@ describe("Abilities - Sap Sipper", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     const initialEnemyHp = enemyPokemon.hp;
 
-    game.move.select(moveToUse);
+    game.moveHelper.select(moveToUse);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -116,7 +116,7 @@ describe("Abilities - Sap Sipper", () => {
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(moveToUse);
+    game.moveHelper.select(moveToUse);
 
     await game.phaseInterceptor.to(MoveEndPhase);
 
@@ -143,7 +143,7 @@ describe("Abilities - Sap Sipper", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     const initialEnemyHp = enemyPokemon.hp;
 
-    game.move.select(moveToUse);
+    game.moveHelper.select(moveToUse);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -158,10 +158,10 @@ describe("Abilities - Sap Sipper", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.LEAF_BLADE);
+    game.moveHelper.select(Moves.LEAF_BLADE);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
-    await game.move.forceMiss();
+    await game.moveHelper.forceMiss();
     await game.phaseInterceptor.to("BerryPhase", false);
     expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(1);
   });

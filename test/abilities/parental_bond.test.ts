@@ -46,7 +46,7 @@ describe("Abilities - Parental Bond", () => {
 
     let enemyStartingHp = enemyPokemon.hp;
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
 
     await game.phaseInterceptor.to("DamageAnimPhase");
     const firstStrikeDamage = enemyStartingHp - enemyPokemon.hp;
@@ -68,7 +68,7 @@ describe("Abilities - Parental Bond", () => {
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.POWER_UP_PUNCH);
+    game.moveHelper.select(Moves.POWER_UP_PUNCH);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -83,7 +83,7 @@ describe("Abilities - Parental Bond", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.BABY_DOLL_EYES);
+    game.moveHelper.select(Moves.BABY_DOLL_EYES);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -97,8 +97,8 @@ describe("Abilities - Parental Bond", () => {
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.DOUBLE_HIT);
-    await game.move.forceHit();
+    game.moveHelper.select(Moves.DOUBLE_HIT);
+    await game.moveHelper.forceHit();
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -112,7 +112,7 @@ describe("Abilities - Parental Bond", () => {
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SELF_DESTRUCT);
+    game.moveHelper.select(Moves.SELF_DESTRUCT);
 
     await game.phaseInterceptor.to("DamageAnimPhase", false);
 
@@ -126,8 +126,8 @@ describe("Abilities - Parental Bond", () => {
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.ROLLOUT);
-    await game.move.forceHit();
+    game.moveHelper.select(Moves.ROLLOUT);
+    await game.moveHelper.forceHit();
 
     await game.phaseInterceptor.to("DamageAnimPhase", false);
 
@@ -141,7 +141,7 @@ describe("Abilities - Parental Bond", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.DRAGON_RAGE);
+    game.moveHelper.select(Moves.DRAGON_RAGE);
     await game.phaseInterceptor.to("BerryPhase", false);
 
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp() - 80);
@@ -156,7 +156,7 @@ describe("Abilities - Parental Bond", () => {
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.COUNTER);
+    game.moveHelper.select(Moves.COUNTER);
     await game.phaseInterceptor.to("DamageAnimPhase");
 
     const playerDamage = leadPokemon.getMaxHp() - leadPokemon.hp;
@@ -175,8 +175,8 @@ describe("Abilities - Parental Bond", () => {
 
     const playerPokemon = game.scene.getPlayerField();
 
-    game.move.select(Moves.EARTHQUAKE);
-    game.move.select(Moves.EARTHQUAKE, 1);
+    game.moveHelper.select(Moves.EARTHQUAKE);
+    game.moveHelper.select(Moves.EARTHQUAKE, 1);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -190,7 +190,7 @@ describe("Abilities - Parental Bond", () => {
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.EARTHQUAKE);
+    game.moveHelper.select(Moves.EARTHQUAKE);
     await game.phaseInterceptor.to("DamageAnimPhase", false);
 
     expect(leadPokemon.turnData.hitCount).toBe(2);
@@ -203,7 +203,7 @@ describe("Abilities - Parental Bond", () => {
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.MIND_BLOWN);
+    game.moveHelper.select(Moves.MIND_BLOWN);
 
     await game.phaseInterceptor.to("DamageAnimPhase", false);
 
@@ -223,7 +223,7 @@ describe("Abilities - Parental Bond", () => {
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.BURN_UP);
+    game.moveHelper.select(Moves.BURN_UP);
 
     await game.phaseInterceptor.to("MoveEffectPhase");
 
@@ -244,7 +244,7 @@ describe("Abilities - Parental Bond", () => {
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
 
     await game.phaseInterceptor.to("DamageAnimPhase");
 
@@ -262,8 +262,8 @@ describe("Abilities - Parental Bond", () => {
 
     const enemyStartingHp = enemyPokemon.hp;
 
-    game.move.select(Moves.SEISMIC_TOSS);
-    await game.move.forceHit();
+    game.moveHelper.select(Moves.SEISMIC_TOSS);
+    await game.moveHelper.forceHit();
 
     await game.phaseInterceptor.to("DamageAnimPhase");
 
@@ -281,8 +281,8 @@ describe("Abilities - Parental Bond", () => {
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.HYPER_BEAM);
-    await game.move.forceHit();
+    game.moveHelper.select(Moves.HYPER_BEAM);
+    await game.moveHelper.forceHit();
 
     await game.phaseInterceptor.to("DamageAnimPhase");
 
@@ -302,8 +302,8 @@ describe("Abilities - Parental Bond", () => {
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.ANCHOR_SHOT);
-    await game.move.forceHit();
+    game.moveHelper.select(Moves.ANCHOR_SHOT);
+    await game.moveHelper.forceHit();
 
     await game.phaseInterceptor.to("DamageAnimPhase");
 
@@ -326,8 +326,8 @@ describe("Abilities - Parental Bond", () => {
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.SMACK_DOWN);
-    await game.move.forceHit();
+    game.moveHelper.select(Moves.SMACK_DOWN);
+    await game.moveHelper.forceHit();
 
     await game.phaseInterceptor.to("DamageAnimPhase");
 
@@ -346,8 +346,8 @@ describe("Abilities - Parental Bond", () => {
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.U_TURN);
-    await game.move.forceHit();
+    game.moveHelper.select(Moves.U_TURN);
+    await game.moveHelper.forceHit();
 
     await game.phaseInterceptor.to("MoveEffectPhase");
     expect(leadPokemon.turnData.hitCount).toBe(2);
@@ -364,8 +364,8 @@ describe("Abilities - Parental Bond", () => {
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.WAKE_UP_SLAP);
-    await game.move.forceHit();
+    game.moveHelper.select(Moves.WAKE_UP_SLAP);
+    await game.moveHelper.forceHit();
 
     await game.phaseInterceptor.to("DamageAnimPhase");
 
@@ -385,7 +385,7 @@ describe("Abilities - Parental Bond", () => {
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -400,7 +400,7 @@ describe("Abilities - Parental Bond", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.WATER_GUN);
+    game.moveHelper.select(Moves.WATER_GUN);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -414,7 +414,7 @@ describe("Abilities - Parental Bond", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "damageAndUpdate");
 
-    game.move.select(Moves.FUTURE_SIGHT);
+    game.moveHelper.select(Moves.FUTURE_SIGHT);
     await game.toNextTurn();
 
     game.doSwitchPokemon(1);

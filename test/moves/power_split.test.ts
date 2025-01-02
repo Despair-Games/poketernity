@@ -42,7 +42,7 @@ describe("Moves - Power Split", () => {
     const avgAtk = Math.floor((player.getStat(Stat.ATK, false) + enemy.getStat(Stat.ATK, false)) / 2);
     const avgSpAtk = Math.floor((player.getStat(Stat.SPATK, false) + enemy.getStat(Stat.SPATK, false)) / 2);
 
-    game.move.select(Moves.POWER_SPLIT);
+    game.moveHelper.select(Moves.POWER_SPLIT);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(player.getStat(Stat.ATK, false)).toBe(avgAtk);
@@ -62,10 +62,10 @@ describe("Moves - Power Split", () => {
     const avgAtk = Math.floor((player.getStat(Stat.ATK, false) + enemy.getStat(Stat.ATK, false)) / 2);
     const avgSpAtk = Math.floor((player.getStat(Stat.SPATK, false) + enemy.getStat(Stat.SPATK, false)) / 2);
 
-    game.move.select(Moves.POWER_SPLIT);
+    game.moveHelper.select(Moves.POWER_SPLIT);
     await game.phaseInterceptor.to(TurnEndPhase);
 
-    game.move.select(Moves.POWER_SPLIT);
+    game.moveHelper.select(Moves.POWER_SPLIT);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(player.getStat(Stat.ATK, false)).toBe(avgAtk);

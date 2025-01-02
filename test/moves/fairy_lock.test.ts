@@ -38,8 +38,8 @@ describe("Moves - Fairy Lock", () => {
     const playerPokemon = game.scene.getPlayerField();
     const enemyField = game.scene.getEnemyField();
 
-    game.move.select(Moves.FAIRY_LOCK);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.FAIRY_LOCK);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.forceEnemyMove(Moves.SPLASH, 1);
     await game.forceEnemyMove(Moves.SPLASH, 1);
     await game.phaseInterceptor.to("BerryPhase");
@@ -48,8 +48,8 @@ describe("Moves - Fairy Lock", () => {
 
     await game.toNextTurn();
 
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.SPLASH, 1);
     await game.forceEnemyMove(Moves.SPLASH, 1);
     await game.phaseInterceptor.to("BerryPhase");
@@ -68,8 +68,8 @@ describe("Moves - Fairy Lock", () => {
   it("Ghost types can escape Fairy Lock", async () => {
     await game.classicMode.startBattle([Species.DUSKNOIR, Species.GENGAR, Species.TYRUNT]);
 
-    game.move.select(Moves.FAIRY_LOCK);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.FAIRY_LOCK);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.forceEnemyMove(Moves.SPLASH, 1);
     await game.forceEnemyMove(Moves.SPLASH, 1);
     await game.phaseInterceptor.to("BerryPhase");
@@ -82,7 +82,7 @@ describe("Moves - Fairy Lock", () => {
     expect(game.scene.getPlayerField()[0].isTrapped()).toEqual(false);
     expect(game.scene.getPlayerField()[1].isTrapped()).toEqual(false);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     game.doSwitchPokemon(2);
     await game.forceEnemyMove(Moves.SPLASH, 1);
     await game.forceEnemyMove(Moves.SPLASH, 1);
@@ -96,8 +96,8 @@ describe("Moves - Fairy Lock", () => {
     game.overridesHelper.enemyMoveset([Moves.SPLASH, Moves.WHIRLWIND]);
     await game.classicMode.startBattle([Species.KLEFKI, Species.TYRUNT, Species.ZYGARDE]);
 
-    game.move.select(Moves.FAIRY_LOCK);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.FAIRY_LOCK);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.forceEnemyMove(Moves.SPLASH, 1);
     await game.forceEnemyMove(Moves.SPLASH, 1);
     await game.phaseInterceptor.to("BerryPhase");
@@ -106,8 +106,8 @@ describe("Moves - Fairy Lock", () => {
     expect(game.scene.arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.ENEMY)).toBeDefined();
 
     await game.toNextTurn();
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.WHIRLWIND, 0);
     game.doSelectPartyPokemon(2);
     await game.forceEnemyMove(Moves.WHIRLWIND, 1);
@@ -123,8 +123,8 @@ describe("Moves - Fairy Lock", () => {
     game.overridesHelper.moveset([Moves.FAIRY_LOCK, Moves.SPLASH, Moves.MEMENTO]);
     await game.classicMode.startBattle([Species.KLEFKI, Species.GUZZLORD, Species.TYRUNT, Species.ZYGARDE]);
 
-    game.move.select(Moves.FAIRY_LOCK);
-    game.move.select(Moves.MEMENTO, 1);
+    game.moveHelper.select(Moves.FAIRY_LOCK);
+    game.moveHelper.select(Moves.MEMENTO, 1);
     game.doSelectPartyPokemon(2);
     await game.forceEnemyMove(Moves.SPLASH, 1);
     await game.forceEnemyMove(Moves.SPLASH, 1);
@@ -133,8 +133,8 @@ describe("Moves - Fairy Lock", () => {
     expect(game.scene.arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.ENEMY)).toBeDefined();
 
     await game.toNextTurn();
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.SPLASH, 1);
     await game.forceEnemyMove(Moves.SPLASH, 1);
     await game.phaseInterceptor.to("BerryPhase");

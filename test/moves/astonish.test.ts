@@ -45,7 +45,7 @@ describe("Moves - Astonish", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.ASTONISH);
+    game.moveHelper.select(Moves.ASTONISH);
 
     await game.phaseInterceptor.to(MoveEndPhase, false);
 
@@ -58,7 +58,7 @@ describe("Moves - Astonish", () => {
 
     await game.phaseInterceptor.to(CommandPhase, false);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.phaseInterceptor.to(BerryPhase, false);
 

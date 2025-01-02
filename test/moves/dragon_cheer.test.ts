@@ -37,8 +37,8 @@ describe("Moves - Dragon Cheer", () => {
 
     vi.spyOn(enemy, "getCritStage");
 
-    game.move.select(Moves.DRAGON_CHEER, 0);
-    game.move.select(Moves.TACKLE, 1, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.DRAGON_CHEER, 0);
+    game.moveHelper.select(Moves.TACKLE, 1, BattlerIndex.ENEMY);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
@@ -54,8 +54,8 @@ describe("Moves - Dragon Cheer", () => {
 
     vi.spyOn(enemy, "getCritStage");
 
-    game.move.select(Moves.DRAGON_CHEER, 0);
-    game.move.select(Moves.TACKLE, 1, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.DRAGON_CHEER, 0);
+    game.moveHelper.select(Moves.TACKLE, 1, BattlerIndex.ENEMY);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
@@ -72,8 +72,8 @@ describe("Moves - Dragon Cheer", () => {
 
     vi.spyOn(enemy, "getCritStage");
 
-    game.move.select(Moves.DRAGON_CHEER, 0);
-    game.move.select(Moves.TACKLE, 1, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.DRAGON_CHEER, 0);
+    game.moveHelper.select(Moves.TACKLE, 1, BattlerIndex.ENEMY);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
@@ -87,8 +87,8 @@ describe("Moves - Dragon Cheer", () => {
     vi.spyOn(magikarp, "getTypes").mockReturnValue([Type.DRAGON]);
     expect(magikarp.getTypes()).toEqual([Type.DRAGON]);
 
-    game.move.select(Moves.SPLASH, 0);
-    game.move.select(Moves.TACKLE, 1, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.SPLASH, 0);
+    game.moveHelper.select(Moves.TACKLE, 1, BattlerIndex.ENEMY);
 
     await game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 

@@ -39,9 +39,9 @@ describe("Moves - Aromatherapy", () => {
     vi.spyOn(rightPlayer, "resetStatus");
     vi.spyOn(partyPokemon, "resetStatus");
 
-    game.move.select(Moves.AROMATHERAPY, 0);
+    game.moveHelper.select(Moves.AROMATHERAPY, 0);
     await game.phaseInterceptor.to(CommandPhase);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.toNextTurn();
 
     expect(leftPlayer.resetStatus).toHaveBeenCalledOnce();
@@ -61,9 +61,9 @@ describe("Moves - Aromatherapy", () => {
     vi.spyOn(leftOpp, "resetStatus");
     vi.spyOn(rightOpp, "resetStatus");
 
-    game.move.select(Moves.AROMATHERAPY, 0);
+    game.moveHelper.select(Moves.AROMATHERAPY, 0);
     await game.phaseInterceptor.to(CommandPhase);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.toNextTurn();
 
     expect(leftOpp.resetStatus).toHaveBeenCalledTimes(0);
@@ -85,9 +85,9 @@ describe("Moves - Aromatherapy", () => {
     vi.spyOn(rightPlayer, "resetStatus");
     vi.spyOn(partyPokemon, "resetStatus");
 
-    game.move.select(Moves.AROMATHERAPY, 0);
+    game.moveHelper.select(Moves.AROMATHERAPY, 0);
     await game.phaseInterceptor.to(CommandPhase);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.toNextTurn();
 
     expect(leftPlayer.resetStatus).toHaveBeenCalledOnce();

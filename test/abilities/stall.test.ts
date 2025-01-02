@@ -42,7 +42,7 @@ describe("Abilities - Stall", () => {
     const playerIndex = game.scene.getPlayerPokemon()!.getBattlerIndex();
     const enemyIndex = game.scene.getEnemyPokemon()!.getBattlerIndex();
 
-    game.move.select(Moves.QUICK_ATTACK);
+    game.moveHelper.select(Moves.QUICK_ATTACK);
 
     await game.phaseInterceptor.to(TurnStartPhase, false);
     const phase = game.scene.getCurrentPhase() as TurnStartPhase;
@@ -60,7 +60,7 @@ describe("Abilities - Stall", () => {
     const playerIndex = game.scene.getPlayerPokemon()!.getBattlerIndex();
     const enemyIndex = game.scene.getEnemyPokemon()!.getBattlerIndex();
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
 
     await game.phaseInterceptor.to(TurnStartPhase, false);
     const phase = game.scene.getCurrentPhase() as TurnStartPhase;
@@ -79,7 +79,7 @@ describe("Abilities - Stall", () => {
     const playerIndex = game.scene.getPlayerPokemon()!.getBattlerIndex();
     const enemyIndex = game.scene.getEnemyPokemon()!.getBattlerIndex();
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
 
     await game.phaseInterceptor.to(TurnStartPhase, false);
     const phase = game.scene.getCurrentPhase() as TurnStartPhase;

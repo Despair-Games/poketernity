@@ -49,7 +49,7 @@ describe("Abilities - POWER CONSTRUCT", () => {
     zygarde!.status = new Status(StatusEffect.FAINT);
     expect(zygarde!.isFainted()).toBe(true);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.doKillOpponents();
     await game.phaseInterceptor.to(TurnEndPhase);
     game.doSelectModifier();
@@ -76,7 +76,7 @@ describe("Abilities - POWER CONSTRUCT", () => {
     zygarde!.status = new Status(StatusEffect.FAINT);
     expect(zygarde!.isFainted()).toBe(true);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.doKillOpponents();
     await game.phaseInterceptor.to(TurnEndPhase);
     game.doSelectModifier();

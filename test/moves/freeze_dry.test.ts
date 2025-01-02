@@ -39,7 +39,7 @@ describe("Moves - Freeze-Dry", () => {
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
@@ -53,7 +53,7 @@ describe("Moves - Freeze-Dry", () => {
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
@@ -67,7 +67,7 @@ describe("Moves - Freeze-Dry", () => {
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
@@ -88,11 +88,11 @@ describe("Moves - Freeze-Dry", () => {
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.SOAK);
+    game.moveHelper.select(Moves.SOAK);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toNextTurn();
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(enemy.getMoveEffectiveness).toHaveReturnedWith(2);
@@ -106,10 +106,10 @@ describe("Moves - Freeze-Dry", () => {
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.FORESTS_CURSE);
+    game.moveHelper.select(Moves.FORESTS_CURSE);
     await game.toNextTurn();
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
@@ -123,7 +123,7 @@ describe("Moves - Freeze-Dry", () => {
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
@@ -137,7 +137,7 @@ describe("Moves - Freeze-Dry", () => {
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
@@ -151,10 +151,10 @@ describe("Moves - Freeze-Dry", () => {
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.SOAK);
+    game.moveHelper.select(Moves.SOAK);
     await game.toNextTurn();
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
@@ -168,7 +168,7 @@ describe("Moves - Freeze-Dry", () => {
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
@@ -182,7 +182,7 @@ describe("Moves - Freeze-Dry", () => {
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
@@ -196,7 +196,7 @@ describe("Moves - Freeze-Dry", () => {
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("BerryPhase");
 
@@ -210,7 +210,7 @@ describe("Moves - Freeze-Dry", () => {
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("BerryPhase");
 
@@ -224,7 +224,7 @@ describe("Moves - Freeze-Dry", () => {
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("BerryPhase");
 
@@ -238,7 +238,7 @@ describe("Moves - Freeze-Dry", () => {
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("BerryPhase");
 
@@ -252,7 +252,7 @@ describe("Moves - Freeze-Dry", () => {
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("BerryPhase");
 
@@ -268,7 +268,7 @@ describe("Moves - Freeze-Dry", () => {
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
@@ -284,7 +284,7 @@ describe("Moves - Freeze-Dry", () => {
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
@@ -300,7 +300,7 @@ describe("Moves - Freeze-Dry", () => {
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
@@ -317,7 +317,7 @@ describe("Moves - Freeze-Dry", () => {
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.FREEZE_DRY);
+    game.moveHelper.select(Moves.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("BerryPhase");
 

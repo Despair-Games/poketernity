@@ -38,7 +38,7 @@ describe("Moves - Tackle", () => {
     game.overridesHelper.enemySpecies(Species.GENGAR);
     await game.startBattle([Species.MIGHTYENA]);
     const hpOpponent = game.scene.currentBattle.enemyParty[0].hp;
-    game.move.select(moveToUse);
+    game.moveHelper.select(moveToUse);
     await game.phaseInterceptor.runFrom(EnemyCommandPhase).to(TurnEndPhase);
     const hpLost = hpOpponent - game.scene.currentBattle.enemyParty[0].hp;
     expect(hpLost).toBe(0);
@@ -52,7 +52,7 @@ describe("Moves - Tackle", () => {
 
     const hpOpponent = game.scene.currentBattle.enemyParty[0].hp;
 
-    game.move.select(moveToUse);
+    game.moveHelper.select(moveToUse);
     await game.phaseInterceptor.runFrom(EnemyCommandPhase).to(TurnEndPhase);
     const hpLost = hpOpponent - game.scene.currentBattle.enemyParty[0].hp;
     expect(hpLost).toBeGreaterThan(0);

@@ -41,7 +41,7 @@ describe("Moves - Dive", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.DIVE);
+    game.moveHelper.select(Moves.DIVE);
 
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(playerPokemon.getTag(BattlerTagType.UNDERWATER)).toBeDefined();
@@ -67,7 +67,7 @@ describe("Moves - Dive", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.DIVE);
+    game.moveHelper.select(Moves.DIVE);
 
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(playerPokemon.hp).toBeLessThan(playerPokemon.getMaxHp());
@@ -81,7 +81,7 @@ describe("Moves - Dive", () => {
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.DIVE);
+    game.moveHelper.select(Moves.DIVE);
 
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(playerPokemon.getTag(BattlerTagType.UNDERWATER)).toBeUndefined();
@@ -99,7 +99,7 @@ describe("Moves - Dive", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.DIVE);
+    game.moveHelper.select(Moves.DIVE);
 
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -116,7 +116,7 @@ describe("Moves - Dive", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.DIVE);
+    game.moveHelper.select(Moves.DIVE);
 
     await game.phaseInterceptor.to("TurnEndPhase");
     await game.phaseInterceptor.to("TurnStartPhase", false);

@@ -45,7 +45,7 @@ describe("Items - Toxic orb", () => {
     const player = game.scene.getPlayerPokemon()!;
     expect(player.getHeldItems()[0].type.id).toBe("TOXIC_ORB");
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.phaseInterceptor.to("TurnEndPhase");
     await game.phaseInterceptor.to("MessagePhase");

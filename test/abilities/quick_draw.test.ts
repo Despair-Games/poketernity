@@ -49,7 +49,7 @@ describe("Abilities - Quick Draw", () => {
     pokemon.hp = 1;
     enemy.hp = 1;
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
     await game.phaseInterceptor.to(FaintPhase, false);
 
     expect(pokemon.isFainted()).toBe(false);
@@ -71,7 +71,7 @@ describe("Abilities - Quick Draw", () => {
       pokemon.hp = 1;
       enemy.hp = 1;
 
-      game.move.select(Moves.TAIL_WHIP);
+      game.moveHelper.select(Moves.TAIL_WHIP);
       await game.phaseInterceptor.to(FaintPhase, false);
 
       expect(pokemon.isFainted()).toBe(true);
@@ -91,7 +91,7 @@ describe("Abilities - Quick Draw", () => {
     pokemon.hp = 1;
     enemy.hp = 1;
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
     await game.phaseInterceptor.to(FaintPhase, false);
 
     expect(pokemon.isFainted()).toBe(true);

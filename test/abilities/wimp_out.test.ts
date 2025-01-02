@@ -72,7 +72,7 @@ describe("Abilities - Wimp Out", () => {
 
     const wimpod = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     game.doSelectPartyPokemon(1);
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -87,7 +87,7 @@ describe("Abilities - Wimp Out", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     enemyPokemon.hp *= 0.52;
 
-    game.move.select(Moves.FALSE_SWIPE);
+    game.moveHelper.select(Moves.FALSE_SWIPE);
     await game.phaseInterceptor.to("BerryPhase");
 
     const isVisible = enemyPokemon.visible;
@@ -100,7 +100,7 @@ describe("Abilities - Wimp Out", () => {
     const wimpod = game.scene.getPlayerPokemon()!;
     wimpod.hp = 5;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(wimpod.hp).toEqual(1);
@@ -111,7 +111,7 @@ describe("Abilities - Wimp Out", () => {
     game.overridesHelper.enemyMoveset([Moves.SPIRIT_SHACKLE]).startingLevel(53).enemyLevel(45);
     await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     game.doSelectPartyPokemon(1);
 
     await game.phaseInterceptor.to("TurnEndPhase");
@@ -126,7 +126,7 @@ describe("Abilities - Wimp Out", () => {
     game.overridesHelper.startingLevel(95).enemyMoveset([Moves.U_TURN]);
     await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     game.doSelectPartyPokemon(1);
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -140,7 +140,7 @@ describe("Abilities - Wimp Out", () => {
     game.overridesHelper.startingLevel(190).startingWave(8).enemyMoveset([Moves.U_TURN]);
     await game.classicMode.startBattle([Species.GOLISOPOD, Species.TYRUNT]);
     const RIVAL_NINJASK1 = game.scene.getEnemyPokemon()?.id;
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to("BerryPhase", false);
     expect(game.scene.getEnemyPokemon()?.id !== RIVAL_NINJASK1);
   });
@@ -151,7 +151,7 @@ describe("Abilities - Wimp Out", () => {
 
     const wimpod = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     game.doSelectPartyPokemon(1);
     await game.phaseInterceptor.to("SwitchSummonPhase", false);
 
@@ -166,7 +166,7 @@ describe("Abilities - Wimp Out", () => {
     game.overridesHelper.moveset([Moves.HEAD_SMASH]).enemyMoveset([Moves.SPLASH]);
     await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
 
-    game.move.select(Moves.HEAD_SMASH);
+    game.moveHelper.select(Moves.HEAD_SMASH);
     game.doSelectPartyPokemon(1);
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -180,7 +180,7 @@ describe("Abilities - Wimp Out", () => {
     const wimpod = game.scene.getPlayerPokemon()!;
     wimpod.hp *= 0.52;
 
-    game.move.select(Moves.SUBSTITUTE);
+    game.moveHelper.select(Moves.SUBSTITUTE);
     await game.phaseInterceptor.to("TurnEndPhase");
 
     confirmNoSwitch();
@@ -190,7 +190,7 @@ describe("Abilities - Wimp Out", () => {
     game.overridesHelper.enemyAbility(Abilities.NEUTRALIZING_GAS).startingLevel(5);
     await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to("TurnEndPhase");
 
     confirmNoSwitch();
@@ -212,7 +212,7 @@ describe("Abilities - Wimp Out", () => {
 
       wimpod.damageAndUpdate(toDmgValue(wimpod.getMaxHp() * 0.4));
 
-      game.move.select(Moves.DOUBLE_EDGE);
+      game.moveHelper.select(Moves.DOUBLE_EDGE);
       game.doSelectPartyPokemon(1);
       await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -230,7 +230,7 @@ describe("Abilities - Wimp Out", () => {
 
     game.scene.getPlayerPokemon()!.hp *= 0.51;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     game.doSelectPartyPokemon(1);
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -243,7 +243,7 @@ describe("Abilities - Wimp Out", () => {
 
     game.scene.getPlayerPokemon()!.hp *= 0.51;
 
-    game.move.select(Moves.ENDURE);
+    game.moveHelper.select(Moves.ENDURE);
     await game.phaseInterceptor.to("TurnEndPhase");
 
     confirmNoSwitch();
@@ -255,7 +255,7 @@ describe("Abilities - Wimp Out", () => {
 
     game.scene.getPlayerPokemon()!.hp *= 0.51;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     game.doSelectPartyPokemon(1);
     await game.toNextTurn();
 
@@ -268,7 +268,7 @@ describe("Abilities - Wimp Out", () => {
 
     game.scene.getPlayerPokemon()!.hp *= 0.52;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     game.doSelectPartyPokemon(1);
     await game.toNextTurn();
 
@@ -280,7 +280,7 @@ describe("Abilities - Wimp Out", () => {
     await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
     game.scene.getPlayerPokemon()!.hp *= 0.52;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     game.doSelectPartyPokemon(1);
     await game.toNextTurn();
 
@@ -292,7 +292,7 @@ describe("Abilities - Wimp Out", () => {
     await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
     game.scene.getPlayerPokemon()!.hp *= 0.52;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     game.doSelectPartyPokemon(1);
     await game.toNextTurn();
 
@@ -304,7 +304,7 @@ describe("Abilities - Wimp Out", () => {
     await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
     game.scene.getPlayerPokemon()!.hp *= 0.7;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     game.doSelectPartyPokemon(1);
     await game.toNextTurn();
 
@@ -316,7 +316,7 @@ describe("Abilities - Wimp Out", () => {
     await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
     game.scene.getPlayerPokemon()!.hp *= 0.55;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     game.doSelectPartyPokemon(1);
     await game.toNextTurn();
 
@@ -334,7 +334,7 @@ describe("Abilities - Wimp Out", () => {
     await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
     game.scene.getPlayerPokemon()!.hp *= 0.51;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(game.scene.getPlayerParty()[0].getHpRatio()).toEqual(0.51);
@@ -352,8 +352,8 @@ describe("Abilities - Wimp Out", () => {
     const enemyLeadPokemon = game.scene.getEnemyParty()[0];
     const enemySecPokemon = game.scene.getEnemyParty()[1];
 
-    game.move.select(Moves.FALSE_SWIPE, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.FALSE_SWIPE, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.phaseInterceptor.to("BerryPhase");
 
@@ -376,7 +376,7 @@ describe("Abilities - Wimp Out", () => {
     await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
     game.scene.getPlayerPokemon()!.hp *= 0.51;
 
-    game.move.select(Moves.THUNDER_PUNCH);
+    game.moveHelper.select(Moves.THUNDER_PUNCH);
     game.doSelectPartyPokemon(1);
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -398,7 +398,7 @@ describe("Abilities - Wimp Out", () => {
     await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
     game.scene.getPlayerPokemon()!.hp *= 0.65;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     game.doSelectPartyPokemon(1);
     await game.toNextTurn();
 
@@ -410,7 +410,7 @@ describe("Abilities - Wimp Out", () => {
     await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
     vi.spyOn(allMoves[Moves.SLUDGE_BOMB], "chance", "get").mockReturnValue(100);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     game.doSelectPartyPokemon(1);
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -424,7 +424,7 @@ describe("Abilities - Wimp Out", () => {
 
     game.scene.getPlayerPokemon()!.hp *= 0.51;
 
-    game.move.select(Moves.ENDURE);
+    game.moveHelper.select(Moves.ENDURE);
     game.doSelectPartyPokemon(1);
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -440,7 +440,7 @@ describe("Abilities - Wimp Out", () => {
 
     game.scene.getPlayerPokemon()!.hp *= 0.51;
 
-    game.move.select(Moves.ENDURE);
+    game.moveHelper.select(Moves.ENDURE);
     game.doSelectPartyPokemon(1);
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -455,7 +455,7 @@ describe("Abilities - Wimp Out", () => {
 
     game.scene.getPlayerPokemon()!.hp *= 0.51;
 
-    game.move.select(Moves.ENDURE);
+    game.moveHelper.select(Moves.ENDURE);
     game.doSelectPartyPokemon(1);
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -479,7 +479,7 @@ describe("Abilities - Wimp Out", () => {
       // TODO: add helper function to force confusion self-hits
 
       while (playerPokemon.getHpRatio() > 0.49) {
-        game.move.select(Moves.SWORDS_DANCE);
+        game.moveHelper.select(Moves.SWORDS_DANCE);
         await game.phaseInterceptor.to("TurnEndPhase");
       }
 
@@ -494,9 +494,9 @@ describe("Abilities - Wimp Out", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     // Use 2 turns of False Swipe due to opponent's health bar shield
-    game.move.select(Moves.FALSE_SWIPE);
+    game.moveHelper.select(Moves.FALSE_SWIPE);
     await game.toNextTurn();
-    game.move.select(Moves.FALSE_SWIPE);
+    game.moveHelper.select(Moves.FALSE_SWIPE);
     await game.toNextTurn();
 
     const isVisible = enemyPokemon.visible;
@@ -517,8 +517,8 @@ describe("Abilities - Wimp Out", () => {
     await game.classicMode.startBattle([Species.RAICHU, Species.PIKACHU]);
     const [wimpod0, wimpod1] = game.scene.getEnemyField();
 
-    game.move.select(Moves.FALSE_SWIPE, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.MATCHA_GOTCHA, 1);
+    game.moveHelper.select(Moves.FALSE_SWIPE, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.MATCHA_GOTCHA, 1);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     await game.phaseInterceptor.to("TurnEndPhase");
 

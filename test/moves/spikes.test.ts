@@ -33,10 +33,10 @@ describe("Moves - Spikes", () => {
   it("should not damage the team that set them", async () => {
     await game.startBattle([Species.MIGHTYENA, Species.POOCHYENA]);
 
-    game.move.select(Moves.SPIKES);
+    game.moveHelper.select(Moves.SPIKES);
     await game.toNextTurn();
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     game.doSwitchPokemon(1);
@@ -53,10 +53,10 @@ describe("Moves - Spikes", () => {
     game.overridesHelper.startingWave(5);
     await game.startBattle([Species.MIGHTYENA, Species.POOCHYENA]);
 
-    game.move.select(Moves.SPIKES);
+    game.moveHelper.select(Moves.SPIKES);
     await game.toNextTurn();
 
-    game.move.select(Moves.ROAR);
+    game.moveHelper.select(Moves.ROAR);
     await game.toNextTurn();
 
     const enemy = game.scene.getEnemyParty()[0];
@@ -67,10 +67,10 @@ describe("Moves - Spikes", () => {
     game.overridesHelper.startingWave(5);
     await game.startBattle([Species.MIGHTYENA, Species.POOCHYENA]);
 
-    game.move.select(Moves.SPIKES);
+    game.moveHelper.select(Moves.SPIKES);
     await game.toNextTurn();
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     game.forceEnemyToSwitch();
     await game.toNextTurn();
 

@@ -73,7 +73,7 @@ describe("Shop modifications", async () => {
 
   it("should not have Eviolite and Mini Black Hole available in Classic if not unlocked", async () => {
     await game.classicMode.startBattle([Species.BULBASAUR]);
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.doKillOpponents();
     await game.phaseInterceptor.to("BattleEndPhase");
     game.onNextPrompt("SelectModifierPhase", Mode.MODIFIER_SELECT, () => {
@@ -84,7 +84,7 @@ describe("Shop modifications", async () => {
 
   it("should have Eviolite and Mini Black Hole available in Daily", async () => {
     await game.dailyMode.startBattle();
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.doKillOpponents();
     await game.phaseInterceptor.to("BattleEndPhase");
     game.onNextPrompt("SelectModifierPhase", Mode.MODIFIER_SELECT, () => {

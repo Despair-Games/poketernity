@@ -38,15 +38,15 @@ describe("Arena - Grassy Terrain", () => {
     const eq = allMoves[Moves.EARTHQUAKE];
     vi.spyOn(eq, "calculateBattlePower");
 
-    game.move.select(Moves.EARTHQUAKE);
+    game.moveHelper.select(Moves.EARTHQUAKE);
     await game.toNextTurn();
 
     expect(eq.calculateBattlePower).toHaveReturnedWith(100);
 
-    game.move.select(Moves.GRASSY_TERRAIN);
+    game.moveHelper.select(Moves.GRASSY_TERRAIN);
     await game.toNextTurn();
 
-    game.move.select(Moves.EARTHQUAKE);
+    game.moveHelper.select(Moves.EARTHQUAKE);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(eq.calculateBattlePower).toHaveReturnedWith(50);
@@ -58,10 +58,10 @@ describe("Arena - Grassy Terrain", () => {
     const eq = allMoves[Moves.EARTHQUAKE];
     vi.spyOn(eq, "calculateBattlePower");
 
-    game.move.select(Moves.GRASSY_TERRAIN);
+    game.moveHelper.select(Moves.GRASSY_TERRAIN);
     await game.toNextTurn();
 
-    game.move.select(Moves.EARTHQUAKE);
+    game.moveHelper.select(Moves.EARTHQUAKE);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(eq.calculateBattlePower).toHaveReturnedWith(100);

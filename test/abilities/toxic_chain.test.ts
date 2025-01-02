@@ -42,7 +42,7 @@ describe("Abilities - Toxic Chain", () => {
    * Checks that the enemy Pokemon is badly poisoned after using a given move against it.
    */
   async function checkSucceedPoison(move: Moves, enemyPokemon: EnemyPokemon) {
-    game.move.select(move);
+    game.moveHelper.select(move);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
     expect(enemyPokemon.status?.effect).toBe(StatusEffect.TOXIC);
@@ -52,7 +52,7 @@ describe("Abilities - Toxic Chain", () => {
    * Checks that the enemy Pokemon is not statused after using a given move against it.
    */
   async function checkFailPoison(move: Moves, enemyPokemon: EnemyPokemon) {
-    game.move.select(move);
+    game.moveHelper.select(move);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
     expect(enemyPokemon.status?.effect).toBeUndefined();
@@ -97,7 +97,7 @@ describe("Abilities - Toxic Chain", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "trySetStatus").mockImplementation(() => false);
 
-    game.move.select(Moves.DOUBLE_IRON_BASH);
+    game.moveHelper.select(Moves.DOUBLE_IRON_BASH);
     await game.toNextTurn();
 
     expect(enemyPokemon.trySetStatus).toHaveBeenCalledTimes(2);
@@ -111,7 +111,7 @@ describe("Abilities - Toxic Chain", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "trySetStatus").mockImplementation(() => false);
 
-    game.move.select(Moves.POISON_FANG);
+    game.moveHelper.select(Moves.POISON_FANG);
     await game.toNextTurn();
 
     expect(enemyPokemon.trySetStatus).toHaveBeenCalledTimes(2);
@@ -123,7 +123,7 @@ describe("Abilities - Toxic Chain", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
     await game.toNextTurn();
 
     expect(enemyPokemon.status?.effect).toBe(StatusEffect.BURN);

@@ -41,13 +41,13 @@ describe("Moves - Encore", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.ENCORE);
+    game.moveHelper.select(Moves.ENCORE);
     await game.forceEnemyMove(Moves.SPLASH);
 
     await game.toNextTurn();
     expect(enemyPokemon.getTag(BattlerTagType.ENCORE)).toBeDefined();
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     // The enemy AI would normally be inclined to use Tackle, but should be
     // forced into using Splash.
     await game.phaseInterceptor.to("BerryPhase", false);
@@ -71,12 +71,12 @@ describe("Moves - Encore", () => {
       const enemyPokemon = game.scene.getEnemyPokemon()!;
 
       if (delay) {
-        game.move.select(Moves.SPLASH);
+        game.moveHelper.select(Moves.SPLASH);
         await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
         await game.toNextTurn();
       }
 
-      game.move.select(Moves.ENCORE);
+      game.moveHelper.select(Moves.ENCORE);
 
       const turnOrder = delay ? [BattlerIndex.PLAYER, BattlerIndex.ENEMY] : [BattlerIndex.ENEMY, BattlerIndex.PLAYER];
       await game.setTurnOrder(turnOrder);
@@ -93,19 +93,19 @@ describe("Moves - Encore", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
-    game.move.select(Moves.ENCORE);
+    game.moveHelper.select(Moves.ENCORE);
     await game.setTurnOrder(turnOrder);
     await game.phaseInterceptor.to("BerryPhase");
     expect(enemyPokemon?.getTag(BattlerTagType.ENCORE)).toBeDefined();
 
     await game.toNextTurn();
-    game.move.select(Moves.TORMENT);
+    game.moveHelper.select(Moves.TORMENT);
     await game.setTurnOrder(turnOrder);
     await game.phaseInterceptor.to("BerryPhase");
     expect(enemyPokemon?.getTag(BattlerTagType.TORMENT)).toBeDefined();
 
     await game.toNextTurn();
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.setTurnOrder(turnOrder);
     await game.phaseInterceptor.to("BerryPhase");
     const lastMove = enemyPokemon?.getLastXMoves()[0];

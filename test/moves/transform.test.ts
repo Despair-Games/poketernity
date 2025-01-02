@@ -38,7 +38,7 @@ describe("Moves - Transform", () => {
   it("should copy species, ability, gender, all stats except HP, all stat stages, moveset, and types of target", async () => {
     await game.classicMode.startBattle([Species.DITTO]);
 
-    game.move.select(Moves.TRANSFORM);
+    game.moveHelper.select(Moves.TRANSFORM);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     const player = game.scene.getPlayerPokemon()!;
@@ -85,7 +85,7 @@ describe("Moves - Transform", () => {
     const avgAtk = Math.floor((player.getStat(Stat.ATK, false) + enemy.getStat(Stat.ATK, false)) / 2);
     const avgSpAtk = Math.floor((player.getStat(Stat.SPATK, false) + enemy.getStat(Stat.SPATK, false)) / 2);
 
-    game.move.select(Moves.TRANSFORM);
+    game.moveHelper.select(Moves.TRANSFORM);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(player.getStat(Stat.ATK, false)).toBe(avgAtk);
@@ -101,7 +101,7 @@ describe("Moves - Transform", () => {
     await game.classicMode.startBattle([Species.DITTO]);
     const player = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.TRANSFORM);
+    game.moveHelper.select(Moves.TRANSFORM);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     player.getMoveset().forEach((move) => {

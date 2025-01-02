@@ -42,7 +42,7 @@ describe("Abilities - Shield Dust", () => {
     game.scene.getEnemyPokemon()!.stats[Stat.SPDEF] = 10000;
     expect(game.scene.getPlayerPokemon()!.formIndex).toBe(0);
 
-    game.move.select(Moves.AIR_SLASH);
+    game.moveHelper.select(Moves.AIR_SLASH);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to(MoveEffectPhase, false);

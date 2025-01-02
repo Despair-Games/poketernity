@@ -41,13 +41,13 @@ describe("Moves - Freezy Frost", () => {
     const user = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.HOWL);
+    game.moveHelper.select(Moves.HOWL);
     await game.toNextTurn();
 
     expect(user.getStatStage(Stat.ATK)).toBe(1);
     expect(enemy.getStatStage(Stat.ATK)).toBe(1);
 
-    game.move.select(Moves.FREEZY_FROST);
+    game.moveHelper.select(Moves.FREEZY_FROST);
     await game.toNextTurn();
 
     expect(user.getStatStage(Stat.ATK)).toBe(0);
@@ -59,13 +59,13 @@ describe("Moves - Freezy Frost", () => {
     await game.classicMode.startBattle([Species.SHUCKLE]); // Shuckle for slower Howl on first turn so Freezy Frost doesn't affect it.
     const user = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.HOWL);
+    game.moveHelper.select(Moves.HOWL);
     await game.toNextTurn();
 
     const userAtkBefore = user.getStatStage(Stat.ATK);
     expect(userAtkBefore).toBe(1);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
     expect(user.getStatStage(Stat.ATK)).toBe(0);
   });
@@ -76,9 +76,9 @@ describe("Moves - Freezy Frost", () => {
     const [leftPlayer, rightPlayer] = game.scene.getPlayerField();
     const [leftOpp, rightOpp] = game.scene.getEnemyField();
 
-    game.move.select(Moves.HOWL, 0);
+    game.moveHelper.select(Moves.HOWL, 0);
     await game.phaseInterceptor.to(CommandPhase);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.toNextTurn();
 
     expect(leftPlayer.getStatStage(Stat.ATK)).toBe(1);
@@ -86,9 +86,9 @@ describe("Moves - Freezy Frost", () => {
     expect(leftOpp.getStatStage(Stat.ATK)).toBe(2); // Both enemies use Howl
     expect(rightOpp.getStatStage(Stat.ATK)).toBe(2);
 
-    game.move.select(Moves.FREEZY_FROST, 0, leftOpp.getBattlerIndex());
+    game.moveHelper.select(Moves.FREEZY_FROST, 0, leftOpp.getBattlerIndex());
     await game.phaseInterceptor.to(CommandPhase);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.toNextTurn();
 
     expect(leftPlayer.getStatStage(Stat.ATK)).toBe(0);

@@ -47,7 +47,7 @@ describe("Abilities - Contrary", () => {
 
       expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(1);
 
-      game.move.select(Moves.TAIL_WHIP);
+      game.moveHelper.select(Moves.TAIL_WHIP);
       await game.phaseInterceptor.to("TurnEndPhase");
 
       expect(enemyPokemon.getStatStage(Stat.DEF)).toBe(1);
@@ -64,7 +64,7 @@ describe("Abilities - Contrary", () => {
 
       expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(1);
 
-      game.move.select(Moves.SPLASH);
+      game.moveHelper.select(Moves.SPLASH);
       await game.phaseInterceptor.to("TurnEndPhase");
 
       expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(1);

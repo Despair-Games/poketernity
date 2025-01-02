@@ -38,13 +38,13 @@ describe("Moves - Fake Out", () => {
 
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.FAKE_OUT);
+    game.moveHelper.select(Moves.FAKE_OUT);
     await game.toNextTurn();
 
     expect(enemy.hp).toBeLessThan(enemy.getMaxHp());
     const postTurnOneHp = enemy.hp;
 
-    game.move.select(Moves.FAKE_OUT);
+    game.moveHelper.select(Moves.FAKE_OUT);
     await game.toNextTurn();
 
     expect(enemy.hp).toBe(postTurnOneHp);
@@ -57,10 +57,10 @@ describe("Moves - Fake Out", () => {
     const enemy = game.scene.getEnemyPokemon()!;
     enemy.damageAndUpdate(enemy.getMaxHp() - 1);
 
-    game.move.select(Moves.FAKE_OUT);
+    game.moveHelper.select(Moves.FAKE_OUT);
     await game.toNextWave();
 
-    game.move.select(Moves.FAKE_OUT);
+    game.moveHelper.select(Moves.FAKE_OUT);
     await game.toNextTurn();
 
     expect(game.scene.getEnemyPokemon()!.isFullHp()).toBe(false);
@@ -72,7 +72,7 @@ describe("Moves - Fake Out", () => {
 
     const enemy1 = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.FAKE_OUT);
+    game.moveHelper.select(Moves.FAKE_OUT);
     await game.phaseInterceptor.to("MoveEndPhase");
 
     expect(enemy1.hp).toBeLessThan(enemy1.getMaxHp());
@@ -80,7 +80,7 @@ describe("Moves - Fake Out", () => {
     await game.doKillOpponents();
     await game.toNextWave();
 
-    game.move.select(Moves.FAKE_OUT);
+    game.moveHelper.select(Moves.FAKE_OUT);
     await game.toNextTurn();
 
     const enemy2 = game.scene.getEnemyPokemon()!;
@@ -94,7 +94,7 @@ describe("Moves - Fake Out", () => {
     game.doSwitchPokemon(1);
     await game.toNextTurn();
 
-    game.move.select(Moves.FAKE_OUT);
+    game.moveHelper.select(Moves.FAKE_OUT);
     await game.toNextTurn();
 
     expect(enemy2.hp).toBeLessThan(enemy2.getMaxHp());
@@ -109,7 +109,7 @@ describe("Moves - Fake Out", () => {
 
     await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
 
-    game.move.select(moveId);
+    game.moveHelper.select(moveId);
     game.doSelectPartyPokemon(1);
 
     await game.toNextTurn();
@@ -120,7 +120,7 @@ describe("Moves - Fake Out", () => {
     expect(player.species.speciesId).toBe(Species.MAGIKARP);
     const enemyStartingHp = enemy.hp;
 
-    game.move.select(Moves.FAKE_OUT);
+    game.moveHelper.select(Moves.FAKE_OUT);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(enemy.hp).toBeLessThan(enemyStartingHp);
@@ -134,7 +134,7 @@ describe("Moves - Fake Out", () => {
 
     await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     game.doSelectPartyPokemon(1);
 
     await game.toNextTurn();
@@ -144,7 +144,7 @@ describe("Moves - Fake Out", () => {
 
     expect(player.species.speciesId).toBe(Species.MAGIKARP);
 
-    game.move.select(Moves.FAKE_OUT);
+    game.moveHelper.select(Moves.FAKE_OUT);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(enemy.isFullHp()).toBeFalsy();

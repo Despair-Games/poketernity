@@ -40,7 +40,7 @@ describe("Moves - U-turn", () => {
     game.scene.getPlayerPokemon()!.hp = playerHp;
 
     // act
-    game.move.select(Moves.U_TURN);
+    game.moveHelper.select(Moves.U_TURN);
     game.doSelectPartyPokemon(1);
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -58,7 +58,7 @@ describe("Moves - U-turn", () => {
     await game.classicMode.startBattle([Species.RAICHU, Species.SHUCKLE]);
 
     // act
-    game.move.select(Moves.U_TURN);
+    game.moveHelper.select(Moves.U_TURN);
     game.doSelectPartyPokemon(1);
     await game.phaseInterceptor.to("SwitchPhase", false);
 
@@ -77,7 +77,7 @@ describe("Moves - U-turn", () => {
     vi.spyOn(game.scene.getEnemyPokemon()!, "randSeedInt").mockReturnValue(0);
 
     // act
-    game.move.select(Moves.U_TURN);
+    game.moveHelper.select(Moves.U_TURN);
     await game.phaseInterceptor.to("SwitchPhase", false);
 
     // assert
@@ -94,7 +94,7 @@ describe("Moves - U-turn", () => {
     const enemy = game.scene.getEnemyPokemon()!;
 
     // KO the opponent with U-Turn
-    game.move.select(Moves.U_TURN);
+    game.moveHelper.select(Moves.U_TURN);
     game.doSelectPartyPokemon(1);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemy.isFainted()).toBe(true);

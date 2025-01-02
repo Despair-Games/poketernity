@@ -36,7 +36,7 @@ describe("Abilities - Moody", () => {
     await game.classicMode.startBattle();
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     // Find the increased and decreased stats, make sure they are different.
@@ -57,7 +57,7 @@ describe("Abilities - Moody", () => {
     // Set all stat stages to -6
     vi.spyOn(playerPokemon.summonData, "statStages", "get").mockReturnValue(new Array(BATTLE_STATS.length).fill(-6));
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     // Should increase one stat stage by 2 (from -6, meaning it will be -4)
@@ -75,7 +75,7 @@ describe("Abilities - Moody", () => {
     // Set all stat stages to 6
     vi.spyOn(playerPokemon.summonData, "statStages", "get").mockReturnValue(new Array(BATTLE_STATS.length).fill(6));
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     // Should decrease one stat stage by 1 (from 6, meaning it will be 5)

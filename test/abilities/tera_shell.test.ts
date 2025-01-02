@@ -39,14 +39,14 @@ describe("Abilities - Tera Shell", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getMoveEffectiveness");
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(playerPokemon.getMoveEffectiveness).toHaveLastReturnedWith(0.5);
 
     await game.toNextTurn();
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(playerPokemon.getMoveEffectiveness).toHaveLastReturnedWith(2);
@@ -60,7 +60,7 @@ describe("Abilities - Tera Shell", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getMoveEffectiveness");
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(playerPokemon.getMoveEffectiveness).toHaveLastReturnedWith(0);
@@ -74,7 +74,7 @@ describe("Abilities - Tera Shell", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getMoveEffectiveness");
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(playerPokemon.getMoveEffectiveness).toHaveLastReturnedWith(0.25);
@@ -88,7 +88,7 @@ describe("Abilities - Tera Shell", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getMoveEffectiveness");
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.phaseInterceptor.to("BerryPhase", false);
     expect(playerPokemon.getMoveEffectiveness).toHaveLastReturnedWith(1);
@@ -105,10 +105,10 @@ describe("Abilities - Tera Shell", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-    await game.move.forceHit();
+    await game.moveHelper.forceHit();
     for (let i = 0; i < 2; i++) {
       await game.phaseInterceptor.to("MoveEffectPhase");
       expect(playerPokemon.getMoveEffectiveness).toHaveLastReturnedWith(0.5);

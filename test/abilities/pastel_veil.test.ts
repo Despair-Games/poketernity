@@ -41,8 +41,8 @@ describe("Abilities - Pastel Veil", () => {
 
     expect(ponyta.hasAbility(Abilities.PASTEL_VEIL)).toBe(true);
 
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.TOXIC_THREAD, 1, BattlerIndex.PLAYER);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.TOXIC_THREAD, 1, BattlerIndex.PLAYER);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -57,14 +57,14 @@ describe("Abilities - Pastel Veil", () => {
 
     expect(ponyta.hasAbility(Abilities.PASTEL_VEIL)).toBe(true);
 
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.TOXIC_THREAD, 1, BattlerIndex.PLAYER);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.TOXIC_THREAD, 1, BattlerIndex.PLAYER);
 
     await game.phaseInterceptor.to(TurnEndPhase);
     expect(magikarp.status?.effect).toBe(StatusEffect.POISON);
 
     await game.phaseInterceptor.to(CommandPhase);
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     game.doSwitchPokemon(2);
     await game.phaseInterceptor.to(TurnEndPhase);
 

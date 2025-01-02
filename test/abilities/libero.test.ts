@@ -44,7 +44,7 @@ describe("Abilities - Libero", () => {
     const leadPokemon = game.scene.getPlayerPokemon()!;
     expect(leadPokemon).not.toBe(undefined);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     testPokemonTypeMatchesDefaultMoveType(leadPokemon, Moves.SPLASH);
@@ -59,12 +59,12 @@ describe("Abilities - Libero", () => {
     let leadPokemon = game.scene.getPlayerPokemon()!;
     expect(leadPokemon).not.toBe(undefined);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     testPokemonTypeMatchesDefaultMoveType(leadPokemon, Moves.SPLASH);
 
-    game.move.select(Moves.AGILITY);
+    game.moveHelper.select(Moves.AGILITY);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(leadPokemon.summonData.abilitiesApplied.filter((a) => a === Abilities.LIBERO)).toHaveLength(1);
@@ -81,7 +81,7 @@ describe("Abilities - Libero", () => {
     leadPokemon = game.scene.getPlayerPokemon()!;
     expect(leadPokemon).not.toBe(undefined);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     testPokemonTypeMatchesDefaultMoveType(leadPokemon, Moves.SPLASH);
@@ -96,7 +96,7 @@ describe("Abilities - Libero", () => {
     expect(leadPokemon).not.toBe(undefined);
 
     game.scene.arena.weather = new Weather(WeatherType.SUNNY);
-    game.move.select(Moves.WEATHER_BALL);
+    game.moveHelper.select(Moves.WEATHER_BALL);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(leadPokemon.summonData.abilitiesApplied).toContain(Abilities.LIBERO);
@@ -115,7 +115,7 @@ describe("Abilities - Libero", () => {
     const leadPokemon = game.scene.getPlayerPokemon()!;
     expect(leadPokemon).not.toBe(undefined);
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(leadPokemon.summonData.abilitiesApplied).toContain(Abilities.LIBERO);
@@ -134,7 +134,7 @@ describe("Abilities - Libero", () => {
     expect(leadPokemon).not.toBe(undefined);
 
     game.scene.arena.biomeType = Biome.MOUNTAIN;
-    game.move.select(Moves.NATURE_POWER);
+    game.moveHelper.select(Moves.NATURE_POWER);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     testPokemonTypeMatchesDefaultMoveType(leadPokemon, Moves.AIR_SLASH);
@@ -148,7 +148,7 @@ describe("Abilities - Libero", () => {
     const leadPokemon = game.scene.getPlayerPokemon()!;
     expect(leadPokemon).not.toBe(undefined);
 
-    game.move.select(Moves.DIG);
+    game.moveHelper.select(Moves.DIG);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     testPokemonTypeMatchesDefaultMoveType(leadPokemon, Moves.DIG);
@@ -163,8 +163,8 @@ describe("Abilities - Libero", () => {
     const leadPokemon = game.scene.getPlayerPokemon()!;
     expect(leadPokemon).not.toBe(undefined);
 
-    game.move.select(Moves.TACKLE);
-    await game.move.forceMiss();
+    game.moveHelper.select(Moves.TACKLE);
+    await game.moveHelper.forceMiss();
     await game.phaseInterceptor.to(TurnEndPhase);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -181,7 +181,7 @@ describe("Abilities - Libero", () => {
     const leadPokemon = game.scene.getPlayerPokemon()!;
     expect(leadPokemon).not.toBe(undefined);
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     testPokemonTypeMatchesDefaultMoveType(leadPokemon, Moves.TACKLE);
@@ -196,7 +196,7 @@ describe("Abilities - Libero", () => {
     const leadPokemon = game.scene.getPlayerPokemon()!;
     expect(leadPokemon).not.toBe(undefined);
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     testPokemonTypeMatchesDefaultMoveType(leadPokemon, Moves.TACKLE);
@@ -211,7 +211,7 @@ describe("Abilities - Libero", () => {
     expect(leadPokemon).not.toBe(undefined);
 
     leadPokemon.summonData.types = [allMoves[Moves.SPLASH].type];
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(leadPokemon.summonData.abilitiesApplied).not.toContain(Abilities.LIBERO);
@@ -227,7 +227,7 @@ describe("Abilities - Libero", () => {
 
     vi.spyOn(leadPokemon, "isTerastallized").mockReturnValue(true);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(leadPokemon.summonData.abilitiesApplied).not.toContain(Abilities.LIBERO);
@@ -241,7 +241,7 @@ describe("Abilities - Libero", () => {
     const leadPokemon = game.scene.getPlayerPokemon()!;
     expect(leadPokemon).not.toBe(undefined);
 
-    game.move.select(Moves.STRUGGLE);
+    game.moveHelper.select(Moves.STRUGGLE);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(leadPokemon.summonData.abilitiesApplied).not.toContain(Abilities.LIBERO);
@@ -255,7 +255,7 @@ describe("Abilities - Libero", () => {
     const leadPokemon = game.scene.getPlayerPokemon()!;
     expect(leadPokemon).not.toBe(undefined);
 
-    game.move.select(Moves.BURN_UP);
+    game.moveHelper.select(Moves.BURN_UP);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(leadPokemon.summonData.abilitiesApplied).not.toContain(Abilities.LIBERO);
@@ -270,7 +270,7 @@ describe("Abilities - Libero", () => {
     const leadPokemon = game.scene.getPlayerPokemon()!;
     expect(leadPokemon).not.toBe(undefined);
 
-    game.move.select(Moves.TRICK_OR_TREAT);
+    game.moveHelper.select(Moves.TRICK_OR_TREAT);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     testPokemonTypeMatchesDefaultMoveType(leadPokemon, Moves.TRICK_OR_TREAT);
@@ -284,7 +284,7 @@ describe("Abilities - Libero", () => {
     const leadPokemon = game.scene.getPlayerPokemon()!;
     expect(leadPokemon).not.toBe(undefined);
 
-    game.move.select(Moves.CURSE);
+    game.moveHelper.select(Moves.CURSE);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     testPokemonTypeMatchesDefaultMoveType(leadPokemon, Moves.CURSE);

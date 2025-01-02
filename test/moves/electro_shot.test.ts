@@ -41,7 +41,7 @@ describe("Moves - Electro Shot", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.ELECTRO_SHOT);
+    game.moveHelper.select(Moves.ELECTRO_SHOT);
 
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(playerPokemon.getTag(BattlerTagType.CHARGING)).toBeDefined();
@@ -71,7 +71,7 @@ describe("Moves - Electro Shot", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.ELECTRO_SHOT);
+    game.moveHelper.select(Moves.ELECTRO_SHOT);
 
     await game.phaseInterceptor.to("MoveEffectPhase", false);
     expect(playerPokemon.getStatStage(Stat.SPATK)).toBe(1);
@@ -93,7 +93,7 @@ describe("Moves - Electro Shot", () => {
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.ELECTRO_SHOT);
+    game.moveHelper.select(Moves.ELECTRO_SHOT);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(playerPokemon.turnData.hitCount).toBe(1);

@@ -53,7 +53,7 @@ describe("Abilities - Magic Guard", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     expect(enemyPokemon).toBeDefined();
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -74,7 +74,7 @@ describe("Abilities - Magic Guard", () => {
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -95,7 +95,7 @@ describe("Abilities - Magic Guard", () => {
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -112,7 +112,7 @@ describe("Abilities - Magic Guard", () => {
 
     await game.startBattle([Species.MAGIKARP]);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -134,7 +134,7 @@ describe("Abilities - Magic Guard", () => {
 
     await game.startBattle([Species.MAGIKARP]);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -162,7 +162,7 @@ describe("Abilities - Magic Guard", () => {
     await game.startBattle([Species.MAGIKARP]);
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -187,7 +187,7 @@ describe("Abilities - Magic Guard", () => {
     await game.startBattle([Species.MAGIKARP]);
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -212,7 +212,7 @@ describe("Abilities - Magic Guard", () => {
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.CURSE);
+    game.moveHelper.select(Moves.CURSE);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -235,8 +235,8 @@ describe("Abilities - Magic Guard", () => {
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.HIGH_JUMP_KICK);
-    await game.move.forceMiss();
+    game.moveHelper.select(Moves.HIGH_JUMP_KICK);
+    await game.moveHelper.forceMiss();
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -253,7 +253,7 @@ describe("Abilities - Magic Guard", () => {
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.TAKE_DOWN);
+    game.moveHelper.select(Moves.TAKE_DOWN);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -270,7 +270,7 @@ describe("Abilities - Magic Guard", () => {
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.STRUGGLE);
+    game.moveHelper.select(Moves.STRUGGLE);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -288,7 +288,7 @@ describe("Abilities - Magic Guard", () => {
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.STEEL_BEAM);
+    game.moveHelper.select(Moves.STEEL_BEAM);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -315,7 +315,7 @@ describe("Abilities - Magic Guard", () => {
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.BELLY_DRUM);
+    game.moveHelper.select(Moves.BELLY_DRUM);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -337,7 +337,7 @@ describe("Abilities - Magic Guard", () => {
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -362,7 +362,7 @@ describe("Abilities - Magic Guard", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     enemyPokemon.hp = 1;
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     /**
@@ -385,7 +385,7 @@ describe("Abilities - Magic Guard", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     /**
@@ -408,7 +408,7 @@ describe("Abilities - Magic Guard", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.ABSORB);
+    game.moveHelper.select(Moves.ABSORB);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     /**
@@ -427,7 +427,7 @@ describe("Abilities - Magic Guard", () => {
 
     await game.startBattle([Species.MAGIKARP]);
     const leadPokemon = game.scene.getPlayerPokemon()!;
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     /**

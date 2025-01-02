@@ -36,8 +36,8 @@ describe("Moves - Spotlight", () => {
 
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.move.select(Moves.SPOTLIGHT, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.QUICK_ATTACK, 1, BattlerIndex.ENEMY_2);
+    game.moveHelper.select(Moves.SPOTLIGHT, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.QUICK_ATTACK, 1, BattlerIndex.ENEMY_2);
 
     await game.forceEnemyMove(Moves.SPLASH);
     await game.forceEnemyMove(Moves.SPLASH);
@@ -53,8 +53,8 @@ describe("Moves - Spotlight", () => {
 
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.move.select(Moves.SPOTLIGHT, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.QUICK_ATTACK, 1, BattlerIndex.ENEMY_2);
+    game.moveHelper.select(Moves.SPOTLIGHT, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.QUICK_ATTACK, 1, BattlerIndex.ENEMY_2);
 
     await game.forceEnemyMove(Moves.SPLASH);
     await game.forceEnemyMove(Moves.FOLLOW_ME);

@@ -33,7 +33,7 @@ describe("Moves - Baddy Bad", () => {
     game.overridesHelper.enemyMoveset(Moves.PROTECT);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    game.move.select(Moves.BADDY_BAD);
+    game.moveHelper.select(Moves.BADDY_BAD);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(game.scene.arena.tags.length).toBe(0);

@@ -38,7 +38,7 @@ describe("Abilities - Gorilla Tactics", () => {
     const darmanitan = game.scene.getPlayerPokemon()!;
     const initialAtkStat = darmanitan.getStat(Stat.ATK);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.SPLASH);
 
     await game.phaseInterceptor.to("TurnEndPhase");
@@ -56,13 +56,13 @@ describe("Abilities - Gorilla Tactics", () => {
     const enemy = game.scene.getEnemyPokemon()!;
 
     // First turn, lock move to Growl
-    game.move.select(Moves.GROWL);
+    game.moveHelper.select(Moves.GROWL);
     await game.forceEnemyMove(Moves.SPLASH);
 
     // Second turn, Growl is interrupted by Disable
     await game.toNextTurn();
 
-    game.move.select(Moves.GROWL);
+    game.moveHelper.select(Moves.GROWL);
     await game.forceEnemyMove(Moves.DISABLE);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
@@ -72,7 +72,7 @@ describe("Abilities - Gorilla Tactics", () => {
     // Third turn, Struggle is used
     await game.toNextTurn();
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("MoveEndPhase");

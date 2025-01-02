@@ -36,12 +36,12 @@ describe("Moves - Relic Song", () => {
 
     const meloetta = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.RELIC_SONG);
+    game.moveHelper.select(Moves.RELIC_SONG);
     await game.toNextTurn();
 
     expect(meloetta.formIndex).toBe(1);
 
-    game.move.select(Moves.RELIC_SONG);
+    game.moveHelper.select(Moves.RELIC_SONG);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(meloetta.formIndex).toBe(0);
@@ -55,7 +55,7 @@ describe("Moves - Relic Song", () => {
 
     expect(meloetta.formIndex).toBe(0);
 
-    game.move.select(Moves.RELIC_SONG);
+    game.moveHelper.select(Moves.RELIC_SONG);
     await game.phaseInterceptor.to("BerryPhase");
     await game.toNextTurn();
 
@@ -68,7 +68,7 @@ describe("Moves - Relic Song", () => {
 
     const meloetta = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.doKillOpponents();
     await game.toNextWave();
 

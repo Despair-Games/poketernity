@@ -41,9 +41,9 @@ describe("Moves - Tidy Up", () => {
     game.overridesHelper.enemyMoveset([Moves.SPIKES, Moves.SPIKES, Moves.SPIKES, Moves.SPIKES]);
     await game.classicMode.startBattle();
 
-    game.move.select(Moves.SPIKES);
+    game.moveHelper.select(Moves.SPIKES);
     await game.phaseInterceptor.to(TurnEndPhase);
-    game.move.select(Moves.TIDY_UP);
+    game.moveHelper.select(Moves.TIDY_UP);
     await game.phaseInterceptor.to(MoveEndPhase);
     expect(game.scene.arena.getTag(ArenaTagType.SPIKES)).toBeUndefined();
   }, 20000);
@@ -53,9 +53,9 @@ describe("Moves - Tidy Up", () => {
     game.overridesHelper.enemyMoveset([Moves.STEALTH_ROCK, Moves.STEALTH_ROCK, Moves.STEALTH_ROCK, Moves.STEALTH_ROCK]);
     await game.classicMode.startBattle();
 
-    game.move.select(Moves.STEALTH_ROCK);
+    game.moveHelper.select(Moves.STEALTH_ROCK);
     await game.phaseInterceptor.to(TurnEndPhase);
-    game.move.select(Moves.TIDY_UP);
+    game.moveHelper.select(Moves.TIDY_UP);
     await game.phaseInterceptor.to(MoveEndPhase);
     expect(game.scene.arena.getTag(ArenaTagType.STEALTH_ROCK)).toBeUndefined();
   }, 20000);
@@ -65,9 +65,9 @@ describe("Moves - Tidy Up", () => {
     game.overridesHelper.enemyMoveset([Moves.TOXIC_SPIKES, Moves.TOXIC_SPIKES, Moves.TOXIC_SPIKES, Moves.TOXIC_SPIKES]);
     await game.classicMode.startBattle();
 
-    game.move.select(Moves.TOXIC_SPIKES);
+    game.moveHelper.select(Moves.TOXIC_SPIKES);
     await game.phaseInterceptor.to(TurnEndPhase);
-    game.move.select(Moves.TIDY_UP);
+    game.moveHelper.select(Moves.TIDY_UP);
     await game.phaseInterceptor.to(MoveEndPhase);
     expect(game.scene.arena.getTag(ArenaTagType.TOXIC_SPIKES)).toBeUndefined();
   }, 20000);
@@ -78,9 +78,9 @@ describe("Moves - Tidy Up", () => {
 
     await game.classicMode.startBattle();
 
-    game.move.select(Moves.STICKY_WEB);
+    game.moveHelper.select(Moves.STICKY_WEB);
     await game.phaseInterceptor.to(TurnEndPhase);
-    game.move.select(Moves.TIDY_UP);
+    game.moveHelper.select(Moves.TIDY_UP);
     await game.phaseInterceptor.to(MoveEndPhase);
     expect(game.scene.arena.getTag(ArenaTagType.STICKY_WEB)).toBeUndefined();
   }, 20000);
@@ -91,9 +91,9 @@ describe("Moves - Tidy Up", () => {
 
     await game.classicMode.startBattle();
 
-    game.move.select(Moves.SUBSTITUTE);
+    game.moveHelper.select(Moves.SUBSTITUTE);
     await game.phaseInterceptor.to(TurnEndPhase);
-    game.move.select(Moves.TIDY_UP);
+    game.moveHelper.select(Moves.TIDY_UP);
     await game.phaseInterceptor.to(MoveEndPhase);
 
     const pokemon = [game.scene.getPlayerPokemon()!, game.scene.getEnemyPokemon()!];
@@ -111,7 +111,7 @@ describe("Moves - Tidy Up", () => {
     expect(playerPokemon.getStatStage(Stat.ATK)).toBe(0);
     expect(playerPokemon.getStatStage(Stat.SPD)).toBe(0);
 
-    game.move.select(Moves.TIDY_UP);
+    game.moveHelper.select(Moves.TIDY_UP);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(playerPokemon.getStatStage(Stat.ATK)).toBe(1);

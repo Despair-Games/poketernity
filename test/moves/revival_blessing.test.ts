@@ -37,14 +37,14 @@ describe("Moves - Revival Blessing", () => {
   it("should revive a selected fainted Pokemon when used by the player", async () => {
     await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
 
-    game.move.select(Moves.MEMENTO);
+    game.moveHelper.select(Moves.MEMENTO);
     game.doSelectPartyPokemon(1, "SwitchPhase");
     await game.toNextTurn();
 
     const player = game.scene.getPlayerPokemon()!;
 
     expect(player.species.speciesId).toBe(Species.MAGIKARP);
-    game.move.select(Moves.REVIVAL_BLESSING);
+    game.moveHelper.select(Moves.REVIVAL_BLESSING);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     game.doSelectPartyPokemon(1, "RevivalBlessingPhase");
@@ -61,11 +61,11 @@ describe("Moves - Revival Blessing", () => {
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.doKillOpponents();
 
     await game.toNextTurn();
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.phaseInterceptor.to("MoveEndPhase", false);
@@ -78,7 +78,7 @@ describe("Moves - Revival Blessing", () => {
   it("should fail when there are no fainted Pokemon to target", async () => {
     await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
 
-    game.move.select(Moves.REVIVAL_BLESSING);
+    game.moveHelper.select(Moves.REVIVAL_BLESSING);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEndPhase", false);
 
@@ -96,8 +96,8 @@ describe("Moves - Revival Blessing", () => {
 
     const feebas = game.scene.getPlayerField()[0];
 
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.REVIVAL_BLESSING, 1);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.REVIVAL_BLESSING, 1);
     await game.forceEnemyMove(Moves.FISSURE, BattlerIndex.PLAYER);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2]);

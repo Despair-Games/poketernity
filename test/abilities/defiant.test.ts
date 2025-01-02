@@ -37,7 +37,7 @@ describe("Abilities - Defiant", () => {
     await game.classicMode.startBattle([Species.FLYGON]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to(TurnInitPhase);
 
     expect(playerPokemon.getStatStage(Stat.ATK)).toBe(3);
@@ -49,7 +49,7 @@ describe("Abilities - Defiant", () => {
     await game.classicMode.startBattle([Species.FLYGON]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
-    game.move.select(Moves.CLOSE_COMBAT);
+    game.moveHelper.select(Moves.CLOSE_COMBAT);
     await game.phaseInterceptor.to(TurnInitPhase);
 
     expect(playerPokemon.getStatStage(Stat.SPDEF)).toBe(-1);
@@ -62,7 +62,7 @@ describe("Abilities - Defiant", () => {
     await game.classicMode.startBattle([Species.FLYGON]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to(TurnInitPhase);
 
     expect(playerPokemon.getStatStage(Stat.DEF)).toBe(0);

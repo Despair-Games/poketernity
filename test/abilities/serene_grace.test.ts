@@ -42,9 +42,9 @@ describe("Abilities - Serene Grace", () => {
     const airSlashFlinchAttr = airSlashMove.getAttrs(FlinchAttr)[0];
     vi.spyOn(airSlashFlinchAttr, "getMoveChance");
 
-    game.move.select(Moves.AIR_SLASH);
+    game.moveHelper.select(Moves.AIR_SLASH);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.move.forceHit();
+    await game.moveHelper.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(airSlashFlinchAttr.getMoveChance).toHaveLastReturnedWith(60);

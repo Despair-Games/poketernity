@@ -42,8 +42,8 @@ describe("Moves - Gastro Acid", () => {
 
     await game.startBattle();
 
-    game.move.select(Moves.GASTRO_ACID, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.GASTRO_ACID, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.phaseInterceptor.to("TurnInitPhase");
 
@@ -51,8 +51,8 @@ describe("Moves - Gastro Acid", () => {
     expect(enemyField[0].summonData.abilitySuppressed).toBe(true);
     expect(enemyField[1].summonData.abilitySuppressed).toBe(false);
 
-    game.move.select(Moves.WATER_GUN, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.WATER_GUN, 1, BattlerIndex.ENEMY_2);
+    game.moveHelper.select(Moves.WATER_GUN, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.WATER_GUN, 1, BattlerIndex.ENEMY_2);
 
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -65,13 +65,13 @@ describe("Moves - Gastro Acid", () => {
 
     await game.startBattle();
 
-    game.move.select(Moves.CORE_ENFORCER);
+    game.moveHelper.select(Moves.CORE_ENFORCER);
     // Force player to be slower to enable Core Enforcer to proc its suppression effect
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.phaseInterceptor.to("TurnInitPhase");
 
-    game.move.select(Moves.GASTRO_ACID);
+    game.moveHelper.select(Moves.GASTRO_ACID);
 
     await game.phaseInterceptor.to("TurnInitPhase");
 

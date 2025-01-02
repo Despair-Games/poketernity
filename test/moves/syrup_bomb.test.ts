@@ -43,19 +43,19 @@ describe("Moves - SYRUP BOMB", () => {
     const targetPokemon = game.scene.getEnemyPokemon()!;
     expect(targetPokemon.getStatStage(Stat.SPD)).toBe(0);
 
-    game.move.select(Moves.SYRUP_BOMB);
+    game.moveHelper.select(Moves.SYRUP_BOMB);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.move.forceHit();
+    await game.moveHelper.forceHit();
     await game.toNextTurn();
     expect(targetPokemon.getTag(BattlerTagType.SYRUP_BOMB)).toBeDefined();
     expect(targetPokemon.getStatStage(Stat.SPD)).toBe(-1);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
     expect(targetPokemon.getTag(BattlerTagType.SYRUP_BOMB)).toBeDefined();
     expect(targetPokemon.getStatStage(Stat.SPD)).toBe(-2);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
     expect(targetPokemon.getTag(BattlerTagType.SYRUP_BOMB)).toBeUndefined();
     expect(targetPokemon.getStatStage(Stat.SPD)).toBe(-3);
@@ -67,9 +67,9 @@ describe("Moves - SYRUP BOMB", () => {
 
     const targetPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.SYRUP_BOMB);
+    game.moveHelper.select(Moves.SYRUP_BOMB);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.move.forceHit();
+    await game.moveHelper.forceHit();
     await game.toNextTurn();
     expect(targetPokemon.isFullHp()).toBe(true);
     expect(targetPokemon.getTag(BattlerTagType.SYRUP_BOMB)).toBeUndefined();
@@ -79,9 +79,9 @@ describe("Moves - SYRUP BOMB", () => {
   it("stops lowering the target's speed if the user leaves the field", async () => {
     await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
 
-    game.move.select(Moves.SYRUP_BOMB);
+    game.moveHelper.select(Moves.SYRUP_BOMB);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.move.forceHit();
+    await game.moveHelper.forceHit();
     await game.toNextTurn();
 
     game.doSwitchPokemon(1);

@@ -36,7 +36,7 @@ describe("Abilities - Pickpocket", () => {
   it("should steal the enemy's held item when hit by a contact move", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(game.scene.getEnemyPokemon()!.getHeldItems().length).toBe(0);
@@ -47,7 +47,7 @@ describe("Abilities - Pickpocket", () => {
     game.overridesHelper.enemyMoveset(Moves.EMBER);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(game.scene.getEnemyPokemon()!.getHeldItems().length).toBe(1);
@@ -57,7 +57,7 @@ describe("Abilities - Pickpocket", () => {
   it("shouldn't trigger when the enemy hits a substitute", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    game.move.select(Moves.SUBSTITUTE);
+    game.moveHelper.select(Moves.SUBSTITUTE);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(game.scene.getEnemyPokemon()!.getHeldItems().length).toBe(1);

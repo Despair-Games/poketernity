@@ -39,20 +39,20 @@ describe("Abilities - Early Bird", () => {
 
     const player = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.BELLY_DRUM);
+    game.moveHelper.select(Moves.BELLY_DRUM);
     await game.toNextTurn();
-    game.move.select(Moves.REST);
+    game.moveHelper.select(Moves.REST);
     await game.toNextTurn();
 
     expect(player.status?.effect).toBe(StatusEffect.SLEEP);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     expect(player.status?.effect).toBe(StatusEffect.SLEEP);
     expect(player.getLastXMoves(1)[0].result).toBe(MoveResult.FAIL);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     expect(player.status?.effect).toBeUndefined();
@@ -65,13 +65,13 @@ describe("Abilities - Early Bird", () => {
     const player = game.scene.getPlayerPokemon()!;
     player.status = new Status(StatusEffect.SLEEP, 0, 4);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     expect(player.status?.effect).toBe(StatusEffect.SLEEP);
     expect(player.getLastXMoves(1)[0].result).toBe(MoveResult.FAIL);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     expect(player.status?.effect).toBeUndefined();
@@ -84,7 +84,7 @@ describe("Abilities - Early Bird", () => {
     const player = game.scene.getPlayerPokemon()!;
     player.status = new Status(StatusEffect.SLEEP, 0, 2);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     expect(player.status?.effect).toBeUndefined();

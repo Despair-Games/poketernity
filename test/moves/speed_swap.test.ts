@@ -42,7 +42,7 @@ describe("Moves - Speed Swap", () => {
     const playerSpd = player.getStat(Stat.SPD, false);
     const enemySpd = enemy.getStat(Stat.SPD, false);
 
-    game.move.select(Moves.SPEED_SWAP);
+    game.moveHelper.select(Moves.SPEED_SWAP);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(player.getStat(Stat.SPD, false)).toBe(enemySpd);

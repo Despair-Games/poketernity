@@ -57,7 +57,7 @@ describe("Items - Double Battle Chance Boosters", () => {
 
     await game.classicMode.startBattle([Species.PIKACHU]);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.doKillOpponents();
 

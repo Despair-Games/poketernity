@@ -59,7 +59,7 @@ describe("Moves - Dragon Rage", () => {
     game.overridesHelper.disableCrits();
     vi.spyOn(enemyPokemon, "getTypes").mockReturnValue([Type.DRAGON]);
 
-    game.move.select(Moves.DRAGON_RAGE);
+    game.moveHelper.select(Moves.DRAGON_RAGE);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(enemyPokemon.getInverseHp()).toBe(dragonRageDamage);
@@ -69,7 +69,7 @@ describe("Moves - Dragon Rage", () => {
     game.overridesHelper.disableCrits();
     vi.spyOn(enemyPokemon, "getTypes").mockReturnValue([Type.STEEL]);
 
-    game.move.select(Moves.DRAGON_RAGE);
+    game.moveHelper.select(Moves.DRAGON_RAGE);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(enemyPokemon.getInverseHp()).toBe(dragonRageDamage);
@@ -79,7 +79,7 @@ describe("Moves - Dragon Rage", () => {
     game.overridesHelper.disableCrits();
     partyPokemon.setStatStage(Stat.SPATK, 2);
 
-    game.move.select(Moves.DRAGON_RAGE);
+    game.moveHelper.select(Moves.DRAGON_RAGE);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(enemyPokemon.getInverseHp()).toBe(dragonRageDamage);
@@ -89,7 +89,7 @@ describe("Moves - Dragon Rage", () => {
     game.overridesHelper.disableCrits();
     vi.spyOn(partyPokemon, "getTypes").mockReturnValue([Type.DRAGON]);
 
-    game.move.select(Moves.DRAGON_RAGE);
+    game.moveHelper.select(Moves.DRAGON_RAGE);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(enemyPokemon.getInverseHp()).toBe(dragonRageDamage);
@@ -98,7 +98,7 @@ describe("Moves - Dragon Rage", () => {
   it("should prevent critical hits", async () => {
     partyPokemon.addTag(BattlerTagType.ALWAYS_CRIT, 99, Moves.NONE, 0);
 
-    game.move.select(Moves.DRAGON_RAGE);
+    game.moveHelper.select(Moves.DRAGON_RAGE);
     await game.phaseInterceptor.to("BerryPhase");
 
     const lastAttackReceived = enemyPokemon.turnData.attacksReceived[0];
@@ -109,7 +109,7 @@ describe("Moves - Dragon Rage", () => {
     game.overridesHelper.disableCrits();
     game.overridesHelper.enemyAbility(Abilities.ICE_SCALES);
 
-    game.move.select(Moves.DRAGON_RAGE);
+    game.moveHelper.select(Moves.DRAGON_RAGE);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(enemyPokemon.getInverseHp()).toBe(dragonRageDamage);

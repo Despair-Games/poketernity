@@ -36,7 +36,7 @@ describe("Abilities - Wind Rider", () => {
 
     expect(shiftry.getStatStage(Stat.ATK)).toBe(0);
 
-    game.move.select(Moves.PETAL_BLIZZARD);
+    game.moveHelper.select(Moves.PETAL_BLIZZARD);
 
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -52,7 +52,7 @@ describe("Abilities - Wind Rider", () => {
 
     expect(shiftry.getStatStage(Stat.ATK)).toBe(0);
 
-    game.move.select(Moves.TAILWIND);
+    game.moveHelper.select(Moves.TAILWIND);
 
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -69,7 +69,7 @@ describe("Abilities - Wind Rider", () => {
     expect(shiftry.getStatStage(Stat.ATK)).toBe(0);
     expect(magikarp.getStatStage(Stat.ATK)).toBe(0);
 
-    game.move.select(Moves.TAILWIND);
+    game.moveHelper.select(Moves.TAILWIND);
 
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -87,7 +87,7 @@ describe("Abilities - Wind Rider", () => {
     expect(shiftry.getStatStage(Stat.ATK)).toBe(0);
     expect(magikarp.getStatStage(Stat.ATK)).toBe(0);
 
-    game.move.select(Moves.TAILWIND);
+    game.moveHelper.select(Moves.TAILWIND);
 
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -104,7 +104,7 @@ describe("Abilities - Wind Rider", () => {
     expect(shiftry.getStatStage(Stat.ATK)).toBe(0);
     expect(shiftry.isFullHp()).toBe(true);
 
-    game.move.select(Moves.SANDSTORM);
+    game.moveHelper.select(Moves.SANDSTORM);
 
     await game.phaseInterceptor.to("TurnEndPhase");
 

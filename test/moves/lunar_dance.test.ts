@@ -34,12 +34,12 @@ describe("Moves - Lunar Dance", () => {
     await game.classicMode.startBattle([Species.BULBASAUR, Species.ODDISH, Species.RATTATA]);
 
     const [bulbasaur, oddish, rattata] = game.scene.getPlayerParty();
-    game.move.changeMoveset(bulbasaur, [Moves.LUNAR_DANCE, Moves.SPLASH]);
-    game.move.changeMoveset(oddish, [Moves.LUNAR_DANCE, Moves.SPLASH]);
-    game.move.changeMoveset(rattata, [Moves.LUNAR_DANCE, Moves.SPLASH]);
+    game.moveHelper.changeMoveset(bulbasaur, [Moves.LUNAR_DANCE, Moves.SPLASH]);
+    game.moveHelper.changeMoveset(oddish, [Moves.LUNAR_DANCE, Moves.SPLASH]);
+    game.moveHelper.changeMoveset(rattata, [Moves.LUNAR_DANCE, Moves.SPLASH]);
 
-    game.move.select(Moves.SPLASH, 0);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH, 0);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.phaseInterceptor.to(CommandPhase);
     await game.toNextTurn();
 
@@ -50,12 +50,12 @@ describe("Moves - Lunar Dance", () => {
 
     // Switch out Bulbasaur for Rattata so we can swtich bulbasaur back in with lunar dance
     game.doSwitchPokemon(2);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.phaseInterceptor.to(CommandPhase);
     await game.toNextTurn();
 
-    game.move.select(Moves.SPLASH, 0);
-    game.move.select(Moves.LUNAR_DANCE);
+    game.moveHelper.select(Moves.SPLASH, 0);
+    game.moveHelper.select(Moves.LUNAR_DANCE);
     game.doSelectPartyPokemon(2);
     await game.phaseInterceptor.to("SwitchPhase", false);
     await game.toNextTurn();
@@ -65,8 +65,8 @@ describe("Moves - Lunar Dance", () => {
     expect(bulbasaur.moveset[1]?.ppUsed).toBe(0);
     expect(bulbasaur.isFullHp()).toBe(true);
 
-    game.move.select(Moves.SPLASH, 0);
-    game.move.select(Moves.LUNAR_DANCE);
+    game.moveHelper.select(Moves.SPLASH, 0);
+    game.moveHelper.select(Moves.LUNAR_DANCE);
     await game.phaseInterceptor.to(CommandPhase);
     await game.toNextTurn();
 

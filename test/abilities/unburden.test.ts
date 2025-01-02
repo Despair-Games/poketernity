@@ -74,7 +74,7 @@ describe("Abilities - Unburden", () => {
     const initialPlayerSpeed = playerPokemon.getStat(Stat.SPD);
 
     // Player gets hit by False Swipe and eats its own Sitrus Berry
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     expect(getHeldItemCount(playerPokemon)).toBeLessThan(playerHeldItems);
@@ -90,7 +90,7 @@ describe("Abilities - Unburden", () => {
     const initialPlayerSpeed = playerPokemon.getStat(Stat.SPD);
 
     // Player gets hit by False Swipe and eats its own Sitrus Berry
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     expect(getHeldItemCount(playerPokemon)).toBe(playerHeldItems);
@@ -107,7 +107,7 @@ describe("Abilities - Unburden", () => {
     const initialEnemySpeed = enemyPokemon.getStat(Stat.SPD);
 
     // Player uses Pluck and eats the opponent's berry
-    game.move.select(Moves.PLUCK);
+    game.moveHelper.select(Moves.PLUCK);
     await game.toNextTurn();
 
     expect(getHeldItemCount(enemyPokemon)).toBeLessThan(enemyHeldItemCt);
@@ -123,7 +123,7 @@ describe("Abilities - Unburden", () => {
     const initialEnemySpeed = enemyPokemon.getStat(Stat.SPD);
 
     // Player uses Knock Off and removes the opponent's item
-    game.move.select(Moves.KNOCK_OFF);
+    game.moveHelper.select(Moves.KNOCK_OFF);
     await game.toNextTurn();
 
     expect(getHeldItemCount(enemyPokemon)).toBeLessThan(enemyHeldItemCt);
@@ -139,7 +139,7 @@ describe("Abilities - Unburden", () => {
     const initialEnemySpeed = enemyPokemon.getStat(Stat.SPD);
 
     // Player steals the opponent's item via ability Magician
-    game.move.select(Moves.FALSE_SWIPE);
+    game.moveHelper.select(Moves.FALSE_SWIPE);
     await game.toNextTurn();
 
     expect(getHeldItemCount(enemyPokemon)).toBeLessThan(enemyHeldItemCt);
@@ -155,7 +155,7 @@ describe("Abilities - Unburden", () => {
     const initialPlayerSpeed = playerPokemon.getStat(Stat.SPD);
 
     // Player's item gets stolen via ability Pickpocket
-    game.move.select(Moves.FALSE_SWIPE);
+    game.moveHelper.select(Moves.FALSE_SWIPE);
     await game.toNextTurn();
 
     expect(getHeldItemCount(playerPokemon)).toBeLessThan(playerHeldItems);
@@ -171,7 +171,7 @@ describe("Abilities - Unburden", () => {
     const initialEnemySpeed = enemyPokemon.getStat(Stat.SPD);
 
     // Player uses Thief and steals the opponent's item
-    game.move.select(Moves.THIEF);
+    game.moveHelper.select(Moves.THIEF);
     await game.toNextTurn();
 
     expect(getHeldItemCount(enemyPokemon)).toBeLessThan(enemyHeldItemCt);
@@ -191,7 +191,7 @@ describe("Abilities - Unburden", () => {
     const initialEnemySpeed = enemyPokemon.getStat(Stat.SPD);
 
     // Player steals the opponent's item using Grip Claw
-    game.move.select(Moves.FALSE_SWIPE);
+    game.moveHelper.select(Moves.FALSE_SWIPE);
     await game.toNextTurn();
 
     expect(getHeldItemCount(enemyPokemon)).toBeLessThan(enemyHeldItemCt);
@@ -207,7 +207,7 @@ describe("Abilities - Unburden", () => {
     const initialPlayerSpeed = playerPokemon.getStat(Stat.SPD);
 
     // Player gets hit by False Swipe and eats Sitrus Berry, which should not trigger Unburden
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     expect(getHeldItemCount(playerPokemon)).toBeLessThan(playerHeldItems);
@@ -225,7 +225,7 @@ describe("Abilities - Unburden", () => {
 
     // Player uses Stuff Cheeks and eats its own berry
     // Caution: Do not test this using opponent, there is a known issue where opponent can randomly generate with Salac Berry
-    game.move.select(Moves.STUFF_CHEEKS);
+    game.moveHelper.select(Moves.STUFF_CHEEKS);
     await game.toNextTurn();
 
     expect(getHeldItemCount(playerPokemon)).toBeLessThan(playerHeldItemCt);
@@ -244,8 +244,8 @@ describe("Abilities - Unburden", () => {
     const initialPlayerSpeed = treecko.getStat(Stat.SPD);
 
     // Turn 1: Treecko gets hit by False Swipe and eats Sitrus Berry, activating Unburden
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.forceEnemyMove(Moves.FALSE_SWIPE, 0);
     await game.forceEnemyMove(Moves.FALSE_SWIPE, 0);
     await game.phaseInterceptor.to("TurnEndPhase");
@@ -255,7 +255,7 @@ describe("Abilities - Unburden", () => {
 
     // Turn 2: Switch Meowth to Weezing, activating Neutralizing Gas
     await game.toNextTurn();
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     game.doSwitchPokemon(2);
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -264,7 +264,7 @@ describe("Abilities - Unburden", () => {
 
     // Turn 3: Switch Weezing to Meowth, deactivating Neutralizing Gas
     await game.toNextTurn();
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     game.doSwitchPokemon(2);
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -283,7 +283,7 @@ describe("Abilities - Unburden", () => {
     vi.spyOn(unburdenAttr, "applyPostItemLost");
 
     // Player uses Baton Pass, which also passes the Baton item
-    game.move.select(Moves.BATON_PASS);
+    game.moveHelper.select(Moves.BATON_PASS);
     game.doSelectPartyPokemon(1);
     await game.toNextTurn();
 
@@ -303,7 +303,7 @@ describe("Abilities - Unburden", () => {
     const initialPlayerSpeed = playerPokemon.getStat(Stat.SPD);
 
     // Turn 1: Get hit by False Swipe and eat Sitrus Berry, activating Unburden
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.FALSE_SWIPE);
     await game.toNextTurn();
 
@@ -311,7 +311,7 @@ describe("Abilities - Unburden", () => {
     expect(playerPokemon.getEffectiveStat(Stat.SPD)).toBe(initialPlayerSpeed * 2);
 
     // Turn 2: Get hit by Worry Seed, deactivating Unburden
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.WORRY_SEED);
     await game.toNextTurn();
 
@@ -328,7 +328,7 @@ describe("Abilities - Unburden", () => {
     const initialPlayerSpeed = playerPokemon.getStat(Stat.SPD);
 
     // Turn 1: Get hit by Wing Attack and faint, activating Reviver Seed
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     expect(getHeldItemCount(playerPokemon)).toBeLessThan(playerHeldItems);
@@ -344,7 +344,7 @@ describe("Abilities - Unburden", () => {
     const treeckoInitialHeldItems = getHeldItemCount(treecko);
     const initialSpeed = treecko.getStat(Stat.SPD);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.THIEF);
     game.doSelectPartyPokemon(1);
     await game.toNextTurn();
@@ -372,8 +372,8 @@ describe("Abilities - Unburden", () => {
     const treeckoInitialHeldItems = getHeldItemCount(treecko);
     const initialSpeed = treecko.getStat(Stat.SPD);
 
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.REVIVAL_BLESSING, 1);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.REVIVAL_BLESSING, 1);
     await game.forceEnemyMove(Moves.THIEF, BattlerIndex.PLAYER);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2]);

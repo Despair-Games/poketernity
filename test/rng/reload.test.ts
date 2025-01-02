@@ -53,7 +53,7 @@ describe("Reload", () => {
     await game.dailyMode.startBattle();
 
     // Transition from Wave 10 to Wave 11 in order to trigger biome switch
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.doKillOpponents();
     game.onNextPrompt("SelectBiomePhase", Mode.OPTION_SELECT, () => {
       (game.scene.time as MockClock).overrideDelay = null;
@@ -86,7 +86,7 @@ describe("Reload", () => {
     await game.classicMode.startBattle(); // Apparently daily mode would override the biome
 
     // Transition from Wave 10 to Wave 11 in order to trigger biome switch
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.doKillOpponents();
     await game.toNextWave();
     expect(game.phaseInterceptor.log).toContain("NewBiomeEncounterPhase");

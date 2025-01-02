@@ -36,11 +36,11 @@ describe("Moves - Trick Or Treat", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
-    game.move.select(Moves.FORESTS_CURSE);
+    game.moveHelper.select(Moves.FORESTS_CURSE);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemyPokemon!.summonData.addedType).toBe(Type.GRASS);
 
-    game.move.select(Moves.TRICK_OR_TREAT);
+    game.moveHelper.select(Moves.TRICK_OR_TREAT);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemyPokemon?.summonData.addedType).toBe(Type.GHOST);
   });

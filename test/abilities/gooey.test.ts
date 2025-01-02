@@ -43,7 +43,7 @@ describe("Abilities - Gooey/Tangling Hair", () => {
       await game.classicMode.startBattle([Species.FEEBAS]);
       const pokemon = game.scene.getPlayerPokemon()!;
 
-      game.move.select(Moves.TACKLE);
+      game.moveHelper.select(Moves.TACKLE);
       await game.phaseInterceptor.to("BerryPhase");
 
       expect(allMoves[Moves.TACKLE].hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
@@ -61,7 +61,7 @@ describe("Abilities - Gooey/Tangling Hair", () => {
       await game.classicMode.startBattle([Species.FEEBAS]);
       const pokemon = game.scene.getPlayerPokemon()!;
 
-      game.move.select(Moves.TACKLE);
+      game.moveHelper.select(Moves.TACKLE);
       await game.phaseInterceptor.to("BerryPhase");
 
       expect(allMoves[Moves.TACKLE].hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
@@ -79,7 +79,7 @@ describe("Abilities - Gooey/Tangling Hair", () => {
       await game.classicMode.startBattle([Species.FEEBAS]);
       const pokemon = game.scene.getPlayerPokemon()!;
 
-      game.move.select(Moves.EMBER);
+      game.moveHelper.select(Moves.EMBER);
       await game.phaseInterceptor.to("BerryPhase");
 
       expect(allMoves[Moves.EMBER].hasFlag(MoveFlags.MAKES_CONTACT)).toBe(false);
@@ -95,7 +95,7 @@ describe("Abilities - Gooey/Tangling Hair", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
     const pokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.DOUBLE_IRON_BASH);
+    game.moveHelper.select(Moves.DOUBLE_IRON_BASH);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(allMoves[Moves.DOUBLE_IRON_BASH].hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);

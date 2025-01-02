@@ -34,7 +34,7 @@ describe("Weather - Sandstorm", () => {
   it("inflicts damage equal to 1/16 of Pokemon's max HP at turn end", async () => {
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
 
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -47,7 +47,7 @@ describe("Weather - Sandstorm", () => {
     game.overridesHelper.moveset([Moves.DIVE]);
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
-    game.move.select(Moves.DIVE);
+    game.moveHelper.select(Moves.DIVE);
 
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -67,8 +67,8 @@ describe("Weather - Sandstorm", () => {
 
     await game.classicMode.startBattle([Species.ROCKRUFF, Species.KLINK]);
 
-    game.move.select(Moves.SPLASH, 0);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH, 0);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.phaseInterceptor.to("TurnEndPhase");
 

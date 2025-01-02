@@ -45,9 +45,9 @@ describe("Abilities - Effect Spore", () => {
     vi.spyOn(abilityAttr, "applyPostDefend");
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.TACKLE);
-    await game.move.forceHit();
+    await game.moveHelper.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(abilityAttr.applyPostDefend).toHaveLastReturnedWith(true);
@@ -61,9 +61,9 @@ describe("Abilities - Effect Spore", () => {
     const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(EffectSporeAbAttr)[0]!;
     vi.spyOn(abilityAttr, "applyPostDefend");
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.TACKLE);
-    await game.move.forceHit();
+    await game.moveHelper.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(abilityAttr.applyPostDefend).toHaveLastReturnedWith(false);
@@ -76,9 +76,9 @@ describe("Abilities - Effect Spore", () => {
     const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(EffectSporeAbAttr)[0]!;
     vi.spyOn(abilityAttr, "applyPostDefend");
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.TACKLE);
-    await game.move.forceHit();
+    await game.moveHelper.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(abilityAttr.applyPostDefend).toHaveLastReturnedWith(false);
@@ -90,9 +90,9 @@ describe("Abilities - Effect Spore", () => {
     const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(EffectSporeAbAttr)[0]!;
     vi.spyOn(abilityAttr, "applyPostDefend");
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.WATER_GUN);
-    await game.move.forceHit();
+    await game.moveHelper.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(abilityAttr.applyPostDefend).toHaveLastReturnedWith(false);

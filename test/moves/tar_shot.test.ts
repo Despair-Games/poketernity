@@ -40,14 +40,14 @@ describe("Moves - Tar Shot", () => {
 
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.TAR_SHOT);
+    game.moveHelper.select(Moves.TAR_SHOT);
 
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemy.getStatStage(Stat.SPD)).toBe(-1);
 
     await game.toNextTurn();
 
-    game.move.select(Moves.FIRE_PUNCH);
+    game.moveHelper.select(Moves.FIRE_PUNCH);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
@@ -61,21 +61,21 @@ describe("Moves - Tar Shot", () => {
 
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.TAR_SHOT);
+    game.moveHelper.select(Moves.TAR_SHOT);
 
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemy.getStatStage(Stat.SPD)).toBe(-1);
 
     await game.toNextTurn();
 
-    game.move.select(Moves.TAR_SHOT);
+    game.moveHelper.select(Moves.TAR_SHOT);
 
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemy.getStatStage(Stat.SPD)).toBe(-2);
 
     await game.toNextTurn();
 
-    game.move.select(Moves.FIRE_PUNCH);
+    game.moveHelper.select(Moves.FIRE_PUNCH);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
@@ -90,14 +90,14 @@ describe("Moves - Tar Shot", () => {
 
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.TAR_SHOT);
+    game.moveHelper.select(Moves.TAR_SHOT);
 
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemy.getStatStage(Stat.SPD)).toBe(-1);
 
     await game.toNextTurn();
 
-    game.move.select(Moves.FIRE_PUNCH);
+    game.moveHelper.select(Moves.FIRE_PUNCH);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
@@ -112,7 +112,7 @@ describe("Moves - Tar Shot", () => {
 
     vi.spyOn(enemy, "getMoveEffectiveness");
 
-    game.move.select(Moves.TAR_SHOT);
+    game.moveHelper.select(Moves.TAR_SHOT);
 
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemy.getStatStage(Stat.SPD)).toBe(-1);
@@ -121,7 +121,7 @@ describe("Moves - Tar Shot", () => {
 
     game.overridesHelper.enemyHeldItems([{ name: "TERA_SHARD", type: Type.GRASS }]);
 
-    game.move.select(Moves.FIRE_PUNCH);
+    game.moveHelper.select(Moves.FIRE_PUNCH);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("MoveEndPhase");

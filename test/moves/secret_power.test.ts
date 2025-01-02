@@ -48,13 +48,13 @@ describe("Moves - Secret Power", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     // No Terrain + Biome.VOLCANO --> Burn
-    game.move.select(Moves.SECRET_POWER);
+    game.moveHelper.select(Moves.SECRET_POWER);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemyPokemon.status?.effect).toBe(StatusEffect.BURN);
 
     // Misty Terrain --> SpAtk -1
-    game.move.select(Moves.SECRET_POWER);
+    game.moveHelper.select(Moves.SECRET_POWER);
     await game.forceEnemyMove(Moves.MISTY_TERRAIN);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemyPokemon.getStatStage(Stat.SPATK)).toBe(-1);
@@ -71,8 +71,8 @@ describe("Moves - Secret Power", () => {
     const sereneGraceAttr = allAbilities[Abilities.SERENE_GRACE].getAttrs(MoveEffectChanceMultiplierAbAttr)[0];
     vi.spyOn(sereneGraceAttr, "apply");
 
-    game.move.select(Moves.WATER_PLEDGE, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.FIRE_PLEDGE, 1, BattlerIndex.ENEMY_2);
+    game.moveHelper.select(Moves.WATER_PLEDGE, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.FIRE_PLEDGE, 1, BattlerIndex.ENEMY_2);
 
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -82,8 +82,8 @@ describe("Moves - Secret Power", () => {
     rainbowEffect = rainbowEffect!;
     vi.spyOn(rainbowEffect, "apply");
 
-    game.move.select(Moves.SECRET_POWER, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SECRET_POWER, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 

@@ -46,8 +46,8 @@ describe("Abilities - Overgrow/Blaze/Torrent/Swarm", () => {
       playerPokemon.hp = playerPokemon.getMaxHp() * 0.33 - 1;
       vi.spyOn(playerPokemon, "getEffectiveStat");
 
-      game.move.select(move);
-      await game.move.forceHit();
+      game.moveHelper.select(move);
+      await game.moveHelper.forceHit();
       await game.phaseInterceptor.to("BerryPhase");
 
       expect(playerPokemon.getEffectiveStat).toHaveLastReturnedWith(Math.floor(playerPokemon.stats[Stat.ATK] * 1.5));
@@ -68,8 +68,8 @@ describe("Abilities - Overgrow/Blaze/Torrent/Swarm", () => {
       playerPokemon.hp = playerPokemon.getMaxHp() * 0.33 - 1;
       vi.spyOn(playerPokemon, "getEffectiveStat");
 
-      game.move.select(move);
-      await game.move.forceHit();
+      game.moveHelper.select(move);
+      await game.moveHelper.forceHit();
       await game.phaseInterceptor.to("BerryPhase");
 
       expect(playerPokemon.getEffectiveStat).toHaveLastReturnedWith(Math.floor(playerPokemon.stats[Stat.SPATK] * 1.5));
@@ -89,8 +89,8 @@ describe("Abilities - Overgrow/Blaze/Torrent/Swarm", () => {
       const playerPokemon = game.scene.getPlayerPokemon()!;
       vi.spyOn(playerPokemon, "getEffectiveStat");
 
-      game.move.select(move);
-      await game.move.forceHit();
+      game.moveHelper.select(move);
+      await game.moveHelper.forceHit();
       await game.phaseInterceptor.to("BerryPhase");
 
       const statUsed =
@@ -113,8 +113,8 @@ describe("Abilities - Overgrow/Blaze/Torrent/Swarm", () => {
     playerPokemon.hp = playerPokemon.getMaxHp() * 0.33 - 1;
     vi.spyOn(playerPokemon, "getEffectiveStat");
 
-    game.move.select(Moves.TACKLE);
-    await game.move.forceHit();
+    game.moveHelper.select(Moves.TACKLE);
+    await game.moveHelper.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(playerPokemon.getEffectiveStat).toHaveLastReturnedWith(Math.floor(playerPokemon.stats[Stat.ATK]));

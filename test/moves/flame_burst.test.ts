@@ -49,8 +49,8 @@ describe("Moves - Flame Burst", () => {
     await game.classicMode.startBattle([Species.PIKACHU, Species.PIKACHU]);
     const [leftEnemy, rightEnemy] = game.scene.getEnemyField();
 
-    game.move.select(Moves.FLAME_BURST, 0, leftEnemy.getBattlerIndex());
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.FLAME_BURST, 0, leftEnemy.getBattlerIndex());
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(leftEnemy.hp).toBeLessThan(leftEnemy.getMaxHp());
@@ -63,8 +63,8 @@ describe("Moves - Flame Burst", () => {
     await game.classicMode.startBattle([Species.PIKACHU, Species.PIKACHU]);
     const [leftEnemy, rightEnemy] = game.scene.getEnemyField();
 
-    game.move.select(Moves.FLAME_BURST, 0, leftEnemy.getBattlerIndex());
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.FLAME_BURST, 0, leftEnemy.getBattlerIndex());
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(leftEnemy.hp).toBe(leftEnemy.getMaxHp());
@@ -77,8 +77,8 @@ describe("Moves - Flame Burst", () => {
 
     vi.spyOn(rightEnemy, "getAbility").mockReturnValue(allAbilities[Abilities.FLASH_FIRE]);
 
-    game.move.select(Moves.FLAME_BURST, 0, leftEnemy.getBattlerIndex());
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.FLAME_BURST, 0, leftEnemy.getBattlerIndex());
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(leftEnemy.hp).toBeLessThan(leftEnemy.getMaxHp());
@@ -91,8 +91,8 @@ describe("Moves - Flame Burst", () => {
 
     vi.spyOn(rightEnemy, "getAbility").mockReturnValue(allAbilities[Abilities.MAGIC_GUARD]);
 
-    game.move.select(Moves.FLAME_BURST, 0, leftEnemy.getBattlerIndex());
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.FLAME_BURST, 0, leftEnemy.getBattlerIndex());
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(leftEnemy.hp).toBeLessThan(leftEnemy.getMaxHp());
@@ -105,8 +105,8 @@ describe("Moves - Flame Burst", () => {
     await game.classicMode.startBattle([Species.PIKACHU, Species.PIKACHU]);
     const [leftEnemy, rightEnemy] = game.scene.getEnemyField();
 
-    game.move.select(Moves.FLAME_BURST, 0, leftEnemy.getBattlerIndex());
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.FLAME_BURST, 0, leftEnemy.getBattlerIndex());
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.forceEnemyMove(Moves.SUBSTITUTE);
     await game.forceEnemyMove(Moves.SPLASH);
@@ -125,8 +125,8 @@ describe("Moves - Flame Burst", () => {
 
     const leftEnemy = game.scene.getEnemyField()[0];
 
-    game.move.select(Moves.FLAME_BURST, 0, BattlerIndex.ENEMY_2);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.FLAME_BURST, 0, BattlerIndex.ENEMY_2);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.forceEnemyMove(Moves.PROTECT);
     await game.forceEnemyMove(Moves.SPLASH);
@@ -147,8 +147,8 @@ describe("Moves - Flame Burst", () => {
     const leftEnemy = game.scene.getEnemyField()[0];
     leftEnemy.hp = 1;
 
-    game.move.select(Moves.FLAME_BURST, 0, BattlerIndex.ENEMY_2);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.FLAME_BURST, 0, BattlerIndex.ENEMY_2);
+    game.moveHelper.select(Moves.SPLASH, 1);
 
     await game.forceEnemyMove(Moves.ENDURE);
     await game.forceEnemyMove(Moves.SPLASH);

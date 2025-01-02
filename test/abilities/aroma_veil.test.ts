@@ -38,8 +38,8 @@ describe("Moves - Aroma Veil", () => {
 
     const party = game.scene.getPlayerParty()! as PlayerPokemon[];
 
-    game.move.select(Moves.GROWL);
-    game.move.select(Moves.GROWL);
+    game.moveHelper.select(Moves.GROWL);
+    game.moveHelper.select(Moves.GROWL);
     await game.forceEnemyMove(Moves.HEAL_BLOCK);
     await game.toNextTurn();
     party.forEach((p) => {
@@ -52,8 +52,8 @@ describe("Moves - Aroma Veil", () => {
 
     const party = game.scene.getPlayerParty()! as PlayerPokemon[];
 
-    game.move.select(Moves.GROWL);
-    game.move.select(Moves.GROWL, 1);
+    game.moveHelper.select(Moves.GROWL);
+    game.moveHelper.select(Moves.GROWL, 1);
     await game.forceEnemyMove(Moves.IMPRISON, BattlerIndex.PLAYER);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.toNextTurn();

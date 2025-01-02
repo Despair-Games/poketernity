@@ -48,7 +48,7 @@ describe("Moves - Tera Blast", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "getMoveEffectiveness");
 
-    game.move.select(Moves.TERA_BLAST);
+    game.moveHelper.select(Moves.TERA_BLAST);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
@@ -60,7 +60,7 @@ describe("Moves - Tera Blast", () => {
 
     await game.classicMode.startBattle();
 
-    game.move.select(Moves.TERA_BLAST);
+    game.moveHelper.select(Moves.TERA_BLAST);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
@@ -76,7 +76,7 @@ describe("Moves - Tera Blast", () => {
     vi.spyOn(enemyPokemon, "getMoveEffectiveness");
     vi.spyOn(enemyPokemon, "isTerastallized").mockReturnValue(true);
 
-    game.move.select(Moves.TERA_BLAST);
+    game.moveHelper.select(Moves.TERA_BLAST);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
@@ -94,7 +94,7 @@ describe("Moves - Tera Blast", () => {
       playerPokemon.stats[Stat.ATK] = 100;
       playerPokemon.stats[Stat.SPATK] = 1;
 
-      game.move.select(Moves.TERA_BLAST);
+      game.moveHelper.select(Moves.TERA_BLAST);
       await game.phaseInterceptor.to("TurnEndPhase");
       expect(game.scene.getEnemyPokemon()!.battleData.abilityRevealed).toBe(true);
     },
@@ -107,7 +107,7 @@ describe("Moves - Tera Blast", () => {
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.TERA_BLAST);
+    game.moveHelper.select(Moves.TERA_BLAST);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEndPhase");
 

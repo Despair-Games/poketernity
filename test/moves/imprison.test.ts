@@ -35,7 +35,7 @@ describe("Moves - Imprison", () => {
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.TRANSFORM);
+    game.moveHelper.select(Moves.TRANSFORM);
     await game.forceEnemyMove(Moves.IMPRISON);
     await game.toNextTurn();
     const playerMoveset = playerPokemon.getMoveset().map((x) => x?.moveId);
@@ -50,7 +50,7 @@ describe("Moves - Imprison", () => {
     expect(imprisonBattlerTag).toBeDefined();
 
     // Second turn, Imprison forces Struggle to occur
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.toNextTurn();
     const move1 = playerPokemon.getLastXMoves(1)[0]!;
@@ -62,7 +62,7 @@ describe("Moves - Imprison", () => {
 
     const playerPokemon1 = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.IMPRISON);
     await game.toNextTurn();
     const imprisonArenaTag = game.scene.arena.getTag(ArenaTagType.IMPRISON);
@@ -86,7 +86,7 @@ describe("Moves - Imprison", () => {
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
-    game.move.select(Moves.IMPRISON);
+    game.moveHelper.select(Moves.IMPRISON);
     await game.forceEnemyMove(Moves.GROWL);
     await game.toNextTurn();
     expect(game.scene.arena.getTag(ArenaTagType.IMPRISON)).toBeDefined();

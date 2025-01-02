@@ -40,8 +40,8 @@ describe("Multi-target damage reduction", () => {
 
     const [enemy1, enemy2] = game.scene.getEnemyField();
 
-    game.move.select(Moves.DAZZLING_GLEAM);
-    game.move.select(Moves.TACKLE, 1, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.DAZZLING_GLEAM);
+    game.moveHelper.select(Moves.TACKLE, 1, BattlerIndex.ENEMY);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     await game.phaseInterceptor.to("MoveEndPhase");
 
@@ -56,8 +56,8 @@ describe("Multi-target damage reduction", () => {
     await game.killPokemon(enemy2);
     await game.toNextTurn();
 
-    game.move.select(Moves.DAZZLING_GLEAM);
-    game.move.select(Moves.TACKLE, 1, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.DAZZLING_GLEAM);
+    game.moveHelper.select(Moves.TACKLE, 1, BattlerIndex.ENEMY);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
@@ -81,8 +81,8 @@ describe("Multi-target damage reduction", () => {
     const player2 = game.scene.getPlayerParty()[1];
     const [enemy1, enemy2] = game.scene.getEnemyField();
 
-    game.move.select(Moves.EARTHQUAKE);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.EARTHQUAKE);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
@@ -96,8 +96,8 @@ describe("Multi-target damage reduction", () => {
     await game.killPokemon(enemy2);
     await game.toNextTurn();
 
-    game.move.select(Moves.EARTHQUAKE);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.EARTHQUAKE);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
@@ -115,7 +115,7 @@ describe("Multi-target damage reduction", () => {
     await game.killPokemon(player2);
     await game.toNextTurn();
 
-    game.move.select(Moves.EARTHQUAKE);
+    game.moveHelper.select(Moves.EARTHQUAKE);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("MoveEndPhase");

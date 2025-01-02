@@ -45,9 +45,9 @@ describe("Moves - Instruct", () => {
     await game.classicMode.startBattle([Species.AMOONGUSS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
-    game.move.changeMoveset(enemy, Moves.SONIC_BOOM);
+    game.moveHelper.changeMoveset(enemy, Moves.SONIC_BOOM);
 
-    game.move.select(Moves.INSTRUCT, BattlerIndex.PLAYER, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.INSTRUCT, BattlerIndex.PLAYER, BattlerIndex.ENEMY);
     await game.forceEnemyMove(Moves.SONIC_BOOM, BattlerIndex.PLAYER);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("TurnEndPhase", false);
@@ -60,14 +60,14 @@ describe("Moves - Instruct", () => {
     await game.classicMode.startBattle([Species.AMOONGUSS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
-    game.move.changeMoveset(enemy, [Moves.SONIC_BOOM, Moves.SUBSTITUTE]);
+    game.moveHelper.changeMoveset(enemy, [Moves.SONIC_BOOM, Moves.SUBSTITUTE]);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.SUBSTITUTE);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toNextTurn();
 
-    game.move.select(Moves.INSTRUCT);
+    game.moveHelper.select(Moves.INSTRUCT);
     await game.forceEnemyMove(Moves.SONIC_BOOM);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("TurnEndPhase", false);
@@ -81,11 +81,11 @@ describe("Moves - Instruct", () => {
     await game.classicMode.startBattle([Species.AMOONGUSS, Species.SHUCKLE]);
 
     const [amoonguss, shuckle] = game.scene.getPlayerField();
-    game.move.changeMoveset(amoonguss, Moves.INSTRUCT);
-    game.move.changeMoveset(shuckle, Moves.SONIC_BOOM);
+    game.moveHelper.changeMoveset(amoonguss, Moves.INSTRUCT);
+    game.moveHelper.changeMoveset(shuckle, Moves.SONIC_BOOM);
 
-    game.move.select(Moves.INSTRUCT, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2);
-    game.move.select(Moves.SONIC_BOOM, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.INSTRUCT, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2);
+    game.moveHelper.select(Moves.SONIC_BOOM, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
@@ -101,9 +101,9 @@ describe("Moves - Instruct", () => {
     await game.classicMode.startBattle([Species.AMOONGUSS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
-    game.move.changeMoveset(enemy, Moves.GIGATON_HAMMER);
+    game.moveHelper.changeMoveset(enemy, Moves.GIGATON_HAMMER);
 
-    game.move.select(Moves.INSTRUCT);
+    game.moveHelper.select(Moves.INSTRUCT);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("TurnEndPhase", false);
 
@@ -114,17 +114,17 @@ describe("Moves - Instruct", () => {
     game.overridesHelper.moveset([Moves.THUNDER_WAVE, Moves.INSTRUCT]).enemyMoveset([Moves.SPLASH, Moves.SONIC_BOOM]);
     await game.classicMode.startBattle([Species.AMOONGUSS]);
 
-    game.move.select(Moves.THUNDER_WAVE);
+    game.moveHelper.select(Moves.THUNDER_WAVE);
     await game.forceEnemyMove(Moves.SONIC_BOOM);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
-    game.move.select(Moves.INSTRUCT);
+    game.moveHelper.select(Moves.INSTRUCT);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-    await game.move.forceStatusActivation(true);
+    await game.moveHelper.forceStatusActivation(true);
     await game.phaseInterceptor.to("MovePhase");
-    await game.move.forceStatusActivation(false);
+    await game.moveHelper.forceStatusActivation(false);
     await game.phaseInterceptor.to("TurnEndPhase", false);
 
     const moveHistory = game.scene.getEnemyPokemon()!.getMoveHistory();
@@ -139,11 +139,11 @@ describe("Moves - Instruct", () => {
     await game.classicMode.startBattle([Species.AMOONGUSS]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
-    game.move.changeMoveset(enemyPokemon, Moves.HIDDEN_POWER);
+    game.moveHelper.changeMoveset(enemyPokemon, Moves.HIDDEN_POWER);
     const moveUsed = enemyPokemon.moveset.find((m) => m?.moveId === Moves.HIDDEN_POWER)!;
     moveUsed.ppUsed = moveUsed.getMovePp() - 1;
 
-    game.move.select(Moves.INSTRUCT);
+    game.moveHelper.select(Moves.INSTRUCT);
     await game.forceEnemyMove(Moves.HIDDEN_POWER);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("TurnEndPhase", false);
@@ -157,7 +157,7 @@ describe("Moves - Instruct", () => {
     game.overridesHelper.enemyMoveset(Moves.SPLASH);
     await game.classicMode.startBattle([Species.AMOONGUSS]);
 
-    game.move.select(Moves.INSTRUCT);
+    game.moveHelper.select(Moves.INSTRUCT);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("TurnEndPhase", false);
@@ -170,11 +170,11 @@ describe("Moves - Instruct", () => {
     await game.classicMode.startBattle([Species.AMOONGUSS, Species.DROWZEE]);
 
     const [enemy1, enemy2] = game.scene.getEnemyField();
-    game.move.changeMoveset(enemy1, Moves.SONIC_BOOM);
-    game.move.changeMoveset(enemy2, Moves.SPLASH);
+    game.moveHelper.changeMoveset(enemy1, Moves.SONIC_BOOM);
+    game.moveHelper.changeMoveset(enemy2, Moves.SPLASH);
 
-    game.move.select(Moves.INSTRUCT, BattlerIndex.PLAYER, BattlerIndex.ENEMY);
-    game.move.select(Moves.DISABLE, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.INSTRUCT, BattlerIndex.PLAYER, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.DISABLE, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY);
     await game.forceEnemyMove(Moves.SONIC_BOOM, BattlerIndex.PLAYER);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
@@ -196,8 +196,8 @@ describe("Moves - Instruct", () => {
 
     const MoveToUse = Moves.PROTECT;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
-    game.move.changeMoveset(enemyPokemon, MoveToUse);
-    game.move.select(Moves.INSTRUCT);
+    game.moveHelper.changeMoveset(enemyPokemon, MoveToUse);
+    game.moveHelper.select(Moves.INSTRUCT);
     await game.forceEnemyMove(Moves.PROTECT);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("TurnEndPhase", false);
@@ -217,14 +217,14 @@ describe("Moves - Instruct", () => {
       { move: Moves.SONIC_BOOM, targets: [BattlerIndex.PLAYER], result: MoveResult.SUCCESS, virtual: false },
     ];
 
-    game.move.select(Moves.INSTRUCT);
+    game.moveHelper.select(Moves.INSTRUCT);
     await game.forceEnemyMove(Moves.HYPER_BEAM);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     expect(player.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
 
-    game.move.select(Moves.INSTRUCT);
+    game.moveHelper.select(Moves.INSTRUCT);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("TurnEndPhase", false);
 
@@ -239,8 +239,8 @@ describe("Moves - Instruct", () => {
       .enemyAbility(Abilities.DANCER);
     await game.classicMode.startBattle([Species.SHUCKLE, Species.SHUCKLE]);
 
-    game.move.select(Moves.INSTRUCT, BattlerIndex.PLAYER, BattlerIndex.ENEMY);
-    game.move.select(Moves.FIERY_DANCE, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.INSTRUCT, BattlerIndex.PLAYER, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.FIERY_DANCE, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
@@ -255,17 +255,17 @@ describe("Moves - Instruct", () => {
 
     const player = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
-    game.move.select(Moves.INSTRUCT);
+    game.moveHelper.select(Moves.INSTRUCT);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(player.turnData.attacksReceived.length).toBe(10);
 
     await game.toNextTurn();
-    game.move.select(Moves.INSTRUCT);
+    game.moveHelper.select(Moves.INSTRUCT);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("BerryPhase");
 
@@ -282,14 +282,14 @@ describe("Moves - Instruct", () => {
 
     const [, ivysaur] = game.scene.getPlayerField();
 
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.forceEnemyMove(Moves.BULLET_SEED, BattlerIndex.PLAYER_2);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.toNextTurn();
 
-    game.move.select(Moves.INSTRUCT, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.INSTRUCT, 1, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.INSTRUCT, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.INSTRUCT, 1, BattlerIndex.ENEMY);
     await game.forceEnemyMove(Moves.BULLET_SEED, BattlerIndex.PLAYER_2);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
@@ -298,8 +298,8 @@ describe("Moves - Instruct", () => {
     expect(ivysaur.turnData.attacksReceived.length).toBe(15);
 
     await game.toNextTurn();
-    game.move.select(Moves.INSTRUCT, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.INSTRUCT, 1, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.INSTRUCT, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.INSTRUCT, 1, BattlerIndex.ENEMY);
     await game.forceEnemyMove(Moves.BULLET_SEED, BattlerIndex.PLAYER_2);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);

@@ -39,7 +39,7 @@ describe("Abilities - Honey Gather", () => {
     await game.classicMode.startBattle([Species.MILOTIC]);
     game.scene.money = 1000;
 
-    game.move.select(Moves.THUNDERBOLT);
+    game.moveHelper.select(Moves.THUNDERBOLT);
     await game.toNextWave();
 
     expect(game.scene.money).toBeGreaterThan(1000);
@@ -49,7 +49,7 @@ describe("Abilities - Honey Gather", () => {
     await game.classicMode.startBattle([Species.MILOTIC]);
     game.scene.money = 1000;
 
-    game.move.select(Moves.ROAR);
+    game.moveHelper.select(Moves.ROAR);
     await game.toNextTurn();
 
     expect(game.scene.money).toBe(1000);

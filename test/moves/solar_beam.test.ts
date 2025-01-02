@@ -41,7 +41,7 @@ describe("Moves - Solar Beam", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.SOLAR_BEAM);
+    game.moveHelper.select(Moves.SOLAR_BEAM);
 
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(playerPokemon.getTag(BattlerTagType.CHARGING)).toBeDefined();
@@ -69,7 +69,7 @@ describe("Moves - Solar Beam", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.SOLAR_BEAM);
+    game.moveHelper.select(Moves.SOLAR_BEAM);
 
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(playerPokemon.getTag(BattlerTagType.CHARGING)).toBeUndefined();
@@ -93,7 +93,7 @@ describe("Moves - Solar Beam", () => {
 
     vi.spyOn(solarBeam, "calculateBattlePower");
 
-    game.move.select(Moves.SOLAR_BEAM);
+    game.moveHelper.select(Moves.SOLAR_BEAM);
 
     await game.phaseInterceptor.to("TurnEndPhase");
     await game.phaseInterceptor.to("TurnEndPhase");

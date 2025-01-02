@@ -36,7 +36,7 @@ describe("Moves - Taunt", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
     // First turn, Player Pokemon succeeds using Growl without Taunt
-    game.move.select(Moves.GROWL);
+    game.moveHelper.select(Moves.GROWL);
     await game.forceEnemyMove(Moves.TAUNT);
     await game.toNextTurn();
     const move1 = playerPokemon.getLastXMoves(1)[0]!;
@@ -45,7 +45,7 @@ describe("Moves - Taunt", () => {
     expect(playerPokemon?.getTag(BattlerTagType.TAUNT)).toBeDefined();
 
     // Second turn, Taunt forces Struggle to occur
-    game.move.select(Moves.GROWL);
+    game.moveHelper.select(Moves.GROWL);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.toNextTurn();
     const move2 = playerPokemon.getLastXMoves(1)[0]!;

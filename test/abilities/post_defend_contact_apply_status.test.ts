@@ -49,7 +49,7 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
       "get",
     ).mockReturnValue(100);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.TACKLE);
     await game.phaseInterceptor.to("BerryPhase");
 
@@ -73,7 +73,7 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
       "get",
     ).mockReturnValue(100);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.WATER_GUN);
     await game.phaseInterceptor.to("BerryPhase");
 
@@ -93,7 +93,7 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
       "get",
     ).mockReturnValue(100);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.TACKLE);
     await game.phaseInterceptor.to("BerryPhase");
 

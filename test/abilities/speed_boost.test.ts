@@ -40,7 +40,7 @@ describe("Abilities - Speed Boost", () => {
     await game.classicMode.startBattle();
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
 
     expect(playerPokemon.getStatStage(Stat.SPD)).toBe(1);
@@ -49,13 +49,13 @@ describe("Abilities - Speed Boost", () => {
   it("should not trigger this turn if pokemon was switched into combat via attack, but the turn after", async () => {
     await game.classicMode.startBattle([Species.SHUCKLE, Species.NINJASK]);
 
-    game.move.select(Moves.U_TURN);
+    game.moveHelper.select(Moves.U_TURN);
     game.doSelectPartyPokemon(1);
     await game.toNextTurn();
     const playerPokemon = game.scene.getPlayerPokemon()!;
     expect(playerPokemon.getStatStage(Stat.SPD)).toBe(0);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
     expect(playerPokemon.getStatStage(Stat.SPD)).toBe(1);
   });
@@ -65,19 +65,19 @@ describe("Abilities - Speed Boost", () => {
 
     const [shuckle, ninjask] = game.scene.getPlayerParty();
 
-    game.move.select(Moves.U_TURN);
+    game.moveHelper.select(Moves.U_TURN);
     game.doSelectPartyPokemon(1);
     await game.toNextTurn();
     expect(game.scene.getPlayerPokemon()!).toBe(ninjask);
     expect(ninjask.getStatStage(Stat.SPD)).toBe(0);
 
-    game.move.select(Moves.U_TURN);
+    game.moveHelper.select(Moves.U_TURN);
     game.doSelectPartyPokemon(1);
     await game.toNextTurn();
     expect(game.scene.getPlayerPokemon()!).toBe(shuckle);
     expect(shuckle.getStatStage(Stat.SPD)).toBe(0);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
     expect(shuckle.getStatStage(Stat.SPD)).toBe(1);
   });
@@ -90,7 +90,7 @@ describe("Abilities - Speed Boost", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     expect(playerPokemon.getStatStage(Stat.SPD)).toBe(0);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
     expect(playerPokemon.getStatStage(Stat.SPD)).toBe(1);
   });
@@ -108,7 +108,7 @@ describe("Abilities - Speed Boost", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     expect(playerPokemon.getStatStage(Stat.SPD)).toBe(0);
 
-    game.move.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH);
     await game.toNextTurn();
     expect(playerPokemon.getStatStage(Stat.SPD)).toBe(1);
   });

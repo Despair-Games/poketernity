@@ -37,8 +37,8 @@ describe("Moves - Lucky Chant", () => {
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.LUCKY_CHANT);
-    await game.move.forceHit();
+    game.moveHelper.select(Moves.LUCKY_CHANT);
+    await game.moveHelper.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
     const lastAttackReceived = playerPokemon.turnData.attacksReceived[0];
@@ -52,10 +52,10 @@ describe("Moves - Lucky Chant", () => {
 
     const playerPokemon = game.scene.getPlayerField();
 
-    game.move.select(Moves.FOLLOW_ME);
-    game.move.select(Moves.LUCKY_CHANT, 1);
-    await game.move.forceHit();
-    await game.move.forceHit();
+    game.moveHelper.select(Moves.FOLLOW_ME);
+    game.moveHelper.select(Moves.LUCKY_CHANT, 1);
+    await game.moveHelper.forceHit();
+    await game.moveHelper.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
     const attacksReceivedA = playerPokemon[0].turnData.attacksReceived[0];
@@ -74,8 +74,8 @@ describe("Moves - Lucky Chant", () => {
 
     enemyPokemon.addTag(BattlerTagType.ALWAYS_CRIT, 3, Moves.NONE, 0);
 
-    game.move.select(Moves.LUCKY_CHANT);
-    await game.move.forceHit();
+    game.moveHelper.select(Moves.LUCKY_CHANT);
+    await game.moveHelper.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
     const lastAttackReceived = playerPokemon.turnData.attacksReceived[0];

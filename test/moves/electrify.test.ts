@@ -40,7 +40,7 @@ describe("Moves - Electrify", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "getMoveType");
 
-    game.move.select(Moves.ELECTRIFY);
+    game.moveHelper.select(Moves.ELECTRIFY);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
@@ -58,7 +58,7 @@ describe("Moves - Electrify", () => {
     const enemyPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(enemyPokemon, "getMoveType");
 
-    game.move.select(Moves.ELECTRIFY);
+    game.moveHelper.select(Moves.ELECTRIFY);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 

@@ -42,7 +42,7 @@ describe("UI - Transfer Items", () => {
 
     await game.startBattle([Species.RAYQUAZA, Species.RAYQUAZA, Species.RAYQUAZA]);
 
-    game.move.select(Moves.DRAGON_CLAW);
+    game.moveHelper.select(Moves.DRAGON_CLAW);
 
     game.onNextPrompt("SelectModifierPhase", Mode.MODIFIER_SELECT, () => {
       expect(game.scene.ui.getHandler()).toBeInstanceOf(ModifierSelectUiHandler);

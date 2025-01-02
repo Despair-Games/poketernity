@@ -45,7 +45,7 @@ describe("Moves - Protect", () => {
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.PROTECT);
+    game.moveHelper.select(Moves.PROTECT);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -60,7 +60,7 @@ describe("Moves - Protect", () => {
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.PROTECT);
+    game.moveHelper.select(Moves.PROTECT);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -75,7 +75,7 @@ describe("Moves - Protect", () => {
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.PROTECT);
+    game.moveHelper.select(Moves.PROTECT);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -90,7 +90,7 @@ describe("Moves - Protect", () => {
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.PROTECT);
+    game.moveHelper.select(Moves.PROTECT);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -105,7 +105,7 @@ describe("Moves - Protect", () => {
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.PROTECT);
+    game.moveHelper.select(Moves.PROTECT);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -120,7 +120,7 @@ describe("Moves - Protect", () => {
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.PROTECT);
+    game.moveHelper.select(Moves.PROTECT);
 
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 

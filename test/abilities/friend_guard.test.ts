@@ -41,8 +41,8 @@ describe("Moves - Friend Guard", () => {
 
     const enemy1 = game.scene.getEnemyField()[0];
 
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.forceEnemyMove(Moves.TACKLE, BattlerIndex.PLAYER);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.toNextTurn();
@@ -54,8 +54,8 @@ describe("Moves - Friend Guard", () => {
 
     vi.spyOn(player2, "getAbility").mockReturnValue(allAbilities[Abilities.FRIEND_GUARD]);
 
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.forceEnemyMove(Moves.TACKLE, BattlerIndex.PLAYER);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.toNextTurn();
@@ -74,8 +74,8 @@ describe("Moves - Friend Guard", () => {
     const player2 = game.scene.getPlayerField()[1];
     const spy = vi.spyOn(player2, "getAttackDamage");
 
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.forceEnemyMove(Moves.TACKLE, BattlerIndex.PLAYER_2);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.toNextTurn();
@@ -84,8 +84,8 @@ describe("Moves - Friend Guard", () => {
 
     vi.spyOn(player2, "getAbility").mockReturnValue(allAbilities[Abilities.FRIEND_GUARD]);
 
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.forceEnemyMove(Moves.TACKLE, BattlerIndex.PLAYER_2);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.toNextTurn();
@@ -100,8 +100,8 @@ describe("Moves - Friend Guard", () => {
     const [player1, player2] = game.scene.getPlayerField();
     const spy = vi.spyOn(player1, "getAttackDamage");
 
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.forceEnemyMove(Moves.DRAGON_RAGE, BattlerIndex.PLAYER);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.toNextTurn();
@@ -111,8 +111,8 @@ describe("Moves - Friend Guard", () => {
 
     vi.spyOn(player2, "getAbility").mockReturnValue(allAbilities[Abilities.FRIEND_GUARD]);
 
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.forceEnemyMove(Moves.DRAGON_RAGE, BattlerIndex.PLAYER);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.toNextTurn();

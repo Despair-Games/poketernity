@@ -38,16 +38,16 @@ describe("Abilities - Hyper Cutter", () => {
 
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.OCTOLOCK);
+    game.moveHelper.select(Moves.OCTOLOCK);
     await game.toNextTurn();
-    game.move.select(Moves.DEFOG);
+    game.moveHelper.select(Moves.DEFOG);
     await game.toNextTurn();
-    game.move.select(Moves.NOBLE_ROAR);
+    game.moveHelper.select(Moves.NOBLE_ROAR);
     await game.toNextTurn();
-    game.move.select(Moves.SAND_ATTACK);
+    game.moveHelper.select(Moves.SAND_ATTACK);
     await game.toNextTurn();
     game.overridesHelper.moveset([Moves.STRING_SHOT]);
-    game.move.select(Moves.STRING_SHOT);
+    game.moveHelper.select(Moves.STRING_SHOT);
     await game.toNextTurn();
 
     expect(enemy.getStatStage(Stat.ATK)).toEqual(0);

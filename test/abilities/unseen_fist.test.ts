@@ -58,7 +58,7 @@ describe("Abilities - Unseen Fist", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     enemyPokemon.addTag(BattlerTagType.SUBSTITUTE, 0, Moves.NONE, enemyPokemon.id);
 
-    game.move.select(Moves.TACKLE);
+    game.moveHelper.select(Moves.TACKLE);
 
     await game.phaseInterceptor.to(BerryPhase, false);
 
@@ -86,7 +86,7 @@ async function testUnseenFistHitResult(
 
   const enemyStartingHp = enemyPokemon.hp;
 
-  game.move.select(attackMove);
+  game.moveHelper.select(attackMove);
   await game.phaseInterceptor.to(TurnEndPhase, false);
 
   if (shouldSucceed) {

@@ -38,7 +38,7 @@ describe("Moves - Growth", () => {
 
     expect(playerPokemon.getStatStage(Stat.SPATK)).toBe(0);
 
-    game.move.select(Moves.GROWTH);
+    game.moveHelper.select(Moves.GROWTH);
     await game.phaseInterceptor.runFrom(EnemyCommandPhase).to(TurnInitPhase);
 
     expect(playerPokemon.getStatStage(Stat.SPATK)).toBe(1);

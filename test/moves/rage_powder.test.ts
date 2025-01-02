@@ -35,8 +35,8 @@ describe("Moves - Rage Powder", () => {
 
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.move.select(Moves.QUICK_ATTACK, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.QUICK_ATTACK, 1, BattlerIndex.ENEMY_2);
+    game.moveHelper.select(Moves.QUICK_ATTACK, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.QUICK_ATTACK, 1, BattlerIndex.ENEMY_2);
 
     await game.forceEnemyMove(Moves.RAGE_POWDER);
     await game.forceEnemyMove(Moves.SPLASH);
@@ -58,8 +58,8 @@ describe("Moves - Rage Powder", () => {
 
     const enemyStartingHp = enemyPokemon.map((p) => p.hp);
 
-    game.move.select(Moves.QUICK_ATTACK, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.QUICK_ATTACK, 1, BattlerIndex.ENEMY_2);
+    game.moveHelper.select(Moves.QUICK_ATTACK, 0, BattlerIndex.ENEMY);
+    game.moveHelper.select(Moves.QUICK_ATTACK, 1, BattlerIndex.ENEMY_2);
 
     await game.forceEnemyMove(Moves.RAGE_POWDER);
     await game.forceEnemyMove(Moves.SPLASH);

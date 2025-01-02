@@ -65,7 +65,7 @@ export class GameManager {
   public textInterceptor: TextInterceptor;
   public inputsHandler: InputsHandler;
   public readonly overridesHelper: OverridesHelper;
-  public readonly move: MoveHelper;
+  public readonly moveHelper: MoveHelper;
   public readonly classicMode: ClassicModeHelper;
   public readonly dailyMode: DailyModeHelper;
   public readonly challengeMode: ChallengeModeHelper;
@@ -88,7 +88,7 @@ export class GameManager {
     this.textInterceptor = new TextInterceptor(this.scene);
     this.gameWrapper.setScene(this.scene);
     this.overridesHelper = new OverridesHelper(this);
-    this.move = new MoveHelper(this);
+    this.moveHelper = new MoveHelper(this);
     this.classicMode = new ClassicModeHelper(this);
     this.dailyMode = new DailyModeHelper(this);
     this.challengeMode = new ChallengeModeHelper(this);

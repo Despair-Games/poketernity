@@ -47,9 +47,9 @@ describe("Moves - Lunar Blessing", () => {
     vi.spyOn(leftPlayer, "heal");
     vi.spyOn(rightPlayer, "heal");
 
-    game.move.select(Moves.LUNAR_BLESSING, 0);
+    game.moveHelper.select(Moves.LUNAR_BLESSING, 0);
     await game.phaseInterceptor.to(CommandPhase);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.toNextTurn();
 
     expect(leftPlayer.heal).toHaveBeenCalledOnce();
@@ -67,9 +67,9 @@ describe("Moves - Lunar Blessing", () => {
     vi.spyOn(leftPlayer, "resetStatus");
     vi.spyOn(rightPlayer, "resetStatus");
 
-    game.move.select(Moves.LUNAR_BLESSING, 0);
+    game.moveHelper.select(Moves.LUNAR_BLESSING, 0);
     await game.phaseInterceptor.to(CommandPhase);
-    game.move.select(Moves.SPLASH, 1);
+    game.moveHelper.select(Moves.SPLASH, 1);
     await game.toNextTurn();
 
     expect(leftPlayer.resetStatus).toHaveBeenCalledOnce();

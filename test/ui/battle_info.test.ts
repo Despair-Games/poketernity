@@ -45,7 +45,7 @@ describe("UI - Battle Info", () => {
 
       await game.classicMode.startBattle([Species.CHARIZARD]);
 
-      game.move.select(Moves.SPLASH);
+      game.moveHelper.select(Moves.SPLASH);
       await game.doKillOpponents();
       await game.phaseInterceptor.to(ExpPhase, true);
 

@@ -36,7 +36,7 @@ describe("Abilities - Wind Power", () => {
 
     expect(shiftry.getTag(BattlerTagType.CHARGED)).toBeUndefined();
 
-    game.move.select(Moves.PETAL_BLIZZARD);
+    game.moveHelper.select(Moves.PETAL_BLIZZARD);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(shiftry.getTag(BattlerTagType.CHARGED)).toBeDefined();
@@ -51,7 +51,7 @@ describe("Abilities - Wind Power", () => {
 
     expect(shiftry.getTag(BattlerTagType.CHARGED)).toBeUndefined();
 
-    game.move.select(Moves.TAILWIND);
+    game.moveHelper.select(Moves.TAILWIND);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(shiftry.getTag(BattlerTagType.CHARGED)).toBeDefined();
@@ -68,7 +68,7 @@ describe("Abilities - Wind Power", () => {
     expect(shiftry.getTag(BattlerTagType.CHARGED)).toBeUndefined();
     expect(magikarp.getTag(BattlerTagType.CHARGED)).toBeUndefined();
 
-    game.move.select(Moves.TAILWIND);
+    game.moveHelper.select(Moves.TAILWIND);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -84,7 +84,7 @@ describe("Abilities - Wind Power", () => {
 
     expect(shiftry.getTag(BattlerTagType.CHARGED)).toBeUndefined();
 
-    game.move.select(Moves.SANDSTORM);
+    game.moveHelper.select(Moves.SANDSTORM);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
