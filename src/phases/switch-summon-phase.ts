@@ -1,20 +1,17 @@
 import { globalScene } from "#app/global-scene";
-import { applyPreSwitchOutAbAttrs, PostDamageForceSwitchAbAttr } from "#app/data/ability";
+import { applyPreSwitchOutAbAttrs } from "#app/data/ability";
 import { PreSwitchOutAbAttr } from "#app/data/ab-attrs/pre-switch-out-ab-attr";
-import { allMoves } from "#app/data/all-moves";
 import { getPokeballTintColor } from "#app/data/pokeball";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";
 import { TrainerSlot } from "#app/data/trainer-config";
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { SwitchEffectTransferModifier } from "#app/modifier/modifier";
-import { Command } from "#app/ui/command-ui-handler";
 import i18next from "i18next";
 import { PostSummonPhase } from "./post-summon-phase";
 import { SummonPhase } from "./summon-phase";
 import { SubstituteTag } from "#app/data/battler-tags";
 import { SwitchType } from "#enums/switch-type";
-import { ForceSwitchOutAttr } from "#app/data/move-attrs/force-switch-out-attr";
 
 export class SwitchSummonPhase extends SummonPhase {
   private readonly switchType: SwitchType;
@@ -202,24 +199,13 @@ export class SwitchSummonPhase extends SummonPhase {
 
     const pokemon = this.getPokemon();
 
-    const moveId = globalScene.currentBattle.lastMove;
-    const lastUsedMove = moveId ? allMoves[moveId] : undefined;
-
-    const currentCommand = globalScene.currentBattle.turnCommands[this.fieldIndex]?.command;
-    const lastPokemonIsForceSwitchedAndNotFainted =
-      lastUsedMove?.hasAttr(ForceSwitchOutAttr) && !this.lastPokemon.isFainted();
-    const lastPokemonHasForceSwitchAbAttr =
-      this.lastPokemon.hasAbilityWithAttr(PostDamageForceSwitchAbAttr) && !this.lastPokemon.isFainted();
-
     // Compensate for turn spent summoning
     // Or compensate for force switch move if switched out pokemon is not fainted
-    if (
-      currentCommand === Command.POKEMON
-      || lastPokemonIsForceSwitchedAndNotFainted
-      || lastPokemonHasForceSwitchAbAttr
-    ) {
+    if (this.switchType !== SwitchType.INITIAL_SWITCH) {
       pokemon.battleSummonData.turnCount--;
       pokemon.battleSummonData.waveTurnCount--;
+      pokemon.resetTurnData();
+      pokemon.turnData.switchedInThisTurn = true;
     }
 
     if (this.switchType === SwitchType.BATON_PASS && pokemon) {
@@ -229,11 +215,6 @@ export class SwitchSummonPhase extends SummonPhase {
       if (subTag) {
         pokemon.summonData.tags.push(subTag);
       }
-    }
-
-    if (this.switchType !== SwitchType.INITIAL_SWITCH) {
-      pokemon.resetTurnData();
-      pokemon.turnData.switchedInThisTurn = true;
     }
 
     this.lastPokemon?.resetSummonData();
