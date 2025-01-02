@@ -14,8 +14,6 @@ import { AbAttr } from "./ab-attr";
 +-----------------------+-------+--------+----------------------------------+
 | Sand Veil             | EVA   |    1.3 | In sandstorm only                |
 | Compound Eyes         | ACC   |    1.3 |                                  |
-| Swift Swim            | SPD   |      2 | In rain only                     |
-| Chlorophyll           | SPD   |      2 | In sun only                      |
 | Huge Power/Pure Power | ATK   |      2 |                                  |
 | Hustle                | ATK   |    1.5 |                                  |
 |                       | ACC   |    0.8 | Applies to Physical moves only   |
@@ -31,9 +29,7 @@ import { AbAttr } from "./ab-attr";
 |                       | SPDEF |    1.5 |                                  |
 | Defeatist             | ATK   |    0.5 | Needs to be at less than half HP |
 |                       | SPATK |    0.5 |                                  |
-| Sand Rush             | SPD   |      2 | In sandstorm only                |
 | Grass Pelt            | DEF   |    1.5 | In grassy terrain only           |
-| Slush Rush            | SPD   |      2 | In snow/hail only                |
 | Surge Surfer          | SPD   |      2 | In electric terrain only         |
 | Orichalum Pulse       | ATK   |   1.33 | In sun only                      |
 | Hadron Engine         | SPATK |   1.33 | In electric terrain only         |
