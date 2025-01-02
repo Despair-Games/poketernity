@@ -67,7 +67,6 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
   protected rowsToDisplay: number;
   protected device: Device;
 
-  abstract saveSettingToLocalStorage(setting, cursor): void;
   abstract setSetting(setting, value: number): boolean;
 
   /**
@@ -337,9 +336,8 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
 
     // Update the cursor for each key based on the stored settings or default cursors.
     this.keys.forEach((key, index) => {
-      console.log("update bindings", key, index, settings.gamepad[key]);
       if (["enabled"].includes(key)) {
-        this.setOptionCursor(index, settings.gamepad[key] ? Number(settings.gamepad[key]) : this.optionCursors[index]);
+        this.setOptionCursor(index, settings.gamepad[key] ? Number(!settings.gamepad[key]) : this.optionCursors[index]);
       }
     });
 
@@ -659,7 +657,7 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
 
     // If the save flag is set, save the setting to local storage
     if (save) {
-      this.saveSettingToLocalStorage(setting, cursor);
+      this.setSetting(setting, cursor);
     }
 
     return true; // Return true to indicate the cursor was successfully updated.

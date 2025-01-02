@@ -162,7 +162,7 @@ export class GameManager {
     settings.update("general", "partyExpNotificationMode", ExpNotification.SKIP);
     settings.update("general", "hpBarSpeed", HpBarSpeed.SKIP);
     settings.update("general", "enableTutorials", false);
-    this.scene.gameData.gender = PlayerGender.MALE; // set initial player gender
+    settings.update("display", "playerGender", PlayerGender.MALE);
     settings.update("general", "battleStyle", this.settings.battleStyle);
     settings.update("audio", "fieldVolume", 0);
   }

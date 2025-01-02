@@ -13,6 +13,7 @@ import type { RunEntry } from "../system/game-data";
 import { PlayerGender } from "#enums/player-gender";
 import { TrainerVariant } from "../field/trainer";
 import { RunDisplayMode } from "#app/ui/run-info-ui-handler";
+import { settings } from "#app/system/settings/settings-manager";
 
 export type RunSelectCallback = (cursor: number) => void;
 
@@ -293,7 +294,7 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
       this.add(gameOutcomeLabel);
     } else {
       // Run Result: Defeats
-      const genderIndex = globalScene.gameData.gender ?? PlayerGender.UNSET;
+      const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
       const genderStr = PlayerGender[genderIndex].toLowerCase();
       // Defeats from wild Pokemon battles will show the Pokemon responsible by the text of the run result.
       if (data.battleType === BattleType.WILD || (data.battleType === BattleType.MYSTERY_ENCOUNTER && !data.trainer)) {

@@ -64,7 +64,7 @@ export class GameOverPhase extends BattlePhase {
     // Otherwise, continue standard Game Over logic
 
     if (this.isVictory && globalScene.gameMode.isEndless) {
-      const genderIndex = globalScene.gameData.gender ?? PlayerGender.UNSET;
+      const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
       const genderStr = PlayerGender[genderIndex].toLowerCase();
       globalScene.ui.showDialogue(
         i18next.t("miscDialogue:ending_endless", { context: genderStr }),
@@ -175,19 +175,19 @@ export class GameOverPhase extends BattlePhase {
 
             if (!globalScene.ui.shouldSkipDialogue(dialogueKey)) {
               globalScene.ui.fadeIn(500).then(() => {
-                const genderIndex = globalScene.gameData.gender ?? PlayerGender.UNSET;
+                const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
                 const genderStr = PlayerGender[genderIndex].toLowerCase();
                 // Dialogue has to be retrieved so that the rival's expressions can be loaded and shown via getCharVariantFromDialogue
                 const dialogue = i18next.t(dialogueKey, { context: genderStr });
                 globalScene.charSprite
                   .showCharacter(
-                    `rival_${globalScene.gameData.gender === PlayerGender.FEMALE ? "m" : "f"}`,
+                    `rival_${settings.display.playerGender === PlayerGender.FEMALE ? "m" : "f"}`,
                     getCharVariantFromDialogue(dialogue),
                   )
                   .then(() => {
                     globalScene.ui.showDialogue(
                       dialogueKey,
-                      globalScene.gameData.gender === PlayerGender.FEMALE
+                      settings.display.playerGender === PlayerGender.FEMALE
                         ? trainerConfigs[TrainerType.RIVAL].name
                         : trainerConfigs[TrainerType.RIVAL].nameFemale,
                       null,

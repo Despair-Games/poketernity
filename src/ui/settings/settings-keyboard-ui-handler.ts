@@ -82,18 +82,19 @@ export default class SettingsKeyboardUiHandler extends AbstractControlSettingsUi
   }
 
   /**
-   * Handle the home key press event.
+   * Handle the home key press event: reset mappings for the current device
    */
   onHomeDown(): void {
     if (![Mode.SETTINGS_KEYBOARD, Mode.SETTINGS_GAMEPAD].includes(globalScene.ui.getMode())) {
       return;
     }
-    globalScene.gameData.resetMappingToFactory();
+    const isKeyboard = globalScene.ui.getMode() === Mode.SETTINGS_KEYBOARD;
+    globalScene.gameData.resetMappingToFactory(isKeyboard ? Device.KEYBOARD : Device.GAMEPAD);
     NavigationManager.getInstance().updateIcons();
   }
 
   /**
-   * Handle the delete key press event.
+   * Handle the delete key press event: remove mapping for the current button
    */
   onDeleteDown(): void {
     if (globalScene.ui.getMode() !== Mode.SETTINGS_KEYBOARD) {
@@ -106,7 +107,10 @@ export default class SettingsKeyboardUiHandler extends AbstractControlSettingsUi
     const activeConfig = this.getActiveConfig();
     const success = deleteBind(this.getActiveConfig(), settingName);
     if (success) {
-      this.saveCustomKeyboardMappingToLocalStorage(activeConfig);
+      globalScene.gameData.saveMappingConfigs(
+        globalScene.inputController?.selectedDevice[Device.KEYBOARD],
+        activeConfig,
+      );
       this.updateBindings();
       NavigationManager.getInstance().updateIcons();
     }
@@ -157,33 +161,6 @@ export default class SettingsKeyboardUiHandler extends AbstractControlSettingsUi
           );
         }
       }
-    }
-  }
-
-  /**
-   * Save the custom keyboard mapping to local storage.
-   *
-   * @param config - The configuration to save.
-   */
-  saveCustomKeyboardMappingToLocalStorage(config): void {
-    globalScene.gameData.saveMappingConfigs(globalScene.inputController?.selectedDevice[Device.KEYBOARD], config);
-  }
-
-  /**
-   * Save the setting to local storage.
-   *
-   * @param settingName - The name of the setting to save.
-   * @param cursor - The cursor position to save.
-   */
-  saveSettingToLocalStorage(settingName, cursor): void {
-    if (this.setting[settingName] !== this.setting.Default_Layout) {
-      globalScene.gameData.saveControlSetting(
-        this.device,
-        this.localStoragePropertyName,
-        settingName,
-        this.settingDeviceDefaults,
-        cursor,
-      );
     }
   }
 }

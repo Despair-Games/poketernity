@@ -1,5 +1,3 @@
-import type { CandyUpgradeNotificationChangedEvent } from "#app/events/battle-scene";
-import { BattleSceneEventType } from "#app/events/battle-scene";
 import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
 import type { Variant } from "#app/data/variant";
 import { getVariantTint, getVariantTierForVariant } from "#app/data/variant";
@@ -79,6 +77,8 @@ import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
 import { settings } from "#app/system/settings/settings-manager";
 import { CandyUpgradeNotificationMode } from "#app/enums/candy-upgrade-notification-mode";
 import { CandyUpgradeDisplayMode } from "#app/enums/candy-upgrade-display";
+import type { SettingsUpdateEventArgs } from "#app/@types/Settings";
+import { eventBus } from "#app/event-bus";
 
 export type StarterSelectCallback = (starters: Starter[]) => void;
 
@@ -1088,9 +1088,11 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.initTutorialOverlay(this.starterSelectContainer);
     this.starterSelectContainer.bringToTop(this.starterSelectMessageBoxContainer);
 
-    globalScene.eventTarget.addEventListener(BattleSceneEventType.CANDY_UPGRADE_NOTIFICATION_CHANGED, (e) =>
-      this.onCandyUpgradeDisplayChanged(e),
-    );
+    eventBus.on("settings/updated", ({ key, value }: SettingsUpdateEventArgs) => {
+      if (key === "candyUpgradeDisplayMode" && typeof value === "number") {
+        this.onCandyUpgradeDisplayChanged();
+      }
+    });
 
     this.updateInstructions();
   }
@@ -1451,15 +1453,9 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
   }
 
   /**
-   * Processes an {@linkcode CandyUpgradeNotificationChangedEvent} sent when the corresponding setting changes
-   * @param event {@linkcode Event} sent by the callback
+   * Update the candy upgrade notification style based on the settings
    */
-  onCandyUpgradeDisplayChanged(event: Event): void {
-    const candyUpgradeDisplayEvent = event as CandyUpgradeNotificationChangedEvent;
-    if (!candyUpgradeDisplayEvent) {
-      return;
-    }
-
+  onCandyUpgradeDisplayChanged(): void {
     // Loop through all visible candy icons when set to 'Icon' mode
     if (settings.display.candyUpgradeDisplayMode === CandyUpgradeDisplayMode.ICON) {
       this.filteredStarterContainers.forEach((starter) => {

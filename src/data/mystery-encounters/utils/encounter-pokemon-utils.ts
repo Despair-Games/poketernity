@@ -38,6 +38,7 @@ import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import type { Abilities } from "#enums/abilities";
 import type { PokeballType } from "#enums/pokeball";
 import { StatusEffect } from "#enums/status-effect";
+import { settings } from "#app/system/settings/settings-manager";
 
 /** Will give +1 level every 10 waves */
 export const STANDARD_ENCOUNTER_BOOSTED_LEVEL_MODIFIER = 1;
@@ -463,7 +464,7 @@ export function trainerThrowPokeball(
 
   return new Promise((resolve) => {
     globalScene.trainer.setTexture(
-      `trainer_${globalScene.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`,
+      `trainer_${settings.display.playerGender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`,
     );
     globalScene.time.delayedCall(512, () => {
       globalScene.playSound("se/pb_throw");
@@ -474,7 +475,7 @@ export function trainerThrowPokeball(
         globalScene.trainer.setFrame("3");
         globalScene.time.delayedCall(768, () => {
           globalScene.trainer.setTexture(
-            `trainer_${globalScene.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back`,
+            `trainer_${settings.display.playerGender === PlayerGender.FEMALE ? "f" : "m"}_back`,
           );
         });
       });

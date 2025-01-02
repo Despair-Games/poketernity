@@ -61,7 +61,7 @@ export function applySessionVersionMigration(data: SessionSaveData) {
  * @see {@link SettingsVersionConverter}
  */
 export function applySettingsVersionMigration(data: Object) {
-  const gameVersion: string = data.hasOwnProperty("gameVersion") ? data["gameVersion"] : "1.0.0";
+  const gameVersion: string = data.hasOwnProperty("meta") ? (data["meta"]["gameVersion"] ?? "1.0.0") : "1.0.0";
   const curVersion = gameVersion.split(".").map((value) => parseInt(value));
 
   if (!curVersion.every((value, index) => value === LATEST_VERSION[index])) {
@@ -156,12 +156,12 @@ class SystemVersionConverter extends VersionConverter {
     if (curMajor === 1) {
       if (curMinor === 0) {
         if (curPatch <= 4) {
-          console.log("Applying v1.0.4 system data migraton!");
+          console.log("Applying v1.0.4 system data migration!");
           this.callMigrators(data, v1_0_4.systemMigrators);
         }
       }
       if (curMinor <= 1) {
-        console.log("Applying v1.1.0 system data migraton!");
+        console.log("Applying v1.1.0 system data migration!");
         this.callMigrators(data, v1_1_0.systemMigrators);
       }
     }
@@ -182,16 +182,16 @@ class SettingsVersionConverter extends VersionConverter {
     if (curMajor === 1) {
       if (curMinor === 0) {
         if (curPatch <= 4) {
-          console.log("Applying v1.0.4 settings data migraton!");
+          console.log("Applying v1.0.4 settings data migration!");
           this.callMigrators(data, v1_0_4.settingsMigrators);
         }
       }
       if (curMinor <= 1) {
-        console.log("Applying v1.1.0 settings data migraton!");
+        console.log("Applying v1.1.0 settings data migration!");
         this.callMigrators(data, v1_1_0.settingsMigrators);
       }
     }
 
-    console.log(`System data successfully migrated to v${version}!`);
+    console.log(`Settings successfully migrated to v${version}!`);
   }
 }

@@ -36,6 +36,7 @@ import { modifierSortFunc } from "#app/modifier/modifier";
 import { PlayerGender } from "#enums/player-gender";
 import { Stat, PERMANENT_STATS, getStatKey } from "#enums/stat";
 import { Nature } from "#enums/nature";
+import { settings } from "#app/system/settings/settings-manager";
 
 enum Page {
   PROFILE,
@@ -789,7 +790,7 @@ export default class SummaryUiHandler extends UiHandler {
         const trainerText = addBBCodeTextObject(
           7,
           12,
-          `${i18next.t("pokemonSummary:ot")}/${getBBCodeFrag(loggedInUser?.username || i18next.t("pokemonSummary:unknown"), globalScene.gameData.gender === PlayerGender.FEMALE ? TextStyle.SUMMARY_PINK : TextStyle.SUMMARY_BLUE)}`,
+          `${i18next.t("pokemonSummary:ot")}/${getBBCodeFrag(loggedInUser?.username || i18next.t("pokemonSummary:unknown"), settings.display.playerGender === PlayerGender.FEMALE ? TextStyle.SUMMARY_PINK : TextStyle.SUMMARY_BLUE)}`,
           TextStyle.SUMMARY_ALT,
         );
         trainerText.setOrigin(0, 0);

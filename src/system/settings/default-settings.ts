@@ -1,4 +1,10 @@
-import type { AudioSettings, DisplaySettings, GamepadSettings, GeneralSettings, Settings } from "#app/@types/Settings";
+import type {
+  AudioSettings,
+  DisplaySettings,
+  GamepadSettings,
+  GeneralSettings,
+  UserFacingSettings,
+} from "#app/@types/Settings";
 import { BattleStyle } from "#app/enums/battle-style";
 import { CandyUpgradeDisplayMode } from "#app/enums/candy-upgrade-display";
 import { CandyUpgradeNotificationMode } from "#app/enums/candy-upgrade-notification-mode";
@@ -12,7 +18,7 @@ import { MoneyFormat } from "#app/enums/money-format";
 import { MusicPreference } from "#app/enums/music-preference";
 import { ShopCursorTarget } from "#app/enums/shop-cursor-target";
 import { UiTheme } from "#app/enums/ui-theme";
-import { Gender } from "#enums/gender";
+import { PlayerGender } from "#enums/player-gender";
 import { UiWindowType } from "#enums/ui-window-type";
 
 export const defaultGeneralSettings: GeneralSettings = {
@@ -45,7 +51,7 @@ export const defaultDisplaySettings: DisplaySettings = {
   showTimeOfDayWidget: true,
   timeOfDayAnimation: EaseType.BOUNCE,
   enableFusionPaletteSwaps: true,
-  playerGender: Gender.MALE,
+  playerGender: PlayerGender.MALE,
   enableTypeHints: false,
   showBgmBar: true,
   shopCursorTarget: ShopCursorTarget.REWARDS,
@@ -61,14 +67,14 @@ export const defaultAudioSettings: AudioSettings = {
   musicPreference: MusicPreference.ALLGENS,
 };
 
-export const deafultGamepadSettings: GamepadSettings = {
+export const defaultGamepadSettings: GamepadSettings = {
   activeIndex: 0,
   enabled: true,
 };
 
-export const defaultSettings: Settings = {
+export const defaultSettings: UserFacingSettings = {
   general: defaultGeneralSettings,
   display: defaultDisplaySettings,
   audio: defaultAudioSettings,
-  gamepad: deafultGamepadSettings,
+  gamepad: defaultGamepadSettings,
 };
