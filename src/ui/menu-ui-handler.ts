@@ -572,7 +572,7 @@ export default class MenuUiHandler extends MessageUiHandler {
           success = true;
           break;
         case MenuOptions.STATS:
-          ui.setOverlayMode(Mode.GAME_STATS);
+          globalScene.scene.start("PlayerStats");
           success = true;
           break;
         case MenuOptions.RUN_HISTORY:

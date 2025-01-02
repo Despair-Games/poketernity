@@ -58,6 +58,7 @@ export function addTextObject(
   content: string,
   style: TextStyle,
   extraStyleOptions?: Phaser.Types.GameObjects.Text.TextStyle,
+  scene?: Phaser.Scene,
 ): Phaser.GameObjects.Text {
   const { scale, styleOptions, shadowColor, shadowXpos, shadowYpos } = getTextStyleOptions(
     style,
@@ -65,7 +66,7 @@ export function addTextObject(
     extraStyleOptions,
   );
 
-  const ret = globalScene.add.text(x, y, content, styleOptions);
+  const ret = (scene ?? globalScene).add.text(x, y, content, styleOptions);
   ret.setScale(scale);
   ret.setShadow(shadowXpos, shadowYpos, shadowColor);
   if (!(styleOptions as Phaser.Types.GameObjects.Text.TextStyle).lineSpacing) {

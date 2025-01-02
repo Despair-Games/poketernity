@@ -11,6 +11,84 @@ import { Button } from "#enums/buttons";
 import i18next from "i18next";
 import { UiTheme } from "#enums/ui-theme";
 import { globalScene } from "#app/global-scene";
+import { Scene } from "phaser";
+
+export class PlayerStatsScene extends Scene {
+  public mainContainer: Phaser.GameObjects.Container;
+  public statsContainer: Phaser.GameObjects.Container;
+  public arrowDown: Phaser.GameObjects.Sprite;
+  public arrowUp: Phaser.GameObjects.Sprite;
+
+  constructor() {
+    super({ key: "PlayerStats" });
+  }
+  create() {
+    this.mainContainer = this.add.container(1, -this.game.canvas.height + 1);
+    this.mainContainer.setInteractive(
+      new Phaser.Geom.Rectangle(0, 0, this.game.canvas.width, this.game.canvas.height),
+      Phaser.Geom.Rectangle.Contains,
+    );
+
+    const headerBg = addWindow(0, 0, this.game.canvas.width, 24);
+    headerBg.setOrigin(0, 0);
+
+    const headerText = addTextObject(0, 0, i18next.t("gameStatsUiHandler:stats"), TextStyle.SETTINGS_LABEL);
+    headerText.setOrigin(0, 0);
+    headerText.setPositionRelative(headerBg, 8, 4);
+
+    const statsBgWidth = this.game.canvas.width / 2;
+    // Why...
+    new Array(2).fill(null).map((_, i) => {
+      const width = statsBgWidth + 2;
+      const height = Math.floor(this.game.canvas.height - headerBg.height - 2);
+      const statsBg = addWindow(
+        (statsBgWidth - 2) * i,
+        headerBg.height,
+        width,
+        height,
+        false,
+        false,
+        i > 0 ? -3 : 0,
+        1,
+      );
+      statsBg.setOrigin(0, 0);
+      return statsBg;
+    });
+
+    this.statsContainer = this.add.container(0, 0);
+
+    new Array(18).fill(null).map((_, s) => {
+      const statLabel = addTextObject(
+        8 + (s % 2 === 1 ? statsBgWidth : 0),
+        28 + Math.floor(s / 2) * 16,
+        "",
+        TextStyle.STATS_LABEL,
+        undefined,
+        this,
+      );
+      statLabel.setOrigin(0, 0);
+      this.statsContainer.add(statLabel);
+
+      const statValue = addTextObject(statsBgWidth * ((s % 2) + 1) - 8, statLabel.y, "", TextStyle.STATS_VALUE);
+      statValue.setOrigin(1, 0);
+      this.statsContainer.add(statValue);
+    });
+
+    this.mainContainer.add(headerBg);
+    this.mainContainer.add(headerText);
+    this.mainContainer.add(this.statsContainer);
+
+    // arrows to show that we can scroll through the stats
+    this.arrowDown = this.add.sprite(statsBgWidth, this.game.canvas.height + 50, "prompt");
+    this.arrowDown.setScale(2, 2);
+    this.mainContainer.add(this.arrowDown);
+    this.arrowUp = this.add.sprite(statsBgWidth, headerBg.height, "prompt");
+    this.arrowUp.flipY = true;
+    this.mainContainer.add(this.arrowUp);
+
+    this.mainContainer.setVisible(true);
+  }
+}
 
 interface DisplayStat {
   label_key?: string;

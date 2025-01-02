@@ -46,14 +46,16 @@ export function addWindow(
   maskOffsetX?: number,
   maskOffsetY?: number,
   windowVariant?: WindowVariant,
+  scene?: Phaser.Scene,
 ): Phaser.GameObjects.NineSlice {
   if (windowVariant === undefined) {
     windowVariant = WindowVariant.NORMAL;
   }
 
-  const borderSize = globalScene.uiTheme ? 6 : 8;
+  const targetScene = scene ?? globalScene;
+  const borderSize = scene ? 6 : globalScene.uiTheme ? 6 : 8; // Apologies
 
-  const window = globalScene.add.nineslice(
+  const window = targetScene.add.nineslice(
     x,
     y,
     `window_${globalScene.windowType}${getWindowVariantSuffix(windowVariant)}`,
@@ -75,7 +77,7 @@ export function addWindow(
      * height: bottom
      */
     const maskRect = new Phaser.GameObjects.Rectangle(
-      globalScene,
+      targetScene,
       6 * (x - (mergeMaskLeft ? 2 : 0) - (maskOffsetX || 0)),
       6 * (y + (mergeMaskTop ? 2 : 0) + (maskOffsetY || 0)),
       width - (mergeMaskLeft ? 2 : 0),
