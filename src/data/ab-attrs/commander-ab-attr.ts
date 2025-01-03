@@ -27,6 +27,8 @@ export class CommanderAbAttr extends AbAttr {
       if (!simulated) {
         // Lapse the source's semi-invulnerable tags (to avoid visual inconsistencies)
         pokemon.lapseTags(BattlerTagLapseType.MOVE_EFFECT);
+        // Remove Sky Drop's effect from the source and whoever else is affected.
+        this.clearSkyDropEffects(pokemon);
         // Play an animation of the source jumping into the ally Dondozo's mouth
         globalScene.triggerPokemonBattleAnim(pokemon, PokemonAnimType.COMMANDER_APPLY);
         // Apply boosts from this effect to the ally Dondozo
@@ -37,5 +39,27 @@ export class CommanderAbAttr extends AbAttr {
       return true;
     }
     return false;
+  }
+
+  /**
+   * Remove's Sky Drops effects from the commanding Pokemon
+   * and whoever else is involved (when applicable).
+   * @param pokemon The {@linkcode Pokemon} with this attribute
+   */
+  private clearSkyDropEffects(pokemon: Pokemon): void {
+    const skyDropTagId = pokemon.getTag(BattlerTagType.SKY_DROP)?.sourceId;
+    if (skyDropTagId) {
+      globalScene.getField(true).forEach((p) => {
+        if (p && p.getTag(BattlerTagType.SKY_DROP)?.sourceId === skyDropTagId) {
+          // Cancel the Sky Drop user's next use of Sky Drop
+          if (skyDropTagId === p.id) {
+            globalScene.tryRemovePhase((phase) => phase instanceof MovePhase && phase.pokemon.id === p.id);
+            p.getMoveQueue().shift();
+            p.removeTag(BattlerTagType.CHARGING);
+          }
+          p.removeTag(BattlerTagType.SKY_DROP);
+        }
+      });
+    }
   }
 }

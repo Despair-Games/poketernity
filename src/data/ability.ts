@@ -5,7 +5,7 @@ import { type Stat, type BattleStat } from "#app/enums/stat";
 import { SwitchType } from "#app/enums/switch-type";
 import type { Pokemon } from "#app/field/pokemon";
 import type { EnemyPokemon, PokemonMove, HitResult } from "#app/field/pokemon";
-import { MoveResult, PlayerPokemon } from "#app/field/pokemon";
+import { PlayerPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { Localizable } from "#app/interfaces/locales";
 import { BattleEndPhase } from "#app/phases/battle-end-phase";
@@ -58,6 +58,7 @@ import type { PostBattleAbAttr } from "./ab-attrs/post-battle-ab-attr";
 import type { PostFaintAbAttr } from "./ab-attrs/post-faint-ab-attr";
 import { ForceSwitchOutImmunityAbAttr } from "./ab-attrs/force-switch-out-immunity-ab-attr";
 import { queueShowAbility } from "./ability-utils";
+import { BattlerTagType } from "#enums/battler-tag-type";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -383,10 +384,7 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
       if (enemyMoveHistory.length > 0) {
         const enemyLastMoveUsed = enemyMoveHistory[enemyMoveHistory.length - 1];
         // Will not activate if the Pokémon's HP falls below half while it is in the air during Sky Drop.
-        if (
-          fordbiddenDefendingMoves.includes(enemyLastMoveUsed.move)
-          || (enemyLastMoveUsed.move === Moves.SKY_DROP && enemyLastMoveUsed.result === MoveResult.OTHER)
-        ) {
+        if (fordbiddenDefendingMoves.includes(enemyLastMoveUsed.move) || pokemon.getTag(BattlerTagType.SKY_DROP)) {
           return false;
           // Will not activate if the Pokémon's HP falls below half by a move affected by Sheer Force.
         } else if (allMoves[enemyLastMoveUsed.move].chance >= 0 && source.hasAbility(Abilities.SHEER_FORCE)) {

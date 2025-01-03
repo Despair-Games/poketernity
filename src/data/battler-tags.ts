@@ -1997,6 +1997,28 @@ export class SemiInvulnerableTag extends BattlerTag {
   }
 }
 
+export class SkyDropTag extends BattlerTag {
+  constructor(sourceId: number) {
+    super(BattlerTagType.SKY_DROP, BattlerTagLapseType.CUSTOM, 1, Moves.SKY_DROP, sourceId);
+  }
+
+  override onAdd(pokemon: Pokemon): void {
+    super.onAdd(pokemon);
+    pokemon.setVisible(false);
+  }
+
+  override onRemove(pokemon: Pokemon): void {
+    if (pokemon.id === this.sourceId) {
+      pokemon.removeTag(BattlerTagType.CHARGING);
+    }
+    // Wait 2 frames before setting visible for battle animations that don't immediately show the sprite invisible
+    globalScene.tweens.addCounter({
+      duration: getFrameMs(2),
+      onComplete: () => pokemon.setVisible(true),
+    });
+  }
+}
+
 export class TypeImmuneTag extends BattlerTag {
   public immuneType: Type;
 
@@ -3400,6 +3422,8 @@ export function getBattlerTag(
     case BattlerTagType.UNDERWATER:
     case BattlerTagType.HIDDEN:
       return new SemiInvulnerableTag(tagType, turnCount, sourceMove);
+    case BattlerTagType.SKY_DROP:
+      return new SkyDropTag(sourceId);
     case BattlerTagType.FIRE_BOOST:
       return new TypeBoostTag(tagType, sourceMove, Type.FIRE, 1.5, false);
     case BattlerTagType.CRIT_BOOST:
