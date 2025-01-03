@@ -3351,6 +3351,40 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         ? 0.5
         : 1;
 
+    /** Doubles damage if the attacker has Tinted Lens and is using a resisted move */
+    const tintedLensMultiplier = new NumberHolder(1);
+    if (!ignoreSourceAbility) {
+      applyPreAttackAbAttrs(DamageBoostAbAttr, source, this, move, simulated, tintedLensMultiplier);
+    }
+
+    /** Apply this Pokemon's post-calc defensive modifiers (e.g. Fur Coat) */
+    const receivedDamageMultiplier = new NumberHolder(1);
+    const alliedFieldDamageMultiplier = new NumberHolder(1);
+    if (!ignoreAbility) {
+      applyPreDefendAbAttrs(
+        ReceivedMoveDamageMultiplierAbAttr,
+        this,
+        source,
+        move,
+        cancelled,
+        simulated,
+        receivedDamageMultiplier,
+      );
+
+      /** Additionally apply friend guard damage reduction if ally has it. */
+      if (globalScene.currentBattle.double && this.getAlly()?.isActive(true)) {
+        applyPreDefendAbAttrs(
+          AlliedFieldDamageReductionAbAttr,
+          this.getAlly(),
+          source,
+          move,
+          cancelled,
+          simulated,
+          alliedFieldDamageMultiplier,
+        );
+      }
+    }
+
     damage.value = toDmgValue(
       baseDamage
         * targetMultiplier
@@ -3364,13 +3398,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         * burnMultiplier.value
         * screenMultiplier.value
         * hitsTagMultiplier.value
-        * mistyTerrainMultiplier,
+        * mistyTerrainMultiplier
+        * tintedLensMultiplier.value
+        * receivedDamageMultiplier.value
+        * alliedFieldDamageMultiplier.value,
     );
-
-    /** Doubles damage if the attacker has Tinted Lens and is using a resisted move */
-    if (!ignoreSourceAbility) {
-      applyPreAttackAbAttrs(DamageBoostAbAttr, source, this, move, simulated, damage);
-    }
 
     /** Apply the enemy's Damage and Resistance tokens */
     if (!source.isPlayer()) {
@@ -3378,24 +3410,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
     if (!this.isPlayer()) {
       globalScene.applyModifiers(EnemyDamageReducerModifier, false, damage);
-    }
-
-    /** Apply this Pokemon's post-calc defensive modifiers (e.g. Fur Coat) */
-    if (!ignoreAbility) {
-      applyPreDefendAbAttrs(ReceivedMoveDamageMultiplierAbAttr, this, source, move, cancelled, simulated, damage);
-
-      /** Additionally apply friend guard damage reduction if ally has it. */
-      if (globalScene.currentBattle.double && this.getAlly()?.isActive(true)) {
-        applyPreDefendAbAttrs(
-          AlliedFieldDamageReductionAbAttr,
-          this.getAlly(),
-          source,
-          move,
-          cancelled,
-          simulated,
-          damage,
-        );
-      }
     }
 
     // This attribute may modify damage arbitrarily, so be careful about changing its order of application.

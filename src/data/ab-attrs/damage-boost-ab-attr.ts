@@ -38,8 +38,8 @@ export class DamageBoostAbAttr extends PreAttackAbAttr {
     args: any[],
   ): boolean {
     if (this.condition(pokemon, defender, move)) {
-      const power = args[0] as NumberHolder;
-      power.value = Math.floor(power.value * this.damageMultiplier);
+      const multiplier = args[0] as NumberHolder;
+      multiplier.value *= this.damageMultiplier;
       return true;
     }
 
