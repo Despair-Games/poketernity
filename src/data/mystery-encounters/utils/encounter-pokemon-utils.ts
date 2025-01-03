@@ -43,7 +43,7 @@ import { StatusEffect } from "#enums/status-effect";
 export const STANDARD_ENCOUNTER_BOOSTED_LEVEL_MODIFIER = 1;
 
 /**
- * Gets the sprite key and file root for a given PokemonSpecies (accounts for gender, shiny, variants, forms, and experimental)
+ * Gets the sprite key and file root for a given PokemonSpecies (accounts for gender, shiny, variants, and forms)
  * @param species - The species of the sprite
  * @param female - Whether the sprite represents the female version
  * @param formIndex - The formIndex of the sprite
@@ -73,7 +73,7 @@ export function getSpriteKeysFromSpecies(
 }
 
 /**
- * Gets the sprite key and file root for a given Pokemon (accounts for gender, shiny, variants, forms, and experimental)
+ * Gets the sprite key and file root for a given Pokemon (accounts for gender, shiny, variants, and forms)
  * @param pokemon - The input Pokemon
  * @returns an object with the sprite key and file root
  */

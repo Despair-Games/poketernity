@@ -12,7 +12,6 @@ const deepCopy = (data: any) => {
 
 describe("check if every variant's sprite are correctly set", () => {
   let masterlist: PokemonVariantMasterlist;
-  let expVariant: PokemonVariantMasterlist["exp"];
   let femaleVariant: PokemonVariantMasterlist["female"];
   let backVariant: PokemonVariantMasterlist["back"];
   let rootDir: string;
@@ -20,11 +19,8 @@ describe("check if every variant's sprite are correctly set", () => {
   beforeAll(() => {
     rootDir = `${getAppRootDir()}${path.sep}public${path.sep}images${path.sep}pokemon${path.sep}variant${path.sep}`;
     masterlist = deepCopy(_masterlist);
-    expVariant = masterlist.exp;
     femaleVariant = masterlist.female;
     backVariant = masterlist.back;
-    //@ts-ignore
-    delete masterlist.exp; //TODO: resolve ts-ignore
     //@ts-ignore
     delete masterlist.female; //TODO: resolve ts-ignore
     //@ts-ignore
@@ -33,7 +29,6 @@ describe("check if every variant's sprite are correctly set", () => {
 
   it("data should not be undefined", () => {
     expect(masterlist).toBeDefined();
-    expect(expVariant).toBeDefined();
     expect(femaleVariant).toBeDefined();
     expect(backVariant).toBeDefined();
   });
@@ -183,36 +178,6 @@ describe("check if every variant's sprite are correctly set", () => {
     expect(errors.length).toBe(0);
   });
 
-  it("check exp back variant files", () => {
-    const dirPath = `${rootDir}exp${path.sep}back${path.sep}`;
-    const errors = getMissingFiles(expVariant.back, dirPath);
-    if (errors.length) {
-      console.log("errors", errors);
-    }
-    expect(errors.length).toBe(0);
-  });
-
-  it("check exp female variant files", () => {
-    const dirPath = `${rootDir}exp${path.sep}female${path.sep}`;
-    const errors = getMissingFiles(expVariant.female, dirPath);
-    if (errors.length) {
-      console.log("errors", errors);
-    }
-    expect(errors.length).toBe(0);
-  });
-
-  it("check exp male variant files", () => {
-    const dirPath = `${rootDir}exp${path.sep}`;
-    const expMaleVariant = deepCopy(expVariant);
-    delete expMaleVariant.female;
-    delete expMaleVariant.back;
-    const errors = getMissingFiles(expMaleVariant, dirPath);
-    if (errors.length) {
-      console.log("errors", errors);
-    }
-    expect(errors.length).toBe(0);
-  });
-
   // check over every file if it's correctly set in the masterlist
 
   it("look over every file in variant female and check if present in masterlist", () => {
@@ -243,36 +208,9 @@ describe("check if every variant's sprite are correctly set", () => {
     expect(errors.length).toBe(0);
   });
 
-  it("look over every file in variant exp back and check if present in masterlist", () => {
-    const dirPath = `${rootDir}exp${path.sep}back${path.sep}`;
-    const errors = getMissingMasterlist(expVariant.back, dirPath);
-    if (errors.length) {
-      console.log("errors for ", dirPath, errors);
-    }
-    expect(errors.length).toBe(0);
-  });
-
-  it("look over every file in variant exp female and check if present in masterlist", () => {
-    const dirPath = `${rootDir}exp${path.sep}female${path.sep}`;
-    const errors = getMissingMasterlist(expVariant.female, dirPath);
-    if (errors.length) {
-      console.log("errors for ", dirPath, errors);
-    }
-    expect(errors.length).toBe(0);
-  });
-
-  it("look over every file in variant exp male and check if present in masterlist", () => {
-    const dirPath = `${rootDir}exp${path.sep}`;
-    const errors = getMissingMasterlist(expVariant, dirPath, ["back", "female"]);
-    if (errors.length) {
-      console.log("errors for ", dirPath, errors);
-    }
-    expect(errors.length).toBe(0);
-  });
-
   it("look over every file in variant root and check if present in masterlist", () => {
     const dirPath = `${rootDir}`;
-    const errors = getMissingMasterlist(masterlist, dirPath, ["back", "female", "exp", "icons"]);
+    const errors = getMissingMasterlist(masterlist, dirPath, ["back", "female", "icons"]);
     if (errors.length) {
       console.log("errors for ", dirPath, errors);
     }

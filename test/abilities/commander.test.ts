@@ -1,14 +1,14 @@
 import { BattlerIndex } from "#app/battle";
+import { MoveResult } from "#app/field/pokemon";
+import { Abilities } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import { Moves } from "#enums/moves";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
+import { Species } from "#enums/species";
 import type { EffectiveStat } from "#enums/stat";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { WeatherType } from "#enums/weather-type";
-import { MoveResult } from "#app/field/pokemon";
-import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
-import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -215,5 +215,13 @@ describe("Abilities - Commander", () => {
     await game.toNextTurn();
     const enemy = game.scene.getEnemyField()[0];
     expect(enemy.isFullHp()).toBeTruthy();
+  });
+
+  it("should have the custom effect of increasing chances of double battles", async () => {
+    game.override.startingWave(2);
+    vi.spyOn(game.scene, "getDoubleBattleChance");
+    await game.classicMode.startBattle([Species.TATSUGIRI, Species.DONDOZO]);
+
+    expect(game.scene.getDoubleBattleChance).toHaveLastReturnedWith(2);
   });
 });
