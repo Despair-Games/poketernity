@@ -1,5 +1,5 @@
 import { TrainerType } from "#enums/trainer-type";
-import { trainerConfigs } from "./trainer-config";
+import { allTrainerConfigs } from "./balance/trainer-configs/all-trainer-configs";
 
 export interface TrainerTypeMessages {
   encounter?: string | string[];
@@ -1674,14 +1674,15 @@ export function initTrainerTypeDialogue(): void {
     for (const messageType of messageTypes) {
       if (Array.isArray(messages)) {
         if (messages[0][messageType]) {
-          trainerConfigs[trainerType][`${messageType}Messages`] = messages[0][messageType];
+          allTrainerConfigs[trainerType][`${messageType}Messages`] = messages[0][messageType];
         }
         if (messages.length > 1) {
-          trainerConfigs[trainerType][`female${messageType.slice(0, 1).toUpperCase()}${messageType.slice(1)}Messages`] =
-            messages[1][messageType];
+          allTrainerConfigs[trainerType][
+            `female${messageType.slice(0, 1).toUpperCase()}${messageType.slice(1)}Messages`
+          ] = messages[1][messageType];
         }
       } else {
-        trainerConfigs[trainerType][`${messageType}Messages`] = messages[messageType];
+        allTrainerConfigs[trainerType][`${messageType}Messages`] = messages[messageType];
       }
     }
   }

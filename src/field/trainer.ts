@@ -7,7 +7,6 @@ import {
   TrainerPartyCompoundTemplate,
   TrainerPoolTier,
   TrainerSlot,
-  trainerConfigs,
   trainerPartyTemplates,
 } from "#app/data/trainer-config";
 import { signatureSpecies } from "#app/data/balance/signatureSpecies";
@@ -21,6 +20,7 @@ import i18next from "i18next";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
+import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 
 export enum TrainerVariant {
   DEFAULT,
@@ -44,9 +44,9 @@ export default class Trainer extends Phaser.GameObjects.Container {
     trainerConfigOverride?: TrainerConfig,
   ) {
     super(globalScene, -72, 80);
-    this.config = trainerConfigs.hasOwnProperty(trainerType)
-      ? trainerConfigs[trainerType]
-      : trainerConfigs[TrainerType.ACE_TRAINER];
+    this.config = allTrainerConfigs.hasOwnProperty(trainerType)
+      ? allTrainerConfigs[trainerType]
+      : allTrainerConfigs[TrainerType.ACE_TRAINER];
 
     if (trainerConfigOverride) {
       this.config = trainerConfigOverride;

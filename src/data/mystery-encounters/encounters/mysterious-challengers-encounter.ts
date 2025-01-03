@@ -3,12 +3,7 @@ import {
   initBattleWithEnemyConfig,
   setEncounterRewards,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import {
-  trainerConfigs,
-  TrainerPartyCompoundTemplate,
-  TrainerPartyTemplate,
-  trainerPartyTemplates,
-} from "#app/data/trainer-config";
+import { TrainerPartyCompoundTemplate, TrainerPartyTemplate, trainerPartyTemplates } from "#app/data/trainer-config";
 import { ModifierTier } from "#app/modifier/modifier-tier";
 import { modifierTypes } from "#app/modifier/modifier-type";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
@@ -19,6 +14,7 @@ import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounte
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
+import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/mysteriousChallengers";
@@ -44,7 +40,7 @@ export const MysteriousChallengersEncounter: MysteryEncounter = MysteryEncounter
 
     // Normal difficulty trainer is randomly pulled from biome
     const normalTrainerType = globalScene.arena.randomTrainerType(globalScene.currentBattle.waveIndex);
-    const normalConfig = trainerConfigs[normalTrainerType].clone();
+    const normalConfig = allTrainerConfigs[normalTrainerType].clone();
     let female = false;
     if (normalConfig.hasGenders) {
       female = !!randSeedInt(2);
@@ -73,7 +69,7 @@ export const MysteriousChallengersEncounter: MysteryEncounter = MysteryEncounter
         true,
       ),
     );
-    const hardConfig = trainerConfigs[hardTrainerType].clone();
+    const hardConfig = allTrainerConfigs[hardTrainerType].clone();
     hardConfig.setPartyTemplates(hardTemplate);
     female = false;
     if (hardConfig.hasGenders) {
@@ -90,8 +86,8 @@ export const MysteriousChallengersEncounter: MysteryEncounter = MysteryEncounter
     // They are given an E4 template team, so will be stronger than usual boss encounter and always have 6 mons
     const brutalTrainerType = globalScene.arena.randomTrainerType(globalScene.currentBattle.waveIndex, true);
     const e4Template = trainerPartyTemplates.ELITE_FOUR;
-    const brutalConfig = trainerConfigs[brutalTrainerType].clone();
-    brutalConfig.title = trainerConfigs[brutalTrainerType].title;
+    const brutalConfig = allTrainerConfigs[brutalTrainerType].clone();
+    brutalConfig.title = allTrainerConfigs[brutalTrainerType].title;
     brutalConfig.setPartyTemplates(e4Template);
     // @ts-ignore
     brutalConfig.partyTemplateFunc = null; // Overrides gym leader party template func

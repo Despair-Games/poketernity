@@ -76,7 +76,6 @@ import FieldSpritePipeline from "#app/pipelines/field-sprite";
 import SpritePipeline from "#app/pipelines/sprite";
 import PartyExpBar from "#app/ui/party-exp-bar";
 import type { TrainerSlot } from "#app/data/trainer-config";
-import { trainerConfigs } from "#app/data/trainer-config";
 import Trainer, { TrainerVariant } from "#app/field/trainer";
 import type TrainerData from "#app/system/trainer-data";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
@@ -174,7 +173,7 @@ import { BlockItemTheftAbAttr } from "./data/ab-attrs/block-item-theft-ab-attr";
 import { DoubleBattleChanceAbAttr } from "./data/ab-attrs/double-battle-chance-ab-attr";
 import { PostBattleInitAbAttr } from "./data/ab-attrs/post-battle-init-ab-attr";
 import { bgmLoopPoint } from "./data/bgm-loop-point";
-
+import { allTrainerConfigs } from "./data/balance/trainer-configs/all-trainer-configs";
 export const bypassLogin = import.meta.env.VITE_BYPASS_LOGIN === "1";
 
 const DEBUG_RNG = false;
@@ -1355,13 +1354,13 @@ export default class BattleScene extends SceneBase {
       if (newBattleType === BattleType.TRAINER) {
         const trainerType = this.arena.randomTrainerType(newWaveIndex);
         let doubleTrainer = false;
-        if (trainerConfigs[trainerType].doubleOnly) {
+        if (allTrainerConfigs[trainerType].doubleOnly) {
           doubleTrainer = true;
-        } else if (trainerConfigs[trainerType].hasDouble) {
+        } else if (allTrainerConfigs[trainerType].hasDouble) {
           doubleTrainer = !randSeedInt(this.getDoubleBattleChance(newWaveIndex, playerField));
           // Add a check that special trainers can't be double except for tate and liza - they should use the normal double chance
           if (
-            trainerConfigs[trainerType].trainerTypeDouble
+            allTrainerConfigs[trainerType].trainerTypeDouble
             && ![TrainerType.TATE, TrainerType.LIZA].includes(trainerType)
           ) {
             doubleTrainer = false;

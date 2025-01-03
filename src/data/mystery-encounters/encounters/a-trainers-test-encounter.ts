@@ -6,7 +6,6 @@ import {
   setEncounterRewards,
   transitionMysteryEncounterIntroVisuals,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { trainerConfigs } from "#app/data/trainer-config";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
@@ -23,6 +22,7 @@ import { PartyHealPhase } from "#app/phases/party-heal-phase";
 import { ModifierTier } from "#app/modifier/modifier-tier";
 import { modifierTypes } from "#app/modifier/modifier-type";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
+import { meTrainerConfigs } from "#app/data/balance/trainer-configs/me-trainer-configs";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/aTrainersTest";
@@ -104,7 +104,7 @@ export const ATrainersTestEncounter: MysteryEncounter = MysteryEncounterBuilder.
     encounter.misc = { trainerType, trainerNameKey, trainerEggDescription: eggDescription };
 
     // Trainer config
-    const trainerConfig = trainerConfigs[trainerType].clone();
+    const trainerConfig = meTrainerConfigs[trainerType].clone();
     const trainerSpriteKey = trainerConfig.getSpriteKey();
     encounter.enemyPartyConfigs.push({
       levelAdditiveModifier: 1,

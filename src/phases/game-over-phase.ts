@@ -5,7 +5,6 @@ import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
-import { trainerConfigs } from "#app/data/trainer-config";
 import type { Pokemon } from "#app/field/pokemon";
 import { modifierTypes } from "#app/modifier/modifier-type";
 import { BattlePhase } from "#app/phases/battle-phase";
@@ -22,7 +21,6 @@ import { Unlockables } from "#app/system/unlockables";
 import { Mode } from "#app/ui/ui";
 import { isLocal, isLocalServerConnected } from "#app/utils";
 import { PlayerGender } from "#enums/player-gender";
-import { TrainerType } from "#enums/trainer-type";
 import i18next from "i18next";
 import type { SessionSaveData } from "#app/@types/SessionData";
 import PersistentModifierData from "#app/system/modifier-data";
@@ -186,9 +184,8 @@ export class GameOverPhase extends BattlePhase {
                   .then(() => {
                     globalScene.ui.showDialogue(
                       dialogueKey,
-                      globalScene.gameData.gender === PlayerGender.FEMALE
-                        ? trainerConfigs[TrainerType.RIVAL].name
-                        : trainerConfigs[TrainerType.RIVAL].nameFemale,
+                      // TODO: remove hardcoded rival names
+                      globalScene.gameData.gender === PlayerGender.FEMALE ? "Finn" : "Ivy",
                       null,
                       () => {
                         globalScene.ui.fadeOut(500).then(() => {
