@@ -1,8 +1,7 @@
 import { globalScene } from "#app/global-scene";
-import { TextStyle, addTextObject, getTextStyleOptions } from "./text";
+import { TextStyle, getTextStyleOptions } from "./text";
 import { Mode } from "./ui";
 import UiHandler from "./ui-handler";
-import { addWindow } from "./ui-theme";
 import { rgbHexToRgba, fixedInt } from "#app/utils";
 import { argbFromRgba } from "@material/material-color-utilities";
 import { Button } from "#enums/buttons";
@@ -64,7 +63,7 @@ export default abstract class AbstractOptionSelectUiHandler extends UiHandler {
     this.optionSelectContainer.setVisible(false);
     ui.add(this.optionSelectContainer);
 
-    this.optionSelectBg = addWindow(0, 0, this.getWindowWidth(), this.getWindowHeight());
+    this.optionSelectBg = globalScene.addWindow(0, 0, this.getWindowWidth(), this.getWindowHeight());
     this.optionSelectBg.setName("option-select-bg");
     this.optionSelectBg.setOrigin(1, 1);
     this.optionSelectContainer.add(this.optionSelectBg);
@@ -107,7 +106,7 @@ export default abstract class AbstractOptionSelectUiHandler extends UiHandler {
       this.optionSelectIcons.splice(0, this.optionSelectIcons.length);
     }
 
-    this.optionSelectText = addTextObject(
+    this.optionSelectText = globalScene.addTextObject(
       0,
       0,
       options.map((o) => (o.item ? `    ${o.label}` : o.label)).join("\n"),

@@ -50,7 +50,7 @@ import type { Phase } from "#app/phase";
 import { initGameSpeed } from "#app/system/game-speed";
 import { Arena, ArenaBase } from "#app/field/arena";
 import { GameData } from "#app/system/game-data";
-import { addTextObject, getTextColor, TextStyle } from "#app/ui/text";
+import { getTextColor, TextStyle } from "#app/ui/text";
 import { allMoves } from "#app/data/all-moves";
 import { MusicPreference } from "#app/system/settings/settings";
 import {
@@ -598,7 +598,7 @@ export default class BattleScene extends SceneBase {
     this.candyBar.setup();
     this.fieldUI.add(this.candyBar);
 
-    this.biomeWaveText = addTextObject(
+    this.biomeWaveText = globalScene.addTextObject(
       this.game.canvas.width / 6 - 2,
       0,
       startingWave.toString(),
@@ -608,23 +608,27 @@ export default class BattleScene extends SceneBase {
     this.biomeWaveText.setOrigin(1, 0.5);
     this.fieldUI.add(this.biomeWaveText);
 
-    this.moneyText = addTextObject(this.game.canvas.width / 6 - 2, 0, "", TextStyle.MONEY);
+    this.moneyText = globalScene.addTextObject(this.game.canvas.width / 6 - 2, 0, "", TextStyle.MONEY);
     this.moneyText.setName("text-money");
     this.moneyText.setOrigin(1, 0.5);
     this.fieldUI.add(this.moneyText);
 
-    this.scoreText = addTextObject(this.game.canvas.width / 6 - 2, 0, "", TextStyle.PARTY, { fontSize: "54px" });
+    this.scoreText = globalScene.addTextObject(this.game.canvas.width / 6 - 2, 0, "", TextStyle.PARTY, {
+      fontSize: "54px",
+    });
     this.scoreText.setName("text-score");
     this.scoreText.setOrigin(1, 0.5);
     this.fieldUI.add(this.scoreText);
 
-    this.luckText = addTextObject(this.game.canvas.width / 6 - 2, 0, "", TextStyle.PARTY, { fontSize: "54px" });
+    this.luckText = globalScene.addTextObject(this.game.canvas.width / 6 - 2, 0, "", TextStyle.PARTY, {
+      fontSize: "54px",
+    });
     this.luckText.setName("text-luck");
     this.luckText.setOrigin(1, 0.5);
     this.luckText.setVisible(false);
     this.fieldUI.add(this.luckText);
 
-    this.luckLabelText = addTextObject(
+    this.luckLabelText = globalScene.addTextObject(
       this.game.canvas.width / 6 - 2,
       0,
       i18next.t("common:luckIndicator"),

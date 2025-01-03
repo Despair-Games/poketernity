@@ -1,6 +1,6 @@
 import type { ModalConfig } from "./modal-ui-handler";
 import { ModalUiHandler } from "./modal-ui-handler";
-import { addTextObject, TextStyle } from "./text";
+import { TextStyle } from "./text";
 import type { Mode } from "./ui";
 import { updateUserInfo } from "#app/account";
 import { removeCookie } from "#app/utils";
@@ -46,7 +46,7 @@ export default class UnavailableModalUiHandler extends ModalUiHandler {
   override setup(): void {
     super.setup();
 
-    const label = addTextObject(
+    const label = globalScene.addTextObject(
       this.getWidth() / 2,
       this.getHeight() / 2,
       i18next.t("menu:errorServerDown"),

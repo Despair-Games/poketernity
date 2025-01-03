@@ -1,8 +1,8 @@
 import type { ModalConfig } from "./modal-ui-handler";
 import { ModalUiHandler } from "./modal-ui-handler";
 import type { Mode } from "./ui";
-import { TextStyle, addTextInputObject, addTextObject } from "./text";
-import { WindowVariant, addWindow } from "./ui-theme";
+import { TextStyle, addTextInputObject } from "./text";
+import { WindowVariant } from "./ui-theme";
 import type InputText from "phaser3-rex-plugins/plugins/inputtext";
 import { fixedInt } from "#app/utils";
 import { Button } from "#enums/buttons";
@@ -66,7 +66,7 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
       this.updateFields(config, hasTitle);
     }
 
-    this.errorMessage = addTextObject(
+    this.errorMessage = globalScene.addTextObject(
       10,
       (hasTitle ? 31 : 5) + 20 * (config.length - 1) + 16 + this.getButtonTopMargin(),
       "",
@@ -83,7 +83,12 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
     this.inputs = [];
     this.formLabels = [];
     fieldsConfig.forEach((config, f) => {
-      const label = addTextObject(10, (hasTitle ? 31 : 5) + 20 * f, config.label, TextStyle.TOOLTIP_CONTENT);
+      const label = globalScene.addTextObject(
+        10,
+        (hasTitle ? 31 : 5) + 20 * f,
+        config.label,
+        TextStyle.TOOLTIP_CONTENT,
+      );
       label.name = "formLabel" + f;
 
       this.formLabels.push(label);
@@ -92,7 +97,7 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
       const inputContainer = globalScene.add.container(70, (hasTitle ? 28 : 2) + 20 * f);
       inputContainer.setVisible(false);
 
-      const inputBg = addWindow(0, 0, 80, 16, false, false, 0, 0, WindowVariant.XTHIN);
+      const inputBg = globalScene.addWindow(0, 0, 80, 16, false, false, 0, 0, WindowVariant.XTHIN);
 
       const isPassword = config?.isPassword;
       const isReadOnly = config?.isReadOnly;

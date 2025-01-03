@@ -1,8 +1,8 @@
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
 import { getEnumKeys, executeIf } from "#app/utils";
-import { TextStyle, addTextObject } from "./text";
-import { WindowVariant, addWindow } from "./ui-theme";
+import { TextStyle } from "./text";
+import { WindowVariant } from "./ui-theme";
 import { api } from "#app/plugins/api/api";
 
 export interface RankingEntry {
@@ -60,10 +60,10 @@ export class DailyRunScoreboard extends Phaser.GameObjects.Container {
   }
 
   setup() {
-    const titleWindow = addWindow(0, 0, 114, 18, false, false, undefined, undefined, WindowVariant.THIN);
+    const titleWindow = globalScene.addWindow(0, 0, 114, 18, false, false, undefined, undefined, WindowVariant.THIN);
     this.add(titleWindow);
 
-    this.titleLabel = addTextObject(
+    this.titleLabel = globalScene.addTextObject(
       titleWindow.displayWidth / 2,
       titleWindow.displayHeight / 2,
       i18next.t("menu:loading"),
@@ -73,13 +73,18 @@ export class DailyRunScoreboard extends Phaser.GameObjects.Container {
     this.titleLabel.setOrigin(0.5, 0.5);
     this.add(this.titleLabel);
 
-    const window = addWindow(0, 17, 114, 118, false, false, undefined, undefined, WindowVariant.THIN);
+    const window = globalScene.addWindow(0, 17, 114, 118, false, false, undefined, undefined, WindowVariant.THIN);
     this.add(window);
 
     this.rankingsContainer = globalScene.add.container(6, 21);
     this.add(this.rankingsContainer);
 
-    this.loadingLabel = addTextObject(window.displayWidth / 2, window.displayHeight / 2 + 16, "", TextStyle.WINDOW);
+    this.loadingLabel = globalScene.addTextObject(
+      window.displayWidth / 2,
+      window.displayHeight / 2 + 16,
+      "",
+      TextStyle.WINDOW,
+    );
     this.loadingLabel.setOrigin(0.5, 0.5);
     this.loadingLabel.setVisible(false);
 
@@ -117,7 +122,7 @@ export class DailyRunScoreboard extends Phaser.GameObjects.Container {
       }
     });
 
-    this.pageNumberLabel = addTextObject(
+    this.pageNumberLabel = globalScene.addTextObject(
       window.displayWidth / 2,
       titleWindow.displayHeight + window.displayHeight - 16,
       "1",
@@ -153,18 +158,18 @@ export class DailyRunScoreboard extends Phaser.GameObjects.Container {
     const getEntry = (rank: string, username: string, score: string, wave: string) => {
       const entryContainer = globalScene.add.container(0, 0);
 
-      const rankLabel = addTextObject(0, 0, rank, TextStyle.WINDOW, { fontSize: "54px" });
+      const rankLabel = globalScene.addTextObject(0, 0, rank, TextStyle.WINDOW, { fontSize: "54px" });
       entryContainer.add(rankLabel);
 
-      const usernameLabel = addTextObject(12, 0, username, TextStyle.WINDOW, { fontSize: "54px" });
+      const usernameLabel = globalScene.addTextObject(12, 0, username, TextStyle.WINDOW, { fontSize: "54px" });
       entryContainer.add(usernameLabel);
 
-      const scoreLabel = addTextObject(84, 0, score, TextStyle.WINDOW, { fontSize: "54px" });
+      const scoreLabel = globalScene.addTextObject(84, 0, score, TextStyle.WINDOW, { fontSize: "54px" });
       entryContainer.add(scoreLabel);
 
       switch (this.category) {
         case ScoreboardCategory.DAILY:
-          const waveLabel = addTextObject(68, 0, wave, TextStyle.WINDOW, { fontSize: "54px" });
+          const waveLabel = globalScene.addTextObject(68, 0, wave, TextStyle.WINDOW, { fontSize: "54px" });
           entryContainer.add(waveLabel);
           break;
         case ScoreboardCategory.WEEKLY:

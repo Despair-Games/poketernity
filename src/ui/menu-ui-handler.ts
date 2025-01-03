@@ -14,9 +14,9 @@ import type { OptionSelectConfig, OptionSelectItem } from "./abstact-option-sele
 import { AdminMode, getAdminModeName } from "./admin-ui-handler";
 import type AwaitableUiHandler from "./awaitable-ui-handler";
 import MessageUiHandler from "./message-ui-handler";
-import { TextStyle, addTextObject, getTextStyleOptions } from "./text";
+import { TextStyle, getTextStyleOptions } from "./text";
 import { Mode } from "./ui";
-import { WindowVariant, addWindow } from "./ui-theme";
+import { WindowVariant } from "./ui-theme";
 
 enum MenuOptions {
   GAME_SETTINGS,
@@ -128,7 +128,7 @@ export default class MenuUiHandler extends MessageUiHandler {
         return !this.excludedMenus().some((exclusion) => exclusion.condition && exclusion.options.includes(m));
       });
 
-    this.optionSelectText = addTextObject(
+    this.optionSelectText = globalScene.addTextObject(
       0,
       0,
       this.menuOptions.map((o) => `${i18next.t(`menuUiHandler:${MenuOptions[o]}`)}`).join("\n"),
@@ -138,7 +138,7 @@ export default class MenuUiHandler extends MessageUiHandler {
     this.optionSelectText.setLineSpacing(12);
 
     this.scale = getTextStyleOptions(TextStyle.WINDOW, globalScene.uiTheme).scale;
-    this.menuBg = addWindow(
+    this.menuBg = globalScene.addWindow(
       globalScene.game.canvas.width / 6 - (this.optionSelectText.displayWidth + 25),
       0,
       this.optionSelectText.displayWidth + 19 + 24 * this.scale,
@@ -159,12 +159,12 @@ export default class MenuUiHandler extends MessageUiHandler {
     this.menuMessageBoxContainer.setVisible(false);
 
     // Window for general messages
-    this.menuMessageBox = addWindow(0, 0, this.defaultMessageBoxWidth, 48);
+    this.menuMessageBox = globalScene.addWindow(0, 0, this.defaultMessageBoxWidth, 48);
     this.menuMessageBox.setOrigin(0, 0);
     this.menuMessageBoxContainer.add(this.menuMessageBox);
 
     // Full-width window used for testing dialog messages in debug mode
-    this.dialogueMessageBox = addWindow(
+    this.dialogueMessageBox = globalScene.addWindow(
       -this.textPadding,
       0,
       globalScene.game.canvas.width / 6 + this.textPadding * 2,
@@ -178,7 +178,9 @@ export default class MenuUiHandler extends MessageUiHandler {
     this.dialogueMessageBox.setOrigin(0, 0);
     this.menuMessageBoxContainer.add(this.dialogueMessageBox);
 
-    const menuMessageText = addTextObject(this.textPadding, this.textPadding, "", TextStyle.WINDOW, { maxLines: 2 });
+    const menuMessageText = globalScene.addTextObject(this.textPadding, this.textPadding, "", TextStyle.WINDOW, {
+      maxLines: 2,
+    });
     menuMessageText.setName("menu-message");
     menuMessageText.setOrigin(0, 0);
     this.menuMessageBoxContainer.add(menuMessageText);

@@ -1,7 +1,7 @@
-import { TextStyle, addTextObject } from "./text";
+import { TextStyle } from "./text";
 import type { Mode } from "./ui";
 import UiHandler from "./ui-handler";
-import { WindowVariant, addWindow } from "./ui-theme";
+import { WindowVariant } from "./ui-theme";
 import type { Button } from "#enums/buttons";
 import { globalScene } from "#app/global-scene";
 
@@ -49,11 +49,11 @@ export abstract class ModalUiHandler extends UiHandler {
       Phaser.Geom.Rectangle.Contains,
     );
 
-    this.modalBg = addWindow(0, 0, 0, 0);
+    this.modalBg = globalScene.addWindow(0, 0, 0, 0);
 
     this.modalContainer.add(this.modalBg);
 
-    this.titleText = addTextObject(0, 4, "", TextStyle.SETTINGS_LABEL);
+    this.titleText = globalScene.addTextObject(0, 4, "", TextStyle.SETTINGS_LABEL);
     this.titleText.setOrigin(0.5, 0);
 
     this.modalContainer.add(this.titleText);
@@ -71,10 +71,20 @@ export abstract class ModalUiHandler extends UiHandler {
 
   private addButton(label: string) {
     const buttonTopMargin = this.getButtonTopMargin();
-    const buttonLabel = addTextObject(0, 8, label, TextStyle.TOOLTIP_CONTENT);
+    const buttonLabel = globalScene.addTextObject(0, 8, label, TextStyle.TOOLTIP_CONTENT);
     buttonLabel.setOrigin(0.5, 0.5);
 
-    const buttonBg = addWindow(0, 0, buttonLabel.getBounds().width + 8, 16, false, false, 0, 0, WindowVariant.THIN);
+    const buttonBg = globalScene.addWindow(
+      0,
+      0,
+      buttonLabel.getBounds().width + 8,
+      16,
+      false,
+      false,
+      0,
+      0,
+      WindowVariant.THIN,
+    );
     buttonBg.setOrigin(0.5, 0);
     buttonBg.setInteractive(
       new Phaser.Geom.Rectangle(0, 0, buttonBg.width, buttonBg.height),

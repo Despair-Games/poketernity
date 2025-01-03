@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { TextStyle, addTextObject } from "#app/ui/text";
+import { TextStyle } from "#app/ui/text";
 import type { nil } from "#app/utils";
 import i18next from "i18next";
 
@@ -135,7 +135,7 @@ export class TimedEventDisplay extends Phaser.GameObjects.Container {
       this.banner.setOrigin(0.5, 1);
       this.banner.setScale(this.event.scale ?? 0.18);
       if (showTimer) {
-        this.eventTimerText = addTextObject(
+        this.eventTimerText = globalScene.addTextObject(
           this.banner.x,
           this.banner.y + 2,
           this.timeToGo(this.event.endDate),

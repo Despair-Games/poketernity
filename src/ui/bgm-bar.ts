@@ -1,4 +1,4 @@
-import { addTextObject, TextStyle } from "./text";
+import { TextStyle } from "./text";
 import i18next from "i18next";
 import { formatText } from "#app/utils";
 import { globalScene } from "#app/global-scene";
@@ -40,7 +40,7 @@ export default class BgmBar extends Phaser.GameObjects.Container {
 
     this.add(this.bg);
 
-    this.musicText = addTextObject(5, 5, "", TextStyle.BGM_BAR);
+    this.musicText = globalScene.addTextObject(5, 5, "", TextStyle.BGM_BAR);
     this.musicText.setOrigin(0, 0);
     this.musicText.setWordWrapWidth(650, true);
 

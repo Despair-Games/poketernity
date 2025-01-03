@@ -14,7 +14,7 @@ import TargetSelectUiHandler from "./target-select-ui-handler";
 import SettingsUiHandler from "./settings/settings-ui-handler";
 import SettingsGamepadUiHandler from "./settings/settings-gamepad-ui-handler";
 import GameChallengesUiHandler from "./challenges-select-ui-handler";
-import { TextStyle, addTextObject } from "./text";
+import { TextStyle } from "./text";
 import AchvBar from "./achv-bar";
 import MenuUiHandler from "./menu-ui-handler";
 import AchvsUiHandler from "./achvs-ui-handler";
@@ -22,7 +22,6 @@ import OptionSelectUiHandler from "./settings/option-select-ui-handler";
 import EggHatchSceneHandler from "./egg-hatch-scene-handler";
 import EggListUiHandler from "./egg-list-ui-handler";
 import EggGachaUiHandler from "./egg-gacha-ui-handler";
-import { addWindow } from "./ui-theme";
 import LoginFormUiHandler from "./login-form-ui-handler";
 import RegistrationFormUiHandler from "./registration-form-ui-handler";
 import LoadingModalUiHandler from "./loading-modal-ui-handler";
@@ -242,15 +241,15 @@ export default class UI extends Phaser.GameObjects.Container {
     this.tooltipContainer.setName("tooltip");
     this.tooltipContainer.setVisible(false);
 
-    this.tooltipBg = addWindow(0, 0, 128, 31);
+    this.tooltipBg = globalScene.addWindow(0, 0, 128, 31);
     this.tooltipBg.setName("window-tooltip-bg");
     this.tooltipBg.setOrigin(0, 0);
 
-    this.tooltipTitle = addTextObject(64, 4, "", TextStyle.TOOLTIP_TITLE);
+    this.tooltipTitle = globalScene.addTextObject(64, 4, "", TextStyle.TOOLTIP_TITLE);
     this.tooltipTitle.setName("text-tooltip-title");
     this.tooltipTitle.setOrigin(0.5, 0);
 
-    this.tooltipContent = addTextObject(6, 16, "", TextStyle.TOOLTIP_CONTENT);
+    this.tooltipContent = globalScene.addTextObject(6, 16, "", TextStyle.TOOLTIP_CONTENT);
     this.tooltipContent.setName("text-tooltip-content");
     this.tooltipContent.setWordWrapWidth(850);
 

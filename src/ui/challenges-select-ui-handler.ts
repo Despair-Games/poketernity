@@ -1,7 +1,6 @@
-import { TextStyle, addTextObject } from "./text";
+import { TextStyle } from "./text";
 import type { Mode } from "./ui";
 import UiHandler from "./ui-handler";
-import { addWindow } from "./ui-theme";
 import { Button } from "#enums/buttons";
 import i18next from "i18next";
 import type { Challenge } from "#app/data/challenge";
@@ -80,17 +79,17 @@ export default class GameChallengesUiHandler extends UiHandler {
     this.challengesContainer.add(bgOverlay);
 
     // TODO: Change this back to /9 when adding in difficulty
-    const headerBg = addWindow(0, 0, globalScene.game.canvas.width / 6, 24);
+    const headerBg = globalScene.addWindow(0, 0, globalScene.game.canvas.width / 6, 24);
     headerBg.setName("window-header-bg");
     headerBg.setOrigin(0, 0);
 
-    const headerText = addTextObject(0, 0, i18next.t("challenges:title"), TextStyle.SETTINGS_LABEL);
+    const headerText = globalScene.addTextObject(0, 0, i18next.t("challenges:title"), TextStyle.SETTINGS_LABEL);
     headerText.setName("text-header");
     headerText.setOrigin(0, 0);
     headerText.setPositionRelative(headerBg, 8, 4);
 
     this.optionsWidth = globalScene.scaledCanvas.width * 0.6;
-    this.optionsBg = addWindow(
+    this.optionsBg = globalScene.addWindow(
       0,
       headerBg.height,
       this.optionsWidth,
@@ -99,7 +98,7 @@ export default class GameChallengesUiHandler extends UiHandler {
     this.optionsBg.setName("window-options-bg");
     this.optionsBg.setOrigin(0, 0);
 
-    const descriptionBg = addWindow(
+    const descriptionBg = globalScene.addWindow(
       0,
       headerBg.height,
       globalScene.scaledCanvas.width - this.optionsWidth,
@@ -127,12 +126,12 @@ export default class GameChallengesUiHandler extends UiHandler {
     this.descriptionText.setShadow(4, 5, ShadowColor.ORANGE);
     this.descriptionText.setOrigin(0, 0);
 
-    this.startBg = addWindow(0, 0, descriptionBg.width, 24);
+    this.startBg = globalScene.addWindow(0, 0, descriptionBg.width, 24);
     this.startBg.setName("window-start-bg");
     this.startBg.setOrigin(0, 0);
     this.startBg.setPositionRelative(descriptionBg, 0, descriptionBg.height);
 
-    this.startText = addTextObject(0, 0, i18next.t("challenges:noneSelected"), TextStyle.SETTINGS_LABEL);
+    this.startText = globalScene.addTextObject(0, 0, i18next.t("challenges:noneSelected"), TextStyle.SETTINGS_LABEL);
     this.startText.setName("text-start");
     this.startText.setOrigin(0, 0);
     this.startText.setPositionRelative(this.startBg, (this.startBg.width - this.startText.displayWidth) / 2, 4);
@@ -160,7 +159,7 @@ export default class GameChallengesUiHandler extends UiHandler {
     this.challengeLabels = [];
 
     for (let i = 0; i < 9; i++) {
-      const label = addTextObject(8, 28 + i * 16, "", TextStyle.SETTINGS_LABEL);
+      const label = globalScene.addTextObject(8, 28 + i * 16, "", TextStyle.SETTINGS_LABEL);
       label.setName(`text-challenge-label-${i}`);
       label.setOrigin(0, 0);
 
@@ -180,7 +179,7 @@ export default class GameChallengesUiHandler extends UiHandler {
       rightArrow.setVisible(false);
       this.valuesContainer.add(rightArrow);
 
-      const value = addTextObject(0, 28 + i * 16, "", TextStyle.SETTINGS_LABEL);
+      const value = globalScene.addTextObject(0, 28 + i * 16, "", TextStyle.SETTINGS_LABEL);
       value.setName(`challenge-value-text-${i}`);
       value.setPositionRelative(label, 100, 0);
       this.valuesContainer.add(value);
@@ -242,7 +241,7 @@ export default class GameChallengesUiHandler extends UiHandler {
         this.challengeLabels[i].leftArrow.setVisible(true);
         this.challengeLabels[i].rightArrow.setVisible(true);
 
-        const tempText = addTextObject(0, 0, "", TextStyle.SETTINGS_LABEL); // this is added here to get the widest text object for this language, which will be used for the arrow placement
+        const tempText = globalScene.addTextObject(0, 0, "", TextStyle.SETTINGS_LABEL); // this is added here to get the widest text object for this language, which will be used for the arrow placement
 
         for (let j = 0; j <= globalScene.gameMode.challenges[i].maxValue; j++) {
           // this goes through each challenge's value to find out what the max width will be

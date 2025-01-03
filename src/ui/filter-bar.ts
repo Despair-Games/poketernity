@@ -1,9 +1,9 @@
 import type { DropDown } from "./dropdown";
 import { DropDownType } from "./dropdown";
 import type { StarterContainer } from "./starter-container";
-import { addTextObject, getTextColor, TextStyle } from "./text";
+import { getTextColor, TextStyle } from "./text";
 import type { UiTheme } from "#enums/ui-theme";
-import { addWindow, WindowVariant } from "./ui-theme";
+import { WindowVariant } from "./ui-theme";
 import { globalScene } from "#app/global-scene";
 
 export enum DropDownColumn {
@@ -32,7 +32,7 @@ export class FilterBar extends Phaser.GameObjects.Container {
     this.width = width;
     this.height = height;
 
-    this.window = addWindow(0, 0, width, height, false, false, undefined, undefined, WindowVariant.THIN);
+    this.window = globalScene.addWindow(0, 0, width, height, false, false, undefined, undefined, WindowVariant.THIN);
     this.add(this.window);
 
     this.cursorObj = globalScene.add.image(1, 1, "cursor");
@@ -59,7 +59,7 @@ export class FilterBar extends Phaser.GameObjects.Container {
 
     this.columns.push(column);
 
-    const filterTypesLabel = addTextObject(0, 3, title, TextStyle.TOOLTIP_CONTENT);
+    const filterTypesLabel = globalScene.addTextObject(0, 3, title, TextStyle.TOOLTIP_CONTENT);
     this.labels.push(filterTypesLabel);
     this.add(filterTypesLabel);
     this.dropDowns.push(dropDown);

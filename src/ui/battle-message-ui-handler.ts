@@ -1,8 +1,7 @@
 import { globalScene } from "#app/global-scene";
-import { addBBCodeTextObject, addTextObject, getTextColor, TextStyle } from "./text";
+import { addBBCodeTextObject, getTextColor, TextStyle } from "./text";
 import { Mode } from "./ui";
 import MessageUiHandler from "./message-ui-handler";
-import { addWindow } from "./ui-theme";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 import { Button } from "#enums/buttons";
 import i18next from "i18next";
@@ -38,7 +37,7 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
     this.bg.setOrigin(0, 1);
     ui.add(this.bg);
 
-    this.commandWindow = addWindow(202, 0, 118, 48);
+    this.commandWindow = globalScene.addWindow(202, 0, 118, 48);
     this.commandWindow.setName("window-command");
     this.commandWindow.setOrigin(0, 1);
     this.commandWindow.setVisible(false);
@@ -48,11 +47,11 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
     this.movesWindowContainer.setName("moves-bg");
     this.movesWindowContainer.setVisible(false);
 
-    const movesWindow = addWindow(0, 0, 243, 48);
+    const movesWindow = globalScene.addWindow(0, 0, 243, 48);
     movesWindow.setName("moves-window");
     movesWindow.setOrigin(0, 1);
 
-    const moveDetailsWindow = addWindow(240, 0, 80, 48, false, false, -1, 132);
+    const moveDetailsWindow = globalScene.addWindow(240, 0, 80, 48, false, false, -1, 132);
     moveDetailsWindow.setName("move-details-window");
     moveDetailsWindow.setOrigin(0, 1);
 
@@ -62,7 +61,7 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
     const messageContainer = globalScene.add.container(12, -39);
     ui.add(messageContainer);
 
-    const message = addTextObject(0, 0, "", TextStyle.MESSAGE, {
+    const message = globalScene.addTextObject(0, 0, "", TextStyle.MESSAGE, {
       maxLines: 2,
       wordWrap: {
         width: this.wordWrapWidth,
@@ -78,7 +77,7 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
     this.nameBox = globalScene.add.nineslice(0, 0, "namebox", globalScene.windowType, 72, 16, 8, 8, 5, 5);
     this.nameBox.setOrigin(0, 0);
 
-    this.nameText = addTextObject(8, 0, "Rival", TextStyle.MESSAGE, { maxLines: 1 });
+    this.nameText = globalScene.addTextObject(8, 0, "Rival", TextStyle.MESSAGE, { maxLines: 1 });
 
     this.nameBoxContainer.add(this.nameBox);
     this.nameBoxContainer.add(this.nameText);
@@ -92,9 +91,15 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
 
     this.levelUpStatsContainer = levelUpStatsContainer;
 
-    const levelUpStatsLabelsContent = addTextObject(globalScene.game.canvas.width / 6 - 73, -94, "", TextStyle.WINDOW, {
-      maxLines: 6,
-    });
+    const levelUpStatsLabelsContent = globalScene.addTextObject(
+      globalScene.game.canvas.width / 6 - 73,
+      -94,
+      "",
+      TextStyle.WINDOW,
+      {
+        maxLines: 6,
+      },
+    );
     levelUpStatsLabelsContent.setLineSpacing(i18next.resolvedLanguage === "ja" ? 25 : 5);
     let levelUpStatsLabelText = "";
 
@@ -104,7 +109,7 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
     levelUpStatsLabelsContent.text = levelUpStatsLabelText;
     levelUpStatsLabelsContent.x -= levelUpStatsLabelsContent.displayWidth;
 
-    const levelUpStatsBg = addWindow(
+    const levelUpStatsBg = globalScene.addWindow(
       globalScene.game.canvas.width / 6,
       -100,
       80 + levelUpStatsLabelsContent.displayWidth,
@@ -115,7 +120,7 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
 
     levelUpStatsContainer.add(levelUpStatsLabelsContent);
 
-    const levelUpStatsIncrContent = addTextObject(
+    const levelUpStatsIncrContent = globalScene.addTextObject(
       globalScene.game.canvas.width / 6 - 50,
       -94,
       "+\n+\n+\n+\n+\n+",

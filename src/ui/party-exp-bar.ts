@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import type { Pokemon } from "../field/pokemon";
-import { TextStyle, addTextObject } from "./text";
+import { TextStyle } from "./text";
 
 export default class PartyExpBar extends Phaser.GameObjects.Container {
   private bg: Phaser.GameObjects.NineSlice;
@@ -21,7 +21,7 @@ export default class PartyExpBar extends Phaser.GameObjects.Container {
 
     this.add(this.bg);
 
-    this.expText = addTextObject(22, 4, "", TextStyle.BATTLE_INFO);
+    this.expText = globalScene.addTextObject(22, 4, "", TextStyle.BATTLE_INFO);
     this.expText.setOrigin(0, 0);
     this.add(this.expText);
 

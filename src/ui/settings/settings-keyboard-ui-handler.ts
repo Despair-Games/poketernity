@@ -10,7 +10,7 @@ import {
 import { reverseValueToKeySetting, truncateString } from "#app/utils";
 import AbstractControlSettingsUiHandler from "#app/ui/settings/abstract-control-settings-ui-handler";
 import type { InterfaceConfig } from "#app/inputs-controller";
-import { addTextObject, TextStyle } from "#app/ui/text";
+import { TextStyle } from "#app/ui/text";
 import { deleteBind } from "#app/configs/inputs/configHandler";
 import { Device } from "#enums/devices";
 import { NavigationManager } from "#app/ui/settings/navigationMenu";
@@ -58,7 +58,7 @@ export default class SettingsKeyboardUiHandler extends AbstractControlSettingsUi
     this.layout["noKeyboard"] = new Map();
     const optionsContainer = globalScene.add.container(0, 0);
     optionsContainer.setVisible(false); // Initially hide the container as no gamepads are connected.
-    const label = addTextObject(8, 28, i18next.t("settings:keyboardPleasePress"), TextStyle.SETTINGS_LABEL);
+    const label = globalScene.addTextObject(8, 28, i18next.t("settings:keyboardPleasePress"), TextStyle.SETTINGS_LABEL);
     label.setOrigin(0, 0);
     optionsContainer.add(label);
     this.settingsContainer.add(optionsContainer);
@@ -68,7 +68,7 @@ export default class SettingsKeyboardUiHandler extends AbstractControlSettingsUi
     iconDelete.setPositionRelative(this.actionsBg, this.navigationContainer.width - 260, 4);
     this.navigationIcons["BUTTON_DELETE"] = iconDelete;
 
-    const deleteText = addTextObject(0, 0, i18next.t("settings:delete"), TextStyle.SETTINGS_LABEL);
+    const deleteText = globalScene.addTextObject(0, 0, i18next.t("settings:delete"), TextStyle.SETTINGS_LABEL);
     deleteText.setOrigin(0, 0.15);
     deleteText.setPositionRelative(iconDelete, -deleteText.width / 6 - 2, 0);
 

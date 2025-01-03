@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
-import { addTextObject, TextStyle } from "./text";
-import { addWindow, WindowVariant } from "./ui-theme";
+import { TextStyle } from "./text";
+import { WindowVariant } from "./ui-theme";
 import i18next from "i18next";
 
 export enum DropDownState {
@@ -68,7 +68,7 @@ export class DropDownOption extends Phaser.GameObjects.Container {
     const currentLabel = this.labels[this.currentLabelIndex];
 
     this.state = currentLabel.state;
-    this.text = addTextObject(0, 0, currentLabel.text || "", TextStyle.TOOLTIP_CONTENT);
+    this.text = globalScene.addTextObject(0, 0, currentLabel.text || "", TextStyle.TOOLTIP_CONTENT);
     this.text.setOrigin(0, 0.5);
     this.add(this.text);
 
@@ -338,7 +338,7 @@ export class DropDown extends Phaser.GameObjects.Container {
       }
     });
 
-    this.window = addWindow(
+    this.window = globalScene.addWindow(
       0,
       0,
       optionWidth,

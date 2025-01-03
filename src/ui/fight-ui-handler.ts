@@ -1,6 +1,6 @@
 import type { InfoToggle } from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
-import { addTextObject, TextStyle } from "./text";
+import { TextStyle } from "./text";
 import { getTypeDamageMultiplierColor } from "#app/data/type";
 import { Type } from "#enums/type";
 import { Command } from "./command-ui-handler";
@@ -63,35 +63,65 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
     this.moveCategoryIcon.setVisible(false);
     this.moveInfoContainer.add(this.moveCategoryIcon);
 
-    this.ppLabel = addTextObject(globalScene.scaledCanvas.width - 70, -26, "PP", TextStyle.MOVE_INFO_CONTENT);
+    this.ppLabel = globalScene.addTextObject(
+      globalScene.scaledCanvas.width - 70,
+      -26,
+      "PP",
+      TextStyle.MOVE_INFO_CONTENT,
+    );
     this.ppLabel.setOrigin(0.0, 0.5);
     this.ppLabel.setVisible(false);
     this.ppLabel.setText(i18next.t("fightUiHandler:pp"));
     this.moveInfoContainer.add(this.ppLabel);
 
-    this.ppText = addTextObject(globalScene.scaledCanvas.width - 12, -26, "--/--", TextStyle.MOVE_INFO_CONTENT);
+    this.ppText = globalScene.addTextObject(
+      globalScene.scaledCanvas.width - 12,
+      -26,
+      "--/--",
+      TextStyle.MOVE_INFO_CONTENT,
+    );
     this.ppText.setOrigin(1, 0.5);
     this.ppText.setVisible(false);
     this.moveInfoContainer.add(this.ppText);
 
-    this.powerLabel = addTextObject(globalScene.scaledCanvas.width - 70, -18, "POWER", TextStyle.MOVE_INFO_CONTENT);
+    this.powerLabel = globalScene.addTextObject(
+      globalScene.scaledCanvas.width - 70,
+      -18,
+      "POWER",
+      TextStyle.MOVE_INFO_CONTENT,
+    );
     this.powerLabel.setOrigin(0.0, 0.5);
     this.powerLabel.setVisible(false);
     this.powerLabel.setText(i18next.t("fightUiHandler:power"));
     this.moveInfoContainer.add(this.powerLabel);
 
-    this.powerText = addTextObject(globalScene.scaledCanvas.width - 12, -18, "---", TextStyle.MOVE_INFO_CONTENT);
+    this.powerText = globalScene.addTextObject(
+      globalScene.scaledCanvas.width - 12,
+      -18,
+      "---",
+      TextStyle.MOVE_INFO_CONTENT,
+    );
     this.powerText.setOrigin(1, 0.5);
     this.powerText.setVisible(false);
     this.moveInfoContainer.add(this.powerText);
 
-    this.accuracyLabel = addTextObject(globalScene.scaledCanvas.width - 70, -10, "ACC", TextStyle.MOVE_INFO_CONTENT);
+    this.accuracyLabel = globalScene.addTextObject(
+      globalScene.scaledCanvas.width - 70,
+      -10,
+      "ACC",
+      TextStyle.MOVE_INFO_CONTENT,
+    );
     this.accuracyLabel.setOrigin(0.0, 0.5);
     this.accuracyLabel.setVisible(false);
     this.accuracyLabel.setText(i18next.t("fightUiHandler:accuracy"));
     this.moveInfoContainer.add(this.accuracyLabel);
 
-    this.accuracyText = addTextObject(globalScene.scaledCanvas.width - 12, -10, "---", TextStyle.MOVE_INFO_CONTENT);
+    this.accuracyText = globalScene.addTextObject(
+      globalScene.scaledCanvas.width - 12,
+      -10,
+      "---",
+      TextStyle.MOVE_INFO_CONTENT,
+    );
     this.accuracyText.setOrigin(1, 0.5);
     this.accuracyText.setVisible(false);
     this.moveInfoContainer.add(this.accuracyText);
@@ -315,7 +345,12 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
     const moveset = pokemon.getMoveset();
 
     for (let moveIndex = 0; moveIndex < 4; moveIndex++) {
-      const moveText = addTextObject(moveIndex % 2 === 0 ? 0 : 100, moveIndex < 2 ? 0 : 16, "-", TextStyle.WINDOW);
+      const moveText = globalScene.addTextObject(
+        moveIndex % 2 === 0 ? 0 : 100,
+        moveIndex < 2 ? 0 : 16,
+        "-",
+        TextStyle.WINDOW,
+      );
       moveText.setName("text-empty-move");
 
       if (moveIndex < moveset.length) {

@@ -1,12 +1,11 @@
 import { Mode } from "./ui";
-import { TextStyle, addTextObject, getEggTierTextTint, getTextStyleOptions } from "./text";
+import { TextStyle, getEggTierTextTint, getTextStyleOptions } from "./text";
 import MessageUiHandler from "./message-ui-handler";
 import { getEnumValues, getEnumKeys, fixedInt, randSeedShuffle } from "#app/utils";
 import type { IEggOptions } from "../data/egg";
 import { Egg, getLegendaryGachaSpeciesForTimestamp } from "../data/egg";
 import { VoucherType, getVoucherTypeIcon } from "../system/voucher";
 import { getPokemonSpecies } from "../data/pokemon-species";
-import { addWindow } from "./ui-theme";
 import { Tutorial, handleTutorial } from "../tutorial";
 import { Button } from "#enums/buttons";
 import Overrides from "#app/overrides";
@@ -123,7 +122,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
         legendaryLabelY = 0;
       }
 
-      const gachaUpLabel = addTextObject(gachaX, gachaY, i18next.t("egg:legendaryUPGacha"), gachaTextStyle);
+      const gachaUpLabel = globalScene.addTextObject(gachaX, gachaY, i18next.t("egg:legendaryUPGacha"), gachaTextStyle);
       gachaUpLabel.setOrigin(0, 0);
       gachaInfoContainer.add(gachaUpLabel);
 
@@ -206,7 +205,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
     this.eggGachaOptionsContainer = globalScene.add.container(globalScene.game.canvas.width / 6, 148);
     this.eggGachaContainer.add(this.eggGachaOptionsContainer);
 
-    this.eggGachaOptionSelectBg = addWindow(0, 0, 96, 16 + 576 * this.scale);
+    this.eggGachaOptionSelectBg = globalScene.addWindow(0, 0, 96, 16 + 576 * this.scale);
     this.eggGachaOptionSelectBg.setOrigin(1, 1);
     this.eggGachaOptionsContainer.add(this.eggGachaOptionSelectBg);
 
@@ -254,7 +253,12 @@ export default class EggGachaUiHandler extends MessageUiHandler {
       })
       .join("\n");
 
-    const optionText = addTextObject(0, 0, `${pullOptionsText}\n${i18next.t("menu:cancel")}`, TextStyle.WINDOW);
+    const optionText = globalScene.addTextObject(
+      0,
+      0,
+      `${pullOptionsText}\n${i18next.t("menu:cancel")}`,
+      TextStyle.WINDOW,
+    );
 
     optionText.setLineSpacing(28);
     optionText.setFontSize("80px");
@@ -275,11 +279,11 @@ export default class EggGachaUiHandler extends MessageUiHandler {
     new Array(getEnumKeys(VoucherType).length).fill(null).map((_, i) => {
       const container = globalScene.add.container(globalScene.game.canvas.width / 6 - 56 * i, 0);
 
-      const bg = addWindow(0, 0, 56, 22);
+      const bg = globalScene.addWindow(0, 0, 56, 22);
       bg.setOrigin(1, 0);
       container.add(bg);
 
-      const countLabel = addTextObject(-48, 3, "0", TextStyle.WINDOW);
+      const countLabel = globalScene.addTextObject(-48, 3, "0", TextStyle.WINDOW);
       countLabel.setOrigin(0, 0);
       container.add(countLabel);
 
@@ -307,13 +311,13 @@ export default class EggGachaUiHandler extends MessageUiHandler {
 
     const gachaMessageBoxContainer = globalScene.add.container(0, 148);
 
-    const gachaMessageBox = addWindow(0, 0, 320, 32);
+    const gachaMessageBox = globalScene.addWindow(0, 0, 320, 32);
     gachaMessageBox.setOrigin(0, 0);
     gachaMessageBoxContainer.add(gachaMessageBox);
 
     this.eggGachaMessageBox = gachaMessageBox;
 
-    const gachaMessageText = addTextObject(8, 8, "", TextStyle.WINDOW, { maxLines: 2 });
+    const gachaMessageText = globalScene.addTextObject(8, 8, "", TextStyle.WINDOW, { maxLines: 2 });
     gachaMessageText.setOrigin(0, 0);
     gachaMessageBoxContainer.add(gachaMessageText);
 
@@ -537,7 +541,9 @@ export default class EggGachaUiHandler extends MessageUiHandler {
           const eggSprite = globalScene.add.sprite(0, 0, "egg", `egg_${egg.getKey()}`);
           ret.add(eggSprite);
 
-          const eggText = addTextObject(0, 14, egg.getEggDescriptor(), TextStyle.PARTY, { align: "center" });
+          const eggText = globalScene.addTextObject(0, 14, egg.getEggDescriptor(), TextStyle.PARTY, {
+            align: "center",
+          });
           eggText.setOrigin(0.5, 0);
           eggText.setTint(getEggTierTextTint(!egg.isManaphyEgg() ? egg.tier : EggTier.EPIC));
           ret.add(eggText);

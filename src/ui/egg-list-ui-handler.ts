@@ -1,8 +1,7 @@
 import { Mode } from "#app/ui/ui";
 import PokemonIconAnimHandler, { PokemonIconAnimMode } from "#app/ui/pokemon-icon-anim-handler";
-import { TextStyle, addTextObject } from "#app/ui/text";
+import { TextStyle } from "#app/ui/text";
 import MessageUiHandler from "#app/ui/message-ui-handler";
-import { addWindow } from "#app/ui/ui-theme";
 import { Button } from "#enums/buttons";
 import i18next from "i18next";
 import ScrollableGridUiHandler from "#app/ui/scrollable-grid-handler";
@@ -53,26 +52,26 @@ export default class EggListUiHandler extends MessageUiHandler {
     eggListBg.setOrigin(0, 0);
     this.eggListContainer.add(eggListBg);
 
-    this.eggListContainer.add(addWindow(1, 85, 106, 22));
-    this.eggListContainer.add(addWindow(1, 102, 106, 50, true));
-    this.eggListContainer.add(addWindow(1, 147, 106, 32, true));
-    this.eggListContainer.add(addWindow(107, 1, 212, 178));
+    this.eggListContainer.add(globalScene.addWindow(1, 85, 106, 22));
+    this.eggListContainer.add(globalScene.addWindow(1, 102, 106, 50, true));
+    this.eggListContainer.add(globalScene.addWindow(1, 147, 106, 32, true));
+    this.eggListContainer.add(globalScene.addWindow(107, 1, 212, 178));
 
     this.iconAnimHandler = new PokemonIconAnimHandler();
     this.iconAnimHandler.setup();
 
-    this.eggNameText = addTextObject(8, 68, "", TextStyle.SUMMARY);
+    this.eggNameText = globalScene.addTextObject(8, 68, "", TextStyle.SUMMARY);
     this.eggNameText.setOrigin(0, 0);
     this.eggListContainer.add(this.eggNameText);
 
-    this.eggDateText = addTextObject(8, 91, "", TextStyle.TOOLTIP_CONTENT);
+    this.eggDateText = globalScene.addTextObject(8, 91, "", TextStyle.TOOLTIP_CONTENT);
     this.eggListContainer.add(this.eggDateText);
 
-    this.eggHatchWavesText = addTextObject(8, 108, "", TextStyle.TOOLTIP_CONTENT);
+    this.eggHatchWavesText = globalScene.addTextObject(8, 108, "", TextStyle.TOOLTIP_CONTENT);
     this.eggHatchWavesText.setWordWrapWidth(540);
     this.eggListContainer.add(this.eggHatchWavesText);
 
-    this.eggGachaInfoText = addTextObject(8, 152, "", TextStyle.TOOLTIP_CONTENT);
+    this.eggGachaInfoText = globalScene.addTextObject(8, 152, "", TextStyle.TOOLTIP_CONTENT);
     this.eggGachaInfoText.setWordWrapWidth(540);
     this.eggListContainer.add(this.eggGachaInfoText);
 
@@ -98,11 +97,11 @@ export default class EggListUiHandler extends MessageUiHandler {
     this.eggListMessageBoxContainer.setVisible(false);
     this.eggListContainer.add(this.eggListMessageBoxContainer);
 
-    const eggListMessageBox = addWindow(1, -1, 318, 28);
+    const eggListMessageBox = globalScene.addWindow(1, -1, 318, 28);
     eggListMessageBox.setOrigin(0, 1);
     this.eggListMessageBoxContainer.add(eggListMessageBox);
 
-    this.message = addTextObject(8, -8, "", TextStyle.WINDOW, { maxLines: 1 });
+    this.message = globalScene.addTextObject(8, -8, "", TextStyle.WINDOW, { maxLines: 1 });
     this.message.setOrigin(0, 1);
     this.eggListMessageBoxContainer.add(this.message);
 
