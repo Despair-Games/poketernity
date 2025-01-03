@@ -29,10 +29,28 @@ export class PlayerStatsScene extends Scene {
       Phaser.Geom.Rectangle.Contains,
     );
 
-    const headerBg = addWindow(0, 0, this.game.canvas.width, 24);
+    const headerBg = addWindow(
+      0,
+      0,
+      this.game.canvas.width,
+      24,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      this,
+    );
     headerBg.setOrigin(0, 0);
 
-    const headerText = addTextObject(0, 0, i18next.t("gameStatsUiHandler:stats"), TextStyle.SETTINGS_LABEL);
+    const headerText = addTextObject(
+      0,
+      0,
+      i18next.t("gameStatsUiHandler:stats"),
+      TextStyle.SETTINGS_LABEL,
+      undefined,
+      this,
+    );
     headerText.setOrigin(0, 0);
     headerText.setPositionRelative(headerBg, 8, 4);
 
@@ -50,6 +68,8 @@ export class PlayerStatsScene extends Scene {
         false,
         i > 0 ? -3 : 0,
         1,
+        undefined,
+        this,
       );
       statsBg.setOrigin(0, 0);
       return statsBg;
@@ -69,7 +89,14 @@ export class PlayerStatsScene extends Scene {
       statLabel.setOrigin(0, 0);
       this.statsContainer.add(statLabel);
 
-      const statValue = addTextObject(statsBgWidth * ((s % 2) + 1) - 8, statLabel.y, "", TextStyle.STATS_VALUE);
+      const statValue = addTextObject(
+        statsBgWidth * ((s % 2) + 1) - 8,
+        statLabel.y,
+        "",
+        TextStyle.STATS_VALUE,
+        undefined,
+        this,
+      );
       statValue.setOrigin(1, 0);
       this.statsContainer.add(statValue);
     });
@@ -80,13 +107,13 @@ export class PlayerStatsScene extends Scene {
 
     // arrows to show that we can scroll through the stats
     this.arrowDown = this.add.sprite(statsBgWidth, this.game.canvas.height + 50, "prompt");
-    this.arrowDown.setScale(2, 2);
     this.mainContainer.add(this.arrowDown);
     this.arrowUp = this.add.sprite(statsBgWidth, headerBg.height, "prompt");
     this.arrowUp.flipY = true;
     this.mainContainer.add(this.arrowUp);
 
     this.mainContainer.setVisible(true);
+    console.log(this.mainContainer);
   }
 }
 
