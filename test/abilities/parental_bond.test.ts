@@ -445,10 +445,9 @@ describe("Abilities - Parental Bond", () => {
 
     await game.phaseInterceptor.to("MoveEffectPhase");
     await game.phaseInterceptor.to("MoveEffectPhase", false);
-    // The enemy's Sp Atk should drop before the second hit
-    expect(enemyPokemon.getStatStage(Stat.SPATK)).toBe(-1);
+    // The enemy's Sp Atk should not drop before the second hit
+    expect(enemyPokemon.getStatStage(Stat.SPATK)).toBe(0);
     await game.phaseInterceptor.to("MoveEndPhase", false);
-    // should still be at -1 after the second hit
     expect(enemyPokemon.getStatStage(Stat.SPATK)).toBe(-1);
     expect(playerPokemon.turnData.hitCount).toBe(2);
   });
