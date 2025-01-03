@@ -9,6 +9,8 @@ import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { allMoves } from "#app/data/all-moves";
+import { BattlerIndex } from "#app/battle";
 
 describe("Abilities - Parental Bond", () => {
   let phaserGame: Phaser.Game;
@@ -425,5 +427,29 @@ describe("Abilities - Parental Bond", () => {
 
     // TODO: Update hit count to 1 once Future Sight is fixed to not activate abilities if user is off the field
     expect(enemyPokemon.damageAndUpdate).toHaveBeenCalledTimes(2);
+  });
+
+  it("should only apply the effects of Secret Power on the first hit", async () => {
+    game.override.moveset(Moves.SECRET_POWER).enemyMoveset(Moves.MISTY_TERRAIN); // Secret Power lowers Sp Atk in Misty Terrain
+
+    vi.spyOn(allMoves[Moves.SECRET_POWER], "chance", "get").mockReturnValue(-1);
+
+    await game.classicMode.startBattle([Species.MAGIKARP]);
+
+    const playerPokemon = game.scene.getPlayerPokemon()!;
+    const enemyPokemon = game.scene.getEnemyPokemon()!;
+
+    game.move.select(Moves.SECRET_POWER);
+    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    await game.phaseInterceptor.to("MoveEndPhase");
+
+    await game.phaseInterceptor.to("MoveEffectPhase");
+    await game.phaseInterceptor.to("MoveEffectPhase", false);
+    // The enemy's Sp Atk should drop before the second hit
+    expect(enemyPokemon.getStatStage(Stat.SPATK)).toBe(-1);
+    await game.phaseInterceptor.to("MoveEndPhase", false);
+    // should still be at -1 after the second hit
+    expect(enemyPokemon.getStatStage(Stat.SPATK)).toBe(-1);
+    expect(playerPokemon.turnData.hitCount).toBe(2);
   });
 });

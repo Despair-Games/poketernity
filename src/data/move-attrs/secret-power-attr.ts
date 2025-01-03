@@ -20,7 +20,7 @@ import { applyAbAttrs, applyPreDefendAbAttrs } from "../ability";
  */
 export class SecretPowerAttr extends MoveEffectAttr {
   constructor() {
-    super(false);
+    super(false, { firstHitOnly: true });
   }
 
   /**
