@@ -3,6 +3,10 @@ import type { CommonAnim } from "#app/data/battle-anims";
 import { CommonBattleAnim } from "#app/data/battle-anims";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 
+/**
+ * Plays a {@linkcode CommonBattleAnim}
+ * @extends PokemonPhase
+ */
 export class CommonAnimPhase extends PokemonPhase {
   private anim: CommonAnim | null;
   private readonly targetIndex?: BattlerIndex;

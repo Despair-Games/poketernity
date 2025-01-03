@@ -1,3 +1,10 @@
+// -- start tsdoc imports --
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import type { NewBiomeEncounterPhase } from "#app/phases/new-biome-encounter-phase";
+import type { NextEncounterPhase } from "#app/phases/next-encounter-phase";
+/* eslint-enable @typescript-eslint/no-unused-vars */
+// -- end tsdoc imports --
+
 import { BattlerIndex, BattleType } from "#app/battle";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
 import { SyncEncounterNatureAbAttr } from "#app/data/ab-attrs/sync-encounter-nature-ab-attr";
@@ -44,6 +51,13 @@ import { Species } from "#enums/species";
 import i18next from "i18next";
 import { MysteryEncounterPhase } from "./mystery-encounter-phases/mystery-encounter-phase";
 
+/**
+ * Starts the first encounter (wave 1) of a new run. Subsequent encounters are handled by
+ * {@linkcode NextEncounterPhase} and {@linkcode NewBiomeEncounterPhase},
+ * or {@linkcode MysteryEncounterPhase} for Mystery Encounters.
+ *
+ * @extends BattlePhase
+ */
 export class EncounterPhase extends BattlePhase {
   private readonly loaded: boolean;
 

@@ -4,6 +4,11 @@ import { addTextObject, TextStyle } from "#app/ui/text";
 import { PlayerGender } from "#enums/player-gender";
 import i18next from "i18next";
 
+/**
+ * Displays the End Card after a classic run ends in victory.
+ *
+ * @extends Phase
+ */
 export class EndCardPhase extends Phase {
   public endCard: Phaser.GameObjects.Image;
   public text: Phaser.GameObjects.Text;

@@ -28,6 +28,13 @@ import { PlayerGender } from "#enums/player-gender";
 import { TrainerType } from "#enums/trainer-type";
 import i18next from "i18next";
 
+/**
+ * Handles the effects of the player ending a run:
+ * - If this is a Mystery Encounter that allows the player to lose without ending the run, end the phase early.
+ * - Validate various achievements
+ * - Award unlockables if necessary
+ * - Award ribbons + vouchers per player pokemon if a victory
+ */
 export class GameOverPhase extends BattlePhase {
   private isVictory: boolean;
   private readonly firstRibbons: PokemonSpecies[] = [];

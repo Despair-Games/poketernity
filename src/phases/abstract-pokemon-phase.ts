@@ -4,6 +4,10 @@ import { globalScene } from "#app/global-scene";
 import type { nil } from "#app/utils";
 import { FieldPhase } from "./abstract-field-phase";
 
+/**
+ * Provides helper functions to get the pokemon involved in the phase
+ * @extends FieldPhase
+ */
 export abstract class PokemonPhase extends FieldPhase {
   protected battlerIndex: BattlerIndex | number;
   public isPlayer: boolean;

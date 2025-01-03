@@ -1,3 +1,10 @@
+// -- start tsdoc imports --
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { type BattlerTag } from "#app/data/battler-tags";
+import { type MovePhase } from "#app/phases/move-phase";
+/* eslint-enable @typescript-eslint/no-unused-vars */
+// -- end tsdoc imports --
+
 import type { BattlerIndex } from "#app/battle";
 import { BattleType } from "#app/battle";
 import { PostFaintAbAttr } from "#app/data/ab-attrs/post-faint-ab-attr";
@@ -26,6 +33,31 @@ import { SwitchSummonPhase } from "./switch-summon-phase";
 import { ToggleDoublePositionPhase } from "./toggle-double-position-phase";
 import { VictoryPhase } from "./victory-phase";
 
+/**
+ * Handles the effects of a pokemon fainting:
+ * - Triggers the effects of Destiny Bond and Grudge
+ * - Triggers Reviver Seed
+ * - Handles final boss transformation to phase 2 and defeat
+ * - Increments the Last Respects / Supreme Overload counters
+ * - Displays the "pokemon fainted" message
+ * - Triggers form changes
+ * - Applies {@linkcode PostFaintAbAttr}s
+ * - Applies {@linkcode PostKnockOutAbAttr}s
+ * - Applies {@linkcode PostVictoryAbAttr}s
+ * - If the fainted pokemon was the player's:
+ *   - If the player's last valid pokemon just fainted then unshift a {@linkcode GameOverPhase},
+ *     otherwise push a {@linkcode SwitchPhase} or {@linkcode ToggleDoublePositionPhase} as needed.
+ * - If the fainted pokemon was the AI's:
+ *   - Unshift a {@linkcode VictoryPhase}, then if this is a trainer battle and the AI
+ *     has unfainted pokemon in reserve, push a {@linkcode SwitchSummonPhase}
+ * - Redirect moves off of fainted targets in doubles (TODO: handle this in {@linkcode MovePhase}?)
+ * - Play the pokemon's faint cry
+ * - Handle friendship loss for player pokemon
+ * - Lapse {@linkcode BattlerTagLapseType.FAINT} tags
+ * - Clear {@linkcode BattlerTag}s from the fainted pokemon
+ *
+ * @extends PokemonPhase
+ */
 export class FaintPhase extends PokemonPhase {
   /** Whether or not enduring (for this phase's purposes, Reviver Seed) should be prevented */
   private readonly preventEndure: boolean;
@@ -59,12 +91,14 @@ export class FaintPhase extends PokemonPhase {
 
     const faintPokemon = this.getPokemon();
 
-    if (!isNullOrUndefined(this.destinyTag) && !isNullOrUndefined(this.source)) {
-      this.destinyTag.lapse(this.source, BattlerTagLapseType.CUSTOM);
-    }
+    if (!isNullOrUndefined(this.source)) {
+      if (!isNullOrUndefined(this.destinyTag)) {
+        this.destinyTag.lapse(this.source, BattlerTagLapseType.CUSTOM);
+      }
 
-    if (!isNullOrUndefined(this.grudgeTag) && !isNullOrUndefined(this.source)) {
-      this.grudgeTag.lapse(faintPokemon, BattlerTagLapseType.CUSTOM, this.source);
+      if (!isNullOrUndefined(this.grudgeTag)) {
+        this.grudgeTag.lapse(faintPokemon, BattlerTagLapseType.CUSTOM, this.source);
+      }
     }
 
     if (!this.preventEndure) {
