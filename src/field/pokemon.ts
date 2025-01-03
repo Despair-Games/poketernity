@@ -3385,24 +3385,29 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       }
     }
 
-    damage.value = toDmgValue(
-      baseDamage
-        * targetMultiplier
-        * multiStrikeEnhancementMultiplier.value
-        * arenaAttackTypeMultiplier.value
-        * glaiveRushMultiplier.value
-        * criticalMultiplier.value
-        * randomMultiplier
-        * stabMultiplier.value
-        * typeMultiplier
-        * burnMultiplier.value
-        * screenMultiplier.value
-        * hitsTagMultiplier.value
-        * mistyTerrainMultiplier
-        * tintedLensMultiplier.value
-        * receivedDamageMultiplier.value
-        * alliedFieldDamageMultiplier.value,
-    );
+    /** If damage is nullified by a form-ability (Eiscue's Ice Face, Mimikyu's Disguise), then damage is set to 0 */
+    if (receivedDamageMultiplier.value > 0) {
+      damage.value = toDmgValue(
+        baseDamage
+          * targetMultiplier
+          * multiStrikeEnhancementMultiplier.value
+          * arenaAttackTypeMultiplier.value
+          * glaiveRushMultiplier.value
+          * criticalMultiplier.value
+          * randomMultiplier
+          * stabMultiplier.value
+          * typeMultiplier
+          * burnMultiplier.value
+          * screenMultiplier.value
+          * hitsTagMultiplier.value
+          * mistyTerrainMultiplier
+          * tintedLensMultiplier.value
+          * receivedDamageMultiplier.value
+          * alliedFieldDamageMultiplier.value,
+      );
+    } else {
+      damage.value = 0;
+    }
 
     /** Apply the enemy's Damage and Resistance tokens */
     if (!source.isPlayer()) {
