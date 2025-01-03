@@ -1,10 +1,12 @@
+// -- start tsdoc imports --
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
+// -- end tsdoc imports --
+
 import type { OptionPhaseCallback } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { transitionMysteryEncounterIntroVisuals } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-// tsdoc imports
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
 
 /**
  * Will handle (in order):

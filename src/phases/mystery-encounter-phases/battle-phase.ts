@@ -1,3 +1,8 @@
+// -- start tsdoc imports --
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type { PostSummonPhase } from "#app/phases/post-summon-phase";
+// -- end tsdoc imports --
+
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
 import { TrainerSlot } from "#app/data/trainer-config";
 import { globalScene } from "#app/global-scene";
@@ -12,9 +17,6 @@ import { randSeedItem } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import i18next from "i18next";
-// tsdoc imports
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { PostSummonPhase } from "#app/phases/post-summon-phase";
 
 /**
  * Will handle (in order):

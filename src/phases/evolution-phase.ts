@@ -1,3 +1,8 @@
+// -- start tsdoc imports --
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { type FormChangePhase } from "#app/phases/form-change-phase";
+// -- end tsdoc imports --
+
 import type { AnySound } from "#app/battle-scene";
 import type { SpeciesFormEvolution } from "#app/data/balance/pokemon-evolutions";
 import { FusionSpeciesFormEvolution } from "#app/data/balance/pokemon-evolutions";
@@ -9,13 +14,10 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { EndEvolutionPhase } from "#app/phases/end-evolution-phase";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
 import { Mode } from "#app/ui/ui";
+import { fixedInt } from "#app/utils";
 import i18next from "i18next";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 import { FormChangeBasePhase } from "./abstract-form-change-base-phase";
-// tsdoc imports
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { type FormChangePhase } from "#app/phases/form-change-phase";
-import { fixedInt } from "#app/utils";
 
 /**
  * A phase for handling Pokemon evolution

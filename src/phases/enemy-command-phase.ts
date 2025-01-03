@@ -1,12 +1,14 @@
+// -- start tsdoc imports --
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type { EnemyPokemon, Pokemon } from "#app/field/pokemon";
+// -- end tsdoc imports --
+
 import { BattlerIndex } from "#app/battle";
 import { globalScene } from "#app/global-scene";
 import { Command } from "#app/ui/command-ui-handler";
 import { Abilities } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { FieldPhase } from "./abstract-field-phase";
-// tsdoc imports
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { EnemyPokemon, Pokemon } from "#app/field/pokemon";
 
 /**
  * Phase for determining an enemy AI's action for the next turn.

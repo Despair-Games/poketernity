@@ -1,3 +1,8 @@
+// -- start tsdoc imports --
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { type EvolutionPhase } from "#app/phases/evolution-phase";
+// -- end tsdoc imports --
+
 import type { SpeciesFormChange } from "#app/data/pokemon-forms";
 import { getSpeciesFormChangeMessage } from "#app/data/pokemon-forms";
 import type { PlayerPokemon, Pokemon } from "#app/field/pokemon";
@@ -6,14 +11,11 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { achvs } from "#app/system/achv";
 import type PartyUiHandler from "#app/ui/party-ui-handler";
 import { Mode } from "#app/ui/ui";
+import { fixedInt } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { FormChangeBasePhase } from "./abstract-form-change-base-phase";
 import { EndEvolutionPhase } from "./end-evolution-phase";
-// tsdoc imports
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { type EvolutionPhase } from "#app/phases/evolution-phase";
-import { fixedInt } from "#app/utils";
 
 /**
  * A phase for handling Pokemon form changes, this does not cover evolutions

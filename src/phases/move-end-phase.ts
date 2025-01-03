@@ -1,10 +1,12 @@
+// -- start tsdoc imports --
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { type Arena } from "#app/field/arena";
+// -- end tsdoc imports --
+
 import type { BattlerIndex } from "#app/battle";
 import { BattlerTagLapseType } from "#app/data/battler-tags";
 import { globalScene } from "#app/global-scene";
 import { PokemonPhase } from "./abstract-pokemon-phase";
-// tsdoc imports
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { type Arena } from "#app/field/arena";
 
 /**
  * Lapses {@linkcode BattlerTagLapseType.AFTER_MOVE} and calls {@linkcode Arena.setIgnoreAbilities}`(false)`
