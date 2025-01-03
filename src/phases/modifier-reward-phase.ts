@@ -1,10 +1,10 @@
 import { globalScene } from "#app/global-scene";
 import type { ModifierType, ModifierTypeFunc } from "#app/modifier/modifier-type";
 import { getModifierType } from "#app/modifier/modifier-type";
+import { Phase } from "#app/phase";
 import i18next from "i18next";
-import { BattlePhase } from "./abstract-battle-phase";
 
-export class ModifierRewardPhase extends BattlePhase {
+export class ModifierRewardPhase extends Phase {
   protected readonly modifierType: ModifierType;
 
   constructor(modifierTypeFunc: ModifierTypeFunc) {
