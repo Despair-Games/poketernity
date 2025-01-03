@@ -37,8 +37,8 @@ describe("Moves - Wide Guard", () => {
 
     const leadPokemon = game.scene.getPlayerField();
 
-    game.move.useMove(Moves.WIDE_GUARD);
-    game.move.useMove(Moves.SPLASH, 1);
+    game.move.use(Moves.WIDE_GUARD);
+    game.move.use(Moves.SPLASH, 1);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -52,8 +52,8 @@ describe("Moves - Wide Guard", () => {
 
     const leadPokemon = game.scene.getPlayerField();
 
-    game.move.useMove(Moves.WIDE_GUARD);
-    game.move.useMove(Moves.SPLASH, 1);
+    game.move.use(Moves.WIDE_GUARD);
+    game.move.use(Moves.SPLASH, 1);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -67,8 +67,8 @@ describe("Moves - Wide Guard", () => {
 
     const leadPokemon = game.scene.getPlayerField();
 
-    game.move.useMove(Moves.WIDE_GUARD);
-    game.move.useMove(Moves.SPLASH, 1);
+    game.move.use(Moves.WIDE_GUARD);
+    game.move.use(Moves.SPLASH, 1);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -83,8 +83,8 @@ describe("Moves - Wide Guard", () => {
     const leadPokemon = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.move.useMove(Moves.WIDE_GUARD);
-    game.move.useMove(Moves.SURF, 1);
+    game.move.use(Moves.WIDE_GUARD);
+    game.move.use(Moves.SURF, 1);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 

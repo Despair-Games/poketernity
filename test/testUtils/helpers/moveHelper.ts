@@ -76,7 +76,7 @@ export class MoveHelper extends GameManagerHelper {
    * @param pkmIndex - the pokemon index. Relevant for double-battles only (defaults to 0)
    * @param targetIndex - (optional) The {@linkcode BattlerIndex} of the Pokemon to target for single-target moves, or `null` if a manual call to `selectTarget()` is required
    */
-  public useMove(move: Moves, pkmIndex: 0 | 1 = 0, targetIndex?: BattlerIndex | null): void {
+  public use(move: Moves, pkmIndex: 0 | 1 = 0, targetIndex?: BattlerIndex | null): void {
     const movesetOverride = Array.isArray(Overrides.MOVESET_OVERRIDE)
       ? Overrides.MOVESET_OVERRIDE
       : [Overrides.MOVESET_OVERRIDE];

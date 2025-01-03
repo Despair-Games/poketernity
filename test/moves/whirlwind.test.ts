@@ -39,7 +39,7 @@ describe("Moves - Whirlwind", () => {
 
     const staraptor = game.pokemonHelper.getPlayerPokemon();
 
-    game.move.useMove(move);
+    game.move.use(move);
     await game.move.forceEnemyMove(Moves.WHIRLWIND);
 
     await game.phaseInterceptor.to("BerryPhase", false);
@@ -57,7 +57,7 @@ describe("Moves - Whirlwind", () => {
     vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: number = 0) => {
       return min;
     });
-    game.move.useMove(Moves.SPLASH);
+    game.move.use(Moves.SPLASH);
     await game.move.forceEnemyMove(Moves.WHIRLWIND);
     await game.toNextTurn();
 
@@ -69,7 +69,7 @@ describe("Moves - Whirlwind", () => {
     vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: number = 0) => {
       return min + 1;
     });
-    game.move.useMove(Moves.SPLASH);
+    game.move.use(Moves.SPLASH);
     await game.move.forceEnemyMove(Moves.WHIRLWIND);
     await game.toNextTurn();
 
@@ -89,7 +89,7 @@ describe("Moves - Whirlwind", () => {
     vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: number = 0) => {
       return min;
     });
-    game.move.useMove(Moves.SPLASH);
+    game.move.use(Moves.SPLASH);
     await game.move.forceEnemyMove(Moves.WHIRLWIND);
     await game.toNextTurn();
 
@@ -108,7 +108,7 @@ describe("Moves - Whirlwind", () => {
     eevee.hp = 0;
     eevee.status = new Status(StatusEffect.FAINT);
     expect(eevee.isFainted()).toBe(true);
-    game.move.useMove(Moves.SPLASH);
+    game.move.use(Moves.SPLASH);
     await game.move.forceEnemyMove(Moves.SPLASH);
     await game.toNextTurn();
 
@@ -116,7 +116,7 @@ describe("Moves - Whirlwind", () => {
     vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: number = 0) => {
       return min;
     });
-    game.move.useMove(Moves.SPLASH);
+    game.move.use(Moves.SPLASH);
     await game.move.forceEnemyMove(Moves.WHIRLWIND);
     await game.toNextTurn();
 
@@ -135,7 +135,7 @@ describe("Moves - Whirlwind", () => {
     eevee.hp = 0;
     eevee.status = new Status(StatusEffect.FAINT);
     expect(eevee.isFainted()).toBe(true);
-    game.move.useMove(Moves.SPLASH);
+    game.move.use(Moves.SPLASH);
     await game.move.forceEnemyMove(Moves.SPLASH);
     await game.toNextTurn();
 
@@ -143,7 +143,7 @@ describe("Moves - Whirlwind", () => {
     vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: number = 0) => {
       return min;
     });
-    game.move.useMove(Moves.SPLASH);
+    game.move.use(Moves.SPLASH);
     await game.move.forceEnemyMove(Moves.WHIRLWIND);
     await game.toNextTurn();
 
