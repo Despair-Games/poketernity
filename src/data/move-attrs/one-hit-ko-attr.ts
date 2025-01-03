@@ -6,13 +6,26 @@ import type { Move } from "#app/data/move";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";
 import type { MoveConditionFunc } from "../move-conditions";
 
+/**
+ * Attribute to mark a move as a {@link https://bulbapedia.bulbagarden.net/wiki/One-hit_knockout_move one-hit knockout}
+ * if the target is not a Boss Pokemon.
+ * @extends MoveAttr
+ */
 export class OneHitKOAttr extends MoveAttr {
-  override apply(_user: Pokemon, target: Pokemon, _move: Move, args: any[]): boolean {
+  /**
+   * If the target is not a Boss, flags the given move as a one-hit KO
+   * @param _user the {@linkcode Pokemon} using the move
+   * @param target the {@linkcode Pokemon} targeted by the move
+   * @param _move the {@linkcode Move} being used
+   * @param isOneHitKo a {@linkcode BooleanHolder} containing a flag which, if set to `true`, marks
+   * the current attack as a one-hit KO
+   * @returns `true` if the move is flagged as a one-hit KO
+   */
+  override apply(_user: Pokemon, target: Pokemon, _move: Move, isOneHitKo: BooleanHolder): boolean {
     if (target.isBossImmune()) {
       return false;
     }
-
-    (args[0] as BooleanHolder).value = true;
+    isOneHitKo.value = true;
 
     return true;
   }

@@ -22,8 +22,13 @@ export const doublePowerChanceMessageFunc = (user: Pokemon, _target: Pokemon, mo
   return message;
 };
 
+/**
+ * Attribute to apply a chance to double move power.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Fickle_Beam_(move) Fickle Beam}.
+ * @extends VariablePowerAttr
+ */
 export class DoublePowerChanceAttr extends VariablePowerAttr {
-  override apply(_user: Pokemon, _target: Pokemon, move: Move, args: any[]): boolean {
+  override apply(_user: Pokemon, _target: Pokemon, move: Move, power: NumberHolder): boolean {
     let rand: number;
     globalScene.executeWithSeedOffset(
       () => (rand = randSeedInt(100)),
@@ -31,7 +36,6 @@ export class DoublePowerChanceAttr extends VariablePowerAttr {
       globalScene.waveSeed,
     );
     if (rand! < move.chance) {
-      const power = args[0] as NumberHolder;
       power.value *= 2;
       return true;
     }

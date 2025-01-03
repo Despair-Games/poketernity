@@ -3,9 +3,14 @@ import type { NumberHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
 import { VariablePowerAttr } from "#app/data/move-attrs/variable-power-attr";
 
+/**
+ * Attribute to set move power inversely proportional to the user's HP ratio.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Flail_(move) Flail}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Reversal_(move) Reversal}.
+ * @extends VariablePowerAttr
+ */
 export class LowHpPowerAttr extends VariablePowerAttr {
-  override apply(user: Pokemon, _target: Pokemon, _move: Move, args: any[]): boolean {
-    const power = args[0] as NumberHolder;
+  override apply(user: Pokemon, _target: Pokemon, _move: Move, power: NumberHolder): boolean {
     const hpRatio = user.getHpRatio();
 
     switch (true) {

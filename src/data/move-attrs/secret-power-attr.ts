@@ -16,19 +16,17 @@ import { MoveEffectChanceMultiplierAbAttr } from "../ab-attrs/move-effect-chance
 import { applyAbAttrs, applyPreDefendAbAttrs } from "../ability";
 
 /**
- * Attribute used to determine the Biome/Terrain-based secondary effect of Secret Power
+ * Attribute used to determine the Biome/Terrain-based secondary
+ * effect of {@link https://bulbapedia.bulbagarden.net/wiki/Secret_Power_(move) Secret Power}.
+ * @extends MoveEffectAttr
  */
 export class SecretPowerAttr extends MoveEffectAttr {
   constructor() {
     super(false);
   }
 
-  /**
-   * Used to apply the secondary effect to the target Pokemon
-   * @returns `true` if a secondary effect is successfully applied
-   */
-  override apply(user: Pokemon, target: Pokemon, move: Move, args?: any[]): boolean {
-    if (!super.apply(user, target, move, args)) {
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+    if (!super.apply(user, target, move)) {
       return false;
     }
     const chance = this.getMoveChance(user, target, move, false);
@@ -41,7 +39,7 @@ export class SecretPowerAttr extends MoveEffectAttr {
         const biome = globalScene.arena.biomeType;
         secondaryEffect = this.determineBiomeEffect(biome);
       }
-      return secondaryEffect.apply(user, target, move, []);
+      return secondaryEffect.apply(user, target, move);
     }
     return false;
   }

@@ -7,9 +7,14 @@ import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import type { MoveConditionFunc } from "../move-conditions";
 
+/**
+ * Attribute to swap the user and target's abilities (if both are swappable).
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Skill_Swap_(move) Skill Swap}.
+ * @extends MoveEffectAttr
+ */
 export class SwitchAbilitiesAttr extends MoveEffectAttr {
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    if (!super.apply(user, target, move, args)) {
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+    if (!super.apply(user, target, move)) {
       return false;
     }
 

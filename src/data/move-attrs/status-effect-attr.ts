@@ -9,6 +9,12 @@ import { applyPostAttackAbAttrs } from "#app/data/ability";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
+/**
+ * Attribute to add a non-volatile status condition to
+ * the user or target, depending on {@linkcode selfTarget}.
+ * @extends MoveEffectAttr
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Status_condition#Non-volatile_status Non-volatile status conditions}
+ */
 export class StatusEffectAttr extends MoveEffectAttr {
   public effect: StatusEffect;
   public turnsRemaining?: number;
@@ -28,7 +34,7 @@ export class StatusEffectAttr extends MoveEffectAttr {
     this.overrideStatus = overrideStatus;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move, _args: any[]): boolean {
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     const moveChance = this.getMoveChance(user, target, move, this.selfTarget, true);
     const statusCheck = moveChance < 0 || moveChance === 100 || user.randSeedInt(100) < moveChance;
     if (statusCheck) {

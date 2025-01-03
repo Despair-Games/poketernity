@@ -3,16 +3,13 @@ import type { NumberHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
 import { VariablePowerAttr } from "#app/data/move-attrs/variable-power-attr";
 
+/**
+ * Attribute to scale move power inversely with its remaining PP.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Trump_Card_(move) Trump Card}.
+ * @extends VariablePowerAttr
+ */
 export class LessPPMorePowerAttr extends VariablePowerAttr {
-  /**
-   * Power up moves when less PP user has
-   * @param user {@linkcode Pokemon} using this move
-   * @param _target {@linkcode Pokemon} target of this move
-   * @param move {@linkcode Move} being used
-   * @param args [0] {@linkcode NumberHolder} of power
-   * @returns true if the function succeeds
-   */
-  override apply(user: Pokemon, _target: Pokemon, move: Move, args: any[]): boolean {
+  override apply(user: Pokemon, _target: Pokemon, move: Move, power: NumberHolder): boolean {
     const ppMax = move.pp;
     const ppUsed = user.moveset.find((m) => m.moveId === move.id)?.ppUsed ?? 0;
 
@@ -21,8 +18,6 @@ export class LessPPMorePowerAttr extends VariablePowerAttr {
     if (ppRemains < 0) {
       ppRemains = 0;
     }
-
-    const power = args[0] as NumberHolder;
 
     switch (ppRemains) {
       case 0:

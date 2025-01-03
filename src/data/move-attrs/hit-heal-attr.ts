@@ -14,8 +14,7 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
  * Heals user as a side effect of a move that hits a target.
  * Healing is based on {@linkcode healRatio} * the amount of damage dealt or a stat of the target.
  * @extends MoveEffectAttr
- * @see {@linkcode apply}
- * @see {@linkcode getUserBenefitScore}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Category:HP-draining_moves HP-draining moves}
  */
 export class HitHealAttr extends MoveEffectAttr {
   private healRatio: number;
@@ -27,17 +26,13 @@ export class HitHealAttr extends MoveEffectAttr {
     this.healRatio = healRatio ?? 0.5;
     this.healStat = healStat ?? null;
   }
+
   /**
    * Heals the user the determined amount and possibly displays a message about regaining health.
    * If the target has the {@linkcode ReverseDrainAbAttr}, all healing is instead converted
    * to damage to the user.
-   * @param user {@linkcode Pokemon} using this move
-   * @param target {@linkcode Pokemon} target of this move
-   * @param _move {@linkcode Move} being used
-   * @param _args N/A
-   * @returns true if the function succeeds
    */
-  override apply(user: Pokemon, target: Pokemon, _move: Move, _args: any[]): boolean {
+  override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
     let healAmount = 0;
     let message = "";
     const reverseDrain = target.hasAbilityWithAttr(ReverseDrainAbAttr, false);

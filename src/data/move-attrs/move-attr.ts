@@ -8,7 +8,6 @@ import type { MoveCondition, MoveConditionFunc } from "../move-conditions";
  * @abstract
  * @see {@linkcode apply}
  */
-
 export abstract class MoveAttr {
   /** Should this {@linkcode Move} target the user? */
   public selfTarget: boolean;
@@ -27,7 +26,7 @@ export abstract class MoveAttr {
    * @param _args Set of unique arguments needed by this attribute
    * @returns true if application of the ability succeeds
    */
-  apply(_user: Pokemon | null, _target: Pokemon | null, _move: Move, _args: any[]): boolean {
+  apply(_user: Pokemon | null, _target: Pokemon | null, _move: Move, ..._args: unknown[]): boolean {
     return true;
   }
 

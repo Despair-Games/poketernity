@@ -6,6 +6,11 @@ import { ArenaTagSide } from "../arena-tag";
 import type { Move } from "../move";
 import { MoveEffectAttr } from "./move-effect-attr";
 
+/**
+ * Attribute to remove {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Variations_of_Spikes hazards}
+ * from the field.
+ * @extends MoveEffectAttr
+ */
 export class RemoveArenaTrapAttr extends MoveEffectAttr {
   private targetBothSides: boolean;
 
@@ -14,8 +19,12 @@ export class RemoveArenaTrapAttr extends MoveEffectAttr {
     this.targetBothSides = targetBothSides;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    if (!super.apply(user, target, move, args)) {
+  /**
+   * Removes hazards from either the user's (?) side of the field
+   * or both sides of the field, depending on {@linkcode targetBothSides}
+   */
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+    if (!super.apply(user, target, move)) {
       return false;
     }
 

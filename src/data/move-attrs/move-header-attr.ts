@@ -5,8 +5,9 @@ import { MoveAttr } from "#app/data/move-attrs/move-attr";
  * Move Header effects apply at the beginning of a turn before any moves are resolved.
  * They can be used to apply effects to the field (e.g. queueing a message) or to the user
  * (e.g. adding a battler tag).
+ * @see {@linkcode MoveHeaderPhase}
+ * @extends MoveAttr
  */
-
 export class MoveHeaderAttr extends MoveAttr {
   constructor() {
     super(true);

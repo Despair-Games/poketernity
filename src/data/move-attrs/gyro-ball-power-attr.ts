@@ -5,22 +5,12 @@ import type { Move } from "#app/data/move";
 import { VariablePowerAttr } from "#app/data/move-attrs/variable-power-attr";
 
 /**
- * Attribute used for Gyro Ball move.
+ * Attribute implementing {@link https://bulbapedia.bulbagarden.net/wiki/Gyro_Ball_(move) Gyro Ball's} power modifier.
+ * The move's power increases the slower the user is compared to the target.
  * @extends VariablePowerAttr
- * @see {@linkcode apply}
  **/
 export class GyroBallPowerAttr extends VariablePowerAttr {
-  /**
-   * Move that deals more damage the slower {@linkcode Stat.SPD}
-   * the user is compared to the target.
-   * @param user Pokemon that used the move
-   * @param target The target of the move
-   * @param _move Move with this attribute
-   * @param args N/A
-   * @returns true if the function succeeds
-   */
-  override apply(user: Pokemon, target: Pokemon, _move: Move, args: any[]): boolean {
-    const power = args[0] as NumberHolder;
+  override apply(user: Pokemon, target: Pokemon, _move: Move, power: NumberHolder): boolean {
     const userSpeed = user.getEffectiveStat(Stat.SPD);
     if (userSpeed < 1) {
       // Gen 6+ always have 1 base power

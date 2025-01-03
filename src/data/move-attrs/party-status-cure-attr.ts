@@ -10,9 +10,7 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 /**
  * Cures the user's party of non-volatile status conditions, ie. Heal Bell, Aromatherapy
  * @extends MoveEffectAttr
- * @see {@linkcode apply}
  */
-
 export class PartyStatusCureAttr extends MoveEffectAttr {
   /** Message to display after using move */
   private message: string | null;
@@ -27,15 +25,15 @@ export class PartyStatusCureAttr extends MoveEffectAttr {
   }
 
   //The same as MoveEffectAttr.canApply, except it doesn't check for the target's HP.
-  override canApply(user: Pokemon, target: Pokemon, move: Move, _args: any[]) {
+  override canApply(user: Pokemon, target: Pokemon, move: Move) {
     const isTargetValid =
       (this.selfTarget && user.hp && !user.getTag(BattlerTagType.FRENZY))
       || (!this.selfTarget && (!target.getTag(BattlerTagType.PROTECTED) || move.hasFlag(MoveFlags.IGNORE_PROTECT)));
     return !!isTargetValid;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    if (!this.canApply(user, target, move, args)) {
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+    if (!this.canApply(user, target, move)) {
       return false;
     }
     const partyPokemon = user.getParty();

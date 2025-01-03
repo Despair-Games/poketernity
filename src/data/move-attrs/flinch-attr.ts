@@ -9,6 +9,10 @@ import { applyAbAttrs, applyPreDefendAbAttrs } from "../ability";
 import type { Move } from "../move";
 import { AddBattlerTagAttr } from "./add-battler-tag-attr";
 
+/**
+ * Attribute adding a chance to flinch the target.
+ * @extends AddBattlerTagAttr
+ */
 export class FlinchAttr extends AddBattlerTagAttr {
   constructor() {
     super(BattlerTagType.FLINCHED, false);

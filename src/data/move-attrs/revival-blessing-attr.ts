@@ -12,24 +12,16 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import type { MoveConditionFunc } from "../move-conditions";
 
 /**
- * Attribute used for Revival Blessing.
+ * Attribute to revive a Pokemon in the user's party to 50% HP.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Revival_Blessing_(move) Revival Blessing}
  * @extends MoveEffectAttr
- * @see {@linkcode apply}
  */
 export class RevivalBlessingAttr extends MoveEffectAttr {
   constructor() {
     super(true);
   }
 
-  /**
-   *
-   * @param user {@linkcode Pokemon} using this move
-   * @param _target {@linkcode Pokemon} target of this move
-   * @param _move {@linkcode Move} being used
-   * @param _args N/A
-   * @returns 'true' if the function succeeds
-   */
-  override apply(user: Pokemon, _target: Pokemon, _move: Move, _args: any[]): boolean {
+  override apply(user: Pokemon, _target: Pokemon, _move: Move): boolean {
     // If user is player, checks if the user has fainted pokemon
     if (user instanceof PlayerPokemon) {
       globalScene.unshiftPhase(new RevivalBlessingPhase(user));

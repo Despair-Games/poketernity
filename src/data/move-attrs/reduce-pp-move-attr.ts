@@ -8,8 +8,9 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import type { MoveConditionFunc } from "../move-conditions";
 
 /**
- *  Attribute used for moves that reduce PP of the target's last used move.
- *  Used for Spite.
+ * Attribute used for moves that reduce PP of the target's last used move.
+ * Used for Spite.
+ * @extends MoveEffectAttr
  */
 export class ReducePpMoveAttr extends MoveEffectAttr {
   protected reduction: number;
@@ -18,17 +19,8 @@ export class ReducePpMoveAttr extends MoveEffectAttr {
     this.reduction = reduction;
   }
 
-  /**
-   * Reduces the PP of the target's last-used move by an amount based on this attribute instance's {@linkcode reduction}.
-   *
-   * @param _user {@linkcode Pokemon} that used the attack
-   * @param target {@linkcode Pokemon} targeted by the attack
-   * @param _move N/A
-   * @param _args N/A
-   * @returns `true`
-   */
-  override apply(_user: Pokemon, target: Pokemon, _move: Move, _args: any[]): boolean {
-    // Null checks can be skipped due to condition function
+  /** Reduces the PP of the target's last-used move by an amount based on this attribute instance's {@linkcode reduction}. */
+  override apply(_user: Pokemon, target: Pokemon, _move: Move): boolean {
     const lastMove = target.getLastXMoves()[0];
     const movesetMove = target.getMoveset().find((m) => m.moveId === lastMove.move)!;
     const lastPpUsed = movesetMove.ppUsed;

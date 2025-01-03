@@ -4,17 +4,14 @@ import type { NumberHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
 import { VariableMoveTypeMultiplierAttr } from "#app/data/move-attrs/variable-move-type-multiplier-attr";
 
+/**
+ * Attribute to make a move have no effect against Ice-type Pokemon.
+ * Used for {@linkcode https://bulbapedia.bulbagarden.net/wiki/Sheer_Cold_(move) Sheer Cold}.
+ * @extends VariableMoveTypeMultiplierAttr
+ */
 export class IceNoEffectTypeAttr extends VariableMoveTypeMultiplierAttr {
-  /**
-   * Checks to see if the Target is Ice-Type or not. If so, the move will have no effect.
-   * @param _user n/a
-   * @param target The {@linkcode Pokemon} targeted by the move
-   * @param _move n/a
-   * @param args `[0]` a {@linkcode NumberHolder | NumberHolder} containing a type effectiveness multiplier
-   * @returns `true` if this Ice-type immunity applies; `false` otherwise
-   */
-  override apply(_user: Pokemon, target: Pokemon, _move: Move, args: any[]): boolean {
-    const multiplier = args[0] as NumberHolder;
+  /** Sets the given move's type effectiveness to 0 if the target is Ice type */
+  override apply(_user: Pokemon, target: Pokemon, _move: Move, multiplier: NumberHolder): boolean {
     if (target.isOfType(Type.ICE)) {
       multiplier.value = 0;
       return true;

@@ -9,24 +9,19 @@ import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
 /**
- * Attribute that causes targets of the move to eat a berry. Used for Teatime, Stuff Cheeks
+ * Attribute that causes targets of the move to eat a berry.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Stuff_Cheeks_(move) Stuff Cheeks}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Teatime_(move) Teatime}.
+ * @extends MoveEffectAttr
  */
-
 export class EatBerryAttr extends MoveEffectAttr {
   protected chosenBerry: BerryModifier | undefined;
   constructor(selfTarget: boolean) {
     super(selfTarget);
   }
-  /**
-   * Causes the target to eat a berry.
-   * @param user {@linkcode Pokemon} Pokemon that used the move
-   * @param target {@linkcode Pokemon} Pokemon that will eat a berry
-   * @param move {@linkcode Move} The move being used
-   * @param args Unused
-   * @returns `true` if the function succeeds
-   */
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    if (!super.apply(user, target, move, args)) {
+
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+    if (!super.apply(user, target, move)) {
       return false;
     }
 

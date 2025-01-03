@@ -12,13 +12,10 @@ import type { MoveConditionFunc } from "../move-conditions";
  * A suppressed ability cannot be activated.
  *
  * @extends MoveEffectAttr
- * @see {@linkcode apply}
- * @see {@linkcode getCondition}
  */
 export class SuppressAbilitiesAttr extends MoveEffectAttr {
-  /** Sets ability suppression for the target pokemon and displays a message. */
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    if (!super.apply(user, target, move, args)) {
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+    if (!super.apply(user, target, move)) {
       return false;
     }
 

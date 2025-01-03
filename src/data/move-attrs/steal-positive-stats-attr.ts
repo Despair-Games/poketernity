@@ -12,7 +12,7 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
 /**
  * Attribute to steal the target's positive stat stages.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Spectral_Thief_(move) | Spectral Thief}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Spectral_Thief_(move) Spectral Thief}.
  * @extends MoveEffectAttr
  */
 export class StealPositiveStatsAttr extends MoveEffectAttr {
@@ -20,11 +20,7 @@ export class StealPositiveStatsAttr extends MoveEffectAttr {
     super(false, { trigger: MoveEffectTrigger.PRE_APPLY });
   }
 
-  /**
-   * Steals the given target's stat stages and adds them to the user
-   * @returns `true` if any stat stages were stolen
-   */
-  override apply(user: Pokemon, target: Pokemon, _move: Move, _args?: any[]): boolean {
+  override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
     let statsStolen: boolean = false;
     for (const s of BATTLE_STATS) {
       if (target.getStatStage(s) > 0) {

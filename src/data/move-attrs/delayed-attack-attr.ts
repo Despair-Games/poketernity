@@ -11,11 +11,10 @@ import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effec
 
 /**
  * Attack Move that doesn't hit the turn it is played and doesn't allow for multiple
- * uses on the same target. Examples are Future Sight or Doom Desire.
+ * uses on the same target.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Future_Sight_(move) Future Sight}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Doom_Desire_(move) Doom Desire}.
  * @extends OverrideMoveEffectAttr
- * @param tagType The {@linkcode ArenaTagType} that will be placed on the field when the move is used
- * @param chargeAnim The {@linkcode ChargeAnim | Charging Animation} used for the move
- * @param chargeText The text to display when the move is used
  */
 export class DelayedAttackAttr extends OverrideMoveEffectAttr {
   public tagType: ArenaTagType;
@@ -30,14 +29,16 @@ export class DelayedAttackAttr extends OverrideMoveEffectAttr {
     this.chargeText = chargeText;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
+  /**
+   * If used virtually, this queues a message and proceeds normally.
+   * Otherwise, this adds a delayed attack to the field and cancels other move effects
+   * for the current attack.
+   */
+  override apply(user: Pokemon, target: Pokemon, move: Move, overridden: BooleanHolder, virtual: boolean): boolean {
     // Edge case for the move applied on a pokemon that has fainted
     if (!target) {
       return true;
     }
-
-    const overridden = args[0] as BooleanHolder;
-    const virtual = args[1] as boolean;
 
     if (!virtual) {
       overridden.value = true;

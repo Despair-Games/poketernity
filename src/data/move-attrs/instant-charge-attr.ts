@@ -1,12 +1,12 @@
 import type { Pokemon } from "#app/field/pokemon";
-import { BooleanHolder } from "#app/utils";
+import type { BooleanHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";
 import type { UserMoveConditionFunc } from "../move-conditions";
 
 /**
- * Attribute that allows charge moves to resolve in 1 turn under a given condition.
- * Should only be used for {@linkcode ChargingMove | ChargingMoves} as a `chargeAttr`.
+ * Attribute that allows charge moves to resolve in 1 turn under a set condition.
+ * Should only be used for {@linkcode ChargingMove charge moves} as a `chargeAttr`.
  * @extends MoveAttr
  */
 export class InstantChargeAttr extends MoveAttr {
@@ -23,16 +23,10 @@ export class InstantChargeAttr extends MoveAttr {
    * @param user the {@linkcode Pokemon} using the move
    * @param _target n/a
    * @param move the {@linkcode Move} associated with this attribute
-   * @param args
-   *  - `[0]` a {@linkcode BooleanHolder | BooleanHolder} for the "instant charge" flag
+   * @param instantCharge a {@linkcode BooleanHolder} for the "instant charge" flag
    * @returns `true` if the instant charge condition is met; `false` otherwise.
    */
-  override apply(user: Pokemon, _target: Pokemon | null, move: Move, args: any[]): boolean {
-    const instantCharge = args[0];
-    if (!(instantCharge instanceof BooleanHolder)) {
-      return false;
-    }
-
+  override apply(user: Pokemon, _target: Pokemon | null, move: Move, instantCharge: BooleanHolder): boolean {
     if (this.condition(user, move)) {
       instantCharge.value = true;
       return true;

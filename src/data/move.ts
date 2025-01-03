@@ -1024,9 +1024,9 @@ function applyMoveAttrsInternal(
   user: Pokemon | null,
   target: Pokemon | null,
   move: Move,
-  args: any[],
+  ...args: unknown[]
 ): void {
-  move.attrs.filter((attr) => attrFilter(attr)).forEach((attr) => attr.apply(user, target, move, args));
+  move.attrs.filter((attr) => attrFilter(attr)).forEach((attr) => attr.apply(user, target, move, ...args));
 }
 
 function applyMoveChargeAttrsInternal(
@@ -1034,9 +1034,9 @@ function applyMoveChargeAttrsInternal(
   user: Pokemon | null,
   target: Pokemon | null,
   move: ChargingMove,
-  args: any[],
+  ...args: unknown[]
 ): void {
-  move.chargeAttrs.filter((attr) => attrFilter(attr)).forEach((attr) => attr.apply(user, target, move, args));
+  move.chargeAttrs.filter((attr) => attrFilter(attr)).forEach((attr) => attr.apply(user, target, move, ...args));
 }
 
 export function applyMoveAttrs(
@@ -1044,9 +1044,9 @@ export function applyMoveAttrs(
   user: Pokemon | null,
   target: Pokemon | null,
   move: Move,
-  ...args: any[]
+  ...args: unknown[]
 ): void {
-  applyMoveAttrsInternal((attr: MoveAttr) => attr instanceof attrType, user, target, move, args);
+  applyMoveAttrsInternal((attr: MoveAttr) => attr instanceof attrType, user, target, move, ...args);
 }
 
 export function applyFilteredMoveAttrs(
@@ -1054,9 +1054,9 @@ export function applyFilteredMoveAttrs(
   user: Pokemon,
   target: Pokemon | null,
   move: Move,
-  ...args: any[]
+  ...args: unknown[]
 ): void {
-  applyMoveAttrsInternal(attrFilter, user, target, move, args);
+  applyMoveAttrsInternal(attrFilter, user, target, move, ...args);
 }
 
 export function applyMoveChargeAttrs(
@@ -1064,9 +1064,9 @@ export function applyMoveChargeAttrs(
   user: Pokemon | null,
   target: Pokemon | null,
   move: ChargingMove,
-  ...args: any[]
+  ...args: unknown[]
 ): void {
-  applyMoveChargeAttrsInternal((attr: MoveAttr) => attr instanceof attrType, user, target, move, args);
+  applyMoveChargeAttrsInternal((attr: MoveAttr) => attr instanceof attrType, user, target, move, ...args);
 }
 
 export type MoveTargetSet = {

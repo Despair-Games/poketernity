@@ -4,17 +4,23 @@ import { type Move, applyMoveAttrs } from "#app/data/move";
 import { AddBattlerTagAttr } from "./add-battler-tag-attr";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
+/**
+ * Attribute to put the user into a frenzy.
+ * @extends MoveEffectAttr
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Variations_of_Thrash Variations of Thrash}
+ */
 export class FrenzyAttr extends MoveEffectAttr {
   constructor() {
     super(true, { lastHitOnly: true });
   }
 
-  override canApply(user: Pokemon, target: Pokemon, _move: Move, _args: any[]) {
+  override canApply(user: Pokemon, target: Pokemon, _move: Move) {
     return !(this.selfTarget ? user : target).isFainted();
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    if (!super.apply(user, target, move, args)) {
+  /** Adds or progresses the user's {@linkcode BattlerTagType.FRENZY Frenzy} status */
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+    if (!super.apply(user, target, move)) {
       return false;
     }
 
@@ -25,7 +31,7 @@ export class FrenzyAttr extends MoveEffectAttr {
         .map(() => user.getMoveQueue().push({ move: move.id, targets: [target.getBattlerIndex()], ignorePP: true }));
       user.addTag(BattlerTagType.FRENZY, turnCount, move.id, user.id);
     } else {
-      applyMoveAttrs(AddBattlerTagAttr, user, target, move, args);
+      applyMoveAttrs(AddBattlerTagAttr, user, target, move);
       user.lapseTag(BattlerTagType.FRENZY); // if FRENZY is already in effect (moveQueue.length > 0), lapse the tag
     }
 

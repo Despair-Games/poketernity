@@ -13,14 +13,11 @@ import { VariableMoveCategoryAttr } from "#app/data/move-attrs/variable-move-cat
  * @extends VariableMoveCategoryAttr
  */
 export class TeraMoveCategoryAttr extends VariableMoveCategoryAttr {
-  override apply(user: Pokemon, target: Pokemon, _move: Move, args: any[]): boolean {
-    const category = args[0] as NumberHolder;
-
+  override apply(user: Pokemon, target: Pokemon, _move: Move, category: NumberHolder): boolean {
     if (user.isTerastallized() && user.getEffectiveStat(Stat.ATK, target) > user.getEffectiveStat(Stat.SPATK, target)) {
       category.value = MoveCategory.PHYSICAL;
       return true;
     }
-
     return false;
   }
 }

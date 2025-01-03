@@ -13,24 +13,15 @@ import type { MoveConditionFunc } from "../move-conditions";
 
 /**
  * Attribute used for moves that causes the target to repeat their last used move.
- *
- * Used for [Instruct](https://bulbapedia.bulbagarden.net/wiki/Instruct_(move)).
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Instruct_(move) Instruct}.
+ * @extends MoveEffectAttr
  */
 export class RepeatMoveAttr extends MoveEffectAttr {
   constructor() {
     super(false, { trigger: MoveEffectTrigger.POST_APPLY }); // needed to ensure correct protect interaction
   }
 
-  /**
-   * Forces the target to re-use their last used move again
-   *
-   * @param user {@linkcode Pokemon} that used the attack
-   * @param target {@linkcode Pokemon} targeted by the attack
-   * @param _move N/A
-   * @param _args N/A
-   * @returns `true` if the move succeeds
-   */
-  override apply(user: Pokemon, target: Pokemon, _move: Move, _args: any[]): boolean {
+  override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
     // get the last move used (excluding status based failures) as well as the corresponding moveset slot
     const lastMove = target.getLastXMoves(-1).find((m) => m.move !== Moves.NONE)!;
     const movesetMove = target.getMoveset().find((m) => m?.moveId === lastMove.move)!;

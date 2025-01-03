@@ -13,6 +13,11 @@ interface AddBattlerTagAttrOptions extends MoveEffectAttrOptions {
   turnCountMax?: number;
 }
 
+/**
+ * Attribute to add a battler tag to a Pokemon of a given {@linkcode BattlerTagType type}.
+ * @extends MoveEffectAttr
+ * @see {@linkcode BattlerTag}
+ */
 export class AddBattlerTagAttr extends MoveEffectAttr {
   public tagType: BattlerTagType;
   protected override options?: AddBattlerTagAttrOptions;
@@ -49,16 +54,8 @@ export class AddBattlerTagAttr extends MoveEffectAttr {
     return this.options?.turnCountMax ?? this.turnCountMin;
   }
 
-  override canApply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    if (!super.canApply(user, target, move, args)) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    if (!super.apply(user, target, move, args)) {
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+    if (!super.apply(user, target, move)) {
       return false;
     }
 

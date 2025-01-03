@@ -23,17 +23,8 @@ export class SwapStatStagesAttr extends MoveEffectAttr {
     this.stats = stats;
   }
 
-  /**
-   * For all {@linkcode stats}, swaps the user's and target's corresponding stat
-   * stage.
-   * @param user the {@linkcode Pokemon} that used the move
-   * @param target the {@linkcode Pokemon} that the move was used on
-   * @param move N/A
-   * @param args N/A
-   * @returns true if attribute application succeeds
-   */
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    if (super.apply(user, target, move, args)) {
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+    if (super.apply(user, target, move)) {
       for (const s of this.stats) {
         const temp = user.getStatStage(s);
         user.setStatStage(s, target.getStatStage(s));

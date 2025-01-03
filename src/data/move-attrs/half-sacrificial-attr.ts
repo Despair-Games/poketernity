@@ -11,25 +11,17 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
 /**
  * Attribute used for moves which cut the user's Max HP in half.
- * Triggers using {@linkcode MoveEffectTrigger.POST_TARGET}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Mind_Blown_(move) Mind Blown}
+ * and {@linkcode https://bulbapedia.bulbagarden.net/wiki/Steel_Beam_(move) Steel Beam}.
  * @extends MoveEffectAttr
- * @see {@linkcode apply}
  */
 export class HalfSacrificialAttr extends MoveEffectAttr {
   constructor() {
     super(true, { trigger: MoveEffectTrigger.POST_TARGET });
   }
 
-  /**
-   * Cut's the user's Max HP in half and displays the appropriate recoil message
-   * @param user {@linkcode Pokemon} that used the move
-   * @param target N/A
-   * @param move {@linkcode Move} with this attribute
-   * @param args N/A
-   * @returns true if the function succeeds
-   */
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    if (!super.apply(user, target, move, args)) {
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+    if (!super.apply(user, target, move)) {
       return false;
     }
 

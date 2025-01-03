@@ -6,6 +6,10 @@ import i18next from "i18next";
 import type { Move } from "../move";
 import { AddBattlerTagAttr } from "./add-battler-tag-attr";
 
+/**
+ * Attribute to apply the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Perish_Song_(move) Perish Song}.
+ * @extends AddBattlerTagAttr
+ */
 export class FaintCountdownAttr extends AddBattlerTagAttr {
   constructor() {
     super(BattlerTagType.PERISH_SONG, false, {
@@ -14,8 +18,8 @@ export class FaintCountdownAttr extends AddBattlerTagAttr {
     });
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    if (!super.apply(user, target, move, args)) {
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+    if (!super.apply(user, target, move)) {
       return false;
     }
 

@@ -5,6 +5,10 @@ import type { Move } from "../move";
 import type { MoveConditionFunc } from "../move-conditions";
 import { MoveEffectAttr } from "./move-effect-attr";
 
+/**
+ * Attribute to add an arena tag to the field of a given {@linkcode ArenaTagType type}.
+ * @extends MoveEffectAttr
+ */
 export class AddArenaTagAttr extends MoveEffectAttr {
   public tagType: ArenaTagType;
   public turnCount: number;
@@ -25,8 +29,8 @@ export class AddArenaTagAttr extends MoveEffectAttr {
     this.selfSideTarget = selfSideTarget;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    if (!super.apply(user, target, move, args)) {
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+    if (!super.apply(user, target, move)) {
       return false;
     }
 

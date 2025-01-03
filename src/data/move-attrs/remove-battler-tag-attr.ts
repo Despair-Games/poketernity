@@ -3,6 +3,11 @@ import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { Move } from "../move";
 import { MoveEffectAttr } from "./move-effect-attr";
 
+/**
+ * Attribute to remove battler tags within a given type set
+ * from the target.
+ * @extends MoveEffectAttr
+ */
 export class RemoveBattlerTagAttr extends MoveEffectAttr {
   public tagTypes: BattlerTagType[];
 
@@ -12,8 +17,8 @@ export class RemoveBattlerTagAttr extends MoveEffectAttr {
     this.tagTypes = tagTypes;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    if (!super.apply(user, target, move, args)) {
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+    if (!super.apply(user, target, move)) {
       return false;
     }
 

@@ -7,16 +7,11 @@ import { AddArenaTagAttr } from "./add-arena-tag-attr";
 /**
  * Attribute used for Stone Axe and Ceaseless Edge.
  * Applies the given ArenaTrapTag when move is used.
+ * Also can be negated by {@link https://bulbapedia.bulbagarden.net/wiki/Sheer_Force_(Ability) Sheer Force}.
  * @extends AddArenaTagAttr
- * @see {@linkcode apply}
  */
 export class AddArenaTrapTagHitAttr extends AddArenaTagAttr {
-  /**
-   * @param user {@linkcode Pokemon} using this move
-   * @param target {@linkcode Pokemon} target of this move
-   * @param move {@linkcode Move} being used
-   */
-  override apply(user: Pokemon, target: Pokemon, move: Move, _args: any[]): boolean {
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     const moveChance = this.getMoveChance(user, target, move, this.selfTarget, true);
     const side = (this.selfSideTarget ? user : target).getArenaTagSide();
     const tag = globalScene.arena.getTagOnSide(this.tagType, side) as ArenaTrapTag;

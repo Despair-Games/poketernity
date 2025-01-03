@@ -9,32 +9,21 @@ import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effec
 
 /**
  * Attribute that cancels the associated move's effects when set to be combined with the user's ally's
- * subsequent move this turn. Used for Grass Pledge, Water Pledge, and Fire Pledge.
+ * subsequent move this turn.
+ * Used for the {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Pledge_moves Pledge moves}.
  * @extends OverrideMoveEffectAttr
  */
 export class AwaitCombinedPledgeAttr extends OverrideMoveEffectAttr {
   constructor() {
     super(true);
   }
-  /**
-   * If the user's ally is set to use a different move with this attribute,
-   * defer this move's effects for a combined move on the ally's turn.
-   * @param user the {@linkcode Pokemon} using this move
-   * @param _target n/a
-   * @param move the {@linkcode Move} being used
-   * @param args
-   * - [0] a {@linkcode BooleanHolder} indicating whether the move's base
-   * effects should be overridden this turn.
-   * @returns `true` if base move effects were overridden; `false` otherwise
-   */
-  override apply(user: Pokemon, _target: Pokemon, move: Move, args: any[]): boolean {
+
+  override apply(user: Pokemon, _target: Pokemon, move: Move, overridden: BooleanHolder): boolean {
     if (user.turnData.combiningPledge) {
       // "The two moves have become one!\nIt's a combined move!"
       globalScene.queueMessage(i18next.t("moveTriggers:combiningPledge"));
       return false;
     }
-
-    const overridden = args[0] as BooleanHolder;
 
     const allyMovePhase = globalScene.findPhase<MovePhase>(
       (phase) => phase instanceof MovePhase && phase.pokemon.isPlayer() === user.isPlayer(),

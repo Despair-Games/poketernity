@@ -7,21 +7,13 @@ import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
 /**
- * Attribute for {@linkcode Moves.AFTER_YOU}
- *
- * [After You - Move | Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/After_You_(move))
+ * Attribute to allow the target to move immediately after the user
+ * if the target hasn't moved yet this turn.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/After_You_(move) After You}.
+ * @extends MoveEffectAttr
  */
 export class AfterYouAttr extends MoveEffectAttr {
-  /**
-   * Allows the target of this move to act right after the user.
-   *
-   * @param _user {@linkcode Pokemon} that is using the move.
-   * @param target {@linkcode Pokemon} that will move right after this move is used.
-   * @param move {@linkcode Move} {@linkcode Moves.AFTER_YOU}
-   * @param _args N/A
-   * @returns true
-   */
-  override apply(_user: Pokemon, target: Pokemon, _move: Move, _args: any[]): boolean {
+  override apply(_user: Pokemon, target: Pokemon, _move: Move): boolean {
     globalScene.queueMessage(i18next.t("moveTriggers:afterYou", { targetName: getPokemonNameWithAffix(target) }));
 
     //Will find next acting phase of the targeted pokémon, delete it and queue it next on successful delete.
