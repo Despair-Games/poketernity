@@ -6,7 +6,7 @@ import { Phase } from "#app/phase";
 import { handleTutorial, Tutorial } from "#app/tutorial";
 import { Mode } from "#app/ui/ui";
 import { executeIf, getCookie, removeCookie } from "#app/utils";
-import i18next, { t } from "i18next";
+import i18next from "i18next";
 import { SelectGenderPhase } from "./select-gender-phase";
 import { UnavailablePhase } from "./unavailable-phase";
 
@@ -105,7 +105,7 @@ export class LoginPhase extends Phase {
             this.end();
           } else {
             ui.setMode(Mode.MESSAGE);
-            ui.showText(t("menu:failedToLoadSaveData"));
+            ui.showText(i18next.t("menu:failedToLoadSaveData"));
           }
         });
       }
