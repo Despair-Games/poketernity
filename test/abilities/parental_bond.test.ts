@@ -429,7 +429,7 @@ describe("Abilities - Parental Bond", () => {
     expect(enemyPokemon.damageAndUpdate).toHaveBeenCalledTimes(2);
   });
 
-  it("should only apply the effects of Secret Power on the first hit", async () => {
+  it("should only apply the effects of Secret Power on the final hit", async () => {
     game.override.moveset(Moves.SECRET_POWER).enemyMoveset(Moves.MISTY_TERRAIN); // Secret Power lowers Sp Atk in Misty Terrain
 
     vi.spyOn(allMoves[Moves.SECRET_POWER], "chance", "get").mockReturnValue(-1);
