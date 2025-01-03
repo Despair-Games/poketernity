@@ -578,7 +578,7 @@ export function initAbilities() {
       .condition(getWeatherCondition(WeatherType.HAIL, WeatherType.SNOW))
       .ignorable(),
     new Ability(Abilities.GLUTTONY, 4).attr(ReduceBerryUseThresholdAbAttr),
-    new Ability(Abilities.ANGER_POINT, 4).attr(PostDefendCritStatStageChangeAbAttr, Stat.ATK, 6),
+    new Ability(Abilities.ANGER_POINT, 4).attr(PostDefendCritStatStageChangeAbAttr, Stat.ATK, 12),
     new Ability(Abilities.UNBURDEN, 4)
       .attr(PostItemLostApplyBattlerTagAbAttr, BattlerTagType.UNBURDEN)
       .bypassFaint() // Allows reviver seed to activate Unburden

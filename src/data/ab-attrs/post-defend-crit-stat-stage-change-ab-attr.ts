@@ -1,4 +1,4 @@
-import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
+import { Stat } from "#enums/stat";
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { HitResult } from "#app/field/pokemon";
@@ -7,6 +7,11 @@ import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import type { BattleStat } from "#enums/stat";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 
+/**
+ * Attribute that prompts a stat stage change after the ability holder received a critical hit
+ * Abilities using this attribute are:
+ * - Anger Point: Maximizes Attack stat
+ */
 export class PostDefendCritStatStageChangeAbAttr extends PostDefendAbAttr {
   private readonly stat: BattleStat;
   private readonly stages: number;
@@ -22,22 +27,24 @@ export class PostDefendCritStatStageChangeAbAttr extends PostDefendAbAttr {
     pokemon: Pokemon,
     _passive: boolean,
     simulated: boolean,
-    _attacker: Pokemon,
+    attacker: Pokemon,
     _move: Move,
     _hitResult: HitResult,
     _args: any[],
   ): boolean {
-    if (!simulated) {
-      globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [this.stat], this.stages));
-    }
-
-    return true;
-  }
-
-  override getCondition(): AbAttrCondition {
-    return (pokemon: Pokemon) =>
+    const attacksReceivedEntry = pokemon.turnData.attacksReceived[0];
+    if (
       pokemon.turnData.attacksReceived.length !== 0
-      // TODO: Normalize `attacksReceived[]` checks
-      && pokemon.turnData.attacksReceived[pokemon.turnData.attacksReceived.length - 1].isCritical;
+      && attacksReceivedEntry.isCritical
+      && attacksReceivedEntry.sourceId === attacker.id
+      && pokemon.summonData.statStages[Stat.ATK] < 6
+    ) {
+      if (!simulated) {
+        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [this.stat], this.stages));
+      }
+      return true;
+    } else {
+      return false;
+    }
   }
 }
