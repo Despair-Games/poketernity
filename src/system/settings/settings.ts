@@ -177,8 +177,8 @@ export const SettingKeys = {
 };
 
 export enum MusicPreference {
-  CONSISTENT,
-  MIXED,
+  GENFIVE,
+  ALLGENS,
 }
 
 /**
@@ -659,15 +659,15 @@ export const Setting: Array<Setting> = [
     label: i18next.t("settings:musicPreference"),
     options: [
       {
-        value: "Consistent",
-        label: i18next.t("settings:consistent"),
+        value: "Gen V + PMD",
+        label: i18next.t("settings:musicGenFive"),
       },
       {
-        value: "Mixed",
-        label: i18next.t("settings:mixed"),
+        value: "All Gens",
+        label: i18next.t("settings:musicAllGens"),
       },
     ],
-    default: MusicPreference.MIXED,
+    default: MusicPreference.ALLGENS,
     type: SettingType.AUDIO,
     requireReload: true,
   },
@@ -795,10 +795,6 @@ export function setSetting(setting: string, value: number): boolean {
       globalScene.updateMoneyText(false);
       break;
     case SettingKeys.Sprite_Set:
-      globalScene.experimentalSprites = !!value;
-      if (value) {
-        globalScene.initExpSprites();
-      }
       break;
     case SettingKeys.Move_Animations:
       globalScene.moveAnimations = Setting[index].options[value].value === "On";
