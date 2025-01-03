@@ -7,6 +7,7 @@ import { getTextColor, TextStyle } from "#app/ui/text";
 import { Mode } from "#app/ui/ui";
 import i18next from "i18next";
 import { PokemonPhase } from "./pokemon-phase";
+import { settings } from "#app/system/settings/settings-manager";
 
 export class ScanIvsPhase extends PokemonPhase {
   private shownIvs: number;
@@ -30,7 +31,7 @@ export class ScanIvsPhase extends PokemonPhase {
     let statsContainer: Phaser.GameObjects.Sprite[] = [];
     let statsContainerLabels: Phaser.GameObjects.Sprite[] = [];
     const enemyField = globalScene.getEnemyField();
-    const uiTheme = globalScene.uiTheme; // Assuming uiTheme is accessible
+    const uiTheme = settings.display.uiTheme; // Assuming uiTheme is accessible
     for (let e = 0; e < enemyField.length; e++) {
       enemyIvs = enemyField[e].ivs;
       const currentIvs = globalScene.gameData.dexData[enemyField[e].species.getRootSpeciesId()].ivs; // we are using getRootSpeciesId() here because we want to check against the baby form, not the mid form if it exists
@@ -51,7 +52,7 @@ export class ScanIvsPhase extends PokemonPhase {
       }
     }
 
-    if (!globalScene.hideIvs) {
+    if (!settings.general.hideIvScanner) {
       globalScene.ui.showText(
         i18next.t("battle:ivScannerUseQuestion", { pokemonName: getPokemonNameWithAffix(pokemon) }),
         null,

@@ -2,6 +2,7 @@ import { globalScene } from "#app/global-scene";
 import { PokeballType } from "#enums/pokeball";
 import type { Variant } from "#app/data/variant";
 import { getFrameMs, randGauss } from "#app/utils";
+import { settings } from "#app/system/settings/settings-manager";
 
 export function addPokeballOpenParticles(x: number, y: number, pokeballType: PokeballType): void {
   switch (pokeballType) {
@@ -49,7 +50,7 @@ function doDefaultPbOpenParticles(x: number, y: number, radius: number) {
     particle.play({
       key: "pb_open_particle",
       startFrame: (index + 3) % 4,
-      frameRate: Math.floor(16 * globalScene.gameSpeed),
+      frameRate: Math.floor(16 * settings.general.gameSpeed),
     });
     globalScene.tweens.add({
       targets: particle,

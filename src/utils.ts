@@ -1,7 +1,8 @@
+import { api } from "#app/plugins/api/api";
 import { MoneyFormat } from "#enums/money-format";
 import { Moves } from "#enums/moves";
 import i18next from "i18next";
-import { api } from "#app/plugins/api/api";
+import { supportedLanguages } from "./system/settings/supported-languages";
 
 export type nil = null | undefined;
 
@@ -224,7 +225,9 @@ export function formatFancyLargeNumber(number: number, rounded: number = 3): str
     number /= Math.pow(1000, exponent);
   }
 
-  return `${exponent === 0 || number % 1 === 0 ? number : number.toFixed(rounded)}${AbbreviationsLargeNumber[exponent]}`;
+  return `${exponent === 0 || number % 1 === 0 ? number : number.toFixed(rounded)}${
+    AbbreviationsLargeNumber[exponent]
+  }`;
 }
 
 export function formatMoney(format: MoneyFormat, amount: number) {
@@ -289,7 +292,9 @@ export const isBeta = import.meta.env.MODE === "beta"; // this checks to see if 
 export function setCookie(cName: string, cValue: string): void {
   const expiration = new Date();
   expiration.setTime(new Date().getTime() + 3600000 * 24 * 30 * 3 /*7*/);
-  document.cookie = `${cName}=${cValue};Secure;SameSite=Strict;Domain=${window.location.hostname};Path=/;Expires=${expiration.toUTCString()}`;
+  document.cookie = `${cName}=${cValue};Secure;SameSite=Strict;Domain=${
+    window.location.hostname
+  };Path=/;Expires=${expiration.toUTCString()}`;
 }
 
 export function removeCookie(cName: string): void {
@@ -630,4 +635,40 @@ export function animationFileName(move: Moves): string {
  */
 export function camelCaseToKebabCase(str: string): string {
   return str.replace(/[A-Z]+(?![a-z])|[A-Z]/g, (s, o) => (o ? "-" : "") + s.toLowerCase());
+}
+
+/**
+ * Check if a language is supported
+ * @param key The key of the language to check
+ * @returns `true` if the language is supported
+ */
+export function isSupportedLanguage(key: string) {
+  return supportedLanguages.some((l) => l.key === key);
+}
+
+/**
+ * Capitalizes the first letter of a string
+ * @param str The string to capitalize
+ * @returns The capitalized string
+ */
+export function capitalize(str: string) {
+  return String(str).charAt(0).toUpperCase() + String(str).slice(1);
+}
+
+/**
+ * Check if the device has a touchscreen.
+ *
+ * @returns `true` if the device has a touchscreen, otherwise `false`.
+ */
+export function hasTouchscreen(): boolean {
+  return window.matchMedia("(hover: none), (pointer: coarse)").matches;
+}
+
+/**
+ * Check if the device is in landscape mode.
+ * @returns `true` if the device is in landscape mode, otherwise `false` which means it is in portrait mode.
+ */
+export function isLandscapeMode() {
+  const { width, height } = window.screen;
+  return width > height;
 }

@@ -1,5 +1,7 @@
 import type BattleScene from "#app/battle-scene";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
+import { settings } from "#app/system/settings/settings-manager";
+import { ShopCursorTarget } from "#app/enums/shop-cursor-target";
 import { PlayerPokemon } from "#app/field/pokemon";
 import { ModifierTier } from "#app/modifier/modifier-tier";
 import type { CustomModifierSettings } from "#app/modifier/modifier-type";
@@ -88,7 +90,7 @@ describe("SelectModifierPhase", () => {
   it.todo("should generate random modifiers from reroll", async () => {
     await game.classicMode.startBattle([Species.ABRA, Species.VOLCARONA]);
     scene.money = 1000000;
-    scene.shopCursorTarget = 0;
+    settings.update("display", "shopCursorTarget", ShopCursorTarget.REROLL);
 
     game.move.select(Moves.FISSURE);
     await game.phaseInterceptor.to("SelectModifierPhase");

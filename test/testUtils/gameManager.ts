@@ -2,6 +2,7 @@ import { updateUserInfo } from "#app/account";
 import { BattlerIndex } from "#app/battle";
 import BattleScene from "#app/battle-scene";
 import { getMoveTargets } from "#app/data/move";
+import { settings } from "#app/system/settings/settings-manager";
 import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
 import Trainer from "#app/field/trainer";
 import { GameModes, getGameMode } from "#app/game-mode";
@@ -35,6 +36,7 @@ import { BattleStyle } from "#enums/battle-style";
 import { Button } from "#enums/buttons";
 import { ExpGainsSpeed } from "#enums/exp-gains-speed";
 import { ExpNotification } from "#enums/exp-notification";
+import { HpBarSpeed } from "#enums/hp-bar-speed";
 import type { Moves } from "#enums/moves";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PlayerGender } from "#enums/player-gender";
@@ -153,16 +155,16 @@ export class GameManager {
     this.phaseInterceptor.pop();
     await this.phaseInterceptor.run(TitlePhase);
 
-    this.scene.gameSpeed = 5;
-    this.scene.moveAnimations = false;
-    this.scene.showLevelUpStats = false;
-    this.scene.expGainsSpeed = ExpGainsSpeed.SKIP;
-    this.scene.expParty = ExpNotification.SKIP;
-    this.scene.hpBarSpeed = 3;
-    this.scene.enableTutorials = false;
+    settings.update("general", "gameSpeed", 5);
+    settings.update("display", "enableMoveAnimations", false);
+    settings.update("display", "showStatsOnLevelUp", false);
+    settings.update("general", "expGainsSpeed", ExpGainsSpeed.SKIP);
+    settings.update("general", "partyExpNotificationMode", ExpNotification.SKIP);
+    settings.update("general", "hpBarSpeed", HpBarSpeed.SKIP);
+    settings.update("general", "enableTutorials", false);
     this.scene.gameData.gender = PlayerGender.MALE; // set initial player gender
-    this.scene.battleStyle = this.settings.battleStyle;
-    this.scene.fieldVolume = 0;
+    settings.update("general", "battleStyle", this.settings.battleStyle);
+    settings.update("audio", "fieldVolume", 0);
   }
 
   /**
@@ -249,7 +251,7 @@ export class GameManager {
   async startBattle(species?: Species[]) {
     await this.classicMode.runToSummon(species);
 
-    if (this.scene.battleStyle === BattleStyle.SWITCH) {
+    if (settings.general.battleStyle === BattleStyle.SWITCH) {
       this.onNextPrompt(
         "CheckSwitchPhase",
         Mode.CONFIRM,

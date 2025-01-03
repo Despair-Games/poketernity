@@ -16,6 +16,7 @@ import { Device } from "#enums/devices";
 import { NavigationManager } from "#app/ui/settings/navigationMenu";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
+import { MAPPING_CONFIG_LS_KEY } from "#app/constants";
 
 /**
  * Class representing the settings UI handler for keyboards.
@@ -37,7 +38,7 @@ export default class SettingsKeyboardUiHandler extends AbstractControlSettingsUi
     this.configs = [cfg_keyboard_qwerty];
     this.commonSettingsCount = 0;
     this.textureOverride = "keyboard";
-    this.localStoragePropertyName = "settingsKeyboard";
+    this.localStoragePropertyName = MAPPING_CONFIG_LS_KEY;
     this.settingBlacklisted = settingKeyboardBlackList;
     this.device = Device.KEYBOARD;
 

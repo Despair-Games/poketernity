@@ -3,6 +3,7 @@ import { TextStyle, addBBCodeTextObject, addTextObject, getTextColor } from "./t
 import { PERMANENT_STATS, getStatKey } from "#app/enums/stat";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
+import { settings } from "#app/system/settings/settings-manager";
 
 const ivChartSize = 24;
 const ivChartStatCoordMultipliers = [
@@ -114,7 +115,7 @@ export class StatsContainer extends Phaser.GameObjects.Container {
         ])
         .flat();
       const lastIvChartData = this.statsIvsCache || defaultIvChartData;
-      const perfectIVColor: string = getTextColor(TextStyle.SUMMARY_GOLD, false, globalScene.uiTheme);
+      const perfectIVColor: string = getTextColor(TextStyle.SUMMARY_GOLD, false, settings.display.uiTheme);
       this.statsIvsCache = ivChartData.slice(0);
 
       this.ivStatValueTexts.map((t: BBCodeText, i: number) => {
@@ -128,7 +129,7 @@ export class StatsContainer extends Phaser.GameObjects.Container {
         }
         if (this.showDiff && originalIvs) {
           if (originalIvs[i] < ivs[i]) {
-            label += ` ([color=${getTextColor(TextStyle.SUMMARY_BLUE, false, globalScene.uiTheme)}][shadow=${getTextColor(TextStyle.SUMMARY_BLUE, true, globalScene.uiTheme)}]+${ivs[i] - originalIvs[i]}[/shadow][/color])`;
+            label += ` ([color=${getTextColor(TextStyle.SUMMARY_BLUE, false, settings.display.uiTheme)}][shadow=${getTextColor(TextStyle.SUMMARY_BLUE, true, settings.display.uiTheme)}]+${ivs[i] - originalIvs[i]}[/shadow][/color])`;
           } else {
             label += " (-)";
           }

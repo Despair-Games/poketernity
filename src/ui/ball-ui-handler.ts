@@ -9,6 +9,7 @@ import type { CommandPhase } from "#app/phases/command-phase";
 import { globalScene } from "#app/global-scene";
 import { PokeballType } from "#app/enums/pokeball";
 import { getEnumLength } from "#app/utils";
+import { settings } from "#app/system/settings/settings-manager";
 
 export default class BallUiHandler extends UiHandler {
   private pokeballSelectContainer: Phaser.GameObjects.Container;
@@ -26,7 +27,7 @@ export default class BallUiHandler extends UiHandler {
   setup() {
     const ui = this.getUi();
 
-    this.scale = getTextStyleOptions(TextStyle.WINDOW, globalScene.uiTheme).scale;
+    this.scale = getTextStyleOptions(TextStyle.WINDOW, settings.display.uiTheme).scale;
 
     let optionsTextContent = "";
 

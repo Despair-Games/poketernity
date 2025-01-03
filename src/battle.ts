@@ -21,7 +21,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import type { Moves } from "#enums/moves";
 import { PlayerGender } from "#enums/player-gender";
-import { MusicPreference } from "#app/system/settings/settings";
+import { MusicPreference } from "#enums/music-preference";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
 import i18next from "#app/plugins/i18n";
@@ -30,6 +30,7 @@ import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import type { CustomModifierSettings } from "#app/modifier/modifier-type";
 import { ModifierTier } from "#app/modifier/modifier-tier";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
+import { settings } from "./system/settings/settings-manager";
 
 export enum ClassicFixedBossWaves {
   // TODO: other fixed wave battles should be added here
@@ -238,7 +239,7 @@ export default class Battle {
       if (!this.started && this.trainer?.config.encounterBgm && this.trainer?.getEncounterMessages()?.length) {
         return `encounter_${this.trainer?.getEncounterBgm()}`;
       }
-      if (globalScene.musicPreference === MusicPreference.GENFIVE) {
+      if (settings.audio.musicPreference === MusicPreference.GENFIVE) {
         return this.trainer?.getBattleBgm() ?? null;
       } else {
         return this.trainer?.getMixedBattleBgm() ?? null;
@@ -255,7 +256,7 @@ export default class Battle {
         return "battle_final_encounter";
       }
       if (pokemon.species.isLegendLike()) {
-        if (globalScene.musicPreference === MusicPreference.GENFIVE) {
+        if (settings.audio.musicPreference === MusicPreference.GENFIVE) {
           switch (pokemon.species.speciesId) {
             case Species.REGIROCK:
             case Species.REGICE:
@@ -272,7 +273,7 @@ export default class Battle {
               }
               return "battle_legendary_unova";
           }
-        } else if (globalScene.musicPreference === MusicPreference.ALLGENS) {
+        } else if (settings.audio.musicPreference === MusicPreference.ALLGENS) {
           switch (pokemon.species.speciesId) {
             case Species.ARTICUNO:
             case Species.ZAPDOS:

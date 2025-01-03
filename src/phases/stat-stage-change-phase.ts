@@ -14,6 +14,7 @@ import { PokemonPhase } from "./pokemon-phase";
 import { Stat, type BattleStat, getStatKey, getStatStageChangeDescriptionKey } from "#enums/stat";
 import { PostStatStageChangeAbAttr } from "#app/data/ab-attrs/post-stat-stage-change-ab-attr";
 import { ProtectStatAbAttr } from "#app/data/ab-attrs/protect-stat-ab-attr";
+import { settings } from "#app/system/settings/settings-manager";
 
 export type StatStageChangeCallback = (
   target: Pokemon | null,
@@ -172,7 +173,7 @@ export class StatStageChangePhase extends PokemonPhase {
       handleTutorial(Tutorial.Stat_Change).then(() => super.end());
     };
 
-    if (relLevels.filter((l) => l).length && globalScene.moveAnimations) {
+    if (relLevels.filter((l) => l).length && settings.display.enableMoveAnimations) {
       pokemon.enableMask();
       const pokemonMaskSprite = pokemon.maskSprite;
 

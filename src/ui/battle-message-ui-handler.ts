@@ -8,6 +8,7 @@ import { Button } from "#enums/buttons";
 import i18next from "i18next";
 import type { Stat } from "#app/enums/stat";
 import { PERMANENT_STATS, getStatKey } from "#app/enums/stat";
+import { settings } from "#app/system/settings/settings-manager";
 
 export default class BattleMessageUiHandler extends MessageUiHandler {
   private levelUpStatsContainer: Phaser.GameObjects.Container;
@@ -33,7 +34,7 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
     this.textTimer = null;
     this.textCallbackTimer = null;
 
-    this.bg = globalScene.add.sprite(0, 0, "bg", globalScene.windowType);
+    this.bg = globalScene.add.sprite(0, 0, "bg", settings.display.uiWindowType);
     this.bg.setName("sprite-battle-msg-bg");
     this.bg.setOrigin(0, 1);
     ui.add(this.bg);
@@ -75,7 +76,7 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
     this.nameBoxContainer = globalScene.add.container(0, -16);
     this.nameBoxContainer.setVisible(false);
 
-    this.nameBox = globalScene.add.nineslice(0, 0, "namebox", globalScene.windowType, 72, 16, 8, 8, 5, 5);
+    this.nameBox = globalScene.add.nineslice(0, 0, "namebox", settings.display.uiWindowType, 72, 16, 8, 8, 5, 5);
     this.nameBox.setOrigin(0, 0);
 
     this.nameText = addTextObject(8, 0, "Rival", TextStyle.MESSAGE, { maxLines: 1 });
@@ -202,7 +203,7 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
 
   promptLevelUpStats(partyMemberIndex: number, prevStats: number[], showTotals: boolean): Promise<void> {
     return new Promise((resolve) => {
-      if (!globalScene.showLevelUpStats) {
+      if (!settings.display.showStatsOnLevelUp) {
         return resolve();
       }
       const newStats = globalScene.getPlayerParty()[partyMemberIndex].stats;
@@ -263,7 +264,7 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
   getIvDescriptor(value: number, typeIv: number, pokemonId: number): string {
     const starterSpecies = globalScene.getPokemonById(pokemonId)!.species.getRootSpeciesId(); // we are using getRootSpeciesId() here because we want to check against the baby form, not the mid form if it exists
     const starterIvs: number[] = globalScene.gameData.dexData[starterSpecies].ivs;
-    const uiTheme = globalScene.uiTheme; // Assuming uiTheme is accessible
+    const uiTheme = settings.display.uiTheme; // Assuming uiTheme is accessible
 
     // Function to wrap text in color based on comparison
     const coloredText = (text: string, isBetter: boolean, ivValue) => {

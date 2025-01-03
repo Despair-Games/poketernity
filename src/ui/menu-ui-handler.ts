@@ -17,6 +17,7 @@ import MessageUiHandler from "./message-ui-handler";
 import { TextStyle, addTextObject, getTextStyleOptions } from "./text";
 import { Mode } from "./ui";
 import { WindowVariant, addWindow } from "./ui-theme";
+import { settings } from "#app/system/settings/settings-manager";
 
 enum MenuOptions {
   GAME_SETTINGS,
@@ -137,7 +138,7 @@ export default class MenuUiHandler extends MessageUiHandler {
     );
     this.optionSelectText.setLineSpacing(12);
 
-    this.scale = getTextStyleOptions(TextStyle.WINDOW, globalScene.uiTheme).scale;
+    this.scale = getTextStyleOptions(TextStyle.WINDOW, settings.display.uiTheme).scale;
     this.menuBg = addWindow(
       globalScene.game.canvas.width / 6 - (this.optionSelectText.displayWidth + 25),
       0,

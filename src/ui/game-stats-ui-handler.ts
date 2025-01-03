@@ -11,6 +11,7 @@ import { Button } from "#enums/buttons";
 import i18next from "i18next";
 import { UiTheme } from "#enums/ui-theme";
 import { globalScene } from "#app/global-scene";
+import { settings } from "#app/system/settings/settings-manager";
 
 interface DisplayStat {
   label_key?: string;
@@ -291,7 +292,7 @@ export default class GameStatsUiHandler extends UiHandler {
     this.gameStatsContainer.add(this.statsContainer);
 
     // arrows to show that we can scroll through the stats
-    const isLegacyTheme = globalScene.uiTheme === UiTheme.LEGACY;
+    const isLegacyTheme = settings.display.uiTheme === UiTheme.LEGACY;
     this.arrowDown = globalScene.add.sprite(
       statsBgWidth,
       globalScene.game.canvas.height / 6 - (isLegacyTheme ? 9 : 5),
@@ -318,7 +319,7 @@ export default class GameStatsUiHandler extends UiHandler {
 
     this.arrowUp.play("prompt");
     this.arrowDown.play("prompt");
-    if (globalScene.uiTheme === UiTheme.LEGACY) {
+    if (settings.display.uiTheme === UiTheme.LEGACY) {
       this.arrowUp.setTint(0x484848);
       this.arrowDown.setTint(0x484848);
     }

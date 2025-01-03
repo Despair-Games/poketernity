@@ -6,6 +6,7 @@ import InputText from "phaser3-rex-plugins/plugins/inputtext";
 import { globalScene } from "#app/global-scene";
 import { ModifierTier } from "../modifier/modifier-tier";
 import i18next from "#app/plugins/i18n";
+import { settings } from "#app/system/settings/settings-manager";
 
 export enum TextStyle {
   MESSAGE,
@@ -61,7 +62,7 @@ export function addTextObject(
 ): Phaser.GameObjects.Text {
   const { scale, styleOptions, shadowColor, shadowXpos, shadowYpos } = getTextStyleOptions(
     style,
-    globalScene.uiTheme,
+    settings.display.uiTheme,
     extraStyleOptions,
   );
 
@@ -86,7 +87,7 @@ export function setTextStyle(
 ) {
   const { scale, styleOptions, shadowColor, shadowXpos, shadowYpos } = getTextStyleOptions(
     style,
-    globalScene.uiTheme,
+    settings.display.uiTheme,
     extraStyleOptions,
   );
   obj.setScale(scale);
@@ -109,7 +110,7 @@ export function addBBCodeTextObject(
 ): BBCodeText {
   const { scale, styleOptions, shadowColor, shadowXpos, shadowYpos } = getTextStyleOptions(
     style,
-    globalScene.uiTheme,
+    settings.display.uiTheme,
     extraStyleOptions,
   );
 
@@ -136,7 +137,7 @@ export function addTextInputObject(
   style: TextStyle,
   extraStyleOptions?: InputText.IConfig,
 ): InputText {
-  const { scale, styleOptions } = getTextStyleOptions(style, globalScene.uiTheme, extraStyleOptions);
+  const { scale, styleOptions } = getTextStyleOptions(style, settings.display.uiTheme, extraStyleOptions);
 
   const ret = new InputText(globalScene, x, y, width, height, styleOptions as InputText.IConfig);
   globalScene.add.existing(ret);

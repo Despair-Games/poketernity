@@ -1,7 +1,12 @@
-import type { Mode } from "../ui";
+import type { SupportedLanguage } from "#app/@types/Language";
+import { LANGUAGE_MAX_OPTIONS } from "#app/constants";
+import { eventBus } from "#app/event-bus";
+import { globalScene } from "#app/global-scene";
+import { displaySettingUiItems } from "#app/ui/settings/settings-ui-items";
+import { supportedLanguages } from "#app/system/settings/supported-languages";
+import i18next from "i18next";
+import { Mode } from "../ui";
 import AbstractSettingsUiHandler from "./abstract-settings-ui-handler";
-import { SettingKeys, SettingType } from "#app/system/settings/settings";
-import { LOCALE_LS_KEY } from "#app/constants";
 ("#app/inputs-controller");
 
 export default class SettingsDisplayUiHandler extends AbstractSettingsUiHandler {
@@ -10,94 +15,50 @@ export default class SettingsDisplayUiHandler extends AbstractSettingsUiHandler 
    *
    * @param mode - The UI mode, optional.
    */
-  constructor(mode: Mode | null = null) {
-    super(SettingType.DISPLAY, mode);
-    this.title = "Display";
+  constructor() {
+    super("display", displaySettingUiItems);
 
-    /**
-     * Update to current language from default value.
-     * - default value is 'English'
-     */
-    const languageIndex = this.settings.findIndex((s) => s.key === SettingKeys.Language);
-    if (languageIndex >= 0) {
-      const currentLocale = localStorage.getItem(LOCALE_LS_KEY);
-      switch (currentLocale) {
-        case "en":
-          this.settings[languageIndex].options[0] = {
-            value: "English",
-            label: "English",
-          };
-          break;
-        case "es-ES":
-          this.settings[languageIndex].options[0] = {
-            value: "Español (ES)",
-            label: "Español (ES)",
-          };
-          break;
-        case "it":
-          this.settings[languageIndex].options[0] = {
-            value: "Italiano",
-            label: "Italiano",
-          };
-          break;
-        case "fr":
-          this.settings[languageIndex].options[0] = {
-            value: "Français",
-            label: "Français",
-          };
-          break;
-        case "de":
-          this.settings[languageIndex].options[0] = {
-            value: "Deutsch",
-            label: "Deutsch",
-          };
-          break;
-        case "pt-BR":
-          this.settings[languageIndex].options[0] = {
-            value: "Português (BR)",
-            label: "Português (BR)",
-          };
-          break;
-        case "zh-CN":
-          this.settings[languageIndex].options[0] = {
-            value: "简体中文",
-            label: "简体中文",
-          };
-          break;
-        case "zh-TW":
-          this.settings[languageIndex].options[0] = {
-            value: "繁體中文",
-            label: "繁體中文",
-          };
-          break;
-        case "ko":
-        case "ko-KR":
-          this.settings[languageIndex].options[0] = {
-            value: "한국어",
-            label: "한국어",
-          };
-          break;
-        case "ja":
-          this.settings[languageIndex].options[0] = {
-            value: "日本語",
-            label: "日本語",
-          };
-          break;
-        case "ca-ES":
-          this.settings[languageIndex].options[0] = {
-            value: "Català",
-            label: "Català",
-          };
-          break;
-        default:
-          this.settings[languageIndex].options[0] = {
-            value: "English",
-            label: "English",
-          };
-          break;
-      }
-    }
+    eventBus.on("language/change", () => {
+      globalScene.ui.setOverlayMode(Mode.OPTION_SELECT, {
+        options: [
+          ...supportedLanguages
+            .filter((l) => l.key !== i18next.resolvedLanguage)
+            .map((l) => {
+              return {
+                label: l.label,
+                handler: () => {
+                  if (this.canLoseProgress()) {
+                    this.showConfirm(
+                      i18next.t("menuUiHandler:losingProgressionWarning"),
+                      () => this.handleChangeLanguage(l),
+                      () => this.handleCancelLanguageChange(),
+                    );
+                  } else {
+                    this.handleChangeLanguage(l);
+                  }
+                },
+              };
+            }),
+          {
+            label: i18next.t("settings:back"),
+            handler: () => this.handleCancelLanguageChange(),
+          },
+        ],
+        maxOptions: LANGUAGE_MAX_OPTIONS,
+      });
+    });
+  }
 
-    this.localStorageKey = "settings";
+  private handleCancelLanguageChange() {
+    this.setOptionCursor(0, 0);
+    globalScene.ui.revertMode();
+    return true;
+  }
+
+  private handleChangeLanguage(lan: SupportedLanguage) {
+    i18next.changeLanguage(lan.key);
+    this.setOptionCursor(0, 0);
+    this.updateOptionValueLabel(0, 0, lan.label);
+    window.location.reload();
   }
 }

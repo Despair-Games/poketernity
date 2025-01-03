@@ -6,6 +6,7 @@ import { NumberHolder } from "#app/utils";
 import { HidePartyExpBarPhase } from "./hide-party-exp-bar-phase";
 import { LevelUpPhase } from "./level-up-phase";
 import { PlayerPartyMemberPokemonPhase } from "./player-party-member-pokemon-phase";
+import { settings } from "#app/system/settings/settings-manager";
 
 export class ShowPartyExpBarPhase extends PlayerPartyMemberPokemonPhase {
   private expValue: number;
@@ -33,24 +34,29 @@ export class ShowPartyExpBarPhase extends PlayerPartyMemberPokemonPhase {
     globalScene.unshiftPhase(new HidePartyExpBarPhase());
     pokemon.updateInfo();
 
-    if (globalScene.expParty === ExpNotification.SKIP) {
+    if (settings.general.partyExpNotificationMode === ExpNotification.SKIP) {
       this.end();
-    } else if (globalScene.expParty === ExpNotification.ONLY_LEVEL_UP) {
+    } else if (settings.general.partyExpNotificationMode === ExpNotification.ONLY_LEVEL_UP) {
       if (newLevel > lastLevel) {
         // this means if we level up
         // instead of displaying the exp gain in the small frame, we display the new level
         // we use the same method for mode 0 & 1, by giving a parameter saying to display the exp or the level
         globalScene.partyExpBar
-          .showPokemonExp(pokemon, exp.value, globalScene.expParty === ExpNotification.ONLY_LEVEL_UP, newLevel)
+          .showPokemonExp(
+            pokemon,
+            exp.value,
+            settings.general.partyExpNotificationMode === ExpNotification.ONLY_LEVEL_UP,
+            newLevel,
+          )
           .then(() => {
-            setTimeout(() => this.end(), 800 / Math.pow(2, globalScene.expGainsSpeed));
+            setTimeout(() => this.end(), 800 / Math.pow(2, settings.general.expGainsSpeed));
           });
       } else {
         this.end();
       }
-    } else if (globalScene.expGainsSpeed < ExpGainsSpeed.SKIP) {
+    } else if (settings.general.expGainsSpeed < ExpGainsSpeed.SKIP) {
       globalScene.partyExpBar.showPokemonExp(pokemon, exp.value, false, newLevel).then(() => {
-        setTimeout(() => this.end(), 500 / Math.pow(2, globalScene.expGainsSpeed));
+        setTimeout(() => this.end(), 500 / Math.pow(2, settings.general.expGainsSpeed));
       });
     } else {
       this.end();

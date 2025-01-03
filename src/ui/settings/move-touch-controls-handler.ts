@@ -1,3 +1,4 @@
+import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import type TouchControl from "#app/touch-controls";
 import type UI from "#app/ui/ui";
@@ -57,6 +58,10 @@ export default class MoveTouchControlsHandler {
       if (screenSize.width > screenSize.height !== this.isLandscapeMode) {
         this.changeOrientation(screenSize.width > screenSize.height);
       }
+    });
+
+    eventBus.on("touchControls/move/start", () => {
+      this.enableConfigurationMode(globalScene.ui);
     });
   }
 
@@ -119,14 +124,20 @@ export default class MoveTouchControlsHandler {
     saveButton.addEventListener("click", () => {
       this.saveCurrentPositions();
       this.disableConfigurationMode();
+      eventBus.emit("touchControls/move/save");
+      eventBus.emit("touchControls/move/end");
     });
     resetButton.addEventListener("click", () => {
       this.resetPositions();
+      eventBus.emit("touchControls/move/reset");
+      eventBus.emit("touchControls/move/end");
     });
     cancelButton.addEventListener("click", () => {
       const positions = this.getSavedPositionsOfCurrentOrientation();
       this.setPositions(positions);
       this.disableConfigurationMode();
+      eventBus.emit("touchControls/move/cancel");
+      eventBus.emit("touchControls/move/end");
     });
   }
 

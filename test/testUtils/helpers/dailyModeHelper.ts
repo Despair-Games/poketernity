@@ -8,6 +8,7 @@ import { TurnInitPhase } from "#app/phases/turn-init-phase";
 import type SaveSlotSelectUiHandler from "#app/ui/save-slot-select-ui-handler";
 import { Mode } from "#app/ui/ui";
 import { GameManagerHelper } from "#test/testUtils/helpers/gameManagerHelper";
+import { settings } from "#app/system/settings/settings-manager";
 
 /**
  * Helper to handle daily mode specifics
@@ -48,7 +49,7 @@ export class DailyModeHelper extends GameManagerHelper {
   async startBattle() {
     await this.runToSummon();
 
-    if (this.game.scene.battleStyle === BattleStyle.SWITCH) {
+    if (settings.general.battleStyle === BattleStyle.SWITCH) {
       this.game.onNextPrompt(
         "CheckSwitchPhase",
         Mode.CONFIRM,

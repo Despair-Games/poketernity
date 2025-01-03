@@ -1,5 +1,6 @@
-import { SettingType } from "../../system/settings/settings";
-import type { Mode } from "../ui";
+import { generalSettingsUiItems } from "#app/ui/settings/settings-ui-items";
+import { hasTouchscreen, isLandscapeMode } from "#app/utils";
+import { t } from "i18next";
 import AbstractSettingsUiHandler from "./abstract-settings-ui-handler";
 
 export default class SettingsUiHandler extends AbstractSettingsUiHandler {
@@ -8,9 +9,22 @@ export default class SettingsUiHandler extends AbstractSettingsUiHandler {
    *
    * @param mode - The UI mode, optional.
    */
-  constructor(mode: Mode | null = null) {
-    super(SettingType.GENERAL, mode);
-    this.title = "General";
-    this.localStorageKey = "settings";
+  constructor() {
+    super("general", generalSettingsUiItems);
+
+    window.addEventListener("resize", () => {
+      this.updateMoveTouchControlsSettingsLabel();
+    });
+  }
+
+  private updateMoveTouchControlsSettingsLabel() {
+    if (!hasTouchscreen()) return;
+
+    const settingIndex = this.uiItems.findIndex((uiItem) => uiItem.key === "moveTouchControls");
+    if (settingIndex === -1) {
+      console.warn("Could not find moveTouchControls setting label!");
+    }
+
+    this.updateOptionValueLabel(settingIndex, 0, isLandscapeMode() ? t("settings:landscape") : t("settings:portrait"));
   }
 }

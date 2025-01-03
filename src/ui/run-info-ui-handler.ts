@@ -32,6 +32,7 @@ import { SettingKeyboard } from "#app/system/settings/settings-keyboard";
 import { getBiomeName } from "#app/data/balance/biomes";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
+import { settings } from "#app/system/settings/settings-manager";
 
 /**
  * RunInfoUiMode indicates possible overlays of RunInfoUiHandler.
@@ -633,8 +634,8 @@ export default class RunInfoUiHandler extends UiHandler {
     const runInfoText = addBBCodeTextObject(7, 0, "", TextStyle.WINDOW, { fontSize: "50px", lineSpacing: lineSpacing });
     const runTime = getPlayTimeString(this.runInfo.playTime);
     runInfoText.appendText(`${i18next.t("runHistory:runLength")}: ${runTime}`, false);
-    const runMoney = formatMoney(globalScene.moneyFormat, this.runInfo.money);
-    const moneyTextColor = getTextColor(TextStyle.MONEY_WINDOW, false, globalScene.uiTheme);
+    const runMoney = formatMoney(settings.display.moneyFormat, this.runInfo.money);
+    const moneyTextColor = getTextColor(TextStyle.MONEY_WINDOW, false, settings.display.uiTheme);
     runInfoText.appendText(
       `[color=${moneyTextColor}]${i18next.t("battleScene:moneyOwned", { formattedMoney: runMoney })}[/color]`,
     );

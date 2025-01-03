@@ -1,4 +1,5 @@
 import { LOCALE_LS_KEY } from "#app/constants";
+import { supportedLanguages } from "#app/system/settings/supported-languages";
 import { camelCaseToKebabCase } from "#app/utils";
 import i18next from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
@@ -164,7 +165,7 @@ export async function initI18n(): Promise<void> {
   i18next.use(new KoreanPostpositionProcessor());
   await i18next.init({
     fallbackLng: "en",
-    supportedLngs: ["en", "es-ES", "fr", "it", "de", "zh-CN", "zh-TW", "pt-BR", "ko", "ja", "ca-ES"],
+    supportedLngs: supportedLanguages.map((l) => l.key),
     backend: {
       loadPath(lng: string, [ns]: string[]) {
         let fileName: string;
