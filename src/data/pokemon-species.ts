@@ -577,8 +577,7 @@ export abstract class PokemonSpeciesForm {
         const spritePath = this.getSpriteAtlasPath(female, formIndex, shiny, variant)
           .replace("variant/", "")
           .replace(/_[1-3]$/, "");
-        globalScene.loadPokemonVariantAssets(spriteKey, spritePath, variant);
-        resolve();
+        globalScene.loadPokemonVariantAssets(spriteKey, spritePath, variant).then(() => resolve());
       });
       if (startLoad) {
         if (!globalScene.load.isLoading()) {
