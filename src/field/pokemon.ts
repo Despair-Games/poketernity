@@ -6057,9 +6057,9 @@ export class PokemonBattleData {
 
 export class PokemonBattleSummonData {
   /** The number of turns the pokemon has passed since entering the battle */
-  public turnCount: number = 1;
+  public turnCount: number = 0;
   /** The number of turns the pokemon has passed since the start of the wave */
-  public waveTurnCount: number = 1;
+  public waveTurnCount: number = 0;
   /** The list of moves the pokemon has used since entering the battle */
   public moveHistory: TurnMove[] = [];
 }
