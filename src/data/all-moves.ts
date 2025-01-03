@@ -195,7 +195,7 @@ import { SuppressAbilitiesAttr } from "./move-attrs/suppress-abilities-attr";
 import { SuppressAbilitiesIfActedAttr } from "./move-attrs/suppress-abilities-if-acted-attr";
 import { SurviveDamageAttr } from "./move-attrs/survive-damage-attr";
 import { SwallowHealAttr } from "./move-attrs/swallow-heal-attr";
-import { SwapArenaTagsAttr } from "./move-attrs/swap-arena-tags-attr";
+import { courtChangeArenaTags, SwapArenaTagsAttr } from "./move-attrs/swap-arena-tags-attr";
 import { SwapStatAttr } from "./move-attrs/swap-stat-attr";
 import { SwapStatStagesAttr } from "./move-attrs/swap-stat-stages-attr";
 import { SwitchAbilitiesAttr } from "./move-attrs/switch-abilities-attr";
@@ -2869,17 +2869,11 @@ export function initMoves() {
     new AttackMove(Moves.FISHIOUS_REND, Type.WATER, MoveCategory.PHYSICAL, 85, 100, 10, -1, 0, 8)
       .attr(FirstAttackDoublePowerAttr)
       .bitingMove(),
-    new StatusMove(Moves.COURT_CHANGE, Type.NORMAL, 100, 10, -1, 0, 8).attr(SwapArenaTagsAttr, [
-      ArenaTagType.AURORA_VEIL,
-      ArenaTagType.LIGHT_SCREEN,
-      ArenaTagType.MIST,
-      ArenaTagType.REFLECT,
-      ArenaTagType.SPIKES,
-      ArenaTagType.STEALTH_ROCK,
-      ArenaTagType.STICKY_WEB,
-      ArenaTagType.TAILWIND,
-      ArenaTagType.TOXIC_SPIKES,
-    ]),
+    new StatusMove(Moves.COURT_CHANGE, Type.NORMAL, -1, 10, -1, 0, 8)
+      .attr(SwapArenaTagsAttr, courtChangeArenaTags)
+      .condition((_user, _target, _move) =>
+        globalScene.arena.tags.some((arenaTag) => courtChangeArenaTags.includes(arenaTag.tagType)),
+      ), // G-max moves are not implemented but this should also swap steelsurge, vine lash, wildfire, and cannonade
     new AttackMove(Moves.MAX_FLARE, Type.FIRE, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.NEAR_ENEMY)
       .unimplemented()
