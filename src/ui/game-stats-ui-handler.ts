@@ -11,9 +11,9 @@ import { Button } from "#enums/buttons";
 import i18next from "i18next";
 import { UiTheme } from "#enums/ui-theme";
 import { globalScene } from "#app/global-scene";
-import { Scene } from "phaser";
+import { SceneBase } from "#app/scene-base";
 
-export class PlayerStatsScene extends Scene {
+export class PlayerStatsScene extends SceneBase {
   public mainContainer: Phaser.GameObjects.Container;
   public statsContainer: Phaser.GameObjects.Container;
   public arrowDown: Phaser.GameObjects.Sprite;
@@ -113,7 +113,6 @@ export class PlayerStatsScene extends Scene {
     this.mainContainer.add(this.arrowUp);
 
     this.mainContainer.setVisible(true);
-    console.log(this.mainContainer);
   }
 }
 
