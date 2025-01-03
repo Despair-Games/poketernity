@@ -1,5 +1,6 @@
 import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
 import { GameManagerHelper } from "#test/testUtils/helpers/gameManagerHelper";
+import { expect } from "vitest";
 // tsdoc imports
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { type globalScene } from "#app/global-scene";
@@ -17,7 +18,9 @@ export class PokemonHelper extends GameManagerHelper {
    * (aka {@linkcode PlayerPokemon.isAllowedInBattle is allowed in battle}).
    */
   public getPlayerPokemon(includeSwitching: boolean = true): PlayerPokemon {
-    return this.game.scene.getPlayerPokemon(includeSwitching)!;
+    const pokemon = this.game.scene.getPlayerPokemon(includeSwitching);
+    expect(pokemon).toBeDefined();
+    return pokemon!;
   }
 
   /**
@@ -31,6 +34,8 @@ export class PokemonHelper extends GameManagerHelper {
    * (aka {@linkcode EnemyPokemon.isAllowedInBattle is allowed in battle}).
    */
   public getEnemyPokemon(includeSwitching: boolean = true): EnemyPokemon {
-    return this.game.scene.getEnemyPokemon(includeSwitching)!;
+    const pokemon = this.game.scene.getEnemyPokemon(includeSwitching);
+    expect(pokemon).toBeDefined();
+    return pokemon!;
   }
 }
