@@ -4,7 +4,7 @@ import { Mode } from "#app/ui/ui";
 import { fixedInt } from "#app/utils";
 
 export class ReloadSessionPhase extends Phase {
-  private systemDataStr?: string;
+  private readonly systemDataStr?: string;
 
   constructor(systemDataStr?: string) {
     super();
@@ -12,13 +12,15 @@ export class ReloadSessionPhase extends Phase {
     this.systemDataStr = systemDataStr;
   }
 
-  override start(): void {
-    globalScene.ui.setMode(Mode.SESSION_RELOAD);
+  public override start(): void {
+    const { gameData, time, ui } = globalScene;
+
+    ui.setMode(Mode.SESSION_RELOAD);
 
     let delayElapsed = false;
     let loaded = false;
 
-    globalScene.time.delayedCall(fixedInt(1500), () => {
+    time.delayedCall(fixedInt(1500), () => {
       if (loaded) {
         this.end();
       } else {
@@ -26,16 +28,14 @@ export class ReloadSessionPhase extends Phase {
       }
     });
 
-    globalScene.gameData.clearLocalData();
+    gameData.clearLocalData();
 
-    (this.systemDataStr ? globalScene.gameData.initSystem(this.systemDataStr) : globalScene.gameData.loadSystem()).then(
-      () => {
-        if (delayElapsed) {
-          this.end();
-        } else {
-          loaded = true;
-        }
-      },
-    );
+    (this.systemDataStr ? gameData.initSystem(this.systemDataStr) : gameData.loadSystem()).then(() => {
+      if (delayElapsed) {
+        this.end();
+      } else {
+        loaded = true;
+      }
+    });
   }
 }

@@ -1,25 +1,28 @@
-import { applyAbAttrs } from "#app/data/ability";
 import { RunSuccessAbAttr } from "#app/data/ab-attrs/run-success-ab-attr";
+import { applyAbAttrs } from "#app/data/ability";
+import type { EnemyPokemon, PlayerPokemon, Pokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
+import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
+import { BattleEndPhase } from "#app/phases/battle-end-phase";
+import { NewBattlePhase } from "#app/phases/new-battle-phase";
+import { NumberHolder } from "#app/utils";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
-import type { PlayerPokemon, EnemyPokemon } from "#app/field/pokemon";
-import type { Pokemon } from "#app/field/pokemon";
 import i18next from "i18next";
-import { NumberHolder } from "#app/utils";
-import { BattleEndPhase } from "./battle-end-phase";
-import { NewBattlePhase } from "./new-battle-phase";
-import { PokemonPhase } from "./pokemon-phase";
-import { globalScene } from "#app/global-scene";
 
+/**
+ * Handles the player attempting to run away from a wild battle
+ * @extends PokemonPhase
+ */
 export class AttemptRunPhase extends PokemonPhase {
-  /** For testing purposes: this is to force the pokemon to fail and escape */
-  public forceFailEscape = false;
+  /** For testing purposes: this is to force the pokemon to fail to escape */
+  public forceFailEscape = false; // TODO: replace with a new override
 
   constructor(fieldIndex: number) {
     super(fieldIndex);
   }
 
-  override start() {
+  public override start(): void {
     super.start();
 
     const playerField = globalScene.getPlayerField();
@@ -63,7 +66,13 @@ export class AttemptRunPhase extends PokemonPhase {
     this.end();
   }
 
-  attemptRunAway(playerField: PlayerPokemon[], enemyField: EnemyPokemon[], escapeChance: NumberHolder) {
+  /**
+   * Calculates the base escape chance based on the current field.
+   * @param playerField - Usually {@linkcode BattleScene.getPlayerField()}
+   * @param enemyField - Usually {@linkcode BattleScene.getEnemyField()}
+   * @param escapeChance - {@linkcode NumberHolder} holding the % chance to escape, will be overwritten by the function
+   */
+  public attemptRunAway(playerField: PlayerPokemon[], enemyField: EnemyPokemon[], escapeChance: NumberHolder): void {
     /** Sum of the speed of all enemy pokemon on the field */
     const enemySpeed = enemyField.reduce(
       (total: number, enemyPokemon: Pokemon) => total + enemyPokemon.getStat(Stat.SPD),

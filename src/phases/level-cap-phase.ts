@@ -1,14 +1,14 @@
 import { globalScene } from "#app/global-scene";
 import { Mode } from "#app/ui/ui";
 import i18next from "i18next";
-import { FieldPhase } from "./field-phase";
+import { FieldPhase } from "./abstract-field-phase";
 
+/**
+ * Displays the message for when the level cap increases
+ * @extends FieldPhase
+ */
 export class LevelCapPhase extends FieldPhase {
-  constructor() {
-    super();
-  }
-
-  override start(): void {
+  public override start(): void {
     super.start();
 
     globalScene.ui.setMode(Mode.MESSAGE).then(() => {

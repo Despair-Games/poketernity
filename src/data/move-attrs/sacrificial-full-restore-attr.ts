@@ -36,17 +36,11 @@ export class SacrificialFullRestoreAttr extends SacrificialAttr {
       .reduce((maxHp: number, hp: number) => Math.max(hp, maxHp), 0);
 
     globalScene.pushPhase(
-      new PokemonHealPhase(
-        user.getBattlerIndex(),
-        maxPartyMemberHp,
-        i18next.t(this.moveTriggerMessage, { pokemonName: getPokemonNameWithAffix(user) }),
-        true,
-        false,
-        false,
-        true,
-        false,
-        this.restorePP,
-      ),
+      new PokemonHealPhase(user.getBattlerIndex(), maxPartyMemberHp, {
+        message: i18next.t(this.moveTriggerMessage, { pokemonName: getPokemonNameWithAffix(user) }),
+        healStatus: true,
+        fullRestorePP: this.restorePP,
+      }),
       true,
     );
 

@@ -1,21 +1,29 @@
-import { globalScene } from "#app/global-scene";
+// -- start tsdoc imports --
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type { EnemyPokemon, Pokemon } from "#app/field/pokemon";
+// -- end tsdoc imports --
+
 import { BattlerIndex } from "#app/battle";
+import { globalScene } from "#app/global-scene";
 import { Command } from "#app/ui/command-ui-handler";
-import { FieldPhase } from "./field-phase";
 import { Abilities } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import { FieldPhase } from "./abstract-field-phase";
 
 /**
  * Phase for determining an enemy AI's action for the next turn.
  * During this phase, the enemy decides whether to switch (if it has a trainer)
  * or to use a move from its moveset.
  *
- * For more information on how the Enemy AI works, see docs/enemy-ai.md
+ * For more information on how the Enemy AI works, see {@link ../../docs/enemy-ai.md}
+ *
  * @see {@linkcode Pokemon.getMatchupScore}
  * @see {@linkcode EnemyPokemon.getNextMove}
+ *
+ * @extends FieldPhase
  */
 export class EnemyCommandPhase extends FieldPhase {
-  protected fieldIndex: number;
+  protected readonly fieldIndex: number;
   protected skipTurn: boolean = false;
 
   constructor(fieldIndex: number) {
@@ -27,7 +35,7 @@ export class EnemyCommandPhase extends FieldPhase {
     }
   }
 
-  override start() {
+  public override start(): void {
     super.start();
 
     const enemyPokemon = globalScene.getEnemyField()[this.fieldIndex];
@@ -88,18 +96,18 @@ export class EnemyCommandPhase extends FieldPhase {
     /** Select a move to use (and a target to use it against, if applicable) */
     const nextMove = enemyPokemon.getNextMove();
 
-    globalScene.currentBattle.turnCommands[this.fieldIndex + BattlerIndex.ENEMY] = {
+    battle.turnCommands[this.fieldIndex + BattlerIndex.ENEMY] = {
       command: Command.FIGHT,
       move: nextMove,
       skip: this.skipTurn,
     };
 
-    globalScene.currentBattle.enemySwitchCounter = Math.max(globalScene.currentBattle.enemySwitchCounter - 1, 0);
+    battle.enemySwitchCounter = Math.max(battle.enemySwitchCounter - 1, 0);
 
     this.end();
   }
 
-  getFieldIndex(): number {
+  public getFieldIndex(): number {
     return this.fieldIndex;
   }
 }

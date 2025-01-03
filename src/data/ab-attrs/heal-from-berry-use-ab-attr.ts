@@ -26,15 +26,12 @@ export class HealFromBerryUseAbAttr extends AbAttr {
     const { name: abilityName } = passive ? pokemon.getPassiveAbility() : pokemon.getAbility();
     if (!simulated) {
       globalScene.unshiftPhase(
-        new PokemonHealPhase(
-          pokemon.getBattlerIndex(),
-          toDmgValue(pokemon.getMaxHp() * this.healPercent),
-          i18next.t("abilityTriggers:healFromBerryUse", {
+        new PokemonHealPhase(pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() * this.healPercent), {
+          message: i18next.t("abilityTriggers:healFromBerryUse", {
             pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
             abilityName,
           }),
-          true,
-        ),
+        }),
       );
     }
     return true;

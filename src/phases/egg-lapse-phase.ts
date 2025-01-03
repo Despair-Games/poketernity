@@ -1,29 +1,29 @@
-import { globalScene } from "#app/global-scene";
 import type { Egg } from "#app/data/egg";
 import { EGG_SEED } from "#app/data/egg";
-import { Phase } from "#app/phase";
-import i18next from "i18next";
-import Overrides from "#app/overrides";
-import { EggHatchPhase } from "./egg-hatch-phase";
-import { Mode } from "#app/ui/ui";
-import { achvs } from "#app/system/achv";
-import type { PlayerPokemon } from "#app/field/pokemon";
-import { EggSummaryPhase } from "./egg-summary-phase";
 import { EggHatchData } from "#app/data/egg-hatch-data";
+import type { PlayerPokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
+import Overrides from "#app/overrides";
+import { Phase } from "#app/phase";
+import { achvs } from "#app/system/achv";
+import { Mode } from "#app/ui/ui";
+import i18next from "i18next";
+import { EggHatchPhase } from "./egg-hatch-phase";
+import { EggSummaryPhase } from "./egg-summary-phase";
 
 /**
- * Phase that handles updating eggs, and hatching any ready eggs
- * Also handles prompts for skipping animation, and calling the egg summary phase
+ * Phase that handles updating eggs, and hatching any ready eggs.
+ * Also handles prompts for skipping animation, and calling the egg summary phase.
+ *
+ * @extends Phase
  */
 export class EggLapsePhase extends Phase {
   private eggHatchData: EggHatchData[] = [];
   private readonly minEggsToSkip: number = 2;
-  constructor() {
-    super();
-  }
 
-  override start() {
+  public override start(): void {
     super.start();
+
     const eggsToHatch: Egg[] = globalScene.gameData.eggs.filter((egg: Egg) => {
       return Overrides.EGG_IMMEDIATE_HATCH_OVERRIDE ? true : --egg.hatchWaves < 1;
     });
@@ -77,7 +77,7 @@ export class EggLapsePhase extends Phase {
    * Hatches eggs normally one by one, showing animations
    * @param eggsToHatch list of eggs to hatch
    */
-  hatchEggsRegular(eggsToHatch: Egg[]) {
+  protected hatchEggsRegular(eggsToHatch: Egg[]): void {
     let eggsToHatchCount: number = eggsToHatch.length;
     for (const egg of eggsToHatch) {
       globalScene.unshiftPhase(new EggHatchPhase(this, egg, eggsToHatchCount));
@@ -89,13 +89,13 @@ export class EggLapsePhase extends Phase {
    * Hatches eggs with no animations
    * @param eggsToHatch list of eggs to hatch
    */
-  hatchEggsSkipped(eggsToHatch: Egg[]) {
+  protected hatchEggsSkipped(eggsToHatch: Egg[]): void {
     for (const egg of eggsToHatch) {
       this.hatchEggSilently(egg);
     }
   }
 
-  showSummary() {
+  protected showSummary(): void {
     globalScene.unshiftPhase(new EggSummaryPhase(this.eggHatchData));
     this.end();
   }
@@ -105,7 +105,7 @@ export class EggLapsePhase extends Phase {
    * Also validates the achievements for the hatched pokemon and removes the egg
    * @param egg egg to hatch
    */
-  hatchEggSilently(egg: Egg) {
+  protected hatchEggSilently(egg: Egg): void {
     const eggIndex = globalScene.gameData.eggs.findIndex((e) => e.id === egg.id);
     if (eggIndex === -1) {
       return this.end();
@@ -138,7 +138,7 @@ export class EggLapsePhase extends Phase {
    * @param egg the egg to hatch
    * @returns the hatched PlayerPokemon
    */
-  generatePokemon(egg: Egg): EggHatchData {
+  public generatePokemon(egg: Egg): EggHatchData {
     let ret: PlayerPokemon;
     let newHatchData: EggHatchData;
     globalScene.executeWithSeedOffset(

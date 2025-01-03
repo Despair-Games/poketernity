@@ -4,22 +4,20 @@ import {
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { TurnInitEvent } from "#app/events/battle-scene";
 import type { PlayerPokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
 import i18next from "i18next";
+import { FieldPhase } from "./abstract-field-phase";
 import { CommandPhase } from "./command-phase";
 import { EnemyCommandPhase } from "./enemy-command-phase";
-import { FieldPhase } from "./field-phase";
 import { GameOverPhase } from "./game-over-phase";
 import { ToggleDoublePositionPhase } from "./toggle-double-position-phase";
 import { TurnStartPhase } from "./turn-start-phase";
-import { globalScene } from "#app/global-scene";
 
 export class TurnInitPhase extends FieldPhase {
-  constructor() {
-    super();
-  }
-
-  override start() {
+  public override start(): void {
     super.start();
+
+    const { currentBattle } = globalScene;
 
     globalScene.getPlayerField().forEach((p) => {
       // If this pokemon is in play and evolved into something illegal under the current challenge, force a switch
@@ -33,8 +31,8 @@ export class TurnInitPhase extends FieldPhase {
           globalScene.clearPhaseQueue();
           globalScene.unshiftPhase(new GameOverPhase());
         } else if (
-          allowedPokemon.length >= globalScene.currentBattle.getBattlerCount()
-          || (globalScene.currentBattle.double && !allowedPokemon[0].isActive(true))
+          allowedPokemon.length >= currentBattle.getBattlerCount()
+          || (currentBattle.double && !allowedPokemon[0].isActive(true))
         ) {
           // If there is at least one pokemon in the back that is legal to switch in, force a switch.
           p.switchOut();
@@ -43,7 +41,7 @@ export class TurnInitPhase extends FieldPhase {
           // This should only happen in double battles.
           p.leaveField();
         }
-        if (allowedPokemon.length === 1 && globalScene.currentBattle.double) {
+        if (allowedPokemon.length === 1 && currentBattle.double) {
           globalScene.unshiftPhase(new ToggleDoublePositionPhase(true));
         }
       }
@@ -55,15 +53,15 @@ export class TurnInitPhase extends FieldPhase {
 
     // If true, will skip remainder of current phase (and not queue CommandPhases etc.)
     if (handleMysteryEncounterTurnStartEffects()) {
-      this.end();
-      return;
+      return this.end();
     }
 
     globalScene.getField().forEach((pokemon) => {
       const fieldIndex = pokemon.getFieldIndex();
-      if (pokemon?.isActive()) {
+
+      if (pokemon.isActive()) {
         if (pokemon.isPlayer()) {
-          globalScene.currentBattle.addParticipant(pokemon as PlayerPokemon);
+          currentBattle.addParticipant(pokemon as PlayerPokemon);
         }
 
         pokemon.resetTurnData();

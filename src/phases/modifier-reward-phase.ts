@@ -1,11 +1,11 @@
 import { globalScene } from "#app/global-scene";
 import type { ModifierType, ModifierTypeFunc } from "#app/modifier/modifier-type";
 import { getModifierType } from "#app/modifier/modifier-type";
+import { Phase } from "#app/phase";
 import i18next from "i18next";
-import { BattlePhase } from "./battle-phase";
 
-export class ModifierRewardPhase extends BattlePhase {
-  protected modifierType: ModifierType;
+export class ModifierRewardPhase extends Phase {
+  protected readonly modifierType: ModifierType;
 
   constructor(modifierTypeFunc: ModifierTypeFunc) {
     super();
@@ -13,13 +13,13 @@ export class ModifierRewardPhase extends BattlePhase {
     this.modifierType = getModifierType(modifierTypeFunc);
   }
 
-  override start() {
+  public override start(): void {
     super.start();
 
     this.doReward().then(() => this.end());
   }
 
-  doReward(): Promise<void> {
+  protected doReward(): Promise<void> {
     return new Promise<void>((resolve) => {
       const newModifier = this.modifierType.newModifier();
       globalScene.addModifier(newModifier);

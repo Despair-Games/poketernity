@@ -20,7 +20,7 @@ import { Moves } from "#enums/moves";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
 import { TheWinstrateChallengeEncounter } from "#app/data/mystery-encounters/encounters/the-winstrate-challenge-encounter";
 import { Status } from "#app/data/status-effect";
-import { MysteryEncounterRewardsPhase } from "#app/phases/mystery-encounter-phases";
+import { MysteryEncounterRewardsPhase } from "#app/phases/mystery-encounter-phases/rewards-phase";
 import { CommandPhase } from "#app/phases/command-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { PartyHealPhase } from "#app/phases/party-heal-phase";

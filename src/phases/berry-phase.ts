@@ -1,19 +1,22 @@
-import { applyAbAttrs } from "#app/data/ability";
+import { HealFromBerryUseAbAttr } from "#app/data/ab-attrs/heal-from-berry-use-ab-attr";
 import { PreventBerryUseAbAttr } from "#app/data/ab-attrs/prevent-berry-use-ab-attr";
+import { applyAbAttrs } from "#app/data/ability";
 import { CommonAnim } from "#app/data/battle-anims";
 import { BerryUsedEvent } from "#app/events/battle-scene";
+import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BerryModifier } from "#app/modifier/modifier";
-import i18next from "i18next";
+import { FieldPhase } from "#app/phases/abstract-field-phase";
+import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { BooleanHolder } from "#app/utils";
-import { FieldPhase } from "./field-phase";
-import { CommonAnimPhase } from "./common-anim-phase";
-import { globalScene } from "#app/global-scene";
-import { HealFromBerryUseAbAttr } from "#app/data/ab-attrs/heal-from-berry-use-ab-attr";
+import i18next from "i18next";
 
-/** The phase after attacks where the pokemon eat berries */
+/**
+ * The phase after attacks where the pokemon eat berries
+ * @extends FieldPhase
+ */
 export class BerryPhase extends FieldPhase {
-  override start() {
+  public override start(): void {
     super.start();
 
     this.executeForAll((pokemon) => {

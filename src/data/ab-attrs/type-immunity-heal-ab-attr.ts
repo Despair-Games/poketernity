@@ -28,15 +28,12 @@ export class TypeImmunityHealAbAttr extends TypeImmunityAbAttr {
       if (!pokemon.isFullHp() && !simulated) {
         const abilityName = (!passive ? pokemon.getAbility() : pokemon.getPassiveAbility()).name;
         globalScene.unshiftPhase(
-          new PokemonHealPhase(
-            pokemon.getBattlerIndex(),
-            toDmgValue(pokemon.getMaxHp() / 4),
-            i18next.t("abilityTriggers:typeImmunityHeal", {
+          new PokemonHealPhase(pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() / 4), {
+            message: i18next.t("abilityTriggers:typeImmunityHeal", {
               pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
               abilityName,
             }),
-            true,
-          ),
+          }),
         );
         cancelled.value = true; // Suppresses "No Effect" message
       }

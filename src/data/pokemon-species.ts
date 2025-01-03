@@ -212,8 +212,11 @@ export abstract class PokemonSpeciesForm {
 
   /**
    * Method to get the root species id of a Pokemon.
+   * @example
+   * ```
    * Magmortar.getRootSpeciesId(true) => Magmar
    * Magmortar.getRootSpeciesId(false) => Magby
+   * ```
    * @param forStarter boolean to get the nonbaby form of a starter
    * @returns The species
    */

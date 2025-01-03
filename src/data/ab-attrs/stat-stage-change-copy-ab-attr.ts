@@ -17,7 +17,7 @@ export class StatStageChangeCopyAbAttr extends AbAttr {
     const stages: number = args[1];
     if (!simulated) {
       globalScene.unshiftPhase(
-        new StatStageChangePhase(pokemon.getBattlerIndex(), true, stats, stages, true, false, false),
+        new StatStageChangePhase(pokemon.getBattlerIndex(), true, stats, stages, { canBeCopied: false }),
       );
     }
     return true;

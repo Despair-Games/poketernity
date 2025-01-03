@@ -24,7 +24,7 @@ import { ModifierTier } from "#app/modifier/modifier-tier";
 import { ClowningAroundEncounter } from "#app/data/mystery-encounters/encounters/clowning-around-encounter";
 import { TrainerType } from "#enums/trainer-type";
 import { Abilities } from "#enums/abilities";
-import { PostMysteryEncounterPhase } from "#app/phases/mystery-encounter-phases";
+import { PostMysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/post-mystery-encounter-phase";
 import { Button } from "#enums/buttons";
 import type PartyUiHandler from "#app/ui/party-ui-handler";
 import type OptionSelectUiHandler from "#app/ui/settings/option-select-ui-handler";

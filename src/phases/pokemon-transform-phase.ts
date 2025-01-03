@@ -1,17 +1,19 @@
 import type { BattlerIndex } from "#app/battle";
-import { BattlerTagType } from "#enums/battler-tag-type";
-import { EFFECTIVE_STATS, BATTLE_STATS } from "#enums/stat";
 import { PokemonMove } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { PokemonPhase } from "./pokemon-phase";
+import { BattlerTagType } from "#enums/battler-tag-type";
+import { BATTLE_STATS, EFFECTIVE_STATS } from "#enums/stat";
+import { PokemonPhase } from "./abstract-pokemon-phase";
 
 /**
  * Transforms a Pokemon into another Pokemon on the field.
  * Used for Transform (move) and Imposter (ability)
+ *
+ * @extends PokemonPhase
  */
 export class PokemonTransformPhase extends PokemonPhase {
-  protected targetIndex: BattlerIndex;
-  private playSound: boolean;
+  protected readonly targetIndex: BattlerIndex;
+  private readonly playSound: boolean;
 
   constructor(userIndex: BattlerIndex, targetIndex: BattlerIndex, playSound: boolean = false) {
     super(userIndex);

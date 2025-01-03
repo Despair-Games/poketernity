@@ -1,13 +1,13 @@
-import { globalScene } from "#app/global-scene";
 import type { BattlerIndex } from "#app/battle";
-import { PokemonPhase } from "./pokemon-phase";
+import { globalScene } from "#app/global-scene";
+import { PokemonPhase } from "./abstract-pokemon-phase";
 
 export class ShinySparklePhase extends PokemonPhase {
   constructor(battlerIndex: BattlerIndex) {
     super(battlerIndex);
   }
 
-  override start() {
+  public override start(): void {
     super.start();
 
     this.getPokemon().sparkle();

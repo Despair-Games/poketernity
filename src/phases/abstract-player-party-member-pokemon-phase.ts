@@ -1,12 +1,12 @@
 import type { PlayerPokemon } from "#app/field/pokemon";
-import { PartyMemberPokemonPhase } from "./party-member-pokemon-phase";
+import { PartyMemberPokemonPhase } from "./abstract-party-member-pokemon-phase";
 
 export abstract class PlayerPartyMemberPokemonPhase extends PartyMemberPokemonPhase {
   constructor(partyMemberIndex: number) {
     super(partyMemberIndex, true);
   }
 
-  getPlayerPokemon(): PlayerPokemon {
+  public getPlayerPokemon(): PlayerPokemon {
     return super.getPokemon() as PlayerPokemon;
   }
 }

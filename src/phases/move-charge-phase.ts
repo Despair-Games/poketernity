@@ -1,17 +1,16 @@
-import { globalScene } from "#app/global-scene";
 import type { BattlerIndex } from "#app/battle";
 import { MoveChargeAnim } from "#app/data/battle-anims";
 import { applyMoveChargeAttrs } from "#app/data/move";
 import { InstantChargeAttr } from "#app/data/move-attrs/instant-charge-attr";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import type { PokemonMove } from "#app/field/pokemon";
-import type { Pokemon } from "#app/field/pokemon";
-import { MoveResult } from "#app/field/pokemon";
-import { BooleanHolder } from "#app/utils";
-import { MovePhase } from "#app/phases/move-phase";
-import { PokemonPhase } from "#app/phases/pokemon-phase";
-import { BattlerTagType } from "#enums/battler-tag-type";
+import { MoveResult, type Pokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
+import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
+import { MovePhase } from "#app/phases/move-phase";
+import { BooleanHolder } from "#app/utils";
+import { BattlerTagType } from "#enums/battler-tag-type";
 
 /**
  * Phase for the "charging turn" of two-turn moves (e.g. Dig).
@@ -19,9 +18,9 @@ import { MoveEndPhase } from "#app/phases/move-end-phase";
  */
 export class MoveChargePhase extends PokemonPhase {
   /** The move instance that this phase applies */
-  public move: PokemonMove;
+  public readonly move: PokemonMove;
   /** The field index targeted by the move (Charging moves assume single target) */
-  public targetIndex: BattlerIndex;
+  public readonly targetIndex: BattlerIndex;
 
   constructor(battlerIndex: BattlerIndex, targetIndex: BattlerIndex, move: PokemonMove) {
     super(battlerIndex);
@@ -29,7 +28,7 @@ export class MoveChargePhase extends PokemonPhase {
     this.targetIndex = targetIndex;
   }
 
-  public override start() {
+  public override start(): void {
     super.start();
 
     const user = this.getUserPokemon();
@@ -40,7 +39,7 @@ export class MoveChargePhase extends PokemonPhase {
     // immediately end this phase.
     if (!target || !move.isChargingMove()) {
       console.warn("Invalid parameters for MoveChargePhase");
-      return super.end();
+      return this.end();
     }
 
     new MoveChargeAnim(move.chargeAnim, move.id, user).play(false, () => {
@@ -48,12 +47,12 @@ export class MoveChargePhase extends PokemonPhase {
 
       applyMoveChargeAttrs(MoveEffectAttr, user, target, move);
       user.addTag(BattlerTagType.CHARGING, 1, move.id, user.id);
-      this.end();
+      this.checkInstantCharge();
     });
   }
 
   /** Checks the move's instant charge conditions, then ends this phase. */
-  public override end() {
+  protected checkInstantCharge(): void {
     const user = this.getUserPokemon();
     const move = this.move.getMove();
 
@@ -74,11 +73,11 @@ export class MoveChargePhase extends PokemonPhase {
       // Add this move's charging phase to the user's move history
       user.pushMoveHistory({ move: this.move.moveId, targets: [this.targetIndex], result: MoveResult.OTHER });
     }
-    super.end();
+    this.end();
   }
 
   public getUserPokemon(): Pokemon {
-    return (this.player ? globalScene.getPlayerField() : globalScene.getEnemyField())[this.fieldIndex];
+    return this.getAlliedField()[this.fieldIndex];
   }
 
   public getTargetPokemon(): Pokemon | undefined {

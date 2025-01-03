@@ -188,10 +188,22 @@ export function addPokeballCaptureStars(pokeball: Phaser.GameObjects.Sprite): vo
   new Array(3).fill(null).map(() => addParticle());
 }
 
+/**
+ * Helper function to generate sines.
+ * @param index number to scale pi/128 inside the sine function
+ * @param amplitude Scales the output of the sine function
+ * @returns a number
+ */
 export function sin(index: number, amplitude: number): number {
   return amplitude * Math.sin(index * (Math.PI / 128));
 }
 
+/**
+ * Helper function to generate cosines.
+ * @param index number to scale pi/128 inside the cosine function
+ * @param amplitude Scales the output of the cosine function
+ * @returns a number
+ */
 export function cos(index: number, amplitude: number): number {
   return amplitude * Math.cos(index * (Math.PI / 128));
 }

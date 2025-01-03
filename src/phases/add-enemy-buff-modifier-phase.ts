@@ -1,19 +1,19 @@
+import { globalScene } from "#app/global-scene";
+import { EnemyPersistentModifier } from "#app/modifier/modifier";
 import { ModifierTier } from "#app/modifier/modifier-tier";
 import {
-  regenerateModifierPoolThresholds,
   ModifierPoolType,
   getEnemyBuffModifierForWave,
+  regenerateModifierPoolThresholds,
 } from "#app/modifier/modifier-type";
-import { EnemyPersistentModifier } from "#app/modifier/modifier";
 import { Phase } from "#app/phase";
-import { globalScene } from "#app/global-scene";
 
+/**
+ * Adds buff tokens to enemy pokemon in endless mode based on the current wave.
+ * @extends Phase
+ */
 export class AddEnemyBuffModifierPhase extends Phase {
-  constructor() {
-    super();
-  }
-
-  override start() {
+  public override start(): void {
     super.start();
 
     const waveIndex = globalScene.currentBattle.waveIndex;

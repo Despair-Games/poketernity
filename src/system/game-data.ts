@@ -864,6 +864,7 @@ export class GameData {
     return ret;
   }
 
+  // Note: changing this requires testing run history (and updating `GameOverPhase.getRunHistoryEntry()` if necessary)
   public getSessionSaveData(): SessionSaveData {
     return {
       seed: globalScene.seed,

@@ -51,7 +51,7 @@ function getStatusEffectMessageKey(statusEffect: StatusEffect | undefined): stri
 export function getStatusEffectObtainText(
   statusEffect: StatusEffect | undefined,
   pokemonNameWithAffix: string,
-  sourceText?: string,
+  sourceText?: string | null,
 ): string {
   if (statusEffect === StatusEffect.NONE) {
     return "";
