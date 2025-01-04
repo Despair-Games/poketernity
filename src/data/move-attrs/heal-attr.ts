@@ -25,9 +25,17 @@ export class HealAttr extends MoveEffectAttr {
     this.showAnim = !!showAnim;
   }
 
-  override apply(user: Pokemon, target: Pokemon, _move: Move, _args: any[]): boolean {
-    this.addHealPhase(this.selfTarget ? user : target, this.healRatio);
+  override apply(user: Pokemon, target: Pokemon, move: Move, _args: any[]): boolean {
+    this.addHealPhase(this.selfTarget ? user : target, this.getHealRatio(user, target, move));
     return true;
+  }
+
+  /**
+   * Helper function to obtain this attribute's heal ratio
+   * @returns a heal ratio in the interval [0, 1]
+   */
+  protected getHealRatio(_user: Pokemon, _target: Pokemon, _move: Move): number {
+    return this.healRatio;
   }
 
   /**
@@ -46,8 +54,9 @@ export class HealAttr extends MoveEffectAttr {
     );
   }
 
-  override getTargetBenefitScore(user: Pokemon, target: Pokemon, _move: Move): number {
-    const score = (1 - (this.selfTarget ? user : target).getHpRatio()) * 20 - this.healRatio * 10;
+  override getTargetBenefitScore(user: Pokemon, target: Pokemon, move: Move): number {
+    const score =
+      (1 - (this.selfTarget ? user : target).getHpRatio()) * 20 - this.getHealRatio(user, target, move) * 10;
     return Math.round(score / (1 - this.healRatio / 2));
   }
 }
