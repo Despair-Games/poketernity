@@ -12,7 +12,7 @@ import { MoveTarget } from "#enums/move-target";
 import { Moves } from "#enums/moves";
 import { MultiHitType } from "#enums/multi-hit-type";
 import { Species } from "#enums/species";
-import { Stat, getStatKey, BATTLE_STATS } from "#enums/stat";
+import { Stat, getStatKey, BATTLE_STATS, BATTLE_STAT_MAX } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { SwitchType } from "#enums/switch-type";
 import { TerrainType } from "#enums/terrain-type";
@@ -763,7 +763,7 @@ export function initMoves() {
     new SelfStatusMove(Moves.BELLY_DRUM, Type.NORMAL, -1, 10, -1, 0, 2).attr(
       CutHpStatStageBoostAttr,
       [Stat.ATK],
-      12,
+      BATTLE_STAT_MAX,
       2,
       (user) => {
         globalScene.queueMessage(

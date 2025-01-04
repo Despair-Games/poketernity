@@ -23,7 +23,7 @@ export const PERMANENT_STATS = [Stat.HP, Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SP
 /** Type used to describe the core, permanent stats of a Pokemon. */
 export type PermanentStat = (typeof PERMANENT_STATS)[number];
 
-/** A constant array comprised of the {@linkcode Stat} values that make up {@linkcode EFfectiveStat}. */
+/** A constant array comprised of the {@linkcode Stat} values that make up {@linkcode EffectiveStat}. */
 export const EFFECTIVE_STATS = [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD] as const;
 /** Type used to describe the intersection of core stats and stats that have stages in battle. */
 export type EffectiveStat = (typeof EFFECTIVE_STATS)[number];
@@ -32,6 +32,8 @@ export type EffectiveStat = (typeof EFFECTIVE_STATS)[number];
 export const BATTLE_STATS = [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD, Stat.ACC, Stat.EVA] as const;
 /** Type used to describe the stats that have stages which can be incremented and decremented in battle. */
 export type BattleStat = (typeof BATTLE_STATS)[number];
+/** Used when a stat stage is maximized or minimized to the lowest possible value */
+export const BATTLE_STAT_MAX = 12;
 
 /** A constant array comprised of {@linkcode Stat} the values that make up {@linkcode TempBattleStat}. */
 export const TEMP_BATTLE_STATS = [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD, Stat.ACC] as const;
@@ -50,7 +52,7 @@ export function getStatStageChangeDescriptionKey(stages: number, isIncrease: boo
     return isIncrease ? "battle:statRose" : "battle:statFell";
   } else if (stages === 2) {
     return isIncrease ? "battle:statSharplyRose" : "battle:statHarshlyFell";
-  } else if (stages > 2 && stages <= 6) {
+  } else if ((stages > 2 && stages <= 6) || (stages = BATTLE_STAT_MAX)) {
     return isIncrease ? "battle:statRoseDrastically" : "battle:statSeverelyFell";
   }
   return isIncrease ? "battle:statWontGoAnyHigher" : "battle:statWontGoAnyLower";
