@@ -47,7 +47,7 @@ import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
 import { EncounterAnim } from "#enums/encounter-anims";
 import { Challenges } from "#enums/challenges";
-import { meTrainerConfigs } from "#app/data/balance/trainer-configs/me-trainer-configs";
+import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/clowningAround";
@@ -125,7 +125,7 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
     const encounter = globalScene.currentBattle.mysteryEncounter!;
 
     const clownTrainerType = TrainerType.HARLEQUIN;
-    const clownConfig = meTrainerConfigs[clownTrainerType].clone();
+    const clownConfig = allTrainerConfigs[clownTrainerType].clone();
     const clownPartyTemplate = new TrainerPartyCompoundTemplate(
       new TrainerPartyTemplate(1, PartyMemberStrength.STRONG),
       new TrainerPartyTemplate(1, PartyMemberStrength.STRONGER),

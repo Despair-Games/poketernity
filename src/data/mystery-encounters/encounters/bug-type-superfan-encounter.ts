@@ -52,7 +52,7 @@ import { allMoves } from "#app/data/all-moves";
 import { ModifierTier } from "#app/modifier/modifier-tier";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
 import { getSpriteKeysFromSpecies } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
-import { meTrainerConfigs } from "#app/data/balance/trainer-configs/me-trainer-configs";
+import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/bugTypeSuperfan";
@@ -504,7 +504,7 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
 
 function getTrainerConfigForWave(waveIndex: number) {
   // Bug type superfan trainer config
-  const config = meTrainerConfigs[TrainerType.BUG_TYPE_SUPERFAN].clone();
+  const config = allTrainerConfigs[TrainerType.BUG_TYPE_SUPERFAN].clone();
   config.name = i18next.t("trainerNames:bug_type_superfan");
 
   let pool3Copy = POOL_3_POKEMON.slice(0);
