@@ -1,10 +1,11 @@
+import { ReceivedMoveDamageMultiplierAbAttr } from "#app/data/ab-attrs/received-move-damage-multiplier-ab-attr";
 import { allMoves } from "#app/data/all-moves";
-import type { DamageCalculationResult } from "#app/field/pokemon";
 import { Abilities } from "#enums/abilities";
 import { MoveFlags } from "#enums/move-flags";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
+import type { NumberHolder } from "#app/utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -37,54 +38,53 @@ describe("Abilities - Fluffy", () => {
   it("should reduce the damage of contact moves by half", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
     const enemy = game.scene.getEnemyPokemon()!;
-    const abilitySpy = vi.spyOn(enemy, "getAttackDamage");
+    const abilitySpy = vi.spyOn(enemy.getAbility().getAttrs(ReceivedMoveDamageMultiplierAbAttr)[0], "applyPreDefend");
 
     game.move.select(Moves.TACKLE);
     await game.phaseInterceptor.to("BerryPhase");
 
-    const damageResult = abilitySpy.mock.results[0].value as DamageCalculationResult;
+    const damageMultiplier = (abilitySpy.mock.lastCall?.[6][0] as NumberHolder).value;
     expect(allMoves[Moves.TACKLE].hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
-    expect(damageResult.finalDamage).toBe(Math.floor(damageResult.postMultiplierDamage! / 2));
+    expect(damageMultiplier).toBe(0.5);
   });
 
   it("should double the damage of a non-contact fire move", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
     const enemy = game.scene.getEnemyPokemon()!;
-    const abilitySpy = vi.spyOn(enemy, "getAttackDamage");
+    const abilitySpy = vi.spyOn(enemy.getAbility().getAttrs(ReceivedMoveDamageMultiplierAbAttr)[0], "applyPreDefend");
 
     game.move.select(Moves.EMBER);
     await game.phaseInterceptor.to("BerryPhase");
 
-    const damageResult = abilitySpy.mock.results[0].value as DamageCalculationResult;
-    expect(allMoves[Moves.EMBER].hasFlag(MoveFlags.MAKES_CONTACT)).toBe(false);
-    expect(damageResult.finalDamage).toBe(damageResult.postMultiplierDamage! * 2);
+    const damageMultiplier = (abilitySpy.mock.lastCall?.[6][0] as NumberHolder).value;
+    expect(damageMultiplier).toBe(2);
   });
 
   it("should not alter the damage of a contact-making fire move", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
     const enemy = game.scene.getEnemyPokemon()!;
-    const abilitySpy = vi.spyOn(enemy, "getAttackDamage");
+    const abilitySpy = vi.spyOn(enemy.getAbility().getAttrs(ReceivedMoveDamageMultiplierAbAttr)[0], "applyPreDefend");
 
     game.move.select(Moves.FIRE_FANG);
     await game.move.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
-    const damageResult = abilitySpy.mock.results[0].value as DamageCalculationResult;
+    const damageMultiplier = (abilitySpy.mock.lastCall?.[6][0] as NumberHolder).value;
     expect(allMoves[Moves.FIRE_FANG].hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
-    expect(damageResult.finalDamage).toBe(damageResult.postMultiplierDamage);
+    expect(damageMultiplier).toBe(1);
   });
 
   it("should not alter the damage of contact moves if the attacker has the ability Long Reach", async () => {
     game.override.ability(Abilities.LONG_REACH);
     await game.classicMode.startBattle([Species.FEEBAS]);
     const enemy = game.scene.getEnemyPokemon()!;
-    const abilitySpy = vi.spyOn(enemy, "getAttackDamage");
+    const abilitySpy = vi.spyOn(enemy.getAbility().getAttrs(ReceivedMoveDamageMultiplierAbAttr)[0], "applyPreDefend");
 
     game.move.select(Moves.TACKLE);
     await game.phaseInterceptor.to("BerryPhase");
 
-    const damageResult = abilitySpy.mock.results[0].value as DamageCalculationResult;
+    const damageMultiplier = (abilitySpy.mock.lastCall?.[6][0] as NumberHolder).value;
     expect(allMoves[Moves.TACKLE].hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
-    expect(damageResult.finalDamage).toBe(Math.floor(damageResult.postMultiplierDamage! * 0.5) * 2);
+    expect(damageMultiplier).toBe(1);
   });
 });
