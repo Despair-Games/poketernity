@@ -30,7 +30,7 @@ import type { DexEntry } from "#app/@types/DexData";
 import type { StarterMoveset } from "#app/@types/StarterData";
 import { DexAttr, AbilityAttr } from "#app/data/dex-attributes";
 import { Tutorial, handleTutorial } from "#app/tutorial";
-import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
+import type { OptionSelectIconConfig, OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import MessageUiHandler from "#app/ui/message-ui-handler";
 import PokemonIconAnimHandler, { PokemonIconAnimMode } from "#app/ui/pokemon-icon-anim-handler";
 import { StatsContainer } from "#app/ui/stats-container";
@@ -1994,7 +1994,21 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
           // Purchases with Candy
           const candyCount = starterData.candyCount;
           const showUseCandies = () => {
-            const options: any[] = []; // TODO: add proper type
+            const options: OptionSelectItem[] = [];
+            const candyIconsConfig: OptionSelectIconConfig[] = [
+              {
+                name: "items",
+                frame: "candy",
+                scale: 0.5,
+                tint: argbFromRgba(rgbHexToRgba(starterColors[this.lastSpecies.speciesId][0])),
+              },
+              {
+                name: "items",
+                frame: "candy_overlay",
+                scale: 0.5,
+                tint: argbFromRgba(rgbHexToRgba(starterColors[this.lastSpecies.speciesId][1])),
+              },
+            ];
 
             // Unlock passive option
             if (!(passiveAttr & PassiveAttr.UNLOCKED)) {
@@ -2028,8 +2042,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                   }
                   return false;
                 },
-                item: "candy",
-                itemArgs: starterColors[this.lastSpecies.speciesId],
+                iconsConfig: candyIconsConfig,
               });
             }
 
@@ -2066,8 +2079,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                   }
                   return false;
                 },
-                item: "candy",
-                itemArgs: starterColors[this.lastSpecies.speciesId],
+                iconsConfig: candyIconsConfig,
               });
             }
 
@@ -2118,8 +2130,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                 }
                 return false;
               },
-              item: "candy",
-              itemArgs: starterColors[this.lastSpecies.speciesId],
+              iconsConfig: candyIconsConfig,
             });
             options.push({
               label: i18next.t("menu:cancel"),

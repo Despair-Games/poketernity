@@ -4,9 +4,8 @@ import { TextStyle, addTextObject, getTextStyleOptions } from "#app/ui/text";
 import { Mode } from "#app/ui/ui";
 import UiHandler from "#app/ui/ui-handler";
 import { addWindow } from "#app/ui/ui-theme";
-import { fixedInt, rgbHexToRgba } from "#app/utils";
+import { fixedInt } from "#app/utils";
 import { Button } from "#enums/buttons";
-import { argbFromRgba } from "@material/material-color-utilities";
 
 const scrollUpLabel = "↑";
 const scrollDownLabel = "↓";
@@ -94,7 +93,8 @@ export default class OptionSelectUiHandler extends UiHandler {
     this.optionSelectText = addTextObject(
       0,
       0,
-      options.map((o) => (o.item ? `    ${o.label}` : o.label)).join("\n"),
+      // TODO handle icon size properly
+      options.map((o) => (o.iconsConfig ? `    ${o.label}` : o.label)).join("\n"),
       TextStyle.WINDOW,
       { maxLines: options.length },
     );
@@ -123,28 +123,18 @@ export default class OptionSelectUiHandler extends UiHandler {
     this.optionSelectText.setPositionRelative(this.optionSelectBg, 12 + 24 * this.scale, 2 + 42 * this.scale);
 
     options.forEach((option: OptionSelectItem, i: number) => {
-      if (option.item) {
-        const itemIcon = globalScene.add.sprite(0, 0, "items", option.item);
-        itemIcon.setScale(3 * this.scale);
-        this.optionSelectIcons.push(itemIcon);
+      if (option.iconsConfig) {
+        for (const config of option.iconsConfig) {
+          const iconSprite = globalScene.add.sprite(0, 0, config.name, config.frame);
+          iconSprite.setScale(config.scale ?? this.scale);
+          iconSprite.setPositionRelative(this.optionSelectText, 36 * this.scale, 7 + i * (114 * this.scale - 3));
 
-        this.optionSelectContainer.add(itemIcon);
-
-        itemIcon.setPositionRelative(this.optionSelectText, 36 * this.scale, 7 + i * (114 * this.scale - 3));
-
-        if (option.item === "candy") {
-          const itemOverlayIcon = globalScene.add.sprite(0, 0, "items", "candy_overlay");
-          itemOverlayIcon.setScale(3 * this.scale);
-          this.optionSelectIcons.push(itemOverlayIcon);
-
-          this.optionSelectContainer.add(itemOverlayIcon);
-
-          itemOverlayIcon.setPositionRelative(this.optionSelectText, 36 * this.scale, 7 + i * (114 * this.scale - 3));
-
-          if (option.itemArgs) {
-            itemIcon.setTint(argbFromRgba(rgbHexToRgba(option.itemArgs[0])));
-            itemOverlayIcon.setTint(argbFromRgba(rgbHexToRgba(option.itemArgs[1])));
+          if (config.tint) {
+            iconSprite.setTint(config.tint);
           }
+
+          this.optionSelectIcons.push(iconSprite);
+          this.optionSelectContainer.add(iconSprite);
         }
       }
     });
@@ -166,11 +156,11 @@ export default class OptionSelectUiHandler extends UiHandler {
     this.scrollCursor = 0;
     this.setCursor(0);
 
-    if (this.config.delay) {
+    if (this.config.inputDelay) {
       this.blockInput = true;
       this.optionSelectText.setAlpha(0.5);
       this.cursorObj?.setAlpha(0.8);
-      globalScene.time.delayedCall(fixedInt(this.config.delay), () => this.unblockInput());
+      globalScene.time.delayedCall(fixedInt(this.config.inputDelay), () => this.unblockInput());
     }
 
     return true;
@@ -242,6 +232,7 @@ export default class OptionSelectUiHandler extends UiHandler {
           break;
       }
       if (this.config?.supportHover) {
+        // TODO why need to check supportHover and not just that onHover exists
         // handle hover code if the element supports hover-handlers and the option has the optional hover-handler set.
         this.config?.options[this.cursor + (this.scrollCursor - (this.scrollCursor ? 1 : 0))]?.onHover?.();
       }

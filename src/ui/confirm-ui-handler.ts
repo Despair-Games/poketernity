@@ -47,7 +47,7 @@ export default class ConfirmUiHandler extends OptionSelectUiHandler {
             },
           },
         ],
-        delay: args.length >= 8 && args[7] !== null ? (args[7] as number) : 0,
+        inputDelay: args.length >= 8 && args[7] !== null ? (args[7] as number) : 0,
       };
 
       super.show([config]);
@@ -79,7 +79,7 @@ export default class ConfirmUiHandler extends OptionSelectUiHandler {
             },
           },
         ],
-        delay: args.length >= 6 && args[5] !== null ? (args[5] as number) : 0,
+        inputDelay: args.length >= 6 && args[5] !== null ? (args[5] as number) : 0,
         noCancel: args.length >= 7 && args[6] !== null ? (args[6] as boolean) : false,
       };
 

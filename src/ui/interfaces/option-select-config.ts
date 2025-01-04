@@ -1,19 +1,66 @@
+/**
+ * Customizations options for UI's {@linkcode Mode.OPTION_SELECT}
+ */
 export interface OptionSelectConfig {
-  xOffset?: number;
-  yOffset?: number;
+  /** The {@linkcode OptionSelectItem}s to display. */
   options: OptionSelectItem[];
+  /** The maximum number of options shown at once on screen. */
   maxOptions?: number;
-  delay?: number;
+  /** Horizontal offset for the window compared to the default (right of screen) */
+  xOffset?: number;
+  /** Vertical offset for the window compared to the default (bottom of screen) */
+  yOffset?: number;
+  /** Optional delay (in ms) before the player is allowed to make a selection. */
+  inputDelay?: number;
+  /**
+   * Set to `true` to prevent closing the menu with the cancel button.
+   * Otherwise using the cancel button will act as if the player selected the last option.
+   */
   noCancel?: boolean;
+  /** Set to `true` to allow bypassing the inputDelay with the cancel button. */
+  canCancelDelay?: boolean;
+  /** TODO is that really needed? */
   supportHover?: boolean;
 }
 
+/**
+ * Configuration for an option in the menu
+ */
 export interface OptionSelectItem {
+  /**
+   * Text that will be shown in the menu for this option.
+   * Can only be on a single line.
+   */
   label: string;
+  /** Handler called when that option is selected. */
   handler: () => boolean;
+  /** Optional handler for when the cursor is moved to that option. */
   onHover?: () => void;
+  /** Set to `true` to keep the menu open after this option was selected. */
   keepOpen?: boolean;
+  /** Set to `true` to prevent the default menu sound effects from playing. */
   overrideSound?: boolean;
-  item?: string;
-  itemArgs?: any[];
+  /**
+   * Optional configuration to display icon(s) before or after the label's text.
+   * If multiple icons are given for the same spot they will be overlayed
+   * in the order they are in the array, not displayed next to each other.
+   */
+  iconsConfig?: OptionSelectIconConfig[];
+}
+
+/**
+ * Configuration for displaying a sprite before or after an option's label
+ *
+ * @example
+ * for the friendship candy sprite: `{ filename: "items", frame: "candy" }`
+ */
+export interface OptionSelectIconConfig {
+  /** The name of the sprite/texture to use */
+  name: string;
+  /** The frame to use if the sprite has multiple ones */
+  frame?: number | string;
+  /** Optional scaling for the icon */
+  scale?: number;
+  /** Optional tint to give the icon */
+  tint?: number;
 }
