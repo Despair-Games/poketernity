@@ -1,11 +1,11 @@
 import { globalScene } from "#app/global-scene";
-import { TextStyle, addTextObject, getTextStyleOptions } from "./text";
-import { Mode } from "./ui";
-import UiHandler from "./ui-handler";
-import { addWindow } from "./ui-theme";
-import { rgbHexToRgba, fixedInt } from "#app/utils";
-import { argbFromRgba } from "@material/material-color-utilities";
+import { TextStyle, addTextObject, getTextStyleOptions } from "#app/ui/text";
+import { Mode } from "#app/ui/ui";
+import UiHandler from "#app/ui/ui-handler";
+import { addWindow } from "#app/ui/ui-theme";
+import { fixedInt, rgbHexToRgba } from "#app/utils";
 import { Button } from "#enums/buttons";
+import { argbFromRgba } from "@material/material-color-utilities";
 
 export interface OptionSelectConfig {
   xOffset?: number;
@@ -30,7 +30,7 @@ export interface OptionSelectItem {
 const scrollUpLabel = "↑";
 const scrollDownLabel = "↓";
 
-export default abstract class AbstractOptionSelectUiHandler extends UiHandler {
+export default class OptionSelectUiHandler extends UiHandler {
   protected optionSelectContainer: Phaser.GameObjects.Container;
   protected optionSelectBg: Phaser.GameObjects.NineSlice;
   protected optionSelectText: Phaser.GameObjects.Text;
@@ -46,17 +46,20 @@ export default abstract class AbstractOptionSelectUiHandler extends UiHandler {
 
   private cursorObj: Phaser.GameObjects.Image | null;
 
-  constructor(mode: Mode | null) {
+  constructor(mode: Mode = Mode.OPTION_SELECT) {
     super(mode);
   }
 
-  abstract getWindowWidth(): number;
+  public getWindowWidth(): number {
+    // TODO
+    return 64;
+  }
 
-  getWindowHeight(): number {
+  public getWindowHeight(): number {
     return (Math.min((this.config?.options || []).length, this.config?.maxOptions || 99) + 1) * 96 * this.scale;
   }
 
-  setup() {
+  override setup() {
     const ui = this.getUi();
 
     this.optionSelectContainer = globalScene.add.container(globalScene.game.canvas.width / 6 - 1, -48);
@@ -192,7 +195,7 @@ export default abstract class AbstractOptionSelectUiHandler extends UiHandler {
     return true;
   }
 
-  processInput(button: Button): boolean {
+  override processInput(button: Button): boolean {
     const ui = this.getUi();
 
     let success = false;
@@ -270,7 +273,7 @@ export default abstract class AbstractOptionSelectUiHandler extends UiHandler {
     return success;
   }
 
-  unblockInput(): void {
+  protected unblockInput(): void {
     if (!this.blockInput) {
       return;
     }
@@ -280,7 +283,7 @@ export default abstract class AbstractOptionSelectUiHandler extends UiHandler {
     this.cursorObj?.setAlpha(1);
   }
 
-  getOptionsWithScroll(): OptionSelectItem[] {
+  protected getOptionsWithScroll(): OptionSelectItem[] {
     if (!this.config) {
       return [];
     }
@@ -380,7 +383,7 @@ export default abstract class AbstractOptionSelectUiHandler extends UiHandler {
     this.eraseCursor();
   }
 
-  eraseCursor() {
+  protected eraseCursor() {
     if (this.cursorObj) {
       this.cursorObj.destroy();
     }

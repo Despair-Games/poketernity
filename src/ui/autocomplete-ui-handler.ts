@@ -1,16 +1,8 @@
+import OptionSelectUiHandler from "#app/ui/option-select-ui-handler";
 import { Button } from "#enums/buttons";
-import AbstractOptionSelectUiHandler from "./abstact-option-select-ui-handler";
-import { Mode } from "./ui";
 
-export default class AutoCompleteUiHandler extends AbstractOptionSelectUiHandler {
+export default class AutoCompleteUiHandler extends OptionSelectUiHandler {
   modalContainer: Phaser.GameObjects.Container;
-  constructor(mode: Mode = Mode.OPTION_SELECT) {
-    super(mode);
-  }
-
-  getWindowWidth(): number {
-    return 64;
-  }
 
   override show(args: any[]): boolean {
     if (args[0].modalContainer) {

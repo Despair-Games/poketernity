@@ -33,7 +33,7 @@ import { randSeedInt, randSeedShuffle } from "#app/utils";
 import { showEncounterDialogue, showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { Mode } from "#app/ui/ui";
 import i18next from "i18next";
-import type { OptionSelectConfig } from "#app/ui/abstact-option-select-ui-handler";
+import type { OptionSelectConfig } from "#app/ui/option-select-ui-handler";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon";
 import { Ability } from "#app/data/ability";

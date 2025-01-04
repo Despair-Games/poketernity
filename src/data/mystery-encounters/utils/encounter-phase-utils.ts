@@ -25,7 +25,7 @@ import {
   MysteryEncounterRewardsPhase,
 } from "#app/phases/mystery-encounter-phases";
 import type PokemonData from "#app/system/pokemon-data";
-import type { OptionSelectConfig, OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler";
+import type { OptionSelectConfig, OptionSelectItem } from "#app/ui/option-select-ui-handler";
 import type { PartyOption, PokemonSelectFilter } from "#app/ui/party-ui-handler";
 import { PartyUiMode } from "#app/ui/party-ui-handler";
 import { Mode } from "#app/ui/ui";

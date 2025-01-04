@@ -1,11 +1,11 @@
-import type { OptionSelectConfig } from "./abstact-option-select-ui-handler";
-import AbstractOptionSelectUiHandler from "./abstact-option-select-ui-handler";
-import { Mode } from "./ui";
-import i18next from "i18next";
-import { Button } from "#enums/buttons";
 import { globalScene } from "#app/global-scene";
+import type { OptionSelectConfig } from "#app/ui/option-select-ui-handler";
+import OptionSelectUiHandler from "#app/ui/option-select-ui-handler";
+import { Mode } from "#app/ui/ui";
+import { Button } from "#enums/buttons";
+import i18next from "i18next";
 
-export default class ConfirmUiHandler extends AbstractOptionSelectUiHandler {
+export default class ConfirmUiHandler extends OptionSelectUiHandler {
   public static readonly windowWidth: number = 48;
 
   private switchCheck: boolean;
@@ -13,10 +13,6 @@ export default class ConfirmUiHandler extends AbstractOptionSelectUiHandler {
 
   constructor() {
     super(Mode.CONFIRM);
-  }
-
-  getWindowWidth(): number {
-    return ConfirmUiHandler.windowWidth;
   }
 
   override show(args: any[]): boolean {
