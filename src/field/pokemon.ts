@@ -3191,7 +3191,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return {
         cancelled: cancelled.value,
         result: move.id === Moves.SHEER_COLD ? HitResult.IMMUNE : HitResult.NO_EFFECT,
-        damage: 0,
+        finalDamage: 0,
       };
     }
 
@@ -3213,7 +3213,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return {
         cancelled: false,
         result: HitResult.EFFECTIVE,
-        damage: fixedDamage.value,
+        finalDamage: fixedDamage.value,
       };
     }
 
@@ -3224,7 +3224,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return {
         cancelled: false,
         result: HitResult.ONE_HIT_KO,
-        damage: this.hp,
+        finalDamage: this.hp,
       };
     }
 
@@ -3367,6 +3367,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         * mistyTerrainMultiplier,
     );
 
+    const postMultiplierDamage: number = damage.value;
+
     /** Doubles damage if the attacker has Tinted Lens and is using a resisted move */
     if (!ignoreSourceAbility) {
       applyPreAttackAbAttrs(DamageBoostAbAttr, source, this, move, simulated, damage);
@@ -3383,7 +3385,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     /** Apply this Pokemon's post-calc defensive modifiers (e.g. Fur Coat) */
     if (!ignoreAbility) {
       applyPreDefendAbAttrs(ReceivedMoveDamageMultiplierAbAttr, this, source, move, cancelled, simulated, damage);
-
       /** Additionally apply friend guard damage reduction if ally has it. */
       if (globalScene.currentBattle.double && this.getAlly()?.isActive(true)) {
         applyPreDefendAbAttrs(
@@ -3422,7 +3423,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return {
       cancelled: cancelled.value,
       result: hitResult,
-      damage: damage.value,
+      baseDamage: baseDamage,
+      postMultiplierDamage: postMultiplierDamage,
+      finalDamage: damage.value,
     };
   }
 
@@ -5592,7 +5595,7 @@ export class EnemyPokemon extends Pokemon {
                   || [Moves.SUCKER_PUNCH, Moves.UPPER_HAND, Moves.THUNDERCLAP].includes(move.id);
                 return (
                   doesNotFail
-                  && p.getAttackDamage(this, move, !p.battleData.abilityRevealed, false, isCritical).damage >= p.hp
+                  && p.getAttackDamage(this, move, !p.battleData.abilityRevealed, false, isCritical).finalDamage >= p.hp
                 );
               })
             );
@@ -6134,8 +6137,12 @@ export interface DamageCalculationResult {
   cancelled: boolean;
   /** The effectiveness of the move */
   result: HitResult;
+  /** The attack's base damage, as determined by the source's level, move power, and Attack stat as well as the target Pokemon's Defense stat */
+  baseDamage?: number;
+  /** The calculated damage of the move before any post-calculation factors are applied */
+  postMultiplierDamage?: number;
   /** The damage dealt by the move */
-  damage: number;
+  finalDamage: number;
 }
 
 /**

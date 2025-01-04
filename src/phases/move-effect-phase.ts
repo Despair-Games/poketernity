@@ -386,7 +386,7 @@ export class MoveEffectPhase extends PokemonPhase {
 
     const isCritical = target.getCriticalHitResult(user, move, false);
 
-    const { result: result, damage: dmg } = target.getAttackDamage(
+    const { result: result, finalDamage: dmg } = target.getAttackDamage(
       user,
       move,
       false,
