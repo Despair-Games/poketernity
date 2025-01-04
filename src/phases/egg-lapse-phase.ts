@@ -52,7 +52,6 @@ export class EggLapsePhase extends Phase {
               null,
               null,
               1000,
-              true,
             );
           },
           100,

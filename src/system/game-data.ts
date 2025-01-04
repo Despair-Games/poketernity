@@ -1495,7 +1495,7 @@ export class GameData {
                   globalScene.ui.showText("", 0);
                 },
                 false,
-                -98,
+                -98, // TODO UGH
               );
             },
           );

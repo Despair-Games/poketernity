@@ -224,7 +224,7 @@ export default class MenuUiHandler extends MessageUiHandler {
                 },
               },
             ]),
-          xOffset: 98,
+          xOffset: 98, // todo offset by width of the menu
         };
         ui.setOverlayMode(Mode.MENU_OPTION_SELECT, config);
       });
@@ -386,7 +386,7 @@ export default class MenuUiHandler extends MessageUiHandler {
 
     //Thank you Vassiat
     this.manageDataConfig = {
-      xOffset: 98,
+      xOffset: 98, // offset by width of the menu handler
       options: manageDataOptions,
       maxOptions: 7,
     };
@@ -507,7 +507,7 @@ export default class MenuUiHandler extends MessageUiHandler {
       },
     });
     this.communityConfig = {
-      xOffset: 98,
+      xOffset: 98, // todo offset by width of the menu
       options: communityOptions,
     };
     this.setCursor(0);

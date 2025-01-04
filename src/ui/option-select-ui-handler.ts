@@ -103,10 +103,13 @@ export default class OptionSelectUiHandler extends UiHandler {
     this.optionSelectText.setName("text-option-select");
     this.optionSelectContainer.add(this.optionSelectText);
 
-    this.optionSelectContainer.setPosition(
-      globalScene.game.canvas.width / 6 - 1 - (this.config?.xOffset || 0),
-      -48 + (this.config?.yOffset || 0),
-    );
+    // Make sure the window is not larger than the screen
+    const bgWidth = Math.max(this.optionSelectText.displayWidth + 24, this.getWindowWidth());
+    this.optionSelectBg.width = bgWidth; // TODO based on label size etc
+
+    // Make sure the window doesn't go past the left side of the screen
+    const xPosition = Math.max(bgWidth + 1, globalScene.scaledCanvas.width - 1 - Math.abs(this.config?.xOffset ?? 0));
+    this.optionSelectContainer.setPosition(xPosition, -48 + (this.config?.yOffset ?? 0));
 
     this.optionSelectBg.width = Math.max(this.optionSelectText.displayWidth + 24, this.getWindowWidth());
 
@@ -181,8 +184,12 @@ export default class OptionSelectUiHandler extends UiHandler {
 
     if (button === Button.ACTION || button === Button.CANCEL) {
       if (this.blockInput) {
-        ui.playError();
-        return false;
+        if (button === Button.CANCEL && this.config?.canCancelDelay) {
+          this.unblockInput();
+        } else {
+          ui.playError();
+          return false;
+        }
       }
 
       success = true;
