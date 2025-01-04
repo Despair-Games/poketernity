@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import { biomeLinks, getBiomeName } from "#app/data/balance/biomes";
 import { Biome } from "#app/enums/biome";
 import { MoneyInterestModifier, MapModifier } from "#app/modifier/modifier";
-import type { OptionSelectItem } from "#app/ui/option-select-ui-handler";
+import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import { Mode } from "#app/ui/ui";
 import { BattlePhase } from "./battle-phase";
 import { randSeedInt } from "#app/utils";

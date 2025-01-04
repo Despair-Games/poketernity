@@ -30,7 +30,7 @@ import type { DexEntry } from "#app/@types/DexData";
 import type { StarterMoveset } from "#app/@types/StarterData";
 import { DexAttr, AbilityAttr } from "#app/data/dex-attributes";
 import { Tutorial, handleTutorial } from "#app/tutorial";
-import type { OptionSelectItem } from "#app/ui/option-select-ui-handler";
+import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import MessageUiHandler from "#app/ui/message-ui-handler";
 import PokemonIconAnimHandler, { PokemonIconAnimMode } from "#app/ui/pokemon-icon-anim-handler";
 import { StatsContainer } from "#app/ui/stats-container";

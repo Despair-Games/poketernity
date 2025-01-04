@@ -5,9 +5,9 @@ import { GameModes } from "#app/game-mode";
 import { EncounterPhase } from "#app/phases/encounter-phase";
 import { SelectStarterPhase } from "#app/phases/select-starter-phase";
 import type { TitlePhase } from "#app/phases/title-phase";
-import type { OptionSelectItem } from "#app/ui/option-select-ui-handler";
+import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import type SaveSlotSelectUiHandler from "#app/ui/save-slot-select-ui-handler";
-import type OptionSelectUiHandler from "#app/ui/settings/option-select-ui-handler";
+import type OptionSelectUiHandler from "#app/ui/option-select-ui-handler";
 import type StarterSelectUiHandler from "#app/ui/starter-select-ui-handler";
 import { Mode } from "#app/ui/ui";
 import { Abilities } from "#enums/abilities";
@@ -63,6 +63,7 @@ describe("UI - Starter select", () => {
     await new Promise<void>((resolve) => {
       game.onNextPrompt("SelectStarterPhase", Mode.OPTION_SELECT, () => {
         optionSelectUiHandler = game.scene.ui.getHandler() as OptionSelectUiHandler;
+        // TODO see how to do this without the need for getOptionsWithScroll to be public
         options = optionSelectUiHandler.getOptionsWithScroll();
         resolve();
       });

@@ -8,15 +8,15 @@ import { fixedInt, getCookie, getEnumKeys, isBeta, isLocal } from "#app/utils";
 import { Button } from "#enums/buttons";
 import { GameDataType } from "#enums/game-data-type";
 import i18next from "i18next";
-import { loggedInUser, updateUserInfo } from "../account";
-import { Tutorial, handleTutorial } from "../tutorial";
-import type { OptionSelectConfig, OptionSelectItem } from "./option-select-ui-handler";
-import { AdminMode, getAdminModeName } from "./admin-ui-handler";
-import type AwaitableUiHandler from "./awaitable-ui-handler";
-import MessageUiHandler from "./message-ui-handler";
+import { loggedInUser, updateUserInfo } from "#app/account";
+import { Tutorial, handleTutorial } from "#app/tutorial";
+import type { OptionSelectConfig, OptionSelectItem } from "#app/ui/interfaces/option-select-config";
+import { AdminMode, getAdminModeName } from "#app/ui/admin-ui-handler";
+import type AwaitableUiHandler from "#app/ui/awaitable-ui-handler";
+import MessageUiHandler from "#app/ui/message-ui-handler";
 import { TextStyle, addTextObject, getTextStyleOptions } from "./text";
-import { Mode } from "./ui";
-import { WindowVariant, addWindow } from "./ui-theme";
+import { Mode } from "#app/ui/ui";
+import { WindowVariant, addWindow } from "#app/ui/ui-theme";
 
 enum MenuOptions {
   GAME_SETTINGS,

@@ -14,7 +14,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { AbilityAttr } from "#app/data/dex-attributes";
 import PokemonData from "#app/system/pokemon-data";
-import type { OptionSelectItem } from "#app/ui/option-select-ui-handler";
+import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import { isNullOrUndefined, randSeedShuffle } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";

@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import type { OptionSelectConfig } from "#app/ui/option-select-ui-handler";
+import type { OptionSelectConfig } from "#app/ui/interfaces/option-select-config";
 import OptionSelectUiHandler from "#app/ui/option-select-ui-handler";
 import { Mode } from "#app/ui/ui";
 import { Button } from "#enums/buttons";

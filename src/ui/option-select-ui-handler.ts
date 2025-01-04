@@ -1,4 +1,5 @@
 import { globalScene } from "#app/global-scene";
+import type { OptionSelectConfig, OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import { TextStyle, addTextObject, getTextStyleOptions } from "#app/ui/text";
 import { Mode } from "#app/ui/ui";
 import UiHandler from "#app/ui/ui-handler";
@@ -6,26 +7,6 @@ import { addWindow } from "#app/ui/ui-theme";
 import { fixedInt, rgbHexToRgba } from "#app/utils";
 import { Button } from "#enums/buttons";
 import { argbFromRgba } from "@material/material-color-utilities";
-
-export interface OptionSelectConfig {
-  xOffset?: number;
-  yOffset?: number;
-  options: OptionSelectItem[];
-  maxOptions?: number;
-  delay?: number;
-  noCancel?: boolean;
-  supportHover?: boolean;
-}
-
-export interface OptionSelectItem {
-  label: string;
-  handler: () => boolean;
-  onHover?: () => void;
-  keepOpen?: boolean;
-  overrideSound?: boolean;
-  item?: string;
-  itemArgs?: any[];
-}
 
 const scrollUpLabel = "↑";
 const scrollDownLabel = "↓";
@@ -283,7 +264,7 @@ export default class OptionSelectUiHandler extends UiHandler {
     this.cursorObj?.setAlpha(1);
   }
 
-  protected getOptionsWithScroll(): OptionSelectItem[] {
+  public getOptionsWithScroll(): OptionSelectItem[] {
     if (!this.config) {
       return [];
     }
