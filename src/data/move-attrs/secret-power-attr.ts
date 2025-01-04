@@ -22,7 +22,7 @@ import { applyAbAttrs, applyPreDefendAbAttrs } from "../ability";
  */
 export class SecretPowerAttr extends MoveEffectAttr {
   constructor() {
-    super(false);
+    super(false, { lastHitOnly: true });
   }
 
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
