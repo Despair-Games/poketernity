@@ -56,7 +56,6 @@ import fs from "fs";
 import { expect, vi } from "vitest";
 import { globalScene } from "#app/global-scene";
 import type StarterSelectUiHandler from "#app/ui/starter-select-ui-handler";
-import { GameData } from "#app/system/game-data";
 
 /**
  * Class to manage the game state and transitions between phases.
@@ -99,9 +98,8 @@ export class GameManager {
     this.phaseInterceptor = new PhaseInterceptor(this.scene);
 
     if (!firstTimeScene) {
-      this.scene.reset();
+      this.scene.reset(false, true);
       (this.scene.ui.handlers[Mode.STARTER_SELECT] as StarterSelectUiHandler).clearStarterPreferences();
-      this.scene.gameData = new GameData();
       this.scene.clearAllPhases();
 
       // This part, in particular, must not be run before the PhaseInterceptor has been initialized.
