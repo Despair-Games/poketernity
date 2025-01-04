@@ -128,7 +128,6 @@ import { UiTheme } from "#enums/ui-theme";
 import { TimedEventManager } from "#app/timed-event-manager";
 import type { PokemonAnimType } from "#enums/pokemon-anim-type";
 import i18next from "i18next";
-import { TrainerType } from "#enums/trainer-type";
 import { classicFinalBossDialogue } from "#app/data/dialogue";
 import { LoadingScene } from "#app/loading-scene";
 import { LevelCapPhase } from "#app/phases/level-cap-phase";
@@ -1361,7 +1360,7 @@ export default class BattleScene extends SceneBase {
           // Add a check that special trainers can't be double except for tate and liza - they should use the normal double chance
           if (
             allTrainerConfigs[trainerType].trainerTypeDouble
-            && ![TrainerType.TATE, TrainerType.LIZA].includes(trainerType)
+            // && ![TrainerType.TATE, TrainerType.LIZA].includes(trainerType) TODO: Add back special double trainers for doubles mode
           ) {
             doubleTrainer = false;
           }
