@@ -29,7 +29,7 @@ export interface OptionSelectConfig {
 export interface OptionSelectItem {
   /**
    * Text that will be shown in the menu for this option.
-   * Can only be on a single line.
+   * Can only be on a single line, can use BBCode.
    */
   label: string;
   /** Handler called when that option is selected. */

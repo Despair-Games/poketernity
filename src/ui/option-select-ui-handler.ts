@@ -1,11 +1,12 @@
 import { globalScene } from "#app/global-scene";
 import type { OptionSelectConfig, OptionSelectItem } from "#app/ui/interfaces/option-select-config";
-import { TextStyle, addTextObject, getTextStyleOptions } from "#app/ui/text";
+import { TextStyle, addBBCodeTextObject, getTextStyleOptions } from "#app/ui/text";
 import { Mode } from "#app/ui/ui";
 import UiHandler from "#app/ui/ui-handler";
 import { addWindow } from "#app/ui/ui-theme";
 import { fixedInt } from "#app/utils";
 import { Button } from "#enums/buttons";
+import type BBCodeText from "phaser3-rex-plugins/plugins/gameobjects/tagtext/bbcodetext/BBCodeText";
 
 const scrollUpLabel = "↑";
 const scrollDownLabel = "↓";
@@ -13,7 +14,7 @@ const scrollDownLabel = "↓";
 export default class OptionSelectUiHandler extends UiHandler {
   protected optionSelectContainer: Phaser.GameObjects.Container;
   protected optionSelectBg: Phaser.GameObjects.NineSlice;
-  protected optionSelectText: Phaser.GameObjects.Text;
+  protected optionSelectText: BBCodeText;
   protected optionSelectIcons: Phaser.GameObjects.Sprite[];
 
   protected config: OptionSelectConfig | null;
@@ -90,18 +91,18 @@ export default class OptionSelectUiHandler extends UiHandler {
       this.optionSelectIcons.splice(0, this.optionSelectIcons.length);
     }
 
-    this.optionSelectText = addTextObject(
+    this.optionSelectText = addBBCodeTextObject(
       0,
       0,
       // TODO handle icon size properly
       options.map((o) => (o.iconsConfig ? `    ${o.label}` : o.label)).join("\n"),
       TextStyle.WINDOW,
-      { maxLines: options.length },
+      { maxLines: options.length, lineSpacing: this.scale * 72 },
     );
-    this.optionSelectText.setLineSpacing(this.scale * 72);
+    this.optionSelectText.setOrigin(0, 0);
     this.optionSelectText.setName("text-option-select");
-    this.optionSelectText.setLineSpacing(12);
     this.optionSelectContainer.add(this.optionSelectText);
+
     this.optionSelectContainer.setPosition(
       globalScene.game.canvas.width / 6 - 1 - (this.config?.xOffset || 0),
       -48 + (this.config?.yOffset || 0),
@@ -120,7 +121,10 @@ export default class OptionSelectUiHandler extends UiHandler {
 
     this.optionSelectBg.height = this.getWindowHeight();
 
-    this.optionSelectText.setPositionRelative(this.optionSelectBg, 12 + 24 * this.scale, 2 + 42 * this.scale);
+    this.optionSelectText.setPosition(
+      this.optionSelectBg.x - this.optionSelectBg.width + 12 + 24 * this.scale,
+      this.optionSelectBg.y - this.optionSelectBg.height + 2 + 42 * this.scale,
+    );
 
     options.forEach((option: OptionSelectItem, i: number) => {
       if (option.iconsConfig) {
