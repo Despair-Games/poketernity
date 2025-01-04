@@ -3,7 +3,7 @@ import { applyPreSwitchOutAbAttrs } from "#app/data/ability";
 import { PreSwitchOutAbAttr } from "#app/data/ab-attrs/pre-switch-out-ab-attr";
 import { getPokeballTintColor } from "#app/data/pokeball";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";
-import { TrainerSlot } from "#app/data/trainer-config";
+import { TrainerSlot } from "#enums/TrainerSlot";
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { SwitchEffectTransferModifier } from "#app/modifier/modifier";

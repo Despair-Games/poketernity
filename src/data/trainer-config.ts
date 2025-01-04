@@ -15,28 +15,16 @@ import { PartyMemberStrength } from "#enums/party-member-strength";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
 import Overrides from "#app/overrides";
+import { TrainerPoolTier } from "../enums/TrainerPoolTier";
+import { TrainerSlot } from "../enums/TrainerSlot";
 
 /** Minimum BST for Pokemon generated onto the Elite Four's teams */
 const ELITE_FOUR_MINIMUM_BST = 460;
 /** Minimum BST for Pokemon generated onto the E4 Champion's team */
 const CHAMPION_MINIMUM_BST = 508;
 
-export enum TrainerPoolTier {
-  COMMON,
-  UNCOMMON,
-  RARE,
-  SUPER_RARE,
-  ULTRA_RARE,
-}
-
 export interface TrainerTierPools {
   [key: number]: Species[];
-}
-
-export enum TrainerSlot {
-  NONE,
-  TRAINER,
-  TRAINER_PARTNER,
 }
 
 export class TrainerPartyTemplate {

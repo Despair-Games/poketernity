@@ -4,10 +4,10 @@ import {
   getWavePartyTemplate,
   TrainerConfig,
   trainerPartyTemplates,
-  TrainerPoolTier,
-  TrainerSlot,
   type TrainerConfigs,
 } from "#app/data/trainer-config";
+import { TrainerSlot } from "#enums/TrainerSlot";
+import { TrainerPoolTier } from "#enums/TrainerPoolTier";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";

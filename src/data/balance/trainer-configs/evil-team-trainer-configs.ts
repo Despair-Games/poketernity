@@ -2,10 +2,10 @@ import {
   getEvilGruntPartyTemplate,
   getRandomPartyMemberFunc,
   TrainerConfig,
-  TrainerPoolTier,
-  TrainerSlot,
   type TrainerConfigs,
 } from "#app/data/trainer-config";
+import { TrainerSlot } from "#enums/TrainerSlot";
+import { TrainerPoolTier } from "#enums/TrainerPoolTier";
 import { PokemonMove } from "#app/field/pokemon";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";

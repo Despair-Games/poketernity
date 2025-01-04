@@ -3,12 +3,9 @@ import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
 import type { TrainerConfig, TrainerPartyTemplate } from "#app/data/trainer-config";
-import {
-  TrainerPartyCompoundTemplate,
-  TrainerPoolTier,
-  TrainerSlot,
-  trainerPartyTemplates,
-} from "#app/data/trainer-config";
+import { TrainerPartyCompoundTemplate, trainerPartyTemplates } from "#app/data/trainer-config";
+import { TrainerSlot } from "#enums/TrainerSlot";
+import { TrainerPoolTier } from "#enums/TrainerPoolTier";
 import { signatureSpecies } from "#app/data/balance/signatureSpecies";
 import type { EnemyPokemon } from "#app/field/pokemon";
 import { randSeedWeightedItem, randSeedItem, randSeedInt } from "#app/utils";
