@@ -47,11 +47,11 @@ describe("Moves - Spectral Thief", () => {
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
-    const preEffectDamage = enemy.getAttackDamage(player, allMoves[Moves.SPECTRAL_THIEF]).finalDamage;
+    const preEffectDamage = enemy.getAttackDamage(player, allMoves[Moves.SPECTRAL_THIEF]).damage;
 
     await game.phaseInterceptor.to("MoveEffectPhase");
 
-    const postEffectDamage = spy.mock.results.at(-1)?.value.finalDamage;
+    const postEffectDamage = spy.mock.results.at(-1)?.value.damage;
     expect(postEffectDamage).toBeGreaterThan(preEffectDamage);
     expect(player.getStatStage(Stat.DEF)).toBe(2);
     expect(enemy.getStatStage(Stat.DEF)).toBe(0);
