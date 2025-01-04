@@ -37,7 +37,7 @@ export class PostDefendCritStatStageChangeAbAttr extends PostDefendAbAttr {
       pokemon.turnData.attacksReceived.length !== 0
       && attacksReceivedEntry.isCritical
       && attacksReceivedEntry.sourceId === attacker.id
-      && pokemon.summonData.statStages[Stat.ATK] < 6
+      && pokemon.getStatStage(Stat.ATK) < 6
     ) {
       if (!simulated) {
         globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [this.stat], this.stages));
