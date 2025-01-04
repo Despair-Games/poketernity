@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import type { ModifierTypeOption } from "../modifier/modifier-type";
 import { getPlayerShopModifierTypeOptionsForWave, TmModifierType } from "../modifier/modifier-type";
 import { getPokeballAtlasKey } from "#app/data/pokeball";
-import { addTextObject, getTextStyleOptions, getModifierTierTextTint, getTextColor, TextStyle } from "./text";
+import { getTextStyleOptions, getModifierTierTextTint, getTextColor, TextStyle } from "./text";
 import AwaitableUiHandler from "./awaitable-ui-handler";
 import { Mode } from "./ui";
 import { LockModifierTiersModifier, PokemonHeldItemModifier, HealShopCostModifier } from "../modifier/modifier";
@@ -81,7 +81,12 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
     this.transferButtonContainer.setVisible(false);
     ui.add(this.transferButtonContainer);
 
-    const transferButtonText = addTextObject(-4, -2, i18next.t("modifierSelectUiHandler:transfer"), TextStyle.PARTY);
+    const transferButtonText = globalScene.addTextObject(
+      -4,
+      -2,
+      i18next.t("modifierSelectUiHandler:transfer"),
+      TextStyle.PARTY,
+    );
     transferButtonText.setName("text-transfer-btn");
     transferButtonText.setOrigin(1, 0);
     this.transferButtonContainer.add(transferButtonText);
@@ -94,7 +99,12 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
     this.checkButtonContainer.setVisible(false);
     ui.add(this.checkButtonContainer);
 
-    const checkButtonText = addTextObject(-4, -2, i18next.t("modifierSelectUiHandler:checkTeam"), TextStyle.PARTY);
+    const checkButtonText = globalScene.addTextObject(
+      -4,
+      -2,
+      i18next.t("modifierSelectUiHandler:checkTeam"),
+      TextStyle.PARTY,
+    );
     checkButtonText.setName("text-use-btn");
     checkButtonText.setOrigin(1, 0);
     this.checkButtonContainer.add(checkButtonText);
@@ -104,12 +114,17 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
     this.rerollButtonContainer.setVisible(false);
     ui.add(this.rerollButtonContainer);
 
-    const rerollButtonText = addTextObject(-4, -2, i18next.t("modifierSelectUiHandler:reroll"), TextStyle.PARTY);
+    const rerollButtonText = globalScene.addTextObject(
+      -4,
+      -2,
+      i18next.t("modifierSelectUiHandler:reroll"),
+      TextStyle.PARTY,
+    );
     rerollButtonText.setName("text-reroll-btn");
     rerollButtonText.setOrigin(0, 0);
     this.rerollButtonContainer.add(rerollButtonText);
 
-    this.rerollCostText = addTextObject(0, 0, "", TextStyle.MONEY);
+    this.rerollCostText = globalScene.addTextObject(0, 0, "", TextStyle.MONEY);
     this.rerollCostText.setName("text-reroll-cost");
     this.rerollCostText.setOrigin(0, 0);
     this.rerollCostText.setPositionRelative(rerollButtonText, rerollButtonText.displayWidth + 5, 1);
@@ -119,7 +134,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
     this.lockRarityButtonContainer.setVisible(false);
     ui.add(this.lockRarityButtonContainer);
 
-    this.lockRarityButtonText = addTextObject(
+    this.lockRarityButtonText = globalScene.addTextObject(
       -4,
       -2,
       i18next.t("modifierSelectUiHandler:lockRarities"),
@@ -136,7 +151,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
     ui.add(this.continueButtonContainer);
 
     // Create continue button
-    const continueButtonText = addTextObject(
+    const continueButtonText = globalScene.addTextObject(
       -24,
       5,
       i18next.t("modifierSelectUiHandler:continueNextWaveButton"),
@@ -755,7 +770,9 @@ class ModifierOption extends Phaser.GameObjects.Container {
       this.itemContainer.add(this.itemTint);
     }
 
-    this.itemText = addTextObject(0, 35, this.modifierTypeOption.type?.name!, TextStyle.PARTY, { align: "center" }); // TODO: is this bang correct?
+    this.itemText = globalScene.addTextObject(0, 35, this.modifierTypeOption.type?.name!, TextStyle.PARTY, {
+      align: "center",
+    }); // TODO: is this bang correct?
     this.itemText.setOrigin(0.5, 0);
     this.itemText.setAlpha(0);
     this.itemText.setTint(
@@ -764,7 +781,7 @@ class ModifierOption extends Phaser.GameObjects.Container {
     this.add(this.itemText);
 
     if (this.modifierTypeOption.cost) {
-      this.itemCostText = addTextObject(0, 45, "", TextStyle.MONEY, { align: "center" });
+      this.itemCostText = globalScene.addTextObject(0, 45, "", TextStyle.MONEY, { align: "center" });
 
       this.itemCostText.setOrigin(0.5, 0);
       this.itemCostText.setAlpha(0);

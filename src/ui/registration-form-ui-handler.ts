@@ -2,7 +2,7 @@ import type { InputFieldConfig } from "./form-modal-ui-handler";
 import { FormModalUiHandler } from "./form-modal-ui-handler";
 import type { ModalConfig } from "./modal-ui-handler";
 import { Mode } from "./ui";
-import { TextStyle, addTextObject } from "./text";
+import { TextStyle } from "./text";
 import i18next from "i18next";
 import { api } from "#app/plugins/api/api";
 import { globalScene } from "#app/global-scene";
@@ -79,9 +79,15 @@ export default class RegistrationFormUiHandler extends FormModalUiHandler {
     });
 
     const warningMessageFontSize = languageSettings[i18next.resolvedLanguage!]?.warningMessageFontSize ?? "42px";
-    const label = addTextObject(10, 87, i18next.t("menu:registrationAgeWarning"), TextStyle.TOOLTIP_CONTENT, {
-      fontSize: warningMessageFontSize,
-    });
+    const label = globalScene.addTextObject(
+      10,
+      87,
+      i18next.t("menu:registrationAgeWarning"),
+      TextStyle.TOOLTIP_CONTENT,
+      {
+        fontSize: warningMessageFontSize,
+      },
+    );
 
     this.modalContainer.add(label);
   }

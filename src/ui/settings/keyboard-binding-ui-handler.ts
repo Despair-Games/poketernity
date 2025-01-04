@@ -2,7 +2,7 @@ import AbstractBindingUiHandler from "./abstract-binding-ui-handler";
 import type { Mode } from "../ui";
 import { getKeyWithKeycode } from "#app/configs/inputs/configHandler";
 import { Device } from "#enums/devices";
-import { addTextObject, TextStyle } from "#app/ui/text";
+import { TextStyle } from "#app/ui/text";
 import { globalScene } from "#app/global-scene";
 
 export default class KeyboardBindingUiHandler extends AbstractBindingUiHandler {
@@ -21,7 +21,7 @@ export default class KeyboardBindingUiHandler extends AbstractBindingUiHandler {
     this.newButtonIcon.setOrigin(0.5);
     this.newButtonIcon.setVisible(false);
 
-    this.actionLabel = addTextObject(0, 0, "Assign button", TextStyle.SETTINGS_LABEL);
+    this.actionLabel = globalScene.addTextObject(0, 0, "Assign button", TextStyle.SETTINGS_LABEL);
     this.actionLabel.setOrigin(0, 0.5);
     this.actionLabel.setPositionRelative(this.actionBg, this.actionBg.width - 80, this.actionBg.height / 2);
     this.actionsContainer.add(this.actionLabel);

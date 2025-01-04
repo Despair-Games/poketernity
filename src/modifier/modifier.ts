@@ -20,7 +20,7 @@ import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";
 import { achvs } from "#app/system/achv";
 import type { VoucherType } from "#app/system/voucher";
 import { Command } from "#app/ui/command-ui-handler";
-import { addTextObject, TextStyle } from "#app/ui/text";
+import { TextStyle } from "#app/ui/text";
 import { BooleanHolder, hslToHex, isNullOrUndefined, NumberHolder, toDmgValue } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryType } from "#enums/berry-type";
@@ -411,7 +411,7 @@ export abstract class LapsingPersistentModifier extends PersistentModifier {
     const typeHex = hslToHex(hue, 0.5, 0.9);
     const strokeHex = hslToHex(hue, 0.7, 0.3);
 
-    const battleCountText = addTextObject(27, 0, this.battleCount.toString(), TextStyle.PARTY, {
+    const battleCountText = globalScene.addTextObject(27, 0, this.battleCount.toString(), TextStyle.PARTY, {
       fontSize: "66px",
       color: typeHex,
     });
@@ -813,7 +813,7 @@ export abstract class LapsingPokemonHeldItemModifier extends PokemonHeldItemModi
     const container = super.getIcon(forSummary);
 
     if (this.getPokemon()?.isPlayer()) {
-      const battleCountText = addTextObject(27, 0, this.battlesLeft.toString(), TextStyle.PARTY, {
+      const battleCountText = globalScene.addTextObject(27, 0, this.battlesLeft.toString(), TextStyle.PARTY, {
         fontSize: "66px",
         color: Color.PINK,
       });

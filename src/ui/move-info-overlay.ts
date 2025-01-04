@@ -1,7 +1,6 @@
 import type { InfoToggle } from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
-import { TextStyle, addTextObject } from "./text";
-import { addWindow } from "./ui-theme";
+import { TextStyle } from "./text";
 import { getLocalizedSpriteKey, fixedInt } from "#app/utils";
 import type { Move } from "../data/move";
 import { MoveCategory } from "#app/enums/move-category";
@@ -59,7 +58,7 @@ export default class MoveInfoOverlay extends Phaser.GameObjects.Container implem
 
     // prepare the description box
     const width = (options?.width || MoveInfoOverlay.getWidth(scale)) / scale; // divide by scale as we always want this to be half a window wide
-    this.descBg = addWindow(
+    this.descBg = globalScene.addWindow(
       options?.onSide && !options?.right ? EFF_WIDTH : 0,
       options?.top ? EFF_HEIGHT : 0,
       width - (options?.onSide ? EFF_WIDTH : 0),
@@ -69,7 +68,7 @@ export default class MoveInfoOverlay extends Phaser.GameObjects.Container implem
     this.add(this.descBg);
 
     // set up the description; wordWrap uses true pixels, unaffected by any scaling, while other values are affected
-    this.desc = addTextObject(
+    this.desc = globalScene.addTextObject(
       (options?.onSide && !options?.right ? EFF_WIDTH : 0) + BORDER,
       (options?.top ? EFF_HEIGHT : 0) + BORDER - 2,
       "",
@@ -112,7 +111,7 @@ export default class MoveInfoOverlay extends Phaser.GameObjects.Container implem
     );
     this.add(this.val);
 
-    const valuesBg = addWindow(0, 0, EFF_WIDTH, EFF_HEIGHT);
+    const valuesBg = globalScene.addWindow(0, 0, EFF_WIDTH, EFF_HEIGHT);
     valuesBg.setOrigin(0, 0);
     this.val.add(valuesBg);
 
@@ -123,30 +122,30 @@ export default class MoveInfoOverlay extends Phaser.GameObjects.Container implem
     this.cat = globalScene.add.sprite(57, EFF_HEIGHT - 35, "categories", "physical");
     this.val.add(this.cat);
 
-    const ppTxt = addTextObject(12, EFF_HEIGHT - 25, "PP", TextStyle.MOVE_INFO_CONTENT);
+    const ppTxt = globalScene.addTextObject(12, EFF_HEIGHT - 25, "PP", TextStyle.MOVE_INFO_CONTENT);
     ppTxt.setOrigin(0.0, 0.5);
     ppTxt.setText(i18next.t("fightUiHandler:pp"));
     this.val.add(ppTxt);
 
-    this.pp = addTextObject(70, EFF_HEIGHT - 25, "--", TextStyle.MOVE_INFO_CONTENT);
+    this.pp = globalScene.addTextObject(70, EFF_HEIGHT - 25, "--", TextStyle.MOVE_INFO_CONTENT);
     this.pp.setOrigin(1, 0.5);
     this.val.add(this.pp);
 
-    const powTxt = addTextObject(12, EFF_HEIGHT - 17, "POWER", TextStyle.MOVE_INFO_CONTENT);
+    const powTxt = globalScene.addTextObject(12, EFF_HEIGHT - 17, "POWER", TextStyle.MOVE_INFO_CONTENT);
     powTxt.setOrigin(0.0, 0.5);
     powTxt.setText(i18next.t("fightUiHandler:power"));
     this.val.add(powTxt);
 
-    this.pow = addTextObject(70, EFF_HEIGHT - 17, "---", TextStyle.MOVE_INFO_CONTENT);
+    this.pow = globalScene.addTextObject(70, EFF_HEIGHT - 17, "---", TextStyle.MOVE_INFO_CONTENT);
     this.pow.setOrigin(1, 0.5);
     this.val.add(this.pow);
 
-    const accTxt = addTextObject(12, EFF_HEIGHT - 9, "ACC", TextStyle.MOVE_INFO_CONTENT);
+    const accTxt = globalScene.addTextObject(12, EFF_HEIGHT - 9, "ACC", TextStyle.MOVE_INFO_CONTENT);
     accTxt.setOrigin(0.0, 0.5);
     accTxt.setText(i18next.t("fightUiHandler:accuracy"));
     this.val.add(accTxt);
 
-    this.acc = addTextObject(70, EFF_HEIGHT - 9, "---", TextStyle.MOVE_INFO_CONTENT);
+    this.acc = globalScene.addTextObject(70, EFF_HEIGHT - 9, "---", TextStyle.MOVE_INFO_CONTENT);
     this.acc.setOrigin(1, 0.5);
     this.val.add(this.acc);
 

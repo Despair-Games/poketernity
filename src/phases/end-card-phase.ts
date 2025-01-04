@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { PlayerGender } from "#app/enums/player-gender";
 import { Phase } from "#app/phase";
-import { addTextObject, TextStyle } from "#app/ui/text";
+import { TextStyle } from "#app/ui/text";
 import i18next from "i18next";
 
 export class EndCardPhase extends Phase {
@@ -27,7 +27,7 @@ export class EndCardPhase extends Phase {
     this.endCard.setScale(0.5);
     globalScene.field.add(this.endCard);
 
-    this.text = addTextObject(
+    this.text = globalScene.addTextObject(
       globalScene.game.canvas.width / 12,
       globalScene.game.canvas.height / 6 - 16,
       i18next.t("battle:congratulations"),

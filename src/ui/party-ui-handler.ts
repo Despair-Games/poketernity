@@ -1,7 +1,7 @@
 import type { PlayerPokemon, PokemonMove } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { MoveResult } from "#app/field/pokemon";
-import { addBBCodeTextObject, addTextObject, getTextColor, TextStyle } from "#app/ui/text";
+import { addBBCodeTextObject, getTextColor, TextStyle } from "#app/ui/text";
 import { Command } from "#app/ui/command-ui-handler";
 import MessageUiHandler from "#app/ui/message-ui-handler";
 import { Mode } from "#app/ui/ui";
@@ -16,7 +16,6 @@ import { getGenderColor, getGenderShadowColor, getGenderSymbol } from "#app/data
 import { StatusEffect } from "#enums/status-effect";
 import PokemonIconAnimHandler, { PokemonIconAnimMode } from "#app/ui/pokemon-icon-anim-handler";
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
-import { addWindow } from "#app/ui/ui-theme";
 import { SpeciesFormChangeItemTrigger, FormChangeItem } from "#app/data/pokemon-forms";
 import { getVariantTint } from "#app/data/variant";
 import { Button } from "#enums/buttons";
@@ -280,14 +279,14 @@ export default class PartyUiHandler extends MessageUiHandler {
     partyMessageBoxContainer.setName("party-msg-box");
     partyContainer.add(partyMessageBoxContainer);
 
-    const partyMessageBox = addWindow(1, 31, 262, 30);
+    const partyMessageBox = globalScene.addWindow(1, 31, 262, 30);
     partyMessageBox.setName("window-party-msg-box");
     partyMessageBox.setOrigin(0, 1);
     partyMessageBoxContainer.add(partyMessageBox);
 
     this.partyMessageBox = partyMessageBox;
 
-    const partyMessageText = addTextObject(10, 8, defaultMessage, TextStyle.WINDOW, { maxLines: 2 });
+    const partyMessageText = globalScene.addTextObject(10, 8, defaultMessage, TextStyle.WINDOW, { maxLines: 2 });
     partyMessageText.setName("text-party-msg");
 
     partyMessageText.setOrigin(0, 0);
@@ -1119,7 +1118,7 @@ export default class PartyUiHandler extends MessageUiHandler {
 
     this.options.push(PartyOption.CANCEL);
 
-    this.optionsBg = addWindow(0, 0, 0, 16 * this.options.length + 13);
+    this.optionsBg = globalScene.addWindow(0, 0, 0, 16 * this.options.length + 13);
     this.optionsBg.setOrigin(1, 1);
 
     this.optionsContainer.add(this.optionsBg);
@@ -1444,7 +1443,7 @@ class PartySlot extends Phaser.GameObjects.Container {
     let displayName = this.pokemon.getNameToRender();
     let nameTextWidth: number;
 
-    const nameSizeTest = addTextObject(0, 0, displayName, TextStyle.PARTY);
+    const nameSizeTest = globalScene.addTextObject(0, 0, displayName, TextStyle.PARTY);
     nameTextWidth = nameSizeTest.displayWidth;
 
     while (nameTextWidth > (this.slotIndex >= battlerCount ? 52 : 76 - (this.pokemon.fusionSpecies ? 8 : 0))) {
@@ -1455,7 +1454,7 @@ class PartySlot extends Phaser.GameObjects.Container {
 
     nameSizeTest.destroy();
 
-    this.slotName = addTextObject(0, 0, displayName, TextStyle.PARTY);
+    this.slotName = globalScene.addTextObject(0, 0, displayName, TextStyle.PARTY);
     this.slotName.setPositionRelative(
       slotBg,
       this.slotIndex >= battlerCount ? 21 : 24,
@@ -1467,7 +1466,7 @@ class PartySlot extends Phaser.GameObjects.Container {
     slotLevelLabel.setPositionRelative(this.slotName, 8, 12);
     slotLevelLabel.setOrigin(0, 0);
 
-    const slotLevelText = addTextObject(
+    const slotLevelText = globalScene.addTextObject(
       0,
       0,
       this.pokemon.level.toString(),
@@ -1481,7 +1480,7 @@ class PartySlot extends Phaser.GameObjects.Container {
     const genderSymbol = getGenderSymbol(this.pokemon.getGender(true));
 
     if (genderSymbol) {
-      const slotGenderText = addTextObject(0, 0, genderSymbol, TextStyle.PARTY);
+      const slotGenderText = globalScene.addTextObject(0, 0, genderSymbol, TextStyle.PARTY);
       slotGenderText.setColor(getGenderColor(this.pokemon.getGender(true)));
       slotGenderText.setShadowColor(getGenderShadowColor(this.pokemon.getGender(true)));
       if (this.slotIndex >= battlerCount) {
@@ -1558,12 +1557,12 @@ class PartySlot extends Phaser.GameObjects.Container {
     this.slotHpOverlay.setScale(hpRatio, 1);
     this.slotHpOverlay.setVisible(false);
 
-    this.slotHpText = addTextObject(0, 0, `${this.pokemon.hp}/${this.pokemon.getMaxHp()}`, TextStyle.PARTY);
+    this.slotHpText = globalScene.addTextObject(0, 0, `${this.pokemon.hp}/${this.pokemon.getMaxHp()}`, TextStyle.PARTY);
     this.slotHpText.setPositionRelative(this.slotHpBar, this.slotHpBar.width - 3, this.slotHpBar.height - 2);
     this.slotHpText.setOrigin(1, 0);
     this.slotHpText.setVisible(false);
 
-    this.slotDescriptionLabel = addTextObject(0, 0, "", TextStyle.MESSAGE);
+    this.slotDescriptionLabel = globalScene.addTextObject(0, 0, "", TextStyle.MESSAGE);
     this.slotDescriptionLabel.setPositionRelative(
       slotBg,
       this.slotIndex >= battlerCount ? 94 : 32,
@@ -1663,7 +1662,7 @@ class PartyCancelButton extends Phaser.GameObjects.Container {
 
     this.partyCancelPb = partyCancelPb;
 
-    const partyCancelText = addTextObject(-8, -7, i18next.t("partyUiHandler:cancel"), TextStyle.PARTY);
+    const partyCancelText = globalScene.addTextObject(-8, -7, i18next.t("partyUiHandler:cancel"), TextStyle.PARTY);
     this.add(partyCancelText);
   }
 

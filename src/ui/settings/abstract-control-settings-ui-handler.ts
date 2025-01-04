@@ -1,8 +1,7 @@
 import UiHandler from "#app/ui/ui-handler";
 import type { Mode } from "#app/ui/ui";
 import type { InterfaceConfig } from "#app/inputs-controller";
-import { addWindow } from "#app/ui/ui-theme";
-import { addTextObject, TextStyle } from "#app/ui/text";
+import { TextStyle } from "#app/ui/text";
 import { ScrollBar } from "#app/ui/scroll-bar";
 import { getIconWithSettingName } from "#app/configs/inputs/configHandler";
 import NavigationMenu, { NavigationManager } from "#app/ui/settings/navigationMenu";
@@ -112,7 +111,7 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
 
     this.navigationContainer = new NavigationMenu(0, 0);
 
-    this.optionsBg = addWindow(
+    this.optionsBg = globalScene.addWindow(
       0,
       this.navigationContainer.height,
       globalScene.game.canvas.width / 6 - 2,
@@ -120,7 +119,7 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
     );
     this.optionsBg.setOrigin(0, 0);
 
-    this.actionsBg = addWindow(
+    this.actionsBg = globalScene.addWindow(
       0,
       globalScene.game.canvas.height / 6 - this.navigationContainer.height,
       globalScene.game.canvas.width / 6 - 2,
@@ -133,7 +132,7 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
     iconAction.setPositionRelative(this.actionsBg, this.navigationContainer.width - 32, 4);
     this.navigationIcons["BUTTON_ACTION"] = iconAction;
 
-    const actionText = addTextObject(0, 0, i18next.t("settings:action"), TextStyle.SETTINGS_LABEL);
+    const actionText = globalScene.addTextObject(0, 0, i18next.t("settings:action"), TextStyle.SETTINGS_LABEL);
     actionText.setOrigin(0, 0.15);
     actionText.setPositionRelative(iconAction, -actionText.width / 6 - 2, 0);
 
@@ -142,7 +141,7 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
     iconCancel.setPositionRelative(this.actionsBg, this.navigationContainer.width - 100, 4);
     this.navigationIcons["BUTTON_CANCEL"] = iconCancel;
 
-    const cancelText = addTextObject(0, 0, i18next.t("settings:back"), TextStyle.SETTINGS_LABEL);
+    const cancelText = globalScene.addTextObject(0, 0, i18next.t("settings:back"), TextStyle.SETTINGS_LABEL);
     cancelText.setOrigin(0, 0.15);
     cancelText.setPositionRelative(iconCancel, -cancelText.width / 6 - 2, 0);
 
@@ -151,7 +150,7 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
     iconReset.setPositionRelative(this.actionsBg, this.navigationContainer.width - 180, 4);
     this.navigationIcons["BUTTON_HOME"] = iconReset;
 
-    const resetText = addTextObject(0, 0, i18next.t("settings:reset"), TextStyle.SETTINGS_LABEL);
+    const resetText = globalScene.addTextObject(0, 0, i18next.t("settings:reset"), TextStyle.SETTINGS_LABEL);
     resetText.setOrigin(0, 0.15);
     resetText.setPositionRelative(iconReset, -resetText.width / 6 - 2, 0);
 
@@ -218,7 +217,7 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
         } else {
           labelText = i18next.t(`settings:${i18nKey}`);
         }
-        settingLabels[s] = addTextObject(8, 28 + s * 16, labelText, labelStyle);
+        settingLabels[s] = globalScene.addTextObject(8, 28 + s * 16, labelText, labelStyle);
         settingLabels[s].setOrigin(0, 0);
         optionsContainer.add(settingLabels[s]);
 
@@ -231,7 +230,7 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
           if (bindingSettings.includes(this.setting[setting])) {
             // Create a label for non-null options, typically indicating actionable options like 'change'.
             if (o) {
-              const valueLabel = addTextObject(0, 0, isLock ? "" : option, TextStyle.WINDOW);
+              const valueLabel = globalScene.addTextObject(0, 0, isLock ? "" : option, TextStyle.WINDOW);
               valueLabel.setOrigin(0, 0);
               optionsContainer.add(valueLabel);
               valueLabels.push(valueLabel);
@@ -246,7 +245,7 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
             continue;
           }
           // For regular settings like 'Gamepad support', create a label and determine if it is selected.
-          const valueLabel = addTextObject(
+          const valueLabel = globalScene.addTextObject(
             0,
             0,
             option,

@@ -1,9 +1,8 @@
 import { getPokeballName } from "../data/pokeball";
-import { addTextObject, getTextStyleOptions, TextStyle } from "./text";
+import { getTextStyleOptions, TextStyle } from "./text";
 import { Command } from "./command-ui-handler";
 import { Mode } from "./ui";
 import UiHandler from "./ui-handler";
-import { addWindow } from "./ui-theme";
 import { Button } from "#enums/buttons";
 import type { CommandPhase } from "#app/phases/command-phase";
 import { globalScene } from "#app/global-scene";
@@ -34,7 +33,10 @@ export default class BallUiHandler extends UiHandler {
       optionsTextContent += `${getPokeballName(pb)}\n`;
     }
     optionsTextContent += "Cancel";
-    const optionsText = addTextObject(0, 0, optionsTextContent, TextStyle.WINDOW, { align: "right", maxLines: 6 });
+    const optionsText = globalScene.addTextObject(0, 0, optionsTextContent, TextStyle.WINDOW, {
+      align: "right",
+      maxLines: 6,
+    });
     const optionsTextWidth = optionsText.displayWidth;
     this.pokeballSelectContainer = globalScene.add.container(
       globalScene.game.canvas.width / 6 - 51 - Math.max(64, optionsTextWidth),
@@ -43,7 +45,7 @@ export default class BallUiHandler extends UiHandler {
     this.pokeballSelectContainer.setVisible(false);
     ui.add(this.pokeballSelectContainer);
 
-    this.pokeballSelectBg = addWindow(
+    this.pokeballSelectBg = globalScene.addWindow(
       0,
       0,
       50 + Math.max(64, optionsTextWidth),
@@ -56,7 +58,7 @@ export default class BallUiHandler extends UiHandler {
     optionsText.setPositionRelative(this.pokeballSelectBg, 42, 9);
     optionsText.setLineSpacing(this.scale * 72);
 
-    this.countsText = addTextObject(0, 0, "", TextStyle.WINDOW, { maxLines: 5 });
+    this.countsText = globalScene.addTextObject(0, 0, "", TextStyle.WINDOW, { maxLines: 5 });
     this.countsText.setPositionRelative(this.pokeballSelectBg, 18, 9);
     this.countsText.setLineSpacing(this.scale * 72);
     this.pokeballSelectContainer.add(this.countsText);

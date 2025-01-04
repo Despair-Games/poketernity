@@ -1,5 +1,5 @@
 import type { Pokemon } from "../field/pokemon";
-import { addTextObject, TextStyle } from "./text";
+import { TextStyle } from "./text";
 import { fixedInt } from "#app/utils";
 import { globalScene } from "#app/global-scene";
 import type { Move } from "#app/data/move";
@@ -86,7 +86,7 @@ export default class BattleFlyout extends Phaser.GameObjects.Container {
 
     // Loops through and sets the position of each text object according to the width and height of the flyout
     for (let i = 0; i < 4; i++) {
-      this.flyoutText[i] = addTextObject(
+      this.flyoutText[i] = globalScene.addTextObject(
         this.flyoutWidth / 4 + (this.flyoutWidth / 2) * (i % 2),
         this.flyoutHeight / 4 + (this.flyoutHeight / 2) * (i < 2 ? 0 : 1),
         "???",

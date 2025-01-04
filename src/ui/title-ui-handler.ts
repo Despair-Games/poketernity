@@ -1,7 +1,7 @@
 import OptionSelectUiHandler from "./settings/option-select-ui-handler";
 import { Mode } from "./ui";
 import { fixedInt, randItem } from "#app/utils";
-import { TextStyle, addTextObject, getTextStyleOptions } from "./text";
+import { TextStyle, getTextStyleOptions } from "./text";
 import { getSplashMessages } from "../data/splash-messages";
 import i18next from "i18next";
 import { TimedEventDisplay } from "#app/timed-event-manager";
@@ -46,7 +46,7 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
       this.titleContainer.add(this.eventDisplay);
     }
 
-    this.playerCountLabel = addTextObject(
+    this.playerCountLabel = globalScene.addTextObject(
       globalScene.game.canvas.width / 6 - 2,
       globalScene.game.canvas.height / 6 - 13 - 576 * getTextStyleOptions(TextStyle.WINDOW, globalScene.uiTheme).scale,
       `? ${i18next.t("menu:playersOnline")}`,
@@ -56,9 +56,15 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
     this.playerCountLabel.setOrigin(1, 0);
     this.titleContainer.add(this.playerCountLabel);
 
-    this.splashMessageText = addTextObject(logo.x + 64, logo.y + logo.displayHeight - 8, "", TextStyle.MONEY, {
-      fontSize: "54px",
-    });
+    this.splashMessageText = globalScene.addTextObject(
+      logo.x + 64,
+      logo.y + logo.displayHeight - 8,
+      "",
+      TextStyle.MONEY,
+      {
+        fontSize: "54px",
+      },
+    );
     this.splashMessageText.setOrigin(0.5, 0.5);
     this.splashMessageText.setAngle(-20);
     this.titleContainer.add(this.splashMessageText);
@@ -73,7 +79,7 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
       yoyo: true,
     });
 
-    this.appVersionText = addTextObject(logo.x - 60, logo.y + logo.displayHeight + 4, "", TextStyle.MONEY, {
+    this.appVersionText = globalScene.addTextObject(logo.x - 60, logo.y + logo.displayHeight + 4, "", TextStyle.MONEY, {
       fontSize: "54px",
     });
     this.appVersionText.setOrigin(0.5, 0.5);

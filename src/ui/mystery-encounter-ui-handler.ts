@@ -2,7 +2,7 @@ import { addBBCodeTextObject, getBBCodeFrag, TextStyle } from "./text";
 import { Mode } from "./ui";
 import UiHandler from "./ui-handler";
 import { Button } from "#enums/buttons";
-import { addWindow, WindowVariant } from "./ui-theme";
+import { WindowVariant } from "./ui-theme";
 import type { MysteryEncounterPhase } from "../phases/mystery-encounter-phases";
 import { PartyUiMode } from "./party-ui-handler";
 import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
@@ -71,13 +71,13 @@ export default class MysteryEncounterUiHandler extends UiHandler {
 
     this.setCursor(this.getCursor());
 
-    this.descriptionWindow = addWindow(0, 0, 150, 105, false, false, 0, 0, WindowVariant.THIN);
+    this.descriptionWindow = globalScene.addWindow(0, 0, 150, 105, false, false, 0, 0, WindowVariant.THIN);
     this.descriptionContainer.add(this.descriptionWindow);
 
-    this.tooltipWindow = addWindow(0, 0, 110, 48, false, false, 0, 0, WindowVariant.THIN);
+    this.tooltipWindow = globalScene.addWindow(0, 0, 110, 48, false, false, 0, 0, WindowVariant.THIN);
     this.tooltipContainer.add(this.tooltipWindow);
 
-    this.dexProgressWindow = addWindow(0, 0, 24, 28, false, false, 0, 0, WindowVariant.THIN);
+    this.dexProgressWindow = globalScene.addWindow(0, 0, 24, 28, false, false, 0, 0, WindowVariant.THIN);
     this.dexProgressContainer.add(this.dexProgressWindow);
 
     this.rarityBall = globalScene.add.sprite(141, 9, "pb");

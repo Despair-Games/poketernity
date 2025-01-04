@@ -1,4 +1,4 @@
-import { addTextObject, TextStyle } from "./text";
+import { TextStyle } from "./text";
 import PartyUiHandler, { PartyUiMode } from "./party-ui-handler";
 import { Mode } from "./ui";
 import UiHandler from "./ui-handler";
@@ -41,7 +41,12 @@ export default class CommandUiHandler extends UiHandler {
     ui.add(this.commandsContainer);
 
     for (let c = 0; c < commands.length; c++) {
-      const commandText = addTextObject(c % 2 === 0 ? 0 : 55.8, c < 2 ? 0 : 16, commands[c], TextStyle.WINDOW);
+      const commandText = globalScene.addTextObject(
+        c % 2 === 0 ? 0 : 55.8,
+        c < 2 ? 0 : 16,
+        commands[c],
+        TextStyle.WINDOW,
+      );
       commandText.setName(commands[c]);
       this.commandsContainer.add(commandText);
     }

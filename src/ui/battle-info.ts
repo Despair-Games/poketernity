@@ -1,7 +1,7 @@
 import type { EnemyPokemon, Pokemon } from "../field/pokemon";
 import { getLevelTotalExp, getLevelRelExp } from "../data/exp";
 import { getLocalizedSpriteKey, fixedInt } from "#app/utils";
-import { addTextObject, TextStyle } from "./text";
+import { TextStyle } from "./text";
 import { getGenderSymbol, getGenderColor } from "#app/data/gender";
 import { Gender } from "#enums/gender";
 import { StatusEffect } from "#enums/status-effect";
@@ -11,7 +11,7 @@ import { Type } from "#enums/type";
 import { getVariantTint } from "#app/data/variant";
 import { Stat } from "#enums/stat";
 import BattleFlyout from "./battle-flyout";
-import { WindowVariant, addWindow } from "./ui-theme";
+import { WindowVariant } from "./ui-theme";
 import i18next from "i18next";
 import { ExpGainsSpeed } from "#app/enums/exp-gains-speed";
 
@@ -102,12 +102,12 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
     this.box.setOrigin(1, 0.5);
     this.add(this.box);
 
-    this.nameText = addTextObject(player ? -115 : -124, player ? -15.2 : -11.2, "", TextStyle.BATTLE_INFO);
+    this.nameText = globalScene.addTextObject(player ? -115 : -124, player ? -15.2 : -11.2, "", TextStyle.BATTLE_INFO);
     this.nameText.setName("text_name");
     this.nameText.setOrigin(0, 0);
     this.add(this.nameText);
 
-    this.genderText = addTextObject(0, 0, "", TextStyle.BATTLE_INFO);
+    this.genderText = globalScene.addTextObject(0, 0, "", TextStyle.BATTLE_INFO);
     this.genderText.setName("text_gender");
     this.genderText.setOrigin(0, 0);
     this.genderText.setPositionRelative(this.nameText, 0, 2);
@@ -316,8 +316,18 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
       this.effectivenessContainer.setVisible(false);
       this.add(this.effectivenessContainer);
 
-      this.effectivenessText = addTextObject(5, 4.5, "", TextStyle.BATTLE_INFO);
-      this.effectivenessWindow = addWindow(0, 0, 0, 20, undefined, false, undefined, undefined, WindowVariant.XTHIN);
+      this.effectivenessText = globalScene.addTextObject(5, 4.5, "", TextStyle.BATTLE_INFO);
+      this.effectivenessWindow = globalScene.addWindow(
+        0,
+        0,
+        0,
+        20,
+        undefined,
+        false,
+        undefined,
+        undefined,
+        WindowVariant.XTHIN,
+      );
 
       this.effectivenessContainer.add(this.effectivenessWindow);
       this.effectivenessContainer.add(this.effectivenessText);
@@ -772,7 +782,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
     let displayName = pokemon.getNameToRender().replace(/[♂♀]/g, "");
     let nameTextWidth: number;
 
-    const nameSizeTest = addTextObject(0, 0, displayName, TextStyle.BATTLE_INFO);
+    const nameSizeTest = globalScene.addTextObject(0, 0, displayName, TextStyle.BATTLE_INFO);
     nameTextWidth = nameSizeTest.displayWidth;
 
     while (

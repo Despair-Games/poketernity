@@ -1,7 +1,6 @@
-import { TextStyle, addTextObject } from "#app/ui/text";
+import { TextStyle } from "#app/ui/text";
 import { Mode } from "#app/ui/ui";
 import MessageUiHandler from "#app/ui/message-ui-handler";
-import { addWindow } from "#app/ui/ui-theme";
 import { ScrollBar } from "#app/ui/scroll-bar";
 import { Button } from "#enums/buttons";
 import type { InputsIcons } from "#app/ui/settings/abstract-control-settings-ui-handler";
@@ -66,7 +65,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
 
     this.navigationContainer = new NavigationMenu(0, 0);
 
-    this.optionsBg = addWindow(
+    this.optionsBg = globalScene.addWindow(
       0,
       this.navigationContainer.height,
       globalScene.game.canvas.width / 6 - 2,
@@ -75,7 +74,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
     this.optionsBg.setName("window-options-bg");
     this.optionsBg.setOrigin(0, 0);
 
-    const actionsBg = addWindow(
+    const actionsBg = globalScene.addWindow(
       0,
       globalScene.game.canvas.height / 6 - this.navigationContainer.height,
       globalScene.game.canvas.width / 6 - 2,
@@ -88,7 +87,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
     iconAction.setPositionRelative(actionsBg, this.navigationContainer.width - 32, 4);
     this.navigationIcons["BUTTON_ACTION"] = iconAction;
 
-    const actionText = addTextObject(0, 0, i18next.t("settings:action"), TextStyle.SETTINGS_LABEL);
+    const actionText = globalScene.addTextObject(0, 0, i18next.t("settings:action"), TextStyle.SETTINGS_LABEL);
     actionText.setOrigin(0, 0.15);
     actionText.setPositionRelative(iconAction, -actionText.width / 6 - 2, 0);
 
@@ -97,7 +96,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
     iconCancel.setPositionRelative(actionsBg, this.navigationContainer.width - 100, 4);
     this.navigationIcons["BUTTON_CANCEL"] = iconCancel;
 
-    const cancelText = addTextObject(0, 0, i18next.t("settings:back"), TextStyle.SETTINGS_LABEL);
+    const cancelText = globalScene.addTextObject(0, 0, i18next.t("settings:back"), TextStyle.SETTINGS_LABEL);
     cancelText.setOrigin(0, 0.15);
     cancelText.setPositionRelative(iconCancel, -cancelText.width / 6 - 2, 0);
 
@@ -114,13 +113,13 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
         settingName += ` (${i18next.t("settings:requireReload")})`;
       }
 
-      this.settingLabels[s] = addTextObject(8, 28 + s * 16, settingName, TextStyle.SETTINGS_LABEL);
+      this.settingLabels[s] = globalScene.addTextObject(8, 28 + s * 16, settingName, TextStyle.SETTINGS_LABEL);
       this.settingLabels[s].setOrigin(0, 0);
 
       this.optionsContainer.add(this.settingLabels[s]);
       this.optionValueLabels.push(
         setting.options.map((option, o) => {
-          const valueLabel = addTextObject(
+          const valueLabel = globalScene.addTextObject(
             0,
             0,
             option.label,
@@ -165,11 +164,11 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
     this.messageBoxContainer.setName("settings-message-box");
     this.messageBoxContainer.setVisible(false);
 
-    const settingsMessageBox = addWindow(0, -1, globalScene.scaledCanvas.width - 2, 48);
+    const settingsMessageBox = globalScene.addWindow(0, -1, globalScene.scaledCanvas.width - 2, 48);
     settingsMessageBox.setOrigin(0, 1);
     this.messageBoxContainer.add(settingsMessageBox);
 
-    const messageText = addTextObject(8, -40, "", TextStyle.WINDOW, { maxLines: 2 });
+    const messageText = globalScene.addTextObject(8, -40, "", TextStyle.WINDOW, { maxLines: 2 });
     messageText.setWordWrapWidth(globalScene.game.canvas.width - 60);
     messageText.setName("settings-message");
     messageText.setOrigin(0, 0);

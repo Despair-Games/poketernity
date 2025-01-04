@@ -1,8 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { GameModes } from "../game-mode";
-import { TextStyle, addTextObject } from "./text";
+import { TextStyle } from "./text";
 import { Mode } from "./ui";
-import { addWindow } from "./ui-theme";
 import { fixedInt, formatLargeNumber, isNullOrUndefined } from "#app/utils";
 import type PokemonData from "../system/pokemon-data";
 import MessageUiHandler from "./message-ui-handler";
@@ -188,10 +187,10 @@ export default class RunHistoryUiHandler extends MessageUiHandler {
    * If the player has no runs saved so far, this creates a giant window labeled empty instead.
    */
   private async showEmpty() {
-    const emptyWindow = addWindow(0, 0, 304, 165);
+    const emptyWindow = globalScene.addWindow(0, 0, 304, 165);
     this.runsContainer.add(emptyWindow);
     const emptyWindowCoordinates = emptyWindow.getCenter();
-    const emptyText = addTextObject(0, 0, i18next.t("saveSlotSelectUiHandler:empty"), TextStyle.WINDOW, {
+    const emptyText = globalScene.addTextObject(0, 0, i18next.t("saveSlotSelectUiHandler:empty"), TextStyle.WINDOW, {
       fontSize: "128px",
     });
     emptyText.setPosition(emptyWindowCoordinates.x - 18, emptyWindowCoordinates.y - 15);
@@ -284,12 +283,12 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
     const victory = run.isVictory;
     const data = globalScene.gameData.parseSessionData(JSON.stringify(run.entry));
 
-    const slotWindow = addWindow(0, 0, 304, 52);
+    const slotWindow = globalScene.addWindow(0, 0, 304, 52);
     this.add(slotWindow);
 
     // Run Result: Victory
     if (victory) {
-      const gameOutcomeLabel = addTextObject(8, 5, `${i18next.t("runHistory:victory")}`, TextStyle.WINDOW);
+      const gameOutcomeLabel = globalScene.addTextObject(8, 5, `${i18next.t("runHistory:victory")}`, TextStyle.WINDOW);
       this.add(gameOutcomeLabel);
     } else {
       // Run Result: Defeats
@@ -298,7 +297,7 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
       // Defeats from wild Pokemon battles will show the Pokemon responsible by the text of the run result.
       if (data.battleType === BattleType.WILD || (data.battleType === BattleType.MYSTERY_ENCOUNTER && !data.trainer)) {
         const enemyContainer = globalScene.add.container(8, 5);
-        const gameOutcomeLabel = addTextObject(
+        const gameOutcomeLabel = globalScene.addTextObject(
           0,
           0,
           `${i18next.t("runHistory:defeatedWild", { context: genderStr })}`,
@@ -312,7 +311,7 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
           enemyData["player"] = true;
           const enemy = enemyData.toPokemon();
           const enemyIcon = globalScene.addPokemonIcon(enemy, 0, 0, 0, 0);
-          const enemyLevel = addTextObject(
+          const enemyLevel = globalScene.addTextObject(
             32,
             20,
             `${i18next.t("saveSlotSelectUiHandler:lv")}${formatLargeNumber(enemy.level, 1000)}`,
@@ -338,7 +337,7 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
         const RIVAL_TRAINER_ID_THRESHOLD = 375;
         if (data.trainer.trainerType >= RIVAL_TRAINER_ID_THRESHOLD) {
           const rivalName = tObj.variant === TrainerVariant.FEMALE ? "trainerNames:rival_female" : "trainerNames:rival";
-          const gameOutcomeLabel = addTextObject(
+          const gameOutcomeLabel = globalScene.addTextObject(
             8,
             5,
             `${i18next.t("runHistory:defeatedRival", { context: genderStr })} ${i18next.t(rivalName)}`,
@@ -346,7 +345,7 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
           );
           this.add(gameOutcomeLabel);
         } else {
-          const gameOutcomeLabel = addTextObject(
+          const gameOutcomeLabel = globalScene.addTextObject(
             8,
             5,
             `${i18next.t("runHistory:defeatedTrainer", { context: genderStr })}${tObj.getName(0, true)}`,
@@ -360,7 +359,7 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
     // Game Mode + Waves
     // Because Endless (Spliced) tends to have the longest name across languages, the line tends to spill into the party icons.
     // To fix this, the Spliced icon is used to indicate an Endless Spliced run
-    const gameModeLabel = addTextObject(8, 19, "", TextStyle.WINDOW);
+    const gameModeLabel = globalScene.addTextObject(8, 19, "", TextStyle.WINDOW);
     let mode = "";
     switch (data.gameMode) {
       case GameModes.DAILY:
@@ -392,7 +391,12 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
     gameModeLabel.appendText(i18next.t("saveSlotSelectUiHandler:wave") + " " + data.waveIndex, false);
     this.add(gameModeLabel);
 
-    const timestampLabel = addTextObject(8, 33, new Date(data.timestamp).toLocaleString(), TextStyle.WINDOW);
+    const timestampLabel = globalScene.addTextObject(
+      8,
+      33,
+      new Date(data.timestamp).toLocaleString(),
+      TextStyle.WINDOW,
+    );
     this.add(timestampLabel);
 
     // pokemonIconsContainer holds the run's party Pokemon icons and levels
@@ -406,7 +410,7 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
       const pokemon = p.toPokemon();
       const icon = globalScene.addPokemonIcon(pokemon, 0, 0, 0, 0);
 
-      const text = addTextObject(
+      const text = globalScene.addTextObject(
         32,
         20,
         `${i18next.t("saveSlotSelectUiHandler:lv")}${formatLargeNumber(pokemon.level, 1000)}`,

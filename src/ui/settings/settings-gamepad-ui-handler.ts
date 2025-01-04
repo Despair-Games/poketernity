@@ -1,4 +1,4 @@
-import { addTextObject, TextStyle } from "../text";
+import { TextStyle } from "../text";
 import type { Mode } from "../ui";
 import {
   setSettingGamepad,
@@ -53,7 +53,7 @@ export default class SettingsGamepadUiHandler extends AbstractControlSettingsUiH
     this.layout["noGamepads"] = new Map();
     const optionsContainer = globalScene.add.container(0, 0);
     optionsContainer.setVisible(false); // Initially hide the container as no gamepads are connected.
-    const label = addTextObject(8, 28, i18next.t("settings:gamepadPleasePlug"), TextStyle.SETTINGS_LABEL);
+    const label = globalScene.addTextObject(8, 28, i18next.t("settings:gamepadPleasePlug"), TextStyle.SETTINGS_LABEL);
     label.setOrigin(0, 0);
     optionsContainer.add(label);
     this.settingsContainer.add(optionsContainer);

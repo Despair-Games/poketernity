@@ -1,6 +1,7 @@
 import type { ModalConfig } from "./modal-ui-handler";
 import { ModalUiHandler } from "./modal-ui-handler";
-import { addTextObject, TextStyle } from "./text";
+import { globalScene } from "#app/global-scene";
+import { TextStyle } from "./text";
 import type { Mode } from "./ui";
 
 export default class SessionReloadModalUiHandler extends ModalUiHandler {
@@ -31,7 +32,7 @@ export default class SessionReloadModalUiHandler extends ModalUiHandler {
   override setup(): void {
     super.setup();
 
-    const label = addTextObject(
+    const label = globalScene.addTextObject(
       this.getWidth() / 2,
       this.getHeight() / 2,
       "Your session is out of date.\nYour data will be reloaded…",

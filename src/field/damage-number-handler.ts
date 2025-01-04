@@ -1,4 +1,4 @@
-import { TextStyle, addTextObject } from "../ui/text";
+import { TextStyle } from "../ui/text";
 import type { DamageResult } from "./pokemon";
 import type { Pokemon } from "./pokemon";
 import { HitResult } from "./pokemon";
@@ -27,7 +27,7 @@ export default class DamageNumberHandler {
 
     const battlerIndex = target.getBattlerIndex();
     const baseScale = target.getSpriteScale() / 6;
-    const damageNumber = addTextObject(
+    const damageNumber = globalScene.addTextObject(
       target.x,
       -(globalScene.game.canvas.height / 6) + target.y - target.getSprite().height / 2,
       formatStat(amount, true),

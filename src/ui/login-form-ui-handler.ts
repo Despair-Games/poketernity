@@ -4,8 +4,7 @@ import type { ModalConfig } from "./modal-ui-handler";
 import { fixedInt } from "#app/utils";
 import { Mode } from "./ui";
 import i18next from "i18next";
-import { addTextObject, TextStyle } from "./text";
-import { addWindow } from "./ui-theme";
+import { TextStyle } from "./text";
 import type { OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler";
 import { api } from "#app/plugins/api/api";
 import { globalScene } from "#app/global-scene";
@@ -68,9 +67,9 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
       new Phaser.Geom.Rectangle(0, 0, globalScene.game.canvas.width / 12, globalScene.game.canvas.height / 12),
       Phaser.Geom.Rectangle.Contains,
     );
-    this.externalPartyTitle = addTextObject(0, 4, "", TextStyle.SETTINGS_LABEL);
+    this.externalPartyTitle = globalScene.addTextObject(0, 4, "", TextStyle.SETTINGS_LABEL);
     this.externalPartyTitle.setOrigin(0.5, 0);
-    this.externalPartyBg = addWindow(0, 0, 0, 0);
+    this.externalPartyBg = globalScene.addWindow(0, 0, 0, 0);
     this.externalPartyContainer.add(this.externalPartyBg);
     this.externalPartyContainer.add(this.externalPartyTitle);
 

@@ -1,8 +1,7 @@
 import Phaser from "phaser";
-import { TextStyle, addTextObject } from "#app/ui/text";
+import { TextStyle } from "#app/ui/text";
 import type { Mode } from "#app/ui/ui";
 import UiHandler from "#app/ui/ui-handler";
-import { addWindow } from "#app/ui/ui-theme";
 import { getPlayTimeString, formatFancyLargeNumber, toReadableString } from "#app/utils";
 import type { GameData } from "#app/system/game-data";
 import { DexAttr } from "#app/data/dex-attributes";
@@ -240,10 +239,10 @@ export default class GameStatsUiHandler extends UiHandler {
       Phaser.Geom.Rectangle.Contains,
     );
 
-    const headerBg = addWindow(0, 0, globalScene.game.canvas.width / 6 - 2, 24);
+    const headerBg = globalScene.addWindow(0, 0, globalScene.game.canvas.width / 6 - 2, 24);
     headerBg.setOrigin(0, 0);
 
-    const headerText = addTextObject(0, 0, i18next.t("gameStatsUiHandler:stats"), TextStyle.SETTINGS_LABEL);
+    const headerText = globalScene.addTextObject(0, 0, i18next.t("gameStatsUiHandler:stats"), TextStyle.SETTINGS_LABEL);
     headerText.setOrigin(0, 0);
     headerText.setPositionRelative(headerBg, 8, 4);
 
@@ -251,7 +250,7 @@ export default class GameStatsUiHandler extends UiHandler {
     const [statsBgLeft, statsBgRight] = new Array(2).fill(null).map((_, i) => {
       const width = statsBgWidth + 2;
       const height = Math.floor(globalScene.game.canvas.height / 6 - headerBg.height - 2);
-      const statsBg = addWindow(
+      const statsBg = globalScene.addWindow(
         (statsBgWidth - 2) * i,
         headerBg.height,
         width,
@@ -268,7 +267,7 @@ export default class GameStatsUiHandler extends UiHandler {
     this.statsContainer = globalScene.add.container(0, 0);
 
     new Array(18).fill(null).map((_, s) => {
-      const statLabel = addTextObject(
+      const statLabel = globalScene.addTextObject(
         8 + (s % 2 === 1 ? statsBgWidth : 0),
         28 + Math.floor(s / 2) * 16,
         "",
@@ -278,7 +277,12 @@ export default class GameStatsUiHandler extends UiHandler {
       this.statsContainer.add(statLabel);
       this.statLabels.push(statLabel);
 
-      const statValue = addTextObject(statsBgWidth * ((s % 2) + 1) - 8, statLabel.y, "", TextStyle.STATS_VALUE);
+      const statValue = globalScene.addTextObject(
+        statsBgWidth * ((s % 2) + 1) - 8,
+        statLabel.y,
+        "",
+        TextStyle.STATS_VALUE,
+      );
       statValue.setOrigin(1, 0);
       this.statsContainer.add(statValue);
       this.statValues.push(statValue);

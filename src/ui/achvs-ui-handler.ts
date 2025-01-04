@@ -5,9 +5,8 @@ import { achvs, getAchievementDescription } from "#app/system/achv";
 import type { Voucher } from "#app/system/voucher";
 import { getVoucherTypeIcon, getVoucherTypeName, vouchers } from "#app/system/voucher";
 import MessageUiHandler from "#app/ui/message-ui-handler";
-import { addTextObject, TextStyle } from "#app/ui/text";
+import { TextStyle } from "#app/ui/text";
 import type { Mode } from "#app/ui/ui";
-import { addWindow } from "#app/ui/ui-theme";
 import { ScrollBar } from "#app/ui/scroll-bar";
 import { PlayerGender } from "#enums/player-gender";
 import { globalScene } from "#app/global-scene";
@@ -77,16 +76,16 @@ export default class AchvsUiHandler extends MessageUiHandler {
       Phaser.Geom.Rectangle.Contains,
     );
 
-    this.headerBg = addWindow(0, 0, globalScene.game.canvas.width / 6 - 2, 24);
+    this.headerBg = globalScene.addWindow(0, 0, globalScene.game.canvas.width / 6 - 2, 24);
     this.headerBg.setOrigin(0, 0);
 
-    this.headerText = addTextObject(0, 0, "", TextStyle.SETTINGS_LABEL);
+    this.headerText = globalScene.addTextObject(0, 0, "", TextStyle.SETTINGS_LABEL);
     this.headerText.setOrigin(0, 0);
     this.headerText.setPositionRelative(this.headerBg, 8, 4);
     this.headerActionButton = new Phaser.GameObjects.Sprite(globalScene, 0, 0, "keyboard", "ACTION.png");
     this.headerActionButton.setOrigin(0, 0);
     this.headerActionButton.setPositionRelative(this.headerBg, 236, 6);
-    this.headerActionText = addTextObject(0, 0, "", TextStyle.WINDOW, { fontSize: "60px" });
+    this.headerActionText = globalScene.addTextObject(0, 0, "", TextStyle.WINDOW, { fontSize: "60px" });
     this.headerActionText.setOrigin(0, 0);
     this.headerActionText.setPositionRelative(this.headerBg, 264, 8);
 
@@ -97,7 +96,7 @@ export default class AchvsUiHandler extends MessageUiHandler {
     this.achvsName = i18next.t("achv:Achievements.name", { context: genderStr });
     this.vouchersName = i18next.t("voucher:vouchers");
 
-    this.iconsBg = addWindow(
+    this.iconsBg = globalScene.addWindow(
       0,
       this.headerBg.height,
       globalScene.game.canvas.width / 6 - 2,
@@ -130,11 +129,11 @@ export default class AchvsUiHandler extends MessageUiHandler {
       this.iconsContainer.add(icon);
     }
 
-    const titleBg = addWindow(0, this.headerBg.height + this.iconsBg.height, 174, 24);
+    const titleBg = globalScene.addWindow(0, this.headerBg.height + this.iconsBg.height, 174, 24);
     titleBg.setOrigin(0, 0);
     this.titleBg = titleBg;
 
-    this.titleText = addTextObject(0, 0, "", TextStyle.WINDOW);
+    this.titleText = globalScene.addTextObject(0, 0, "", TextStyle.WINDOW);
     const textSize = languageSettings[i18next.language]?.TextSize ?? this.titleText.style.fontSize;
     this.titleText.setFontSize(textSize);
     const titleBgCenterX = titleBg.x + titleBg.width / 2;
@@ -143,25 +142,30 @@ export default class AchvsUiHandler extends MessageUiHandler {
     this.titleText.setPosition(titleBgCenterX, titleBgCenterY);
 
     this.scoreContainer = globalScene.add.container(titleBg.x + titleBg.width, titleBg.y);
-    const scoreBg = addWindow(0, 0, 46, 24);
+    const scoreBg = globalScene.addWindow(0, 0, 46, 24);
     scoreBg.setOrigin(0, 0);
     this.scoreContainer.add(scoreBg);
 
-    this.scoreText = addTextObject(scoreBg.width / 2, scoreBg.height / 2, "", TextStyle.WINDOW);
+    this.scoreText = globalScene.addTextObject(scoreBg.width / 2, scoreBg.height / 2, "", TextStyle.WINDOW);
     this.scoreText.setOrigin(0.5, 0.5);
     this.scoreContainer.add(this.scoreText);
 
-    const unlockBg = addWindow(this.scoreContainer.x + scoreBg.width, titleBg.y, 98, 24);
+    const unlockBg = globalScene.addWindow(this.scoreContainer.x + scoreBg.width, titleBg.y, 98, 24);
     unlockBg.setOrigin(0, 0);
 
-    this.unlockText = addTextObject(0, 0, "", TextStyle.WINDOW);
+    this.unlockText = globalScene.addTextObject(0, 0, "", TextStyle.WINDOW);
     this.unlockText.setOrigin(0.5, 0.5);
     this.unlockText.setPositionRelative(unlockBg, unlockBg.width / 2, unlockBg.height / 2);
 
-    const descriptionBg = addWindow(0, titleBg.y + titleBg.height, globalScene.game.canvas.width / 6 - 2, 42);
+    const descriptionBg = globalScene.addWindow(
+      0,
+      titleBg.y + titleBg.height,
+      globalScene.game.canvas.width / 6 - 2,
+      42,
+    );
     descriptionBg.setOrigin(0, 0);
 
-    const descriptionText = addTextObject(0, 0, "", TextStyle.WINDOW, { maxLines: 2 });
+    const descriptionText = globalScene.addTextObject(0, 0, "", TextStyle.WINDOW, { maxLines: 2 });
     descriptionText.setWordWrapWidth(1870);
     descriptionText.setOrigin(0, 0);
     descriptionText.setPositionRelative(descriptionBg, 8, 4);

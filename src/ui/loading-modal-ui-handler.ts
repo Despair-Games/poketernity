@@ -1,6 +1,7 @@
 import i18next from "i18next";
 import { ModalUiHandler } from "./modal-ui-handler";
-import { addTextObject, TextStyle } from "./text";
+import { globalScene } from "#app/global-scene";
+import { TextStyle } from "./text";
 import type { Mode } from "./ui";
 
 export default class LoadingModalUiHandler extends ModalUiHandler {
@@ -31,7 +32,12 @@ export default class LoadingModalUiHandler extends ModalUiHandler {
   override setup(): void {
     super.setup();
 
-    const label = addTextObject(this.getWidth() / 2, this.getHeight() / 2, i18next.t("menu:loading"), TextStyle.WINDOW);
+    const label = globalScene.addTextObject(
+      this.getWidth() / 2,
+      this.getHeight() / 2,
+      i18next.t("menu:loading"),
+      TextStyle.WINDOW,
+    );
     label.setOrigin(0.5, 0.5);
 
     this.modalContainer.add(label);

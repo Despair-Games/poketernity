@@ -1,6 +1,6 @@
 import { starterColors } from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
-import { TextStyle, addTextObject } from "./text";
+import { TextStyle } from "./text";
 import { argbFromRgba } from "@material/material-color-utilities";
 import { rgbHexToRgba } from "#app/utils";
 import type { Species } from "#enums/species";
@@ -39,7 +39,7 @@ export default class CandyBar extends Phaser.GameObjects.Container {
 
     this.add(this.candyOverlayIcon);
 
-    this.countText = addTextObject(22, 4, "", TextStyle.BATTLE_INFO);
+    this.countText = globalScene.addTextObject(22, 4, "", TextStyle.BATTLE_INFO);
     this.countText.setOrigin(0, 0);
     this.add(this.countText);
 

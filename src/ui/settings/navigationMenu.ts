@@ -1,8 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { Mode } from "#app/ui/ui";
 import type { InputsIcons } from "#app/ui/settings/abstract-control-settings-ui-handler";
-import { addTextObject, setTextStyle, TextStyle } from "#app/ui/text";
-import { addWindow } from "#app/ui/ui-theme";
+import { setTextStyle, TextStyle } from "#app/ui/text";
 import { Button } from "#enums/buttons";
 import i18next from "i18next";
 
@@ -116,7 +115,7 @@ export default class NavigationMenu extends Phaser.GameObjects.Container {
    */
   setup() {
     const navigationManager = NavigationManager.getInstance();
-    const headerBg = addWindow(0, 0, globalScene.game.canvas.width / 6 - 2, 24);
+    const headerBg = globalScene.addWindow(0, 0, globalScene.game.canvas.width / 6 - 2, 24);
     headerBg.setOrigin(0, 0);
     this.add(headerBg);
     this.width = headerBg.width;
@@ -137,7 +136,7 @@ export default class NavigationMenu extends Phaser.GameObjects.Container {
     let relative: Phaser.GameObjects.Sprite | Phaser.GameObjects.Text = iconPreviousTab;
     let relativeWidth: number = iconPreviousTab.width * 6;
     for (const label of navigationManager.labels) {
-      const labelText = addTextObject(0, 0, label, TextStyle.SETTINGS_LABEL);
+      const labelText = globalScene.addTextObject(0, 0, label, TextStyle.SETTINGS_LABEL);
       labelText.setOrigin(0, 0);
       labelText.setPositionRelative(relative, 6 + relativeWidth / 6, 0);
       this.add(labelText);

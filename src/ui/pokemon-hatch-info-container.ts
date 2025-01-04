@@ -2,7 +2,7 @@ import PokemonInfoContainer from "#app/ui/pokemon-info-container";
 import { Gender } from "#enums/gender";
 import { Type } from "#enums/type";
 import { rgbHexToRgba, padInt } from "#app/utils";
-import { TextStyle, addTextObject } from "#app/ui/text";
+import { TextStyle } from "#app/ui/text";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { allMoves } from "#app/data/all-moves";
 import { Species } from "#enums/species";
@@ -49,11 +49,11 @@ export default class PokemonHatchInfoContainer extends PokemonInfoContainer {
     this.pokemonListContainer.add(this.currentPokemonSprite);
 
     // setup name and number
-    this.pokemonNumberText = addTextObject(80, 107.5, "0000", TextStyle.SUMMARY, { fontSize: 74 });
+    this.pokemonNumberText = globalScene.addTextObject(80, 107.5, "0000", TextStyle.SUMMARY, { fontSize: 74 });
     this.pokemonNumberText.setOrigin(0, 0);
     this.pokemonListContainer.add(this.pokemonNumberText);
 
-    this.pokemonNameText = addTextObject(7, 107.5, "", TextStyle.SUMMARY, { fontSize: 74 });
+    this.pokemonNameText = globalScene.addTextObject(7, 107.5, "", TextStyle.SUMMARY, { fontSize: 74 });
     this.pokemonNameText.setOrigin(0, 0);
     this.pokemonListContainer.add(this.pokemonNameText);
 
@@ -73,7 +73,7 @@ export default class PokemonHatchInfoContainer extends PokemonInfoContainer {
     this.pokemonCandyOverlayIcon.setOrigin(0, 0);
     this.pokemonListContainer.add(this.pokemonCandyOverlayIcon);
 
-    this.pokemonCandyCountText = addTextObject(14, 40, "x0", TextStyle.SUMMARY, { fontSize: "56px" });
+    this.pokemonCandyCountText = globalScene.addTextObject(14, 40, "x0", TextStyle.SUMMARY, { fontSize: "56px" });
     this.pokemonCandyCountText.setOrigin(0, 0);
     this.pokemonListContainer.add(this.pokemonCandyCountText);
 
@@ -91,7 +91,7 @@ export default class PokemonHatchInfoContainer extends PokemonInfoContainer {
       const eggMoveBg = globalScene.add.nineslice(70, 0, "type_bgs", "unknown", 92, 14, 2, 2, 2, 2);
       eggMoveBg.setOrigin(1, 0);
 
-      const eggMoveLabel = addTextObject(70 - eggMoveBg.width / 2, 0, "???", TextStyle.PARTY);
+      const eggMoveLabel = globalScene.addTextObject(70 - eggMoveBg.width / 2, 0, "???", TextStyle.PARTY);
       eggMoveLabel.setOrigin(0.5, 0);
 
       this.pokemonEggMoveBgs.push(eggMoveBg);

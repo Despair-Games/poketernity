@@ -16,7 +16,7 @@ import { getStarterValueFriendshipCap, speciesStarterCosts } from "#app/data/bal
 import { argbFromRgba } from "@material/material-color-utilities";
 import { getTypeRgb } from "#app/data/type";
 import { Type } from "#enums/type";
-import { TextStyle, addBBCodeTextObject, addTextObject, getBBCodeFrag } from "#app/ui/text";
+import { TextStyle, addBBCodeTextObject, getBBCodeFrag } from "#app/ui/text";
 import type { Move } from "#app/data/move";
 import { MoveCategory } from "#app/enums/move-category";
 import { getPokeballAtlasKey } from "#app/data/pokeball";
@@ -141,7 +141,7 @@ export default class SummaryUiHandler extends UiHandler {
     this.tabSprite.setOrigin(1, 1);
     this.summaryContainer.add(this.tabSprite);
 
-    const summaryLabel = addTextObject(4, -165, i18next.t("pokemonSummary:pokemonInfo"), TextStyle.SUMMARY);
+    const summaryLabel = globalScene.addTextObject(4, -165, i18next.t("pokemonSummary:pokemonInfo"), TextStyle.SUMMARY);
     summaryLabel.setOrigin(0, 1);
     this.summaryContainer.add(summaryLabel);
 
@@ -150,7 +150,7 @@ export default class SummaryUiHandler extends UiHandler {
     this.shinyOverlay.setVisible(false);
     this.summaryContainer.add(this.shinyOverlay);
 
-    this.numberText = addTextObject(17, -149, "0000", TextStyle.SUMMARY);
+    this.numberText = globalScene.addTextObject(17, -149, "0000", TextStyle.SUMMARY);
     this.numberText.setOrigin(0, 1);
     this.summaryContainer.add(this.numberText);
 
@@ -162,7 +162,7 @@ export default class SummaryUiHandler extends UiHandler {
     );
     this.summaryContainer.add(this.pokemonSprite);
 
-    this.nameText = addTextObject(6, -54, "", TextStyle.SUMMARY);
+    this.nameText = globalScene.addTextObject(6, -54, "", TextStyle.SUMMARY);
     this.nameText.setOrigin(0, 0);
     this.summaryContainer.add(this.nameText);
 
@@ -205,7 +205,7 @@ export default class SummaryUiHandler extends UiHandler {
     this.candyShadow.setInteractive(new Phaser.Geom.Rectangle(0, 0, 30, 16), Phaser.Geom.Rectangle.Contains);
     this.summaryContainer.add(this.candyShadow);
 
-    this.candyCountText = addTextObject(20, -146, "x0", TextStyle.WINDOW_ALT, { fontSize: "76px" });
+    this.candyCountText = globalScene.addTextObject(20, -146, "x0", TextStyle.WINDOW_ALT, { fontSize: "76px" });
     this.candyCountText.setOrigin(0, 0);
     this.summaryContainer.add(this.candyCountText);
 
@@ -224,7 +224,7 @@ export default class SummaryUiHandler extends UiHandler {
     this.friendshipShadow.setInteractive(new Phaser.Geom.Rectangle(0, 0, 50, 16), Phaser.Geom.Rectangle.Contains);
     this.summaryContainer.add(this.friendshipShadow);
 
-    this.friendshipText = addTextObject(20, -66, "x0", TextStyle.WINDOW_ALT, { fontSize: "76px" });
+    this.friendshipText = globalScene.addTextObject(20, -66, "x0", TextStyle.WINDOW_ALT, { fontSize: "76px" });
     this.friendshipText.setOrigin(0, 0);
     this.summaryContainer.add(this.friendshipText);
 
@@ -235,11 +235,11 @@ export default class SummaryUiHandler extends UiHandler {
     this.summaryContainer.add(this.championRibbon);
     this.championRibbon.setVisible(false);
 
-    this.levelText = addTextObject(36, -17, "", TextStyle.SUMMARY_ALT);
+    this.levelText = globalScene.addTextObject(36, -17, "", TextStyle.SUMMARY_ALT);
     this.levelText.setOrigin(0, 1);
     this.summaryContainer.add(this.levelText);
 
-    this.genderText = addTextObject(96, -17, "", TextStyle.SUMMARY);
+    this.genderText = globalScene.addTextObject(96, -17, "", TextStyle.SUMMARY);
     this.genderText.setOrigin(0, 1);
     this.summaryContainer.add(this.genderText);
 
@@ -250,7 +250,7 @@ export default class SummaryUiHandler extends UiHandler {
 
     this.statusContainer.add(statusBg);
 
-    const statusLabel = addTextObject(3, 0, i18next.t("pokemonSummary:status"), TextStyle.SUMMARY);
+    const statusLabel = globalScene.addTextObject(3, 0, i18next.t("pokemonSummary:status"), TextStyle.SUMMARY);
     statusLabel.setOrigin(0, 0);
 
     this.statusContainer.add(statusLabel);
@@ -270,17 +270,22 @@ export default class SummaryUiHandler extends UiHandler {
     moveEffectBg.setOrigin(0, 0);
     this.moveEffectContainer.add(moveEffectBg);
 
-    const moveEffectLabels = addTextObject(8, 12, i18next.t("pokemonSummary:powerAccuracyCategory"), TextStyle.SUMMARY);
+    const moveEffectLabels = globalScene.addTextObject(
+      8,
+      12,
+      i18next.t("pokemonSummary:powerAccuracyCategory"),
+      TextStyle.SUMMARY,
+    );
     moveEffectLabels.setLineSpacing(9);
     moveEffectLabels.setOrigin(0, 0);
 
     this.moveEffectContainer.add(moveEffectLabels);
 
-    this.movePowerText = addTextObject(99, 27, "0", TextStyle.WINDOW_ALT);
+    this.movePowerText = globalScene.addTextObject(99, 27, "0", TextStyle.WINDOW_ALT);
     this.movePowerText.setOrigin(1, 1);
     this.moveEffectContainer.add(this.movePowerText);
 
-    this.moveAccuracyText = addTextObject(99, 43, "0", TextStyle.WINDOW_ALT);
+    this.moveAccuracyText = globalScene.addTextObject(99, 43, "0", TextStyle.WINDOW_ALT);
     this.moveAccuracyText.setOrigin(1, 1);
     this.moveEffectContainer.add(this.moveAccuracyText);
 
@@ -795,11 +800,21 @@ export default class SummaryUiHandler extends UiHandler {
         trainerText.setOrigin(0, 0);
         profileContainer.add(trainerText);
 
-        const trainerIdText = addTextObject(174, 12, globalScene.gameData.trainerId.toString(), TextStyle.SUMMARY_ALT);
+        const trainerIdText = globalScene.addTextObject(
+          174,
+          12,
+          globalScene.gameData.trainerId.toString(),
+          TextStyle.SUMMARY_ALT,
+        );
         trainerIdText.setOrigin(0, 0);
         profileContainer.add(trainerIdText);
 
-        const typeLabel = addTextObject(7, 28, `${i18next.t("pokemonSummary:type")}/`, TextStyle.WINDOW_ALT);
+        const typeLabel = globalScene.addTextObject(
+          7,
+          28,
+          `${i18next.t("pokemonSummary:type")}/`,
+          TextStyle.WINDOW_ALT,
+        );
         typeLabel.setOrigin(0, 0);
         profileContainer.add(typeLabel);
 
@@ -827,11 +842,16 @@ export default class SummaryUiHandler extends UiHandler {
         }
 
         if (this.pokemon?.getLuck()) {
-          const luckLabelText = addTextObject(141, 28, i18next.t("common:luckIndicator"), TextStyle.SUMMARY_ALT);
+          const luckLabelText = globalScene.addTextObject(
+            141,
+            28,
+            i18next.t("common:luckIndicator"),
+            TextStyle.SUMMARY_ALT,
+          );
           luckLabelText.setOrigin(0, 0);
           profileContainer.add(luckLabelText);
 
-          const luckText = addTextObject(
+          const luckText = globalScene.addTextObject(
             141 + luckLabelText.displayWidth + 2,
             28,
             this.pokemon.getLuck().toString(),
@@ -878,13 +898,19 @@ export default class SummaryUiHandler extends UiHandler {
           abilityInfo.labelImage.setOrigin(0, 0);
           profileContainer.add(abilityInfo.labelImage);
 
-          abilityInfo.nameText = addTextObject(7, 66, abilityInfo.ability?.name!, TextStyle.SUMMARY_ALT); // TODO: is this bang correct?
+          abilityInfo.nameText = globalScene.addTextObject(7, 66, abilityInfo.ability?.name!, TextStyle.SUMMARY_ALT); // TODO: is this bang correct?
           abilityInfo.nameText.setOrigin(0, 1);
           profileContainer.add(abilityInfo.nameText);
 
-          abilityInfo.descriptionText = addTextObject(7, 69, abilityInfo.ability?.description!, TextStyle.WINDOW_ALT, {
-            wordWrap: { width: 1224 },
-          }); // TODO: is this bang correct?
+          abilityInfo.descriptionText = globalScene.addTextObject(
+            7,
+            69,
+            abilityInfo.ability?.description!,
+            TextStyle.WINDOW_ALT,
+            {
+              wordWrap: { width: 1224 },
+            },
+          ); // TODO: is this bang correct?
           abilityInfo.descriptionText.setOrigin(0, 0);
           profileContainer.add(abilityInfo.descriptionText);
 
@@ -950,7 +976,7 @@ export default class SummaryUiHandler extends UiHandler {
 
           const natureStatMultiplier = getNatureStatMultiplier(this.pokemon?.getNature()!, s); // TODO: is this bang correct?
 
-          const statLabel = addTextObject(
+          const statLabel = globalScene.addTextObject(
             27 + 115 * colIndex + (colIndex === 1 ? 5 : 0),
             56 + 16 * rowIndex,
             statName,
@@ -968,7 +994,12 @@ export default class SummaryUiHandler extends UiHandler {
               ? formatStat(this.pokemon?.getStat(stat)!) // TODO: is this bang correct?
               : `${formatStat(this.pokemon?.hp!, true)}/${formatStat(this.pokemon?.getMaxHp()!, true)}`; // TODO: are those bangs correct?
 
-          const statValue = addTextObject(120 + 88 * colIndex, 56 + 16 * rowIndex, statValueText, TextStyle.WINDOW_ALT);
+          const statValue = globalScene.addTextObject(
+            120 + 88 * colIndex,
+            56 + 16 * rowIndex,
+            statValueText,
+            TextStyle.WINDOW_ALT,
+          );
           statValue.setOrigin(1, 0);
           statsContainer.add(statValue);
         });
@@ -998,21 +1029,21 @@ export default class SummaryUiHandler extends UiHandler {
         const relLvExp = getLevelRelExp(pkmLvl + 1, pkmSpeciesGrowthRate);
         const expRatio = pkmLvl < globalScene.getMaxExpLevel() ? pkmLvlExp / relLvExp : 0;
 
-        const expLabel = addTextObject(6, 112, i18next.t("pokemonSummary:expPoints"), TextStyle.SUMMARY);
+        const expLabel = globalScene.addTextObject(6, 112, i18next.t("pokemonSummary:expPoints"), TextStyle.SUMMARY);
         expLabel.setOrigin(0, 0);
         statsContainer.add(expLabel);
 
-        const nextLvExpLabel = addTextObject(6, 128, i18next.t("pokemonSummary:nextLv"), TextStyle.SUMMARY);
+        const nextLvExpLabel = globalScene.addTextObject(6, 128, i18next.t("pokemonSummary:nextLv"), TextStyle.SUMMARY);
         nextLvExpLabel.setOrigin(0, 0);
         statsContainer.add(nextLvExpLabel);
 
-        const expText = addTextObject(208, 112, pkmExp.toString(), TextStyle.WINDOW_ALT);
+        const expText = globalScene.addTextObject(208, 112, pkmExp.toString(), TextStyle.WINDOW_ALT);
         expText.setOrigin(1, 0);
         statsContainer.add(expText);
 
         const nextLvExp =
           pkmLvl < globalScene.getMaxExpLevel() ? getLevelTotalExp(pkmLvl + 1, pkmSpeciesGrowthRate) - pkmExp : 0;
-        const nextLvExpText = addTextObject(208, 128, nextLvExp.toString(), TextStyle.WINDOW_ALT);
+        const nextLvExpText = globalScene.addTextObject(208, 128, nextLvExp.toString(), TextStyle.WINDOW_ALT);
         nextLvExpText.setOrigin(1, 0);
         statsContainer.add(nextLvExpText);
 
@@ -1042,7 +1073,7 @@ export default class SummaryUiHandler extends UiHandler {
         extraRowOverlay.setOrigin(0, 1);
         this.extraMoveRowContainer.add(extraRowOverlay);
 
-        const extraRowText = addTextObject(
+        const extraRowText = globalScene.addTextObject(
           35,
           0,
           this.summaryUiMode === SummaryUiMode.LEARN_MOVE && this.newMove
@@ -1068,7 +1099,7 @@ export default class SummaryUiHandler extends UiHandler {
           this.extraMoveRowContainer.add(ppOverlay);
 
           const pp = padInt(this.newMove?.pp!, 2, "  "); // TODO: is this bang correct?
-          const ppText = addTextObject(173, 1, `${pp}/${pp}`, TextStyle.WINDOW);
+          const ppText = globalScene.addTextObject(173, 1, `${pp}/${pp}`, TextStyle.WINDOW);
           ppText.setOrigin(0, 1);
           this.extraMoveRowContainer.add(ppText);
         }
@@ -1090,7 +1121,7 @@ export default class SummaryUiHandler extends UiHandler {
             moveRowContainer.add(typeIcon);
           }
 
-          const moveText = addTextObject(35, 0, move ? move.getName() : "-", TextStyle.SUMMARY);
+          const moveText = globalScene.addTextObject(35, 0, move ? move.getName() : "-", TextStyle.SUMMARY);
           moveText.setOrigin(0, 1);
           moveRowContainer.add(moveText);
 
@@ -1098,7 +1129,7 @@ export default class SummaryUiHandler extends UiHandler {
           ppOverlay.setOrigin(0, 1);
           moveRowContainer.add(ppOverlay);
 
-          const ppText = addTextObject(173, 1, "--/--", TextStyle.WINDOW);
+          const ppText = globalScene.addTextObject(173, 1, "--/--", TextStyle.WINDOW);
           ppText.setOrigin(0, 1);
 
           if (move) {
@@ -1110,7 +1141,9 @@ export default class SummaryUiHandler extends UiHandler {
           moveRowContainer.add(ppText);
         }
 
-        this.moveDescriptionText = addTextObject(2, 84, "", TextStyle.WINDOW_ALT, { wordWrap: { width: 1212 } });
+        this.moveDescriptionText = globalScene.addTextObject(2, 84, "", TextStyle.WINDOW_ALT, {
+          wordWrap: { width: 1212 },
+        });
         this.movesContainer.add(this.moveDescriptionText);
 
         const moveDescriptionTextMaskRect = globalScene.make.graphics({});

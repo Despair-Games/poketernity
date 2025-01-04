@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { Achv, getAchievementDescription } from "../system/achv";
 import { Voucher } from "../system/voucher";
-import { TextStyle, addTextObject } from "./text";
+import { TextStyle } from "./text";
 import type { PlayerGender } from "#enums/player-gender";
 
 export default class AchvBar extends Phaser.GameObjects.Container {
@@ -48,15 +48,15 @@ export default class AchvBar extends Phaser.GameObjects.Container {
     this.icon.setOrigin(0, 0);
     this.add(this.icon);
 
-    this.titleText = addTextObject(40, 3, "", TextStyle.MESSAGE, { fontSize: "72px" });
+    this.titleText = globalScene.addTextObject(40, 3, "", TextStyle.MESSAGE, { fontSize: "72px" });
     this.titleText.setOrigin(0, 0);
     this.add(this.titleText);
 
-    this.scoreText = addTextObject(150, 3, "", TextStyle.MESSAGE, { fontSize: "72px" });
+    this.scoreText = globalScene.addTextObject(150, 3, "", TextStyle.MESSAGE, { fontSize: "72px" });
     this.scoreText.setOrigin(1, 0);
     this.add(this.scoreText);
 
-    this.descriptionText = addTextObject(43, 16, "", TextStyle.WINDOW_ALT, { fontSize: "72px" });
+    this.descriptionText = globalScene.addTextObject(43, 16, "", TextStyle.WINDOW_ALT, { fontSize: "72px" });
     this.descriptionText.setOrigin(0, 0);
     this.add(this.descriptionText);
 

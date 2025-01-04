@@ -1,7 +1,6 @@
 import UiHandler from "../ui-handler";
 import type { Mode } from "../ui";
-import { addWindow } from "../ui-theme";
-import { addTextObject, TextStyle } from "../text";
+import { TextStyle } from "../text";
 import { Button } from "#enums/buttons";
 import { NavigationManager } from "#app/ui/settings/navigationMenu";
 import i18next from "i18next";
@@ -71,7 +70,7 @@ export default abstract class AbstractBindingUiHandler extends UiHandler {
     ui.add(this.actionsContainer);
 
     // Setup backgrounds and text objects for UI.
-    this.titleBg = addWindow(
+    this.titleBg = globalScene.addWindow(
       globalScene.game.canvas.width / 6 - this.getWindowWidth(),
       -(globalScene.game.canvas.height / 6) + 28 + 21,
       this.getWindowWidth(),
@@ -80,7 +79,7 @@ export default abstract class AbstractBindingUiHandler extends UiHandler {
     this.titleBg.setOrigin(0.5);
     this.optionSelectContainer.add(this.titleBg);
 
-    this.actionBg = addWindow(
+    this.actionBg = globalScene.addWindow(
       globalScene.game.canvas.width / 6 - this.getWindowWidth(),
       -(globalScene.game.canvas.height / 6) + this.getWindowHeight() + 28 + 21 + 21,
       this.getWindowWidth(),
@@ -90,17 +89,17 @@ export default abstract class AbstractBindingUiHandler extends UiHandler {
     this.actionsContainer.add(this.actionBg);
 
     // Text prompts and instructions for the user.
-    this.unlockText = addTextObject(0, 0, i18next.t("settings:pressButton"), TextStyle.WINDOW);
+    this.unlockText = globalScene.addTextObject(0, 0, i18next.t("settings:pressButton"), TextStyle.WINDOW);
     this.unlockText.setOrigin(0, 0);
     this.unlockText.setPositionRelative(this.titleBg, 36, 4);
     this.optionSelectContainer.add(this.unlockText);
 
-    this.timerText = addTextObject(0, 0, "(5)", TextStyle.WINDOW);
+    this.timerText = globalScene.addTextObject(0, 0, "(5)", TextStyle.WINDOW);
     this.timerText.setOrigin(0, 0);
     this.timerText.setPositionRelative(this.unlockText, this.unlockText.width / 6 + 5, 0);
     this.optionSelectContainer.add(this.timerText);
 
-    this.optionSelectBg = addWindow(
+    this.optionSelectBg = globalScene.addWindow(
       globalScene.game.canvas.width / 6 - this.getWindowWidth(),
       -(globalScene.game.canvas.height / 6) + this.getWindowHeight() + 28,
       this.getWindowWidth(),
@@ -109,7 +108,7 @@ export default abstract class AbstractBindingUiHandler extends UiHandler {
     this.optionSelectBg.setOrigin(0.5);
     this.optionSelectContainer.add(this.optionSelectBg);
 
-    this.cancelLabel = addTextObject(0, 0, i18next.t("settings:back"), TextStyle.SETTINGS_LABEL);
+    this.cancelLabel = globalScene.addTextObject(0, 0, i18next.t("settings:back"), TextStyle.SETTINGS_LABEL);
     this.cancelLabel.setOrigin(0, 0.5);
     this.cancelLabel.setPositionRelative(this.actionBg, 10, this.actionBg.height / 2);
     this.actionsContainer.add(this.cancelLabel);

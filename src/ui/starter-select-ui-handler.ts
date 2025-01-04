@@ -34,9 +34,8 @@ import type { OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler"
 import MessageUiHandler from "#app/ui/message-ui-handler";
 import PokemonIconAnimHandler, { PokemonIconAnimMode } from "#app/ui/pokemon-icon-anim-handler";
 import { StatsContainer } from "#app/ui/stats-container";
-import { TextStyle, addBBCodeTextObject, addTextObject } from "#app/ui/text";
+import { TextStyle, addBBCodeTextObject } from "#app/ui/text";
 import { Mode } from "#app/ui/ui";
-import { addWindow } from "#app/ui/ui-theme";
 import { Egg } from "#app/data/egg";
 import Overrides from "#app/overrides";
 import { SettingKeyboard } from "#app/system/settings/settings-keyboard";
@@ -390,7 +389,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.shinyOverlay.setVisible(false);
     this.starterSelectContainer.add(this.shinyOverlay);
 
-    const starterContainerWindow = addWindow(speciesContainerX, filterBarHeight + 1, 175, 161);
+    const starterContainerWindow = globalScene.addWindow(speciesContainerX, filterBarHeight + 1, 175, 161);
     const starterContainerBg = globalScene.add.image(
       speciesContainerX + 1,
       filterBarHeight + 2,
@@ -399,9 +398,9 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     starterContainerBg.setOrigin(0, 0);
     this.starterSelectContainer.add(starterContainerBg);
 
-    this.starterSelectContainer.add(addWindow(teamWindowX, teamWindowY, teamWindowWidth, teamWindowHeight));
+    this.starterSelectContainer.add(globalScene.addWindow(teamWindowX, teamWindowY, teamWindowWidth, teamWindowHeight));
     this.starterSelectContainer.add(
-      addWindow(teamWindowX, teamWindowY + teamWindowHeight - 5, teamWindowWidth, teamWindowWidth, true),
+      globalScene.addWindow(teamWindowX, teamWindowY + teamWindowHeight - 5, teamWindowWidth, teamWindowWidth, true),
     );
     this.starterSelectContainer.add(starterContainerWindow);
 
@@ -566,15 +565,15 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.iconAnimHandler = new PokemonIconAnimHandler();
     this.iconAnimHandler.setup();
 
-    this.pokemonNumberText = addTextObject(17, 1, "0000", TextStyle.SUMMARY);
+    this.pokemonNumberText = globalScene.addTextObject(17, 1, "0000", TextStyle.SUMMARY);
     this.pokemonNumberText.setOrigin(0, 0);
     this.starterSelectContainer.add(this.pokemonNumberText);
 
-    this.pokemonNameText = addTextObject(6, 112, "", TextStyle.SUMMARY);
+    this.pokemonNameText = globalScene.addTextObject(6, 112, "", TextStyle.SUMMARY);
     this.pokemonNameText.setOrigin(0, 0);
     this.starterSelectContainer.add(this.pokemonNameText);
 
-    this.pokemonGrowthRateLabelText = addTextObject(
+    this.pokemonGrowthRateLabelText = globalScene.addTextObject(
       8,
       106,
       i18next.t("starterSelectUiHandler:growthRate"),
@@ -585,15 +584,15 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.pokemonGrowthRateLabelText.setVisible(false);
     this.starterSelectContainer.add(this.pokemonGrowthRateLabelText);
 
-    this.pokemonGrowthRateText = addTextObject(34, 106, "", TextStyle.SUMMARY_PINK, { fontSize: "36px" });
+    this.pokemonGrowthRateText = globalScene.addTextObject(34, 106, "", TextStyle.SUMMARY_PINK, { fontSize: "36px" });
     this.pokemonGrowthRateText.setOrigin(0, 0);
     this.starterSelectContainer.add(this.pokemonGrowthRateText);
 
-    this.pokemonGenderText = addTextObject(96, 112, "", TextStyle.SUMMARY_ALT);
+    this.pokemonGenderText = globalScene.addTextObject(96, 112, "", TextStyle.SUMMARY_ALT);
     this.pokemonGenderText.setOrigin(0, 0);
     this.starterSelectContainer.add(this.pokemonGenderText);
 
-    this.pokemonUncaughtText = addTextObject(
+    this.pokemonUncaughtText = globalScene.addTextObject(
       6,
       127,
       i18next.t("starterSelectUiHandler:uncaught"),
@@ -610,7 +609,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     // The font size should be set per language
     const starterInfoTextSize = textSettings?.starterInfoTextSize || 56;
 
-    this.pokemonAbilityLabelText = addTextObject(
+    this.pokemonAbilityLabelText = globalScene.addTextObject(
       6,
       127 + starterInfoYOffset,
       i18next.t("starterSelectUiHandler:ability"),
@@ -622,15 +621,21 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
 
     this.starterSelectContainer.add(this.pokemonAbilityLabelText);
 
-    this.pokemonAbilityText = addTextObject(starterInfoXPos, 127 + starterInfoYOffset, "", TextStyle.SUMMARY_ALT, {
-      fontSize: starterInfoTextSize,
-    });
+    this.pokemonAbilityText = globalScene.addTextObject(
+      starterInfoXPos,
+      127 + starterInfoYOffset,
+      "",
+      TextStyle.SUMMARY_ALT,
+      {
+        fontSize: starterInfoTextSize,
+      },
+    );
     this.pokemonAbilityText.setOrigin(0, 0);
     this.pokemonAbilityText.setInteractive(new Phaser.Geom.Rectangle(0, 0, 250, 55), Phaser.Geom.Rectangle.Contains);
 
     this.starterSelectContainer.add(this.pokemonAbilityText);
 
-    this.pokemonPassiveLabelText = addTextObject(
+    this.pokemonPassiveLabelText = globalScene.addTextObject(
       6,
       136 + starterInfoYOffset,
       i18next.t("starterSelectUiHandler:passive"),
@@ -641,9 +646,15 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.pokemonPassiveLabelText.setVisible(false);
     this.starterSelectContainer.add(this.pokemonPassiveLabelText);
 
-    this.pokemonPassiveText = addTextObject(starterInfoXPos, 136 + starterInfoYOffset, "", TextStyle.SUMMARY_ALT, {
-      fontSize: starterInfoTextSize,
-    });
+    this.pokemonPassiveText = globalScene.addTextObject(
+      starterInfoXPos,
+      136 + starterInfoYOffset,
+      "",
+      TextStyle.SUMMARY_ALT,
+      {
+        fontSize: starterInfoTextSize,
+      },
+    );
     this.pokemonPassiveText.setOrigin(0, 0);
     this.pokemonPassiveText.setInteractive(new Phaser.Geom.Rectangle(0, 0, 250, 55), Phaser.Geom.Rectangle.Contains);
     this.starterSelectContainer.add(this.pokemonPassiveText);
@@ -660,7 +671,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.pokemonPassiveLockedIcon.setVisible(false);
     this.starterSelectContainer.add(this.pokemonPassiveLockedIcon);
 
-    this.pokemonNatureLabelText = addTextObject(
+    this.pokemonNatureLabelText = globalScene.addTextObject(
       6,
       145 + starterInfoYOffset,
       i18next.t("starterSelectUiHandler:nature"),
@@ -685,11 +696,16 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.pokemonEggMoveBgs = [];
     this.pokemonEggMoveLabels = [];
 
-    this.valueLimitLabel = addTextObject(teamWindowX + 17, 150, "0/10", TextStyle.TOOLTIP_CONTENT);
+    this.valueLimitLabel = globalScene.addTextObject(teamWindowX + 17, 150, "0/10", TextStyle.TOOLTIP_CONTENT);
     this.valueLimitLabel.setOrigin(0.5, 0);
     this.starterSelectContainer.add(this.valueLimitLabel);
 
-    const startLabel = addTextObject(teamWindowX + 17, 162, i18next.t("common:start"), TextStyle.TOOLTIP_CONTENT);
+    const startLabel = globalScene.addTextObject(
+      teamWindowX + 17,
+      162,
+      i18next.t("common:start"),
+      TextStyle.TOOLTIP_CONTENT,
+    );
     startLabel.setOrigin(0.5, 0);
     this.starterSelectContainer.add(startLabel);
 
@@ -784,15 +800,27 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.type2Icon.setOrigin(0, 0);
     this.starterSelectContainer.add(this.type2Icon);
 
-    this.pokemonLuckLabelText = addTextObject(8, 89, i18next.t("common:luckIndicator"), TextStyle.WINDOW_ALT, {
-      fontSize: "56px",
-    });
+    this.pokemonLuckLabelText = globalScene.addTextObject(
+      8,
+      89,
+      i18next.t("common:luckIndicator"),
+      TextStyle.WINDOW_ALT,
+      {
+        fontSize: "56px",
+      },
+    );
     this.pokemonLuckLabelText.setOrigin(0, 0);
     this.starterSelectContainer.add(this.pokemonLuckLabelText);
 
-    this.pokemonLuckText = addTextObject(8 + this.pokemonLuckLabelText.displayWidth + 2, 89, "0", TextStyle.WINDOW, {
-      fontSize: "56px",
-    });
+    this.pokemonLuckText = globalScene.addTextObject(
+      8 + this.pokemonLuckLabelText.displayWidth + 2,
+      89,
+      "0",
+      TextStyle.WINDOW,
+      {
+        fontSize: "56px",
+      },
+    );
     this.pokemonLuckText.setOrigin(0, 0);
     this.starterSelectContainer.add(this.pokemonLuckText);
 
@@ -816,14 +844,14 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.pokemonCandyDarknessOverlay.setAlpha(0.5);
     this.pokemonCandyContainer.add(this.pokemonCandyDarknessOverlay);
 
-    this.pokemonCandyCountText = addTextObject(9.5, 0, "x0", TextStyle.WINDOW_ALT, { fontSize: "56px" });
+    this.pokemonCandyCountText = globalScene.addTextObject(9.5, 0, "x0", TextStyle.WINDOW_ALT, { fontSize: "56px" });
     this.pokemonCandyCountText.setOrigin(0, 0);
     this.pokemonCandyContainer.add(this.pokemonCandyCountText);
 
     this.pokemonCandyContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, 30, 20), Phaser.Geom.Rectangle.Contains);
     this.starterSelectContainer.add(this.pokemonCandyContainer);
 
-    this.pokemonFormText = addTextObject(6, 42, "Form", TextStyle.WINDOW_ALT, { fontSize: "42px" });
+    this.pokemonFormText = globalScene.addTextObject(6, 42, "Form", TextStyle.WINDOW_ALT, { fontSize: "42px" });
     this.pokemonFormText.setOrigin(0, 0);
     this.starterSelectContainer.add(this.pokemonFormText);
 
@@ -836,7 +864,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     pokemonCaughtIcon.setScale(0.75);
     this.pokemonCaughtHatchedContainer.add(pokemonCaughtIcon);
 
-    this.pokemonCaughtCountText = addTextObject(24, 4, "0", TextStyle.SUMMARY_ALT);
+    this.pokemonCaughtCountText = globalScene.addTextObject(24, 4, "0", TextStyle.SUMMARY_ALT);
     this.pokemonCaughtCountText.setOrigin(0, 0);
     this.pokemonCaughtHatchedContainer.add(this.pokemonCaughtCountText);
 
@@ -850,7 +878,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.pokemonShinyIcon.setScale(1);
     this.pokemonCaughtHatchedContainer.add(this.pokemonShinyIcon);
 
-    this.pokemonHatchedCountText = addTextObject(24, 19, "0", TextStyle.SUMMARY_ALT);
+    this.pokemonHatchedCountText = globalScene.addTextObject(24, 19, "0", TextStyle.SUMMARY_ALT);
     this.pokemonHatchedCountText.setOrigin(0, 0);
     this.pokemonCaughtHatchedContainer.add(this.pokemonHatchedCountText);
 
@@ -863,7 +891,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       const moveBg = globalScene.add.nineslice(0, 0, "type_bgs", "unknown", 92, 14, 2, 2, 2, 2);
       moveBg.setOrigin(1, 0);
 
-      const moveLabel = addTextObject(-moveBg.width / 2, 0, "-", TextStyle.PARTY);
+      const moveLabel = globalScene.addTextObject(-moveBg.width / 2, 0, "-", TextStyle.PARTY);
       moveLabel.setOrigin(0.5, 0);
 
       this.pokemonMoveBgs.push(moveBg);
@@ -876,7 +904,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       this.pokemonMovesContainer.add(moveContainer);
     }
 
-    this.pokemonAdditionalMoveCountLabel = addTextObject(
+    this.pokemonAdditionalMoveCountLabel = globalScene.addTextObject(
       -this.pokemonMoveBgs[0].width / 2,
       56,
       "(+0)",
@@ -891,7 +919,12 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.pokemonEggMovesContainer = globalScene.add.container(102, 85);
     this.pokemonEggMovesContainer.setScale(0.375);
 
-    const eggMovesLabel = addTextObject(-46, 0, i18next.t("starterSelectUiHandler:eggMoves"), TextStyle.WINDOW_ALT);
+    const eggMovesLabel = globalScene.addTextObject(
+      -46,
+      0,
+      i18next.t("starterSelectUiHandler:eggMoves"),
+      TextStyle.WINDOW_ALT,
+    );
     eggMovesLabel.setOrigin(0.5, 0);
 
     this.pokemonEggMovesContainer.add(eggMovesLabel);
@@ -902,7 +935,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       const eggMoveBg = globalScene.add.nineslice(0, 0, "type_bgs", "unknown", 92, 14, 2, 2, 2, 2);
       eggMoveBg.setOrigin(1, 0);
 
-      const eggMoveLabel = addTextObject(-eggMoveBg.width / 2, 0, "???", TextStyle.PARTY);
+      const eggMoveLabel = globalScene.addTextObject(-eggMoveBg.width / 2, 0, "???", TextStyle.PARTY);
       eggMoveLabel.setOrigin(0.5, 0);
 
       this.pokemonEggMoveBgs.push(eggMoveBg);
@@ -937,7 +970,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.shinyIconElement.setName("sprite-shiny-icon-element");
     this.shinyIconElement.setScale(0.675);
     this.shinyIconElement.setOrigin(0.0, 0.0);
-    this.shinyLabel = addTextObject(
+    this.shinyLabel = globalScene.addTextObject(
       this.instructionRowX + this.instructionRowTextOffset,
       this.instructionRowY,
       i18next.t("starterSelectUiHandler:cycleShiny"),
@@ -956,7 +989,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.formIconElement.setName("sprite-form-icon-element");
     this.formIconElement.setScale(0.675);
     this.formIconElement.setOrigin(0.0, 0.0);
-    this.formLabel = addTextObject(
+    this.formLabel = globalScene.addTextObject(
       this.instructionRowX + this.instructionRowTextOffset,
       this.instructionRowY,
       i18next.t("starterSelectUiHandler:cycleForm"),
@@ -975,7 +1008,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.genderIconElement.setName("sprite-gender-icon-element");
     this.genderIconElement.setScale(0.675);
     this.genderIconElement.setOrigin(0.0, 0.0);
-    this.genderLabel = addTextObject(
+    this.genderLabel = globalScene.addTextObject(
       this.instructionRowX + this.instructionRowTextOffset,
       this.instructionRowY,
       i18next.t("starterSelectUiHandler:cycleGender"),
@@ -994,7 +1027,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.abilityIconElement.setName("sprite-ability-icon-element");
     this.abilityIconElement.setScale(0.675);
     this.abilityIconElement.setOrigin(0.0, 0.0);
-    this.abilityLabel = addTextObject(
+    this.abilityLabel = globalScene.addTextObject(
       this.instructionRowX + this.instructionRowTextOffset,
       this.instructionRowY,
       i18next.t("starterSelectUiHandler:cycleAbility"),
@@ -1013,7 +1046,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.natureIconElement.setName("sprite-nature-icon-element");
     this.natureIconElement.setScale(0.675);
     this.natureIconElement.setOrigin(0.0, 0.0);
-    this.natureLabel = addTextObject(
+    this.natureLabel = globalScene.addTextObject(
       this.instructionRowX + this.instructionRowTextOffset,
       this.instructionRowY,
       i18next.t("starterSelectUiHandler:cycleNature"),
@@ -1032,7 +1065,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.goFilterIconElement.setName("sprite-goFilter-icon-element");
     this.goFilterIconElement.setScale(0.675);
     this.goFilterIconElement.setOrigin(0.0, 0.0);
-    this.goFilterLabel = addTextObject(
+    this.goFilterLabel = globalScene.addTextObject(
       this.filterInstructionRowX + this.instructionRowTextOffset,
       this.filterInstructionRowY,
       i18next.t("starterSelectUiHandler:goFilter"),
@@ -1051,11 +1084,11 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.starterSelectMessageBoxContainer.setVisible(false);
     this.starterSelectContainer.add(this.starterSelectMessageBoxContainer);
 
-    this.starterSelectMessageBox = addWindow(1, -1, 318, 28);
+    this.starterSelectMessageBox = globalScene.addWindow(1, -1, 318, 28);
     this.starterSelectMessageBox.setOrigin(0, 1);
     this.starterSelectMessageBoxContainer.add(this.starterSelectMessageBox);
 
-    this.message = addTextObject(8, 8, "", TextStyle.WINDOW, { maxLines: 2 });
+    this.message = globalScene.addTextObject(8, 8, "", TextStyle.WINDOW, { maxLines: 2 });
     this.message.setOrigin(0, 0);
     this.starterSelectMessageBoxContainer.add(this.message);
 

@@ -1,5 +1,5 @@
 import MessageUiHandler from "./message-ui-handler";
-import { TextStyle, addTextObject } from "./text";
+import { TextStyle } from "./text";
 import { Mode } from "./ui";
 import { Button } from "#enums/buttons";
 import { globalScene } from "#app/global-scene";
@@ -39,7 +39,7 @@ export default class FormChangeSceneHandler extends MessageUiHandler {
     this.messageContainer.setVisible(false);
     ui.add(this.messageContainer);
 
-    const message = addTextObject(0, 0, "", TextStyle.MESSAGE, {
+    const message = globalScene.addTextObject(0, 0, "", TextStyle.MESSAGE, {
       maxLines: 2,
       wordWrap: {
         width: 1780,

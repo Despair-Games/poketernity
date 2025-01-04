@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import type PokemonSpecies from "../data/pokemon-species";
-import { addTextObject, TextStyle } from "./text";
+import { TextStyle } from "./text";
 
 export class StarterContainer extends Phaser.GameObjects.Container {
   public species: PokemonSpecies;
@@ -57,7 +57,7 @@ export class StarterContainer extends Phaser.GameObjects.Container {
     this.add(this.shinyIcons);
 
     // value label
-    const label = addTextObject(1, 2, "0", TextStyle.WINDOW, { fontSize: "32px" });
+    const label = globalScene.addTextObject(1, 2, "0", TextStyle.WINDOW, { fontSize: "32px" });
     label.setShadowOffset(2, 2);
     label.setOrigin(0, 0);
     label.setVisible(false);
