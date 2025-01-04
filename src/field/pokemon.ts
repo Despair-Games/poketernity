@@ -677,15 +677,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
                   .replace("variant/", "")
                   .replace(/_[1-3]$/, "");
                 let config = variantData;
-                const useExpSprite =
-                  globalScene.experimentalSprites
-                  && globalScene.hasExpSprite(this.getBattleSpriteKey(isBackSprite, ignoreOverride));
                 battleSpritePath.split("/").map((p) => (config ? (config = config[p]) : null));
                 const variantSet: VariantSet = config as VariantSet;
                 if (variantSet && variantSet[this.variant] === 1) {
                   const cacheKey = this.getBattleSpriteKey(isBackSprite);
                   if (!variantColorCache.hasOwnProperty(cacheKey)) {
-                    await this.populateVariantColorCache(cacheKey, useExpSprite, battleSpritePath);
+                    await this.populateVariantColorCache(cacheKey, battleSpritePath);
                   }
                 }
                 resolve();
@@ -710,55 +707,24 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * Gracefully handle errors loading a variant sprite. Log if it fails and attempt to fall back on
-   * non-experimental sprites before giving up.
-   *
-   * @param cacheKey the cache key for the variant color sprite
-   * @param attemptedSpritePath the sprite path that failed to load
-   * @param useExpSprite was the attempted sprite experimental
-   * @param battleSpritePath the filename of the sprite
-   * @param optionalParams any additional params to log
-   */
-  async fallbackVariantColor(
-    cacheKey: string,
-    attemptedSpritePath: string,
-    useExpSprite: boolean,
-    battleSpritePath: string,
-    ...optionalParams: any[]
-  ) {
-    console.warn(`Could not load ${attemptedSpritePath}!`, ...optionalParams);
-    if (useExpSprite) {
-      await this.populateVariantColorCache(cacheKey, false, battleSpritePath);
-    }
-  }
-
-  /**
    * Attempt to process variant sprite.
-   *
    * @param cacheKey the cache key for the variant color sprite
-   * @param useExpSprite should the experimental sprite be used
    * @param battleSpritePath the filename of the sprite
    */
-  async populateVariantColorCache(cacheKey: string, useExpSprite: boolean, battleSpritePath: string) {
-    const spritePath = `./images/pokemon/variant/${useExpSprite ? "exp/" : ""}${battleSpritePath}.json`;
+  async populateVariantColorCache(cacheKey: string, battleSpritePath: string) {
+    const spritePath = `./images/pokemon/variant/${battleSpritePath}.json`;
     return globalScene
       .cachedFetch(spritePath)
       .then((res) => {
         // Prevent the JSON from processing if it failed to load
         if (!res.ok) {
-          return this.fallbackVariantColor(
-            cacheKey,
-            res.url,
-            useExpSprite,
-            battleSpritePath,
-            res.status,
-            res.statusText,
-          );
+          console.warn(`Failed to load sprite variant ${battleSpritePath}:`, res.status, res.statusText, res.url);
+          return;
         }
         return res.json();
       })
       .catch((error) => {
-        return this.fallbackVariantColor(cacheKey, spritePath, useExpSprite, battleSpritePath, error);
+        console.warn(`Failed to load sprite variant ${battleSpritePath}:`, error);
       })
       .then((c) => {
         if (!isNullOrUndefined(c)) {
@@ -3225,7 +3191,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return {
         cancelled: cancelled.value,
         result: move.id === Moves.SHEER_COLD ? HitResult.IMMUNE : HitResult.NO_EFFECT,
-        finalDamage: 0,
+        damage: 0,
       };
     }
 
@@ -3247,7 +3213,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return {
         cancelled: false,
         result: HitResult.EFFECTIVE,
-        finalDamage: fixedDamage.value,
+        damage: fixedDamage.value,
       };
     }
 
@@ -3258,7 +3224,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return {
         cancelled: false,
         result: HitResult.ONE_HIT_KO,
-        finalDamage: this.hp,
+        damage: this.hp,
       };
     }
 
@@ -3385,40 +3351,26 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         ? 0.5
         : 1;
 
-    damage.value = toDmgValue(
-      baseDamage
-        * targetMultiplier
-        * multiStrikeEnhancementMultiplier.value
-        * arenaAttackTypeMultiplier.value
-        * glaiveRushMultiplier.value
-        * criticalMultiplier.value
-        * randomMultiplier
-        * stabMultiplier.value
-        * typeMultiplier
-        * burnMultiplier.value
-        * screenMultiplier.value
-        * hitsTagMultiplier.value
-        * mistyTerrainMultiplier,
-    );
-
-    const postMultiplierDamage: number = damage.value;
-
     /** Doubles damage if the attacker has Tinted Lens and is using a resisted move */
+    const tintedLensMultiplier = new NumberHolder(1);
     if (!ignoreSourceAbility) {
-      applyPreAttackAbAttrs(DamageBoostAbAttr, source, this, move, simulated, damage);
-    }
-
-    /** Apply the enemy's Damage and Resistance tokens */
-    if (!source.isPlayer()) {
-      globalScene.applyModifiers(EnemyDamageBoosterModifier, false, damage);
-    }
-    if (!this.isPlayer()) {
-      globalScene.applyModifiers(EnemyDamageReducerModifier, false, damage);
+      applyPreAttackAbAttrs(DamageBoostAbAttr, source, this, move, simulated, tintedLensMultiplier);
     }
 
     /** Apply this Pokemon's post-calc defensive modifiers (e.g. Fur Coat) */
+    const receivedDamageMultiplier = new NumberHolder(1);
+    const alliedFieldDamageMultiplier = new NumberHolder(1);
     if (!ignoreAbility) {
-      applyPreDefendAbAttrs(ReceivedMoveDamageMultiplierAbAttr, this, source, move, cancelled, simulated, damage);
+      applyPreDefendAbAttrs(
+        ReceivedMoveDamageMultiplierAbAttr,
+        this,
+        source,
+        move,
+        cancelled,
+        simulated,
+        receivedDamageMultiplier,
+      );
+
       /** Additionally apply friend guard damage reduction if ally has it. */
       if (globalScene.currentBattle.double && this.getAlly()?.isActive(true)) {
         applyPreDefendAbAttrs(
@@ -3428,9 +3380,41 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           move,
           cancelled,
           simulated,
-          damage,
+          alliedFieldDamageMultiplier,
         );
       }
+    }
+
+    /** If damage is nullified by a form-ability (Eiscue's Ice Face, Mimikyu's Disguise), then damage is set to 0 */
+    if (receivedDamageMultiplier.value > 0) {
+      damage.value = toDmgValue(
+        baseDamage
+          * targetMultiplier
+          * multiStrikeEnhancementMultiplier.value
+          * arenaAttackTypeMultiplier.value
+          * glaiveRushMultiplier.value
+          * criticalMultiplier.value
+          * randomMultiplier
+          * stabMultiplier.value
+          * typeMultiplier
+          * burnMultiplier.value
+          * screenMultiplier.value
+          * hitsTagMultiplier.value
+          * mistyTerrainMultiplier
+          * tintedLensMultiplier.value
+          * receivedDamageMultiplier.value
+          * alliedFieldDamageMultiplier.value,
+      );
+    } else {
+      damage.value = 0;
+    }
+
+    /** Apply the enemy's Damage and Resistance tokens */
+    if (!source.isPlayer()) {
+      globalScene.applyModifiers(EnemyDamageBoosterModifier, false, damage);
+    }
+    if (!this.isPlayer()) {
+      globalScene.applyModifiers(EnemyDamageReducerModifier, false, damage);
     }
 
     // This attribute may modify damage arbitrarily, so be careful about changing its order of application.
@@ -3457,9 +3441,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return {
       cancelled: cancelled.value,
       result: hitResult,
-      baseDamage: baseDamage,
-      postMultiplierDamage: postMultiplierDamage,
-      finalDamage: damage.value,
+      damage: damage.value,
     };
   }
 
@@ -5629,7 +5611,7 @@ export class EnemyPokemon extends Pokemon {
                   || [Moves.SUCKER_PUNCH, Moves.UPPER_HAND, Moves.THUNDERCLAP].includes(move.id);
                 return (
                   doesNotFail
-                  && p.getAttackDamage(this, move, !p.battleData.abilityRevealed, false, isCritical).finalDamage >= p.hp
+                  && p.getAttackDamage(this, move, !p.battleData.abilityRevealed, false, isCritical).damage >= p.hp
                 );
               })
             );
@@ -6171,12 +6153,8 @@ export interface DamageCalculationResult {
   cancelled: boolean;
   /** The effectiveness of the move */
   result: HitResult;
-  /** The attack's base damage, as determined by the source's level, move power, and Attack stat as well as the target Pokemon's Defense stat */
-  baseDamage?: number;
-  /** The calculated damage of the move before any post-calculation factors are applied */
-  postMultiplierDamage?: number;
   /** The damage dealt by the move */
-  finalDamage: number;
+  damage: number;
 }
 
 /**
