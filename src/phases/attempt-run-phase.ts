@@ -68,8 +68,8 @@ export class AttemptRunPhase extends PokemonPhase {
 
   /**
    * Calculates the base escape chance based on the current field.
-   * @param playerField - Usually {@linkcode BattleScene.getPlayerField()}
-   * @param enemyField - Usually {@linkcode BattleScene.getEnemyField()}
+   * @param playerField - Array of {@linkcode PlayerPokemon} whose speed stats will be used in the calculation.
+   * @param enemyField - Array of {@linkcode EnemyPokemon} whose speed stats will be used in the calculation.
    * @param escapeChance - {@linkcode NumberHolder} holding the % chance to escape, will be overwritten by the function
    */
   public attemptRunAway(playerField: PlayerPokemon[], enemyField: EnemyPokemon[], escapeChance: NumberHolder): void {
