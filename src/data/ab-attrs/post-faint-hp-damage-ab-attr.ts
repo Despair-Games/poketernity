@@ -19,7 +19,11 @@ export class PostFaintHPDamageAbAttr extends PostFaintAbAttr {
     _hitResult?: HitResult,
     ..._args: any[]
   ): boolean {
-    if (move !== undefined && attacker !== undefined && !simulated) {
+    if (!move || !attacker || !attacker.isOnField()) {
+      return false;
+    }
+
+    if (!simulated) {
       //If the mon didn't die to indirect damage
       const damage = pokemon.turnData.attacksReceived[0].damage;
       attacker.damageAndUpdate(damage, HitResult.OTHER);

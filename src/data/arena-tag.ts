@@ -995,12 +995,21 @@ class StickyWebTag extends ArenaTrapTag {
     super.onAdd(arena);
     const source = this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
     if (!quiet && source) {
-      globalScene.queueMessage(
-        i18next.t("arenaTag:stickyWebOnAdd", {
-          moveName: this.getMoveName(),
-          opponentDesc: source.getOpponentDescriptor(),
-        }),
-      );
+      if (this.side === ArenaTagSide.PLAYER) {
+        globalScene.queueMessage(
+          i18next.t("arenaTag:stickyWebOnAddPlayerSide", {
+            moveName: this.getMoveName(),
+            opponentDesc: source.getOpponentDescriptor(),
+          }),
+        );
+      } else {
+        globalScene.queueMessage(
+          i18next.t("arenaTag:stickyWebOnAddEnemySide", {
+            moveName: this.getMoveName(),
+            opponentDesc: source.getOpponentDescriptor(),
+          }),
+        );
+      }
     }
   }
 
