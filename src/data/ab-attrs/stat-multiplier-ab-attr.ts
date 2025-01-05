@@ -59,8 +59,8 @@ export class StatMultiplierAbAttr extends AbAttr {
     args: any[],
   ): boolean {
     const move = args[0] as Move;
-    const target = args[1] as Pokemon;
-    if (stat === this.stat && (!this.condition || this.condition(pokemon, target, move))) {
+    const opponent = args[1] as Pokemon;
+    if (stat === this.stat && (!this.condition || this.condition(pokemon, opponent, move))) {
       statValue.value *= this.multiplier;
       return true;
     }
