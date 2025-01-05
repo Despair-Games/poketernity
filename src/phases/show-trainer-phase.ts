@@ -1,13 +1,9 @@
 import { globalScene } from "#app/global-scene";
-import { PlayerGender } from "#app/enums/player-gender";
-import { BattlePhase } from "./battle-phase";
+import { PlayerGender } from "#enums/player-gender";
+import { BattlePhase } from "./abstract-battle-phase";
 
 export class ShowTrainerPhase extends BattlePhase {
-  constructor() {
-    super();
-  }
-
-  override start() {
+  public override start(): void {
     super.start();
 
     globalScene.trainer.setVisible(true);

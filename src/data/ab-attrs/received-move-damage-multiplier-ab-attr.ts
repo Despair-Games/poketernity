@@ -1,6 +1,6 @@
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
-import { type BooleanHolder, type NumberHolder, toDmgValue } from "#app/utils";
+import { type BooleanHolder, type NumberHolder } from "#app/utils";
 import { PreDefendAbAttr } from "./pre-defend-ab-attr";
 
 //#region Types
@@ -29,9 +29,9 @@ export class ReceivedMoveDamageMultiplierAbAttr extends PreDefendAbAttr {
     _cancelled: BooleanHolder,
     args: any[],
   ): boolean {
-    const damage: NumberHolder = args[0];
+    const multiplier: NumberHolder = args[0];
     if (this.condition(pokemon, attacker, move)) {
-      damage.value = toDmgValue(damage.value * this.damageMultiplier);
+      multiplier.value *= this.damageMultiplier;
 
       return true;
     }
