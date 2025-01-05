@@ -176,8 +176,8 @@ export class CommandPhase extends FieldPhase {
 
     switch (command) {
       case Command.FIGHT:
-        const ignorePp: boolean | undefined = args[0];
-        const targets: MoveTargetSet | undefined = args[1];
+        const ignorePp = args[0] as boolean | undefined;
+        const targets = args[1] as MoveTargetSet | undefined;
         const useStruggle = cursor > -1 && !playerPokemon.getMoveset().filter((m) => m.isUsable(playerPokemon)).length;
 
         if (cursor === -1 || playerPokemon.trySelectMove(cursor, ignorePp) || useStruggle) {
