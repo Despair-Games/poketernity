@@ -75,49 +75,6 @@ describe("Moves - Future Sight", () => {
     expect(game.scene.getEnemyPokemon()!.isFullHp()).toBe(false);
   });
 
-  it("doesn't crash if the user leaves the field and the hit triggers Destiny Bond", async () => {
-    game.override.enemyMoveset([Moves.DESTINY_BOND, Moves.SPLASH]).enemyAbility(Abilities.BALL_FETCH);
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
-
-    const [feebas, milotic] = game.scene.getPlayerParty();
-
-    game.move.select(Moves.FUTURE_SIGHT);
-    await game.forceEnemyMove(Moves.SPLASH);
-    await game.toNextTurn();
-
-    game.doSwitchPokemon(1);
-    await game.forceEnemyMove(Moves.SPLASH);
-    await game.toNextTurn();
-
-    game.move.select(Moves.SPLASH);
-    await game.forceEnemyMove(Moves.DESTINY_BOND);
-    await game.phaseInterceptor.to("SelectModifierPhase", false);
-
-    expect(game.scene.getPlayerPokemon()!.species.speciesId).toBe(Species.MILOTIC);
-    expect(milotic.isFullHp()).toBe(true);
-    expect(feebas.isFullHp()).toBe(true);
-  });
-
-  it("doesn't crash if the user leaves the field and the hit triggers Innards Out", async () => {
-    game.override.enemyAbility(Abilities.INNARDS_OUT);
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
-
-    const [feebas, milotic] = game.scene.getPlayerParty();
-
-    game.move.select(Moves.FUTURE_SIGHT);
-    await game.toNextTurn();
-
-    game.doSwitchPokemon(1);
-    await game.toNextTurn();
-
-    game.move.select(Moves.SPLASH);
-    await game.phaseInterceptor.to("SelectModifierPhase", false);
-
-    expect(game.scene.getPlayerPokemon()!.species.speciesId).toBe(Species.MILOTIC);
-    expect(milotic.isFullHp()).toBe(true);
-    expect(feebas.isFullHp()).toBe(true);
-  });
-
   it("should inflict damage as a Psychic-type move", async () => {
     game.override.enemySpecies(Species.UMBREON);
 
@@ -245,6 +202,49 @@ describe("Moves - Future Sight", () => {
 
     await game.phaseInterceptor.to("MoveEffectPhase");
     expect(enemyPokemon[1].isFainted()).toBeTruthy();
+  });
+
+  it("doesn't crash if the user leaves the field and the hit triggers Destiny Bond", async () => {
+    game.override.enemyMoveset([Moves.DESTINY_BOND, Moves.SPLASH]).enemyAbility(Abilities.BALL_FETCH).enemyLevel(1);
+    await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
+
+    const [feebas, milotic] = game.scene.getPlayerParty();
+
+    game.move.select(Moves.FUTURE_SIGHT);
+    await game.forceEnemyMove(Moves.SPLASH);
+    await game.toNextTurn();
+
+    game.doSwitchPokemon(1);
+    await game.forceEnemyMove(Moves.SPLASH);
+    await game.toNextTurn();
+
+    game.move.select(Moves.SPLASH);
+    await game.forceEnemyMove(Moves.DESTINY_BOND);
+    await game.phaseInterceptor.to("SelectModifierPhase", false);
+
+    expect(game.scene.getPlayerPokemon()!.species.speciesId).toBe(Species.MILOTIC);
+    expect(milotic.isFullHp()).toBe(true);
+    expect(feebas.isFullHp()).toBe(true);
+  });
+
+  it("doesn't crash if the user leaves the field and the hit triggers Innards Out", async () => {
+    game.override.enemyAbility(Abilities.INNARDS_OUT).enemyLevel(1);
+    await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
+
+    const [feebas, milotic] = game.scene.getPlayerParty();
+
+    game.move.select(Moves.FUTURE_SIGHT);
+    await game.toNextTurn();
+
+    game.doSwitchPokemon(1);
+    await game.toNextTurn();
+
+    game.move.select(Moves.SPLASH);
+    await game.phaseInterceptor.to("SelectModifierPhase", false);
+
+    expect(game.scene.getPlayerPokemon()!.species.speciesId).toBe(Species.MILOTIC);
+    expect(milotic.isFullHp()).toBe(true);
+    expect(feebas.isFullHp()).toBe(true);
   });
 
   // TODO: Implement these properties and fill in these tests
