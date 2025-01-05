@@ -3351,38 +3351,25 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         ? 0.5
         : 1;
 
-    damage.value = toDmgValue(
-      baseDamage
-        * targetMultiplier
-        * multiStrikeEnhancementMultiplier.value
-        * arenaAttackTypeMultiplier.value
-        * glaiveRushMultiplier.value
-        * criticalMultiplier.value
-        * randomMultiplier
-        * stabMultiplier.value
-        * typeMultiplier
-        * burnMultiplier.value
-        * screenMultiplier.value
-        * hitsTagMultiplier.value
-        * mistyTerrainMultiplier,
-    );
-
     /** Doubles damage if the attacker has Tinted Lens and is using a resisted move */
+    const tintedLensMultiplier = new NumberHolder(1);
     if (!ignoreSourceAbility) {
-      applyPreAttackAbAttrs(DamageBoostAbAttr, source, this, move, simulated, damage);
-    }
-
-    /** Apply the enemy's Damage and Resistance tokens */
-    if (!source.isPlayer()) {
-      globalScene.applyModifiers(EnemyDamageBoosterModifier, false, damage);
-    }
-    if (!this.isPlayer()) {
-      globalScene.applyModifiers(EnemyDamageReducerModifier, false, damage);
+      applyPreAttackAbAttrs(DamageBoostAbAttr, source, this, move, simulated, tintedLensMultiplier);
     }
 
     /** Apply this Pokemon's post-calc defensive modifiers (e.g. Fur Coat) */
+    const receivedDamageMultiplier = new NumberHolder(1);
+    const alliedFieldDamageMultiplier = new NumberHolder(1);
     if (!ignoreAbility) {
-      applyPreDefendAbAttrs(ReceivedMoveDamageMultiplierAbAttr, this, source, move, cancelled, simulated, damage);
+      applyPreDefendAbAttrs(
+        ReceivedMoveDamageMultiplierAbAttr,
+        this,
+        source,
+        move,
+        cancelled,
+        simulated,
+        receivedDamageMultiplier,
+      );
 
       /** Additionally apply friend guard damage reduction if ally has it. */
       if (globalScene.currentBattle.double && this.getAlly()?.isActive(true)) {
@@ -3393,9 +3380,41 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           move,
           cancelled,
           simulated,
-          damage,
+          alliedFieldDamageMultiplier,
         );
       }
+    }
+
+    /** If damage is nullified by a form-ability (Eiscue's Ice Face, Mimikyu's Disguise), then damage is set to 0 */
+    if (receivedDamageMultiplier.value > 0) {
+      damage.value = toDmgValue(
+        baseDamage
+          * targetMultiplier
+          * multiStrikeEnhancementMultiplier.value
+          * arenaAttackTypeMultiplier.value
+          * glaiveRushMultiplier.value
+          * criticalMultiplier.value
+          * randomMultiplier
+          * stabMultiplier.value
+          * typeMultiplier
+          * burnMultiplier.value
+          * screenMultiplier.value
+          * hitsTagMultiplier.value
+          * mistyTerrainMultiplier
+          * tintedLensMultiplier.value
+          * receivedDamageMultiplier.value
+          * alliedFieldDamageMultiplier.value,
+      );
+    } else {
+      damage.value = 0;
+    }
+
+    /** Apply the enemy's Damage and Resistance tokens */
+    if (!source.isPlayer()) {
+      globalScene.applyModifiers(EnemyDamageBoosterModifier, false, damage);
+    }
+    if (!this.isPlayer()) {
+      globalScene.applyModifiers(EnemyDamageReducerModifier, false, damage);
     }
 
     // This attribute may modify damage arbitrarily, so be careful about changing its order of application.
