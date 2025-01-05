@@ -15,11 +15,6 @@ import type { MoveConditionFunc } from "../move-conditions";
  * @extends MoveEffectAttr
  */
 export class AbilityGiveAttr extends MoveEffectAttr {
-  constructor() {
-    super(false);
-  }
-
-  /** Gives the user's ability to the given target */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

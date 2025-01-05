@@ -9,7 +9,6 @@ import { VariablePowerAttr } from "#app/data/move-attrs/variable-power-attr";
  * @extends VariablePowerAttr
  */
 export class RoundPowerAttr extends VariablePowerAttr {
-  /** Doubles the given move's power if Round was previously used this turn */
   override apply(user: Pokemon, _target: Pokemon, _move: Move, power: NumberHolder): boolean {
     if (user.turnData?.joinedRound) {
       power.value *= 2;

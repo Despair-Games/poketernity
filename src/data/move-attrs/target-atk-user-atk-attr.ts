@@ -5,8 +5,7 @@ import type { Move } from "#app/data/move";
 import { VariableAtkAttr } from "#app/data/move-attrs/variable-atk-attr";
 
 /**
- * Attribute to set the offensive stat used for the move's attack
- * to the target's Attack stat.
+ * Attribute to set the offensive stat used for the move's attack to the target's Attack stat.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Foul_Play_(move) | Foul Play}.
  * @extends VariableAtkAttr
  */

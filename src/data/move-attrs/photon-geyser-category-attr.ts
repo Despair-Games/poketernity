@@ -11,7 +11,6 @@ import { VariableMoveCategoryAttr } from "#app/data/move-attrs/variable-move-cat
  * @extends VariableMoveCategoryAttr
  */
 export class PhotonGeyserCategoryAttr extends VariableMoveCategoryAttr {
-  /** Changes the given move's category to match the user's highest effective offensive stat */
   override apply(user: Pokemon, target: Pokemon, move: Move, category: NumberHolder): boolean {
     if (user.getEffectiveStat(Stat.ATK, target, move) > user.getEffectiveStat(Stat.SPATK, target, move)) {
       category.value = MoveCategory.PHYSICAL;

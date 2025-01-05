@@ -19,7 +19,6 @@ export class ReducePpMoveAttr extends MoveEffectAttr {
     this.reduction = reduction;
   }
 
-  /** Reduces the PP of the target's last-used move by an amount based on this attribute instance's {@linkcode reduction}. */
   override apply(_user: Pokemon, target: Pokemon, _move: Move): boolean {
     const lastMove = target.getLastXMoves()[0];
     const movesetMove = target.getMoveset().find((m) => m.moveId === lastMove.move)!;

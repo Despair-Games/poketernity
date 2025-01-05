@@ -6,7 +6,7 @@ import { VariableAccuracyAttr } from "#app/data/move-attrs/variable-accuracy-att
 /**
  * Attribute to set move accuracy based on accuracy rules for one-hit KO moves:
  * - If the user is of lower level than the target, accuracy is set to 0.
- * - otherwise, accuracy increases as the difference in levels between the user and the target increases.
+ * - Otherwise, accuracy increases as the difference in levels between the user and the target increases.
  * @extends VariableAccuracyAttr
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/One-hit_knockout_move | One-hit knockout moves}
  */

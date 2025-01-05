@@ -9,7 +9,6 @@ import { VariablePowerAttr } from "#app/data/move-attrs/variable-power-attr";
  * @extends VariablePowerAttr
  */
 export class CombinedPledgePowerAttr extends VariablePowerAttr {
-  /** Multiplies the given move's power by 150/80 when the move is combined with a different Pledge move */
   override apply(user: Pokemon, _target: Pokemon, move: Move, power: NumberHolder): boolean {
     const combinedPledgeMove = user.turnData.combiningPledge;
 

@@ -10,7 +10,6 @@ import { VariableMoveTypeMultiplierAttr } from "#app/data/move-attrs/variable-mo
  * @extends VariableMoveTypeMultiplierAttr
  */
 export class IceNoEffectTypeAttr extends VariableMoveTypeMultiplierAttr {
-  /** Sets the given move's type effectiveness to 0 if the target is Ice type */
   override apply(_user: Pokemon, target: Pokemon, _move: Move, multiplier: NumberHolder): boolean {
     if (target.isOfType(Type.ICE)) {
       multiplier.value = 0;

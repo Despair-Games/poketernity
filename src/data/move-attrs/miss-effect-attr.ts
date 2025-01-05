@@ -4,8 +4,7 @@ import { MoveAttr } from "#app/data/move-attrs/move-attr";
 import type { UserMoveConditionFunc } from "../move-conditions";
 
 /**
- * Attribute to add an effect that triggers when the
- * move misses.
+ * Attribute to add an effect that triggers when the move misses.
  * @extends MoveAttr
  * @see {@linkcode missEffectFunc}
  */
@@ -18,13 +17,6 @@ export class MissEffectAttr extends MoveAttr {
     this.missEffectFunc = missEffectFunc;
   }
 
-  /**
-   * Applies this attribute's on-miss function
-   * @param user the {@linkcode Pokemon} using the move
-   * @param _target n/a
-   * @param move the {@linkcode Move} being used
-   * @returns `true`
-   */
   override apply(user: Pokemon, _target: Pokemon, move: Move): boolean {
     this.missEffectFunc(user, move);
     return true;

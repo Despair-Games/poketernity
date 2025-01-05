@@ -4,8 +4,7 @@ import { MoveAttr } from "#app/data/move-attrs/move-attr";
 import type { NumberHolder } from "#app/utils";
 
 /**
- * Attribute to modify a move's type effectiveness in certain
- * game states.
+ * Attribute to modify a move's type effectiveness in certain game states.
  * @extends MoveAttr
  */
 export class VariableMoveTypeMultiplierAttr extends MoveAttr {

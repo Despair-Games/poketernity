@@ -5,8 +5,7 @@ import type { Move } from "#app/data/move";
 import { VariableAtkAttr } from "#app/data/move-attrs/variable-atk-attr";
 
 /**
- * Attribute to change the attacking stat used for the move
- * to the user's Defense.
+ * Attribute to change the attacking stat used for the move to the user's Defense.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Body_Press_(move) | Body Press}.
  * @extends VariableAtkAttr
  */
