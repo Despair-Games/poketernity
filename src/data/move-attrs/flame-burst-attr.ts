@@ -7,7 +7,7 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
 /**
  * Applies damage to the target's ally equal to 1/16 of that ally's max HP.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Flame_Burst_(move)}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Flame_Burst_(move) | Flame Burst}.
  * @extends MoveEffectAttr
  */
 export class FlameBurstAttr extends MoveEffectAttr {

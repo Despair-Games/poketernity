@@ -14,7 +14,7 @@ const countPositiveStatStages = (pokemon: Pokemon): number => {
 
 /**
  * Attribute that increases power based on the amount of positive stat stage increases.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Stored_Power_(move) Stored Power}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Stored_Power_(move) | Stored Power}.
  * @extends VariablePowerAttr
  */
 export class PositiveStatStagePowerAttr extends VariablePowerAttr {

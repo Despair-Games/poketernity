@@ -6,7 +6,7 @@ import { VariableDefAttr } from "#app/data/move-attrs/variable-def-attr";
 
 /**
  * Attribute for Special attacks that deal physical damage,
- * e.g. {@link https://bulbapedia.bulbagarden.net/wiki/Psyshock_(move) Psyshock}.
+ * e.g. {@link https://bulbapedia.bulbagarden.net/wiki/Psyshock_(move) | Psyshock}.
  * @extends VariableDefAttr
  */
 export class DealsPhysicalDamageAttr extends VariableDefAttr {

@@ -39,7 +39,7 @@ export class MoveEffectAttr extends MoveAttr {
    */
   protected options?: MoveEffectAttrOptions;
 
-  constructor(selfTarget?: boolean, options?: MoveEffectAttrOptions) {
+  constructor(selfTarget: boolean = false, options?: MoveEffectAttrOptions) {
     super(selfTarget);
     this.options = options;
   }

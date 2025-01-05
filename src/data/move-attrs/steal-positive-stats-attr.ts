@@ -12,7 +12,7 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
 /**
  * Attribute to steal the target's positive stat stages.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Spectral_Thief_(move) Spectral Thief}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Spectral_Thief_(move) | Spectral Thief}.
  * @extends MoveEffectAttr
  */
 export class StealPositiveStatsAttr extends MoveEffectAttr {

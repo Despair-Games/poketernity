@@ -5,10 +5,10 @@ import type { Move } from "#app/data/move";
 import { StatusEffectAttr } from "#app/data/move-attrs/status-effect-attr";
 
 /**
- * Attribute to randomly apply one of a {@linkcode effects set of status effects}
+ * Attribute to randomly apply one of a {@linkcode effects | set of status effects}
  * onto the target.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Tri_Attack_(move) Tri-Attack}
- * and {@link https://bulbapedia.bulbagarden.net/wiki/Dire_Claw_(move) Dire Claw}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Tri_Attack_(move) | Tri-Attack}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Dire_Claw_(move) | Dire Claw}.
  * @extends StatusEffectAttr
  */
 export class MultiStatusEffectAttr extends StatusEffectAttr {

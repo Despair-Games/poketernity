@@ -6,7 +6,7 @@ import { VariableMoveCategoryAttr } from "#app/data/move-attrs/variable-move-cat
 
 /**
  * Change the move category to status when used on the user's ally.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Pollen_Puff_(move) Pollen Puff}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Pollen_Puff_(move) | Pollen Puff}.
  * @extends VariableMoveCategoryAttr
  */
 export class StatusCategoryOnAllyAttr extends VariableMoveCategoryAttr {

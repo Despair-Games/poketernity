@@ -10,7 +10,7 @@ import { VariablePowerAttr } from "#app/data/move-attrs/variable-power-attr";
 /**
  * Attribute to set move power based on one of four random Presents. One of which
  * heals the target for 25% of its maximum HP instead of dealing damage.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Present_(move) Present}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Present_(move) | Present}.
  * @extends VariablePowerAttr
  */
 export class PresentPowerAttr extends VariablePowerAttr {

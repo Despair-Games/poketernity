@@ -6,8 +6,7 @@ import { type Move } from "#app/data/move";
 import { VariableMoveTypeAttr } from "#app/data/move-attrs/variable-move-type-attr";
 
 /**
- * Attribute used for Tera Starstorm that changes the move type to Stellar
- * if the user is Terastallized.
+ * Attribute used for Tera Starstorm that changes the move type to Stellar if the user is Terastallized.
  * @extends VariableMoveTypeAttr
  */
 export class TeraStarstormTypeAttr extends VariableMoveTypeAttr {

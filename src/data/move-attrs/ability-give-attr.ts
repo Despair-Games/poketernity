@@ -11,15 +11,10 @@ import type { MoveConditionFunc } from "../move-conditions";
 
 /**
  * Attribute to give the user's ability to the target.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Entrainment_(move) Entrainment}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Entrainment_(move) | Entrainment}.
  * @extends MoveEffectAttr
  */
 export class AbilityGiveAttr extends MoveEffectAttr {
-  constructor() {
-    super(false);
-  }
-
-  /** Gives the user's ability to the given target */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

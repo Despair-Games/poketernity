@@ -6,9 +6,8 @@ import { StatStageChangeAttr } from "#app/data/move-attrs/stat-stage-change-attr
 import type { MoveConditionFunc } from "../move-conditions";
 
 /**
- * Attribute to increase the user's stats upon knocking out
- * the target with the move.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Fell_Stinger_(move) Fell Stinger}.
+ * Attribute to increase the user's stats upon knocking out the target with the move.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Fell_Stinger_(move) | Fell Stinger}.
  * @extends MoveAttr
  */
 export class PostVictoryStatStageChangeAttr extends MoveAttr {

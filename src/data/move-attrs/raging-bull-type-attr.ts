@@ -8,7 +8,7 @@ import { VariableMoveTypeAttr } from "#app/data/move-attrs/variable-move-type-at
 /**
  * Attribute to change move type according to the form
  * of the Paldean Tauros using it.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Raging_Bull_(move) Raging Bull}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Raging_Bull_(move) | Raging Bull}.
  * @extends VariableMoveTypeAttr
  */
 export class RagingBullTypeAttr extends VariableMoveTypeAttr {

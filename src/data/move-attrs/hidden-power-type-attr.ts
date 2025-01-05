@@ -7,7 +7,7 @@ import { VariableMoveTypeAttr } from "#app/data/move-attrs/variable-move-type-at
 
 /**
  * Attribute to change the move's type based on the user's IVs.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Hidden_Power_(move) Hidden Power}
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Hidden_Power_(move) | Hidden Power}
  * @extends VariableMoveTypeAttr
  */
 export class HiddenPowerTypeAttr extends VariableMoveTypeAttr {

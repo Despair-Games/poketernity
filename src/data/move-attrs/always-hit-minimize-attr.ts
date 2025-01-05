@@ -6,7 +6,7 @@ import { VariableAccuracyAttr } from "#app/data/move-attrs/variable-accuracy-att
 
 /**
  * Attribute to guarantee hits against Pokemon
- * that are {@linkcode BattlerTagType.MINIMIZED minimized}.
+ * that are {@linkcode BattlerTagType.MINIMIZED | minimized}.
  * @extends VariableAccuracyAttr
  */
 export class AlwaysHitMinimizeAttr extends VariableAccuracyAttr {

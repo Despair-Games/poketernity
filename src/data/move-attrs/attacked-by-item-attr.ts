@@ -8,7 +8,7 @@ import type { MoveConditionFunc } from "../move-conditions";
 
 /**
  * Attribute to cause the move to fail if the target is not holding an item.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Poltergeist_(move) Poltergeist}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Poltergeist_(move) | Poltergeist}.
  * @extends MoveAttr
  */
 export class AttackedByItemAttr extends MoveAttr {

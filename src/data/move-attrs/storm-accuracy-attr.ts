@@ -6,8 +6,8 @@ import type { Move } from "#app/data/move";
 import { VariableAccuracyAttr } from "#app/data/move-attrs/variable-accuracy-attr";
 
 /**
- * Attribute used for Bleakwind Storm, Wildbolt Storm, and Sandsear Storm that sets accuracy to never
- * miss in rain
+ * Attribute used for Bleakwind Storm, Wildbolt Storm, and Sandsear Storm
+ * that sets accuracy to never miss in rain.
  * Springtide Storm does NOT have this property
  * @extends VariableAccuracyAttr
  */

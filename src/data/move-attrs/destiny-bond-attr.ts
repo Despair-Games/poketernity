@@ -8,9 +8,8 @@ import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
 /**
- * Attribute to apply the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Destiny_Bond_(move) Destiny Bond}.
- * If the user faints while Destiny Bond is in effect, the user
- * takes the attacker down with it.
+ * Attribute to apply the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Destiny_Bond_(move) | Destiny Bond}.
+ * If the user faints while Destiny Bond is in effect, the user takes the attacker down with it.
  * @extends MoveEffectAttr
  */
 export class DestinyBondAttr extends MoveEffectAttr {

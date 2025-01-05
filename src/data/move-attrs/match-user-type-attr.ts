@@ -6,11 +6,10 @@ import { VariableMoveTypeAttr } from "#app/data/move-attrs/variable-move-type-at
 
 /**
  * Attribute to change move type to match the user's primary type.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Revelation_Dance_(move) Revelation Dance}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Revelation_Dance_(move) | Revelation Dance}.
  * @extends VariableMoveTypeAttr
  */
 export class MatchUserTypeAttr extends VariableMoveTypeAttr {
-  /** Sets the given move's type to the user's primary type */
   override apply(user: Pokemon, _target: Pokemon, _move: Move, moveType: NumberHolder): boolean {
     const userTypes = user.getTypes(true);
 

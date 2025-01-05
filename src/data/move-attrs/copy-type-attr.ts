@@ -9,7 +9,7 @@ import type { MoveConditionFunc } from "../move-conditions";
 
 /**
  * Attribute to change the user's type to match the target's type(s).
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Reflect_Type_(move) Reflect Type}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Reflect_Type_(move) | Reflect Type}.
  * @extends MoveEffectAttr
  */
 export class CopyTypeAttr extends MoveEffectAttr {
@@ -41,7 +41,7 @@ export class CopyTypeAttr extends MoveEffectAttr {
 
   /**
    * Moves with this attribute fail if
-   * - The target is {@linkcode Type.UNKNOWN typeless}
+   * - The target is {@linkcode Type.UNKNOWN | typeless}
    * - The target has an added type (e.g. from Forest's Curse).
    */
   override getCondition(): MoveConditionFunc {

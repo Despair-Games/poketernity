@@ -8,8 +8,8 @@ import type { MoveConditionFunc } from "../move-conditions";
 /**
  * Attribute to grant a stat stage boost to the user
  * at the cost of a portion of the user's maximum HP.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Belly_Drum_(move) Belly Drum}
- * and {@link https://bulbapedia.bulbagarden.net/wiki/Clangorous_Soul_(move) Clangorous Soul}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Belly_Drum_(move) | Belly Drum}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Clangorous_Soul_(move) | Clangorous Soul}.
  * @extends StatStageChangeAttr
  */
 export class CutHpStatStageBoostAttr extends StatStageChangeAttr {
@@ -28,7 +28,6 @@ export class CutHpStatStageBoostAttr extends StatStageChangeAttr {
     this.messageCallback = messageCallback;
   }
 
-  /** Sacrifices a set ratio of the user's maximum HP to grant a stat stage boost */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     user.damageAndUpdate(toDmgValue(user.getMaxHp() / this.cutRatio), HitResult.OTHER, false, true);
     user.updateInfo();

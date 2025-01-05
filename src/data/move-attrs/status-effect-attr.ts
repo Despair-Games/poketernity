@@ -13,7 +13,7 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
  * Attribute to add a non-volatile status condition to
  * the user or target, depending on {@linkcode selfTarget}.
  * @extends MoveEffectAttr
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Status_condition#Non-volatile_status Non-volatile status conditions}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Status_condition#Non-volatile_status | Non-volatile status conditions}
  */
 export class StatusEffectAttr extends MoveEffectAttr {
   public effect: StatusEffect;

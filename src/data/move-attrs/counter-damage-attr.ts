@@ -9,8 +9,8 @@ type MoveFilter = (move: Move) => boolean;
 
 /**
  * Attribute to modify damage based on the damage received by the user from attacks
- * that satisfy a given {@linkcode moveFilter move filter}.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Variations_of_Counter variants of Counter},
+ * that satisfy a given {@linkcode moveFilter | move filter}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Variations_of_Counter | variants of Counter},
  * including Metal Burst and Comeuppance.
  * @extends FixedDamageAttr
  */

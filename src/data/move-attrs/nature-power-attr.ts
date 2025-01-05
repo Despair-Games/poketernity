@@ -11,12 +11,12 @@ import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effec
 /**
  * Attribute to invoke another move based on the current biome
  * (or terrain, if one is on the field).
- * Used by {@link https://bulbapedia.bulbagarden.net/wiki/Nature_Power_(move) Nature Power}.
+ * Used by {@link https://bulbapedia.bulbagarden.net/wiki/Nature_Power_(move) | Nature Power}.
  * @extends OverrideMoveEffectAttr
  */
 export class NaturePowerAttr extends OverrideMoveEffectAttr {
   override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
-    let moveId;
+    let moveId: Moves;
     switch (globalScene.arena.getTerrainType()) {
       // this allows terrains to 'override' the biome move
       case TerrainType.NONE:

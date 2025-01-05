@@ -13,7 +13,7 @@ import type { MoveConditionFunc } from "../move-conditions";
 
 /**
  * Attribute to revive a Pokemon in the user's party to 50% HP.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Revival_Blessing_(move) Revival Blessing}
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Revival_Blessing_(move) | Revival Blessing}
  * @extends MoveEffectAttr
  */
 export class RevivalBlessingAttr extends MoveEffectAttr {

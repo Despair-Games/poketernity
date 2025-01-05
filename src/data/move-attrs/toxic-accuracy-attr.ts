@@ -6,7 +6,7 @@ import { VariableAccuracyAttr } from "#app/data/move-attrs/variable-accuracy-att
 
 /**
  * Attribute to guarantee a hit if the user is Poison-type.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Toxic_(move) Toxic}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Toxic_(move) | Toxic}.
  * @extends VariableAccuracyAttr
  */
 export class ToxicAccuracyAttr extends VariableAccuracyAttr {

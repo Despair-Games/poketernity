@@ -6,7 +6,7 @@ import type { MoveConditionFunc } from "../move-conditions";
 import { MoveEffectAttr } from "./move-effect-attr";
 
 /**
- * Attribute to add an arena tag to the field of a given {@linkcode ArenaTagType type}.
+ * Attribute to add an arena tag to the field of a given {@linkcode ArenaTagType | type}.
  * @extends MoveEffectAttr
  */
 export class AddArenaTagAttr extends MoveEffectAttr {

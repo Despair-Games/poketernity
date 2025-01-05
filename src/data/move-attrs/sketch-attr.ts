@@ -9,12 +9,14 @@ import { targetMoveCopiableCondition, type MoveConditionFunc } from "../move-con
 import { MoveEffectAttr } from "./move-effect-attr";
 
 /**
- * Attribute for {@linkcode Moves.SKETCH} that causes the user to copy the opponent's last used move
+ * Attribute for {@linkcode Moves.SKETCH} that causes the user to copy the opponent's last used move.
  * This move copies the last used non-virtual move
- *  e.g. if Metronome is used, it copies Metronome itself, not the virtual move called by Metronome
- * Fails if the opponent has not yet used a move.
- * Fails if used on an uncopiable move, listed in unsketchableMoves in getCondition
- * Fails if the move is already in the user's moveset
+ * e.g. if Metronome is used, it copies Metronome itself, not the virtual move called by Metronome.
+ *
+ * Fails if:
+ * - the opponent has not yet used a move.
+ * - used on an uncopiable move, listed in unsketchableMoves in getCondition.
+ * - the move is already in the user's moveset.
  * @extends MoveEffectAttr
  */
 export class SketchAttr extends MoveEffectAttr {

@@ -10,7 +10,7 @@ import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
 /**
- * Attribute to apply {@link https://bulbapedia.bulbagarden.net/wiki/Recoil recoil damage} to the user.
+ * Attribute to apply {@link https://bulbapedia.bulbagarden.net/wiki/Recoil | recoil damage} to the user.
  * @extends MoveEffectAttr
  */
 export class RecoilAttr extends MoveEffectAttr {

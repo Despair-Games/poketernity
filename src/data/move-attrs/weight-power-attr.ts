@@ -5,8 +5,8 @@ import { VariablePowerAttr } from "#app/data/move-attrs/variable-power-attr";
 
 /**
  * Attribute to set move power proportional to the target's weight.
- * Used by {@link https://bulbapedia.bulbagarden.net/wiki/Low_Kick_(move) Low Kick}
- * and {@link https://bulbapedia.bulbagarden.net/wiki/Grass_Knot_(move) Grass Knot}.
+ * Used by {@link https://bulbapedia.bulbagarden.net/wiki/Low_Kick_(move) | Low Kick}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Grass_Knot_(move) | Grass Knot}.
  * @extends VariablePowerAttr
  */
 export class WeightPowerAttr extends VariablePowerAttr {

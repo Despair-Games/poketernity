@@ -5,7 +5,7 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
 /**
  * Attribute to split HP evenly between the user and target.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Pain_Split_(move) Pain Split}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Pain_Split_(move) | Pain Split}.
  * @extends MoveEffectAttr
  */
 export class HpSplitAttr extends MoveEffectAttr {

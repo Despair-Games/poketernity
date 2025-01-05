@@ -17,7 +17,7 @@ import { applyAbAttrs, applyPreDefendAbAttrs } from "../ability";
 
 /**
  * Attribute used to determine the Biome/Terrain-based secondary
- * effect of {@link https://bulbapedia.bulbagarden.net/wiki/Secret_Power_(move) Secret Power}.
+ * effect of {@link https://bulbapedia.bulbagarden.net/wiki/Secret_Power_(move) | Secret Power}.
  * @extends MoveEffectAttr
  */
 export class SecretPowerAttr extends MoveEffectAttr {

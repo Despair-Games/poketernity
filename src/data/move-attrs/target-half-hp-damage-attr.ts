@@ -6,11 +6,11 @@ import { FixedDamageAttr } from "#app/data/move-attrs/fixed-damage-attr";
 
 /**
  * Attribute to set move damage equal to half the target's remaining HP.
- * If this move is boosted by {@linkcode PokemonMultiHitModifier Multi-Lens},
+ * If this move is boosted by {@linkcode PokemonMultiHitModifier | Multi-Lens},
  * damage is adjusted such that the combined damage of all hits is
  * equal to half the target's remaining HP.
  * @extends FixedDamageAttr
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Variations_of_Super_Fang Variations of Super Fang}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Variations_of_Super_Fang | Variations of Super Fang}
  */
 export class TargetHalfHpDamageAttr extends FixedDamageAttr {
   // the initial amount of hp the target had before the first hit

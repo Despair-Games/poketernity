@@ -5,7 +5,7 @@ import { VariablePowerAttr } from "#app/data/move-attrs/variable-power-attr";
 
 /**
  * Attribute to multiply move power by the output of
- * a set {@linkcode powerMultiplierFunc function}.
+ * a set {@linkcode powerMultiplierFunc | function}.
  * @extends VariablePowerAttr
  */
 export class MovePowerMultiplierAttr extends VariablePowerAttr {

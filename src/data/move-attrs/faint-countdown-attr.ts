@@ -7,7 +7,7 @@ import type { Move } from "../move";
 import { AddBattlerTagAttr } from "./add-battler-tag-attr";
 
 /**
- * Attribute to apply the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Perish_Song_(move) Perish Song}.
+ * Attribute to apply the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Perish_Song_(move) | Perish Song}.
  * @extends AddBattlerTagAttr
  */
 export class FaintCountdownAttr extends AddBattlerTagAttr {

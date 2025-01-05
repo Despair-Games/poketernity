@@ -8,7 +8,7 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
 /**
  * Attribute to change the user's type to match that of the first move in its moveset.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Conversion_(move) Conversion}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Conversion_(move) | Conversion}.
  * @extends MoveEffectAttr
  */
 export class FirstMoveTypeAttr extends MoveEffectAttr {
@@ -16,7 +16,6 @@ export class FirstMoveTypeAttr extends MoveEffectAttr {
     super(true);
   }
 
-  /** Changes the user's type to match that of the first move in its moveset */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;

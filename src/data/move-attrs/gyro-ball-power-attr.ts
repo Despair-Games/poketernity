@@ -5,7 +5,7 @@ import type { Move } from "#app/data/move";
 import { VariablePowerAttr } from "#app/data/move-attrs/variable-power-attr";
 
 /**
- * Attribute implementing {@link https://bulbapedia.bulbagarden.net/wiki/Gyro_Ball_(move) Gyro Ball's} power modifier.
+ * Attribute implementing {@link https://bulbapedia.bulbagarden.net/wiki/Gyro_Ball_(move) | Gyro Ball's} power modifier.
  * The move's power increases the slower the user is compared to the target.
  * @extends VariablePowerAttr
  **/

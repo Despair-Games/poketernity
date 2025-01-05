@@ -7,7 +7,7 @@ import { VariableAccuracyAttr } from "#app/data/move-attrs/variable-accuracy-att
 
 /**
  * Attribute to guarantee the move hits if Hail or Snow is on the field.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Blizzard_(move) Blizzard}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Blizzard_(move) | Blizzard}.
  * @extends VariableAccuracyAttr
  */
 export class BlizzardAccuracyAttr extends VariableAccuracyAttr {

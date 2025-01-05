@@ -13,7 +13,7 @@ import type { MoveConditionFunc } from "../move-conditions";
 
 /**
  * Attribute used for moves that causes the target to repeat their last used move.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Instruct_(move) Instruct}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Instruct_(move) | Instruct}.
  * @extends MoveEffectAttr
  */
 export class RepeatMoveAttr extends MoveEffectAttr {

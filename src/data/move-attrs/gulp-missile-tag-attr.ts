@@ -16,9 +16,9 @@ export class GulpMissileTagAttr extends MoveEffectAttr {
   }
 
   /**
-   * If the user is a {@linkcode Species.CRAMORANT Cramorant} with {@linkcode Abilities.GULP_MISSILE Gulp Missile},
-   * allows the user to swallow a {@linkcode BattlerTagType.GULP_MISSILE_ARROKUDA Arrokuda} or
-   * {@linkcode BattlerTagType.GULP_MISSILE_PIKACHU Pikachu} depending on the user's HP ratio
+   * If the user is a {@linkcode Species.CRAMORANT | Cramorant} with {@linkcode Abilities.GULP_MISSILE | Gulp Missile},
+   * allows the user to swallow a {@linkcode BattlerTagType.GULP_MISSILE_ARROKUDA | Arrokuda} or
+   * {@linkcode BattlerTagType.GULP_MISSILE_PIKACHU | Pikachu} depending on the user's HP ratio
    */
   override apply(user: Pokemon, _target: Pokemon, move: Move): boolean {
     if (!super.apply(user, _target, move)) {
