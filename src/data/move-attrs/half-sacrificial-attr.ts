@@ -12,7 +12,7 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 /**
  * Attribute used for moves which cut the user's Max HP in half.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Mind_Blown_(move) | Mind Blown}
- * and {@linkcode https://bulbapedia.bulbagarden.net/wiki/Steel_Beam_(move) Steel Beam}.
+ * and {@linkcode https://bulbapedia.bulbagarden.net/wiki/Steel_Beam_(move) | Steel Beam}.
  * @extends MoveEffectAttr
  */
 export class HalfSacrificialAttr extends MoveEffectAttr {

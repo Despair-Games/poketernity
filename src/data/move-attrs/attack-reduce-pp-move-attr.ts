@@ -5,7 +5,7 @@ import type { MoveConditionFunc } from "../move-conditions";
 
 /**
  * Attribute to reduce the PP of the target's last move after attacking.
- * Used for {@linkcode https://bulbapedia.bulbagarden.net/wiki/Eerie_Spell_(move) Eerie Spell}.
+ * Used for {@linkcode https://bulbapedia.bulbagarden.net/wiki/Eerie_Spell_(move) | Eerie Spell}.
  * @extends ReducePpMoveAttr
  */
 export class AttackReducePpMoveAttr extends ReducePpMoveAttr {

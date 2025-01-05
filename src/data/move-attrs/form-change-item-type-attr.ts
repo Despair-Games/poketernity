@@ -9,7 +9,7 @@ import { VariableMoveTypeAttr } from "#app/data/move-attrs/variable-move-type-at
  * Attribute to change a move's type based on the user's
  * form if they are an Arceus or Silvally (or a fusion of either).
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Judgment_(move) | Judgment}
- * and {@linkcode https://bulbapedia.bulbagarden.net/wiki/Multi-Attack_(move) Multi-Attack}.
+ * and {@linkcode https://bulbapedia.bulbagarden.net/wiki/Multi-Attack_(move) | Multi-Attack}.
  * @extends VariableMoveTypeAttr
  */
 export class FormChangeItemTypeAttr extends VariableMoveTypeAttr {

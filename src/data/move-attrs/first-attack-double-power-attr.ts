@@ -6,7 +6,7 @@ import { VariablePowerAttr } from "#app/data/move-attrs/variable-power-attr";
 
 /**
  * Attribute to double move power if the target has not used a move this turn.
- * Used for {@linkcode https://bulbapedia.bulbagarden.net/wiki/Bolt_Beak_(move) Bolt Beak}
+ * Used for {@linkcode https://bulbapedia.bulbagarden.net/wiki/Bolt_Beak_(move) | Bolt Beak}
  * and {@link https://bulbapedia.bulbagarden.net/wiki/Fishious_Rend_(move) | Fishious Rend}.
  * @extends VariablePowerAttr.
  */

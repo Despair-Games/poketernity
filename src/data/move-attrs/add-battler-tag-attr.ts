@@ -14,7 +14,7 @@ interface AddBattlerTagAttrOptions extends MoveEffectAttrOptions {
 }
 
 /**
- * Attribute to add a battler tag to a Pokemon of a given {@linkcode BattlerTagType type}.
+ * Attribute to add a battler tag to a Pokemon of a given {@linkcode BattlerTagType | type}.
  * @extends MoveEffectAttr
  * @see {@linkcode BattlerTag}
  */

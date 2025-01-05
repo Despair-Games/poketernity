@@ -9,8 +9,8 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import { getStatusEffectHealText } from "#app/data/status-effect";
 
 /**
- * Move attribute to cure a set of {@linkcode StatusEffect status effects}
- * from the user or target, depending on if the effect is {@linkcode selfTarget self-targeted}.
+ * Move attribute to cure a set of {@linkcode StatusEffect | status effects}
+ * from the user or target, depending on if the effect is {@linkcode selfTarget | self-targeted}.
  * @extends MoveEffectAttr
  */
 export class HealStatusEffectAttr extends MoveEffectAttr {

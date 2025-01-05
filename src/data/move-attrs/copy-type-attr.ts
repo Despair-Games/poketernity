@@ -41,7 +41,7 @@ export class CopyTypeAttr extends MoveEffectAttr {
 
   /**
    * Moves with this attribute fail if
-   * - The target is {@linkcode Type.UNKNOWN typeless}
+   * - The target is {@linkcode Type.UNKNOWN | typeless}
    * - The target has an added type (e.g. from Forest's Curse).
    */
   override getCondition(): MoveConditionFunc {
