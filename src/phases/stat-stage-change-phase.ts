@@ -117,7 +117,7 @@ export class StatStageChangePhase extends PokemonPhase {
           messages.push(
             i18next.t("battle:statMaximized", {
               pokemonNameWithAffix: getPokemonNameWithAffix(this.getPokemon()),
-              stats: getStatKey(this.stats[0]),
+              stats: i18next.t(getStatKey(this.stats[0])),
             }),
           );
         } else {
