@@ -1,15 +1,14 @@
 import { globalScene } from "#app/global-scene";
-import { ExpGainsSpeed } from "#app/enums/exp-gains-speed";
-import { ExpNotification } from "#app/enums/exp-notification";
 import { ExpBoosterModifier } from "#app/modifier/modifier";
 import { NumberHolder } from "#app/utils";
-import { HidePartyExpBarPhase } from "./hide-party-exp-bar-phase";
+import { ExpGainsSpeed } from "#enums/exp-gains-speed";
+import { ExpNotification } from "#enums/exp-notification";
+import { PlayerPartyMemberPokemonPhase } from "./abstract-player-party-member-pokemon-phase";
 import { LevelUpPhase } from "./level-up-phase";
-import { PlayerPartyMemberPokemonPhase } from "./player-party-member-pokemon-phase";
 import { settings } from "#app/system/settings/settings-manager";
 
 export class ShowPartyExpBarPhase extends PlayerPartyMemberPokemonPhase {
-  private expValue: number;
+  private readonly expValue: number;
 
   constructor(partyMemberIndex: number, expValue: number) {
     super(partyMemberIndex);
@@ -17,11 +16,12 @@ export class ShowPartyExpBarPhase extends PlayerPartyMemberPokemonPhase {
     this.expValue = expValue;
   }
 
-  override start() {
+  public override start(): void {
     super.start();
 
     const pokemon = this.getPokemon();
     const exp = new NumberHolder(this.expValue);
+
     globalScene.applyModifiers(ExpBoosterModifier, true, exp);
     exp.value = Math.floor(exp.value);
 
@@ -31,35 +31,36 @@ export class ShowPartyExpBarPhase extends PlayerPartyMemberPokemonPhase {
     if (newLevel > lastLevel) {
       globalScene.unshiftPhase(new LevelUpPhase(this.partyMemberIndex, lastLevel, newLevel));
     }
-    globalScene.unshiftPhase(new HidePartyExpBarPhase());
     pokemon.updateInfo();
 
-    if (settings.general.partyExpNotificationMode === ExpNotification.SKIP) {
+    const { partyExpBar } = globalScene;
+    const { partyExpNotificationMode, expGainsSpeed } = settings.general;
+
+    if (partyExpNotificationMode === ExpNotification.SKIP) {
       this.end();
-    } else if (settings.general.partyExpNotificationMode === ExpNotification.ONLY_LEVEL_UP) {
+    } else if (partyExpNotificationMode === ExpNotification.ONLY_LEVEL_UP) {
       if (newLevel > lastLevel) {
         // this means if we level up
         // instead of displaying the exp gain in the small frame, we display the new level
         // we use the same method for mode 0 & 1, by giving a parameter saying to display the exp or the level
-        globalScene.partyExpBar
-          .showPokemonExp(
-            pokemon,
-            exp.value,
-            settings.general.partyExpNotificationMode === ExpNotification.ONLY_LEVEL_UP,
-            newLevel,
-          )
+        partyExpBar
+          .showPokemonExp(pokemon, exp.value, partyExpNotificationMode === ExpNotification.ONLY_LEVEL_UP, newLevel)
           .then(() => {
-            setTimeout(() => this.end(), 800 / Math.pow(2, settings.general.expGainsSpeed));
+            setTimeout(() => this.end(), 800 / Math.pow(2, expGainsSpeed));
           });
       } else {
         this.end();
       }
-    } else if (settings.general.expGainsSpeed < ExpGainsSpeed.SKIP) {
-      globalScene.partyExpBar.showPokemonExp(pokemon, exp.value, false, newLevel).then(() => {
-        setTimeout(() => this.end(), 500 / Math.pow(2, settings.general.expGainsSpeed));
+    } else if (expGainsSpeed < ExpGainsSpeed.SKIP) {
+      partyExpBar.showPokemonExp(pokemon, exp.value, false, newLevel).then(() => {
+        setTimeout(() => this.end(), 500 / Math.pow(2, expGainsSpeed));
       });
     } else {
       this.end();
     }
+  }
+
+  public override end(): void {
+    globalScene.partyExpBar.hide().then(() => super.end());
   }
 }

@@ -1,13 +1,17 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { ExpBoosterModifier } from "#app/modifier/modifier";
-import i18next from "i18next";
 import { NumberHolder } from "#app/utils";
-import { PlayerPartyMemberPokemonPhase } from "./player-party-member-pokemon-phase";
+import i18next from "i18next";
+import { PlayerPartyMemberPokemonPhase } from "./abstract-player-party-member-pokemon-phase";
 import { LevelUpPhase } from "./level-up-phase";
 
+/**
+ * Grants a player pokemon EXP and pushes a {@linkcode LevelUpPhase} if it leveled up
+ * @extends PlayerPartyMemberPokemonPhase
+ */
 export class ExpPhase extends PlayerPartyMemberPokemonPhase {
-  private expValue: number;
+  private readonly expValue: number;
 
   constructor(partyMemberIndex: number, expValue: number) {
     super(partyMemberIndex);
@@ -15,7 +19,7 @@ export class ExpPhase extends PlayerPartyMemberPokemonPhase {
     this.expValue = expValue;
   }
 
-  override start() {
+  public override start(): void {
     super.start();
 
     const pokemon = this.getPokemon();
