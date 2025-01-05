@@ -32,10 +32,21 @@ export default class AutoCompleteUiHandler extends OptionSelectUiHandler {
   }
 
   override processInput(button: Button): boolean {
-    // the cancel and action button are here because if you're typing, x and z are used for cancel/action. This means you could be typing something and accidentally cancel/select when you don't mean to
-    // the submit button is therefore used to select a choice (the enter button), though this does not work on my local dev testing for phones, as for my phone/keyboard combo, the enter and z key are both
-    // bound to Button.ACTION, which makes this not work on mobile
-    if (button !== Button.CANCEL && button !== Button.ACTION) {
+    const ui = this.getUi();
+    if (button === Button.SUBMIT) {
+      const option = this.config?.options[this.cursor + (this.scrollCursor - (this.scrollCursor ? 1 : 0))];
+      if (option?.handler()) {
+        if (!option.keepOpen) {
+          this.clear();
+        }
+        if (!option.overrideSound) {
+          ui.playSelect();
+        }
+      } else {
+        ui.playError();
+      }
+      return true;
+    } else if (button !== Button.CANCEL && button !== Button.ACTION) {
       return super.processInput(button);
     }
     return false;

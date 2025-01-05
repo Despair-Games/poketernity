@@ -14,7 +14,7 @@ export interface OptionSelectConfig {
   inputDelay?: number;
   /**
    * Set to `true` to prevent closing the menu with the cancel button.
-   * Otherwise using the cancel button will act as if the player selected the last option.
+   * Otherwise using the cancel button will act as if the last option was selected.
    */
   noCancel?: boolean;
   /** Set to `true` to allow bypassing the inputDelay with the cancel button. */
