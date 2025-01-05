@@ -1,4 +1,3 @@
-import { globalScene } from "#app/global-scene";
 import { MoveChargeAnim } from "#app/data/battle-anims";
 import { applyMoveChargeAttrs } from "#app/data/move";
 import { InstantChargeAttr } from "#app/data/move-attrs/instant-charge-attr";
@@ -7,7 +6,6 @@ import { MoveResult } from "#app/field/pokemon";
 import { BooleanHolder } from "#app/utils";
 import { MovePhase } from "#app/phases/move-phase";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { HitCheckPhase } from "./hit-check-phase";
 import { HitCheckResult } from "#enums/hit-check-result";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -29,7 +27,7 @@ export class MoveChargePhase extends HitCheckPhase {
     // immediately end this phase.
     if (!user || !target || !move.isChargingMove()) {
       console.warn("Invalid parameters for MoveChargePhase");
-      return super.end();
+      return this.end();
     }
 
     const targetHitCheck = move.hitCheckOnCharge ? this.hitCheck(target)[0] : HitCheckResult.HIT;
@@ -55,12 +53,12 @@ export class MoveChargePhase extends HitCheckPhase {
 
       applyMoveChargeAttrs(MoveEffectAttr, user, target, move);
       user.addTag(BattlerTagType.CHARGING, 1, move.id, user.id);
-      this.end();
+      this.checkInstantCharge();
     });
   }
 
   /** Checks the move's instant charge conditions, then ends this phase. */
-  public override end() {
+  protected checkInstantCharge(): void {
     const user = this.getUserPokemon();
     const move = this.move.getMove();
 
@@ -81,6 +79,6 @@ export class MoveChargePhase extends HitCheckPhase {
       // Add this move's charging phase to the user's move history
       user.pushMoveHistory({ move: this.move.moveId, targets: this.targets, result: MoveResult.OTHER });
     }
-    super.end();
+    this.end();
   }
 }

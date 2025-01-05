@@ -98,7 +98,7 @@ describe("Items - Multi Lens", () => {
     expect(playerPokemon.turnData.hitCount).toBe(2);
   });
 
-  it("should enhance multi-target moves", async () => {
+  it("should not enhance multi-target moves", async () => {
     game.override.battleType("double").moveset([Moves.SWIFT, Moves.SPLASH]);
 
     await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
@@ -112,7 +112,7 @@ describe("Items - Multi Lens", () => {
 
     await game.phaseInterceptor.to("MoveEndPhase");
 
-    expect(magikarp.turnData.hitCount).toBe(2);
+    expect(magikarp.turnData.hitCount).toBe(1);
   });
 
   it("should enhance fixed-damage moves while also applying damage reduction", async () => {

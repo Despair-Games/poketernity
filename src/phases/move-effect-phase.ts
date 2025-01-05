@@ -1,62 +1,48 @@
+import type { BattlerIndex } from "#app/battle";
 import { AddSecondStrikeAbAttr } from "#app/data/ab-attrs/add-second-strike-ab-attr";
 import { IgnoreMoveEffectsAbAttr } from "#app/data/ab-attrs/ignore-move-effect-ab-attr";
 import { PostAttackAbAttr } from "#app/data/ab-attrs/post-attack-ab-attr";
 import { PostDamageAbAttr } from "#app/data/ab-attrs/post-damage-ab-attr";
 import { PostDefendAbAttr } from "#app/data/ab-attrs/post-defend-ab-attr";
-import {
-  applyPostAttackAbAttrs,
-  applyPostDamageAbAttrs,
-  applyPostDefendAbAttrs,
-  applyPreAttackAbAttrs,
-} from "#app/data/ability";
+import { applyPreAttackAbAttrs, applyPostDamageAbAttrs, applyPostAttackAbAttrs, applyPostDefendAbAttrs } from "#app/data/ability";
 import { MoveAnim } from "#app/data/battle-anims";
-import { BattlerTagLapseType, SkyDropTag, SubstituteTag, TypeBoostTag } from "#app/data/battler-tags";
-import type { MoveAttr } from "#app/data/move-attrs/move-attr";
-import { applyFilteredMoveAttrs, applyMoveAttrs } from "#app/data/move";
+import { type BattlerTagLapseType, SkyDropTag, type TypeBoostTag, type SubstituteTag } from "#app/data/battler-tags";
+import { type applyMoveAttrs, applyFilteredMoveAttrs, type AttackMove } from "#app/data/move";
+import { DelayedAttackAttr } from "#app/data/move-attrs/delayed-attack-attr";
 import { FlinchAttr } from "#app/data/move-attrs/flinch-attr";
-import { NoEffectAttr } from "#app/data/move-attrs/no-effect-attr";
 import { MissEffectAttr } from "#app/data/move-attrs/miss-effect-attr";
-import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
+import type { MoveAttr } from "#app/data/move-attrs/move-attr";
+import type { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import { MultiHitAttr } from "#app/data/move-attrs/multi-hit-attr";
-import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
-import { MoveEffectTrigger } from "#enums/move-effect-trigger";
-import { AttackMove } from "#app/data/move";
-import { MoveTarget } from "#enums/move-target";
-import { MoveCategory } from "#enums/move-category";
+import { NoEffectAttr } from "#app/data/move-attrs/no-effect-attr";
+import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
 import { SpeciesFormChangePostMoveTrigger } from "#app/data/pokemon-forms";
 import type { TypeDamageMultiplier } from "#app/data/type";
-import type { Pokemon } from "#app/field/pokemon";
-import type { DamageResult, TurnMove } from "#app/field/pokemon";
-import { HitResult, MoveResult } from "#app/field/pokemon";
-import { globalScene } from "#app/global-scene";
-import { getPokemonNameWithAffix } from "#app/messages";
-import {
-  ContactHeldItemTransferChanceModifier,
-  DamageMoneyRewardModifier,
-  EnemyAttackStatusEffectChanceModifier,
-  EnemyEndureChanceModifier,
-  FlinchChanceModifier,
-  HitHealModifier,
-  PokemonMultiHitModifier,
-} from "#app/modifier/modifier";
-import { FaintPhase } from "#app/phases/faint-phase";
+import type { TurnMove, MoveResult, Pokemon, HitResult, DamageResult } from "#app/field/pokemon";
+import type { globalScene } from "#app/global-scene";
+import type { getPokemonNameWithAffix } from "#app/messages";
+import { PokemonMultiHitModifier, EnemyEndureChanceModifier, DamageMoneyRewardModifier, EnemyAttackStatusEffectChanceModifier, ContactHeldItemTransferChanceModifier, HitHealModifier, FlinchChanceModifier } from "#app/modifier/modifier";
 import { DamageAchv } from "#app/system/achv";
-import { BooleanHolder, isNullOrUndefined, NumberHolder } from "#app/utils";
-import { BattlerTagType } from "#enums/battler-tag-type";
-import { HitCheckResult } from "#enums/hit-check-result";
+import type { BooleanHolder, NumberHolder } from "#app/utils";
+import type { BattlerTagType } from "#enums/battler-tag-type";
+import type { HitCheckResult } from "#enums/hit-check-result";
+import { MoveCategory } from "#enums/move-category";
+import type { MoveEffectTrigger } from "#enums/move-effect-trigger";
+import type { MoveTarget } from "#enums/move-target";
 import { Moves } from "#enums/moves";
 import i18next from "i18next";
-import { DelayedAttackAttr } from "#app/data/move-attrs/delayed-attack-attr";
-import { HitCheckPhase } from "#app/phases/hit-check-phase";
-import type { BattlerIndex } from "#app/battle";
+import type { isNullOrUndefined } from "util";
+import { FaintPhase } from "./faint-phase";
+import { HitCheckPhase } from "./hit-check-phase";
 import { MovePhase } from "./move-phase";
+
 
 export class MoveEffectPhase extends HitCheckPhase {
   private moveHistoryEntry: TurnMove;
   /** The targets of the move after dynamic adjustments, e.g. from Dragon Darts */
   private adjustedTargets: BattlerIndex[] | null = null;
 
-  /** MOVE EFFECT TRIGGER CONDITIONS */
+  // MOVE EFFECT TRIGGER CONDITIONS
 
   /** Is this the first strike of a move? */
   private firstHit: boolean;
@@ -526,7 +512,7 @@ export class MoveEffectPhase extends HitCheckPhase {
 
     // Apply Grip Claw's chance to steal an item from the target
     if (move instanceof AttackMove) {
-      globalScene.applyModifiers(ContactHeldItemTransferChanceModifier, this.player, user, target);
+      globalScene.applyModifiers(ContactHeldItemTransferChanceModifier, this.isPlayer, user, target);
     }
   }
 
@@ -537,10 +523,16 @@ export class MoveEffectPhase extends HitCheckPhase {
      * If the move has smart targeting (e.g. Dragon Darts),
      * and the original target fainted due to the first hit,
      * redirect the next strike to the original target's ally.
+     * Note: We do NOT use `canApplySmartTargeting()` here,
+     * due to a quirk where `getFirstTarget()` returns `undefined` if the target is fainted.
      */
-    if (this.canApplySmartTargeting()) {
-      const ogTarget = globalScene.getField().find((p) => p.getBattlerIndex() === this.targets[0]);
-      if (ogTarget && ogTarget.isFainted() && ogTarget.getAlly()?.isActive(true)) {
+    if (this.move.getMove().moveTarget === MoveTarget.DRAGON_DARTS) {
+      const ogTarget = globalScene.getFieldPokemonByBattlerIndex(this.targets[0]);
+      if (
+        ogTarget?.isFainted()
+        && ogTarget.getAlly()?.isActive(true)
+        && ogTarget.getAlly().id !== this.getUserPokemon()?.id
+      ) {
         this.targets = [ogTarget.getAlly().getBattlerIndex()];
       }
     }
@@ -562,7 +554,7 @@ export class MoveEffectPhase extends HitCheckPhase {
           // If there are multiple hits, or if there are hits of the multi-hit move left
           globalScene.queueMessage(i18next.t("battle:attackHitsCount", { count: hitsTotal }));
         }
-        globalScene.applyModifiers(HitHealModifier, this.player, user);
+        globalScene.applyModifiers(HitHealModifier, this.isPlayer, user);
         // Clear all cached move effectiveness values among targets
         this.getTargets().forEach((target) => (target.turnData.moveEffectiveness = null));
       }
@@ -609,11 +601,13 @@ export class MoveEffectPhase extends HitCheckPhase {
   /** Determines if this phase's move can be redirected by smart targeting */
   public canApplySmartTargeting(): boolean {
     const target = this.getFirstTarget();
+    const targetAlly = target?.getAlly();
 
     return (
       this.move.getMove().moveTarget === MoveTarget.DRAGON_DARTS
-      && globalScene.currentBattle.double
-      && target !== this.getUserPokemon()?.getAlly()
+      && !isNullOrUndefined(targetAlly)
+      && targetAlly.isActive(true)
+      && targetAlly !== this.getUserPokemon()
       && !target?.getTag(BattlerTagType.CENTER_OF_ATTENTION)
     );
   }

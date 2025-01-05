@@ -1,9 +1,13 @@
 import { globalScene } from "#app/global-scene";
 import { fixedInt } from "#app/utils";
-import { BattlePhase } from "./battle-phase";
+import { BattlePhase } from "./abstract-battle-phase";
 
+/**
+ * Fully heals the player's party, usually occurs after every 10th wave
+ * @extends BattlePhase
+ */
 export class PartyHealPhase extends BattlePhase {
-  private resumeBgm: boolean;
+  private readonly resumeBgm: boolean;
 
   constructor(resumeBgm: boolean) {
     super();
@@ -11,14 +15,16 @@ export class PartyHealPhase extends BattlePhase {
     this.resumeBgm = resumeBgm;
   }
 
-  override start() {
+  public override start(): void {
     super.start();
+    const { time, ui } = globalScene;
 
     const bgmPlaying = globalScene.isBgmPlaying();
     if (bgmPlaying) {
       globalScene.fadeOutBgm(1000, false);
     }
-    globalScene.ui.fadeOut(1000).then(() => {
+
+    ui.fadeOut(1000).then(() => {
       for (const pokemon of globalScene.getPlayerParty()) {
         pokemon.hp = pokemon.getMaxHp();
         pokemon.resetStatus();
@@ -28,12 +34,12 @@ export class PartyHealPhase extends BattlePhase {
         pokemon.updateInfo(true);
       }
       const healSong = globalScene.playSoundWithoutBgm("heal");
-      globalScene.time.delayedCall(fixedInt(healSong.totalDuration * 1000), () => {
+      time.delayedCall(fixedInt(healSong.totalDuration * 1000), () => {
         healSong.destroy();
         if (this.resumeBgm && bgmPlaying) {
           globalScene.playBgm();
         }
-        globalScene.ui.fadeIn(500).then(() => this.end());
+        ui.fadeIn(500).then(() => this.end());
       });
     });
   }

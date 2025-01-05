@@ -677,15 +677,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
                   .replace("variant/", "")
                   .replace(/_[1-3]$/, "");
                 let config = variantData;
-                const useExpSprite =
-                  globalScene.experimentalSprites
-                  && globalScene.hasExpSprite(this.getBattleSpriteKey(isBackSprite, ignoreOverride));
                 battleSpritePath.split("/").map((p) => (config ? (config = config[p]) : null));
                 const variantSet: VariantSet = config as VariantSet;
                 if (variantSet && variantSet[this.variant] === 1) {
                   const cacheKey = this.getBattleSpriteKey(isBackSprite);
                   if (!variantColorCache.hasOwnProperty(cacheKey)) {
-                    await this.populateVariantColorCache(cacheKey, useExpSprite, battleSpritePath);
+                    await this.populateVariantColorCache(cacheKey, battleSpritePath);
                   }
                 }
                 resolve();
@@ -710,55 +707,24 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * Gracefully handle errors loading a variant sprite. Log if it fails and attempt to fall back on
-   * non-experimental sprites before giving up.
-   *
-   * @param cacheKey the cache key for the variant color sprite
-   * @param attemptedSpritePath the sprite path that failed to load
-   * @param useExpSprite was the attempted sprite experimental
-   * @param battleSpritePath the filename of the sprite
-   * @param optionalParams any additional params to log
-   */
-  async fallbackVariantColor(
-    cacheKey: string,
-    attemptedSpritePath: string,
-    useExpSprite: boolean,
-    battleSpritePath: string,
-    ...optionalParams: any[]
-  ) {
-    console.warn(`Could not load ${attemptedSpritePath}!`, ...optionalParams);
-    if (useExpSprite) {
-      await this.populateVariantColorCache(cacheKey, false, battleSpritePath);
-    }
-  }
-
-  /**
    * Attempt to process variant sprite.
-   *
    * @param cacheKey the cache key for the variant color sprite
-   * @param useExpSprite should the experimental sprite be used
    * @param battleSpritePath the filename of the sprite
    */
-  async populateVariantColorCache(cacheKey: string, useExpSprite: boolean, battleSpritePath: string) {
-    const spritePath = `./images/pokemon/variant/${useExpSprite ? "exp/" : ""}${battleSpritePath}.json`;
+  async populateVariantColorCache(cacheKey: string, battleSpritePath: string) {
+    const spritePath = `./images/pokemon/variant/${battleSpritePath}.json`;
     return globalScene
       .cachedFetch(spritePath)
       .then((res) => {
         // Prevent the JSON from processing if it failed to load
         if (!res.ok) {
-          return this.fallbackVariantColor(
-            cacheKey,
-            res.url,
-            useExpSprite,
-            battleSpritePath,
-            res.status,
-            res.statusText,
-          );
+          console.warn(`Failed to load sprite variant ${battleSpritePath}:`, res.status, res.statusText, res.url);
+          return;
         }
         return res.json();
       })
       .catch((error) => {
-        return this.fallbackVariantColor(cacheKey, spritePath, useExpSprite, battleSpritePath, error);
+        console.warn(`Failed to load sprite variant ${battleSpritePath}:`, error);
       })
       .then((c) => {
         if (!isNullOrUndefined(c)) {
@@ -1250,7 +1216,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       }
     }
     if (!ignoreAbility) {
-      applyStatMultiplierAbAttrs(StatMultiplierAbAttr, this, stat, statValue, simulated);
+      applyStatMultiplierAbAttrs(StatMultiplierAbAttr, this, stat, statValue, simulated, move, opponent);
     }
 
     let ret =
@@ -1862,7 +1828,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       weightRemoved = 100 * autotomizedTag!.autotomizeCount;
     }
     const minWeight = 0.1;
-    const weight = new NumberHolder(this.species.weight - weightRemoved);
+    const weight = new NumberHolder(this.getSpeciesForm().weight - weightRemoved);
 
     // This will trigger the ability overlay so only call this function when necessary
     applyAbAttrs(WeightMultiplierAbAttr, this, null, false, weight);
@@ -3129,7 +3095,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       source.getEffectiveStat(
         isPhysical ? Stat.ATK : Stat.SPATK,
         this,
-        undefined,
+        move,
         ignoreSourceAbility,
         ignoreAbility,
         isCritical,
@@ -3389,38 +3355,25 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         ? 0.5
         : 1;
 
-    damage.value = toDmgValue(
-      baseDamage
-        * targetMultiplier
-        * multiStrikeEnhancementMultiplier.value
-        * arenaAttackTypeMultiplier.value
-        * glaiveRushMultiplier.value
-        * criticalMultiplier.value
-        * randomMultiplier
-        * stabMultiplier.value
-        * typeMultiplier
-        * burnMultiplier.value
-        * screenMultiplier.value
-        * hitsTagMultiplier.value
-        * mistyTerrainMultiplier,
-    );
-
     /** Doubles damage if the attacker has Tinted Lens and is using a resisted move */
+    const tintedLensMultiplier = new NumberHolder(1);
     if (!ignoreSourceAbility) {
-      applyPreAttackAbAttrs(DamageBoostAbAttr, source, this, move, simulated, damage);
-    }
-
-    /** Apply the enemy's Damage and Resistance tokens */
-    if (!source.isPlayer()) {
-      globalScene.applyModifiers(EnemyDamageBoosterModifier, false, damage);
-    }
-    if (!this.isPlayer()) {
-      globalScene.applyModifiers(EnemyDamageReducerModifier, false, damage);
+      applyPreAttackAbAttrs(DamageBoostAbAttr, source, this, move, simulated, tintedLensMultiplier);
     }
 
     /** Apply this Pokemon's post-calc defensive modifiers (e.g. Fur Coat) */
+    const receivedDamageMultiplier = new NumberHolder(1);
+    const alliedFieldDamageMultiplier = new NumberHolder(1);
     if (!ignoreAbility) {
-      applyPreDefendAbAttrs(ReceivedMoveDamageMultiplierAbAttr, this, source, move, cancelled, simulated, damage);
+      applyPreDefendAbAttrs(
+        ReceivedMoveDamageMultiplierAbAttr,
+        this,
+        source,
+        move,
+        cancelled,
+        simulated,
+        receivedDamageMultiplier,
+      );
 
       /** Additionally apply friend guard damage reduction if ally has it. */
       if (globalScene.currentBattle.double && this.getAlly()?.isActive(true)) {
@@ -3431,9 +3384,41 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           move,
           cancelled,
           simulated,
-          damage,
+          alliedFieldDamageMultiplier,
         );
       }
+    }
+
+    /** If damage is nullified by a form-ability (Eiscue's Ice Face, Mimikyu's Disguise), then damage is set to 0 */
+    if (receivedDamageMultiplier.value > 0) {
+      damage.value = toDmgValue(
+        baseDamage
+          * targetMultiplier
+          * multiStrikeEnhancementMultiplier.value
+          * arenaAttackTypeMultiplier.value
+          * glaiveRushMultiplier.value
+          * criticalMultiplier.value
+          * randomMultiplier
+          * stabMultiplier.value
+          * typeMultiplier
+          * burnMultiplier.value
+          * screenMultiplier.value
+          * hitsTagMultiplier.value
+          * mistyTerrainMultiplier
+          * tintedLensMultiplier.value
+          * receivedDamageMultiplier.value
+          * alliedFieldDamageMultiplier.value,
+      );
+    } else {
+      damage.value = 0;
+    }
+
+    /** Apply the enemy's Damage and Resistance tokens */
+    if (!source.isPlayer()) {
+      globalScene.applyModifiers(EnemyDamageBoosterModifier, false, damage);
+    }
+    if (!this.isPlayer()) {
+      globalScene.applyModifiers(EnemyDamageReducerModifier, false, damage);
     }
 
     // This attribute may modify damage arbitrarily, so be careful about changing its order of application.
@@ -5207,6 +5192,7 @@ export class PlayerPokemon extends Pokemon {
         newPokemon.moveset = this.moveset.slice();
         newPokemon.moveset = this.copyMoveset();
         newPokemon.luck = this.luck;
+        newPokemon.gender = Gender.GENDERLESS;
         newPokemon.metLevel = this.metLevel;
         newPokemon.metBiome = this.metBiome;
         newPokemon.metSpecies = this.metSpecies;
@@ -5615,10 +5601,9 @@ export class EnemyPokemon extends Pokemon {
               return false;
             }
 
-            const fieldPokemon = globalScene.getField();
             const moveTargets = getMoveTargets(this, move.id)
-              .targets.map((ind) => fieldPokemon[ind])
-              .filter((p) => this.isPlayer() !== p.isPlayer());
+              .targets.map((ind) => globalScene.getFieldPokemonByBattlerIndex(ind))
+              .filter((p) => !isNullOrUndefined(p) && this.isPlayer() !== p.isPlayer()) as Pokemon[];
             // Only considers critical hits for crit-only moves or when this Pokemon is under the effect of Laser Focus
             const isCritical = move.hasAttr(CritOnlyAttr) || !!this.getTag(BattlerTagType.ALWAYS_CRIT);
 
@@ -5660,7 +5645,7 @@ export class EnemyPokemon extends Pokemon {
                 break;
               }
 
-              const target = globalScene.getField()[mt];
+              const target = globalScene.getFieldPokemonByBattlerIndex(mt)!;
               /**
                * The "target score" of a move is given by the move's user benefit score + the move's target benefit score.
                * If the target is an ally, the target benefit score is multiplied by -1.
@@ -5981,7 +5966,7 @@ export class EnemyPokemon extends Pokemon {
       }
 
       globalScene.unshiftPhase(
-        new StatStageChangePhase(this.getBattlerIndex(), true, [boostedStat!], stages, true, true),
+        new StatStageChangePhase(this.getBattlerIndex(), true, [boostedStat!], stages, { ignoreAbilities: true }),
       );
       this.bossSegmentIndex--;
     }

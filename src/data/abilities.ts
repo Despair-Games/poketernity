@@ -99,14 +99,13 @@ import { PostVictoryFormChangeAbAttr } from "./ab-attrs/post-victory-form-change
 import { PostVictoryStatStageChangeAbAttr } from "./ab-attrs/post-victory-stat-stage-change-ab-attr";
 import { SynchronizeStatusAbAttr } from "./ab-attrs/synchronize-status-ab-attr";
 import { PostAttackApplyBattlerTagAbAttr } from "./ab-attrs/post-attack-apply-battler-tag-ab-attr";
-import { PostAttackContactApplyStatusEffectAbAttr } from "./ab-attrs/post-attack-contact-apply-status-effect-ab-attr";
 import { PostAttackApplyStatusEffectAbAttr } from "./ab-attrs/post-attack-apply-status-effect-ab-attr";
 import { GorillaTacticsAbAttr } from "./ab-attrs/gorilla-tactics-ab-attr";
 import { StatMultiplierAbAttr } from "./ab-attrs/stat-multiplier-ab-attr";
 import { AllyMoveCategoryPowerBoostAbAttr } from "./ab-attrs/ally-move-category-power-boost-ab-attr";
 import { UserFieldMoveTypePowerBoostAbAttr } from "./ab-attrs/user-field-move-type-power-boost-ab-attr";
 import { VariableMovePowerBoostAbAttr } from "./ab-attrs/variable-move-power-boost-ab-attr";
-import { LowHpMoveTypePowerBoostAbAttr } from "./ab-attrs/low-hp-move-type-power-boost-ab-attr";
+import { LowHpMoveTypeAttackMultiplierAbAttr } from "./ab-attrs/low-hp-move-type-attack-multiplier-ab-attr";
 import { MoveTypePowerBoostAbAttr } from "./ab-attrs/move-type-power-boost-ab-attr";
 import { MovePowerBoostAbAttr } from "./ab-attrs/move-power-boost-ab-attr";
 import { DamageBoostAbAttr } from "./ab-attrs/damage-boost-ab-attr";
@@ -196,6 +195,7 @@ import { PostFaintContactDamageAbAttr } from "./ab-attrs/post-faint-contact-dama
 import { PostFaintHPDamageAbAttr } from "./ab-attrs/post-faint-hp-damage-ab-attr";
 import { BypassSpeedChanceAbAttr } from "./ab-attrs/bypass-speed-chance-ab-attr";
 import { TerrainEventTypeChangeAbAttr } from "./ab-attrs/terrain-event-type-change-ab-attr";
+import { WeatherBasedSpeedDoublerAbAttr } from "./ab-attrs/weather-based-speed-doubler-ab-attr";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {
@@ -204,7 +204,7 @@ function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   };
 }
 
-function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondition {
+export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondition {
   return () => {
     if (!globalScene?.arena) {
       return false;
@@ -414,12 +414,14 @@ export function initAbilities() {
       .attr(TypeImmunityStatStageChangeAbAttr, Type.ELECTRIC, Stat.SPATK, 1)
       .ignorable(),
     new Ability(Abilities.SERENE_GRACE, 3).attr(MoveEffectChanceMultiplierAbAttr, 2),
-    new Ability(Abilities.SWIFT_SWIM, 3)
-      .attr(StatMultiplierAbAttr, Stat.SPD, 2)
-      .condition(getWeatherCondition(WeatherType.RAIN, WeatherType.HEAVY_RAIN)),
-    new Ability(Abilities.CHLOROPHYLL, 3)
-      .attr(StatMultiplierAbAttr, Stat.SPD, 2)
-      .condition(getWeatherCondition(WeatherType.SUNNY, WeatherType.HARSH_SUN)),
+    new Ability(Abilities.SWIFT_SWIM, 3).attr(WeatherBasedSpeedDoublerAbAttr, [
+      WeatherType.RAIN,
+      WeatherType.HEAVY_RAIN,
+    ]),
+    new Ability(Abilities.CHLOROPHYLL, 3).attr(WeatherBasedSpeedDoublerAbAttr, [
+      WeatherType.SUNNY,
+      WeatherType.HARSH_SUN,
+    ]),
     new Ability(Abilities.ILLUMINATE, 3)
       .attr(ProtectStatAbAttr, Stat.ACC)
       .attr(DoubleBattleChanceAbAttr)
@@ -520,10 +522,10 @@ export function initAbilities() {
       )
       .ignorable(),
     new Ability(Abilities.LIQUID_OOZE, 3).attr(ReverseDrainAbAttr),
-    new Ability(Abilities.OVERGROW, 3).attr(LowHpMoveTypePowerBoostAbAttr, Type.GRASS),
-    new Ability(Abilities.BLAZE, 3).attr(LowHpMoveTypePowerBoostAbAttr, Type.FIRE),
-    new Ability(Abilities.TORRENT, 3).attr(LowHpMoveTypePowerBoostAbAttr, Type.WATER),
-    new Ability(Abilities.SWARM, 3).attr(LowHpMoveTypePowerBoostAbAttr, Type.BUG),
+    new Ability(Abilities.OVERGROW, 3).attr(LowHpMoveTypeAttackMultiplierAbAttr, Type.GRASS),
+    new Ability(Abilities.BLAZE, 3).attr(LowHpMoveTypeAttackMultiplierAbAttr, Type.FIRE),
+    new Ability(Abilities.TORRENT, 3).attr(LowHpMoveTypeAttackMultiplierAbAttr, Type.WATER),
+    new Ability(Abilities.SWARM, 3).attr(LowHpMoveTypeAttackMultiplierAbAttr, Type.BUG),
     new Ability(Abilities.ROCK_HEAD, 3).attr(BlockRecoilDamageAttr),
     new Ability(Abilities.DROUGHT, 3)
       .attr(PostSummonWeatherChangeAbAttr, WeatherType.SUNNY)
@@ -757,7 +759,7 @@ export function initAbilities() {
       .condition((pokemon) => pokemon.getHpRatio() <= 0.5),
     new Ability(Abilities.CURSED_BODY, 5).attr(PostDefendMoveDisableAbAttr, 30).bypassFaint(),
     new Ability(Abilities.HEALER, 5).conditionalAttr(
-      (pokemon) => pokemon.getAlly() && randSeedInt(10) < 3,
+      (pokemon) => pokemon.getAlly() && pokemon.getAlly().status?.effect !== StatusEffect.FAINT && randSeedInt(10) < 3,
       PostTurnResetStatusAbAttr,
       true,
     ),
@@ -814,13 +816,14 @@ export function initAbilities() {
         (pokemon, attacker, move) => pokemon !== attacker && move.hasFlag(MoveFlags.POWDER_MOVE),
       )
       .ignorable(),
-    new Ability(Abilities.POISON_TOUCH, 5).attr(PostAttackContactApplyStatusEffectAbAttr, 30, StatusEffect.POISON),
+    new Ability(Abilities.POISON_TOUCH, 5)
+      .attr(PostAttackApplyStatusEffectAbAttr, true, 30, StatusEffect.POISON)
+      .edgeCase(), // Does not inflict poison if user gets inflicted with target's Mummy
     new Ability(Abilities.REGENERATOR, 5).attr(PreSwitchOutHealAbAttr),
     new Ability(Abilities.BIG_PECKS, 5).attr(ProtectStatAbAttr, Stat.DEF).ignorable(),
     new Ability(Abilities.SAND_RUSH, 5)
-      .attr(StatMultiplierAbAttr, Stat.SPD, 2)
-      .attr(BlockWeatherDamageAttr, WeatherType.SANDSTORM)
-      .condition(getWeatherCondition(WeatherType.SANDSTORM)),
+      .attr(WeatherBasedSpeedDoublerAbAttr, [WeatherType.SANDSTORM])
+      .attr(BlockWeatherDamageAttr, WeatherType.SANDSTORM),
     new Ability(Abilities.WONDER_SKIN, 5).attr(WonderSkinAbAttr).ignorable(),
     new Ability(Abilities.ANALYTIC, 5).attr(
       MovePowerBoostAbAttr,
@@ -966,7 +969,7 @@ export function initAbilities() {
     ),
     new Ability(Abilities.GOOEY, 6).attr(
       PostDefendStatStageChangeAbAttr,
-      (_target, _user, move) => move.hasFlag(MoveFlags.MAKES_CONTACT),
+      (target, user, move) => move.checkFlag(MoveFlags.MAKES_CONTACT, user, target),
       Stat.SPD,
       -1,
       false,
@@ -1078,9 +1081,7 @@ export function initAbilities() {
         1,
       )
       .condition(getSheerForceHitDisableAbCondition()),
-    new Ability(Abilities.SLUSH_RUSH, 7)
-      .attr(StatMultiplierAbAttr, Stat.SPD, 2)
-      .condition(getWeatherCondition(WeatherType.HAIL, WeatherType.SNOW)),
+    new Ability(Abilities.SLUSH_RUSH, 7).attr(WeatherBasedSpeedDoublerAbAttr, [WeatherType.HAIL, WeatherType.SNOW]),
     new Ability(Abilities.LONG_REACH, 7).attr(IgnoreContactAbAttr),
     new Ability(Abilities.LIQUID_VOICE, 7).attr(MoveTypeChangeAbAttr, Type.WATER, 1, (_user, _target, move) =>
       move.hasFlag(MoveFlags.SOUND_BASED),
@@ -1205,7 +1206,7 @@ export function initAbilities() {
     new Ability(Abilities.SOUL_HEART, 7).attr(PostKnockOutStatStageChangeAbAttr, Stat.SPATK, 1),
     new Ability(Abilities.TANGLING_HAIR, 7).attr(
       PostDefendStatStageChangeAbAttr,
-      (_target, _user, move) => move.hasFlag(MoveFlags.MAKES_CONTACT),
+      (target, user, move) => move.checkFlag(MoveFlags.MAKES_CONTACT, user, target),
       Stat.SPD,
       -1,
       false,
@@ -1487,7 +1488,7 @@ export function initAbilities() {
       .bypassFaint(),
     new Ability(Abilities.COMMANDER, 9)
       .attr(CommanderAbAttr)
-      .attr(DoubleBattleChanceAbAttr)
+      .attr(DoubleBattleChanceAbAttr) // Custom implementation to allow more double battles
       .attr(UncopiableAbilityAbAttr)
       .attr(UnswappableAbilityAbAttr)
       .edgeCase(), // Encore, Frenzy, and other non-`TURN_END` tags don't lapse correctly on the commanding Pokemon.
@@ -1622,7 +1623,9 @@ export function initAbilities() {
       .ignorable(),
     new Ability(Abilities.SUPERSWEET_SYRUP, 9).attr(PostSummonStatStageChangeAbAttr, [Stat.EVA], -1),
     new Ability(Abilities.HOSPITALITY, 9).attr(PostSummonAllyHealAbAttr, 4, true),
-    new Ability(Abilities.TOXIC_CHAIN, 9).attr(PostAttackApplyStatusEffectAbAttr, false, 30, StatusEffect.TOXIC),
+    new Ability(Abilities.TOXIC_CHAIN, 9)
+      .attr(PostAttackApplyStatusEffectAbAttr, false, 30, StatusEffect.TOXIC)
+      .edgeCase(), // Does not inflict poison if user gets inflicted with target's Mummy
     new Ability(Abilities.EMBODY_ASPECT_TEAL, 9)
       .attr(PostBattleInitStatStageChangeAbAttr, [Stat.SPD], 1, true)
       .attr(UncopiableAbilityAbAttr)
