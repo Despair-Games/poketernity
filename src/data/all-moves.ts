@@ -1639,7 +1639,8 @@ export function initMoves() {
       .attr(ClearWeatherAttr, WeatherType.FOG)
       .attr(ClearTerrainAttr)
       .attr(RemoveScreensAttr, false)
-      .attr(RemoveArenaTrapAttr, true),
+      .attr(RemoveArenaTrapAttr, true)
+      .attr(RemoveArenaTagsAttr, [ArenaTagType.SAFEGUARD, ArenaTagType.MIST], ArenaTagRelativeSide.TARGET),
     new StatusMove(Moves.TRICK_ROOM, Type.PSYCHIC, -1, 5, -1, -7, 4)
       .attr(AddArenaTagAttr, ArenaTagType.TRICK_ROOM, { turnCount: 5 })
       .ignoresProtect()
