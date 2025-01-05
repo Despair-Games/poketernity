@@ -2,20 +2,20 @@ import { BattlerIndex } from "#app/battle";
 import { AlwaysHitAbAttr } from "#app/data/ab-attrs/always-hit-ab-attr";
 import { MaxMultiHitAbAttr } from "#app/data/ab-attrs/max-multi-hit-ab-attr";
 import { ConditionalProtectTag } from "#app/data/arena-tag";
-import { SemiInvulnerableTag, ProtectedTag, SkyDropTag } from "#app/data/battler-tags";
-import type { TypeDamageMultiplier } from "#app/data/type";
-import { BattlerTagType } from "#enums/battler-tag-type";
-import { HitCheckResult } from "#enums/hit-check-result";
-import { Type } from "#enums/type";
-import type { Pokemon, PokemonMove } from "#app/field/pokemon";
-import { globalScene } from "#app/global-scene";
-import { BooleanHolder } from "#app/utils";
-import { PokemonPhase } from "#app/phases/pokemon-phase";
+import { SemiInvulnerableTag, SkyDropTag, ProtectedTag } from "#app/data/battler-tags";
 import { HitsTagAttr } from "#app/data/move-attrs/hits-tag-attr";
 import { OneHitKOAttr } from "#app/data/move-attrs/one-hit-ko-attr";
 import { ToxicAccuracyAttr } from "#app/data/move-attrs/toxic-accuracy-attr";
+import type { TypeDamageMultiplier } from "#app/data/type";
+import type { PokemonMove, Pokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
+import { BooleanHolder } from "#app/utils";
+import { BattlerTagType } from "#enums/battler-tag-type";
+import { HitCheckResult } from "#enums/hit-check-result";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveTarget } from "#enums/move-target";
+import { Type } from "#enums/type";
+import { PokemonPhase } from "./abstract-pokemon-phase";
 
 type HitCheckEntry = [HitCheckResult, TypeDamageMultiplier];
 
@@ -170,7 +170,7 @@ export abstract class HitCheckPhase extends PokemonPhase {
     if (this.battlerIndex > BattlerIndex.ENEMY_2) {
       return globalScene.getPokemonById(this.battlerIndex);
     }
-    return (this.player ? globalScene.getPlayerField() : globalScene.getEnemyField())[this.fieldIndex];
+    return (this.isPlayer ? globalScene.getPlayerField() : globalScene.getEnemyField())[this.fieldIndex];
   }
 
   /** @returns An array of all {@linkcode Pokemon} targeted by this phase's invoked move */

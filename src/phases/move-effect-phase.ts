@@ -4,38 +4,51 @@ import { IgnoreMoveEffectsAbAttr } from "#app/data/ab-attrs/ignore-move-effect-a
 import { PostAttackAbAttr } from "#app/data/ab-attrs/post-attack-ab-attr";
 import { PostDamageAbAttr } from "#app/data/ab-attrs/post-damage-ab-attr";
 import { PostDefendAbAttr } from "#app/data/ab-attrs/post-defend-ab-attr";
-import { applyPreAttackAbAttrs, applyPostDamageAbAttrs, applyPostAttackAbAttrs, applyPostDefendAbAttrs } from "#app/data/ability";
+import {
+  applyPreAttackAbAttrs,
+  applyPostDamageAbAttrs,
+  applyPostAttackAbAttrs,
+  applyPostDefendAbAttrs,
+} from "#app/data/ability";
 import { MoveAnim } from "#app/data/battle-anims";
-import { type BattlerTagLapseType, SkyDropTag, type TypeBoostTag, type SubstituteTag } from "#app/data/battler-tags";
-import { type applyMoveAttrs, applyFilteredMoveAttrs, type AttackMove } from "#app/data/move";
+import { BattlerTagLapseType, SkyDropTag, SubstituteTag, TypeBoostTag } from "#app/data/battler-tags";
+import { applyFilteredMoveAttrs, applyMoveAttrs, AttackMove } from "#app/data/move";
 import { DelayedAttackAttr } from "#app/data/move-attrs/delayed-attack-attr";
 import { FlinchAttr } from "#app/data/move-attrs/flinch-attr";
 import { MissEffectAttr } from "#app/data/move-attrs/miss-effect-attr";
 import type { MoveAttr } from "#app/data/move-attrs/move-attr";
-import type { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
+import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import { MultiHitAttr } from "#app/data/move-attrs/multi-hit-attr";
 import { NoEffectAttr } from "#app/data/move-attrs/no-effect-attr";
 import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
 import { SpeciesFormChangePostMoveTrigger } from "#app/data/pokemon-forms";
 import type { TypeDamageMultiplier } from "#app/data/type";
-import type { TurnMove, MoveResult, Pokemon, HitResult, DamageResult } from "#app/field/pokemon";
-import type { globalScene } from "#app/global-scene";
-import type { getPokemonNameWithAffix } from "#app/messages";
-import { PokemonMultiHitModifier, EnemyEndureChanceModifier, DamageMoneyRewardModifier, EnemyAttackStatusEffectChanceModifier, ContactHeldItemTransferChanceModifier, HitHealModifier, FlinchChanceModifier } from "#app/modifier/modifier";
+import type { TurnMove, Pokemon, DamageResult } from "#app/field/pokemon";
+import { MoveResult, HitResult } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
+import { getPokemonNameWithAffix } from "#app/messages";
+import {
+  PokemonMultiHitModifier,
+  EnemyEndureChanceModifier,
+  DamageMoneyRewardModifier,
+  EnemyAttackStatusEffectChanceModifier,
+  ContactHeldItemTransferChanceModifier,
+  HitHealModifier,
+  FlinchChanceModifier,
+} from "#app/modifier/modifier";
 import { DamageAchv } from "#app/system/achv";
-import type { BooleanHolder, NumberHolder } from "#app/utils";
-import type { BattlerTagType } from "#enums/battler-tag-type";
-import type { HitCheckResult } from "#enums/hit-check-result";
+import { BooleanHolder, NumberHolder } from "#app/utils";
+import { BattlerTagType } from "#enums/battler-tag-type";
+import { HitCheckResult } from "#enums/hit-check-result";
 import { MoveCategory } from "#enums/move-category";
-import type { MoveEffectTrigger } from "#enums/move-effect-trigger";
-import type { MoveTarget } from "#enums/move-target";
+import { MoveEffectTrigger } from "#enums/move-effect-trigger";
+import { MoveTarget } from "#enums/move-target";
 import { Moves } from "#enums/moves";
 import i18next from "i18next";
-import type { isNullOrUndefined } from "util";
+import { isNullOrUndefined } from "util";
 import { FaintPhase } from "./faint-phase";
 import { HitCheckPhase } from "./hit-check-phase";
 import { MovePhase } from "./move-phase";
-
 
 export class MoveEffectPhase extends HitCheckPhase {
   private moveHistoryEntry: TurnMove;
