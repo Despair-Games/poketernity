@@ -6,7 +6,7 @@ Pokéternity is a browser based Pokémon fangame heavily inspired by the rogueli
 
 ## 🛠️ Development
 
-If you have the motivation and experience with Typescript/Javascript (or are willing to learn) please feel free to fork the repository and make pull requests with contributions. If you don't know what to work on but want to help, reference the below **To-Do** section or the **#feature-vote** channel in the discord.
+If you have the motivation and experience with Typescript/Javascript (or are willing to learn) please feel free to fork the repository and make pull requests with contributions. If you don't know what to work on but want to help, reference the below **To-Do** section.
 
 ### 💻 Environment Setup
 
@@ -18,7 +18,7 @@ If you have the motivation and experience with Typescript/Javascript (or are wil
 #### Running Locally
 
 1. Clone the repo and in the root directory run `npm install`
-   - _if you run into any errors, reach out in the **#dev-corner** channel in discord_
+<!--   - _if you run into any errors, reach out in the **#dev-corner** channel in discord_-->
 2. Run `npm run start:dev` to locally run the project in `localhost:8000`
 
 #### Code-Style
@@ -41,10 +41,10 @@ For detailed guidelines on documenting your code, refer to the [comments.md](./d
 
 - In the `src/overrides.ts` file there are overrides for most values you'll need to change for testing
 
-<!-- **How do I retrieve the translations?**
+**How do I retrieve the translations?**
 
 - The translations were moved to the [dedicated translation repository](https://github.com/despair-games/poketernity-locales) and are now applied as a submodule in this project.
-- The command to retrieve the translations is `git submodule update --init --recursive`. If you still struggle to get it working, please reach out to #dev-corner channel in Discord. -->
+- The command to retrieve the translations is `git submodule update --init --recursive`. <!--If you still struggle to get it working, please reach out to #dev-corner channel in Discord.-->
 
 ## 🪧 To Do
 
