@@ -906,12 +906,7 @@ export function initAbilities() {
     new Ability(Abilities.PROTEAN, 6).attr(PokemonTypeChangeAbAttr),
     //.condition((p) => !p.summonData?.abilitiesApplied.includes(Abilities.PROTEAN)), //Gen 9 Implementation
     new Ability(Abilities.FUR_COAT, 6)
-      .attr(
-        StatMultiplierAbAttr,
-        Stat.DEF,
-        2,
-        (target, user, move) => !!target && user?.getMoveCategory(target, move) === MoveCategory.PHYSICAL,
-      )
+      .attr(StatMultiplierAbAttr, Stat.DEF, 2, (_user, target, _move) => !!target)
       .ignorable(),
     new Ability(Abilities.MAGICIAN, 6).attr(PostAttackStealHeldItemAbAttr),
     new Ability(Abilities.BULLETPROOF, 6)
