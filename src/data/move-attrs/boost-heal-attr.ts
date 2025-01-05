@@ -30,11 +30,11 @@ export class BoostHealAttr extends HealAttr {
     this.condition = condition;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
-    const healRatio: number = (this.condition ? this.condition(user, target, move) : false)
-      ? this.boostedHealRatio
-      : this.normalHealRatio;
-    this.addHealPhase(target, healRatio);
-    return true;
+  protected override getHealRatio(user: Pokemon, target: Pokemon, move: Move): number {
+    if (this.condition && this.condition(user, target, move)) {
+      return this.boostedHealRatio;
+    } else {
+      return this.normalHealRatio;
+    }
   }
 }
