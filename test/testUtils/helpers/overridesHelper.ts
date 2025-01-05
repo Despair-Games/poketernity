@@ -438,7 +438,7 @@ export class OverridesHelper extends GameManagerHelper {
   }
 
   /**
-   * Override statuses (Paralysis and Freeze) to always or never activate
+   * Override the statuses Paralysis, Freeze, Sleep, Confusion, or Infatuation  to always or never activate
    * @param activate - `true` to force activation, `false` to force no activation, `null` to disable the override
    * @returns `this`
    */

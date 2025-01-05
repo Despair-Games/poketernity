@@ -21,26 +21,21 @@ import {
   SubstituteTag,
   TypeBoostTag,
 } from "#app/data/battler-tags";
-import type { MoveAttr } from "#app/data/move-attrs/move-attr";
-import { applyFilteredMoveAttrs, applyMoveAttrs } from "#app/data/move";
+import { applyFilteredMoveAttrs, applyMoveAttrs, AttackMove } from "#app/data/move";
+import { DelayedAttackAttr } from "#app/data/move-attrs/delayed-attack-attr";
 import { FlinchAttr } from "#app/data/move-attrs/flinch-attr";
 import { HitsTagAttr } from "#app/data/move-attrs/hits-tag-attr";
-import { NoEffectAttr } from "#app/data/move-attrs/no-effect-attr";
 import { MissEffectAttr } from "#app/data/move-attrs/miss-effect-attr";
-import { ToxicAccuracyAttr } from "#app/data/move-attrs/toxic-accuracy-attr";
-import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
-import { OneHitKOAttr } from "#app/data/move-attrs/one-hit-ko-attr";
-import { MultiHitAttr } from "#app/data/move-attrs/multi-hit-attr";
+import type { MoveAttr } from "#app/data/move-attrs/move-attr";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
-import { MoveEffectTrigger } from "#enums/move-effect-trigger";
-import { AttackMove } from "#app/data/move";
-import { MoveFlags } from "#enums/move-flags";
-import { MoveTarget } from "#enums/move-target";
-import { MoveCategory } from "#enums/move-category";
+import { MultiHitAttr } from "#app/data/move-attrs/multi-hit-attr";
+import { NoEffectAttr } from "#app/data/move-attrs/no-effect-attr";
+import { OneHitKOAttr } from "#app/data/move-attrs/one-hit-ko-attr";
+import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
+import { ToxicAccuracyAttr } from "#app/data/move-attrs/toxic-accuracy-attr";
 import { SpeciesFormChangePostMoveTrigger } from "#app/data/pokemon-forms";
 import type { TypeDamageMultiplier } from "#app/data/type";
-import type { Pokemon } from "#app/field/pokemon";
-import type { DamageResult, PokemonMove, TurnMove } from "#app/field/pokemon";
+import type { DamageResult, Pokemon, PokemonMove, TurnMove } from "#app/field/pokemon";
 import { HitResult, MoveResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -53,30 +48,33 @@ import {
   HitHealModifier,
   PokemonMultiHitModifier,
 } from "#app/modifier/modifier";
+import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { FaintPhase } from "#app/phases/faint-phase";
-import { PokemonPhase } from "#app/phases/pokemon-phase";
 import { DamageAchv } from "#app/system/achv";
 import { BooleanHolder, isNullOrUndefined, NumberHolder } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitCheckResult } from "#enums/hit-check-result";
+import { MoveCategory } from "#enums/move-category";
+import { MoveEffectTrigger } from "#enums/move-effect-trigger";
+import { MoveFlags } from "#enums/move-flags";
+import { MoveTarget } from "#enums/move-target";
 import { Moves } from "#enums/moves";
 import { Type } from "#enums/type";
 import i18next from "i18next";
-import { DelayedAttackAttr } from "#app/data/move-attrs/delayed-attack-attr";
 
 type HitCheckEntry = [HitCheckResult, TypeDamageMultiplier];
 
 export class MoveEffectPhase extends PokemonPhase {
-  public move: PokemonMove;
+  public readonly move: PokemonMove;
   /** The original targets of the move */
   protected targets: BattlerIndex[];
   /** The targets of the move after dynamic adjustments, e.g. from Dragon Darts */
   private adjustedTargets: BattlerIndex[] | null = null;
 
-  private hitChecks: HitCheckEntry[];
+  private readonly hitChecks: HitCheckEntry[];
   private moveHistoryEntry: TurnMove;
 
-  /** MOVE EFFECT TRIGGER CONDITIONS */
+  // MOVE EFFECT TRIGGER CONDITIONS
 
   /** Is this the first strike of a move? */
   private firstHit: boolean;
@@ -526,7 +524,7 @@ export class MoveEffectPhase extends PokemonPhase {
 
     // Apply Grip Claw's chance to steal an item from the target
     if (move instanceof AttackMove) {
-      globalScene.applyModifiers(ContactHeldItemTransferChanceModifier, this.player, user, target);
+      globalScene.applyModifiers(ContactHeldItemTransferChanceModifier, this.isPlayer, user, target);
     }
   }
 
@@ -537,10 +535,16 @@ export class MoveEffectPhase extends PokemonPhase {
      * If the move has smart targeting (e.g. Dragon Darts),
      * and the original target fainted due to the first hit,
      * redirect the next strike to the original target's ally.
+     * Note: We do NOT use `canApplySmartTargeting()` here,
+     * due to a quirk where `getFirstTarget()` returns `undefined` if the target is fainted.
      */
-    if (this.canApplySmartTargeting()) {
-      const ogTarget = globalScene.getField().find((p) => p.getBattlerIndex() === this.targets[0]);
-      if (ogTarget && ogTarget.isFainted() && ogTarget.getAlly()?.isActive(true)) {
+    if (this.move.getMove().moveTarget === MoveTarget.DRAGON_DARTS) {
+      const ogTarget = globalScene.getFieldPokemonByBattlerIndex(this.targets[0]);
+      if (
+        ogTarget?.isFainted()
+        && ogTarget.getAlly()?.isActive(true)
+        && ogTarget.getAlly().id !== this.getUserPokemon()?.id
+      ) {
         this.targets = [ogTarget.getAlly().getBattlerIndex()];
       }
     }
@@ -562,7 +566,7 @@ export class MoveEffectPhase extends PokemonPhase {
           // If there are multiple hits, or if there are hits of the multi-hit move left
           globalScene.queueMessage(i18next.t("battle:attackHitsCount", { count: hitsTotal }));
         }
-        globalScene.applyModifiers(HitHealModifier, this.player, user);
+        globalScene.applyModifiers(HitHealModifier, this.isPlayer, user);
         // Clear all cached move effectiveness values among targets
         this.getTargets().forEach((target) => (target.turnData.moveEffectiveness = null));
       }
@@ -610,11 +614,13 @@ export class MoveEffectPhase extends PokemonPhase {
   /** Determines if this phase's move can be redirected by smart targeting */
   public canApplySmartTargeting(): boolean {
     const target = this.getFirstTarget();
+    const targetAlly = target?.getAlly();
 
     return (
       this.move.getMove().moveTarget === MoveTarget.DRAGON_DARTS
-      && globalScene.currentBattle.double
-      && target !== this.getUserPokemon()?.getAlly()
+      && !isNullOrUndefined(targetAlly)
+      && targetAlly.isActive(true)
+      && targetAlly !== this.getUserPokemon()
       && !target?.getTag(BattlerTagType.CENTER_OF_ATTENTION)
     );
   }
@@ -763,7 +769,7 @@ export class MoveEffectPhase extends PokemonPhase {
     if (this.battlerIndex > BattlerIndex.ENEMY_2) {
       return globalScene.getPokemonById(this.battlerIndex);
     }
-    return (this.player ? globalScene.getPlayerField() : globalScene.getEnemyField())[this.fieldIndex];
+    return this.getAlliedField()[this.fieldIndex];
   }
 
   /** @returns An array of all {@linkcode Pokemon} targeted by this phase's invoked move */

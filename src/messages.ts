@@ -1,5 +1,6 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
+import type { nil } from "#app/utils";
 import i18next from "i18next";
 
 /**
@@ -7,8 +8,9 @@ import i18next from "i18next";
  * @param pokemon {@linkcode Pokemon} name and battle context will be retrieved from this instance
  * @returns The pokemon's name (ex: "Wild Gengar", "Ectoplasma sauvage")
  */
-export function getPokemonNameWithAffix(pokemon: Pokemon | undefined): string {
+export function getPokemonNameWithAffix(pokemon: Pokemon | nil): string {
   if (!pokemon) {
+    console.warn("Pokemon missing when trying to retrieve name.");
     return "Missigno";
   }
 

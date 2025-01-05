@@ -3,6 +3,7 @@ import { MoveResult } from "#app/field/pokemon";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
+import { Type } from "#enums/type";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -298,6 +299,37 @@ describe("Moves - Dragon Darts", () => {
 
     enemyPokemon.forEach((p) => expect(p.isFainted()).toBeTruthy());
     expect(player.turnData.hitCount).toBe(2);
+  });
+
+  it("should not strike the user on the second hit if the user's ally faints to the first", async () => {
+    game.override.startingHeldItems([{ name: "ATTACK_TYPE_BOOSTER", type: Type.DRAGON, count: 99 }]);
+
+    await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
+
+    const [player1, player2] = game.scene.getPlayerField();
+    const enemyPokemon = game.scene.getEnemyField();
+
+    game.move.select(Moves.DRAGON_DARTS, 0, BattlerIndex.PLAYER_2);
+    game.move.select(Moves.SPLASH, 1);
+
+    await game.phaseInterceptor.to("BerryPhase", false);
+
+    expect(player2.isFainted()).toBeTruthy();
+    expect(player1.isFullHp()).toBeTruthy();
+    enemyPokemon.forEach((p) => expect(p.isFullHp).toBeTruthy());
+  });
+
+  it("should not crash when used in a 1v2 battle", async () => {
+    game.override.enemyMoveset(Moves.DRAGON_DARTS);
+    await game.classicMode.startBattle([Species.SHUCKLE]);
+
+    game.move.select(Moves.DRAGON_DARTS);
+
+    await game.toNextTurn();
+
+    for (const pokemon of game.scene.getField()) {
+      expect(pokemon.isFullHp()).toBe(false);
+    }
   });
 
   // TODO: rework Pressure and implement this interaction

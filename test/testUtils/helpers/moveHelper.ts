@@ -64,7 +64,7 @@ export class MoveHelper extends GameManagerHelper {
   }
 
   /**
-   * Forces the Paralysis or Freeze status to activate on the next move by temporarily mocking {@linkcode Overrides.STATUS_ACTIVATION_OVERRIDE},
+   * Forces the statuses Paralysis, Freeze, Sleep, Confusion, or Infatuation to activate on the next move by temporarily mocking {@linkcode Overrides.STATUS_ACTIVATION_OVERRIDE},
    * advancing to the next `MovePhase`, and then resetting the override to `null`
    * @param activated - `true` to force the status to activate, `false` to force the status to not activate (will cause Freeze to heal)
    */

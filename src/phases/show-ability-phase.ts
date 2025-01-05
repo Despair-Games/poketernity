@@ -1,9 +1,9 @@
-import { globalScene } from "#app/global-scene";
 import type { BattlerIndex } from "#app/battle";
-import { PokemonPhase } from "./pokemon-phase";
+import { globalScene } from "#app/global-scene";
+import { PokemonPhase } from "./abstract-pokemon-phase";
 
 export class ShowAbilityPhase extends PokemonPhase {
-  private passive: boolean;
+  private readonly passive: boolean;
 
   constructor(battlerIndex: BattlerIndex, passive: boolean = false) {
     super(battlerIndex);
@@ -11,7 +11,7 @@ export class ShowAbilityPhase extends PokemonPhase {
     this.passive = passive;
   }
 
-  override start() {
+  public override start(): void {
     super.start();
 
     const pokemon = this.getPokemon();
@@ -19,7 +19,7 @@ export class ShowAbilityPhase extends PokemonPhase {
     if (pokemon) {
       globalScene.abilityBar.showAbility(pokemon, this.passive);
 
-      if (pokemon?.battleData) {
+      if (pokemon.battleData) {
         pokemon.battleData.abilityRevealed = true;
       }
     }
