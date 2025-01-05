@@ -173,6 +173,7 @@ import { DoubleBattleChanceAbAttr } from "./data/ab-attrs/double-battle-chance-a
 import { PostBattleInitAbAttr } from "./data/ab-attrs/post-battle-init-ab-attr";
 import { bgmLoopPoint } from "./data/bgm-loop-point";
 import { allTrainerConfigs } from "./data/balance/trainer-configs/all-trainer-configs";
+
 export const bypassLogin = import.meta.env.VITE_BYPASS_LOGIN === "1";
 
 const DEBUG_RNG = false;
