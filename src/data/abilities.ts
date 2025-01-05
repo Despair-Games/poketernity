@@ -1204,7 +1204,7 @@ export function initAbilities() {
         (target, user, move) => move.checkFlag(MoveFlags.MAKES_CONTACT, user, target),
         0.5,
       )
-      .attr(ReceivedMoveDamageMultiplierAbAttr, (_target, user, move) => user.getMoveType(move) === Type.FIRE, 2)
+      .attr(ReceivedTypeDamageMultiplierAbAttr, Type.FIRE, 2)
       .ignorable(),
     new Ability(Abilities.DAZZLING, 7).attr(FieldPriorityMoveImmunityAbAttr).ignorable(),
     new Ability(Abilities.SOUL_HEART, 7).attr(PostKnockOutStatStageChangeAbAttr, Stat.SPATK, 1),
