@@ -10,8 +10,8 @@ import type { MoveConditionFunc } from "../move-conditions";
 
 /**
  * Attribute to change the target's type to a set type.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Soak_(move) Soak}
- * and {@link https://bulbapedia.bulbagarden.net/wiki/Magic_Powder_(move) Magic Powder}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Soak_(move) | Soak}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Magic_Powder_(move) | Magic Powder}.
  * @extends MoveEffectAttr
  */
 export class ChangeTypeAttr extends MoveEffectAttr {

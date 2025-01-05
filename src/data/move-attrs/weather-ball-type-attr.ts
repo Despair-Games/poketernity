@@ -8,7 +8,7 @@ import { VariableMoveTypeAttr } from "#app/data/move-attrs/variable-move-type-at
 
 /**
  * Attribute to change a move's type to match the active weather.
- * Used by {@link https://bulbapedia.bulbagarden.net/wiki/Weather_Ball_(move) Weather Ball}.
+ * Used by {@link https://bulbapedia.bulbagarden.net/wiki/Weather_Ball_(move) | Weather Ball}.
  * @extends VariableMoveTypeAttr
  */
 export class WeatherBallTypeAttr extends VariableMoveTypeAttr {

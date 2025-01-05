@@ -6,7 +6,7 @@ import { MoveAttr } from "#app/data/move-attrs/move-attr";
 /**
  * Attribute to increase a move's critical hit ratio.
  * @extends MoveAttr
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Category:Moves_with_a_high_critical-hit_ratio Moves with a high critical-hit ratio}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Category:Moves_with_a_high_critical-hit_ratio | Moves with a high critical-hit ratio}
  */
 export class HighCritAttr extends MoveAttr {
   /**

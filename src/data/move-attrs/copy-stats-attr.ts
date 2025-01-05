@@ -10,7 +10,7 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 /**
  * Attribute to copy the target's stat stages onto the user.
  * This also copies critical hit stages from Focus Energy or Lansat Berries.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Psych_Up_(move) Psych Up}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Psych_Up_(move) | Psych Up}.
  * @extends MoveEffectAttr
  */
 export class CopyStatsAttr extends MoveEffectAttr {

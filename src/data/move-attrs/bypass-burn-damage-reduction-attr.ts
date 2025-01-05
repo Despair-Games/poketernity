@@ -6,7 +6,7 @@ import { MoveAttr } from "#app/data/move-attrs/move-attr";
 /**
  * Attribute used for moves that bypass the burn damage reduction of physical moves
  * when calculating damage.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Facade_(move) Facade}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Facade_(move) | Facade}.
  * @extends MoveAttr
  */
 export class BypassBurnDamageReductionAttr extends MoveAttr {

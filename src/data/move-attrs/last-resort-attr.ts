@@ -5,7 +5,7 @@ import { MoveAttr } from "#app/data/move-attrs/move-attr";
 import type { MoveConditionFunc } from "../move-conditions";
 
 /**
- * Attribute implementing {@link https://bulbapedia.bulbagarden.net/wiki/Last_Resort_(move) Last Resort}'s
+ * Attribute implementing {@link https://bulbapedia.bulbagarden.net/wiki/Last_Resort_(move) | Last Resort}'s
  * condition for use.
  * The move can only be used after the user has used all other
  * moves in its moveset since it entered the field.

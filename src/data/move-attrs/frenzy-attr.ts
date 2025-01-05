@@ -7,7 +7,7 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 /**
  * Attribute to put the user into a frenzy.
  * @extends MoveEffectAttr
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Variations_of_Thrash Variations of Thrash}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Variations_of_Thrash | Variations of Thrash}
  */
 export class FrenzyAttr extends MoveEffectAttr {
   constructor() {

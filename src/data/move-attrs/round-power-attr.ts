@@ -4,7 +4,7 @@ import type { Move } from "#app/data/move";
 import { VariablePowerAttr } from "#app/data/move-attrs/variable-power-attr";
 
 /**
- * Variable Power attribute for {@link https://bulbapedia.bulbagarden.net/wiki/Round_(move) Round}.
+ * Variable Power attribute for {@link https://bulbapedia.bulbagarden.net/wiki/Round_(move) | Round}.
  * Doubles power if another Pokemon has previously selected Round this turn.
  * @extends VariablePowerAttr
  */

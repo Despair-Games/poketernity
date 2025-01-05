@@ -7,7 +7,7 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
 /**
  * Attribute to increase a random stat on the user by 2 stages.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Acupressure_(move) Acupressure}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Acupressure_(move) | Acupressure}.
  * @extends MoveEffectAttr
  */
 export class AcupressureStatStageChangeAttr extends MoveEffectAttr {

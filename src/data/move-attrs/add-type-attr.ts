@@ -11,8 +11,8 @@ import type { MoveConditionFunc } from "../move-conditions";
  * Attribute to add a set type to the target.
  * Note that this doesn't overwrite any of the target's base types;
  * it only overwrites types added by other moves with this attribute.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Forest%27s_Curse_(move) Forest's Curse}
- * and {@linkcode https://bulbapedia.bulbagarden.net/wiki/Trick-or-Treat_(move) Trick-or-Treat}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Forest%27s_Curse_(move) | Forest's Curse}
+ * and {@linkcode https://bulbapedia.bulbagarden.net/wiki/Trick-or-Treat_(move) | Trick-or-Treat}.
  * @extends MoveEffectAttr
  */
 export class AddTypeAttr extends MoveEffectAttr {

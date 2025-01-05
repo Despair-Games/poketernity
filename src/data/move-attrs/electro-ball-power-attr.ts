@@ -5,7 +5,7 @@ import type { Move } from "#app/data/move";
 import { VariablePowerAttr } from "#app/data/move-attrs/variable-power-attr";
 
 /**
- * Attribute implementing {@link https://bulbapedia.bulbagarden.net/wiki/Electro_Ball_(move) Electro Ball}'s
+ * Attribute implementing {@link https://bulbapedia.bulbagarden.net/wiki/Electro_Ball_(move) | Electro Ball}'s
  * move power modifier.
  * Sets the move's power proportional to the user's
  * {@linkcode Stat.SPD Speed} compared to the target.

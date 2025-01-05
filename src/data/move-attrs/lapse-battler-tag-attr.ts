@@ -5,7 +5,7 @@ import { MoveEffectAttr } from "./move-effect-attr";
 
 /**
  * Attribute to lapse battler tags of a given type set on the target.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Mortal_Spin_(move) Mortal Spin}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Mortal_Spin_(move) | Mortal Spin}.
  * @extends MoveEffectAttr
  */
 export class LapseBattlerTagAttr extends MoveEffectAttr {

@@ -6,7 +6,7 @@ import type { Move } from "#app/data/move";
 import { VariablePowerAttr } from "#app/data/move-attrs/variable-power-attr";
 
 /**
- * Attribute implementing {@link https://bulbapedia.bulbagarden.net/wiki/Water_Shuriken_(move) Water Shuriken}'s
+ * Attribute implementing {@link https://bulbapedia.bulbagarden.net/wiki/Water_Shuriken_(move) | Water Shuriken}'s
  * effect of setting the move's power to 20 per strike when
  * used by Battle Bond Ash Greninja.
  * @extends VariablePowerAttr

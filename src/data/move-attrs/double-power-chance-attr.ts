@@ -24,7 +24,7 @@ export const doublePowerChanceMessageFunc = (user: Pokemon, _target: Pokemon, mo
 
 /**
  * Attribute to apply a chance to double move power.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Fickle_Beam_(move) Fickle Beam}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Fickle_Beam_(move) | Fickle Beam}.
  * @extends VariablePowerAttr
  */
 export class DoublePowerChanceAttr extends VariablePowerAttr {

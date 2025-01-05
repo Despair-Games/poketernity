@@ -7,7 +7,7 @@ import type { Move } from "../move";
 import { MoveEffectAttr } from "./move-effect-attr";
 
 /**
- * Attribute to remove {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Variations_of_Spikes hazards}
+ * Attribute to remove {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Variations_of_Spikes | hazards}
  * from the field.
  * @extends MoveEffectAttr
  */

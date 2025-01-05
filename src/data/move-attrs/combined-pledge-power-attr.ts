@@ -4,7 +4,7 @@ import type { Move } from "#app/data/move";
 import { VariablePowerAttr } from "#app/data/move-attrs/variable-power-attr";
 
 /**
- * Attribute to change a {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Pledge_moves Pledge move}'s
+ * Attribute to change a {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Pledge_moves | Pledge move}'s
  * power to 150 when combined with another unique Pledge move from an ally.
  * @extends VariablePowerAttr
  */

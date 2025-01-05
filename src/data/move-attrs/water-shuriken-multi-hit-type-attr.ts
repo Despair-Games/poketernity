@@ -7,7 +7,7 @@ import type { Move } from "#app/data/move";
 import { ChangeMultiHitTypeAttr } from "#app/data/move-attrs/change-multi-hit-type-attr";
 
 /**
- * Attribute implementing {@link https://bulbapedia.bulbagarden.net/wiki/Water_Shuriken_(move) Water Shuriken}'s
+ * Attribute implementing {@link https://bulbapedia.bulbagarden.net/wiki/Water_Shuriken_(move) | Water Shuriken}'s
  * effect of always hitting 3 times when used by Battle Bond Ash Greninja.
  * @extends ChangeMultiHitTypeAttrs
  */

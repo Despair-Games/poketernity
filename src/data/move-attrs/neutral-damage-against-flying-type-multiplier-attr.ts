@@ -8,7 +8,7 @@ import { VariableMoveTypeMultiplierAttr } from "#app/data/move-attrs/variable-mo
 /**
  * Attribute to set a move's type effectiveness to 1 against
  * Flying-type Pokemon that are not grounded by an effect.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Thousand_Arrows_(move) Thousand Arrows}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Thousand_Arrows_(move) | Thousand Arrows}.
  * @extends VariableMoveTypeMultiplierAttr
  */
 export class NeutralDamageAgainstFlyingTypeMultiplierAttr extends VariableMoveTypeMultiplierAttr {

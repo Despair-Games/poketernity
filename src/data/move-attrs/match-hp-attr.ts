@@ -7,7 +7,7 @@ import type { MoveConditionFunc } from "../move-conditions";
 /**
  * Attribute to set move damage such that the target
  * is brought down to the user's HP.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Endeavor_(move) Endeavor}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Endeavor_(move) | Endeavor}.
  * @extends FixedDamageAttr
  */
 export class MatchHpAttr extends FixedDamageAttr {

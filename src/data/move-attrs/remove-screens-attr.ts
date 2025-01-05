@@ -8,7 +8,7 @@ import { MoveEffectAttr } from "./move-effect-attr";
 
 /**
  * Attribute to remove the effects of
- * {@link https://bulbapedia.bulbagarden.net/wiki/Light_Screen_(move) Light Screen}
+ * {@link https://bulbapedia.bulbagarden.net/wiki/Light_Screen_(move) | Light Screen}
  * and similar effects.
  * @extends MoveEffectAttr
  */

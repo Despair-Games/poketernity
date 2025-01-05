@@ -8,7 +8,7 @@ import { VariableMoveTypeAttr } from "#app/data/move-attrs/variable-move-type-at
 /**
  * Attribute to change a move's type based on the form of
  * Genesect using it.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Techno_Blast_(move) Techno Blast}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Techno_Blast_(move) | Techno Blast}.
  * @extends VariableMoveTypeAttr
  */
 export class TechnoBlastTypeAttr extends VariableMoveTypeAttr {

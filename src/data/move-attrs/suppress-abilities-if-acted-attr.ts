@@ -5,7 +5,7 @@ import { SuppressAbilitiesAttr } from "#app/data/move-attrs/suppress-abilities-a
 
 /**
  * Applies the effects of {@linkcode SuppressAbilitiesAttr} if the target has already moved this turn.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Core_Enforcer_(move) Core Enforcer}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Core_Enforcer_(move) | Core Enforcer}.
  * @extends MoveEffectAttr
  */
 export class SuppressAbilitiesIfActedAttr extends MoveEffectAttr {

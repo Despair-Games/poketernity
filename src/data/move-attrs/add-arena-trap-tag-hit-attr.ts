@@ -7,7 +7,7 @@ import { AddArenaTagAttr } from "./add-arena-tag-attr";
 /**
  * Attribute used for Stone Axe and Ceaseless Edge.
  * Applies the given ArenaTrapTag when move is used.
- * Also can be negated by {@link https://bulbapedia.bulbagarden.net/wiki/Sheer_Force_(Ability) Sheer Force}.
+ * Also can be negated by {@link https://bulbapedia.bulbagarden.net/wiki/Sheer_Force_(Ability) | Sheer Force}.
  * @extends AddArenaTagAttr
  */
 export class AddArenaTrapTagHitAttr extends AddArenaTagAttr {

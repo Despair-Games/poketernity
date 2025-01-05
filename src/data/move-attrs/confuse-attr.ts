@@ -8,7 +8,7 @@ import type { Move } from "../move";
 import { AddBattlerTagAttr } from "./add-battler-tag-attr";
 
 /**
- * Attribute to {@link https://bulbapedia.bulbagarden.net/wiki/Confusion_(status_condition) confuse}
+ * Attribute to {@link https://bulbapedia.bulbagarden.net/wiki/Confusion_(status_condition) | confuse}
  * the user or target.
  * @extends AddBattlerTagAttr
  */

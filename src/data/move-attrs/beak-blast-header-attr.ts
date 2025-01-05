@@ -5,7 +5,7 @@ import { ChargeAnim } from "#app/data/battle-anims";
 /**
  * Header attribute to implement the "charge phase" of Beak Blast at the
  * beginning of a turn.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Beak_Blast_(move) Beak Blast}
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Beak_Blast_(move) | Beak Blast}
  * @extends AddBattlerTagHeaderAttr
  * @see {@linkcode BeakBlastChargingTag}
  */

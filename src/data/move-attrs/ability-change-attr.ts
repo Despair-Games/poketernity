@@ -12,8 +12,8 @@ import type { MoveConditionFunc } from "../move-conditions";
 
 /**
  * Attribute to change a target's ability to a set ability.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Worry_Seed_(move) Worry Seed}
- * and {@link https://bulbapedia.bulbagarden.net/wiki/Simple_Beam_(move) Simple Beam}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Worry_Seed_(move) | Worry Seed}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Simple_Beam_(move) | Simple Beam}.
  * @extends MoveEffectAttr
  */
 export class AbilityChangeAttr extends MoveEffectAttr {

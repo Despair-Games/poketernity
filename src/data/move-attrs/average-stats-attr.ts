@@ -9,8 +9,8 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 /**
  * Attribute to temporarily set certain stats of the user and
  * target to the average between the two.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Power_Split_(move) Power Split}
- * and {@link https://bulbapedia.bulbagarden.net/wiki/Guard_Split_(move) Guard Split}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Power_Split_(move) | Power Split}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Guard_Split_(move) | Guard Split}.
  * @extends MoveEffectAttr
  */
 export class AverageStatsAttr extends MoveEffectAttr {

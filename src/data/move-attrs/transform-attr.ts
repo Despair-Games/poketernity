@@ -9,7 +9,7 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 /**
  * Attribute to transform the user into the target,
  * copying its species, form, ability, moveset, and stats (except for HP).
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Transform_(move) Transform}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Transform_(move) | Transform}.
  * @extends MoveEffectAttr
  * @see {@linkcode PokemonTransformPhase}
  */

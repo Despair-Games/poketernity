@@ -10,7 +10,7 @@ import { AddBattlerTagAttr } from "./add-battler-tag-attr";
  * Moves with this attribute have an increased chance of failing after
  * consecutive uses.
  * @extends AddBattlerTagAttr
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Variations_of_Protect Variations of Protect}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Variations_of_Protect | Variations of Protect}
  */
 export class ProtectAttr extends AddBattlerTagAttr {
   constructor(tagType: BattlerTagType = BattlerTagType.PROTECTED) {

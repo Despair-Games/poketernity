@@ -6,7 +6,7 @@ import { type Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
 /**
- * Attribute implementing {@link https://bulbapedia.bulbagarden.net/wiki/Psycho_Shift_(move) Psycho Shift}'s effect.
+ * Attribute implementing {@link https://bulbapedia.bulbagarden.net/wiki/Psycho_Shift_(move) | Psycho Shift}'s effect.
  * Passes the user's status effect onto the target.
  * @extends MoveEffectAttr
  */

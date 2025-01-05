@@ -10,7 +10,7 @@ import type { Move } from "../move";
 import { MoveEffectAttr } from "./move-effect-attr";
 
 /**
- * Attribute for {@link https://bulbapedia.bulbagarden.net/wiki/Curse_(move) Curse}
+ * Attribute for {@link https://bulbapedia.bulbagarden.net/wiki/Curse_(move) | Curse}
  * to apply different effects based on the user's type:
  * - If the user is Ghost-type, this adds a {@linkcode BattlerTagType.CURSED curse} to the target
  * at the cost of half of the user's maximum HP.

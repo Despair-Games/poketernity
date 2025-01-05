@@ -9,7 +9,7 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import type { MoveConditionFunc } from "../move-conditions";
 
 /**
- * Attribute to put in a {@link https://bulbapedia.bulbagarden.net/wiki/Substitute_(doll) Substitute Doll}
+ * Attribute to put in a {@link https://bulbapedia.bulbagarden.net/wiki/Substitute_(doll) | Substitute Doll}
  * for the user.
  * @extends MoveEffectAttr
  * @see {@linkcode apply}

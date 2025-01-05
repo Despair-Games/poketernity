@@ -12,8 +12,8 @@ import type { MoveConditionFunc } from "../move-conditions";
 /**
  * Attribute to copy the target's ability onto the
  * user (and, optionally, the user's ally).
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Role_Play_(move) Role Play}
- * and {@link https://bulbapedia.bulbagarden.net/wiki/Doodle_(move) Doodle}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Role_Play_(move) | Role Play}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Doodle_(move) | Doodle}.
  * @extends MoveEffectAttr
  */
 export class AbilityCopyAttr extends MoveEffectAttr {

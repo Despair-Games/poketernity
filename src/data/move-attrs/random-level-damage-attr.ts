@@ -6,7 +6,7 @@ import { FixedDamageAttr } from "#app/data/move-attrs/fixed-damage-attr";
 /**
  * Attribute to set move damage randomly
  * between 0.5 and 1.5 * the user's level.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Psywave_(move) Psywave}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Psywave_(move) | Psywave}.
  * @extends FixedDamageAttr
  */
 export class RandomLevelDamageAttr extends FixedDamageAttr {

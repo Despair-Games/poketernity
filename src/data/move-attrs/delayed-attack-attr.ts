@@ -12,8 +12,8 @@ import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effec
 /**
  * Attack Move that doesn't hit the turn it is played and doesn't allow for multiple
  * uses on the same target.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Future_Sight_(move) Future Sight}
- * and {@link https://bulbapedia.bulbagarden.net/wiki/Doom_Desire_(move) Doom Desire}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Future_Sight_(move) | Future Sight}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Doom_Desire_(move) | Doom Desire}.
  * @extends OverrideMoveEffectAttr
  */
 export class DelayedAttackAttr extends OverrideMoveEffectAttr {

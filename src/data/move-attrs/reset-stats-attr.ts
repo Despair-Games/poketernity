@@ -8,9 +8,9 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
 /**
  * Attribute to reset the stat stages of a single Pokemon
- * (e.g. {@link https://bulbapedia.bulbagarden.net/wiki/Clear_Smog_(move) Clear Smog})
+ * (e.g. {@link https://bulbapedia.bulbagarden.net/wiki/Clear_Smog_(move) | Clear Smog})
  * or all Pokemon on the field
- * (e.g. {@link https://bulbapedia.bulbagarden.net/wiki/Haze_(move) Haze}).
+ * (e.g. {@link https://bulbapedia.bulbagarden.net/wiki/Haze_(move) | Haze}).
  * @extends MoveEffectAttr
  */
 export class ResetStatsAttr extends MoveEffectAttr {

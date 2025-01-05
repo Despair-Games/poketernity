@@ -8,7 +8,7 @@ import type { MoveConditionFunc } from "../move-conditions";
 /**
  * Attribute to set the weather to Snow, then
  * attempt a forced switch on the user.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Chilly_Reception_(move) Chilly Reception}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Chilly_Reception_(move) | Chilly Reception}.
  * @extends ForceSwitchOutAttr
  */
 export class ChillyReceptionAttr extends ForceSwitchOutAttr {

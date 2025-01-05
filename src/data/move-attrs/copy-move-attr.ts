@@ -7,8 +7,8 @@ import { lastMoveCopiableCondition, type MoveConditionFunc } from "../move-condi
 
 /**
  * Attribute to copy the last move used in battle and invoke it against random target(s).
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Mirror_Move_(move) Mirror Move}
- * and {@link https://bulbapedia.bulbagarden.net/wiki/Copycat_(move) Copycat}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Mirror_Move_(move) | Mirror Move}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Copycat_(move) | Copycat}.
  * @extends OverrideMoveEffectAttr
  */
 export class CopyMoveAttr extends OverrideMoveEffectAttr {

@@ -6,8 +6,8 @@ import { MoveAttr } from "#app/data/move-attrs/move-attr";
 
 /**
  * Attribute to allow the user to use the associated move while asleep.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Snore_(move) Snore}
- * and {@link https://bulbapedia.bulbagarden.net/wiki/Sleep_Talk_(move) Sleep Talk}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Snore_(move) | Snore}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Sleep_Talk_(move) | Sleep Talk}.
  * @extends MoveAttr
  */
 export class BypassSleepAttr extends MoveAttr {

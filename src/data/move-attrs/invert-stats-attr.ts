@@ -8,7 +8,7 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
 /**
  * Attribute to invert the target's stat stages.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Topsy-Turvy_(move) Topsy-Turvy}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Topsy-Turvy_(move) | Topsy-Turvy}.
  * @extends MoveEffectAttr
  */
 export class InvertStatsAttr extends MoveEffectAttr {

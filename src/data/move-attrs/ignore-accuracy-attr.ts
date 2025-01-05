@@ -9,7 +9,7 @@ import { AddBattlerTagAttr } from "./add-battler-tag-attr";
 /**
  * Attribute to add an effect that prevents the user from missing
  * its moves for the next 2 turns.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Lock-On_(move) Lock-On}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Lock-On_(move) | Lock-On}.
  * @extends AddBattlerTagAttr
  */
 export class IgnoreAccuracyAttr extends AddBattlerTagAttr {

@@ -8,8 +8,8 @@ import { VariablePowerAttr } from "#app/data/move-attrs/variable-power-attr";
 /**
  * Attribute to halve move power if Rain, Hail, Snow,
  * or a Sandstorm is active.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Solar_Beam_(move) Solar Beam}
- * and {@link https://bulbapedia.bulbagarden.net/wiki/Solar_Blade_(move) Solar Blade}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Solar_Beam_(move) | Solar Beam}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Solar_Blade_(move) | Solar Blade}.
  * @extends VariablePowerAttr
  */
 export class AntiSunlightPowerDecreaseAttr extends VariablePowerAttr {

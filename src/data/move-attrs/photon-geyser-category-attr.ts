@@ -7,7 +7,7 @@ import { VariableMoveCategoryAttr } from "#app/data/move-attrs/variable-move-cat
 
 /**
  * Attribute to change move category to match the user's highest effective offensive stat.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Photon_Geyser_(move) Photon Geyser}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Photon_Geyser_(move) | Photon Geyser}.
  * @extends VariableMoveCategoryAttr
  */
 export class PhotonGeyserCategoryAttr extends VariableMoveCategoryAttr {

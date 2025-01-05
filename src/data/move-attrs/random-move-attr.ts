@@ -11,7 +11,7 @@ import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effec
 
 /**
  * Attribute to invoke a random move and use it virtually on a random legal target.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Metronome_(move) Metronome}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Metronome_(move) | Metronome}.
  * @extends OverrideMoveEffectAttr
  */
 export class RandomMoveAttr extends OverrideMoveEffectAttr {

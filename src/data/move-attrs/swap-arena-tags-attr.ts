@@ -9,7 +9,7 @@ import { MoveEffectAttr } from "./move-effect-attr";
 
 /**
  * Swaps arena effects between the player and enemy side.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Court_Change_(move) Court Change}
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Court_Change_(move) | Court Change}
  * @extends MoveEffectAttr
  */
 export class SwapArenaTagsAttr extends MoveEffectAttr {

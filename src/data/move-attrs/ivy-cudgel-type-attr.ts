@@ -6,7 +6,7 @@ import type { Move } from "#app/data/move";
 import { VariableMoveTypeAttr } from "#app/data/move-attrs/variable-move-type-attr";
 
 /**
- * Attribute implementing {@link https://bulbapedia.bulbagarden.net/wiki/Ivy_Cudgel_(move) Ivy Cudgel}'s
+ * Attribute implementing {@link https://bulbapedia.bulbagarden.net/wiki/Ivy_Cudgel_(move) | Ivy Cudgel}'s
  * type-changing effect. A move with this attribute changes type based on the specific
  * form of Ogerpon (or fusion with Ogerpon) using it.
  * @extends VariableMoveTypeAttr

@@ -9,7 +9,7 @@ import type { MoveConditionFunc } from "../move-conditions";
 
 /**
  * Attribute to swap the user and target's abilities (if both are swappable).
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Skill_Swap_(move) Skill Swap}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Skill_Swap_(move) | Skill Swap}.
  * @extends MoveEffectAttr
  */
 export class SwitchAbilitiesAttr extends MoveEffectAttr {
