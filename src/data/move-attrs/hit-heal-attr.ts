@@ -62,7 +62,7 @@ export class HitHealAttr extends MoveEffectAttr {
     }
     globalScene.unshiftPhase(
       new PokemonHealPhase(user.getBattlerIndex(), healAmount, {
-        message: message,
+        message,
         showFullHpMessage: false,
         skipAnim: true,
       }),
