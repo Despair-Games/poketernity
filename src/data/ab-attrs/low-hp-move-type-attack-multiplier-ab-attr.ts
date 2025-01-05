@@ -28,7 +28,7 @@ export class LowHpMoveTypeAttackMultiplierAbAttr extends StatMultiplierAbAttr {
    */
   constructor(boostedType: Type) {
     const condition = (pokemon: Pokemon, _target: Pokemon, move: Move): boolean => {
-      return move && pokemon.getHpRatio() <= 1/3 && pokemon.getMoveType(move) === boostedType;
+      return move && pokemon.getHpRatio() <= 1 / 3 && pokemon.getMoveType(move) === boostedType;
     };
     super(Stat.ATK, 1.5, condition);
   }

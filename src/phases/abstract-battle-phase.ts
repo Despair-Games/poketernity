@@ -1,13 +1,13 @@
-import { globalScene } from "#app/global-scene";
 import { TrainerSlot } from "#app/data/trainer-config";
+import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 
-export class BattlePhase extends Phase {
-  constructor() {
-    super();
-  }
-
-  showEnemyTrainer(trainerSlot: TrainerSlot = TrainerSlot.NONE): void {
+/**
+ * Adds functions to display and hide the enemy trainer
+ * @extends Phase
+ */
+export abstract class BattlePhase extends Phase {
+  public showEnemyTrainer(trainerSlot: TrainerSlot = TrainerSlot.NONE): void {
     const { trainer } = globalScene.currentBattle;
     if (!trainer) {
       console.warn("Enemy trainer is missing!");
@@ -39,7 +39,7 @@ export class BattlePhase extends Phase {
     });
   }
 
-  hideEnemyTrainer(): void {
+  public hideEnemyTrainer(): void {
     globalScene.tweens.add({
       targets: globalScene.currentBattle.trainer,
       x: "+=16",

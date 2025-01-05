@@ -1,25 +1,30 @@
+// -- start tsdoc imports --
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { type EvolutionPhase } from "#app/phases/evolution-phase";
+// -- end tsdoc imports --
+
+import type { SpeciesFormChange } from "#app/data/pokemon-forms";
+import { getSpeciesFormChangeMessage } from "#app/data/pokemon-forms";
+import type { PlayerPokemon, Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
+import { getPokemonNameWithAffix } from "#app/messages";
+import { achvs } from "#app/system/achv";
+import type PartyUiHandler from "#app/ui/party-ui-handler";
+import { Mode } from "#app/ui/ui";
 import { fixedInt } from "#app/utils";
-import { achvs } from "../system/achv";
-import type { SpeciesFormChange } from "../data/pokemon-forms";
-import { getSpeciesFormChangeMessage } from "../data/pokemon-forms";
-import type { PlayerPokemon, Pokemon } from "../field/pokemon";
-import { Mode } from "../ui/ui";
-import type PartyUiHandler from "../ui/party-ui-handler";
-import { getPokemonNameWithAffix } from "../messages";
-import { EndEvolutionPhase } from "./end-evolution-phase";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { SpeciesFormKey } from "#enums/species-form-key";
-import { FormChangeBasePhase } from "./form-change-base-phase";
+import { FormChangeBasePhase } from "./abstract-form-change-base-phase";
+import { EndEvolutionPhase } from "./end-evolution-phase";
 
 /**
- * A phase for handling Pokemon specifically for form changes, this does not cover evolutions
- * For evolutions, @see {@linkcode EvolutionPhase}
+ * A phase for handling Pokemon form changes, this does not cover evolutions
+ * @see {@linkcode EvolutionPhase} for evolutions
  * @extends FormChangeBasePhase
  */
 export class FormChangePhase extends FormChangeBasePhase {
-  private formChange: SpeciesFormChange;
-  private modal: boolean;
+  private readonly formChange: SpeciesFormChange;
+  private readonly modal: boolean;
 
   constructor(pokemon: PlayerPokemon, formChange: SpeciesFormChange, modal: boolean) {
     super(pokemon);
@@ -40,6 +45,8 @@ export class FormChangePhase extends FormChangeBasePhase {
   }
 
   public override doFormChange(): void {
+    const { time, tweens } = globalScene;
+
     this.pokemon.getPossibleForm(this.formChange).then((formChangedPokemon) => {
       [this.pokemonNewFormSprite, this.pokemonNewFormTintSprite].map((sprite) => {
         const spriteKey = formChangedPokemon.getSpriteKey(true);
@@ -61,16 +68,16 @@ export class FormChangePhase extends FormChangeBasePhase {
         });
       });
 
-      globalScene.time.delayedCall(250, () => {
-        globalScene.tweens.add({
+      time.delayedCall(250, () => {
+        tweens.add({
           targets: this.bgOverlay,
           alpha: 1,
           delay: 500,
           duration: 1500,
           ease: "Sine.easeOut",
           onComplete: () => {
-            globalScene.time.delayedCall(1000, () => {
-              globalScene.tweens.add({
+            time.delayedCall(1000, () => {
+              tweens.add({
                 targets: this.bgOverlay,
                 alpha: 0,
                 duration: 250,
@@ -80,7 +87,7 @@ export class FormChangePhase extends FormChangeBasePhase {
             });
             globalScene.playSound("se/charge");
             this.doSpiralUpward();
-            globalScene.tweens.addCounter({
+            tweens.addCounter({
               from: 0,
               to: 1,
               duration: 2000,
@@ -89,10 +96,10 @@ export class FormChangePhase extends FormChangeBasePhase {
               },
               onComplete: () => {
                 this.pokemonSprite.setVisible(false);
-                globalScene.time.delayedCall(1100, () => {
+                time.delayedCall(1100, () => {
                   globalScene.playSound("se/beam");
                   this.doArcDownward();
-                  globalScene.time.delayedCall(1000, () => {
+                  time.delayedCall(1000, () => {
                     this.pokemonNewFormTintSprite.setScale(0.25);
                     this.pokemonNewFormTintSprite.setVisible(true);
                     this.doCycle(1, 1).then((_success) => {
@@ -113,17 +120,18 @@ export class FormChangePhase extends FormChangeBasePhase {
    * @param formChangedPokemon - The {@linkcode Pokemon} that has changed form
    */
   private handleFormChangeComplete(formChangedPokemon: Pokemon): void {
-    const onFormChangeComplete = () => {
+    const { time, tweens, ui } = globalScene;
+    const onFormChangeComplete = (): void => {
       const preName = getPokemonNameWithAffix(this.pokemon);
 
-      globalScene.tweens.add({
+      tweens.add({
         targets: this.bgOverlay,
         alpha: 0,
         duration: 250,
         onComplete: () => {
-          globalScene.time.delayedCall(250, () => {
+          time.delayedCall(250, () => {
             this.pokemon.cry();
-            globalScene.time.delayedCall(1250, () => {
+            time.delayedCall(1250, () => {
               let playEvolutionFanfare = false;
               if (this.formChange.formKey.includes(SpeciesFormKey.MEGA)) {
                 globalScene.validateAchv(achvs.MEGA_EVOLVE);
@@ -140,7 +148,7 @@ export class FormChangePhase extends FormChangeBasePhase {
               globalScene.playSoundWithoutBgm(playEvolutionFanfare ? "evolution_fanfare" : "minor_fanfare");
 
               formChangedPokemon.destroy();
-              globalScene.ui.showText(
+              ui.showText(
                 getSpeciesFormChangeMessage(this.pokemon, this.formChange, preName),
                 null,
                 () => this.end(),
@@ -148,7 +156,7 @@ export class FormChangePhase extends FormChangeBasePhase {
                 true,
                 fixedInt(delay),
               );
-              globalScene.time.delayedCall(fixedInt(delay + 250), () => globalScene.playBgm());
+              time.delayedCall(fixedInt(delay + 250), () => globalScene.playBgm());
             });
           });
         },
@@ -158,7 +166,7 @@ export class FormChangePhase extends FormChangeBasePhase {
     globalScene.playSound("se/sparkle");
     this.pokemonNewFormSprite.setVisible(true);
     this.doCircleInward();
-    globalScene.time.delayedCall(900, () => {
+    time.delayedCall(900, () => {
       this.pokemon.changeForm(this.formChange).then(() => {
         if (!this.modal) {
           globalScene.unshiftPhase(new EndEvolutionPhase());
@@ -166,7 +174,7 @@ export class FormChangePhase extends FormChangeBasePhase {
 
         globalScene.playSound("se/shine");
         this.doSpray();
-        globalScene.tweens.add({
+        tweens.add({
           targets: this.overlay,
           alpha: 1,
           duration: 250,
@@ -174,7 +182,7 @@ export class FormChangePhase extends FormChangeBasePhase {
           onComplete: () => {
             this.bgOverlay.setAlpha(1);
             this.bgVideo.setVisible(false);
-            globalScene.tweens.add({
+            tweens.add({
               targets: [this.overlay, this.pokemonNewFormTintSprite],
               alpha: 0,
               duration: 2000,
@@ -189,11 +197,13 @@ export class FormChangePhase extends FormChangeBasePhase {
   }
 
   public override end(): void {
+    const { ui } = globalScene;
+
     this.pokemon.findAndRemoveTags((t) => t.tagType === BattlerTagType.AUTOTOMIZED);
     if (this.modal) {
-      globalScene.ui.revertMode().then(() => {
-        if (globalScene.ui.getMode() === Mode.PARTY) {
-          const partyUiHandler = globalScene.ui.getHandler() as PartyUiHandler;
+      ui.revertMode().then(() => {
+        if (ui.getMode() === Mode.PARTY) {
+          const partyUiHandler = ui.getHandler() as PartyUiHandler;
           partyUiHandler.clearPartySlots();
           partyUiHandler.populatePartySlots();
         }
