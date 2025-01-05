@@ -24,7 +24,7 @@ describe("Abilities - Fur Coat", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.TACKLE, Moves.PSYSHOCK, Moves.SWEET_KISS])
+      .moveset([Moves.TACKLE, Moves.PSYSHOCK, Moves.SWEET_KISS, Moves.SPLASH])
       .ability(Abilities.BALL_FETCH)
       .battleType("single")
       .disableCrits()
@@ -50,7 +50,7 @@ describe("Abilities - Fur Coat", () => {
     game.move.select(Moves.PSYSHOCK);
     await game.phaseInterceptor.to("BerryPhase");
 
-    expect(enemyPokemon.getEffectiveStat).toHaveReturnedWith(enemyPokemon.stats[Stat.DEF] * 2);
+    expect(enemyPokemon.getEffectiveStat).toHaveReturnedWith(enemyPokemon.getStat(Stat.DEF) * 2);
   });
 
   it("should not affect self-inflicted confusion damage", async () => {
@@ -60,6 +60,20 @@ describe("Abilities - Fur Coat", () => {
     vi.spyOn(enemyPokemon, "getEffectiveStat");
 
     game.move.select(Moves.SWEET_KISS);
+    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    await game.move.forceHit();
+    await game.phaseInterceptor.to("BerryPhase");
+
+    expect(enemyPokemon.getEffectiveStat).toHaveReturnedWith(enemyPokemon.stats[Stat.DEF]);
+  });
+
+  it("should not affect the Defense stat when using the move Body Press", async () => {
+    game.override.enemyMoveset(Moves.BODY_PRESS);
+    await game.classicMode.startBattle([Species.FEEBAS]);
+    const enemyPokemon = game.scene.getEnemyPokemon()!;
+    vi.spyOn(enemyPokemon, "getEffectiveStat");
+
+    game.move.select(Moves.SPLASH);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.move.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
