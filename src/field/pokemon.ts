@@ -241,7 +241,6 @@ import { TypeImmunityAbAttr } from "#app/data/ab-attrs/type-immunity-ab-attr";
 import { FullHpResistTypeAbAttr } from "#app/data/ab-attrs/full-hp-resist-type-ab-attr";
 import { FieldPriorityMoveImmunityAbAttr } from "#app/data/ab-attrs/field-priority-move-immunity-ab-attr";
 import { MoveImmunityAbAttr } from "#app/data/ab-attrs/move-immunity-ab-attr";
-import { DefDefAttr } from "#app/data/move-attrs/def-def-attr";
 
 export enum LearnMoveSituation {
   MISC,
@@ -3101,16 +3100,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     );
     applyMoveAttrs(VariableAtkAttr, source, this, move, sourceAtk);
 
-    /** The target's defense stat should be used if the move is physical or uses DEF to calculate its damage */
-    const useDefenseStat = isPhysical || move.hasAttr(DefDefAttr);
-
     /**
      * This Pokemon's defensive stat for the given move's category.
      * Critical hits cause positive stat stages to be ignored.
      */
     const targetDef = new NumberHolder(
       this.getEffectiveStat(
-        useDefenseStat ? Stat.DEF : Stat.SPDEF,
+        isPhysical ? Stat.DEF : Stat.SPDEF,
         source,
         move,
         ignoreAbility,

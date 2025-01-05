@@ -64,7 +64,7 @@ describe("Abilities - Fur Coat", () => {
     await game.move.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
-    expect(enemyPokemon.getEffectiveStat).toHaveReturnedWith(enemyPokemon.stats[Stat.DEF]);
+    expect(enemyPokemon.getEffectiveStat).toHaveReturnedWith(enemyPokemon.getStat(Stat.DEF));
   });
 
   it("should not affect the Defense stat when using the move Body Press", async () => {
@@ -78,6 +78,6 @@ describe("Abilities - Fur Coat", () => {
     await game.move.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
-    expect(enemyPokemon.getEffectiveStat).toHaveReturnedWith(enemyPokemon.stats[Stat.DEF]);
+    expect(enemyPokemon.getEffectiveStat).toHaveReturnedWith(enemyPokemon.getStat(Stat.DEF));
   });
 });
