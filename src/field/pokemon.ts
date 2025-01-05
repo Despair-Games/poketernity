@@ -5962,7 +5962,7 @@ export class EnemyPokemon extends Pokemon {
       }
 
       globalScene.unshiftPhase(
-        new StatStageChangePhase(this.getBattlerIndex(), true, [boostedStat!], stages, true, true),
+        new StatStageChangePhase(this.getBattlerIndex(), true, [boostedStat!], stages, { ignoreAbilities: true }),
       );
       this.bossSegmentIndex--;
     }
