@@ -3,7 +3,7 @@ import { ArenaTagType } from "#app/enums/arena-tag-type";
 import { BattlerTagType } from "#app/enums/battler-tag-type";
 import { Gender } from "#app/enums/gender";
 import { Moves } from "#app/enums/moves";
-import { BATTLE_STAT_MAX, EFFECTIVE_STATS, getStatKey, Stat, type EffectiveStat } from "#app/enums/stat";
+import { EFFECTIVE_STATS, getStatKey, Stat, type EffectiveStat } from "#app/enums/stat";
 import { StatusEffect } from "#app/enums/status-effect";
 import { TerrainType } from "#app/enums/terrain-type";
 import { Type } from "#app/enums/type";
@@ -578,7 +578,7 @@ export function initAbilities() {
       .condition(getWeatherCondition(WeatherType.HAIL, WeatherType.SNOW))
       .ignorable(),
     new Ability(Abilities.GLUTTONY, 4).attr(ReduceBerryUseThresholdAbAttr),
-    new Ability(Abilities.ANGER_POINT, 4).attr(PostDefendCritStatStageChangeAbAttr, Stat.ATK, BATTLE_STAT_MAX),
+    new Ability(Abilities.ANGER_POINT, 4).attr(PostDefendCritStatStageChangeAbAttr, Stat.ATK, 12),
     new Ability(Abilities.UNBURDEN, 4)
       .attr(PostItemLostApplyBattlerTagAbAttr, BattlerTagType.UNBURDEN)
       .bypassFaint() // Allows reviver seed to activate Unburden

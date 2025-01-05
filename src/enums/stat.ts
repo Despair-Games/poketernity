@@ -32,8 +32,6 @@ export type EffectiveStat = (typeof EFFECTIVE_STATS)[number];
 export const BATTLE_STATS = [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD, Stat.ACC, Stat.EVA] as const;
 /** Type used to describe the stats that have stages which can be incremented and decremented in battle. */
 export type BattleStat = (typeof BATTLE_STATS)[number];
-/** Used when a stat stage is maximized or minimized to the lowest possible value */
-export const BATTLE_STAT_MAX = 12;
 
 /** A constant array comprised of {@linkcode Stat} the values that make up {@linkcode TempBattleStat}. */
 export const TEMP_BATTLE_STATS = [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD, Stat.ACC] as const;
@@ -48,14 +46,29 @@ export type TempBattleStat = (typeof TEMP_BATTLE_STATS)[number];
  * @returns the translation key fitting the conditions described by {@linkcode stages} and {@linkcode isIncrease}
  */
 export function getStatStageChangeDescriptionKey(stages: number, isIncrease: boolean) {
-  if (stages === 1) {
-    return isIncrease ? "battle:statRose" : "battle:statFell";
-  } else if (stages === 2) {
-    return isIncrease ? "battle:statSharplyRose" : "battle:statHarshlyFell";
-  } else if ((stages > 2 && stages <= 6) || stages === BATTLE_STAT_MAX) {
-    return isIncrease ? "battle:statRoseDrastically" : "battle:statSeverelyFell";
+  if (isIncrease) {
+    switch (stages) {
+      case 0:
+        return "battle:statWontGoAnyHigher";
+      case 1:
+        return "battle:statRose";
+      case 2:
+        return "battle:statSharplyRose";
+      default:
+        return "battle:statRoseDrastically";
+    }
+  } else {
+    switch (stages) {
+      case 0:
+        return "battle:statWontGoAnyLower";
+      case 1:
+        return "battle:statFell";
+      case 2:
+        return "battle:statHarshlyFell";
+      default:
+        return "battle:statSeverelyFell";
+    }
   }
-  return isIncrease ? "battle:statWontGoAnyHigher" : "battle:statWontGoAnyLower";
 }
 
 /**
