@@ -11,10 +11,13 @@ import { EndEvolutionPhase } from "./end-evolution-phase";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { FormChangeBasePhase } from "./form-change-base-phase";
+// tsdoc import
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { EvolutionPhase } from "./evolution-phase";
 
 /**
  * A phase for handling Pokemon specifically for form changes, this does not cover evolutions
- * For evolutions, @see {@linkcode EvolutionPhase}
+ * @see {@linkcode EvolutionPhase} for evolution handling
  * @extends FormChangeBasePhase
  */
 export class FormChangePhase extends FormChangeBasePhase {

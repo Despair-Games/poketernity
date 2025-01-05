@@ -14,10 +14,13 @@ import { EndEvolutionPhase } from "#app/phases/end-evolution-phase";
 import { EVOLVE_MOVE } from "#app/data/balance/pokemon-level-moves";
 import { FormChangeBasePhase } from "./form-change-base-phase";
 import { getPokemonNameWithAffix } from "#app/messages";
+// tsdoc import
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { FormChangePhase } from "./form-change-phase";
 
 /**
  * A phase for handling Pokemon evolution
- * For general form changes, @see {@linkcode FormChangePhase}
+ * @see {@linkcode FormChangePhase} for form change handling
  * @extends FormChangeBasePhase
  */
 export class EvolutionPhase extends FormChangeBasePhase {
