@@ -4,6 +4,11 @@ import type { BooleanHolder } from "#app/utils";
 import i18next from "i18next";
 import { AbAttr } from "./ab-attr";
 
+/**
+ * Ability attribute that prevents the Pokemon from receiving recoil damage except when using the move Struggle
+ * This attribute is used by the abilities:
+ * - Rock Head
+ */
 export class BlockRecoilDamageAttr extends AbAttr {
   override apply(
     _pokemon: Pokemon,
