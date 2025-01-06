@@ -18,12 +18,10 @@ import {
   modifierTypes,
   regenerateModifierPoolThresholds,
 } from "#app/modifier/modifier-type";
-import {
-  MysteryEncounterBattlePhase,
-  MysteryEncounterBattleStartCleanupPhase,
-  MysteryEncounterPhase,
-  MysteryEncounterRewardsPhase,
-} from "#app/phases/mystery-encounter-phases";
+import { MysteryEncounterBattlePhase } from "#app/phases/mystery-encounter-phases/battle-phase";
+import { MysteryEncounterRewardsPhase } from "#app/phases/mystery-encounter-phases/rewards-phase";
+import { MysteryEncounterBattleStartCleanupPhase } from "#app/phases/mystery-encounter-phases/battle-start-cleanup-phase";
+import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import type PokemonData from "#app/system/pokemon-data";
 import type { OptionSelectConfig, OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler";
 import type { PartyOption, PokemonSelectFilter } from "#app/ui/party-ui-handler";
@@ -42,7 +40,7 @@ import { initMoveAnim, loadMoveAnimAssets } from "#app/data/battle-anims";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { Status } from "#app/data/status-effect";
 import type { TrainerConfig } from "#app/data/trainer-config";
-import { trainerConfigs, TrainerSlot } from "#app/data/trainer-config";
+import { TrainerSlot } from "#enums/trainer-slot";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import type { IEggOptions } from "#app/data/egg";
 import { Egg } from "#app/data/egg";
@@ -58,6 +56,7 @@ import { PartyExpPhase } from "#app/phases/party-exp-phase";
 import type { Variant } from "#app/data/variant";
 import { StatusEffect } from "#enums/status-effect";
 import { globalScene } from "#app/global-scene";
+import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 
 /**
  * Animates exclamation sprite over trainer's head at start of encounter
@@ -154,7 +153,7 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
       globalScene.currentBattle.trainer.destroy();
     }
 
-    trainerConfig = partyTrainerConfig ? partyTrainerConfig : trainerConfigs[trainerType!];
+    trainerConfig = partyTrainerConfig ? partyTrainerConfig : allTrainerConfigs[trainerType!];
 
     const doubleTrainer = trainerConfig.doubleOnly || (trainerConfig.hasDouble && !!partyConfig.doubleBattle);
     doubleBattle = doubleTrainer;
@@ -732,7 +731,7 @@ export function setEncounterRewards(
     }
 
     if (customShopRewards) {
-      globalScene.unshiftPhase(new SelectModifierPhase(0, undefined, customShopRewards));
+      globalScene.unshiftPhase(new SelectModifierPhase({ customModifierSettings: customShopRewards }));
     } else {
       globalScene.tryRemovePhase((p) => p instanceof SelectModifierPhase);
     }

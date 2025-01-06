@@ -6,6 +6,20 @@ import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import type { BattleStat } from "#enums/stat";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 
+/**
+ * Activates after receiving an attack and if certain conditions are met, changes the effective stats
+ * These abilities use this attribute:
+ * - Weak Armor
+ * - Justified
+ * - Rattled
+ * - Gooey
+ * - Stamina
+ * - Water Compaction
+ * - Tangling Hair
+ * - Cotton Down
+ * - Steam Engine
+ * - Thermal Exchange
+ */
 export class PostDefendStatStageChangeAbAttr extends PostDefendAbAttr {
   private readonly condition: PokemonDefendCondition;
   private readonly stat: BattleStat;

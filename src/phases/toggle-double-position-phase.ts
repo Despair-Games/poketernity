@@ -1,9 +1,9 @@
-import { globalScene } from "#app/global-scene";
 import { FieldPosition } from "#app/field/pokemon";
-import { BattlePhase } from "./battle-phase";
+import { globalScene } from "#app/global-scene";
+import { BattlePhase } from "./abstract-battle-phase";
 
 export class ToggleDoublePositionPhase extends BattlePhase {
-  private double: boolean;
+  private readonly double: boolean;
 
   constructor(double: boolean) {
     super();
@@ -11,7 +11,7 @@ export class ToggleDoublePositionPhase extends BattlePhase {
     this.double = double;
   }
 
-  override start() {
+  public override start(): void {
     super.start();
 
     const playerPokemon = globalScene.getPlayerField().find((p) => p.isActive(true));

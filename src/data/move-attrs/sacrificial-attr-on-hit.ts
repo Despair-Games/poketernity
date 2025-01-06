@@ -5,25 +5,15 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 /**
  * Attribute used for moves which self KO the user but only if the move hits a target
  * @extends MoveEffectAttr
- * @see {@linkcode apply}
- **/
-
+ */
 export class SacrificialAttrOnHit extends MoveEffectAttr {
   constructor() {
     super(true);
   }
 
-  /**
-   * Deals damage to the user equal to their current hp if the move lands
-   * @param user {@linkcode Pokemon} that used the move
-   * @param target {@linkcode Pokemon} target of the move
-   * @param move {@linkcode Move} with this attribute
-   * @param args N/A
-   * @returns true if the function succeeds
-   **/
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     // If the move fails to hit a target, then the user does not faint and the function returns false
-    if (!super.apply(user, target, move, args)) {
+    if (!super.apply(user, target, move)) {
       return false;
     }
 

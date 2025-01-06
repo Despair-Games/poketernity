@@ -24,29 +24,31 @@ export const courtChangeArenaTags = [
 ];
 
 /**
- * Swaps arena effects between the player and enemy side
- * Used in Court Change
+ * Swaps arena effects between the player and enemy side.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Court_Change_(move) | Court Change}
  * @extends MoveEffectAttr
- * @see {@linkcode apply}
  */
 export class SwapArenaTagsAttr extends MoveEffectAttr {
-  public SwapTags: ArenaTagType[];
+  public swappableTags: ArenaTagType[];
 
   constructor(SwapTags: ArenaTagType[]) {
     super(true);
-    this.SwapTags = SwapTags;
+    this.swappableTags = SwapTags;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    if (!super.apply(user, target, move, args)) {
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+    if (!super.apply(user, target, move)) {
       return false;
     }
 
     const tagPlayerTemp = globalScene.arena.findTagsOnSide(
-      (t) => this.SwapTags.includes(t.tagType),
+      (t) => this.swappableTags.includes(t.tagType),
       ArenaTagSide.PLAYER,
     );
-    const tagEnemyTemp = globalScene.arena.findTagsOnSide((t) => this.SwapTags.includes(t.tagType), ArenaTagSide.ENEMY);
+    const tagEnemyTemp = globalScene.arena.findTagsOnSide(
+      (t) => this.swappableTags.includes(t.tagType),
+      ArenaTagSide.ENEMY,
+    );
 
     if (tagPlayerTemp) {
       for (const swapTagsType of tagPlayerTemp) {

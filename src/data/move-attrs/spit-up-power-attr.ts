@@ -16,11 +16,10 @@ export class SpitUpPowerAttr extends VariablePowerAttr {
     this.multiplier = multiplier;
   }
 
-  override apply(user: Pokemon, _target: Pokemon, _move: Move, args: any[]): boolean {
+  override apply(user: Pokemon, _target: Pokemon, _move: Move, power: NumberHolder): boolean {
     const stockpilingTag = user.getTag(StockpilingTag);
 
     if (stockpilingTag && stockpilingTag.stockpiledCount > 0) {
-      const power = args[0] as NumberHolder;
       power.value = this.multiplier * stockpilingTag.stockpiledCount;
       return true;
     }

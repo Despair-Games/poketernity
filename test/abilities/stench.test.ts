@@ -90,4 +90,27 @@ describe("Abilities - Stench", () => {
     await game.phaseInterceptor.to("BerryPhase");
     expect(abilityAttr.getChance).not.toHaveBeenCalled();
   });
+
+  it("Stench should not apply against a target with Shield Dust, unless the attack ignores abilities", async () => {
+    game.override.enemyAbility(Abilities.SHIELD_DUST).moveset([Moves.TACKLE, Moves.MOONGEIST_BEAM]);
+    await game.classicMode.startBattle([Species.FEEBAS]);
+
+    const playerPokemon = game.scene.getPlayerPokemon()!;
+    const abilityAttr = playerPokemon
+      .getAbility()
+      .getAttrs(PostAttackApplyBattlerTagAbAttr)[0] as PostAttackApplyBattlerTagAbAttr;
+
+    vi.spyOn(abilityAttr, "getChance");
+
+    game.move.select(Moves.TACKLE);
+    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    await game.phaseInterceptor.to("BerryPhase");
+    expect(abilityAttr.getChance).not.toHaveBeenCalled();
+
+    await game.toNextTurn();
+    game.move.select(Moves.MOONGEIST_BEAM);
+    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    await game.phaseInterceptor.to("BerryPhase");
+    expect(abilityAttr.getChance).toHaveLastReturnedWith(10);
+  });
 });

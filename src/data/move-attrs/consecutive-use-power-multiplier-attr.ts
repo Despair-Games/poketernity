@@ -3,6 +3,11 @@ import { type Pokemon, type TurnMove, MoveResult } from "#app/field/pokemon";
 import type { Move } from "#app/data/move";
 import { MovePowerMultiplierAttr } from "#app/data/move-attrs/move-power-multiplier-attr";
 
+/**
+ * Abstract attribute to multiply move power based on the
+ * number of times the move has been used consecutively and successfully by the user.
+ * @extends MovePowerMultiplierAttr
+ */
 export abstract class ConsecutiveUsePowerMultiplierAttr extends MovePowerMultiplierAttr {
   constructor(limit: number, resetOnFail: boolean, resetOnLimit?: boolean, ...comboMoves: Moves[]) {
     super((user: Pokemon, _target: Pokemon, move: Move): number => {

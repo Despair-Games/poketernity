@@ -26,6 +26,7 @@ import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { ProtectStatAbAttr } from "./ab-attrs/protect-stat-ab-attr";
+import { MoveFlags } from "#enums/move-flags";
 
 export enum ArenaTagSide {
   BOTH,
@@ -339,12 +340,15 @@ export class ConditionalProtectTag extends ArenaTag {
     arena: Arena,
     simulated: boolean,
     isProtected: BooleanHolder,
-    _attacker: Pokemon,
+    attacker: Pokemon,
     defender: Pokemon,
     moveId: Moves,
-    ignoresProtectBypass: BooleanHolder,
   ): boolean {
-    if ((this.side === ArenaTagSide.PLAYER) === defender.isPlayer() && this.protectConditionFunc(arena, moveId)) {
+    if (
+      (this.side === ArenaTagSide.PLAYER) === defender.isPlayer()
+      && this.protectConditionFunc(arena, moveId)
+      && (this.ignoresBypass || !allMoves[moveId].checkFlag(MoveFlags.IGNORE_PROTECT, attacker, defender))
+    ) {
       if (!isProtected.value) {
         isProtected.value = true;
         if (!simulated) {
@@ -357,8 +361,6 @@ export class ConditionalProtectTag extends ArenaTag {
           );
         }
       }
-
-      ignoresProtectBypass.value = ignoresProtectBypass.value || this.ignoresBypass;
       return true;
     }
     return false;
@@ -560,7 +562,7 @@ class WishTag extends ArenaTag {
     const target = globalScene.getFieldPokemonByBattlerIndex(this.battlerIndex);
     if (target?.isActive(true)) {
       globalScene.queueMessage(this.triggerMessage);
-      globalScene.unshiftPhase(new PokemonHealPhase(target.getBattlerIndex(), this.healHp, null, true, false));
+      globalScene.unshiftPhase(new PokemonHealPhase(target.getBattlerIndex(), this.healHp));
     }
   }
 }
@@ -995,12 +997,21 @@ class StickyWebTag extends ArenaTrapTag {
     super.onAdd(arena);
     const source = this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
     if (!quiet && source) {
-      globalScene.queueMessage(
-        i18next.t("arenaTag:stickyWebOnAdd", {
-          moveName: this.getMoveName(),
-          opponentDesc: source.getOpponentDescriptor(),
-        }),
-      );
+      if (this.side === ArenaTagSide.PLAYER) {
+        globalScene.queueMessage(
+          i18next.t("arenaTag:stickyWebOnAddPlayerSide", {
+            moveName: this.getMoveName(),
+            opponentDesc: source.getOpponentDescriptor(),
+          }),
+        );
+      } else {
+        globalScene.queueMessage(
+          i18next.t("arenaTag:stickyWebOnAddEnemySide", {
+            moveName: this.getMoveName(),
+            opponentDesc: source.getOpponentDescriptor(),
+          }),
+        );
+      }
     }
   }
 
@@ -1128,7 +1139,7 @@ class TailwindTag extends ArenaTag {
       // Raise attack by one stage if party member has WIND_RIDER ability
       if (pokemon.hasAbility(Abilities.WIND_RIDER)) {
         globalScene.unshiftPhase(new ShowAbilityPhase(pokemon.getBattlerIndex()));
-        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [Stat.ATK], 1, true));
+        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [Stat.ATK], 1));
       }
     }
   }
