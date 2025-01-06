@@ -3,7 +3,14 @@ import type { SceneBase } from "#app/scene-base";
 import { getFrameMs, randGauss, randInt } from "#app/utils";
 import { PokeballType } from "#enums/pokeball";
 import type { Variant } from "./data/variant";
+// tsdoc import
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { BattleAnim } from "./data/battle-anims";
 
+/**
+ * Class for handling general animations such as particle effects
+ * For battle animations, see {@linkcode BattleAnim}
+ */
 export class Animation {
   private scene: SceneBase;
   constructor(scene: SceneBase = globalScene) {
