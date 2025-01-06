@@ -179,8 +179,8 @@ export default class Battle {
         )
         .map((i) => {
           const ret = i as PokemonHeldItemModifier;
-          //@ts-ignore - this is awful to fix/change
-          ret.pokemonId = null;
+          // TODO: Figure out how to remove the `!`
+          ret.pokemonId = null!;
           return ret;
         }),
     );
