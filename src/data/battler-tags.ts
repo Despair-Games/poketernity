@@ -1538,7 +1538,7 @@ export class ProtectedTag extends BattlerTag {
   }
 
   override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
-    if (move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)) {
+    if (move.checkFlag(MoveFlags.IGNORE_PROTECT, attacker, pokemon)) {
       return false;
     }
 
