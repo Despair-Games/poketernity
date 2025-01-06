@@ -27,12 +27,9 @@ export class PresentPowerAttr extends VariablePowerAttr {
       user.turnData.hitCount = 1;
       user.turnData.hitsLeft = 1;
       globalScene.unshiftPhase(
-        new PokemonHealPhase(
-          target.getBattlerIndex(),
-          toDmgValue(target.getMaxHp() / 4),
-          i18next.t("moveTriggers:regainedHealth", { pokemonName: getPokemonNameWithAffix(target) }),
-          true,
-        ),
+        new PokemonHealPhase(target.getBattlerIndex(), toDmgValue(target.getMaxHp() / 4), {
+          message: i18next.t("moveTriggers:regainedHealth", { pokemonName: getPokemonNameWithAffix(target) }),
+        }),
       );
     }
 

@@ -80,15 +80,12 @@ export function getBerryEffectFunc(berryType: BerryType): BerryEffectFunc {
         const hpHealed = new NumberHolder(toDmgValue(pokemon.getMaxHp() / 4));
         applyAbAttrs(DoubleBerryEffectAbAttr, pokemon, null, false, hpHealed);
         globalScene.unshiftPhase(
-          new PokemonHealPhase(
-            pokemon.getBattlerIndex(),
-            hpHealed.value,
-            i18next.t("battle:hpHealBerry", {
+          new PokemonHealPhase(pokemon.getBattlerIndex(), hpHealed.value, {
+            message: i18next.t("battle:hpHealBerry", {
               pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
               berryName: getBerryName(berryType),
             }),
-            true,
-          ),
+          }),
         );
         applyPostItemLostAbAttrs(PostItemLostAbAttr, berryOwner ?? pokemon, false);
       };

@@ -18,7 +18,6 @@ import { initStatsKeys } from "#app/ui/game-stats-ui-handler";
 import { initVouchers } from "#app/system/voucher";
 import { Biome } from "#enums/biome";
 import { initMysteryEncounters } from "#app/data/mystery-encounters/mystery-encounters";
-import { globalScene } from "#app/global-scene";
 import { initAbilities } from "./data/abilities";
 import { initMoves } from "./data/all-moves";
 
@@ -506,7 +505,7 @@ export class LoadingScene extends SceneBase {
 
   async create() {
     this.events.once(Phaser.Scenes.Events.DESTROY, () => this.handleDestroy());
-    globalScene.scene.start("battle");
+    this.scene.start("battle");
   }
 
   handleDestroy() {

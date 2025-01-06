@@ -560,7 +560,7 @@ class WishTag extends ArenaTag {
     const target = globalScene.getFieldPokemonByBattlerIndex(this.battlerIndex);
     if (target?.isActive(true)) {
       globalScene.queueMessage(this.triggerMessage);
-      globalScene.unshiftPhase(new PokemonHealPhase(target.getBattlerIndex(), this.healHp, null, true, false));
+      globalScene.unshiftPhase(new PokemonHealPhase(target.getBattlerIndex(), this.healHp));
     }
   }
 }
@@ -995,12 +995,21 @@ class StickyWebTag extends ArenaTrapTag {
     super.onAdd(arena);
     const source = this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
     if (!quiet && source) {
-      globalScene.queueMessage(
-        i18next.t("arenaTag:stickyWebOnAdd", {
-          moveName: this.getMoveName(),
-          opponentDesc: source.getOpponentDescriptor(),
-        }),
-      );
+      if (this.side === ArenaTagSide.PLAYER) {
+        globalScene.queueMessage(
+          i18next.t("arenaTag:stickyWebOnAddPlayerSide", {
+            moveName: this.getMoveName(),
+            opponentDesc: source.getOpponentDescriptor(),
+          }),
+        );
+      } else {
+        globalScene.queueMessage(
+          i18next.t("arenaTag:stickyWebOnAddEnemySide", {
+            moveName: this.getMoveName(),
+            opponentDesc: source.getOpponentDescriptor(),
+          }),
+        );
+      }
     }
   }
 
@@ -1128,7 +1137,7 @@ class TailwindTag extends ArenaTag {
       // Raise attack by one stage if party member has WIND_RIDER ability
       if (pokemon.hasAbility(Abilities.WIND_RIDER)) {
         globalScene.unshiftPhase(new ShowAbilityPhase(pokemon.getBattlerIndex()));
-        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [Stat.ATK], 1, true));
+        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [Stat.ATK], 1));
       }
     }
   }
