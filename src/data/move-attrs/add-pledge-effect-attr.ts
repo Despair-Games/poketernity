@@ -12,7 +12,11 @@ export class AddPledgeEffectAttr extends AddArenaTagAttr {
   private readonly requiredPledge: Moves;
 
   constructor(tagType: ArenaTagType, requiredPledge: Moves, selfSideTarget: boolean = false) {
-    super(tagType, 4, false, selfSideTarget);
+    super(tagType, {
+      turnCount: 4,
+      failOnOverlap: false,
+      selfSideTarget: selfSideTarget,
+    });
 
     this.requiredPledge = requiredPledge;
   }

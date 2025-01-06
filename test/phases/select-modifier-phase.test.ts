@@ -74,10 +74,14 @@ describe("SelectModifierPhase", () => {
       new ModifierTypeOption(modifierTypes.REVIVE(), 0, 1000),
     ];
 
-    const selectModifierPhase1 = new SelectModifierPhase(0, undefined, { guaranteedModifierTypeOptions: options });
-    const selectModifierPhase2 = new SelectModifierPhase(0, undefined, {
-      guaranteedModifierTypeOptions: options,
-      rerollMultiplier: 2,
+    const selectModifierPhase1 = new SelectModifierPhase({
+      customModifierSettings: { guaranteedModifierTypeOptions: options },
+    });
+    const selectModifierPhase2 = new SelectModifierPhase({
+      customModifierSettings: {
+        guaranteedModifierTypeOptions: options,
+        rerollMultiplier: 2,
+      },
     });
 
     const cost1 = selectModifierPhase1.getRerollCost(false);
@@ -161,7 +165,7 @@ describe("SelectModifierPhase", () => {
         modifierTypes.GOLDEN_PUNCH,
       ],
     };
-    const selectModifierPhase = new SelectModifierPhase(0, undefined, customModifiers);
+    const selectModifierPhase = new SelectModifierPhase({ customModifierSettings: customModifiers });
     scene.unshiftPhase(selectModifierPhase);
     game.move.select(Moves.SPLASH);
     await game.phaseInterceptor.to("SelectModifierPhase");
@@ -198,7 +202,7 @@ describe("SelectModifierPhase", () => {
     }
     scene.getPlayerParty().push(pokemon, pokemon, pokemon, pokemon, pokemon, pokemon);
 
-    const selectModifierPhase = new SelectModifierPhase(0, undefined, customModifiers);
+    const selectModifierPhase = new SelectModifierPhase({ customModifierSettings: customModifiers });
     scene.unshiftPhase(selectModifierPhase);
     game.move.select(Moves.SPLASH);
     await game.phaseInterceptor.to("SelectModifierPhase");
@@ -237,7 +241,7 @@ describe("SelectModifierPhase", () => {
       guaranteedModifierTypeFuncs: [modifierTypes.MEMORY_MUSHROOM, modifierTypes.TM_COMMON],
       guaranteedModifierTiers: [ModifierTier.MASTER, ModifierTier.MASTER],
     };
-    const selectModifierPhase = new SelectModifierPhase(0, undefined, customModifiers);
+    const selectModifierPhase = new SelectModifierPhase({ customModifierSettings: customModifiers });
     scene.unshiftPhase(selectModifierPhase);
     game.move.select(Moves.SPLASH);
     await game.phaseInterceptor.run(SelectModifierPhase);
@@ -261,7 +265,7 @@ describe("SelectModifierPhase", () => {
       guaranteedModifierTiers: [ModifierTier.MASTER],
       fillRemaining: true,
     };
-    const selectModifierPhase = new SelectModifierPhase(0, undefined, customModifiers);
+    const selectModifierPhase = new SelectModifierPhase({ customModifierSettings: customModifiers });
     scene.unshiftPhase(selectModifierPhase);
     game.move.select(Moves.SPLASH);
     await game.phaseInterceptor.run(SelectModifierPhase);

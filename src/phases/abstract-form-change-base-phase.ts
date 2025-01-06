@@ -41,8 +41,10 @@ export abstract class FormChangeBasePhase extends Phase {
     return globalScene.ui.setModeForceTransition(Mode.FORM_CHANGE_SCENE);
   }
 
-  public override start() {
+  public override start(): void {
     super.start();
+    const { add, game, spritePipeline, ui } = globalScene;
+    const { canvas } = game;
 
     this.setMode().then(() => {
       if (!this.validate()) {
@@ -51,39 +53,33 @@ export abstract class FormChangeBasePhase extends Phase {
 
       globalScene.fadeOutBgm(undefined, false);
 
-      this.handler = globalScene.ui.getHandler() as FormChangeSceneHandler;
+      this.handler = ui.getHandler() as FormChangeSceneHandler;
 
       this.container = this.handler.container;
 
-      this.baseBgImg = globalScene.add.image(0, 0, "default_bg");
+      this.baseBgImg = add.image(0, 0, "default_bg");
       this.baseBgImg.setOrigin(0, 0);
       this.container.add(this.baseBgImg);
 
-      this.bgVideo = globalScene.add.video(0, 0, "evo_bg").stop();
+      this.bgVideo = add.video(0, 0, "evo_bg").stop();
       this.bgVideo.setOrigin(0, 0);
       this.bgVideo.setScale(0.4359673025);
       this.bgVideo.setVisible(false);
       this.container.add(this.bgVideo);
 
-      this.bgOverlay = globalScene.add.rectangle(
-        0,
-        0,
-        globalScene.game.canvas.width / 6,
-        globalScene.game.canvas.height / 6,
-        0x262626,
-      );
+      this.bgOverlay = add.rectangle(0, 0, canvas.width / 6, canvas.height / 6, 0x262626);
       this.bgOverlay.setOrigin(0, 0);
       this.bgOverlay.setAlpha(0);
       this.container.add(this.bgOverlay);
 
-      const getPokemonSprite = () => {
+      const getPokemonSprite = (): Phaser.GameObjects.Sprite => {
         const ret = globalScene.addPokemonSprite(
           this.pokemon,
           this.baseBgImg.displayWidth / 2,
           this.baseBgImg.displayHeight / 2,
           "pkmn__sub",
         );
-        ret.setPipeline(globalScene.spritePipeline, { tone: [0.0, 0.0, 0.0, 0.0], ignoreTimeTint: true });
+        ret.setPipeline(spritePipeline, { tone: [0.0, 0.0, 0.0, 0.0], ignoreTimeTint: true });
         return ret;
       };
 
@@ -98,16 +94,10 @@ export abstract class FormChangeBasePhase extends Phase {
       this.pokemonNewFormTintSprite.setVisible(false);
       this.pokemonNewFormTintSprite.setTintFill(0xffffff);
 
-      this.overlay = globalScene.add.rectangle(
-        0,
-        -globalScene.game.canvas.height / 6,
-        globalScene.game.canvas.width / 6,
-        globalScene.game.canvas.height / 6 - 48,
-        0xffffff,
-      );
+      this.overlay = add.rectangle(0, -canvas.height / 6, canvas.width / 6, canvas.height / 6 - 48, 0xffffff);
       this.overlay.setOrigin(0, 0);
       this.overlay.setAlpha(0);
-      globalScene.ui.add(this.overlay);
+      ui.add(this.overlay);
 
       [this.pokemonSprite, this.pokemonTintSprite, this.pokemonNewFormSprite, this.pokemonNewFormTintSprite].map(
         (sprite) => {
@@ -118,7 +108,7 @@ export abstract class FormChangeBasePhase extends Phase {
             console.error(`Failed to play animation for ${spriteKey}`, err);
           }
 
-          sprite.setPipeline(globalScene.spritePipeline, {
+          sprite.setPipeline(spritePipeline, {
             tone: [0.0, 0.0, 0.0, 0.0],
             hasShadow: false,
             teraColor: getTypeRgb(this.pokemon.getTeraType()),
