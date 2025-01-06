@@ -408,6 +408,9 @@ export default class BattleScene extends SceneBase {
       atlasPath = atlasPath.replace("variant/", "");
       basePath = atlasPath.replace(/_[0-3]$/, "");
     }
+    if (basePath.includes("shiny/")) {
+      basePath = basePath.replace("shiny/", "");
+    }
     this.load.atlas(
       key,
       `images/pokemon/${variant ? "variant/" : ""}${atlasPath}.png`,
