@@ -4188,7 +4188,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
      */
     if (effect === StatusEffect.SLEEP || effect === StatusEffect.FREEZE) {
       const currentPhase = globalScene.getCurrentPhase();
-      sleepTurnsRemaining.value = turnsRemaining ?? this.randSeedIntRange(2, 4);
+      sleepTurnsRemaining.value = turnsRemaining > 0 ? turnsRemaining : this.randSeedIntRange(2, 4);
       applyAbAttrs(ReduceSleepDurationAbAttr, this, null, undefined, effect, sleepTurnsRemaining);
       if (currentPhase instanceof MoveEffectPhase && currentPhase.getUserPokemon() === this) {
         this.turnData.hitCount = 1;
