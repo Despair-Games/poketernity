@@ -1,6 +1,6 @@
 import { signatureSpecies } from "#app/data/balance/signatureSpecies";
 import { getRandomPartyMemberFunc, TrainerConfig, type TrainerConfigs } from "#app/data/trainer-config";
-import { TrainerSlot } from "#enums/TrainerSlot";
+import { TrainerSlot } from "#enums/trainer-slot";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
 

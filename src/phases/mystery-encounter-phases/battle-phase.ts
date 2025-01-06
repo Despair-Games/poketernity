@@ -16,7 +16,7 @@ import { randSeedItem } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import i18next from "i18next";
-import { TrainerSlot } from "#enums/TrainerSlot";
+import { TrainerSlot } from "#enums/trainer-slot";
 
 /**
  * Will handle (in order):

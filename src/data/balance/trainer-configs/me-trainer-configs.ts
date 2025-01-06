@@ -6,7 +6,7 @@ import {
   trainerPartyTemplates,
   type TrainerConfigs,
 } from "#app/data/trainer-config";
-import { TrainerSlot } from "#enums/TrainerSlot";
+import { TrainerSlot } from "#enums/trainer-slot";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { PokeballType } from "#enums/pokeball";
 import { Species } from "#enums/species";

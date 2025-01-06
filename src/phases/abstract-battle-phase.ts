@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { TrainerSlot } from "#enums/TrainerSlot";
+import { TrainerSlot } from "#enums/trainer-slot";
 import { Phase } from "#app/phase";
 
 /**

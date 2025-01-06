@@ -10,7 +10,7 @@ import {
   transitionMysteryEncounterIntroVisuals,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { getRandomPartyMemberFunc, TrainerPartyCompoundTemplate, TrainerPartyTemplate } from "#app/data/trainer-config";
-import { TrainerSlot } from "#enums/TrainerSlot";
+import { TrainerSlot } from "#enums/trainer-slot";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { globalScene } from "#app/global-scene";

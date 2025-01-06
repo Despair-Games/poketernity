@@ -7,7 +7,7 @@ import {
   trainerPartyTemplates,
   type TrainerConfigs,
 } from "#app/data/trainer-config";
-import { TrainerSlot } from "#enums/TrainerSlot";
+import { TrainerSlot } from "#enums/trainer-slot";
 import type { PersistentModifier } from "#app/modifier/modifier";
 import { modifierTypes } from "#app/modifier/modifier-type";
 import { PokeballType } from "#enums/pokeball";

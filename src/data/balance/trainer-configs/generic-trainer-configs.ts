@@ -6,8 +6,8 @@ import {
   trainerPartyTemplates,
   type TrainerConfigs,
 } from "#app/data/trainer-config";
-import { TrainerSlot } from "#enums/TrainerSlot";
-import { TrainerPoolTier } from "#enums/TrainerPoolTier";
+import { TrainerSlot } from "#enums/trainer-slot";
+import { TrainerPoolTier } from "#enums/trainer-pool-tier";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";

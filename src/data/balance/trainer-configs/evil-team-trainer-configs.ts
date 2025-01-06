@@ -4,8 +4,8 @@ import {
   TrainerConfig,
   type TrainerConfigs,
 } from "#app/data/trainer-config";
-import { TrainerSlot } from "#enums/TrainerSlot";
-import { TrainerPoolTier } from "#enums/TrainerPoolTier";
+import { TrainerSlot } from "#enums/trainer-slot";
+import { TrainerPoolTier } from "#enums/trainer-pool-tier";
 import { PokemonMove } from "#app/field/pokemon";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
