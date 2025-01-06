@@ -75,7 +75,7 @@ import { GameModes, getGameMode } from "#app/game-mode";
 import FieldSpritePipeline from "#app/pipelines/field-sprite";
 import SpritePipeline from "#app/pipelines/sprite";
 import PartyExpBar from "#app/ui/party-exp-bar";
-import type { TrainerSlot } from "./enums/trainer-slot";
+import type { TrainerSlot } from "#enums/trainer-slot";
 import Trainer, { TrainerVariant } from "#app/field/trainer";
 import type TrainerData from "#app/system/trainer-data";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";

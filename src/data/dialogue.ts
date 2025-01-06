@@ -1677,9 +1677,8 @@ export function initTrainerTypeDialogue(): void {
           allTrainerConfigs[trainerType][`${messageType}Messages`] = messages[0][messageType];
         }
         if (messages.length > 1) {
-          allTrainerConfigs[trainerType][
-            `female${messageType.slice(0, 1).toUpperCase()}${messageType.slice(1)}Messages`
-          ] = messages[1][messageType];
+          const femaleMessageKey = `female${messageType.slice(0, 1).toUpperCase()}${messageType.slice(1)}Messages`;
+          allTrainerConfigs[trainerType][femaleMessageKey] = messages[1][messageType];
         }
       } else {
         allTrainerConfigs[trainerType][`${messageType}Messages`] = messages[messageType];

@@ -2,7 +2,7 @@ import { BattleType } from "#app/battle";
 import { getPokeballAtlasKey, getPokeballTintColor } from "#app/data/pokeball";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";
 import { TrainerSlot } from "#enums/trainer-slot";
-import { PlayerGender } from "#app/enums/player-gender";
+import { PlayerGender } from "#enums/player-gender";
 import { addPokeballOpenParticles } from "#app/field/anims";
 import { FieldPosition, type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";

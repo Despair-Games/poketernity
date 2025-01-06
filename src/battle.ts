@@ -29,7 +29,7 @@ import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import type { CustomModifierSettings } from "#app/modifier/modifier-type";
 import { ModifierTier } from "#app/modifier/modifier-tier";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { allTrainerConfigs } from "./data/balance/trainer-configs/all-trainer-configs";
+import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 
 export enum ClassicFixedBossWaves {
   // TODO: other fixed wave battles should be added here
