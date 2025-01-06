@@ -4181,12 +4181,15 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return false;
     }
 
+    const sleepTurnsRemaining = new NumberHolder(0);
     /**
      * If this Pokemon falls asleep or freezes in the middle of a multi-hit attack,
      * cancel the attack's subsequent hits.
      */
     if (effect === StatusEffect.SLEEP || effect === StatusEffect.FREEZE) {
       const currentPhase = globalScene.getCurrentPhase();
+      sleepTurnsRemaining.value = turnsRemaining ?? this.randSeedIntRange(2, 4);
+      applyAbAttrs(ReduceSleepDurationAbAttr, this, null, undefined, effect, sleepTurnsRemaining);
       if (currentPhase instanceof MoveEffectPhase && currentPhase.getUserPokemon() === this) {
         this.turnData.hitCount = 1;
         this.turnData.hitsLeft = 1;
@@ -4195,17 +4198,18 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     if (asPhase) {
       globalScene.unshiftPhase(
-        new ObtainStatusEffectPhase(this.getBattlerIndex(), effect, turnsRemaining, sourceText, sourcePokemon),
+        new ObtainStatusEffectPhase(
+          this.getBattlerIndex(),
+          effect,
+          effect === StatusEffect.SLEEP ? sleepTurnsRemaining.value : turnsRemaining,
+          sourceText,
+          sourcePokemon,
+        ),
       );
       return true;
     }
 
-    let sleepTurnsRemaining: NumberHolder;
-
     if (effect === StatusEffect.SLEEP) {
-      sleepTurnsRemaining = new NumberHolder(turnsRemaining ?? this.randSeedIntRange(2, 4));
-      applyAbAttrs(ReduceSleepDurationAbAttr, this, null, undefined, effect, sleepTurnsRemaining);
-
       this.setFrameRate(4);
 
       // If the user is invulnerable, lets remove their invulnerability when they fall asleep
@@ -4224,7 +4228,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       }
     }
 
-    sleepTurnsRemaining = sleepTurnsRemaining!; // tell TS compiler it's defined
     effect = effect!; // If `effect` is undefined then `trySetStatus()` will have already returned early via the `canSetStatus()` call
     this.status = new Status(effect, 0, sleepTurnsRemaining?.value);
 
