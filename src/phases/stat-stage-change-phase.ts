@@ -121,7 +121,7 @@ export class StatStageChangePhase extends PokemonPhase {
             }),
           );
         } else {
-          messages.concat(this.getStatStageChangeMessages(filteredStats, stages.value, relLevels));
+          messages.push(...this.getStatStageChangeMessages(filteredStats, stages.value, relLevels));
         }
         for (const message of messages) {
           globalScene.queueMessage(message);
