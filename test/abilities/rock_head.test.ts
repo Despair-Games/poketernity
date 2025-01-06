@@ -30,7 +30,7 @@ describe("Abilities - Rock Head", () => {
       .enemyMoveset(Moves.SPLASH);
   });
 
-  it("should do not take recoil damage", async () => {
+  it("should prevent recoil damage when using a recoil move", async () => {
     game.override.moveset(Moves.TAKE_DOWN);
     await game.classicMode.startBattle([Species.FEEBAS]);
     const pokemon = game.scene.getPlayerPokemon();
@@ -42,7 +42,7 @@ describe("Abilities - Rock Head", () => {
     expect(pokemon?.isFullHp()).toBe(true);
   });
 
-  it("should take recoil damage when using Struggle", async () => {
+  it("should not prevent recoil damage from Struggle", async () => {
     game.override.moveset(Moves.STRUGGLE);
     await game.classicMode.startBattle([Species.FEEBAS]);
     const pokemon = game.scene.getPlayerPokemon();
@@ -84,23 +84,11 @@ describe("Abilities - Rock Head", () => {
   });
 
   it("should not prevent the user from fainting due to using a move", async () => {
-    game.override.moveset(Moves.HEALING_WISH);
+    game.override.moveset(Moves.MEMENTO);
     await game.classicMode.startBattle([Species.FEEBAS, Species.ABRA]);
     const pokemon = game.scene.getPlayerPokemon();
 
-    game.move.select(Moves.HEALING_WISH);
-    await game.move.forceMiss();
-    await game.phaseInterceptor.to("BerryPhase");
-
-    expect(pokemon?.isFullHp()).toBe(false);
-  });
-
-  it("should not prevent the user from fainting", async () => {
-    game.override.moveset(Moves.HEALING_WISH);
-    await game.classicMode.startBattle([Species.FEEBAS, Species.ABRA]);
-    const pokemon = game.scene.getPlayerPokemon();
-
-    game.move.select(Moves.HEALING_WISH);
+    game.move.select(Moves.MEMENTO);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(pokemon?.isFullHp()).toBe(false);
