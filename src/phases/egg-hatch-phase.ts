@@ -452,7 +452,7 @@ export class EggHatchPhase extends Phase {
       yOffset += speedMultiplier;
       if (trigIndex < 160) {
         particle.setPosition(initialX + (speed * f) / 3, initialY + yOffset);
-        particle.y += -sin(trigIndex, amp);
+        particle.y += -this.anims.sin(trigIndex, amp);
         if (f > 108) {
           particle.setScale(1 - (f - 108) / 20);
         }

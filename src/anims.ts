@@ -240,7 +240,7 @@ export class Animation {
    * @param sparkleSprite the Sprite to play the animation on
    * @param variant which shiny {@linkcode variant} to play the animation for
    */
-  public doShinySparkleAnim(sparkleSprite: Phaser.GameObjects.Sprite, variant: Variant) {
+  public doShinySparkleAnim(sparkleSprite: Phaser.GameObjects.Sprite, variant: Variant): void {
     const keySuffix = variant ? `_${variant + 1}` : "";
     const spriteKey = `shiny${keySuffix}`;
     const animationKey = `sparkle${keySuffix}`;
@@ -262,7 +262,15 @@ export class Animation {
     globalScene.playSound("se/sparkle");
   }
 
-  private doDefaultPbOpenParticles(x: number, y: number, radius: number) {
+  public cos(index: number, amplitude: number): number {
+    return amplitude * Math.cos(index * (Math.PI / 128));
+  }
+
+  public sin(index: number, amplitude: number): number {
+    return amplitude * Math.sin(index * (Math.PI / 128));
+  }
+
+  private doDefaultPbOpenParticles(x: number, y: number, radius: number): void {
     const pbOpenParticlesFrameNames = globalScene.anims.generateFrameNames("pb_particles", {
       start: 0,
       end: 3,
@@ -311,7 +319,7 @@ export class Animation {
     });
   }
 
-  private doMbOpenParticles(x: number, y: number) {
+  private doMbOpenParticles(x: number, y: number): void {
     const particles: Phaser.GameObjects.Image[] = [];
     for (let j = 0; j < 2; j++) {
       for (let i = 0; i < 8; i++) {
@@ -333,7 +341,7 @@ export class Animation {
     }
   }
 
-  private doUbOpenParticles(x: number, y: number, frameIndex: number) {
+  private doUbOpenParticles(x: number, y: number, frameIndex: number): void {
     const particles: Phaser.GameObjects.Image[] = [];
     for (let i = 0; i < 10; i++) {
       particles.push(this.doFanOutParticle(i * 25, x, y, 1, 1, 5, frameIndex));
@@ -575,13 +583,5 @@ export class Animation {
     };
 
     updateParticle();
-  }
-
-  private cos(index: number, amplitude: number): number {
-    return amplitude * Math.cos(index * (Math.PI / 128));
-  }
-
-  private sin(index: number, amplitude: number): number {
-    return amplitude * Math.sin(index * (Math.PI / 128));
   }
 }
