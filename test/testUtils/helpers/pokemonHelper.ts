@@ -8,10 +8,9 @@ import { type globalScene } from "#app/global-scene";
 /** Helper to manage pokemon */
 export class PokemonHelper extends GameManagerHelper {
   /**
-   * Passthrough for {@linkcode globalScene.getPlayerPokemon} that ignores the `undefined` return value.
-   *
-   * Note: `undefined` can still be returned if there is no valid pokemon, but the compiler will
-   * no longer warn of that possibility or require `null` checks in order to simplify test writing.
+   * Passthrough for {@linkcode globalScene.getPlayerPokemon} that adds an `undefined` check for
+   * the Pokemon so that the return type for the function doesn't have `undefined`.
+   * This removes the need to add a `!` like when calling `game.scene.getPlayerPokemon()!`.
    * @param includeSwitching Whether a pokemon that is currently switching out is valid, default `true`
    * @returns The first {@linkcode PlayerPokemon} that is {@linkcode globalScene.getPlayerField on the field}
    * and {@linkcode PlayerPokemon.isActive is active}
@@ -24,10 +23,9 @@ export class PokemonHelper extends GameManagerHelper {
   }
 
   /**
-   * Passthrough for {@linkcode globalScene.getPlayerPokemon} that ignores the `undefined` return value.
-   *
-   * Note: `undefined` can still be returned if there is no valid pokemon, but the compiler will
-   * no longer warn of that possibility or require `null` checks in order to simplify test writing.
+   * Passthrough for {@linkcode globalScene.getEnemyPokemon} that adds an `undefined` check for
+   * the Pokemon so that the return type for the function doesn't have `undefined`.
+   * This removes the need to add a `!` like when calling `game.scene.getEnemyPokemon()!`.
    * @param includeSwitching Whether a pokemon that is currently switching out is valid, default `true`
    * @returns The first {@linkcode EnemyPokemon} that is {@linkcode globalScene.getEnemyField on the field}
    * and {@linkcode EnemyPokemon.isActive is active}
