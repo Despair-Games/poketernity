@@ -4188,6 +4188,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
      */
     if (effect === StatusEffect.SLEEP || effect === StatusEffect.FREEZE) {
       const currentPhase = globalScene.getCurrentPhase();
+      // Apply Early Bird's ability attribute if applicable
       sleepTurnsRemaining.value = turnsRemaining > 0 ? turnsRemaining : this.randSeedIntRange(2, 4);
       applyAbAttrs(ReduceSleepDurationAbAttr, this, null, undefined, effect, sleepTurnsRemaining);
       if (currentPhase instanceof MoveEffectPhase && currentPhase.getUserPokemon() === this) {
