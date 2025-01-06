@@ -112,7 +112,17 @@ export class StatStageChangePhase extends PokemonPhase {
 
     const end = (): void => {
       if (this.showMessage) {
-        const messages = this.getStatStageChangeMessages(filteredStats, stages.value, relLevels);
+        const messages: string[] = [];
+        if (this.stages === 12 && filteredStats.length === 1) {
+          messages.push(
+            i18next.t("battle:statMaximized", {
+              pokemonNameWithAffix: getPokemonNameWithAffix(this.getPokemon()),
+              stats: i18next.t(getStatKey(this.stats[0])),
+            }),
+          );
+        } else {
+          messages.push(...this.getStatStageChangeMessages(filteredStats, stages.value, relLevels));
+        }
         for (const message of messages) {
           globalScene.queueMessage(message);
         }
