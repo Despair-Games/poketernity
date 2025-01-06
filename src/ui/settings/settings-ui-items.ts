@@ -19,7 +19,7 @@ import { MusicPreference } from "#app/enums/music-preference";
 import { ShopCursorTarget } from "#app/enums/shop-cursor-target";
 import { UiTheme } from "#app/enums/ui-theme";
 import i18next, { t } from "i18next";
-import { supportedLanguages } from "../../system/settings/supported-languages";
+import { supportedLanguages } from "#app/system/settings/supported-languages";
 import { isLandscapeMode } from "#app/utils";
 import { PlayerGender } from "#app/enums/player-gender";
 
@@ -133,15 +133,15 @@ export const generalSettingsUiItems: SettingsUiItem<GeneralSettingsKey>[] = [
   },
   {
     key: "moveTouchControls",
-    label: i18next.t("settings:moveTouchControls"),
+    label: t("settings:moveTouchControls"),
     options: [
       {
         value: 0,
-        label: isLandscapeMode() ? i18next.t("settings:landscape") : i18next.t("settings:portrait"),
+        label: isLandscapeMode() ? t("settings:landscape") : t("settings:portrait"),
       },
       {
         value: 1,
-        label: i18next.t("settings:configure"),
+        label: t("settings:configure"),
       },
     ],
     touchscreenOnly: true,
@@ -296,7 +296,7 @@ export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey>[] = [
     key: "shopOverlayOpacity",
     label: t("settings:shopOverlayOpacity"),
     options: Array.from({ length: 9 }).map((_, i) => ({
-      value: Number((i * 0.1).toFixed(1)),
+      value: Number(((i + 1) * 0.1).toFixed(1)),
       label: `${(i + 1) * 10}`,
     })),
   },

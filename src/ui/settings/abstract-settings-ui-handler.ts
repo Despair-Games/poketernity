@@ -342,7 +342,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
             const successA = this.setCursor(this.rowsToDisplay - 1);
             // Then, adjust the scroll to display the bottommost elements of the menu.
             const successB = this.setScrollCursor(this.optionValueLabels.length - this.rowsToDisplay);
-            success = successA && successB; // success is just there to play the little validation sound effect
+            success = successA || successB; // success is just there to play the little validation sound effect
           }
           break;
         case Button.DOWN:
@@ -359,7 +359,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
             const successA = this.setCursor(0);
             // Then, reset the scroll to start from the first element of the menu.
             const successB = this.setScrollCursor(0);
-            success = successA && successB; // Indicates a successful cursor and scroll adjustment.
+            success = successA || successB; // Indicates a successful cursor and scroll adjustment.
           }
           break;
         case Button.LEFT:

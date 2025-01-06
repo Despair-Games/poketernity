@@ -17,7 +17,6 @@ export class SelectGenderPhase extends Phase {
           {
             label: i18next.t("settings:boy"),
             handler: () => {
-              gameData.gender = PlayerGender.MALE;
               settings.update("display", "playerGender", PlayerGender.MALE);
               gameData.saveSystem().then(() => this.end());
               return true;
@@ -26,7 +25,6 @@ export class SelectGenderPhase extends Phase {
           {
             label: i18next.t("settings:girl"),
             handler: () => {
-              gameData.gender = PlayerGender.FEMALE;
               settings.update("display", "playerGender", PlayerGender.FEMALE);
               gameData.saveSystem().then(() => this.end());
               return true;

@@ -9,16 +9,24 @@ import type { ExpNotification } from "#enums/exp-notification";
 import type { HpBarSpeed } from "#enums/hp-bar-speed";
 import type { MoneyFormat } from "#enums/money-format";
 import type { MusicPreference } from "#enums/music-preference";
+import type { PlayerGender } from "#enums/player-gender";
 import type { ShopCursorTarget } from "#enums/shop-cursor-target";
-import type { Gender } from "#enums/gender";
 import type { UiTheme } from "#enums/ui-theme";
 import type { UiWindowType } from "#enums/ui-window-type";
 
-export interface Settings {
+export interface Settings extends UserFacingSettings {
+  meta: MetaSettings;
+}
+
+export interface UserFacingSettings {
   general: GeneralSettings;
   audio: AudioSettings;
   display: DisplaySettings;
   gamepad: GamepadSettings;
+}
+
+export interface MetaSettings {
+  gameVersion: string;
 }
 
 export interface GeneralSettings {
@@ -51,7 +59,7 @@ export interface DisplaySettings {
   showTimeOfDayWidget: boolean;
   timeOfDayAnimation: EaseType;
   enableFusionPaletteSwaps: boolean;
-  playerGender: Gender;
+  playerGender: PlayerGender;
   enableTypeHints: boolean;
   showBgmBar: boolean;
   shopCursorTarget: ShopCursorTarget;
@@ -90,7 +98,7 @@ export interface SettingsUiItem<K = string> {
   touchscreenOnly?: boolean;
 }
 
-export type SettingsCategory = keyof Settings;
+export type SettingsCategory = keyof UserFacingSettings;
 
 /** All keys for all settings categories */
 export type AnySettingKey = GeneralSettingsKey | DisplaySettingsKey | AudioSettingsKey | GamepadSettingsKey;

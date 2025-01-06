@@ -113,22 +113,4 @@ export default class SettingsGamepadUiHandler extends AbstractControlSettingsUiH
       }
     }
   }
-
-  /**
-   * Save the setting to local storage.
-   *
-   * @param settingName - The setting to save.
-   * @param cursor - The cursor position to save.
-   */
-  saveSettingToLocalStorage(settingName, cursor): void {
-    if (this.setting[settingName] !== this.setting.Controller) {
-      globalScene.gameData.saveControlSetting(
-        this.device,
-        this.localStoragePropertyName,
-        settingName,
-        this.settingDeviceDefaults,
-        cursor,
-      );
-    }
-  }
 }

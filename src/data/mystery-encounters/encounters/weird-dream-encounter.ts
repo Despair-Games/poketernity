@@ -44,6 +44,7 @@ import type HeldModifierConfig from "#app/interfaces/held-modifier-config";
 import { trainerConfigs, TrainerPartyTemplate } from "#app/data/trainer-config";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
+import { settings } from "#app/system/settings/settings-manager";
 
 /** i18n namespace for encounter */
 const namespace = "mysteryEncounters/weirdDream";
@@ -243,7 +244,7 @@ export const WeirdDreamEncounter: MysteryEncounter = MysteryEncounterBuilder.wit
         enemyPokemonConfigs.push(enemyConfig);
       }
 
-      const genderIndex = globalScene.gameData.gender ?? PlayerGender.UNSET;
+      const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
       const trainerConfig =
         trainerConfigs[
           genderIndex === PlayerGender.FEMALE ? TrainerType.FUTURE_SELF_F : TrainerType.FUTURE_SELF_M

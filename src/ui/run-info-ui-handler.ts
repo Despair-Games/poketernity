@@ -223,7 +223,7 @@ export default class RunInfoUiHandler extends UiHandler {
    *
    */
   private async parseRunResult() {
-    const genderIndex = globalScene.gameData.gender ?? PlayerGender.UNSET;
+    const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
     const genderStr = PlayerGender[genderIndex];
     const runResultTextStyle = this.isVictory ? TextStyle.PERFECT_IV : TextStyle.SUMMARY_RED;
     const runResultTitle = this.isVictory
@@ -984,7 +984,7 @@ export default class RunInfoUiHandler extends UiHandler {
    */
   private createVictorySplash(): void {
     this.endCardContainer = globalScene.add.container(0, 0);
-    const genderIndex = globalScene.gameData.gender ?? PlayerGender.UNSET;
+    const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
     const isFemale = genderIndex === PlayerGender.FEMALE;
     const endCard = globalScene.add.image(0, 0, `end_${isFemale ? "f" : "m"}`);
     endCard.setOrigin(0);
@@ -1006,7 +1006,7 @@ export default class RunInfoUiHandler extends UiHandler {
    * This could be adapted into a public-facing method for victory screens. Perhaps.
    */
   private createHallofFame(): void {
-    const genderIndex = globalScene.gameData.gender ?? PlayerGender.UNSET;
+    const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
     const isFemale = genderIndex === PlayerGender.FEMALE;
     const genderStr = PlayerGender[genderIndex].toLowerCase();
     // Issue Note (08-05-2024): It seems as if fused pokemon do not appear with the averaged color b/c pokemonData's loadAsset requires there to be some active battle?

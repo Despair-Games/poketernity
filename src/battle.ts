@@ -589,7 +589,7 @@ export const classicFixedBattles: FixedBattleConfigs = {
       () =>
         new Trainer(
           TrainerType.RIVAL,
-          globalScene.gameData.gender === PlayerGender.MALE ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
+          settings.display.playerGender === PlayerGender.MALE ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
         ),
     ),
   [25]: new FixedBattleConfig()
@@ -598,7 +598,7 @@ export const classicFixedBattles: FixedBattleConfigs = {
       () =>
         new Trainer(
           TrainerType.RIVAL_2,
-          globalScene.gameData.gender === PlayerGender.MALE ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
+          settings.display.playerGender === PlayerGender.MALE ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
         ),
     )
     .setCustomModifierRewards({
@@ -630,7 +630,7 @@ export const classicFixedBattles: FixedBattleConfigs = {
       () =>
         new Trainer(
           TrainerType.RIVAL_3,
-          globalScene.gameData.gender === PlayerGender.MALE ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
+          settings.display.playerGender === PlayerGender.MALE ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
         ),
     )
     .setCustomModifierRewards({
@@ -703,7 +703,7 @@ export const classicFixedBattles: FixedBattleConfigs = {
       () =>
         new Trainer(
           TrainerType.RIVAL_4,
-          globalScene.gameData.gender === PlayerGender.MALE ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
+          settings.display.playerGender === PlayerGender.MALE ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
         ),
     )
     .setCustomModifierRewards({
@@ -784,7 +784,7 @@ export const classicFixedBattles: FixedBattleConfigs = {
       () =>
         new Trainer(
           TrainerType.RIVAL_5,
-          globalScene.gameData.gender === PlayerGender.MALE ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
+          settings.display.playerGender === PlayerGender.MALE ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
         ),
     )
     .setCustomModifierRewards({
@@ -915,7 +915,7 @@ export const classicFixedBattles: FixedBattleConfigs = {
       () =>
         new Trainer(
           TrainerType.RIVAL_6,
-          globalScene.gameData.gender === PlayerGender.MALE ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
+          settings.display.playerGender === PlayerGender.MALE ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
         ),
     )
     .setCustomModifierRewards({

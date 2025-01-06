@@ -335,8 +335,25 @@ export default class BattleScene extends SceneBase {
         }
       }
 
+      // If window type gets changed, update window colors
       if (key === "uiWindowType" && typeof value === "number") {
         updateWindowType(value);
+      }
+
+      // If gender gets changed, update trainer sprite
+      if (key === "playerGender" && typeof value === "number") {
+        const female = value === PlayerGender.FEMALE;
+        this.trainer.setTexture(this.trainer.texture.key.replace(female ? "m" : "f", female ? "f" : "m"));
+      }
+
+      // Money format changed, update it
+      if (key === "moneyFormat" && typeof value === "number") {
+        this.updateMoneyText(false);
+      }
+
+      // Shop overlay opacity changed, update it
+      if (key === "shopOverlayOpacity" && typeof value === "number") {
+        this.updateShopOverlayOpacity(value);
       }
     });
   }
@@ -622,7 +639,7 @@ export default class BattleScene extends SceneBase {
     const trainer = this.addFieldSprite(
       0,
       0,
-      `trainer_${this.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back`,
+      `trainer_${settings.display.playerGender === PlayerGender.FEMALE ? "f" : "m"}_back`,
     );
     trainer.setOrigin(0.5, 1);
     trainer.setName("sprite-trainer");
@@ -1196,7 +1213,7 @@ export default class BattleScene extends SceneBase {
 
     this.arena.init();
 
-    this.trainer.setTexture(`trainer_${this.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back`);
+    this.trainer.setTexture(`trainer_${settings.display.playerGender === PlayerGender.FEMALE ? "f" : "m"}_back`);
     this.trainer.setPosition(406, 186);
     this.trainer.setVisible(true);
 
@@ -1809,8 +1826,6 @@ export default class BattleScene extends SceneBase {
   }
 
   updateShopOverlayOpacity(value: number): void {
-    settings.update("display", "shopOverlayOpacity", value);
-
     if (this.shopOverlayShown) {
       this.shopOverlay.setAlpha(value);
     }

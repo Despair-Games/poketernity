@@ -1,6 +1,7 @@
-import type { Settings, SettingsCategory } from "#app/@types/Settings";
+import type { UserFacingSettings, SettingsCategory, Settings } from "#app/@types/Settings";
 import { SETTINGS_LS_KEY } from "#app/constants";
 import { eventBus } from "#app/event-bus";
+import { version } from "../../../package.json";
 import { isNullOrUndefined } from "#app/utils";
 import { defaultSettings } from "./default-settings";
 
@@ -8,7 +9,7 @@ import { defaultSettings } from "./default-settings";
 
 interface SettingsManagerInit {
   localStorageKey: string;
-  settings: Settings;
+  settings: UserFacingSettings;
 }
 
 //#endregion
@@ -17,7 +18,7 @@ interface SettingsManagerInit {
  * Manages game settings
  */
 class SettingsManager {
-  /** Local storage key for peristing settings. */
+  /** Local storage key for persisting settings. */
   public readonly lsKey: string;
 
   /** Internal buffer for current settings. */
@@ -27,13 +28,14 @@ class SettingsManager {
     const { localStorageKey, settings } = init;
 
     this.lsKey = localStorageKey;
-    this._settings = settings;
+    this._settings = {
+      meta: {
+        gameVersion: version,
+      },
+      ...settings,
+    };
 
-    try {
-      this.loadFromLocalStorage();
-    } catch (err) {
-      console.error("Settings manager init failed:", err);
-    }
+    this.loadFromLocalStorage();
   }
 
   /**
@@ -41,6 +43,13 @@ class SettingsManager {
    */
   get settings() {
     return this._settings;
+  }
+
+  /**
+   * Quick access to meta settings
+   */
+  get meta() {
+    return this._settings.meta;
   }
 
   /**
@@ -105,7 +114,7 @@ class SettingsManager {
    * @param key the key of the setting
    * @param value the updated value
    */
-  update<C extends SettingsCategory>(category: C, key: keyof Settings[C], value: any) {
+  update<C extends SettingsCategory>(category: C, key: keyof UserFacingSettings[C], value: any) {
     if (!this._settings[category]) {
       eventBus.emit("settings/update/failed", { category, key, value });
       throw new Error(`Unknown category: ${category}`);
@@ -118,6 +127,7 @@ class SettingsManager {
 
     this._settings[category][key] = value;
     eventBus.emit("settings/updated", { category, key, value });
+
     this.saveToLocalStorage();
   }
 
@@ -128,7 +138,7 @@ class SettingsManager {
    * @param key the key of the setting
    * @param value the updated value
    */
-  updateAndReload<C extends SettingsCategory>(category: C, key: keyof Settings[C], value: any) {
+  updateAndReload<C extends SettingsCategory>(category: C, key: keyof UserFacingSettings[C], value: any) {
     this.update(category, key, value);
     window.location.reload();
   }
@@ -149,7 +159,11 @@ class SettingsManager {
 
     if (lsItem) {
       try {
-        const lsSettings: Partial<Settings> = JSON.parse(lsItem);
+        const lsSettings: Partial<UserFacingSettings> = JSON.parse(lsItem);
+
+        // TODO figure out what to do with settings migration
+        // applySettingsVersionMigration(lsSettings);
+
         const { general, audio, display, gamepad } = lsSettings;
 
         if (general) {

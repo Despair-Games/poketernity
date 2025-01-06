@@ -16,9 +16,10 @@ import type { SettingKeyboard } from "#app/system/settings/settings-keyboard";
 import TouchControl from "#app/touch-controls";
 import { Button } from "#enums/buttons";
 import { Device } from "#enums/devices";
-import MoveTouchControlsHandler from "./ui/settings/move-touch-controls-handler";
-import type { SettingsUpdateEventArgs } from "./@types/Settings";
-import { eventBus } from "./event-bus";
+import MoveTouchControlsHandler from "#app/ui/settings/move-touch-controls-handler";
+import type { SettingsUpdateEventArgs } from "#app/@types/Settings";
+import { eventBus } from "#app/event-bus";
+import { settings } from "#app/system/settings/settings-manager";
 
 export interface DeviceMapping {
   [key: string]: number;
@@ -75,6 +76,8 @@ export class InputsController {
   public events: Phaser.Events.EventEmitter;
 
   private buttonLock: Button[] = new Array();
+
+  // TODO interactions and configs are defined as maps but used as objects
   private interactions: Map<Button, Map<string, boolean>> = new Map();
   private configs: Map<string, InterfaceConfig> = new Map();
 
@@ -168,13 +171,18 @@ export class InputsController {
       globalScene.input.keyboard?.on("keydown", this.keyboardKeyDown, this);
       globalScene.input.keyboard?.on("keyup", this.keyboardKeyUp, this);
     }
+
     this.touchControls = new TouchControl();
     this.moveTouchControlsHandler = new MoveTouchControlsHandler(this.touchControls);
-
     this.touchControls.render();
-    eventBus.on("settings/updated", ({ category, key }: SettingsUpdateEventArgs) => {
+
+    this.setGamepadSupport(settings.gamepad.enabled);
+
+    eventBus.on("settings/updated", ({ category, key, value }: SettingsUpdateEventArgs) => {
       if (category === "display" && ["uiWindowType", "uiTheme"].includes(key)) {
         this.touchControls.render();
+      } else if (category === "gamepad" && key === "enabled" && typeof value === "boolean") {
+        this.setGamepadSupport(value);
       }
     });
   }
@@ -584,12 +592,24 @@ export class InputsController {
     this.configs[selectedDevice].custom = mappingConfigs.custom;
   }
 
-  resetConfigs(): void {
-    this.configs = new Map();
-    if (this.getGamepadsName()?.length) {
-      this.setupGamepad(this.selectedDevice[Device.GAMEPAD]);
+  /**
+   * Reset the mapping config for the selected device.
+   * If it's a Gamepad, only reset the config for the one currently in use
+   * @param device the {@linkcode Device} to reset config for
+   */
+  resetConfig(device: Device): void {
+    const deviceName = this.selectedDevice[device];
+    if (this.configs[deviceName]) {
+      delete this.configs[deviceName];
+      switch (device) {
+        case Device.KEYBOARD:
+          this.setupKeyboard();
+          break;
+        case Device.GAMEPAD:
+          this.setupGamepad(deviceName);
+          break;
+      }
     }
-    this.setupKeyboard();
   }
 
   /**
