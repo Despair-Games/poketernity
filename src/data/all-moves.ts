@@ -2956,7 +2956,9 @@ export function initMoves() {
       .attr(CutHpStatStageBoostAttr, [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD], 1, 3)
       .soundBased()
       .danceMove(),
-    new AttackMove(Moves.BODY_PRESS, Type.FIGHTING, MoveCategory.PHYSICAL, 80, 100, 10, -1, 0, 8).attr(DefAtkAttr),
+    new AttackMove(Moves.BODY_PRESS, Type.FIGHTING, MoveCategory.PHYSICAL, 80, 100, 10, -1, 0, 8)
+      .attr(DefAtkAttr)
+      .edgeCase(), // Does not consider Huge Power and other attack modifiers correctly
     new StatusMove(Moves.DECORATE, Type.FAIRY, -1, 15, -1, 0, 8)
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.SPATK], 2)
       .ignoresProtect(),
