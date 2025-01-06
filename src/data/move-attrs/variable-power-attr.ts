@@ -1,10 +1,22 @@
 import type { Pokemon } from "#app/field/pokemon";
 import type { Move } from "#app/data/move";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";
+import type { NumberHolder } from "#app/utils";
 
+/**
+ * Attribute to modify a move's power based on game state.
+ * @extends MoveAttr
+ */
 export class VariablePowerAttr extends MoveAttr {
-  override apply(_user: Pokemon, _target: Pokemon, _move: Move, _args: any[]): boolean {
-    //const power = args[0] as Utils.NumberHolder;
+  /**
+   * Modifies the given move's power based on game state
+   * @param _user the {@linkcode Pokemon} using the move
+   * @param _target the {@linkcode Pokemon} targeted by the move
+   * @param _move the {@linkcode Move} being used
+   * @param _power a {@linkcode NumberHolder} containing the move's power for the turn
+   * @returns `true` if the move's power was modified by this attribute
+   */
+  override apply(_user: Pokemon, _target: Pokemon, _move: Move, _power: NumberHolder): boolean {
     return false;
   }
 }

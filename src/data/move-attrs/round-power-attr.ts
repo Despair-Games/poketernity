@@ -1,5 +1,5 @@
 import type { Pokemon } from "#app/field/pokemon";
-import { NumberHolder } from "#app/utils";
+import type { NumberHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
 import { VariablePowerAttr } from "#app/data/move-attrs/variable-power-attr";
 
@@ -9,12 +9,7 @@ import { VariablePowerAttr } from "#app/data/move-attrs/variable-power-attr";
  * @extends VariablePowerAttr
  */
 export class RoundPowerAttr extends VariablePowerAttr {
-  override apply(user: Pokemon, _target: Pokemon, _move: Move, args: any[]): boolean {
-    const power = args[0];
-    if (!(power instanceof NumberHolder)) {
-      return false;
-    }
-
+  override apply(user: Pokemon, _target: Pokemon, _move: Move, power: NumberHolder): boolean {
     if (user.turnData?.joinedRound) {
       power.value *= 2;
       return true;

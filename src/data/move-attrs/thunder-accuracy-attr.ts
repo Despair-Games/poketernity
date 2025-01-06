@@ -10,9 +10,8 @@ import { VariableAccuracyAttr } from "#app/data/move-attrs/variable-accuracy-att
  * @extends VariableAccuracyAttr
  */
 export class ThunderAccuracyAttr extends VariableAccuracyAttr {
-  override apply(_user: Pokemon, _target: Pokemon, _move: Move, args: any[]): boolean {
+  override apply(_user: Pokemon, _target: Pokemon, _move: Move, accuracy: NumberHolder): boolean {
     if (!globalScene.arena.weather?.isEffectSuppressed()) {
-      const accuracy = args[0] as NumberHolder;
       const weatherType = globalScene.arena.weather?.weatherType || WeatherType.NONE;
       switch (weatherType) {
         case WeatherType.SUNNY:

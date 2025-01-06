@@ -17,7 +17,7 @@ export class CueNextRoundAttr extends MoveEffectAttr {
     super(true, { lastHitOnly: true });
   }
 
-  override apply(_user: Pokemon, _target: Pokemon, _move: Move, _args?: any[]): boolean {
+  override apply(_user: Pokemon, _target: Pokemon, _move: Move): boolean {
     const nextRoundPhase = globalScene.findPhase<MovePhase>(
       (phase) => phase instanceof MovePhase && phase.move.moveId === Moves.ROUND,
     );
