@@ -11,7 +11,6 @@ import {
   getPokeballTintColor,
 } from "#app/data/pokeball";
 import { PlayerGender } from "#enums/player-gender";
-import { addPokeballCaptureStars, addPokeballOpenParticles } from "#app/field/anims";
 import { getStatusEffectCatchRateMultiplier } from "#app/data/status-effect";
 import { achvs } from "#app/system/achv";
 import { Mode } from "#app/ui/ui";
@@ -38,6 +37,7 @@ import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import type { Abilities } from "#enums/abilities";
 import type { PokeballType } from "#enums/pokeball";
 import { StatusEffect } from "#enums/status-effect";
+import { Animation } from "#app/anims";
 
 /** Will give +1 level every 10 waves */
 export const STANDARD_ENCOUNTER_BOOSTED_LEVEL_MODIFIER = 1;
@@ -439,6 +439,7 @@ export function trainerThrowPokeball(
   pokeballType: PokeballType,
   ballTwitchRate?: number,
 ): Promise<boolean> {
+  const anims = new Animation();
   const originalY: number = pokemon.y;
 
   if (!ballTwitchRate) {
@@ -491,7 +492,7 @@ export function trainerThrowPokeball(
           globalScene.playSound("se/pb_rel");
           pokemon.tint(getPokeballTintColor(pokeballType));
 
-          addPokeballOpenParticles(pokeball.x, pokeball.y, pokeballType);
+          anims.addPokeballOpenParticles(pokeball.x, pokeball.y, pokeballType);
 
           globalScene.tweens.add({
             targets: pokemon,
@@ -537,7 +538,7 @@ export function trainerThrowPokeball(
                       }
                     } else {
                       globalScene.playSound("se/pb_lock");
-                      addPokeballCaptureStars(pokeball);
+                      anims.addPokeballCaptureStars(pokeball);
 
                       const pbTint = globalScene.add.sprite(pokeball.x, pokeball.y, "pb", "pb");
                       pbTint.setOrigin(pokeball.originX, pokeball.originY);

@@ -94,7 +94,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
                   this.bgVideo.play();
                 });
                 globalScene.playSound("se/charge");
-                this.doSpiralUpward();
+                this.anims.doSpiralUpward(this.baseBgImg, this.container);
                 globalScene.tweens.addCounter({
                   from: 0,
                   to: 1,
@@ -106,18 +106,20 @@ export class EvolutionPhase extends FormChangeBasePhase {
                     this.pokemonSprite.setVisible(false);
                     globalScene.time.delayedCall(1100, () => {
                       globalScene.playSound("se/beam");
-                      this.doArcDownward();
+                      this.anims.doArcDownward(this.baseBgImg, this.container);
                       globalScene.time.delayedCall(1500, () => {
                         this.pokemonNewFormTintSprite.setScale(0.25);
                         this.pokemonNewFormTintSprite.setVisible(true);
                         this.handler.canCancel = true;
-                        this.doCycle(1).then((success) => {
-                          if (success) {
-                            this.handleSuccessEvolution(evolvedPokemon);
-                          } else {
-                            this.handleFailedEvolution(evolvedPokemon);
-                          }
-                        });
+                        this.anims
+                          .doCycle(1, 15, this.pokemonTintSprite, this.pokemonNewFormTintSprite)
+                          .then((success) => {
+                            if (success) {
+                              this.handleSuccessEvolution(evolvedPokemon);
+                            } else {
+                              this.handleFailedEvolution(evolvedPokemon);
+                            }
+                          });
                       });
                     });
                   },
@@ -197,7 +199,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
   private handleSuccessEvolution(evolvedPokemon: Pokemon): void {
     globalScene.playSound("se/sparkle");
     this.pokemonNewFormSprite.setVisible(true);
-    this.doCircleInward();
+    this.anims.doCircleInward(this.baseBgImg, this.container);
 
     const onEvolutionComplete = () => {
       SoundFade.fadeOut(globalScene, this.evolutionBgm, 100);
@@ -241,7 +243,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
         globalScene.unshiftPhase(new EndEvolutionPhase());
 
         globalScene.playSound("se/shine");
-        this.doSpray();
+        this.anims.doSpray(this.baseBgImg, this.container);
         globalScene.tweens.add({
           targets: this.overlay,
           alpha: 1,

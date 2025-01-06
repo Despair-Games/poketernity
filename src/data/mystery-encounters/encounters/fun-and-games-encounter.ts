@@ -24,7 +24,6 @@ import i18next from "i18next";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { PlayerGender } from "#enums/player-gender";
 import { getPokeballAtlasKey, getPokeballTintColor } from "#app/data/pokeball";
-import { addPokeballOpenParticles } from "#app/field/anims";
 import { ShinySparklePhase } from "#app/phases/shiny-sparkle-phase";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";
 import { PostSummonPhase } from "#app/phases/post-summon-phase";
@@ -32,6 +31,7 @@ import { modifierTypes } from "#app/modifier/modifier-type";
 import { Nature } from "#enums/nature";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
 import { isPokemonValidForEncounterOptionSelection } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
+import { Animation } from "#app/anims";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/funAndGames";
@@ -338,6 +338,8 @@ async function showWobbuffetHealthBar() {
 
 function summonPlayerPokemonAnimation(pokemon: PlayerPokemon): Promise<void> {
   return new Promise<void>((resolve) => {
+    const anims = new Animation();
+
     const pokeball = globalScene.addFieldSprite(36, 80, "pb", getPokeballAtlasKey(pokemon.pokeball));
     pokeball.setVisible(false);
     pokeball.setOrigin(0.5, 0.625);
@@ -372,7 +374,7 @@ function summonPlayerPokemonAnimation(pokemon: PlayerPokemon): Promise<void> {
             pokeball.destroy();
             globalScene.add.existing(pokemon);
             globalScene.field.add(pokemon);
-            addPokeballOpenParticles(pokemon.x, pokemon.y - 16, pokemon.pokeball);
+            anims.addPokeballOpenParticles(pokemon.x, pokemon.y - 16, pokemon.pokeball);
             globalScene.updateModifiers(true);
             globalScene.updateFieldScale();
             pokemon.showInfo();

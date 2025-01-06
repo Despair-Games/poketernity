@@ -79,7 +79,7 @@ export class FormChangePhase extends FormChangeBasePhase {
               this.bgVideo.play();
             });
             globalScene.playSound("se/charge");
-            this.doSpiralUpward();
+            this.anims.doSpiralUpward(this.baseBgImg, this.container);
             globalScene.tweens.addCounter({
               from: 0,
               to: 1,
@@ -91,11 +91,11 @@ export class FormChangePhase extends FormChangeBasePhase {
                 this.pokemonSprite.setVisible(false);
                 globalScene.time.delayedCall(1100, () => {
                   globalScene.playSound("se/beam");
-                  this.doArcDownward();
+                  this.anims.doArcDownward(this.baseBgImg, this.container);
                   globalScene.time.delayedCall(1000, () => {
                     this.pokemonNewFormTintSprite.setScale(0.25);
                     this.pokemonNewFormTintSprite.setVisible(true);
-                    this.doCycle(1, 1).then((_success) => {
+                    this.anims.doCycle(1, 1, this.pokemonTintSprite, this.pokemonNewFormTintSprite).then((_success) => {
                       this.handleFormChangeComplete(formChangedPokemon);
                     });
                   });
@@ -157,7 +157,7 @@ export class FormChangePhase extends FormChangeBasePhase {
 
     globalScene.playSound("se/sparkle");
     this.pokemonNewFormSprite.setVisible(true);
-    this.doCircleInward();
+    this.anims.doCircleInward(this.baseBgImg, this.container);
     globalScene.time.delayedCall(900, () => {
       this.pokemon.changeForm(this.formChange).then(() => {
         if (!this.modal) {
@@ -165,7 +165,7 @@ export class FormChangePhase extends FormChangeBasePhase {
         }
 
         globalScene.playSound("se/shine");
-        this.doSpray();
+        this.anims.doSpray(this.baseBgImg, this.container);
         globalScene.tweens.add({
           targets: this.overlay,
           alpha: 1,

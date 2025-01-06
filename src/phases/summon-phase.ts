@@ -3,7 +3,6 @@ import { getPokeballAtlasKey, getPokeballTintColor } from "#app/data/pokeball";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";
 import { TrainerSlot } from "#app/data/trainer-config";
 import { PlayerGender } from "#app/enums/player-gender";
-import { addPokeballOpenParticles } from "#app/field/anims";
 import type { Pokemon } from "#app/field/pokemon";
 import { FieldPosition } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -14,9 +13,11 @@ import { GameOverPhase } from "./game-over-phase";
 import { ShinySparklePhase } from "./shiny-sparkle-phase";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { globalScene } from "#app/global-scene";
+import { Animation } from "#app/anims";
 
 export class SummonPhase extends PartyMemberPokemonPhase {
   private loaded: boolean;
+  private anims: Animation = new Animation();
 
   constructor(fieldIndex: number, player: boolean = true, loaded: boolean = false) {
     super(fieldIndex, player);
@@ -169,7 +170,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
               }
               globalScene.currentBattle.seenEnemyPartyMemberIds.add(pokemon.id);
             }
-            addPokeballOpenParticles(pokemon.x, pokemon.y - 16, pokemon.pokeball);
+            this.anims.addPokeballOpenParticles(pokemon.x, pokemon.y - 16, pokemon.pokeball);
             globalScene.updateModifiers(this.player);
             globalScene.updateFieldScale();
             pokemon.showInfo();
