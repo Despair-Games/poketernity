@@ -2,7 +2,7 @@ import Phaser from "phaser";
 import type { AnySound } from "#app/battle-scene";
 import type BattleScene from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
-import type { Variant, VariantSet } from "#app/data/variant";
+import type { Variant } from "#app/data/variant";
 import { variantColorCache } from "#app/data/variant";
 import { variantData } from "#app/data/variant";
 import BattleInfo, { PlayerBattleInfo, EnemyBattleInfo } from "#app/ui/battle-info";
@@ -670,67 +670,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
             }
             resolve();
           };
-          if (this.shiny) {
-            const populateVariantColors = (isBackSprite: boolean = false): Promise<void> => {
-              return new Promise(async (resolve) => {
-                const battleSpritePath = this.getBattleSpriteAtlasPath(isBackSprite, ignoreOverride)
-                  .replace("variant/", "")
-                  .replace(/_[1-3]$/, "");
-                let config = variantData;
-                battleSpritePath.split("/").map((p) => (config ? (config = config[p]) : null));
-                const variantSet: VariantSet = config as VariantSet;
-                if (variantSet && variantSet[this.variant] === 1) {
-                  const cacheKey = this.getBattleSpriteKey(isBackSprite);
-                  if (!variantColorCache.hasOwnProperty(cacheKey)) {
-                    await this.populateVariantColorCache(cacheKey, battleSpritePath);
-                  }
-                }
-                resolve();
-              });
-            };
-            if (this.isPlayer()) {
-              Promise.all([populateVariantColors(false), populateVariantColors(true)]).then(() =>
-                updateFusionPaletteAndResolve(),
-              );
-            } else {
-              populateVariantColors(false).then(() => updateFusionPaletteAndResolve());
-            }
-          } else {
-            updateFusionPaletteAndResolve();
-          }
+          updateFusionPaletteAndResolve();
         });
         if (!globalScene.load.isLoading()) {
           globalScene.load.start();
         }
       });
     });
-  }
-
-  /**
-   * Attempt to process variant sprite.
-   * @param cacheKey the cache key for the variant color sprite
-   * @param battleSpritePath the filename of the sprite
-   */
-  async populateVariantColorCache(cacheKey: string, battleSpritePath: string) {
-    const spritePath = `./images/pokemon/variant/${battleSpritePath}.json`;
-    return globalScene
-      .cachedFetch(spritePath)
-      .then((res) => {
-        // Prevent the JSON from processing if it failed to load
-        if (!res.ok) {
-          console.warn(`Failed to load sprite variant ${battleSpritePath}:`, res.status, res.statusText, res.url);
-          return;
-        }
-        return res.json();
-      })
-      .catch((error) => {
-        console.warn(`Failed to load sprite variant ${battleSpritePath}:`, error);
-      })
-      .then((c) => {
-        if (!isNullOrUndefined(c)) {
-          variantColorCache[cacheKey] = c;
-        }
-      });
   }
 
   getFormKey(): string {
