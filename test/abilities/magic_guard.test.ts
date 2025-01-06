@@ -1,4 +1,4 @@
-import { ArenaTagSide, getArenaTag } from "#app/data/arena-tag";
+import { ArenaTagSide } from "#app/data/arena-tag";
 import { getStatusEffectCatchRateMultiplier } from "#app/data/status-effect";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { Abilities } from "#enums/abilities";
@@ -156,8 +156,7 @@ describe("Abilities - Magic Guard", () => {
 
   it("Magic Guard prevents damage caused by entry hazards", async () => {
     // Adds and applies Spikes to both sides of the arena
-    const newTag = getArenaTag(ArenaTagType.SPIKES, 0, 5, Moves.SPIKES, ArenaTagSide.BOTH)!;
-    game.scene.arena.tags.push(newTag);
+    game.scene.arena.addTag(ArenaTagType.SPIKES, 0, 5, Moves.SPIKES, ArenaTagSide.BOTH, true);
 
     await game.startBattle([Species.MAGIKARP]);
     const leadPokemon = game.scene.getPlayerPokemon()!;
@@ -179,8 +178,7 @@ describe("Abilities - Magic Guard", () => {
 
   it("Magic Guard does not prevent poison from Toxic Spikes", async () => {
     // Adds and applies Spikes to both sides of the arena
-    const newTag = getArenaTag(ArenaTagType.TOXIC_SPIKES, 0, 5, Moves.TOXIC_SPIKES, ArenaTagSide.BOTH)!;
-    game.scene.arena.tags.push(newTag);
+    game.scene.arena.addTag(ArenaTagType.TOXIC_SPIKES, 0, 5, Moves.TOXIC_SPIKES, ArenaTagSide.BOTH, true);
 
     await game.startBattle([Species.MAGIKARP]);
     const leadPokemon = game.scene.getPlayerPokemon()!;
