@@ -1,5 +1,3 @@
-import { Status } from "#app/data/status-effect";
-import { MoveResult } from "#app/field/pokemon";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
@@ -38,56 +36,31 @@ describe("Abilities - Early Bird", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const player = game.scene.getPlayerPokemon()!;
+    player.damageAndUpdate(5);
 
-    game.move.select(Moves.BELLY_DRUM);
-    await game.toNextTurn();
     game.move.select(Moves.REST);
-    await game.toNextTurn();
+    await game.phaseInterceptor.to("BerryPhase");
 
-    expect(player.status?.effect).toBe(StatusEffect.SLEEP);
-
-    game.move.select(Moves.SPLASH);
-    await game.toNextTurn();
-
-    expect(player.status?.effect).toBe(StatusEffect.SLEEP);
-    expect(player.getLastXMoves(1)[0].result).toBe(MoveResult.FAIL);
-
-    game.move.select(Moves.SPLASH);
-    await game.toNextTurn();
-
-    expect(player.status?.effect).toBeUndefined();
-    expect(player.getLastXMoves(1)[0].result).toBe(MoveResult.SUCCESS);
+    expect(player.status).toBeDefined();
+    expect(player.status?.sleepTurnsRemaining).toBe(1);
   });
 
   it("reduces 3-turn sleep to 1 turn", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const player = game.scene.getPlayerPokemon()!;
-    player.status = new Status(StatusEffect.SLEEP, 0, 4);
+    player.trySetStatus(StatusEffect.SLEEP, undefined, null, 3);
 
-    game.move.select(Moves.SPLASH);
-    await game.toNextTurn();
-
-    expect(player.status?.effect).toBe(StatusEffect.SLEEP);
-    expect(player.getLastXMoves(1)[0].result).toBe(MoveResult.FAIL);
-
-    game.move.select(Moves.SPLASH);
-    await game.toNextTurn();
-
-    expect(player.status?.effect).toBeUndefined();
-    expect(player.getLastXMoves(1)[0].result).toBe(MoveResult.SUCCESS);
+    expect(player.status).toBeDefined();
+    expect(player.status?.sleepTurnsRemaining).toBe(1);
   });
 
   it("reduces 1-turn sleep to 0 turns", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const player = game.scene.getPlayerPokemon()!;
-    player.status = new Status(StatusEffect.SLEEP, 0, 2);
-
-    game.move.select(Moves.SPLASH);
-    await game.toNextTurn();
-
-    expect(player.status?.effect).toBeUndefined();
-    expect(player.getLastXMoves(1)[0].result).toBe(MoveResult.SUCCESS);
+    player.trySetStatus(StatusEffect.SLEEP, undefined, null, 1);
+    expect(player.status).toBeDefined();
+    expect(player.status?.sleepTurnsRemaining).toBe(0);
   });
 });

@@ -1,11 +1,14 @@
 import type { BattlerIndex } from "#app/battle";
 import { CommonAnim, CommonBattleAnim } from "#app/data/battle-anims";
 import { getStatusEffectObtainText, getStatusEffectOverlapText } from "#app/data/status-effect";
+import { applyAbAttrs } from "#app/data/ability";
+import { ReduceSleepDurationAbAttr } from "#app/data/ab-attrs/reduce-sleep-duration-ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { StatusEffect } from "#enums/status-effect";
 import { PokemonPhase } from "./abstract-pokemon-phase";
+import { NumberHolder } from "#app/utils";
 
 /**
  * Applies a status effect to a pokemon
@@ -38,7 +41,9 @@ export class ObtainStatusEffectPhase extends PokemonPhase {
     if (pokemon && !pokemon.status) {
       if (pokemon.trySetStatus(this.statusEffect, false, this.sourcePokemon)) {
         if (this.turnsRemaining) {
-          pokemon.status!.sleepTurnsRemaining = this.turnsRemaining;
+          const sleepTurnsRemaining = new NumberHolder(this.turnsRemaining);
+          applyAbAttrs(ReduceSleepDurationAbAttr, pokemon, null, undefined, this.statusEffect, sleepTurnsRemaining);
+          pokemon.status!.sleepTurnsRemaining = sleepTurnsRemaining.value;
         }
         pokemon.updateInfo(true);
         new CommonBattleAnim(CommonAnim.POISON + (this.statusEffect! - 1), pokemon).play(false, () => {
