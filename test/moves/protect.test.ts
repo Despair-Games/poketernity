@@ -9,6 +9,7 @@ import { allMoves } from "#app/data/all-moves";
 import { ArenaTagSide, ArenaTrapTag } from "#app/data/arena-tag";
 import { BattlerIndex } from "#app/battle";
 import { MoveResult } from "#app/field/pokemon";
+import { TrappedTag } from "#app/data/battler-tags";
 
 describe("Moves - Protect", () => {
   let phaserGame: Phaser.Game;
@@ -95,6 +96,20 @@ describe("Moves - Protect", () => {
 
     expect(leadPokemon.hp).toBe(leadPokemon.getMaxHp());
     expect(enemyPokemon.turnData.hitCount).toBe(1);
+  });
+
+  test("certain moves can bypass protect", async () => {
+    game.override.enemyMoveset([Moves.BLOCK]);
+
+    await game.classicMode.startBattle([Species.CHARIZARD]);
+
+    const leadPokemon = game.scene.getPlayerPokemon()!;
+
+    game.move.select(Moves.PROTECT);
+
+    await game.phaseInterceptor.to("BerryPhase", false);
+
+    expect(leadPokemon.findTag((t) => t instanceof TrappedTag)).toBeDefined();
   });
 
   test("should fail if the user is the last to move in the turn", async () => {

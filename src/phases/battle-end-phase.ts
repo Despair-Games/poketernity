@@ -1,13 +1,17 @@
-import { globalScene } from "#app/global-scene";
-import { applyPostBattleAbAttrs } from "#app/data/ability";
-import { LapsingPersistentModifier, LapsingPokemonHeldItemModifier } from "#app/modifier/modifier";
-import { BattlePhase } from "./battle-phase";
-import { GameOverPhase } from "./game-over-phase";
 import { PostBattleAbAttr } from "#app/data/ab-attrs/post-battle-ab-attr";
+import { applyPostBattleAbAttrs } from "#app/data/ability";
+import { globalScene } from "#app/global-scene";
+import { LapsingPersistentModifier, LapsingPokemonHeldItemModifier } from "#app/modifier/modifier";
+import { BattlePhase } from "#app/phases/abstract-battle-phase";
+import { GameOverPhase } from "#app/phases/game-over-phase";
 
+/**
+ * Handles the effects that need to trigger after a battle ends (game stats updates, reducing item turn count, etc)
+ * @extends BattlePhase
+ */
 export class BattleEndPhase extends BattlePhase {
   /** If true, will increment battles won */
-  isVictory: boolean;
+  public readonly isVictory: boolean;
 
   constructor(isVictory: boolean) {
     super();
@@ -15,27 +19,26 @@ export class BattleEndPhase extends BattlePhase {
     this.isVictory = isVictory;
   }
 
-  override start() {
+  public override start(): void {
     super.start();
 
-    globalScene.gameData.gameStats.battles++;
-    if (
-      globalScene.gameMode.isEndless
-      && globalScene.currentBattle.waveIndex + 1 > globalScene.gameData.gameStats.highestEndlessWave
-    ) {
-      globalScene.gameData.gameStats.highestEndlessWave = globalScene.currentBattle.waveIndex + 1;
+    const { currentBattle, gameData, gameMode } = globalScene;
+
+    gameData.gameStats.battles++;
+    if (gameMode.isEndless && currentBattle.waveIndex + 1 > gameData.gameStats.highestEndlessWave) {
+      gameData.gameStats.highestEndlessWave = currentBattle.waveIndex + 1;
     }
 
     if (this.isVictory) {
-      globalScene.currentBattle.addBattleScore();
+      currentBattle.addBattleScore();
 
-      if (globalScene.currentBattle.trainer) {
-        globalScene.gameData.gameStats.trainersDefeated++;
+      if (currentBattle.trainer) {
+        gameData.gameStats.trainersDefeated++;
       }
     }
 
     // Endless graceful end
-    if (globalScene.gameMode.isEndless && globalScene.currentBattle.waveIndex >= 5850) {
+    if (gameMode.isEndless && currentBattle.waveIndex >= 5850) {
       globalScene.clearPhaseQueue();
       globalScene.unshiftPhase(new GameOverPhase(true));
     }
@@ -50,8 +53,8 @@ export class BattleEndPhase extends BattlePhase {
       applyPostBattleAbAttrs(PostBattleAbAttr, pokemon, false, this.isVictory);
     }
 
-    if (globalScene.currentBattle.moneyScattered) {
-      globalScene.currentBattle.pickUpScatteredMoney();
+    if (currentBattle.moneyScattered) {
+      currentBattle.pickUpScatteredMoney();
     }
 
     globalScene.clearEnemyHeldItemModifiers();

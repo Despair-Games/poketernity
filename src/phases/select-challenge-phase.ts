@@ -3,11 +3,7 @@ import { Phase } from "#app/phase";
 import { Mode } from "#app/ui/ui";
 
 export class SelectChallengePhase extends Phase {
-  constructor() {
-    super();
-  }
-
-  override start() {
+  public override start(): void {
     super.start();
 
     globalScene.playBgm("menu");
