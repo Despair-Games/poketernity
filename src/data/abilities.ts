@@ -526,7 +526,7 @@ export function initAbilities() {
     new Ability(Abilities.BLAZE, 3).attr(LowHpMoveTypeAttackMultiplierAbAttr, Type.FIRE),
     new Ability(Abilities.TORRENT, 3).attr(LowHpMoveTypeAttackMultiplierAbAttr, Type.WATER),
     new Ability(Abilities.SWARM, 3).attr(LowHpMoveTypeAttackMultiplierAbAttr, Type.BUG),
-    new Ability(Abilities.ROCK_HEAD, 3).attr(BlockRecoilDamageAttr),
+    new Ability(Abilities.ROCK_HEAD, 3).attr(BlockRecoilDamageAttr).edgeCase(), // Should be overwritten by Mummy/Lingering Aroma before recoil damage is cancelled
     new Ability(Abilities.DROUGHT, 3)
       .attr(PostSummonWeatherChangeAbAttr, WeatherType.SUNNY)
       .attr(PostBiomeChangeWeatherChangeAbAttr, WeatherType.SUNNY),
