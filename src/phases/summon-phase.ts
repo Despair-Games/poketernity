@@ -11,6 +11,8 @@ import { GameOverPhase } from "./game-over-phase";
 import { PostSummonPhase } from "./post-summon-phase";
 import { ShinySparklePhase } from "./shiny-sparkle-phase";
 import { Animation } from "#app/anims";
+import { globalScene } from "#app/global-scene";
+import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 
 export class SummonPhase extends PartyMemberPokemonPhase {
   private readonly loaded: boolean;
@@ -171,7 +173,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
               currentBattle.seenEnemyPartyMemberIds.add(pokemon.id);
             }
             this.anims.addPokeballOpenParticles(pokemon.x, pokemon.y - 16, pokemon.pokeball);
-            globalScene.updateModifiers(this.player);
+            globalScene.updateModifiers(this.isPlayer);
             globalScene.updateFieldScale();
 
             pokemon.showInfo();
