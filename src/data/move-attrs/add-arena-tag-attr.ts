@@ -14,6 +14,10 @@ interface AddArenaTagAttrOptions extends MoveEffectAttrOptions {
   selfSideTarget?: boolean;
 }
 
+/**
+ * Attribute to add an arena tag to the field of a given {@linkcode ArenaTagType | type}.
+ * @extends MoveEffectAttr
+ */
 export class AddArenaTagAttr extends MoveEffectAttr {
   public tagType: ArenaTagType;
   protected override options?: AddArenaTagAttrOptions;
@@ -51,8 +55,8 @@ export class AddArenaTagAttr extends MoveEffectAttr {
     return this.options?.selfSideTarget ?? false;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    if (!super.apply(user, target, move, args)) {
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+    if (!super.apply(user, target, move)) {
       return false;
     }
 

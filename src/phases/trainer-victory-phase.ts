@@ -1,5 +1,4 @@
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
-import { TrainerSlot } from "#app/data/trainer-config";
 import { globalScene } from "#app/global-scene";
 import { modifierTypes } from "#app/modifier/modifier-type";
 import { achvs } from "#app/system/achv";
@@ -11,6 +10,7 @@ import i18next from "i18next";
 import { BattlePhase } from "./abstract-battle-phase";
 import { ModifierRewardPhase } from "./modifier-reward-phase";
 import { MoneyRewardPhase } from "./money-reward-phase";
+import { TrainerSlot } from "#enums/trainer-slot";
 
 export class TrainerVictoryPhase extends BattlePhase {
   public override start(): void {

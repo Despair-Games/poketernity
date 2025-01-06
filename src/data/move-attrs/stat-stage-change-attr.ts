@@ -19,6 +19,7 @@ interface StatStageChangeAttrOptions extends MoveEffectAttrOptions {
   /** `true` to display a message */
   showMessage?: boolean;
 }
+
 /**
  * Attribute used for moves that change stat stages
  *
@@ -28,7 +29,6 @@ interface StatStageChangeAttrOptions extends MoveEffectAttrOptions {
  * @param options {@linkcode StatStageChangeAttrOptions} Container for any optional parameters for this attribute.
  *
  * @extends MoveEffectAttr
- * @see {@linkcode apply}
  */
 
 export class StatStageChangeAttr extends MoveEffectAttr {
@@ -63,16 +63,8 @@ export class StatStageChangeAttr extends MoveEffectAttr {
     return this.options?.showMessage ?? true;
   }
 
-  /**
-   * Attempts to change stats of the user or target (depending on value of selfTarget) if conditions are met
-   * @param user {@linkcode Pokemon} the user of the move
-   * @param target {@linkcode Pokemon} the target of the move
-   * @param move {@linkcode Move} the move
-   * @param args unused
-   * @returns whether stat stages were changed
-   */
-  override apply(user: Pokemon, target: Pokemon, move: Move, args?: any[]): boolean {
-    if (!super.apply(user, target, move, args) || (this.condition && !this.condition(user, target, move))) {
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+    if (!super.apply(user, target, move) || (this.condition && !this.condition(user, target, move))) {
       return false;
     }
 

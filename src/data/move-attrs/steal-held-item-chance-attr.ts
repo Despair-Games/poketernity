@@ -8,9 +8,9 @@ import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
 /**
- * The following needs to be implemented for Thief
- * "If the user faints due to the target's Ability (Rough Skin or Iron Barbs) or held Rocky Helmet, it cannot remove the target's held item."
- * "If Knock Off causes a Pokémon with the Sticky Hold Ability to faint, it can now remove that Pokémon's held item."
+ * TODO: The following needs to be implemented for Thief:
+ * - "If the user faints due to the target's Ability (Rough Skin or Iron Barbs) or held Rocky Helmet, it cannot remove the target's held item."
+ * - "If Knock Off causes a Pokémon with the Sticky Hold Ability to faint, it can now remove that Pokémon's held item."
  */
 export class StealHeldItemChanceAttr extends MoveEffectAttr {
   private chance: number;
@@ -20,7 +20,7 @@ export class StealHeldItemChanceAttr extends MoveEffectAttr {
     this.chance = chance;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move, _args: any[]): boolean {
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (move.hitsSubstitute(user, target)) {
       return false;
     }

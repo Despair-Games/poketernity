@@ -4,6 +4,13 @@ import { globalScene } from "#app/global-scene";
 import type { Move } from "#app/data/move";
 import { HealAttr } from "#app/data/move-attrs/heal-attr";
 
+/**
+ * Attribute to restore the user's HP.
+ * The heal ratio varies based on the active weather.
+ * @extends HealAttr
+ * @abstract
+ * @see {@linkcode getWeatherHealRatio}
+ */
 export abstract class WeatherHealAttr extends HealAttr {
   constructor() {
     super(0.5);

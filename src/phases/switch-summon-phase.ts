@@ -3,7 +3,7 @@ import { applyPreSwitchOutAbAttrs } from "#app/data/ability";
 import { SubstituteTag } from "#app/data/battler-tags";
 import { getPokeballTintColor } from "#app/data/pokeball";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";
-import { TrainerSlot } from "#app/data/trainer-config";
+import { TrainerSlot } from "#enums/trainer-slot";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
