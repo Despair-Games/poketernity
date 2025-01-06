@@ -1199,8 +1199,12 @@ export function initAbilities() {
     new Ability(Abilities.DANCER, 7).attr(PostDancingMoveAbAttr),
     new Ability(Abilities.BATTERY, 7).attr(AllyMoveCategoryPowerBoostAbAttr, [MoveCategory.SPECIAL], 1.3),
     new Ability(Abilities.FLUFFY, 7)
-      .attr(ReceivedMoveDamageMultiplierAbAttr, (_target, _user, move) => move.hasFlag(MoveFlags.MAKES_CONTACT), 0.5)
-      .attr(ReceivedMoveDamageMultiplierAbAttr, (_target, user, move) => user.getMoveType(move) === Type.FIRE, 2)
+      .attr(
+        ReceivedMoveDamageMultiplierAbAttr,
+        (target, user, move) => move.checkFlag(MoveFlags.MAKES_CONTACT, user, target),
+        0.5,
+      )
+      .attr(ReceivedTypeDamageMultiplierAbAttr, Type.FIRE, 2)
       .ignorable(),
     new Ability(Abilities.DAZZLING, 7).attr(FieldPriorityMoveImmunityAbAttr).ignorable(),
     new Ability(Abilities.SOUL_HEART, 7).attr(PostKnockOutStatStageChangeAbAttr, Stat.SPATK, 1),
