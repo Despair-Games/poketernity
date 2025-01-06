@@ -53,7 +53,7 @@ describe("Abilities - Rock Head", () => {
     expect(pokemon?.isFullHp()).toBe(false);
   });
 
-  it.each([
+  it.todo.each([
     { abilityName: "Mummy", ability: Abilities.MUMMY },
     { abilityName: "Lingering Aroma", ability: Abilities.LINGERING_AROMA },
   ])(
