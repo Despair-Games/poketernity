@@ -12,12 +12,10 @@ import type { DelayedAttackTag } from "#app/data/arena-tag";
 import type { MoveConditionFunc } from "#app/data/move-conditions";
 
 /**
- * Attack Move that doesn't hit the turn it is played and doesn't allow for multiple
- * uses on the same target. Examples are Future Sight or Doom Desire.
+ * Attack Move that doesn't hit the turn it is played and doesn't allow for multiple uses on the same target.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Future_Sight_(move) | Future Sight}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Doom_Desire_(move) | Doom Desire}.
  * @extends OverrideMoveEffectAttr
- * @param tagType The {@linkcode ArenaTagType} that will be placed on the field when the move is used
- * @param chargeAnim The {@linkcode ChargeAnim | Charging Animation} used for the move
- * @param chargeText The text to display when the move is used
  */
 export class DelayedAttackAttr extends OverrideMoveEffectAttr {
   public chargeAnim: ChargeAnim;
@@ -31,24 +29,15 @@ export class DelayedAttackAttr extends OverrideMoveEffectAttr {
   }
 
   /**
-   * Queues a delayed attack against the given target, adding an arena tag
-   * for the effect if it doesn't already exist.
-   * @param user the {@linkcode Pokemon} using the move
-   * @param target the {@linkcode Pokemon} targeted by the move.
-   * @param move the {@linkcode Move} being used.
-   * @param args additional arguments for this function:
-   * - `[0]` a {@linkcode BooleanHolder} that becomes `true` if other move effects in the turn are overridden.
-   * - `[1]` `true` if the move is used virtually (i.e. for the move's "attack phase"); `false` otherwise.
-   * @see {@linkcode DelayedAttackTag}
+   * If used virtually, this queues a message and proceeds normally.
+   * Otherwise, this adds a delayed attack to the field and cancels other move effects
+   * for the current attack.
    */
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
+  override apply(user: Pokemon, target: Pokemon, move: Move, overridden: BooleanHolder, virtual: boolean): boolean {
     // Edge case for the move applied on a pokemon that has fainted
     if (!target) {
       return true;
     }
-
-    const overridden: BooleanHolder = args[0];
-    const virtual: boolean = args[1];
 
     if (!virtual) {
       overridden.value = true;

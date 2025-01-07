@@ -2,10 +2,10 @@ import type { SessionSaveData } from "#app/@types/SessionData";
 import { clientSessionId } from "#app/account";
 import { BattleType } from "#app/battle";
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
+import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
-import { trainerConfigs } from "#app/data/trainer-config";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { modifierTypes } from "#app/modifier/modifier-type";
@@ -190,8 +190,8 @@ export class GameOverPhase extends BattlePhase {
                 const dialogue = i18next.t(dialogueKey, { context: genderStr });
                 const rivalName =
                   gameData.gender === PlayerGender.FEMALE
-                    ? trainerConfigs[TrainerType.RIVAL].name
-                    : trainerConfigs[TrainerType.RIVAL].nameFemale;
+                    ? allTrainerConfigs[TrainerType.RIVAL].name
+                    : allTrainerConfigs[TrainerType.RIVAL].nameFemale;
 
                 globalScene.charSprite
                   .showCharacter(

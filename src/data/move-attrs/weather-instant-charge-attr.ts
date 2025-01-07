@@ -5,7 +5,7 @@ import { InstantChargeAttr } from "#app/data/move-attrs/instant-charge-attr";
 
 /**
  * Attribute that allows charge moves to resolve in 1 turn while specific {@linkcode WeatherType | Weather}
- * is active. Should only be used for {@linkcode ChargingMove | ChargingMoves} as a `chargeAttr`.
+ * is active. Should only be used for {@linkcode ChargingMove | charge moves} via `.chargeAttr()`.
  * @extends InstantChargeAttr
  */
 export class WeatherInstantChargeAttr extends InstantChargeAttr {

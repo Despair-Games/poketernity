@@ -11,7 +11,7 @@ import { initAchievements } from "#app/system/achv";
 import { initVouchers } from "#app/system/voucher";
 import { initStatsKeys } from "#app/ui/game-stats-ui-handler";
 import { afterAll, beforeAll, vi } from "vitest";
-import { initAbilities } from "#app/data/abilities";
+import { initAbilities } from "#app/data/all-abilities";
 import { initMoves } from "#app/data/all-moves";
 
 /** Set the timezone to UTC for tests. */

@@ -684,8 +684,6 @@ export class MoveEffectPhase extends PokemonPhase {
     const targetSide = target.getArenaTagSide();
     /** Has the invoked move been cancelled by conditional protection (e.g Quick Guard)? */
     const hasConditionalProtectApplied = new BooleanHolder(false);
-    /** Does the applied conditional protection bypass Protect-ignoring effects? */
-    const bypassIgnoreProtect = new BooleanHolder(false);
     /** If the move is not targeting a Pokemon on the user's side, try to apply conditional protection effects */
     if (!this.move.getMove().isAllyTarget()) {
       globalScene.arena.applyTagsForSide(
@@ -696,15 +694,13 @@ export class MoveEffectPhase extends PokemonPhase {
         user,
         target,
         move.id,
-        bypassIgnoreProtect,
       );
     }
 
     /** Is the target protected by Protect, etc. or a relevant conditional protection effect? */
     const isProtected =
-      (bypassIgnoreProtect.value || !this.move.getMove().checkFlag(MoveFlags.IGNORE_PROTECT, user, target))
-      && (hasConditionalProtectApplied.value
-        || target.findTags((t) => t instanceof ProtectedTag)[0]?.apply(target, simulated, user, move));
+      hasConditionalProtectApplied.value
+      || target.findTags((t) => t instanceof ProtectedTag)[0]?.apply(target, simulated, user, move);
 
     if (isProtected) {
       return [HitCheckResult.PROTECTED, 0];
