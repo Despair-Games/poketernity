@@ -22,25 +22,18 @@ export function getPokeballAtlasKey(type: PokeballType): string {
 }
 
 export function getPokeballName(type: PokeballType): string {
-  let ret: string;
   switch (type) {
     case PokeballType.POKEBALL:
-      ret = i18next.t("pokeball:pokeBall");
-      break;
+      return i18next.t("pokeball:pokeBall");
     case PokeballType.GREAT_BALL:
-      ret = i18next.t("pokeball:greatBall");
-      break;
+      return i18next.t("pokeball:greatBall");
     case PokeballType.ULTRA_BALL:
-      ret = i18next.t("pokeball:ultraBall");
-      break;
+      return i18next.t("pokeball:ultraBall");
     case PokeballType.LUXURY_BALL:
-      ret = i18next.t("pokeball:luxuryBall");
-      break;
+      return i18next.t("pokeball:luxuryBall");
     case PokeballType.MASTER_BALL:
-      ret = i18next.t("pokeball:masterBall");
-      break;
+      return i18next.t("pokeball:masterBall");
   }
-  return ret;
 }
 
 export function getPokeballCatchMultiplier(type: PokeballType): number {
