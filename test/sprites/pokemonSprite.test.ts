@@ -15,9 +15,11 @@ describe("check if every variant's sprite are correctly set", () => {
   let femaleVariant: PokemonVariantMasterlist["female"];
   let backVariant: PokemonVariantMasterlist["back"];
   let rootDir: string;
+  let variantDir: string;
 
   beforeAll(() => {
-    rootDir = `${getAppRootDir()}${path.sep}public${path.sep}images${path.sep}pokemon${path.sep}variant${path.sep}`;
+    rootDir = `${getAppRootDir()}${path.sep}public${path.sep}images${path.sep}pokemon${path.sep}`;
+    variantDir = `${rootDir}variant${path.sep}`;
     masterlist = deepCopy(_masterlist);
     femaleVariant = masterlist.female;
     backVariant = masterlist.back;
@@ -35,52 +37,17 @@ describe("check if every variant's sprite are correctly set", () => {
 
   function getMissingMasterlist(mlist: any, dirpath: string, excludes: string[] = []): string[] {
     const errors: string[] = [];
-    const trimmedDirpath = `variant${path.sep}${dirpath.split(rootDir)[1]}`;
+    const trimmedDirpath = `${dirpath.split(rootDir)[1]}`;
     if (fs.existsSync(dirpath)) {
       const files = fs.readdirSync(dirpath).filter((filename) => !/^\..*/.test(filename));
       for (const filename of files) {
         const filePath = `${dirpath}${filename}`;
         const trimmedFilePath = `${trimmedDirpath}${filename}`;
-        const ext = filename.split(".")[1];
         const name = filename.split(".")[0];
         if (excludes.includes(name)) {
           continue;
         }
         if (name.includes("_")) {
-          const id = name.split("_")[0];
-          const variant = name.split("_")[1];
-          const index = parseInt(variant, 10) - 1;
-          if (ext !== "json") {
-            const urlJsonFile = `${dirpath}${id}.json`;
-            if (mlist.hasOwnProperty(id)) {
-              const trimmedUrlJsonFilepath = `${trimmedDirpath}${id}.json`;
-              const jsonFileExists = fs.existsSync(urlJsonFile);
-              if (mlist[id].includes(1) && !jsonFileExists) {
-                const msg = `[${name}] MISSING JSON ${trimmedUrlJsonFilepath}`;
-                if (!errors.includes(msg)) {
-                  errors.push(msg);
-                }
-              }
-              if (!mlist.hasOwnProperty(id) && jsonFileExists) {
-                errors.push(`[${id}] missing key ${id} in masterlist for ${trimmedFilePath}`);
-              }
-              if (mlist[id][index] === 1 && jsonFileExists) {
-                const raw = fs.readFileSync(urlJsonFile, { encoding: "utf8", flag: "r" });
-                const data = JSON.parse(raw);
-                const keys = Object.keys(data);
-                if (!keys.includes(`${index}`)) {
-                  const urlSpriteJsonFile = `${dirpath}${id}_${variant}.json`;
-                  const trimmedUrlSpriteFilepath = `${trimmedDirpath}${id}_${variant}.json`;
-                  const spriteFileExists = fs.existsSync(urlSpriteJsonFile);
-                  if (spriteFileExists) {
-                    errors.push(
-                      `[${id}] [${mlist[id]}] - the value should be 2 for the index ${index} - ${trimmedUrlSpriteFilepath}`,
-                    );
-                  }
-                }
-              }
-            }
-          }
         } else if (!mlist.hasOwnProperty(name)) {
           errors.push(`[${name}] - missing key ${name} in masterlist for ${trimmedFilePath}`);
         } else {
@@ -88,13 +55,10 @@ describe("check if every variant's sprite are correctly set", () => {
           const data = JSON.parse(raw);
           for (const key of Object.keys(data)) {
             if (mlist[name][key] !== 1) {
-              // if 2, check if json there
+              // if 2, json should NOT be there
               const urlSpriteJsonFile = `${dirpath}${name}_${parseInt(key, 10) + 1}.json`;
-              const spriteFileExists = fs.existsSync(urlSpriteJsonFile);
-              if (!spriteFileExists) {
-                errors.push(
-                  `[${name}] [${mlist[name]}] - the value should be 1 for the index ${key} - ${trimmedFilePath}`,
-                );
+              if (fs.existsSync(urlSpriteJsonFile)) {
+                errors.push(`[${name}] [${mlist[name]}] - Remove json file ${key} - ${trimmedFilePath}`);
               }
             }
           }
@@ -113,22 +77,10 @@ describe("check if every variant's sprite are correctly set", () => {
         if (elm === 0) {
           continue;
         } else if (elm === 1) {
-          url = `${key}.json`;
-          const filePath = `${dirPath}${url}`;
-          const raw = fs.readFileSync(filePath, { encoding: "utf8", flag: "r" });
-          const data = JSON.parse(raw);
-          if (!data.hasOwnProperty(index)) {
-            errors.push(`index: ${index} - ${filePath}`);
-          }
+          errors.push(` masterlist value should be 2 for ${key} - ${dirPath}`);
         } else if (elm === 2) {
           url = `${key}_${parseInt(index, 10) + 1}.png`;
-          let filePath = `${dirPath}${url}`;
-          if (!fs.existsSync(filePath)) {
-            errors.push(filePath);
-          }
-
-          url = `${key}_${parseInt(index, 10) + 1}.json`;
-          filePath = `${dirPath}${url}`;
+          const filePath = `${dirPath}${url}`;
           if (!fs.existsSync(filePath)) {
             errors.push(filePath);
           }
@@ -138,10 +90,10 @@ describe("check if every variant's sprite are correctly set", () => {
     return errors;
   }
 
-  // chech presence of every files listed in masterlist
+  // check if entries in masterlist correspond to existing files
 
   it("check root variant files", () => {
-    const dirPath = rootDir;
+    const dirPath = variantDir;
     const errors = getMissingFiles(masterlist, dirPath);
     if (errors.length) {
       console.log("errors", errors);
@@ -150,7 +102,7 @@ describe("check if every variant's sprite are correctly set", () => {
   });
 
   it("check female variant files", () => {
-    const dirPath = `${rootDir}female${path.sep}`;
+    const dirPath = `${variantDir}female${path.sep}`;
     const errors = getMissingFiles(femaleVariant, dirPath);
     if (errors.length) {
       console.log("errors", errors);
@@ -159,7 +111,7 @@ describe("check if every variant's sprite are correctly set", () => {
   });
 
   it("check back female variant files", () => {
-    const dirPath = `${rootDir}back${path.sep}female${path.sep}`;
+    const dirPath = `${variantDir}back${path.sep}female${path.sep}`;
     const errors = getMissingFiles(backVariant.female, dirPath);
     if (errors.length) {
       console.log("errors", errors);
@@ -167,8 +119,8 @@ describe("check if every variant's sprite are correctly set", () => {
     expect(errors.length).toBe(0);
   });
 
-  it("check back male back variant files", () => {
-    const dirPath = `${rootDir}back${path.sep}`;
+  it("check back male variant files", () => {
+    const dirPath = `${variantDir}back${path.sep}`;
     const backMaleVariant = deepCopy(backVariant);
     delete backMaleVariant.female;
     const errors = getMissingFiles(backMaleVariant, dirPath);
@@ -181,7 +133,7 @@ describe("check if every variant's sprite are correctly set", () => {
   // check over every file if it's correctly set in the masterlist
 
   it("look over every file in variant female and check if present in masterlist", () => {
-    const dirPath = `${rootDir}female${path.sep}`;
+    const dirPath = `${variantDir}female${path.sep}`;
     const errors = getMissingMasterlist(femaleVariant, dirPath);
     if (errors.length) {
       console.log("errors for ", dirPath, errors);
@@ -190,7 +142,7 @@ describe("check if every variant's sprite are correctly set", () => {
   });
 
   it("look over every file in variant back female and check if present in masterlist", () => {
-    const dirPath = `${rootDir}back${path.sep}female${path.sep}`;
+    const dirPath = `${variantDir}back${path.sep}female${path.sep}`;
     const errors = getMissingMasterlist(backVariant.female, dirPath);
     if (errors.length) {
       console.log("errors for ", dirPath, errors);
@@ -199,7 +151,7 @@ describe("check if every variant's sprite are correctly set", () => {
   });
 
   it("look over every file in variant back male and check if present in masterlist", () => {
-    const dirPath = `${rootDir}back${path.sep}`;
+    const dirPath = `${variantDir}back${path.sep}`;
     const backMaleVariant = deepCopy(backVariant);
     const errors = getMissingMasterlist(backMaleVariant, dirPath, ["female"]);
     if (errors.length) {
@@ -209,7 +161,7 @@ describe("check if every variant's sprite are correctly set", () => {
   });
 
   it("look over every file in variant root and check if present in masterlist", () => {
-    const dirPath = `${rootDir}`;
+    const dirPath = `${variantDir}`;
     const errors = getMissingMasterlist(masterlist, dirPath, ["back", "female", "icons"]);
     if (errors.length) {
       console.log("errors for ", dirPath, errors);
