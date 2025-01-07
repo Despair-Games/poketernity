@@ -682,14 +682,14 @@ export function applyPostAttackAbAttrs(
 export function applyPostKnockOutAbAttrs(
   attrType: Constructor<PostKnockOutAbAttr>,
   pokemon: Pokemon,
-  knockedOut: Pokemon,
+  knockedOutPokemon: Pokemon,
   simulated: boolean = false,
   ...args: any[]
 ): void {
   applyAbAttrsInternal<PostKnockOutAbAttr>(
     attrType,
     pokemon,
-    (attr, passive) => attr.applyPostKnockOut(pokemon, passive, simulated, knockedOut, ...args),
+    (attr, passive) => attr.applyPostKnockOut(pokemon, passive, simulated, knockedOutPokemon, ...args),
     args,
     false,
     simulated,
