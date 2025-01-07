@@ -96,7 +96,7 @@ describe("Abilities - Infiltrator", () => {
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
-    enemy.addTag(BattlerTagType.SUBSTITUTE, enemy.id, 1, Moves.NONE);
+    enemy.addTag(BattlerTagType.SUBSTITUTE, 1, Moves.NONE, enemy.id);
 
     game.move.select(Moves.BABY_DOLL_EYES);
 
