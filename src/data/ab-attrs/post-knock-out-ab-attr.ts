@@ -7,7 +7,7 @@ export class PostKnockOutAbAttr extends AbAttr {
     _passive: boolean,
     _simulated: boolean,
     _knockedOut: Pokemon,
-    _args: any[],
+    ..._args: unknown[]
   ): boolean {
     return false;
   }

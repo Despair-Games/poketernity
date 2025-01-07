@@ -18,7 +18,6 @@ export class SuppressWeatherEffectAbAttr extends PreWeatherEffectAbAttr {
     _simulated: boolean,
     weather: Weather,
     cancelled: BooleanHolder,
-    _args: any[],
   ): boolean {
     if (this.affectsImmutable || weather.isImmutable()) {
       cancelled.value = true;

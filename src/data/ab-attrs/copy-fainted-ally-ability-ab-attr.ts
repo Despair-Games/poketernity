@@ -7,13 +7,7 @@ import { PostKnockOutAbAttr } from "./post-knock-out-ab-attr";
 import { UncopiableAbilityAbAttr } from "./uncopiable-ability-ab-attr";
 
 export class CopyFaintedAllyAbilityAbAttr extends PostKnockOutAbAttr {
-  override applyPostKnockOut(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    knockedOut: Pokemon,
-    _args: any[],
-  ): boolean {
+  override applyPostKnockOut(pokemon: Pokemon, _passive: boolean, simulated: boolean, knockedOut: Pokemon): boolean {
     if (pokemon.isPlayer() === knockedOut.isPlayer() && !knockedOut.getAbility().hasAttr(UncopiableAbilityAbAttr)) {
       if (!simulated) {
         pokemon.summonData.ability = knockedOut.getAbility().id;

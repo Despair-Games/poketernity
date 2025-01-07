@@ -27,9 +27,8 @@ export class ReceivedMoveDamageMultiplierAbAttr extends PreDefendAbAttr {
     attacker: Pokemon,
     move: Move,
     _cancelled: BooleanHolder,
-    args: any[],
+    multiplier: NumberHolder,
   ): boolean {
-    const multiplier: NumberHolder = args[0];
     if (this.condition(pokemon, attacker, move)) {
       multiplier.value *= this.damageMultiplier;
 

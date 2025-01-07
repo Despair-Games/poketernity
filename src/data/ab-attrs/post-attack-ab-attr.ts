@@ -30,12 +30,12 @@ export class PostAttackAbAttr extends AbAttr {
     defender: Pokemon,
     move: Move,
     hitResult: HitResult | null,
-    args: any[],
+    ...args: unknown[]
   ): boolean {
     // When attackRequired is true, we require the move to be an attack move and to deal damage before checking secondary requirements.
     // If attackRequired is false, we always defer to the secondary requirements.
     if (this.attackCondition(pokemon, defender, move)) {
-      return this.applyPostAttackAfterMoveTypeCheck(pokemon, passive, simulated, defender, move, hitResult, args);
+      return this.applyPostAttackAfterMoveTypeCheck(pokemon, passive, simulated, defender, move, hitResult, ...args);
     } else {
       return false;
     }
@@ -51,7 +51,7 @@ export class PostAttackAbAttr extends AbAttr {
     _defender: Pokemon,
     _move: Move,
     _hitResult: HitResult | null,
-    _args: any[],
+    ..._args: unknown[]
   ): boolean {
     return false;
   }

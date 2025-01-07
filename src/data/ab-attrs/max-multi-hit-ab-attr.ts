@@ -8,9 +8,8 @@ export class MaxMultiHitAbAttr extends AbAttr {
     _passive: boolean,
     _simulated: boolean,
     _cancelled: BooleanHolder,
-    args: any[],
+    hitValue: NumberHolder,
   ): boolean {
-    const hitValue: NumberHolder = args[0];
     hitValue.value = 0;
 
     return true;

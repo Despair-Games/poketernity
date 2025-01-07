@@ -3,7 +3,7 @@ import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import type { BooleanHolder } from "#app/utils";
+import type { BooleanHolder, NumberHolder } from "#app/utils";
 import type { BattleStat } from "#enums/stat";
 import type { Type } from "#enums/type";
 import { TypeImmunityAbAttr } from "./type-immunity-ab-attr";
@@ -26,9 +26,9 @@ export class TypeImmunityStatStageChangeAbAttr extends TypeImmunityAbAttr {
     attacker: Pokemon,
     move: Move,
     cancelled: BooleanHolder,
-    args: any[],
+    typeMultiplier: NumberHolder,
   ): boolean {
-    const ret = super.applyPreDefend(pokemon, passive, simulated, attacker, move, cancelled, args);
+    const ret = super.applyPreDefend(pokemon, passive, simulated, attacker, move, cancelled, typeMultiplier);
 
     if (ret) {
       cancelled.value = true; // Suppresses "No Effect" message

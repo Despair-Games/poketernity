@@ -24,10 +24,11 @@ export class FieldPreventExplosionLikeAbAttr extends AbAttr {
     _passive: boolean,
     _simulated: boolean,
     cancelled: BooleanHolder,
-    args: any[],
+    moveUser: string,
+    moveName: string,
   ): boolean {
-    this.moveUser = args[0];
-    this.moveName = args[1];
+    this.moveUser = moveUser;
+    this.moveName = moveName;
     cancelled.value = true;
     return true;
   }

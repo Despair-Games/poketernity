@@ -36,7 +36,6 @@ import type { PostDefendAbAttr } from "./ab-attrs/post-defend-ab-attr";
 import type { PostStatStageChangeAbAttr } from "./ab-attrs/post-stat-stage-change-ab-attr";
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import type { FieldMultiplyStatAbAttr } from "./ab-attrs/field-multiply-stat-ab-attr";
-import type { StatMultiplierAbAttr } from "./ab-attrs/stat-multiplier-ab-attr";
 import type { PostAttackAbAttr } from "./ab-attrs/post-attack-ab-attr";
 import type { PostSetStatusAbAttr } from "./ab-attrs/post-set-status-ab-attr";
 import type { PostVictoryAbAttr } from "./ab-attrs/post-victory-ab-attr";
@@ -58,6 +57,7 @@ import type { PostBattleAbAttr } from "./ab-attrs/post-battle-ab-attr";
 import type { PostFaintAbAttr } from "./ab-attrs/post-faint-ab-attr";
 import { ForceSwitchOutImmunityAbAttr } from "./ab-attrs/force-switch-out-immunity-ab-attr";
 import { queueShowAbility } from "./ability-utils";
+import type { StatStageAbAttr } from "./ab-attrs/stat-stage-ab-attr";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -363,7 +363,6 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
     damage: number,
     _passive: boolean,
     _simulated: boolean,
-    _args: any[],
     source?: Pokemon,
   ): boolean {
     const moveHistory = pokemon.getMoveHistory();
@@ -484,7 +483,7 @@ export function applyAbAttrs(
   applyAbAttrsInternal<AbAttr>(
     attrType,
     pokemon,
-    (attr, passive) => attr.apply(pokemon, passive, simulated, cancelled, args),
+    (attr, passive) => attr.apply(pokemon, passive, simulated, cancelled, ...args),
     args,
     false,
     simulated,
@@ -500,7 +499,7 @@ export function applyPostBattleInitAbAttrs(
   applyAbAttrsInternal<PostBattleInitAbAttr>(
     attrType,
     pokemon,
-    (attr, passive) => attr.applyPostBattleInit(pokemon, passive, simulated, args),
+    (attr, passive) => attr.applyPostBattleInit(pokemon, passive, simulated, ...args),
     args,
     false,
     simulated,
@@ -519,7 +518,7 @@ export function applyPreDefendAbAttrs(
   applyAbAttrsInternal<PreDefendAbAttr>(
     attrType,
     pokemon,
-    (attr, passive) => attr.applyPreDefend(pokemon, passive, simulated, attacker, move, cancelled, args),
+    (attr, passive) => attr.applyPreDefend(pokemon, passive, simulated, attacker, move, cancelled, ...args),
     args,
     false,
     simulated,
@@ -538,7 +537,7 @@ export function applyPostDefendAbAttrs(
   applyAbAttrsInternal<PostDefendAbAttr>(
     attrType,
     pokemon,
-    (attr, passive) => attr.applyPostDefend(pokemon, passive, simulated, attacker, move, hitResult, args),
+    (attr, passive) => attr.applyPostDefend(pokemon, passive, simulated, attacker, move, hitResult, ...args),
     args,
     false,
     simulated,
@@ -557,7 +556,7 @@ export function applyPostMoveUsedAbAttrs(
   applyAbAttrsInternal<PostMoveUsedAbAttr>(
     attrType,
     pokemon,
-    (attr, _passive) => attr.applyPostMoveUsed(pokemon, move, source, targets, simulated, args),
+    (attr, _passive) => attr.applyPostMoveUsed(pokemon, move, source, targets, simulated, ...args),
     args,
     false,
     simulated,
@@ -565,17 +564,17 @@ export function applyPostMoveUsedAbAttrs(
 }
 
 export function applyStatMultiplierAbAttrs(
-  attrType: Constructor<StatMultiplierAbAttr>,
+  attrType: Constructor<StatStageAbAttr>,
   pokemon: Pokemon,
   stat: BattleStat,
   statValue: NumberHolder,
   simulated: boolean = false,
   ...args: any[]
 ): void {
-  applyAbAttrsInternal<StatMultiplierAbAttr>(
+  applyAbAttrsInternal<StatStageAbAttr>(
     attrType,
     pokemon,
-    (attr, passive) => attr.applyStatStage(pokemon, passive, simulated, stat, statValue, args),
+    (attr, passive) => attr.applyStatStage(pokemon, passive, simulated, stat, statValue, ...args),
     args,
   );
 }
@@ -591,7 +590,7 @@ export function applyPostSetStatusAbAttrs(
   applyAbAttrsInternal<PostSetStatusAbAttr>(
     attrType,
     pokemon,
-    (attr, passive) => attr.applyPostSetStatus(pokemon, sourcePokemon, passive, effect, simulated, args),
+    (attr, passive) => attr.applyPostSetStatus(pokemon, sourcePokemon, passive, effect, simulated, ...args),
     args,
     false,
     simulated,
@@ -610,7 +609,7 @@ export function applyPostDamageAbAttrs(
   applyAbAttrsInternal<PostDamageAbAttr>(
     attrType,
     pokemon,
-    (attr, passive) => attr.applyPostDamage(pokemon, damage, passive, simulated, args, source),
+    (attr, passive) => attr.applyPostDamage(pokemon, damage, passive, simulated, source, ...args),
     args,
   );
 }
@@ -655,7 +654,7 @@ export function applyPreAttackAbAttrs(
   applyAbAttrsInternal<PreAttackAbAttr>(
     attrType,
     pokemon,
-    (attr, passive) => attr.applyPreAttack(pokemon, passive, simulated, defender, move, args),
+    (attr, passive) => attr.applyPreAttack(pokemon, passive, simulated, defender, move, ...args),
     args,
     false,
     simulated,
@@ -674,7 +673,7 @@ export function applyPostAttackAbAttrs(
   applyAbAttrsInternal<PostAttackAbAttr>(
     attrType,
     pokemon,
-    (attr, passive) => attr.applyPostAttack(pokemon, passive, simulated, defender, move, hitResult, args),
+    (attr, passive) => attr.applyPostAttack(pokemon, passive, simulated, defender, move, hitResult, ...args),
     args,
     false,
     simulated,
@@ -691,7 +690,7 @@ export function applyPostKnockOutAbAttrs(
   applyAbAttrsInternal<PostKnockOutAbAttr>(
     attrType,
     pokemon,
-    (attr, passive) => attr.applyPostKnockOut(pokemon, passive, simulated, knockedOut, args),
+    (attr, passive) => attr.applyPostKnockOut(pokemon, passive, simulated, knockedOut, ...args),
     args,
     false,
     simulated,
@@ -707,7 +706,7 @@ export function applyPostVictoryAbAttrs(
   applyAbAttrsInternal<PostVictoryAbAttr>(
     attrType,
     pokemon,
-    (attr, passive) => attr.applyPostVictory(pokemon, passive, simulated, args),
+    (attr, passive) => attr.applyPostVictory(pokemon, passive, simulated, ...args),
     args,
     false,
     simulated,
@@ -723,7 +722,7 @@ export function applyPostSummonAbAttrs(
   applyAbAttrsInternal<PostSummonAbAttr>(
     attrType,
     pokemon,
-    (attr, passive) => attr.applyPostSummon(pokemon, passive, simulated, args),
+    (attr, passive) => attr.applyPostSummon(pokemon, passive, simulated, ...args),
     args,
     false,
     simulated,
@@ -739,7 +738,7 @@ export function applyPreSwitchOutAbAttrs(
   applyAbAttrsInternal<PreSwitchOutAbAttr>(
     attrType,
     pokemon,
-    (attr, passive) => attr.applyPreSwitchOut(pokemon, passive, simulated, args),
+    (attr, passive) => attr.applyPreSwitchOut(pokemon, passive, simulated, ...args),
     args,
     true,
     simulated,
@@ -757,7 +756,7 @@ export function applyPreStatStageChangeAbAttrs(
   applyAbAttrsInternal<PreStatStageChangeAbAttr>(
     attrType,
     pokemon,
-    (attr, passive) => attr.applyPreStatStageChange(pokemon, passive, simulated, stat, cancelled, args),
+    (attr, passive) => attr.applyPreStatStageChange(pokemon, passive, simulated, stat, cancelled, ...args),
     args,
     false,
     simulated,
@@ -776,7 +775,7 @@ export function applyPostStatStageChangeAbAttrs(
   applyAbAttrsInternal<PostStatStageChangeAbAttr>(
     attrType,
     pokemon,
-    (attr, _passive) => attr.applyPostStatStageChange(pokemon, simulated, stats, stages, selfTarget, args),
+    (attr, _passive) => attr.applyPostStatStageChange(pokemon, simulated, stats, stages, selfTarget, ...args),
     args,
     false,
     simulated,
@@ -794,7 +793,7 @@ export function applyPreSetStatusAbAttrs(
   applyAbAttrsInternal<PreSetStatusAbAttr>(
     attrType,
     pokemon,
-    (attr, passive) => attr.applyPreSetStatus(pokemon, passive, simulated, effect, cancelled, args),
+    (attr, passive) => attr.applyPreSetStatus(pokemon, passive, simulated, effect, cancelled, ...args),
     args,
     false,
     simulated,
@@ -812,7 +811,7 @@ export function applyPreApplyBattlerTagAbAttrs(
   applyAbAttrsInternal<PreApplyBattlerTagAbAttr>(
     attrType,
     pokemon,
-    (attr, passive) => attr.applyPreApplyBattlerTag(pokemon, passive, simulated, tag, cancelled, args),
+    (attr, passive) => attr.applyPreApplyBattlerTag(pokemon, passive, simulated, tag, cancelled, ...args),
     args,
     false,
     simulated,
@@ -830,7 +829,7 @@ export function applyPreWeatherEffectAbAttrs(
   applyAbAttrsInternal<PreWeatherDamageAbAttr>(
     attrType,
     pokemon,
-    (attr, passive) => attr.applyPreWeatherEffect(pokemon, passive, simulated, weather, cancelled, args),
+    (attr, passive) => attr.applyPreWeatherEffect(pokemon, passive, simulated, weather, cancelled, ...args),
     args,
     true,
     simulated,
@@ -846,7 +845,7 @@ export function applyPostTurnAbAttrs(
   applyAbAttrsInternal<PostTurnAbAttr>(
     attrType,
     pokemon,
-    (attr, passive) => attr.applyPostTurn(pokemon, passive, simulated, args),
+    (attr, passive) => attr.applyPostTurn(pokemon, passive, simulated, ...args),
     args,
     false,
     simulated,
@@ -863,7 +862,7 @@ export function applyPostWeatherChangeAbAttrs(
   applyAbAttrsInternal<PostWeatherChangeAbAttr>(
     attrType,
     pokemon,
-    (attr, passive) => attr.applyPostWeatherChange(pokemon, passive, simulated, weather, args),
+    (attr, passive) => attr.applyPostWeatherChange(pokemon, passive, simulated, weather, ...args),
     args,
     false,
     simulated,
@@ -880,7 +879,7 @@ export function applyPostWeatherLapseAbAttrs(
   applyAbAttrsInternal<PostWeatherLapseAbAttr>(
     attrType,
     pokemon,
-    (attr, passive) => attr.applyPostWeatherLapse(pokemon, passive, simulated, weather, args),
+    (attr, passive) => attr.applyPostWeatherLapse(pokemon, passive, simulated, weather, ...args),
     args,
     false,
     simulated,
@@ -897,7 +896,7 @@ export function applyPostTerrainChangeAbAttrs(
   applyAbAttrsInternal<PostTerrainChangeAbAttr>(
     attrType,
     pokemon,
-    (attr, passive) => attr.applyPostTerrainChange(pokemon, passive, simulated, terrain, args),
+    (attr, passive) => attr.applyPostTerrainChange(pokemon, passive, simulated, terrain, ...args),
     args,
     false,
     simulated,
@@ -916,7 +915,7 @@ export function applyCheckTrappedAbAttrs(
   applyAbAttrsInternal<CheckTrappedAbAttr>(
     attrType,
     pokemon,
-    (attr, passive) => attr.applyCheckTrapped(pokemon, passive, simulated, trapped, otherPokemon, args),
+    (attr, passive) => attr.applyCheckTrapped(pokemon, passive, simulated, trapped, otherPokemon, ...args),
     args,
     false,
     simulated,
@@ -933,7 +932,7 @@ export function applyPostBattleAbAttrs(
   applyAbAttrsInternal<PostBattleAbAttr>(
     attrType,
     pokemon,
-    (attr, passive) => attr.applyPostBattle(pokemon, passive, simulated, args),
+    (attr, passive) => attr.applyPostBattle(pokemon, passive, simulated, ...args),
     args,
     false,
     simulated,
@@ -952,7 +951,7 @@ export function applyPostFaintAbAttrs(
   applyAbAttrsInternal<PostFaintAbAttr>(
     attrType,
     pokemon,
-    (attr, passive) => attr.applyPostFaint(pokemon, passive, simulated, attacker, move, hitResult, args),
+    (attr, passive) => attr.applyPostFaint(pokemon, passive, simulated, attacker, move, hitResult, ...args),
     args,
     false,
     simulated,
@@ -968,7 +967,7 @@ export function applyPostItemLostAbAttrs(
   applyAbAttrsInternal<PostItemLostAbAttr>(
     attrType,
     pokemon,
-    (attr, _passive) => attr.applyPostItemLost(pokemon, simulated, args),
+    (attr, _passive) => attr.applyPostItemLost(pokemon, simulated, ...args),
     args,
   );
 }

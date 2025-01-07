@@ -27,7 +27,6 @@ export class PostFaintContactDamageAbAttr extends PostFaintAbAttr {
     attacker?: Pokemon,
     move?: Move,
     _hitResult?: HitResult,
-    ..._args: any[]
   ): boolean {
     if (move && attacker && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)) {
       //If the mon didn't die to indirect damage

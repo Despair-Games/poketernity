@@ -39,13 +39,12 @@ export class LowHpMoveTypeAttackMultiplierAbAttr extends StatMultiplierAbAttr {
     simulated: boolean,
     stat: BattleStat,
     statValue: NumberHolder,
-    args: any[],
+    move: Move,
+    target: Pokemon,
   ): boolean {
-    const move: Move | null = args[0];
-    const target: Pokemon | null = args[1];
     const category =
       !isNullOrUndefined(move) && !isNullOrUndefined(target) ? pokemon.getMoveCategory(target, move) : move?.category;
     this.stat = category === MoveCategory.SPECIAL ? Stat.SPATK : Stat.ATK;
-    return super.applyStatStage(pokemon, passive, simulated, stat, statValue, args);
+    return super.applyStatStage(pokemon, passive, simulated, stat, statValue, move, target);
   }
 }

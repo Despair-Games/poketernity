@@ -19,7 +19,6 @@ export class PostFaintUnsuppressedWeatherFormChangeAbAttr extends PostFaintAbAtt
    * @param _attacker n/a
    * @param _move n/a
    * @param _hitResult n/a
-   * @param _args n/a
    * @returns whether the form change was triggered
    */
   override applyPostFaint(
@@ -29,7 +28,6 @@ export class PostFaintUnsuppressedWeatherFormChangeAbAttr extends PostFaintAbAtt
     _attacker: Pokemon,
     _move: Move,
     _hitResult: HitResult,
-    _args: any[],
   ): boolean {
     const pokemonToTransform = getPokemonWithWeatherBasedForms();
 

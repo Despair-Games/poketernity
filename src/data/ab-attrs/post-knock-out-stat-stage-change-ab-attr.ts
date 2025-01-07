@@ -15,13 +15,7 @@ export class PostKnockOutStatStageChangeAbAttr extends PostKnockOutAbAttr {
     this.stages = stages;
   }
 
-  override applyPostKnockOut(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    _knockedOut: Pokemon,
-    _args: any[],
-  ): boolean {
+  override applyPostKnockOut(pokemon: Pokemon, _passive: boolean, simulated: boolean, _knockedOut: Pokemon): boolean {
     const stat = typeof this.stat === "function" ? this.stat(pokemon) : this.stat;
     if (!simulated) {
       globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [stat], this.stages));

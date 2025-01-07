@@ -5,6 +5,7 @@ import { Stat } from "#enums/stat";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
 import { getWeatherCondition } from "#app/data/all-abilities";
+import type { Move } from "../move";
 
 /**
  * Ability attribute that doubles speed if specific weather(s) are active
@@ -34,10 +35,10 @@ export class WeatherBasedSpeedDoublerAbAttr extends StatMultiplierAbAttr {
     simulated: boolean,
     stat: BattleStat,
     statValue: NumberHolder,
-    args: any[],
+    move: Move,
   ): boolean {
     if (getWeatherCondition(...this.weather)(pokemon)) {
-      return super.applyStatStage(pokemon, passive, simulated, stat, statValue, args);
+      return super.applyStatStage(pokemon, passive, simulated, stat, statValue, move);
     }
     return false;
   }
