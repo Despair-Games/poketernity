@@ -112,7 +112,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
    * Enemy trainer or player trainer will do animations to throw Pokeball and summon a Pokemon to the field.
    */
   protected summon(): void {
-    const { add, currentBattle, field, time, tweens } = globalScene;
+    const { add, currentBattle, field, time, tweens, animations } = globalScene;
     const pokemon = this.getPokemon();
 
     const pokeball = globalScene.addFieldSprite(
@@ -170,7 +170,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
               }
               currentBattle.seenEnemyPartyMemberIds.add(pokemon.id);
             }
-            globalScene.animations.addPokeballOpenParticles(pokemon.x, pokemon.y - 16, pokemon.pokeball);
+            animations.addPokeballOpenParticles(pokemon.x, pokemon.y - 16, pokemon.pokeball);
             globalScene.updateModifiers(this.isPlayer);
             globalScene.updateFieldScale();
 
