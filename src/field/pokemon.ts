@@ -3,7 +3,6 @@ import type { AnySound } from "#app/battle-scene";
 import type BattleScene from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
 import type { Variant } from "#app/data/variant";
-import { variantColorCache } from "#app/data/variant";
 import { variantData } from "#app/data/variant";
 import BattleInfo, { PlayerBattleInfo, EnemyBattleInfo } from "#app/ui/battle-info";
 import type { Move } from "#app/data/move";
@@ -60,8 +59,6 @@ import {
   getEnumValues,
   toDmgValue,
   fixedInt,
-  rgbaToInt,
-  rgbHexToRgba,
   rgbToHsv,
   deltaRgb,
   isBetween,
@@ -4458,30 +4455,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     });
 
     for (let f = 0; f < 2; f++) {
-      const variantColors = variantColorCache[!f ? spriteKey : backSpriteKey];
-      const variantColorSet = new Map<number, number[]>();
-      if (this.shiny && variantColors && variantColors[this.variant]) {
-        Object.keys(variantColors[this.variant]).forEach((k) => {
-          variantColorSet.set(
-            rgbaToInt(Array.from(Object.values(rgbHexToRgba(k)))),
-            Array.from(Object.values(rgbHexToRgba(variantColors[this.variant][k]))),
-          );
-        });
-      }
-
       for (let i = 0; i < pixelData[f].length; i += 4) {
         if (pixelData[f][i + 3]) {
           const pixel = pixelData[f].slice(i, i + 4);
-          let [r, g, b, a] = pixel;
-          if (variantColors) {
-            const color = rgbaToInt([r, g, b, a]);
-            if (variantColorSet.has(color)) {
-              const mappedPixel = variantColorSet.get(color);
-              if (mappedPixel) {
-                [r, g, b, a] = mappedPixel;
-              }
-            }
-          }
+          const [r, g, b, a] = pixel;
           if (!spriteColors.find((c) => c[0] === r && c[1] === g && c[2] === b)) {
             spriteColors.push([r, g, b, a]);
           }
@@ -4506,36 +4483,17 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     const fusionPixelColors: number[] = [];
     for (let f = 0; f < 2; f++) {
-      const variantColors = variantColorCache[!f ? fusionSpriteKey : fusionBackSpriteKey];
-      const variantColorSet = new Map<number, number[]>();
-      if (this.fusionShiny && variantColors && variantColors[this.fusionVariant]) {
-        Object.keys(variantColors[this.fusionVariant]).forEach((k) => {
-          variantColorSet.set(
-            rgbaToInt(Array.from(Object.values(rgbHexToRgba(k)))),
-            Array.from(Object.values(rgbHexToRgba(variantColors[this.fusionVariant][k]))),
-          );
-        });
-      }
       for (let i = 0; i < pixelData[2 + f].length; i += 4) {
         const total = pixelData[2 + f].slice(i, i + 3).reduce((total: number, value: number) => total + value, 0);
         if (!total) {
           continue;
         }
-        let [r, g, b, a] = [
+        const [r, g, b, a] = [
           pixelData[2 + f][i],
           pixelData[2 + f][i + 1],
           pixelData[2 + f][i + 2],
           pixelData[2 + f][i + 3],
         ];
-        if (variantColors) {
-          const color = rgbaToInt([r, g, b, a]);
-          if (variantColorSet.has(color)) {
-            const mappedPixel = variantColorSet.get(color);
-            if (mappedPixel) {
-              [r, g, b, a] = mappedPixel;
-            }
-          }
-        }
         fusionPixelColors.push(argbFromRgba({ r, g, b, a }));
       }
     }

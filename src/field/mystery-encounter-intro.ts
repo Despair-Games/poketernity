@@ -153,10 +153,6 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
           // Set Pipeline for shiny variant
           sprite.setPipelineData("spriteKey", spriteKey);
           tintSprite.setPipelineData("spriteKey", spriteKey);
-          sprite.setPipelineData("shiny", true);
-          sprite.setPipelineData("variant", variant);
-          tintSprite.setPipelineData("shiny", true);
-          tintSprite.setPipelineData("variant", variant);
           // Create Sprite for shiny Sparkle
           pokemonShinySparkle = globalScene.add.sprite(sprite.x, sprite.y, "shiny");
           pokemonShinySparkle.setOrigin(0.5, 1);

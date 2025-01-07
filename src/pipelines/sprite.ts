@@ -1,9 +1,7 @@
-import { variantColorCache } from "#app/data/variant";
-import { Pokemon } from "../field/pokemon";
-import Trainer from "../field/trainer";
-import FieldSpritePipeline from "./field-sprite";
-import { rgbHexToRgba } from "#app/utils";
-import MysteryEncounterIntroVisuals from "../field/mystery-encounter-intro";
+import { Pokemon } from "#app/field/pokemon";
+import Trainer from "#app/field/trainer";
+import FieldSpritePipeline from "#app/pipelines/field-sprite";
+import MysteryEncounterIntroVisuals from "#app/field/mystery-encounter-intro";
 import { globalScene } from "#app/global-scene";
 
 const spriteFragShader = `
@@ -40,8 +38,6 @@ uniform vec2 texSize;
 uniform float yOffset;
 uniform float yShadowOffset;
 uniform vec4 tone;
-uniform ivec4 baseVariantColors[32];
-uniform vec4 variantColors[32];
 uniform ivec4 spriteColors[32];
 uniform ivec4 fusionSpriteColors[32];
 
@@ -162,15 +158,6 @@ void main() {
     vec4 texture = texture2D(uMainSampler[0], outTexCoord);
 
     ivec4 colorInt = ivec4(int(texture.r * 255.0), int(texture.g * 255.0), int(texture.b * 255.0), int(texture.a * 255.0));
-
-    for (int i = 0; i < 32; i++) {
-        if (baseVariantColors[i][3] == 0)
-            break;
-        if (texture.a > 0.0 && colorInt.r == baseVariantColors[i].r && colorInt.g == baseVariantColors[i].g && colorInt.b == baseVariantColors[i].b) {
-            texture.rgb = variantColors[i].rgb;
-            break;
-        }
-    }
 
     for (int i = 0; i < 32; i++) {
         if (spriteColors[i][3] == 0)
@@ -419,58 +406,6 @@ export default class SpritePipeline extends FieldSpritePipeline {
       this.set4iv("spriteColors", flatSpriteColors.flat());
       this.set4iv("fusionSpriteColors", flatFusionSpriteColors.flat());
     }
-  }
-
-  override onBatch(gameObject: Phaser.GameObjects.GameObject): void {
-    if (gameObject) {
-      const sprite = gameObject as Phaser.GameObjects.Sprite;
-      const data = sprite.pipelineData;
-
-      const variant: number = data.hasOwnProperty("variant")
-        ? data["variant"]
-        : sprite.parentContainer instanceof Pokemon
-          ? sprite.parentContainer.variant
-          : 0;
-      let variantColors;
-
-      const emptyColors = [0, 0, 0, 0];
-      const flatBaseColors: number[] = [];
-      const flatVariantColors: number[] = [];
-
-      if (
-        (sprite.parentContainer instanceof Pokemon ? sprite.parentContainer.shiny : !!data["shiny"])
-        && (variantColors =
-          variantColorCache[
-            sprite.parentContainer instanceof Pokemon
-              ? sprite.parentContainer.getSprite().texture.key
-              : data["spriteKey"]
-          ])
-        && variantColors.hasOwnProperty(variant)
-      ) {
-        const baseColors = Object.keys(variantColors[variant]);
-        for (let c = 0; c < 32; c++) {
-          if (c < baseColors.length) {
-            const baseColor = Array.from(Object.values(rgbHexToRgba(baseColors[c])));
-            const variantColor = Array.from(Object.values(rgbHexToRgba(variantColors[variant][baseColors[c]])));
-            flatBaseColors.splice(flatBaseColors.length, 0, ...baseColor);
-            flatVariantColors.splice(flatVariantColors.length, 0, ...variantColor.map((c) => c / 255.0));
-          } else {
-            flatBaseColors.splice(flatBaseColors.length, 0, ...emptyColors);
-            flatVariantColors.splice(flatVariantColors.length, 0, ...emptyColors);
-          }
-        }
-      } else {
-        for (let c = 0; c < 32; c++) {
-          flatBaseColors.splice(flatBaseColors.length, 0, ...emptyColors);
-          flatVariantColors.splice(flatVariantColors.length, 0, ...emptyColors);
-        }
-      }
-
-      this.set4iv("baseVariantColors", flatBaseColors.flat());
-      this.set4fv("variantColors", flatVariantColors.flat());
-    }
-
-    super.onBatch(gameObject);
   }
 
   override batchQuad(
