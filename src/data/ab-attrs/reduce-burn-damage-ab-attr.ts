@@ -15,8 +15,7 @@ export class ReduceBurnDamageAbAttr extends AbAttr {
    * Applies the damage reduction
    * @param _pokemon N/A
    * @param _passive N/A
-   * @param _cancelled N/A
-   * @param args `[0]` {@linkcode NumberHolder} The damage value being modified
+   * @param damage {@linkcode NumberHolder} The damage value being modified
    * @returns `true`
    */
   override apply(_pokemon: Pokemon, _passive: boolean, _simulated: boolean, damage: NumberHolder): boolean {

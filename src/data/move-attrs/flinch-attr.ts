@@ -28,7 +28,7 @@ export class FlinchAttr extends AddBattlerTagAttr {
   ): number {
     const moveChance = new NumberHolder(this.effectChanceOverride ?? move.chance);
 
-    applyAbAttrs(MoveEffectChanceMultiplierAbAttr, user, null, false, moveChance, move, showAbility);
+    applyAbAttrs(MoveEffectChanceMultiplierAbAttr, user, false, moveChance, move, showAbility);
 
     if (moveChance.value <= move.chance) {
       const userSide = user.getArenaTagSide();

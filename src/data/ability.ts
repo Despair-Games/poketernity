@@ -264,7 +264,7 @@ class ForceSwitchOutHelper {
 
     if (player) {
       const blockedByAbility = new BooleanHolder(false);
-      applyAbAttrs(ForceSwitchOutImmunityAbAttr, opponent, blockedByAbility);
+      applyAbAttrs(ForceSwitchOutImmunityAbAttr, opponent, false, blockedByAbility);
       return !blockedByAbility.value;
     }
 
@@ -301,7 +301,7 @@ class ForceSwitchOutHelper {
    */
   public getFailedText(target: Pokemon): string | null {
     const blockedByAbility = new BooleanHolder(false);
-    applyAbAttrs(ForceSwitchOutImmunityAbAttr, target, blockedByAbility);
+    applyAbAttrs(ForceSwitchOutImmunityAbAttr, target, false, blockedByAbility);
     return blockedByAbility.value
       ? i18next.t("moveTriggers:cannotBeSwitchedOut", { pokemonName: getPokemonNameWithAffix(target) })
       : null;
@@ -476,14 +476,13 @@ function applyAbAttrsInternal<TAttr extends AbAttr>(
 export function applyAbAttrs(
   attrType: Constructor<AbAttr>,
   pokemon: Pokemon,
-  cancelled: BooleanHolder | null,
   simulated: boolean = false,
   ...args: any[]
 ): void {
   applyAbAttrsInternal<AbAttr>(
     attrType,
     pokemon,
-    (attr, passive) => attr.apply(pokemon, passive, simulated, cancelled, ...args),
+    (attr, passive) => attr.apply(pokemon, passive, simulated, ...args),
     args,
     false,
     simulated,
