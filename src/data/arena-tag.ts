@@ -711,7 +711,7 @@ export class ArenaTrapTag extends ArenaTag {
    * @returns `true` if this hazard affects the given Pokemon; `false` otherwise.
    */
   override apply(_arena: Arena, simulated: boolean, pokemon: Pokemon): boolean {
-    if ((this.side === ArenaTagSide.PLAYER) !== pokemon.isPlayer()) {
+    if (this.side !== ArenaTagSide.BOTH && (this.side === ArenaTagSide.PLAYER) !== pokemon.isPlayer()) {
       return false;
     }
 
@@ -883,14 +883,13 @@ export class DelayedAttackTag extends ArenaTag {
   public delayedAttacks: DelayedAttack[];
 
   constructor() {
-    super(ArenaTagType.DELAYED_ATTACK, 3);
+    super(ArenaTagType.DELAYED_ATTACK, 0);
 
     this.delayedAttacks = [];
   }
 
   public addAttack(source: Pokemon, move: Moves, targetIndex: BattlerIndex): void {
     this.delayedAttacks.push({ sourceId: source.id, move, targetIndex, turnCount: 3 });
-    this.turnCount = 3;
   }
 
   override lapse(_arena: Arena): boolean {
