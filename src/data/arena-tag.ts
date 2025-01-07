@@ -1160,8 +1160,8 @@ class TailwindTag extends ArenaTag {
  * Doubles the prize money from trainers and money moves like {@linkcode Moves.PAY_DAY} and {@linkcode Moves.MAKE_IT_RAIN}.
  */
 class HappyHourTag extends ArenaTag {
-  constructor(turnCount: number, sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.HAPPY_HOUR, turnCount, Moves.HAPPY_HOUR, sourceId, side);
+  constructor(sourceId: number, side: ArenaTagSide) {
+    super(ArenaTagType.HAPPY_HOUR, 0, Moves.HAPPY_HOUR, sourceId, side);
   }
 
   override onAdd(_arena: Arena): void {
@@ -1434,7 +1434,7 @@ export function getArenaTag(
     case ArenaTagType.TAILWIND:
       return new TailwindTag(turnCount, sourceId, side);
     case ArenaTagType.HAPPY_HOUR:
-      return new HappyHourTag(turnCount, sourceId, side);
+      return new HappyHourTag(sourceId, side);
     case ArenaTagType.SAFEGUARD:
       return new SafeguardTag(turnCount, sourceId, side);
     case ArenaTagType.IMPRISON:
