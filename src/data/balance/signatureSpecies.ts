@@ -13,7 +13,7 @@ export const signatureSpecies: SignatureSpecies = {
   // Kanto gym leaders
   BROCK: [Species.ONIX, Species.GEODUDE, [Species.OMANYTE, Species.KABUTO], Species.AERODACTYL],
   MISTY: [Species.STARYU, Species.PSYDUCK, Species.WOOPER, [Species.MAGIKARP, Species.FEEBAS]],
-  LT_SURGE: [Species.PIKACHU, Species.ELEKID, Species.VOLTORB],
+  LT_SURGE: [Species.PICHU, Species.ELEKID, Species.VOLTORB],
   ERIKA: [Species.ODDISH, Species.BELLSPROUT, Species.TANGELA, Species.HOPPIP],
   JANINE: [Species.VENONAT, Species.SPINARAK, Species.ZUBAT],
   SABRINA: [Species.ABRA, Species.MIME_JR, Species.SMOOCHUM, Species.ESPEON],
