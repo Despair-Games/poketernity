@@ -774,7 +774,7 @@ export abstract class Move implements Localizable {
         .flat(),
     );
     for (const aura of fieldAuras) {
-      aura.applyPreAttack(source, null, simulated, target, this, [power]);
+      aura.applyPreAttack(source, null, simulated, target, this, power);
     }
 
     const alliedField: Pokemon[] = source.getField();

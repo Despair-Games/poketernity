@@ -43,7 +43,7 @@ describe("Abilities - Fluffy", () => {
     game.move.select(Moves.TACKLE);
     await game.phaseInterceptor.to("BerryPhase");
 
-    const damageMultiplier = (abilitySpy.mock.lastCall?.[6][0] as NumberHolder).value;
+    const damageMultiplier = (abilitySpy.mock.lastCall?.[6] as NumberHolder).value;
     expect(allMoves[Moves.TACKLE].hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
     expect(damageMultiplier).toBe(0.5);
   });
@@ -56,7 +56,7 @@ describe("Abilities - Fluffy", () => {
     game.move.select(Moves.EMBER);
     await game.phaseInterceptor.to("BerryPhase");
 
-    const damageMultiplier = (abilitySpy.mock.lastCall?.[6][0] as NumberHolder).value;
+    const damageMultiplier = (abilitySpy.mock.lastCall?.[6] as NumberHolder).value;
     expect(damageMultiplier).toBe(2);
   });
 
@@ -69,7 +69,7 @@ describe("Abilities - Fluffy", () => {
     await game.move.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
-    const damageMultiplier = (abilitySpy.mock.lastCall?.[6][0] as NumberHolder).value;
+    const damageMultiplier = (abilitySpy.mock.lastCall?.[6] as NumberHolder).value;
     expect(allMoves[Moves.FIRE_FANG].hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
     expect(damageMultiplier).toBe(1);
   });
@@ -83,7 +83,7 @@ describe("Abilities - Fluffy", () => {
     game.move.select(Moves.TACKLE);
     await game.phaseInterceptor.to("BerryPhase");
 
-    const damageMultiplier = (abilitySpy.mock.lastCall?.[6][0] as NumberHolder).value;
+    const damageMultiplier = (abilitySpy.mock.lastCall?.[6] as NumberHolder).value;
     expect(allMoves[Moves.TACKLE].hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
     expect(damageMultiplier).toBe(1);
   });
