@@ -84,7 +84,9 @@ export interface GamepadSettings {
 export type SettingUiItemOption = {
   value: number | string | boolean;
   label: string;
-  needConfirmation?: boolean;
+  /** Indicates if a settings change requires a confirmation */
+  requiresConfirmation?: boolean;
+  /** Provide a custom confirmation message. */
   confirmationMessage?: string;
 };
 

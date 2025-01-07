@@ -16,25 +16,50 @@ import { ExpNotification } from "#app/enums/exp-notification";
 import { HpBarSpeed } from "#app/enums/hp-bar-speed";
 import { MoneyFormat } from "#app/enums/money-format";
 import { MusicPreference } from "#app/enums/music-preference";
+import { PlayerGender } from "#app/enums/player-gender";
 import { ShopCursorTarget } from "#app/enums/shop-cursor-target";
 import { UiTheme } from "#app/enums/ui-theme";
-import i18next, { t } from "i18next";
 import { supportedLanguages } from "#app/system/settings/supported-languages";
 import { isLandscapeMode } from "#app/utils";
-import { PlayerGender } from "#app/enums/player-gender";
+import i18next, { t } from "i18next";
 
+//#region Types
+
+type UseOptionInit = Pick<SettingUiItemOption, "requiresConfirmation" | "confirmationMessage">;
+
+//#endregion
 //#region Helper Functions
 
-function useBoolOptions(
-  falseI18nKey: string = "settings:off",
-  trueI18nKey: string = "settings:on",
-): SettingUiItemOption[] {
+/**
+ * Creates an array with "on/off" options.
+ * @param onInit Initial settings for "on" option. Default `{}`
+ * @param offInit Initial settings for "off" option. Default `{}`
+ * @returns On/off options array
+ */
+function useOnOffOptions(onInit: UseOptionInit = {}, offInit: UseOptionInit = {}): SettingUiItemOption[] {
   return [
-    { value: false, label: t(falseI18nKey) },
-    { value: true, label: t(trueI18nKey) },
+    { value: true, label: t("settings:on"), ...onInit },
+    { value: false, label: t("settings:off"), ...offInit },
   ];
 }
 
+/**
+ * Creates an array with "auto/disabled" options.
+ * @param autoInit Initial settings for "auto" option. Default `{}`
+ * @param disabledInit Initial settings for "disabled" option. Default `{}`
+ * @returns Auto/disabled options array
+ */
+function useAutoDisabledOptions(autoInit: UseOptionInit = {}, disabledInit: UseOptionInit = {}): SettingUiItemOption[] {
+  return [
+    { value: true, label: t("settings:auto"), ...autoInit },
+    { value: false, label: t("settings:disabled"), ...disabledInit },
+  ];
+}
+
+/**
+ * Creates an array with volume options ranging from 0/mute - 100 in 10 steps
+ * @returns An array from 0 - 100
+ */
 function useVolumeOptions(): SettingUiItemOption[] {
   return Array.from({ length: 11 }).map((_, i) => ({
     value: Number((i * 0.1).toFixed(1)),
@@ -42,11 +67,13 @@ function useVolumeOptions(): SettingUiItemOption[] {
   }));
 }
 
-//#endregion
-
-//#region Constants
-
-export const gameSpeedOptions: number[] = [1, 1.25, 1.5, 2, 2.5, 3, 4, 5];
+/**
+ * Creates an array with game speed options ranging from 1x - 5x (inconsistent steps).
+ * @returns An array from 1x - 5x
+ */
+function useGameSpeedOptions(): SettingUiItemOption[] {
+  return [1, 1.25, 1.5, 2, 2.5, 3, 4, 5].map((n) => ({ value: n, label: `${n}x` }));
+}
 
 //#endregion
 
@@ -57,7 +84,7 @@ export const generalSettingsUiItems: SettingsUiItem<GeneralSettingsKey>[] = [
   {
     key: "gameSpeed",
     label: t("settings:gameSpeed"),
-    options: gameSpeedOptions.map((n) => ({ value: n, label: `${n}x` })),
+    options: useGameSpeedOptions(),
   },
   {
     key: "hpBarSpeed",
@@ -91,7 +118,7 @@ export const generalSettingsUiItems: SettingsUiItem<GeneralSettingsKey>[] = [
   {
     key: "skipSeenDialogues",
     label: t("settings:skipSeenDialogues"),
-    options: useBoolOptions(),
+    options: useOnOffOptions(),
   },
   {
     key: "eggSkipPreference",
@@ -113,22 +140,26 @@ export const generalSettingsUiItems: SettingsUiItem<GeneralSettingsKey>[] = [
   {
     key: "enableRetries",
     label: t("settings:enableRetries"),
-    options: useBoolOptions(),
+    options: useOnOffOptions(),
   },
   {
     key: "hideIvScanner",
     label: t("settings:hideIvs"),
-    options: useBoolOptions(),
+    options: useOnOffOptions(),
   },
   {
     key: "enableTutorials",
     label: t("settings:tutorials"),
-    options: useBoolOptions(),
+    options: useOnOffOptions(),
   },
   {
     key: "enableTouchControls",
     label: t("settings:touchControls"),
-    options: useBoolOptions("settings:disabled", "settings:auto"),
+    options: useAutoDisabledOptions(
+      {},
+      { requiresConfirmation: true, confirmationMessage: t("settings:confirmDisableTouch") },
+    ),
+    //TODO: needs confirmation for `disabled`
     touchscreenOnly: true,
   },
   {
@@ -149,7 +180,7 @@ export const generalSettingsUiItems: SettingsUiItem<GeneralSettingsKey>[] = [
   {
     key: "enableVibration",
     label: t("settings:vibrations"),
-    options: useBoolOptions("settings:disabled", "settings:auto"),
+    options: useAutoDisabledOptions(),
   },
 ];
 
@@ -206,12 +237,12 @@ export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey>[] = [
   {
     key: "enableMoveAnimations",
     label: t("settings:moveAnimations"),
-    options: useBoolOptions(),
+    options: useOnOffOptions(),
   },
   {
     key: "showStatsOnLevelUp",
     label: t("settings:showStatsOnLevelUp"),
-    options: useBoolOptions(),
+    options: useOnOffOptions(),
   },
   {
     key: "candyUpgradeNotificationMode",
@@ -234,22 +265,22 @@ export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey>[] = [
   {
     key: "enableMoveInfo",
     label: t("settings:moveInfo"),
-    options: useBoolOptions(),
+    options: useOnOffOptions(),
   },
   {
     key: "showMovesetFlyout",
     label: t("settings:showMovesetFlyout"),
-    options: useBoolOptions(),
+    options: useOnOffOptions(),
   },
   {
     key: "showArenaFlyout",
     label: t("settings:showArenaFlyout"),
-    options: useBoolOptions(),
+    options: useOnOffOptions(),
   },
   {
     key: "showTimeOfDayWidget",
     label: t("settings:showTimeOfDayWidget"),
-    options: useBoolOptions(),
+    options: useOnOffOptions(),
   },
   {
     key: "timeOfDayAnimation",
@@ -262,7 +293,7 @@ export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey>[] = [
   {
     key: "enableFusionPaletteSwaps",
     label: t("settings:fusionPaletteSwaps"),
-    options: useBoolOptions(),
+    options: useOnOffOptions(),
   },
   {
     key: "playerGender",
@@ -275,12 +306,12 @@ export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey>[] = [
   {
     key: "enableTypeHints",
     label: t("settings:typeHints"),
-    options: useBoolOptions(),
+    options: useOnOffOptions(),
   },
   {
     key: "showBgmBar",
     label: t("settings:showBgmBar"),
-    options: useBoolOptions(),
+    options: useOnOffOptions(),
   },
   {
     key: "shopCursorTarget",

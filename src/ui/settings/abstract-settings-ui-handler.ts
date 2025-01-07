@@ -461,7 +461,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
     if (save) {
       const value = uiItem.options[cursor].value;
       // For settings that ask for confirmation, display confirmation message and a Yes/No prompt before saving the setting
-      if (uiItem.options[cursor]?.needConfirmation) {
+      if (uiItem.options[cursor]?.requiresConfirmation) {
         const confirmUpdateSetting = () => {
           globalScene.ui.revertMode();
           this.showText("");
@@ -585,12 +585,6 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
         } else {
           settingsManager.updateAndReload(this.category, key as never, newValue);
         }
-      } else if (this.category === "general" && key === "enableTouchControls" && newValue === false) {
-        this.showConfirm(
-          i18next.t("settings:confirmDisableTouch"),
-          () => settingsManager.update(this.category, key as never, newValue),
-          () => this.handleCancelConfirm(uiItem),
-        );
       } else {
         settingsManager.update(this.category, key as never, newValue);
       }
