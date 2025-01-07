@@ -10,13 +10,11 @@ import { PartyMemberPokemonPhase } from "./abstract-party-member-pokemon-phase";
 import { GameOverPhase } from "./game-over-phase";
 import { PostSummonPhase } from "./post-summon-phase";
 import { ShinySparklePhase } from "./shiny-sparkle-phase";
-import { Animation } from "#app/anims";
 import { globalScene } from "#app/global-scene";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 
 export class SummonPhase extends PartyMemberPokemonPhase {
   private readonly loaded: boolean;
-  private anims: Animation = new Animation();
 
   constructor(fieldIndex: number, player: boolean = true, loaded: boolean = false) {
     super(fieldIndex, player);
@@ -172,7 +170,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
               }
               currentBattle.seenEnemyPartyMemberIds.add(pokemon.id);
             }
-            this.anims.addPokeballOpenParticles(pokemon.x, pokemon.y - 16, pokemon.pokeball);
+            globalScene.animations.addPokeballOpenParticles(pokemon.x, pokemon.y - 16, pokemon.pokeball);
             globalScene.updateModifiers(this.isPlayer);
             globalScene.updateFieldScale();
 

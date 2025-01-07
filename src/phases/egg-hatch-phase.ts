@@ -15,7 +15,6 @@ import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 import { fixedInt, getFrameMs, randInt } from "#app/utils";
 import type { EggLapsePhase } from "./egg-lapse-phase";
 import type { EggHatchData } from "#app/data/egg-hatch-data";
-import { Animation } from "#app/anims";
 
 /**
  * Class that represents egg hatching
@@ -69,8 +68,6 @@ export class EggHatchPhase extends Phase {
   /** The sound effect being played when the egg is hatched */
   private evolutionBgm: AnySound;
   private readonly eggLapsePhase: EggLapsePhase;
-
-  private anims: Animation = new Animation();
 
   constructor(hatchScene: EggLapsePhase, egg: Egg, eggsToHatchCount: number) {
     super();
@@ -372,7 +369,7 @@ export class EggHatchPhase extends Phase {
       this.pokemon.cry();
       if (isShiny) {
         globalScene.time.delayedCall(fixedInt(500), () => {
-          this.anims.doShinySparkleAnim(this.pokemonShinySparkle, this.pokemon.variant);
+          globalScene.animations.doShinySparkleAnim(this.pokemonShinySparkle, this.pokemon.variant);
         });
       }
       globalScene.time.delayedCall(fixedInt((isShiny ? 750 : 250) + (!this.skipped ? 1000 : 0)), () => {
@@ -452,7 +449,7 @@ export class EggHatchPhase extends Phase {
       yOffset += speedMultiplier;
       if (trigIndex < 160) {
         particle.setPosition(initialX + (speed * f) / 3, initialY + yOffset);
-        particle.y += -this.anims.sin(trigIndex, amp);
+        particle.y += -globalScene.animations.sin(trigIndex, amp);
         if (f > 108) {
           particle.setScale(1 - (f - 108) / 20);
         }

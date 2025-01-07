@@ -1,4 +1,3 @@
-import { Animation } from "#app/anims";
 import { getTypeRgb } from "#app/data/type";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -24,8 +23,6 @@ export abstract class FormChangeBasePhase extends Phase {
   protected pokemonTintSprite: Phaser.GameObjects.Sprite;
   protected pokemonNewFormSprite: Phaser.GameObjects.Sprite;
   protected pokemonNewFormTintSprite: Phaser.GameObjects.Sprite;
-
-  public anims: Animation = new Animation();
 
   constructor(pokemon: PlayerPokemon) {
     super();

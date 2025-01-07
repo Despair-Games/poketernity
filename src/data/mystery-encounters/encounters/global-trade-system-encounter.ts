@@ -46,7 +46,6 @@ import { trainerNamePools } from "#app/data/trainer-names";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
 import { addPokemonDataToDexAndValidateAchievements } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import type { PokeballType } from "#enums/pokeball";
-import { Animation } from "#app/anims";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/globalTradeSystem";
@@ -905,7 +904,6 @@ function doTradeReceivedSequence(
   return new Promise<void>((resolve) => {
     const tradeContainer = globalScene.fieldUI.getByName("Trade Background") as Phaser.GameObjects.Container;
     const tradeBaseBg = tradeContainer.getByName("Trade Background Image") as Phaser.GameObjects.Image;
-    const anims = new Animation();
 
     receivedPokemonSprite.setVisible(false);
     receivedPokemonSprite.x = tradeBaseBg.displayWidth / 2;
@@ -966,7 +964,7 @@ function doTradeReceivedSequence(
             onComplete: () => {
               if (receivedPokemon.shiny) {
                 globalScene.time.delayedCall(500, () => {
-                  anims.doShinySparkleAnim(pokemonShinySparkle, receivedPokemon.variant);
+                  globalScene.animations.doShinySparkleAnim(pokemonShinySparkle, receivedPokemon.variant);
                 });
               }
               receivedPokeballSprite.destroy();

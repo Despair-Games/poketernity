@@ -240,7 +240,6 @@ import { TypeImmunityAbAttr } from "#app/data/ab-attrs/type-immunity-ab-attr";
 import { FullHpResistTypeAbAttr } from "#app/data/ab-attrs/full-hp-resist-type-ab-attr";
 import { FieldPriorityMoveImmunityAbAttr } from "#app/data/ab-attrs/field-priority-move-immunity-ab-attr";
 import { MoveImmunityAbAttr } from "#app/data/ab-attrs/move-immunity-ab-attr";
-import { Animation } from "#app/anims";
 
 export enum LearnMoveSituation {
   MISC,
@@ -318,7 +317,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   public usedTMs: Moves[];
 
   private shinySparkle: Phaser.GameObjects.Sprite;
-  private anims: Animation = new Animation();
 
   constructor(
     x: number,
@@ -4421,7 +4419,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   sparkle(): void {
     if (this.shinySparkle) {
-      this.anims.doShinySparkleAnim(this.shinySparkle, this.variant);
+      globalScene.animations.doShinySparkleAnim(this.shinySparkle, this.variant);
     }
   }
 

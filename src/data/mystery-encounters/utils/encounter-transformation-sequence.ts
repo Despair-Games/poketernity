@@ -1,9 +1,6 @@
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { getTypeRgb } from "#app/data/type";
 import { globalScene } from "#app/global-scene";
-import { Animation } from "#app/anims";
-
-const anims = new Animation();
 
 export enum TransformationScreenPosition {
   CENTER,
@@ -117,7 +114,7 @@ export function doPokemonTransformationSequence(
       ease: "Cubic.easeInOut",
       duration: 2000,
       onComplete: () => {
-        anims.doSpiralUpward(transformationBaseBg, transformationContainer, xOffset, yOffset);
+        globalScene.animations.doSpiralUpward(transformationBaseBg, transformationContainer, xOffset, yOffset);
         globalScene.tweens.addCounter({
           from: 0,
           to: 1,
@@ -128,13 +125,18 @@ export function doPokemonTransformationSequence(
           onComplete: () => {
             pokemonSprite.setVisible(false);
             globalScene.time.delayedCall(700, () => {
-              anims.doArcDownward(transformationBaseBg, transformationContainer, xOffset, yOffset);
+              globalScene.animations.doArcDownward(transformationBaseBg, transformationContainer, xOffset, yOffset);
               globalScene.time.delayedCall(1000, () => {
                 pokemonEvoTintSprite.setScale(0.25);
                 pokemonEvoTintSprite.setVisible(true);
-                anims.doCycle(1.5, 6, pokemonTintSprite, pokemonEvoTintSprite).then(() => {
+                globalScene.animations.doCycle(1.5, 6, pokemonTintSprite, pokemonEvoTintSprite).then(() => {
                   pokemonEvoSprite.setVisible(true);
-                  anims.doCircleInward(transformationBaseBg, transformationContainer, xOffset, yOffset);
+                  globalScene.animations.doCircleInward(
+                    transformationBaseBg,
+                    transformationContainer,
+                    xOffset,
+                    yOffset,
+                  );
 
                   globalScene.time.delayedCall(900, () => {
                     globalScene.tweens.add({

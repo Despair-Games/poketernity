@@ -86,7 +86,7 @@ export class FormChangePhase extends FormChangeBasePhase {
               this.bgVideo.play();
             });
             globalScene.playSound("se/charge");
-            this.anims.doSpiralUpward(this.baseBgImg, this.container);
+            globalScene.animations.doSpiralUpward(this.baseBgImg, this.container);
             tweens.addCounter({
               from: 0,
               to: 1,
@@ -98,13 +98,15 @@ export class FormChangePhase extends FormChangeBasePhase {
                 this.pokemonSprite.setVisible(false);
                 time.delayedCall(1100, () => {
                   globalScene.playSound("se/beam");
-                  this.anims.doArcDownward(this.baseBgImg, this.container);
+                  globalScene.animations.doArcDownward(this.baseBgImg, this.container);
                   time.delayedCall(1000, () => {
                     this.pokemonNewFormTintSprite.setScale(0.25);
                     this.pokemonNewFormTintSprite.setVisible(true);
-                    this.anims.doCycle(1, 1, this.pokemonTintSprite, this.pokemonNewFormTintSprite).then((_success) => {
-                      this.handleFormChangeComplete(formChangedPokemon);
-                    });
+                    globalScene.animations
+                      .doCycle(1, 1, this.pokemonTintSprite, this.pokemonNewFormTintSprite)
+                      .then((_success) => {
+                        this.handleFormChangeComplete(formChangedPokemon);
+                      });
                   });
                 });
               },
@@ -165,7 +167,7 @@ export class FormChangePhase extends FormChangeBasePhase {
 
     globalScene.playSound("se/sparkle");
     this.pokemonNewFormSprite.setVisible(true);
-    this.anims.doCircleInward(this.baseBgImg, this.container);
+    globalScene.animations.doCircleInward(this.baseBgImg, this.container);
     time.delayedCall(900, () => {
       this.pokemon.changeForm(this.formChange).then(() => {
         if (!this.modal) {
@@ -173,7 +175,7 @@ export class FormChangePhase extends FormChangeBasePhase {
         }
 
         globalScene.playSound("se/shine");
-        this.anims.doSpray(this.baseBgImg, this.container);
+        globalScene.animations.doSpray(this.baseBgImg, this.container);
         tweens.add({
           targets: this.overlay,
           alpha: 1,

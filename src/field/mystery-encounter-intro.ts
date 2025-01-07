@@ -6,7 +6,6 @@ import { isNullOrUndefined } from "#app/utils";
 import { getSpriteKeysFromSpecies } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import type { Variant } from "#app/data/variant";
 import PlayAnimationConfig = Phaser.Types.Animations.PlayAnimationConfig;
-import { Animation } from "#app/anims";
 
 type KnownFileRoot =
   | "arenas"
@@ -80,7 +79,6 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
   public spriteConfigs: MysteryEncounterSpriteConfig[];
   public enterFromRight: boolean;
   private shinySparkleSprites: { sprite: Phaser.GameObjects.Sprite; variant: Variant }[];
-  private anims: Animation = new Animation();
 
   constructor(encounter: MysteryEncounter) {
     super(globalScene, -72, 76);
@@ -354,7 +352,7 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
   playShinySparkles() {
     for (const sparkleConfig of this.shinySparkleSprites) {
       globalScene.time.delayedCall(500, () => {
-        this.anims.doShinySparkleAnim(sparkleConfig.sprite, sparkleConfig.variant);
+        globalScene.animations.doShinySparkleAnim(sparkleConfig.sprite, sparkleConfig.variant);
       });
     }
   }

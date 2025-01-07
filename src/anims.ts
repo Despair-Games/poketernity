@@ -1,4 +1,3 @@
-import { globalScene } from "#app/global-scene";
 import { getFrameMs, randGauss, randInt } from "#app/utils";
 import { PokeballType } from "#enums/pokeball";
 import type { Variant } from "./data/variant";
@@ -8,12 +7,12 @@ import { BattleAnim } from "./data/battle-anims";
 import type BattleScene from "./battle-scene";
 
 /**
- * Class for handling general animations such as particle effects
- * For battle animations, see {@linkcode BattleAnim}
+ * Class for handling general animations such as particle effects.
+ * For battle animations, see {@linkcode BattleAnim}.
  */
 export class Animation {
   private scene: BattleScene;
-  constructor(scene: BattleScene = globalScene) {
+  constructor(scene: BattleScene) {
     this.scene = scene;
   }
 

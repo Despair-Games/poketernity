@@ -22,7 +22,6 @@ import { type PokeballType } from "#enums/pokeball";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
-import { Animation } from "#app/anims";
 
 /**
  * Handles catching a pokemon after the player throws a ball
@@ -32,7 +31,6 @@ export class AttemptCapturePhase extends PokemonPhase {
   private readonly pokeballType: PokeballType;
   private pokeball: Phaser.GameObjects.Sprite;
   private originalY: number;
-  private anims: Animation = new Animation();
 
   constructor(targetIndex: number, pokeballType: PokeballType) {
     super(BattlerIndex.ENEMY + targetIndex);
@@ -94,7 +92,7 @@ export class AttemptCapturePhase extends PokemonPhase {
         globalScene.playSound("se/pb_rel");
         pokemon.tint(getPokeballTintColor(this.pokeballType));
 
-        this.anims.addPokeballOpenParticles(this.pokeball.x, this.pokeball.y, this.pokeballType);
+        globalScene.animations.addPokeballOpenParticles(this.pokeball.x, this.pokeball.y, this.pokeballType);
 
         tweens.add({
           // Mon enters ball
@@ -153,7 +151,7 @@ export class AttemptCapturePhase extends PokemonPhase {
                     this.failCatch();
                   } else {
                     globalScene.playSound("se/pb_lock");
-                    this.anims.addPokeballCaptureStars(this.pokeball);
+                    globalScene.animations.addPokeballCaptureStars(this.pokeball);
 
                     const pbTint = globalScene.add.sprite(this.pokeball.x, this.pokeball.y, "pb", "pb");
                     pbTint.setOrigin(this.pokeball.originX, this.pokeball.originY);
