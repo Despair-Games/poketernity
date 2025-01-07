@@ -1758,12 +1758,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           if (p.getAbility().hasAttr(SuppressFieldAbilitiesAbAttr) && p.canApplyAbility()) {
             p.getAbility()
               .getAttrs(SuppressFieldAbilitiesAbAttr)
-              .map((a) => a.apply(this, false, false, suppressed, [ability]));
+              .map((a) => a.apply(this, false, false, suppressed, ability));
           }
           if (p.getPassiveAbility().hasAttr(SuppressFieldAbilitiesAbAttr) && p.canApplyAbility(true)) {
             p.getPassiveAbility()
               .getAttrs(SuppressFieldAbilitiesAbAttr)
-              .map((a) => a.apply(this, true, false, suppressed, [ability]));
+              .map((a) => a.apply(this, true, false, suppressed, ability));
           }
         });
       if (suppressed.value) {
