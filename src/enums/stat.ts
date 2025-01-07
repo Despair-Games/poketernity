@@ -23,7 +23,7 @@ export const PERMANENT_STATS = [Stat.HP, Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SP
 /** Type used to describe the core, permanent stats of a Pokemon. */
 export type PermanentStat = (typeof PERMANENT_STATS)[number];
 
-/** A constant array comprised of the {@linkcode Stat} values that make up {@linkcode EFfectiveStat}. */
+/** A constant array comprised of the {@linkcode Stat} values that make up {@linkcode EffectiveStat}. */
 export const EFFECTIVE_STATS = [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD] as const;
 /** Type used to describe the intersection of core stats and stats that have stages in battle. */
 export type EffectiveStat = (typeof EFFECTIVE_STATS)[number];
@@ -46,14 +46,29 @@ export type TempBattleStat = (typeof TEMP_BATTLE_STATS)[number];
  * @returns the translation key fitting the conditions described by {@linkcode stages} and {@linkcode isIncrease}
  */
 export function getStatStageChangeDescriptionKey(stages: number, isIncrease: boolean) {
-  if (stages === 1) {
-    return isIncrease ? "battle:statRose" : "battle:statFell";
-  } else if (stages === 2) {
-    return isIncrease ? "battle:statSharplyRose" : "battle:statHarshlyFell";
-  } else if (stages > 2 && stages <= 6) {
-    return isIncrease ? "battle:statRoseDrastically" : "battle:statSeverelyFell";
+  if (isIncrease) {
+    switch (stages) {
+      case 0:
+        return "battle:statWontGoAnyHigher";
+      case 1:
+        return "battle:statRose";
+      case 2:
+        return "battle:statSharplyRose";
+      default:
+        return "battle:statRoseDrastically";
+    }
+  } else {
+    switch (stages) {
+      case 0:
+        return "battle:statWontGoAnyLower";
+      case 1:
+        return "battle:statFell";
+      case 2:
+        return "battle:statHarshlyFell";
+      default:
+        return "battle:statSeverelyFell";
+    }
   }
-  return isIncrease ? "battle:statWontGoAnyHigher" : "battle:statWontGoAnyLower";
 }
 
 /**

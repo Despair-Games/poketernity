@@ -1537,7 +1537,11 @@ export class ProtectedTag extends BattlerTag {
     );
   }
 
-  override apply(pokemon: Pokemon, simulated: boolean, ..._args: unknown[]): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
+    if (move.checkFlag(MoveFlags.IGNORE_PROTECT, attacker, pokemon)) {
+      return false;
+    }
+
     if (!simulated) {
       new CommonBattleAnim(CommonAnim.PROTECT, pokemon).play();
       globalScene.queueMessage(
@@ -1552,7 +1556,7 @@ export class ProtectedTag extends BattlerTag {
 export class DamageProtectedTag extends ProtectedTag {
   override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
     if (attacker.getMoveCategory(pokemon, move) !== MoveCategory.STATUS) {
-      return super.apply(pokemon, simulated);
+      return super.apply(pokemon, simulated, attacker, move);
     }
     return false;
   }

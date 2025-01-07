@@ -1,13 +1,13 @@
 import { BattleType } from "#app/battle";
 import { getPokeballAtlasKey, getPokeballTintColor } from "#app/data/pokeball";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";
-import { TrainerSlot } from "#app/data/trainer-config";
+import { TrainerSlot } from "#enums/trainer-slot";
+import { PlayerGender } from "#enums/player-gender";
 import { addPokeballOpenParticles } from "#app/field/anims";
 import { FieldPosition, type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
-import { PlayerGender } from "#enums/player-gender";
 import i18next from "i18next";
 import { PartyMemberPokemonPhase } from "./abstract-party-member-pokemon-phase";
 import { GameOverPhase } from "./game-over-phase";

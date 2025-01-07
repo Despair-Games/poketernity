@@ -74,7 +74,7 @@ import { CueNextRoundAttr } from "./move-attrs/cue-next-round-attr";
 import { CurseAttr } from "./move-attrs/curse-attr";
 import { CutHpStatStageBoostAttr } from "./move-attrs/cut-hp-stat-stage-boost-attr";
 import { DefAtkAttr } from "./move-attrs/def-atk-attr";
-import { DefDefAttr } from "./move-attrs/def-def-attr";
+import { DealsPhysicalDamageAttr } from "./move-attrs/deals-physical-damage-attr";
 import { DelayedAttackAttr } from "./move-attrs/delayed-attack-attr";
 import { DestinyBondAttr } from "./move-attrs/destiny-bond-attr";
 import { DiscourageFrequentUseAttr } from "./move-attrs/discourage-frequent-use-attr";
@@ -1787,7 +1787,9 @@ export function initMoves() {
       .ignoresProtect()
       .target(MoveTarget.BOTH_SIDES)
       .unimplemented(),
-    new AttackMove(Moves.PSYSHOCK, Type.PSYCHIC, MoveCategory.SPECIAL, 80, 100, 10, -1, 0, 5).attr(DefDefAttr),
+    new AttackMove(Moves.PSYSHOCK, Type.PSYCHIC, MoveCategory.SPECIAL, 80, 100, 10, -1, 0, 5).attr(
+      DealsPhysicalDamageAttr,
+    ),
     new AttackMove(Moves.VENOSHOCK, Type.POISON, MoveCategory.SPECIAL, 65, 100, 10, -1, 0, 5).attr(
       MovePowerMultiplierAttr,
       (_user, target, _move) =>
@@ -2065,7 +2067,9 @@ export function initMoves() {
       [Stat.ACC],
       -1,
     ),
-    new AttackMove(Moves.PSYSTRIKE, Type.PSYCHIC, MoveCategory.SPECIAL, 100, 100, 10, -1, 0, 5).attr(DefDefAttr),
+    new AttackMove(Moves.PSYSTRIKE, Type.PSYCHIC, MoveCategory.SPECIAL, 100, 100, 10, -1, 0, 5).attr(
+      DealsPhysicalDamageAttr,
+    ),
     new AttackMove(Moves.TAIL_SLAP, Type.NORMAL, MoveCategory.PHYSICAL, 25, 85, 10, -1, 0, 5).attr(MultiHitAttr),
     new AttackMove(Moves.HURRICANE, Type.FLYING, MoveCategory.SPECIAL, 110, 70, 10, 30, 0, 5)
       .attr(ThunderAccuracyAttr)
@@ -2092,7 +2096,7 @@ export function initMoves() {
       .soundBased()
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new AttackMove(Moves.SECRET_SWORD, Type.FIGHTING, MoveCategory.SPECIAL, 85, 100, 10, -1, 0, 5)
-      .attr(DefDefAttr)
+      .attr(DealsPhysicalDamageAttr)
       .slicingMove(),
     new AttackMove(Moves.GLACIATE, Type.ICE, MoveCategory.SPECIAL, 65, 95, 10, 100, 0, 5)
       .attr(StatStageChangeAttr, [Stat.SPD], -1)
@@ -2178,7 +2182,7 @@ export function initMoves() {
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.SPATK], -1)
       .soundBased(),
     new StatusMove(Moves.ION_DELUGE, Type.ELECTRIC, -1, 25, -1, 1, 6)
-      .attr(AddArenaTagAttr, ArenaTagType.ION_DELUGE)
+      .attr(AddArenaTagAttr, ArenaTagType.ION_DELUGE, { turnCount: 1 })
       .target(MoveTarget.BOTH_SIDES),
     new AttackMove(Moves.PARABOLIC_CHARGE, Type.ELECTRIC, MoveCategory.SPECIAL, 65, 100, 20, -1, 0, 6)
       .attr(HitHealAttr)
