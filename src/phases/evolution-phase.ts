@@ -101,7 +101,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
                   this.bgVideo.play();
                 });
                 globalScene.playSound("se/charge");
-                this.anims.doSpiralUpward(this.baseBgImg, this.container);
+                globalScene.animations.doSpiralUpward(this.baseBgImg, this.container);
                 tweens.addCounter({
                   from: 0,
                   to: 1,
@@ -113,12 +113,12 @@ export class EvolutionPhase extends FormChangeBasePhase {
                     this.pokemonSprite.setVisible(false);
                     time.delayedCall(1100, () => {
                       globalScene.playSound("se/beam");
-                      this.anims.doArcDownward(this.baseBgImg, this.container);
+                      globalScene.animations.doArcDownward(this.baseBgImg, this.container);
                       time.delayedCall(1500, () => {
                         this.pokemonNewFormTintSprite.setScale(0.25);
                         this.pokemonNewFormTintSprite.setVisible(true);
                         this.handler.canCancel = true;
-                        this.anims
+                        globalScene.animations
                           .doCycle(1, 15, this.pokemonTintSprite, this.pokemonNewFormTintSprite)
                           .then((success) => {
                             if (success) {
@@ -210,7 +210,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
 
     globalScene.playSound("se/sparkle");
     this.pokemonNewFormSprite.setVisible(true);
-    this.anims.doCircleInward(this.baseBgImg, this.container);
+    globalScene.animations.doCircleInward(this.baseBgImg, this.container);
 
     const onEvolutionComplete = (): void => {
       SoundFade.fadeOut(globalScene, this.evolutionBgm, 100);
@@ -254,7 +254,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
         globalScene.unshiftPhase(new EndEvolutionPhase());
 
         globalScene.playSound("se/shine");
-        this.anims.doSpray(this.baseBgImg, this.container);
+        globalScene.animations.doSpray(this.baseBgImg, this.container);
         tweens.add({
           targets: this.overlay,
           alpha: 1,
