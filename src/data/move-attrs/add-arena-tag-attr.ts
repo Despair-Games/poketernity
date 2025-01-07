@@ -14,6 +14,10 @@ interface AddArenaTagAttrOptions extends MoveEffectAttrOptions {
   selfSideTarget?: boolean;
 }
 
+/**
+ * Attribute to add an arena tag to the field of a given {@linkcode ArenaTagType | type}.
+ * @extends MoveEffectAttr
+ */
 export class AddArenaTagAttr extends MoveEffectAttr {
   public tagType: ArenaTagType;
   protected override options?: AddArenaTagAttrOptions;
@@ -27,10 +31,10 @@ export class AddArenaTagAttr extends MoveEffectAttr {
 
   /**
    * The number of turns the added tag remains in effect.
-   * @default 1
+   * @default 0, which denotes an arena tag that lasts indefinitely until the next arena reset.
    */
   public get turnCount() {
-    return this.options?.turnCount ?? 1;
+    return this.options?.turnCount ?? 0;
   }
 
   /**
@@ -51,8 +55,8 @@ export class AddArenaTagAttr extends MoveEffectAttr {
     return this.options?.selfSideTarget ?? false;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    if (!super.apply(user, target, move, args)) {
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+    if (!super.apply(user, target, move)) {
       return false;
     }
 
