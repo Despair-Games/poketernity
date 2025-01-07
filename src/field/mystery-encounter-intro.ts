@@ -225,9 +225,9 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
       this.spriteConfigs.forEach((config) => {
         if (config.isPokemon) {
           globalScene.loadPokemonAtlas(config.spriteKey, config.fileRoot);
-          if (config.isShiny) {
-            globalScene.loadPokemonVariantAssets(config.spriteKey, config.fileRoot, config.variant);
-          }
+          // if (config.isShiny) {
+          // globalScene.loadPokemonVariantAssets(config.spriteKey, config.fileRoot, config.variant);
+          // }
         } else if (config.isItem) {
           globalScene.loadAtlas("items", "");
         } else {
