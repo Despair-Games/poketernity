@@ -637,9 +637,12 @@ export function initAbilities() {
     new Ability(Abilities.TECHNICIAN, 4).attr(
       MovePowerBoostAbAttr,
       (user, target, move) => {
-        const power = new NumberHolder(move.power);
-        applyMoveAttrs(VariablePowerAttr, user, target, move, power);
-        return power.value <= 60;
+        if (user && target) {
+          const power = new NumberHolder(move.power);
+          applyMoveAttrs(VariablePowerAttr, user!, target!, move, power);
+          return power.value <= 60;
+        }
+        return false;
       },
       1.5,
     ),

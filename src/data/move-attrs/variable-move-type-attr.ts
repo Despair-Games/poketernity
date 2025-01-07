@@ -16,7 +16,7 @@ export class VariableMoveTypeAttr extends MoveAttr {
    * @param _moveType a {@linkcode NumberHolder} containing the move's type for the turn.
    * @returns
    */
-  override apply(_user: Pokemon, _target: Pokemon, _move: Move, _moveType: NumberHolder): boolean {
+  override apply(_user: Pokemon, _target: Pokemon | null, _move: Move, _moveType: NumberHolder): boolean {
     return false;
   }
 }
