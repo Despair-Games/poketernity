@@ -2174,7 +2174,7 @@ export function initMoves() {
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.SPATK], -1)
       .soundBased(),
     new StatusMove(Moves.ION_DELUGE, Type.ELECTRIC, -1, 25, -1, 1, 6)
-      .attr(AddArenaTagAttr, ArenaTagType.ION_DELUGE)
+      .attr(AddArenaTagAttr, ArenaTagType.ION_DELUGE, { turnCount: 1 })
       .target(MoveTarget.BOTH_SIDES),
     new AttackMove(Moves.PARABOLIC_CHARGE, Type.ELECTRIC, MoveCategory.SPECIAL, 65, 100, 20, -1, 0, 6)
       .attr(HitHealAttr)

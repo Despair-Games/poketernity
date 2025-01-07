@@ -31,10 +31,10 @@ export class AddArenaTagAttr extends MoveEffectAttr {
 
   /**
    * The number of turns the added tag remains in effect.
-   * @default 1
+   * @default 0, which denotes an arena tag that lasts indefinitely until the next arena reset.
    */
   public get turnCount() {
-    return this.options?.turnCount ?? 1;
+    return this.options?.turnCount ?? 0;
   }
 
   /**
