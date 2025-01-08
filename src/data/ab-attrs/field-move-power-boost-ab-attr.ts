@@ -2,13 +2,13 @@ import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition"
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
-import { AbAttr } from "./ab-attr";
+import { PreAttackAbAttr } from "./pre-attack-ab-attr";
 
 /**
  * Boosts the power of a Pokémon's move under certain conditions.
  * @extends AbAttr
  */
-export class FieldMovePowerBoostAbAttr extends AbAttr {
+export class FieldMovePowerBoostAbAttr extends PreAttackAbAttr {
   private readonly condition: PokemonAttackCondition;
   private readonly powerMultiplier: number;
 
@@ -22,16 +22,15 @@ export class FieldMovePowerBoostAbAttr extends AbAttr {
     this.powerMultiplier = powerMultiplier;
   }
 
-  applyPreAttack(
+  override applyPreAttack(
     pokemon: Pokemon | null,
     _passive: boolean | null,
     _simulated: boolean,
     defender: Pokemon | null,
     move: Move,
-    args: any[],
+    movePower: NumberHolder,
   ): boolean {
     if (this.condition(pokemon, defender, move)) {
-      const movePower: NumberHolder = args[0];
       movePower.value *= this.powerMultiplier;
 
       return true;

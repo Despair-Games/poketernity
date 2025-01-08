@@ -14,9 +14,6 @@ export type VariantSet = [Variant, Variant, Variant];
 // The _masterlist.json but parsed/loaded
 export const variantData: any = {};
 
-/** What the variant color json gets parsed into, see {@linkcode populateVariantColorCache} */
-export const variantColorCache = {};
-
 /**
  * Function to get a color hex number representing a color for a Variant
  * @param variant - The Variant

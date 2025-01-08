@@ -27,7 +27,6 @@ export class PostFaintClearWeatherAbAttr extends PostFaintAbAttr {
     _attacker?: Pokemon,
     _move?: Move,
     _hitResult?: HitResult,
-    ..._args: any[]
   ): boolean {
     const weatherType = globalScene.arena.weather?.weatherType;
     let turnOffWeather = false;

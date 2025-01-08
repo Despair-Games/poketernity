@@ -20,7 +20,7 @@ export class StealEatBerryAttr extends EatBerryAttr {
 
   override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
     const cancelled = new BooleanHolder(false);
-    applyAbAttrs(BlockItemTheftAbAttr, target, cancelled); // check for abilities that block item theft
+    applyAbAttrs(BlockItemTheftAbAttr, target, false, cancelled); // check for abilities that block item theft
     if (cancelled.value === true) {
       return false;
     }

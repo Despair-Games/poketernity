@@ -24,7 +24,7 @@ export class CheckTrappedAbAttr extends AbAttr {
     _simulated: boolean,
     _trapped: BooleanHolder,
     _otherPokemon: Pokemon,
-    _args: any[],
+    ..._args: unknown[]
   ): boolean {
     return false;
   }

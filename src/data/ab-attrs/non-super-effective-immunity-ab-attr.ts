@@ -23,10 +23,8 @@ export class NonSuperEffectiveImmunityAbAttr extends TypeImmunityAbAttr {
     _attacker: Pokemon,
     move: Move,
     cancelled: BooleanHolder,
-    args: any[],
+    typeMultiplier: NumberHolder,
   ): boolean {
-    const typeMultiplier: NumberHolder = args[0];
-
     if (move instanceof AttackMove && typeMultiplier.value < 2) {
       cancelled.value = true; // Suppresses "No Effect" message
       typeMultiplier.value = 0;

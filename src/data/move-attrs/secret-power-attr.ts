@@ -166,17 +166,7 @@ export class SecretPowerAttr extends MoveEffectAttr {
   ): number {
     const moveChance = new NumberHolder(this.effectChanceOverride ?? move.chance);
 
-    applyAbAttrs(
-      MoveEffectChanceMultiplierAbAttr,
-      user,
-      null,
-      false,
-      moveChance,
-      move,
-      target,
-      selfEffect,
-      showAbility,
-    );
+    applyAbAttrs(MoveEffectChanceMultiplierAbAttr, user, false, moveChance, move, showAbility);
 
     if (!selfEffect) {
       applyPreDefendAbAttrs(IgnoreMoveEffectsAbAttr, target, user, null, null, false, moveChance);

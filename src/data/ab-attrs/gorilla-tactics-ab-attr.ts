@@ -31,7 +31,6 @@ export class GorillaTacticsAbAttr extends PostAttackAbAttr {
     _defender: Pokemon,
     _move: Move,
     _hitResult: HitResult | null,
-    _args: any[],
   ): boolean {
     if (simulated) {
       return simulated;

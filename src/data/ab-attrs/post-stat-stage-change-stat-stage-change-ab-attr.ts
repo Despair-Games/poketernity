@@ -24,7 +24,6 @@ export class PostStatStageChangeStatStageChangeAbAttr extends PostStatStageChang
     statStagesChanged: BattleStat[],
     stagesChanged: number,
     selfTarget: boolean,
-    _args: any[],
   ): boolean {
     if (this.condition(pokemon, statStagesChanged, stagesChanged) && !selfTarget) {
       if (!simulated) {

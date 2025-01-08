@@ -2,7 +2,7 @@ import { type Move } from "#app/data/move";
 import { FixedDamageAttr } from "../move-attrs/fixed-damage-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { type BooleanHolder, NumberHolder } from "#app/utils";
+import type { BooleanHolder, NumberHolder } from "#app/utils";
 import i18next from "i18next";
 import { PreDefendAbAttr } from "./pre-defend-ab-attr";
 
@@ -30,13 +30,8 @@ export class FullHpResistTypeAbAttr extends PreDefendAbAttr {
     _attacker: Pokemon,
     move: Move | null,
     _cancelled: BooleanHolder | null,
-    args: any[],
+    typeMultiplier: NumberHolder,
   ): boolean {
-    const typeMultiplier = args[0];
-    if (!(typeMultiplier && typeMultiplier instanceof NumberHolder)) {
-      return false;
-    }
-
     if (move && move.hasAttr(FixedDamageAttr)) {
       return false;
     }

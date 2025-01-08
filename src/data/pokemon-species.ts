@@ -577,10 +577,6 @@ export abstract class PokemonSpeciesForm {
         } else {
           globalScene.anims.get(spriteKey).frameRate = 10;
         }
-        const spritePath = this.getSpriteAtlasPath(female, formIndex, shiny, variant)
-          .replace("variant/", "")
-          .replace(/_[1-3]$/, "");
-        globalScene.loadPokemonVariantAssets(spriteKey, spritePath, variant);
         resolve();
       });
       if (startLoad) {

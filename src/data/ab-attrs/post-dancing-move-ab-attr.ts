@@ -31,7 +31,6 @@ export class PostDancingMoveAbAttr extends PostMoveUsedAbAttr {
     source: Pokemon,
     targets: BattlerIndex[],
     simulated: boolean,
-    _args: any[],
   ): boolean {
     // List of tags that prevent the Dancer from replicating the move
     const forbiddenTags = [

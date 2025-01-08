@@ -3,7 +3,7 @@ import { type Move } from "#app/data/move";
 import { NeutralDamageAgainstFlyingTypeMultiplierAttr } from "../move-attrs/neutral-damage-against-flying-type-multiplier-attr";
 import { MoveCategory } from "../../enums/move-category";
 import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder } from "#app/utils";
+import type { BooleanHolder, NumberHolder } from "#app/utils";
 import type { Type } from "#enums/type";
 import { TypeImmunityAbAttr } from "./type-immunity-ab-attr";
 
@@ -26,14 +26,14 @@ export class AttackTypeImmunityAbAttr extends TypeImmunityAbAttr {
     attacker: Pokemon,
     move: Move,
     cancelled: BooleanHolder,
-    args: any[],
+    typeMultiplier: NumberHolder,
   ): boolean {
     // this is a hacky way to fix the Levitate/Thousand Arrows interaction, but it works for now...
     if (
       attacker.getMoveCategory(pokemon, move) !== MoveCategory.STATUS
       && !move.hasAttr(NeutralDamageAgainstFlyingTypeMultiplierAttr)
     ) {
-      return super.applyPreDefend(pokemon, passive, simulated, attacker, move, cancelled, args);
+      return super.applyPreDefend(pokemon, passive, simulated, attacker, move, cancelled, typeMultiplier);
     }
     return false;
   }
