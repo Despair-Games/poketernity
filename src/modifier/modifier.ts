@@ -2088,7 +2088,7 @@ export class PokemonInstantReviveModifier extends PokemonHeldItemModifier {
 
     // Reapply Commander on the Pokemon's side of the field, if applicable
     const field = pokemon.getField();
-    field.forEach((p) => applyAbAttrs(CommanderAbAttr, p, null, false));
+    field.forEach((p) => applyAbAttrs(CommanderAbAttr, p, false));
     return true;
   }
 

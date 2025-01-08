@@ -24,8 +24,8 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
       pokemon.status.incrementTurn();
 
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, cancelled);
-      applyAbAttrs(BlockStatusDamageAbAttr, pokemon, cancelled);
+      applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, false, cancelled);
+      applyAbAttrs(BlockStatusDamageAbAttr, pokemon, false, cancelled);
 
       if (!cancelled.value) {
         globalScene.queueMessage(
@@ -42,7 +42,7 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
             break;
           case StatusEffect.BURN:
             damage.value = Math.max(pokemon.getMaxHp() >> 4, 1);
-            applyAbAttrs(ReduceBurnDamageAbAttr, pokemon, null, false, damage);
+            applyAbAttrs(ReduceBurnDamageAbAttr, pokemon, false, damage);
             break;
         }
 

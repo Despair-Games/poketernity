@@ -21,13 +21,18 @@ export class IgnoreOpponentStatStagesAbAttr extends AbAttr {
    * @param _pokemon n/a
    * @param _passive n/a
    * @param _simulated n/a
-   * @param _cancelled n/a
-   * @param args A BooleanHolder that represents whether or not to ignore a stat's stat changes
+   * @param stat The {@linkcode EffectiveStat} to be ignored by this ability
+   * @param ignoreStatStage A {@linkcode BooleanHolder} that represents whether or not to ignore a stat's stat changes
    * @returns true if the stat is ignored, false otherwise
    */
-  override apply(_pokemon: Pokemon, _passive: boolean, _simulated: boolean, _cancelled: BooleanHolder, args: any[]) {
-    const stat: EffectiveStat = args[0];
-    const ignoreStatStage: BooleanHolder = args[1];
+  override apply(
+    _pokemon: Pokemon,
+    _passive: boolean,
+    _simulated: boolean,
+    _cancelled: BooleanHolder,
+    stat: EffectiveStat,
+    ignoreStatStage: BooleanHolder,
+  ) {
     if (this.stats.includes(stat)) {
       ignoreStatStage.value = true;
       return true;

@@ -24,9 +24,8 @@ export class MoveImmunityStatStageChangeAbAttr extends MoveImmunityAbAttr {
     attacker: Pokemon,
     move: Move,
     cancelled: BooleanHolder,
-    args: any[],
   ): boolean {
-    const ret = super.applyPreDefend(pokemon, passive, simulated, attacker, move, cancelled, args);
+    const ret = super.applyPreDefend(pokemon, passive, simulated, attacker, move, cancelled);
     if (ret && !simulated) {
       globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [this.stat], this.stages));
     }

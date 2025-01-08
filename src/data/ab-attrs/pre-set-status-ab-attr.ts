@@ -10,7 +10,7 @@ export class PreSetStatusAbAttr extends AbAttr {
     _simulated: boolean,
     _effect: StatusEffect | undefined,
     _cancelled: BooleanHolder,
-    _args: any[],
+    ..._args: unknown[]
   ): boolean {
     return false;
   }

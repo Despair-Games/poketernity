@@ -155,7 +155,7 @@ export class EncounterPhase extends BattlePhase {
             .slice(0, !double ? 1 : 2)
             .reverse()
             .forEach((playerPokemon) => {
-              applyAbAttrs(SyncEncounterNatureAbAttr, playerPokemon, null, false, currentBattle.enemyParty[e]);
+              applyAbAttrs(SyncEncounterNatureAbAttr, playerPokemon, false, currentBattle.enemyParty[e]);
             });
         }
       }

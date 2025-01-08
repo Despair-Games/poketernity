@@ -1,6 +1,6 @@
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder, NumberHolder } from "#app/utils";
+import type { NumberHolder } from "#app/utils";
 import { AbAttr } from "./ab-attr";
 
 /**
@@ -27,11 +27,9 @@ export class ChangeMovePriorityAbAttr extends AbAttr {
     pokemon: Pokemon,
     _passive: boolean,
     _simulated: boolean,
-    _cancelled: BooleanHolder,
-    args: any[],
+    move: Move,
+    priority: NumberHolder,
   ): boolean {
-    const move: Move = args[0];
-    const priority: NumberHolder = args[1];
     if (!this.moveFunc(pokemon, move)) {
       return false;
     }

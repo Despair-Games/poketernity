@@ -10,7 +10,7 @@ export class PreApplyBattlerTagAbAttr extends AbAttr {
     _simulated: boolean,
     _tag: BattlerTag,
     _cancelled: BooleanHolder,
-    _args: any[],
+    ..._args: unknown[]
   ): boolean {
     return false;
   }
