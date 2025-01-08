@@ -60,7 +60,7 @@ export function getPokeballTintColor(type: PokeballType): number {
     case PokeballType.ULTRA_BALL:
       return 0xe6cd31;
     case PokeballType.LUXURY_BALL:
-      return 0xe74c18; // TODO find proper color
+      return 0xffde6a;
     case PokeballType.MASTER_BALL:
       return 0xa441bd;
   }
