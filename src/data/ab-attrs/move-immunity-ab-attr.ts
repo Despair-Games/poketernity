@@ -22,7 +22,6 @@ export class MoveImmunityAbAttr extends PreDefendAbAttr {
     attacker: Pokemon,
     move: Move,
     cancelled: BooleanHolder,
-    _args: any[],
   ): boolean {
     if (this.immuneCondition(pokemon, attacker, move)) {
       cancelled.value = true;

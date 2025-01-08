@@ -1,7 +1,7 @@
 import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition";
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
-import type { nil, NumberHolder } from "#app/utils";
+import type { NumberHolder } from "#app/utils";
 import type { Type } from "#enums/type";
 import { PreAttackAbAttr } from "./pre-attack-ab-attr";
 
@@ -21,11 +21,10 @@ export class MoveTypeChangeAbAttr extends PreAttackAbAttr {
     _simulated: boolean,
     defender: Pokemon,
     move: Move,
-    args: any[],
+    moveType: NumberHolder,
+    power: NumberHolder,
   ): boolean {
     if (this.condition && this.condition(pokemon, defender, move)) {
-      const moveType: NumberHolder | nil = args[0];
-      const power: NumberHolder | nil = args[1];
       if (moveType) {
         moveType.value = this.newType;
       }

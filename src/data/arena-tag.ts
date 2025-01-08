@@ -147,7 +147,7 @@ export class MistTag extends ArenaTag {
     if (attacker) {
       const bypassed = new BooleanHolder(false);
       // TODO: Allow this to be simulated
-      applyAbAttrs(InfiltratorAbAttr, attacker, null, false, bypassed);
+      applyAbAttrs(InfiltratorAbAttr, attacker, simulated, bypassed);
       if (bypassed.value) {
         return false;
       }
@@ -205,14 +205,14 @@ export class WeakenMoveScreenTag extends ArenaTag {
    */
   override apply(
     _arena: Arena,
-    _simulated: boolean,
+    simulated: boolean,
     attacker: Pokemon,
     moveCategory: MoveCategory,
     damageMultiplier: NumberHolder,
   ): boolean {
     if (this.weakenedCategories.includes(moveCategory)) {
       const bypassed = new BooleanHolder(false);
-      applyAbAttrs(InfiltratorAbAttr, attacker, null, false, bypassed);
+      applyAbAttrs(InfiltratorAbAttr, attacker, simulated, bypassed);
       if (bypassed.value) {
         return false;
       }
@@ -764,7 +764,7 @@ class SpikesTag extends ArenaTrapTag {
   override activateTrap(pokemon: Pokemon, simulated: boolean): boolean {
     if (pokemon.isGrounded()) {
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, cancelled);
+      applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, simulated, cancelled);
 
       if (simulated) {
         return !cancelled.value;
@@ -951,7 +951,7 @@ class StealthRockTag extends ArenaTrapTag {
 
   override activateTrap(pokemon: Pokemon, simulated: boolean): boolean {
     const cancelled = new BooleanHolder(false);
-    applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, cancelled);
+    applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, simulated, cancelled);
 
     if (cancelled.value) {
       return false;
@@ -1018,7 +1018,7 @@ class StickyWebTag extends ArenaTrapTag {
   override activateTrap(pokemon: Pokemon, simulated: boolean): boolean {
     if (pokemon.isGrounded()) {
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs(ProtectStatAbAttr, pokemon, cancelled);
+      applyAbAttrs(ProtectStatAbAttr, pokemon, simulated, cancelled);
 
       if (simulated) {
         return !cancelled.value;
@@ -1160,8 +1160,8 @@ class TailwindTag extends ArenaTag {
  * Doubles the prize money from trainers and money moves like {@linkcode Moves.PAY_DAY} and {@linkcode Moves.MAKE_IT_RAIN}.
  */
 class HappyHourTag extends ArenaTag {
-  constructor(turnCount: number, sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.HAPPY_HOUR, turnCount, Moves.HAPPY_HOUR, sourceId, side);
+  constructor(sourceId: number, side: ArenaTagSide) {
+    super(ArenaTagType.HAPPY_HOUR, 0, Moves.HAPPY_HOUR, sourceId, side);
   }
 
   override onAdd(_arena: Arena): void {
@@ -1434,7 +1434,7 @@ export function getArenaTag(
     case ArenaTagType.TAILWIND:
       return new TailwindTag(turnCount, sourceId, side);
     case ArenaTagType.HAPPY_HOUR:
-      return new HappyHourTag(turnCount, sourceId, side);
+      return new HappyHourTag(sourceId, side);
     case ArenaTagType.SAFEGUARD:
       return new SafeguardTag(turnCount, sourceId, side);
     case ArenaTagType.IMPRISON:

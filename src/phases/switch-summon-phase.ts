@@ -194,10 +194,8 @@ export class SwitchSummonPhase extends SummonPhase {
       return;
     }
 
-    // Compensate for mid-turn summoning so that Fake Out/etc work properly
+    // Process mid-turn summoning so that Stakeout/etc work properly
     if (this.switchType !== SwitchType.INITIAL_SWITCH) {
-      pokemon.battleSummonData.turnCount--;
-      pokemon.battleSummonData.waveTurnCount--;
       pokemon.resetTurnData();
       pokemon.turnData.switchedInThisTurn = true;
     }

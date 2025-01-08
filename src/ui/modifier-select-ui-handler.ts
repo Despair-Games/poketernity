@@ -16,7 +16,8 @@ import i18next from "i18next";
 import { ShopCursorTarget } from "#app/enums/shop-cursor-target";
 import { NumberHolder } from "#app/utils";
 import Phaser from "phaser";
-import type { PokeballType } from "#enums/pokeball";
+import { PokeballType } from "#enums/pokeball";
+import { ModifierTier } from "#app/modifier/modifier-tier";
 
 export const SHOP_OPTIONS_ROW_LIMIT = 7;
 const SINGLE_SHOP_ROW_YOFFSET = 12;
@@ -759,7 +760,7 @@ class ModifierOption extends Phaser.GameObjects.Container {
     this.itemText.setOrigin(0.5, 0);
     this.itemText.setAlpha(0);
     this.itemText.setTint(
-      this.modifierTypeOption.type?.tier ? getModifierTierTextTint(this.modifierTypeOption.type?.tier) : undefined,
+      this.modifierTypeOption.type?.tier ? getModifierTierTextTint(this.modifierTypeOption.type.tier) : undefined,
     );
     this.add(this.itemText);
 
@@ -897,8 +898,37 @@ class ModifierOption extends Phaser.GameObjects.Container {
     });
   }
 
-  getPbAtlasKey(tierOffset: number = 0) {
-    return getPokeballAtlasKey((this.modifierTypeOption.type?.tier! + tierOffset) as number as PokeballType); // TODO: is this bang correct?
+  /**
+   * Get the frame from the pokeball sprite atlas used to animate this Modifier getting rolled
+   * @param tierOffset optional offset to the modifier's tier, if it was bumped up
+   * @returns the atlas key to use, falls back to pokeball if none is found
+   */
+  getPbAtlasKey(tierOffset: number = 0): string {
+    const modifierTier = (this.modifierTypeOption.type ? this.modifierTypeOption.type.tier : 0) + tierOffset;
+    return getPokeballAtlasKey(this.getPbForRarity(modifierTier));
+  }
+
+  /**
+   * Get the pokeball used to animate a modifier of the given tier being rolled
+   * Maps common, great, ultra and master tiers to their counterpart ball
+   * Temporarily Maps Epic tier to the Luxury ball
+   * @param modifierTier the {@linkcode ModifierTier} to get corresponding pokeball for
+   * @returns the corresponding {@linkcode PokeballType}, or Pokeball by default
+   */
+  getPbForRarity(modifierTier: ModifierTier): PokeballType {
+    switch (modifierTier) {
+      case ModifierTier.COMMON:
+        return PokeballType.POKEBALL;
+      case ModifierTier.GREAT:
+        return PokeballType.GREAT_BALL;
+      case ModifierTier.ULTRA:
+        return PokeballType.ULTRA_BALL;
+      case ModifierTier.EPIC:
+        return PokeballType.LUXURY_BALL;
+      case ModifierTier.MASTER:
+        return PokeballType.MASTER_BALL;
+    }
+    return PokeballType.POKEBALL;
   }
 
   updateCostText(): void {

@@ -67,7 +67,7 @@ export class MultiHitAttr extends MoveAttr {
       case MultiHitType._2_TO_5: {
         const rand = user.randSeedInt(16);
         const hitValue = new NumberHolder(rand);
-        applyAbAttrs(MaxMultiHitAbAttr, user, null, false, hitValue);
+        applyAbAttrs(MaxMultiHitAbAttr, user, false, hitValue);
         if (hitValue.value >= 10) {
           return 2;
         } else if (hitValue.value >= 4) {

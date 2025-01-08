@@ -35,7 +35,6 @@ export class PostWeatherChangeFormChangeAbAttr extends PostWeatherChangeAbAttr {
     _passive: boolean,
     simulated: boolean,
     _weather: WeatherType,
-    _args: any[],
   ): boolean {
     const isCastformWithForecast =
       pokemon.species.speciesId === Species.CASTFORM && this.ability === Abilities.FORECAST;

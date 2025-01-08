@@ -22,7 +22,7 @@ export class PostSetStatusAbAttr extends AbAttr {
     _passive: boolean,
     _effect: StatusEffect,
     _simulated: boolean,
-    _args: any[],
+    ..._args: unknown[]
   ): boolean {
     return false;
   }

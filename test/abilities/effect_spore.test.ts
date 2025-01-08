@@ -139,7 +139,6 @@ describe("Abilities - Effect Spore", () => {
         enemyPokemon,
         allMoves[Moves.TACKLE],
         HitResult.EFFECTIVE,
-        [],
       );
     }
 

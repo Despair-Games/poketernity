@@ -18,13 +18,7 @@ export class PostWeatherLapseDamageAbAttr extends PostWeatherLapseAbAttr {
     this.damageFactor = damageFactor;
   }
 
-  override applyPostWeatherLapse(
-    pokemon: Pokemon,
-    passive: boolean,
-    simulated: boolean,
-    _weather: Weather,
-    _args: any[],
-  ): boolean {
+  override applyPostWeatherLapse(pokemon: Pokemon, passive: boolean, simulated: boolean, _weather: Weather): boolean {
     if (pokemon.hasAbilityWithAttr(BlockNonDirectDamageAbAttr)) {
       return false;
     }

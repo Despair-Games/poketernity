@@ -32,7 +32,6 @@ export class BlockWeatherDamageAttr extends PreWeatherDamageAbAttr {
     _simulated: boolean,
     weather: Weather,
     cancelled: BooleanHolder,
-    _args: any[],
   ): boolean {
     if (!this.weatherTypes.length || this.weatherTypes.indexOf(weather?.weatherType) > -1) {
       cancelled.value = true;

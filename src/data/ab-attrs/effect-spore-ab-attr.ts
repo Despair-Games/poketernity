@@ -28,7 +28,6 @@ export class EffectSporeAbAttr extends PostDefendAbAttr {
     attacker: Pokemon,
     move: Move,
     _hitResult: HitResult,
-    _args: any[],
   ): boolean {
     if (attacker.hasAbility(Abilities.OVERCOAT) || attacker.isOfType(Type.GRASS)) {
       return false;
