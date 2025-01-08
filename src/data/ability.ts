@@ -477,7 +477,7 @@ export function applyAbAttrs(
   attrType: Constructor<AbAttr>,
   pokemon: Pokemon,
   simulated: boolean = false,
-  ...args: any[]
+  ...args: unknown[]
 ): void {
   applyAbAttrsInternal<AbAttr>(
     attrType,
@@ -493,7 +493,7 @@ export function applyPostBattleInitAbAttrs(
   attrType: Constructor<PostBattleInitAbAttr>,
   pokemon: Pokemon,
   simulated: boolean = false,
-  ...args: any[]
+  ...args: unknown[]
 ): void {
   applyAbAttrsInternal<PostBattleInitAbAttr>(
     attrType,
@@ -512,7 +512,7 @@ export function applyPreDefendAbAttrs(
   move: Move | null,
   cancelled: BooleanHolder | null,
   simulated: boolean = false,
-  ...args: any[]
+  ...args: unknown[]
 ): void {
   applyAbAttrsInternal<PreDefendAbAttr>(
     attrType,
@@ -531,7 +531,7 @@ export function applyPostDefendAbAttrs(
   move: Move,
   hitResult: HitResult | null,
   simulated: boolean = false,
-  ...args: any[]
+  ...args: unknown[]
 ): void {
   applyAbAttrsInternal<PostDefendAbAttr>(
     attrType,
@@ -550,7 +550,7 @@ export function applyPostMoveUsedAbAttrs(
   source: Pokemon,
   targets: BattlerIndex[],
   simulated: boolean = false,
-  ...args: any[]
+  ...args: unknown[]
 ): void {
   applyAbAttrsInternal<PostMoveUsedAbAttr>(
     attrType,
@@ -568,7 +568,7 @@ export function applyStatMultiplierAbAttrs(
   stat: BattleStat,
   statValue: NumberHolder,
   simulated: boolean = false,
-  ...args: any[]
+  ...args: unknown[]
 ): void {
   applyAbAttrsInternal<StatStageAbAttr>(
     attrType,
@@ -584,7 +584,7 @@ export function applyPostSetStatusAbAttrs(
   effect: StatusEffect,
   sourcePokemon?: Pokemon | null,
   simulated: boolean = false,
-  ...args: any[]
+  ...args: unknown[]
 ): void {
   applyAbAttrsInternal<PostSetStatusAbAttr>(
     attrType,
@@ -648,7 +648,7 @@ export function applyPreAttackAbAttrs(
   defender: Pokemon | null,
   move: Move,
   simulated: boolean = false,
-  ...args: any[]
+  ...args: unknown[]
 ): void {
   applyAbAttrsInternal<PreAttackAbAttr>(
     attrType,
@@ -667,7 +667,7 @@ export function applyPostAttackAbAttrs(
   move: Move,
   hitResult: HitResult | null,
   simulated: boolean = false,
-  ...args: any[]
+  ...args: unknown[]
 ): void {
   applyAbAttrsInternal<PostAttackAbAttr>(
     attrType,
@@ -684,7 +684,7 @@ export function applyPostKnockOutAbAttrs(
   pokemon: Pokemon,
   knockedOutPokemon: Pokemon,
   simulated: boolean = false,
-  ...args: any[]
+  ...args: unknown[]
 ): void {
   applyAbAttrsInternal<PostKnockOutAbAttr>(
     attrType,
@@ -700,7 +700,7 @@ export function applyPostVictoryAbAttrs(
   attrType: Constructor<PostVictoryAbAttr>,
   pokemon: Pokemon,
   simulated: boolean = false,
-  ...args: any[]
+  ...args: unknown[]
 ): void {
   applyAbAttrsInternal<PostVictoryAbAttr>(
     attrType,
@@ -716,7 +716,7 @@ export function applyPostSummonAbAttrs(
   attrType: Constructor<PostSummonAbAttr>,
   pokemon: Pokemon,
   simulated: boolean = false,
-  ...args: any[]
+  ...args: unknown[]
 ): void {
   applyAbAttrsInternal<PostSummonAbAttr>(
     attrType,
@@ -732,7 +732,7 @@ export function applyPreSwitchOutAbAttrs(
   attrType: Constructor<PreSwitchOutAbAttr>,
   pokemon: Pokemon,
   simulated: boolean = false,
-  ...args: any[]
+  ...args: unknown[]
 ): void {
   applyAbAttrsInternal<PreSwitchOutAbAttr>(
     attrType,
@@ -750,7 +750,7 @@ export function applyPreStatStageChangeAbAttrs(
   stat: BattleStat,
   cancelled: BooleanHolder,
   simulated: boolean = false,
-  ...args: any[]
+  ...args: unknown[]
 ): void {
   applyAbAttrsInternal<PreStatStageChangeAbAttr>(
     attrType,
@@ -769,7 +769,7 @@ export function applyPostStatStageChangeAbAttrs(
   stages: number,
   selfTarget: boolean,
   simulated: boolean = false,
-  ...args: any[]
+  ...args: unknown[]
 ): void {
   applyAbAttrsInternal<PostStatStageChangeAbAttr>(
     attrType,
@@ -787,7 +787,7 @@ export function applyPreSetStatusAbAttrs(
   effect: StatusEffect | undefined,
   cancelled: BooleanHolder,
   simulated: boolean = false,
-  ...args: any[]
+  ...args: unknown[]
 ): void {
   applyAbAttrsInternal<PreSetStatusAbAttr>(
     attrType,
@@ -805,7 +805,7 @@ export function applyPreApplyBattlerTagAbAttrs(
   tag: BattlerTag,
   cancelled: BooleanHolder,
   simulated: boolean = false,
-  ...args: any[]
+  ...args: unknown[]
 ): void {
   applyAbAttrsInternal<PreApplyBattlerTagAbAttr>(
     attrType,
@@ -823,7 +823,7 @@ export function applyPreWeatherEffectAbAttrs(
   weather: Weather | null,
   cancelled: BooleanHolder,
   simulated: boolean = false,
-  ...args: any[]
+  ...args: unknown[]
 ): void {
   applyAbAttrsInternal<PreWeatherDamageAbAttr>(
     attrType,
@@ -839,7 +839,7 @@ export function applyPostTurnAbAttrs(
   attrType: Constructor<PostTurnAbAttr>,
   pokemon: Pokemon,
   simulated: boolean = false,
-  ...args: any[]
+  ...args: unknown[]
 ): void {
   applyAbAttrsInternal<PostTurnAbAttr>(
     attrType,
@@ -856,7 +856,7 @@ export function applyPostWeatherChangeAbAttrs(
   pokemon: Pokemon,
   weather: WeatherType,
   simulated: boolean = false,
-  ...args: any[]
+  ...args: unknown[]
 ): void {
   applyAbAttrsInternal<PostWeatherChangeAbAttr>(
     attrType,
@@ -873,7 +873,7 @@ export function applyPostWeatherLapseAbAttrs(
   pokemon: Pokemon,
   weather: Weather | null,
   simulated: boolean = false,
-  ...args: any[]
+  ...args: unknown[]
 ): void {
   applyAbAttrsInternal<PostWeatherLapseAbAttr>(
     attrType,
@@ -890,7 +890,7 @@ export function applyPostTerrainChangeAbAttrs(
   pokemon: Pokemon,
   terrain: TerrainType,
   simulated: boolean = false,
-  ...args: any[]
+  ...args: unknown[]
 ): void {
   applyAbAttrsInternal<PostTerrainChangeAbAttr>(
     attrType,
@@ -909,7 +909,7 @@ export function applyCheckTrappedAbAttrs(
   otherPokemon: Pokemon,
   messages: string[],
   simulated: boolean = false,
-  ...args: any[]
+  ...args: unknown[]
 ): void {
   applyAbAttrsInternal<CheckTrappedAbAttr>(
     attrType,
@@ -926,7 +926,7 @@ export function applyPostBattleAbAttrs(
   attrType: Constructor<PostBattleAbAttr>,
   pokemon: Pokemon,
   simulated: boolean = false,
-  ...args: any[]
+  ...args: unknown[]
 ): void {
   applyAbAttrsInternal<PostBattleAbAttr>(
     attrType,
@@ -945,7 +945,7 @@ export function applyPostFaintAbAttrs(
   move?: Move,
   hitResult?: HitResult,
   simulated: boolean = false,
-  ...args: any[]
+  ...args: unknown[]
 ): void {
   applyAbAttrsInternal<PostFaintAbAttr>(
     attrType,
@@ -961,7 +961,7 @@ export function applyPostItemLostAbAttrs(
   attrType: Constructor<PostItemLostAbAttr>,
   pokemon: Pokemon,
   simulated: boolean = false,
-  ...args: any[]
+  ...args: unknown[]
 ): void {
   applyAbAttrsInternal<PostItemLostAbAttr>(
     attrType,
