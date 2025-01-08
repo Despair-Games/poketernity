@@ -16,7 +16,6 @@ import { Unlockables } from "#app/system/unlockables";
 import { GameModes, getGameMode } from "#app/game-mode";
 import { BattleType } from "#app/battle";
 import TrainerData from "#app/system/trainer-data";
-import { trainerConfigs } from "#app/data/trainer-config";
 import { resetSettings, setSetting, SettingKeys } from "#app/system/settings/settings";
 import { achvs } from "#app/system/achv";
 import EggData from "#app/system/egg-data";
@@ -58,6 +57,7 @@ import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { api } from "#app/plugins/api/api";
 import { ArenaTrapTag } from "#app/data/arena-tag";
 import { SAVE_FILE_EXTENSION } from "#app/constants";
+import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 import type { AchvUnlocks, SystemSaveData, Unlocks, VoucherCounts, VoucherUnlocks } from "#app/@types/SystemData";
 import { AbilityAttr, DexAttr } from "#app/data/dex-attributes";
 import type { StarterData } from "#app/@types/StarterData";
@@ -864,6 +864,7 @@ export class GameData {
     return ret;
   }
 
+  // Note: changing this requires testing run history (and updating `GameOverPhase.getRunHistoryEntry()` if necessary)
   public getSessionSaveData(): SessionSaveData {
     return {
       seed: globalScene.seed,
@@ -984,7 +985,7 @@ export class GameData {
           globalScene.newArena(sessionData.arena.biome);
 
           const battleType = sessionData.battleType || 0;
-          const trainerConfig = sessionData.trainer ? trainerConfigs[sessionData.trainer.trainerType] : null;
+          const trainerConfig = sessionData.trainer ? allTrainerConfigs[sessionData.trainer.trainerType] : null;
           const mysteryEncounterType =
             sessionData.mysteryEncounterType !== -1 ? sessionData.mysteryEncounterType : undefined;
           const battle = globalScene.newBattle(
@@ -1084,10 +1085,11 @@ export class GameData {
   }
 
   /**
-   * Delete the session data at the given slot when overwriting a save file
+   * Delete the session data at the given slot when overwriting a save file.
+   *
    * For deleting the session of a finished run, use {@linkcode tryClearSession}
    * @param slotId the slot to clear
-   * @returns Promise with result `true` if the session was deleted successfully, `false` otherwise
+   * @returns `Promise` with result `true` if the session was deleted successfully, `false` otherwise
    */
   deleteSession(slotId: number): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
@@ -1121,9 +1123,13 @@ export class GameData {
     });
   }
 
-  /* Defines a localStorage item 'daily' to check on clears, offline implementation of savedata/newclear API
-  If a GameModes clear other than Daily is checked, newClear = true as usual
-  If a Daily mode is cleared, checks if it was already cleared before, based on seed, and returns true only to new daily clear runs */
+  /**
+   * Defines a localStorage item 'daily' to check on clears, offline implementation of savedata/newclear API.
+   *
+   * If a game mode other than Daily is checked, `newClear` = `true` as usual.
+   *
+   * If a Daily mode is cleared, checks if it was already cleared before based on seed, and returns `true` only to new daily clear runs.
+   */
   offlineNewClear(): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
       const sessionData = this.getSessionSaveData();
@@ -1152,8 +1158,10 @@ export class GameData {
   }
 
   /**
-   * Attempt to clear session data after the end of a run
-   * After session data is removed, attempt to update user info so the menu updates
+   * Attempt to clear session data after the end of a run.
+   *
+   * After session data is removed, attempt to update user info so the menu updates.
+   *
    * To delete an unfinished run instead, use {@linkcode deleteSession}
    */
   async tryClearSession(slotId: number): Promise<[success: boolean, newClear: boolean]> {

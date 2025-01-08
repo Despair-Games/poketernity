@@ -14,7 +14,7 @@ import { EnemyCommandPhase } from "#app/phases/enemy-command-phase";
 import { FaintPhase } from "#app/phases/faint-phase";
 import { LoginPhase } from "#app/phases/login-phase";
 import { MovePhase } from "#app/phases/move-phase";
-import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases";
+import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { NewBattlePhase } from "#app/phases/new-battle-phase";
 import { SelectStarterPhase } from "#app/phases/select-starter-phase";
 import type { SelectTargetPhase } from "#app/phases/select-target-phase";
@@ -22,8 +22,6 @@ import { TitlePhase } from "#app/phases/title-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
 import { TurnStartPhase } from "#app/phases/turn-start-phase";
-import { ErrorInterceptor } from "#test/testUtils/errorInterceptor";
-import type { InputsHandler } from "#test/testUtils/inputsHandler";
 import type BattleMessageUiHandler from "#app/ui/battle-message-ui-handler";
 import type CommandUiHandler from "#app/ui/command-ui-handler";
 import type ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
@@ -39,6 +37,7 @@ import type { Moves } from "#enums/moves";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PlayerGender } from "#enums/player-gender";
 import type { Species } from "#enums/species";
+import { ErrorInterceptor } from "#test/testUtils/errorInterceptor";
 import { generateStarter, waitUntil } from "#test/testUtils/gameManagerUtils";
 import { GameWrapper } from "#test/testUtils/gameWrapper";
 import { ChallengeModeHelper } from "#test/testUtils/helpers/challengeModeHelper";
@@ -47,13 +46,17 @@ import { DailyModeHelper } from "#test/testUtils/helpers/dailyModeHelper";
 import { ModifierHelper } from "#test/testUtils/helpers/modifiersHelper";
 import { MoveHelper } from "#test/testUtils/helpers/moveHelper";
 import { OverridesHelper } from "#test/testUtils/helpers/overridesHelper";
+import { PokemonHelper } from "#test/testUtils/helpers/pokemonHelper";
 import { ReloadHelper } from "#test/testUtils/helpers/reloadHelper";
 import { SettingsHelper } from "#test/testUtils/helpers/settingsHelper";
+import type { InputsHandler } from "#test/testUtils/inputsHandler";
 import { PhaseInterceptor } from "#test/testUtils/phaseInterceptor";
 import { TextInterceptor } from "#test/testUtils/TextInterceptor";
 import { AES, enc } from "crypto-js";
 import fs from "fs";
 import { expect, vi } from "vitest";
+import { globalScene } from "#app/global-scene";
+import type StarterSelectUiHandler from "#app/ui/starter-select-ui-handler";
 
 /**
  * Class to manage the game state and transitions between phases.
@@ -72,6 +75,7 @@ export class GameManager {
   public readonly settings: SettingsHelper;
   public readonly reload: ReloadHelper;
   public readonly modifiers: ModifierHelper;
+  public readonly pokemonHelper: PokemonHelper;
 
   /**
    * Creates an instance of GameManager.
@@ -83,10 +87,31 @@ export class GameManager {
     ErrorInterceptor.getInstance().clear();
     BattleScene.prototype.randBattleSeedInt = (range, min: number = 0) => min + range - 1; // This simulates a max roll
     this.gameWrapper = new GameWrapper(phaserGame, bypassLogin);
-    this.scene = new BattleScene();
+
+    let firstTimeScene = false;
+    if (globalScene) {
+      this.scene = globalScene;
+    } else {
+      this.scene = new BattleScene();
+      this.gameWrapper.setScene(this.scene);
+      firstTimeScene = true;
+    }
+
     this.phaseInterceptor = new PhaseInterceptor(this.scene);
+
+    if (!firstTimeScene) {
+      this.scene.reset(false, true);
+      (this.scene.ui.handlers[Mode.STARTER_SELECT] as StarterSelectUiHandler).clearStarterPreferences();
+      this.scene.clearAllPhases();
+
+      // This part, in particular, must not be run before the PhaseInterceptor has been initialized.
+      this.scene.pushPhase(new LoginPhase());
+      this.scene.pushPhase(new TitlePhase());
+      this.scene.shiftPhase();
+
+      this.gameWrapper.scene = this.scene;
+    }
     this.textInterceptor = new TextInterceptor(this.scene);
-    this.gameWrapper.setScene(this.scene);
     this.override = new OverridesHelper(this);
     this.move = new MoveHelper(this);
     this.classicMode = new ClassicModeHelper(this);
@@ -95,6 +120,7 @@ export class GameManager {
     this.settings = new SettingsHelper(this);
     this.reload = new ReloadHelper(this);
     this.modifiers = new ModifierHelper(this);
+    this.pokemonHelper = new PokemonHelper(this);
 
     // Disables Mystery Encounters on all tests (can be overridden at test level)
     this.override.mysteryEncounterChance(0);
@@ -350,6 +376,9 @@ export class GameManager {
    * given target (if applicable).
    * @param moveId {@linkcode Moves} the move the enemy will use
    * @param target {@linkcode BattlerIndex} the target on which the enemy will use the given move
+   * @deprecated Use {@linkcode MoveHelper.selectEnemyMove | this.move.selectEnemyMove} instead for
+   * identical functionality, or {@linkcode MoveHelper.forceEnemyMove | this.move.forceEnemyMove} which will
+   * overwrite the enemy pokemon's moveset (and disable the global moveset override if it's active)
    */
   async forceEnemyMove(moveId: Moves, target?: BattlerIndex) {
     // Wait for the next EnemyCommandPhase to start

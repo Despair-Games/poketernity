@@ -3552,8 +3552,6 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
             this.assetLoadCancelled = null;
             this.speciesLoaded.set(species.speciesId, true);
             this.pokemonSprite.play(species.getSpriteKey(female!, formIndex, shiny, variant)); // TODO: is this bang correct?
-            this.pokemonSprite.setPipelineData("shiny", shiny);
-            this.pokemonSprite.setPipelineData("variant", variant);
             this.pokemonSprite.setPipelineData("spriteKey", species.getSpriteKey(female!, formIndex, shiny, variant)); // TODO: is this bang correct?
             this.pokemonSprite.setVisible(!this.statsMode);
           });
@@ -4285,5 +4283,14 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       icon.setTexture(species.getIconAtlasKey(formIndex, false, variant));
       icon.setFrame(species.getIconId(female, formIndex, false, variant));
     }
+  }
+
+  /**
+   * Clears this UI's starter preferences.
+   *
+   * This is intended to only be used for unit tests that work with this UI.
+   */
+  clearStarterPreferences() {
+    this.starterPreferences = {};
   }
 }

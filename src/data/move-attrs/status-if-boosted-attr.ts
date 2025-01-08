@@ -15,14 +15,7 @@ export class StatusIfBoostedAttr extends MoveEffectAttr {
     this.effect = effect;
   }
 
-  /**
-   * @param user {@linkcode Pokemon} using this move
-   * @param target {@linkcode Pokemon} target of this move
-   * @param _move {@linkcode Move} N/A
-   * @param _args N/A
-   * @returns true
-   */
-  override apply(user: Pokemon, target: Pokemon, _move: Move, _args: any[]): boolean {
+  override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
     if (target.turnData.statStagesIncreased) {
       target.trySetStatus(this.effect, true, user);
     }

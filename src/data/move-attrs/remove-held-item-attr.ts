@@ -25,15 +25,7 @@ export class RemoveHeldItemAttr extends MoveEffectAttr {
     this.berriesOnly = berriesOnly;
   }
 
-  /**
-   *
-   * @param user {@linkcode Pokemon} that used the move
-   * @param target Target {@linkcode Pokemon} that the moves applies to
-   * @param move {@linkcode Move} that is used
-   * @param _args N/A
-   * @returns `True` if an item was removed
-   */
-  override apply(user: Pokemon, target: Pokemon, _move: Move, _args: any[]): boolean {
+  override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
     if (!this.berriesOnly && target.isPlayer()) {
       // "Wild Pokemon cannot knock off Player Pokemon's held items" (See Bulbapedia)
       return false;

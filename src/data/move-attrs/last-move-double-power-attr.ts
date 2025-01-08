@@ -21,18 +21,7 @@ export class LastMoveDoublePowerAttr extends VariablePowerAttr {
     this.move = move;
   }
 
-  /**
-   * Doubles power of move if the given move is found to precede the current
-   * move with no other moves being executed in between, only ignoring failed
-   * moves if any.
-   * @param user {@linkcode Pokemon} that used the move
-   * @param target N/A
-   * @param move N/A
-   * @param args [0] {@linkcode NumberHolder} that holds the resulting power of the move
-   * @returns true if attribute application succeeds, false otherwise
-   */
-  override apply(user: Pokemon, _target: Pokemon, _move: Move, args: any[]): boolean {
-    const power = args[0] as NumberHolder;
+  override apply(user: Pokemon, _target: Pokemon, _move: Move, power: NumberHolder): boolean {
     const enemy = user.getOpponent(0);
     const pokemonActed: Pokemon[] = [];
 

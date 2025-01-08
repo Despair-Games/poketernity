@@ -11,7 +11,9 @@ import type { MoveConditionFunc } from "../move-conditions";
  * Attr used for moves that faint the user but revive a different Pokemon
  * @protected restorePP - whether or not PP is restored to the revived Pokemon. Lunar dance does this
  * @protected moveMessage - the associated key for the move trigger message
- * Used by healing wish and lunar dance
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Healing_Wish_(move) | Healing Wish}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Lunar_Dance_(move) | Lunar Dance}.
+ * @extends SacrificialAttr
  */
 export class SacrificialFullRestoreAttr extends SacrificialAttr {
   protected restorePP: boolean;
@@ -24,8 +26,8 @@ export class SacrificialFullRestoreAttr extends SacrificialAttr {
     this.moveTriggerMessage = moveTriggerMessage;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    if (!super.apply(user, target, move, args)) {
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+    if (!super.apply(user, target, move)) {
       return false;
     }
 
@@ -36,17 +38,11 @@ export class SacrificialFullRestoreAttr extends SacrificialAttr {
       .reduce((maxHp: number, hp: number) => Math.max(hp, maxHp), 0);
 
     globalScene.pushPhase(
-      new PokemonHealPhase(
-        user.getBattlerIndex(),
-        maxPartyMemberHp,
-        i18next.t(this.moveTriggerMessage, { pokemonName: getPokemonNameWithAffix(user) }),
-        true,
-        false,
-        false,
-        true,
-        false,
-        this.restorePP,
-      ),
+      new PokemonHealPhase(user.getBattlerIndex(), maxPartyMemberHp, {
+        message: i18next.t(this.moveTriggerMessage, { pokemonName: getPokemonNameWithAffix(user) }),
+        healStatus: true,
+        fullRestorePP: this.restorePP,
+      }),
       true,
     );
 

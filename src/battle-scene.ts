@@ -75,8 +75,7 @@ import { GameModes, getGameMode } from "#app/game-mode";
 import FieldSpritePipeline from "#app/pipelines/field-sprite";
 import SpritePipeline from "#app/pipelines/sprite";
 import PartyExpBar from "#app/ui/party-exp-bar";
-import type { TrainerSlot } from "#app/data/trainer-config";
-import { trainerConfigs } from "#app/data/trainer-config";
+import type { TrainerSlot } from "#enums/trainer-slot";
 import Trainer, { TrainerVariant } from "#app/field/trainer";
 import type TrainerData from "#app/system/trainer-data";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
@@ -109,8 +108,8 @@ import PokemonInfoContainer from "#app/ui/pokemon-info-container";
 import { biomeDepths, getBiomeName } from "#app/data/balance/biomes";
 import { SceneBase } from "#app/scene-base";
 import CandyBar from "#app/ui/candy-bar";
-import type { Variant, VariantSet } from "#app/data/variant";
-import { variantColorCache, variantData } from "#app/data/variant";
+import type { Variant } from "#app/data/variant";
+import { variantData } from "#app/data/variant";
 import type { Localizable } from "#app/interfaces/locales";
 import Overrides from "#app/overrides";
 import { InputsController } from "#app/inputs-controller";
@@ -129,7 +128,6 @@ import { UiTheme } from "#enums/ui-theme";
 import { TimedEventManager } from "#app/timed-event-manager";
 import type { PokemonAnimType } from "#enums/pokemon-anim-type";
 import i18next from "i18next";
-import { TrainerType } from "#enums/trainer-type";
 import { classicFinalBossDialogue } from "#app/data/dialogue";
 import { LoadingScene } from "#app/loading-scene";
 import { LevelCapPhase } from "#app/phases/level-cap-phase";
@@ -174,6 +172,7 @@ import { BlockItemTheftAbAttr } from "./data/ab-attrs/block-item-theft-ab-attr";
 import { DoubleBattleChanceAbAttr } from "./data/ab-attrs/double-battle-chance-ab-attr";
 import { PostBattleInitAbAttr } from "./data/ab-attrs/post-battle-init-ab-attr";
 import { bgmLoopPoint } from "./data/bgm-loop-point";
+import { allTrainerConfigs } from "./data/balance/trainer-configs/all-trainer-configs";
 
 export const bypassLogin = import.meta.env.VITE_BYPASS_LOGIN === "1";
 
@@ -403,39 +402,19 @@ export default class BattleScene extends SceneBase {
 
   loadPokemonAtlas(key: string, atlasPath: string) {
     const variant = atlasPath.includes("variant/") || /_[0-3]$/.test(atlasPath);
+    let basePath = atlasPath;
     if (variant) {
       atlasPath = atlasPath.replace("variant/", "");
+      basePath = atlasPath.replace(/_[0-3]$/, "");
+    }
+    if (basePath.includes("shiny/")) {
+      basePath = basePath.replace("shiny/", "");
     }
     this.load.atlas(
       key,
       `images/pokemon/${variant ? "variant/" : ""}${atlasPath}.png`,
-      `images/pokemon/${variant ? "variant/" : ""}${atlasPath}.json`,
+      `images/pokemon/${basePath}.json`,
     );
-  }
-
-  /**
-   * Load the variant assets for the given sprite and stores them in {@linkcode variantColorCache}
-   */
-  loadPokemonVariantAssets(spriteKey: string, fileRoot: string, variant?: Variant) {
-    let variantConfig = variantData;
-    fileRoot.split("/").map((p) => (variantConfig ? (variantConfig = variantConfig[p]) : null));
-    const variantSet = variantConfig as VariantSet;
-    if (variantSet && variant !== undefined && variantSet[variant] === 1) {
-      const populateVariantColors = (key: string): Promise<void> => {
-        return new Promise((resolve) => {
-          if (variantColorCache.hasOwnProperty(key)) {
-            return resolve();
-          }
-          this.cachedFetch(`./images/pokemon/variant/${fileRoot}.json`)
-            .then((res) => res.json())
-            .then((c) => {
-              variantColorCache[key] = c;
-              resolve();
-            });
-        });
-      };
-      populateVariantColors(spriteKey);
-    }
   }
 
   async preload() {
@@ -1355,14 +1334,14 @@ export default class BattleScene extends SceneBase {
       if (newBattleType === BattleType.TRAINER) {
         const trainerType = this.arena.randomTrainerType(newWaveIndex);
         let doubleTrainer = false;
-        if (trainerConfigs[trainerType].doubleOnly) {
+        if (allTrainerConfigs[trainerType].doubleOnly) {
           doubleTrainer = true;
-        } else if (trainerConfigs[trainerType].hasDouble) {
+        } else if (allTrainerConfigs[trainerType].hasDouble) {
           doubleTrainer = !randSeedInt(this.getDoubleBattleChance(newWaveIndex, playerField));
           // Add a check that special trainers can't be double except for tate and liza - they should use the normal double chance
           if (
-            trainerConfigs[trainerType].trainerTypeDouble
-            && ![TrainerType.TATE, TrainerType.LIZA].includes(trainerType)
+            allTrainerConfigs[trainerType].trainerTypeDouble
+            // && ![TrainerType.TATE, TrainerType.LIZA].includes(trainerType) TODO: Add back special double trainers for doubles mode
           ) {
             doubleTrainer = false;
           }
@@ -2344,10 +2323,24 @@ export default class BattleScene extends SceneBase {
   }
 
   /**
-   * Clears the phaseQueue
+   * Clears the phaseQueue, but does not clear any other phase-related stuff.
+   *
+   * TODO: Should this function be replaced by {@linkcode clearAllPhases}?
    */
   clearPhaseQueue(): void {
     this.phaseQueue.splice(0, this.phaseQueue.length);
+  }
+
+  /**
+   * Clears all phase-related stuff, including all phase queues, the current and standby phases, and a splice index.
+   */
+  clearAllPhases(): void {
+    for (const queue of [this.phaseQueue, this.phaseQueuePrepend, this.conditionalQueue, this.nextCommandPhaseQueue]) {
+      queue.splice(0, queue.length);
+    }
+    this.currentPhase = null;
+    this.standbyPhase = null;
+    this.clearPhaseQueueSplice();
   }
 
   /**

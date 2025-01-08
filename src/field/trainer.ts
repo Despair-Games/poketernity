@@ -3,13 +3,9 @@ import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
 import type { TrainerConfig, TrainerPartyTemplate } from "#app/data/trainer-config";
-import {
-  TrainerPartyCompoundTemplate,
-  TrainerPoolTier,
-  TrainerSlot,
-  trainerConfigs,
-  trainerPartyTemplates,
-} from "#app/data/trainer-config";
+import { TrainerPartyCompoundTemplate, trainerPartyTemplates } from "#app/data/trainer-config";
+import { TrainerSlot } from "#enums/trainer-slot";
+import { TrainerPoolTier } from "#enums/trainer-pool-tier";
 import { signatureSpecies } from "#app/data/balance/signatureSpecies";
 import type { EnemyPokemon } from "#app/field/pokemon";
 import { randSeedWeightedItem, randSeedItem, randSeedInt } from "#app/utils";
@@ -21,6 +17,7 @@ import i18next from "i18next";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
+import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 
 export enum TrainerVariant {
   DEFAULT,
@@ -44,9 +41,9 @@ export default class Trainer extends Phaser.GameObjects.Container {
     trainerConfigOverride?: TrainerConfig,
   ) {
     super(globalScene, -72, 80);
-    this.config = trainerConfigs.hasOwnProperty(trainerType)
-      ? trainerConfigs[trainerType]
-      : trainerConfigs[TrainerType.ACE_TRAINER];
+    this.config = allTrainerConfigs.hasOwnProperty(trainerType)
+      ? allTrainerConfigs[trainerType]
+      : allTrainerConfigs[TrainerType.ACE_TRAINER];
 
     if (trainerConfigOverride) {
       this.config = trainerConfigOverride;
