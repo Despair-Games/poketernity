@@ -11,8 +11,8 @@ export class PostDamageAbAttr extends AbAttr {
     _damage: number,
     _passive: boolean,
     _simulated: boolean,
-    _args: any[],
     _source?: Pokemon,
+    ..._args: unknown[]
   ): boolean {
     return false;
   }

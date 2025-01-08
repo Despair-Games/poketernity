@@ -1,7 +1,6 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { BooleanHolder } from "#app/utils";
 import { TerrainType } from "#enums/terrain-type";
 import { Type } from "#enums/type";
 import i18next from "i18next";
@@ -13,13 +12,7 @@ import { PostSummonAbAttr } from "./post-summon-ab-attr";
  * @extends PostSummonAbAttr
  */
 export class TerrainEventTypeChangeAbAttr extends PostSummonAbAttr {
-  override apply(
-    pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    _cancelled: BooleanHolder,
-    _args: any[],
-  ): boolean {
+  override apply(pokemon: Pokemon, _passive: boolean, _simulated: boolean): boolean {
     if (pokemon.isTerastallized()) {
       return false;
     }
@@ -69,10 +62,10 @@ export class TerrainEventTypeChangeAbAttr extends PostSummonAbAttr {
    * Checks if the Pokemon should change types if summoned into an active terrain
    * @returns `true` if there is an active terrain requiring a type change | `false` if not
    */
-  override applyPostSummon(pokemon: Pokemon, passive: boolean, simulated: boolean, _args: any[]): boolean {
+  override applyPostSummon(pokemon: Pokemon, passive: boolean, simulated: boolean): boolean {
     if (globalScene.arena.getTerrainType() !== TerrainType.NONE) {
       // TODO: `apply()` probably shouldn't be used this way
-      return this.apply(pokemon, passive, simulated, new BooleanHolder(false), []);
+      return this.apply(pokemon, passive, simulated);
     }
     return false;
   }

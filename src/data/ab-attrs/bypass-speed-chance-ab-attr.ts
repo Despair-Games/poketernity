@@ -28,21 +28,13 @@ export class BypassSpeedChanceAbAttr extends AbAttr {
    * bypass move order in their priority bracket when pokemon choose damaging move
    * @param pokemon {@linkcode Pokemon} applying this ability
    * @param _passive N/A
-   * @param _cancelled N/A
    * @param args [0] {@linkcode BooleanHolder} set to true when the ability activated
    * @returns whether the ability was activated
    */
-  override apply(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    _cancelled: BooleanHolder,
-    args: any[],
-  ): boolean {
+  override apply(pokemon: Pokemon, _passive: boolean, simulated: boolean, bypassSpeed: BooleanHolder): boolean {
     if (simulated) {
       return false;
     }
-    const bypassSpeed = args[0] as BooleanHolder;
 
     if (!bypassSpeed.value && pokemon.randSeedInt(100) < this.chance) {
       const turnCommand = globalScene.currentBattle.turnCommands[pokemon.getBattlerIndex()];

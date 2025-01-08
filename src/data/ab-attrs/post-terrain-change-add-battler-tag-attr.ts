@@ -21,7 +21,6 @@ export class PostTerrainChangeAddBattlerTagAttr extends PostTerrainChangeAbAttr 
     _passive: boolean,
     simulated: boolean,
     terrain: TerrainType,
-    _args: any[],
   ): boolean {
     if (!this.terrainTypes.find((t) => t === terrain)) {
       return false;

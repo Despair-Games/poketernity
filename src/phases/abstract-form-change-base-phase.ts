@@ -114,8 +114,6 @@ export abstract class FormChangeBasePhase extends Phase {
           });
           sprite.setPipelineData("ignoreTimeTint", true);
           sprite.setPipelineData("spriteKey", this.pokemon.getSpriteKey());
-          sprite.setPipelineData("shiny", this.pokemon.shiny);
-          sprite.setPipelineData("variant", this.pokemon.variant);
           ["spriteColors", "fusionSpriteColors"].map((k) => {
             if (this.pokemon.summonData?.speciesForm) {
               k += "Base";

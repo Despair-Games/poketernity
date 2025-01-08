@@ -34,7 +34,7 @@ export class PostSummonPhase extends PokemonPhase {
 
     applyPostSummonAbAttrs(PostSummonAbAttr, pokemon);
     const field = pokemon.getField();
-    field.forEach((p) => applyAbAttrs(CommanderAbAttr, p, null, false));
+    field.forEach((p) => applyAbAttrs(CommanderAbAttr, p, false));
 
     this.end();
   }

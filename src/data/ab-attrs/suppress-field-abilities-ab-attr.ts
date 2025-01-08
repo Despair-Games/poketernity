@@ -13,12 +13,11 @@ export class SuppressFieldAbilitiesAbAttr extends AbAttr {
     _pokemon: Pokemon,
     _passive: boolean,
     _simulated: boolean,
-    cancelled: BooleanHolder,
-    args: any[],
+    suppressed: BooleanHolder,
+    ability: Ability,
   ): boolean {
-    const ability = args[0] as Ability;
     if (!ability.hasAttr(UnsuppressableAbilityAbAttr) && !ability.hasAttr(SuppressFieldAbilitiesAbAttr)) {
-      cancelled.value = true;
+      suppressed.value = true;
       return true;
     }
     return false;

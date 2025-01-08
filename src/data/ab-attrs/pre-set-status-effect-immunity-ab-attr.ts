@@ -27,7 +27,6 @@ export class PreSetStatusEffectImmunityAbAttr extends PreSetStatusAbAttr {
    * @param _passive - n/a
    * @param effect - The status effect being applied.
    * @param cancelled - A holder for a boolean value indicating if the status application was cancelled.
-   * @param _args - n/a
    * @returns A boolean indicating the result of the status application.
    */
   override applyPreSetStatus(
@@ -36,7 +35,6 @@ export class PreSetStatusEffectImmunityAbAttr extends PreSetStatusAbAttr {
     _simulated: boolean,
     effect: StatusEffect,
     cancelled: BooleanHolder,
-    _args: any[],
   ): boolean {
     if (this.immuneEffects.length < 1 || this.immuneEffects.includes(effect)) {
       cancelled.value = true;

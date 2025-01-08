@@ -10,7 +10,7 @@ export class PreStatStageChangeAbAttr extends AbAttr {
     _simulated: boolean,
     _stat: BattleStat,
     _cancelled: BooleanHolder,
-    _args: any[],
+    ..._args: unknown[]
   ): boolean {
     return false;
   }

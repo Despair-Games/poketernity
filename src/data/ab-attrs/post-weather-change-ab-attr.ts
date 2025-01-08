@@ -8,7 +8,7 @@ export class PostWeatherChangeAbAttr extends AbAttr {
     _passive: boolean,
     _simulated: boolean,
     _weather: WeatherType,
-    _args: any[],
+    ..._args: unknown[]
   ): boolean {
     return false;
   }

@@ -24,7 +24,6 @@ export class PostAttackStealHeldItemAbAttr extends PostAttackAbAttr {
     defender: Pokemon,
     move: Move,
     hitResult: HitResult,
-    _args: any[],
   ): boolean {
     if (
       !simulated
