@@ -193,7 +193,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
 
   override getFailedText(_user: Pokemon, target: Pokemon, _move: Move, _cancelled: BooleanHolder): string | null {
     const blockedByAbility = new BooleanHolder(false);
-    applyAbAttrs(ForceSwitchOutImmunityAbAttr, target, blockedByAbility);
+    applyAbAttrs(ForceSwitchOutImmunityAbAttr, target, false, blockedByAbility);
     return blockedByAbility.value
       ? i18next.t("moveTriggers:cannotBeSwitchedOut", { pokemonName: getPokemonNameWithAffix(target) })
       : null;
@@ -221,7 +221,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
         }
 
         const blockedByAbility = new BooleanHolder(false);
-        applyAbAttrs(ForceSwitchOutImmunityAbAttr, target, blockedByAbility);
+        applyAbAttrs(ForceSwitchOutImmunityAbAttr, target, false, blockedByAbility);
         return !blockedByAbility.value;
       }
 

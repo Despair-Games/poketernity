@@ -21,7 +21,6 @@ export class PostDefendTerrainChangeAbAttr extends PostDefendAbAttr {
     _attacker: Pokemon,
     _move: Move,
     hitResult: HitResult,
-    _args: any[],
   ): boolean {
     if (hitResult < HitResult.NO_EFFECT) {
       if (simulated) {

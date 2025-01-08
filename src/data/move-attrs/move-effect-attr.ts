@@ -132,17 +132,7 @@ export class MoveEffectAttr extends MoveAttr {
   getMoveChance(user: Pokemon, target: Pokemon, move: Move, selfEffect: boolean, showAbility?: boolean): number {
     const moveChance = new NumberHolder(this.effectChanceOverride ?? move.chance);
 
-    applyAbAttrs(
-      MoveEffectChanceMultiplierAbAttr,
-      user,
-      null,
-      false,
-      moveChance,
-      move,
-      target,
-      selfEffect,
-      showAbility,
-    );
+    applyAbAttrs(MoveEffectChanceMultiplierAbAttr, user, false, moveChance, move, showAbility);
 
     const userSide = user.getArenaTagSide();
     globalScene.arena.applyTagsForSide(ArenaTagType.WATER_FIRE_PLEDGE, userSide, false, moveChance);

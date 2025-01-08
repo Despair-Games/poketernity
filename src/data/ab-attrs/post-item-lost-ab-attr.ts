@@ -6,7 +6,7 @@ import { AbAttr } from "./ab-attr";
  * @extends AbAttr
  */
 export class PostItemLostAbAttr extends AbAttr {
-  applyPostItemLost(_pokemon: Pokemon, _simulated: boolean, _args: any[]): boolean {
+  applyPostItemLost(_pokemon: Pokemon, _simulated: boolean, ..._args: unknown[]): boolean {
     return false;
   }
 }

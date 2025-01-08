@@ -1,5 +1,6 @@
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
+import type { NumberHolder } from "#app/utils";
 import { PreAttackAbAttr } from "./pre-attack-ab-attr";
 
 export class VariableMovePowerAbAttr extends PreAttackAbAttr {
@@ -9,9 +10,8 @@ export class VariableMovePowerAbAttr extends PreAttackAbAttr {
     _simulated: boolean,
     _defender: Pokemon,
     _move: Move,
-    _args: any[],
+    _power: NumberHolder,
   ): boolean {
-    //const power = args[0] as Utils.NumberHolder;
     return false;
   }
 }

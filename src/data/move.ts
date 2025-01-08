@@ -311,7 +311,7 @@ export abstract class Move implements Localizable {
 
     const bypassed = new BooleanHolder(false);
     // TODO: Allow this to be simulated
-    applyAbAttrs(InfiltratorAbAttr, user, null, false, bypassed);
+    applyAbAttrs(InfiltratorAbAttr, user, false, bypassed);
 
     return !bypassed.value && !this.hasFlag(MoveFlags.SOUND_BASED) && !this.hasFlag(MoveFlags.IGNORE_SUBSTITUTE);
   }
@@ -589,7 +589,7 @@ export abstract class Move implements Localizable {
       case MoveFlags.IGNORE_ABILITIES:
         if (user.hasAbilityWithAttr(MoveAbilityBypassAbAttr)) {
           const abilityEffectsIgnored = new BooleanHolder(false);
-          applyAbAttrs(MoveAbilityBypassAbAttr, user, abilityEffectsIgnored, false, this);
+          applyAbAttrs(MoveAbilityBypassAbAttr, user, false, abilityEffectsIgnored, this);
           if (abilityEffectsIgnored.value) {
             return true;
           }
@@ -774,7 +774,7 @@ export abstract class Move implements Localizable {
         .flat(),
     );
     for (const aura of fieldAuras) {
-      aura.applyPreAttack(source, null, simulated, target, this, [power]);
+      aura.applyPreAttack(source, null, simulated, target, this, power);
     }
 
     const alliedField: Pokemon[] = source.getField();
@@ -807,7 +807,7 @@ export abstract class Move implements Localizable {
     const priority = new NumberHolder(this.priority);
 
     applyMoveAttrs(IncrementMovePriorityAttr, user, null, this, priority);
-    applyAbAttrs(ChangeMovePriorityAbAttr, user, null, simulated, this, priority);
+    applyAbAttrs(ChangeMovePriorityAbAttr, user, simulated, this, priority);
 
     return priority.value;
   }

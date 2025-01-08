@@ -19,9 +19,8 @@ export class IgnoreMoveEffectsAbAttr extends PreDefendAbAttr {
     _attacker: Pokemon,
     _move: Move,
     _cancelled: BooleanHolder,
-    args: any[],
+    effectChance: NumberHolder,
   ): boolean {
-    const effectChance: NumberHolder = args[0];
     if (effectChance.value <= 0) {
       return false;
     }

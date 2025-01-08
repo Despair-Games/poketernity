@@ -25,7 +25,7 @@ export class StealPositiveStatsAttr extends MoveEffectAttr {
     for (const s of BATTLE_STATS) {
       if (target.getStatStage(s) > 0) {
         const userStatChange = new NumberHolder(target.getStatStage(s));
-        applyAbAttrs(StatStageChangeMultiplierAbAttr, user, null, false, userStatChange);
+        applyAbAttrs(StatStageChangeMultiplierAbAttr, user, false, userStatChange);
         user.setStatStage(s, user.getStatStage(s) + userStatChange.value);
         target.setStatStage(s, 0);
       }

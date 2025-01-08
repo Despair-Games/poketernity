@@ -30,7 +30,6 @@ export class PostDefendCritStatStageChangeAbAttr extends PostDefendAbAttr {
     attacker: Pokemon,
     _move: Move,
     _hitResult: HitResult,
-    _args: any[],
   ): boolean {
     const attacksReceivedEntry = pokemon.turnData.attacksReceived[0];
     if (

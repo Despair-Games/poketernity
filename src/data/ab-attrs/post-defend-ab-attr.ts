@@ -10,7 +10,7 @@ export class PostDefendAbAttr extends AbAttr {
     _attacker: Pokemon,
     _move: Move,
     _hitResult: HitResult | null,
-    _args: any[],
+    ..._args: unknown[]
   ): boolean {
     return false;
   }

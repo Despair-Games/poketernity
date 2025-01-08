@@ -10,16 +10,7 @@ import { AbAttr } from "./ab-attr";
  * @extends AbAttr
  */
 export class BlockCritAbAttr extends AbAttr {
-  override apply(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    _cancelled: BooleanHolder,
-    args: any[],
-  ): boolean {
-    const isCritical = args[0] as BooleanHolder;
-
-    // Only if isCritical is `true`, then the game checks if any crit-blocking abilities would nullify the result.
+  override apply(_pokemon: Pokemon, _passive: boolean, _simulated: boolean, isCritical: BooleanHolder): boolean {
     if (isCritical.value) {
       isCritical.value = false;
       return true;

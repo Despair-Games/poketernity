@@ -24,7 +24,6 @@ export class PostDefendWeatherChangeAbAttr extends PostDefendAbAttr {
     attacker: Pokemon,
     move: Move,
     _hitResult: HitResult,
-    _args: any[],
   ): boolean {
     if (this.condition && !this.condition(pokemon, attacker, move)) {
       return false;
