@@ -14,12 +14,13 @@ import type { Moves } from "#enums/moves";
  * Fails if the user has no callable moves.
  *
  * Invalid moves are indicated by what is passed in to invalidMoves: {@linkcode invalidAssistMoves} or {@linkcode invalidSleepTalkMoves}
- * @extends RandomMoveAttr to use the callMove function on a moveId
+ * @extends RandomMoveAttr
  * @see {@linkcode getCondition} for move selection
  */
 export class RandomMovesetMoveAttr extends CallMoveAttr {
   private includeParty: boolean;
   private moveId: number;
+
   constructor(invalidMoves: Moves[], includeParty: boolean = false) {
     super();
     this.includeParty = includeParty;
@@ -33,8 +34,8 @@ export class RandomMovesetMoveAttr extends CallMoveAttr {
    * @param move Move being used
    * @param args Unused
    */
-  override apply(user: Pokemon, target: Pokemon, _move: Move, overriden: BooleanHolder, virtual: boolean): boolean {
-    return super.apply(user, target, allMoves[this.moveId], overriden, virtual);
+  override apply(user: Pokemon, target: Pokemon, _move: Move, overridden: BooleanHolder): boolean {
+    return super.apply(user, target, allMoves[this.moveId], overridden);
   }
 
   override getCondition(): MoveConditionFunc {
@@ -48,15 +49,17 @@ export class RandomMovesetMoveAttr extends CallMoveAttr {
       } else {
         allies = [user];
       }
+
       const partyMoveset = allies.map((p) => p.moveset).flat();
       const moves = partyMoveset.filter(
         (m) => !this.invalidMoves.includes(m.moveId) && !m.getMove().name.endsWith(" (N)"),
       );
+
       if (moves.length === 0) {
         return false;
       }
 
-      this.moveId = moves[user.randSeedInt(moves.length)]!.moveId;
+      this.moveId = moves[user.randSeedInt(moves.length)].moveId;
       return true;
     };
   }

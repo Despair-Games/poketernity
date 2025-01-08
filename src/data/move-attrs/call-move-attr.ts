@@ -17,12 +17,15 @@ import type { Moves } from "#enums/moves";
 export abstract class CallMoveAttr extends OverrideMoveEffectAttr {
   protected invalidMoves: Moves[];
   protected hasTarget: boolean;
-  override apply(user: Pokemon, target: Pokemon, move: Move, _overridden: BooleanHolder, _virtual: boolean): boolean {
+
+  override apply(user: Pokemon, target: Pokemon, move: Move, overridden: BooleanHolder): boolean {
     const replaceMoveTarget = move.moveTarget === MoveTarget.NEAR_OTHER ? MoveTarget.NEAR_ENEMY : undefined;
     const moveTargets = getMoveTargets(user, move.id, replaceMoveTarget);
+
     if (moveTargets.targets.length === 0) {
       return false;
     }
+
     const targets =
       moveTargets.multiple || moveTargets.targets.length === 1
         ? moveTargets.targets
@@ -31,12 +34,15 @@ export abstract class CallMoveAttr extends OverrideMoveEffectAttr {
               ? target.getBattlerIndex()
               : moveTargets.targets[user.randSeedInt(moveTargets.targets.length)],
           ]; // account for Mirror Move having a target already
+
     user.getMoveQueue().push({ move: move.id, targets: targets, virtual: true, ignorePP: true });
     globalScene.unshiftPhase(new MovePhase(user, targets, new PokemonMove(move.id, 0, 0, true), true, true));
 
     // Promise.resolve(initMoveAnim(user.scene, move.id).then(() => {
     //   loadMoveAnimAssets(user.scene, [ move.id ], true);
     // }));
+
+    overridden.value = true;
     return true;
   }
 }

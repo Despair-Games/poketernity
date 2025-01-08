@@ -33,14 +33,16 @@ export class RandomMoveAttr extends CallMoveAttr {
    * @param move Move being used
    * @param args Unused
    */
-  override apply(user: Pokemon, target: Pokemon, _move: Move, overridden: BooleanHolder, virtual: boolean): boolean {
+  override apply(user: Pokemon, target: Pokemon, _move: Move, overridden: BooleanHolder): boolean {
     const moveIds = getEnumValues(Moves).map((m) =>
       !this.invalidMoves.includes(m) && !allMoves[m].name.endsWith(" (N)") ? m : Moves.NONE,
     );
+
     let moveId: Moves = Moves.NONE;
     do {
       moveId = this.getMoveOverride() ?? moveIds[user.randSeedInt(moveIds.length)];
     } while (moveId === Moves.NONE);
-    return super.apply(user, target, allMoves[moveId], overridden, virtual);
+
+    return super.apply(user, target, allMoves[moveId], overridden);
   }
 }

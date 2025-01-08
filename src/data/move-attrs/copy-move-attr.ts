@@ -11,20 +11,21 @@ import type { Moves } from "#enums/moves";
  * Attribute used to copy a previously-used move.
  * Used for {@linkcode Moves.COPYCAT} and {@linkcode Moves.MIRROR_MOVE}
  * @see {@linkcode apply} for move selection and move call
- * @extends CallMoveAttr to call a selected move
+ * @extends CallMoveAttr
  */
 export class CopyMoveAttr extends CallMoveAttr {
   private mirrorMove: boolean;
+
   constructor(mirrorMove: boolean, invalidMoves: Moves[] = []) {
     super();
     this.mirrorMove = mirrorMove;
     this.invalidMoves = invalidMoves;
   }
 
-  override apply(user: Pokemon, target: Pokemon, _move: Move, overridden: BooleanHolder, virtual: boolean): boolean {
+  override apply(user: Pokemon, target: Pokemon, _move: Move, overridden: BooleanHolder): boolean {
     this.hasTarget = this.mirrorMove;
     const lastMove = this.mirrorMove ? target.getLastXMoves()[0].move : globalScene.currentBattle.lastMove;
-    return super.apply(user, target, allMoves[lastMove], overridden, virtual);
+    return super.apply(user, target, allMoves[lastMove], overridden);
   }
 
   override getCondition(): MoveConditionFunc {
