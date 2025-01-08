@@ -2692,7 +2692,7 @@ export default class BattleScene extends SceneBase {
     const cancelled = new BooleanHolder(false);
 
     if (source && source.isPlayer() !== target.isPlayer()) {
-      applyAbAttrs(BlockItemTheftAbAttr, source);
+      applyAbAttrs(BlockItemTheftAbAttr, source, false, cancelled);
     }
 
     if (cancelled.value) {
