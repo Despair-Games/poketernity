@@ -17,7 +17,6 @@ export class PostFaintHPDamageAbAttr extends PostFaintAbAttr {
     attacker?: Pokemon,
     move?: Move,
     _hitResult?: HitResult,
-    ..._args: any[]
   ): boolean {
     if (!move || !attacker || !attacker.isOnField()) {
       return false;

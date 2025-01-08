@@ -15,7 +15,7 @@ export class PreSwitchOutClearWeatherAbAttr extends PreSwitchOutAbAttr {
    * @param _args N/A
    * @returns Returns `true` if the weather clears, otherwise `false`.
    */
-  override applyPreSwitchOut(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
+  override applyPreSwitchOut(pokemon: Pokemon, _passive: boolean, simulated: boolean): boolean {
     const weatherType = globalScene.arena.weather?.weatherType;
     let turnOffWeather = false;
     let weatherAbility: Abilities | null = null;

@@ -1288,7 +1288,7 @@ export default class BattleScene extends SceneBase {
   getDoubleBattleChance(newWaveIndex: number, playerField: PlayerPokemon[]) {
     const doubleChance = new NumberHolder(newWaveIndex % 10 === 0 ? 32 : 8);
     this.applyModifiers(DoubleBattleChanceBoosterModifier, true, doubleChance);
-    playerField.forEach((p) => applyAbAttrs(DoubleBattleChanceAbAttr, p, null, false, doubleChance));
+    playerField.forEach((p) => applyAbAttrs(DoubleBattleChanceAbAttr, p, false, doubleChance));
     return Math.max(doubleChance.value, 1);
   }
 
@@ -2692,7 +2692,7 @@ export default class BattleScene extends SceneBase {
     const cancelled = new BooleanHolder(false);
 
     if (source && source.isPlayer() !== target.isPlayer()) {
-      applyAbAttrs(BlockItemTheftAbAttr, source, cancelled);
+      applyAbAttrs(BlockItemTheftAbAttr, source);
     }
 
     if (cancelled.value) {

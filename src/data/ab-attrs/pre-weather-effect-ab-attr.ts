@@ -10,7 +10,7 @@ export class PreWeatherEffectAbAttr extends AbAttr {
     _simulated: boolean,
     _weather: Weather | null,
     _cancelled: BooleanHolder,
-    _args: any[],
+    ..._args: unknown[]
   ): boolean {
     return false;
   }

@@ -19,7 +19,7 @@ export class PostWeatherLapseAbAttr extends AbAttr {
     _passive: boolean,
     _simulated: boolean,
     _weather: Weather | null,
-    _args: any[],
+    ..._args: unknown[]
   ): boolean {
     return false;
   }

@@ -33,12 +33,11 @@ export class PostSummonStatStageChangeOnArenaAbAttr extends PostSummonStatStageC
    *
    * @param pokemon The {@linkcode Pokemon} being summoned
    * @param passive Whether the effect is passive
-   * @param args Additional arguments
    * @returns Returns `true` if the stat change was applied, otherwise `false`
    */
-  override applyPostSummon(pokemon: Pokemon, passive: boolean, simulated: boolean, args: any[]): boolean {
+  override applyPostSummon(pokemon: Pokemon, passive: boolean, simulated: boolean): boolean {
     if (globalScene.arena.getTagOnSide(this.tagType, pokemon.getArenaTagSide())) {
-      return super.applyPostSummon(pokemon, passive, simulated, args);
+      return super.applyPostSummon(pokemon, passive, simulated);
     }
     return false;
   }

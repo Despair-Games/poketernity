@@ -26,7 +26,6 @@ export class PostAttackApplyStatusEffectAbAttr extends PostAttackAbAttr {
     target: Pokemon,
     move: Move,
     _hitResult: HitResult,
-    _args: any[],
   ): boolean {
     /**
      * The status is only applied to the target if

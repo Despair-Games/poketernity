@@ -22,7 +22,7 @@ export class HealFromBerryUseAbAttr extends AbAttr {
     this.healPercent = Phaser.Math.Clamp(healPercent, 0, 1);
   }
 
-  override apply(pokemon: Pokemon, passive: boolean, simulated: boolean, ..._args: any[]): boolean {
+  override apply(pokemon: Pokemon, passive: boolean, simulated: boolean): boolean {
     const { name: abilityName } = passive ? pokemon.getPassiveAbility() : pokemon.getAbility();
     if (!simulated) {
       globalScene.unshiftPhase(

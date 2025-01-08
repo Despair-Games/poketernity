@@ -35,7 +35,6 @@ export class PostAttackApplyBattlerTagAbAttr extends PostAttackAbAttr {
     target: Pokemon,
     move: Move,
     _hitResult: HitResult,
-    _args: any[],
   ): boolean {
     /**
      * The battler tag is only applied to the target if

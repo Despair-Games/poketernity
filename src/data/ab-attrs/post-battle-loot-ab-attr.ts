@@ -10,9 +10,8 @@ export class PostBattleLootAbAttr extends PostBattleAbAttr {
    * @param args - `[0]`: boolean for if the battle ended in a victory
    * @returns `true` if successful
    */
-  override applyPostBattle(pokemon: Pokemon, _passive: boolean, simulated: boolean, args: any[]): boolean {
+  override applyPostBattle(pokemon: Pokemon, _passive: boolean, simulated: boolean, isVictory: boolean): boolean {
     const postBattleLoot = globalScene.currentBattle.postBattleLoot;
-    const isVictory: boolean = args[0];
 
     if (!simulated && postBattleLoot.length > 0 && isVictory) {
       const randItem = randSeedItem(postBattleLoot);

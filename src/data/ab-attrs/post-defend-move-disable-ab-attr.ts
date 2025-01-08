@@ -21,7 +21,6 @@ export class PostDefendMoveDisableAbAttr extends PostDefendAbAttr {
     attacker: Pokemon,
     move: Move,
     _hitResult: HitResult,
-    _args: any[],
   ): boolean {
     if (attacker.getTag(BattlerTagType.DISABLED) === null) {
       if (

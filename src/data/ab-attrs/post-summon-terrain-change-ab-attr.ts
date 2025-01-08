@@ -12,7 +12,7 @@ export class PostSummonTerrainChangeAbAttr extends PostSummonAbAttr {
     this.terrainType = terrainType;
   }
 
-  override applyPostSummon(_pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
+  override applyPostSummon(_pokemon: Pokemon, _passive: boolean, simulated: boolean): boolean {
     if (simulated) {
       return globalScene.arena.terrain?.terrainType !== this.terrainType;
     } else {

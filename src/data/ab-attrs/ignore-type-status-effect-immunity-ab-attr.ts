@@ -25,10 +25,9 @@ export class IgnoreTypeStatusEffectImmunityAbAttr extends AbAttr {
     _passive: boolean,
     _simulated: boolean,
     cancelled: BooleanHolder,
-    args: any[],
+    effect: StatusEffect,
+    defType: Type,
   ): boolean {
-    const effect: StatusEffect = args[0];
-    const defType: Type = args[1];
     if (this.statusEffect.includes(effect) && this.defenderType.includes(defType)) {
       cancelled.value = true;
       return true;

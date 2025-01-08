@@ -9,7 +9,7 @@ export class PostStatStageChangeAbAttr extends AbAttr {
     _statsChanged: BattleStat[],
     _stagesChanged: number,
     _selfTarget: boolean,
-    _args: any[],
+    ..._args: unknown[]
   ): boolean {
     return false;
   }

@@ -14,28 +14,26 @@ export function getPokeballAtlasKey(type: PokeballType): string {
       return "gb";
     case PokeballType.ULTRA_BALL:
       return "ub";
+    case PokeballType.LUXURY_BALL:
+      return "lb";
     case PokeballType.MASTER_BALL:
       return "mb";
   }
 }
 
 export function getPokeballName(type: PokeballType): string {
-  let ret: string;
   switch (type) {
     case PokeballType.POKEBALL:
-      ret = i18next.t("pokeball:pokeBall");
-      break;
+      return i18next.t("pokeball:pokeBall");
     case PokeballType.GREAT_BALL:
-      ret = i18next.t("pokeball:greatBall");
-      break;
+      return i18next.t("pokeball:greatBall");
     case PokeballType.ULTRA_BALL:
-      ret = i18next.t("pokeball:ultraBall");
-      break;
+      return i18next.t("pokeball:ultraBall");
+    case PokeballType.LUXURY_BALL:
+      return i18next.t("pokeball:luxuryBall");
     case PokeballType.MASTER_BALL:
-      ret = i18next.t("pokeball:masterBall");
-      break;
+      return i18next.t("pokeball:masterBall");
   }
-  return ret;
 }
 
 export function getPokeballCatchMultiplier(type: PokeballType): number {
@@ -46,6 +44,8 @@ export function getPokeballCatchMultiplier(type: PokeballType): number {
       return 1.5;
     case PokeballType.ULTRA_BALL:
       return 2;
+    case PokeballType.LUXURY_BALL:
+      return 0;
     case PokeballType.MASTER_BALL:
       return -1;
   }
@@ -59,6 +59,8 @@ export function getPokeballTintColor(type: PokeballType): number {
       return 0x94b4de;
     case PokeballType.ULTRA_BALL:
       return 0xe6cd31;
+    case PokeballType.LUXURY_BALL:
+      return 0xffde6a;
     case PokeballType.MASTER_BALL:
       return 0xa441bd;
   }

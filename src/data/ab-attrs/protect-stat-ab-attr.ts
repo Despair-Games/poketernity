@@ -26,7 +26,6 @@ export class ProtectStatAbAttr extends PreStatStageChangeAbAttr {
    * @param simulated
    * @param stat the {@linkcode BattleStat} being affected
    * @param cancelled The {@linkcode BooleanHolder} that will be set to true if the stat is protected
-   * @param _args
    * @returns true if the stat is protected, false otherwise
    */
   override applyPreStatStageChange(
@@ -35,7 +34,6 @@ export class ProtectStatAbAttr extends PreStatStageChangeAbAttr {
     _simulated: boolean,
     stat: BattleStat,
     cancelled: BooleanHolder,
-    _args: any[],
   ): boolean {
     if (isNullOrUndefined(this.protectedStat) || stat === this.protectedStat) {
       cancelled.value = true;
