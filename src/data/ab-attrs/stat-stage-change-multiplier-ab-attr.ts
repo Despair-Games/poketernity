@@ -1,5 +1,5 @@
 import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder, NumberHolder } from "#app/utils";
+import type { NumberHolder } from "#app/utils";
 import { AbAttr } from "./ab-attr";
 
 export class StatStageChangeMultiplierAbAttr extends AbAttr {
@@ -11,14 +11,7 @@ export class StatStageChangeMultiplierAbAttr extends AbAttr {
     this.multiplier = multiplier;
   }
 
-  override apply(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    _cancelled: BooleanHolder,
-    args: any[],
-  ): boolean {
-    const stages: NumberHolder = args[0];
+  override apply(_pokemon: Pokemon, _passive: boolean, _simulated: boolean, stages: NumberHolder): boolean {
     stages.value *= this.multiplier;
 
     return true;

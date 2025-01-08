@@ -15,7 +15,7 @@ import { PostSummonAbAttr } from "./post-summon-ab-attr";
  * @see {@linkcode applyPostSummon}
  */
 export class PostSummonClearAllyStatStagesAbAttr extends PostSummonAbAttr {
-  override applyPostSummon(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
+  override applyPostSummon(pokemon: Pokemon, _passive: boolean, simulated: boolean): boolean {
     const target = pokemon.getAlly();
     if (target?.isActive(true)) {
       if (!simulated) {

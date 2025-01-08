@@ -17,7 +17,7 @@ export class PostBattleInitStatStageChangeAbAttr extends PostBattleInitAbAttr {
     this.selfTarget = selfTarget;
   }
 
-  override applyPostBattleInit(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
+  override applyPostBattleInit(pokemon: Pokemon, _passive: boolean, simulated: boolean): boolean {
     const statStageChangePhases: StatStageChangePhase[] = [];
 
     if (!simulated) {

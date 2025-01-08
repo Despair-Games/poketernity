@@ -389,7 +389,7 @@ export class Arena {
           (t) => "terrainTypes" in t && !(t.terrainTypes as TerrainType[]).find((t) => t === terrain),
         );
         applyPostTerrainChangeAbAttrs(PostTerrainChangeAbAttr, pokemon, terrain);
-        applyAbAttrs(TerrainEventTypeChangeAbAttr, pokemon, null, false);
+        applyAbAttrs(TerrainEventTypeChangeAbAttr, pokemon, false);
       });
 
     return true;

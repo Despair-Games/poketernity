@@ -12,7 +12,7 @@ export class PostTurnFormChangeAbAttr extends PostTurnAbAttr {
     this.formFunc = formFunc;
   }
 
-  override applyPostTurn(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
+  override applyPostTurn(pokemon: Pokemon, _passive: boolean, simulated: boolean): boolean {
     const formIndex = this.formFunc(pokemon);
     if (formIndex !== pokemon.formIndex) {
       if (!simulated) {

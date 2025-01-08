@@ -21,7 +21,7 @@ export class NewBiomeEncounterPhase extends NextEncounterPhase {
     }
 
     for (const pokemon of globalScene.getPlayerParty().filter((p) => p.isOnField())) {
-      applyAbAttrs(PostBiomeChangeAbAttr, pokemon, null);
+      applyAbAttrs(PostBiomeChangeAbAttr, pokemon);
     }
 
     const enemyField = globalScene.getEnemyField();
