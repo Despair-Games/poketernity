@@ -107,8 +107,8 @@ import PokemonInfoContainer from "#app/ui/pokemon-info-container";
 import { biomeDepths, getBiomeName } from "#app/data/balance/biomes";
 import { SceneBase } from "#app/scene-base";
 import CandyBar from "#app/ui/candy-bar";
-import type { Variant, VariantSet } from "#app/data/variant";
-import { variantColorCache, variantData } from "#app/data/variant";
+import type { Variant } from "#app/data/variant";
+import { variantData } from "#app/data/variant";
 import type { Localizable } from "#app/interfaces/locales";
 import Overrides from "#app/overrides";
 import { InputsController } from "#app/inputs-controller";
@@ -359,39 +359,19 @@ export default class BattleScene extends SceneBase {
 
   loadPokemonAtlas(key: string, atlasPath: string) {
     const variant = atlasPath.includes("variant/") || /_[0-3]$/.test(atlasPath);
+    let basePath = atlasPath;
     if (variant) {
       atlasPath = atlasPath.replace("variant/", "");
+      basePath = atlasPath.replace(/_[0-3]$/, "");
+    }
+    if (basePath.includes("shiny/")) {
+      basePath = basePath.replace("shiny/", "");
     }
     this.load.atlas(
       key,
       `images/pokemon/${variant ? "variant/" : ""}${atlasPath}.png`,
-      `images/pokemon/${variant ? "variant/" : ""}${atlasPath}.json`,
+      `images/pokemon/${basePath}.json`,
     );
-  }
-
-  /**
-   * Load the variant assets for the given sprite and stores them in {@linkcode variantColorCache}
-   */
-  loadPokemonVariantAssets(spriteKey: string, fileRoot: string, variant?: Variant) {
-    let variantConfig = variantData;
-    fileRoot.split("/").map((p) => (variantConfig ? (variantConfig = variantConfig[p]) : null));
-    const variantSet = variantConfig as VariantSet;
-    if (variantSet && variant !== undefined && variantSet[variant] === 1) {
-      const populateVariantColors = (key: string): Promise<void> => {
-        return new Promise((resolve) => {
-          if (variantColorCache.hasOwnProperty(key)) {
-            return resolve();
-          }
-          this.cachedFetch(`./images/pokemon/variant/${fileRoot}.json`)
-            .then((res) => res.json())
-            .then((c) => {
-              variantColorCache[key] = c;
-              resolve();
-            });
-        });
-      };
-      populateVariantColors(spriteKey);
-    }
   }
 
   async preload() {

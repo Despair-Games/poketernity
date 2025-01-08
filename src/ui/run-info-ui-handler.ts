@@ -1052,8 +1052,6 @@ export default class RunInfoUiHandler extends UiHandler {
       species.loadAssets(female, formIndex, shiny, variant, true).then(() => {
         speciesLoaded.set(id, true);
         pokemonSprite.play(species.getSpriteKey(female, formIndex, shiny, variant));
-        pokemonSprite.setPipelineData("shiny", shiny);
-        pokemonSprite.setPipelineData("variant", variant);
         pokemonSprite.setPipelineData("spriteKey", species.getSpriteKey(female, formIndex, shiny, variant));
         pokemonSprite.setVisible(true);
       });
