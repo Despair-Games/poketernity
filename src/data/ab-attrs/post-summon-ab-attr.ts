@@ -13,7 +13,7 @@ export class PostSummonAbAttr extends AbAttr {
    * @param _args Set of unique arguments needed by this attribute
    * @returns true if application of the ability succeeds
    */
-  applyPostSummon(_pokemon: Pokemon, _passive: boolean, _simulated: boolean, _args: any[]): boolean {
+  applyPostSummon(_pokemon: Pokemon, _passive: boolean, _simulated: boolean, ..._args: unknown[]): boolean {
     return false;
   }
 }

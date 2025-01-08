@@ -8,7 +8,7 @@ export class PostTerrainChangeAbAttr extends AbAttr {
     _passive: boolean,
     _simulated: boolean,
     _terrain: TerrainType,
-    _args: any[],
+    ..._args: unknown[]
   ): boolean {
     return false;
   }

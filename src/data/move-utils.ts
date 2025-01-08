@@ -11,7 +11,7 @@ import type { UserMoveConditionFunc } from "./move-conditions";
 
 export const crashDamageFunc = (user: Pokemon, _move: Move) => {
   const cancelled = new BooleanHolder(false);
-  applyAbAttrs(BlockNonDirectDamageAbAttr, user, cancelled);
+  applyAbAttrs(BlockNonDirectDamageAbAttr, user, false, cancelled);
   if (cancelled.value) {
     return false;
   }

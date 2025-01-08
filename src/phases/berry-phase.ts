@@ -26,7 +26,7 @@ export class BerryPhase extends FieldPhase {
 
       if (hasUsableBerry) {
         const cancelled = new BooleanHolder(false);
-        pokemon.getOpponents().map((opp) => applyAbAttrs(PreventBerryUseAbAttr, opp, cancelled));
+        pokemon.getOpponents().map((opp) => applyAbAttrs(PreventBerryUseAbAttr, opp, false, cancelled));
 
         if (cancelled.value) {
           globalScene.queueMessage(
@@ -47,7 +47,7 @@ export class BerryPhase extends FieldPhase {
 
           globalScene.updateModifiers(pokemon.isPlayer());
 
-          applyAbAttrs(HealFromBerryUseAbAttr, pokemon, new BooleanHolder(false));
+          applyAbAttrs(HealFromBerryUseAbAttr, pokemon);
         }
       }
     });

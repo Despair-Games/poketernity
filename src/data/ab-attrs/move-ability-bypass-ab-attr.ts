@@ -17,9 +17,8 @@ export class MoveAbilityBypassAbAttr extends AbAttr {
     _passive: boolean,
     _simulated: boolean,
     cancelled: BooleanHolder,
-    args: any[],
+    move: Move,
   ): boolean {
-    const move: Move = args[0];
     if (this.moveIgnoreFunc(pokemon, move)) {
       cancelled.value = true;
       return true;

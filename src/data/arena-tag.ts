@@ -147,7 +147,7 @@ export class MistTag extends ArenaTag {
     if (attacker) {
       const bypassed = new BooleanHolder(false);
       // TODO: Allow this to be simulated
-      applyAbAttrs(InfiltratorAbAttr, attacker, null, false, bypassed);
+      applyAbAttrs(InfiltratorAbAttr, attacker, simulated, bypassed);
       if (bypassed.value) {
         return false;
       }
@@ -205,14 +205,14 @@ export class WeakenMoveScreenTag extends ArenaTag {
    */
   override apply(
     _arena: Arena,
-    _simulated: boolean,
+    simulated: boolean,
     attacker: Pokemon,
     moveCategory: MoveCategory,
     damageMultiplier: NumberHolder,
   ): boolean {
     if (this.weakenedCategories.includes(moveCategory)) {
       const bypassed = new BooleanHolder(false);
-      applyAbAttrs(InfiltratorAbAttr, attacker, null, false, bypassed);
+      applyAbAttrs(InfiltratorAbAttr, attacker, simulated, bypassed);
       if (bypassed.value) {
         return false;
       }
@@ -764,7 +764,7 @@ class SpikesTag extends ArenaTrapTag {
   override activateTrap(pokemon: Pokemon, simulated: boolean): boolean {
     if (pokemon.isGrounded()) {
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, cancelled);
+      applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, simulated, cancelled);
 
       if (simulated) {
         return !cancelled.value;
@@ -951,7 +951,7 @@ class StealthRockTag extends ArenaTrapTag {
 
   override activateTrap(pokemon: Pokemon, simulated: boolean): boolean {
     const cancelled = new BooleanHolder(false);
-    applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, cancelled);
+    applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, simulated, cancelled);
 
     if (cancelled.value) {
       return false;
@@ -1018,7 +1018,7 @@ class StickyWebTag extends ArenaTrapTag {
   override activateTrap(pokemon: Pokemon, simulated: boolean): boolean {
     if (pokemon.isGrounded()) {
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs(ProtectStatAbAttr, pokemon, cancelled);
+      applyAbAttrs(ProtectStatAbAttr, pokemon, simulated, cancelled);
 
       if (simulated) {
         return !cancelled.value;

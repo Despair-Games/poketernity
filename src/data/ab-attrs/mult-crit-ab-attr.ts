@@ -1,5 +1,5 @@
 import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder, NumberHolder } from "#app/utils";
+import type { NumberHolder } from "#app/utils";
 import { AbAttr } from "./ab-attr";
 
 export class MultCritAbAttr extends AbAttr {
@@ -11,16 +11,9 @@ export class MultCritAbAttr extends AbAttr {
     this.multAmount = multAmount;
   }
 
-  override apply(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    _cancelled: BooleanHolder,
-    args: any[],
-  ): boolean {
-    const critMult = args[0] as NumberHolder;
-    if (critMult.value > 1) {
-      critMult.value *= this.multAmount;
+  override apply(_pokemon: Pokemon, _passive: boolean, _simulated: boolean, critMultiplier: NumberHolder): boolean {
+    if (critMultiplier.value > 1) {
+      critMultiplier.value *= this.multAmount;
       return true;
     }
 

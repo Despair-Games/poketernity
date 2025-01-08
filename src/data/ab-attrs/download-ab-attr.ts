@@ -20,7 +20,7 @@ export class DownloadAbAttr extends PostSummonAbAttr {
    * @param pokemon The {@linkcode Pokemon} with this ability
    * @returns Returns `true` if ability is used successful, `false` if not.
    */
-  override applyPostSummon(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
+  override applyPostSummon(pokemon: Pokemon, _passive: boolean, simulated: boolean): boolean {
     this.enemyDef = 0;
     this.enemySpDef = 0;
 

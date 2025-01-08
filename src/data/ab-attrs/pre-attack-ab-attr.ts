@@ -9,7 +9,7 @@ export class PreAttackAbAttr extends AbAttr {
     _simulated: boolean,
     _defender: Pokemon | null,
     _move: Move,
-    _args: any[],
+    ..._args: unknown[]
   ): boolean {
     return false;
   }

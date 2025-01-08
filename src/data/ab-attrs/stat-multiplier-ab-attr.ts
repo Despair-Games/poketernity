@@ -3,7 +3,7 @@ import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
 import type { BattleStat } from "#enums/stat";
-import { AbAttr } from "./ab-attr";
+import { StatStageAbAttr } from "./stat-stage-ab-attr";
 
 /**
  * Ability attribute that multiplies a Pokemon's stat by a factor
@@ -36,28 +36,26 @@ import { AbAttr } from "./ab-attr";
 +-----------------------+-------+--------+----------------------------------+
 ```
  */
-export class StatMultiplierAbAttr extends AbAttr {
-  public stat: BattleStat;
+export class StatMultiplierAbAttr extends StatStageAbAttr {
   private readonly multiplier: number;
   private readonly condition?: PokemonAttackCondition;
 
   constructor(stat: BattleStat, multiplier: number, condition?: PokemonAttackCondition) {
-    super(false);
+    super(stat);
 
-    this.stat = stat;
     this.multiplier = multiplier;
     this.condition = condition;
   }
 
-  applyStatStage(
+  override applyStatStage(
     pokemon: Pokemon,
     _passive: boolean,
     _simulated: boolean,
     stat: BattleStat,
     statValue: NumberHolder,
-    args: any[],
+    move: Move,
+    _target?: Pokemon,
   ): boolean {
-    const move = args[0] as Move;
     if (stat === this.stat && (!this.condition || this.condition(pokemon, null, move))) {
       statValue.value *= this.multiplier;
       return true;
