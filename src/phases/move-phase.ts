@@ -226,7 +226,6 @@ export class MovePhase extends BattlePhase {
           applyAbAttrs(
             ReduceStatusEffectDurationAbAttr,
             this.pokemon,
-            null,
             false,
             this.pokemon.status.effect,
             turnsRemaining,
@@ -482,7 +481,7 @@ export class MovePhase extends BattlePhase {
       globalScene
         .getField(true)
         .filter((p) => p !== this.pokemon)
-        .forEach((p) => applyAbAttrs(RedirectMoveAbAttr, p, null, false, this.move.moveId, redirectTarget));
+        .forEach((p) => applyAbAttrs(RedirectMoveAbAttr, p, false, this.move.moveId, redirectTarget));
 
       /** `true` if an Ability is responsible for redirecting the move to another target; `false` otherwise */
       let redirectedByAbility = currentTarget !== redirectTarget.value;

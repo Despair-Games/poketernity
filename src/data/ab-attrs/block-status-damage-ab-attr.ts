@@ -24,13 +24,7 @@ export class BlockStatusDamageAbAttr extends AbAttr {
    * @param N/A
    * @returns Returns `true` if status damage is blocked
    */
-  override apply(
-    pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    cancelled: BooleanHolder,
-    _args: any[],
-  ): boolean {
+  override apply(pokemon: Pokemon, _passive: boolean, _simulated: boolean, cancelled: BooleanHolder): boolean {
     if (pokemon.status && this.effects.includes(pokemon.status.effect)) {
       cancelled.value = true;
       return true;

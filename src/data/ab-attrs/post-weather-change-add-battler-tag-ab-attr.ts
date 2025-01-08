@@ -21,7 +21,6 @@ export class PostWeatherChangeAddBattlerTagAttr extends PostWeatherChangeAbAttr 
     _passive: boolean,
     simulated: boolean,
     weather: WeatherType,
-    _args: any[],
   ): boolean {
     if (!this.weatherTypes.find((w) => weather === w)) {
       return false;

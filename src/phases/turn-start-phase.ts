@@ -79,8 +79,8 @@ export class TurnStartPhase extends FieldPhase {
       .map((p) => {
         const bypassSpeed = new BooleanHolder(false);
         const canCheckHeldItems = new BooleanHolder(true);
-        applyAbAttrs(BypassSpeedChanceAbAttr, p, null, false, bypassSpeed);
-        applyAbAttrs(PreventBypassSpeedChanceAbAttr, p, null, false, bypassSpeed, canCheckHeldItems);
+        applyAbAttrs(BypassSpeedChanceAbAttr, p, false, bypassSpeed);
+        applyAbAttrs(PreventBypassSpeedChanceAbAttr, p, false, bypassSpeed, canCheckHeldItems);
         if (canCheckHeldItems.value) {
           globalScene.applyModifiers(BypassSpeedChanceModifier, p.isPlayer(), p, bypassSpeed);
         }

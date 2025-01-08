@@ -18,10 +18,9 @@ export class IgnoreTypeImmunityAbAttr extends AbAttr {
     _passive: boolean,
     _simulated: boolean,
     cancelled: BooleanHolder,
-    args: any[],
+    moveType: Type,
+    defType: Type,
   ): boolean {
-    const moveType: Type = args[0];
-    const defType: Type = args[1];
     if (this.defenderType === defType && this.allowedMoveTypes.includes(moveType)) {
       cancelled.value = true;
       return true;
