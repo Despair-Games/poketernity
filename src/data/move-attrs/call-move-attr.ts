@@ -1,8 +1,8 @@
-//import { initMoveAnim, loadMoveAnimAssets } from "#app/data/battle-anims";
 import { type Move, getMoveTargets } from "#app/data/move";
 import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
 import { type Pokemon, PokemonMove } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
+import { LoadMoveAnimPhase } from "#app/phases/load-move-anim-phase";
 import { MovePhase } from "#app/phases/move-phase";
 import type { BooleanHolder } from "#app/utils";
 import { MoveTarget } from "#enums/move-target";
@@ -36,11 +36,8 @@ export abstract class CallMoveAttr extends OverrideMoveEffectAttr {
           ]; // account for Mirror Move having a target already
 
     user.getMoveQueue().push({ move: move.id, targets: targets, virtual: true, ignorePP: true });
+    globalScene.unshiftPhase(new LoadMoveAnimPhase(move.id));
     globalScene.unshiftPhase(new MovePhase(user, targets, new PokemonMove(move.id, 0, 0, true), true, true));
-
-    // Promise.resolve(initMoveAnim(user.scene, move.id).then(() => {
-    //   loadMoveAnimAssets(user.scene, [ move.id ], true);
-    // }));
 
     return true;
   }
