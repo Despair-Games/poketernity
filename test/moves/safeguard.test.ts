@@ -156,7 +156,7 @@ describe("Moves - Safeguard", () => {
     expect(enemyPokemon.status).toBeUndefined();
   });
 
-  it("still works if the user has a fainted ally", async () => {
+  it("should apply even if the user has a fainted ally", async () => {
     game.override.battleType("double");
 
     await game.classicMode.startBattle();

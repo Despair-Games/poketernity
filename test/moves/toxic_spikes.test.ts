@@ -133,7 +133,7 @@ describe("Moves - Toxic Spikes", () => {
     expect(arenaTags.layers).toBe(1);
   });
 
-  it("should still work if the target is fainted", async () => {
+  it("should apply even if the target is fainted", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const enemyPokemon = game.pokemonHelper.getEnemyPokemon();

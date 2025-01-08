@@ -151,7 +151,7 @@ describe("Moves - Fairy Lock", () => {
     expect(game.scene.getEnemyField()[1].isTrapped()).toEqual(false);
   });
 
-  it("should still work if all targets are fainted", async () => {
+  it("should apply even if the field is empty", async () => {
     await game.classicMode.startBattle([Species.KLEFKI, Species.GUZZLORD, Species.TYRUNT, Species.ZYGARDE]);
 
     game.move.use(Moves.FAIRY_LOCK);
