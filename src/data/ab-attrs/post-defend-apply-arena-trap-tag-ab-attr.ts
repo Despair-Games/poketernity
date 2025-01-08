@@ -25,7 +25,6 @@ export class PostDefendApplyArenaTrapTagAbAttr extends PostDefendAbAttr {
     attacker: Pokemon,
     move: Move,
     _hitResult: HitResult,
-    _args: any[],
   ): boolean {
     if (this.condition(pokemon, attacker, move)) {
       const tag = globalScene.arena.getTag(this.tagType) as ArenaTrapTag;

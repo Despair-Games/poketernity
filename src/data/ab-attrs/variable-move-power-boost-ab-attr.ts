@@ -27,10 +27,9 @@ export class VariableMovePowerBoostAbAttr extends VariableMovePowerAbAttr {
     _simulated: boolean,
     defender: Pokemon,
     move: Move,
-    args: any[],
+    power: NumberHolder,
   ): boolean {
     const multiplier = this.multFunc(pokemon, defender, move);
-    const power: NumberHolder = args[0];
     if (multiplier !== 1) {
       power.value *= multiplier;
       return true;

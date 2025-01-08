@@ -48,7 +48,7 @@ export class WeatherEffectPhase extends CommonAnimPhase {
           const cancelled = new BooleanHolder(false);
 
           applyPreWeatherEffectAbAttrs(PreWeatherDamageAbAttr, pokemon, weather, cancelled);
-          applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, cancelled);
+          applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, false, cancelled);
 
           if (
             cancelled.value

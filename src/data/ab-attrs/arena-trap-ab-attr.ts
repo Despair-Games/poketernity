@@ -30,7 +30,6 @@ export class ArenaTrapAbAttr extends CheckTrappedAbAttr {
     _simulated: boolean,
     trapped: BooleanHolder,
     otherPokemon: Pokemon,
-    _args: any[],
   ): boolean {
     if (this.arenaTrapCondition(pokemon, otherPokemon)) {
       if (
