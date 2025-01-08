@@ -18,7 +18,7 @@ export abstract class CallMoveAttr extends OverrideMoveEffectAttr {
   protected invalidMoves: Moves[];
   protected hasTarget: boolean;
 
-  override apply(user: Pokemon, target: Pokemon, move: Move, overridden: BooleanHolder): boolean {
+  override apply(user: Pokemon, target: Pokemon, move: Move, _overridden: BooleanHolder): boolean {
     const replaceMoveTarget = move.moveTarget === MoveTarget.NEAR_OTHER ? MoveTarget.NEAR_ENEMY : undefined;
     const moveTargets = getMoveTargets(user, move.id, replaceMoveTarget);
 
@@ -42,7 +42,6 @@ export abstract class CallMoveAttr extends OverrideMoveEffectAttr {
     //   loadMoveAnimAssets(user.scene, [ move.id ], true);
     // }));
 
-    overridden.value = true;
     return true;
   }
 }
