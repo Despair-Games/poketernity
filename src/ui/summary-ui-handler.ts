@@ -7,7 +7,7 @@ import {
   rgbHexToRgba,
   padInt,
   getEnumValues,
-  fixedInt,
+  fixedNumber,
   toReadableString,
   formatStat,
 } from "#app/utils";
@@ -666,10 +666,10 @@ export default class SummaryUiHandler extends UiHandler {
       if (moveDescriptionLineCount > 3) {
         this.descriptionScrollTween = globalScene.tweens.add({
           targets: this.moveDescriptionText,
-          delay: fixedInt(2000),
+          delay: fixedNumber(2000),
           loop: -1,
-          hold: fixedInt(2000),
-          duration: fixedInt((moveDescriptionLineCount - 3) * 2000),
+          hold: fixedNumber(2000),
+          duration: fixedNumber((moveDescriptionLineCount - 3) * 2000),
           y: `-=${14.83 * (moveDescriptionLineCount - 3)}`,
         });
       }
@@ -688,10 +688,10 @@ export default class SummaryUiHandler extends UiHandler {
       this.moveCursorObj.setVisible(true);
       this.moveCursorBlinkTimer = globalScene.time.addEvent({
         loop: true,
-        delay: fixedInt(600),
+        delay: fixedNumber(600),
         callback: () => {
           this.moveCursorObj?.setVisible(false);
-          globalScene.time.delayedCall(fixedInt(100), () => {
+          globalScene.time.delayedCall(fixedNumber(100), () => {
             if (!this.moveCursorObj) {
               return;
             }
@@ -904,10 +904,10 @@ export default class SummaryUiHandler extends UiHandler {
             abilityInfo.descriptionText.setY(69);
             this.descriptionScrollTween = globalScene.tweens.add({
               targets: abilityInfo.descriptionText,
-              delay: fixedInt(2000),
+              delay: fixedNumber(2000),
               loop: -1,
-              hold: fixedInt(2000),
-              duration: fixedInt((abilityDescriptionLineCount - 2) * 2000),
+              hold: fixedNumber(2000),
+              duration: fixedNumber((abilityDescriptionLineCount - 2) * 2000),
               y: `-=${14.83 * (abilityDescriptionLineCount - 2)}`,
             });
           }
