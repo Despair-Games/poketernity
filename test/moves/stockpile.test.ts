@@ -76,6 +76,7 @@ describe("Moves - Stockpile", () => {
           expect(user.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
             result: MoveResult.FAIL,
             move: Moves.STOCKPILE,
+            targets: [user.getBattlerIndex()],
           });
         }
       }

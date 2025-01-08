@@ -392,16 +392,6 @@ export abstract class Move implements Localizable {
   }
 
   /**
-   * Sets the {@linkcode MoveFlags.IGNORE_VIRTUAL} flag for the calling Move
-   * @see {@linkcode Moves.NATURE_POWER}
-   * @returns The {@linkcode Move} that called this function
-   */
-  ignoresVirtual(): this {
-    this.setFlag(MoveFlags.IGNORE_VIRTUAL, true);
-    return this;
-  }
-
-  /**
    * Sets the {@linkcode MoveFlags.SOUND_BASED} flag for the calling Move
    * @see {@linkcode Moves.UPROAR}
    * @returns The {@linkcode Move} that called this function
@@ -1074,17 +1064,20 @@ export type MoveTargetSet = {
   multiple: boolean;
 };
 
-export function getMoveTargets(user: Pokemon, move: Moves): MoveTargetSet {
+export function getMoveTargets(user: Pokemon, move: Moves, replaceTarget?: MoveTarget): MoveTargetSet {
   const variableTarget = new NumberHolder(0);
   user.getOpponents().forEach((p) => applyMoveAttrs(VariableTargetAttr, user, p, allMoves[move], variableTarget));
 
-  const moveTarget = allMoves[move].hasAttr(VariableTargetAttr)
-    ? variableTarget.value
-    : move
-      ? allMoves[move].moveTarget
-      : move === undefined
-        ? MoveTarget.NEAR_ENEMY
-        : [];
+  let moveTarget: MoveTarget | undefined;
+  if (allMoves[move].hasAttr(VariableTargetAttr)) {
+    moveTarget = variableTarget.value;
+  } else if (replaceTarget !== undefined) {
+    moveTarget = replaceTarget;
+  } else if (move) {
+    moveTarget = allMoves[move].moveTarget;
+  } else if (move === undefined) {
+    moveTarget = MoveTarget.NEAR_ENEMY;
+  }
   const opponents = user.getOpponents();
 
   let set: Pokemon[] = [];

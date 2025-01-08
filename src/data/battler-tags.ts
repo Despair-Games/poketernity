@@ -665,7 +665,7 @@ export class InterruptedTag extends BattlerTag {
     super.onAdd(pokemon);
 
     pokemon.getMoveQueue().shift();
-    pokemon.pushMoveHistory({ move: Moves.NONE, result: MoveResult.OTHER });
+    pokemon.pushMoveHistory({ move: Moves.NONE, result: MoveResult.OTHER, targets: [] });
   }
 
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {

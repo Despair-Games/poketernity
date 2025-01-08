@@ -1,20 +1,22 @@
-import { MoveFlags } from "#enums/move-flags";
-import { Moves } from "#enums/moves";
-import { type Pokemon, PokemonMove } from "#app/field/pokemon";
-import { globalScene } from "#app/global-scene";
-import { LoadMoveAnimPhase } from "#app/phases/load-move-anim-phase";
-import { MovePhase } from "#app/phases/move-phase";
-import { getEnumValues } from "#app/utils";
-import { type Move, getMoveTargets } from "#app/data/move";
 import { allMoves } from "#app/data/all-moves";
-import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
+import { type Move } from "#app/data/move";
+import { CallMoveAttr } from "#app/data/move-attrs/call-move-attr";
+import { type Pokemon } from "#app/field/pokemon";
+import { getEnumValues, type BooleanHolder } from "#app/utils";
+import { Moves } from "#enums/moves";
 
 /**
- * Attribute to invoke a random move and use it virtually on a random legal target.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Metronome_(move) | Metronome}.
- * @extends OverrideMoveEffectAttr
+ * Attribute used to call a random move.
+ * Used for {@linkcode Moves.METRONOME}
+ * @see {@linkcode apply} for move selection and move call
+ * @extends CallMoveAttr to call a selected move
  */
-export class RandomMoveAttr extends OverrideMoveEffectAttr {
+export class RandomMoveAttr extends CallMoveAttr {
+  constructor(invalidMoves: Moves[]) {
+    super();
+    this.invalidMoves = invalidMoves;
+  }
+
   /**
    * This function exists solely to allow tests to override the randomly selected move by mocking this function.
    */
@@ -22,25 +24,23 @@ export class RandomMoveAttr extends OverrideMoveEffectAttr {
     return null;
   }
 
-  override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
-    const moveIds = getEnumValues(Moves).filter(
-      (m) => !allMoves[m].hasFlag(MoveFlags.IGNORE_VIRTUAL) && !allMoves[m].name.endsWith(" (N)"),
+  /**
+   * User calls a random moveId.
+   *
+   * Invalid moves are indicated by what is passed in to invalidMoves: {@linkcode invalidMetronomeMoves}
+   * @param user Pokemon that used the move and will call a random move
+   * @param target Pokemon that will be targeted by the random move (if single target)
+   * @param move Move being used
+   * @param args Unused
+   */
+  override apply(user: Pokemon, target: Pokemon, _move: Move, overridden: BooleanHolder, virtual: boolean): boolean {
+    const moveIds = getEnumValues(Moves).map((m) =>
+      !this.invalidMoves.includes(m) && !allMoves[m].name.endsWith(" (N)") ? m : Moves.NONE,
     );
-    const moveId = this.getMoveOverride() ?? moveIds[user.randSeedInt(moveIds.length)];
-
-    const moveTargets = getMoveTargets(user, moveId);
-    if (!moveTargets.targets.length) {
-      return false;
-    }
-    const targets =
-      moveTargets.multiple || moveTargets.targets.length === 1
-        ? moveTargets.targets
-        : moveTargets.targets.indexOf(target.getBattlerIndex()) > -1
-          ? [target.getBattlerIndex()]
-          : [moveTargets.targets[user.randSeedInt(moveTargets.targets.length)]];
-    user.getMoveQueue().push({ move: moveId, targets: targets, ignorePP: true });
-    globalScene.unshiftPhase(new LoadMoveAnimPhase(moveId));
-    globalScene.unshiftPhase(new MovePhase(user, targets, new PokemonMove(moveId, 0, 0, true), true));
-    return true;
+    let moveId: Moves = Moves.NONE;
+    do {
+      moveId = this.getMoveOverride() ?? moveIds[user.randSeedInt(moveIds.length)];
+    } while (moveId === Moves.NONE);
+    return super.apply(user, target, allMoves[moveId], overridden, virtual);
   }
 }

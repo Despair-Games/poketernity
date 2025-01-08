@@ -5,7 +5,7 @@ import { speciesStarterCosts } from "#app/data/balance/starters";
 import type { EncoreTag } from "#app/data/battler-tags";
 import { TrappedTag, type BattlerTag } from "#app/data/battler-tags";
 import { getMoveTargets, type MoveTargetSet } from "#app/data/move";
-import type { PlayerPokemon } from "#app/field/pokemon";
+import type { PlayerPokemon, TurnMove } from "#app/field/pokemon";
 import { FieldPosition } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -98,6 +98,7 @@ export class CommandPhase extends FieldPhase {
       moveQueue.length
       && moveQueue[0]
       && moveQueue[0].move
+      && !moveQueue[0].virtual
       && (!playerPokemon.getMoveset().find((m) => m.moveId === moveQueue[0].move)
         || !playerPokemon
           .getMoveset()
@@ -108,17 +109,17 @@ export class CommandPhase extends FieldPhase {
       moveQueue.shift();
     }
 
-    if (moveQueue.length) {
+    if (moveQueue.length > 0) {
       const queuedMove = moveQueue[0];
       if (!queuedMove.move) {
-        this.handleCommand(Command.FIGHT, -1, false);
+        this.handleCommand(Command.FIGHT, -1);
       } else {
         const moveIndex = playerPokemon.getMoveset().findIndex((m) => m.moveId === queuedMove.move);
-        if (moveIndex > -1 && playerPokemon.getMoveset()[moveIndex].isUsable(playerPokemon, queuedMove.ignorePP)) {
-          this.handleCommand(Command.FIGHT, moveIndex, queuedMove.ignorePP, {
-            targets: queuedMove.targets,
-            multiple: queuedMove.targets.length > 1,
-          });
+        if (
+          (moveIndex > -1 && playerPokemon.getMoveset()[moveIndex].isUsable(playerPokemon, queuedMove.ignorePP))
+          || queuedMove.virtual
+        ) {
+          this.handleCommand(Command.FIGHT, moveIndex, queuedMove.ignorePP, queuedMove);
         } else {
           ui.setMode(Mode.COMMAND, this.fieldIndex);
         }
@@ -148,7 +149,7 @@ export class CommandPhase extends FieldPhase {
    * @returns `true` if the command was successful
    * @overload
    */
-  public handleCommand(command: Command.FIGHT, cursor: number, ignorePp?: boolean, targets?: MoveTargetSet): boolean;
+  public handleCommand(command: Command.FIGHT, cursor: number, ignorePp?: boolean, turnMove?: TurnMove): boolean;
   /**
    * @param command - {@linkcode Command.POKEMON}
    * @param cursor - Cursor index for the selected Pokemon
@@ -177,22 +178,32 @@ export class CommandPhase extends FieldPhase {
     switch (command) {
       case Command.FIGHT:
         const ignorePp = args[0] as boolean | undefined;
-        const targets = args[1] as MoveTargetSet | undefined;
+        //const targets = args[1] as MoveTargetSet | undefined;
+        const turnMove: TurnMove | undefined = args.length === 2 ? (args[1] as TurnMove) : undefined;
         const useStruggle = cursor > -1 && !playerPokemon.getMoveset().filter((m) => m.isUsable(playerPokemon)).length;
 
         if (cursor === -1 || playerPokemon.trySelectMove(cursor, ignorePp) || useStruggle) {
-          const moveId = !useStruggle
-            ? cursor > -1
-              ? playerPokemon.getMoveset()[cursor].moveId
-              : Moves.NONE
-            : Moves.STRUGGLE;
+          let moveId: Moves;
+          if (useStruggle) {
+            moveId = Moves.STRUGGLE;
+          } else if (turnMove !== undefined) {
+            moveId = turnMove.move;
+          } else if (cursor > -1) {
+            moveId = playerPokemon.getMoveset()[cursor]!.moveId;
+          } else {
+            moveId = Moves.NONE;
+          }
+
           const turnCommand: TurnCommand = {
             command: Command.FIGHT,
             cursor: cursor,
             move: { move: moveId, targets: [], ignorePP: ignorePp },
             args: args,
           };
-          const moveTargets: MoveTargetSet = targets ?? getMoveTargets(playerPokemon, moveId);
+          const moveTargets: MoveTargetSet =
+            turnMove === undefined
+              ? getMoveTargets(playerPokemon, moveId)
+              : { targets: turnMove.targets, multiple: turnMove.targets.length > 1 };
 
           if (!moveId) {
             turnCommand.targets = [this.fieldIndex];

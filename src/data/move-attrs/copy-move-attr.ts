@@ -1,41 +1,40 @@
-import { type Pokemon, type PlayerPokemon, PokemonMove } from "#app/field/pokemon";
+import { allMoves } from "#app/data/all-moves";
+import { type Move } from "#app/data/move";
+import { CallMoveAttr } from "#app/data/move-attrs/call-move-attr";
+import { type MoveConditionFunc } from "#app/data/move-conditions";
+import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { MovePhase } from "#app/phases/move-phase";
-import { type Move, getMoveTargets } from "#app/data/move";
-import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
-import { lastMoveCopiableCondition, type MoveConditionFunc } from "../move-conditions";
+import type { BooleanHolder } from "#app/utils";
+import type { Moves } from "#enums/moves";
 
 /**
- * Attribute to copy the last move used in battle and invoke it against random target(s).
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Mirror_Move_(move) | Mirror Move}
- * and {@link https://bulbapedia.bulbagarden.net/wiki/Copycat_(move) | Copycat}.
- * @extends OverrideMoveEffectAttr
+ * Attribute used to copy a previously-used move.
+ * Used for {@linkcode Moves.COPYCAT} and {@linkcode Moves.MIRROR_MOVE}
+ * @see {@linkcode apply} for move selection and move call
+ * @extends CallMoveAttr to call a selected move
  */
-export class CopyMoveAttr extends OverrideMoveEffectAttr {
-  override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
-    const lastMove = globalScene.currentBattle.lastMove;
+export class CopyMoveAttr extends CallMoveAttr {
+  private mirrorMove: boolean;
+  constructor(mirrorMove: boolean, invalidMoves: Moves[] = []) {
+    super();
+    this.mirrorMove = mirrorMove;
+    this.invalidMoves = invalidMoves;
+  }
 
-    const moveTargets = getMoveTargets(user, lastMove);
-    if (!moveTargets.targets.length) {
-      return false;
-    }
-
-    const targets =
-      moveTargets.multiple || moveTargets.targets.length === 1
-        ? moveTargets.targets
-        : moveTargets.targets.indexOf(target.getBattlerIndex()) > -1
-          ? [target.getBattlerIndex()]
-          : [moveTargets.targets[user.randSeedInt(moveTargets.targets.length)]];
-    user.getMoveQueue().push({ move: lastMove, targets: targets, ignorePP: true });
-
-    globalScene.unshiftPhase(
-      new MovePhase(user as PlayerPokemon, targets, new PokemonMove(lastMove, 0, 0, true), true),
-    );
-
-    return true;
+  override apply(user: Pokemon, target: Pokemon, _move: Move, overridden: BooleanHolder, virtual: boolean): boolean {
+    this.hasTarget = this.mirrorMove;
+    const lastMove = this.mirrorMove ? target.getLastXMoves()[0].move : globalScene.currentBattle.lastMove;
+    return super.apply(user, target, allMoves[lastMove], overridden, virtual);
   }
 
   override getCondition(): MoveConditionFunc {
-    return lastMoveCopiableCondition;
+    return (_user, target, _move) => {
+      if (this.mirrorMove) {
+        return target.getMoveHistory().length !== 0;
+      } else {
+        const lastMove = globalScene.currentBattle.lastMove;
+        return lastMove !== undefined && !this.invalidMoves.includes(lastMove);
+      }
+    };
   }
 }
