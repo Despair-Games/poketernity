@@ -12,7 +12,6 @@ export class FieldPriorityMoveImmunityAbAttr extends PreDefendAbAttr {
     attacker: Pokemon,
     move: Move,
     cancelled: BooleanHolder,
-    _args: any[],
   ): boolean {
     if (move.moveTarget === MoveTarget.USER || move.moveTarget === MoveTarget.NEAR_ALLY) {
       return false;

@@ -11,7 +11,7 @@ export class PostFaintAbAttr extends AbAttr {
     _attacker?: Pokemon,
     _move?: Move,
     _hitResult?: HitResult,
-    ..._args: any[]
+    ..._args: unknown[]
   ): boolean {
     return false;
   }

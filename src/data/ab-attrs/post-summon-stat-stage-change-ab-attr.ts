@@ -25,7 +25,7 @@ export class PostSummonStatStageChangeAbAttr extends PostSummonAbAttr {
     this.intimidate = intimidate;
   }
 
-  override applyPostSummon(pokemon: Pokemon, passive: boolean, simulated: boolean, _args: any[]): boolean {
+  override applyPostSummon(pokemon: Pokemon, passive: boolean, simulated: boolean): boolean {
     if (simulated) {
       return true;
     }
@@ -40,8 +40,8 @@ export class PostSummonStatStageChangeAbAttr extends PostSummonAbAttr {
     for (const opponent of pokemon.getOpponents()) {
       const cancelled = new BooleanHolder(false);
       if (this.intimidate) {
-        applyAbAttrs(IntimidateImmunityAbAttr, opponent, cancelled, simulated);
-        applyAbAttrs(PostIntimidateStatStageChangeAbAttr, opponent, cancelled, simulated);
+        applyAbAttrs(IntimidateImmunityAbAttr, opponent, simulated, cancelled);
+        applyAbAttrs(PostIntimidateStatStageChangeAbAttr, opponent, simulated, cancelled);
 
         if (opponent.getTag(BattlerTagType.SUBSTITUTE)) {
           cancelled.value = true;

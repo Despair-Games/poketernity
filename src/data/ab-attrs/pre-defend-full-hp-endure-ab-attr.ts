@@ -12,9 +12,8 @@ export class PreDefendFullHpEndureAbAttr extends PreDefendAbAttr {
     _attacker: Pokemon,
     _move: Move,
     _cancelled: BooleanHolder,
-    args: any[],
+    damage: NumberHolder,
   ): boolean {
-    const damage: NumberHolder = args[0];
     if (
       pokemon.isFullHp()
       && pokemon.getMaxHp() > 1 // Checks if pokemon has Wonder Guard (which forces 1hp)

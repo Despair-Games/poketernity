@@ -26,10 +26,9 @@ export class PostSummonUserFieldRemoveStatusEffectAbAttr extends PostSummonAbAtt
    *
    * @param pokemon - The Pokémon that triggered the ability.
    * @param _passive - n/a
-   * @param _args - n/a
    * @returns A boolean or a promise that resolves to a boolean indicating the result of the ability application.
    */
-  override applyPostSummon(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
+  override applyPostSummon(pokemon: Pokemon, _passive: boolean, simulated: boolean): boolean {
     const allowedPokemon = pokemon.getField().filter((p) => p.isAllowedInBattle());
 
     if (allowedPokemon.length < 1) {

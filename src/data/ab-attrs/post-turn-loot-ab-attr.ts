@@ -23,7 +23,7 @@ export class PostTurnLootAbAttr extends PostTurnAbAttr {
     super();
   }
 
-  override applyPostTurn(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
+  override applyPostTurn(pokemon: Pokemon, _passive: boolean, simulated: boolean): boolean {
     const pass = Phaser.Math.RND.realInRange(0, 1);
     if (Phaser.Math.Clamp(this.procChance(pokemon), 0, 1) < pass) {
       return false;

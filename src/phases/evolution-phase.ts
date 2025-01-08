@@ -72,8 +72,6 @@ export class EvolutionPhase extends FormChangeBasePhase {
 
             sprite.setPipelineData("ignoreTimeTint", true);
             sprite.setPipelineData("spriteKey", evolvedPokemon.getSpriteKey());
-            sprite.setPipelineData("shiny", evolvedPokemon.shiny);
-            sprite.setPipelineData("variant", evolvedPokemon.variant);
             ["spriteColors", "fusionSpriteColors"].map((k) => {
               if (evolvedPokemon.summonData?.speciesForm) {
                 k += "Base";

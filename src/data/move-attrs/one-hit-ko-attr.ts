@@ -33,7 +33,7 @@ export class OneHitKOAttr extends MoveAttr {
   override getCondition(): MoveConditionFunc {
     return (user, target, _move) => {
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs(BlockOneHitKOAbAttr, target, cancelled);
+      applyAbAttrs(BlockOneHitKOAbAttr, target, false, cancelled);
       return !cancelled.value && user.level >= target.level;
     };
   }

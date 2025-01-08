@@ -24,7 +24,6 @@ export class PostDefendContactDamageAbAttr extends PostDefendAbAttr {
     attacker: Pokemon,
     move: Move,
     _hitResult: HitResult,
-    _args: any[],
   ): boolean {
     if (
       !simulated

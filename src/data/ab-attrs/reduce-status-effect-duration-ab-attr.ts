@@ -1,5 +1,5 @@
 import type { Pokemon } from "#app/field/pokemon";
-import { type BooleanHolder, NumberHolder } from "#app/utils";
+import type { NumberHolder } from "#app/utils";
 import type { StatusEffect } from "#enums/status-effect";
 import { AbAttr } from "./ab-attr";
 
@@ -28,14 +28,9 @@ export class ReduceStatusEffectDurationAbAttr extends AbAttr {
     _pokemon: Pokemon,
     _passive: boolean,
     _simulated: boolean,
-    _cancelled: BooleanHolder,
-    args: any[],
+    statusEffect: StatusEffect,
+    turnsRemaining: NumberHolder,
   ): boolean {
-    const statusEffect: StatusEffect = args[0];
-    const turnsRemaining = args[1];
-    if (!(turnsRemaining instanceof NumberHolder)) {
-      return false;
-    }
     if (statusEffect === this.statusEffect) {
       turnsRemaining.value -= 1;
       return true;
