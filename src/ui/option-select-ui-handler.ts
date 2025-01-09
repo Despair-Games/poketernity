@@ -42,7 +42,7 @@ export default class OptionSelectUiHandler extends MessageUiHandler {
   }
 
   public getWindowHeight(): number {
-    return (Math.min((this.config?.options || []).length, this.config?.maxOptions || 99) + 1) * 96 * this.scale;
+    return (Math.min((this.config?.options || []).length, this.config?.maxOptions || 99) + 1) * 96 * this.scale - 2;
   }
 
   override setup() {
@@ -76,7 +76,7 @@ export default class OptionSelectUiHandler extends MessageUiHandler {
     const maxWidth = this.getOptionsWidth(configOptions);
 
     // Save the max width amongst all options, and use it for everything
-    this.displayWidth = maxWidth + 30;
+    this.displayWidth = maxWidth + 23;
 
     this.optionSelectText.setMaxLines(this.config?.maxOptions ?? configOptions.length);
 
@@ -91,8 +91,8 @@ export default class OptionSelectUiHandler extends MessageUiHandler {
     this.optionSelectBg.height = this.getWindowHeight();
 
     this.optionSelectText.setPosition(
-      this.optionSelectBg.x - this.optionSelectBg.width + 12 + 30 * this.scale,
-      this.optionSelectBg.y - this.optionSelectBg.height + 2 + 42 * this.scale,
+      this.optionSelectBg.x - this.optionSelectBg.width + 11 + 24 * this.scale,
+      this.optionSelectBg.y - this.optionSelectBg.height + 42 * this.scale,
     );
 
     this.displayCurrentOptions();
@@ -369,8 +369,8 @@ export default class OptionSelectUiHandler extends MessageUiHandler {
 
     this.cursorObj.setPositionRelative(
       this.optionSelectBg,
-      12,
-      102 * this.scale + this.cursor * (114 * this.scale - 3),
+      10,
+      102 * this.scale + this.cursor * (114 * this.scale - 3) - 2,
     );
 
     return changed;
