@@ -571,7 +571,6 @@ export function selectPokemonForOption(
                   options: fullOptions,
                   maxOptions: 7,
                   yOffset: 0,
-                  supportHover: true,
                 };
 
                 // Do hover over the starting selection option
@@ -706,7 +705,6 @@ export function selectOptionThenPokemon(
       options: fullOptions,
       maxOptions: 7,
       yOffset: 0,
-      supportHover: true,
     };
 
     displayOptions(config);

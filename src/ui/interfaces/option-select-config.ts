@@ -25,8 +25,6 @@ export interface OptionMenuSettings {
   inputDelay?: number;
   /** Set to `true` to allow bypassing the inputDelay with the cancel button. */
   canCancelDelay?: boolean;
-  /** TODO is that really needed? */
-  supportHover?: boolean;
 }
 
 /**

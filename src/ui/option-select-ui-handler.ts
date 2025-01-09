@@ -4,7 +4,7 @@ import { TextStyle, addBBCodeTextObject, getTextStyleOptions } from "#app/ui/tex
 import MessageUiHandler from "#app/ui/message-ui-handler";
 import { Mode } from "#app/ui/ui";
 import { addWindow } from "#app/ui/ui-theme";
-import { fixedNumber } from "#app/utils";
+import { fixedNumber, isNullOrUndefined } from "#app/utils";
 import { Button } from "#enums/buttons";
 import type BBCodeText from "phaser3-rex-plugins/plugins/gameobjects/tagtext/bbcodetext/BBCodeText";
 
@@ -257,10 +257,12 @@ export default class OptionSelectUiHandler extends MessageUiHandler {
           }
           break;
       }
-      if (this.config?.supportHover) {
-        // TODO why need to check supportHover and not just that onHover exists
-        // handle hover code if the element supports hover-handlers and the option has the optional hover-handler set.
-        this.config?.options[this.cursor + (this.scrollCursor - (this.scrollCursor ? 1 : 0))]?.onHover?.();
+      if (success) {
+        // handle hover code if the option has a handler for it
+        const optionIndex = this.cursor + (this.scrollCursor - (this.scrollCursor ? 1 : 0));
+        if (!isNullOrUndefined(this.config?.options[optionIndex].onHover)) {
+          this.config.options[optionIndex].onHover();
+        }
       }
     }
 

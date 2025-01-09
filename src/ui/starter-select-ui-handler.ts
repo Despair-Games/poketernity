@@ -1810,7 +1810,6 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                                           this.moveInfoOverlay.clear();
                                         },
                                       }),
-                                    supportHover: true,
                                     maxOptions: 8,
                                     yOffset: 19,
                                   });
@@ -1838,7 +1837,6 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                           this.moveInfoOverlay.clear();
                         },
                       }),
-                    supportHover: true,
                     maxOptions: 8,
                     yOffset: 19,
                   });
