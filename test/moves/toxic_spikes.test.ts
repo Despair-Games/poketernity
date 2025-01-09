@@ -1,7 +1,6 @@
+import { BattlerIndex } from "#app/battle";
 import type { ArenaTrapTag } from "#app/data/arena-tag";
 import { ArenaTagSide } from "#app/data/arena-tag";
-import type { SessionSaveData } from "#app/@types/SessionData";
-import { decrypt, encrypt, GameData } from "#app/system/game-data";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { Moves } from "#enums/moves";
@@ -38,28 +37,28 @@ describe("Moves - Toxic Spikes", () => {
   });
 
   it("should not affect the opponent if they do not switch", async () => {
-    await game.classicMode.runToSummon([Species.MIGHTYENA, Species.POOCHYENA]);
+    await game.classicMode.startBattle([Species.MIGHTYENA, Species.POOCHYENA]);
 
     const enemy = game.scene.getEnemyField()[0];
 
     game.move.select(Moves.TOXIC_SPIKES);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toNextTurn();
     game.move.select(Moves.SPLASH);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toNextTurn();
     game.doSwitchPokemon(1);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toNextTurn();
 
     expect(enemy.hp).toBe(enemy.getMaxHp());
     expect(enemy.status?.effect).toBeUndefined();
   });
 
   it("should poison the opponent if they switch into 1 layer", async () => {
-    await game.classicMode.runToSummon([Species.MIGHTYENA]);
+    await game.classicMode.startBattle([Species.MIGHTYENA]);
 
     game.move.select(Moves.TOXIC_SPIKES);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toNextTurn();
     game.move.select(Moves.ROAR);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toNextTurn();
 
     const enemy = game.scene.getEnemyField()[0];
 
@@ -68,14 +67,14 @@ describe("Moves - Toxic Spikes", () => {
   });
 
   it("should badly poison the opponent if they switch into 2 layers", async () => {
-    await game.classicMode.runToSummon([Species.MIGHTYENA]);
+    await game.classicMode.startBattle([Species.MIGHTYENA]);
 
     game.move.select(Moves.TOXIC_SPIKES);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toNextTurn();
     game.move.select(Moves.TOXIC_SPIKES);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toNextTurn();
     game.move.select(Moves.ROAR);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toNextTurn();
 
     const enemy = game.scene.getEnemyField()[0];
     expect(enemy.hp).toBeLessThan(enemy.getMaxHp());
@@ -83,7 +82,7 @@ describe("Moves - Toxic Spikes", () => {
   });
 
   it("should be removed if a grounded poison pokemon switches in", async () => {
-    await game.classicMode.runToSummon([Species.MUK, Species.PIDGEY]);
+    await game.classicMode.startBattle([Species.MUK, Species.PIDGEY]);
 
     const muk = game.scene.getPlayerPokemon()!;
 
@@ -106,10 +105,10 @@ describe("Moves - Toxic Spikes", () => {
   });
 
   it("shouldn't create multiple layers per use in doubles", async () => {
-    await game.classicMode.runToSummon([Species.MIGHTYENA, Species.POOCHYENA]);
+    await game.classicMode.startBattle([Species.MIGHTYENA, Species.POOCHYENA]);
 
     game.move.select(Moves.TOXIC_SPIKES);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toNextTurn();
 
     const arenaTags = game.scene.arena.getTagOnSide(ArenaTagType.TOXIC_SPIKES, ArenaTagSide.ENEMY) as ArenaTrapTag;
     expect(arenaTags.tagType).toBe(ArenaTagType.TOXIC_SPIKES);
@@ -118,25 +117,36 @@ describe("Moves - Toxic Spikes", () => {
 
   it("should persist through reload", async () => {
     game.override.startingWave(1);
-    const gameData = new GameData();
 
-    await game.classicMode.runToSummon([Species.MIGHTYENA]);
+    await game.classicMode.startBattle([Species.MIGHTYENA]);
 
     game.move.select(Moves.TOXIC_SPIKES);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toNextTurn();
     game.move.select(Moves.SPLASH);
     await game.doKillOpponents();
-    await game.phaseInterceptor.to("BattleEndPhase");
     await game.toNextWave();
 
-    const sessionData: SessionSaveData = gameData["getSessionSaveData"]();
-    localStorage.setItem("sessionTestData", encrypt(JSON.stringify(sessionData), true));
-    const recoveredData: SessionSaveData = gameData.parseSessionData(
-      decrypt(localStorage.getItem("sessionTestData")!, true),
-    );
-    gameData.loadSession(0, recoveredData);
+    await game.reload.reloadSession();
 
-    expect(sessionData.arena.tags).toEqual(recoveredData.arena.tags);
-    localStorage.removeItem("sessionTestData");
+    const arenaTags = game.scene.arena.getTagOnSide(ArenaTagType.TOXIC_SPIKES, ArenaTagSide.ENEMY) as ArenaTrapTag;
+    expect(arenaTags.tagType).toBe(ArenaTagType.TOXIC_SPIKES);
+    expect(arenaTags.layers).toBe(1);
+  });
+
+  it("should apply even if the target is fainted", async () => {
+    await game.classicMode.startBattle([Species.FEEBAS]);
+
+    const enemyPokemon = game.pokemonHelper.getEnemyPokemon();
+
+    game.move.use(Moves.TOXIC_SPIKES);
+    await game.move.forceEnemyMove(Moves.MEMENTO);
+    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    await game.phaseInterceptor.to("MoveEndPhase");
+    expect(enemyPokemon.isFainted()).toBe(true);
+    await game.toNextTurn();
+
+    const arenaTags = game.scene.arena.getTagOnSide(ArenaTagType.TOXIC_SPIKES, ArenaTagSide.ENEMY) as ArenaTrapTag;
+    expect(arenaTags.tagType).toBe(ArenaTagType.TOXIC_SPIKES);
+    expect(arenaTags.layers).toBe(1);
   });
 });
