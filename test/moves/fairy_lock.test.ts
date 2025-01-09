@@ -6,6 +6,7 @@ import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { BattlerIndex } from "#app/battle";
 
 describe("Moves - Fairy Lock", () => {
   let phaserGame: Phaser.Game;
@@ -148,5 +149,32 @@ describe("Moves - Fairy Lock", () => {
     expect(game.scene.getPlayerField()[1].isTrapped()).toEqual(false);
     expect(game.scene.getEnemyField()[0].isTrapped()).toEqual(false);
     expect(game.scene.getEnemyField()[1].isTrapped()).toEqual(false);
+  });
+
+  it("should apply even if the field is empty", async () => {
+    await game.classicMode.startBattle([Species.KLEFKI, Species.GUZZLORD, Species.TYRUNT, Species.ZYGARDE]);
+
+    game.move.use(Moves.FAIRY_LOCK);
+    game.move.use(Moves.MEMENTO, 1, BattlerIndex.PLAYER);
+    await game.move.forceEnemyMove(Moves.MEMENTO, BattlerIndex.PLAYER);
+    await game.move.forceEnemyMove(Moves.MEMENTO, BattlerIndex.PLAYER);
+    game.doSelectPartyPokemon(2);
+    await game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER]);
+
+    // Allow all 3 targets to use Memento
+    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("MoveEndPhase");
+
+    const playerPokemon = game.scene.getPlayerField();
+    const enemyPokemon = game.scene.getEnemyField();
+    expect(playerPokemon[1].isFainted()).toBe(true);
+    expect(enemyPokemon[0].isFainted()).toBe(true);
+    expect(enemyPokemon[1].isFainted()).toBe(true);
+
+    await game.phaseInterceptor.to("BerryPhase");
+    expect(game.scene.arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.PLAYER)).toBeDefined();
+    expect(game.scene.arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.ENEMY)).toBeDefined();
+    expect(playerPokemon[0].isTrapped()).toBe(true);
   });
 });
