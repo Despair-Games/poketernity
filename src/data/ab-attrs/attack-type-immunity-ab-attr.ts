@@ -32,7 +32,7 @@ export class AttackTypeImmunityAbAttr extends TypeImmunityAbAttr {
       attacker.getMoveCategory(pokemon, move) !== MoveCategory.STATUS
       && !move.hasAttr(NeutralDamageAgainstFlyingTypeMultiplierAttr)
     ) {
-      return super.apply(pokemon, passive, simulated, attacker, move, cancelled, typeMultiplier);
+      return super.apply(pokemon, simulated, attacker, move, cancelled, typeMultiplier);
     }
     return false;
   }

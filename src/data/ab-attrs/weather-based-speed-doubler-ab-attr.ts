@@ -31,7 +31,7 @@ export class WeatherBasedSpeedDoublerAbAttr extends StatMultiplierAbAttr {
 
   override apply(pokemon: Pokemon, simulated: boolean, stat: BattleStat, statValue: NumberHolder, move: Move): boolean {
     if (getWeatherCondition(...this.weather)(pokemon)) {
-      return super.applyStatStage(pokemon, passive, simulated, stat, statValue, move);
+      return super.apply(pokemon, simulated, stat, statValue, move);
     }
     return false;
   }

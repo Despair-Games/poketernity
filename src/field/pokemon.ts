@@ -2979,7 +2979,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     applyAbAttrs(StatMultiplierAbAttr, this, false, Stat.ACC, accuracyMultiplier, sourceMove);
 
     const evasionMultiplier = new NumberHolder(1);
-    applyAbAttrs(StatMultiplierAbAttr, target, false, Stat.EVA, evasionMultiplier);
+    applyAbAttrs(StatMultiplierAbAttr, target, false, Stat.EVA, evasionMultiplier, sourceMove);
 
     return accuracyMultiplier.value / evasionMultiplier.value;
   }

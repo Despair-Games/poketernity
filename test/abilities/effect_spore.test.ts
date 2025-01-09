@@ -42,7 +42,7 @@ describe("Abilities - Effect Spore", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(EffectSporeAbAttr)[0]!;
-    vi.spyOn(abilityAttr, "applyPostDefend");
+    vi.spyOn(abilityAttr, "apply");
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     game.move.select(Moves.SPLASH);
@@ -50,7 +50,7 @@ describe("Abilities - Effect Spore", () => {
     await game.move.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
-    expect(abilityAttr.applyPostDefend).toHaveLastReturnedWith(true);
+    expect(abilityAttr.apply).toHaveLastReturnedWith(true);
     expect(enemyPokemon.status).toBeDefined();
   });
 
@@ -59,14 +59,14 @@ describe("Abilities - Effect Spore", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(EffectSporeAbAttr)[0]!;
-    vi.spyOn(abilityAttr, "applyPostDefend");
+    vi.spyOn(abilityAttr, "apply");
 
     game.move.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.TACKLE);
     await game.move.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
-    expect(abilityAttr.applyPostDefend).toHaveLastReturnedWith(false);
+    expect(abilityAttr.apply).toHaveLastReturnedWith(false);
   });
 
   it("should not affect Grass-type Pokemon", async () => {
@@ -74,28 +74,28 @@ describe("Abilities - Effect Spore", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(EffectSporeAbAttr)[0]!;
-    vi.spyOn(abilityAttr, "applyPostDefend");
+    vi.spyOn(abilityAttr, "apply");
 
     game.move.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.TACKLE);
     await game.move.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
-    expect(abilityAttr.applyPostDefend).toHaveLastReturnedWith(false);
+    expect(abilityAttr.apply).toHaveLastReturnedWith(false);
   });
 
   it("should require contact to activate", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(EffectSporeAbAttr)[0]!;
-    vi.spyOn(abilityAttr, "applyPostDefend");
+    vi.spyOn(abilityAttr, "apply");
 
     game.move.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.WATER_GUN);
     await game.move.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
-    expect(abilityAttr.applyPostDefend).toHaveLastReturnedWith(false);
+    expect(abilityAttr.apply).toHaveLastReturnedWith(false);
   });
 
   it("should have correct chances of inflicting sleep (11%), paralysis (10%), and poison (9%)", async () => {
@@ -132,14 +132,7 @@ describe("Abilities - Effect Spore", () => {
     // Apply the Effect Spore attr while simulating the full range of possible RNG rolls.
     // Unfortunately, actually using Tackle 100 times takes too long, so we only apply the attr.
     for (rngSweepProgress = 0; rngSweepProgress < 100; rngSweepProgress++) {
-      abilityAttr.applyPostDefend(
-        playerPokemon,
-        false,
-        false,
-        enemyPokemon,
-        allMoves[Moves.TACKLE],
-        HitResult.EFFECTIVE,
-      );
+      abilityAttr.apply(playerPokemon, false, enemyPokemon, allMoves[Moves.TACKLE], HitResult.EFFECTIVE);
     }
 
     expect(sleepCount).toBe(11);

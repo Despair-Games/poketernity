@@ -27,7 +27,7 @@ export class TypeImmunityStatStageChangeAbAttr extends TypeImmunityAbAttr {
     cancelled: BooleanHolder,
     typeMultiplier: NumberHolder,
   ): boolean {
-    const ret = super.apply(pokemon, passive, simulated, attacker, move, cancelled, typeMultiplier);
+    const ret = super.apply(pokemon, simulated, attacker, move, cancelled, typeMultiplier);
 
     if (ret) {
       cancelled.value = true; // Suppresses "No Effect" message

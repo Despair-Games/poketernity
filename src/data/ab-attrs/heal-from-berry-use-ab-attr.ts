@@ -23,7 +23,7 @@ export class HealFromBerryUseAbAttr extends AbAttr {
   }
 
   override apply(pokemon: Pokemon, simulated: boolean): boolean {
-    const { name: abilityName } = passive ? pokemon.getPassiveAbility() : pokemon.getAbility();
+    const abilityName = this.source.name;
     if (!simulated) {
       globalScene.unshiftPhase(
         new PokemonHealPhase(pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() * this.healPercent), {

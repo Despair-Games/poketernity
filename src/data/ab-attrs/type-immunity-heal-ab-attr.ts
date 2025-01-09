@@ -21,11 +21,11 @@ export class TypeImmunityHealAbAttr extends TypeImmunityAbAttr {
     cancelled: BooleanHolder,
     typeMultiplier: NumberHolder,
   ): boolean {
-    const ret = super.apply(pokemon, passive, simulated, attacker, move, cancelled, typeMultiplier);
+    const ret = super.apply(pokemon, simulated, attacker, move, cancelled, typeMultiplier);
 
     if (ret) {
       if (!pokemon.isFullHp() && !simulated) {
-        const abilityName = (!passive ? pokemon.getAbility() : pokemon.getPassiveAbility()).name;
+        const abilityName = this.source.name;
         globalScene.unshiftPhase(
           new PokemonHealPhase(pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() / 4), {
             message: i18next.t("abilityTriggers:typeImmunityHeal", {

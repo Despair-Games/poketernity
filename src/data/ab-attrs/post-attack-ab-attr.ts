@@ -10,7 +10,7 @@ export class PostAttackAbAttr extends AbAttr {
 
   /** The default attackCondition requires that the selected move is a damaging move */
   constructor(
-    attackCondition: PokemonAttackCondition = (_user, _target, move) => move.category !== MoveCategory.STATUS,
+    attackCondition: PokemonAttackCondition = (_user, _target, move) => move?.category !== MoveCategory.STATUS,
     showAbility: boolean = true,
   ) {
     super(showAbility);
@@ -23,7 +23,7 @@ export class PostAttackAbAttr extends AbAttr {
    * applying the effect of any inherited class. This can be changed by providing a different {@link attackCondition} to the constructor. See {@link ConfusionOnStatusEffectAbAttr}
    * for an example of an effect that does not require a damaging move.
    */
-  applyPostAttack(
+  override apply(
     pokemon: Pokemon,
     simulated: boolean,
     defender: Pokemon,
@@ -34,14 +34,14 @@ export class PostAttackAbAttr extends AbAttr {
     // When attackRequired is true, we require the move to be an attack move and to deal damage before checking secondary requirements.
     // If attackRequired is false, we always defer to the secondary requirements.
     if (this.attackCondition(pokemon, defender, move)) {
-      return this.applyPostAttackAfterMoveTypeCheck(pokemon, passive, simulated, defender, move, hitResult, ...args);
+      return this.applyPostAttackAfterMoveTypeCheck(pokemon, simulated, defender, move, hitResult, ...args);
     } else {
       return false;
     }
   }
 
   /**
-   * This method is only called after {@link applyPostAttack} has already been applied. Use this for handling checks specific to the ability in question.
+   * This method is only called after {@linkcode apply} has already been applied. Use this for handling checks specific to the ability in question.
    */
   applyPostAttackAfterMoveTypeCheck(
     _pokemon: Pokemon,
