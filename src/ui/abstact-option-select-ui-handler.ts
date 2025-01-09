@@ -3,7 +3,7 @@ import { TextStyle, addTextObject, getTextStyleOptions } from "./text";
 import { Mode } from "./ui";
 import UiHandler from "./ui-handler";
 import { addWindow } from "./ui-theme";
-import { rgbHexToRgba, fixedInt } from "#app/utils";
+import { rgbHexToRgba, fixedNumber } from "#app/utils";
 import { argbFromRgba } from "@material/material-color-utilities";
 import { Button } from "#enums/buttons";
 
@@ -186,7 +186,7 @@ export default abstract class AbstractOptionSelectUiHandler extends UiHandler {
       this.blockInput = true;
       this.optionSelectText.setAlpha(0.5);
       this.cursorObj?.setAlpha(0.8);
-      globalScene.time.delayedCall(fixedInt(this.config.delay), () => this.unblockInput());
+      globalScene.time.delayedCall(fixedNumber(this.config.delay), () => this.unblockInput());
     }
 
     return true;

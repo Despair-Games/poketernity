@@ -635,10 +635,14 @@ export class MoveEffectPhase extends HitCheckPhase {
     });
   }
 
-  /** @returns An array of all {@linkcode Pokemon} targeted by this phase's invoked move */
+  /**
+   * @returns An array of all {@linkcode Pokemon} targeted by this phase's invoked move.
+   * Unless the move is field-targeting, this array only includes active (e.g., non-fainted) targets.
+   */
   public override getTargets(): Pokemon[] {
     const targets = this.adjustedTargets ?? this.targets;
-    return globalScene.getField(true).filter((p) => targets.indexOf(p.getBattlerIndex()) > -1);
+    const activeOnly = !this.move.getMove().isFieldTarget();
+    return globalScene.getField(activeOnly).filter((p) => targets.includes(p.getBattlerIndex()));
   }
 
   /** @returns A new `MoveEffectPhase` with the same properties as this phase */
