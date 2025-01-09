@@ -33,6 +33,7 @@ export class SelectGenderPhase extends Phase {
             },
           },
         ],
+        noCancel: true,
       });
     });
   }
