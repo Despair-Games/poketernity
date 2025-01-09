@@ -45,7 +45,7 @@ describe("Abilities - Sand Veil", () => {
     vi.spyOn(leadPokemon[0], "getAbility").mockReturnValue(allAbilities[Abilities.SAND_VEIL]);
 
     const sandVeilAttr = allAbilities[Abilities.SAND_VEIL].getAttrs(StatMultiplierAbAttr)[0];
-    vi.spyOn(sandVeilAttr, "apply").mockImplementation((_pokemon, _simulated, stat, statValue, _args) => {
+    vi.spyOn(sandVeilAttr, "apply").mockImplementation((_pokemon, _simulated, stat, statValue) => {
       if (stat === Stat.EVA && game.scene.arena.weather?.weatherType === WeatherType.SANDSTORM) {
         statValue.value *= -1; // will make all attacks miss
         return true;

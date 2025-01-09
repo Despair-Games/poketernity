@@ -12,16 +12,6 @@ export class GorillaTacticsAbAttr extends PostAttackAbAttr {
     super(false, false);
   }
 
-  /**
-   *
-   * @param pokemon the {@linkcode Pokemon} with this ability
-   * @param _passive n/a
-   * @param simulated whether the ability is being simulated
-   * @param _defender n/a
-   * @param _move n/a
-   * @param _args n/a
-   * @returns `true` if the ability is applied
-   */
   override applyPostAttack(pokemon: Pokemon, simulated: boolean, _defender: Pokemon, _move: Move): boolean {
     if (simulated) {
       return simulated;

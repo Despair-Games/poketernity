@@ -30,6 +30,16 @@ export class PostAttackAbAttr extends AbAttr {
     return false;
   }
 
+  /**
+   * Called by {@linkcode apply} after a move category check satisfies
+   * the attribute's {@linkcode attackOnly} condition to apply effects.
+   * @param _pokemon The {@linkcode Pokemon} with this ability
+   * @param _simulated If `true`, suppresses changes to game state
+   * @param _defender The {@linkcode Pokemon} attacked by the source
+   * @param _move The {@linkcode Move} being used
+   * @param _args Additional arguments for subclasses
+   * @returns `true` if effects apply successfully
+   */
   protected applyPostAttack(
     _pokemon: Pokemon,
     _simulated: boolean,
