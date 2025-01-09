@@ -42,14 +42,14 @@ export const signatureSpecies: SignatureSpecies = {
   JUAN: [Species.HORSEA, Species.BARBOACH, Species.SPHEAL, Species.RELICANTH],
 
   // Sinnoh gym leaders
-  ROARK: [Species.CRANIDOS, Species.LARVITAR, Species.GEODUDE],
-  GARDENIA: [Species.ROSELIA, Species.TANGELA, Species.TURTWIG],
-  MAYLENE: [Species.LUCARIO, Species.MEDITITE, Species.CHIMCHAR],
-  CRASHER_WAKE: [Species.BUIZEL, Species.MAGIKARP, Species.PIPLUP],
+  ROARK: [Species.CRANIDOS, Species.LARVITAR, Species.BONSLY],
+  GARDENIA: [Species.BUDEW, Species.TURTWIG, Species.CHERUBI],
+  MAYLENE: [Species.RIOLU, Species.MEDITITE, Species.CHIMCHAR],
+  CRASHER_WAKE: [Species.BUIZEL, Species.WOOPER, Species.MAGIKARP, Species.LOTAD],
   FANTINA: [Species.MISDREAVUS, Species.DRIFLOON, Species.SPIRITOMB],
-  BYRON: [Species.SHIELDON, Species.BRONZOR, Species.AGGRON],
-  CANDICE: [Species.SNEASEL, Species.SNOVER, Species.SNORUNT],
-  VOLKNER: [Species.SHINX, Species.CHINCHOU, Species.ROTOM],
+  BYRON: [Species.SHIELDON, Species.BRONZOR, Species.ARON],
+  CANDICE: [Species.SNOVER, Species.SNORUNT, Species.SNEASEL, Species.GLACEON],
+  VOLKNER: [Species.SHINX, Species.CHINCHOU, Species.ROTOM, Species.ELEKID],
 
   // Unova gym leaders
   CILAN: [Species.PANSAGE, Species.COTTONEE, Species.PETILIL],
