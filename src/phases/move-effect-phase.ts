@@ -510,7 +510,7 @@ export class MoveEffectPhase extends PokemonPhase {
     this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target, firstTarget, false);
     this.applyHeldItemFlinchCheck(user, target, dealsDamage);
     this.applyOnGetHitAbEffects(user, target, hitResult);
-    applyAbAttrs(PostAttackAbAttr, user, false, target, move, hitResult);
+    applyAbAttrs(PostAttackAbAttr, user, false, target, move);
 
     // Apply status tokens if the user is an enemy Pokemon
     if (!user.isPlayer() && move instanceof AttackMove) {

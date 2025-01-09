@@ -1,7 +1,6 @@
 import type { Move } from "#app/data/move";
 import { MoveFlags } from "../../enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
-import type { HitResult } from "#app/field/pokemon";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import { IgnoreMoveEffectsAbAttr } from "./ignore-move-effect-ab-attr";
 import { PostAttackAbAttr } from "./post-attack-ab-attr";
@@ -28,13 +27,7 @@ export class PostAttackApplyBattlerTagAbAttr extends PostAttackAbAttr {
     this.effects = effects;
   }
 
-  override applyPostAttackAfterMoveTypeCheck(
-    attacker: Pokemon,
-    simulated: boolean,
-    target: Pokemon,
-    move: Move,
-    _hitResult: HitResult,
-  ): boolean {
+  override applyPostAttack(attacker: Pokemon, simulated: boolean, target: Pokemon, move: Move): boolean {
     /**
      * The battler tag is only applied to the target if
      * - The target does not have a secondary ability that suppresses move effects

@@ -9,13 +9,11 @@ import { AbAttr } from "./ab-attr";
  * Note - Quick Claw has a separate and distinct implementation outside of priority
  */
 export class ChangeMovePriorityAbAttr extends AbAttr {
+  /** The condition moves must follow for the priority change to apply */
   private readonly moveFunc: (pokemon: Pokemon, move: Move) => boolean;
+  /** The amount of priority added or subtracted */
   private readonly changeAmount: number;
 
-  /**
-   * @param moveFunc applies priority-change to moves within a provided category
-   * @param changeAmount the amount of priority added or subtracted
-   */
   constructor(moveFunc: (pokemon: Pokemon, move: Move) => boolean, changeAmount: number) {
     super(true);
 
