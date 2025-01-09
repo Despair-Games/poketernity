@@ -13,10 +13,10 @@ import { Tutorial, handleTutorial } from "#app/tutorial";
 import type { OptionSelectConfig, OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import { AdminMode, getAdminModeName } from "#app/ui/admin-ui-handler";
 import type AwaitableUiHandler from "#app/ui/awaitable-ui-handler";
-import MessageUiHandler from "#app/ui/message-ui-handler";
-import { TextStyle, addTextObject, getTextStyleOptions } from "./text";
+import { TextStyle, addTextObject } from "#app/ui/text";
 import { Mode } from "#app/ui/ui";
 import { WindowVariant, addWindow } from "#app/ui/ui-theme";
+import OptionSelectUiHandler from "#app/ui/option-select-ui-handler";
 
 enum MenuOptions {
   GAME_SETTINGS,
@@ -33,7 +33,7 @@ enum MenuOptions {
 
 const { VITE_WIKI_URL, VITE_DISCORD_URL, VITE_GITHUB_URL, VITE_REDDIT_URL, VITE_DONATE_URL } = import.meta.env;
 
-export default class MenuUiHandler extends MessageUiHandler {
+export default class MenuUiHandler extends OptionSelectUiHandler {
   private readonly textPadding = 8;
   private readonly defaultMessageBoxWidth = 220;
   private readonly defaultWordWrapWidth = 1224;
@@ -41,11 +41,6 @@ export default class MenuUiHandler extends MessageUiHandler {
   private menuContainer: Phaser.GameObjects.Container;
   private menuMessageBoxContainer: Phaser.GameObjects.Container;
   private menuOverlay: Phaser.GameObjects.Rectangle;
-
-  private menuBg: Phaser.GameObjects.NineSlice;
-  protected optionSelectText: Phaser.GameObjects.Text;
-
-  private cursorObj: Phaser.GameObjects.Image | null;
 
   private excludedMenus: () => ConditionalMenu[];
   private menuOptions: MenuOptions[];
@@ -57,11 +52,9 @@ export default class MenuUiHandler extends MessageUiHandler {
   private menuMessageBox: Phaser.GameObjects.NineSlice;
   private dialogueMessageBox: Phaser.GameObjects.NineSlice;
 
-  protected scale: number = 0.1666666667;
-
   public bgmBar: BgmBar;
 
-  constructor(mode: Mode | null = null) {
+  constructor(mode: Mode = Mode.MENU) {
     super(mode);
 
     this.excludedMenus = () => [
@@ -79,7 +72,7 @@ export default class MenuUiHandler extends MessageUiHandler {
       });
   }
 
-  setup(): void {
+  override setup(): void {
     const ui = this.getUi();
 
     this.bgmBar = new BgmBar();
@@ -98,68 +91,31 @@ export default class MenuUiHandler extends MessageUiHandler {
       globalScene,
       -1,
       -1,
-      globalScene.scaledCanvas.width,
-      globalScene.scaledCanvas.height,
+      globalScene.scaledCanvas.width + 2,
+      globalScene.scaledCanvas.height + 2,
       0xffffff,
       0.3,
     );
     this.menuOverlay.setName("menu-overlay");
     this.menuOverlay.setOrigin(0, 0);
-    this.menuContainer.add(this.menuOverlay);
 
     this.menuContainer.add(this.bgmBar);
 
     this.menuContainer.setVisible(false);
+
+    super.setup();
   }
 
   render() {
     const ui = this.getUi();
-    this.excludedMenus = () => [
-      {
-        condition: globalScene.getCurrentPhase() instanceof SelectModifierPhase,
-        options: [MenuOptions.EGG_GACHA, MenuOptions.EGG_LIST],
-      },
-      { condition: bypassLogin, options: [MenuOptions.LOG_OUT] },
-    ];
-
-    this.menuOptions = getEnumKeys(MenuOptions)
-      .map((m) => parseInt(MenuOptions[m]) as MenuOptions)
-      .filter((m) => {
-        return !this.excludedMenus().some((exclusion) => exclusion.condition && exclusion.options.includes(m));
-      });
-
-    this.optionSelectText = addTextObject(
-      0,
-      0,
-      this.menuOptions.map((o) => `${i18next.t(`menuUiHandler:${MenuOptions[o]}`)}`).join("\n"),
-      TextStyle.WINDOW,
-      { maxLines: this.menuOptions.length },
-    );
-    this.optionSelectText.setLineSpacing(12);
-
-    this.scale = getTextStyleOptions(TextStyle.WINDOW, globalScene.uiTheme).scale;
-    this.menuBg = addWindow(
-      globalScene.game.canvas.width / 6 - (this.optionSelectText.displayWidth + 25),
-      0,
-      this.optionSelectText.displayWidth + 19 + 24 * this.scale,
-      globalScene.game.canvas.height / 6 - 2,
-    );
-    this.menuBg.setOrigin(0, 0);
-
-    this.optionSelectText.setPositionRelative(this.menuBg, 10 + 24 * this.scale, 6);
-
-    this.menuContainer.add(this.menuBg);
-
-    this.menuContainer.add(this.optionSelectText);
-
-    ui.add(this.menuContainer);
+    ui.add(this.menuOverlay);
 
     this.menuMessageBoxContainer = globalScene.add.container(0, 130);
     this.menuMessageBoxContainer.setName("menu-message-box");
     this.menuMessageBoxContainer.setVisible(false);
 
     // Window for general messages
-    this.menuMessageBox = addWindow(0, 0, this.defaultMessageBoxWidth, 48);
+    this.menuMessageBox = addWindow(0, 0, globalScene.scaledCanvas.width, 48);
     this.menuMessageBox.setOrigin(0, 0);
     this.menuMessageBoxContainer.add(this.menuMessageBox);
 
@@ -192,8 +148,12 @@ export default class MenuUiHandler extends MessageUiHandler {
     this.setDialogTestMode(false);
 
     this.menuContainer.add(this.menuMessageBoxContainer);
+  }
 
-    const manageDataOptions: any[] = []; // TODO: proper type
+  private initManageDataOptions(): void {
+    const ui = this.getUi();
+
+    const manageDataOptions: OptionSelectItem[] = [];
 
     const confirmSlot = (message: string, slotFilter: (i: number) => boolean, callback: (i: number) => void) => {
       ui.revertMode();
@@ -224,7 +184,7 @@ export default class MenuUiHandler extends MessageUiHandler {
                 },
               },
             ]),
-          xOffset: 98, // todo offset by width of the menu
+          xOffset: this.getWindowWidth(),
         };
         ui.setOverlayMode(Mode.MENU_OPTION_SELECT, config);
       });
@@ -383,13 +343,15 @@ export default class MenuUiHandler extends MessageUiHandler {
       },
       keepOpen: true,
     });
-
-    //Thank you Vassiat
     this.manageDataConfig = {
-      xOffset: 98, // offset by width of the menu handler
+      xOffset: this.getWindowWidth(),
       options: manageDataOptions,
       maxOptions: 7,
     };
+  }
+
+  private initCommunityMenuOptions(): void {
+    const ui = this.getUi();
 
     const communityOptions: OptionSelectItem[] = [];
 
@@ -506,16 +468,23 @@ export default class MenuUiHandler extends MessageUiHandler {
         return true;
       },
     });
+
     this.communityConfig = {
-      xOffset: 98, // todo offset by width of the menu
+      xOffset: this.getWindowWidth(),
       options: communityOptions,
     };
-    this.setCursor(0);
   }
 
-  override show(args: any[]): boolean {
+  override show(_args: any[]): boolean {
     this.render();
-    super.show(args);
+
+    this.excludedMenus = () => [
+      {
+        condition: globalScene.getCurrentPhase() instanceof SelectModifierPhase,
+        options: [MenuOptions.EGG_GACHA, MenuOptions.EGG_LIST],
+      },
+      { condition: bypassLogin, options: [MenuOptions.LOG_OUT] },
+    ];
 
     this.menuOptions = getEnumKeys(MenuOptions)
       .map((m) => parseInt(MenuOptions[m]) as MenuOptions)
@@ -523,18 +492,41 @@ export default class MenuUiHandler extends MessageUiHandler {
         return !this.excludedMenus().some((exclusion) => exclusion.condition && exclusion.options.includes(m));
       });
 
-    this.menuContainer.setVisible(true);
-    this.setCursor(0);
+    const menuOptions: OptionSelectItem[] = this.menuOptions.map((option: MenuOptions) => {
+      return {
+        label: `${i18next.t(`menuUiHandler:${MenuOptions[option]}`)}`,
+        handler: () => this.optionSelected(option),
+        keepOpen: true,
+      };
+    });
 
-    this.getUi().moveTo(this.menuContainer, this.getUi().length - 1);
+    const config: OptionSelectConfig = {
+      options: menuOptions,
+      yOffset: -this.defaultYOffset - 1,
+      maxOptions: 10,
+      noCancel: true, // we take care of closing the menu in this handler
+    };
+
+    super.show([config]);
+
+    // Add the container after the option selection menu was initialized, so that it shows above it
+    this.getUi().add(this.menuContainer);
+    this.menuContainer.setVisible(true);
+
+    // Make sure the tutorial overlay sits above everything, but below the message box
+    this.menuContainer.bringToTop(this.tutorialOverlay);
+    this.menuContainer.bringToTop(this.menuMessageBoxContainer);
+
+    // Needs to be done after super.show that it offsets everything properly based on the menu's width
+    // TODO remove that need by using a NumberHolder for the window's width?
+    this.menuMessageBox.setDisplaySize(globalScene.scaledCanvas.width - this.getWindowWidth() - 2, 48);
+    this.initManageDataOptions();
+    this.initCommunityMenuOptions();
 
     this.getUi().hideTooltip();
 
     globalScene.playSound("ui/menu_open");
 
-    // Make sure the tutorial overlay sits above everything, but below the message box
-    this.menuContainer.bringToTop(this.tutorialOverlay);
-    this.menuContainer.bringToTop(this.menuMessageBoxContainer);
     handleTutorial(Tutorial.Menu);
 
     this.bgmBar.toggleBgmBar(true);
@@ -542,169 +534,120 @@ export default class MenuUiHandler extends MessageUiHandler {
     return true;
   }
 
-  processInput(button: Button): boolean {
-    const ui = this.getUi();
+  public override getWindowHeight(): number {
+    return globalScene.scaledCanvas.height - 2;
+  }
 
+  optionSelected(option: MenuOptions): boolean {
     let success = false;
-    let error = false;
-
-    if (button === Button.ACTION) {
-      let adjustedCursor = this.cursor;
-      const excludedMenu = this.excludedMenus().find((e) => e.condition);
-      if (excludedMenu !== undefined && excludedMenu.options !== undefined && excludedMenu.options.length > 0) {
-        const sortedOptions = excludedMenu.options.sort();
-        for (const imo of sortedOptions) {
-          if (adjustedCursor >= imo) {
-            adjustedCursor++;
-          } else {
-            break;
-          }
-        }
-      }
-      this.showText("", 0);
-      switch (adjustedCursor) {
-        case MenuOptions.GAME_SETTINGS:
-          ui.setOverlayMode(Mode.SETTINGS);
-          success = true;
-          break;
-        case MenuOptions.ACHIEVEMENTS:
-          ui.setOverlayMode(Mode.ACHIEVEMENTS);
-          success = true;
-          break;
-        case MenuOptions.STATS:
-          ui.setOverlayMode(Mode.GAME_STATS);
-          success = true;
-          break;
-        case MenuOptions.RUN_HISTORY:
-          ui.setOverlayMode(Mode.RUN_HISTORY);
-          success = true;
-          break;
-        case MenuOptions.EGG_LIST:
-          if (globalScene.gameData.eggs.length) {
-            ui.revertMode();
-            ui.setOverlayMode(Mode.EGG_LIST);
-            success = true;
-          } else {
-            ui.showText(i18next.t("menuUiHandler:noEggs"), null, () => ui.showText(""), fixedNumber(1500));
-            error = true;
-          }
-          break;
-        case MenuOptions.EGG_GACHA:
+    const ui = this.getUi();
+    switch (option) {
+      case MenuOptions.GAME_SETTINGS:
+        ui.setOverlayMode(Mode.SETTINGS);
+        success = true;
+        break;
+      case MenuOptions.ACHIEVEMENTS:
+        ui.setOverlayMode(Mode.ACHIEVEMENTS);
+        success = true;
+        break;
+      case MenuOptions.STATS:
+        ui.setOverlayMode(Mode.GAME_STATS);
+        success = true;
+        break;
+      case MenuOptions.RUN_HISTORY:
+        ui.setOverlayMode(Mode.RUN_HISTORY);
+        success = true;
+        break;
+      case MenuOptions.EGG_LIST:
+        if (globalScene.gameData.eggs.length) {
           ui.revertMode();
-          ui.setOverlayMode(Mode.EGG_GACHA);
+          ui.setOverlayMode(Mode.EGG_LIST);
           success = true;
-          break;
-        case MenuOptions.MANAGE_DATA:
-          if (
-            !bypassLogin
-            && !this.manageDataConfig.options.some(
-              (o) =>
-                o.label === i18next.t("menuUiHandler:linkDiscord")
-                || o.label === i18next.t("menuUiHandler:unlinkDiscord"),
-            )
-          ) {
-            this.manageDataConfig.options.splice(
-              this.manageDataConfig.options.length - 1,
-              0,
-              {
-                label:
-                  loggedInUser?.discordId === ""
-                    ? i18next.t("menuUiHandler:linkDiscord")
-                    : i18next.t("menuUiHandler:unlinkDiscord"),
-                handler: () => {
-                  if (loggedInUser?.discordId === "") {
-                    const token = getCookie(SESSION_ID_COOKIE);
-                    const redirectUri = encodeURIComponent(`${import.meta.env.VITE_SERVER_URL}/auth/discord/callback`);
-                    const discordId = import.meta.env.VITE_DISCORD_CLIENT_ID;
-                    const discordUrl = `https://discord.com/api/oauth2/authorize?client_id=${discordId}&redirect_uri=${redirectUri}&response_type=code&scope=identify&state=${token}&prompt=none`;
-                    window.open(discordUrl, "_self");
-                    return true;
-                  } else {
-                    api.unlinkDiscord().then((_isSuccess) => {
-                      updateUserInfo().then(() => globalScene.reset(true, true));
-                    });
-                    return true;
-                  }
-                },
-              },
-              {
-                label:
-                  loggedInUser?.googleId === ""
-                    ? i18next.t("menuUiHandler:linkGoogle")
-                    : i18next.t("menuUiHandler:unlinkGoogle"),
-                handler: () => {
-                  if (loggedInUser?.googleId === "") {
-                    const token = getCookie(SESSION_ID_COOKIE);
-                    const redirectUri = encodeURIComponent(`${import.meta.env.VITE_SERVER_URL}/auth/google/callback`);
-                    const googleId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-                    const googleUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${googleId}&response_type=code&redirect_uri=${redirectUri}&scope=openid&state=${token}`;
-                    window.open(googleUrl, "_self");
-                    return true;
-                  } else {
-                    api.unlinkGoogle().then((_isSuccess) => {
-                      updateUserInfo().then(() => globalScene.reset(true, true));
-                    });
-                    return true;
-                  }
-                },
-              },
-            );
-          }
-          ui.setOverlayMode(Mode.MENU_OPTION_SELECT, this.manageDataConfig);
-          success = true;
-          break;
-        case MenuOptions.COMMUNITY:
-          ui.setOverlayMode(Mode.MENU_OPTION_SELECT, this.communityConfig);
-          success = true;
-          break;
-        case MenuOptions.SAVE_AND_QUIT:
-          if (globalScene.currentBattle) {
-            success = true;
-            const doSaveQuit = () => {
-              ui.setMode(Mode.LOADING, {
-                buttonActions: [],
-                fadeOut: () =>
-                  globalScene.gameData.saveAll(true, true, true, true).then(() => {
-                    globalScene.reset(true);
-                  }),
-              });
-            };
-            if (globalScene.currentBattle.turn > 1) {
-              ui.showText(i18next.t("menuUiHandler:losingProgressionWarning"), null, () => {
-                if (!this.active) {
-                  this.showText("", 0);
-                  return;
+        } else {
+          ui.showText(i18next.t("menuUiHandler:noEggs"), null, () => ui.showText(""), fixedNumber(1500));
+        }
+        break;
+      case MenuOptions.EGG_GACHA:
+        ui.revertMode();
+        ui.setOverlayMode(Mode.EGG_GACHA);
+        success = true;
+        break;
+      case MenuOptions.MANAGE_DATA:
+        if (
+          !bypassLogin
+          && !this.manageDataConfig.options.some(
+            (o) =>
+              o.label === i18next.t("menuUiHandler:linkDiscord")
+              || o.label === i18next.t("menuUiHandler:unlinkDiscord"),
+          )
+        ) {
+          this.manageDataConfig.options.splice(
+            this.manageDataConfig.options.length - 1,
+            0,
+            {
+              label:
+                loggedInUser?.discordId === ""
+                  ? i18next.t("menuUiHandler:linkDiscord")
+                  : i18next.t("menuUiHandler:unlinkDiscord"),
+              handler: () => {
+                if (loggedInUser?.discordId === "") {
+                  const token = getCookie(SESSION_ID_COOKIE);
+                  const redirectUri = encodeURIComponent(`${import.meta.env.VITE_SERVER_URL}/auth/discord/callback`);
+                  const discordId = import.meta.env.VITE_DISCORD_CLIENT_ID;
+                  const discordUrl = `https://discord.com/api/oauth2/authorize?client_id=${discordId}&redirect_uri=${redirectUri}&response_type=code&scope=identify&state=${token}&prompt=none`;
+                  window.open(discordUrl, "_self");
+                  return true;
+                } else {
+                  api.unlinkDiscord().then((_isSuccess) => {
+                    updateUserInfo().then(() => globalScene.reset(true, true));
+                  });
+                  return true;
                 }
-                ui.setOverlayMode(
-                  Mode.CONFIRM,
-                  doSaveQuit,
-                  () => {
-                    ui.revertMode();
-                    this.showText("", 0);
-                  },
-                  false,
-                  -98,
-                );
-              });
-            } else {
-              doSaveQuit();
-            }
-          } else {
-            error = true;
-          }
-          break;
-        case MenuOptions.LOG_OUT:
+              },
+            },
+            {
+              label:
+                loggedInUser?.googleId === ""
+                  ? i18next.t("menuUiHandler:linkGoogle")
+                  : i18next.t("menuUiHandler:unlinkGoogle"),
+              handler: () => {
+                if (loggedInUser?.googleId === "") {
+                  const token = getCookie(SESSION_ID_COOKIE);
+                  const redirectUri = encodeURIComponent(`${import.meta.env.VITE_SERVER_URL}/auth/google/callback`);
+                  const googleId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+                  const googleUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${googleId}&response_type=code&redirect_uri=${redirectUri}&scope=openid&state=${token}`;
+                  window.open(googleUrl, "_self");
+                  return true;
+                } else {
+                  api.unlinkGoogle().then((_isSuccess) => {
+                    updateUserInfo().then(() => globalScene.reset(true, true));
+                  });
+                  return true;
+                }
+              },
+            },
+          );
+        }
+        ui.setOverlayMode(Mode.MENU_OPTION_SELECT, this.manageDataConfig);
+        success = true;
+        break;
+      case MenuOptions.COMMUNITY:
+        ui.setOverlayMode(Mode.MENU_OPTION_SELECT, this.communityConfig);
+        success = true;
+        break;
+      case MenuOptions.SAVE_AND_QUIT:
+        if (globalScene.currentBattle) {
           success = true;
-          const doLogout = () => {
+          const doSaveQuit = () => {
             ui.setMode(Mode.LOADING, {
               buttonActions: [],
               fadeOut: () =>
-                api.account.logout().then(() => {
-                  updateUserInfo().then(() => globalScene.reset(true, true));
+                globalScene.gameData.saveAll(true, true, true, true).then(() => {
+                  globalScene.reset(true);
                 }),
             });
           };
-          if (globalScene.currentBattle) {
+          if (globalScene.currentBattle.turn > 1) {
             ui.showText(i18next.t("menuUiHandler:losingProgressionWarning"), null, () => {
               if (!this.active) {
                 this.showText("", 0);
@@ -712,53 +655,69 @@ export default class MenuUiHandler extends MessageUiHandler {
               }
               ui.setOverlayMode(
                 Mode.CONFIRM,
-                doLogout,
+                doSaveQuit,
                 () => {
                   ui.revertMode();
                   this.showText("", 0);
                 },
                 false,
-                -98,
+                -this.getWindowWidth(),
               );
             });
           } else {
-            doLogout();
+            doSaveQuit();
           }
-          break;
-      }
-    } else if (button === Button.CANCEL) {
-      success = true;
+        }
+        break;
+      case MenuOptions.LOG_OUT:
+        success = true;
+        const doLogout = () => {
+          ui.setMode(Mode.LOADING, {
+            buttonActions: [],
+            fadeOut: () =>
+              api.account.logout().then(() => {
+                updateUserInfo().then(() => globalScene.reset(true, true));
+              }),
+          });
+        };
+        if (globalScene.currentBattle) {
+          ui.showText(i18next.t("menuUiHandler:losingProgressionWarning"), null, () => {
+            if (!this.active) {
+              this.showText("", 0);
+              return;
+            }
+            ui.setOverlayMode(
+              Mode.CONFIRM,
+              doLogout,
+              () => {
+                ui.revertMode();
+                this.showText("", 0);
+              },
+              false,
+              -this.getWindowWidth(),
+            );
+          });
+        } else {
+          doLogout();
+        }
+        break;
+    }
+    return success;
+  }
+
+  override processInput(button: Button): boolean {
+    const ui = this.getUi();
+    if (button === Button.CANCEL) {
+      ui.playSelect();
       ui.revertMode().then((result) => {
         if (!result) {
           ui.setMode(Mode.MESSAGE);
         }
       });
+      return true;
     } else {
-      switch (button) {
-        case Button.UP:
-          if (this.cursor) {
-            success = this.setCursor(this.cursor - 1);
-          } else {
-            success = this.setCursor(this.menuOptions.length - 1);
-          }
-          break;
-        case Button.DOWN:
-          if (this.cursor + 1 < this.menuOptions.length) {
-            success = this.setCursor(this.cursor + 1);
-          } else {
-            success = this.setCursor(0);
-          }
-          break;
-      }
+      return super.processInput(button);
     }
-
-    if (success) {
-      ui.playSelect();
-    } else if (error) {
-      ui.playError();
-    }
-
-    return success || error;
   }
 
   /**
@@ -791,33 +750,10 @@ export default class MenuUiHandler extends MessageUiHandler {
     super.showText(text, delay, callback, callbackDelay, prompt, promptDelay);
   }
 
-  override setCursor(cursor: number): boolean {
-    const ret = super.setCursor(cursor);
-
-    if (!this.cursorObj) {
-      this.cursorObj = globalScene.add.image(0, 0, "cursor");
-      this.cursorObj.setOrigin(0, 0);
-      this.menuContainer.add(this.cursorObj);
-    }
-
-    this.cursorObj.setScale(this.scale * 6);
-    this.cursorObj.setPositionRelative(this.menuBg, 7, 6 + (18 + this.cursor * 96) * this.scale);
-
-    return ret;
-  }
-
   override clear() {
     super.clear();
     this.menuContainer.setVisible(false);
     this.bgmBar.toggleBgmBar(false);
-    this.eraseCursor();
-  }
-
-  eraseCursor() {
-    if (this.cursorObj) {
-      this.cursorObj.destroy();
-    }
-    this.cursorObj = null;
   }
 }
 
