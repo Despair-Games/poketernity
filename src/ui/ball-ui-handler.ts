@@ -7,9 +7,10 @@ import { addWindow } from "./ui-theme";
 import { Button } from "#enums/buttons";
 import type { CommandPhase } from "#app/phases/command-phase";
 import { globalScene } from "#app/global-scene";
-import { PokeballType } from "#app/enums/pokeball";
-import { getEnumLength } from "#app/utils";
 
+/**
+ * TODO: This should extend AbstractOptionSelectUiHandler
+ */
 export default class BallUiHandler extends UiHandler {
   private pokeballSelectContainer: Phaser.GameObjects.Container;
   private pokeballSelectBg: Phaser.GameObjects.NineSlice;
@@ -29,8 +30,9 @@ export default class BallUiHandler extends UiHandler {
     this.scale = getTextStyleOptions(TextStyle.WINDOW, globalScene.uiTheme).scale;
 
     let optionsTextContent = "";
+    const pokeballTypeCount = Object.keys(globalScene.pokeballCounts).length;
 
-    for (let pb = 0; pb < Object.keys(globalScene.pokeballCounts).length; pb++) {
+    for (let pb = 0; pb < pokeballTypeCount; pb++) {
       optionsTextContent += `${getPokeballName(pb)}\n`;
     }
     optionsTextContent += "Cancel";
@@ -47,7 +49,7 @@ export default class BallUiHandler extends UiHandler {
       0,
       0,
       50 + Math.max(64, optionsTextWidth),
-      32 + getEnumLength(PokeballType) * 96 * this.scale,
+      32 + pokeballTypeCount * 96 * this.scale,
     );
     this.pokeballSelectBg.setOrigin(0, 1);
     this.pokeballSelectContainer.add(this.pokeballSelectBg);
