@@ -4,7 +4,7 @@ Pokéternity is a browser based Pokémon fangame heavily inspired by the rogueli
 
 # Contributing
 
-Please take a look at our Contributor Code of Conduct [here](./CODE_OF_CONDUCT.md).
+Make sure to read our [Code of Conduct](./CODE_OF_CONDUCT.md) before contributing!
 
 ## 🛠️ Development
 
