@@ -701,6 +701,7 @@ export async function catchPokemon(
       };
       Promise.all([pokemon.hideInfo(), globalScene.gameData.setPokemonCaught(pokemon)]).then(() => {
         if (globalScene.getPlayerParty().length === 6) {
+          // TODO use dedicated confirm mode with summary option
           const promptRelease = () => {
             globalScene.ui.showText(
               i18next.t("battle:partyFull", { pokemonName: pokemon.getNameToRender() }),

@@ -1,81 +1,83 @@
-import type { CandyUpgradeNotificationChangedEvent } from "#app/events/battle-scene";
-import { BattleSceneEventType } from "#app/events/battle-scene";
-import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
-import type { Variant } from "#app/data/variant";
-import { getVariantTint, getVariantTierForVariant } from "#app/data/variant";
-import { argbFromRgba } from "@material/material-color-utilities";
-import i18next from "i18next";
-import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
-import { starterColors } from "#app/battle-scene";
-import { globalScene } from "#app/global-scene";
-import { allAbilities } from "#app/data/ability";
-import { speciesEggMoves } from "#app/data/balance/egg-moves";
-import { GrowthRate, getGrowthRateColor } from "#app/data/exp";
-import { getGenderColor, getGenderShadowColor, getGenderSymbol } from "#app/data/gender";
-import { Gender } from "#enums/gender";
-import { allMoves } from "#app/data/all-moves";
-import { getNatureName } from "#app/data/nature";
-import { pokemonFormChanges } from "#app/data/pokemon-forms";
-import type { LevelMoves } from "#app/data/balance/pokemon-level-moves";
-import { pokemonFormLevelMoves, pokemonSpeciesLevelMoves } from "#app/data/balance/pokemon-level-moves";
-import type PokemonSpecies from "#app/data/pokemon-species";
-import { allSpecies, getPokemonSpeciesForm, getPokerusStarters } from "#app/data/pokemon-species";
-import { getStarterValueFriendshipCap, speciesStarterCosts, POKERUS_STARTER_COUNT } from "#app/data/balance/starters";
-import { starterPassiveAbilities } from "#app/data/balance/passives";
-import { Type } from "#enums/type";
-import { GameModes } from "#app/game-mode";
-import type { DexAttrProps, StarterAttributes, StarterPreferences } from "#app/system/game-data";
-import { StarterPrefs } from "#app/system/game-data";
 import type { DexEntry } from "#app/@types/DexData";
 import type { StarterMoveset } from "#app/@types/StarterData";
-import { DexAttr, AbilityAttr } from "#app/data/dex-attributes";
+import { starterColors } from "#app/battle-scene";
+import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
+import { allAbilities } from "#app/data/ability";
+import { allMoves } from "#app/data/all-moves";
+import { speciesEggMoves } from "#app/data/balance/egg-moves";
+import { starterPassiveAbilities } from "#app/data/balance/passives";
+import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
+import type { LevelMoves } from "#app/data/balance/pokemon-level-moves";
+import { pokemonFormLevelMoves, pokemonSpeciesLevelMoves } from "#app/data/balance/pokemon-level-moves";
+import {
+  POKERUS_STARTER_COUNT,
+  getPassiveCandyCount,
+  getSameSpeciesEggCandyCounts,
+  getStarterValueFriendshipCap,
+  getValueReductionCandyCounts,
+  speciesStarterCosts,
+} from "#app/data/balance/starters";
+import * as Challenge from "#app/data/challenge";
+import { AbilityAttr, DexAttr } from "#app/data/dex-attributes";
+import { Egg, getEggTierForSpecies } from "#app/data/egg";
+import { GrowthRate, getGrowthRateColor } from "#app/data/exp";
+import { getGenderColor, getGenderShadowColor, getGenderSymbol } from "#app/data/gender";
+import { getNatureName } from "#app/data/nature";
+import { pokemonFormChanges } from "#app/data/pokemon-forms";
+import type PokemonSpecies from "#app/data/pokemon-species";
+import { allSpecies, getPokemonSpeciesForm, getPokerusStarters } from "#app/data/pokemon-species";
+import type { Variant } from "#app/data/variant";
+import { getVariantTierForVariant, getVariantTint } from "#app/data/variant";
+import type { CandyUpgradeNotificationChangedEvent } from "#app/events/battle-scene";
+import { BattleSceneEventType } from "#app/events/battle-scene";
+import { GameModes } from "#app/game-mode";
+import { globalScene } from "#app/global-scene";
+import Overrides from "#app/overrides";
+import { EncounterPhase } from "#app/phases/encounter-phase";
+import { SelectChallengePhase } from "#app/phases/select-challenge-phase";
+import { TitlePhase } from "#app/phases/title-phase";
+import type { DexAttrProps, StarterAttributes, StarterPreferences } from "#app/system/game-data";
+import { StarterPrefs } from "#app/system/game-data";
+import { SettingKeyboard } from "#app/system/settings/settings-keyboard";
 import { Tutorial, handleTutorial } from "#app/tutorial";
+import { DropDown, DropDownLabel, DropDownOption, DropDownState, DropDownType, SortCriteria } from "#app/ui/dropdown";
+import { DropDownColumn, FilterBar } from "#app/ui/filter-bar";
 import type { OptionSelectIconConfig, OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import MessageUiHandler from "#app/ui/message-ui-handler";
+import MoveInfoOverlay from "#app/ui/move-info-overlay";
 import PokemonIconAnimHandler, { PokemonIconAnimMode } from "#app/ui/pokemon-icon-anim-handler";
+import { ScrollBar } from "#app/ui/scroll-bar";
+import { StarterContainer } from "#app/ui/starter-container";
 import { StatsContainer } from "#app/ui/stats-container";
 import { TextStyle, addBBCodeTextObject, addTextObject } from "#app/ui/text";
 import { Mode } from "#app/ui/ui";
 import { addWindow } from "#app/ui/ui-theme";
-import { Egg } from "#app/data/egg";
-import Overrides from "#app/overrides";
-import { SettingKeyboard } from "#app/system/settings/settings-keyboard";
-import { Passive as PassiveAttr } from "#enums/passive";
-import * as Challenge from "#app/data/challenge";
-import MoveInfoOverlay from "#app/ui/move-info-overlay";
-import { getEggTierForSpecies } from "#app/data/egg";
-import { Device } from "#enums/devices";
-import type { Moves } from "#enums/moves";
-import { Species } from "#enums/species";
-import { Button } from "#enums/buttons";
-import { EggSourceType } from "#enums/egg-source-types";
-import { DropDown, DropDownLabel, DropDownOption, DropDownState, DropDownType, SortCriteria } from "#app/ui/dropdown";
-import { StarterContainer } from "#app/ui/starter-container";
-import { DropDownColumn, FilterBar } from "#app/ui/filter-bar";
-import { ScrollBar } from "#app/ui/scroll-bar";
-import { SelectChallengePhase } from "#app/phases/select-challenge-phase";
-import { EncounterPhase } from "#app/phases/encounter-phase";
-import { TitlePhase } from "#app/phases/title-phase";
-import { Abilities } from "#enums/abilities";
-import {
-  getPassiveCandyCount,
-  getValueReductionCandyCounts,
-  getSameSpeciesEggCandyCounts,
-} from "#app/data/balance/starters";
 import {
   BooleanHolder,
+  NumberHolder,
   capitalizeString,
   fixedNumber,
   getLocalizedSpriteKey,
   isNullOrUndefined,
-  NumberHolder,
   padInt,
   randIntRange,
   rgbHexToRgba,
   toReadableString,
 } from "#app/utils";
+import { Abilities } from "#enums/abilities";
+import { Button } from "#enums/buttons";
+import { Device } from "#enums/devices";
+import { EggSourceType } from "#enums/egg-source-types";
+import { Gender } from "#enums/gender";
+import type { Moves } from "#enums/moves";
 import type { Nature } from "#enums/nature";
-import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
+import { Passive as PassiveAttr } from "#enums/passive";
+import { Species } from "#enums/species";
+import { Type } from "#enums/type";
+import { argbFromRgba } from "@material/material-color-utilities";
+import i18next from "i18next";
+import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
+import type { ConfirmModeConfig } from "./interfaces/confirm-menu-config";
 
 export type StarterSelectCallback = (starters: Starter[]) => void;
 
@@ -4020,31 +4022,30 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.blockInput = true;
     const ui = this.getUi();
 
-    const cancel = () => {
+    const doExit = () => {
+      ui.setMode(Mode.STARTER_SELECT);
+      globalScene.clearPhaseQueue();
+      if (globalScene.gameMode.isChallenge) {
+        globalScene.pushPhase(new SelectChallengePhase());
+        globalScene.pushPhase(new EncounterPhase());
+      } else {
+        globalScene.pushPhase(new TitlePhase());
+      }
+      this.clearText();
+      globalScene.getCurrentPhase()?.end();
+    };
+    const cancelExit = () => {
       ui.setMode(Mode.STARTER_SELECT);
       this.clearText();
       this.blockInput = false;
     };
+    const options: ConfirmModeConfig = {
+      yesHandler: doExit,
+      noHandler: cancelExit,
+      yOffset: 19,
+    };
     ui.showText(i18next.t("starterSelectUiHandler:confirmExit"), null, () => {
-      ui.setModeWithoutClear(
-        Mode.CONFIRM,
-        () => {
-          ui.setMode(Mode.STARTER_SELECT);
-          globalScene.clearPhaseQueue();
-          if (globalScene.gameMode.isChallenge) {
-            globalScene.pushPhase(new SelectChallengePhase());
-            globalScene.pushPhase(new EncounterPhase());
-          } else {
-            globalScene.pushPhase(new TitlePhase());
-          }
-          this.clearText();
-          globalScene.getCurrentPhase()?.end();
-        },
-        cancel,
-        null,
-        null,
-        19,
-      );
+      ui.setModeWithoutClear(Mode.CONFIRM, options);
     });
 
     return true;
@@ -4055,56 +4056,51 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       return false;
     }
 
-    const ui = this.getUi();
+    if (this.isPartyValid()) {
+      const ui = this.getUi();
 
-    const cancel = () => {
-      ui.setMode(Mode.STARTER_SELECT);
-      if (!manualTrigger) {
-        this.popStarter(this.starterSpecies.length - 1);
-      }
-      this.clearText();
-    };
+      const startRun = () => {
+        globalScene.money = globalScene.gameMode.getStartingMoney();
+        ui.setMode(Mode.STARTER_SELECT);
+        const thisObj = this;
+        const originalStarterSelectCallback = this.starterSelectCallback;
+        this.starterSelectCallback = null;
+        originalStarterSelectCallback
+          && originalStarterSelectCallback(
+            new Array(this.starterSpecies.length).fill(0).map(function (_, i) {
+              const starterSpecies = thisObj.starterSpecies[i];
+              return {
+                species: starterSpecies,
+                dexAttr: thisObj.starterAttr[i],
+                abilityIndex: thisObj.starterAbilityIndexes[i],
+                passive: !(
+                  globalScene.gameData.starterData[starterSpecies.speciesId].passiveAttr
+                  ^ (PassiveAttr.ENABLED | PassiveAttr.UNLOCKED)
+                ),
+                nature: thisObj.starterNatures[i] as Nature,
+                moveset: thisObj.starterMovesets[i],
+                pokerus: thisObj.pokerusSpecies.includes(starterSpecies),
+                nickname: thisObj.starterPreferences[starterSpecies.speciesId]?.nickname,
+              };
+            }),
+          );
+      };
 
-    const canStart = this.isPartyValid();
+      const cancelStartRun = () => {
+        ui.setMode(Mode.STARTER_SELECT);
+        if (!manualTrigger) {
+          this.popStarter(this.starterSpecies.length - 1);
+        }
+        this.clearText();
+      };
 
-    if (canStart) {
+      const confirmStartOptions: ConfirmModeConfig = {
+        yesHandler: startRun,
+        noHandler: cancelStartRun,
+        yOffset: 19,
+      };
       ui.showText(i18next.t("starterSelectUiHandler:confirmStartTeam"), null, () => {
-        ui.setModeWithoutClear(
-          Mode.CONFIRM,
-          () => {
-            const startRun = () => {
-              globalScene.money = globalScene.gameMode.getStartingMoney();
-              ui.setMode(Mode.STARTER_SELECT);
-              const thisObj = this;
-              const originalStarterSelectCallback = this.starterSelectCallback;
-              this.starterSelectCallback = null;
-              originalStarterSelectCallback
-                && originalStarterSelectCallback(
-                  new Array(this.starterSpecies.length).fill(0).map(function (_, i) {
-                    const starterSpecies = thisObj.starterSpecies[i];
-                    return {
-                      species: starterSpecies,
-                      dexAttr: thisObj.starterAttr[i],
-                      abilityIndex: thisObj.starterAbilityIndexes[i],
-                      passive: !(
-                        globalScene.gameData.starterData[starterSpecies.speciesId].passiveAttr
-                        ^ (PassiveAttr.ENABLED | PassiveAttr.UNLOCKED)
-                      ),
-                      nature: thisObj.starterNatures[i] as Nature,
-                      moveset: thisObj.starterMovesets[i],
-                      pokerus: thisObj.pokerusSpecies.includes(starterSpecies),
-                      nickname: thisObj.starterPreferences[starterSpecies.speciesId]?.nickname,
-                    };
-                  }),
-                );
-            };
-            startRun();
-          },
-          cancel,
-          null,
-          null,
-          19,
-        );
+        ui.setModeWithoutClear(Mode.CONFIRM, confirmStartOptions);
       });
     } else {
       this.tutorialActive = true;

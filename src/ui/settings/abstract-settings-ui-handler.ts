@@ -10,6 +10,7 @@ import type { SettingType } from "#app/system/settings/settings";
 import { Setting, SettingKeys } from "#app/system/settings/settings";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
+import type { ConfirmModeConfig } from "../interfaces/confirm-menu-config";
 
 /**
  * Abstract class for handling UI elements related to settings.
@@ -422,8 +423,15 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
 
         const confirmationMessage =
           setting.options[cursor].confirmationMessage ?? i18next.t("settings:defaultConfirmMessage");
+        const confirmSettingOptions: ConfirmModeConfig = {
+          yesHandler: confirmUpdateSetting,
+          noHandler: cancelUpdateSetting,
+          yOffset: 1,
+          inputDelay: 750,
+          canCancelDelay: true,
+        };
         globalScene.ui.showText(confirmationMessage, null, () => {
-          globalScene.ui.setOverlayMode(Mode.CONFIRM, confirmUpdateSetting, cancelUpdateSetting, true, null, 1, 750);
+          globalScene.ui.setOverlayMode(Mode.CONFIRM, confirmSettingOptions);
         });
       } else {
         saveSetting();

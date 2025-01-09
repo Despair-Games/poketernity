@@ -1,36 +1,36 @@
-import type { PlayerPokemon, PokemonMove } from "#app/field/pokemon";
-import type { Pokemon } from "#app/field/pokemon";
+import { allMoves } from "#app/data/all-moves";
+import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
+import { applyChallenges, ChallengeType } from "#app/data/challenge";
+import { getGenderColor, getGenderShadowColor, getGenderSymbol } from "#app/data/gender";
+import { ForceSwitchOutAttr } from "#app/data/move-attrs/force-switch-out-attr";
+import { FormChangeItem, SpeciesFormChangeItemTrigger } from "#app/data/pokemon-forms";
+import { getVariantTint } from "#app/data/variant";
+import type { PlayerPokemon, Pokemon, PokemonMove } from "#app/field/pokemon";
 import { MoveResult } from "#app/field/pokemon";
-import { addBBCodeTextObject, addTextObject, getTextColor, TextStyle } from "#app/ui/text";
-import { Command } from "#app/ui/command-ui-handler";
-import MessageUiHandler from "#app/ui/message-ui-handler";
-import { Mode } from "#app/ui/ui";
-import { BooleanHolder, toReadableString, randInt, getLocalizedSpriteKey } from "#app/utils";
+import { globalScene } from "#app/global-scene";
+import { getPokemonNameWithAffix } from "#app/messages";
 import {
   PokemonFormChangeItemModifier,
   PokemonHeldItemModifier,
   SwitchEffectTransferModifier,
 } from "#app/modifier/modifier";
-import { allMoves } from "#app/data/all-moves";
-import { getGenderColor, getGenderShadowColor, getGenderSymbol } from "#app/data/gender";
-import { StatusEffect } from "#enums/status-effect";
-import PokemonIconAnimHandler, { PokemonIconAnimMode } from "#app/ui/pokemon-icon-anim-handler";
-import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
-import { addWindow } from "#app/ui/ui-theme";
-import { SpeciesFormChangeItemTrigger, FormChangeItem } from "#app/data/pokemon-forms";
-import { getVariantTint } from "#app/data/variant";
-import { Button } from "#enums/buttons";
-import { applyChallenges, ChallengeType } from "#app/data/challenge";
-import MoveInfoOverlay from "#app/ui/move-info-overlay";
-import i18next from "i18next";
-import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
-import { Moves } from "#enums/moves";
-import { Species } from "#enums/species";
-import { getPokemonNameWithAffix } from "#app/messages";
 import type { CommandPhase } from "#app/phases/command-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import { globalScene } from "#app/global-scene";
-import { ForceSwitchOutAttr } from "#app/data/move-attrs/force-switch-out-attr";
+import { Command } from "#app/ui/command-ui-handler";
+import MessageUiHandler from "#app/ui/message-ui-handler";
+import MoveInfoOverlay from "#app/ui/move-info-overlay";
+import PokemonIconAnimHandler, { PokemonIconAnimMode } from "#app/ui/pokemon-icon-anim-handler";
+import { addBBCodeTextObject, addTextObject, getTextColor, TextStyle } from "#app/ui/text";
+import { Mode } from "#app/ui/ui";
+import { addWindow } from "#app/ui/ui-theme";
+import { BooleanHolder, getLocalizedSpriteKey, randInt, toReadableString } from "#app/utils";
+import { Button } from "#enums/buttons";
+import { Moves } from "#enums/moves";
+import { Species } from "#enums/species";
+import { StatusEffect } from "#enums/status-effect";
+import i18next from "i18next";
+import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
+import type { ConfirmModeConfig } from "./interfaces/confirm-menu-config";
 
 const defaultMessage = i18next.t("partyUiHandler:choosePokemon");
 
@@ -575,9 +575,8 @@ export default class PartyUiHandler extends MessageUiHandler {
             }),
             null,
             () => {
-              ui.setModeWithoutClear(
-                Mode.CONFIRM,
-                () => {
+              const options: ConfirmModeConfig = {
+                yesHandler: () => {
                   const fusionName = pokemon.name;
                   pokemon.unfuse().then(() => {
                     this.clearPartySlots();
@@ -595,11 +594,12 @@ export default class PartyUiHandler extends MessageUiHandler {
                     );
                   });
                 },
-                () => {
+                noHandler: () => {
                   ui.setMode(Mode.PARTY);
                   this.showText("", 0);
                 },
-              );
+              };
+              ui.setModeWithoutClear(Mode.CONFIRM, options);
             },
           );
         } else if (option === PartyOption.RELEASE) {
@@ -607,22 +607,22 @@ export default class PartyUiHandler extends MessageUiHandler {
           ui.playSelect();
           if (this.cursor >= globalScene.currentBattle.getBattlerCount() || !pokemon.isAllowedInBattle()) {
             this.blockInput = true;
+            const options: ConfirmModeConfig = {
+              yesHandler: () => {
+                ui.setMode(Mode.PARTY);
+                this.doRelease(this.cursor);
+              },
+              noHandler: () => {
+                ui.setMode(Mode.PARTY);
+                this.showText("", 0);
+              },
+            };
             this.showText(
               i18next.t("partyUiHandler:releaseConfirmation", { pokemonName: getPokemonNameWithAffix(pokemon) }),
               null,
               () => {
                 this.blockInput = false;
-                ui.setModeWithoutClear(
-                  Mode.CONFIRM,
-                  () => {
-                    ui.setMode(Mode.PARTY);
-                    this.doRelease(this.cursor);
-                  },
-                  () => {
-                    ui.setMode(Mode.PARTY);
-                    this.showText("", 0);
-                  },
-                );
+                ui.setModeWithoutClear(Mode.CONFIRM, options);
               },
             );
           } else {

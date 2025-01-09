@@ -1,21 +1,22 @@
+import { loggedInUser, updateUserInfo } from "#app/account";
 import { bypassLogin } from "#app/battle-scene";
 import { SESSION_ID_COOKIE } from "#app/constants";
 import { globalScene } from "#app/global-scene";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { api } from "#app/plugins/api/api";
+import { Tutorial, handleTutorial } from "#app/tutorial";
+import { AdminMode, getAdminModeName } from "#app/ui/admin-ui-handler";
 import BgmBar from "#app/ui/bgm-bar";
+import type { OptionSelectModeConfig, OptionSelectItem } from "#app/ui/interfaces/option-select-config";
+import OptionSelectUiHandler from "#app/ui/option-select-ui-handler";
+import { TextStyle, addTextObject } from "#app/ui/text";
+import { Mode } from "#app/ui/ui";
+import { addWindow } from "#app/ui/ui-theme";
 import { fixedNumber, getCookie, getEnumKeys, isBeta, isLocal } from "#app/utils";
 import { Button } from "#enums/buttons";
 import { GameDataType } from "#enums/game-data-type";
 import i18next from "i18next";
-import { loggedInUser, updateUserInfo } from "#app/account";
-import { Tutorial, handleTutorial } from "#app/tutorial";
-import type { OptionSelectConfig, OptionSelectItem } from "#app/ui/interfaces/option-select-config";
-import { AdminMode, getAdminModeName } from "#app/ui/admin-ui-handler";
-import { TextStyle, addTextObject } from "#app/ui/text";
-import { Mode } from "#app/ui/ui";
-import { addWindow } from "#app/ui/ui-theme";
-import OptionSelectUiHandler from "#app/ui/option-select-ui-handler";
+import type { ConfirmModeConfig } from "./interfaces/confirm-menu-config";
 
 enum MenuOptions {
   GAME_SETTINGS,
@@ -43,8 +44,8 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
   private excludedMenus: () => ConditionalMenu[];
   private menuOptions: MenuOptions[];
 
-  protected manageDataConfig: OptionSelectConfig;
-  protected communityConfig: OptionSelectConfig;
+  protected manageDataConfig: OptionSelectModeConfig;
+  protected communityConfig: OptionSelectModeConfig;
 
   public bgmBar: BgmBar;
 
@@ -135,7 +136,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
     const confirmSlot = (message: string, slotFilter: (i: number) => boolean, callback: (i: number) => void) => {
       ui.revertMode();
       ui.showText(message, null, () => {
-        const config: OptionSelectConfig = {
+        const config: OptionSelectModeConfig = {
           options: new Array(5)
             .fill(null)
             .map((_, i) => i)
@@ -422,7 +423,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
       };
     });
 
-    const config: OptionSelectConfig = {
+    const config: OptionSelectModeConfig = {
       options: menuOptions,
       yOffset: -this.defaultYOffset - 1,
       maxOptions: 10,
@@ -575,16 +576,15 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
                 this.showText("", 0);
                 return;
               }
-              ui.setOverlayMode(
-                Mode.CONFIRM,
-                doSaveQuit,
-                () => {
+              const options: ConfirmModeConfig = {
+                yesHandler: doSaveQuit,
+                noHandler: () => {
                   ui.revertMode();
                   this.showText("", 0);
                 },
-                false,
-                -this.getWindowWidth(),
-              );
+                xOffset: -this.getWindowWidth(),
+              };
+              ui.setOverlayMode(Mode.CONFIRM, options);
             });
           } else {
             doSaveQuit();
@@ -608,16 +608,15 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
               this.showText("", 0);
               return;
             }
-            ui.setOverlayMode(
-              Mode.CONFIRM,
-              doLogout,
-              () => {
+            const options: ConfirmModeConfig = {
+              yesHandler: doLogout,
+              noHandler: () => {
                 ui.revertMode();
                 this.showText("", 0);
               },
-              false,
-              -this.getWindowWidth(),
-            );
+              xOffset: -this.getWindowWidth(),
+            };
+            ui.setOverlayMode(Mode.CONFIRM, options);
           });
         } else {
           doLogout();

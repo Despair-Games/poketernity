@@ -9,6 +9,7 @@ import Overrides from "#app/overrides";
 import { PlayerPartyMemberPokemonPhase } from "#app/phases/abstract-player-party-member-pokemon-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import FormChangeSceneHandler from "#app/ui/form-change-scene-handler";
+import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { SummaryUiMode } from "#app/ui/summary-ui-handler";
 import { Mode } from "#app/ui/ui";
 import { Moves } from "#enums/moves";
@@ -94,15 +95,17 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
 
     await ui.showTextPromise(preQText);
     await ui.showTextPromise(shouldReplaceQ, undefined, false);
-    await ui.setModeWithoutClear(
-      Mode.CONFIRM,
-      () => this.forgetMoveProcess(move, pokemon), // Yes
-      () => {
-        // No
+
+    const options: ConfirmModeConfig = {
+      yesHandler: () => {
+        this.forgetMoveProcess(move, pokemon);
+      },
+      noHandler: () => {
         ui.setMode(this.messageMode);
         this.rejectMoveAndEnd(move, pokemon);
       },
-    );
+    };
+    await ui.setModeWithoutClear(Mode.CONFIRM, options);
   }
 
   /**
@@ -156,9 +159,8 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
 
     await ui.showTextPromise(i18next.t("battle:learnMoveStopTeaching", { moveName: move.name }), undefined, false);
 
-    ui.setModeWithoutClear(
-      Mode.CONFIRM,
-      () => {
+    const options: ConfirmModeConfig = {
+      yesHandler: () => {
         ui.setMode(this.messageMode);
         ui.showTextPromise(
           i18next.t("battle:learnMoveNotLearned", {
@@ -168,12 +170,15 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
           undefined,
           true,
         ).then(() => this.end());
+        return true;
       },
-      () => {
+      noHandler: () => {
         ui.setMode(this.messageMode);
         this.replaceMoveCheck(move, pokemon);
+        return true;
       },
-    );
+    };
+    ui.setModeWithoutClear(Mode.CONFIRM, options);
   }
 
   /**

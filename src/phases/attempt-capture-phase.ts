@@ -296,6 +296,7 @@ export class AttemptCapturePhase extends PokemonPhase {
               ui.showText(i18next.t("battle:partyFull", { pokemonName: pokemon.getNameToRender() }), null, () => {
                 pokemonInfoContainer.makeRoomForConfirmUi(1, true);
                 ui.setMode(
+                  // TODO use dedicated confirm mode with summary option
                   Mode.CONFIRM,
                   () => {
                     const newPokemon = globalScene.addPlayerPokemon(

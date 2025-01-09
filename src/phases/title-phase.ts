@@ -15,7 +15,7 @@ import {
 import { Phase } from "#app/phase";
 import { Unlockables } from "#app/system/unlockables";
 import { vouchers } from "#app/system/voucher";
-import type { OptionSelectConfig, OptionSelectItem } from "#app/ui/interfaces/option-select-config";
+import type { OptionSelectModeConfig, OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import { SaveSlotUiMode } from "#app/ui/save-slot-select-ui-handler";
 import { Mode } from "#app/ui/ui";
 import { isLocal, isLocalServerConnected } from "#app/utils";
@@ -169,7 +169,7 @@ export class TitlePhase extends Phase {
         keepOpen: true,
       },
     );
-    const config: OptionSelectConfig = {
+    const config: OptionSelectModeConfig = {
       options: options,
       noCancel: true,
       yOffset: 47,

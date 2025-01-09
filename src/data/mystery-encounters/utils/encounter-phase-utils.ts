@@ -23,7 +23,7 @@ import { MysteryEncounterRewardsPhase } from "#app/phases/mystery-encounter-phas
 import { MysteryEncounterBattleStartCleanupPhase } from "#app/phases/mystery-encounter-phases/battle-start-cleanup-phase";
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import type PokemonData from "#app/system/pokemon-data";
-import type { OptionSelectConfig, OptionSelectItem } from "#app/ui/interfaces/option-select-config";
+import type { OptionSelectModeConfig, OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import type { PartyOption, PokemonSelectFilter } from "#app/ui/party-ui-handler";
 import { PartyUiMode } from "#app/ui/party-ui-handler";
 import { Mode } from "#app/ui/ui";
@@ -567,7 +567,7 @@ export function selectPokemonForOption(
                     },
                   });
 
-                const config: OptionSelectConfig = {
+                const config: OptionSelectModeConfig = {
                   options: fullOptions,
                   maxOptions: 7,
                   yOffset: 0,
@@ -629,7 +629,7 @@ export function selectOptionThenPokemon(
   return new Promise<PokemonAndOptionSelected | null>((resolve) => {
     const modeToSetOnExit = globalScene.ui.getMode();
 
-    const displayOptions = (config: OptionSelectConfig) => {
+    const displayOptions = (config: OptionSelectModeConfig) => {
       globalScene.ui.setMode(Mode.MESSAGE).then(() => {
         if (!optionSelectPromptKey) {
           // Do hover over the starting selection option
@@ -702,7 +702,7 @@ export function selectOptionThenPokemon(
         },
       });
 
-    const config: OptionSelectConfig = {
+    const config: OptionSelectModeConfig = {
       options: fullOptions,
       maxOptions: 7,
       yOffset: 0,

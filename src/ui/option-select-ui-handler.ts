@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import type { OptionSelectConfig, OptionSelectItem } from "#app/ui/interfaces/option-select-config";
+import type { OptionSelectModeConfig, OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import { TextStyle, addBBCodeTextObject, getTextStyleOptions } from "#app/ui/text";
 import MessageUiHandler from "#app/ui/message-ui-handler";
 import { Mode } from "#app/ui/ui";
@@ -21,7 +21,7 @@ export default class OptionSelectUiHandler extends MessageUiHandler {
   protected optionSelectText: BBCodeText;
   protected optionSelectIcons: Phaser.GameObjects.Sprite[];
 
-  protected config: OptionSelectConfig | null;
+  protected config: OptionSelectModeConfig | null;
 
   protected blockInput: boolean;
 
@@ -182,7 +182,7 @@ export default class OptionSelectUiHandler extends MessageUiHandler {
 
     super.show(args);
 
-    this.config = args[0] as OptionSelectConfig;
+    this.config = args[0] as OptionSelectModeConfig;
     this.setupOptions();
 
     globalScene.ui.bringToTop(this.optionSelectContainer);
