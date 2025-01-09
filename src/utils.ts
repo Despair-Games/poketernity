@@ -362,14 +362,16 @@ export class NumberHolder {
  * @see `transformValue` in {@linkcode initGameSpeed}
  * @extends NumberHolder
  */
-export class FixedNumber extends NumberHolder {
+export class FixedNumber {
+  public readonly value: number;
+
   constructor(value: number) {
-    super(value);
+    this.value = value;
   }
 }
 
 /**
- * Helper method to create a FixedNumber
+ * Helper method to create a {@linkcode FixedNumber}
  * @param value - The value to be stored in the {@linkcode FixedNumber}
  */
 export function fixedNumber(value: number): number {
