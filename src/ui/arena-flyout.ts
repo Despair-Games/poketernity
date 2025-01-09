@@ -16,7 +16,7 @@ import type { TurnEndEvent } from "../events/battle-scene";
 import { BattleSceneEventType } from "../events/battle-scene";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import TimeOfDayWidget from "./time-of-day-widget";
-import { toCamelCaseString, formatText, fixedInt } from "#app/utils";
+import { toCamelCaseString, formatText, fixedNumber } from "#app/utils";
 import type { ParseKeys } from "i18next";
 import i18next from "i18next";
 
@@ -407,7 +407,7 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
     globalScene.tweens.add({
       targets: this.flyoutParent,
       x: visible ? this.anchorX : this.anchorX - this.translationX,
-      duration: fixedInt(125),
+      duration: fixedNumber(125),
       ease: "Sine.easeInOut",
       alpha: visible ? 1 : 0,
       onComplete: () => (this.timeOfDayWidget.parentVisible = visible),

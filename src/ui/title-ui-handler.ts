@@ -1,6 +1,6 @@
 import OptionSelectUiHandler from "./settings/option-select-ui-handler";
 import { Mode } from "./ui";
-import { fixedInt, randItem } from "#app/utils";
+import { fixedNumber, randItem } from "#app/utils";
 import { TextStyle, addTextObject, getTextStyleOptions } from "./text";
 import { getSplashMessages } from "../data/splash-messages";
 import i18next from "i18next";
@@ -70,7 +70,7 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
 
     globalScene.tweens.add({
       targets: this.splashMessageText,
-      duration: fixedInt(350),
+      duration: fixedNumber(350),
       scale: originalSplashMessageScale * 1.25,
       loop: -1,
       yoyo: true,
@@ -124,7 +124,7 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
 
       globalScene.tweens.add({
         targets: [this.titleContainer, ui.getMessageHandler().bg],
-        duration: fixedInt(325),
+        duration: fixedNumber(325),
         alpha: (target: any) => (target === this.titleContainer ? 1 : 0),
         ease: "Sine.easeInOut",
       });
@@ -145,7 +145,7 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
 
     globalScene.tweens.add({
       targets: [this.titleContainer, ui.getMessageHandler().bg],
-      duration: fixedInt(325),
+      duration: fixedNumber(325),
       alpha: (target: any) => (target === this.titleContainer ? 0 : 1),
       ease: "Sine.easeInOut",
     });
