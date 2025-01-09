@@ -19,8 +19,7 @@ export class PostKnockOutStatStageChangeAbAttr extends PostKnockOutAbAttr {
     pokemon: Pokemon,
     _passive: boolean,
     simulated: boolean,
-    _knockedOut: Pokemon,
-    _args: any[],
+    _knockedOutPokemon: Pokemon,
   ): boolean {
     const stat = typeof this.stat === "function" ? this.stat(pokemon) : this.stat;
     if (!simulated) {

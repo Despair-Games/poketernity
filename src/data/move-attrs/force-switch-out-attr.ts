@@ -20,6 +20,12 @@ import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import type { MoveConditionFunc } from "../move-conditions";
 
+/**
+ * Attribute to force either the user (e.g. {@link https://bulbapedia.bulbagarden.net/wiki/U-turn_(move) | U-turn})
+ * or the target (e.g. {@link https://bulbapedia.bulbagarden.net/wiki/Roar_(move) | Roar})
+ * off the field, prompting a switch.
+ * @extends MoveEffectAttr
+ */
 export class ForceSwitchOutAttr extends MoveEffectAttr {
   constructor(
     private selfSwitch: boolean = false,
@@ -32,7 +38,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
     return this.switchType === SwitchType.BATON_PASS;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move, _args: any[]): boolean {
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     // Check if the move category is not STATUS or if the switch out condition is not met
     if (!this.getSwitchOutCondition()(user, target, move)) {
       return false;
@@ -187,7 +193,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
 
   override getFailedText(_user: Pokemon, target: Pokemon, _move: Move, _cancelled: BooleanHolder): string | null {
     const blockedByAbility = new BooleanHolder(false);
-    applyAbAttrs(ForceSwitchOutImmunityAbAttr, target, blockedByAbility);
+    applyAbAttrs(ForceSwitchOutImmunityAbAttr, target, false, blockedByAbility);
     return blockedByAbility.value
       ? i18next.t("moveTriggers:cannotBeSwitchedOut", { pokemonName: getPokemonNameWithAffix(target) })
       : null;
@@ -215,7 +221,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
         }
 
         const blockedByAbility = new BooleanHolder(false);
-        applyAbAttrs(ForceSwitchOutImmunityAbAttr, target, blockedByAbility);
+        applyAbAttrs(ForceSwitchOutImmunityAbAttr, target, false, blockedByAbility);
         return !blockedByAbility.value;
       }
 

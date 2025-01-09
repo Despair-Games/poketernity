@@ -17,26 +17,17 @@ export class PostWeatherLapseHealAbAttr extends PostWeatherLapseAbAttr {
     this.healFactor = healFactor;
   }
 
-  override applyPostWeatherLapse(
-    pokemon: Pokemon,
-    passive: boolean,
-    simulated: boolean,
-    _weather: Weather,
-    _args: any[],
-  ): boolean {
+  override applyPostWeatherLapse(pokemon: Pokemon, passive: boolean, simulated: boolean, _weather: Weather): boolean {
     if (!pokemon.isFullHp()) {
       const abilityName = (!passive ? pokemon.getAbility() : pokemon.getPassiveAbility()).name;
       if (!simulated) {
         globalScene.unshiftPhase(
-          new PokemonHealPhase(
-            pokemon.getBattlerIndex(),
-            toDmgValue(pokemon.getMaxHp() / (16 / this.healFactor)),
-            i18next.t("abilityTriggers:postWeatherLapseHeal", {
+          new PokemonHealPhase(pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() / (16 / this.healFactor)), {
+            message: i18next.t("abilityTriggers:postWeatherLapseHeal", {
               pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
               abilityName,
             }),
-            true,
-          ),
+          }),
         );
       }
       return true;

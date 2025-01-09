@@ -3,7 +3,7 @@ import {
   selectPokemonForOption,
   setEncounterRewards,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { TrainerSlot } from "#app/data/trainer-config";
+import { TrainerSlot } from "#enums/trainer-slot";
 import { ModifierTier } from "#app/modifier/modifier-tier";
 import { MusicPreference } from "#app/system/settings/settings";
 import type { ModifierTypeOption } from "#app/modifier/modifier-type";
@@ -671,8 +671,6 @@ function doPokemonTradeSequence(tradedPokemon: PlayerPokemon, receivedPokemon: P
       });
       sprite.setPipelineData("ignoreTimeTint", true);
       sprite.setPipelineData("spriteKey", tradedPokemon.getSpriteKey());
-      sprite.setPipelineData("shiny", tradedPokemon.shiny);
-      sprite.setPipelineData("variant", tradedPokemon.variant);
       ["spriteColors", "fusionSpriteColors"].map((k) => {
         if (tradedPokemon.summonData?.speciesForm) {
           k += "Base";
@@ -696,8 +694,6 @@ function doPokemonTradeSequence(tradedPokemon: PlayerPokemon, receivedPokemon: P
       });
       sprite.setPipelineData("ignoreTimeTint", true);
       sprite.setPipelineData("spriteKey", receivedPokemon.getSpriteKey());
-      sprite.setPipelineData("shiny", receivedPokemon.shiny);
-      sprite.setPipelineData("variant", receivedPokemon.variant);
       ["spriteColors", "fusionSpriteColors"].map((k) => {
         if (receivedPokemon.summonData?.speciesForm) {
           k += "Base";

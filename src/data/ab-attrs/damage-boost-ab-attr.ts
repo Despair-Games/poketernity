@@ -35,11 +35,10 @@ export class DamageBoostAbAttr extends PreAttackAbAttr {
     _simulated: boolean,
     defender: Pokemon,
     move: Move,
-    args: any[],
+    multiplier: NumberHolder,
   ): boolean {
     if (this.condition(pokemon, defender, move)) {
-      const power = args[0] as NumberHolder;
-      power.value = Math.floor(power.value * this.damageMultiplier);
+      multiplier.value *= this.damageMultiplier;
       return true;
     }
 

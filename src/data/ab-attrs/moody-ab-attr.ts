@@ -18,10 +18,9 @@ export class MoodyAbAttr extends PostTurnAbAttr {
    * @param pokemon {@linkcode Pokemon} that has this ability
    * @param _passive N/A
    * @param simulated `true` if applying in a simulated call.
-   * @param _args N/A
    * @returns `true`
    */
-  override applyPostTurn(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
+  override applyPostTurn(pokemon: Pokemon, _passive: boolean, simulated: boolean): boolean {
     const canRaise = EFFECTIVE_STATS.filter((s) => pokemon.getStatStage(s) < 6);
     let canLower = EFFECTIVE_STATS.filter((s) => pokemon.getStatStage(s) > -6);
 

@@ -8,7 +8,7 @@ import i18next from "i18next";
 import { PostSummonAbAttr } from "./post-summon-ab-attr";
 
 export class ForewarnAbAttr extends PostSummonAbAttr {
-  override applyPostSummon(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
+  override applyPostSummon(pokemon: Pokemon, _passive: boolean, simulated: boolean): boolean {
     let maxPowerSeen = 0;
     let maxMove = "";
     let movePower = 0;

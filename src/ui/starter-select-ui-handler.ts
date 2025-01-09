@@ -65,7 +65,7 @@ import {
 import {
   BooleanHolder,
   capitalizeString,
-  fixedInt,
+  fixedNumber,
   getLocalizedSpriteKey,
   isNullOrUndefined,
   NumberHolder,
@@ -1359,14 +1359,14 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         {
           targets: icon,
           y: 2 - 5,
-          duration: fixedInt(125),
+          duration: fixedNumber(125),
           ease: "Cubic.easeOut",
           yoyo: true,
         },
         {
           targets: icon,
           y: 2 - 3,
-          duration: fixedInt(150),
+          duration: fixedNumber(150),
           ease: "Cubic.easeOut",
           yoyo: true,
         },
@@ -3563,8 +3563,6 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
             this.assetLoadCancelled = null;
             this.speciesLoaded.set(species.speciesId, true);
             this.pokemonSprite.play(species.getSpriteKey(female!, formIndex, shiny, variant)); // TODO: is this bang correct?
-            this.pokemonSprite.setPipelineData("shiny", shiny);
-            this.pokemonSprite.setPipelineData("variant", variant);
             this.pokemonSprite.setPipelineData("spriteKey", species.getSpriteKey(female!, formIndex, shiny, variant)); // TODO: is this bang correct?
             this.pokemonSprite.setVisible(!this.statsMode);
           });
@@ -3940,7 +3938,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       this.getTextColor(!overLimit ? TextStyle.TOOLTIP_CONTENT : TextStyle.SUMMARY_PINK, true),
     );
     if (overLimit) {
-      globalScene.time.delayedCall(fixedInt(500), () => this.tryUpdateValue());
+      globalScene.time.delayedCall(fixedNumber(500), () => this.tryUpdateValue());
       return false;
     }
     let isPartyValid: boolean = this.isPartyValid(); // this checks to see if the party is valid
@@ -4296,5 +4294,14 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       icon.setTexture(species.getIconAtlasKey(formIndex, false, variant));
       icon.setFrame(species.getIconId(female, formIndex, false, variant));
     }
+  }
+
+  /**
+   * Clears this UI's starter preferences.
+   *
+   * This is intended to only be used for unit tests that work with this UI.
+   */
+  clearStarterPreferences() {
+    this.starterPreferences = {};
   }
 }

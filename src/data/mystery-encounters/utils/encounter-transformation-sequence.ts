@@ -82,8 +82,6 @@ export function doPokemonTransformationSequence(
       });
       sprite.setPipelineData("ignoreTimeTint", true);
       sprite.setPipelineData("spriteKey", previousPokemon.getSpriteKey());
-      sprite.setPipelineData("shiny", previousPokemon.shiny);
-      sprite.setPipelineData("variant", previousPokemon.variant);
       ["spriteColors", "fusionSpriteColors"].map((k) => {
         if (previousPokemon.summonData?.speciesForm) {
           k += "Base";
@@ -102,8 +100,6 @@ export function doPokemonTransformationSequence(
 
       sprite.setPipelineData("ignoreTimeTint", true);
       sprite.setPipelineData("spriteKey", transformPokemon.getSpriteKey());
-      sprite.setPipelineData("shiny", transformPokemon.shiny);
-      sprite.setPipelineData("variant", transformPokemon.variant);
       ["spriteColors", "fusionSpriteColors"].map((k) => {
         if (transformPokemon.summonData?.speciesForm) {
           k += "Base";

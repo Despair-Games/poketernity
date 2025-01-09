@@ -627,7 +627,7 @@ export class FlinchedTag extends BattlerTag {
   override onAdd(pokemon: Pokemon): void {
     super.onAdd(pokemon);
 
-    applyAbAttrs(FlinchEffectAbAttr, pokemon, null);
+    applyAbAttrs(FlinchEffectAbAttr, pokemon);
   }
 
   /**
@@ -930,7 +930,7 @@ export class SeedTag extends BattlerTag {
       const source = pokemon.getOpponents().find((o) => o.getBattlerIndex() === this.sourceIndex);
       if (source) {
         const cancelled = new BooleanHolder(false);
-        applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, cancelled);
+        applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, false, cancelled);
 
         if (!cancelled.value) {
           globalScene.unshiftPhase(
@@ -940,15 +940,13 @@ export class SeedTag extends BattlerTag {
           const damage = pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 8));
           const reverseDrain = pokemon.hasAbilityWithAttr(ReverseDrainAbAttr, false);
           globalScene.unshiftPhase(
-            new PokemonHealPhase(
-              source.getBattlerIndex(),
-              !reverseDrain ? damage : damage * -1,
-              !reverseDrain
+            new PokemonHealPhase(source.getBattlerIndex(), !reverseDrain ? damage : damage * -1, {
+              message: !reverseDrain
                 ? i18next.t("battlerTags:seededLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) })
                 : i18next.t("battlerTags:seededLapseShed", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
-              false,
-              true,
-            ),
+              showFullHpMessage: false,
+              skipAnim: true,
+            }),
           );
         }
       }
@@ -1006,7 +1004,7 @@ export class PowderTag extends BattlerTag {
           );
 
           const cancelDamage = new BooleanHolder(false);
-          applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, cancelDamage);
+          applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, false, cancelDamage);
           if (!cancelDamage.value) {
             pokemon.damageAndUpdate(Math.floor(pokemon.getMaxHp() / 4), HitResult.OTHER);
           }
@@ -1053,7 +1051,7 @@ export class NightmareTag extends BattlerTag {
       globalScene.unshiftPhase(new CommonAnimPhase(pokemon.getBattlerIndex(), undefined, CommonAnim.CURSE)); // TODO: Update animation type
 
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, cancelled);
+      applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, false, cancelled);
 
       if (!cancelled.value) {
         pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 4));
@@ -1239,12 +1237,9 @@ export class IngrainTag extends TrappedTag {
 
     if (ret) {
       globalScene.unshiftPhase(
-        new PokemonHealPhase(
-          pokemon.getBattlerIndex(),
-          toDmgValue(pokemon.getMaxHp() / 16),
-          i18next.t("battlerTags:ingrainLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
-          true,
-        ),
+        new PokemonHealPhase(pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() / 16), {
+          message: i18next.t("battlerTags:ingrainLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+        }),
       );
     }
 
@@ -1299,15 +1294,12 @@ export class AquaRingTag extends BattlerTag {
 
     if (ret) {
       globalScene.unshiftPhase(
-        new PokemonHealPhase(
-          pokemon.getBattlerIndex(),
-          toDmgValue(pokemon.getMaxHp() / 16),
-          i18next.t("battlerTags:aquaRingLapse", {
+        new PokemonHealPhase(pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() / 16), {
+          message: i18next.t("battlerTags:aquaRingLapse", {
             moveName: this.getMoveName(),
             pokemonName: getPokemonNameWithAffix(pokemon),
           }),
-          true,
-        ),
+        }),
       );
     }
 
@@ -1400,7 +1392,7 @@ export abstract class DamagingTrapTag extends TrappedTag {
       globalScene.unshiftPhase(new CommonAnimPhase(pokemon.getBattlerIndex(), undefined, this.commonAnim));
 
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, cancelled);
+      applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, false, cancelled);
 
       if (!cancelled.value) {
         pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 8));
@@ -1545,7 +1537,11 @@ export class ProtectedTag extends BattlerTag {
     );
   }
 
-  override apply(pokemon: Pokemon, simulated: boolean, ..._args: unknown[]): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
+    if (move.checkFlag(MoveFlags.IGNORE_PROTECT, attacker, pokemon)) {
+      return false;
+    }
+
     if (!simulated) {
       new CommonBattleAnim(CommonAnim.PROTECT, pokemon).play();
       globalScene.queueMessage(
@@ -1560,7 +1556,7 @@ export class ProtectedTag extends BattlerTag {
 export class DamageProtectedTag extends ProtectedTag {
   override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
     if (attacker.getMoveCategory(pokemon, move) !== MoveCategory.STATUS) {
-      return super.apply(pokemon, simulated);
+      return super.apply(pokemon, simulated, attacker, move);
     }
     return false;
   }
@@ -2154,7 +2150,7 @@ export class SaltCuredTag extends BattlerTag {
       );
 
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, cancelled);
+      applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, false, cancelled);
 
       if (!cancelled.value) {
         const pokemonSteelOrWater = pokemon.isOfType(Type.STEEL) || pokemon.isOfType(Type.WATER);
@@ -2203,7 +2199,7 @@ export class CursedTag extends BattlerTag {
       );
 
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, cancelled);
+      applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, false, cancelled);
 
       if (!cancelled.value) {
         pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 4));
@@ -2438,7 +2434,7 @@ export class StockpilingTag extends BattlerTag {
     super(BattlerTagType.STOCKPILING, BattlerTagLapseType.CUSTOM, 1, sourceMove);
   }
 
-  private onStatStagesChanged: StatStageChangeCallback = (_, statsChanged, statChanges) => {
+  private onStatStagesChanged: StatStageChangeCallback = (statsChanged, statChanges) => {
     const defChange = statChanges[statsChanged.indexOf(Stat.DEF)] ?? 0;
     const spDefChange = statChanges[statsChanged.indexOf(Stat.SPDEF)] ?? 0;
 
@@ -2478,16 +2474,9 @@ export class StockpilingTag extends BattlerTag {
 
       // Attempt to increase DEF and SPDEF by one stage, keeping track of successful changes.
       globalScene.unshiftPhase(
-        new StatStageChangePhase(
-          pokemon.getBattlerIndex(),
-          true,
-          [Stat.SPDEF, Stat.DEF],
-          1,
-          true,
-          false,
-          true,
-          this.onStatStagesChanged,
-        ),
+        new StatStageChangePhase(pokemon.getBattlerIndex(), true, [Stat.SPDEF, Stat.DEF], 1, {
+          onChange: this.onStatStagesChanged,
+        }),
       );
     }
   }
@@ -2505,15 +2494,11 @@ export class StockpilingTag extends BattlerTag {
     const spDefChange = this.statChangeCounts[Stat.SPDEF];
 
     if (defChange) {
-      globalScene.unshiftPhase(
-        new StatStageChangePhase(pokemon.getBattlerIndex(), true, [Stat.DEF], -defChange, true, false, true),
-      );
+      globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [Stat.DEF], -defChange));
     }
 
     if (spDefChange) {
-      globalScene.unshiftPhase(
-        new StatStageChangePhase(pokemon.getBattlerIndex(), true, [Stat.SPDEF], -spDefChange, true, false, true),
-      );
+      globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [Stat.SPDEF], -spDefChange));
     }
   }
 }
@@ -2545,7 +2530,7 @@ export class GulpMissileTag extends BattlerTag {
       }
 
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs(BlockNonDirectDamageAbAttr, attacker, cancelled);
+      applyAbAttrs(BlockNonDirectDamageAbAttr, attacker, false, cancelled);
 
       if (!cancelled.value) {
         attacker.damageAndUpdate(Math.max(1, Math.floor(attacker.getMaxHp() / 4)), HitResult.OTHER);
@@ -2925,7 +2910,7 @@ export class MysteryEncounterPostSummonTag extends BattlerTag {
 
     if (lapseType === BattlerTagLapseType.CUSTOM) {
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs(ProtectStatAbAttr, pokemon, cancelled);
+      applyAbAttrs(ProtectStatAbAttr, pokemon, false, cancelled);
       if (!cancelled.value) {
         if (pokemon.mysteryEncounterBattleEffects) {
           pokemon.mysteryEncounterBattleEffects(pokemon);
@@ -3146,9 +3131,7 @@ export class SyrupBombTag extends BattlerTag {
     globalScene.queueMessage(
       i18next.t("battlerTags:syrupBombLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
-    globalScene.unshiftPhase(
-      new StatStageChangePhase(pokemon.getBattlerIndex(), true, [Stat.SPD], -1, true, false, true),
-    );
+    globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [Stat.SPD], -1));
     return --this.turnCount > 0;
   }
 }

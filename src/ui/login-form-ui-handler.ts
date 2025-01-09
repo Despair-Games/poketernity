@@ -1,7 +1,7 @@
 import type { InputFieldConfig } from "./form-modal-ui-handler";
 import { FormModalUiHandler } from "./form-modal-ui-handler";
 import type { ModalConfig } from "./modal-ui-handler";
-import { fixedInt } from "#app/utils";
+import { fixedNumber } from "#app/utils";
 import { Mode } from "./ui";
 import i18next from "i18next";
 import { addTextObject, TextStyle } from "./text";
@@ -278,7 +278,7 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
     this.externalPartyContainer.setAlpha(0);
     globalScene.tweens.add({
       targets: this.externalPartyContainer,
-      duration: fixedInt(1000),
+      duration: fixedNumber(1000),
       ease: "Sine.easeInOut",
       y: "-=24",
       alpha: 1,
@@ -287,7 +287,7 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
     this.infoContainer.setAlpha(0);
     globalScene.tweens.add({
       targets: this.infoContainer,
-      duration: fixedInt(1000),
+      duration: fixedNumber(1000),
       ease: "Sine.easeInOut",
       y: "-=24",
       alpha: 1,

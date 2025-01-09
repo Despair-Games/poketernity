@@ -20,16 +20,12 @@ export class StealPositiveStatsAttr extends MoveEffectAttr {
     super(false, { trigger: MoveEffectTrigger.PRE_APPLY });
   }
 
-  /**
-   * Steals the given target's stat stages and adds them to the user
-   * @returns `true` if any stat stages were stolen
-   */
-  override apply(user: Pokemon, target: Pokemon, _move: Move, _args?: any[]): boolean {
+  override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
     let statsStolen: boolean = false;
     for (const s of BATTLE_STATS) {
       if (target.getStatStage(s) > 0) {
         const userStatChange = new NumberHolder(target.getStatStage(s));
-        applyAbAttrs(StatStageChangeMultiplierAbAttr, user, null, false, userStatChange);
+        applyAbAttrs(StatStageChangeMultiplierAbAttr, user, false, userStatChange);
         user.setStatStage(s, user.getStatStage(s) + userStatChange.value);
         target.setStatStage(s, 0);
       }

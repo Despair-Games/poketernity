@@ -6,7 +6,7 @@ import { Type } from "#enums/type";
 import { Command } from "./command-ui-handler";
 import { Mode } from "./ui";
 import UiHandler from "./ui-handler";
-import { getLocalizedSpriteKey, fixedInt, padInt } from "#app/utils";
+import { getLocalizedSpriteKey, fixedNumber, padInt } from "#app/utils";
 import { MoveCategory } from "#app/enums/move-category";
 import i18next from "i18next";
 import { Button } from "#enums/buttons";
@@ -197,7 +197,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
     }
     globalScene.tweens.add({
       targets: [this.movesContainer, this.cursorObj],
-      duration: fixedInt(125),
+      duration: fixedNumber(125),
       ease: "Sine.easeInOut",
       alpha: visible ? 0 : 1,
     });

@@ -30,7 +30,7 @@ export class TypeImmunityAbAttr extends PreDefendAbAttr {
    * @param attacker - The attacking {@linkcode Pokemon}
    * @param move The used {@linkcode Move}
    * @param _cancelled N/A
-   * @param args `[0]`: {@linkcode NumberHolder} gets set to `0` if the pokemon is immune
+   * @param typeMultiplier {@linkcode NumberHolder} gets set to `0` if the pokemon is immune
    */
   override applyPreDefend(
     pokemon: Pokemon,
@@ -39,9 +39,8 @@ export class TypeImmunityAbAttr extends PreDefendAbAttr {
     attacker: Pokemon,
     move: Move,
     _cancelled: BooleanHolder,
-    args: any[],
+    typeMultiplier: NumberHolder,
   ): boolean {
-    const typeMultiplier: NumberHolder = args[0];
     // Field moves should ignore immunity
     if ([MoveTarget.BOTH_SIDES, MoveTarget.ENEMY_SIDE, MoveTarget.USER_SIDE].includes(move.moveTarget)) {
       return false;

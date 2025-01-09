@@ -18,8 +18,8 @@ import { initStatsKeys } from "#app/ui/game-stats-ui-handler";
 import { initVouchers } from "#app/system/voucher";
 import { Biome } from "#enums/biome";
 import { initMysteryEncounters } from "#app/data/mystery-encounters/mystery-encounters";
-import { initAbilities } from "./data/abilities";
-import { initMoves } from "./data/all-moves";
+import { initAbilities } from "#app/data/all-abilities";
+import { initMoves } from "#app/data/all-moves";
 
 export class LoadingScene extends SceneBase {
   public static readonly KEY = "loading";

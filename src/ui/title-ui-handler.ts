@@ -1,13 +1,13 @@
-import { getSplashMessages } from "#app/data/splash-messages";
-import { globalScene } from "#app/global-scene";
-import { api } from "#app/plugins/api/api";
-import { TimedEventDisplay } from "#app/timed-event-manager";
-import OptionSelectUiHandler from "#app/ui/option-select-ui-handler";
 import { Mode } from "#app/ui/ui";
-import { fixedInt, randItem } from "#app/utils";
+import { fixedNumber, randItem } from "#app/utils";
+import { TextStyle, addTextObject, getTextStyleOptions } from "#app/ui/text";
+import { getSplashMessages } from "#app/data/splash-messages";
 import i18next from "i18next";
+import { TimedEventDisplay } from "#app/timed-event-manager";
 import { version } from "../../package.json";
-import { TextStyle, addTextObject, getTextStyleOptions } from "./text";
+import { api } from "#app/plugins/api/api";
+import { globalScene } from "#app/global-scene";
+import OptionSelectUiHandler from "#app/ui/option-select-ui-handler";
 
 export default class TitleUiHandler extends OptionSelectUiHandler {
   /** If the stats can not be retrieved, use this fallback value */
@@ -67,7 +67,7 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
 
     globalScene.tweens.add({
       targets: this.splashMessageText,
-      duration: fixedInt(350),
+      duration: fixedNumber(350),
       scale: originalSplashMessageScale * 1.25,
       loop: -1,
       yoyo: true,
@@ -121,7 +121,7 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
 
       globalScene.tweens.add({
         targets: [this.titleContainer, ui.getMessageHandler().bg],
-        duration: fixedInt(325),
+        duration: fixedNumber(325),
         alpha: (target: any) => (target === this.titleContainer ? 1 : 0),
         ease: "Sine.easeInOut",
       });
@@ -142,7 +142,7 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
 
     globalScene.tweens.add({
       targets: [this.titleContainer, ui.getMessageHandler().bg],
-      duration: fixedInt(325),
+      duration: fixedNumber(325),
       alpha: (target: any) => (target === this.titleContainer ? 0 : 1),
       ease: "Sine.easeInOut",
     });

@@ -25,7 +25,6 @@ export class SynchronizeStatusAbAttr extends PostSetStatusAbAttr {
     _passive: boolean,
     effect: StatusEffect,
     simulated: boolean,
-    _args: any[],
   ): boolean {
     /** Synchronizable statuses */
     const syncStatuses = new Set<StatusEffect>([

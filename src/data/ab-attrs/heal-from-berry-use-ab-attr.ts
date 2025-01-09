@@ -22,19 +22,16 @@ export class HealFromBerryUseAbAttr extends AbAttr {
     this.healPercent = Phaser.Math.Clamp(healPercent, 0, 1);
   }
 
-  override apply(pokemon: Pokemon, passive: boolean, simulated: boolean, ..._args: any[]): boolean {
+  override apply(pokemon: Pokemon, passive: boolean, simulated: boolean): boolean {
     const { name: abilityName } = passive ? pokemon.getPassiveAbility() : pokemon.getAbility();
     if (!simulated) {
       globalScene.unshiftPhase(
-        new PokemonHealPhase(
-          pokemon.getBattlerIndex(),
-          toDmgValue(pokemon.getMaxHp() * this.healPercent),
-          i18next.t("abilityTriggers:healFromBerryUse", {
+        new PokemonHealPhase(pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() * this.healPercent), {
+          message: i18next.t("abilityTriggers:healFromBerryUse", {
             pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
             abilityName,
           }),
-          true,
-        ),
+        }),
       );
     }
     return true;

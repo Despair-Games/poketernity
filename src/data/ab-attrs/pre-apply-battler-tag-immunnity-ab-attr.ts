@@ -26,7 +26,6 @@ export class PreApplyBattlerTagImmunityAbAttr extends PreApplyBattlerTagAbAttr {
     simulated: boolean,
     tag: BattlerTag,
     cancelled: BooleanHolder,
-    _args: any[],
   ): boolean {
     if (this.immuneTagTypes.includes(tag.tagType)) {
       cancelled.value = true;

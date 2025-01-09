@@ -16,7 +16,7 @@ export class PostSummonUnnamedMessageAbAttr extends PostSummonAbAttr {
     this.message = message;
   }
 
-  override applyPostSummon(_pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
+  override applyPostSummon(_pokemon: Pokemon, _passive: boolean, simulated: boolean): boolean {
     if (!simulated) {
       globalScene.queueMessage(this.message);
     }

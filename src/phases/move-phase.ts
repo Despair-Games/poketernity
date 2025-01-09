@@ -1,32 +1,32 @@
 import { BattlerIndex } from "#app/battle";
-import { globalScene } from "#app/global-scene";
-import { applyAbAttrs, applyPostMoveUsedAbAttrs, applyPreAttackAbAttrs } from "#app/data/ability";
-import { IncreasePpAbAttr } from "#app/data/ab-attrs/increase-pp-ab-attr";
-import { ReduceStatusEffectDurationAbAttr } from "#app/data/ab-attrs/reduce-status-effect-duration-ab-attr";
 import { BlockRedirectAbAttr } from "#app/data/ab-attrs/block-redirect-ab-attr";
-import { RedirectMoveAbAttr } from "#app/data/ab-attrs/redirect-move-ab-attr";
+import { IncreasePpAbAttr } from "#app/data/ab-attrs/increase-pp-ab-attr";
+import { PokemonTypeChangeAbAttr } from "#app/data/ab-attrs/pokemon-type-change-ab-attr";
 import { PostMoveUsedAbAttr } from "#app/data/ab-attrs/post-move-used-ab-attr";
+import { RedirectMoveAbAttr } from "#app/data/ab-attrs/redirect-move-ab-attr";
+import { ReduceStatusEffectDurationAbAttr } from "#app/data/ab-attrs/reduce-status-effect-duration-ab-attr";
+import { applyAbAttrs, applyPostMoveUsedAbAttrs, applyPreAttackAbAttrs } from "#app/data/ability";
+import { allMoves } from "#app/data/all-moves";
 import type { DelayedAttackTag } from "#app/data/arena-tag";
 import { CommonAnim } from "#app/data/battle-anims";
 import { BattlerTagLapseType, CenterOfAttentionTag } from "#app/data/battler-tags";
 import { applyMoveAttrs } from "#app/data/move";
-import { allMoves } from "#app/data/all-moves";
-import { CopyMoveAttr } from "#app/data/move-attrs/copy-move-attr";
 import { BypassRedirectAttr } from "#app/data/move-attrs/bypass-redirect-attr";
 import { BypassSleepAttr } from "#app/data/move-attrs/bypass-sleep-attr";
+import { CopyMoveAttr } from "#app/data/move-attrs/copy-move-attr";
+import { DelayedAttackAttr } from "#app/data/move-attrs/delayed-attack-attr";
 import { HealStatusEffectAttr } from "#app/data/move-attrs/heal-status-effect-attr";
 import { PreMoveMessageAttr } from "#app/data/move-attrs/pre-move-message-attr";
-import { MoveFlags } from "#app/enums/move-flags";
+import { frenzyMissFunc } from "#app/data/move-utils";
 import { SpeciesFormChangePreMoveTrigger } from "#app/data/pokemon-forms";
 import { getStatusEffectActivationText, getStatusEffectHealText } from "#app/data/status-effect";
-import { Type } from "#enums/type";
+import { getTerrainBlockMessage } from "#app/data/terrain";
 import { MoveUsedEvent } from "#app/events/battle-scene";
-import type { PokemonMove } from "#app/field/pokemon";
-import type { Pokemon } from "#app/field/pokemon";
-import { MoveResult } from "#app/field/pokemon";
+import { MoveResult, type Pokemon, type PokemonMove } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import Overrides from "#app/overrides";
-import { BattlePhase } from "#app/phases/battle-phase";
+import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { MoveChargePhase } from "#app/phases/move-charge-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
@@ -36,14 +36,30 @@ import { BooleanHolder, NumberHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import { MoveFlags } from "#enums/move-flags";
 import { Moves } from "#enums/moves";
 import { StatusEffect } from "#enums/status-effect";
+import { Type } from "#enums/type";
 import i18next from "i18next";
-import { getTerrainBlockMessage } from "#app/data/terrain";
-import { PokemonTypeChangeAbAttr } from "#app/data/ab-attrs/pokemon-type-change-ab-attr";
-import { DelayedAttackAttr } from "#app/data/move-attrs/delayed-attack-attr";
-import { frenzyMissFunc } from "#app/data/move-utils";
 
+/**
+ * Resolves the following:
+ * - Checks if the move can be executed
+ * - Applies target redirection based on move effects and abilities
+ * - Chooses the move target for counterattack moves
+ * - Applies the effects of statuses that might stop a move from executing
+ * - Lapses `PRE_MOVE` and `MOVE` `BattlerTag`s
+ * - Checks if it's the first turn of a charging move and passes off to a {@linkcode MoveChargePhase} if so
+ * - Handles the delayed attack of Future Sight and Doom Desire
+ * - Handles PP usage
+ * - Handles move failure due to weather or terrain
+ * - Handles the Dancer ability
+ *
+ * If the move is successful then a {@linkcode MoveEffectPhase} is queued.
+ * Regardless of success, a {@linkcode MoveEndPhase} is queued.
+ *
+ * @extends BattlePhase
+ */
 export class MovePhase extends BattlePhase {
   protected _pokemon: Pokemon;
   protected _move: PokemonMove;
@@ -106,7 +122,7 @@ export class MovePhase extends BattlePhase {
     return (
       this.pokemon.isActive(true)
       && this.move.isUsable(this.pokemon, this.ignorePp, ignoreDisableTags)
-      && !!this.targets.length
+      && this.targets.length > 0
     );
   }
 
@@ -185,8 +201,13 @@ export class MovePhase extends BattlePhase {
     }
   }
 
+  /**
+   * @returns An array of all {@linkcode Pokemon} targeted by this phase's invoked move.
+   * Unless the move is field-targeting, this array only includes active (e.g., non-fainted) targets.
+   */
   public getActiveTargetPokemon(): Pokemon[] {
-    return globalScene.getField(true).filter((p) => this.targets.includes(p.getBattlerIndex()));
+    const activeOnly = !this.move.getMove().isFieldTarget();
+    return globalScene.getField(activeOnly).filter((p) => this.targets.includes(p.getBattlerIndex()));
   }
 
   /**
@@ -210,7 +231,6 @@ export class MovePhase extends BattlePhase {
           applyAbAttrs(
             ReduceStatusEffectDurationAbAttr,
             this.pokemon,
-            null,
             false,
             this.pokemon.status.effect,
             turnsRemaining,
@@ -400,7 +420,7 @@ export class MovePhase extends BattlePhase {
   }
 
   /** Queues a {@linkcode MoveChargePhase} for this phase's invoked move. */
-  protected chargeMove() {
+  protected chargeMove(): void {
     const move = this.move.getMove();
     const targets = this.getActiveTargetPokemon();
 
@@ -466,7 +486,7 @@ export class MovePhase extends BattlePhase {
       globalScene
         .getField(true)
         .filter((p) => p !== this.pokemon)
-        .forEach((p) => applyAbAttrs(RedirectMoveAbAttr, p, null, false, this.move.moveId, redirectTarget));
+        .forEach((p) => applyAbAttrs(RedirectMoveAbAttr, p, false, this.move.moveId, redirectTarget));
 
       /** `true` if an Ability is responsible for redirecting the move to another target; `false` otherwise */
       let redirectedByAbility = currentTarget !== redirectTarget.value;

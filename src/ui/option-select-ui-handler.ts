@@ -4,7 +4,7 @@ import { TextStyle, addBBCodeTextObject, getTextStyleOptions } from "#app/ui/tex
 import { Mode } from "#app/ui/ui";
 import UiHandler from "#app/ui/ui-handler";
 import { addWindow } from "#app/ui/ui-theme";
-import { fixedInt } from "#app/utils";
+import { fixedNumber } from "#app/utils";
 import { Button } from "#enums/buttons";
 import type BBCodeText from "phaser3-rex-plugins/plugins/gameobjects/tagtext/bbcodetext/BBCodeText";
 
@@ -201,7 +201,7 @@ export default class OptionSelectUiHandler extends UiHandler {
       this.blockInput = true;
       this.optionSelectText.setAlpha(0.5);
       this.cursorObj?.setAlpha(0.8);
-      globalScene.time.delayedCall(fixedInt(this.config.inputDelay), () => this.unblockInput());
+      globalScene.time.delayedCall(fixedNumber(this.config.inputDelay), () => this.unblockInput());
     }
 
     return true;

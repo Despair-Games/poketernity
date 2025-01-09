@@ -10,7 +10,7 @@ import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounte
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
-import { TrainerSlot } from "#app/data/trainer-config";
+import { TrainerSlot } from "#enums/trainer-slot";
 import { HiddenAbilityRateBoosterModifier, IvScannerModifier } from "#app/modifier/modifier";
 import type { EnemyPokemon } from "#app/field/pokemon";
 import { PokeballType } from "#enums/pokeball";
@@ -557,7 +557,7 @@ async function doEndTurn(cursorIndex: number) {
       leaveEncounterWithoutBattle(true);
     }
   } else {
-    globalScene.queueMessage(getEncounterText(`${namespace}:safari.watching`) ?? "", 0, null, 1000);
+    globalScene.queueMessage(getEncounterText(`${namespace}:safari.watching`) ?? "", null, null, 1000);
     initSubsequentOptionSelect({
       overrideOptions: safariZoneGameOptions,
       startingCursorIndex: cursorIndex,

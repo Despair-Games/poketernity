@@ -1,13 +1,17 @@
-import { globalScene } from "#app/global-scene";
 import { type BattlerIndex } from "#app/battle";
 import { type DamageResult, HitResult } from "#app/field/pokemon";
-import { fixedInt } from "#app/utils";
-import { PokemonPhase } from "#app/phases/pokemon-phase";
+import { globalScene } from "#app/global-scene";
+import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
+import { fixedNumber } from "#app/utils";
 
+/**
+ * Displays damage numbers and plays move hit SFX during battle
+ * @extends PokemonPhase
+ */
 export class DamageAnimPhase extends PokemonPhase {
   private amount: number;
-  private damageResult: DamageResult;
-  private critical: boolean;
+  private readonly damageResult: DamageResult;
+  private readonly critical: boolean;
 
   constructor(
     battlerIndex: BattlerIndex,
@@ -22,28 +26,28 @@ export class DamageAnimPhase extends PokemonPhase {
     this.critical = critical;
   }
 
-  override start() {
+  public override start(): void {
     super.start();
 
     if (this.damageResult === HitResult.ONE_HIT_KO) {
       if (globalScene.moveAnimations) {
         globalScene.toggleInvert(true);
       }
-      globalScene.time.delayedCall(fixedInt(1000), () => {
+      globalScene.time.delayedCall(fixedNumber(1000), () => {
         globalScene.toggleInvert(false);
-        this.applyDamage();
+        this.displayDamage();
       });
       return;
     }
 
-    this.applyDamage();
+    this.displayDamage();
   }
 
-  updateAmount(amount: number): void {
+  public updateAmount(amount: number): void {
     this.amount = amount;
   }
 
-  applyDamage() {
+  protected displayDamage(): void {
     switch (this.damageResult) {
       case HitResult.EFFECTIVE:
         globalScene.playSound("se/hit");
@@ -84,7 +88,7 @@ export class DamageAnimPhase extends PokemonPhase {
     }
   }
 
-  override end() {
+  public override end(): void {
     if (globalScene.currentBattle.isClassicFinalBoss) {
       globalScene.initFinalBossPhaseTwo(this.getPokemon());
     } else {

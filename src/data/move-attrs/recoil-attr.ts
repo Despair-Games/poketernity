@@ -9,6 +9,10 @@ import { applyAbAttrs } from "#app/data/ability";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
+/**
+ * Attribute to apply {@link https://bulbapedia.bulbagarden.net/wiki/Recoil | recoil damage} to the user.
+ * @extends MoveEffectAttr
+ */
 export class RecoilAttr extends MoveEffectAttr {
   private useHp: boolean;
   private damageRatio: number;
@@ -22,15 +26,15 @@ export class RecoilAttr extends MoveEffectAttr {
     this.unblockable = unblockable;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    if (!super.apply(user, target, move, args)) {
+  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+    if (!super.apply(user, target, move)) {
       return false;
     }
 
     const cancelled = new BooleanHolder(false);
     if (!this.unblockable) {
-      applyAbAttrs(BlockRecoilDamageAttr, user, cancelled);
-      applyAbAttrs(BlockNonDirectDamageAbAttr, user, cancelled);
+      applyAbAttrs(BlockRecoilDamageAttr, user, false, cancelled);
+      applyAbAttrs(BlockNonDirectDamageAbAttr, user, false, cancelled);
     }
 
     if (cancelled.value) {

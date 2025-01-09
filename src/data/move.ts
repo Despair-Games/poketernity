@@ -311,7 +311,7 @@ export abstract class Move implements Localizable {
 
     const bypassed = new BooleanHolder(false);
     // TODO: Allow this to be simulated
-    applyAbAttrs(InfiltratorAbAttr, user, null, false, bypassed);
+    applyAbAttrs(InfiltratorAbAttr, user, false, bypassed);
 
     return !bypassed.value && !this.hasFlag(MoveFlags.SOUND_BASED) && !this.hasFlag(MoveFlags.IGNORE_SUBSTITUTE);
   }
@@ -589,7 +589,7 @@ export abstract class Move implements Localizable {
       case MoveFlags.IGNORE_ABILITIES:
         if (user.hasAbilityWithAttr(MoveAbilityBypassAbAttr)) {
           const abilityEffectsIgnored = new BooleanHolder(false);
-          applyAbAttrs(MoveAbilityBypassAbAttr, user, abilityEffectsIgnored, false, this);
+          applyAbAttrs(MoveAbilityBypassAbAttr, user, false, abilityEffectsIgnored, this);
           if (abilityEffectsIgnored.value) {
             return true;
           }
@@ -774,7 +774,7 @@ export abstract class Move implements Localizable {
         .flat(),
     );
     for (const aura of fieldAuras) {
-      aura.applyPreAttack(source, null, simulated, target, this, [power]);
+      aura.applyPreAttack(source, null, simulated, target, this, power);
     }
 
     const alliedField: Pokemon[] = source.getField();
@@ -807,7 +807,7 @@ export abstract class Move implements Localizable {
     const priority = new NumberHolder(this.priority);
 
     applyMoveAttrs(IncrementMovePriorityAttr, user, null, this, priority);
-    applyAbAttrs(ChangeMovePriorityAbAttr, user, null, simulated, this, priority);
+    applyAbAttrs(ChangeMovePriorityAbAttr, user, simulated, this, priority);
 
     return priority.value;
   }
@@ -1024,9 +1024,9 @@ function applyMoveAttrsInternal(
   user: Pokemon | null,
   target: Pokemon | null,
   move: Move,
-  args: any[],
+  ...args: unknown[]
 ): void {
-  move.attrs.filter((attr) => attrFilter(attr)).forEach((attr) => attr.apply(user, target, move, args));
+  move.attrs.filter((attr) => attrFilter(attr)).forEach((attr) => attr.apply(user, target, move, ...args));
 }
 
 function applyMoveChargeAttrsInternal(
@@ -1034,9 +1034,9 @@ function applyMoveChargeAttrsInternal(
   user: Pokemon | null,
   target: Pokemon | null,
   move: ChargingMove,
-  args: any[],
+  ...args: unknown[]
 ): void {
-  move.chargeAttrs.filter((attr) => attrFilter(attr)).forEach((attr) => attr.apply(user, target, move, args));
+  move.chargeAttrs.filter((attr) => attrFilter(attr)).forEach((attr) => attr.apply(user, target, move, ...args));
 }
 
 export function applyMoveAttrs(
@@ -1044,9 +1044,9 @@ export function applyMoveAttrs(
   user: Pokemon | null,
   target: Pokemon | null,
   move: Move,
-  ...args: any[]
+  ...args: unknown[]
 ): void {
-  applyMoveAttrsInternal((attr: MoveAttr) => attr instanceof attrType, user, target, move, args);
+  applyMoveAttrsInternal((attr: MoveAttr) => attr instanceof attrType, user, target, move, ...args);
 }
 
 export function applyFilteredMoveAttrs(
@@ -1054,9 +1054,9 @@ export function applyFilteredMoveAttrs(
   user: Pokemon,
   target: Pokemon | null,
   move: Move,
-  ...args: any[]
+  ...args: unknown[]
 ): void {
-  applyMoveAttrsInternal(attrFilter, user, target, move, args);
+  applyMoveAttrsInternal(attrFilter, user, target, move, ...args);
 }
 
 export function applyMoveChargeAttrs(
@@ -1064,9 +1064,9 @@ export function applyMoveChargeAttrs(
   user: Pokemon | null,
   target: Pokemon | null,
   move: ChargingMove,
-  ...args: any[]
+  ...args: unknown[]
 ): void {
-  applyMoveChargeAttrsInternal((attr: MoveAttr) => attr instanceof attrType, user, target, move, args);
+  applyMoveChargeAttrsInternal((attr: MoveAttr) => attr instanceof attrType, user, target, move, ...args);
 }
 
 export type MoveTargetSet = {

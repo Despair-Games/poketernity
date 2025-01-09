@@ -1,6 +1,6 @@
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder, NumberHolder } from "#app/utils";
+import type { NumberHolder } from "#app/utils";
 import { Moves } from "#enums/moves";
 import { AbAttr } from "./ab-attr";
 
@@ -25,15 +25,10 @@ export class MoveEffectChanceMultiplierAbAttr extends AbAttr {
     _pokemon: Pokemon,
     _passive: boolean,
     _simulated: boolean,
-    _cancelled: BooleanHolder,
-    args: any[],
+    moveChance: NumberHolder,
+    move: Move,
+    showAbility: boolean,
   ): boolean {
-    const moveChance: NumberHolder = args[0];
-    const move: Move = args[1];
-    // const target: Pokemon = args[2];
-    // const selfEffect: boolean = args[3];
-    const showAbility: boolean = args[4];
-
     this.showAbility = showAbility;
 
     const exceptMoves = [Moves.ORDER_UP, Moves.ELECTRO_SHOT];

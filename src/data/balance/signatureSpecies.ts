@@ -21,14 +21,14 @@ export const signatureSpecies: SignatureSpecies = {
   GIOVANNI: [Species.SANDILE, Species.MURKROW, Species.NIDORAN_M, Species.NIDORAN_F],
 
   // Johto gym leaders
-  FALKNER: [Species.PIDGEY, Species.HOOTHOOT, Species.DODUO],
-  BUGSY: [Species.SCYTHER, Species.HERACROSS, Species.SHUCKLE, Species.PINSIR],
-  WHITNEY: [Species.GIRAFARIG, Species.MILTANK],
+  FALKNER: [Species.PIDGEY, Species.HOOTHOOT, Species.NATU, Species.MURKROW],
+  BUGSY: [Species.SCYTHER, [Species.CATERPIE, Species.WEEDLE], Species.HERACROSS, Species.SHUCKLE],
+  WHITNEY: [Species.MILTANK, Species.CLEFFA, Species.GIRAFARIG, Species.TEDDIURSA],
   MORTY: [Species.GASTLY, Species.MISDREAVUS, Species.SABLEYE],
-  CHUCK: [Species.POLIWRATH, Species.MANKEY],
-  JASMINE: [Species.MAGNEMITE, Species.STEELIX],
-  PRYCE: [Species.SEEL, Species.SWINUB],
-  CLAIR: [Species.DRATINI, Species.HORSEA, Species.GYARADOS],
+  CHUCK: [Species.POLIWAG, Species.MANKEY, Species.HITMONTOP],
+  JASMINE: [Species.STEELIX, Species.MAGNEMITE, Species.SKARMORY],
+  PRYCE: [Species.SWINUB, Species.SEEL, Species.SNEASEL],
+  CLAIR: [Species.HORSEA, Species.DRATINI, Species.MAGIKARP],
 
   // Hoenn gym leaders
   ROXANNE: [Species.GEODUDE, Species.NOSEPASS],

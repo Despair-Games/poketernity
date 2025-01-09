@@ -23,7 +23,6 @@ export class PokemonTypeChangeAbAttr extends PreAttackAbAttr {
     simulated: boolean,
     _defender: Pokemon,
     move: Move,
-    _args: any[],
   ): boolean {
     if (
       !pokemon.isTerastallized()

@@ -9,6 +9,10 @@ import { applyAbAttrs, applyPreDefendAbAttrs } from "../ability";
 import type { Move } from "../move";
 import { AddBattlerTagAttr } from "./add-battler-tag-attr";
 
+/**
+ * Attribute adding a chance to flinch the target.
+ * @extends AddBattlerTagAttr
+ */
 export class FlinchAttr extends AddBattlerTagAttr {
   constructor() {
     super(BattlerTagType.FLINCHED, false);
@@ -24,17 +28,7 @@ export class FlinchAttr extends AddBattlerTagAttr {
   ): number {
     const moveChance = new NumberHolder(this.effectChanceOverride ?? move.chance);
 
-    applyAbAttrs(
-      MoveEffectChanceMultiplierAbAttr,
-      user,
-      null,
-      false,
-      moveChance,
-      move,
-      target,
-      selfEffect,
-      showAbility,
-    );
+    applyAbAttrs(MoveEffectChanceMultiplierAbAttr, user, false, moveChance, move, showAbility);
 
     if (moveChance.value <= move.chance) {
       const userSide = user.getArenaTagSide();

@@ -26,6 +26,7 @@ import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { ProtectStatAbAttr } from "./ab-attrs/protect-stat-ab-attr";
+import { MoveFlags } from "#enums/move-flags";
 
 export enum ArenaTagSide {
   BOTH,
@@ -146,7 +147,7 @@ export class MistTag extends ArenaTag {
     if (attacker) {
       const bypassed = new BooleanHolder(false);
       // TODO: Allow this to be simulated
-      applyAbAttrs(InfiltratorAbAttr, attacker, null, false, bypassed);
+      applyAbAttrs(InfiltratorAbAttr, attacker, simulated, bypassed);
       if (bypassed.value) {
         return false;
       }
@@ -204,14 +205,14 @@ export class WeakenMoveScreenTag extends ArenaTag {
    */
   override apply(
     _arena: Arena,
-    _simulated: boolean,
+    simulated: boolean,
     attacker: Pokemon,
     moveCategory: MoveCategory,
     damageMultiplier: NumberHolder,
   ): boolean {
     if (this.weakenedCategories.includes(moveCategory)) {
       const bypassed = new BooleanHolder(false);
-      applyAbAttrs(InfiltratorAbAttr, attacker, null, false, bypassed);
+      applyAbAttrs(InfiltratorAbAttr, attacker, simulated, bypassed);
       if (bypassed.value) {
         return false;
       }
@@ -339,12 +340,15 @@ export class ConditionalProtectTag extends ArenaTag {
     arena: Arena,
     simulated: boolean,
     isProtected: BooleanHolder,
-    _attacker: Pokemon,
+    attacker: Pokemon,
     defender: Pokemon,
     moveId: Moves,
-    ignoresProtectBypass: BooleanHolder,
   ): boolean {
-    if ((this.side === ArenaTagSide.PLAYER) === defender.isPlayer() && this.protectConditionFunc(arena, moveId)) {
+    if (
+      (this.side === ArenaTagSide.PLAYER) === defender.isPlayer()
+      && this.protectConditionFunc(arena, moveId)
+      && (this.ignoresBypass || !allMoves[moveId].checkFlag(MoveFlags.IGNORE_PROTECT, attacker, defender))
+    ) {
       if (!isProtected.value) {
         isProtected.value = true;
         if (!simulated) {
@@ -357,8 +361,6 @@ export class ConditionalProtectTag extends ArenaTag {
           );
         }
       }
-
-      ignoresProtectBypass.value = ignoresProtectBypass.value || this.ignoresBypass;
       return true;
     }
     return false;
@@ -560,7 +562,7 @@ class WishTag extends ArenaTag {
     const target = globalScene.getFieldPokemonByBattlerIndex(this.battlerIndex);
     if (target?.isActive(true)) {
       globalScene.queueMessage(this.triggerMessage);
-      globalScene.unshiftPhase(new PokemonHealPhase(target.getBattlerIndex(), this.healHp, null, true, false));
+      globalScene.unshiftPhase(new PokemonHealPhase(target.getBattlerIndex(), this.healHp));
     }
   }
 }
@@ -762,7 +764,7 @@ class SpikesTag extends ArenaTrapTag {
   override activateTrap(pokemon: Pokemon, simulated: boolean): boolean {
     if (pokemon.isGrounded()) {
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, cancelled);
+      applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, simulated, cancelled);
 
       if (simulated) {
         return !cancelled.value;
@@ -949,7 +951,7 @@ class StealthRockTag extends ArenaTrapTag {
 
   override activateTrap(pokemon: Pokemon, simulated: boolean): boolean {
     const cancelled = new BooleanHolder(false);
-    applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, cancelled);
+    applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, simulated, cancelled);
 
     if (cancelled.value) {
       return false;
@@ -995,19 +997,28 @@ class StickyWebTag extends ArenaTrapTag {
     super.onAdd(arena);
     const source = this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
     if (!quiet && source) {
-      globalScene.queueMessage(
-        i18next.t("arenaTag:stickyWebOnAdd", {
-          moveName: this.getMoveName(),
-          opponentDesc: source.getOpponentDescriptor(),
-        }),
-      );
+      if (this.side === ArenaTagSide.PLAYER) {
+        globalScene.queueMessage(
+          i18next.t("arenaTag:stickyWebOnAddPlayerSide", {
+            moveName: this.getMoveName(),
+            opponentDesc: source.getOpponentDescriptor(),
+          }),
+        );
+      } else {
+        globalScene.queueMessage(
+          i18next.t("arenaTag:stickyWebOnAddEnemySide", {
+            moveName: this.getMoveName(),
+            opponentDesc: source.getOpponentDescriptor(),
+          }),
+        );
+      }
     }
   }
 
   override activateTrap(pokemon: Pokemon, simulated: boolean): boolean {
     if (pokemon.isGrounded()) {
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs(ProtectStatAbAttr, pokemon, cancelled);
+      applyAbAttrs(ProtectStatAbAttr, pokemon, simulated, cancelled);
 
       if (simulated) {
         return !cancelled.value;
@@ -1128,7 +1139,7 @@ class TailwindTag extends ArenaTag {
       // Raise attack by one stage if party member has WIND_RIDER ability
       if (pokemon.hasAbility(Abilities.WIND_RIDER)) {
         globalScene.unshiftPhase(new ShowAbilityPhase(pokemon.getBattlerIndex()));
-        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [Stat.ATK], 1, true));
+        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [Stat.ATK], 1));
       }
     }
   }
@@ -1149,8 +1160,8 @@ class TailwindTag extends ArenaTag {
  * Doubles the prize money from trainers and money moves like {@linkcode Moves.PAY_DAY} and {@linkcode Moves.MAKE_IT_RAIN}.
  */
 class HappyHourTag extends ArenaTag {
-  constructor(turnCount: number, sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.HAPPY_HOUR, turnCount, Moves.HAPPY_HOUR, sourceId, side);
+  constructor(sourceId: number, side: ArenaTagSide) {
+    super(ArenaTagType.HAPPY_HOUR, 0, Moves.HAPPY_HOUR, sourceId, side);
   }
 
   override onAdd(_arena: Arena): void {
@@ -1423,7 +1434,7 @@ export function getArenaTag(
     case ArenaTagType.TAILWIND:
       return new TailwindTag(turnCount, sourceId, side);
     case ArenaTagType.HAPPY_HOUR:
-      return new HappyHourTag(turnCount, sourceId, side);
+      return new HappyHourTag(sourceId, side);
     case ArenaTagType.SAFEGUARD:
       return new SafeguardTag(turnCount, sourceId, side);
     case ArenaTagType.IMPRISON:

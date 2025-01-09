@@ -27,18 +27,18 @@ export class PostTurnStatusHealAbAttr extends PostTurnAbAttr {
    * @param _args N/A
    * @returns Returns `true` if healed from status, `false` if not
    */
-  override applyPostTurn(pokemon: Pokemon, passive: boolean, simulated: boolean, _args: any[]): boolean {
+  override applyPostTurn(pokemon: Pokemon, passive: boolean, simulated: boolean): boolean {
     if (pokemon.status && this.effects.includes(pokemon.status.effect)) {
       if (!pokemon.isFullHp()) {
         if (!simulated) {
           const abilityName = (!passive ? pokemon.getAbility() : pokemon.getPassiveAbility()).name;
           globalScene.unshiftPhase(
-            new PokemonHealPhase(
-              pokemon.getBattlerIndex(),
-              toDmgValue(pokemon.getMaxHp() / 8),
-              i18next.t("abilityTriggers:poisonHeal", { pokemonName: getPokemonNameWithAffix(pokemon), abilityName }),
-              true,
-            ),
+            new PokemonHealPhase(pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() / 8), {
+              message: i18next.t("abilityTriggers:poisonHeal", {
+                pokemonName: getPokemonNameWithAffix(pokemon),
+                abilityName,
+              }),
+            }),
           );
         }
         return true;

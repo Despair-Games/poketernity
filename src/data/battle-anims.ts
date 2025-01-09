@@ -1062,8 +1062,6 @@ export abstract class BattleAnim {
                   (k) => (sprite.pipelineData[k] = (isUser ? user! : target).getSprite().pipelineData[k]),
                 ); // TODO: are those bangs correct?
                 sprite.setPipelineData("spriteKey", (isUser ? user! : target).getBattleSpriteKey());
-                sprite.setPipelineData("shiny", (isUser ? user : target).shiny);
-                sprite.setPipelineData("variant", (isUser ? user : target).variant);
                 sprite.setPipelineData("ignoreFieldPos", true);
                 spriteSource.on("animationupdate", (_anim, frame) => sprite.setFrame(frame.textureFrame));
                 globalScene.field.add(sprite);

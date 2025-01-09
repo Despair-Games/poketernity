@@ -1,7 +1,7 @@
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder } from "#app/utils";
+import type { BooleanHolder, NumberHolder } from "#app/utils";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { Type } from "#enums/type";
 import { TypeImmunityAbAttr } from "./type-immunity-ab-attr";
@@ -24,9 +24,9 @@ export class TypeImmunityAddBattlerTagAbAttr extends TypeImmunityAbAttr {
     attacker: Pokemon,
     move: Move,
     cancelled: BooleanHolder,
-    args: any[],
+    typeMultiplier: NumberHolder,
   ): boolean {
-    const ret = super.applyPreDefend(pokemon, passive, simulated, attacker, move, cancelled, args);
+    const ret = super.applyPreDefend(pokemon, passive, simulated, attacker, move, cancelled, typeMultiplier);
 
     if (ret) {
       cancelled.value = true; // Suppresses "No Effect" message

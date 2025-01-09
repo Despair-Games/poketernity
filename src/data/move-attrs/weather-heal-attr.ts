@@ -4,19 +4,24 @@ import { globalScene } from "#app/global-scene";
 import type { Move } from "#app/data/move";
 import { HealAttr } from "#app/data/move-attrs/heal-attr";
 
+/**
+ * Attribute to restore the user's HP.
+ * The heal ratio varies based on the active weather.
+ * @extends HealAttr
+ * @abstract
+ * @see {@linkcode getWeatherHealRatio}
+ */
 export abstract class WeatherHealAttr extends HealAttr {
   constructor() {
     super(0.5);
   }
 
-  override apply(user: Pokemon, _target: Pokemon, _move: Move, _args: any[]): boolean {
-    let healRatio = 0.5;
+  protected override getHealRatio(_user: Pokemon, _target: Pokemon, _move: Move): number {
     if (!globalScene.arena.weather?.isEffectSuppressed()) {
       const weatherType = globalScene.arena.weather?.weatherType || WeatherType.NONE;
-      healRatio = this.getWeatherHealRatio(weatherType);
+      return this.getWeatherHealRatio(weatherType);
     }
-    this.addHealPhase(user, healRatio);
-    return true;
+    return 0.5;
   }
 
   abstract getWeatherHealRatio(weatherType: WeatherType): number;

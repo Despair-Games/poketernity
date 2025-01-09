@@ -1796,15 +1796,12 @@ export class TurnHealModifier extends PokemonHeldItemModifier {
   override apply(pokemon: Pokemon): boolean {
     if (!pokemon.isFullHp()) {
       globalScene.unshiftPhase(
-        new PokemonHealPhase(
-          pokemon.getBattlerIndex(),
-          toDmgValue(pokemon.getMaxHp() / 16) * this.stackCount,
-          i18next.t("modifier:turnHealApply", {
+        new PokemonHealPhase(pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() / 16) * this.stackCount, {
+          message: i18next.t("modifier:turnHealApply", {
             pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
             typeName: this.type.name,
           }),
-          true,
-        ),
+        }),
       );
       return true;
     }
@@ -1900,11 +1897,12 @@ export class HitHealModifier extends PokemonHeldItemModifier {
         new PokemonHealPhase(
           pokemon.getBattlerIndex(),
           toDmgValue(pokemon.turnData.totalDamageDealt / 8) * this.stackCount,
-          i18next.t("modifier:hitHealApply", {
-            pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-            typeName: this.type.name,
-          }),
-          true,
+          {
+            message: i18next.t("modifier:hitHealApply", {
+              pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
+              typeName: this.type.name,
+            }),
+          },
         ),
       );
     }
@@ -2075,17 +2073,14 @@ export class PokemonInstantReviveModifier extends PokemonHeldItemModifier {
   override apply(pokemon: Pokemon): boolean {
     // Restore the Pokemon to half HP
     globalScene.unshiftPhase(
-      new PokemonHealPhase(
-        pokemon.getBattlerIndex(),
-        toDmgValue(pokemon.getMaxHp() / 2),
-        i18next.t("modifier:pokemonInstantReviveApply", {
+      new PokemonHealPhase(pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() / 2), {
+        message: i18next.t("modifier:pokemonInstantReviveApply", {
           pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
           typeName: this.type.name,
         }),
-        false,
-        false,
-        true,
-      ),
+        showFullHpMessage: false,
+        revive: true,
+      }),
     );
 
     // Remove the Pokemon's FAINT status
@@ -2093,7 +2088,7 @@ export class PokemonInstantReviveModifier extends PokemonHeldItemModifier {
 
     // Reapply Commander on the Pokemon's side of the field, if applicable
     const field = pokemon.getField();
-    field.forEach((p) => applyAbAttrs(CommanderAbAttr, p, null, false));
+    field.forEach((p) => applyAbAttrs(CommanderAbAttr, p, false));
     return true;
   }
 
@@ -3749,12 +3744,12 @@ export class EnemyTurnHealModifier extends EnemyPersistentModifier {
         new PokemonHealPhase(
           enemyPokemon.getBattlerIndex(),
           Math.max(Math.floor(enemyPokemon.getMaxHp() / (100 / this.healPercent)) * this.stackCount, 1),
-          i18next.t("modifier:enemyTurnHealApply", { pokemonNameWithAffix: getPokemonNameWithAffix(enemyPokemon) }),
-          true,
-          false,
-          false,
-          false,
-          true,
+          {
+            message: i18next.t("modifier:enemyTurnHealApply", {
+              pokemonNameWithAffix: getPokemonNameWithAffix(enemyPokemon),
+            }),
+            preventFullHeal: true,
+          },
         ),
       );
       return true;
