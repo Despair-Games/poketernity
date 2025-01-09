@@ -9,7 +9,7 @@ import { PostAttackAbAttr } from "./post-attack-ab-attr";
  */
 export class GorillaTacticsAbAttr extends PostAttackAbAttr {
   constructor() {
-    super(true, false);
+    super(false, false);
   }
 
   /**
