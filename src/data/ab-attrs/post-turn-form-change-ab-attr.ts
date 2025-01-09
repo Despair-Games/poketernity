@@ -4,9 +4,9 @@ import { globalScene } from "#app/global-scene";
 import { PostTurnAbAttr } from "./post-turn-ab-attr";
 
 export class PostTurnFormChangeAbAttr extends PostTurnAbAttr {
-  private readonly formFunc: (p: Pokemon) => integer;
+  private readonly formFunc: (p: Pokemon) => number;
 
-  constructor(formFunc: (p: Pokemon) => integer) {
+  constructor(formFunc: (p: Pokemon) => number) {
     super(true);
 
     this.formFunc = formFunc;

@@ -11,7 +11,6 @@ import { PostTurnAbAttr } from "./post-turn-ab-attr";
  * After the turn ends, try to create an extra item
  * @param itemType - The type of item to create
  * @param procChance - Chance to create an item
- * @see {@linkcode applyPostTurn()}
  * @extends PostTurnAbAttr
  */
 export class PostTurnLootAbAttr extends PostTurnAbAttr {

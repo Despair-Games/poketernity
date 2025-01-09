@@ -21,12 +21,6 @@ export class PostTurnStatusHealAbAttr extends PostTurnAbAttr {
     this.effects = effects;
   }
 
-  /**
-   * @param pokemon {@linkcode Pokemon} with the ability that will receive the healing
-   * @param passive N/A
-   * @param _args N/A
-   * @returns Returns `true` if healed from status, `false` if not
-   */
   override apply(pokemon: Pokemon, simulated: boolean): boolean {
     if (pokemon.status && this.effects.includes(pokemon.status.effect)) {
       if (!pokemon.isFullHp()) {
