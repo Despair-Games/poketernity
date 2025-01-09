@@ -1,6 +1,5 @@
 import { EffectSporeAbAttr } from "#app/data/ab-attrs/effect-spore-ab-attr";
 import { allMoves } from "#app/data/all-moves";
-import { HitResult } from "#app/field/pokemon";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
@@ -132,7 +131,7 @@ describe("Abilities - Effect Spore", () => {
     // Apply the Effect Spore attr while simulating the full range of possible RNG rolls.
     // Unfortunately, actually using Tackle 100 times takes too long, so we only apply the attr.
     for (rngSweepProgress = 0; rngSweepProgress < 100; rngSweepProgress++) {
-      abilityAttr.apply(playerPokemon, false, enemyPokemon, allMoves[Moves.TACKLE], HitResult.EFFECTIVE);
+      abilityAttr.apply(playerPokemon, false, enemyPokemon, allMoves[Moves.TACKLE]);
     }
 
     expect(sleepCount).toBe(11);
