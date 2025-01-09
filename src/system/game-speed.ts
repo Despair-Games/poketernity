@@ -3,7 +3,7 @@ import type FadeIn from "phaser3-rex-plugins/plugins/audio/fade/FadeIn";
 import type FadeOut from "phaser3-rex-plugins/plugins/audio/fade/FadeOut";
 import type BattleScene from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
-import { FixedInt } from "#app/utils";
+import { FixedNumber } from "#app/utils";
 
 type FadeIn = typeof FadeIn;
 type FadeOut = typeof FadeOut;
@@ -11,11 +11,17 @@ type FadeOut = typeof FadeOut;
 export function initGameSpeed() {
   const thisArg = this as BattleScene;
 
-  const transformValue = (value: number | FixedInt): number => {
-    if (value instanceof FixedInt) {
-      return (value as FixedInt).value;
+  /**
+   * Adjusts the given value based on the game speed or returns it as is.
+   * @param num - The value to be evaluated. Can be either a `number` or an instance of {@linkcode FixedNumber}.
+   * @returns The original numeric value if `value` is an instance of {@linkcode FixedNumber} or if {@linkcode BattleScene.gameSpeed | gameSpeed} is `1`;
+   * otherwise, the value adjusted for the game speed.
+   */
+  const transformValue = (num: number | FixedNumber): number => {
+    if (num instanceof FixedNumber) {
+      return num.value;
     }
-    return thisArg.gameSpeed === 1 ? value : Math.ceil((value /= thisArg.gameSpeed));
+    return thisArg.gameSpeed === 1 ? num : Math.ceil((num /= thisArg.gameSpeed));
   };
 
   const originalAddEvent = this.time.addEvent;

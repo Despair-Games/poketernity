@@ -122,7 +122,7 @@ export class MovePhase extends BattlePhase {
     return (
       this.pokemon.isActive(true)
       && this.move.isUsable(this.pokemon, this.ignorePp, ignoreDisableTags)
-      && !!this.targets.length
+      && this.targets.length > 0
     );
   }
 
@@ -201,8 +201,13 @@ export class MovePhase extends BattlePhase {
     }
   }
 
+  /**
+   * @returns An array of all {@linkcode Pokemon} targeted by this phase's invoked move.
+   * Unless the move is field-targeting, this array only includes active (e.g., non-fainted) targets.
+   */
   public getActiveTargetPokemon(): Pokemon[] {
-    return globalScene.getField(true).filter((p) => this.targets.includes(p.getBattlerIndex()));
+    const activeOnly = !this.move.getMove().isFieldTarget();
+    return globalScene.getField(activeOnly).filter((p) => this.targets.includes(p.getBattlerIndex()));
   }
 
   /**

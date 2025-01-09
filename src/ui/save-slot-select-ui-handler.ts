@@ -5,7 +5,7 @@ import { GameMode } from "../game-mode";
 import * as Modifier from "../modifier/modifier";
 import type { SessionSaveData } from "#app/@types/SessionData";
 import type PokemonData from "../system/pokemon-data";
-import { isNullOrUndefined, fixedInt, getPlayTimeString, formatLargeNumber } from "#app/utils";
+import { isNullOrUndefined, fixedNumber, getPlayTimeString, formatLargeNumber } from "#app/utils";
 import MessageUiHandler from "./message-ui-handler";
 import { TextStyle, addTextObject } from "./text";
 import { Mode } from "./ui";
@@ -324,7 +324,7 @@ export default class SaveSlotSelectUiHandler extends MessageUiHandler {
       globalScene.tweens.add({
         targets: this.sessionSlotsContainer,
         y: this.sessionSlotsContainerInitialY - 56 * scrollCursor,
-        duration: fixedInt(325),
+        duration: fixedNumber(325),
         ease: "Sine.easeInOut",
       });
     }
