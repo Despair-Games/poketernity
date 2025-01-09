@@ -1872,7 +1872,9 @@ export function initMoves() {
     new AttackMove(Moves.ACID_SPRAY, Type.POISON, MoveCategory.SPECIAL, 40, 100, 20, 100, 0, 5)
       .attr(StatStageChangeAttr, [Stat.SPDEF], -2)
       .ballBombMove(),
-    new AttackMove(Moves.FOUL_PLAY, Type.DARK, MoveCategory.PHYSICAL, 95, 100, 15, -1, 0, 5).attr(TargetAtkUserAtkAttr),
+    new AttackMove(Moves.FOUL_PLAY, Type.DARK, MoveCategory.PHYSICAL, 95, 100, 15, -1, 0, 5)
+      .attr(TargetAtkUserAtkAttr)
+      .edgeCase(), // Does not consider Huge Power/other attack stat modifiers correctly
     new StatusMove(Moves.SIMPLE_BEAM, Type.NORMAL, 100, 15, -1, 0, 5).attr(AbilityChangeAttr, Abilities.SIMPLE),
     new StatusMove(Moves.ENTRAINMENT, Type.NORMAL, 100, 15, -1, 0, 5).attr(AbilityGiveAttr),
     new StatusMove(Moves.AFTER_YOU, Type.NORMAL, -1, 15, -1, 0, 5)
@@ -2954,7 +2956,9 @@ export function initMoves() {
       .attr(CutHpStatStageBoostAttr, [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD], 1, 3)
       .soundBased()
       .danceMove(),
-    new AttackMove(Moves.BODY_PRESS, Type.FIGHTING, MoveCategory.PHYSICAL, 80, 100, 10, -1, 0, 8).attr(DefAtkAttr),
+    new AttackMove(Moves.BODY_PRESS, Type.FIGHTING, MoveCategory.PHYSICAL, 80, 100, 10, -1, 0, 8)
+      .attr(DefAtkAttr)
+      .edgeCase(), // Does not consider Huge Power or other attack stat modifiers correctly
     new StatusMove(Moves.DECORATE, Type.FAIRY, -1, 15, -1, 0, 8)
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.SPATK], 2)
       .ignoresProtect(),
