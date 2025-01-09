@@ -12,10 +12,9 @@ import { loggedInUser, updateUserInfo } from "#app/account";
 import { Tutorial, handleTutorial } from "#app/tutorial";
 import type { OptionSelectConfig, OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import { AdminMode, getAdminModeName } from "#app/ui/admin-ui-handler";
-import type AwaitableUiHandler from "#app/ui/awaitable-ui-handler";
 import { TextStyle, addTextObject } from "#app/ui/text";
 import { Mode } from "#app/ui/ui";
-import { WindowVariant, addWindow } from "#app/ui/ui-theme";
+import { addWindow } from "#app/ui/ui-theme";
 import OptionSelectUiHandler from "#app/ui/option-select-ui-handler";
 
 enum MenuOptions {
@@ -35,11 +34,10 @@ const { VITE_WIKI_URL, VITE_DISCORD_URL, VITE_GITHUB_URL, VITE_REDDIT_URL, VITE_
 
 export default class MenuUiHandler extends OptionSelectUiHandler {
   private readonly textPadding = 8;
-  private readonly defaultMessageBoxWidth = 220;
-  private readonly defaultWordWrapWidth = 1224;
 
   private menuContainer: Phaser.GameObjects.Container;
   private menuMessageBoxContainer: Phaser.GameObjects.Container;
+  private menuMessageBox: Phaser.GameObjects.NineSlice;
   private menuOverlay: Phaser.GameObjects.Rectangle;
 
   private excludedMenus: () => ConditionalMenu[];
@@ -47,10 +45,6 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
 
   protected manageDataConfig: OptionSelectConfig;
   protected communityConfig: OptionSelectConfig;
-
-  // Windows for the default message box and the message box for testing dialogue
-  private menuMessageBox: Phaser.GameObjects.NineSlice;
-  private dialogueMessageBox: Phaser.GameObjects.NineSlice;
 
   public bgmBar: BgmBar;
 
@@ -119,33 +113,16 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
     this.menuMessageBox.setOrigin(0, 0);
     this.menuMessageBoxContainer.add(this.menuMessageBox);
 
-    // Full-width window used for testing dialog messages in debug mode
-    this.dialogueMessageBox = addWindow(
-      -this.textPadding,
-      0,
-      globalScene.game.canvas.width / 6 + this.textPadding * 2,
-      49,
-      false,
-      false,
-      0,
-      0,
-      WindowVariant.THIN,
-    );
-    this.dialogueMessageBox.setOrigin(0, 0);
-    this.menuMessageBoxContainer.add(this.dialogueMessageBox);
-
     const menuMessageText = addTextObject(this.textPadding, this.textPadding, "", TextStyle.WINDOW, { maxLines: 2 });
     menuMessageText.setName("menu-message");
     menuMessageText.setOrigin(0, 0);
+    menuMessageText.setWordWrapWidth(1224);
     this.menuMessageBoxContainer.add(menuMessageText);
 
     this.initTutorialOverlay(this.menuContainer);
     this.initPromptSprite(this.menuMessageBoxContainer);
 
     this.message = menuMessageText;
-
-    // By default we use the general purpose message window
-    this.setDialogTestMode(false);
 
     this.menuContainer.add(this.menuMessageBoxContainer);
   }
@@ -280,61 +257,6 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
         keepOpen: true,
       },
     );
-    if (isLocal || isBeta) {
-      // this should make sure we don't have this option in live
-      manageDataOptions.push({
-        label: "Test Dialogue",
-        handler: () => {
-          ui.playSelect();
-          const prefilledText = "";
-          const buttonAction: any = {};
-          buttonAction["buttonActions"] = [
-            (sanitizedName: string) => {
-              ui.revertMode();
-              ui.playSelect();
-              const dialogueTestName = sanitizedName;
-              const dialogueName = decodeURIComponent(escape(atob(dialogueTestName)));
-              const handler = ui.getHandler() as AwaitableUiHandler;
-              handler.tutorialActive = true;
-              const interpolatorOptions: any = {};
-              const splitArr = dialogueName.split(" "); // this splits our inputted text into words to cycle through later
-              const translatedString = splitArr[0]; // this is our outputted i18 string
-              const regex = RegExp("\\{\\{(\\w*)\\}\\}", "g"); // this is a regex expression to find all the text between {{ }} in the i18 output
-              const matches = i18next.t(translatedString).match(regex) ?? [];
-              if (matches.length > 0) {
-                for (let match = 0; match < matches.length; match++) {
-                  // we add 1 here  because splitArr[0] is our first value for the translatedString, and after that is where the variables are
-                  // the regex here in the replace (/\W/g) is to remove the {{ and }} and just give us all alphanumeric characters
-                  if (typeof splitArr[match + 1] !== "undefined") {
-                    interpolatorOptions[matches[match].replace(/\W/g, "")] = i18next.t(splitArr[match + 1]);
-                  }
-                }
-              }
-              // Switch to the dialog test window
-              this.setDialogTestMode(true);
-              ui.showText(
-                String(i18next.t(translatedString, interpolatorOptions)),
-                null,
-                () =>
-                  globalScene.ui.showText("", 0, () => {
-                    handler.tutorialActive = false;
-                    // Go back to the default message window
-                    this.setDialogTestMode(false);
-                  }),
-                null,
-                true,
-              );
-            },
-            () => {
-              ui.revertMode();
-            },
-          ];
-          ui.setMode(Mode.TEST_DIALOGUE, buttonAction, prefilledText);
-          return true;
-        },
-        keepOpen: true,
-      });
-    }
     manageDataOptions.push({
       label: i18next.t("menuUiHandler:cancel"),
       handler: () => {
@@ -718,23 +640,6 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
     } else {
       return super.processInput(button);
     }
-  }
-
-  /**
-   * Switch the message window style and size when we are replaying dialog for debug purposes
-   * In "dialog test mode", the window takes the whole width of the screen and the text
-   * is set up to wrap around the same way as the dialogue during the game
-   * @param isDialogMode whether to use the dialog test
-   */
-  setDialogTestMode(isDialogMode: boolean) {
-    this.menuMessageBox.setVisible(!isDialogMode);
-    this.dialogueMessageBox.setVisible(isDialogMode);
-    // If we're testing dialog, we use the same word wrapping as the battle message handler
-    this.message.setWordWrapWidth(
-      isDialogMode ? globalScene.ui.getMessageHandler().wordWrapWidth : this.defaultWordWrapWidth,
-    );
-    this.message.setX(isDialogMode ? this.textPadding + 1 : this.textPadding);
-    this.message.setY(isDialogMode ? this.textPadding + 0.4 : this.textPadding);
   }
 
   override showText(
