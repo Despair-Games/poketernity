@@ -18,9 +18,6 @@ export class TerrainEventTypeChangeAbAttr extends PostSummonAbAttr {
     }
 
     const currentTerrain = globalScene.arena.getTerrainType();
-    if (currentTerrain === TerrainType.NONE) {
-      return false;
-    }
 
     const typeChange: Type[] = this.determineTypeChange(pokemon, currentTerrain);
     if (typeChange.length !== 0) {
