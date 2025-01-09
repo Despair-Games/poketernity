@@ -4,15 +4,11 @@ import { Mode } from "#app/ui/ui";
 import i18next from "i18next";
 
 export default class ConfirmUiHandler extends OptionSelectUiHandler {
+  // TODO remove and replace with getWindowWidth
   public static readonly windowWidth: number = 48;
 
   constructor() {
     super(Mode.CONFIRM);
-  }
-
-  override getWindowWidth(): number {
-    // TODO remove once size is measured properly in parent
-    return 48;
   }
 
   override show(args: any[]): boolean {

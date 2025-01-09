@@ -12,6 +12,10 @@ const scrollUpLabel = "↑";
 const scrollDownLabel = "↓";
 
 export default class OptionSelectUiHandler extends UiHandler {
+  private singleSpaceWidth: number;
+
+  protected readonly defaultYOffset = -48;
+
   protected optionSelectContainer: Phaser.GameObjects.Container;
   protected optionSelectBg: Phaser.GameObjects.NineSlice;
   protected optionSelectText: BBCodeText;
@@ -25,6 +29,8 @@ export default class OptionSelectUiHandler extends UiHandler {
 
   protected scale: number = 0.1666666667;
 
+  protected displayWidth: number;
+
   private cursorObj: Phaser.GameObjects.Image | null;
 
   constructor(mode: Mode = Mode.OPTION_SELECT) {
@@ -32,8 +38,7 @@ export default class OptionSelectUiHandler extends UiHandler {
   }
 
   public getWindowWidth(): number {
-    // TODO
-    return 64;
+    return this.displayWidth;
   }
 
   public getWindowHeight(): number {
@@ -43,7 +48,9 @@ export default class OptionSelectUiHandler extends UiHandler {
   override setup() {
     const ui = this.getUi();
 
-    this.optionSelectContainer = globalScene.add.container(globalScene.game.canvas.width / 6 - 1, -48);
+    this.scale = getTextStyleOptions(TextStyle.WINDOW, globalScene.uiTheme).scale;
+
+    this.optionSelectContainer = globalScene.add.container(globalScene.scaledCanvas.width - 1, this.defaultYOffset);
     this.optionSelectContainer.setName(`option-select-${this.mode ? Mode[this.mode] : "UNKNOWN"}`);
     this.optionSelectContainer.setVisible(false);
     ui.add(this.optionSelectContainer);
@@ -53,88 +60,115 @@ export default class OptionSelectUiHandler extends UiHandler {
     this.optionSelectBg.setOrigin(1, 1);
     this.optionSelectContainer.add(this.optionSelectBg);
 
-    this.optionSelectIcons = [];
+    this.optionSelectText = addBBCodeTextObject(0, 0, "", TextStyle.WINDOW, { lineSpacing: this.scale * 72 });
+    this.optionSelectText.setOrigin(0, 0);
+    this.optionSelectText.setName("text-option-select");
+    this.optionSelectContainer.add(this.optionSelectText);
 
-    this.scale = getTextStyleOptions(TextStyle.WINDOW, globalScene.uiTheme).scale;
+    this.optionSelectIcons = [];
 
     this.setCursor(0);
   }
 
   protected setupOptions() {
-    const configOptions = this.config?.options ?? [];
+    const configOptions: OptionSelectItem[] = this.config?.options ?? [];
 
-    let options: OptionSelectItem[];
+    const maxWidth = this.getOptionsWidth(configOptions);
 
-    // for performance reasons, this limits how many options we can see at once. Without this, it would try to make text options for every single options
-    // which makes the performance take a hit. If there's not enough options to do this (set to 10 at the moment) and the ui mode !== Mode.AUTO_COMPLETE,
-    // this is ignored and the original code is untouched, with the options array being all the options from the config
-    if (configOptions.length >= 10 && globalScene.ui.getMode() === Mode.AUTO_COMPLETE) {
-      const optionsScrollTotal = configOptions.length;
-      const optionStartIndex = this.scrollCursor;
-      const optionEndIndex = Math.min(
-        optionsScrollTotal,
-        optionStartIndex
-          + (!optionStartIndex || this.scrollCursor + (this.config?.maxOptions! - 1) >= optionsScrollTotal
-            ? this.config?.maxOptions! - 1
-            : this.config?.maxOptions! - 2),
-      );
-      options = configOptions.slice(optionStartIndex, optionEndIndex + 2);
-    } else {
-      options = configOptions;
-    }
+    // Save the max width amongst all options, and use it for everything
+    this.displayWidth = maxWidth + 30;
 
-    if (this.optionSelectText) {
-      this.optionSelectText.destroy();
-    }
-    if (this.optionSelectIcons?.length) {
-      this.optionSelectIcons.map((i) => i.destroy());
-      this.optionSelectIcons.splice(0, this.optionSelectIcons.length);
-    }
-
-    this.optionSelectText = addBBCodeTextObject(
-      0,
-      0,
-      // TODO handle icon size properly
-      options.map((o) => (o.iconsConfig ? `    ${o.label}` : o.label)).join("\n"),
-      TextStyle.WINDOW,
-      { maxLines: options.length, lineSpacing: this.scale * 72 },
-    );
-    this.optionSelectText.setOrigin(0, 0);
-    this.optionSelectText.setName("text-option-select");
-    this.optionSelectContainer.add(this.optionSelectText);
+    this.optionSelectText.setMaxLines(this.config?.maxOptions ?? configOptions.length);
 
     // Make sure the window is not larger than the screen
-    const bgWidth = Math.max(this.optionSelectText.displayWidth + 24, this.getWindowWidth());
-    this.optionSelectBg.width = bgWidth; // TODO based on label size etc
+    const bgWidth = Math.min(this.getWindowWidth(), globalScene.scaledCanvas.width - 2);
 
     // Make sure the window doesn't go past the left side of the screen
     const xPosition = Math.max(bgWidth + 1, globalScene.scaledCanvas.width - 1 - Math.abs(this.config?.xOffset ?? 0));
-    this.optionSelectContainer.setPosition(xPosition, -48 + (this.config?.yOffset ?? 0));
+    this.optionSelectContainer.setPosition(xPosition, this.defaultYOffset + (this.config?.yOffset ?? 0));
 
-    this.optionSelectBg.width = Math.max(this.optionSelectText.displayWidth + 24, this.getWindowWidth());
-
-    if (this.config?.options && this.config?.options.length > this.config?.maxOptions!) {
-      // TODO: is this bang correct?
-      this.optionSelectText.setText(
-        this.getOptionsWithScroll()
-          .map((o) => o.label)
-          .join("\n"),
-      );
-    }
-
+    this.optionSelectBg.width = bgWidth;
     this.optionSelectBg.height = this.getWindowHeight();
 
     this.optionSelectText.setPosition(
-      this.optionSelectBg.x - this.optionSelectBg.width + 12 + 24 * this.scale,
+      this.optionSelectBg.x - this.optionSelectBg.width + 12 + 30 * this.scale,
       this.optionSelectBg.y - this.optionSelectBg.height + 2 + 42 * this.scale,
     );
 
+    this.displayCurrentOptions();
+  }
+
+  /**
+   * Compute the width required to display all given options.
+   * Creates temporary sprite and Text objects and set to be able to infer the required space
+   * For options with an icon, adds the appropriate number of space before the label to give the sprite the space it needs
+   * TODO ^ is that really needed or too much computation for little benefit?
+   * Note, by default this is called with all options in a menu, which may cause performance issues
+   * for longer lists. If your menu contains many element it might be wiser to use a different solution
+   * @param configOptions array of {@linkcode OptionSelectItem} to consider
+   * @returns the maximum width that will be taken by all elements of the menu
+   */
+  protected getOptionsWidth(configOptions: OptionSelectItem[]): number {
+    const tempTextObject = addBBCodeTextObject(0, 0, " ", TextStyle.WINDOW);
+    const tempSprite = globalScene.add.sprite(0, 0, "items");
+    const singleSpaceWidth = tempTextObject.displayWidth;
+    this.singleSpaceWidth = singleSpaceWidth;
+    let maxWidth = 0;
+
+    // Go through all options, and find out their actual display width
+    for (const option of configOptions) {
+      let labelWidth = 0;
+
+      // Measure the width of the icon(s) to show before the label
+      if (option.iconsConfig && !option.label.startsWith(" ")) {
+        let maxIconWidth = 0;
+        for (const iconConfig of option.iconsConfig) {
+          tempSprite.setTexture(iconConfig.name, iconConfig.frame);
+          tempSprite.setScale(iconConfig.scale);
+          console.log(tempSprite.displayWidth);
+          maxIconWidth = Math.max(maxIconWidth, tempSprite.frame.width * tempSprite.scale);
+        }
+        // Pad the label with as many spaces as needed to make room for the icon
+        if (maxIconWidth > 0) {
+          const neededSpaces = Math.ceil(maxIconWidth / singleSpaceWidth);
+          console.log(singleSpaceWidth + " " + neededSpaces);
+          option.label = option.label.padStart(option.label.length + neededSpaces);
+        }
+      }
+
+      // Measure the width of the label
+      tempTextObject.setText(option.label);
+      labelWidth += tempTextObject.displayWidth;
+
+      maxWidth = Math.max(maxWidth, labelWidth);
+
+      console.log("LABEL " + option.label + " " + tempTextObject.displayWidth + " " + labelWidth);
+    }
+
+    console.log("DONE " + maxWidth);
+
+    tempTextObject.destroy();
+    tempSprite.destroy();
+
+    return maxWidth;
+  }
+
+  protected displayCurrentOptions(): void {
+    // Destroy any existing icon sprite. TODO improve performance
+    this.clearIconSprites();
+
+    const options: OptionSelectItem[] = this.getOptionsWithScroll();
+
+    this.optionSelectText.setText(options.map((o) => o.label).join("\n"));
+
     options.forEach((option: OptionSelectItem, i: number) => {
+      const iconY = 7 + i * (114 * this.scale - 3);
       if (option.iconsConfig) {
+        const iconX = Math.floor(((option.label.length - option.label.trimStart().length) * this.singleSpaceWidth) / 2);
         for (const config of option.iconsConfig) {
           const iconSprite = globalScene.add.sprite(0, 0, config.name, config.frame);
-          iconSprite.setScale(config.scale ?? this.scale);
-          iconSprite.setPositionRelative(this.optionSelectText, 36 * this.scale, 7 + i * (114 * this.scale - 3));
+          iconSprite.setScale(config.scale);
+          iconSprite.setPositionRelative(this.optionSelectText, iconX, iconY);
 
           if (config.tint) {
             iconSprite.setTint(config.tint);
@@ -297,35 +331,38 @@ export default class OptionSelectUiHandler extends UiHandler {
   override setCursor(cursor: number): boolean {
     const changed = this.cursor !== cursor;
 
-    let isScroll = false;
+    let scrollUpdated = false;
     const options = this.getOptionsWithScroll();
+    // TODO rewrite this mess
     if (changed && this.config?.maxOptions && this.config.options.length > this.config.maxOptions) {
       if (Math.abs(cursor - this.cursor) === options.length - 1) {
         // Wrap around the list
-        const optionsScrollTotal = this.config.options.length;
-        this.scrollCursor = cursor ? optionsScrollTotal - (this.config.maxOptions - 1) : 0;
-        this.setupOptions();
+        const maxScrollCursor = this.config.options.length - (this.config.maxOptions - 1);
+        this.scrollCursor = cursor > 0 ? maxScrollCursor : 0;
+        this.cursor = cursor;
+        scrollUpdated = true;
       } else {
         // Move the cursor up or down by 1
         const isDown = cursor && cursor > this.cursor;
         if (isDown) {
           if (options[cursor].label === scrollDownLabel) {
-            isScroll = true;
+            scrollUpdated = true;
             this.scrollCursor++;
           }
         } else {
           if (!cursor && this.scrollCursor) {
-            isScroll = true;
+            scrollUpdated = true;
             this.scrollCursor--;
           }
         }
-        if (isScroll && this.scrollCursor === 1) {
+        if (scrollUpdated && this.scrollCursor === 1) {
+          // TODO ???
           this.scrollCursor += isDown ? 1 : -1;
         }
       }
     }
-    if (isScroll) {
-      this.setupOptions();
+    if (scrollUpdated) {
+      this.displayCurrentOptions();
     } else {
       this.cursor = cursor;
     }
@@ -333,9 +370,9 @@ export default class OptionSelectUiHandler extends UiHandler {
     if (!this.cursorObj) {
       this.cursorObj = globalScene.add.image(0, 0, "cursor");
       this.optionSelectContainer.add(this.cursorObj);
+      this.cursorObj.setScale(this.scale * 6);
     }
 
-    this.cursorObj.setScale(this.scale * 6);
     this.cursorObj.setPositionRelative(
       this.optionSelectBg,
       12,
@@ -345,15 +382,23 @@ export default class OptionSelectUiHandler extends UiHandler {
     return changed;
   }
 
-  override clear() {
+  override clear(): void {
     super.clear();
     this.config = null;
+    this.clearIconSprites();
     this.optionSelectContainer.setVisible(false);
     this.scrollCursor = 0;
     this.eraseCursor();
   }
 
-  protected eraseCursor() {
+  protected clearIconSprites(): void {
+    for (const iconSprite of this.optionSelectIcons) {
+      iconSprite.destroy();
+    }
+    this.optionSelectIcons = [];
+  }
+
+  protected eraseCursor(): void {
     if (this.cursorObj) {
       this.cursorObj.destroy();
     }

@@ -472,6 +472,7 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
   }
 
   makeRoomForConfirmUi(speedMultiplier: number = 1, fromCatch: boolean = false): Promise<void> {
+    // TODO clean up width
     const xPosition = fromCatch
       ? this.initialX - this.infoWindowWidth - 65
       : this.initialX - this.infoWindowWidth - ConfirmUiHandler.windowWidth;

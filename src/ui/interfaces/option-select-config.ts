@@ -42,8 +42,7 @@ export interface OptionSelectItem {
   overrideSound?: boolean;
   /**
    * Optional configuration to display icon(s) before or after the label's text.
-   * If multiple icons are given for the same spot they will be overlayed
-   * in the order they are in the array, not displayed next to each other.
+   * If multiple icons are given they will be overlayed.
    */
   iconsConfig?: OptionSelectIconConfig[];
 }
