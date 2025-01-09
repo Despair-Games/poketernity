@@ -358,7 +358,9 @@ export class NumberHolder {
 }
 
 /**
- * Holds a fixed number value, this is solely used to differentiate between a regular number and a fixed number.
+ * Holds a fixed number value, this is solely used to differentiate between a regular number
+ * and a constant or fixed number.
+ * This is used in the game speed system to differentiate between a fixed game speed and a dynamic one.
  * @see `transformValue` in {@linkcode initGameSpeed}
  * @extends NumberHolder
  */
