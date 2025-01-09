@@ -151,7 +151,6 @@ import { UserFieldStatusEffectImmunityAbAttr } from "#app/data/ab-attrs/user-fie
 import { StatusEffectImmunityAbAttr } from "#app/data/ab-attrs/status-effect-immunity-ab-attr";
 import { CommanderAbAttr } from "#app/data/ab-attrs/commander-ab-attr";
 import { IgnoreOpponentStatStagesAbAttr } from "#app/data/ab-attrs/ignore-opponent-stat-stages-ab-attr";
-import { PostSetStatusAbAttr } from "#app/data/ab-attrs/post-set-status-ab-attr";
 import { StatMultiplierAbAttr } from "#app/data/ab-attrs/stat-multiplier-ab-attr";
 import { DamageBoostAbAttr } from "#app/data/ab-attrs/damage-boost-ab-attr";
 import { AddSecondStrikeAbAttr } from "#app/data/ab-attrs/add-second-strike-ab-attr";
@@ -225,6 +224,7 @@ import { TypeImmunityAbAttr } from "#app/data/ab-attrs/type-immunity-ab-attr";
 import { FullHpResistTypeAbAttr } from "#app/data/ab-attrs/full-hp-resist-type-ab-attr";
 import { FieldPriorityMoveImmunityAbAttr } from "#app/data/ab-attrs/field-priority-move-immunity-ab-attr";
 import { MoveImmunityAbAttr } from "#app/data/ab-attrs/move-immunity-ab-attr";
+import { SynchronizeStatusAbAttr } from "#app/data/ab-attrs/synchronize-status-ab-attr";
 
 export enum LearnMoveSituation {
   MISC,
@@ -4137,7 +4137,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     if (effect !== StatusEffect.FAINT) {
       globalScene.triggerPokemonFormChange(this, SpeciesFormChangeStatusEffectTrigger, true);
-      applyAbAttrs(PostSetStatusAbAttr, this, false, sourcePokemon, effect);
+      applyAbAttrs(SynchronizeStatusAbAttr, this, false, sourcePokemon, effect);
     }
 
     return true;

@@ -1,14 +1,25 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { StatusEffect } from "#enums/status-effect";
-import { PostSetStatusAbAttr } from "./post-set-status-ab-attr";
+import { AbAttr } from "./ab-attr";
 
 /**
  * If another Pokemon burns, paralyzes, poisons, or badly poisons this Pokemon,
  * that Pokemon receives the same non-volatile status condition as part of this
- * ability attribute. For Synchronize ability.
- * @extends PostSetStatusAbAttr
+ * ability attribute.
+ * Used for {@linkcode https://bulbapedia.bulbagarden.net/wiki/Synchronize_(Ability) | Synchronize}.
+ * @extends AbAttr
  */
-export class SynchronizeStatusAbAttr extends PostSetStatusAbAttr {
+export class SynchronizeStatusAbAttr extends AbAttr {
+  /**
+   * When afflicted with burn, paralysis, or poison, copies the status
+   * effect onto the source of the status condition
+   * @param pokemon The {@linkcode Pokemon} with this ability
+   * @param simulated If `true`, suppresses changes to game state
+   * @param sourcePokemon The {@linkcode Pokemon} applying the status effect
+   * @param effect The {@linkcode StatusEffect} being applied
+   * @returns `true` if this effect attempts to copy the status effect
+   * onto the source.
+   */
   override apply(
     pokemon: Pokemon,
     simulated: boolean,
