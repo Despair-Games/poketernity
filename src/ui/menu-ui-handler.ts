@@ -4,7 +4,7 @@ import { globalScene } from "#app/global-scene";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { api } from "#app/plugins/api/api";
 import BgmBar from "#app/ui/bgm-bar";
-import { fixedInt, getCookie, getEnumKeys, isBeta, isLocal } from "#app/utils";
+import { fixedNumber, getCookie, getEnumKeys, isBeta, isLocal } from "#app/utils";
 import { Button } from "#enums/buttons";
 import { GameDataType } from "#enums/game-data-type";
 import i18next from "i18next";
@@ -585,7 +585,7 @@ export default class MenuUiHandler extends MessageUiHandler {
             ui.setOverlayMode(Mode.EGG_LIST);
             success = true;
           } else {
-            ui.showText(i18next.t("menuUiHandler:noEggs"), null, () => ui.showText(""), fixedInt(1500));
+            ui.showText(i18next.t("menuUiHandler:noEggs"), null, () => ui.showText(""), fixedNumber(1500));
             error = true;
           }
           break;

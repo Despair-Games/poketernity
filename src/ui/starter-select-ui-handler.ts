@@ -65,7 +65,7 @@ import {
 import {
   BooleanHolder,
   capitalizeString,
-  fixedInt,
+  fixedNumber,
   getLocalizedSpriteKey,
   isNullOrUndefined,
   NumberHolder,
@@ -1359,14 +1359,14 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         {
           targets: icon,
           y: 2 - 5,
-          duration: fixedInt(125),
+          duration: fixedNumber(125),
           ease: "Cubic.easeOut",
           yoyo: true,
         },
         {
           targets: icon,
           y: 2 - 3,
-          duration: fixedInt(150),
+          duration: fixedNumber(150),
           ease: "Cubic.easeOut",
           yoyo: true,
         },
@@ -3927,7 +3927,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       this.getTextColor(!overLimit ? TextStyle.TOOLTIP_CONTENT : TextStyle.SUMMARY_PINK, true),
     );
     if (overLimit) {
-      globalScene.time.delayedCall(fixedInt(500), () => this.tryUpdateValue());
+      globalScene.time.delayedCall(fixedNumber(500), () => this.tryUpdateValue());
       return false;
     }
     let isPartyValid: boolean = this.isPartyValid(); // this checks to see if the party is valid

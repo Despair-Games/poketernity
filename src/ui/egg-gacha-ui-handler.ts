@@ -1,7 +1,7 @@
 import { Mode } from "./ui";
 import { TextStyle, addTextObject, getEggTierTextTint, getTextStyleOptions } from "./text";
 import MessageUiHandler from "./message-ui-handler";
-import { getEnumValues, getEnumKeys, fixedInt, randSeedShuffle } from "#app/utils";
+import { getEnumValues, getEnumKeys, fixedNumber, randSeedShuffle } from "#app/utils";
 import type { IEggOptions } from "../data/egg";
 import { Egg, getLegendaryGachaSpeciesForTimestamp } from "../data/egg";
 import { VoucherType, getVoucherTypeIcon } from "../system/voucher";
@@ -353,7 +353,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
     if (this.transitioning && this.transitionCancelled) {
       delay = Math.ceil(delay / 5);
     }
-    return fixedInt(delay);
+    return fixedNumber(delay);
   }
 
   pull(pullCount: number = 0, count: number = 0, eggs?: Egg[]): void {
@@ -638,7 +638,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
   }
 
   showError(text: string): void {
-    this.showText(text, undefined, () => this.showText(this.defaultText), fixedInt(1500));
+    this.showText(text, undefined, () => this.showText(this.defaultText), fixedNumber(1500));
   }
 
   setTransitioning(transitioning: boolean): void {

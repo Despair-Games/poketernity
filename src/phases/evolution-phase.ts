@@ -14,7 +14,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { EndEvolutionPhase } from "#app/phases/end-evolution-phase";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
 import { Mode } from "#app/ui/ui";
-import { fixedInt } from "#app/utils";
+import { fixedNumber } from "#app/utils";
 import i18next from "i18next";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 import { FormChangeBasePhase } from "./abstract-form-change-base-phase";
@@ -225,9 +225,9 @@ export class EvolutionPhase extends FormChangeBasePhase {
             () => this.end(),
             null,
             true,
-            fixedInt(4000),
+            fixedNumber(4000),
           );
-          time.delayedCall(fixedInt(4250), () => globalScene.playBgm());
+          time.delayedCall(fixedNumber(4250), () => globalScene.playBgm());
         });
       });
     };

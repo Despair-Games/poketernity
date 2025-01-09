@@ -2,7 +2,7 @@ import { TextStyle, addTextObject } from "../ui/text";
 import type { DamageResult } from "./pokemon";
 import type { Pokemon } from "./pokemon";
 import { HitResult } from "./pokemon";
-import { formatStat, fixedInt } from "#app/utils";
+import { formatStat, fixedNumber } from "#app/utils";
 import type { BattlerIndex } from "../battle";
 import { globalScene } from "#app/global-scene";
 
@@ -85,14 +85,14 @@ export default class DamageNumberHandler {
     if (globalScene.damageNumbersMode === 1) {
       globalScene.tweens.add({
         targets: damageNumber,
-        duration: fixedInt(750),
+        duration: fixedNumber(750),
         alpha: 1,
         y: "-=32",
       });
       globalScene.tweens.add({
         delay: 375,
         targets: damageNumber,
-        duration: fixedInt(625),
+        duration: fixedNumber(625),
         alpha: 0,
         ease: "Sine.easeIn",
         onComplete: () => {
@@ -109,7 +109,7 @@ export default class DamageNumberHandler {
       targets: damageNumber,
       tweens: [
         {
-          duration: fixedInt(250),
+          duration: fixedNumber(250),
           alpha: 1,
           scaleX: 0.75 * baseScale,
           scaleY: 1.25 * baseScale,
@@ -117,7 +117,7 @@ export default class DamageNumberHandler {
           ease: "Cubic.easeOut",
         },
         {
-          duration: fixedInt(175),
+          duration: fixedNumber(175),
           alpha: 1,
           scaleX: 0.875 * baseScale,
           scaleY: 1.125 * baseScale,
@@ -125,59 +125,59 @@ export default class DamageNumberHandler {
           ease: "Cubic.easeIn",
         },
         {
-          duration: fixedInt(100),
+          duration: fixedNumber(100),
           scaleX: 1.25 * baseScale,
           scaleY: 0.75 * baseScale,
           ease: "Cubic.easeOut",
         },
         {
-          duration: fixedInt(175),
+          duration: fixedNumber(175),
           scaleX: 0.875 * baseScale,
           scaleY: 1.125 * baseScale,
           y: "-=8",
           ease: "Cubic.easeOut",
         },
         {
-          duration: fixedInt(50),
+          duration: fixedNumber(50),
           scaleX: 0.925 * baseScale,
           scaleY: 1.075 * baseScale,
           y: "+=8",
           ease: "Cubic.easeIn",
         },
         {
-          duration: fixedInt(100),
+          duration: fixedNumber(100),
           scaleX: 1.125 * baseScale,
           scaleY: 0.875 * baseScale,
           ease: "Cubic.easeOut",
         },
         {
-          duration: fixedInt(175),
+          duration: fixedNumber(175),
           scaleX: 0.925 * baseScale,
           scaleY: 1.075 * baseScale,
           y: "-=4",
           ease: "Cubic.easeOut",
         },
         {
-          duration: fixedInt(50),
+          duration: fixedNumber(50),
           scaleX: 0.975 * baseScale,
           scaleY: 1.025 * baseScale,
           y: "+=4",
           ease: "Cubic.easeIn",
         },
         {
-          duration: fixedInt(100),
+          duration: fixedNumber(100),
           scaleX: 1.075 * baseScale,
           scaleY: 0.925 * baseScale,
           ease: "Cubic.easeOut",
         },
         {
-          duration: fixedInt(25),
+          duration: fixedNumber(25),
           scaleX: baseScale,
           scaleY: baseScale,
           ease: "Cubic.easeOut",
         },
         {
-          delay: fixedInt(500),
+          delay: fixedNumber(500),
           alpha: 0,
           onComplete: () => {
             this.damageNumbers
