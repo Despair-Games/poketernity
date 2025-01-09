@@ -509,7 +509,7 @@ export class MoveEffectPhase extends PokemonPhase {
 
     this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target, firstTarget, false);
     this.applyHeldItemFlinchCheck(user, target, dealsDamage);
-    this.applyOnGetHitAbEffects(user, target, hitResult);
+    this.applyOnGetHitAbEffects(user, target);
     applyAbAttrs(PostAttackAbAttr, user, false, target, move);
 
     // Apply status tokens if the user is an enemy Pokemon
@@ -575,10 +575,9 @@ export class MoveEffectPhase extends PokemonPhase {
    * (i.e. Effect Spore, Disguise, Liquid Ooze, Beak Blast)
    * @param user - The {@linkcode Pokemon} using this phase's invoked move
    * @param target - {@linkcode Pokemon} the current target of this phase's invoked move
-   * @param hitResult - The {@linkcode HitResult} of the attempted move
    */
-  protected applyOnGetHitAbEffects(user: Pokemon, target: Pokemon, hitResult: HitResult): void {
-    applyAbAttrs(PostDefendAbAttr, target, false, user, this.move.getMove(), hitResult);
+  protected applyOnGetHitAbEffects(user: Pokemon, target: Pokemon): void {
+    applyAbAttrs(PostDefendAbAttr, target, false, user, this.move.getMove());
     target.lapseTags(BattlerTagLapseType.AFTER_HIT);
   }
 

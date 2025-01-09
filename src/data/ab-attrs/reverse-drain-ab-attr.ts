@@ -1,6 +1,5 @@
 import { type Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
-import type { HitResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
@@ -20,12 +19,11 @@ export class ReverseDrainAbAttr extends PostDefendAbAttr {
    * @param pokemon {@linkcode Pokemon} with this ability
    * @param _passive N/A
    * @param attacker {@linkcode Pokemon} that is attacking this Pokemon
-   * @param move {@linkcode PokemonMove} that is being used
-   * @param _hitResult N/A
+   * @param move {@linkcode Move} that is being used
    * @param _args N/A
    * @returns true if healing should be reversed on a healing move, false otherwise.
    */
-  override apply(_pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move, _hitResult: HitResult): boolean {
+  override apply(_pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
     if (move.hasAttr(HitHealAttr)) {
       if (!simulated) {
         globalScene.queueMessage(

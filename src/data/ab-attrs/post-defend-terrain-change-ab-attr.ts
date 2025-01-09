@@ -1,7 +1,7 @@
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
-import { HitResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
+import { MoveCategory } from "#enums/move-category";
 import type { TerrainType } from "#enums/terrain-type";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 
@@ -14,14 +14,8 @@ export class PostDefendTerrainChangeAbAttr extends PostDefendAbAttr {
     this.terrainType = terrainType;
   }
 
-  override apply(
-    _pokemon: Pokemon,
-    simulated: boolean,
-    _attacker: Pokemon,
-    _move: Move,
-    hitResult: HitResult,
-  ): boolean {
-    if (hitResult < HitResult.NO_EFFECT) {
+  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
+    if (attacker.getMoveCategory(pokemon, move) !== MoveCategory.STATUS) {
       if (simulated) {
         return globalScene.arena.terrain?.terrainType !== (this.terrainType || undefined);
       } else {

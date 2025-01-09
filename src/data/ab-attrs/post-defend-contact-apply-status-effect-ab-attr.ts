@@ -1,7 +1,6 @@
 import type { Move } from "#app/data/move";
 import { MoveFlags } from "../../enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
-import type { HitResult } from "#app/field/pokemon";
 import type { StatusEffect } from "#enums/status-effect";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 
@@ -35,7 +34,7 @@ export class PostDefendContactApplyStatusEffectAbAttr extends PostDefendAbAttr {
     this.statusEffects = this.statusEffects.concat(effects);
   }
 
-  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move, _hitResult: HitResult): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
     if (
       move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
       && !attacker.status
