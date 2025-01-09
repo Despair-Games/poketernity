@@ -5,10 +5,10 @@ import { PostAttackAbAttr } from "#app/data/ab-attrs/post-attack-ab-attr";
 import { PostDamageAbAttr } from "#app/data/ab-attrs/post-damage-ab-attr";
 import { PostDefendAbAttr } from "#app/data/ab-attrs/post-defend-ab-attr";
 import {
-  applyPreAttackAbAttrs,
-  applyPostDamageAbAttrs,
   applyPostAttackAbAttrs,
+  applyPostDamageAbAttrs,
   applyPostDefendAbAttrs,
+  applyPreAttackAbAttrs,
 } from "#app/data/ability";
 import { MoveAnim } from "#app/data/battle-anims";
 import { BattlerTagLapseType, SkyDropTag, SubstituteTag, TypeBoostTag } from "#app/data/battler-tags";
@@ -23,21 +23,21 @@ import { NoEffectAttr } from "#app/data/move-attrs/no-effect-attr";
 import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
 import { SpeciesFormChangePostMoveTrigger } from "#app/data/pokemon-forms";
 import type { TypeDamageMultiplier } from "#app/data/type";
-import type { TurnMove, Pokemon, DamageResult } from "#app/field/pokemon";
-import { MoveResult, HitResult } from "#app/field/pokemon";
+import type { DamageResult, Pokemon, TurnMove } from "#app/field/pokemon";
+import { HitResult, MoveResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import {
-  PokemonMultiHitModifier,
-  EnemyEndureChanceModifier,
+  ContactHeldItemTransferChanceModifier,
   DamageMoneyRewardModifier,
   EnemyAttackStatusEffectChanceModifier,
-  ContactHeldItemTransferChanceModifier,
-  HitHealModifier,
+  EnemyEndureChanceModifier,
   FlinchChanceModifier,
+  HitHealModifier,
+  PokemonMultiHitModifier,
 } from "#app/modifier/modifier";
 import { DamageAchv } from "#app/system/achv";
-import { BooleanHolder, NumberHolder } from "#app/utils";
+import { BooleanHolder, isNullOrUndefined, NumberHolder } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitCheckResult } from "#enums/hit-check-result";
 import { MoveCategory } from "#enums/move-category";
@@ -45,7 +45,6 @@ import { MoveEffectTrigger } from "#enums/move-effect-trigger";
 import { MoveTarget } from "#enums/move-target";
 import { Moves } from "#enums/moves";
 import i18next from "i18next";
-import { isNullOrUndefined } from "util";
 import { FaintPhase } from "./faint-phase";
 import { HitCheckPhase } from "./hit-check-phase";
 import { MovePhase } from "./move-phase";
