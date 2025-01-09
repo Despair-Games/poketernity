@@ -23,14 +23,7 @@ export class PostDefendCritStatStageChangeAbAttr extends PostDefendAbAttr {
     this.stages = stages;
   }
 
-  override applyPostDefend(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    attacker: Pokemon,
-    _move: Move,
-    _hitResult: HitResult,
-  ): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, _move: Move, _hitResult: HitResult): boolean {
     const attacksReceivedEntry = pokemon.turnData.attacksReceived[0];
     if (
       pokemon.turnData.attacksReceived.length !== 0

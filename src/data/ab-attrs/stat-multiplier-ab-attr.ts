@@ -47,13 +47,12 @@ export class StatMultiplierAbAttr extends StatStageAbAttr {
     this.condition = condition;
   }
 
-  override applyStatStage(
+  override apply(
     pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
     stat: BattleStat,
     statValue: NumberHolder,
-    move: Move,
+    move?: Move,
     _target?: Pokemon,
   ): boolean {
     if (stat === this.stat && (!this.condition || this.condition(pokemon, null, move))) {

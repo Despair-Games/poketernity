@@ -14,7 +14,6 @@ export class SuppressWeatherEffectAbAttr extends PreWeatherEffectAbAttr {
 
   override applyPreWeatherEffect(
     _pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
     weather: Weather,
     cancelled: BooleanHolder,

@@ -26,7 +26,6 @@ export class GorillaTacticsAbAttr extends PostAttackAbAttr {
    */
   override applyPostAttackAfterMoveTypeCheck(
     pokemon: Pokemon,
-    _passive: boolean,
     simulated: boolean,
     _defender: Pokemon,
     _move: Move,

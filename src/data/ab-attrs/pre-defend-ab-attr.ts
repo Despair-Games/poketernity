@@ -4,9 +4,8 @@ import type { BooleanHolder } from "#app/utils";
 import { AbAttr } from "./ab-attr";
 
 export class PreDefendAbAttr extends AbAttr {
-  applyPreDefend(
+  override apply(
     _pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
     _attacker: Pokemon,
     _move: Move | null,

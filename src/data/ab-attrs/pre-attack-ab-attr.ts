@@ -3,9 +3,8 @@ import type { Pokemon } from "#app/field/pokemon";
 import { AbAttr } from "./ab-attr";
 
 export class PreAttackAbAttr extends AbAttr {
-  applyPreAttack(
+  override apply(
     _pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
     _defender: Pokemon | null,
     _move: Move,

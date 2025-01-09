@@ -30,7 +30,6 @@ export class PostAttackApplyBattlerTagAbAttr extends PostAttackAbAttr {
 
   override applyPostAttackAfterMoveTypeCheck(
     attacker: Pokemon,
-    _passive: boolean,
     simulated: boolean,
     target: Pokemon,
     move: Move,

@@ -26,7 +26,6 @@ export class ConditionalCritAbAttr extends AbAttr {
    */
   override apply(
     pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
     isCritical: BooleanHolder,
     target: Pokemon,

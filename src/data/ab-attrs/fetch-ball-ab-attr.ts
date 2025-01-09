@@ -17,7 +17,7 @@ export class FetchBallAbAttr extends PostTurnAbAttr {
    * @param _args N/A
    * @returns true if player has used a pokeball and this pokemon is owned by the player
    */
-  override applyPostTurn(pokemon: Pokemon, _passive: boolean, simulated: boolean): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean): boolean {
     if (simulated) {
       return false;
     }

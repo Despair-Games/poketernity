@@ -1,5 +1,5 @@
 import { PostTurnAbAttr } from "#app/data/ab-attrs/post-turn-ab-attr";
-import { applyPostTurnAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/ability";
 import { BattlerTagLapseType } from "#app/data/battler-tags";
 import { TurnEndEvent } from "#app/events/battle-scene";
 import type { Pokemon } from "#app/field/pokemon";
@@ -47,7 +47,7 @@ export class TurnEndPhase extends FieldPhase {
           globalScene.applyModifier(EnemyStatusEffectHealChanceModifier, false, pokemon);
         }
 
-        applyPostTurnAbAttrs(PostTurnAbAttr, pokemon);
+        applyAbAttrs(PostTurnAbAttr, pokemon, false);
       }
 
       globalScene.applyModifiers(TurnStatusEffectModifier, pokemon.isPlayer(), pokemon);

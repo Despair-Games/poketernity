@@ -32,9 +32,8 @@ export class TypeImmunityAbAttr extends PreDefendAbAttr {
    * @param _cancelled N/A
    * @param typeMultiplier {@linkcode NumberHolder} gets set to `0` if the pokemon is immune
    */
-  override applyPreDefend(
+  override apply(
     pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
     attacker: Pokemon,
     move: Move,

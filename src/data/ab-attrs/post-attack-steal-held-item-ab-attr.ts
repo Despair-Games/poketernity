@@ -19,7 +19,6 @@ export class PostAttackStealHeldItemAbAttr extends PostAttackAbAttr {
 
   override applyPostAttackAfterMoveTypeCheck(
     pokemon: Pokemon,
-    _passive: boolean,
     simulated: boolean,
     defender: Pokemon,
     move: Move,

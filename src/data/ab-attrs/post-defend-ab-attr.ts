@@ -3,9 +3,8 @@ import { type HitResult, type Pokemon } from "#app/field/pokemon";
 import { AbAttr } from "./ab-attr";
 
 export class PostDefendAbAttr extends AbAttr {
-  applyPostDefend(
+  override apply(
     _pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
     _attacker: Pokemon,
     _move: Move,

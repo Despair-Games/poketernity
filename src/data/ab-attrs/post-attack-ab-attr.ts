@@ -25,7 +25,6 @@ export class PostAttackAbAttr extends AbAttr {
    */
   applyPostAttack(
     pokemon: Pokemon,
-    passive: boolean,
     simulated: boolean,
     defender: Pokemon,
     move: Move,
@@ -46,7 +45,6 @@ export class PostAttackAbAttr extends AbAttr {
    */
   applyPostAttackAfterMoveTypeCheck(
     _pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
     _defender: Pokemon,
     _move: Move,

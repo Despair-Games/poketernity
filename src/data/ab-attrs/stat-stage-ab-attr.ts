@@ -11,9 +11,8 @@ export class StatStageAbAttr extends AbAttr {
     this.stat = stat;
   }
 
-  applyStatStage(
+  override apply(
     _pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
     _stat: BattleStat,
     _statValue: NumberHolder,

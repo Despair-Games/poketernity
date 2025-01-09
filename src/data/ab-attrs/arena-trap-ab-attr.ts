@@ -24,13 +24,7 @@ export class ArenaTrapAbAttr extends CheckTrappedAbAttr {
    * @param otherPokemon The {@link Pokemon} that is affected by an Arena Trap ability
    * @returns `true` if enemy Pokemon is trapped
    */
-  override applyCheckTrapped(
-    pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    trapped: BooleanHolder,
-    otherPokemon: Pokemon,
-  ): boolean {
+  override apply(pokemon: Pokemon, _simulated: boolean, trapped: BooleanHolder, otherPokemon: Pokemon): boolean {
     if (this.arenaTrapCondition(pokemon, otherPokemon)) {
       if (
         otherPokemon.getTypes(true).includes(Type.GHOST)

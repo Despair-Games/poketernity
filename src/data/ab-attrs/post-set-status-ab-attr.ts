@@ -16,12 +16,11 @@ export class PostSetStatusAbAttr extends AbAttr {
    * @param _args Set of unique arguments needed by this attribute.
    * @returns `true` if application of the ability succeeds.
    */
-  applyPostSetStatus(
+  override apply(
     _pokemon: Pokemon,
-    _sourcePokemon: Pokemon | null = null,
-    _passive: boolean,
-    _effect: StatusEffect,
     _simulated: boolean,
+    _sourcePokemon: Pokemon | null = null,
+    _effect: StatusEffect,
     ..._args: unknown[]
   ): boolean {
     return false;

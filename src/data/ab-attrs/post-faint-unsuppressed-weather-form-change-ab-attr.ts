@@ -21,9 +21,8 @@ export class PostFaintUnsuppressedWeatherFormChangeAbAttr extends PostFaintAbAtt
    * @param _hitResult n/a
    * @returns whether the form change was triggered
    */
-  override applyPostFaint(
+  override apply(
     _pokemon: Pokemon,
-    _passive: boolean,
     simulated: boolean,
     _attacker: Pokemon,
     _move: Move,

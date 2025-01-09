@@ -26,7 +26,6 @@ export class ReduceStatusEffectDurationAbAttr extends AbAttr {
    */
   override apply(
     _pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
     statusEffect: StatusEffect,
     turnsRemaining: NumberHolder,

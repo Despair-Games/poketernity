@@ -14,9 +14,8 @@ export class PostDefendTerrainChangeAbAttr extends PostDefendAbAttr {
     this.terrainType = terrainType;
   }
 
-  override applyPostDefend(
+  override apply(
     _pokemon: Pokemon,
-    _passive: boolean,
     simulated: boolean,
     _attacker: Pokemon,
     _move: Move,

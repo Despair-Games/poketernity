@@ -21,9 +21,8 @@ export class AlliedFieldDamageReductionAbAttr extends PreDefendAbAttr {
    * @param args
    * - `[0]` {@linkcode NumberHolder} - The damage being dealt
    */
-  override applyPreDefend(
+  override apply(
     _pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
     _attacker: Pokemon,
     _move: Move,

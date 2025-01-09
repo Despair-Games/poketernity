@@ -4,9 +4,8 @@ import type { NumberHolder } from "#app/utils";
 import { PreAttackAbAttr } from "./pre-attack-ab-attr";
 
 export class VariableMovePowerAbAttr extends PreAttackAbAttr {
-  override applyPreAttack(
+  override apply(
     _pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
     _defender: Pokemon,
     _move: Move,

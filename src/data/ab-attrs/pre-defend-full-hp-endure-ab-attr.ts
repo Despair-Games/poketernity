@@ -5,9 +5,8 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { PreDefendAbAttr } from "./pre-defend-ab-attr";
 
 export class PreDefendFullHpEndureAbAttr extends PreDefendAbAttr {
-  override applyPreDefend(
+  override apply(
     pokemon: Pokemon,
-    _passive: boolean,
     simulated: boolean,
     _attacker: Pokemon,
     _move: Move,

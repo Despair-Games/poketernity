@@ -27,14 +27,13 @@ export class AddSecondStrikeAbAttr extends PreAttackAbAttr {
    * - `[1]` the damage multiplier for the current strike ({@linkcode NumberHolder})
    * @returns
    */
-  override applyPreAttack(
+  override apply(
     pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
     _defender: Pokemon,
     move: Move,
-    hitCount: NumberHolder,
-    multiplier: NumberHolder,
+    hitCount: NumberHolder | null,
+    multiplier: NumberHolder | null,
   ): boolean {
     if (move.canBeMultiStrikeEnhanced(pokemon)) {
       this.showAbility = !!hitCount?.value;

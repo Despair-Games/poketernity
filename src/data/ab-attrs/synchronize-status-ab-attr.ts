@@ -9,22 +9,11 @@ import { PostSetStatusAbAttr } from "./post-set-status-ab-attr";
  * @extends PostSetStatusAbAttr
  */
 export class SynchronizeStatusAbAttr extends PostSetStatusAbAttr {
-  /**
-   * If the `StatusEffect` that was set is Burn, Paralysis, Poison, or Toxic, and the status
-   * was set by a source Pokemon, set the source Pokemon's status to the same `StatusEffect`.
-   * @param pokemon {@linkcode Pokemon} that status condition was set on.
-   * @param sourcePokemon {@linkcode Pokemon} that that set the status condition. Is null if status was not set by a Pokemon.
-   * @param _passive N/A
-   * @param effect {@linkcode StatusEffect} that was set.
-   * @param _args N/A
-   * @returns `true` if application of the ability succeeds.
-   */
-  override applyPostSetStatus(
+  override apply(
     pokemon: Pokemon,
-    sourcePokemon: Pokemon | null = null,
-    _passive: boolean,
-    effect: StatusEffect,
     simulated: boolean,
+    sourcePokemon: Pokemon | null = null,
+    effect: StatusEffect,
   ): boolean {
     /** Synchronizable statuses */
     const syncStatuses = new Set<StatusEffect>([

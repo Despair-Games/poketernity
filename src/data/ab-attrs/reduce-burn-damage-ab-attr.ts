@@ -18,7 +18,7 @@ export class ReduceBurnDamageAbAttr extends AbAttr {
    * @param damage {@linkcode NumberHolder} The damage value being modified
    * @returns `true`
    */
-  override apply(_pokemon: Pokemon, _passive: boolean, _simulated: boolean, damage: NumberHolder): boolean {
+  override apply(_pokemon: Pokemon, _simulated: boolean, damage: NumberHolder): boolean {
     damage.value = toDmgValue(damage.value * this.multiplier);
 
     return true;

@@ -6,14 +6,7 @@ import { AbAttr } from "./ab-attr";
  * @extends AbAttr
  */
 export class PostDamageAbAttr extends AbAttr {
-  public applyPostDamage(
-    _pokemon: Pokemon,
-    _damage: number,
-    _passive: boolean,
-    _simulated: boolean,
-    _source?: Pokemon,
-    ..._args: unknown[]
-  ): boolean {
+  override apply(_pokemon: Pokemon, _simulated: boolean, _damage: number, _source?: Pokemon): boolean {
     return false;
   }
 }

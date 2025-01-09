@@ -21,7 +21,6 @@ export class PostAttackApplyStatusEffectAbAttr extends PostAttackAbAttr {
 
   override applyPostAttackAfterMoveTypeCheck(
     attacker: Pokemon,
-    _passive: boolean,
     simulated: boolean,
     target: Pokemon,
     move: Move,

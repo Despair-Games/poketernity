@@ -8,14 +8,7 @@ import { PostDefendAbAttr } from "./post-defend-ab-attr";
 import { UnswappableAbilityAbAttr } from "./unswappable-ability-ab-attr";
 
 export class PostDefendAbilitySwapAbAttr extends PostDefendAbAttr {
-  override applyPostDefend(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
-    _hitResult: HitResult,
-  ): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move, _hitResult: HitResult): boolean {
     if (
       move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
       && !attacker.getAbility().hasAttr(UnswappableAbilityAbAttr)

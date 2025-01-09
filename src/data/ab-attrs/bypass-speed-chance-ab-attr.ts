@@ -31,7 +31,7 @@ export class BypassSpeedChanceAbAttr extends AbAttr {
    * @param args [0] {@linkcode BooleanHolder} set to true when the ability activated
    * @returns whether the ability was activated
    */
-  override apply(pokemon: Pokemon, _passive: boolean, simulated: boolean, bypassSpeed: BooleanHolder): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean, bypassSpeed: BooleanHolder): boolean {
     if (simulated) {
       return false;
     }

@@ -22,9 +22,8 @@ export class FieldMovePowerBoostAbAttr extends PreAttackAbAttr {
     this.powerMultiplier = powerMultiplier;
   }
 
-  override applyPreAttack(
+  override apply(
     pokemon: Pokemon | null,
-    _passive: boolean | null,
     _simulated: boolean,
     defender: Pokemon | null,
     move: Move,

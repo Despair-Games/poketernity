@@ -23,13 +23,7 @@ export class ChangeMovePriorityAbAttr extends AbAttr {
     this.changeAmount = changeAmount;
   }
 
-  override apply(
-    pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    move: Move,
-    priority: NumberHolder,
-  ): boolean {
+  override apply(pokemon: Pokemon, _simulated: boolean, move: Move, priority: NumberHolder): boolean {
     if (!this.moveFunc(pokemon, move)) {
       return false;
     }

@@ -18,7 +18,7 @@ export class PostStatStageChangeStatStageChangeAbAttr extends PostStatStageChang
     this.stages = stages;
   }
 
-  override applyPostStatStageChange(
+  override apply(
     pokemon: Pokemon,
     simulated: boolean,
     statStagesChanged: BattleStat[],

@@ -22,7 +22,7 @@ export class PostTurnHurtIfSleepingAbAttr extends PostTurnAbAttr {
    * @param _args N/A
    * @returns `true` if any opponents are sleeping
    */
-  override applyPostTurn(pokemon: Pokemon, _passive: boolean, simulated: boolean): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean): boolean {
     let hadEffect = false;
     for (const opp of pokemon.getOpponents()) {
       if (

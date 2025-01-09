@@ -8,12 +8,12 @@ import { AbAttr } from "./ab-attr";
  * @extends AbAttr
  */
 export class PostMoveUsedAbAttr extends AbAttr {
-  applyPostMoveUsed(
+  override apply(
     _pokemon: Pokemon,
+    _simulated: boolean,
     _move: PokemonMove,
     _source: Pokemon,
     _targets: BattlerIndex[],
-    _simulated: boolean,
     ..._args: unknown[]
   ): boolean {
     return false;

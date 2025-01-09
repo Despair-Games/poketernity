@@ -15,7 +15,7 @@ export class MoneyAbAttr extends PostBattleAbAttr {
    * @param args - `[0]`: boolean for if the battle ended in a victory
    * @returns `true` if successful
    */
-  override applyPostBattle(_pokemon: Pokemon, _passive: boolean, simulated: boolean, isVictory: boolean): boolean {
+  override apply(_pokemon: Pokemon, simulated: boolean, isVictory: boolean): boolean {
     if (!simulated && isVictory) {
       globalScene.currentBattle.moneyScattered += globalScene.getWaveMoneyAmount(0.2);
       return true;

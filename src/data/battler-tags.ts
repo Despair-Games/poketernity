@@ -36,7 +36,6 @@ import { EFFECTIVE_STATS, getStatKey, Stat, type BattleStat, type EffectiveStat 
 import { StatusEffect } from "#enums/status-effect";
 import { WeatherType } from "#enums/weather-type";
 import { ReverseDrainAbAttr } from "./ab-attrs/reverse-drain-ab-attr";
-import { ProtectStatAbAttr } from "./ab-attrs/protect-stat-ab-attr";
 import Overrides from "#app/overrides";
 
 export enum BattlerTagLapseType {
@@ -627,7 +626,7 @@ export class FlinchedTag extends BattlerTag {
   override onAdd(pokemon: Pokemon): void {
     super.onAdd(pokemon);
 
-    applyAbAttrs(FlinchEffectAbAttr, pokemon);
+    applyAbAttrs(FlinchEffectAbAttr, pokemon, false);
   }
 
   /**
@@ -2909,12 +2908,8 @@ export class MysteryEncounterPostSummonTag extends BattlerTag {
     const ret = super.lapse(pokemon, lapseType);
 
     if (lapseType === BattlerTagLapseType.CUSTOM) {
-      const cancelled = new BooleanHolder(false);
-      applyAbAttrs(ProtectStatAbAttr, pokemon, false, cancelled);
-      if (!cancelled.value) {
-        if (pokemon.mysteryEncounterBattleEffects) {
-          pokemon.mysteryEncounterBattleEffects(pokemon);
-        }
+      if (pokemon.mysteryEncounterBattleEffects) {
+        pokemon.mysteryEncounterBattleEffects(pokemon);
       }
     }
 

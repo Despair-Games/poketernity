@@ -15,14 +15,13 @@ export class MoveTypeChangeAbAttr extends PreAttackAbAttr {
   }
 
   // TODO: Decouple this into two attributes (type change / power boost)
-  override applyPreAttack(
+  override apply(
     pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
-    defender: Pokemon,
+    defender: Pokemon | null,
     move: Move,
-    moveType: NumberHolder,
-    power: NumberHolder,
+    moveType?: NumberHolder,
+    power?: NumberHolder,
   ): boolean {
     if (this.condition && this.condition(pokemon, defender, move)) {
       if (moveType) {

@@ -4,9 +4,8 @@ import type { BattleStat } from "#enums/stat";
 import { AbAttr } from "./ab-attr";
 
 export class PreStatStageChangeAbAttr extends AbAttr {
-  applyPreStatStageChange(
+  override apply(
     _pokemon: Pokemon | null,
-    _passive: boolean,
     _simulated: boolean,
     _stat: BattleStat,
     _cancelled: BooleanHolder,

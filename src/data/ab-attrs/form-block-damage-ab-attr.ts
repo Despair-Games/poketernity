@@ -44,9 +44,8 @@ export class FormBlockDamageAbAttr extends ReceivedMoveDamageMultiplierAbAttr {
    * @param args Additional arguments.
    * @returns `true` if the immunity was applied.
    */
-  override applyPreDefend(
+  override apply(
     pokemon: Pokemon,
-    _passive: boolean,
     simulated: boolean,
     attacker: Pokemon,
     move: Move,

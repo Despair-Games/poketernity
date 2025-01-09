@@ -33,7 +33,6 @@ export class ConfusionOnStatusEffectAbAttr extends PostAttackAbAttr {
    */
   override applyPostAttackAfterMoveTypeCheck(
     pokemon: Pokemon,
-    _passive: boolean,
     simulated: boolean,
     defender: Pokemon,
     move: Move,

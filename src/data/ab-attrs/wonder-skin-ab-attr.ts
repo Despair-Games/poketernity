@@ -11,9 +11,8 @@ import { PreDefendAbAttr } from "./pre-defend-ab-attr";
  * @extends PreDefendAbAttr
  */
 export class WonderSkinAbAttr extends PreDefendAbAttr {
-  override applyPreDefend(
+  override apply(
     _pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
     _attacker: Pokemon,
     move: Move,
