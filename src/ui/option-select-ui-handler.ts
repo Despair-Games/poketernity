@@ -1,8 +1,8 @@
 import { globalScene } from "#app/global-scene";
 import type { OptionSelectConfig, OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import { TextStyle, addBBCodeTextObject, getTextStyleOptions } from "#app/ui/text";
+import MessageUiHandler from "#app/ui/message-ui-handler";
 import { Mode } from "#app/ui/ui";
-import UiHandler from "#app/ui/ui-handler";
 import { addWindow } from "#app/ui/ui-theme";
 import { fixedNumber } from "#app/utils";
 import { Button } from "#enums/buttons";
@@ -11,7 +11,7 @@ import type BBCodeText from "phaser3-rex-plugins/plugins/gameobjects/tagtext/bbc
 const scrollUpLabel = "↑";
 const scrollDownLabel = "↓";
 
-export default class OptionSelectUiHandler extends UiHandler {
+export default class OptionSelectUiHandler extends MessageUiHandler {
   private singleSpaceWidth: number;
 
   protected readonly defaultYOffset = -48;
@@ -125,13 +125,11 @@ export default class OptionSelectUiHandler extends UiHandler {
         for (const iconConfig of option.iconsConfig) {
           tempSprite.setTexture(iconConfig.name, iconConfig.frame);
           tempSprite.setScale(iconConfig.scale);
-          console.log(tempSprite.displayWidth);
           maxIconWidth = Math.max(maxIconWidth, tempSprite.frame.width * tempSprite.scale);
         }
         // Pad the label with as many spaces as needed to make room for the icon
         if (maxIconWidth > 0) {
           const neededSpaces = Math.ceil(maxIconWidth / singleSpaceWidth);
-          console.log(singleSpaceWidth + " " + neededSpaces);
           option.label = option.label.padStart(option.label.length + neededSpaces);
         }
       }
@@ -141,11 +139,7 @@ export default class OptionSelectUiHandler extends UiHandler {
       labelWidth += tempTextObject.displayWidth;
 
       maxWidth = Math.max(maxWidth, labelWidth);
-
-      console.log("LABEL " + option.label + " " + tempTextObject.displayWidth + " " + labelWidth);
     }
-
-    console.log("DONE " + maxWidth);
 
     tempTextObject.destroy();
     tempSprite.destroy();
