@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { Pokemon } from "./pokemon";
-import { fixedInt, randInt } from "#app/utils";
+import { fixedNumber, randInt } from "#app/utils";
 
 export default class PokemonSpriteSparkleHandler {
   private sprites: Set<Phaser.GameObjects.Sprite>;
@@ -9,7 +9,7 @@ export default class PokemonSpriteSparkleHandler {
     this.sprites = new Set();
 
     globalScene.tweens.addCounter({
-      duration: fixedInt(200),
+      duration: fixedNumber(200),
       from: 0,
       to: 1,
       yoyo: true,
@@ -48,7 +48,7 @@ export default class PokemonSpriteSparkleHandler {
         sparkle.setName("sprite-tera-sparkle");
         sparkle.play("tera_sparkle");
         parent.add(sparkle);
-        s.scene.time.delayedCall(fixedInt(Math.floor((1000 / 12) * 13)), () => sparkle.destroy());
+        s.scene.time.delayedCall(fixedNumber(Math.floor((1000 / 12) * 13)), () => sparkle.destroy());
       }
     }
   }
