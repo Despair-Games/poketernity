@@ -10,7 +10,7 @@ import type { SettingType } from "#app/system/settings/settings";
 import { Setting, SettingKeys } from "#app/system/settings/settings";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
-import type { ConfirmModeConfig } from "../interfaces/confirm-menu-config";
+import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 
 /**
  * Abstract class for handling UI elements related to settings.

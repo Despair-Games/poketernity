@@ -17,6 +17,7 @@ import {
 import type { CommandPhase } from "#app/phases/command-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { Command } from "#app/ui/command-ui-handler";
+import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import MessageUiHandler from "#app/ui/message-ui-handler";
 import MoveInfoOverlay from "#app/ui/move-info-overlay";
 import PokemonIconAnimHandler, { PokemonIconAnimMode } from "#app/ui/pokemon-icon-anim-handler";
@@ -30,7 +31,6 @@ import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
-import type { ConfirmModeConfig } from "./interfaces/confirm-menu-config";
 
 const defaultMessage = i18next.t("partyUiHandler:choosePokemon");
 

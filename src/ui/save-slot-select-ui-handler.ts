@@ -7,7 +7,7 @@ import i18next from "i18next";
 import { GameMode } from "../game-mode";
 import * as Modifier from "../modifier/modifier";
 import type PokemonData from "../system/pokemon-data";
-import type { ConfirmModeConfig } from "./interfaces/confirm-menu-config";
+import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import MessageUiHandler from "./message-ui-handler";
 import { TextStyle, addTextObject } from "./text";
 import { Mode } from "./ui";

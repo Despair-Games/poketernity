@@ -16,7 +16,7 @@ import { fixedNumber, getCookie, getEnumKeys, isBeta, isLocal } from "#app/utils
 import { Button } from "#enums/buttons";
 import { GameDataType } from "#enums/game-data-type";
 import i18next from "i18next";
-import type { ConfirmModeConfig } from "./interfaces/confirm-menu-config";
+import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 
 enum MenuOptions {
   GAME_SETTINGS,
