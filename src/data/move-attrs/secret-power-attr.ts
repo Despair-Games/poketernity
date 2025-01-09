@@ -169,7 +169,7 @@ export class SecretPowerAttr extends MoveEffectAttr {
     applyAbAttrs(MoveEffectChanceMultiplierAbAttr, user, false, moveChance, move, showAbility);
 
     if (!selfEffect) {
-      applyAbAttrs(IgnoreMoveEffectsAbAttr, target, false, user, move, { value: false }, moveChance);
+      applyAbAttrs(IgnoreMoveEffectsAbAttr, target, false, user, move, moveChance);
     }
     return moveChance.value;
   }

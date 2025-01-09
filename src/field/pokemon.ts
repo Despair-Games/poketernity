@@ -1935,7 +1935,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     // Apply Tera Shell's effect to attacks after all immunities are accounted for
     if (!ignoreAbility && move.category !== MoveCategory.STATUS) {
-      applyAbAttrs(FullHpResistTypeAbAttr, this, simulated, source, move, cancelledHolder, typeMultiplier);
+      applyAbAttrs(FullHpResistTypeAbAttr, this, simulated, source, move, typeMultiplier);
     }
 
     if (move.category === MoveCategory.STATUS && move.hitsSubstitute(source, this)) {
@@ -3283,15 +3283,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const receivedDamageMultiplier = new NumberHolder(1);
     const alliedFieldDamageMultiplier = new NumberHolder(1);
     if (!ignoreAbility) {
-      applyAbAttrs(
-        ReceivedMoveDamageMultiplierAbAttr,
-        this,
-        simulated,
-        source,
-        move,
-        cancelled,
-        receivedDamageMultiplier,
-      );
+      applyAbAttrs(ReceivedMoveDamageMultiplierAbAttr, this, simulated, source, move, receivedDamageMultiplier);
 
       /** Additionally apply friend guard damage reduction if ally has it. */
       if (globalScene.currentBattle.double && this.getAlly()?.isActive(true)) {
@@ -3301,7 +3293,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           simulated,
           source,
           move,
-          cancelled,
           alliedFieldDamageMultiplier,
         );
       }
@@ -3343,7 +3334,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     applyMoveAttrs(ModifiedDamageAttr, source, this, move, damage);
 
     if (this.isFullHp() && !ignoreAbility) {
-      applyAbAttrs(PreDefendFullHpEndureAbAttr, this, simulated, source, move, cancelled, damage);
+      applyAbAttrs(PreDefendFullHpEndureAbAttr, this, simulated, source, move, damage);
     }
 
     // debug message for when damage is applied (i.e. not simulated)

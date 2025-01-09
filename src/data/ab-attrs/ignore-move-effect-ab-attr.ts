@@ -1,6 +1,6 @@
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder, NumberHolder } from "#app/utils";
+import type { NumberHolder } from "#app/utils";
 import { PreDefendAbAttr } from "./pre-defend-ab-attr";
 
 /**
@@ -17,7 +17,6 @@ export class IgnoreMoveEffectsAbAttr extends PreDefendAbAttr {
     _simulated: boolean,
     _attacker: Pokemon,
     _move: Move,
-    _cancelled: BooleanHolder,
     effectChance: NumberHolder,
   ): boolean {
     if (effectChance.value <= 0) {

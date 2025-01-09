@@ -2,7 +2,7 @@ import type { PokemonDefendCondition } from "#app/@types/PokemonDefendCondition"
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { HitResult } from "#app/field/pokemon";
-import type { BooleanHolder, NumberHolder } from "#app/utils";
+import type { NumberHolder } from "#app/utils";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import { ReceivedMoveDamageMultiplierAbAttr } from "./received-move-damage-multiplier-ab-attr";
 
@@ -49,7 +49,6 @@ export class FormBlockDamageAbAttr extends ReceivedMoveDamageMultiplierAbAttr {
     simulated: boolean,
     attacker: Pokemon,
     move: Move,
-    _cancelled: BooleanHolder,
     multiplier: NumberHolder,
   ): boolean {
     if (this.condition(pokemon, attacker, move) && !move.hitsSubstitute(attacker, pokemon)) {

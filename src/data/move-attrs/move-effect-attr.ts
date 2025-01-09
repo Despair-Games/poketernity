@@ -138,7 +138,7 @@ export class MoveEffectAttr extends MoveAttr {
     globalScene.arena.applyTagsForSide(ArenaTagType.WATER_FIRE_PLEDGE, userSide, false, moveChance);
 
     if (!selfEffect) {
-      applyAbAttrs(IgnoreMoveEffectsAbAttr, target, false, user, move, { value: false }, moveChance);
+      applyAbAttrs(IgnoreMoveEffectsAbAttr, target, false, user, move, moveChance);
     }
     return moveChance.value;
   }

@@ -54,15 +54,7 @@ describe("Abilities - Shield Dust", () => {
 
     const chance = new NumberHolder(move.chance);
     applyAbAttrs(MoveEffectChanceMultiplierAbAttr, phase.getUserPokemon()!, false, chance, move, false);
-    applyAbAttrs(
-      IgnoreMoveEffectsAbAttr,
-      phase.getFirstTarget()!,
-      false,
-      phase.getUserPokemon()!,
-      move,
-      { value: false },
-      chance,
-    );
+    applyAbAttrs(IgnoreMoveEffectsAbAttr, phase.getFirstTarget()!, false, phase.getUserPokemon()!, move, chance);
     expect(chance.value).toBe(0);
   }, 20000);
 

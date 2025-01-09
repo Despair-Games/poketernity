@@ -699,7 +699,7 @@ export abstract class Move implements Localizable {
     const moveAccuracy = new NumberHolder(this.accuracy);
 
     applyMoveAttrs(VariableAccuracyAttr, user, target, this, moveAccuracy);
-    applyAbAttrs(WonderSkinAbAttr, target, simulated, user, this, { value: false }, moveAccuracy);
+    applyAbAttrs(WonderSkinAbAttr, target, simulated, user, this, moveAccuracy);
 
     if (moveAccuracy.value === -1) {
       return moveAccuracy.value;
