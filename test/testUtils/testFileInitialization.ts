@@ -15,12 +15,10 @@ import { setCookie } from "#app/utils";
 import { blobToString } from "#test/testUtils/gameManagerUtils";
 import { MockConsoleLog } from "#test/testUtils/mocks/mockConsoleLog";
 import { mockContext } from "#test/testUtils/mocks/mockContext";
-import { MockFetch } from "#test/testUtils/mocks/mockFetch";
 import { mockLocalStorage } from "#test/testUtils/mocks/mockLocalStorage";
 import { MockImage } from "#test/testUtils/mocks/mocksContainer/mockImage";
 import Phaser from "phaser";
 import InputText from "phaser3-rex-plugins/plugins/inputtext";
-import { vi } from "vitest";
 import { manageListeners } from "./listenersManager";
 
 /**
@@ -53,7 +51,6 @@ export function initTestFile() {
     return null as any;
   };
   navigator.getGamepads = () => [];
-  global.fetch = vi.fn(MockFetch) as any;
   setCookie(SESSION_ID_COOKIE, "fake_token");
 
   window.matchMedia = () =>
@@ -98,4 +95,16 @@ export function initTestFile() {
   }
 
   manageListeners();
+}
+
+/**
+ * Closes the current mock server and initializes a new mock server.
+ * This is run at the beginning of every API test file.
+ */
+export async function initServerForApiTests() {
+  global.server?.close();
+  const { setupServer } = await import("msw/node");
+  global.server = setupServer();
+  global.server.listen({ onUnhandledRequest: "error" });
+  return global.server;
 }
