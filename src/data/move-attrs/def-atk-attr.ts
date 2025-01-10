@@ -14,8 +14,8 @@ export class DefAtkAttr extends VariableAtkAttr {
     super();
   }
 
-  override apply(user: Pokemon, target: Pokemon, _move: Move, attackingStat: NumberHolder): boolean {
-    attackingStat.value = user.getEffectiveStat(Stat.DEF, target);
+  override apply(user: Pokemon, target: Pokemon, move: Move, attackingStat: NumberHolder): boolean {
+    attackingStat.value = user.getEffectiveStat(Stat.DEF, target, move, true);
     return true;
   }
 }

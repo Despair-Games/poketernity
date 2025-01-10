@@ -1,3 +1,7 @@
+// -- start tsdoc imports --
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type { initGameSpeed } from "#app/system/game-speed";
+// -- end tsdoc imports --
 import { MoneyFormat } from "#enums/money-format";
 import { Moves } from "#enums/moves";
 import i18next from "i18next";
@@ -353,23 +357,27 @@ export class NumberHolder {
   }
 }
 
-/** @deprecated Use {@linkcode NumberHolder} */
-export class IntegerHolder extends NumberHolder {
+/**
+ * Holds a fixed number value, this is solely used to differentiate between a regular number
+ * and a constant or fixed number.
+ * This is used in the game speed system to differentiate between a fixed game speed and a dynamic one.
+ * @see `transformValue` in {@linkcode initGameSpeed}
+ * @extends NumberHolder
+ */
+export class FixedNumber {
+  public readonly value: number;
+
   constructor(value: number) {
-    super(value);
+    this.value = value;
   }
 }
 
-/** @deprecated Use {@linkcode NumberHolder}*/
-export class FixedInt extends IntegerHolder {
-  constructor(value: number) {
-    super(value);
-  }
-}
-
-/** @deprecated */
-export function fixedInt(value: number): number {
-  return new FixedInt(value) as unknown as number;
+/**
+ * Helper method to create a {@linkcode FixedNumber}
+ * @param value - The value to be stored in the {@linkcode FixedNumber}
+ */
+export function fixedNumber(value: number): number {
+  return new FixedNumber(value) as unknown as number;
 }
 
 /**

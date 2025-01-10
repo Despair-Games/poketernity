@@ -58,7 +58,7 @@ import {
   BooleanHolder,
   getEnumValues,
   toDmgValue,
-  fixedInt,
+  fixedNumber,
   rgbToHsv,
   deltaRgb,
   isBetween,
@@ -3100,9 +3100,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const damage = new NumberHolder(0);
     const defendingSide = this.getArenaTagSide();
 
-    const variableCategory = new NumberHolder(move.category);
-    applyMoveAttrs(VariableMoveCategoryAttr, source, this, move, variableCategory);
-    const moveCategory = variableCategory.value as MoveCategory;
+    const moveCategory = source.getMoveCategory(this, move);
 
     /** The move's type after type-changing effects are applied */
     const moveType = source.getMoveType(move);
@@ -3817,16 +3815,16 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       let fusionCry = this.getFusionSpeciesForm().cry(soundConfig, true);
       duration = Math.min(duration, fusionCry.totalDuration * 1000);
       fusionCry.destroy();
-      scene.time.delayedCall(fixedInt(Math.ceil(duration * 0.4)), () => {
+      scene.time.delayedCall(fixedNumber(Math.ceil(duration * 0.4)), () => {
         try {
-          SoundFade.fadeOut(scene, cry, fixedInt(Math.ceil(duration * 0.2)));
+          SoundFade.fadeOut(scene, cry, fixedNumber(Math.ceil(duration * 0.2)));
           fusionCry = this.getFusionSpeciesForm().cry(
             Object.assign({ seek: Math.max(fusionCry.totalDuration * 0.4, 0) }, soundConfig),
           );
           SoundFade.fadeIn(
             scene,
             fusionCry,
-            fixedInt(Math.ceil(duration * 0.2)),
+            fixedNumber(Math.ceil(duration * 0.2)),
             scene.masterVolume * scene.fieldVolume,
             0,
           );
@@ -3861,7 +3859,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     tintSprite?.anims.pause();
 
     let faintCryTimer: Phaser.Time.TimerEvent | null = globalScene.time.addEvent({
-      delay: fixedInt(delay),
+      delay: fixedNumber(delay),
       repeat: -1,
       callback: () => {
         frameThreshold = sprite.anims.msPerFrame / rate;
@@ -3887,7 +3885,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     });
 
     // Failsafe
-    globalScene.time.delayedCall(fixedInt(3000), () => {
+    globalScene.time.delayedCall(fixedNumber(3000), () => {
       if (!faintCryTimer || !globalScene) {
         return;
       }
@@ -3942,7 +3940,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     tintSprite?.anims.pause();
 
     let faintCryTimer: Phaser.Time.TimerEvent | null = globalScene.time.addEvent({
-      delay: fixedInt(delay),
+      delay: fixedNumber(delay),
       repeat: -1,
       callback: () => {
         ++i;
@@ -3956,7 +3954,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           frameProgress -= frameThreshold;
         }
         if (i === transitionIndex && fusionCryKey) {
-          SoundFade.fadeOut(globalScene, cry, fixedInt(Math.ceil((duration / rate) * 0.2)));
+          SoundFade.fadeOut(globalScene, cry, fixedNumber(Math.ceil((duration / rate) * 0.2)));
           fusionCry = globalScene.playSound(
             fusionCryKey,
             Object.assign({ seek: Math.max(fusionCry.totalDuration * 0.4, 0), rate: rate }),
@@ -3964,7 +3962,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           SoundFade.fadeIn(
             globalScene,
             fusionCry,
-            fixedInt(Math.ceil((duration / rate) * 0.2)),
+            fixedNumber(Math.ceil((duration / rate) * 0.2)),
             globalScene.masterVolume * globalScene.fieldVolume,
             0,
           );
@@ -3987,7 +3985,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     });
 
     // Failsafe
-    globalScene.time.delayedCall(fixedInt(3000), () => {
+    globalScene.time.delayedCall(fixedNumber(3000), () => {
       if (!faintCryTimer || !globalScene) {
         return;
       }

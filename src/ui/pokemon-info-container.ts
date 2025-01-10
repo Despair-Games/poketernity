@@ -10,7 +10,7 @@ import i18next from "i18next";
 import { DexAttr } from "#app/data/dex-attributes";
 import type { DexEntry } from "#app/@types/DexData";
 import type { StarterDataEntry } from "#app/@types/StarterData";
-import { capitalizeString, fixedInt } from "#app/utils";
+import { capitalizeString, fixedNumber } from "#app/utils";
 import ConfirmUiHandler from "./confirm-ui-handler";
 import { StatsContainer } from "./stats-container";
 import { TextStyle, addBBCodeTextObject, addTextObject, getTextColor } from "./text";
@@ -408,7 +408,7 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
       if (!eggInfo) {
         globalScene.tweens.add({
           targets: this,
-          duration: fixedInt(Math.floor(750 / speedMultiplier)),
+          duration: fixedNumber(Math.floor(750 / speedMultiplier)),
           ease: "Cubic.easeInOut",
           x: this.initialX - this.infoWindowWidth,
           onComplete: () => {
@@ -418,9 +418,9 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
 
         if (showMoves) {
           globalScene.tweens.add({
-            delay: fixedInt(Math.floor(325 / speedMultiplier)),
+            delay: fixedNumber(Math.floor(325 / speedMultiplier)),
             targets: this.pokemonMovesContainer,
-            duration: fixedInt(Math.floor(325 / speedMultiplier)),
+            duration: fixedNumber(Math.floor(325 / speedMultiplier)),
             ease: "Cubic.easeInOut",
             x: this.movesContainerInitialX - 57,
             onComplete: () => resolve(),
@@ -478,7 +478,7 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
     return new Promise<void>((resolve) => {
       globalScene.tweens.add({
         targets: this,
-        duration: fixedInt(Math.floor(150 / speedMultiplier)),
+        duration: fixedNumber(Math.floor(150 / speedMultiplier)),
         ease: "Cubic.easeInOut",
         x: xPosition,
         onComplete: () => {
@@ -497,14 +497,14 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
 
       globalScene.tweens.add({
         targets: this.pokemonMovesContainer,
-        duration: fixedInt(Math.floor(750 / speedMultiplier)),
+        duration: fixedNumber(Math.floor(750 / speedMultiplier)),
         ease: "Cubic.easeInOut",
         x: this.movesContainerInitialX,
       });
 
       globalScene.tweens.add({
         targets: this,
-        duration: fixedInt(Math.floor(750 / speedMultiplier)),
+        duration: fixedNumber(Math.floor(750 / speedMultiplier)),
         ease: "Cubic.easeInOut",
         x: this.initialX,
         onComplete: () => {

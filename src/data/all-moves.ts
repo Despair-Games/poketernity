@@ -195,7 +195,7 @@ import { SuppressAbilitiesAttr } from "./move-attrs/suppress-abilities-attr";
 import { SuppressAbilitiesIfActedAttr } from "./move-attrs/suppress-abilities-if-acted-attr";
 import { SurviveDamageAttr } from "./move-attrs/survive-damage-attr";
 import { SwallowHealAttr } from "./move-attrs/swallow-heal-attr";
-import { SwapArenaTagsAttr } from "./move-attrs/swap-arena-tags-attr";
+import { courtChangeArenaTags, SwapArenaTagsAttr } from "./move-attrs/swap-arena-tags-attr";
 import { SwapStatAttr } from "./move-attrs/swap-stat-attr";
 import { SwapStatStagesAttr } from "./move-attrs/swap-stat-stages-attr";
 import { SwitchAbilitiesAttr } from "./move-attrs/switch-abilities-attr";
@@ -1872,7 +1872,9 @@ export function initMoves() {
     new AttackMove(Moves.ACID_SPRAY, Type.POISON, MoveCategory.SPECIAL, 40, 100, 20, 100, 0, 5)
       .attr(StatStageChangeAttr, [Stat.SPDEF], -2)
       .ballBombMove(),
-    new AttackMove(Moves.FOUL_PLAY, Type.DARK, MoveCategory.PHYSICAL, 95, 100, 15, -1, 0, 5).attr(TargetAtkUserAtkAttr),
+    new AttackMove(Moves.FOUL_PLAY, Type.DARK, MoveCategory.PHYSICAL, 95, 100, 15, -1, 0, 5)
+      .attr(TargetAtkUserAtkAttr)
+      .edgeCase(), // Does not consider Huge Power/other attack stat modifiers correctly
     new StatusMove(Moves.SIMPLE_BEAM, Type.NORMAL, 100, 15, -1, 0, 5).attr(AbilityChangeAttr, Abilities.SIMPLE),
     new StatusMove(Moves.ENTRAINMENT, Type.NORMAL, 100, 15, -1, 0, 5).attr(AbilityGiveAttr),
     new StatusMove(Moves.AFTER_YOU, Type.NORMAL, -1, 15, -1, 0, 5)
@@ -2872,17 +2874,11 @@ export function initMoves() {
     new AttackMove(Moves.FISHIOUS_REND, Type.WATER, MoveCategory.PHYSICAL, 85, 100, 10, -1, 0, 8)
       .attr(FirstAttackDoublePowerAttr)
       .bitingMove(),
-    new StatusMove(Moves.COURT_CHANGE, Type.NORMAL, 100, 10, -1, 0, 8).attr(SwapArenaTagsAttr, [
-      ArenaTagType.AURORA_VEIL,
-      ArenaTagType.LIGHT_SCREEN,
-      ArenaTagType.MIST,
-      ArenaTagType.REFLECT,
-      ArenaTagType.SPIKES,
-      ArenaTagType.STEALTH_ROCK,
-      ArenaTagType.STICKY_WEB,
-      ArenaTagType.TAILWIND,
-      ArenaTagType.TOXIC_SPIKES,
-    ]),
+    new StatusMove(Moves.COURT_CHANGE, Type.NORMAL, -1, 10, -1, 0, 8)
+      .attr(SwapArenaTagsAttr, courtChangeArenaTags)
+      .condition((_user, _target, _move) =>
+        globalScene.arena.tags.some((arenaTag) => courtChangeArenaTags.includes(arenaTag.tagType)),
+      ), // G-max moves are not implemented but this should also swap steelsurge, vine lash, wildfire, and cannonade
     new AttackMove(Moves.MAX_FLARE, Type.FIRE, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.NEAR_ENEMY)
       .unimplemented()
@@ -2960,7 +2956,9 @@ export function initMoves() {
       .attr(CutHpStatStageBoostAttr, [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD], 1, 3)
       .soundBased()
       .danceMove(),
-    new AttackMove(Moves.BODY_PRESS, Type.FIGHTING, MoveCategory.PHYSICAL, 80, 100, 10, -1, 0, 8).attr(DefAtkAttr),
+    new AttackMove(Moves.BODY_PRESS, Type.FIGHTING, MoveCategory.PHYSICAL, 80, 100, 10, -1, 0, 8)
+      .attr(DefAtkAttr)
+      .edgeCase(), // Does not consider Huge Power or other attack stat modifiers correctly
     new StatusMove(Moves.DECORATE, Type.FAIRY, -1, 15, -1, 0, 8)
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.SPATK], 2)
       .ignoresProtect(),
