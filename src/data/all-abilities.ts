@@ -640,7 +640,7 @@ export function initAbilities() {
     new Ability(Abilities.TECHNICIAN, 4).attr(
       MovePowerBoostAbAttr,
       (user, target, move) => {
-        if (!move) {
+        if (!move || !user || !target) {
           return false;
         }
         const power = new NumberHolder(move.power);
@@ -956,7 +956,7 @@ export function initAbilities() {
     new Ability(Abilities.SYMBIOSIS, 6).unimplemented(),
     new Ability(Abilities.TOUGH_CLAWS, 6).attr(
       MovePowerBoostAbAttr,
-      (user, target, move) => !!user && !!move && move.checkFlag(MoveFlags.MAKES_CONTACT, user, target),
+      (user, target, move) => !!user && !!move && move.checkFlag(MoveFlags.MAKES_CONTACT, user, target ?? null),
       1.3,
     ),
     new Ability(Abilities.PIXILATE, 6).attr(

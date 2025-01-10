@@ -3186,7 +3186,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       multiStrikeEnhancementMultiplier,
     );
     if (!ignoreSourceAbility) {
-      applyAbAttrs(AddSecondStrikeAbAttr, source, simulated, this, move, null, multiStrikeEnhancementMultiplier);
+      applyAbAttrs(AddSecondStrikeAbAttr, source, simulated, this, move, undefined, multiStrikeEnhancementMultiplier);
     }
 
     /** Doubles damage if this Pokemon's last move was Glaive Rush */

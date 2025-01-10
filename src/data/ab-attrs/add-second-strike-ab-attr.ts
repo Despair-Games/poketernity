@@ -32,8 +32,8 @@ export class AddSecondStrikeAbAttr extends PreAttackAbAttr {
     _simulated: boolean,
     _defender: Pokemon,
     move: Move,
-    hitCount: NumberHolder | null,
-    multiplier: NumberHolder | null,
+    hitCount?: NumberHolder,
+    multiplier?: NumberHolder,
   ): boolean {
     if (move.canBeMultiStrikeEnhanced(pokemon)) {
       this.showAbility = !!hitCount?.value;

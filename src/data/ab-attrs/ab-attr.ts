@@ -1,6 +1,6 @@
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import { type Pokemon } from "#app/field/pokemon";
-import type { Ability } from "../ability";
+import type { Ability } from "#app/data/ability";
 
 export abstract class AbAttr {
   public source: Ability;
