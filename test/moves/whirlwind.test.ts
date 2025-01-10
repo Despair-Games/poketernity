@@ -37,7 +37,7 @@ describe("Moves - Whirlwind", () => {
   ])("should not hit a flying target: $name (=$move)", async ({ move }) => {
     await game.classicMode.startBattle([Species.STARAPTOR]);
 
-    const staraptor = game.pokemonHelper.getPlayerPokemon();
+    const staraptor = game.field.getPlayerPokemon();
 
     game.move.use(move);
     await game.move.forceEnemyMove(Moves.WHIRLWIND);
