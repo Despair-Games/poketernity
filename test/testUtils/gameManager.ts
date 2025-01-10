@@ -122,8 +122,8 @@ export class GameManager {
     this.modifiers = new ModifierHelper(this);
     this.field = new FieldHelper(this);
 
-    // Disables Mystery Encounters on all tests (can be overridden at test level)
-    this.override.mysteryEncounterChance(0);
+    // Sanitize overrides for each test
+    this.override.mysteryEncounterChance(0).moveset([]).enemyMoveset([]).startingHeldItems([]).enemyHeldItems([]);
   }
 
   /**
