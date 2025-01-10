@@ -136,7 +136,7 @@ describe("Moves - Toxic Spikes", () => {
   it("should apply even if the target is fainted", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    const enemyPokemon = game.pokemonHelper.getEnemyPokemon();
+    const enemyPokemon = game.field.getEnemyPokemon();
 
     game.move.use(Moves.TOXIC_SPIKES);
     await game.move.forceEnemyMove(Moves.MEMENTO);

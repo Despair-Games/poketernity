@@ -3100,9 +3100,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const damage = new NumberHolder(0);
     const defendingSide = this.getArenaTagSide();
 
-    const variableCategory = new NumberHolder(move.category);
-    applyMoveAttrs(VariableMoveCategoryAttr, source, this, move, variableCategory);
-    const moveCategory = variableCategory.value as MoveCategory;
+    const moveCategory = source.getMoveCategory(this, move);
 
     /** The move's type after type-changing effects are applied */
     const moveType = source.getMoveType(move);

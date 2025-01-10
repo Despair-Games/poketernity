@@ -6,7 +6,7 @@ import { expect } from "vitest";
 import { type globalScene } from "#app/global-scene";
 
 /** Helper to manage pokemon */
-export class PokemonHelper extends GameManagerHelper {
+export class FieldHelper extends GameManagerHelper {
   /**
    * Passthrough for {@linkcode globalScene.getPlayerPokemon} that adds an `undefined` check for
    * the Pokemon so that the return type for the function doesn't have `undefined`.
