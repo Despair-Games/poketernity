@@ -204,7 +204,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
       globalScene.tryRemovePhase((phase) => phase instanceof SelectModifierPhase);
     } else if (this.learnMoveType === LearnMoveType.MEMORY) {
       if (this.cost !== -1) {
-        if (!Overrides.WAIVE_ROLL_FEE_OVERRIDE) {
+        if (!Overrides.WAIVE_SHOP_FEES_OVERRIDE) {
           globalScene.money -= this.cost;
           globalScene.updateMoneyText();
           globalScene.animateMoneyChanged(false);
