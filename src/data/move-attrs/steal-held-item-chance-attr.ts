@@ -13,7 +13,7 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
  * - "If Knock Off causes a Pokémon with the Sticky Hold Ability to faint, it can now remove that Pokémon's held item."
  */
 export class StealHeldItemChanceAttr extends MoveEffectAttr {
-  private chance: number;
+  public readonly chance: number;
 
   constructor(chance: number) {
     super(false);

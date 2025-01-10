@@ -23,7 +23,7 @@ export class FullHpResistTypeAbAttr extends PreDefendAbAttr {
    */
   override apply(
     pokemon: Pokemon,
-    _simulated: boolean,
+    simulated: boolean,
     _attacker: Pokemon,
     move: Move | null,
     typeMultiplier: NumberHolder,
@@ -34,7 +34,9 @@ export class FullHpResistTypeAbAttr extends PreDefendAbAttr {
 
     if (pokemon.isFullHp() && typeMultiplier.value > 0.5) {
       typeMultiplier.value = 0.5;
-      pokemon.turnData.moveEffectiveness = 0.5;
+      if (!simulated) {
+        pokemon.turnData.moveEffectiveness = 0.5;
+      }
       return true;
     }
     return false;
