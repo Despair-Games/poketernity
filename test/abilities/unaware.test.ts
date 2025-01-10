@@ -41,8 +41,8 @@ describe("Abilities - Unaware", () => {
     await game.move.forceEnemyMove(Moves.SHELL_SMASH);
     await game.toNextTurn();
 
-    const playerPokemon = game.pokemonHelper.getPlayerPokemon();
-    const enemyPokemon = game.pokemonHelper.getEnemyPokemon();
+    const playerPokemon = game.field.getPlayerPokemon();
+    const enemyPokemon = game.field.getEnemyPokemon();
     for (const stat of EFFECTIVE_STATS) {
       let expectedStat = enemyPokemon.getStat(stat);
       if (stat === Stat.SPD) {
@@ -61,8 +61,8 @@ describe("Abilities - Unaware", () => {
     await game.move.forceEnemyMove(Moves.SPLASH);
     await game.toNextTurn();
 
-    const playerPokemon = game.pokemonHelper.getPlayerPokemon();
-    const enemyPokemon = game.pokemonHelper.getEnemyPokemon();
+    const playerPokemon = game.field.getPlayerPokemon();
+    const enemyPokemon = game.field.getEnemyPokemon();
     for (const stat of EFFECTIVE_STATS) {
       let expectedStat = playerPokemon.getStat(stat);
       if ([Stat.ATK, Stat.SPATK, Stat.SPD].includes(stat)) {
@@ -112,7 +112,7 @@ describe("Abilities - Unaware", () => {
   it("should cause the opponent's Body Press to ignore the opponent's Defense stages", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    const enemyPokemon = game.pokemonHelper.getEnemyPokemon();
+    const enemyPokemon = game.field.getEnemyPokemon();
     vi.spyOn(enemyPokemon, "getEffectiveStat");
     const expectedDef = enemyPokemon.getStat(Stat.DEF);
 
@@ -130,9 +130,9 @@ describe("Abilities - Unaware", () => {
     game.override.statusActivation(true).startingLevel(1000).enemyLevel(1000);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    const playerPokemon = game.pokemonHelper.getPlayerPokemon();
+    const playerPokemon = game.field.getPlayerPokemon();
     vi.spyOn(playerPokemon, "getEffectiveStat");
-    const enemyPokemon = game.pokemonHelper.getEnemyPokemon();
+    const enemyPokemon = game.field.getEnemyPokemon();
     vi.spyOn(enemyPokemon, "getEffectiveStat");
     const expectedPlayerAtk = Math.floor(playerPokemon.getStat(Stat.ATK) * (3 / 2));
     const expectedEnemyAtk = Math.floor(enemyPokemon.getStat(Stat.ATK) * (3 / 2));
@@ -172,7 +172,7 @@ describe("Abilities - Unaware", () => {
     game.override.startingLevel(1000).enemyLevel(1000);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    const playerPokemon = game.pokemonHelper.getPlayerPokemon();
+    const playerPokemon = game.field.getPlayerPokemon();
     const hpAmounts = [playerPokemon.hp];
 
     game.move.use(Moves.WILL_O_WISP);

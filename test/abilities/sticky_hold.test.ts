@@ -50,7 +50,7 @@ describe("Abilities - Sticky Hold", () => {
       await game.move.forceEnemyMove(Moves.SPLASH);
       await game.toNextTurn();
 
-      const enemyPokemon = game.pokemonHelper.getEnemyPokemon();
+      const enemyPokemon = game.field.getEnemyPokemon();
       expect(enemyPokemon.getHeldItems().length).toBe(1);
     },
   );
@@ -68,7 +68,7 @@ describe("Abilities - Sticky Hold", () => {
       await game.move.forceEnemyMove(Moves.FALSE_SWIPE);
       await game.toNextTurn();
 
-      const enemyPokemon = game.pokemonHelper.getEnemyPokemon();
+      const enemyPokemon = game.field.getEnemyPokemon();
       expect(enemyPokemon.getHeldItems().length).toBe(1);
     },
   );
