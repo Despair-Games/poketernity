@@ -9,6 +9,7 @@ import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import type { MockClock } from "#test/testUtils/mocks/mockClock";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import * as Text from "#app/ui/text";
 
 describe("Reload", () => {
   let phaserGame: Phaser.Game;
@@ -28,6 +29,7 @@ describe("Reload", () => {
     game = new GameManager(phaserGame);
     vi.spyOn(api, "getGameTitleStats").mockResolvedValue({ battleCount: -1, playerCount: -1 });
     vi.spyOn(api.daily, "getSeed").mockResolvedValue("test-seed");
+    vi.spyOn(Text, "addBBCodeTextObject").mockReturnValue({ destroy: () => {}, setText: () => {} } as any);
   });
 
   it("should not have RNG inconsistencies in a Classic run", async () => {
