@@ -202,6 +202,8 @@ export class GameWrapper {
     // @ts-ignore
     this.scene.remove = vi.fn();
     this.scene.eventManager = new MockTimedEventManager(); // Disable Timed Events
+
+    Pokemon.prototype.updateInfo = async () => {};
   }
 }
 

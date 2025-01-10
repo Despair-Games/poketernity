@@ -2784,6 +2784,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     this.switchOutStatus = status;
   }
 
+  /**
+   * Updates the Pokemon's battle info UI. This is purely a visual update.
+   * @param instant Whether or not the update should be instant.
+   */
   updateInfo(instant?: boolean): Promise<void> {
     return this.battleInfo.updateInfo(this, instant);
   }
