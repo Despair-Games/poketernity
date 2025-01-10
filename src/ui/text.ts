@@ -1,8 +1,8 @@
 import { EggTier } from "#enums/egg-type";
 import { UiTheme } from "#enums/ui-theme";
 import type Phaser from "phaser";
-import BBCodeText from "phaser3-rex-plugins/plugins/gameobjects/tagtext/bbcodetext/BBCodeText";
-import InputText from "phaser3-rex-plugins/plugins/inputtext";
+import type BBCodeText from "phaser3-rex-plugins/plugins/gameobjects/tagtext/bbcodetext/BBCodeText";
+import type InputText from "phaser3-rex-plugins/plugins/inputtext";
 import { globalScene } from "#app/global-scene";
 import { ModifierTier } from "../modifier/modifier-tier";
 import i18next from "#app/plugins/i18n";
@@ -113,8 +113,7 @@ export function addBBCodeTextObject(
     extraStyleOptions,
   );
 
-  const ret = new BBCodeText(globalScene, x, y, content, styleOptions as BBCodeText.TextStyle);
-  globalScene.add.existing(ret);
+  const ret = globalScene.add.rexBBCodeText(x, y, content, styleOptions as BBCodeText.TextStyle);
   ret.setScale(scale);
   ret.setShadow(shadowXpos, shadowYpos, shadowColor);
   if (!(styleOptions as BBCodeText.TextStyle).lineSpacing) {
@@ -138,8 +137,7 @@ export function addTextInputObject(
 ): InputText {
   const { scale, styleOptions } = getTextStyleOptions(style, globalScene.uiTheme, extraStyleOptions);
 
-  const ret = new InputText(globalScene, x, y, width, height, styleOptions as InputText.IConfig);
-  globalScene.add.existing(ret);
+  const ret = globalScene.add.rexInputText(x, y, width, height, styleOptions as InputText.IConfig);
   ret.setScale(scale);
 
   return ret;

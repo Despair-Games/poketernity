@@ -16,7 +16,6 @@ import { MockTextureManager } from "#test/testUtils/mocks/mockTextureManager";
 import { MockTimedEventManager } from "#test/testUtils/mocks/mockTimedEventManager";
 import fs from "fs";
 import Phaser from "phaser";
-import InputText from "phaser3-rex-plugins/plugins/inputtext";
 import { vi } from "vitest";
 import { version } from "../../package.json";
 import InputManager = Phaser.Input.InputManager;
@@ -33,8 +32,6 @@ Object.defineProperty(window, "console", {
   value: mockConsoleLog(false),
 });
 
-InputText.prototype.setElement = () => null as any;
-InputText.prototype.resize = () => null as any;
 Phaser.GameObjects.Image = MockImage as any;
 window.URL.createObjectURL = (blob: Blob) => {
   blobToString(blob).then((data: string) => {

@@ -1,13 +1,15 @@
+import type { MockGameObject } from "#test/testUtils/mocks/mockGameObject";
+import { MockVideoGameObject } from "#test/testUtils/mocks/mockVideoGameObject";
+import { MockBBCodeText } from "#test/testUtils/mocks/mocksContainer/mockBBCodeText";
 import { MockContainer } from "#test/testUtils/mocks/mocksContainer/mockContainer";
 import { MockImage } from "#test/testUtils/mocks/mocksContainer/mockImage";
+import { MockInputText } from "#test/testUtils/mocks/mocksContainer/mockInputText";
 import { MockNineslice } from "#test/testUtils/mocks/mocksContainer/mockNineslice";
 import { MockPolygon } from "#test/testUtils/mocks/mocksContainer/mockPolygon";
 import { MockRectangle } from "#test/testUtils/mocks/mocksContainer/mockRectangle";
 import { MockSprite } from "#test/testUtils/mocks/mocksContainer/mockSprite";
 import { MockText } from "#test/testUtils/mocks/mocksContainer/mockText";
 import { MockTexture } from "#test/testUtils/mocks/mocksContainer/mockTexture";
-import type { MockGameObject } from "#test/testUtils/mocks/mockGameObject";
-import { MockVideoGameObject } from "#test/testUtils/mocks/mockVideoGameObject";
 
 /**
  * Stub class for Phaser.Textures.TextureManager
@@ -33,6 +35,8 @@ export class MockTextureManager {
       image: this.image.bind(this),
       polygon: this.polygon.bind(this),
       text: this.text.bind(this),
+      rexBBCodeText: this.rexBBCodeText.bind(this),
+      rexInputText: this.rexInputText.bind(this),
       bitmapText: this.text.bind(this),
       displayList: this.displayList,
       video: () => new MockVideoGameObject(),
@@ -99,6 +103,18 @@ export class MockTextureManager {
 
   text(x, y, content, styleOptions) {
     const text = new MockText(this, x, y, content, styleOptions);
+    this.list.push(text);
+    return text;
+  }
+
+  rexBBCodeText(x, y, content, styleOptions) {
+    const text = new MockBBCodeText(this, x, y, content, styleOptions);
+    this.list.push(text);
+    return text;
+  }
+
+  rexInputText(x, y, w, h, content, styleOptions) {
+    const text = new MockInputText(this, x, y, w, h, content, styleOptions);
     this.list.push(text);
     return text;
   }
