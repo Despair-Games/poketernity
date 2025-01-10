@@ -1,4 +1,4 @@
-import { BattlerIndex } from "#app/battle";
+import { BattlerIndex } from "#enums/battler-index";
 import { AddSecondStrikeAbAttr } from "#app/data/ab-attrs/add-second-strike-ab-attr";
 import { AlwaysHitAbAttr } from "#app/data/ab-attrs/always-hit-ab-attr";
 import { IgnoreMoveEffectsAbAttr } from "#app/data/ab-attrs/ignore-move-effect-ab-attr";
@@ -14,13 +14,8 @@ import {
 } from "#app/data/ability";
 import { ConditionalProtectTag } from "#app/data/arena-tag";
 import { MoveAnim } from "#app/data/battle-anims";
-import {
-  BattlerTagLapseType,
-  ProtectedTag,
-  SemiInvulnerableTag,
-  SubstituteTag,
-  TypeBoostTag,
-} from "#app/data/battler-tags";
+import { ProtectedTag, SemiInvulnerableTag, SubstituteTag, TypeBoostTag } from "#app/data/battler-tags";
+import { BattlerTagLapseType } from "#app/enums/battler-tag-lapse-type";
 import { applyFilteredMoveAttrs, applyMoveAttrs, AttackMove } from "#app/data/move";
 import { DelayedAttackAttr } from "#app/data/move-attrs/delayed-attack-attr";
 import { FlinchAttr } from "#app/data/move-attrs/flinch-attr";
@@ -36,7 +31,8 @@ import { ToxicAccuracyAttr } from "#app/data/move-attrs/toxic-accuracy-attr";
 import { SpeciesFormChangePostMoveTrigger } from "#app/data/pokemon-forms";
 import type { TypeDamageMultiplier } from "#app/data/type";
 import type { DamageResult, Pokemon, PokemonMove, TurnMove } from "#app/field/pokemon";
-import { HitResult, MoveResult } from "#app/field/pokemon";
+import { MoveResult } from "#enums/move-result";
+import { HitResult } from "#enums/hit-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import {

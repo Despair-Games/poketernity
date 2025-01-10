@@ -15,14 +15,7 @@ import type { ConditionFn } from "#app/@types/common";
 import { Stat, getShortenedStatKey } from "#app/enums/stat";
 import { Challenges } from "#app/enums/challenges";
 import { globalScene } from "#app/global-scene";
-
-export enum AchvTier {
-  COMMON,
-  GREAT,
-  ULTRA,
-  EPIC,
-  MASTER,
-}
+import { AchvTier } from "../enums/achv-tier";
 
 export class Achv {
   public localizationKey: string;

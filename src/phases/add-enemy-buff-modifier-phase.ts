@@ -1,11 +1,8 @@
 import { globalScene } from "#app/global-scene";
 import { EnemyPersistentModifier } from "#app/modifier/modifier";
 import { ModifierTier } from "#app/modifier/modifier-tier";
-import {
-  ModifierPoolType,
-  getEnemyBuffModifierForWave,
-  regenerateModifierPoolThresholds,
-} from "#app/modifier/modifier-type";
+import { getEnemyBuffModifierForWave, regenerateModifierPoolThresholds } from "#app/modifier/modifier-type";
+import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { Phase } from "#app/phase";
 
 /**

@@ -1,4 +1,4 @@
-import type { BattlerIndex } from "#app/battle";
+import type { BattlerIndex } from "#enums/battler-index";
 import { BlockNonDirectDamageAbAttr } from "#app/data/ab-attrs/block-non-direct-damage-ab-attr";
 import { BlockStatusDamageAbAttr } from "#app/data/ab-attrs/block-status-damage-ab-attr";
 import { PostDamageAbAttr } from "#app/data/ab-attrs/post-damage-ab-attr";

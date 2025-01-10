@@ -8,7 +8,7 @@ import type { SpeciesFormEvolution } from "#app/data/balance/pokemon-evolutions"
 import { FusionSpeciesFormEvolution } from "#app/data/balance/pokemon-evolutions";
 import { EVOLVE_MOVE } from "#app/data/balance/pokemon-level-moves";
 import type { PlayerPokemon, Pokemon } from "#app/field/pokemon";
-import { LearnMoveSituation } from "#app/field/pokemon";
+import { LearnMoveSituation } from "#enums/learn-move-situation";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { EndEvolutionPhase } from "#app/phases/end-evolution-phase";

@@ -12,12 +12,8 @@ import type { PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { EnemyPokemon } from "#app/field/pokemon";
 import type { BerryModifierType, ModifierTypeOption } from "#app/modifier/modifier-type";
-import {
-  getPartyLuckValue,
-  ModifierPoolType,
-  modifierTypes,
-  regenerateModifierPoolThresholds,
-} from "#app/modifier/modifier-type";
+import { getPartyLuckValue, modifierTypes, regenerateModifierPoolThresholds } from "#app/modifier/modifier-type";
+import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { randSeedInt } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";

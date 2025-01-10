@@ -8,7 +8,7 @@ import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
 import type { Type } from "#enums/type";
 import type { PersistentModifier } from "#app/modifier/modifier";
-import { TrainerVariant } from "#app/field/trainer";
+import { TrainerVariant } from "#enums/trainer-variant";
 import { getIsInitialized, initI18n } from "#app/plugins/i18n";
 import i18next from "i18next";
 import { PartyMemberStrength } from "#enums/party-member-strength";

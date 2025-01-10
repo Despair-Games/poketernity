@@ -19,11 +19,11 @@ import {
   StatusEffectRequirement,
   WaveRangeRequirement,
 } from "./mystery-encounter-requirements";
-import type { BattlerIndex } from "#app/battle";
+import type { BattlerIndex } from "#enums/battler-index";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import type { GameModes } from "#app/game-mode";
+import type { GameModes } from "#enums/game-modes";
 import type { EncounterAnim } from "#enums/encounter-anims";
 import type { Challenges } from "#enums/challenges";
 import { globalScene } from "#app/global-scene";

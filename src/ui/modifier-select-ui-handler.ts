@@ -6,7 +6,8 @@ import { addTextObject, getTextStyleOptions, getModifierTierTextTint, getTextCol
 import AwaitableUiHandler from "./awaitable-ui-handler";
 import { Mode } from "./ui";
 import { LockModifierTiersModifier, PokemonHeldItemModifier, HealShopCostModifier } from "../modifier/modifier";
-import { handleTutorial, Tutorial } from "../tutorial";
+import { handleTutorial } from "../tutorial";
+import { Tutorial } from "#app/enums/tutorial";
 import { Button } from "#enums/buttons";
 import MoveInfoOverlay from "./move-info-overlay";
 import { allMoves } from "#app/data/all-moves";

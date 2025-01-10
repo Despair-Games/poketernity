@@ -5,7 +5,7 @@ import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
 import type { EnemyPokemon } from "#app/field/pokemon";
-import { AiType } from "#app/field/pokemon";
+import { AiType } from "#enums/ai-type";
 import { randSeedInt } from "#app/utils";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";

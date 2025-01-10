@@ -16,7 +16,8 @@ import { getStatusEffectHealText } from "#app/data/status-effect";
 import { TerrainType } from "#enums/terrain-type";
 import { Type } from "#enums/type";
 import type { Pokemon } from "#app/field/pokemon";
-import { HitResult, MoveResult } from "#app/field/pokemon";
+import { MoveResult } from "#enums/move-result";
+import { HitResult } from "#enums/hit-result";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
@@ -38,18 +39,7 @@ import { WeatherType } from "#enums/weather-type";
 import { ReverseDrainAbAttr } from "./ab-attrs/reverse-drain-ab-attr";
 import { ProtectStatAbAttr } from "./ab-attrs/protect-stat-ab-attr";
 import Overrides from "#app/overrides";
-
-export enum BattlerTagLapseType {
-  FAINT,
-  MOVE,
-  PRE_MOVE,
-  AFTER_MOVE,
-  MOVE_EFFECT,
-  TURN_END,
-  HIT,
-  AFTER_HIT,
-  CUSTOM,
-}
+import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 
 export class BattlerTag {
   public tagType: BattlerTagType;

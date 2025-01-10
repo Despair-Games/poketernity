@@ -1,6 +1,6 @@
 import { PostTurnAbAttr } from "#app/data/ab-attrs/post-turn-ab-attr";
 import { applyPostTurnAbAttrs } from "#app/data/ability";
-import { BattlerTagLapseType } from "#app/data/battler-tags";
+import { BattlerTagLapseType } from "#app/enums/battler-tag-lapse-type";
 import { TurnEndEvent } from "#app/events/battle-scene";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";

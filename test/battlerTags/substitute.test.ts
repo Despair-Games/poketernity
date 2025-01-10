@@ -1,9 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { PokemonTurnData, TurnMove, PokemonMove } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
-import { MoveResult } from "#app/field/pokemon";
+import { MoveResult } from "#enums/move-result";
 import BattleScene from "#app/battle-scene";
-import { BattlerTagLapseType, BindTag, SubstituteTag } from "#app/data/battler-tags";
+import { BindTag, SubstituteTag } from "#app/data/battler-tags";
+import { BattlerTagLapseType } from "#app/enums/battler-tag-lapse-type";
 import { Moves } from "#enums/moves";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import * as messages from "#app/messages";

@@ -10,7 +10,8 @@ import { starterColors } from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
 import { allAbilities } from "#app/data/ability";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
-import { GrowthRate, getGrowthRateColor } from "#app/data/exp";
+import { getGrowthRateColor } from "#app/data/exp";
+import { GrowthRate } from "#enums/growth-rates";
 import { getGenderColor, getGenderShadowColor, getGenderSymbol } from "#app/data/gender";
 import { Gender } from "#enums/gender";
 import { allMoves } from "#app/data/all-moves";
@@ -23,13 +24,14 @@ import { allSpecies, getPokemonSpeciesForm, getPokerusStarters } from "#app/data
 import { getStarterValueFriendshipCap, speciesStarterCosts, POKERUS_STARTER_COUNT } from "#app/data/balance/starters";
 import { starterPassiveAbilities } from "#app/data/balance/passives";
 import { Type } from "#enums/type";
-import { GameModes } from "#app/game-mode";
+import { GameModes } from "#enums/game-modes";
 import type { DexAttrProps, StarterAttributes, StarterPreferences } from "#app/system/game-data";
 import { StarterPrefs } from "#app/system/game-data";
 import type { DexEntry } from "#app/@types/DexData";
 import type { StarterMoveset } from "#app/@types/StarterData";
 import { DexAttr, AbilityAttr } from "#app/data/dex-attributes";
-import { Tutorial, handleTutorial } from "#app/tutorial";
+import { handleTutorial } from "#app/tutorial";
+import { Tutorial } from "#app/enums/tutorial";
 import type { OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler";
 import MessageUiHandler from "#app/ui/message-ui-handler";
 import PokemonIconAnimHandler, { PokemonIconAnimMode } from "#app/ui/pokemon-icon-anim-handler";
@@ -42,6 +44,7 @@ import Overrides from "#app/overrides";
 import { SettingKeyboard } from "#app/system/settings/settings-keyboard";
 import { Passive as PassiveAttr } from "#enums/passive";
 import * as Challenge from "#app/data/challenge";
+import * as ChallengeType from "#app/enums/challenge-type";
 import MoveInfoOverlay from "#app/ui/move-info-overlay";
 import { getEggTierForSpecies } from "#app/data/egg";
 import { Device } from "#enums/devices";
@@ -1678,7 +1681,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
 
           Challenge.applyChallenges(
             globalScene.gameMode,
-            Challenge.ChallengeType.STARTER_CHOICE,
+            ChallengeType.ChallengeType.STARTER_CHOICE,
             this.lastSpecies,
             isValidForChallenge,
             globalScene.gameData.getSpeciesDexAttrProps(
@@ -2730,7 +2733,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         valueLimit.value = 10;
     }
 
-    Challenge.applyChallenges(globalScene.gameMode, Challenge.ChallengeType.STARTER_POINTS, valueLimit);
+    Challenge.applyChallenges(globalScene.gameMode, ChallengeType.ChallengeType.STARTER_POINTS, valueLimit);
 
     return valueLimit.value;
   }
@@ -2759,7 +2762,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
             const isValidForChallenge = new BooleanHolder(true);
             Challenge.applyChallenges(
               globalScene.gameMode,
-              Challenge.ChallengeType.STARTER_CHOICE,
+              ChallengeType.ChallengeType.STARTER_CHOICE,
               container.species,
               isValidForChallenge,
               globalScene.gameData.getSpeciesDexAttrProps(species, tempFormProps),
@@ -2771,7 +2774,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
           const isValidForChallenge = new BooleanHolder(true);
           Challenge.applyChallenges(
             globalScene.gameMode,
-            Challenge.ChallengeType.STARTER_CHOICE,
+            ChallengeType.ChallengeType.STARTER_CHOICE,
             container.species,
             isValidForChallenge,
             globalScene.gameData.getSpeciesDexAttrProps(
@@ -3562,7 +3565,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         const isValidForChallenge = new BooleanHolder(true);
         Challenge.applyChallenges(
           globalScene.gameMode,
-          Challenge.ChallengeType.STARTER_CHOICE,
+          ChallengeType.ChallengeType.STARTER_CHOICE,
           species,
           isValidForChallenge,
           globalScene.gameData.getSpeciesDexAttrProps(species, this.dexAttrCursor),
@@ -3937,7 +3940,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       const species = this.filteredStarterContainers[this.cursor].species;
       Challenge.applyChallenges(
         globalScene.gameMode,
-        Challenge.ChallengeType.STARTER_CHOICE,
+        ChallengeType.ChallengeType.STARTER_CHOICE,
         species,
         isNewPokemonValid,
         globalScene.gameData.getSpeciesDexAttrProps(species, this.getCurrentDexProps(species.speciesId)),
@@ -3970,7 +3973,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       const isValidForChallenge = new BooleanHolder(true);
       Challenge.applyChallenges(
         globalScene.gameMode,
-        Challenge.ChallengeType.STARTER_CHOICE,
+        ChallengeType.ChallengeType.STARTER_CHOICE,
         this.allSpecies[s],
         isValidForChallenge,
         globalScene.gameData.getSpeciesDexAttrProps(
@@ -4118,7 +4121,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       const species = this.starterSpecies[s];
       Challenge.applyChallenges(
         globalScene.gameMode,
-        Challenge.ChallengeType.STARTER_CHOICE,
+        ChallengeType.ChallengeType.STARTER_CHOICE,
         species,
         isValidForChallenge,
         globalScene.gameData.getSpeciesDexAttrProps(species, this.getCurrentDexProps(species.speciesId)),

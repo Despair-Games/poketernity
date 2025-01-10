@@ -3,7 +3,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import i18next from "i18next";
-import { ArenaTagSide } from "../arena-tag";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 import type { Move } from "../move";
 import { MoveEffectAttr } from "./move-effect-attr";
 

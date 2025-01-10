@@ -1,8 +1,8 @@
-import { BattlerIndex } from "#app/battle";
-import { ArenaTagSide } from "#app/data/arena-tag";
+import { BattlerIndex } from "#enums/battler-index";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 import { SubstituteTag, TrappedTag } from "#app/data/battler-tags";
 import { allMoves } from "#app/data/all-moves";
-import { MoveResult } from "#app/field/pokemon";
+import { MoveResult } from "#enums/move-result";
 import type { CommandPhase } from "#app/phases/command-phase";
 import { GameManager } from "#test/testUtils/gameManager";
 import { Command } from "#app/ui/command-ui-handler";
