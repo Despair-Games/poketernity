@@ -5,11 +5,11 @@ import { AbAttr } from "./ab-attr";
 export class PreAttackAbAttr extends AbAttr {
   /**
    * Applies an effect before the source moves
-   * @param _pokemon The {@linkcode Pokemon} with this ability
-   * @param _simulated If `true`, suppresses changes to game state
-   * @param _defender The {@linkcode Pokemon} targeted by the move
-   * @param _move The {@linkcode Move} being used
-   * @param _args Any additional parameters for this effect
+   * @param pokemon The {@linkcode Pokemon} with this ability
+   * @param simulated If `true`, suppresses changes to game state
+   * @param defender The {@linkcode Pokemon} targeted by the move
+   * @param move The {@linkcode Move} being used
+   * @param args Any additional parameters for this effect
    * @returns `true` if effects from this attribute apply successfully
    */
   override apply(

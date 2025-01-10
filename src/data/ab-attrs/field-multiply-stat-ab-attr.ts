@@ -23,8 +23,8 @@ export class FieldMultiplyStatAbAttr extends AbAttr {
 
   /**
    * Tries to multiply a Pokemon's Stat
-   * @param _pokemon The {@linkcode Pokemon} with this ability
-   * @param _simulated If `true`, suppresses changes to game state
+   * @param pokemon The {@linkcode Pokemon} with this ability
+   * @param simulated If `true`, suppresses changes to game state
    * @param stat The {@linkcode Stat} being checked
    * @param statValue {@linkcode NumberHolder} the value of the checked stat
    * @param checkedPokemon The {@linkcode Pokemon} this ability is targeting

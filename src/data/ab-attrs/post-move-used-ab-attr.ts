@@ -10,11 +10,11 @@ import { AbAttr } from "./ab-attr";
 export class PostMoveUsedAbAttr extends AbAttr {
   /**
    * Applies an effect after a move is used by any other Pokemon
-   * @param _pokemon The {@linkcode Pokemon} with this ability
-   * @param _simulated If `true`, suppresses changes to game state
-   * @param _move The {@linkcode Move} being used
-   * @param _source The {@linkcode Pokemon} using the move
-   * @param _targets The targets of the move (by {@linkcode BattlerIndex})
+   * @param pokemon The {@linkcode Pokemon} with this ability
+   * @param simulated If `true`, suppresses changes to game state
+   * @param move The {@linkcode Move} being used
+   * @param source The {@linkcode Pokemon} using the move
+   * @param targets The targets of the move (by {@linkcode BattlerIndex})
    * @returns `true` if effects successfully apply
    */
   override apply(

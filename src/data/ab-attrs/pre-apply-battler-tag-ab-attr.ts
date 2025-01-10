@@ -6,10 +6,10 @@ import { AbAttr } from "./ab-attr";
 export class PreApplyBattlerTagAbAttr extends AbAttr {
   /**
    * Applies an effect before a battler tag is applied to the source
-   * @param _pokemon The {@linkcode Pokemon} with this ability
-   * @param _simulated If `true`, suppresses changes to game state
-   * @param _tag The {@linkcode BattlerTag} being applied to the source
-   * @param _cancelled A {@linkcode BooleanHolder} which, if set to `true`,
+   * @param pokemon The {@linkcode Pokemon} with this ability
+   * @param simulated If `true`, suppresses changes to game state
+   * @param tag The {@linkcode BattlerTag} being applied to the source
+   * @param cancelled A {@linkcode BooleanHolder} which, if set to `true`,
    * negates the battler tag's effects.
    * @returns `true` if effects apply successfully
    */

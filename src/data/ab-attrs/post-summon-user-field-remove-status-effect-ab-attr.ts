@@ -25,7 +25,7 @@ export class PostSummonUserFieldRemoveStatusEffectAbAttr extends PostSummonAbAtt
    * Removes supplied status effect from the user's field when user of the ability is summoned.
    *
    * @param pokemon - The Pokémon that triggered the ability.
-   * @param _passive - n/a
+   * @param passive - n/a
    * @returns A boolean or a promise that resolves to a boolean indicating the result of the ability application.
    */
   override apply(pokemon: Pokemon, simulated: boolean): boolean {

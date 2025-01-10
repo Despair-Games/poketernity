@@ -24,7 +24,7 @@ export class DamageBoostAbAttr extends PreAttackAbAttr {
    * Multiplies a move's damage by {@linkcode damageMultiplier}
    * if the attribute's {@linkcode condition} is met.
    * @param pokemon The {@linkcode Pokemon} with this ability
-   * @param _simulated If `true`, suppresses changes to game state
+   * @param simulated If `true`, suppresses changes to game state
    * @param defender The {@linkcode Pokemon} targeted by the move
    * @param move The {@linkcode Move} being used
    * @param multiplier A {@linkcode NumberHolder} containing a damage

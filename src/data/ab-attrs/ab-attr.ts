@@ -15,9 +15,9 @@ export abstract class AbAttr {
 
   /**
    * Applies the effects of this attribute
-   * @param _pokemon The {@linkcode Pokemon} with the ability
-   * @param _simulated `true` if attribute effects should be resolved without changing game state
-   * @param _args Any additional parameters or data to modify
+   * @param pokemon The {@linkcode Pokemon} with the ability
+   * @param simulated `true` if attribute effects should be resolved without changing game state
+   * @param args Any additional parameters or data to modify
    * @returns `true` if this attribute applies successfully. If {@linkcode showAbility} is enabled,
    * and this apply call is not simulated, returning `true` activates the ability's flyout
    * and {@linkcode getTriggerMessage | trigger message} (if applicable)

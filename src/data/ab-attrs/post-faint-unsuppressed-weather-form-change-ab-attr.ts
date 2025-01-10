@@ -14,11 +14,11 @@ export class PostFaintUnsuppressedWeatherFormChangeAbAttr extends PostFaintAbAtt
   /**
    * Triggers {@linkcode Arena.triggerWeatherBasedFormChanges | triggerWeatherBasedFormChanges}
    * when the user of the ability faints
-   * @param _pokemon the fainted {@linkcode Pokemon}
-   * @param _passive n/a
-   * @param _attacker n/a
-   * @param _move n/a
-   * @param _hitResult n/a
+   * @param pokemon the fainted {@linkcode Pokemon}
+   * @param passive n/a
+   * @param attacker n/a
+   * @param move n/a
+   * @param hitResult n/a
    * @returns whether the form change was triggered
    */
   override apply(

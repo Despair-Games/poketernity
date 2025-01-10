@@ -11,10 +11,10 @@ export class PreWeatherDamageAbAttr extends PreWeatherEffectAbAttr {
   /**
    * Applies an effect before the source would take damage from weather
    * (e.g. Hail, Sandstorm).
-   * @param _pokemon The {@linkcode Pokemon} with this ability
-   * @param _simulated If `true`, suppresses changes to game state
-   * @param _weather The {@linkcode Weather} applying damage
-   * @param _cancelled A {@linkcode BooleanHolder} which, if `true`,
+   * @param pokemon The {@linkcode Pokemon} with this ability
+   * @param simulated If `true`, suppresses changes to game state
+   * @param weather The {@linkcode Weather} applying damage
+   * @param cancelled A {@linkcode BooleanHolder} which, if `true`,
    * cancels the damage taken from weather.
    * @returns `true` if this ability's effects successfully apply.
    */

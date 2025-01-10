@@ -9,9 +9,9 @@ import { AbAttr } from "./ab-attr";
 export class InfiltratorAbAttr extends AbAttr {
   /**
    * Sets a flag to bypass screens, Substitute, Safeguard, and Mist
-   * @param _pokemon n/a
-   * @param _passive n/a
-   * @param _simulated n/a
+   * @param pokemon n/a
+   * @param passive n/a
+   * @param simulated n/a
    * @param bypassed a {@linkcode BooleanHolder} containing the flag
    * @returns `true` if the bypass flag was successfully set; `false` otherwise.
    */

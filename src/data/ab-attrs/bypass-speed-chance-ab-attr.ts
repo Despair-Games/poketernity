@@ -27,7 +27,7 @@ export class BypassSpeedChanceAbAttr extends AbAttr {
   /**
    * bypass move order in their priority bracket when pokemon choose damaging move
    * @param pokemon {@linkcode Pokemon} applying this ability
-   * @param _passive N/A
+   * @param passive N/A
    * @param bypassSpeed {@linkcode BooleanHolder} set to true when the ability activated
    * @returns whether the ability was activated
    */

@@ -17,10 +17,10 @@ export class ReverseDrainAbAttr extends PostDefendAbAttr {
    * Examples include: Absorb, Draining Kiss, Bitter Blade, etc.
    * Also displays a message to show this ability was activated.
    * @param pokemon {@linkcode Pokemon} with this ability
-   * @param _passive N/A
+   * @param passive N/A
    * @param attacker {@linkcode Pokemon} that is attacking this Pokemon
    * @param move {@linkcode Move} that is being used
-   * @param _args N/A
+   * @param args N/A
    * @returns true if healing should be reversed on a healing move, false otherwise.
    */
   override apply(_pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {

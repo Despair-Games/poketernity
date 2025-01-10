@@ -6,11 +6,11 @@ import { PreAttackAbAttr } from "./pre-attack-ab-attr";
 export class VariableMovePowerAbAttr extends PreAttackAbAttr {
   /**
    * Modifies a move's power when used by the source Pokemon
-   * @param _pokemon The {@linkcode Pokemon} with this ability
-   * @param _simulated If `true`, suppresses changes to game state
-   * @param _defender The {@linkcode Pokemon} targeted by the move
-   * @param _move The {@linkcode Move} being used
-   * @param _power A {@linkcode NumberHolder} containing the move's
+   * @param pokemon The {@linkcode Pokemon} with this ability
+   * @param simulated If `true`, suppresses changes to game state
+   * @param defender The {@linkcode Pokemon} targeted by the move
+   * @param move The {@linkcode Move} being used
+   * @param power A {@linkcode NumberHolder} containing the move's
    * power for the current turn
    * @returns `true` if this effect modified the move's power
    */

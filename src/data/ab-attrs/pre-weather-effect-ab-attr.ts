@@ -6,10 +6,10 @@ import { AbAttr } from "./ab-attr";
 export class PreWeatherEffectAbAttr extends AbAttr {
   /**
    * Applies an effect before weather effects would trigger
-   * @param _pokemon The {@linkcode Pokemon} with this ability
-   * @param _simulated If `true`, suppresses changes to game state
-   * @param _weather The active {@linkcode Weather} on the field
-   * @param _cancelled A {@linkcode BooleanHolder} which, if `true`,
+   * @param pokemon The {@linkcode Pokemon} with this ability
+   * @param simulated If `true`, suppresses changes to game state
+   * @param weather The active {@linkcode Weather} on the field
+   * @param cancelled A {@linkcode BooleanHolder} which, if `true`,
    * cancel's the current weather's effects.
    * @returns `true` if effects from this attribute apply successfully
    */

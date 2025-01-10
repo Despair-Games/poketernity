@@ -53,11 +53,11 @@ export class StatMultiplierAbAttr extends AbAttr {
   /**
    * Applies a multiplier to a given stat on the source if conditions are met.
    * @param pokemon The {@linkcode Pokemon} with this ability
-   * @param _simulated If `true`, suppresses changes to game state
+   * @param simulated If `true`, suppresses changes to game state
    * @param stat The {@linkcode BattleStat} being evaluated
    * @param statValue A {@linkcode NumberHolder} containing the value of the evaluated stat
    * @param move The {@linkcode Move} being used at the time of evaluation
-   * @param _target The {@linkcode Pokemon} targeted by the move
+   * @param target The {@linkcode Pokemon} targeted by the move
    * @returns `true` if this attribute's multiplier applies to the evaluated stat
    */
   override apply(

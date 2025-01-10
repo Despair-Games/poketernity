@@ -24,7 +24,7 @@ export class ConfusionOnStatusEffectAbAttr extends PostAttackAbAttr {
   /**
    * Applies confusion to the target pokemon.
    * @param pokemon {@link Pokemon} attacking
-   * @param _passive N/A
+   * @param passive N/A
    * @param defender {@link Pokemon} defending
    * @param move {@link Move} used to apply status effect and confusion
    * @param effect {@linkcode StatusEffect} applied by move

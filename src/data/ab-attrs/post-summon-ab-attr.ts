@@ -8,9 +8,9 @@ import { AbAttr } from "./ab-attr";
 export class PostSummonAbAttr extends AbAttr {
   /**
    * Applies ability post summon (after switching in)
-   * @param _pokemon {@linkcode Pokemon} with this ability
-   * @param _passive Whether this ability is a passive
-   * @param _args Set of unique arguments needed by this attribute
+   * @param pokemon {@linkcode Pokemon} with this ability
+   * @param passive Whether this ability is a passive
+   * @param args Set of unique arguments needed by this attribute
    * @returns true if application of the ability succeeds
    */
   override apply(_pokemon: Pokemon, _simulated: boolean, ..._args: unknown[]): boolean {

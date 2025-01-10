@@ -34,10 +34,10 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
    * the Pokémon's health after damage to determine whether the switch-out should occur.
    *
    * @param pokemon The Pokémon that took damage.
-   * @param _simulated Whether the ability is being simulated.
+   * @param simulated Whether the ability is being simulated.
    * @param damage The amount of damage taken by the Pokémon.
-   * @param _passive N/A
-   * @param _args N/A
+   * @param passive N/A
+   * @param args N/A
    * @param source The Pokemon that dealt damage
    * @returns `true` if the switch-out logic was successfully applied
    */

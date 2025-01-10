@@ -15,8 +15,8 @@ export class FullHpResistTypeAbAttr extends PreDefendAbAttr {
   /**
    * Reduces a type multiplier to 0.5 if the source is at full HP.
    * @param pokemon {@linkcode Pokemon} the Pokemon with this ability
-   * @param _simulated n/a (this doesn't change game state)
-   * @param _attacker n/a
+   * @param simulated n/a (this doesn't change game state)
+   * @param attacker n/a
    * @param move {@linkcode Move} the move being used on the source
    * @param typeMultiplier a container for the move's current type effectiveness multiplier
    * @returns `true` if the move's effectiveness is reduced; `false` otherwise

@@ -18,9 +18,9 @@ export class IgnoreOpponentStatStagesAbAttr extends AbAttr {
 
   /**
    * Modifies a BooleanHolder and returns the result to see if a stat is ignored or not
-   * @param _pokemon n/a
-   * @param _passive n/a
-   * @param _simulated n/a
+   * @param pokemon n/a
+   * @param passive n/a
+   * @param simulated n/a
    * @param stat The {@linkcode BattleStat} to be ignored by this ability
    * @param ignoreStatStage A {@linkcode BooleanHolder} that represents whether or not to ignore a stat's stat changes
    * @returns true if the stat is ignored, false otherwise
