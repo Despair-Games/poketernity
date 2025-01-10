@@ -1461,7 +1461,7 @@ export class MoveChargeAnim extends MoveAnim {
   private chargeAnim: ChargeAnim;
 
   /**
-   * **Note:** The default for {@linkcode targetIndex} being {@linkcode BattlerIndex.PLAYER} is due to MoveCharAnim originally not supporting a target argument.
+   * **Note:** The default for {@linkcode targetIndex} being {@linkcode BattlerIndex.PLAYER} is due to `MoveChargeAnim` originally not supporting a target argument.
    */
   constructor(chargeAnim: ChargeAnim, move: Moves, user: Pokemon, targetIndex: BattlerIndex = BattlerIndex.PLAYER) {
     super(move, user, targetIndex);
