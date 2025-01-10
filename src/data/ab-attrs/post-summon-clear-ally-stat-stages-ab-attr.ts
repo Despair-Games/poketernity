@@ -12,7 +12,6 @@ import { PostSummonAbAttr } from "./post-summon-ab-attr";
  * Used by Curious Medicine
  * @param pokemon The {@link Pokemon} with this {@link AbAttr}
  * @extends PostSummonAbAttr
- * @see {@linkcode applyPostSummon}
  */
 export class PostSummonClearAllyStatStagesAbAttr extends PostSummonAbAttr {
   override apply(pokemon: Pokemon, simulated: boolean): boolean {

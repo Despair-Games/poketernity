@@ -9,7 +9,6 @@ import { PostSummonAbAttr } from "./post-summon-ab-attr";
  * it will raise Attack if the foe's current Defense is lower than its current Special Defense stat;
  * otherwise, it will raise Special Attack.
  * @extends PostSummonAbAttr
- * @see {@linkcode applyPostSummon}
  */
 export class DownloadAbAttr extends PostSummonAbAttr {
   private enemyDef: number;
