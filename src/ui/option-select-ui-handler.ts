@@ -148,7 +148,7 @@ export default class OptionSelectUiHandler extends MessageUiHandler {
   }
 
   protected displayCurrentOptions(): void {
-    // Destroy any existing icon sprite. TODO improve performance
+    // Destroy any existing icon sprite. TODO: improve performance
     this.clearIconSprites();
 
     const options: OptionSelectItem[] = this.getOptionsWithScroll();

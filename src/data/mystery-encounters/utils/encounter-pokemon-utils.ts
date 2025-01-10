@@ -38,7 +38,7 @@ import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import type { Abilities } from "#enums/abilities";
 import type { PokeballType } from "#enums/pokeball";
 import { StatusEffect } from "#enums/status-effect";
-import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
+import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 
 /** Will give +1 level every 10 waves */
 export const STANDARD_ENCOUNTER_BOOSTED_LEVEL_MODIFIER = 1;
@@ -666,6 +666,7 @@ export async function catchPokemon(
   globalScene.gameData.updateSpeciesDexIvs(pokemon.species.getRootSpeciesId(true), pokemon.ivs);
 
   return new Promise((resolve) => {
+    // TODO: remove all this duplicated code from attempt-capture-phase
     const doPokemonCatchMenu = () => {
       const end = () => {
         // Ensure the pokemon is in the enemy party in all situations
@@ -702,76 +703,77 @@ export async function catchPokemon(
       };
       Promise.all([pokemon.hideInfo(), globalScene.gameData.setPokemonCaught(pokemon)]).then(() => {
         if (globalScene.getPlayerParty().length === 6) {
-          const addToPartyOptions: OptionSelectItem[] = [
-            {
-              label: i18next.t("partyUiHandler:SUMMARY"),
-              handler: () => {
-                globalScene.ui.setMode(Mode.MESSAGE).then(() => {
-                  removePokemon();
-                  end();
-                });
-                return true;
+          const addToPartyMenuConfig: OptionSelectModeConfig = {
+            options: [
+              {
+                label: i18next.t("partyUiHandler:SUMMARY"),
+                handler: () => {
+                  globalScene.ui.setMode(Mode.MESSAGE).then(() => {
+                    removePokemon();
+                    end();
+                  });
+                  return true;
+                },
               },
-            },
-            {
-              label: i18next.t("menu:yes"),
-              handler: () => {
-                const newPokemon = globalScene.addPlayerPokemon(
-                  pokemon.species,
-                  pokemon.level,
-                  pokemon.abilityIndex,
-                  pokemon.formIndex,
-                  pokemon.gender,
-                  pokemon.shiny,
-                  pokemon.variant,
-                  pokemon.ivs,
-                  pokemon.nature,
-                  pokemon,
-                );
-                globalScene.ui.setMode(
-                  Mode.SUMMARY,
-                  newPokemon,
-                  0,
-                  SummaryUiMode.DEFAULT,
-                  () => {
-                    globalScene.ui.setMode(Mode.MESSAGE).then(() => {
-                      promptRelease();
-                    });
-                  },
-                  false,
-                );
-                return true;
-              },
-            },
-            {
-              label: i18next.t("menu:no"),
-              handler: () => {
-                globalScene.ui.setMode(
-                  Mode.PARTY,
-                  PartyUiMode.RELEASE,
-                  0,
-                  (slotIndex: number, _option: PartyOption) => {
-                    globalScene.ui.setMode(Mode.MESSAGE).then(() => {
-                      if (slotIndex < 6) {
-                        addToParty(slotIndex);
-                      } else {
+              {
+                label: i18next.t("menu:yes"),
+                handler: () => {
+                  const newPokemon = globalScene.addPlayerPokemon(
+                    pokemon.species,
+                    pokemon.level,
+                    pokemon.abilityIndex,
+                    pokemon.formIndex,
+                    pokemon.gender,
+                    pokemon.shiny,
+                    pokemon.variant,
+                    pokemon.ivs,
+                    pokemon.nature,
+                    pokemon,
+                  );
+                  globalScene.ui.setMode(
+                    Mode.SUMMARY,
+                    newPokemon,
+                    0,
+                    SummaryUiMode.DEFAULT,
+                    () => {
+                      globalScene.ui.setMode(Mode.MESSAGE).then(() => {
                         promptRelease();
-                      }
-                    });
-                  },
-                );
-                return true;
+                      });
+                    },
+                    false,
+                  );
+                  return true;
+                },
               },
-            },
-          ];
+              {
+                label: i18next.t("menu:no"),
+                handler: () => {
+                  globalScene.ui.setMode(
+                    Mode.PARTY,
+                    PartyUiMode.RELEASE,
+                    0,
+                    (slotIndex: number, _option: PartyOption) => {
+                      globalScene.ui.setMode(Mode.MESSAGE).then(() => {
+                        if (slotIndex < 6) {
+                          addToParty(slotIndex);
+                        } else {
+                          promptRelease();
+                        }
+                      });
+                    },
+                  );
+                  return true;
+                },
+              },
+            ],
+          };
           const promptRelease = () => {
             globalScene.ui.showText(
               i18next.t("battle:partyFull", { pokemonName: pokemon.getNameToRender() }),
               null,
               () => {
-                // TODO probably move based on the menu's size in the current language
-                globalScene.pokemonInfoContainer.makeRoomForConfirmUi(1, true);
-                globalScene.ui.setMode(Mode.OPTION_SELECT, addToPartyOptions);
+                globalScene.ui.setMode(Mode.OPTION_SELECT, addToPartyMenuConfig);
+                globalScene.pokemonInfoContainer.makeRoomForOptionSelectUi();
               },
             );
           };

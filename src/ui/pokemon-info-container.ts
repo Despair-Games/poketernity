@@ -11,11 +11,11 @@ import { DexAttr } from "#app/data/dex-attributes";
 import type { DexEntry } from "#app/@types/DexData";
 import type { StarterDataEntry } from "#app/@types/StarterData";
 import { capitalizeString, fixedNumber } from "#app/utils";
-import ConfirmUiHandler from "./confirm-ui-handler";
 import { StatsContainer } from "./stats-container";
 import { TextStyle, addBBCodeTextObject, addTextObject, getTextColor } from "./text";
 import { addWindow } from "./ui-theme";
 import { Species } from "#enums/species";
+import OptionSelectUiHandler from "./option-select-ui-handler";
 
 interface LanguageSetting {
   infoContainerTextSize: string;
@@ -471,11 +471,14 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
     this.pokemonMovesContainer.setVisible(false);
   }
 
-  makeRoomForConfirmUi(speedMultiplier: number = 1, fromCatch: boolean = false): Promise<void> {
-    // TODO clean up width
-    const xPosition = fromCatch
-      ? this.initialX - this.infoWindowWidth - 65
-      : this.initialX - this.infoWindowWidth - ConfirmUiHandler.windowWidth;
+  makeRoomForOptionSelectUi(speedMultiplier: number = 1): Promise<void> {
+    const handler = globalScene.ui.getHandler();
+    let xPosition = this.initialX - this.infoWindowWidth;
+    if (handler instanceof OptionSelectUiHandler) {
+      xPosition -= handler.getWindowWidth();
+    } else {
+      xPosition -= 65;
+    }
     return new Promise<void>((resolve) => {
       globalScene.tweens.add({
         targets: this,

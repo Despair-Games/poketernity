@@ -5,9 +5,6 @@ import { Mode } from "#app/ui/ui";
 import i18next from "i18next";
 
 export default class ConfirmUiHandler extends OptionSelectUiHandler {
-  // TODO remove and replace uses with getWindowWidth
-  public static readonly windowWidth: number = 48;
-
   constructor() {
     super(Mode.CONFIRM);
   }
