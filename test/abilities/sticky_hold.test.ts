@@ -35,43 +35,41 @@ describe("Abilities - Sticky Hold", () => {
       .enemyLevel(100);
   });
 
-  it.each([
-    { moveName: "Thief", move: Moves.THIEF },
-    { moveName: "Pluck", move: Moves.PLUCK },
-    { moveName: "Incinerate", move: Moves.INCINERATE },
-    { moveName: "Knock Off", move: Moves.KNOCK_OFF },
-  ])("should prevent the user from losing a held item when hit by the move $moveName", async ({ move }) => {
-    // Force item removal RNG calls to succeed
-    if (move === Moves.THIEF) {
-      vi.spyOn(allMoves[move].getAttrs(StealHeldItemChanceAttr)[0], "chance", "get").mockReturnValue(1.0);
-    }
-    vi.spyOn(allMoves[move], "chance", "get").mockReturnValue(-1);
+  it.each([Moves.THIEF, Moves.PLUCK, Moves.INCINERATE, Moves.KNOCK_OFF].map((move) => ({ move, name: Moves[move] })))(
+    "should prevent the user from losing a held item when hit by the move $name",
+    async ({ move }) => {
+      // Force item removal RNG calls to succeed
+      if (move === Moves.THIEF) {
+        vi.spyOn(allMoves[move].getAttrs(StealHeldItemChanceAttr)[0], "chance", "get").mockReturnValue(1.0);
+      }
+      vi.spyOn(allMoves[move], "chance", "get").mockReturnValue(-1);
 
-    await game.classicMode.startBattle([Species.FEEBAS]);
+      await game.classicMode.startBattle([Species.FEEBAS]);
 
-    game.move.use(move);
-    await game.move.forceEnemyMove(Moves.SPLASH);
-    await game.toNextTurn();
+      game.move.use(move);
+      await game.move.forceEnemyMove(Moves.SPLASH);
+      await game.toNextTurn();
 
-    const enemyPokemon = game.pokemonHelper.getEnemyPokemon();
-    expect(enemyPokemon.getHeldItems().length).toBe(1);
-  });
+      const enemyPokemon = game.pokemonHelper.getEnemyPokemon();
+      expect(enemyPokemon.getHeldItems().length).toBe(1);
+    },
+  );
 
   // TODO: Enable this test, and add it to the above test block, once Corrosive Gas is implemented
-  it.todo("should prevent the user from losing a held item when hit by the move Corrosive Gas", () => {});
+  it.todo("should prevent the user from losing a held item when hit by the move 'CORROSIVE_GAS'", () => {});
 
-  it.each([
-    { abilityName: "Magician", ability: Abilities.MAGICIAN },
-    { abilityName: "Pickpocket", ability: Abilities.PICKPOCKET },
-  ])("should prevent the user's held item from being stolen by the ability $abilityName", async ({ ability }) => {
-    game.override.ability(ability);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+  it.each([Abilities.MAGICIAN, Abilities.PICKPOCKET].map((ability) => ({ ability, name: Abilities[ability] })))(
+    "should prevent the user's held item from being stolen by the ability $name",
+    async ({ ability }) => {
+      game.override.ability(ability);
+      await game.classicMode.startBattle([Species.FEEBAS]);
 
-    game.move.use(Moves.FALSE_SWIPE);
-    await game.move.forceEnemyMove(Moves.FALSE_SWIPE);
-    await game.toNextTurn();
+      game.move.use(Moves.FALSE_SWIPE);
+      await game.move.forceEnemyMove(Moves.FALSE_SWIPE);
+      await game.toNextTurn();
 
-    const enemyPokemon = game.pokemonHelper.getEnemyPokemon();
-    expect(enemyPokemon.getHeldItems().length).toBe(1);
-  });
+      const enemyPokemon = game.pokemonHelper.getEnemyPokemon();
+      expect(enemyPokemon.getHeldItems().length).toBe(1);
+    },
+  );
 });
