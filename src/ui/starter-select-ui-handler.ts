@@ -77,7 +77,7 @@ import { Type } from "#enums/type";
 import { argbFromRgba } from "@material/material-color-utilities";
 import i18next from "i18next";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
-import type { ConfirmModeConfig } from "./interfaces/confirm-menu-config";
+import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 
 export type StarterSelectCallback = (starters: Starter[]) => void;
 

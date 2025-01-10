@@ -7,7 +7,8 @@ import { api } from "#app/plugins/api/api";
 import { Tutorial, handleTutorial } from "#app/tutorial";
 import { AdminMode, getAdminModeName } from "#app/ui/admin-ui-handler";
 import BgmBar from "#app/ui/bgm-bar";
-import type { OptionSelectModeConfig, OptionSelectItem } from "#app/ui/interfaces/option-select-config";
+import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
+import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import OptionSelectUiHandler from "#app/ui/option-select-ui-handler";
 import { TextStyle, addTextObject } from "#app/ui/text";
 import { Mode } from "#app/ui/ui";
@@ -16,7 +17,6 @@ import { fixedNumber, getCookie, getEnumKeys, isBeta, isLocal } from "#app/utils
 import { Button } from "#enums/buttons";
 import { GameDataType } from "#enums/game-data-type";
 import i18next from "i18next";
-import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 
 enum MenuOptions {
   GAME_SETTINGS,
