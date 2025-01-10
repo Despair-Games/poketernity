@@ -50,7 +50,7 @@ export class MoveChargePhase extends HitCheckPhase {
       return super.end();
     }
 
-    new MoveChargeAnim(move.chargeAnim, move.id, user).play(false, () => {
+    new MoveChargeAnim(move.chargeAnim, move.id, user, target.getBattlerIndex()).play(false, () => {
       move.showChargeText(user, target);
 
       applyMoveChargeAttrs(MoveEffectAttr, user, target, move);
