@@ -1809,6 +1809,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     );
   }
 
+  public isSemiInvulnerable(): boolean {
+    return !!this.getTag(SemiInvulnerableTag) || !!this.getTag(BattlerTagType.SKY_DROP);
+  }
+
   /**
    * Determines whether this Pokemon is prevented from running or switching due
    * to effects from moves and/or abilities.

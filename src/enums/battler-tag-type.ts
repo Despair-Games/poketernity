@@ -94,4 +94,5 @@ export enum BattlerTagType {
   PSYCHO_SHIFT = "PSYCHO_SHIFT",
   ENDURE_TOKEN = "ENDURE_TOKEN",
   POWDER = "POWDER",
+  SKY_DROP = "SKY_DROP",
 }
