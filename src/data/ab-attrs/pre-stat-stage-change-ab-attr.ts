@@ -5,7 +5,7 @@ import { AbAttr } from "./ab-attr";
 
 export class PreStatStageChangeAbAttr extends AbAttr {
   override apply(
-    _pokemon: Pokemon | null,
+    _pokemon: Pokemon,
     _simulated: boolean,
     _stat: BattleStat,
     _cancelled: BooleanHolder,

@@ -18,7 +18,7 @@ export class MoveTypeChangeAbAttr extends PreAttackAbAttr {
   override apply(
     pokemon: Pokemon,
     _simulated: boolean,
-    defender: Pokemon | null,
+    defender: Pokemon | undefined,
     move: Move,
     moveType?: NumberHolder,
     power?: NumberHolder,

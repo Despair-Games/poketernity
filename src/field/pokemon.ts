@@ -1844,7 +1844,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const moveTypeHolder = new NumberHolder(move.type);
 
     applyMoveAttrs(VariableMoveTypeAttr, this, null, move, moveTypeHolder);
-    applyAbAttrs(MoveTypeChangeAbAttr, this, simulated, null, move, moveTypeHolder);
+    applyAbAttrs(MoveTypeChangeAbAttr, this, simulated, undefined, move, moveTypeHolder);
 
     globalScene.arena.applyTags(ArenaTagType.ION_DELUGE, simulated, moveTypeHolder);
     if (this.getTag(BattlerTagType.ELECTRIFIED)) {
@@ -4135,7 +4135,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     if (effect !== StatusEffect.FAINT) {
       globalScene.triggerPokemonFormChange(this, SpeciesFormChangeStatusEffectTrigger, true);
-      applyAbAttrs(SynchronizeStatusAbAttr, this, false, sourcePokemon, effect);
+      if (sourcePokemon) {
+        applyAbAttrs(SynchronizeStatusAbAttr, this, false, sourcePokemon, effect);
+      }
     }
 
     return true;

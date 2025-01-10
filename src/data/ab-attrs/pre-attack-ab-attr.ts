@@ -15,7 +15,7 @@ export class PreAttackAbAttr extends AbAttr {
   override apply(
     _pokemon: Pokemon,
     _simulated: boolean,
-    _defender: Pokemon | null,
+    _defender: Pokemon | undefined,
     _move: Move,
     ..._args: unknown[]
   ): boolean {

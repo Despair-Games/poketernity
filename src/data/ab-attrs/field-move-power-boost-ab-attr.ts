@@ -23,9 +23,9 @@ export class FieldMovePowerBoostAbAttr extends PreAttackAbAttr {
   }
 
   override apply(
-    pokemon: Pokemon | null,
+    pokemon: Pokemon,
     _simulated: boolean,
-    defender: Pokemon | null,
+    defender: Pokemon,
     move: Move,
     movePower: NumberHolder,
   ): boolean {
