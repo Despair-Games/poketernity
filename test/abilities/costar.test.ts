@@ -1,6 +1,6 @@
 import { Stat } from "#enums/stat";
-import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { Abilities } from "#app/server-data/abilities";
+import { Moves } from "#app/server-data/moves";
 import { Species } from "#enums/species";
 import { CommandPhase } from "#app/phases/command-phase";
 import { MessagePhase } from "#app/phases/message-phase";

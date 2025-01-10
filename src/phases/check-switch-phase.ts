@@ -5,7 +5,7 @@ import { SummonMissingPhase } from "#app/phases/summon-missing-phase";
 import { SwitchPhase } from "#app/phases/switch-phase";
 import { Mode } from "#app/ui/ui";
 import { BattleStyle } from "#enums/battle-style";
-import { BattlerTagType } from "#enums/battler-tag-type";
+import { BattlerTagType } from "#app/server-data/battler-tag-type";
 import { SwitchType } from "#enums/switch-type";
 import i18next from "i18next";
 

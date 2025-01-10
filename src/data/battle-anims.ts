@@ -7,7 +7,7 @@ import { MoveFlags } from "#enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
 import { getFrameMs, getEnumKeys, getEnumValues, animationFileName, isNullOrUndefined } from "#app/utils";
 import type { BattlerIndex } from "#app/battle";
-import { Moves } from "#enums/moves";
+import { Moves } from "#app/server-data/moves";
 import { SubstituteTag } from "./battler-tags";
 import Phaser from "phaser";
 import { EncounterAnim } from "#enums/encounter-anims";

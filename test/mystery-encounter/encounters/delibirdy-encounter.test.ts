@@ -1,4 +1,4 @@
-import { Biome } from "#enums/biome";
+import { Biome } from "#app/server-data/biome";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";

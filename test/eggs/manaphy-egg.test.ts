@@ -1,6 +1,6 @@
 import { EVERYTHING_SAVE_FILE_PATH } from "#test/testUtils/testUtils";
 import { Egg } from "#app/data/egg";
-import { EggSourceType } from "#enums/egg-source-types";
+import { EggSourceType } from "#app/server-data/egg-source-types";
 import { EggTier } from "#enums/egg-type";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";

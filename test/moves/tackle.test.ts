@@ -1,7 +1,7 @@
 import { Stat } from "#enums/stat";
 import { EnemyCommandPhase } from "#app/phases/enemy-command-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
-import { Moves } from "#enums/moves";
+import { Moves } from "#app/server-data/moves";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";

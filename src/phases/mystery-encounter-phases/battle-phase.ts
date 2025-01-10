@@ -13,7 +13,7 @@ import { ScanIvsPhase } from "#app/phases/scan-ivs-phase";
 import { SummonPhase } from "#app/phases/summon-phase";
 import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
 import { randSeedItem } from "#app/utils";
-import { BattlerTagType } from "#enums/battler-tag-type";
+import { BattlerTagType } from "#app/server-data/battler-tag-type";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import i18next from "i18next";
 import { TrainerSlot } from "#enums/trainer-slot";

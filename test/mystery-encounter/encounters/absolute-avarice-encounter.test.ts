@@ -1,4 +1,4 @@
-import { Biome } from "#enums/biome";
+import { Biome } from "#app/server-data/biome";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -15,7 +15,7 @@ import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encount
 import { BerryModifier, PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { BerryType } from "#enums/berry-type";
 import { AbsoluteAvariceEncounter } from "#app/data/mystery-encounters/encounters/absolute-avarice-encounter";
-import { Moves } from "#enums/moves";
+import { Moves } from "#app/server-data/moves";
 import { CommandPhase } from "#app/phases/command-phase";
 import { MovePhase } from "#app/phases/move-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";

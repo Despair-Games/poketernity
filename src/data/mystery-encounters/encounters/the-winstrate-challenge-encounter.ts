@@ -16,9 +16,9 @@ import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-en
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { TrainerType } from "#enums/trainer-type";
 import { Species } from "#enums/species";
-import { Abilities } from "#enums/abilities";
+import { Abilities } from "#app/server-data/abilities";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
-import { Moves } from "#enums/moves";
+import { Moves } from "#app/server-data/moves";
 import { Nature } from "#enums/nature";
 import { Type } from "#enums/type";
 import { BerryType } from "#enums/berry-type";
@@ -33,7 +33,7 @@ import { ReturnPhase } from "#app/phases/return-phase";
 import i18next from "i18next";
 import { ModifierTier } from "#app/modifier/modifier-tier";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
-import { BattlerTagType } from "#enums/battler-tag-type";
+import { BattlerTagType } from "#app/server-data/battler-tag-type";
 import { PostBattleInitAbAttr } from "#app/data/ab-attrs/post-battle-init-ab-attr";
 
 /** the i18n namespace for the encounter */

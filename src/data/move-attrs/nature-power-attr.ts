@@ -1,5 +1,5 @@
-import { Biome } from "#enums/biome";
-import { Moves } from "#enums/moves";
+import { Biome } from "#app/server-data/biome";
+import { Moves } from "#app/server-data/moves";
 import { TerrainType } from "#enums/terrain-type";
 import { type Pokemon, PokemonMove } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";

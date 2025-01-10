@@ -4,7 +4,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { HitResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { BattlerTagType } from "#enums/battler-tag-type";
+import type { BattlerTagType } from "#app/server-data/battler-tag-type";
 import i18next from "i18next";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 

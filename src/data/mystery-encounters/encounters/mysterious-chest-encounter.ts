@@ -19,7 +19,7 @@ import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
 import { ModifierTier } from "#app/modifier/modifier-tier";
 import { GameOverPhase } from "#app/phases/game-over-phase";
 import { randSeedInt } from "#app/utils";
-import { Moves } from "#enums/moves";
+import { Moves } from "#app/server-data/moves";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";

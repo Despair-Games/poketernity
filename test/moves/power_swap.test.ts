@@ -3,9 +3,9 @@ import Phaser from "phaser";
 import { GameManager } from "#test/testUtils/gameManager";
 import { Species } from "#enums/species";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
-import { Moves } from "#enums/moves";
+import { Moves } from "#app/server-data/moves";
 import { Stat, BATTLE_STATS } from "#enums/stat";
-import { Abilities } from "#enums/abilities";
+import { Abilities } from "#app/server-data/abilities";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
 
 describe("Moves - Power Swap", () => {

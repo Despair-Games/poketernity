@@ -26,7 +26,7 @@ import { Type } from "#enums/type";
 import { GameModes } from "#app/game-mode";
 import type { DexAttrProps, StarterAttributes, StarterPreferences } from "#app/system/game-data";
 import { StarterPrefs } from "#app/system/game-data";
-import type { DexEntry } from "#app/@types/DexData";
+import type { DexEntry } from "#app/server-data/dex-data";
 import type { StarterMoveset } from "#app/@types/StarterData";
 import { DexAttr, AbilityAttr } from "#app/data/dex-attributes";
 import { Tutorial, handleTutorial } from "#app/tutorial";
@@ -45,10 +45,10 @@ import * as Challenge from "#app/data/challenge";
 import MoveInfoOverlay from "#app/ui/move-info-overlay";
 import { getEggTierForSpecies } from "#app/data/egg";
 import { Device } from "#enums/devices";
-import type { Moves } from "#enums/moves";
+import type { Moves } from "#app/server-data/moves";
 import { Species } from "#enums/species";
 import { Button } from "#enums/buttons";
-import { EggSourceType } from "#enums/egg-source-types";
+import { EggSourceType } from "#app/server-data/egg-source-types";
 import { DropDown, DropDownLabel, DropDownOption, DropDownState, DropDownType, SortCriteria } from "#app/ui/dropdown";
 import { StarterContainer } from "#app/ui/starter-container";
 import { DropDownColumn, FilterBar } from "#app/ui/filter-bar";
@@ -56,7 +56,7 @@ import { ScrollBar } from "#app/ui/scroll-bar";
 import { SelectChallengePhase } from "#app/phases/select-challenge-phase";
 import { EncounterPhase } from "#app/phases/encounter-phase";
 import { TitlePhase } from "#app/phases/title-phase";
-import { Abilities } from "#enums/abilities";
+import { Abilities } from "#app/server-data/abilities";
 import {
   getPassiveCandyCount,
   getValueReductionCandyCounts,

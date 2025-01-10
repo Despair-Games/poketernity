@@ -12,7 +12,7 @@ import { achvs } from "#app/system/achv";
 import type PartyUiHandler from "#app/ui/party-ui-handler";
 import { Mode } from "#app/ui/ui";
 import { fixedInt } from "#app/utils";
-import { BattlerTagType } from "#enums/battler-tag-type";
+import { BattlerTagType } from "#app/server-data/battler-tag-type";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { FormChangeBasePhase } from "./abstract-form-change-base-phase";
 import { EndEvolutionPhase } from "./end-evolution-phase";

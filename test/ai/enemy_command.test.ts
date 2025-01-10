@@ -1,8 +1,8 @@
 import type BattleScene from "#app/battle-scene";
 import { allMoves } from "#app/data/all-moves";
 import { MoveCategory } from "#enums/move-category";
-import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { Abilities } from "#app/server-data/abilities";
+import { Moves } from "#app/server-data/moves";
 import { Species } from "#enums/species";
 import type { EnemyPokemon } from "#app/field/pokemon";
 import { AiType } from "#app/field/pokemon";

@@ -1,5 +1,5 @@
 import { getPokemonSpecies } from "#app/data/pokemon-species";
-import { Moves } from "#app/enums/moves";
+import { Moves } from "#app/server-data/moves";
 import { Species } from "#app/enums/species";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";

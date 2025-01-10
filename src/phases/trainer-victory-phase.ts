@@ -4,7 +4,7 @@ import { modifierTypes } from "#app/modifier/modifier-type";
 import { achvs } from "#app/system/achv";
 import { vouchers } from "#app/system/voucher";
 import { randSeedItem } from "#app/utils";
-import { Biome } from "#enums/biome";
+import { Biome } from "#app/server-data/biome";
 import { TrainerType } from "#enums/trainer-type";
 import i18next from "i18next";
 import { BattlePhase } from "./abstract-battle-phase";

@@ -11,7 +11,7 @@ import { BypassSpeedChanceModifier } from "#app/modifier/modifier";
 import { CheckStatusEffectPhase } from "#app/phases/check-status-effect-phase";
 import { Command } from "#app/ui/command-ui-handler";
 import { BooleanHolder, isNullOrUndefined, randSeedShuffle } from "#app/utils";
-import { Abilities } from "#enums/abilities";
+import { Abilities } from "#app/server-data/abilities";
 import { Stat } from "#enums/stat";
 import { SwitchType } from "#enums/switch-type";
 import { FieldPhase } from "./abstract-field-phase";

@@ -27,9 +27,9 @@ import type { StatStageChangeCallback } from "#app/phases/stat-stage-change-phas
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import i18next from "#app/plugins/i18n";
 import { BooleanHolder, getFrameMs, isNullOrUndefined, NumberHolder, toDmgValue } from "#app/utils";
-import { Abilities } from "#enums/abilities";
-import { BattlerTagType } from "#enums/battler-tag-type";
-import { Moves } from "#enums/moves";
+import { Abilities } from "#app/server-data/abilities";
+import { BattlerTagType } from "#app/server-data/battler-tag-type";
+import { Moves } from "#app/server-data/moves";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import { Species } from "#enums/species";
 import { EFFECTIVE_STATS, getStatKey, Stat, type BattleStat, type EffectiveStat } from "#enums/stat";
@@ -38,92 +38,8 @@ import { WeatherType } from "#enums/weather-type";
 import { ReverseDrainAbAttr } from "./ab-attrs/reverse-drain-ab-attr";
 import { ProtectStatAbAttr } from "./ab-attrs/protect-stat-ab-attr";
 import Overrides from "#app/overrides";
-
-export enum BattlerTagLapseType {
-  FAINT,
-  MOVE,
-  PRE_MOVE,
-  AFTER_MOVE,
-  MOVE_EFFECT,
-  TURN_END,
-  HIT,
-  AFTER_HIT,
-  CUSTOM,
-}
-
-export class BattlerTag {
-  public tagType: BattlerTagType;
-  public lapseTypes: BattlerTagLapseType[];
-  public turnCount: number;
-  public sourceMove: Moves;
-  public sourceId?: number;
-  public isBatonPassable: boolean;
-
-  constructor(
-    tagType: BattlerTagType,
-    lapseType: BattlerTagLapseType | BattlerTagLapseType[],
-    turnCount: number,
-    sourceMove?: Moves,
-    sourceId?: number,
-    isBatonPassable: boolean = false,
-  ) {
-    this.tagType = tagType;
-    this.lapseTypes = Array.isArray(lapseType) ? lapseType : [lapseType];
-    this.turnCount = turnCount;
-    this.sourceMove = sourceMove!; // TODO: is this bang correct?
-    this.sourceId = sourceId;
-    this.isBatonPassable = isBatonPassable;
-  }
-
-  canAdd(_pokemon: Pokemon): boolean {
-    return true;
-  }
-
-  onAdd(_pokemon: Pokemon): void {}
-
-  onRemove(_pokemon: Pokemon): void {}
-
-  onOverlap(_pokemon: Pokemon): void {}
-
-  lapse(_pokemon: Pokemon, _lapseType: BattlerTagLapseType): boolean {
-    return --this.turnCount > 0;
-  }
-
-  apply(_pokemon: Pokemon, _simulated: boolean, ..._args: unknown[]): boolean {
-    return true;
-  }
-
-  getDescriptor(): string {
-    return "";
-  }
-
-  isSourceLinked(): boolean {
-    return false;
-  }
-
-  getMoveName(): string | null {
-    return this.sourceMove ? allMoves[this.sourceMove].name : null;
-  }
-
-  /**
-   * When given a battler tag or json representing one, load the data for it.
-   * This is meant to be inherited from by any battler tag with custom attributes
-   * @param source - The source {@linkcode BattlerTag}
-   */
-  loadTag(source: BattlerTag | any): void {
-    this.turnCount = source.turnCount;
-    this.sourceMove = source.sourceMove;
-    this.sourceId = source.sourceId;
-  }
-
-  /**
-   * Helper function that retrieves the source Pokemon object
-   * @returns The source {@linkcode Pokemon} or `null` if none is found
-   */
-  public getSourcePokemon(): Pokemon | null {
-    return this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
-  }
-}
+import { BattlerTag } from "#app/server-data/battler-tag";
+import { BattlerTagLapseType } from "#app/server-data/battler-tag-lapse-type";
 
 export interface WeatherBattlerTag {
   weatherTypes: WeatherType[];

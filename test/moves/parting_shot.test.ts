@@ -1,5 +1,5 @@
-import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { Abilities } from "#app/server-data/abilities";
+import { Moves } from "#app/server-data/moves";
 import { Species } from "#enums/species";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, test } from "vitest";

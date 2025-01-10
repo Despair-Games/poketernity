@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { Abilities } from "#app/server-data/abilities";
 import { MultiHitType } from "#enums/multi-hit-type";
 import { Species } from "#enums/species";
 import type { Pokemon } from "#app/field/pokemon";

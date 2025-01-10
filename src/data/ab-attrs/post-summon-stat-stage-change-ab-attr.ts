@@ -4,7 +4,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { BooleanHolder } from "#app/utils";
-import { BattlerTagType } from "#enums/battler-tag-type";
+import { BattlerTagType } from "#app/server-data/battler-tag-type";
 import type { BattleStat } from "#enums/stat";
 import { IntimidateImmunityAbAttr } from "./intimidate-immunity-ab-attr";
 import { PostIntimidateStatStageChangeAbAttr } from "./post-intimidate-stat-stage-change-ab-attr";

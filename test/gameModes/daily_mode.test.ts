@@ -1,5 +1,5 @@
-import { Biome } from "#enums/biome";
-import { Moves } from "#enums/moves";
+import { Biome } from "#app/server-data/biome";
+import { Moves } from "#app/server-data/moves";
 import { MapModifier } from "#app/modifier/modifier";
 import { api } from "#app/plugins/api/api";
 import ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";

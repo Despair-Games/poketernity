@@ -16,7 +16,7 @@ import { getSpriteKeysFromSpecies } from "#app/data/mystery-encounters/utils/enc
 import { randSeedInt } from "#app/utils";
 import i18next from "i18next";
 import type { IEggOptions } from "#app/data/egg";
-import { EggSourceType } from "#enums/egg-source-types";
+import { EggSourceType } from "#app/server-data/egg-source-types";
 import { EggTier } from "#enums/egg-type";
 import { PartyHealPhase } from "#app/phases/party-heal-phase";
 import { ModifierTier } from "#app/modifier/modifier-tier";

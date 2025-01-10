@@ -1,4 +1,4 @@
-import type { BattlerTagType } from "#enums/battler-tag-type";
+import type { BattlerTagType } from "#app/server-data/battler-tag-type";
 import { HitsTagAttr } from "#app/data/move-attrs/hits-tag-attr";
 
 /**

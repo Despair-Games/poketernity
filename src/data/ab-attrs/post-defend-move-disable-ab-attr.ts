@@ -2,7 +2,7 @@ import type { Move } from "#app/data/move";
 import { MoveFlags } from "../../enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
 import type { HitResult } from "#app/field/pokemon";
-import { BattlerTagType } from "#enums/battler-tag-type";
+import { BattlerTagType } from "#app/server-data/battler-tag-type";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 
 export class PostDefendMoveDisableAbAttr extends PostDefendAbAttr {

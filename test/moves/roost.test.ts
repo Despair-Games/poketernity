@@ -1,7 +1,7 @@
 import { BattlerIndex } from "#app/battle";
 import { Type } from "#enums/type";
-import { BattlerTagType } from "#enums/battler-tag-type";
-import { Moves } from "#enums/moves";
+import { BattlerTagType } from "#app/server-data/battler-tag-type";
+import { Moves } from "#app/server-data/moves";
 import { Species } from "#enums/species";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";

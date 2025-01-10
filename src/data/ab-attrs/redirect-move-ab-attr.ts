@@ -2,7 +2,7 @@ import { allMoves } from "#app/data/all-moves";
 import { MoveTarget } from "../../enums/move-target";
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder, NumberHolder } from "#app/utils";
-import type { Moves } from "#enums/moves";
+import type { Moves } from "#app/server-data/moves";
 import { AbAttr } from "./ab-attr";
 
 export class RedirectMoveAbAttr extends AbAttr {

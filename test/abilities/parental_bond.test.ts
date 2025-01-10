@@ -1,8 +1,8 @@
 import { Type } from "#enums/type";
-import { BattlerTagType } from "#enums/battler-tag-type";
+import { BattlerTagType } from "#app/server-data/battler-tag-type";
 import { toDmgValue } from "#app/utils";
-import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { Abilities } from "#app/server-data/abilities";
+import { Moves } from "#app/server-data/moves";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";

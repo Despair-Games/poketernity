@@ -1,6 +1,6 @@
-import type { DexData } from "#app/@types/DexData";
-import type EggData from "#app/system/egg-data";
-import type { GameStats } from "#app/system/game-stats";
+import type { DexData } from "#app/server-data/dex-data";
+import type EggData from "#app/server-data/egg-data";
+import type { GameStats } from "#app/server-data/game-stats";
 import type { PlayerGender } from "#enums/player-gender";
 import type { StarterData } from "#app/@types/StarterData";
 

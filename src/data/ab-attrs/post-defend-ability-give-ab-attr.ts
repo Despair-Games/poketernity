@@ -3,7 +3,7 @@ import { MoveFlags } from "../../enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
 import type { HitResult } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { Abilities } from "#enums/abilities";
+import type { Abilities } from "#app/server-data/abilities";
 import i18next from "i18next";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 import { UnsuppressableAbilityAbAttr } from "./unsuppressable-ability-ab-attr";

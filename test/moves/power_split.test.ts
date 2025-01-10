@@ -3,9 +3,9 @@ import Phaser from "phaser";
 import { GameManager } from "#test/testUtils/gameManager";
 import { Species } from "#enums/species";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
-import { Moves } from "#enums/moves";
+import { Moves } from "#app/server-data/moves";
 import { Stat } from "#enums/stat";
-import { Abilities } from "#enums/abilities";
+import { Abilities } from "#app/server-data/abilities";
 
 describe("Moves - Power Split", () => {
   let phaserGame: Phaser.Game;

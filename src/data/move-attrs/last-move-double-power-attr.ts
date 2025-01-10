@@ -1,4 +1,4 @@
-import type { Moves } from "#enums/moves";
+import type { Moves } from "#app/server-data/moves";
 import { type Pokemon, MoveResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { NumberHolder } from "#app/utils";

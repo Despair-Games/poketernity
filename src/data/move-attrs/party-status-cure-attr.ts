@@ -1,5 +1,5 @@
-import type { Abilities } from "#enums/abilities";
-import { BattlerTagType } from "#enums/battler-tag-type";
+import type { Abilities } from "#app/server-data/abilities";
+import { BattlerTagType } from "#app/server-data/battler-tag-type";
 import { MoveFlags } from "#enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";

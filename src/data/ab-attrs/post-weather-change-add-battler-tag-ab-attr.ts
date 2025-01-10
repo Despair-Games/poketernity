@@ -1,5 +1,5 @@
 import type { Pokemon } from "#app/field/pokemon";
-import type { BattlerTagType } from "#enums/battler-tag-type";
+import type { BattlerTagType } from "#app/server-data/battler-tag-type";
 import type { WeatherType } from "#enums/weather-type";
 import { PostWeatherChangeAbAttr } from "./post-weather-change-ab-attr";
 

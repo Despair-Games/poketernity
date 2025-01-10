@@ -1,4 +1,4 @@
-import { Biome } from "#enums/biome";
+import { Biome } from "#app/server-data/biome";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { DarkDealEncounter } from "./encounters/dark-deal-encounter";
 import { DepartmentStoreSaleEncounter } from "./encounters/department-store-sale-encounter";

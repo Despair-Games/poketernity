@@ -1,8 +1,8 @@
-import { Abilities } from "#app/enums/abilities";
+import { Abilities } from "#app/server-data/abilities";
 import { ArenaTagType } from "#app/enums/arena-tag-type";
-import { BattlerTagType } from "#app/enums/battler-tag-type";
+import { BattlerTagType } from "#app/server-data/battler-tag-type";
 import { Gender } from "#app/enums/gender";
-import { Moves } from "#app/enums/moves";
+import { Moves } from "#app/server-data/moves";
 import { EFFECTIVE_STATS, getStatKey, Stat, type EffectiveStat } from "#app/enums/stat";
 import { StatusEffect } from "#app/enums/status-effect";
 import { TerrainType } from "#app/enums/terrain-type";

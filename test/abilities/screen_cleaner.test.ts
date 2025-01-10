@@ -1,8 +1,8 @@
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { PostSummonPhase } from "#app/phases/post-summon-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
-import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { Abilities } from "#app/server-data/abilities";
+import { Moves } from "#app/server-data/moves";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";

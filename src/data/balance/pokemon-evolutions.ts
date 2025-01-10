@@ -6,8 +6,8 @@ import { Type } from "#enums/type";
 import { randSeedInt } from "#app/utils";
 import { WeatherType } from "#enums/weather-type";
 import { Nature } from "#enums/nature";
-import { Biome } from "#enums/biome";
-import { Moves } from "#enums/moves";
+import { Biome } from "#app/server-data/biome";
+import { Moves } from "#app/server-data/moves";
 import { Species } from "#enums/species";
 import { TimeOfDay } from "#enums/time-of-day";
 import {

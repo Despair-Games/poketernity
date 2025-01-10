@@ -1,11 +1,11 @@
 import { GameManager } from "#test/testUtils/gameManager";
-import { Moves } from "#enums/moves";
+import { Moves } from "#app/server-data/moves";
 import { Species } from "#enums/species";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { BattlerTagType } from "#enums/battler-tag-type";
+import { BattlerTagType } from "#app/server-data/battler-tag-type";
 import { MoveResult } from "#app/field/pokemon";
-import { Abilities } from "#enums/abilities";
+import { Abilities } from "#app/server-data/abilities";
 
 describe("Moves - Fake Out", () => {
   let phaserGame: Phaser.Game;

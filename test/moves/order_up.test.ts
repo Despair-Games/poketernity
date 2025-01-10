@@ -1,10 +1,10 @@
 import { BattlerIndex } from "#app/battle";
-import { BattlerTagType } from "#enums/battler-tag-type";
+import { BattlerTagType } from "#app/server-data/battler-tag-type";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import type { EffectiveStat } from "#enums/stat";
 import { Stat } from "#enums/stat";
-import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { Abilities } from "#app/server-data/abilities";
+import { Moves } from "#app/server-data/moves";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";

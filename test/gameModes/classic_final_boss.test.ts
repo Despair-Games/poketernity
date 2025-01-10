@@ -1,8 +1,8 @@
 import { GameModes } from "#app/game-mode";
 import { TurnHeldItemTransferModifier } from "#app/modifier/modifier";
-import { Abilities } from "#enums/abilities";
-import { Biome } from "#enums/biome";
-import { Moves } from "#enums/moves";
+import { Abilities } from "#app/server-data/abilities";
+import { Biome } from "#app/server-data/biome";
+import { Moves } from "#app/server-data/moves";
 import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/testUtils/gameManager";

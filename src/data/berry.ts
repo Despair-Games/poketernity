@@ -8,7 +8,7 @@ import { ReduceBerryUseThresholdAbAttr } from "./ab-attrs/reduce-berry-use-thres
 import { DoubleBerryEffectAbAttr } from "./ab-attrs/double-berry-effect-ab-attr";
 import { PostItemLostAbAttr } from "./ab-attrs/post-item-lost-ab-attr";
 import i18next from "i18next";
-import { BattlerTagType } from "#enums/battler-tag-type";
+import { BattlerTagType } from "#app/server-data/battler-tag-type";
 import { BerryType } from "#enums/berry-type";
 import { Stat, type BattleStat } from "#app/enums/stat";
 import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";

@@ -1,4 +1,4 @@
-import { Biome } from "#enums/biome";
+import { Biome } from "#app/server-data/biome";
 import { getPokemonNameWithAffix } from "../messages";
 import type { Pokemon } from "../field/pokemon";
 import { Type } from "#enums/type";

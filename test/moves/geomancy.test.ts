@@ -1,8 +1,8 @@
 import type { EffectiveStat } from "#enums/stat";
 import { Stat } from "#enums/stat";
 import { MoveResult } from "#app/field/pokemon";
-import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { Abilities } from "#app/server-data/abilities";
+import { Moves } from "#app/server-data/moves";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";

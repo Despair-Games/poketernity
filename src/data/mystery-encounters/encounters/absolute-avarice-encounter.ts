@@ -22,8 +22,8 @@ import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { BerryModifier, PokemonInstantReviveModifier } from "#app/modifier/modifier";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
-import { Moves } from "#enums/moves";
-import { BattlerTagType } from "#enums/battler-tag-type";
+import { Moves } from "#app/server-data/moves";
+import { BattlerTagType } from "#app/server-data/battler-tag-type";
 import { randInt } from "#app/utils";
 import { BattlerIndex } from "#app/battle";
 import {

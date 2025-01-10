@@ -1,4 +1,4 @@
-import { Abilities } from "#app/enums/abilities";
+import { Abilities } from "#app/server-data/abilities";
 import { Species } from "#app/enums/species";
 
 export const starterPassiveAbilities = {

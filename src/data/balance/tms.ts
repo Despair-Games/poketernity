@@ -1,5 +1,5 @@
 import { ModifierTier } from "#app/modifier/modifier-tier";
-import { Moves } from "#enums/moves";
+import { Moves } from "#app/server-data/moves";
 import { Species } from "#enums/species";
 
 interface TmSpecies {

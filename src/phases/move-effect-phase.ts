@@ -52,13 +52,13 @@ import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { FaintPhase } from "#app/phases/faint-phase";
 import { DamageAchv } from "#app/system/achv";
 import { BooleanHolder, isNullOrUndefined, NumberHolder } from "#app/utils";
-import { BattlerTagType } from "#enums/battler-tag-type";
+import { BattlerTagType } from "#app/server-data/battler-tag-type";
 import { HitCheckResult } from "#enums/hit-check-result";
 import { MoveCategory } from "#enums/move-category";
 import { MoveEffectTrigger } from "#enums/move-effect-trigger";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveTarget } from "#enums/move-target";
-import { Moves } from "#enums/moves";
+import { Moves } from "#app/server-data/moves";
 import { Type } from "#enums/type";
 import i18next from "i18next";
 

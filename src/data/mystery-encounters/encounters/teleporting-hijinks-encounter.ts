@@ -20,12 +20,12 @@ import { queueEncounterMessage, showEncounterText } from "#app/data/mystery-enco
 import PokemonData from "#app/system/pokemon-data";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import { Biome } from "#enums/biome";
+import { Biome } from "#app/server-data/biome";
 import { getBiomeKey } from "#app/field/arena";
 import { Type } from "#enums/type";
 import { getPartyLuckValue, modifierTypes } from "#app/modifier/modifier-type";
 import { TrainerSlot } from "#enums/trainer-slot";
-import { BattlerTagType } from "#enums/battler-tag-type";
+import { BattlerTagType } from "#app/server-data/battler-tag-type";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { Stat } from "#enums/stat";

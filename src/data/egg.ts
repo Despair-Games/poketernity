@@ -11,7 +11,7 @@ import type { PlayerPokemon } from "#app/field/pokemon";
 import i18next from "i18next";
 import { EggTier } from "#enums/egg-type";
 import { Species } from "#enums/species";
-import { EggSourceType } from "#enums/egg-source-types";
+import { EggSourceType } from "#app/server-data/egg-source-types";
 import {
   MANAPHY_EGG_MANAPHY_RATE,
   SAME_SPECIES_EGG_HA_RATE,

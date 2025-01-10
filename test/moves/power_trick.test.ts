@@ -1,12 +1,12 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import Phaser from "phaser";
 import { GameManager } from "#test/testUtils/gameManager";
-import { Moves } from "#enums/moves";
+import { Moves } from "#app/server-data/moves";
 import { Stat } from "#enums/stat";
 import { Species } from "#enums/species";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
-import { Abilities } from "#enums/abilities";
-import { BattlerTagType } from "#enums/battler-tag-type";
+import { Abilities } from "#app/server-data/abilities";
+import { BattlerTagType } from "#app/server-data/battler-tag-type";
 
 describe("Moves - Power Trick", () => {
   let phaserGame: Phaser.Game;

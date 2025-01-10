@@ -1,6 +1,6 @@
 import type { Variant } from "#app/data/variant";
 import { Weather } from "#app/data/weather";
-import { Abilities } from "#enums/abilities";
+import { Abilities } from "#app/server-data/abilities";
 import * as GameMode from "#app/game-mode";
 import type { GameModes } from "#app/game-mode";
 import { getGameMode } from "#app/game-mode";
@@ -8,8 +8,8 @@ import type { ModifierOverride } from "#app/modifier/modifier-type";
 import type { BattleStyle } from "#app/overrides";
 import Overrides from "#app/overrides";
 import type { Unlockables } from "#app/system/unlockables";
-import { Biome } from "#enums/biome";
-import { Moves } from "#enums/moves";
+import { Biome } from "#app/server-data/biome";
+import { Moves } from "#app/server-data/moves";
 import type { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";

@@ -10,7 +10,7 @@ import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { MovePhase } from "#app/phases/move-phase";
 import { BooleanHolder } from "#app/utils";
-import { BattlerTagType } from "#enums/battler-tag-type";
+import { BattlerTagType } from "#app/server-data/battler-tag-type";
 
 /**
  * Phase for the "charging turn" of two-turn moves (e.g. Dig).

@@ -9,10 +9,10 @@ import { Pokemon, EnemyPokemon, PokemonMove, PokemonSummonData } from "../field/
 import { TrainerSlot } from "#enums/trainer-slot";
 import type { Variant } from "#app/data/variant";
 import { loadBattlerTag } from "../data/battler-tags";
-import type { Biome } from "#enums/biome";
-import { Moves } from "#enums/moves";
+import type { Biome } from "#app/server-data/biome";
+import { Moves } from "#app/server-data/moves";
 import type { Species } from "#enums/species";
-import { CustomPokemonData } from "#app/data/custom-pokemon-data";
+import { CustomPokemonData } from "#app/server-data/custom-pokemon-data";
 
 export default class PokemonData {
   public id: number;

@@ -3,7 +3,7 @@ import { StatusMove } from "../move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { Moves } from "#enums/moves";
+import { Moves } from "#app/server-data/moves";
 import i18next from "i18next";
 import { PostSummonAbAttr } from "./post-summon-ab-attr";
 

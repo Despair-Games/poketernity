@@ -4,7 +4,7 @@ import { MapModifier, MoneyInterestModifier } from "#app/modifier/modifier";
 import type { OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler";
 import { Mode } from "#app/ui/ui";
 import { randSeedInt } from "#app/utils";
-import { Biome } from "#enums/biome";
+import { Biome } from "#app/server-data/biome";
 import { BattlePhase } from "./abstract-battle-phase";
 import { PartyHealPhase } from "./party-heal-phase";
 import { SwitchBiomePhase } from "./switch-biome-phase";

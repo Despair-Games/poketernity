@@ -2,7 +2,7 @@ import { type Pokemon, HitResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import { BattlerTagType } from "#enums/battler-tag-type";
+import { BattlerTagType } from "#app/server-data/battler-tag-type";
 import { Stat } from "#enums/stat";
 import { Type } from "#enums/type";
 import i18next from "i18next";

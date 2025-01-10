@@ -1,4 +1,4 @@
-import type { Moves } from "#enums/moves";
+import type { Moves } from "#app/server-data/moves";
 import type { Pokemon } from "#app/field/pokemon";
 import type { Move } from "#app/data/move";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";

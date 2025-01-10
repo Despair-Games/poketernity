@@ -1,6 +1,6 @@
 import { BattlerIndex } from "#app/battle";
 import { GameManager } from "#test/testUtils/gameManager";
-import { Moves } from "#enums/moves";
+import { Moves } from "#app/server-data/moves";
 import { Species } from "#enums/species";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";

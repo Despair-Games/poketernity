@@ -1,8 +1,8 @@
 import { EffectSporeAbAttr } from "#app/data/ab-attrs/effect-spore-ab-attr";
 import { allMoves } from "#app/data/all-moves";
 import { HitResult } from "#app/field/pokemon";
-import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { Abilities } from "#app/server-data/abilities";
+import { Moves } from "#app/server-data/moves";
 import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/testUtils/gameManager";

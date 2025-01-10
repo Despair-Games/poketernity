@@ -1,5 +1,5 @@
 import { MoneyFormat } from "#enums/money-format";
-import { Moves } from "#enums/moves";
+import { Moves } from "#app/server-data/moves";
 import i18next from "i18next";
 import { api } from "#app/plugins/api/api";
 

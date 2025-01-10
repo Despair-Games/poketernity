@@ -2,7 +2,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vite
 import Phaser from "phaser";
 import { GameManager } from "#test/testUtils/gameManager";
 import { Species } from "#enums/species";
-import { Moves } from "#enums/moves";
+import { Moves } from "#app/server-data/moves";
 import { allMoves } from "#app/data/all-moves";
 
 describe("Moves - Retaliate", () => {

@@ -8,7 +8,7 @@ import { type Weather, getWeatherDamageMessage, getWeatherLapseMessage } from "#
 import { HitResult, type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { BooleanHolder, toDmgValue } from "#app/utils";
-import { BattlerTagType } from "#enums/battler-tag-type";
+import { BattlerTagType } from "#app/server-data/battler-tag-type";
 import { WeatherType } from "#enums/weather-type";
 import { CommonAnimPhase } from "./common-anim-phase";
 

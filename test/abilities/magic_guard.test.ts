@@ -1,10 +1,10 @@
 import { ArenaTagSide, getArenaTag } from "#app/data/arena-tag";
 import { getStatusEffectCatchRateMultiplier } from "#app/data/status-effect";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
-import { Abilities } from "#enums/abilities";
+import { Abilities } from "#app/server-data/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
-import { BattlerTagType } from "#enums/battler-tag-type";
-import { Moves } from "#enums/moves";
+import { BattlerTagType } from "#app/server-data/battler-tag-type";
+import { Moves } from "#app/server-data/moves";
 import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
 import { WeatherType } from "#enums/weather-type";

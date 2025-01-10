@@ -1,5 +1,5 @@
 import type { Pokemon } from "#app/field/pokemon";
-import type { BattlerTagType } from "#enums/battler-tag-type";
+import type { BattlerTagType } from "#app/server-data/battler-tag-type";
 import { PostItemLostAbAttr } from "./post-item-lost-ab-attr";
 
 /**

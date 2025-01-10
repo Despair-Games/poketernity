@@ -1,4 +1,4 @@
-import { Biome } from "#enums/biome";
+import { Biome } from "#app/server-data/biome";
 import { TerrainType } from "#enums/terrain-type";
 import { Type } from "#enums/type";
 import type { Pokemon } from "#app/field/pokemon";

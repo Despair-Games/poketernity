@@ -3,8 +3,8 @@ import {
   SpeciesFormEvolution,
   SpeciesWildEvolutionDelay,
 } from "#app/data/balance/pokemon-evolutions";
-import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { Abilities } from "#app/server-data/abilities";
+import { Moves } from "#app/server-data/moves";
 import { Species } from "#enums/species";
 import * as Utils from "#app/utils";
 import { GameManager } from "#test/testUtils/gameManager";

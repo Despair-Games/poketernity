@@ -10,13 +10,13 @@ import {
 } from "#app/modifier/modifier";
 import type { Constructor, nil } from "#app/utils";
 import { BooleanHolder, NumberHolder } from "#app/utils";
-import { Abilities } from "#enums/abilities";
+import { Abilities } from "#app/server-data/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
-import { BattlerTagType } from "#enums/battler-tag-type";
+import { BattlerTagType } from "#app/server-data/battler-tag-type";
 import { MoveCategory } from "#enums/move-category";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveTarget } from "#enums/move-target";
-import { Moves } from "#enums/moves";
+import { Moves } from "#app/server-data/moves";
 import { Type } from "#enums/type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";

@@ -1,5 +1,5 @@
 import { MoveEffectTrigger } from "#enums/move-effect-trigger";
-import { Moves } from "#enums/moves";
+import { Moves } from "#app/server-data/moves";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";

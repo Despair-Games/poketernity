@@ -8,18 +8,11 @@ import { allSpecies } from "./data/pokemon-species";
 import type { Arena } from "./field/arena";
 import Overrides from "#app/overrides";
 import { randSeedInt, randSeedItem } from "#app/utils";
-import { Biome } from "#enums/biome";
+import { Biome } from "#app/server-data/biome";
 import { Species } from "#enums/species";
 import { Challenges } from "./enums/challenges";
 import { globalScene } from "#app/global-scene";
-
-export enum GameModes {
-  CLASSIC,
-  ENDLESS,
-  SPLICED_ENDLESS,
-  DAILY,
-  CHALLENGE,
-}
+import { GameModes } from "./server-data/game-modes";
 
 interface GameModeConfig {
   isClassic?: boolean;

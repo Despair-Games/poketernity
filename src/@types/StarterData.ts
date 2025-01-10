@@ -1,4 +1,4 @@
-import type { Moves } from "#enums/moves";
+import type { Moves } from "#app/server-data/moves";
 
 /**
  * Data for a single starter species

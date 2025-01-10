@@ -34,8 +34,8 @@ import { Gender } from "#enums/gender";
 import type { PermanentStat } from "#enums/stat";
 import { VictoryPhase } from "#app/phases/victory-phase";
 import { SummaryUiMode } from "#app/ui/summary-ui-handler";
-import { CustomPokemonData } from "#app/data/custom-pokemon-data";
-import type { Abilities } from "#enums/abilities";
+import { CustomPokemonData } from "#app/server-data/custom-pokemon-data";
+import type { Abilities } from "#app/server-data/abilities";
 import type { PokeballType } from "#enums/pokeball";
 import { StatusEffect } from "#enums/status-effect";
 

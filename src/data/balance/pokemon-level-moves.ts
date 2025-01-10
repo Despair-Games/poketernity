@@ -1,4 +1,4 @@
-import { Moves } from "#enums/moves";
+import { Moves } from "#app/server-data/moves";
 import { Species } from "#enums/species";
 
 export type LevelMoves = [number, Moves][];

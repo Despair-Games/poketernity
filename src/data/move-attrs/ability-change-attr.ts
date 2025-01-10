@@ -1,4 +1,4 @@
-import type { Abilities } from "#enums/abilities";
+import type { Abilities } from "#app/server-data/abilities";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";

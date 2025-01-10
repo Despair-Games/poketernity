@@ -1,9 +1,9 @@
 import type { ArenaTrapTag } from "#app/data/arena-tag";
 import { ArenaTagSide } from "#app/data/arena-tag";
 import { allMoves } from "#app/data/all-moves";
-import { Abilities } from "#enums/abilities";
+import { Abilities } from "#app/server-data/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
-import { Moves } from "#enums/moves";
+import { Moves } from "#app/server-data/moves";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";

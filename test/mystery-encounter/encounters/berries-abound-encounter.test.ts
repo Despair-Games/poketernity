@@ -1,5 +1,5 @@
 import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
-import { Biome } from "#enums/biome";
+import { Biome } from "#app/server-data/biome";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -20,7 +20,7 @@ import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encount
 import * as EncounterDialogueUtils from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { CommandPhase } from "#app/phases/command-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import { Abilities } from "#enums/abilities";
+import { Abilities } from "#app/server-data/abilities";
 
 const namespace = "mysteryEncounters/berriesAbound";
 const defaultParty = [Species.PYUKUMUKU, Species.MAGIKARP, Species.PIKACHU];

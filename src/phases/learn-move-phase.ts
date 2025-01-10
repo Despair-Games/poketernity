@@ -11,7 +11,7 @@ import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import FormChangeSceneHandler from "#app/ui/form-change-scene-handler";
 import { SummaryUiMode } from "#app/ui/summary-ui-handler";
 import { Mode } from "#app/ui/ui";
-import { Moves } from "#enums/moves";
+import { Moves } from "#app/server-data/moves";
 import i18next from "i18next";
 
 export enum LearnMoveType {

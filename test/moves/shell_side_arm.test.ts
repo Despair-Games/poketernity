@@ -1,8 +1,8 @@
 import { BattlerIndex } from "#app/battle";
 import { allMoves } from "#app/data/all-moves";
 import { ShellSideArmCategoryAttr } from "#app/data/move-attrs/shell-side-arm-category-attr";
-import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { Abilities } from "#app/server-data/abilities";
+import { Moves } from "#app/server-data/moves";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";

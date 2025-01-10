@@ -16,10 +16,10 @@ import { BlockNonDirectDamageAbAttr } from "./ab-attrs/block-non-direct-damage-a
 import { Stat } from "#enums/stat";
 import { CommonAnim, CommonBattleAnim } from "#app/data/battle-anims";
 import i18next from "i18next";
-import { Abilities } from "#enums/abilities";
+import { Abilities } from "#app/server-data/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
-import { BattlerTagType } from "#enums/battler-tag-type";
-import { Moves } from "#enums/moves";
+import { BattlerTagType } from "#app/server-data/battler-tag-type";
+import { Moves } from "#app/server-data/moves";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
@@ -27,85 +27,9 @@ import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { ProtectStatAbAttr } from "./ab-attrs/protect-stat-ab-attr";
 import { MoveFlags } from "#enums/move-flags";
+import { ArenaTag } from "#app/server-data/arena-tag";
+import { ArenaTagSide } from "#app/server-data/arena-tag-side";
 
-export enum ArenaTagSide {
-  BOTH,
-  PLAYER,
-  ENEMY,
-}
-
-export abstract class ArenaTag {
-  constructor(
-    public tagType: ArenaTagType,
-    public turnCount: number,
-    public sourceMove?: Moves,
-    public sourceId?: number,
-    public side: ArenaTagSide = ArenaTagSide.BOTH,
-  ) {}
-
-  apply(_arena: Arena, _simulated: boolean, ..._args: unknown[]): boolean {
-    return true;
-  }
-
-  onAdd(_arena: Arena, _quiet: boolean = false): void {}
-
-  onRemove(_arena: Arena, quiet: boolean = false): void {
-    if (!quiet) {
-      globalScene.queueMessage(
-        i18next.t(
-          `arenaTag:arenaOnRemove${this.side === ArenaTagSide.PLAYER ? "Player" : this.side === ArenaTagSide.ENEMY ? "Enemy" : ""}`,
-          { moveName: this.getMoveName() },
-        ),
-      );
-    }
-  }
-
-  onOverlap(_arena: Arena): void {}
-
-  lapse(_arena: Arena): boolean {
-    return this.turnCount < 1 || !!--this.turnCount;
-  }
-
-  getMoveName(): string | null {
-    return this.sourceMove ? allMoves[this.sourceMove].name : null;
-  }
-
-  /**
-   * When given a arena tag or json representing one, load the data for it.
-   * This is meant to be inherited from by any arena tag with custom attributes
-   * @param source - The {@linkcode ArenaTag} source to load from
-   */
-  loadTag(source: ArenaTag | any): void {
-    this.turnCount = source.turnCount;
-    this.sourceMove = source.sourceMove;
-    this.sourceId = source.sourceId;
-    this.side = source.side;
-  }
-
-  /**
-   * Helper function that retrieves the source Pokemon
-   * @returns The source {@linkcode Pokemon} or `null` if none is found
-   */
-  public getSourcePokemon(): Pokemon | null {
-    return this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
-  }
-
-  /**
-   * Helper function that retrieves the Pokemon affected
-   * @returns list of PlayerPokemon or EnemyPokemon on the field
-   */
-  public getAffectedPokemon(): Pokemon[] {
-    switch (this.side) {
-      case ArenaTagSide.PLAYER:
-        return globalScene.getPlayerField() ?? [];
-      case ArenaTagSide.ENEMY:
-        return globalScene.getEnemyField() ?? [];
-      case ArenaTagSide.BOTH:
-      default:
-        return globalScene.getField(true) ?? [];
-    }
-  }
-}
 
 /**
  * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Mist_(move) Mist}.

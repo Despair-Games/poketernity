@@ -3,7 +3,7 @@ import { HitResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { toDmgValue } from "#app/utils";
-import { Abilities } from "#enums/abilities";
+import { Abilities } from "#app/server-data/abilities";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
 import { BlockNonDirectDamageAbAttr } from "./block-non-direct-damage-ab-attr";

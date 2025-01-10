@@ -3,7 +3,7 @@ import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { HitResult } from "#app/field/pokemon";
 import type { BooleanHolder, NumberHolder } from "#app/utils";
-import type { BattlerTagType } from "#enums/battler-tag-type";
+import type { BattlerTagType } from "#app/server-data/battler-tag-type";
 import { ReceivedMoveDamageMultiplierAbAttr } from "./received-move-damage-multiplier-ab-attr";
 
 /**

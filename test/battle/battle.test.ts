@@ -19,13 +19,13 @@ import { VictoryPhase } from "#app/phases/victory-phase";
 import { GameManager } from "#test/testUtils/gameManager";
 import { generateStarter } from "#test/testUtils/gameManagerUtils";
 import { Mode } from "#app/ui/ui";
-import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { Abilities } from "#app/server-data/abilities";
+import { Moves } from "#app/server-data/moves";
 import { PlayerGender } from "#enums/player-gender";
 import { Species } from "#enums/species";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { Biome } from "#enums/biome";
+import { Biome } from "#app/server-data/biome";
 import { EVERYTHING_SAVE_FILE_PATH } from "#test/testUtils/testUtils";
 
 describe("Test Battle Phase", () => {

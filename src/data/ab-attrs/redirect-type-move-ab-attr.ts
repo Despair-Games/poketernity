@@ -1,5 +1,5 @@
 import { allMoves } from "#app/data/all-moves";
-import type { Moves } from "#enums/moves";
+import type { Moves } from "#app/server-data/moves";
 import type { Type } from "#enums/type";
 import { RedirectMoveAbAttr } from "./redirect-move-ab-attr";
 

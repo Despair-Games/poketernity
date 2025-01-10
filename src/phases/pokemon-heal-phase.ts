@@ -8,7 +8,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { HealingBoosterModifier } from "#app/modifier/modifier";
 import { HealAchv } from "#app/system/achv";
 import { NumberHolder } from "#app/utils";
-import { BattlerTagType } from "#enums/battler-tag-type";
+import { BattlerTagType } from "#app/server-data/battler-tag-type";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
 import { CommonAnimPhase } from "./common-anim-phase";

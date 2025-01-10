@@ -8,7 +8,7 @@ import { Type } from "#enums/type";
 import type { Pokemon } from "../field/pokemon";
 import i18next from "i18next";
 import { DexAttr } from "#app/data/dex-attributes";
-import type { DexEntry } from "#app/@types/DexData";
+import type { DexEntry } from "#app/server-data/dex-data";
 import type { StarterDataEntry } from "#app/@types/StarterData";
 import { capitalizeString, fixedInt } from "#app/utils";
 import ConfirmUiHandler from "./confirm-ui-handler";

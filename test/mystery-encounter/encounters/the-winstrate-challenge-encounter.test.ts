@@ -1,6 +1,6 @@
 import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
 import { HUMAN_TRANSITABLE_BIOMES } from "#app/data/mystery-encounters/mystery-encounters";
-import { Biome } from "#enums/biome";
+import { Biome } from "#app/server-data/biome";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -16,7 +16,7 @@ import ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
 import MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { TrainerType } from "#enums/trainer-type";
 import { Nature } from "#enums/nature";
-import { Moves } from "#enums/moves";
+import { Moves } from "#app/server-data/moves";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
 import { TheWinstrateChallengeEncounter } from "#app/data/mystery-encounters/encounters/the-winstrate-challenge-encounter";
 import { Status } from "#app/data/status-effect";

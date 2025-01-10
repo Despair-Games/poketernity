@@ -7,7 +7,7 @@ import {
 import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerPoolTier } from "#enums/trainer-pool-tier";
 import { PokemonMove } from "#app/field/pokemon";
-import { Moves } from "#enums/moves";
+import { Moves } from "#app/server-data/moves";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
 

@@ -1,5 +1,5 @@
-import { BattlerTagType } from "#enums/battler-tag-type";
-import { Biome } from "#enums/biome";
+import { BattlerTagType } from "#app/server-data/battler-tag-type";
+import { Biome } from "#app/server-data/biome";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { TerrainType } from "#enums/terrain-type";

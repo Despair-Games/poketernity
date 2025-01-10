@@ -1,7 +1,7 @@
 import { BattleType } from "#app/battle";
-import { BattlerTagType } from "#enums/battler-tag-type";
+import { BattlerTagType } from "#app/server-data/battler-tag-type";
 import { MoveCategory } from "#enums/move-category";
-import { Moves } from "#enums/moves";
+import { Moves } from "#app/server-data/moves";
 import { SwitchType } from "#enums/switch-type";
 import type { Pokemon, EnemyPokemon } from "#app/field/pokemon";
 import { PlayerPokemon } from "#app/field/pokemon";

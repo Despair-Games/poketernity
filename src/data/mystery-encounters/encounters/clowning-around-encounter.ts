@@ -21,7 +21,7 @@ import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
-import { Abilities } from "#enums/abilities";
+import { Abilities } from "#app/server-data/abilities";
 import {
   applyAbilityOverrideToPokemon,
   applyModifierTypeToPlayerPokemon,
@@ -40,10 +40,10 @@ import { Ability } from "#app/data/ability";
 import { BerryModifier } from "#app/modifier/modifier";
 import { BerryType } from "#enums/berry-type";
 import { BattlerIndex } from "#app/battle";
-import { Moves } from "#enums/moves";
+import { Moves } from "#app/server-data/moves";
 import { EncounterBattleAnim } from "#app/data/battle-anims";
 import { MoveCategory } from "#app/enums/move-category";
-import { CustomPokemonData } from "#app/data/custom-pokemon-data";
+import { CustomPokemonData } from "#app/server-data/custom-pokemon-data";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
 import { EncounterAnim } from "#enums/encounter-anims";
 import { Challenges } from "#enums/challenges";

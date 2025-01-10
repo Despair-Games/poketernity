@@ -1,5 +1,5 @@
 import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
-import { Biome } from "#enums/biome";
+import { Biome } from "#app/server-data/biome";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -14,7 +14,7 @@ import {
   runSelectMysteryEncounterOption,
   skipBattleRunMysteryEncounterRewardsPhase,
 } from "#test/mystery-encounter/encounter-test-utils";
-import { Moves } from "#enums/moves";
+import { Moves } from "#app/server-data/moves";
 import type BattleScene from "#app/battle-scene";
 import { AttackTypeBoosterModifier, PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { Type } from "#enums/type";
@@ -26,8 +26,8 @@ import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils
 import { CommandPhase } from "#app/phases/command-phase";
 import { MovePhase } from "#app/phases/move-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import { BattlerTagType } from "#enums/battler-tag-type";
-import { Abilities } from "#enums/abilities";
+import { BattlerTagType } from "#app/server-data/battler-tag-type";
+import { Abilities } from "#app/server-data/abilities";
 import i18next from "i18next";
 import { StatusEffect } from "#enums/status-effect";
 

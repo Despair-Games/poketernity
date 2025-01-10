@@ -4,8 +4,8 @@ import { MoveEffectChanceMultiplierAbAttr } from "#app/data/ab-attrs/move-effect
 import { applyAbAttrs, applyPreDefendAbAttrs } from "#app/data/ability";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { NumberHolder } from "#app/utils";
-import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { Abilities } from "#app/server-data/abilities";
+import { Moves } from "#app/server-data/moves";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/testUtils/gameManager";

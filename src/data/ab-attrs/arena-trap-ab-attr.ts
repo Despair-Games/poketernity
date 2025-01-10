@@ -1,7 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { BooleanHolder } from "#app/utils";
-import { Abilities } from "#enums/abilities";
+import { Abilities } from "#app/server-data/abilities";
 import { Type } from "#enums/type";
 import i18next from "i18next";
 import { CheckTrappedAbAttr } from "./check-trapped-ab-attr";

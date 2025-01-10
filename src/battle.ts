@@ -18,7 +18,7 @@ import { SpeciesFormKey } from "#enums/species-form-key";
 import type { EnemyPokemon, PlayerPokemon, QueuedMove } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { ArenaTagType } from "#enums/arena-tag-type";
-import type { Moves } from "#enums/moves";
+import type { Moves } from "#app/server-data/moves";
 import { PlayerGender } from "#enums/player-gender";
 import { MusicPreference } from "#app/system/settings/settings";
 import { Species } from "#enums/species";
@@ -30,26 +30,13 @@ import type { CustomModifierSettings } from "#app/modifier/modifier-type";
 import { ModifierTier } from "#app/modifier/modifier-tier";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
+import { BattlerIndex } from "./server-data/battler-index";
+import { BattleType } from "./server-data/battle-type";
 
 export enum ClassicFixedBossWaves {
   // TODO: other fixed wave battles should be added here
   EVIL_BOSS_1 = 115,
   EVIL_BOSS_2 = 165,
-}
-
-export enum BattleType {
-  WILD,
-  TRAINER,
-  CLEAR,
-  MYSTERY_ENCOUNTER,
-}
-
-export enum BattlerIndex {
-  ATTACKER = -1,
-  PLAYER,
-  PLAYER_2,
-  ENEMY,
-  ENEMY_2,
 }
 
 export interface TurnCommand {

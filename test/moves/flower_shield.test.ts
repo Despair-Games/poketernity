@@ -1,10 +1,10 @@
 import { Stat } from "#enums/stat";
 import { SemiInvulnerableTag } from "#app/data/battler-tags";
 import { Type } from "#enums/type";
-import { Biome } from "#enums/biome";
+import { Biome } from "#app/server-data/biome";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
-import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { Abilities } from "#app/server-data/abilities";
+import { Moves } from "#app/server-data/moves";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";

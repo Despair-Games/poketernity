@@ -1,5 +1,5 @@
-import { Moves } from "#enums/moves";
-import { Abilities } from "#enums/abilities";
+import { Moves } from "#app/server-data/moves";
+import { Abilities } from "#app/server-data/abilities";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/testUtils/gameManager";

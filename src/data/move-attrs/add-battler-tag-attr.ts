@@ -1,5 +1,5 @@
 import type { Pokemon } from "#app/field/pokemon";
-import { BattlerTagType } from "#enums/battler-tag-type";
+import { BattlerTagType } from "#app/server-data/battler-tag-type";
 import type { Move } from "../move";
 import type { MoveConditionFunc } from "../move-conditions";
 import { type MoveEffectAttrOptions, MoveEffectAttr } from "./move-effect-attr";

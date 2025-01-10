@@ -6,7 +6,7 @@ import i18next from "i18next";
 import { BlockNonDirectDamageAbAttr } from "./ab-attrs/block-non-direct-damage-ab-attr";
 import { applyAbAttrs } from "./ability";
 import type { Move } from "./move";
-import { BattlerTagType } from "#enums/battler-tag-type";
+import { BattlerTagType } from "#app/server-data/battler-tag-type";
 import type { UserMoveConditionFunc } from "./move-conditions";
 
 export const crashDamageFunc = (user: Pokemon, _move: Move) => {

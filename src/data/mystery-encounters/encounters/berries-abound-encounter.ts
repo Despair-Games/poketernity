@@ -19,7 +19,7 @@ import {
   regenerateModifierPoolThresholds,
 } from "#app/modifier/modifier-type";
 import { randSeedInt } from "#app/utils";
-import { BattlerTagType } from "#enums/battler-tag-type";
+import { BattlerTagType } from "#app/server-data/battler-tag-type";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";

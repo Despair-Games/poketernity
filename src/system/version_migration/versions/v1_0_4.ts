@@ -4,7 +4,7 @@ import type { SystemSaveData } from "#app/@types/SystemData";
 import { AbilityAttr, DexAttr } from "#app/data/dex-attributes";
 import { defaultStarterSpecies } from "#app/data/balance/default-starters";
 import { allSpecies } from "#app/data/pokemon-species";
-import { CustomPokemonData } from "#app/data/custom-pokemon-data";
+import { CustomPokemonData } from "#app/server-data/custom-pokemon-data";
 import { isNullOrUndefined } from "#app/utils";
 
 export const systemMigrators = [

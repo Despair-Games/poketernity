@@ -1,6 +1,6 @@
 import { getBiomeKey } from "#app/field/arena";
 import { globalScene } from "#app/global-scene";
-import type { Biome } from "#enums/biome";
+import type { Biome } from "#app/server-data/biome";
 import { BattlePhase } from "./abstract-battle-phase";
 
 export class SwitchBiomePhase extends BattlePhase {

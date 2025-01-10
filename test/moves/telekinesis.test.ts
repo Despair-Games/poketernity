@@ -1,7 +1,7 @@
-import { BattlerTagType } from "#enums/battler-tag-type";
+import { BattlerTagType } from "#app/server-data/battler-tag-type";
 import { allMoves } from "#app/data/all-moves";
-import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { Abilities } from "#app/server-data/abilities";
+import { Moves } from "#app/server-data/moves";
 import { Species } from "#enums/species";
 import { MoveResult } from "#app/field/pokemon";
 import { GameManager } from "#test/testUtils/gameManager";

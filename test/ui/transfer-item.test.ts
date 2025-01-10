@@ -1,6 +1,6 @@
 import { BerryType } from "#enums/berry-type";
 import { Button } from "#enums/buttons";
-import { Moves } from "#enums/moves";
+import { Moves } from "#app/server-data/moves";
 import { Species } from "#enums/species";
 import { BattleEndPhase } from "#app/phases/battle-end-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
