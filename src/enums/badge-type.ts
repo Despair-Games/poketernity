@@ -82,7 +82,7 @@ export enum BadgeType {
   DRAGON,
 
   // Paldea
-  CONTONDO,
+  CORTONDO,
   ARTAZON,
   LEVINCIA,
   CASCARRAFA,
