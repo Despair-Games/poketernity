@@ -11,7 +11,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { achvs } from "#app/system/achv";
 import type PartyUiHandler from "#app/ui/party-ui-handler";
 import { Mode } from "#app/ui/ui";
-import { fixedInt } from "#app/utils";
+import { fixedNumber } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { FormChangeBasePhase } from "./abstract-form-change-base-phase";
@@ -152,9 +152,9 @@ export class FormChangePhase extends FormChangeBasePhase {
                 () => this.end(),
                 null,
                 true,
-                fixedInt(delay),
+                fixedNumber(delay),
               );
-              time.delayedCall(fixedInt(delay + 250), () => globalScene.playBgm());
+              time.delayedCall(fixedNumber(delay + 250), () => globalScene.playBgm());
             });
           });
         },

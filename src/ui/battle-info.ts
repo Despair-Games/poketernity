@@ -1,6 +1,6 @@
 import type { EnemyPokemon, Pokemon } from "../field/pokemon";
 import { getLevelTotalExp, getLevelRelExp } from "../data/exp";
-import { getLocalizedSpriteKey, fixedInt } from "#app/utils";
+import { getLocalizedSpriteKey, fixedNumber } from "#app/utils";
 import { addTextObject, TextStyle } from "./text";
 import { getGenderSymbol, getGenderColor } from "#app/data/gender";
 import { Gender } from "#enums/gender";
@@ -535,7 +535,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
   toggleStats(visible: boolean): void {
     globalScene.tweens.add({
       targets: this.statsContainer,
-      duration: fixedInt(125),
+      duration: fixedNumber(125),
       ease: "Sine.easeInOut",
       alpha: visible ? 1 : 0,
     });

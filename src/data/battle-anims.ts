@@ -6,7 +6,7 @@ import { AttackMove } from "./move";
 import { MoveFlags } from "#enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
 import { getFrameMs, getEnumKeys, getEnumValues, animationFileName, isNullOrUndefined } from "#app/utils";
-import type { BattlerIndex } from "#app/battle";
+import { BattlerIndex } from "#app/battle";
 import { Moves } from "#enums/moves";
 import { SubstituteTag } from "./battler-tags";
 import Phaser from "phaser";
@@ -1432,8 +1432,8 @@ export class CommonBattleAnim extends BattleAnim {
 export class MoveAnim extends BattleAnim {
   public move: Moves;
 
-  constructor(move: Moves, user: Pokemon, target: BattlerIndex, playOnEmptyField: boolean = false) {
-    super(user, globalScene.getFieldPokemonByBattlerIndex(target), playOnEmptyField);
+  constructor(move: Moves, user: Pokemon, targetIndex: BattlerIndex, playOnEmptyField: boolean = false) {
+    super(user, globalScene.getFieldPokemonByBattlerIndex(targetIndex), playOnEmptyField);
 
     this.move = move;
   }
@@ -1460,8 +1460,11 @@ export class MoveAnim extends BattleAnim {
 export class MoveChargeAnim extends MoveAnim {
   private chargeAnim: ChargeAnim;
 
-  constructor(chargeAnim: ChargeAnim, move: Moves, user: Pokemon) {
-    super(move, user, 0);
+  /**
+   * **Note:** The default for {@linkcode targetIndex} being {@linkcode BattlerIndex.PLAYER} is due to `MoveChargeAnim` originally not supporting a target argument.
+   */
+  constructor(chargeAnim: ChargeAnim, move: Moves, user: Pokemon, targetIndex: BattlerIndex = BattlerIndex.PLAYER) {
+    super(move, user, targetIndex);
 
     this.chargeAnim = chargeAnim;
   }

@@ -2,7 +2,7 @@ import type { InfoToggle } from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
 import { TextStyle, addTextObject } from "./text";
 import { addWindow } from "./ui-theme";
-import { getLocalizedSpriteKey, fixedInt } from "#app/utils";
+import { getLocalizedSpriteKey, fixedNumber } from "#app/utils";
 import type { Move } from "../data/move";
 import { MoveCategory } from "#app/enums/move-category";
 import { Type } from "#enums/type";
@@ -189,10 +189,10 @@ export default class MoveInfoOverlay extends Phaser.GameObjects.Container implem
       // generate scrolling effects
       this.descScroll = globalScene.tweens.add({
         targets: this.desc,
-        delay: fixedInt(2000),
+        delay: fixedNumber(2000),
         loop: -1,
-        hold: fixedInt(2000),
-        duration: fixedInt((moveDescriptionLineCount - 3) * 2000),
+        hold: fixedNumber(2000),
+        duration: fixedNumber((moveDescriptionLineCount - 3) * 2000),
         y: `-=${14.83 * (72 / 96) * (moveDescriptionLineCount - 3)}`,
       });
     }
@@ -215,7 +215,7 @@ export default class MoveInfoOverlay extends Phaser.GameObjects.Container implem
     }
     globalScene.tweens.add({
       targets: this.desc,
-      duration: fixedInt(125),
+      duration: fixedNumber(125),
       ease: "Sine.easeInOut",
       alpha: visible ? 1 : 0,
     });

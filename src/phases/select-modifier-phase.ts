@@ -28,7 +28,7 @@ import type ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
 import { SHOP_OPTIONS_ROW_LIMIT } from "#app/ui/modifier-select-ui-handler";
 import PartyUiHandler, { PartyOption, PartyUiMode } from "#app/ui/party-ui-handler";
 import { Mode } from "#app/ui/ui";
-import { isNullOrUndefined, NumberHolder } from "#app/utils";
+import { NumberHolder } from "#app/utils";
 import i18next from "i18next";
 import { BattlePhase } from "./abstract-battle-phase";
 
@@ -140,7 +140,7 @@ export class SelectModifierPhase extends BattlePhase {
                 ui.clearText();
                 ui.setMode(Mode.MESSAGE).then(() => super.end());
 
-                if (!Overrides.WAIVE_ROLL_FEE_OVERRIDE) {
+                if (!Overrides.WAIVE_SHOP_FEES_OVERRIDE) {
                   globalScene.money -= rerollCost;
                   globalScene.updateMoneyText();
                   globalScene.animateMoneyChanged(false);
@@ -244,7 +244,7 @@ export class SelectModifierPhase extends BattlePhase {
           break;
       }
 
-      if (cost && money < cost && !Overrides.WAIVE_ROLL_FEE_OVERRIDE) {
+      if (cost && money < cost && !Overrides.WAIVE_SHOP_FEES_OVERRIDE) {
         ui.playError();
         return false;
       }
@@ -260,7 +260,7 @@ export class SelectModifierPhase extends BattlePhase {
 
         if (cost && !(modifier.type instanceof RememberMoveModifierType)) {
           if (result) {
-            if (!Overrides.WAIVE_ROLL_FEE_OVERRIDE) {
+            if (!Overrides.WAIVE_SHOP_FEES_OVERRIDE) {
               globalScene.money -= cost;
               globalScene.updateMoneyText();
               globalScene.animateMoneyChanged(false);
@@ -383,27 +383,22 @@ export class SelectModifierPhase extends BattlePhase {
   }
 
   public getRerollCost(lockRarities: boolean): number {
+    const multiplier = this.customModifierSettings?.rerollMultiplier ?? 1;
+    if (multiplier < 0) {
+      // Override reroll cost to -1 to signify there is nothing to reroll
+      return -1;
+    }
+
     let baseValue = 0;
-    if (Overrides.WAIVE_ROLL_FEE_OVERRIDE) {
+    if (Overrides.WAIVE_SHOP_FEES_OVERRIDE) {
       return baseValue;
     } else if (lockRarities) {
-      const tierValues = [50, 125, 300, 750, 2000];
+      const tierValues = [50, 125, 300, 750, 2000]; // TODO: this should be part of balance files
       for (const opt of this.typeOptions) {
         baseValue += tierValues[opt.type.tier ?? 0];
       }
     } else {
-      baseValue = 250;
-    }
-
-    let multiplier = 1;
-    if (!isNullOrUndefined(this.customModifierSettings?.rerollMultiplier)) {
-      if (this.customModifierSettings.rerollMultiplier < 0) {
-        // Completely overrides reroll cost to -1 and early exits
-        return -1;
-      }
-
-      // Otherwise, continue with custom multiplier
-      multiplier = this.customModifierSettings.rerollMultiplier;
+      baseValue = 250; // TODO: this should be part of balance files
     }
 
     const baseMultiplier = Math.min(
