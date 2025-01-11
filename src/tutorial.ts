@@ -4,7 +4,7 @@ import type UiHandler from "./ui/ui-handler";
 import { Mode } from "./ui/ui";
 import i18next from "i18next";
 import Overrides from "#app/overrides";
-import { Tutorial } from "#app/enums/tutorial";
+import { Tutorial } from "#enums/tutorial";
 
 const tutorialHandlers = {
   [Tutorial.Intro]: () => {

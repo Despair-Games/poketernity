@@ -1,5 +1,5 @@
 import { applyChallenges } from "#app/data/challenge";
-import { ChallengeType } from "#app/enums/challenge-type";
+import { ChallengeType } from "#enums/challenge-type";
 import { SpeciesFormChangeMoveLearnedTrigger } from "#app/data/pokemon-forms";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
 import { globalScene } from "#app/global-scene";

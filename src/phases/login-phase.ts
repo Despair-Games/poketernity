@@ -4,7 +4,7 @@ import { SESSION_ID_COOKIE } from "#app/constants";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { handleTutorial } from "#app/tutorial";
-import { Tutorial } from "#app/enums/tutorial";
+import { Tutorial } from "#enums/tutorial";
 import { Mode } from "#app/ui/ui";
 import { executeIf, getCookie, removeCookie } from "#app/utils";
 import i18next from "i18next";

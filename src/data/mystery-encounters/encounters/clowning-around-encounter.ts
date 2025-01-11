@@ -43,7 +43,7 @@ import { BerryType } from "#enums/berry-type";
 import { BattlerIndex } from "#enums/battler-index";
 import { Moves } from "#enums/moves";
 import { EncounterBattleAnim } from "#app/data/battle-anims";
-import { MoveCategory } from "#app/enums/move-category";
+import { MoveCategory } from "#enums/move-category";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
 import { EncounterAnim } from "#enums/encounter-anims";

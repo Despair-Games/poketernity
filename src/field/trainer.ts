@@ -19,7 +19,7 @@ import { PartyMemberStrength } from "#enums/party-member-strength";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
-import { TrainerVariant } from "../enums/trainer-variant";
+import { TrainerVariant } from ".#enums/trainer-variant";
 
 export default class Trainer extends Phaser.GameObjects.Container {
   public config: TrainerConfig;

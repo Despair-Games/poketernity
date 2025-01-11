@@ -44,7 +44,7 @@ import { SummonPhase } from "#app/phases/summon-phase";
 import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
 import { achvs } from "#app/system/achv";
 import { handleTutorial } from "#app/tutorial";
-import { Tutorial } from "#app/enums/tutorial";
+import { Tutorial } from "#enums/tutorial";
 import { Mode } from "#app/ui/ui";
 import { randSeedInt, randSeedItem } from "#app/utils";
 import { Biome } from "#enums/biome";

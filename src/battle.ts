@@ -11,7 +11,7 @@ import {
   isBetween,
 } from "#app/utils";
 import Trainer from "./field/trainer";
-import { TrainerVariant } from "./enums/trainer-variant";
+import { TrainerVariant } from "#enums/trainer-variant";
 import type { GameMode } from "./game-mode";
 import { MoneyMultiplierModifier, PokemonHeldItemModifier } from "./modifier/modifier";
 import type { PokeballType } from "#enums/pokeball";
@@ -31,8 +31,8 @@ import type { CustomModifierSettings } from "#app/modifier/modifier-type";
 import { ModifierTier } from "#app/modifier/modifier-tier";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
-import { BattleType } from "./enums/battle-type";
-import { BattlerIndex } from "./enums/battler-index";
+import { BattleType } from "#enums/battle-type";
+import { BattlerIndex } from "#enums/battler-index";
 import {
   CHAMPION_WAVE,
   ELITE_FOUR_1_WAVE,

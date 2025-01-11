@@ -127,7 +127,7 @@ import { getStatKey, Stat, TEMP_BATTLE_STATS } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { Type } from "#enums/type";
 import i18next from "i18next";
-import { ModifierPoolType } from "../enums/modifier-pool-type";
+import { ModifierPoolType } from ".#enums/modifier-pool-type";
 
 const outputModifierData = false;
 const useMaxWeightForOutput = false;

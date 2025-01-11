@@ -7,7 +7,7 @@ import { Command } from "./command-ui-handler";
 import { Mode } from "./ui";
 import UiHandler from "./ui-handler";
 import { getLocalizedSpriteKey, fixedNumber, padInt } from "#app/utils";
-import { MoveCategory } from "#app/enums/move-category";
+import { MoveCategory } from "#enums/move-category";
 import i18next from "i18next";
 import { Button } from "#enums/buttons";
 import type { PokemonMove } from "#app/field/pokemon";

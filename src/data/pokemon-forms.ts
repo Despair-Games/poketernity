@@ -2,7 +2,7 @@ import { PokemonFormChangeItemModifier, TerastallizeModifier } from "../modifier
 import type { Pokemon } from "../field/pokemon";
 import { StatusEffect } from "#enums/status-effect";
 import { allMoves } from "#app/data/all-moves";
-import { MoveCategory } from "../enums/move-category";
+import { MoveCategory } from ".#enums/move-category";
 import { Type } from "#enums/type";
 import type { Constructor, nil } from "#app/utils";
 import { Abilities } from "#enums/abilities";
@@ -12,10 +12,10 @@ import type { TimeOfDay } from "#enums/time-of-day";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
 import { WeatherType } from "#enums/weather-type";
-import { Challenges } from "#app/enums/challenges";
+import { Challenges } from "#enums/challenges";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { globalScene } from "#app/global-scene";
-import { FormChangeItem } from "../enums/form-change-item";
+import { FormChangeItem } from ".#enums/form-change-item";
 
 export type SpeciesFormChangeConditionPredicate = (p: Pokemon) => boolean;
 export type SpeciesFormChangeConditionEnforceFunc = (p: Pokemon) => void;

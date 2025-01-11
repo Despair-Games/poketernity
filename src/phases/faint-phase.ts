@@ -14,7 +14,7 @@ import { applyPostFaintAbAttrs, applyPostKnockOutAbAttrs, applyPostVictoryAbAttr
 import { allMoves } from "#app/data/all-moves";
 import { FRIENDSHIP_LOSS_FROM_FAINT } from "#app/data/balance/starters";
 import { type DestinyBondTag, type GrudgeTag } from "#app/data/battler-tags";
-import { BattlerTagLapseType } from "#app/enums/battler-tag-lapse-type";
+import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { classicFinalBossDialogue } from "#app/data/dialogue";
 import { PostVictoryStatStageChangeAttr } from "#app/data/move-attrs/post-victory-stat-stage-change-attr";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";

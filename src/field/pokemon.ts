@@ -127,7 +127,7 @@ import {
   AutotomizedTag,
   PowerTrickTag,
 } from "../data/battler-tags";
-import { BattlerTagLapseType } from "#app/enums/battler-tag-lapse-type";
+import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { WeatherType } from "#enums/weather-type";
 import { NoCritTag, WeakenMoveScreenTag } from "#app/data/arena-tag";
 import { ArenaTagSide } from "#enums/arena-tag-side";
@@ -198,7 +198,7 @@ import i18next from "i18next";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { ModifierTier } from "#app/modifier/modifier-tier";
 import { applyChallenges } from "#app/data/challenge";
-import { ChallengeType } from "#app/enums/challenge-type";
+import { ChallengeType } from "#enums/challenge-type";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -239,11 +239,11 @@ import { TypeImmunityAbAttr } from "#app/data/ab-attrs/type-immunity-ab-attr";
 import { FullHpResistTypeAbAttr } from "#app/data/ab-attrs/full-hp-resist-type-ab-attr";
 import { FieldPriorityMoveImmunityAbAttr } from "#app/data/ab-attrs/field-priority-move-immunity-ab-attr";
 import { MoveImmunityAbAttr } from "#app/data/ab-attrs/move-immunity-ab-attr";
-import { HitResult } from "../enums/hit-result";
-import type { MoveResult } from "../enums/move-result";
-import { AiType } from "../enums/ai-type";
-import { LearnMoveSituation } from "../enums/learn-move-situation";
-import { FieldPosition } from "../enums/field-position";
+import { HitResult } from ".#enums/hit-result";
+import type { MoveResult } from ".#enums/move-result";
+import { AiType } from ".#enums/ai-type";
+import { LearnMoveSituation } from ".#enums/learn-move-situation";
+import { FieldPosition } from ".#enums/field-position";
 
 export abstract class Pokemon extends Phaser.GameObjects.Container {
   public id: number;

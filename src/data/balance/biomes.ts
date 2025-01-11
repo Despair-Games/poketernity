@@ -7,7 +7,7 @@ import { Biome } from "#enums/biome";
 import { Species } from "#enums/species";
 import { TimeOfDay } from "#enums/time-of-day";
 import { TrainerType } from "#enums/trainer-type";
-import { BiomePoolTier } from "../../enums/biome-pool-tier";
+import { BiomePoolTier } from "../.#enums/biome-pool-tier";
 // import beautify from "json-beautify";
 
 export function getBiomeName(biome: Biome | -1) {

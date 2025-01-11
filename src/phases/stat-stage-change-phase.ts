@@ -10,7 +10,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { ResetNegativeStatStageModifier } from "#app/modifier/modifier";
 import { handleTutorial } from "#app/tutorial";
-import { Tutorial } from "#app/enums/tutorial";
+import { Tutorial } from "#enums/tutorial";
 import { BooleanHolder, NumberHolder } from "#app/utils";
 import { getStatKey, getStatStageChangeDescriptionKey, Stat, type BattleStat } from "#enums/stat";
 import i18next from "i18next";

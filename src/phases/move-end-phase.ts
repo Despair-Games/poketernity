@@ -4,7 +4,7 @@ import { type Arena } from "#app/field/arena";
 // -- end tsdoc imports --
 
 import type { BattlerIndex } from "#enums/battler-index";
-import { BattlerTagLapseType } from "#app/enums/battler-tag-lapse-type";
+import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { globalScene } from "#app/global-scene";
 import { PokemonPhase } from "./abstract-pokemon-phase";
 

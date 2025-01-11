@@ -1,4 +1,4 @@
-import { GrowthRate } from "../enums/growth-rates";
+import { GrowthRate } from ".#enums/growth-rates";
 
 const expLevels = [
   [

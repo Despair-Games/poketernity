@@ -1,11 +1,11 @@
 import i18next from "i18next";
 import { achvs, getAchievementDescription } from "./achv";
-import { AchvTier } from "../enums/achv-tier";
+import { AchvTier } from ".#enums/achv-tier";
 import type { PlayerGender } from "#enums/player-gender";
 import { TrainerType } from "#enums/trainer-type";
 import type { ConditionFn } from "#app/@types/common";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
-import { VoucherType } from "../enums/voucher-type";
+import { VoucherType } from ".#enums/voucher-type";
 
 export class Voucher {
   public id: string;

@@ -7,7 +7,7 @@ import { fixedNumber, formatLargeNumber, isNullOrUndefined } from "#app/utils";
 import type PokemonData from "../system/pokemon-data";
 import MessageUiHandler from "./message-ui-handler";
 import i18next from "i18next";
-import { Button } from "../enums/buttons";
+import { Button } from ".#enums/buttons";
 import { BattleType } from "#enums/battle-type";
 import type { RunEntry } from "../system/game-data";
 import { PlayerGender } from "#enums/player-gender";

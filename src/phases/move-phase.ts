@@ -10,7 +10,7 @@ import { allMoves } from "#app/data/all-moves";
 import type { DelayedAttackTag } from "#app/data/arena-tag";
 import { CommonAnim } from "#app/data/battle-anims";
 import { CenterOfAttentionTag } from "#app/data/battler-tags";
-import { BattlerTagLapseType } from "#app/enums/battler-tag-lapse-type";
+import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { applyMoveAttrs } from "#app/data/move";
 import { BypassRedirectAttr } from "#app/data/move-attrs/bypass-redirect-attr";
 import { BypassSleepAttr } from "#app/data/move-attrs/bypass-sleep-attr";

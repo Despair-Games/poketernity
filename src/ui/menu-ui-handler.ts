@@ -10,7 +10,7 @@ import { GameDataType } from "#enums/game-data-type";
 import i18next from "i18next";
 import { loggedInUser, updateUserInfo } from "../account";
 import { handleTutorial } from "../tutorial";
-import { Tutorial } from "#app/enums/tutorial";
+import { Tutorial } from "#enums/tutorial";
 import type { OptionSelectConfig, OptionSelectItem } from "./abstact-option-select-ui-handler";
 import { AdminMode, getAdminModeName } from "./admin-ui-handler";
 import type AwaitableUiHandler from "./awaitable-ui-handler";

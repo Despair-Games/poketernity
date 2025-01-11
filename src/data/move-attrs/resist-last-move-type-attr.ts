@@ -6,7 +6,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { toReadableString, NumberHolder } from "#app/utils";
 import i18next from "i18next";
 import { applyChallenges } from "#app/data/challenge";
-import { ChallengeType } from "#app/enums/challenge-type";
+import { ChallengeType } from "#enums/challenge-type";
 import { type Move } from "#app/data/move";
 import { allMoves } from "#app/data/all-moves";
 import { getTypeDamageMultiplier } from "#app/data/type";
