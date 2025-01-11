@@ -32,7 +32,7 @@ const tutorialHandlers = {
   },
   [Tutorial.Menu]: () => {
     return new Promise<void>((resolve) => {
-      globalScene.gameData.saveTutorialFlag(Tutorial.Access_Menu, true);
+      globalScene.gameData.saveTutorialFlag(Tutorial.ACCESS_MENU, true);
       globalScene.ui.showText(
         i18next.t("tutorial:menu"),
         null,
@@ -64,7 +64,7 @@ const tutorialHandlers = {
       );
     });
   },
-  [Tutorial.Stat_Change]: () => {
+  [Tutorial.Stat_ChangeE]: () => {
     return new Promise<void>((resolve) => {
       globalScene
         .showFieldOverlay(1000)

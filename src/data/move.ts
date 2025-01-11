@@ -68,7 +68,7 @@ export abstract class Move implements Localizable {
   public priority: number;
   public generation: number;
   public attrs: MoveAttr[] = [];
-  private conditions: MoveCondition[] = [];
+  protected conditions: MoveCondition[] = [];
   /** The move's {@linkcode MoveFlags} */
   private flags: number = 0;
   private nameAppend: string = "";
@@ -948,6 +948,8 @@ function ChargeMove<TBase extends SubMove>(Base: TBase) {
 
     /** Move attributes that apply during the move's charging phase */
     public chargeAttrs: MoveAttr[] = [];
+    /** Does the move calculate its hit check during its charging phase? */
+    public hitCheckOnCharge: boolean = false;
 
     override isChargingMove(): this is ChargingMove {
       return true;
@@ -1006,7 +1008,22 @@ function ChargeMove<TBase extends SubMove>(Base: TBase) {
     chargeAttr<T extends Constructor<MoveAttr>>(ChargeAttrType: T, ...args: ConstructorParameters<T>): this {
       const chargeAttr = new ChargeAttrType(...args);
       this.chargeAttrs.push(chargeAttr);
+      let attrCondition = chargeAttr.getCondition();
+      if (attrCondition) {
+        if (typeof attrCondition === "function") {
+          attrCondition = new MoveCondition(attrCondition);
+        }
+        this.conditions.push(attrCondition);
+      }
+      return this;
+    }
 
+    /**
+     * Causes the move's hit check to also be calculated during its charging phase.
+     * @returns this {@linkcode Move} (for chaining API purposes)
+     */
+    doesHitCheckOnCharge(): this {
+      this.hitCheckOnCharge = true;
       return this;
     }
   };

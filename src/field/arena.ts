@@ -594,7 +594,7 @@ export class Arena {
     ...args: unknown[]
   ): void {
     let tags =
-      typeof tagType === "string"
+      typeof tagType === "number"
         ? this.tags.filter((t) => t.tagType === tagType)
         : this.tags.filter((t) => t instanceof tagType);
     if (side !== ArenaTagSide.BOTH) {
@@ -684,7 +684,7 @@ export class Arena {
    * @returns either the {@linkcode ArenaTag}, or `undefined` if it isn't there
    */
   getTagOnSide(tagType: ArenaTagType | Constructor<ArenaTag>, side: ArenaTagSide): ArenaTag | undefined {
-    return typeof tagType === "string"
+    return typeof tagType === "number"
       ? this.tags.find(
           (t) =>
             t.tagType === tagType && (side === ArenaTagSide.BOTH || t.side === ArenaTagSide.BOTH || t.side === side),
