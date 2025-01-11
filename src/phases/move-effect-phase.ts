@@ -30,8 +30,6 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import {
   ContactHeldItemTransferChanceModifier,
   DamageMoneyRewardModifier,
-  EnemyAttackStatusEffectChanceModifier,
-  EnemyEndureChanceModifier,
   FlinchChanceModifier,
   HitHealModifier,
   PokemonMultiHitModifier,
@@ -394,10 +392,6 @@ export class MoveEffectPhase extends HitCheckPhase {
       if (isBlockedBySubstitute) {
         substitute.hp -= dmg;
       }
-      if (!target.isPlayer() && dmg >= target.hp) {
-        globalScene.applyModifiers(EnemyEndureChanceModifier, false, target);
-      }
-
       /**
        * We explicitly require to ignore the faint phase here, as we want to show the messages
        * about the critical hit and the super effective/not very effective messages before the faint phase.
@@ -516,11 +510,6 @@ export class MoveEffectPhase extends HitCheckPhase {
     this.applyHeldItemFlinchCheck(user, target, dealsDamage);
     this.applyOnGetHitAbEffects(user, target, hitResult);
     applyPostAttackAbAttrs(PostAttackAbAttr, user, target, move, hitResult);
-
-    // Apply status tokens if the user is an enemy Pokemon
-    if (!user.isPlayer() && move instanceof AttackMove) {
-      globalScene.applyShuffledModifiers(EnemyAttackStatusEffectChanceModifier, false, target);
-    }
 
     // Apply Grip Claw's chance to steal an item from the target
     if (move instanceof AttackMove) {

@@ -3,7 +3,6 @@ import { handleMysteryEncounterVictory } from "#app/data/mystery-encounters/util
 import { globalScene } from "#app/global-scene";
 import { modifierTypes, type CustomModifierSettings } from "#app/modifier/modifier-type";
 import { PokemonPhase } from "./abstract-pokemon-phase";
-import { AddEnemyBuffModifierPhase } from "./add-enemy-buff-modifier-phase";
 import { BattleEndPhase } from "./battle-end-phase";
 import { EggLapsePhase } from "./egg-lapse-phase";
 import { GameOverPhase } from "./game-over-phase";
@@ -89,13 +88,6 @@ export class VictoryPhase extends PokemonPhase {
 
           if (waveIndex <= 150 && !(waveIndex % 50)) {
             globalScene.pushPhase(new ModifierRewardPhase(modifierTypes.GOLDEN_POKEBALL));
-          }
-
-          if (isEndless && !(waveIndex % 50)) {
-            globalScene.pushPhase(
-              new ModifierRewardPhase(!(waveIndex % 250) ? modifierTypes.VOUCHER_PREMIUM : modifierTypes.VOUCHER_PLUS),
-            );
-            globalScene.pushPhase(new AddEnemyBuffModifierPhase());
           }
         }
 

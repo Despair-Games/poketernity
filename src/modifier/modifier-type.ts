@@ -12,7 +12,6 @@ import {
   SpeciesFormChangeCondition,
   SpeciesFormChangeItemTrigger,
 } from "#app/data/pokemon-forms";
-import { getStatusEffectDescriptor } from "#app/data/status-effect";
 import type { Pokemon } from "#app/field/pokemon";
 import type { EnemyPokemon, PlayerPokemon, PokemonMove } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -30,13 +29,6 @@ import {
   CriticalCatchChanceBoosterModifier,
   DamageMoneyRewardModifier,
   DoubleBattleChanceBoosterModifier,
-  EnemyAttackStatusEffectChanceModifier,
-  EnemyDamageBoosterModifier,
-  EnemyDamageReducerModifier,
-  EnemyEndureChanceModifier,
-  EnemyFusionChanceModifier,
-  EnemyStatusEffectHealChanceModifier,
-  EnemyTurnHealModifier,
   EvolutionItemModifier,
   EvolutionStatBoosterModifier,
   EvoTrackerModifier,
@@ -95,9 +87,7 @@ import {
   TurnHealModifier,
   TurnHeldItemTransferModifier,
   TurnStatusEffectModifier,
-  type EnemyPersistentModifier,
   type Modifier,
-  type PersistentModifier,
 } from "#app/modifier/modifier";
 import { ModifierTier } from "#app/modifier/modifier-tier";
 import Overrides from "#app/overrides";
@@ -1698,46 +1688,6 @@ export class TurnHeldItemTransferModifierType extends PokemonHeldItemModifierTyp
   }
 }
 
-export class EnemyAttackStatusEffectChanceModifierType extends ModifierType {
-  private chancePercent: number;
-  private effect: StatusEffect;
-
-  constructor(localeKey: string, iconImage: string, chancePercent: number, effect: StatusEffect, stackCount?: number) {
-    super(
-      localeKey,
-      iconImage,
-      (type, _args) => new EnemyAttackStatusEffectChanceModifier(type, effect, chancePercent, stackCount),
-      "enemy_status_chance",
-    );
-
-    this.chancePercent = chancePercent;
-    this.effect = effect;
-  }
-
-  override getDescription(): string {
-    return i18next.t("modifierType:ModifierType.EnemyAttackStatusEffectChanceModifierType.description", {
-      chancePercent: this.chancePercent,
-      statusEffect: getStatusEffectDescriptor(this.effect),
-    });
-  }
-}
-
-export class EnemyEndureChanceModifierType extends ModifierType {
-  private chancePercent: number;
-
-  constructor(localeKey: string, iconImage: string, chancePercent: number) {
-    super(localeKey, iconImage, (type, _args) => new EnemyEndureChanceModifier(type, chancePercent), "enemy_endure");
-
-    this.chancePercent = chancePercent;
-  }
-
-  override getDescription(): string {
-    return i18next.t("modifierType:ModifierType.EnemyEndureChanceModifierType.description", {
-      chancePercent: this.chancePercent,
-    });
-  }
-}
-
 export type ModifierTypeFunc = () => ModifierType;
 type WeightedModifierTypeWeightFunc = (party: Pokemon[], rerollCount?: number) => number;
 
@@ -2246,64 +2196,6 @@ export const modifierTypes = {
       (type, _args) => new TempExtraModifierModifier(type, 100),
       undefined,
       "se/pb_bounce_1",
-    ),
-
-  ENEMY_DAMAGE_BOOSTER: () =>
-    new ModifierType(
-      "modifierType:ModifierType.ENEMY_DAMAGE_BOOSTER",
-      "wl_item_drop",
-      (type, _args) => new EnemyDamageBoosterModifier(type, 5),
-    ),
-  ENEMY_DAMAGE_REDUCTION: () =>
-    new ModifierType(
-      "modifierType:ModifierType.ENEMY_DAMAGE_REDUCTION",
-      "wl_guard_spec",
-      (type, _args) => new EnemyDamageReducerModifier(type, 2.5),
-    ),
-  //ENEMY_SUPER_EFFECT_BOOSTER: () => new ModifierType('Type Advantage Token', 'Increases damage of super effective attacks by 30%', (type, _args) => new EnemySuperEffectiveDamageBoosterModifier(type, 30), 'wl_custom_super_effective'),
-  ENEMY_HEAL: () =>
-    new ModifierType(
-      "modifierType:ModifierType.ENEMY_HEAL",
-      "wl_potion",
-      (type, _args) => new EnemyTurnHealModifier(type, 2, 10),
-    ),
-  ENEMY_ATTACK_POISON_CHANCE: () =>
-    new EnemyAttackStatusEffectChanceModifierType(
-      "modifierType:ModifierType.ENEMY_ATTACK_POISON_CHANCE",
-      "wl_antidote",
-      5,
-      StatusEffect.POISON,
-      10,
-    ),
-  ENEMY_ATTACK_PARALYZE_CHANCE: () =>
-    new EnemyAttackStatusEffectChanceModifierType(
-      "modifierType:ModifierType.ENEMY_ATTACK_PARALYZE_CHANCE",
-      "wl_paralyze_heal",
-      2.5,
-      StatusEffect.PARALYSIS,
-      10,
-    ),
-  ENEMY_ATTACK_BURN_CHANCE: () =>
-    new EnemyAttackStatusEffectChanceModifierType(
-      "modifierType:ModifierType.ENEMY_ATTACK_BURN_CHANCE",
-      "wl_burn_heal",
-      5,
-      StatusEffect.BURN,
-      10,
-    ),
-  ENEMY_STATUS_EFFECT_HEAL_CHANCE: () =>
-    new ModifierType(
-      "modifierType:ModifierType.ENEMY_STATUS_EFFECT_HEAL_CHANCE",
-      "wl_full_heal",
-      (type, _args) => new EnemyStatusEffectHealChanceModifier(type, 2.5, 10),
-    ),
-  ENEMY_ENDURE_CHANCE: () =>
-    new EnemyEndureChanceModifierType("modifierType:ModifierType.ENEMY_ENDURE_CHANCE", "wl_reset_urge", 2),
-  ENEMY_FUSED_CHANCE: () =>
-    new ModifierType(
-      "modifierType:ModifierType.ENEMY_FUSED_CHANCE",
-      "wl_custom_spliced",
-      (type, _args) => new EnemyFusionChanceModifier(type, 1),
     ),
 
   MYSTERY_ENCOUNTER_SHUCKLE_JUICE: () =>
@@ -2945,37 +2837,15 @@ const trainerModifierPool: ModifierPool = {
 };
 
 const enemyBuffModifierPool: ModifierPool = {
-  [ModifierTier.COMMON]: [
-    new WeightedModifierType(modifierTypes.ENEMY_DAMAGE_BOOSTER, 9),
-    new WeightedModifierType(modifierTypes.ENEMY_DAMAGE_REDUCTION, 9),
-    new WeightedModifierType(modifierTypes.ENEMY_ATTACK_POISON_CHANCE, 3),
-    new WeightedModifierType(modifierTypes.ENEMY_ATTACK_PARALYZE_CHANCE, 3),
-    new WeightedModifierType(modifierTypes.ENEMY_ATTACK_BURN_CHANCE, 3),
-    new WeightedModifierType(modifierTypes.ENEMY_STATUS_EFFECT_HEAL_CHANCE, 9),
-    new WeightedModifierType(modifierTypes.ENEMY_ENDURE_CHANCE, 4),
-    new WeightedModifierType(modifierTypes.ENEMY_FUSED_CHANCE, 1),
-  ].map((m) => {
+  [ModifierTier.COMMON]: [].map((m: WeightedModifierType) => {
     m.setTier(ModifierTier.COMMON);
     return m;
   }),
-  [ModifierTier.GREAT]: [
-    new WeightedModifierType(modifierTypes.ENEMY_DAMAGE_BOOSTER, 5),
-    new WeightedModifierType(modifierTypes.ENEMY_DAMAGE_REDUCTION, 5),
-    new WeightedModifierType(modifierTypes.ENEMY_STATUS_EFFECT_HEAL_CHANCE, 5),
-    new WeightedModifierType(modifierTypes.ENEMY_ENDURE_CHANCE, 5),
-    new WeightedModifierType(modifierTypes.ENEMY_FUSED_CHANCE, 1),
-  ].map((m) => {
+  [ModifierTier.GREAT]: [].map((m: WeightedModifierType) => {
     m.setTier(ModifierTier.GREAT);
     return m;
   }),
-  [ModifierTier.ULTRA]: [
-    new WeightedModifierType(modifierTypes.ENEMY_DAMAGE_BOOSTER, 10),
-    new WeightedModifierType(modifierTypes.ENEMY_DAMAGE_REDUCTION, 10),
-    new WeightedModifierType(modifierTypes.ENEMY_HEAL, 10),
-    new WeightedModifierType(modifierTypes.ENEMY_STATUS_EFFECT_HEAL_CHANCE, 10),
-    new WeightedModifierType(modifierTypes.ENEMY_ENDURE_CHANCE, 10),
-    new WeightedModifierType(modifierTypes.ENEMY_FUSED_CHANCE, 5),
-  ].map((m) => {
+  [ModifierTier.ULTRA]: [].map((m: WeightedModifierType) => {
     m.setTier(ModifierTier.ULTRA);
     return m;
   }),
@@ -3371,41 +3241,6 @@ export function getPlayerShopModifierTypeOptionsForWave(waveIndex: number, baseC
     [new ModifierTypeOption(modifierTypes.SACRED_ASH(), 0, baseCost * 10)],
   ];
   return options.slice(0, Math.ceil(Math.max(waveIndex + 10, 0) / 30)).flat();
-}
-
-export function getEnemyBuffModifierForWave(
-  tier: ModifierTier,
-  enemyModifiers: PersistentModifier[],
-): EnemyPersistentModifier {
-  let tierStackCount: number;
-  switch (tier) {
-    case ModifierTier.ULTRA:
-      tierStackCount = 5;
-      break;
-    case ModifierTier.GREAT:
-      tierStackCount = 3;
-      break;
-    default:
-      tierStackCount = 1;
-      break;
-  }
-
-  const retryCount = 50;
-  let candidate = getNewModifierTypeOption([], ModifierPoolType.ENEMY_BUFF, tier);
-  let r = 0;
-  let matchingModifier: PersistentModifier | undefined;
-  while (
-    ++r < retryCount
-    && (matchingModifier = enemyModifiers.find((m) => m.type.id === candidate?.type?.id))
-    && matchingModifier.getMaxStackCount() < matchingModifier.stackCount + (r < 10 ? tierStackCount : 1)
-  ) {
-    candidate = getNewModifierTypeOption([], ModifierPoolType.ENEMY_BUFF, tier);
-  }
-
-  const modifier = candidate?.type?.newModifier() as EnemyPersistentModifier;
-  modifier.stackCount = tierStackCount;
-
-  return modifier;
 }
 
 export function getEnemyModifierTypesForWave(
