@@ -6,23 +6,23 @@ import i18next from "i18next";
 import Overrides from "#app/overrides";
 
 export enum Tutorial {
-  Intro = "INTRO",
-  Access_Menu = "ACCESS_MENU",
-  Menu = "MENU",
-  Starter_Select = "STARTER_SELECT",
-  Pokerus = "POKERUS",
-  Stat_Change = "STAT_CHANGE",
-  Select_Item = "SELECT_ITEM",
-  Egg_Gacha = "EGG_GACHA",
+  INTRO,
+  ACCESS_MENU,
+  MENU,
+  STARTER_SELECT,
+  POKERUS,
+  STAT_CHANGE,
+  SELECT_ITEM,
+  EGG_GACHA,
 }
 
 const tutorialHandlers = {
-  [Tutorial.Intro]: () => {
+  [Tutorial.INTRO]: () => {
     return new Promise<void>((resolve) => {
       globalScene.ui.showText(i18next.t("tutorial:intro"), null, () => resolve(), null, true);
     });
   },
-  [Tutorial.Access_Menu]: () => {
+  [Tutorial.ACCESS_MENU]: () => {
     return new Promise<void>((resolve) => {
       if (globalScene.enableTouchControls) {
         return resolve();
@@ -40,9 +40,9 @@ const tutorialHandlers = {
         );
     });
   },
-  [Tutorial.Menu]: () => {
+  [Tutorial.MENU]: () => {
     return new Promise<void>((resolve) => {
-      globalScene.gameData.saveTutorialFlag(Tutorial.Access_Menu, true);
+      globalScene.gameData.saveTutorialFlag(Tutorial.ACCESS_MENU, true);
       globalScene.ui.showText(
         i18next.t("tutorial:menu"),
         null,
@@ -52,7 +52,7 @@ const tutorialHandlers = {
       );
     });
   },
-  [Tutorial.Starter_Select]: () => {
+  [Tutorial.STARTER_SELECT]: () => {
     return new Promise<void>((resolve) => {
       globalScene.ui.showText(
         i18next.t("tutorial:starterSelect"),
@@ -63,7 +63,7 @@ const tutorialHandlers = {
       );
     });
   },
-  [Tutorial.Pokerus]: () => {
+  [Tutorial.POKERUS]: () => {
     return new Promise<void>((resolve) => {
       globalScene.ui.showText(
         i18next.t("tutorial:pokerus"),
@@ -74,7 +74,7 @@ const tutorialHandlers = {
       );
     });
   },
-  [Tutorial.Stat_Change]: () => {
+  [Tutorial.STAT_CHANGE]: () => {
     return new Promise<void>((resolve) => {
       globalScene
         .showFieldOverlay(1000)
@@ -89,7 +89,7 @@ const tutorialHandlers = {
         );
     });
   },
-  [Tutorial.Select_Item]: () => {
+  [Tutorial.SELECT_ITEM]: () => {
     return new Promise<void>((resolve) => {
       globalScene.ui.setModeWithoutClear(Mode.MESSAGE).then(() => {
         globalScene.ui.showText(
@@ -105,7 +105,7 @@ const tutorialHandlers = {
       });
     });
   },
-  [Tutorial.Egg_Gacha]: () => {
+  [Tutorial.EGG_GACHA]: () => {
     return new Promise<void>((resolve) => {
       globalScene.ui.showText(
         i18next.t("tutorial:eggGacha"),

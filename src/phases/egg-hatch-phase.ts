@@ -1,13 +1,10 @@
 import type { AnySound } from "#app/battle-scene";
 import type { Egg } from "#app/data/egg";
-import type { EggHatchData } from "#app/data/egg-hatch-data";
 import { EggCountChangedEvent } from "#app/events/egg";
-import { doShinySparkleAnim, sin } from "#app/field/anims";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { Phase } from "#app/phase";
-import type { EggLapsePhase } from "#app/phases/egg-lapse-phase";
 import { achvs } from "#app/system/achv";
 import EggCounterContainer from "#app/ui/egg-counter-container";
 import type EggHatchSceneHandler from "#app/ui/egg-hatch-scene-handler";
@@ -16,6 +13,8 @@ import { Mode } from "#app/ui/ui";
 import { fixedNumber, getFrameMs, randInt } from "#app/utils";
 import i18next from "i18next";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
+import type { EggLapsePhase } from "./egg-lapse-phase";
+import type { EggHatchData } from "#app/data/egg-hatch-data";
 
 /**
  * Class that represents egg hatching
@@ -368,7 +367,7 @@ export class EggHatchPhase extends Phase {
       this.pokemon.cry();
       if (isShiny) {
         globalScene.time.delayedCall(fixedNumber(500), () => {
-          doShinySparkleAnim(this.pokemonShinySparkle, this.pokemon.variant);
+          globalScene.animations.doShinySparkleAnim(this.pokemonShinySparkle, this.pokemon.variant);
         });
       }
       globalScene.time.delayedCall(fixedNumber((isShiny ? 750 : 250) + (!this.skipped ? 1000 : 0)), () => {
@@ -448,7 +447,7 @@ export class EggHatchPhase extends Phase {
       yOffset += speedMultiplier;
       if (trigIndex < 160) {
         particle.setPosition(initialX + (speed * f) / 3, initialY + yOffset);
-        particle.y += -sin(trigIndex, amp);
+        particle.y += -globalScene.animations.sin(trigIndex, amp);
         if (f > 108) {
           particle.setScale(1 - (f - 108) / 20);
         }
