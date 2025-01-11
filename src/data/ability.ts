@@ -20,7 +20,6 @@ import type { AbAttr } from "./ab-attrs/ab-attr";
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import { ForceSwitchOutImmunityAbAttr } from "./ab-attrs/force-switch-out-immunity-ab-attr";
 import { queueShowAbility } from "./ability-utils";
-import { BattlerTagType } from "#enums/battler-tag-type";
 
 export class Ability implements Localizable {
   public id: Abilities;

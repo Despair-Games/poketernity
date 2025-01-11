@@ -1,4 +1,4 @@
-import { type Pokemon, MoveResult } from "#app/field/pokemon";
+import { type Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
@@ -7,6 +7,7 @@ import { PostDamageAbAttr } from "./post-damage-ab-attr";
 import { ForceSwitchOutHelper, calculateShellBellRecovery } from "#app/data/ability";
 import { allMoves } from "#app/data/all-moves";
 import type { Move } from "#app/data/move";
+import { BattlerTagType } from "#enums/battler-tag-type";
 
 /**
  * Ability attribute for forcing a Pokémon to switch out after its health drops below half.
@@ -59,10 +60,7 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
       if (enemyMoveHistory.length > 0) {
         const enemyLastMoveUsed = enemyMoveHistory[enemyMoveHistory.length - 1];
         // Will not activate if the Pokémon's HP falls below half while it is in the air during Sky Drop.
-        if (
-          fordbiddenDefendingMoves.includes(enemyLastMoveUsed.move)
-          || (enemyLastMoveUsed.move === Moves.SKY_DROP && enemyLastMoveUsed.result === MoveResult.OTHER)
-        ) {
+        if (fordbiddenDefendingMoves.includes(enemyLastMoveUsed.move) || pokemon.getTag(BattlerTagType.SKY_DROP)) {
           return false;
           // Will not activate if the Pokémon's HP falls below half by a move affected by Sheer Force.
         } else if (allMoves[enemyLastMoveUsed.move].chance >= 0 && source.hasAbility(Abilities.SHEER_FORCE)) {
