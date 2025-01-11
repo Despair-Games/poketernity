@@ -535,7 +535,7 @@ export default class MenuUiHandler extends MessageUiHandler {
     // Make sure the tutorial overlay sits above everything, but below the message box
     this.menuContainer.bringToTop(this.tutorialOverlay);
     this.menuContainer.bringToTop(this.menuMessageBoxContainer);
-    handleTutorial(Tutorial.Menu);
+    handleTutorial(Tutorial.MENU);
 
     this.bgmBar.toggleBgmBar(true);
 
