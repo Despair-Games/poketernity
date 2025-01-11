@@ -4146,7 +4146,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     let sleepTurnsRemaining: NumberHolder;
 
     if (effect === StatusEffect.SLEEP) {
-      sleepTurnsRemaining = new NumberHolder(this.randSeedIntRange(2, 4));
+      sleepTurnsRemaining = new NumberHolder(turnsRemaining !== 0 ? turnsRemaining : this.randSeedIntRange(2, 4));
 
       this.setFrameRate(4);
 
