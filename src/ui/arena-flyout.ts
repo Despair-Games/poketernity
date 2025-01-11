@@ -44,7 +44,7 @@ interface ArenaEffectInfo {
 }
 
 export function getFieldEffectText(arenaTagType: string): string {
-  if (!arenaTagType || arenaTagType === ArenaTagType.NONE) {
+  if (!arenaTagType || arenaTagType === ArenaTagType[ArenaTagType.NONE]) {
     return arenaTagType;
   }
   const effectName = toCamelCaseString(arenaTagType);
