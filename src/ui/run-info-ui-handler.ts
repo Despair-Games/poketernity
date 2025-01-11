@@ -14,7 +14,7 @@ import {
 } from "#app/utils";
 import type PokemonData from "../system/pokemon-data";
 import i18next from "i18next";
-import { Button } from ".#enums/buttons";
+import { Button } from "#enums/buttons";
 import { BattleType } from "#enums/battle-type";
 import { TrainerVariant } from "#enums/trainer-variant";
 import { Challenges } from "#enums/challenges";

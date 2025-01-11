@@ -51,7 +51,7 @@ import {
   modifierTypes,
   PokemonHeldItemModifierType,
 } from "./modifier-type";
-import { ModifierPoolType } from ".#enums/modifier-pool-type";
+import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { Color, ShadowColor } from "#enums/color";
 import { FRIENDSHIP_GAIN_FROM_RARE_CANDY } from "#app/data/balance/starters";
 import { applyAbAttrs } from "#app/data/ability";

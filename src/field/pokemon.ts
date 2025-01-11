@@ -239,11 +239,11 @@ import { TypeImmunityAbAttr } from "#app/data/ab-attrs/type-immunity-ab-attr";
 import { FullHpResistTypeAbAttr } from "#app/data/ab-attrs/full-hp-resist-type-ab-attr";
 import { FieldPriorityMoveImmunityAbAttr } from "#app/data/ab-attrs/field-priority-move-immunity-ab-attr";
 import { MoveImmunityAbAttr } from "#app/data/ab-attrs/move-immunity-ab-attr";
-import { HitResult } from ".#enums/hit-result";
-import type { MoveResult } from ".#enums/move-result";
-import { AiType } from ".#enums/ai-type";
-import { LearnMoveSituation } from ".#enums/learn-move-situation";
-import { FieldPosition } from ".#enums/field-position";
+import { HitResult } from "#enums/hit-result";
+import type { MoveResult } from "#enums/move-result";
+import { AiType } from "#enums/ai-type";
+import { LearnMoveSituation } from "#enums/learn-move-situation";
+import { FieldPosition } from "#enums/field-position";
 
 export abstract class Pokemon extends Phaser.GameObjects.Container {
   public id: number;

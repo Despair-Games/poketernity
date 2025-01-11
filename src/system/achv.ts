@@ -15,7 +15,7 @@ import type { ConditionFn } from "#app/@types/common";
 import { Stat, getShortenedStatKey } from "#enums/stat";
 import { Challenges } from "#enums/challenges";
 import { globalScene } from "#app/global-scene";
-import { AchvTier } from ".#enums/achv-tier";
+import { AchvTier } from "#enums/achv-tier";
 
 export class Achv {
   public localizationKey: string;

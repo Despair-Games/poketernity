@@ -1,7 +1,7 @@
 import i18next from "i18next";
 import { GameMode } from "../game-mode";
 import { GameModes } from "#enums/game-modes";
-import { Unlockables } from ".#enums/unlockables";
+import { Unlockables } from "#enums/unlockables";
 
 export function getUnlockableName(unlockable: Unlockables) {
   switch (unlockable) {

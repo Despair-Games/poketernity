@@ -17,8 +17,8 @@ import {
   TempExtraModifierModifier,
 } from "#app/modifier/modifier";
 import { SpeciesFormKey } from "#enums/species-form-key";
-import { EvolutionItem } from "../.#enums/evolution-item";
-import { SpeciesWildEvolutionDelay } from "../.#enums/species-wild-evolution-delay";
+import { EvolutionItem } from "#enums/evolution-item";
+import { SpeciesWildEvolutionDelay } from "#enums/species-wild-evolution-delay";
 
 /**
  * Pokemon Evolution tuple type consisting of:

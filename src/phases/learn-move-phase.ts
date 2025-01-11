@@ -13,7 +13,7 @@ import { SummaryUiMode } from "#app/ui/summary-ui-handler";
 import { Mode } from "#app/ui/ui";
 import { Moves } from "#enums/moves";
 import i18next from "i18next";
-import { LearnMoveType } from ".#enums/learn-move-type";
+import { LearnMoveType } from "#enums/learn-move-type";
 
 export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
   private readonly moveId: Moves;
