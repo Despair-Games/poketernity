@@ -918,6 +918,28 @@ export default class BattleScene extends SceneBase {
   }
 
   /**
+   * Remove's Sky Drops effects from the given Pokemon
+   * and whoever else is involved (when applicable).
+   * @param pokemon The {@linkcode Pokemon} with this attribute
+   */
+  public clearSkyDropEffects(pokemon: Pokemon): void {
+    const skyDropTagId = pokemon.getTag(BattlerTagType.SKY_DROP)?.sourceId;
+    if (skyDropTagId) {
+      globalScene.getField(true).forEach((p) => {
+        if (p && p.getTag(BattlerTagType.SKY_DROP)?.sourceId === skyDropTagId) {
+          // Cancel the Sky Drop user's next use of Sky Drop
+          if (skyDropTagId === p.id) {
+            globalScene.tryRemovePhase((phase) => phase instanceof MovePhase && phase.pokemon.id === p.id);
+            p.getMoveQueue().shift();
+            p.removeTag(BattlerTagType.CHARGING);
+          }
+          p.removeTag(BattlerTagType.SKY_DROP);
+        }
+      });
+    }
+  }
+
+  /**
    * Returns the ModifierBar of this scene, which is declared private and therefore not accessible elsewhere
    * @param isEnemy Whether to return the enemy's modifier bar
    * @returns The {@linkcode ModifierBar} of this scene

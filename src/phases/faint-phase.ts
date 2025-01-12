@@ -84,6 +84,14 @@ export class FaintPhase extends PokemonPhase {
     this.destinyTag = destinyTag;
     this.grudgeTag = grudgeTag;
     this.source = source;
+
+    /**
+     * Clear Sky Drop effects immediately when we know this Pokemon is fainting.
+     * Otherwise, the Pokemon's summon data may get reset before this phase starts,
+     * which would prevent the function from properly clearing Sky Drop effects.
+     */
+    const faintPokemon = this.getPokemon();
+    globalScene.clearSkyDropEffects(faintPokemon);
   }
 
   public override start(): void {

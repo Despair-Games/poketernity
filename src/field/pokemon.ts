@@ -127,6 +127,7 @@ import {
   TarShotTag,
   AutotomizedTag,
   PowerTrickTag,
+  SkyDropTag,
 } from "../data/battler-tags";
 import { WeatherType } from "#enums/weather-type";
 import { ArenaTagSide, NoCritTag, WeakenMoveScreenTag } from "#app/data/arena-tag";
@@ -1803,7 +1804,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       || (!this.isOfType(Type.FLYING, true, true)
         && !this.hasAbility(Abilities.LEVITATE)
         && !this.getTag(BattlerTagType.FLOATING)
-        && !this.getTag(SemiInvulnerableTag))
+        && !this.getTag(SemiInvulnerableTag)
+        && !this.getTag(SkyDropTag))
     );
   }
 
@@ -1822,6 +1824,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   public isTrapped(trappedAbMessages: string[] = [], simulated: boolean = true): boolean {
     const commandedTag = this.getTag(BattlerTagType.COMMANDED);
     if (commandedTag?.getSourcePokemon()?.isActive(true)) {
+      return true;
+    }
+
+    if (this.getTag(SkyDropTag)) {
       return true;
     }
 

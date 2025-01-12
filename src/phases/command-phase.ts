@@ -3,7 +3,7 @@ import { BattleType } from "#app/battle";
 import { ArenaTagSide, type ArenaTag } from "#app/data/arena-tag";
 import { speciesStarterCosts } from "#app/data/balance/starters";
 import type { EncoreTag } from "#app/data/battler-tags";
-import { TrappedTag, type BattlerTag } from "#app/data/battler-tags";
+import { SkyDropTag, TrappedTag, type BattlerTag } from "#app/data/battler-tags";
 import { getMoveTargets, type MoveTargetSet } from "#app/data/move";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { FieldPosition } from "#app/field/pokemon";
@@ -334,7 +334,7 @@ export class CommandPhase extends FieldPhase {
             true,
           );
         } else {
-          const trapTag = playerPokemon.getTag(TrappedTag);
+          const trapTag = playerPokemon.getTag(TrappedTag) ?? playerPokemon.getTag(SkyDropTag);
           const fairyLockTag = arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.PLAYER);
 
           if (!trapTag && !fairyLockTag) {

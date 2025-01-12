@@ -35,6 +35,7 @@ export class SkyDropAttr extends MoveEffectAttr {
    * - The target's weight is 200 kg or more.
    * - The target is behind a substitute
    * - The target is semi-invulnerable (from Dig, etc.)
+   * - The target is Commanding a Dondozo
    * - The target is immobilized by another Pokemon's Sky Drop
    */
   override getCondition(): MoveConditionFunc {
@@ -44,6 +45,7 @@ export class SkyDropAttr extends MoveEffectAttr {
       && target.species.weight < 200
       && !target.getTag(BattlerTagType.SUBSTITUTE)
       && !target.getTag(SemiInvulnerableTag)
+      && target.getAlly()?.getTag(BattlerTagType.COMMANDED)?.getSourcePokemon()?.id !== target.id
       && (!target.getTag(SkyDropTag) || target.getTag(SkyDropTag)?.sourceId === user.id);
   }
 }
