@@ -169,6 +169,7 @@ import { PRSFX_SOUND_ADJUSTMENT_RATIO } from "./constants";
 import { bgmLoopPoint } from "./data/bgm-loop-point";
 import { allTrainerConfigs } from "./data/balance/trainer-configs/all-trainer-configs";
 import { eventBus } from "./event-bus";
+import { Animation } from "./animations";
 
 export const bypassLogin = import.meta.env.VITE_BYPASS_LOGIN === "1";
 
@@ -294,6 +295,9 @@ export default class BattleScene extends SceneBase {
 
   public eventManager: TimedEventManager;
 
+  /** Handler for general {@linkcode Animation | animations} */
+  public animations: Animation;
+
   /**
    * Allows subscribers to listen for events
    *
@@ -314,6 +318,7 @@ export default class BattleScene extends SceneBase {
     this.nextCommandPhaseQueue = [];
     this.eventManager = new TimedEventManager();
     this.updateGameInfo();
+    this.animations = new Animation(this);
     initGlobalScene(this);
     this.initSettingsEventListeners();
   }

@@ -4,7 +4,7 @@ import { IncreasePpAbAttr } from "#app/data/ab-attrs/increase-pp-ab-attr";
 import { PokemonTypeChangeAbAttr } from "#app/data/ab-attrs/pokemon-type-change-ab-attr";
 import { PostMoveUsedAbAttr } from "#app/data/ab-attrs/post-move-used-ab-attr";
 import { RedirectMoveAbAttr } from "#app/data/ab-attrs/redirect-move-ab-attr";
-import { ReduceStatusEffectDurationAbAttr } from "#app/data/ab-attrs/reduce-status-effect-duration-ab-attr";
+import { ReduceSleepDurationAbAttr } from "#app/data/ab-attrs/reduce-sleep-duration-ab-attr";
 import { applyAbAttrs, applyPostMoveUsedAbAttrs, applyPreAttackAbAttrs } from "#app/data/ability";
 import { allMoves } from "#app/data/all-moves";
 import type { DelayedAttackTag } from "#app/data/arena-tag";
@@ -234,13 +234,7 @@ export class MovePhase extends BattlePhase {
         case StatusEffect.SLEEP:
           applyMoveAttrs(BypassSleepAttr, this.pokemon, null, this.move.getMove());
           const turnsRemaining = new NumberHolder(this.pokemon.status.sleepTurnsRemaining ?? 0);
-          applyAbAttrs(
-            ReduceStatusEffectDurationAbAttr,
-            this.pokemon,
-            false,
-            this.pokemon.status.effect,
-            turnsRemaining,
-          );
+          applyAbAttrs(ReduceSleepDurationAbAttr, this.pokemon, false, this.pokemon.status.effect, turnsRemaining);
           if (Overrides.STATUS_ACTIVATION_OVERRIDE === true) {
             turnsRemaining.value = Math.max(turnsRemaining.value, 1);
           } else if (Overrides.STATUS_ACTIVATION_OVERRIDE === false) {

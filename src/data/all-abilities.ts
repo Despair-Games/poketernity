@@ -36,7 +36,7 @@ import { ReduceBerryUseThresholdAbAttr } from "./ab-attrs/reduce-berry-use-thres
 import { ForceSwitchOutImmunityAbAttr } from "./ab-attrs/force-switch-out-immunity-ab-attr";
 import { IncreasePpAbAttr } from "./ab-attrs/increase-pp-ab-attr";
 import { FlinchStatStageChangeAbAttr } from "./ab-attrs/flinch-stat-stage-change-ab-attr";
-import { ReduceStatusEffectDurationAbAttr } from "./ab-attrs/reduce-status-effect-duration-ab-attr";
+import { ReduceSleepDurationAbAttr } from "./ab-attrs/reduce-sleep-duration-ab-attr";
 import { BlockRedirectAbAttr } from "./ab-attrs/block-redirect-ab-attr";
 import { RedirectTypeMoveAbAttr } from "./ab-attrs/redirect-type-move-ab-attr";
 import { PostFaintClearWeatherAbAttr } from "./ab-attrs/post-faint-clear-weather-ab-attr";
@@ -466,7 +466,7 @@ export function initAbilities() {
       .attr(ReceivedTypeDamageMultiplierAbAttr, Type.FIRE, 0.5)
       .attr(ReceivedTypeDamageMultiplierAbAttr, Type.ICE, 0.5)
       .ignorable(),
-    new Ability(Abilities.EARLY_BIRD, 3).attr(ReduceStatusEffectDurationAbAttr, StatusEffect.SLEEP),
+    new Ability(Abilities.EARLY_BIRD, 3).attr(ReduceSleepDurationAbAttr),
     new Ability(Abilities.FLAME_BODY, 3)
       .attr(PostDefendContactApplyStatusEffectAbAttr, 30, StatusEffect.BURN)
       .bypassFaint(),
@@ -902,9 +902,7 @@ export function initAbilities() {
     new Ability(Abilities.CHEEK_POUCH, 6).attr(HealFromBerryUseAbAttr, 1 / 3),
     new Ability(Abilities.PROTEAN, 6).attr(PokemonTypeChangeAbAttr),
     //.condition((p) => !p.summonData?.abilitiesApplied.includes(Abilities.PROTEAN)), //Gen 9 Implementation
-    new Ability(Abilities.FUR_COAT, 6)
-      .attr(StatMultiplierAbAttr, Stat.DEF, 2, (_user, target) => !!target)
-      .ignorable(),
+    new Ability(Abilities.FUR_COAT, 6).attr(StatMultiplierAbAttr, Stat.DEF, 2, (_user, target) => !!target).ignorable(),
     new Ability(Abilities.MAGICIAN, 6).attr(PostAttackStealHeldItemAbAttr),
     new Ability(Abilities.BULLETPROOF, 6)
       .attr(

@@ -709,16 +709,13 @@ export class GameData {
       }
     }
 
-    Object.keys(Tutorial)
-      .map((t) => t as Tutorial)
-      .forEach((t) => {
-        const key = Tutorial[t];
-        if (key === tutorial) {
-          tutorials[key] = flag;
-        } else {
-          tutorials[key] ??= false;
-        }
-      });
+    Object.keys(Tutorial).forEach((key) => {
+      if (key === Tutorial[tutorial]) {
+        tutorials[key] = flag;
+      } else {
+        tutorials[key] ??= false;
+      }
+    });
 
     localStorage.setItem(key, JSON.stringify(tutorials));
 
