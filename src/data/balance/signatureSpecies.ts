@@ -15,10 +15,10 @@ export const signatureSpecies: SignatureSpecies = {
   MISTY: [Species.STARYU, Species.PSYDUCK, Species.WOOPER, [Species.MAGIKARP, Species.FEEBAS]],
   LT_SURGE: [Species.PICHU, Species.ELEKID, Species.VOLTORB],
   ERIKA: [Species.ODDISH, Species.BELLSPROUT, Species.TANGELA, Species.HOPPIP],
-  JANINE: [Species.VENONAT, Species.SPINARAK, Species.ZUBAT],
+  JANINE: [Species.VENONAT, Species.SPINARAK, Species.ZUBAT, Species.KOFFING],
   SABRINA: [Species.ABRA, Species.MIME_JR, Species.SMOOCHUM, Species.ESPEON],
-  BLAINE: [Species.MAGBY, Species.GROWLITHE, Species.PONYTA, Species.SLUGMA],
-  GIOVANNI: [Species.RHYHORN, Species.DIGLETT, Species.NIDORAN_M, Species.NIDORAN_F],
+  BLAINE: [Species.GROWLITHE, Species.PONYTA, Species.MAGBY, Species.SLUGMA],
+  GIOVANNI: [Species.RHYHORN, Species.DIGLETT, [Species.NIDORAN_M, Species.NIDORAN_F], Species.SANDILE],
 
   // Johto gym leaders
   FALKNER: [Species.PIDGEY, Species.HOOTHOOT, Species.NATU, Species.MURKROW],
