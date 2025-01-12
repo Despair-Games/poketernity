@@ -6,7 +6,7 @@ import { AbAttr } from "./ab-attr";
 /**
  * /**
  * This attribute reduces the duration of sleep by half and is used by the ability Early Bird.
- * Early Bird halves the sleep duration. When the Pokémon is put to sleep, the number of turns it will remain asleep is preset, between 1 and 5 (the range depends on the generation).
+ * Early Bird halves the sleep duration. When the Pokémon is put to sleep, the number of turns it will remain asleep is preset, between 1 and 3.
  * This number of turns is halved for a Pokémon with Early Bird, rounded down if it is odd. So if only 1 turn is preset, it is rounded down to 0, causing the Pokémon to wake up the next time it moves.
  * @param statusEffect - The {@linkcode StatusEffect} to check for
  * @see {@linkcode apply}
