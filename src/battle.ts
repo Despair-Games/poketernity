@@ -10,8 +10,8 @@ import {
   randInt,
   isBetween,
 } from "#app/utils";
-import Trainer from "./field/trainer";
 import { TrainerVariant } from "#enums/trainer-variant";
+import Trainer from "./field/trainer";
 import type { GameMode } from "./game-mode";
 import { MoneyMultiplierModifier, PokemonHeldItemModifier } from "./modifier/modifier";
 import type { PokeballType } from "#enums/pokeball";

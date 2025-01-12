@@ -179,8 +179,6 @@ import { bgmLoopPoint } from "./data/bgm-loop-point";
 import { allTrainerConfigs } from "./data/balance/trainer-configs/all-trainer-configs";
 import { Animation } from "./animations";
 
-export const bypassLogin = import.meta.env.VITE_BYPASS_LOGIN === "1";
-
 const DEBUG_RNG = false;
 
 const OPP_IVS_OVERRIDE_VALIDATED: number[] = (
