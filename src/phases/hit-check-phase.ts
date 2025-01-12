@@ -1,4 +1,3 @@
-import { BattlerIndex } from "#app/battle";
 import { AlwaysHitAbAttr } from "#app/data/ab-attrs/always-hit-ab-attr";
 import { MaxMultiHitAbAttr } from "#app/data/ab-attrs/max-multi-hit-ab-attr";
 import { ConditionalProtectTag } from "#app/data/arena-tag";
@@ -10,6 +9,7 @@ import type { TypeDamageMultiplier } from "#app/data/type";
 import type { PokemonMove, Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { BooleanHolder } from "#app/utils";
+import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitCheckResult } from "#enums/hit-check-result";
 import { MoveFlags } from "#enums/move-flags";
