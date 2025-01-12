@@ -1133,7 +1133,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       this.setCursor(0);
       this.tryUpdateValue(0);
 
-      handleTutorial(Tutorial.STARTER_SELECT);
+      handleTutorial(Tutorial.Starter_Select);
 
       return true;
     }
@@ -3358,7 +3358,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
 
         this.pokemonSprite.clearTint();
         if (this.pokerusSpecies.includes(species)) {
-          handleTutorial(Tutorial.POKERUS);
+          handleTutorial(Tutorial.Pokerus);
         }
       } else {
         this.pokemonGrowthRateText.setText("");

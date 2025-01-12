@@ -11,7 +11,7 @@ import {
   applyPreAttackAbAttrs,
 } from "#app/data/ability";
 import { MoveAnim } from "#app/data/battle-anims";
-import { SubstituteTag, TypeBoostTag } from "#app/data/battler-tags";
+import { SkyDropTag, SubstituteTag, TypeBoostTag } from "#app/data/battler-tags";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { applyFilteredMoveAttrs, applyMoveAttrs, AttackMove } from "#app/data/move";
 import { DelayedAttackAttr } from "#app/data/move-attrs/delayed-attack-attr";

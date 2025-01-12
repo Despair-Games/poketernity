@@ -348,7 +348,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
 
       updateCursorTarget();
 
-      handleTutorial(Tutorial.SELECT_ITEM).then((res) => {
+      handleTutorial(Tutorial.Select_Item).then((res) => {
         if (res) {
           updateCursorTarget();
         }

@@ -596,7 +596,7 @@ export class EncounterPhase extends BattlePhase {
         }
       }
     }
-    handleTutorial(Tutorial.ACCESS_MENU).then(() => super.end());
+    handleTutorial(Tutorial.Access_Menu).then(() => super.end());
   }
 
   public displayFinalBossDialogue(): void {

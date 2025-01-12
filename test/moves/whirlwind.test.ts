@@ -10,7 +10,7 @@ import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { Status } from "#app/data/status-effect";
 import { StatusEffect } from "#enums/status-effect";
-import { BattlerIndex } from "#app/battle";
+import { BattlerIndex } from "#enums/battler-index";
 
 describe("Moves - Whirlwind", () => {
   let phaserGame: Phaser.Game;
