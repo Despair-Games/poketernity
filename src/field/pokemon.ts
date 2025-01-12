@@ -1799,6 +1799,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   public isGrounded(): boolean {
+    // Note: This code is also copied in `GroundedTag.onAdd()`, to check whether or not the Pokemon
+    // was grounded before receiving the `GroundedTag`.
     return (
       !!this.getTag(GroundedTag)
       || (!this.isOfType(Type.FLYING, true, true)
