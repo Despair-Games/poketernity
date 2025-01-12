@@ -1,4 +1,3 @@
-import { Status } from "#app/data/status-effect";
 import { MoveResult } from "#enums/move-result";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
