@@ -10,7 +10,9 @@ vi.mock("#app/overrides", async (importOriginal) => {
 
   return {
     default: defaultOverrides,
-    defaultOverrides,
+    // Export `defaultOverrides` as a *copy*.
+    // This ensures we can easily reset `overrides` back to its default values after modifying it.
+    defaultOverrides: { ...defaultOverrides },
   } satisfies typeof import("#app/overrides"); // eslint-disable-line
 });
 

@@ -122,9 +122,10 @@ export class GameManager {
     this.reload = new ReloadHelper(this);
     this.modifiers = new ModifierHelper(this);
     this.field = new FieldHelper(this);
+    this.override.sanitizeOverrides();
 
-    // Sanitize overrides for each test
-    this.override.mysteryEncounterChance(0).moveset([]).enemyMoveset([]).startingHeldItems([]).enemyHeldItems([]);
+    // Disables Mystery Encounters on all tests (can be overridden at test level)
+    this.override.mysteryEncounterChance(0);
 
     global.fetch = vi.fn(MockFetch) as any;
   }
