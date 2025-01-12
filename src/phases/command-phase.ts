@@ -1,12 +1,11 @@
-import type { TurnCommand } from "#app/battle";
+import type { TurnCommand } from "#app/turn-command-manager";
 import { BattleType } from "#app/battle";
 import { ArenaTagSide, type ArenaTag } from "#app/data/arena-tag";
 import { speciesStarterCosts } from "#app/data/balance/starters";
 import type { EncoreTag } from "#app/data/battler-tags";
 import { TrappedTag, type BattlerTag } from "#app/data/battler-tags";
 import { getMoveTargets, type MoveTargetSet } from "#app/data/move";
-import type { PlayerPokemon } from "#app/field/pokemon";
-import { FieldPosition } from "#app/field/pokemon";
+import { FieldPosition, type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { FieldPhase } from "#app/phases/abstract-field-phase";
@@ -42,6 +41,9 @@ export class CommandPhase extends FieldPhase {
     super.start();
 
     const { currentBattle, ui } = globalScene;
+    const { turnManager } = globalScene.currentBattle;
+
+    const pokemon = this.getPokemon();
 
     globalScene.updateGameInfo();
 
@@ -61,9 +63,9 @@ export class CommandPhase extends FieldPhase {
       if (globalScene.getPlayerField().filter((p) => p.isActive()).length === 1) {
         this.fieldIndex = FieldPosition.CENTER;
       } else {
-        const allyCommand = currentBattle.turnCommands[this.fieldIndex - 1];
+        const allyCommand = turnManager.getCommand(pokemon.getAlly());
         if (allyCommand?.command === Command.BALL || allyCommand?.command === Command.RUN) {
-          currentBattle.turnCommands[this.fieldIndex] = { command: allyCommand?.command, skip: true };
+          return this.end();
         }
       }
     }
@@ -71,39 +73,29 @@ export class CommandPhase extends FieldPhase {
     // If the Pokemon has applied Commander's effects to its ally, skip this command
     if (
       currentBattle?.double
-      && this.getPokemon().getAlly()?.getTag(BattlerTagType.COMMANDED)?.getSourcePokemon() === this.getPokemon()
+      && pokemon.getAlly()?.getTag(BattlerTagType.COMMANDED)?.getSourcePokemon() === this.getPokemon()
     ) {
-      currentBattle.turnCommands[this.fieldIndex] = {
-        command: Command.FIGHT,
-        move: { move: Moves.NONE, targets: [] },
-        skip: true,
-      };
-    }
-
-    // Checks if the Pokemon is under the effects of Encore. If so, Encore can end early if the encored move has no more PP.
-    const encoreTag = this.getPokemon().getTag(BattlerTagType.ENCORE) as EncoreTag;
-    if (encoreTag) {
-      this.getPokemon().lapseTag(BattlerTagType.ENCORE);
-    }
-
-    if (currentBattle.turnCommands[this.fieldIndex]?.skip) {
       return this.end();
     }
 
-    const playerPokemon = globalScene.getPlayerField()[this.fieldIndex];
+    // Checks if the Pokemon is under the effects of Encore. If so, Encore can end early if the encored move has no more PP.
+    const encoreTag = pokemon.getTag(BattlerTagType.ENCORE) as EncoreTag;
+    if (encoreTag) {
+      pokemon.lapseTag(BattlerTagType.ENCORE);
+    }
 
-    const moveQueue = playerPokemon.getMoveQueue();
+    const moveQueue = pokemon.getMoveQueue();
 
     while (
       moveQueue.length
       && moveQueue[0]
       && moveQueue[0].move
-      && (!playerPokemon.getMoveset().find((m) => m.moveId === moveQueue[0].move)
-        || !playerPokemon
+      && (!pokemon.getMoveset().find((m) => m.moveId === moveQueue[0].move)
+        || !pokemon
           .getMoveset()
           [
-            playerPokemon.getMoveset().findIndex((m) => m.moveId === moveQueue[0].move)
-          ].isUsable(playerPokemon, moveQueue[0].ignorePP))
+            pokemon.getMoveset().findIndex((m) => m.moveId === moveQueue[0].move)
+          ].isUsable(pokemon, moveQueue[0].ignorePP))
     ) {
       moveQueue.shift();
     }
@@ -113,8 +105,8 @@ export class CommandPhase extends FieldPhase {
       if (!queuedMove.move) {
         this.handleCommand(Command.FIGHT, -1, false);
       } else {
-        const moveIndex = playerPokemon.getMoveset().findIndex((m) => m.moveId === queuedMove.move);
-        if (moveIndex > -1 && playerPokemon.getMoveset()[moveIndex].isUsable(playerPokemon, queuedMove.ignorePP)) {
+        const moveIndex = pokemon.getMoveset().findIndex((m) => m.moveId === queuedMove.move);
+        if (moveIndex > -1 && pokemon.getMoveset()[moveIndex].isUsable(pokemon, queuedMove.ignorePP)) {
           this.handleCommand(Command.FIGHT, moveIndex, queuedMove.ignorePP, {
             targets: queuedMove.targets,
             multiple: queuedMove.targets.length > 1,
@@ -158,11 +150,11 @@ export class CommandPhase extends FieldPhase {
    */
   public handleCommand(command: Command.POKEMON, cursor: number, isBaton: boolean): boolean;
   public handleCommand(command: Command, cursor: number, ...args: unknown[]): boolean {
-    const playerPokemon = globalScene.getPlayerField()[this.fieldIndex];
+    const pokemon = this.getPokemon();
     let success: boolean = false;
 
     const { arena, currentBattle, gameData, gameMode, ui } = globalScene;
-    const { battleType, mysteryEncounter } = currentBattle;
+    const { battleType, mysteryEncounter, turnManager } = currentBattle;
 
     const failCatchRunCallback = (): void => {
       ui.showText("", 0);
@@ -178,27 +170,28 @@ export class CommandPhase extends FieldPhase {
       case Command.FIGHT:
         const ignorePp = args[0] as boolean | undefined;
         const targets = args[1] as MoveTargetSet | undefined;
-        const useStruggle = cursor > -1 && !playerPokemon.getMoveset().filter((m) => m.isUsable(playerPokemon)).length;
+        const useStruggle = cursor > -1 && !pokemon.getMoveset().filter((m) => m.isUsable(pokemon)).length;
 
-        if (cursor === -1 || playerPokemon.trySelectMove(cursor, ignorePp) || useStruggle) {
+        if (cursor === -1 || pokemon.trySelectMove(cursor, ignorePp) || useStruggle) {
           const moveId = !useStruggle
             ? cursor > -1
-              ? playerPokemon.getMoveset()[cursor].moveId
+              ? pokemon.getMoveset()[cursor].moveId
               : Moves.NONE
             : Moves.STRUGGLE;
           const turnCommand: TurnCommand = {
+            pokemon: pokemon,
             command: Command.FIGHT,
             cursor: cursor,
             move: { move: moveId, targets: [], ignorePP: ignorePp },
             args: args,
           };
-          const moveTargets: MoveTargetSet = targets ?? getMoveTargets(playerPokemon, moveId);
+          const moveTargets: MoveTargetSet = targets ?? getMoveTargets(pokemon, moveId);
 
           if (!moveId) {
             turnCommand.targets = [this.fieldIndex];
           }
 
-          console.log(moveTargets, getPokemonNameWithAffix(playerPokemon));
+          console.log(moveTargets, getPokemonNameWithAffix(pokemon));
           if (moveTargets.targets.length > 1 && moveTargets.multiple) {
             globalScene.unshiftPhase(new SelectTargetPhase(this.fieldIndex));
           }
@@ -206,26 +199,25 @@ export class CommandPhase extends FieldPhase {
             turnCommand.move.targets = moveTargets.targets;
           } else if (
             turnCommand.move
-            && playerPokemon.getTag(BattlerTagType.CHARGING)
-            && playerPokemon.getMoveQueue().length >= 1
+            && pokemon.getTag(BattlerTagType.CHARGING)
+            && pokemon.getMoveQueue().length >= 1
           ) {
-            turnCommand.move.targets = playerPokemon.getMoveQueue()[0].targets;
+            turnCommand.move.targets = pokemon.getMoveQueue()[0].targets;
           } else {
             globalScene.unshiftPhase(new SelectTargetPhase(this.fieldIndex));
           }
 
-          currentBattle.turnCommands[this.fieldIndex] = turnCommand;
+          turnManager.addCommand(turnCommand);
           success = true;
-        } else if (cursor < playerPokemon.getMoveset().length) {
-          const move = playerPokemon.getMoveset()[cursor];
+        } else if (cursor < pokemon.getMoveset().length) {
+          const move = pokemon.getMoveset()[cursor];
           ui.setMode(Mode.MESSAGE);
 
           let errorMessageKey: string;
-          if (playerPokemon.isMoveRestricted(move.moveId, playerPokemon)) {
+          if (pokemon.isMoveRestricted(move.moveId, pokemon)) {
             errorMessageKey =
-              playerPokemon
-                .getRestrictingTag(move.moveId, playerPokemon)
-                ?.selectionDeniedText(playerPokemon, move.moveId) ?? "battle:moveDisabled";
+              pokemon.getRestrictingTag(move.moveId, pokemon)?.selectionDeniedText(pokemon, move.moveId)
+              ?? "battle:moveDisabled";
           } else if (move.getName().endsWith(" (N)")) {
             errorMessageKey = "battle:moveNotImplemented";
           } else {
@@ -281,13 +273,14 @@ export class CommandPhase extends FieldPhase {
             ) {
               failCatchRun("battle:noPokeballStrong");
             } else {
-              currentBattle.turnCommands[this.fieldIndex] = {
+              turnManager.addCommand({
+                pokemon: pokemon,
                 command: Command.BALL,
                 cursor: cursor,
                 targets: targets,
-              };
+              });
               if (this.fieldIndex) {
-                currentBattle.turnCommands[this.fieldIndex - 1]!.skip = true;
+                turnManager.tryRemoveCommand((tc) => tc.pokemon === pokemon.getAlly());
               }
               success = true;
             }
@@ -309,13 +302,14 @@ export class CommandPhase extends FieldPhase {
         const isSwitch = command === Command.POKEMON;
         const batonPass = isSwitch && (args[0] as boolean);
         const trappedAbMessages: string[] = [];
-        if (batonPass || !playerPokemon.isTrapped(trappedAbMessages)) {
-          currentBattle.turnCommands[this.fieldIndex] = isSwitch
-            ? { command: Command.POKEMON, cursor: cursor, args: args }
-            : { command: Command.RUN };
+        if (batonPass || !pokemon.isTrapped(trappedAbMessages)) {
+          const turnCommand: TurnCommand = isSwitch
+            ? { pokemon: pokemon, command: Command.POKEMON, cursor: cursor, args: args }
+            : { pokemon: pokemon, command: Command.RUN };
+          turnManager.addCommand(turnCommand);
           success = true;
           if (!isSwitch && this.fieldIndex) {
-            currentBattle.turnCommands[this.fieldIndex - 1]!.skip = true;
+            turnManager.tryRemoveCommand((tc) => tc.pokemon === pokemon.getAlly());
           }
         } else if (trappedAbMessages.length > 0) {
           if (!isSwitch) {
@@ -334,7 +328,7 @@ export class CommandPhase extends FieldPhase {
             true,
           );
         } else {
-          const trapTag = playerPokemon.getTag(TrappedTag);
+          const trapTag = pokemon.getTag(TrappedTag);
           const fairyLockTag = arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.PLAYER);
 
           if (!trapTag && !fairyLockTag) {
@@ -395,7 +389,7 @@ export class CommandPhase extends FieldPhase {
     return this.fieldIndex;
   }
 
-  public getPokemon(): PlayerPokemon {
+  public getPokemon(): Pokemon {
     return globalScene.getPlayerField()[this.fieldIndex];
   }
 

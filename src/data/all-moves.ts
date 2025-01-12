@@ -1450,7 +1450,7 @@ export function initMoves() {
       MovePowerMultiplierAttr,
       (_user, target, _move) =>
         target.getLastXMoves(1).find((m) => m.turn === globalScene.currentBattle.turn)
-        || globalScene.currentBattle.turnCommands[target.getBattlerIndex()]?.command === Command.BALL
+        || target.turnData?.turnCommand?.command === Command.BALL
           ? 2
           : 1,
     ),
@@ -1508,10 +1508,13 @@ export function initMoves() {
     new StatusMove(Moves.WORRY_SEED, Type.GRASS, 100, 10, -1, 0, 4).attr(AbilityChangeAttr, Abilities.INSOMNIA),
     new AttackMove(Moves.SUCKER_PUNCH, Type.DARK, MoveCategory.PHYSICAL, 70, 100, 5, -1, 1, 4).condition(
       (_user, target, _move) => {
-        const turnCommand = globalScene.currentBattle.turnCommands[target.getBattlerIndex()];
-        if (!turnCommand || !turnCommand.move) {
+        const { turnManager } = globalScene.currentBattle;
+        const turnCommand = turnManager.getCommand(target);
+
+        if (!turnCommand?.move) {
           return false;
         }
+
         return (
           turnCommand.command === Command.FIGHT
           && !target.turnData.acted
@@ -3638,8 +3641,9 @@ export function initMoves() {
       .condition(failIfLastCondition),
     new AttackMove(Moves.THUNDERCLAP, Type.ELECTRIC, MoveCategory.SPECIAL, 70, 100, 5, -1, 1, 9).condition(
       (_user, target, _move) => {
-        const turnCommand = globalScene.currentBattle.turnCommands[target.getBattlerIndex()];
-        if (!turnCommand || !turnCommand.move) {
+        const { turnManager } = globalScene.currentBattle;
+        const turnCommand = turnManager.getCommand(target);
+        if (!turnCommand?.move) {
           return false;
         }
         return (

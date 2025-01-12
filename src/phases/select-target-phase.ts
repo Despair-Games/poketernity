@@ -16,9 +16,10 @@ export class SelectTargetPhase extends PokemonPhase {
     super.start();
 
     const { currentBattle, ui } = globalScene;
-    const { turnCommands } = currentBattle;
+    const { turnManager } = currentBattle;
+    const pokemon = this.getPokemon();
 
-    const turnCommand = turnCommands[this.fieldIndex];
+    const turnCommand = turnManager.findCommand((tc) => tc.pokemon === pokemon);
     const move = turnCommand?.move?.move ?? Moves.NONE;
 
     ui.setMode(Mode.TARGET_SELECT, this.fieldIndex, move, (targets: BattlerIndex[]) => {
@@ -41,7 +42,7 @@ export class SelectTargetPhase extends PokemonPhase {
       }
 
       if (targets.length < 1) {
-        turnCommands[this.fieldIndex] = null;
+        turnManager.tryRemoveCommand((tc) => tc.pokemon === user);
         globalScene.unshiftPhase(new CommandPhase(this.fieldIndex));
       } else {
         if (turnCommand) {

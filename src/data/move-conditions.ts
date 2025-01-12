@@ -53,7 +53,8 @@ export class FirstMoveCondition extends MoveCondition {
 export class UpperHandCondition extends MoveCondition {
   constructor() {
     super((_user, target, _move) => {
-      const targetCommand = globalScene.currentBattle.turnCommands[target.getBattlerIndex()];
+      const { turnManager } = globalScene.currentBattle;
+      const targetCommand = turnManager.getCommand(target);
 
       return (
         !!targetCommand

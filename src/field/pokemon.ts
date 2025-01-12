@@ -238,6 +238,7 @@ import { TypeImmunityAbAttr } from "#app/data/ab-attrs/type-immunity-ab-attr";
 import { FullHpResistTypeAbAttr } from "#app/data/ab-attrs/full-hp-resist-type-ab-attr";
 import { FieldPriorityMoveImmunityAbAttr } from "#app/data/ab-attrs/field-priority-move-immunity-ab-attr";
 import { MoveImmunityAbAttr } from "#app/data/ab-attrs/move-immunity-ab-attr";
+import type { TurnCommand } from "#app/turn-command-manager";
 
 export enum LearnMoveSituation {
   MISC,
@@ -5990,6 +5991,7 @@ export class PokemonBattleSummonData {
 }
 
 export class PokemonTurnData {
+  public turnCommand: TurnCommand;
   public flinched: boolean = false;
   public acted: boolean = false;
   /** How many times the move should hit the target(s) */

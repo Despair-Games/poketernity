@@ -350,7 +350,7 @@ export abstract class SpeciesFormChangeMoveTrigger extends SpeciesFormChangeTrig
 
 export class SpeciesFormChangePreMoveTrigger extends SpeciesFormChangeMoveTrigger {
   override canChange(pokemon: Pokemon): boolean {
-    const command = globalScene.currentBattle.turnCommands[pokemon.getBattlerIndex()];
+    const command = pokemon.turnData?.turnCommand;
     return !!command?.move && this.movePredicate(command.move.move) === this.used;
   }
 }

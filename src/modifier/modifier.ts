@@ -1701,8 +1701,8 @@ export class BypassSpeedChanceModifier extends PokemonHeldItemModifier {
   override apply(pokemon: Pokemon, doBypassSpeed: BooleanHolder): boolean {
     if (!doBypassSpeed.value && pokemon.randSeedInt(10) < this.getStackCount()) {
       doBypassSpeed.value = true;
-      const isCommandFight =
-        globalScene.currentBattle.turnCommands[pokemon.getBattlerIndex()]?.command === Command.FIGHT;
+      const turnCommand = globalScene.currentBattle.turnManager.findCommand((tc) => tc.pokemon === pokemon);
+      const isCommandFight = turnCommand?.command === Command.FIGHT;
       const hasQuickClaw = this.type instanceof PokemonHeldItemModifierType && this.type.id === "QUICK_CLAW";
 
       if (isCommandFight && hasQuickClaw) {
