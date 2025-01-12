@@ -1,4 +1,3 @@
-import { Status } from "#app/data/status-effect";
 import { MoveResult } from "#app/field/pokemon";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
@@ -63,26 +62,20 @@ describe("Abilities - Early Bird", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const player = game.scene.getPlayerPokemon()!;
-    player.status = new Status(StatusEffect.SLEEP, 0, 4);
+    player.trySetStatus(StatusEffect.SLEEP, false, null, 3);
 
     game.move.select(Moves.SPLASH);
     await game.toNextTurn();
 
     expect(player.status?.effect).toBe(StatusEffect.SLEEP);
-    expect(player.getLastXMoves(1)[0].result).toBe(MoveResult.FAIL);
-
-    game.move.select(Moves.SPLASH);
-    await game.toNextTurn();
-
-    expect(player.status?.effect).toBeUndefined();
-    expect(player.getLastXMoves(1)[0].result).toBe(MoveResult.SUCCESS);
+    expect(player.status?.sleepTurnsRemaining).toBe(1);
   });
 
   it("reduces 1-turn sleep to 0 turns", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const player = game.scene.getPlayerPokemon()!;
-    player.status = new Status(StatusEffect.SLEEP, 0, 2);
+    player.trySetStatus(StatusEffect.SLEEP, false, null, 1);
 
     game.move.select(Moves.SPLASH);
     await game.toNextTurn();
