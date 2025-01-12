@@ -57,7 +57,11 @@ describe("Moves - Order Up", () => {
       expect(dondozo.getTag(BattlerTagType.COMMANDED)).toBeDefined();
 
       game.move.select(Moves.ORDER_UP, 1, BattlerIndex.ENEMY);
-      expect(game.scene.currentBattle.turnCommands[0]?.skip).toBeTruthy();
+
+      await game.phaseInterceptor.to("TurnStartPhase", false);
+
+      const { turnManager } = game.scene.currentBattle;
+      expect(turnManager.findCommand((tc) => tc.pokemon === tatsugiri)).toBeUndefined();
 
       await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -77,7 +81,11 @@ describe("Moves - Order Up", () => {
     expect(dondozo.getTag(BattlerTagType.COMMANDED)).toBeDefined();
 
     game.move.select(Moves.ORDER_UP, 1, BattlerIndex.ENEMY);
-    expect(game.scene.currentBattle.turnCommands[0]?.skip).toBeTruthy();
+
+    await game.phaseInterceptor.to("TurnStartPhase", false);
+
+    const { turnManager } = game.scene.currentBattle;
+    expect(turnManager.findCommand((tc) => tc.pokemon === tatsugiri)).toBeUndefined();
 
     await game.phaseInterceptor.to("BerryPhase", false);
 

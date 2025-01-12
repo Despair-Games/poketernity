@@ -39,18 +39,24 @@ export interface TurnCommand {
    * {@linkcode Command.BALL | ball} commands
    */
   targets?: BattlerIndex[];
-  /** If `true` when commands are executed, this command is ignored */
-  skip?: boolean;
   /** Any other arguments given with this command */
   args?: any[];
 }
 
 export class TurnCommandManager {
-  private turnCommands: TurnCommand[];
+  /**
+   * The internal {@linkcode TurnCommand} queue.
+   *
+   * NOTE: This is only `public` to facilitate unit tests that override turn order.
+   * Please use this class's API to access and modify turn commands instead
+   * of accessing this array directly.
+   */
+  public turnCommands: TurnCommand[];
   private orderIndex: number;
 
   constructor() {
     this.turnCommands = [];
+    this.orderIndex = 0;
   }
 
   // --------------  BEGIN PUBLIC METHODS  -------------- //
@@ -134,7 +140,7 @@ export class TurnCommandManager {
    */
   public shiftNextCommand(): boolean {
     const nextCommand = this.turnCommands.shift();
-    if (!nextCommand || nextCommand.skip) {
+    if (!nextCommand) {
       return false;
     }
 
@@ -151,7 +157,7 @@ export class TurnCommandManager {
   }
 
   /** Schedules all turn commands to be run at the start of the turn. */
-  public startTurn() {
+  public startTurn(): void {
     // Shuffle and sort turn commands by speed, command type, priority, etc.
     this.setTurnOrder(false);
     // Add all commands that aren't using moves to the phase queue
@@ -161,7 +167,11 @@ export class TurnCommandManager {
     // Add the first valid move command to the phase queue.
     // This loop ensures that skipped and invalid commands do not
     // freeze the turn sequence.
-    while (this.turnCommands.length && this.shiftNextCommand());
+    while (!this.empty() && this.shiftNextCommand());
+  }
+
+  public empty(): boolean {
+    return !this.turnCommands.length;
   }
 
   // ---------------  END PUBLIC METHODS  --------------- //

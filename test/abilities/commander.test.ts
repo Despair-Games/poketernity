@@ -56,11 +56,14 @@ describe("Abilities - Commander", () => {
 
     game.move.select(Moves.SPLASH, 1);
 
-    expect(game.scene.currentBattle.turnCommands[0]?.skip).toBeTruthy();
-
     // Force both enemies to target the Tatsugiri
     await game.forceEnemyMove(Moves.TACKLE, BattlerIndex.PLAYER);
     await game.forceEnemyMove(Moves.TACKLE, BattlerIndex.PLAYER);
+
+    await game.phaseInterceptor.to("TurnStartPhase", false);
+
+    const { turnManager } = game.scene.currentBattle;
+    expect(turnManager.findCommand((tc) => tc.pokemon === tatsugiri)).toBeUndefined();
 
     await game.phaseInterceptor.to("BerryPhase", false);
     game.scene.getEnemyField().forEach((enemy) => expect(enemy.getLastXMoves(1)[0].result).toBe(MoveResult.MISS));
@@ -96,14 +99,17 @@ describe("Abilities - Commander", () => {
     expect(game.scene.triggerPokemonBattleAnim).toHaveBeenLastCalledWith(tatsugiri, PokemonAnimType.COMMANDER_APPLY);
     expect(dondozo.getTag(BattlerTagType.COMMANDED)).toBeDefined();
 
+    game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER]);
+
     game.move.select(Moves.MEMENTO, 1, BattlerIndex.ENEMY);
 
-    expect(game.scene.currentBattle.turnCommands[0]?.skip).toBeTruthy();
-
     await game.forceEnemyMove(Moves.TACKLE, BattlerIndex.PLAYER);
     await game.forceEnemyMove(Moves.TACKLE, BattlerIndex.PLAYER);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER]);
+    await game.phaseInterceptor.to("TurnStartPhase", false);
+
+    const { turnManager } = game.scene.currentBattle;
+    expect(turnManager.findCommand((tc) => tc.pokemon === tatsugiri)).toBeUndefined();
 
     await game.phaseInterceptor.to("FaintPhase", false);
     expect(dondozo.getTag(BattlerTagType.COMMANDED)).toBeUndefined();
@@ -125,7 +131,10 @@ describe("Abilities - Commander", () => {
 
     game.move.select(Moves.SPLASH, 1);
 
-    expect(game.scene.currentBattle.turnCommands[0]?.skip).toBeTruthy();
+    await game.phaseInterceptor.to("TurnStartPhase", false);
+
+    const { turnManager } = game.scene.currentBattle;
+    expect(turnManager.findCommand((tc) => tc.pokemon === tatsugiri)).toBeUndefined();
 
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(tatsugiri.isFullHp()).toBeFalsy();
@@ -145,7 +154,10 @@ describe("Abilities - Commander", () => {
 
     game.move.select(Moves.SPLASH, 1);
 
-    expect(game.scene.currentBattle.turnCommands[0]?.skip).toBeTruthy();
+    await game.phaseInterceptor.to("TurnStartPhase", false);
+
+    const { turnManager } = game.scene.currentBattle;
+    expect(turnManager.findCommand((tc) => tc.pokemon === tatsugiri)).toBeUndefined();
 
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(tatsugiri.isFullHp()).toBeFalsy();
@@ -163,7 +175,10 @@ describe("Abilities - Commander", () => {
 
     game.move.select(Moves.SPLASH, 1);
 
-    expect(game.scene.currentBattle.turnCommands[0]?.skip).toBeTruthy();
+    await game.phaseInterceptor.to("TurnStartPhase", false);
+
+    const { turnManager } = game.scene.currentBattle;
+    expect(turnManager.findCommand((tc) => tc.pokemon === tatsugiri)).toBeUndefined();
 
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(tatsugiri.isFullHp()).toBeFalsy();
@@ -181,7 +196,10 @@ describe("Abilities - Commander", () => {
 
     game.move.select(Moves.SPLASH, 1);
 
-    expect(game.scene.currentBattle.turnCommands[0]?.skip).toBeTruthy();
+    await game.phaseInterceptor.to("TurnStartPhase", false);
+
+    const { turnManager } = game.scene.currentBattle;
+    expect(turnManager.findCommand((tc) => tc.pokemon === tatsugiri)).toBeUndefined();
 
     await game.forceEnemyMove(Moves.WHIRLWIND, BattlerIndex.PLAYER_2);
     await game.forceEnemyMove(Moves.SPLASH);

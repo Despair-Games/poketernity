@@ -7,6 +7,7 @@ import type { BattlerIndex } from "#app/battle";
 import { BattlerTagLapseType } from "#app/data/battler-tags";
 import { globalScene } from "#app/global-scene";
 import { PokemonPhase } from "./abstract-pokemon-phase";
+import { MovePhase } from "./move-phase";
 
 /**
  * Lapses {@linkcode BattlerTagLapseType.AFTER_MOVE} and calls {@linkcode Arena.setIgnoreAbilities}`(false)`
@@ -27,6 +28,15 @@ export class MoveEndPhase extends PokemonPhase {
 
     globalScene.arena.setIgnoreAbilities(false);
 
+    if (!globalScene.findPhase((phase) => phase instanceof MovePhase)) {
+      const { turnManager } = globalScene.currentBattle;
+
+      // Reset turn order in case the last move affected Speed
+      turnManager.setTurnOrder();
+      // Pull commands from the turn manager until empty or a new
+      // move phase is queued
+      while (!turnManager.empty() && !turnManager.shiftNextCommand());
+    }
     this.end();
   }
 }

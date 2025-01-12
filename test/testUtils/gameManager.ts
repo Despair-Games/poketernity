@@ -57,6 +57,7 @@ import fs from "fs";
 import { expect, vi } from "vitest";
 import { globalScene } from "#app/global-scene";
 import type StarterSelectUiHandler from "#app/ui/starter-select-ui-handler";
+import type { TurnCommand } from "#app/turn-command-manager";
 
 /**
  * Class to manage the game state and transitions between phases.
@@ -547,18 +548,28 @@ export class GameManager {
   }
 
   /**
-   * Intercepts `TurnStartPhase` and mocks the getSpeedOrder's return value {@linkcode TurnStartPhase.getSpeedOrder}
-   * Used to modify the turn order.
+   * Mocks the game's {@linkcode TurnCommandManager} to
    * @param order The turn order to set
    * @example
    * ```ts
    * await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2]);
    * ```
    */
-  async setTurnOrder(order: BattlerIndex[]): Promise<void> {
-    await this.phaseInterceptor.to(TurnStartPhase, false);
+  setTurnOrder(order: BattlerIndex[]): void {
+    expect(order.length).toBe(this.scene.getField(true).length);
+    const { turnManager } = this.scene.currentBattle;
 
-    vi.spyOn(this.scene.getCurrentPhase() as TurnStartPhase, "getSpeedOrder").mockReturnValue(order);
+    vi.spyOn(turnManager, "setTurnOrder").mockImplementation(() => {
+      const newTurnOrder: TurnCommand[] = [];
+      order.forEach((bi) => {
+        const turnCommand = turnManager.findCommand((tc) => tc.pokemon.getBattlerIndex() === bi);
+        if (turnCommand) {
+          newTurnOrder.push(turnCommand);
+        }
+      });
+
+      turnManager.turnCommands = newTurnOrder;
+    });
   }
 
   /**
