@@ -68,10 +68,9 @@ class DefaultOverrides {
   readonly NEVER_CRIT_OVERRIDE: boolean = false;
   /** default 1000 */
   readonly STARTING_MONEY_OVERRIDE: number = 0;
-  /** Sets all shop item prices to 0 */
+  /** Sets all shop item prices and reroll cost to 0 */
   readonly WAIVE_SHOP_FEES_OVERRIDE: boolean = false;
-  /** Sets reroll price to 0 */
-  readonly WAIVE_ROLL_FEE_OVERRIDE: boolean = false;
+  /** Sets all candy upgrades cost to 0 in starter selection */
   readonly FREE_CANDY_UPGRADE_OVERRIDE: boolean = false;
   readonly POKEBALL_OVERRIDE: { active: boolean; pokeballs: PokeballCounts } = {
     active: false,

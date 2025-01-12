@@ -46,7 +46,7 @@ import { DailyModeHelper } from "#test/testUtils/helpers/dailyModeHelper";
 import { ModifierHelper } from "#test/testUtils/helpers/modifiersHelper";
 import { MoveHelper } from "#test/testUtils/helpers/moveHelper";
 import { OverridesHelper } from "#test/testUtils/helpers/overridesHelper";
-import { PokemonHelper } from "#test/testUtils/helpers/pokemonHelper";
+import { FieldHelper } from "#test/testUtils/helpers/fieldHelper";
 import { ReloadHelper } from "#test/testUtils/helpers/reloadHelper";
 import { SettingsHelper } from "#test/testUtils/helpers/settingsHelper";
 import type { InputsHandler } from "#test/testUtils/inputsHandler";
@@ -75,7 +75,7 @@ export class GameManager {
   public readonly settings: SettingsHelper;
   public readonly reload: ReloadHelper;
   public readonly modifiers: ModifierHelper;
-  public readonly pokemonHelper: PokemonHelper;
+  public readonly field: FieldHelper;
 
   /**
    * Creates an instance of GameManager.
@@ -120,7 +120,7 @@ export class GameManager {
     this.settings = new SettingsHelper(this);
     this.reload = new ReloadHelper(this);
     this.modifiers = new ModifierHelper(this);
-    this.pokemonHelper = new PokemonHelper(this);
+    this.field = new FieldHelper(this);
 
     // Disables Mystery Encounters on all tests (can be overridden at test level)
     this.override.mysteryEncounterChance(0);

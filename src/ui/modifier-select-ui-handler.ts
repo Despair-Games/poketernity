@@ -52,6 +52,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
   private cursorObj: Phaser.GameObjects.Image | null;
 
   constructor() {
+    // TODO: why does it use Mode.CONFIRM and not Mode.MODIFIER_SELECT?
     super(Mode.CONFIRM);
 
     this.options = [];
@@ -346,7 +347,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
 
       updateCursorTarget();
 
-      handleTutorial(Tutorial.Select_Item).then((res) => {
+      handleTutorial(Tutorial.SELECT_ITEM).then((res) => {
         if (res) {
           updateCursorTarget();
         }
@@ -932,7 +933,7 @@ class ModifierOption extends Phaser.GameObjects.Container {
   }
 
   updateCostText(): void {
-    const cost = Overrides.WAIVE_ROLL_FEE_OVERRIDE ? 0 : this.modifierTypeOption.cost;
+    const cost = Overrides.WAIVE_SHOP_FEES_OVERRIDE ? 0 : this.modifierTypeOption.cost;
     const textStyle = cost <= globalScene.money ? TextStyle.MONEY : TextStyle.PARTY_RED;
 
     const formattedMoney = formatMoney(globalScene.moneyFormat, cost);

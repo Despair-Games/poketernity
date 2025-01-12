@@ -8,7 +8,7 @@ import { StatStageAbAttr } from "./stat-stage-ab-attr";
 /**
  * Ability attribute that multiplies a Pokemon's stat by a factor
  * Abilities with this attribute:
- ```text
+ ```
 +-----------------------+-------+--------+----------------------------------+
 |        Ability        | Stat  | Factor |              Notes               |
 +-----------------------+-------+--------+----------------------------------+
@@ -29,6 +29,7 @@ import { StatStageAbAttr } from "./stat-stage-ab-attr";
 |                       | SPDEF |    1.5 |                                  |
 | Defeatist             | ATK   |    0.5 | Needs to be at less than half HP |
 |                       | SPATK |    0.5 |                                  |
+| Fur Coat              | DEF   |      2 |                                  |
 | Grass Pelt            | DEF   |    1.5 | In grassy terrain only           |
 | Surge Surfer          | SPD   |      2 | In electric terrain only         |
 | Orichalum Pulse       | ATK   |   1.33 | In sun only                      |
@@ -54,9 +55,9 @@ export class StatMultiplierAbAttr extends StatStageAbAttr {
     stat: BattleStat,
     statValue: NumberHolder,
     move: Move,
-    _target?: Pokemon,
+    target?: Pokemon,
   ): boolean {
-    if (stat === this.stat && (!this.condition || this.condition(pokemon, null, move))) {
+    if (stat === this.stat && (!this.condition || this.condition(pokemon, target ?? null, move))) {
       statValue.value *= this.multiplier;
       return true;
     }
