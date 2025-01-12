@@ -12,7 +12,7 @@ import { ModifierRewardPhase } from "./modifier-reward-phase";
 import { NewBattlePhase } from "./new-battle-phase";
 import { SelectModifierPhase } from "./select-modifier-phase";
 import { TrainerVictoryPhase } from "./trainer-victory-phase";
-import { EVIL_BOSS_2_WAVE } from "#app/special-waves";
+import { EVIL_BOSS_2_WAVE } from "#app/data/special-waves";
 
 export class VictoryPhase extends PokemonPhase {
   /** If true, indicates that the phase is intended for EXP purposes only, and not to continue a battle to next phase */

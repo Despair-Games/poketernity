@@ -120,6 +120,6 @@ export class LoginPhase extends Phase {
       globalScene.unshiftPhase(new SelectGenderPhase());
     }
 
-    handleTutorial(Tutorial.Intro).then(() => super.end());
+    handleTutorial(Tutorial.INTRO).then(() => super.end());
   }
 }

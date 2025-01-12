@@ -53,7 +53,7 @@ import {
   RIVAL5_WAVE,
   RIVAL_WAVE,
   TUTORIAL_BATTLE_WAVE,
-} from "./special-waves";
+} from "./data/special-waves";
 
 export interface TurnCommand {
   command: Command;

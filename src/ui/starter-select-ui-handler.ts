@@ -44,7 +44,6 @@ import Overrides from "#app/overrides";
 import { SettingKeyboard } from "#app/system/settings/settings-keyboard";
 import { Passive as PassiveAttr } from "#enums/passive";
 import * as Challenge from "#app/data/challenge";
-import * as ChallengeType from "#enums/challenge-type";
 import MoveInfoOverlay from "#app/ui/move-info-overlay";
 import { getEggTierForSpecies } from "#app/data/egg";
 import { Device } from "#enums/devices";
@@ -79,6 +78,7 @@ import {
 } from "#app/utils";
 import type { Nature } from "#enums/nature";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
+import { ChallengeType } from "#enums/challenge-type";
 
 export type StarterSelectCallback = (starters: Starter[]) => void;
 
@@ -1133,7 +1133,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       this.setCursor(0);
       this.tryUpdateValue(0);
 
-      handleTutorial(Tutorial.Starter_Select);
+      handleTutorial(Tutorial.STARTER_SELECT);
 
       return true;
     }
@@ -1681,7 +1681,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
 
           Challenge.applyChallenges(
             globalScene.gameMode,
-            ChallengeType.ChallengeType.STARTER_CHOICE,
+            ChallengeType.STARTER_CHOICE,
             this.lastSpecies,
             isValidForChallenge,
             globalScene.gameData.getSpeciesDexAttrProps(
@@ -2733,7 +2733,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         valueLimit.value = 10;
     }
 
-    Challenge.applyChallenges(globalScene.gameMode, ChallengeType.ChallengeType.STARTER_POINTS, valueLimit);
+    Challenge.applyChallenges(globalScene.gameMode, ChallengeType.STARTER_POINTS, valueLimit);
 
     return valueLimit.value;
   }
@@ -2762,7 +2762,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
             const isValidForChallenge = new BooleanHolder(true);
             Challenge.applyChallenges(
               globalScene.gameMode,
-              ChallengeType.ChallengeType.STARTER_CHOICE,
+              ChallengeType.STARTER_CHOICE,
               container.species,
               isValidForChallenge,
               globalScene.gameData.getSpeciesDexAttrProps(species, tempFormProps),
@@ -2774,7 +2774,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
           const isValidForChallenge = new BooleanHolder(true);
           Challenge.applyChallenges(
             globalScene.gameMode,
-            ChallengeType.ChallengeType.STARTER_CHOICE,
+            ChallengeType.STARTER_CHOICE,
             container.species,
             isValidForChallenge,
             globalScene.gameData.getSpeciesDexAttrProps(
@@ -3358,7 +3358,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
 
         this.pokemonSprite.clearTint();
         if (this.pokerusSpecies.includes(species)) {
-          handleTutorial(Tutorial.Pokerus);
+          handleTutorial(Tutorial.POKERUS);
         }
       } else {
         this.pokemonGrowthRateText.setText("");
@@ -3565,7 +3565,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         const isValidForChallenge = new BooleanHolder(true);
         Challenge.applyChallenges(
           globalScene.gameMode,
-          ChallengeType.ChallengeType.STARTER_CHOICE,
+          ChallengeType.STARTER_CHOICE,
           species,
           isValidForChallenge,
           globalScene.gameData.getSpeciesDexAttrProps(species, this.dexAttrCursor),
@@ -3940,7 +3940,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       const species = this.filteredStarterContainers[this.cursor].species;
       Challenge.applyChallenges(
         globalScene.gameMode,
-        ChallengeType.ChallengeType.STARTER_CHOICE,
+        ChallengeType.STARTER_CHOICE,
         species,
         isNewPokemonValid,
         globalScene.gameData.getSpeciesDexAttrProps(species, this.getCurrentDexProps(species.speciesId)),
@@ -3973,7 +3973,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       const isValidForChallenge = new BooleanHolder(true);
       Challenge.applyChallenges(
         globalScene.gameMode,
-        ChallengeType.ChallengeType.STARTER_CHOICE,
+        ChallengeType.STARTER_CHOICE,
         this.allSpecies[s],
         isValidForChallenge,
         globalScene.gameData.getSpeciesDexAttrProps(
@@ -4121,7 +4121,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       const species = this.starterSpecies[s];
       Challenge.applyChallenges(
         globalScene.gameMode,
-        ChallengeType.ChallengeType.STARTER_CHOICE,
+        ChallengeType.STARTER_CHOICE,
         species,
         isValidForChallenge,
         globalScene.gameData.getSpeciesDexAttrProps(species, this.getCurrentDexProps(species.speciesId)),
