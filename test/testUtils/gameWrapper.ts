@@ -18,6 +18,7 @@ import Phaser from "phaser";
 import InputText from "phaser3-rex-plugins/plugins/inputtext";
 import { vi } from "vitest";
 import { version } from "../../package.json";
+import * as bypassLogin from "#app/bypass-login";
 import InputManager = Phaser.Input.InputManager;
 import KeyboardManager = Phaser.Input.Keyboard.KeyboardManager;
 import KeyboardPlugin = Phaser.Input.Keyboard.KeyboardPlugin;
@@ -73,11 +74,11 @@ export class GameWrapper {
   public game: Phaser.Game;
   public scene: BattleScene;
 
-  constructor(phaserGame: Phaser.Game, bypassLogin: boolean) {
+  constructor(phaserGame: Phaser.Game, bypassLoginValue: boolean) {
     Phaser.Math.RND.sow(["test"]);
     // vi.spyOn(Utils, "apiFetch", "get").mockReturnValue(fetch);
-    if (bypassLogin) {
-      vi.spyOn(bypassLogin, "valueOf").mockReturnValue(true);
+    if (bypassLoginValue) {
+      vi.spyOn(bypassLogin, "bypassLogin", "get").mockReturnValue(true);
     }
     this.game = phaserGame;
     MoveAnim.prototype.getAnim = () =>
