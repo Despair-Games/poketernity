@@ -89,6 +89,12 @@ export class VictoryPhase extends PokemonPhase {
           if (waveIndex <= 150 && !(waveIndex % 50)) {
             globalScene.pushPhase(new ModifierRewardPhase(modifierTypes.GOLDEN_POKEBALL));
           }
+
+          if (isEndless && !(waveIndex % 50)) {
+            globalScene.pushPhase(
+              new ModifierRewardPhase(!(waveIndex % 250) ? modifierTypes.VOUCHER_PREMIUM : modifierTypes.VOUCHER_PLUS),
+            );
+          }
         }
 
         globalScene.pushPhase(new NewBattlePhase());
