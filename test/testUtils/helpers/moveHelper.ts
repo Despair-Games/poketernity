@@ -81,7 +81,7 @@ export class MoveHelper extends GameManagerHelper {
       ? Overrides.MOVESET_OVERRIDE
       : [Overrides.MOVESET_OVERRIDE];
     if (movesetOverride.length > 0) {
-      Overrides.MOVESET_OVERRIDE = [];
+      vi.spyOn(Overrides, "MOVESET_OVERRIDE", "get").mockReturnValue([]);
       console.warn(
         "Warning: Player moveset override disabled! Do not use the moveset override when using this function!",
       );
@@ -170,7 +170,7 @@ export class MoveHelper extends GameManagerHelper {
       ? Overrides.OPP_MOVESET_OVERRIDE
       : [Overrides.OPP_MOVESET_OVERRIDE];
     if (movesetOverride.length > 0) {
-      Overrides.OPP_MOVESET_OVERRIDE = [];
+      vi.spyOn(Overrides, "OPP_MOVESET_OVERRIDE", "get").mockReturnValue([]);
       console.warn(
         "Warning: Enemy moveset override disabled! Do not use the moveset override when using this function!",
       );

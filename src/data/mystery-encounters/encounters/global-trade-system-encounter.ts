@@ -46,7 +46,6 @@ import { trainerNamePools } from "#app/data/trainer-names";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
 import { addPokemonDataToDexAndValidateAchievements } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import type { PokeballType } from "#enums/pokeball";
-import { doShinySparkleAnim } from "#app/field/anims";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/globalTradeSystem";
@@ -671,8 +670,6 @@ function doPokemonTradeSequence(tradedPokemon: PlayerPokemon, receivedPokemon: P
       });
       sprite.setPipelineData("ignoreTimeTint", true);
       sprite.setPipelineData("spriteKey", tradedPokemon.getSpriteKey());
-      sprite.setPipelineData("shiny", tradedPokemon.shiny);
-      sprite.setPipelineData("variant", tradedPokemon.variant);
       ["spriteColors", "fusionSpriteColors"].map((k) => {
         if (tradedPokemon.summonData?.speciesForm) {
           k += "Base";
@@ -696,8 +693,6 @@ function doPokemonTradeSequence(tradedPokemon: PlayerPokemon, receivedPokemon: P
       });
       sprite.setPipelineData("ignoreTimeTint", true);
       sprite.setPipelineData("spriteKey", receivedPokemon.getSpriteKey());
-      sprite.setPipelineData("shiny", receivedPokemon.shiny);
-      sprite.setPipelineData("variant", receivedPokemon.variant);
       ["spriteColors", "fusionSpriteColors"].map((k) => {
         if (receivedPokemon.summonData?.speciesForm) {
           k += "Base";
@@ -965,7 +960,7 @@ function doTradeReceivedSequence(
             onComplete: () => {
               if (receivedPokemon.shiny) {
                 globalScene.time.delayedCall(500, () => {
-                  doShinySparkleAnim(pokemonShinySparkle, receivedPokemon.variant);
+                  globalScene.animations.doShinySparkleAnim(pokemonShinySparkle, receivedPokemon.variant);
                 });
               }
               receivedPokeballSprite.destroy();

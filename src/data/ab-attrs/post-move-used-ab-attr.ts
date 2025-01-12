@@ -14,7 +14,7 @@ export class PostMoveUsedAbAttr extends AbAttr {
     _source: Pokemon,
     _targets: BattlerIndex[],
     _simulated: boolean,
-    _args: any[],
+    ..._args: unknown[]
   ): boolean {
     return false;
   }

@@ -3,7 +3,7 @@ import { GameModes } from "../game-mode";
 import { TextStyle, addTextObject } from "./text";
 import { Mode } from "./ui";
 import { addWindow } from "./ui-theme";
-import { fixedInt, formatLargeNumber, isNullOrUndefined } from "#app/utils";
+import { fixedNumber, formatLargeNumber, isNullOrUndefined } from "#app/utils";
 import type PokemonData from "../system/pokemon-data";
 import MessageUiHandler from "./message-ui-handler";
 import i18next from "i18next";
@@ -219,7 +219,7 @@ export default class RunHistoryUiHandler extends MessageUiHandler {
       globalScene.tweens.add({
         targets: this.runsContainer,
         y: this.runContainerInitialY - 56 * scrollCursor,
-        duration: fixedInt(325),
+        duration: fixedNumber(325),
         ease: "Sine.easeInOut",
       });
     }

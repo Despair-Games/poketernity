@@ -38,9 +38,8 @@ export class ConfusionOnStatusEffectAbAttr extends PostAttackAbAttr {
     defender: Pokemon,
     move: Move,
     _hitResult: HitResult,
-    args: any[],
+    effect: StatusEffect,
   ): boolean {
-    const effect: StatusEffect = args[0];
     if (this.effects.includes(effect) && !defender.isFainted()) {
       if (simulated) {
         return defender.canAddTag(BattlerTagType.CONFUSED);

@@ -1,7 +1,7 @@
 import { BattlerIndex } from "../battle";
 import { Mode } from "./ui";
 import UiHandler from "./ui-handler";
-import { isNullOrUndefined, fixedInt } from "#app/utils";
+import { isNullOrUndefined, fixedNumber } from "#app/utils";
 import { getMoveTargets } from "../data/move";
 import { Button } from "#enums/buttons";
 import type { Moves } from "#enums/moves";
@@ -152,7 +152,7 @@ export default class TargetSelectUiHandler extends UiHandler {
       key: { start: 1, to: 0.25 },
       loop: -1,
       loopDelay: 150,
-      duration: fixedInt(450),
+      duration: fixedNumber(450),
       ease: "Sine.easeInOut",
       yoyo: true,
       onUpdate: (t) => {
@@ -178,7 +178,7 @@ export default class TargetSelectUiHandler extends UiHandler {
           targets: [info],
           y: { start: info.getBaseY(), to: info.getBaseY() + 1 },
           loop: -1,
-          duration: fixedInt(250),
+          duration: fixedNumber(250),
           ease: "Linear",
           yoyo: true,
         }),

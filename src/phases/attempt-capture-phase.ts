@@ -9,9 +9,7 @@ import {
   getPokeballTintColor,
 } from "#app/data/pokeball";
 import { getStatusEffectCatchRateMultiplier } from "#app/data/status-effect";
-import { addPokeballCaptureStars, addPokeballOpenParticles } from "#app/field/anims";
 import { type EnemyPokemon } from "#app/field/pokemon";
-import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
@@ -23,6 +21,7 @@ import { Mode } from "#app/ui/ui";
 import { type PokeballType } from "#enums/pokeball";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
+import { globalScene } from "#app/global-scene";
 
 /**
  * Handles catching a pokemon after the player throws a ball
@@ -93,7 +92,7 @@ export class AttemptCapturePhase extends PokemonPhase {
         globalScene.playSound("se/pb_rel");
         pokemon.tint(getPokeballTintColor(this.pokeballType));
 
-        addPokeballOpenParticles(this.pokeball.x, this.pokeball.y, this.pokeballType);
+        globalScene.animations.addPokeballOpenParticles(this.pokeball.x, this.pokeball.y, this.pokeballType);
 
         tweens.add({
           // Mon enters ball
@@ -152,7 +151,7 @@ export class AttemptCapturePhase extends PokemonPhase {
                     this.failCatch();
                   } else {
                     globalScene.playSound("se/pb_lock");
-                    addPokeballCaptureStars(this.pokeball);
+                    globalScene.animations.addPokeballCaptureStars(this.pokeball);
 
                     const pbTint = globalScene.add.sprite(this.pokeball.x, this.pokeball.y, "pb", "pb");
                     pbTint.setOrigin(this.pokeball.originX, this.pokeball.originY);

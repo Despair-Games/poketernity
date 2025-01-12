@@ -1,4 +1,3 @@
-import { SemiInvulnerableTag } from "#app/data/battler-tags";
 import { getSpeciesFormChangeMessage, type SpeciesFormChange } from "#app/data/pokemon-forms";
 import { getTypeRgb } from "#app/data/type";
 import { EnemyPokemon, type Pokemon } from "#app/field/pokemon";
@@ -29,7 +28,7 @@ export class QuietFormChangePhase extends BattlePhase {
 
     const preName = getPokemonNameWithAffix(this.pokemon);
 
-    if (!this.pokemon.isOnField() || this.pokemon.getTag(SemiInvulnerableTag) || this.pokemon.isFainted()) {
+    if (!this.pokemon.isOnField() || this.pokemon.isSemiInvulnerable() || this.pokemon.isFainted()) {
       if (this.pokemon.isPlayer() || this.pokemon.isActive()) {
         this.pokemon.changeForm(this.formChange).then(() => {
           ui.showText(

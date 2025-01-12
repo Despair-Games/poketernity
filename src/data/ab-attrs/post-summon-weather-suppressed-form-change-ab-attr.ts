@@ -16,7 +16,7 @@ export class PostSummonWeatherSuppressedFormChangeAbAttr extends PostSummonAbAtt
    * @param _args n/a
    * @returns whether a Pokemon was reverted to its normal form
    */
-  override applyPostSummon(_pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]) {
+  override applyPostSummon(_pokemon: Pokemon, _passive: boolean, simulated: boolean) {
     const pokemonToTransform = getPokemonWithWeatherBasedForms();
 
     if (pokemonToTransform.length < 1) {

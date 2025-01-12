@@ -277,7 +277,7 @@ export class CommandPhase extends FieldPhase {
               targetPokemon.isBoss()
               && targetPokemon.bossSegmentIndex >= 1
               && !targetPokemon.hasAbility(Abilities.WONDER_GUARD, false, true)
-              && cursor < PokeballType.MASTER_BALL
+              && cursor !== PokeballType.MASTER_BALL
             ) {
               failCatchRun("battle:noPokeballStrong");
             } else {

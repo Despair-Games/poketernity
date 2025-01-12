@@ -108,7 +108,7 @@ export const failIfDampCondition: MoveConditionFunc = (user, _target, move) => {
   globalScene
     .getField(true)
     .map((p) =>
-      applyAbAttrs(FieldPreventExplosionLikeAbAttr, p, cancelled, undefined, getPokemonNameWithAffix(user), move.name),
+      applyAbAttrs(FieldPreventExplosionLikeAbAttr, p, undefined, cancelled, getPokemonNameWithAffix(user), move.name),
     );
   return !cancelled.value;
 };

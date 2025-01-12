@@ -33,8 +33,8 @@ export class RecoilAttr extends MoveEffectAttr {
 
     const cancelled = new BooleanHolder(false);
     if (!this.unblockable) {
-      applyAbAttrs(BlockRecoilDamageAttr, user, cancelled);
-      applyAbAttrs(BlockNonDirectDamageAbAttr, user, cancelled);
+      applyAbAttrs(BlockRecoilDamageAttr, user, false, cancelled);
+      applyAbAttrs(BlockNonDirectDamageAbAttr, user, false, cancelled);
     }
 
     if (cancelled.value) {

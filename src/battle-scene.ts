@@ -6,7 +6,7 @@ import type { PokemonSpeciesFilter } from "#app/data/pokemon-species";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { allSpecies, getPokemonSpecies } from "#app/data/pokemon-species";
 import {
-  fixedInt,
+  fixedNumber,
   getIvsFromId,
   randSeedInt,
   getEnumValues,
@@ -108,8 +108,8 @@ import PokemonInfoContainer from "#app/ui/pokemon-info-container";
 import { biomeDepths, getBiomeName } from "#app/data/balance/biomes";
 import { SceneBase } from "#app/scene-base";
 import CandyBar from "#app/ui/candy-bar";
-import type { Variant, VariantSet } from "#app/data/variant";
-import { variantColorCache, variantData } from "#app/data/variant";
+import type { Variant } from "#app/data/variant";
+import { variantData } from "#app/data/variant";
 import type { Localizable } from "#app/interfaces/locales";
 import Overrides from "#app/overrides";
 import { InputsController } from "#app/inputs-controller";
@@ -173,6 +173,7 @@ import { DoubleBattleChanceAbAttr } from "./data/ab-attrs/double-battle-chance-a
 import { PostBattleInitAbAttr } from "./data/ab-attrs/post-battle-init-ab-attr";
 import { bgmLoopPoint } from "./data/bgm-loop-point";
 import { allTrainerConfigs } from "./data/balance/trainer-configs/all-trainer-configs";
+import { Animation } from "./animations";
 
 export const bypassLogin = import.meta.env.VITE_BYPASS_LOGIN === "1";
 
@@ -377,6 +378,9 @@ export default class BattleScene extends SceneBase {
 
   public eventManager: TimedEventManager;
 
+  /** Handler for general {@linkcode Animation | animations} */
+  public animations: Animation;
+
   /**
    * Allows subscribers to listen for events
    *
@@ -397,44 +401,25 @@ export default class BattleScene extends SceneBase {
     this.nextCommandPhaseQueue = [];
     this.eventManager = new TimedEventManager();
     this.updateGameInfo();
+    this.animations = new Animation(this);
     initGlobalScene(this);
   }
 
   loadPokemonAtlas(key: string, atlasPath: string) {
     const variant = atlasPath.includes("variant/") || /_[0-3]$/.test(atlasPath);
+    let basePath = atlasPath;
     if (variant) {
       atlasPath = atlasPath.replace("variant/", "");
+      basePath = atlasPath.replace(/_[0-3]$/, "");
+    }
+    if (basePath.includes("shiny/")) {
+      basePath = basePath.replace("shiny/", "");
     }
     this.load.atlas(
       key,
       `images/pokemon/${variant ? "variant/" : ""}${atlasPath}.png`,
-      `images/pokemon/${variant ? "variant/" : ""}${atlasPath}.json`,
+      `images/pokemon/${basePath}.json`,
     );
-  }
-
-  /**
-   * Load the variant assets for the given sprite and stores them in {@linkcode variantColorCache}
-   */
-  loadPokemonVariantAssets(spriteKey: string, fileRoot: string, variant?: Variant) {
-    let variantConfig = variantData;
-    fileRoot.split("/").map((p) => (variantConfig ? (variantConfig = variantConfig[p]) : null));
-    const variantSet = variantConfig as VariantSet;
-    if (variantSet && variant !== undefined && variantSet[variant] === 1) {
-      const populateVariantColors = (key: string): Promise<void> => {
-        return new Promise((resolve) => {
-          if (variantColorCache.hasOwnProperty(key)) {
-            return resolve();
-          }
-          this.cachedFetch(`./images/pokemon/variant/${fileRoot}.json`)
-            .then((res) => res.json())
-            .then((c) => {
-              variantColorCache[key] = c;
-              resolve();
-            });
-        });
-      };
-      populateVariantColors(spriteKey);
-    }
   }
 
   async preload() {
@@ -746,7 +731,7 @@ export default class BattleScene extends SceneBase {
     }
 
     this.playTimeTimer = this.time.addEvent({
-      delay: fixedInt(1000),
+      delay: fixedNumber(1000),
       repeat: -1,
       callback: () => {
         if (this.gameData) {
@@ -1308,7 +1293,7 @@ export default class BattleScene extends SceneBase {
   getDoubleBattleChance(newWaveIndex: number, playerField: PlayerPokemon[]) {
     const doubleChance = new NumberHolder(newWaveIndex % 10 === 0 ? 32 : 8);
     this.applyModifiers(DoubleBattleChanceBoosterModifier, true, doubleChance);
-    playerField.forEach((p) => applyAbAttrs(DoubleBattleChanceAbAttr, p, null, false, doubleChance));
+    playerField.forEach((p) => applyAbAttrs(DoubleBattleChanceAbAttr, p, false, doubleChance));
     return Math.max(doubleChance.value, 1);
   }
 
@@ -1558,7 +1543,7 @@ export default class BattleScene extends SceneBase {
         scale: scale,
         x: (defaultWidth - scaledWidth) / 2,
         y: defaultHeight - scaledHeight,
-        duration: !instant ? fixedInt(Math.abs(this.field.scale - scale) * 200) : 0,
+        duration: !instant ? fixedNumber(Math.abs(this.field.scale - scale) * 200) : 0,
         ease: "Sine.easeInOut",
         onComplete: () => resolve(),
       });
@@ -2278,7 +2263,7 @@ export default class BattleScene extends SceneBase {
       this.bgmResumeTimer.destroy();
     }
     if (resumeBgm) {
-      this.bgmResumeTimer = this.time.delayedCall(pauseDuration || fixedInt(sound.totalDuration * 1000), () => {
+      this.bgmResumeTimer = this.time.delayedCall(pauseDuration || fixedNumber(sound.totalDuration * 1000), () => {
         this.resumeBgm();
         this.bgmResumeTimer = null;
       });
@@ -2712,7 +2697,7 @@ export default class BattleScene extends SceneBase {
     const cancelled = new BooleanHolder(false);
 
     if (source && source.isPlayer() !== target.isPlayer()) {
-      applyAbAttrs(BlockItemTheftAbAttr, source, cancelled);
+      applyAbAttrs(BlockItemTheftAbAttr, source, false, cancelled);
     }
 
     if (cancelled.value) {
@@ -3232,7 +3217,7 @@ export default class BattleScene extends SceneBase {
    */
   initFinalBossPhaseTwo(pokemon: Pokemon): void {
     if (pokemon instanceof EnemyPokemon && pokemon.isBoss() && !pokemon.formIndex && pokemon.bossSegmentIndex < 1) {
-      this.fadeOutBgm(fixedInt(2000), false);
+      this.fadeOutBgm(fixedNumber(2000), false);
       this.ui.showDialogue(classicFinalBossDialogue.firstStageWin, pokemon.species.name, undefined, () => {
         const finalBossMBH = getModifierType(modifierTypes.MINI_BLACK_HOLE).newModifier(
           pokemon,

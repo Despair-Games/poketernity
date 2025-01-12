@@ -5,7 +5,6 @@ import type { Species } from "#enums/species";
 import { isNullOrUndefined } from "#app/utils";
 import { getSpriteKeysFromSpecies } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import type { Variant } from "#app/data/variant";
-import { doShinySparkleAnim } from "#app/field/anims";
 import PlayAnimationConfig = Phaser.Types.Animations.PlayAnimationConfig;
 
 type KnownFileRoot =
@@ -153,10 +152,6 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
           // Set Pipeline for shiny variant
           sprite.setPipelineData("spriteKey", spriteKey);
           tintSprite.setPipelineData("spriteKey", spriteKey);
-          sprite.setPipelineData("shiny", true);
-          sprite.setPipelineData("variant", variant);
-          tintSprite.setPipelineData("shiny", true);
-          tintSprite.setPipelineData("variant", variant);
           // Create Sprite for shiny Sparkle
           pokemonShinySparkle = globalScene.add.sprite(sprite.x, sprite.y, "shiny");
           pokemonShinySparkle.setOrigin(0.5, 1);
@@ -225,9 +220,6 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
       this.spriteConfigs.forEach((config) => {
         if (config.isPokemon) {
           globalScene.loadPokemonAtlas(config.spriteKey, config.fileRoot);
-          if (config.isShiny) {
-            globalScene.loadPokemonVariantAssets(config.spriteKey, config.fileRoot, config.variant);
-          }
         } else if (config.isItem) {
           globalScene.loadAtlas("items", "");
         } else {
@@ -353,7 +345,7 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
   playShinySparkles() {
     for (const sparkleConfig of this.shinySparkleSprites) {
       globalScene.time.delayedCall(500, () => {
-        doShinySparkleAnim(sparkleConfig.sprite, sparkleConfig.variant);
+        globalScene.animations.doShinySparkleAnim(sparkleConfig.sprite, sparkleConfig.variant);
       });
     }
   }

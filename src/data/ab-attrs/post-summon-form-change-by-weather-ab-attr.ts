@@ -26,10 +26,9 @@ export class PostSummonFormChangeByWeatherAbAttr extends PostSummonAbAttr {
    * if it is the specific Pokemon and ability
    * @param pokemon the {@linkcode Pokemon} with this ability
    * @param passive n/a
-   * @param _args n/a
    * @returns whether the form change was triggered
    */
-  override applyPostSummon(pokemon: Pokemon, passive: boolean, simulated: boolean, _args: any[]): boolean {
+  override applyPostSummon(pokemon: Pokemon, passive: boolean, simulated: boolean): boolean {
     const isCastformWithForecast =
       pokemon.species.speciesId === Species.CASTFORM && this.ability === Abilities.FORECAST;
     const isCherrimWithFlowerGift =

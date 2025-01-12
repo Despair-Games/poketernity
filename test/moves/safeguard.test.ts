@@ -155,4 +155,25 @@ describe("Moves - Safeguard", () => {
 
     expect(enemyPokemon.status).toBeUndefined();
   });
+
+  it("should apply even if the user has a fainted ally", async () => {
+    game.override.battleType("double");
+
+    await game.classicMode.startBattle();
+
+    game.move.use(Moves.SPORE, 0, BattlerIndex.ENEMY);
+    game.move.use(Moves.NUZZLE, 1, BattlerIndex.ENEMY);
+    await game.move.forceEnemyMove(Moves.SAFEGUARD);
+    await game.move.forceEnemyMove(Moves.MEMENTO, BattlerIndex.PLAYER);
+
+    await game.setTurnOrder([BattlerIndex.ENEMY_2, BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
+
+    const enemyPokemon = game.scene.getEnemyField();
+
+    await game.phaseInterceptor.to("MoveEndPhase");
+    expect(enemyPokemon[1].isFainted()).toBe(true);
+
+    await game.toNextTurn();
+    expect(enemyPokemon[0].status).toBeUndefined();
+  });
 });

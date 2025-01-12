@@ -14,7 +14,6 @@ export class PostDefendTypeChangeAbAttr extends PostDefendAbAttr {
     attacker: Pokemon,
     move: Move,
     hitResult: HitResult,
-    _args: any[],
   ): boolean {
     if (hitResult < HitResult.NO_EFFECT) {
       if (simulated) {

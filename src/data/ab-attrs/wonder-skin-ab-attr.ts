@@ -18,9 +18,8 @@ export class WonderSkinAbAttr extends PreDefendAbAttr {
     _attacker: Pokemon,
     move: Move,
     _cancelled: BooleanHolder,
-    args: any[],
+    moveAccuracy: NumberHolder,
   ): boolean {
-    const moveAccuracy = args[0] as NumberHolder;
     if (move.category === MoveCategory.STATUS && moveAccuracy.value >= 50) {
       moveAccuracy.value = 50;
       return true;

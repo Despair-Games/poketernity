@@ -7,7 +7,7 @@ import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { allSpecies, getPokemonSpecies, noStarterFormKeys } from "#app/data/pokemon-species";
 import { speciesStarterCosts } from "#app/data/balance/starters";
-import { randInt, getEnumKeys, isLocal, executeIf, fixedInt, randSeedItem, NumberHolder } from "#app/utils";
+import { randInt, getEnumKeys, isLocal, executeIf, fixedNumber, randSeedItem, NumberHolder } from "#app/utils";
 import Overrides from "#app/overrides";
 import PokemonData from "#app/system/pokemon-data";
 import PersistentModifierData from "#app/system/modifier-data";
@@ -800,16 +800,13 @@ export class GameData {
       tutorials = JSON.parse(localStorage.getItem(key)!); // TODO: is this bang correct?
     }
 
-    Object.keys(Tutorial)
-      .map((t) => t as Tutorial)
-      .forEach((t) => {
-        const key = Tutorial[t];
-        if (key === tutorial) {
-          tutorials[key] = flag;
-        } else {
-          tutorials[key] ??= false;
-        }
-      });
+    Object.keys(Tutorial).forEach((key) => {
+      if (key === Tutorial[tutorial]) {
+        tutorials[key] = flag;
+      } else {
+        tutorials[key] ??= false;
+      }
+    });
 
     localStorage.setItem(key, JSON.stringify(tutorials));
 
@@ -1446,7 +1443,7 @@ export class GameData {
           }
 
           const displayError = (error: string) =>
-            globalScene.ui.showText(error, null, () => globalScene.ui.showText("", 0), fixedInt(1500));
+            globalScene.ui.showText(error, null, () => globalScene.ui.showText("", 0), fixedNumber(1500));
           dataName = dataName!; // tell TS compiler that dataName is defined!
 
           if (!valid) {
@@ -1454,7 +1451,7 @@ export class GameData {
               `Your ${dataName} data could not be loaded. It may be corrupted.`,
               null,
               () => globalScene.ui.showText("", 0),
-              fixedInt(1500),
+              fixedNumber(1500),
             );
           }
 

@@ -14,7 +14,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { EndEvolutionPhase } from "#app/phases/end-evolution-phase";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
 import { Mode } from "#app/ui/ui";
-import { fixedInt } from "#app/utils";
+import { fixedNumber } from "#app/utils";
 import i18next from "i18next";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 import { FormChangeBasePhase } from "./abstract-form-change-base-phase";
@@ -53,7 +53,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
   }
 
   public override doFormChange(): void {
-    const { time, tweens, ui } = globalScene;
+    const { time, tweens, ui, animations } = globalScene;
 
     ui.showText(
       i18next.t("menu:evolving", { pokemonName: this.preEvolvedPokemonName }),
@@ -72,8 +72,6 @@ export class EvolutionPhase extends FormChangeBasePhase {
 
             sprite.setPipelineData("ignoreTimeTint", true);
             sprite.setPipelineData("spriteKey", evolvedPokemon.getSpriteKey());
-            sprite.setPipelineData("shiny", evolvedPokemon.shiny);
-            sprite.setPipelineData("variant", evolvedPokemon.variant);
             ["spriteColors", "fusionSpriteColors"].map((k) => {
               if (evolvedPokemon.summonData?.speciesForm) {
                 k += "Base";
@@ -101,7 +99,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
                   this.bgVideo.play();
                 });
                 globalScene.playSound("se/charge");
-                this.doSpiralUpward();
+                animations.doSpiralUpward(this.baseBgImg, this.container);
                 tweens.addCounter({
                   from: 0,
                   to: 1,
@@ -113,18 +111,20 @@ export class EvolutionPhase extends FormChangeBasePhase {
                     this.pokemonSprite.setVisible(false);
                     time.delayedCall(1100, () => {
                       globalScene.playSound("se/beam");
-                      this.doArcDownward();
+                      animations.doArcDownward(this.baseBgImg, this.container);
                       time.delayedCall(1500, () => {
                         this.pokemonNewFormTintSprite.setScale(0.25);
                         this.pokemonNewFormTintSprite.setVisible(true);
                         this.handler.canCancel = true;
-                        this.doCycle(1).then((success) => {
-                          if (success) {
-                            this.handleSuccessEvolution(evolvedPokemon);
-                          } else {
-                            this.handleFailedEvolution(evolvedPokemon);
-                          }
-                        });
+                        animations
+                          .doCycle(1, 15, this.pokemonTintSprite, this.pokemonNewFormTintSprite)
+                          .then((success) => {
+                            if (success) {
+                              this.handleSuccessEvolution(evolvedPokemon);
+                            } else {
+                              this.handleFailedEvolution(evolvedPokemon);
+                            }
+                          });
                       });
                     });
                   },
@@ -204,11 +204,11 @@ export class EvolutionPhase extends FormChangeBasePhase {
    * @param evolvedPokemon - The evolved Pokemon
    */
   private handleSuccessEvolution(evolvedPokemon: Pokemon): void {
-    const { time, tweens, ui } = globalScene;
+    const { time, tweens, ui, animations } = globalScene;
 
     globalScene.playSound("se/sparkle");
     this.pokemonNewFormSprite.setVisible(true);
-    this.doCircleInward();
+    animations.doCircleInward(this.baseBgImg, this.container);
 
     const onEvolutionComplete = (): void => {
       SoundFade.fadeOut(globalScene, this.evolutionBgm, 100);
@@ -227,9 +227,9 @@ export class EvolutionPhase extends FormChangeBasePhase {
             () => this.end(),
             null,
             true,
-            fixedInt(4000),
+            fixedNumber(4000),
           );
-          time.delayedCall(fixedInt(4250), () => globalScene.playBgm());
+          time.delayedCall(fixedNumber(4250), () => globalScene.playBgm());
         });
       });
     };
@@ -252,7 +252,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
         globalScene.unshiftPhase(new EndEvolutionPhase());
 
         globalScene.playSound("se/shine");
-        this.doSpray();
+        animations.doSpray(this.baseBgImg, this.container);
         tweens.add({
           targets: this.overlay,
           alpha: 1,

@@ -76,7 +76,7 @@ export class StatStageChangePhase extends PokemonPhase {
     const stages = new NumberHolder(this.stages);
 
     if (!this.ignoreAbilities) {
-      applyAbAttrs(StatStageChangeMultiplierAbAttr, pokemon, null, false, stages);
+      applyAbAttrs(StatStageChangeMultiplierAbAttr, pokemon, false, stages);
     }
 
     let simulate = false;
@@ -148,7 +148,7 @@ export class StatStageChangePhase extends PokemonPhase {
 
       if (stages.value > 0 && this.canBeCopied) {
         for (const opponent of pokemon.getOpponents()) {
-          applyAbAttrs(StatStageChangeCopyAbAttr, opponent, null, false, this.stats, stages.value);
+          applyAbAttrs(StatStageChangeCopyAbAttr, opponent, false, this.stats, stages.value);
         }
       }
 
@@ -174,7 +174,7 @@ export class StatStageChangePhase extends PokemonPhase {
 
       pokemon.updateInfo();
 
-      handleTutorial(Tutorial.Stat_Change).then(() => super.end());
+      handleTutorial(Tutorial.STAT_CHANGE).then(() => super.end());
     };
 
     if (relLevels.filter((l) => l).length && moveAnimations) {
