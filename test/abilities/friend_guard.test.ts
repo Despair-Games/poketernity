@@ -4,10 +4,10 @@ import { Abilities } from "#enums/abilities";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { BattlerIndex } from "#app/battle";
+import { BattlerIndex } from "#enums/battler-index";
 import { allAbilities } from "#app/data/ability";
 import { allMoves } from "#app/data/all-moves";
-import { MoveCategory } from "#app/enums/move-category";
+import { MoveCategory } from "#enums/move-category";
 
 describe("Moves - Friend Guard", () => {
   let phaserGame: Phaser.Game;

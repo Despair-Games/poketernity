@@ -1,6 +1,6 @@
-import { BattlerIndex } from "#app/battle";
+import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/all-moves";
-import { ArenaTagSide } from "#app/data/arena-tag";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 import { toDmgValue } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";

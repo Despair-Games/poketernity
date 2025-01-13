@@ -3,7 +3,7 @@ import { globalScene } from "#app/global-scene";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import type { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveEffectTrigger } from "#enums/move-effect-trigger";
-import { ArenaTagSide } from "../arena-tag";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 import type { Move } from "../move";
 import { MoveEffectAttr } from "./move-effect-attr";
 

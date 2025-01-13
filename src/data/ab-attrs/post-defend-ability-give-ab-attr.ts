@@ -1,7 +1,7 @@
 import type { Move } from "#app/data/move";
-import { MoveFlags } from "../../enums/move-flags";
+import { MoveFlags } from "#enums/move-flags";
+import type { HitResult } from "#enums/hit-result";
 import type { Pokemon } from "#app/field/pokemon";
-import type { HitResult } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { Abilities } from "#enums/abilities";
 import i18next from "i18next";

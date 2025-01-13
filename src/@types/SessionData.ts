@@ -1,9 +1,9 @@
 import type { PokeballCounts } from "#app/battle-scene";
-import type { GameModes } from "#app/game-mode";
+import type { GameModes } from "#enums/game-modes";
 import type PokemonData from "#app/system/pokemon-data";
 import type PersistentModifierData from "#app/system/modifier-data";
 import type ArenaData from "#app/system/arena-data";
-import type { BattleType } from "#app/battle";
+import type { BattleType } from "#enums/battle-type";
 import type TrainerData from "#app/system/trainer-data";
 import type ChallengeData from "#app/system/challenge-data";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";

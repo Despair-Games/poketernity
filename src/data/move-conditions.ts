@@ -1,4 +1,5 @@
-import { MoveResult, type Pokemon } from "#app/field/pokemon";
+import { type Pokemon } from "#app/field/pokemon";
+import { MoveResult } from "#enums/move-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { MovePhase } from "#app/phases/move-phase";

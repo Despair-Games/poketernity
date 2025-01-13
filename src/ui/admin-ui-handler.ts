@@ -1,4 +1,4 @@
-import { Button } from "#app/enums/buttons";
+import { Button } from "#enums/buttons";
 import { api } from "#app/plugins/api/api";
 import { formatText } from "#app/utils";
 import type { InputFieldConfig } from "./form-modal-ui-handler";

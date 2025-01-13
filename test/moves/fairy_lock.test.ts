@@ -1,4 +1,4 @@
-import { ArenaTagSide } from "#app/data/arena-tag";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
@@ -6,7 +6,7 @@ import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { BattlerIndex } from "#app/battle";
+import { BattlerIndex } from "#enums/battler-index";
 
 describe("Moves - Fairy Lock", () => {
   let phaserGame: Phaser.Game;
