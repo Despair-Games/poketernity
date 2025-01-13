@@ -19,7 +19,6 @@ import { LevelUpPhase } from "#app/phases/level-up-phase";
 import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";
 import { achvs } from "#app/system/achv";
 import type { VoucherType } from "#enums/voucher-type";
-import { Command } from "#app/ui/command-ui-handler";
 import { addTextObject, TextStyle } from "#app/ui/text";
 import { BooleanHolder, hslToHex, isNullOrUndefined, NumberHolder, toDmgValue } from "#app/utils";
 import { BerryType } from "#enums/berry-type";
@@ -55,6 +54,7 @@ import { FRIENDSHIP_GAIN_FROM_RARE_CANDY } from "#app/data/balance/starters";
 import { applyAbAttrs } from "#app/data/ability";
 import { CommanderAbAttr } from "#app/data/ab-attrs/commander-ab-attr";
 import { globalScene } from "#app/global-scene";
+import { BattlerTagType } from "#enums/battler-tag-type";
 
 export type ModifierPredicate = (modifier: Modifier) => boolean;
 
@@ -1694,17 +1694,13 @@ export class BypassSpeedChanceModifier extends PokemonHeldItemModifier {
   /**
    * Applies {@linkcode BypassSpeedChanceModifier}
    * @param pokemon the {@linkcode Pokemon} that holds the item
-   * @param doBypassSpeed {@linkcode BooleanHolder} that is `true` if speed should be bypassed
    * @returns `true` if {@linkcode BypassSpeedChanceModifier} has been applied
    */
-  override apply(pokemon: Pokemon, doBypassSpeed: BooleanHolder): boolean {
-    if (!doBypassSpeed.value && pokemon.randSeedInt(10) < this.getStackCount()) {
-      doBypassSpeed.value = true;
-      const turnCommand = globalScene.currentBattle.turnManager.findCommand((tc) => tc.pokemon === pokemon);
-      const isCommandFight = turnCommand?.command === Command.FIGHT;
+  override apply(pokemon: Pokemon): boolean {
+    if (pokemon.randSeedInt(10) < this.getStackCount() && pokemon.addTag(BattlerTagType.BYPASS_SPEED)) {
       const hasQuickClaw = this.type instanceof PokemonHeldItemModifierType && this.type.id === "QUICK_CLAW";
 
-      if (isCommandFight && hasQuickClaw) {
+      if (hasQuickClaw) {
         globalScene.queueMessage(
           i18next.t("modifier:bypassSpeedChanceApply", {
             pokemonName: getPokemonNameWithAffix(pokemon),

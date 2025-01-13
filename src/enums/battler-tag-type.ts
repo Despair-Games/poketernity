@@ -95,4 +95,5 @@ export enum BattlerTagType {
   ENDURE_TOKEN,
   POWDER,
   SKY_DROP,
+  BYPASS_SPEED,
 }

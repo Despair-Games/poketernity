@@ -40,6 +40,7 @@ import { ReverseDrainAbAttr } from "./ab-attrs/reverse-drain-ab-attr";
 import { ProtectStatAbAttr } from "./ab-attrs/protect-stat-ab-attr";
 import Overrides from "#app/overrides";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
+import { PreventBypassSpeedChanceAbAttr } from "./ab-attrs/prevent-bypass-speed-chance-ab-attr";
 
 export class BattlerTag {
   public tagType: BattlerTagType;
@@ -3280,6 +3281,23 @@ export class PsychoShiftTag extends BattlerTag {
       pokemon.updateInfo();
     }
     return false;
+  }
+}
+
+/**
+ * Tag to allow the affected Pokemon's move to go first in its priority bracket.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Quick_Draw_(Ability) | Quick Draw}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Quick_Claw Quick Claw}.
+ */
+export class BypassSpeedTag extends BattlerTag {
+  constructor() {
+    super(BattlerTagType.BYPASS_SPEED, BattlerTagLapseType.TURN_END, 1);
+  }
+
+  override canAdd(pokemon: Pokemon): boolean {
+    const cancelled = new BooleanHolder(false);
+    applyAbAttrs(PreventBypassSpeedChanceAbAttr, pokemon, false);
+    return !cancelled.value;
   }
 }
 

@@ -26,7 +26,7 @@ describe("Abilities - Quick Draw", () => {
     game = new GameManager(phaserGame);
     game.override.battleType("single");
 
-    game.override.starterSpecies(Species.MAGIKARP);
+    game.override.starterSpecies(Species.FEEBAS);
     game.override.ability(Abilities.QUICK_DRAW);
     game.override.moveset([Moves.TACKLE, Moves.TAIL_WHIP]);
 

@@ -1,16 +1,12 @@
-import { allMoves } from "#app/data/all-moves";
-import { MoveCategory } from "#enums/move-category";
 import type { Pokemon } from "#app/field/pokemon";
-import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { Command } from "#app/ui/command-ui-handler";
-import type { BooleanHolder } from "#app/utils";
 import i18next from "i18next";
 import { AbAttr } from "./ab-attr";
+import { BattlerTagType } from "#enums/battler-tag-type";
 
 /**
- * If a Pokémon with this Ability selects a damaging move, it has a 30% chance of going first in its priority bracket. If the Ability activates, this is announced at the start of the turn (after move selection).
- *
+ * If a Pokémon with this Ability selects a damaging move, it has a 30% chance of going first in its priority bracket.
+ * If the Ability activates, this is announced at the start of the turn (after move selection).
  * @extends AbAttr
  */
 export class BypassSpeedChanceAbAttr extends AbAttr {
@@ -24,28 +20,12 @@ export class BypassSpeedChanceAbAttr extends AbAttr {
     this.chance = chance;
   }
 
-  /**
-   * bypass move order in their priority bracket when pokemon choose damaging move
-   * @param pokemon {@linkcode Pokemon} applying this ability
-   * @param _passive N/A
-   * @param args [0] {@linkcode BooleanHolder} set to true when the ability activated
-   * @returns whether the ability was activated
-   */
-  override apply(pokemon: Pokemon, _passive: boolean, simulated: boolean, bypassSpeed: BooleanHolder): boolean {
-    if (simulated) {
-      return false;
-    }
-
-    if (!bypassSpeed.value && pokemon.randSeedInt(100) < this.chance) {
-      const turnCommand = globalScene.currentBattle.turnManager.findCommand((tc) => tc.pokemon === pokemon);
-      const isCommandFight = turnCommand?.command === Command.FIGHT;
-      const move = turnCommand?.move?.move ? allMoves[turnCommand.move.move] : null;
-      const isDamageMove = move?.category === MoveCategory.PHYSICAL || move?.category === MoveCategory.SPECIAL;
-
-      if (isCommandFight && isDamageMove) {
-        bypassSpeed.value = true;
-        return true;
+  override apply(pokemon: Pokemon, _passive: boolean, simulated: boolean): boolean {
+    if (pokemon.randSeedInt(100) < this.chance) {
+      if (!simulated) {
+        return pokemon.addTag(BattlerTagType.BYPASS_SPEED);
       }
+      return true;
     }
 
     return false;

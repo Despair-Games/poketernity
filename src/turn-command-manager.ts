@@ -1,11 +1,17 @@
 import { Abilities } from "#enums/abilities";
 import type { BattlerIndex } from "#enums/battler-index";
+import { BattlerTagType } from "#enums/battler-tag-type";
+import { MoveCategory } from "#enums/move-category";
 import { Stat } from "#enums/stat";
 import { SwitchType } from "#enums/switch-type";
+import { BypassSpeedChanceAbAttr } from "./data/ab-attrs/bypass-speed-chance-ab-attr";
+import { applyAbAttrs } from "./data/ability";
 import { allMoves } from "./data/all-moves";
 import { TrickRoomTag } from "./data/arena-tag";
+import { MoveHeaderAttr } from "./data/move-attrs/move-header-attr";
 import { PokemonMove, type Pokemon, type QueuedMove } from "./field/pokemon";
 import { globalScene } from "./global-scene";
+import { BypassSpeedChanceModifier } from "./modifier/modifier";
 import { AttemptCapturePhase } from "./phases/attempt-capture-phase";
 import { AttemptRunPhase } from "./phases/attempt-run-phase";
 import { MoveHeaderPhase } from "./phases/move-header-phase";
@@ -158,6 +164,9 @@ export class TurnCommandManager {
 
   /** Schedules all turn commands to be run at the start of the turn. */
   public startTurn(): void {
+    // Apply speed-bypassing effects for all remaining Pokemon
+    // TODO: Find a way to apply this after non-FIGHT commands are processed
+    this.applyBypassSpeedEffects();
     // Shuffle and sort turn commands by speed, command type, priority, etc.
     this.setTurnOrder(false);
     // Add all commands that aren't using moves to the phase queue
@@ -223,13 +232,22 @@ export class TurnCommandManager {
           return -1;
         }
       } else if (a.command === Command.FIGHT) {
-        const [aPriority, bPriority] = [a, b].map((tc) => {
+        const priority = [a, b].map((tc) => {
           const move = allMoves[tc.move!.move];
           return move.getPriority(tc.pokemon, quiet);
         });
 
-        if (aPriority !== bPriority) {
-          return aPriority < bPriority ? 1 : -1;
+        const priorityBrackets = priority.map((p) => Math.ceil(p));
+        const bypassSpeed = [a, b].map((tc) => !!tc.pokemon.getTag(BattlerTagType.BYPASS_SPEED));
+
+        if (priority[0] !== priority[1]) {
+          if (priorityBrackets[0] !== priorityBrackets[1] || bypassSpeed[0] === bypassSpeed[1]) {
+            return priority[1] - priority[0];
+          }
+        }
+
+        if (bypassSpeed[0] !== bypassSpeed[1]) {
+          return bypassSpeed[0] ? -1 : 1;
         }
       }
       return 0;
@@ -311,6 +329,27 @@ export class TurnCommandManager {
   }
 
   /**
+   * Applies the effects of {@linkcode BypassSpeedChanceAbAttr | Quick Draw}
+   * and {@linkcode BypassSpeedChanceModifier | Quick Claw} to all commands
+   * in the turn command queue. Quick Draw and Quick Claw each
+   * have an independent chance of allowing their respective Pokemon
+   * to bypass Speed, but if Quick Draw successfully applies, Quick
+   * Claw cannot also apply.
+   */
+  private applyBypassSpeedEffects(): void {
+    this.turnCommands.forEach((tc) => {
+      const { pokemon, move } = tc;
+      // Only apply to commands to use damaging moves
+      if (!move || allMoves[move.move].category === MoveCategory.STATUS) {
+        return;
+      }
+
+      applyAbAttrs(BypassSpeedChanceAbAttr, pokemon, false);
+      globalScene.applyModifiers(BypassSpeedChanceModifier, pokemon.isPlayer(), pokemon);
+    });
+  }
+
+  /**
    * Runs the move header effects of all move commands in the
    * turn command queue.
    * @see {@linkcode MoveHeaderPhase}
@@ -328,7 +367,9 @@ export class TurnCommandManager {
       const pokemonMove =
         pokemon.getMoveset().find((mv) => mv.moveId === queuedMove.move) ?? new PokemonMove(queuedMove.move);
 
-      globalScene.unshiftPhase(new MoveHeaderPhase(pokemon, pokemonMove));
+      if (pokemonMove.getMove().hasAttr(MoveHeaderAttr)) {
+        globalScene.unshiftPhase(new MoveHeaderPhase(pokemon, pokemonMove));
+      }
     });
   }
 }
