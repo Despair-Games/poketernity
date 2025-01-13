@@ -2897,7 +2897,7 @@ export function initMoves() {
     new AttackMove(Moves.FISHIOUS_REND, Type.WATER, MoveCategory.PHYSICAL, 85, 100, 10, -1, 0, 8)
       .attr(FirstAttackDoublePowerAttr)
       .bitingMove(),
-    new StatusMove(Moves.COURT_CHANGE, Type.NORMAL, 100, 10, -1, 0, 8)
+    new StatusMove(Moves.COURT_CHANGE, Type.NORMAL, -1, 10, -1, 0, 8)
       .attr(SwapArenaTagsAttr, courtChangeArenaTags)
       .condition((_user, _target, _move) =>
         globalScene.arena.tags.some((arenaTag) => courtChangeArenaTags.includes(arenaTag.tagType)),
