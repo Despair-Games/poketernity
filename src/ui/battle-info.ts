@@ -13,7 +13,7 @@ import { Stat } from "#enums/stat";
 import BattleFlyout from "./battle-flyout";
 import { WindowVariant, addWindow } from "./ui-theme";
 import i18next from "i18next";
-import { ExpGainsSpeed } from "#app/enums/exp-gains-speed";
+import { ExpGainsSpeed } from "#enums/exp-gains-speed";
 
 export default class BattleInfo extends Phaser.GameObjects.Container {
   public static readonly EXP_GAINS_DURATION_BASE = 1650;

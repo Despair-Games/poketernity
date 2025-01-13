@@ -1,4 +1,4 @@
-import type { BattlerIndex } from "#app/battle";
+import type { BattlerIndex } from "#enums/battler-index";
 import { AddSecondStrikeAbAttr } from "#app/data/ab-attrs/add-second-strike-ab-attr";
 import { IgnoreMoveEffectsAbAttr } from "#app/data/ab-attrs/ignore-move-effect-ab-attr";
 import { PostAttackAbAttr } from "#app/data/ab-attrs/post-attack-ab-attr";
@@ -6,7 +6,8 @@ import { PostDamageAbAttr } from "#app/data/ab-attrs/post-damage-ab-attr";
 import { PostDefendAbAttr } from "#app/data/ab-attrs/post-defend-ab-attr";
 import { applyAbAttrs } from "#app/data/ability";
 import { MoveAnim } from "#app/data/battle-anims";
-import { BattlerTagLapseType, SkyDropTag, SubstituteTag, TypeBoostTag } from "#app/data/battler-tags";
+import { SkyDropTag, SubstituteTag, TypeBoostTag } from "#app/data/battler-tags";
+import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { applyFilteredMoveAttrs, applyMoveAttrs, AttackMove } from "#app/data/move";
 import { DelayedAttackAttr } from "#app/data/move-attrs/delayed-attack-attr";
 import { FlinchAttr } from "#app/data/move-attrs/flinch-attr";
@@ -19,14 +20,13 @@ import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effec
 import { SpeciesFormChangePostMoveTrigger } from "#app/data/pokemon-forms";
 import type { TypeDamageMultiplier } from "#app/data/type";
 import type { DamageResult, Pokemon, TurnMove } from "#app/field/pokemon";
-import { HitResult, MoveResult } from "#app/field/pokemon";
+import { MoveResult } from "#enums/move-result";
+import { HitResult } from "#enums/hit-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import {
   ContactHeldItemTransferChanceModifier,
   DamageMoneyRewardModifier,
-  EnemyAttackStatusEffectChanceModifier,
-  EnemyEndureChanceModifier,
   FlinchChanceModifier,
   HitHealModifier,
   PokemonMultiHitModifier,
@@ -389,10 +389,6 @@ export class MoveEffectPhase extends HitCheckPhase {
       if (isBlockedBySubstitute) {
         substitute.hp -= dmg;
       }
-      if (!target.isPlayer() && dmg >= target.hp) {
-        globalScene.applyModifiers(EnemyEndureChanceModifier, false, target);
-      }
-
       /**
        * We explicitly require to ignore the faint phase here, as we want to show the messages
        * about the critical hit and the super effective/not very effective messages before the faint phase.
@@ -511,11 +507,6 @@ export class MoveEffectPhase extends HitCheckPhase {
     this.applyHeldItemFlinchCheck(user, target, dealsDamage);
     this.applyOnGetHitAbEffects(user, target);
     applyAbAttrs(PostAttackAbAttr, user, false, target, move);
-
-    // Apply status tokens if the user is an enemy Pokemon
-    if (!user.isPlayer() && move instanceof AttackMove) {
-      globalScene.applyShuffledModifiers(EnemyAttackStatusEffectChanceModifier, false, target);
-    }
 
     // Apply Grip Claw's chance to steal an item from the target
     if (move instanceof AttackMove) {

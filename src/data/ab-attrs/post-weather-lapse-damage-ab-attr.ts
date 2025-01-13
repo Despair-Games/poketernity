@@ -1,6 +1,6 @@
 import type { Weather } from "#app/data/weather";
 import type { Pokemon } from "#app/field/pokemon";
-import { HitResult } from "#app/field/pokemon";
+import { HitResult } from "#enums/hit-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { toDmgValue } from "#app/utils";

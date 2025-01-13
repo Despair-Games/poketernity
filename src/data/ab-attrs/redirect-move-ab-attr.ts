@@ -1,5 +1,5 @@
 import { allMoves } from "#app/data/all-moves";
-import { MoveTarget } from "../../enums/move-target";
+import { MoveTarget } from "#enums/move-target";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
 import type { Moves } from "#enums/moves";

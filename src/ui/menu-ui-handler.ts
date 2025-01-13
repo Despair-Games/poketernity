@@ -1,4 +1,4 @@
-import { bypassLogin } from "#app/battle-scene";
+import { bypassLogin } from "#app/constants";
 import { SESSION_ID_COOKIE } from "#app/constants";
 import { globalScene } from "#app/global-scene";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
@@ -9,7 +9,8 @@ import { Button } from "#enums/buttons";
 import { GameDataType } from "#enums/game-data-type";
 import i18next from "i18next";
 import { loggedInUser, updateUserInfo } from "../account";
-import { Tutorial, handleTutorial } from "../tutorial";
+import { handleTutorial } from "../tutorial";
+import { Tutorial } from "#enums/tutorial";
 import type { OptionSelectConfig, OptionSelectItem } from "./abstact-option-select-ui-handler";
 import { AdminMode, getAdminModeName } from "./admin-ui-handler";
 import type AwaitableUiHandler from "./awaitable-ui-handler";
@@ -535,7 +536,7 @@ export default class MenuUiHandler extends MessageUiHandler {
     // Make sure the tutorial overlay sits above everything, but below the message box
     this.menuContainer.bringToTop(this.tutorialOverlay);
     this.menuContainer.bringToTop(this.menuMessageBoxContainer);
-    handleTutorial(Tutorial.Menu);
+    handleTutorial(Tutorial.MENU);
 
     this.bgmBar.toggleBgmBar(true);
 

@@ -1,4 +1,4 @@
-import { BattlerIndex } from "#app/battle";
+import { BattlerIndex } from "#enums/battler-index";
 import { Stat } from "#enums/stat";
 import { allMoves } from "#app/data/all-moves";
 import { Type } from "#enums/type";

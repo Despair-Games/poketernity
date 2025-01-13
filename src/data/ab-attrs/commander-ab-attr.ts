@@ -1,4 +1,4 @@
-import { BattlerTagLapseType } from "#app/data/battler-tags";
+import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { MovePhase } from "#app/phases/move-phase";

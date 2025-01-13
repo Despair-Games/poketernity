@@ -1,4 +1,4 @@
-import type { BattlerIndex } from "#app/battle";
+import type { BattlerIndex } from "#enums/battler-index";
 import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon";
 import { AbAttr } from "./ab-attr";

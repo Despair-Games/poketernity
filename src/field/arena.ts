@@ -1,6 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import type { BiomeTierTrainerPools, PokemonPools } from "#app/data/balance/biomes";
-import { biomePokemonPools, BiomePoolTier, biomeTrainerPools } from "#app/data/balance/biomes";
+import { biomePokemonPools, biomeTrainerPools } from "#app/data/balance/biomes";
+import { BiomePoolTier } from "#enums/biome-pool-tier";
 import { type Constructor, randSeedInt } from "#app/utils";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
@@ -9,8 +10,9 @@ import { CommonAnim } from "#app/data/battle-anims";
 import type { Type } from "#enums/type";
 import type { Move } from "#app/data/move";
 import type { ArenaTag } from "#app/data/arena-tag";
-import { ArenaTagSide, ArenaTrapTag, getArenaTag } from "#app/data/arena-tag";
-import type { BattlerIndex } from "#app/battle";
+import { ArenaTrapTag, getArenaTag } from "#app/data/arena-tag";
+import { ArenaTagSide } from "#enums/arena-tag-side";
+import type { BattlerIndex } from "#enums/battler-index";
 import { getTerrainClearMessage, getTerrainStartMessage, Terrain } from "#app/data/terrain";
 import { TerrainType } from "#enums/terrain-type";
 import { applyAbAttrs } from "#app/data/ability";
@@ -592,7 +594,7 @@ export class Arena {
     ...args: unknown[]
   ): void {
     let tags =
-      typeof tagType === "string"
+      typeof tagType === "number"
         ? this.tags.filter((t) => t.tagType === tagType)
         : this.tags.filter((t) => t instanceof tagType);
     if (side !== ArenaTagSide.BOTH) {
@@ -682,7 +684,7 @@ export class Arena {
    * @returns either the {@linkcode ArenaTag}, or `undefined` if it isn't there
    */
   getTagOnSide(tagType: ArenaTagType | Constructor<ArenaTag>, side: ArenaTagSide): ArenaTag | undefined {
-    return typeof tagType === "string"
+    return typeof tagType === "number"
       ? this.tags.find(
           (t) =>
             t.tagType === tagType && (side === ArenaTagSide.BOTH || t.side === ArenaTagSide.BOTH || t.side === side),
