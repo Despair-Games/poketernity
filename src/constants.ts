@@ -28,9 +28,6 @@ export const bypassLogin = import.meta.env.VITE_BYPASS_LOGIN === "1";
 /** Key for the local storage item storing the settings. */
 export const SETTINGS_LS_KEY = `${LS_PREFIX}/settings`;
 
-/** Key prefix for the local storage item storing the users data. */
-export const DATA_LS_KEY_PREFIX = `${LS_PREFIX}/data`;
-
 /** Key for the local storage item storing the input mapping configs. */
 export const MAPPING_CONFIG_LS_KEY = `${LS_PREFIX}/mapping/configs`;
 
