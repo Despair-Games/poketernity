@@ -1,6 +1,7 @@
 import path from "path";
 import fs from "fs";
 import { type Logger, type Plugin as VitePlugin } from "vite";
+import chalk from "chalk";
 
 //#region Constants
 
@@ -16,6 +17,7 @@ export function flxMinifyPublicJsonFiles(): VitePlugin {
   let logger: Logger;
   let count = 0;
   const errors: Error[] = [];
+  const { cyan, gray, red, yellow, green } = chalk;
 
   return {
     name: NAME,
@@ -26,7 +28,7 @@ export function flxMinifyPublicJsonFiles(): VitePlugin {
       logger = resolvedConfig.logger;
     },
     buildStart() {
-      logger.info(`  \x1b[36m→ Plugin: ${NAME} v${VERSION}\x1b[0m`);
+      logger.info(cyan(`\t→ Plugin: ${NAME} v${VERSION}`));
     },
     async generateBundle(options, _bundle) {
       function minifyJsonFiles(dir: string, outputDir: string) {
@@ -68,16 +70,16 @@ export function flxMinifyPublicJsonFiles(): VitePlugin {
       minifyJsonFiles(publicDir, outputDir);
     },
     closeBundle() {
-      const logSuffix = ` \x1b[90m[${NAME}v${VERSION}]\x1b[0m`;
-
-      if (errors.length > 0) {
-        errors.map((error) => logger.error(`\x1b[31m${error.message}\x1b[0m${logSuffix}`, { error }));
-      }
+      const logSuffix = gray(` [${NAME}]`);
 
       if (count > 0) {
-        const failedMsg = errors.length > 0 ? ` \x1b[33m(${errors.length} failed)\x1b[0m` : "";
+        const failedMsg = errors.length > 0 ? yellow(` (${errors.length} failed)`) : "";
 
-        logger.info(`\x1b[32mMinified ${count} JSON files successfully${failedMsg}${logSuffix}`);
+        logger.info(`${green(`Minified ${count} JSON files successfully`)}${failedMsg}${logSuffix}`);
+      }
+
+      if (errors.length > 0) {
+        errors.map((error) => logger.error(`${red(error.message)}${logSuffix}`, { error }));
       }
     },
   };
