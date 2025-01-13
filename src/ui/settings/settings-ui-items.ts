@@ -153,6 +153,11 @@ export const generalSettingsUiItems: SettingsUiItem<GeneralSettingsKey>[] = [
     options: useOnOffOptions(),
   },
   {
+    key: "enableVibration",
+    label: t("settings:vibrations"),
+    options: useAutoDisabledOptions(),
+  },
+  {
     key: "enableTouchControls",
     label: t("settings:touchControls"),
     options: useAutoDisabledOptions(
@@ -160,11 +165,6 @@ export const generalSettingsUiItems: SettingsUiItem<GeneralSettingsKey>[] = [
       { requiresConfirmation: true, confirmationMessage: t("settings:confirmDisableTouch") },
     ),
     touchscreenOnly: true,
-  },
-  {
-    key: "enableVibration",
-    label: t("settings:vibrations"),
-    options: useAutoDisabledOptions(),
   },
   {
     key: "moveTouchControls",
