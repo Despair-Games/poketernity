@@ -2,7 +2,7 @@
  * Used for classicFixedBattles and victory-phase
  *
  * Youngster/Lass on 5
- * Rival on 8, 55, 95, 145, 195
+ * Rival on 8, 25, 55, 95, 145, 195
  * Evil team grunts on 35, 62, 64, and 112
  * Evil team admin on 66 and 114
  * Evil leader on 115, 165
