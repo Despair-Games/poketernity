@@ -27,7 +27,7 @@ export const defaultGeneralSettings: GeneralSettings = {
   expGainsSpeed: ExpGainsSpeed.DEFAULT,
   partyExpNotificationMode: ExpNotification.DEFAULT,
   skipSeenDialogues: false,
-  eggSkipPreference: EggSkipPreference.NEVER,
+  eggSkipPreference: EggSkipPreference.ASK,
   battleStyle: BattleStyle.SWITCH,
   enableRetries: false,
   hideIvScanner: false,
