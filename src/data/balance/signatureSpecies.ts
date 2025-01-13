@@ -67,14 +67,14 @@ export const signatureSpecies: SignatureSpecies = {
   MARLON: [Species.WAILMER, Species.FRILLISH, Species.TIRTOUGA],
 
   // Kalos gym leaders
-  VIOLA: [Species.SURSKIT, Species.SCATTERBUG],
-  GRANT: [Species.AMAURA, Species.TYRUNT],
-  KORRINA: [Species.HAWLUCHA, Species.LUCARIO, Species.MIENFOO],
-  RAMOS: [Species.SKIDDO, Species.HOPPIP, Species.BELLSPROUT],
-  CLEMONT: [Species.HELIOPTILE, Species.MAGNEMITE, Species.EMOLGA],
-  VALERIE: [Species.SYLVEON, Species.MAWILE, Species.MR_MIME],
+  VIOLA: [Species.SCATTERBUG, Species.SURSKIT, Species.DEWPIDER],
+  GRANT: [Species.AMAURA, Species.TYRUNT, Species.BINACLE, Species.CARBINK],
+  KORRINA: [Species.HAWLUCHA, Species.RIOLU, Species.PANCHAM, Species.MIENFOO],
+  RAMOS: [Species.SKIDDO, Species.HOPPIP, Species.BELLSPROUT, [Species.PHANTUMP, Species.PUMPKABOO]],
+  CLEMONT: [Species.HELIOPTILE, Species.MAGNEMITE, Species.EMOLGA, Species.DEDENNE],
+  VALERIE: [Species.SYLVEON, Species.MAWILE, Species.MIME_JR, [Species.SPRITZEE, Species.SWIRLIX]],
   OLYMPIA: [Species.ESPURR, Species.SIGILYPH, Species.SLOWKING],
-  WULFRIC: [Species.BERGMITE, Species.SNOVER, Species.CRYOGONAL],
+  WULFRIC: [Species.BERGMITE, Species.CRYOGONAL, Species.SNOVER],
 
   // Galar gym leaders
   MILO: [Species.GOSSIFLEUR, Species.APPLIN, Species.BOUNSWEET],
