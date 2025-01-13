@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { PokemonTurnData, TurnMove, PokemonMove } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { MoveResult } from "#enums/move-result";
@@ -10,14 +10,32 @@ import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import * as messages from "#app/messages";
 import { allMoves } from "#app/data/all-moves";
 import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
+import { GameManager } from "#test/testUtils/gameManager";
 
 describe("BattlerTag - SubstituteTag", () => {
+  let phaserGame: Phaser.Game;
+  let game: GameManager;
+
+  beforeAll(() => {
+    phaserGame = new Phaser.Game({
+      type: Phaser.HEADLESS,
+    });
+  });
+
+  afterEach(() => {
+    game.phaseInterceptor.restoreOg();
+  });
+
+  beforeEach(() => {
+    game = new GameManager(phaserGame);
+  });
+
   let mockPokemon: Pokemon;
 
   describe("onAdd behavior", () => {
     beforeEach(() => {
       mockPokemon = {
-        scene: new BattleScene(),
+        scene: game.scene,
         hp: 101,
         id: 0,
         getMaxHp: vi.fn().mockReturnValue(101) as Pokemon["getMaxHp"],
@@ -78,7 +96,7 @@ describe("BattlerTag - SubstituteTag", () => {
   describe("onRemove behavior", () => {
     beforeEach(() => {
       mockPokemon = {
-        scene: new BattleScene(),
+        scene: game.scene,
         hp: 101,
         id: 0,
         isFainted: vi.fn().mockReturnValue(false) as Pokemon["isFainted"],
@@ -110,7 +128,7 @@ describe("BattlerTag - SubstituteTag", () => {
   describe("lapse behavior", () => {
     beforeEach(() => {
       mockPokemon = {
-        scene: new BattleScene(),
+        scene: game.scene,
         hp: 101,
         id: 0,
         turnData: { acted: true } as PokemonTurnData,

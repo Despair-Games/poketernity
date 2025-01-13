@@ -1,21 +1,7 @@
 import "vitest-canvas-mock";
 
-import { initLoggedInUser } from "#app/account";
-import { initBiomes } from "#app/data/balance/biomes";
-import { initEggMoves } from "#app/data/balance/egg-moves";
-import { initPokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
-import { initMysteryEncounters } from "#app/data/mystery-encounters/mystery-encounters";
-import { initPokemonForms } from "#app/data/pokemon-forms";
-import { initSpecies } from "#app/data/pokemon-species";
-import { initAchievements } from "#app/system/achv";
-import { initVouchers } from "#app/system/voucher";
-import { initStatsKeys } from "#app/ui/game-stats-ui-handler";
 import { afterAll, beforeAll, vi } from "vitest";
-import { initAbilities } from "#app/data/all-abilities";
-import { initMoves } from "#app/data/all-moves";
-
-/** Set the timezone to UTC for tests. */
-process.env.TZ = "UTC";
+import { initTestFile } from "#test/testUtils/testFileInitialization";
 
 /** Mock the override import to always return default values, ignoring any custom overrides. */
 vi.mock("#app/overrides", async (importOriginal) => {
@@ -24,7 +10,9 @@ vi.mock("#app/overrides", async (importOriginal) => {
 
   return {
     default: defaultOverrides,
-    defaultOverrides,
+    // Export `defaultOverrides` as a *copy*.
+    // This ensures we can easily reset `overrides` back to its default values after modifying it.
+    defaultOverrides: { ...defaultOverrides },
   } satisfies typeof import("#app/overrides"); // eslint-disable-line
 });
 
@@ -62,28 +50,10 @@ vi.mock("i18next", async (importOriginal) => {
   return await importOriginal();
 });
 
-initVouchers();
-initAchievements();
-initStatsKeys();
-initPokemonPrevolutions();
-initBiomes();
-initEggMoves();
-initPokemonForms();
-initSpecies();
-initMoves();
-initAbilities();
-initLoggedInUser();
-initMysteryEncounters();
-
 global.testFailed = false;
 
 beforeAll(() => {
-  Object.defineProperty(document, "fonts", {
-    writable: true,
-    value: {
-      add: () => {},
-    },
-  });
+  initTestFile();
 });
 
 afterAll(() => {

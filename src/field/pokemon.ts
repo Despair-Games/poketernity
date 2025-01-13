@@ -77,9 +77,6 @@ import {
   EFFECTIVE_STATS,
 } from "#enums/stat";
 import {
-  EnemyDamageBoosterModifier,
-  EnemyDamageReducerModifier,
-  EnemyFusionChanceModifier,
   HiddenAbilityRateBoosterModifier,
   BaseStatModifier,
   PokemonFriendshipBoosterModifier,
@@ -441,9 +438,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
       if (level > 1) {
         const fused = new BooleanHolder(globalScene.gameMode.isSplicedOnly);
-        if (!fused.value && !this.isPlayer() && !this.hasTrainer()) {
-          globalScene.applyModifier(EnemyFusionChanceModifier, false, fused);
-        }
 
         if (fused.value) {
           this.calculateStats();
@@ -2779,6 +2773,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     this.switchOutStatus = status;
   }
 
+  /**
+   * Updates the Pokemon's battle info UI. This is purely a visual update.
+   * @param instant Whether or not the update should be instant.
+   */
   updateInfo(instant?: boolean): Promise<void> {
     return this.battleInfo.updateInfo(this, instant);
   }
@@ -3343,14 +3341,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       );
     } else {
       damage.value = 0;
-    }
-
-    /** Apply the enemy's Damage and Resistance tokens */
-    if (!source.isPlayer()) {
-      globalScene.applyModifiers(EnemyDamageBoosterModifier, false, damage);
-    }
-    if (!this.isPlayer()) {
-      globalScene.applyModifiers(EnemyDamageReducerModifier, false, damage);
     }
 
     // This attribute may modify damage arbitrarily, so be careful about changing its order of application.
