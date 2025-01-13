@@ -39,13 +39,6 @@ class SettingsManager {
   }
 
   /**
-   * Getter for {@linkcode _settings}. No public setter!
-   */
-  get settings() {
-    return this._settings;
-  }
-
-  /**
    * Quick access to meta settings
    */
   get meta() {

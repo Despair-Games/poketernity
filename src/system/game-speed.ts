@@ -19,7 +19,7 @@ export function initGameSpeed() {
     if (num instanceof FixedNumber) {
       return num.value;
     }
-    return settings.settings.general.gameSpeed === 1 ? num : Math.ceil((num /= settings.settings.general.gameSpeed));
+    return settings.general.gameSpeed === 1 ? num : Math.ceil((num /= settings.general.gameSpeed));
   };
 
   const originalAddEvent = this.time.addEvent;
