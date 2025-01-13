@@ -1,10 +1,11 @@
-import type { BattlerIndex } from "#app/battle";
-import { BattleType } from "#app/battle";
+import type { BattlerIndex } from "#enums/battler-index";
+import { BattleType } from "#enums/battle-type";
 import type { Weather } from "#app/data/weather";
-import { type Stat, type BattleStat } from "#app/enums/stat";
-import { SwitchType } from "#app/enums/switch-type";
+import { type Stat, type BattleStat } from "#enums/stat";
+import { SwitchType } from "#enums/switch-type";
 import type { Pokemon } from "#app/field/pokemon";
-import type { EnemyPokemon, PokemonMove, HitResult } from "#app/field/pokemon";
+import type { EnemyPokemon, PokemonMove } from "#app/field/pokemon";
+import type { HitResult } from "#enums/hit-result";
 import { PlayerPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { Localizable } from "#app/interfaces/locales";

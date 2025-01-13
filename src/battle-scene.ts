@@ -60,22 +60,26 @@ import {
   getModifierPoolForType,
   getModifierType,
   getPartyLuckValue,
-  ModifierPoolType,
   modifierTypes,
   PokemonHeldItemModifierType,
 } from "#app/modifier/modifier-type";
+import { ModifierPoolType } from "#enums/modifier-pool-type";
 import AbilityBar from "#app/ui/ability-bar";
 import { allAbilities, applyAbAttrs, applyPostBattleInitAbAttrs, applyPostItemLostAbAttrs } from "#app/data/ability";
 import { PostItemLostAbAttr } from "./data/ab-attrs/post-item-lost-ab-attr";
-import type { BattlerIndex, FixedBattleConfig } from "#app/battle";
-import Battle, { BattleType } from "#app/battle";
+import type { FixedBattleConfig } from "#app/battle";
+import type { BattlerIndex } from "#enums/battler-index";
+import Battle from "#app/battle";
+import { BattleType } from "#enums/battle-type";
 import type { GameMode } from "#app/game-mode";
-import { GameModes, getGameMode } from "#app/game-mode";
+import { getGameMode } from "#app/game-mode";
+import { GameModes } from "#enums/game-modes";
 import FieldSpritePipeline from "#app/pipelines/field-sprite";
 import SpritePipeline from "#app/pipelines/sprite";
 import PartyExpBar from "#app/ui/party-exp-bar";
 import type { TrainerSlot } from "#enums/trainer-slot";
-import Trainer, { TrainerVariant } from "#app/field/trainer";
+import Trainer from "#app/field/trainer";
+import { TrainerVariant } from "#enums/trainer-variant";
 import type TrainerData from "#app/system/trainer-data";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
@@ -92,11 +96,11 @@ import type PokemonData from "#app/system/pokemon-data";
 import { Nature } from "#enums/nature";
 import type { SpeciesFormChange, SpeciesFormChangeTrigger } from "#app/data/pokemon-forms";
 import {
-  FormChangeItem,
   pokemonFormChanges,
   SpeciesFormChangeManualTrigger,
   SpeciesFormChangeTimeOfDayTrigger,
 } from "#app/data/pokemon-forms";
+import { FormChangeItem } from "#enums/form-change-item";
 import { FormChangePhase } from "#app/phases/form-change-phase";
 import { getTypeRgb } from "#app/data/type";
 import { Type } from "#enums/type";
@@ -170,8 +174,6 @@ import { bgmLoopPoint } from "./data/bgm-loop-point";
 import { allTrainerConfigs } from "./data/balance/trainer-configs/all-trainer-configs";
 import { eventBus } from "./event-bus";
 import { Animation } from "./animations";
-
-export const bypassLogin = import.meta.env.VITE_BYPASS_LOGIN === "1";
 
 const DEBUG_RNG = false;
 
@@ -1285,7 +1287,10 @@ export default class BattleScene extends SceneBase {
         this.field.add(newTrainer);
       }
     } else {
-      if (!this.gameMode.hasTrainers) {
+      if (
+        !this.gameMode.hasTrainers
+        || (Overrides.DISABLE_RANDOM_TRAINERS_OVERRIDE && isNullOrUndefined(trainerData))
+      ) {
         newBattleType = BattleType.WILD;
       } else if (battleType === undefined) {
         newBattleType = this.gameMode.isWaveTrainer(newWaveIndex, this.arena) ? BattleType.TRAINER : BattleType.WILD;

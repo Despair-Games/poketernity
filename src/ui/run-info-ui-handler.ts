@@ -1,4 +1,4 @@
-import { GameModes } from "../game-mode";
+import { GameModes } from "#enums/game-modes";
 import UiHandler from "./ui-handler";
 import type { SessionSaveData } from "#app/@types/SessionData";
 import { TextStyle, addTextObject, addBBCodeTextObject, getTextColor } from "./text";
@@ -14,15 +14,15 @@ import {
 } from "#app/utils";
 import type PokemonData from "../system/pokemon-data";
 import i18next from "i18next";
-import { Button } from "../enums/buttons";
-import { BattleType } from "../battle";
-import { TrainerVariant } from "../field/trainer";
+import { Button } from "#enums/buttons";
+import { BattleType } from "#enums/battle-type";
+import { TrainerVariant } from "#enums/trainer-variant";
 import { Challenges } from "#enums/challenges";
 import { getLuckString, getLuckTextTint } from "../modifier/modifier-type";
 import RoundRectangle from "phaser3-rex-plugins/plugins/roundrectangle";
 import { getTypeRgb } from "#app/data/type";
 import { Type } from "#enums/type";
-import { TypeColor, TypeShadow } from "#app/enums/color";
+import { TypeColor, TypeShadow } from "#enums/color";
 import { getNatureStatMultiplier, getNatureName } from "../data/nature";
 import { getVariantTint } from "#app/data/variant";
 import * as Modifier from "../modifier/modifier";

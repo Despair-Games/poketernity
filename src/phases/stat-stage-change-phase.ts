@@ -1,4 +1,4 @@
-import type { BattlerIndex } from "#app/battle";
+import type { BattlerIndex } from "#enums/battler-index";
 import { PostStatStageChangeAbAttr } from "#app/data/ab-attrs/post-stat-stage-change-ab-attr";
 import { ProtectStatAbAttr } from "#app/data/ab-attrs/protect-stat-ab-attr";
 import { StatStageChangeCopyAbAttr } from "#app/data/ab-attrs/stat-stage-change-copy-ab-attr";
@@ -9,7 +9,8 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { ResetNegativeStatStageModifier } from "#app/modifier/modifier";
-import { handleTutorial, Tutorial } from "#app/tutorial";
+import { handleTutorial } from "#app/tutorial";
+import { Tutorial } from "#enums/tutorial";
 import { BooleanHolder, NumberHolder } from "#app/utils";
 import { getStatKey, getStatStageChangeDescriptionKey, Stat, type BattleStat } from "#enums/stat";
 import i18next from "i18next";

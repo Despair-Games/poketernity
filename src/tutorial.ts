@@ -5,17 +5,7 @@ import { Mode } from "./ui/ui";
 import i18next from "i18next";
 import Overrides from "#app/overrides";
 import { settings } from "./system/settings/settings-manager";
-
-export enum Tutorial {
-  INTRO,
-  ACCESS_MENU,
-  MENU,
-  STARTER_SELECT,
-  POKERUS,
-  STAT_CHANGE,
-  SELECT_ITEM,
-  EGG_GACHA,
-}
+import { Tutorial } from "#enums/tutorial";
 
 const tutorialHandlers = {
   [Tutorial.INTRO]: () => {

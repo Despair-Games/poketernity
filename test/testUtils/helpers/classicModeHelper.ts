@@ -1,6 +1,7 @@
 import { BattleStyle } from "#enums/battle-style";
 import type { Species } from "#enums/species";
-import { GameModes, getGameMode } from "#app/game-mode";
+import { getGameMode } from "#app/game-mode";
+import { GameModes } from "#enums/game-modes";
 import overrides from "#app/overrides";
 import { CommandPhase } from "#app/phases/command-phase";
 import { EncounterPhase } from "#app/phases/encounter-phase";

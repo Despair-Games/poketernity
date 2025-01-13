@@ -6,14 +6,15 @@ import { addTextObject, getTextStyleOptions, getModifierTierTextTint, getTextCol
 import AwaitableUiHandler from "./awaitable-ui-handler";
 import { Mode } from "./ui";
 import { LockModifierTiersModifier, PokemonHeldItemModifier, HealShopCostModifier } from "../modifier/modifier";
-import { handleTutorial, Tutorial } from "../tutorial";
+import { handleTutorial } from "../tutorial";
+import { Tutorial } from "#enums/tutorial";
 import { Button } from "#enums/buttons";
 import MoveInfoOverlay from "./move-info-overlay";
 import { allMoves } from "#app/data/all-moves";
 import { formatMoney } from "#app/utils";
 import Overrides from "#app/overrides";
 import i18next from "i18next";
-import { ShopCursorTarget } from "#app/enums/shop-cursor-target";
+import { ShopCursorTarget } from "#enums/shop-cursor-target";
 import { NumberHolder } from "#app/utils";
 import Phaser from "phaser";
 import { PokeballType } from "#enums/pokeball";

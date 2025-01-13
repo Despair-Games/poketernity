@@ -1,5 +1,6 @@
-import { type BattlerIndex } from "#app/battle";
-import { type DamageResult, HitResult } from "#app/field/pokemon";
+import { type BattlerIndex } from "#enums/battler-index";
+import { type DamageResult } from "#app/field/pokemon";
+import { HitResult } from "#enums/hit-result";
 import { globalScene } from "#app/global-scene";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { fixedNumber } from "#app/utils";

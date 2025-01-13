@@ -1,9 +1,9 @@
 import { TextStyle, addTextObject } from "../ui/text";
 import type { DamageResult } from "./pokemon";
 import type { Pokemon } from "./pokemon";
-import { HitResult } from "./pokemon";
+import { HitResult } from "#enums/hit-result";
 import { formatStat, fixedNumber } from "#app/utils";
-import type { BattlerIndex } from "../battle";
+import type { BattlerIndex } from "#enums/battler-index";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
 import { DamageNumbersMode } from "#app/enums/damage-numbers-mode";
