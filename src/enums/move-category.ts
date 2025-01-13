@@ -1,5 +1,5 @@
 export enum MoveCategory {
-  PHYSICAL,
-  SPECIAL,
-  STATUS,
+  STATUS = 1,
+  PHYSICAL = 2,
+  SPECIAL = 3,
 }
