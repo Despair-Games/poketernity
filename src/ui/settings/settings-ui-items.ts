@@ -159,7 +159,6 @@ export const generalSettingsUiItems: SettingsUiItem<GeneralSettingsKey>[] = [
       {},
       { requiresConfirmation: true, confirmationMessage: t("settings:confirmDisableTouch") },
     ),
-    //TODO: needs confirmation for `disabled`
     touchscreenOnly: true,
   },
   {

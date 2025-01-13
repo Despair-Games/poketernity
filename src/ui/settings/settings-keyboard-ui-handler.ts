@@ -1,5 +1,7 @@
-import { Mode } from "../ui";
 import cfg_keyboard_qwerty from "#app/configs/inputs/cfg_keyboard_qwerty";
+import { deleteBind } from "#app/configs/inputs/configHandler";
+import { globalScene } from "#app/global-scene";
+import type { InterfaceConfig } from "#app/inputs-controller";
 import {
   setSettingKeyboard,
   SettingKeyboard,
@@ -7,16 +9,13 @@ import {
   settingKeyboardDefaults,
   settingKeyboardOptions,
 } from "#app/system/settings/settings-keyboard";
-import { reverseValueToKeySetting, truncateString } from "#app/utils";
 import AbstractControlSettingsUiHandler from "#app/ui/settings/abstract-control-settings-ui-handler";
-import type { InterfaceConfig } from "#app/inputs-controller";
-import { addTextObject, TextStyle } from "#app/ui/text";
-import { deleteBind } from "#app/configs/inputs/configHandler";
-import { Device } from "#enums/devices";
 import { NavigationManager } from "#app/ui/settings/navigationMenu";
+import { addTextObject, TextStyle } from "#app/ui/text";
+import { reverseValueToKeySetting, truncateString } from "#app/utils";
+import { Device } from "#enums/devices";
 import i18next from "i18next";
-import { globalScene } from "#app/global-scene";
-import { MAPPING_CONFIG_LS_KEY } from "#app/constants";
+import { Mode } from "../ui";
 
 /**
  * Class representing the settings UI handler for keyboards.
@@ -38,7 +37,6 @@ export default class SettingsKeyboardUiHandler extends AbstractControlSettingsUi
     this.configs = [cfg_keyboard_qwerty];
     this.commonSettingsCount = 0;
     this.textureOverride = "keyboard";
-    this.localStoragePropertyName = MAPPING_CONFIG_LS_KEY;
     this.settingBlacklisted = settingKeyboardBlackList;
     this.device = Device.KEYBOARD;
 
