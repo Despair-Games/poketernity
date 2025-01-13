@@ -813,7 +813,7 @@ export class GameData {
    * Registers the given tutorial's seen status in local storage
    * @param tutorial the {@linkcode Tutorial} to update the flag for
    * @param flag whether the tutorial should be marked as seen or not. Default: `true`
-   * @returns `true` if saving was successful
+   * @returns `true` if saving was successful, `false` otherwise
    */
   public saveTutorialFlag(tutorial: Tutorial, flag: boolean = true): boolean {
     const key = getDataTypeKey(GameDataType.TUTORIALS);
@@ -831,7 +831,7 @@ export class GameData {
   /**
    * Checks if the given tutorial is marked as seen in local storage
    * @param tutorial the {@linkcode Tutorial} to get the flag for
-   * @returns `true` if the tutorial has already been seen, false otherwise
+   * @returns `true` if the tutorial has already been seen, `false` otherwise
    */
   public wasTutorialSeen(tutorial: Tutorial): boolean {
     return this.getTutorialFlags()[tutorial] ?? false;
