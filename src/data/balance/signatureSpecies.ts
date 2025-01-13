@@ -48,7 +48,7 @@ export const signatureSpecies: SignatureSpecies = {
   CRASHER_WAKE: [Species.BUIZEL, Species.WOOPER, Species.MAGIKARP, Species.LOTAD],
   FANTINA: [Species.MISDREAVUS, Species.DRIFLOON, Species.SPIRITOMB],
   BYRON: [Species.SHIELDON, Species.BRONZOR, Species.ARON],
-  CANDICE: [Species.SNOVER, Species.SNORUNT, Species.SNEASEL, Species.GLACEON],
+  CANDICE: [Species.SNOVER, Species.FROSLASS, Species.SNEASEL, Species.GLACEON],
   VOLKNER: [Species.SHINX, Species.CHINCHOU, Species.ROTOM, Species.ELEKID],
 
   // Unova gym leaders
