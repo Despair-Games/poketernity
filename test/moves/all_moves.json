@@ -13811,7 +13811,7 @@
       "type_id": 1,
       "power": -1,
       "pp": 10,
-      "accuracy": 100,
+      "accuracy": -1,
       "priority": 0,
       "target_id": 12,
       "damage_class_id": 1,
