@@ -21,7 +21,7 @@ import { TrainerSlot } from "#enums/trainer-slot";
 /** Minimum BST for Pokemon generated onto the Elite Four's teams */
 const ELITE_FOUR_MINIMUM_BST = 460;
 /** Minimum BST for Pokemon generated onto the E4 Champion's team */
-const CHAMPION_MINIMUM_BST = 508;
+const CHAMPION_MINIMUM_BST = 500;
 
 export interface TrainerTierPools {
   [key: number]: Species[];
