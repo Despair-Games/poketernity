@@ -54,7 +54,7 @@ export const signatureSpecies: SignatureSpecies = {
   // Unova gym leaders
   CILAN: [Species.PANSAGE, Species.FERROSEED, Species.MARACTUS],
   CHILI: [Species.PANSEAR, Species.DARUMAKA, Species.HEATMOR],
-  CRESS: [Species.PANPOUR, Species.SLOWPOKE, Species.BASCULIN],
+  CRESS: [Species.PANPOUR, Species.SLOWKING, Species.BASCULIN],
   CHEREN: [Species.LILLIPUP, Species.PIDOVE, Species.MINCCINO],
   LENORA: [Species.PATRAT, Species.DEERLING, Species.RUFFLET],
   ROXIE: [Species.VENIPEDE, Species.KOFFING, Species.TRUBBISH],
