@@ -39,6 +39,7 @@ describe("All Moves", () => {
 
   /**
    * Custom Implementations as of 01/2025:
+   * - One Hit KO moves
    * - Dark Void --> Accuracy
    * - Zippy Zap --> PP + Power
    * - Heal Order --> PP
