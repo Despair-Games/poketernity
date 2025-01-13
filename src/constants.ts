@@ -22,5 +22,8 @@ export const LS_PREFIX = "pkty";
 /** Key for the local storage item storing the locale. */
 export const LOCALE_LS_KEY = `${LS_PREFIX}/locale`;
 
+/** Key for the local storage item storing the seen tutorials. */
+export const TUTORIALS_LS_KEY = `${LS_PREFIX}/tutorials`;
+
 /** Value used for byapssing login values */
 export const bypassLogin = import.meta.env.VITE_BYPASS_LOGIN === "1";

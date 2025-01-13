@@ -1,5 +1,5 @@
 import i18next from "i18next";
-import { bypassLogin } from "#app/constants";
+import { bypassLogin, TUTORIALS_LS_KEY } from "#app/constants";
 import { globalScene } from "#app/global-scene";
 import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
@@ -28,7 +28,7 @@ import { Mode } from "#app/ui/ui";
 import { clientSessionId, loggedInUser, updateUserInfo } from "#app/account";
 import { Nature } from "#enums/nature";
 import { GameStats } from "#app/system/game-stats";
-import { Tutorial } from "#enums/tutorial";
+import type { Tutorial } from "#enums/tutorial";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { allMoves } from "#app/data/all-moves";
 import { TrainerVariant } from "#enums/trainer-variant";
@@ -82,7 +82,7 @@ export function getDataTypeKey(dataType: GameDataType, slotId: number = 0): stri
     case GameDataType.SETTINGS:
       return "settings";
     case GameDataType.TUTORIALS:
-      return "tutorials";
+      return TUTORIALS_LS_KEY;
     case GameDataType.SEEN_DIALOGUES:
       return "seenDialogues";
     case GameDataType.RUN_HISTORY:
@@ -165,10 +165,6 @@ export class StarterPrefs {
       StarterPrefers_private_latest = pStr;
     }
   }
-}
-
-export interface TutorialFlags {
-  [key: string]: boolean;
 }
 
 export interface SeenDialogues {
@@ -795,44 +791,52 @@ export class GameData {
     return true; // TODO: is `true` the correct return value?
   }
 
-  public saveTutorialFlag(tutorial: Tutorial, flag: boolean): boolean {
+  /**
+   * Registers the given tutorial's seen status in local storage
+   * @param tutorial the {@linkcode Tutorial} to update the flag for
+   * @param flag whether the tutorial should be marked as seen or not. Default: `true`
+   * @returns `true` if saving was successful
+   */
+  public saveTutorialFlag(tutorial: Tutorial, flag: boolean = true): boolean {
     const key = getDataTypeKey(GameDataType.TUTORIALS);
-    let tutorials: object = {};
+    let tutorials: boolean[] = [];
+
     if (localStorage.hasOwnProperty(key)) {
-      tutorials = JSON.parse(localStorage.getItem(key)!); // TODO: is this bang correct?
+      try {
+        tutorials = JSON.parse(localStorage.getItem(key)!);
+      } catch (err) {
+        console.warn("Failed to parse tutorial data from local storage", err);
+      }
     }
 
-    Object.keys(Tutorial).forEach((key) => {
-      if (key === Tutorial[tutorial]) {
-        tutorials[key] = flag;
-      } else {
-        tutorials[key] ??= false;
-      }
-    });
-
-    localStorage.setItem(key, JSON.stringify(tutorials));
-
-    return true;
+    tutorials[tutorial] = flag;
+    try {
+      localStorage.setItem(key, JSON.stringify(tutorials));
+      return true;
+    } catch (err) {
+      console.warn("Failed to saved tutorial data in local storage", err);
+      return false;
+    }
   }
 
-  public getTutorialFlags(): TutorialFlags {
+  /**
+   * Checks if the given tutorial is marked as seen in local storage
+   * @param tutorial the {@linkcode Tutorial} to get the flag for
+   * @returns `true` if the tutorial has already been seen, false otherwise
+   */
+  public wasTutorialSeen(tutorial: Tutorial): boolean {
     const key = getDataTypeKey(GameDataType.TUTORIALS);
-    const ret: TutorialFlags = {};
-    Object.values(Tutorial)
-      .map((tutorial) => tutorial as Tutorial)
-      .forEach((tutorial) => (ret[Tutorial[tutorial]] = false));
+    let tutorials: boolean[] = [];
 
-    if (!localStorage.hasOwnProperty(key)) {
-      return ret;
+    if (localStorage.hasOwnProperty(key)) {
+      try {
+        tutorials = JSON.parse(localStorage.getItem(key)!);
+      } catch (err) {
+        console.warn("Failed to parse tutorial data from local storage", err);
+      }
     }
 
-    const tutorials = JSON.parse(localStorage.getItem(key)!); // TODO: is this bang correct?
-
-    for (const tutorial of Object.keys(tutorials)) {
-      ret[tutorial] = tutorials[tutorial];
-    }
-
-    return ret;
+    return tutorials[tutorial] ?? false;
   }
 
   public saveSeenDialogue(dialogue: string): boolean {
