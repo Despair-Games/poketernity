@@ -2493,7 +2493,7 @@ export default class BattleScene extends SceneBase {
   }
 
   /**
-   * Tries to add the input phase to index after target phase in the {@linkcode phaseQueue}, else simply calls {@linkcode unshiftPhase()}
+   * Tries to add the input phase to index after target phase in the {@linkcode phaseQueue}, else simply calls {@linkcode unshiftPhase}
    * @param phase {@linkcode Phase} the phase to be added
    * @param targetPhase {@linkcode Phase} the type of phase to search for in {@linkcode phaseQueue}
    * @returns `true` if a `targetPhase` was found to append to

@@ -14,6 +14,7 @@ import { globalScene } from "./global-scene";
 import { BypassSpeedChanceModifier } from "./modifier/modifier";
 import { AttemptCapturePhase } from "./phases/attempt-capture-phase";
 import { AttemptRunPhase } from "./phases/attempt-run-phase";
+import { MoveEndPhase } from "./phases/move-end-phase";
 import { MoveHeaderPhase } from "./phases/move-header-phase";
 import { MovePhase } from "./phases/move-phase";
 import { SwitchSummonPhase } from "./phases/switch-summon-phase";
@@ -111,19 +112,28 @@ export class TurnCommandManager {
   }
 
   /**
+   * Obtains the given Pokemon's turn command from the turn queue
+   * @param pokemon The {@linkcode Pokemon} whose turn command is requested
+   * @returns the {@linkcode TurnCommand} from the given Pokemon, or `undefined`
+   * if no such turn command exists.
+   */
+  public findPokemonCommand(pokemon: Pokemon): TurnCommand | undefined {
+    return this.findCommand((tc) => tc.pokemon === pokemon);
+  }
+
+  /**
    * Removes the first command in the turn command queue that
    * meets the given condition.
    * @param commandFilter Signifies the command should be removed from the queue
    * if evaluated to be `true`.
    * @returns `true` if a command was removed
    */
-  public tryRemoveCommand(commandFilter: (command: TurnCommand) => boolean): boolean {
+  public tryRemoveCommand(commandFilter: (command: TurnCommand) => boolean): TurnCommand | undefined {
     const cmdIndex = this.turnCommands.findIndex((tc) => commandFilter(tc));
     if (cmdIndex > -1) {
-      this.turnCommands.splice(cmdIndex, 1);
-      return true;
+      return this.turnCommands.splice(cmdIndex, 1)[0];
     }
-    return false;
+    return undefined;
   }
 
   /**
@@ -162,6 +172,44 @@ export class TurnCommandManager {
     }
   }
 
+  /**
+   * Schedules the execution of a {@linkcode Command.FIGHT | FIGHT} command
+   * immediately, possibly out of turn order.
+   * This should not be used when command types other than `FIGHT`
+   * are present in the turn command queue.
+   * @param pokemon The {@linkcode Pokemon} whose command is preempted
+   * @returns `true` if a command is found and scheduled for execution
+   */
+  public preemptFightCommand(condition: (command: TurnCommand) => boolean): boolean {
+    if (this.turnCommands.some((tc) => tc.command !== Command.FIGHT)) {
+      console.warn("Found non-FIGHT commands in the turn command queue when trying to preempt a FIGHT command");
+      return false;
+    }
+
+    const turnCommand = this.tryRemoveCommand((tc) => tc.command === Command.FIGHT && condition(tc));
+
+    if (turnCommand) {
+      const { pokemon, cursor, move: queuedMove, targets } = turnCommand;
+      if (!pokemon.isActive(true) || !queuedMove) {
+        return false;
+      }
+
+      pokemon.turnData.order = this.orderIndex++;
+
+      const move =
+        pokemon.getMoveset().find((m) => m.moveId === queuedMove.move && m.ppUsed < m.getMovePp())
+        ?? new PokemonMove(queuedMove.move);
+
+      globalScene.appendToPhase(
+        new MovePhase(pokemon, targets ?? queuedMove.targets, move, false, cursor !== -1 && queuedMove.ignorePP),
+        MoveEndPhase,
+      );
+
+      return true;
+    }
+    return false;
+  }
+
   /** Schedules all turn commands to be run at the start of the turn. */
   public startTurn(): void {
     // Apply speed-bypassing effects for all remaining Pokemon
@@ -176,7 +224,7 @@ export class TurnCommandManager {
     // Add the first valid move command to the phase queue.
     // This loop ensures that skipped and invalid commands do not
     // freeze the turn sequence.
-    while (!this.empty() && this.shiftNextCommand());
+    while (!this.empty() && !this.shiftNextCommand());
   }
 
   public empty(): boolean {
@@ -257,6 +305,7 @@ export class TurnCommandManager {
   private handleFightCommand(turnCommand: TurnCommand): boolean {
     const { pokemon, cursor, move: queuedMove, targets } = turnCommand;
     if (!pokemon?.isActive(true) || !queuedMove) {
+      console.warn(`FIGHT command from ${pokemon?.name} is invalid`);
       return false;
     }
 
