@@ -639,7 +639,7 @@ export function initAbilities() {
       (user, target, move) => {
         if (user && target) {
           const power = new NumberHolder(move.power);
-          applyMoveAttrs(VariablePowerAttr, user!, target!, move, power);
+          applyMoveAttrs(VariablePowerAttr, user, target, move, power);
           return power.value <= 60;
         }
         return false;
