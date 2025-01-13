@@ -1123,16 +1123,12 @@ export class EncoreTag extends MoveRestrictionBattlerTag {
       i18next.t("battlerTags:encoreOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
 
-    const movePhase = globalScene.findPhase((m) => m instanceof MovePhase && m.pokemon === pokemon);
-    if (movePhase) {
-      const movesetMove = pokemon.getMoveset().find((m) => m.moveId === this.moveId);
-      if (movesetMove) {
-        const lastMove = pokemon.getLastXMoves(1)[0];
-        globalScene.tryReplacePhase(
-          (m) => m instanceof MovePhase && m.pokemon === pokemon,
-          new MovePhase(pokemon, lastMove.targets ?? [], movesetMove),
-        );
-      }
+    const { turnManager } = globalScene.currentBattle;
+
+    const movesetMove = pokemon.getMoveset().find((m) => m.moveId === this.moveId);
+    if (movesetMove) {
+      const lastMove = pokemon.getLastXMoves(1)[0];
+      turnManager.tryReplaceMove(pokemon, movesetMove, lastMove?.targets ?? []);
     }
   }
 

@@ -231,6 +231,31 @@ export class TurnCommandManager {
     return !this.turnCommands.length;
   }
 
+  /**
+   * Changes the given Pokemon's queued command to instead use the given move
+   * against the given target(s).
+   * @param pokemon the {@linkcode Pokemon} whose command is modified
+   * @param move the {@linkcode PokemonMove} replacing the current command's move
+   * @param targets the {@linkcode BattlerIndex | targets} for the replacement move
+   * @returns `true` if a turn command was modified
+   */
+  public tryReplaceMove(pokemon: Pokemon, move: PokemonMove, targets: BattlerIndex[]): boolean {
+    const turnCommand = this.findPokemonCommand(pokemon);
+    if (turnCommand?.command !== Command.FIGHT) {
+      return false;
+    }
+
+    const newMove: QueuedMove = {
+      move: move.moveId,
+      targets,
+    };
+
+    turnCommand.move = newMove;
+    turnCommand.targets = targets;
+
+    return true;
+  }
+
   // ---------------  END PUBLIC METHODS  --------------- //
 
   /** Randomly shuffles the turn command queue. */
