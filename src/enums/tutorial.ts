@@ -1,0 +1,10 @@
+export enum Tutorial {
+  INTRO,
+  ACCESS_MENU,
+  MENU,
+  STARTER_SELECT,
+  POKERUS,
+  STAT_CHANGE,
+  SELECT_ITEM,
+  EGG_GACHA,
+}

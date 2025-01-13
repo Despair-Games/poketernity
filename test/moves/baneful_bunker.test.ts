@@ -4,7 +4,7 @@ import { GameManager } from "#test/testUtils/gameManager";
 import { Species } from "#enums/species";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
-import { BattlerIndex } from "#app/battle";
+import { BattlerIndex } from "#enums/battler-index";
 import { StatusEffect } from "#enums/status-effect";
 
 describe("Moves - Baneful Bunker", () => {

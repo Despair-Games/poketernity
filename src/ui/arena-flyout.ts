@@ -1,6 +1,7 @@
 import { addTextObject, TextStyle } from "./text";
 import { globalScene } from "#app/global-scene";
-import { ArenaTagSide, ArenaTrapTag } from "#app/data/arena-tag";
+import { ArenaTrapTag } from "#app/data/arena-tag";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 import { WeatherType } from "#enums/weather-type";
 import { TerrainType } from "#enums/terrain-type";
 import { addWindow, WindowVariant } from "./ui-theme";

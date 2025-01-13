@@ -1,10 +1,11 @@
 import { updateUserInfo } from "#app/account";
-import { BattlerIndex } from "#app/battle";
+import { BattlerIndex } from "#enums/battler-index";
 import BattleScene from "#app/battle-scene";
 import { getMoveTargets } from "#app/data/move";
 import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
 import Trainer from "#app/field/trainer";
-import { GameModes, getGameMode } from "#app/game-mode";
+import { getGameMode } from "#app/game-mode";
+import { GameModes } from "#enums/game-modes";
 import { ModifierTypeOption, modifierTypes } from "#app/modifier/modifier-type";
 import overrides from "#app/overrides";
 import { CheckSwitchPhase } from "#app/phases/check-switch-phase";
@@ -57,6 +58,7 @@ import fs from "fs";
 import { expect, vi } from "vitest";
 import { globalScene } from "#app/global-scene";
 import type StarterSelectUiHandler from "#app/ui/starter-select-ui-handler";
+import { MockFetch } from "#test/testUtils/mocks/mockFetch";
 
 /**
  * Class to manage the game state and transitions between phases.
@@ -121,9 +123,12 @@ export class GameManager {
     this.reload = new ReloadHelper(this);
     this.modifiers = new ModifierHelper(this);
     this.field = new FieldHelper(this);
+    this.override.sanitizeOverrides();
 
     // Disables Mystery Encounters on all tests (can be overridden at test level)
     this.override.mysteryEncounterChance(0);
+
+    global.fetch = vi.fn(MockFetch) as any;
   }
 
   /**

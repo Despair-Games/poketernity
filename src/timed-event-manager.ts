@@ -1,12 +1,8 @@
 import { globalScene } from "#app/global-scene";
 import { TextStyle, addTextObject } from "#app/ui/text";
 import type { nil } from "#app/utils";
+import { EventType } from "#enums/event-type";
 import i18next from "i18next";
-
-export enum EventType {
-  SHINY,
-  NO_TIMER_DISPLAY,
-}
 
 interface EventBanner {
   bannerKey?: string;

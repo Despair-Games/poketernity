@@ -1,6 +1,6 @@
 import { api } from "#app/plugins/api/api";
 import type { UserInfo } from "#app/@types/UserInfo";
-import { bypassLogin } from "./battle-scene";
+import { bypassLogin } from "./constants";
 import { randomString } from "#app/utils";
 
 export let loggedInUser: UserInfo | null = null;
