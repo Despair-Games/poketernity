@@ -1,6 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/all-moves";
-import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
@@ -45,18 +44,17 @@ describe("Moves - Round", () => {
     game.move.select(Moves.ROUND, 0, BattlerIndex.ENEMY);
     game.move.select(Moves.ROUND, 1, BattlerIndex.ENEMY_2);
 
-    await game.forceEnemyMove(Moves.ROUND, BattlerIndex.PLAYER);
-    await game.forceEnemyMove(Moves.SPLASH);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY]);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY]);
+    await game.move.selectEnemyMove(Moves.ROUND, BattlerIndex.PLAYER);
+    await game.move.selectEnemyMove(Moves.SPLASH);
 
-    const actualTurnOrder: BattlerIndex[] = [];
+    await game.phaseInterceptor.to("BerryPhase", false);
 
-    for (let i = 0; i < 4; i++) {
-      await game.phaseInterceptor.to("MoveEffectPhase", false);
-      actualTurnOrder.push((game.scene.getCurrentPhase() as MoveEffectPhase).getUserPokemon()!.getBattlerIndex());
-      await game.phaseInterceptor.to("MoveEndPhase");
-    }
+    const actualTurnOrder = game.scene
+      .getField(true)
+      .sort((pA, pB) => pA.turnData.order - pB.turnData.order)
+      .map((p) => p.getBattlerIndex());
 
     expect(actualTurnOrder).toEqual([
       BattlerIndex.PLAYER,

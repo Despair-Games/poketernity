@@ -1,7 +1,6 @@
 import { Moves } from "#enums/moves";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { MovePhase } from "#app/phases/move-phase";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
@@ -18,23 +17,13 @@ export class CueNextRoundAttr extends MoveEffectAttr {
   }
 
   override apply(_user: Pokemon, _target: Pokemon, _move: Move): boolean {
-    const nextRoundPhase = globalScene.findPhase<MovePhase>(
-      (phase) => phase instanceof MovePhase && phase.move.moveId === Moves.ROUND,
-    );
-
-    if (!nextRoundPhase) {
+    const { turnManager } = globalScene.currentBattle;
+    return turnManager.preemptFightCommand((tc) => {
+      if (tc.move?.move === Moves.ROUND) {
+        tc.pokemon.turnData.joinedRound = true;
+        return true;
+      }
       return false;
-    }
-
-    // Update the phase queue so that the next Pokemon using Round moves next
-    const nextRoundIndex = globalScene.phaseQueue.indexOf(nextRoundPhase);
-    const nextMoveIndex = globalScene.phaseQueue.findIndex((phase) => phase instanceof MovePhase);
-    if (nextRoundIndex !== nextMoveIndex) {
-      globalScene.prependToPhase(globalScene.phaseQueue.splice(nextRoundIndex, 1)[0], MovePhase);
-    }
-
-    // Mark the corresponding Pokemon as having "joined the Round" (for doubling power later)
-    nextRoundPhase.pokemon.turnData.joinedRound = true;
-    return true;
+    });
   }
 }
