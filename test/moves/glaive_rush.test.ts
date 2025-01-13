@@ -54,8 +54,8 @@ describe("Moves - Glaive Rush", () => {
     const enemy = game.scene.getEnemyPokemon()!;
     enemy.hp = 1000;
 
-    allMoves[Moves.AVALANCHE].accuracy = 0;
     game.move.select(Moves.AVALANCHE);
+    await game.move.forceMiss();
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemy.hp).toBeLessThan(1000);
   });
@@ -89,13 +89,13 @@ describe("Moves - Glaive Rush", () => {
 
     enemy.hp = 1000;
     player.hp = 1000;
-    allMoves[Moves.SHADOW_SNEAK].accuracy = 0;
 
     game.move.select(Moves.GLAIVE_RUSH);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(player.hp).toBe(1000);
 
     game.move.select(Moves.SPLASH);
+    await game.move.forceMiss();
     await game.phaseInterceptor.to("TurnEndPhase");
     const damagedHp = player.hp;
     expect(player.hp).toBeLessThan(1000);
