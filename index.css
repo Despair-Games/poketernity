@@ -119,11 +119,11 @@ body {
 
 @media (pointer: coarse) {
   /* hasTouchscreen() && !isTouchControlsEnabled */
-  body:has(> #touchControls[class="visible"]) #app {
+  body:has(> #touchControls.visible) #app {
     align-items: start;
   }
 
-  body:has(> #touchControls[class="visible"]) #app > div:first-child {
+  body:has(> #touchControls.visible) #app > div:first-child {
     transform-origin: top !important;
   }
 }
@@ -222,8 +222,8 @@ input:-internal-autofill-selected {
 /* Show #apadPreviousTab and #apadNextTab only in settings, except in touch configuration panel */
 #touchControls:not([data-ui-mode^="SETTINGS"]) #apadPreviousTab,
 #touchControls:not([data-ui-mode^="SETTINGS"]) #apadNextTab,
-#touchControls:is(.config-mode) #apadPreviousTab,
-#touchControls:is(.config-mode) #apadNextTab {
+#touchControls:is([data-configuring]) #apadPreviousTab,
+#touchControls:is([data-configuring]) #apadNextTab {
   display: none;
 }
 
@@ -244,13 +244,13 @@ input:-internal-autofill-selected {
 }
 
 /* Show cycle buttons only on STARTER_SELECT and on touch configuration panel */
-#touchControls:not(.config-mode):not([data-ui-mode="STARTER_SELECT"]) #apadOpenFilters,
-#touchControls:not(.config-mode):not([data-ui-mode="STARTER_SELECT"], [data-ui-mode="RUN_INFO"]) #apadCycleForm,
-#touchControls:not(.config-mode):not([data-ui-mode="STARTER_SELECT"], [data-ui-mode="RUN_INFO"]) #apadCycleShiny,
-#touchControls:not(.config-mode):not([data-ui-mode="STARTER_SELECT"]) #apadCycleNature,
-#touchControls:not(.config-mode):not([data-ui-mode="STARTER_SELECT"], [data-ui-mode="RUN_INFO"]) #apadCycleAbility,
-#touchControls:not(.config-mode):not([data-ui-mode="STARTER_SELECT"]) #apadCycleGender,
-#touchControls:not(.config-mode):not([data-ui-mode="STARTER_SELECT"]) #apadCycleVariant {
+#touchControls:not([data-configuring]):not([data-ui-mode="STARTER_SELECT"]) #apadOpenFilters,
+#touchControls:not([data-configuring]):not([data-ui-mode="STARTER_SELECT"], [data-ui-mode="RUN_INFO"]) #apadCycleForm,
+#touchControls:not([data-configuring]):not([data-ui-mode="STARTER_SELECT"], [data-ui-mode="RUN_INFO"]) #apadCycleShiny,
+#touchControls:not([data-configuring]):not([data-ui-mode="STARTER_SELECT"]) #apadCycleNature,
+#touchControls:not([data-configuring]):not([data-ui-mode="STARTER_SELECT"], [data-ui-mode="RUN_INFO"]) #apadCycleAbility,
+#touchControls:not([data-configuring]):not([data-ui-mode="STARTER_SELECT"]) #apadCycleGender,
+#touchControls:not([data-configuring]):not([data-ui-mode="STARTER_SELECT"]) #apadCycleVariant {
   display: none;
 }
 
