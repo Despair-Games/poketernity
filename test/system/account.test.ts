@@ -1,7 +1,7 @@
 import { api } from "#app/plugins/api/api";
 import { describe, expect, it, vi } from "vitest";
 import { initLoggedInUser, loggedInUser, updateUserInfo } from "#app/account";
-import * as bypassLogin from "#app/bypass-login";
+import * as bypassLogin from "#app/constants";
 
 describe("account", () => {
   describe("initLoggedInUser", () => {
