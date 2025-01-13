@@ -810,20 +810,19 @@ export class GameData {
   }
 
   /**
-   * Registers the given tutorial's seen status in local storage
+   * Registers the given tutorial as seen in local storage
    * @param tutorial the {@linkcode Tutorial} to update the flag for
-   * @param flag whether the tutorial should be marked as seen or not. Default: `true`
    * @returns `true` if saving was successful, `false` otherwise
    */
-  public saveTutorialFlag(tutorial: Tutorial, flag: boolean = true): boolean {
+  public saveTutorialAsSeen(tutorial: Tutorial): boolean {
     const key = getDataTypeKey(GameDataType.TUTORIALS);
     const tutorials = this.getTutorialFlags();
-    tutorials[tutorial] = flag;
+    tutorials[tutorial] = true;
     try {
       localStorage.setItem(key, JSON.stringify(tutorials));
       return true;
     } catch (err) {
-      console.warn("Failed to saved tutorial data in local storage", err);
+      console.error("Failed to saved tutorial data in local storage", err);
       return false;
     }
   }
