@@ -51,7 +51,6 @@ export default class MoveTouchControlsHandler {
     this.inConfigurationMode = false;
     this.setPositions(this.getSavedPositionsOfCurrentOrientation() ?? []);
     this.initListeners();
-    console.log("MoveTouchControlsHandler currentOrientation:", this.currentOrientation);
   }
 
   //#region Getter/Setter
