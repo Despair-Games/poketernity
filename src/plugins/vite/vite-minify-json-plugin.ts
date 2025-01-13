@@ -10,11 +10,9 @@ const VERSION = "2.0.0";
 //#endregion
 
 /**
- * Plugin to mnify json files in the build folder after the bundling is done.
- * @param basePath base path/es starting inside the build dir (e.g. will always start with "/dist" if dist is the build dir)
- * @param recursive if true, will crawl subdirectories
+ * Plugin to minify json files in the `public/` directory.
  */
-export function flxMinifyPublicJsonFiles(_basePath: string | string[], _recursive?: boolean): VitePlugin {
+export function flxMinifyPublicJsonFiles(): VitePlugin {
   let logger: Logger;
   let count = 0;
   const errors: Error[] = [];
@@ -69,7 +67,6 @@ export function flxMinifyPublicJsonFiles(_basePath: string | string[], _recursiv
 
       minifyJsonFiles(publicDir, outputDir);
     },
-
     closeBundle() {
       const logSuffix = ` \x1b[90m[${NAME}v${VERSION}]\x1b[0m`;
 

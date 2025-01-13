@@ -1,9 +1,9 @@
 import { defineConfig, loadEnv, Rollup, UserConfig } from "vite";
 import ViteTsconfigPaths from "vite-tsconfig-paths";
-import { flxMinifyPublicJsonFiles as VitePluginMinifyPublicJsonFiles } from "./src/plugins/vite/vite-minify-json-plugin";
+import { flxMinifyPublicJsonFiles as ViteMinifyPublicJsonFiles } from "./src/plugins/vite/vite-minify-json-plugin";
 
 export const defaultConfig: UserConfig = {
-  plugins: [ViteTsconfigPaths(), VitePluginMinifyPublicJsonFiles(["images", "battle-anims"], true)],
+  plugins: [ViteTsconfigPaths(), ViteMinifyPublicJsonFiles()],
   clearScreen: false,
   appType: "mpa",
   build: {
