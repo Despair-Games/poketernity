@@ -217,7 +217,6 @@ export default class MoveTouchControlsHandler {
     this.resetBtn.addEventListener("click", () => {
       this.resetPositions();
       eventBus.emit("touchControls/move/reset");
-      eventBus.emit("touchControls/move/end");
     });
     this.cancelBtn.addEventListener("click", () => {
       const positions = this.getSavedPositionsOfCurrentOrientation();
