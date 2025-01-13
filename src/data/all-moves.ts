@@ -1285,7 +1285,7 @@ export function initMoves() {
     new AttackMove(Moves.SAND_TOMB, Type.GROUND, MoveCategory.PHYSICAL, 35, 85, 15, -1, 0, 3)
       .attr(TrapAttr, BattlerTagType.SAND_TOMB)
       .makesContact(false),
-    new AttackMove(Moves.SHEER_COLD, Type.ICE, MoveCategory.SPECIAL, 200, 20, 5, -1, 0, 3)
+    new AttackMove(Moves.SHEER_COLD, Type.ICE, MoveCategory.SPECIAL, 200, 30, 5, -1, 0, 3)
       .attr(IceNoEffectTypeAttr)
       .attr(OneHitKOAttr)
       .attr(SheerColdAccuracyAttr),
