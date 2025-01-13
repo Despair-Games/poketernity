@@ -2781,6 +2781,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     this.switchOutStatus = status;
   }
 
+  /**
+   * Updates the Pokemon's battle info UI. This is purely a visual update.
+   * @param instant Whether or not the update should be instant.
+   */
   updateInfo(instant?: boolean): Promise<void> {
     return this.battleInfo.updateInfo(this, instant);
   }
@@ -4132,7 +4136,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     let sleepTurnsRemaining: NumberHolder;
 
     if (effect === StatusEffect.SLEEP) {
-      sleepTurnsRemaining = new NumberHolder(this.randSeedIntRange(2, 4));
+      sleepTurnsRemaining = new NumberHolder(turnsRemaining !== 0 ? turnsRemaining : this.randSeedIntRange(2, 4));
 
       this.setFrameRate(4);
 

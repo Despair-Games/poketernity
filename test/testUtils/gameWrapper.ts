@@ -1,22 +1,14 @@
 import BattleScene from "#app/battle-scene";
 import * as battleScene from "#app/battle-scene";
-import { SESSION_ID_COOKIE } from "#app/constants";
 import { MoveAnim } from "#app/data/battle-anims";
 import { Pokemon } from "#app/field/pokemon";
-import { setCookie } from "#app/utils";
-import { blobToString } from "#test/testUtils/gameManagerUtils";
 import { MockClock } from "#test/testUtils/mocks/mockClock";
-import { mockConsoleLog } from "#test/testUtils/mocks/mockConsoleLog";
-import { MockFetch } from "#test/testUtils/mocks/mockFetch";
 import { MockGameObjectCreator } from "#test/testUtils/mocks/mockGameObjectCreator";
-import { MockImage } from "#test/testUtils/mocks/mocksContainer/mockImage";
 import { MockLoader } from "#test/testUtils/mocks/mockLoader";
-import { mockLocalStorage } from "#test/testUtils/mocks/mockLocalStorage";
 import { MockTextureManager } from "#test/testUtils/mocks/mockTextureManager";
 import { MockTimedEventManager } from "#test/testUtils/mocks/mockTimedEventManager";
 import fs from "fs";
 import Phaser from "phaser";
-import InputText from "phaser3-rex-plugins/plugins/inputtext";
 import { vi } from "vitest";
 import { version } from "../../package.json";
 import InputManager = Phaser.Input.InputManager;
@@ -25,50 +17,6 @@ import KeyboardPlugin = Phaser.Input.Keyboard.KeyboardPlugin;
 import GamepadPlugin = Phaser.Input.Gamepad.GamepadPlugin;
 import EventEmitter = Phaser.Events.EventEmitter;
 import UpdateList = Phaser.GameObjects.UpdateList;
-
-Object.defineProperty(window, "localStorage", {
-  value: mockLocalStorage(),
-});
-Object.defineProperty(window, "console", {
-  value: mockConsoleLog(false),
-});
-
-InputText.prototype.setElement = () => null as any;
-InputText.prototype.resize = () => null as any;
-Phaser.GameObjects.Image = MockImage as any;
-window.URL.createObjectURL = (blob: Blob) => {
-  blobToString(blob).then((data: string) => {
-    localStorage.setItem("toExport", data);
-  });
-  return null as any;
-};
-navigator.getGamepads = () => [];
-global.fetch = vi.fn(MockFetch) as any;
-setCookie(SESSION_ID_COOKIE, "fake_token");
-
-window.matchMedia = () =>
-  ({
-    matches: false,
-  }) as any;
-
-/**
- * Sets this object's position relative to another object with a given offset
- * @param guideObject {@linkcode Phaser.GameObjects.GameObject} to base the position off of
- * @param x The relative x position
- * @param y The relative y position
- */
-const setPositionRelative = function (guideObject: any, x: number, y: number) {
-  const offsetX = guideObject.width * (-0.5 + (0.5 - guideObject.originX));
-  const offsetY = guideObject.height * (-0.5 + (0.5 - guideObject.originY));
-  this.setPosition(guideObject.x + offsetX + x, guideObject.y + offsetY + y);
-};
-
-Phaser.GameObjects.Container.prototype.setPositionRelative = setPositionRelative;
-Phaser.GameObjects.Sprite.prototype.setPositionRelative = setPositionRelative;
-Phaser.GameObjects.Image.prototype.setPositionRelative = setPositionRelative;
-Phaser.GameObjects.NineSlice.prototype.setPositionRelative = setPositionRelative;
-Phaser.GameObjects.Text.prototype.setPositionRelative = setPositionRelative;
-Phaser.GameObjects.Rectangle.prototype.setPositionRelative = setPositionRelative;
 
 export class GameWrapper {
   public game: Phaser.Game;
@@ -254,6 +202,8 @@ export class GameWrapper {
     // @ts-ignore
     this.scene.remove = vi.fn();
     this.scene.eventManager = new MockTimedEventManager(); // Disable Timed Events
+
+    Pokemon.prototype.updateInfo = async () => {};
   }
 }
 
