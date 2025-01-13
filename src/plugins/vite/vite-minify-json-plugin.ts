@@ -1,57 +1,87 @@
 import path from "path";
 import fs from "fs";
-import { type Plugin as VitePlugin } from "vite";
+import { type Logger, type Plugin as VitePlugin } from "vite";
 
-/**
- * Crawl a directory (recursively if wanted) for json files and minifies found ones.
- * @param dir the directory to crawl
- * @param recursive if true, will crawl subdirectories
- */
-function applyToDir(dir: string, recursive?: boolean) {
-  const files = fs.readdirSync(dir).filter((file) => !/^\..*/.test(file));
+//#region Constants
 
-  for (const file of files) {
-    const filePath = path.join(dir, file);
-    const stat = fs.lstatSync(filePath);
+const NAME = "flx-minify-public-json-files";
+const VERSION = "2.0.0";
 
-    if (stat.isDirectory() && recursive) {
-      applyToDir(filePath, recursive); // only if recursive is true
-    } else if (path.extname(file) === ".json") {
-      const contents = fs.readFileSync(filePath, "utf8");
-      const minifiedContent = JSON.stringify(JSON.parse(contents));
-
-      fs.writeFileSync(filePath, minifiedContent, "utf8");
-    }
-  }
-}
+//#endregion
 
 /**
  * Plugin to mnify json files in the build folder after the bundling is done.
  * @param basePath base path/es starting inside the build dir (e.g. will always start with "/dist" if dist is the build dir)
  * @param recursive if true, will crawl subdirectories
  */
-export function minifyJsonPlugin(basePath: string | string[], recursive?: boolean): VitePlugin {
-  let buildDir = "dist"; // Default build dir
+export function flxMinifyPublicJsonFiles(_basePath: string | string[], _recursive?: boolean): VitePlugin {
+  let logger: Logger;
+  let count = 0;
+  const errors: Error[] = [];
 
   return {
-    name: "flx-minify-json",
+    name: NAME,
+    version: VERSION,
     apply: "build",
-    configResolved(config) {
-      buildDir = config.build.outDir; // Read the build output directory from Vite config
+    enforce: "post", //run after other plugins/stuff
+    configResolved(resolvedConfig) {
+      logger = resolvedConfig.logger;
     },
-    async closeBundle() {
-      console.log("Minifying JSON files...");
-      const basePathes = Array.isArray(basePath) ? basePath : [basePath];
+    buildStart() {
+      logger.info(`  \x1b[36m→ Plugin: ${NAME} v${VERSION}\x1b[0m`);
+    },
+    async generateBundle(options, _bundle) {
+      function minifyJsonFiles(dir: string, outputDir: string) {
+        const files = fs.readdirSync(dir);
 
-      basePathes.forEach((basePath) => {
-        const baseDir = path.resolve(buildDir, basePath);
-        if (fs.existsSync(baseDir)) {
-          applyToDir(baseDir, recursive);
-        } else {
-          console.error(`Path ${baseDir} does not exist!`);
+        for (const file of files) {
+          const fullPath = path.join(dir, file);
+          const outputFilePath = path.join(outputDir, file);
+          const stat = fs.statSync(fullPath);
+
+          if (stat.isDirectory()) {
+            // Recurse into subdirectories
+            const nestedOutputDir = path.join(outputDir, file);
+            fs.mkdirSync(nestedOutputDir, { recursive: true });
+            minifyJsonFiles(fullPath, nestedOutputDir);
+          } else if (file.endsWith(".json")) {
+            try {
+              // Minify JSON file
+              const content = fs.readFileSync(fullPath, "utf-8");
+              const minifiedContent = JSON.stringify(JSON.parse(content));
+              fs.writeFileSync(outputFilePath, minifiedContent, "utf-8");
+              count++;
+            } catch (err) {
+              fs.copyFileSync(fullPath, outputFilePath);
+              const error = new Error(`Failed to minify JSON file: ${fullPath}\n\t→ ${err.message}`);
+              error.stack = err.stack;
+              errors.push(error);
+            }
+          } else {
+            // Copy other files as-is
+            fs.copyFileSync(fullPath, outputFilePath);
+          }
         }
-      });
-      console.log("Finished minifying JSON files!");
+      }
+
+      const publicDir = path.resolve("./public");
+      const outputDir = path.resolve(options.dir || "dist");
+
+      minifyJsonFiles(publicDir, outputDir);
+    },
+
+    closeBundle() {
+      const logSuffix = ` \x1b[90m[${NAME}v${VERSION}]\x1b[0m`;
+
+      if (errors.length > 0) {
+        errors.map((error) => logger.error(`\x1b[31m${error.message}\x1b[0m${logSuffix}`, { error }));
+      }
+
+      if (count > 0) {
+        const failedMsg = errors.length > 0 ? ` \x1b[33m(${errors.length} failed)\x1b[0m` : "";
+
+        logger.info(`\x1b[32mMinified ${count} JSON files successfully${failedMsg}${logSuffix}`);
+      }
     },
   };
 }
