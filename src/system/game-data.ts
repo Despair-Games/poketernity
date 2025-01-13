@@ -792,14 +792,12 @@ export class GameData {
   }
 
   /**
-   * Registers the given tutorial's seen status in local storage
-   * @param tutorial the {@linkcode Tutorial} to update the flag for
-   * @param flag whether the tutorial should be marked as seen or not. Default: `true`
-   * @returns `true` if saving was successful
+   * Retrieve the tutorial seen flags from local storage
+   * @returns the flags saved in local storage if they exist, otherwise an empty array
    */
-  public saveTutorialFlag(tutorial: Tutorial, flag: boolean = true): boolean {
+  private getTutorialFlags(): (boolean | null)[] {
     const key = getDataTypeKey(GameDataType.TUTORIALS);
-    let tutorials: boolean[] = [];
+    let tutorials = [];
 
     if (localStorage.hasOwnProperty(key)) {
       try {
@@ -808,7 +806,18 @@ export class GameData {
         console.warn("Failed to parse tutorial data from local storage", err);
       }
     }
+    return tutorials;
+  }
 
+  /**
+   * Registers the given tutorial's seen status in local storage
+   * @param tutorial the {@linkcode Tutorial} to update the flag for
+   * @param flag whether the tutorial should be marked as seen or not. Default: `true`
+   * @returns `true` if saving was successful
+   */
+  public saveTutorialFlag(tutorial: Tutorial, flag: boolean = true): boolean {
+    const key = getDataTypeKey(GameDataType.TUTORIALS);
+    const tutorials = this.getTutorialFlags();
     tutorials[tutorial] = flag;
     try {
       localStorage.setItem(key, JSON.stringify(tutorials));
@@ -825,18 +834,7 @@ export class GameData {
    * @returns `true` if the tutorial has already been seen, false otherwise
    */
   public wasTutorialSeen(tutorial: Tutorial): boolean {
-    const key = getDataTypeKey(GameDataType.TUTORIALS);
-    let tutorials: boolean[] = [];
-
-    if (localStorage.hasOwnProperty(key)) {
-      try {
-        tutorials = JSON.parse(localStorage.getItem(key)!);
-      } catch (err) {
-        console.warn("Failed to parse tutorial data from local storage", err);
-      }
-    }
-
-    return tutorials[tutorial] ?? false;
+    return this.getTutorialFlags()[tutorial] ?? false;
   }
 
   public saveSeenDialogue(dialogue: string): boolean {
