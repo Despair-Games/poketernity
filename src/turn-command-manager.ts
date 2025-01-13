@@ -1,7 +1,7 @@
 import { Abilities } from "#enums/abilities";
+import type { BattlerIndex } from "#enums/battler-index";
 import { Stat } from "#enums/stat";
 import { SwitchType } from "#enums/switch-type";
-import type { BattlerIndex } from "./battle";
 import { allMoves } from "./data/all-moves";
 import { TrickRoomTag } from "./data/arena-tag";
 import { PokemonMove, type Pokemon, type QueuedMove } from "./field/pokemon";
