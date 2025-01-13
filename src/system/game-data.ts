@@ -1,5 +1,5 @@
 import i18next from "i18next";
-import { bypassLogin } from "#app/constants";
+import { bypassLogin, SETTINGS_LS_KEY } from "#app/constants";
 import { globalScene } from "#app/global-scene";
 import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
@@ -73,7 +73,7 @@ export function getDataTypeKey(dataType: GameDataType, slotId: number = 0): stri
       }
       return ret;
     case GameDataType.SETTINGS:
-      return "settings";
+      return SETTINGS_LS_KEY;
     case GameDataType.TUTORIALS:
       return "tutorials";
     case GameDataType.SEEN_DIALOGUES:
