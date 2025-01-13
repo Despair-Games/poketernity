@@ -799,9 +799,10 @@ export class GameData {
     const key = getDataTypeKey(GameDataType.TUTORIALS);
     let tutorials = [];
 
-    if (localStorage.hasOwnProperty(key)) {
+    const lsItem = localStorage.getItem(key);
+    if (lsItem) {
       try {
-        tutorials = JSON.parse(localStorage.getItem(key)!);
+        tutorials = JSON.parse(lsItem);
       } catch (err) {
         console.warn("Failed to parse tutorial data from local storage", err);
       }
