@@ -5,7 +5,8 @@ import type { NextEncounterPhase } from "#app/phases/next-encounter-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import { BattlerIndex, BattleType } from "#app/battle";
+import { BattlerIndex } from "#enums/battler-index";
+import { BattleType } from "#enums/battle-type";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
 import { SyncEncounterNatureAbAttr } from "#app/data/ab-attrs/sync-encounter-nature-ab-attr";
 import { applyAbAttrs } from "#app/data/ability";
@@ -19,7 +20,7 @@ import { TrainerSlot } from "#enums/trainer-slot";
 import { getRandomWeatherType } from "#app/data/weather";
 import { EncounterPhaseEvent } from "#app/events/battle-scene";
 import type { Pokemon } from "#app/field/pokemon";
-import { FieldPosition } from "#app/field/pokemon";
+import { FieldPosition } from "#enums/field-position";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import {
@@ -29,7 +30,8 @@ import {
   overrideModifiers,
   TurnHeldItemTransferModifier,
 } from "#app/modifier/modifier";
-import { ModifierPoolType, regenerateModifierPoolThresholds } from "#app/modifier/modifier-type";
+import { regenerateModifierPoolThresholds } from "#app/modifier/modifier-type";
+import { ModifierPoolType } from "#enums/modifier-pool-type";
 import Overrides from "#app/overrides";
 import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { CheckSwitchPhase } from "#app/phases/check-switch-phase";
@@ -41,7 +43,8 @@ import { ShinySparklePhase } from "#app/phases/shiny-sparkle-phase";
 import { SummonPhase } from "#app/phases/summon-phase";
 import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
 import { achvs } from "#app/system/achv";
-import { handleTutorial, Tutorial } from "#app/tutorial";
+import { handleTutorial } from "#app/tutorial";
+import { Tutorial } from "#enums/tutorial";
 import { Mode } from "#app/ui/ui";
 import { randSeedInt, randSeedItem } from "#app/utils";
 import { Biome } from "#enums/biome";

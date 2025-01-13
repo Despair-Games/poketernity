@@ -1,4 +1,4 @@
-import { BattlerIndex } from "../battle";
+import { BattlerIndex } from "#enums/battler-index";
 import { Mode } from "./ui";
 import UiHandler from "./ui-handler";
 import { isNullOrUndefined, fixedNumber } from "#app/utils";

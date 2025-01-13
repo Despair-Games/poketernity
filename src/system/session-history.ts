@@ -1,4 +1,4 @@
-import type { GameModes } from "../game-mode";
+import type { GameModes } from "#enums/game-modes";
 import type PokemonData from "./pokemon-data";
 import type PersistentModifierData from "./modifier-data";
 

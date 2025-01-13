@@ -1,15 +1,16 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { PokemonTurnData, TurnMove, PokemonMove } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
-import { MoveResult } from "#app/field/pokemon";
 import type BattleScene from "#app/battle-scene";
-import { BattlerTagLapseType, BindTag, SubstituteTag } from "#app/data/battler-tags";
+import { BindTag, SubstituteTag } from "#app/data/battler-tags";
 import { Moves } from "#enums/moves";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import * as messages from "#app/messages";
 import { allMoves } from "#app/data/all-moves";
 import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { GameManager } from "#test/testUtils/gameManager";
+import { MoveResult } from "#enums/move-result";
+import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 
 describe("BattlerTag - SubstituteTag", () => {
   let phaserGame: Phaser.Game;

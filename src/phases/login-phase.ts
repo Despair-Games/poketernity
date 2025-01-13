@@ -1,9 +1,10 @@
 import { updateUserInfo } from "#app/account";
-import { bypassLogin } from "#app/battle-scene";
+import { bypassLogin } from "#app/constants";
 import { SESSION_ID_COOKIE } from "#app/constants";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import { handleTutorial, Tutorial } from "#app/tutorial";
+import { handleTutorial } from "#app/tutorial";
+import { Tutorial } from "#enums/tutorial";
 import { Mode } from "#app/ui/ui";
 import { executeIf, getCookie, removeCookie } from "#app/utils";
 import i18next from "i18next";

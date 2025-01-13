@@ -1,5 +1,4 @@
 import BattleScene from "#app/battle-scene";
-import * as battleScene from "#app/battle-scene";
 import { MoveAnim } from "#app/data/battle-anims";
 import { Pokemon } from "#app/field/pokemon";
 import { MockClock } from "#test/testUtils/mocks/mockClock";
@@ -11,6 +10,7 @@ import fs from "fs";
 import Phaser from "phaser";
 import { vi } from "vitest";
 import { version } from "../../package.json";
+import * as constants from "#app/constants";
 import InputManager = Phaser.Input.InputManager;
 import KeyboardManager = Phaser.Input.Keyboard.KeyboardManager;
 import KeyboardPlugin = Phaser.Input.Keyboard.KeyboardPlugin;
@@ -22,11 +22,11 @@ export class GameWrapper {
   public game: Phaser.Game;
   public scene: BattleScene;
 
-  constructor(phaserGame: Phaser.Game, bypassLogin: boolean) {
+  constructor(phaserGame: Phaser.Game, bypassLoginMockTrue: boolean) {
     Phaser.Math.RND.sow(["test"]);
     // vi.spyOn(Utils, "apiFetch", "get").mockReturnValue(fetch);
-    if (bypassLogin) {
-      vi.spyOn(battleScene, "bypassLogin", "get").mockReturnValue(true);
+    if (bypassLoginMockTrue) {
+      vi.spyOn(constants, "bypassLogin", "get").mockReturnValue(true);
     }
     this.game = phaserGame;
     MoveAnim.prototype.getAnim = () =>

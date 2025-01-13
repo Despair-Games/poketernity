@@ -1,4 +1,5 @@
-import { BattleType, ClassicFixedBossWaves, type BattlerIndex } from "#app/battle";
+import { type BattlerIndex } from "#enums/battler-index";
+import { BattleType } from "#enums/battle-type";
 import { handleMysteryEncounterVictory } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { globalScene } from "#app/global-scene";
 import { modifierTypes, type CustomModifierSettings } from "#app/modifier/modifier-type";
@@ -10,6 +11,7 @@ import { ModifierRewardPhase } from "./modifier-reward-phase";
 import { NewBattlePhase } from "./new-battle-phase";
 import { SelectModifierPhase } from "./select-modifier-phase";
 import { TrainerVictoryPhase } from "./trainer-victory-phase";
+import { EVIL_BOSS_2_WAVE } from "#app/data/special-waves";
 
 export class VictoryPhase extends PokemonPhase {
   /** If true, indicates that the phase is intended for EXP purposes only, and not to continue a battle to next phase */
@@ -55,7 +57,7 @@ export class VictoryPhase extends PokemonPhase {
       if (isEndless || !gameMode.isWaveFinal(waveIndex)) {
         globalScene.pushPhase(new EggLapsePhase());
 
-        if (isClassic && waveIndex === ClassicFixedBossWaves.EVIL_BOSS_2) {
+        if (isClassic && waveIndex === EVIL_BOSS_2_WAVE) {
           // Should get Lock Capsule on 165 before shop phase so it can be used in the rewards shop
           globalScene.pushPhase(new ModifierRewardPhase(modifierTypes.LOCK_CAPSULE));
         }

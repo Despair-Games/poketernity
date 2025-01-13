@@ -2,7 +2,8 @@ import i18next from "i18next";
 import type { FixedBattleConfigs } from "./battle";
 import { classicFixedBattles, FixedBattleConfig } from "./battle";
 import type { Challenge } from "./data/challenge";
-import { allChallenges, applyChallenges, ChallengeType, copyChallenge } from "./data/challenge";
+import { allChallenges, applyChallenges, copyChallenge } from "./data/challenge";
+import { ChallengeType } from "#enums/challenge-type";
 import type PokemonSpecies from "./data/pokemon-species";
 import { allSpecies } from "./data/pokemon-species";
 import type { Arena } from "./field/arena";
@@ -10,16 +11,9 @@ import Overrides from "#app/overrides";
 import { randSeedInt, randSeedItem } from "#app/utils";
 import { Biome } from "#enums/biome";
 import { Species } from "#enums/species";
-import { Challenges } from "./enums/challenges";
+import { Challenges } from "#enums/challenges";
 import { globalScene } from "#app/global-scene";
-
-export enum GameModes {
-  CLASSIC,
-  ENDLESS,
-  SPLICED_ENDLESS,
-  DAILY,
-  CHALLENGE,
-}
+import { GameModes } from "#enums/game-modes";
 
 interface GameModeConfig {
   isClassic?: boolean;
