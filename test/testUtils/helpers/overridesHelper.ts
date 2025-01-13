@@ -3,7 +3,7 @@ import { Weather } from "#app/data/weather";
 import { Abilities } from "#enums/abilities";
 import type { ModifierOverride } from "#app/modifier/modifier-type";
 import type { BattleStyle } from "#app/overrides";
-import Overrides from "#app/overrides";
+import Overrides, { defaultOverrides } from "#app/overrides";
 import type { Unlockables } from "#enums/unlockables";
 import { Biome } from "#enums/biome";
 import { Moves } from "#enums/moves";
