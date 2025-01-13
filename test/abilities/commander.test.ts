@@ -196,13 +196,13 @@ describe("Abilities - Commander", () => {
 
     game.move.select(Moves.SPLASH, 1);
 
+    await game.forceEnemyMove(Moves.WHIRLWIND, BattlerIndex.PLAYER_2);
+    await game.forceEnemyMove(Moves.SPLASH);
+
     await game.phaseInterceptor.to("TurnStartPhase", false);
 
     const { turnManager } = game.scene.currentBattle;
     expect(turnManager.findCommand((tc) => tc.pokemon === tatsugiri)).toBeUndefined();
-
-    await game.forceEnemyMove(Moves.WHIRLWIND, BattlerIndex.PLAYER_2);
-    await game.forceEnemyMove(Moves.SPLASH);
 
     // Test may time out here if Whirlwind forced out a Pokemon
     await game.phaseInterceptor.to("TurnEndPhase");

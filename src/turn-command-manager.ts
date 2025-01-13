@@ -238,11 +238,11 @@ export class TurnCommandManager {
 
   private handleFightCommand(turnCommand: TurnCommand): boolean {
     const { pokemon, cursor, move: queuedMove, targets } = turnCommand;
-    pokemon.turnData.order = this.orderIndex++;
-
-    if (!queuedMove) {
+    if (!pokemon?.isActive(true) || !queuedMove) {
       return false;
     }
+
+    pokemon.turnData.order = this.orderIndex++;
 
     const move =
       pokemon.getMoveset().find((m) => m.moveId === queuedMove.move && m.ppUsed < m.getMovePp())
