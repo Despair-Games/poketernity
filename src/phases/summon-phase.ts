@@ -1,18 +1,18 @@
-import { BattleType } from "#app/battle";
+import { BattleType } from "#enums/battle-type";
 import { getPokeballAtlasKey, getPokeballTintColor } from "#app/data/pokeball";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { PlayerGender } from "#enums/player-gender";
-import { addPokeballOpenParticles } from "#app/field/anims";
-import { FieldPosition, type Pokemon } from "#app/field/pokemon";
+import { type Pokemon } from "#app/field/pokemon";
+import { FieldPosition } from "#enums/field-position";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import i18next from "i18next";
 import { PartyMemberPokemonPhase } from "./abstract-party-member-pokemon-phase";
 import { GameOverPhase } from "./game-over-phase";
 import { PostSummonPhase } from "./post-summon-phase";
 import { ShinySparklePhase } from "./shiny-sparkle-phase";
+import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 
 export class SummonPhase extends PartyMemberPokemonPhase {
   private readonly loaded: boolean;
@@ -113,7 +113,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
    * Enemy trainer or player trainer will do animations to throw Pokeball and summon a Pokemon to the field.
    */
   protected summon(): void {
-    const { add, currentBattle, field, time, tweens } = globalScene;
+    const { add, currentBattle, field, time, tweens, animations } = globalScene;
     const pokemon = this.getPokemon();
 
     const pokeball = globalScene.addFieldSprite(
@@ -171,9 +171,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
               }
               currentBattle.seenEnemyPartyMemberIds.add(pokemon.id);
             }
-
-            addPokeballOpenParticles(pokemon.x, pokemon.y - 16, pokemon.pokeball);
-
+            animations.addPokeballOpenParticles(pokemon.x, pokemon.y - 16, pokemon.pokeball);
             globalScene.updateModifiers(this.isPlayer);
             globalScene.updateFieldScale();
 

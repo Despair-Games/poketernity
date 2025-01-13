@@ -29,7 +29,6 @@ export class IgnoreOpponentStatStagesAbAttr extends AbAttr {
     _pokemon: Pokemon,
     _passive: boolean,
     _simulated: boolean,
-    _cancelled: BooleanHolder,
     stat: EffectiveStat,
     ignoreStatStage: BooleanHolder,
   ) {

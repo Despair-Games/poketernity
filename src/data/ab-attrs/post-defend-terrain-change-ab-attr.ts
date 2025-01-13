@@ -1,6 +1,6 @@
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
-import { HitResult } from "#app/field/pokemon";
+import { HitResult } from "#enums/hit-result";
 import { globalScene } from "#app/global-scene";
 import type { TerrainType } from "#enums/terrain-type";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";

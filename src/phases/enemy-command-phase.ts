@@ -3,7 +3,7 @@
 import type { EnemyPokemon, Pokemon } from "#app/field/pokemon";
 // -- end tsdoc imports --
 
-import { BattlerIndex } from "#app/battle";
+import { BattlerIndex } from "#enums/battler-index";
 import { globalScene } from "#app/global-scene";
 import { Command } from "#app/ui/command-ui-handler";
 import { Abilities } from "#enums/abilities";

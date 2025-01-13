@@ -1,8 +1,9 @@
-import { type BattlerIndex } from "#app/battle";
-import { type DamageResult, HitResult } from "#app/field/pokemon";
+import { type BattlerIndex } from "#enums/battler-index";
+import { type DamageResult } from "#app/field/pokemon";
+import { HitResult } from "#enums/hit-result";
 import { globalScene } from "#app/global-scene";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
-import { fixedInt } from "#app/utils";
+import { fixedNumber } from "#app/utils";
 
 /**
  * Displays damage numbers and plays move hit SFX during battle
@@ -33,7 +34,7 @@ export class DamageAnimPhase extends PokemonPhase {
       if (globalScene.moveAnimations) {
         globalScene.toggleInvert(true);
       }
-      globalScene.time.delayedCall(fixedInt(1000), () => {
+      globalScene.time.delayedCall(fixedNumber(1000), () => {
         globalScene.toggleInvert(false);
         this.displayDamage();
       });

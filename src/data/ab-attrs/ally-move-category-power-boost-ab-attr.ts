@@ -1,4 +1,4 @@
-import type { MoveCategory } from "../../enums/move-category";
+import type { MoveCategory } from "#enums/move-category";
 import { FieldMovePowerBoostAbAttr } from "./field-move-power-boost-ab-attr";
 
 /**

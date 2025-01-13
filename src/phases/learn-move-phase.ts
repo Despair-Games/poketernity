@@ -13,15 +13,7 @@ import { SummaryUiMode } from "#app/ui/summary-ui-handler";
 import { Mode } from "#app/ui/ui";
 import { Moves } from "#enums/moves";
 import i18next from "i18next";
-
-export enum LearnMoveType {
-  /** For learning a move via level-up, evolution, or other non-item-based event */
-  LEARN_MOVE,
-  /** For learning a move via Memory Mushroom */
-  MEMORY,
-  /** For learning a move via TM */
-  TM,
-}
+import { LearnMoveType } from "#enums/learn-move-type";
 
 export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
   private readonly moveId: Moves;
@@ -204,7 +196,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
       globalScene.tryRemovePhase((phase) => phase instanceof SelectModifierPhase);
     } else if (this.learnMoveType === LearnMoveType.MEMORY) {
       if (this.cost !== -1) {
-        if (!Overrides.WAIVE_ROLL_FEE_OVERRIDE) {
+        if (!Overrides.WAIVE_SHOP_FEES_OVERRIDE) {
           globalScene.money -= this.cost;
           globalScene.updateMoneyText();
           globalScene.animateMoneyChanged(false);

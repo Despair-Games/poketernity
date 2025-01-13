@@ -1,4 +1,5 @@
-import { type Pokemon, MoveResult } from "#app/field/pokemon";
+import { type Pokemon } from "#app/field/pokemon";
+import { MoveResult } from "#enums/move-result";
 import { globalScene } from "#app/global-scene";
 import type { ArenaTagType } from "#enums/arena-tag-type";
 import type { Move } from "../move";

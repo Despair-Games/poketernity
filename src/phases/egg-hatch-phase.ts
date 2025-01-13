@@ -1,21 +1,20 @@
 import type { AnySound } from "#app/battle-scene";
 import type { Egg } from "#app/data/egg";
-import type { EggHatchData } from "#app/data/egg-hatch-data";
 import { EggCountChangedEvent } from "#app/events/egg";
-import { doShinySparkleAnim, sin } from "#app/field/anims";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { Phase } from "#app/phase";
-import type { EggLapsePhase } from "#app/phases/egg-lapse-phase";
 import { achvs } from "#app/system/achv";
 import EggCounterContainer from "#app/ui/egg-counter-container";
 import type EggHatchSceneHandler from "#app/ui/egg-hatch-scene-handler";
 import PokemonInfoContainer from "#app/ui/pokemon-info-container";
 import { Mode } from "#app/ui/ui";
-import { fixedInt, getFrameMs, randInt } from "#app/utils";
+import { fixedNumber, getFrameMs, randInt } from "#app/utils";
 import i18next from "i18next";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
+import type { EggLapsePhase } from "./egg-lapse-phase";
+import type { EggHatchData } from "#app/data/egg-hatch-data";
 
 /**
  * Class that represents egg hatching
@@ -303,17 +302,17 @@ export class EggHatchPhase extends Phase {
     this.canSkip = false;
     this.hatched = true;
     if (this.evolutionBgm) {
-      SoundFade.fadeOut(globalScene, this.evolutionBgm, fixedInt(100));
+      SoundFade.fadeOut(globalScene, this.evolutionBgm, fixedNumber(100));
     }
     for (let e = 0; e < 5; e++) {
-      globalScene.time.delayedCall(fixedInt(375 * e), () =>
+      globalScene.time.delayedCall(fixedNumber(375 * e), () =>
         globalScene.playSound("se/egg_hatch", { volume: 1 - e * 0.2 }),
       );
     }
     this.eggLightraysOverlay.setVisible(true);
     this.eggLightraysOverlay.play("egg_lightrays");
     globalScene.tweens.add({
-      duration: fixedInt(125),
+      duration: fixedNumber(125),
       targets: this.eggHatchOverlay,
       alpha: 1,
       ease: "Cubic.easeIn",
@@ -322,7 +321,7 @@ export class EggHatchPhase extends Phase {
         this.canSkip = true;
       },
     });
-    globalScene.time.delayedCall(fixedInt(1500), () => {
+    globalScene.time.delayedCall(fixedNumber(1500), () => {
       this.canSkip = false;
       if (!this.skipped) {
         this.doReveal();
@@ -362,16 +361,16 @@ export class EggHatchPhase extends Phase {
     this.pokemonSprite.setPipelineData("spriteKey", this.pokemon.getSpriteKey());
     this.pokemonSprite.setVisible(true);
 
-    globalScene.time.delayedCall(fixedInt(250), () => {
+    globalScene.time.delayedCall(fixedNumber(250), () => {
       this.eggsToHatchCount--;
       this.eggHatchHandler.eventTarget.dispatchEvent(new EggCountChangedEvent(this.eggsToHatchCount));
       this.pokemon.cry();
       if (isShiny) {
-        globalScene.time.delayedCall(fixedInt(500), () => {
-          doShinySparkleAnim(this.pokemonShinySparkle, this.pokemon.variant);
+        globalScene.time.delayedCall(fixedNumber(500), () => {
+          globalScene.animations.doShinySparkleAnim(this.pokemonShinySparkle, this.pokemon.variant);
         });
       }
-      globalScene.time.delayedCall(fixedInt((isShiny ? 750 : 250) + (!this.skipped ? 1000 : 0)), () => {
+      globalScene.time.delayedCall(fixedNumber((isShiny ? 750 : 250) + (!this.skipped ? 1000 : 0)), () => {
         this.infoContainer.show(this.pokemon, false, this.skipped ? 2 : 1);
 
         globalScene.playSoundWithoutBgm("evolution_fanfare");
@@ -396,7 +395,7 @@ export class EggHatchPhase extends Phase {
       });
     });
     globalScene.tweens.add({
-      duration: fixedInt(this.skipped ? 500 : 3000),
+      duration: fixedNumber(this.skipped ? 500 : 3000),
       targets: this.eggHatchOverlay,
       alpha: 0,
       ease: "Cubic.easeOut",
@@ -448,7 +447,7 @@ export class EggHatchPhase extends Phase {
       yOffset += speedMultiplier;
       if (trigIndex < 160) {
         particle.setPosition(initialX + (speed * f) / 3, initialY + yOffset);
-        particle.y += -sin(trigIndex, amp);
+        particle.y += -globalScene.animations.sin(trigIndex, amp);
         if (f > 108) {
           particle.setScale(1 - (f - 108) / 20);
         }

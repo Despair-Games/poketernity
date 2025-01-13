@@ -6,14 +6,15 @@ import { addTextObject, getTextStyleOptions, getModifierTierTextTint, getTextCol
 import AwaitableUiHandler from "./awaitable-ui-handler";
 import { Mode } from "./ui";
 import { LockModifierTiersModifier, PokemonHeldItemModifier, HealShopCostModifier } from "../modifier/modifier";
-import { handleTutorial, Tutorial } from "../tutorial";
+import { handleTutorial } from "../tutorial";
+import { Tutorial } from "#enums/tutorial";
 import { Button } from "#enums/buttons";
 import MoveInfoOverlay from "./move-info-overlay";
 import { allMoves } from "#app/data/all-moves";
 import { formatMoney } from "#app/utils";
 import Overrides from "#app/overrides";
 import i18next from "i18next";
-import { ShopCursorTarget } from "#app/enums/shop-cursor-target";
+import { ShopCursorTarget } from "#enums/shop-cursor-target";
 import { NumberHolder } from "#app/utils";
 import Phaser from "phaser";
 import { PokeballType } from "#enums/pokeball";
@@ -52,6 +53,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
   private cursorObj: Phaser.GameObjects.Image | null;
 
   constructor() {
+    // TODO: why does it use Mode.CONFIRM and not Mode.MODIFIER_SELECT?
     super(Mode.CONFIRM);
 
     this.options = [];
@@ -346,7 +348,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
 
       updateCursorTarget();
 
-      handleTutorial(Tutorial.Select_Item).then((res) => {
+      handleTutorial(Tutorial.SELECT_ITEM).then((res) => {
         if (res) {
           updateCursorTarget();
         }
@@ -932,7 +934,7 @@ class ModifierOption extends Phaser.GameObjects.Container {
   }
 
   updateCostText(): void {
-    const cost = Overrides.WAIVE_ROLL_FEE_OVERRIDE ? 0 : this.modifierTypeOption.cost;
+    const cost = Overrides.WAIVE_SHOP_FEES_OVERRIDE ? 0 : this.modifierTypeOption.cost;
     const textStyle = cost <= globalScene.money ? TextStyle.MONEY : TextStyle.PARTY_RED;
 
     const formattedMoney = formatMoney(globalScene.moneyFormat, cost);

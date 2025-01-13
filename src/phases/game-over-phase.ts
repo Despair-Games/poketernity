@@ -1,6 +1,6 @@
 import type { SessionSaveData } from "#app/@types/SessionData";
 import { clientSessionId } from "#app/account";
-import { BattleType } from "#app/battle";
+import { BattleType } from "#enums/battle-type";
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
@@ -21,7 +21,7 @@ import { UnlockPhase } from "#app/phases/unlock-phase";
 import { api } from "#app/plugins/api/api";
 import { achvs, ChallengeAchv } from "#app/system/achv";
 import TrainerData from "#app/system/trainer-data";
-import { Unlockables } from "#app/system/unlockables";
+import { Unlockables } from "#enums/unlockables";
 import { Mode } from "#app/ui/ui";
 import { isLocal, isLocalServerConnected } from "#app/utils";
 import { PlayerGender } from "#enums/player-gender";

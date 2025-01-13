@@ -1,6 +1,6 @@
 import type { EnemyPokemon, Pokemon } from "../field/pokemon";
 import { getLevelTotalExp, getLevelRelExp } from "../data/exp";
-import { getLocalizedSpriteKey, fixedInt } from "#app/utils";
+import { getLocalizedSpriteKey, fixedNumber } from "#app/utils";
 import { addTextObject, TextStyle } from "./text";
 import { getGenderSymbol, getGenderColor } from "#app/data/gender";
 import { Gender } from "#enums/gender";
@@ -13,7 +13,7 @@ import { Stat } from "#enums/stat";
 import BattleFlyout from "./battle-flyout";
 import { WindowVariant, addWindow } from "./ui-theme";
 import i18next from "i18next";
-import { ExpGainsSpeed } from "#app/enums/exp-gains-speed";
+import { ExpGainsSpeed } from "#enums/exp-gains-speed";
 
 export default class BattleInfo extends Phaser.GameObjects.Container {
   public static readonly EXP_GAINS_DURATION_BASE = 1650;
@@ -535,7 +535,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
   toggleStats(visible: boolean): void {
     globalScene.tweens.add({
       targets: this.statsContainer,
-      duration: fixedInt(125),
+      duration: fixedNumber(125),
       ease: "Sine.easeInOut",
       alpha: visible ? 1 : 0,
     });

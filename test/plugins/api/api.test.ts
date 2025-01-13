@@ -1,11 +1,16 @@
 import type { TitleStatsResponse } from "#app/@types/Api";
 import { api } from "#app/plugins/api/api";
+import { initServerForApiTests } from "#test/testUtils/testFileInitialization";
 import { getApiBaseUrl } from "#test/testUtils/testUtils";
 import { http, HttpResponse } from "msw";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const apiBase = getApiBaseUrl();
-const { server } = global;
+
+let server;
+beforeAll(async () => {
+  server = await initServerForApiTests();
+});
 
 afterEach(() => {
   server.resetHandlers();
