@@ -274,7 +274,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
     this.updateBindings();
 
     this.uiItems.forEach((uiItem, s) => {
-      const value = settingsManager.settings[this.category][uiItem.key];
+      const value = settingsManager[this.category][uiItem.key];
       let index = 0;
 
       if (value !== undefined) {
@@ -623,7 +623,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
   protected handleCancelConfirm(uiItem: SettingsUiItem) {
     const { options } = uiItem;
 
-    const oldValue = settingsManager.settings[this.category][uiItem.key];
+    const oldValue = settingsManager[this.category][uiItem.key];
     const oldOptionIndex = options.findIndex((option) => option.value === oldValue);
     this.setOptionCursor(-1, Math.max(oldOptionIndex, 0), false);
   }
