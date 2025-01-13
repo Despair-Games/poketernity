@@ -1,5 +1,5 @@
 import i18next from "i18next";
-import { GameMode } from "../game-mode";
+import { GameMode } from "#app/game-mode";
 import { GameModes } from "#enums/game-modes";
 import { Unlockables } from "#enums/unlockables";
 

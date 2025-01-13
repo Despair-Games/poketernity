@@ -1,5 +1,5 @@
 import i18next from "i18next";
-import { bypassLogin } from "#app/bypass-login";
+import { bypassLogin } from "#app/constants";
 import { globalScene } from "#app/global-scene";
 import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";

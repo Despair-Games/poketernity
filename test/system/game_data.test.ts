@@ -6,7 +6,7 @@ import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import * as account from "#app/account";
-import * as bypassLogin from "#app/bypass-login";
+import * as bypassLogin from "#app/constants";
 
 describe("System - Game Data", () => {
   let phaserGame: Phaser.Game;

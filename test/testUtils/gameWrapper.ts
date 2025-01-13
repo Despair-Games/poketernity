@@ -10,7 +10,7 @@ import fs from "fs";
 import Phaser from "phaser";
 import { vi } from "vitest";
 import { version } from "../../package.json";
-import * as bypassLogin from "#app/bypass-login";
+import * as bypassLogin from "#app/constants";
 import InputManager = Phaser.Input.InputManager;
 import KeyboardManager = Phaser.Input.Keyboard.KeyboardManager;
 import KeyboardPlugin = Phaser.Input.Keyboard.KeyboardPlugin;
@@ -22,10 +22,10 @@ export class GameWrapper {
   public game: Phaser.Game;
   public scene: BattleScene;
 
-  constructor(phaserGame: Phaser.Game, bypassLoginValue: boolean) {
+  constructor(phaserGame: Phaser.Game, bypassLoginMockTrue: boolean) {
     Phaser.Math.RND.sow(["test"]);
     // vi.spyOn(Utils, "apiFetch", "get").mockReturnValue(fetch);
-    if (bypassLoginValue) {
+    if (bypassLoginMockTrue) {
       vi.spyOn(bypassLogin, "bypassLogin", "get").mockReturnValue(true);
     }
     this.game = phaserGame;
