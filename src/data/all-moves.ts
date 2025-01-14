@@ -244,6 +244,7 @@ import { crashDamageFunc, frenzyMissFunc } from "./move-utils";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { NoDamageAgainstFlyingAttr } from "./move-attrs/no-damage-against-flying-attr";
 import { SkyDropAttr } from "./move-attrs/sky-drop-attr";
+import { StatStageChangeAllOppsAttr } from "./move-attrs/stat-stage-change-all-opps";
 
 export const allMoves: Move[] = [];
 
@@ -3339,10 +3340,10 @@ export function initMoves() {
       { failOnOverlap: true },
     ),
     new AttackMove(Moves.G_MAX_TARTNESS, Type.GRASS, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).attr(
-      StatStageChangeAttr,
+      StatStageChangeAllOppsAttr,
       [Stat.EVA],
       -1,
-    ), // TODO: Needs to statdrop all opponents
+    ),
     new AttackMove(Moves.G_MAX_SWEETNESS, Type.GRASS, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).attr(
       HealStatusEffectAttr,
       false,
@@ -3360,10 +3361,10 @@ export function initMoves() {
       { failOnOverlap: true },
     ), // TODO: Needs to torment all opponents
     new AttackMove(Moves.G_MAX_FOAM_BURST, Type.WATER, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).attr(
-      StatStageChangeAttr,
+      StatStageChangeAllOppsAttr,
       [Stat.SPD],
       -2,
-    ), // TODO: Needs to statdrop all opponents
+    ),
     new AttackMove(Moves.G_MAX_CENTIFERNO, Type.FIRE, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).attr(
       TrapAttr,
       BattlerTagType.FIRE_SPIN,
