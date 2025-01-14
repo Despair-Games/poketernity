@@ -3258,103 +3258,121 @@ export function initMoves() {
       ]),
     new AttackMove(Moves.G_MAX_WILDFIRE, Type.FIRE, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .attr(AddArenaTrapTagHitAttr, ArenaTagType.G_MAX_WILDFIRE),
     new AttackMove(Moves.G_MAX_BEFUDDLE, Type.BUG, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .attr(MultiStatusEffectAttr, [StatusEffect.POISON, StatusEffect.PARALYSIS, StatusEffect.SLEEP]),
     new AttackMove(Moves.G_MAX_VOLT_CRASH, Type.ELECTRIC, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .attr(StatusEffectAttr, StatusEffect.PARALYSIS),
     new AttackMove(Moves.G_MAX_GOLD_RUSH, Type.NORMAL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .attr(MoneyAttr), // TODO: Should give 100x user level money
     new AttackMove(Moves.G_MAX_CHI_STRIKE, Type.FIGHTING, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .attr(AddBattlerTagAttr, BattlerTagType.CHI_STRIKE_CRIT_BOOST, true, { failOnOverlap: false }), // TODO: Should also give the user's ally chi strike crit boost
     new AttackMove(Moves.G_MAX_TERROR, Type.GHOST, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .attr(AddBattlerTagAttr, BattlerTagType.TRAPPED, false, { failOnOverlap: true }),
     new AttackMove(Moves.G_MAX_RESONANCE, Type.ICE, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .attr(AddArenaTagAttr, ArenaTagType.AURORA_VEIL, { turnCount: 5, selfSideTarget: true }),
     new AttackMove(Moves.G_MAX_CUDDLE, Type.NORMAL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .attr(AddBattlerTagAttr, BattlerTagType.INFATUATED), // TODO: Should only add tag if targets are opposite gender
     new AttackMove(Moves.G_MAX_REPLENISH, Type.NORMAL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .unimplemented(), // Same effect as recycle (N)
     new AttackMove(Moves.G_MAX_MALODOR, Type.POISON, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .attr(StatusEffectAttr, StatusEffect.POISON),
     new AttackMove(Moves.G_MAX_STONESURGE, Type.WATER, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .attr(AddArenaTrapTagHitAttr, ArenaTagType.STEALTH_ROCK),
     new AttackMove(Moves.G_MAX_WIND_RAGE, Type.FLYING, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .attr(ClearWeatherAttr, WeatherType.FOG)
+      .attr(ClearTerrainAttr)
+      .attr(RemoveScreensAttr, false)
+      .attr(RemoveArenaTrapAttr, true)
+      .attr(RemoveArenaTagsAttr, [ArenaTagType.SAFEGUARD, ArenaTagType.MIST], ArenaTagRelativeSide.TARGET),
     new AttackMove(Moves.G_MAX_STUN_SHOCK, Type.ELECTRIC, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .attr(MultiStatusEffectAttr, [StatusEffect.POISON, StatusEffect.PARALYSIS]),
     new AttackMove(Moves.G_MAX_FINALE, Type.FAIRY, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .attr(HealAttr, 1 / 6, true, false), // TODO: should also heal ally
     new AttackMove(Moves.G_MAX_DEPLETION, Type.DRAGON, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .attr(ReducePpMoveAttr, 2),
     new AttackMove(Moves.G_MAX_GRAVITAS, Type.PSYCHIC, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .attr(AddArenaTagAttr, ArenaTagType.GRAVITY, { turnCount: 5 }),
     new AttackMove(Moves.G_MAX_VOLCALITH, Type.ROCK, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .attr(AddArenaTrapTagHitAttr, ArenaTagType.G_MAX_VOLCALITH),
     new AttackMove(Moves.G_MAX_SANDBLAST, Type.GROUND, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
-    new AttackMove(Moves.G_MAX_SNOOZE, Type.DARK, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
+      .attr(TrapAttr, BattlerTagType.SAND_TOMB),
+    new AttackMove(Moves.G_MAX_SNOOZE, Type.DARK, MoveCategory.PHYSICAL, 10, -1, 10, 50, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .attr(AddBattlerTagAttr, BattlerTagType.DROWSY, false, { failOnOverlap: true }),
     new AttackMove(Moves.G_MAX_TARTNESS, Type.GRASS, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .attr(StatStageChangeAttr, [Stat.EVA], -1),
     new AttackMove(Moves.G_MAX_SWEETNESS, Type.GRASS, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .attr(HealStatusEffectAttr, false, getNonVolatileStatusEffects()), // TODO: Should also heal ally of status
     new AttackMove(Moves.G_MAX_SMITE, Type.FAIRY, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .attr(ConfuseAttr),
     new AttackMove(Moves.G_MAX_STEELSURGE, Type.STEEL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .attr(AddArenaTrapTagHitAttr, ArenaTagType.SHARP_STEEL),
     new AttackMove(Moves.G_MAX_MELTDOWN, Type.STEEL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .attr(AddBattlerTagAttr, BattlerTagType.TORMENT, false, { failOnOverlap: true }),
     new AttackMove(Moves.G_MAX_FOAM_BURST, Type.WATER, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .attr(StatStageChangeAttr, [Stat.SPD], -2),
     new AttackMove(Moves.G_MAX_CENTIFERNO, Type.FIRE, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .attr(TrapAttr, BattlerTagType.FIRE_SPIN),
     new AttackMove(Moves.G_MAX_VINE_LASH, Type.GRASS, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .attr(AddArenaTrapTagHitAttr, ArenaTagType.G_MAX_VINE_LASH),
     new AttackMove(Moves.G_MAX_CANNONADE, Type.WATER, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
-    new AttackMove(Moves.G_MAX_DRUM_SOLO, Type.GRASS, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
+      .attr(AddArenaTrapTagHitAttr, ArenaTagType.G_MAX_CANNONADE),
+    new AttackMove(Moves.G_MAX_DRUM_SOLO, Type.GRASS, MoveCategory.PHYSICAL, 160, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
-    new AttackMove(Moves.G_MAX_FIREBALL, Type.FIRE, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
+      .ignoresAbilities(),
+    new AttackMove(Moves.G_MAX_FIREBALL, Type.FIRE, MoveCategory.PHYSICAL, 160, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
-    new AttackMove(Moves.G_MAX_HYDROSNIPE, Type.WATER, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
+      .ignoresAbilities(),
+    new AttackMove(Moves.G_MAX_HYDROSNIPE, Type.WATER, MoveCategory.PHYSICAL, 160, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .ignoresAbilities(),
     new AttackMove(Moves.G_MAX_ONE_BLOW, Type.DARK, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .attr(RemoveBattlerTagAttr, [BattlerTagType.PROTECTED])
+      .attr(
+        RemoveArenaTagsAttr,
+        [ArenaTagType.QUICK_GUARD, ArenaTagType.WIDE_GUARD, ArenaTagType.MAT_BLOCK, ArenaTagType.CRAFTY_SHIELD],
+        ArenaTagRelativeSide.TARGET,
+        MoveEffectTrigger.PRE_APPLY,
+      )
+      .ignoresProtect(),
     new AttackMove(Moves.G_MAX_RAPID_FLOW, Type.WATER, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .attr(RemoveBattlerTagAttr, [BattlerTagType.PROTECTED])
+      .attr(
+        RemoveArenaTagsAttr,
+        [ArenaTagType.QUICK_GUARD, ArenaTagType.WIDE_GUARD, ArenaTagType.MAT_BLOCK, ArenaTagType.CRAFTY_SHIELD],
+        ArenaTagRelativeSide.TARGET,
+        MoveEffectTrigger.PRE_APPLY,
+      )
+      .ignoresProtect(),
     new AttackMove(Moves.TERA_BLAST, Type.NORMAL, MoveCategory.SPECIAL, 80, 100, 10, -1, 0, 9)
       .attr(TeraMoveCategoryAttr)
       .attr(TeraBlastTypeAttr)
