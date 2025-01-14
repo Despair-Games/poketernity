@@ -37,6 +37,7 @@ describe("All Moves", () => {
     17: MoveFlags.PULSE_MOVE,
     18: MoveFlags.BALLBOMB_MOVE,
     21: MoveFlags.DANCE_MOVE,
+    22: MoveFlags.SLICING_MOVE,
   };
 
   /**
