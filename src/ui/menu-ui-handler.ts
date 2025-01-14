@@ -69,6 +69,8 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
   }
 
   override setup(): void {
+    super.setup();
+
     const ui = this.getUi();
 
     this.bgmBar = new BgmBar();
@@ -76,57 +78,109 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
 
     ui.bgmBar = this.bgmBar;
 
-    this.menuContainer = globalScene.add.container(1, -(globalScene.game.canvas.height / 6) + 1);
-    this.menuContainer.setName("menu");
-    this.menuContainer.setInteractive(
-      new Phaser.Geom.Rectangle(0, 0, globalScene.game.canvas.width / 6, globalScene.game.canvas.height / 6),
-      Phaser.Geom.Rectangle.Contains,
-    );
+    const width = globalScene.scaledCanvas.width;
+    const height = globalScene.scaledCanvas.height;
 
+    // Background overlay that sits below everything in the menu
     this.menuOverlay = new Phaser.GameObjects.Rectangle(
       globalScene,
-      -1,
-      -1,
-      globalScene.scaledCanvas.width + 2,
-      globalScene.scaledCanvas.height + 2,
+      -width - 1,
+      -height - 1,
+      width + 2,
+      height + 2,
       0xffffff,
       0.3,
     );
     this.menuOverlay.setName("menu-overlay");
     this.menuOverlay.setOrigin(0, 0);
+    this.optionSelectContainer.addAt(this.menuOverlay, 0);
 
+    this.menuContainer = globalScene.add.container(2 - width, 2 - height);
+    this.menuContainer.setName("menu");
     this.menuContainer.add(this.bgmBar);
-
-    this.menuContainer.setVisible(false);
-
-    super.setup();
-  }
-
-  render() {
-    const ui = this.getUi();
-    ui.add(this.menuOverlay);
 
     this.menuMessageBoxContainer = globalScene.add.container(0, 130);
     this.menuMessageBoxContainer.setName("menu-message-box");
     this.menuMessageBoxContainer.setVisible(false);
 
-    // Window for general messages
-    this.menuMessageBox = addWindow(0, 0, globalScene.scaledCanvas.width, 48);
+    this.menuMessageBox = addWindow(0, 0, width, 48);
     this.menuMessageBox.setOrigin(0, 0);
     this.menuMessageBoxContainer.add(this.menuMessageBox);
 
-    const menuMessageText = addTextObject(this.textPadding, this.textPadding, "", TextStyle.WINDOW, { maxLines: 2 });
-    menuMessageText.setName("menu-message");
-    menuMessageText.setOrigin(0, 0);
-    menuMessageText.setWordWrapWidth(1224);
-    this.menuMessageBoxContainer.add(menuMessageText);
+    this.message = addTextObject(this.textPadding, this.textPadding, "", TextStyle.WINDOW, { maxLines: 2 });
+    this.message.setName("menu-message");
+    this.message.setOrigin(0, 0);
+    this.message.setWordWrapWidth(1224);
+    this.menuMessageBoxContainer.add(this.message);
 
     this.initTutorialOverlay(this.menuContainer);
     this.initPromptSprite(this.menuMessageBoxContainer);
-
-    this.message = menuMessageText;
-
     this.menuContainer.add(this.menuMessageBoxContainer);
+
+    this.optionSelectContainer.add(this.menuContainer);
+
+    this.initManageDataOptions();
+    this.initCommunityMenuOptions();
+  }
+
+  override show(_args: any[]): boolean {
+    const config: OptionSelectModeConfig = this.getMenuOptionsConfig();
+
+    super.show([config]);
+
+    // Resize the message box so that it does not go over the menu
+    this.menuMessageBox.setDisplaySize(globalScene.scaledCanvas.width - this.getWindowWidth() - 2, 48);
+
+    // Make sure the tutorial overlay sits above everything, but below the message box
+    this.menuContainer.bringToTop(this.tutorialOverlay);
+    this.menuContainer.bringToTop(this.menuMessageBoxContainer);
+
+    this.getUi().hideTooltip();
+
+    globalScene.playSound("ui/menu_open");
+
+    this.cursorObj?.setVisible(false);
+    handleTutorial(Tutorial.MENU).then(() => {
+      this.cursorObj?.setVisible(true);
+      this.bgmBar.toggleBgmBar(true);
+    });
+
+    return true;
+  }
+
+  getMenuOptionsConfig(): OptionSelectModeConfig {
+    this.excludedMenus = () => [
+      {
+        condition: globalScene.getCurrentPhase() instanceof SelectModifierPhase,
+        options: [MenuOptions.EGG_GACHA, MenuOptions.EGG_LIST],
+      },
+      { condition: bypassLogin, options: [MenuOptions.LOG_OUT] },
+    ];
+
+    this.menuOptions = getEnumKeys(MenuOptions)
+      .map((m) => parseInt(MenuOptions[m]) as MenuOptions)
+      .filter((m) => {
+        return !this.excludedMenus().some((exclusion) => exclusion.condition && exclusion.options.includes(m));
+      });
+
+    const menuOptions: OptionSelectItem[] = this.menuOptions.map((option: MenuOptions) => {
+      return {
+        label: `${i18next.t(`menuUiHandler:${MenuOptions[option]}`)}`,
+        handler: () => this.optionSelected(option),
+        keepOpen: true,
+      };
+    });
+
+    return {
+      options: menuOptions,
+      yOffset: -this.defaultYOffset - 1,
+      maxOptions: 10,
+      noCancel: true, // we take care of closing the menu in this handler
+    };
+  }
+
+  override computeWindowHeight(_numOptions: number, _maxOptions: number): number {
+    return globalScene.scaledCanvas.height - 2; // always fill the screen
   }
 
   private initManageDataOptions(): void {
@@ -163,7 +217,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
                 },
               },
             ]),
-          xOffset: this.getWindowWidth(),
+          xOffset: this.windowWidth,
         };
         ui.setOverlayMode(Mode.MENU_OPTION_SELECT, config);
       });
@@ -268,7 +322,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
       keepOpen: true,
     });
     this.manageDataConfig = {
-      xOffset: this.getWindowWidth(),
+      xOffset: this.windowWidth,
       options: manageDataOptions,
       maxOptions: 7,
     };
@@ -394,72 +448,9 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
     });
 
     this.communityConfig = {
-      xOffset: this.getWindowWidth(),
+      xOffset: this.windowWidth,
       options: communityOptions,
     };
-  }
-
-  override show(_args: any[]): boolean {
-    this.render();
-
-    this.excludedMenus = () => [
-      {
-        condition: globalScene.getCurrentPhase() instanceof SelectModifierPhase,
-        options: [MenuOptions.EGG_GACHA, MenuOptions.EGG_LIST],
-      },
-      { condition: bypassLogin, options: [MenuOptions.LOG_OUT] },
-    ];
-
-    this.menuOptions = getEnumKeys(MenuOptions)
-      .map((m) => parseInt(MenuOptions[m]) as MenuOptions)
-      .filter((m) => {
-        return !this.excludedMenus().some((exclusion) => exclusion.condition && exclusion.options.includes(m));
-      });
-
-    const menuOptions: OptionSelectItem[] = this.menuOptions.map((option: MenuOptions) => {
-      return {
-        label: `${i18next.t(`menuUiHandler:${MenuOptions[option]}`)}`,
-        handler: () => this.optionSelected(option),
-        keepOpen: true,
-      };
-    });
-
-    const config: OptionSelectModeConfig = {
-      options: menuOptions,
-      yOffset: -this.defaultYOffset - 1,
-      maxOptions: 10,
-      noCancel: true, // we take care of closing the menu in this handler
-    };
-
-    super.show([config]);
-
-    // Add the container after the option selection menu was initialized, so that it shows above it
-    this.getUi().add(this.menuContainer);
-    this.menuContainer.setVisible(true);
-
-    // Make sure the tutorial overlay sits above everything, but below the message box
-    this.menuContainer.bringToTop(this.tutorialOverlay);
-    this.menuContainer.bringToTop(this.menuMessageBoxContainer);
-
-    // Needs to be done after super.show that it offsets everything properly based on the menu's width
-    // TODO remove that need by using a NumberHolder for the window's width?
-    this.menuMessageBox.setDisplaySize(globalScene.scaledCanvas.width - this.getWindowWidth() - 2, 48);
-    this.initManageDataOptions();
-    this.initCommunityMenuOptions();
-
-    this.getUi().hideTooltip();
-
-    globalScene.playSound("ui/menu_open");
-
-    handleTutorial(Tutorial.MENU);
-
-    this.bgmBar.toggleBgmBar(true);
-
-    return true;
-  }
-
-  public override getWindowHeight(): number {
-    return globalScene.scaledCanvas.height - 2;
   }
 
   optionSelected(option: MenuOptions): boolean {
@@ -583,7 +574,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
                   ui.revertMode();
                   this.showText("", 0);
                 },
-                xOffset: -this.getWindowWidth(),
+                xOffset: this.windowWidth,
               };
               ui.setOverlayMode(Mode.CONFIRM, options);
             });
@@ -615,7 +606,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
                 ui.revertMode();
                 this.showText("", 0);
               },
-              xOffset: -this.getWindowWidth(),
+              xOffset: this.windowWidth,
             };
             ui.setOverlayMode(Mode.CONFIRM, options);
           });
@@ -657,7 +648,6 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
 
   override clear() {
     super.clear();
-    this.menuContainer.setVisible(false);
     this.bgmBar.toggleBgmBar(false);
   }
 }
