@@ -1,4 +1,4 @@
-import { FieldPosition } from "#app/field/pokemon";
+import { FieldPosition } from "#enums/field-position";
 import { globalScene } from "#app/global-scene";
 import { BattlePhase } from "./abstract-battle-phase";
 

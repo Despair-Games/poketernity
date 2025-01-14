@@ -1,4 +1,4 @@
-import { GameModes } from "#app/game-mode";
+import { GameModes } from "#enums/game-modes";
 import { TurnHeldItemTransferModifier } from "#app/modifier/modifier";
 import { Abilities } from "#enums/abilities";
 import { Biome } from "#enums/biome";

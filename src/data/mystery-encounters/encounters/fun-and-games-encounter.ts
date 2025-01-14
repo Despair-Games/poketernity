@@ -13,7 +13,7 @@ import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/myst
 import { TrainerSlot } from "#enums/trainer-slot";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
-import { FieldPosition } from "#app/field/pokemon";
+import { FieldPosition } from "#enums/field-position";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
 import { MoneyRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
 import { queueEncounterMessage, showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
@@ -24,7 +24,6 @@ import i18next from "i18next";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { PlayerGender } from "#enums/player-gender";
 import { getPokeballAtlasKey, getPokeballTintColor } from "#app/data/pokeball";
-import { addPokeballOpenParticles } from "#app/field/anims";
 import { ShinySparklePhase } from "#app/phases/shiny-sparkle-phase";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";
 import { PostSummonPhase } from "#app/phases/post-summon-phase";
@@ -372,7 +371,7 @@ function summonPlayerPokemonAnimation(pokemon: PlayerPokemon): Promise<void> {
             pokeball.destroy();
             globalScene.add.existing(pokemon);
             globalScene.field.add(pokemon);
-            addPokeballOpenParticles(pokemon.x, pokemon.y - 16, pokemon.pokeball);
+            globalScene.animations.addPokeballOpenParticles(pokemon.x, pokemon.y - 16, pokemon.pokeball);
             globalScene.updateModifiers(true);
             globalScene.updateFieldScale();
             pokemon.showInfo();

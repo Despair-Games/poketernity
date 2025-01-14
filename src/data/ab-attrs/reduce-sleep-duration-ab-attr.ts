@@ -1,20 +1,21 @@
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
-import type { StatusEffect } from "#enums/status-effect";
+import { StatusEffect } from "#enums/status-effect";
 import { AbAttr } from "./ab-attr";
 
 /**
- * Used by Early Bird, makes the pokemon wake up faster
+ * /**
+ * This attribute reduces the duration of sleep by half and is used by the ability Early Bird.
+ * Early Bird halves the sleep duration. When the Pokémon is put to sleep, the number of turns it will remain asleep is preset, between 1 and 3.
+ * This number of turns is halved for a Pokémon with Early Bird, rounded down if it is odd. So if only 1 turn is preset, it is rounded down to 0, causing the Pokémon to wake up the next time it moves.
  * @param statusEffect - The {@linkcode StatusEffect} to check for
  * @see {@linkcode apply}
  */
-export class ReduceStatusEffectDurationAbAttr extends AbAttr {
-  private readonly statusEffect: StatusEffect;
+export class ReduceSleepDurationAbAttr extends AbAttr {
+  private readonly statusEffect: StatusEffect = StatusEffect.SLEEP;
 
-  constructor(statusEffect: StatusEffect) {
+  constructor() {
     super(true);
-
-    this.statusEffect = statusEffect;
   }
 
   /**

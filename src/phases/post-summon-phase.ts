@@ -1,4 +1,4 @@
-import type { BattlerIndex } from "#app/battle";
+import type { BattlerIndex } from "#enums/battler-index";
 import { CommanderAbAttr } from "#app/data/ab-attrs/commander-ab-attr";
 import { PostSummonAbAttr } from "#app/data/ab-attrs/post-summon-ab-attr";
 import { applyAbAttrs, applyPostSummonAbAttrs } from "#app/data/ability";

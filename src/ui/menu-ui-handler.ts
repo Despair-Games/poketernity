@@ -1,10 +1,11 @@
 import { loggedInUser, updateUserInfo } from "#app/account";
-import { bypassLogin } from "#app/battle-scene";
+import { bypassLogin } from "#app/constants";
 import { SESSION_ID_COOKIE } from "#app/constants";
 import { globalScene } from "#app/global-scene";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { api } from "#app/plugins/api/api";
-import { Tutorial, handleTutorial } from "#app/tutorial";
+import { handleTutorial } from "#app/tutorial";
+import { Tutorial } from "#enums/tutorial";
 import { AdminMode, getAdminModeName } from "#app/ui/admin-ui-handler";
 import BgmBar from "#app/ui/bgm-bar";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
@@ -450,7 +451,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
 
     globalScene.playSound("ui/menu_open");
 
-    handleTutorial(Tutorial.Menu);
+    handleTutorial(Tutorial.MENU);
 
     this.bgmBar.toggleBgmBar(true);
 

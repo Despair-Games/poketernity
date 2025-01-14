@@ -1,5 +1,5 @@
 import i18next from "i18next";
-import { bypassLogin } from "#app/battle-scene";
+import { bypassLogin } from "#app/constants";
 import { globalScene } from "#app/global-scene";
 import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
@@ -12,37 +12,39 @@ import Overrides from "#app/overrides";
 import PokemonData from "#app/system/pokemon-data";
 import PersistentModifierData from "#app/system/modifier-data";
 import ArenaData from "#app/system/arena-data";
-import { Unlockables } from "#app/system/unlockables";
-import { GameModes, getGameMode } from "#app/game-mode";
-import { BattleType } from "#app/battle";
+import { Unlockables } from "#enums/unlockables";
+import { getGameMode } from "#app/game-mode";
+import { GameModes } from "#enums/game-modes";
+import { BattleType } from "#enums/battle-type";
 import TrainerData from "#app/system/trainer-data";
 import { resetSettings, setSetting, SettingKeys } from "#app/system/settings/settings";
 import { achvs } from "#app/system/achv";
 import EggData from "#app/system/egg-data";
 import type { Egg } from "#app/data/egg";
-import { vouchers, VoucherType } from "#app/system/voucher";
+import { vouchers } from "#app/system/voucher";
+import { VoucherType } from "#enums/voucher-type";
 import { AES, enc } from "crypto-js";
 import { Mode } from "#app/ui/ui";
 import { clientSessionId, loggedInUser, updateUserInfo } from "#app/account";
 import { Nature } from "#enums/nature";
 import { GameStats } from "#app/system/game-stats";
-import { Tutorial } from "#app/tutorial";
+import { Tutorial } from "#enums/tutorial";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { allMoves } from "#app/data/all-moves";
-import { TrainerVariant } from "#app/field/trainer";
+import { TrainerVariant } from "#enums/trainer-variant";
 import type { Variant } from "#app/data/variant";
 import { setSettingGamepad, SettingGamepad, settingGamepadDefaults } from "#app/system/settings/settings-gamepad";
 import type { SettingKeyboard } from "#app/system/settings/settings-keyboard";
 import { setSettingKeyboard } from "#app/system/settings/settings-keyboard";
 import { TagAddedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";
 import * as Modifier from "#app/modifier/modifier";
-import { StatusEffect } from "#enums/status-effect";
 import ChallengeData from "#app/system/challenge-data";
 import { Device } from "#enums/devices";
 import { GameDataType } from "#enums/game-data-type";
 import { PlayerGender } from "#enums/player-gender";
 import type { Species } from "#enums/species";
-import { applyChallenges, ChallengeType } from "#app/data/challenge";
+import { applyChallenges } from "#app/data/challenge";
+import { ChallengeType } from "#enums/challenge-type";
 import { WeatherType } from "#enums/weather-type";
 import { TerrainType } from "#enums/terrain-type";
 import { ReloadSessionPhase } from "#app/phases/reload-session-phase";
@@ -801,16 +803,13 @@ export class GameData {
       tutorials = JSON.parse(localStorage.getItem(key)!); // TODO: is this bang correct?
     }
 
-    Object.keys(Tutorial)
-      .map((t) => t as Tutorial)
-      .forEach((t) => {
-        const key = Tutorial[t];
-        if (key === tutorial) {
-          tutorials[key] = flag;
-        } else {
-          tutorials[key] ??= false;
-        }
-      });
+    Object.keys(Tutorial).forEach((key) => {
+      if (key === Tutorial[tutorial]) {
+        tutorials[key] = flag;
+      } else {
+        tutorials[key] ??= false;
+      }
+    });
 
     localStorage.setItem(key, JSON.stringify(tutorials));
 
@@ -1225,12 +1224,6 @@ export class GameData {
           if (md?.className === "ExpBalanceModifier") {
             // Temporarily limit EXP Balance until it gets reworked
             md.stackCount = Math.min(md.stackCount, 4);
-          }
-          if (
-            (md instanceof Modifier.EnemyAttackStatusEffectChanceModifier && md.effect === StatusEffect.FREEZE)
-            || md.effect === StatusEffect.SLEEP
-          ) {
-            continue;
           }
           ret.push(new PersistentModifierData(md, player));
         }

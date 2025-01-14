@@ -1,15 +1,16 @@
-import { BattlerIndex } from "#app/battle";
+import { BattlerIndex } from "#enums/battler-index";
 import { BlockRedirectAbAttr } from "#app/data/ab-attrs/block-redirect-ab-attr";
 import { IncreasePpAbAttr } from "#app/data/ab-attrs/increase-pp-ab-attr";
 import { PokemonTypeChangeAbAttr } from "#app/data/ab-attrs/pokemon-type-change-ab-attr";
 import { PostMoveUsedAbAttr } from "#app/data/ab-attrs/post-move-used-ab-attr";
 import { RedirectMoveAbAttr } from "#app/data/ab-attrs/redirect-move-ab-attr";
-import { ReduceStatusEffectDurationAbAttr } from "#app/data/ab-attrs/reduce-status-effect-duration-ab-attr";
+import { ReduceSleepDurationAbAttr } from "#app/data/ab-attrs/reduce-sleep-duration-ab-attr";
 import { applyAbAttrs, applyPostMoveUsedAbAttrs, applyPreAttackAbAttrs } from "#app/data/ability";
 import { allMoves } from "#app/data/all-moves";
 import type { DelayedAttackTag } from "#app/data/arena-tag";
 import { CommonAnim } from "#app/data/battle-anims";
-import { BattlerTagLapseType, CenterOfAttentionTag } from "#app/data/battler-tags";
+import { CenterOfAttentionTag, SkyDropTag } from "#app/data/battler-tags";
+import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { applyMoveAttrs } from "#app/data/move";
 import { BypassRedirectAttr } from "#app/data/move-attrs/bypass-redirect-attr";
 import { BypassSleepAttr } from "#app/data/move-attrs/bypass-sleep-attr";
@@ -22,7 +23,8 @@ import { SpeciesFormChangePreMoveTrigger } from "#app/data/pokemon-forms";
 import { getStatusEffectActivationText, getStatusEffectHealText } from "#app/data/status-effect";
 import { getTerrainBlockMessage } from "#app/data/terrain";
 import { MoveUsedEvent } from "#app/events/battle-scene";
-import { MoveResult, type Pokemon, type PokemonMove } from "#app/field/pokemon";
+import { type Pokemon, type PokemonMove } from "#app/field/pokemon";
+import { MoveResult } from "#enums/move-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import Overrides from "#app/overrides";
@@ -126,18 +128,24 @@ export class MovePhase extends BattlePhase {
     );
   }
 
-  /**Signifies the current move should fail but still use PP */
+  /** Signifies the current move should fail but still use PP */
   public fail(): void {
     this.failed = true;
   }
 
-  /**Signifies the current move should cancel and retain PP */
+  /** Signifies the current move should cancel and retain PP */
   public cancel(): void {
     this.cancelled = true;
   }
 
   public override start(): void {
     super.start();
+
+    // If the user is affected by another Pokemon's Sky Drop, skip the user's turn
+    const skyDropTag = this.pokemon.getTag(SkyDropTag);
+    if (skyDropTag && skyDropTag.sourceId !== this.pokemon.id) {
+      return this.end();
+    }
 
     console.log(Moves[this.move.moveId]);
 
@@ -228,13 +236,7 @@ export class MovePhase extends BattlePhase {
         case StatusEffect.SLEEP:
           applyMoveAttrs(BypassSleepAttr, this.pokemon, null, this.move.getMove());
           const turnsRemaining = new NumberHolder(this.pokemon.status.sleepTurnsRemaining ?? 0);
-          applyAbAttrs(
-            ReduceStatusEffectDurationAbAttr,
-            this.pokemon,
-            false,
-            this.pokemon.status.effect,
-            turnsRemaining,
-          );
+          applyAbAttrs(ReduceSleepDurationAbAttr, this.pokemon, false, this.pokemon.status.effect, turnsRemaining);
           if (Overrides.STATUS_ACTIVATION_OVERRIDE === true) {
             turnsRemaining.value = Math.max(turnsRemaining.value, 1);
           } else if (Overrides.STATUS_ACTIVATION_OVERRIDE === false) {
@@ -429,7 +431,7 @@ export class MovePhase extends BattlePhase {
       applyPreAttackAbAttrs(PokemonTypeChangeAbAttr, this.pokemon, null, this.move.getMove());
 
       this.showMoveText();
-      globalScene.unshiftPhase(new MoveChargePhase(this.pokemon.getBattlerIndex(), this.targets[0], this.move));
+      globalScene.unshiftPhase(new MoveChargePhase(this.pokemon.getBattlerIndex(), this.targets, this.move));
     } else {
       this.pokemon.pushMoveHistory({
         move: this.move.moveId,

@@ -1,4 +1,5 @@
-import { type TurnMove, MoveResult } from "#app/field/pokemon";
+import { type TurnMove } from "#app/field/pokemon";
+import { MoveResult } from "#enums/move-result";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { Moves } from "#enums/moves";
 import { allMoves } from "#app/data/all-moves";
