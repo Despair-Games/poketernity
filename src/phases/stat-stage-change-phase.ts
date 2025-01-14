@@ -14,6 +14,7 @@ import { Tutorial } from "#enums/tutorial";
 import { BooleanHolder, NumberHolder } from "#app/utils";
 import { getStatKey, getStatStageChangeDescriptionKey, Stat, type BattleStat } from "#enums/stat";
 import i18next from "i18next";
+import { settings } from "#app/system/settings/settings-manager";
 import { PokemonPhase } from "./abstract-pokemon-phase";
 
 export type StatStageChangeCallback = (changed: BattleStat[], relativeChanges: number[], target?: Pokemon) => void;
@@ -57,7 +58,7 @@ export class StatStageChangePhase extends PokemonPhase {
   public override start(): void {
     const pokemon = this.getPokemon();
 
-    const { add, arena, field, fieldSpritePipeline, moveAnimations, tweens, time } = globalScene;
+    const { add, arena, field, fieldSpritePipeline, tweens, time } = globalScene;
 
     if (!pokemon.isActive(true)) {
       return super.end();
@@ -178,7 +179,7 @@ export class StatStageChangePhase extends PokemonPhase {
       handleTutorial(Tutorial.STAT_CHANGE).then(() => super.end());
     };
 
-    if (relLevels.filter((l) => l).length && moveAnimations) {
+    if (relLevels.filter((l) => l).length && settings.display.enableMoveAnimations) {
       pokemon.enableMask();
       const pokemonMaskSprite = pokemon.maskSprite;
 

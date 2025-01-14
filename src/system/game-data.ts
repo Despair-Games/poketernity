@@ -1,5 +1,5 @@
 import i18next from "i18next";
-import { bypassLogin } from "#app/constants";
+import { bypassLogin, SETTINGS_LS_KEY } from "#app/constants";
 import { globalScene } from "#app/global-scene";
 import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
@@ -17,7 +17,6 @@ import { getGameMode } from "#app/game-mode";
 import { GameModes } from "#enums/game-modes";
 import { BattleType } from "#enums/battle-type";
 import TrainerData from "#app/system/trainer-data";
-import { resetSettings, setSetting, SettingKeys } from "#app/system/settings/settings";
 import { achvs } from "#app/system/achv";
 import EggData from "#app/system/egg-data";
 import type { Egg } from "#app/data/egg";
@@ -33,13 +32,10 @@ import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { allMoves } from "#app/data/all-moves";
 import { TrainerVariant } from "#enums/trainer-variant";
 import type { Variant } from "#app/data/variant";
-import { setSettingGamepad, SettingGamepad, settingGamepadDefaults } from "#app/system/settings/settings-gamepad";
-import type { SettingKeyboard } from "#app/system/settings/settings-keyboard";
-import { setSettingKeyboard } from "#app/system/settings/settings-keyboard";
 import { TagAddedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";
 import * as Modifier from "#app/modifier/modifier";
 import ChallengeData from "#app/system/challenge-data";
-import { Device } from "#enums/devices";
+import type { Device } from "#enums/devices";
 import { GameDataType } from "#enums/game-data-type";
 import { PlayerGender } from "#enums/player-gender";
 import type { Species } from "#enums/species";
@@ -49,16 +45,12 @@ import { WeatherType } from "#enums/weather-type";
 import { TerrainType } from "#enums/terrain-type";
 import { ReloadSessionPhase } from "#app/phases/reload-session-phase";
 import { RUN_HISTORY_LIMIT } from "#app/ui/run-history-ui-handler";
-import {
-  applySessionVersionMigration,
-  applySystemVersionMigration,
-  applySettingsVersionMigration,
-} from "./version_migration/version_converter";
+import { applySessionVersionMigration, applySystemVersionMigration } from "./version_migration/version_converter";
 import { MysteryEncounterSaveData } from "#app/data/mystery-encounters/mystery-encounter-save-data";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { api } from "#app/plugins/api/api";
 import { ArenaTrapTag } from "#app/data/arena-tag";
-import { SAVE_FILE_EXTENSION } from "#app/constants";
+import { MAPPING_CONFIG_LS_KEY, SAVE_FILE_EXTENSION } from "#app/constants";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 import type { AchvUnlocks, SystemSaveData, Unlocks, VoucherCounts, VoucherUnlocks } from "#app/@types/SystemData";
 import { AbilityAttr, DexAttr } from "#app/data/dex-attributes";
@@ -66,6 +58,7 @@ import type { StarterData } from "#app/@types/StarterData";
 import type { DexData, DexEntry } from "#app/@types/DexData";
 import type { SessionSaveData } from "#app/@types/SessionData";
 import { defaultStarterSpecies } from "#app/data/balance/default-starters";
+import { settings } from "#app/system/settings/settings-manager";
 
 const saveKey = "x0i2O7WRiANTqPmZ"; // Temporary; secure encryption is not yet necessary
 
@@ -80,7 +73,7 @@ export function getDataTypeKey(dataType: GameDataType, slotId: number = 0): stri
       }
       return ret;
     case GameDataType.SETTINGS:
-      return "settings";
+      return SETTINGS_LS_KEY;
     case GameDataType.TUTORIALS:
       return "tutorials";
     case GameDataType.SEEN_DIALOGUES:
@@ -197,8 +190,6 @@ export class GameData {
   public trainerId: number;
   public secretId: number;
 
-  public gender: PlayerGender;
-
   public dexData: DexData;
   private defaultDexData: DexData | null;
 
@@ -218,8 +209,6 @@ export class GameData {
   public unlockPity: number[];
 
   constructor() {
-    this.loadSettings();
-    this.loadGamepadSettings();
     this.loadMappingConfigs();
     this.trainerId = randInt(65536);
     this.secretId = randInt(65536);
@@ -251,7 +240,7 @@ export class GameData {
     return {
       trainerId: this.trainerId,
       secretId: this.secretId,
-      gender: this.gender,
+      gender: settings.display.playerGender,
       dexData: this.dexData,
       starterData: this.starterData,
       gameStats: this.gameStats,
@@ -385,10 +374,6 @@ export class GameData {
         this.trainerId = systemData.trainerId;
         this.secretId = systemData.secretId;
 
-        this.gender = systemData.gender;
-
-        this.saveSetting(SettingKeys.Player_Gender, systemData.gender === PlayerGender.FEMALE ? 1 : 0);
-
         if (!systemData.starterData) {
           this.initStarterData();
 
@@ -464,6 +449,10 @@ export class GameData {
         this.consolidateDexData(this.dexData);
         this.defaultDexData = null;
 
+        // Ensure that the player gender in settings matches the player gender in system data
+        if (systemData.gender !== PlayerGender.UNSET && systemData.gender !== settings.display.playerGender) {
+          settings.update("display", "playerGender", systemData.gender);
+        }
         resolve(true);
       } catch (err) {
         console.error(err);
@@ -631,28 +620,6 @@ export class GameData {
   }
 
   /**
-   * Saves a setting to localStorage
-   * @param setting string ideally of SettingKeys
-   * @param valueIndex index of the setting's option
-   * @returns true
-   */
-  public saveSetting(setting: string, valueIndex: number): boolean {
-    let settings: object = {};
-    if (localStorage.hasOwnProperty("settings")) {
-      settings = JSON.parse(localStorage.getItem("settings")!); // TODO: is this bang correct?
-    }
-
-    setSetting(setting, valueIndex);
-
-    settings[setting] = valueIndex;
-    settings["gameVersion"] = globalScene.game.config.gameVersion;
-
-    localStorage.setItem("settings", JSON.stringify(settings));
-
-    return true;
-  }
-
-  /**
    * Saves the mapping configurations for a specified device.
    *
    * @param deviceName - The name of the device for which the configurations are being saved.
@@ -662,15 +629,20 @@ export class GameData {
   public saveMappingConfigs(deviceName: string, config): boolean {
     const key = deviceName.toLowerCase(); // Convert the gamepad name to lowercase to use as a key
     let mappingConfigs: object = {}; // Initialize an empty object to hold the mapping configurations
-    if (localStorage.hasOwnProperty("mappingConfigs")) {
+    const lsMappingStr = localStorage.getItem(MAPPING_CONFIG_LS_KEY);
+    if (lsMappingStr) {
       // Check if 'mappingConfigs' exists in localStorage
-      mappingConfigs = JSON.parse(localStorage.getItem("mappingConfigs")!); // TODO: is this bang correct?
+      try {
+        mappingConfigs = JSON.parse(lsMappingStr);
+      } catch (err) {
+        console.error("Error parsing mapping configs from localStorage:", err);
+      }
     } // Parse the existing 'mappingConfigs' from localStorage
     if (!mappingConfigs[key]) {
       mappingConfigs[key] = {};
     } // If there is no configuration for the given key, create an empty object for it
     mappingConfigs[key].custom = config.custom; // Assign the custom configuration to the mapping configuration for the given key
-    localStorage.setItem("mappingConfigs", JSON.stringify(mappingConfigs)); // Save the updated mapping configurations back to localStorage
+    localStorage.setItem(MAPPING_CONFIG_LS_KEY, JSON.stringify(mappingConfigs)); // Save the updated mapping configurations back to localStorage
     return true; // Return true to indicate the operation was successful
   }
 
@@ -685,13 +657,12 @@ export class GameData {
    * for the corresponding gamepad or device key. The method then returns `true` to indicate success.
    */
   public loadMappingConfigs(): boolean {
-    if (!localStorage.hasOwnProperty("mappingConfigs")) {
+    const lsMappingStr = localStorage.getItem(MAPPING_CONFIG_LS_KEY);
+    if (!lsMappingStr) {
       // Check if 'mappingConfigs' exists in localStorage
       return false;
     } // If 'mappingConfigs' does not exist, return false
-
-    const mappingConfigs = JSON.parse(localStorage.getItem("mappingConfigs")!); // Parse the existing 'mappingConfigs' from localStorage // TODO: is this bang correct?
-
+    const mappingConfigs = JSON.parse(lsMappingStr); // Parse the existing 'mappingConfigs' from localStorage
     for (const key of Object.keys(mappingConfigs)) {
       // Iterate over the keys of the mapping configurations
       globalScene.inputController.injectConfig(key, mappingConfigs[key]);
@@ -700,106 +671,44 @@ export class GameData {
     return true; // Return true to indicate the operation was successful
   }
 
-  public resetMappingToFactory(): boolean {
-    if (!localStorage.hasOwnProperty("mappingConfigs")) {
-      // Check if 'mappingConfigs' exists in localStorage
-      return false;
-    } // If 'mappingConfigs' does not exist, return false
-    localStorage.removeItem("mappingConfigs");
-    globalScene.inputController.resetConfigs();
-    return true; // TODO: is `true` the correct return value?
-  }
-
   /**
-   * Saves a gamepad setting to localStorage.
-   *
-   * @param setting - The gamepad setting to save.
-   * @param valueIndex - The index of the value to set for the gamepad setting.
-   * @returns `true` if the setting is successfully saved.
-   *
-   * @remarks
-   * This method initializes an empty object for gamepad settings if none exist in localStorage.
-   * It then updates the setting in the current scene and iterates over the default gamepad settings
-   * to update the specified setting with the new value. Finally, it saves the updated settings back
-   * to localStorage and returns `true` to indicate success.
+   * Reset the mappings for the given device to its default values
+   * If it's a gamepad, only reset the one currently in use
+   * @returns `true` if the operation was successful, `false` otherwise
    */
-  public saveControlSetting(
-    device: Device,
-    localStoragePropertyName: string,
-    setting: SettingGamepad | SettingKeyboard,
-    settingDefaults,
-    valueIndex: number,
-  ): boolean {
-    let settingsControls: object = {}; // Initialize an empty object to hold the gamepad settings
-
-    if (localStorage.hasOwnProperty(localStoragePropertyName)) {
-      // Check if 'settingsControls' exists in localStorage
-      settingsControls = JSON.parse(localStorage.getItem(localStoragePropertyName)!); // Parse the existing 'settingsControls' from localStorage // TODO: is this bang correct?
-    }
-
-    if (device === Device.GAMEPAD) {
-      setSettingGamepad(setting as SettingGamepad, valueIndex);
-    } else if (device === Device.KEYBOARD) {
-      setSettingKeyboard(setting as SettingKeyboard, valueIndex);
-    }
-
-    Object.keys(settingDefaults).forEach((s) => {
-      // Iterate over the default gamepad settings
-      if (s === setting) {
-        // If the current setting matches, update its value
-        settingsControls[s] = valueIndex;
-      }
-    });
-
-    localStorage.setItem(localStoragePropertyName, JSON.stringify(settingsControls)); // Save the updated gamepad settings back to localStorage
-
-    return true; // Return true to indicate the operation was successful
-  }
-
-  /**
-   * Loads Settings from local storage if available
-   * @returns true if succesful, false if not
-   */
-  private loadSettings(): boolean {
-    resetSettings();
-
-    if (!localStorage.hasOwnProperty("settings")) {
+  public resetMappingToFactory(device: Device): boolean {
+    const deviceName = globalScene.inputController?.selectedDevice[device];
+    const lsMappingStr = localStorage.getItem(MAPPING_CONFIG_LS_KEY);
+    if (!lsMappingStr) {
+      // no config found
       return false;
     }
-
-    const settings = JSON.parse(localStorage.getItem("settings")!); // TODO: is this bang correct?
-
-    applySettingsVersionMigration(settings);
-
-    for (const setting of Object.keys(settings)) {
-      setSetting(setting, settings[setting]);
+    let mappingConfigs = {};
+    try {
+      mappingConfigs = JSON.parse(lsMappingStr);
+    } catch (err) {
+      console.error("Error parsing mapping configs from localStorage:", err);
     }
-
-    return true; // TODO: is `true` the correct return value?
-  }
-
-  private loadGamepadSettings(): boolean {
-    Object.values(SettingGamepad)
-      .map((setting) => setting as SettingGamepad)
-      .forEach((setting) => setSettingGamepad(setting, settingGamepadDefaults[setting]));
-
-    if (!localStorage.hasOwnProperty("settingsGamepad")) {
-      return false;
+    if (mappingConfigs.hasOwnProperty(deviceName)) {
+      // Delete the config for this device and update local storage
+      delete mappingConfigs[deviceName];
+      localStorage.setItem(MAPPING_CONFIG_LS_KEY, JSON.stringify(mappingConfigs));
+      // Tell the inputcontroller to update
+      globalScene.inputController.resetConfig(device);
     }
-    const settingsGamepad = JSON.parse(localStorage.getItem("settingsGamepad")!); // TODO: is this bang correct?
-
-    for (const setting of Object.keys(settingsGamepad)) {
-      setSettingGamepad(setting as SettingGamepad, settingsGamepad[setting]);
-    }
-
     return true; // TODO: is `true` the correct return value?
   }
 
   public saveTutorialFlag(tutorial: Tutorial, flag: boolean): boolean {
     const key = getDataTypeKey(GameDataType.TUTORIALS);
     let tutorials: object = {};
-    if (localStorage.hasOwnProperty(key)) {
-      tutorials = JSON.parse(localStorage.getItem(key)!); // TODO: is this bang correct?
+    const lsItem = localStorage.getItem(key);
+    if (lsItem) {
+      try {
+        tutorials = JSON.parse(lsItem);
+      } catch (err) {
+        console.error("Error parsing tutorial flags from localStorage:", err);
+      }
     }
 
     Object.keys(Tutorial).forEach((key) => {
