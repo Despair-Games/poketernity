@@ -1,10 +1,9 @@
-import { allMoves } from "#app/data/all-moves";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("Moves - Glaive Rush", () => {
   let phaserGame: Phaser.Game;
@@ -54,7 +53,9 @@ describe("Moves - Glaive Rush", () => {
     const enemy = game.scene.getEnemyPokemon()!;
     enemy.hp = 1000;
 
-    allMoves[Moves.AVALANCHE].accuracy = 0;
+    const player = game.scene.getPlayerPokemon()!;
+    vi.spyOn(player, "getAccuracyMultiplier").mockReturnValue(0);
+
     game.move.select(Moves.AVALANCHE);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemy.hp).toBeLessThan(1000);
@@ -70,7 +71,8 @@ describe("Moves - Glaive Rush", () => {
     enemy.hp = 1000;
     player.hp = 1000;
 
-    allMoves[Moves.AVALANCHE].accuracy = 0;
+    vi.spyOn(enemy, "getAccuracyMultiplier").mockReturnValue(0);
+
     game.move.select(Moves.GLAIVE_RUSH);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(player.hp).toBeLessThan(1000);
@@ -89,7 +91,8 @@ describe("Moves - Glaive Rush", () => {
 
     enemy.hp = 1000;
     player.hp = 1000;
-    allMoves[Moves.SHADOW_SNEAK].accuracy = 0;
+
+    vi.spyOn(enemy, "getAccuracyMultiplier").mockReturnValue(0);
 
     game.move.select(Moves.GLAIVE_RUSH);
     await game.phaseInterceptor.to("TurnEndPhase");
@@ -113,7 +116,8 @@ describe("Moves - Glaive Rush", () => {
     const enemy = game.scene.getEnemyPokemon()!;
 
     enemy.hp = 1000;
-    allMoves[Moves.SHADOW_SNEAK].accuracy = 0;
+
+    vi.spyOn(enemy, "getAccuracyMultiplier").mockReturnValue(0);
 
     game.move.select(Moves.GLAIVE_RUSH);
     await game.phaseInterceptor.to("TurnEndPhase");
