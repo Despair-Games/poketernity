@@ -19,14 +19,6 @@ export class PostSummonFormChangeByWeatherAbAttr extends PostSummonAbAttr {
     this.ability = ability;
   }
 
-  /**
-   * Calls the {@linkcode globalScene.triggerPokemonFormChange | triggerPokemonFormChange} for both
-   * {@linkcode SpeciesFormChangeWeatherTrigger} and {@linkcode SpeciesFormChangeWeatherTrigger}
-   * if it is the specific Pokemon and ability
-   * @param pokemon the {@linkcode Pokemon} with this ability
-   * @param passive n/a
-   * @returns whether the form change was triggered
-   */
   override apply(pokemon: Pokemon, simulated: boolean): boolean {
     const isCastformWithForecast =
       pokemon.species.speciesId === Species.CASTFORM && this.ability === Abilities.FORECAST;

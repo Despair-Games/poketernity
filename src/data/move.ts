@@ -741,7 +741,7 @@ export abstract class Move implements Localizable {
     const power = new NumberHolder(this.power);
     const typeChangeMovePowerMultiplier = new NumberHolder(1);
 
-    applyAbAttrs(MoveTypeChangeAbAttr, source, true, target, this, { value: 0 }, typeChangeMovePowerMultiplier);
+    applyAbAttrs(MoveTypeChangeAbAttr, source, true, this, target, undefined, typeChangeMovePowerMultiplier);
 
     const sourceTeraType = source.getTeraType();
     if (
@@ -755,10 +755,10 @@ export abstract class Move implements Localizable {
       power.value = 60;
     }
 
-    applyAbAttrs(VariableMovePowerAbAttr, source, simulated, target, this, power);
+    applyAbAttrs(VariableMovePowerAbAttr, source, simulated, this, target, power);
 
     if (source.getAlly()) {
-      applyAbAttrs(AllyMoveCategoryPowerBoostAbAttr, source.getAlly(), simulated, target, this, power);
+      applyAbAttrs(AllyMoveCategoryPowerBoostAbAttr, source.getAlly(), simulated, this, target, power);
     }
 
     const fieldAuras = new Set(
@@ -774,11 +774,11 @@ export abstract class Move implements Localizable {
         .flat(),
     );
     for (const aura of fieldAuras) {
-      aura.apply(source, simulated, target, this, power);
+      aura.apply(source, simulated, this, target, power);
     }
 
     const alliedField: Pokemon[] = source.getField();
-    alliedField.forEach((p) => applyAbAttrs(UserFieldMoveTypePowerBoostAbAttr, p, simulated, target, this, power));
+    alliedField.forEach((p) => applyAbAttrs(UserFieldMoveTypePowerBoostAbAttr, p, simulated, this, target, power));
 
     power.value *= typeChangeMovePowerMultiplier.value;
 

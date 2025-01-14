@@ -25,7 +25,7 @@ export class FullHpResistTypeAbAttr extends PreDefendAbAttr {
     pokemon: Pokemon,
     simulated: boolean,
     _attacker: Pokemon,
-    move: Move | null,
+    move: Move,
     typeMultiplier: NumberHolder,
   ): boolean {
     if (move && move.hasAttr(FixedDamageAttr)) {

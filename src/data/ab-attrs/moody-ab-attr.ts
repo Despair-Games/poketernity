@@ -10,7 +10,6 @@ import { PostTurnAbAttr } from "./post-turn-ab-attr";
  * or decreased, respectively.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Moody_(Ability) | Moody}.
  * @extends PostTurnAbAttr
- * @see {@linkcode applyPostTurn}
  */
 export class MoodyAbAttr extends PostTurnAbAttr {
   override apply(pokemon: Pokemon, simulated: boolean): boolean {

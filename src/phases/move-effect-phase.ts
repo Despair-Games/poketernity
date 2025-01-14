@@ -122,7 +122,7 @@ export class MoveEffectPhase extends HitCheckPhase {
       // Assume single target for multi hit
       applyMoveAttrs(MultiHitAttr, user, this.getFirstTarget(), move, hitCount);
       // If Parental Bond is applicable, add another hit
-      applyAbAttrs(AddSecondStrikeAbAttr, user, false, targets[0], move, hitCount);
+      applyAbAttrs(AddSecondStrikeAbAttr, user, false, move, targets[0], hitCount);
       // If Multi-Lens is applicable, add hits equal to the number of held Multi-Lenses
       globalScene.applyModifiers(PokemonMultiHitModifier, user.isPlayer(), user, move.id, hitCount);
       // Set the user's relevant turnData fields to reflect the final hit count

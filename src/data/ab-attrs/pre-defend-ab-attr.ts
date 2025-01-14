@@ -16,7 +16,7 @@ export class PreDefendAbAttr extends AbAttr {
     _pokemon: Pokemon,
     _simulated: boolean,
     _attacker: Pokemon,
-    _move: Move | null,
+    _move?: Move,
     ..._args: unknown[]
   ): boolean {
     return false;

@@ -22,7 +22,9 @@ export class AddSecondStrikeAbAttr extends PreAttackAbAttr {
    * If conditions are met, this increases the move's hit count (via args[0])
    * or multiplies the damage of secondary strikes (via args[1])
    * @param pokemon the {@linkcode Pokemon} using the move
+   * @param simulated if `true`, suppresses changes to game state
    * @param move the {@linkcode Move} used by the ability source
+   * @param defender n/a
    * @param hitCount a {@linkcode NumberHolder} containing the number of strikes this move currently has
    * @param multiplier a {@linkcode NumberHolder} containing the damage multiplier for the current strike
    * @returns `true` if the given move is modified by this effect
@@ -30,8 +32,8 @@ export class AddSecondStrikeAbAttr extends PreAttackAbAttr {
   override apply(
     pokemon: Pokemon,
     _simulated: boolean,
-    _defender: Pokemon,
     move: Move,
+    _defender: Pokemon,
     hitCount?: NumberHolder,
     multiplier?: NumberHolder,
   ): boolean {

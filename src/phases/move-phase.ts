@@ -383,11 +383,11 @@ export class MovePhase extends BattlePhase {
      * if the move fails.
      */
     if (success) {
-      applyAbAttrs(PokemonTypeChangeAbAttr, this.pokemon, false, undefined, this.move.getMove());
+      applyAbAttrs(PokemonTypeChangeAbAttr, this.pokemon, false, this.move.getMove());
       globalScene.unshiftPhase(new MoveEffectPhase(this.pokemon.getBattlerIndex(), this.targets, this.move));
     } else {
       if ([Moves.ROAR, Moves.WHIRLWIND, Moves.TRICK_OR_TREAT, Moves.FORESTS_CURSE].includes(this.move.moveId)) {
-        applyAbAttrs(PokemonTypeChangeAbAttr, this.pokemon, false, undefined, this.move.getMove());
+        applyAbAttrs(PokemonTypeChangeAbAttr, this.pokemon, false, this.move.getMove());
       }
 
       this.pokemon.pushMoveHistory({
@@ -428,7 +428,7 @@ export class MovePhase extends BattlePhase {
 
     if (move.applyConditions(this.pokemon, targets[0], move)) {
       // Protean and Libero apply on the charging turn of charge moves
-      applyAbAttrs(PokemonTypeChangeAbAttr, this.pokemon, false, undefined, this.move.getMove());
+      applyAbAttrs(PokemonTypeChangeAbAttr, this.pokemon, false, this.move.getMove());
 
       this.showMoveText();
       globalScene.unshiftPhase(new MoveChargePhase(this.pokemon.getBattlerIndex(), this.targets, this.move));

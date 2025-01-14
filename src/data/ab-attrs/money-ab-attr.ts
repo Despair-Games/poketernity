@@ -6,7 +6,6 @@ import { PostBattleAbAttr } from "./post-battle-ab-attr";
  * Gives money to the user after the battle.
  *
  * @extends PostBattleAbAttr
- * @see {@linkcode applyPostBattle}
  */
 export class MoneyAbAttr extends PostBattleAbAttr {
   override apply(_pokemon: Pokemon, simulated: boolean, isVictory: boolean): boolean {

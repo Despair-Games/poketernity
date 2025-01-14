@@ -1,3 +1,8 @@
+// -- start tsdoc imports --
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { type Arena } from "#app/field/arena";
+// -- end tsdoc imports --
+
 import { getPokemonWithWeatherBasedForms } from "#app/data/ability-utils";
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
@@ -14,11 +19,6 @@ export class PostFaintUnsuppressedWeatherFormChangeAbAttr extends PostFaintAbAtt
   /**
    * Triggers {@linkcode Arena.triggerWeatherBasedFormChanges | triggerWeatherBasedFormChanges}
    * when the user of the ability faints
-   * @param pokemon the fainted {@linkcode Pokemon}
-   * @param passive n/a
-   * @param attacker n/a
-   * @param move n/a
-   * @param hitResult n/a
    * @returns whether the form change was triggered
    */
   override apply(

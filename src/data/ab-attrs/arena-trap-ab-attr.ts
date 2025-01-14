@@ -4,15 +4,22 @@ import type { BooleanHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { Type } from "#enums/type";
 import i18next from "i18next";
-import { CheckTrappedAbAttr } from "./check-trapped-ab-attr";
+import { AbAttr } from "./ab-attr";
+
+type ArenaTrapCondition = (user: Pokemon, target: Pokemon) => boolean;
 
 /**
  * Determines whether a Pokemon is blocked from switching/running away
  * because of a trapping ability or move.
- * @extends CheckTrappedAbAttr
- * @see {@linkcode applyCheckTrapped}
+ * @extends AbAttr
  */
-export class ArenaTrapAbAttr extends CheckTrappedAbAttr {
+export class ArenaTrapAbAttr extends AbAttr {
+  protected readonly arenaTrapCondition: ArenaTrapCondition;
+
+  constructor(condition: ArenaTrapCondition) {
+    super(false);
+    this.arenaTrapCondition = condition;
+  }
   /**
    * Checks if enemy Pokemon is trapped by an Arena Trap-esque ability:
    * - If the enemy is a Ghost type, it is not trapped

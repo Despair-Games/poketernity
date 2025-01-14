@@ -136,7 +136,6 @@ import { UnsuppressableAbilityAbAttr } from "#app/data/ab-attrs/unsuppressable-a
 import { InfiltratorAbAttr } from "#app/data/ab-attrs/infiltrator-ab-attr";
 import { SuppressFieldAbilitiesAbAttr } from "#app/data/ab-attrs/suppress-field-abilities-ab-attr";
 import { WeightMultiplierAbAttr } from "#app/data/ab-attrs/weight-multiplier-ab-attr";
-import { CheckTrappedAbAttr } from "#app/data/ab-attrs/check-trapped-ab-attr";
 import { BypassBurnDamageReductionAbAttr } from "#app/data/ab-attrs/bypass-burn-damage-reduction-ab-attr";
 import { PostItemLostAbAttr } from "#app/data/ab-attrs/post-item-lost-ab-attr";
 import { ConditionalCritAbAttr } from "#app/data/ab-attrs/conditional-crit-ab-attr";
@@ -228,6 +227,7 @@ import type { MoveResult } from "#enums/move-result";
 import { AiType } from "#enums/ai-type";
 import { LearnMoveSituation } from "#enums/learn-move-situation";
 import { FieldPosition } from "#enums/field-position";
+import { ArenaTrapAbAttr } from "#app/data/ab-attrs/arena-trap-ab-attr";
 
 export abstract class Pokemon extends Phaser.GameObjects.Container {
   public id: number;
@@ -1811,7 +1811,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const opposingField = opposingFieldUnfiltered.filter((enemyPkm) => enemyPkm.switchOutStatus === false);
 
     opposingField.forEach((opponent) =>
-      trappedAbMessages.push(...applyAbAttrs(CheckTrappedAbAttr, opponent, simulated, trappedByAbility, this)),
+      trappedAbMessages.push(...applyAbAttrs(ArenaTrapAbAttr, opponent, simulated, trappedByAbility, this)),
     );
 
     const side = this.getArenaTagSide();
@@ -1833,7 +1833,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const moveTypeHolder = new NumberHolder(move.type);
 
     applyMoveAttrs(VariableMoveTypeAttr, this, null, move, moveTypeHolder);
-    applyAbAttrs(MoveTypeChangeAbAttr, this, simulated, undefined, move, moveTypeHolder);
+    applyAbAttrs(MoveTypeChangeAbAttr, this, simulated, move, undefined, moveTypeHolder);
 
     globalScene.arena.applyTags(ArenaTagType.ION_DELUGE, simulated, moveTypeHolder);
     if (this.getTag(BattlerTagType.ELECTRIFIED)) {
@@ -3179,7 +3179,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       multiStrikeEnhancementMultiplier,
     );
     if (!ignoreSourceAbility) {
-      applyAbAttrs(AddSecondStrikeAbAttr, source, simulated, this, move, undefined, multiStrikeEnhancementMultiplier);
+      applyAbAttrs(AddSecondStrikeAbAttr, source, simulated, move, this, undefined, multiStrikeEnhancementMultiplier);
     }
 
     /** Doubles damage if this Pokemon's last move was Glaive Rush */
@@ -3267,7 +3267,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     /** Doubles damage if the attacker has Tinted Lens and is using a resisted move */
     const tintedLensMultiplier = new NumberHolder(1);
     if (!ignoreSourceAbility) {
-      applyAbAttrs(DamageBoostAbAttr, source, simulated, this, move, tintedLensMultiplier);
+      applyAbAttrs(DamageBoostAbAttr, source, simulated, move, this, tintedLensMultiplier);
     }
 
     /** Apply this Pokemon's post-calc defensive modifiers (e.g. Fur Coat) */
