@@ -1,3 +1,5 @@
+import type { NumberHolder } from "#app/utils";
+
 /**
  * Customizations options for UI's {@linkcode Mode.OPTION_SELECT}
  */
@@ -13,9 +15,9 @@ export interface OptionMenuSettings {
   /** The maximum number of options shown at once on screen. */
   maxOptions?: number;
   /** Horizontal offset for the window compared to the default (right of screen) */
-  xOffset?: number;
+  xOffset?: number | NumberHolder;
   /** Vertical offset for the window compared to the default (bottom of screen) */
-  yOffset?: number;
+  yOffset?: number | NumberHolder;
   /**
    * Set to `true` to prevent closing the menu with the cancel button.
    * Otherwise using the cancel button will act as if the last option was selected.

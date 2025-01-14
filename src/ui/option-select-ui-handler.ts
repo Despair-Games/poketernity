@@ -31,7 +31,7 @@ export default class OptionSelectUiHandler extends MessageUiHandler {
 
   protected displayWidth: number;
 
-  private cursorObj: Phaser.GameObjects.Image | null;
+  protected cursorObj: Phaser.GameObjects.Image | null;
 
   constructor(mode: Mode = Mode.OPTION_SELECT) {
     super(mode);
@@ -117,8 +117,6 @@ export default class OptionSelectUiHandler extends MessageUiHandler {
 
     // Go through all options, and find out their actual display width
     for (const option of configOptions) {
-      let labelWidth = 0;
-
       // Measure the width of the icon(s) to show before the label
       if (option.iconsConfig && !option.label.startsWith(" ")) {
         let maxIconWidth = 0;
@@ -136,9 +134,7 @@ export default class OptionSelectUiHandler extends MessageUiHandler {
 
       // Measure the width of the label
       tempTextObject.setText(option.label);
-      labelWidth += tempTextObject.displayWidth;
-
-      maxWidth = Math.max(maxWidth, labelWidth);
+      maxWidth = Math.max(maxWidth, tempTextObject.displayWidth);
     }
 
     tempTextObject.destroy();
@@ -148,28 +144,36 @@ export default class OptionSelectUiHandler extends MessageUiHandler {
   }
 
   protected displayCurrentOptions(): void {
-    // Destroy any existing icon sprite. TODO: improve performance
-    this.clearIconSprites();
-
     const options: OptionSelectItem[] = this.getOptionsWithScroll();
-
     this.optionSelectText.setText(options.map((o) => o.label).join("\n"));
 
+    // Hide existing icons
+    for (const iconSprite of this.optionSelectIcons) {
+      iconSprite.setVisible(false);
+    }
+
+    // Display the icons before each option, if any
+    let currentIconIndex = 0;
     options.forEach((option: OptionSelectItem, i: number) => {
-      const iconY = 7 + i * (114 * this.scale - 3);
       if (option.iconsConfig) {
+        const iconY = 7 + i * (114 * this.scale - 3);
         const iconX = Math.floor(((option.label.length - option.label.trimStart().length) * this.singleSpaceWidth) / 2);
-        for (const config of option.iconsConfig) {
-          const iconSprite = globalScene.add.sprite(0, 0, config.name, config.frame);
+        for (const config of option.iconsConfig!) {
+          let iconSprite = this.optionSelectIcons[currentIconIndex++];
+          if (!iconSprite) {
+            iconSprite = globalScene.add.sprite(0, 0, config.name, config.frame);
+            this.optionSelectIcons.push(iconSprite);
+            this.optionSelectContainer.add(iconSprite);
+          } else {
+            iconSprite.setTexture(config.name, config.frame);
+            iconSprite.setVisible(true);
+          }
+
           iconSprite.setScale(config.scale);
           iconSprite.setPositionRelative(this.optionSelectText, iconX, iconY);
-
           if (config.tint) {
             iconSprite.setTint(config.tint);
           }
-
-          this.optionSelectIcons.push(iconSprite);
-          this.optionSelectContainer.add(iconSprite);
         }
       }
     });
