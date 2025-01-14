@@ -25,7 +25,6 @@
     "posttest:silent": "git rev-parse --short HEAD",
 
     "typecheck": "tsc --noEmit",
-
     "posttypecheck": "git rev-parse --short HEAD",
 
     "eslint": "eslint --fix .",
