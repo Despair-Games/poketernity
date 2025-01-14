@@ -1,10 +1,10 @@
 import type { TurnCommand } from "#app/battle";
 import { BattleType } from "#enums/battle-type";
-import { type ArenaTag } from "#app/data/arena-tag";
+import { type FairyLockTag } from "#app/data/arena-tag";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { speciesStarterCosts } from "#app/data/balance/starters";
 import type { EncoreTag } from "#app/data/battler-tags";
-import { TrappedTag, type BattlerTag } from "#app/data/battler-tags";
+import { TrappedTag } from "#app/data/battler-tags";
 import { getMoveTargets, type MoveTargetSet } from "#app/data/move";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { FieldPosition } from "#enums/field-position";
@@ -310,6 +310,22 @@ export class CommandPhase extends FieldPhase {
         const isSwitch = command === Command.POKEMON;
         const batonPass = isSwitch && (args[0] as boolean);
         const trappedAbMessages: string[] = [];
+
+        const showNoEscapeText = (text: string): void => {
+          ui.showText(
+            text,
+            null,
+            () => {
+              ui.showText("", 0);
+              if (!isSwitch) {
+                ui.setMode(Mode.COMMAND, this.fieldIndex);
+              }
+            },
+            null,
+            true,
+          );
+        };
+
         if (batonPass || !playerPokemon.isTrapped(trappedAbMessages)) {
           currentBattle.turnCommands[this.fieldIndex] = isSwitch
             ? { command: Command.POKEMON, cursor: cursor, args: args }
@@ -322,57 +338,31 @@ export class CommandPhase extends FieldPhase {
           if (!isSwitch) {
             ui.setMode(Mode.MESSAGE);
           }
-          ui.showText(
-            trappedAbMessages[0],
-            null,
-            () => {
-              ui.showText("", 0);
-              if (!isSwitch) {
-                ui.setMode(Mode.COMMAND, this.fieldIndex);
-              }
-            },
-            null,
-            true,
-          );
+          showNoEscapeText(trappedAbMessages[0]);
         } else {
           const trapTag = playerPokemon.getTag(TrappedTag);
           const fairyLockTag = arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.PLAYER);
 
-          if (!trapTag && !fairyLockTag) {
-            i18next.t(`battle:noEscape${isSwitch ? "Switch" : "Flee"}`);
-            break;
-          }
           if (!isSwitch) {
             ui.setMode(Mode.COMMAND, this.fieldIndex);
             ui.setMode(Mode.MESSAGE);
           }
-          const showNoEscapeText = (tag: BattlerTag | ArenaTag): void => {
-            ui.showText(
-              i18next.t("battle:noEscapePokemon", {
-                pokemonName:
-                  tag.sourceId && globalScene.getPokemonById(tag.sourceId)
-                    ? getPokemonNameWithAffix(globalScene.getPokemonById(tag.sourceId))
-                    : "",
-                moveName: tag.getMoveName(),
-                escapeVerb: isSwitch ? i18next.t("battle:escapeVerbSwitch") : i18next.t("battle:escapeVerbFlee"),
-              }),
-              null,
-              () => {
-                ui.showText("", 0);
-                if (!isSwitch) {
-                  ui.setMode(Mode.COMMAND, this.fieldIndex);
-                }
-              },
-              null,
-              true,
-            );
+
+          const getNoEscapeText = (tag?: TrappedTag | FairyLockTag) => {
+            if (!tag) {
+              return i18next.t(`battle:noEscape${isSwitch ? "Switch" : "Flee"}`);
+            }
+            return i18next.t("battle:noEscapePokemon", {
+              pokemonName:
+                tag.sourceId && globalScene.getPokemonById(tag.sourceId)
+                  ? getPokemonNameWithAffix(globalScene.getPokemonById(tag.sourceId))
+                  : "",
+              moveName: tag.getMoveName(),
+              escapeVerb: isSwitch ? i18next.t("battle:escapeVerbSwitch") : i18next.t("battle:escapeVerbFlee"),
+            });
           };
 
-          if (trapTag) {
-            showNoEscapeText(trapTag);
-          } else if (fairyLockTag) {
-            showNoEscapeText(fairyLockTag);
-          }
+          showNoEscapeText(getNoEscapeText(trapTag ?? fairyLockTag));
         }
         break;
     }

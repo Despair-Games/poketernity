@@ -3,6 +3,7 @@ import type { TextStyle } from "./text";
 import { getTextColor } from "./text";
 import type { Mode } from "./ui";
 import type { Button } from "#enums/buttons";
+import { settings } from "#app/system/settings/settings-manager";
 
 /**
  * A basic abstract class to act as a holder and processor for UI elements.
@@ -34,7 +35,7 @@ export default abstract class UiHandler {
   }
 
   getTextColor(style: TextStyle, shadow: boolean = false): string {
-    return getTextColor(style, shadow, globalScene.uiTheme);
+    return getTextColor(style, shadow, settings.display.uiTheme);
   }
 
   getCursor(): number {

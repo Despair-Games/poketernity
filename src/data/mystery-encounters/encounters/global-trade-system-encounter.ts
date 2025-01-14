@@ -5,7 +5,7 @@ import {
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { ModifierTier } from "#app/modifier/modifier-tier";
-import { MusicPreference } from "#app/system/settings/settings";
+import { MusicPreference } from "#enums/music-preference";
 import type { ModifierTypeOption } from "#app/modifier/modifier-type";
 import { getPlayerModifierTypeOptions, regenerateModifierPoolThresholds } from "#app/modifier/modifier-type";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
@@ -43,6 +43,7 @@ import { trainerNamePools } from "#app/data/trainer-names";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
 import { addPokemonDataToDexAndValidateAchievements } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import type { PokeballType } from "#enums/pokeball";
+import { settings } from "#app/system/settings/settings-manager";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/globalTradeSystem";
@@ -123,7 +124,7 @@ export const GlobalTradeSystemEncounter: MysteryEncounter = MysteryEncounterBuil
 
     // Load bgm
     let bgmKey: string;
-    if (globalScene.musicPreference === MusicPreference.GENFIVE) {
+    if (settings.audio.musicPreference === MusicPreference.GENFIVE) {
       bgmKey = "mystery_encounter_gen_5_gts";
       globalScene.loadBgm(bgmKey, `${bgmKey}.mp3`);
     } else {

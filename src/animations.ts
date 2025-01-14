@@ -6,6 +6,7 @@ import { getFrameMs, randGauss, randInt } from "#app/utils";
 import { PokeballType } from "#enums/pokeball";
 import type { Variant } from "./data/variant";
 import type BattleScene from "./battle-scene";
+import { settings } from "#app/system/settings/settings-manager";
 
 /**
  * Class for handling general animations such as particle effects.
@@ -306,7 +307,7 @@ export class Animation {
       particle.play({
         key: "pb_open_particle",
         startFrame: (index + 3) % 4,
-        frameRate: Math.floor(16 * this.scene.gameSpeed),
+        frameRate: Math.floor(16 * settings.general.gameSpeed),
       });
       this.scene.tweens.add({
         targets: particle,
