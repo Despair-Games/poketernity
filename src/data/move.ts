@@ -359,13 +359,13 @@ export abstract class Move implements Localizable {
   /**
    * Sets the flags of the move
    * @param flag {@linkcode MoveFlags}
-   * @param on a boolean, if True, then "ORs" the flag onto existing ones, if False then "XORs" the flag onto existing ones
+   * @param on If `true`, sets the move to have the flag; if `false`, sets the move to NOT have the flag.
    */
   private setFlag(flag: MoveFlags, on: boolean): void {
     // bitwise OR and bitwise XOR respectively
     if (on) {
       this.flags |= flag;
-    } else {
+    } else if (this.hasFlag(flag)) {
       this.flags ^= flag;
     }
   }
