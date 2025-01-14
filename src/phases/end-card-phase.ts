@@ -3,6 +3,7 @@ import { Phase } from "#app/phase";
 import { addTextObject, TextStyle } from "#app/ui/text";
 import { PlayerGender } from "#enums/player-gender";
 import i18next from "i18next";
+import { settings } from "#app/system/settings/settings-manager";
 
 /**
  * Displays the End Card after a classic run ends in victory.
@@ -24,7 +25,7 @@ export class EndCardPhase extends Phase {
     this.endCard = globalScene.add.image(
       0,
       0,
-      `end_${globalScene.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}`,
+      `end_${settings.display.playerGender === PlayerGender.FEMALE ? "f" : "m"}`,
     );
     this.endCard.setOrigin(0);
     this.endCard.setScale(0.5);

@@ -9,6 +9,7 @@ import { NumberHolder } from "#app/utils";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
+import { ArenaTagType } from "#enums/arena-tag-type";
 
 /**
  * Handles the player attempting to run away from a wild battle
@@ -49,6 +50,8 @@ export class AttemptRunPhase extends PokemonPhase {
       });
 
       globalScene.clearEnemyHeldItemModifiers();
+      // clear all queued delayed attacks (e.g. from Future Sight)
+      globalScene.arena.removeTag(ArenaTagType.DELAYED_ATTACK);
 
       enemyField.forEach((enemyPokemon) => {
         enemyPokemon.hideInfo().then(() => enemyPokemon.destroy());

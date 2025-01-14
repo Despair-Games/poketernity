@@ -4,6 +4,7 @@ import { HitResult } from "#enums/hit-result";
 import { globalScene } from "#app/global-scene";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { fixedNumber } from "#app/utils";
+import { settings } from "#app/system/settings/settings-manager";
 
 /**
  * Displays damage numbers and plays move hit SFX during battle
@@ -31,7 +32,7 @@ export class DamageAnimPhase extends PokemonPhase {
     super.start();
 
     if (this.damageResult === HitResult.ONE_HIT_KO) {
-      if (globalScene.moveAnimations) {
+      if (settings.display.enableMoveAnimations) {
         globalScene.toggleInvert(true);
       }
       globalScene.time.delayedCall(fixedNumber(1000), () => {

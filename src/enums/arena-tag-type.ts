@@ -5,8 +5,6 @@ export enum ArenaTagType {
   SPIKES,
   TOXIC_SPIKES,
   MIST,
-  FUTURE_SIGHT,
-  DOOM_DESIRE,
   WISH,
   STEALTH_ROCK,
   STICKY_WEB,
@@ -29,4 +27,5 @@ export enum ArenaTagType {
   WATER_FIRE_PLEDGE,
   GRASS_WATER_PLEDGE,
   FAIRY_LOCK,
+  DELAYED_ATTACK,
 }
