@@ -5,6 +5,7 @@ import type {
   SettingsUiItem,
   SettingUiItemOption,
 } from "#app/@types/Settings";
+import { GAME_SPEEDS } from "#app/constants";
 import { BattleStyle } from "#app/enums/battle-style";
 import { CandyUpgradeDisplayMode } from "#app/enums/candy-upgrade-display";
 import { CandyUpgradeNotificationMode } from "#app/enums/candy-upgrade-notification-mode";
@@ -19,7 +20,6 @@ import { MusicPreference } from "#app/enums/music-preference";
 import { PlayerGender } from "#app/enums/player-gender";
 import { ShopCursorTarget } from "#app/enums/shop-cursor-target";
 import { UiTheme } from "#app/enums/ui-theme";
-import { GAME_SPEEDS } from "#app/system/game-speed";
 import { supportedLanguages } from "#app/system/settings/supported-languages";
 import { isLandscapeMode } from "#app/utils";
 import i18next, { t } from "i18next";
