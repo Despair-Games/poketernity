@@ -21,6 +21,10 @@ export const courtChangeArenaTags = [
   ArenaTagType.GRASS_WATER_PLEDGE,
   ArenaTagType.FIRE_GRASS_PLEDGE,
   ArenaTagType.WATER_FIRE_PLEDGE,
+  ArenaTagType.G_MAX_VINE_LASH,
+  ArenaTagType.G_MAX_WILDFIRE,
+  ArenaTagType.G_MAX_CANNONADE,
+  ArenaTagType.G_MAX_VOLCALITH,
 ];
 
 /**
