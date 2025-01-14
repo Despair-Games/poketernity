@@ -24,3 +24,18 @@ export const LOCALE_LS_KEY = `${LS_PREFIX}/locale`;
 
 /** Value used for byapssing login values */
 export const bypassLogin = import.meta.env.VITE_BYPASS_LOGIN === "1";
+
+/** Key for the local storage item storing the settings. */
+export const SETTINGS_LS_KEY = `${LS_PREFIX}/settings`;
+
+/** Key for the local storage item storing the input mapping configs. */
+export const MAPPING_CONFIG_LS_KEY = `${LS_PREFIX}/mapping/configs`;
+
+/** The ratio at which PRSFX sound volumes are played is adjusted since they are sigificantly louder. */
+export const PRSFX_SOUND_ADJUSTMENT_RATIO = 0.5;
+
+/** The maximum number of language options to display simultaneously. */
+export const LANGUAGE_MAX_OPTIONS = 7;
+
+/** All available game speeds. */
+export const GAME_SPEEDS = [1, 1.25, 1.5, 2, 2.5, 3, 4, 5];
