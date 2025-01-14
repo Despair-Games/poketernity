@@ -20,7 +20,7 @@ export class AddArenaTrapTagHitAttr extends AddArenaTagAttr {
       (moveChance < 0 || moveChance === 100 || user.randSeedInt(100) < moveChance)
       && user.getLastXMoves(1)[0]?.result === MoveResult.SUCCESS
     ) {
-      globalScene.arena.addTag(this.tagType, 0, move.id, user.id, side);
+      globalScene.arena.addTag(this.tagType, user.id, 0, move.id, side);
       if (!tag) {
         return true;
       }

@@ -100,7 +100,7 @@ describe("Battle Mechanics - Damage Calculation", () => {
   });
 
   it("Charizard with odd HP survives Stealth Rock damage twice", async () => {
-    game.scene.arena.addTag(ArenaTagType.STEALTH_ROCK, 1, Moves.STEALTH_ROCK, 0);
+    game.scene.arena.addTag(ArenaTagType.STEALTH_ROCK, 0, 1, Moves.STEALTH_ROCK);
     game.override.seed("Charizard Stealth Rock test").enemySpecies(Species.CHARIZARD).enemyAbility(Abilities.BLAZE);
 
     await game.classicMode.startBattle([Species.PIKACHU]);
