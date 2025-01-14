@@ -48,26 +48,24 @@ describe("All Moves", () => {
   const filename = resolve("./test/moves/all_moves.json");
   const file = readFileSync(filename, { encoding: "utf-8" });
   const moveData: MoveData[] = JSON.parse(file);
-  initMoves();
-  moveData.forEach((move: MoveData) => {
+
+  it.each(moveData)("$identifier, if implemented, should have correct move data", async (move: MoveData) => {
     const pktyMove = allMoves[move.id as Moves] as Move;
     if (pktyMove && !isUnimplemented(pktyMove.name)) {
-      it(`${pktyMove.name}`, async () => {
-        expect(pktyMove.type).toBe(move.type_id - 1); // PokeAPI begins its list of types with the number 1
-        expect(pktyMove.accuracy).toBe(move.accuracy);
-        expect(pktyMove.priority).toBe(move.priority);
-        expect(pktyMove.power).toBe(move.power);
-        expect(pktyMove.pp).toBe(move.pp);
-        expect(pktyMove.category).toBe(move.damage_class_id);
-        expect(pktyMove.chance).toBe(move.effect_chance);
-        if (move.flags.length > 0) {
-          move.flags.forEach((f: MoveFlags) => {
-            if (flagsToCheck[f]) {
-              expect(pktyMove.hasFlag(flagsToCheck[f])).toBe(true);
-            }
-          });
+      expect(pktyMove.type).toBe(move.type_id - 1); // PokeAPI begins its list of types with the number 1
+      expect(pktyMove.accuracy).toBe(move.accuracy);
+      expect(pktyMove.priority).toBe(move.priority);
+      expect(pktyMove.power).toBe(move.power);
+      expect(pktyMove.pp).toBe(move.pp);
+      expect(pktyMove.category).toBe(move.damage_class_id);
+      expect(pktyMove.chance).toBe(move.effect_chance);
+      if (Array.isArray(move.flags)) {
+        for (const f of Object.keys(flagsToCheck)) {
+          const actualHasFlag = pktyMove.hasFlag(flagsToCheck[f]);
+          const expectedHasFlag = move.flags.includes(Number(f));
+          expect(actualHasFlag).toBe(expectedHasFlag);
         }
-      });
+      }
     }
   });
 
