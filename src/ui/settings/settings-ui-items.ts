@@ -19,6 +19,7 @@ import { MusicPreference } from "#app/enums/music-preference";
 import { PlayerGender } from "#app/enums/player-gender";
 import { ShopCursorTarget } from "#app/enums/shop-cursor-target";
 import { UiTheme } from "#app/enums/ui-theme";
+import { gameSpeeds } from "#app/system/game-speed";
 import { supportedLanguages } from "#app/system/settings/supported-languages";
 import { isLandscapeMode } from "#app/utils";
 import i18next, { t } from "i18next";
@@ -72,7 +73,7 @@ function useVolumeOptions(): SettingUiItemOption[] {
  * @returns An array from 1x - 5x
  */
 function useGameSpeedOptions(): SettingUiItemOption[] {
-  return [1, 1.25, 1.5, 2, 2.5, 3, 4, 5].map((n) => ({ value: n, label: `${n}x` }));
+  return gameSpeeds.map((n) => ({ value: n, label: `${n}x` }));
 }
 
 //#endregion

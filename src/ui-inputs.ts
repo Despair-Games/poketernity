@@ -12,6 +12,7 @@ import SettingsDisplayUiHandler from "./ui/settings/settings-display-ui-handler"
 import SettingsAudioUiHandler from "./ui/settings/settings-audio-ui-handler";
 import RunInfoUiHandler from "./ui/run-info-ui-handler";
 import { settings } from "./system/settings/settings-manager";
+import { gameSpeeds } from "./system/game-speed";
 
 type ActionKeys = Record<Button, () => void>;
 
@@ -216,13 +217,17 @@ export class UiInputs {
   }
 
   buttonSpeedChange(up = true): void {
-    if (up && settings.general.gameSpeed < 5) {
-      settings.update("general", "gameSpeed", settings.general.gameSpeed + 1);
+    const index = gameSpeeds.findIndex((n) => n === settings.general.gameSpeed) ?? 0;
+
+    if (up) {
+      const nextIndex = Math.min(index + 1, gameSpeeds.length - 1);
+      settings.update("general", "gameSpeed", gameSpeeds[nextIndex]);
       if (globalScene.ui?.getMode() === Mode.SETTINGS) {
         (globalScene.ui.getHandler() as SettingsUiHandler).show([]);
       }
-    } else if (!up && settings.general.gameSpeed > 1) {
-      settings.update("general", "gameSpeed", Math.max(settings.general.gameSpeed - 1, 1));
+    } else if (!up) {
+      const nextIndex = Math.max(index - 1, 0);
+      settings.update("general", "gameSpeed", gameSpeeds[nextIndex]);
       if (globalScene.ui?.getMode() === Mode.SETTINGS) {
         (globalScene.ui.getHandler() as SettingsUiHandler).show([]);
       }

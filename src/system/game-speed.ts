@@ -5,8 +5,15 @@ import { globalScene } from "#app/global-scene";
 import { FixedNumber } from "#app/utils";
 import { settings } from "#app/system/settings/settings-manager";
 
+//#region Types
+
 type FadeIn = typeof FadeIn;
 type FadeOut = typeof FadeOut;
+
+//#endregion
+
+/** All available game speeds. */
+export const gameSpeeds = [1, 1.25, 1.5, 2, 2.5, 3, 4, 5];
 
 export function initGameSpeed() {
   /**
