@@ -7,6 +7,7 @@ import { addWindow } from "./ui-theme";
 import { Button } from "#enums/buttons";
 import type { CommandPhase } from "#app/phases/command-phase";
 import { globalScene } from "#app/global-scene";
+import { settings } from "#app/system/settings/settings-manager";
 
 /**
  * TODO: This should extend AbstractOptionSelectUiHandler
@@ -27,7 +28,7 @@ export default class BallUiHandler extends UiHandler {
   setup() {
     const ui = this.getUi();
 
-    this.scale = getTextStyleOptions(TextStyle.WINDOW, globalScene.uiTheme).scale;
+    this.scale = getTextStyleOptions(TextStyle.WINDOW, settings.display.uiTheme).scale;
 
     let optionsTextContent = "";
     const pokeballTypeCount = Object.keys(globalScene.pokeballCounts).length;
