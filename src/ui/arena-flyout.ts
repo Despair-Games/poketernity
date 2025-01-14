@@ -285,6 +285,12 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
     switch (arenaEffectChangedEvent.constructor) {
       case TagAddedEvent:
         const tagAddedEvent = arenaEffectChangedEvent as TagAddedEvent;
+
+        const excludedTagTypes = [ArenaTagType.DELAYED_ATTACK];
+        if (excludedTagTypes.includes(tagAddedEvent.arenaTagType)) {
+          return;
+        }
+
         const isArenaTrapTag = globalScene.arena.getTag(tagAddedEvent.arenaTagType) instanceof ArenaTrapTag;
         let arenaEffectType: ArenaEffectType;
 

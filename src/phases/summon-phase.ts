@@ -7,6 +7,7 @@ import { type Pokemon } from "#app/field/pokemon";
 import { FieldPosition } from "#enums/field-position";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { settings } from "#app/system/settings/settings-manager";
 import i18next from "i18next";
 import { PartyMemberPokemonPhase } from "./abstract-party-member-pokemon-phase";
 import { GameOverPhase } from "./game-over-phase";
@@ -33,7 +34,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
    * Sends out a Pokemon before the battle begins and shows the appropriate messages
    */
   protected preSummon(): void {
-    const { currentBattle, gameData, pbTray, pbTrayEnemy, time, trainer, tweens, ui } = globalScene;
+    const { currentBattle, pbTray, pbTrayEnemy, time, trainer, tweens, ui } = globalScene;
 
     const partyMember = this.getPokemon();
     // If the Pokemon about to be sent out is fainted, illegal under a challenge, or no longer in the party for some reason, switch to the first non-fainted legal Pokemon
@@ -76,7 +77,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
     if (this.isPlayer) {
       ui.showText(i18next.t("battle:playerGo", { pokemonName: getPokemonNameWithAffix(this.getPokemon()) }));
       pbTray.hide();
-      trainer.setTexture(`trainer_${gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`);
+      trainer.setTexture(`trainer_${settings.display.playerGender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`);
 
       time.delayedCall(562, () => {
         trainer.setFrame("2");

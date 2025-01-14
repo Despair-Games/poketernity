@@ -2,6 +2,7 @@ import { PlayerGender } from "#enums/player-gender";
 import { BattleStyle } from "#enums/battle-style";
 import { ExpGainsSpeed } from "#enums/exp-gains-speed";
 import { GameManagerHelper } from "#test/testUtils/helpers/gameManagerHelper";
+import { settings } from "#app/system/settings/settings-manager";
 
 /**
  * Helper to handle settings for tests
@@ -26,7 +27,7 @@ export class SettingsHelper extends GameManagerHelper {
    * @param enable true to enabled, false to disabled
    */
   typeHints(enable: boolean): void {
-    this.game.scene.typeHints = enable;
+    settings.update("display", "enableTypeHints", enable);
     this.log(`Type Hints ${enable ? "enabled" : "disabled"}`);
   }
 
@@ -35,7 +36,7 @@ export class SettingsHelper extends GameManagerHelper {
    * @param gender the {@linkcode PlayerGender} to set
    */
   playerGender(gender: PlayerGender) {
-    this.game.scene.gameData.gender = gender;
+    settings.update("display", "playerGender", gender);
     this.log(`Gender set to: ${PlayerGender[gender]} (=${gender})`);
   }
 
@@ -44,7 +45,7 @@ export class SettingsHelper extends GameManagerHelper {
    * @param speed the {@linkcode ExpGainsSpeed} to set
    */
   expGainsSpeed(speed: ExpGainsSpeed) {
-    this.game.scene.expGainsSpeed = speed;
+    settings.update("general", "expGainsSpeed", speed);
     this.log(`Exp Gains Speed set to: ${ExpGainsSpeed[speed]} (=${speed})`);
   }
 
