@@ -1108,7 +1108,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
     const chiStrikeCritBoostTag = source.getTag(ChiStrikeCritBoostTag);
     if (chiStrikeCritBoostTag) {
-      critStage.value += 1;
+      critStage.value += chiStrikeCritBoostTag.stackCount;
     }
 
     console.log(`crit stage: +${critStage.value}`);

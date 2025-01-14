@@ -897,13 +897,17 @@ export class DelayedAttackTag extends ArenaTag {
 }
 
 /**
- * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Stealth_Rock_(move) Stealth Rock}.
- * Applies up to 1 layer of Stealth Rocks, dealing percentage-based damage to any Pokémon
- * who is summoned into the trap, based on the Rock type's type effectiveness.
+ * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Stealth_Rock_(move) Stealth Rock}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/G-Max_Steelsurge_(move) G-Max Steelsurge}.
+ * Applies up to 1 layer of hazards, dealing percentage-based damage to any Pokemon summoned into the trap
+ * based on the type effectiveness
  */
-class StealthRockTag extends ArenaTrapTag {
-  constructor(sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.STEALTH_ROCK, Moves.STEALTH_ROCK, sourceId, side, 1);
+class TypeHazardTag extends ArenaTrapTag {
+  public damagingType: Type;
+
+  constructor(arenaTagType: ArenaTagType, sourceMove: Moves, sourceId: number, side: ArenaTagSide, damagingType: Type) {
+    super(arenaTagType, sourceMove, sourceId, side, 1);
+    this.damagingType = damagingType;
   }
 
   override onAdd(arena: Arena, quiet: boolean = false): void {
@@ -911,39 +915,21 @@ class StealthRockTag extends ArenaTrapTag {
 
     const source = this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
     if (!quiet && source) {
-      globalScene.queueMessage(
-        i18next.t("arenaTag:stealthRockOnAdd", { opponentDesc: source.getOpponentDescriptor() }),
-      );
+      if (this.damagingType === Type.ROCK) {
+        globalScene.queueMessage(
+          i18next.t("arenaTag:stealthRockOnAdd", { opponentDesc: source.getOpponentDescriptor() }),
+        );
+      } else {
+        globalScene.queueMessage(
+          i18next.t("arenaTag:sharpSteelOnAdd", { opponentDesc: source.getOpponentDescriptor() }),
+        );
+      }
     }
   }
 
   getDamageHpRatio(pokemon: Pokemon): number {
-    const effectiveness = pokemon.getAttackTypeEffectiveness(Type.ROCK, undefined, true);
-
-    let damageHpRatio: number = 0;
-
-    switch (effectiveness) {
-      case 0:
-        damageHpRatio = 0;
-        break;
-      case 0.25:
-        damageHpRatio = 0.03125;
-        break;
-      case 0.5:
-        damageHpRatio = 0.0625;
-        break;
-      case 1:
-        damageHpRatio = 0.125;
-        break;
-      case 2:
-        damageHpRatio = 0.25;
-        break;
-      case 4:
-        damageHpRatio = 0.5;
-        break;
-    }
-
-    return damageHpRatio;
+    const effectiveness = pokemon.getAttackTypeEffectiveness(this.damagingType, undefined, true);
+    return 0.125 * effectiveness;
   }
 
   override activateTrap(pokemon: Pokemon, simulated: boolean): boolean {
@@ -961,91 +947,15 @@ class StealthRockTag extends ArenaTrapTag {
         return true;
       }
       const damage = toDmgValue(pokemon.getMaxHp() * damageHpRatio);
-      globalScene.queueMessage(
-        i18next.t("arenaTag:stealthRockActivateTrap", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
-      );
-      pokemon.damageAndUpdate(damage, HitResult.OTHER);
-      if (pokemon.turnData) {
-        pokemon.turnData.damageTaken += damage;
+      if (this.damagingType === Type.ROCK) {
+        globalScene.queueMessage(
+          i18next.t("arenaTag:stealthRockActivateTrap", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+        );
+      } else {
+        globalScene.queueMessage(
+          i18next.t("arenaTag:sharpSteelActivateTrap", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+        );
       }
-      return true;
-    }
-
-    return false;
-  }
-
-  override getMatchupScoreMultiplier(pokemon: Pokemon): number {
-    const damageHpRatio = this.getDamageHpRatio(pokemon);
-    return Phaser.Math.Linear(super.getMatchupScoreMultiplier(pokemon), 1, 1 - Math.pow(damageHpRatio, damageHpRatio));
-  }
-}
-
-/**
- * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/G-Max_Steelsurge_(move) G-Max Steelsurge}.
- * Applies up to 1 layer of Sharp Steel, dealing percentage-based damage to any Pokémon
- * who is summoned into the trap, based on the Steel type's type effectiveness.
- */
-class SharpSteelTag extends ArenaTrapTag {
-  constructor(sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.SHARP_STEEL, Moves.G_MAX_STEELSURGE, sourceId, side, 1);
-  }
-
-  override onAdd(arena: Arena, quiet: boolean = false): void {
-    super.onAdd(arena);
-
-    const source = this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
-    if (!quiet && source) {
-      globalScene.queueMessage(i18next.t("arenaTag:sharpSteelOnAdd", { opponentDesc: source.getOpponentDescriptor() }));
-    }
-  }
-
-  getDamageHpRatio(pokemon: Pokemon): number {
-    const effectiveness = pokemon.getAttackTypeEffectiveness(Type.STEEL, undefined, true);
-
-    let damageHpRatio: number = 0;
-
-    switch (effectiveness) {
-      case 0:
-        damageHpRatio = 0;
-        break;
-      case 0.25:
-        damageHpRatio = 0.03125;
-        break;
-      case 0.5:
-        damageHpRatio = 0.0625;
-        break;
-      case 1:
-        damageHpRatio = 0.125;
-        break;
-      case 2:
-        damageHpRatio = 0.25;
-        break;
-      case 4:
-        damageHpRatio = 0.5;
-        break;
-    }
-
-    return damageHpRatio;
-  }
-
-  override activateTrap(pokemon: Pokemon, simulated: boolean): boolean {
-    const cancelled = new BooleanHolder(false);
-    applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, simulated, cancelled);
-
-    if (cancelled.value) {
-      return false;
-    }
-
-    const damageHpRatio = this.getDamageHpRatio(pokemon);
-
-    if (damageHpRatio) {
-      if (simulated) {
-        return true;
-      }
-      const damage = toDmgValue(pokemon.getMaxHp() * damageHpRatio);
-      globalScene.queueMessage(
-        i18next.t("arenaTag:sharpSteelActivateTrap", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
-      );
       pokemon.damageAndUpdate(damage, HitResult.OTHER);
       if (pokemon.turnData) {
         pokemon.turnData.damageTaken += damage;
@@ -1569,9 +1479,9 @@ export function getArenaTag(
     case ArenaTagType.WISH:
       return new WishTag(turnCount, sourceId, side);
     case ArenaTagType.STEALTH_ROCK:
-      return new StealthRockTag(sourceId, side);
+      return new TypeHazardTag(ArenaTagType.STEALTH_ROCK, sourceMove!, sourceId, side, Type.ROCK);
     case ArenaTagType.SHARP_STEEL:
-      return new SharpSteelTag(sourceId, side);
+      return new TypeHazardTag(ArenaTagType.SHARP_STEEL, sourceMove!, sourceId, side, Type.STEEL);
     case ArenaTagType.STICKY_WEB:
       return new StickyWebTag(sourceId, side);
     case ArenaTagType.TRICK_ROOM:

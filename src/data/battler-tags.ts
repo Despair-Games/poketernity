@@ -2119,12 +2119,15 @@ export class CritBoostTag extends BattlerTag {
  * Granted by G-Max Chi Strike
  */
 export class ChiStrikeCritBoostTag extends BattlerTag {
+  public stackCount: number = 0;
+
   constructor(tagType: BattlerTagType, sourceMove: Moves) {
     super(tagType, BattlerTagLapseType.TURN_END, 1, sourceMove, undefined, true);
   }
 
   override onAdd(pokemon: Pokemon): void {
     super.onAdd(pokemon);
+    this.stackCount += 1;
 
     globalScene.queueMessage(
       i18next.t("battlerTags:chiStrikeCritBoostOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
@@ -2135,12 +2138,21 @@ export class ChiStrikeCritBoostTag extends BattlerTag {
     return lapseType !== BattlerTagLapseType.CUSTOM || super.lapse(pokemon, lapseType);
   }
 
+  override onOverlap(pokemon: Pokemon): void {
+    this.onAdd(pokemon);
+  }
+
   override onRemove(pokemon: Pokemon): void {
     super.onRemove(pokemon);
 
     globalScene.queueMessage(
       i18next.t("battlerTags:chiStrikeCritBoostOnRemove", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
+  }
+
+  override loadTag(source: BattlerTag | any): void {
+    super.loadTag(source);
+    this.stackCount = source.stackCount || 0;
   }
 }
 
