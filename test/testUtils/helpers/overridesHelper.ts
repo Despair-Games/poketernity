@@ -4,7 +4,7 @@ import { Abilities } from "#enums/abilities";
 import type { ModifierOverride } from "#app/modifier/modifier-type";
 import type { BattleStyle } from "#app/overrides";
 import Overrides, { defaultOverrides } from "#app/overrides";
-import type { Unlockables } from "#app/system/unlockables";
+import type { Unlockables } from "#enums/unlockables";
 import { Biome } from "#enums/biome";
 import { Moves } from "#enums/moves";
 import type { MysteryEncounterTier } from "#enums/mystery-encounter-tier";

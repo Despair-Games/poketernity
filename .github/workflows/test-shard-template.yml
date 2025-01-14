@@ -16,7 +16,7 @@ on:
 jobs:
   test:
     name: Shard ${{ inputs.shard }} of ${{ inputs.totalShards }}
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v4

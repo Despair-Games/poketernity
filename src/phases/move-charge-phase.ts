@@ -2,7 +2,7 @@ import { MoveChargeAnim } from "#app/data/battle-anims";
 import { applyMoveChargeAttrs } from "#app/data/move";
 import { InstantChargeAttr } from "#app/data/move-attrs/instant-charge-attr";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
-import { MoveResult } from "#app/field/pokemon";
+import { MoveResult } from "#enums/move-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BooleanHolder } from "#app/utils";

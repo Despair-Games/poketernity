@@ -4,20 +4,21 @@ import { getLevelTotalExp } from "#app/data/exp";
 import { allMoves } from "#app/data/all-moves";
 import { MAX_PER_TYPE_POKEBALLS } from "#app/data/pokeball";
 import {
-  type FormChangeItem,
   SpeciesFormChangeItemTrigger,
   SpeciesFormChangeLapseTeraTrigger,
   SpeciesFormChangeTeraTrigger,
 } from "#app/data/pokemon-forms";
+import { type FormChangeItem } from "#enums/form-change-item";
 import { Pokemon, type PlayerPokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import Overrides from "#app/overrides";
 import { EvolutionPhase } from "#app/phases/evolution-phase";
-import { LearnMovePhase, LearnMoveType } from "#app/phases/learn-move-phase";
+import { LearnMovePhase } from "#app/phases/learn-move-phase";
+import { LearnMoveType } from "#enums/learn-move-type";
 import { LevelUpPhase } from "#app/phases/level-up-phase";
 import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";
 import { achvs } from "#app/system/achv";
-import type { VoucherType } from "#app/system/voucher";
+import type { VoucherType } from "#enums/voucher-type";
 import { Command } from "#app/ui/command-ui-handler";
 import { addTextObject, TextStyle } from "#app/ui/text";
 import { BooleanHolder, hslToHex, isNullOrUndefined, NumberHolder, toDmgValue } from "#app/utils";
@@ -44,11 +45,11 @@ import {
   type TerastallizeModifierType,
   type TmModifierType,
   getModifierType,
-  ModifierPoolType,
   ModifierTypeGenerator,
   modifierTypes,
   PokemonHeldItemModifierType,
 } from "./modifier-type";
+import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { Color, ShadowColor } from "#enums/color";
 import { FRIENDSHIP_GAIN_FROM_RARE_CANDY } from "#app/data/balance/starters";
 import { applyAbAttrs } from "#app/data/ability";

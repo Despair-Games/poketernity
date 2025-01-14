@@ -1,4 +1,6 @@
-import { type Pokemon, HitResult, MoveResult } from "#app/field/pokemon";
+import { type Pokemon } from "#app/field/pokemon";
+import { MoveResult } from "#enums/move-result";
+import { HitResult } from "#enums/hit-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BooleanHolder, toDmgValue } from "#app/utils";

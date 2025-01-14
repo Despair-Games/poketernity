@@ -1,7 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { ModifierPoolType } from "#app/modifier/modifier-type";
+import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import i18next from "i18next";
 import type { Move } from "#app/data/move";

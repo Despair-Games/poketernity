@@ -1,4 +1,5 @@
-import { EvolutionItem, pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
+import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
+import { EvolutionItem } from "#enums/evolution-item";
 import { tmPoolTiers, tmSpecies } from "#app/data/balance/tms";
 import { getBerryEffectDescription, getBerryName } from "#app/data/berry";
 import { selfStatLowerMoves } from "#app/data/move";
@@ -6,12 +7,8 @@ import { allMoves } from "#app/data/all-moves";
 import { AttackMove } from "#app/data/move";
 import { getNatureName, getNatureStatMultiplier } from "#app/data/nature";
 import { getPokeballCatchMultiplier, getPokeballName, MAX_PER_TYPE_POKEBALLS } from "#app/data/pokeball";
-import {
-  FormChangeItem,
-  pokemonFormChanges,
-  SpeciesFormChangeCondition,
-  SpeciesFormChangeItemTrigger,
-} from "#app/data/pokemon-forms";
+import { pokemonFormChanges, SpeciesFormChangeCondition, SpeciesFormChangeItemTrigger } from "#app/data/pokemon-forms";
+import { FormChangeItem } from "#enums/form-change-item";
 import type { Pokemon } from "#app/field/pokemon";
 import type { EnemyPokemon, PlayerPokemon, PokemonMove } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -91,8 +88,9 @@ import {
 } from "#app/modifier/modifier";
 import { ModifierTier } from "#app/modifier/modifier-tier";
 import Overrides from "#app/overrides";
-import { Unlockables } from "#app/system/unlockables";
-import { getVoucherTypeIcon, getVoucherTypeName, VoucherType } from "#app/system/voucher";
+import { Unlockables } from "#enums/unlockables";
+import { getVoucherTypeIcon, getVoucherTypeName } from "#app/system/voucher";
+import { VoucherType } from "#enums/voucher-type";
 import type { PokemonMoveSelectFilter, PokemonSelectFilter } from "#app/ui/party-ui-handler";
 import PartyUiHandler from "#app/ui/party-ui-handler";
 import { getModifierTierTextTint } from "#app/ui/text";
@@ -119,17 +117,10 @@ import { getStatKey, Stat, TEMP_BATTLE_STATS } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { Type } from "#enums/type";
 import i18next from "i18next";
+import { ModifierPoolType } from "#enums/modifier-pool-type";
 
 const outputModifierData = false;
 const useMaxWeightForOutput = false;
-
-export enum ModifierPoolType {
-  PLAYER,
-  WILD,
-  TRAINER,
-  ENEMY_BUFF,
-  DAILY_STARTER,
-}
 
 type NewModifierFunc = (type: ModifierType, args: any[]) => Modifier;
 

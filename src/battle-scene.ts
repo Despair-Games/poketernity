@@ -61,22 +61,26 @@ import {
   getModifierPoolForType,
   getModifierType,
   getPartyLuckValue,
-  ModifierPoolType,
   modifierTypes,
   PokemonHeldItemModifierType,
 } from "#app/modifier/modifier-type";
+import { ModifierPoolType } from "#enums/modifier-pool-type";
 import AbilityBar from "#app/ui/ability-bar";
 import { allAbilities, applyAbAttrs, applyPostBattleInitAbAttrs, applyPostItemLostAbAttrs } from "#app/data/ability";
 import { PostItemLostAbAttr } from "./data/ab-attrs/post-item-lost-ab-attr";
-import type { BattlerIndex, FixedBattleConfig } from "#app/battle";
-import Battle, { BattleType } from "#app/battle";
+import type { FixedBattleConfig } from "#app/battle";
+import type { BattlerIndex } from "#enums/battler-index";
+import Battle from "#app/battle";
+import { BattleType } from "#enums/battle-type";
 import type { GameMode } from "#app/game-mode";
-import { GameModes, getGameMode } from "#app/game-mode";
+import { getGameMode } from "#app/game-mode";
+import { GameModes } from "#enums/game-modes";
 import FieldSpritePipeline from "#app/pipelines/field-sprite";
 import SpritePipeline from "#app/pipelines/sprite";
 import PartyExpBar from "#app/ui/party-exp-bar";
 import type { TrainerSlot } from "#enums/trainer-slot";
-import Trainer, { TrainerVariant } from "#app/field/trainer";
+import Trainer from "#app/field/trainer";
+import { TrainerVariant } from "#enums/trainer-variant";
 import type TrainerData from "#app/system/trainer-data";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
@@ -93,11 +97,11 @@ import type PokemonData from "#app/system/pokemon-data";
 import { Nature } from "#enums/nature";
 import type { SpeciesFormChange, SpeciesFormChangeTrigger } from "#app/data/pokemon-forms";
 import {
-  FormChangeItem,
   pokemonFormChanges,
   SpeciesFormChangeManualTrigger,
   SpeciesFormChangeTimeOfDayTrigger,
 } from "#app/data/pokemon-forms";
+import { FormChangeItem } from "#enums/form-change-item";
 import { FormChangePhase } from "#app/phases/form-change-phase";
 import { getTypeRgb } from "#app/data/type";
 import { Type } from "#enums/type";
@@ -146,7 +150,7 @@ import { SwitchPhase } from "#app/phases/switch-phase";
 import { TitlePhase } from "#app/phases/title-phase";
 import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
-import { ShopCursorTarget } from "#app/enums/shop-cursor-target";
+import { ShopCursorTarget } from "#enums/shop-cursor-target";
 import MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import {
   allMysteryEncounters,
@@ -174,8 +178,6 @@ import { PostBattleInitAbAttr } from "./data/ab-attrs/post-battle-init-ab-attr";
 import { bgmLoopPoint } from "./data/bgm-loop-point";
 import { allTrainerConfigs } from "./data/balance/trainer-configs/all-trainer-configs";
 import { Animation } from "./animations";
-
-export const bypassLogin = import.meta.env.VITE_BYPASS_LOGIN === "1";
 
 const DEBUG_RNG = false;
 

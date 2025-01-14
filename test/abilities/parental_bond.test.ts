@@ -10,7 +10,7 @@ import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { allMoves } from "#app/data/all-moves";
-import { BattlerIndex } from "#app/battle";
+import { BattlerIndex } from "#enums/battler-index";
 
 describe("Abilities - Parental Bond", () => {
   let phaserGame: Phaser.Game;
