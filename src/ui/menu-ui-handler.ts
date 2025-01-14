@@ -43,7 +43,6 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
   private menuOverlay: Phaser.GameObjects.Rectangle;
 
   private excludedMenus: () => ConditionalMenu[];
-  private menuOptions: MenuOptions[];
 
   protected manageDataConfig: OptionSelectModeConfig;
   protected communityConfig: OptionSelectModeConfig;
@@ -55,17 +54,12 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
 
     this.excludedMenus = () => [
       {
-        condition: [Mode.COMMAND, Mode.TITLE].includes(mode ?? Mode.TITLE),
+        excluded: globalScene.getCurrentPhase() instanceof SelectModifierPhase,
         options: [MenuOptions.EGG_GACHA, MenuOptions.EGG_LIST],
       },
-      { condition: bypassLogin, options: [MenuOptions.LOG_OUT] },
+      { excluded: bypassLogin, options: [MenuOptions.LOG_OUT] },
+      { excluded: !globalScene.currentBattle, options: [MenuOptions.SAVE_AND_QUIT] },
     ];
-
-    this.menuOptions = getEnumKeys(MenuOptions)
-      .map((m) => parseInt(MenuOptions[m]) as MenuOptions)
-      .filter((m) => {
-        return !this.excludedMenus().some((exclusion) => exclusion.condition && exclusion.options.includes(m));
-      });
   }
 
   override setup(): void {
@@ -149,21 +143,13 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
   }
 
   getMenuOptionsConfig(): OptionSelectModeConfig {
-    this.excludedMenus = () => [
-      {
-        condition: globalScene.getCurrentPhase() instanceof SelectModifierPhase,
-        options: [MenuOptions.EGG_GACHA, MenuOptions.EGG_LIST],
-      },
-      { condition: bypassLogin, options: [MenuOptions.LOG_OUT] },
-    ];
-
-    this.menuOptions = getEnumKeys(MenuOptions)
+    const validOptions = getEnumKeys(MenuOptions)
       .map((m) => parseInt(MenuOptions[m]) as MenuOptions)
       .filter((m) => {
-        return !this.excludedMenus().some((exclusion) => exclusion.condition && exclusion.options.includes(m));
+        return !this.excludedMenus().some((option) => option.excluded && option.options.includes(m));
       });
 
-    const menuOptions: OptionSelectItem[] = this.menuOptions.map((option: MenuOptions) => {
+    const menuOptions: OptionSelectItem[] = validOptions.map((option: MenuOptions) => {
       return {
         label: `${i18next.t(`menuUiHandler:${MenuOptions[option]}`)}`,
         handler: () => this.optionSelected(option),
@@ -653,6 +639,6 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
 }
 
 interface ConditionalMenu {
-  condition: boolean;
+  excluded: boolean;
   options: MenuOptions[];
 }
