@@ -3214,6 +3214,7 @@ export function initMoves() {
       .danceMove(),
     new AttackMove(Moves.HEADLONG_RUSH, Type.GROUND, MoveCategory.PHYSICAL, 120, 100, 5, -1, 0, 8)
       .attr(StatStageChangeAttr, [Stat.DEF, Stat.SPDEF], -1, true)
+      .makesContact()
       .punchingMove(),
     new AttackMove(Moves.BARB_BARRAGE, Type.POISON, MoveCategory.PHYSICAL, 60, 100, 10, 50, 0, 8)
       .makesContact(false)
@@ -3475,6 +3476,7 @@ export function initMoves() {
       .soundBased(),
     new AttackMove(Moves.AQUA_STEP, Type.WATER, MoveCategory.PHYSICAL, 80, 100, 10, 100, 0, 9)
       .attr(StatStageChangeAttr, [Stat.SPD], 1, true)
+      .makesContact()
       .danceMove(),
     new AttackMove(Moves.RAGING_BULL, Type.NORMAL, MoveCategory.PHYSICAL, 90, 100, 10, -1, 0, 9)
       .attr(RagingBullTypeAttr)
@@ -3558,6 +3560,7 @@ export function initMoves() {
     ),
     new AttackMove(Moves.BITTER_BLADE, Type.FIRE, MoveCategory.PHYSICAL, 90, 100, 10, -1, 0, 9)
       .attr(HitHealAttr)
+      .makesContact()
       .slicingMove()
       .triageMove(),
     new AttackMove(Moves.DOUBLE_SHOCK, Type.ELECTRIC, MoveCategory.PHYSICAL, 120, 100, 5, -1, 0, 9)
