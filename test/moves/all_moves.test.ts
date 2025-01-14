@@ -2,7 +2,6 @@ import { allMoves } from "#app/data/all-moves";
 import { resolve } from "path";
 import { readFileSync } from "fs";
 import { describe, expect, it } from "vitest";
-import { initMoves } from "#app/data/all-moves";
 import type { MoveCategory } from "#enums/move-category";
 import type { Moves } from "#enums/moves";
 import type { Move } from "#app/data/move";
@@ -25,6 +24,9 @@ describe("All Moves", () => {
     flags: number[];
   };
 
+  /**
+   * Flags for moves added in Legends Arceus and after were manually added to all_moves.json
+   */
   const flagsToCheck = {
     1: MoveFlags.MAKES_CONTACT,
     8: MoveFlags.PUNCHING_MOVE,
