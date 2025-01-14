@@ -4,7 +4,7 @@ import { TextStyle, addBBCodeTextObject, getTextStyleOptions } from "#app/ui/tex
 import MessageUiHandler from "#app/ui/message-ui-handler";
 import { Mode } from "#app/ui/ui";
 import { addWindow } from "#app/ui/ui-theme";
-import { fixedNumber, isNullOrUndefined } from "#app/utils";
+import { fixedNumber, getNumberValue, isNullOrUndefined, NumberHolder } from "#app/utils";
 import { Button } from "#enums/buttons";
 import type BBCodeText from "phaser3-rex-plugins/plugins/gameobjects/tagtext/bbcodetext/BBCodeText";
 
@@ -15,6 +15,8 @@ export default class OptionSelectUiHandler extends MessageUiHandler {
   private singleSpaceWidth: number;
 
   protected readonly defaultYOffset = -48;
+  protected readonly windowWidth: NumberHolder;
+  protected readonly windowHeight: NumberHolder;
 
   protected optionSelectContainer: Phaser.GameObjects.Container;
   protected optionSelectBg: Phaser.GameObjects.NineSlice;
@@ -29,20 +31,25 @@ export default class OptionSelectUiHandler extends MessageUiHandler {
 
   protected scale: number = 0.1666666667;
 
-  protected displayWidth: number;
-
   protected cursorObj: Phaser.GameObjects.Image | null;
 
   constructor(mode: Mode = Mode.OPTION_SELECT) {
     super(mode);
+
+    this.windowWidth = new NumberHolder(0);
+    this.windowHeight = new NumberHolder(0);
   }
 
   public getWindowWidth(): number {
-    return this.displayWidth;
+    return this.windowWidth.value;
   }
 
   public getWindowHeight(): number {
-    return (Math.min((this.config?.options || []).length, this.config?.maxOptions || 99) + 1) * 96 * this.scale - 2;
+    return this.windowHeight.value;
+  }
+
+  protected computeWindowHeight(numOptions: number, maxOptions: number): number {
+    return (Math.min(numOptions, maxOptions) + 1) * 96 * this.scale - 2;
   }
 
   override setup() {
@@ -73,27 +80,28 @@ export default class OptionSelectUiHandler extends MessageUiHandler {
   protected setupOptions() {
     const configOptions: OptionSelectItem[] = this.config?.options ?? [];
 
-    const maxWidth = this.getOptionsWidth(configOptions);
-
-    // Save the max width amongst all options, and use it for everything
-    this.displayWidth = maxWidth + 23;
-
     this.optionSelectText.setMaxLines(this.config?.maxOptions ?? configOptions.length);
 
+    // Get the max width amongst all options, and use it for everything
+    const maxWidth = this.getOptionsWidth(configOptions);
+    const xOffset = getNumberValue(this.config?.xOffset ?? 0);
+    const yOffset = getNumberValue(this.config?.yOffset ?? 0);
+
     // Make sure the window is not larger than the screen
-    const bgWidth = Math.min(this.getWindowWidth(), globalScene.scaledCanvas.width - 2);
-
+    const bgWidth = Math.min(maxWidth + 23, globalScene.scaledCanvas.width - 2);
+    const bgHeight = this.computeWindowHeight(configOptions.length, this.config?.maxOptions ?? 99);
     // Make sure the window doesn't go past the left side of the screen
-    const xPosition = Math.max(bgWidth + 1, globalScene.scaledCanvas.width - 1 - Math.abs(this.config?.xOffset ?? 0));
-    this.optionSelectContainer.setPosition(xPosition, this.defaultYOffset + (this.config?.yOffset ?? 0));
+    const xPosition = Math.max(bgWidth + 1, globalScene.scaledCanvas.width - 1 - Math.abs(xOffset));
 
-    this.optionSelectBg.width = bgWidth;
-    this.optionSelectBg.height = this.getWindowHeight();
-
+    this.optionSelectContainer.setPosition(xPosition, this.defaultYOffset + yOffset);
+    this.optionSelectBg.setSize(bgWidth, bgHeight);
     this.optionSelectText.setPosition(
-      this.optionSelectBg.x - this.optionSelectBg.width + 11 + 24 * this.scale,
-      this.optionSelectBg.y - this.optionSelectBg.height + 42 * this.scale,
+      this.optionSelectBg.x - bgWidth + 11 + 24 * this.scale,
+      this.optionSelectBg.y - bgHeight + 42 * this.scale,
     );
+
+    this.windowWidth.value = bgWidth;
+    this.windowHeight.value = bgHeight;
 
     this.displayCurrentOptions();
   }
