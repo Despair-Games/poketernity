@@ -672,11 +672,12 @@ export function initAbilities() {
     new Ability(Abilities.UNAWARE, 4)
       .attr(IgnoreOpponentStatStagesAbAttr, [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.ACC, Stat.EVA])
       .ignorable(),
-    new Ability(Abilities.TINTED_LENS, 4).attr(
-      DamageBoostAbAttr,
-      2,
-      (user, target, move) => (target?.getMoveEffectiveness(user!, move!) ?? 1) <= 0.5, // TODO: Fix these bangs
-    ),
+    new Ability(Abilities.TINTED_LENS, 4).attr(DamageBoostAbAttr, 2, (user, target, move) => {
+      if (!user || !target || !move) {
+        return false;
+      }
+      return (target.getMoveEffectiveness(user, move) ?? 1) <= 0.5;
+    }),
     new Ability(Abilities.FILTER, 4)
       .attr(
         ReceivedMoveDamageMultiplierAbAttr,
@@ -1260,12 +1261,22 @@ export function initAbilities() {
     ),
     new Ability(Abilities.PRISM_ARMOR, 7).attr(
       ReceivedMoveDamageMultiplierAbAttr,
-      (target, user, move) => target.getMoveEffectiveness(user, move) >= 2,
+      (user, target, move) => {
+        if (!user || !target || !move) {
+          return false; // If any are missing, return false
+        }
+        return (target.getMoveEffectiveness(user, move) ?? 1) >= 2;
+      },
       0.75,
     ),
     new Ability(Abilities.NEUROFORCE, 7).attr(
       MovePowerBoostAbAttr,
-      (user, target, move) => (target?.getMoveEffectiveness(user!, move!) ?? 1) >= 2, // TODO: Fix these bangs
+      (user, target, move) => {
+        if (!user || !target || !move) {
+          return false; // If any are missing, return false
+        }
+        return (target.getMoveEffectiveness(user, move) ?? 1) >= 2;
+      },
       1.25,
     ),
     new Ability(Abilities.INTREPID_SWORD, 8).attr(PostSummonStatStageChangeAbAttr, [Stat.ATK], 1, true),

@@ -26,7 +26,7 @@ export class TypeImmunityAbAttr extends PreDefendAbAttr {
   /**
    * Applies immunity if this ability grants immunity to the type of the given move.
    * @param pokemon - The defending {@linkcode Pokemon}
-   * @param passive - N/A
+   * @param simulated - N/A
    * @param attacker - The attacking {@linkcode Pokemon}
    * @param move The used {@linkcode Move}
    * @param cancelled N/A

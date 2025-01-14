@@ -11,7 +11,7 @@ import { PostTurnAbAttr } from "./post-turn-ab-attr";
 
 /**
  * Attribute to damage all sleeping opponents by 1/8 of their max hp at the end of turn.
- * Used for {@linkcode https://bulbapedia.bulbagarden.net/wiki/Bad_Dreams_(Ability) | Bad Dreams}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Bad_Dreams_(Ability) | Bad Dreams}.
  * @extends PostTurnAbAttr
  */
 export class PostTurnHurtIfSleepingAbAttr extends PostTurnAbAttr {

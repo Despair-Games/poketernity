@@ -37,30 +37,28 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
    * @param pokemon The Pokémon that took damage.
    * @param simulated Whether the ability is being simulated.
    * @param damage The amount of damage taken by the Pokémon.
-   * @param passive N/A
-   * @param args N/A
    * @param source The Pokemon that dealt damage
    * @returns `true` if the switch-out logic was successfully applied
    */
   public override apply(pokemon: Pokemon, _simulated: boolean, damage: number, source?: Pokemon): boolean {
     const moveHistory = pokemon.getMoveHistory();
     // Will not activate when the Pokémon's HP is lowered by cutting its own HP
-    const fordbiddenAttackingMoves = [Moves.BELLY_DRUM, Moves.SUBSTITUTE, Moves.CURSE, Moves.PAIN_SPLIT];
+    const forbiddenAttackingMoves = [Moves.BELLY_DRUM, Moves.SUBSTITUTE, Moves.CURSE, Moves.PAIN_SPLIT];
     if (moveHistory.length > 0) {
       const lastMoveUsed = moveHistory[moveHistory.length - 1];
-      if (fordbiddenAttackingMoves.includes(lastMoveUsed.move)) {
+      if (forbiddenAttackingMoves.includes(lastMoveUsed.move)) {
         return false;
       }
     }
 
     // Dragon Tail and Circle Throw switch out Pokémon before the Ability activates.
-    const fordbiddenDefendingMoves = [Moves.DRAGON_TAIL, Moves.CIRCLE_THROW];
+    const forbiddenDefendingMoves = [Moves.DRAGON_TAIL, Moves.CIRCLE_THROW];
     if (source) {
       const enemyMoveHistory = source.getMoveHistory();
       if (enemyMoveHistory.length > 0) {
         const enemyLastMoveUsed = enemyMoveHistory[enemyMoveHistory.length - 1];
         // Will not activate if the Pokémon's HP falls below half while it is in the air during Sky Drop.
-        if (fordbiddenDefendingMoves.includes(enemyLastMoveUsed.move) || pokemon.getTag(BattlerTagType.SKY_DROP)) {
+        if (forbiddenDefendingMoves.includes(enemyLastMoveUsed.move) || pokemon.getTag(BattlerTagType.SKY_DROP)) {
           return false;
           // Will not activate if the Pokémon's HP falls below half by a move affected by Sheer Force.
         } else if (allMoves[enemyLastMoveUsed.move].chance >= 0 && source.hasAbility(Abilities.SHEER_FORCE)) {
@@ -92,6 +90,7 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
       return false;
     }
   }
+
   public getFailedText(_user: Pokemon, target: Pokemon, _move: Move, _cancelled: BooleanHolder): string | null {
     return this.helper.getFailedText(target);
   }

@@ -17,7 +17,7 @@ export class ReverseDrainAbAttr extends PostDefendAbAttr {
    * Examples include: Absorb, Draining Kiss, Bitter Blade, etc.
    * Also displays a message to show this ability was activated.
    * @param pokemon {@linkcode Pokemon} with this ability
-   * @param passive N/A
+   * @param simulated N/A
    * @param attacker {@linkcode Pokemon} that is attacking this Pokemon
    * @param move {@linkcode Move} that is being used
    * @param args N/A
