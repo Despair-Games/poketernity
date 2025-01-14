@@ -4,13 +4,13 @@ import type { Pokemon } from "#app/field/pokemon";
 import { AbAttr } from "./ab-attr";
 
 export class PostAttackAbAttr extends AbAttr {
-  /** Does this effect only apply to attack moves? */
-  private readonly attackOnly: boolean;
+  /** Whether it only applies to attack moves. */
+  private readonly attackMovesOnly: boolean;
 
-  constructor(attackOnly: boolean = true, showAbility: boolean = true) {
+  constructor(attackMovesOnly: boolean = true, showAbility: boolean = true) {
     super(showAbility);
 
-    this.attackOnly = attackOnly;
+    this.attackMovesOnly = attackMovesOnly;
   }
 
   /**
@@ -24,7 +24,7 @@ export class PostAttackAbAttr extends AbAttr {
    * @returns `true` if effects from this ability can apply successfully.
    */
   override apply(pokemon: Pokemon, simulated: boolean, defender: Pokemon, move: Move, ...args: unknown[]): boolean {
-    if (!this.attackOnly || pokemon.getMoveCategory(defender, move) !== MoveCategory.STATUS) {
+    if (!this.attackMovesOnly || pokemon.getMoveCategory(defender, move) !== MoveCategory.STATUS) {
       return this.applyPostAttack(pokemon, simulated, defender, move, ...args);
     }
     return false;

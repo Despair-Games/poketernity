@@ -37,10 +37,8 @@ export class FormBlockDamageAbAttr extends ReceivedMoveDamageMultiplierAbAttr {
    * Removes the appropriate `BattlerTagType` when hit by an attack and is in its defense form.
    *
    * @param pokemon The Pokémon with the ability.
-   * @param passive n/a
    * @param attacker The attacking Pokémon.
    * @param move The move being used.
-   * @param cancelled n/a
    * @param args Additional arguments.
    * @returns `true` if the immunity was applied.
    */

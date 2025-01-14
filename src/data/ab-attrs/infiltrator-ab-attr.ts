@@ -10,7 +10,6 @@ export class InfiltratorAbAttr extends AbAttr {
   /**
    * Sets a flag to bypass screens, Substitute, Safeguard, and Mist
    * @param pokemon n/a
-   * @param passive n/a
    * @param simulated n/a
    * @param bypassed a {@linkcode BooleanHolder} containing the flag
    * @returns `true` if the bypass flag was successfully set; `false` otherwise.

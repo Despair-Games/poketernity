@@ -3,6 +3,8 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
 import { AbAttr } from "./ab-attr";
 
+type AbAttrMoveCondition = (pokemon: Pokemon, move: Move) => boolean;
+
 /**
  * This governs abilities that alter the priority of moves
  * Abilities: Prankster, Gale Wings, Triage, Mycelium Might, Stall
@@ -10,11 +12,11 @@ import { AbAttr } from "./ab-attr";
  */
 export class ChangeMovePriorityAbAttr extends AbAttr {
   /** The condition moves must follow for the priority change to apply */
-  private readonly moveFunc: (pokemon: Pokemon, move: Move) => boolean;
+  private readonly moveFunc: AbAttrMoveCondition;
   /** The amount of priority added or subtracted */
   private readonly changeAmount: number;
 
-  constructor(moveFunc: (pokemon: Pokemon, move: Move) => boolean, changeAmount: number) {
+  constructor(moveFunc: AbAttrMoveCondition, changeAmount: number) {
     super(true);
 
     this.moveFunc = moveFunc;
