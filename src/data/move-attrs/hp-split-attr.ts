@@ -1,4 +1,5 @@
-import { type Pokemon, HitResult } from "#app/field/pokemon";
+import { type Pokemon } from "#app/field/pokemon";
+import { HitResult } from "#enums/hit-result";
 import { globalScene } from "#app/global-scene";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";

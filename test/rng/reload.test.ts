@@ -1,4 +1,4 @@
-import { GameModes } from "#app/game-mode";
+import { GameModes } from "#enums/game-modes";
 import { api } from "#app/plugins/api/api";
 import type OptionSelectUiHandler from "#app/ui/settings/option-select-ui-handler";
 import { Mode } from "#app/ui/ui";

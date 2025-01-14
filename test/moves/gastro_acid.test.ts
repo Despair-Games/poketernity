@@ -1,8 +1,8 @@
-import { BattlerIndex } from "#app/battle";
+import { BattlerIndex } from "#enums/battler-index";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
-import { MoveResult } from "#app/field/pokemon";
+import { MoveResult } from "#enums/move-result";
 import { GameManager } from "#test/testUtils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 

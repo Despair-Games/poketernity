@@ -1,4 +1,4 @@
-import { VariantTier } from "#app/enums/variant-tier";
+import { VariantTier } from "#enums/variant-tier";
 
 // Normal Shiny, Rare Shiny, Epic Shiny
 export type Variant = 0 | 1 | 2;

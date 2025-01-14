@@ -5,19 +5,21 @@ import { type MovePhase } from "#app/phases/move-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import type { BattlerIndex } from "#app/battle";
-import { BattleType } from "#app/battle";
+import type { BattlerIndex } from "#enums/battler-index";
+import { BattleType } from "#enums/battle-type";
 import { PostFaintAbAttr } from "#app/data/ab-attrs/post-faint-ab-attr";
 import { PostKnockOutAbAttr } from "#app/data/ab-attrs/post-knock-out-ab-attr";
 import { PostVictoryAbAttr } from "#app/data/ab-attrs/post-victory-ab-attr";
 import { applyPostFaintAbAttrs, applyPostKnockOutAbAttrs, applyPostVictoryAbAttrs } from "#app/data/ability";
 import { allMoves } from "#app/data/all-moves";
 import { FRIENDSHIP_LOSS_FROM_FAINT } from "#app/data/balance/starters";
-import { BattlerTagLapseType, type DestinyBondTag, type GrudgeTag } from "#app/data/battler-tags";
+import { type DestinyBondTag, type GrudgeTag } from "#app/data/battler-tags";
+import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { classicFinalBossDialogue } from "#app/data/dialogue";
 import { PostVictoryStatStageChangeAttr } from "#app/data/move-attrs/post-victory-stat-stage-change-attr";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";
-import { HitResult, PlayerPokemon, PokemonMove, type EnemyPokemon, type Pokemon } from "#app/field/pokemon";
+import { PlayerPokemon, PokemonMove, type EnemyPokemon, type Pokemon } from "#app/field/pokemon";
+import { HitResult } from "#enums/hit-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { PokemonInstantReviveModifier } from "#app/modifier/modifier";

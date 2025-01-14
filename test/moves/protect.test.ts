@@ -6,9 +6,10 @@ import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
 import { Stat } from "#enums/stat";
 import { allMoves } from "#app/data/all-moves";
-import { ArenaTagSide, ArenaTrapTag } from "#app/data/arena-tag";
-import { BattlerIndex } from "#app/battle";
-import { MoveResult } from "#app/field/pokemon";
+import { ArenaTrapTag } from "#app/data/arena-tag";
+import { ArenaTagSide } from "#enums/arena-tag-side";
+import { BattlerIndex } from "#enums/battler-index";
+import { MoveResult } from "#enums/move-result";
 import { TrappedTag } from "#app/data/battler-tags";
 
 describe("Moves - Protect", () => {
