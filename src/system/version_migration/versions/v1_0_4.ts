@@ -1,4 +1,3 @@
-import { SettingKeys } from "#app/system/settings/settings";
 import type { SessionSaveData } from "#app/@types/SessionData";
 import type { SystemSaveData } from "#app/@types/SystemData";
 import { AbilityAttr, DexAttr } from "#app/data/dex-attributes";
@@ -85,20 +84,7 @@ export const systemMigrators = [
   },
 ] as const;
 
-export const settingsMigrators = [
-  /**
-   * Migrate from "REROLL_TARGET" property to {@linkcode
-   * SettingKeys.Shop_Cursor_Target}.
-   * @param data the `settings` object
-   */
-  function fixRerollTarget(data: Object) {
-    if (data.hasOwnProperty("REROLL_TARGET") && !data.hasOwnProperty(SettingKeys.Shop_Cursor_Target)) {
-      data[SettingKeys.Shop_Cursor_Target] = data["REROLL_TARGET"];
-      delete data["REROLL_TARGET"];
-      localStorage.setItem("settings", JSON.stringify(data));
-    }
-  },
-] as const;
+export const settingsMigrators = [] as const;
 
 export const sessionMigrators = [
   /**

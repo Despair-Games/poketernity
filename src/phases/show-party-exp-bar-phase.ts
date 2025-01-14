@@ -5,6 +5,7 @@ import { ExpGainsSpeed } from "#enums/exp-gains-speed";
 import { ExpNotification } from "#enums/exp-notification";
 import { PlayerPartyMemberPokemonPhase } from "./abstract-player-party-member-pokemon-phase";
 import { LevelUpPhase } from "./level-up-phase";
+import { settings } from "#app/system/settings/settings-manager";
 
 export class ShowPartyExpBarPhase extends PlayerPartyMemberPokemonPhase {
   private readonly expValue: number;
@@ -17,8 +18,6 @@ export class ShowPartyExpBarPhase extends PlayerPartyMemberPokemonPhase {
 
   public override start(): void {
     super.start();
-
-    const { expParty, expGainsSpeed, partyExpBar } = globalScene;
 
     const pokemon = this.getPokemon();
     const exp = new NumberHolder(this.expValue);
@@ -34,15 +33,18 @@ export class ShowPartyExpBarPhase extends PlayerPartyMemberPokemonPhase {
     }
     pokemon.updateInfo();
 
-    if (expParty === ExpNotification.SKIP) {
+    const { partyExpBar } = globalScene;
+    const { partyExpNotificationMode, expGainsSpeed } = settings.general;
+
+    if (partyExpNotificationMode === ExpNotification.SKIP) {
       this.end();
-    } else if (expParty === ExpNotification.ONLY_LEVEL_UP) {
+    } else if (partyExpNotificationMode === ExpNotification.ONLY_LEVEL_UP) {
       if (newLevel > lastLevel) {
         // this means if we level up
         // instead of displaying the exp gain in the small frame, we display the new level
         // we use the same method for mode 0 & 1, by giving a parameter saying to display the exp or the level
         partyExpBar
-          .showPokemonExp(pokemon, exp.value, expParty === ExpNotification.ONLY_LEVEL_UP, newLevel)
+          .showPokemonExp(pokemon, exp.value, partyExpNotificationMode === ExpNotification.ONLY_LEVEL_UP, newLevel)
           .then(() => {
             setTimeout(() => this.end(), 800 / Math.pow(2, expGainsSpeed));
           });
