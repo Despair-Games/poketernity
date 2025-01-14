@@ -1,6 +1,6 @@
 import { defineConfig, loadEnv, Rollup, UserConfig } from "vite";
 import ViteTsconfigPaths from "vite-tsconfig-paths";
-import { flxMinifyPublicJsonFiles as ViteMinifyPublicJsonFiles } from "./src/plugins/vite/vite-minify-json-plugin";
+import { minifyPublicJsonFiles as ViteMinifyPublicJsonFiles } from "./src/plugins/vite/vite-minify-json-plugin";
 
 export const defaultConfig: UserConfig = {
   plugins: [ViteTsconfigPaths(), ViteMinifyPublicJsonFiles()],

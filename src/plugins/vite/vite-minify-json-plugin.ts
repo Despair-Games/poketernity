@@ -5,7 +5,7 @@ import chalk from "chalk";
 
 //#region Constants
 
-const NAME = "flx-minify-public-json-files";
+const NAME = "minify-public-json-files";
 const VERSION = "2.0.0";
 
 //#endregion
@@ -13,7 +13,7 @@ const VERSION = "2.0.0";
 /**
  * Plugin to minify json files in the `public/` directory.
  */
-export function flxMinifyPublicJsonFiles(): VitePlugin {
+export function minifyPublicJsonFiles(): VitePlugin {
   let logger: Logger;
   let count = 0;
   const errors: Error[] = [];
