@@ -36,3 +36,6 @@ export const PRSFX_SOUND_ADJUSTMENT_RATIO = 0.5;
 
 /** The maximum number of language options to display simultaneously. */
 export const LANGUAGE_MAX_OPTIONS = 7;
+
+/** All available game speeds. */
+export const GAME_SPEEDS = [1, 1.25, 1.5, 2, 2.5, 3, 4, 5];

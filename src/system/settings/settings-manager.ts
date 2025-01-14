@@ -1,5 +1,5 @@
 import type { UserFacingSettings, SettingsCategory, Settings } from "#app/@types/Settings";
-import { SETTINGS_LS_KEY } from "#app/constants";
+import { GAME_SPEEDS, SETTINGS_LS_KEY } from "#app/constants";
 import { eventBus } from "#app/event-bus";
 import { version } from "../../../package.json";
 import { isNullOrUndefined } from "#app/utils";
@@ -99,6 +99,13 @@ class SettingsManager {
    */
   get effectiveUiVolume() {
     return this._settings.audio.uiVolume * this._settings.audio.masterVolume;
+  }
+
+  /**
+   * Getter for the active game-speed index (inside {@linkcode GAME_SPEEDS})
+   */
+  get gameSpeedIndex() {
+    return GAME_SPEEDS.findIndex((n) => n === this.general.gameSpeed) ?? 0;
   }
 
   /**

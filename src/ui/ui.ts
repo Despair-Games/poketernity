@@ -100,6 +100,17 @@ export enum Mode {
   MYSTERY_ENCOUNTER,
 }
 
+/** All modes that are part of the settings UI. */
+export const settingsUiModes = [
+  Mode.SETTINGS,
+  Mode.SETTINGS_AUDIO,
+  Mode.SETTINGS_DISPLAY,
+  Mode.SETTINGS_KEYBOARD,
+  Mode.KEYBOARD_BINDING,
+  Mode.SETTINGS_GAMEPAD,
+  Mode.GAMEPAD_BINDING,
+];
+
 const transitionModes = [
   Mode.SAVE_SLOT,
   Mode.PARTY,

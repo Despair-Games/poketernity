@@ -12,9 +12,6 @@ type FadeOut = typeof FadeOut;
 
 //#endregion
 
-/** All available game speeds. */
-export const gameSpeeds = [1, 1.25, 1.5, 2, 2.5, 3, 4, 5];
-
 export function initGameSpeed() {
   /**
    * Adjusts the given value based on the game speed or returns it as is.

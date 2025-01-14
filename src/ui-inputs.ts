@@ -1,5 +1,5 @@
 import type Phaser from "phaser";
-import { Mode } from "./ui/ui";
+import { Mode, settingsUiModes } from "./ui/ui";
 import type { InputsController } from "./inputs-controller";
 import type MessageUiHandler from "./ui/message-ui-handler";
 import StarterSelectUiHandler from "./ui/starter-select-ui-handler";
@@ -12,7 +12,7 @@ import SettingsDisplayUiHandler from "./ui/settings/settings-display-ui-handler"
 import SettingsAudioUiHandler from "./ui/settings/settings-audio-ui-handler";
 import RunInfoUiHandler from "./ui/run-info-ui-handler";
 import { settings } from "./system/settings/settings-manager";
-import { gameSpeeds } from "./system/game-speed";
+import { GAME_SPEEDS } from "./constants";
 
 type ActionKeys = Record<Button, () => void>;
 
@@ -217,20 +217,14 @@ export class UiInputs {
   }
 
   buttonSpeedChange(up = true): void {
-    const index = gameSpeeds.findIndex((n) => n === settings.general.gameSpeed) ?? 0;
+    const { ui } = globalScene;
 
-    if (up) {
-      const nextIndex = Math.min(index + 1, gameSpeeds.length - 1);
-      settings.update("general", "gameSpeed", gameSpeeds[nextIndex]);
-      if (globalScene.ui?.getMode() === Mode.SETTINGS) {
-        (globalScene.ui.getHandler() as SettingsUiHandler).show([]);
-      }
-    } else if (!up) {
-      const nextIndex = Math.max(index - 1, 0);
-      settings.update("general", "gameSpeed", gameSpeeds[nextIndex]);
-      if (globalScene.ui?.getMode() === Mode.SETTINGS) {
-        (globalScene.ui.getHandler() as SettingsUiHandler).show([]);
-      }
-    }
+    if (settingsUiModes.includes(ui?.getMode())) return;
+
+    const { gameSpeedIndex } = settings;
+    const lastIndex = GAME_SPEEDS.length - 1;
+    const newIndex = up ? Math.min(gameSpeedIndex + 1, lastIndex) : Math.max(gameSpeedIndex - 1, 0);
+
+    settings.update("general", "gameSpeed", GAME_SPEEDS[newIndex]);
   }
 }
