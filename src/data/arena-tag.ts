@@ -981,6 +981,144 @@ class StealthRockTag extends ArenaTrapTag {
 }
 
 /**
+ * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/G-Max_Steelsurge_(move) G-Max Steelsurge}.
+ * Applies up to 1 layer of Sharp Steel, dealing percentage-based damage to any Pokémon
+ * who is summoned into the trap, based on the Steel type's type effectiveness.
+ */
+class SharpSteelTag extends ArenaTrapTag {
+  constructor(sourceId: number, side: ArenaTagSide) {
+    super(ArenaTagType.SHARP_STEEL, Moves.G_MAX_STEELSURGE, sourceId, side, 1);
+  }
+
+  override onAdd(arena: Arena, quiet: boolean = false): void {
+    super.onAdd(arena);
+
+    const source = this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
+    if (!quiet && source) {
+      globalScene.queueMessage(i18next.t("arenaTag:sharpSteelOnAdd", { opponentDesc: source.getOpponentDescriptor() }));
+    }
+  }
+
+  getDamageHpRatio(pokemon: Pokemon): number {
+    const effectiveness = pokemon.getAttackTypeEffectiveness(Type.STEEL, undefined, true);
+
+    let damageHpRatio: number = 0;
+
+    switch (effectiveness) {
+      case 0:
+        damageHpRatio = 0;
+        break;
+      case 0.25:
+        damageHpRatio = 0.03125;
+        break;
+      case 0.5:
+        damageHpRatio = 0.0625;
+        break;
+      case 1:
+        damageHpRatio = 0.125;
+        break;
+      case 2:
+        damageHpRatio = 0.25;
+        break;
+      case 4:
+        damageHpRatio = 0.5;
+        break;
+    }
+
+    return damageHpRatio;
+  }
+
+  override activateTrap(pokemon: Pokemon, simulated: boolean): boolean {
+    const cancelled = new BooleanHolder(false);
+    applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, simulated, cancelled);
+
+    if (cancelled.value) {
+      return false;
+    }
+
+    const damageHpRatio = this.getDamageHpRatio(pokemon);
+
+    if (damageHpRatio) {
+      if (simulated) {
+        return true;
+      }
+      const damage = toDmgValue(pokemon.getMaxHp() * damageHpRatio);
+      globalScene.queueMessage(
+        i18next.t("arenaTag:sharpSteelActivateTrap", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+      );
+      pokemon.damageAndUpdate(damage, HitResult.OTHER);
+      if (pokemon.turnData) {
+        pokemon.turnData.damageTaken += damage;
+      }
+      return true;
+    }
+
+    return false;
+  }
+
+  override getMatchupScoreMultiplier(pokemon: Pokemon): number {
+    const damageHpRatio = this.getDamageHpRatio(pokemon);
+    return Phaser.Math.Linear(super.getMatchupScoreMultiplier(pokemon), 1, 1 - Math.pow(damageHpRatio, damageHpRatio));
+  }
+}
+
+/**
+ * Class to describe the field effect of G-Max moves that damage all Pokemon not of the type to take 1/6th damage each turn
+ */
+class GMaxArenaTag extends ArenaTag {
+  public immuneType: Type;
+  constructor(tagType, sourceMove: Moves, sourceId: number, immuneType: Type) {
+    super(tagType, 4, sourceMove, sourceId, ArenaTagSide.ENEMY);
+    this.immuneType = immuneType;
+  }
+
+  private getAnimationForType() {
+    switch (this.immuneType) {
+      case Type.GRASS:
+        return CommonAnim.WRAP;
+      case Type.FIRE:
+        return CommonAnim.FIRE_SPIN;
+      case Type.WATER:
+        return CommonAnim.WHIRLPOOL;
+      case Type.ROCK:
+        return CommonAnim.SAND_TOMB;
+      default:
+        return CommonAnim.WRAP;
+    }
+  }
+
+  override onAdd(_arena: Arena): void {
+    globalScene.queueMessage(
+      i18next.t(
+        `arenaTag:GMaxArenaOnAdd${this.side === ArenaTagSide.PLAYER ? "Player" : this.side === ArenaTagSide.ENEMY ? "Enemy" : ""}${Type[this.immuneType]}`,
+      ),
+    );
+  }
+
+  override lapse(arena: Arena): boolean {
+    const field: Pokemon[] =
+      this.side === ArenaTagSide.PLAYER ? globalScene.getPlayerField() : globalScene.getEnemyField();
+
+    field
+      .filter((pokemon) => !pokemon.isOfType(this.immuneType) && !pokemon.switchOutStatus)
+      .forEach((pokemon) => {
+        globalScene.queueMessage(
+          i18next.t(`arenaTag:GMaxArenaLapse${Type[this.immuneType]}`, {
+            pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
+          }),
+        );
+        // TODO: Replace this with a proper animation
+        globalScene.unshiftPhase(
+          new CommonAnimPhase(pokemon.getBattlerIndex(), pokemon.getBattlerIndex(), this.getAnimationForType()),
+        );
+        pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 6));
+      });
+
+    return super.lapse(arena);
+  }
+}
+
+/**
  * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Sticky_Web_(move) Sticky Web}.
  * Applies up to 1 layer of Sticky Web, which lowers the Speed by one stage
  * to any Pokémon who is summoned into this trap.
@@ -1432,6 +1570,8 @@ export function getArenaTag(
       return new WishTag(turnCount, sourceId, side);
     case ArenaTagType.STEALTH_ROCK:
       return new StealthRockTag(sourceId, side);
+    case ArenaTagType.SHARP_STEEL:
+      return new SharpSteelTag(sourceId, side);
     case ArenaTagType.STICKY_WEB:
       return new StickyWebTag(sourceId, side);
     case ArenaTagType.TRICK_ROOM:
@@ -1460,6 +1600,14 @@ export function getArenaTag(
       return new GrassWaterPledgeTag(sourceId, side);
     case ArenaTagType.FAIRY_LOCK:
       return new FairyLockTag(turnCount, sourceId);
+    case ArenaTagType.G_MAX_VINE_LASH:
+      return new GMaxArenaTag(ArenaTagType.G_MAX_VINE_LASH, Moves.G_MAX_VINE_LASH, sourceId, Type.GRASS);
+    case ArenaTagType.G_MAX_WILDFIRE:
+      return new GMaxArenaTag(ArenaTagType.G_MAX_WILDFIRE, Moves.G_MAX_WILDFIRE, sourceId, Type.FIRE);
+    case ArenaTagType.G_MAX_CANNONADE:
+      return new GMaxArenaTag(ArenaTagType.G_MAX_CANNONADE, Moves.G_MAX_CANNONADE, sourceId, Type.WATER);
+    case ArenaTagType.G_MAX_VOLCALITH:
+      return new GMaxArenaTag(ArenaTagType.G_MAX_VOLCALITH, Moves.G_MAX_VOLCALITH, sourceId, Type.ROCK);
     default:
       return null;
   }

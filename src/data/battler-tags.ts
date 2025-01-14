@@ -2083,6 +2083,11 @@ export class TypeBoostTag extends BattlerTag {
   }
 }
 
+/**
+ * Used for nonstackable instances of crit boost such as
+ * Focus Energy, Dragon Cheer
+ * Liechi Berry
+ */
 export class CritBoostTag extends BattlerTag {
   constructor(tagType: BattlerTagType, sourceMove: Moves) {
     super(tagType, BattlerTagLapseType.TURN_END, 1, sourceMove, undefined, true);
@@ -2105,6 +2110,36 @@ export class CritBoostTag extends BattlerTag {
 
     globalScene.queueMessage(
       i18next.t("battlerTags:critBoostOnRemove", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+    );
+  }
+}
+
+/**
+ * Used for an instance of a stackable crit boost
+ * Granted by G-Max Chi Strike
+ */
+export class ChiStrikeCritBoostTag extends BattlerTag {
+  constructor(tagType: BattlerTagType, sourceMove: Moves) {
+    super(tagType, BattlerTagLapseType.TURN_END, 1, sourceMove, undefined, true);
+  }
+
+  override onAdd(pokemon: Pokemon): void {
+    super.onAdd(pokemon);
+
+    globalScene.queueMessage(
+      i18next.t("battlerTags:chiStrikeCritBoostOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+    );
+  }
+
+  override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
+    return lapseType !== BattlerTagLapseType.CUSTOM || super.lapse(pokemon, lapseType);
+  }
+
+  override onRemove(pokemon: Pokemon): void {
+    super.onRemove(pokemon);
+
+    globalScene.queueMessage(
+      i18next.t("battlerTags:chiStrikeCritBoostOnRemove", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }
 }
@@ -3401,6 +3436,8 @@ export function getBattlerTag(
       return new TypeBoostTag(tagType, sourceMove, Type.FIRE, 1.5, false);
     case BattlerTagType.CRIT_BOOST:
       return new CritBoostTag(tagType, sourceMove);
+    case BattlerTagType.CHI_STRIKE_CRIT_BOOST:
+      return new ChiStrikeCritBoostTag(tagType, sourceMove);
     case BattlerTagType.DRAGON_CHEER:
       return new DragonCheerTag();
     case BattlerTagType.ALWAYS_CRIT:

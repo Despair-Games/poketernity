@@ -123,6 +123,7 @@ import {
   TarShotTag,
   AutotomizedTag,
   PowerTrickTag,
+  ChiStrikeCritBoostTag,
 } from "../data/battler-tags";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { WeatherType } from "#enums/weather-type";
@@ -1104,6 +1105,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       } else {
         critStage.value += 2;
       }
+    }
+    const chiStrikeCritBoostTag = source.getTag(ChiStrikeCritBoostTag);
+    if (chiStrikeCritBoostTag) {
+      critStage.value += 1;
     }
 
     console.log(`crit stage: +${critStage.value}`);
