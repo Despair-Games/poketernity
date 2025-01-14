@@ -120,7 +120,7 @@ export async function handleTutorial(tutorial: Tutorial): Promise<boolean> {
     return false;
   }
 
-  if (globalScene.gameData.wasTutorialSeen(tutorial) && !Overrides.BYPASS_TUTORIAL_SKIP_OVERRIDE) {
+  if (globalScene.gameData.isTutorialSeen(tutorial) && !Overrides.BYPASS_TUTORIAL_SKIP_OVERRIDE) {
     return false;
   }
 

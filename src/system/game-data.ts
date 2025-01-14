@@ -833,7 +833,7 @@ export class GameData {
    * @param tutorial the {@linkcode Tutorial} to get the flag for
    * @returns `true` if the tutorial has already been seen, `false` otherwise
    */
-  public wasTutorialSeen(tutorial: Tutorial): boolean {
+  public isTutorialSeen(tutorial: Tutorial): boolean {
     return this.getTutorialFlags()[tutorial] ?? false;
   }
 
