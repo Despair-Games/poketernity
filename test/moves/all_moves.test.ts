@@ -72,9 +72,6 @@ describe("All Moves", () => {
   });
 
   function isUnimplemented(name: string): boolean {
-    if (name.includes(" (N)")) {
-      return true;
-    }
-    return false;
+    return name.includes(" (N)");
   }
 });
