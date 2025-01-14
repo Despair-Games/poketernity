@@ -27,14 +27,6 @@ export class PostSummonStatStageChangeOnArenaAbAttr extends PostSummonStatStageC
     this.tagType = tagType;
   }
 
-  /**
-   * Applies the post-summon stat change if the specified arena tag is present on pokemon's side.
-   * This is used in Wind Rider ability.
-   *
-   * @param pokemon The {@linkcode Pokemon} being summoned
-   * @param passive Whether the effect is passive
-   * @returns Returns `true` if the stat change was applied, otherwise `false`
-   */
   override apply(pokemon: Pokemon, simulated: boolean): boolean {
     if (globalScene.arena.getTagOnSide(this.tagType, pokemon.getArenaTagSide())) {
       return super.apply(pokemon, simulated);
