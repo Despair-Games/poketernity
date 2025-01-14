@@ -13826,7 +13826,7 @@
       "identifier": "max-flare",
       "generation_id": 8,
       "type_id": 10,
-      "power": 100,
+      "power": 10,
       "pp": 10,
       "accuracy": -1,
       "priority": 0,

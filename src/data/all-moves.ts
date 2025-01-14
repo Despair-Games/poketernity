@@ -2902,7 +2902,7 @@ export function initMoves() {
       .condition((_user, _target, _move) =>
         globalScene.arena.tags.some((arenaTag) => courtChangeArenaTags.includes(arenaTag.tagType)),
       ), // G-max moves are not implemented but this should also swap steelsurge, vine lash, wildfire, and cannonade
-    new AttackMove(Moves.MAX_FLARE, Type.FIRE, MoveCategory.PHYSICAL, 100, -1, 10, -1, 0, 8)
+    new AttackMove(Moves.MAX_FLARE, Type.FIRE, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.NEAR_ENEMY)
       .unimplemented()
       .ignoresVirtual(),
