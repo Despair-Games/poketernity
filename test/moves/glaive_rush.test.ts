@@ -57,7 +57,6 @@ describe("Moves - Glaive Rush", () => {
     vi.spyOn(player, "getAccuracyMultiplier").mockReturnValue(0);
 
     game.move.select(Moves.AVALANCHE);
-    await game.move.forceMiss();
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemy.hp).toBeLessThan(1000);
   });
@@ -100,7 +99,6 @@ describe("Moves - Glaive Rush", () => {
     expect(player.hp).toBe(1000);
 
     game.move.select(Moves.SPLASH);
-    await game.move.forceMiss();
     await game.phaseInterceptor.to("TurnEndPhase");
     const damagedHp = player.hp;
     expect(player.hp).toBeLessThan(1000);
