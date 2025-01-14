@@ -29,8 +29,6 @@ import type PokemonSpecies from "#app/data/pokemon-species";
 import { allSpecies, getPokemonSpeciesForm, getPokerusStarters } from "#app/data/pokemon-species";
 import type { Variant } from "#app/data/variant";
 import { getVariantTierForVariant, getVariantTint } from "#app/data/variant";
-import type { CandyUpgradeNotificationChangedEvent } from "#app/events/battle-scene";
-import { BattleSceneEventType } from "#app/events/battle-scene";
 import { GameModes } from "#enums/game-modes";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
@@ -81,6 +79,11 @@ import { argbFromRgba } from "@material/material-color-utilities";
 import i18next from "i18next";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
+import { settings } from "#app/system/settings/settings-manager";
+import { CandyUpgradeNotificationMode } from "#app/enums/candy-upgrade-notification-mode";
+import { CandyUpgradeDisplayMode } from "#app/enums/candy-upgrade-display";
+import type { SettingsUpdateEventArgs } from "#app/@types/Settings";
+import { eventBus } from "#app/event-bus";
 
 export type StarterSelectCallback = (starters: Starter[]) => void;
 
@@ -564,7 +567,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     // Offset the generation filter dropdown to avoid covering the filtered pokemon
     this.filterBar.offsetHybridFilters();
 
-    if (!globalScene.uiTheme) {
+    if (!settings.display.uiTheme) {
       starterContainerWindow.setVisible(false);
     }
 
@@ -1090,9 +1093,11 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.initTutorialOverlay(this.starterSelectContainer);
     this.starterSelectContainer.bringToTop(this.starterSelectMessageBoxContainer);
 
-    globalScene.eventTarget.addEventListener(BattleSceneEventType.CANDY_UPGRADE_NOTIFICATION_CHANGED, (e) =>
-      this.onCandyUpgradeDisplayChanged(e),
-    );
+    eventBus.on("settings/updated", ({ key, value }: SettingsUpdateEventArgs) => {
+      if (key === "candyUpgradeDisplayMode" && typeof value === "number") {
+        this.onCandyUpgradeDisplayChanged();
+      }
+    });
 
     this.updateInstructions();
   }
@@ -1287,14 +1292,20 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
    * @returns true if upgrade notifications are enabled and set to display an 'Icon'
    */
   isUpgradeIconEnabled(): boolean {
-    return globalScene.candyUpgradeNotification !== 0 && globalScene.candyUpgradeDisplay === 0;
+    return (
+      settings.display.candyUpgradeNotificationMode !== CandyUpgradeNotificationMode.OFF
+      && settings.display.candyUpgradeDisplayMode === CandyUpgradeDisplayMode.ICON
+    );
   }
   /**
    * Determines if 'Animation' based upgrade notifications should be shown
    * @returns true if upgrade notifications are enabled and set to display an 'Animation'
    */
   isUpgradeAnimationEnabled(): boolean {
-    return globalScene.candyUpgradeNotification !== 0 && globalScene.candyUpgradeDisplay === 1;
+    return (
+      settings.display.candyUpgradeNotificationMode !== CandyUpgradeNotificationMode.OFF
+      && settings.display.candyUpgradeDisplayMode === CandyUpgradeDisplayMode.ANIMATION
+    );
   }
 
   /**
@@ -1348,7 +1359,10 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
   setUpgradeAnimation(icon: Phaser.GameObjects.Sprite, species: PokemonSpecies, startPaused: boolean = false): void {
     globalScene.tweens.killTweensOf(icon);
     // Skip animations if they are disabled
-    if (globalScene.candyUpgradeDisplay === 0 || species.speciesId !== species.getRootSpeciesId(false)) {
+    if (
+      settings.display.candyUpgradeDisplayMode === CandyUpgradeDisplayMode.ICON
+      || species.speciesId !== species.getRootSpeciesId(false)
+    ) {
       return;
     }
 
@@ -1383,12 +1397,12 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     const isSameSpeciesEggAvailable = this.isSameSpeciesEggAvailable(species.speciesId);
 
     // 'Passives Only' mode
-    if (globalScene.candyUpgradeNotification === 1) {
+    if (settings.display.candyUpgradeNotificationMode === CandyUpgradeNotificationMode.PASSIVES_ONLY) {
       if (isPassiveAvailable) {
         globalScene.tweens.chain(tweenChain).paused = startPaused;
       }
       // 'On' mode
-    } else if (globalScene.candyUpgradeNotification === 2) {
+    } else if (settings.display.candyUpgradeNotificationMode === CandyUpgradeNotificationMode.ON) {
       if (isPassiveAvailable || isValueReductionAvailable || isSameSpeciesEggAvailable) {
         globalScene.tweens.chain(tweenChain).paused = startPaused;
       }
@@ -1404,7 +1418,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
 
     if (
       !species
-      || globalScene.candyUpgradeNotification === 0
+      || settings.display.candyUpgradeNotificationMode === CandyUpgradeNotificationMode.OFF
       || species.speciesId !== species.getRootSpeciesId(false)
     ) {
       starter.candyUpgradeIcon.setVisible(false);
@@ -1417,12 +1431,12 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     const isSameSpeciesEggAvailable = this.isSameSpeciesEggAvailable(species.speciesId);
 
     // 'Passive Only' mode
-    if (globalScene.candyUpgradeNotification === 1) {
+    if (settings.display.candyUpgradeNotificationMode === CandyUpgradeNotificationMode.PASSIVES_ONLY) {
       starter.candyUpgradeIcon.setVisible(slotVisible && isPassiveAvailable);
       starter.candyUpgradeOverlayIcon.setVisible(slotVisible && starter.candyUpgradeIcon.visible);
 
       // 'On' mode
-    } else if (globalScene.candyUpgradeNotification === 2) {
+    } else if (settings.display.candyUpgradeNotificationMode === CandyUpgradeNotificationMode.ON) {
       starter.candyUpgradeIcon.setVisible(
         slotVisible && (isPassiveAvailable || isValueReductionAvailable || isSameSpeciesEggAvailable),
       );
@@ -1444,17 +1458,11 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
   }
 
   /**
-   * Processes an {@linkcode CandyUpgradeNotificationChangedEvent} sent when the corresponding setting changes
-   * @param event {@linkcode Event} sent by the callback
+   * Update the candy upgrade notification style based on the settings
    */
-  onCandyUpgradeDisplayChanged(event: Event): void {
-    const candyUpgradeDisplayEvent = event as CandyUpgradeNotificationChangedEvent;
-    if (!candyUpgradeDisplayEvent) {
-      return;
-    }
-
+  onCandyUpgradeDisplayChanged(): void {
     // Loop through all visible candy icons when set to 'Icon' mode
-    if (globalScene.candyUpgradeDisplay === 0) {
+    if (settings.display.candyUpgradeDisplayMode === CandyUpgradeDisplayMode.ICON) {
       this.filteredStarterContainers.forEach((starter) => {
         this.setUpgradeIcon(starter);
       });
@@ -1867,7 +1875,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                     options: natures
                       .map((n: Nature, _i: number) => {
                         const option: OptionSelectItem = {
-                          label: getNatureName(n, true, true, true, globalScene.uiTheme),
+                          label: getNatureName(n, true, true, true, settings.display.uiTheme),
                           handler: () => {
                             // update default nature in starter save data
                             if (!starterAttributes) {
@@ -2017,7 +2025,9 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
             if (!(passiveAttr & PassiveAttr.UNLOCKED)) {
               const passiveCost = getPassiveCandyCount(speciesStarterCosts[this.lastSpecies.speciesId]);
               options.push({
-                label: `x${passiveCost} ${i18next.t("starterSelectUiHandler:unlockPassive")} (${allAbilities[starterPassiveAbilities[this.lastSpecies.speciesId]].name})`,
+                label: `x${passiveCost} ${i18next.t("starterSelectUiHandler:unlockPassive")} (${
+                  allAbilities[starterPassiveAbilities[this.lastSpecies.speciesId]].name
+                })`,
                 handler: () => {
                   if (Overrides.FREE_CANDY_UPGRADE_OVERRIDE || candyCount >= passiveCost) {
                     starterData.passiveAttr |= PassiveAttr.UNLOCKED | PassiveAttr.ENABLED;
@@ -3081,7 +3091,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         container.favoriteIcon.setVisible(this.starterPreferences[speciesId]?.favorite ?? false);
 
         // 'Candy Icon' mode
-        if (globalScene.candyUpgradeDisplay === 0) {
+        if (settings.display.candyUpgradeDisplayMode === CandyUpgradeDisplayMode.ICON) {
           if (!starterColors[speciesId]) {
             // Default to white if no colors are found
             starterColors[speciesId] = ["ffffff", "ffffff"];
@@ -3092,7 +3102,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
           container.candyUpgradeOverlayIcon.setTint(argbFromRgba(rgbHexToRgba(starterColors[speciesId][1])));
 
           this.setUpgradeIcon(container);
-        } else if (globalScene.candyUpgradeDisplay === 1) {
+        } else if (settings.display.candyUpgradeDisplayMode === CandyUpgradeDisplayMode.ANIMATION) {
           container.candyUpgradeIcon.setVisible(false);
           container.candyUpgradeOverlayIcon.setVisible(false);
         }
@@ -3712,7 +3722,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         }
 
         this.pokemonNatureText.setText(
-          getNatureName(natureIndex as unknown as Nature, true, true, false, globalScene.uiTheme),
+          getNatureName(natureIndex as unknown as Nature, true, true, false, settings.display.uiTheme),
         );
 
         let levelMoves: LevelMoves;

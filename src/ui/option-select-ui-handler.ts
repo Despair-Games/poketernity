@@ -7,6 +7,7 @@ import { addWindow } from "#app/ui/ui-theme";
 import { fixedNumber, getNumberValue, isNullOrUndefined, NumberHolder } from "#app/utils";
 import { Button } from "#enums/buttons";
 import type BBCodeText from "phaser3-rex-plugins/plugins/gameobjects/tagtext/bbcodetext/BBCodeText";
+import { settings } from "#app/system/settings/settings-manager";
 
 const scrollUpLabel = "↑";
 const scrollDownLabel = "↓";
@@ -55,7 +56,7 @@ export default class OptionSelectUiHandler extends MessageUiHandler {
   override setup() {
     const ui = this.getUi();
 
-    this.scale = getTextStyleOptions(TextStyle.WINDOW, globalScene.uiTheme).scale;
+    this.scale = getTextStyleOptions(TextStyle.WINDOW, settings.display.uiTheme).scale;
 
     this.optionSelectContainer = globalScene.add.container(globalScene.scaledCanvas.width - 1, this.defaultYOffset);
     this.optionSelectContainer.setName(`option-select-${this.mode ? Mode[this.mode] : "UNKNOWN"}`);

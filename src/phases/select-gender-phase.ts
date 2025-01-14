@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import { SettingKeys } from "#app/system/settings/settings";
+import { settings } from "#app/system/settings/settings-manager";
 import { Mode } from "#app/ui/ui";
 import { PlayerGender } from "#enums/player-gender";
 import i18next from "i18next";
@@ -17,8 +17,7 @@ export class SelectGenderPhase extends Phase {
           {
             label: i18next.t("settings:boy"),
             handler: () => {
-              gameData.gender = PlayerGender.MALE;
-              gameData.saveSetting(SettingKeys.Player_Gender, 0);
+              settings.update("display", "playerGender", PlayerGender.MALE);
               gameData.saveSystem().then(() => this.end());
               return true;
             },
@@ -26,8 +25,7 @@ export class SelectGenderPhase extends Phase {
           {
             label: i18next.t("settings:girl"),
             handler: () => {
-              gameData.gender = PlayerGender.FEMALE;
-              gameData.saveSetting(SettingKeys.Player_Gender, 1);
+              settings.update("display", "playerGender", PlayerGender.FEMALE);
               gameData.saveSystem().then(() => this.end());
               return true;
             },

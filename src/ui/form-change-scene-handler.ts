@@ -3,6 +3,7 @@ import { TextStyle, addTextObject } from "./text";
 import { Mode } from "./ui";
 import { Button } from "#enums/buttons";
 import { globalScene } from "#app/global-scene";
+import { settings } from "#app/system/settings/settings-manager";
 
 /**
  * A handler for Pokemon form change and evolution scenes
@@ -28,7 +29,7 @@ export default class FormChangeSceneHandler extends MessageUiHandler {
     this.container = globalScene.add.container(0, -globalScene.game.canvas.height / 6);
     ui.add(this.container);
 
-    const messageBg = globalScene.add.sprite(0, 0, "bg", globalScene.windowType);
+    const messageBg = globalScene.add.sprite(0, 0, "bg", settings.display.uiWindowType);
     messageBg.setOrigin(0, 1);
     messageBg.setVisible(false);
     ui.add(messageBg);

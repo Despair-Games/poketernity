@@ -8,6 +8,7 @@ import { LevelAchv } from "#app/system/achv";
 import { NumberHolder } from "#app/utils";
 import { ExpNotification } from "#enums/exp-notification";
 import i18next from "i18next";
+import { settings } from "#app/system/settings/settings-manager";
 
 /**
  * Handles the effects of a pokemon levelling up:
@@ -34,7 +35,7 @@ export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
 
   public override start(): void {
     super.start();
-    const { expParty, gameData, ui } = globalScene;
+    const { gameData, ui } = globalScene;
 
     if (this.level > gameData.gameStats.highestLevel) {
       gameData.gameStats.highestLevel = this.level;
@@ -52,7 +53,7 @@ export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
         .promptLevelUpStats(this.partyMemberIndex, prevStats, false)
         .then(() => this.end());
 
-    if (expParty === ExpNotification.DEFAULT) {
+    if (settings.general.partyExpNotificationMode === ExpNotification.DEFAULT) {
       globalScene.playSound("level_up_fanfare");
 
       const levelUpText = i18next.t("battle:levelUp", {
@@ -60,7 +61,7 @@ export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
         level: this.level,
       });
       ui.showText(levelUpText, null, () => promptLevelUpStats(), null, true);
-    } else if (expParty === ExpNotification.SKIP) {
+    } else if (settings.general.partyExpNotificationMode === ExpNotification.SKIP) {
       this.end();
     } else {
       // we still want to display the stats if activated
