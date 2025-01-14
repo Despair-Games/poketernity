@@ -745,7 +745,7 @@ export class BerryModifierType extends PokemonHeldItemModifierType implements Ge
 }
 
 enum AttackTypeBoosterItem {
-  SILK_SCARF = 1,
+  SILK_SCARF,
   BLACK_BELT,
   SHARP_BEAK,
   POISON_BARB,

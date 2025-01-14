@@ -1,5 +1,6 @@
 export enum Type {
-  NORMAL = 1,
+  UNKNOWN = -1,
+  NORMAL,
   FIGHTING,
   FLYING,
   POISON,
@@ -18,5 +19,4 @@ export enum Type {
   DARK,
   FAIRY,
   STELLAR,
-  UNKNOWN = 10001,
 }

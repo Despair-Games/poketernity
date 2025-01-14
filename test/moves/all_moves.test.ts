@@ -39,10 +39,10 @@ describe("All Moves", () => {
 
   /**
    * Custom Implementations as of 01/2025:
-   * - One Hit KO moves
-   * - Dark Void --> Accuracy
-   * - Zippy Zap --> PP + Power
-   * - Heal Order --> PP
+   * - Horn Drill / Guillotine / Sheer Cold / Fissure : BP set to 200
+   * - Dark Void : Accurary is set to pre-Gen VIII's 80
+   * - Zippy Zap : Uses LGPE's implementation. PP: 10 -> 15, BP: 90 -> 50
+   * - Heal Order : PP decreased to 5
    */
 
   const filename = resolve("./test/moves/all_moves.json");
@@ -53,7 +53,7 @@ describe("All Moves", () => {
     const pktyMove = allMoves[move.id as Moves] as Move;
     if (pktyMove && !isUnimplemented(pktyMove.name)) {
       it(`${pktyMove.name}`, async () => {
-        expect(pktyMove.type).toBe(move.type_id);
+        expect(pktyMove.type).toBe(move.type_id - 1); // PokeAPI begins its list of types with the number 1
         expect(pktyMove.accuracy).toBe(move.accuracy);
         expect(pktyMove.priority).toBe(move.priority);
         expect(pktyMove.power).toBe(move.power);
