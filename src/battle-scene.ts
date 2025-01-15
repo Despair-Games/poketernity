@@ -3364,7 +3364,7 @@ export default class BattleScene extends SceneBase {
       "partyUiHandler:untilWeMeetAgain",
       "partyUiHandler:sayonara",
     ];
-    return i18next.t(randItem(goodbyeKeys), { pokemonName: pokemonName });
+    return i18next.t(randItem(goodbyeKeys), { pokemonName });
   }
 
   /**
