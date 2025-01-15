@@ -5,6 +5,7 @@ import { globalScene } from "#app/global-scene";
 import { LoadMoveAnimPhase } from "#app/phases/load-move-anim-phase";
 import { MovePhase } from "#app/phases/move-phase";
 import type { BooleanHolder } from "#app/utils";
+import type { BattlerIndex } from "#enums/battler-index";
 import { MoveTarget } from "#enums/move-target";
 import type { Moves } from "#enums/moves";
 
@@ -26,16 +27,16 @@ export abstract class CallMoveAttr extends OverrideMoveEffectAttr {
       return false;
     }
 
-    const targets =
-      moveTargets.multiple || moveTargets.targets.length === 1
-        ? moveTargets.targets
-        : [
-            this.hasTarget
-              ? target.getBattlerIndex()
-              : moveTargets.targets[user.randSeedInt(moveTargets.targets.length)],
-          ]; // account for Mirror Move having a target already
+    let targets: BattlerIndex[];
+    if (moveTargets.multiple || moveTargets.targets.length === 1) {
+      targets = moveTargets.targets;
+    } else if (this.hasTarget) {
+      targets = [target.getBattlerIndex()];
+    } else {
+      targets = [moveTargets.targets[user.randSeedInt(moveTargets.targets.length)]];
+    }
 
-    user.getMoveQueue().push({ move: move.id, targets: targets, virtual: true, ignorePP: true });
+    user.getMoveQueue().push({ move: move.id, targets, virtual: true, ignorePP: true });
     globalScene.unshiftPhase(new LoadMoveAnimPhase(move.id));
     globalScene.unshiftPhase(new MovePhase(user, targets, new PokemonMove(move.id, 0, 0, true), true, true));
 
