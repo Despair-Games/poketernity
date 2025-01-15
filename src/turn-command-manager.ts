@@ -151,6 +151,31 @@ export class TurnCommandManager {
   }
 
   /**
+   * Redirects single target move commands from opposing Pokemon from
+   * a removed Pokemon to the removed Pokemon's ally.
+   * Should only be used during a double battle
+   * @param removedPokemon
+   * @returns
+   */
+  public redirectMoveCommandTargetsToAlly(removedPokemon: Pokemon): void {
+    const allyPokemon = removedPokemon.getAlly();
+    if (!allyPokemon?.isActive(true)) {
+      return;
+    }
+
+    this.turnCommands.forEach((tc) => {
+      if (
+        tc.command === Command.FIGHT
+        && tc.pokemon.isPlayer() !== removedPokemon.isPlayer()
+        && tc.targets?.length === 1
+        && tc.targets[0] === removedPokemon.getBattlerIndex()
+      ) {
+        tc.targets[0] = allyPokemon.getBattlerIndex();
+      }
+    });
+  }
+
+  /**
    * Dequeues the next turn command and unshifts a {@linkcode Phase} based on
    * that command.
    * @returns `true` if a phase was queued as a result of this call.

@@ -859,7 +859,17 @@ export default class BattleScene extends SceneBase {
     if (this.currentBattle.double === false) {
       return;
     }
+
     if (allyPokemon?.isActive(true)) {
+      const { turnManager } = this.currentBattle;
+      turnManager.redirectMoveCommandTargetsToAlly(removedPokemon);
+
+      /**
+       * If the removed Pokemon fainted before the turn's first move (e.g. from an entry hazard),
+       * A move phase targeting the removed Pokemon may already be queued. Therefore, in addition
+       * to redirecting commands in the turn manager, we also need to redirect any applicable commands
+       * queued for execution.
+       */
       let targetingMovePhase: MovePhase;
       do {
         targetingMovePhase = this.findPhase(
