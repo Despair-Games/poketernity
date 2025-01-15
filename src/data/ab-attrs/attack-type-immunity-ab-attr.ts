@@ -19,9 +19,8 @@ export class AttackTypeImmunityAbAttr extends TypeImmunityAbAttr {
     super(immuneType, condition);
   }
 
-  override applyPreDefend(
+  override apply(
     pokemon: Pokemon,
-    passive: boolean,
     simulated: boolean,
     attacker: Pokemon,
     move: Move,
@@ -33,7 +32,7 @@ export class AttackTypeImmunityAbAttr extends TypeImmunityAbAttr {
       attacker.getMoveCategory(pokemon, move) !== MoveCategory.STATUS
       && !move.hasAttr(NeutralDamageAgainstFlyingTypeMultiplierAttr)
     ) {
-      return super.applyPreDefend(pokemon, passive, simulated, attacker, move, cancelled, typeMultiplier);
+      return super.apply(pokemon, simulated, attacker, move, cancelled, typeMultiplier);
     }
     return false;
   }

@@ -1,3 +1,8 @@
+// -- start tsdoc imports --
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type { VariableMovePowerAbAttr } from "#app/data/ab-attrs/variable-move-power-ab-attr";
+// -- end tsdoc imports --
+
 import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition";
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
@@ -6,7 +11,7 @@ import { PreAttackAbAttr } from "./pre-attack-ab-attr";
 
 /**
  * Class for abilities that boost the damage of moves
- * For abilities that boost the base power of moves, see VariableMovePowerAbAttr
+ * For abilities that boost the base power of moves, see {@linkcode VariableMovePowerAbAttr}
  * @param damageMultiplier the amount to multiply the damage by
  * @param condition the condition for this ability to be applied
  */
@@ -21,20 +26,21 @@ export class DamageBoostAbAttr extends PreAttackAbAttr {
   }
 
   /**
-   *
-   * @param pokemon the attacker pokemon
-   * @param _passive N/A
-   * @param defender the target pokemon
-   * @param move the move used by the attacker pokemon
-   * @param args Utils.NumberHolder as damage
-   * @returns true if the function succeeds
+   * Multiplies a move's damage by {@linkcode damageMultiplier}
+   * if the attribute's {@linkcode condition} is met.
+   * @param pokemon The {@linkcode Pokemon} with this ability
+   * @param simulated If `true`, suppresses changes to game state
+   * @param move The {@linkcode Move} being used
+   * @param defender The {@linkcode Pokemon} targeted by the move
+   * @param multiplier A {@linkcode NumberHolder} containing a damage
+   * multiplier for the current attack.
+   * @returns `true` if this effect modified the given move's damage
    */
-  override applyPreAttack(
+  override apply(
     pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
-    defender: Pokemon,
     move: Move,
+    defender: Pokemon,
     multiplier: NumberHolder,
   ): boolean {
     if (this.condition(pokemon, defender, move)) {

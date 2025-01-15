@@ -26,15 +26,14 @@ export class TypeImmunityAbAttr extends PreDefendAbAttr {
   /**
    * Applies immunity if this ability grants immunity to the type of the given move.
    * @param pokemon - The defending {@linkcode Pokemon}
-   * @param _passive - N/A
+   * @param simulated - N/A
    * @param attacker - The attacking {@linkcode Pokemon}
    * @param move The used {@linkcode Move}
-   * @param _cancelled N/A
+   * @param cancelled N/A
    * @param typeMultiplier {@linkcode NumberHolder} gets set to `0` if the pokemon is immune
    */
-  override applyPreDefend(
+  override apply(
     pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
     attacker: Pokemon,
     move: Move,

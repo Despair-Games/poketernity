@@ -1,25 +1,28 @@
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import { type Pokemon } from "#app/field/pokemon";
+import type { Ability } from "#app/data/ability";
 
 export abstract class AbAttr {
+  public source: Ability;
   public showAbility: boolean;
+  public showAbilityInstant: boolean;
   private extraCondition: AbAttrCondition;
 
-  constructor(showAbility: boolean = true) {
+  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
     this.showAbility = showAbility;
+    this.showAbilityInstant = showAbilityInstant;
   }
 
   /**
    * Applies the effects of this attribute
-   * @param _pokemon The {@linkcode Pokemon} with the ability
-   * @param _passive `true` if the source ability is a Pokemon's passive
-   * @param _simulated `true` if attribute effects should be resolved without changing game state
-   * @param _args Any additional parameters or data to modify
+   * @param pokemon The {@linkcode Pokemon} with the ability
+   * @param simulated `true` if attribute effects should be resolved without changing game state
+   * @param args Any additional parameters or data to modify
    * @returns `true` if this attribute applies successfully. If {@linkcode showAbility} is enabled,
    * and this apply call is not simulated, returning `true` activates the ability's flyout
    * and {@linkcode getTriggerMessage | trigger message} (if applicable)
    */
-  apply(_pokemon: Pokemon, _passive: boolean, _simulated: boolean, ..._args: unknown[]): boolean {
+  apply(_pokemon: Pokemon, _simulated: boolean, ..._args: unknown[]): boolean {
     return false;
   }
 

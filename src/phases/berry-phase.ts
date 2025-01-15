@@ -47,7 +47,7 @@ export class BerryPhase extends FieldPhase {
 
           globalScene.updateModifiers(pokemon.isPlayer());
 
-          applyAbAttrs(HealFromBerryUseAbAttr, pokemon);
+          applyAbAttrs(HealFromBerryUseAbAttr, pokemon, false);
         }
       }
     });

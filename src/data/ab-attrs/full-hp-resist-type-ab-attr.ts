@@ -2,7 +2,7 @@ import { type Move } from "#app/data/move";
 import { FixedDamageAttr } from "../move-attrs/fixed-damage-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { BooleanHolder, NumberHolder } from "#app/utils";
+import type { NumberHolder } from "#app/utils";
 import i18next from "i18next";
 import { PreDefendAbAttr } from "./pre-defend-ab-attr";
 
@@ -15,21 +15,17 @@ export class FullHpResistTypeAbAttr extends PreDefendAbAttr {
   /**
    * Reduces a type multiplier to 0.5 if the source is at full HP.
    * @param pokemon {@linkcode Pokemon} the Pokemon with this ability
-   * @param _passive n/a
-   * @param _simulated n/a (this doesn't change game state)
-   * @param _attacker n/a
+   * @param simulated n/a (this doesn't change game state)
+   * @param attacker n/a
    * @param move {@linkcode Move} the move being used on the source
-   * @param _cancelled n/a
-   * @param args `[0]` a container for the move's current type effectiveness multiplier
+   * @param typeMultiplier a container for the move's current type effectiveness multiplier
    * @returns `true` if the move's effectiveness is reduced; `false` otherwise
    */
-  override applyPreDefend(
+  override apply(
     pokemon: Pokemon,
-    _passive: boolean,
     simulated: boolean,
     _attacker: Pokemon,
-    move: Move | null,
-    _cancelled: BooleanHolder | null,
+    move: Move,
     typeMultiplier: NumberHolder,
   ): boolean {
     if (move && move.hasAttr(FixedDamageAttr)) {

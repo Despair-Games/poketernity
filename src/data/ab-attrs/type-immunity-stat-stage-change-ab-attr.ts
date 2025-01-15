@@ -19,16 +19,15 @@ export class TypeImmunityStatStageChangeAbAttr extends TypeImmunityAbAttr {
     this.stages = stages;
   }
 
-  override applyPreDefend(
+  override apply(
     pokemon: Pokemon,
-    passive: boolean,
     simulated: boolean,
     attacker: Pokemon,
     move: Move,
     cancelled: BooleanHolder,
     typeMultiplier: NumberHolder,
   ): boolean {
-    const ret = super.applyPreDefend(pokemon, passive, simulated, attacker, move, cancelled, typeMultiplier);
+    const ret = super.apply(pokemon, simulated, attacker, move, cancelled, typeMultiplier);
 
     if (ret) {
       cancelled.value = true; // Suppresses "No Effect" message

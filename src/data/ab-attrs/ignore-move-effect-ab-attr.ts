@@ -1,6 +1,6 @@
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder, NumberHolder } from "#app/utils";
+import type { NumberHolder } from "#app/utils";
 import { PreDefendAbAttr } from "./pre-defend-ab-attr";
 
 /**
@@ -10,15 +10,13 @@ import { PreDefendAbAttr } from "./pre-defend-ab-attr";
  */
 export class IgnoreMoveEffectsAbAttr extends PreDefendAbAttr {
   /**
-   * @param args [0]: {@linkcode NumberHolder} Move additional effect chance.
+   * @param effectChance {@linkcode NumberHolder} Move additional effect chance.
    */
-  override applyPreDefend(
+  override apply(
     _pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
     _attacker: Pokemon,
     _move: Move,
-    _cancelled: BooleanHolder,
     effectChance: NumberHolder,
   ): boolean {
     if (effectChance.value <= 0) {
