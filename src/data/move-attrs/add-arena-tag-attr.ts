@@ -1,4 +1,5 @@
-import { type Pokemon, MoveResult } from "#app/field/pokemon";
+import { type Pokemon } from "#app/field/pokemon";
+import { MoveResult } from "#enums/move-result";
 import { globalScene } from "#app/global-scene";
 import type { ArenaTagType } from "#enums/arena-tag-type";
 import type { Move } from "../move";
@@ -65,7 +66,7 @@ export class AddArenaTagAttr extends MoveEffectAttr {
       && user.getLastXMoves(1)[0]?.result === MoveResult.SUCCESS
     ) {
       const side = (this.selfSideTarget ? user : target).getArenaTagSide();
-      globalScene.arena.addTag(this.tagType, this.turnCount, move.id, user.id, side);
+      globalScene.arena.addTag(this.tagType, user.id, this.turnCount, move.id, side);
       return true;
     }
 

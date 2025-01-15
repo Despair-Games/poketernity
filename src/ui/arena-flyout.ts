@@ -1,6 +1,7 @@
 import { addTextObject, TextStyle } from "./text";
 import { globalScene } from "#app/global-scene";
-import { ArenaTagSide, ArenaTrapTag } from "#app/data/arena-tag";
+import { ArenaTrapTag } from "#app/data/arena-tag";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 import { WeatherType } from "#enums/weather-type";
 import { TerrainType } from "#enums/terrain-type";
 import { addWindow, WindowVariant } from "./ui-theme";
@@ -284,6 +285,12 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
     switch (arenaEffectChangedEvent.constructor) {
       case TagAddedEvent:
         const tagAddedEvent = arenaEffectChangedEvent as TagAddedEvent;
+
+        const excludedTagTypes = [ArenaTagType.DELAYED_ATTACK];
+        if (excludedTagTypes.includes(tagAddedEvent.arenaTagType)) {
+          return;
+        }
+
         const isArenaTrapTag = globalScene.arena.getTag(tagAddedEvent.arenaTagType) instanceof ArenaTrapTag;
         let arenaEffectType: ArenaEffectType;
 

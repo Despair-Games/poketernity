@@ -1,15 +1,16 @@
 import { globalScene } from "#app/global-scene";
 import type { Arena } from "#app/field/arena";
 import { Type } from "#enums/type";
-import { BooleanHolder, NumberHolder, toDmgValue } from "#app/utils";
+import { BooleanHolder, isNullOrUndefined, NumberHolder, toDmgValue } from "#app/utils";
 import { allMoves } from "#app/data/all-moves";
-import { MoveTarget } from "../enums/move-target";
-import { MoveCategory } from "../enums/move-category";
+import { MoveTarget } from "#enums/move-target";
+import { MoveCategory } from "#enums/move-category";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { Pokemon } from "#app/field/pokemon";
-import { HitResult, PokemonMove } from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon";
+import { HitResult } from "#enums/hit-result";
 import { StatusEffect } from "#enums/status-effect";
-import type { BattlerIndex } from "#app/battle";
+import type { BattlerIndex } from "#enums/battler-index";
 import { applyAbAttrs } from "#app/data/ability";
 import { InfiltratorAbAttr } from "./ab-attrs/infiltrator-ab-attr";
 import { BlockNonDirectDamageAbAttr } from "./ab-attrs/block-non-direct-damage-ab-attr";
@@ -27,13 +28,8 @@ import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { ProtectStatAbAttr } from "./ab-attrs/protect-stat-ab-attr";
 import { MoveFlags } from "#enums/move-flags";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 import { SkyDropTag } from "./battler-tags";
-
-export enum ArenaTagSide {
-  BOTH,
-  PLAYER,
-  ENEMY,
-}
 
 export abstract class ArenaTag {
   constructor(
@@ -714,7 +710,7 @@ export class ArenaTrapTag extends ArenaTag {
    * @returns `true` if this hazard affects the given Pokemon; `false` otherwise.
    */
   override apply(_arena: Arena, simulated: boolean, pokemon: Pokemon): boolean {
-    if ((this.side === ArenaTagSide.PLAYER) !== pokemon.isPlayer()) {
+    if (this.side !== ArenaTagSide.BOTH && (this.side === ArenaTagSide.PLAYER) !== pokemon.isPlayer()) {
       return false;
     }
 
@@ -865,39 +861,67 @@ class ToxicSpikesTag extends ArenaTrapTag {
 }
 
 /**
- * Arena Tag class for delayed attacks, such as {@linkcode Moves.FUTURE_SIGHT} or {@linkcode Moves.DOOM_DESIRE}.
- * Delays the attack's effect by a set amount of turns, usually 3 (including the turn the move is used),
+ * Interface representing a delayed attack command.
+ * @see {@linkcode DelayedAttackTag}
+ */
+interface DelayedAttack {
+  sourceId: number;
+  move: Moves;
+  targetIndex: BattlerIndex;
+  turnCount: number;
+}
+
+/**
+ * Arena Tag class for delayed attacks from {@link https://bulbapedia.bulbagarden.net/wiki/Future_Sight_(move) Future Sight}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Doom_Desire_(move) Doom Desire}.
+ * Delays the attack's effect by 3 turns (including the turn the move is used),
  * and deals damage after the turn count is reached.
  */
 export class DelayedAttackTag extends ArenaTag {
-  public targetIndex: BattlerIndex;
+  /** Contains all queued delayed attacks on the field */
+  public delayedAttacks: DelayedAttack[];
 
-  constructor(
-    tagType: ArenaTagType,
-    sourceMove: Moves | undefined,
-    sourceId: number,
-    targetIndex: BattlerIndex,
-    side: ArenaTagSide = ArenaTagSide.BOTH,
-  ) {
-    super(tagType, 3, sourceMove, sourceId, side);
+  constructor() {
+    super(ArenaTagType.DELAYED_ATTACK, 0);
 
-    this.targetIndex = targetIndex;
-    this.side = side;
+    this.delayedAttacks = [];
   }
 
-  override lapse(arena: Arena): boolean {
-    const ret = super.lapse(arena);
+  public addAttack(source: Pokemon, move: Moves, targetIndex: BattlerIndex): void {
+    this.delayedAttacks.push({ sourceId: source.id, move, targetIndex, turnCount: 3 });
+  }
 
-    if (!ret) {
-      globalScene.unshiftPhase(
-        new MoveEffectPhase(this.sourceId!, [this.targetIndex], new PokemonMove(this.sourceMove!, 0, 0, true)),
-      ); // TODO: are those bangs correct?
-    }
+  override lapse(_arena: Arena): boolean {
+    this.delayedAttacks.forEach((attack) => {
+      attack.turnCount--;
 
-    return ret;
+      if (!isNullOrUndefined(globalScene.getPokemonById(attack.sourceId)) && attack.turnCount <= 0) {
+        const target = globalScene.getField(true).find((p) => attack.targetIndex === p.getBattlerIndex());
+        if (target) {
+          globalScene.unshiftPhase(
+            new MoveEffectPhase(attack.sourceId, [attack.targetIndex], new PokemonMove(attack.move, 0, 0, true)),
+          );
+        } else if (globalScene.currentBattle.double) {
+          const redirectIndex = attack.targetIndex + (attack.targetIndex % 2 === 0 ? 1 : -1);
+          globalScene.unshiftPhase(
+            new MoveEffectPhase(attack.sourceId, [redirectIndex], new PokemonMove(attack.move, 0, 0, true)),
+          );
+        }
+      }
+    });
+
+    this.delayedAttacks = this.delayedAttacks.filter(
+      (attack) => !isNullOrUndefined(globalScene.getPokemonById(attack.sourceId)) && attack.turnCount > 0,
+    );
+    return this.delayedAttacks.length > 0;
   }
 
   override onRemove(_arena: Arena): void {}
+
+  override loadTag(source: ArenaTag | any): void {
+    super.loadTag(source);
+    this.delayedAttacks = source.delayedAttacks;
+  }
 }
 
 /**
@@ -1400,10 +1424,9 @@ export class FairyLockTag extends ArenaTag {
 // TODO: swap `sourceMove` and `sourceId` and make `sourceMove` an optional parameter
 export function getArenaTag(
   tagType: ArenaTagType,
-  turnCount: number,
-  sourceMove: Moves | undefined,
   sourceId: number,
-  targetIndex?: BattlerIndex,
+  turnCount: number,
+  sourceMove?: Moves,
   side: ArenaTagSide = ArenaTagSide.BOTH,
 ): ArenaTag | null {
   switch (tagType) {
@@ -1429,9 +1452,8 @@ export function getArenaTag(
       return new SpikesTag(sourceId, side);
     case ArenaTagType.TOXIC_SPIKES:
       return new ToxicSpikesTag(sourceId, side);
-    case ArenaTagType.FUTURE_SIGHT:
-    case ArenaTagType.DOOM_DESIRE:
-      return new DelayedAttackTag(tagType, sourceMove, sourceId, targetIndex!, side); // TODO:questionable bang
+    case ArenaTagType.DELAYED_ATTACK:
+      return new DelayedAttackTag();
     case ArenaTagType.WISH:
       return new WishTag(turnCount, sourceId, side);
     case ArenaTagType.STEALTH_ROCK:
@@ -1476,8 +1498,7 @@ export function getArenaTag(
  */
 export function loadArenaTag(source: ArenaTag | any): ArenaTag {
   const tag =
-    getArenaTag(source.tagType, source.turnCount, source.sourceMove, source.sourceId, source.targetIndex, source.side)
-    ?? new NoneTag();
+    getArenaTag(source.tagType, source.turnCount, source.sourceMove, source.sourceId, source.side) ?? new NoneTag();
   tag.loadTag(source);
   return tag;
 }

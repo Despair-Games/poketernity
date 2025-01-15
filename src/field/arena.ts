@@ -1,6 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import type { BiomeTierTrainerPools, PokemonPools } from "#app/data/balance/biomes";
-import { biomePokemonPools, BiomePoolTier, biomeTrainerPools } from "#app/data/balance/biomes";
+import { biomePokemonPools, biomeTrainerPools } from "#app/data/balance/biomes";
+import { BiomePoolTier } from "#enums/biome-pool-tier";
 import { type Constructor, randSeedInt } from "#app/utils";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
@@ -9,8 +10,9 @@ import { CommonAnim } from "#app/data/battle-anims";
 import type { Type } from "#enums/type";
 import type { Move } from "#app/data/move";
 import type { ArenaTag } from "#app/data/arena-tag";
-import { ArenaTagSide, ArenaTrapTag, getArenaTag } from "#app/data/arena-tag";
-import type { BattlerIndex } from "#app/battle";
+import { ArenaTrapTag, getArenaTag } from "#app/data/arena-tag";
+import { ArenaTagSide } from "#enums/arena-tag-side";
+import type { BattlerIndex } from "#enums/battler-index";
 import { getTerrainClearMessage, getTerrainStartMessage, Terrain } from "#app/data/terrain";
 import { TerrainType } from "#enums/terrain-type";
 import { applyAbAttrs, applyPostTerrainChangeAbAttrs, applyPostWeatherChangeAbAttrs } from "#app/data/ability";
@@ -625,12 +627,11 @@ export class Arena {
    */
   addTag(
     tagType: ArenaTagType,
-    turnCount: number,
-    sourceMove: Moves | undefined,
     sourceId: number,
+    turnCount: number = 0,
+    sourceMove?: Moves,
     side: ArenaTagSide = ArenaTagSide.BOTH,
     quiet: boolean = false,
-    targetIndex?: BattlerIndex,
   ): boolean {
     const existingTag = this.getTagOnSide(tagType, side);
     if (existingTag) {
@@ -645,7 +646,7 @@ export class Arena {
     }
 
     // creates a new tag object
-    const newTag = getArenaTag(tagType, turnCount || 0, sourceMove, sourceId, targetIndex, side);
+    const newTag = getArenaTag(tagType, sourceId, turnCount, sourceMove, side);
     if (newTag) {
       this.tags.push(newTag);
       newTag.onAdd(this, quiet);

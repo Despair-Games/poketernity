@@ -8,11 +8,16 @@ import { SystemSavedataApi } from "#app/plugins/api/system-savedata-api";
 import type { SystemSaveData } from "#app/@types/SystemData";
 import { getApiBaseUrl } from "#test/testUtils/testUtils";
 import { http, HttpResponse } from "msw";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { initServerForApiTests } from "#test/testUtils/testFileInitialization";
 
 const apiBase = getApiBaseUrl();
 const systemSavedataApi = new SystemSavedataApi(getApiBaseUrl());
-const { server } = global;
+
+let server;
+beforeAll(async () => {
+  server = await initServerForApiTests();
+});
 
 afterEach(() => {
   server.resetHandlers();

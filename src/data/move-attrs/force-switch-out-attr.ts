@@ -1,4 +1,4 @@
-import { BattleType } from "#app/battle";
+import { BattleType } from "#enums/battle-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveCategory } from "#enums/move-category";
 import { Moves } from "#enums/moves";

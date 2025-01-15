@@ -4,9 +4,10 @@ import { TextStyle, addTextObject } from "./text";
 import { addWindow } from "./ui-theme";
 import { getLocalizedSpriteKey, fixedNumber } from "#app/utils";
 import type { Move } from "../data/move";
-import { MoveCategory } from "#app/enums/move-category";
+import { MoveCategory } from "#enums/move-category";
 import { Type } from "#enums/type";
 import i18next from "i18next";
+import { settings } from "#app/system/settings/settings-manager";
 
 export interface MoveInfoOverlaySettings {
   delayVisibility?: boolean; // if true, showing the overlay will only set it to active and populate the fields and the handler using this field has to manually call setVisible later.
@@ -164,7 +165,7 @@ export default class MoveInfoOverlay extends Phaser.GameObjects.Container implem
 
   // show this component with infos for the specific move
   show(move: Move): boolean {
-    if (!globalScene.enableMoveInfo) {
+    if (!settings.display.enableMoveInfo) {
       return false; // move infos have been disabled // TODO:: is `false` correct? i used to be `undeefined`
     }
     this.move = move;

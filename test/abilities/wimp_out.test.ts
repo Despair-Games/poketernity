@@ -1,6 +1,6 @@
-import { BattlerIndex } from "#app/battle";
+import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/all-moves";
-import { ArenaTagSide } from "#app/data/arena-tag";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 import { toDmgValue } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -324,8 +324,8 @@ describe("Abilities - Wimp Out", () => {
   });
 
   it("Magic Guard passive should not allow indirect damage to trigger Wimp Out", async () => {
-    game.scene.arena.addTag(ArenaTagType.STEALTH_ROCK, 1, Moves.STEALTH_ROCK, 0, ArenaTagSide.ENEMY);
-    game.scene.arena.addTag(ArenaTagType.SPIKES, 1, Moves.SPIKES, 0, ArenaTagSide.ENEMY);
+    game.scene.arena.addTag(ArenaTagType.STEALTH_ROCK, 0, 1, Moves.STEALTH_ROCK, ArenaTagSide.ENEMY);
+    game.scene.arena.addTag(ArenaTagType.SPIKES, 0, 1, Moves.SPIKES, ArenaTagSide.ENEMY);
     game.override
       .passiveAbility(Abilities.MAGIC_GUARD)
       .enemyMoveset([Moves.LEECH_SEED])
@@ -380,8 +380,8 @@ describe("Abilities - Wimp Out", () => {
   });
 
   it("Activates due to entry hazards", async () => {
-    game.scene.arena.addTag(ArenaTagType.STEALTH_ROCK, 1, Moves.STEALTH_ROCK, 0, ArenaTagSide.ENEMY);
-    game.scene.arena.addTag(ArenaTagType.SPIKES, 1, Moves.SPIKES, 0, ArenaTagSide.ENEMY);
+    game.scene.arena.addTag(ArenaTagType.STEALTH_ROCK, 0, 1, Moves.STEALTH_ROCK, ArenaTagSide.ENEMY);
+    game.scene.arena.addTag(ArenaTagType.SPIKES, 0, 1, Moves.SPIKES, ArenaTagSide.ENEMY);
     game.override.enemySpecies(Species.CENTISKORCH).enemyAbility(Abilities.WIMP_OUT).startingWave(4);
     await game.classicMode.startBattle([Species.TYRUNT]);
 

@@ -1,11 +1,4 @@
-export enum GrowthRate {
-  ERRATIC = 0,
-  FAST,
-  MEDIUM_FAST,
-  MEDIUM_SLOW,
-  SLOW,
-  FLUCTUATING,
-}
+import { GrowthRate } from "#enums/growth-rates";
 
 const expLevels = [
   [

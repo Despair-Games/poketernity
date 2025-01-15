@@ -4,17 +4,8 @@ import type UiHandler from "./ui/ui-handler";
 import { Mode } from "./ui/ui";
 import i18next from "i18next";
 import Overrides from "#app/overrides";
-
-export enum Tutorial {
-  INTRO,
-  ACCESS_MENU,
-  MENU,
-  STARTER_SELECT,
-  POKERUS,
-  STAT_CHANGE,
-  SELECT_ITEM,
-  EGG_GACHA,
-}
+import { settings } from "./system/settings/settings-manager";
+import { Tutorial } from "#enums/tutorial";
 
 const tutorialHandlers = {
   [Tutorial.INTRO]: () => {
@@ -24,7 +15,7 @@ const tutorialHandlers = {
   },
   [Tutorial.ACCESS_MENU]: () => {
     return new Promise<void>((resolve) => {
-      if (globalScene.enableTouchControls) {
+      if (settings.general.enableTouchControls) {
         return resolve();
       }
       globalScene
@@ -42,7 +33,7 @@ const tutorialHandlers = {
   },
   [Tutorial.MENU]: () => {
     return new Promise<void>((resolve) => {
-      globalScene.gameData.saveTutorialFlag(Tutorial.ACCESS_MENU, true);
+      globalScene.gameData.saveTutorialAsSeen(Tutorial.ACCESS_MENU);
       globalScene.ui.showText(
         i18next.t("tutorial:menu"),
         null,
@@ -126,11 +117,11 @@ const tutorialHandlers = {
  * @returns a promise with result `true` if the tutorial was run and finished, `false` otherwise
  */
 export async function handleTutorial(tutorial: Tutorial): Promise<boolean> {
-  if (!globalScene.enableTutorials && !Overrides.BYPASS_TUTORIAL_SKIP_OVERRIDE) {
+  if (!settings.general.enableTutorials && !Overrides.BYPASS_TUTORIAL_SKIP_OVERRIDE) {
     return false;
   }
 
-  if (globalScene.gameData.getTutorialFlags()[tutorial] && !Overrides.BYPASS_TUTORIAL_SKIP_OVERRIDE) {
+  if (globalScene.gameData.isSeenTutorial(tutorial) && !Overrides.BYPASS_TUTORIAL_SKIP_OVERRIDE) {
     return false;
   }
 
@@ -149,7 +140,7 @@ export async function handleTutorial(tutorial: Tutorial): Promise<boolean> {
 
   // tutorial finished and overlay gone, re-enable menu, save tutorial as seen
   globalScene.disableMenu = isMenuDisabled;
-  globalScene.gameData.saveTutorialFlag(tutorial, true);
+  globalScene.gameData.saveTutorialAsSeen(tutorial);
   if (handler instanceof AwaitableUiHandler) {
     handler.tutorialActive = false;
   }
