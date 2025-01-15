@@ -1,5 +1,5 @@
-import { MoveResult } from "#app/field/pokemon";
 import { Abilities } from "#enums/abilities";
+import { MoveResult } from "#enums/move-result";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
