@@ -177,8 +177,10 @@ import { Animation } from "./animations";
 
 const DEBUG_RNG = false;
 
-const OPP_IVS_OVERRIDE_VALIDATED: number[] = (
-  Array.isArray(Overrides.OPP_IVS_OVERRIDE) ? Overrides.OPP_IVS_OVERRIDE : new Array(6).fill(Overrides.OPP_IVS_OVERRIDE)
+const ENEMY_IVS_OVERRIDE_VALIDATED: number[] = (
+  Array.isArray(Overrides.ENEMY_IVS_OVERRIDE)
+    ? Overrides.ENEMY_IVS_OVERRIDE
+    : new Array(6).fill(Overrides.ENEMY_IVS_OVERRIDE)
 ).map((iv) => (isNaN(iv) || iv === null || iv > 31 ? -1 : iv));
 
 export const startingWave = Overrides.STARTING_WAVE_OVERRIDE || 1;
@@ -941,17 +943,17 @@ export default class BattleScene extends SceneBase {
     dataSource?: PokemonData,
     postProcess?: (enemyPokemon: EnemyPokemon) => void,
   ): EnemyPokemon {
-    if (Overrides.OPP_LEVEL_OVERRIDE > 0) {
-      level = Overrides.OPP_LEVEL_OVERRIDE;
+    if (Overrides.ENEMY_LEVEL_OVERRIDE > 0) {
+      level = Overrides.ENEMY_LEVEL_OVERRIDE;
     }
-    if (Overrides.OPP_SPECIES_OVERRIDE) {
-      species = getPokemonSpecies(Overrides.OPP_SPECIES_OVERRIDE);
+    if (Overrides.ENEMY_SPECIES_OVERRIDE) {
+      species = getPokemonSpecies(Overrides.ENEMY_SPECIES_OVERRIDE);
       // The fact that a Pokemon is a boss or not can change based on its Species and level
       boss = this.getEncounterBossSegments(this.currentBattle.waveIndex, level, species) > 1;
     }
 
     const pokemon = new EnemyPokemon(species, level, trainerSlot, boss, shinyLock, dataSource);
-    if (Overrides.OPP_FUSION_OVERRIDE) {
+    if (Overrides.ENEMY_FUSION_OVERRIDE) {
       pokemon.generateFusionSpecies();
     }
 
@@ -973,8 +975,8 @@ export default class BattleScene extends SceneBase {
     }
 
     for (let i = 0; i < pokemon.ivs.length; i++) {
-      if (OPP_IVS_OVERRIDE_VALIDATED[i] > -1) {
-        pokemon.ivs[i] = OPP_IVS_OVERRIDE_VALIDATED[i];
+      if (ENEMY_IVS_OVERRIDE_VALIDATED[i] > -1) {
+        pokemon.ivs[i] = ENEMY_IVS_OVERRIDE_VALIDATED[i];
       }
     }
 
@@ -1640,9 +1642,9 @@ export default class BattleScene extends SceneBase {
     species?: PokemonSpecies,
     forceBoss: boolean = false,
   ): number {
-    if (Overrides.OPP_HEALTH_SEGMENTS_OVERRIDE > 1) {
-      return Overrides.OPP_HEALTH_SEGMENTS_OVERRIDE;
-    } else if (Overrides.OPP_HEALTH_SEGMENTS_OVERRIDE === 1) {
+    if (Overrides.ENEMY_HEALTH_SEGMENTS_OVERRIDE > 1) {
+      return Overrides.ENEMY_HEALTH_SEGMENTS_OVERRIDE;
+    } else if (Overrides.ENEMY_HEALTH_SEGMENTS_OVERRIDE === 1) {
       // The rest of the code expects to be returned 0 and not 1 if the enemy is not a boss
       return 0;
     }
