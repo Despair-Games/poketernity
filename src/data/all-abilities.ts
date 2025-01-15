@@ -598,7 +598,7 @@ export function initAbilities() {
     new Ability(Abilities.DOWNLOAD, 4).attr(DownloadAbAttr),
     new Ability(Abilities.IRON_FIST, 4).attr(
       MovePowerBoostAbAttr,
-      (_user, _target, move) => !!move && move.hasFlag(MoveFlags.PUNCHING_MOVE),
+      (_user, _target, move) => !!move?.hasFlag(MoveFlags.PUNCHING_MOVE),
       1.2,
     ),
     new Ability(Abilities.POISON_HEAL, 4)
@@ -676,7 +676,7 @@ export function initAbilities() {
       if (!user || !target || !move) {
         return false;
       }
-      return (target.getMoveEffectiveness(user, move) ?? 1) <= 0.5;
+      return target.getMoveEffectiveness(user, move) <= 0.5;
     }),
     new Ability(Abilities.FILTER, 4)
       .attr(
@@ -710,7 +710,7 @@ export function initAbilities() {
     new Ability(Abilities.FRISK, 4).attr(FriskAbAttr),
     new Ability(Abilities.RECKLESS, 4).attr(
       MovePowerBoostAbAttr,
-      (_user, _target, move) => !!move && move.hasFlag(MoveFlags.RECKLESS_MOVE),
+      (_user, _target, move) => !!move?.hasFlag(MoveFlags.RECKLESS_MOVE),
       1.2,
     ),
     new Ability(Abilities.MULTITYPE, 4)
@@ -923,7 +923,7 @@ export function initAbilities() {
       .edgeCase(), // Should not boost stats if switching into court changed sticky web
     new Ability(Abilities.STRONG_JAW, 6).attr(
       MovePowerBoostAbAttr,
-      (_user, _target, move) => !!move && move.hasFlag(MoveFlags.BITING_MOVE),
+      (_user, _target, move) => !!move?.hasFlag(MoveFlags.BITING_MOVE),
       1.5,
     ),
     new Ability(Abilities.REFRIGERATE, 6).attr(
@@ -949,7 +949,7 @@ export function initAbilities() {
     ),
     new Ability(Abilities.MEGA_LAUNCHER, 6).attr(
       MovePowerBoostAbAttr,
-      (_user, _target, move) => !!move && move.hasFlag(MoveFlags.PULSE_MOVE),
+      (_user, _target, move) => !!move?.hasFlag(MoveFlags.PULSE_MOVE),
       1.5,
     ),
     new Ability(Abilities.GRASS_PELT, 6)
@@ -958,7 +958,7 @@ export function initAbilities() {
     new Ability(Abilities.SYMBIOSIS, 6).unimplemented(),
     new Ability(Abilities.TOUGH_CLAWS, 6).attr(
       MovePowerBoostAbAttr,
-      (user, target, move) => !!user && !!move && move.checkFlag(MoveFlags.MAKES_CONTACT, user, target ?? null),
+      (user, target, move) => !!user && !!move?.checkFlag(MoveFlags.MAKES_CONTACT, user, target ?? null),
       1.3,
     ),
     new Ability(Abilities.PIXILATE, 6).attr(
@@ -1087,7 +1087,7 @@ export function initAbilities() {
       MoveTypeChangeAbAttr,
       Type.WATER,
       1,
-      (_user, _target, move) => !!move && move.hasFlag(MoveFlags.SOUND_BASED),
+      (_user, _target, move) => !!move?.hasFlag(MoveFlags.SOUND_BASED),
     ),
     new Ability(Abilities.TRIAGE, 7).attr(
       ChangeMovePriorityAbAttr,
@@ -1263,9 +1263,9 @@ export function initAbilities() {
       ReceivedMoveDamageMultiplierAbAttr,
       (user, target, move) => {
         if (!user || !target || !move) {
-          return false; // If any are missing, return false
+          return false;
         }
-        return (target.getMoveEffectiveness(user, move) ?? 1) >= 2;
+        return target.getMoveEffectiveness(user, move) >= 2;
       },
       0.75,
     ),
@@ -1273,9 +1273,9 @@ export function initAbilities() {
       MovePowerBoostAbAttr,
       (user, target, move) => {
         if (!user || !target || !move) {
-          return false; // If any are missing, return false
+          return false;
         }
-        return (target.getMoveEffectiveness(user, move) ?? 1) >= 2;
+        return target.getMoveEffectiveness(user, move) >= 2;
       },
       1.25,
     ),
@@ -1322,7 +1322,7 @@ export function initAbilities() {
       6,
     ),
     new Ability(Abilities.PUNK_ROCK, 8)
-      .attr(MovePowerBoostAbAttr, (_user, _target, move) => !!move && move.hasFlag(MoveFlags.SOUND_BASED), 1.3)
+      .attr(MovePowerBoostAbAttr, (_user, _target, move) => !!move?.hasFlag(MoveFlags.SOUND_BASED), 1.3)
       .attr(ReceivedMoveDamageMultiplierAbAttr, (_target, _user, move) => move.hasFlag(MoveFlags.SOUND_BASED), 0.5)
       .ignorable(),
     new Ability(Abilities.SAND_SPIT, 8).attr(
@@ -1604,7 +1604,7 @@ export function initAbilities() {
     new Ability(Abilities.CUD_CHEW, 9).unimplemented(),
     new Ability(Abilities.SHARPNESS, 9).attr(
       MovePowerBoostAbAttr,
-      (_user, _target, move) => !!move && move.hasFlag(MoveFlags.SLICING_MOVE),
+      (_user, _target, move) => !!move?.hasFlag(MoveFlags.SLICING_MOVE),
       1.5,
     ),
     new Ability(Abilities.SUPREME_OVERLORD, 9)

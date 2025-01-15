@@ -11,11 +11,10 @@ import { NewBattlePhase } from "#app/phases/new-battle-phase";
 import { SwitchPhase } from "#app/phases/switch-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import type { Constructor } from "#app/utils";
-import { BooleanHolder, toDmgValue } from "#app/utils";
+import { BooleanHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import i18next from "i18next";
 import { getPokemonNameWithAffix } from "../messages";
-import { HitHealModifier } from "../modifier/modifier";
 import type { AbAttr } from "./ab-attrs/ab-attr";
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import { ForceSwitchOutImmunityAbAttr } from "./ab-attrs/force-switch-out-immunity-ab-attr";
@@ -268,24 +267,6 @@ export class ForceSwitchOutHelper {
       ? i18next.t("moveTriggers:cannotBeSwitchedOut", { pokemonName: getPokemonNameWithAffix(target) })
       : null;
   }
-}
-
-/**
- * Calculates the amount of recovery from the Shell Bell item.
- *
- * If the Pokémon is holding a Shell Bell, this function computes the amount of health
- * recovered based on the damage dealt in the current turn. The recovery is multiplied by the
- * Shell Bell's modifier (if any).
- *
- * @param pokemon - The Pokémon whose Shell Bell recovery is being calculated.
- * @returns The amount of health recovered by Shell Bell.
- */
-export function calculateShellBellRecovery(pokemon: Pokemon): number {
-  const shellBellModifier = pokemon.getHeldItems().find((m) => m instanceof HitHealModifier);
-  if (shellBellModifier) {
-    return toDmgValue(pokemon.turnData.totalDamageDealt / 8) * shellBellModifier.stackCount;
-  }
-  return 0;
 }
 
 /**

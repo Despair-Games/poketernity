@@ -19,7 +19,7 @@ export class MoveTypeChangeAbAttr extends PreAttackAbAttr {
     pokemon: Pokemon,
     _simulated: boolean,
     move: Move,
-    defender: Pokemon | undefined,
+    defender?: Pokemon,
     moveType?: NumberHolder,
     power?: NumberHolder,
   ): boolean {

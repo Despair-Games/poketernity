@@ -15,10 +15,6 @@ export class AlliedFieldDamageReductionAbAttr extends PreDefendAbAttr {
     this.damageMultiplier = damageMultiplier;
   }
 
-  /**
-   * Handles the damage reduction
-   * @param multiplier {@linkcode NumberHolder} - The damage being dealt
-   */
   override apply(
     _pokemon: Pokemon,
     _simulated: boolean,
