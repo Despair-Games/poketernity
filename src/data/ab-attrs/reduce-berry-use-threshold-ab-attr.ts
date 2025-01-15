@@ -3,7 +3,7 @@ import type { NumberHolder } from "#app/utils";
 import { AbAttr } from "./ab-attr";
 
 export class ReduceBerryUseThresholdAbAttr extends AbAttr {
-  override apply(pokemon: Pokemon, _passive: boolean, _simulated: boolean, threshold: NumberHolder): boolean {
+  override apply(pokemon: Pokemon, _simulated: boolean, threshold: NumberHolder): boolean {
     const hpRatio = pokemon.getHpRatio();
 
     if (threshold.value < hpRatio) {

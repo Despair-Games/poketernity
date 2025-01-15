@@ -6,11 +6,7 @@ import i18next from "i18next";
 import { PostBattleAbAttr } from "./post-battle-ab-attr";
 
 export class PostBattleLootAbAttr extends PostBattleAbAttr {
-  /**
-   * @param args - `[0]`: boolean for if the battle ended in a victory
-   * @returns `true` if successful
-   */
-  override applyPostBattle(pokemon: Pokemon, _passive: boolean, simulated: boolean, isVictory: boolean): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean, isVictory: boolean): boolean {
     const postBattleLoot = globalScene.currentBattle.postBattleLoot;
 
     if (!simulated && postBattleLoot.length > 0 && isVictory) {

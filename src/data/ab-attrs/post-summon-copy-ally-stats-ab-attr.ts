@@ -10,7 +10,7 @@ import { PostSummonAbAttr } from "./post-summon-ab-attr";
  * @extends PostSummonAbAttr
  */
 export class PostSummonCopyAllyStatsAbAttr extends PostSummonAbAttr {
-  override applyPostSummon(pokemon: Pokemon, _passive: boolean, simulated: boolean): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean): boolean {
     if (!globalScene.currentBattle.double) {
       return false;
     }

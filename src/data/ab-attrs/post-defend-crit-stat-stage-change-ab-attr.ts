@@ -1,7 +1,6 @@
 import { Stat } from "#enums/stat";
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
-import type { HitResult } from "#enums/hit-result";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import type { BattleStat } from "#enums/stat";
@@ -23,14 +22,7 @@ export class PostDefendCritStatStageChangeAbAttr extends PostDefendAbAttr {
     this.stages = stages;
   }
 
-  override applyPostDefend(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    attacker: Pokemon,
-    _move: Move,
-    _hitResult: HitResult,
-  ): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, _move: Move): boolean {
     const attacksReceivedEntry = pokemon.turnData.attacksReceived[0];
     if (
       pokemon.turnData.attacksReceived.length !== 0

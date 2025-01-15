@@ -1,5 +1,4 @@
 import { applyAbAttrs } from "#app/data/ability";
-import { queueShowAbility } from "#app/data/ability-utils";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
@@ -17,7 +16,7 @@ export class PostSummonStatStageChangeAbAttr extends PostSummonAbAttr {
   private readonly intimidate: boolean;
 
   constructor(stats: BattleStat[], stages: number, selfTarget: boolean = false, intimidate: boolean = false) {
-    super(false);
+    super(true, true);
 
     this.stats = stats;
     this.stages = stages;
@@ -25,12 +24,11 @@ export class PostSummonStatStageChangeAbAttr extends PostSummonAbAttr {
     this.intimidate = intimidate;
   }
 
-  override applyPostSummon(pokemon: Pokemon, passive: boolean, simulated: boolean): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean): boolean {
     if (simulated) {
       return true;
     }
 
-    queueShowAbility(pokemon, passive); // TODO: Better solution than manually showing the ability here
     if (this.selfTarget) {
       // we unshift the StatStageChangePhase to put it right after the showAbility and not at the end of the
       // phase list (which could be after CommandPhase for example)

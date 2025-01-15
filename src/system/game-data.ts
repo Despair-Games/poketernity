@@ -1,5 +1,5 @@
 import i18next from "i18next";
-import { bypassLogin, SETTINGS_LS_KEY } from "#app/constants";
+import { bypassLogin, SETTINGS_LS_KEY, TUTORIALS_LS_KEY } from "#app/constants";
 import { globalScene } from "#app/global-scene";
 import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
@@ -7,7 +7,16 @@ import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { allSpecies, getPokemonSpecies, noStarterFormKeys } from "#app/data/pokemon-species";
 import { speciesStarterCosts } from "#app/data/balance/starters";
-import { randInt, getEnumKeys, isLocal, executeIf, fixedNumber, randSeedItem, NumberHolder } from "#app/utils";
+import {
+  randInt,
+  getEnumKeys,
+  isLocal,
+  executeIf,
+  fixedNumber,
+  randSeedItem,
+  NumberHolder,
+  isNullOrUndefined,
+} from "#app/utils";
 import Overrides from "#app/overrides";
 import PokemonData from "#app/system/pokemon-data";
 import PersistentModifierData from "#app/system/modifier-data";
@@ -27,7 +36,7 @@ import { Mode } from "#app/ui/ui";
 import { clientSessionId, loggedInUser, updateUserInfo } from "#app/account";
 import { Nature } from "#enums/nature";
 import { GameStats } from "#app/system/game-stats";
-import { Tutorial } from "#enums/tutorial";
+import type { Tutorial } from "#enums/tutorial";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { allMoves } from "#app/data/all-moves";
 import { TrainerVariant } from "#enums/trainer-variant";
@@ -76,7 +85,7 @@ export function getDataTypeKey(dataType: GameDataType, slotId: number = 0): stri
     case GameDataType.SETTINGS:
       return SETTINGS_LS_KEY;
     case GameDataType.TUTORIALS:
-      return "tutorials";
+      return TUTORIALS_LS_KEY;
     case GameDataType.SEEN_DIALOGUES:
       return "seenDialogues";
     case GameDataType.RUN_HISTORY:
@@ -159,10 +168,6 @@ export class StarterPrefs {
       StarterPrefers_private_latest = pStr;
     }
   }
-}
-
-export interface TutorialFlags {
-  [key: string]: boolean;
 }
 
 export interface SeenDialogues {
@@ -700,49 +705,50 @@ export class GameData {
     return true; // TODO: is `true` the correct return value?
   }
 
-  public saveTutorialFlag(tutorial: Tutorial, flag: boolean): boolean {
+  /**
+   * Retrieve the seen tutorials from local storage as {@linkcode Set}
+   * @returns the numbers saved in local storage if they exist, otherwise an empty {@linkcode Set}
+   */
+  private getSeenTutorialsSet() {
     const key = getDataTypeKey(GameDataType.TUTORIALS);
-    let tutorials: object = {};
+    const tutorials = new Set<Tutorial>();
     const lsItem = localStorage.getItem(key);
     if (lsItem) {
       try {
-        tutorials = JSON.parse(lsItem);
+        const lsTutorials: Tutorial[] = JSON.parse(lsItem);
+        lsTutorials.forEach((lsTutorial) => (!isNullOrUndefined(lsTutorial) ? tutorials.add(lsTutorial) : null));
       } catch (err) {
-        console.error("Error parsing tutorial flags from localStorage:", err);
+        console.warn("Failed to parse tutorial data from local storage", err);
       }
     }
-
-    Object.keys(Tutorial).forEach((key) => {
-      if (key === Tutorial[tutorial]) {
-        tutorials[key] = flag;
-      } else {
-        tutorials[key] ??= false;
-      }
-    });
-
-    localStorage.setItem(key, JSON.stringify(tutorials));
-
-    return true;
+    return tutorials;
   }
 
-  public getTutorialFlags(): TutorialFlags {
+  /**
+   * Registers the given tutorial as seen in local storage
+   * @param tutorial the {@linkcode Tutorial} to update the flag for
+   * @returns `true` if saving was successful, `false` otherwise
+   */
+  public saveTutorialAsSeen(tutorial: Tutorial): boolean {
     const key = getDataTypeKey(GameDataType.TUTORIALS);
-    const ret: TutorialFlags = {};
-    Object.values(Tutorial)
-      .map((tutorial) => tutorial as Tutorial)
-      .forEach((tutorial) => (ret[Tutorial[tutorial]] = false));
-
-    if (!localStorage.hasOwnProperty(key)) {
-      return ret;
+    const tutorials = this.getSeenTutorialsSet();
+    tutorials.add(tutorial);
+    try {
+      localStorage.setItem(key, JSON.stringify([...tutorials]));
+      return true;
+    } catch (err) {
+      console.error("Failed to saved tutorial data in local storage", err);
+      return false;
     }
+  }
 
-    const tutorials = JSON.parse(localStorage.getItem(key)!); // TODO: is this bang correct?
-
-    for (const tutorial of Object.keys(tutorials)) {
-      ret[tutorial] = tutorials[tutorial];
-    }
-
-    return ret;
+  /**
+   * Checks if the given tutorial is marked as seen in local storage
+   * @param tutorial the {@linkcode Tutorial} to get the flag for
+   * @returns `true` if the tutorial has already been seen, `false` otherwise
+   */
+  public isSeenTutorial(tutorial: Tutorial): boolean {
+    return this.getSeenTutorialsSet().has(tutorial) ?? false;
   }
 
   public saveSeenDialogue(dialogue: string): boolean {

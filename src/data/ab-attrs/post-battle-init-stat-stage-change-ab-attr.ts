@@ -10,14 +10,14 @@ export class PostBattleInitStatStageChangeAbAttr extends PostBattleInitAbAttr {
   private readonly selfTarget: boolean;
 
   constructor(stats: BattleStat[], stages: number, selfTarget: boolean = false) {
-    super();
+    super(true, true);
 
     this.stats = stats;
     this.stages = stages;
     this.selfTarget = selfTarget;
   }
 
-  override applyPostBattleInit(pokemon: Pokemon, _passive: boolean, simulated: boolean): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean): boolean {
     const statStageChangePhases: StatStageChangePhase[] = [];
 
     if (!simulated) {
@@ -35,7 +35,6 @@ export class PostBattleInitStatStageChangeAbAttr extends PostBattleInitAbAttr {
         if (!this.selfTarget && !statStageChangePhase.getPokemon()?.summonData) {
           globalScene.pushPhase(statStageChangePhase);
         } else {
-          // TODO: This causes the ability bar to be shown at the wrong time
           globalScene.unshiftPhase(statStageChangePhase);
         }
       }

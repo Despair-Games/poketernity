@@ -6,7 +6,7 @@ export class SyncEncounterNatureAbAttr extends AbAttr {
     super(false);
   }
 
-  override apply(pokemon: Pokemon, _passive: boolean, _simulated: boolean, opponent: Pokemon): boolean {
+  override apply(pokemon: Pokemon, _simulated: boolean, opponent: Pokemon): boolean {
     opponent.setNature(pokemon.getNature());
 
     return true;

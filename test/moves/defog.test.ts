@@ -54,7 +54,7 @@ describe("Moves - Defog", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     [ArenaTagSide.PLAYER, ArenaTagSide.ENEMY].forEach((side) =>
-      game.scene.arena.addTag(tagType, 2, Moves.NONE, 0, side, true),
+      game.scene.arena.addTag(tagType, 0, 2, Moves.NONE, side, true),
     );
 
     game.move.select(Moves.DEFOG);
@@ -76,7 +76,7 @@ describe("Moves - Defog", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     [ArenaTagSide.PLAYER, ArenaTagSide.ENEMY].forEach((side) =>
-      game.scene.arena.addTag(tagType, 2, Moves.NONE, 0, side, true),
+      game.scene.arena.addTag(tagType, 0, 2, Moves.NONE, side, true),
     );
 
     game.move.select(Moves.DEFOG);

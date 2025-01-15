@@ -11,6 +11,7 @@ import { ModifierRewardPhase } from "./modifier-reward-phase";
 import { NewBattlePhase } from "./new-battle-phase";
 import { SelectModifierPhase } from "./select-modifier-phase";
 import { TrainerVictoryPhase } from "./trainer-victory-phase";
+import { ArenaTagType } from "#enums/arena-tag-type";
 import { EVIL_BOSS_2_WAVE } from "#app/data/special-waves";
 
 export class VictoryPhase extends PokemonPhase {
@@ -48,6 +49,9 @@ export class VictoryPhase extends PokemonPhase {
     if (
       !globalScene.getEnemyParty().find((p) => (battleType === BattleType.WILD ? p.isOnField() : !p?.isFainted(true)))
     ) {
+      // clear all queued delayed attacks (e.g. from Future Sight)
+      globalScene.arena.removeTag(ArenaTagType.DELAYED_ATTACK);
+
       globalScene.pushPhase(new BattleEndPhase(true));
 
       if (battleType === BattleType.TRAINER) {
