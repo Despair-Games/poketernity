@@ -8,6 +8,7 @@ import { Species } from "#enums/species";
 import { TimeOfDay } from "#enums/time-of-day";
 import { TrainerType } from "#enums/trainer-type";
 import { BiomePoolTier } from "#enums/biome-pool-tier";
+import { uncatchableSpecies } from "./uncatchable-species";
 // import beautify from "json-beautify";
 
 export function getBiomeName(biome: Biome | -1) {
@@ -72,8 +73,6 @@ export const biomeLinks: BiomeLinks = {
 };
 
 export const biomeDepths: BiomeDepths = {};
-
-export const uncatchableSpecies: Species[] = [];
 
 export interface SpeciesTree {
   [key: number]: Species[];
