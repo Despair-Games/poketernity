@@ -1498,7 +1498,7 @@ export function getArenaTag(
  */
 export function loadArenaTag(source: ArenaTag | any): ArenaTag {
   const tag =
-    getArenaTag(source.tagType, source.turnCount, source.sourceMove, source.sourceId, source.side) ?? new NoneTag();
+    getArenaTag(source.tagType, source.sourceId, source.turnCount, source.sourceMove, source.side) ?? new NoneTag();
   tag.loadTag(source);
   return tag;
 }
