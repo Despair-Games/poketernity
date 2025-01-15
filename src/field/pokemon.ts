@@ -3456,9 +3456,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
        */
       globalScene.setPhaseQueueSplice();
       globalScene.unshiftPhase(new FaintPhase(this.getBattlerIndex(), preventEndure));
-      this.destroySubstitute();
-      this.lapseTag(BattlerTagType.COMMANDED);
-      this.resetSummonData();
     }
     return damage;
   }

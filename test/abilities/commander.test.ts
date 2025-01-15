@@ -105,7 +105,7 @@ describe("Abilities - Commander", () => {
 
     await game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER]);
 
-    await game.phaseInterceptor.to("FaintPhase", false);
+    await game.phaseInterceptor.to("FaintPhase");
     expect(dondozo.getTag(BattlerTagType.COMMANDED)).toBeUndefined();
     expect(game.scene.triggerPokemonBattleAnim).toHaveBeenLastCalledWith(dondozo, PokemonAnimType.COMMANDER_REMOVE);
 
