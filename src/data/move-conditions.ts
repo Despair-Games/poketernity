@@ -104,12 +104,14 @@ export const failOnBossCondition: MoveConditionFunc = (_user, target, _move) => 
 
 export const failIfSingleBattle: MoveConditionFunc = (_user, _target, _move) => globalScene.currentBattle.double;
 
+/** @todo Add simulated support */
 export const failIfDampCondition: MoveConditionFunc = (user, _target, move) => {
   const cancelled = new BooleanHolder(false);
-  globalScene.getField(true).map((p) =>
-    // TODO: Add simulated support for this effect
-    applyAbAttrs(FieldPreventExplosionLikeAbAttr, p, false, cancelled, getPokemonNameWithAffix(user), move.name),
-  );
+  globalScene
+    .getField(true)
+    .map((p) =>
+      applyAbAttrs(FieldPreventExplosionLikeAbAttr, p, false, cancelled, getPokemonNameWithAffix(user), move.name),
+    );
   return !cancelled.value;
 };
 
