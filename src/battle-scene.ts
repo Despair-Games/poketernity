@@ -174,6 +174,7 @@ import { bgmLoopPoint } from "./data/bgm-loop-point";
 import { allTrainerConfigs } from "./data/balance/trainer-configs/all-trainer-configs";
 import { eventBus } from "./event-bus";
 import { Animation } from "./animations";
+import { setStarterColors, starterColors } from "./data/starter-colors";
 
 const DEBUG_RNG = false;
 
@@ -182,11 +183,6 @@ const OPP_IVS_OVERRIDE_VALIDATED: number[] = (
 ).map((iv) => (isNaN(iv) || iv === null || iv > 31 ? -1 : iv));
 
 export const startingWave = Overrides.STARTING_WAVE_OVERRIDE || 1;
-
-export let starterColors: StarterColors;
-interface StarterColors {
-  [key: string]: [string, string];
-}
 
 export interface PokeballCounts {
   [pb: string]: number;
@@ -740,7 +736,7 @@ export default class BattleScene extends SceneBase {
       this.cachedFetch("./starter-colors.json")
         .then((res) => res.json())
         .then((sc) => {
-          starterColors = {};
+          setStarterColors({});
           Object.keys(sc).forEach((key) => {
             starterColors[key] = sc[key];
           });
