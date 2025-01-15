@@ -37,8 +37,9 @@ describe("Abilities - Fur Coat", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "getEffectiveStat");
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     game.move.select(Moves.TACKLE);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.phaseInterceptor.to("MoveEndPhase", false);
 
     expect(enemyPokemon.getEffectiveStat).toHaveReturnedWith(enemyPokemon.stats[Stat.DEF] * 2);
   });
@@ -47,8 +48,9 @@ describe("Abilities - Fur Coat", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "getEffectiveStat");
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     game.move.select(Moves.PSYSHOCK);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.phaseInterceptor.to("MoveEndPhase", false);
 
     expect(enemyPokemon.getEffectiveStat).toHaveReturnedWith(enemyPokemon.getStat(Stat.DEF) * 2);
   });
@@ -62,7 +64,8 @@ describe("Abilities - Fur Coat", () => {
     game.move.select(Moves.SWEET_KISS);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("MoveEndPhase", false);
 
     expect(enemyPokemon.getEffectiveStat).toHaveReturnedWith(enemyPokemon.getStat(Stat.DEF));
   });
@@ -76,7 +79,7 @@ describe("Abilities - Fur Coat", () => {
     game.move.select(Moves.SPLASH);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.phaseInterceptor.to("MoveEndPhase", false);
 
     expect(enemyPokemon.getEffectiveStat).toHaveReturnedWith(enemyPokemon.getStat(Stat.DEF));
   });
