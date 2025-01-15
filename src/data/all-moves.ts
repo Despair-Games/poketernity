@@ -245,6 +245,8 @@ import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { NoDamageAgainstFlyingAttr } from "./move-attrs/no-damage-against-flying-attr";
 import { SkyDropAttr } from "./move-attrs/sky-drop-attr";
 import { StatStageChangeAllOppsAttr } from "./move-attrs/stat-stage-change-all-opps";
+import { MultiStatusAllOppsEffectAttr } from "./move-attrs/multi-status-all-opps-effect-attr";
+import { AddBattlerTagAllOppsAttr } from "./move-attrs/add-battler-tag-all-opps-attr";
 
 export const allMoves: Move[] = [];
 
@@ -3262,13 +3264,15 @@ export function initMoves() {
       ArenaTagType.G_MAX_WILDFIRE,
     ),
     new AttackMove(Moves.G_MAX_BEFUDDLE, Type.BUG, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).attr(
-      MultiStatusEffectAttr,
+      MultiStatusAllOppsEffectAttr,
       [StatusEffect.POISON, StatusEffect.PARALYSIS, StatusEffect.SLEEP],
-    ), // TODO: Needs to status all opponents
+      true,
+    ),
     new AttackMove(Moves.G_MAX_VOLT_CRASH, Type.ELECTRIC, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).attr(
-      StatusEffectAttr,
-      StatusEffect.PARALYSIS,
-    ), // TODO: Needs to status all opponents
+      MultiStatusAllOppsEffectAttr,
+      [StatusEffect.PARALYSIS],
+      true,
+    ),
     new AttackMove(Moves.G_MAX_GOLD_RUSH, Type.NORMAL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).attr(MoneyAttr), // TODO: Should give 100x user level money
     new AttackMove(Moves.G_MAX_CHI_STRIKE, Type.FIGHTING, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).attr(
       AddBattlerTagAttr,
@@ -3277,25 +3281,24 @@ export function initMoves() {
       { failOnOverlap: false },
     ), // TODO: Should also give the user's ally chi strike crit boost
     new AttackMove(Moves.G_MAX_TERROR, Type.GHOST, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).attr(
-      AddBattlerTagAttr,
+      AddBattlerTagAllOppsAttr,
       BattlerTagType.TRAPPED,
-      false,
-      { failOnOverlap: true },
-    ), // TODO: Does this also trap both opponents?
+    ),
     new AttackMove(Moves.G_MAX_RESONANCE, Type.ICE, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).attr(
       AddArenaTagAttr,
       ArenaTagType.AURORA_VEIL,
       { turnCount: 5, selfSideTarget: true },
     ),
     new AttackMove(Moves.G_MAX_CUDDLE, Type.NORMAL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).attr(
-      AddBattlerTagAttr,
+      AddBattlerTagAllOppsAttr,
       BattlerTagType.INFATUATED,
-    ), // TODO: Should only add tag if targets are opposite gender
+    ),
     new AttackMove(Moves.G_MAX_REPLENISH, Type.NORMAL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).unimplemented(), // TODO: Same effect as recycle (N) but also replenish ally's items
     new AttackMove(Moves.G_MAX_MALODOR, Type.POISON, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).attr(
-      StatusEffectAttr,
-      StatusEffect.POISON,
-    ), // TODO: Needs to status all opponents
+      MultiStatusAllOppsEffectAttr,
+      [StatusEffect.POISON],
+      true,
+    ),
     new AttackMove(Moves.G_MAX_STONESURGE, Type.WATER, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).attr(
       AddArenaTrapTagHitAttr,
       ArenaTagType.STEALTH_ROCK,
@@ -3307,9 +3310,10 @@ export function initMoves() {
       .attr(RemoveArenaTrapAttr, true)
       .attr(RemoveArenaTagsAttr, [ArenaTagType.SAFEGUARD, ArenaTagType.MIST], ArenaTagRelativeSide.TARGET),
     new AttackMove(Moves.G_MAX_STUN_SHOCK, Type.ELECTRIC, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).attr(
-      MultiStatusEffectAttr,
+      MultiStatusAllOppsEffectAttr,
       [StatusEffect.POISON, StatusEffect.PARALYSIS],
-    ), // TODO: Needs to status all opponents
+      false,
+    ),
     new AttackMove(Moves.G_MAX_FINALE, Type.FAIRY, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).attr(
       HealAttr,
       1 / 6,
@@ -3334,12 +3338,10 @@ export function initMoves() {
       BattlerTagType.SAND_TOMB,
     ),
     new AttackMove(Moves.G_MAX_SNOOZE, Type.DARK, MoveCategory.PHYSICAL, 10, -1, 10, 50, 0, 8).attr(
-      AddBattlerTagAttr,
+      AddBattlerTagAllOppsAttr,
       BattlerTagType.DROWSY,
-      false,
-      { failOnOverlap: true },
     ),
-    new AttackMove(Moves.G_MAX_TARTNESS, Type.GRASS, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).attr(
+    new AttackMove(Moves.G_MAX_TARTNESS, Type.GRASS, MoveCategory.PHYSICAL, 1000, -1, 10, -1, 0, 8).attr(
       StatStageChangeAllOppsAttr,
       [Stat.EVA],
       -1,
@@ -3349,17 +3351,18 @@ export function initMoves() {
       false,
       getNonVolatileStatusEffects(),
     ), // TODO: Should also heal ally of status
-    new AttackMove(Moves.G_MAX_SMITE, Type.FAIRY, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).attr(ConfuseAttr), // TODO: Needs to confuse all opponents
+    new AttackMove(Moves.G_MAX_SMITE, Type.FAIRY, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).attr(
+      AddBattlerTagAllOppsAttr,
+      BattlerTagType.CONFUSED,
+    ),
     new AttackMove(Moves.G_MAX_STEELSURGE, Type.STEEL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).attr(
       AddArenaTrapTagHitAttr,
       ArenaTagType.SHARP_STEEL,
     ),
     new AttackMove(Moves.G_MAX_MELTDOWN, Type.STEEL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).attr(
-      AddBattlerTagAttr,
+      AddBattlerTagAllOppsAttr,
       BattlerTagType.TORMENT,
-      false,
-      { failOnOverlap: true },
-    ), // TODO: Needs to torment all opponents
+    ),
     new AttackMove(Moves.G_MAX_FOAM_BURST, Type.WATER, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).attr(
       StatStageChangeAllOppsAttr,
       [Stat.SPD],

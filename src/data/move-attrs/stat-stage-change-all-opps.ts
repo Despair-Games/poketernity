@@ -1,6 +1,6 @@
 import { MoveCategory } from "#enums/move-category";
 import { type BattleStat, Stat } from "#enums/stat";
-import type { Pokemon } from "#app/field/pokemon";
+import { PlayerPokemon, type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { AttackMove } from "../move";
@@ -21,7 +21,7 @@ interface StatStageChangeAllOppsAttrOptions extends MoveEffectAttrOptions {
 }
 
 /**
- * Attribute used for moves that change stat stages
+ * Attribute used for G-Max moves that change the stats of all opponents
  *
  * @param stats {@linkcode BattleStat} Array of stat(s) to change
  * @param stages How many stages to change the stat(s) by, [-6, 6]
@@ -64,17 +64,24 @@ export class StatStageChangeAllOppsAttr extends MoveEffectAttr {
   }
 
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
-    if (!super.apply(user, target, move) || (this.condition && !this.condition(user, target, move))) {
+    if (this.condition && !this.condition(user, target, move)) {
       return false;
     }
 
-    const moveChance = this.getMoveChance(user, target, move, this.selfTarget, true);
+    const moveChance = this.getMoveChance(user, target, move, false, true);
     if (moveChance < 0 || moveChance === 100 || user.randSeedInt(100) < moveChance) {
-      const stages = this.stages;
-      const allOpps = [target, target.getAlly()];
+      let allOpps: Pokemon[];
+      if (target instanceof PlayerPokemon) {
+        allOpps = globalScene.getPlayerField();
+      } else {
+        allOpps = globalScene.getEnemyField();
+      }
+      allOpps = allOpps.filter((p) => p.isActive);
       allOpps.forEach((opp) =>
         globalScene.unshiftPhase(
-          new StatStageChangePhase(opp.getBattlerIndex(), false, this.stats, stages, { showMessage: this.showMessage }),
+          new StatStageChangePhase(opp.getBattlerIndex(), false, this.stats, this.stages, {
+            showMessage: this.showMessage,
+          }),
         ),
       );
       return true;
@@ -85,9 +92,8 @@ export class StatStageChangeAllOppsAttr extends MoveEffectAttr {
 
   override getTargetBenefitScore(user: Pokemon, target: Pokemon, _move: Move): number {
     let ret = 0;
-    const moveLevels = this.stages;
     for (const stat of this.stats) {
-      let levels = moveLevels;
+      let levels = this.stages;
       const statStage = target.getStatStage(stat);
       if (levels > 0) {
         levels = Math.min(statStage + levels, 6) - statStage;
@@ -97,24 +103,14 @@ export class StatStageChangeAllOppsAttr extends MoveEffectAttr {
       let noEffect = false;
       switch (stat) {
         case Stat.ATK:
-          if (this.selfTarget) {
-            noEffect = !user.getMoveset().find((m) => m instanceof AttackMove && m.category === MoveCategory.PHYSICAL);
-          }
           break;
         case Stat.DEF:
-          if (!this.selfTarget) {
-            noEffect = !user.getMoveset().find((m) => m instanceof AttackMove && m.category === MoveCategory.PHYSICAL);
-          }
+          noEffect = !user.getMoveset().find((m) => m instanceof AttackMove && m.category === MoveCategory.PHYSICAL);
           break;
         case Stat.SPATK:
-          if (this.selfTarget) {
-            noEffect = !user.getMoveset().find((m) => m instanceof AttackMove && m.category === MoveCategory.SPECIAL);
-          }
           break;
         case Stat.SPDEF:
-          if (!this.selfTarget) {
-            noEffect = !user.getMoveset().find((m) => m instanceof AttackMove && m.category === MoveCategory.SPECIAL);
-          }
+          noEffect = !user.getMoveset().find((m) => m instanceof AttackMove && m.category === MoveCategory.SPECIAL);
           break;
       }
       if (noEffect) {
