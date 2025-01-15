@@ -1,21 +1,14 @@
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
-import { HitResult } from "#enums/hit-result";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { Type } from "#enums/type";
 import i18next from "i18next";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
+import { MoveCategory } from "#enums/move-category";
 
 export class PostDefendTypeChangeAbAttr extends PostDefendAbAttr {
-  override applyPostDefend(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
-    hitResult: HitResult,
-  ): boolean {
-    if (hitResult < HitResult.NO_EFFECT) {
+  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
+    if (attacker.getMoveCategory(pokemon, move) !== MoveCategory.STATUS) {
       if (simulated) {
         return true;
       }

@@ -1,31 +1,26 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { StatusEffect } from "#enums/status-effect";
-import { PostSetStatusAbAttr } from "./post-set-status-ab-attr";
+import { AbAttr } from "./ab-attr";
 
 /**
  * If another Pokemon burns, paralyzes, poisons, or badly poisons this Pokemon,
  * that Pokemon receives the same non-volatile status condition as part of this
- * ability attribute. For Synchronize ability.
- * @extends PostSetStatusAbAttr
+ * ability attribute.
+ * Used for {@linkcode https://bulbapedia.bulbagarden.net/wiki/Synchronize_(Ability) | Synchronize}.
+ * @extends AbAttr
  */
-export class SynchronizeStatusAbAttr extends PostSetStatusAbAttr {
+export class SynchronizeStatusAbAttr extends AbAttr {
   /**
-   * If the `StatusEffect` that was set is Burn, Paralysis, Poison, or Toxic, and the status
-   * was set by a source Pokemon, set the source Pokemon's status to the same `StatusEffect`.
-   * @param pokemon {@linkcode Pokemon} that status condition was set on.
-   * @param sourcePokemon {@linkcode Pokemon} that that set the status condition. Is null if status was not set by a Pokemon.
-   * @param _passive N/A
-   * @param effect {@linkcode StatusEffect} that was set.
-   * @param _args N/A
-   * @returns `true` if application of the ability succeeds.
+   * When afflicted with burn, paralysis, or poison, copies the status
+   * effect onto the source of the status condition
+   * @param pokemon The {@linkcode Pokemon} with this ability
+   * @param simulated If `true`, suppresses changes to game state
+   * @param sourcePokemon The {@linkcode Pokemon} applying the status effect
+   * @param effect The {@linkcode StatusEffect} being applied
+   * @returns `true` if this effect attempts to copy the status effect
+   * onto the source.
    */
-  override applyPostSetStatus(
-    pokemon: Pokemon,
-    sourcePokemon: Pokemon | null = null,
-    _passive: boolean,
-    effect: StatusEffect,
-    simulated: boolean,
-  ): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean, sourcePokemon: Pokemon, effect: StatusEffect): boolean {
     /** Synchronizable statuses */
     const syncStatuses = new Set<StatusEffect>([
       StatusEffect.BURN,

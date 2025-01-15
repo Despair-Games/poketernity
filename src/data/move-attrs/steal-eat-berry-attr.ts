@@ -4,7 +4,7 @@ import { BooleanHolder } from "#app/utils";
 import i18next from "i18next";
 import { BlockItemTheftAbAttr } from "#app/data/ab-attrs/block-item-theft-ab-attr";
 import { PostItemLostAbAttr } from "#app/data/ab-attrs/post-item-lost-ab-attr";
-import { applyAbAttrs, applyPostItemLostAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/ability";
 import type { Move } from "#app/data/move";
 import { EatBerryAttr } from "#app/data/move-attrs/eat-berry-attr";
 
@@ -31,7 +31,7 @@ export class StealEatBerryAttr extends EatBerryAttr {
     }
     // if the target has berries, pick a random berry and steal it
     this.chosenBerry = heldBerries[user.randSeedInt(heldBerries.length)];
-    applyPostItemLostAbAttrs(PostItemLostAbAttr, target, false);
+    applyAbAttrs(PostItemLostAbAttr, target, false);
     const message = i18next.t("battle:stealEatBerry", {
       pokemonName: user.name,
       targetName: target.name,

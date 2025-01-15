@@ -14,14 +14,7 @@ export class MovePowerBoostAbAttr extends VariableMovePowerAbAttr {
     this.powerMultiplier = powerMultiplier;
   }
 
-  override applyPreAttack(
-    pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    defender: Pokemon,
-    move: Move,
-    power: NumberHolder,
-  ): boolean {
+  override apply(pokemon: Pokemon, _simulated: boolean, move: Move, defender: Pokemon, power: NumberHolder): boolean {
     if (this.condition(pokemon, defender, move)) {
       power.value *= this.powerMultiplier;
       return true;

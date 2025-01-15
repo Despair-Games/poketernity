@@ -1,6 +1,6 @@
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
-import { type BooleanHolder, type NumberHolder } from "#app/utils";
+import type { NumberHolder } from "#app/utils";
 import { PreDefendAbAttr } from "./pre-defend-ab-attr";
 
 //#region Types
@@ -20,13 +20,11 @@ export class ReceivedMoveDamageMultiplierAbAttr extends PreDefendAbAttr {
     this.damageMultiplier = damageMultiplier;
   }
 
-  override applyPreDefend(
+  override apply(
     pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
     attacker: Pokemon,
     move: Move,
-    _cancelled: BooleanHolder,
     multiplier: NumberHolder,
   ): boolean {
     if (this.condition(pokemon, attacker, move)) {

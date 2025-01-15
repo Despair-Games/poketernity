@@ -17,7 +17,7 @@ export class PostIntimidateStatStageChangeAbAttr extends AbAttr {
     this.overwrites = overwrites;
   }
 
-  override apply(pokemon: Pokemon, _passive: boolean, simulated: boolean, cancelled: BooleanHolder): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean, cancelled: BooleanHolder): boolean {
     if (!simulated) {
       globalScene.pushPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), false, this.stats, this.stages));
     }

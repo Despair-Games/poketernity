@@ -55,9 +55,9 @@ export class SwapArenaTagsAttr extends MoveEffectAttr {
         globalScene.arena.removeTagOnSide(swapTagsType.tagType, ArenaTagSide.PLAYER, true);
         globalScene.arena.addTag(
           swapTagsType.tagType,
+          swapTagsType.sourceId!,
           swapTagsType.turnCount,
           swapTagsType.sourceMove,
-          swapTagsType.sourceId!,
           ArenaTagSide.ENEMY,
           true,
         ); // TODO: is the bang correct?
@@ -68,9 +68,9 @@ export class SwapArenaTagsAttr extends MoveEffectAttr {
         globalScene.arena.removeTagOnSide(swapTagsType.tagType, ArenaTagSide.ENEMY, true);
         globalScene.arena.addTag(
           swapTagsType.tagType,
+          swapTagsType.sourceId!,
           swapTagsType.turnCount,
           swapTagsType.sourceMove,
-          swapTagsType.sourceId!,
           ArenaTagSide.PLAYER,
           true,
         ); // TODO: is the bang correct?

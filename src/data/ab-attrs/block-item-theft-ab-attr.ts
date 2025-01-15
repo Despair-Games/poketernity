@@ -5,9 +5,8 @@ import i18next from "i18next";
 import { AbAttr } from "./ab-attr";
 
 export class BlockItemTheftAbAttr extends AbAttr {
-  override apply(_pokemon: Pokemon, _passive: boolean, _simulated: boolean, cancelled: BooleanHolder): boolean {
+  override apply(_pokemon: Pokemon, _simulated: boolean, cancelled: BooleanHolder): boolean {
     cancelled.value = true;
-
     return true;
   }
 

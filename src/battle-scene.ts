@@ -65,7 +65,7 @@ import {
 } from "#app/modifier/modifier-type";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import AbilityBar from "#app/ui/ability-bar";
-import { allAbilities, applyAbAttrs, applyPostBattleInitAbAttrs, applyPostItemLostAbAttrs } from "#app/data/ability";
+import { allAbilities, applyAbAttrs } from "#app/data/ability";
 import { PostItemLostAbAttr } from "./data/ab-attrs/post-item-lost-ab-attr";
 import type { FixedBattleConfig } from "#app/battle";
 import type { BattlerIndex } from "#enums/battler-index";
@@ -1435,7 +1435,7 @@ export default class BattleScene extends SceneBase {
 
         for (const pokemon of this.getPlayerParty()) {
           pokemon.resetBattleData();
-          applyPostBattleInitAbAttrs(PostBattleInitAbAttr, pokemon);
+          applyAbAttrs(PostBattleInitAbAttr, pokemon, false);
         }
 
         if (!this.trainer.visible) {
@@ -2697,13 +2697,13 @@ export default class BattleScene extends SceneBase {
           if (target.isPlayer()) {
             this.addModifier(newItemModifier, ignoreUpdate, playSound, false, instant);
             if (source && itemLost) {
-              applyPostItemLostAbAttrs(PostItemLostAbAttr, source, false);
+              applyAbAttrs(PostItemLostAbAttr, source, false);
             }
             return true;
           } else {
             this.addEnemyModifier(newItemModifier, ignoreUpdate, instant);
             if (source && itemLost) {
-              applyPostItemLostAbAttrs(PostItemLostAbAttr, source, false);
+              applyAbAttrs(PostItemLostAbAttr, source, false);
             }
             return true;
           }

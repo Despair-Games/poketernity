@@ -3,7 +3,7 @@ import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
 import type { BattleStat } from "#enums/stat";
-import { StatStageAbAttr } from "./stat-stage-ab-attr";
+import { AbAttr } from "./ab-attr";
 
 /**
  * Ability attribute that multiplies a Pokemon's stat by a factor
@@ -37,27 +37,38 @@ import { StatStageAbAttr } from "./stat-stage-ab-attr";
 +-----------------------+-------+--------+----------------------------------+
 ```
  */
-export class StatMultiplierAbAttr extends StatStageAbAttr {
-  private readonly multiplier: number;
-  private readonly condition?: PokemonAttackCondition;
+export class StatMultiplierAbAttr extends AbAttr {
+  protected stat: BattleStat;
+  protected readonly multiplier: number;
+  protected readonly condition?: PokemonAttackCondition;
 
   constructor(stat: BattleStat, multiplier: number, condition?: PokemonAttackCondition) {
-    super(stat);
+    super();
 
+    this.stat = stat;
     this.multiplier = multiplier;
     this.condition = condition;
   }
 
-  override applyStatStage(
+  /**
+   * Applies a multiplier to a given stat on the source if conditions are met.
+   * @param pokemon The {@linkcode Pokemon} with this ability
+   * @param simulated If `true`, suppresses changes to game state
+   * @param stat The {@linkcode BattleStat} being evaluated
+   * @param statValue A {@linkcode NumberHolder} containing the value of the evaluated stat
+   * @param move The {@linkcode Move} being used at the time of evaluation
+   * @param target The {@linkcode Pokemon} targeted by the move
+   * @returns `true` if this attribute's multiplier applies to the evaluated stat
+   */
+  override apply(
     pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
     stat: BattleStat,
     statValue: NumberHolder,
-    move: Move,
+    move?: Move,
     target?: Pokemon,
   ): boolean {
-    if (stat === this.stat && (!this.condition || this.condition(pokemon, target ?? null, move))) {
+    if (stat === this.stat && (!this.condition || this.condition(pokemon, target, move))) {
       statValue.value *= this.multiplier;
       return true;
     }
