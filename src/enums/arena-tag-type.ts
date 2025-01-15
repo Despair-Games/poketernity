@@ -5,8 +5,6 @@ export enum ArenaTagType {
   SPIKES,
   TOXIC_SPIKES,
   MIST,
-  FUTURE_SIGHT,
-  DOOM_DESIRE,
   WISH,
   STEALTH_ROCK,
   STICKY_WEB,
@@ -34,4 +32,5 @@ export enum ArenaTagType {
   G_MAX_CANNONADE,
   G_MAX_VOLCALITH,
   SHARP_STEEL,
+  DELAYED_ATTACK,
 }

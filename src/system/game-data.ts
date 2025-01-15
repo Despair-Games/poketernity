@@ -1,5 +1,5 @@
 import i18next from "i18next";
-import { bypassLogin, SETTINGS_LS_KEY } from "#app/constants";
+import { bypassLogin, SETTINGS_LS_KEY, TUTORIALS_LS_KEY } from "#app/constants";
 import { globalScene } from "#app/global-scene";
 import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
@@ -27,7 +27,7 @@ import { Mode } from "#app/ui/ui";
 import { clientSessionId, loggedInUser, updateUserInfo } from "#app/account";
 import { Nature } from "#enums/nature";
 import { GameStats } from "#app/system/game-stats";
-import { Tutorial } from "#enums/tutorial";
+import type { Tutorial } from "#enums/tutorial";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { allMoves } from "#app/data/all-moves";
 import { TrainerVariant } from "#enums/trainer-variant";
@@ -75,7 +75,7 @@ export function getDataTypeKey(dataType: GameDataType, slotId: number = 0): stri
     case GameDataType.SETTINGS:
       return SETTINGS_LS_KEY;
     case GameDataType.TUTORIALS:
-      return "tutorials";
+      return TUTORIALS_LS_KEY;
     case GameDataType.SEEN_DIALOGUES:
       return "seenDialogues";
     case GameDataType.RUN_HISTORY:
@@ -158,10 +158,6 @@ export class StarterPrefs {
       StarterPrefers_private_latest = pStr;
     }
   }
-}
-
-export interface TutorialFlags {
-  [key: string]: boolean;
 }
 
 export interface SeenDialogues {
@@ -699,49 +695,49 @@ export class GameData {
     return true; // TODO: is `true` the correct return value?
   }
 
-  public saveTutorialFlag(tutorial: Tutorial, flag: boolean): boolean {
+  /**
+   * Retrieve the tutorial seen flags from local storage
+   * @returns the flags saved in local storage if they exist, otherwise an empty array
+   */
+  private getTutorialFlags(): (boolean | null)[] {
     const key = getDataTypeKey(GameDataType.TUTORIALS);
-    let tutorials: object = {};
+    let tutorials = [];
     const lsItem = localStorage.getItem(key);
     if (lsItem) {
       try {
         tutorials = JSON.parse(lsItem);
       } catch (err) {
-        console.error("Error parsing tutorial flags from localStorage:", err);
+        console.warn("Failed to parse tutorial data from local storage", err);
       }
     }
-
-    Object.keys(Tutorial).forEach((key) => {
-      if (key === Tutorial[tutorial]) {
-        tutorials[key] = flag;
-      } else {
-        tutorials[key] ??= false;
-      }
-    });
-
-    localStorage.setItem(key, JSON.stringify(tutorials));
-
-    return true;
+    return tutorials;
   }
 
-  public getTutorialFlags(): TutorialFlags {
+  /**
+   * Registers the given tutorial as seen in local storage
+   * @param tutorial the {@linkcode Tutorial} to update the flag for
+   * @returns `true` if saving was successful, `false` otherwise
+   */
+  public saveTutorialAsSeen(tutorial: Tutorial): boolean {
     const key = getDataTypeKey(GameDataType.TUTORIALS);
-    const ret: TutorialFlags = {};
-    Object.values(Tutorial)
-      .map((tutorial) => tutorial as Tutorial)
-      .forEach((tutorial) => (ret[Tutorial[tutorial]] = false));
-
-    if (!localStorage.hasOwnProperty(key)) {
-      return ret;
+    const tutorials = this.getTutorialFlags();
+    tutorials[tutorial] = true;
+    try {
+      localStorage.setItem(key, JSON.stringify(tutorials));
+      return true;
+    } catch (err) {
+      console.error("Failed to saved tutorial data in local storage", err);
+      return false;
     }
+  }
 
-    const tutorials = JSON.parse(localStorage.getItem(key)!); // TODO: is this bang correct?
-
-    for (const tutorial of Object.keys(tutorials)) {
-      ret[tutorial] = tutorials[tutorial];
-    }
-
-    return ret;
+  /**
+   * Checks if the given tutorial is marked as seen in local storage
+   * @param tutorial the {@linkcode Tutorial} to get the flag for
+   * @returns `true` if the tutorial has already been seen, `false` otherwise
+   */
+  public isSeenTutorial(tutorial: Tutorial): boolean {
+    return this.getTutorialFlags()[tutorial] ?? false;
   }
 
   public saveSeenDialogue(dialogue: string): boolean {

@@ -33,7 +33,7 @@ const tutorialHandlers = {
   },
   [Tutorial.MENU]: () => {
     return new Promise<void>((resolve) => {
-      globalScene.gameData.saveTutorialFlag(Tutorial.ACCESS_MENU, true);
+      globalScene.gameData.saveTutorialAsSeen(Tutorial.ACCESS_MENU);
       globalScene.ui.showText(
         i18next.t("tutorial:menu"),
         null,
@@ -121,7 +121,7 @@ export async function handleTutorial(tutorial: Tutorial): Promise<boolean> {
     return false;
   }
 
-  if (globalScene.gameData.getTutorialFlags()[tutorial] && !Overrides.BYPASS_TUTORIAL_SKIP_OVERRIDE) {
+  if (globalScene.gameData.isSeenTutorial(tutorial) && !Overrides.BYPASS_TUTORIAL_SKIP_OVERRIDE) {
     return false;
   }
 
@@ -140,7 +140,7 @@ export async function handleTutorial(tutorial: Tutorial): Promise<boolean> {
 
   // tutorial finished and overlay gone, re-enable menu, save tutorial as seen
   globalScene.disableMenu = isMenuDisabled;
-  globalScene.gameData.saveTutorialFlag(tutorial, true);
+  globalScene.gameData.saveTutorialAsSeen(tutorial);
   if (handler instanceof AwaitableUiHandler) {
     handler.tutorialActive = false;
   }

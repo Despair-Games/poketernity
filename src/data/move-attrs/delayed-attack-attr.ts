@@ -1,4 +1,4 @@
-import type { ArenaTagType } from "#enums/arena-tag-type";
+import { ArenaTagType } from "#enums/arena-tag-type";
 import { type Pokemon } from "#app/field/pokemon";
 import { MoveResult } from "#enums/move-result";
 import { globalScene } from "#app/global-scene";
@@ -9,6 +9,8 @@ import i18next from "i18next";
 import { type ChargeAnim, MoveChargeAnim } from "#app/data/battle-anims";
 import type { Move } from "#app/data/move";
 import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
+import type { DelayedAttackTag } from "#app/data/arena-tag";
+import type { MoveConditionFunc } from "#app/data/move-conditions";
 
 /**
  * Attack Move that doesn't hit the turn it is played and doesn't allow for multiple uses on the same target.
@@ -17,14 +19,12 @@ import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effec
  * @extends OverrideMoveEffectAttr
  */
 export class DelayedAttackAttr extends OverrideMoveEffectAttr {
-  public tagType: ArenaTagType;
   public chargeAnim: ChargeAnim;
   private chargeText: string;
 
-  constructor(tagType: ArenaTagType, chargeAnim: ChargeAnim, chargeText: string) {
+  constructor(chargeAnim: ChargeAnim, chargeText: string) {
     super();
 
-    this.tagType = tagType;
     this.chargeAnim = chargeAnim;
     this.chargeText = chargeText;
   }
@@ -49,8 +49,14 @@ export class DelayedAttackAttr extends OverrideMoveEffectAttr {
           .replace("{USER}", getPokemonNameWithAffix(user)),
       );
       user.pushMoveHistory({ move: move.id, targets: [target.getBattlerIndex()], result: MoveResult.OTHER });
-      const side = target.getArenaTagSide();
-      globalScene.arena.addTag(this.tagType, 3, move.id, user.id, side, false, target.getBattlerIndex());
+      // Add a Delayed Attack tag to the arena if it doesn't already exist
+      globalScene.arena.addTag(ArenaTagType.DELAYED_ATTACK, user.id);
+      // Queue an attack on the added (or existing) tag
+      const tag = globalScene.arena.getTag(ArenaTagType.DELAYED_ATTACK) as DelayedAttackTag;
+      if (tag) {
+        tag.addAttack(user, move.id, target.getBattlerIndex());
+      }
+      return true;
     } else {
       globalScene.queueMessage(
         i18next.t("moveTriggers:tookMoveAttack", {
@@ -60,5 +66,13 @@ export class DelayedAttackAttr extends OverrideMoveEffectAttr {
       );
     }
     return true;
+  }
+
+  /** Delayed attacks fail if another delayed attack is already queued against the target */
+  override getCondition(): MoveConditionFunc {
+    return (_user, target, _move) => {
+      const delayedAttackTag = globalScene.arena.getTag(ArenaTagType.DELAYED_ATTACK) as DelayedAttackTag;
+      return !delayedAttackTag?.delayedAttacks.some((attack) => attack.targetIndex === target.getBattlerIndex());
+    };
   }
 }
