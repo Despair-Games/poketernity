@@ -116,12 +116,17 @@ describe("Abilities - Unaware", () => {
     vi.spyOn(enemyPokemon, "getEffectiveStat");
     const expectedDef = enemyPokemon.getStat(Stat.DEF);
 
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+
     game.move.use(Moves.SPLASH);
     await game.move.forceEnemyMove(Moves.IRON_DEFENSE);
     await game.toNextTurn();
+
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+
     game.move.use(Moves.SPLASH);
     await game.move.forceEnemyMove(Moves.BODY_PRESS);
-    await game.toNextTurn();
+    await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(enemyPokemon.getEffectiveStat).toHaveLastReturnedWith(expectedDef);
   });
@@ -146,19 +151,21 @@ describe("Abilities - Unaware", () => {
     playerPokemon.addTag(BattlerTagType.CONFUSED);
     enemyPokemon.addTag(BattlerTagType.CONFUSED);
 
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     game.move.use(Moves.SPLASH);
     await game.move.forceEnemyMove(Moves.SPLASH);
-    await game.toNextTurn();
 
-    expect(playerPokemon.isFullHp()).toBe(false);
-    expect(enemyPokemon.isFullHp()).toBe(false);
+    await game.phaseInterceptor.to("MovePhase");
 
-    // Check that each Pokemon's most recently computed stat is either their boosted Atk or their boosted Def
+    expect(playerPokemon.isFullHp()).toBeFalsy();
     try {
       expect(playerPokemon.getEffectiveStat).toHaveLastReturnedWith(expectedPlayerAtk);
     } catch {
       expect(playerPokemon.getEffectiveStat).toHaveLastReturnedWith(expectedPlayerDef);
     }
+
+    await game.phaseInterceptor.to("MovePhase");
+    expect(enemyPokemon.isFullHp()).toBe(false);
     try {
       expect(enemyPokemon.getEffectiveStat).toHaveLastReturnedWith(expectedEnemyAtk);
     } catch {
