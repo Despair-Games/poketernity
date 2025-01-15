@@ -11,7 +11,6 @@ import {
   FusePokemonModifierType,
   getPlayerModifierTypeOptions,
   getPlayerShopModifierTypeOptionsForWave,
-  ModifierPoolType,
   PokemonModifierType,
   PokemonMoveModifierType,
   PokemonPpRestoreModifierType,
@@ -23,6 +22,7 @@ import {
   type ModifierType,
   type ModifierTypeOption,
 } from "#app/modifier/modifier-type";
+import { ModifierPoolType } from "#enums/modifier-pool-type";
 import Overrides from "#app/overrides";
 import type ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
 import { SHOP_OPTIONS_ROW_LIMIT } from "#app/ui/modifier-select-ui-handler";

@@ -1,5 +1,5 @@
 import { allMoves } from "#app/data/all-moves";
-import { MoveCategory } from "../../enums/move-category";
+import { MoveCategory } from "#enums/move-category";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";

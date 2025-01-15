@@ -1,5 +1,6 @@
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { type Pokemon, HitResult } from "#app/field/pokemon";
+import { type Pokemon } from "#app/field/pokemon";
+import { HitResult } from "#enums/hit-result";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { BooleanHolder } from "#app/utils";
 import i18next from "i18next";

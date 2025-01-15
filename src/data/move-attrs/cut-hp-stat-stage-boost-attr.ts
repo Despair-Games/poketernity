@@ -1,5 +1,6 @@
 import type { BattleStat } from "#enums/stat";
-import { type Pokemon, HitResult } from "#app/field/pokemon";
+import { type Pokemon } from "#app/field/pokemon";
+import { HitResult } from "#enums/hit-result";
 import { toDmgValue } from "#app/utils";
 import type { Move } from "#app/data/move";
 import { StatStageChangeAttr } from "#app/data/move-attrs/stat-stage-change-attr";

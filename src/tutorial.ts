@@ -4,27 +4,18 @@ import type UiHandler from "./ui/ui-handler";
 import { Mode } from "./ui/ui";
 import i18next from "i18next";
 import Overrides from "#app/overrides";
-
-export enum Tutorial {
-  Intro = "INTRO",
-  Access_Menu = "ACCESS_MENU",
-  Menu = "MENU",
-  Starter_Select = "STARTER_SELECT",
-  Pokerus = "POKERUS",
-  Stat_Change = "STAT_CHANGE",
-  Select_Item = "SELECT_ITEM",
-  Egg_Gacha = "EGG_GACHA",
-}
+import { settings } from "./system/settings/settings-manager";
+import { Tutorial } from "#enums/tutorial";
 
 const tutorialHandlers = {
-  [Tutorial.Intro]: () => {
+  [Tutorial.INTRO]: () => {
     return new Promise<void>((resolve) => {
       globalScene.ui.showText(i18next.t("tutorial:intro"), null, () => resolve(), null, true);
     });
   },
-  [Tutorial.Access_Menu]: () => {
+  [Tutorial.ACCESS_MENU]: () => {
     return new Promise<void>((resolve) => {
-      if (globalScene.enableTouchControls) {
+      if (settings.general.enableTouchControls) {
         return resolve();
       }
       globalScene
@@ -40,9 +31,9 @@ const tutorialHandlers = {
         );
     });
   },
-  [Tutorial.Menu]: () => {
+  [Tutorial.MENU]: () => {
     return new Promise<void>((resolve) => {
-      globalScene.gameData.saveTutorialFlag(Tutorial.Access_Menu, true);
+      globalScene.gameData.saveTutorialAsSeen(Tutorial.ACCESS_MENU);
       globalScene.ui.showText(
         i18next.t("tutorial:menu"),
         null,
@@ -52,7 +43,7 @@ const tutorialHandlers = {
       );
     });
   },
-  [Tutorial.Starter_Select]: () => {
+  [Tutorial.STARTER_SELECT]: () => {
     return new Promise<void>((resolve) => {
       globalScene.ui.showText(
         i18next.t("tutorial:starterSelect"),
@@ -63,7 +54,7 @@ const tutorialHandlers = {
       );
     });
   },
-  [Tutorial.Pokerus]: () => {
+  [Tutorial.POKERUS]: () => {
     return new Promise<void>((resolve) => {
       globalScene.ui.showText(
         i18next.t("tutorial:pokerus"),
@@ -74,7 +65,7 @@ const tutorialHandlers = {
       );
     });
   },
-  [Tutorial.Stat_Change]: () => {
+  [Tutorial.STAT_CHANGE]: () => {
     return new Promise<void>((resolve) => {
       globalScene
         .showFieldOverlay(1000)
@@ -89,7 +80,7 @@ const tutorialHandlers = {
         );
     });
   },
-  [Tutorial.Select_Item]: () => {
+  [Tutorial.SELECT_ITEM]: () => {
     return new Promise<void>((resolve) => {
       globalScene.ui.setModeWithoutClear(Mode.MESSAGE).then(() => {
         globalScene.ui.showText(
@@ -105,7 +96,7 @@ const tutorialHandlers = {
       });
     });
   },
-  [Tutorial.Egg_Gacha]: () => {
+  [Tutorial.EGG_GACHA]: () => {
     return new Promise<void>((resolve) => {
       globalScene.ui.showText(
         i18next.t("tutorial:eggGacha"),
@@ -126,11 +117,11 @@ const tutorialHandlers = {
  * @returns a promise with result `true` if the tutorial was run and finished, `false` otherwise
  */
 export async function handleTutorial(tutorial: Tutorial): Promise<boolean> {
-  if (!globalScene.enableTutorials && !Overrides.BYPASS_TUTORIAL_SKIP_OVERRIDE) {
+  if (!settings.general.enableTutorials && !Overrides.BYPASS_TUTORIAL_SKIP_OVERRIDE) {
     return false;
   }
 
-  if (globalScene.gameData.getTutorialFlags()[tutorial] && !Overrides.BYPASS_TUTORIAL_SKIP_OVERRIDE) {
+  if (globalScene.gameData.isSeenTutorial(tutorial) && !Overrides.BYPASS_TUTORIAL_SKIP_OVERRIDE) {
     return false;
   }
 
@@ -149,7 +140,7 @@ export async function handleTutorial(tutorial: Tutorial): Promise<boolean> {
 
   // tutorial finished and overlay gone, re-enable menu, save tutorial as seen
   globalScene.disableMenu = isMenuDisabled;
-  globalScene.gameData.saveTutorialFlag(tutorial, true);
+  globalScene.gameData.saveTutorialAsSeen(tutorial);
   if (handler instanceof AwaitableUiHandler) {
     handler.tutorialActive = false;
   }

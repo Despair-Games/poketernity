@@ -1,6 +1,7 @@
 import { allSpecies } from "#app/data/pokemon-species";
 import { Stat } from "#enums/stat";
-import { GameModes, getGameMode } from "#app/game-mode";
+import { getGameMode } from "#app/game-mode";
+import { GameModes } from "#enums/game-modes";
 import { BattleEndPhase } from "#app/phases/battle-end-phase";
 import { CommandPhase } from "#app/phases/command-phase";
 import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
@@ -27,6 +28,7 @@ import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { Biome } from "#enums/biome";
 import { EVERYTHING_SAVE_FILE_PATH } from "#test/testUtils/testUtils";
+import { settings } from "#app/system/settings/settings-manager";
 
 describe("Test Battle Phase", () => {
   let phaserGame: Phaser.Game;
@@ -44,14 +46,14 @@ describe("Test Battle Phase", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.scene.gameData.gender = undefined!; // just for these tests!
+    settings.update("display", "playerGender", PlayerGender.UNSET); // just for these tests!
   });
 
   it("test phase interceptor with prompt", async () => {
     await game.phaseInterceptor.run(LoginPhase);
 
     game.onNextPrompt("SelectGenderPhase", Mode.OPTION_SELECT, () => {
-      game.scene.gameData.gender = PlayerGender.MALE;
+      settings.update("display", "playerGender", PlayerGender.FEMALE);
       game.endPhase();
     });
 
@@ -61,14 +63,14 @@ describe("Test Battle Phase", () => {
     await game.waitMode(Mode.TITLE);
 
     expect(game.scene.ui?.getMode()).toBe(Mode.TITLE);
-    expect(game.scene.gameData.gender).toBe(PlayerGender.MALE);
+    expect(settings.display.playerGender).toBe(PlayerGender.FEMALE);
   }, 20000);
 
   it("test phase interceptor with prompt with preparation for a future prompt", async () => {
     await game.phaseInterceptor.run(LoginPhase);
 
     game.onNextPrompt("SelectGenderPhase", Mode.OPTION_SELECT, () => {
-      game.scene.gameData.gender = PlayerGender.MALE;
+      settings.update("display", "playerGender", PlayerGender.MALE);
       game.endPhase();
     });
 
@@ -82,7 +84,7 @@ describe("Test Battle Phase", () => {
     await game.waitMode(Mode.TITLE);
 
     expect(game.scene.ui?.getMode()).toBe(Mode.TITLE);
-    expect(game.scene.gameData.gender).toBe(PlayerGender.MALE);
+    expect(settings.display.playerGender).toBe(PlayerGender.MALE);
   }, 20000);
 
   it("newGame one-liner", async () => {
@@ -159,7 +161,7 @@ describe("Test Battle Phase", () => {
       "SelectGenderPhase",
       Mode.OPTION_SELECT,
       () => {
-        game.scene.gameData.gender = PlayerGender.MALE;
+        settings.update("display", "playerGender", PlayerGender.MALE);
         game.endPhase();
       },
       () => game.isCurrentPhase(TitlePhase),
@@ -174,7 +176,7 @@ describe("Test Battle Phase", () => {
       "SelectGenderPhase",
       Mode.OPTION_SELECT,
       () => {
-        game.scene.gameData.gender = PlayerGender.MALE;
+        settings.update("display", "playerGender", PlayerGender.MALE);
         game.endPhase();
       },
       () => game.isCurrentPhase(TitlePhase),
@@ -188,7 +190,7 @@ describe("Test Battle Phase", () => {
       "SelectGenderPhase",
       Mode.OPTION_SELECT,
       () => {
-        game.scene.gameData.gender = PlayerGender.MALE;
+        settings.update("display", "playerGender", PlayerGender.MALE);
         game.endPhase();
       },
       () => game.isCurrentPhase(TitlePhase),

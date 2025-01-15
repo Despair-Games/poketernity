@@ -1,7 +1,7 @@
 import type { PokemonDefendCondition } from "#app/@types/PokemonDefendCondition";
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
-import type { HitResult } from "#app/field/pokemon";
+import type { HitResult } from "#enums/hit-result";
 import { globalScene } from "#app/global-scene";
 import type { WeatherType } from "#enums/weather-type";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";

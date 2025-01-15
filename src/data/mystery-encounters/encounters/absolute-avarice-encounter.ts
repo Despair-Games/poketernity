@@ -25,7 +25,7 @@ import { getPokemonSpecies } from "#app/data/pokemon-species";
 import { Moves } from "#enums/moves";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { randInt } from "#app/utils";
-import { BattlerIndex } from "#app/battle";
+import { BattlerIndex } from "#enums/battler-index";
 import {
   applyModifierTypeToPlayerPokemon,
   catchPokemon,

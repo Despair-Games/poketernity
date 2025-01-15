@@ -11,7 +11,6 @@ import {
   getPokeballTintColor,
 } from "#app/data/pokeball";
 import { PlayerGender } from "#enums/player-gender";
-import { addPokeballCaptureStars, addPokeballOpenParticles } from "#app/field/anims";
 import { getStatusEffectCatchRateMultiplier } from "#app/data/status-effect";
 import { achvs } from "#app/system/achv";
 import { Mode } from "#app/ui/ui";
@@ -38,6 +37,7 @@ import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import type { Abilities } from "#enums/abilities";
 import type { PokeballType } from "#enums/pokeball";
 import { StatusEffect } from "#enums/status-effect";
+import { settings } from "#app/system/settings/settings-manager";
 
 /** Will give +1 level every 10 waves */
 export const STANDARD_ENCOUNTER_BOOSTED_LEVEL_MODIFIER = 1;
@@ -463,7 +463,7 @@ export function trainerThrowPokeball(
 
   return new Promise((resolve) => {
     globalScene.trainer.setTexture(
-      `trainer_${globalScene.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`,
+      `trainer_${settings.display.playerGender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`,
     );
     globalScene.time.delayedCall(512, () => {
       globalScene.playSound("se/pb_throw");
@@ -474,7 +474,7 @@ export function trainerThrowPokeball(
         globalScene.trainer.setFrame("3");
         globalScene.time.delayedCall(768, () => {
           globalScene.trainer.setTexture(
-            `trainer_${globalScene.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back`,
+            `trainer_${settings.display.playerGender === PlayerGender.FEMALE ? "f" : "m"}_back`,
           );
         });
       });
@@ -491,7 +491,7 @@ export function trainerThrowPokeball(
           globalScene.playSound("se/pb_rel");
           pokemon.tint(getPokeballTintColor(pokeballType));
 
-          addPokeballOpenParticles(pokeball.x, pokeball.y, pokeballType);
+          globalScene.animations.addPokeballOpenParticles(pokeball.x, pokeball.y, pokeballType);
 
           globalScene.tweens.add({
             targets: pokemon,
@@ -537,7 +537,7 @@ export function trainerThrowPokeball(
                       }
                     } else {
                       globalScene.playSound("se/pb_lock");
-                      addPokeballCaptureStars(pokeball);
+                      globalScene.animations.addPokeballCaptureStars(pokeball);
 
                       const pbTint = globalScene.add.sprite(pokeball.x, pokeball.y, "pb", "pb");
                       pbTint.setOrigin(pokeball.originX, pokeball.originY);

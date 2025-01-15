@@ -1,9 +1,9 @@
-import { BattleType, ClassicFixedBossWaves, type BattlerIndex } from "#app/battle";
+import { type BattlerIndex } from "#enums/battler-index";
+import { BattleType } from "#enums/battle-type";
 import { handleMysteryEncounterVictory } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { globalScene } from "#app/global-scene";
 import { modifierTypes, type CustomModifierSettings } from "#app/modifier/modifier-type";
 import { PokemonPhase } from "./abstract-pokemon-phase";
-import { AddEnemyBuffModifierPhase } from "./add-enemy-buff-modifier-phase";
 import { BattleEndPhase } from "./battle-end-phase";
 import { EggLapsePhase } from "./egg-lapse-phase";
 import { GameOverPhase } from "./game-over-phase";
@@ -11,6 +11,8 @@ import { ModifierRewardPhase } from "./modifier-reward-phase";
 import { NewBattlePhase } from "./new-battle-phase";
 import { SelectModifierPhase } from "./select-modifier-phase";
 import { TrainerVictoryPhase } from "./trainer-victory-phase";
+import { ArenaTagType } from "#enums/arena-tag-type";
+import { EVIL_BOSS_2_WAVE } from "#app/data/special-waves";
 
 export class VictoryPhase extends PokemonPhase {
   /** If true, indicates that the phase is intended for EXP purposes only, and not to continue a battle to next phase */
@@ -47,6 +49,9 @@ export class VictoryPhase extends PokemonPhase {
     if (
       !globalScene.getEnemyParty().find((p) => (battleType === BattleType.WILD ? p.isOnField() : !p?.isFainted(true)))
     ) {
+      // clear all queued delayed attacks (e.g. from Future Sight)
+      globalScene.arena.removeTag(ArenaTagType.DELAYED_ATTACK);
+
       globalScene.pushPhase(new BattleEndPhase(true));
 
       if (battleType === BattleType.TRAINER) {
@@ -56,7 +61,7 @@ export class VictoryPhase extends PokemonPhase {
       if (isEndless || !gameMode.isWaveFinal(waveIndex)) {
         globalScene.pushPhase(new EggLapsePhase());
 
-        if (isClassic && waveIndex === ClassicFixedBossWaves.EVIL_BOSS_2) {
+        if (isClassic && waveIndex === EVIL_BOSS_2_WAVE) {
           // Should get Lock Capsule on 165 before shop phase so it can be used in the rewards shop
           globalScene.pushPhase(new ModifierRewardPhase(modifierTypes.LOCK_CAPSULE));
         }
@@ -95,7 +100,6 @@ export class VictoryPhase extends PokemonPhase {
             globalScene.pushPhase(
               new ModifierRewardPhase(!(waveIndex % 250) ? modifierTypes.VOUCHER_PREMIUM : modifierTypes.VOUCHER_PLUS),
             );
-            globalScene.pushPhase(new AddEnemyBuffModifierPhase());
           }
         }
 

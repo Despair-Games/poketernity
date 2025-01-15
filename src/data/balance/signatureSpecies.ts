@@ -31,15 +31,15 @@ export const signatureSpecies: SignatureSpecies = {
   CLAIR: [Species.HORSEA, Species.DRATINI, Species.MAGIKARP],
 
   // Hoenn gym leaders
-  ROXANNE: [Species.GEODUDE, Species.NOSEPASS],
-  BRAWLY: [Species.MACHOP, Species.MAKUHITA],
-  WATTSON: [Species.MAGNEMITE, Species.VOLTORB, Species.ELECTRIKE],
-  FLANNERY: [Species.SLUGMA, Species.TORKOAL, Species.NUMEL],
-  NORMAN: [Species.SLAKOTH, Species.SPINDA, Species.CHANSEY, Species.KANGASKHAN],
-  WINONA: [Species.SWABLU, Species.WINGULL, Species.TROPIUS, Species.SKARMORY],
-  TATE: [Species.SOLROCK, Species.NATU, Species.CHIMECHO, Species.GALLADE],
-  LIZA: [Species.LUNATONE, Species.SPOINK, Species.BALTOY, Species.GARDEVOIR],
-  JUAN: [Species.HORSEA, Species.BARBOACH, Species.SPHEAL, Species.RELICANTH],
+  ROXANNE: [Species.NOSEPASS, Species.GEODUDE, [Species.LILEEP, Species.ANORITH], Species.RELICANTH],
+  BRAWLY: [Species.MAKUHITA, Species.MACHOP, Species.MEDITITE],
+  WATTSON: [Species.ELECTRIKE, Species.MAGNEMITE, Species.VOLTORB, [Species.PLUSLE, Species.MINUN]],
+  FLANNERY: [Species.TORKOAL, Species.NUMEL, Species.SLUGMA],
+  NORMAN: [Species.SLAKOTH, Species.SPINDA, Species.ZIGZAGOON, Species.KECLEON],
+  WINONA: [Species.SWABLU, Species.WINGULL, Species.TAILLOW, Species.TROPIUS],
+  TATE: [Species.SOLROCK, Species.NATU, Species.SPOINK, Species.GALLADE],
+  LIZA: [Species.LUNATONE, Species.BALTOY, Species.CHINGLING, Species.GARDEVOIR],
+  JUAN: [Species.HORSEA, Species.CORPHISH, Species.SPHEAL, Species.BARBOACH],
 
   // Sinnoh gym leaders
   ROARK: [Species.CRANIDOS, Species.LARVITAR, Species.GEODUDE],

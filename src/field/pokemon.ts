@@ -77,9 +77,6 @@ import {
   EFFECTIVE_STATS,
 } from "#enums/stat";
 import {
-  EnemyDamageBoosterModifier,
-  EnemyDamageReducerModifier,
-  EnemyFusionChanceModifier,
   HiddenAbilityRateBoosterModifier,
   BaseStatModifier,
   PokemonFriendshipBoosterModifier,
@@ -111,7 +108,6 @@ import {
 import { reverseCompatibleTms, tmSpecies, tmPoolTiers } from "#app/data/balance/tms";
 import {
   BattlerTag,
-  BattlerTagLapseType,
   EncoreTag,
   GroundedTag,
   HighestStatBoostTag,
@@ -128,8 +124,10 @@ import {
   AutotomizedTag,
   PowerTrickTag,
 } from "../data/battler-tags";
+import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { WeatherType } from "#enums/weather-type";
-import { ArenaTagSide, NoCritTag, WeakenMoveScreenTag } from "#app/data/arena-tag";
+import { NoCritTag, WeakenMoveScreenTag } from "#app/data/arena-tag";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 import type { Ability } from "#app/data/ability";
 import {
   allAbilities,
@@ -171,7 +169,7 @@ import { AddSecondStrikeAbAttr } from "#app/data/ab-attrs/add-second-strike-ab-a
 import { MoveTypeChangeAbAttr } from "#app/data/ab-attrs/move-type-change-ab-attr";
 import { FieldMultiplyStatAbAttr } from "#app/data/ab-attrs/field-multiply-stat-ab-attr";
 import type PokemonData from "#app/system/pokemon-data";
-import { BattlerIndex } from "#app/battle";
+import { BattlerIndex } from "#enums/battler-index";
 import { Mode } from "#app/ui/ui";
 import type { PartyOption } from "#app/ui/party-ui-handler";
 import PartyUiHandler, { PartyUiMode } from "#app/ui/party-ui-handler";
@@ -196,7 +194,8 @@ import Overrides from "#app/overrides";
 import i18next from "i18next";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { ModifierTier } from "#app/modifier/modifier-tier";
-import { applyChallenges, ChallengeType } from "#app/data/challenge";
+import { applyChallenges } from "#app/data/challenge";
+import { ChallengeType } from "#enums/challenge-type";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -226,7 +225,6 @@ import {
 } from "#app/data/balance/rates";
 import { Nature } from "#enums/nature";
 import { StatusEffect } from "#enums/status-effect";
-import { doShinySparkleAnim } from "#app/field/anims";
 import { IgnoreTypeStatusEffectImmunityAbAttr } from "#app/data/ab-attrs/ignore-type-status-effect-immunity-ab-attr";
 import type { AbAttr } from "#app/data/ab-attrs/ab-attr";
 import { PostDamageAbAttr } from "#app/data/ab-attrs/post-damage-ab-attr";
@@ -238,21 +236,12 @@ import { TypeImmunityAbAttr } from "#app/data/ab-attrs/type-immunity-ab-attr";
 import { FullHpResistTypeAbAttr } from "#app/data/ab-attrs/full-hp-resist-type-ab-attr";
 import { FieldPriorityMoveImmunityAbAttr } from "#app/data/ab-attrs/field-priority-move-immunity-ab-attr";
 import { MoveImmunityAbAttr } from "#app/data/ab-attrs/move-immunity-ab-attr";
-
-export enum LearnMoveSituation {
-  MISC,
-  LEVEL_UP,
-  RELEARN,
-  EVOLUTION,
-  EVOLUTION_FUSED, // If fusionSpecies has Evolved
-  EVOLUTION_FUSED_BASE, // If fusion's base species has Evolved
-}
-
-export enum FieldPosition {
-  CENTER,
-  LEFT,
-  RIGHT,
-}
+import { settings } from "#app/system/settings/settings-manager";
+import { HitResult } from "#enums/hit-result";
+import type { MoveResult } from "#enums/move-result";
+import { AiType } from "#enums/ai-type";
+import { LearnMoveSituation } from "#enums/learn-move-situation";
+import { FieldPosition } from "#enums/field-position";
 
 export abstract class Pokemon extends Phaser.GameObjects.Container {
   public id: number;
@@ -450,9 +439,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
       if (level > 1) {
         const fused = new BooleanHolder(globalScene.gameMode.isSplicedOnly);
-        if (!fused.value && !this.isPlayer() && !this.hasTrainer()) {
-          globalScene.applyModifier(EnemyFusionChanceModifier, false, fused);
-        }
 
         if (fused.value) {
           this.calculateStats();
@@ -1808,6 +1794,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     );
   }
 
+  public isSemiInvulnerable(): boolean {
+    return !!this.getTag(SemiInvulnerableTag) || !!this.getTag(BattlerTagType.SKY_DROP);
+  }
+
   /**
    * Determines whether this Pokemon is prevented from running or switching due
    * to effects from moves and/or abilities.
@@ -2784,6 +2774,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     this.switchOutStatus = status;
   }
 
+  /**
+   * Updates the Pokemon's battle info UI. This is purely a visual update.
+   * @param instant Whether or not the update should be instant.
+   */
   updateInfo(instant?: boolean): Promise<void> {
     return this.battleInfo.updateInfo(this, instant);
   }
@@ -3350,14 +3344,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       damage.value = 0;
     }
 
-    /** Apply the enemy's Damage and Resistance tokens */
-    if (!source.isPlayer()) {
-      globalScene.applyModifiers(EnemyDamageBoosterModifier, false, damage);
-    }
-    if (!this.isPlayer()) {
-      globalScene.applyModifiers(EnemyDamageReducerModifier, false, damage);
-    }
-
     // This attribute may modify damage arbitrarily, so be careful about changing its order of application.
     applyMoveAttrs(ModifiedDamageAttr, source, this, move, damage);
 
@@ -3821,13 +3807,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           fusionCry = this.getFusionSpeciesForm().cry(
             Object.assign({ seek: Math.max(fusionCry.totalDuration * 0.4, 0) }, soundConfig),
           );
-          SoundFade.fadeIn(
-            scene,
-            fusionCry,
-            fixedNumber(Math.ceil(duration * 0.2)),
-            scene.masterVolume * scene.fieldVolume,
-            0,
-          );
+          SoundFade.fadeIn(scene, fusionCry, fixedNumber(Math.ceil(duration * 0.2)), settings.effectiveFieldVolume, 0);
         } catch (err) {
           console.error(err);
         }
@@ -3845,7 +3825,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const key = this.species.getCryKey(this.formIndex);
     let rate = 0.85;
     const cry = globalScene.playSound(key, { rate: rate }) as AnySound;
-    if (!cry || globalScene.fieldVolume === 0) {
+    if (!cry || settings.effectiveFieldVolume === 0) {
       return callback();
     }
     const sprite = this.getSprite();
@@ -3910,7 +3890,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     const fusionCryKey = this.fusionSpecies!.getCryKey(this.fusionFormIndex);
     let fusionCry = globalScene.playSound(fusionCryKey, { rate: rate }) as AnySound;
-    if (!cry || !fusionCry || globalScene.fieldVolume === 0) {
+    if (!cry || !fusionCry || settings.effectiveFieldVolume === 0) {
       return callback();
     }
     fusionCry.stop();
@@ -3963,7 +3943,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
             globalScene,
             fusionCry,
             fixedNumber(Math.ceil((duration / rate) * 0.2)),
-            globalScene.masterVolume * globalScene.fieldVolume,
+            settings.effectiveFieldVolume,
             0,
           );
         }
@@ -4143,7 +4123,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     let sleepTurnsRemaining: NumberHolder;
 
     if (effect === StatusEffect.SLEEP) {
-      sleepTurnsRemaining = new NumberHolder(this.randSeedIntRange(2, 4));
+      sleepTurnsRemaining = new NumberHolder(turnsRemaining !== 0 ? turnsRemaining : this.randSeedIntRange(2, 4));
 
       this.setFrameRate(4);
 
@@ -4361,7 +4341,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   sparkle(): void {
     if (this.shinySparkle) {
-      doShinySparkleAnim(this.shinySparkle, this.variant);
+      globalScene.animations.doShinySparkleAnim(this.shinySparkle, this.variant);
     }
   }
 
@@ -6012,34 +5992,6 @@ export class PokemonTurnData {
    * forced to act again in the same turn
    */
   public extraTurns: number = 0;
-}
-
-export enum AiType {
-  RANDOM,
-  SMART_RANDOM,
-  SMART,
-}
-
-export enum MoveResult {
-  PENDING,
-  SUCCESS,
-  FAIL,
-  MISS,
-  OTHER,
-}
-
-export enum HitResult {
-  EFFECTIVE = 1,
-  SUPER_EFFECTIVE,
-  NOT_VERY_EFFECTIVE,
-  ONE_HIT_KO,
-  NO_EFFECT,
-  STATUS,
-  HEAL,
-  FAIL,
-  MISS,
-  OTHER,
-  IMMUNE,
 }
 
 export type DamageResult =

@@ -1,6 +1,7 @@
-import { BattlerIndex } from "#app/battle";
+import { BattlerIndex } from "#enums/battler-index";
 import { Status } from "#app/data/status-effect";
-import { GameModes, getGameMode } from "#app/game-mode";
+import { getGameMode } from "#app/game-mode";
+import { GameModes } from "#enums/game-modes";
 import { BattleEndPhase } from "#app/phases/battle-end-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
 import { Abilities } from "#enums/abilities";
