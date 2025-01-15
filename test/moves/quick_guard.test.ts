@@ -94,7 +94,7 @@ describe("Moves - Quick Guard", () => {
 
     game.move.select(Moves.QUICK_GUARD);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 

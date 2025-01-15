@@ -513,7 +513,7 @@ describe("Moves - Substitute", () => {
 
     game.move.select(Moves.SPLASH);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]); // enemy uses Sappy Seed first
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]); // enemy uses Sappy Seed first
     await game.move.forceHit(); // forces Sappy Seed to hit
     await game.phaseInterceptor.to("MoveEndPhase");
 

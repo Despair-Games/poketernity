@@ -59,7 +59,7 @@ describe("Moves - Whirlwind", () => {
     game.move.select(Moves.SKY_DROP, 0, BattlerIndex.ENEMY);
     game.move.select(Moves.WHIRLWIND, 1, BattlerIndex.ENEMY);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 

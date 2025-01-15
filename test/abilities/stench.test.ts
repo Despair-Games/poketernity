@@ -44,7 +44,7 @@ describe("Abilities - Stench", () => {
       .getAttrs(PostAttackApplyBattlerTagAbAttr)[0] as PostAttackApplyBattlerTagAbAttr;
     vi.spyOn(abilityAttr, "getChance");
     game.move.select(Moves.TACKLE);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(abilityAttr.getChance).toHaveLastReturnedWith(10);
@@ -63,7 +63,7 @@ describe("Abilities - Stench", () => {
       ?.getMove();
     vi.spyOn(abilityAttr, "getChance");
     game.move.select(Moves.HEADBUTT);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(headbuttMove?.hasAttr(FlinchAttr)).toBe(true);
@@ -85,7 +85,7 @@ describe("Abilities - Stench", () => {
     vi.spyOn(abilityAttr, "getChance");
     game.move.select(Moves.TACKLE);
     await game.forceEnemyMove(Moves.SPLASH);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("BerryPhase");
     expect(abilityAttr.getChance).not.toHaveBeenCalled();
@@ -103,13 +103,13 @@ describe("Abilities - Stench", () => {
     vi.spyOn(abilityAttr, "getChance");
 
     game.move.select(Moves.TACKLE);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("BerryPhase");
     expect(abilityAttr.getChance).not.toHaveBeenCalled();
 
     await game.toNextTurn();
     game.move.select(Moves.MOONGEIST_BEAM);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("BerryPhase");
     expect(abilityAttr.getChance).toHaveLastReturnedWith(10);
   });

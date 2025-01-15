@@ -45,7 +45,7 @@ describe("Moves - Plasma Fists", () => {
     await game.forceEnemyMove(Moves.TACKLE, BattlerIndex.PLAYER);
     await game.forceEnemyMove(Moves.TACKLE, BattlerIndex.PLAYER_2);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -66,7 +66,7 @@ describe("Moves - Plasma Fists", () => {
 
     game.move.select(Moves.PLASMA_FISTS);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("BerryPhase", false);
 
     expect(enemyPokemon.getMoveType).toHaveLastReturnedWith(Type.FAIRY);
@@ -84,7 +84,7 @@ describe("Moves - Plasma Fists", () => {
 
     game.move.select(Moves.PLASMA_FISTS);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("BerryPhase", false);
 
     expect(enemyPokemon.getMoveType).toHaveLastReturnedWith(Type.ELECTRIC);

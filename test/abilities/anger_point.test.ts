@@ -48,7 +48,7 @@ describe("Abilities - Anger Point", () => {
     const pokemon = game.scene.getPlayerPokemon();
 
     game.move.select(Moves.SUBSTITUTE);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(pokemon?.getStatStage(Stat.ATK)).toBe(0);

@@ -111,7 +111,7 @@ describe("Moves - Flame Burst", () => {
     await game.forceEnemyMove(Moves.SUBSTITUTE);
     await game.forceEnemyMove(Moves.SPLASH);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
 
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -131,7 +131,7 @@ describe("Moves - Flame Burst", () => {
     await game.forceEnemyMove(Moves.PROTECT);
     await game.forceEnemyMove(Moves.SPLASH);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
 
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -153,7 +153,7 @@ describe("Moves - Flame Burst", () => {
     await game.forceEnemyMove(Moves.ENDURE);
     await game.forceEnemyMove(Moves.SPLASH);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
 
     await game.phaseInterceptor.to("TurnEndPhase");
 

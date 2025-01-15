@@ -248,7 +248,7 @@ describe("Abilities - Gulp Missile", () => {
 
     game.move.select(Moves.SUBSTITUTE);
     await game.forceEnemyMove(Moves.POWER_TRIP);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toNextTurn();
 
     expect(game.scene.getPlayerPokemon()!.formIndex).toBe(GULPING_FORM);

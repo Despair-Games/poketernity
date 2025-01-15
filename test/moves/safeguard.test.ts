@@ -41,7 +41,7 @@ describe("Moves - Safeguard", () => {
     const enemy = game.scene.getEnemyPokemon()!;
 
     game.move.select(Moves.NUZZLE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     expect(enemy.status).toBeUndefined();
@@ -52,7 +52,7 @@ describe("Moves - Safeguard", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     game.move.select(Moves.SPORE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     expect(enemyPokemon.status).toBeUndefined();
@@ -64,7 +64,7 @@ describe("Moves - Safeguard", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     game.move.select(Moves.CONFUSE_RAY);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     expect(enemyPokemon.summonData.tags).toEqual([]);
@@ -78,7 +78,7 @@ describe("Moves - Safeguard", () => {
     game.move.select(Moves.SPORE, 0, BattlerIndex.ENEMY_2);
     game.move.select(Moves.NUZZLE, 1, BattlerIndex.ENEMY_2);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
 
     await game.phaseInterceptor.to("BerryPhase");
 
@@ -93,7 +93,7 @@ describe("Moves - Safeguard", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     game.move.select(Moves.YAWN);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     expect(enemyPokemon.summonData.tags).toEqual([]);
@@ -104,7 +104,7 @@ describe("Moves - Safeguard", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     game.move.select(Moves.YAWN);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toNextTurn();
 
     game.move.select(Moves.SPLASH);
@@ -119,7 +119,7 @@ describe("Moves - Safeguard", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     game.move.select(Moves.SPLASH);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
     enemyPokemon.damageAndUpdate(1);
 
@@ -147,7 +147,7 @@ describe("Moves - Safeguard", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     game.move.select(Moves.SPLASH);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
     game.override.enemyMoveset([Moves.TACKLE]);
     game.move.select(Moves.SPLASH);
@@ -166,7 +166,7 @@ describe("Moves - Safeguard", () => {
     await game.move.forceEnemyMove(Moves.SAFEGUARD);
     await game.move.forceEnemyMove(Moves.MEMENTO, BattlerIndex.PLAYER);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY_2, BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
+    game.setTurnOrder([BattlerIndex.ENEMY_2, BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
 
     const enemyPokemon = game.scene.getEnemyField();
 

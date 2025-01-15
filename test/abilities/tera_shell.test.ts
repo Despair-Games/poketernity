@@ -107,7 +107,7 @@ describe("Abilities - Tera Shell", () => {
 
     game.move.select(Moves.SPLASH);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.move.forceHit();
     for (let i = 0; i < 2; i++) {
       await game.phaseInterceptor.to("MoveEffectPhase");

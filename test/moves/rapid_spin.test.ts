@@ -55,7 +55,7 @@ describe("Moves - Rapid Spin", () => {
     const player = game.scene.getPlayerPokemon()!;
 
     game.move.select(Moves.RAPID_SPIN);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 

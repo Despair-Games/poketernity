@@ -440,7 +440,7 @@ describe("Abilities - Parental Bond", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     game.move.select(Moves.SECRET_POWER);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("MoveEndPhase");
 
     await game.phaseInterceptor.to("MoveEffectPhase");

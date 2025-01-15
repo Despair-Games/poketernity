@@ -45,7 +45,7 @@ describe("Moves - Heal Block", () => {
     player.damageAndUpdate(enemy.getMaxHp() - 1);
 
     game.move.select(Moves.ABSORB);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("TurnEndPhase");
 
     const lastPlayerMove = player.getLastXMoves(1)[0];

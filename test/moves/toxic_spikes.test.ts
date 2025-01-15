@@ -140,7 +140,7 @@ describe("Moves - Toxic Spikes", () => {
 
     game.move.use(Moves.TOXIC_SPIKES);
     await game.move.forceEnemyMove(Moves.MEMENTO);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(enemyPokemon.isFainted()).toBe(true);
     await game.toNextTurn();

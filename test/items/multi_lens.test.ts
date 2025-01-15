@@ -51,7 +51,7 @@ describe("Items - Multi Lens", () => {
       vi.spyOn(enemyPokemon, "getBaseDamage").mockReturnValue(100);
 
       game.move.select(Moves.TACKLE);
-      await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+      game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
       await game.phaseInterceptor.to("MoveEndPhase");
       const damageResults = spy.mock.results.map((result) => result.value?.damage);
@@ -70,7 +70,7 @@ describe("Items - Multi Lens", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
     game.move.select(Moves.TACKLE);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(playerPokemon.turnData.hitCount).toBe(3);
@@ -108,7 +108,7 @@ describe("Items - Multi Lens", () => {
     game.move.select(Moves.SWIFT, 0);
     game.move.select(Moves.SPLASH, 1);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
 
@@ -125,7 +125,7 @@ describe("Items - Multi Lens", () => {
     const spy = vi.spyOn(enemyPokemon, "getAttackDamage");
 
     game.move.select(Moves.SEISMIC_TOSS);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     const damageResults = spy.mock.results.map((result) => result.value?.damage);
@@ -148,7 +148,7 @@ describe("Items - Multi Lens", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     game.move.select(Moves.SUPER_FANG);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(enemyPokemon.getHpRatio()).toBeCloseTo(0.5, 5);
   });
@@ -167,7 +167,7 @@ describe("Items - Multi Lens", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     game.move.select(Moves.SUPER_FANG);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(enemyPokemon.getHpRatio()).toBeCloseTo(0.5, 5);
   });
@@ -187,7 +187,7 @@ describe("Items - Multi Lens", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     game.move.select(Moves.SUPER_FANG);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(enemyPokemon.getHpRatio()).toBeCloseTo(0.25, 5);
   });

@@ -559,7 +559,7 @@ export class GameManager {
    * @param order The turn order to set
    * @example
    * ```ts
-   * await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2]);
+   * game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2]);
    * ```
    */
   setTurnOrder(order: BattlerIndex[]): void {

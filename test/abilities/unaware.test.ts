@@ -177,14 +177,14 @@ describe("Abilities - Unaware", () => {
 
     game.move.use(Moves.WILL_O_WISP);
     await game.move.forceEnemyMove(Moves.TACKLE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     hpAmounts.push(playerPokemon.hp);
 
     game.move.use(Moves.WILL_O_WISP);
     await game.move.forceEnemyMove(Moves.TACKLE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     hpAmounts.push(playerPokemon.hp);

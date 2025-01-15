@@ -109,7 +109,7 @@ describe("Abilities - Galvanize", () => {
     vi.spyOn(enemyPokemon, "getMoveEffectiveness");
 
     game.move.select(Moves.FURY_SWIPES);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.move.forceHit();
 
     await game.phaseInterceptor.to("MoveEffectPhase");

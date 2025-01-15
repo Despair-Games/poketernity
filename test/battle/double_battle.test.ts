@@ -105,7 +105,7 @@ describe("Double Battles", () => {
 
     game.move.select(Moves.MEMENTO, 0, BattlerIndex.ENEMY);
     game.move.select(Moves.SURF, 1);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2]);
     await game.toNextTurn();
 
     expect(milotic.isFullHp()).toBe(true);

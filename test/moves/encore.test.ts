@@ -72,14 +72,14 @@ describe("Moves - Encore", () => {
 
       if (delay) {
         game.move.select(Moves.SPLASH);
-        await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+        game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
         await game.toNextTurn();
       }
 
       game.move.select(Moves.ENCORE);
 
       const turnOrder = delay ? [BattlerIndex.PLAYER, BattlerIndex.ENEMY] : [BattlerIndex.ENEMY, BattlerIndex.PLAYER];
-      await game.setTurnOrder(turnOrder);
+      game.setTurnOrder(turnOrder);
 
       await game.phaseInterceptor.to("BerryPhase", false);
       expect(playerPokemon.getLastXMoves(1)[0].result).toBe(MoveResult.FAIL);
@@ -94,19 +94,19 @@ describe("Moves - Encore", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon();
     game.move.select(Moves.ENCORE);
-    await game.setTurnOrder(turnOrder);
+    game.setTurnOrder(turnOrder);
     await game.phaseInterceptor.to("BerryPhase");
     expect(enemyPokemon?.getTag(BattlerTagType.ENCORE)).toBeDefined();
 
     await game.toNextTurn();
     game.move.select(Moves.TORMENT);
-    await game.setTurnOrder(turnOrder);
+    game.setTurnOrder(turnOrder);
     await game.phaseInterceptor.to("BerryPhase");
     expect(enemyPokemon?.getTag(BattlerTagType.TORMENT)).toBeDefined();
 
     await game.toNextTurn();
     game.move.select(Moves.SPLASH);
-    await game.setTurnOrder(turnOrder);
+    game.setTurnOrder(turnOrder);
     await game.phaseInterceptor.to("BerryPhase");
     const lastMove = enemyPokemon?.getLastXMoves()[0];
     expect(lastMove?.move).toBe(Moves.STRUGGLE);

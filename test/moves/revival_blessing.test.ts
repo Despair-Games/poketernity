@@ -46,7 +46,7 @@ describe("Moves - Revival Blessing", () => {
     expect(player.species.speciesId).toBe(Species.MAGIKARP);
     game.move.select(Moves.REVIVAL_BLESSING);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     game.doSelectPartyPokemon(1, "RevivalBlessingPhase");
 
     await game.phaseInterceptor.to("MoveEndPhase", false);
@@ -57,16 +57,17 @@ describe("Moves - Revival Blessing", () => {
   });
 
   it("should revive a random fainted enemy when used by an enemy Trainer", async () => {
-    game.override.enemyMoveset(Moves.REVIVAL_BLESSING).startingWave(8);
+    game.override.startingWave(8);
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
     game.move.select(Moves.SPLASH);
-    await game.doKillOpponents();
-
+    await game.move.forceEnemyMove(Moves.MEMENTO);
     await game.toNextTurn();
+
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     game.move.select(Moves.SPLASH);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    await game.move.forceEnemyMove(Moves.REVIVAL_BLESSING);
 
     await game.phaseInterceptor.to("MoveEndPhase", false);
 
@@ -79,7 +80,7 @@ describe("Moves - Revival Blessing", () => {
     await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
 
     game.move.select(Moves.REVIVAL_BLESSING);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEndPhase", false);
 
     const player = game.scene.getPlayerPokemon()!;
@@ -100,7 +101,7 @@ describe("Moves - Revival Blessing", () => {
     game.move.select(Moves.REVIVAL_BLESSING, 1);
     await game.forceEnemyMove(Moves.FISSURE, BattlerIndex.PLAYER);
     await game.forceEnemyMove(Moves.SPLASH);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     await game.phaseInterceptor.to("MoveEndPhase");

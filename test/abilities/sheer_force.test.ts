@@ -48,7 +48,7 @@ describe("Abilities - Sheer Force", () => {
 
     game.move.select(Moves.AIR_SLASH);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.move.forceHit();
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -65,7 +65,7 @@ describe("Abilities - Sheer Force", () => {
 
     game.move.select(Moves.BIND);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.move.forceHit();
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -80,7 +80,7 @@ describe("Abilities - Sheer Force", () => {
     vi.spyOn(tackleMove, "calculateBattlePower");
 
     game.move.select(Moves.TACKLE);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.move.forceHit();
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -103,7 +103,7 @@ describe("Abilities - Sheer Force", () => {
 
     game.move.select(Moves.HEADBUTT);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.move.forceHit();
     await game.phaseInterceptor.to("BerryPhase", false);
 

@@ -159,7 +159,7 @@ describe("Moves - Fairy Lock", () => {
     await game.move.forceEnemyMove(Moves.MEMENTO, BattlerIndex.PLAYER);
     await game.move.forceEnemyMove(Moves.MEMENTO, BattlerIndex.PLAYER);
     game.doSelectPartyPokemon(2);
-    await game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER]);
 
     // Allow all 3 targets to use Memento
     await game.phaseInterceptor.to("MoveEndPhase");

@@ -49,7 +49,7 @@ describe("Moves - Instruct", () => {
 
     game.move.select(Moves.INSTRUCT, BattlerIndex.PLAYER, BattlerIndex.ENEMY);
     await game.forceEnemyMove(Moves.SONIC_BOOM, BattlerIndex.PLAYER);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("TurnEndPhase", false);
 
     expect(game.scene.getPlayerPokemon()?.getInverseHp()).toBe(40);
@@ -64,12 +64,12 @@ describe("Moves - Instruct", () => {
 
     game.move.select(Moves.SPLASH);
     await game.forceEnemyMove(Moves.SUBSTITUTE);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toNextTurn();
 
     game.move.select(Moves.INSTRUCT);
     await game.forceEnemyMove(Moves.SONIC_BOOM);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("TurnEndPhase", false);
 
     expect(game.scene.getPlayerPokemon()?.getInverseHp()).toBe(40);
@@ -88,7 +88,7 @@ describe("Moves - Instruct", () => {
     game.move.select(Moves.SONIC_BOOM, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.forceEnemyMove(Moves.SPLASH);
-    await game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     await game.phaseInterceptor.to("TurnEndPhase", false);
 
     expect(game.scene.getEnemyField()[0].getInverseHp()).toBe(40);
@@ -104,7 +104,7 @@ describe("Moves - Instruct", () => {
     game.move.changeMoveset(enemy, Moves.GIGATON_HAMMER);
 
     game.move.select(Moves.INSTRUCT);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("TurnEndPhase", false);
 
     instructSuccess(enemy, Moves.GIGATON_HAMMER);
@@ -116,12 +116,12 @@ describe("Moves - Instruct", () => {
 
     game.move.select(Moves.THUNDER_WAVE);
     await game.forceEnemyMove(Moves.SONIC_BOOM);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     game.move.select(Moves.INSTRUCT);
     await game.forceEnemyMove(Moves.SPLASH);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.move.forceStatusActivation(true);
     await game.phaseInterceptor.to("MovePhase");
     await game.move.forceStatusActivation(false);
@@ -145,7 +145,7 @@ describe("Moves - Instruct", () => {
 
     game.move.select(Moves.INSTRUCT);
     await game.forceEnemyMove(Moves.HIDDEN_POWER);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("TurnEndPhase", false);
 
     const playerMove = game.scene.getPlayerPokemon()!.getLastXMoves()!;
@@ -159,7 +159,7 @@ describe("Moves - Instruct", () => {
 
     game.move.select(Moves.INSTRUCT);
     await game.forceEnemyMove(Moves.SPLASH);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("TurnEndPhase", false);
 
     expect(game.scene.getPlayerPokemon()!.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
@@ -177,7 +177,7 @@ describe("Moves - Instruct", () => {
     game.move.select(Moves.DISABLE, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY);
     await game.forceEnemyMove(Moves.SONIC_BOOM, BattlerIndex.PLAYER);
     await game.forceEnemyMove(Moves.SPLASH);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
     await game.phaseInterceptor.to("TurnEndPhase", false);
 
     expect(game.scene.getPlayerField()[0].getLastXMoves()[0].result).toBe(MoveResult.SUCCESS);
@@ -199,7 +199,7 @@ describe("Moves - Instruct", () => {
     game.move.changeMoveset(enemyPokemon, MoveToUse);
     game.move.select(Moves.INSTRUCT);
     await game.forceEnemyMove(Moves.PROTECT);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("TurnEndPhase", false);
 
     expect(enemyPokemon.getLastXMoves(-1)[0].move).toBe(Moves.PROTECT);
@@ -219,13 +219,13 @@ describe("Moves - Instruct", () => {
 
     game.move.select(Moves.INSTRUCT);
     await game.forceEnemyMove(Moves.HYPER_BEAM);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     expect(player.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
 
     game.move.select(Moves.INSTRUCT);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("TurnEndPhase", false);
 
     expect(player.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
@@ -243,7 +243,7 @@ describe("Moves - Instruct", () => {
     game.move.select(Moves.FIERY_DANCE, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY);
     await game.forceEnemyMove(Moves.SPLASH);
     await game.forceEnemyMove(Moves.SPLASH);
-    await game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     await game.phaseInterceptor.to("TurnEndPhase", false);
 
     expect(game.scene.getPlayerField()[0].getLastXMoves()[0].result).toBe(MoveResult.FAIL);
@@ -259,14 +259,14 @@ describe("Moves - Instruct", () => {
     await game.toNextTurn();
 
     game.move.select(Moves.INSTRUCT);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(player.turnData.attacksReceived.length).toBe(10);
 
     await game.toNextTurn();
     game.move.select(Moves.INSTRUCT);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(player.turnData.attacksReceived.length).toBe(10);
@@ -292,7 +292,7 @@ describe("Moves - Instruct", () => {
     game.move.select(Moves.INSTRUCT, 1, BattlerIndex.ENEMY);
     await game.forceEnemyMove(Moves.BULLET_SEED, BattlerIndex.PLAYER_2);
     await game.forceEnemyMove(Moves.SPLASH);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(ivysaur.turnData.attacksReceived.length).toBe(15);
@@ -302,7 +302,7 @@ describe("Moves - Instruct", () => {
     game.move.select(Moves.INSTRUCT, 1, BattlerIndex.ENEMY);
     await game.forceEnemyMove(Moves.BULLET_SEED, BattlerIndex.PLAYER_2);
     await game.forceEnemyMove(Moves.SPLASH);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(ivysaur.turnData.attacksReceived.length).toBe(15);

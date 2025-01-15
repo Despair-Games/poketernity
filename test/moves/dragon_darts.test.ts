@@ -45,7 +45,7 @@ describe("Moves - Dragon Darts", () => {
     const enemy = game.scene.getEnemyPokemon()!;
 
     game.move.select(Moves.DRAGON_DARTS);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     for (let i = 0; i < 2; i++) {
       const enemyStartingHp = enemy.hp;
@@ -65,7 +65,7 @@ describe("Moves - Dragon Darts", () => {
     game.move.select(Moves.DRAGON_DARTS, 0, BattlerIndex.ENEMY);
     game.move.select(Moves.SPLASH, 1);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     await game.phaseInterceptor.to("MoveEndPhase", false);
 
@@ -82,7 +82,7 @@ describe("Moves - Dragon Darts", () => {
     game.move.select(Moves.DRAGON_DARTS, 0, BattlerIndex.PLAYER_2);
     game.move.select(Moves.SPLASH, 1);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     for (let i = 0; i < 2; i++) {
       const allyStartingHp = player2.hp;
@@ -108,7 +108,7 @@ describe("Moves - Dragon Darts", () => {
     await game.forceEnemyMove(Moves.DRAGON_DARTS, BattlerIndex.PLAYER_2);
     await game.forceEnemyMove(Moves.SPLASH);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
 
     for (let i = 0; i < 2; i++) {
       const magikarpStartingHp = magikarp.hp;
@@ -134,7 +134,7 @@ describe("Moves - Dragon Darts", () => {
     await game.forceEnemyMove(Moves.PROTECT);
     await game.forceEnemyMove(Moves.SPLASH);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     for (let i = 0; i < 2; i++) {
@@ -160,7 +160,7 @@ describe("Moves - Dragon Darts", () => {
     await game.forceEnemyMove(Moves.DIG, BattlerIndex.PLAYER);
     await game.forceEnemyMove(Moves.SPLASH);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
 
     for (let i = 0; i < 2; i++) {
       const enemy2StartingHp = enemy2.hp;
@@ -184,7 +184,7 @@ describe("Moves - Dragon Darts", () => {
     await game.forceEnemyMove(Moves.DRAGON_DARTS, BattlerIndex.PLAYER);
     await game.forceEnemyMove(Moves.SPLASH);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
 
     for (let i = 0; i < 2; i++) {
       const dondozoStartingHp = dondozo.hp;
@@ -204,7 +204,7 @@ describe("Moves - Dragon Darts", () => {
     game.move.select(Moves.DRAGON_DARTS, 0, BattlerIndex.ENEMY);
     game.move.select(Moves.SPLASH, 1);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     await game.move.forceMiss(true);
 
@@ -231,7 +231,7 @@ describe("Moves - Dragon Darts", () => {
     await game.forceEnemyMove(Moves.WIDE_GUARD);
     await game.forceEnemyMove(Moves.SPLASH);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -253,7 +253,7 @@ describe("Moves - Dragon Darts", () => {
     await game.forceEnemyMove(Moves.DRAGON_DARTS, BattlerIndex.PLAYER);
     await game.forceEnemyMove(Moves.SPLASH);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -273,7 +273,7 @@ describe("Moves - Dragon Darts", () => {
     game.move.select(Moves.DRAGON_DARTS, 0, BattlerIndex.ENEMY);
     game.move.select(Moves.ELECTRIFY, 1, BattlerIndex.PLAYER);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -293,7 +293,7 @@ describe("Moves - Dragon Darts", () => {
     game.move.select(Moves.DRAGON_DARTS, 0, BattlerIndex.ENEMY);
     game.move.select(Moves.SPLASH, 1);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
 

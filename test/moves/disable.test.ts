@@ -38,7 +38,7 @@ describe("Moves - Disable", () => {
     const enemyMon = game.scene.getEnemyPokemon()!;
 
     game.move.select(Moves.DISABLE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     expect(enemyMon.getMoveHistory()).toHaveLength(1);
@@ -52,7 +52,7 @@ describe("Moves - Disable", () => {
     const enemyMon = game.scene.getEnemyPokemon()!;
 
     game.move.select(Moves.DISABLE);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toNextTurn();
 
     expect(playerMon.getMoveHistory()[0]).toMatchObject({ move: Moves.DISABLE, result: MoveResult.FAIL });
@@ -65,7 +65,7 @@ describe("Moves - Disable", () => {
     const enemyMon = game.scene.getEnemyPokemon()!;
 
     game.move.select(Moves.DISABLE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     game.move.select(Moves.SPLASH);
@@ -85,7 +85,7 @@ describe("Moves - Disable", () => {
     const enemyMon = game.scene.getEnemyPokemon()!;
 
     game.move.select(Moves.DISABLE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     expect(playerMon.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
@@ -103,7 +103,7 @@ describe("Moves - Disable", () => {
 
     // Both mons just used Splash last turn; now have player use Disable.
     game.move.select(Moves.DISABLE);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toNextTurn();
 
     const enemyHistory = enemyMon.getMoveHistory();
@@ -119,7 +119,7 @@ describe("Moves - Disable", () => {
     const enemyMon = game.scene.getEnemyPokemon()!;
 
     game.move.select(Moves.DISABLE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     expect(enemyMon.isMoveRestricted(Moves.NATURE_POWER)).toBe(true);

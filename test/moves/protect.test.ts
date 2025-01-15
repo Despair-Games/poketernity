@@ -123,7 +123,7 @@ describe("Moves - Protect", () => {
 
     game.move.select(Moves.PROTECT);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 

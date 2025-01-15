@@ -52,7 +52,7 @@ describe("Moves - Toxic", () => {
     await game.classicMode.startBattle([Species.TOXAPEX]);
 
     game.move.select(Moves.TOXIC);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("BerryPhase", false);
 
     expect(game.scene.getEnemyPokemon()!.status?.effect).toBe(StatusEffect.TOXIC);
@@ -64,7 +64,7 @@ describe("Moves - Toxic", () => {
     await game.classicMode.startBattle([Species.UMBREON]);
 
     game.move.select(Moves.TOXIC);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("BerryPhase", false);
 
     expect(game.scene.getEnemyPokemon()!.status).toBeUndefined();
@@ -76,7 +76,7 @@ describe("Moves - Toxic", () => {
     await game.classicMode.startBattle([Species.TOXAPEX]);
 
     game.move.select(Moves.SWIFT);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("BerryPhase", false);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;

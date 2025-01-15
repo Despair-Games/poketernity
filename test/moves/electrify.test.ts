@@ -42,7 +42,7 @@ describe("Moves - Electrify", () => {
 
     game.move.select(Moves.ELECTRIFY);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("BerryPhase", false);
     expect(enemyPokemon.getMoveType).toHaveLastReturnedWith(Type.ELECTRIC);
@@ -60,7 +60,7 @@ describe("Moves - Electrify", () => {
 
     game.move.select(Moves.ELECTRIFY);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("BerryPhase", false);
     expect(enemyPokemon.getMoveType).toHaveLastReturnedWith(Type.ELECTRIC);

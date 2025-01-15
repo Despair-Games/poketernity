@@ -152,7 +152,7 @@ describe("Moves - Future Sight", () => {
 
     game.move.select(Moves.FUTURE_SIGHT, 0, BattlerIndex.ENEMY);
     game.move.select(Moves.FUTURE_SIGHT, 1, BattlerIndex.ENEMY);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(game.scene.arena.getTag(ArenaTagType.DELAYED_ATTACK)).toBeDefined();

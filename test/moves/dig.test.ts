@@ -100,7 +100,7 @@ describe("Moves - Dig", () => {
     const preDigEarthquakeDmg = playerPokemon.getAttackDamage(enemyPokemon, allMoves[Moves.EARTHQUAKE]).damage;
 
     game.move.select(Moves.DIG);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("MoveEffectPhase");
 

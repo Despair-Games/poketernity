@@ -64,7 +64,7 @@ describe("Abilities - Gorilla Tactics", () => {
 
     game.move.select(Moves.GROWL);
     await game.forceEnemyMove(Moves.DISABLE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemy.getStatStage(Stat.ATK)).toBe(-1); // Only the effect of the first Growl should be applied
@@ -73,7 +73,7 @@ describe("Abilities - Gorilla Tactics", () => {
     await game.toNextTurn();
 
     game.move.select(Moves.TACKLE);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(darmanitan.hp).toBeLessThan(darmanitan.getMaxHp());

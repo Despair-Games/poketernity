@@ -60,7 +60,7 @@ describe("Abilities - Fur Coat", () => {
     vi.spyOn(enemyPokemon, "getEffectiveStat");
 
     game.move.select(Moves.SWEET_KISS);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.move.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
@@ -74,7 +74,7 @@ describe("Abilities - Fur Coat", () => {
     vi.spyOn(enemyPokemon, "getEffectiveStat");
 
     game.move.select(Moves.SPLASH);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.move.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 

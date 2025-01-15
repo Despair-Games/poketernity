@@ -40,7 +40,7 @@ describe("Abilities - Dancer", () => {
 
     game.move.select(Moves.SPLASH);
     game.move.select(Moves.SWORDS_DANCE, 1);
-    await game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
     await game.phaseInterceptor.to("MovePhase");
     // immediately copies ally move
     await game.phaseInterceptor.to("MovePhase", false);

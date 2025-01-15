@@ -223,7 +223,7 @@ describe("Abilities - Forecast", () => {
 
     game.move.select(Moves.SKILL_SWAP, 0, BattlerIndex.PLAYER_2);
     game.move.select(Moves.SKILL_SWAP, 1, BattlerIndex.PLAYER);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(castform.formIndex).toBe(NORMAL_FORM);
@@ -235,7 +235,7 @@ describe("Abilities - Forecast", () => {
 
     game.move.select(Moves.SPLASH);
     game.move.select(Moves.WORRY_SEED, 1, BattlerIndex.PLAYER);
-    await game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     await game.phaseInterceptor.to("MoveEndPhase");
 
     expect(castform.formIndex).toBe(NORMAL_FORM);
@@ -250,7 +250,7 @@ describe("Abilities - Forecast", () => {
 
     // First turn - Forecast is suppressed
     game.move.select(Moves.SPLASH);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.move.forceHit();
 
     await game.phaseInterceptor.to(TurnEndPhase);
