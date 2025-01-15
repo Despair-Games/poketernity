@@ -3334,7 +3334,6 @@ export default class BattleScene extends SceneBase {
   canReleasePokemon(slotIndex: number): boolean {
     const currentParty = this.getPlayerParty();
     const postReleaseParty = currentParty.filter((p) => currentParty[slotIndex].id !== p.id);
-    console.log(postReleaseParty);
     return postReleaseParty.some((p) => p.isAllowedInBattle());
   }
 
@@ -3351,6 +3350,7 @@ export default class BattleScene extends SceneBase {
   /**
    * Returns a randomly selected release message to be displayed when a player releases a {@linkcode Pokemon}
    * @param pokemonName
+   * @returns a string containing the message selected
    */
   getReleaseMessage(pokemonName: string): string {
     const goodbyeKeys = [

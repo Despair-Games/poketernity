@@ -1251,6 +1251,10 @@ export default class PartyUiHandler extends MessageUiHandler {
     }
   }
 
+  /**
+   * Function that attempts to release a selected Pokemon in the party and displays a different message based on its success
+   * @param slotIndex the position of the selected Pokemon with the party
+   */
   tryRelease(slotIndex: number): void {
     if (globalScene.canReleasePokemon(slotIndex)) {
       this.showText(
