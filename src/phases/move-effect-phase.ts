@@ -458,18 +458,9 @@ export class MoveEffectPhase extends HitCheckPhase {
       // set splice index here, so future scene queues happen before FaintedPhase
       globalScene.setPhaseQueueSplice();
       globalScene.unshiftPhase(new FaintPhase(target.getBattlerIndex(), isOneHitKo, destinyTag, grudgeTag, user));
-
-      this.clearEffectsOnFaint(target);
     }
 
     return result;
-  }
-
-  /** Clears temporary effects from the given target {@linkcode Pokemon} before it faints. */
-  private clearEffectsOnFaint(target: Pokemon): void {
-    target.destroySubstitute();
-    target.lapseTag(BattlerTagType.COMMANDED);
-    target.resetSummonData();
   }
 
   /**
