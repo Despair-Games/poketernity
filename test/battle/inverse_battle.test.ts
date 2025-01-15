@@ -84,7 +84,7 @@ describe("Inverse Battle", () => {
   });
 
   it("Stealth Rock follows the inverse matchups - Stealth Rock against Charizard deals 1/32 of max HP", async () => {
-    game.scene.arena.addTag(ArenaTagType.STEALTH_ROCK, 1, Moves.STEALTH_ROCK, 0);
+    game.scene.arena.addTag(ArenaTagType.STEALTH_ROCK, 0, 1, Moves.STEALTH_ROCK);
     game.override.enemySpecies(Species.CHARIZARD).enemyLevel(100);
 
     await game.challengeMode.startBattle();

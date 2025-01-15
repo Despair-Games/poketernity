@@ -43,6 +43,7 @@ import { ShinySparklePhase } from "#app/phases/shiny-sparkle-phase";
 import { SummonPhase } from "#app/phases/summon-phase";
 import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
 import { achvs } from "#app/system/achv";
+import { settings } from "#app/system/settings/settings-manager";
 import { handleTutorial } from "#app/tutorial";
 import { Tutorial } from "#enums/tutorial";
 import { Mode } from "#app/ui/ui";
@@ -619,7 +620,7 @@ export class EncounterPhase extends BattlePhase {
               ? i18next.t("battleSpecDialogue:key", { count: count, ordinal: true })
               : "";
           const cycleCount = count.toLocaleString() + ordinalUsed;
-          const genderIndex = gameData.gender ?? PlayerGender.UNSET;
+          const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
           const genderStr = PlayerGender[genderIndex].toLowerCase();
           const encounterDialogue = i18next.t(localizationKey, { context: genderStr, cycleCount: cycleCount });
           if (!gameData.getSeenDialogues()[localizationKey]) {

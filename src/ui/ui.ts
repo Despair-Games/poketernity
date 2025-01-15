@@ -52,6 +52,7 @@ import TestDialogueUiHandler from "#app/ui/test-dialogue-ui-handler";
 import AutoCompleteUiHandler from "./autocomplete-ui-handler";
 import { Device } from "#enums/devices";
 import MysteryEncounterUiHandler from "./mystery-encounter-ui-handler";
+import { settings } from "#app/system/settings/settings-manager";
 import FormChangeSceneHandler from "./form-change-scene-handler";
 
 export enum Mode {
@@ -98,6 +99,17 @@ export enum Mode {
   ADMIN,
   MYSTERY_ENCOUNTER,
 }
+
+/** All modes that are part of the settings UI. */
+export const settingsUiModes = [
+  Mode.SETTINGS,
+  Mode.SETTINGS_AUDIO,
+  Mode.SETTINGS_DISPLAY,
+  Mode.SETTINGS_KEYBOARD,
+  Mode.KEYBOARD_BINDING,
+  Mode.SETTINGS_GAMEPAD,
+  Mode.GAMEPAD_BINDING,
+];
 
 const transitionModes = [
   Mode.SAVE_SLOT,
@@ -344,7 +356,7 @@ export default class UI extends Phaser.GameObjects.Container {
     // Get localized dialogue (if available)
     let hasi18n = false;
     let text = keyOrText;
-    const genderIndex = globalScene.gameData.gender ?? PlayerGender.UNSET;
+    const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
     const genderStr = PlayerGender[genderIndex].toLowerCase();
 
     if (i18next.exists(keyOrText)) {
@@ -399,7 +411,7 @@ export default class UI extends Phaser.GameObjects.Container {
 
   shouldSkipDialogue(i18nKey: string): boolean {
     if (i18next.exists(i18nKey)) {
-      if (globalScene.skipSeenDialogues && globalScene.gameData.getSeenDialogues()[i18nKey] === true) {
+      if (settings.general.skipSeenDialogues && globalScene.gameData.getSeenDialogues()[i18nKey] === true) {
         return true;
       }
     }
