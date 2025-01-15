@@ -2,7 +2,7 @@ import type { PokemonDefendCondition } from "#app/@types/PokemonDefendCondition"
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { HitResult } from "#enums/hit-result";
-import type { BooleanHolder, NumberHolder } from "#app/utils";
+import type { NumberHolder } from "#app/utils";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import { ReceivedMoveDamageMultiplierAbAttr } from "./received-move-damage-multiplier-ab-attr";
 
@@ -37,20 +37,16 @@ export class FormBlockDamageAbAttr extends ReceivedMoveDamageMultiplierAbAttr {
    * Removes the appropriate `BattlerTagType` when hit by an attack and is in its defense form.
    *
    * @param pokemon The Pokémon with the ability.
-   * @param _passive n/a
    * @param attacker The attacking Pokémon.
    * @param move The move being used.
-   * @param _cancelled n/a
    * @param args Additional arguments.
    * @returns `true` if the immunity was applied.
    */
-  override applyPreDefend(
+  override apply(
     pokemon: Pokemon,
-    _passive: boolean,
     simulated: boolean,
     attacker: Pokemon,
     move: Move,
-    _cancelled: BooleanHolder,
     multiplier: NumberHolder,
   ): boolean {
     if (this.condition(pokemon, attacker, move) && !move.hitsSubstitute(attacker, pokemon)) {
@@ -71,7 +67,7 @@ export class FormBlockDamageAbAttr extends ReceivedMoveDamageMultiplierAbAttr {
    * Gets the message triggered when the Pokémon avoids damage using the form-changing ability.
    * @param pokemon The Pokémon with the ability.
    * @param abilityName The name of the ability.
-   * @param _args n/a
+   * @param args n/a
    * @returns The trigger message.
    */
   override getTriggerMessage(pokemon: Pokemon, abilityName: string, ..._args: any[]): string {

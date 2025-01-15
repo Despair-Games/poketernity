@@ -32,7 +32,8 @@ export class RemoveHeldItemAttr extends MoveEffectAttr {
     }
 
     const cancelled = new BooleanHolder(false);
-    applyAbAttrs(BlockItemTheftAbAttr, target, false, cancelled); // Check for abilities that block item theft
+
+    applyAbAttrs(BlockItemTheftAbAttr, target, false, cancelled);
 
     if (cancelled.value === true) {
       return false;

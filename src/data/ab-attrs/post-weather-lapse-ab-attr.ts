@@ -14,13 +14,14 @@ export class PostWeatherLapseAbAttr extends AbAttr {
     this.weatherTypes = weatherTypes;
   }
 
-  applyPostWeatherLapse(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    _weather: Weather | null,
-    ..._args: unknown[]
-  ): boolean {
+  /**
+   * Applies an effect after the weather on the field lapses.
+   * @param pokemon The {@linkcode Pokemon} with this ability
+   * @param simulated If `true`, suppresses changes to game state
+   * @param weather The {@linkcode Weather} on the field
+   * @returns `true` if effects successfully apply
+   */
+  override apply(_pokemon: Pokemon, _simulated: boolean, _weather: Weather): boolean {
     return false;
   }
 

@@ -15,7 +15,7 @@ import { ArenaTagSide } from "#enums/arena-tag-side";
 import type { BattlerIndex } from "#enums/battler-index";
 import { getTerrainClearMessage, getTerrainStartMessage, Terrain } from "#app/data/terrain";
 import { TerrainType } from "#enums/terrain-type";
-import { applyAbAttrs, applyPostTerrainChangeAbAttrs, applyPostWeatherChangeAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/ability";
 import { PostTerrainChangeAbAttr } from "#app/data/ab-attrs/post-terrain-change-ab-attr";
 import { PostWeatherChangeAbAttr } from "#app/data/ab-attrs/post-weather-change-ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
@@ -324,7 +324,7 @@ export class Arena {
         pokemon.findAndRemoveTags(
           (t) => "weatherTypes" in t && !(t.weatherTypes as WeatherType[]).find((t) => t === weather),
         );
-        applyPostWeatherChangeAbAttrs(PostWeatherChangeAbAttr, pokemon, weather);
+        applyAbAttrs(PostWeatherChangeAbAttr, pokemon, false, weather);
       });
 
     return true;
@@ -390,7 +390,7 @@ export class Arena {
         pokemon.findAndRemoveTags(
           (t) => "terrainTypes" in t && !(t.terrainTypes as TerrainType[]).find((t) => t === terrain),
         );
-        applyPostTerrainChangeAbAttrs(PostTerrainChangeAbAttr, pokemon, terrain);
+        applyAbAttrs(PostTerrainChangeAbAttr, pokemon, false, terrain);
         applyAbAttrs(TerrainEventTypeChangeAbAttr, pokemon, false);
       });
 
@@ -627,12 +627,11 @@ export class Arena {
    */
   addTag(
     tagType: ArenaTagType,
-    turnCount: number,
-    sourceMove: Moves | undefined,
     sourceId: number,
+    turnCount: number = 0,
+    sourceMove?: Moves,
     side: ArenaTagSide = ArenaTagSide.BOTH,
     quiet: boolean = false,
-    targetIndex?: BattlerIndex,
   ): boolean {
     const existingTag = this.getTagOnSide(tagType, side);
     if (existingTag) {
@@ -647,7 +646,7 @@ export class Arena {
     }
 
     // creates a new tag object
-    const newTag = getArenaTag(tagType, turnCount || 0, sourceMove, sourceId, targetIndex, side);
+    const newTag = getArenaTag(tagType, sourceId, turnCount, sourceMove, side);
     if (newTag) {
       this.tags.push(newTag);
       newTag.onAdd(this, quiet);

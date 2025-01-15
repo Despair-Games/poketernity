@@ -10,19 +10,12 @@ import { BlockNonDirectDamageAbAttr } from "./block-non-direct-damage-ab-attr";
 import { PostTurnAbAttr } from "./post-turn-ab-attr";
 
 /**
- * Attribute used for abilities (Bad Dreams) that damages the opponents for being asleep
+ * Attribute to damage all sleeping opponents by 1/8 of their max hp at the end of turn.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Bad_Dreams_(Ability) | Bad Dreams}.
  * @extends PostTurnAbAttr
  */
 export class PostTurnHurtIfSleepingAbAttr extends PostTurnAbAttr {
-  /**
-   * Deals damage to all sleeping opponents equal to 1/8 of their max hp (min 1)
-   * @param pokemon Pokemon that has this ability
-   * @param _passive N/A
-   * @param simulated `true` if applying in a simulated call.
-   * @param _args N/A
-   * @returns `true` if any opponents are sleeping
-   */
-  override applyPostTurn(pokemon: Pokemon, _passive: boolean, simulated: boolean): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean): boolean {
     let hadEffect = false;
     for (const opp of pokemon.getOpponents()) {
       if (

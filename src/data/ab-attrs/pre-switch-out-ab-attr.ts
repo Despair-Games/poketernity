@@ -2,7 +2,17 @@ import type { Pokemon } from "#app/field/pokemon";
 import { AbAttr } from "./ab-attr";
 
 export class PreSwitchOutAbAttr extends AbAttr {
-  applyPreSwitchOut(_pokemon: Pokemon, _passive: boolean, _simulated: boolean, ..._args: unknown[]): boolean {
+  constructor(showAbility: boolean = true) {
+    super(showAbility, true);
+  }
+
+  /**
+   * Applies an effect before the source switches out of the field
+   * @param pokemon The {@linkcode Pokemon} with this ability
+   * @param simulated If `true`, suppresses changes to game state
+   * @returns `true` if effects from this attribute apply successfully
+   */
+  override apply(_pokemon: Pokemon, _simulated: boolean): boolean {
     return false;
   }
 }

@@ -23,7 +23,6 @@ export class MoveEffectChanceMultiplierAbAttr extends AbAttr {
    */
   override apply(
     _pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
     moveChance: NumberHolder,
     move: Move,

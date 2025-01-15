@@ -5,7 +5,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
 import { ConfusionOnStatusEffectAbAttr } from "#app/data/ab-attrs/confusion-on-status-effect-ab-attr";
-import { applyPostAttackAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/ability";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
@@ -59,7 +59,7 @@ export class StatusEffectAttr extends MoveEffectAttr {
         (!pokemon.status || (pokemon.status.effect === this.effect && moveChance < 0))
         && pokemon.trySetStatus(this.effect, true, user, this.turnsRemaining)
       ) {
-        applyPostAttackAbAttrs(ConfusionOnStatusEffectAbAttr, user, target, move, null, false, this.effect);
+        applyAbAttrs(ConfusionOnStatusEffectAbAttr, user, false, target, move, null, this.effect);
         return true;
       }
     }
