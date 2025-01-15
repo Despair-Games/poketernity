@@ -22,7 +22,7 @@ import i18next from "i18next";
 import { isNullOrUndefined } from "#app/utils";
 import { selfStatLowerMoves, type Move } from "./move";
 import { AttackMove } from "./move";
-import { ChargeAnim } from "./battle-anims";
+import { ChargeAnim } from "#enums/charge-anim";
 import { EncoreTag, StockpilingTag, SemiInvulnerableTag, ShellTrapTag, TrappedTag } from "./battler-tags";
 import { ChargingAttackMove, ChargingSelfStatusMove } from "./move";
 import { AbilityChangeAttr } from "./move-attrs/ability-change-attr";
