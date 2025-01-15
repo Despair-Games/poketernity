@@ -26,13 +26,16 @@ vi.mock("i18next", async (importOriginal) => {
   console.log("Mocking i18next");
   const { setupServer } = await import("msw/node");
   const { http, HttpResponse } = await import("msw");
+  const fs = await import("fs");
 
   global.server = setupServer(
     http.get("/locales/en/*", async (req) => {
       const filename = req.params[0];
 
       try {
-        const json = await import(`../public/locales/en/${req.params[0]}`);
+        // Read the JSON file, instead of importing it, to avoid a bug that breaks locales for the move Return.
+        const path = `./public/locales/en/${req.params[0]}`;
+        const json = JSON.parse(fs.readFileSync(path, { encoding: "utf8", flag: "r" }));
         console.log("Loaded locale", filename);
         return HttpResponse.json(json);
       } catch (err) {

@@ -35,6 +35,15 @@ type SparseBoostsTable = any;
 
 /* eslint-disable */
 
+/**
+ * Move data is sourced from: https://github.com/smogon/pokemon-showdown/blob/master/data/moves.ts,
+ * with the following exceptions due to Poketernity's custom implementations:
+ *
+ * - Dark Void's accuracy: 50 -> 80 (balance, pre-gen VII implementation)
+ * - OHKO moves (Fissure, Guillotine, Horn Drill, Sheer Cold) base power: 0 -> 200 (for use against Boss Pokemon)
+ * - Zippy Zap's base power: 80 -> 50, PP: 10 -> 15, secondary effect -> guaranteed crit (LGPE implementation)
+ * - Heal Order's PP: 10 -> 5 (balance + consistency with other recovery moves)
+ */
 export const showdownMoveData = {
   "10000000voltthunderbolt": {
     num: 719,
@@ -3547,7 +3556,7 @@ export const showdownMoveData = {
   },
   darkvoid: {
     num: 464,
-    accuracy: 50,
+    accuracy: 80,
     basePower: 0,
     category: "Status",
     name: "Dark Void",
@@ -5848,7 +5857,7 @@ export const showdownMoveData = {
   fissure: {
     num: 90,
     accuracy: 30,
-    basePower: 0,
+    basePower: 200,
     category: "Physical",
     name: "Fissure",
     pp: 5,
@@ -8460,7 +8469,7 @@ export const showdownMoveData = {
   guillotine: {
     num: 12,
     accuracy: 30,
-    basePower: 0,
+    basePower: 200,
     category: "Physical",
     name: "Guillotine",
     pp: 5,
@@ -8842,7 +8851,7 @@ export const showdownMoveData = {
     category: "Status",
     isNonstandard: "Past",
     name: "Heal Order",
-    pp: 10,
+    pp: 5,
     priority: 0,
     flags: { snatch: 1, heal: 1, metronome: 1 },
     heal: [1, 2],
@@ -9464,7 +9473,7 @@ export const showdownMoveData = {
   horndrill: {
     num: 32,
     accuracy: 30,
-    basePower: 0,
+    basePower: 200,
     category: "Physical",
     name: "Horn Drill",
     pp: 5,
@@ -17071,7 +17080,7 @@ export const showdownMoveData = {
   sheercold: {
     num: 329,
     accuracy: 30,
-    basePower: 0,
+    basePower: 200,
     category: "Special",
     name: "Sheer Cold",
     pp: 5,
@@ -22379,21 +22388,14 @@ export const showdownMoveData = {
   zippyzap: {
     num: 729,
     accuracy: 100,
-    basePower: 80,
+    basePower: 50,
     category: "Physical",
     isNonstandard: "LGPE",
     name: "Zippy Zap",
-    pp: 10,
+    pp: 15,
     priority: 2,
     flags: { contact: 1, protect: 1, mirror: 1 },
-    secondary: {
-      chance: 100,
-      self: {
-        boosts: {
-          evasion: 1,
-        },
-      },
-    },
+    willCrit: true,
     target: "normal",
     type: "Electric",
     contestType: "Cool",
@@ -22442,4 +22444,5 @@ export const showdownMoveData = {
     contestType: "Clever",
   },
 };
+
 /* eslint-enable */
