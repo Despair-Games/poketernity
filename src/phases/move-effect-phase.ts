@@ -97,6 +97,13 @@ export class MoveEffectPhase extends HitCheckPhase {
     applyMoveAttrs(OverrideMoveEffectAttr, user, this.getFirstTarget(), move, overridden, this.move.virtual);
     // If other effects were overridden, stop this phase before they can be applied
     if (overridden.value) {
+      this.moveHistoryEntry = {
+        move: this.move.moveId,
+        targets: this.adjustedTargets ?? this.targets,
+        result: MoveResult.SUCCESS,
+        virtual: this.move.virtual,
+      };
+      user.pushMoveHistory(this.moveHistoryEntry);
       return this.end();
     }
 
