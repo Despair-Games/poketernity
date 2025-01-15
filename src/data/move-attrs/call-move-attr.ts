@@ -1,3 +1,11 @@
+// -- start tsdoc imports --
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import type { CopyMoveAttr } from "#app/data/move-attrs/copy-move-attr";
+import type { RandomMoveAttr } from "#app/data/move-attrs/random-move-attr";
+import type { RandomMovesetMoveAttr } from "#app/data/move-attrs/random-moveset-move-attr";
+/* eslint-enable @typescript-eslint/no-unused-vars */
+// -- end tsdoc imports --
+
 import { type Move, getMoveTargets } from "#app/data/move";
 import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
 import { type Pokemon, PokemonMove } from "#app/field/pokemon";
@@ -8,7 +16,6 @@ import type { BooleanHolder } from "#app/utils";
 import type { BattlerIndex } from "#enums/battler-index";
 import { MoveTarget } from "#enums/move-target";
 import type { Moves } from "#enums/moves";
-
 /**
  * Attribute used to call a move.
  * Used by other move attributes: {@linkcode RandomMoveAttr}, {@linkcode RandomMovesetMoveAttr}, {@linkcode CopyMoveAttr}

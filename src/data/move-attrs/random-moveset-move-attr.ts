@@ -12,8 +12,6 @@ import type { Moves } from "#enums/moves";
  * Used for {@linkcode Moves.ASSIST} and {@linkcode Moves.SLEEP_TALK}
  *
  * Fails if the user has no callable moves.
- *
- * Invalid moves are indicated by what is passed in to invalidMoves: {@linkcode invalidAssistMoves} or {@linkcode invalidSleepTalkMoves}
  * @extends RandomMoveAttr
  * @see {@linkcode getCondition} for move selection
  */
