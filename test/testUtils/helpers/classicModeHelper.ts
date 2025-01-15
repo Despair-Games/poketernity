@@ -1,6 +1,7 @@
 import { BattleStyle } from "#enums/battle-style";
 import type { Species } from "#enums/species";
-import { GameModes, getGameMode } from "#app/game-mode";
+import { getGameMode } from "#app/game-mode";
+import { GameModes } from "#enums/game-modes";
 import overrides from "#app/overrides";
 import { CommandPhase } from "#app/phases/command-phase";
 import { EncounterPhase } from "#app/phases/encounter-phase";
@@ -9,6 +10,7 @@ import { TurnInitPhase } from "#app/phases/turn-init-phase";
 import { Mode } from "#app/ui/ui";
 import { generateStarter } from "#test/testUtils/gameManagerUtils";
 import { GameManagerHelper } from "#test/testUtils/helpers/gameManagerHelper";
+import { settings } from "#app/system/settings/settings-manager";
 
 /**
  * Helper to handle classic mode specifics
@@ -48,7 +50,7 @@ export class ClassicModeHelper extends GameManagerHelper {
   async startBattle(species?: Species[]): Promise<void> {
     await this.runToSummon(species);
 
-    if (this.game.scene.battleStyle === BattleStyle.SWITCH) {
+    if (settings.general.battleStyle === BattleStyle.SWITCH) {
       this.game.onNextPrompt(
         "CheckSwitchPhase",
         Mode.CONFIRM,

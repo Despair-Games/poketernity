@@ -6,7 +6,7 @@ import { type TurnEndPhase } from "#app/phases/turn-end-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import { BattlerTagLapseType } from "#app/data/battler-tags";
+import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { GameOverPhase } from "#app/phases/game-over-phase";

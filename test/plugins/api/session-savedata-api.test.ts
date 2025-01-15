@@ -10,11 +10,16 @@ import { SessionSavedataApi } from "#app/plugins/api/session-savedata-api";
 import type { SessionSaveData } from "#app/@types/SessionData";
 import { getApiBaseUrl } from "#test/testUtils/testUtils";
 import { http, HttpResponse } from "msw";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { initServerForApiTests } from "#test/testUtils/testFileInitialization";
 
 const apiBase = getApiBaseUrl();
 const sessionSavedataApi = new SessionSavedataApi(apiBase);
-const { server } = global;
+
+let server;
+beforeAll(async () => {
+  server = await initServerForApiTests();
+});
 
 afterEach(() => {
   server.resetHandlers();

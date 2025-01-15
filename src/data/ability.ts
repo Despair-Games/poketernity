@@ -1,11 +1,12 @@
-import type { BattlerIndex } from "#app/battle";
-import { BattleType } from "#app/battle";
+import type { BattlerIndex } from "#enums/battler-index";
+import { BattleType } from "#enums/battle-type";
 import type { Weather } from "#app/data/weather";
-import { type Stat, type BattleStat } from "#app/enums/stat";
-import { SwitchType } from "#app/enums/switch-type";
+import { type Stat, type BattleStat } from "#enums/stat";
+import { SwitchType } from "#enums/switch-type";
 import type { Pokemon } from "#app/field/pokemon";
-import type { EnemyPokemon, PokemonMove, HitResult } from "#app/field/pokemon";
-import { MoveResult, PlayerPokemon } from "#app/field/pokemon";
+import type { EnemyPokemon, PokemonMove } from "#app/field/pokemon";
+import type { HitResult } from "#enums/hit-result";
+import { PlayerPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { Localizable } from "#app/interfaces/locales";
 import { BattleEndPhase } from "#app/phases/battle-end-phase";
@@ -58,6 +59,7 @@ import type { PostFaintAbAttr } from "./ab-attrs/post-faint-ab-attr";
 import { ForceSwitchOutImmunityAbAttr } from "./ab-attrs/force-switch-out-immunity-ab-attr";
 import { queueShowAbility } from "./ability-utils";
 import type { StatStageAbAttr } from "./ab-attrs/stat-stage-ab-attr";
+import { BattlerTagType } from "#enums/battler-tag-type";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -382,10 +384,7 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
       if (enemyMoveHistory.length > 0) {
         const enemyLastMoveUsed = enemyMoveHistory[enemyMoveHistory.length - 1];
         // Will not activate if the Pokémon's HP falls below half while it is in the air during Sky Drop.
-        if (
-          fordbiddenDefendingMoves.includes(enemyLastMoveUsed.move)
-          || (enemyLastMoveUsed.move === Moves.SKY_DROP && enemyLastMoveUsed.result === MoveResult.OTHER)
-        ) {
+        if (fordbiddenDefendingMoves.includes(enemyLastMoveUsed.move) || pokemon.getTag(BattlerTagType.SKY_DROP)) {
           return false;
           // Will not activate if the Pokémon's HP falls below half by a move affected by Sheer Force.
         } else if (allMoves[enemyLastMoveUsed.move].chance >= 0 && source.hasAbility(Abilities.SHEER_FORCE)) {

@@ -11,7 +11,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { achvs } from "#app/system/achv";
 import type PartyUiHandler from "#app/ui/party-ui-handler";
 import { Mode } from "#app/ui/ui";
-import { fixedInt } from "#app/utils";
+import { fixedNumber } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { FormChangeBasePhase } from "./abstract-form-change-base-phase";
@@ -45,7 +45,7 @@ export class FormChangePhase extends FormChangeBasePhase {
   }
 
   public override doFormChange(): void {
-    const { time, tweens } = globalScene;
+    const { time, tweens, animations } = globalScene;
 
     this.pokemon.getPossibleForm(this.formChange).then((formChangedPokemon) => {
       [this.pokemonNewFormSprite, this.pokemonNewFormTintSprite].map((sprite) => {
@@ -84,7 +84,7 @@ export class FormChangePhase extends FormChangeBasePhase {
               this.bgVideo.play();
             });
             globalScene.playSound("se/charge");
-            this.doSpiralUpward();
+            animations.doSpiralUpward(this.baseBgImg, this.container);
             tweens.addCounter({
               from: 0,
               to: 1,
@@ -96,11 +96,11 @@ export class FormChangePhase extends FormChangeBasePhase {
                 this.pokemonSprite.setVisible(false);
                 time.delayedCall(1100, () => {
                   globalScene.playSound("se/beam");
-                  this.doArcDownward();
+                  animations.doArcDownward(this.baseBgImg, this.container);
                   time.delayedCall(1000, () => {
                     this.pokemonNewFormTintSprite.setScale(0.25);
                     this.pokemonNewFormTintSprite.setVisible(true);
-                    this.doCycle(1, 1).then((_success) => {
+                    animations.doCycle(1, 1, this.pokemonTintSprite, this.pokemonNewFormTintSprite).then((_success) => {
                       this.handleFormChangeComplete(formChangedPokemon);
                     });
                   });
@@ -118,7 +118,7 @@ export class FormChangePhase extends FormChangeBasePhase {
    * @param formChangedPokemon - The {@linkcode Pokemon} that has changed form
    */
   private handleFormChangeComplete(formChangedPokemon: Pokemon): void {
-    const { time, tweens, ui } = globalScene;
+    const { time, tweens, ui, animations } = globalScene;
     const onFormChangeComplete = (): void => {
       const preName = getPokemonNameWithAffix(this.pokemon);
 
@@ -152,9 +152,9 @@ export class FormChangePhase extends FormChangeBasePhase {
                 () => this.end(),
                 null,
                 true,
-                fixedInt(delay),
+                fixedNumber(delay),
               );
-              time.delayedCall(fixedInt(delay + 250), () => globalScene.playBgm());
+              time.delayedCall(fixedNumber(delay + 250), () => globalScene.playBgm());
             });
           });
         },
@@ -163,7 +163,7 @@ export class FormChangePhase extends FormChangeBasePhase {
 
     globalScene.playSound("se/sparkle");
     this.pokemonNewFormSprite.setVisible(true);
-    this.doCircleInward();
+    animations.doCircleInward(this.baseBgImg, this.container);
     time.delayedCall(900, () => {
       this.pokemon.changeForm(this.formChange).then(() => {
         if (!this.modal) {
@@ -171,7 +171,7 @@ export class FormChangePhase extends FormChangeBasePhase {
         }
 
         globalScene.playSound("se/shine");
-        this.doSpray();
+        animations.doSpray(this.baseBgImg, this.container);
         tweens.add({
           targets: this.overlay,
           alpha: 1,

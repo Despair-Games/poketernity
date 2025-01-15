@@ -1,12 +1,17 @@
 import type { UpdateAllSavedataRequest } from "#app/@types/SavedataApi";
 import { SavedataApi } from "#app/plugins/api/savedata-api";
+import { initServerForApiTests } from "#test/testUtils/testFileInitialization";
 import { getApiBaseUrl } from "#test/testUtils/testUtils";
 import { http, HttpResponse } from "msw";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const apiBase = getApiBaseUrl();
 const savedataApi = new SavedataApi(apiBase);
-const { server } = global;
+
+let server;
+beforeAll(async () => {
+  server = await initServerForApiTests();
+});
 
 afterEach(() => {
   server.resetHandlers();

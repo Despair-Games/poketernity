@@ -1,19 +1,22 @@
 import { Mode } from "./ui";
 import { TextStyle, addTextObject, getEggTierTextTint, getTextStyleOptions } from "./text";
 import MessageUiHandler from "./message-ui-handler";
-import { getEnumValues, getEnumKeys, fixedInt, randSeedShuffle } from "#app/utils";
+import { getEnumValues, getEnumKeys, fixedNumber, randSeedShuffle } from "#app/utils";
 import type { IEggOptions } from "../data/egg";
 import { Egg, getLegendaryGachaSpeciesForTimestamp } from "../data/egg";
-import { VoucherType, getVoucherTypeIcon } from "../system/voucher";
+import { getVoucherTypeIcon } from "../system/voucher";
+import { VoucherType } from "#enums/voucher-type";
 import { getPokemonSpecies } from "../data/pokemon-species";
 import { addWindow } from "./ui-theme";
-import { Tutorial, handleTutorial } from "../tutorial";
+import { handleTutorial } from "../tutorial";
+import { Tutorial } from "#enums/tutorial";
 import { Button } from "#enums/buttons";
 import Overrides from "#app/overrides";
-import { GachaType } from "#app/enums/gacha-types";
+import { GachaType } from "#enums/gacha-types";
 import i18next from "i18next";
 import { EggTier } from "#enums/egg-type";
 import { globalScene } from "#app/global-scene";
+import { settings } from "#app/system/settings/settings-manager";
 
 export default class EggGachaUiHandler extends MessageUiHandler {
   private eggGachaContainer: Phaser.GameObjects.Container;
@@ -54,7 +57,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
 
   setup() {
     this.gachaCursor = 0;
-    this.scale = getTextStyleOptions(TextStyle.WINDOW, globalScene.uiTheme).scale;
+    this.scale = getTextStyleOptions(TextStyle.WINDOW, settings.display.uiTheme).scale;
 
     const ui = this.getUi();
 
@@ -344,7 +347,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
 
     this.eggGachaContainer.setVisible(true);
 
-    handleTutorial(Tutorial.Egg_Gacha);
+    handleTutorial(Tutorial.EGG_GACHA);
 
     return true;
   }
@@ -353,7 +356,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
     if (this.transitioning && this.transitionCancelled) {
       delay = Math.ceil(delay / 5);
     }
-    return fixedInt(delay);
+    return fixedNumber(delay);
   }
 
   pull(pullCount: number = 0, count: number = 0, eggs?: Egg[]): void {
@@ -638,7 +641,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
   }
 
   showError(text: string): void {
-    this.showText(text, undefined, () => this.showText(this.defaultText), fixedInt(1500));
+    this.showText(text, undefined, () => this.showText(this.defaultText), fixedNumber(1500));
   }
 
   setTransitioning(transitioning: boolean): void {

@@ -4,6 +4,8 @@ Pokéternity is a browser based Pokémon fangame heavily inspired by the rogueli
 
 # Contributing
 
+Make sure to read our [Code of Conduct](./CODE_OF_CONDUCT.md) before contributing!
+
 ## 🛠️ Development
 
 If you have the motivation and experience with Typescript/Javascript (or are willing to learn) please feel free to fork the repository and make pull requests with contributions. If you don't know what to work on but want to help, reference the below **To-Do** section.
@@ -45,6 +47,9 @@ For detailed guidelines on documenting your code, refer to the [comments.md](./d
 
 - The translations were moved to the [dedicated translation repository](https://github.com/despair-games/poketernity-locales) and are now applied as a submodule in this project.
 - The command to retrieve the translations is `git submodule update --init --recursive`. <!--If you still struggle to get it working, please reach out to #dev-corner channel in Discord.-->
+
+> [!NOTE]
+> We have recently made major changes to our testing framework (see #158 and #247). If you experience any weird issues with unit tests, especially issues that only occur when running multiple test files in a single run, please feel free to reach out for help.
 
 ## 🪧 To Do
 

@@ -1,12 +1,13 @@
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
-import { MoveResult, PokemonMove } from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon";
+import { MoveResult } from "#enums/move-result";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { StatusEffect } from "#enums/status-effect";
-import { BattlerIndex } from "#app/battle";
+import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/all-moves";
 import { RandomMoveAttr } from "#app/data/move-attrs/random-move-attr";
 

@@ -1,4 +1,4 @@
-import type { BattlerIndex } from "#app/battle";
+import type { BattlerIndex } from "#enums/battler-index";
 import { CommonAnim, CommonBattleAnim } from "#app/data/battle-anims";
 import { getStatusEffectObtainText, getStatusEffectOverlapText } from "#app/data/status-effect";
 import type { Pokemon } from "#app/field/pokemon";

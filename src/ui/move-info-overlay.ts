@@ -2,11 +2,12 @@ import type { InfoToggle } from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
 import { TextStyle, addTextObject } from "./text";
 import { addWindow } from "./ui-theme";
-import { getLocalizedSpriteKey, fixedInt } from "#app/utils";
+import { getLocalizedSpriteKey, fixedNumber } from "#app/utils";
 import type { Move } from "../data/move";
-import { MoveCategory } from "#app/enums/move-category";
+import { MoveCategory } from "#enums/move-category";
 import { Type } from "#enums/type";
 import i18next from "i18next";
+import { settings } from "#app/system/settings/settings-manager";
 
 export interface MoveInfoOverlaySettings {
   delayVisibility?: boolean; // if true, showing the overlay will only set it to active and populate the fields and the handler using this field has to manually call setVisible later.
@@ -164,7 +165,7 @@ export default class MoveInfoOverlay extends Phaser.GameObjects.Container implem
 
   // show this component with infos for the specific move
   show(move: Move): boolean {
-    if (!globalScene.enableMoveInfo) {
+    if (!settings.display.enableMoveInfo) {
       return false; // move infos have been disabled // TODO:: is `false` correct? i used to be `undeefined`
     }
     this.move = move;
@@ -189,10 +190,10 @@ export default class MoveInfoOverlay extends Phaser.GameObjects.Container implem
       // generate scrolling effects
       this.descScroll = globalScene.tweens.add({
         targets: this.desc,
-        delay: fixedInt(2000),
+        delay: fixedNumber(2000),
         loop: -1,
-        hold: fixedInt(2000),
-        duration: fixedInt((moveDescriptionLineCount - 3) * 2000),
+        hold: fixedNumber(2000),
+        duration: fixedNumber((moveDescriptionLineCount - 3) * 2000),
         y: `-=${14.83 * (72 / 96) * (moveDescriptionLineCount - 3)}`,
       });
     }
@@ -215,7 +216,7 @@ export default class MoveInfoOverlay extends Phaser.GameObjects.Container implem
     }
     globalScene.tweens.add({
       targets: this.desc,
-      duration: fixedInt(125),
+      duration: fixedNumber(125),
       ease: "Sine.easeInOut",
       alpha: visible ? 1 : 0,
     });

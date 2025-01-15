@@ -1,6 +1,6 @@
 import { getPokemonNameWithAffix } from "../messages";
 import type { Pokemon } from "../field/pokemon";
-import { HitResult } from "../field/pokemon";
+import { HitResult } from "#enums/hit-result";
 import { getStatusEffectHealText } from "./status-effect";
 import { NumberHolder, toDmgValue, randSeedInt } from "#app/utils";
 import { applyAbAttrs, applyPostItemLostAbAttrs } from "./ability";
@@ -10,7 +10,7 @@ import { PostItemLostAbAttr } from "./ab-attrs/post-item-lost-ab-attr";
 import i18next from "i18next";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryType } from "#enums/berry-type";
-import { Stat, type BattleStat } from "#app/enums/stat";
+import { Stat, type BattleStat } from "#enums/stat";
 import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { globalScene } from "#app/global-scene";

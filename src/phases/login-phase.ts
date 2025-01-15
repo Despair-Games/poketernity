@@ -1,14 +1,16 @@
 import { updateUserInfo } from "#app/account";
-import { bypassLogin } from "#app/battle-scene";
+import { bypassLogin } from "#app/constants";
 import { SESSION_ID_COOKIE } from "#app/constants";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import { handleTutorial, Tutorial } from "#app/tutorial";
+import { handleTutorial } from "#app/tutorial";
+import { Tutorial } from "#enums/tutorial";
 import { Mode } from "#app/ui/ui";
 import { executeIf, getCookie, removeCookie } from "#app/utils";
 import i18next from "i18next";
 import { SelectGenderPhase } from "./select-gender-phase";
 import { UnavailablePhase } from "./unavailable-phase";
+import { settings } from "#app/system/settings/settings-manager";
 
 export class LoginPhase extends Phase {
   private readonly showText: boolean;
@@ -115,10 +117,10 @@ export class LoginPhase extends Phase {
   public override end(): void {
     globalScene.ui.setMode(Mode.MESSAGE);
 
-    if (!globalScene.gameData.gender) {
+    if (!settings.display.playerGender) {
       globalScene.unshiftPhase(new SelectGenderPhase());
     }
 
-    handleTutorial(Tutorial.Intro).then(() => super.end());
+    handleTutorial(Tutorial.INTRO).then(() => super.end());
   }
 }

@@ -6,7 +6,7 @@ import type { PokemonSpeciesFilter } from "#app/data/pokemon-species";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { allSpecies, getPokemonSpecies } from "#app/data/pokemon-species";
 import {
-  fixedInt,
+  fixedNumber,
   getIvsFromId,
   randSeedInt,
   getEnumValues,
@@ -52,7 +52,6 @@ import { Arena, ArenaBase } from "#app/field/arena";
 import { GameData } from "#app/system/game-data";
 import { addTextObject, getTextColor, TextStyle } from "#app/ui/text";
 import { allMoves } from "#app/data/all-moves";
-import { MusicPreference } from "#app/system/settings/settings";
 import {
   getDefaultModifierTypeForTier,
   getEnemyModifierTypesForWave,
@@ -61,22 +60,26 @@ import {
   getModifierPoolForType,
   getModifierType,
   getPartyLuckValue,
-  ModifierPoolType,
   modifierTypes,
   PokemonHeldItemModifierType,
 } from "#app/modifier/modifier-type";
+import { ModifierPoolType } from "#enums/modifier-pool-type";
 import AbilityBar from "#app/ui/ability-bar";
 import { allAbilities, applyAbAttrs, applyPostBattleInitAbAttrs, applyPostItemLostAbAttrs } from "#app/data/ability";
 import { PostItemLostAbAttr } from "./data/ab-attrs/post-item-lost-ab-attr";
-import type { BattlerIndex, FixedBattleConfig } from "#app/battle";
-import Battle, { BattleType } from "#app/battle";
+import type { FixedBattleConfig } from "#app/battle";
+import type { BattlerIndex } from "#enums/battler-index";
+import Battle from "#app/battle";
+import { BattleType } from "#enums/battle-type";
 import type { GameMode } from "#app/game-mode";
-import { GameModes, getGameMode } from "#app/game-mode";
+import { getGameMode } from "#app/game-mode";
+import { GameModes } from "#enums/game-modes";
 import FieldSpritePipeline from "#app/pipelines/field-sprite";
 import SpritePipeline from "#app/pipelines/sprite";
 import PartyExpBar from "#app/ui/party-exp-bar";
 import type { TrainerSlot } from "#enums/trainer-slot";
-import Trainer, { TrainerVariant } from "#app/field/trainer";
+import Trainer from "#app/field/trainer";
+import { TrainerVariant } from "#enums/trainer-variant";
 import type TrainerData from "#app/system/trainer-data";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
@@ -88,16 +91,16 @@ import type { Voucher } from "#app/system/voucher";
 import { vouchers } from "#app/system/voucher";
 import { Gender } from "#enums/gender";
 import type UIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin";
-import { addUiThemeOverrides } from "#app/ui/ui-theme";
+import { addUiThemeOverrides, updateWindowType } from "#app/ui/ui-theme";
 import type PokemonData from "#app/system/pokemon-data";
 import { Nature } from "#enums/nature";
 import type { SpeciesFormChange, SpeciesFormChangeTrigger } from "#app/data/pokemon-forms";
 import {
-  FormChangeItem,
   pokemonFormChanges,
   SpeciesFormChangeManualTrigger,
   SpeciesFormChangeTimeOfDayTrigger,
 } from "#app/data/pokemon-forms";
+import { FormChangeItem } from "#enums/form-change-item";
 import { FormChangePhase } from "#app/phases/form-change-phase";
 import { getTypeRgb } from "#app/data/type";
 import { Type } from "#enums/type";
@@ -116,15 +119,10 @@ import { InputsController } from "#app/inputs-controller";
 import { UiInputs } from "#app/ui-inputs";
 import { NewArenaEvent } from "#app/events/battle-scene";
 import { ArenaFlyout } from "#app/ui/arena-flyout";
-import { EaseType } from "#enums/ease-type";
-import { BattleStyle } from "#enums/battle-style";
 import { Biome } from "#enums/biome";
-import type { ExpNotification } from "#enums/exp-notification";
-import { MoneyFormat } from "#enums/money-format";
 import { Moves } from "#enums/moves";
 import { PlayerGender } from "#enums/player-gender";
 import { Species } from "#enums/species";
-import { UiTheme } from "#enums/ui-theme";
 import { TimedEventManager } from "#app/timed-event-manager";
 import type { PokemonAnimType } from "#enums/pokemon-anim-type";
 import i18next from "i18next";
@@ -146,7 +144,6 @@ import { SwitchPhase } from "#app/phases/switch-phase";
 import { TitlePhase } from "#app/phases/title-phase";
 import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
-import { ShopCursorTarget } from "#app/enums/shop-cursor-target";
 import MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import {
   allMysteryEncounters,
@@ -163,7 +160,6 @@ import type HeldModifierConfig from "#app/interfaces/held-modifier-config";
 import { ExpPhase } from "#app/phases/exp-phase";
 import { ShowPartyExpBarPhase } from "#app/phases/show-party-exp-bar-phase";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
-import { ExpGainsSpeed } from "#enums/exp-gains-speed";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { FRIENDSHIP_GAIN_FROM_BATTLE } from "#app/data/balance/starters";
 import { StatusEffect } from "#enums/status-effect";
@@ -171,10 +167,13 @@ import { globalScene, initGlobalScene } from "#app/global-scene";
 import { BlockItemTheftAbAttr } from "./data/ab-attrs/block-item-theft-ab-attr";
 import { DoubleBattleChanceAbAttr } from "./data/ab-attrs/double-battle-chance-ab-attr";
 import { PostBattleInitAbAttr } from "./data/ab-attrs/post-battle-init-ab-attr";
+import { settings } from "./system/settings/settings-manager";
+import type { AnySettingKey, SettingsUpdateEventArgs } from "./@types/Settings";
+import { PRSFX_SOUND_ADJUSTMENT_RATIO } from "./constants";
 import { bgmLoopPoint } from "./data/bgm-loop-point";
 import { allTrainerConfigs } from "./data/balance/trainer-configs/all-trainer-configs";
-
-export const bypassLogin = import.meta.env.VITE_BYPASS_LOGIN === "1";
+import { eventBus } from "./event-bus";
+import { Animation } from "./animations";
 
 const DEBUG_RNG = false;
 
@@ -207,85 +206,7 @@ export default class BattleScene extends SceneBase {
 
   public sessionPlayTime: number | null = null;
   public lastSavePlayTime: number | null = null;
-  public masterVolume: number = 0.5;
-  public bgmVolume: number = 1;
-  public fieldVolume: number = 1;
-  public seVolume: number = 1;
-  public uiVolume: number = 1;
-  public gameSpeed: number = 1;
-  public damageNumbersMode: number = 0;
   public reroll: boolean = false;
-  public shopCursorTarget: number = ShopCursorTarget.REWARDS;
-  public showMovesetFlyout: boolean = true;
-  public showArenaFlyout: boolean = true;
-  public showTimeOfDayWidget: boolean = true;
-  public timeOfDayAnimation: EaseType = EaseType.NONE;
-  public showLevelUpStats: boolean = true;
-  public enableTutorials: boolean = import.meta.env.VITE_BYPASS_TUTORIAL === "1";
-  public enableMoveInfo: boolean = true;
-  public enableRetries: boolean = false;
-  public hideIvs: boolean = false;
-  /**
-   * Determines the condition for a notification should be shown for Candy Upgrades
-   * - 0 = 'Off'
-   * - 1 = 'Passives Only'
-   * - 2 = 'On'
-   */
-  public candyUpgradeNotification: number = 0;
-  /**
-   * Determines what type of notification is used for Candy Upgrades
-   * - 0 = 'Icon'
-   * - 1 = 'Animation'
-   */
-  public candyUpgradeDisplay: number = 0;
-  public moneyFormat: MoneyFormat = MoneyFormat.NORMAL;
-  public uiTheme: UiTheme = UiTheme.DEFAULT;
-  public windowType: number = 0;
-  public musicPreference: number = MusicPreference.ALLGENS;
-  public moveAnimations: boolean = true;
-  public expGainsSpeed: ExpGainsSpeed = ExpGainsSpeed.DEFAULT;
-  public skipSeenDialogues: boolean = false;
-  /**
-   * Determines if the egg hatching animation should be skipped
-   * - 0 = Never (never skip animation)
-   * - 1 = Ask (ask to skip animation when hatching 2 or more eggs)
-   * - 2 = Always (automatically skip animation when hatching 2 or more eggs)
-   */
-  public eggSkipPreference: number = 0;
-
-  /**
-   * Defines the experience gain display mode.
-   *
-   * @remarks
-   * The `expParty` can have several modes:
-   * - `0` - Default: The normal experience gain display, nothing changed.
-   * - `1` - Level Up Notification: Displays the level up in the small frame instead of a message.
-   * - `2` - Skip: No level up frame nor message.
-   *
-   * Modes `1` and `2` are still compatible with stats display, level up, new move, etc.
-   * @default 0 - Uses the default normal experience gain display.
-   */
-  public expParty: ExpNotification = 0;
-  public hpBarSpeed: number = 0;
-  public fusionPaletteSwaps: boolean = true;
-  public enableTouchControls: boolean = false;
-  public enableVibration: boolean = false;
-  public showBgmBar: boolean = true;
-
-  /**
-   * Determines the selected battle style.
-   * - 0 = 'Switch'
-   * - 1 = 'Set' - The option to switch the active pokemon at the start of a battle will not display.
-   */
-  public battleStyle: number = BattleStyle.SWITCH;
-
-  /**
-   * Defines whether or not to show type effectiveness hints
-   * - true: No hints
-   * - false: Show hints for moves
-   */
-  public typeHints: boolean = false;
-
   public disableMenu: boolean = false;
 
   public gameData: GameData;
@@ -345,7 +266,6 @@ export default class BattleScene extends SceneBase {
   private fieldOverlay: Phaser.GameObjects.Rectangle;
   private shopOverlay: Phaser.GameObjects.Rectangle;
   private shopOverlayShown: boolean = false;
-  private shopOverlayOpacity: number = 0.8;
 
   public modifiers: PersistentModifier[];
   private enemyModifiers: PersistentModifier[];
@@ -377,6 +297,9 @@ export default class BattleScene extends SceneBase {
 
   public eventManager: TimedEventManager;
 
+  /** Handler for general {@linkcode Animation | animations} */
+  public animations: Animation;
+
   /**
    * Allows subscribers to listen for events
    *
@@ -397,7 +320,48 @@ export default class BattleScene extends SceneBase {
     this.nextCommandPhaseQueue = [];
     this.eventManager = new TimedEventManager();
     this.updateGameInfo();
+    this.animations = new Animation(this);
     initGlobalScene(this);
+    this.initSettingsEventListeners();
+  }
+
+  private initSettingsEventListeners() {
+    const updateSoundKeys: AnySettingKey[] = ["masterVolume", "bgmVolume", "fieldVolume", "soundEffectsVolume"];
+
+    eventBus.on("settings/updated", ({ key, value }: SettingsUpdateEventArgs) => {
+      if (updateSoundKeys.includes(key)) {
+        //TODO: check if the effective volume changed to optimize
+        this.updateSoundVolume();
+      }
+
+      if (key === "enableTouchControls") {
+        const touchControls = document.getElementById("touchControls");
+        if (touchControls && typeof value === "boolean") {
+          touchControls.classList.toggle("visible", value);
+        }
+      }
+
+      // If window type gets changed, update window colors
+      if (key === "uiWindowType" && typeof value === "number") {
+        updateWindowType(value);
+      }
+
+      // If gender gets changed, update trainer sprite
+      if (key === "playerGender" && typeof value === "number") {
+        const female = value === PlayerGender.FEMALE;
+        this.trainer.setTexture(this.trainer.texture.key.replace(female ? "m" : "f", female ? "f" : "m"));
+      }
+
+      // Money format changed, update it
+      if (key === "moneyFormat" && typeof value === "number") {
+        this.updateMoneyText(false);
+      }
+
+      // Shop overlay opacity changed, update it
+      if (key === "shopOverlayOpacity" && typeof value === "number") {
+        this.updateShopOverlayOpacity(value);
+      }
+    });
   }
 
   loadPokemonAtlas(key: string, atlasPath: string) {
@@ -661,7 +625,7 @@ export default class BattleScene extends SceneBase {
     const trainer = this.addFieldSprite(
       0,
       0,
-      `trainer_${this.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back`,
+      `trainer_${settings.display.playerGender === PlayerGender.FEMALE ? "f" : "m"}_back`,
     );
     trainer.setOrigin(0.5, 1);
     trainer.setName("sprite-trainer");
@@ -726,7 +690,7 @@ export default class BattleScene extends SceneBase {
     }
 
     this.playTimeTimer = this.time.addEvent({
-      delay: fixedInt(1000),
+      delay: fixedNumber(1000),
       repeat: -1,
       callback: () => {
         if (this.gameData) {
@@ -1235,7 +1199,7 @@ export default class BattleScene extends SceneBase {
 
     this.arena.init();
 
-    this.trainer.setTexture(`trainer_${this.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back`);
+    this.trainer.setTexture(`trainer_${settings.display.playerGender === PlayerGender.FEMALE ? "f" : "m"}_back`);
     this.trainer.setPosition(406, 186);
     this.trainer.setVisible(true);
 
@@ -1323,7 +1287,10 @@ export default class BattleScene extends SceneBase {
         this.field.add(newTrainer);
       }
     } else {
-      if (!this.gameMode.hasTrainers) {
+      if (
+        !this.gameMode.hasTrainers
+        || (Overrides.DISABLE_RANDOM_TRAINERS_OVERRIDE && isNullOrUndefined(trainerData))
+      ) {
         newBattleType = BattleType.WILD;
       } else if (battleType === undefined) {
         newBattleType = this.gameMode.isWaveTrainer(newWaveIndex, this.arena) ? BattleType.TRAINER : BattleType.WILD;
@@ -1538,7 +1505,7 @@ export default class BattleScene extends SceneBase {
         scale: scale,
         x: (defaultWidth - scaledWidth) / 2,
         y: defaultHeight - scaledHeight,
-        duration: !instant ? fixedInt(Math.abs(this.field.scale - scale) * 200) : 0,
+        duration: !instant ? fixedNumber(Math.abs(this.field.scale - scale) * 200) : 0,
         ease: "Sine.easeInOut",
         onComplete: () => resolve(),
       });
@@ -1848,10 +1815,8 @@ export default class BattleScene extends SceneBase {
   }
 
   updateShopOverlayOpacity(value: number): void {
-    this.shopOverlayOpacity = value;
-
     if (this.shopOverlayShown) {
-      this.shopOverlay.setAlpha(this.shopOverlayOpacity);
+      this.shopOverlay.setAlpha(value);
     }
   }
 
@@ -1860,7 +1825,7 @@ export default class BattleScene extends SceneBase {
     return new Promise((resolve) => {
       this.tweens.add({
         targets: this.shopOverlay,
-        alpha: this.shopOverlayOpacity,
+        alpha: settings.display.shopOverlayOpacity,
         ease: "Sine.easeOut",
         duration,
         onComplete: () => resolve(),
@@ -1903,7 +1868,7 @@ export default class BattleScene extends SceneBase {
     if (this.money === undefined) {
       return;
     }
-    const formattedMoney = formatMoney(this.moneyFormat, this.money);
+    const formattedMoney = formatMoney(settings.display.moneyFormat, this.money);
     this.moneyText.setText(i18next.t("battleScene:moneyOwned", { formattedMoney }));
     this.fieldUI.moveAbove(this.moneyText, this.luckText);
     if (forceVisible) {
@@ -2090,7 +2055,7 @@ export default class BattleScene extends SceneBase {
     if (this.bgm && bgmName === this.bgm.key) {
       if (!this.bgm.isPlaying) {
         this.bgm.play({
-          volume: this.masterVolume * this.bgmVolume,
+          volume: settings.effectiveBgmVolume,
         });
       }
       return;
@@ -2107,7 +2072,7 @@ export default class BattleScene extends SceneBase {
       this.ui.bgmBar.setBgmToBgmBar(bgmName);
       if (bgmName === null && this.bgm && !this.bgm.pendingRemove) {
         this.bgm.play({
-          volume: this.masterVolume * this.bgmVolume,
+          volume: settings.effectiveBgmVolume,
         });
         return;
       }
@@ -2116,7 +2081,7 @@ export default class BattleScene extends SceneBase {
       }
       this.bgm = this.sound.add(bgmName, { loop: true });
       this.bgm.play({
-        volume: this.masterVolume * this.bgmVolume,
+        volume: settings.effectiveBgmVolume,
       });
       if (loopPoint) {
         this.bgm.on("looped", () => this.bgm.play({ seek: loopPoint }));
@@ -2161,21 +2126,21 @@ export default class BattleScene extends SceneBase {
     if (this.sound) {
       for (const sound of this.sound.getAllPlaying() as AnySound[]) {
         if (this.bgmCache.has(sound.key)) {
-          sound.setVolume(this.masterVolume * this.bgmVolume);
+          sound.setVolume(settings.effectiveBgmVolume);
         } else {
           const soundDetails = sound.key.split("/");
           switch (soundDetails[0]) {
             case "battle_anims":
             case "cry":
               if (soundDetails[1].startsWith("PRSFX- ")) {
-                sound.setVolume(this.masterVolume * this.fieldVolume * 0.5);
+                sound.setVolume(settings.effectiveFieldVolume * PRSFX_SOUND_ADJUSTMENT_RATIO);
               } else {
-                sound.setVolume(this.masterVolume * this.fieldVolume);
+                sound.setVolume(settings.effectiveFieldVolume);
               }
               break;
             case "se":
             case "ui":
-              sound.setVolume(this.masterVolume * this.seVolume);
+              sound.setVolume(settings.effectiveSoundEffectsVolume);
           }
         }
       }
@@ -2223,22 +2188,22 @@ export default class BattleScene extends SceneBase {
         case "evolution_fanfare":
           // These sounds are loaded in as BGM, but played as sound effects
           // When these sounds are updated in updateVolume(), they are treated as BGM however because they are placed in the BGM Cache through being called by playSoundWithoutBGM()
-          config["volume"] *= this.masterVolume * this.bgmVolume;
+          config["volume"] *= settings.effectiveBgmVolume;
           break;
         case "battle_anims":
         case "cry":
-          config["volume"] *= this.masterVolume * this.fieldVolume;
+          config["volume"] *= settings.effectiveFieldVolume;
           //PRSFX sound files are unusually loud
           if (keyDetails[1].startsWith("PRSFX- ")) {
-            config["volume"] *= 0.5;
+            config["volume"] *= PRSFX_SOUND_ADJUSTMENT_RATIO;
           }
           break;
         case "ui":
           //As of, right now this applies to the "select", "menu_open", "error" sound effects
-          config["volume"] *= this.masterVolume * this.uiVolume;
+          config["volume"] *= settings.effectiveUiVolume;
           break;
         case "se":
-          config["volume"] *= this.masterVolume * this.seVolume;
+          config["volume"] *= settings.effectiveSoundEffectsVolume;
           break;
       }
       this.sound.play(key, config);
@@ -2258,7 +2223,7 @@ export default class BattleScene extends SceneBase {
       this.bgmResumeTimer.destroy();
     }
     if (resumeBgm) {
-      this.bgmResumeTimer = this.time.delayedCall(pauseDuration || fixedInt(sound.totalDuration * 1000), () => {
+      this.bgmResumeTimer = this.time.delayedCall(pauseDuration || fixedNumber(sound.totalDuration * 1000), () => {
         this.resumeBgm();
         this.bgmResumeTimer = null;
       });
@@ -2692,7 +2657,7 @@ export default class BattleScene extends SceneBase {
     const cancelled = new BooleanHolder(false);
 
     if (source && source.isPlayer() !== target.isPlayer()) {
-      applyAbAttrs(BlockItemTheftAbAttr, source);
+      applyAbAttrs(BlockItemTheftAbAttr, source, false, cancelled);
     }
 
     if (cancelled.value) {
@@ -3212,7 +3177,7 @@ export default class BattleScene extends SceneBase {
    */
   initFinalBossPhaseTwo(pokemon: Pokemon): void {
     if (pokemon instanceof EnemyPokemon && pokemon.isBoss() && !pokemon.formIndex && pokemon.bossSegmentIndex < 1) {
-      this.fadeOutBgm(fixedInt(2000), false);
+      this.fadeOutBgm(fixedNumber(2000), false);
       this.ui.showDialogue(classicFinalBossDialogue.firstStageWin, pokemon.species.name, undefined, () => {
         const finalBossMBH = getModifierType(modifierTypes.MINI_BLACK_HOLE).newModifier(
           pokemon,

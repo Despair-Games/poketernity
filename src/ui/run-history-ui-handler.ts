@@ -1,18 +1,19 @@
 import { globalScene } from "#app/global-scene";
-import { GameModes } from "../game-mode";
+import { GameModes } from "#enums/game-modes";
 import { TextStyle, addTextObject } from "./text";
 import { Mode } from "./ui";
 import { addWindow } from "./ui-theme";
-import { fixedInt, formatLargeNumber, isNullOrUndefined } from "#app/utils";
+import { fixedNumber, formatLargeNumber, isNullOrUndefined } from "#app/utils";
 import type PokemonData from "../system/pokemon-data";
 import MessageUiHandler from "./message-ui-handler";
 import i18next from "i18next";
-import { Button } from "../enums/buttons";
-import { BattleType } from "../battle";
+import { Button } from "#enums/buttons";
+import { BattleType } from "#enums/battle-type";
 import type { RunEntry } from "../system/game-data";
 import { PlayerGender } from "#enums/player-gender";
-import { TrainerVariant } from "../field/trainer";
+import { TrainerVariant } from "#enums/trainer-variant";
 import { RunDisplayMode } from "#app/ui/run-info-ui-handler";
+import { settings } from "#app/system/settings/settings-manager";
 
 export type RunSelectCallback = (cursor: number) => void;
 
@@ -219,7 +220,7 @@ export default class RunHistoryUiHandler extends MessageUiHandler {
       globalScene.tweens.add({
         targets: this.runsContainer,
         y: this.runContainerInitialY - 56 * scrollCursor,
-        duration: fixedInt(325),
+        duration: fixedNumber(325),
         ease: "Sine.easeInOut",
       });
     }
@@ -293,7 +294,7 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
       this.add(gameOutcomeLabel);
     } else {
       // Run Result: Defeats
-      const genderIndex = globalScene.gameData.gender ?? PlayerGender.UNSET;
+      const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
       const genderStr = PlayerGender[genderIndex].toLowerCase();
       // Defeats from wild Pokemon battles will show the Pokemon responsible by the text of the run result.
       if (data.battleType === BattleType.WILD || (data.battleType === BattleType.MYSTERY_ENCOUNTER && !data.trainer)) {

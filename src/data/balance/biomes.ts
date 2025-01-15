@@ -7,6 +7,7 @@ import { Biome } from "#enums/biome";
 import { Species } from "#enums/species";
 import { TimeOfDay } from "#enums/time-of-day";
 import { TrainerType } from "#enums/trainer-type";
+import { BiomePoolTier } from "#enums/biome-pool-tier";
 // import beautify from "json-beautify";
 
 export function getBiomeName(biome: Biome | -1) {
@@ -71,18 +72,6 @@ export const biomeLinks: BiomeLinks = {
 };
 
 export const biomeDepths: BiomeDepths = {};
-
-export enum BiomePoolTier {
-  COMMON,
-  UNCOMMON,
-  RARE,
-  SUPER_RARE,
-  ULTRA_RARE,
-  BOSS,
-  BOSS_RARE,
-  BOSS_SUPER_RARE,
-  BOSS_ULTRA_RARE,
-}
 
 export const uncatchableSpecies: Species[] = [];
 

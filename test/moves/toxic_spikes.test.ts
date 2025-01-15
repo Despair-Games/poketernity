@@ -1,6 +1,6 @@
-import { BattlerIndex } from "#app/battle";
+import { BattlerIndex } from "#enums/battler-index";
 import type { ArenaTrapTag } from "#app/data/arena-tag";
-import { ArenaTagSide } from "#app/data/arena-tag";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { Moves } from "#enums/moves";
@@ -136,7 +136,7 @@ describe("Moves - Toxic Spikes", () => {
   it("should apply even if the target is fainted", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    const enemyPokemon = game.pokemonHelper.getEnemyPokemon();
+    const enemyPokemon = game.field.getEnemyPokemon();
 
     game.move.use(Moves.TOXIC_SPIKES);
     await game.move.forceEnemyMove(Moves.MEMENTO);
