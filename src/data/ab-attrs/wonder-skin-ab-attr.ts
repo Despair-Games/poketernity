@@ -1,7 +1,7 @@
 import { type Move } from "#app/data/move";
 import { MoveCategory } from "#enums/move-category";
 import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder, NumberHolder } from "#app/utils";
+import type { NumberHolder } from "#app/utils";
 import { PreDefendAbAttr } from "./pre-defend-ab-attr";
 
 /**
@@ -11,13 +11,11 @@ import { PreDefendAbAttr } from "./pre-defend-ab-attr";
  * @extends PreDefendAbAttr
  */
 export class WonderSkinAbAttr extends PreDefendAbAttr {
-  override applyPreDefend(
+  override apply(
     _pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
     _attacker: Pokemon,
     move: Move,
-    _cancelled: BooleanHolder,
     moveAccuracy: NumberHolder,
   ): boolean {
     if (move.category === MoveCategory.STATUS && moveAccuracy.value >= 50) {

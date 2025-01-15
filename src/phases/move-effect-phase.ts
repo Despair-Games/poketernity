@@ -4,12 +4,7 @@ import { IgnoreMoveEffectsAbAttr } from "#app/data/ab-attrs/ignore-move-effect-a
 import { PostAttackAbAttr } from "#app/data/ab-attrs/post-attack-ab-attr";
 import { PostDamageAbAttr } from "#app/data/ab-attrs/post-damage-ab-attr";
 import { PostDefendAbAttr } from "#app/data/ab-attrs/post-defend-ab-attr";
-import {
-  applyPostAttackAbAttrs,
-  applyPostDamageAbAttrs,
-  applyPostDefendAbAttrs,
-  applyPreAttackAbAttrs,
-} from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/ability";
 import { MoveAnim } from "#app/data/battle-anims";
 import { SkyDropTag, SubstituteTag, TypeBoostTag } from "#app/data/battler-tags";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
@@ -127,7 +122,7 @@ export class MoveEffectPhase extends HitCheckPhase {
       // Assume single target for multi hit
       applyMoveAttrs(MultiHitAttr, user, this.getFirstTarget(), move, hitCount);
       // If Parental Bond is applicable, add another hit
-      applyPreAttackAbAttrs(AddSecondStrikeAbAttr, user, null, move, false, hitCount, null);
+      applyAbAttrs(AddSecondStrikeAbAttr, user, false, move, targets[0], hitCount);
       // If Multi-Lens is applicable, add hits equal to the number of held Multi-Lenses
       globalScene.applyModifiers(PokemonMultiHitModifier, user.isPlayer(), user, move.id, hitCount);
       // Set the user's relevant turnData fields to reflect the final hit count
@@ -308,7 +303,7 @@ export class MoveEffectPhase extends HitCheckPhase {
 
       // Multi-hit check for Wimp Out/Emergency Exit
       if (user.turnData.hitCount > 1) {
-        applyPostDamageAbAttrs(PostDamageAbAttr, target, 0, target.hasPassive(), false, [], user);
+        applyAbAttrs(PostDamageAbAttr, target, false, 0, user);
       }
     }
   }
@@ -510,8 +505,8 @@ export class MoveEffectPhase extends HitCheckPhase {
 
     this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target, firstTarget, false);
     this.applyHeldItemFlinchCheck(user, target, dealsDamage);
-    this.applyOnGetHitAbEffects(user, target, hitResult);
-    applyPostAttackAbAttrs(PostAttackAbAttr, user, target, move, hitResult);
+    this.applyOnGetHitAbEffects(user, target);
+    applyAbAttrs(PostAttackAbAttr, user, false, target, move);
 
     // Apply Grip Claw's chance to steal an item from the target
     if (move instanceof AttackMove) {
@@ -571,10 +566,9 @@ export class MoveEffectPhase extends HitCheckPhase {
    * (i.e. Effect Spore, Disguise, Liquid Ooze, Beak Blast)
    * @param user - The {@linkcode Pokemon} using this phase's invoked move
    * @param target - {@linkcode Pokemon} the current target of this phase's invoked move
-   * @param hitResult - The {@linkcode HitResult} of the attempted move
    */
-  protected applyOnGetHitAbEffects(user: Pokemon, target: Pokemon, hitResult: HitResult): void {
-    applyPostDefendAbAttrs(PostDefendAbAttr, target, user, this.move.getMove(), hitResult);
+  protected applyOnGetHitAbEffects(user: Pokemon, target: Pokemon): void {
+    applyAbAttrs(PostDefendAbAttr, target, false, user, this.move.getMove());
     target.lapseTags(BattlerTagLapseType.AFTER_HIT);
   }
 

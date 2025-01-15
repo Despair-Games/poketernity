@@ -24,7 +24,7 @@ import { Type } from "#enums/type";
 import { BerryType } from "#enums/berry-type";
 import { Stat } from "#enums/stat";
 import { SpeciesFormChangeManualTrigger } from "#app/data/pokemon-forms";
-import { applyPostBattleInitAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/ability";
 import { showEncounterDialogue, showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { PartyHealPhase } from "#app/phases/party-heal-phase";
@@ -214,7 +214,7 @@ function endTrainerBattleAndShowDialogue(): Promise<void> {
         }
 
         pokemon.resetBattleData();
-        applyPostBattleInitAbAttrs(PostBattleInitAbAttr, pokemon);
+        applyAbAttrs(PostBattleInitAbAttr, pokemon, false);
       }
 
       globalScene.unshiftPhase(new ShowTrainerPhase());

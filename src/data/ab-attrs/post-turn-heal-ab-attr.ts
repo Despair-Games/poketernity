@@ -7,10 +7,10 @@ import i18next from "i18next";
 import { PostTurnAbAttr } from "./post-turn-ab-attr";
 
 export class PostTurnHealAbAttr extends PostTurnAbAttr {
-  override applyPostTurn(pokemon: Pokemon, passive: boolean, simulated: boolean): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean): boolean {
     if (!pokemon.isFullHp()) {
       if (!simulated) {
-        const abilityName = (!passive ? pokemon.getAbility() : pokemon.getPassiveAbility()).name;
+        const abilityName = this.source.name;
         globalScene.unshiftPhase(
           new PokemonHealPhase(pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() / 16), {
             message: i18next.t("abilityTriggers:postTurnHeal", {

@@ -6,9 +6,7 @@ import { AbAttr } from "./ab-attr";
 /**
  * Multiplies a Stat if the checked Pokemon lacks this ability.
  * If this ability cannot stack, a BooleanHolder can be used to prevent this from stacking.
- * @see {@link applyFieldStatMultiplierAbAttrs}
- * @see {@link applyFieldStat}
- * @see {@link BooleanHolder}
+ * @see {@link applyAbAttrs}
  */
 export class FieldMultiplyStatAbAttr extends AbAttr {
   private readonly stat: Stat;
@@ -25,24 +23,21 @@ export class FieldMultiplyStatAbAttr extends AbAttr {
 
   /**
    * Tries to multiply a Pokemon's Stat
-   * @param _pokemon N/A
-   * @param _passive N/A
+   * @param pokemon The {@linkcode Pokemon} with this ability
+   * @param simulated If `true`, suppresses changes to game state
    * @param stat The {@linkcode Stat} being checked
    * @param statValue {@linkcode NumberHolder} the value of the checked stat
    * @param checkedPokemon The {@linkcode Pokemon} this ability is targeting
    * @param hasApplied {@linkcode BooleanHolder} whether or not another multiplier has been applied to this stat
-   * @param _args N/A
    * @returns `true` if this changed the checked stat, `false` otherwise.
    */
-  applyFieldStat(
+  override apply(
     _pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
     stat: Stat,
     statValue: NumberHolder,
     checkedPokemon: Pokemon,
     hasApplied: BooleanHolder,
-    _args: any[],
   ): boolean {
     if (!this.canStack && hasApplied.value) {
       return false;

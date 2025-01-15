@@ -12,13 +12,7 @@ export class MoveAbilityBypassAbAttr extends AbAttr {
     this.moveIgnoreFunc = moveIgnoreFunc ?? ((_pokemon, _move) => true);
   }
 
-  override apply(
-    pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    cancelled: BooleanHolder,
-    move: Move,
-  ): boolean {
+  override apply(pokemon: Pokemon, _simulated: boolean, cancelled: BooleanHolder, move: Move): boolean {
     if (this.moveIgnoreFunc(pokemon, move)) {
       cancelled.value = true;
       return true;

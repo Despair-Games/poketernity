@@ -1,12 +1,11 @@
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder, NumberHolder } from "#app/utils";
+import type { NumberHolder } from "#app/utils";
 import { PreDefendAbAttr } from "./pre-defend-ab-attr";
 
 /**
  * Reduces the damage dealt to an allied Pokemon. Used by Friend Guard.
  * @extends PreDefendAbAttr
- * @see {@linkcode applyPreDefend}
  */
 export class AlliedFieldDamageReductionAbAttr extends PreDefendAbAttr {
   private readonly damageMultiplier: number;
@@ -16,18 +15,11 @@ export class AlliedFieldDamageReductionAbAttr extends PreDefendAbAttr {
     this.damageMultiplier = damageMultiplier;
   }
 
-  /**
-   * Handles the damage reduction
-   * @param args
-   * - `[0]` {@linkcode NumberHolder} - The damage being dealt
-   */
-  override applyPreDefend(
+  override apply(
     _pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
     _attacker: Pokemon,
     _move: Move,
-    _cancelled: BooleanHolder,
     multiplier: NumberHolder,
   ): boolean {
     multiplier.value *= this.damageMultiplier;

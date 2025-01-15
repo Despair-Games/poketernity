@@ -27,11 +27,11 @@ export class BypassSpeedChanceAbAttr extends AbAttr {
   /**
    * bypass move order in their priority bracket when pokemon choose damaging move
    * @param pokemon {@linkcode Pokemon} applying this ability
-   * @param _passive N/A
-   * @param args [0] {@linkcode BooleanHolder} set to true when the ability activated
+   * @param simulated if `true`, suppresses changes to game state
+   * @param bypassSpeed {@linkcode BooleanHolder} set to true when the ability activated
    * @returns whether the ability was activated
    */
-  override apply(pokemon: Pokemon, _passive: boolean, simulated: boolean, bypassSpeed: BooleanHolder): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean, bypassSpeed: BooleanHolder): boolean {
     if (simulated) {
       return false;
     }

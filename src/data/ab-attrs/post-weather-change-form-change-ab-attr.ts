@@ -21,21 +21,7 @@ export class PostWeatherChangeFormChangeAbAttr extends PostWeatherChangeAbAttr {
     this.formRevertingWeathers = formRevertingWeathers;
   }
 
-  /**
-   * Calls {@linkcode Arena.triggerWeatherBasedFormChangesToNormal | triggerWeatherBasedFormChangesToNormal} when the
-   * weather changed to form-reverting weather, otherwise calls {@linkcode Arena.triggerWeatherBasedFormChanges | triggerWeatherBasedFormChanges}
-   * @param pokemon the {@linkcode Pokemon} with this ability
-   * @param _passive n/a
-   * @param _weather n/a
-   * @param _args n/a
-   * @returns whether the form change was triggered
-   */
-  override applyPostWeatherChange(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    _weather: WeatherType,
-  ): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean, _weather: WeatherType): boolean {
     const isCastformWithForecast =
       pokemon.species.speciesId === Species.CASTFORM && this.ability === Abilities.FORECAST;
     const isCherrimWithFlowerGift =

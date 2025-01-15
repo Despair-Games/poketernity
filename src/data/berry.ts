@@ -3,7 +3,7 @@ import type { Pokemon } from "../field/pokemon";
 import { HitResult } from "#enums/hit-result";
 import { getStatusEffectHealText } from "./status-effect";
 import { NumberHolder, toDmgValue, randSeedInt } from "#app/utils";
-import { applyAbAttrs, applyPostItemLostAbAttrs } from "./ability";
+import { applyAbAttrs } from "./ability";
 import { ReduceBerryUseThresholdAbAttr } from "./ab-attrs/reduce-berry-use-threshold-ab-attr";
 import { DoubleBerryEffectAbAttr } from "./ab-attrs/double-berry-effect-ab-attr";
 import { PostItemLostAbAttr } from "./ab-attrs/post-item-lost-ab-attr";
@@ -87,7 +87,7 @@ export function getBerryEffectFunc(berryType: BerryType): BerryEffectFunc {
             }),
           }),
         );
-        applyPostItemLostAbAttrs(PostItemLostAbAttr, berryOwner ?? pokemon, false);
+        applyAbAttrs(PostItemLostAbAttr, berryOwner ?? pokemon, false);
       };
     case BerryType.LUM:
       return (pokemon: Pokemon, berryOwner?: Pokemon) => {
@@ -99,7 +99,7 @@ export function getBerryEffectFunc(berryType: BerryType): BerryEffectFunc {
         }
         pokemon.resetStatus(true, true);
         pokemon.updateInfo();
-        applyPostItemLostAbAttrs(PostItemLostAbAttr, berryOwner ?? pokemon, false);
+        applyAbAttrs(PostItemLostAbAttr, berryOwner ?? pokemon, false);
       };
     case BerryType.LIECHI:
     case BerryType.GANLON:
@@ -115,7 +115,7 @@ export function getBerryEffectFunc(berryType: BerryType): BerryEffectFunc {
         const statStages = new NumberHolder(1);
         applyAbAttrs(DoubleBerryEffectAbAttr, pokemon, false, statStages);
         globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [stat], statStages.value));
-        applyPostItemLostAbAttrs(PostItemLostAbAttr, berryOwner ?? pokemon, false);
+        applyAbAttrs(PostItemLostAbAttr, berryOwner ?? pokemon, false);
       };
     case BerryType.LANSAT:
       return (pokemon: Pokemon, berryOwner?: Pokemon) => {
@@ -123,7 +123,7 @@ export function getBerryEffectFunc(berryType: BerryType): BerryEffectFunc {
           pokemon.battleData.berriesEaten.push(berryType);
         }
         pokemon.addTag(BattlerTagType.CRIT_BOOST);
-        applyPostItemLostAbAttrs(PostItemLostAbAttr, berryOwner ?? pokemon, false);
+        applyAbAttrs(PostItemLostAbAttr, berryOwner ?? pokemon, false);
       };
     case BerryType.STARF:
       return (pokemon: Pokemon, berryOwner?: Pokemon) => {
@@ -134,7 +134,7 @@ export function getBerryEffectFunc(berryType: BerryType): BerryEffectFunc {
         const stages = new NumberHolder(2);
         applyAbAttrs(DoubleBerryEffectAbAttr, pokemon, false, stages);
         globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [randStat], stages.value));
-        applyPostItemLostAbAttrs(PostItemLostAbAttr, berryOwner ?? pokemon, false);
+        applyAbAttrs(PostItemLostAbAttr, berryOwner ?? pokemon, false);
       };
     case BerryType.LEPPA:
       return (pokemon: Pokemon, berryOwner?: Pokemon) => {
@@ -153,7 +153,7 @@ export function getBerryEffectFunc(berryType: BerryType): BerryEffectFunc {
               berryName: getBerryName(berryType),
             }),
           );
-          applyPostItemLostAbAttrs(PostItemLostAbAttr, berryOwner ?? pokemon, false);
+          applyAbAttrs(PostItemLostAbAttr, berryOwner ?? pokemon, false);
         }
       };
   }

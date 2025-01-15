@@ -4,15 +4,22 @@ import type { BooleanHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { Type } from "#enums/type";
 import i18next from "i18next";
-import { CheckTrappedAbAttr } from "./check-trapped-ab-attr";
+import { AbAttr } from "./ab-attr";
+
+type ArenaTrapCondition = (user: Pokemon, target: Pokemon) => boolean;
 
 /**
  * Determines whether a Pokemon is blocked from switching/running away
  * because of a trapping ability or move.
- * @extends CheckTrappedAbAttr
- * @see {@linkcode applyCheckTrapped}
+ * @extends AbAttr
  */
-export class ArenaTrapAbAttr extends CheckTrappedAbAttr {
+export class ArenaTrapAbAttr extends AbAttr {
+  protected readonly arenaTrapCondition: ArenaTrapCondition;
+
+  constructor(condition: ArenaTrapCondition) {
+    super(false);
+    this.arenaTrapCondition = condition;
+  }
   /**
    * Checks if enemy Pokemon is trapped by an Arena Trap-esque ability:
    * - If the enemy is a Ghost type, it is not trapped
@@ -20,25 +27,20 @@ export class ArenaTrapAbAttr extends CheckTrappedAbAttr {
    * - If the user has Magnet Pull and the enemy is not a Steel type, it is not trapped.
    * - If the user has Arena Trap and the enemy is not grounded, it is not trapped.
    * @param pokemon The {@link Pokemon} with this {@link AbAttr}
+   * @param simulated n/a
    * @param trapped {@link BooleanHolder} indicating whether the other Pokemon is trapped or not
-   * @param otherPokemon The {@link Pokemon} that is affected by an Arena Trap ability
+   * @param trappedPokemon The {@link Pokemon} that is affected by an Arena Trap ability
    * @returns `true` if enemy Pokemon is trapped
    */
-  override applyCheckTrapped(
-    pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    trapped: BooleanHolder,
-    otherPokemon: Pokemon,
-  ): boolean {
-    if (this.arenaTrapCondition(pokemon, otherPokemon)) {
+  override apply(pokemon: Pokemon, _simulated: boolean, trapped: BooleanHolder, trappedPokemon: Pokemon): boolean {
+    if (this.arenaTrapCondition(pokemon, trappedPokemon)) {
       if (
-        otherPokemon.getTypes(true).includes(Type.GHOST)
-        || (otherPokemon.getTypes(true).includes(Type.STELLAR) && otherPokemon.getTypes().includes(Type.GHOST))
+        trappedPokemon.getTypes(true).includes(Type.GHOST)
+        || (trappedPokemon.getTypes(true).includes(Type.STELLAR) && trappedPokemon.getTypes().includes(Type.GHOST))
       ) {
         trapped.value = false;
         return false;
-      } else if (otherPokemon.hasAbility(Abilities.RUN_AWAY)) {
+      } else if (trappedPokemon.hasAbility(Abilities.RUN_AWAY)) {
         trapped.value = false;
         return false;
       }
