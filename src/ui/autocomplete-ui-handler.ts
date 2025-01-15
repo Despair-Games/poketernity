@@ -2,27 +2,21 @@ import OptionSelectUiHandler from "#app/ui/option-select-ui-handler";
 import { Button } from "#enums/buttons";
 
 export default class AutoCompleteUiHandler extends OptionSelectUiHandler {
-  modalContainer: Phaser.GameObjects.Container;
+  private modalContainer: Phaser.GameObjects.Container;
 
   override show(args: any[]): boolean {
-    if (args[0].modalContainer) {
+    if (args[0].hasOwnProperty("modalContainer")) {
       const { modalContainer } = args[0];
-      const show = super.show(args);
       this.modalContainer = modalContainer;
-      this.setupOptions();
 
-      return show;
+      return super.show(args);
     }
     return false;
   }
 
-  protected override setupOptions() {
-    super.setupOptions();
+  override updateSizeForOptions(options: any): void {
+    super.updateSizeForOptions(options);
     if (this.modalContainer) {
-      this.optionSelectContainer.setSize(
-        this.optionSelectContainer.height,
-        Math.max(this.optionSelectText.displayWidth + 24, this.getWindowWidth()),
-      );
       this.optionSelectContainer.setPositionRelative(
         this.modalContainer,
         this.optionSelectBg.width,
@@ -34,7 +28,7 @@ export default class AutoCompleteUiHandler extends OptionSelectUiHandler {
   override processInput(button: Button): boolean {
     const ui = this.getUi();
     if (button === Button.SUBMIT) {
-      const option = this.config?.options[this.cursor + (this.scrollCursor - (this.scrollCursor ? 1 : 0))];
+      const option = this.getCurrentOption();
       if (option?.handler()) {
         if (!option.keepOpen) {
           this.clear();

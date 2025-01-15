@@ -63,8 +63,7 @@ describe("UI - Starter select", () => {
     await new Promise<void>((resolve) => {
       game.onNextPrompt("SelectStarterPhase", Mode.OPTION_SELECT, () => {
         optionSelectUiHandler = game.scene.ui.getHandler() as OptionSelectUiHandler;
-        // TODO see how to do this without the need for getOptionsWithScroll to be public
-        options = optionSelectUiHandler.getOptionsWithScroll();
+        options = (optionSelectUiHandler as any).currentOptions;
         resolve();
       });
     });
@@ -125,7 +124,7 @@ describe("UI - Starter select", () => {
     await new Promise<void>((resolve) => {
       game.onNextPrompt("SelectStarterPhase", Mode.OPTION_SELECT, () => {
         optionSelectUiHandler = game.scene.ui.getHandler() as OptionSelectUiHandler;
-        options = optionSelectUiHandler.getOptionsWithScroll();
+        options = (optionSelectUiHandler as any).currentOptions;
         resolve();
       });
     });
@@ -189,7 +188,7 @@ describe("UI - Starter select", () => {
     await new Promise<void>((resolve) => {
       game.onNextPrompt("SelectStarterPhase", Mode.OPTION_SELECT, () => {
         optionSelectUiHandler = game.scene.ui.getHandler() as OptionSelectUiHandler;
-        options = optionSelectUiHandler.getOptionsWithScroll();
+        options = (optionSelectUiHandler as any).currentOptions;
         resolve();
       });
     });
@@ -252,7 +251,7 @@ describe("UI - Starter select", () => {
     await new Promise<void>((resolve) => {
       game.onNextPrompt("SelectStarterPhase", Mode.OPTION_SELECT, () => {
         optionSelectUiHandler = game.scene.ui.getHandler() as OptionSelectUiHandler;
-        options = optionSelectUiHandler.getOptionsWithScroll();
+        options = (optionSelectUiHandler as any).currentOptions;
         resolve();
       });
     });
@@ -313,7 +312,7 @@ describe("UI - Starter select", () => {
     await new Promise<void>((resolve) => {
       game.onNextPrompt("SelectStarterPhase", Mode.OPTION_SELECT, () => {
         optionSelectUiHandler = game.scene.ui.getHandler() as OptionSelectUiHandler;
-        options = optionSelectUiHandler.getOptionsWithScroll();
+        options = (optionSelectUiHandler as any).currentOptions;
         resolve();
       });
     });
@@ -375,7 +374,7 @@ describe("UI - Starter select", () => {
     await new Promise<void>((resolve) => {
       game.onNextPrompt("SelectStarterPhase", Mode.OPTION_SELECT, () => {
         optionSelectUiHandler = game.scene.ui.getHandler() as OptionSelectUiHandler;
-        options = optionSelectUiHandler.getOptionsWithScroll();
+        options = (optionSelectUiHandler as any).currentOptions;
         resolve();
       });
     });
@@ -436,7 +435,7 @@ describe("UI - Starter select", () => {
     await new Promise<void>((resolve) => {
       game.onNextPrompt("SelectStarterPhase", Mode.OPTION_SELECT, () => {
         optionSelectUiHandler = game.scene.ui.getHandler() as OptionSelectUiHandler;
-        options = optionSelectUiHandler.getOptionsWithScroll();
+        options = (optionSelectUiHandler as any).currentOptions;
         resolve();
       });
     });
@@ -496,7 +495,7 @@ describe("UI - Starter select", () => {
     await new Promise<void>((resolve) => {
       game.onNextPrompt("SelectStarterPhase", Mode.OPTION_SELECT, () => {
         optionSelectUiHandler = game.scene.ui.getHandler() as OptionSelectUiHandler;
-        options = optionSelectUiHandler.getOptionsWithScroll();
+        options = (optionSelectUiHandler as any).currentOptions;
         resolve();
       });
     });
@@ -561,7 +560,7 @@ describe("UI - Starter select", () => {
     await new Promise<void>((resolve) => {
       game.onNextPrompt("SelectStarterPhase", Mode.OPTION_SELECT, () => {
         optionSelectUiHandler = game.scene.ui.getHandler() as OptionSelectUiHandler;
-        options = optionSelectUiHandler.getOptionsWithScroll();
+        options = (optionSelectUiHandler as any).currentOptions;
         resolve();
       });
     });

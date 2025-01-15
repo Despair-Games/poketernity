@@ -159,13 +159,13 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
 
     return {
       options: menuOptions,
-      yOffset: -this.defaultYOffset - 1,
+      yOffset: -this.DEFAULT_Y_OFFSET - 1,
       maxOptions: 10,
       noCancel: true, // we take care of closing the menu in this handler
     };
   }
 
-  override computeWindowHeight(_numOptions: number, _maxOptions: number): number {
+  override computeWindowHeight(): number {
     return globalScene.scaledCanvas.height - 2; // always fill the screen
   }
 
