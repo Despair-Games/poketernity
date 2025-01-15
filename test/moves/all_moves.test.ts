@@ -1,5 +1,4 @@
 import { allMoves } from "#app/data/all-moves";
-import { resolve } from "path";
 import { describe, expect, it } from "vitest";
 import type { MoveCategory } from "#enums/move-category";
 import type { Moves } from "#enums/moves";
