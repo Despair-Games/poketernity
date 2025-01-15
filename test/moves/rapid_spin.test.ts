@@ -71,7 +71,7 @@ describe("Moves - Rapid Spin", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     [ArenaTagSide.PLAYER, ArenaTagSide.ENEMY].forEach((side) =>
-      game.scene.arena.addTag(tagType, 1, Moves.NONE, 0, side),
+      game.scene.arena.addTag(tagType, 0, 1, Moves.NONE, side),
     );
 
     game.move.select(Moves.RAPID_SPIN);

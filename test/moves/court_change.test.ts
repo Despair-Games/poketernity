@@ -39,17 +39,17 @@ describe("Moves - Court Change", () => {
     game.move.select(Moves.SAFEGUARD);
     await game.toNextTurn();
 
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.SAFEGUARD, ArenaTagSide.PLAYER)?.tagType).toBe(
-      ArenaTagType.SAFEGUARD,
-    );
+    const tag1 = game.scene.arena.getTagOnSide(ArenaTagType.SAFEGUARD, ArenaTagSide.PLAYER);
+    expect(tag1?.tagType).toBe(ArenaTagType.SAFEGUARD);
+    expect(tag1?.turnCount).toBe(4);
     expect(game.scene.arena.getTagOnSide(ArenaTagType.SAFEGUARD, ArenaTagSide.ENEMY)).toBeUndefined();
 
     game.move.select(Moves.COURT_CHANGE);
     await game.toNextTurn();
 
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.SAFEGUARD, ArenaTagSide.ENEMY)?.tagType).toBe(
-      ArenaTagType.SAFEGUARD,
-    );
+    const tag2 = game.scene.arena.getTagOnSide(ArenaTagType.SAFEGUARD, ArenaTagSide.ENEMY);
+    expect(tag2?.tagType).toBe(ArenaTagType.SAFEGUARD);
+    expect(tag2?.turnCount).toBe(3);
     expect(game.scene.arena.getTagOnSide(ArenaTagType.SAFEGUARD, ArenaTagSide.PLAYER)).toBeUndefined();
   });
 

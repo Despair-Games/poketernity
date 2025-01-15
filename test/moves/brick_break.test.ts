@@ -46,7 +46,7 @@ describe("Moves - Brick Break", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     [ArenaTagSide.PLAYER, ArenaTagSide.ENEMY].forEach((side) =>
-      game.scene.arena.addTag(tagType, 2, Moves.NONE, 0, side),
+      game.scene.arena.addTag(tagType, 0, 2, Moves.NONE, side),
     );
 
     game.move.select(Moves.BRICK_BREAK);
@@ -59,7 +59,7 @@ describe("Moves - Brick Break", () => {
   it("Reflect should not reduce Brick Break's damage when removed", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    game.scene.arena.addTag(ArenaTagType.REFLECT, 2, Moves.NONE, 0, ArenaTagSide.ENEMY);
+    game.scene.arena.addTag(ArenaTagType.REFLECT, 0, 2, Moves.NONE, ArenaTagSide.ENEMY);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
@@ -78,7 +78,7 @@ describe("Moves - Brick Break", () => {
 
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    game.scene.arena.addTag(ArenaTagType.REFLECT, 2, Moves.NONE, 0, ArenaTagSide.ENEMY);
+    game.scene.arena.addTag(ArenaTagType.REFLECT, 0, 2, Moves.NONE, ArenaTagSide.ENEMY);
 
     game.move.select(Moves.BRICK_BREAK);
 
