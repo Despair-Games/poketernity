@@ -18,6 +18,7 @@ import { fixedNumber, getCookie, getEnumKeys, isBeta, isLocal } from "#app/utils
 import { Button } from "#enums/buttons";
 import { GameDataType } from "#enums/game-data-type";
 import i18next from "i18next";
+import type AwaitableUiHandler from "./awaitable-ui-handler";
 
 enum MenuOptions {
   GAME_SETTINGS,
@@ -208,7 +209,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
         ui.setOverlayMode(Mode.MENU_OPTION_SELECT, config);
       });
     };
-
+    // Import Session
     if (isLocal || isBeta) {
       manageDataOptions.push({
         label: i18next.t("menuUiHandler:importSession"),
@@ -223,6 +224,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
         keepOpen: true,
       });
     }
+    // Export Session
     manageDataOptions.push({
       label: i18next.t("menuUiHandler:exportSession"),
       handler: () => {
@@ -247,6 +249,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
       },
       keepOpen: true,
     });
+    // Import Run History
     manageDataOptions.push({
       label: i18next.t("menuUiHandler:importRunHistory"),
       handler: () => {
@@ -255,6 +258,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
       },
       keepOpen: true,
     });
+    // Export Run History
     manageDataOptions.push({
       label: i18next.t("menuUiHandler:exportRunHistory"),
       handler: () => {
@@ -263,6 +267,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
       },
       keepOpen: true,
     });
+    // Import Data
     if (isLocal || isBeta) {
       manageDataOptions.push({
         label: i18next.t("menuUiHandler:importData"),
@@ -274,6 +279,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
         keepOpen: true,
       });
     }
+    // Export Data
     manageDataOptions.push(
       {
         label: i18next.t("menuUiHandler:exportData"),
@@ -299,6 +305,62 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
         keepOpen: true,
       },
     );
+
+    // TODO: fully remove test dialogue option and related handlers
+    if (isLocal || isBeta) {
+      // this should make sure we don't have this option in live
+      manageDataOptions.push({
+        label: "Test Dialogue",
+        handler: () => {
+          ui.playSelect();
+          const prefilledText = "";
+          const buttonAction: any = {};
+          buttonAction["buttonActions"] = [
+            (sanitizedName: string) => {
+              ui.revertMode();
+              ui.playSelect();
+              const dialogueTestName = sanitizedName;
+              const dialogueName = decodeURIComponent(escape(atob(dialogueTestName)));
+              const handler = ui.getHandler() as AwaitableUiHandler;
+              handler.tutorialActive = true;
+              const interpolatorOptions: any = {};
+              const splitArr = dialogueName.split(" "); // this splits our inputted text into words to cycle through later
+              const translatedString = splitArr[0]; // this is our outputted i18 string
+              const regex = RegExp("\\{\\{(\\w*)\\}\\}", "g"); // this is a regex expression to find all the text between {{ }} in the i18 output
+              const matches = i18next.t(translatedString).match(regex) ?? [];
+              if (matches.length > 0) {
+                for (let match = 0; match < matches.length; match++) {
+                  // we add 1 here  because splitArr[0] is our first value for the translatedString, and after that is where the variables are
+                  // the regex here in the replace (/\W/g) is to remove the {{ and }} and just give us all alphanumeric characters
+                  if (typeof splitArr[match + 1] !== "undefined") {
+                    interpolatorOptions[matches[match].replace(/\W/g, "")] = i18next.t(splitArr[match + 1]);
+                  }
+                }
+              }
+              // Switch to the dialog test window
+              ui.showText(
+                String(i18next.t(translatedString, interpolatorOptions)),
+                null,
+                () =>
+                  globalScene.ui.showText("", 0, () => {
+                    handler.tutorialActive = false;
+                  }),
+                null,
+                true,
+              );
+            },
+            () => {
+              ui.revertMode();
+            },
+          ];
+          ui.setMode(Mode.TEST_DIALOGUE, buttonAction, prefilledText);
+          return true;
+        },
+        keepOpen: true,
+      });
+    }
+
+    // Cancel option
     manageDataOptions.push({
       label: i18next.t("menuUiHandler:cancel"),
       handler: () => {
@@ -307,6 +369,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
       },
       keepOpen: true,
     });
+
     this.manageDataConfig = {
       xOffset: this.windowWidth,
       options: manageDataOptions,
