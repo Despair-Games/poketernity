@@ -89,7 +89,7 @@ export class MoveEffectPhase extends HitCheckPhase {
     const move = this.move.getMove();
 
     // Assume single target for override
-    applyMoveAttrs(OverrideMoveEffectAttr, user, this.getFirstTarget(), move, overridden, this.move.virtual);
+    applyMoveAttrs(OverrideMoveEffectAttr, user, targets[0], move, overridden, this.move.virtual);
     // If other effects were overridden, stop this phase before they can be applied
     if (overridden.value) {
       return this.end();
@@ -120,7 +120,7 @@ export class MoveEffectPhase extends HitCheckPhase {
     if (user.turnData.hitsLeft === -1) {
       const hitCount = new NumberHolder(1);
       // Assume single target for multi hit
-      applyMoveAttrs(MultiHitAttr, user, this.getFirstTarget(), move, hitCount);
+      applyMoveAttrs(MultiHitAttr, user, targets[0], move, hitCount);
       // If Parental Bond is applicable, add another hit
       applyAbAttrs(AddSecondStrikeAbAttr, user, false, move, targets[0], hitCount);
       // If Multi-Lens is applicable, add hits equal to the number of held Multi-Lenses

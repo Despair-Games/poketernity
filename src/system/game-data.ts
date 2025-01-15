@@ -7,7 +7,16 @@ import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { allSpecies, getPokemonSpecies, noStarterFormKeys } from "#app/data/pokemon-species";
 import { speciesStarterCosts } from "#app/data/balance/starters";
-import { randInt, getEnumKeys, isLocal, executeIf, fixedNumber, randSeedItem, NumberHolder } from "#app/utils";
+import {
+  randInt,
+  getEnumKeys,
+  isLocal,
+  executeIf,
+  fixedNumber,
+  randSeedItem,
+  NumberHolder,
+  isNullOrUndefined,
+} from "#app/utils";
 import Overrides from "#app/overrides";
 import PokemonData from "#app/system/pokemon-data";
 import PersistentModifierData from "#app/system/modifier-data";
@@ -696,16 +705,17 @@ export class GameData {
   }
 
   /**
-   * Retrieve the tutorial seen flags from local storage
-   * @returns the flags saved in local storage if they exist, otherwise an empty array
+   * Retrieve the seen tutorials from local storage as {@linkcode Set}
+   * @returns the numbers saved in local storage if they exist, otherwise an empty {@linkcode Set}
    */
-  private getTutorialFlags(): (boolean | null)[] {
+  private getSeenTutorialsSet() {
     const key = getDataTypeKey(GameDataType.TUTORIALS);
-    let tutorials = [];
+    const tutorials = new Set<Tutorial>();
     const lsItem = localStorage.getItem(key);
     if (lsItem) {
       try {
-        tutorials = JSON.parse(lsItem);
+        const lsTutorials: Tutorial[] = JSON.parse(lsItem);
+        lsTutorials.forEach((lsTutorial) => (!isNullOrUndefined(lsTutorial) ? tutorials.add(lsTutorial) : null));
       } catch (err) {
         console.warn("Failed to parse tutorial data from local storage", err);
       }
@@ -720,10 +730,10 @@ export class GameData {
    */
   public saveTutorialAsSeen(tutorial: Tutorial): boolean {
     const key = getDataTypeKey(GameDataType.TUTORIALS);
-    const tutorials = this.getTutorialFlags();
-    tutorials[tutorial] = true;
+    const tutorials = this.getSeenTutorialsSet();
+    tutorials.add(tutorial);
     try {
-      localStorage.setItem(key, JSON.stringify(tutorials));
+      localStorage.setItem(key, JSON.stringify([...tutorials]));
       return true;
     } catch (err) {
       console.error("Failed to saved tutorial data in local storage", err);
@@ -737,7 +747,7 @@ export class GameData {
    * @returns `true` if the tutorial has already been seen, `false` otherwise
    */
   public isSeenTutorial(tutorial: Tutorial): boolean {
-    return this.getTutorialFlags()[tutorial] ?? false;
+    return this.getSeenTutorialsSet().has(tutorial) ?? false;
   }
 
   public saveSeenDialogue(dialogue: string): boolean {
