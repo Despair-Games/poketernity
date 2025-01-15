@@ -3349,7 +3349,7 @@ export default class BattleScene extends SceneBase {
 
   /**
    * Returns a randomly selected release message to be displayed when a player releases a {@linkcode Pokemon}
-   * @param pokemonName
+   * @param pokemonName name of the Pokemon to be released
    * @returns a string containing the message selected
    */
   getReleaseMessage(pokemonName: string): string {
