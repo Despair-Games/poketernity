@@ -15,11 +15,11 @@ import { initTrainerTypeDialogue } from "#app/data/dialogue";
 import { initChallenges } from "#app/data/challenge";
 import i18next from "i18next";
 import { initStatsKeys } from "#app/ui/game-stats-ui-handler";
-import { initVouchers } from "#app/system/voucher";
 import { Biome } from "#enums/biome";
 import { initMysteryEncounters } from "#app/data/mystery-encounters/mystery-encounters";
 import { initAbilities } from "#app/data/all-abilities";
 import { initMoves } from "#app/data/all-moves";
+import { initVouchers } from "./system/init-vouchers";
 
 export class LoadingScene extends SceneBase {
   public static readonly KEY = "loading";
