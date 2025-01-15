@@ -5,13 +5,7 @@ import type { BattleStat } from "#enums/stat";
 import { AbAttr } from "./ab-attr";
 
 export class StatStageChangeCopyAbAttr extends AbAttr {
-  override apply(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    stats: BattleStat[],
-    stages: number,
-  ): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean, stats: BattleStat[], stages: number): boolean {
     if (!simulated) {
       globalScene.unshiftPhase(
         new StatStageChangePhase(pokemon.getBattlerIndex(), true, stats, stages, { canBeCopied: false }),

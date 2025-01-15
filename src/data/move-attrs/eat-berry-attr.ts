@@ -57,6 +57,6 @@ export class EatBerryAttr extends MoveEffectAttr {
 
   eatBerry(consumer: Pokemon, berryOwner?: Pokemon) {
     getBerryEffectFunc(this.chosenBerry!.berryType)(consumer, berryOwner); // consumer eats the berry
-    applyAbAttrs(HealFromBerryUseAbAttr, consumer);
+    applyAbAttrs(HealFromBerryUseAbAttr, consumer, false);
   }
 }

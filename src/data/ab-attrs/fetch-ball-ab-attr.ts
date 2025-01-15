@@ -6,18 +6,13 @@ import i18next from "i18next";
 import { PostTurnAbAttr } from "./post-turn-ab-attr";
 
 /**
- * Grabs the last failed Pokeball used
+ * Attribute to add the last used Pokeball in the current battle
+ * back into the player's inventory.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Ball_Fetch_(Ability) | Ball Fetch}.
  * @extends PostTurnAbAttr
- * @see {@linkcode applyPostTurn} */
+ */
 export class FetchBallAbAttr extends PostTurnAbAttr {
-  /**
-   * Adds the last used Pokeball back into the player's inventory
-   * @param pokemon {@linkcode Pokemon} with this ability
-   * @param _passive N/A
-   * @param _args N/A
-   * @returns true if player has used a pokeball and this pokemon is owned by the player
-   */
-  override applyPostTurn(pokemon: Pokemon, _passive: boolean, simulated: boolean): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean): boolean {
     if (simulated) {
       return false;
     }

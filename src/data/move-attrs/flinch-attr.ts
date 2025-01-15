@@ -3,10 +3,10 @@ import { globalScene } from "#app/global-scene";
 import { NumberHolder } from "#app/utils";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { IgnoreMoveEffectsAbAttr } from "../ab-attrs/ignore-move-effect-ab-attr";
-import { MoveEffectChanceMultiplierAbAttr } from "../ab-attrs/move-effect-chance-multiplier-ab-attr";
-import { applyAbAttrs, applyPreDefendAbAttrs } from "../ability";
-import type { Move } from "../move";
+import { IgnoreMoveEffectsAbAttr } from "#app/data/ab-attrs/ignore-move-effect-ab-attr";
+import { MoveEffectChanceMultiplierAbAttr } from "#app/data/ab-attrs/move-effect-chance-multiplier-ab-attr";
+import { applyAbAttrs } from "#app/data/ability";
+import type { Move } from "#app/data/move";
 import { AddBattlerTagAttr } from "./add-battler-tag-attr";
 
 /**
@@ -24,7 +24,7 @@ export class FlinchAttr extends AddBattlerTagAttr {
     target: Pokemon,
     move: Move,
     selfEffect: boolean,
-    showAbility?: boolean,
+    showAbility: boolean = false,
   ): number {
     const moveChance = new NumberHolder(this.effectChanceOverride ?? move.chance);
 
@@ -36,7 +36,7 @@ export class FlinchAttr extends AddBattlerTagAttr {
     }
 
     if (!selfEffect) {
-      applyPreDefendAbAttrs(IgnoreMoveEffectsAbAttr, target, user, null, null, false, moveChance);
+      applyAbAttrs(IgnoreMoveEffectsAbAttr, target, false, user, move, moveChance);
     }
     return moveChance.value;
   }

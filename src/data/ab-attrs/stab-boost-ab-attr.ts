@@ -3,7 +3,7 @@ import type { NumberHolder } from "#app/utils";
 import { AbAttr } from "./ab-attr";
 
 export class StabBoostAbAttr extends AbAttr {
-  override apply(_pokemon: Pokemon, _passive: boolean, _simulated: boolean, stabMultiplier: NumberHolder): boolean {
+  override apply(_pokemon: Pokemon, _simulated: boolean, stabMultiplier: NumberHolder): boolean {
     if (stabMultiplier.value > 1) {
       stabMultiplier.value += 0.5;
       return true;

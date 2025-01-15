@@ -17,7 +17,7 @@ export class PostSummonAllyHealAbAttr extends PostSummonAbAttr {
     this.showAnim = showAnim;
   }
 
-  override applyPostSummon(pokemon: Pokemon, _passive: boolean, simulated: boolean): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean): boolean {
     const target = pokemon.getAlly();
     if (target?.isActive(true)) {
       if (!simulated) {

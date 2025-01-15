@@ -15,9 +15,8 @@ export class MoveImmunityAbAttr extends PreDefendAbAttr {
     this.immuneCondition = immuneCondition;
   }
 
-  override applyPreDefend(
+  override apply(
     pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
     attacker: Pokemon,
     move: Move,

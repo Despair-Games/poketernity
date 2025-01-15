@@ -16,8 +16,11 @@ export class PsychoShiftEffectAttr extends MoveEffectAttr {
   }
 
   override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
-    const statusToApply: StatusEffect | undefined =
-      user.status?.effect ?? (user.hasAbility(Abilities.COMATOSE) ? StatusEffect.SLEEP : undefined);
+    const statusToApply = this.getStatusToApply(user);
+
+    if (!statusToApply) {
+      return false;
+    }
 
     if (target.status) {
       return false;
@@ -35,6 +38,11 @@ export class PsychoShiftEffectAttr extends MoveEffectAttr {
   }
 
   override getTargetBenefitScore(user: Pokemon, target: Pokemon, _move: Move): number {
-    return !target.status && target.canSetStatus(user.status?.effect, true, false, user) ? -10 : 0;
+    const statusToApply = this.getStatusToApply(user);
+    return !target.status && !!statusToApply && target.canSetStatus(statusToApply, true, false, user) ? -10 : 0;
+  }
+
+  private getStatusToApply(user: Pokemon): StatusEffect | undefined {
+    return user.status?.effect ?? (user.hasAbility(Abilities.COMATOSE) ? StatusEffect.SLEEP : undefined);
   }
 }
