@@ -1724,7 +1724,7 @@ export function initMoves() {
       1,
       true,
     ),
-    new SelfStatusMove(Moves.HEAL_ORDER, Type.BUG, -1, 5, -1, 0, 4).attr(HealAttr, 0.5).triageMove(),
+    new SelfStatusMove(Moves.HEAL_ORDER, Type.BUG, -1, 10, -1, 0, 4).attr(HealAttr, 0.5).triageMove(),
     new AttackMove(Moves.HEAD_SMASH, Type.ROCK, MoveCategory.PHYSICAL, 150, 80, 5, -1, 0, 4)
       .attr(RecoilAttr, false, 0.5)
       .recklessMove(),
@@ -3264,7 +3264,7 @@ export function initMoves() {
       .attr(HealStatusEffectAttr, false, getNonVolatileStatusEffects())
       .target(MoveTarget.USER_AND_ALLIES)
       .triageMove(),
-    new SelfStatusMove(Moves.TAKE_HEART, Type.PSYCHIC, -1, 10, -1, 0, 8)
+    new SelfStatusMove(Moves.TAKE_HEART, Type.PSYCHIC, -1, 15, -1, 0, 8)
       .attr(StatStageChangeAttr, [Stat.SPATK, Stat.SPDEF], 1, true)
       .attr(HealStatusEffectAttr, true, [
         StatusEffect.PARALYSIS,

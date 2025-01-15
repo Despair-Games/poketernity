@@ -46,7 +46,6 @@ describe("All Moves", async () => {
    * - Imprison : Accuracy is set to 100 in PKTY, not -1
    * - Dark Void : Accurary is set to pre-Gen VIII's 80
    * - Zippy Zap : Uses LGPE's implementation. PP: 10 -> 15, BP: 90 -> 50
-   * - Heal Order : PP decreased to 5
    * - Court Change : Accuracy is set to 100 in PKTY, not -1
    */
 
