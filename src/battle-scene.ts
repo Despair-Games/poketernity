@@ -17,6 +17,7 @@ import {
   BooleanHolder,
   NumberHolder,
   type Constructor,
+  randItem,
 } from "#app/utils";
 import type { Modifier, ModifierPredicate, TurnHeldItemTransferModifier } from "./modifier/modifier";
 import {
@@ -3323,6 +3324,48 @@ export default class BattleScene extends SceneBase {
         }
       }
     }
+  }
+
+  /**
+   * Checks if the Pokemon selected can be released without any issues
+   * @param slotIndex the position of the Pokemon the player is trying to release
+   * @returns `false` if releasing the Pokemon would lead to a softlock and loss
+   */
+  canReleasePokemon(slotIndex: number): boolean {
+    const currentParty = this.getPlayerParty();
+    const postReleaseParty = this.getPlayerParty().filter((p) => currentParty[slotIndex].id !== p.id);
+    console.log(postReleaseParty);
+    return postReleaseParty.some((p) => p.isAllowedInBattle());
+  }
+
+  /**
+   * Removes the Pokemon at the specified slot index and destroys it
+   * @param slotIndex the position of the Pokemon released
+   */
+  releasePokemon(slotIndex: number): void {
+    globalScene.removePartyMemberModifiers(slotIndex);
+    const releasedPokemon = globalScene.getPlayerParty().splice(slotIndex, 1)[0];
+    releasedPokemon.destroy();
+  }
+
+  /**
+   * Returns a randomly selected release message to be displayed when a player releases a Pokemon
+   * @param pokemonName
+   */
+  getReleaseMessage(pokemonName: string): string {
+    const goodbyeKeys = [
+      "partyUiHandler:goodbye",
+      "partyUiHandler:byebye",
+      "partyUiHandler:farewell",
+      "partyUiHandler:soLong",
+      "partyUiHandler:thisIsWhereWePart",
+      "partyUiHandler:illMissYou",
+      "partyUiHandler:illNeverForgetYou",
+      "partyUiHandler:untilWeMeetAgain",
+      "partyUiHandler:sayonara",
+      "partyUiHandler:smellYaLater",
+    ];
+    return i18next.t(randItem(goodbyeKeys), { pokemonName: pokemonName });
   }
 
   /**
