@@ -18,7 +18,13 @@ export class VariableMoveTypeChartAttr extends MoveAttr {
    * @param _defType A single defensive type of the target
    * @returns true if application of the attribute succeeds
    */
-  override apply(_user: Pokemon, _target: Pokemon, _move: Move, _multiplier: NumberHolder, _defType: Type): boolean {
+  override apply(
+    _user: Pokemon | null,
+    _target: Pokemon | null,
+    _move: Move,
+    _multiplier: NumberHolder,
+    _defType: Type,
+  ): boolean {
     return false;
   }
 }

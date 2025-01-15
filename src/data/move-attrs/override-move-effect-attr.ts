@@ -22,7 +22,7 @@ export class OverrideMoveEffectAttr extends MoveAttr {
    */
   override apply(
     _user: Pokemon,
-    _target: Pokemon,
+    _target: Pokemon | null,
     _move: Move,
     _overridden: BooleanHolder,
     _virtual: boolean,

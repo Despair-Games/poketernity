@@ -804,6 +804,8 @@ export abstract class Move implements Localizable {
   getPriority(user: Pokemon, simulated: boolean = true) {
     const priority = new NumberHolder(this.priority);
 
+    // TODO: Let this attribute accept null targets
+    // @ts-ignore
     applyMoveAttrs(IncrementMovePriorityAttr, user, null, this, priority);
     applyAbAttrs(ChangeMovePriorityAbAttr, user, simulated, this, priority);
 
@@ -1034,54 +1036,43 @@ export type ChargingMove = ChargingAttackMove | ChargingSelfStatusMove;
 
 export type MoveAttrFilter = (attr: MoveAttr) => boolean;
 
-function applyMoveAttrsInternal(
+function applyMoveAttrsInternal<TAttr extends MoveAttr>(
   attrFilter: MoveAttrFilter,
-  user: Pokemon | null,
-  target: Pokemon | null,
-  move: Move,
-  ...args: unknown[]
+  ...params: Parameters<TAttr["apply"]>
 ): void {
+  const [user, target, move, ...args] = params;
   move.attrs.filter((attr) => attrFilter(attr)).forEach((attr) => attr.apply(user, target, move, ...args));
 }
 
-function applyMoveChargeAttrsInternal(
+function applyMoveChargeAttrsInternal<TAttr extends MoveAttr>(
   attrFilter: MoveAttrFilter,
-  user: Pokemon | null,
-  target: Pokemon | null,
-  move: ChargingMove,
-  ...args: unknown[]
+  ...params: Parameters<TAttr["apply"]>
 ): void {
-  move.chargeAttrs.filter((attr) => attrFilter(attr)).forEach((attr) => attr.apply(user, target, move, ...args));
+  const [user, target, move, ...args] = params;
+  if (move instanceof ChargingAttackMove || move instanceof ChargingSelfStatusMove) {
+    move.chargeAttrs.filter((attr) => attrFilter(attr)).forEach((attr) => attr.apply(user, target, move, ...args));
+  }
 }
 
-export function applyMoveAttrs(
-  attrType: Constructor<MoveAttr>,
-  user: Pokemon | null,
-  target: Pokemon | null,
-  move: Move,
-  ...args: unknown[]
+export function applyMoveAttrs<TAttr extends MoveAttr>(
+  attrType: Constructor<TAttr>,
+  ...params: Parameters<TAttr["apply"]>
 ): void {
-  applyMoveAttrsInternal((attr: MoveAttr) => attr instanceof attrType, user, target, move, ...args);
+  applyMoveAttrsInternal((attr: MoveAttr) => attr instanceof attrType, ...params);
 }
 
-export function applyFilteredMoveAttrs(
+export function applyFilteredMoveAttrs<TAttr extends MoveAttr>(
   attrFilter: MoveAttrFilter,
-  user: Pokemon,
-  target: Pokemon | null,
-  move: Move,
-  ...args: unknown[]
+  ...params: Parameters<TAttr["apply"]>
 ): void {
-  applyMoveAttrsInternal(attrFilter, user, target, move, ...args);
+  applyMoveAttrsInternal(attrFilter, ...params);
 }
 
-export function applyMoveChargeAttrs(
-  attrType: Constructor<MoveAttr>,
-  user: Pokemon | null,
-  target: Pokemon | null,
-  move: ChargingMove,
-  ...args: unknown[]
+export function applyMoveChargeAttrs<TAttr extends MoveAttr>(
+  attrType: Constructor<TAttr>,
+  ...params: Parameters<TAttr["apply"]>
 ): void {
-  applyMoveChargeAttrsInternal((attr: MoveAttr) => attr instanceof attrType, user, target, move, ...args);
+  applyMoveChargeAttrsInternal((attr: MoveAttr) => attr instanceof attrType, ...params);
 }
 
 export type MoveTargetSet = {
