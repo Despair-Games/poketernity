@@ -1,13 +1,12 @@
 import { allMoves } from "#app/data/all-moves";
 import { resolve } from "path";
-import { readFileSync } from "fs";
 import { describe, expect, it } from "vitest";
 import type { MoveCategory } from "#enums/move-category";
 import type { Moves } from "#enums/moves";
 import type { Move } from "#app/data/move";
 import { MoveFlags } from "#enums/move-flags";
 
-describe("All Moves", () => {
+describe("All Moves", async () => {
   type MoveData = {
     id: number;
     identifier: string;
@@ -48,8 +47,7 @@ describe("All Moves", () => {
    * - Heal Order : PP decreased to 5
    */
 
-  const filename = resolve("./test/moves/all_moves.json");
-  const file = readFileSync(filename, { encoding: "utf-8" });
+  const file = await import("./test/moves/all_moves.json");
   const moveData: MoveData[] = JSON.parse(file);
 
   it.each(moveData)("$identifier, if implemented, should have correct move data", async (move: MoveData) => {
