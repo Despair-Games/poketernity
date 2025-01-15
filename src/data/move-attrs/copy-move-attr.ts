@@ -9,6 +9,8 @@ import type { Moves } from "#enums/moves";
 
 /**
  * Attribute used to copy a previously-used move.
+ * Copycat copies the last used move, and Mirror Move copies the last move used by the target.
+ *
  * Used for {@linkcode Moves.COPYCAT} and {@linkcode Moves.MIRROR_MOVE}
  * @see {@linkcode apply} for move selection and move call
  * @extends CallMoveAttr
