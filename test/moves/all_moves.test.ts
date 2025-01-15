@@ -1,4 +1,6 @@
 import { allMoves } from "#app/data/all-moves";
+import { resolve } from "path";
+import { readFileSync } from "fs";
 import { describe, expect, it } from "vitest";
 import type { MoveCategory } from "#enums/move-category";
 import type { Moves } from "#enums/moves";
@@ -41,12 +43,15 @@ describe("All Moves", async () => {
   /**
    * Custom Implementations as of 01/2025:
    * - Horn Drill / Guillotine / Sheer Cold / Fissure : BP set to 200
+   * - Imprison : Accuracy is set to 100 in PKTY, not -1
    * - Dark Void : Accurary is set to pre-Gen VIII's 80
    * - Zippy Zap : Uses LGPE's implementation. PP: 10 -> 15, BP: 90 -> 50
    * - Heal Order : PP decreased to 5
+   * - Court Change : Accuracy is set to 100 in PKTY, not -1
    */
 
-  const file = await import("./test/moves/all_moves.json");
+  const filename = resolve("./test/moves/all_moves.json");
+  const file = readFileSync(filename, { encoding: "utf-8" });
   const moveData: MoveData[] = JSON.parse(file);
 
   it.each(moveData)("$identifier, if implemented, should have correct move data", async (move: MoveData) => {
