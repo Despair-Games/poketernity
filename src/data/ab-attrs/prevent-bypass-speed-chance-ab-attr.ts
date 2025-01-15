@@ -26,7 +26,6 @@ export class PreventBypassSpeedChanceAbAttr extends AbAttr {
    */
   override apply(
     pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
     bypassSpeed: BooleanHolder,
     canCheckHeldItems: BooleanHolder,

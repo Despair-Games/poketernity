@@ -16,12 +16,7 @@ export class PostWeatherChangeAddBattlerTagAttr extends PostWeatherChangeAbAttr 
     this.weatherTypes = weatherTypes;
   }
 
-  override applyPostWeatherChange(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    weather: WeatherType,
-  ): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean, weather: WeatherType): boolean {
     if (!this.weatherTypes.find((w) => weather === w)) {
       return false;
     }

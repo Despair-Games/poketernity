@@ -1,4 +1,3 @@
-import { queueShowAbility } from "#app/data/ability-utils";
 import { SpeciesFormChangeRevertWeatherFormTrigger, SpeciesFormChangeWeatherTrigger } from "#app/data/pokemon-forms";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -15,20 +14,12 @@ export class PostSummonFormChangeByWeatherAbAttr extends PostSummonAbAttr {
   private readonly ability: Abilities;
 
   constructor(ability: Abilities) {
-    super(false);
+    super(true, true);
 
     this.ability = ability;
   }
 
-  /**
-   * Calls the {@linkcode globalScene.triggerPokemonFormChange | triggerPokemonFormChange} for both
-   * {@linkcode SpeciesFormChangeWeatherTrigger} and {@linkcode SpeciesFormChangeWeatherTrigger}
-   * if it is the specific Pokemon and ability
-   * @param pokemon the {@linkcode Pokemon} with this ability
-   * @param passive n/a
-   * @returns whether the form change was triggered
-   */
-  override applyPostSummon(pokemon: Pokemon, passive: boolean, simulated: boolean): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean): boolean {
     const isCastformWithForecast =
       pokemon.species.speciesId === Species.CASTFORM && this.ability === Abilities.FORECAST;
     const isCherrimWithFlowerGift =
@@ -41,7 +32,6 @@ export class PostSummonFormChangeByWeatherAbAttr extends PostSummonAbAttr {
 
       globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeWeatherTrigger);
       globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeRevertWeatherFormTrigger);
-      queueShowAbility(pokemon, passive);
       return true;
     }
     return false;

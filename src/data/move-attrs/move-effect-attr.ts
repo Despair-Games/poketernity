@@ -7,7 +7,7 @@ import { globalScene } from "#app/global-scene";
 import { NumberHolder } from "#app/utils";
 import { IgnoreMoveEffectsAbAttr } from "#app/data/ab-attrs/ignore-move-effect-ab-attr";
 import { MoveEffectChanceMultiplierAbAttr } from "#app/data/ab-attrs/move-effect-chance-multiplier-ab-attr";
-import { applyAbAttrs, applyPreDefendAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/ability";
 import { type Move } from "#app/data/move";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";
 
@@ -129,7 +129,7 @@ export class MoveEffectAttr extends MoveAttr {
    * @returns The final percent chance of this attribute's effect applying. If negative, the
    * effect is guaranteed to apply.
    */
-  getMoveChance(user: Pokemon, target: Pokemon, move: Move, selfEffect: boolean, showAbility?: boolean): number {
+  getMoveChance(user: Pokemon, target: Pokemon, move: Move, selfEffect: boolean, showAbility: boolean = false): number {
     const moveChance = new NumberHolder(this.effectChanceOverride ?? move.chance);
 
     applyAbAttrs(MoveEffectChanceMultiplierAbAttr, user, false, moveChance, move, showAbility);
@@ -138,7 +138,7 @@ export class MoveEffectAttr extends MoveAttr {
     globalScene.arena.applyTagsForSide(ArenaTagType.WATER_FIRE_PLEDGE, userSide, false, moveChance);
 
     if (!selfEffect) {
-      applyPreDefendAbAttrs(IgnoreMoveEffectsAbAttr, target, user, null, null, false, moveChance);
+      applyAbAttrs(IgnoreMoveEffectsAbAttr, target, false, user, move, moveChance);
     }
     return moveChance.value;
   }

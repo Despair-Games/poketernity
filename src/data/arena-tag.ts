@@ -1043,7 +1043,7 @@ class StickyWebTag extends ArenaTrapTag {
   override activateTrap(pokemon: Pokemon, simulated: boolean): boolean {
     if (pokemon.isGrounded()) {
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs(ProtectStatAbAttr, pokemon, simulated, cancelled);
+      applyAbAttrs(ProtectStatAbAttr, pokemon, simulated, Stat.SPD, cancelled);
 
       if (simulated) {
         return !cancelled.value;
@@ -1498,7 +1498,7 @@ export function getArenaTag(
  */
 export function loadArenaTag(source: ArenaTag | any): ArenaTag {
   const tag =
-    getArenaTag(source.tagType, source.turnCount, source.sourceMove, source.sourceId, source.side) ?? new NoneTag();
+    getArenaTag(source.tagType, source.sourceId, source.turnCount, source.sourceMove, source.side) ?? new NoneTag();
   tag.loadTag(source);
   return tag;
 }

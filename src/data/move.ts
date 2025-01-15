@@ -31,7 +31,7 @@ import { MoveTypeChangeAbAttr } from "./ab-attrs/move-type-change-ab-attr";
 import { UserFieldMoveTypePowerBoostAbAttr } from "./ab-attrs/user-field-move-type-power-boost-ab-attr";
 import { VariableMovePowerAbAttr } from "./ab-attrs/variable-move-power-ab-attr";
 import { WonderSkinAbAttr } from "./ab-attrs/wonder-skin-ab-attr";
-import { applyAbAttrs, applyPreAttackAbAttrs, applyPreDefendAbAttrs } from "./ability";
+import { applyAbAttrs } from "./ability";
 import { WeakenMoveTypeTag } from "./arena-tag";
 import { HelpingHandTag, TypeBoostTag } from "./battler-tags";
 import { IncrementMovePriorityAttr } from "./move-attrs/increment-move-priority-attr";
@@ -699,7 +699,7 @@ export abstract class Move implements Localizable {
     const moveAccuracy = new NumberHolder(this.accuracy);
 
     applyMoveAttrs(VariableAccuracyAttr, user, target, this, moveAccuracy);
-    applyPreDefendAbAttrs(WonderSkinAbAttr, target, user, this, { value: false }, simulated, moveAccuracy);
+    applyAbAttrs(WonderSkinAbAttr, target, simulated, user, this, moveAccuracy);
 
     if (moveAccuracy.value === -1) {
       return moveAccuracy.value;
@@ -741,7 +741,7 @@ export abstract class Move implements Localizable {
     const power = new NumberHolder(this.power);
     const typeChangeMovePowerMultiplier = new NumberHolder(1);
 
-    applyPreAttackAbAttrs(MoveTypeChangeAbAttr, source, target, this, true, null, typeChangeMovePowerMultiplier);
+    applyAbAttrs(MoveTypeChangeAbAttr, source, true, this, target, undefined, typeChangeMovePowerMultiplier);
 
     const sourceTeraType = source.getTeraType();
     if (
@@ -755,10 +755,10 @@ export abstract class Move implements Localizable {
       power.value = 60;
     }
 
-    applyPreAttackAbAttrs(VariableMovePowerAbAttr, source, target, this, simulated, power);
+    applyAbAttrs(VariableMovePowerAbAttr, source, simulated, this, target, power);
 
     if (source.getAlly()) {
-      applyPreAttackAbAttrs(AllyMoveCategoryPowerBoostAbAttr, source.getAlly(), target, this, simulated, power);
+      applyAbAttrs(AllyMoveCategoryPowerBoostAbAttr, source.getAlly(), simulated, this, target, power);
     }
 
     const fieldAuras = new Set(
@@ -774,13 +774,11 @@ export abstract class Move implements Localizable {
         .flat(),
     );
     for (const aura of fieldAuras) {
-      aura.applyPreAttack(source, null, simulated, target, this, power);
+      aura.apply(source, simulated, this, target, power);
     }
 
     const alliedField: Pokemon[] = source.getField();
-    alliedField.forEach((p) =>
-      applyPreAttackAbAttrs(UserFieldMoveTypePowerBoostAbAttr, p, target, this, simulated, power),
-    );
+    alliedField.forEach((p) => applyAbAttrs(UserFieldMoveTypePowerBoostAbAttr, p, simulated, this, target, power));
 
     power.value *= typeChangeMovePowerMultiplier.value;
 

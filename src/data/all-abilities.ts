@@ -14,7 +14,8 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { MovePhase } from "#app/phases/move-phase";
 import { isNullOrUndefined, NumberHolder, randSeedInt, toDmgValue } from "#app/utils";
 import i18next from "i18next";
-import { Ability, allAbilities, PostDamageForceSwitchAbAttr } from "./ability";
+import { Ability, allAbilities } from "./ability";
+import { PostDamageForceSwitchAbAttr } from "./ab-attrs/post-damage-force-switch-out-ab-attr";
 import { PreventBypassSpeedChanceAbAttr } from "./ab-attrs/prevent-bypass-speed-chance-ab-attr";
 import { FormBlockDamageAbAttr } from "./ab-attrs/form-block-damage-ab-attr";
 import { PostSummonStatStageChangeOnArenaAbAttr } from "./ab-attrs/post-summon-stat-stage-change-on-arena-ab-attr";
@@ -477,7 +478,7 @@ export function initAbilities() {
     new Ability(Abilities.TRUANT, 3).attr(PostSummonAddBattlerTagAbAttr, BattlerTagType.TRUANT, 1, false),
     new Ability(Abilities.HUSTLE, 3)
       .attr(StatMultiplierAbAttr, Stat.ATK, 1.5)
-      .attr(StatMultiplierAbAttr, Stat.ACC, 0.8, (_user, _target, move) => move.category === MoveCategory.PHYSICAL),
+      .attr(StatMultiplierAbAttr, Stat.ACC, 0.8, (_user, _target, move) => move?.category === MoveCategory.PHYSICAL),
     new Ability(Abilities.CUTE_CHARM, 3).attr(PostDefendContactApplyTagChanceAbAttr, 30, BattlerTagType.INFATUATED),
     new Ability(Abilities.PLUS, 3).conditionalAttr(
       (p) =>
@@ -597,7 +598,7 @@ export function initAbilities() {
     new Ability(Abilities.DOWNLOAD, 4).attr(DownloadAbAttr),
     new Ability(Abilities.IRON_FIST, 4).attr(
       MovePowerBoostAbAttr,
-      (_user, _target, move) => move.hasFlag(MoveFlags.PUNCHING_MOVE),
+      (_user, _target, move) => !!move?.hasFlag(MoveFlags.PUNCHING_MOVE),
       1.2,
     ),
     new Ability(Abilities.POISON_HEAL, 4)
@@ -626,8 +627,11 @@ export function initAbilities() {
         1.5,
       ),
     new Ability(Abilities.NORMALIZE, 4).attr(MoveTypeChangeAbAttr, Type.NORMAL, 1.2, (_user, _target, move) => {
-      return ![Moves.HIDDEN_POWER, Moves.WEATHER_BALL, Moves.NATURAL_GIFT, Moves.JUDGMENT, Moves.TECHNO_BLAST].includes(
-        move.id,
+      return (
+        !!move
+        && ![Moves.HIDDEN_POWER, Moves.WEATHER_BALL, Moves.NATURAL_GIFT, Moves.JUDGMENT, Moves.TECHNO_BLAST].includes(
+          move.id,
+        )
       );
     }),
     new Ability(Abilities.SNIPER, 4).attr(MultCritAbAttr, 1.5),
@@ -637,6 +641,9 @@ export function initAbilities() {
     new Ability(Abilities.TECHNICIAN, 4).attr(
       MovePowerBoostAbAttr,
       (user, target, move) => {
+        if (!move || !user || !target) {
+          return false;
+        }
         const power = new NumberHolder(move.power);
         applyMoveAttrs(VariablePowerAttr, user, target, move, power);
         return power.value <= 60;
@@ -665,11 +672,12 @@ export function initAbilities() {
     new Ability(Abilities.UNAWARE, 4)
       .attr(IgnoreOpponentStatStagesAbAttr, [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.ACC, Stat.EVA])
       .ignorable(),
-    new Ability(Abilities.TINTED_LENS, 4).attr(
-      DamageBoostAbAttr,
-      2,
-      (user, target, move) => (target?.getMoveEffectiveness(user!, move) ?? 1) <= 0.5,
-    ),
+    new Ability(Abilities.TINTED_LENS, 4).attr(DamageBoostAbAttr, 2, (user, target, move) => {
+      if (!user || !target || !move) {
+        return false;
+      }
+      return target.getMoveEffectiveness(user, move) <= 0.5;
+    }),
     new Ability(Abilities.FILTER, 4)
       .attr(
         ReceivedMoveDamageMultiplierAbAttr,
@@ -702,7 +710,7 @@ export function initAbilities() {
     new Ability(Abilities.FRISK, 4).attr(FriskAbAttr),
     new Ability(Abilities.RECKLESS, 4).attr(
       MovePowerBoostAbAttr,
-      (_user, _target, move) => move.hasFlag(MoveFlags.RECKLESS_MOVE),
+      (_user, _target, move) => !!move?.hasFlag(MoveFlags.RECKLESS_MOVE),
       1.2,
     ),
     new Ability(Abilities.MULTITYPE, 4)
@@ -743,7 +751,7 @@ export function initAbilities() {
       .attr(PostDefendStealHeldItemAbAttr, (_target, _user, move) => move.hasFlag(MoveFlags.MAKES_CONTACT))
       .condition(getSheerForceHitDisableAbCondition()),
     new Ability(Abilities.SHEER_FORCE, 5)
-      .attr(MovePowerBoostAbAttr, (_user, _target, move) => move.chance >= 1, 5461 / 4096)
+      .attr(MovePowerBoostAbAttr, (_user, _target, move) => !!move && move.chance >= 1, 5461 / 4096)
       .attr(MoveEffectChanceMultiplierAbAttr, 0), // Should disable life orb, eject button, red card, kee/maranga berry if they get implemented
     new Ability(Abilities.CONTRARY, 5).attr(StatStageChangeMultiplierAbAttr, -1).ignorable(),
     new Ability(Abilities.UNNERVE, 5).attr(PreventBerryUseAbAttr),
@@ -782,13 +790,13 @@ export function initAbilities() {
     new Ability(Abilities.TOXIC_BOOST, 5).attr(
       MovePowerBoostAbAttr,
       (user, _target, move) =>
-        move.category === MoveCategory.PHYSICAL
+        move?.category === MoveCategory.PHYSICAL
         && (user?.status?.effect === StatusEffect.POISON || user?.status?.effect === StatusEffect.TOXIC),
       1.5,
     ),
     new Ability(Abilities.FLARE_BOOST, 5).attr(
       MovePowerBoostAbAttr,
-      (user, _target, move) => move.category === MoveCategory.SPECIAL && user?.status?.effect === StatusEffect.BURN,
+      (user, _target, move) => move?.category === MoveCategory.SPECIAL && user?.status?.effect === StatusEffect.BURN,
       1.5,
     ),
     new Ability(Abilities.HARVEST, 5)
@@ -915,14 +923,14 @@ export function initAbilities() {
       .edgeCase(), // Should not boost stats if switching into court changed sticky web
     new Ability(Abilities.STRONG_JAW, 6).attr(
       MovePowerBoostAbAttr,
-      (_user, _target, move) => move.hasFlag(MoveFlags.BITING_MOVE),
+      (_user, _target, move) => !!move?.hasFlag(MoveFlags.BITING_MOVE),
       1.5,
     ),
     new Ability(Abilities.REFRIGERATE, 6).attr(
       MoveTypeChangeAbAttr,
       Type.ICE,
       1.2,
-      (_user, _target, move) => move.type === Type.NORMAL && !move.hasAttr(VariableMoveTypeAttr),
+      (_user, _target, move) => move?.type === Type.NORMAL && !move.hasAttr(VariableMoveTypeAttr),
     ),
     new Ability(Abilities.SWEET_VEIL, 6)
       .attr(UserFieldStatusEffectImmunityAbAttr, StatusEffect.SLEEP)
@@ -941,7 +949,7 @@ export function initAbilities() {
     ),
     new Ability(Abilities.MEGA_LAUNCHER, 6).attr(
       MovePowerBoostAbAttr,
-      (_user, _target, move) => move.hasFlag(MoveFlags.PULSE_MOVE),
+      (_user, _target, move) => !!move?.hasFlag(MoveFlags.PULSE_MOVE),
       1.5,
     ),
     new Ability(Abilities.GRASS_PELT, 6)
@@ -950,14 +958,14 @@ export function initAbilities() {
     new Ability(Abilities.SYMBIOSIS, 6).unimplemented(),
     new Ability(Abilities.TOUGH_CLAWS, 6).attr(
       MovePowerBoostAbAttr,
-      (_user, _target, move) => move.hasFlag(MoveFlags.MAKES_CONTACT),
+      (user, target, move) => !!user && !!move?.checkFlag(MoveFlags.MAKES_CONTACT, user, target ?? null),
       1.3,
     ),
     new Ability(Abilities.PIXILATE, 6).attr(
       MoveTypeChangeAbAttr,
       Type.FAIRY,
       1.2,
-      (_user, _target, move) => move.type === Type.NORMAL && !move.hasAttr(VariableMoveTypeAttr),
+      (_user, _target, move) => move?.type === Type.NORMAL && !move.hasAttr(VariableMoveTypeAttr),
     ),
     new Ability(Abilities.GOOEY, 6).attr(
       PostDefendStatStageChangeAbAttr,
@@ -970,7 +978,7 @@ export function initAbilities() {
       MoveTypeChangeAbAttr,
       Type.FLYING,
       1.2,
-      (_user, _target, move) => move.type === Type.NORMAL && !move.hasAttr(VariableMoveTypeAttr),
+      (_user, _target, move) => move?.type === Type.NORMAL && !move.hasAttr(VariableMoveTypeAttr),
     ),
     new Ability(Abilities.PARENTAL_BOND, 6).attr(AddSecondStrikeAbAttr, 0.25),
     new Ability(Abilities.DARK_AURA, 6)
@@ -1075,8 +1083,11 @@ export function initAbilities() {
       .condition(getSheerForceHitDisableAbCondition()),
     new Ability(Abilities.SLUSH_RUSH, 7).attr(WeatherBasedSpeedDoublerAbAttr, [WeatherType.HAIL, WeatherType.SNOW]),
     new Ability(Abilities.LONG_REACH, 7).attr(IgnoreContactAbAttr),
-    new Ability(Abilities.LIQUID_VOICE, 7).attr(MoveTypeChangeAbAttr, Type.WATER, 1, (_user, _target, move) =>
-      move.hasFlag(MoveFlags.SOUND_BASED),
+    new Ability(Abilities.LIQUID_VOICE, 7).attr(
+      MoveTypeChangeAbAttr,
+      Type.WATER,
+      1,
+      (_user, _target, move) => !!move?.hasFlag(MoveFlags.SOUND_BASED),
     ),
     new Ability(Abilities.TRIAGE, 7).attr(
       ChangeMovePriorityAbAttr,
@@ -1087,7 +1098,7 @@ export function initAbilities() {
       MoveTypeChangeAbAttr,
       Type.ELECTRIC,
       1.2,
-      (_user, _target, move) => move.type === Type.NORMAL && !move.hasAttr(VariableMoveTypeAttr),
+      (_user, _target, move) => move?.type === Type.NORMAL && !move.hasAttr(VariableMoveTypeAttr),
     ),
     new Ability(Abilities.SURGE_SURFER, 7).conditionalAttr(
       getTerrainCondition(TerrainType.ELECTRIC),
@@ -1250,12 +1261,22 @@ export function initAbilities() {
     ),
     new Ability(Abilities.PRISM_ARMOR, 7).attr(
       ReceivedMoveDamageMultiplierAbAttr,
-      (target, user, move) => target.getMoveEffectiveness(user, move) >= 2,
+      (user, target, move) => {
+        if (!user || !target || !move) {
+          return false;
+        }
+        return target.getMoveEffectiveness(user, move) >= 2;
+      },
       0.75,
     ),
     new Ability(Abilities.NEUROFORCE, 7).attr(
       MovePowerBoostAbAttr,
-      (user, target, move) => (target?.getMoveEffectiveness(user!, move) ?? 1) >= 2,
+      (user, target, move) => {
+        if (!user || !target || !move) {
+          return false;
+        }
+        return target.getMoveEffectiveness(user, move) >= 2;
+      },
       1.25,
     ),
     new Ability(Abilities.INTREPID_SWORD, 8).attr(PostSummonStatStageChangeAbAttr, [Stat.ATK], 1, true),
@@ -1301,7 +1322,7 @@ export function initAbilities() {
       6,
     ),
     new Ability(Abilities.PUNK_ROCK, 8)
-      .attr(MovePowerBoostAbAttr, (_user, _target, move) => move.hasFlag(MoveFlags.SOUND_BASED), 1.3)
+      .attr(MovePowerBoostAbAttr, (_user, _target, move) => !!move?.hasFlag(MoveFlags.SOUND_BASED), 1.3)
       .attr(ReceivedMoveDamageMultiplierAbAttr, (_target, _user, move) => move.hasFlag(MoveFlags.SOUND_BASED), 0.5)
       .ignorable(),
     new Ability(Abilities.SAND_SPIT, 8).attr(
@@ -1583,7 +1604,7 @@ export function initAbilities() {
     new Ability(Abilities.CUD_CHEW, 9).unimplemented(),
     new Ability(Abilities.SHARPNESS, 9).attr(
       MovePowerBoostAbAttr,
-      (_user, _target, move) => move.hasFlag(MoveFlags.SLICING_MOVE),
+      (_user, _target, move) => !!move?.hasFlag(MoveFlags.SLICING_MOVE),
       1.5,
     ),
     new Ability(Abilities.SUPREME_OVERLORD, 9)

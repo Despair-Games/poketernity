@@ -12,7 +12,7 @@ export class PostBattleInitFormChangeAbAttr extends PostBattleInitAbAttr {
     this.formFunc = formFunc;
   }
 
-  override applyPostBattleInit(pokemon: Pokemon, _passive: boolean, simulated: boolean): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean): boolean {
     const formIndex = this.formFunc(pokemon);
     if (formIndex !== pokemon.formIndex && !simulated) {
       return globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger, false);

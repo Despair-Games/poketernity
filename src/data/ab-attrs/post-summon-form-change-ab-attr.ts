@@ -12,7 +12,7 @@ export class PostSummonFormChangeAbAttr extends PostSummonAbAttr {
     this.formFunc = formFunc;
   }
 
-  override applyPostSummon(pokemon: Pokemon, _passive: boolean, simulated: boolean): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean): boolean {
     const formIndex = this.formFunc(pokemon);
     if (formIndex !== pokemon.formIndex) {
       return simulated || globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger, false);

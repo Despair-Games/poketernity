@@ -11,18 +11,8 @@ import { PostFaintAbAttr } from "./post-faint-ab-attr";
  * @extends PostFaintAbAttr
  */
 export class PostFaintClearWeatherAbAttr extends PostFaintAbAttr {
-  /**
-   * @param pokemon The {@linkcode Pokemon} with the ability
-   * @param _passive N/A
-   * @param _attacker N/A
-   * @param _move N/A
-   * @param _hitResult N/A
-   * @param _args N/A
-   * @returns Returns true if the weather clears, otherwise false.
-   */
-  override applyPostFaint(
+  override apply(
     pokemon: Pokemon,
-    _passive: boolean,
     simulated: boolean,
     _attacker?: Pokemon,
     _move?: Move,
