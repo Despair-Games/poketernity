@@ -12,7 +12,7 @@
 
     "preview": "vite preview",
 
-    "test": "vitest run --project main",
+    "test": "vitest run --project main --no-isolate",
     "posttest": "git rev-parse --short HEAD",
 
     "test:cov": "vitest run --project main --coverage",
@@ -21,7 +21,7 @@
     "test:watch": "vitest watch --project main --coverage",
     "posttest:watch": "git rev-parse --short HEAD",
 
-    "test:silent": "vitest run --project main --silent",
+    "test:silent": "vitest run --project main --silent --no-isolate",
     "posttest:silent": "git rev-parse --short HEAD",
 
     "typecheck": "tsc --noEmit",

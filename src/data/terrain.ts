@@ -2,7 +2,7 @@ import type { Pokemon } from "../field/pokemon";
 import type { Move } from "./move";
 import { Type } from "#enums/type";
 import { ProtectAttr } from "./move-attrs/protect-attr";
-import type { BattlerIndex } from "#app/battle";
+import type { BattlerIndex } from "#enums/battler-index";
 import i18next from "i18next";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { TerrainType } from "#enums/terrain-type";

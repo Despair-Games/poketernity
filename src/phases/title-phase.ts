@@ -1,19 +1,20 @@
 import type { SessionSaveData } from "#app/@types/SessionData";
 import { loggedInUser } from "#app/account";
-import { BattleType } from "#app/battle";
+import { BattleType } from "#enums/battle-type";
 import { fetchDailyRunSeed, getDailyRunStarters } from "#app/data/daily-run";
 import { getBiomeKey } from "#app/field/arena";
-import { GameMode, GameModes, getGameMode } from "#app/game-mode";
+import { GameMode, getGameMode } from "#app/game-mode";
+import { GameModes } from "#enums/game-modes";
 import { globalScene } from "#app/global-scene";
 import type { Modifier } from "#app/modifier/modifier";
 import {
   getDailyRunStarterModifiers,
-  ModifierPoolType,
   modifierTypes,
   regenerateModifierPoolThresholds,
 } from "#app/modifier/modifier-type";
+import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { Phase } from "#app/phase";
-import { Unlockables } from "#app/system/unlockables";
+import { Unlockables } from "#enums/unlockables";
 import { vouchers } from "#app/system/voucher";
 import type { OptionSelectConfig, OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler";
 import { SaveSlotUiMode } from "#app/ui/save-slot-select-ui-handler";

@@ -7,6 +7,7 @@ import { Mode } from "#app/ui/ui";
 import { BattleStyle } from "#enums/battle-style";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { SwitchType } from "#enums/switch-type";
+import { settings } from "#app/system/settings/settings-manager";
 import i18next from "i18next";
 
 /**
@@ -33,8 +34,8 @@ export class CheckSwitchPhase extends BattlePhase {
     // End this phase early...
 
     // ...if the user is playing in Set Mode
-    if (globalScene.battleStyle === BattleStyle.SET) {
-      return this.end();
+    if (settings.general.battleStyle === BattleStyle.SET) {
+      return super.end();
     }
 
     // ...if the checked Pokemon is somehow not on the field

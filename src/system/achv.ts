@@ -12,17 +12,11 @@ import {
   InverseBattleChallenge,
 } from "#app/data/challenge";
 import type { ConditionFn } from "#app/@types/common";
-import { Stat, getShortenedStatKey } from "#app/enums/stat";
-import { Challenges } from "#app/enums/challenges";
+import { Stat, getShortenedStatKey } from "#enums/stat";
+import { Challenges } from "#enums/challenges";
 import { globalScene } from "#app/global-scene";
-
-export enum AchvTier {
-  COMMON,
-  GREAT,
-  ULTRA,
-  EPIC,
-  MASTER,
-}
+import { settings } from "./settings/settings-manager";
+import { AchvTier } from "#enums/achv-tier";
 
 export class Achv {
   public localizationKey: string;
@@ -206,7 +200,7 @@ export class ChallengeAchv extends Achv {
  */
 export function getAchievementDescription(localizationKey: string): string {
   // We need to get the player gender from the game data to add the correct prefix to the achievement name
-  const genderIndex = globalScene?.gameData?.gender ?? PlayerGender.MALE;
+  const genderIndex = settings.display.playerGender ?? PlayerGender.MALE;
   const genderStr = PlayerGender[genderIndex].toLowerCase();
 
   switch (localizationKey) {

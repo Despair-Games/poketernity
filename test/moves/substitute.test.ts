@@ -1,8 +1,5 @@
-import { BattlerIndex } from "#app/battle";
-import { ArenaTagSide } from "#app/data/arena-tag";
 import { SubstituteTag, TrappedTag } from "#app/data/battler-tags";
 import { allMoves } from "#app/data/all-moves";
-import { MoveResult } from "#app/field/pokemon";
 import type { CommandPhase } from "#app/phases/command-phase";
 import { GameManager } from "#test/testUtils/gameManager";
 import { Command } from "#app/ui/command-ui-handler";
@@ -18,6 +15,9 @@ import { StatusEffect } from "#enums/status-effect";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { StealHeldItemChanceAttr } from "#app/data/move-attrs/steal-held-item-chance-attr";
+import { MoveResult } from "#enums/move-result";
+import { BattlerIndex } from "#enums/battler-index";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 
 describe("Moves - Substitute", () => {
   let phaserGame: Phaser.Game;

@@ -1,4 +1,4 @@
-import type { BattlerIndex } from "#app/battle";
+import type { BattlerIndex } from "#enums/battler-index";
 import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { Localizable } from "#app/interfaces/locales";
@@ -68,7 +68,7 @@ export abstract class Move implements Localizable {
   public priority: number;
   public generation: number;
   public attrs: MoveAttr[] = [];
-  private conditions: MoveCondition[] = [];
+  protected conditions: MoveCondition[] = [];
   /** The move's {@linkcode MoveFlags} */
   private flags: number = 0;
   private nameAppend: string = "";
@@ -359,13 +359,13 @@ export abstract class Move implements Localizable {
   /**
    * Sets the flags of the move
    * @param flag {@linkcode MoveFlags}
-   * @param on a boolean, if True, then "ORs" the flag onto existing ones, if False then "XORs" the flag onto existing ones
+   * @param on If `true`, sets the move to have the flag; if `false`, sets the move to NOT have the flag.
    */
   private setFlag(flag: MoveFlags, on: boolean): void {
     // bitwise OR and bitwise XOR respectively
     if (on) {
       this.flags |= flag;
-    } else {
+    } else if (this.hasFlag(flag)) {
       this.flags ^= flag;
     }
   }
@@ -948,6 +948,8 @@ function ChargeMove<TBase extends SubMove>(Base: TBase) {
 
     /** Move attributes that apply during the move's charging phase */
     public chargeAttrs: MoveAttr[] = [];
+    /** Does the move calculate its hit check during its charging phase? */
+    public hitCheckOnCharge: boolean = false;
 
     override isChargingMove(): this is ChargingMove {
       return true;
@@ -1006,7 +1008,22 @@ function ChargeMove<TBase extends SubMove>(Base: TBase) {
     chargeAttr<T extends Constructor<MoveAttr>>(ChargeAttrType: T, ...args: ConstructorParameters<T>): this {
       const chargeAttr = new ChargeAttrType(...args);
       this.chargeAttrs.push(chargeAttr);
+      let attrCondition = chargeAttr.getCondition();
+      if (attrCondition) {
+        if (typeof attrCondition === "function") {
+          attrCondition = new MoveCondition(attrCondition);
+        }
+        this.conditions.push(attrCondition);
+      }
+      return this;
+    }
 
+    /**
+     * Causes the move's hit check to also be calculated during its charging phase.
+     * @returns this {@linkcode Move} (for chaining API purposes)
+     */
+    doesHitCheckOnCharge(): this {
+      this.hitCheckOnCharge = true;
       return this;
     }
   };
