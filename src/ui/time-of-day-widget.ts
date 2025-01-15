@@ -3,6 +3,7 @@ import { globalScene } from "#app/global-scene";
 import { BattleSceneEventType } from "../events/battle-scene";
 import { EaseType } from "#enums/ease-type";
 import { TimeOfDay } from "#enums/time-of-day";
+import { settings } from "#app/system/settings/settings-manager";
 
 /** A small self contained UI element that displays the time of day as an icon */
 export default class TimeOfDayWidget extends Phaser.GameObjects.Container {
@@ -49,8 +50,8 @@ export default class TimeOfDayWidget extends Phaser.GameObjects.Container {
   constructor(x: number = 0, y: number = 0) {
     super(globalScene, x, y);
 
-    this.setVisible(globalScene.showTimeOfDayWidget);
-    if (!globalScene.showTimeOfDayWidget) {
+    this.setVisible(settings.display.showTimeOfDayWidget);
+    if (!settings.display.showTimeOfDayWidget) {
       return;
     }
 
@@ -135,8 +136,8 @@ export default class TimeOfDayWidget extends Phaser.GameObjects.Container {
     this.resetIcons();
 
     // Tween based on the player setting
-    (globalScene.timeOfDayAnimation === EaseType.BACK ? this.getBackTween() : this.getBounceTween()).forEach((tween) =>
-      globalScene.tweens.add(tween),
+    (settings.display.timeOfDayAnimation === EaseType.BACK ? this.getBackTween() : this.getBounceTween()).forEach(
+      (tween) => globalScene.tweens.add(tween),
     );
 
     // Swaps all elements of the icon arrays by shifting the first element onto the end of the array
