@@ -3327,9 +3327,9 @@ export default class BattleScene extends SceneBase {
   }
 
   /**
-   * Checks if the Pokemon selected can be released without any issues
+   * Checks if a {@linkcode Pokemon} can be released from party
    * @param slotIndex the position of the Pokemon the player is trying to release
-   * @returns `false` if releasing the Pokemon would lead to a softlock and loss
+   * @returns `true` if any of the remaining Pokemon in the party is {@linkcode Pokemon.isAllowedInBattle | allowed in battle}, otherwise `false`
    */
   canReleasePokemon(slotIndex: number): boolean {
     const currentParty = this.getPlayerParty();
@@ -3339,7 +3339,7 @@ export default class BattleScene extends SceneBase {
   }
 
   /**
-   * Removes the Pokemon at the specified slot index and destroys it
+   * Removes the {@linkcode Pokemon} at the specified slot index and destroys it
    * @param slotIndex the position of the Pokemon released
    */
   releasePokemon(slotIndex: number): void {
@@ -3349,7 +3349,7 @@ export default class BattleScene extends SceneBase {
   }
 
   /**
-   * Returns a randomly selected release message to be displayed when a player releases a Pokemon
+   * Returns a randomly selected release message to be displayed when a player releases a {@linkcode Pokemon}
    * @param pokemonName
    */
   getReleaseMessage(pokemonName: string): string {
