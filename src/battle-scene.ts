@@ -3333,7 +3333,7 @@ export default class BattleScene extends SceneBase {
    */
   canReleasePokemon(slotIndex: number): boolean {
     const currentParty = this.getPlayerParty();
-    const postReleaseParty = this.getPlayerParty().filter((p) => currentParty[slotIndex].id !== p.id);
+    const postReleaseParty = currentParty.filter((p) => currentParty[slotIndex].id !== p.id);
     console.log(postReleaseParty);
     return postReleaseParty.some((p) => p.isAllowedInBattle());
   }

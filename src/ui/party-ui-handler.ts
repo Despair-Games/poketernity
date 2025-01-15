@@ -1264,9 +1264,9 @@ export default class PartyUiHandler extends MessageUiHandler {
             this.setCursor(this.cursor - 1);
           }
           if (this.partyUiMode === PartyUiMode.RELEASE) {
-            const selectCallback = this.selectCallback;
+            const { selectCallback, cursor } = this;
+            selectCallback && selectCallback(cursor, PartyOption.RELEASE);
             this.selectCallback = null;
-            selectCallback && selectCallback(this.cursor, PartyOption.RELEASE);
           }
           this.showText("", 0);
         },
