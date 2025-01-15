@@ -6,13 +6,8 @@ import { WeatherType } from "#enums/weather-type";
 import { TerrainType } from "#enums/terrain-type";
 import { addWindow, WindowVariant } from "./ui-theme";
 import type { ArenaEvent } from "#app/events/arena";
-import {
-  ArenaEventType,
-  TagAddedEvent,
-  TagRemovedEvent,
-  TerrainChangedEvent,
-  WeatherChangedEvent,
-} from "#app/events/arena";
+import { TagAddedEvent, TagRemovedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";
+import { ArenaEventType } from "#enums/arena-event-type";
 import type { TurnEndEvent } from "../events/battle-scene";
 import { BattleSceneEventType } from "../events/battle-scene";
 import { ArenaTagType } from "#enums/arena-tag-type";
