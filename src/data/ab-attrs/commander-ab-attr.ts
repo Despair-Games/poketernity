@@ -1,12 +1,12 @@
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { MovePhase } from "#app/phases/move-phase";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { Moves } from "#enums/moves";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import { Species } from "#enums/species";
 import { AbAttr } from "./ab-attr";
+import { MovePhase } from "#app/phases/move-phase";
 
 /**
  * Attribute implementing the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Commander_(Ability) | Commander}.
@@ -34,11 +34,25 @@ export class CommanderAbAttr extends AbAttr {
         // Apply boosts from this effect to the ally Dondozo
         pokemon.getAlly().addTag(BattlerTagType.COMMANDED, 0, Moves.NONE, pokemon.id);
         // Cancel the source Pokemon's next move (if a move is queued)
-        globalScene.tryRemovePhase((phase) => phase instanceof MovePhase && phase.pokemon === pokemon);
+        this.cancelQueuedMove(pokemon);
       }
       return true;
     }
     return false;
+  }
+
+  /**
+   * Cancels all commands from the given Pokemon for the current turn
+   * @param pokemon The {@linkcode Pokemon} with this ability
+   */
+  private cancelQueuedMove(pokemon: Pokemon): void {
+    const { turnManager } = globalScene.currentBattle;
+    turnManager.tryRemoveCommand((tc) => tc.pokemon === pokemon);
+    // The first move in the turn is already added to the phase queue at this point.
+    // If this move is from the source Pokemon, the turn manager needs to queue the next valid move command.
+    if (globalScene.tryRemovePhase((phase) => phase instanceof MovePhase && phase.pokemon === pokemon)) {
+      while (!turnManager.empty() && !turnManager.shiftNextCommand());
+    }
   }
 
   /**
@@ -53,7 +67,7 @@ export class CommanderAbAttr extends AbAttr {
         if (p && p.getTag(BattlerTagType.SKY_DROP)?.sourceId === skyDropTagId) {
           // Cancel the Sky Drop user's next use of Sky Drop
           if (skyDropTagId === p.id) {
-            globalScene.tryRemovePhase((phase) => phase instanceof MovePhase && phase.pokemon.id === p.id);
+            globalScene.currentBattle.turnManager.tryRemoveCommand((tc) => tc.pokemon === p);
             p.getMoveQueue().shift();
             p.removeTag(BattlerTagType.CHARGING);
           }

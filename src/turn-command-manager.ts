@@ -126,9 +126,10 @@ export class TurnCommandManager {
    * meets the given condition.
    * @param commandFilter Signifies the command should be removed from the queue
    * if evaluated to be `true`.
-   * @returns `true` if a command was removed
+   * @returns the {@linkcode TurnCommand} that was removed, or `undefined` if no command is removed
    */
   public tryRemoveCommand(commandFilter: (command: TurnCommand) => boolean): TurnCommand | undefined {
+    console.log(this.turnCommands.map((tc) => tc.pokemon.name));
     const cmdIndex = this.turnCommands.findIndex((tc) => commandFilter(tc));
     if (cmdIndex > -1) {
       return this.turnCommands.splice(cmdIndex, 1)[0];
