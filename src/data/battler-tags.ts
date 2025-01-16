@@ -1999,6 +1999,7 @@ export class SkyDropTag extends BattlerTag {
         // Cancel the Sky Drop user's next use of Sky Drop
         if (this.sourceId === pokemon.id) {
           globalScene.tryRemovePhase((phase) => phase instanceof MovePhase && phase.pokemon.id === pokemon.id);
+          globalScene.currentBattle.turnManager.tryRemoveCommand((tc) => tc.pokemon === pokemon);
           pokemon.getMoveQueue().shift();
           pokemon.removeTag(BattlerTagType.CHARGING);
         }
