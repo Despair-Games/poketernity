@@ -13,7 +13,7 @@ import { BattleType } from "#enums/battle-type";
 import type { RunEntry } from "../system/game-data";
 import { PlayerGender } from "#enums/player-gender";
 import { TrainerVariant } from "#enums/trainer-variant";
-import { RunDisplayMode } from "#app/ui/run-info-ui-handler";
+import { RunDisplayMode } from "#enums/run-display-mode";
 import { settings } from "#app/system/settings/settings-manager";
 
 export type RunSelectCallback = (cursor: number) => void;

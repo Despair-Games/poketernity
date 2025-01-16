@@ -11,7 +11,7 @@ import { addTextObject } from "./text";
 import { TextStyle } from "#enums/text-style";
 import { Mode } from "./ui";
 import { addWindow } from "./ui-theme";
-import { RunDisplayMode } from "#app/ui/run-info-ui-handler";
+import { RunDisplayMode } from "#enums/run-display-mode";
 import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
 
 const SESSION_SLOTS_COUNT = 5;

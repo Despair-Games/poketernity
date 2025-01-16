@@ -34,6 +34,7 @@ import { getBiomeName } from "#app/data/balance/biomes";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
+import { RunDisplayMode } from "#enums/run-display-mode";
 
 /**
  * RunInfoUiMode indicates possible overlays of RunInfoUiHandler.
@@ -44,11 +45,6 @@ enum RunInfoUiMode {
   MAIN,
   HALL_OF_FAME,
   ENDING_ART,
-}
-
-export enum RunDisplayMode {
-  RUN_HISTORY,
-  SESSION_PREVIEW,
 }
 
 /**
