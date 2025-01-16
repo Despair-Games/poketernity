@@ -8,15 +8,7 @@ import { addWindow } from "./ui-theme";
 import { WindowVariant } from "#enums/window-variant";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
-
-export enum DropDownColumn {
-  GEN,
-  TYPES,
-  CAUGHT,
-  UNLOCKS,
-  MISC,
-  SORT,
-}
+import type { DropDownColumn } from "../enums/drop-down-column";
 
 export class FilterBar extends Phaser.GameObjects.Container {
   private window: Phaser.GameObjects.NineSlice;
