@@ -25,7 +25,7 @@ export class AverageStatsAttr extends MoveEffectAttr {
     this.msgKey = msgKey;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+  override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (super.apply(user, target, move)) {
       for (const s of this.stats) {
         const avg = Math.floor((user.getStat(s, false) + target.getStat(s, false)) / 2);

@@ -23,7 +23,7 @@ export class SwapStatStagesAttr extends MoveEffectAttr {
     this.stats = stats;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+  override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (super.apply(user, target, move)) {
       for (const s of this.stats) {
         const temp = user.getStatStage(s);

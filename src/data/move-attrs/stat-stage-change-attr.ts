@@ -30,7 +30,6 @@ interface StatStageChangeAttrOptions extends MoveEffectAttrOptions {
  *
  * @extends MoveEffectAttr
  */
-
 export class StatStageChangeAttr extends MoveEffectAttr {
   public stats: BattleStat[];
   public stages: number;
@@ -63,7 +62,7 @@ export class StatStageChangeAttr extends MoveEffectAttr {
     return this.options?.showMessage ?? true;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+  override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move) || (this.condition && !this.condition(user, target, move))) {
       return false;
     }

@@ -13,7 +13,7 @@ export class SacrificialAttr extends MoveEffectAttr {
     super(true, { trigger: MoveEffectTrigger.POST_TARGET });
   }
 
-  override apply(user: Pokemon, _target: Pokemon, _move: Move): boolean {
+  override applyEffect(user: Pokemon, _target: Pokemon, _move: Move): boolean {
     user.damageAndUpdate(user.hp, HitResult.OTHER, false, true, true);
     user.turnData.damageTaken += user.hp;
 

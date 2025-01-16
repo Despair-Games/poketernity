@@ -12,7 +12,7 @@ export class SacrificialAttrOnHit extends MoveEffectAttr {
     super(true);
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+  override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     // If the move fails to hit a target, then the user does not faint and the function returns false
     if (!super.apply(user, target, move)) {
       return false;

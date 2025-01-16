@@ -17,7 +17,7 @@ export class SemiInvulnerableAttr extends MoveEffectAttr {
     this.tagType = tagType;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+  override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;
     }

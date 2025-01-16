@@ -1,7 +1,6 @@
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveEffectTrigger } from "#enums/move-effect-trigger";
-import { MoveFlags } from "#enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { NumberHolder } from "#app/utils";
@@ -96,25 +95,46 @@ export class MoveEffectAttr extends MoveAttr {
    * @param move the {@linkcode Move} being used
    * @returns `true` if effects can apply
    */
-  canApply(user: Pokemon, target: Pokemon, move: Move) {
-    return (
-      !!(this.selfTarget ? user.hp && !user.getTag(BattlerTagType.FRENZY) : target.hp)
-      && (this.selfTarget
-        || !target.getTag(BattlerTagType.PROTECTED)
-        || move.checkFlag(MoveFlags.IGNORE_PROTECT, user, target))
-    );
+  canApply(user: Pokemon, target: Pokemon, move: Move): boolean {
+    if (
+      (this.selfTarget && (user.isFainted() || user.getTag(BattlerTagType.FRENZY)))
+      || (!this.selfTarget && target.isFainted())
+    ) {
+      return false;
+    }
+
+    const effectChance = this.getMoveChance(user, target, move, this.selfTarget, true);
+    return effectChance < 0 || user.randSeedInt(100) < effectChance;
   }
 
   /**
-   * Applies move effects if conditions are met to apply them.
+   * Checks if this attribute's effect can be applied, and if so, applies the move effect.
+   * Subclasses of this attribute should override {@linkcode applyEffect} instead of this
+   * method.
    * @param user the {@linkcode Pokemon} using the move
    * @param target the {@linkcode Pokemon} targeted by the move
    * @param move the {@linkcode Move} being used
-   * @returns `true` if effects have applied successfully
-   * @see {@linkcode canApply}
+   * @sealed
    */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
-    return this.canApply(user, target, move);
+    if (this.canApply(user, target, move)) {
+      return this.applyEffect(user, target, move);
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * Applies this attribute's effects.
+   * Subclasses should override this method instead of {@linkcode apply}
+   * to implement their own move effects.
+   * @param user the {@linkcode Pokemon} using the move
+   * @param target the {@linkcode Pokemon} targeted by the move
+   * @param move the {@linkcode Move} being used
+   * @returns `true` if effects successfully applied.
+   */
+  applyEffect(_user: Pokemon, _target: Pokemon, _move: Move): boolean {
+    return false;
   }
 
   /**

@@ -28,7 +28,7 @@ export class RecoilAttr extends MoveEffectAttr {
     this.unblockable = unblockable;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+  override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;
     }

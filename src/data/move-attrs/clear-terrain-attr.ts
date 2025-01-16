@@ -16,7 +16,7 @@ export class ClearTerrainAttr extends MoveEffectAttr {
     super();
   }
 
-  override apply(_user: Pokemon, _target: Pokemon, _move: Move): boolean {
+  override applyEffect(_user: Pokemon, _target: Pokemon, _move: Move): boolean {
     return globalScene.arena.trySetTerrain(TerrainType.NONE, true, true);
   }
 }

@@ -26,7 +26,7 @@ export class HealStatusEffectAttr extends MoveEffectAttr {
     this.effects = [effects].flat(1);
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+  override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;
     }

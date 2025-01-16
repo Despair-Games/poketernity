@@ -9,7 +9,7 @@ import { SuppressAbilitiesAttr } from "#app/data/move-attrs/suppress-abilities-a
  * @extends MoveEffectAttr
  */
 export class SuppressAbilitiesIfActedAttr extends MoveEffectAttr {
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+  override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;
     }

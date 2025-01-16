@@ -25,7 +25,7 @@ export class AddSubstituteAttr extends MoveEffectAttr {
     this.hpCost = hpCost;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+  override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!super.apply(user, target, move)) {
       return false;
     }

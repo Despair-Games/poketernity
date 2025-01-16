@@ -32,7 +32,7 @@ export class PartyStatusCureAttr extends MoveEffectAttr {
     return !!isTargetValid;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+  override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!this.canApply(user, target, move)) {
       return false;
     }
