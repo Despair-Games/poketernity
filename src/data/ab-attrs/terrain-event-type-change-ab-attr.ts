@@ -12,12 +12,17 @@ import { PostSummonAbAttr } from "./post-summon-ab-attr";
  * @extends PostSummonAbAttr
  */
 export class TerrainEventTypeChangeAbAttr extends PostSummonAbAttr {
-  override apply(pokemon: Pokemon, _simulated: boolean): boolean {
+  override apply(pokemon: Pokemon, _simulated: boolean, onSummon: boolean = true): boolean {
     if (pokemon.isTerastallized()) {
       return false;
     }
 
     const currentTerrain = globalScene.arena.getTerrainType();
+
+    // If there is no terrain, only apply ability if the terrain changed to become empty (i.e., `onSummon` is false)
+    if (onSummon && currentTerrain === TerrainType.NONE) {
+      return false;
+    }
 
     const typeChange: Type[] = this.determineTypeChange(pokemon, currentTerrain);
     if (typeChange.length !== 0) {
