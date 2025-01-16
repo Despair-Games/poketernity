@@ -9,7 +9,7 @@ import Overrides from "#app/overrides";
 import { PlayerPartyMemberPokemonPhase } from "#app/phases/abstract-player-party-member-pokemon-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import FormChangeSceneHandler from "#app/ui/form-change-scene-handler";
-import { SummaryUiMode } from "#app/ui/summary-ui-handler";
+import { SummaryUiMode } from "#enums/summary-ui-mode";
 import { Mode } from "#app/ui/ui";
 import { Moves } from "#enums/moves";
 import i18next from "i18next";

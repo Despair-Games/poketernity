@@ -32,7 +32,7 @@ import { modifierTypes } from "#app/modifier/modifier-type";
 import { Gender } from "#enums/gender";
 import type { PermanentStat } from "#enums/stat";
 import { VictoryPhase } from "#app/phases/victory-phase";
-import { SummaryUiMode } from "#app/ui/summary-ui-handler";
+import { SummaryUiMode } from "#enums/summary-ui-mode";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import type { Abilities } from "#enums/abilities";
 import type { PokeballType } from "#enums/pokeball";

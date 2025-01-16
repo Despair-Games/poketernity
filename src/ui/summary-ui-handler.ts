@@ -38,16 +38,12 @@ import { PlayerGender } from "#enums/player-gender";
 import { Stat, PERMANENT_STATS, getStatKey } from "#enums/stat";
 import { Nature } from "#enums/nature";
 import { settings } from "#app/system/settings/settings-manager";
+import { SummaryUiMode } from "#enums/summary-ui-mode";
 
 enum Page {
   PROFILE,
   STATS,
   MOVES,
-}
-
-export enum SummaryUiMode {
-  DEFAULT,
-  LEARN_MOVE,
 }
 
 /** Holds all objects related to an ability for each iteration */

@@ -16,7 +16,7 @@ import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { VictoryPhase } from "#app/phases/victory-phase";
 import { achvs } from "#app/system/achv";
 import { type PartyOption, PartyUiMode } from "#app/ui/party-ui-handler";
-import { SummaryUiMode } from "#app/ui/summary-ui-handler";
+import { SummaryUiMode } from "#enums/summary-ui-mode";
 import { Mode } from "#app/ui/ui";
 import { type PokeballType } from "#enums/pokeball";
 import { StatusEffect } from "#enums/status-effect";
