@@ -49,7 +49,6 @@ import {
 } from "#app/data/balance/starters";
 import { starterPassiveAbilities } from "#app/data/balance/passives";
 import {
-  type Constructor,
   isNullOrUndefined,
   randSeedInt,
   type nil,
@@ -62,6 +61,7 @@ import {
   rgbToHsv,
   deltaRgb,
   isBetween,
+  type AbstractConstructor,
 } from "#app/utils";
 import type { TypeDamageMultiplier } from "#app/data/type";
 import { getTypeDamageMultiplier, getTypeRgb } from "#app/data/type";
@@ -1720,7 +1720,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns Whether an ability with that attribute is present and active
    */
   public hasAbilityWithAttr(
-    attrType: Constructor<AbAttr>,
+    attrType: AbstractConstructor<AbAttr>,
     canApply: boolean = true,
     ignoreOverride?: boolean,
   ): boolean {
@@ -3535,9 +3535,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   getTag(tagType: BattlerTagType): BattlerTag | nil;
 
   /** @overload */
-  getTag<T extends BattlerTag>(tagType: Constructor<T>): T | nil;
+  getTag<T extends BattlerTag>(tagType: AbstractConstructor<T>): T | nil;
 
-  getTag(tagType: BattlerTagType | Constructor<BattlerTag>): BattlerTag | nil {
+  getTag(tagType: BattlerTagType | AbstractConstructor<BattlerTag>): BattlerTag | nil {
     if (!this.summonData) {
       return null;
     }
