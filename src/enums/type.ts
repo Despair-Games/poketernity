@@ -1,6 +1,6 @@
 export enum Type {
   UNKNOWN = -1,
-  NORMAL = 0,
+  NORMAL,
   FIGHTING,
   FLYING,
   POISON,

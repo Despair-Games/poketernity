@@ -166,11 +166,11 @@ export class MoveHelper extends GameManagerHelper {
     const enemy =
       this.game.scene.getEnemyField()[(this.game.scene.getCurrentPhase() as EnemyCommandPhase).getFieldIndex()];
 
-    const movesetOverride = Array.isArray(Overrides.OPP_MOVESET_OVERRIDE)
-      ? Overrides.OPP_MOVESET_OVERRIDE
-      : [Overrides.OPP_MOVESET_OVERRIDE];
+    const movesetOverride = Array.isArray(Overrides.ENEMY_MOVESET_OVERRIDE)
+      ? Overrides.ENEMY_MOVESET_OVERRIDE
+      : [Overrides.ENEMY_MOVESET_OVERRIDE];
     if (movesetOverride.length > 0) {
-      vi.spyOn(Overrides, "OPP_MOVESET_OVERRIDE", "get").mockReturnValue([]);
+      vi.spyOn(Overrides, "ENEMY_MOVESET_OVERRIDE", "get").mockReturnValue([]);
       console.warn(
         "Warning: Enemy moveset override disabled! Do not use the moveset override when using this function!",
       );

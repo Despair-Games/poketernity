@@ -1,6 +1,6 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { type BattlerTag } from "#app/data/battler-tags";
+import { SkyDropTag, type BattlerTag } from "#app/data/battler-tags";
 import { type MovePhase } from "#app/phases/move-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
@@ -34,6 +34,7 @@ import { SwitchPhase } from "./switch-phase";
 import { SwitchSummonPhase } from "./switch-summon-phase";
 import { ToggleDoublePositionPhase } from "./toggle-double-position-phase";
 import { VictoryPhase } from "./victory-phase";
+import { BattlerTagType } from "#enums/battler-tag-type";
 
 /**
  * Handles the effects of a pokemon fainting:
@@ -102,6 +103,11 @@ export class FaintPhase extends PokemonPhase {
         this.grudgeTag.lapse(faintPokemon, BattlerTagLapseType.CUSTOM, this.source);
       }
     }
+
+    faintPokemon.getTag(SkyDropTag)?.clearSkyDropEffects();
+    faintPokemon.destroySubstitute();
+    faintPokemon.lapseTag(BattlerTagType.COMMANDED);
+    faintPokemon.resetSummonData();
 
     if (!this.preventEndure) {
       const instantReviveModifier = globalScene.applyModifier(
