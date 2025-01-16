@@ -2,7 +2,7 @@ import type SettingsGamepadUiHandler from "../../ui/settings/settings-gamepad-ui
 import { Mode } from "../../ui/ui";
 import { truncateString } from "../../utils";
 import { Button } from "#enums/buttons";
-import { SettingKeyboard } from "#app/system/settings/settings-keyboard";
+import { SettingKeyboard } from "#enums/settings-keyboard";
 import { globalScene } from "#app/global-scene";
 import { settings } from "./settings-manager";
 import { SettingGamepad } from "#enums/setting-gamepad";

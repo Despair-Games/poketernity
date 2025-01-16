@@ -4,11 +4,11 @@ import { globalScene } from "#app/global-scene";
 import type { InterfaceConfig } from "#app/inputs-controller";
 import {
   setSettingKeyboard,
-  SettingKeyboard,
   settingKeyboardBlackList,
   settingKeyboardDefaults,
   settingKeyboardOptions,
 } from "#app/system/settings/settings-keyboard";
+import { SettingKeyboard } from "#enums/settings-keyboard";
 import AbstractControlSettingsUiHandler from "#app/ui/settings/abstract-control-settings-ui-handler";
 import { NavigationManager } from "#app/ui/settings/navigationMenu";
 import { addTextObject } from "#app/ui/text";

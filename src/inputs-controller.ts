@@ -12,7 +12,7 @@ import cfg_keyboard_qwerty from "./configs/inputs/cfg_keyboard_qwerty";
 import { assign, getButtonWithKeycode, getIconForLatestInput, swap } from "#app/configs/inputs/configHandler";
 import { globalScene } from "#app/global-scene";
 import type { SettingGamepad } from "#enums/setting-gamepad";
-import type { SettingKeyboard } from "#app/system/settings/settings-keyboard";
+import type { SettingKeyboard } from "#enums/settings-keyboard";
 import TouchControl from "#app/touch-controls";
 import { Button } from "#enums/buttons";
 import { Device } from "#enums/devices";
