@@ -232,7 +232,7 @@ export default abstract class AsbtractOptionSelectUiHandler<T extends OptionSele
     // Make sure the window doesn't go past the left side of the screen
     const xPosition = Math.max(bgWidth + 1, globalScene.scaledCanvas.width - 1 - Math.abs(xOffset));
 
-    this.optionSelectContainer.setPosition(xPosition, -1 + yOffset);
+    this.optionSelectContainer.setPosition(xPosition, -1 - Math.abs(yOffset));
     this.optionSelectBg.setSize(bgWidth, bgHeight);
     this.optionSelectText.setPosition(
       this.optionSelectBg.x - bgWidth + 11 + 24 * this.scale,

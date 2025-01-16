@@ -132,7 +132,7 @@ export class TitlePhase extends Phase {
             ui.showText(i18next.t("menu:selectGameMode"), null, () =>
               ui.setOverlayMode(Mode.OPTION_SELECT, {
                 options: options,
-                yOffset: -47,
+                yOffset: 48,
               }),
             );
           } else {

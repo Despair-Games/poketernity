@@ -456,7 +456,7 @@ function displayYesNoOptions(resolve) {
   const config: OptionSelectModeConfig<OptionSelectItem> = {
     options: fullOptions,
     maxOptions: 7,
-    yOffset: -47,
+    yOffset: 48,
   };
   globalScene.ui.setModeWithoutClear(Mode.OPTION_SELECT, config, null, true);
 }

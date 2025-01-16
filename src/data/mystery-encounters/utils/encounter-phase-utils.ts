@@ -575,7 +575,7 @@ export function selectPokemonForOption(
                 const config: OptionSelectModeConfig<OptionSelectItem> = {
                   options: fullOptions,
                   maxOptions: 7,
-                  yOffset: -47,
+                  yOffset: 48,
                 };
 
                 // Do hover over the starting selection option
@@ -709,7 +709,7 @@ export function selectOptionThenPokemon(
     const config: OptionSelectModeConfig<OptionSelectItem> = {
       options: fullOptions,
       maxOptions: 7,
-      yOffset: -47,
+      yOffset: 48,
     };
 
     displayOptions(config);

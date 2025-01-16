@@ -204,6 +204,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
               },
             ]),
           xOffset: this.windowWidth,
+          yOffset: this.menuMessageBox.displayHeight,
         };
         ui.setOverlayMode(Mode.MENU_OPTION_SELECT, config);
       });
@@ -216,7 +217,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
           confirmSlot(
             i18next.t("menuUiHandler:importSlotSelect"),
             () => true,
-            (slotId) => globalScene.gameData.importData(GameDataType.SESSION, slotId),
+            (slotId) => globalScene.gameData.importData(GameDataType.SESSION, slotId, this.windowWidth),
           );
           return true;
         },
@@ -371,7 +372,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
 
     this.manageDataConfig = {
       xOffset: this.windowWidth,
-      yOffset: -47,
+      yOffset: this.menuMessageBox.displayHeight,
       options: manageDataOptions,
       maxOptions: 7,
     };
@@ -482,6 +483,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
           globalScene.ui.setOverlayMode(Mode.OPTION_SELECT, {
             options: options,
             delay: 0,
+            yOffset: this.menuMessageBox.displayHeight,
           });
           return true;
         },
@@ -497,9 +499,9 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
     });
 
     this.communityConfig = {
-      xOffset: this.windowWidth,
-      yOffset: -47,
       options: communityOptions,
+      xOffset: this.windowWidth,
+      yOffset: this.menuMessageBox.displayHeight,
     };
   }
 

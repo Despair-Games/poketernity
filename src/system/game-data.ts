@@ -1302,7 +1302,7 @@ export class GameData {
     });
   }
 
-  public importData(dataType: GameDataType, slotId: number = 0): void {
+  public importData(dataType: GameDataType, slotId: number = 0, confirmWindowXOffset?: number | NumberHolder): void {
     const dataKey = `${getDataTypeKey(dataType, slotId)}_${loggedInUser?.username}`;
 
     let saveFile: any = document.getElementById("saveFile");
@@ -1405,7 +1405,7 @@ export class GameData {
               globalScene.ui.revertMode();
               globalScene.ui.showText("", 0);
             },
-            xOffset: -98, // TODO: should be based on menu size
+            xOffset: confirmWindowXOffset,
           };
           globalScene.ui.showText(
             `Your ${dataName} data will be overridden and the page will reload. Proceed?`,

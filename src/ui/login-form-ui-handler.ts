@@ -218,7 +218,7 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
       const localStorageKeys = Object.keys(localStorage); // this gets the keys for localStorage
       const keyToFind = "data_";
       const dataKeys = localStorageKeys.filter((ls) => ls.indexOf(keyToFind) >= 0);
-      if (dataKeys.length > 0 && dataKeys.length <= 2) {
+      if (dataKeys.length > 0 && dataKeys.length <= 12) {
         const options: OptionSelectItem[] = [];
         for (let i = 0; i < dataKeys.length; i++) {
           options.push({
@@ -233,7 +233,8 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
         globalScene.ui.setOverlayMode(Mode.OPTION_SELECT, {
           options: options,
           delay: 1000,
-          yOffset: -47,
+          xOffset: globalScene.scaledCanvas.width,
+          yOffset: globalScene.scaledCanvas.height - this.usernameInfoImage.displayHeight - 16 * dataKeys.length - 22,
         });
         this.infoContainer.setInteractive(
           new Phaser.Geom.Rectangle(0, 0, globalScene.game.canvas.width, globalScene.game.canvas.height),

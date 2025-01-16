@@ -146,7 +146,7 @@ export function setSettingGamepad(setting: SettingGamepad, value: number): boole
                 handler: cancelHandler,
               },
             ],
-            yOffset: -47,
+            yOffset: 48,
           });
           return false;
         }

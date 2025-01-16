@@ -17,7 +17,7 @@ export default class ConfirmUiHandler extends OptionSelectUiHandler {
     const config = args[0] as ConfirmModeConfig;
     const fullConfig: OptionSelectModeConfig<OptionSelectItem> = {
       ...config,
-      yOffset: config.yOffset ?? -47,
+      yOffset: config.yOffset ?? 48,
       options: [
         {
           label: i18next.t("menu:yes"),
