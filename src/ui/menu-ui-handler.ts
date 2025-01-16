@@ -45,8 +45,8 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
 
   private excludedMenus: () => ConditionalMenu[];
 
-  protected manageDataConfig: OptionSelectModeConfig;
-  protected communityConfig: OptionSelectModeConfig;
+  protected manageDataConfig: OptionSelectModeConfig<OptionSelectItem>;
+  protected communityConfig: OptionSelectModeConfig<OptionSelectItem>;
 
   public bgmBar: BgmBar;
 
@@ -119,7 +119,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
   }
 
   override show(_args: any[]): boolean {
-    const config: OptionSelectModeConfig = this.getMenuOptionsConfig();
+    const config: OptionSelectModeConfig<OptionSelectItem> = this.getMenuOptionsConfig();
 
     super.show([config]);
 
@@ -143,7 +143,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
     return true;
   }
 
-  getMenuOptionsConfig(): OptionSelectModeConfig {
+  getMenuOptionsConfig(): OptionSelectModeConfig<OptionSelectItem> {
     const validOptions = getEnumKeys(MenuOptions)
       .map((m) => parseInt(MenuOptions[m]) as MenuOptions)
       .filter((m) => {
@@ -160,7 +160,6 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
 
     return {
       options: menuOptions,
-      yOffset: -this.DEFAULT_Y_OFFSET - 1,
       maxOptions: 10,
       noCancel: true, // we take care of closing the menu in this handler
     };
@@ -178,7 +177,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
     const confirmSlot = (message: string, slotFilter: (i: number) => boolean, callback: (i: number) => void) => {
       ui.revertMode();
       ui.showText(message, null, () => {
-        const config: OptionSelectModeConfig = {
+        const config: OptionSelectModeConfig<OptionSelectItem> = {
           options: new Array(5)
             .fill(null)
             .map((_, i) => i)
@@ -372,6 +371,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
 
     this.manageDataConfig = {
       xOffset: this.windowWidth,
+      yOffset: -47,
       options: manageDataOptions,
       maxOptions: 7,
     };
@@ -498,6 +498,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
 
     this.communityConfig = {
       xOffset: this.windowWidth,
+      yOffset: -47,
       options: communityOptions,
     };
   }

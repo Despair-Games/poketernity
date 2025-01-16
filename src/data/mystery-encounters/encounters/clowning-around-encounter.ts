@@ -34,7 +34,7 @@ import { randSeedInt, randSeedShuffle } from "#app/utils";
 import { showEncounterDialogue, showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { Mode } from "#app/ui/ui";
 import i18next from "i18next";
-import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
+import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon";
 import { Ability } from "#app/data/ability";
@@ -453,10 +453,10 @@ function displayYesNoOptions(resolve) {
     },
   ];
 
-  const config: OptionSelectModeConfig = {
+  const config: OptionSelectModeConfig<OptionSelectItem> = {
     options: fullOptions,
     maxOptions: 7,
-    yOffset: 0,
+    yOffset: -47,
   };
   globalScene.ui.setModeWithoutClear(Mode.OPTION_SELECT, config, null, true);
 }

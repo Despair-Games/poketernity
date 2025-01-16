@@ -481,7 +481,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
         const confirmSettingOptions: ConfirmModeConfig = {
           yesHandler: confirmUpdateSetting,
           noHandler: cancelUpdateSetting,
-          yOffset: 1,
+          yOffset: -this.messageBoxContainer.displayHeight,
           inputDelay: 750,
           canCancelDelay: true,
         };

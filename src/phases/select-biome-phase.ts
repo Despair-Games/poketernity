@@ -71,6 +71,7 @@ export class SelectBiomePhase extends BattlePhase {
         ui.setMode(Mode.OPTION_SELECT, {
           options: biomeSelectItems,
           delay: 1000,
+          yOffset: -47,
         });
       } else {
         setNextBiome(biomes[randSeedInt(biomes.length)]);

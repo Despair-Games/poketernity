@@ -572,10 +572,10 @@ export function selectPokemonForOption(
                     },
                   });
 
-                const config: OptionSelectModeConfig = {
+                const config: OptionSelectModeConfig<OptionSelectItem> = {
                   options: fullOptions,
                   maxOptions: 7,
-                  yOffset: 0,
+                  yOffset: -47,
                 };
 
                 // Do hover over the starting selection option
@@ -633,7 +633,7 @@ export function selectOptionThenPokemon(
   return new Promise<PokemonAndOptionSelected | null>((resolve) => {
     const modeToSetOnExit = globalScene.ui.getMode();
 
-    const displayOptions = (config: OptionSelectModeConfig) => {
+    const displayOptions = (config: OptionSelectModeConfig<OptionSelectItem>) => {
       globalScene.ui.setMode(Mode.MESSAGE).then(() => {
         if (!optionSelectPromptKey) {
           // Do hover over the starting selection option
@@ -706,10 +706,10 @@ export function selectOptionThenPokemon(
         },
       });
 
-    const config: OptionSelectModeConfig = {
+    const config: OptionSelectModeConfig<OptionSelectItem> = {
       options: fullOptions,
       maxOptions: 7,
-      yOffset: 0,
+      yOffset: -47,
     };
 
     displayOptions(config);

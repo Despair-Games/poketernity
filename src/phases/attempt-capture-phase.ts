@@ -15,7 +15,7 @@ import { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { VictoryPhase } from "#app/phases/victory-phase";
 import { achvs } from "#app/system/achv";
-import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
+import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { type PartyOption, PartyUiMode } from "#app/ui/party-ui-handler";
 import { SummaryUiMode } from "#app/ui/summary-ui-handler";
 import { Mode } from "#app/ui/ui";
@@ -292,7 +292,7 @@ export class AttemptCapturePhase extends PokemonPhase {
         };
         Promise.all([pokemon.hideInfo(), gameData.setPokemonCaught(pokemon)]).then(() => {
           if (globalScene.getPlayerParty().length === PLAYER_PARTY_MAX_SIZE) {
-            const addToPartyMenuConfig: OptionSelectModeConfig = {
+            const addToPartyMenuConfig: OptionSelectModeConfig<OptionSelectItem> = {
               options: [
                 {
                   label: i18next.t("partyUiHandler:SUMMARY"),

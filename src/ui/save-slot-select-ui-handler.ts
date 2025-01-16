@@ -141,7 +141,7 @@ export default class SaveSlotSelectUiHandler extends MessageUiHandler {
                     ui.showText("", 0);
                   },
                   canCancelDelay: true,
-                  yOffset: 19,
+                  yOffset: -28,
                   inputDelay: import.meta.env.DEV ? 300 : 2000,
                 };
                 ui.showText(i18next.t("saveSlotSelectUiHandler:overwriteData"), null, () => {

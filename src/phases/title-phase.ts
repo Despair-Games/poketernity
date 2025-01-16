@@ -130,7 +130,10 @@ export class TitlePhase extends Phase {
             });
 
             ui.showText(i18next.t("menu:selectGameMode"), null, () =>
-              ui.setOverlayMode(Mode.OPTION_SELECT, { options: options }),
+              ui.setOverlayMode(Mode.OPTION_SELECT, {
+                options: options,
+                yOffset: -47,
+              }),
             );
           } else {
             this.gameMode = GameModes.CLASSIC;
@@ -170,10 +173,9 @@ export class TitlePhase extends Phase {
         keepOpen: true,
       },
     );
-    const config: OptionSelectModeConfig = {
+    const config: OptionSelectModeConfig<OptionSelectItem> = {
       options: options,
       noCancel: true,
-      yOffset: 47,
     };
     globalScene.ui.setMode(Mode.TITLE, config);
   }

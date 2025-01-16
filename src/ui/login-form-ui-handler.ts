@@ -233,6 +233,7 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
         globalScene.ui.setOverlayMode(Mode.OPTION_SELECT, {
           options: options,
           delay: 1000,
+          yOffset: -47,
         });
         this.infoContainer.setInteractive(
           new Phaser.Geom.Rectangle(0, 0, globalScene.game.canvas.width, globalScene.game.canvas.height),

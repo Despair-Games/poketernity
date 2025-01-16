@@ -1822,7 +1822,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                                         },
                                       }),
                                     maxOptions: 8,
-                                    yOffset: 19,
+                                    yOffset: -28,
                                   });
                                   this.blockInput = false;
                                 },
@@ -1849,7 +1849,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                         },
                       }),
                     maxOptions: 8,
-                    yOffset: 19,
+                    yOffset: -28,
                   });
                   this.blockInput = false;
                 });
@@ -1902,7 +1902,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                         },
                       }),
                     maxOptions: 8,
-                    yOffset: 19,
+                    yOffset: -28,
                   });
                 });
               });
@@ -2154,7 +2154,6 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
             });
             ui.setModeWithoutClear(Mode.OPTION_SELECT, {
               options: options,
-              yOffset: 47,
             });
           };
           if (!pokemonPrevolutions.hasOwnProperty(this.lastSpecies.speciesId)) {
@@ -2175,7 +2174,6 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
           });
           ui.setModeWithoutClear(Mode.OPTION_SELECT, {
             options: options,
-            yOffset: 47,
           });
           success = true;
         }
@@ -4051,7 +4049,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     const options: ConfirmModeConfig = {
       yesHandler: doExit,
       noHandler: cancelExit,
-      yOffset: 19,
+      yOffset: -28,
     };
     ui.showText(i18next.t("starterSelectUiHandler:confirmExit"), null, () => {
       ui.setModeWithoutClear(Mode.CONFIRM, options);
@@ -4106,7 +4104,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       const confirmStartOptions: ConfirmModeConfig = {
         yesHandler: startRun,
         noHandler: cancelStartRun,
-        yOffset: 19,
+        yOffset: -28,
       };
       ui.showText(i18next.t("starterSelectUiHandler:confirmStartTeam"), null, () => {
         ui.setModeWithoutClear(Mode.CONFIRM, confirmStartOptions);

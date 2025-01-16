@@ -4,9 +4,9 @@ import type { TextStyle } from "#app/ui/text";
 /**
  * Customizations options for UI's {@linkcode Mode.OPTION_SELECT}
  */
-export interface OptionSelectModeConfig extends OptionMenuSettings {
+export interface OptionSelectModeConfig<T extends OptionSelectItem> extends OptionMenuSettings {
   /** The {@linkcode OptionSelectItem}s to display. */
-  options: OptionSelectItem[];
+  options: T[];
 }
 
 /**
@@ -60,7 +60,7 @@ export interface OptionSelectItem {
 }
 
 /**
- * Configuration for displaying a sprite before or after an option's label
+ * Configuration for displaying a sprite before an option's label
  *
  * @example for the friendship candy sprite: `{ name: "items", frame: "candy" }`
  */
