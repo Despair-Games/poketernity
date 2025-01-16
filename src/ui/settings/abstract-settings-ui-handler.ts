@@ -481,7 +481,6 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
         const confirmSettingOptions: ConfirmModeConfig = {
           yesHandler: confirmUpdateSetting,
           noHandler: cancelUpdateSetting,
-          yOffset: 48,
           inputDelay: 750,
           canCancelDelay: true,
         };
@@ -605,27 +604,24 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
   }
 
   protected showConfirm(text: string, onConfirm: () => void, onCancel?: () => void) {
+    const config: ConfirmModeConfig = {
+      yesHandler: () => {
+        NavigationManager.getInstance().reset();
+        // revert confirm mode.
+        globalScene.ui.revertMode();
+        // revert settings mode.
+        globalScene.ui.revertMode();
+        this.showText("", 0);
+        onConfirm();
+      },
+      noHandler: () => {
+        globalScene.ui.revertMode();
+        this.showText("", 0);
+        onCancel && onCancel();
+      },
+    };
     this.showText(text, undefined, () => {
-      globalScene.ui.setOverlayMode(
-        Mode.CONFIRM,
-        () => {
-          NavigationManager.getInstance().reset();
-          // revert confirm mode.
-          globalScene.ui.revertMode();
-          // revert settings mode.
-          globalScene.ui.revertMode();
-          this.showText("", 0);
-          onConfirm();
-        },
-        () => {
-          globalScene.ui.revertMode();
-          this.showText("", 0);
-          onCancel && onCancel();
-        },
-        false,
-        0,
-        0,
-      );
+      globalScene.ui.setOverlayMode(Mode.CONFIRM, config);
     });
   }
 

@@ -124,7 +124,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
     super.show([config]);
 
     // Resize the message box so that it does not go over the menu
-    this.menuMessageBox.setDisplaySize(globalScene.scaledCanvas.width - this.getWindowWidth() - 2, 48);
+    this.menuMessageBox.setSize(globalScene.scaledCanvas.width - this.getWindowWidth() - 2, 48);
 
     // Make sure the tutorial overlay sits above everything, but below the message box
     this.menuContainer.bringToTop(this.tutorialOverlay);
@@ -162,6 +162,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
       options: menuOptions,
       maxOptions: 10,
       noCancel: true, // we take care of closing the menu in this handler
+      yOffset: 1,
     };
   }
 
@@ -204,7 +205,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
               },
             ]),
           xOffset: this.windowWidth,
-          yOffset: this.menuMessageBox.displayHeight,
+          yOffset: this.menuMessageBox.displayHeight + 1,
         };
         ui.setOverlayMode(Mode.MENU_OPTION_SELECT, config);
       });
@@ -372,7 +373,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
 
     this.manageDataConfig = {
       xOffset: this.windowWidth,
-      yOffset: this.menuMessageBox.displayHeight,
+      yOffset: this.menuMessageBox.displayHeight + 1,
       options: manageDataOptions,
       maxOptions: 7,
     };
@@ -483,7 +484,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
           globalScene.ui.setOverlayMode(Mode.OPTION_SELECT, {
             options: options,
             delay: 0,
-            yOffset: this.menuMessageBox.displayHeight,
+            yOffset: this.menuMessageBox.displayHeight + 1,
           });
           return true;
         },
@@ -501,7 +502,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
     this.communityConfig = {
       options: communityOptions,
       xOffset: this.windowWidth,
-      yOffset: this.menuMessageBox.displayHeight,
+      yOffset: this.menuMessageBox.displayHeight + 1,
     };
   }
 

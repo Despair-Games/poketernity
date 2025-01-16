@@ -1822,7 +1822,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                                         },
                                       }),
                                     maxOptions: 8,
-                                    yOffset: 28,
+                                    yOffset: 29,
                                   });
                                   this.blockInput = false;
                                 },
@@ -1849,7 +1849,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                         },
                       }),
                     maxOptions: 8,
-                    yOffset: 28,
+                    yOffset: 29,
                   });
                   this.blockInput = false;
                 });
@@ -1902,7 +1902,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                         },
                       }),
                     maxOptions: 8,
-                    yOffset: 28,
+                    yOffset: 29,
                   });
                 });
               });
@@ -4049,7 +4049,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     const options: ConfirmModeConfig = {
       yesHandler: doExit,
       noHandler: cancelExit,
-      yOffset: 28,
+      yOffset: 29,
     };
     ui.showText(i18next.t("starterSelectUiHandler:confirmExit"), null, () => {
       ui.setModeWithoutClear(Mode.CONFIRM, options);
@@ -4104,7 +4104,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       const confirmStartOptions: ConfirmModeConfig = {
         yesHandler: startRun,
         noHandler: cancelStartRun,
-        yOffset: 28,
+        yOffset: 29,
       };
       ui.showText(i18next.t("starterSelectUiHandler:confirmStartTeam"), null, () => {
         ui.setModeWithoutClear(Mode.CONFIRM, confirmStartOptions);

@@ -547,6 +547,7 @@ export function selectPokemonForOption(
                 const fullOptions = secondaryOptions
                   .map((option) => {
                     // Update handler to resolve promise
+                    // TODO: don't update the handler like this
                     const onSelect = option.handler;
                     option.handler = () => {
                       onSelect();
@@ -582,7 +583,7 @@ export function selectPokemonForOption(
                 if (fullOptions[0].onHover) {
                   fullOptions[0].onHover();
                 }
-                globalScene.ui.setModeWithoutClear(Mode.OPTION_SELECT, config, null, true);
+                globalScene.ui.setModeWithoutClear(Mode.OPTION_SELECT, config);
               };
 
               const textPromptKey =
@@ -682,6 +683,7 @@ export function selectOptionThenPokemon(
     const fullOptions = options
       .map((option, index) => {
         // Update handler to resolve promise
+        // TODO: don't update the handler like this
         const onSelect = option.handler;
         option.handler = () => {
           onSelect();

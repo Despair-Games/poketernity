@@ -1,8 +1,14 @@
+// -- start tsdoc imports --
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type { Mode } from "#app/ui/ui";
+// -- end tsdoc imports --
 import type { NumberHolder } from "#app/utils";
 import type { TextStyle } from "#app/ui/text";
 
 /**
  * Customizations options for UI's {@linkcode Mode.OPTION_SELECT}
+ *
+ * @template T the specifc type of {@linkcode OptionSelectItem} contained by this config
  */
 export interface OptionSelectModeConfig<T extends OptionSelectItem> extends OptionMenuSettings {
   /** The {@linkcode OptionSelectItem}s to display. */
@@ -14,20 +20,20 @@ export interface OptionSelectModeConfig<T extends OptionSelectItem> extends Opti
  */
 export interface OptionMenuSettings {
   /** The maximum number of options shown at once on screen. */
-  maxOptions?: number;
+  readonly maxOptions?: number;
   /** Horizontal offset for the window compared to the default (right of screen) */
-  xOffset?: number | NumberHolder;
+  readonly xOffset?: number | NumberHolder;
   /** Vertical offset for the window compared to the default (bottom of screen) */
-  yOffset?: number | NumberHolder;
+  readonly yOffset?: number | NumberHolder;
   /**
    * Set to `true` to prevent closing the menu with the cancel button.
    * Otherwise using the cancel button will act as if the last option was selected.
    */
-  noCancel?: boolean;
+  readonly noCancel?: boolean;
   /** Optional delay (in ms) before the player is allowed to make a selection. */
-  inputDelay?: number;
+  readonly inputDelay?: number;
   /** Set to `true` to allow bypassing the inputDelay with the cancel button. */
-  canCancelDelay?: boolean;
+  readonly canCancelDelay?: boolean;
 }
 
 /**
@@ -38,25 +44,25 @@ export interface OptionSelectItem {
    * Text that will be shown in the menu for this option.
    * Can only be on a single line, can use BBCode.
    */
-  label: string;
+  readonly label: string;
   /**
    * Handler called when that option is selected.
    * @returns `true` to play the "success" sfx, `false` for the "error" sfx
    */
   handler: () => boolean;
   /** Optional handler for when the cursor is moved to that option. */
-  onHover?: () => void;
+  readonly onHover?: () => void;
   /** Set to `true` to keep the menu open after this option was selected. */
-  keepOpen?: boolean;
+  readonly keepOpen?: boolean;
   /** Set to `true` to prevent the default menu sound effects from playing. */
-  overrideSound?: boolean;
+  readonly overrideSound?: boolean;
   /**
    * Optional configuration to display icon(s) before the label's text.
    * If multiple icons are given they will be overlayed.
    */
-  iconsConfig?: OptionSelectIconConfig[];
+  readonly iconsConfig?: OptionSelectIconConfig[];
   /** Optional {@linkcode TextStyle} to give the item a custom color */
-  color?: TextStyle;
+  readonly color?: TextStyle;
 }
 
 /**
@@ -66,11 +72,11 @@ export interface OptionSelectItem {
  */
 export interface OptionSelectIconConfig {
   /** The name of the sprite/texture to use */
-  name: string;
+  readonly name: string;
   /** The frame to use if the sprite has multiple ones */
-  frame?: number | string;
+  readonly frame?: number | string;
   /** Optional scaling for the icon */
-  scale?: number;
+  readonly scale?: number;
   /** Optional tint to give the icon */
-  tint?: number;
+  readonly tint?: number;
 }

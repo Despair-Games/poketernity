@@ -1,3 +1,7 @@
+// -- start tsdoc imports --
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type { Mode } from "#app/ui/ui";
+// -- end tsdoc imports --
 import type { OptionMenuSettings } from "#app/ui/interfaces/option-select-config";
 
 /**

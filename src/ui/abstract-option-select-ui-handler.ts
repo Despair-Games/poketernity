@@ -8,6 +8,7 @@ import { fixedNumber, getNumberValue, isNullOrUndefined, NumberHolder } from "#a
 import { Button } from "#enums/buttons";
 import type BBCodeText from "phaser3-rex-plugins/plugins/gameobjects/tagtext/bbcodetext/BBCodeText";
 import { settings } from "#app/system/settings/settings-manager";
+import type { UIOptionSelectItem } from "./interfaces/option-select-ui-item";
 
 const WINDOW_PADDING = 23;
 const DEFAULT_MAX_OPTIONS = 10;
@@ -28,12 +29,20 @@ const SCROLL_DOWN_ITEM: UIOptionSelectItem = {
   displayLabel: "↓",
 };
 
-export interface UIOptionSelectItem extends OptionSelectItem {
-  initialized: boolean;
-  displayLabel: string;
-  iconsWidth?: number;
-}
-
+/**
+ * Generic handler for a menu with several options to choose from with a cursor.
+ * Given the proper {@linkcode OptionSelectModeConfig} the handler takes care of:
+ *  - Measure the size of all elements in the menu, including the size of any icon.
+ *  - Apply the required BBCode if an elements asks for a specific color.
+ *  - Creating the window of the appropriate size to hold all elements.
+ *  - Handle scrolling through the menu items, resizing as needed.
+ *  - Handle selecting the menu items, or cancelling out of the menu.
+ *
+ * At initialization the size of the first {@linkcode NUM_PRE_COMPUTED_OPTIONS} is measured.
+ * Then the window's size is updated as needed when a non initialized option needs to be displayed.
+ *
+ * @template T the specifc type of {@linkcode OptionSelectItem} that this handler displays
+ */
 export default abstract class AsbtractOptionSelectUiHandler<T extends OptionSelectItem> extends MessageUiHandler {
   private config: OptionSelectModeConfig<T> | null;
   private options: (UIOptionSelectItem & T)[];
@@ -145,15 +154,52 @@ export default abstract class AsbtractOptionSelectUiHandler<T extends OptionSele
   }
 
   /**
-   * Compute the width required to display all given options.
-   * Creates temporary sprite and Text objects and set to be able to infer the required space
-   * For options with an icon, adds the appropriate number of space before the label to give the sprite the space it needs
-   * Note, by default this is called with all options in a menu, which may cause performance issues
-   * for longer lists. If your menu contains many element it might be wiser to use a different solution
-   * @param configOptions array of {@linkcode OptionSelectItem} to consider
-   * @returns the maximum width that will be taken by all elements of the menu
+   * Automatically set the menu's size for the given options.
+   * If the given options need less horizontal space than some of the ones already
+   * shown before the previous maximum size is kept.
+   * @param options the {@linkcode UIOptionSelectItem} to consider
    */
-  private getOptionsMaxWidth(configOptions: UIOptionSelectItem[]): number {
+  protected updateSizeForOptions(options: (UIOptionSelectItem & T)[]): void {
+    if (this.fullyInitialized) {
+      return;
+    }
+
+    // Get the max width amongst the given options, and use it for everything
+    const currentWidth = this.windowWidth.value;
+    const maxWidth = this.getOptionsMaxWidth(options) + WINDOW_PADDING;
+
+    if (maxWidth <= currentWidth) {
+      return;
+    }
+
+    const xOffset = getNumberValue(this.config?.xOffset ?? 0);
+    const yOffset = getNumberValue(this.config?.yOffset ?? 0);
+
+    // Make sure the window is not larger than the screen
+    const bgWidth = Math.min(maxWidth, globalScene.scaledCanvas.width - 2);
+    const bgHeight = this.computeWindowHeight();
+    // Make sure the window doesn't go past the left side of the screen
+    const xPosition = Math.max(bgWidth + 1, globalScene.scaledCanvas.width - 1 - Math.abs(xOffset));
+
+    this.optionSelectContainer.setPosition(xPosition, -Math.abs(yOffset));
+    this.optionSelectBg.setSize(bgWidth, bgHeight);
+    this.optionSelectText.setPosition(
+      this.optionSelectBg.x - bgWidth + 11 + 24 * this.scale,
+      this.optionSelectBg.y - bgHeight + 42 * this.scale,
+    );
+
+    this.windowWidth.value = bgWidth;
+    this.windowHeight.value = bgHeight;
+  }
+
+  /**
+   * Compute the width required to display all given options and readies them for display.
+   * Creates temporary sprite and Text objects and set to be able to infer the required space.
+   * Only considers the options that have not been initialized, and marks them as initialized once done.
+   * @param configOptions array of {@linkcode UIOptionSelectItem} to consider
+   * @returns the maximum width that will be taken by those elements
+   */
+  private getOptionsMaxWidth(configOptions: (UIOptionSelectItem & T)[]): number {
     const nonInitializedOptions = configOptions.filter((o) => !o.initialized);
     if (nonInitializedOptions.length === 0) {
       return 0;
@@ -179,8 +225,16 @@ export default abstract class AsbtractOptionSelectUiHandler<T extends OptionSele
     return totalWidth;
   }
 
+  /**
+   * Readies the given {@linkcode UIOptionSelectItem} for display.
+   * For options with icon(s), adds the appropriate number of space before the label to give the sprite the space it needs
+   * For options with color, adds the appropriate BBCode to the label
+   * @param option the {@linkcode UIOptionSelectItem} to consider
+   * @param singleSpaceWidth the width of a single space, used to offset the label if there is a icon to show
+   * @param tempSprite a Sprite object that can be used to measure the needed space of the item's icon, if any
+   */
   protected initializeOption(
-    option: UIOptionSelectItem,
+    option: UIOptionSelectItem & T,
     singleSpaceWidth: number,
     tempSprite: Phaser.GameObjects.Sprite,
   ) {
@@ -210,39 +264,10 @@ export default abstract class AsbtractOptionSelectUiHandler<T extends OptionSele
     option.initialized = true;
   }
 
-  protected updateSizeForOptions(options: UIOptionSelectItem[]) {
-    if (this.fullyInitialized) {
-      return;
-    }
-
-    // Get the max width amongst the given options, and use it for everything
-    const currentWidth = this.windowWidth.value;
-    const maxWidth = this.getOptionsMaxWidth(options) + WINDOW_PADDING;
-
-    if (maxWidth <= currentWidth) {
-      return;
-    }
-
-    const xOffset = getNumberValue(this.config?.xOffset ?? 0);
-    const yOffset = getNumberValue(this.config?.yOffset ?? 0);
-
-    // Make sure the window is not larger than the screen
-    const bgWidth = Math.min(maxWidth, globalScene.scaledCanvas.width - 2);
-    const bgHeight = this.computeWindowHeight();
-    // Make sure the window doesn't go past the left side of the screen
-    const xPosition = Math.max(bgWidth + 1, globalScene.scaledCanvas.width - 1 - Math.abs(xOffset));
-
-    this.optionSelectContainer.setPosition(xPosition, -1 - Math.abs(yOffset));
-    this.optionSelectBg.setSize(bgWidth, bgHeight);
-    this.optionSelectText.setPosition(
-      this.optionSelectBg.x - bgWidth + 11 + 24 * this.scale,
-      this.optionSelectBg.y - bgHeight + 42 * this.scale,
-    );
-
-    this.windowWidth.value = bgWidth;
-    this.windowHeight.value = bgHeight;
-  }
-
+  /**
+   * Update the menu based on the current cursor and scroll cursor.
+   * Handles automatic resizing as needed.
+   */
   protected updateCurrentOptions(): void {
     if (!this.config) {
       return;
@@ -254,7 +279,7 @@ export default abstract class AsbtractOptionSelectUiHandler<T extends OptionSele
     if (this.maxOptions < totalOptions) {
       const optionStartIndex = this.scrollCursor;
       let optionEndIndex = Math.min(this.scrollCursor + this.maxOptions - 1, options.length);
-      if (this.scrollCursor > 0 && optionEndIndex < totalOptions - 1) {
+      if (this.scrollCursor > 0 && optionEndIndex < totalOptions) {
         optionEndIndex -= 1;
       }
 
@@ -264,7 +289,7 @@ export default abstract class AsbtractOptionSelectUiHandler<T extends OptionSele
       if (optionStartIndex > 0) {
         options.unshift(SCROLL_UP_ITEM as any);
       }
-      if (optionEndIndex < totalOptions - 1) {
+      if (optionEndIndex < totalOptions) {
         options.push(SCROLL_DOWN_ITEM as any);
       }
     }
@@ -274,7 +299,10 @@ export default abstract class AsbtractOptionSelectUiHandler<T extends OptionSele
     this.displayCurrentOptions();
   }
 
-  protected displayCurrentOptions(): void {
+  /**
+   * Display the current options based on the cursor and scroll cursor
+   */
+  private displayCurrentOptions(): void {
     this.optionSelectText.setText(this.currentOptions.map((o) => o.displayLabel).join("\n"));
 
     // Hide existing icons

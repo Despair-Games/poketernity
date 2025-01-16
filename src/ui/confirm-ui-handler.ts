@@ -4,6 +4,10 @@ import OptionSelectUiHandler from "#app/ui/option-select-ui-handler";
 import { Mode } from "#app/ui/ui";
 import i18next from "i18next";
 
+/**
+ * Handler that displays a simple Yes/No menu.
+ * @extends OptionSelectUiHandler
+ */
 export default class ConfirmUiHandler extends OptionSelectUiHandler {
   constructor() {
     super(Mode.CONFIRM);

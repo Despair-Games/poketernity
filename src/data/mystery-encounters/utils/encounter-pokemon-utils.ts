@@ -766,6 +766,7 @@ export async function catchPokemon(
                 },
               },
             ],
+            yOffset: 48,
           };
           const promptRelease = () => {
             globalScene.ui.showText(

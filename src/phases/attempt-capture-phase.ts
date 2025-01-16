@@ -355,6 +355,7 @@ export class AttemptCapturePhase extends PokemonPhase {
                   },
                 },
               ],
+              yOffset: 48,
             };
             const promptRelease = (): void => {
               ui.showText(i18next.t("battle:partyFull", { pokemonName: pokemon.getNameToRender() }), null, () => {
