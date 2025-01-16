@@ -268,8 +268,11 @@ export function getTextStyleOptions(
   return { scale, styleOptions, shadowColor, shadowXpos, shadowYpos };
 }
 
-export function getBBCodeFrag(content: string, textStyle: TextStyle, uiTheme: UiTheme = UiTheme.DEFAULT): string {
-  return `[color=${getTextColor(textStyle, false, uiTheme)}][shadow=${getTextColor(textStyle, true, uiTheme)}]${content}`;
+export function getBBCodeFrag(content: string, textStyle: TextStyle, closeFragment: boolean = false): string {
+  const uiTheme = settings.display.uiTheme ?? UiTheme.DEFAULT;
+  const openingFragment = `[color=${getTextColor(textStyle, false, uiTheme)}][shadow=${getTextColor(textStyle, true, uiTheme)}]`;
+  const closingFragment = closeFragment ? "[/color][/shadow]" : "";
+  return `${openingFragment}${content}${closingFragment}`;
 }
 
 /**
@@ -288,14 +291,9 @@ export function getBBCodeFrag(content: string, textStyle: TextStyle, uiTheme: Ui
  * @param forWindow set to `true` if the text is to be displayed in a window ({@linkcode BattleScene.addWindow})
  *  it will replace all instances of the default MONEY TextStyle by {@linkcode TextStyle.MONEY_WINDOW}
  */
-export function getTextWithColors(
-  content: string,
-  primaryStyle: TextStyle,
-  uiTheme: UiTheme,
-  forWindow?: boolean,
-): string {
+export function getTextWithColors(content: string, primaryStyle: TextStyle, forWindow?: boolean): string {
   // Apply primary styling before anything else
-  let text = getBBCodeFrag(content, primaryStyle, uiTheme) + "[/color][/shadow]";
+  let text = getBBCodeFrag(content, primaryStyle, true);
   const primaryStyleString = [...text.match(new RegExp(/\[color=[^\[]*\]\[shadow=[^\[]*\]/i))!][0];
 
   /* For money text displayed in game windows, we can't use the default {@linkcode TextStyle.MONEY}
@@ -307,12 +305,7 @@ export function getTextWithColors(
 
   // Set custom colors
   text = text.replace(/@\[([^{]*)\]{([^}]*)}/gi, (_substring, textStyle: string, textToColor: string) => {
-    return (
-      "[/color][/shadow]"
-      + getBBCodeFrag(textToColor, TextStyle[textStyle], uiTheme)
-      + "[/color][/shadow]"
-      + primaryStyleString
-    );
+    return "[/color][/shadow]" + getBBCodeFrag(textToColor, TextStyle[textStyle], true) + primaryStyleString;
   });
 
   // Remove extra style block at the end

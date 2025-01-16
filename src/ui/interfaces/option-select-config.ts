@@ -1,4 +1,5 @@
 import type { NumberHolder } from "#app/utils";
+import type { TextStyle } from "#app/ui/text";
 
 /**
  * Customizations options for UI's {@linkcode Mode.OPTION_SELECT}
@@ -54,13 +55,14 @@ export interface OptionSelectItem {
    * If multiple icons are given they will be overlayed.
    */
   iconsConfig?: OptionSelectIconConfig[];
+  /** Optional {@linkcode TextStyle} to give the item a custom color */
+  color?: TextStyle;
 }
 
 /**
  * Configuration for displaying a sprite before or after an option's label
  *
- * @example
- * for the friendship candy sprite: `{ filename: "items", frame: "candy" }`
+ * @example for the friendship candy sprite: `{ name: "items", frame: "candy" }`
  */
 export interface OptionSelectIconConfig {
   /** The name of the sprite/texture to use */

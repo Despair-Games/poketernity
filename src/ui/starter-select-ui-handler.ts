@@ -1875,7 +1875,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                     options: natures
                       .map((n: Nature, _i: number) => {
                         const option: OptionSelectItem = {
-                          label: getNatureName(n, true, true, true, settings.display.uiTheme),
+                          label: getNatureName(n, true, true, true),
                           handler: () => {
                             // update default nature in starter save data
                             if (!starterAttributes) {
@@ -3721,9 +3721,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
           globalScene.ui.hideTooltip();
         }
 
-        this.pokemonNatureText.setText(
-          getNatureName(natureIndex as unknown as Nature, true, true, false, settings.display.uiTheme),
-        );
+        this.pokemonNatureText.setText(getNatureName(natureIndex as unknown as Nature, true, true, false));
 
         let levelMoves: LevelMoves;
         if (

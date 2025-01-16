@@ -342,7 +342,7 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
         this.pokemonAbilityLabelText.setShadowColor(getTextColor(TextStyle.WINDOW, true, settings.display.uiTheme));
       }
 
-      this.pokemonNatureText.setText(getNatureName(pokemon.getNature(), true, false, false, settings.display.uiTheme));
+      this.pokemonNatureText.setText(getNatureName(pokemon.getNature(), true, false, false));
 
       const dexNatures = dexEntry.natureAttr;
       const newNature = 1 << (pokemon.nature + 1);

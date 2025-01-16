@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import type { OptionSelectModeConfig, OptionSelectItem } from "#app/ui/interfaces/option-select-config";
-import { TextStyle, addBBCodeTextObject, getTextStyleOptions } from "#app/ui/text";
+import { TextStyle, addBBCodeTextObject, getBBCodeFrag, getTextStyleOptions } from "#app/ui/text";
 import MessageUiHandler from "#app/ui/message-ui-handler";
 import { Mode } from "#app/ui/ui";
 import { addWindow } from "#app/ui/ui-theme";
@@ -138,7 +138,7 @@ export default class OptionSelectUiHandler extends MessageUiHandler {
 
     this.optionSelectText.setMaxLines(this.maxOptions);
 
-    // Set window size based on the dimensions of the first {@linkcode DEFAULT_PRE_COMPUTED_OPTIONS} options
+    // Set window size based on the first {@linkcode DEFAULT_PRE_COMPUTED_OPTIONS} options
     this.updateSizeForOptions(this.options.slice(0, NUM_PRE_COMPUTED_OPTIONS));
 
     this.updateCurrentOptions();
@@ -166,6 +166,9 @@ export default class OptionSelectUiHandler extends MessageUiHandler {
     for (const option of nonInitializedOptions) {
       this.initializeOption(option, singleSpaceWidth, tempSprite);
     }
+
+    // Check if all options are now initialized.
+    this.fullyInitialized = this.options.every((o) => o.initialized);
 
     tempTextObject.setText(nonInitializedOptions.map((o) => o.displayLabel).join("\n"));
     const totalWidth = tempTextObject.displayWidth;
@@ -195,6 +198,10 @@ export default class OptionSelectUiHandler extends MessageUiHandler {
       if (maxIconWidth > 0) {
         const neededSpaces = Math.ceil(maxIconWidth / singleSpaceWidth);
         label = label.padStart(label.length + neededSpaces);
+        // Change the label color to fit the required text style
+        if (!isNullOrUndefined(option.color) && option.color !== DEFAULT_TEXT_STYLE) {
+          label = getBBCodeFrag(label, option.color, true);
+        }
       }
       option.iconsWidth = maxIconWidth;
     }
@@ -211,9 +218,6 @@ export default class OptionSelectUiHandler extends MessageUiHandler {
     // Get the max width amongst the given options, and use it for everything
     const currentWidth = this.windowWidth.value;
     const maxWidth = this.getOptionsMaxWidth(options) + WINDOW_PADDING;
-
-    // Check if all options are now initialized.
-    this.fullyInitialized = this.options.every((o) => o.initialized);
 
     if (maxWidth <= currentWidth) {
       return;

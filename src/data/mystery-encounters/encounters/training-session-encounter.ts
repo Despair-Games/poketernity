@@ -31,7 +31,6 @@ import { getStatKey } from "#enums/stat";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
 import { isPokemonValidForEncounterOptionSelection } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import type { Nature } from "#enums/nature";
-import { settings } from "#app/system/settings/settings-manager";
 
 /** The i18n namespace for the encounter */
 const namespace = "mysteryEncounters/trainingSession";
@@ -189,7 +188,7 @@ export const TrainingSessionEncounter: MysteryEncounter = MysteryEncounterBuilde
           // Return the options for nature selection
           return natures.map((nature: Nature) => {
             const option: OptionSelectItem = {
-              label: getNatureName(nature, true, true, true, settings.display.uiTheme),
+              label: getNatureName(nature, true, true, true),
               handler: () => {
                 // Pokemon and second option selected
                 encounter.setDialogueToken("nature", getNatureName(nature));
