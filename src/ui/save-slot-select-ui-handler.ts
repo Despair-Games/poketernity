@@ -12,14 +12,10 @@ import { TextStyle } from "#enums/text-style";
 import { Mode } from "./ui";
 import { addWindow } from "./ui-theme";
 import { RunDisplayMode } from "#app/ui/run-info-ui-handler";
+import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
 
 const SESSION_SLOTS_COUNT = 5;
 const SLOTS_ON_SCREEN = 3;
-
-export enum SaveSlotUiMode {
-  LOAD,
-  SAVE,
-}
 
 export type SaveSlotSelectCallback = (cursor: number) => void;
 

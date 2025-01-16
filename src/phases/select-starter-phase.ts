@@ -7,7 +7,7 @@ import { overrideHeldItems, overrideModifiers } from "#app/modifier/modifier";
 import Overrides from "#app/overrides";
 import { Phase } from "#app/phase";
 import { TitlePhase } from "#app/phases/title-phase";
-import { SaveSlotUiMode } from "#app/ui/save-slot-select-ui-handler";
+import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
 import type { Starter } from "#app/ui/starter-select-ui-handler";
 import { Mode } from "#app/ui/ui";
 import { Gender } from "#enums/gender";

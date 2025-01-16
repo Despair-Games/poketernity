@@ -17,7 +17,7 @@ import { Phase } from "#app/phase";
 import { Unlockables } from "#enums/unlockables";
 import { vouchers } from "#app/system/voucher";
 import type { OptionSelectConfig, OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler";
-import { SaveSlotUiMode } from "#app/ui/save-slot-select-ui-handler";
+import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
 import { Mode } from "#app/ui/ui";
 import { isLocal, isLocalServerConnected } from "#app/utils";
 import { Gender } from "#enums/gender";
