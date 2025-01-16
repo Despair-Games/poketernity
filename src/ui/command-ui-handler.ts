@@ -1,6 +1,7 @@
 import { addTextObject } from "./text";
 import { TextStyle } from "#enums/text-style";
-import PartyUiHandler, { PartyUiMode } from "./party-ui-handler";
+import PartyUiHandler from "./party-ui-handler";
+import { PartyUiMode } from "#enums/party-ui-mode";
 import { Mode } from "./ui";
 import UiHandler from "./ui-handler";
 import i18next from "i18next";
