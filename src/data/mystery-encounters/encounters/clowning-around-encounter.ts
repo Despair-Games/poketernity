@@ -95,7 +95,7 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
     },
     {
       spriteKey: Species.BLACEPHALON.toString(),
-      fileRoot: "pokemon/exp",
+      fileRoot: "pokemon",
       hasShadow: true,
       repeat: true,
       x: 25,
