@@ -2,7 +2,7 @@ import { SubstituteTag, TrappedTag } from "#app/data/battler-tags";
 import { allMoves } from "#app/data/all-moves";
 import type { CommandPhase } from "#app/phases/command-phase";
 import { GameManager } from "#test/testUtils/gameManager";
-import { Command } from "#app/ui/command-ui-handler";
+import { Command } from "#enums/command";
 import { Mode } from "#app/ui/ui";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";

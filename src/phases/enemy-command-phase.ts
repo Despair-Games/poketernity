@@ -5,7 +5,7 @@ import type { EnemyPokemon, Pokemon } from "#app/field/pokemon";
 
 import { BattlerIndex } from "#enums/battler-index";
 import { globalScene } from "#app/global-scene";
-import { Command } from "#app/ui/command-ui-handler";
+import { Command } from "#enums/command";
 import { Abilities } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { FieldPhase } from "./abstract-field-phase";

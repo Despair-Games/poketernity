@@ -13,7 +13,7 @@ import { StockpilingTag } from "./battler-tags";
 import { type Move } from "./move";
 import { allMoves } from "#app/data/all-moves";
 import { MoveCategory } from "#enums/move-category";
-import { Command } from "#app/ui/command-ui-handler";
+import { Command } from "#enums/command";
 import { FieldPreventExplosionLikeAbAttr } from "./ab-attrs/field-prevent-explosion-like-ab-attr";
 
 export type MoveConditionFunc = (user: Pokemon, target: Pokemon, move: Move) => boolean;

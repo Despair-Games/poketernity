@@ -9,7 +9,7 @@ import { PokemonMove, type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { BypassSpeedChanceModifier } from "#app/modifier/modifier";
 import { CheckStatusEffectPhase } from "#app/phases/check-status-effect-phase";
-import { Command } from "#app/ui/command-ui-handler";
+import { Command } from "#enums/command";
 import { BooleanHolder, isNullOrUndefined, randSeedShuffle } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { Stat } from "#enums/stat";

@@ -3,7 +3,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { MoveResult } from "#enums/move-result";
 import { addBBCodeTextObject, addTextObject, getTextColor } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
-import { Command } from "#app/ui/command-ui-handler";
+import { Command } from "../enums/command";
 import MessageUiHandler from "#app/ui/message-ui-handler";
 import { Mode } from "#app/ui/ui";
 import { BooleanHolder, toReadableString, getLocalizedSpriteKey } from "#app/utils";

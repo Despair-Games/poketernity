@@ -4,7 +4,7 @@ import { addTextObject } from "./text";
 import { TextStyle } from "#enums/text-style";
 import { getTypeDamageMultiplierColor } from "#app/data/type";
 import { Type } from "#enums/type";
-import { Command } from "./command-ui-handler";
+import { Command } from "../enums/command";
 import { Mode } from "./ui";
 import UiHandler from "./ui-handler";
 import { getLocalizedSpriteKey, fixedNumber, padInt } from "#app/utils";
