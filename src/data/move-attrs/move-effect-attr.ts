@@ -32,7 +32,7 @@ export interface MoveEffectAttrOptions {
  * @extends MoveAttr
  * @see {@linkcode apply}
  */
-export class MoveEffectAttr extends MoveAttr {
+export abstract class MoveEffectAttr extends MoveAttr {
   /**
    * A container for this attribute's optional parameters
    * @see {@linkcode MoveEffectAttrOptions} for supported params.
