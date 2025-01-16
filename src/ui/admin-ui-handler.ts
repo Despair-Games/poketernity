@@ -7,6 +7,7 @@ import type { ModalConfig } from "./modal-ui-handler";
 import { TextStyle } from "./text";
 import { Mode } from "./ui";
 import { globalScene } from "#app/global-scene";
+import { AdminMode } from "#enums/admin-mode";
 
 type AdminUiHandlerService = "discord" | "google";
 type AdminUiHandlerServiceMode = "Link" | "Unlink";
@@ -422,12 +423,6 @@ export default class AdminUiHandler extends FormModalUiHandler {
       this.modalContainer.remove(removeArray.pop(), true);
     }
   }
-}
-
-export enum AdminMode {
-  LINK,
-  SEARCH,
-  ADMIN,
 }
 
 export function getAdminModeName(adminMode: AdminMode): string {
