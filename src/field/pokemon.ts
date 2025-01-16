@@ -123,6 +123,7 @@ import {
   TarShotTag,
   AutotomizedTag,
   PowerTrickTag,
+  SkyDropTag,
 } from "../data/battler-tags";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { WeatherType } from "#enums/weather-type";
@@ -1773,12 +1774,15 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   public isGrounded(): boolean {
+    // Note: This code is also copied in `GroundedTag.onAdd()`, to check whether or not the Pokemon
+    // was grounded before receiving the `GroundedTag`.
     return (
       !!this.getTag(GroundedTag)
       || (!this.isOfType(Type.FLYING, true, true)
         && !this.hasAbility(Abilities.LEVITATE)
         && !this.getTag(BattlerTagType.FLOATING)
-        && !this.getTag(SemiInvulnerableTag))
+        && !this.getTag(SemiInvulnerableTag)
+        && !this.getTag(SkyDropTag))
     );
   }
 
@@ -1797,6 +1801,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   public isTrapped(trappedAbMessages: string[] = [], simulated: boolean = true): boolean {
     const commandedTag = this.getTag(BattlerTagType.COMMANDED);
     if (commandedTag?.getSourcePokemon()?.isActive(true)) {
+      return true;
+    }
+
+    if (this.getTag(SkyDropTag)) {
       return true;
     }
 
@@ -3420,9 +3428,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
        */
       globalScene.setPhaseQueueSplice();
       globalScene.unshiftPhase(new FaintPhase(this.getBattlerIndex(), preventEndure));
-      this.destroySubstitute();
-      this.lapseTag(BattlerTagType.COMMANDED);
-      this.resetSummonData();
     }
     return damage;
   }
