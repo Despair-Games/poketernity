@@ -4,18 +4,13 @@ import { getEnumKeys, executeIf } from "#app/utils";
 import { TextStyle, addTextObject } from "./text";
 import { WindowVariant, addWindow } from "./ui-theme";
 import { api } from "#app/plugins/api/api";
+import { ScoreboardCategory } from "#enums/scoreboard-category";
 
 export interface RankingEntry {
   rank: number;
   username: string;
   score: number;
   wave: number;
-}
-
-// Don't forget to update translations when adding a new category
-export enum ScoreboardCategory {
-  DAILY,
-  WEEKLY,
 }
 
 export class DailyRunScoreboard extends Phaser.GameObjects.Container {
