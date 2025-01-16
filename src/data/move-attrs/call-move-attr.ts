@@ -25,6 +25,7 @@ import type { Moves } from "#enums/moves";
 export abstract class CallMoveAttr extends OverrideMoveEffectAttr {
   protected invalidMoves: Moves[];
   protected hasTarget: boolean;
+  public readonly callsOtherMoves: boolean = true;
 
   override apply(user: Pokemon, target: Pokemon, move: Move, overridden: BooleanHolder): boolean {
     const replaceMoveTarget = move.moveTarget === MoveTarget.NEAR_OTHER ? MoveTarget.NEAR_ENEMY : undefined;

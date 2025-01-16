@@ -15,6 +15,8 @@ import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effec
  * @extends OverrideMoveEffectAttr
  */
 export class NaturePowerAttr extends OverrideMoveEffectAttr {
+  public readonly callsOtherMoves: boolean = true;
+
   override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
     let moveId: Moves;
     switch (globalScene.arena.getTerrainType()) {
