@@ -2,7 +2,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type { Mode } from "#app/ui/ui";
 // -- end tsdoc imports --
-import type { NumberHolder } from "#app/utils";
 import type { TextStyle } from "#app/ui/text";
 
 /**
@@ -22,9 +21,9 @@ export interface OptionMenuSettings {
   /** The maximum number of options shown at once on screen. */
   readonly maxOptions?: number;
   /** Horizontal offset for the window compared to the default (right of screen) */
-  readonly xOffset?: number | NumberHolder;
+  readonly xOffset?: number;
   /** Vertical offset for the window compared to the default (bottom of screen) */
-  readonly yOffset?: number | NumberHolder;
+  readonly yOffset?: number;
   /**
    * Set to `true` to prevent closing the menu with the cancel button.
    * Otherwise using the cancel button will act as if the last option was selected.
@@ -34,6 +33,8 @@ export interface OptionMenuSettings {
   readonly inputDelay?: number;
   /** Set to `true` to allow bypassing the inputDelay with the cancel button. */
   readonly canCancelDelay?: boolean;
+  /** Optional callback for when the window gets resized. */
+  readonly onResize?: (w: number, h: number) => void;
 }
 
 /**

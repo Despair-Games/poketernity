@@ -1302,7 +1302,7 @@ export class GameData {
     });
   }
 
-  public importData(dataType: GameDataType, slotId: number = 0, confirmWindowXOffset?: number | NumberHolder): void {
+  public importData(dataType: GameDataType, slotId: number = 0, confirmWindowXOffset?: number): void {
     const dataKey = `${getDataTypeKey(dataType, slotId)}_${loggedInUser?.username}`;
 
     let saveFile: any = document.getElementById("saveFile");

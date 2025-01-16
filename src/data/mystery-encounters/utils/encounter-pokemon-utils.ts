@@ -767,6 +767,9 @@ export async function catchPokemon(
               },
             ],
             yOffset: 48,
+            onResize: (w: number, _h: number) => {
+              globalScene.pokemonInfoContainer.makeRoomForOptionSelectUi(w);
+            },
           };
           const promptRelease = () => {
             globalScene.ui.showText(
@@ -774,7 +777,6 @@ export async function catchPokemon(
               null,
               () => {
                 globalScene.ui.setMode(Mode.OPTION_SELECT, addToPartyMenuConfig);
-                globalScene.pokemonInfoContainer.makeRoomForOptionSelectUi();
               },
             );
           };

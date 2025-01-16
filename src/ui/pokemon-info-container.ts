@@ -15,7 +15,6 @@ import { StatsContainer } from "./stats-container";
 import { TextStyle, addBBCodeTextObject, addTextObject, getTextColor } from "./text";
 import { addWindow } from "./ui-theme";
 import { Species } from "#enums/species";
-import OptionSelectUiHandler from "#app/ui/option-select-ui-handler";
 import { settings } from "#app/system/settings/settings-manager";
 
 interface LanguageSetting {
@@ -478,20 +477,13 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
     this.pokemonMovesContainer.setVisible(false);
   }
 
-  makeRoomForOptionSelectUi(speedMultiplier: number = 1): Promise<void> {
-    const handler = globalScene.ui.getHandler();
-    let xPosition = this.initialX - this.infoWindowWidth;
-    if (handler instanceof OptionSelectUiHandler) {
-      xPosition -= handler.getWindowWidth();
-    } else {
-      xPosition -= 65;
-    }
+  makeRoomForOptionSelectUi(requiredSpace: number): Promise<void> {
     return new Promise<void>((resolve) => {
       globalScene.tweens.add({
         targets: this,
-        duration: fixedNumber(Math.floor(150 / speedMultiplier)),
+        duration: fixedNumber(150),
         ease: "Cubic.easeInOut",
-        x: xPosition,
+        x: this.initialX - this.infoWindowWidth - requiredSpace,
         onComplete: () => {
           resolve();
         },

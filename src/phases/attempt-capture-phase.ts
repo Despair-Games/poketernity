@@ -356,11 +356,13 @@ export class AttemptCapturePhase extends PokemonPhase {
                 },
               ],
               yOffset: 48,
+              onResize: (w: number, _h: number) => {
+                pokemonInfoContainer.makeRoomForOptionSelectUi(w);
+              },
             };
             const promptRelease = (): void => {
               ui.showText(i18next.t("battle:partyFull", { pokemonName: pokemon.getNameToRender() }), null, () => {
                 ui.setMode(Mode.OPTION_SELECT, addToPartyMenuConfig);
-                pokemonInfoContainer.makeRoomForOptionSelectUi();
               });
             };
             promptRelease();

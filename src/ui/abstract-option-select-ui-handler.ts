@@ -4,7 +4,7 @@ import { TextStyle, addBBCodeTextObject, getBBCodeFrag, getTextStyleOptions } fr
 import MessageUiHandler from "#app/ui/message-ui-handler";
 import { Mode } from "#app/ui/ui";
 import { addWindow } from "#app/ui/ui-theme";
-import { fixedNumber, getNumberValue, isNullOrUndefined, NumberHolder } from "#app/utils";
+import { fixedNumber, getNumberValue, isNullOrUndefined } from "#app/utils";
 import { Button } from "#enums/buttons";
 import type BBCodeText from "phaser3-rex-plugins/plugins/gameobjects/tagtext/bbcodetext/BBCodeText";
 import { settings } from "#app/system/settings/settings-manager";
@@ -50,9 +50,6 @@ export default abstract class AsbtractOptionSelectUiHandler<T extends OptionSele
   private maxOptions: number;
   protected fullyInitialized: boolean;
 
-  protected readonly windowWidth: NumberHolder;
-  protected readonly windowHeight: NumberHolder;
-
   protected optionSelectContainer: Phaser.GameObjects.Container;
   protected optionSelectBg: Phaser.GameObjects.NineSlice;
   protected optionSelectText: BBCodeText;
@@ -67,17 +64,6 @@ export default abstract class AsbtractOptionSelectUiHandler<T extends OptionSele
 
   constructor(mode: Mode = Mode.OPTION_SELECT) {
     super(mode);
-
-    this.windowWidth = new NumberHolder(0);
-    this.windowHeight = new NumberHolder(0);
-  }
-
-  public getWindowWidth(): number {
-    return this.windowWidth.value;
-  }
-
-  public getWindowHeight(): number {
-    return this.windowHeight.value;
   }
 
   protected computeWindowHeight(): number {
@@ -94,7 +80,7 @@ export default abstract class AsbtractOptionSelectUiHandler<T extends OptionSele
     this.optionSelectContainer.setVisible(false);
     ui.add(this.optionSelectContainer);
 
-    this.optionSelectBg = addWindow(0, 0, this.getWindowWidth(), this.getWindowHeight());
+    this.optionSelectBg = addWindow(0, 0, 0, 0);
     this.optionSelectBg.setName("option-select-bg");
     this.optionSelectBg.setOrigin(1, 1);
     this.optionSelectContainer.add(this.optionSelectBg);
@@ -165,7 +151,7 @@ export default abstract class AsbtractOptionSelectUiHandler<T extends OptionSele
     }
 
     // Get the max width amongst the given options, and use it for everything
-    const currentWidth = this.windowWidth.value;
+    const currentWidth = this.optionSelectBg.displayWidth;
     const maxWidth = this.getOptionsMaxWidth(options) + WINDOW_PADDING;
 
     if (maxWidth <= currentWidth) {
@@ -182,14 +168,15 @@ export default abstract class AsbtractOptionSelectUiHandler<T extends OptionSele
     const xPosition = Math.max(bgWidth + 1, globalScene.scaledCanvas.width - 1 - Math.abs(xOffset));
 
     this.optionSelectContainer.setPosition(xPosition, -Math.abs(yOffset));
-    this.optionSelectBg.setSize(bgWidth, bgHeight);
     this.optionSelectText.setPosition(
       this.optionSelectBg.x - bgWidth + 11 + 24 * this.scale,
       this.optionSelectBg.y - bgHeight + 42 * this.scale,
     );
 
-    this.windowWidth.value = bgWidth;
-    this.windowHeight.value = bgHeight;
+    this.optionSelectBg.setSize(bgWidth, bgHeight);
+    if (this.config?.onResize) {
+      this.config.onResize(bgWidth, bgHeight);
+    }
   }
 
   /**
@@ -479,13 +466,12 @@ export default abstract class AsbtractOptionSelectUiHandler<T extends OptionSele
     this.options = [];
     this.currentOptions = [];
     this.maxOptions = DEFAULT_MAX_OPTIONS;
-    this.windowWidth.value = 0;
-    this.windowHeight.value = 0;
     this.fullyInitialized = false;
 
-    this.clearIconSprites();
+    this.optionSelectBg.setSize(0, 0);
     this.optionSelectContainer.setVisible(false);
     this.scrollCursor = 0;
+    this.clearIconSprites();
     this.eraseCursor();
   }
 

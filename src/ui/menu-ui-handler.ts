@@ -123,9 +123,6 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
 
     super.show([config]);
 
-    // Resize the message box so that it does not go over the menu
-    this.menuMessageBox.setSize(globalScene.scaledCanvas.width - this.getWindowWidth() - 2, 48);
-
     // Make sure the tutorial overlay sits above everything, but below the message box
     this.menuContainer.bringToTop(this.tutorialOverlay);
     this.menuContainer.bringToTop(this.menuMessageBoxContainer);
@@ -163,6 +160,13 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
       maxOptions: 10,
       noCancel: true, // we take care of closing the menu in this handler
       yOffset: 1,
+      onResize: (w: number, _h: number) => {
+        // Init the community and manage data menus config once the menu has its proper size
+        this.initCommunityMenuOptions();
+        this.initManageDataOptions();
+        // Resize the message box so that it does not go over the menu
+        this.menuMessageBox.setSize(globalScene.scaledCanvas.width - w - 2, 48);
+      },
     };
   }
 
@@ -204,7 +208,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
                 },
               },
             ]),
-          xOffset: this.windowWidth,
+          xOffset: this.optionSelectBg.displayWidth,
           yOffset: this.menuMessageBox.displayHeight + 1,
         };
         ui.setOverlayMode(Mode.MENU_OPTION_SELECT, config);
@@ -218,7 +222,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
           confirmSlot(
             i18next.t("menuUiHandler:importSlotSelect"),
             () => true,
-            (slotId) => globalScene.gameData.importData(GameDataType.SESSION, slotId, this.windowWidth),
+            (slotId) => globalScene.gameData.importData(GameDataType.SESSION, slotId, this.optionSelectBg.displayWidth),
           );
           return true;
         },
@@ -372,7 +376,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
     });
 
     this.manageDataConfig = {
-      xOffset: this.windowWidth,
+      xOffset: this.optionSelectBg.displayWidth,
       yOffset: this.menuMessageBox.displayHeight + 1,
       options: manageDataOptions,
       maxOptions: 7,
@@ -501,7 +505,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
 
     this.communityConfig = {
       options: communityOptions,
-      xOffset: this.windowWidth,
+      xOffset: this.optionSelectBg.displayWidth,
       yOffset: this.menuMessageBox.displayHeight + 1,
     };
   }
@@ -627,7 +631,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
                   ui.revertMode();
                   this.showText("", 0);
                 },
-                xOffset: this.windowWidth,
+                xOffset: this.optionSelectBg.displayWidth,
               };
               ui.setOverlayMode(Mode.CONFIRM, options);
             });
@@ -659,7 +663,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
                 ui.revertMode();
                 this.showText("", 0);
               },
-              xOffset: this.windowWidth,
+              xOffset: this.optionSelectBg.displayWidth,
             };
             ui.setOverlayMode(Mode.CONFIRM, options);
           });
