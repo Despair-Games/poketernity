@@ -35,33 +35,9 @@ import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { globalScene } from "#app/global-scene";
 import { ForceSwitchOutAttr } from "#app/data/move-attrs/force-switch-out-attr";
 import { PartyUiMode } from "#enums/party-ui-mode";
+import { PartyOption } from "#enums/party-option";
 
 const defaultMessage = i18next.t("partyUiHandler:choosePokemon");
-
-export enum PartyOption {
-  CANCEL = -1,
-  SEND_OUT,
-  PASS_BATON,
-  REVIVE,
-  APPLY,
-  TEACH,
-  TRANSFER,
-  SUMMARY,
-  UNPAUSE_EVOLUTION,
-  SPLICE,
-  UNSPLICE,
-  RELEASE,
-  RENAME,
-  SELECT,
-  SCROLL_UP = 1000,
-  SCROLL_DOWN = 1001,
-  FORM_CHANGE_ITEM = 2000,
-  MOVE_1 = 3000,
-  MOVE_2,
-  MOVE_3,
-  MOVE_4,
-  ALL = 4000,
-}
 
 export type PartySelectCallback = (cursor: number, option: PartyOption) => void;
 export type PartyModifierTransferSelectCallback = (

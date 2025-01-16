@@ -15,7 +15,7 @@ import { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { VictoryPhase } from "#app/phases/victory-phase";
 import { achvs } from "#app/system/achv";
-import { type PartyOption } from "#app/ui/party-ui-handler";
+import { type PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import { SummaryUiMode } from "#enums/summary-ui-mode";
 import { Mode } from "#app/ui/ui";

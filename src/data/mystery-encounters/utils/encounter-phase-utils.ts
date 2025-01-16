@@ -28,7 +28,8 @@ import { MysteryEncounterBattleStartCleanupPhase } from "#app/phases/mystery-enc
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import type PokemonData from "#app/system/pokemon-data";
 import type { OptionSelectConfig, OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler";
-import type { PartyOption, PokemonSelectFilter } from "#app/ui/party-ui-handler";
+import type { PokemonSelectFilter } from "#app/ui/party-ui-handler";
+import type { PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import { Mode } from "#app/ui/ui";
 import { isNullOrUndefined, randSeedInt, randomString } from "#app/utils";

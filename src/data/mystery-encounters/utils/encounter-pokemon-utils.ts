@@ -14,7 +14,7 @@ import { PlayerGender } from "#enums/player-gender";
 import { getStatusEffectCatchRateMultiplier } from "#app/data/status-effect";
 import { achvs } from "#app/system/achv";
 import { Mode } from "#app/ui/ui";
-import type { PartyOption } from "#app/ui/party-ui-handler";
+import type { PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import { Species } from "#enums/species";
 import type { Type } from "#enums/type";

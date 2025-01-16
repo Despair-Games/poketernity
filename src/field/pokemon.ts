@@ -156,7 +156,7 @@ import { FieldMultiplyStatAbAttr } from "#app/data/ab-attrs/field-multiply-stat-
 import type PokemonData from "#app/system/pokemon-data";
 import { BattlerIndex } from "#enums/battler-index";
 import { Mode } from "#app/ui/ui";
-import type { PartyOption } from "#app/ui/party-ui-handler";
+import type { PartyOption } from "#enums/party-option";
 import PartyUiHandler from "#app/ui/party-ui-handler";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
