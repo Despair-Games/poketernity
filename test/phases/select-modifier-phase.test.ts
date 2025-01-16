@@ -3,7 +3,7 @@ import { getPokemonSpecies } from "#app/data/pokemon-species";
 import { settings } from "#app/system/settings/settings-manager";
 import { ShopCursorTarget } from "#app/enums/shop-cursor-target";
 import { PlayerPokemon } from "#app/field/pokemon";
-import { ModifierTier } from "#app/modifier/modifier-tier";
+import { ModifierTier } from "#enums/modifier-tier";
 import type { CustomModifierSettings } from "#app/modifier/modifier-type";
 import { ModifierTypeOption, modifierTypes } from "#app/modifier/modifier-type";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";

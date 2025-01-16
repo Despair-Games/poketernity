@@ -6,7 +6,7 @@ import {
   TempExtraModifierModifier,
   type Modifier,
 } from "#app/modifier/modifier";
-import type { ModifierTier } from "#app/modifier/modifier-tier";
+import type { ModifierTier } from "#enums/modifier-tier";
 import {
   FusePokemonModifierType,
   getPlayerModifierTypeOptions,

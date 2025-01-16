@@ -16,7 +16,7 @@ import {
 } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
-import { ModifierTier } from "#app/modifier/modifier-tier";
+import { ModifierTier } from "#enums/modifier-tier";
 import { GameOverPhase } from "#app/phases/game-over-phase";
 import { randSeedInt } from "#app/utils";
 import { Moves } from "#enums/moves";

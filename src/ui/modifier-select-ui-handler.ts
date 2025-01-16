@@ -19,7 +19,7 @@ import { ShopCursorTarget } from "#enums/shop-cursor-target";
 import { NumberHolder } from "#app/utils";
 import Phaser from "phaser";
 import { PokeballType } from "#enums/pokeball";
-import { ModifierTier } from "#app/modifier/modifier-tier";
+import { ModifierTier } from "#enums/modifier-tier";
 import { settings } from "#app/system/settings/settings-manager";
 
 export const SHOP_OPTIONS_ROW_LIMIT = 7;
