@@ -12,20 +12,25 @@ import { settings } from "#app/system/settings/settings-manager";
 const WINDOW_PADDING = 23;
 const DEFAULT_MAX_OPTIONS = 10;
 const NUM_PRE_COMPUTED_OPTIONS = 15;
+const DEFAULT_TEXT_STYLE = TextStyle.WINDOW;
 
 const SCROLL_UP_ITEM: UIOptionSelectItem = {
   label: "↑",
   handler: () => true,
   initialized: true,
+  displayLabel: "↑",
 };
 const SCROLL_DOWN_ITEM: UIOptionSelectItem = {
   label: "↓",
   handler: () => true,
   initialized: true,
+  displayLabel: "↓",
 };
 
 interface UIOptionSelectItem extends OptionSelectItem {
   initialized: boolean;
+  displayLabel: string;
+  iconsWidth?: number;
 }
 
 export default class OptionSelectUiHandler extends MessageUiHandler {
@@ -34,8 +39,6 @@ export default class OptionSelectUiHandler extends MessageUiHandler {
   private currentOptions: UIOptionSelectItem[];
   private fullyInitialized: boolean;
   private maxOptions: number;
-
-  private singleSpaceWidth: number;
 
   protected readonly DEFAULT_Y_OFFSET = -48;
   protected readonly windowWidth: NumberHolder;
@@ -75,7 +78,7 @@ export default class OptionSelectUiHandler extends MessageUiHandler {
   override setup() {
     const ui = this.getUi();
 
-    this.scale = getTextStyleOptions(TextStyle.WINDOW, settings.display.uiTheme).scale;
+    this.scale = getTextStyleOptions(DEFAULT_TEXT_STYLE, settings.display.uiTheme).scale;
 
     this.optionSelectContainer = globalScene.add.container(globalScene.scaledCanvas.width - 1, this.DEFAULT_Y_OFFSET);
     this.optionSelectContainer.setName(`option-select-${this.mode ? Mode[this.mode] : "UNKNOWN"}`);
@@ -87,7 +90,7 @@ export default class OptionSelectUiHandler extends MessageUiHandler {
     this.optionSelectBg.setOrigin(1, 1);
     this.optionSelectContainer.add(this.optionSelectBg);
 
-    this.optionSelectText = addBBCodeTextObject(0, 0, "", TextStyle.WINDOW, { lineSpacing: this.scale * 72 });
+    this.optionSelectText = addBBCodeTextObject(0, 0, "", DEFAULT_TEXT_STYLE, { lineSpacing: this.scale * 72 });
     this.optionSelectText.setOrigin(0, 0);
     this.optionSelectText.setName("text-option-select");
     this.optionSelectContainer.add(this.optionSelectText);
@@ -122,10 +125,14 @@ export default class OptionSelectUiHandler extends MessageUiHandler {
     return true;
   }
 
-  protected initOptions(config: OptionSelectModeConfig) {
+  private initOptions(config: OptionSelectModeConfig) {
     this.config = config;
     this.options = (config.options ?? []).map((option) => {
-      return { ...option, initialized: false };
+      return {
+        ...option,
+        initialized: false,
+        displayLabel: option.label,
+      };
     });
     this.maxOptions = Math.min(this.options.length, config.maxOptions ?? DEFAULT_MAX_OPTIONS);
 
@@ -146,46 +153,54 @@ export default class OptionSelectUiHandler extends MessageUiHandler {
    * @param configOptions array of {@linkcode OptionSelectItem} to consider
    * @returns the maximum width that will be taken by all elements of the menu
    */
-  protected getOptionsMaxWidth(configOptions: UIOptionSelectItem[]): number {
+  private getOptionsMaxWidth(configOptions: UIOptionSelectItem[]): number {
     const nonInitializedOptions = configOptions.filter((o) => !o.initialized);
     if (nonInitializedOptions.length === 0) {
       return 0;
     }
 
-    let maxWidth: number = 0;
-    const tempTextObject = addBBCodeTextObject(0, 0, " ", TextStyle.WINDOW);
+    const tempTextObject = addBBCodeTextObject(0, 0, " ", DEFAULT_TEXT_STYLE);
     const tempSprite = globalScene.add.sprite(0, 0, "items");
     const singleSpaceWidth = tempTextObject.displayWidth;
-    this.singleSpaceWidth = singleSpaceWidth;
 
-    // Go through all options, find out their actual display width
     for (const option of nonInitializedOptions) {
-      // Measure the width of the icon(s) to show before the label
-      if (option.iconsConfig) {
-        let maxIconWidth = 0;
-        for (const iconConfig of option.iconsConfig) {
-          tempSprite.setTexture(iconConfig.name, iconConfig.frame);
-          tempSprite.setScale(iconConfig.scale);
-          maxIconWidth = Math.max(maxIconWidth, tempSprite.frame.width * tempSprite.scale);
-        }
-        // Pad the label with as many spaces as needed to make room for the icon
-        if (maxIconWidth > 0) {
-          const neededSpaces = Math.ceil(maxIconWidth / singleSpaceWidth);
-          option.label = option.label.padStart(option.label.length + neededSpaces);
-        }
-      }
-
-      option.initialized = true;
-
-      // Measure the width of the label
-      tempTextObject.setText(option.label);
-      maxWidth = Math.max(maxWidth, tempTextObject.displayWidth);
+      this.initializeOption(option, singleSpaceWidth, tempSprite);
     }
+
+    tempTextObject.setText(nonInitializedOptions.map((o) => o.displayLabel).join("\n"));
+    const totalWidth = tempTextObject.displayWidth;
 
     tempTextObject.destroy();
     tempSprite.destroy();
 
-    return maxWidth;
+    return totalWidth;
+  }
+
+  protected initializeOption(
+    option: UIOptionSelectItem,
+    singleSpaceWidth: number,
+    tempSprite: Phaser.GameObjects.Sprite,
+  ) {
+    let label = option.displayLabel ?? option.label;
+
+    // Measure the width of the icon(s) to show before the label
+    if (option.iconsConfig) {
+      let maxIconWidth = 0;
+      for (const iconConfig of option.iconsConfig) {
+        tempSprite.setTexture(iconConfig.name, iconConfig.frame);
+        tempSprite.setScale(iconConfig.scale);
+        maxIconWidth = Math.max(maxIconWidth, tempSprite.frame.width * tempSprite.scale);
+      }
+      // Pad the label with as many spaces as needed to make room for the icon
+      if (maxIconWidth > 0) {
+        const neededSpaces = Math.ceil(maxIconWidth / singleSpaceWidth);
+        label = label.padStart(label.length + neededSpaces);
+      }
+      option.iconsWidth = maxIconWidth;
+    }
+
+    option.displayLabel = label;
+    option.initialized = true;
   }
 
   protected updateSizeForOptions(options: UIOptionSelectItem[]) {
@@ -225,7 +240,6 @@ export default class OptionSelectUiHandler extends MessageUiHandler {
   }
 
   protected updateCurrentOptions(): void {
-    console.log("UPDATE CURRENT OPTIONS (initialized: " + this.fullyInitialized + ")");
     if (!this.config) {
       return;
     }
@@ -257,7 +271,7 @@ export default class OptionSelectUiHandler extends MessageUiHandler {
   }
 
   protected displayCurrentOptions(): void {
-    this.optionSelectText.setText(this.currentOptions.map((o) => o.label).join("\n"));
+    this.optionSelectText.setText(this.currentOptions.map((o) => o.displayLabel).join("\n"));
 
     // Hide existing icons
     for (const iconSprite of this.optionSelectIcons) {
@@ -266,10 +280,10 @@ export default class OptionSelectUiHandler extends MessageUiHandler {
 
     // Display the icons before each option, if any
     let currentIconIndex = 0;
-    this.currentOptions.forEach((option: OptionSelectItem, i: number) => {
+    this.currentOptions.forEach((option: UIOptionSelectItem, i: number) => {
       if (option.iconsConfig) {
         const iconY = 7 + i * (114 * this.scale - 3);
-        const iconX = Math.floor(((option.label.length - option.label.trimStart().length) * this.singleSpaceWidth) / 2);
+        const iconX = Math.floor((option.iconsWidth ?? 0) / 2);
         for (const config of option.iconsConfig!) {
           let iconSprite = this.optionSelectIcons[currentIconIndex++];
           if (!iconSprite) {
