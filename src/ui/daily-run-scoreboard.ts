@@ -2,7 +2,8 @@ import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
 import { getEnumKeys, executeIf } from "#app/utils";
 import { TextStyle, addTextObject } from "./text";
-import { WindowVariant, addWindow } from "./ui-theme";
+import { addWindow } from "./ui-theme";
+import { WindowVariant } from "#enums/window-variant";
 import { api } from "#app/plugins/api/api";
 import { ScoreboardCategory } from "#enums/scoreboard-category";
 

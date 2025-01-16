@@ -18,7 +18,8 @@ import type AwaitableUiHandler from "./awaitable-ui-handler";
 import MessageUiHandler from "./message-ui-handler";
 import { TextStyle, addTextObject, getTextStyleOptions } from "./text";
 import { Mode } from "./ui";
-import { WindowVariant, addWindow } from "./ui-theme";
+import { addWindow } from "./ui-theme";
+import { WindowVariant } from "#enums/window-variant";
 import { settings } from "#app/system/settings/settings-manager";
 
 enum MenuOptions {

@@ -1,7 +1,8 @@
 import { TextStyle, addTextObject } from "./text";
 import type { Mode } from "./ui";
 import UiHandler from "./ui-handler";
-import { WindowVariant, addWindow } from "./ui-theme";
+import { addWindow } from "./ui-theme";
+import { WindowVariant } from "#enums/window-variant";
 import type { Button } from "#enums/buttons";
 import { globalScene } from "#app/global-scene";
 
