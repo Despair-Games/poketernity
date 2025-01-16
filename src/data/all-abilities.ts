@@ -11,8 +11,7 @@ import { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { MovePhase } from "#app/phases/move-phase";
-import { isNullOrUndefined, NumberHolder, randSeedInt, toDmgValue } from "#app/utils";
+import { NumberHolder, randSeedInt, toDmgValue } from "#app/utils";
 import i18next from "i18next";
 import { Ability, allAbilities } from "./ability";
 import { PostDamageForceSwitchAbAttr } from "./ab-attrs/post-damage-force-switch-out-ab-attr";
@@ -832,10 +831,7 @@ export function initAbilities() {
     new Ability(Abilities.WONDER_SKIN, 5).attr(WonderSkinAbAttr).ignorable(),
     new Ability(Abilities.ANALYTIC, 5).attr(
       MovePowerBoostAbAttr,
-      (user, _target, _move) => {
-        const movePhase = globalScene.findPhase((phase) => phase instanceof MovePhase && phase.pokemon.id !== user?.id);
-        return isNullOrUndefined(movePhase);
-      },
+      () => globalScene.currentBattle.turnManager.empty(),
       1.3,
     ),
     new Ability(Abilities.ILLUSION, 5).attr(UncopiableAbilityAbAttr).attr(UnswappableAbilityAbAttr).unimplemented(),
