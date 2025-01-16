@@ -15,7 +15,8 @@ import {
 import { allMoves } from "#app/data/all-moves";
 import { getGenderColor, getGenderShadowColor, getGenderSymbol } from "#app/data/gender";
 import { StatusEffect } from "#enums/status-effect";
-import PokemonIconAnimHandler, { PokemonIconAnimMode } from "#app/ui/pokemon-icon-anim-handler";
+import PokemonIconAnimHandler from "#app/ui/pokemon-icon-anim-handler";
+import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
 import { addWindow } from "#app/ui/ui-theme";
 import { SpeciesFormChangeItemTrigger } from "#app/data/pokemon-forms";

@@ -1,5 +1,6 @@
 import { Mode } from "./ui";
-import PokemonIconAnimHandler, { PokemonIconAnimMode } from "./pokemon-icon-anim-handler";
+import PokemonIconAnimHandler from "./pokemon-icon-anim-handler";
+import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
 import MessageUiHandler from "./message-ui-handler";
 import { getEggTierForSpecies } from "../data/egg";
 import { Button } from "#enums/buttons";
