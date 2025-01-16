@@ -1,7 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { AbAttr } from "./ab-attr";
 
-export class PreSwitchOutAbAttr extends AbAttr {
+export abstract class PreSwitchOutAbAttr extends AbAttr {
   constructor(showAbility: boolean = true) {
     super(showAbility, true);
   }

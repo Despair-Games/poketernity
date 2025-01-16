@@ -1,7 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { AbAttr } from "./ab-attr";
 
-export class PostTurnAbAttr extends AbAttr {
+export abstract class PostTurnAbAttr extends AbAttr {
   /**
    * Applies an effect at the end of a turn.
    * @param pokemon The {@linkcode Pokemon} with this ability
