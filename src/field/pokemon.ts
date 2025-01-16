@@ -1596,7 +1596,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns An array of all the ability attributes on this ability.
    */
   public getAbilityAttrs<T extends AbAttr = AbAttr>(
-    attrType: { new (...args: any[]): T },
+    attrType: AbstractConstructor<T>,
     canApply: boolean = true,
     ignoreOverride: boolean = false,
   ): T[] {
