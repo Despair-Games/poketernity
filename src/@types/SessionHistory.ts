@@ -1,12 +1,7 @@
 import type { GameModes } from "#enums/game-modes";
-import type PokemonData from "./pokemon-data";
-import type PersistentModifierData from "./modifier-data";
-
-export enum SessionHistoryResult {
-  ACTIVE,
-  WIN,
-  LOSS,
-}
+import type PokemonData from "../system/pokemon-data";
+import type PersistentModifierData from "../system/modifier-data";
+import type { SessionHistoryResult } from "#enums/session-history-result";
 
 export interface SessionHistory {
   seed: string;
