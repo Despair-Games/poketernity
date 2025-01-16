@@ -4,7 +4,7 @@ import { type FairyLockTag } from "#app/data/arena-tag";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { speciesStarterCosts } from "#app/data/balance/starters";
 import type { EncoreTag } from "#app/data/battler-tags";
-import { TrappedTag } from "#app/data/battler-tags";
+import { SkyDropTag, TrappedTag } from "#app/data/battler-tags";
 import { getMoveTargets, type MoveTargetSet } from "#app/data/move";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { FieldPosition } from "#enums/field-position";
@@ -340,7 +340,7 @@ export class CommandPhase extends FieldPhase {
           }
           showNoEscapeText(trappedAbMessages[0]);
         } else {
-          const trapTag = playerPokemon.getTag(TrappedTag);
+          const trapTag = playerPokemon.getTag(TrappedTag) ?? playerPokemon.getTag(SkyDropTag);
           const fairyLockTag = arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.PLAYER);
 
           if (!isSwitch) {
@@ -348,7 +348,7 @@ export class CommandPhase extends FieldPhase {
             ui.setMode(Mode.MESSAGE);
           }
 
-          const getNoEscapeText = (tag?: TrappedTag | FairyLockTag) => {
+          const getNoEscapeText = (tag?: TrappedTag | SkyDropTag | FairyLockTag) => {
             if (!tag) {
               return i18next.t(`battle:noEscape${isSwitch ? "Switch" : "Flee"}`);
             }
