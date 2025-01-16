@@ -1043,7 +1043,7 @@ class StickyWebTag extends ArenaTrapTag {
   override activateTrap(pokemon: Pokemon, simulated: boolean): boolean {
     if (pokemon.isGrounded()) {
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs(ProtectStatAbAttr, pokemon, simulated, cancelled);
+      applyAbAttrs(ProtectStatAbAttr, pokemon, simulated, Stat.SPD, cancelled);
 
       if (simulated) {
         return !cancelled.value;

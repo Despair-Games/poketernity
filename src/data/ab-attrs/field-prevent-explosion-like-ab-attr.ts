@@ -21,7 +21,6 @@ export class FieldPreventExplosionLikeAbAttr extends AbAttr {
    */
   override apply(
     _pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
     cancelled: BooleanHolder,
     moveUser: string,

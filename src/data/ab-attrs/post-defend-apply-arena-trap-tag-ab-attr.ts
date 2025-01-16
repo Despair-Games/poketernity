@@ -2,7 +2,6 @@ import type { PokemonDefendCondition } from "#app/@types/PokemonDefendCondition"
 import { type ArenaTrapTag } from "#app/data/arena-tag";
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
-import type { HitResult } from "#enums/hit-result";
 import { globalScene } from "#app/global-scene";
 import type { ArenaTagType } from "#enums/arena-tag-type";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
@@ -18,14 +17,7 @@ export class PostDefendApplyArenaTrapTagAbAttr extends PostDefendAbAttr {
     this.tagType = tagType;
   }
 
-  override applyPostDefend(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
-    _hitResult: HitResult,
-  ): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
     if (this.condition(pokemon, attacker, move)) {
       const tag = globalScene.arena.getTag(this.tagType) as ArenaTrapTag;
       if (!globalScene.arena.getTag(this.tagType) || tag.layers < tag.maxLayers) {

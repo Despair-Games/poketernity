@@ -20,7 +20,7 @@ export class BypassSpeedChanceAbAttr extends AbAttr {
     this.chance = chance;
   }
 
-  override apply(pokemon: Pokemon, _passive: boolean, simulated: boolean): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean): boolean {
     if (pokemon.randSeedInt(100) < this.chance) {
       if (!simulated) {
         return pokemon.addTag(BattlerTagType.BYPASS_SPEED);

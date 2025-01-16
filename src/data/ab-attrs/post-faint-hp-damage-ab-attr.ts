@@ -10,9 +10,8 @@ import { PostFaintAbAttr } from "./post-faint-ab-attr";
  * @extends PostFaintAbAttr
  */
 export class PostFaintHPDamageAbAttr extends PostFaintAbAttr {
-  override applyPostFaint(
+  override apply(
     pokemon: Pokemon,
-    _passive: boolean,
     simulated: boolean,
     attacker?: Pokemon,
     move?: Move,

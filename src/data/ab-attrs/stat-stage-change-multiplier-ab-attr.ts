@@ -11,7 +11,7 @@ export class StatStageChangeMultiplierAbAttr extends AbAttr {
     this.multiplier = multiplier;
   }
 
-  override apply(_pokemon: Pokemon, _passive: boolean, _simulated: boolean, stages: NumberHolder): boolean {
+  override apply(_pokemon: Pokemon, _simulated: boolean, stages: NumberHolder): boolean {
     stages.value *= this.multiplier;
 
     return true;

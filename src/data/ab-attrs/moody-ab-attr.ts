@@ -5,22 +5,14 @@ import { EFFECTIVE_STATS } from "#enums/stat";
 import { PostTurnAbAttr } from "./post-turn-ab-attr";
 
 /**
- * Attribute used for Moody
+ * Attribute to randomly increase one stat stage by 2 and decrease a different
+ * stat stage by 1. Any stat stage at +6 or -6 is excluded from being increased
+ * or decreased, respectively.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Moody_(Ability) | Moody}.
  * @extends PostTurnAbAttr
- * @see {@linkcode applyPostTurn}
  */
 export class MoodyAbAttr extends PostTurnAbAttr {
-  /**
-   * Randomly increases one stat stage by 2 and decreases a different stat stage by 1.
-   * Any stat stages at +6 or -6 are excluded from being increased or decreased, respectively.
-   * If the pokemon already has all stat stages raised to 6, it will only decrease one stat stage by 1.
-   * If the pokemon already has all stat stages lowered to -6, it will only increase one stat stage by 2.
-   * @param pokemon {@linkcode Pokemon} that has this ability
-   * @param _passive N/A
-   * @param simulated `true` if applying in a simulated call.
-   * @returns `true`
-   */
-  override applyPostTurn(pokemon: Pokemon, _passive: boolean, simulated: boolean): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean): boolean {
     const canRaise = EFFECTIVE_STATS.filter((s) => pokemon.getStatStage(s) < 6);
     let canLower = EFFECTIVE_STATS.filter((s) => pokemon.getStatStage(s) > -6);
 

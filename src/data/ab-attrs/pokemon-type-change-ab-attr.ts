@@ -17,13 +17,7 @@ import { PreAttackAbAttr } from "./pre-attack-ab-attr";
 export class PokemonTypeChangeAbAttr extends PreAttackAbAttr {
   private moveType: Type;
 
-  override applyPreAttack(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    _defender: Pokemon,
-    move: Move,
-  ): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean, move: Move): boolean {
     if (
       !pokemon.isTerastallized()
       && move.id !== Moves.STRUGGLE

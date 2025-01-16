@@ -15,7 +15,6 @@ export class IgnoreTypeImmunityAbAttr extends AbAttr {
 
   override apply(
     _pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
     cancelled: BooleanHolder,
     moveType: Type,

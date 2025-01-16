@@ -13,7 +13,7 @@ export class PostSummonAddBattlerTagAbAttr extends PostSummonAbAttr {
     this.turnCount = turnCount;
   }
 
-  override applyPostSummon(pokemon: Pokemon, _passive: boolean, simulated: boolean): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean): boolean {
     if (simulated) {
       return pokemon.canAddTag(this.tagType);
     } else {

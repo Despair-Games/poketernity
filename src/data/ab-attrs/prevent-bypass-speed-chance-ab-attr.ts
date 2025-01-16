@@ -20,7 +20,7 @@ export class PreventBypassSpeedChanceAbAttr extends AbAttr {
     this.condition = condition;
   }
 
-  override apply(pokemon: Pokemon, _passive: boolean, _simulated: boolean, cancelled: BooleanHolder): boolean {
+  override apply(pokemon: Pokemon, _simulated: boolean, cancelled: BooleanHolder): boolean {
     const turnCommand = globalScene.currentBattle.turnManager.findCommand((tc) => tc.pokemon === pokemon);
     const isCommandFight = turnCommand?.command === Command.FIGHT;
     const move = turnCommand?.move?.move ? allMoves[turnCommand.move.move] : null;

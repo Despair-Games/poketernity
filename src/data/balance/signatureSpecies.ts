@@ -11,14 +11,14 @@ type SignatureSpecies = {
  */
 export const signatureSpecies: SignatureSpecies = {
   // Kanto gym leaders
-  BROCK: [Species.GEODUDE, Species.ONIX],
-  MISTY: [Species.STARYU, Species.PSYDUCK],
-  LT_SURGE: [Species.VOLTORB, Species.PIKACHU, Species.ELECTABUZZ],
+  BROCK: [Species.ONIX, Species.GEODUDE, [Species.OMANYTE, Species.KABUTO], Species.AERODACTYL],
+  MISTY: [Species.STARYU, Species.PSYDUCK, Species.WOOPER, [Species.MAGIKARP, Species.FEEBAS]],
+  LT_SURGE: [Species.PICHU, Species.ELEKID, Species.VOLTORB],
   ERIKA: [Species.ODDISH, Species.BELLSPROUT, Species.TANGELA, Species.HOPPIP],
-  JANINE: [Species.VENONAT, Species.SPINARAK, Species.ZUBAT],
-  SABRINA: [Species.ABRA, Species.MR_MIME, Species.ESPEON],
-  BLAINE: [Species.GROWLITHE, Species.PONYTA, Species.MAGMAR],
-  GIOVANNI: [Species.SANDILE, Species.MURKROW, Species.NIDORAN_M, Species.NIDORAN_F],
+  JANINE: [Species.VENONAT, Species.SPINARAK, Species.ZUBAT, Species.KOFFING],
+  SABRINA: [Species.ABRA, Species.MIME_JR, Species.SMOOCHUM, Species.ESPEON],
+  BLAINE: [Species.GROWLITHE, Species.PONYTA, Species.MAGBY, Species.SLUGMA],
+  GIOVANNI: [Species.RHYHORN, Species.DIGLETT, [Species.NIDORAN_M, Species.NIDORAN_F], Species.SANDILE],
 
   // Johto gym leaders
   FALKNER: [Species.PIDGEY, Species.HOOTHOOT, Species.NATU, Species.MURKROW],

@@ -1,7 +1,7 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { IgnoreMoveEffectsAbAttr } from "#app/data/ab-attrs/ignore-move-effect-ab-attr";
 import { MoveEffectChanceMultiplierAbAttr } from "#app/data/ab-attrs/move-effect-chance-multiplier-ab-attr";
-import { applyAbAttrs, applyPreDefendAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/ability";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { NumberHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
@@ -54,15 +54,7 @@ describe("Abilities - Shield Dust", () => {
 
     const chance = new NumberHolder(move.chance);
     applyAbAttrs(MoveEffectChanceMultiplierAbAttr, phase.getUserPokemon()!, false, chance, move, false);
-    applyPreDefendAbAttrs(
-      IgnoreMoveEffectsAbAttr,
-      phase.getFirstTarget()!,
-      phase.getUserPokemon()!,
-      null,
-      null,
-      false,
-      chance,
-    );
+    applyAbAttrs(IgnoreMoveEffectsAbAttr, phase.getFirstTarget()!, false, phase.getUserPokemon()!, move, chance);
     expect(chance.value).toBe(0);
   }, 20000);
 

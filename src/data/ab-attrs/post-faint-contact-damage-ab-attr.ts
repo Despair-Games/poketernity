@@ -20,9 +20,8 @@ export class PostFaintContactDamageAbAttr extends PostFaintAbAttr {
     this.damageRatio = damageRatio;
   }
 
-  override applyPostFaint(
+  override apply(
     pokemon: Pokemon,
-    _passive: boolean,
     simulated: boolean,
     attacker?: Pokemon,
     move?: Move,
@@ -31,7 +30,19 @@ export class PostFaintContactDamageAbAttr extends PostFaintAbAttr {
     if (move && attacker && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)) {
       //If the mon didn't die to indirect damage
       const cancelled = new BooleanHolder(false);
-      globalScene.getField(true).map((p) => applyAbAttrs(FieldPreventExplosionLikeAbAttr, p, simulated, cancelled));
+      globalScene
+        .getField(true)
+        .map((p) =>
+          applyAbAttrs(
+            FieldPreventExplosionLikeAbAttr,
+            p,
+            simulated,
+            cancelled,
+            getPokemonNameWithAffix(attacker),
+            move.name,
+          ),
+        );
+
       applyAbAttrs(BlockNonDirectDamageAbAttr, attacker, simulated, cancelled);
       if (cancelled.value) {
         return false;
