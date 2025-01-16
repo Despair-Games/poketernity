@@ -16,6 +16,7 @@ import type { BooleanHolder } from "#app/utils";
 import type { BattlerIndex } from "#enums/battler-index";
 import { MoveTarget } from "#enums/move-target";
 import type { Moves } from "#enums/moves";
+
 /**
  * Attribute used to call a move.
  * Used by other move attributes: {@linkcode RandomMoveAttr}, {@linkcode RandomMovesetMoveAttr}, {@linkcode CopyMoveAttr}
