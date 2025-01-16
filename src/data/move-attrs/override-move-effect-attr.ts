@@ -8,7 +8,7 @@ import type { BooleanHolder } from "#app/utils";
  * move effect chain in {@linkcode MoveEffectPhase}.
  * @extends MoveAttr
  */
-export class OverrideMoveEffectAttr extends MoveAttr {
+export abstract class OverrideMoveEffectAttr extends MoveAttr {
   /**
    * Applies effects that may cancel the subsequent effect
    * chain in {@linkcode MoveEffectPhase}
