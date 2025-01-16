@@ -13,7 +13,7 @@ import {
 import { PlayerGender } from "#enums/player-gender";
 import { getStatusEffectCatchRateMultiplier } from "#app/data/status-effect";
 import { achvs } from "#app/system/achv";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import type { PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import { Species } from "#enums/species";
@@ -708,7 +708,7 @@ export async function catchPokemon(
               () => {
                 globalScene.pokemonInfoContainer.makeRoomForConfirmUi(1, true);
                 globalScene.ui.setMode(
-                  Mode.CONFIRM,
+                  UiMode.CONFIRM,
                   () => {
                     const newPokemon = globalScene.addPlayerPokemon(
                       pokemon.species,
@@ -723,12 +723,12 @@ export async function catchPokemon(
                       pokemon,
                     );
                     globalScene.ui.setMode(
-                      Mode.SUMMARY,
+                      UiMode.SUMMARY,
                       newPokemon,
                       0,
                       SummaryUiMode.DEFAULT,
                       () => {
-                        globalScene.ui.setMode(Mode.MESSAGE).then(() => {
+                        globalScene.ui.setMode(UiMode.MESSAGE).then(() => {
                           promptRelease();
                         });
                       },
@@ -737,11 +737,11 @@ export async function catchPokemon(
                   },
                   () => {
                     globalScene.ui.setMode(
-                      Mode.PARTY,
+                      UiMode.PARTY,
                       PartyUiMode.RELEASE,
                       0,
                       (slotIndex: number, _option: PartyOption) => {
-                        globalScene.ui.setMode(Mode.MESSAGE).then(() => {
+                        globalScene.ui.setMode(UiMode.MESSAGE).then(() => {
                           if (slotIndex < 6) {
                             addToParty(slotIndex);
                           } else {
@@ -752,7 +752,7 @@ export async function catchPokemon(
                     );
                   },
                   () => {
-                    globalScene.ui.setMode(Mode.MESSAGE).then(() => {
+                    globalScene.ui.setMode(UiMode.MESSAGE).then(() => {
                       removePokemon();
                       end();
                     });

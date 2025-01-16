@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import PartyUiHandler from "#app/ui/party-ui-handler";
 import { PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { SwitchType } from "#enums/switch-type";
 import { BattlePhase } from "./abstract-battle-phase";
 import { PostSummonPhase } from "./post-summon-phase";
@@ -72,7 +72,7 @@ export class SwitchPhase extends BattlePhase {
       currentBattle.getBattlerCount() === 1 || globalScene.getPokemonAllowedInBattle().length > 1 ? this.fieldIndex : 0;
 
     ui.setMode(
-      Mode.PARTY,
+      UiMode.PARTY,
       this.isModal ? PartyUiMode.FAINT_SWITCH : PartyUiMode.POST_BATTLE_SWITCH,
       fieldIndex,
       (slotIndex: number, option: PartyOption) => {
@@ -85,7 +85,7 @@ export class SwitchPhase extends BattlePhase {
           const switchType = option === PartyOption.PASS_BATON ? SwitchType.BATON_PASS : this.switchType;
           globalScene.unshiftPhase(new SwitchSummonPhase(switchType, fieldIndex, slotIndex, this.doReturn));
         }
-        ui.setMode(Mode.MESSAGE).then(() => super.end());
+        ui.setMode(UiMode.MESSAGE).then(() => super.end());
       },
       PartyUiHandler.FilterNonFainted,
     );

@@ -156,7 +156,7 @@ import { MoveTypeChangeAbAttr } from "#app/data/ab-attrs/move-type-change-ab-att
 import { FieldMultiplyStatAbAttr } from "#app/data/ab-attrs/field-multiply-stat-ab-attr";
 import type PokemonData from "#app/system/pokemon-data";
 import { BattlerIndex } from "#enums/battler-index";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import type { PartyOption } from "#enums/party-option";
 import PartyUiHandler from "#app/ui/party-ui-handler";
 import { PartyUiMode } from "#enums/party-ui-mode";
@@ -4831,7 +4831,7 @@ export class PlayerPokemon extends Pokemon {
       this.leaveField(switchType === SwitchType.SWITCH);
 
       globalScene.ui.setMode(
-        Mode.PARTY,
+        UiMode.PARTY,
         PartyUiMode.FAINT_SWITCH,
         this.getFieldIndex(),
         (slotIndex: number, _option: PartyOption) => {
@@ -4841,7 +4841,7 @@ export class PlayerPokemon extends Pokemon {
               MoveEndPhase,
             );
           }
-          globalScene.ui.setMode(Mode.MESSAGE).then(resolve);
+          globalScene.ui.setMode(UiMode.MESSAGE).then(resolve);
         },
         PartyUiHandler.FilterNonFainted,
       );

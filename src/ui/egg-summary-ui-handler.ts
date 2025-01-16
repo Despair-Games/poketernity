@@ -1,4 +1,4 @@
-import { Mode } from "./ui";
+import { UiMode } from "../enums/ui-mode";
 import PokemonIconAnimHandler from "./pokemon-icon-anim-handler";
 import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
 import MessageUiHandler from "./message-ui-handler";
@@ -57,7 +57,7 @@ export default class EggSummaryUiHandler extends MessageUiHandler {
   public readonly eventTarget: EventTarget = new EventTarget();
 
   constructor() {
-    super(Mode.EGG_HATCH_SUMMARY);
+    super(UiMode.EGG_HATCH_SUMMARY);
   }
 
   setup() {

@@ -23,7 +23,7 @@ import { achvs, ChallengeAchv } from "#app/system/achv";
 import { settings } from "#app/system/settings/settings-manager";
 import TrainerData from "#app/system/trainer-data";
 import { Unlockables } from "#enums/unlockables";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { isLocal, isLocalServerConnected } from "#app/utils";
 import { PlayerGender } from "#enums/player-gender";
 import { TrainerType } from "#enums/trainer-type";
@@ -103,7 +103,7 @@ export class GameOverPhase extends BattlePhase {
 
       ui.showText(i18next.t("battle:retryBattle"), null, () => {
         ui.setMode(
-          Mode.CONFIRM,
+          UiMode.CONFIRM,
           () => reloadGame(),
           () => this.handleGameOver(),
           false,

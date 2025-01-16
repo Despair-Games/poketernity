@@ -7,7 +7,7 @@ import { getVoucherTypeIcon, getVoucherTypeName, vouchers } from "#app/system/vo
 import MessageUiHandler from "#app/ui/message-ui-handler";
 import { addTextObject } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
-import type { Mode } from "#app/ui/ui";
+import type { UiMode } from "../enums/ui-mode";
 import { addWindow } from "#app/ui/ui-theme";
 import { ScrollBar } from "#app/ui/scroll-bar";
 import { PlayerGender } from "#enums/player-gender";
@@ -61,7 +61,7 @@ export default class AchvsUiHandler extends MessageUiHandler {
   private cursorObj: Phaser.GameObjects.NineSlice | null;
   private currentPage: Page;
 
-  constructor(mode: Mode | null = null) {
+  constructor(mode: UiMode | null = null) {
     super(mode);
 
     this.achvsTotal = Object.keys(achvs).length;

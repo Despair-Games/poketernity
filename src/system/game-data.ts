@@ -32,7 +32,7 @@ import type { Egg } from "#app/data/egg";
 import { vouchers } from "#app/system/voucher";
 import { VoucherType } from "#enums/voucher-type";
 import { AES, enc } from "crypto-js";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { clientSessionId, loggedInUser, updateUserInfo } from "#app/account";
 import { Nature } from "#enums/nature";
 import { GameStats } from "#app/system/game-stats";
@@ -1371,7 +1371,7 @@ export class GameData {
             null,
             () => {
               globalScene.ui.setOverlayMode(
-                Mode.CONFIRM,
+                UiMode.CONFIRM,
                 () => {
                   localStorage.setItem(dataKey, encrypt(dataStr, bypassLogin));
 

@@ -1,5 +1,5 @@
 import AbstractBindingUiHandler from "./abstract-binding-ui-handler";
-import type { Mode } from "../ui";
+import type { UiMode } from "../../enums/ui-mode";
 import { Device } from "#enums/devices";
 import { getIconWithSettingName, getKeyWithKeycode } from "#app/configs/inputs/configHandler";
 import { addTextObject } from "#app/ui/text";
@@ -7,7 +7,7 @@ import { TextStyle } from "#enums/text-style";
 import { globalScene } from "#app/global-scene";
 
 export default class GamepadBindingUiHandler extends AbstractBindingUiHandler {
-  constructor(mode: Mode | null = null) {
+  constructor(mode: UiMode | null = null) {
     super(mode);
     globalScene.input.gamepad?.on("down", this.gamepadButtonDown, this);
   }

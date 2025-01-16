@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "../../enums/ui-mode";
 import type { InputsIcons } from "#app/ui/settings/abstract-control-settings-ui-handler";
 import { addTextObject, setTextStyle } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
@@ -15,8 +15,8 @@ const RIGHT = "RIGHT";
  */
 export class NavigationManager {
   private static instance: NavigationManager;
-  public modes: Mode[];
-  public selectedMode: Mode = Mode.SETTINGS;
+  public modes: UiMode[];
+  public selectedMode: UiMode = UiMode.SETTINGS;
   public navigationMenus: NavigationMenu[] = new Array<NavigationMenu>();
   public labels: string[];
 
@@ -28,11 +28,11 @@ export class NavigationManager {
    */
   constructor() {
     this.modes = [
-      Mode.SETTINGS,
-      Mode.SETTINGS_DISPLAY,
-      Mode.SETTINGS_AUDIO,
-      Mode.SETTINGS_GAMEPAD,
-      Mode.SETTINGS_KEYBOARD,
+      UiMode.SETTINGS,
+      UiMode.SETTINGS_DISPLAY,
+      UiMode.SETTINGS_AUDIO,
+      UiMode.SETTINGS_GAMEPAD,
+      UiMode.SETTINGS_KEYBOARD,
     ];
     this.labels = [
       i18next.t("settings:general"),
@@ -44,7 +44,7 @@ export class NavigationManager {
   }
 
   public reset() {
-    this.selectedMode = Mode.SETTINGS;
+    this.selectedMode = UiMode.SETTINGS;
     this.updateNavigationMenus();
   }
 

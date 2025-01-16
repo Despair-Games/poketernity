@@ -1,5 +1,5 @@
 import UiHandler from "../ui-handler";
-import type { Mode } from "../ui";
+import type { UiMode } from "../../enums/ui-mode";
 import { addWindow } from "../ui-theme";
 import { addTextObject } from "../text";
 import { TextStyle } from "#enums/text-style";
@@ -52,7 +52,7 @@ export default abstract class AbstractBindingUiHandler extends UiHandler {
    *
    * @param mode - The UI mode.
    */
-  constructor(mode: Mode | null = null) {
+  constructor(mode: UiMode | null = null) {
     super(mode);
   }
 

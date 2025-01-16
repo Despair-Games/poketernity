@@ -1,6 +1,6 @@
 import { addTextObject } from "./text";
 import { TextStyle } from "#enums/text-style";
-import type { Mode } from "./ui";
+import type { UiMode } from "../enums/ui-mode";
 import UiHandler from "./ui-handler";
 import { addWindow } from "./ui-theme";
 import { Button } from "#enums/buttons";
@@ -51,7 +51,7 @@ export default class GameChallengesUiHandler extends UiHandler {
   private readonly leftArrowGap: number = 90; // distance from the label to the left arrow
   private readonly arrowSpacing: number = 3; // distance between the arrows and the value area
 
-  constructor(mode: Mode | null = null) {
+  constructor(mode: UiMode | null = null) {
     super(mode);
   }
 

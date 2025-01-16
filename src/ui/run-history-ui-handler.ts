@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import { GameModes } from "#enums/game-modes";
 import { addTextObject } from "./text";
 import { TextStyle } from "#enums/text-style";
-import { Mode } from "./ui";
+import { UiMode } from "../enums/ui-mode";
 import { addWindow } from "./ui-theme";
 import { fixedNumber, formatLargeNumber, isNullOrUndefined } from "#app/utils";
 import type PokemonData from "../system/pokemon-data";
@@ -42,7 +42,7 @@ export default class RunHistoryUiHandler extends MessageUiHandler {
   private runContainerInitialY: number;
 
   constructor() {
-    super(Mode.RUN_HISTORY);
+    super(UiMode.RUN_HISTORY);
   }
 
   override setup() {
@@ -112,7 +112,7 @@ export default class RunHistoryUiHandler extends MessageUiHandler {
       if (button === Button.ACTION) {
         const cursor = this.cursor + this.scrollCursor;
         if (this.runs[cursor]) {
-          globalScene.ui.setOverlayMode(Mode.RUN_INFO, this.runs[cursor].entryData, RunDisplayMode.RUN_HISTORY, true);
+          globalScene.ui.setOverlayMode(UiMode.RUN_INFO, this.runs[cursor].entryData, RunDisplayMode.RUN_HISTORY, true);
         } else {
           return false;
         }

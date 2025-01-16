@@ -16,7 +16,7 @@ import { TextStyle } from "#enums/text-style";
 import { reverseValueToKeySetting, truncateString } from "#app/utils";
 import { Device } from "#enums/devices";
 import i18next from "i18next";
-import { Mode } from "../ui";
+import { UiMode } from "../../enums/ui-mode";
 
 /**
  * Class representing the settings UI handler for keyboards.
@@ -29,7 +29,7 @@ export default class SettingsKeyboardUiHandler extends AbstractControlSettingsUi
    *
    * @param mode - The UI mode, optional.
    */
-  constructor(mode: Mode | null = null) {
+  constructor(mode: UiMode | null = null) {
     super(mode);
     this.titleSelected = "Keyboard";
     this.setting = SettingKeyboard;
@@ -84,10 +84,10 @@ export default class SettingsKeyboardUiHandler extends AbstractControlSettingsUi
    * Handle the home key press event: reset mappings for the current device
    */
   onHomeDown(): void {
-    if (![Mode.SETTINGS_KEYBOARD, Mode.SETTINGS_GAMEPAD].includes(globalScene.ui.getMode())) {
+    if (![UiMode.SETTINGS_KEYBOARD, UiMode.SETTINGS_GAMEPAD].includes(globalScene.ui.getMode())) {
       return;
     }
-    const isKeyboard = globalScene.ui.getMode() === Mode.SETTINGS_KEYBOARD;
+    const isKeyboard = globalScene.ui.getMode() === UiMode.SETTINGS_KEYBOARD;
     globalScene.gameData.resetMappingToFactory(isKeyboard ? Device.KEYBOARD : Device.GAMEPAD);
     NavigationManager.getInstance().updateIcons();
   }
@@ -96,7 +96,7 @@ export default class SettingsKeyboardUiHandler extends AbstractControlSettingsUi
    * Handle the delete key press event: remove mapping for the current button
    */
   onDeleteDown(): void {
-    if (globalScene.ui.getMode() !== Mode.SETTINGS_KEYBOARD) {
+    if (globalScene.ui.getMode() !== UiMode.SETTINGS_KEYBOARD) {
       return;
     }
     const cursor = this.cursor + this.scrollCursor; // Calculate the absolute cursor position.

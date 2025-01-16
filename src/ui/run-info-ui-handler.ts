@@ -3,7 +3,7 @@ import UiHandler from "./ui-handler";
 import type { SessionSaveData } from "#app/@types/SessionData";
 import { addTextObject, addBBCodeTextObject, getTextColor } from "./text";
 import { TextStyle } from "#enums/text-style";
-import { Mode } from "./ui";
+import { UiMode } from "../enums/ui-mode";
 import { addWindow } from "./ui-theme";
 import { getPokeballAtlasKey } from "#app/data/pokeball";
 import {
@@ -72,7 +72,7 @@ export default class RunInfoUiHandler extends UiHandler {
   private modifiersModule: any;
 
   constructor() {
-    super(Mode.RUN_INFO);
+    super(UiMode.RUN_INFO);
   }
 
   override async setup() {

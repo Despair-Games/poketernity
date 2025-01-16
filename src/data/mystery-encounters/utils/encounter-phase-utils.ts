@@ -31,7 +31,7 @@ import type { OptionSelectConfig, OptionSelectItem } from "#app/ui/abstact-optio
 import type { PokemonSelectFilter } from "#app/ui/party-ui-handler";
 import type { PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { isNullOrUndefined, randSeedInt, randomString } from "#app/utils";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import { Biome } from "#enums/biome";
@@ -524,7 +524,7 @@ export function selectPokemonForOption(
 
     // Open party screen to choose pokemon
     globalScene.ui.setMode(
-      Mode.PARTY,
+      UiMode.PARTY,
       PartyUiMode.SELECT,
       -1,
       (slotIndex: number, _option: PartyOption) => {
@@ -542,7 +542,7 @@ export function selectPokemonForOption(
             }
 
             // There is a second option to choose after selecting the Pokemon
-            globalScene.ui.setMode(Mode.MESSAGE).then(() => {
+            globalScene.ui.setMode(UiMode.MESSAGE).then(() => {
               const displayOptions = () => {
                 // Always appends a cancel option to bottom of options
                 const fullOptions = secondaryOptions
@@ -584,7 +584,7 @@ export function selectPokemonForOption(
                 if (fullOptions[0].onHover) {
                   fullOptions[0].onHover();
                 }
-                globalScene.ui.setModeWithoutClear(Mode.OPTION_SELECT, config, null, true);
+                globalScene.ui.setModeWithoutClear(UiMode.OPTION_SELECT, config, null, true);
               };
 
               const textPromptKey =
@@ -636,20 +636,20 @@ export function selectOptionThenPokemon(
     const modeToSetOnExit = globalScene.ui.getMode();
 
     const displayOptions = (config: OptionSelectConfig) => {
-      globalScene.ui.setMode(Mode.MESSAGE).then(() => {
+      globalScene.ui.setMode(UiMode.MESSAGE).then(() => {
         if (!optionSelectPromptKey) {
           // Do hover over the starting selection option
           if (fullOptions[0].onHover) {
             fullOptions[0].onHover();
           }
-          globalScene.ui.setMode(Mode.OPTION_SELECT, config);
+          globalScene.ui.setMode(UiMode.OPTION_SELECT, config);
         } else {
           showEncounterText(optionSelectPromptKey).then(() => {
             // Do hover over the starting selection option
             if (fullOptions[0].onHover) {
               fullOptions[0].onHover();
             }
-            globalScene.ui.setMode(Mode.OPTION_SELECT, config);
+            globalScene.ui.setMode(UiMode.OPTION_SELECT, config);
           });
         }
       });
@@ -658,7 +658,7 @@ export function selectOptionThenPokemon(
     const selectPokemonAfterOption = (selectedOptionIndex: number) => {
       // Open party screen to choose a Pokemon
       globalScene.ui.setMode(
-        Mode.PARTY,
+        UiMode.PARTY,
         PartyUiMode.SELECT,
         -1,
         (slotIndex: number, _option: PartyOption) => {

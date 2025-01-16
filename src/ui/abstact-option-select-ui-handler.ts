@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { addTextObject, getTextStyleOptions } from "./text";
 import { TextStyle } from "#enums/text-style";
-import { Mode } from "./ui";
+import { UiMode } from "../enums/ui-mode";
 import UiHandler from "./ui-handler";
 import { addWindow } from "./ui-theme";
 import { rgbHexToRgba, fixedNumber } from "#app/utils";
@@ -49,7 +49,7 @@ export default abstract class AbstractOptionSelectUiHandler extends UiHandler {
 
   private cursorObj: Phaser.GameObjects.Image | null;
 
-  constructor(mode: Mode | null) {
+  constructor(mode: UiMode | null) {
     super(mode);
   }
 
@@ -63,7 +63,7 @@ export default abstract class AbstractOptionSelectUiHandler extends UiHandler {
     const ui = this.getUi();
 
     this.optionSelectContainer = globalScene.add.container(globalScene.game.canvas.width / 6 - 1, -48);
-    this.optionSelectContainer.setName(`option-select-${this.mode ? Mode[this.mode] : "UNKNOWN"}`);
+    this.optionSelectContainer.setName(`option-select-${this.mode ? UiMode[this.mode] : "UNKNOWN"}`);
     this.optionSelectContainer.setVisible(false);
     ui.add(this.optionSelectContainer);
 
@@ -87,7 +87,7 @@ export default abstract class AbstractOptionSelectUiHandler extends UiHandler {
     // for performance reasons, this limits how many options we can see at once. Without this, it would try to make text options for every single options
     // which makes the performance take a hit. If there's not enough options to do this (set to 10 at the moment) and the ui mode !== Mode.AUTO_COMPLETE,
     // this is ignored and the original code is untouched, with the options array being all the options from the config
-    if (configOptions.length >= 10 && globalScene.ui.getMode() === Mode.AUTO_COMPLETE) {
+    if (configOptions.length >= 10 && globalScene.ui.getMode() === UiMode.AUTO_COMPLETE) {
       const optionsScrollTotal = configOptions.length;
       const optionStartIndex = this.scrollCursor;
       const optionEndIndex = Math.min(
@@ -232,7 +232,7 @@ export default abstract class AbstractOptionSelectUiHandler extends UiHandler {
       } else {
         ui.playError();
       }
-    } else if (button === Button.SUBMIT && ui.getMode() === Mode.AUTO_COMPLETE) {
+    } else if (button === Button.SUBMIT && ui.getMode() === UiMode.AUTO_COMPLETE) {
       // this is here to differentiate between a Button.SUBMIT vs Button.ACTION within the autocomplete handler
       // this is here because Button.ACTION is picked up as z on the keyboard, meaning if you're typing and hit z, it'll select the option you've chosen
       success = true;

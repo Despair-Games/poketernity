@@ -9,7 +9,7 @@ import { isNullOrUndefined, fixedNumber, getPlayTimeString, formatLargeNumber } 
 import MessageUiHandler from "./message-ui-handler";
 import { addTextObject } from "./text";
 import { TextStyle } from "#enums/text-style";
-import { Mode } from "./ui";
+import { UiMode } from "../enums/ui-mode";
 import { addWindow } from "./ui-theme";
 import { RunDisplayMode } from "#enums/run-display-mode";
 import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
@@ -36,7 +36,7 @@ export default class SaveSlotSelectUiHandler extends MessageUiHandler {
   private sessionSlotsContainerInitialY: number;
 
   constructor() {
-    super(Mode.SAVE_SLOT);
+    super(UiMode.SAVE_SLOT);
   }
 
   setup() {
@@ -118,13 +118,13 @@ export default class SaveSlotSelectUiHandler extends MessageUiHandler {
                 this.saveSlotSelectCallback = null;
                 ui.revertMode();
                 ui.showText("", 0);
-                ui.setMode(Mode.MESSAGE);
+                ui.setMode(UiMode.MESSAGE);
                 originalCallback && originalCallback(cursor);
               };
               if (this.sessionSlots[cursor].hasData) {
                 ui.showText(i18next.t("saveSlotSelectUiHandler:overwriteData"), null, () => {
                   ui.setOverlayMode(
-                    Mode.CONFIRM,
+                    UiMode.CONFIRM,
                     () => {
                       globalScene.gameData.deleteSession(cursor).then((response) => {
                         if (response === false) {
@@ -179,7 +179,7 @@ export default class SaveSlotSelectUiHandler extends MessageUiHandler {
         case Button.RIGHT:
           if (this.sessionSlots[cursorPosition].hasData && this.sessionSlots[cursorPosition].saveData) {
             globalScene.ui.setOverlayMode(
-              Mode.RUN_INFO,
+              UiMode.RUN_INFO,
               this.sessionSlots[cursorPosition].saveData,
               RunDisplayMode.SESSION_PREVIEW,
             );

@@ -2,7 +2,7 @@ import { getPokeballName } from "../data/pokeball";
 import { addTextObject, getTextStyleOptions } from "./text";
 import { TextStyle } from "#enums/text-style";
 import { Command } from "../enums/command";
-import { Mode } from "./ui";
+import { UiMode } from "../enums/ui-mode";
 import UiHandler from "./ui-handler";
 import { addWindow } from "./ui-theme";
 import { Button } from "#enums/buttons";
@@ -23,7 +23,7 @@ export default class BallUiHandler extends UiHandler {
   private scale: number = 0.1666666667;
 
   constructor() {
-    super(Mode.BALL);
+    super(UiMode.BALL);
   }
 
   setup() {
@@ -91,15 +91,15 @@ export default class BallUiHandler extends UiHandler {
       if (button === Button.ACTION && this.cursor < pokeballTypeCount) {
         if (globalScene.pokeballCounts[this.cursor]) {
           if (commandPhase.handleCommand(Command.BALL, this.cursor)) {
-            globalScene.ui.setMode(Mode.COMMAND, commandPhase.getFieldIndex());
-            globalScene.ui.setMode(Mode.MESSAGE);
+            globalScene.ui.setMode(UiMode.COMMAND, commandPhase.getFieldIndex());
+            globalScene.ui.setMode(UiMode.MESSAGE);
             success = true;
           }
         } else {
           ui.playError();
         }
       } else {
-        ui.setMode(Mode.COMMAND, commandPhase.getFieldIndex());
+        ui.setMode(UiMode.COMMAND, commandPhase.getFieldIndex());
         success = true;
       }
     } else {

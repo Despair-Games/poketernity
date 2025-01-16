@@ -8,7 +8,7 @@ import type { InputsIcons } from "#app/ui/settings/abstract-control-settings-ui-
 import NavigationMenu, { NavigationManager } from "#app/ui/settings/navigationMenu";
 import { addTextObject } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "../../enums/ui-mode";
 import { addWindow } from "#app/ui/ui-theme";
 import { capitalize, hasTouchscreen } from "#app/utils";
 import { Button } from "#enums/buttons";
@@ -478,7 +478,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
         const confirmationMessage =
           uiItem.options[cursor].confirmationMessage ?? i18next.t("settings:defaultConfirmMessage");
         globalScene.ui.showText(confirmationMessage, null, () => {
-          globalScene.ui.setOverlayMode(Mode.CONFIRM, confirmUpdateSetting, cancelUpdateSetting, null, null, 1, 750);
+          globalScene.ui.setOverlayMode(UiMode.CONFIRM, confirmUpdateSetting, cancelUpdateSetting, null, null, 1, 750);
         });
       } else {
         this.handleSaveSetting<typeof value>(uiItem, value);
@@ -599,7 +599,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
   protected showConfirm(text: string, onConfirm: () => void, onCancel?: () => void) {
     this.showText(text, undefined, () => {
       globalScene.ui.setOverlayMode(
-        Mode.CONFIRM,
+        UiMode.CONFIRM,
         () => {
           NavigationManager.getInstance().reset();
           // revert confirm mode.

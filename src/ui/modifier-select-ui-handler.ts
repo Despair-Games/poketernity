@@ -5,7 +5,7 @@ import { getPokeballAtlasKey } from "#app/data/pokeball";
 import { addTextObject, getTextStyleOptions, getModifierTierTextTint, getTextColor } from "./text";
 import { TextStyle } from "#enums/text-style";
 import AwaitableUiHandler from "./awaitable-ui-handler";
-import { Mode } from "./ui";
+import { UiMode } from "../enums/ui-mode";
 import { LockModifierTiersModifier, PokemonHeldItemModifier, HealShopCostModifier } from "../modifier/modifier";
 import { handleTutorial } from "../tutorial";
 import { Tutorial } from "#enums/tutorial";
@@ -56,7 +56,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
 
   constructor() {
     // TODO: why does it use Mode.CONFIRM and not Mode.MODIFIER_SELECT?
-    super(Mode.CONFIRM);
+    super(UiMode.CONFIRM);
 
     this.options = [];
     this.shopOptionsRows = [];

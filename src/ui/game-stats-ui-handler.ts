@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import { addTextObject } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
-import type { Mode } from "#app/ui/ui";
+import type { UiMode } from "../enums/ui-mode";
 import UiHandler from "#app/ui/ui-handler";
 import { addWindow } from "#app/ui/ui-theme";
 import { getPlayTimeString, formatFancyLargeNumber, toReadableString } from "#app/utils";
@@ -225,7 +225,7 @@ export default class GameStatsUiHandler extends UiHandler {
   private arrowUp: Phaser.GameObjects.Sprite;
   private arrowDown: Phaser.GameObjects.Sprite;
 
-  constructor(mode: Mode | null = null) {
+  constructor(mode: UiMode | null = null) {
     super(mode);
 
     this.statLabels = [];

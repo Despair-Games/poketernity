@@ -1,6 +1,6 @@
 import { addTextObject } from "./text";
 import { TextStyle } from "#enums/text-style";
-import type { Mode } from "./ui";
+import type { UiMode } from "../enums/ui-mode";
 import UiHandler from "./ui-handler";
 import { addWindow } from "./ui-theme";
 import { WindowVariant } from "#enums/window-variant";
@@ -19,7 +19,7 @@ export abstract class ModalUiHandler extends UiHandler {
   protected buttonBgs: Phaser.GameObjects.NineSlice[];
   protected buttonLabels: Phaser.GameObjects.Text[];
 
-  constructor(mode: Mode | null = null) {
+  constructor(mode: UiMode | null = null) {
     super(mode);
 
     this.buttonContainers = [];

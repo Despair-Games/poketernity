@@ -18,7 +18,7 @@ import { Unlockables } from "#enums/unlockables";
 import { vouchers } from "#app/system/voucher";
 import type { OptionSelectConfig, OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler";
 import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { isLocal, isLocalServerConnected } from "#app/utils";
 import { Gender } from "#enums/gender";
 import i18next from "i18next";
@@ -79,7 +79,7 @@ export class TitlePhase extends Phase {
         handler: () => {
           const setModeAndEnd = (gameMode: GameModes): void => {
             this.gameMode = gameMode;
-            ui.setMode(Mode.MESSAGE);
+            ui.setMode(UiMode.MESSAGE);
             ui.clearText();
             this.end();
           };
@@ -130,11 +130,11 @@ export class TitlePhase extends Phase {
             });
 
             ui.showText(i18next.t("menu:selectGameMode"), null, () =>
-              ui.setOverlayMode(Mode.OPTION_SELECT, { options: options }),
+              ui.setOverlayMode(UiMode.OPTION_SELECT, { options: options }),
             );
           } else {
             this.gameMode = GameModes.CLASSIC;
-            ui.setMode(Mode.MESSAGE);
+            ui.setMode(UiMode.MESSAGE);
             ui.clearText();
             this.end();
           }
@@ -144,7 +144,7 @@ export class TitlePhase extends Phase {
       {
         label: i18next.t("menu:loadGame"),
         handler: () => {
-          ui.setOverlayMode(Mode.SAVE_SLOT, SaveSlotUiMode.LOAD, (slotId: number) => {
+          ui.setOverlayMode(UiMode.SAVE_SLOT, SaveSlotUiMode.LOAD, (slotId: number) => {
             if (slotId === -1) {
               return this.showOptions();
             }
@@ -164,7 +164,7 @@ export class TitlePhase extends Phase {
       {
         label: i18next.t("menu:settings"),
         handler: () => {
-          ui.setOverlayMode(Mode.SETTINGS);
+          ui.setOverlayMode(UiMode.SETTINGS);
           return true;
         },
         keepOpen: true,
@@ -175,14 +175,14 @@ export class TitlePhase extends Phase {
       noCancel: true,
       yOffset: 47,
     };
-    globalScene.ui.setMode(Mode.TITLE, config);
+    globalScene.ui.setMode(UiMode.TITLE, config);
   }
 
   public loadSaveSlot(slotId: number): void {
     const { gameData, ui } = globalScene;
 
     globalScene.sessionSlotId = slotId > -1 || !loggedInUser ? slotId : loggedInUser.lastSessionSlot;
-    ui.setMode(Mode.MESSAGE);
+    ui.setMode(UiMode.MESSAGE);
     ui.resetModeChain();
 
     gameData
@@ -204,7 +204,7 @@ export class TitlePhase extends Phase {
   public initDailyRun(): void {
     const { gameData, time, ui } = globalScene;
 
-    ui.setMode(Mode.SAVE_SLOT, SaveSlotUiMode.SAVE, (slotId: number) => {
+    ui.setMode(UiMode.SAVE_SLOT, SaveSlotUiMode.SAVE, (slotId: number) => {
       globalScene.clearPhaseQueue();
       if (slotId === -1) {
         globalScene.pushPhase(new TitlePhase());

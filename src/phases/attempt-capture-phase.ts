@@ -18,7 +18,7 @@ import { achvs } from "#app/system/achv";
 import { type PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import { SummaryUiMode } from "#enums/summary-ui-mode";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { type PokeballType } from "#enums/pokeball";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
@@ -296,7 +296,7 @@ export class AttemptCapturePhase extends PokemonPhase {
               ui.showText(i18next.t("battle:partyFull", { pokemonName: pokemon.getNameToRender() }), null, () => {
                 pokemonInfoContainer.makeRoomForConfirmUi(1, true);
                 ui.setMode(
-                  Mode.CONFIRM,
+                  UiMode.CONFIRM,
                   () => {
                     const newPokemon = globalScene.addPlayerPokemon(
                       pokemon.species,
@@ -311,12 +311,12 @@ export class AttemptCapturePhase extends PokemonPhase {
                       pokemon,
                     );
                     ui.setMode(
-                      Mode.SUMMARY,
+                      UiMode.SUMMARY,
                       newPokemon,
                       0,
                       SummaryUiMode.DEFAULT,
                       () => {
-                        ui.setMode(Mode.MESSAGE).then(() => {
+                        ui.setMode(UiMode.MESSAGE).then(() => {
                           promptRelease();
                         });
                       },
@@ -325,11 +325,11 @@ export class AttemptCapturePhase extends PokemonPhase {
                   },
                   () => {
                     ui.setMode(
-                      Mode.PARTY,
+                      UiMode.PARTY,
                       PartyUiMode.RELEASE,
                       this.fieldIndex,
                       (slotIndex: number, _option: PartyOption) => {
-                        ui.setMode(Mode.MESSAGE).then(() => {
+                        ui.setMode(UiMode.MESSAGE).then(() => {
                           if (slotIndex < 6) {
                             addToParty(slotIndex);
                           } else {
@@ -340,7 +340,7 @@ export class AttemptCapturePhase extends PokemonPhase {
                     );
                   },
                   () => {
-                    ui.setMode(Mode.MESSAGE).then(() => {
+                    ui.setMode(UiMode.MESSAGE).then(() => {
                       removePokemon();
                       end();
                     });

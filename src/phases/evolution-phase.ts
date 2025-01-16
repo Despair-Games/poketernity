@@ -13,7 +13,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { EndEvolutionPhase } from "#app/phases/end-evolution-phase";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { fixedNumber } from "#app/utils";
 import i18next from "i18next";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
@@ -175,7 +175,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
               this.end();
             };
             ui.setOverlayMode(
-              Mode.CONFIRM,
+              UiMode.CONFIRM,
               () => {
                 ui.revertMode();
                 this.pokemon.pauseEvolutions = true;

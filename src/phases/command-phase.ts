@@ -13,7 +13,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { FieldPhase } from "#app/phases/abstract-field-phase";
 import { SelectTargetPhase } from "#app/phases/select-target-phase";
 import { Command } from "#enums/command";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { isNullOrUndefined } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -46,7 +46,7 @@ export class CommandPhase extends FieldPhase {
 
     globalScene.updateGameInfo();
 
-    const commandUiHandler = globalScene.ui.handlers[Mode.COMMAND];
+    const commandUiHandler = globalScene.ui.handlers[UiMode.COMMAND];
 
     if (commandUiHandler) {
       if (currentBattle.turn === 1 || commandUiHandler.getCursor() === Command.POKEMON) {
@@ -121,15 +121,15 @@ export class CommandPhase extends FieldPhase {
             multiple: queuedMove.targets.length > 1,
           });
         } else {
-          ui.setMode(Mode.COMMAND, this.fieldIndex);
+          ui.setMode(UiMode.COMMAND, this.fieldIndex);
         }
       }
     } else {
       if (currentBattle.isBattleMysteryEncounter() && currentBattle.mysteryEncounter?.skipToFightInput) {
         ui.clearText();
-        ui.setMode(Mode.FIGHT, this.fieldIndex);
+        ui.setMode(UiMode.FIGHT, this.fieldIndex);
       } else {
-        ui.setMode(Mode.COMMAND, this.fieldIndex);
+        ui.setMode(UiMode.COMMAND, this.fieldIndex);
       }
     }
   }
@@ -167,11 +167,11 @@ export class CommandPhase extends FieldPhase {
 
     const failCatchRunCallback = (): void => {
       ui.showText("", 0);
-      ui.setMode(Mode.COMMAND, this.fieldIndex);
+      ui.setMode(UiMode.COMMAND, this.fieldIndex);
     };
     const failCatchRun = (i18nKey: string): void => {
-      ui.setMode(Mode.COMMAND, this.fieldIndex);
-      ui.setMode(Mode.MESSAGE);
+      ui.setMode(UiMode.COMMAND, this.fieldIndex);
+      ui.setMode(UiMode.MESSAGE);
       ui.showText(i18next.t(i18nKey), null, () => failCatchRunCallback(), null, true);
     };
 
@@ -219,7 +219,7 @@ export class CommandPhase extends FieldPhase {
           success = true;
         } else if (cursor < playerPokemon.getMoveset().length) {
           const move = playerPokemon.getMoveset()[cursor];
-          ui.setMode(Mode.MESSAGE);
+          ui.setMode(UiMode.MESSAGE);
 
           let errorMessageKey: string;
           if (playerPokemon.isMoveRestricted(move.moveId, playerPokemon)) {
@@ -239,7 +239,7 @@ export class CommandPhase extends FieldPhase {
             null,
             () => {
               ui.clearText();
-              ui.setMode(Mode.FIGHT, this.fieldIndex);
+              ui.setMode(UiMode.FIGHT, this.fieldIndex);
             },
             null,
             true,
@@ -318,7 +318,7 @@ export class CommandPhase extends FieldPhase {
             () => {
               ui.showText("", 0);
               if (!isSwitch) {
-                ui.setMode(Mode.COMMAND, this.fieldIndex);
+                ui.setMode(UiMode.COMMAND, this.fieldIndex);
               }
             },
             null,
@@ -336,7 +336,7 @@ export class CommandPhase extends FieldPhase {
           }
         } else if (trappedAbMessages.length > 0) {
           if (!isSwitch) {
-            ui.setMode(Mode.MESSAGE);
+            ui.setMode(UiMode.MESSAGE);
           }
           showNoEscapeText(trappedAbMessages[0]);
         } else {
@@ -344,8 +344,8 @@ export class CommandPhase extends FieldPhase {
           const fairyLockTag = arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.PLAYER);
 
           if (!isSwitch) {
-            ui.setMode(Mode.COMMAND, this.fieldIndex);
-            ui.setMode(Mode.MESSAGE);
+            ui.setMode(UiMode.COMMAND, this.fieldIndex);
+            ui.setMode(UiMode.MESSAGE);
           }
 
           const getNoEscapeText = (tag?: TrappedTag | SkyDropTag | FairyLockTag) => {
@@ -391,6 +391,6 @@ export class CommandPhase extends FieldPhase {
   }
 
   public override end(): void {
-    globalScene.ui.setMode(Mode.MESSAGE).then(() => super.end());
+    globalScene.ui.setMode(UiMode.MESSAGE).then(() => super.end());
   }
 }
