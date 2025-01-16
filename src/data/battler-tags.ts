@@ -37,7 +37,6 @@ import { EFFECTIVE_STATS, getStatKey, Stat, type BattleStat, type EffectiveStat 
 import { StatusEffect } from "#enums/status-effect";
 import { WeatherType } from "#enums/weather-type";
 import { ReverseDrainAbAttr } from "./ab-attrs/reverse-drain-ab-attr";
-import { ProtectStatAbAttr } from "./ab-attrs/protect-stat-ab-attr";
 import Overrides from "#app/overrides";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 
@@ -617,7 +616,7 @@ export class FlinchedTag extends BattlerTag {
   override onAdd(pokemon: Pokemon): void {
     super.onAdd(pokemon);
 
-    applyAbAttrs(FlinchEffectAbAttr, pokemon);
+    applyAbAttrs(FlinchEffectAbAttr, pokemon, false);
   }
 
   /**
@@ -2003,6 +2002,23 @@ export class SkyDropTag extends BattlerTag {
       onComplete: () => pokemon.setVisible(true),
     });
   }
+
+  /**
+   * Removes Sky Drop's effects from all Pokemon affected by this instance of Sky Drop.
+   */
+  public clearSkyDropEffects(): void {
+    globalScene.getField(true).forEach((pokemon) => {
+      if (pokemon?.getTag(BattlerTagType.SKY_DROP)?.sourceId === this.sourceId) {
+        // Cancel the Sky Drop user's next use of Sky Drop
+        if (this.sourceId === pokemon.id) {
+          globalScene.tryRemovePhase((phase) => phase instanceof MovePhase && phase.pokemon.id === pokemon.id);
+          pokemon.getMoveQueue().shift();
+          pokemon.removeTag(BattlerTagType.CHARGING);
+        }
+        pokemon.removeTag(BattlerTagType.SKY_DROP);
+      }
+    });
+  }
 }
 
 export class TypeImmuneTag extends BattlerTag {
@@ -2921,12 +2937,8 @@ export class MysteryEncounterPostSummonTag extends BattlerTag {
     const ret = super.lapse(pokemon, lapseType);
 
     if (lapseType === BattlerTagLapseType.CUSTOM) {
-      const cancelled = new BooleanHolder(false);
-      applyAbAttrs(ProtectStatAbAttr, pokemon, false, cancelled);
-      if (!cancelled.value) {
-        if (pokemon.mysteryEncounterBattleEffects) {
-          pokemon.mysteryEncounterBattleEffects(pokemon);
-        }
+      if (pokemon.mysteryEncounterBattleEffects) {
+        pokemon.mysteryEncounterBattleEffects(pokemon);
       }
     }
 

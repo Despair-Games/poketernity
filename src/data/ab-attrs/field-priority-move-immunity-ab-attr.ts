@@ -5,9 +5,8 @@ import type { BooleanHolder } from "#app/utils";
 import { PreDefendAbAttr } from "./pre-defend-ab-attr";
 
 export class FieldPriorityMoveImmunityAbAttr extends PreDefendAbAttr {
-  override applyPreDefend(
+  override apply(
     _pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
     attacker: Pokemon,
     move: Move,

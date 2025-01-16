@@ -4,14 +4,22 @@ import type { HitResult } from "#enums/hit-result";
 import { AbAttr } from "./ab-attr";
 
 export class PostFaintAbAttr extends AbAttr {
-  applyPostFaint(
+  /**
+   * Applies an effect after the source Pokemon faints
+   * @param pokemon The {@linkcode Pokemon} with this ability
+   * @param simulated If `true`, suppresses changes to game state
+   * @param attacker The {@linkcode Pokemon} that caused the source to faint
+   * @param move The {@linkcode Move} that caused the source to faint
+   * @param hitResult The {@linkcode HitResult | effectiveness} of the
+   * KO-ing move.
+   * @returns `true` if effects from this attribute successfully apply
+   */
+  override apply(
     _pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
     _attacker?: Pokemon,
     _move?: Move,
     _hitResult?: HitResult,
-    ..._args: unknown[]
   ): boolean {
     return false;
   }

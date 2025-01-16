@@ -1,5 +1,5 @@
 import { PostBattleAbAttr } from "#app/data/ab-attrs/post-battle-ab-attr";
-import { applyPostBattleAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/ability";
 import { globalScene } from "#app/global-scene";
 import { LapsingPersistentModifier, LapsingPokemonHeldItemModifier } from "#app/modifier/modifier";
 import { BattlePhase } from "#app/phases/abstract-battle-phase";
@@ -50,7 +50,7 @@ export class BattleEndPhase extends BattlePhase {
     }
 
     for (const pokemon of globalScene.getPokemonAllowedInBattle()) {
-      applyPostBattleAbAttrs(PostBattleAbAttr, pokemon, false, this.isVictory);
+      applyAbAttrs(PostBattleAbAttr, pokemon, false, this.isVictory);
     }
 
     if (currentBattle.moneyScattered) {

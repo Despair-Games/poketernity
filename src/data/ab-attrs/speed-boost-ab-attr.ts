@@ -5,7 +5,7 @@ import { Stat } from "#enums/stat";
 import { PostTurnAbAttr } from "./post-turn-ab-attr";
 
 export class SpeedBoostAbAttr extends PostTurnAbAttr {
-  override applyPostTurn(pokemon: Pokemon, _passive: boolean, simulated: boolean): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean): boolean {
     if (!simulated) {
       if (!pokemon.turnData.switchedInThisTurn && !pokemon.turnData.failedRunAway) {
         globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [Stat.SPD], 1));

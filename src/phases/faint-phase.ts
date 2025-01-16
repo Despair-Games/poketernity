@@ -1,6 +1,6 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { type BattlerTag } from "#app/data/battler-tags";
+import { SkyDropTag, type BattlerTag } from "#app/data/battler-tags";
 import { type MovePhase } from "#app/phases/move-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
@@ -10,7 +10,7 @@ import { BattleType } from "#enums/battle-type";
 import { PostFaintAbAttr } from "#app/data/ab-attrs/post-faint-ab-attr";
 import { PostKnockOutAbAttr } from "#app/data/ab-attrs/post-knock-out-ab-attr";
 import { PostVictoryAbAttr } from "#app/data/ab-attrs/post-victory-ab-attr";
-import { applyPostFaintAbAttrs, applyPostKnockOutAbAttrs, applyPostVictoryAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/ability";
 import { allMoves } from "#app/data/all-moves";
 import { FRIENDSHIP_LOSS_FROM_FAINT } from "#app/data/balance/starters";
 import { type DestinyBondTag, type GrudgeTag } from "#app/data/battler-tags";
@@ -34,6 +34,7 @@ import { SwitchPhase } from "./switch-phase";
 import { SwitchSummonPhase } from "./switch-summon-phase";
 import { ToggleDoublePositionPhase } from "./toggle-double-position-phase";
 import { VictoryPhase } from "./victory-phase";
+import { BattlerTagType } from "#enums/battler-tag-type";
 
 /**
  * Handles the effects of a pokemon fainting:
@@ -103,6 +104,11 @@ export class FaintPhase extends PokemonPhase {
       }
     }
 
+    faintPokemon.getTag(SkyDropTag)?.clearSkyDropEffects();
+    faintPokemon.destroySubstitute();
+    faintPokemon.lapseTag(BattlerTagType.COMMANDED);
+    faintPokemon.resetSummonData();
+
     if (!this.preventEndure) {
       const instantReviveModifier = globalScene.applyModifier(
         PokemonInstantReviveModifier,
@@ -154,24 +160,25 @@ export class FaintPhase extends PokemonPhase {
 
     if (pokemon.turnData?.attacksReceived?.length) {
       const lastAttack = pokemon.turnData.attacksReceived[0];
-      applyPostFaintAbAttrs(
+      applyAbAttrs(
         PostFaintAbAttr,
         pokemon,
+        false,
         globalScene.getPokemonById(lastAttack.sourceId)!, // TODO: is this bang correct?
         new PokemonMove(lastAttack.move).getMove(),
         lastAttack.result,
       );
     } else {
       //If killed by indirect damage, apply post-faint abilities without providing a last move
-      applyPostFaintAbAttrs(PostFaintAbAttr, pokemon);
+      applyAbAttrs(PostFaintAbAttr, pokemon, false);
     }
 
     const alivePlayField = globalScene.getField(true);
-    alivePlayField.forEach((p) => applyPostKnockOutAbAttrs(PostKnockOutAbAttr, p, pokemon));
+    alivePlayField.forEach((p) => applyAbAttrs(PostKnockOutAbAttr, p, false, pokemon));
     if (pokemon.turnData?.attacksReceived?.length) {
       const defeatSource = globalScene.getPokemonById(pokemon.turnData.attacksReceived[0].sourceId);
       if (defeatSource?.isOnField()) {
-        applyPostVictoryAbAttrs(PostVictoryAbAttr, defeatSource);
+        applyAbAttrs(PostVictoryAbAttr, defeatSource, false);
         // TODO: Refactor Fell Stinger
         const pvmove = allMoves[pokemon.turnData.attacksReceived[0].move];
         const pvattrs = pvmove.getAttrs(PostVictoryStatStageChangeAttr);

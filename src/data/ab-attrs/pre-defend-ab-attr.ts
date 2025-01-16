@@ -1,16 +1,22 @@
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder } from "#app/utils";
 import { AbAttr } from "./ab-attr";
 
 export class PreDefendAbAttr extends AbAttr {
-  applyPreDefend(
+  /**
+   * Applies an effect before the source Pokemon is hit by an attack.
+   * @param pokemon The {@linkcode Pokemon} with this ability
+   * @param simulated If `true`, suppresses changes to game state
+   * @param attacker The {@linkcode Pokemon} attacking the source Pokemon
+   * @param move The {@linkcode Move} being used
+   * @param args Additional arguments required for the specific effect
+   * @returns `true` if effects from this attribute successfully apply
+   */
+  override apply(
     _pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
     _attacker: Pokemon,
-    _move: Move | null,
-    _cancelled: BooleanHolder | null,
+    _move?: Move,
     ..._args: unknown[]
   ): boolean {
     return false;

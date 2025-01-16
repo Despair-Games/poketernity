@@ -12,13 +12,7 @@ export class SuppressWeatherEffectAbAttr extends PreWeatherEffectAbAttr {
     this.affectsImmutable = affectsImmutable;
   }
 
-  override applyPreWeatherEffect(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    weather: Weather,
-    cancelled: BooleanHolder,
-  ): boolean {
+  override apply(_pokemon: Pokemon, _simulated: boolean, weather: Weather, cancelled: BooleanHolder): boolean {
     if (this.affectsImmutable || weather.isImmutable()) {
       cancelled.value = true;
       return true;

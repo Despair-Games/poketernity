@@ -11,9 +11,9 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import { StatStageChangeAttr } from "#app/data/move-attrs/stat-stage-change-attr";
 import { StatusEffectAttr } from "#app/data/move-attrs/status-effect-attr";
 import { NumberHolder } from "#app/utils";
-import { IgnoreMoveEffectsAbAttr } from "../ab-attrs/ignore-move-effect-ab-attr";
-import { MoveEffectChanceMultiplierAbAttr } from "../ab-attrs/move-effect-chance-multiplier-ab-attr";
-import { applyAbAttrs, applyPreDefendAbAttrs } from "../ability";
+import { IgnoreMoveEffectsAbAttr } from "#app/data/ab-attrs/ignore-move-effect-ab-attr";
+import { MoveEffectChanceMultiplierAbAttr } from "#app/data/ab-attrs/move-effect-chance-multiplier-ab-attr";
+import { applyAbAttrs } from "#app/data/ability";
 
 /**
  * Attribute used to determine the Biome/Terrain-based secondary
@@ -162,14 +162,14 @@ export class SecretPowerAttr extends MoveEffectAttr {
     target: Pokemon,
     move: Move,
     selfEffect: boolean,
-    showAbility?: boolean,
+    showAbility: boolean = false,
   ): number {
     const moveChance = new NumberHolder(this.effectChanceOverride ?? move.chance);
 
     applyAbAttrs(MoveEffectChanceMultiplierAbAttr, user, false, moveChance, move, showAbility);
 
     if (!selfEffect) {
-      applyPreDefendAbAttrs(IgnoreMoveEffectsAbAttr, target, user, null, null, false, moveChance);
+      applyAbAttrs(IgnoreMoveEffectsAbAttr, target, false, user, move, moveChance);
     }
     return moveChance.value;
   }

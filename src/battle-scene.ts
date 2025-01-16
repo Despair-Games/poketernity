@@ -17,6 +17,7 @@ import {
   BooleanHolder,
   NumberHolder,
   type Constructor,
+  randItem,
 } from "#app/utils";
 import type { Modifier, ModifierPredicate, TurnHeldItemTransferModifier } from "./modifier/modifier";
 import {
@@ -65,7 +66,7 @@ import {
 } from "#app/modifier/modifier-type";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import AbilityBar from "#app/ui/ability-bar";
-import { allAbilities, applyAbAttrs, applyPostBattleInitAbAttrs, applyPostItemLostAbAttrs } from "#app/data/ability";
+import { allAbilities, applyAbAttrs } from "#app/data/ability";
 import { PostItemLostAbAttr } from "./data/ab-attrs/post-item-lost-ab-attr";
 import type { FixedBattleConfig } from "#app/battle";
 import type { BattlerIndex } from "#enums/battler-index";
@@ -177,8 +178,10 @@ import { Animation } from "./animations";
 
 const DEBUG_RNG = false;
 
-const OPP_IVS_OVERRIDE_VALIDATED: number[] = (
-  Array.isArray(Overrides.OPP_IVS_OVERRIDE) ? Overrides.OPP_IVS_OVERRIDE : new Array(6).fill(Overrides.OPP_IVS_OVERRIDE)
+const ENEMY_IVS_OVERRIDE_VALIDATED: number[] = (
+  Array.isArray(Overrides.ENEMY_IVS_OVERRIDE)
+    ? Overrides.ENEMY_IVS_OVERRIDE
+    : new Array(6).fill(Overrides.ENEMY_IVS_OVERRIDE)
 ).map((iv) => (isNaN(iv) || iv === null || iv > 31 ? -1 : iv));
 
 export const startingWave = Overrides.STARTING_WAVE_OVERRIDE || 1;
@@ -941,17 +944,17 @@ export default class BattleScene extends SceneBase {
     dataSource?: PokemonData,
     postProcess?: (enemyPokemon: EnemyPokemon) => void,
   ): EnemyPokemon {
-    if (Overrides.OPP_LEVEL_OVERRIDE > 0) {
-      level = Overrides.OPP_LEVEL_OVERRIDE;
+    if (Overrides.ENEMY_LEVEL_OVERRIDE > 0) {
+      level = Overrides.ENEMY_LEVEL_OVERRIDE;
     }
-    if (Overrides.OPP_SPECIES_OVERRIDE) {
-      species = getPokemonSpecies(Overrides.OPP_SPECIES_OVERRIDE);
+    if (Overrides.ENEMY_SPECIES_OVERRIDE) {
+      species = getPokemonSpecies(Overrides.ENEMY_SPECIES_OVERRIDE);
       // The fact that a Pokemon is a boss or not can change based on its Species and level
       boss = this.getEncounterBossSegments(this.currentBattle.waveIndex, level, species) > 1;
     }
 
     const pokemon = new EnemyPokemon(species, level, trainerSlot, boss, shinyLock, dataSource);
-    if (Overrides.OPP_FUSION_OVERRIDE) {
+    if (Overrides.ENEMY_FUSION_OVERRIDE) {
       pokemon.generateFusionSpecies();
     }
 
@@ -973,8 +976,8 @@ export default class BattleScene extends SceneBase {
     }
 
     for (let i = 0; i < pokemon.ivs.length; i++) {
-      if (OPP_IVS_OVERRIDE_VALIDATED[i] > -1) {
-        pokemon.ivs[i] = OPP_IVS_OVERRIDE_VALIDATED[i];
+      if (ENEMY_IVS_OVERRIDE_VALIDATED[i] > -1) {
+        pokemon.ivs[i] = ENEMY_IVS_OVERRIDE_VALIDATED[i];
       }
     }
 
@@ -1435,7 +1438,7 @@ export default class BattleScene extends SceneBase {
 
         for (const pokemon of this.getPlayerParty()) {
           pokemon.resetBattleData();
-          applyPostBattleInitAbAttrs(PostBattleInitAbAttr, pokemon);
+          applyAbAttrs(PostBattleInitAbAttr, pokemon, false);
         }
 
         if (!this.trainer.visible) {
@@ -1640,9 +1643,9 @@ export default class BattleScene extends SceneBase {
     species?: PokemonSpecies,
     forceBoss: boolean = false,
   ): number {
-    if (Overrides.OPP_HEALTH_SEGMENTS_OVERRIDE > 1) {
-      return Overrides.OPP_HEALTH_SEGMENTS_OVERRIDE;
-    } else if (Overrides.OPP_HEALTH_SEGMENTS_OVERRIDE === 1) {
+    if (Overrides.ENEMY_HEALTH_SEGMENTS_OVERRIDE > 1) {
+      return Overrides.ENEMY_HEALTH_SEGMENTS_OVERRIDE;
+    } else if (Overrides.ENEMY_HEALTH_SEGMENTS_OVERRIDE === 1) {
       // The rest of the code expects to be returned 0 and not 1 if the enemy is not a boss
       return 0;
     }
@@ -2697,13 +2700,13 @@ export default class BattleScene extends SceneBase {
           if (target.isPlayer()) {
             this.addModifier(newItemModifier, ignoreUpdate, playSound, false, instant);
             if (source && itemLost) {
-              applyPostItemLostAbAttrs(PostItemLostAbAttr, source, false);
+              applyAbAttrs(PostItemLostAbAttr, source, false);
             }
             return true;
           } else {
             this.addEnemyModifier(newItemModifier, ignoreUpdate, instant);
             if (source && itemLost) {
-              applyPostItemLostAbAttrs(PostItemLostAbAttr, source, false);
+              applyAbAttrs(PostItemLostAbAttr, source, false);
             }
             return true;
           }
@@ -3323,6 +3326,47 @@ export default class BattleScene extends SceneBase {
         }
       }
     }
+  }
+
+  /**
+   * Checks if a {@linkcode Pokemon} can be released from party
+   * @param slotIndex the position of the Pokemon the player is trying to release
+   * @returns `true` if any of the remaining Pokemon in the party is {@linkcode Pokemon.isAllowedInBattle | allowed in battle}, otherwise `false`
+   */
+  canReleasePokemon(slotIndex: number): boolean {
+    const currentParty = this.getPlayerParty();
+    const postReleaseParty = currentParty.filter((p) => currentParty[slotIndex].id !== p.id);
+    return postReleaseParty.some((p) => p.isAllowedInBattle());
+  }
+
+  /**
+   * Removes the {@linkcode Pokemon} at the specified slot index and destroys it
+   * @param slotIndex the position of the Pokemon released
+   */
+  releasePokemon(slotIndex: number): void {
+    globalScene.removePartyMemberModifiers(slotIndex);
+    const releasedPokemon = globalScene.getPlayerParty().splice(slotIndex, 1)[0];
+    releasedPokemon.destroy();
+  }
+
+  /**
+   * Returns a randomly selected release message to be displayed when a player releases a {@linkcode Pokemon}
+   * @param pokemonName name of the Pokemon to be released
+   * @returns a string containing the message selected
+   */
+  getReleaseMessage(pokemonName: string): string {
+    const goodbyeKeys = [
+      "partyUiHandler:goodbye",
+      "partyUiHandler:byebye",
+      "partyUiHandler:farewell",
+      "partyUiHandler:soLong",
+      "partyUiHandler:thisIsWhereWePart",
+      "partyUiHandler:illMissYou",
+      "partyUiHandler:illNeverForgetYou",
+      "partyUiHandler:untilWeMeetAgain",
+      "partyUiHandler:sayonara",
+    ];
+    return i18next.t(randItem(goodbyeKeys), { pokemonName });
   }
 
   /**

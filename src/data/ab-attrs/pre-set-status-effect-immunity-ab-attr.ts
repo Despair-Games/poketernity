@@ -20,22 +20,7 @@ export class PreSetStatusEffectImmunityAbAttr extends PreSetStatusAbAttr {
     this.immuneEffects = immuneEffects;
   }
 
-  /**
-   * Applies immunity to supplied status effects.
-   *
-   * @param _pokemon - The Pokémon to which the status is being applied.
-   * @param _passive - n/a
-   * @param effect - The status effect being applied.
-   * @param cancelled - A holder for a boolean value indicating if the status application was cancelled.
-   * @returns A boolean indicating the result of the status application.
-   */
-  override applyPreSetStatus(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    effect: StatusEffect,
-    cancelled: BooleanHolder,
-  ): boolean {
+  override apply(_pokemon: Pokemon, _simulated: boolean, effect: StatusEffect, cancelled: BooleanHolder): boolean {
     if (this.immuneEffects.length < 1 || this.immuneEffects.includes(effect)) {
       cancelled.value = true;
       return true;
