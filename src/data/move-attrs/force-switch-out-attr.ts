@@ -4,7 +4,6 @@ import { MoveCategory } from "#enums/move-category";
 import { Moves } from "#enums/moves";
 import { SwitchType } from "#enums/switch-type";
 import type { Pokemon, EnemyPokemon } from "#app/field/pokemon";
-import { PlayerPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BattleEndPhase } from "#app/phases/battle-end-phase";
@@ -52,7 +51,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
     // (e.g. when it uses Flip Turn), make it spit out the Tatsugiri before switching out.
     switchOutTarget.lapseTag(BattlerTagType.COMMANDED);
 
-    if (switchOutTarget instanceof PlayerPokemon) {
+    if (switchOutTarget.isPlayer()) {
       /**
        * Check if Wimp Out/Emergency Exit activates due to being hit by U-turn or Volt Switch
        * If it did, the user of U-turn or Volt Switch will not be switched out.
@@ -203,7 +202,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
   getSwitchOutCondition(): MoveConditionFunc {
     return (user, target, _move) => {
       const switchOutTarget = this.selfSwitch ? user : target;
-      const player = switchOutTarget instanceof PlayerPokemon;
+      const player = switchOutTarget.isPlayer();
 
       if (!this.selfSwitch) {
         // Dondozo with an allied Tatsugiri in its mouth cannot be forced out
