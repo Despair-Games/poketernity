@@ -1028,7 +1028,7 @@ export function initMoves() {
     new SelfStatusMove(Moves.STOCKPILE, Type.NORMAL, -1, 20, -1, 0, 3)
       .condition((user) => (user.getTag(StockpilingTag)?.stockpiledCount ?? 0) < 3)
       .attr(AddBattlerTagAttr, BattlerTagType.STOCKPILING, true),
-    new AttackMove(Moves.SPIT_UP, Type.NORMAL, MoveCategory.SPECIAL, -1, -1, 10, -1, 0, 3)
+    new AttackMove(Moves.SPIT_UP, Type.NORMAL, MoveCategory.SPECIAL, -1, 100, 10, -1, 0, 3)
       .condition(hasStockpileStacksCondition)
       .attr(SpitUpPowerAttr, 100)
       .attr(RemoveBattlerTagAttr, [BattlerTagType.STOCKPILING], true),
@@ -1284,7 +1284,7 @@ export function initMoves() {
     new AttackMove(Moves.SAND_TOMB, Type.GROUND, MoveCategory.PHYSICAL, 35, 85, 15, -1, 0, 3)
       .attr(TrapAttr, BattlerTagType.SAND_TOMB)
       .makesContact(false),
-    new AttackMove(Moves.SHEER_COLD, Type.ICE, MoveCategory.SPECIAL, 200, 20, 5, -1, 0, 3)
+    new AttackMove(Moves.SHEER_COLD, Type.ICE, MoveCategory.SPECIAL, 200, 30, 5, -1, 0, 3)
       .attr(IceNoEffectTypeAttr)
       .attr(OneHitKOAttr)
       .attr(SheerColdAccuracyAttr),
@@ -1722,7 +1722,7 @@ export function initMoves() {
       1,
       true,
     ),
-    new SelfStatusMove(Moves.HEAL_ORDER, Type.BUG, -1, 5, -1, 0, 4).attr(HealAttr, 0.5).triageMove(),
+    new SelfStatusMove(Moves.HEAL_ORDER, Type.BUG, -1, 10, -1, 0, 4).attr(HealAttr, 0.5).triageMove(),
     new AttackMove(Moves.HEAD_SMASH, Type.ROCK, MoveCategory.PHYSICAL, 150, 80, 5, -1, 0, 4)
       .attr(RecoilAttr, false, 0.5)
       .recklessMove(),
@@ -2646,15 +2646,18 @@ export function initMoves() {
     /* Unused */
     new AttackMove(Moves.SINISTER_ARROW_RAID, Type.GHOST, MoveCategory.PHYSICAL, 180, -1, 1, -1, 0, 7)
       .makesContact(false)
+      .unimplemented()
       .edgeCase() // I assume it's because the user needs spirit shackle and decidueye
       .ignoresVirtual(),
     new AttackMove(Moves.MALICIOUS_MOONSAULT, Type.DARK, MoveCategory.PHYSICAL, 180, -1, 1, -1, 0, 7)
       .attr(AlwaysHitMinimizeAttr)
+      .unimplemented()
       .attr(HitsTagAttr, BattlerTagType.MINIMIZED, true)
       .edgeCase() // I assume it's because it needs darkest lariat and incineroar
       .ignoresVirtual(),
     new AttackMove(Moves.OCEANIC_OPERETTA, Type.WATER, MoveCategory.SPECIAL, 195, -1, 1, -1, 0, 7)
       .edgeCase() // I assume it's because it needs sparkling aria and primarina
+      .unimplemented()
       .ignoresVirtual(),
     new AttackMove(Moves.GUARDIAN_OF_ALOLA, Type.FAIRY, MoveCategory.SPECIAL, -1, -1, 1, -1, 0, 7)
       .unimplemented()
@@ -2663,15 +2666,19 @@ export function initMoves() {
       .unimplemented()
       .ignoresVirtual(),
     new AttackMove(Moves.STOKED_SPARKSURFER, Type.ELECTRIC, MoveCategory.SPECIAL, 175, -1, 1, 100, 0, 7)
+      .unimplemented()
       .edgeCase() // I assume it's because it needs thunderbolt and Alola Raichu
       .ignoresVirtual(),
     new AttackMove(Moves.PULVERIZING_PANCAKE, Type.NORMAL, MoveCategory.PHYSICAL, 210, -1, 1, -1, 0, 7)
       .edgeCase() // I assume it's because it needs giga impact and snorlax
+      .unimplemented()
       .ignoresVirtual(),
     new SelfStatusMove(Moves.EXTREME_EVOBOOST, Type.NORMAL, -1, 1, -1, 0, 7)
+      .unimplemented()
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD], 2, true)
       .ignoresVirtual(),
     new AttackMove(Moves.GENESIS_SUPERNOVA, Type.PSYCHIC, MoveCategory.SPECIAL, 185, -1, 1, 100, 0, 7)
+      .unimplemented()
       .attr(TerrainChangeAttr, TerrainType.PSYCHIC)
       .ignoresVirtual(),
     /* End Unused */
@@ -2728,6 +2735,7 @@ export function initMoves() {
     /* Unused */
     new AttackMove(Moves.TEN_MILLION_VOLT_THUNDERBOLT, Type.ELECTRIC, MoveCategory.SPECIAL, 195, -1, 1, -1, 0, 7)
       .edgeCase() // I assume it's because it needs thunderbolt and pikachu in a cap
+      .unimplemented()
       .ignoresVirtual(),
     /* End Unused */
     new AttackMove(Moves.MIND_BLOWN, Type.FIRE, MoveCategory.SPECIAL, 150, 100, 5, -1, 0, 7)
@@ -2743,26 +2751,32 @@ export function initMoves() {
     /* Unused */
     new AttackMove(Moves.LIGHT_THAT_BURNS_THE_SKY, Type.PSYCHIC, MoveCategory.SPECIAL, 200, -1, 1, -1, 0, 7)
       .attr(PhotonGeyserCategoryAttr)
+      .unimplemented()
       .ignoresAbilities()
       .ignoresVirtual(),
     new AttackMove(Moves.SEARING_SUNRAZE_SMASH, Type.STEEL, MoveCategory.PHYSICAL, 200, -1, 1, -1, 0, 7)
       .ignoresAbilities()
+      .unimplemented()
       .ignoresVirtual(),
     new AttackMove(Moves.MENACING_MOONRAZE_MAELSTROM, Type.GHOST, MoveCategory.SPECIAL, 200, -1, 1, -1, 0, 7)
       .ignoresAbilities()
+      .unimplemented()
       .ignoresVirtual(),
     new AttackMove(Moves.LETS_SNUGGLE_FOREVER, Type.FAIRY, MoveCategory.PHYSICAL, 190, -1, 1, -1, 0, 7)
       .edgeCase() // I assume it needs play rough and mimikyu
+      .unimplemented()
       .ignoresVirtual(),
     new AttackMove(Moves.SPLINTERED_STORMSHARDS, Type.ROCK, MoveCategory.PHYSICAL, 190, -1, 1, -1, 0, 7)
       .attr(ClearTerrainAttr)
       .makesContact(false)
+      .unimplemented()
       .ignoresVirtual(),
     new AttackMove(Moves.CLANGOROUS_SOULBLAZE, Type.DRAGON, MoveCategory.SPECIAL, 185, -1, 1, 100, 0, 7)
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD], 1, true, {
         firstTargetOnly: true,
       })
       .soundBased()
+      .unimplemented()
       .target(MoveTarget.ALL_NEAR_ENEMIES)
       .edgeCase() // I assume it needs clanging scales and Kommo-O
       .ignoresVirtual(),
@@ -3014,6 +3028,7 @@ export function initMoves() {
     new StatusMove(Moves.LIFE_DEW, Type.WATER, -1, 10, -1, 0, 8)
       .attr(HealAttr, 0.25, true, false)
       .target(MoveTarget.USER_AND_ALLIES)
+      .triageMove()
       .ignoresProtect(),
     new SelfStatusMove(Moves.OBSTRUCT, Type.DARK, 100, 10, -1, 4, 8)
       .attr(ProtectAttr, BattlerTagType.OBSTRUCT)
@@ -3112,6 +3127,7 @@ export function initMoves() {
     new StatusMove(Moves.JUNGLE_HEALING, Type.GRASS, -1, 10, -1, 0, 8)
       .attr(HealAttr, 0.25, true, false)
       .attr(HealStatusEffectAttr, false, getNonVolatileStatusEffects())
+      .triageMove()
       .target(MoveTarget.USER_AND_ALLIES),
     new AttackMove(Moves.WICKED_BLOW, Type.DARK, MoveCategory.PHYSICAL, 75, 100, 5, -1, 0, 8)
       .attr(CritOnlyAttr)
@@ -3196,6 +3212,7 @@ export function initMoves() {
       .danceMove(),
     new AttackMove(Moves.HEADLONG_RUSH, Type.GROUND, MoveCategory.PHYSICAL, 120, 100, 5, -1, 0, 8)
       .attr(StatStageChangeAttr, [Stat.DEF, Stat.SPDEF], -1, true)
+      .makesContact()
       .punchingMove(),
     new AttackMove(Moves.BARB_BARRAGE, Type.POISON, MoveCategory.PHYSICAL, 60, 100, 10, 50, 0, 8)
       .makesContact(false)
@@ -3245,7 +3262,7 @@ export function initMoves() {
       .attr(HealStatusEffectAttr, false, getNonVolatileStatusEffects())
       .target(MoveTarget.USER_AND_ALLIES)
       .triageMove(),
-    new SelfStatusMove(Moves.TAKE_HEART, Type.PSYCHIC, -1, 10, -1, 0, 8)
+    new SelfStatusMove(Moves.TAKE_HEART, Type.PSYCHIC, -1, 15, -1, 0, 8)
       .attr(StatStageChangeAttr, [Stat.SPATK, Stat.SPDEF], 1, true)
       .attr(HealStatusEffectAttr, true, [
         StatusEffect.PARALYSIS,
@@ -3457,6 +3474,7 @@ export function initMoves() {
       .soundBased(),
     new AttackMove(Moves.AQUA_STEP, Type.WATER, MoveCategory.PHYSICAL, 80, 100, 10, 100, 0, 9)
       .attr(StatStageChangeAttr, [Stat.SPD], 1, true)
+      .makesContact()
       .danceMove(),
     new AttackMove(Moves.RAGING_BULL, Type.NORMAL, MoveCategory.PHYSICAL, 90, 100, 10, -1, 0, 9)
       .attr(RagingBullTypeAttr)
@@ -3540,6 +3558,7 @@ export function initMoves() {
     ),
     new AttackMove(Moves.BITTER_BLADE, Type.FIRE, MoveCategory.PHYSICAL, 90, 100, 10, -1, 0, 9)
       .attr(HitHealAttr)
+      .makesContact()
       .slicingMove()
       .triageMove(),
     new AttackMove(Moves.DOUBLE_SHOCK, Type.ELECTRIC, MoveCategory.PHYSICAL, 120, 100, 5, -1, 0, 9)

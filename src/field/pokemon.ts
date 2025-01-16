@@ -1350,7 +1350,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     // Overrides moveset based on arrays specified in overrides.ts
     let overrideArray: Moves | Array<Moves> = this.isPlayer()
       ? Overrides.MOVESET_OVERRIDE
-      : Overrides.OPP_MOVESET_OVERRIDE;
+      : Overrides.ENEMY_MOVESET_OVERRIDE;
     if (!Array.isArray(overrideArray)) {
       overrideArray = [overrideArray];
     }
@@ -1540,8 +1540,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (Overrides.ABILITY_OVERRIDE && this.isPlayer()) {
       return allAbilities[Overrides.ABILITY_OVERRIDE];
     }
-    if (Overrides.OPP_ABILITY_OVERRIDE && !this.isPlayer()) {
-      return allAbilities[Overrides.OPP_ABILITY_OVERRIDE];
+    if (Overrides.ENEMY_ABILITY_OVERRIDE && !this.isPlayer()) {
+      return allAbilities[Overrides.ENEMY_ABILITY_OVERRIDE];
     }
     if (this.isFusion()) {
       if (!isNullOrUndefined(this.fusionCustomPokemonData?.ability) && this.fusionCustomPokemonData.ability !== -1) {
@@ -1571,8 +1571,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (Overrides.PASSIVE_ABILITY_OVERRIDE && this.isPlayer()) {
       return allAbilities[Overrides.PASSIVE_ABILITY_OVERRIDE];
     }
-    if (Overrides.OPP_PASSIVE_ABILITY_OVERRIDE && !this.isPlayer()) {
-      return allAbilities[Overrides.OPP_PASSIVE_ABILITY_OVERRIDE];
+    if (Overrides.ENEMY_PASSIVE_ABILITY_OVERRIDE && !this.isPlayer()) {
+      return allAbilities[Overrides.ENEMY_PASSIVE_ABILITY_OVERRIDE];
     }
     if (!isNullOrUndefined(this.customPokemonData.passive) && this.customPokemonData.passive !== -1) {
       return allAbilities[this.customPokemonData.passive];
@@ -1623,7 +1623,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     // returns override if valid for current case
     if (
       (Overrides.PASSIVE_ABILITY_OVERRIDE !== Abilities.NONE && this.isPlayer())
-      || (Overrides.OPP_PASSIVE_ABILITY_OVERRIDE !== Abilities.NONE && !this.isPlayer())
+      || (Overrides.ENEMY_PASSIVE_ABILITY_OVERRIDE !== Abilities.NONE && !this.isPlayer())
     ) {
       return true;
     }
@@ -2410,8 +2410,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     if (forStarter && this instanceof PlayerPokemon && Overrides.STARTER_FUSION_SPECIES_OVERRIDE) {
       fusionOverride = getPokemonSpecies(Overrides.STARTER_FUSION_SPECIES_OVERRIDE);
-    } else if (this instanceof EnemyPokemon && Overrides.OPP_FUSION_SPECIES_OVERRIDE) {
-      fusionOverride = getPokemonSpecies(Overrides.OPP_FUSION_SPECIES_OVERRIDE);
+    } else if (this instanceof EnemyPokemon && Overrides.ENEMY_FUSION_SPECIES_OVERRIDE) {
+      fusionOverride = getPokemonSpecies(Overrides.ENEMY_FUSION_SPECIES_OVERRIDE);
     }
 
     this.fusionSpecies =
@@ -5267,42 +5267,42 @@ export class EnemyPokemon extends Pokemon {
       this.setBoss(boss, dataSource?.bossSegments);
     }
 
-    if (Overrides.OPP_STATUS_OVERRIDE) {
-      this.status = new Status(Overrides.OPP_STATUS_OVERRIDE, 0, 4);
+    if (Overrides.ENEMY_STATUS_OVERRIDE) {
+      this.status = new Status(Overrides.ENEMY_STATUS_OVERRIDE, 0, 4);
     }
 
-    if (Overrides.OPP_GENDER_OVERRIDE) {
-      this.gender = Overrides.OPP_GENDER_OVERRIDE;
+    if (Overrides.ENEMY_GENDER_OVERRIDE) {
+      this.gender = Overrides.ENEMY_GENDER_OVERRIDE;
     }
 
     const speciesId = this.species.speciesId;
 
     if (
-      speciesId in Overrides.OPP_FORM_OVERRIDES
-      && Overrides.OPP_FORM_OVERRIDES[speciesId]
-      && this.species.forms[Overrides.OPP_FORM_OVERRIDES[speciesId]]
+      speciesId in Overrides.ENEMY_FORM_OVERRIDES
+      && Overrides.ENEMY_FORM_OVERRIDES[speciesId]
+      && this.species.forms[Overrides.ENEMY_FORM_OVERRIDES[speciesId]]
     ) {
-      this.formIndex = Overrides.OPP_FORM_OVERRIDES[speciesId] ?? 0;
+      this.formIndex = Overrides.ENEMY_FORM_OVERRIDES[speciesId] ?? 0;
     }
 
     if (!dataSource) {
       this.generateAndPopulateMoveset();
 
-      if (shinyLock || Overrides.OPP_SHINY_OVERRIDE === false) {
+      if (shinyLock || Overrides.ENEMY_SHINY_OVERRIDE === false) {
         this.shiny = false;
       } else {
         this.trySetShiny();
       }
 
-      if (!this.shiny && Overrides.OPP_SHINY_OVERRIDE) {
+      if (!this.shiny && Overrides.ENEMY_SHINY_OVERRIDE) {
         this.shiny = true;
         this.initShinySparkle();
       }
 
       if (this.shiny) {
         this.variant = this.generateShinyVariant();
-        if (Overrides.OPP_VARIANT_OVERRIDE !== null) {
-          this.variant = Overrides.OPP_VARIANT_OVERRIDE;
+        if (Overrides.ENEMY_VARIANT_OVERRIDE !== null) {
+          this.variant = Overrides.ENEMY_VARIANT_OVERRIDE;
         }
       }
 
