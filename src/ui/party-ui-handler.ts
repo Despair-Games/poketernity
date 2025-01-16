@@ -5,7 +5,7 @@ import { addBBCodeTextObject, addTextObject, getTextColor, TextStyle } from "#ap
 import { Command } from "#app/ui/command-ui-handler";
 import MessageUiHandler from "#app/ui/message-ui-handler";
 import { Mode } from "#app/ui/ui";
-import { BooleanHolder, toReadableString, randInt, getLocalizedSpriteKey } from "#app/utils";
+import { BooleanHolder, toReadableString, getLocalizedSpriteKey } from "#app/utils";
 import {
   PokemonFormChangeItemModifier,
   PokemonHeldItemModifier,
@@ -512,7 +512,7 @@ export default class PartyUiHandler extends MessageUiHandler {
                 }
                 this.clearOptions();
               } else if (option === PartyOption.RELEASE) {
-                this.doRelease(this.cursor);
+                this.tryRelease(this.cursor);
               } else {
                 const selectCallback = this.selectCallback;
                 this.selectCallback = null;
@@ -618,7 +618,7 @@ export default class PartyUiHandler extends MessageUiHandler {
                   Mode.CONFIRM,
                   () => {
                     ui.setMode(Mode.PARTY);
-                    this.doRelease(this.cursor);
+                    this.tryRelease(this.cursor);
                   },
                   () => {
                     ui.setMode(Mode.PARTY);
@@ -1251,53 +1251,34 @@ export default class PartyUiHandler extends MessageUiHandler {
     }
   }
 
-  doRelease(slotIndex: number): void {
-    this.showText(
-      this.getReleaseMessage(getPokemonNameWithAffix(globalScene.getPlayerParty()[slotIndex])),
-      null,
-      () => {
-        this.clearPartySlots();
-        globalScene.removePartyMemberModifiers(slotIndex);
-        const releasedPokemon = globalScene.getPlayerParty().splice(slotIndex, 1)[0];
-        releasedPokemon.destroy();
-        this.populatePartySlots();
-        if (this.cursor >= globalScene.getPlayerParty().length) {
-          this.setCursor(this.cursor - 1);
-        }
-        if (this.partyUiMode === PartyUiMode.RELEASE) {
-          const selectCallback = this.selectCallback;
-          this.selectCallback = null;
-          selectCallback && selectCallback(this.cursor, PartyOption.RELEASE);
-        }
-        this.showText("", 0);
-      },
-      null,
-      true,
-    );
-  }
-
-  getReleaseMessage(pokemonName: string): string {
-    const rand = randInt(128);
-    if (rand < 20) {
-      return i18next.t("partyUiHandler:goodbye", { pokemonName: pokemonName });
-    } else if (rand < 40) {
-      return i18next.t("partyUiHandler:byebye", { pokemonName: pokemonName });
-    } else if (rand < 60) {
-      return i18next.t("partyUiHandler:farewell", { pokemonName: pokemonName });
-    } else if (rand < 80) {
-      return i18next.t("partyUiHandler:soLong", { pokemonName: pokemonName });
-    } else if (rand < 100) {
-      return i18next.t("partyUiHandler:thisIsWhereWePart", { pokemonName: pokemonName });
-    } else if (rand < 108) {
-      return i18next.t("partyUiHandler:illMissYou", { pokemonName: pokemonName });
-    } else if (rand < 116) {
-      return i18next.t("partyUiHandler:illNeverForgetYou", { pokemonName: pokemonName });
-    } else if (rand < 124) {
-      return i18next.t("partyUiHandler:untilWeMeetAgain", { pokemonName: pokemonName });
-    } else if (rand < 127) {
-      return i18next.t("partyUiHandler:sayonara", { pokemonName: pokemonName });
+  /**
+   * Function that attempts to release a selected Pokemon in the party and displays a different message based on its success
+   * @param slotIndex the position of the selected Pokemon with the party
+   */
+  tryRelease(slotIndex: number): void {
+    if (globalScene.canReleasePokemon(slotIndex)) {
+      this.showText(
+        globalScene.getReleaseMessage(getPokemonNameWithAffix(globalScene.getPlayerParty()[slotIndex])),
+        null,
+        () => {
+          globalScene.releasePokemon(slotIndex);
+          this.clearPartySlots();
+          this.populatePartySlots();
+          if (this.cursor >= globalScene.getPlayerParty().length) {
+            this.setCursor(this.cursor - 1);
+          }
+          if (this.partyUiMode === PartyUiMode.RELEASE) {
+            const { selectCallback, cursor } = this;
+            selectCallback && selectCallback(cursor, PartyOption.RELEASE);
+            this.selectCallback = null;
+          }
+          this.showText("", 0);
+        },
+        null,
+        true,
+      );
     } else {
-      return i18next.t("partyUiHandler:smellYaLater", { pokemonName: pokemonName });
+      this.showText(i18next.t("partyUihandler:cannotReleasePokemon"), null, () => this.showText("", 0), null, true);
     }
   }
 
