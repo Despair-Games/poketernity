@@ -11,7 +11,7 @@ import type SettingsKeyboardUiHandler from "./ui/settings/settings-keyboard-ui-h
 import cfg_keyboard_qwerty from "./configs/inputs/cfg_keyboard_qwerty";
 import { assign, getButtonWithKeycode, getIconForLatestInput, swap } from "#app/configs/inputs/configHandler";
 import { globalScene } from "#app/global-scene";
-import type { SettingGamepad } from "#app/system/settings/settings-gamepad";
+import type { SettingGamepad } from "#enums/setting-gamepad";
 import type { SettingKeyboard } from "#app/system/settings/settings-keyboard";
 import TouchControl from "#app/touch-controls";
 import { Button } from "#enums/buttons";
