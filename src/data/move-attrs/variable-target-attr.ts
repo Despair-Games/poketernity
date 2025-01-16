@@ -7,7 +7,7 @@ import { MoveAttr } from "#app/data/move-attrs/move-attr";
  * Attribute to change a move's legal target set based on game state.
  * @extends MoveAttr
  */
-export abstract class VariableTargetAttr extends MoveAttr {
+export class VariableTargetAttr extends MoveAttr {
   private targetChangeFunc: (user: Pokemon, target: Pokemon, move: Move) => number;
 
   constructor(targetChange: (user: Pokemon, target: Pokemon, move: Move) => number) {
