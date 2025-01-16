@@ -9,7 +9,7 @@ import type { ArenaEvent } from "#app/events/arena";
 import { TagAddedEvent, TagRemovedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";
 import { ArenaEventType } from "#enums/arena-event-type";
 import type { TurnEndEvent } from "../events/battle-scene";
-import { BattleSceneEventType } from "../events/battle-scene";
+import { BattleSceneEventType } from "#enums/battle-scene-event-type";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import TimeOfDayWidget from "./time-of-day-widget";
 import { toCamelCaseString, formatText, fixedNumber } from "#app/utils";
