@@ -1,7 +1,8 @@
 import type { EnemyPokemon, Pokemon } from "../field/pokemon";
 import { getLevelTotalExp, getLevelRelExp } from "../data/exp";
 import { getLocalizedSpriteKey, fixedNumber } from "#app/utils";
-import { addTextObject, TextStyle } from "./text";
+import { addTextObject } from "./text";
+import { TextStyle } from "#enums/text-style";
 import { getGenderSymbol, getGenderColor } from "#app/data/gender";
 import { Gender } from "#enums/gender";
 import { StatusEffect } from "#enums/status-effect";

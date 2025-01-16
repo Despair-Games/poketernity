@@ -1,7 +1,8 @@
 import { globalScene } from "#app/global-scene";
 import { Achv, getAchievementDescription } from "#app/system/achv";
 import { Voucher } from "#app/system/voucher";
-import { TextStyle, addTextObject } from "#app/ui/text";
+import { addTextObject } from "#app/ui/text";
+import { TextStyle } from "#enums/text-style";
 import type { PlayerGender } from "#enums/player-gender";
 import { settings } from "#app/system/settings/settings-manager";
 

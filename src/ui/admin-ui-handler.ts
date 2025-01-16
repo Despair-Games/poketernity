@@ -4,7 +4,7 @@ import { formatText } from "#app/utils";
 import type { InputFieldConfig } from "./form-modal-ui-handler";
 import { FormModalUiHandler } from "./form-modal-ui-handler";
 import type { ModalConfig } from "./modal-ui-handler";
-import { TextStyle } from "./text";
+import { TextStyle } from "#enums/text-style";
 import { Mode } from "./ui";
 import { globalScene } from "#app/global-scene";
 import { AdminMode } from "#enums/admin-mode";

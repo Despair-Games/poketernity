@@ -1,5 +1,6 @@
 import { globalScene } from "#app/global-scene";
-import { TextStyle, addTextObject, getTextStyleOptions } from "./text";
+import { addTextObject, getTextStyleOptions } from "./text";
+import { TextStyle } from "#enums/text-style";
 import { Mode } from "./ui";
 import UiHandler from "./ui-handler";
 import { addWindow } from "./ui-theme";

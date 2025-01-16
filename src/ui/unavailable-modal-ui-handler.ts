@@ -1,6 +1,7 @@
 import type { ModalConfig } from "./modal-ui-handler";
 import { ModalUiHandler } from "./modal-ui-handler";
-import { addTextObject, TextStyle } from "./text";
+import { addTextObject } from "./text";
+import { TextStyle } from "#enums/text-style";
 import type { Mode } from "./ui";
 import { updateUserInfo } from "#app/account";
 import { removeCookie } from "#app/utils";

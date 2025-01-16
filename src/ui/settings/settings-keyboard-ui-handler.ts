@@ -11,7 +11,8 @@ import {
 } from "#app/system/settings/settings-keyboard";
 import AbstractControlSettingsUiHandler from "#app/ui/settings/abstract-control-settings-ui-handler";
 import { NavigationManager } from "#app/ui/settings/navigationMenu";
-import { addTextObject, TextStyle } from "#app/ui/text";
+import { addTextObject } from "#app/ui/text";
+import { TextStyle } from "#enums/text-style";
 import { reverseValueToKeySetting, truncateString } from "#app/utils";
 import { Device } from "#enums/devices";
 import i18next from "i18next";
