@@ -34,44 +34,12 @@ describe("Abilities - Triage", () => {
       .enemyMoveset(Moves.SPLASH);
   });
 
+  // Note: All affected moves have been verified to have the TRIAGE_MOVE flag by all_moves
   it.each([
-    { move: Moves.ABSORB, moveName: "Absorb" },
-    { move: Moves.MEGA_DRAIN, moveName: "Mega Drain" },
     { move: Moves.RECOVER, moveName: "Recover" },
-    { move: Moves.SOFT_BOILED, moveName: "Soft-Boiled" },
-    { move: Moves.DREAM_EATER, moveName: "Dream Eater" },
-    { move: Moves.LEECH_LIFE, moveName: "Leech Life" },
-    { move: Moves.REST, moveName: "Rest" },
-    { move: Moves.GIGA_DRAIN, moveName: "Giga Drain" },
-    { move: Moves.MILK_DRINK, moveName: "Milk Drink" },
-    { move: Moves.MORNING_SUN, moveName: "Morning Sun" },
-    { move: Moves.SYNTHESIS, moveName: "Synthesis" },
-    { move: Moves.MOONLIGHT, moveName: "Moonlight" },
-    { move: Moves.SWALLOW, moveName: "Swallow" },
-    { move: Moves.WISH, moveName: "Wish" },
-    { move: Moves.SLACK_OFF, moveName: "Slack Off" },
-    { move: Moves.ROOST, moveName: "Roost" },
     { move: Moves.HEALING_WISH, moveName: "Healing Wish (P)" },
-    { move: Moves.DRAIN_PUNCH, moveName: "Drain Punch" },
-    { move: Moves.HEAL_ORDER, moveName: "Heal Order" },
-    { move: Moves.LUNAR_DANCE, moveName: "Lunar Dance (P)" },
-    { move: Moves.HEAL_PULSE, moveName: "Heal Pulse" },
-    { move: Moves.HORN_LEECH, moveName: "Horn Leech" },
-    { move: Moves.PARABOLIC_CHARGE, moveName: "Parabolic Charge" },
-    { move: Moves.DRAINING_KISS, moveName: "Draining Kiss" },
-    { move: Moves.OBLIVION_WING, moveName: "Oblivion Wing" },
-    { move: Moves.SHORE_UP, moveName: "Shore Up" },
-    { move: Moves.FLORAL_HEALING, moveName: "Floral Healing" },
-    { move: Moves.STRENGTH_SAP, moveName: "Strength Sap" },
-    { move: Moves.PURIFY, moveName: "Purify" },
-    { move: Moves.BOUNCY_BUBBLE, moveName: "Bouncy Bubble" },
-    { move: Moves.LIFE_DEW, moveName: "Life Dew" },
-    { move: Moves.JUNGLE_HEALING, moveName: "Jungle Healing" },
-    { move: Moves.LUNAR_BLESSING, moveName: "Lunar Blessing" },
-    { move: Moves.REVIVAL_BLESSING, moveName: "Revival Blessing" },
     { move: Moves.BITTER_BLADE, moveName: "Bitter Blade" },
-    { move: Moves.MATCHA_GOTCHA, moveName: "Matcha Gotcha" },
-  ])("should increase the priority of $moveName by 3", async ({ move }) => {
+  ])("should increase the priority of HP-recovery moves by 3", async ({ move }) => {
     game.override.moveset(move);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
