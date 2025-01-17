@@ -395,15 +395,6 @@ export function fixedNumber(value: number): number {
 }
 
 /**
- * Helper method to get the value of a parameter that is either a number of NumberHolder
- * @param number a number of {@linkcode NumberHolder}
- * @returns the value of the NumberHolder if it is one, the unchanged number otherwise
- */
-export function getNumberValue(number: number | NumberHolder): number {
-  return number instanceof NumberHolder ? number.value : number;
-}
-
-/**
  * Formats a string to title case
  * @param unformattedText Text to be formatted
  * @returns the formatted string

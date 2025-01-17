@@ -6,7 +6,7 @@ import { ScrollBar } from "#app/ui/scroll-bar";
 import { TextStyle, addBBCodeTextObject, getBBCodeFrag, getTextStyleOptions } from "#app/ui/text";
 import { Mode } from "#app/ui/ui";
 import { addWindow } from "#app/ui/ui-theme";
-import { fixedNumber, getNumberValue, isNullOrUndefined } from "#app/utils";
+import { fixedNumber, isNullOrUndefined } from "#app/utils";
 import { Button } from "#enums/buttons";
 import type BBCodeText from "phaser3-rex-plugins/plugins/gameobjects/tagtext/bbcodetext/BBCodeText";
 import type { UIOptionSelectItem } from "./interfaces/option-select-ui-item";
@@ -161,16 +161,16 @@ export default abstract class AsbtractOptionSelectUiHandler<T extends OptionSele
       return;
     }
 
-    const xOffset = getNumberValue(this.config?.xOffset ?? 0);
-    const yOffset = getNumberValue(this.config?.yOffset ?? 0);
+    const xOffset = Math.abs(this.config?.xOffset ?? 0);
+    const yOffset = Math.abs(this.config?.yOffset ?? 0);
 
     // Make sure the window is not larger than the screen
     const bgWidth = Math.min(maxWidth, globalScene.scaledCanvas.width - 2);
     const bgHeight = this.computeWindowHeight();
     // Make sure the window doesn't go past the left side of the screen
-    const xPosition = Math.max(bgWidth + 1, globalScene.scaledCanvas.width - 1 - Math.abs(xOffset));
+    const xPosition = Math.max(bgWidth + 1, globalScene.scaledCanvas.width - 1 - xOffset);
 
-    this.optionSelectContainer.setPosition(xPosition, -Math.abs(yOffset));
+    this.optionSelectContainer.setPosition(xPosition, -yOffset);
     this.optionSelectText.setPosition(
       this.optionSelectBg.x - bgWidth + 11 + 24 * this.scale,
       this.optionSelectBg.y - bgHeight + 42 * this.scale,
