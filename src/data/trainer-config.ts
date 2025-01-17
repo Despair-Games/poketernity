@@ -1543,14 +1543,14 @@ export function getEvilGruntPartyTemplate(): TrainerPartyTemplate {
 }
 
 /**
- * Function used to generate a TrainerPartyTemplate for trainers that change their
+ * Function used to generate a {@linkcode TrainerPartyTemplate} for trainers that change their
  * party template as the player progresses.
  * Subtracting offsetWave (20) from the waveIndex scaled by mode (+30 if daily),
- * for every wavesTOScale (30), the trainer will onto their next given TrainerPartyTemplate
+ * for every wavesToScale (30), the trainer will onto their next given {@linkcode TrainerPartyTemplate}
  *
- * Currently used by ace trainers, breeders, and twins
+ * Currently used by ace trainers, breeders, twins, and gym leaders
  * @param templates an array of templates that the trainers can use
- * @returns a TrainerPartyTemplate
+ * @returns a {@linkcode TrainerPartyTemplate}
  */
 export function getWavePartyTemplate(...templates: TrainerPartyTemplate[]): TrainerPartyTemplate {
   const wavesToScale = 30;

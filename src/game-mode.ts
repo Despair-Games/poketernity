@@ -126,7 +126,7 @@ export class GameMode implements GameModeConfig {
    *
    * @param waveIndex the current floor the player is on
    * @param ignoreCurveChanges whether or not to ignore the extra addition in daily mode
-   * Acetrainers, Breeders, and Twins all use the {@linkcode getWavePartyTemplate} function
+   * Acetrainers, Breeders, Twins, and gym leaders all use the {@linkcode getWavePartyTemplate} function
    * and thus do not have the extra addition applied in daily mode
    * @returns a number representing what the wave should be
    */
