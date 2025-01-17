@@ -42,7 +42,6 @@ import { Moves } from "#enums/moves";
 import i18next from "i18next";
 import { FaintPhase } from "./faint-phase";
 import { HitCheckPhase } from "./hit-check-phase";
-import { MovePhase } from "./move-phase";
 
 export class MoveEffectPhase extends HitCheckPhase {
   private moveHistoryEntry: TurnMove;
@@ -454,34 +453,9 @@ export class MoveEffectPhase extends HitCheckPhase {
       // set splice index here, so future scene queues happen before FaintedPhase
       globalScene.setPhaseQueueSplice();
       globalScene.unshiftPhase(new FaintPhase(target.getBattlerIndex(), isOneHitKo, destinyTag, grudgeTag, user));
-
-      this.clearEffectsOnFaint(target);
     }
 
     return result;
-  }
-
-  /** Clears temporary effects from the given target {@linkcode Pokemon} before it faints. */
-  private clearEffectsOnFaint(target: Pokemon): void {
-    target.destroySubstitute();
-    target.lapseTag(BattlerTagType.COMMANDED);
-
-    const skyDropTagId = target.getTag(BattlerTagType.SKY_DROP)?.sourceId;
-    if (skyDropTagId) {
-      globalScene.getField(true).forEach((p) => {
-        if (p && p.getTag(BattlerTagType.SKY_DROP)?.sourceId === skyDropTagId) {
-          // Cancel the Sky Drop user's next use of Sky Drop
-          if (skyDropTagId === p.id) {
-            globalScene.tryRemovePhase((phase) => phase instanceof MovePhase && phase.pokemon.id === p.id);
-            p.getMoveQueue().shift();
-            p.removeTag(BattlerTagType.CHARGING);
-          }
-          p.removeTag(BattlerTagType.SKY_DROP);
-        }
-      });
-    }
-
-    target.resetSummonData();
   }
 
   /**

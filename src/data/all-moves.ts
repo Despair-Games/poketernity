@@ -1836,7 +1836,8 @@ export function initMoves() {
       .attr(RemoveBattlerTagAttr, [BattlerTagType.FLYING, BattlerTagType.FLOATING, BattlerTagType.TELEKINESIS])
       .attr(HitsTagAttr, BattlerTagType.FLYING)
       .attr(HitsTagAttr, BattlerTagType.SKY_DROP)
-      .makesContact(false),
+      .makesContact(false)
+      .edgeCase(), // Should hit a Pokemon lifted up by Sky Drop without permanently grounding it
     new AttackMove(Moves.STORM_THROW, Type.FIGHTING, MoveCategory.PHYSICAL, 60, 100, 10, -1, 0, 5).attr(CritOnlyAttr),
     new AttackMove(Moves.FLAME_BURST, Type.FIRE, MoveCategory.SPECIAL, 70, 100, 15, -1, 0, 5).attr(FlameBurstAttr),
     new AttackMove(Moves.SLUDGE_WAVE, Type.POISON, MoveCategory.SPECIAL, 95, 100, 10, 10, 0, 5)
@@ -2349,7 +2350,8 @@ export function initMoves() {
       .attr(AddBattlerTagAttr, BattlerTagType.INTERRUPTED)
       .attr(RemoveBattlerTagAttr, [BattlerTagType.FLYING, BattlerTagType.FLOATING, BattlerTagType.TELEKINESIS])
       .makesContact(false)
-      .target(MoveTarget.ALL_NEAR_ENEMIES),
+      .target(MoveTarget.ALL_NEAR_ENEMIES)
+      .edgeCase(), // Should hit a Pokemon lifted up by Sky Drop without permanently grounding it
     new AttackMove(Moves.THOUSAND_WAVES, Type.GROUND, MoveCategory.PHYSICAL, 90, 100, 10, -1, 0, 6)
       .attr(AddBattlerTagAttr, BattlerTagType.TRAPPED, false, { lastHitOnly: true })
       .makesContact(false)

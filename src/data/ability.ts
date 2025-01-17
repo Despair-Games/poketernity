@@ -219,13 +219,13 @@ export class ForceSwitchOutHelper {
    * @param opponent The opponent Pokémon.
    * @returns `true` if the switch-out condition is met
    */
-  public getSwitchOutCondition(pokemon: Pokemon, opponent: Pokemon): boolean {
+  public getSwitchOutCondition(pokemon: Pokemon, _opponent: Pokemon): boolean {
     const switchOutTarget = pokemon;
     const player = switchOutTarget instanceof PlayerPokemon;
 
     if (player) {
       const blockedByAbility = new BooleanHolder(false);
-      applyAbAttrs(ForceSwitchOutImmunityAbAttr, opponent, false, blockedByAbility);
+      applyAbAttrs(ForceSwitchOutImmunityAbAttr, pokemon, false, blockedByAbility);
       return !blockedByAbility.value;
     }
 
@@ -314,10 +314,13 @@ export function applyAbAttrs<TAttr extends AbAttr>(
             queueShowAbility(pokemon, passive);
           }
         }
-
+      }
+      if (result) {
         const message = attr.getTriggerMessage(pokemon, ability.name, ...args);
         if (message) {
-          globalScene.queueMessage(message);
+          if (!simulated) {
+            globalScene.queueMessage(message);
+          }
           messages.push(message);
         }
       }
