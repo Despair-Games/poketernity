@@ -3977,6 +3977,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     ignoreField: boolean = false,
   ): boolean {
     if (effect !== StatusEffect.FAINT) {
+      if (this.isFainted()) {
+        return false;
+      }
       if (overrideStatus ? this.status?.effect === effect : this.status) {
         return false;
       }
