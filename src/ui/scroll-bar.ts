@@ -83,4 +83,9 @@ export class ScrollBar extends Phaser.GameObjects.Container {
       1 + ((this.bg.displayHeight - 1 - this.handleBottom.displayHeight) / this.totalRows) * this.currentRow;
     this.handleBottom.y = this.handleBody.y + this.handleBody.displayHeight;
   }
+
+  override destroy(fromScene?: boolean): void {
+    this.removeAll(true);
+    super.destroy(fromScene);
+  }
 }

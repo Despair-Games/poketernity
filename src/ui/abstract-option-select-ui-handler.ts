@@ -1,33 +1,22 @@
 import { globalScene } from "#app/global-scene";
-import type { OptionSelectModeConfig, OptionSelectItem } from "#app/ui/interfaces/option-select-config";
-import { TextStyle, addBBCodeTextObject, getBBCodeFrag, getTextStyleOptions } from "#app/ui/text";
+import { settings } from "#app/system/settings/settings-manager";
+import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import MessageUiHandler from "#app/ui/message-ui-handler";
+import { ScrollBar } from "#app/ui/scroll-bar";
+import { TextStyle, addBBCodeTextObject, getBBCodeFrag, getTextStyleOptions } from "#app/ui/text";
 import { Mode } from "#app/ui/ui";
 import { addWindow } from "#app/ui/ui-theme";
 import { fixedNumber, getNumberValue, isNullOrUndefined } from "#app/utils";
 import { Button } from "#enums/buttons";
 import type BBCodeText from "phaser3-rex-plugins/plugins/gameobjects/tagtext/bbcodetext/BBCodeText";
-import { settings } from "#app/system/settings/settings-manager";
 import type { UIOptionSelectItem } from "./interfaces/option-select-ui-item";
 
+const SCROLLBAR_PADDING = 5;
+const SCROLLBAR_WIDTH = 3;
 const WINDOW_PADDING = 23;
 const DEFAULT_MAX_OPTIONS = 10;
 const NUM_PRE_COMPUTED_OPTIONS = 15;
 const DEFAULT_TEXT_STYLE = TextStyle.WINDOW;
-
-const SCROLL_UP_ITEM: UIOptionSelectItem = {
-  label: "↑",
-  handler: () => true,
-  initialized: true,
-  displayLabel: "↑",
-};
-
-const SCROLL_DOWN_ITEM: UIOptionSelectItem = {
-  label: "↓",
-  handler: () => true,
-  initialized: true,
-  displayLabel: "↓",
-};
 
 /**
  * Generic handler for a menu with several options to choose from with a cursor.
@@ -46,7 +35,6 @@ const SCROLL_DOWN_ITEM: UIOptionSelectItem = {
 export default abstract class AsbtractOptionSelectUiHandler<T extends OptionSelectItem> extends MessageUiHandler {
   private config: OptionSelectModeConfig<T> | null;
   private options: (UIOptionSelectItem & T)[];
-  private currentOptions: (UIOptionSelectItem & T)[];
   private maxOptions: number;
   protected fullyInitialized: boolean;
 
@@ -55,6 +43,7 @@ export default abstract class AsbtractOptionSelectUiHandler<T extends OptionSele
   protected optionSelectText: BBCodeText;
   protected optionSelectIcons: Phaser.GameObjects.Sprite[];
   protected cursorObj: Phaser.GameObjects.Image | null;
+  protected scrollBar: ScrollBar | null;
 
   protected blockInput: boolean;
 
@@ -97,6 +86,7 @@ export default abstract class AsbtractOptionSelectUiHandler<T extends OptionSele
 
   override show(args: any[]): boolean {
     if (!args.length || !args[0].hasOwnProperty("options") || !args[0].options.length) {
+      console.error("Missing `OptionSelectModeConfig` argument for Mode.OPTION_SELECT");
       return false;
     }
 
@@ -134,25 +124,38 @@ export default abstract class AsbtractOptionSelectUiHandler<T extends OptionSele
     this.optionSelectText.setMaxLines(this.maxOptions);
 
     // Set window size based on the first {@linkcode DEFAULT_PRE_COMPUTED_OPTIONS} options
-    this.updateSizeForOptions(this.options.slice(0, NUM_PRE_COMPUTED_OPTIONS));
+    this.updateSizeForOptions(this.options.slice(0, Math.max(this.maxOptions, NUM_PRE_COMPUTED_OPTIONS)));
+    this.displayCurrentOptions(true);
 
-    this.updateCurrentOptions();
+    if (this.options.length > this.maxOptions) {
+      this.scrollBar = new ScrollBar(
+        0,
+        0,
+        SCROLLBAR_WIDTH,
+        this.optionSelectBg.displayHeight - SCROLLBAR_PADDING * 2,
+        this.maxOptions,
+      );
+      this.scrollBar.setTotalRows(this.options.length);
+      this.scrollBar.setPositionRelative(
+        this.optionSelectBg,
+        this.optionSelectBg.displayWidth - SCROLLBAR_PADDING * 2,
+        SCROLLBAR_PADDING,
+      );
+      this.optionSelectContainer.add(this.scrollBar);
+    }
   }
 
   /**
    * Automatically set the menu's size for the given options.
-   * If the given options need less horizontal space than some of the ones already
-   * shown before the previous maximum size is kept.
+   * Preserves the current size if they are all smaller, otherwise expands as needed.
    * @param options the {@linkcode UIOptionSelectItem} to consider
    */
   protected updateSizeForOptions(options: (UIOptionSelectItem & T)[]): void {
-    if (this.fullyInitialized) {
-      return;
-    }
+    const currentWidth = this.optionSelectBg.displayWidth;
+    const scrollBarWidth = this.options.length > this.maxOptions ? SCROLLBAR_PADDING : 0;
 
     // Get the max width amongst the given options, and use it for everything
-    const currentWidth = this.optionSelectBg.displayWidth;
-    const maxWidth = this.getOptionsMaxWidth(options) + WINDOW_PADDING;
+    const maxWidth = this.getOptionsMaxWidth(options) + WINDOW_PADDING + scrollBarWidth;
 
     if (maxWidth <= currentWidth) {
       return;
@@ -252,45 +255,18 @@ export default abstract class AsbtractOptionSelectUiHandler<T extends OptionSele
   }
 
   /**
-   * Update the menu based on the current cursor and scroll cursor.
-   * Handles automatic resizing as needed.
+   * Display the current options based on the cursor and scroll cursor.
+   * Can handle automatic resizing of the menu window as needed.
+   * @param skipResizing Set to `true` to skip the automatic resizing step; default: `false`.
    */
-  protected updateCurrentOptions(): void {
-    if (!this.config) {
-      return;
+  protected displayCurrentOptions(skipResizing: boolean = false): void {
+    const currentOptions = this.options.slice(this.scrollCursor, this.scrollCursor + this.maxOptions);
+
+    if (!skipResizing && !this.fullyInitialized) {
+      this.updateSizeForOptions(currentOptions);
     }
 
-    const options = this.options.slice(0);
-    const totalOptions = options.length;
-
-    if (this.maxOptions < totalOptions) {
-      const optionStartIndex = this.scrollCursor;
-      let optionEndIndex = Math.min(this.scrollCursor + this.maxOptions - 1, options.length);
-      if (this.scrollCursor > 0 && optionEndIndex < totalOptions) {
-        optionEndIndex -= 1;
-      }
-
-      options.splice(optionEndIndex, totalOptions);
-      options.splice(0, optionStartIndex);
-
-      if (optionStartIndex > 0) {
-        options.unshift(SCROLL_UP_ITEM as any);
-      }
-      if (optionEndIndex < totalOptions) {
-        options.push(SCROLL_DOWN_ITEM as any);
-      }
-    }
-
-    this.currentOptions = options;
-    this.updateSizeForOptions(options);
-    this.displayCurrentOptions();
-  }
-
-  /**
-   * Display the current options based on the cursor and scroll cursor
-   */
-  private displayCurrentOptions(): void {
-    this.optionSelectText.setText(this.currentOptions.map((o) => o.displayLabel).join("\n"));
+    this.optionSelectText.setText(currentOptions.map((o) => o.displayLabel).join("\n"));
 
     // Hide existing icons
     for (const iconSprite of this.optionSelectIcons) {
@@ -299,7 +275,7 @@ export default abstract class AsbtractOptionSelectUiHandler<T extends OptionSele
 
     // Display the icons before each option, if any
     let currentIconIndex = 0;
-    this.currentOptions.forEach((option: UIOptionSelectItem, i: number) => {
+    currentOptions.forEach((option: UIOptionSelectItem, i: number) => {
       if (option.iconsConfig) {
         const iconY = 7 + i * (114 * this.scale - 3);
         const iconX = Math.floor((option.iconsWidth ?? 0) / 2);
@@ -325,7 +301,7 @@ export default abstract class AsbtractOptionSelectUiHandler<T extends OptionSele
   }
 
   protected getCurrentOption(): UIOptionSelectItem & T {
-    return this.options[this.cursor + (this.scrollCursor - (this.scrollCursor ? 1 : 0))];
+    return this.options[this.cursor + this.scrollCursor];
   }
 
   override processInput(button: Button): boolean {
@@ -346,15 +322,16 @@ export default abstract class AsbtractOptionSelectUiHandler<T extends OptionSele
 
       success = true;
       if (button === Button.CANCEL) {
-        if (this.options.length > this.maxOptions) {
-          this.scrollCursor = this.options.length - this.maxOptions + 1;
-          this.cursor = this.currentOptions.length - 1; // Why is this not using setcursor..
-        } else if (!this.config?.noCancel) {
-          this.setCursor(this.currentOptions.length - 1);
-        } else {
+        if (this.config?.noCancel) {
           return false;
         }
+        // Cancelling, move the cursors to the last option to act as if it was being selected
+        if (this.options.length > this.maxOptions) {
+          this.scrollCursor = this.options.length - this.maxOptions;
+        }
+        this.cursor = this.maxOptions - 1;
       }
+
       const option = this.getCurrentOption();
       if (option?.handler()) {
         if (!option.keepOpen) {
@@ -369,14 +346,24 @@ export default abstract class AsbtractOptionSelectUiHandler<T extends OptionSele
         case Button.UP:
           if (this.cursor > 0) {
             success = this.setCursor(this.cursor - 1);
-          } else if (this.cursor === 0) {
-            success = this.setCursor(this.currentOptions.length - 1);
+          } else if (this.scrollCursor > 0) {
+            success = this.setScrollCursor(this.scrollCursor - 1);
+          } else {
+            if (this.options.length > this.maxOptions) {
+              this.setScrollCursor(this.options.length - this.maxOptions);
+            }
+            success = this.setCursor(this.maxOptions - 1);
           }
           break;
         case Button.DOWN:
-          if (this.cursor < this.currentOptions.length - 1) {
+          if (this.cursor < this.maxOptions - 1) {
             success = this.setCursor(this.cursor + 1);
+          } else if (this.scrollCursor < this.options.length - this.maxOptions) {
+            success = this.setScrollCursor(this.scrollCursor + 1);
           } else {
+            if (this.scrollCursor > 0) {
+              this.setScrollCursor(0);
+            }
             success = this.setCursor(0);
           }
           break;
@@ -410,37 +397,7 @@ export default abstract class AsbtractOptionSelectUiHandler<T extends OptionSele
   override setCursor(cursor: number): boolean {
     const changed = this.cursor !== cursor;
 
-    let scrollUpdated = false;
-
-    if (changed && this.options.length > this.maxOptions) {
-      if (Math.abs(cursor - this.cursor) === this.currentOptions.length - 1) {
-        // Wrap around the list
-        const maxScrollCursor = this.options.length - (this.maxOptions - 1);
-        this.scrollCursor = cursor > 0 ? maxScrollCursor : 0;
-        this.cursor = cursor;
-        scrollUpdated = true;
-      } else {
-        // Move the cursor up or down by 1
-        const isDown = cursor > 0 && cursor > this.cursor;
-        if (isDown) {
-          if (this.currentOptions[cursor].displayLabel === SCROLL_DOWN_ITEM.label) {
-            scrollUpdated = true;
-            this.scrollCursor++;
-          }
-        } else if (cursor === 0 && this.scrollCursor > 0) {
-          scrollUpdated = true;
-          this.scrollCursor--;
-        }
-        if (scrollUpdated && this.scrollCursor === 1) {
-          // Skip over the "arrow up" option
-          this.scrollCursor += isDown ? 1 : -1;
-        }
-      }
-    }
-
-    if (scrollUpdated) {
-      this.updateCurrentOptions();
-    } else {
+    if (changed) {
       this.cursor = cursor;
     }
 
@@ -459,12 +416,21 @@ export default abstract class AsbtractOptionSelectUiHandler<T extends OptionSele
     return changed;
   }
 
+  setScrollCursor(scrollCursor: number) {
+    if (scrollCursor !== this.scrollCursor) {
+      this.scrollCursor = scrollCursor;
+      this.displayCurrentOptions();
+      this.scrollBar?.setScrollCursor(this.scrollCursor);
+      return true;
+    }
+    return false;
+  }
+
   override clear(): void {
     super.clear();
 
     this.config = null;
     this.options = [];
-    this.currentOptions = [];
     this.maxOptions = DEFAULT_MAX_OPTIONS;
     this.fullyInitialized = false;
 
@@ -472,7 +438,8 @@ export default abstract class AsbtractOptionSelectUiHandler<T extends OptionSele
     this.optionSelectContainer.setVisible(false);
     this.scrollCursor = 0;
     this.clearIconSprites();
-    this.eraseCursor();
+    this.clearCursor();
+    this.clearScrollBar();
   }
 
   protected clearIconSprites(): void {
@@ -482,10 +449,17 @@ export default abstract class AsbtractOptionSelectUiHandler<T extends OptionSele
     this.optionSelectIcons = [];
   }
 
-  protected eraseCursor(): void {
+  protected clearCursor(): void {
     if (this.cursorObj) {
       this.cursorObj.destroy();
     }
     this.cursorObj = null;
+  }
+
+  protected clearScrollBar(): void {
+    if (this.scrollBar) {
+      this.scrollBar.destroy();
+      this.scrollBar = null;
+    }
   }
 }

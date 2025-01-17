@@ -15,6 +15,7 @@ export default class ConfirmUiHandler extends OptionSelectUiHandler {
 
   override show(args: any[]): boolean {
     if (!args[0] || !args[0].hasOwnProperty("yesHandler") || !args[0].hasOwnProperty("noHandler")) {
+      console.error("Missing `ConfirmModeConfig` argument for Mode.CONFIRM");
       return false;
     }
 
