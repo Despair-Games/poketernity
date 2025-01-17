@@ -5,7 +5,7 @@ import { AbAttr } from "./ab-attr";
  * Base class for defining all {@linkcode Ability} Attributes post summon
  * @see {@linkcode applyPostSummon()}
  */
-export class PostSummonAbAttr extends AbAttr {
+export abstract class PostSummonAbAttr extends AbAttr {
   /**
    * Applies ability post summon (after switching in)
    * @param pokemon {@linkcode Pokemon} with this ability

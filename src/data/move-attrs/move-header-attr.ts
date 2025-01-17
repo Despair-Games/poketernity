@@ -8,7 +8,7 @@ import { MoveAttr } from "#app/data/move-attrs/move-attr";
  * @see {@linkcode MoveHeaderPhase}
  * @extends MoveAttr
  */
-export class MoveHeaderAttr extends MoveAttr {
+export abstract class MoveHeaderAttr extends MoveAttr {
   constructor() {
     super(true);
   }

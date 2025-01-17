@@ -3,7 +3,7 @@ import { MoveCategory } from "#enums/move-category";
 import type { Pokemon } from "#app/field/pokemon";
 import { AbAttr } from "./ab-attr";
 
-export class PostAttackAbAttr extends AbAttr {
+export abstract class PostAttackAbAttr extends AbAttr {
   /** Whether it only applies to attack moves. */
   private readonly attackMovesOnly: boolean;
 
@@ -40,13 +40,11 @@ export class PostAttackAbAttr extends AbAttr {
    * @param args Additional arguments for subclasses
    * @returns `true` if effects apply successfully
    */
-  protected applyPostAttack(
+  protected abstract applyPostAttack(
     _pokemon: Pokemon,
     _simulated: boolean,
     _defender: Pokemon,
     _move: Move,
     ..._args: unknown[]
-  ): boolean {
-    return false;
-  }
+  ): boolean;
 }
