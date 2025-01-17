@@ -1,6 +1,6 @@
 import { defineProject } from "vitest/config";
 import { defaultConfig } from "./vite.config";
-import { BaseSequencer } from "vitest/node";
+import { BaseSequencer, type TestSpecification } from "vitest/node";
 
 /**
  * A helper function for sorting test files in a desired order.
@@ -24,12 +24,12 @@ export default defineProject(({ mode }) => ({
     testTimeout: 20000,
     setupFiles: ["./test/fontFace.setup.ts", "./test/vitest.setup.ts"],
     sequence: {
-      sequencer: class Seqencer extends BaseSequencer {
-        async sort(files: [any, string][]) {
+      sequencer: class MySequencer extends BaseSequencer {
+        async sort(files: TestSpecification[]) {
           files = await super.sort(files);
 
           // Sort files so that certain tests get run first
-          return files.sort((a, b) => getTestOrder(a[1]) - getTestOrder(b[1]));
+          return files.sort((a, b) => getTestOrder(a.moduleId) - getTestOrder(b.moduleId));
         }
       },
     },
