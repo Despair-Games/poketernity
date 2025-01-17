@@ -258,23 +258,41 @@ describe("Moves - Sky Drop", () => {
   });
 
   it("should be cancelled when the target Pokemon faints while airborne", async () => {
-    game.override.battleType("double").ability(Abilities.NO_GUARD).moveset([Moves.SKY_DROP, Moves.FISSURE]);
+    game.override.battleType("double");
+    await game.classicMode.startBattle([Species.MAGIKARP, Species.MAREANIE]);
 
-    await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
+    const player1 = game.field.getPlayerPokemon();
+    const enemy1 = game.field.getEnemyPokemon();
+    enemy1.hp = 1;
 
-    const player1 = game.scene.getPlayerField()[0];
-    const enemy1 = game.scene.getEnemyField()[0];
-
-    game.move.select(Moves.SKY_DROP, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.FISSURE, 1, BattlerIndex.ENEMY);
-
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
-    await game.phaseInterceptor.to("BerryPhase");
+    game.move.use(Moves.SKY_DROP, 0, BattlerIndex.ENEMY);
+    game.move.use(Moves.TOXIC, 1, BattlerIndex.ENEMY);
+    await game.move.forceEnemyMove(Moves.SPLASH);
+    await game.move.forceEnemyMove(Moves.SPLASH);
+    await game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(enemy1.isFainted()).toBeTruthy();
     expect(player1.getTag(BattlerTagType.SKY_DROP)).toBeUndefined();
     expect(player1.getTag(BattlerTagType.CHARGING)).toBeUndefined();
     expect(player1.getMoveQueue().length).toBe(0);
+  });
+
+  it("should be cancelled when the user Pokemon faints while airborne", async () => {
+    await game.classicMode.startBattle([Species.MAREANIE]);
+
+    const playerPokemon = game.field.getPlayerPokemon();
+    const enemyPokemon = game.field.getEnemyPokemon();
+    enemyPokemon.hp = 1;
+
+    game.move.use(Moves.TOXIC);
+    await game.move.forceEnemyMove(Moves.SKY_DROP);
+    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    await game.phaseInterceptor.to("TurnEndPhase");
+
+    expect(enemyPokemon.isFainted()).toBeTruthy();
+    expect(playerPokemon.getTag(BattlerTagType.SKY_DROP)).toBeUndefined();
+    expect(playerPokemon.isFullHp()).toBe(true);
   });
 
   it("should be cancelled when another Pokemon uses Gravity", async () => {
@@ -365,5 +383,55 @@ describe("Moves - Sky Drop", () => {
     const dondozo = game.scene.getPlayerField()[0];
 
     expect(dondozo.getTag(BattlerTagType.COMMANDED)).toBeDefined();
+  });
+
+  it("should fail against a Commanding Tatsugiri", async () => {
+    game.override.battleType("double").ability(Abilities.COMMANDER);
+
+    vi.spyOn(game.scene, "triggerPokemonBattleAnim").mockReturnValue(true);
+
+    await game.classicMode.startBattle([Species.TATSUGIRI, Species.DONDOZO]);
+
+    game.move.use(Moves.SPLASH, 0);
+    game.move.use(Moves.SPLASH, 1);
+    await game.move.forceEnemyMove(Moves.SKY_DROP, BattlerIndex.PLAYER);
+    await game.move.forceEnemyMove(Moves.SKY_DROP, BattlerIndex.PLAYER);
+
+    await game.phaseInterceptor.to("BerryPhase");
+
+    for (const enemyPokemon of game.scene.getEnemyField()) {
+      expect(enemyPokemon.getTag(BattlerTagType.SKY_DROP)).toBeUndefined();
+      expect(enemyPokemon.getLastXMoves(1)[0].result).toBe(MoveResult.FAIL);
+    }
+  });
+
+  it("should not allow the target to switch out or flee", async () => {
+    await game.classicMode.startBattle([Species.GASTLY]);
+
+    game.move.use(Moves.SPLASH);
+    await game.move.forceEnemyMove(Moves.SKY_DROP);
+    await game.toNextTurn();
+
+    for (const pokemon of game.scene.getField()) {
+      expect(pokemon.isTrapped()).toBe(true);
+    }
+  });
+
+  it("should make the user and target not grounded", async () => {
+    await game.classicMode.startBattle([Species.FEEBAS]);
+
+    for (const pokemon of game.scene.getField()) {
+      pokemon.hp = 1;
+    }
+
+    game.move.use(Moves.GRASSY_TERRAIN);
+    await game.move.forceEnemyMove(Moves.SKY_DROP);
+    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    await game.toNextTurn();
+
+    for (const pokemon of game.scene.getField()) {
+      expect(pokemon.hp).toBe(1);
+      expect(pokemon.isGrounded()).toBe(false);
+    }
   });
 });
