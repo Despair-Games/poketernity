@@ -8,7 +8,6 @@ import type { NumberHolder } from "#app/utils";
  * @extends MoveAttr
  */
 export abstract class VariableDefAttr extends MoveAttr {
-
   /**
    * Changes the defensive stat used in the current attack's damage calculation
    * @param _user the {@linkcode Pokemon} using the move
