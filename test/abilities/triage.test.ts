@@ -1,8 +1,10 @@
 import { allMoves } from "#app/data/all-moves";
 import { Abilities } from "#enums/abilities";
+import { BattlerIndex } from "#enums/battler-index";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
+import { TurnStartPhase } from "#app/phases/turn-start-phase";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -97,5 +99,27 @@ describe("Abilities - Triage", () => {
   });
 
   // Test for Present if it heals
-  // Test for Pollen Puff targeted towards ally
+  it.todo("should not increase the priority of Present if it heals the user", async () => {
+    game.override.moveset(Moves.PRESENT);
+    await game.classicMode.startBattle([Species.FEEBAS]);
+  });
+
+  it("should not increase the priority of Pollen Puff if it heals the user's ally", async () => {
+    game.override
+      .moveset([Moves.POLLEN_PUFF, Moves.SPLASH])
+      .battleType("double")
+      .startingLevel(10)
+      .enemyMoveset(Moves.QUICK_ATTACK);
+    await game.classicMode.startBattle([Species.FEEBAS, Species.GOLDEEN]);
+
+    game.move.select(Moves.POLLEN_PUFF, 0, BattlerIndex.PLAYER_2);
+    game.move.select(Moves.SPLASH, 1);
+
+    await game.phaseInterceptor.to(TurnStartPhase, false);
+    const phase = game.scene.getCurrentPhase() as TurnStartPhase;
+    const healingPokemonIndex = phase.getCommandOrder().indexOf(BattlerIndex.PLAYER);
+
+    // The Pokemon using Pollen Puff on its ally should be after the enemy Pokemon using Quick Attack
+    expect(healingPokemonIndex).toBeGreaterThanOrEqual(2);
+  });
 });
