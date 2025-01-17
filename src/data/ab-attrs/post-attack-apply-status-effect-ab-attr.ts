@@ -17,6 +17,7 @@ import { PostAttackAbAttr } from "./post-attack-ab-attr";
 ```
 Currently, all abilities that use this attribute only inflict one status effect each. 
 The code is future-proofed so that it can accept a list of multiple status effects though. 
+@extends PostAttackAbAttr
 */
 export class PostAttackApplyStatusEffectAbAttr extends PostAttackAbAttr {
   private readonly contactRequired: boolean;
