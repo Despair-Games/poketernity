@@ -98,7 +98,6 @@ describe("Abilities - Triage", () => {
     expect(moveToUse.getPriority(playerPokemon)).toBe(originalPriority);
   });
 
-  // Test for Present if it heals
   it.todo("should not increase the priority of Present if it heals the user", async () => {
     game.override.moveset(Moves.PRESENT);
     await game.classicMode.startBattle([Species.FEEBAS]);
