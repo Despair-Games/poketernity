@@ -8,9 +8,6 @@ import type { NumberHolder } from "#app/utils";
  * @extends MoveAttr
  */
 export abstract class VariableDefAttr extends MoveAttr {
-  constructor() {
-    super();
-  }
 
   /**
    * Changes the defensive stat used in the current attack's damage calculation
