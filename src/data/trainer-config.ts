@@ -20,8 +20,6 @@ import { TrainerSlot } from "#enums/trainer-slot";
 
 /** Minimum BST for Pokemon generated onto the Elite Four's teams */
 const ELITE_FOUR_MINIMUM_BST = 460;
-/** Minimum BST for Pokemon generated onto the E4 Champion's team */
-const CHAMPION_MINIMUM_BST = 508;
 
 export interface TrainerTierPools {
   [key: number]: Species[];
@@ -203,7 +201,8 @@ export const trainerPartyTemplates = {
 
   CHAMPION: new TrainerPartyCompoundTemplate(
     new TrainerPartyTemplate(1, PartyMemberStrength.STRONGER),
-    new TrainerPartyTemplate(5, PartyMemberStrength.STRONG, false, true),
+    new TrainerPartyTemplate(3, PartyMemberStrength.STRONG),
+    new TrainerPartyTemplate(2, PartyMemberStrength.STRONGER),
   ),
 
   RIVAL: new TrainerPartyCompoundTemplate(
@@ -1301,30 +1300,21 @@ export class TrainerConfig {
 
   /**
    * Initializes the trainer configuration for a Champion.
-   * @param signatureSpecies The signature species for the Champion.
    * @param isMale Whether the Champion is Male or Female (for localization of the title).
+   * @param battleBgm String representing the battle music
+   * @param mixedBattleBgm String representing mixed battle music
    * @returns The updated TrainerConfig instance.
    **/
-  initForChampion(signatureSpecies: (Species | Species[])[], isMale: boolean): TrainerConfig {
+  initForChampion(isMale: boolean, battleBgm: string, mixedBattleBgm: string): TrainerConfig {
     // Check if the internationalization (i18n) system is initialized.
     if (!getIsInitialized()) {
       initI18n();
     }
+    this.setBattleBgm(battleBgm);
+    this.setMixedBattleBgm(mixedBattleBgm);
 
     // Set the party templates for the Champion.
     this.setPartyTemplates(trainerPartyTemplates.CHAMPION);
-
-    // Set up party members with their corresponding species.
-    signatureSpecies.forEach((speciesPool, s) => {
-      // Ensure speciesPool is an array.
-      if (!Array.isArray(speciesPool)) {
-        speciesPool = [speciesPool];
-      }
-      // Set a function to get a random party member from the species pool.
-      this.setPartyMemberFunc(-(s + 1), getRandomPartyMemberFunc(speciesPool));
-    });
-
-    this.setSpeciesFilter((p) => p.baseTotal >= CHAMPION_MINIMUM_BST);
 
     // Localize the trainer's name by converting it to lowercase and replacing spaces with underscores.
     const nameForCall = this.name.toLowerCase().replace(/\s/g, "_");
@@ -1341,7 +1331,6 @@ export class TrainerConfig {
     this.setBoss();
     this.setStaticParty();
     this.setHasVoucher(true);
-    this.setBattleBgm("battle_champion_alder");
     this.setVictoryBgm("victory_champion");
     this.setGenModifiersFunc((party) => getRandomTeraModifiers(party, 3));
 
