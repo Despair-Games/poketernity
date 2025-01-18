@@ -10,7 +10,7 @@ import type { OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler"
 import { api } from "#app/plugins/api/api";
 import { globalScene } from "#app/global-scene";
 import JSZip from "jszip";
-import { SAVE_FILE_EXTENSION, SAVES_ZIP_PREFIX } from "#app/constants";
+import { APP_ABBREVIATION, SAVE_FILE_EXTENSION, SAVES_ZIP_PREFIX } from "#app/constants";
 
 interface BuildInteractableImageOpts {
   scale?: number;
@@ -257,10 +257,13 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
       if (dataKeys.length > 0 || sessionKeys.length > 0) {
         const zip = new JSZip();
         for (let i = 0; i < dataKeys.length; i++) {
-          zip.file(dataKeys[i] + `.${SAVE_FILE_EXTENSION}`, localStorage.getItem(dataKeys[i])!);
+          zip.file(dataKeys[i] + `.${APP_ABBREVIATION}.${SAVE_FILE_EXTENSION}`, localStorage.getItem(dataKeys[i])!);
         }
         for (let i = 0; i < sessionKeys.length; i++) {
-          zip.file(sessionKeys[i] + `.${SAVE_FILE_EXTENSION}`, localStorage.getItem(sessionKeys[i])!);
+          zip.file(
+            sessionKeys[i] + `.${APP_ABBREVIATION}.${SAVE_FILE_EXTENSION}`,
+            localStorage.getItem(sessionKeys[i])!,
+          );
         }
         zip.generateAsync({ type: "blob" }).then((content) => {
           const url = URL.createObjectURL(content);
