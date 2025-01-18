@@ -8,13 +8,47 @@ import { PokeballType } from "#enums/pokeball";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
 
+const rocket_boss_title = "Rocket Boss";
+const rocket_music = "battle_rocket_boss";
+const GIOVANNI = "Giovanni";
+
+const magma_boss_title = "Magma Boss";
+const MAXIE = "Maxie";
+const aqua_boss_title = "Aqua Boss";
+const ARCHIE = "Archie";
+const aqua_magma_music = "battle_aqua_magma_boss";
+
+const galactic_boss_title = "Galactic Boss";
+const CYRUS = "Cyrus";
+const galactic_music = "battle_galactic_boss";
+
+const plasma_boss_title = "Plasma Boss";
+const GHETSIS = "Ghetsis";
+const plasma_music = "battle_plasma_boss";
+
+const flare_boss_title = "Flare Boss";
+const LYSANDRE = "Lysandre";
+const flare_music = "battle_flare_boss";
+
+const aether_boss_title = "Aether Boss";
+const LUSAMINE = "Lusamine";
+const aether_music = "battle_aether_boss";
+const skull_boss_title = "Skull Boss";
+const GUZMA = "Guzma";
+const skull_music = "battle_skull_boss";
+
+const macro_boss_title = "Macro Boss";
+const ROSE = "Rose";
+const macro_music = "battle_macro_boss";
+
+const star_boss_title = "Star Boss";
+const PENNY = "Cassiopeia";
+const star_music = "battle_star_boss";
+
 let t = TrainerType.ROCKET_BOSS_GIOVANNI_1;
 export const evilBossTrainerConfigs: TrainerConfigs = {
   [TrainerType.ROCKET_BOSS_GIOVANNI_1]: new TrainerConfig(t)
-    .setName("Giovanni")
-    .initForEvilTeamLeader("Rocket Boss", [])
-    .setMixedBattleBgm("battle_rocket_boss")
-    .setVictoryBgm("victory_team_plasma")
+    .initForEvilTeamLeader(rocket_boss_title, GIOVANNI, false, rocket_music)
     .setPartyMemberFunc(
       0,
       getRandomPartyMemberFunc([Species.PERSIAN, Species.ALOLA_PERSIAN], TrainerSlot.TRAINER, true, (p) => {
@@ -37,10 +71,7 @@ export const evilBossTrainerConfigs: TrainerConfigs = {
       }),
     ),
   [TrainerType.ROCKET_BOSS_GIOVANNI_2]: new TrainerConfig(++t)
-    .setName("Giovanni")
-    .initForEvilTeamLeader("Rocket Boss", [], true)
-    .setMixedBattleBgm("battle_rocket_boss")
-    .setVictoryBgm("victory_team_plasma")
+    .initForEvilTeamLeader(rocket_boss_title, GIOVANNI, true, rocket_music)
     .setPartyMemberFunc(
       0,
       getRandomPartyMemberFunc([Species.TYRANITAR, Species.IRON_THORNS], TrainerSlot.TRAINER, true, (p) => {
@@ -81,10 +112,7 @@ export const evilBossTrainerConfigs: TrainerConfigs = {
       }),
     ),
   [TrainerType.MAXIE]: new TrainerConfig(++t)
-    .setName("Maxie")
-    .initForEvilTeamLeader("Magma Boss", [])
-    .setMixedBattleBgm("battle_aqua_magma_boss")
-    .setVictoryBgm("victory_team_plasma")
+    .initForEvilTeamLeader(magma_boss_title, MAXIE, false, aqua_magma_music)
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.MIGHTYENA]))
     .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.CROBAT, Species.GLISCOR]))
     .setPartyMemberFunc(2, getRandomPartyMemberFunc([Species.WEEZING, Species.GALAR_WEEZING]))
@@ -102,10 +130,7 @@ export const evilBossTrainerConfigs: TrainerConfigs = {
       }),
     ),
   [TrainerType.MAXIE_2]: new TrainerConfig(++t)
-    .setName("Maxie")
-    .initForEvilTeamLeader("Magma Boss", [], true)
-    .setMixedBattleBgm("battle_aqua_magma_boss")
-    .setVictoryBgm("victory_team_plasma")
+    .initForEvilTeamLeader(magma_boss_title, MAXIE, true, aqua_magma_music)
     .setPartyMemberFunc(
       0,
       getRandomPartyMemberFunc([Species.SOLROCK, Species.TYPHLOSION], TrainerSlot.TRAINER, true, (p) => {
@@ -149,10 +174,7 @@ export const evilBossTrainerConfigs: TrainerConfigs = {
       }),
     ),
   [TrainerType.ARCHIE]: new TrainerConfig(++t)
-    .setName("Archie")
-    .initForEvilTeamLeader("Aqua Boss", [])
-    .setMixedBattleBgm("battle_aqua_magma_boss")
-    .setVictoryBgm("victory_team_plasma")
+    .initForEvilTeamLeader(aqua_boss_title, ARCHIE, false, aqua_magma_music)
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.LINOONE]))
     .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.CROBAT, Species.PELIPPER]))
     .setPartyMemberFunc(2, getRandomPartyMemberFunc([Species.MUK, Species.ALOLA_MUK]))
@@ -170,10 +192,7 @@ export const evilBossTrainerConfigs: TrainerConfigs = {
       }),
     ),
   [TrainerType.ARCHIE_2]: new TrainerConfig(++t)
-    .setName("Archie")
-    .initForEvilTeamLeader("Aqua Boss", [], true)
-    .setMixedBattleBgm("battle_aqua_magma_boss")
-    .setVictoryBgm("victory_team_plasma")
+    .initForEvilTeamLeader(aqua_boss_title, ARCHIE, true, aqua_magma_music)
     .setPartyMemberFunc(
       0,
       getRandomPartyMemberFunc([Species.EMPOLEON, Species.LUDICOLO], TrainerSlot.TRAINER, true, (p) => {
@@ -223,10 +242,7 @@ export const evilBossTrainerConfigs: TrainerConfigs = {
       }),
     ),
   [TrainerType.CYRUS]: new TrainerConfig(++t)
-    .setName("Cyrus")
-    .initForEvilTeamLeader("Galactic Boss", [])
-    .setMixedBattleBgm("battle_galactic_boss")
-    .setVictoryBgm("victory_team_plasma")
+    .initForEvilTeamLeader(galactic_boss_title, CYRUS, false, galactic_music)
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.GYARADOS]))
     .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.HONCHKROW, Species.HISUI_BRAVIARY]))
     .setPartyMemberFunc(2, getRandomPartyMemberFunc([Species.CROBAT, Species.GLISCOR]))
@@ -250,10 +266,7 @@ export const evilBossTrainerConfigs: TrainerConfigs = {
       }),
     ),
   [TrainerType.CYRUS_2]: new TrainerConfig(++t)
-    .setName("Cyrus")
-    .initForEvilTeamLeader("Galactic Boss", [], true)
-    .setMixedBattleBgm("battle_galactic_boss")
-    .setVictoryBgm("victory_team_plasma")
+    .initForEvilTeamLeader(galactic_boss_title, CYRUS, true, galactic_music)
     .setPartyMemberFunc(
       0,
       getRandomPartyMemberFunc([Species.AZELF, Species.UXIE, Species.MESPRIT], TrainerSlot.TRAINER, true, (p) => {
@@ -290,10 +303,7 @@ export const evilBossTrainerConfigs: TrainerConfigs = {
       }),
     ),
   [TrainerType.GHETSIS]: new TrainerConfig(++t)
-    .setName("Ghetsis")
-    .initForEvilTeamLeader("Plasma Boss", [])
-    .setMixedBattleBgm("battle_plasma_boss")
-    .setVictoryBgm("victory_team_plasma")
+    .initForEvilTeamLeader(plasma_boss_title, GHETSIS, false, plasma_music)
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.COFAGRIGUS, Species.RUNERIGUS]))
     .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.BOUFFALANT]))
     .setPartyMemberFunc(2, getRandomPartyMemberFunc([Species.SEISMITOAD, Species.CARRACOSTA]))
@@ -309,10 +319,7 @@ export const evilBossTrainerConfigs: TrainerConfigs = {
       }),
     ),
   [TrainerType.GHETSIS_2]: new TrainerConfig(++t)
-    .setName("Ghetsis")
-    .initForEvilTeamLeader("Plasma Boss", [], true)
-    .setMixedBattleBgm("battle_plasma_boss")
-    .setVictoryBgm("victory_team_plasma")
+    .initForEvilTeamLeader(plasma_boss_title, GHETSIS, true, plasma_music)
     .setPartyMemberFunc(
       0,
       getRandomPartyMemberFunc([Species.GENESECT], TrainerSlot.TRAINER, true, (p) => {
@@ -354,10 +361,7 @@ export const evilBossTrainerConfigs: TrainerConfigs = {
       }),
     ),
   [TrainerType.LYSANDRE]: new TrainerConfig(++t)
-    .setName("Lysandre")
-    .initForEvilTeamLeader("Flare Boss", [])
-    .setMixedBattleBgm("battle_flare_boss")
-    .setVictoryBgm("victory_team_plasma")
+    .initForEvilTeamLeader(flare_boss_title, LYSANDRE, false, flare_music)
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.MIENSHAO]))
     .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.HONCHKROW, Species.TALONFLAME]))
     .setPartyMemberFunc(
@@ -381,10 +385,7 @@ export const evilBossTrainerConfigs: TrainerConfigs = {
       }),
     ),
   [TrainerType.LYSANDRE_2]: new TrainerConfig(++t)
-    .setName("Lysandre")
-    .initForEvilTeamLeader("Flare Boss", [], true)
-    .setMixedBattleBgm("battle_flare_boss")
-    .setVictoryBgm("victory_team_plasma")
+    .initForEvilTeamLeader(flare_boss_title, LYSANDRE, true, flare_music)
     .setPartyMemberFunc(
       0,
       getRandomPartyMemberFunc([Species.SCREAM_TAIL, Species.FLUTTER_MANE], TrainerSlot.TRAINER, true, (p) => {
@@ -422,10 +423,7 @@ export const evilBossTrainerConfigs: TrainerConfigs = {
       }),
     ),
   [TrainerType.LUSAMINE]: new TrainerConfig(++t)
-    .setName("Lusamine")
-    .initForEvilTeamLeader("Aether Boss", [])
-    .setMixedBattleBgm("battle_aether_boss")
-    .setVictoryBgm("victory_team_plasma")
+    .initForEvilTeamLeader(aether_boss_title, LUSAMINE, false, aether_music)
     .setPartyMemberFunc(
       0,
       getRandomPartyMemberFunc([Species.CLEFABLE], TrainerSlot.TRAINER, true, (p) => {
@@ -446,10 +444,7 @@ export const evilBossTrainerConfigs: TrainerConfigs = {
       }),
     ),
   [TrainerType.LUSAMINE_2]: new TrainerConfig(++t)
-    .setName("Lusamine")
-    .initForEvilTeamLeader("Aether Boss", [], true)
-    .setMixedBattleBgm("battle_aether_boss")
-    .setVictoryBgm("victory_team_plasma")
+    .initForEvilTeamLeader(aether_boss_title, LUSAMINE, true, aether_music)
     .setPartyMemberFunc(
       0,
       getRandomPartyMemberFunc([Species.NIHILEGO], TrainerSlot.TRAINER, true, (p) => {
@@ -495,10 +490,7 @@ export const evilBossTrainerConfigs: TrainerConfigs = {
       }),
     ),
   [TrainerType.GUZMA]: new TrainerConfig(++t)
-    .setName("Guzma")
-    .initForEvilTeamLeader("Skull Boss", [])
-    .setMixedBattleBgm("battle_skull_boss")
-    .setVictoryBgm("victory_team_plasma")
+    .initForEvilTeamLeader(skull_boss_title, GUZMA, false, skull_music)
     .setPartyMemberFunc(
       0,
       getRandomPartyMemberFunc([Species.LOKIX, Species.YANMEGA], TrainerSlot.TRAINER, true, (p) => {
@@ -542,10 +534,7 @@ export const evilBossTrainerConfigs: TrainerConfigs = {
       }),
     ),
   [TrainerType.GUZMA_2]: new TrainerConfig(++t)
-    .setName("Guzma")
-    .initForEvilTeamLeader("Skull Boss", [], true)
-    .setMixedBattleBgm("battle_skull_boss")
-    .setVictoryBgm("victory_team_plasma")
+    .initForEvilTeamLeader(skull_boss_title, GUZMA, true, skull_music)
     .setPartyMemberFunc(
       0,
       getRandomPartyMemberFunc([Species.GOLISOPOD], TrainerSlot.TRAINER, true, (p) => {
@@ -599,10 +588,7 @@ export const evilBossTrainerConfigs: TrainerConfigs = {
       }),
     ),
   [TrainerType.ROSE]: new TrainerConfig(++t)
-    .setName("Rose")
-    .initForEvilTeamLeader("Macro Boss", [])
-    .setMixedBattleBgm("battle_macro_boss")
-    .setVictoryBgm("victory_team_plasma")
+    .initForEvilTeamLeader(macro_boss_title, ROSE, false, macro_music)
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.ARCHALUDON]))
     .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.FERROTHORN, Species.ESCAVALIER]))
     .setPartyMemberFunc(2, getRandomPartyMemberFunc([Species.SIRFETCHD, Species.MR_RIME]))
@@ -620,10 +606,7 @@ export const evilBossTrainerConfigs: TrainerConfigs = {
       }),
     ),
   [TrainerType.ROSE_2]: new TrainerConfig(++t)
-    .setName("Rose")
-    .initForEvilTeamLeader("Macro Boss", [], true)
-    .setMixedBattleBgm("battle_macro_boss")
-    .setVictoryBgm("victory_team_plasma")
+    .initForEvilTeamLeader(macro_boss_title, ROSE, true, macro_music)
     .setPartyMemberFunc(
       0,
       getRandomPartyMemberFunc([Species.ARCHALUDON], TrainerSlot.TRAINER, true, (p) => {
@@ -665,10 +648,7 @@ export const evilBossTrainerConfigs: TrainerConfigs = {
       }),
     ),
   [TrainerType.PENNY]: new TrainerConfig(++t)
-    .setName("Cassiopeia")
-    .initForEvilTeamLeader("Star Boss", [])
-    .setMixedBattleBgm("battle_star_boss")
-    .setVictoryBgm("victory_team_plasma")
+    .initForEvilTeamLeader(star_boss_title, PENNY, false, star_music)
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.VAPOREON, Species.JOLTEON, Species.FLAREON]))
     .setPartyMemberFunc(
       1,
@@ -714,10 +694,7 @@ export const evilBossTrainerConfigs: TrainerConfigs = {
       ]; //TODO: is the bang correct?
     }),
   [TrainerType.PENNY_2]: new TrainerConfig(++t)
-    .setName("Cassiopeia")
-    .initForEvilTeamLeader("Star Boss", [], true)
-    .setMixedBattleBgm("battle_star_boss")
-    .setVictoryBgm("victory_team_plasma")
+    .initForEvilTeamLeader(star_boss_title, PENNY, true, star_music)
     .setPartyMemberFunc(
       0,
       getRandomPartyMemberFunc([Species.SYLVEON], TrainerSlot.TRAINER, true, (p) => {
