@@ -1,6 +1,6 @@
 import { allMoves } from "#app/data/all-moves";
-// import { resolve } from "path";
-// import { readFileSync } from "fs";
+import { resolve } from "path";
+import { readFileSync } from "fs";
 import { describe, expect, it } from "vitest";
 import type { MoveCategory } from "#enums/move-category";
 import type { Moves } from "#enums/moves";
@@ -49,11 +49,11 @@ describe("All Moves", async () => {
    * - Court Change : Accuracy is set to 100 in PKTY, not -1
    */
 
-  // const filename = resolve("./test/moves/all_moves.json");
-  // const file = readFileSync(filename, { encoding: "utf-8" });
-  // const moveData: MoveData[] = JSON.parse(file);
+  const filename = resolve("./test/moves/all_moves.json");
+  const file = readFileSync(filename, { encoding: "utf-8" });
+  const moveData: MoveData[] = JSON.parse(file);
 
-  it.todo("$identifier, if implemented, should have correct move data", async (move: MoveData) => {
+  it.each(moveData)("$identifier, if implemented, should have correct move data", async (move: MoveData) => {
     const pktyMove = allMoves[move.id as Moves] as Move;
     if (pktyMove && !isUnimplemented(pktyMove.name)) {
       expect(pktyMove.type).toBe(move.type_id - 1); // PokeAPI begins its list of types with the number 1
