@@ -2,7 +2,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { WeatherType } from "#enums/weather-type";
 import { AbAttr } from "./ab-attr";
 
-export class PostWeatherChangeAbAttr extends AbAttr {
+export abstract class PostWeatherChangeAbAttr extends AbAttr {
   /**
    * Applies an effect after the weather on the field changes
    * @param pokemon The {@linkcode Pokemon} with this ability

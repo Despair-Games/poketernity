@@ -3,7 +3,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
 import { AbAttr } from "./ab-attr";
 
-export class PreApplyBattlerTagAbAttr extends AbAttr {
+export abstract class PreApplyBattlerTagAbAttr extends AbAttr {
   /**
    * Applies an effect before a battler tag is applied to the source
    * @param pokemon The {@linkcode Pokemon} with this ability

@@ -7,7 +7,7 @@ import { AbAttr } from "./ab-attr";
  * Triggers just after a move is used either by the opponent or the player
  * @extends AbAttr
  */
-export class PostMoveUsedAbAttr extends AbAttr {
+export abstract class PostMoveUsedAbAttr extends AbAttr {
   /**
    * Applies an effect after a move is used by any other Pokemon
    * @param pokemon The {@linkcode Pokemon} with this ability

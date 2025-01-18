@@ -7,7 +7,7 @@ import type { NumberHolder } from "#app/utils";
  * Attribute to modify a move's type based on game state.
  * @extends MoveAttr
  */
-export class VariableMoveTypeAttr extends MoveAttr {
+export abstract class VariableMoveTypeAttr extends MoveAttr {
   /**
    * Modifies the given move's type based on game state
    * @param _user the {@linkcode Pokemon} using the move

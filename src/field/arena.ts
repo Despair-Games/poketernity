@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import type { BiomeTierTrainerPools, PokemonPools } from "#app/data/balance/biomes";
 import { biomePokemonPools, biomeTrainerPools } from "#app/data/balance/biomes";
 import { BiomePoolTier } from "#enums/biome-pool-tier";
-import { type Constructor, randSeedInt } from "#app/utils";
+import { type AbstractConstructor, randSeedInt } from "#app/utils";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
 import { getWeatherClearMessage, getWeatherStartMessage, Weather } from "#app/data/weather";
@@ -588,7 +588,7 @@ export class Arena {
    * @param args array of parameters that the called upon tags may need
    */
   applyTagsForSide(
-    tagType: ArenaTagType | Constructor<ArenaTag>,
+    tagType: ArenaTagType | AbstractConstructor<ArenaTag>,
     side: ArenaTagSide,
     simulated: boolean,
     ...args: unknown[]
@@ -610,7 +610,7 @@ export class Arena {
    * @param simulated if `true`, this applies arena tags without changing game state
    * @param args array of parameters that the called upon tags may need
    */
-  applyTags(tagType: ArenaTagType | Constructor<ArenaTag>, simulated: boolean, ...args: unknown[]): void {
+  applyTags(tagType: ArenaTagType | AbstractConstructor<ArenaTag>, simulated: boolean, ...args: unknown[]): void {
     this.applyTagsForSide(tagType, ArenaTagSide.BOTH, simulated, ...args);
   }
 
@@ -666,7 +666,7 @@ export class Arena {
    * @param tagType The {@linkcode ArenaTagType} or {@linkcode ArenaTag} to get
    * @returns either the {@linkcode ArenaTag}, or `undefined` if it isn't there
    */
-  getTag(tagType: ArenaTagType | Constructor<ArenaTag>): ArenaTag | undefined {
+  getTag(tagType: ArenaTagType | AbstractConstructor<ArenaTag>): ArenaTag | undefined {
     return this.getTagOnSide(tagType, ArenaTagSide.BOTH);
   }
 
@@ -682,7 +682,7 @@ export class Arena {
    * @param side The {@linkcode ArenaTagSide} to look at
    * @returns either the {@linkcode ArenaTag}, or `undefined` if it isn't there
    */
-  getTagOnSide(tagType: ArenaTagType | Constructor<ArenaTag>, side: ArenaTagSide): ArenaTag | undefined {
+  getTagOnSide(tagType: ArenaTagType | AbstractConstructor<ArenaTag>, side: ArenaTagSide): ArenaTag | undefined {
     return typeof tagType === "number"
       ? this.tags.find(
           (t) =>

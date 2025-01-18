@@ -8,7 +8,7 @@ import { PreAttackAbAttr } from "./pre-attack-ab-attr";
  * Boosts the power of a Pokémon's move under certain conditions.
  * @extends AbAttr
  */
-export class FieldMovePowerBoostAbAttr extends PreAttackAbAttr {
+export abstract class FieldMovePowerBoostAbAttr extends PreAttackAbAttr {
   private readonly condition: PokemonAttackCondition;
   private readonly powerMultiplier: number;
 

@@ -120,6 +120,16 @@ export class GameMode implements GameModeConfig {
     }
   }
 
+  /**
+   * Function to tweak a wave based on different game modes.
+   * For daily mode, adds 30 plus a possible additional 1 per every 5 floors (rounded down)
+   *
+   * @param waveIndex the current floor the player is on
+   * @param ignoreCurveChanges whether or not to ignore the extra addition in daily mode
+   * Acetrainers, Breeders, Twins, and gym leaders all use the {@linkcode getWavePartyTemplate} function
+   * and thus do not have the extra addition applied in daily mode
+   * @returns a number representing what the wave should be
+   */
   getWaveForDifficulty(waveIndex: number, ignoreCurveChanges: boolean = false): number {
     switch (this.modeId) {
       case GameModes.DAILY:

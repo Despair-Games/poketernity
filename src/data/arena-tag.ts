@@ -164,7 +164,7 @@ export class MistTag extends ArenaTag {
  * Reduces the damage of specific move categories in the arena.
  * @extends ArenaTag
  */
-export class WeakenMoveScreenTag extends ArenaTag {
+export abstract class WeakenMoveScreenTag extends ArenaTag {
   protected weakenedCategories: MoveCategory[];
 
   /**
@@ -289,7 +289,7 @@ type ProtectConditionFunc = (arena: Arena, moveId: Moves) => boolean;
  * Class to implement conditional team protection
  * applies protection based on the attributes of incoming moves
  */
-export class ConditionalProtectTag extends ArenaTag {
+export abstract class ConditionalProtectTag extends ArenaTag {
   /** The condition function to determine which moves are negated */
   protected protectConditionFunc: ProtectConditionFunc;
   /** Does this apply to all moves, including those that ignore other forms of protection? */
@@ -567,7 +567,7 @@ class WishTag extends ArenaTag {
 /**
  * Abstract class to implement weakened moves of a specific type.
  */
-export class WeakenMoveTypeTag extends ArenaTag {
+export abstract class WeakenMoveTypeTag extends ArenaTag {
   private weakenedType: Type;
 
   /**
@@ -674,7 +674,7 @@ export class IonDelugeTag extends ArenaTag {
 /**
  * Abstract class to implement arena traps.
  */
-export class ArenaTrapTag extends ArenaTag {
+export abstract class ArenaTrapTag extends ArenaTag {
   public layers: number;
   public maxLayers: number;
 
