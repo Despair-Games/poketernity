@@ -150,7 +150,7 @@ describe("BattlerTag - StockpilingTag", () => {
       expect(subject.stockpiledCount).toBe(3);
 
       // fourth stack should not be applied
-      // subject.onOverlap(mockPokemon);
+      subject.onOverlap(mockPokemon);
       expect(subject.stockpiledCount).toBe(3);
       expect(subject.statChangeCounts).toMatchObject({ [Stat.DEF]: 0, [Stat.SPDEF]: 2 });
 
