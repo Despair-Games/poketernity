@@ -387,8 +387,8 @@ export default class BattleScene extends SceneBase {
   async preload() {
     if (DEBUG_RNG) {
       const originalRealInRange = Phaser.Math.RND.realInRange;
-      Phaser.Math.RND.realInRange = function (min: number, max: number): number {
-        const ret = originalRealInRange.apply(this, [min, max]);
+      Phaser.Math.RND.realInRange = (min: number, max: number): number => {
+        const ret = originalRealInRange.apply(Phaser.Math.RND, [min, max]);
         const args = ["RNG", ++this.rngCounter, ret / (max - min), `min: ${min} / max: ${max}`];
         args.push(`seed: ${this.rngSeedOverride || this.waveSeed || this.seed}`);
         if (this.rngOffset) {
@@ -1213,7 +1213,7 @@ export default class BattleScene extends SceneBase {
     if (reloadI18n) {
       const localizable: Localizable[] = [
         ...allSpecies,
-        ...allMoves,
+        ...Object.values(allMoves),
         ...allAbilities,
         ...getEnumValues(ModifierPoolType)
           .map((mpt) => getModifierPoolForType(mpt))
