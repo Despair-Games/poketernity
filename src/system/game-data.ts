@@ -1,5 +1,5 @@
 import i18next from "i18next";
-import { bypassLogin, SETTINGS_LS_KEY, TUTORIALS_LS_KEY } from "#app/constants";
+import { APP_ABBREVIATION, bypassLogin, SETTINGS_LS_KEY, TUTORIALS_LS_KEY } from "#app/constants";
 import { globalScene } from "#app/global-scene";
 import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
@@ -1268,7 +1268,7 @@ export class GameData {
         const blob = new Blob([encryptedData.toString()], { type: "text/json" });
         const link = document.createElement("a");
         link.href = window.URL.createObjectURL(blob);
-        link.download = `${dataKey}.${SAVE_FILE_EXTENSION}`;
+        link.download = `${dataKey}.${APP_ABBREVIATION}.${SAVE_FILE_EXTENSION}`;
         link.click();
         link.remove();
       };

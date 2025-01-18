@@ -245,10 +245,11 @@ import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { NoDamageAgainstFlyingAttr } from "./move-attrs/no-damage-against-flying-attr";
 import { SkyDropAttr } from "./move-attrs/sky-drop-attr";
 
-export const allMoves: Move[] = [];
+// Initialized as being empty; it will be filled during `initMoves()`
+export const allMoves: { [moveId in Moves]: Move } = {} as any;
 
 export function initMoves() {
-  allMoves.push(
+  const rawAllMoves = [
     new SelfStatusMove(Moves.NONE, Type.NORMAL, MoveCategory.STATUS, -1, -1, 0, 1),
     new AttackMove(Moves.POUND, Type.NORMAL, MoveCategory.PHYSICAL, 40, 100, 35, -1, 0, 1),
     new AttackMove(Moves.KARATE_CHOP, Type.FIGHTING, MoveCategory.PHYSICAL, 50, 100, 25, -1, 0, 1).attr(HighCritAttr),
@@ -3699,10 +3700,13 @@ export function initMoves() {
       StatusEffectAttr,
       StatusEffect.TOXIC,
     ),
-  );
-  allMoves.map((m) => {
-    if (m.getAttrs(StatStageChangeAttr).some((a) => a.selfTarget && a.stages < 0)) {
-      selfStatLowerMoves.push(m.id);
+  ];
+
+  for (const move of rawAllMoves) {
+    // Make sure `allMoves` assigns correct ID to every move, and check if the move is a self-stat-lowering move
+    allMoves[move.id] = move;
+    if (move.getAttrs(StatStageChangeAttr).some((a) => a.selfTarget && a.stages < 0)) {
+      selfStatLowerMoves.push(move.id);
     }
-  });
+  }
 }

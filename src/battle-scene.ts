@@ -165,7 +165,7 @@ import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { FRIENDSHIP_GAIN_FROM_BATTLE } from "#app/data/balance/starters";
 import { StatusEffect } from "#enums/status-effect";
-import { globalScene, initGlobalScene } from "#app/global-scene";
+import { initGlobalScene } from "#app/global-scene";
 import { BlockItemTheftAbAttr } from "./data/ab-attrs/block-item-theft-ab-attr";
 import { DoubleBattleChanceAbAttr } from "./data/ab-attrs/double-battle-chance-ab-attr";
 import { PostBattleInitAbAttr } from "./data/ab-attrs/post-battle-init-ab-attr";
@@ -384,12 +384,12 @@ export default class BattleScene extends SceneBase {
   async preload() {
     if (DEBUG_RNG) {
       const originalRealInRange = Phaser.Math.RND.realInRange;
-      Phaser.Math.RND.realInRange = function (min: number, max: number): number {
-        const ret = originalRealInRange.apply(this, [min, max]);
-        const args = ["RNG", ++globalScene.rngCounter, ret / (max - min), `min: ${min} / max: ${max}`];
-        args.push(`seed: ${globalScene.rngSeedOverride || globalScene.waveSeed || globalScene.seed}`);
-        if (globalScene.rngOffset) {
-          args.push(`offset: ${globalScene.rngOffset}`);
+      Phaser.Math.RND.realInRange = (min: number, max: number): number => {
+        const ret = originalRealInRange.apply(Phaser.Math.RND, [min, max]);
+        const args = ["RNG", ++this.rngCounter, ret / (max - min), `min: ${min} / max: ${max}`];
+        args.push(`seed: ${this.rngSeedOverride || this.waveSeed || this.seed}`);
+        if (this.rngOffset) {
+          args.push(`offset: ${this.rngOffset}`);
         }
         console.log(...args);
         return ret;
@@ -402,7 +402,7 @@ export default class BattleScene extends SceneBase {
   }
 
   create() {
-    globalScene.scene.remove(LoadingScene.KEY);
+    this.scene.remove(LoadingScene.KEY);
     initGameSpeed.apply(this);
     this.inputController = new InputsController();
     this.uiInputs = new UiInputs(this.inputController);
@@ -1210,7 +1210,7 @@ export default class BattleScene extends SceneBase {
     if (reloadI18n) {
       const localizable: Localizable[] = [
         ...allSpecies,
-        ...allMoves,
+        ...Object.values(allMoves),
         ...allAbilities,
         ...getEnumValues(ModifierPoolType)
           .map((mpt) => getModifierPoolForType(mpt))
@@ -2946,7 +2946,7 @@ export default class BattleScene extends SceneBase {
     let modifiers = (player ? this.modifiers : this.enemyModifiers).filter(
       (m): m is T => m instanceof modifierType && m.shouldApply(...args),
     );
-    globalScene.executeWithSeedOffset(
+    this.executeWithSeedOffset(
       () => {
         const shuffleModifiers = (mods) => {
           if (mods.length < 1) {
@@ -2957,8 +2957,8 @@ export default class BattleScene extends SceneBase {
         };
         modifiers = shuffleModifiers(modifiers);
       },
-      globalScene.currentBattle.turn << 4,
-      globalScene.waveSeed,
+      this.currentBattle.turn << 4,
+      this.waveSeed,
     );
     return this.applyModifiersInternal(modifiers, player, args);
   }
@@ -3341,8 +3341,8 @@ export default class BattleScene extends SceneBase {
    * @param slotIndex the position of the Pokemon released
    */
   releasePokemon(slotIndex: number): void {
-    globalScene.removePartyMemberModifiers(slotIndex);
-    const releasedPokemon = globalScene.getPlayerParty().splice(slotIndex, 1)[0];
+    this.removePartyMemberModifiers(slotIndex);
+    const releasedPokemon = this.getPlayerParty().splice(slotIndex, 1)[0];
     releasedPokemon.destroy();
   }
 
