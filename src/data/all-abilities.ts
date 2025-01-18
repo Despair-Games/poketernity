@@ -947,7 +947,11 @@ export function initAbilities() {
     ),
     new Ability(Abilities.MEGA_LAUNCHER, 6)
       .attr(MoveFlagPowerBoostAbAttr, MoveFlags.PULSE_MOVE, 1.5)
-      .attr(RecoveryBoostAbAttr, (pokemon, _target, move) => pokemon && move.checkFlag(MoveFlags.PULSE_MOVE), 1.5),
+      .attr(
+        RecoveryBoostAbAttr,
+        (pokemon, _target, move) => !!pokemon && !!move && move.checkFlag(MoveFlags.PULSE_MOVE, pokemon, null),
+        1.5,
+      ),
     new Ability(Abilities.GRASS_PELT, 6)
       .conditionalAttr(getTerrainCondition(TerrainType.GRASSY), StatMultiplierAbAttr, Stat.DEF, 1.5)
       .ignorable(),
