@@ -79,4 +79,20 @@ describe("Abilities - Gale Wings", () => {
     expect(flyingMove.getPriority).toHaveLastReturnedWith(flyingMove.priority);
     expect(playerPokemon.getMoveType(flyingMove)).toBe(Type.FLYING);
   });
+
+  it("should not boost the priority of originally Normal-type moves transformed by Aerilate", async () => {
+    game.override.moveset(Moves.TACKLE).passiveAbility(Abilities.AERILATE);
+    await game.classicMode.startBattle([Species.FEEBAS]);
+    const playerPokemon = game.scene.getPlayerPokemon()!;
+
+    const flyingMove = allMoves[Moves.TACKLE];
+    vi.spyOn(flyingMove, "getPriority");
+
+    game.move.select(Moves.TACKLE);
+    await game.phaseInterceptor.to("BerryPhase");
+
+    expect(playerPokemon.isFullHp()).toBe(true);
+    expect(flyingMove.getPriority).toHaveLastReturnedWith(flyingMove.priority);
+    expect(playerPokemon.getMoveType(flyingMove)).toBe(Type.FLYING);
+  });
 });
