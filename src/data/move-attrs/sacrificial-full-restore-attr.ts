@@ -20,7 +20,7 @@ export class SacrificialFullRestoreAttr extends SacrificialAttr {
   protected moveTriggerMessage: string;
 
   constructor(restorePP: boolean, moveTriggerMessage: string) {
-    super(true);
+    super();
 
     this.restorePP = restorePP;
     this.moveTriggerMessage = moveTriggerMessage;
