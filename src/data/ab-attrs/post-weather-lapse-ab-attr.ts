@@ -5,7 +5,7 @@ import { globalScene } from "#app/global-scene";
 import type { WeatherType } from "#enums/weather-type";
 import { AbAttr } from "./ab-attr";
 
-export class PostWeatherLapseAbAttr extends AbAttr {
+export abstract class PostWeatherLapseAbAttr extends AbAttr {
   protected readonly weatherTypes: WeatherType[];
 
   constructor(...weatherTypes: WeatherType[]) {

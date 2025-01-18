@@ -59,7 +59,7 @@ export class StatusEffectAttr extends MoveEffectAttr {
         (!pokemon.status || (pokemon.status.effect === this.effect && moveChance < 0))
         && pokemon.trySetStatus(this.effect, true, user, this.turnsRemaining)
       ) {
-        applyAbAttrs(ConfusionOnStatusEffectAbAttr, user, false, target, move, null, this.effect);
+        applyAbAttrs(ConfusionOnStatusEffectAbAttr, user, false, target, move, this.effect);
         return true;
       }
     }

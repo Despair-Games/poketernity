@@ -10,7 +10,7 @@ import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { NewBattlePhase } from "#app/phases/new-battle-phase";
 import { SwitchPhase } from "#app/phases/switch-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
-import type { Constructor } from "#app/utils";
+import type { AbstractConstructor, Constructor } from "#app/utils";
 import { BooleanHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import i18next from "i18next";
@@ -59,7 +59,7 @@ export class Ability implements Localizable {
    * @param attrType any attribute that extends {@linkcode AbAttr}
    * @returns Array of attributes that match `attrType`, Empty Array if none match.
    */
-  getAttrs<T extends AbAttr>(attrType: Constructor<T>): T[] {
+  getAttrs<T extends AbAttr>(attrType: AbstractConstructor<T>): T[] {
     return this.attrs.filter((a): a is T => a instanceof attrType);
   }
 
@@ -68,7 +68,7 @@ export class Ability implements Localizable {
    * @param attrType any attribute that extends {@linkcode AbAttr}
    * @returns true if the ability has attribute `attrType`
    */
-  hasAttr<T extends AbAttr>(attrType: Constructor<T>): boolean {
+  hasAttr<T extends AbAttr>(attrType: AbstractConstructor<T>): boolean {
     return this.attrs.some((attr) => attr instanceof attrType);
   }
 
@@ -219,13 +219,13 @@ export class ForceSwitchOutHelper {
    * @param opponent The opponent Pokémon.
    * @returns `true` if the switch-out condition is met
    */
-  public getSwitchOutCondition(pokemon: Pokemon, opponent: Pokemon): boolean {
+  public getSwitchOutCondition(pokemon: Pokemon, _opponent: Pokemon): boolean {
     const switchOutTarget = pokemon;
     const player = switchOutTarget instanceof PlayerPokemon;
 
     if (player) {
       const blockedByAbility = new BooleanHolder(false);
-      applyAbAttrs(ForceSwitchOutImmunityAbAttr, opponent, false, blockedByAbility);
+      applyAbAttrs(ForceSwitchOutImmunityAbAttr, pokemon, false, blockedByAbility);
       return !blockedByAbility.value;
     }
 
@@ -280,7 +280,7 @@ export class ForceSwitchOutHelper {
  * @see {@linkcode AbAttr}
  */
 export function applyAbAttrs<TAttr extends AbAttr>(
-  attrType: Constructor<TAttr>,
+  attrType: AbstractConstructor<TAttr>,
   ...params: Parameters<TAttr["apply"]>
 ): string[] {
   const messages: string[] = [];
@@ -314,10 +314,13 @@ export function applyAbAttrs<TAttr extends AbAttr>(
             queueShowAbility(pokemon, passive);
           }
         }
-
+      }
+      if (result) {
         const message = attr.getTriggerMessage(pokemon, ability.name, ...args);
         if (message) {
-          globalScene.queueMessage(message);
+          if (!simulated) {
+            globalScene.queueMessage(message);
+          }
           messages.push(message);
         }
       }

@@ -7,7 +7,7 @@ import type { NumberHolder } from "#app/utils";
  * Attribute to modify a move's category (Physical, Special, or Status) based on game state.
  * @extends MoveAttr
  */
-export class VariableMoveCategoryAttr extends MoveAttr {
+export abstract class VariableMoveCategoryAttr extends MoveAttr {
   /**
    * Modifies the given move's category based on game state
    * @param _user the {@linkcode Pokemon} using the move

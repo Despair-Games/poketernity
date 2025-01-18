@@ -7,7 +7,7 @@ import type { NumberHolder } from "#app/utils";
  * Attribute to modify move accuracy based on game state.
  * @extends MoveAttr
  */
-export class VariableAccuracyAttr extends MoveAttr {
+export abstract class VariableAccuracyAttr extends MoveAttr {
   /**
    * Modifies the given move's accuracy based on game state
    * @param _user the {@linkcode Pokemon} using the move

@@ -16,8 +16,8 @@ import {
   isNullOrUndefined,
   BooleanHolder,
   NumberHolder,
-  type Constructor,
   randItem,
+  type AbstractConstructor,
 } from "#app/utils";
 import type { Modifier, ModifierPredicate, TurnHeldItemTransferModifier } from "./modifier/modifier";
 import {
@@ -2438,7 +2438,7 @@ export default class BattleScene extends SceneBase {
    * @param targetPhase {@linkcode Phase} the type of phase to search for in phaseQueue
    * @returns boolean if a targetPhase was found and added
    */
-  prependToPhase(phase: Phase, targetPhase: Constructor<Phase>): boolean {
+  prependToPhase(phase: Phase, targetPhase: AbstractConstructor<Phase>): boolean {
     const targetIndex = this.phaseQueue.findIndex((ph) => ph instanceof targetPhase);
 
     if (targetIndex !== -1) {
@@ -2456,7 +2456,7 @@ export default class BattleScene extends SceneBase {
    * @param targetPhase {@linkcode Phase} the type of phase to search for in {@linkcode phaseQueue}
    * @returns `true` if a `targetPhase` was found to append to
    */
-  appendToPhase(phase: Phase, targetPhase: Constructor<Phase>): boolean {
+  appendToPhase(phase: Phase, targetPhase: AbstractConstructor<Phase>): boolean {
     const targetIndex = this.phaseQueue.findIndex((ph) => ph instanceof targetPhase);
 
     if (targetIndex !== -1 && this.phaseQueue.length > targetIndex) {
@@ -2910,7 +2910,7 @@ export default class BattleScene extends SceneBase {
    * @param player Whether to search the player (`true`) or the enemy (`false`); Defaults to `true`
    * @returns the list of all modifiers that matched `modifierType`.
    */
-  getModifiers<T extends PersistentModifier>(modifierType: Constructor<T>, player: boolean = true): T[] {
+  getModifiers<T extends PersistentModifier>(modifierType: AbstractConstructor<T>, player: boolean = true): T[] {
     return (player ? this.modifiers : this.enemyModifiers).filter((m): m is T => m instanceof modifierType);
   }
 
@@ -2942,7 +2942,7 @@ export default class BattleScene extends SceneBase {
    * @returns the list of all modifiers that matched `modifierType` and were applied.
    */
   applyShuffledModifiers<T extends PersistentModifier>(
-    modifierType: Constructor<T>,
+    modifierType: AbstractConstructor<T>,
     player: boolean = true,
     ...args: Parameters<T["apply"]>
   ): T[] {
@@ -2974,7 +2974,7 @@ export default class BattleScene extends SceneBase {
    * @returns the list of all modifiers that matched `modifierType` and were applied.
    */
   applyModifiers<T extends PersistentModifier>(
-    modifierType: Constructor<T>,
+    modifierType: AbstractConstructor<T>,
     player: boolean = true,
     ...args: Parameters<T["apply"]>
   ): T[] {
@@ -3009,7 +3009,7 @@ export default class BattleScene extends SceneBase {
    * @returns the first modifier that matches `modifierType` and was applied; return `null` if none matched
    */
   applyModifier<T extends PersistentModifier>(
-    modifierType: Constructor<T>,
+    modifierType: AbstractConstructor<T>,
     player: boolean = true,
     ...args: Parameters<T["apply"]>
   ): T | null {
@@ -3028,7 +3028,7 @@ export default class BattleScene extends SceneBase {
 
   triggerPokemonFormChange(
     pokemon: Pokemon,
-    formChangeTriggerType: Constructor<SpeciesFormChangeTrigger>,
+    formChangeTriggerType: AbstractConstructor<SpeciesFormChangeTrigger>,
     delayed: boolean = false,
     modal: boolean = false,
   ): boolean {
@@ -3092,7 +3092,7 @@ export default class BattleScene extends SceneBase {
     return true;
   }
 
-  validateAchvs(achvType: Constructor<Achv>, ...args: unknown[]): void {
+  validateAchvs(achvType: AbstractConstructor<Achv>, ...args: unknown[]): void {
     const filteredAchvs = Object.values(achvs).filter((a) => a instanceof achvType);
     for (const achv of filteredAchvs) {
       this.validateAchv(achv, args);

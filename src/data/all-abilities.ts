@@ -1091,7 +1091,7 @@ export function initAbilities() {
     ),
     new Ability(Abilities.TRIAGE, 7).attr(
       ChangeMovePriorityAbAttr,
-      (_pokemon, move) => move.hasFlag(MoveFlags.TRIAGE_MOVE),
+      (pokemon, move) => move.checkFlag(MoveFlags.TRIAGE_MOVE, pokemon, null),
       3,
     ),
     new Ability(Abilities.GALVANIZE, 7).attr(
