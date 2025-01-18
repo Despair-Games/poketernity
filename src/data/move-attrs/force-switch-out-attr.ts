@@ -32,7 +32,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
     private selfSwitch: boolean = false,
     private switchType: SwitchType = SwitchType.SWITCH,
   ) {
-    super(false, { lastHitOnly: true });
+    super(selfSwitch, { lastHitOnly: true });
   }
 
   isBatonPass() {

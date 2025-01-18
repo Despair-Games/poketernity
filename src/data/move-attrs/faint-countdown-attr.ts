@@ -19,7 +19,7 @@ export class FaintCountdownAttr extends AddBattlerTagAttr {
   }
 
   override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
-    if (!super.apply(user, target, move)) {
+    if (!super.applyEffect(user, target, move)) {
       return false;
     }
 

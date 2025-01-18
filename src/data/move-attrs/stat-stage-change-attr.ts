@@ -5,15 +5,15 @@ import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { AttackMove } from "../move";
 import type { Move } from "#app/data/move";
-import { type MoveEffectAttrOptions, MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import type { MoveConditionFunc } from "../move-conditions";
+import { ChanceBasedMoveEffectAttr, type ChanceBasedMoveEffectAttrOptions } from "./chance-based-move-effect-attr";
 
 /**
  * Set of optional parameters that may be applied to stat stage changing effects
  * @extends MoveEffectAttrOptions
  * @see {@linkcode StatStageChangeAttr}
  */
-interface StatStageChangeAttrOptions extends MoveEffectAttrOptions {
+interface StatStageChangeAttrOptions extends ChanceBasedMoveEffectAttrOptions {
   /** If defined, needs to be met in order for the stat change to apply */
   condition?: MoveConditionFunc;
   /** `true` to display a message */
@@ -28,9 +28,9 @@ interface StatStageChangeAttrOptions extends MoveEffectAttrOptions {
  * @param selfTarget `true` if the move is self-targetting
  * @param options {@linkcode StatStageChangeAttrOptions} Container for any optional parameters for this attribute.
  *
- * @extends MoveEffectAttr
+ * @extends ChanceBasedMoveEffectAttr
  */
-export class StatStageChangeAttr extends MoveEffectAttr {
+export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
   public stats: BattleStat[];
   public stages: number;
   /**
@@ -63,26 +63,21 @@ export class StatStageChangeAttr extends MoveEffectAttr {
   }
 
   override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
-    if (!super.apply(user, target, move) || (this.condition && !this.condition(user, target, move))) {
+    if (this.condition && !this.condition(user, target, move)) {
       return false;
     }
 
-    const moveChance = this.getMoveChance(user, target, move, this.selfTarget, true);
-    if (moveChance < 0 || moveChance === 100 || user.randSeedInt(100) < moveChance) {
-      const stages = this.getLevels(user);
-      globalScene.unshiftPhase(
-        new StatStageChangePhase(
-          (this.selfTarget ? user : target).getBattlerIndex(),
-          this.selfTarget,
-          this.stats,
-          stages,
-          { showMessage: this.showMessage },
-        ),
-      );
-      return true;
-    }
-
-    return false;
+    const stages = this.getLevels(user);
+    globalScene.unshiftPhase(
+      new StatStageChangePhase(
+        (this.selfTarget ? user : target).getBattlerIndex(),
+        this.selfTarget,
+        this.stats,
+        stages,
+        { showMessage: this.showMessage },
+      ),
+    );
+    return true;
   }
 
   getLevels(_user: Pokemon): number {

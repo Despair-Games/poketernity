@@ -1,12 +1,6 @@
-import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveEffectTrigger } from "#enums/move-effect-trigger";
 import type { Pokemon } from "#app/field/pokemon";
-import { globalScene } from "#app/global-scene";
-import { NumberHolder } from "#app/utils";
-import { IgnoreMoveEffectsAbAttr } from "#app/data/ab-attrs/ignore-move-effect-ab-attr";
-import { MoveEffectChanceMultiplierAbAttr } from "#app/data/ab-attrs/move-effect-chance-multiplier-ab-attr";
-import { applyAbAttrs } from "#app/data/ability";
 import { type Move } from "#app/data/move";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";
 
@@ -22,8 +16,6 @@ export interface MoveEffectAttrOptions {
   lastHitOnly?: boolean;
   /** Should this effect only apply on the first target hit? */
   firstTargetOnly?: boolean;
-  /** Overrides the secondary effect chance for this attr if set. */
-  effectChanceOverride?: number;
 }
 
 /**
@@ -80,14 +72,6 @@ export abstract class MoveEffectAttr extends MoveAttr {
   }
 
   /**
-   * If defined, overrides the move's base chance for this
-   * secondary effect to trigger.
-   */
-  public get effectChanceOverride() {
-    return this.options?.effectChanceOverride;
-  }
-
-  /**
    * Determines whether the {@linkcode Move}'s effects are valid to {@linkcode apply}
    * @virtual
    * @param user the {@linkcode Pokemon} using the move
@@ -95,16 +79,8 @@ export abstract class MoveEffectAttr extends MoveAttr {
    * @param move the {@linkcode Move} being used
    * @returns `true` if effects can apply
    */
-  canApply(user: Pokemon, target: Pokemon, move: Move): boolean {
-    if (
-      (this.selfTarget && (user.isFainted() || user.getTag(BattlerTagType.FRENZY)))
-      || (!this.selfTarget && target.isFainted())
-    ) {
-      return false;
-    }
-
-    const effectChance = this.getMoveChance(user, target, move, this.selfTarget, true);
-    return effectChance < 0 || user.randSeedInt(100) < effectChance;
+  canApply(user: Pokemon, target: Pokemon, _move: Move): boolean {
+    return this.selfTarget ? !user.isFainted() && !user.getTag(BattlerTagType.FRENZY) : !target.isFainted();
   }
 
   /**
@@ -133,33 +109,5 @@ export abstract class MoveEffectAttr extends MoveAttr {
    * @param move the {@linkcode Move} being used
    * @returns `true` if effects successfully applied.
    */
-  applyEffect(_user: Pokemon, _target: Pokemon, _move: Move): boolean {
-    return false;
-  }
-
-  /**
-   * Gets the used move's additional effect chance after modifications from:
-   * - the user's Sheer Force and/or Serene Grace
-   * - the target's Shield Dust
-   * - the "rainbow effect" from combining Water Pledge and Fire Pledge
-   * @param user the {@linkcode Pokemon} using this move
-   * @param target the {@linkcode Pokemon} targeted by the move
-   * @param move the {@linkcode Move} being used
-   * @param selfEffect `true` if move targets user.
-   * @returns The final percent chance of this attribute's effect applying. If negative, the
-   * effect is guaranteed to apply.
-   */
-  getMoveChance(user: Pokemon, target: Pokemon, move: Move, selfEffect: boolean, showAbility: boolean = false): number {
-    const moveChance = new NumberHolder(this.effectChanceOverride ?? move.chance);
-
-    applyAbAttrs(MoveEffectChanceMultiplierAbAttr, user, false, moveChance, move, showAbility);
-
-    const userSide = user.getArenaTagSide();
-    globalScene.arena.applyTagsForSide(ArenaTagType.WATER_FIRE_PLEDGE, userSide, false, moveChance);
-
-    if (!selfEffect) {
-      applyAbAttrs(IgnoreMoveEffectsAbAttr, target, false, user, move, moveChance);
-    }
-    return moveChance.value;
-  }
+  abstract applyEffect(_user: Pokemon, _target: Pokemon, _move: Move): boolean;
 }

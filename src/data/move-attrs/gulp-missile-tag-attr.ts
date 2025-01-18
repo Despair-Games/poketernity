@@ -21,10 +21,6 @@ export class GulpMissileTagAttr extends MoveEffectAttr {
    * {@linkcode BattlerTagType.GULP_MISSILE_PIKACHU | Pikachu} depending on the user's HP ratio
    */
   override applyEffect(user: Pokemon, _target: Pokemon, move: Move): boolean {
-    if (!super.apply(user, _target, move)) {
-      return false;
-    }
-
     if (user.hasAbility(Abilities.GULP_MISSILE) && user.species.speciesId === Species.CRAMORANT) {
       if (user.getHpRatio() >= 0.5) {
         user.addTag(BattlerTagType.GULP_MISSILE_ARROKUDA, 0, move.id);

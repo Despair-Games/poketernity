@@ -12,10 +12,6 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
  * @extends MoveEffectAttr
  */
 export class ClearTerrainAttr extends MoveEffectAttr {
-  constructor() {
-    super();
-  }
-
   override applyEffect(_user: Pokemon, _target: Pokemon, _move: Move): boolean {
     return globalScene.arena.trySetTerrain(TerrainType.NONE, true, true);
   }

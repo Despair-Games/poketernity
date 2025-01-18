@@ -15,11 +15,6 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
  */
 export class CopyStatsAttr extends MoveEffectAttr {
   override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
-    if (!super.apply(user, target, move)) {
-      return false;
-    }
-
-    // Copy all stat stages
     for (const s of BATTLE_STATS) {
       user.setStatStage(s, target.getStatStage(s));
     }

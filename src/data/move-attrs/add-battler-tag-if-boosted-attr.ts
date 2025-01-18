@@ -14,7 +14,7 @@ export class AddBattlerTagIfBoostedAttr extends AddBattlerTagAttr {
 
   override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (target.turnData.statStagesIncreased) {
-      super.apply(user, target, move);
+      super.applyEffect(user, target, move);
     }
     return true;
   }

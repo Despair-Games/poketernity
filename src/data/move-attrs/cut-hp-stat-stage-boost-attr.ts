@@ -32,7 +32,7 @@ export class CutHpStatStageBoostAttr extends StatStageChangeAttr {
   override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     user.damageAndUpdate(toDmgValue(user.getMaxHp() / this.cutRatio), HitResult.OTHER, false, true);
     user.updateInfo();
-    const ret = super.apply(user, target, move);
+    const ret = super.applyEffect(user, target, move);
     if (this.messageCallback) {
       this.messageCallback(user);
     }

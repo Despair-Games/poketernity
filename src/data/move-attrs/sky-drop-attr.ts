@@ -15,10 +15,6 @@ export class SkyDropAttr extends MoveEffectAttr {
    * and removes all of the target's queued moves (including Frenzy moves).
    */
   override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
-    if (!super.apply(user, target, move)) {
-      return false;
-    }
-
     // Add Sky Drop tag to both user and target
     [user, target].forEach((p) => p.addTag(BattlerTagType.SKY_DROP, 1, move.id, user.id));
     // Clear the target's move queue

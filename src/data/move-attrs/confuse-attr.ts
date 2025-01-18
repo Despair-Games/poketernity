@@ -25,6 +25,6 @@ export class ConfuseAttr extends AddBattlerTagAttr {
       return false;
     }
 
-    return super.apply(user, target, move);
+    return super.applyEffect(user, target, move);
   }
 }

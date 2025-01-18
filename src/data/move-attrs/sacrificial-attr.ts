@@ -9,8 +9,8 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
  * @extends MoveEffectAttr
  */
 export class SacrificialAttr extends MoveEffectAttr {
-  constructor() {
-    super(true, { trigger: MoveEffectTrigger.POST_TARGET });
+  constructor(onHit: boolean = false) {
+    super(true, { trigger: onHit ? MoveEffectTrigger.POST_APPLY : MoveEffectTrigger.POST_TARGET });
   }
 
   override applyEffect(user: Pokemon, _target: Pokemon, _move: Move): boolean {

@@ -16,7 +16,7 @@ export class StealHeldItemChanceAttr extends MoveEffectAttr {
   public readonly chance: number;
 
   constructor(chance: number) {
-    super(false);
+    super(true);
     this.chance = chance;
   }
 
