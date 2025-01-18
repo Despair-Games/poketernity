@@ -1213,7 +1213,7 @@ export default class BattleScene extends SceneBase {
     if (reloadI18n) {
       const localizable: Localizable[] = [
         ...allSpecies,
-        ...allMoves,
+        ...Object.values(allMoves),
         ...allAbilities,
         ...getEnumValues(ModifierPoolType)
           .map((mpt) => getModifierPoolForType(mpt))
