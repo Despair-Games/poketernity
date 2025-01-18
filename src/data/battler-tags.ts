@@ -2002,6 +2002,23 @@ export class SkyDropTag extends BattlerTag {
       onComplete: () => pokemon.setVisible(true),
     });
   }
+
+  /**
+   * Removes Sky Drop's effects from all Pokemon affected by this instance of Sky Drop.
+   */
+  public clearSkyDropEffects(): void {
+    globalScene.getField(true).forEach((pokemon) => {
+      if (pokemon?.getTag(BattlerTagType.SKY_DROP)?.sourceId === this.sourceId) {
+        // Cancel the Sky Drop user's next use of Sky Drop
+        if (this.sourceId === pokemon.id) {
+          globalScene.tryRemovePhase((phase) => phase instanceof MovePhase && phase.pokemon.id === pokemon.id);
+          pokemon.getMoveQueue().shift();
+          pokemon.removeTag(BattlerTagType.CHARGING);
+        }
+        pokemon.removeTag(BattlerTagType.SKY_DROP);
+      }
+    });
+  }
 }
 
 export class TypeImmuneTag extends BattlerTag {

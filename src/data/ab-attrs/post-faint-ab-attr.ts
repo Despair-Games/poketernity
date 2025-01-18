@@ -3,7 +3,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { HitResult } from "#enums/hit-result";
 import { AbAttr } from "./ab-attr";
 
-export class PostFaintAbAttr extends AbAttr {
+export abstract class PostFaintAbAttr extends AbAttr {
   /**
    * Applies an effect after the source Pokemon faints
    * @param pokemon The {@linkcode Pokemon} with this ability

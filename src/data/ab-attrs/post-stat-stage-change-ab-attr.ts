@@ -2,7 +2,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { BattleStat } from "#enums/stat";
 import { AbAttr } from "./ab-attr";
 
-export class PostStatStageChangeAbAttr extends AbAttr {
+export abstract class PostStatStageChangeAbAttr extends AbAttr {
   /**
    * Applies an effect after the source's stat stage(s) change
    * @param pokemon The {@linkcode Pokemon} with this ability

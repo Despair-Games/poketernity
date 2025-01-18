@@ -6,9 +6,16 @@ import { AbAttr } from "./ab-attr";
 type AbAttrMoveCondition = (pokemon: Pokemon, move: Move) => boolean;
 
 /**
- * This governs abilities that alter the priority of moves
- * Abilities: Prankster, Gale Wings, Triage, Mycelium Might, Stall
- * Note - Quick Claw has a separate and distinct implementation outside of priority
+ * This ability attribute changes the priority of the ability holder's moves by a specified amount if certain conditions have been met
+ * +-----------------+--------------+-------------------------+
+ * |  Ability Name   | Priority +/- |        Condition        |
+ * +-----------------+--------------+-------------------------+
+ * | Prankster       | +1           | Status moves            |
+ * | Gale Wings      | +1           | Flying moves at full HP |
+ * | Triage          | +3           | HP-Recovery Moves       |
+ * | Mycellium Might | -0.2         | Status Moves            |
+ * | Stall           | -0.2         |                         |
+ * +-----------------+--------------+-------------------------+
  */
 export class ChangeMovePriorityAbAttr extends AbAttr {
   /** The condition moves must follow for the priority change to apply */

@@ -2,7 +2,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { TerrainType } from "#enums/terrain-type";
 import { AbAttr } from "./ab-attr";
 
-export class PostTerrainChangeAbAttr extends AbAttr {
+export abstract class PostTerrainChangeAbAttr extends AbAttr {
   /**
    * Applies an effect after the terrain on the field changes
    * @param pokemon The {@linkcode Pokemon} with this ability

@@ -236,12 +236,25 @@ export default class Trainer extends Phaser.GameObjects.Container {
     return this.config.partyTemplates[this.partyTemplateIndex];
   }
 
+  /**
+   * Function to get levels for a given wave and the {@linkcode TrainerPartyTemplate}
+   *
+   * First the waveIndex is scaled according to {@linkcode getWaveForDifficulty} which I will call `x` here
+   * The base level is 1 + x/2 + (x^2 / 625) a quadratic function that is outpaced by y=x until around wave 310
+   *
+   * If the party member strength is below STRONG, the multiplier is scaled and a negative level offset is applied
+   *
+   * The final result is the base level * scaled multiplier + level offset
+   *
+   * @param waveIndex the current wave the player is on
+   * @returns an array of numbers representing the levels of a trainer's party
+   */
   getPartyLevels(waveIndex: number): number[] {
     const ret: number[] = [];
     const partyTemplate = this.getPartyTemplate();
 
-    const difficultyWaveIndex = globalScene.gameMode.getWaveForDifficulty(waveIndex);
-    const baseLevel = 1 + difficultyWaveIndex / 2 + Math.pow(difficultyWaveIndex / 25, 2);
+    const scaledWaveIndex = globalScene.gameMode.getWaveForDifficulty(waveIndex);
+    const baseLevel = 1 + scaledWaveIndex / 2 + Math.pow(scaledWaveIndex / 25, 2);
 
     if (this.isDouble() && partyTemplate.size < 2) {
       partyTemplate.size = 2;
@@ -272,9 +285,17 @@ export default class Trainer extends Phaser.GameObjects.Container {
 
       let levelOffset = 0;
 
+      /**
+       * If the strength is WEAKER, WEAK, or AVERAGE,
+       * The multiplier is increased by .025 for every 25 scaled waves, with a max cap of 1.2
+       * This means that at a scaled wave index of 200 or higher multiplier will always be 1.2
+       *
+       * A negative level offset is then applied with a base of -1 for every 50 scaled waves,
+       * further scaled by 4 - the scaled multiplier
+       */
       if (strength < PartyMemberStrength.STRONG) {
-        multiplier = Math.min(multiplier + 0.025 * Math.floor(difficultyWaveIndex / 25), 1.2);
-        levelOffset = -Math.floor((difficultyWaveIndex / 50) * (PartyMemberStrength.STRONG - strength));
+        multiplier = Math.min(multiplier + 0.025 * Math.floor(scaledWaveIndex / 25), 1.2);
+        levelOffset = -Math.floor((scaledWaveIndex / 50) * (4 - strength));
       }
 
       const level = Math.ceil(baseLevel * multiplier) + levelOffset;

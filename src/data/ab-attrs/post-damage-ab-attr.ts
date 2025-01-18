@@ -5,7 +5,7 @@ import { AbAttr } from "./ab-attr";
  * Triggers after the Pokemon takes any damage
  * @extends AbAttr
  */
-export class PostDamageAbAttr extends AbAttr {
+export abstract class PostDamageAbAttr extends AbAttr {
   /**
    * Applies an effect after the Pokemon takes damage
    * @param pokemon The {@linkcode Pokemon} with this ability

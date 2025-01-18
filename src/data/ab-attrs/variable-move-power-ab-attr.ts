@@ -3,7 +3,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
 import { PreAttackAbAttr } from "./pre-attack-ab-attr";
 
-export class VariableMovePowerAbAttr extends PreAttackAbAttr {
+export abstract class VariableMovePowerAbAttr extends PreAttackAbAttr {
   /**
    * Modifies a move's power when used by the source Pokemon
    * @param pokemon The {@linkcode Pokemon} with this ability
