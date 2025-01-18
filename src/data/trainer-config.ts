@@ -1182,7 +1182,15 @@ export class TrainerConfig {
     }
 
     // Set the function to generate the Gym Leader's party template.
-    this.setPartyTemplateFunc(getGymLeaderPartyTemplate);
+    this.setPartyTemplateFunc(() =>
+      getWavePartyTemplate(
+        trainerPartyTemplates.GYM_LEADER_1,
+        trainerPartyTemplates.GYM_LEADER_2,
+        trainerPartyTemplates.GYM_LEADER_3,
+        trainerPartyTemplates.GYM_LEADER_4,
+        trainerPartyTemplates.GYM_LEADER_5,
+      ),
+    );
 
     // Set up party members with their corresponding species.
     signatureSpecies.forEach((speciesPool, s) => {
@@ -1534,29 +1542,31 @@ export function getEvilGruntPartyTemplate(): TrainerPartyTemplate {
   }
 }
 
-export function getWavePartyTemplate(...templates: TrainerPartyTemplate[]) {
+/**
+ * Function used to generate a {@linkcode TrainerPartyTemplate} for trainers that change their
+ * party template as the player progresses.
+ * Subtracting offsetWave (20) from the waveIndex scaled by mode (+30 if daily),
+ * for every wavesToScale (30), the trainer will onto their next given {@linkcode TrainerPartyTemplate}
+ *
+ * Currently used by ace trainers, breeders, twins, and gym leaders
+ * @param templates an array of templates that the trainers can use
+ * @returns a {@linkcode TrainerPartyTemplate}
+ */
+export function getWavePartyTemplate(...templates: TrainerPartyTemplate[]): TrainerPartyTemplate {
+  const wavesToScale = 30;
+  const offsetWave = 20;
+
   const wave = Overrides.STARTING_WAVE_OVERRIDE || 1;
   return templates[
-    Math.min(
-      Math.max(
-        Math.ceil(
-          (globalScene.gameMode.getWaveForDifficulty(globalScene.currentBattle?.waveIndex || wave, true) - 20) / 30,
-        ),
-        0,
+    Phaser.Math.Clamp(
+      Math.ceil(
+        (globalScene.gameMode.getWaveForDifficulty(globalScene.currentBattle?.waveIndex || wave, true) - offsetWave)
+          / wavesToScale,
       ),
+      0,
       templates.length - 1,
     )
   ];
-}
-
-function getGymLeaderPartyTemplate() {
-  return getWavePartyTemplate(
-    trainerPartyTemplates.GYM_LEADER_1,
-    trainerPartyTemplates.GYM_LEADER_2,
-    trainerPartyTemplates.GYM_LEADER_3,
-    trainerPartyTemplates.GYM_LEADER_4,
-    trainerPartyTemplates.GYM_LEADER_5,
-  );
 }
 
 /**

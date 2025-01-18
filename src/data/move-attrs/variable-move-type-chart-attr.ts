@@ -8,7 +8,7 @@ import type { Type } from "#enums/type";
  * Attribute for moves which have a custom type chart interaction.
  * @extends MoveAttr
  */
-export class VariableMoveTypeChartAttr extends MoveAttr {
+export abstract class VariableMoveTypeChartAttr extends MoveAttr {
   /**
    * Modifies the given move's type effectiveness multiplier
    * @param _user {@linkcode Pokemon} using the move

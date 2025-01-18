@@ -2,7 +2,7 @@ import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { AbAttr } from "./ab-attr";
 
-export class PreDefendAbAttr extends AbAttr {
+export abstract class PreDefendAbAttr extends AbAttr {
   /**
    * Applies an effect before the source Pokemon is hit by an attack.
    * @param pokemon The {@linkcode Pokemon} with this ability

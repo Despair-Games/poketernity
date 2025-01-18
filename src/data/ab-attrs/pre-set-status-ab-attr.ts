@@ -3,7 +3,7 @@ import type { BooleanHolder } from "#app/utils";
 import type { StatusEffect } from "#enums/status-effect";
 import { AbAttr } from "./ab-attr";
 
-export class PreSetStatusAbAttr extends AbAttr {
+export abstract class PreSetStatusAbAttr extends AbAttr {
   /**
    * Applies an effect before the source is afflicted with a status condition.
    * @param pokemon The {@linkcode Pokemon} with this ability

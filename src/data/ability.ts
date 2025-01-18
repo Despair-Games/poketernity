@@ -9,7 +9,7 @@ import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { NewBattlePhase } from "#app/phases/new-battle-phase";
 import { SwitchPhase } from "#app/phases/switch-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
-import type { Constructor } from "#app/utils";
+import type { AbstractConstructor, Constructor } from "#app/utils";
 import { BooleanHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import i18next from "i18next";
@@ -58,7 +58,7 @@ export class Ability implements Localizable {
    * @param attrType any attribute that extends {@linkcode AbAttr}
    * @returns Array of attributes that match `attrType`, Empty Array if none match.
    */
-  getAttrs<T extends AbAttr>(attrType: Constructor<T>): T[] {
+  getAttrs<T extends AbAttr>(attrType: AbstractConstructor<T>): T[] {
     return this.attrs.filter((a): a is T => a instanceof attrType);
   }
 
@@ -67,7 +67,7 @@ export class Ability implements Localizable {
    * @param attrType any attribute that extends {@linkcode AbAttr}
    * @returns true if the ability has attribute `attrType`
    */
-  hasAttr<T extends AbAttr>(attrType: Constructor<T>): boolean {
+  hasAttr<T extends AbAttr>(attrType: AbstractConstructor<T>): boolean {
     return this.attrs.some((attr) => attr instanceof attrType);
   }
 
@@ -279,7 +279,7 @@ export class ForceSwitchOutHelper {
  * @see {@linkcode AbAttr}
  */
 export function applyAbAttrs<TAttr extends AbAttr>(
-  attrType: Constructor<TAttr>,
+  attrType: AbstractConstructor<TAttr>,
   ...params: Parameters<TAttr["apply"]>
 ): string[] {
   const messages: string[] = [];

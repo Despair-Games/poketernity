@@ -8,7 +8,7 @@ import { MoveAttr } from "#app/data/move-attrs/move-attr";
  * @extends MoveAttr
  * @see {@linkcode getModifiedDamage}
  */
-export class ModifiedDamageAttr extends MoveAttr {
+export abstract class ModifiedDamageAttr extends MoveAttr {
   /**
    * Modifies damage after damage is otherwise fully calculated.
    * Typically used to enforce a damage threshold on a move.
@@ -32,7 +32,5 @@ export class ModifiedDamageAttr extends MoveAttr {
    * @param damage the calculated damage before applying this modifier
    * @returns the modified damage
    */
-  getModifiedDamage(_user: Pokemon, _target: Pokemon, _move: Move, damage: number): number {
-    return damage;
-  }
+  abstract getModifiedDamage(_user: Pokemon, _target: Pokemon, _move: Move, damage: number): number;
 }

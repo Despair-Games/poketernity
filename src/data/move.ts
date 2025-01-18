@@ -8,7 +8,7 @@ import {
   PokemonMultiHitModifier,
   AttackTypeBoosterModifier,
 } from "#app/modifier/modifier";
-import type { Constructor, nil } from "#app/utils";
+import type { AbstractConstructor, Constructor, nil } from "#app/utils";
 import { BooleanHolder, NumberHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -129,7 +129,7 @@ export abstract class Move implements Localizable {
    * @param attrType any attribute that extends {@linkcode MoveAttr}
    * @returns Array of attributes that match `attrType`, Empty Array if none match.
    */
-  getAttrs<T extends MoveAttr>(attrType: Constructor<T>): T[] {
+  getAttrs<T extends MoveAttr>(attrType: AbstractConstructor<T>): T[] {
     return this.attrs.filter((a): a is T => a instanceof attrType);
   }
 
@@ -138,7 +138,7 @@ export abstract class Move implements Localizable {
    * @param attrType any attribute that extends {@linkcode MoveAttr}
    * @returns true if the move has attribute `attrType`
    */
-  hasAttr<T extends MoveAttr>(attrType: Constructor<T>): boolean {
+  hasAttr<T extends MoveAttr>(attrType: AbstractConstructor<T>): boolean {
     return this.attrs.some((attr) => attr instanceof attrType);
   }
 
@@ -827,7 +827,7 @@ export abstract class Move implements Localizable {
     const isMultiTarget = multiple && targets.length > 1;
 
     // ...cannot enhance multi-hit or sacrificial moves
-    const exceptAttrs: Constructor<MoveAttr>[] = [MultiHitAttr, SacrificialAttr, SacrificialAttrOnHit];
+    const exceptAttrs: AbstractConstructor<MoveAttr>[] = [MultiHitAttr, SacrificialAttr, SacrificialAttrOnHit];
 
     // ...and cannot enhance these specific moves.
     const exceptMoves: Moves[] = [Moves.FLING, Moves.UPROAR, Moves.ROLLOUT, Moves.ICE_BALL, Moves.ENDEAVOR];
@@ -986,7 +986,7 @@ function ChargeMove<TBase extends SubMove>(Base: TBase) {
      * @returns Array of attributes that match `attrType`, or an empty array if
      * no matches are found.
      */
-    getChargeAttrs<T extends MoveAttr>(attrType: Constructor<T>): T[] {
+    getChargeAttrs<T extends MoveAttr>(attrType: AbstractConstructor<T>): T[] {
       return this.chargeAttrs.filter((attr): attr is T => attr instanceof attrType);
     }
 
@@ -995,7 +995,7 @@ function ChargeMove<TBase extends SubMove>(Base: TBase) {
      * @param attrType any attribute that extends {@linkcode MoveAttr}
      * @returns `true` if a matching attribute is found; `false` otherwise
      */
-    hasChargeAttr<T extends MoveAttr>(attrType: Constructor<T>): boolean {
+    hasChargeAttr<T extends MoveAttr>(attrType: AbstractConstructor<T>): boolean {
       return this.chargeAttrs.some((attr) => attr instanceof attrType);
     }
 
@@ -1055,7 +1055,7 @@ function applyMoveChargeAttrsInternal<TAttr extends MoveAttr>(
 }
 
 export function applyMoveAttrs<TAttr extends MoveAttr>(
-  attrType: Constructor<TAttr>,
+  attrType: AbstractConstructor<TAttr>,
   ...params: Parameters<TAttr["apply"]>
 ): void {
   applyMoveAttrsInternal((attr: MoveAttr) => attr instanceof attrType, ...params);
@@ -1069,7 +1069,7 @@ export function applyFilteredMoveAttrs<TAttr extends MoveAttr>(
 }
 
 export function applyMoveChargeAttrs<TAttr extends MoveAttr>(
-  attrType: Constructor<TAttr>,
+  attrType: AbstractConstructor<TAttr>,
   ...params: Parameters<TAttr["apply"]>
 ): void {
   applyMoveChargeAttrsInternal((attr: MoveAttr) => attr instanceof attrType, ...params);
