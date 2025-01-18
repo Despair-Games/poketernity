@@ -6,7 +6,14 @@ import { VariableMovePowerAbAttr } from "./variable-move-power-ab-attr";
 
 /**
  * Ability attribute that boosts the power of a move by a factor if it has a specified flag
- *
+ * +---------------+---------------+------------+
+ * |    Ability    |   Move Flag   | Multiplier |
+ * +---------------+---------------+------------+
+ * | Iron Fist     | PUNCHING_MOVE |        1.2 |
+ * | Mega Launcher | PULSE_MOVE    |        1.5 |
+ * | Tough Claws   | MAKES_CONTACT |        1.3 |
+ * | Sharpness     | SLICING_MOVE  |        1.5 |
+ * +---------------+---------------+------------+
  */
 export class MoveFlagPowerBoostAbAttr extends VariableMovePowerAbAttr {
   private readonly flagRequired: MoveFlags;

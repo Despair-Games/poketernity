@@ -4,6 +4,11 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
 import { AbAttr } from "./ab-attr";
 
+/**
+ * Ability attribute that boosts a move's recovery by a certain factor if it meets specific conditions
+ * Used by abilities like...
+ * - Mega Launcher (Recovery move must have a PULSE_MOVE flag)
+ */
 export class RecoveryBoostAbAttr extends AbAttr {
   private readonly condition: PokemonAttackCondition;
   private readonly recoveryMultiplier: number;
