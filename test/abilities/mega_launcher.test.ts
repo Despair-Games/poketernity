@@ -5,8 +5,7 @@ import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { allMoves } from "#app/data/all-moves";
 import { MoveFlags } from "#enums/move-flags";
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { HealAttr } from "#app/data/move-attrs/heal-attr";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 describe("Abilities - Mega Launcher", () => {
   let phaserGame: Phaser.Game;
@@ -37,15 +36,14 @@ describe("Abilities - Mega Launcher", () => {
     game.override.moveset(Moves.HEAL_PULSE);
     await game.classicMode.startBattle([Species.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
+    const enemyPokemon = game.scene.getEnemyPokemon()!;
+    const enemyHpRecovered = Math.floor(enemyPokemon.hp * 0.75);
+    enemyPokemon.hp = 1;
     const pulseMove = allMoves[Moves.HEAL_PULSE];
-    const healAttr = pulseMove.getAttrs(HealAttr)[0];
-
-    vi.spyOn(healAttr, "getHealRatio");
-
     game.move.select(Moves.HEAL_PULSE);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(pulseMove.checkFlag(MoveFlags.PULSE_MOVE, playerPokemon, null)).toBe(true);
-    expect(healAttr.getHealRatio).toHaveLastReturnedWith(0.75);
+    expect(enemyPokemon.hp - 1).toBe(enemyHpRecovered);
   });
 });
