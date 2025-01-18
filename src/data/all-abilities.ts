@@ -706,11 +706,7 @@ export function initAbilities() {
       .attr(PostBiomeChangeWeatherChangeAbAttr, WeatherType.SNOW),
     new Ability(Abilities.HONEY_GATHER, 4).attr(MoneyAbAttr),
     new Ability(Abilities.FRISK, 4).attr(FriskAbAttr),
-    new Ability(Abilities.RECKLESS, 4).attr(
-      MovePowerBoostAbAttr,
-      (_user, _target, move) => !!move?.hasFlag(MoveFlags.RECKLESS_MOVE),
-      1.2,
-    ),
+    new Ability(Abilities.RECKLESS, 4).attr(MoveFlagPowerBoostAbAttr, MoveFlags.RECKLESS_MOVE, 1.2),
     new Ability(Abilities.MULTITYPE, 4)
       .attr(UncopiableAbilityAbAttr)
       .attr(UnswappableAbilityAbAttr)
@@ -919,11 +915,7 @@ export function initAbilities() {
     new Ability(Abilities.COMPETITIVE, 6)
       .attr(PostStatStageChangeStatStageChangeAbAttr, (_target, _statsChanged, stages) => stages < 0, [Stat.SPATK], 2)
       .edgeCase(), // Should not boost stats if switching into court changed sticky web
-    new Ability(Abilities.STRONG_JAW, 6).attr(
-      MovePowerBoostAbAttr,
-      (_user, _target, move) => !!move?.hasFlag(MoveFlags.BITING_MOVE),
-      1.5,
-    ),
+    new Ability(Abilities.STRONG_JAW, 6).attr(MoveFlagPowerBoostAbAttr, MoveFlags.BITING_MOVE, 1.5),
     new Ability(Abilities.REFRIGERATE, 6).attr(
       MoveTypeChangeAbAttr,
       Type.ICE,
@@ -1318,7 +1310,7 @@ export function initAbilities() {
       6,
     ),
     new Ability(Abilities.PUNK_ROCK, 8)
-      .attr(MovePowerBoostAbAttr, (_user, _target, move) => !!move?.hasFlag(MoveFlags.SOUND_BASED), 1.3)
+      .attr(MoveFlagPowerBoostAbAttr, MoveFlags.SOUND_BASED, 1.3)
       .attr(ReceivedMoveDamageMultiplierAbAttr, (_target, _user, move) => move.hasFlag(MoveFlags.SOUND_BASED), 0.5)
       .ignorable(),
     new Ability(Abilities.SAND_SPIT, 8).attr(

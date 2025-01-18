@@ -12,6 +12,9 @@ import { VariableMovePowerAbAttr } from "./variable-move-power-ab-attr";
  * | Iron Fist     | PUNCHING_MOVE |        1.2 |
  * | Mega Launcher | PULSE_MOVE    |        1.5 |
  * | Tough Claws   | MAKES_CONTACT |        1.3 |
+ * | Punk Rock     | SOUND_BASED   |        1.3 |
+ * | Strong Jaw    | BITING_MOVE   |        1.5 |
+ * | Reckless      | RECKLESS_MOVE |        1.2 |
  * | Sharpness     | SLICING_MOVE  |        1.5 |
  * +---------------+---------------+------------+
  */
