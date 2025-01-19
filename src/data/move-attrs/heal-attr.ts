@@ -36,7 +36,7 @@ export class HealAttr extends MoveEffectAttr {
    * Helper function to obtain this attribute's heal ratio
    * @returns a heal ratio in the interval [0, 1]
    */
-  public getHealRatio(user: Pokemon, target: Pokemon, move: Move): number {
+  protected getHealRatio(user: Pokemon, target: Pokemon, move: Move): number {
     const healRatio = new NumberHolder(this.healRatio);
     applyAbAttrs(RecoveryBoostAbAttr, user, false, move, target, healRatio);
     return healRatio.value;
