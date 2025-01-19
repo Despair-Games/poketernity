@@ -4,7 +4,7 @@ import { type Achv } from "#app/system/achv";
 // -- end tsdoc imports --
 
 import i18next from "i18next";
-import { achvs, getAchievementDescription } from "./achv";
+import { achvs } from "./achv";
 import { AchvTier } from "#enums/achv-tier";
 import { TrainerType } from "#enums/trainer-type";
 import type { ConditionFn } from "#app/@types/common";
@@ -98,7 +98,7 @@ export function initVouchers() {
           : achv.score >= 75
             ? VoucherType.PLUS
             : VoucherType.REGULAR;
-    vouchers[achv.id] = new Voucher(voucherType, getAchievementDescription(achv.localizationKey));
+    vouchers[achv.id] = new Voucher(voucherType, achv.getDescription());
   }
 
   const bossTrainerTypes = Object.keys(allTrainerConfigs).filter(
