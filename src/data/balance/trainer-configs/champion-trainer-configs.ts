@@ -109,7 +109,6 @@ export const championTrainerConfigs: TrainerConfigs = {
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.GYARADOS]))
     .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.SALAMENCE, Species.GARCHOMP]))
     .setPartyMemberFunc(2, getRandomPartyMemberFunc([Species.KINGDRA]))
-    .setPartyMemberFunc(3, getRandomPartyMemberFunc([Species.AERODACTYL]))
     .setPartyMemberFunc(
       3,
       getRandomPartyMemberFunc([Species.CHARIZARD], TrainerSlot.TRAINER, true, (p) => {
