@@ -3115,8 +3115,8 @@ export default class BattleScene extends SceneBase {
     return false;
   }
 
-  validateVoucher(voucher: Voucher, args?: unknown[]): boolean {
-    if (!this.gameData.voucherUnlocks.hasOwnProperty(voucher.id) && voucher.validate(args)) {
+  validateVoucher(voucher: Voucher, ...args: unknown[]): boolean {
+    if (!this.gameData.voucherUnlocks.hasOwnProperty(voucher.id) && voucher.validate(...args)) {
       this.gameData.voucherUnlocks[voucher.id] = new Date().getTime();
       this.ui.achvBar.showAchv(voucher);
       this.gameData.voucherCounts[voucher.voucherType]++;

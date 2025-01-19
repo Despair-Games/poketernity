@@ -414,7 +414,7 @@ export default class AchvsUiHandler extends MessageUiHandler {
       const hidden = !unlocked && achv.secret && (!achv.parentId || !achvUnlocks.hasOwnProperty(achv.parentId));
       const tinted = !hidden && !unlocked;
 
-      icon.setFrame(!hidden ? achv.iconImage : "unknown");
+      icon.setFrame(!hidden ? achv.getIconImage() : "unknown");
       icon.setVisible(true);
       if (tinted) {
         icon.setTintFill(0);

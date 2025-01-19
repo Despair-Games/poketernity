@@ -23,7 +23,7 @@ export class Achv {
   public readonly id: string;
   public name: string = "";
   public description: string = "";
-  public readonly iconImage: string;
+  protected readonly iconImage: string;
   public readonly score: number;
 
   public secret: boolean;
@@ -48,10 +48,6 @@ export class Achv {
     const genderStr = PlayerGender[playerGender].toLowerCase();
     // Localization key is used to get the name of the achievement
     return i18next.t(`achv:${this.localizationKey}.name`, { context: genderStr });
-  }
-
-  getDescription(): string {
-    return this.description;
   }
 
   getIconImage(): string {

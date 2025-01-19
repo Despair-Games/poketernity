@@ -1,7 +1,11 @@
+// -- start tsdoc imports --
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { type Achv } from "#app/system/achv";
+// -- end tsdoc imports --
+
 import i18next from "i18next";
 import { achvs, getAchievementDescription } from "./achv";
 import { AchvTier } from "#enums/achv-tier";
-import type { PlayerGender } from "#enums/player-gender";
 import { TrainerType } from "#enums/trainer-type";
 import type { ConditionFn } from "#app/@types/common";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
@@ -12,7 +16,8 @@ export class Voucher {
   public voucherType: VoucherType;
   public description: string;
 
-  private conditionFunc: ConditionFn | undefined;
+  /** Currently unused */
+  private conditionFunc?: ConditionFn;
 
   constructor(voucherType: VoucherType, description: string, conditionFunc?: ConditionFn) {
     this.description = description;
@@ -20,16 +25,16 @@ export class Voucher {
     this.conditionFunc = conditionFunc;
   }
 
-  validate(args?: any[]): boolean {
-    return !this.conditionFunc || this.conditionFunc(args);
+  validate(...args: unknown[]): boolean {
+    return !this.conditionFunc || this.conditionFunc(...args);
   }
 
   /**
    * Get the name of the voucher
-   * @param playerGender - this is ignored here. It's only there to match the signature of the function in the Achv class
+   * @param _ - this is required in order to match the {@linkcode Achv} class's `getName` function
    * @returns the name of the voucher
    */
-  getName(_playerGender: PlayerGender): string {
+  getName(_?: any): string {
     return getVoucherTypeName(this.voucherType);
   }
 
