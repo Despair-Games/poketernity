@@ -5,7 +5,6 @@ import { NumberHolder } from "#app/utils";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type BattleScene from "#app/battle-scene";
 
 describe("check some Achievement related stuff", () => {
   it("should check Achievement creation", () => {
@@ -70,7 +69,6 @@ describe("Achv", () => {
 describe("MoneyAchv", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
-  let scene: BattleScene;
 
   beforeAll(() => {
     phaserGame = new Phaser.Game({
@@ -84,7 +82,6 @@ describe("MoneyAchv", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    scene = game.scene;
   });
 
   it("should create an instance of MoneyAchv", () => {
@@ -95,11 +92,11 @@ describe("MoneyAchv", () => {
 
   it("should validate the achievement based on the money amount", () => {
     const moneyAchv = new MoneyAchv("", "Test Money Achievement", 10000, "money_icon", 10);
-    scene.money = 5000;
+    game.scene.money = 5000;
 
     expect(moneyAchv.validate([])).toBe(false);
 
-    scene.money = 15000;
+    game.scene.money = 15000;
     expect(moneyAchv.validate([])).toBe(true);
   });
 });
@@ -107,7 +104,6 @@ describe("MoneyAchv", () => {
 describe("RibbonAchv", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
-  let scene: BattleScene;
 
   beforeAll(() => {
     phaserGame = new Phaser.Game({
@@ -121,13 +117,6 @@ describe("RibbonAchv", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.moveset([]);
-    game.override.startingLevel(0);
-    game.override.starterSpecies(0);
-    game.override.enemyMoveset([]);
-    game.override.enemySpecies(0);
-    game.override.startingWave(0);
-    scene = game.scene;
   });
 
   it("should create an instance of RibbonAchv", () => {
@@ -138,12 +127,12 @@ describe("RibbonAchv", () => {
 
   it("should validate the achievement based on the ribbon amount", () => {
     const ribbonAchv = new RibbonAchv("", "Test Ribbon Achievement", 10, "ribbon_icon", 10);
-    scene.gameData.gameStats.ribbonsOwned = 5;
+    game.scene.gameData.gameStats.ribbonsOwned = 5;
 
-    expect(ribbonAchv.validate([])).toBe(false);
+    expect(ribbonAchv.validate()).toBe(false);
 
-    scene.gameData.gameStats.ribbonsOwned = 15;
-    expect(ribbonAchv.validate([])).toBe(true);
+    game.scene.gameData.gameStats.ribbonsOwned = 15;
+    expect(ribbonAchv.validate()).toBe(true);
   });
 });
 
@@ -156,12 +145,12 @@ describe("DamageAchv", () => {
 
   it("should validate the achievement based on the damage amount", () => {
     const damageAchv = new DamageAchv("", "Test Damage Achievement", 250, "damage_icon", 10);
-    const numberHolder = new NumberHolder(200);
+    const damageValue = new NumberHolder(200);
 
-    expect(damageAchv.validate([numberHolder])).toBe(false);
+    expect(damageAchv.validate(damageValue)).toBe(false);
 
-    numberHolder.value = 300;
-    expect(damageAchv.validate([numberHolder])).toBe(true);
+    damageValue.value = 300;
+    expect(damageAchv.validate(damageValue)).toBe(true);
   });
 });
 
@@ -174,12 +163,12 @@ describe("HealAchv", () => {
 
   it("should validate the achievement based on the heal amount", () => {
     const healAchv = new HealAchv("", "Test Heal Achievement", 250, "heal_icon", 10);
-    const numberHolder = new NumberHolder(200);
+    const healValue = new NumberHolder(200);
 
-    expect(healAchv.validate([numberHolder])).toBe(false);
+    expect(healAchv.validate(healValue)).toBe(false);
 
-    numberHolder.value = 300;
-    expect(healAchv.validate([numberHolder])).toBe(true);
+    healValue.value = 300;
+    expect(healAchv.validate(healValue)).toBe(true);
   });
 });
 
@@ -192,12 +181,12 @@ describe("LevelAchv", () => {
 
   it("should validate the achievement based on the level", () => {
     const levelAchv = new LevelAchv("", "Test Level Achievement", 100, "level_icon", 10);
-    const _NumberHolder = new NumberHolder(50);
+    const levelValue = new NumberHolder(50);
 
-    expect(levelAchv.validate([_NumberHolder])).toBe(false);
+    expect(levelAchv.validate(levelValue)).toBe(false);
 
-    _NumberHolder.value = 150;
-    expect(levelAchv.validate([_NumberHolder])).toBe(true);
+    levelValue.value = 150;
+    expect(levelAchv.validate(levelValue)).toBe(true);
   });
 });
 
@@ -226,7 +215,7 @@ describe("ModifierAchv", () => {
     );
     const modifier = new TurnHeldItemTransferModifier(null!, 3, 1);
 
-    expect(modifierAchv.validate([modifier])).toBe(true);
+    expect(modifierAchv.validate(modifier)).toBe(true);
   });
 });
 

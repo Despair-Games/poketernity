@@ -19,18 +19,18 @@ import { settings } from "./settings/settings-manager";
 import { AchvTier } from "#enums/achv-tier";
 
 export class Achv {
-  public localizationKey: string;
-  public id: string;
+  public readonly localizationKey: string;
+  public readonly id: string;
   public name: string;
   public description: string;
-  public iconImage: string;
-  public score: number;
+  public readonly iconImage: string;
+  public readonly score: number;
 
   public secret: boolean;
   public hasParent: boolean;
-  public parentId: string;
+  public readonly parentId: string;
 
-  private conditionFunc: ConditionFn | undefined;
+  private conditionFunc?: ConditionFn;
 
   constructor(
     localizationKey: string,
@@ -40,12 +40,12 @@ export class Achv {
     score: number,
     conditionFunc?: ConditionFn,
   ) {
+    this.localizationKey = localizationKey;
     this.name = name;
     this.description = description;
     this.iconImage = iconImage;
     this.score = score;
     this.conditionFunc = conditionFunc;
-    this.localizationKey = localizationKey;
   }
 
   /**
@@ -67,14 +67,14 @@ export class Achv {
     return this.iconImage;
   }
 
-  setSecret(hasParent?: boolean): this {
+  setSecret(hasParent: boolean = false): this {
     this.secret = true;
-    this.hasParent = !!hasParent;
+    this.hasParent = hasParent;
     return this;
   }
 
-  validate(args?: any[]): boolean {
-    return !this.conditionFunc || this.conditionFunc(args);
+  validate(...args: unknown[]): boolean {
+    return !this.conditionFunc || this.conditionFunc(...args);
   }
 
   getTier(): AchvTier {
@@ -95,16 +95,16 @@ export class Achv {
 }
 
 export class MoneyAchv extends Achv {
-  moneyAmount: number;
+  public readonly moneyAmount: number;
 
   constructor(localizationKey: string, name: string, moneyAmount: number, iconImage: string, score: number) {
-    super(localizationKey, name, "", iconImage, score, (_args: any[]) => globalScene.money >= this.moneyAmount);
+    super(localizationKey, name, "", iconImage, score, () => globalScene.money >= this.moneyAmount);
     this.moneyAmount = moneyAmount;
   }
 }
 
 export class RibbonAchv extends Achv {
-  ribbonAmount: number;
+  public readonly ribbonAmount: number;
 
   constructor(localizationKey: string, name: string, ribbonAmount: number, iconImage: string, score: number) {
     super(
@@ -113,14 +113,14 @@ export class RibbonAchv extends Achv {
       "",
       iconImage,
       score,
-      (_args: any[]) => globalScene.gameData.gameStats.ribbonsOwned >= this.ribbonAmount,
+      () => globalScene.gameData.gameStats.ribbonsOwned >= this.ribbonAmount,
     );
     this.ribbonAmount = ribbonAmount;
   }
 }
 
 export class DamageAchv extends Achv {
-  damageAmount: number;
+  public readonly damageAmount: number;
 
   constructor(localizationKey: string, name: string, damageAmount: number, iconImage: string, score: number) {
     super(
@@ -129,14 +129,14 @@ export class DamageAchv extends Achv {
       "",
       iconImage,
       score,
-      (args: any[]) => (args[0] instanceof NumberHolder ? args[0].value : args[0]) >= this.damageAmount,
+      (damage: number | NumberHolder) => (damage instanceof NumberHolder ? damage.value : damage) >= this.damageAmount,
     );
     this.damageAmount = damageAmount;
   }
 }
 
 export class HealAchv extends Achv {
-  healAmount: number;
+  public readonly healAmount: number;
 
   constructor(localizationKey: string, name: string, healAmount: number, iconImage: string, score: number) {
     super(
@@ -145,14 +145,14 @@ export class HealAchv extends Achv {
       "",
       iconImage,
       score,
-      (args: any[]) => (args[0] instanceof NumberHolder ? args[0].value : args[0]) >= this.healAmount,
+      (heal: number | NumberHolder) => (heal instanceof NumberHolder ? heal.value : heal) >= this.healAmount,
     );
     this.healAmount = healAmount;
   }
 }
 
 export class LevelAchv extends Achv {
-  level: number;
+  public readonly level: number;
 
   constructor(localizationKey: string, name: string, level: number, iconImage: string, score: number) {
     super(
@@ -161,7 +161,7 @@ export class LevelAchv extends Achv {
       "",
       iconImage,
       score,
-      (args: any[]) => (args[0] instanceof NumberHolder ? args[0].value : args[0]) >= this.level,
+      (level: number | NumberHolder) => (level instanceof NumberHolder ? level.value : level) >= this.level,
     );
     this.level = level;
   }
@@ -176,7 +176,7 @@ export class ModifierAchv extends Achv {
     score: number,
     modifierFunc: (modifier: Modifier) => boolean,
   ) {
-    super(localizationKey, name, description, iconImage, score, (args: any[]) => modifierFunc(args[0] as Modifier));
+    super(localizationKey, name, description, iconImage, score, (modifier: Modifier) => modifierFunc(modifier));
   }
 }
 
@@ -189,7 +189,7 @@ export class ChallengeAchv extends Achv {
     score: number,
     challengeFunc: (challenge: Challenge) => boolean,
   ) {
-    super(localizationKey, name, description, iconImage, score, (args: any[]) => challengeFunc(args[0] as Challenge));
+    super(localizationKey, name, description, iconImage, score, (challenge: Challenge) => challengeFunc(challenge));
   }
 }
 
@@ -457,7 +457,7 @@ export const achvs = {
     "CLASSIC_VICTORY.description",
     "relic_crown",
     150,
-    (_) => globalScene.gameData.gameStats.sessionsWon === 0,
+    () => globalScene.gameData.gameStats.sessionsWon === 0,
   ),
   UNEVOLVED_CLASSIC_VICTORY: new Achv(
     "UNEVOLVED_CLASSIC_VICTORY",
@@ -465,7 +465,7 @@ export const achvs = {
     "UNEVOLVED_CLASSIC_VICTORY.description",
     "eviolite",
     175,
-    (_) => globalScene.getPlayerParty().some((p) => p.getSpeciesForm(true).speciesId in pokemonEvolutions),
+    () => globalScene.getPlayerParty().some((p) => p.getSpeciesForm(true).speciesId in pokemonEvolutions),
   ),
   MONO_GEN_ONE_VICTORY: new ChallengeAchv(
     "MONO_GEN_ONE",
