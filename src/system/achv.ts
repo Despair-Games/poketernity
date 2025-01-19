@@ -22,7 +22,7 @@ export class Achv {
   public readonly localizationKey: string;
   public readonly id: string;
   public name: string = "";
-  public description: string;
+  public description: string = "";
   public readonly iconImage: string;
   public readonly score: number;
 
@@ -32,15 +32,8 @@ export class Achv {
 
   private conditionFunc?: ConditionFn;
 
-  constructor(
-    localizationKey: string,
-    description: string,
-    iconImage: string,
-    score: number,
-    conditionFunc?: ConditionFn,
-  ) {
+  constructor(localizationKey: string, iconImage: string, score: number, conditionFunc?: ConditionFn) {
     this.localizationKey = localizationKey;
-    this.description = description;
     this.iconImage = iconImage;
     this.score = score;
     this.conditionFunc = conditionFunc;
@@ -96,7 +89,7 @@ export class MoneyAchv extends Achv {
   public readonly moneyAmount: number;
 
   constructor(localizationKey: string, moneyAmount: number, iconImage: string, score: number) {
-    super(localizationKey, "", iconImage, score, () => globalScene.money >= this.moneyAmount);
+    super(localizationKey, iconImage, score, () => globalScene.money >= this.moneyAmount);
     this.moneyAmount = moneyAmount;
   }
 }
@@ -105,13 +98,7 @@ export class RibbonAchv extends Achv {
   public readonly ribbonAmount: number;
 
   constructor(localizationKey: string, ribbonAmount: number, iconImage: string, score: number) {
-    super(
-      localizationKey,
-      "",
-      iconImage,
-      score,
-      () => globalScene.gameData.gameStats.ribbonsOwned >= this.ribbonAmount,
-    );
+    super(localizationKey, iconImage, score, () => globalScene.gameData.gameStats.ribbonsOwned >= this.ribbonAmount);
     this.ribbonAmount = ribbonAmount;
   }
 }
@@ -122,7 +109,6 @@ export class DamageAchv extends Achv {
   constructor(localizationKey: string, damageAmount: number, iconImage: string, score: number) {
     super(
       localizationKey,
-      "",
       iconImage,
       score,
       (damage: number | NumberHolder) => (damage instanceof NumberHolder ? damage.value : damage) >= this.damageAmount,
@@ -137,7 +123,6 @@ export class HealAchv extends Achv {
   constructor(localizationKey: string, healAmount: number, iconImage: string, score: number) {
     super(
       localizationKey,
-      "",
       iconImage,
       score,
       (heal: number | NumberHolder) => (heal instanceof NumberHolder ? heal.value : heal) >= this.healAmount,
@@ -152,7 +137,6 @@ export class LevelAchv extends Achv {
   constructor(localizationKey: string, level: number, iconImage: string, score: number) {
     super(
       localizationKey,
-      "",
       iconImage,
       score,
       (level: number | NumberHolder) => (level instanceof NumberHolder ? level.value : level) >= this.level,
@@ -164,24 +148,22 @@ export class LevelAchv extends Achv {
 export class ModifierAchv extends Achv {
   constructor(
     localizationKey: string,
-    description: string,
     iconImage: string,
     score: number,
     modifierFunc: (modifier: Modifier) => boolean,
   ) {
-    super(localizationKey, description, iconImage, score, (modifier: Modifier) => modifierFunc(modifier));
+    super(localizationKey, iconImage, score, (modifier: Modifier) => modifierFunc(modifier));
   }
 }
 
 export class ChallengeAchv extends Achv {
   constructor(
     localizationKey: string,
-    description: string,
     iconImage: string,
     score: number,
     challengeFunc: (challenge: Challenge) => boolean,
   ) {
-    super(localizationKey, description, iconImage, score, (challenge: Challenge) => challengeFunc(challenge));
+    super(localizationKey, iconImage, score, (challenge: Challenge) => challengeFunc(challenge));
   }
 }
 
@@ -405,58 +387,41 @@ export const achvs = {
   _50_RIBBONS: new RibbonAchv("50_RIBBONS", 50, "ultra_ribbon", 50).setSecret(true),
   _75_RIBBONS: new RibbonAchv("75_RIBBONS", 75, "epic_ribbon", 75).setSecret(true),
   _100_RIBBONS: new RibbonAchv("100_RIBBONS", 100, "master_ribbon", 100).setSecret(true),
-  TRANSFER_MAX_STAT_STAGE: new Achv("TRANSFER_MAX_STAT_STAGE", "TRANSFER_MAX_STAT_STAGE.description", "baton", 20),
-  MAX_FRIENDSHIP: new Achv("MAX_FRIENDSHIP", "MAX_FRIENDSHIP.description", "soothe_bell", 25),
-  MEGA_EVOLVE: new Achv("MEGA_EVOLVE", "MEGA_EVOLVE.description", "mega_bracelet", 50),
-  GIGANTAMAX: new Achv("GIGANTAMAX", "GIGANTAMAX.description", "dynamax_band", 50),
-  TERASTALLIZE: new Achv("TERASTALLIZE", "TERASTALLIZE.description", "tera_orb", 25),
-  STELLAR_TERASTALLIZE: new Achv(
-    "STELLAR_TERASTALLIZE",
-    "STELLAR_TERASTALLIZE.description",
-    "stellar_tera_shard",
-    25,
-  ).setSecret(true),
-  SPLICE: new Achv("SPLICE", "SPLICE.description", "dna_splicers", 10),
+  TRANSFER_MAX_STAT_STAGE: new Achv("TRANSFER_MAX_STAT_STAGE", "baton", 20),
+  MAX_FRIENDSHIP: new Achv("MAX_FRIENDSHIP", "soothe_bell", 25),
+  MEGA_EVOLVE: new Achv("MEGA_EVOLVE", "mega_bracelet", 50),
+  GIGANTAMAX: new Achv("GIGANTAMAX", "dynamax_band", 50),
+  TERASTALLIZE: new Achv("TERASTALLIZE", "tera_orb", 25),
+  STELLAR_TERASTALLIZE: new Achv("STELLAR_TERASTALLIZE", "stellar_tera_shard", 25).setSecret(true),
+  SPLICE: new Achv("SPLICE", "dna_splicers", 10),
   MINI_BLACK_HOLE: new ModifierAchv(
     "MINI_BLACK_HOLE",
-    "MINI_BLACK_HOLE.description",
     "mini_black_hole",
     25,
     (modifier) => modifier instanceof TurnHeldItemTransferModifier,
   ).setSecret(),
-  CATCH_MYTHICAL: new Achv("CATCH_MYTHICAL", "CATCH_MYTHICAL.description", "strange_ball", 50).setSecret(),
-  CATCH_SUB_LEGENDARY: new Achv("CATCH_SUB_LEGENDARY", "CATCH_SUB_LEGENDARY.description", "rb", 75).setSecret(),
-  CATCH_LEGENDARY: new Achv("CATCH_LEGENDARY", "CATCH_LEGENDARY.description", "mb", 100).setSecret(),
-  SEE_SHINY: new Achv("SEE_SHINY", "SEE_SHINY.description", "pb_gold", 75),
-  SHINY_PARTY: new Achv("SHINY_PARTY", "SHINY_PARTY.description", "shiny_charm", 100).setSecret(true),
-  HATCH_MYTHICAL: new Achv("HATCH_MYTHICAL", "HATCH_MYTHICAL.description", "mystery_egg", 75).setSecret(),
-  HATCH_SUB_LEGENDARY: new Achv(
-    "HATCH_SUB_LEGENDARY",
-    "HATCH_SUB_LEGENDARY.description",
-    "oval_stone",
-    100,
-  ).setSecret(),
-  HATCH_LEGENDARY: new Achv("HATCH_LEGENDARY", "HATCH_LEGENDARY.description", "lucky_egg", 125).setSecret(),
-  HATCH_SHINY: new Achv("HATCH_SHINY", "HATCH_SHINY.description", "golden_egg", 100).setSecret(),
-  HIDDEN_ABILITY: new Achv("HIDDEN_ABILITY", "HIDDEN_ABILITY.description", "ability_charm", 75),
-  PERFECT_IVS: new Achv("PERFECT_IVS", "PERFECT_IVS.description", "blunder_policy", 100),
+  CATCH_MYTHICAL: new Achv("CATCH_MYTHICAL", "strange_ball", 50).setSecret(),
+  CATCH_SUB_LEGENDARY: new Achv("CATCH_SUB_LEGENDARY", "rb", 75).setSecret(),
+  CATCH_LEGENDARY: new Achv("CATCH_LEGENDARY", "mb", 100).setSecret(),
+  SEE_SHINY: new Achv("SEE_SHINY", "pb_gold", 75),
+  SHINY_PARTY: new Achv("SHINY_PARTY", "shiny_charm", 100).setSecret(true),
+  HATCH_MYTHICAL: new Achv("HATCH_MYTHICAL", "mystery_egg", 75).setSecret(),
+  HATCH_SUB_LEGENDARY: new Achv("HATCH_SUB_LEGENDARY", "oval_stone", 100).setSecret(),
+  HATCH_LEGENDARY: new Achv("HATCH_LEGENDARY", "lucky_egg", 125).setSecret(),
+  HATCH_SHINY: new Achv("HATCH_SHINY", "golden_egg", 100).setSecret(),
+  HIDDEN_ABILITY: new Achv("HIDDEN_ABILITY", "ability_charm", 75),
+  PERFECT_IVS: new Achv("PERFECT_IVS", "blunder_policy", 100),
   CLASSIC_VICTORY: new Achv(
     "CLASSIC_VICTORY",
-    "CLASSIC_VICTORY.description",
     "relic_crown",
     150,
     () => globalScene.gameData.gameStats.sessionsWon === 0,
   ),
-  UNEVOLVED_CLASSIC_VICTORY: new Achv(
-    "UNEVOLVED_CLASSIC_VICTORY",
-    "UNEVOLVED_CLASSIC_VICTORY.description",
-    "eviolite",
-    175,
-    () => globalScene.getPlayerParty().some((p) => p.getSpeciesForm(true).speciesId in pokemonEvolutions),
+  UNEVOLVED_CLASSIC_VICTORY: new Achv("UNEVOLVED_CLASSIC_VICTORY", "eviolite", 175, () =>
+    globalScene.getPlayerParty().some((p) => p.getSpeciesForm(true).speciesId in pokemonEvolutions),
   ),
   MONO_GEN_ONE_VICTORY: new ChallengeAchv(
     "MONO_GEN_ONE",
-    "MONO_GEN_ONE.description",
     "ribbon_gen1",
     100,
     (c) =>
@@ -466,7 +431,6 @@ export const achvs = {
   ),
   MONO_GEN_TWO_VICTORY: new ChallengeAchv(
     "MONO_GEN_TWO",
-    "MONO_GEN_TWO.description",
     "ribbon_gen2",
     100,
     (c) =>
@@ -476,7 +440,6 @@ export const achvs = {
   ),
   MONO_GEN_THREE_VICTORY: new ChallengeAchv(
     "MONO_GEN_THREE",
-    "MONO_GEN_THREE.description",
     "ribbon_gen3",
     100,
     (c) =>
@@ -486,7 +449,6 @@ export const achvs = {
   ),
   MONO_GEN_FOUR_VICTORY: new ChallengeAchv(
     "MONO_GEN_FOUR",
-    "MONO_GEN_FOUR.description",
     "ribbon_gen4",
     100,
     (c) =>
@@ -496,7 +458,6 @@ export const achvs = {
   ),
   MONO_GEN_FIVE_VICTORY: new ChallengeAchv(
     "MONO_GEN_FIVE",
-    "MONO_GEN_FIVE.description",
     "ribbon_gen5",
     100,
     (c) =>
@@ -506,7 +467,6 @@ export const achvs = {
   ),
   MONO_GEN_SIX_VICTORY: new ChallengeAchv(
     "MONO_GEN_SIX",
-    "MONO_GEN_SIX.description",
     "ribbon_gen6",
     100,
     (c) =>
@@ -516,7 +476,6 @@ export const achvs = {
   ),
   MONO_GEN_SEVEN_VICTORY: new ChallengeAchv(
     "MONO_GEN_SEVEN",
-    "MONO_GEN_SEVEN.description",
     "ribbon_gen7",
     100,
     (c) =>
@@ -526,7 +485,6 @@ export const achvs = {
   ),
   MONO_GEN_EIGHT_VICTORY: new ChallengeAchv(
     "MONO_GEN_EIGHT",
-    "MONO_GEN_EIGHT.description",
     "ribbon_gen8",
     100,
     (c) =>
@@ -536,7 +494,6 @@ export const achvs = {
   ),
   MONO_GEN_NINE_VICTORY: new ChallengeAchv(
     "MONO_GEN_NINE",
-    "MONO_GEN_NINE.description",
     "ribbon_gen9",
     100,
     (c) =>
@@ -546,7 +503,6 @@ export const achvs = {
   ),
   MONO_NORMAL: new ChallengeAchv(
     "MONO_NORMAL",
-    "MONO_NORMAL.description",
     "silk_scarf",
     100,
     (c) =>
@@ -556,7 +512,6 @@ export const achvs = {
   ),
   MONO_FIGHTING: new ChallengeAchv(
     "MONO_FIGHTING",
-    "MONO_FIGHTING.description",
     "black_belt",
     100,
     (c) =>
@@ -566,7 +521,6 @@ export const achvs = {
   ),
   MONO_FLYING: new ChallengeAchv(
     "MONO_FLYING",
-    "MONO_FLYING.description",
     "sharp_beak",
     100,
     (c) =>
@@ -576,7 +530,6 @@ export const achvs = {
   ),
   MONO_POISON: new ChallengeAchv(
     "MONO_POISON",
-    "MONO_POISON.description",
     "poison_barb",
     100,
     (c) =>
@@ -586,7 +539,6 @@ export const achvs = {
   ),
   MONO_GROUND: new ChallengeAchv(
     "MONO_GROUND",
-    "MONO_GROUND.description",
     "soft_sand",
     100,
     (c) =>
@@ -596,7 +548,6 @@ export const achvs = {
   ),
   MONO_ROCK: new ChallengeAchv(
     "MONO_ROCK",
-    "MONO_ROCK.description",
     "hard_stone",
     100,
     (c) =>
@@ -606,7 +557,6 @@ export const achvs = {
   ),
   MONO_BUG: new ChallengeAchv(
     "MONO_BUG",
-    "MONO_BUG.description",
     "silver_powder",
     100,
     (c) =>
@@ -616,7 +566,6 @@ export const achvs = {
   ),
   MONO_GHOST: new ChallengeAchv(
     "MONO_GHOST",
-    "MONO_GHOST.description",
     "spell_tag",
     100,
     (c) =>
@@ -626,7 +575,6 @@ export const achvs = {
   ),
   MONO_STEEL: new ChallengeAchv(
     "MONO_STEEL",
-    "MONO_STEEL.description",
     "metal_coat",
     100,
     (c) =>
@@ -636,7 +584,6 @@ export const achvs = {
   ),
   MONO_FIRE: new ChallengeAchv(
     "MONO_FIRE",
-    "MONO_FIRE.description",
     "charcoal",
     100,
     (c) =>
@@ -646,7 +593,6 @@ export const achvs = {
   ),
   MONO_WATER: new ChallengeAchv(
     "MONO_WATER",
-    "MONO_WATER.description",
     "mystic_water",
     100,
     (c) =>
@@ -656,7 +602,6 @@ export const achvs = {
   ),
   MONO_GRASS: new ChallengeAchv(
     "MONO_GRASS",
-    "MONO_GRASS.description",
     "miracle_seed",
     100,
     (c) =>
@@ -666,7 +611,6 @@ export const achvs = {
   ),
   MONO_ELECTRIC: new ChallengeAchv(
     "MONO_ELECTRIC",
-    "MONO_ELECTRIC.description",
     "magnet",
     100,
     (c) =>
@@ -676,7 +620,6 @@ export const achvs = {
   ),
   MONO_PSYCHIC: new ChallengeAchv(
     "MONO_PSYCHIC",
-    "MONO_PSYCHIC.description",
     "twisted_spoon",
     100,
     (c) =>
@@ -686,7 +629,6 @@ export const achvs = {
   ),
   MONO_ICE: new ChallengeAchv(
     "MONO_ICE",
-    "MONO_ICE.description",
     "never_melt_ice",
     100,
     (c) =>
@@ -696,7 +638,6 @@ export const achvs = {
   ),
   MONO_DRAGON: new ChallengeAchv(
     "MONO_DRAGON",
-    "MONO_DRAGON.description",
     "dragon_fang",
     100,
     (c) =>
@@ -706,7 +647,6 @@ export const achvs = {
   ),
   MONO_DARK: new ChallengeAchv(
     "MONO_DARK",
-    "MONO_DARK.description",
     "black_glasses",
     100,
     (c) =>
@@ -716,7 +656,6 @@ export const achvs = {
   ),
   MONO_FAIRY: new ChallengeAchv(
     "MONO_FAIRY",
-    "MONO_FAIRY.description",
     "fairy_feather",
     100,
     (c) =>
@@ -726,7 +665,6 @@ export const achvs = {
   ),
   FRESH_START: new ChallengeAchv(
     "FRESH_START",
-    "FRESH_START.description",
     "reviver_seed",
     100,
     (c) =>
@@ -736,12 +674,11 @@ export const achvs = {
   ),
   INVERSE_BATTLE: new ChallengeAchv(
     "INVERSE_BATTLE",
-    "INVERSE_BATTLE.description",
     "inverse",
     100,
     (c) => c instanceof InverseBattleChallenge && c.value > 0,
   ),
-  BREEDERS_IN_SPACE: new Achv("BREEDERS_IN_SPACE", "BREEDERS_IN_SPACE.description", "moon_stone", 50).setSecret(),
+  BREEDERS_IN_SPACE: new Achv("BREEDERS_IN_SPACE", "moon_stone", 50).setSecret(),
 };
 
 export function initAchievements() {
