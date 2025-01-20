@@ -1318,6 +1318,12 @@ class FireGrassPledgeTag extends ArenaTag {
     field
       .filter((pokemon) => !pokemon.isOfType(Type.FIRE) && !pokemon.switchOutStatus)
       .forEach((pokemon) => {
+        const cancelled = new BooleanHolder(false);
+        applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, false, cancelled);
+        if (cancelled.value) {
+          return;
+        }
+
         // "{pokemonNameWithAffix} was hurt by the sea of fire!"
         globalScene.queueMessage(
           i18next.t("arenaTag:fireGrassPledgeLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
@@ -1386,6 +1392,80 @@ class GrassWaterPledgeTag extends ArenaTag {
         `arenaTag:grassWaterPledgeOnAdd${this.side === ArenaTagSide.PLAYER ? "Player" : this.side === ArenaTagSide.ENEMY ? "Enemy" : ""}`,
       ),
     );
+  }
+}
+
+/**
+ * Class to describe the field effect of G-Max moves that damage all Pokemon that
+ * are not immune by 1/6th of their health
+ *
+ * Used in:
+ * G-Max Vine Lash: Grass
+ * G-Max Wildfire: Fire
+ * G-Max Cannonade: Water
+ * G-Max Volcalith: Rock
+ */
+export class TypeImmuneDamageOverTimeTag extends ArenaTag {
+  private immuneType: Type;
+
+  constructor(tagType, sourceMove: Moves, sourceId: number, side: ArenaTagSide, immuneType: Type) {
+    super(tagType, 4, sourceMove, sourceId, side);
+    this.immuneType = immuneType;
+  }
+
+  private getAnimationForType() {
+    switch (this.immuneType) {
+      case Type.GRASS:
+        return CommonAnim.WRAP;
+      case Type.FIRE:
+        return CommonAnim.FIRE_SPIN;
+      case Type.WATER:
+        return CommonAnim.WHIRLPOOL;
+      case Type.ROCK:
+        return CommonAnim.SALT_CURE;
+      default:
+        return CommonAnim.WRAP;
+    }
+  }
+
+  override onAdd(_arena: Arena) {
+    let localeKey = "arenaTag:TypeImmuneDamageOverTimeOnAdd";
+    if (this.side === ArenaTagSide.PLAYER) {
+      localeKey = localeKey.concat("Player");
+    } else {
+      localeKey = localeKey.concat("Enemy");
+    }
+    localeKey = localeKey.concat(Type[this.immuneType]);
+
+    globalScene.queueMessage(i18next.t(localeKey));
+  }
+
+  override lapse(arena: Arena): boolean {
+    const field: Pokemon[] =
+      this.side === ArenaTagSide.PLAYER ? globalScene.getPlayerField() : globalScene.getEnemyField();
+
+    field
+      .filter((pokemon) => !pokemon.isOfType(this.immuneType) && !pokemon.switchOutStatus)
+      .forEach((pokemon) => {
+        const cancelled = new BooleanHolder(false);
+        applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, false, cancelled);
+        if (cancelled.value) {
+          return;
+        }
+
+        globalScene.queueMessage(
+          i18next.t(`arenaTag:TypeImmuneDamageOverTimeLapse${Type[this.immuneType]}`, {
+            pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
+          }),
+        );
+        // TODO: Replace this with a proper animation
+        globalScene.unshiftPhase(
+          new CommonAnimPhase(pokemon.getBattlerIndex(), pokemon.getBattlerIndex(), this.getAnimationForType()),
+        );
+        pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 6));
+      });
+
+    return super.lapse(arena);
   }
 }
 
@@ -1471,6 +1551,38 @@ export function getArenaTag(
       return new GrassWaterPledgeTag(sourceId, side);
     case ArenaTagType.FAIRY_LOCK:
       return new FairyLockTag(turnCount, sourceId);
+    case ArenaTagType.G_MAX_VINE_LASH:
+      return new TypeImmuneDamageOverTimeTag(
+        ArenaTagType.G_MAX_VINE_LASH,
+        Moves.G_MAX_VINE_LASH,
+        sourceId,
+        side,
+        Type.GRASS,
+      );
+    case ArenaTagType.G_MAX_WILDFIRE:
+      return new TypeImmuneDamageOverTimeTag(
+        ArenaTagType.G_MAX_WILDFIRE,
+        Moves.G_MAX_WILDFIRE,
+        sourceId,
+        side,
+        Type.FIRE,
+      );
+    case ArenaTagType.G_MAX_CANNONADE:
+      return new TypeImmuneDamageOverTimeTag(
+        ArenaTagType.G_MAX_CANNONADE,
+        Moves.G_MAX_CANNONADE,
+        sourceId,
+        side,
+        Type.WATER,
+      );
+    case ArenaTagType.G_MAX_VOLCALITH:
+      return new TypeImmuneDamageOverTimeTag(
+        ArenaTagType.G_MAX_VOLCALITH,
+        Moves.G_MAX_VOLCALITH,
+        sourceId,
+        side,
+        Type.ROCK,
+      );
     default:
       return null;
   }

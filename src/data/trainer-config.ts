@@ -1120,18 +1120,14 @@ export class TrainerConfig {
   }
 
   /**
-   * Initializes the trainer configuration for an evil team leader. Temporarily hardcoding evil leader teams though.
-   * @param signatureSpecies The signature species for the evil team leader.
-   * @param specialtyTypes The specialty types for the evil team Leader.
-   * @param boolean Whether or not this is the rematch fight
+   * Initializes the trainer configuration for an evil team leader.
+   * @param title the string representation of the evil team leader's title
+   * @param name the string representation of the evil team leader's name
+   * @param rematch Whether or not this is the rematch fight
+   * @param mixedBattleBgm the string representation of the mixed battle bgm
    * @returns The updated TrainerConfig instance.
    * **/
-  initForEvilTeamLeader(
-    title: string,
-    signatureSpecies: (Species | Species[])[],
-    rematch: boolean = false,
-    ...specialtyTypes: Type[]
-  ): TrainerConfig {
+  initForEvilTeamLeader(title: string, name: string, rematch: boolean = false, mixedBattleBgm: string): TrainerConfig {
     if (!getIsInitialized()) {
       initI18n();
     }
@@ -1140,17 +1136,7 @@ export class TrainerConfig {
     } else {
       this.setPartyTemplates(trainerPartyTemplates.RIVAL_5);
     }
-    signatureSpecies.forEach((speciesPool, s) => {
-      if (!Array.isArray(speciesPool)) {
-        speciesPool = [speciesPool];
-      }
-      this.setPartyMemberFunc(-(s + 1), getRandomPartyMemberFunc(speciesPool));
-    });
-    if (specialtyTypes.length) {
-      this.setSpeciesFilter((p) => specialtyTypes.find((t) => p.isOfType(t)) !== undefined);
-      this.setSpecialtyTypes(...specialtyTypes);
-    }
-    const nameForCall = this.name.toLowerCase().replace(/\s/g, "_");
+    const nameForCall = name.toLowerCase().replace(/\s/g, "_");
     this.name = i18next.t(`trainerNames:${nameForCall}`);
     this.setTitle(title);
     this.setMoneyMultiplier(2.5);
@@ -1158,6 +1144,7 @@ export class TrainerConfig {
     this.setStaticParty();
     this.setHasVoucher(true);
     this.setBattleBgm("battle_plasma_boss");
+    this.setMixedBattleBgm(mixedBattleBgm);
     this.setVictoryBgm("victory_team_plasma");
 
     return this;
