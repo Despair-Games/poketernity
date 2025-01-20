@@ -1586,9 +1586,18 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   public hasRevealedAbility(abilityId: Abilities) {
-    return this.battleData?.abilitiesApplied.includes(abilityId);
+    return this.battleData?.abilitiesRevealed.includes(abilityId);
   }
 
+  /**
+   * Obtains the Pokemon's abilities.
+   * @param options Optional flags to filter the output:
+   * - `ignoreOverride`: If `true`, obtains the Pokemon's base ability instead
+   * of overriding abilities (e.g. obtains Trace instead of whatever Trace copies)
+   * - `canApplyOnly`: If `true`, filters out abilities that are suppressed or ignored
+   * - `revealedOnly`: If `true`, filters out abilities that haven't been revealed yet
+   * @returns
+   */
   public getAbilities(options: AbilityFilterOptions = {}): AbilityData[] {
     const ignoreOverride = options.ignoreOverride ?? false;
     let abilities: AbilityData[] = [
@@ -5921,11 +5930,21 @@ export class PokemonSummonData {
   public addedType: Type | null = null;
 }
 
+/** Container for Pokemon-specific data that resets at the end of each wave. */
 export class PokemonBattleData {
+  /** How many hits the Pokemon has taken */
   public hitCount: number = 0;
-  public endured: boolean = false;
+  /** The berries eaten by the Pokemon */
   public berriesEaten: BerryType[] = [];
+  /** The abilities this Pokemon has applied */
   public abilitiesApplied: Abilities[] = [];
+  /**
+   * The abilities revealed from this Pokemon.
+   * This differs from {@linkcode abilitiesApplied} in that
+   * effects such as Frisk and Trace can reveal abilities
+   * without applying them.
+   */
+  public abilitiesRevealed: Abilities[] = [];
 }
 
 export class PokemonBattleSummonData {

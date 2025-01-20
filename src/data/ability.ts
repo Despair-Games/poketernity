@@ -308,6 +308,7 @@ function applyAbAttrsInternal<TAttr extends AbAttr>(
         }
         if (pokemon.battleData && !pokemon.battleData.abilitiesApplied.includes(ability.id)) {
           pokemon.battleData.abilitiesApplied.push(ability.id);
+          pokemon.battleData.abilitiesRevealed.push(ability.id);
         }
         if (attr.showAbility) {
           if (attr.showAbilityInstant) {
