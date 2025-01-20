@@ -32,7 +32,7 @@ const DEFAULT_TEXT_STYLE = TextStyle.WINDOW;
  *
  * @template T the specifc type of {@linkcode OptionSelectItem} that this handler displays
  */
-export default abstract class AsbtractOptionSelectUiHandler<T extends OptionSelectItem> extends MessageUiHandler {
+export default abstract class AbstractOptionSelectUiHandler<T extends OptionSelectItem> extends MessageUiHandler {
   private config: OptionSelectModeConfig<T> | null;
   private options: (UIOptionSelectItem & T)[];
   private maxOptions: number;
@@ -53,6 +53,7 @@ export default abstract class AsbtractOptionSelectUiHandler<T extends OptionSele
 
   constructor(mode: Mode = Mode.OPTION_SELECT) {
     super(mode);
+    this.optionSelectIcons = [];
   }
 
   protected computeWindowHeight(): number {
@@ -79,13 +80,11 @@ export default abstract class AsbtractOptionSelectUiHandler<T extends OptionSele
     this.optionSelectText.setName("text-option-select");
     this.optionSelectContainer.add(this.optionSelectText);
 
-    this.optionSelectIcons = [];
-
     this.setCursor(0);
   }
 
   override show(args: any[]): boolean {
-    if (!args.length || !args[0].hasOwnProperty("options") || !args[0].options.length) {
+    if (!args.length || !args[0].options || !args[0].options.length) {
       console.error("Missing `OptionSelectModeConfig` argument for Mode.OPTION_SELECT");
       return false;
     }
@@ -312,7 +311,7 @@ export default abstract class AsbtractOptionSelectUiHandler<T extends OptionSele
 
     if (button === Button.ACTION || button === Button.CANCEL) {
       if (this.blockInput) {
-        if (button === Button.CANCEL && this.config?.canCancelDelay) {
+        if (button === Button.CANCEL && this.config?.canBypassInputDelay) {
           this.unblockInput();
         } else {
           ui.playError();
@@ -322,7 +321,7 @@ export default abstract class AsbtractOptionSelectUiHandler<T extends OptionSele
 
       success = true;
       if (button === Button.CANCEL) {
-        if (this.config?.noCancel) {
+        if (this.config?.blockCancelButton) {
           return false;
         }
         // Cancelling, move the cursors to the last option to act as if it was being selected
@@ -337,7 +336,7 @@ export default abstract class AsbtractOptionSelectUiHandler<T extends OptionSele
         if (!option.keepOpen) {
           this.clear();
         }
-        playSound = !option.overrideSound;
+        playSound = !option.noSoundEffects;
       } else {
         ui.playError();
       }

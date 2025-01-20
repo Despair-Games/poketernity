@@ -5,7 +5,7 @@ export default class AutoCompleteUiHandler extends OptionSelectUiHandler {
   private modalContainer: Phaser.GameObjects.Container;
 
   override show(args: any[]): boolean {
-    if (args[0].hasOwnProperty("modalContainer")) {
+    if (args[0]?.modalContainer) {
       const { modalContainer } = args[0];
       this.modalContainer = modalContainer;
 
@@ -33,7 +33,7 @@ export default class AutoCompleteUiHandler extends OptionSelectUiHandler {
         if (!option.keepOpen) {
           this.clear();
         }
-        if (!option.overrideSound) {
+        if (!option.noSoundEffects) {
           ui.playSelect();
         }
       } else {

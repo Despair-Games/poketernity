@@ -175,7 +175,7 @@ export class TitlePhase extends Phase {
     );
     const config: OptionSelectModeConfig<OptionSelectItem> = {
       options: options,
-      noCancel: true,
+      blockCancelButton: true,
     };
     globalScene.ui.setMode(Mode.TITLE, config);
   }

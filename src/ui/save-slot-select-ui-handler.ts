@@ -140,7 +140,7 @@ export default class SaveSlotSelectUiHandler extends MessageUiHandler {
                     ui.revertMode();
                     ui.showText("", 0);
                   },
-                  canCancelDelay: true,
+                  canBypassInputDelay: true,
                   yOffset: 28,
                   inputDelay: import.meta.env.DEV ? 300 : 2000,
                 };

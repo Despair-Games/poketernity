@@ -73,8 +73,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
 
     ui.bgmBar = this.bgmBar;
 
-    const width = globalScene.scaledCanvas.width;
-    const height = globalScene.scaledCanvas.height;
+    const { width, height } = globalScene.scaledCanvas;
 
     // Background overlay that sits below everything in the menu
     this.menuOverlay = new Phaser.GameObjects.Rectangle(
@@ -158,7 +157,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
     return {
       options: menuOptions,
       maxOptions: 10,
-      noCancel: true, // we take care of closing the menu in this handler
+      blockCancelButton: true, // we take care of closing the menu in this handler
       yOffset: 1,
       onResize: (w: number, _h: number) => {
         // Init the community and manage data menus config once the menu has its proper size

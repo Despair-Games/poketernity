@@ -230,11 +230,12 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
             },
           });
         }
-        globalScene.ui.setOverlayMode(Mode.OPTION_SELECT, {
+        const { ui, scaledCanvas } = globalScene;
+        ui.setOverlayMode(Mode.OPTION_SELECT, {
           options: options,
           delay: 1000,
-          xOffset: globalScene.scaledCanvas.width,
-          yOffset: globalScene.scaledCanvas.height - this.usernameInfoImage.displayHeight - 16 * dataKeys.length - 22,
+          xOffset: scaledCanvas.width,
+          yOffset: scaledCanvas.height - this.usernameInfoImage.displayHeight - 16 * dataKeys.length - 22,
         });
         this.infoContainer.setInteractive(
           new Phaser.Geom.Rectangle(0, 0, globalScene.game.canvas.width, globalScene.game.canvas.height),

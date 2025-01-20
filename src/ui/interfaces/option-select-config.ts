@@ -24,15 +24,12 @@ export interface OptionMenuSettings {
   readonly xOffset?: number;
   /** Vertical offset for the window compared to the default (bottom of screen) */
   readonly yOffset?: number;
-  /**
-   * Set to `true` to prevent closing the menu with the cancel button.
-   * Otherwise using the cancel button will act as if the last option was selected.
-   */
-  readonly noCancel?: boolean;
+  /** Set to `true` to prevent using the cancel button as a shorcut to selecting the last option in the menu. */
+  readonly blockCancelButton?: boolean;
   /** Optional delay (in ms) before the player is allowed to make a selection. */
   readonly inputDelay?: number;
   /** Set to `true` to allow bypassing the inputDelay with the cancel button. */
-  readonly canCancelDelay?: boolean;
+  readonly canBypassInputDelay?: boolean;
   /** Optional callback for when the window gets resized. */
   readonly onResize?: (w: number, h: number) => void;
 }
@@ -56,7 +53,7 @@ export interface OptionSelectItem {
   /** Set to `true` to keep the menu open after this option was selected. */
   readonly keepOpen?: boolean;
   /** Set to `true` to prevent the default menu sound effects from playing. */
-  readonly overrideSound?: boolean;
+  readonly noSoundEffects?: boolean;
   /**
    * Optional configuration to display icon(s) before the label's text.
    * If multiple icons are given they will be overlayed.

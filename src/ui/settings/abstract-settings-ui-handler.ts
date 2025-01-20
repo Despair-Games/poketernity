@@ -482,7 +482,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
           yesHandler: confirmUpdateSetting,
           noHandler: cancelUpdateSetting,
           inputDelay: 750,
-          canCancelDelay: true,
+          canBypassInputDelay: true,
         };
         globalScene.ui.showText(confirmationMessage, null, () => {
           globalScene.ui.setOverlayMode(Mode.CONFIRM, confirmSettingOptions);
