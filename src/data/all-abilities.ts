@@ -944,7 +944,7 @@ export function initAbilities() {
       .attr(NoFusionAbilityAbAttr),
     new Ability(Abilities.GALE_WINGS, 6).attr(
       ChangeMovePriorityAbAttr,
-      (pokemon, move) => pokemon.isFullHp() && pokemon.getMoveType(move) === Type.FLYING,
+      (pokemon, move) => pokemon.isFullHp() && move.type === Type.FLYING,
       1,
     ),
     new Ability(Abilities.MEGA_LAUNCHER, 6).attr(

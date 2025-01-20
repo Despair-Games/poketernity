@@ -18,7 +18,7 @@ import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { classicFinalBossDialogue } from "#app/data/dialogue";
 import { PostVictoryStatStageChangeAttr } from "#app/data/move-attrs/post-victory-stat-stage-change-attr";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";
-import { PlayerPokemon, PokemonMove, type EnemyPokemon, type Pokemon } from "#app/field/pokemon";
+import { PlayerPokemon, type EnemyPokemon, type Pokemon } from "#app/field/pokemon";
 import { HitResult } from "#enums/hit-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -158,18 +158,11 @@ export class FaintPhase extends PokemonPhase {
     );
     globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeActiveTrigger, true);
 
-    if (pokemon.turnData?.attacksReceived?.length) {
+    if (this.source && pokemon.turnData?.attacksReceived?.length) {
       const lastAttack = pokemon.turnData.attacksReceived[0];
-      applyAbAttrs(
-        PostFaintAbAttr,
-        pokemon,
-        false,
-        globalScene.getPokemonById(lastAttack.sourceId)!, // TODO: is this bang correct?
-        new PokemonMove(lastAttack.move).getMove(),
-        lastAttack.result,
-      );
+      applyAbAttrs(PostFaintAbAttr, pokemon, false, this.source, allMoves[lastAttack.move]);
     } else {
-      //If killed by indirect damage, apply post-faint abilities without providing a last move
+      //If killed by indirect damage, apply post-faint abilities without providing the source of fatal damage
       applyAbAttrs(PostFaintAbAttr, pokemon, false);
     }
 
