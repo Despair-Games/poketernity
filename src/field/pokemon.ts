@@ -4071,6 +4071,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (!this.canSetStatus(effect, asPhase, false, sourcePokemon)) {
       return false;
     }
+    if (this.isFainted() && effect !== StatusEffect.FAINT) {
+      return false;
+    }
 
     /**
      * If this Pokemon falls asleep or freezes in the middle of a multi-hit attack,
