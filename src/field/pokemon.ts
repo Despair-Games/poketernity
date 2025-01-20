@@ -1900,7 +1900,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * This includes modifiers from move and ability attributes.
    * @param source {@linkcode Pokemon} The attacking Pokémon.
    * @param move {@linkcode Move} The move being used by the attacking Pokémon.
-   * @param ignoreAbility Whether to ignore abilities that might affect type effectiveness or immunity (defaults to `false`).
+   * @param abilityApplyMode The {@linkcode AbilityApplyMode} determining how abilities are applied.
    * @param simulated Whether to apply abilities via simulated calls (defaults to `true`)
    * @param cancelled {@linkcode BooleanHolder} Stores whether the move was cancelled by a non-type-based immunity.
    * Currently only used by {@linkcode Pokemon.apply} to determine whether a "No effect" message should be shown.
@@ -3078,10 +3078,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   /**
    * Calculates the damage of an attack made by another Pokemon against this Pokemon
-   * @param source {@linkcode Pokemon} the attacking Pokemon
-   * @param move {@linkcode Pokemon} the move used in the attack
-   * @param ignoreAbility If `true`, ignores this Pokemon's defensive ability effects
-   * @param ignoreSourceAbility If `true`, ignores the attacking Pokemon's ability effects
+   * @param source the attacking {@linkcode Pokemon}
+   * @param move the {@linkcode Move} used in the attack
+   * @param abilityApplyMode the {@linkcode AbilityApplyMode} determining how abilities are applied.
    * @param isCritical If `true`, calculates damage for a critical hit.
    * @param simulated If `true`, suppresses changes to game state during the calculation.
    * @param effectiveness If defined, this is used in place of calculated effectiveness values.
