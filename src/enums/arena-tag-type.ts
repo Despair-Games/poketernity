@@ -32,4 +32,5 @@ export enum ArenaTagType {
   G_MAX_WILDFIRE,
   G_MAX_CANNONADE,
   G_MAX_VOLCALITH,
+  SHARP_STEEL,
 }

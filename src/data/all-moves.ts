@@ -3342,9 +3342,10 @@ export function initMoves() {
     new AttackMove(Moves.G_MAX_SMITE, Type.FAIRY, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
       .unimplemented(),
-    new AttackMove(Moves.G_MAX_STEELSURGE, Type.STEEL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+    new AttackMove(Moves.G_MAX_STEELSURGE, Type.STEEL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).attr(
+      AddArenaTrapTagHitAttr,
+      ArenaTagType.SHARP_STEEL,
+    ),
     new AttackMove(Moves.G_MAX_MELTDOWN, Type.STEEL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
       .unimplemented(),
