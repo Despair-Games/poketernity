@@ -2517,13 +2517,11 @@ export default class BattleScene extends SceneBase {
    * waveSetIndex is 0 from waves 0-19, 1 at 20, and increases by 1 every
    * 10 waves after 20
    *
-   * cyclicalPart is a value from .85 to 1.75, increasing in 0.1 intervals
-   * (wave X1 is .85, wave X2 is .95, wave X9 is 1.65 and the wave after X9 being 1.75)
-   *
-   * The sum of waveSetIndex, 1, and cyclicalPart are then multiplied by 100 and
+   * The sum of 10 times the wave number plus 175 is
    * raised to the power of 1 + .005 * waveSetIndex
    *
-   * The final result is then multiplied by moneyMultiplier
+   * The final result is then multiplied by moneyMultiplier and has the ones
+   * digit replaced with a 0
    *
    * @param moneyMultiplier how much the money is multiplied by
    * @returns the amount of money
@@ -2531,8 +2529,7 @@ export default class BattleScene extends SceneBase {
   getWaveMoneyAmount(moneyMultiplier: number): number {
     const waveIndex = this.currentBattle.waveIndex;
     const waveSetIndex = Math.ceil(waveIndex / 10) - 1;
-    const cyclicalPart = 0.75 + (((waveIndex - 1) % 10) + 1) / 10;
-    const moneyValue = Math.pow((waveSetIndex + 1 + cyclicalPart) * 100, 1 + 0.005 * waveSetIndex) * moneyMultiplier;
+    const moneyValue = Math.pow(waveIndex * 10 + 175, 1 + 0.005 * waveSetIndex) * moneyMultiplier;
     return Math.floor(moneyValue / 10) * 10;
   }
 
