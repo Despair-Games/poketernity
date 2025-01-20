@@ -1,7 +1,7 @@
 import { BattleType } from "#enums/battle-type";
 import { SwitchType } from "#app/enums/switch-type";
-import type { AbilityFilterOptions, Pokemon } from "#app/field/pokemon";
-import type { EnemyPokemon } from "#app/field/pokemon";
+import type { Pokemon, EnemyPokemon } from "#app/field/pokemon";
+import type { AbilityFilterOptions } from "#app/data/ability-filter-options";
 import { PlayerPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { Localizable } from "#app/interfaces/locales";

@@ -231,6 +231,7 @@ import { LearnMoveSituation } from "#enums/learn-move-situation";
 import { FieldPosition } from "#enums/field-position";
 import { ArenaTrapAbAttr } from "#app/data/ab-attrs/arena-trap-ab-attr";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
+import type { AbilityFilterOptions } from "#app/data/ability-filter-options";
 
 export abstract class Pokemon extends Phaser.GameObjects.Container {
   public id: number;
@@ -5873,12 +5874,6 @@ export class EnemyPokemon extends Pokemon {
 
     return ret;
   }
-}
-
-export interface AbilityFilterOptions {
-  ignoreOverride?: boolean;
-  revealedOnly?: boolean;
-  canApplyOnly?: boolean;
 }
 
 interface AbilityData {
