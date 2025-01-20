@@ -2514,8 +2514,8 @@ export default class BattleScene extends SceneBase {
   /**
    * Function to get money on a given wave and multiplier
    *
-   * waveSetIndex is 0 from waves 0-19, 1 at 20, and increases by 1 every
-   * 10 waves after 20
+   * waveSetIndex is 0 from waves 1-10, and then increases by 1 every 10 waves.
+   * This makes the base money amount increase significantly every time the player beats a wave that is a multiple of 10.
    *
    * The sum of 10 times the wave number plus 175 is
    * raised to the power of 1 + .005 * waveSetIndex
