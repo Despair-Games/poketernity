@@ -1,6 +1,6 @@
 import { BattleType } from "#enums/battle-type";
 import { SwitchType } from "#app/enums/switch-type";
-import type { Pokemon } from "#app/field/pokemon";
+import type { AbilityFilterOptions, Pokemon } from "#app/field/pokemon";
 import type { EnemyPokemon } from "#app/field/pokemon";
 import { PlayerPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -19,6 +19,7 @@ import type { AbAttr } from "./ab-attrs/ab-attr";
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import { ForceSwitchOutImmunityAbAttr } from "./ab-attrs/force-switch-out-immunity-ab-attr";
 import { queueShowAbility } from "./ability-utils";
+import { AbilityApplyMode } from "#enums/ability-apply-mode";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -279,18 +280,19 @@ export class ForceSwitchOutHelper {
  * @returns The message(s) displayed when the ability applies
  * @see {@linkcode AbAttr}
  */
-export function applyAbAttrs<TAttr extends AbAttr>(
+function applyAbAttrsInternal<TAttr extends AbAttr>(
+  abFilterOptions: AbilityFilterOptions,
   attrType: AbstractConstructor<TAttr>,
   ...params: Parameters<TAttr["apply"]>
 ): string[] {
   const messages: string[] = [];
   const [pokemon, simulated, ...args] = params;
-  for (const passive of [false, true]) {
-    if (!pokemon.canApplyAbility(passive) || (passive && pokemon.getPassiveAbility().id === pokemon.getAbility().id)) {
-      continue;
+  const abilities = pokemon.getAbilities(abFilterOptions);
+  abilities.forEach(({ ability, passive }) => {
+    if (passive && pokemon.getPassiveAbility().id === pokemon.getAbility().id) {
+      return;
     }
 
-    const ability = passive ? pokemon.getPassiveAbility() : pokemon.getAbility();
     const matchingAttrs = ability.getAttrs(attrType).filter((attr) => {
       const condition = attr.getCondition();
       return !condition || condition(pokemon);
@@ -327,9 +329,45 @@ export function applyAbAttrs<TAttr extends AbAttr>(
 
       globalScene.clearPhaseQueueSplice();
     });
-  }
+  });
 
   return messages;
+}
+
+export function applyAbAttrs<TAttr extends AbAttr>(
+  attrType: AbstractConstructor<TAttr>,
+  ...params: Parameters<TAttr["apply"]>
+): string[] {
+  return applyAbAttrsInternal({ canApplyOnly: true }, attrType, ...params);
+}
+
+export function applyRevealedAbAttrs<TAttr extends AbAttr>(
+  attrType: AbstractConstructor<TAttr>,
+  ...params: Parameters<TAttr["apply"]>
+): string[] {
+  return applyAbAttrsInternal({ canApplyOnly: true, revealedOnly: true }, attrType, ...params);
+}
+
+/**
+ * Obtains the function to apply abilities corresponding to the given mode
+ * @param mode the {@linkcode AbilityApplyMode} determining how abilities are applied:
+ * @returns the function to apply abilities based on the mode:
+ * - {@linkcode AbilityApplyMode.DEFAULT} applies abilities without restriction
+ * (as long as they meet conditions to apply).
+ * - {@linkcode AbilityApplyMode.REVEALED} only applies abilities that have
+ * previously applied in the current battle.
+ * - {@linkcode AbilityApplyMode.IGNORE} does nothing and returns an empty
+ * message array.
+ */
+export function getAbApplyFunc(mode: AbilityApplyMode) {
+  switch (mode) {
+    case AbilityApplyMode.DEFAULT:
+      return applyAbAttrs;
+    case AbilityApplyMode.REVEALED:
+      return applyRevealedAbAttrs;
+    case AbilityApplyMode.IGNORE:
+      return () => [];
+  }
 }
 
 export const allAbilities = [new Ability(Abilities.NONE, 3)];
