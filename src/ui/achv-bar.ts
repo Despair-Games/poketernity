@@ -1,9 +1,7 @@
 import { globalScene } from "#app/global-scene";
-import { Achv, getAchievementDescription } from "#app/system/achv";
+import { Achv } from "#app/system/achv";
 import { Voucher } from "#app/system/voucher";
 import { TextStyle, addTextObject } from "#app/ui/text";
-import type { PlayerGender } from "#enums/player-gender";
-import { settings } from "#app/system/settings/settings-manager";
 
 export default class AchvBar extends Phaser.GameObjects.Container {
   private defaultWidth: number;
@@ -16,13 +14,11 @@ export default class AchvBar extends Phaser.GameObjects.Container {
   private descriptionText: Phaser.GameObjects.Text;
 
   private queue: (Achv | Voucher)[] = [];
-  private playerGender: PlayerGender;
 
   public shown: boolean;
 
   constructor() {
     super(globalScene, globalScene.game.canvas.width / 6, 0);
-    this.playerGender = settings.display.playerGender;
   }
 
   setup(): void {
@@ -79,10 +75,10 @@ export default class AchvBar extends Phaser.GameObjects.Container {
 
     this.bg.setTexture(`achv_bar${tier ? `_${tier + 1}` : ""}`);
     this.icon.setFrame(achv.getIconImage());
-    this.titleText.setText(achv.getName(this.playerGender));
+    this.titleText.setText(achv.getName());
     this.scoreText.setVisible(achv instanceof Achv);
     if (achv instanceof Achv) {
-      this.descriptionText.setText(getAchievementDescription(achv.localizationKey));
+      this.descriptionText.setText(achv.getDescription());
     } else if (achv instanceof Voucher) {
       this.descriptionText.setText(achv.description);
     }
