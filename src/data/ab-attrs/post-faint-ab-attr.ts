@@ -1,6 +1,5 @@
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
-import type { HitResult } from "#enums/hit-result";
 import { AbAttr } from "./ab-attr";
 
 export abstract class PostFaintAbAttr extends AbAttr {
@@ -10,17 +9,9 @@ export abstract class PostFaintAbAttr extends AbAttr {
    * @param simulated If `true`, suppresses changes to game state
    * @param attacker The {@linkcode Pokemon} that caused the source to faint
    * @param move The {@linkcode Move} that caused the source to faint
-   * @param hitResult The {@linkcode HitResult | effectiveness} of the
-   * KO-ing move.
    * @returns `true` if effects from this attribute successfully apply
    */
-  override apply(
-    _pokemon: Pokemon,
-    _simulated: boolean,
-    _attacker?: Pokemon,
-    _move?: Move,
-    _hitResult?: HitResult,
-  ): boolean {
+  override apply(_pokemon: Pokemon, _simulated: boolean, _attacker?: Pokemon, _move?: Move): boolean {
     return false;
   }
 }
