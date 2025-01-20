@@ -1416,7 +1416,7 @@ export class TypeImmuneDamageOverTimeTag extends ArenaTag {
       case Type.WATER:
         return CommonAnim.WHIRLPOOL;
       case Type.ROCK:
-        return CommonAnim.SAND_TOMB;
+        return CommonAnim.SALT_CURE;
       default:
         return CommonAnim.WRAP;
     }
@@ -1441,6 +1441,12 @@ export class TypeImmuneDamageOverTimeTag extends ArenaTag {
     field
       .filter((pokemon) => !pokemon.isOfType(this.immuneType) && !pokemon.switchOutStatus)
       .forEach((pokemon) => {
+        const cancelled = new BooleanHolder(false);
+        applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, false, cancelled);
+        if (cancelled.value) {
+          return;
+        }
+
         globalScene.queueMessage(
           i18next.t(`arenaTag:TypeImmuneDamageOverTimeLapse${Type[this.immuneType]}`, {
             pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
