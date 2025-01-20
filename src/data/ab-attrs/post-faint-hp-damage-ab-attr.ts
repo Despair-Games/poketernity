@@ -10,13 +10,7 @@ import { PostFaintAbAttr } from "./post-faint-ab-attr";
  * @extends PostFaintAbAttr
  */
 export class PostFaintHPDamageAbAttr extends PostFaintAbAttr {
-  override apply(
-    pokemon: Pokemon,
-    simulated: boolean,
-    attacker?: Pokemon,
-    move?: Move,
-    _hitResult?: HitResult,
-  ): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean, attacker?: Pokemon, move?: Move): boolean {
     if (!move || !attacker || !attacker.isOnField()) {
       return false;
     }

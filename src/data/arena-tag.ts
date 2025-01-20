@@ -1318,6 +1318,12 @@ class FireGrassPledgeTag extends ArenaTag {
     field
       .filter((pokemon) => !pokemon.isOfType(Type.FIRE) && !pokemon.switchOutStatus)
       .forEach((pokemon) => {
+        const cancelled = new BooleanHolder(false);
+        applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, false, cancelled);
+        if (cancelled.value) {
+          return;
+        }
+
         // "{pokemonNameWithAffix} was hurt by the sea of fire!"
         globalScene.queueMessage(
           i18next.t("arenaTag:fireGrassPledgeLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
