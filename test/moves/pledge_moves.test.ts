@@ -138,6 +138,29 @@ describe("Moves - Pledge Moves", () => {
     enemyPokemon.forEach((p, i) => expect(enemyStartingHp[i] - p.hp).toBe(toDmgValue(p.getMaxHp() / 8)));
   });
 
+  it("Sea of fire should not damage magic guard", async () => {
+    game.override.enemyAbility(Abilities.MAGIC_GUARD);
+    await game.classicMode.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
+
+    const enemyPokemon = game.scene.getEnemyField();
+
+    game.move.select(Moves.FIRE_PLEDGE, 0, BattlerIndex.ENEMY_2);
+    game.move.select(Moves.GRASS_PLEDGE, 1, BattlerIndex.ENEMY);
+
+    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    // advance to the end of PLAYER_2's move this turn
+    for (let i = 0; i < 2; i++) {
+      await game.phaseInterceptor.to("MoveEndPhase");
+    }
+
+    expect(enemyPokemon[1].hp).toBe(enemyPokemon[1].getMaxHp()); // PLAYER should not have attacked
+    expect(game.scene.arena.getTagOnSide(ArenaTagType.FIRE_GRASS_PLEDGE, ArenaTagSide.ENEMY)).toBeDefined();
+
+    const enemyStartingHp = enemyPokemon.map((p) => p.hp);
+    await game.toNextTurn();
+    enemyPokemon.forEach((p, i) => expect(enemyStartingHp[i] - p.hp).toBe(0));
+  });
+
   it("Fire Pledge - should combine with Water Pledge to form a 150-power Water-type attack that creates a 'rainbow'", async () => {
     game.override.moveset([Moves.FIRE_PLEDGE, Moves.WATER_PLEDGE, Moves.FIERY_DANCE, Moves.SPLASH]);
 
