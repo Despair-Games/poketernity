@@ -6,7 +6,7 @@ import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, it, expect } from "vitest";
 
-describe("Moves - Pledge Moves", () => {
+describe("Moves - G-Max damage over time arena moves", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
 
