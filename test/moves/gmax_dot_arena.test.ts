@@ -5,6 +5,7 @@ import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, it, expect } from "vitest";
+import { toDmgValue } from "#app/utils";
 
 describe("Moves - G-Max damage over time arena moves", () => {
   let phaserGame: Phaser.Game;
@@ -41,8 +42,13 @@ describe("Moves - G-Max damage over time arena moves", () => {
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     await game.phaseInterceptor.to("MoveEndPhase", false);
 
-    game.scene.getEnemyField().forEach((pokemon) => {
-      expect(pokemon.hp).toBeLessThanOrEqual((pokemon.getMaxHp() * 5) / 6);
+    const enemyParty = game.scene.getEnemyParty();
+    const enemyStartingHp = enemyParty.map((p) => p.hp);
+    await game.toNextTurn();
+    const enemyEndingHp = enemyParty.map((p) => p.hp);
+    enemyParty.forEach((pokemon, index) => {
+      const damage = enemyStartingHp[index] - enemyEndingHp[index];
+      expect(damage).toBe(toDmgValue(pokemon.getMaxHp() / 6));
     });
   });
 
@@ -55,8 +61,13 @@ describe("Moves - G-Max damage over time arena moves", () => {
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     await game.phaseInterceptor.to("MoveEndPhase", false);
 
-    game.scene.getEnemyField().forEach((pokemon) => {
-      expect(pokemon.hp).toBeGreaterThan((pokemon.getMaxHp() * 5) / 6);
+    const enemyParty = game.scene.getEnemyParty();
+    const enemyStartingHp = enemyParty.map((p) => p.hp);
+    await game.toNextTurn();
+    const enemyEndingHp = enemyParty.map((p) => p.hp);
+    enemyParty.forEach((_pokemon, index) => {
+      const damage = enemyStartingHp[index] - enemyEndingHp[index];
+      expect(damage).toBe(0);
     });
   });
 
@@ -70,8 +81,13 @@ describe("Moves - G-Max damage over time arena moves", () => {
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     await game.phaseInterceptor.to("MoveEndPhase", false);
 
-    game.scene.getEnemyField().forEach((pokemon) => {
-      expect(pokemon.hp).toBeGreaterThan((pokemon.getMaxHp() * 5) / 6);
+    const enemyParty = game.scene.getEnemyParty();
+    const enemyStartingHp = enemyParty.map((p) => p.hp);
+    await game.toNextTurn();
+    const enemyEndingHp = enemyParty.map((p) => p.hp);
+    enemyParty.forEach((_pokemon, index) => {
+      const damage = enemyStartingHp[index] - enemyEndingHp[index];
+      expect(damage).toBe(0);
     });
   });
 });
