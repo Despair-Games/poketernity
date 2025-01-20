@@ -7,8 +7,6 @@ import type {
 } from "#app/@types/Settings";
 import { GAME_SPEEDS } from "#app/constants";
 import { BattleStyle } from "#app/enums/battle-style";
-import { CandyUpgradeDisplayMode } from "#app/enums/candy-upgrade-display";
-import { CandyUpgradeNotificationMode } from "#app/enums/candy-upgrade-notification-mode";
 import { DamageNumbersMode } from "#app/enums/damage-numbers-mode";
 import { EaseType } from "#app/enums/ease-type";
 import { EggSkipPreference } from "#app/enums/egg-skip-preference";
@@ -243,24 +241,6 @@ export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey>[] = [
     key: "showStatsOnLevelUp",
     label: t("settings:showStatsOnLevelUp"),
     options: useOnOffOptions(),
-  },
-  {
-    key: "candyUpgradeNotificationMode",
-    label: t("settings:candyUpgradeNotification"),
-    options: [
-      { value: CandyUpgradeNotificationMode.OFF, label: t("settings:off") },
-      { value: CandyUpgradeNotificationMode.PASSIVES_ONLY, label: t("settings:passivesOnly") },
-      { value: CandyUpgradeNotificationMode.ON, label: t("settings:on") },
-    ],
-  },
-  {
-    key: "candyUpgradeDisplayMode",
-    label: t("settings:candyUpgradeDisplay"),
-    options: [
-      { value: CandyUpgradeDisplayMode.ICON, label: t("settings:icon") },
-      { value: CandyUpgradeDisplayMode.ANIMATION, label: t("settings:animation") },
-    ],
-    requiresReload: true,
   },
   {
     key: "enableMoveInfo",
