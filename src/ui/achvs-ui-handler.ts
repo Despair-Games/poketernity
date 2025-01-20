@@ -214,8 +214,8 @@ export default class AchvsUiHandler extends MessageUiHandler {
     const achvUnlocks = globalScene.gameData.achvUnlocks;
     const unlocked = achvUnlocks.hasOwnProperty(achv.id);
     const hidden = !unlocked && achv.secret && (!achv.parentId || !achvUnlocks.hasOwnProperty(achv.parentId));
-    this.titleText.setText(unlocked ? achv.getName() : "???");
-    this.showText(!hidden ? achv.getDescription() : "");
+    this.titleText.setText(unlocked ? achv.name : "???");
+    this.showText(!hidden ? achv.description : "");
     this.scoreText.setText(`${achv.score}pt`);
     this.unlockText.setText(
       unlocked ? new Date(achvUnlocks[achv.id]).toLocaleDateString() : i18next.t("achv:Locked.name"),
@@ -408,7 +408,7 @@ export default class AchvsUiHandler extends MessageUiHandler {
       const hidden = !unlocked && achv.secret && (!achv.parentId || !achvUnlocks.hasOwnProperty(achv.parentId));
       const tinted = !hidden && !unlocked;
 
-      icon.setFrame(!hidden ? achv.getIconImage() : "unknown");
+      icon.setFrame(!hidden ? achv.iconImage : "unknown");
       icon.setVisible(true);
       if (tinted) {
         icon.setTintFill(0);

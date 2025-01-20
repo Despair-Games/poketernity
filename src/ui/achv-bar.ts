@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { Achv } from "#app/system/achv";
-import { Voucher } from "#app/system/voucher";
+import type { Voucher } from "#app/system/voucher";
 import { TextStyle, addTextObject } from "#app/ui/text";
 
 export default class AchvBar extends Phaser.GameObjects.Container {
@@ -74,14 +74,10 @@ export default class AchvBar extends Phaser.GameObjects.Container {
     const tier = achv.getTier();
 
     this.bg.setTexture(`achv_bar${tier ? `_${tier + 1}` : ""}`);
-    this.icon.setFrame(achv.getIconImage());
-    this.titleText.setText(achv.getName());
+    this.icon.setFrame(achv.iconImage);
+    this.titleText.setText(achv.name);
     this.scoreText.setVisible(achv instanceof Achv);
-    if (achv instanceof Achv) {
-      this.descriptionText.setText(achv.getDescription());
-    } else if (achv instanceof Voucher) {
-      this.descriptionText.setText(achv.description);
-    }
+    this.descriptionText.setText(achv.description);
 
     if (achv instanceof Achv) {
       this.scoreText.setText(`+${achv.score}pt`);

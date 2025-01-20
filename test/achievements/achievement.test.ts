@@ -28,9 +28,9 @@ describe("Achv", () => {
   });
 
   it("should have the correct attributes", () => {
-    expect(achv.getName()).toBe("TestAchievement.name");
-    expect(achv.getDescription()).toBe("TestAchievement.description");
-    expect(achv.getIconImage()).toBe("test_icon");
+    expect(achv.name).toBe("TestAchievement.name");
+    expect(achv.description).toBe("TestAchievement.description");
+    expect(achv.iconImage).toBe("test_icon");
     expect(achv.score).toBe(10);
   });
 
@@ -230,8 +230,8 @@ describe("MonoGenAchv", () => {
     const monoGenAchv = new MonoGenAchv("SomeAchv", 3, "monotype_icon", 10);
     expect(monoGenAchv).toBeInstanceOf(MonoGenAchv);
     expect(monoGenAchv instanceof Achv).toBe(true);
-    expect(monoGenAchv.getName()).toBe("SomeAchv.name");
-    expect(monoGenAchv.getDescription()).toBe("SomeAchv.description");
+    expect(monoGenAchv.name).toBe("SomeAchv.name");
+    expect(monoGenAchv.description).toBe("SomeAchv.description");
   });
 
   it("should validate the achievement based on the challenge value and type", () => {
@@ -283,8 +283,8 @@ describe("MonoTypeAchv", () => {
     const monoTypeAchv = new MonoTypeAchv(Type.STELLAR, "monotype_icon", 10);
     expect(monoTypeAchv).toBeInstanceOf(MonoTypeAchv);
     expect(monoTypeAchv instanceof Achv).toBe(true);
-    expect(monoTypeAchv.getName()).toBe("MONO_STELLAR.name");
-    expect(monoTypeAchv.getDescription()).toBe("Complete the Stellar monotype challenge.");
+    expect(monoTypeAchv.name).toBe("MONO_STELLAR.name");
+    expect(monoTypeAchv.description).toBe("Complete the Stellar monotype challenge.");
   });
 
   it("should validate the achievement based on the challenge value and type", () => {

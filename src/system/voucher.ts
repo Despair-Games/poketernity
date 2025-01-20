@@ -1,8 +1,3 @@
-// -- start tsdoc imports --
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { type Achv } from "#app/system/achv";
-// -- end tsdoc imports --
-
 import i18next from "i18next";
 import { achvs } from "./achv";
 import { AchvTier } from "#enums/achv-tier";
@@ -29,16 +24,11 @@ export class Voucher {
     return !this.conditionFunc || this.conditionFunc(...args);
   }
 
-  /**
-   * Get the name of the voucher
-   * @param _ - this is required in order to match the {@linkcode Achv} class's `getName` function
-   * @returns the name of the voucher
-   */
-  getName(_?: any): string {
+  public get name(): string {
     return getVoucherTypeName(this.voucherType);
   }
 
-  getIconImage(): string {
+  public get iconImage(): string {
     return getVoucherTypeIcon(this.voucherType);
   }
 
@@ -98,7 +88,7 @@ export function initVouchers() {
           : achv.score >= 75
             ? VoucherType.PLUS
             : VoucherType.REGULAR;
-    vouchers[achv.id] = new Voucher(voucherType, achv.getDescription());
+    vouchers[achv.id] = new Voucher(voucherType, achv.description);
   }
 
   const bossTrainerTypes = Object.keys(allTrainerConfigs).filter(

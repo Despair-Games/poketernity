@@ -23,7 +23,7 @@ export class Achv {
   protected readonly localizationKey: string;
   protected descriptionKey: string;
   protected descriptionLocArgs: Record<string, unknown>;
-  protected readonly iconImage: string;
+  protected readonly _iconImage: string;
   public readonly score: number;
   public readonly id: string;
 
@@ -36,7 +36,7 @@ export class Achv {
   constructor(localizationKey: string, iconImage: string, score: number, conditionFunc?: ConditionFn) {
     this.localizationKey = localizationKey;
     this.descriptionKey = localizationKey;
-    this.iconImage = iconImage;
+    this._iconImage = iconImage;
     this.score = score;
     this.conditionFunc = conditionFunc;
   }
@@ -45,7 +45,7 @@ export class Achv {
    * Get the name of the achievement based on the gender of the player
    * @returns the name of the achievement localized for the player gender
    */
-  public getName(): string {
+  public get name(): string {
     const playerGender = settings.display.playerGender ?? PlayerGender.MALE;
     const genderStr = PlayerGender[playerGender].toLowerCase();
     // Localization key is used to get the name of the achievement
@@ -56,15 +56,15 @@ export class Achv {
    * Get the description of the achievement based on the gender of the player
    * @returns the description of the achievement localized for the player gender
    */
-  public getDescription(): string {
+  public get description(): string {
     const playerGender = settings.display.playerGender ?? PlayerGender.MALE;
     const genderStr = PlayerGender[playerGender].toLowerCase();
     const locOptions = { context: genderStr, ...(this.descriptionLocArgs ?? {}) };
     return i18next.t(`achv:${this.descriptionKey}.description`, locOptions);
   }
 
-  public getIconImage(): string {
-    return this.iconImage;
+  public get iconImage(): string {
+    return this._iconImage;
   }
 
   public setSecret(hasParent: boolean = false): this {
