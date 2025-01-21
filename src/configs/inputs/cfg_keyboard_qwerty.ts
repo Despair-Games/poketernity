@@ -1,5 +1,5 @@
 import { Button } from "#enums/buttons";
-import { SettingKeyboard } from "#enums/settings-keyboard";
+import { SettingKeyboard } from "#enums/setting-keyboard";
 
 const cfg_keyboard_qwerty = {
   padID: "default",

@@ -8,7 +8,7 @@ import {
   settingKeyboardDefaults,
   settingKeyboardOptions,
 } from "#app/system/settings/settings-keyboard";
-import { SettingKeyboard } from "#enums/settings-keyboard";
+import { SettingKeyboard } from "#enums/setting-keyboard";
 import AbstractControlSettingsUiHandler from "#app/ui/settings/abstract-control-settings-ui-handler";
 import { NavigationManager } from "#app/ui/settings/navigationMenu";
 import { addTextObject } from "#app/ui/text";

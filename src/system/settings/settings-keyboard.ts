@@ -3,7 +3,7 @@ import { UiMode } from "#enums/ui-mode";
 import type SettingsKeyboardUiHandler from "#app/ui/settings/settings-keyboard-ui-handler";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
-import { SettingKeyboard } from "#enums/settings-keyboard";
+import { SettingKeyboard } from "#enums/setting-keyboard";
 
 const pressAction = i18next.t("settings:pressToBind");
 

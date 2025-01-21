@@ -1,8 +1,8 @@
 import { getPokeballName } from "../data/pokeball";
 import { addTextObject, getTextStyleOptions } from "./text";
 import { TextStyle } from "#enums/text-style";
-import { Command } from "../enums/command";
-import { UiMode } from "../enums/ui-mode";
+import { BattleCommand } from "#enums/battle-command";
+import { UiMode } from "#enums/ui-mode";
 import UiHandler from "./ui-handler";
 import { addWindow } from "./ui-theme";
 import { Button } from "#enums/buttons";
@@ -90,7 +90,7 @@ export default class BallUiHandler extends UiHandler {
       success = true;
       if (button === Button.ACTION && this.cursor < pokeballTypeCount) {
         if (globalScene.pokeballCounts[this.cursor]) {
-          if (commandPhase.handleCommand(Command.BALL, this.cursor)) {
+          if (commandPhase.handleCommand(BattleCommand.BALL, this.cursor)) {
             globalScene.ui.setMode(UiMode.COMMAND, commandPhase.getFieldIndex());
             globalScene.ui.setMode(UiMode.MESSAGE);
             success = true;

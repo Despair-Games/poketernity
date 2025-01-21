@@ -1,6 +1,6 @@
 import type Phaser from "phaser";
-import { settingsUiModes } from "./ui/ui";
-import { UiMode } from "./enums/ui-mode";
+import { settingsUiModes } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import type { InputsController } from "./inputs-controller";
 import type MessageUiHandler from "./ui/message-ui-handler";
 import StarterSelectUiHandler from "./ui/starter-select-ui-handler";

@@ -176,7 +176,7 @@ import { bgmLoopPoint } from "./data/bgm-loop-point";
 import { allTrainerConfigs } from "./data/balance/trainer-configs/all-trainer-configs";
 import { eventBus } from "./event-bus";
 import { Animation } from "./animations";
-import { setStarterColors, starterColors } from "./data/starter-colors";
+import { resetStarterColors, starterColors } from "./data/starter-colors";
 
 const DEBUG_RNG = false;
 
@@ -740,7 +740,7 @@ export default class BattleScene extends SceneBase {
       this.cachedFetch("./starter-colors.json")
         .then((res) => res.json())
         .then((sc) => {
-          setStarterColors({});
+          resetStarterColors();
           Object.keys(sc).forEach((key) => {
             starterColors[key] = sc[key];
           });

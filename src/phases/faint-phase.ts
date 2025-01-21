@@ -18,7 +18,7 @@ import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { classicFinalBossDialogue } from "#app/data/dialogue";
 import { PostVictoryStatStageChangeAttr } from "#app/data/move-attrs/post-victory-stat-stage-change-attr";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";
-import type { PlayerPokemon, Pokemon, EnemyPokemon } from "#app/field/pokemon";
+import type { Pokemon, EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
 import { HitResult } from "#enums/hit-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";

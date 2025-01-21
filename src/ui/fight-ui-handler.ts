@@ -4,8 +4,8 @@ import { addTextObject } from "./text";
 import { TextStyle } from "#enums/text-style";
 import { getTypeDamageMultiplierColor } from "#app/data/type";
 import { Type } from "#enums/type";
-import { Command } from "../enums/command";
-import { UiMode } from "../enums/ui-mode";
+import { BattleCommand } from "#enums/battle-command";
+import { UiMode } from "#enums/ui-mode";
 import UiHandler from "./ui-handler";
 import { getLocalizedSpriteKey, fixedNumber, padInt } from "#app/utils";
 import { MoveCategory } from "#enums/move-category";
@@ -147,7 +147,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
 
     if (button === Button.CANCEL || button === Button.ACTION) {
       if (button === Button.ACTION) {
-        if ((globalScene.getCurrentPhase() as CommandPhase).handleCommand(Command.FIGHT, cursor, false)) {
+        if ((globalScene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, cursor, false)) {
           success = true;
         } else {
           ui.playError();

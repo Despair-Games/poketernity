@@ -1,6 +1,6 @@
 import { addTextObject } from "./text";
 import { TextStyle } from "#enums/text-style";
-import type { UiMode } from "../enums/ui-mode";
+import type { UiMode } from "#enums/ui-mode";
 import UiHandler from "./ui-handler";
 import { addWindow } from "./ui-theme";
 import { Button } from "#enums/buttons";

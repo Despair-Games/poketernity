@@ -1,6 +1,6 @@
 import type { OptionSelectConfig } from "./abstact-option-select-ui-handler";
 import AbstractOptionSelectUiHandler from "./abstact-option-select-ui-handler";
-import { UiMode } from "../enums/ui-mode";
+import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import { Button } from "#enums/buttons";
 import { globalScene } from "#app/global-scene";

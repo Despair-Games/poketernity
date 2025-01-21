@@ -5,7 +5,7 @@ import Overrides from "#app/overrides";
 import type { CommandPhase } from "#app/phases/command-phase";
 import type { EnemyCommandPhase } from "#app/phases/enemy-command-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
-import { Command } from "#enums/command";
+import { BattleCommand } from "#enums/battle-command";
 import { UiMode } from "#enums/ui-mode";
 import { Moves } from "#enums/moves";
 import { getMovePosition } from "#test/testUtils/gameManagerUtils";
@@ -56,7 +56,7 @@ export class MoveHelper extends GameManagerHelper {
       this.game.scene.ui.setMode(UiMode.FIGHT, (this.game.scene.getCurrentPhase() as CommandPhase).getFieldIndex());
     });
     this.game.onNextPrompt("CommandPhase", UiMode.FIGHT, () => {
-      (this.game.scene.getCurrentPhase() as CommandPhase).handleCommand(Command.FIGHT, movePosition, false);
+      (this.game.scene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, movePosition, false);
     });
 
     if (targetIndex !== null) {

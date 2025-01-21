@@ -3,7 +3,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { MoveResult } from "#enums/move-result";
 import { addBBCodeTextObject, addTextObject, getTextColor } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
-import { Command } from "../enums/command";
+import { BattleCommand } from "../enums/battle-command";
 import MessageUiHandler from "#app/ui/message-ui-handler";
 import { UiMode } from "../enums/ui-mode";
 import { BooleanHolder, toReadableString, getLocalizedSpriteKey } from "#app/utils";
@@ -439,7 +439,7 @@ export default class PartyUiHandler extends MessageUiHandler {
                 }
               } else if (this.cursor) {
                 (globalScene.getCurrentPhase() as CommandPhase).handleCommand(
-                  Command.POKEMON,
+                  BattleCommand.POKEMON,
                   this.cursor,
                   option === PartyOption.PASS_BATON,
                 );

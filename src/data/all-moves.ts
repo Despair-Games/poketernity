@@ -2,7 +2,7 @@ import { MoveResult } from "#enums/move-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BerryModifier } from "#app/modifier/modifier";
-import { Command } from "#enums/command";
+import { BattleCommand } from "#enums/battle-command";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -1449,7 +1449,7 @@ export function initMoves() {
       MovePowerMultiplierAttr,
       (_user, target, _move) =>
         target.getLastXMoves(1).find((m) => m.turn === globalScene.currentBattle.turn)
-        || globalScene.currentBattle.turnCommands[target.getBattlerIndex()]?.command === Command.BALL
+        || globalScene.currentBattle.turnCommands[target.getBattlerIndex()]?.command === BattleCommand.BALL
           ? 2
           : 1,
     ),
@@ -1512,7 +1512,7 @@ export function initMoves() {
           return false;
         }
         return (
-          turnCommand.command === Command.FIGHT
+          turnCommand.command === BattleCommand.FIGHT
           && !target.turnData.acted
           && allMoves[turnCommand.move.move].category !== MoveCategory.STATUS
         );
@@ -3661,7 +3661,7 @@ export function initMoves() {
           return false;
         }
         return (
-          turnCommand.command === Command.FIGHT
+          turnCommand.command === BattleCommand.FIGHT
           && !target.turnData.acted
           && allMoves[turnCommand.move.move].category !== MoveCategory.STATUS
         );

@@ -2,7 +2,7 @@ import type { ArenaTagSide } from "#enums/arena-tag-side";
 import type { ArenaTagType } from "#enums/arena-tag-type";
 import type { TerrainType } from "#enums/terrain-type";
 import type { WeatherType } from "#enums/weather-type";
-import { ArenaEventType } from "../enums/arena-event-type";
+import { ArenaEventType } from "#enums/arena-event-type";
 
 /**
  * Base container class for all {@linkcode ArenaEventType} events

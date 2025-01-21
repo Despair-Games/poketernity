@@ -1,4 +1,4 @@
-import { UiMode } from "../enums/ui-mode";
+import { UiMode } from "#enums/ui-mode";
 import { addTextObject, getEggTierTextTint, getTextStyleOptions } from "./text";
 import { TextStyle } from "#enums/text-style";
 import MessageUiHandler from "./message-ui-handler";

@@ -29,7 +29,7 @@ import { getVariantTint } from "#app/data/variant";
 import * as Modifier from "../modifier/modifier";
 import type { Species } from "#enums/species";
 import { PlayerGender } from "#enums/player-gender";
-import { SettingKeyboard } from "#enums/settings-keyboard";
+import { SettingKeyboard } from "#enums/setting-keyboard";
 import { getBiomeName } from "#app/data/balance/biomes";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";

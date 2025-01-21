@@ -1,5 +1,4 @@
 /** Alias for all {@linkcode ArenaEvent} type strings */
-
 export enum ArenaEventType {
   /** Triggers when a {@linkcode WeatherType} is added, overlapped, or removed */
   WEATHER_CHANGED = "onWeatherChanged",

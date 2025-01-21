@@ -33,7 +33,8 @@ export enum TextStyle {
   SMALLER_WINDOW_ALT,
   BGM_BAR,
   PERFECT_IV,
-  /**  Default style for choices in ME */
+  /** Default style for choices in ME */
   ME_OPTION_DEFAULT,
+  /** Style for choices with special requirements in ME */
   ME_OPTION_SPECIAL,
 }

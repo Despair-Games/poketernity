@@ -1,4 +1,4 @@
-import type { UiMode } from "../enums/ui-mode";
+import type { UiMode } from "#enums/ui-mode";
 import UiHandler from "./ui-handler";
 import { Button } from "#enums/buttons";
 import { globalScene } from "#app/global-scene";

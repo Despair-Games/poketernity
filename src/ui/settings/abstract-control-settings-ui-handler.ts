@@ -1,5 +1,5 @@
 import UiHandler from "#app/ui/ui-handler";
-import type { UiMode } from "../../enums/ui-mode";
+import type { UiMode } from "#enums/ui-mode";
 import type { InterfaceConfig } from "#app/inputs-controller";
 import { addWindow } from "#app/ui/ui-theme";
 import { addTextObject } from "#app/ui/text";

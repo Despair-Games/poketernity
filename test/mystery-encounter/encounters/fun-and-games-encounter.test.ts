@@ -22,7 +22,7 @@ import { CommandPhase } from "#app/phases/command-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { FunAndGamesEncounter } from "#app/data/mystery-encounters/encounters/fun-and-games-encounter";
 import { Moves } from "#enums/moves";
-import { Command } from "#enums/command";
+import { BattleCommand } from "#enums/battle-command";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 
 const namespace = "mysteryEncounters/funAndGames";
@@ -152,15 +152,15 @@ describe("Fun And Games! - Mystery Encounter", () => {
       });
 
       // Turn 1
-      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(Command.FIGHT, 0, false);
+      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, 0, false);
       await game.phaseInterceptor.to(CommandPhase);
 
       // Turn 2
-      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(Command.FIGHT, 0, false);
+      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, 0, false);
       await game.phaseInterceptor.to(CommandPhase);
 
       // Turn 3
-      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(Command.FIGHT, 0, false);
+      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, 0, false);
       await game.phaseInterceptor.to(SelectModifierPhase, false);
 
       // Rewards
@@ -179,7 +179,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
 
       // Skip minigame
       scene.currentBattle.mysteryEncounter!.misc.turnsRemaining = 0;
-      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(Command.FIGHT, 0, false);
+      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, 0, false);
       await game.phaseInterceptor.to(SelectModifierPhase, false);
 
       // Rewards
@@ -208,7 +208,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
       const wobbuffet = scene.getEnemyPokemon()!;
       wobbuffet.hp = Math.floor(0.2 * wobbuffet.getMaxHp());
       scene.currentBattle.mysteryEncounter!.misc.turnsRemaining = 0;
-      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(Command.FIGHT, 0, false);
+      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, 0, false);
       await game.phaseInterceptor.to(SelectModifierPhase, false);
 
       // Rewards
@@ -238,7 +238,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
       const wobbuffet = scene.getEnemyPokemon()!;
       wobbuffet.hp = Math.floor(0.1 * wobbuffet.getMaxHp());
       scene.currentBattle.mysteryEncounter!.misc.turnsRemaining = 0;
-      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(Command.FIGHT, 0, false);
+      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, 0, false);
       await game.phaseInterceptor.to(SelectModifierPhase, false);
 
       // Rewards
@@ -268,7 +268,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
       const wobbuffet = scene.getEnemyPokemon()!;
       wobbuffet.hp = 1;
       scene.currentBattle.mysteryEncounter!.misc.turnsRemaining = 0;
-      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(Command.FIGHT, 0, false);
+      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, 0, false);
       await game.phaseInterceptor.to(SelectModifierPhase, false);
 
       // Rewards

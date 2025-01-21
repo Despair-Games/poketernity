@@ -41,7 +41,7 @@ import { UiMode } from "../enums/ui-mode";
 import { addWindow } from "#app/ui/ui-theme";
 import { Egg } from "#app/data/egg";
 import Overrides from "#app/overrides";
-import { SettingKeyboard } from "#enums/settings-keyboard";
+import { SettingKeyboard } from "#enums/setting-keyboard";
 import { Passive as PassiveAttr } from "#enums/passive";
 import * as Challenge from "#app/data/challenge";
 import MoveInfoOverlay from "#app/ui/move-info-overlay";

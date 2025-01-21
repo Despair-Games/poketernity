@@ -1,7 +1,7 @@
 import MessageUiHandler from "./message-ui-handler";
 import { addTextObject } from "./text";
 import { TextStyle } from "#enums/text-style";
-import { UiMode } from "../enums/ui-mode";
+import { UiMode } from "#enums/ui-mode";
 import { Button } from "#enums/buttons";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";

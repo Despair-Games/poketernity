@@ -12,7 +12,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { FieldPhase } from "#app/phases/abstract-field-phase";
 import { SelectTargetPhase } from "#app/phases/select-target-phase";
-import { Command } from "#enums/command";
+import { BattleCommand } from "#enums/battle-command";
 import { UiMode } from "#enums/ui-mode";
 import { isNullOrUndefined } from "#app/utils";
 import { Abilities } from "#enums/abilities";
@@ -49,8 +49,8 @@ export class CommandPhase extends FieldPhase {
     const commandUiHandler = globalScene.ui.handlers[UiMode.COMMAND];
 
     if (commandUiHandler) {
-      if (currentBattle.turn === 1 || commandUiHandler.getCursor() === Command.POKEMON) {
-        commandUiHandler.setCursor(Command.FIGHT);
+      if (currentBattle.turn === 1 || commandUiHandler.getCursor() === BattleCommand.POKEMON) {
+        commandUiHandler.setCursor(BattleCommand.FIGHT);
       } else {
         commandUiHandler.setCursor(commandUiHandler.getCursor());
       }
@@ -63,7 +63,7 @@ export class CommandPhase extends FieldPhase {
         this.fieldIndex = FieldPosition.CENTER;
       } else {
         const allyCommand = currentBattle.turnCommands[this.fieldIndex - 1];
-        if (allyCommand?.command === Command.BALL || allyCommand?.command === Command.RUN) {
+        if (allyCommand?.command === BattleCommand.BALL || allyCommand?.command === BattleCommand.RUN) {
           currentBattle.turnCommands[this.fieldIndex] = { command: allyCommand?.command, skip: true };
         }
       }
@@ -75,7 +75,7 @@ export class CommandPhase extends FieldPhase {
       && this.getPokemon().getAlly()?.getTag(BattlerTagType.COMMANDED)?.getSourcePokemon() === this.getPokemon()
     ) {
       currentBattle.turnCommands[this.fieldIndex] = {
-        command: Command.FIGHT,
+        command: BattleCommand.FIGHT,
         move: { move: Moves.NONE, targets: [] },
         skip: true,
       };
@@ -112,11 +112,11 @@ export class CommandPhase extends FieldPhase {
     if (moveQueue.length) {
       const queuedMove = moveQueue[0];
       if (!queuedMove.move) {
-        this.handleCommand(Command.FIGHT, -1, false);
+        this.handleCommand(BattleCommand.FIGHT, -1, false);
       } else {
         const moveIndex = playerPokemon.getMoveset().findIndex((m) => m.moveId === queuedMove.move);
         if (moveIndex > -1 && playerPokemon.getMoveset()[moveIndex].isUsable(playerPokemon, queuedMove.ignorePP)) {
-          this.handleCommand(Command.FIGHT, moveIndex, queuedMove.ignorePP, {
+          this.handleCommand(BattleCommand.FIGHT, moveIndex, queuedMove.ignorePP, {
             targets: queuedMove.targets,
             multiple: queuedMove.targets.length > 1,
           });
@@ -135,30 +135,35 @@ export class CommandPhase extends FieldPhase {
   }
 
   /**
-   * @param command - Which of {@linkcode Command.BALL} or {@linkcode Command.RUN} was chosen
+   * @param command - Which of {@linkcode BattleCommand.BALL} or {@linkcode BattleCommand.RUN} was chosen
    * @param cursor - Cursor index for the selected Pokeball
    * @returns `true` if the command was successful
    * @overload
    */
-  public handleCommand(command: Command.BALL | Command.RUN, cursor: number): boolean;
+  public handleCommand(command: BattleCommand.BALL | BattleCommand.RUN, cursor: number): boolean;
   /**
-   * @param command - {@linkcode Command.FIGHT}
+   * @param command - {@linkcode BattleCommand.FIGHT}
    * @param cursor - Cursor index for the selected Move
    * @param ignorePp - `true` if the move shouldn't use PP
    * @param targets - (optional) {@linkcode MoveTargetSet} containing the queued moves targets (ie: from rollout, etc)
    * @returns `true` if the command was successful
    * @overload
    */
-  public handleCommand(command: Command.FIGHT, cursor: number, ignorePp?: boolean, targets?: MoveTargetSet): boolean;
+  public handleCommand(
+    command: BattleCommand.FIGHT,
+    cursor: number,
+    ignorePp?: boolean,
+    targets?: MoveTargetSet,
+  ): boolean;
   /**
-   * @param command - {@linkcode Command.POKEMON}
+   * @param command - {@linkcode BattleCommand.POKEMON}
    * @param cursor - Cursor index for the selected Pokemon
    * @param isBaton - `true` if the pokemon being switched out is holding the Baton item
    * @returns `true` if the command was successful
    * @overload
    */
-  public handleCommand(command: Command.POKEMON, cursor: number, isBaton: boolean): boolean;
-  public handleCommand(command: Command, cursor: number, ...args: unknown[]): boolean {
+  public handleCommand(command: BattleCommand.POKEMON, cursor: number, isBaton: boolean): boolean;
+  public handleCommand(command: BattleCommand, cursor: number, ...args: unknown[]): boolean {
     const playerPokemon = globalScene.getPlayerField()[this.fieldIndex];
     let success: boolean = false;
 
@@ -176,7 +181,7 @@ export class CommandPhase extends FieldPhase {
     };
 
     switch (command) {
-      case Command.FIGHT:
+      case BattleCommand.FIGHT:
         const ignorePp = args[0] as boolean | undefined;
         const targets = args[1] as MoveTargetSet | undefined;
         const useStruggle = cursor > -1 && !playerPokemon.getMoveset().filter((m) => m.isUsable(playerPokemon)).length;
@@ -188,7 +193,7 @@ export class CommandPhase extends FieldPhase {
               : Moves.NONE
             : Moves.STRUGGLE;
           const turnCommand: TurnCommand = {
-            command: Command.FIGHT,
+            command: BattleCommand.FIGHT,
             cursor: cursor,
             move: { move: moveId, targets: [], ignorePP: ignorePp },
             args: args,
@@ -246,7 +251,7 @@ export class CommandPhase extends FieldPhase {
           );
         }
         break;
-      case Command.BALL:
+      case BattleCommand.BALL:
         const notInDex =
           globalScene
             .getEnemyField()
@@ -283,7 +288,7 @@ export class CommandPhase extends FieldPhase {
               failCatchRun("battle:noPokeballStrong");
             } else {
               currentBattle.turnCommands[this.fieldIndex] = {
-                command: Command.BALL,
+                command: BattleCommand.BALL,
                 cursor: cursor,
                 targets: targets,
               };
@@ -295,7 +300,7 @@ export class CommandPhase extends FieldPhase {
           }
         }
         break;
-      case Command.RUN:
+      case BattleCommand.RUN:
         if (arena.biomeType === Biome.END || mysteryEncounter?.fleeAllowed === false) {
           failCatchRun("battle:noEscapeForce");
           break;
@@ -306,8 +311,8 @@ export class CommandPhase extends FieldPhase {
           failCatchRun("battle:noEscapeTrainer");
           break;
         }
-      case Command.POKEMON:
-        const isSwitch = command === Command.POKEMON;
+      case BattleCommand.POKEMON:
+        const isSwitch = command === BattleCommand.POKEMON;
         const batonPass = isSwitch && (args[0] as boolean);
         const trappedAbMessages: string[] = [];
 
@@ -328,8 +333,8 @@ export class CommandPhase extends FieldPhase {
 
         if (batonPass || !playerPokemon.isTrapped(trappedAbMessages)) {
           currentBattle.turnCommands[this.fieldIndex] = isSwitch
-            ? { command: Command.POKEMON, cursor: cursor, args: args }
-            : { command: Command.RUN };
+            ? { command: BattleCommand.POKEMON, cursor: cursor, args: args }
+            : { command: BattleCommand.RUN };
           success = true;
           if (!isSwitch && this.fieldIndex) {
             currentBattle.turnCommands[this.fieldIndex - 1]!.skip = true;

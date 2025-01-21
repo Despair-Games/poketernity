@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import type { Command } from "./enums/command";
+import type { BattleCommand } from "#enums/battle-command";
 import {
   randomString,
   getEnumValues,
@@ -57,7 +57,7 @@ import {
 } from "./data/special-waves";
 
 export interface TurnCommand {
-  command: Command;
+  command: BattleCommand;
   cursor?: number;
   move?: QueuedMove;
   targets?: BattlerIndex[];

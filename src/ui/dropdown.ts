@@ -4,9 +4,9 @@ import { TextStyle } from "#enums/text-style";
 import { addWindow } from "./ui-theme";
 import { WindowVariant } from "#enums/window-variant";
 import i18next from "i18next";
-import { DropDownState } from "../enums/drop-down-state";
-import { DropDownType } from "../enums/drop-down-type";
-import { SortDirection } from "../enums/sort-direction";
+import { DropDownState } from "#enums/drop-down-state";
+import { DropDownType } from "#enums/drop-down-type";
+import { SortDirection } from "#enums/sort-direction";
 
 export class DropDownLabel {
   public state: DropDownState;

@@ -2,7 +2,7 @@ import { SubstituteTag, TrappedTag } from "#app/data/battler-tags";
 import { allMoves } from "#app/data/all-moves";
 import type { CommandPhase } from "#app/phases/command-phase";
 import { GameManager } from "#test/testUtils/gameManager";
-import { Command } from "#enums/command";
+import { BattleCommand } from "#enums/battle-command";
 import { UiMode } from "#enums/ui-mode";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -400,7 +400,7 @@ describe("Moves - Substitute", () => {
 
     // Simulate a Baton switch for the player this turn
     game.onNextPrompt("CommandPhase", UiMode.COMMAND, () => {
-      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(Command.POKEMON, 1, true);
+      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.POKEMON, 1, true);
     });
 
     await game.phaseInterceptor.to("MovePhase", false);

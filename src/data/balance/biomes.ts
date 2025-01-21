@@ -10797,7 +10797,6 @@ export function initBiomes() {
           !!(pokemonBiomes.find((p) => p[0] === es.speciesId)![3] as any[]).filter((b) => b[0] !== Biome.END).length,
       ).length
     ) {
-      // TODO: is the bang on the `find()` correct?
       uncatchableSpecies.push(speciesId);
     }
 

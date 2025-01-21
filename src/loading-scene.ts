@@ -20,7 +20,7 @@ import { Biome } from "#enums/biome";
 import { initMysteryEncounters } from "#app/data/mystery-encounters/mystery-encounters";
 import { initAbilities } from "#app/data/all-abilities";
 import { initMoves } from "#app/data/all-moves";
-import { initVouchers } from "./system/init-vouchers";
+import { initVouchers } from "#app/system/init-vouchers";
 
 export class LoadingScene extends SceneBase {
   public static readonly KEY = "loading";

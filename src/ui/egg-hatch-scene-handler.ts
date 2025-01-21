@@ -1,4 +1,4 @@
-import { UiMode } from "../enums/ui-mode";
+import { UiMode } from "#enums/ui-mode";
 import UiHandler from "./ui-handler";
 import { Button } from "#enums/buttons";
 import { EggHatchPhase } from "#app/phases/egg-hatch-phase";
