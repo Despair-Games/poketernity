@@ -11,7 +11,15 @@ import { BlockNonDirectDamageAbAttr } from "./block-non-direct-damage-ab-attr";
 import { FieldPreventExplosionLikeAbAttr } from "./field-prevent-explosion-like-ab-attr";
 import { PostFaintAbAttr } from "./post-faint-ab-attr";
 
+/**
+ * Attribute that damages an attacker for a fraction of its HP if the attacker KO's the user with a contact move.
+ *
+ * Currently used by the ability Aftermath (Inflicts 1/4 of the attacker's HP in damage).
+ */
 export class PostFaintContactDamageAbAttr extends PostFaintAbAttr {
+  /**
+   * The denominator for the damage ratio (e.g., if this equals 4, the ability inflicts 1/4 of the attacker's HP in damage)
+   */
   private readonly damageRatio: number;
 
   constructor(damageRatio: number) {
@@ -20,13 +28,7 @@ export class PostFaintContactDamageAbAttr extends PostFaintAbAttr {
     this.damageRatio = damageRatio;
   }
 
-  override apply(
-    pokemon: Pokemon,
-    simulated: boolean,
-    attacker?: Pokemon,
-    move?: Move,
-    _hitResult?: HitResult,
-  ): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean, attacker?: Pokemon, move?: Move): boolean {
     if (move && attacker && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)) {
       //If the mon didn't die to indirect damage
       const cancelled = new BooleanHolder(false);
@@ -48,9 +50,10 @@ export class PostFaintContactDamageAbAttr extends PostFaintAbAttr {
         return false;
       }
       if (!simulated) {
-        attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio)), HitResult.OTHER);
+        const abilityDamage = toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio));
+        attacker.damageAndUpdate(abilityDamage, HitResult.OTHER, false, false, true);
         // TODO: This should be handled by `damage()`
-        attacker.turnData.damageTaken += toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio));
+        attacker.turnData.damageTaken += abilityDamage;
       }
       return true;
     }
