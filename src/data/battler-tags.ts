@@ -2136,8 +2136,15 @@ export class CritBoostTag extends BattlerTag {
 export class CritBoostStackableTag extends BattlerTag {
   public stackCount: number = 0;
 
-  constructor(tagType: BattlerTagType) {
-    super(tagType, BattlerTagLapseType.TURN_END, 1, Moves.G_MAX_CHI_STRIKE, undefined, true);
+  constructor() {
+    super(
+      BattlerTagType.CRIT_BOOST_STACKABLE,
+      BattlerTagLapseType.TURN_END,
+      1,
+      Moves.G_MAX_CHI_STRIKE,
+      undefined,
+      true,
+    );
   }
 
   override onAdd(pokemon: Pokemon): void {
@@ -3449,7 +3456,7 @@ export function getBattlerTag(
     case BattlerTagType.DRAGON_CHEER:
       return new DragonCheerTag();
     case BattlerTagType.CRIT_BOOST_STACKABLE:
-      return new CritBoostStackableTag(BattlerTagType.CRIT_BOOST_STACKABLE);
+      return new CritBoostStackableTag();
     case BattlerTagType.ALWAYS_CRIT:
     case BattlerTagType.IGNORE_ACCURACY:
       return new BattlerTag(tagType, BattlerTagLapseType.TURN_END, 2, sourceMove);

@@ -27,8 +27,4 @@ export class ChiStrikeAttr extends AddBattlerTagAttr {
   override getTagTargetBenefitScore(): number {
     return 5;
   }
-
-  override getTargetBenefitScore(_user: Pokemon, _target: Pokemon, _move: Move): number {
-    return 5;
-  }
 }
