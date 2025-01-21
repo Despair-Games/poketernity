@@ -6,6 +6,9 @@ import { toDmgValue } from "#app/utils";
 import i18next from "i18next";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
+import { applyAbAttrs } from "../ability";
+import { NumberHolder } from "#app/utils";
+import { RecoveryBoostAbAttr } from "../ab-attrs/recovery-boost-ab-attr";
 
 /**
  * Heals the user or target by {@linkcode healRatio} depending on the value of {@linkcode selfTarget}
@@ -33,8 +36,10 @@ export class HealAttr extends MoveEffectAttr {
    * Helper function to obtain this attribute's heal ratio
    * @returns a heal ratio in the interval [0, 1]
    */
-  protected getHealRatio(_user: Pokemon, _target: Pokemon, _move: Move): number {
-    return this.healRatio;
+  protected getHealRatio(user: Pokemon, target: Pokemon, move: Move): number {
+    const healRatio = new NumberHolder(this.healRatio);
+    applyAbAttrs(RecoveryBoostAbAttr, user, false, move, target, healRatio);
+    return healRatio.value;
   }
 
   /**
