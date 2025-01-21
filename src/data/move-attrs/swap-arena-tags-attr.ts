@@ -14,6 +14,7 @@ export const courtChangeArenaTags = [
   ArenaTagType.REFLECT,
   ArenaTagType.SPIKES,
   ArenaTagType.STEALTH_ROCK,
+  ArenaTagType.SHARP_STEEL,
   ArenaTagType.STICKY_WEB,
   ArenaTagType.TAILWIND,
   ArenaTagType.TOXIC_SPIKES,
