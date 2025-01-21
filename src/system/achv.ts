@@ -264,12 +264,7 @@ export const achvs = {
   HATCH_SHINY: new Achv("HATCH_SHINY", "golden_egg", 100).setSecret(),
   HIDDEN_ABILITY: new Achv("HIDDEN_ABILITY", "ability_charm", 75),
   PERFECT_IVS: new Achv("PERFECT_IVS", "blunder_policy", 100),
-  CLASSIC_VICTORY: new Achv(
-    "CLASSIC_VICTORY",
-    "relic_crown",
-    150,
-    () => globalScene.gameData.gameStats.sessionsWon === 0,
-  ),
+  CLASSIC_VICTORY: new Achv("CLASSIC_VICTORY", "relic_crown", 150),
   UNEVOLVED_CLASSIC_VICTORY: new Achv("UNEVOLVED_CLASSIC_VICTORY", "eviolite", 175, () =>
     globalScene.getPlayerParty().some((p) => p.getSpeciesForm(true).speciesId in pokemonEvolutions),
   ),
