@@ -420,9 +420,15 @@ export class GameManager {
     };
   }
 
-  /** Transition to the next upcoming {@linkcode CommandPhase} */
-  async toNextTurn() {
+  /**
+   * Transition to the next upcoming {@linkcode CommandPhase}
+   * @param doubles - If `true`, will run `.to(CommandPhase)` twice to account for the extra `CommandPhase` in doubles
+   */
+  async toNextTurn(doubles: boolean = false) {
     await this.phaseInterceptor.to(CommandPhase);
+    if (doubles) {
+      await this.phaseInterceptor.to(CommandPhase);
+    }
   }
 
   /** Emulate selecting a modifier (item) and transition to the next upcoming {@linkcode CommandPhase} */
