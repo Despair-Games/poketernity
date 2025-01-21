@@ -1,5 +1,5 @@
 import OptionSelectUiHandler from "./settings/option-select-ui-handler";
-import { UiMode } from "../enums/ui-mode";
+import { UiMode } from "#enums/ui-mode";
 import { fixedNumber, randItem } from "#app/utils";
 import { addTextObject, getTextStyleOptions } from "./text";
 import { TextStyle } from "#enums/text-style";

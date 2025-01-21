@@ -5,7 +5,7 @@ import i18next from "i18next";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import type { OptionSelectItem } from "./abstact-option-select-ui-handler";
 import { isNullOrUndefined } from "#app/utils";
-import { UiMode } from "../enums/ui-mode";
+import { UiMode } from "#enums/ui-mode";
 
 export default class TestDialogueUiHandler extends FormModalUiHandler {
   keys: string[];

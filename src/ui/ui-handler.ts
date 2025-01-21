@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import type { TextStyle } from "#enums/text-style";
 import { getTextColor } from "./text";
-import type { UiMode } from "../enums/ui-mode";
+import type { UiMode } from "#enums/ui-mode";
 import type { Button } from "#enums/buttons";
 import { settings } from "#app/system/settings/settings-manager";
 

@@ -9,7 +9,7 @@ import { isNullOrUndefined, fixedNumber, getPlayTimeString, formatLargeNumber } 
 import MessageUiHandler from "./message-ui-handler";
 import { addTextObject } from "./text";
 import { TextStyle } from "#enums/text-style";
-import { UiMode } from "../enums/ui-mode";
+import { UiMode } from "#enums/ui-mode";
 import { addWindow } from "./ui-theme";
 import { RunDisplayMode } from "#enums/run-display-mode";
 import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";

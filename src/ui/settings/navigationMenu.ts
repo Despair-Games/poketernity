@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { UiMode } from "../../enums/ui-mode";
+import { UiMode } from "#enums/ui-mode";
 import type { InputsIcons } from "#app/ui/settings/abstract-control-settings-ui-handler";
 import { addTextObject, setTextStyle } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";

@@ -1,5 +1,5 @@
 import UiHandler from "../ui-handler";
-import type { UiMode } from "../../enums/ui-mode";
+import type { UiMode } from "#enums/ui-mode";
 import { addWindow } from "../ui-theme";
 import { addTextObject } from "../text";
 import { TextStyle } from "#enums/text-style";

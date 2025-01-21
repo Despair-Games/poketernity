@@ -1,4 +1,4 @@
-import { UiMode } from "../enums/ui-mode";
+import { UiMode } from "#enums/ui-mode";
 import PokemonIconAnimHandler from "./pokemon-icon-anim-handler";
 import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
 import MessageUiHandler from "./message-ui-handler";

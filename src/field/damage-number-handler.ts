@@ -7,7 +7,7 @@ import { formatStat, fixedNumber } from "#app/utils";
 import type { BattlerIndex } from "#enums/battler-index";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
-import { DamageNumbersMode } from "#app/enums/damage-numbers-mode";
+import { DamageNumbersMode } from "#enums/damage-numbers-mode";
 
 type TextAndShadowArr = [string | null, string | null];
 

@@ -16,7 +16,7 @@ import { TextStyle } from "#enums/text-style";
 import { reverseValueToKeySetting, truncateString } from "#app/utils";
 import { Device } from "#enums/devices";
 import i18next from "i18next";
-import { UiMode } from "../../enums/ui-mode";
+import { UiMode } from "#enums/ui-mode";
 
 /**
  * Class representing the settings UI handler for keyboards.

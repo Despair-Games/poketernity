@@ -1,5 +1,5 @@
 import AbstractBindingUiHandler from "./abstract-binding-ui-handler";
-import type { UiMode } from "../../enums/ui-mode";
+import type { UiMode } from "#enums/ui-mode";
 import { getKeyWithKeycode } from "#app/configs/inputs/configHandler";
 import { Device } from "#enums/devices";
 import { addTextObject } from "#app/ui/text";

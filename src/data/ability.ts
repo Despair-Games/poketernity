@@ -1,5 +1,5 @@
 import { BattleType } from "#enums/battle-type";
-import { SwitchType } from "#app/enums/switch-type";
+import { SwitchType } from "#enums/switch-type";
 import type { Pokemon } from "#app/field/pokemon";
 import type { EnemyPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";

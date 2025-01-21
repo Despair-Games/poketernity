@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { UiMode } from "../enums/ui-mode";
+import { UiMode } from "#enums/ui-mode";
 import UiHandler from "./ui-handler";
 import { isNullOrUndefined, fixedNumber } from "#app/utils";
 import { getMoveTargets } from "../data/move";

@@ -18,7 +18,7 @@ import type AwaitableUiHandler from "./awaitable-ui-handler";
 import MessageUiHandler from "./message-ui-handler";
 import { addTextObject, getTextStyleOptions } from "./text";
 import { TextStyle } from "#enums/text-style";
-import { UiMode } from "../enums/ui-mode";
+import { UiMode } from "#enums/ui-mode";
 import { addWindow } from "./ui-theme";
 import { WindowVariant } from "#enums/window-variant";
 import { settings } from "#app/system/settings/settings-manager";
