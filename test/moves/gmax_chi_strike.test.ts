@@ -72,9 +72,11 @@ describe("Moves - G-Max Chi Strike grants a stackable crit boost", () => {
   });
 
   it("G-Max chi strike should grant ally stackable crit boost", async () => {
-    game.override.battleType("double").enemyAbility(Abilities.PRANKSTER)
-    .moveset([Moves.G_MAX_CHI_STRIKE, Moves.BITE, Moves.SPLASH])
-    .enemyMoveset([Moves.SUBSTITUTE]);
+    game.override
+      .battleType("double")
+      .enemyAbility(Abilities.PRANKSTER)
+      .moveset([Moves.G_MAX_CHI_STRIKE, Moves.BITE, Moves.SPLASH])
+      .enemyMoveset([Moves.SUBSTITUTE]);
     await game.classicMode.startBattle([Species.MACHAMP, Species.SHUCKLE]);
 
     const enemy = game.scene.getEnemyField()[0];
@@ -86,7 +88,7 @@ describe("Moves - G-Max Chi Strike grants a stackable crit boost", () => {
     await game.toNextTurn(); // Need to call it twice for double battles
 
     game.move.select(Moves.SPLASH, 0);
-    game.move.select(Moves.BITE, 1, BattlerIndex.ENEMY)
+    game.move.select(Moves.BITE, 1, BattlerIndex.ENEMY);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemy.getCritStage).toHaveReturnedWith(1);
   });
@@ -100,7 +102,7 @@ describe("Moves - G-Max Chi Strike grants a stackable crit boost", () => {
 
     game.move.select(Moves.G_MAX_CHI_STRIKE);
     await game.toNextTurn();
-    
+
     game.move.select(Moves.BATON_PASS);
     game.doSelectPartyPokemon(1);
     await game.phaseInterceptor.to("TurnEndPhase");
