@@ -2,9 +2,9 @@ import i18next, { type ParseKeys } from "i18next";
 import fs from "fs";
 import path from "path";
 import { vi } from "vitest";
-import { SAVE_FILE_EXTENSION } from "#app/constants";
+import { APP_ABBREVIATION, SAVE_FILE_EXTENSION } from "#app/constants";
 
-export const EVERYTHING_SAVE_FILE_PATH = `test/testUtils/saves/everything.${SAVE_FILE_EXTENSION}`;
+export const EVERYTHING_SAVE_FILE_PATH = `test/testUtils/saves/everything.${APP_ABBREVIATION}.${SAVE_FILE_EXTENSION}`;
 
 /**
  * Sets up the i18next mock.

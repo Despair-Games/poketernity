@@ -79,7 +79,7 @@ export function initTestFile() {
   HTMLCanvasElement.prototype.getContext = () => mockContext;
 
   // Initialize all of these things if and only if they have not been initialized yet
-  if (allMoves.length === 0) {
+  if (Object.values(allMoves).length === 0) {
     initMoves();
     initVouchers();
     initAchievements();

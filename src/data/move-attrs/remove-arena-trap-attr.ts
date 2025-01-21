@@ -10,7 +10,13 @@ import { RemoveArenaTagsAttr } from "./remove-arena-tags-attr";
 export class RemoveArenaTrapAttr extends RemoveArenaTagsAttr {
   constructor(targetBothSides: boolean = false) {
     super(
-      [ArenaTagType.SPIKES, ArenaTagType.TOXIC_SPIKES, ArenaTagType.STEALTH_ROCK, ArenaTagType.STICKY_WEB],
+      [
+        ArenaTagType.SPIKES,
+        ArenaTagType.TOXIC_SPIKES,
+        ArenaTagType.STEALTH_ROCK,
+        ArenaTagType.STICKY_WEB,
+        ArenaTagType.SHARP_STEEL,
+      ],
       targetBothSides ? ArenaTagRelativeSide.ALL : ArenaTagRelativeSide.USER,
     );
   }

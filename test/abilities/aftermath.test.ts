@@ -1,7 +1,8 @@
-import { toDmgValue } from "#app/utils";
 import { Abilities } from "#enums/abilities";
+import { BattlerIndex } from "#enums/battler-index";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
+import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -23,7 +24,6 @@ describe("Abilities - Aftermath", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.GIGA_IMPACT, Moves.HYPER_BEAM])
       .ability(Abilities.NO_GUARD)
       .startingLevel(50)
       .battleType("single")
@@ -38,10 +38,10 @@ describe("Abilities - Aftermath", () => {
 
     const player = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.GIGA_IMPACT);
+    game.move.use(Moves.GRASS_KNOT);
     await game.phaseInterceptor.to("BerryPhase");
 
-    expect(player.hp).toBe(toDmgValue((player.getMaxHp() * 3) / 4));
+    expect(player.hp).toBe(Math.ceil((player.getMaxHp() * 3) / 4));
   });
 
   it("should not cause the attacker to take damage when fainted by a non-contact move", async () => {
@@ -49,21 +49,97 @@ describe("Abilities - Aftermath", () => {
 
     const player = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.HYPER_BEAM);
+    game.move.use(Moves.EARTHQUAKE);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(player.isFullHp()).toBe(true);
   });
 
-  it("should not cause the attacker to take damage when it has Magic Guard", async () => {
-    game.override.passiveAbility(Abilities.MAGIC_GUARD);
+  it("should not cause the attacker to take damage if the attacker has Long Reach", async () => {
+    game.override.ability(Abilities.LONG_REACH);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const player = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.GIGA_IMPACT);
+    game.move.use(Moves.WATERFALL);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(player.isFullHp()).toBe(true);
+  });
+
+  it("should not cause any Pokemon other than the attacker to take damage", async () => {
+    game.override.battleType("double");
+    await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
+
+    const [feebas, milotic] = game.scene.getPlayerParty();
+    const enemy1 = game.field.getEnemyPokemon();
+
+    game.move.use(Moves.SPLASH, 0);
+    game.move.use(Moves.TACKLE, 1, BattlerIndex.ENEMY_2);
+    await game.phaseInterceptor.to("BerryPhase");
+
+    expect(milotic.hp).toBe(Math.ceil((milotic.getMaxHp() * 3) / 4));
+    expect(feebas.isFullHp()).toBe(true);
+    expect(enemy1.isFullHp()).toBe(true);
+  });
+
+  it("should cause the attacker to take damage if the user faints to U-Turn", async () => {
+    await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
+
+    const [feebas, milotic] = game.scene.getPlayerParty();
+
+    game.move.use(Moves.U_TURN);
+    game.doSelectPartyPokemon(1);
+    await game.phaseInterceptor.to("BerryPhase");
+
+    expect(feebas.isOnField()).toBe(false);
+    expect(feebas.hp).toBe(Math.ceil((feebas.getMaxHp() * 3) / 4));
+    expect(milotic.isOnField()).toBe(true);
+    expect(milotic.isFullHp()).toBe(true);
+  });
+
+  it("should not allow the opponent to revive using a Reviver Seed", async () => {
+    game.override.startingHeldItems([{ name: "REVIVER_SEED" }]);
+    await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
+
+    const [feebas, milotic] = game.scene.getPlayerParty();
+    feebas.hp = 1;
+
+    game.move.use(Moves.GRASS_KNOT);
+    game.doSelectPartyPokemon(1);
+    await game.phaseInterceptor.to("BerryPhase");
+
+    expect(feebas.getHeldItems()[0]?.type.id).toBe("REVIVER_SEED");
+    expect(feebas.isFainted()).toBe(true);
+    expect(milotic.isFullHp()).toBe(true);
+  });
+
+  it("should not activate if the user faints by using Self-Destruct", async () => {
+    await game.classicMode.startBattle([Species.GASTLY]); // Ghost-type, immune to Self-Destruct
+
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
+
+    game.move.use(Moves.FALSE_SWIPE);
+    await game.move.forceEnemyMove(Moves.SELF_DESTRUCT);
+    await game.phaseInterceptor.to("BerryPhase");
+
+    expect(player.isFullHp()).toBe(true);
+    expect(enemy.isFainted()).toBe(true);
+  });
+
+  it("should not activate if the user faints via indirect damage", async () => {
+    game.override.enemyStatusEffect(StatusEffect.BURN);
+    await game.classicMode.startBattle([Species.FEEBAS]);
+
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
+
+    game.move.use(Moves.FALSE_SWIPE);
+    await game.move.forceEnemyMove(Moves.SPLASH);
+    await game.phaseInterceptor.to("TurnEndPhase");
+
+    expect(player.isFullHp()).toBe(true);
+    expect(enemy.isFainted()).toBe(true);
   });
 });
