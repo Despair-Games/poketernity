@@ -74,7 +74,7 @@ describe("Abilities - Arena Trap", () => {
 
     game.move.select(Moves.ROAR);
     game.move.select(Moves.SPLASH, 1);
-    await game.toNextTurn(true);
+    await game.toNextTurn();
 
     expect(player1.isTrapped()).toBe(false);
     expect(player2.isTrapped()).toBe(false);
