@@ -2106,7 +2106,7 @@ export class TypeBoostTag extends BattlerTag {
  */
 export class CritBoostTag extends BattlerTag {
   constructor(tagType: BattlerTagType, sourceMove: Moves) {
-    super(tagType, BattlerTagLapseType.TURN_END, 1, sourceMove, undefined, true);
+    super(tagType, BattlerTagLapseType.CUSTOM, 1, sourceMove, undefined, true);
   }
 
   override onAdd(pokemon: Pokemon): void {
@@ -2137,14 +2137,7 @@ export class CritBoostStackableTag extends BattlerTag {
   public stackCount: number = 0;
 
   constructor() {
-    super(
-      BattlerTagType.CRIT_BOOST_STACKABLE,
-      BattlerTagLapseType.TURN_END,
-      1,
-      Moves.G_MAX_CHI_STRIKE,
-      undefined,
-      true,
-    );
+    super(BattlerTagType.CRIT_BOOST_STACKABLE, BattlerTagLapseType.CUSTOM, 1, Moves.G_MAX_CHI_STRIKE, undefined, true);
   }
 
   override onAdd(pokemon: Pokemon): void {
