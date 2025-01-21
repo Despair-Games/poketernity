@@ -925,13 +925,28 @@ export class DelayedAttackTag extends ArenaTag {
 }
 
 /**
- * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Stealth_Rock_(move) Stealth Rock}.
- * Applies up to 1 layer of Stealth Rocks, dealing percentage-based damage to any Pokémon
- * who is summoned into the trap, based on the Rock type's type effectiveness.
+ * Class used for hazards that damage based on type. The two existing ones are
+ * Stealth rock (produced by stealth rock and stone axe) and
+ * Sharp steel (produced by G-Max steelsurge)
  */
-class StealthRockTag extends ArenaTrapTag {
-  constructor(sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.STEALTH_ROCK, Moves.STEALTH_ROCK, sourceId, side, 1);
+class TypeHazardTag extends ArenaTrapTag {
+  public readonly damagingType: Type;
+  public readonly onAddKey: string;
+  public readonly activateTrapKey: string;
+
+  constructor(
+    arenaTagType: ArenaTagType,
+    damagingType: Type,
+    sourceId: number,
+    side: ArenaTagSide,
+    sourceMove: Moves,
+    onAddKey: string,
+    activateTrapKey: string,
+  ) {
+    super(arenaTagType, sourceMove, sourceId, side, 1);
+    this.damagingType = damagingType;
+    this.onAddKey = onAddKey;
+    this.activateTrapKey = activateTrapKey;
   }
 
   override onAdd(arena: Arena, quiet: boolean = false): void {
@@ -939,39 +954,13 @@ class StealthRockTag extends ArenaTrapTag {
 
     const source = this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
     if (!quiet && source) {
-      globalScene.queueMessage(
-        i18next.t("arenaTag:stealthRockOnAdd", { opponentDesc: source.getOpponentDescriptor() }),
-      );
+      globalScene.queueMessage(i18next.t(this.onAddKey, { opponentDesc: source.getOpponentDescriptor() }));
     }
   }
 
   getDamageHpRatio(pokemon: Pokemon): number {
-    const effectiveness = pokemon.getAttackTypeEffectiveness(Type.ROCK, undefined, true);
-
-    let damageHpRatio: number = 0;
-
-    switch (effectiveness) {
-      case 0:
-        damageHpRatio = 0;
-        break;
-      case 0.25:
-        damageHpRatio = 0.03125;
-        break;
-      case 0.5:
-        damageHpRatio = 0.0625;
-        break;
-      case 1:
-        damageHpRatio = 0.125;
-        break;
-      case 2:
-        damageHpRatio = 0.25;
-        break;
-      case 4:
-        damageHpRatio = 0.5;
-        break;
-    }
-
-    return damageHpRatio;
+    const effectiveness = pokemon.getAttackTypeEffectiveness(this.damagingType, undefined, true);
+    return effectiveness * 0.125;
   }
 
   override activateTrap(pokemon: Pokemon, simulated: boolean): boolean {
@@ -990,7 +979,7 @@ class StealthRockTag extends ArenaTrapTag {
       }
       const damage = toDmgValue(pokemon.getMaxHp() * damageHpRatio);
       globalScene.queueMessage(
-        i18next.t("arenaTag:stealthRockActivateTrap", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+        i18next.t(this.activateTrapKey, { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       );
       pokemon.damageAndUpdate(damage, HitResult.OTHER);
       if (pokemon.turnData) {
@@ -1005,6 +994,34 @@ class StealthRockTag extends ArenaTrapTag {
   override getMatchupScoreMultiplier(pokemon: Pokemon): number {
     const damageHpRatio = this.getDamageHpRatio(pokemon);
     return Phaser.Math.Linear(super.getMatchupScoreMultiplier(pokemon), 1, 1 - Math.pow(damageHpRatio, damageHpRatio));
+  }
+}
+
+class StealthRockTag extends TypeHazardTag {
+  constructor(sourceId: number, side: ArenaTagSide) {
+    super(
+      ArenaTagType.STEALTH_ROCK,
+      Type.ROCK,
+      sourceId,
+      side,
+      Moves.STEALTH_ROCK,
+      "arenaTag:stealthRockOnAdd",
+      "arenaTag:stealthRockActivateTrap",
+    );
+  }
+}
+
+class SharpSteelTag extends TypeHazardTag {
+  constructor(sourceId: number, side: ArenaTagSide) {
+    super(
+      ArenaTagType.SHARP_STEEL,
+      Type.STEEL,
+      sourceId,
+      side,
+      Moves.G_MAX_STEELSURGE,
+      "arenaTag:sharpSteelOnAdd",
+      "arenaTag:sharpSteelActivateTrap",
+    );
   }
 }
 
@@ -1583,6 +1600,8 @@ export function getArenaTag(
         side,
         Type.ROCK,
       );
+    case ArenaTagType.SHARP_STEEL:
+      return new SharpSteelTag(sourceId, side);
     default:
       return null;
   }
