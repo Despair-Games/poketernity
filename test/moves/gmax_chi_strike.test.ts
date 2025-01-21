@@ -1,4 +1,5 @@
 import { Abilities } from "#enums/abilities";
+import { BattlerIndex } from "#enums/battler-index";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -23,7 +24,7 @@ describe("Moves - G-Max Chi Strike grants a stackable crit boost", () => {
     game = new GameManager(phaserGame);
     game.override
       .startingLevel(100)
-      .moveset([Moves.G_MAX_CHI_STRIKE, Moves.BITE])
+      .moveset([Moves.G_MAX_CHI_STRIKE, Moves.BITE, Moves.FOCUS_ENERGY, Moves.BATON_PASS])
       .enemySpecies(Species.BLISSEY)
       .enemyLevel(100)
       .enemyAbility(Abilities.BALL_FETCH)
@@ -53,7 +54,6 @@ describe("Moves - G-Max Chi Strike grants a stackable crit boost", () => {
     game.move.select(Moves.BITE);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemy.getCritStage).toHaveReturnedWith(2);
-    await game.toNextTurn();
   });
 
   it("G-Max chi strike should not grant the boost if the opponent is ghost", async () => {
@@ -69,6 +69,49 @@ describe("Moves - G-Max Chi Strike grants a stackable crit boost", () => {
     game.move.select(Moves.BITE);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemy.getCritStage).toHaveReturnedWith(0);
+  });
+
+  it("G-Max chi strike should grant ally stackable crit boost", async () => {
+    game.override.battleType("double").enemyAbility(Abilities.PRANKSTER)
+    .moveset([Moves.G_MAX_CHI_STRIKE, Moves.BITE, Moves.SPLASH])
+    .enemyMoveset([Moves.SUBSTITUTE]);
+    await game.classicMode.startBattle([Species.MACHAMP, Species.SHUCKLE]);
+
+    const enemy = game.scene.getEnemyField()[0];
+    vi.spyOn(enemy, "getCritStage");
+
+    game.move.select(Moves.G_MAX_CHI_STRIKE, 0, BattlerIndex.ENEMY);
+    game.move.select(Moves.SPLASH, 1);
     await game.toNextTurn();
+    await game.toNextTurn(); // Need to call it twice for double battles
+
+    game.move.select(Moves.SPLASH, 0);
+    game.move.select(Moves.BITE, 1, BattlerIndex.ENEMY)
+    await game.phaseInterceptor.to("TurnEndPhase");
+    expect(enemy.getCritStage).toHaveReturnedWith(1);
+  });
+
+  it("G-Max chi strike crit boost is not baton passable", async () => {
+    game.override.enemyAbility(Abilities.PRANKSTER).enemyMoveset([Moves.SUBSTITUTE]);
+    await game.classicMode.startBattle([Species.MACHAMP, Species.SHUCKLE]);
+
+    const enemy = game.scene.getEnemyField()[0];
+    vi.spyOn(enemy, "getCritStage");
+
+    game.move.select(Moves.G_MAX_CHI_STRIKE);
+    await game.toNextTurn();
+    
+    game.move.select(Moves.BATON_PASS);
+    game.doSelectPartyPokemon(1);
+    await game.phaseInterceptor.to("TurnEndPhase");
+
+    game.move.select(Moves.G_MAX_CHI_STRIKE);
+    await game.phaseInterceptor.to("TurnEndPhase");
+    expect(enemy.getCritStage).toHaveReturnedWith(0);
+    await game.toNextTurn();
+
+    game.move.select(Moves.BITE);
+    await game.phaseInterceptor.to("TurnEndPhase");
+    expect(enemy.getCritStage).toHaveReturnedWith(1);
   });
 });

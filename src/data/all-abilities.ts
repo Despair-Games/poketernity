@@ -136,6 +136,7 @@ import { AttackMove } from "./move";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveCategory } from "#enums/move-category";
 import { getNonVolatileStatusEffects } from "./status-effect";
+import { RecoveryBoostAbAttr } from "./ab-attrs/recovery-boost-ab-attr";
 import { IgnoreTypeStatusEffectImmunityAbAttr } from "./ab-attrs/ignore-type-status-effect-immunity-ab-attr";
 import { BlockItemTheftAbAttr } from "./ab-attrs/block-item-theft-ab-attr";
 import { BlockRecoilDamageAttr } from "./ab-attrs/block-recoil-damage-ab-attr";
@@ -197,6 +198,7 @@ import { PostFaintHPDamageAbAttr } from "./ab-attrs/post-faint-hp-damage-ab-attr
 import { BypassSpeedChanceAbAttr } from "./ab-attrs/bypass-speed-chance-ab-attr";
 import { TerrainEventTypeChangeAbAttr } from "./ab-attrs/terrain-event-type-change-ab-attr";
 import { WeatherBasedSpeedDoublerAbAttr } from "./ab-attrs/weather-based-speed-doubler-ab-attr";
+import { MoveFlagPowerBoostAbAttr } from "./ab-attrs/move-flag-power-boost-ab-attr";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {
@@ -596,11 +598,7 @@ export function initAbilities() {
       .attr(TypeImmunityHealAbAttr, Type.WATER)
       .ignorable(),
     new Ability(Abilities.DOWNLOAD, 4).attr(DownloadAbAttr),
-    new Ability(Abilities.IRON_FIST, 4).attr(
-      MovePowerBoostAbAttr,
-      (_user, _target, move) => !!move?.hasFlag(MoveFlags.PUNCHING_MOVE),
-      1.2,
-    ),
+    new Ability(Abilities.IRON_FIST, 4).attr(MoveFlagPowerBoostAbAttr, MoveFlags.PUNCHING_MOVE, 1.2),
     new Ability(Abilities.POISON_HEAL, 4)
       .attr(PostTurnStatusHealAbAttr, StatusEffect.TOXIC, StatusEffect.POISON)
       .attr(BlockStatusDamageAbAttr, StatusEffect.TOXIC, StatusEffect.POISON),
@@ -708,11 +706,7 @@ export function initAbilities() {
       .attr(PostBiomeChangeWeatherChangeAbAttr, WeatherType.SNOW),
     new Ability(Abilities.HONEY_GATHER, 4).attr(MoneyAbAttr),
     new Ability(Abilities.FRISK, 4).attr(FriskAbAttr),
-    new Ability(Abilities.RECKLESS, 4).attr(
-      MovePowerBoostAbAttr,
-      (_user, _target, move) => !!move?.hasFlag(MoveFlags.RECKLESS_MOVE),
-      1.2,
-    ),
+    new Ability(Abilities.RECKLESS, 4).attr(MoveFlagPowerBoostAbAttr, MoveFlags.RECKLESS_MOVE, 1.2),
     new Ability(Abilities.MULTITYPE, 4)
       .attr(UncopiableAbilityAbAttr)
       .attr(UnswappableAbilityAbAttr)
@@ -921,11 +915,7 @@ export function initAbilities() {
     new Ability(Abilities.COMPETITIVE, 6)
       .attr(PostStatStageChangeStatStageChangeAbAttr, (_target, _statsChanged, stages) => stages < 0, [Stat.SPATK], 2)
       .edgeCase(), // Should not boost stats if switching into court changed sticky web
-    new Ability(Abilities.STRONG_JAW, 6).attr(
-      MovePowerBoostAbAttr,
-      (_user, _target, move) => !!move?.hasFlag(MoveFlags.BITING_MOVE),
-      1.5,
-    ),
+    new Ability(Abilities.STRONG_JAW, 6).attr(MoveFlagPowerBoostAbAttr, MoveFlags.BITING_MOVE, 1.5),
     new Ability(Abilities.REFRIGERATE, 6).attr(
       MoveTypeChangeAbAttr,
       Type.ICE,
@@ -947,20 +937,18 @@ export function initAbilities() {
       (pokemon, move) => pokemon.isFullHp() && move.type === Type.FLYING,
       1,
     ),
-    new Ability(Abilities.MEGA_LAUNCHER, 6).attr(
-      MovePowerBoostAbAttr,
-      (_user, _target, move) => !!move?.hasFlag(MoveFlags.PULSE_MOVE),
-      1.5,
-    ),
+    new Ability(Abilities.MEGA_LAUNCHER, 6)
+      .attr(MoveFlagPowerBoostAbAttr, MoveFlags.PULSE_MOVE, 1.5)
+      .attr(
+        RecoveryBoostAbAttr,
+        (pokemon, _target, move) => !!pokemon && !!move?.checkFlag(MoveFlags.PULSE_MOVE, pokemon, null),
+        1.5,
+      ),
     new Ability(Abilities.GRASS_PELT, 6)
       .conditionalAttr(getTerrainCondition(TerrainType.GRASSY), StatMultiplierAbAttr, Stat.DEF, 1.5)
       .ignorable(),
     new Ability(Abilities.SYMBIOSIS, 6).unimplemented(),
-    new Ability(Abilities.TOUGH_CLAWS, 6).attr(
-      MovePowerBoostAbAttr,
-      (user, target, move) => !!user && !!move?.checkFlag(MoveFlags.MAKES_CONTACT, user, target ?? null),
-      1.3,
-    ),
+    new Ability(Abilities.TOUGH_CLAWS, 6).attr(MoveFlagPowerBoostAbAttr, MoveFlags.MAKES_CONTACT, 1.3),
     new Ability(Abilities.PIXILATE, 6).attr(
       MoveTypeChangeAbAttr,
       Type.FAIRY,
@@ -1322,7 +1310,7 @@ export function initAbilities() {
       6,
     ),
     new Ability(Abilities.PUNK_ROCK, 8)
-      .attr(MovePowerBoostAbAttr, (_user, _target, move) => !!move?.hasFlag(MoveFlags.SOUND_BASED), 1.3)
+      .attr(MoveFlagPowerBoostAbAttr, MoveFlags.SOUND_BASED, 1.3)
       .attr(ReceivedMoveDamageMultiplierAbAttr, (_target, _user, move) => move.hasFlag(MoveFlags.SOUND_BASED), 0.5)
       .ignorable(),
     new Ability(Abilities.SAND_SPIT, 8).attr(
@@ -1602,11 +1590,7 @@ export function initAbilities() {
       .conditionalAttr(getTerrainCondition(TerrainType.ELECTRIC), StatMultiplierAbAttr, Stat.SPATK, 4 / 3),
     new Ability(Abilities.OPPORTUNIST, 9).attr(StatStageChangeCopyAbAttr),
     new Ability(Abilities.CUD_CHEW, 9).unimplemented(),
-    new Ability(Abilities.SHARPNESS, 9).attr(
-      MovePowerBoostAbAttr,
-      (_user, _target, move) => !!move?.hasFlag(MoveFlags.SLICING_MOVE),
-      1.5,
-    ),
+    new Ability(Abilities.SHARPNESS, 9).attr(MoveFlagPowerBoostAbAttr, MoveFlags.SLICING_MOVE, 1.5),
     new Ability(Abilities.SUPREME_OVERLORD, 9)
       .attr(
         VariableMovePowerBoostAbAttr,

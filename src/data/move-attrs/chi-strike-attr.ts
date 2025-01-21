@@ -6,7 +6,7 @@ import { AddBattlerTagAttr } from "./add-battler-tag-attr";
 /**
  * Attribute to add a {@linkcode BattlerTagType.CRIT_BOOST_STACKABLE} to a Pokemon
  * and its ally
- * @extends MoveEffectAttr
+ * @extends AddBattlerTagAttr
  * @see {@linkcode BattlerTag}
  */
 export class ChiStrikeAttr extends AddBattlerTagAttr {

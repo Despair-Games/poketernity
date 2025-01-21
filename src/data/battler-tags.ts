@@ -2103,6 +2103,7 @@ export class TypeBoostTag extends BattlerTag {
  * Tag to denote a nonstackable boost to crit rate. Granted by:
  * Focus Energy (+2), Dragon Cheer (+2 if dragon, +1 otherwise),
  * and Lansat Berry (+2)
+ * @extends BattlerTag
  */
 export class CritBoostTag extends BattlerTag {
   constructor(tagType: BattlerTagType, sourceMove: Moves) {
@@ -2132,12 +2133,13 @@ export class CritBoostTag extends BattlerTag {
 
 /**
  * A stackable instance of crit boost granted by G-Max Chi Strike
+ * @extends BattlerTag
  */
 export class CritBoostStackableTag extends BattlerTag {
   public stackCount: number = 0;
 
   constructor() {
-    super(BattlerTagType.CRIT_BOOST_STACKABLE, BattlerTagLapseType.CUSTOM, 1, Moves.G_MAX_CHI_STRIKE, undefined, true);
+    super(BattlerTagType.CRIT_BOOST_STACKABLE, BattlerTagLapseType.CUSTOM, 1, Moves.G_MAX_CHI_STRIKE, undefined);
   }
 
   override onAdd(pokemon: Pokemon): void {
