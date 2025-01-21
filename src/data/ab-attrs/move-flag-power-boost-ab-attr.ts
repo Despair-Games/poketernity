@@ -4,6 +4,7 @@ import { MovePowerBoostAbAttr } from "./move-power-boost-ab-attr";
 
 /**
  * Ability attribute that boosts the power of a move by a factor if it has a specified flag
+ * ```
  * +---------------+---------------+------------+
  * |    Ability    |   Move Flag   | Multiplier |
  * +---------------+---------------+------------+
@@ -15,11 +16,12 @@ import { MovePowerBoostAbAttr } from "./move-power-boost-ab-attr";
  * | Reckless      | RECKLESS_MOVE |        1.2 |
  * | Sharpness     | SLICING_MOVE  |        1.5 |
  * +---------------+---------------+------------+
+ * ```
  */
 export class MoveFlagPowerBoostAbAttr extends MovePowerBoostAbAttr {
   constructor(flagRequired: MoveFlags, powerMultiplier: number) {
     const moveFlagCondition: PokemonAttackCondition = (user, _target, move) =>
-      !!user && !!move && move.checkFlag(flagRequired, user, null);
+      !!user && !!move?.checkFlag(flagRequired, user, null);
     super(moveFlagCondition, powerMultiplier);
   }
 }

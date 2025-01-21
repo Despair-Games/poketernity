@@ -941,7 +941,7 @@ export function initAbilities() {
       .attr(MoveFlagPowerBoostAbAttr, MoveFlags.PULSE_MOVE, 1.5)
       .attr(
         RecoveryBoostAbAttr,
-        (pokemon, _target, move) => !!pokemon && !!move && move.checkFlag(MoveFlags.PULSE_MOVE, pokemon, null),
+        (pokemon, _target, move) => !!pokemon && !!move?.checkFlag(MoveFlags.PULSE_MOVE, pokemon, null),
         1.5,
       ),
     new Ability(Abilities.GRASS_PELT, 6)
