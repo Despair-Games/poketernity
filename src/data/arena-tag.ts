@@ -930,9 +930,9 @@ export class DelayedAttackTag extends ArenaTag {
  * Sharp steel (produced by G-Max steelsurge)
  */
 class TypeHazardTag extends ArenaTrapTag {
-  public damagingType: Type;
-  public onAddKey: string;
-  public activateTrapKey: string;
+  public readonly damagingType: Type;
+  public readonly onAddKey: string;
+  public readonly activateTrapKey: string;
 
   constructor(
     arenaTagType: ArenaTagType,
