@@ -37,7 +37,7 @@ import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import type { Abilities } from "#enums/abilities";
 import type { PokeballType } from "#enums/pokeball";
 import { StatusEffect } from "#enums/status-effect";
-import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
+import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { settings } from "#app/system/settings/settings-manager";
 
 /** Will give +1 level every 10 waves */
@@ -703,7 +703,7 @@ export async function catchPokemon(
       };
       Promise.all([pokemon.hideInfo(), globalScene.gameData.setPokemonCaught(pokemon)]).then(() => {
         if (globalScene.getPlayerParty().length === 6) {
-          const addToPartyMenuConfig: OptionSelectModeConfig<OptionSelectItem> = {
+          const addToPartyMenuConfig: OptionSelectModeConfig = {
             options: [
               {
                 label: i18next.t("partyUiHandler:SUMMARY"),

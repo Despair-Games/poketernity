@@ -173,7 +173,7 @@ export class TitlePhase extends Phase {
         keepOpen: true,
       },
     );
-    const config: OptionSelectModeConfig<OptionSelectItem> = {
+    const config: OptionSelectModeConfig = {
       options: options,
       blockCancelButton: true,
     };

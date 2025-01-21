@@ -45,8 +45,8 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
 
   private excludedMenus: () => ConditionalMenu[];
 
-  protected manageDataConfig: OptionSelectModeConfig<OptionSelectItem>;
-  protected communityConfig: OptionSelectModeConfig<OptionSelectItem>;
+  protected manageDataConfig: OptionSelectModeConfig;
+  protected communityConfig: OptionSelectModeConfig;
 
   public bgmBar: BgmBar;
 
@@ -118,7 +118,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
   }
 
   override show(_args: any[]): boolean {
-    const config: OptionSelectModeConfig<OptionSelectItem> = this.getMenuOptionsConfig();
+    const config: OptionSelectModeConfig = this.getMenuOptionsConfig();
 
     super.show([config]);
 
@@ -139,7 +139,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
     return true;
   }
 
-  getMenuOptionsConfig(): OptionSelectModeConfig<OptionSelectItem> {
+  getMenuOptionsConfig(): OptionSelectModeConfig {
     const validOptions = getEnumKeys(MenuOptions)
       .map((m) => parseInt(MenuOptions[m]) as MenuOptions)
       .filter((m) => {
@@ -181,7 +181,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
     const confirmSlot = (message: string, slotFilter: (i: number) => boolean, callback: (i: number) => void) => {
       ui.revertMode();
       ui.showText(message, null, () => {
-        const config: OptionSelectModeConfig<OptionSelectItem> = {
+        const config: OptionSelectModeConfig = {
           options: new Array(5)
             .fill(null)
             .map((_, i) => i)

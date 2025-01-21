@@ -1,5 +1,5 @@
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import type { OptionSelectModeConfig, OptionSelectItem } from "#app/ui/interfaces/option-select-config";
+import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import OptionSelectUiHandler from "#app/ui/option-select-ui-handler";
 import { Mode } from "#app/ui/ui";
 import i18next from "i18next";
@@ -20,7 +20,7 @@ export default class ConfirmUiHandler extends OptionSelectUiHandler {
     }
 
     const config = args[0] as ConfirmModeConfig;
-    const fullConfig: OptionSelectModeConfig<OptionSelectItem> = {
+    const fullConfig: OptionSelectModeConfig = {
       ...config,
       yOffset: config.yOffset ?? 48,
       options: [

@@ -9,7 +9,7 @@ import type { TextStyle } from "#app/ui/text";
  *
  * @template T the specifc type of {@linkcode OptionSelectItem} contained by this config
  */
-export interface OptionSelectModeConfig<T extends OptionSelectItem> extends OptionMenuSettings {
+export interface OptionSelectModeConfig<T extends OptionSelectItem = OptionSelectItem> extends OptionMenuSettings {
   /** The {@linkcode OptionSelectItem}s to display. */
   options: T[];
 }
