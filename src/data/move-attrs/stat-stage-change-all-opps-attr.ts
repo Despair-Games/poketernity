@@ -20,14 +20,14 @@ interface StatStageChangeAllOppsAttrOptions extends MoveEffectAttrOptions {
 
 /**
  * Attribute used for G-Max moves that change the stats of all opponents
- *
+ * ```
  * +-------------+----------+--------+
  * | G-Max Move  |   Stat   | Change |
  * +-------------+----------+--------+
  * | Foam Burst  | Speed    |     -2 |
  * | Tartness    | Evasion  |     -1 |
  * +-------------+----------+--------+
- *
+ * ```
  * @param stats {@linkcode BattleStat} Array of stat(s) to change
  * @param stages How many stages to change the stat(s) by, [-6, 6]
  * @param selfTarget `true` if the move is self-targetting
