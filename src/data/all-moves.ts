@@ -244,6 +244,7 @@ import { crashDamageFunc, frenzyMissFunc } from "./move-utils";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { NoDamageAgainstFlyingAttr } from "./move-attrs/no-damage-against-flying-attr";
 import { SkyDropAttr } from "./move-attrs/sky-drop-attr";
+import { ChiStrikeAttr } from "./move-attrs/chi-strike-attr";
 
 // Initialized as being empty; it will be filled during `initMoves()`
 export const allMoves: { [moveId in Moves]: Move } = {} as any;
@@ -3287,9 +3288,9 @@ export function initMoves() {
     new AttackMove(Moves.G_MAX_GOLD_RUSH, Type.NORMAL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
       .unimplemented(),
-    new AttackMove(Moves.G_MAX_CHI_STRIKE, Type.FIGHTING, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+    new AttackMove(Moves.G_MAX_CHI_STRIKE, Type.FIGHTING, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).attr(
+      ChiStrikeAttr,
+    ),
     new AttackMove(Moves.G_MAX_TERROR, Type.GHOST, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
       .unimplemented(),

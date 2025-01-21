@@ -2099,6 +2099,11 @@ export class TypeBoostTag extends BattlerTag {
   }
 }
 
+/**
+ * Tag to denote a nonstackable boost to crit rate. Granted by:
+ * Focus Energy (+2), Dragon Cheer (+2 if dragon, +1 otherwise),
+ * and Lansat Berry (+2)
+ */
 export class CritBoostTag extends BattlerTag {
   constructor(tagType: BattlerTagType, sourceMove: Moves) {
     super(tagType, BattlerTagLapseType.TURN_END, 1, sourceMove, undefined, true);
@@ -2122,6 +2127,34 @@ export class CritBoostTag extends BattlerTag {
     globalScene.queueMessage(
       i18next.t("battlerTags:critBoostOnRemove", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
+  }
+}
+
+/**
+ * A stackable instance of crit boost granted by G-Max Chi Strike
+ */
+export class CritBoostStackableTag extends BattlerTag {
+  public stackCount: number = 0;
+
+  constructor(tagType: BattlerTagType) {
+    super(tagType, BattlerTagLapseType.TURN_END, 1, Moves.G_MAX_CHI_STRIKE, undefined, true);
+  }
+
+  override onAdd(pokemon: Pokemon): void {
+    this.stackCount += 1;
+    // This actually does not have any messages in the mainline games
+    globalScene.queueMessage(
+      i18next.t("battlerTags:critBoostOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+    );
+  }
+
+  override onOverlap(pokemon: Pokemon): void {
+    this.onAdd(pokemon);
+  }
+
+  override loadTag(source: BattlerTag | any): void {
+    super.loadTag(source);
+    this.stackCount = source.stackCount ?? 0;
   }
 }
 
@@ -2476,7 +2509,7 @@ export class StockpilingTag extends BattlerTag {
 
   override loadTag(source: BattlerTag | any): void {
     super.loadTag(source);
-    this.stockpiledCount = source.stockpiledCount || 0;
+    this.stockpiledCount = source.stockpiledCount ?? 0;
     this.statChangeCounts = {
       [Stat.DEF]: source.statChangeCounts?.[Stat.DEF] ?? 0,
       [Stat.SPDEF]: source.statChangeCounts?.[Stat.SPDEF] ?? 0,
@@ -3415,6 +3448,8 @@ export function getBattlerTag(
       return new CritBoostTag(tagType, sourceMove);
     case BattlerTagType.DRAGON_CHEER:
       return new DragonCheerTag();
+    case BattlerTagType.CRIT_BOOST_STACKABLE:
+      return new CritBoostStackableTag(BattlerTagType.CRIT_BOOST_STACKABLE);
     case BattlerTagType.ALWAYS_CRIT:
     case BattlerTagType.IGNORE_ACCURACY:
       return new BattlerTag(tagType, BattlerTagLapseType.TURN_END, 2, sourceMove);
