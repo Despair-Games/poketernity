@@ -13,11 +13,7 @@ import type { MoveConditionFunc } from "../move-conditions";
  * @extends MoveEffectAttr
  */
 export class SwitchAbilitiesAttr extends MoveEffectAttr {
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
-    if (!super.apply(user, target, move)) {
-      return false;
-    }
-
+  override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
     const tempAbilityId = user.getAbility().id;
     user.summonData.ability = target.getAbility().id;
     target.summonData.ability = tempAbilityId;

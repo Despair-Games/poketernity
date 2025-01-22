@@ -20,7 +20,7 @@ export class RevivalBlessingAttr extends MoveEffectAttr {
     super(true);
   }
 
-  override apply(user: Pokemon, _target: Pokemon, _move: Move): boolean {
+  override applyEffect(user: Pokemon, _target: Pokemon, _move: Move): boolean {
     // If user is player, checks if the user has fainted pokemon
     if (user.isPlayer()) {
       globalScene.unshiftPhase(new RevivalBlessingPhase(user));

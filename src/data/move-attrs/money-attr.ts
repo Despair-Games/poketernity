@@ -15,7 +15,7 @@ export class MoneyAttr extends MoveEffectAttr {
     super(true, { firstHitOnly: true });
   }
 
-  override apply(_user: Pokemon, _target: Pokemon, _move: Move): boolean {
+  override applyEffect(_user: Pokemon, _target: Pokemon, _move: Move): boolean {
     globalScene.currentBattle.moneyScattered += globalScene.getWaveMoneyAmount(0.2);
     globalScene.queueMessage(i18next.t("moveTriggers:coinsScatteredEverywhere"));
     return true;

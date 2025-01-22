@@ -27,11 +27,7 @@ export class ResistLastMoveTypeAttr extends MoveEffectAttr {
     super(true);
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
-    if (!super.apply(user, target, move)) {
-      return false;
-    }
-
+  override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
     const [targetMove] = target.getLastXMoves(1); // target's most recent move
     if (!targetMove) {
       return false;

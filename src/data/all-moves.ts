@@ -31,7 +31,6 @@ import { AbilityGiveAttr } from "./move-attrs/ability-give-attr";
 import { AcupressureStatStageChangeAttr } from "./move-attrs/acupressure-stat-stage-change-attr";
 import { AddArenaTagAttr } from "./move-attrs/add-arena-tag-attr";
 import { AddArenaTrapTagAttr } from "./move-attrs/add-arena-trap-tag-attr";
-import { AddArenaTrapTagHitAttr } from "./move-attrs/add-arena-trap-tag-hit-attr";
 import { AddBattlerTagAttr } from "./move-attrs/add-battler-tag-attr";
 import { AddBattlerTagHeaderAttr } from "./move-attrs/add-battler-tag-header-attr";
 import { AddBattlerTagIfBoostedAttr } from "./move-attrs/add-battler-tag-if-boosted-attr";
@@ -173,7 +172,6 @@ import { RespectAttackTypeImmunityAttr } from "./move-attrs/respect-attack-type-
 import { RevivalBlessingAttr } from "./move-attrs/revival-blessing-attr";
 import { RoundPowerAttr } from "./move-attrs/round-power-attr";
 import { SacrificialAttr } from "./move-attrs/sacrificial-attr";
-import { SacrificialAttrOnHit } from "./move-attrs/sacrificial-attr-on-hit";
 import { SacrificialFullRestoreAttr } from "./move-attrs/sacrificial-full-restore-attr";
 import { SandHealAttr } from "./move-attrs/sand-heal-attr";
 import { SecretPowerAttr } from "./move-attrs/secret-power-attr";
@@ -1056,7 +1054,7 @@ export function initMoves() {
       .attr(ConfuseAttr),
     new StatusMove(Moves.WILL_O_WISP, Type.FIRE, 85, 15, -1, 0, 3).attr(StatusEffectAttr, StatusEffect.BURN),
     new StatusMove(Moves.MEMENTO, Type.DARK, 100, 10, -1, 0, 3)
-      .attr(SacrificialAttrOnHit)
+      .attr(SacrificialAttr, true)
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.SPATK], -2),
     new AttackMove(Moves.FACADE, Type.NORMAL, MoveCategory.PHYSICAL, 70, 100, 20, -1, 0, 3)
       .attr(MovePowerMultiplierAttr, (user, _target, _move) =>
@@ -1976,7 +1974,7 @@ export function initMoves() {
     ),
     new AttackMove(Moves.FINAL_GAMBIT, Type.FIGHTING, MoveCategory.SPECIAL, -1, 100, 5, -1, 0, 5)
       .attr(UserHpDamageAttr)
-      .attr(SacrificialAttrOnHit),
+      .attr(SacrificialAttr, true),
     new StatusMove(Moves.BESTOW, Type.NORMAL, -1, 15, -1, 0, 5).ignoresProtect().ignoresSubstitute().unimplemented(),
     new AttackMove(Moves.INFERNO, Type.FIRE, MoveCategory.SPECIAL, 100, 50, 5, 100, 0, 5).attr(
       StatusEffectAttr,
@@ -3182,7 +3180,7 @@ export function initMoves() {
       .target(MoveTarget.USER)
       .attr(ShiftStatAttr, Stat.ATK, Stat.DEF),
     new AttackMove(Moves.STONE_AXE, Type.ROCK, MoveCategory.PHYSICAL, 65, 90, 15, 100, 0, 8)
-      .attr(AddArenaTrapTagHitAttr, ArenaTagType.STEALTH_ROCK)
+      .attr(AddArenaTrapTagAttr, ArenaTagType.STEALTH_ROCK)
       .slicingMove(),
     new AttackMove(Moves.SPRINGTIDE_STORM, Type.FAIRY, MoveCategory.SPECIAL, 100, 80, 5, 30, 0, 8)
       .attr(StatStageChangeAttr, [Stat.ATK], -1)
@@ -3244,7 +3242,7 @@ export function initMoves() {
       .attr(StatusEffectAttr, StatusEffect.BURN)
       .attr(MovePowerMultiplierAttr, (_user, target, _move) => (target.status ? 2 : 1)),
     new AttackMove(Moves.CEASELESS_EDGE, Type.DARK, MoveCategory.PHYSICAL, 65, 90, 15, 100, 0, 8)
-      .attr(AddArenaTrapTagHitAttr, ArenaTagType.SPIKES)
+      .attr(AddArenaTrapTagAttr, ArenaTagType.SPIKES)
       .slicingMove(),
     new AttackMove(Moves.BLEAKWIND_STORM, Type.FLYING, MoveCategory.SPECIAL, 100, 80, 10, 30, 0, 8)
       .attr(StormAccuracyAttr)
@@ -3307,7 +3305,7 @@ export function initMoves() {
       .target(MoveTarget.ALL_NEAR_ENEMIES)
       .unimplemented(),
     new AttackMove(Moves.G_MAX_STONESURGE, Type.WATER, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).attr(
-      AddArenaTrapTagHitAttr,
+      AddArenaTrapTagAttr,
       ArenaTagType.STEALTH_ROCK,
     ),
     new AttackMove(Moves.G_MAX_WIND_RAGE, Type.FLYING, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
@@ -3347,7 +3345,7 @@ export function initMoves() {
       .target(MoveTarget.ALL_NEAR_ENEMIES)
       .unimplemented(),
     new AttackMove(Moves.G_MAX_STEELSURGE, Type.STEEL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).attr(
-      AddArenaTrapTagHitAttr,
+      AddArenaTrapTagAttr,
       ArenaTagType.SHARP_STEEL,
     ),
     new AttackMove(Moves.G_MAX_MELTDOWN, Type.STEEL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
