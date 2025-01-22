@@ -1,10 +1,7 @@
 import i18next from "i18next";
-import { achvs } from "./achv";
 import type { ConditionFn } from "#app/@types/common";
 import { AchvTier } from "#enums/achv-tier";
 import { VoucherType } from "#enums/voucher-type";
-import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
-import { TrainerType } from "#enums/trainer-type";
 
 export class Voucher {
   public id: string;
