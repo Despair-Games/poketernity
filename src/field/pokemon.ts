@@ -1345,8 +1345,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   abstract isBoss(): boolean;
 
-  getMoveset(ignoreOverride?: boolean): PokemonMove[] {
-    const ret = !ignoreOverride && this.summonData?.moveset ? this.summonData.moveset : this.moveset;
+  getMoveset(baseOnly?: boolean): PokemonMove[] {
+    const ret = !baseOnly && this.summonData?.moveset ? this.summonData.moveset : this.moveset;
 
     // Overrides moveset based on arrays specified in overrides.ts
     let overrideArray: Moves | Array<Moves> = this.isPlayer()
@@ -1414,10 +1414,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * Gets the types of a pokemon
    * @param includeTeraType - `true` to include tera-formed type; Default: `false`
    * @param forDefend - `true` if the pokemon is defending from an attack; Default: `false`
-   * @param ignoreOverride - If `true`, ignore ability changing effects; Default: `false`
+   * @param baseOnly - If `true`, ignore ability changing effects; Default: `false`
    * @returns array of {@linkcode Type}
    */
-  public getTypes(includeTeraType = false, forDefend: boolean = false, ignoreOverride: boolean = false): Type[] {
+  public getTypes(includeTeraType = false, forDefend: boolean = false, baseOnly: boolean = false): Type[] {
     const types: Type[] = [];
 
     if (includeTeraType) {
@@ -1431,14 +1431,14 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     if (!types.length || !includeTeraType) {
-      if (!ignoreOverride && this.summonData?.types && this.summonData.types.length > 0) {
+      if (!baseOnly && this.summonData?.types && this.summonData.types.length > 0) {
         this.summonData.types.forEach((t) => types.push(t));
       } else if (this.customPokemonData.types && this.customPokemonData.types.length > 0) {
         // "Permanent" override for a Pokemon's normal types, currently only used by Mystery Encounters
         types.push(this.customPokemonData.types[0]);
 
         // Fusing a Pokemon onto something with "permanently changed" types will still apply the fusion's types as normal
-        const fusionSpeciesForm = this.getFusionSpeciesForm(ignoreOverride);
+        const fusionSpeciesForm = this.getFusionSpeciesForm(baseOnly);
         if (fusionSpeciesForm) {
           // Check if the fusion Pokemon also had "permanently changed" types
           const fusionMETypes = this.fusionCustomPokemonData?.types;
@@ -1457,11 +1457,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           types.push(this.customPokemonData.types[1]);
         }
       } else {
-        const speciesForm = this.getSpeciesForm(ignoreOverride);
+        const speciesForm = this.getSpeciesForm(baseOnly);
 
         types.push(speciesForm.type1);
 
-        const fusionSpeciesForm = this.getFusionSpeciesForm(ignoreOverride);
+        const fusionSpeciesForm = this.getFusionSpeciesForm(baseOnly);
         if (fusionSpeciesForm) {
           // Check if the fusion Pokemon also had "permanently changed" types
           // Otherwise, use standard fusion type logic
@@ -1497,7 +1497,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     // the type added to Pokemon from moves like Forest's Curse or Trick Or Treat
-    if (!ignoreOverride && this.summonData && this.summonData.addedType && !types.includes(this.summonData.addedType)) {
+    if (!baseOnly && this.summonData && this.summonData.addedType && !types.includes(this.summonData.addedType)) {
       types.push(this.summonData.addedType);
     }
 
@@ -1514,16 +1514,16 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @param type - {@linkcode Type} to check
    * @param includeTeraType - `true` to include tera-formed type; Default: `true`
    * @param forDefend - `true` if the pokemon is defending from an attack; Default: `false`
-   * @param ignoreOverride - If `true`, ignore ability changing effects; Default: `false`
+   * @param baseOnly - If `true`, ignore ability changing effects; Default: `false`
    * @returns `true` if the Pokemon's type matches
    */
   public isOfType(
     type: Type,
     includeTeraType: boolean = true,
     forDefend: boolean = false,
-    ignoreOverride: boolean = false,
+    baseOnly: boolean = false,
   ): boolean {
-    return this.getTypes(includeTeraType, forDefend, ignoreOverride).some((t) => t === type);
+    return this.getTypes(includeTeraType, forDefend, baseOnly).some((t) => t === type);
   }
 
   /**
@@ -1531,11 +1531,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * This should rarely be called, most of the time {@linkcode hasAbility} or {@linkcode hasAbilityWithAttr} are better used as
    * those check both the passive and non-passive abilities and account for ability suppression.
    * @see {@linkcode hasAbility} {@linkcode hasAbilityWithAttr} Intended ways to check abilities in most cases
-   * @param ignoreOverride - If `true`, ignore ability changing effects; Default: `false`
+   * @param baseOnly - If `true`, ignore ability changing effects; Default: `false`
    * @returns The non-passive {@linkcode Ability} of the pokemon
    */
-  public getAbility(ignoreOverride: boolean = false): Ability {
-    if (!ignoreOverride && this.summonData?.ability) {
+  public getAbility(baseOnly: boolean = false): Ability {
+    if (!baseOnly && this.summonData?.ability) {
       return allAbilities[this.summonData.ability];
     }
     if (Overrides.ABILITY_OVERRIDE && this.isPlayer()) {
@@ -1548,13 +1548,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       if (!isNullOrUndefined(this.fusionCustomPokemonData?.ability) && this.fusionCustomPokemonData.ability !== -1) {
         return allAbilities[this.fusionCustomPokemonData.ability];
       } else {
-        return allAbilities[this.getFusionSpeciesForm(ignoreOverride).getAbility(this.fusionAbilityIndex)];
+        return allAbilities[this.getFusionSpeciesForm(baseOnly).getAbility(this.fusionAbilityIndex)];
       }
     }
     if (!isNullOrUndefined(this.customPokemonData.ability) && this.customPokemonData.ability !== -1) {
       return allAbilities[this.customPokemonData.ability];
     }
-    let abilityId = this.getSpeciesForm(ignoreOverride).getAbility(this.abilityIndex);
+    let abilityId = this.getSpeciesForm(baseOnly).getAbility(this.abilityIndex);
     if (abilityId === Abilities.NONE) {
       abilityId = this.species.ability1;
     }
@@ -1593,16 +1593,17 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   /**
    * Obtains the Pokemon's abilities.
    * @param options Optional flags to filter the output:
-   * - `ignoreOverride`: If `true`, obtains the Pokemon's base ability instead
+   * - `baseOnly`: If `true`, obtains the Pokemon's base ability instead
    * of overriding abilities (e.g. obtains Trace instead of whatever Trace copies)
    * - `canApplyOnly`: If `true`, filters out abilities that are suppressed or ignored
    * - `revealedOnly`: If `true`, filters out abilities that haven't been revealed yet
-   * @returns
+   * @returns all of this Pokemon's abilities that meet filter conditions in the form
+   * of {@linkcode AbilityData} entries.
    */
   public getAbilities(options: AbilityFilterOptions = {}): AbilityData[] {
-    const ignoreOverride = options.ignoreOverride ?? false;
+    const baseOnly = options.baseOnly ?? false;
     let abilities: AbilityData[] = [
-      { ability: this.getAbility(ignoreOverride), passive: false },
+      { ability: this.getAbility(baseOnly), passive: false },
       { ability: this.getPassiveAbility(), passive: true },
     ];
 
@@ -1623,18 +1624,18 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * in effect, and both passive and non-passive.
    * @param attrType - {@linkcode AbAttr} The ability attribute to check for.
    * @param canApply - If `false`, it doesn't check whether the ability is currently active; Default `true`
-   * @param ignoreOverride - If `true`, it ignores ability changing effects; Default `false`
+   * @param baseOnly - If `true`, it ignores ability changing effects; Default `false`
    * @returns An array of all the ability attributes on this ability.
    */
   public getAbilityAttrs<T extends AbAttr = AbAttr>(
     attrType: AbstractConstructor<T>,
     canApply: boolean = true,
-    ignoreOverride: boolean = false,
+    baseOnly: boolean = false,
   ): T[] {
     const abilityAttrs: T[] = [];
 
     if (!canApply || this.canApplyAbility()) {
-      abilityAttrs.push(...this.getAbility(ignoreOverride).getAttrs<T>(attrType));
+      abilityAttrs.push(...this.getAbility(baseOnly).getAttrs<T>(attrType));
     }
 
     if (!canApply || this.canApplyAbility(true)) {
@@ -1727,11 +1728,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * non-passive. This is the primary way to check whether a pokemon has a particular ability.
    * @param ability The {@linkcode Abilities | ability} to check for
    * @param canApply If false, it doesn't check whether the ability is currently active
-   * @param ignoreOverride If true, it ignores ability changing effects
+   * @param baseOnly If true, it ignores ability changing effects
    * @returns Whether the ability is present and active
    */
-  public hasAbility(ability: Abilities, canApply: boolean = true, ignoreOverride?: boolean): boolean {
-    if (this.getAbility(ignoreOverride).id === ability && (!canApply || this.canApplyAbility())) {
+  public hasAbility(ability: Abilities, canApply: boolean = true, baseOnly?: boolean): boolean {
+    if (this.getAbility(baseOnly).id === ability && (!canApply || this.canApplyAbility())) {
       return true;
     }
     if (this.getPassiveAbility().id === ability && this.hasPassive() && (!canApply || this.canApplyAbility(true))) {
@@ -1747,15 +1748,15 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * whether a pokemon has a particular ability.
    * @param attrType The {@linkcode AbAttr | ability attribute} to check for
    * @param canApply If false, it doesn't check whether the ability is currently active
-   * @param ignoreOverride If true, it ignores ability changing effects
+   * @param baseOnly If true, it ignores ability changing effects
    * @returns Whether an ability with that attribute is present and active
    */
   public hasAbilityWithAttr(
     attrType: AbstractConstructor<AbAttr>,
     canApply: boolean = true,
-    ignoreOverride?: boolean,
+    baseOnly?: boolean,
   ): boolean {
-    if ((!canApply || this.canApplyAbility()) && this.getAbility(ignoreOverride).hasAttr(attrType)) {
+    if ((!canApply || this.canApplyAbility()) && this.getAbility(baseOnly).hasAttr(attrType)) {
       return true;
     }
     if (this.hasPassive() && (!canApply || this.canApplyAbility(true)) && this.getPassiveAbility().hasAttr(attrType)) {
