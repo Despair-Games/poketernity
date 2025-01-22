@@ -9,7 +9,7 @@ import { globalScene } from "#app/global-scene";
 import type { GameMode } from "#app/game-mode";
 import type { StarterMoveset } from "#app/@types/StarterData";
 import { randSeedInt, randSeedGauss, randSeedItem, isNullOrUndefined } from "#app/utils";
-import { uncatchableSpecies } from "#app/data/balance/biomes";
+import { uncatchableSpecies } from "#app/data/balance/uncatchable-species";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { GrowthRate } from "#enums/growth-rates";
 import type { EvolutionLevel } from "#app/data/balance/pokemon-evolutions";

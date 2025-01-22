@@ -9,7 +9,6 @@ import { initMysteryEncounters } from "#app/data/mystery-encounters/mystery-enco
 import { initPokemonForms } from "#app/data/pokemon-forms";
 import { initSpecies } from "#app/data/pokemon-species";
 import { initAchievements } from "#app/system/achv";
-import { initVouchers } from "#app/system/voucher";
 import { initStatsKeys } from "#app/ui/game-stats-ui-handler";
 import { setCookie } from "#app/utils";
 import { blobToString } from "#test/testUtils/gameManagerUtils";
@@ -18,8 +17,8 @@ import { mockContext } from "#test/testUtils/mocks/mockContext";
 import { mockLocalStorage } from "#test/testUtils/mocks/mockLocalStorage";
 import { MockImage } from "#test/testUtils/mocks/mocksContainer/mockImage";
 import Phaser from "phaser";
-import InputText from "phaser3-rex-plugins/plugins/inputtext";
 import { manageListeners } from "./listenersManager";
+import { initVouchers } from "#app/system/init-vouchers";
 
 /**
  * An initialization function that is run at the beginning of every test file (via `beforeAll()`).
@@ -41,8 +40,6 @@ export function initTestFile() {
     },
   });
 
-  InputText.prototype.setElement = () => null as any;
-  InputText.prototype.resize = () => null as any;
   Phaser.GameObjects.Image = MockImage as any;
   window.URL.createObjectURL = (blob: Blob) => {
     blobToString(blob).then((data: string) => {

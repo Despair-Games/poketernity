@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import AwaitableUiHandler from "./ui/awaitable-ui-handler";
 import type UiHandler from "./ui/ui-handler";
-import { Mode } from "./ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import Overrides from "#app/overrides";
 import { settings } from "./system/settings/settings-manager";
@@ -82,13 +82,13 @@ const tutorialHandlers = {
   },
   [Tutorial.SELECT_ITEM]: () => {
     return new Promise<void>((resolve) => {
-      globalScene.ui.setModeWithoutClear(Mode.MESSAGE).then(() => {
+      globalScene.ui.setModeWithoutClear(UiMode.MESSAGE).then(() => {
         globalScene.ui.showText(
           i18next.t("tutorial:selectItem"),
           null,
           () =>
             globalScene.ui.showText("", null, () =>
-              globalScene.ui.setModeWithoutClear(Mode.MODIFIER_SELECT).then(() => resolve()),
+              globalScene.ui.setModeWithoutClear(UiMode.MODIFIER_SELECT).then(() => resolve()),
             ),
           null,
           true,
@@ -157,7 +157,7 @@ async function showTutorialOverlay(handler: UiHandler) {
   if (handler instanceof AwaitableUiHandler && handler.tutorialOverlay) {
     globalScene.tweens.add({
       targets: handler.tutorialOverlay,
-      alpha: 0.5,
+      alpha: 0.75,
       duration: 750,
       ease: "Sine.easeOut",
       onComplete: () => {

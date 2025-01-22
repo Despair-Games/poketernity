@@ -10,7 +10,7 @@ import {
   skipBattleRunMysteryEncounterRewardsPhase,
 } from "#test/mystery-encounter/encounter-test-utils";
 import type BattleScene from "#app/battle-scene";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
@@ -19,7 +19,7 @@ import { WeirdDreamEncounter } from "#app/data/mystery-encounters/encounters/wei
 import * as EncounterTransformationSequence from "#app/data/mystery-encounters/utils/encounter-transformation-sequence";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { CommandPhase } from "#app/phases/command-phase";
-import { ModifierTier } from "#app/modifier/modifier-tier";
+import { ModifierTier } from "#enums/modifier-tier";
 
 const namespace = "mysteryEncounters/weirdDream";
 const defaultParty = [Species.MAGBY, Species.HAUNTER, Species.ABRA];
@@ -144,7 +144,7 @@ describe("Weird Dream - Mystery Encounter", () => {
       expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
       await game.phaseInterceptor.run(SelectModifierPhase);
 
-      expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
+      expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
       const modifierSelectHandler = scene.ui.handlers.find(
         (h) => h instanceof ModifierSelectUiHandler,
       ) as ModifierSelectUiHandler;
@@ -199,7 +199,7 @@ describe("Weird Dream - Mystery Encounter", () => {
       expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
       await game.phaseInterceptor.run(SelectModifierPhase);
 
-      expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
+      expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
       const modifierSelectHandler = scene.ui.handlers.find(
         (h) => h instanceof ModifierSelectUiHandler,
       ) as ModifierSelectUiHandler;

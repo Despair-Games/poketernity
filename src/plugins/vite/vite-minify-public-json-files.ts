@@ -6,7 +6,7 @@ import chalk from "chalk";
 //#region Constants
 
 const NAME = "minify-public-json-files";
-const VERSION = "2.0.0";
+const VERSION = "2.0.1";
 
 //#endregion
 
@@ -75,7 +75,7 @@ export function minifyPublicJsonFiles(): VitePlugin {
       if (count > 0) {
         const failedMsg = errors.length > 0 ? yellow(` (${errors.length} failed)`) : "";
 
-        logger.info(`${green(`Minified ${count} JSON files successfully`)}${failedMsg}${logSuffix}`);
+        logger.info(`${green(`✓ Minified ${count} JSON files successfully`)}${failedMsg}${logSuffix}`);
       }
 
       if (errors.length > 0) {

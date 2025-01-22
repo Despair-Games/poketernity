@@ -8,6 +8,7 @@ import { Species } from "#enums/species";
 import { TimeOfDay } from "#enums/time-of-day";
 import { TrainerType } from "#enums/trainer-type";
 import { BiomePoolTier } from "#enums/biome-pool-tier";
+import { uncatchableSpecies } from "./uncatchable-species";
 // import beautify from "json-beautify";
 
 export function getBiomeName(biome: Biome | -1) {
@@ -72,8 +73,6 @@ export const biomeLinks: BiomeLinks = {
 };
 
 export const biomeDepths: BiomeDepths = {};
-
-export const uncatchableSpecies: Species[] = [];
 
 export interface SpeciesTree {
   [key: number]: Species[];
@@ -10798,7 +10797,6 @@ export function initBiomes() {
           !!(pokemonBiomes.find((p) => p[0] === es.speciesId)![3] as any[]).filter((b) => b[0] !== Biome.END).length,
       ).length
     ) {
-      // TODO: is the bang on the `find()` correct?
       uncatchableSpecies.push(speciesId);
     }
 

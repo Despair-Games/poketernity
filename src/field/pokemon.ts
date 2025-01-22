@@ -23,7 +23,6 @@ import { StatStageChangeAttr } from "#app/data/move-attrs/stat-stage-change-attr
 import { OneHitKOAttr } from "#app/data/move-attrs/one-hit-ko-attr";
 import { BypassBurnDamageReductionAttr } from "#app/data/move-attrs/bypass-burn-damage-reduction-attr";
 import { IgnoreWeatherTypeDebuffAttr } from "#app/data/move-attrs/ignore-weather-type-debuff-attr";
-import { SacrificialAttrOnHit } from "#app/data/move-attrs/sacrificial-attr-on-hit";
 import { SacrificialAttr } from "#app/data/move-attrs/sacrificial-attr";
 import { ModifiedDamageAttr } from "#app/data/move-attrs/modified-damage-attr";
 import { CounterDamageAttr } from "#app/data/move-attrs/counter-damage-attr";
@@ -156,9 +155,10 @@ import { MoveTypeChangeAbAttr } from "#app/data/ab-attrs/move-type-change-ab-att
 import { FieldMultiplyStatAbAttr } from "#app/data/ab-attrs/field-multiply-stat-ab-attr";
 import type PokemonData from "#app/system/pokemon-data";
 import { BattlerIndex } from "#enums/battler-index";
-import { Mode } from "#app/ui/ui";
-import type { PartyOption } from "#app/ui/party-ui-handler";
-import PartyUiHandler, { PartyUiMode } from "#app/ui/party-ui-handler";
+import { UiMode } from "#enums/ui-mode";
+import type { PartyOption } from "#enums/party-option";
+import PartyUiHandler from "#app/ui/party-ui-handler";
+import { PartyUiMode } from "#enums/party-ui-mode";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 import type { LevelMoves } from "#app/data/balance/pokemon-level-moves";
 import { EVOLVE_MOVE, RELEARN_MOVE } from "#app/data/balance/pokemon-level-moves";
@@ -179,7 +179,7 @@ import type { TrainerSlot } from "#enums/trainer-slot";
 import Overrides from "#app/overrides";
 import i18next from "i18next";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
-import { ModifierTier } from "#app/modifier/modifier-tier";
+import { ModifierTier } from "#enums/modifier-tier";
 import { applyChallenges } from "#app/data/challenge";
 import { ChallengeType } from "#enums/challenge-type";
 import { Abilities } from "#enums/abilities";
@@ -582,7 +582,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
   }
 
-  abstract isPlayer(): boolean;
+  abstract isPlayer(): this is PlayerPokemon;
+
+  abstract isEnemy(): this is EnemyPokemon;
 
   abstract hasTrainer(): boolean;
 
@@ -1665,7 +1667,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const { currentBattle, gameMode } = globalScene;
     const waveIndex = currentBattle?.waveIndex;
     if (
-      this instanceof EnemyPokemon
+      this.isEnemy()
       && (currentBattle?.isClassicFinalBoss
         || gameMode.isEndlessMinorBoss(waveIndex)
         || gameMode.isEndlessMajorBoss(waveIndex))
@@ -2451,7 +2453,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     if (forStarter && this instanceof PlayerPokemon && Overrides.STARTER_FUSION_SPECIES_OVERRIDE) {
       fusionOverride = getPokemonSpecies(Overrides.STARTER_FUSION_SPECIES_OVERRIDE);
-    } else if (this instanceof EnemyPokemon && Overrides.ENEMY_FUSION_SPECIES_OVERRIDE) {
+    } else if (this.isEnemy() && Overrides.ENEMY_FUSION_SPECIES_OVERRIDE) {
       fusionOverride = getPokemonSpecies(Overrides.ENEMY_FUSION_SPECIES_OVERRIDE);
     }
 
@@ -2607,13 +2609,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (this.isBoss()) {
       movePool = movePool.filter((m) => !allMoves[m[0]].hasAttr(SacrificialAttr));
     }
-    movePool = movePool.filter((m) => !allMoves[m[0]].hasAttr(SacrificialAttrOnHit));
     if (this.hasTrainer()) {
       // Trainers never get OHKO moves
       movePool = movePool.filter((m) => !allMoves[m[0]].hasAttr(OneHitKOAttr));
       // Half the weight of self KO moves
       movePool = movePool.map((m) => [m[0], m[1] * (!!allMoves[m[0]].hasAttr(SacrificialAttr) ? 0.5 : 1)]);
-      movePool = movePool.map((m) => [m[0], m[1] * (!!allMoves[m[0]].hasAttr(SacrificialAttrOnHit) ? 0.5 : 1)]);
       // Trainers get a weight bump to stat buffing moves
       movePool = movePool.map((m) => [
         m[0],
@@ -4746,8 +4746,12 @@ export class PlayerPokemon extends Pokemon {
     this.battleInfo.initInfo(this);
   }
 
-  isPlayer(): boolean {
+  override isPlayer(): this is PlayerPokemon {
     return true;
+  }
+
+  override isEnemy(): this is EnemyPokemon {
+    return false;
   }
 
   hasTrainer(): boolean {
@@ -4824,7 +4828,7 @@ export class PlayerPokemon extends Pokemon {
       this.leaveField(switchType === SwitchType.SWITCH);
 
       globalScene.ui.setMode(
-        Mode.PARTY,
+        UiMode.PARTY,
         PartyUiMode.FAINT_SWITCH,
         this.getFieldIndex(),
         (slotIndex: number, _option: PartyOption) => {
@@ -4834,7 +4838,7 @@ export class PlayerPokemon extends Pokemon {
               MoveEndPhase,
             );
           }
-          globalScene.ui.setMode(Mode.MESSAGE).then(resolve);
+          globalScene.ui.setMode(UiMode.MESSAGE).then(resolve);
         },
         PartyUiHandler.FilterNonFainted,
       );
@@ -5678,8 +5682,12 @@ export class EnemyPokemon extends Pokemon {
     return [sortedBenefitScores[targetIndex][0]];
   }
 
-  isPlayer() {
+  override isPlayer(): this is PlayerPokemon {
     return false;
+  }
+
+  override isEnemy(): this is EnemyPokemon {
+    return true;
   }
 
   hasTrainer(): boolean {

@@ -2,11 +2,12 @@ import type { InputFieldConfig } from "./form-modal-ui-handler";
 import { FormModalUiHandler } from "./form-modal-ui-handler";
 import type { ModalConfig } from "./modal-ui-handler";
 import { fixedNumber } from "#app/utils";
-import { Mode } from "./ui";
+import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
-import { addTextObject, TextStyle } from "./text";
+import { addTextObject } from "./text";
+import { TextStyle } from "#enums/text-style";
 import { addWindow } from "./ui-theme";
-import type { OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler";
+import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import { api } from "#app/plugins/api/api";
 import { globalScene } from "#app/global-scene";
 import JSZip from "jszip";
@@ -35,7 +36,7 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
   private infoContainer: Phaser.GameObjects.Container;
   private externalPartyBg: Phaser.GameObjects.NineSlice;
   private externalPartyTitle: Phaser.GameObjects.Text;
-  constructor(mode: Mode | null = null) {
+  constructor(mode: UiMode | null = null) {
     super(mode);
   }
 
@@ -140,9 +141,9 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
         // Prevent overlapping overrides on action modification
         this.submitAction = originalLoginAction;
         this.sanitizeInputs();
-        globalScene.ui.setMode(Mode.LOADING, { buttonActions: [] });
+        globalScene.ui.setMode(UiMode.LOADING, { buttonActions: [] });
         const onFail = (error) => {
-          globalScene.ui.setMode(Mode.LOGIN_FORM, Object.assign(config, { errorMessage: error?.trim() }));
+          globalScene.ui.setMode(UiMode.LOGIN_FORM, Object.assign(config, { errorMessage: error?.trim() }));
           globalScene.ui.playError();
         };
         if (!this.inputs[0].text) {
@@ -209,8 +210,8 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
     });
 
     const onFail = (error) => {
-      globalScene.ui.setMode(Mode.LOADING, { buttonActions: [] });
-      globalScene.ui.setModeForceTransition(Mode.LOGIN_FORM, Object.assign(config, { errorMessage: error?.trim() }));
+      globalScene.ui.setMode(UiMode.LOADING, { buttonActions: [] });
+      globalScene.ui.setModeForceTransition(UiMode.LOGIN_FORM, Object.assign(config, { errorMessage: error?.trim() }));
       globalScene.ui.playError();
     };
 
@@ -218,7 +219,7 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
       const localStorageKeys = Object.keys(localStorage); // this gets the keys for localStorage
       const keyToFind = "data_";
       const dataKeys = localStorageKeys.filter((ls) => ls.indexOf(keyToFind) >= 0);
-      if (dataKeys.length > 0 && dataKeys.length <= 2) {
+      if (dataKeys.length > 0 && dataKeys.length <= 12) {
         const options: OptionSelectItem[] = [];
         for (let i = 0; i < dataKeys.length; i++) {
           options.push({
@@ -230,9 +231,12 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
             },
           });
         }
-        globalScene.ui.setOverlayMode(Mode.OPTION_SELECT, {
+        const { ui, scaledCanvas } = globalScene;
+        ui.setOverlayMode(UiMode.OPTION_SELECT, {
           options: options,
           delay: 1000,
+          xOffset: scaledCanvas.width,
+          yOffset: scaledCanvas.height - this.usernameInfoImage.displayHeight - 16 * dataKeys.length - 22,
         });
         this.infoContainer.setInteractive(
           new Phaser.Geom.Rectangle(0, 0, globalScene.game.canvas.width, globalScene.game.canvas.height),

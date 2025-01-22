@@ -3,8 +3,8 @@ import { Button } from "#enums/buttons";
 import EventEmitter = Phaser.Events.EventEmitter;
 import { hasTouchscreen } from "./utils";
 import { settings } from "./system/settings/settings-manager";
-import { UiTheme } from "./enums/ui-theme";
-import { UiWindowType } from "./enums/ui-window-type";
+import { UiTheme } from "#enums/ui-theme";
+import { UiWindowType } from "#enums/ui-window-type";
 
 const repeatInputDelayMillis = 250;
 

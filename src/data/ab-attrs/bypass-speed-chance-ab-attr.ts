@@ -3,7 +3,7 @@ import { MoveCategory } from "#enums/move-category";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { Command } from "#app/ui/command-ui-handler";
+import { BattleCommand } from "#enums/battle-command";
 import type { BooleanHolder } from "#app/utils";
 import i18next from "i18next";
 import { AbAttr } from "./ab-attr";
@@ -38,7 +38,7 @@ export class BypassSpeedChanceAbAttr extends AbAttr {
 
     if (!bypassSpeed.value && pokemon.randSeedInt(100) < this.chance) {
       const turnCommand = globalScene.currentBattle.turnCommands[pokemon.getBattlerIndex()];
-      const isCommandFight = turnCommand?.command === Command.FIGHT;
+      const isCommandFight = turnCommand?.command === BattleCommand.FIGHT;
       const move = turnCommand?.move?.move ? allMoves[turnCommand.move.move] : null;
       const isDamageMove = move?.category === MoveCategory.PHYSICAL || move?.category === MoveCategory.SPECIAL;
 

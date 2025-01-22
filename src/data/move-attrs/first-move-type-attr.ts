@@ -16,11 +16,7 @@ export class FirstMoveTypeAttr extends MoveEffectAttr {
     super(true);
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
-    if (!super.apply(user, target, move)) {
-      return false;
-    }
-
+  override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
     const firstMoveType = target.getMoveset()[0].getMove().type;
     user.summonData.types = [firstMoveType];
     globalScene.queueMessage(

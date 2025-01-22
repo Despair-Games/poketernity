@@ -15,11 +15,7 @@ export class RemoveAllSubstitutesAttr extends MoveEffectAttr {
     super(true);
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
-    if (!super.apply(user, target, move)) {
-      return false;
-    }
-
+  override applyEffect(_user: Pokemon, _target: Pokemon, _move: Move): boolean {
     globalScene
       .getField(true)
       .forEach((pokemon) => pokemon.findAndRemoveTags((tag) => tag.tagType === BattlerTagType.SUBSTITUTE));

@@ -23,11 +23,12 @@ import { achvs, ChallengeAchv } from "#app/system/achv";
 import { settings } from "#app/system/settings/settings-manager";
 import TrainerData from "#app/system/trainer-data";
 import { Unlockables } from "#enums/unlockables";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { isLocal, isLocalServerConnected } from "#app/utils";
 import { PlayerGender } from "#enums/player-gender";
 import { TrainerType } from "#enums/trainer-type";
 import i18next from "i18next";
+import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 
 /**
  * Handles the effects of the player ending a run:
@@ -102,15 +103,14 @@ export class GameOverPhase extends BattlePhase {
       };
 
       ui.showText(i18next.t("battle:retryBattle"), null, () => {
-        ui.setMode(
-          Mode.CONFIRM,
-          () => reloadGame(),
-          () => this.handleGameOver(),
-          false,
-          0,
-          0,
-          1000,
-        );
+        const retryOptions: ConfirmModeConfig = {
+          yesHandler: reloadGame,
+          noHandler: () => {
+            this.handleGameOver();
+          },
+          inputDelay: 1000,
+        };
+        ui.setMode(UiMode.CONFIRM, retryOptions);
       });
     }
   }

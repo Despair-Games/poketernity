@@ -21,7 +21,7 @@ export class FlameBurstAttr extends MoveEffectAttr {
     super(true);
   }
 
-  override apply(_user: Pokemon, target: Pokemon, _move: Move): boolean {
+  override applyEffect(_user: Pokemon, target: Pokemon, _move: Move): boolean {
     const targetAlly = target.getAlly();
     const cancelled = new BooleanHolder(false);
 

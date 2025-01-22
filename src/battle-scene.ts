@@ -51,7 +51,8 @@ import type { Phase } from "#app/phase";
 import { initGameSpeed } from "#app/system/game-speed";
 import { Arena, ArenaBase } from "#app/field/arena";
 import { GameData } from "#app/system/game-data";
-import { addTextObject, getTextColor, TextStyle } from "#app/ui/text";
+import { addTextObject, getTextColor } from "#app/ui/text";
+import { TextStyle } from "#enums/text-style";
 import { allMoves } from "#app/data/all-moves";
 import {
   getDefaultModifierTypeForTier,
@@ -175,6 +176,7 @@ import { bgmLoopPoint } from "./data/bgm-loop-point";
 import { allTrainerConfigs } from "./data/balance/trainer-configs/all-trainer-configs";
 import { eventBus } from "./event-bus";
 import { Animation } from "./animations";
+import { resetStarterColors, starterColors } from "./data/starter-colors";
 
 const DEBUG_RNG = false;
 
@@ -185,11 +187,6 @@ const ENEMY_IVS_OVERRIDE_VALIDATED: number[] = (
 ).map((iv) => (isNaN(iv) || iv === null || iv > 31 ? -1 : iv));
 
 export const startingWave = Overrides.STARTING_WAVE_OVERRIDE || 1;
-
-export let starterColors: StarterColors;
-interface StarterColors {
-  [key: string]: [string, string];
-}
 
 export interface PokeballCounts {
   [pb: string]: number;
@@ -743,7 +740,7 @@ export default class BattleScene extends SceneBase {
       this.cachedFetch("./starter-colors.json")
         .then((res) => res.json())
         .then((sc) => {
-          starterColors = {};
+          resetStarterColors();
           Object.keys(sc).forEach((key) => {
             starterColors[key] = sc[key];
           });
@@ -848,7 +845,7 @@ export default class BattleScene extends SceneBase {
    * This function is allowed to return non-active (e.g., fainted) Pokemon.
    * @param battlerIndex The battler index to search for.
    */
-  public getFieldPokemonByBattlerIndex(battlerIndex: BattlerIndex): Pokemon | undefined {
+  public getFieldPokemonByBattlerIndex(battlerIndex?: BattlerIndex): Pokemon | undefined {
     return this.getField().find((p) => p.getBattlerIndex() === battlerIndex);
   }
 
@@ -2511,12 +2508,25 @@ export default class BattleScene extends SceneBase {
     this.validateAchvs(MoneyAchv);
   }
 
+  /**
+   * Function to get money on a given wave and multiplier
+   *
+   * waveSetIndex is 0 from waves 1-10, and then increases by 1 every 10 waves.
+   * This makes the base money amount increase significantly every time the player beats a wave that is a multiple of 10.
+   *
+   * The sum of 10 times the wave number plus 175 is
+   * raised to the power of 1 + .005 * waveSetIndex
+   *
+   * The final result is then multiplied by moneyMultiplier and has the ones
+   * digit replaced with a 0
+   *
+   * @param moneyMultiplier how much the money is multiplied by
+   * @returns the amount of money
+   */
   getWaveMoneyAmount(moneyMultiplier: number): number {
     const waveIndex = this.currentBattle.waveIndex;
     const waveSetIndex = Math.ceil(waveIndex / 10) - 1;
-    const moneyValue =
-      Math.pow((waveSetIndex + 1 + (0.75 + (((waveIndex - 1) % 10) + 1) / 10)) * 100, 1 + 0.005 * waveSetIndex)
-      * moneyMultiplier;
+    const moneyValue = Math.pow(waveIndex * 10 + 175, 1 + 0.005 * waveSetIndex) * moneyMultiplier;
     return Math.floor(moneyValue / 10) * 10;
   }
 
@@ -3058,12 +3068,12 @@ export default class BattleScene extends SceneBase {
       }
       if (matchingFormChange) {
         let phase: Phase;
-        if (pokemon instanceof PlayerPokemon && !matchingFormChange.quiet) {
+        if (pokemon.isPlayer() && !matchingFormChange.quiet) {
           phase = new FormChangePhase(pokemon, matchingFormChange, modal);
         } else {
           phase = new QuietFormChangePhase(pokemon, matchingFormChange);
         }
-        if (pokemon instanceof PlayerPokemon && !matchingFormChange.quiet && modal) {
+        if (pokemon.isPlayer() && !matchingFormChange.quiet && modal) {
           this.overridePhase(phase);
         } else if (delayed) {
           this.pushPhase(phase);
@@ -3095,14 +3105,14 @@ export default class BattleScene extends SceneBase {
   validateAchvs(achvType: AbstractConstructor<Achv>, ...args: unknown[]): void {
     const filteredAchvs = Object.values(achvs).filter((a) => a instanceof achvType);
     for (const achv of filteredAchvs) {
-      this.validateAchv(achv, args);
+      this.validateAchv(achv, ...args);
     }
   }
 
-  validateAchv(achv: Achv, args?: unknown[]): boolean {
+  validateAchv(achv: Achv, ...args: unknown[]): boolean {
     if (
       (!this.gameData.achvUnlocks.hasOwnProperty(achv.id) || Overrides.ACHIEVEMENTS_REUNLOCK_OVERRIDE)
-      && achv.validate(args)
+      && achv.validate(...args)
     ) {
       this.gameData.achvUnlocks[achv.id] = new Date().getTime();
       this.ui.achvBar.showAchv(achv);
@@ -3115,8 +3125,8 @@ export default class BattleScene extends SceneBase {
     return false;
   }
 
-  validateVoucher(voucher: Voucher, args?: unknown[]): boolean {
-    if (!this.gameData.voucherUnlocks.hasOwnProperty(voucher.id) && voucher.validate(args)) {
+  validateVoucher(voucher: Voucher, ...args: unknown[]): boolean {
+    if (!this.gameData.voucherUnlocks.hasOwnProperty(voucher.id) && voucher.validate(...args)) {
       this.gameData.voucherUnlocks[voucher.id] = new Date().getTime();
       this.ui.achvBar.showAchv(voucher);
       this.gameData.voucherCounts[voucher.voucherType]++;
@@ -3163,7 +3173,7 @@ export default class BattleScene extends SceneBase {
     activePokemon = activePokemon.concat(this.getEnemyParty());
     activePokemon.forEach((p) => {
       keys.push(p.getSpriteKey(true));
-      if (p instanceof PlayerPokemon) {
+      if (p.isPlayer()) {
         keys.push(p.getBattleSpriteKey(true, true));
       }
       keys.push(p.species.getCryKey(p.formIndex));
@@ -3179,7 +3189,7 @@ export default class BattleScene extends SceneBase {
    * @param pokemon The (enemy) pokemon
    */
   initFinalBossPhaseTwo(pokemon: Pokemon): void {
-    if (pokemon instanceof EnemyPokemon && pokemon.isBoss() && !pokemon.formIndex && pokemon.bossSegmentIndex < 1) {
+    if (pokemon.isEnemy() && pokemon.isBoss() && !pokemon.formIndex && pokemon.bossSegmentIndex < 1) {
       this.fadeOutBgm(fixedNumber(2000), false);
       this.ui.showDialogue(classicFinalBossDialogue.firstStageWin, pokemon.species.name, undefined, () => {
         const finalBossMBH = getModifierType(modifierTypes.MINI_BLACK_HOLE).newModifier(

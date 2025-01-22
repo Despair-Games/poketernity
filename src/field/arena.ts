@@ -6,7 +6,7 @@ import { type AbstractConstructor, randSeedInt } from "#app/utils";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
 import { getWeatherClearMessage, getWeatherStartMessage, Weather } from "#app/data/weather";
-import { CommonAnim } from "#app/data/battle-anims";
+import { CommonAnim } from "#enums/common-anim";
 import type { Type } from "#enums/type";
 import type { Move } from "#app/data/move";
 import type { ArenaTag } from "#app/data/arena-tag";

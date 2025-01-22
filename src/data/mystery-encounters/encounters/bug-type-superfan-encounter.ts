@@ -26,7 +26,7 @@ import { PokemonMove } from "#app/field/pokemon";
 import { getEncounterText, showEncounterDialogue } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
 import { Moves } from "#enums/moves";
-import type { OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler";
+import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import {
@@ -49,8 +49,8 @@ import {
 import i18next from "i18next";
 import MoveInfoOverlay from "#app/ui/move-info-overlay";
 import { allMoves } from "#app/data/all-moves";
-import { ModifierTier } from "#app/modifier/modifier-tier";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
+import { ModifierTier } from "#enums/modifier-tier";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 import { getSpriteKeysFromSpecies } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 

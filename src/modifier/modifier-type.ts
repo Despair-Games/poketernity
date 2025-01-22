@@ -87,7 +87,7 @@ import {
   TurnStatusEffectModifier,
   type Modifier,
 } from "#app/modifier/modifier";
-import { ModifierTier } from "#app/modifier/modifier-tier";
+import { ModifierTier } from "#enums/modifier-tier";
 import Overrides from "#app/overrides";
 import { Unlockables } from "#enums/unlockables";
 import { getVoucherTypeIcon, getVoucherTypeName } from "#app/system/voucher";

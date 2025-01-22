@@ -1,7 +1,8 @@
 import UiHandler from "../ui-handler";
-import type { Mode } from "../ui";
+import type { UiMode } from "#enums/ui-mode";
 import { addWindow } from "../ui-theme";
-import { addTextObject, TextStyle } from "../text";
+import { addTextObject } from "../text";
+import { TextStyle } from "#enums/text-style";
 import { Button } from "#enums/buttons";
 import { NavigationManager } from "#app/ui/settings/navigationMenu";
 import i18next from "i18next";
@@ -51,7 +52,7 @@ export default abstract class AbstractBindingUiHandler extends UiHandler {
    *
    * @param mode - The UI mode.
    */
-  constructor(mode: Mode | null = null) {
+  constructor(mode: UiMode | null = null) {
     super(mode);
   }
 

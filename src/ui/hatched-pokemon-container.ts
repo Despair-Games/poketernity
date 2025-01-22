@@ -5,7 +5,7 @@ import { DexAttr } from "#app/data/dex-attributes";
 import { globalScene } from "#app/global-scene";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import type PokemonIconAnimHandler from "./pokemon-icon-anim-handler";
-import { PokemonIconAnimMode } from "./pokemon-icon-anim-handler";
+import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
 
 /**
  * A container for a Pokemon's sprite and icons to get displayed in the egg summary screen

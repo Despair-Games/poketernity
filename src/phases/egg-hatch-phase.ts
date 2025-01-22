@@ -9,7 +9,7 @@ import { achvs } from "#app/system/achv";
 import EggCounterContainer from "#app/ui/egg-counter-container";
 import type EggHatchSceneHandler from "#app/ui/egg-hatch-scene-handler";
 import PokemonInfoContainer from "#app/ui/pokemon-info-container";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { fixedNumber, getFrameMs, randInt } from "#app/utils";
 import i18next from "i18next";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
@@ -79,7 +79,7 @@ export class EggHatchPhase extends Phase {
   public override start(): void {
     super.start();
 
-    globalScene.ui.setModeForceTransition(Mode.EGG_HATCH_SCENE).then(() => {
+    globalScene.ui.setModeForceTransition(UiMode.EGG_HATCH_SCENE).then(() => {
       if (!this.egg) {
         return this.end();
       }

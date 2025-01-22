@@ -1,4 +1,4 @@
-import { ModifierTier } from "#app/modifier/modifier-tier";
+import { ModifierTier } from "#enums/modifier-tier";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
 

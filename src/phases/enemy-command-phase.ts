@@ -5,7 +5,7 @@ import type { EnemyPokemon, Pokemon } from "#app/field/pokemon";
 
 import { BattlerIndex } from "#enums/battler-index";
 import { globalScene } from "#app/global-scene";
-import { Command } from "#app/ui/command-ui-handler";
+import { BattleCommand } from "#enums/battle-command";
 import { Abilities } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { FieldPhase } from "./abstract-field-phase";
@@ -79,7 +79,7 @@ export class EnemyCommandPhase extends FieldPhase {
             const index = trainer.getNextSummonIndex(enemyPokemon.trainerSlot, partyMemberScores);
 
             battle.turnCommands[this.fieldIndex + BattlerIndex.ENEMY] = {
-              command: Command.POKEMON,
+              command: BattleCommand.POKEMON,
               cursor: index,
               args: [false],
               skip: this.skipTurn,
@@ -97,7 +97,7 @@ export class EnemyCommandPhase extends FieldPhase {
     const nextMove = enemyPokemon.getNextMove();
 
     battle.turnCommands[this.fieldIndex + BattlerIndex.ENEMY] = {
-      command: Command.FIGHT,
+      command: BattleCommand.FIGHT,
       move: nextMove,
       skip: this.skipTurn,
     };

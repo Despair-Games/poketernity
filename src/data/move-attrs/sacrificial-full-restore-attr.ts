@@ -26,11 +26,7 @@ export class SacrificialFullRestoreAttr extends SacrificialAttr {
     this.moveTriggerMessage = moveTriggerMessage;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
-    if (!super.apply(user, target, move)) {
-      return false;
-    }
-
+  override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     // We don't know which party member will be chosen, so pick the highest max HP in the party
     const maxPartyMemberHp = globalScene
       .getPlayerParty()
@@ -46,7 +42,7 @@ export class SacrificialFullRestoreAttr extends SacrificialAttr {
       true,
     );
 
-    return true;
+    return super.applyEffect(user, target, move);
   }
 
   override getUserBenefitScore(_user: Pokemon, _target: Pokemon, _move: Move): number {

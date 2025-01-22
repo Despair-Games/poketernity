@@ -46,7 +46,7 @@ import { achvs } from "#app/system/achv";
 import { settings } from "#app/system/settings/settings-manager";
 import { handleTutorial } from "#app/tutorial";
 import { Tutorial } from "#enums/tutorial";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { randSeedInt, randSeedItem } from "#app/utils";
 import { Biome } from "#enums/biome";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
@@ -280,7 +280,7 @@ export class EncounterPhase extends BattlePhase {
         });
       }
 
-      ui.setMode(Mode.MESSAGE).then(() => {
+      ui.setMode(UiMode.MESSAGE).then(() => {
         if (!this.loaded) {
           // Set weather before session gets saved to ensure it's properly added to session data
           this.trySetWeatherIfNewBiome();

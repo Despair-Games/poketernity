@@ -175,44 +175,4 @@ export const signatureSpecies: SignatureSpecies = {
   AMARYS: [Species.SKARMORY, Species.EMPOLEON, Species.SCIZOR, Species.METAGROSS],
   LACEY: [Species.EXCADRILL, Species.PRIMARINA, [Species.ALCREMIE, Species.GRANBULL], Species.WHIMSICOTT],
   DRAYTON: [Species.DRAGONITE, Species.ARCHALUDON, Species.HAXORUS, Species.SCEPTILE],
-
-  // Champions
-  BLUE: [
-    [Species.GYARADOS, Species.EXEGGUTOR, Species.ARCANINE],
-    Species.HO_OH,
-    [Species.RHYPERIOR, Species.MAGNEZONE],
-  ], // Alakazam lead, Mega Pidgeot
-  RED: [Species.LUGIA, Species.SNORLAX, [Species.ESPEON, Species.UMBREON, Species.SYLVEON]], // GMax Pikachu lead, Mega gen 1 starter
-  LANCE_CHAMPION: [Species.DRAGONITE, Species.KINGDRA, Species.ALOLA_EXEGGUTOR], // Aerodactyl lead, Mega Latias/Latios
-  STEVEN: [Species.AGGRON, [Species.ARMALDO, Species.CRADILY], Species.DIALGA], // Skarmory lead, Mega Metagross
-  WALLACE: [Species.MILOTIC, Species.PALKIA, Species.LUDICOLO], // Pelipper lead, Mega Swampert
-  CYNTHIA: [Species.GIRATINA, Species.LUCARIO, Species.TOGEKISS], // Spiritomb lead, Mega Garchomp
-  ALDER: [Species.VOLCARONA, Species.ZEKROM, [Species.ACCELGOR, Species.ESCAVALIER], Species.KELDEO], // Bouffalant/Braviary lead
-  IRIS: [Species.HAXORUS, Species.RESHIRAM, Species.ARCHEOPS], // Druddigon lead, Gmax Lapras
-  DIANTHA: [Species.HAWLUCHA, Species.XERNEAS, Species.GOODRA], // Gourgeist lead, Mega Gardevoir
-  HAU: [
-    [Species.SOLGALEO, Species.LUNALA],
-    Species.NOIVERN,
-    [Species.DECIDUEYE, Species.INCINEROAR, Species.PRIMARINA],
-    [Species.TAPU_BULU, Species.TAPU_FINI, Species.TAPU_KOKO, Species.TAPU_LELE],
-  ], // Alola Raichu lead
-  LEON: [Species.DRAGAPULT, Species.ZACIAN, Species.AEGISLASH], // Rillaboom/Cinderace/Inteleon lead, GMax Charizard
-  GEETA: [
-    Species.MIRAIDON,
-    [Species.ESPATHRA, Species.VELUZA],
-    [Species.AVALUGG, Species.HISUI_AVALUGG],
-    Species.KINGAMBIT,
-  ], // Glimmora lead
-  NEMONA: [
-    Species.KORAIDON,
-    Species.PAWMOT,
-    [Species.DUDUNSPARCE, Species.ORTHWORM],
-    [Species.MEOWSCARADA, Species.SKELEDIRGE, Species.QUAQUAVAL],
-  ], // Lycanroc lead
-  KIERAN: [
-    [Species.GRIMMSNARL, Species.INCINEROAR, Species.PORYGON_Z],
-    Species.OGERPON,
-    Species.TERAPAGOS,
-    Species.HYDRAPPLE,
-  ], // Poliwrath/Politoed lead
 };

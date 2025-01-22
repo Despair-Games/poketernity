@@ -1,20 +1,17 @@
-import { addTextObject, TextStyle } from "./text";
+import { addTextObject } from "./text";
+import { TextStyle } from "#enums/text-style";
 import { globalScene } from "#app/global-scene";
 import { ArenaTrapTag } from "#app/data/arena-tag";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { WeatherType } from "#enums/weather-type";
 import { TerrainType } from "#enums/terrain-type";
-import { addWindow, WindowVariant } from "./ui-theme";
+import { addWindow } from "./ui-theme";
+import { WindowVariant } from "#enums/window-variant";
 import type { ArenaEvent } from "#app/events/arena";
-import {
-  ArenaEventType,
-  TagAddedEvent,
-  TagRemovedEvent,
-  TerrainChangedEvent,
-  WeatherChangedEvent,
-} from "#app/events/arena";
+import { TagAddedEvent, TagRemovedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";
+import { ArenaEventType } from "#enums/arena-event-type";
 import type { TurnEndEvent } from "../events/battle-scene";
-import { BattleSceneEventType } from "../events/battle-scene";
+import { BattleSceneEventType } from "#enums/battle-scene-event-type";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import TimeOfDayWidget from "./time-of-day-widget";
 import { toCamelCaseString, formatText, fixedNumber } from "#app/utils";

@@ -9,7 +9,7 @@ import {
 import { STEALING_MOVES } from "#app/data/mystery-encounters/requirements/requirement-groups";
 import type { Pokemon } from "#app/field/pokemon";
 import { EnemyPokemon } from "#app/field/pokemon";
-import { ModifierTier } from "#app/modifier/modifier-tier";
+import { ModifierTier } from "#enums/modifier-tier";
 import type { ModifierTypeOption } from "#app/modifier/modifier-type";
 import {
   getPartyLuckValue,
@@ -35,7 +35,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { queueEncounterMessage } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { randSeedInt } from "#app/utils";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/fightOrFlight";

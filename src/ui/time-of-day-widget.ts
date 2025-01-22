@@ -1,6 +1,6 @@
 import { fixedNumber } from "#app/utils";
 import { globalScene } from "#app/global-scene";
-import { BattleSceneEventType } from "../events/battle-scene";
+import { BattleSceneEventType } from "#enums/battle-scene-event-type";
 import { EaseType } from "#enums/ease-type";
 import { TimeOfDay } from "#enums/time-of-day";
 import { settings } from "#app/system/settings/settings-manager";

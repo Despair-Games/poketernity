@@ -2,7 +2,7 @@ import { MoveResult } from "#enums/move-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BerryModifier } from "#app/modifier/modifier";
-import { Command } from "#app/ui/command-ui-handler";
+import { BattleCommand } from "#enums/battle-command";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -22,7 +22,7 @@ import i18next from "i18next";
 import { isNullOrUndefined } from "#app/utils";
 import { selfStatLowerMoves, type Move } from "./move";
 import { AttackMove } from "./move";
-import { ChargeAnim } from "./battle-anims";
+import { ChargeAnim } from "#enums/charge-anim";
 import { EncoreTag, StockpilingTag, SemiInvulnerableTag, ShellTrapTag, TrappedTag } from "./battler-tags";
 import { ChargingAttackMove, ChargingSelfStatusMove } from "./move";
 import { AbilityChangeAttr } from "./move-attrs/ability-change-attr";
@@ -31,7 +31,6 @@ import { AbilityGiveAttr } from "./move-attrs/ability-give-attr";
 import { AcupressureStatStageChangeAttr } from "./move-attrs/acupressure-stat-stage-change-attr";
 import { AddArenaTagAttr } from "./move-attrs/add-arena-tag-attr";
 import { AddArenaTrapTagAttr } from "./move-attrs/add-arena-trap-tag-attr";
-import { AddArenaTrapTagHitAttr } from "./move-attrs/add-arena-trap-tag-hit-attr";
 import { AddBattlerTagAttr } from "./move-attrs/add-battler-tag-attr";
 import { AddBattlerTagHeaderAttr } from "./move-attrs/add-battler-tag-header-attr";
 import { AddBattlerTagIfBoostedAttr } from "./move-attrs/add-battler-tag-if-boosted-attr";
@@ -173,7 +172,6 @@ import { RespectAttackTypeImmunityAttr } from "./move-attrs/respect-attack-type-
 import { RevivalBlessingAttr } from "./move-attrs/revival-blessing-attr";
 import { RoundPowerAttr } from "./move-attrs/round-power-attr";
 import { SacrificialAttr } from "./move-attrs/sacrificial-attr";
-import { SacrificialAttrOnHit } from "./move-attrs/sacrificial-attr-on-hit";
 import { SacrificialFullRestoreAttr } from "./move-attrs/sacrificial-full-restore-attr";
 import { SandHealAttr } from "./move-attrs/sand-heal-attr";
 import { SecretPowerAttr } from "./move-attrs/secret-power-attr";
@@ -244,6 +242,7 @@ import { crashDamageFunc, frenzyMissFunc } from "./move-utils";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { NoDamageAgainstFlyingAttr } from "./move-attrs/no-damage-against-flying-attr";
 import { SkyDropAttr } from "./move-attrs/sky-drop-attr";
+import { StatStageChangeAllOppsAttr } from "./move-attrs/stat-stage-change-all-opps-attr";
 
 // Initialized as being empty; it will be filled during `initMoves()`
 export const allMoves: { [moveId in Moves]: Move } = {} as any;
@@ -1055,7 +1054,7 @@ export function initMoves() {
       .attr(ConfuseAttr),
     new StatusMove(Moves.WILL_O_WISP, Type.FIRE, 85, 15, -1, 0, 3).attr(StatusEffectAttr, StatusEffect.BURN),
     new StatusMove(Moves.MEMENTO, Type.DARK, 100, 10, -1, 0, 3)
-      .attr(SacrificialAttrOnHit)
+      .attr(SacrificialAttr, true)
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.SPATK], -2),
     new AttackMove(Moves.FACADE, Type.NORMAL, MoveCategory.PHYSICAL, 70, 100, 20, -1, 0, 3)
       .attr(MovePowerMultiplierAttr, (user, _target, _move) =>
@@ -1449,7 +1448,7 @@ export function initMoves() {
       MovePowerMultiplierAttr,
       (_user, target, _move) =>
         target.getLastXMoves(1).find((m) => m.turn === globalScene.currentBattle.turn)
-        || globalScene.currentBattle.turnCommands[target.getBattlerIndex()]?.command === Command.BALL
+        || globalScene.currentBattle.turnCommands[target.getBattlerIndex()]?.command === BattleCommand.BALL
           ? 2
           : 1,
     ),
@@ -1512,7 +1511,7 @@ export function initMoves() {
           return false;
         }
         return (
-          turnCommand.command === Command.FIGHT
+          turnCommand.command === BattleCommand.FIGHT
           && !target.turnData.acted
           && allMoves[turnCommand.move.move].category !== MoveCategory.STATUS
         );
@@ -1975,7 +1974,7 @@ export function initMoves() {
     ),
     new AttackMove(Moves.FINAL_GAMBIT, Type.FIGHTING, MoveCategory.SPECIAL, -1, 100, 5, -1, 0, 5)
       .attr(UserHpDamageAttr)
-      .attr(SacrificialAttrOnHit),
+      .attr(SacrificialAttr, true),
     new StatusMove(Moves.BESTOW, Type.NORMAL, -1, 15, -1, 0, 5).ignoresProtect().ignoresSubstitute().unimplemented(),
     new AttackMove(Moves.INFERNO, Type.FIRE, MoveCategory.SPECIAL, 100, 50, 5, 100, 0, 5).attr(
       StatusEffectAttr,
@@ -2902,7 +2901,7 @@ export function initMoves() {
       .attr(SwapArenaTagsAttr, courtChangeArenaTags)
       .condition((_user, _target, _move) =>
         globalScene.arena.tags.some((arenaTag) => courtChangeArenaTags.includes(arenaTag.tagType)),
-      ), // G-max moves are not implemented but this should also swap steelsurge, vine lash, wildfire, and cannonade
+      ),
     new AttackMove(Moves.MAX_FLARE, Type.FIRE, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.NEAR_ENEMY)
       .unimplemented()
@@ -3181,7 +3180,7 @@ export function initMoves() {
       .target(MoveTarget.USER)
       .attr(ShiftStatAttr, Stat.ATK, Stat.DEF),
     new AttackMove(Moves.STONE_AXE, Type.ROCK, MoveCategory.PHYSICAL, 65, 90, 15, 100, 0, 8)
-      .attr(AddArenaTrapTagHitAttr, ArenaTagType.STEALTH_ROCK)
+      .attr(AddArenaTrapTagAttr, ArenaTagType.STEALTH_ROCK)
       .slicingMove(),
     new AttackMove(Moves.SPRINGTIDE_STORM, Type.FAIRY, MoveCategory.SPECIAL, 100, 80, 5, 30, 0, 8)
       .attr(StatStageChangeAttr, [Stat.ATK], -1)
@@ -3243,7 +3242,7 @@ export function initMoves() {
       .attr(StatusEffectAttr, StatusEffect.BURN)
       .attr(MovePowerMultiplierAttr, (_user, target, _move) => (target.status ? 2 : 1)),
     new AttackMove(Moves.CEASELESS_EDGE, Type.DARK, MoveCategory.PHYSICAL, 65, 90, 15, 100, 0, 8)
-      .attr(AddArenaTrapTagHitAttr, ArenaTagType.SPIKES)
+      .attr(AddArenaTrapTagAttr, ArenaTagType.SPIKES)
       .slicingMove(),
     new AttackMove(Moves.BLEAKWIND_STORM, Type.FLYING, MoveCategory.SPECIAL, 100, 80, 10, 30, 0, 8)
       .attr(StormAccuracyAttr)
@@ -3274,107 +3273,108 @@ export function initMoves() {
         StatusEffect.BURN,
         StatusEffect.SLEEP,
       ]),
-    /* Unused
-    new AttackMove(Moves.G_MAX_WILDFIRE, Type.FIRE, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+    new AttackMove(Moves.G_MAX_WILDFIRE, Type.FIRE, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).attr(
+      AddArenaTagAttr,
+      ArenaTagType.G_MAX_WILDFIRE,
+    ),
     new AttackMove(Moves.G_MAX_BEFUDDLE, Type.BUG, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .unimplemented(), // All opps become poisoned, paralyzed, or asleep
     new AttackMove(Moves.G_MAX_VOLT_CRASH, Type.ELECTRIC, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
-    new AttackMove(Moves.G_MAX_GOLD_RUSH, Type.NORMAL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .unimplemented(), // All opps become paralyze
+    new AttackMove(Moves.G_MAX_GOLD_RUSH, Type.NORMAL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).unimplemented(), // Confuses all opps, gives 100x user level as money
     new AttackMove(Moves.G_MAX_CHI_STRIKE, Type.FIGHTING, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
       .unimplemented(),
     new AttackMove(Moves.G_MAX_TERROR, Type.GHOST, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
-    new AttackMove(Moves.G_MAX_RESONANCE, Type.ICE, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .unimplemented(), // applies trapped to all opps
+    new AttackMove(Moves.G_MAX_RESONANCE, Type.ICE, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).attr(
+      AddArenaTagAttr,
+      ArenaTagType.AURORA_VEIL,
+      { turnCount: 5, selfSideTarget: true },
+    ),
     new AttackMove(Moves.G_MAX_CUDDLE, Type.NORMAL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .unimplemented(), // tries to apply attract to all opps
     new AttackMove(Moves.G_MAX_REPLENISH, Type.NORMAL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .unimplemented(), // 50% of replenishing user and ally's berries (like recycle)
     new AttackMove(Moves.G_MAX_MALODOR, Type.POISON, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
-    new AttackMove(Moves.G_MAX_STONESURGE, Type.WATER, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .unimplemented(), // applies poison to all opps
+    new AttackMove(Moves.G_MAX_STONESURGE, Type.WATER, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).attr(
+      AddArenaTrapTagAttr,
+      ArenaTagType.STEALTH_ROCK,
+    ),
     new AttackMove(Moves.G_MAX_WIND_RAGE, Type.FLYING, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .attr(ClearWeatherAttr, WeatherType.FOG)
+      .attr(ClearTerrainAttr)
+      .attr(RemoveScreensAttr, false)
+      .attr(RemoveArenaTrapAttr, true)
+      .attr(RemoveArenaTagsAttr, [ArenaTagType.SAFEGUARD, ArenaTagType.MIST], ArenaTagRelativeSide.TARGET),
     new AttackMove(Moves.G_MAX_STUN_SHOCK, Type.ELECTRIC, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .unimplemented(), // each opp becomes either paralyzed or poisoned
     new AttackMove(Moves.G_MAX_FINALE, Type.FAIRY, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
-    new AttackMove(Moves.G_MAX_DEPLETION, Type.DRAGON, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
-    new AttackMove(Moves.G_MAX_GRAVITAS, Type.PSYCHIC, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
-    new AttackMove(Moves.G_MAX_VOLCALITH, Type.ROCK, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .unimplemented(), // heal user and ally by 1/6
+    new AttackMove(Moves.G_MAX_DEPLETION, Type.DRAGON, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).unimplemented(), // needs to spite both opponents
+    new AttackMove(Moves.G_MAX_GRAVITAS, Type.PSYCHIC, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).attr(
+      AddArenaTagAttr,
+      ArenaTagType.GRAVITY,
+      { turnCount: 5 },
+    ),
+    new AttackMove(Moves.G_MAX_VOLCALITH, Type.ROCK, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).attr(
+      AddArenaTagAttr,
+      ArenaTagType.G_MAX_VOLCALITH,
+    ),
     new AttackMove(Moves.G_MAX_SANDBLAST, Type.GROUND, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .unimplemented(), // applies a stronger version of sand tomb
     new AttackMove(Moves.G_MAX_SNOOZE, Type.DARK, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
-    new AttackMove(Moves.G_MAX_TARTNESS, Type.GRASS, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .unimplemented(), // 50% of applying drowsy
+    new AttackMove(Moves.G_MAX_TARTNESS, Type.GRASS, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).attr(
+      StatStageChangeAllOppsAttr,
+      [Stat.EVA],
+      -1,
+    ),
     new AttackMove(Moves.G_MAX_SWEETNESS, Type.GRASS, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .unimplemented(), // heals user and ally of status condition
     new AttackMove(Moves.G_MAX_SMITE, Type.FAIRY, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
-    new AttackMove(Moves.G_MAX_STEELSURGE, Type.STEEL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .unimplemented(), // applies confuse to all opps
+    new AttackMove(Moves.G_MAX_STEELSURGE, Type.STEEL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).attr(
+      AddArenaTrapTagAttr,
+      ArenaTagType.SHARP_STEEL,
+    ),
     new AttackMove(Moves.G_MAX_MELTDOWN, Type.STEEL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
-    new AttackMove(Moves.G_MAX_FOAM_BURST, Type.WATER, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
+      .unimplemented(), // applies torment to all opps
+    new AttackMove(Moves.G_MAX_FOAM_BURST, Type.WATER, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).attr(
+      StatStageChangeAllOppsAttr,
+      [Stat.SPD],
+      -2,
+    ),
     new AttackMove(Moves.G_MAX_CENTIFERNO, Type.FIRE, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
-    new AttackMove(Moves.G_MAX_VINE_LASH, Type.GRASS, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
-    new AttackMove(Moves.G_MAX_CANNONADE, Type.WATER, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
-    new AttackMove(Moves.G_MAX_DRUM_SOLO, Type.GRASS, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
-    new AttackMove(Moves.G_MAX_FIREBALL, Type.FIRE, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
-    new AttackMove(Moves.G_MAX_HYDROSNIPE, Type.WATER, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
-    new AttackMove(Moves.G_MAX_ONE_BLOW, Type.DARK, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
-    new AttackMove(Moves.G_MAX_RAPID_FLOW, Type.WATER, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(),
-    End Unused */
+      .unimplemented(), // applies a stronger version of fire spin
+    new AttackMove(Moves.G_MAX_VINE_LASH, Type.GRASS, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).attr(
+      AddArenaTagAttr,
+      ArenaTagType.G_MAX_VINE_LASH,
+    ),
+    new AttackMove(Moves.G_MAX_CANNONADE, Type.WATER, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).attr(
+      AddArenaTagAttr,
+      ArenaTagType.G_MAX_CANNONADE,
+    ),
+    new AttackMove(Moves.G_MAX_DRUM_SOLO, Type.GRASS, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).ignoresAbilities(),
+    new AttackMove(Moves.G_MAX_FIREBALL, Type.FIRE, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).ignoresAbilities(),
+    new AttackMove(Moves.G_MAX_HYDROSNIPE, Type.WATER, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).ignoresAbilities(),
+    new AttackMove(Moves.G_MAX_ONE_BLOW, Type.DARK, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).ignoresProtect(),
+    new AttackMove(Moves.G_MAX_RAPID_FLOW, Type.WATER, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).ignoresProtect(),
     new AttackMove(Moves.TERA_BLAST, Type.NORMAL, MoveCategory.SPECIAL, 80, 100, 10, -1, 0, 9)
       .attr(TeraMoveCategoryAttr)
       .attr(TeraBlastTypeAttr)
@@ -3655,7 +3655,7 @@ export function initMoves() {
           return false;
         }
         return (
-          turnCommand.command === Command.FIGHT
+          turnCommand.command === BattleCommand.FIGHT
           && !target.turnData.acted
           && allMoves[turnCommand.move.move].category !== MoveCategory.STATUS
         );
