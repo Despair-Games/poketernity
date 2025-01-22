@@ -42,6 +42,7 @@ import { Moves } from "#enums/moves";
 import i18next from "i18next";
 import { FaintPhase } from "./faint-phase";
 import { HitCheckPhase } from "./hit-check-phase";
+import { MoveFlags } from "#enums/move-flags";
 
 export class MoveEffectPhase extends HitCheckPhase {
   private moveHistoryEntry: TurnMove;
@@ -294,7 +295,19 @@ export class MoveEffectPhase extends HitCheckPhase {
     const hitResult = this.applyMove(target, effectiveness);
 
     this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target, firstTarget, true);
-    if (!move.hitsSubstitute(user, target)) {
+
+    /**
+     * G-Max Moves apply their effects to both opponents (even if the target faints) and also
+     * ignores substitutes
+     *
+     * TODO: G-Max move edge cases like snooze and the random status ones
+     */
+    if (move.checkFlag(MoveFlags.G_MAX_MOVE, user, target)) {
+      this.applyOnTargetEffects(user, target, hitResult, firstTarget);
+      if (target.getAlly()?.isActive(true)) {
+        this.applyOnTargetEffects(user, target.getAlly(), hitResult, firstTarget);
+      }
+    } else if (!move.hitsSubstitute(user, target)) {
       this.applyOnTargetEffects(user, target, hitResult, firstTarget);
     }
     if (this.lastHit) {
