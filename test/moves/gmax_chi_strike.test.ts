@@ -85,7 +85,6 @@ describe("Moves - G-Max Chi Strike grants a stackable crit boost", () => {
     game.move.select(Moves.G_MAX_CHI_STRIKE, 0, BattlerIndex.ENEMY);
     game.move.select(Moves.SPLASH, 1);
     await game.toNextTurn();
-    await game.toNextTurn(); // Need to call it twice for double battles
 
     game.move.select(Moves.SPLASH, 0);
     game.move.select(Moves.BITE, 1, BattlerIndex.ENEMY);
