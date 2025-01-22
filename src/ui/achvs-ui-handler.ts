@@ -1,7 +1,7 @@
 import { Button } from "#enums/buttons";
 import i18next from "i18next";
 import type { Achv } from "#app/system/achv";
-import { achvs, getAchievementDescription } from "#app/system/achv";
+import { achvs } from "#app/system/achv";
 import type { Voucher } from "#app/system/voucher";
 import { getVoucherTypeIcon, getVoucherTypeName, vouchers } from "#app/system/voucher";
 import MessageUiHandler from "#app/ui/message-ui-handler";
@@ -211,12 +211,6 @@ export default class AchvsUiHandler extends MessageUiHandler {
   }
 
   protected showAchv(achv: Achv) {
-    // We need to get the player gender from the game data to add the correct prefix to the achievement name
-    const genderIndex = settings.display.playerGender ?? PlayerGender.MALE;
-    const genderStr = PlayerGender[genderIndex].toLowerCase();
-
-    achv.name = i18next.t(`achv:${achv.localizationKey}.name`, { context: genderStr });
-    achv.description = getAchievementDescription(achv.localizationKey);
     const achvUnlocks = globalScene.gameData.achvUnlocks;
     const unlocked = achvUnlocks.hasOwnProperty(achv.id);
     const hidden = !unlocked && achv.secret && (!achv.parentId || !achvUnlocks.hasOwnProperty(achv.parentId));

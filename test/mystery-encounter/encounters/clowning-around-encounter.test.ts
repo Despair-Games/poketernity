@@ -27,7 +27,7 @@ import { Abilities } from "#enums/abilities";
 import { PostMysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/post-mystery-encounter-phase";
 import { Button } from "#enums/buttons";
 import type PartyUiHandler from "#app/ui/party-ui-handler";
-import type OptionSelectUiHandler from "#app/ui/settings/option-select-ui-handler";
+import type ConfirmUiHandler from "#app/ui/confirm-ui-handler";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-type";
 import { BerryType } from "#enums/berry-type";
@@ -211,8 +211,8 @@ describe("Clowning Around - Mystery Encounter", () => {
       });
 
       // Run to ability train option selection
-      const optionSelectUiHandler = game.scene.ui.handlers[Mode.OPTION_SELECT] as OptionSelectUiHandler;
-      vi.spyOn(optionSelectUiHandler, "show");
+      const confirmUiHandler = game.scene.ui.handlers[Mode.CONFIRM] as ConfirmUiHandler;
+      vi.spyOn(confirmUiHandler, "show");
       const partyUiHandler = game.scene.ui.handlers[Mode.PARTY] as PartyUiHandler;
       vi.spyOn(partyUiHandler, "show");
       game.endPhase();
@@ -220,9 +220,9 @@ describe("Clowning Around - Mystery Encounter", () => {
       expect(scene.getCurrentPhase()?.constructor.name).toBe(PostMysteryEncounterPhase.name);
 
       // Wait for Yes/No confirmation to appear
-      await vi.waitFor(() => expect(optionSelectUiHandler.show).toHaveBeenCalled());
+      await vi.waitFor(() => expect(confirmUiHandler.show).toHaveBeenCalled());
       // Select "Yes" on train ability
-      optionSelectUiHandler.processInput(Button.ACTION);
+      confirmUiHandler.processInput(Button.ACTION);
       // Select first pokemon in party to train
       await vi.waitFor(() => expect(partyUiHandler.show).toHaveBeenCalled());
       partyUiHandler.processInput(Button.ACTION);

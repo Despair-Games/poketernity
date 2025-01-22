@@ -10,7 +10,7 @@ import { VictoryPhase } from "#app/phases/victory-phase";
 import type MessageUiHandler from "#app/ui/message-ui-handler";
 import type MysteryEncounterUiHandler from "#app/ui/mystery-encounter-ui-handler";
 import type PartyUiHandler from "#app/ui/party-ui-handler";
-import type OptionSelectUiHandler from "#app/ui/settings/option-select-ui-handler";
+import type OptionSelectUiHandler from "#app/ui/option-select-ui-handler";
 import { Mode } from "#app/ui/ui";
 import { isNullOrUndefined } from "#app/utils";
 import { Button } from "#enums/buttons";

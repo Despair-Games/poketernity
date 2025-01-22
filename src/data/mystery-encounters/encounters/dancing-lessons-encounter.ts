@@ -29,7 +29,7 @@ import { modifierTypes } from "#app/modifier/modifier-type";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import PokemonData from "#app/system/pokemon-data";
-import type { OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler";
+import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { Biome } from "#enums/biome";
 import { EncounterAnim } from "#enums/encounter-anims";

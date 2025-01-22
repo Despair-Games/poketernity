@@ -6,7 +6,7 @@ import { Mode } from "./ui";
 import i18next from "i18next";
 import { addTextObject, TextStyle } from "./text";
 import { addWindow } from "./ui-theme";
-import type { OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler";
+import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import { api } from "#app/plugins/api/api";
 import { globalScene } from "#app/global-scene";
 import JSZip from "jszip";
@@ -218,7 +218,7 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
       const localStorageKeys = Object.keys(localStorage); // this gets the keys for localStorage
       const keyToFind = "data_";
       const dataKeys = localStorageKeys.filter((ls) => ls.indexOf(keyToFind) >= 0);
-      if (dataKeys.length > 0 && dataKeys.length <= 2) {
+      if (dataKeys.length > 0 && dataKeys.length <= 12) {
         const options: OptionSelectItem[] = [];
         for (let i = 0; i < dataKeys.length; i++) {
           options.push({
@@ -230,9 +230,12 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
             },
           });
         }
-        globalScene.ui.setOverlayMode(Mode.OPTION_SELECT, {
+        const { ui, scaledCanvas } = globalScene;
+        ui.setOverlayMode(Mode.OPTION_SELECT, {
           options: options,
           delay: 1000,
+          xOffset: scaledCanvas.width,
+          yOffset: scaledCanvas.height - this.usernameInfoImage.displayHeight - 16 * dataKeys.length - 22,
         });
         this.infoContainer.setInteractive(
           new Phaser.Geom.Rectangle(0, 0, globalScene.game.canvas.width, globalScene.game.canvas.height),
