@@ -101,7 +101,7 @@ import {
   getEnumValues,
   isNullOrUndefined,
   NumberHolder,
-  padInt,
+  leftPad,
   randSeedInt,
   randSeedItem,
 } from "#app/utils";
@@ -1122,7 +1122,7 @@ export class TmModifierType extends PokemonModifierType {
 
   override get name(): string {
     return i18next.t("modifierType:ModifierType.TmModifierType.name", {
-      moveId: padInt(Object.keys(tmSpecies).indexOf(this.moveId.toString()) + 1, 3),
+      moveId: leftPad(Object.keys(tmSpecies).indexOf(this.moveId.toString()) + 1, 3),
       moveName: allMoves[this.moveId].name,
     });
   }

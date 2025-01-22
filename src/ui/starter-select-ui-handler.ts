@@ -60,7 +60,7 @@ import {
   fixedNumber,
   getLocalizedSpriteKey,
   isNullOrUndefined,
-  padInt,
+  leftPad,
   rgbHexToRgba,
   toReadableString,
 } from "#app/utils";
@@ -3060,7 +3060,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.lastSpecies = species!; // TODO: is this bang correct?
 
     if (species && (this.speciesStarterDexEntry?.seenAttr || this.speciesStarterDexEntry?.caughtAttr)) {
-      this.pokemonNumberText.setText(padInt(species.speciesId, 4));
+      this.pokemonNumberText.setText(leftPad(species.speciesId, 4));
       if (starterAttributes?.nickname) {
         const name = decodeURIComponent(escape(atob(starterAttributes.nickname)));
         this.pokemonNameText.setText(name);
@@ -3229,7 +3229,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         this.pokemonSprite.setTint(0x808080);
       }
     } else {
-      this.pokemonNumberText.setText(padInt(0, 4));
+      this.pokemonNumberText.setText(leftPad(0, 4));
       this.pokemonNameText.setText(species ? "???" : "");
       this.pokemonGrowthRateText.setText("");
       this.pokemonGrowthRateLabelText.setVisible(false);

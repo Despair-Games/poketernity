@@ -5,7 +5,7 @@ import UiHandler from "#app/ui/ui-handler";
 import {
   getLocalizedSpriteKey,
   rgbHexToRgba,
-  padInt,
+  leftPad,
   getEnumValues,
   fixedNumber,
   toReadableString,
@@ -331,7 +331,7 @@ export default class SummaryUiHandler extends UiHandler {
     this.candyIcon.setTint(argbFromRgba(rgbHexToRgba(colorScheme[0])));
     this.candyOverlay.setTint(argbFromRgba(rgbHexToRgba(colorScheme[1])));
 
-    this.numberText.setText(padInt(this.pokemon.species.speciesId, 4));
+    this.numberText.setText(leftPad(this.pokemon.species.speciesId, 4));
     this.numberText.setColor(this.getTextColor(!this.pokemon.isShiny() ? TextStyle.SUMMARY : TextStyle.SUMMARY_GOLD));
     this.numberText.setShadowColor(
       this.getTextColor(!this.pokemon.isShiny() ? TextStyle.SUMMARY : TextStyle.SUMMARY_GOLD, true),
@@ -1063,7 +1063,7 @@ export default class SummaryUiHandler extends UiHandler {
           ppOverlay.setOrigin(0, 1);
           this.extraMoveRowContainer.add(ppOverlay);
 
-          const pp = padInt(this.newMove?.pp!, 2, "  "); // TODO: is this bang correct?
+          const pp = leftPad(this.newMove?.pp!, 2, "  "); // TODO: is this bang correct?
           const ppText = addTextObject(173, 1, `${pp}/${pp}`, TextStyle.WINDOW);
           ppText.setOrigin(0, 1);
           this.extraMoveRowContainer.add(ppText);
@@ -1100,7 +1100,7 @@ export default class SummaryUiHandler extends UiHandler {
           if (move) {
             const maxPP = move.getMovePp();
             const pp = maxPP - move.ppUsed;
-            ppText.setText(`${padInt(pp, 2, "  ")}/${padInt(maxPP, 2, "  ")}`);
+            ppText.setText(`${leftPad(pp, 2, "  ")}/${leftPad(maxPP, 2, "  ")}`);
           }
 
           moveRowContainer.add(ppText);
