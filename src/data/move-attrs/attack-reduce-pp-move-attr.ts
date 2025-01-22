@@ -1,7 +1,8 @@
-import type { Pokemon, TurnMove } from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
 import type { Move } from "#app/data/move";
 import { ReducePpMoveAttr } from "#app/data/move-attrs/reduce-pp-move-attr";
 import type { MoveConditionFunc } from "../move-conditions";
+import { globalScene } from "#app/global-scene";
 
 /**
  * Attribute to reduce the PP of the target's last move after attacking.
@@ -10,36 +11,47 @@ import type { MoveConditionFunc } from "../move-conditions";
  * @extends ReducePpMoveAttr
  */
 export class AttackReducePpMoveAttr extends ReducePpMoveAttr {
-  private affectBothOpponents: boolean;
+  private affectsBothOpponents: boolean;
 
-  constructor(reduction: number, affectBothOpponents: boolean = false) {
+  constructor(reduction: number, affectsBothOpponents: boolean = false) {
     super(reduction);
-    this.affectBothOpponents = affectBothOpponents;
+    this.affectsBothOpponents = affectsBothOpponents;
   }
 
+  /**
+   * Attempts to reduce the pp of the target (and its ally if affectsBothOpponents is true)'s
+   * last used move
+   * @param user the user of the move
+   * @param target the target of the attack
+   * @param move the move (eerie spell or g-max depletion)
+   * @returns true
+   */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
-    const lastMoveTarget = target.getLastXMoves().find(() => true);
-    if (lastMoveTarget) {
-      this.reducePP(user, target, move, lastMoveTarget);
-    }
-
-    if (this.affectBothOpponents && target.getAlly()?.isActive(true)) {
-      const lastMoveTargetAlly = target
-        .getAlly()
-        .getLastXMoves()
-        .find(() => true);
-      if (lastMoveTargetAlly) {
-        this.reducePP(user, target.getAlly(), move, lastMoveTargetAlly);
+    if (this.affectsBothOpponents) {
+      let allOpps: Pokemon[];
+      if (target.isPlayer()) {
+        allOpps = globalScene.getPlayerField();
+      } else {
+        allOpps = globalScene.getEnemyField();
       }
+      allOpps = allOpps.filter((p) => p.isActive(true));
+      allOpps.forEach((opp) => {
+        this.reducePP(user, opp, move);
+      });
+    } else {
+      this.reducePP(user, target, move);
     }
 
     return true;
   }
 
-  private reducePP(user: Pokemon, target: Pokemon, move: Move, lastMoveTarget: TurnMove) {
-    const movesetMove = target.getMoveset().find((m) => m.moveId === lastMoveTarget.move);
-    if (Boolean(movesetMove?.getPpRatio())) {
-      super.apply(user, target, move);
+  private reducePP(user: Pokemon, target: Pokemon, move: Move): void {
+    const lastMoveTarget = target.getLastXMoves().find(() => true);
+    if (lastMoveTarget) {
+      const movesetMove = target.getMoveset().find((m) => m.moveId === lastMoveTarget.move);
+      if (Boolean(movesetMove?.getPpRatio())) {
+        super.apply(user, target, move);
+      }
     }
   }
 
