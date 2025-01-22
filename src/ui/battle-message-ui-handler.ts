@@ -1,6 +1,7 @@
 import { globalScene } from "#app/global-scene";
-import { addBBCodeTextObject, addTextObject, getTextColor, TextStyle } from "./text";
-import { Mode } from "./ui";
+import { addBBCodeTextObject, addTextObject, getTextColor } from "./text";
+import { TextStyle } from "#enums/text-style";
+import { UiMode } from "#enums/ui-mode";
 import MessageUiHandler from "./message-ui-handler";
 import { addWindow } from "./ui-theme";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
@@ -25,7 +26,7 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
   public nameBoxContainer: Phaser.GameObjects.Container;
 
   constructor() {
-    super(Mode.MESSAGE);
+    super(UiMode.MESSAGE);
   }
 
   setup(): void {

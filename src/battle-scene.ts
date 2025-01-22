@@ -51,7 +51,8 @@ import type { Phase } from "#app/phase";
 import { initGameSpeed } from "#app/system/game-speed";
 import { Arena, ArenaBase } from "#app/field/arena";
 import { GameData } from "#app/system/game-data";
-import { addTextObject, getTextColor, TextStyle } from "#app/ui/text";
+import { addTextObject, getTextColor } from "#app/ui/text";
+import { TextStyle } from "#enums/text-style";
 import { allMoves } from "#app/data/all-moves";
 import {
   getDefaultModifierTypeForTier,
@@ -175,6 +176,7 @@ import { bgmLoopPoint } from "./data/bgm-loop-point";
 import { allTrainerConfigs } from "./data/balance/trainer-configs/all-trainer-configs";
 import { eventBus } from "./event-bus";
 import { Animation } from "./animations";
+import { resetStarterColors, starterColors } from "./data/starter-colors";
 
 const DEBUG_RNG = false;
 
@@ -185,11 +187,6 @@ const ENEMY_IVS_OVERRIDE_VALIDATED: number[] = (
 ).map((iv) => (isNaN(iv) || iv === null || iv > 31 ? -1 : iv));
 
 export const startingWave = Overrides.STARTING_WAVE_OVERRIDE || 1;
-
-export let starterColors: StarterColors;
-interface StarterColors {
-  [key: string]: [string, string];
-}
 
 export interface PokeballCounts {
   [pb: string]: number;
@@ -743,7 +740,7 @@ export default class BattleScene extends SceneBase {
       this.cachedFetch("./starter-colors.json")
         .then((res) => res.json())
         .then((sc) => {
-          starterColors = {};
+          resetStarterColors();
           Object.keys(sc).forEach((key) => {
             starterColors[key] = sc[key];
           });
@@ -3071,12 +3068,12 @@ export default class BattleScene extends SceneBase {
       }
       if (matchingFormChange) {
         let phase: Phase;
-        if (pokemon instanceof PlayerPokemon && !matchingFormChange.quiet) {
+        if (pokemon.isPlayer() && !matchingFormChange.quiet) {
           phase = new FormChangePhase(pokemon, matchingFormChange, modal);
         } else {
           phase = new QuietFormChangePhase(pokemon, matchingFormChange);
         }
-        if (pokemon instanceof PlayerPokemon && !matchingFormChange.quiet && modal) {
+        if (pokemon.isPlayer() && !matchingFormChange.quiet && modal) {
           this.overridePhase(phase);
         } else if (delayed) {
           this.pushPhase(phase);
@@ -3176,7 +3173,7 @@ export default class BattleScene extends SceneBase {
     activePokemon = activePokemon.concat(this.getEnemyParty());
     activePokemon.forEach((p) => {
       keys.push(p.getSpriteKey(true));
-      if (p instanceof PlayerPokemon) {
+      if (p.isPlayer()) {
         keys.push(p.getBattleSpriteKey(true, true));
       }
       keys.push(p.species.getCryKey(p.formIndex));
@@ -3192,7 +3189,7 @@ export default class BattleScene extends SceneBase {
    * @param pokemon The (enemy) pokemon
    */
   initFinalBossPhaseTwo(pokemon: Pokemon): void {
-    if (pokemon instanceof EnemyPokemon && pokemon.isBoss() && !pokemon.formIndex && pokemon.bossSegmentIndex < 1) {
+    if (pokemon.isEnemy() && pokemon.isBoss() && !pokemon.formIndex && pokemon.bossSegmentIndex < 1) {
       this.fadeOutBgm(fixedNumber(2000), false);
       this.ui.showDialogue(classicFinalBossDialogue.firstStageWin, pokemon.species.name, undefined, () => {
         const finalBossMBH = getModifierType(modifierTypes.MINI_BLACK_HOLE).newModifier(

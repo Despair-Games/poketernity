@@ -6,7 +6,7 @@ import { EncounterPhase } from "#app/phases/encounter-phase";
 import { TitlePhase } from "#app/phases/title-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
 import type SaveSlotSelectUiHandler from "#app/ui/save-slot-select-ui-handler";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { GameManagerHelper } from "#test/testUtils/helpers/gameManagerHelper";
 import { settings } from "#app/system/settings/settings-manager";
 
@@ -25,12 +25,12 @@ export class DailyModeHelper extends GameManagerHelper {
       this.game.override.shiny(false).enemyShiny(false);
     }
 
-    this.game.onNextPrompt("TitlePhase", Mode.TITLE, () => {
+    this.game.onNextPrompt("TitlePhase", UiMode.TITLE, () => {
       const titlePhase = new TitlePhase();
       titlePhase.initDailyRun();
     });
 
-    this.game.onNextPrompt("TitlePhase", Mode.SAVE_SLOT, () => {
+    this.game.onNextPrompt("TitlePhase", UiMode.SAVE_SLOT, () => {
       const uihandler = this.game.scene.ui.getHandler<SaveSlotSelectUiHandler>();
       uihandler.processInput(Button.ACTION); // select first slot. that's fine
     });
@@ -52,9 +52,9 @@ export class DailyModeHelper extends GameManagerHelper {
     if (settings.general.battleStyle === BattleStyle.SWITCH) {
       this.game.onNextPrompt(
         "CheckSwitchPhase",
-        Mode.CONFIRM,
+        UiMode.CONFIRM,
         () => {
-          this.game.setMode(Mode.MESSAGE);
+          this.game.setMode(UiMode.MESSAGE);
           this.game.endPhase();
         },
         () => this.game.isCurrentPhase(CommandPhase) || this.game.isCurrentPhase(TurnInitPhase),
@@ -62,9 +62,9 @@ export class DailyModeHelper extends GameManagerHelper {
 
       this.game.onNextPrompt(
         "CheckSwitchPhase",
-        Mode.CONFIRM,
+        UiMode.CONFIRM,
         () => {
-          this.game.setMode(Mode.MESSAGE);
+          this.game.setMode(UiMode.MESSAGE);
           this.game.endPhase();
         },
         () => this.game.isCurrentPhase(CommandPhase) || this.game.isCurrentPhase(TurnInitPhase),

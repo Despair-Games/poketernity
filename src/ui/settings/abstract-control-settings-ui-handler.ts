@@ -1,8 +1,9 @@
 import UiHandler from "#app/ui/ui-handler";
-import type { Mode } from "#app/ui/ui";
+import type { UiMode } from "#enums/ui-mode";
 import type { InterfaceConfig } from "#app/inputs-controller";
 import { addWindow } from "#app/ui/ui-theme";
-import { addTextObject, TextStyle } from "#app/ui/text";
+import { addTextObject } from "#app/ui/text";
+import { TextStyle } from "#enums/text-style";
 import { ScrollBar } from "#app/ui/scroll-bar";
 import { getIconWithSettingName } from "#app/configs/inputs/configHandler";
 import NavigationMenu, { NavigationManager } from "#app/ui/settings/navigationMenu";
@@ -74,7 +75,7 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
    *
    * @param mode - The UI mode.
    */
-  constructor(mode: Mode | null = null) {
+  constructor(mode: UiMode | null = null) {
     super(mode);
     this.rowsToDisplay = 8;
   }

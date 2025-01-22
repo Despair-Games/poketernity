@@ -1,5 +1,5 @@
 import type { BattlerIndex } from "#enums/battler-index";
-import type { CommonAnim } from "#app/data/battle-anims";
+import type { CommonAnim } from "#enums/common-anim";
 import { CommonBattleAnim } from "#app/data/battle-anims";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { globalScene } from "#app/global-scene";

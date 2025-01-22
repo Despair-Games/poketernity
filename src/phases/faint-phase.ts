@@ -18,7 +18,7 @@ import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { classicFinalBossDialogue } from "#app/data/dialogue";
 import { PostVictoryStatStageChangeAttr } from "#app/data/move-attrs/post-victory-stat-stage-change-attr";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";
-import { PlayerPokemon, type EnemyPokemon, type Pokemon } from "#app/field/pokemon";
+import type { Pokemon, EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
 import { HitResult } from "#enums/hit-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -223,7 +223,7 @@ export class FaintPhase extends PokemonPhase {
     }
 
     pokemon.faintCry(() => {
-      if (pokemon instanceof PlayerPokemon) {
+      if (pokemon.isPlayer()) {
         pokemon.addFriendship(-FRIENDSHIP_LOSS_FROM_FAINT);
       }
       pokemon.hideInfo();

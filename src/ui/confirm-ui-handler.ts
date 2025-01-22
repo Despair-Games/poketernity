@@ -1,7 +1,7 @@
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import OptionSelectUiHandler from "#app/ui/option-select-ui-handler";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 
 /**
@@ -10,7 +10,7 @@ import i18next from "i18next";
  */
 export default class ConfirmUiHandler extends OptionSelectUiHandler {
   constructor() {
-    super(Mode.CONFIRM);
+    super(UiMode.CONFIRM);
   }
 
   override show(args: any[]): boolean {

@@ -6,19 +6,21 @@ import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { api } from "#app/plugins/api/api";
 import { handleTutorial } from "#app/tutorial";
 import { Tutorial } from "#enums/tutorial";
-import { AdminMode, getAdminModeName } from "#app/ui/admin-ui-handler";
+import { getAdminModeName } from "#app/ui/admin-ui-handler";
 import BgmBar from "#app/ui/bgm-bar";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import OptionSelectUiHandler from "#app/ui/option-select-ui-handler";
-import { TextStyle, addTextObject } from "#app/ui/text";
-import { Mode } from "#app/ui/ui";
+import { addTextObject } from "#app/ui/text";
 import { addWindow } from "#app/ui/ui-theme";
 import { fixedNumber, getCookie, getEnumKeys, isBeta, isLocal } from "#app/utils";
 import { Button } from "#enums/buttons";
 import { GameDataType } from "#enums/game-data-type";
 import i18next from "i18next";
 import type AwaitableUiHandler from "./awaitable-ui-handler";
+import { UiMode } from "#enums/ui-mode";
+import { TextStyle } from "#enums/text-style";
+import { AdminMode } from "#enums/admin-mode";
 
 enum MenuOptions {
   GAME_SETTINGS,
@@ -50,7 +52,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
 
   public bgmBar: BgmBar;
 
-  constructor(mode: Mode = Mode.MENU) {
+  constructor(mode: UiMode = UiMode.MENU) {
     super(mode);
 
     this.excludedMenus = () => [
@@ -210,7 +212,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
           xOffset: this.optionSelectBg.displayWidth,
           yOffset: this.menuMessageBox.displayHeight + 1,
         };
-        ui.setOverlayMode(Mode.MENU_OPTION_SELECT, config);
+        ui.setOverlayMode(UiMode.MENU_OPTION_SELECT, config);
       });
     };
     // Import Session
@@ -357,7 +359,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
               ui.revertMode();
             },
           ];
-          ui.setMode(Mode.TEST_DIALOGUE, buttonAction, prefilledText);
+          ui.setMode(UiMode.TEST_DIALOGUE, buttonAction, prefilledText);
           return true;
         },
         keepOpen: true,
@@ -457,7 +459,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
                 handler: () => {
                   ui.playSelect();
                   ui.setOverlayMode(
-                    Mode.ADMIN,
+                    UiMode.ADMIN,
                     {
                       buttonActions: [
                         // we double revert here and below to go back 2 layers of menus
@@ -484,7 +486,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
               return true;
             },
           });
-          globalScene.ui.setOverlayMode(Mode.OPTION_SELECT, {
+          globalScene.ui.setOverlayMode(UiMode.OPTION_SELECT, {
             options: options,
             delay: 0,
             yOffset: this.menuMessageBox.displayHeight + 1,
@@ -514,25 +516,25 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
     const ui = this.getUi();
     switch (option) {
       case MenuOptions.GAME_SETTINGS:
-        ui.setOverlayMode(Mode.SETTINGS);
+        ui.setOverlayMode(UiMode.SETTINGS);
         success = true;
         break;
       case MenuOptions.ACHIEVEMENTS:
-        ui.setOverlayMode(Mode.ACHIEVEMENTS);
+        ui.setOverlayMode(UiMode.ACHIEVEMENTS);
         success = true;
         break;
       case MenuOptions.STATS:
-        ui.setOverlayMode(Mode.GAME_STATS);
+        ui.setOverlayMode(UiMode.GAME_STATS);
         success = true;
         break;
       case MenuOptions.RUN_HISTORY:
-        ui.setOverlayMode(Mode.RUN_HISTORY);
+        ui.setOverlayMode(UiMode.RUN_HISTORY);
         success = true;
         break;
       case MenuOptions.EGG_LIST:
         if (globalScene.gameData.eggs.length) {
           ui.revertMode();
-          ui.setOverlayMode(Mode.EGG_LIST);
+          ui.setOverlayMode(UiMode.EGG_LIST);
           success = true;
         } else {
           ui.showText(i18next.t("menuUiHandler:noEggs"), null, () => ui.showText(""), fixedNumber(1500));
@@ -540,7 +542,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
         break;
       case MenuOptions.EGG_GACHA:
         ui.revertMode();
-        ui.setOverlayMode(Mode.EGG_GACHA);
+        ui.setOverlayMode(UiMode.EGG_GACHA);
         success = true;
         break;
       case MenuOptions.MANAGE_DATA:
@@ -599,18 +601,18 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
             },
           );
         }
-        ui.setOverlayMode(Mode.MENU_OPTION_SELECT, this.manageDataConfig);
+        ui.setOverlayMode(UiMode.MENU_OPTION_SELECT, this.manageDataConfig);
         success = true;
         break;
       case MenuOptions.COMMUNITY:
-        ui.setOverlayMode(Mode.MENU_OPTION_SELECT, this.communityConfig);
+        ui.setOverlayMode(UiMode.MENU_OPTION_SELECT, this.communityConfig);
         success = true;
         break;
       case MenuOptions.SAVE_AND_QUIT:
         if (globalScene.currentBattle) {
           success = true;
           const doSaveQuit = () => {
-            ui.setMode(Mode.LOADING, {
+            ui.setMode(UiMode.LOADING, {
               buttonActions: [],
               fadeOut: () =>
                 globalScene.gameData.saveAll(true, true, true, true).then(() => {
@@ -632,7 +634,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
                 },
                 xOffset: this.optionSelectBg.displayWidth,
               };
-              ui.setOverlayMode(Mode.CONFIRM, options);
+              ui.setOverlayMode(UiMode.CONFIRM, options);
             });
           } else {
             doSaveQuit();
@@ -642,7 +644,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
       case MenuOptions.LOG_OUT:
         success = true;
         const doLogout = () => {
-          ui.setMode(Mode.LOADING, {
+          ui.setMode(UiMode.LOADING, {
             buttonActions: [],
             fadeOut: () =>
               api.account.logout().then(() => {
@@ -664,7 +666,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
               },
               xOffset: this.optionSelectBg.displayWidth,
             };
-            ui.setOverlayMode(Mode.CONFIRM, options);
+            ui.setOverlayMode(UiMode.CONFIRM, options);
           });
         } else {
           doLogout();
@@ -680,7 +682,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
       ui.playSelect();
       ui.revertMode().then((result) => {
         if (!result) {
-          ui.setMode(Mode.MESSAGE);
+          ui.setMode(UiMode.MESSAGE);
         }
       });
       return true;

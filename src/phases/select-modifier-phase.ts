@@ -6,7 +6,7 @@ import {
   TempExtraModifierModifier,
   type Modifier,
 } from "#app/modifier/modifier";
-import type { ModifierTier } from "#app/modifier/modifier-tier";
+import type { ModifierTier } from "#enums/modifier-tier";
 import {
   FusePokemonModifierType,
   getPlayerModifierTypeOptions,
@@ -27,8 +27,10 @@ import Overrides from "#app/overrides";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import type ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
 import { SHOP_OPTIONS_ROW_LIMIT } from "#app/ui/modifier-select-ui-handler";
-import PartyUiHandler, { PartyOption, PartyUiMode } from "#app/ui/party-ui-handler";
-import { Mode } from "#app/ui/ui";
+import PartyUiHandler from "#app/ui/party-ui-handler";
+import { PartyOption } from "#enums/party-option";
+import { PartyUiMode } from "#enums/party-ui-mode";
+import { UiMode } from "#enums/ui-mode";
 import { NumberHolder } from "#app/utils";
 import i18next from "i18next";
 import { BattlePhase } from "./abstract-battle-phase";
@@ -99,12 +101,12 @@ export class SelectModifierPhase extends BattlePhase {
         const skipRewardConfirmOptions: ConfirmModeConfig = {
           yesHandler: () => {
             ui.revertMode();
-            ui.setMode(Mode.MESSAGE);
+            ui.setMode(UiMode.MESSAGE);
             super.end();
           },
           noHandler: () => {
             ui.setMode(
-              Mode.MODIFIER_SELECT,
+              UiMode.MODIFIER_SELECT,
               this.isPlayer(),
               this.typeOptions,
               modifierSelectCallback,
@@ -113,7 +115,7 @@ export class SelectModifierPhase extends BattlePhase {
           },
         };
         ui.showText(i18next.t("battle:skipItemQuestion"), null, () => {
-          ui.setOverlayMode(Mode.CONFIRM, skipRewardConfirmOptions);
+          ui.setOverlayMode(UiMode.CONFIRM, skipRewardConfirmOptions);
         });
         return false;
       }
@@ -140,7 +142,7 @@ export class SelectModifierPhase extends BattlePhase {
                 );
 
                 ui.clearText();
-                ui.setMode(Mode.MESSAGE).then(() => super.end());
+                ui.setMode(UiMode.MESSAGE).then(() => super.end());
 
                 if (!Overrides.WAIVE_SHOP_FEES_OVERRIDE) {
                   globalScene.money -= rerollCost;
@@ -152,7 +154,7 @@ export class SelectModifierPhase extends BattlePhase {
               break;
             case 1:
               ui.setModeWithoutClear(
-                Mode.PARTY,
+                UiMode.PARTY,
                 PartyUiMode.MODIFIER_TRANSFER,
                 -1,
                 (fromSlotIndex: number, itemIndex: number, itemQuantity: number, toSlotIndex: number) => {
@@ -181,7 +183,7 @@ export class SelectModifierPhase extends BattlePhase {
                     );
                   } else {
                     ui.setMode(
-                      Mode.MODIFIER_SELECT,
+                      UiMode.MODIFIER_SELECT,
                       this.isPlayer(),
                       this.typeOptions,
                       modifierSelectCallback,
@@ -193,9 +195,9 @@ export class SelectModifierPhase extends BattlePhase {
               );
               break;
             case 2:
-              ui.setModeWithoutClear(Mode.PARTY, PartyUiMode.CHECK, -1, () => {
+              ui.setModeWithoutClear(UiMode.PARTY, PartyUiMode.CHECK, -1, () => {
                 ui.setMode(
-                  Mode.MODIFIER_SELECT,
+                  UiMode.MODIFIER_SELECT,
                   this.isPlayer(),
                   this.typeOptions,
                   modifierSelectCallback,
@@ -221,7 +223,7 @@ export class SelectModifierPhase extends BattlePhase {
         case 1:
           if (this.typeOptions.length === 0) {
             ui.clearText();
-            ui.setMode(Mode.MESSAGE);
+            ui.setMode(UiMode.MESSAGE);
             super.end();
             return true;
           }
@@ -275,7 +277,7 @@ export class SelectModifierPhase extends BattlePhase {
           }
         } else {
           ui.clearText();
-          ui.setMode(Mode.MESSAGE);
+          ui.setMode(UiMode.MESSAGE);
           super.end();
         }
       };
@@ -283,7 +285,7 @@ export class SelectModifierPhase extends BattlePhase {
       if (modifierType instanceof PokemonModifierType) {
         if (modifierType instanceof FusePokemonModifierType) {
           ui.setModeWithoutClear(
-            Mode.PARTY,
+            UiMode.PARTY,
             PartyUiMode.SPLICE,
             -1,
             (fromSlotIndex: number, spliceSlotIndex: number) => {
@@ -293,13 +295,13 @@ export class SelectModifierPhase extends BattlePhase {
                 && spliceSlotIndex < 6
                 && fromSlotIndex !== spliceSlotIndex
               ) {
-                ui.setMode(Mode.MODIFIER_SELECT, this.isPlayer()).then(() => {
+                ui.setMode(UiMode.MODIFIER_SELECT, this.isPlayer()).then(() => {
                   const modifier = modifierType.newModifier(party[fromSlotIndex], party[spliceSlotIndex])!; //TODO: is the bang correct?
                   applyModifier(modifier, true);
                 });
               } else {
                 ui.setMode(
-                  Mode.MODIFIER_SELECT,
+                  UiMode.MODIFIER_SELECT,
                   this.isPlayer(),
                   this.typeOptions,
                   modifierSelectCallback,
@@ -325,12 +327,12 @@ export class SelectModifierPhase extends BattlePhase {
                 : PartyUiMode.MODIFIER;
           const tmMoveId = isTmModifier ? (modifierType as TmModifierType).moveId : undefined;
           ui.setModeWithoutClear(
-            Mode.PARTY,
+            UiMode.PARTY,
             partyUiMode,
             -1,
             (slotIndex: number, option: PartyOption) => {
               if (slotIndex < 6) {
-                ui.setMode(Mode.MODIFIER_SELECT, this.isPlayer()).then(() => {
+                ui.setMode(UiMode.MODIFIER_SELECT, this.isPlayer()).then(() => {
                   const modifier = !isMoveModifier
                     ? !isRememberMoveModifier
                       ? modifierType.newModifier(party[slotIndex])
@@ -340,7 +342,7 @@ export class SelectModifierPhase extends BattlePhase {
                 });
               } else {
                 ui.setMode(
-                  Mode.MODIFIER_SELECT,
+                  UiMode.MODIFIER_SELECT,
                   this.isPlayer(),
                   this.typeOptions,
                   modifierSelectCallback,
@@ -368,7 +370,7 @@ export class SelectModifierPhase extends BattlePhase {
       return !cost;
     };
     ui.setMode(
-      Mode.MODIFIER_SELECT,
+      UiMode.MODIFIER_SELECT,
       this.isPlayer(),
       this.typeOptions,
       modifierSelectCallback,

@@ -3,7 +3,7 @@ import type { PlayerPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import type FormChangeSceneHandler from "#app/ui/form-change-scene-handler";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 
 /**
  * A base phase for handling Pokemon form changes, including evolutions
@@ -35,7 +35,7 @@ export abstract class FormChangeBasePhase extends Phase {
   public abstract validate(): boolean;
 
   public setMode(): Promise<void> {
-    return globalScene.ui.setModeForceTransition(Mode.FORM_CHANGE_SCENE);
+    return globalScene.ui.setModeForceTransition(UiMode.FORM_CHANGE_SCENE);
   }
 
   public override start(): void {

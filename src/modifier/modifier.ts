@@ -19,8 +19,9 @@ import { LevelUpPhase } from "#app/phases/level-up-phase";
 import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";
 import { achvs } from "#app/system/achv";
 import type { VoucherType } from "#enums/voucher-type";
-import { Command } from "#app/ui/command-ui-handler";
-import { addTextObject, TextStyle } from "#app/ui/text";
+import { BattleCommand } from "#enums/battle-command";
+import { addTextObject } from "#app/ui/text";
+import { TextStyle } from "#enums/text-style";
 import { BooleanHolder, hslToHex, isNullOrUndefined, NumberHolder, toDmgValue } from "#app/utils";
 import { BerryType } from "#enums/berry-type";
 import type { Moves } from "#enums/moves";
@@ -1701,7 +1702,7 @@ export class BypassSpeedChanceModifier extends PokemonHeldItemModifier {
     if (!doBypassSpeed.value && pokemon.randSeedInt(10) < this.getStackCount()) {
       doBypassSpeed.value = true;
       const isCommandFight =
-        globalScene.currentBattle.turnCommands[pokemon.getBattlerIndex()]?.command === Command.FIGHT;
+        globalScene.currentBattle.turnCommands[pokemon.getBattlerIndex()]?.command === BattleCommand.FIGHT;
       const hasQuickClaw = this.type instanceof PokemonHeldItemModifierType && this.type.id === "QUICK_CLAW";
 
       if (isCommandFight && hasQuickClaw) {

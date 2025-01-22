@@ -1,10 +1,11 @@
 import type { InfoToggle } from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
-import { addTextObject, TextStyle } from "./text";
+import { addTextObject } from "./text";
+import { TextStyle } from "#enums/text-style";
 import { getTypeDamageMultiplierColor } from "#app/data/type";
 import { Type } from "#enums/type";
-import { Command } from "./command-ui-handler";
-import { Mode } from "./ui";
+import { BattleCommand } from "#enums/battle-command";
+import { UiMode } from "#enums/ui-mode";
 import UiHandler from "./ui-handler";
 import { getLocalizedSpriteKey, fixedNumber, padInt } from "#app/utils";
 import { MoveCategory } from "#enums/move-category";
@@ -37,7 +38,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
   protected cursor2: number = 0;
 
   constructor() {
-    super(Mode.FIGHT);
+    super(UiMode.FIGHT);
   }
 
   setup() {
@@ -146,7 +147,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
 
     if (button === Button.CANCEL || button === Button.ACTION) {
       if (button === Button.ACTION) {
-        if ((globalScene.getCurrentPhase() as CommandPhase).handleCommand(Command.FIGHT, cursor, false)) {
+        if ((globalScene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, cursor, false)) {
           success = true;
         } else {
           ui.playError();
@@ -155,7 +156,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
         // Cannot back out of fight menu if skipToFightInput is enabled
         const { battleType, mysteryEncounter } = globalScene.currentBattle;
         if (battleType !== BattleType.MYSTERY_ENCOUNTER || !mysteryEncounter?.skipToFightInput) {
-          ui.setMode(Mode.COMMAND, this.fieldIndex);
+          ui.setMode(UiMode.COMMAND, this.fieldIndex);
           success = true;
         }
       }

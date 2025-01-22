@@ -16,11 +16,11 @@ import { Moves } from "#enums/moves";
 import type BattleScene from "#app/battle-scene";
 import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils";
-import { ModifierTier } from "#app/modifier/modifier-tier";
+import { ModifierTier } from "#enums/modifier-tier";
 import { ClowningAroundEncounter } from "#app/data/mystery-encounters/encounters/clowning-around-encounter";
 import { TrainerType } from "#enums/trainer-type";
 import { Abilities } from "#enums/abilities";
@@ -206,14 +206,14 @@ describe("Clowning Around - Mystery Encounter", () => {
       await game.phaseInterceptor.run(SelectModifierPhase);
       const abilityToTrain = scene.currentBattle.mysteryEncounter?.misc.ability;
 
-      game.onNextPrompt("PostMysteryEncounterPhase", Mode.MESSAGE, () => {
+      game.onNextPrompt("PostMysteryEncounterPhase", UiMode.MESSAGE, () => {
         game.scene.ui.getHandler().processInput(Button.ACTION);
       });
 
       // Run to ability train option selection
-      const confirmUiHandler = game.scene.ui.handlers[Mode.CONFIRM] as ConfirmUiHandler;
+      const confirmUiHandler = game.scene.ui.handlers[UiMode.CONFIRM] as ConfirmUiHandler;
       vi.spyOn(confirmUiHandler, "show");
-      const partyUiHandler = game.scene.ui.handlers[Mode.PARTY] as PartyUiHandler;
+      const partyUiHandler = game.scene.ui.handlers[UiMode.PARTY] as PartyUiHandler;
       vi.spyOn(partyUiHandler, "show");
       game.endPhase();
       await game.phaseInterceptor.to(PostMysteryEncounterPhase);

@@ -1,5 +1,5 @@
 import type { CommandPhase } from "#app/phases/command-phase";
-import { Command } from "#app/ui/command-ui-handler";
+import { BattleCommand } from "#enums/battle-command";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
@@ -65,7 +65,7 @@ describe("Abilities - Honey Gather", () => {
     vi.spyOn(enemy, "scene", "get").mockReturnValue(game.scene);
 
     const commandPhase = game.scene.getCurrentPhase() as CommandPhase;
-    commandPhase.handleCommand(Command.RUN, 0);
+    commandPhase.handleCommand(BattleCommand.RUN, 0);
     await game.toNextTurn();
 
     expect(game.scene.money).toBe(1000);

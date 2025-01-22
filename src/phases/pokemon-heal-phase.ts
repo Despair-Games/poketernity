@@ -1,5 +1,5 @@
 import type { BattlerIndex } from "#enums/battler-index";
-import { CommonAnim } from "#app/data/battle-anims";
+import { CommonAnim } from "#enums/common-anim";
 import type { HealBlockTag } from "#app/data/battler-tags";
 import { getStatusEffectHealText } from "#app/data/status-effect";
 import { type DamageResult } from "#app/field/pokemon";

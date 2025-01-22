@@ -1,6 +1,5 @@
 import { SwitchType } from "#enums/switch-type";
 import type { Pokemon } from "#app/field/pokemon";
-import { PlayerPokemon, EnemyPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { RevivalBlessingPhase } from "#app/phases/revival-blessing-phase";
@@ -23,10 +22,10 @@ export class RevivalBlessingAttr extends MoveEffectAttr {
 
   override applyEffect(user: Pokemon, _target: Pokemon, _move: Move): boolean {
     // If user is player, checks if the user has fainted pokemon
-    if (user instanceof PlayerPokemon) {
+    if (user.isPlayer()) {
       globalScene.unshiftPhase(new RevivalBlessingPhase(user));
       return true;
-    } else if (user instanceof EnemyPokemon) {
+    } else if (user.isEnemy()) {
       // If used by an enemy trainer with at least one fainted non-boss Pokemon, this
       // revives one of said Pokemon selected at random.
       const faintedPokemon = globalScene.getEnemyParty().filter((p) => p.isFainted() && !p.isBoss());
@@ -59,10 +58,8 @@ export class RevivalBlessingAttr extends MoveEffectAttr {
 
   override getCondition(): MoveConditionFunc {
     return (user, _target, _move) =>
-      (user instanceof PlayerPokemon && globalScene.getPlayerParty().some((p) => p.isFainted()))
-      || (user instanceof EnemyPokemon
-        && user.hasTrainer()
-        && globalScene.getEnemyParty().some((p) => p.isFainted() && !p.isBoss()));
+      (user.isPlayer() && globalScene.getPlayerParty().some((p) => p.isFainted()))
+      || (user.isEnemy() && user.hasTrainer() && globalScene.getEnemyParty().some((p) => p.isFainted() && !p.isBoss()));
   }
 
   override getUserBenefitScore(user: Pokemon, _target: Pokemon, _move: Move): number {

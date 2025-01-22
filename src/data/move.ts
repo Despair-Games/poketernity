@@ -49,7 +49,7 @@ import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { HealStatusEffectAttr } from "./move-attrs/heal-status-effect-attr";
 import { VariableAtkAttr } from "./move-attrs/variable-atk-attr";
-import { ChargeAnim } from "./battle-anims";
+import { ChargeAnim } from "#enums/charge-anim";
 import { allMoves } from "#app/data/all-moves";
 
 export abstract class Move implements Localizable {

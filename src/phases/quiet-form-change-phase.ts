@@ -1,6 +1,6 @@
 import { getSpeciesFormChangeMessage, type SpeciesFormChange } from "#app/data/pokemon-forms";
 import { getTypeRgb } from "#app/data/type";
-import { EnemyPokemon, type Pokemon } from "#app/field/pokemon";
+import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -156,7 +156,7 @@ export class QuietFormChangePhase extends BattlePhase {
   public override end(): void {
     this.pokemon.findAndRemoveTags((t) => t.tagType === BattlerTagType.AUTOTOMIZED);
 
-    if (globalScene?.currentBattle.isClassicFinalBoss && this.pokemon instanceof EnemyPokemon) {
+    if (globalScene?.currentBattle.isClassicFinalBoss && this.pokemon.isEnemy()) {
       globalScene.playBgm();
       globalScene.unshiftPhase(
         new PokemonHealPhase(this.pokemon.getBattlerIndex(), this.pokemon.getMaxHp(), {

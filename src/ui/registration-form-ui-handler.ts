@@ -1,8 +1,9 @@
 import type { InputFieldConfig } from "./form-modal-ui-handler";
 import { FormModalUiHandler } from "./form-modal-ui-handler";
 import type { ModalConfig } from "./modal-ui-handler";
-import { Mode } from "./ui";
-import { TextStyle, addTextObject } from "./text";
+import { UiMode } from "#enums/ui-mode";
+import { addTextObject } from "./text";
+import { TextStyle } from "#enums/text-style";
 import i18next from "i18next";
 import { api } from "#app/plugins/api/api";
 import { globalScene } from "#app/global-scene";
@@ -95,9 +96,9 @@ export default class RegistrationFormUiHandler extends FormModalUiHandler {
         // Prevent overlapping overrides on action modification
         this.submitAction = originalRegistrationAction;
         this.sanitizeInputs();
-        globalScene.ui.setMode(Mode.LOADING, { buttonActions: [] });
+        globalScene.ui.setMode(UiMode.LOADING, { buttonActions: [] });
         const onFail = (error) => {
-          globalScene.ui.setMode(Mode.REGISTRATION_FORM, Object.assign(config, { errorMessage: error?.trim() }));
+          globalScene.ui.setMode(UiMode.REGISTRATION_FORM, Object.assign(config, { errorMessage: error?.trim() }));
           globalScene.ui.playError();
           const errorMessageFontSize = languageSettings[i18next.resolvedLanguage!]?.errorMessageFontSize;
           if (errorMessageFontSize) {

@@ -1,8 +1,7 @@
 import { BattleType } from "#enums/battle-type";
-import { SwitchType } from "#app/enums/switch-type";
+import { SwitchType } from "#enums/switch-type";
 import type { Pokemon } from "#app/field/pokemon";
 import type { EnemyPokemon } from "#app/field/pokemon";
-import { PlayerPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { Localizable } from "#app/interfaces/locales";
 import { BattleEndPhase } from "#app/phases/battle-end-phase";
@@ -144,7 +143,7 @@ export class ForceSwitchOutHelper {
      * - Whether there are available party members to switch in.
      * - If the Pokémon is still alive (hp > 0), and if so, it leaves the field and a new SwitchPhase is initiated.
      */
-    if (switchOutTarget instanceof PlayerPokemon) {
+    if (switchOutTarget.isPlayer()) {
       if (globalScene.getPlayerParty().filter((p) => p.isAllowedInBattle() && !p.isOnField()).length < 1) {
         return false;
       }
@@ -221,7 +220,7 @@ export class ForceSwitchOutHelper {
    */
   public getSwitchOutCondition(pokemon: Pokemon, _opponent: Pokemon): boolean {
     const switchOutTarget = pokemon;
-    const player = switchOutTarget instanceof PlayerPokemon;
+    const player = switchOutTarget.isPlayer();
 
     if (player) {
       const blockedByAbility = new BooleanHolder(false);

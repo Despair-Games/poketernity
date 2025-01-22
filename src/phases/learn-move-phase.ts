@@ -10,15 +10,15 @@ import { PlayerPartyMemberPokemonPhase } from "#app/phases/abstract-player-party
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import FormChangeSceneHandler from "#app/ui/form-change-scene-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import { SummaryUiMode } from "#app/ui/summary-ui-handler";
-import { Mode } from "#app/ui/ui";
+import { SummaryUiMode } from "#enums/summary-ui-mode";
+import { UiMode } from "#enums/ui-mode";
 import { Moves } from "#enums/moves";
 import i18next from "i18next";
 import { LearnMoveType } from "#enums/learn-move-type";
 
 export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
   private readonly moveId: Moves;
-  private messageMode: Mode;
+  private messageMode: UiMode;
   private readonly learnMoveType: LearnMoveType;
   private readonly cost: number;
 
@@ -48,7 +48,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
       return this.end();
     }
 
-    this.messageMode = ui.getHandler() instanceof FormChangeSceneHandler ? Mode.FORM_CHANGE_SCENE : Mode.MESSAGE;
+    this.messageMode = ui.getHandler() instanceof FormChangeSceneHandler ? UiMode.FORM_CHANGE_SCENE : UiMode.MESSAGE;
     ui.setMode(this.messageMode);
     // If the Pokemon has less than 4 moves, the new move is added to the largest empty moveset index
     // If it has 4 moves, the phase then checks if the player wants to replace the move itself.
@@ -97,7 +97,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
         this.rejectMoveAndEnd(move, pokemon);
       },
     };
-    await ui.setModeWithoutClear(Mode.CONFIRM, options);
+    await ui.setModeWithoutClear(UiMode.CONFIRM, options);
   }
 
   /**
@@ -116,7 +116,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
 
     ui.setMode(this.messageMode);
     await ui.showTextPromise(i18next.t("battle:learnMoveForgetQuestion"), undefined, true);
-    await ui.setModeWithoutClear(Mode.SUMMARY, pokemon, SummaryUiMode.LEARN_MOVE, move, (moveIndex: number) => {
+    await ui.setModeWithoutClear(UiMode.SUMMARY, pokemon, SummaryUiMode.LEARN_MOVE, move, (moveIndex: number) => {
       if (moveIndex === 4) {
         ui.setMode(this.messageMode).then(() => this.rejectMoveAndEnd(move, pokemon));
         return;
@@ -170,7 +170,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
         return true;
       },
     };
-    ui.setModeWithoutClear(Mode.CONFIRM, options);
+    ui.setModeWithoutClear(UiMode.CONFIRM, options);
   }
 
   /**
@@ -235,7 +235,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
         globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeMoveLearnedTrigger, true);
         this.end();
       },
-      this.messageMode === Mode.FORM_CHANGE_SCENE ? 1000 : undefined,
+      this.messageMode === UiMode.FORM_CHANGE_SCENE ? 1000 : undefined,
       true,
     );
   }

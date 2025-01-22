@@ -1,12 +1,13 @@
-import { addTextObject, TextStyle } from "../text";
-import type { Mode } from "../ui";
+import { addTextObject } from "../text";
+import { TextStyle } from "#enums/text-style";
+import type { UiMode } from "#enums/ui-mode";
 import {
   setSettingGamepad,
-  SettingGamepad,
   settingGamepadBlackList,
   settingGamepadDefaults,
   settingGamepadOptions,
 } from "../../system/settings/settings-gamepad";
+import { SettingGamepad } from "#enums/setting-gamepad";
 import pad_xbox360 from "#app/configs/inputs/pad_xbox360";
 import pad_dualshock from "#app/configs/inputs/pad_dualshock";
 import pad_unlicensedSNES from "#app/configs/inputs/pad_unlicensedSNES";
@@ -30,7 +31,7 @@ export default class SettingsGamepadUiHandler extends AbstractControlSettingsUiH
    *
    * @param mode - The UI mode, optional.
    */
-  constructor(mode: Mode | null = null) {
+  constructor(mode: UiMode | null = null) {
     super(mode);
     this.titleSelected = "Gamepad";
     this.setting = SettingGamepad;

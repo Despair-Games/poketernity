@@ -3,13 +3,14 @@ import { settings } from "#app/system/settings/settings-manager";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import MessageUiHandler from "#app/ui/message-ui-handler";
 import { ScrollBar } from "#app/ui/scroll-bar";
-import { TextStyle, addBBCodeTextObject, getBBCodeFrag, getTextStyleOptions } from "#app/ui/text";
-import { Mode } from "#app/ui/ui";
+import { addBBCodeTextObject, getBBCodeFrag, getTextStyleOptions } from "#app/ui/text";
 import { addWindow } from "#app/ui/ui-theme";
 import { fixedNumber, isNullOrUndefined } from "#app/utils";
 import { Button } from "#enums/buttons";
 import type BBCodeText from "phaser3-rex-plugins/plugins/gameobjects/tagtext/bbcodetext/BBCodeText";
 import type { UIOptionSelectItem } from "./interfaces/option-select-ui-item";
+import { TextStyle } from "#enums/text-style";
+import { UiMode } from "#enums/ui-mode";
 
 const SCROLLBAR_PADDING = 5;
 const SCROLLBAR_WIDTH = 3;
@@ -51,7 +52,7 @@ export default abstract class AbstractOptionSelectUiHandler<T extends OptionSele
 
   protected scale: number = 0.1666666667;
 
-  constructor(mode: Mode = Mode.OPTION_SELECT) {
+  constructor(mode: UiMode = UiMode.OPTION_SELECT) {
     super(mode);
     this.optionSelectIcons = [];
   }
@@ -66,7 +67,7 @@ export default abstract class AbstractOptionSelectUiHandler<T extends OptionSele
     this.scale = getTextStyleOptions(DEFAULT_TEXT_STYLE, settings.display.uiTheme).scale;
 
     this.optionSelectContainer = globalScene.add.container(globalScene.scaledCanvas.width - 1, -1);
-    this.optionSelectContainer.setName(`option-select-${this.mode ? Mode[this.mode] : "UNKNOWN"}`);
+    this.optionSelectContainer.setName(`option-select-${this.mode ? UiMode[this.mode] : "UNKNOWN"}`);
     this.optionSelectContainer.setVisible(false);
     ui.add(this.optionSelectContainer);
 
