@@ -16,7 +16,7 @@ import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { Phase } from "#app/phase";
 import { Unlockables } from "#enums/unlockables";
 import { vouchers } from "#app/system/voucher";
-import type { OptionSelectConfig, OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler";
+import type { OptionSelectModeConfig, OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import { SaveSlotUiMode } from "#app/ui/save-slot-select-ui-handler";
 import { Mode } from "#app/ui/ui";
 import { isLocal, isLocalServerConnected } from "#app/utils";
@@ -130,7 +130,10 @@ export class TitlePhase extends Phase {
             });
 
             ui.showText(i18next.t("menu:selectGameMode"), null, () =>
-              ui.setOverlayMode(Mode.OPTION_SELECT, { options: options }),
+              ui.setOverlayMode(Mode.OPTION_SELECT, {
+                options: options,
+                yOffset: 48,
+              }),
             );
           } else {
             this.gameMode = GameModes.CLASSIC;
@@ -170,10 +173,9 @@ export class TitlePhase extends Phase {
         keepOpen: true,
       },
     );
-    const config: OptionSelectConfig = {
+    const config: OptionSelectModeConfig = {
       options: options,
-      noCancel: true,
-      yOffset: 47,
+      blockCancelButton: true,
     };
     globalScene.ui.setMode(Mode.TITLE, config);
   }

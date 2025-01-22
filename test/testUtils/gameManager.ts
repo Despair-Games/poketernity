@@ -420,8 +420,9 @@ export class GameManager {
     };
   }
 
-  /** Transition to the next upcoming {@linkcode CommandPhase} */
+  /** Transition to the first {@linkcode CommandPhase} of the next turn. */
   async toNextTurn() {
+    await this.phaseInterceptor.to(TurnInitPhase);
     await this.phaseInterceptor.to(CommandPhase);
   }
 

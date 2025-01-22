@@ -31,6 +31,8 @@ export class SelectGenderPhase extends Phase {
             },
           },
         ],
+        noCancel: true,
+        yOffset: 48,
       });
     });
   }

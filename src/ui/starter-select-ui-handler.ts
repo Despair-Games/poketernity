@@ -1,87 +1,84 @@
-import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
-import type { Variant } from "#app/data/variant";
-import { getVariantTint, getVariantTierForVariant } from "#app/data/variant";
-import { argbFromRgba } from "@material/material-color-utilities";
-import i18next from "i18next";
-import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
-import { starterColors } from "#app/battle-scene";
-import { globalScene } from "#app/global-scene";
-import { allAbilities } from "#app/data/ability";
-import { speciesEggMoves } from "#app/data/balance/egg-moves";
-import { getGrowthRateColor } from "#app/data/exp";
-import { GrowthRate } from "#enums/growth-rates";
-import { getGenderColor, getGenderShadowColor, getGenderSymbol } from "#app/data/gender";
-import { Gender } from "#enums/gender";
-import { allMoves } from "#app/data/all-moves";
-import { getNatureName } from "#app/data/nature";
-import { pokemonFormChanges } from "#app/data/pokemon-forms";
-import type { LevelMoves } from "#app/data/balance/pokemon-level-moves";
-import { pokemonFormLevelMoves, pokemonSpeciesLevelMoves } from "#app/data/balance/pokemon-level-moves";
-import type PokemonSpecies from "#app/data/pokemon-species";
-import { allSpecies, getPokemonSpeciesForm, getPokerusStarters } from "#app/data/pokemon-species";
-import { getStarterValueFriendshipCap, speciesStarterCosts, POKERUS_STARTER_COUNT } from "#app/data/balance/starters";
-import { starterPassiveAbilities } from "#app/data/balance/passives";
-import { Type } from "#enums/type";
-import { GameModes } from "#enums/game-modes";
-import type { DexAttrProps, StarterAttributes, StarterPreferences } from "#app/system/game-data";
-import { StarterPrefs } from "#app/system/game-data";
 import type { DexEntry } from "#app/@types/DexData";
 import type { StarterMoveset } from "#app/@types/StarterData";
-import { DexAttr, AbilityAttr } from "#app/data/dex-attributes";
-import { handleTutorial } from "#app/tutorial";
+import { starterColors } from "#app/battle-scene";
+import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
+import { allAbilities } from "#app/data/ability";
+import { allMoves } from "#app/data/all-moves";
+import { speciesEggMoves } from "#app/data/balance/egg-moves";
+import { starterPassiveAbilities } from "#app/data/balance/passives";
+import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
+import type { LevelMoves } from "#app/data/balance/pokemon-level-moves";
+import { pokemonFormLevelMoves, pokemonSpeciesLevelMoves } from "#app/data/balance/pokemon-level-moves";
+import {
+  POKERUS_STARTER_COUNT,
+  getPassiveCandyCount,
+  getSameSpeciesEggCandyCounts,
+  getStarterValueFriendshipCap,
+  getValueReductionCandyCounts,
+  speciesStarterCosts,
+} from "#app/data/balance/starters";
+import * as Challenge from "#app/data/challenge";
+import { AbilityAttr, DexAttr } from "#app/data/dex-attributes";
+import { Egg, getEggTierForSpecies } from "#app/data/egg";
+import { GrowthRate } from "#enums/growth-rates";
+import { getGrowthRateColor } from "#app/data/exp";
+import { getGenderColor, getGenderShadowColor, getGenderSymbol } from "#app/data/gender";
+import { getNatureName } from "#app/data/nature";
+import { pokemonFormChanges } from "#app/data/pokemon-forms";
+import type PokemonSpecies from "#app/data/pokemon-species";
+import { allSpecies, getPokemonSpeciesForm, getPokerusStarters } from "#app/data/pokemon-species";
+import type { Variant } from "#app/data/variant";
+import { getVariantTierForVariant, getVariantTint } from "#app/data/variant";
+import { GameModes } from "#enums/game-modes";
+import { globalScene } from "#app/global-scene";
+import Overrides from "#app/overrides";
+import { EncounterPhase } from "#app/phases/encounter-phase";
+import { SelectChallengePhase } from "#app/phases/select-challenge-phase";
+import { TitlePhase } from "#app/phases/title-phase";
+import type { DexAttrProps, StarterAttributes, StarterPreferences } from "#app/system/game-data";
+import { StarterPrefs } from "#app/system/game-data";
+import { SettingKeyboard } from "#app/system/settings/settings-keyboard";
 import { Tutorial } from "#enums/tutorial";
-import type { OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler";
+import { handleTutorial } from "#app/tutorial";
+import { DropDown, DropDownLabel, DropDownOption, DropDownState, DropDownType, SortCriteria } from "#app/ui/dropdown";
+import { DropDownColumn, FilterBar } from "#app/ui/filter-bar";
+import type { OptionSelectIconConfig, OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import MessageUiHandler from "#app/ui/message-ui-handler";
+import MoveInfoOverlay from "#app/ui/move-info-overlay";
 import PokemonIconAnimHandler, { PokemonIconAnimMode } from "#app/ui/pokemon-icon-anim-handler";
+import { ScrollBar } from "#app/ui/scroll-bar";
+import { StarterContainer } from "#app/ui/starter-container";
 import { StatsContainer } from "#app/ui/stats-container";
 import { TextStyle, addBBCodeTextObject, addTextObject } from "#app/ui/text";
 import { Mode } from "#app/ui/ui";
 import { addWindow } from "#app/ui/ui-theme";
-import { Egg } from "#app/data/egg";
-import Overrides from "#app/overrides";
-import { SettingKeyboard } from "#app/system/settings/settings-keyboard";
-import { Passive as PassiveAttr } from "#enums/passive";
-import * as Challenge from "#app/data/challenge";
-import MoveInfoOverlay from "#app/ui/move-info-overlay";
-import { getEggTierForSpecies } from "#app/data/egg";
-import { Device } from "#enums/devices";
-import type { Moves } from "#enums/moves";
-import { Species } from "#enums/species";
-import { Button } from "#enums/buttons";
-import { EggSourceType } from "#enums/egg-source-types";
-import { DropDown, DropDownLabel, DropDownOption, DropDownState, DropDownType, SortCriteria } from "#app/ui/dropdown";
-import { StarterContainer } from "#app/ui/starter-container";
-import { DropDownColumn, FilterBar } from "#app/ui/filter-bar";
-import { ScrollBar } from "#app/ui/scroll-bar";
-import { SelectChallengePhase } from "#app/phases/select-challenge-phase";
-import { EncounterPhase } from "#app/phases/encounter-phase";
-import { TitlePhase } from "#app/phases/title-phase";
-import { Abilities } from "#enums/abilities";
-import {
-  getPassiveCandyCount,
-  getValueReductionCandyCounts,
-  getSameSpeciesEggCandyCounts,
-} from "#app/data/balance/starters";
 import {
   BooleanHolder,
+  NumberHolder,
   capitalizeString,
   fixedNumber,
   getLocalizedSpriteKey,
   isNullOrUndefined,
-  NumberHolder,
   padInt,
-  randIntRange,
   rgbHexToRgba,
   toReadableString,
 } from "#app/utils";
-import type { Nature } from "#enums/nature";
-import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
+import { Abilities } from "#enums/abilities";
+import { Button } from "#enums/buttons";
 import { ChallengeType } from "#enums/challenge-type";
+import { Device } from "#enums/devices";
+import { EggSourceType } from "#enums/egg-source-types";
+import { Gender } from "#enums/gender";
+import type { Moves } from "#enums/moves";
+import type { Nature } from "#enums/nature";
+import { Passive as PassiveAttr } from "#enums/passive";
+import { Species } from "#enums/species";
+import { Type } from "#enums/type";
+import { argbFromRgba } from "@material/material-color-utilities";
+import i18next from "i18next";
+import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
+import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { settings } from "#app/system/settings/settings-manager";
-import { CandyUpgradeNotificationMode } from "#app/enums/candy-upgrade-notification-mode";
-import { CandyUpgradeDisplayMode } from "#app/enums/candy-upgrade-display";
-import type { SettingsUpdateEventArgs } from "#app/@types/Settings";
-import { eventBus } from "#app/event-bus";
 
 export type StarterSelectCallback = (starters: Starter[]) => void;
 
@@ -489,6 +486,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
 
     const costReductionLabels = [
       new DropDownLabel(i18next.t("filterBar:costReduction"), undefined, DropDownState.OFF),
+      new DropDownLabel(i18next.t("filterBar:costReductionPartiallyUnlocked"), undefined, DropDownState.PARTIAL),
       new DropDownLabel(i18next.t("filterBar:costReductionUnlocked"), undefined, DropDownState.ON),
       new DropDownLabel(i18next.t("filterBar:costReductionUnlockable"), undefined, DropDownState.UNLOCKABLE),
       new DropDownLabel(i18next.t("filterBar:costReductionLocked"), undefined, DropDownState.EXCLUDE),
@@ -717,7 +715,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
 
     const starterSpecies: Species[] = [];
 
-    const starterBoxContainer = globalScene.add.container(speciesContainerX + 6, 9); //115
+    const starterBoxContainer = globalScene.add.container(speciesContainerX + 6, 9);
 
     this.starterSelectScrollBar = new ScrollBar(161, 12, 5, starterContainerWindow.height - 6, 9);
 
@@ -1091,12 +1089,6 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.initTutorialOverlay(this.starterSelectContainer);
     this.starterSelectContainer.bringToTop(this.starterSelectMessageBoxContainer);
 
-    eventBus.on("settings/updated", ({ key, value }: SettingsUpdateEventArgs) => {
-      if (key === "candyUpgradeDisplayMode" && typeof value === "number") {
-        this.onCandyUpgradeDisplayChanged();
-      }
-    });
-
     this.updateInstructions();
   }
 
@@ -1126,8 +1118,6 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         } else if (dexEntry.seenAttr) {
           icon.setTint(0x808080);
         }
-
-        this.setUpgradeAnimation(icon, species);
       });
 
       this.resetFilters();
@@ -1286,27 +1276,6 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
   }
 
   /**
-   * Determines if 'Icon' based upgrade notifications should be shown
-   * @returns true if upgrade notifications are enabled and set to display an 'Icon'
-   */
-  isUpgradeIconEnabled(): boolean {
-    return (
-      settings.display.candyUpgradeNotificationMode !== CandyUpgradeNotificationMode.OFF
-      && settings.display.candyUpgradeDisplayMode === CandyUpgradeDisplayMode.ICON
-    );
-  }
-  /**
-   * Determines if 'Animation' based upgrade notifications should be shown
-   * @returns true if upgrade notifications are enabled and set to display an 'Animation'
-   */
-  isUpgradeAnimationEnabled(): boolean {
-    return (
-      settings.display.candyUpgradeNotificationMode !== CandyUpgradeNotificationMode.OFF
-      && settings.display.candyUpgradeDisplayMode === CandyUpgradeDisplayMode.ANIMATION
-    );
-  }
-
-  /**
    * Determines if a passive upgrade is available for the given species ID
    * @param speciesId The ID of the species to check the passive of
    * @returns true if the user has enough candies and a passive has not been unlocked already
@@ -1346,134 +1315,6 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     const starterData = globalScene.gameData.starterData[speciesId];
 
     return starterData.candyCount >= getSameSpeciesEggCandyCounts(speciesStarterCosts[speciesId]);
-  }
-
-  /**
-   * Sets a bounce animation if enabled and the Pokemon has an upgrade
-   * @param icon {@linkcode Phaser.GameObjects.GameObject} to animate
-   * @param species {@linkcode PokemonSpecies} of the icon used to check for upgrades
-   * @param startPaused Should this animation be paused after it is added?
-   */
-  setUpgradeAnimation(icon: Phaser.GameObjects.Sprite, species: PokemonSpecies, startPaused: boolean = false): void {
-    globalScene.tweens.killTweensOf(icon);
-    // Skip animations if they are disabled
-    if (
-      settings.display.candyUpgradeDisplayMode === CandyUpgradeDisplayMode.ICON
-      || species.speciesId !== species.getRootSpeciesId(false)
-    ) {
-      return;
-    }
-
-    icon.y = 2;
-
-    const tweenChain: Phaser.Types.Tweens.TweenChainBuilderConfig = {
-      targets: icon,
-      loop: -1,
-      // Make the initial bounce a little randomly delayed
-      delay: randIntRange(0, 50) * 5,
-      loopDelay: 1000,
-      tweens: [
-        {
-          targets: icon,
-          y: 2 - 5,
-          duration: fixedNumber(125),
-          ease: "Cubic.easeOut",
-          yoyo: true,
-        },
-        {
-          targets: icon,
-          y: 2 - 3,
-          duration: fixedNumber(150),
-          ease: "Cubic.easeOut",
-          yoyo: true,
-        },
-      ],
-    };
-
-    const isPassiveAvailable = this.isPassiveAvailable(species.speciesId);
-    const isValueReductionAvailable = this.isValueReductionAvailable(species.speciesId);
-    const isSameSpeciesEggAvailable = this.isSameSpeciesEggAvailable(species.speciesId);
-
-    // 'Passives Only' mode
-    if (settings.display.candyUpgradeNotificationMode === CandyUpgradeNotificationMode.PASSIVES_ONLY) {
-      if (isPassiveAvailable) {
-        globalScene.tweens.chain(tweenChain).paused = startPaused;
-      }
-      // 'On' mode
-    } else if (settings.display.candyUpgradeNotificationMode === CandyUpgradeNotificationMode.ON) {
-      if (isPassiveAvailable || isValueReductionAvailable || isSameSpeciesEggAvailable) {
-        globalScene.tweens.chain(tweenChain).paused = startPaused;
-      }
-    }
-  }
-
-  /**
-   * Sets the visibility of a Candy Upgrade Icon
-   */
-  setUpgradeIcon(starter: StarterContainer): void {
-    const species = starter.species;
-    const slotVisible = !!species?.speciesId;
-
-    if (
-      !species
-      || settings.display.candyUpgradeNotificationMode === CandyUpgradeNotificationMode.OFF
-      || species.speciesId !== species.getRootSpeciesId(false)
-    ) {
-      starter.candyUpgradeIcon.setVisible(false);
-      starter.candyUpgradeOverlayIcon.setVisible(false);
-      return;
-    }
-
-    const isPassiveAvailable = this.isPassiveAvailable(species.speciesId);
-    const isValueReductionAvailable = this.isValueReductionAvailable(species.speciesId);
-    const isSameSpeciesEggAvailable = this.isSameSpeciesEggAvailable(species.speciesId);
-
-    // 'Passive Only' mode
-    if (settings.display.candyUpgradeNotificationMode === CandyUpgradeNotificationMode.PASSIVES_ONLY) {
-      starter.candyUpgradeIcon.setVisible(slotVisible && isPassiveAvailable);
-      starter.candyUpgradeOverlayIcon.setVisible(slotVisible && starter.candyUpgradeIcon.visible);
-
-      // 'On' mode
-    } else if (settings.display.candyUpgradeNotificationMode === CandyUpgradeNotificationMode.ON) {
-      starter.candyUpgradeIcon.setVisible(
-        slotVisible && (isPassiveAvailable || isValueReductionAvailable || isSameSpeciesEggAvailable),
-      );
-      starter.candyUpgradeOverlayIcon.setVisible(slotVisible && starter.candyUpgradeIcon.visible);
-    }
-  }
-
-  /**
-   * Update the display of candy upgrade icons or animations for the given StarterContainer
-   * @param starterContainer the container for the Pokemon to update
-   */
-  updateCandyUpgradeDisplay(starterContainer: StarterContainer) {
-    if (this.isUpgradeIconEnabled()) {
-      this.setUpgradeIcon(starterContainer);
-    }
-    if (this.isUpgradeAnimationEnabled()) {
-      this.setUpgradeAnimation(starterContainer.icon, this.lastSpecies, true);
-    }
-  }
-
-  /**
-   * Update the candy upgrade notification style based on the settings
-   */
-  onCandyUpgradeDisplayChanged(): void {
-    // Loop through all visible candy icons when set to 'Icon' mode
-    if (settings.display.candyUpgradeDisplayMode === CandyUpgradeDisplayMode.ICON) {
-      this.filteredStarterContainers.forEach((starter) => {
-        this.setUpgradeIcon(starter);
-      });
-
-      return;
-    }
-
-    // Loop through all animations when set to 'Animation' mode
-    this.filteredStarterContainers.forEach((starter, s) => {
-      const icon = this.filteredStarterContainers[s].icon;
-
-      this.setUpgradeAnimation(icon, starter.species);
-    });
   }
 
   processInput(button: Button): boolean {
@@ -1819,9 +1660,8 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                                           this.moveInfoOverlay.clear();
                                         },
                                       }),
-                                    supportHover: true,
                                     maxOptions: 8,
-                                    yOffset: 19,
+                                    yOffset: 29,
                                   });
                                   this.blockInput = false;
                                 },
@@ -1847,9 +1687,8 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                           this.moveInfoOverlay.clear();
                         },
                       }),
-                    supportHover: true,
                     maxOptions: 8,
-                    yOffset: 19,
+                    yOffset: 29,
                   });
                   this.blockInput = false;
                 });
@@ -1875,7 +1714,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                     options: natures
                       .map((n: Nature, _i: number) => {
                         const option: OptionSelectItem = {
-                          label: getNatureName(n, true, true, true, settings.display.uiTheme),
+                          label: getNatureName(n, true, true, true),
                           handler: () => {
                             // update default nature in starter save data
                             if (!starterAttributes) {
@@ -1902,7 +1741,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                         },
                       }),
                     maxOptions: 8,
-                    yOffset: 19,
+                    yOffset: 29,
                   });
                 });
               });
@@ -2005,7 +1844,21 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
           // Purchases with Candy
           const candyCount = starterData.candyCount;
           const showUseCandies = () => {
-            const options: any[] = []; // TODO: add proper type
+            const options: OptionSelectItem[] = [];
+            const candyIconsConfig: OptionSelectIconConfig[] = [
+              {
+                name: "items",
+                frame: "candy",
+                scale: 0.5,
+                tint: argbFromRgba(rgbHexToRgba(starterColors[this.lastSpecies.speciesId][0])),
+              },
+              {
+                name: "items",
+                frame: "candy_overlay",
+                scale: 0.5,
+                tint: argbFromRgba(rgbHexToRgba(starterColors[this.lastSpecies.speciesId][1])),
+              },
+            ];
 
             // Unlock passive option
             if (!(passiveAttr & PassiveAttr.UNLOCKED)) {
@@ -2030,9 +1883,8 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                     this.setSpeciesDetails(this.lastSpecies);
                     globalScene.playSound("se/buy");
 
-                    // update the passive background and icon/animation for available upgrade
+                    // update the passive background
                     if (starterContainer) {
-                      this.updateCandyUpgradeDisplay(starterContainer);
                       starterContainer.starterPassiveBgs.setVisible(
                         !!globalScene.gameData.starterData[this.lastSpecies.speciesId].passiveAttr,
                       );
@@ -2041,8 +1893,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                   }
                   return false;
                 },
-                item: "candy",
-                itemArgs: starterColors[this.lastSpecies.speciesId],
+                iconsConfig: candyIconsConfig,
               });
             }
 
@@ -2070,17 +1921,15 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                     ui.setMode(Mode.STARTER_SELECT);
                     globalScene.playSound("se/buy");
 
-                    // update the value label and icon/animation for available upgrade
+                    // update the value label
                     if (starterContainer) {
                       this.updateStarterValueLabel(starterContainer);
-                      this.updateCandyUpgradeDisplay(starterContainer);
                     }
                     return true;
                   }
                   return false;
                 },
-                item: "candy",
-                itemArgs: starterColors[this.lastSpecies.speciesId],
+                iconsConfig: candyIconsConfig,
               });
             }
 
@@ -2122,17 +1971,11 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                   ui.setMode(Mode.STARTER_SELECT);
                   globalScene.playSound("se/buy");
 
-                  // update the icon/animation for available upgrade
-                  if (starterContainer) {
-                    this.updateCandyUpgradeDisplay(starterContainer);
-                  }
-
                   return true;
                 }
                 return false;
               },
-              item: "candy",
-              itemArgs: starterColors[this.lastSpecies.speciesId],
+              iconsConfig: candyIconsConfig,
             });
             options.push({
               label: i18next.t("menu:cancel"),
@@ -2143,7 +1986,6 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
             });
             ui.setModeWithoutClear(Mode.OPTION_SELECT, {
               options: options,
-              yOffset: 47,
             });
           };
           if (!pokemonPrevolutions.hasOwnProperty(this.lastSpecies.speciesId)) {
@@ -2164,7 +2006,6 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
           });
           ui.setModeWithoutClear(Mode.OPTION_SELECT, {
             options: options,
-            yOffset: 47,
           });
           success = true;
         }
@@ -2877,10 +2718,13 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
 
       // Cost Reduction Filter
       const isCostReduced = starterData.valueReduction > 0;
+      const isCostFullyReduced = starterData.valueReduction === valueReductionMax;
       const isCostReductionUnlockable = this.isValueReductionAvailable(container.species.speciesId);
       const fitsCostReduction = this.filterBar.getVals(DropDownColumn.UNLOCKS).some((unlocks) => {
         if (unlocks.val === "COST_REDUCTION" && unlocks.state === DropDownState.ON) {
-          return isCostReduced;
+          return isCostFullyReduced;
+        } else if (unlocks.val === "COST_REDUCTION" && unlocks.state === DropDownState.PARTIAL) {
+          return isCostReduced && !isCostFullyReduced;
         } else if (unlocks.val === "COST_REDUCTION" && unlocks.state === DropDownState.EXCLUDE) {
           return isStarterProgressable && !isCostReduced;
         } else if (unlocks.val === "COST_REDUCTION" && unlocks.state === DropDownState.UNLOCKABLE) {
@@ -3078,23 +2922,6 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         );
         container.classicWinIcon.setVisible(globalScene.gameData.starterData[speciesId].classicWinCount > 0);
         container.favoriteIcon.setVisible(this.starterPreferences[speciesId]?.favorite ?? false);
-
-        // 'Candy Icon' mode
-        if (settings.display.candyUpgradeDisplayMode === CandyUpgradeDisplayMode.ICON) {
-          if (!starterColors[speciesId]) {
-            // Default to white if no colors are found
-            starterColors[speciesId] = ["ffffff", "ffffff"];
-          }
-
-          // Set the candy colors
-          container.candyUpgradeIcon.setTint(argbFromRgba(rgbHexToRgba(starterColors[speciesId][0])));
-          container.candyUpgradeOverlayIcon.setTint(argbFromRgba(rgbHexToRgba(starterColors[speciesId][1])));
-
-          this.setUpgradeIcon(container);
-        } else if (settings.display.candyUpgradeDisplayMode === CandyUpgradeDisplayMode.ANIMATION) {
-          container.candyUpgradeIcon.setVisible(false);
-          container.candyUpgradeOverlayIcon.setVisible(false);
-        }
       }
     });
   };
@@ -3313,13 +3140,6 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         // Pause the animation when the species is selected
         const speciesIndex = this.allSpecies.indexOf(species);
         const icon = this.starterContainers[speciesIndex].icon;
-
-        if (this.isUpgradeAnimationEnabled()) {
-          globalScene.tweens.getTweensOf(icon).forEach((tween) => tween.pause());
-          // Reset the position of the icon
-          icon.x = -2;
-          icon.y = 2;
-        }
 
         // Initiates the small up and down idle animation
         this.iconAnimHandler.addOrUpdate(icon, PokemonIconAnimMode.PASSIVE);
@@ -3590,7 +3410,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
             species.getIconAtlasKey(formIndex, shiny, variant),
             species.getIconId(female!, formIndex, shiny, variant),
           );
-          currentFilteredContainer.checkIconId(female, formIndex, shiny, variant);
+          currentFilteredContainer.checkIconId(female!, formIndex, shiny, variant);
         }
 
         const isNonShinyCaught = !!(caughtAttr & DexAttr.NON_SHINY);
@@ -3710,9 +3530,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
           globalScene.ui.hideTooltip();
         }
 
-        this.pokemonNatureText.setText(
-          getNatureName(natureIndex as unknown as Nature, true, true, false, settings.display.uiTheme),
-        );
+        this.pokemonNatureText.setText(getNatureName(natureIndex as unknown as Nature, true, true, false));
 
         let levelMoves: LevelMoves;
         if (
@@ -4022,31 +3840,30 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.blockInput = true;
     const ui = this.getUi();
 
-    const cancel = () => {
+    const doExit = () => {
+      ui.setMode(Mode.STARTER_SELECT);
+      globalScene.clearPhaseQueue();
+      if (globalScene.gameMode.isChallenge) {
+        globalScene.pushPhase(new SelectChallengePhase());
+        globalScene.pushPhase(new EncounterPhase());
+      } else {
+        globalScene.pushPhase(new TitlePhase());
+      }
+      this.clearText();
+      globalScene.getCurrentPhase()?.end();
+    };
+    const cancelExit = () => {
       ui.setMode(Mode.STARTER_SELECT);
       this.clearText();
       this.blockInput = false;
     };
+    const options: ConfirmModeConfig = {
+      yesHandler: doExit,
+      noHandler: cancelExit,
+      yOffset: 29,
+    };
     ui.showText(i18next.t("starterSelectUiHandler:confirmExit"), null, () => {
-      ui.setModeWithoutClear(
-        Mode.CONFIRM,
-        () => {
-          ui.setMode(Mode.STARTER_SELECT);
-          globalScene.clearPhaseQueue();
-          if (globalScene.gameMode.isChallenge) {
-            globalScene.pushPhase(new SelectChallengePhase());
-            globalScene.pushPhase(new EncounterPhase());
-          } else {
-            globalScene.pushPhase(new TitlePhase());
-          }
-          this.clearText();
-          globalScene.getCurrentPhase()?.end();
-        },
-        cancel,
-        null,
-        null,
-        19,
-      );
+      ui.setModeWithoutClear(Mode.CONFIRM, options);
     });
 
     return true;
@@ -4057,56 +3874,51 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       return false;
     }
 
-    const ui = this.getUi();
+    if (this.isPartyValid()) {
+      const ui = this.getUi();
 
-    const cancel = () => {
-      ui.setMode(Mode.STARTER_SELECT);
-      if (!manualTrigger) {
-        this.popStarter(this.starterSpecies.length - 1);
-      }
-      this.clearText();
-    };
+      const startRun = () => {
+        globalScene.money = globalScene.gameMode.getStartingMoney();
+        ui.setMode(Mode.STARTER_SELECT);
+        const thisObj = this;
+        const originalStarterSelectCallback = this.starterSelectCallback;
+        this.starterSelectCallback = null;
+        originalStarterSelectCallback
+          && originalStarterSelectCallback(
+            new Array(this.starterSpecies.length).fill(0).map(function (_, i) {
+              const starterSpecies = thisObj.starterSpecies[i];
+              return {
+                species: starterSpecies,
+                dexAttr: thisObj.starterAttr[i],
+                abilityIndex: thisObj.starterAbilityIndexes[i],
+                passive: !(
+                  globalScene.gameData.starterData[starterSpecies.speciesId].passiveAttr
+                  ^ (PassiveAttr.ENABLED | PassiveAttr.UNLOCKED)
+                ),
+                nature: thisObj.starterNatures[i] as Nature,
+                moveset: thisObj.starterMovesets[i],
+                pokerus: thisObj.pokerusSpecies.includes(starterSpecies),
+                nickname: thisObj.starterPreferences[starterSpecies.speciesId]?.nickname,
+              };
+            }),
+          );
+      };
 
-    const canStart = this.isPartyValid();
+      const cancelStartRun = () => {
+        ui.setMode(Mode.STARTER_SELECT);
+        if (!manualTrigger) {
+          this.popStarter(this.starterSpecies.length - 1);
+        }
+        this.clearText();
+      };
 
-    if (canStart) {
+      const confirmStartOptions: ConfirmModeConfig = {
+        yesHandler: startRun,
+        noHandler: cancelStartRun,
+        yOffset: 29,
+      };
       ui.showText(i18next.t("starterSelectUiHandler:confirmStartTeam"), null, () => {
-        ui.setModeWithoutClear(
-          Mode.CONFIRM,
-          () => {
-            const startRun = () => {
-              globalScene.money = globalScene.gameMode.getStartingMoney();
-              ui.setMode(Mode.STARTER_SELECT);
-              const thisObj = this;
-              const originalStarterSelectCallback = this.starterSelectCallback;
-              this.starterSelectCallback = null;
-              originalStarterSelectCallback
-                && originalStarterSelectCallback(
-                  new Array(this.starterSpecies.length).fill(0).map(function (_, i) {
-                    const starterSpecies = thisObj.starterSpecies[i];
-                    return {
-                      species: starterSpecies,
-                      dexAttr: thisObj.starterAttr[i],
-                      abilityIndex: thisObj.starterAbilityIndexes[i],
-                      passive: !(
-                        globalScene.gameData.starterData[starterSpecies.speciesId].passiveAttr
-                        ^ (PassiveAttr.ENABLED | PassiveAttr.UNLOCKED)
-                      ),
-                      nature: thisObj.starterNatures[i] as Nature,
-                      moveset: thisObj.starterMovesets[i],
-                      pokerus: thisObj.pokerusSpecies.includes(starterSpecies),
-                      nickname: thisObj.starterPreferences[starterSpecies.speciesId]?.nickname,
-                    };
-                  }),
-                );
-            };
-            startRun();
-          },
-          cancel,
-          null,
-          null,
-          19,
-        );
+        ui.setModeWithoutClear(Mode.CONFIRM, confirmStartOptions);
       });
     } else {
       this.tutorialActive = true;

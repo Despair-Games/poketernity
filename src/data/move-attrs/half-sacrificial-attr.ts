@@ -21,11 +21,7 @@ export class HalfSacrificialAttr extends MoveEffectAttr {
     super(true, { trigger: MoveEffectTrigger.POST_TARGET });
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
-    if (!super.apply(user, target, move)) {
-      return false;
-    }
-
+  override applyEffect(user: Pokemon, _target: Pokemon, _move: Move): boolean {
     const cancelled = new BooleanHolder(false);
     // Check to see if the Pokemon has an ability that blocks non-direct damage
     applyAbAttrs(BlockNonDirectDamageAbAttr, user, false, cancelled);

@@ -11,7 +11,6 @@ import { DexAttr } from "#app/data/dex-attributes";
 import type { DexEntry } from "#app/@types/DexData";
 import type { StarterDataEntry } from "#app/@types/StarterData";
 import { capitalizeString, fixedNumber } from "#app/utils";
-import ConfirmUiHandler from "./confirm-ui-handler";
 import { StatsContainer } from "./stats-container";
 import { TextStyle, addBBCodeTextObject, addTextObject, getTextColor } from "./text";
 import { addWindow } from "./ui-theme";
@@ -342,7 +341,7 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
         this.pokemonAbilityLabelText.setShadowColor(getTextColor(TextStyle.WINDOW, true, settings.display.uiTheme));
       }
 
-      this.pokemonNatureText.setText(getNatureName(pokemon.getNature(), true, false, false, settings.display.uiTheme));
+      this.pokemonNatureText.setText(getNatureName(pokemon.getNature(), true, false, false));
 
       const dexNatures = dexEntry.natureAttr;
       const newNature = 1 << (pokemon.nature + 1);
@@ -478,16 +477,13 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
     this.pokemonMovesContainer.setVisible(false);
   }
 
-  makeRoomForConfirmUi(speedMultiplier: number = 1, fromCatch: boolean = false): Promise<void> {
-    const xPosition = fromCatch
-      ? this.initialX - this.infoWindowWidth - 65
-      : this.initialX - this.infoWindowWidth - ConfirmUiHandler.windowWidth;
+  makeRoomForOptionSelectUi(requiredSpace: number): Promise<void> {
     return new Promise<void>((resolve) => {
       globalScene.tweens.add({
         targets: this,
-        duration: fixedNumber(Math.floor(150 / speedMultiplier)),
+        duration: fixedNumber(150),
         ease: "Cubic.easeInOut",
-        x: xPosition,
+        x: this.initialX - this.infoWindowWidth - requiredSpace,
         onComplete: () => {
           resolve();
         },

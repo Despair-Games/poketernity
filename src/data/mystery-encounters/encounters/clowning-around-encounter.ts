@@ -33,8 +33,6 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { randSeedInt, randSeedShuffle } from "#app/utils";
 import { showEncounterDialogue, showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { Mode } from "#app/ui/ui";
-import i18next from "i18next";
-import type { OptionSelectConfig } from "#app/ui/abstact-option-select-ui-handler";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon";
 import { Ability } from "#app/data/ability";
@@ -49,6 +47,7 @@ import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
 import { EncounterAnim } from "#enums/encounter-anims";
 import { Challenges } from "#enums/challenges";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
+import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/clowningAround";
@@ -96,7 +95,7 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
     },
     {
       spriteKey: Species.BLACEPHALON.toString(),
-      fileRoot: "pokemon/exp",
+      fileRoot: "pokemon",
       hasShadow: true,
       repeat: true,
       x: 25,
@@ -436,29 +435,17 @@ async function handleSwapAbility() {
 
 function displayYesNoOptions(resolve) {
   showEncounterText(`${namespace}:option.1.ability_prompt`, null, 500, false);
-  const fullOptions = [
-    {
-      label: i18next.t("menu:yes"),
-      handler: () => {
-        onYesAbilitySwap(resolve);
-        return true;
-      },
+  const confirmMenuConfig: ConfirmModeConfig = {
+    yesHandler: () => {
+      onYesAbilitySwap(resolve);
+      return true;
     },
-    {
-      label: i18next.t("menu:no"),
-      handler: () => {
-        resolve(false);
-        return true;
-      },
+    noHandler: () => {
+      resolve(false);
+      return true;
     },
-  ];
-
-  const config: OptionSelectConfig = {
-    options: fullOptions,
-    maxOptions: 7,
-    yOffset: 0,
   };
-  globalScene.ui.setModeWithoutClear(Mode.OPTION_SELECT, config, null, true);
+  globalScene.ui.setModeWithoutClear(Mode.CONFIRM, confirmMenuConfig);
 }
 
 function onYesAbilitySwap(resolve) {

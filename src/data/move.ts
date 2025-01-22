@@ -39,7 +39,6 @@ import type { MoveAttr } from "./move-attrs/move-attr";
 import { MultiHitAttr } from "./move-attrs/multi-hit-attr";
 import { OneHitKOAccuracyAttr } from "./move-attrs/one-hit-ko-accuracy-attr";
 import { SacrificialAttr } from "./move-attrs/sacrificial-attr";
-import { SacrificialAttrOnHit } from "./move-attrs/sacrificial-attr-on-hit";
 import { TypelessAttr } from "./move-attrs/typeless-attr";
 import { VariableAccuracyAttr } from "./move-attrs/variable-accuracy-attr";
 import { VariablePowerAttr } from "./move-attrs/variable-power-attr";
@@ -827,7 +826,7 @@ export abstract class Move implements Localizable {
     const isMultiTarget = multiple && targets.length > 1;
 
     // ...cannot enhance multi-hit or sacrificial moves
-    const exceptAttrs: AbstractConstructor<MoveAttr>[] = [MultiHitAttr, SacrificialAttr, SacrificialAttrOnHit];
+    const exceptAttrs: AbstractConstructor<MoveAttr>[] = [MultiHitAttr, SacrificialAttr];
 
     // ...and cannot enhance these specific moves.
     const exceptMoves: Moves[] = [Moves.FLING, Moves.UPROAR, Moves.ROLLOUT, Moves.ICE_BALL, Moves.ENDEAVOR];
