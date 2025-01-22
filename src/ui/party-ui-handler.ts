@@ -33,6 +33,7 @@ import type { CommandPhase } from "#app/phases/command-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { globalScene } from "#app/global-scene";
 import { ForceSwitchOutAttr } from "#app/data/move-attrs/force-switch-out-attr";
+import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 
 const defaultMessage = i18next.t("partyUiHandler:choosePokemon");
 
@@ -577,9 +578,8 @@ export default class PartyUiHandler extends MessageUiHandler {
             }),
             null,
             () => {
-              ui.setModeWithoutClear(
-                Mode.CONFIRM,
-                () => {
+              const options: ConfirmModeConfig = {
+                yesHandler: () => {
                   const fusionName = pokemon.name;
                   pokemon.unfuse().then(() => {
                     this.clearPartySlots();
@@ -597,11 +597,12 @@ export default class PartyUiHandler extends MessageUiHandler {
                     );
                   });
                 },
-                () => {
+                noHandler: () => {
                   ui.setMode(Mode.PARTY);
                   this.showText("", 0);
                 },
-              );
+              };
+              ui.setModeWithoutClear(Mode.CONFIRM, options);
             },
           );
         } else if (option === PartyOption.RELEASE) {
@@ -609,22 +610,22 @@ export default class PartyUiHandler extends MessageUiHandler {
           ui.playSelect();
           if (this.cursor >= globalScene.currentBattle.getBattlerCount() || !pokemon.isAllowedInBattle()) {
             this.blockInput = true;
+            const options: ConfirmModeConfig = {
+              yesHandler: () => {
+                ui.setMode(Mode.PARTY);
+                this.tryRelease(this.cursor);
+              },
+              noHandler: () => {
+                ui.setMode(Mode.PARTY);
+                this.showText("", 0);
+              },
+            };
             this.showText(
               i18next.t("partyUiHandler:releaseConfirmation", { pokemonName: getPokemonNameWithAffix(pokemon) }),
               null,
               () => {
                 this.blockInput = false;
-                ui.setModeWithoutClear(
-                  Mode.CONFIRM,
-                  () => {
-                    ui.setMode(Mode.PARTY);
-                    this.tryRelease(this.cursor);
-                  },
-                  () => {
-                    ui.setMode(Mode.PARTY);
-                    this.showText("", 0);
-                  },
-                );
+                ui.setModeWithoutClear(Mode.CONFIRM, options);
               },
             );
           } else {

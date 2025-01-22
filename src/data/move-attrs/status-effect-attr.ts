@@ -7,15 +7,15 @@ import i18next from "i18next";
 import { ConfusionOnStatusEffectAbAttr } from "#app/data/ab-attrs/confusion-on-status-effect-ab-attr";
 import { applyAbAttrs } from "#app/data/ability";
 import type { Move } from "#app/data/move";
-import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
+import { ChanceBasedMoveEffectAttr } from "./chance-based-move-effect-attr";
 
 /**
  * Attribute to add a non-volatile status condition to
  * the user or target, depending on {@linkcode selfTarget}.
- * @extends MoveEffectAttr
+ * @extends ChanceBasedMoveEffectAttr
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Status_condition#Non-volatile_status | Non-volatile status conditions}
  */
-export class StatusEffectAttr extends MoveEffectAttr {
+export class StatusEffectAttr extends ChanceBasedMoveEffectAttr {
   public effect: StatusEffect;
   public turnsRemaining?: number;
   public overrideStatus: boolean = false;
@@ -34,35 +34,31 @@ export class StatusEffectAttr extends MoveEffectAttr {
     this.overrideStatus = overrideStatus;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
-    const moveChance = this.getMoveChance(user, target, move, this.selfTarget, true);
-    const statusCheck = moveChance < 0 || moveChance === 100 || user.randSeedInt(100) < moveChance;
-    if (statusCheck) {
-      const pokemon = this.selfTarget ? user : target;
-      if (pokemon.status) {
-        if (this.overrideStatus) {
-          pokemon.resetStatus();
-        } else {
-          return false;
-        }
+  override canApply(user: Pokemon, target: Pokemon, move: Move): boolean {
+    if (user !== target && target.isSafeguarded(user)) {
+      if (move.category === MoveCategory.STATUS) {
+        globalScene.queueMessage(i18next.t("moveTriggers:safeguard", { targetName: getPokemonNameWithAffix(target) }));
       }
+      return false;
+    }
+    return super.canApply(user, target, move);
+  }
 
-      if (user !== target && target.isSafeguarded(user)) {
-        if (move.category === MoveCategory.STATUS) {
-          globalScene.queueMessage(
-            i18next.t("moveTriggers:safeguard", { targetName: getPokemonNameWithAffix(target) }),
-          );
-        }
+  override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
+    const pokemon = this.selfTarget ? user : target;
+    if (pokemon.status) {
+      if (this.overrideStatus) {
+        pokemon.resetStatus();
+      } else {
         return false;
       }
-      if (
-        (!pokemon.status || (pokemon.status.effect === this.effect && moveChance < 0))
-        && pokemon.trySetStatus(this.effect, true, user, this.turnsRemaining)
-      ) {
-        applyAbAttrs(ConfusionOnStatusEffectAbAttr, user, false, target, move, this.effect);
-        return true;
-      }
     }
+
+    if (pokemon.trySetStatus(this.effect, true, user, this.turnsRemaining)) {
+      applyAbAttrs(ConfusionOnStatusEffectAbAttr, user, false, target, move, this.effect);
+      return true;
+    }
+
     return false;
   }
 

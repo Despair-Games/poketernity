@@ -1,7 +1,6 @@
 import { toReadableString } from "#app/utils";
 import { TextStyle, getBBCodeFrag } from "../ui/text";
 import { Nature } from "#enums/nature";
-import { UiTheme } from "#enums/ui-theme";
 import i18next from "i18next";
 import { Stat, EFFECTIVE_STATS, getShortenedStatKey } from "#enums/stat";
 
@@ -10,7 +9,6 @@ export function getNatureName(
   includeStatEffects: boolean = false,
   forStarterSelect: boolean = false,
   ignoreBBCode: boolean = false,
-  uiTheme: UiTheme = UiTheme.DEFAULT,
 ): string {
   let ret = toReadableString(Nature[nature]);
   //Translating nature
@@ -30,7 +28,7 @@ export function getNatureName(
     }
     const textStyle = forStarterSelect ? TextStyle.SUMMARY_ALT : TextStyle.WINDOW;
     const getTextFrag = !ignoreBBCode
-      ? (text: string, style: TextStyle) => getBBCodeFrag(text, style, uiTheme)
+      ? (text: string, style: TextStyle) => getBBCodeFrag(text, style)
       : (text: string, _style: TextStyle) => text;
     if (increasedStat && decreasedStat) {
       ret = `${getTextFrag(`${ret}${!forStarterSelect ? "\n" : " "}(`, textStyle)}${getTextFrag(`+${i18next.t(getShortenedStatKey(increasedStat))}`, TextStyle.SUMMARY_PINK)}${getTextFrag("/", textStyle)}${getTextFrag(`-${i18next.t(getShortenedStatKey(decreasedStat))}`, TextStyle.SUMMARY_BLUE)}${getTextFrag(")", textStyle)}`;

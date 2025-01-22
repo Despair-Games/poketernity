@@ -36,6 +36,6 @@ export class PostVictoryStatStageChangeAttr extends MoveAttr {
       return;
     }
     const statChangeAttr = new StatStageChangeAttr(this.stats, this.stages, this.showMessage);
-    statChangeAttr.apply(user, target, move);
+    statChangeAttr.applyEffect(user, target, move);
   }
 }

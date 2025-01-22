@@ -1,7 +1,7 @@
 import { biomeLinks, getBiomeName } from "#app/data/balance/biomes";
 import { globalScene } from "#app/global-scene";
 import { MapModifier, MoneyInterestModifier } from "#app/modifier/modifier";
-import type { OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler";
+import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import { Mode } from "#app/ui/ui";
 import { randSeedInt } from "#app/utils";
 import { Biome } from "#enums/biome";
@@ -71,6 +71,7 @@ export class SelectBiomePhase extends BattlePhase {
         ui.setMode(Mode.OPTION_SELECT, {
           options: biomeSelectItems,
           delay: 1000,
+          yOffset: 48,
         });
       } else {
         setNextBiome(biomes[randSeedInt(biomes.length)]);

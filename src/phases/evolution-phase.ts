@@ -13,6 +13,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { EndEvolutionPhase } from "#app/phases/end-evolution-phase";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
+import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { Mode } from "#app/ui/ui";
 import { fixedNumber } from "#app/utils";
 import i18next from "i18next";
@@ -174,9 +175,8 @@ export class EvolutionPhase extends FormChangeBasePhase {
               evolvedPokemon.destroy();
               this.end();
             };
-            ui.setOverlayMode(
-              Mode.CONFIRM,
-              () => {
+            const options: ConfirmModeConfig = {
+              yesHandler: () => {
                 ui.revertMode();
                 this.pokemon.pauseEvolutions = true;
                 ui.showText(
@@ -186,11 +186,12 @@ export class EvolutionPhase extends FormChangeBasePhase {
                   3000,
                 );
               },
-              () => {
+              noHandler: () => {
                 ui.revertMode();
                 time.delayedCall(3000, end);
               },
-            );
+            };
+            ui.setOverlayMode(Mode.CONFIRM, options);
           },
         );
       },

@@ -1,13 +1,13 @@
-import OptionSelectUiHandler from "./settings/option-select-ui-handler";
-import { Mode } from "./ui";
+import { Mode } from "#app/ui/ui";
 import { fixedNumber, randItem } from "#app/utils";
-import { TextStyle, addTextObject, getTextStyleOptions } from "./text";
-import { getSplashMessages } from "../data/splash-messages";
+import { TextStyle, addTextObject, getTextStyleOptions } from "#app/ui/text";
+import { getSplashMessages } from "#app/data/splash-messages";
 import i18next from "i18next";
 import { TimedEventDisplay } from "#app/timed-event-manager";
 import { version } from "../../package.json";
 import { api } from "#app/plugins/api/api";
 import { globalScene } from "#app/global-scene";
+import OptionSelectUiHandler from "#app/ui/option-select-ui-handler";
 import { settings } from "#app/system/settings/settings-manager";
 
 export default class TitleUiHandler extends OptionSelectUiHandler {

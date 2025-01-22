@@ -12,6 +12,7 @@ import { addWindow } from "#app/ui/ui-theme";
 import { capitalize, hasTouchscreen } from "#app/utils";
 import { Button } from "#enums/buttons";
 import i18next from "i18next";
+import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 
 /**
  * Abstract class for handling UI elements related to settings.
@@ -476,8 +477,15 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
 
         const confirmationMessage =
           uiItem.options[cursor].confirmationMessage ?? i18next.t("settings:defaultConfirmMessage");
+
+        const confirmSettingOptions: ConfirmModeConfig = {
+          yesHandler: confirmUpdateSetting,
+          noHandler: cancelUpdateSetting,
+          inputDelay: 750,
+          canBypassInputDelay: true,
+        };
         globalScene.ui.showText(confirmationMessage, null, () => {
-          globalScene.ui.setOverlayMode(Mode.CONFIRM, confirmUpdateSetting, cancelUpdateSetting, null, null, 1, 750);
+          globalScene.ui.setOverlayMode(Mode.CONFIRM, confirmSettingOptions);
         });
       } else {
         this.handleSaveSetting<typeof value>(uiItem, value);
@@ -596,27 +604,24 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
   }
 
   protected showConfirm(text: string, onConfirm: () => void, onCancel?: () => void) {
+    const config: ConfirmModeConfig = {
+      yesHandler: () => {
+        NavigationManager.getInstance().reset();
+        // revert confirm mode.
+        globalScene.ui.revertMode();
+        // revert settings mode.
+        globalScene.ui.revertMode();
+        this.showText("", 0);
+        onConfirm();
+      },
+      noHandler: () => {
+        globalScene.ui.revertMode();
+        this.showText("", 0);
+        onCancel && onCancel();
+      },
+    };
     this.showText(text, undefined, () => {
-      globalScene.ui.setOverlayMode(
-        Mode.CONFIRM,
-        () => {
-          NavigationManager.getInstance().reset();
-          // revert confirm mode.
-          globalScene.ui.revertMode();
-          // revert settings mode.
-          globalScene.ui.revertMode();
-          this.showText("", 0);
-          onConfirm();
-        },
-        () => {
-          globalScene.ui.revertMode();
-          this.showText("", 0);
-          onCancel && onCancel();
-        },
-        false,
-        0,
-        0,
-      );
+      globalScene.ui.setOverlayMode(Mode.CONFIRM, config);
     });
   }
 

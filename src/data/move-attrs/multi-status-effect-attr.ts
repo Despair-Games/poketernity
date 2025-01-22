@@ -19,10 +19,9 @@ export class MultiStatusEffectAttr extends StatusEffectAttr {
     this.effects = effects;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+  override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     this.effect = randSeedItem(this.effects);
-    const result = super.apply(user, target, move);
-    return result;
+    return super.applyEffect(user, target, move);
   }
 
   override getTargetBenefitScore(user: Pokemon, target: Pokemon, move: Move): number {

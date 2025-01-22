@@ -67,6 +67,7 @@ import type { StarterData } from "#app/@types/StarterData";
 import type { DexData, DexEntry } from "#app/@types/DexData";
 import type { SessionSaveData } from "#app/@types/SessionData";
 import { defaultStarterSpecies } from "#app/data/balance/default-starters";
+import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { settings } from "#app/system/settings/settings-manager";
 
 const saveKey = "x0i2O7WRiANTqPmZ"; // Temporary; secure encryption is not yet necessary
@@ -1301,7 +1302,7 @@ export class GameData {
     });
   }
 
-  public importData(dataType: GameDataType, slotId: number = 0): void {
+  public importData(dataType: GameDataType, slotId: number = 0, confirmWindowXOffset?: number): void {
     const dataKey = `${getDataTypeKey(dataType, slotId)}_${loggedInUser?.username}`;
 
     let saveFile: any = document.getElementById("saveFile");
@@ -1366,53 +1367,51 @@ export class GameData {
             );
           }
 
+          // TODO: move this outside of game data
+          const importDataConfirmOptions: ConfirmModeConfig = {
+            yesHandler: () => {
+              localStorage.setItem(dataKey, encrypt(dataStr, bypassLogin));
+
+              if (!bypassLogin && dataType < GameDataType.SETTINGS) {
+                updateUserInfo().then((success) => {
+                  if (!success[0]) {
+                    return displayError(`Could not contact the server. Your ${dataName} data could not be imported.`);
+                  }
+                  const { trainerId, secretId } = this;
+                  let updatePromise: Promise<string | null>;
+                  if (dataType === GameDataType.SESSION) {
+                    updatePromise = api.savedata.session.update(
+                      { slot: slotId, trainerId, secretId, clientSessionId },
+                      dataStr,
+                    );
+                  } else {
+                    updatePromise = api.savedata.system.update({ trainerId, secretId, clientSessionId }, dataStr);
+                  }
+                  updatePromise.then((error) => {
+                    if (error) {
+                      console.error(error);
+                      return displayError(
+                        `An error occurred while updating ${dataName} data. Please contact the administrator.`,
+                      );
+                    }
+                    window.location = window.location;
+                  });
+                });
+              } else {
+                window.location = window.location;
+              }
+            },
+            noHandler: () => {
+              globalScene.ui.revertMode();
+              globalScene.ui.showText("", 0);
+            },
+            xOffset: confirmWindowXOffset,
+          };
           globalScene.ui.showText(
             `Your ${dataName} data will be overridden and the page will reload. Proceed?`,
             null,
             () => {
-              globalScene.ui.setOverlayMode(
-                Mode.CONFIRM,
-                () => {
-                  localStorage.setItem(dataKey, encrypt(dataStr, bypassLogin));
-
-                  if (!bypassLogin && dataType < GameDataType.SETTINGS) {
-                    updateUserInfo().then((success) => {
-                      if (!success[0]) {
-                        return displayError(
-                          `Could not contact the server. Your ${dataName} data could not be imported.`,
-                        );
-                      }
-                      const { trainerId, secretId } = this;
-                      let updatePromise: Promise<string | null>;
-                      if (dataType === GameDataType.SESSION) {
-                        updatePromise = api.savedata.session.update(
-                          { slot: slotId, trainerId, secretId, clientSessionId },
-                          dataStr,
-                        );
-                      } else {
-                        updatePromise = api.savedata.system.update({ trainerId, secretId, clientSessionId }, dataStr);
-                      }
-                      updatePromise.then((error) => {
-                        if (error) {
-                          console.error(error);
-                          return displayError(
-                            `An error occurred while updating ${dataName} data. Please contact the administrator.`,
-                          );
-                        }
-                        window.location = window.location;
-                      });
-                    });
-                  } else {
-                    window.location = window.location;
-                  }
-                },
-                () => {
-                  globalScene.ui.revertMode();
-                  globalScene.ui.showText("", 0);
-                },
-                false,
-                -98,
-              );
+              globalScene.ui.setOverlayMode(Mode.CONFIRM, importDataConfirmOptions);
             },
           );
         };

@@ -11,7 +11,7 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
  * @extends MoveEffectAttr
  */
 export class AcupressureStatStageChangeAttr extends MoveEffectAttr {
-  override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
+  override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
     const randStats = BATTLE_STATS.filter((s) => target.getStatStage(s) < 6);
     if (randStats.length > 0) {
       const boostStat = [randStats[user.randSeedInt(randStats.length)]];

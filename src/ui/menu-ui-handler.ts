@@ -1,24 +1,24 @@
+import { loggedInUser, updateUserInfo } from "#app/account";
 import { bypassLogin } from "#app/constants";
 import { SESSION_ID_COOKIE } from "#app/constants";
 import { globalScene } from "#app/global-scene";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { api } from "#app/plugins/api/api";
+import { handleTutorial } from "#app/tutorial";
+import { Tutorial } from "#enums/tutorial";
+import { AdminMode, getAdminModeName } from "#app/ui/admin-ui-handler";
 import BgmBar from "#app/ui/bgm-bar";
+import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
+import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
+import OptionSelectUiHandler from "#app/ui/option-select-ui-handler";
+import { TextStyle, addTextObject } from "#app/ui/text";
+import { Mode } from "#app/ui/ui";
+import { addWindow } from "#app/ui/ui-theme";
 import { fixedNumber, getCookie, getEnumKeys, isBeta, isLocal } from "#app/utils";
 import { Button } from "#enums/buttons";
 import { GameDataType } from "#enums/game-data-type";
 import i18next from "i18next";
-import { loggedInUser, updateUserInfo } from "../account";
-import { handleTutorial } from "../tutorial";
-import { Tutorial } from "#enums/tutorial";
-import type { OptionSelectConfig, OptionSelectItem } from "./abstact-option-select-ui-handler";
-import { AdminMode, getAdminModeName } from "./admin-ui-handler";
 import type AwaitableUiHandler from "./awaitable-ui-handler";
-import MessageUiHandler from "./message-ui-handler";
-import { TextStyle, addTextObject, getTextStyleOptions } from "./text";
-import { Mode } from "./ui";
-import { WindowVariant, addWindow } from "./ui-theme";
-import { settings } from "#app/system/settings/settings-manager";
 
 enum MenuOptions {
   GAME_SETTINGS,
@@ -35,53 +35,37 @@ enum MenuOptions {
 
 const { VITE_WIKI_URL, VITE_DISCORD_URL, VITE_GITHUB_URL, VITE_REDDIT_URL, VITE_DONATE_URL } = import.meta.env;
 
-export default class MenuUiHandler extends MessageUiHandler {
+export default class MenuUiHandler extends OptionSelectUiHandler {
   private readonly textPadding = 8;
-  private readonly defaultMessageBoxWidth = 220;
-  private readonly defaultWordWrapWidth = 1224;
 
   private menuContainer: Phaser.GameObjects.Container;
   private menuMessageBoxContainer: Phaser.GameObjects.Container;
+  private menuMessageBox: Phaser.GameObjects.NineSlice;
   private menuOverlay: Phaser.GameObjects.Rectangle;
 
-  private menuBg: Phaser.GameObjects.NineSlice;
-  protected optionSelectText: Phaser.GameObjects.Text;
-
-  private cursorObj: Phaser.GameObjects.Image | null;
-
   private excludedMenus: () => ConditionalMenu[];
-  private menuOptions: MenuOptions[];
 
-  protected manageDataConfig: OptionSelectConfig;
-  protected communityConfig: OptionSelectConfig;
-
-  // Windows for the default message box and the message box for testing dialogue
-  private menuMessageBox: Phaser.GameObjects.NineSlice;
-  private dialogueMessageBox: Phaser.GameObjects.NineSlice;
-
-  protected scale: number = 0.1666666667;
+  protected manageDataConfig: OptionSelectModeConfig;
+  protected communityConfig: OptionSelectModeConfig;
 
   public bgmBar: BgmBar;
 
-  constructor(mode: Mode | null = null) {
+  constructor(mode: Mode = Mode.MENU) {
     super(mode);
 
     this.excludedMenus = () => [
       {
-        condition: [Mode.COMMAND, Mode.TITLE].includes(mode ?? Mode.TITLE),
+        excluded: globalScene.getCurrentPhase() instanceof SelectModifierPhase,
         options: [MenuOptions.EGG_GACHA, MenuOptions.EGG_LIST],
       },
-      { condition: bypassLogin, options: [MenuOptions.LOG_OUT] },
+      { excluded: bypassLogin, options: [MenuOptions.LOG_OUT] },
+      { excluded: !globalScene.currentBattle, options: [MenuOptions.SAVE_AND_QUIT] },
     ];
-
-    this.menuOptions = getEnumKeys(MenuOptions)
-      .map((m) => parseInt(MenuOptions[m]) as MenuOptions)
-      .filter((m) => {
-        return !this.excludedMenus().some((exclusion) => exclusion.condition && exclusion.options.includes(m));
-      });
   }
 
-  setup(): void {
+  override setup(): void {
+    super.setup();
+
     const ui = this.getUi();
 
     this.bgmBar = new BgmBar();
@@ -89,118 +73,115 @@ export default class MenuUiHandler extends MessageUiHandler {
 
     ui.bgmBar = this.bgmBar;
 
-    this.menuContainer = globalScene.add.container(1, -(globalScene.game.canvas.height / 6) + 1);
-    this.menuContainer.setName("menu");
-    this.menuContainer.setInteractive(
-      new Phaser.Geom.Rectangle(0, 0, globalScene.game.canvas.width / 6, globalScene.game.canvas.height / 6),
-      Phaser.Geom.Rectangle.Contains,
-    );
+    const { width, height } = globalScene.scaledCanvas;
 
+    // Background overlay that sits below everything in the menu
     this.menuOverlay = new Phaser.GameObjects.Rectangle(
       globalScene,
-      -1,
-      -1,
-      globalScene.scaledCanvas.width,
-      globalScene.scaledCanvas.height,
+      -width - 1,
+      -height - 1,
+      width + 2,
+      height + 2,
       0xffffff,
       0.3,
     );
     this.menuOverlay.setName("menu-overlay");
     this.menuOverlay.setOrigin(0, 0);
-    this.menuContainer.add(this.menuOverlay);
+    this.optionSelectContainer.addAt(this.menuOverlay, 0);
 
+    this.menuContainer = globalScene.add.container(2 - width, 2 - height);
+    this.menuContainer.setName("menu");
     this.menuContainer.add(this.bgmBar);
-
-    this.menuContainer.setVisible(false);
-  }
-
-  render() {
-    const ui = this.getUi();
-    this.excludedMenus = () => [
-      {
-        condition: globalScene.getCurrentPhase() instanceof SelectModifierPhase,
-        options: [MenuOptions.EGG_GACHA, MenuOptions.EGG_LIST],
-      },
-      { condition: bypassLogin, options: [MenuOptions.LOG_OUT] },
-    ];
-
-    this.menuOptions = getEnumKeys(MenuOptions)
-      .map((m) => parseInt(MenuOptions[m]) as MenuOptions)
-      .filter((m) => {
-        return !this.excludedMenus().some((exclusion) => exclusion.condition && exclusion.options.includes(m));
-      });
-
-    this.optionSelectText = addTextObject(
-      0,
-      0,
-      this.menuOptions.map((o) => `${i18next.t(`menuUiHandler:${MenuOptions[o]}`)}`).join("\n"),
-      TextStyle.WINDOW,
-      { maxLines: this.menuOptions.length },
-    );
-    this.optionSelectText.setLineSpacing(12);
-
-    this.scale = getTextStyleOptions(TextStyle.WINDOW, settings.display.uiTheme).scale;
-    this.menuBg = addWindow(
-      globalScene.game.canvas.width / 6 - (this.optionSelectText.displayWidth + 25),
-      0,
-      this.optionSelectText.displayWidth + 19 + 24 * this.scale,
-      globalScene.game.canvas.height / 6 - 2,
-    );
-    this.menuBg.setOrigin(0, 0);
-
-    this.optionSelectText.setPositionRelative(this.menuBg, 10 + 24 * this.scale, 6);
-
-    this.menuContainer.add(this.menuBg);
-
-    this.menuContainer.add(this.optionSelectText);
-
-    ui.add(this.menuContainer);
 
     this.menuMessageBoxContainer = globalScene.add.container(0, 130);
     this.menuMessageBoxContainer.setName("menu-message-box");
     this.menuMessageBoxContainer.setVisible(false);
 
-    // Window for general messages
-    this.menuMessageBox = addWindow(0, 0, this.defaultMessageBoxWidth, 48);
+    this.menuMessageBox = addWindow(0, 0, width, 48);
     this.menuMessageBox.setOrigin(0, 0);
     this.menuMessageBoxContainer.add(this.menuMessageBox);
 
-    // Full-width window used for testing dialog messages in debug mode
-    this.dialogueMessageBox = addWindow(
-      -this.textPadding,
-      0,
-      globalScene.game.canvas.width / 6 + this.textPadding * 2,
-      49,
-      false,
-      false,
-      0,
-      0,
-      WindowVariant.THIN,
-    );
-    this.dialogueMessageBox.setOrigin(0, 0);
-    this.menuMessageBoxContainer.add(this.dialogueMessageBox);
-
-    const menuMessageText = addTextObject(this.textPadding, this.textPadding, "", TextStyle.WINDOW, { maxLines: 2 });
-    menuMessageText.setName("menu-message");
-    menuMessageText.setOrigin(0, 0);
-    this.menuMessageBoxContainer.add(menuMessageText);
+    this.message = addTextObject(this.textPadding, this.textPadding, "", TextStyle.WINDOW, { maxLines: 2 });
+    this.message.setName("menu-message");
+    this.message.setOrigin(0, 0);
+    this.message.setWordWrapWidth(1224);
+    this.menuMessageBoxContainer.add(this.message);
 
     this.initTutorialOverlay(this.menuContainer);
     this.initPromptSprite(this.menuMessageBoxContainer);
-
-    this.message = menuMessageText;
-
-    // By default we use the general purpose message window
-    this.setDialogTestMode(false);
-
     this.menuContainer.add(this.menuMessageBoxContainer);
 
-    const manageDataOptions: any[] = []; // TODO: proper type
+    this.optionSelectContainer.add(this.menuContainer);
+
+    this.initManageDataOptions();
+    this.initCommunityMenuOptions();
+  }
+
+  override show(_args: any[]): boolean {
+    const config: OptionSelectModeConfig = this.getMenuOptionsConfig();
+
+    super.show([config]);
+
+    // Make sure the tutorial overlay sits above everything, but below the message box
+    this.menuContainer.bringToTop(this.tutorialOverlay);
+    this.menuContainer.bringToTop(this.menuMessageBoxContainer);
+
+    this.getUi().hideTooltip();
+
+    globalScene.playSound("ui/menu_open");
+
+    this.cursorObj?.setVisible(false);
+    handleTutorial(Tutorial.MENU).then(() => {
+      this.cursorObj?.setVisible(true);
+      this.bgmBar.toggleBgmBar(true);
+    });
+
+    return true;
+  }
+
+  getMenuOptionsConfig(): OptionSelectModeConfig {
+    const validOptions = getEnumKeys(MenuOptions)
+      .map((m) => parseInt(MenuOptions[m]) as MenuOptions)
+      .filter((m) => {
+        return !this.excludedMenus().some((option) => option.excluded && option.options.includes(m));
+      });
+
+    const menuOptions: OptionSelectItem[] = validOptions.map((option: MenuOptions) => {
+      return {
+        label: `${i18next.t(`menuUiHandler:${MenuOptions[option]}`)}`,
+        handler: () => this.optionSelected(option),
+        keepOpen: true,
+      };
+    });
+
+    return {
+      options: menuOptions,
+      maxOptions: 10,
+      blockCancelButton: true, // we take care of closing the menu in this handler
+      yOffset: 1,
+      onResize: (w: number, _h: number) => {
+        // Init the community and manage data menus config once the menu has its proper size
+        this.initCommunityMenuOptions();
+        this.initManageDataOptions();
+        // Resize the message box so that it does not go over the menu
+        this.menuMessageBox.setSize(globalScene.scaledCanvas.width - w - 2, 48);
+      },
+    };
+  }
+
+  override computeWindowHeight(): number {
+    return globalScene.scaledCanvas.height - 2; // always fill the screen
+  }
+
+  private initManageDataOptions(): void {
+    const ui = this.getUi();
+
+    const manageDataOptions: OptionSelectItem[] = [];
 
     const confirmSlot = (message: string, slotFilter: (i: number) => boolean, callback: (i: number) => void) => {
       ui.revertMode();
       ui.showText(message, null, () => {
-        const config: OptionSelectConfig = {
+        const config: OptionSelectModeConfig = {
           options: new Array(5)
             .fill(null)
             .map((_, i) => i)
@@ -226,12 +207,13 @@ export default class MenuUiHandler extends MessageUiHandler {
                 },
               },
             ]),
-          xOffset: 98,
+          xOffset: this.optionSelectBg.displayWidth,
+          yOffset: this.menuMessageBox.displayHeight + 1,
         };
         ui.setOverlayMode(Mode.MENU_OPTION_SELECT, config);
       });
     };
-
+    // Import Session
     if (isLocal || isBeta) {
       manageDataOptions.push({
         label: i18next.t("menuUiHandler:importSession"),
@@ -239,13 +221,14 @@ export default class MenuUiHandler extends MessageUiHandler {
           confirmSlot(
             i18next.t("menuUiHandler:importSlotSelect"),
             () => true,
-            (slotId) => globalScene.gameData.importData(GameDataType.SESSION, slotId),
+            (slotId) => globalScene.gameData.importData(GameDataType.SESSION, slotId, this.optionSelectBg.displayWidth),
           );
           return true;
         },
         keepOpen: true,
       });
     }
+    // Export Session
     manageDataOptions.push({
       label: i18next.t("menuUiHandler:exportSession"),
       handler: () => {
@@ -270,6 +253,7 @@ export default class MenuUiHandler extends MessageUiHandler {
       },
       keepOpen: true,
     });
+    // Import Run History
     manageDataOptions.push({
       label: i18next.t("menuUiHandler:importRunHistory"),
       handler: () => {
@@ -278,6 +262,7 @@ export default class MenuUiHandler extends MessageUiHandler {
       },
       keepOpen: true,
     });
+    // Export Run History
     manageDataOptions.push({
       label: i18next.t("menuUiHandler:exportRunHistory"),
       handler: () => {
@@ -286,6 +271,7 @@ export default class MenuUiHandler extends MessageUiHandler {
       },
       keepOpen: true,
     });
+    // Import Data
     if (isLocal || isBeta) {
       manageDataOptions.push({
         label: i18next.t("menuUiHandler:importData"),
@@ -297,6 +283,7 @@ export default class MenuUiHandler extends MessageUiHandler {
         keepOpen: true,
       });
     }
+    // Export Data
     manageDataOptions.push(
       {
         label: i18next.t("menuUiHandler:exportData"),
@@ -322,6 +309,8 @@ export default class MenuUiHandler extends MessageUiHandler {
         keepOpen: true,
       },
     );
+
+    // TODO: fully remove test dialogue option and related handlers
     if (isLocal || isBeta) {
       // this should make sure we don't have this option in live
       manageDataOptions.push({
@@ -353,15 +342,12 @@ export default class MenuUiHandler extends MessageUiHandler {
                 }
               }
               // Switch to the dialog test window
-              this.setDialogTestMode(true);
               ui.showText(
                 String(i18next.t(translatedString, interpolatorOptions)),
                 null,
                 () =>
                   globalScene.ui.showText("", 0, () => {
                     handler.tutorialActive = false;
-                    // Go back to the default message window
-                    this.setDialogTestMode(false);
                   }),
                 null,
                 true,
@@ -377,6 +363,8 @@ export default class MenuUiHandler extends MessageUiHandler {
         keepOpen: true,
       });
     }
+
+    // Cancel option
     manageDataOptions.push({
       label: i18next.t("menuUiHandler:cancel"),
       handler: () => {
@@ -386,12 +374,16 @@ export default class MenuUiHandler extends MessageUiHandler {
       keepOpen: true,
     });
 
-    //Thank you Vassiat
     this.manageDataConfig = {
-      xOffset: 98,
+      xOffset: this.optionSelectBg.displayWidth,
+      yOffset: this.menuMessageBox.displayHeight + 1,
       options: manageDataOptions,
       maxOptions: 7,
     };
+  }
+
+  private initCommunityMenuOptions(): void {
+    const ui = this.getUi();
 
     const communityOptions: OptionSelectItem[] = [];
 
@@ -495,6 +487,7 @@ export default class MenuUiHandler extends MessageUiHandler {
           globalScene.ui.setOverlayMode(Mode.OPTION_SELECT, {
             options: options,
             delay: 0,
+            yOffset: this.menuMessageBox.displayHeight + 1,
           });
           return true;
         },
@@ -508,276 +501,192 @@ export default class MenuUiHandler extends MessageUiHandler {
         return true;
       },
     });
+
     this.communityConfig = {
-      xOffset: 98,
       options: communityOptions,
+      xOffset: this.optionSelectBg.displayWidth,
+      yOffset: this.menuMessageBox.displayHeight + 1,
     };
-    this.setCursor(0);
   }
 
-  override show(args: any[]): boolean {
-    this.render();
-    super.show(args);
-
-    this.menuOptions = getEnumKeys(MenuOptions)
-      .map((m) => parseInt(MenuOptions[m]) as MenuOptions)
-      .filter((m) => {
-        return !this.excludedMenus().some((exclusion) => exclusion.condition && exclusion.options.includes(m));
-      });
-
-    this.menuContainer.setVisible(true);
-    this.setCursor(0);
-
-    this.getUi().moveTo(this.menuContainer, this.getUi().length - 1);
-
-    this.getUi().hideTooltip();
-
-    globalScene.playSound("ui/menu_open");
-
-    // Make sure the tutorial overlay sits above everything, but below the message box
-    this.menuContainer.bringToTop(this.tutorialOverlay);
-    this.menuContainer.bringToTop(this.menuMessageBoxContainer);
-    handleTutorial(Tutorial.MENU);
-
-    this.bgmBar.toggleBgmBar(true);
-
-    return true;
-  }
-
-  processInput(button: Button): boolean {
-    const ui = this.getUi();
-
+  optionSelected(option: MenuOptions): boolean {
     let success = false;
-    let error = false;
-
-    if (button === Button.ACTION) {
-      let adjustedCursor = this.cursor;
-      const excludedMenu = this.excludedMenus().find((e) => e.condition);
-      if (excludedMenu !== undefined && excludedMenu.options !== undefined && excludedMenu.options.length > 0) {
-        const sortedOptions = excludedMenu.options.sort();
-        for (const imo of sortedOptions) {
-          if (adjustedCursor >= imo) {
-            adjustedCursor++;
-          } else {
-            break;
-          }
-        }
-      }
-      this.showText("", 0);
-      switch (adjustedCursor) {
-        case MenuOptions.GAME_SETTINGS:
-          ui.setOverlayMode(Mode.SETTINGS);
-          success = true;
-          break;
-        case MenuOptions.ACHIEVEMENTS:
-          ui.setOverlayMode(Mode.ACHIEVEMENTS);
-          success = true;
-          break;
-        case MenuOptions.STATS:
-          ui.setOverlayMode(Mode.GAME_STATS);
-          success = true;
-          break;
-        case MenuOptions.RUN_HISTORY:
-          ui.setOverlayMode(Mode.RUN_HISTORY);
-          success = true;
-          break;
-        case MenuOptions.EGG_LIST:
-          if (globalScene.gameData.eggs.length) {
-            ui.revertMode();
-            ui.setOverlayMode(Mode.EGG_LIST);
-            success = true;
-          } else {
-            ui.showText(i18next.t("menuUiHandler:noEggs"), null, () => ui.showText(""), fixedNumber(1500));
-            error = true;
-          }
-          break;
-        case MenuOptions.EGG_GACHA:
+    const ui = this.getUi();
+    switch (option) {
+      case MenuOptions.GAME_SETTINGS:
+        ui.setOverlayMode(Mode.SETTINGS);
+        success = true;
+        break;
+      case MenuOptions.ACHIEVEMENTS:
+        ui.setOverlayMode(Mode.ACHIEVEMENTS);
+        success = true;
+        break;
+      case MenuOptions.STATS:
+        ui.setOverlayMode(Mode.GAME_STATS);
+        success = true;
+        break;
+      case MenuOptions.RUN_HISTORY:
+        ui.setOverlayMode(Mode.RUN_HISTORY);
+        success = true;
+        break;
+      case MenuOptions.EGG_LIST:
+        if (globalScene.gameData.eggs.length) {
           ui.revertMode();
-          ui.setOverlayMode(Mode.EGG_GACHA);
+          ui.setOverlayMode(Mode.EGG_LIST);
           success = true;
-          break;
-        case MenuOptions.MANAGE_DATA:
-          if (
-            !bypassLogin
-            && !this.manageDataConfig.options.some(
-              (o) =>
-                o.label === i18next.t("menuUiHandler:linkDiscord")
-                || o.label === i18next.t("menuUiHandler:unlinkDiscord"),
-            )
-          ) {
-            this.manageDataConfig.options.splice(
-              this.manageDataConfig.options.length - 1,
-              0,
-              {
-                label:
-                  loggedInUser?.discordId === ""
-                    ? i18next.t("menuUiHandler:linkDiscord")
-                    : i18next.t("menuUiHandler:unlinkDiscord"),
-                handler: () => {
-                  if (loggedInUser?.discordId === "") {
-                    const token = getCookie(SESSION_ID_COOKIE);
-                    const redirectUri = encodeURIComponent(`${import.meta.env.VITE_SERVER_URL}/auth/discord/callback`);
-                    const discordId = import.meta.env.VITE_DISCORD_CLIENT_ID;
-                    const discordUrl = `https://discord.com/api/oauth2/authorize?client_id=${discordId}&redirect_uri=${redirectUri}&response_type=code&scope=identify&state=${token}&prompt=none`;
-                    window.open(discordUrl, "_self");
-                    return true;
-                  } else {
-                    api.unlinkDiscord().then((_isSuccess) => {
-                      updateUserInfo().then(() => globalScene.reset(true, true));
-                    });
-                    return true;
-                  }
-                },
-              },
-              {
-                label:
-                  loggedInUser?.googleId === ""
-                    ? i18next.t("menuUiHandler:linkGoogle")
-                    : i18next.t("menuUiHandler:unlinkGoogle"),
-                handler: () => {
-                  if (loggedInUser?.googleId === "") {
-                    const token = getCookie(SESSION_ID_COOKIE);
-                    const redirectUri = encodeURIComponent(`${import.meta.env.VITE_SERVER_URL}/auth/google/callback`);
-                    const googleId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-                    const googleUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${googleId}&response_type=code&redirect_uri=${redirectUri}&scope=openid&state=${token}`;
-                    window.open(googleUrl, "_self");
-                    return true;
-                  } else {
-                    api.unlinkGoogle().then((_isSuccess) => {
-                      updateUserInfo().then(() => globalScene.reset(true, true));
-                    });
-                    return true;
-                  }
-                },
-              },
-            );
-          }
-          ui.setOverlayMode(Mode.MENU_OPTION_SELECT, this.manageDataConfig);
-          success = true;
-          break;
-        case MenuOptions.COMMUNITY:
-          ui.setOverlayMode(Mode.MENU_OPTION_SELECT, this.communityConfig);
-          success = true;
-          break;
-        case MenuOptions.SAVE_AND_QUIT:
-          if (globalScene.currentBattle) {
-            success = true;
-            const doSaveQuit = () => {
-              ui.setMode(Mode.LOADING, {
-                buttonActions: [],
-                fadeOut: () =>
-                  globalScene.gameData.saveAll(true, true, true, true).then(() => {
-                    globalScene.reset(true);
-                  }),
-              });
-            };
-            if (globalScene.currentBattle.turn > 1) {
-              ui.showText(i18next.t("menuUiHandler:losingProgressionWarning"), null, () => {
-                if (!this.active) {
-                  this.showText("", 0);
-                  return;
+        } else {
+          ui.showText(i18next.t("menuUiHandler:noEggs"), null, () => ui.showText(""), fixedNumber(1500));
+        }
+        break;
+      case MenuOptions.EGG_GACHA:
+        ui.revertMode();
+        ui.setOverlayMode(Mode.EGG_GACHA);
+        success = true;
+        break;
+      case MenuOptions.MANAGE_DATA:
+        if (
+          !bypassLogin
+          && !this.manageDataConfig.options.some(
+            (o) =>
+              o.label === i18next.t("menuUiHandler:linkDiscord")
+              || o.label === i18next.t("menuUiHandler:unlinkDiscord"),
+          )
+        ) {
+          this.manageDataConfig.options.splice(
+            this.manageDataConfig.options.length - 1,
+            0,
+            {
+              label:
+                loggedInUser?.discordId === ""
+                  ? i18next.t("menuUiHandler:linkDiscord")
+                  : i18next.t("menuUiHandler:unlinkDiscord"),
+              handler: () => {
+                if (loggedInUser?.discordId === "") {
+                  const token = getCookie(SESSION_ID_COOKIE);
+                  const redirectUri = encodeURIComponent(`${import.meta.env.VITE_SERVER_URL}/auth/discord/callback`);
+                  const discordId = import.meta.env.VITE_DISCORD_CLIENT_ID;
+                  const discordUrl = `https://discord.com/api/oauth2/authorize?client_id=${discordId}&redirect_uri=${redirectUri}&response_type=code&scope=identify&state=${token}&prompt=none`;
+                  window.open(discordUrl, "_self");
+                  return true;
+                } else {
+                  api.unlinkDiscord().then((_isSuccess) => {
+                    updateUserInfo().then(() => globalScene.reset(true, true));
+                  });
+                  return true;
                 }
-                ui.setOverlayMode(
-                  Mode.CONFIRM,
-                  doSaveQuit,
-                  () => {
-                    ui.revertMode();
-                    this.showText("", 0);
-                  },
-                  false,
-                  -98,
-                );
-              });
-            } else {
-              doSaveQuit();
-            }
-          } else {
-            error = true;
-          }
-          break;
-        case MenuOptions.LOG_OUT:
+              },
+            },
+            {
+              label:
+                loggedInUser?.googleId === ""
+                  ? i18next.t("menuUiHandler:linkGoogle")
+                  : i18next.t("menuUiHandler:unlinkGoogle"),
+              handler: () => {
+                if (loggedInUser?.googleId === "") {
+                  const token = getCookie(SESSION_ID_COOKIE);
+                  const redirectUri = encodeURIComponent(`${import.meta.env.VITE_SERVER_URL}/auth/google/callback`);
+                  const googleId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+                  const googleUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${googleId}&response_type=code&redirect_uri=${redirectUri}&scope=openid&state=${token}`;
+                  window.open(googleUrl, "_self");
+                  return true;
+                } else {
+                  api.unlinkGoogle().then((_isSuccess) => {
+                    updateUserInfo().then(() => globalScene.reset(true, true));
+                  });
+                  return true;
+                }
+              },
+            },
+          );
+        }
+        ui.setOverlayMode(Mode.MENU_OPTION_SELECT, this.manageDataConfig);
+        success = true;
+        break;
+      case MenuOptions.COMMUNITY:
+        ui.setOverlayMode(Mode.MENU_OPTION_SELECT, this.communityConfig);
+        success = true;
+        break;
+      case MenuOptions.SAVE_AND_QUIT:
+        if (globalScene.currentBattle) {
           success = true;
-          const doLogout = () => {
+          const doSaveQuit = () => {
             ui.setMode(Mode.LOADING, {
               buttonActions: [],
               fadeOut: () =>
-                api.account.logout().then(() => {
-                  updateUserInfo().then(() => globalScene.reset(true, true));
+                globalScene.gameData.saveAll(true, true, true, true).then(() => {
+                  globalScene.reset(true);
                 }),
             });
           };
-          if (globalScene.currentBattle) {
+          if (globalScene.currentBattle.turn > 1) {
             ui.showText(i18next.t("menuUiHandler:losingProgressionWarning"), null, () => {
               if (!this.active) {
                 this.showText("", 0);
                 return;
               }
-              ui.setOverlayMode(
-                Mode.CONFIRM,
-                doLogout,
-                () => {
+              const options: ConfirmModeConfig = {
+                yesHandler: doSaveQuit,
+                noHandler: () => {
                   ui.revertMode();
                   this.showText("", 0);
                 },
-                false,
-                -98,
-              );
+                xOffset: this.optionSelectBg.displayWidth,
+              };
+              ui.setOverlayMode(Mode.CONFIRM, options);
             });
           } else {
-            doLogout();
+            doSaveQuit();
           }
-          break;
-      }
-    } else if (button === Button.CANCEL) {
-      success = true;
+        }
+        break;
+      case MenuOptions.LOG_OUT:
+        success = true;
+        const doLogout = () => {
+          ui.setMode(Mode.LOADING, {
+            buttonActions: [],
+            fadeOut: () =>
+              api.account.logout().then(() => {
+                updateUserInfo().then(() => globalScene.reset(true, true));
+              }),
+          });
+        };
+        if (globalScene.currentBattle) {
+          ui.showText(i18next.t("menuUiHandler:losingProgressionWarning"), null, () => {
+            if (!this.active) {
+              this.showText("", 0);
+              return;
+            }
+            const options: ConfirmModeConfig = {
+              yesHandler: doLogout,
+              noHandler: () => {
+                ui.revertMode();
+                this.showText("", 0);
+              },
+              xOffset: this.optionSelectBg.displayWidth,
+            };
+            ui.setOverlayMode(Mode.CONFIRM, options);
+          });
+        } else {
+          doLogout();
+        }
+        break;
+    }
+    return success;
+  }
+
+  override processInput(button: Button): boolean {
+    const ui = this.getUi();
+    if (button === Button.CANCEL) {
+      ui.playSelect();
       ui.revertMode().then((result) => {
         if (!result) {
           ui.setMode(Mode.MESSAGE);
         }
       });
+      return true;
     } else {
-      switch (button) {
-        case Button.UP:
-          if (this.cursor) {
-            success = this.setCursor(this.cursor - 1);
-          } else {
-            success = this.setCursor(this.menuOptions.length - 1);
-          }
-          break;
-        case Button.DOWN:
-          if (this.cursor + 1 < this.menuOptions.length) {
-            success = this.setCursor(this.cursor + 1);
-          } else {
-            success = this.setCursor(0);
-          }
-          break;
-      }
+      return super.processInput(button);
     }
-
-    if (success) {
-      ui.playSelect();
-    } else if (error) {
-      ui.playError();
-    }
-
-    return success || error;
-  }
-
-  /**
-   * Switch the message window style and size when we are replaying dialog for debug purposes
-   * In "dialog test mode", the window takes the whole width of the screen and the text
-   * is set up to wrap around the same way as the dialogue during the game
-   * @param isDialogMode whether to use the dialog test
-   */
-  setDialogTestMode(isDialogMode: boolean) {
-    this.menuMessageBox.setVisible(!isDialogMode);
-    this.dialogueMessageBox.setVisible(isDialogMode);
-    // If we're testing dialog, we use the same word wrapping as the battle message handler
-    this.message.setWordWrapWidth(
-      isDialogMode ? globalScene.ui.getMessageHandler().wordWrapWidth : this.defaultWordWrapWidth,
-    );
-    this.message.setX(isDialogMode ? this.textPadding + 1 : this.textPadding);
-    this.message.setY(isDialogMode ? this.textPadding + 0.4 : this.textPadding);
   }
 
   override showText(
@@ -793,37 +702,13 @@ export default class MenuUiHandler extends MessageUiHandler {
     super.showText(text, delay, callback, callbackDelay, prompt, promptDelay);
   }
 
-  override setCursor(cursor: number): boolean {
-    const ret = super.setCursor(cursor);
-
-    if (!this.cursorObj) {
-      this.cursorObj = globalScene.add.image(0, 0, "cursor");
-      this.cursorObj.setOrigin(0, 0);
-      this.menuContainer.add(this.cursorObj);
-    }
-
-    this.cursorObj.setScale(this.scale * 6);
-    this.cursorObj.setPositionRelative(this.menuBg, 7, 6 + (18 + this.cursor * 96) * this.scale);
-
-    return ret;
-  }
-
   override clear() {
     super.clear();
-    this.menuContainer.setVisible(false);
     this.bgmBar.toggleBgmBar(false);
-    this.eraseCursor();
-  }
-
-  eraseCursor() {
-    if (this.cursorObj) {
-      this.cursorObj.destroy();
-    }
-    this.cursorObj = null;
   }
 }
 
 interface ConditionalMenu {
-  condition: boolean;
+  excluded: boolean;
   options: MenuOptions[];
 }
