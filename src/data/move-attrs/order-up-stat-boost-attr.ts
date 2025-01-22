@@ -29,7 +29,7 @@ export class OrderUpStatBoostAttr extends MoveEffectAttr {
    * If the commanding Pokemon is not Tatsugiri or otherwise does not have a
    * matching form, this boosts the user's Attack by default.
    */
-  override apply(user: Pokemon, _target: Pokemon, _move: Move): boolean {
+  override applyEffect(user: Pokemon, _target: Pokemon, _move: Move): boolean {
     const commandedTag = user.getTag(CommandedTag);
     if (!commandedTag) {
       return false;

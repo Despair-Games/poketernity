@@ -23,7 +23,6 @@ import { StatStageChangeAttr } from "#app/data/move-attrs/stat-stage-change-attr
 import { OneHitKOAttr } from "#app/data/move-attrs/one-hit-ko-attr";
 import { BypassBurnDamageReductionAttr } from "#app/data/move-attrs/bypass-burn-damage-reduction-attr";
 import { IgnoreWeatherTypeDebuffAttr } from "#app/data/move-attrs/ignore-weather-type-debuff-attr";
-import { SacrificialAttrOnHit } from "#app/data/move-attrs/sacrificial-attr-on-hit";
 import { SacrificialAttr } from "#app/data/move-attrs/sacrificial-attr";
 import { ModifiedDamageAttr } from "#app/data/move-attrs/modified-damage-attr";
 import { CounterDamageAttr } from "#app/data/move-attrs/counter-damage-attr";
@@ -2574,13 +2573,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (this.isBoss()) {
       movePool = movePool.filter((m) => !allMoves[m[0]].hasAttr(SacrificialAttr));
     }
-    movePool = movePool.filter((m) => !allMoves[m[0]].hasAttr(SacrificialAttrOnHit));
     if (this.hasTrainer()) {
       // Trainers never get OHKO moves
       movePool = movePool.filter((m) => !allMoves[m[0]].hasAttr(OneHitKOAttr));
       // Half the weight of self KO moves
       movePool = movePool.map((m) => [m[0], m[1] * (!!allMoves[m[0]].hasAttr(SacrificialAttr) ? 0.5 : 1)]);
-      movePool = movePool.map((m) => [m[0], m[1] * (!!allMoves[m[0]].hasAttr(SacrificialAttrOnHit) ? 0.5 : 1)]);
       // Trainers get a weight bump to stat buffing moves
       movePool = movePool.map((m) => [
         m[0],

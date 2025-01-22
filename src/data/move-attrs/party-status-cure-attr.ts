@@ -1,6 +1,4 @@
 import type { Abilities } from "#enums/abilities";
-import { BattlerTagType } from "#enums/battler-tag-type";
-import { MoveFlags } from "#enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
@@ -18,24 +16,13 @@ export class PartyStatusCureAttr extends MoveEffectAttr {
   private abilityCondition: Abilities;
 
   constructor(message: string | null, abilityCondition: Abilities) {
-    super();
+    super(true);
 
     this.message = message;
     this.abilityCondition = abilityCondition;
   }
 
-  //The same as MoveEffectAttr.canApply, except it doesn't check for the target's HP.
-  override canApply(user: Pokemon, target: Pokemon, move: Move) {
-    const isTargetValid =
-      (this.selfTarget && user.hp && !user.getTag(BattlerTagType.FRENZY))
-      || (!this.selfTarget && (!target.getTag(BattlerTagType.PROTECTED) || move.hasFlag(MoveFlags.IGNORE_PROTECT)));
-    return !!isTargetValid;
-  }
-
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
-    if (!this.canApply(user, target, move)) {
-      return false;
-    }
+  override applyEffect(user: Pokemon, _target: Pokemon, _move: Move): boolean {
     const partyPokemon = user.getParty();
     partyPokemon.forEach((p) => this.cureStatus(p, user.id));
 

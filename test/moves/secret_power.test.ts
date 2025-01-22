@@ -68,13 +68,13 @@ describe("Moves - Secret Power", () => {
       .battleType("double");
     await game.classicMode.startBattle([Species.BLASTOISE, Species.CHARIZARD]);
 
-    const sereneGraceAttr = allAbilities[Abilities.SERENE_GRACE].getAttrs(MoveEffectChanceMultiplierAbAttr)[0];
-    vi.spyOn(sereneGraceAttr, "apply");
-
     game.move.select(Moves.WATER_PLEDGE, 0, BattlerIndex.ENEMY);
     game.move.select(Moves.FIRE_PLEDGE, 1, BattlerIndex.ENEMY_2);
 
     await game.phaseInterceptor.to("TurnEndPhase");
+
+    const sereneGraceAttr = allAbilities[Abilities.SERENE_GRACE].getAttrs(MoveEffectChanceMultiplierAbAttr)[0];
+    vi.spyOn(sereneGraceAttr, "apply");
 
     let rainbowEffect = game.scene.arena.getTagOnSide(ArenaTagType.WATER_FIRE_PLEDGE, ArenaTagSide.PLAYER);
     expect(rainbowEffect).toBeDefined();
