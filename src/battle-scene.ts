@@ -834,6 +834,25 @@ export default class BattleScene extends SceneBase {
   }
 
   /**
+   * Gets an array of all active opponents of the target
+   * Helper function for G-Max moves that apply their effects
+   * to all active opponents to bypass substitute and apply even
+   * if the target faints
+   * @param target the Pokemon being checked
+   * @returns all active Pokemon on the same side as the target
+   */
+  public getActiveOpps(target: Pokemon): Pokemon[] {
+    let allOpps: Pokemon[];
+    if (target.isPlayer()) {
+      allOpps = this.getPlayerField();
+    } else {
+      allOpps = this.getEnemyField();
+    }
+    allOpps = allOpps.filter((p) => p.isActive(true));
+    return allOpps;
+  }
+
+  /**
    * Returns a list of all Pokemon currently on the field, potentially including fainted ones.
    * @param activeOnly If `true`, only return Pokemon which are active (e.g., not fainted). Default `false`.
    */

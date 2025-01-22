@@ -28,13 +28,7 @@ export class AttackReducePpMoveAttr extends ReducePpMoveAttr {
    */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (this.affectsBothOpponents) {
-      let allOpps: Pokemon[];
-      if (target.isPlayer()) {
-        allOpps = globalScene.getPlayerField();
-      } else {
-        allOpps = globalScene.getEnemyField();
-      }
-      allOpps = allOpps.filter((p) => p.isActive(true));
+      const allOpps = globalScene.getActiveOpps(target);
       allOpps.forEach((opp) => {
         this.reducePP(user, opp, move);
       });

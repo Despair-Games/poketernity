@@ -71,13 +71,7 @@ export class StatStageChangeAllOppsAttr extends MoveEffectAttr {
 
     const moveChance = this.getMoveChance(user, target, move, false, true);
     if (moveChance < 0 || moveChance === 100 || user.randSeedInt(100) < moveChance) {
-      let allOpps: Pokemon[];
-      if (target.isPlayer()) {
-        allOpps = globalScene.getPlayerField();
-      } else {
-        allOpps = globalScene.getEnemyField();
-      }
-      allOpps = allOpps.filter((p) => p.isActive(true));
+      const allOpps = globalScene.getActiveOpps(target);
       allOpps.forEach((opp) =>
         globalScene.unshiftPhase(
           new StatStageChangePhase(opp.getBattlerIndex(), false, this.stats, this.stages, {
