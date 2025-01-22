@@ -3,4 +3,5 @@ export enum DropDownState {
   OFF,
   EXCLUDE,
   UNLOCKABLE,
+  PARTIAL,
 }

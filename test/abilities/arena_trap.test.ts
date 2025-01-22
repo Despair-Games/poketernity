@@ -74,12 +74,6 @@ describe("Abilities - Arena Trap", () => {
 
     game.move.select(Moves.ROAR);
     game.move.select(Moves.SPLASH, 1);
-
-    // This runs the fist command phase where the moves are selected
-    await game.toNextTurn();
-    // During the next command phase the player pokemons should not be trapped anymore
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.SPLASH, 1);
     await game.toNextTurn();
 
     expect(player1.isTrapped()).toBe(false);

@@ -4,9 +4,34 @@ import { TextStyle } from "#enums/text-style";
 import { addWindow } from "./ui-theme";
 import { WindowVariant } from "#enums/window-variant";
 import i18next from "i18next";
-import { DropDownState } from "#enums/drop-down-state";
-import { DropDownType } from "#enums/drop-down-type";
-import { SortDirection } from "#enums/sort-direction";
+
+export enum DropDownState {
+  ON,
+  OFF,
+  EXCLUDE,
+  UNLOCKABLE,
+  PARTIAL,
+}
+
+export enum DropDownType {
+  SINGLE = 0,
+  MULTI = 1,
+  HYBRID = 2,
+  RADIAL = 3,
+}
+
+export enum SortDirection {
+  ASC = -1,
+  DESC = 1,
+}
+
+export enum SortCriteria {
+  NUMBER = 0,
+  COST = 1,
+  CANDY = 2,
+  IV = 3,
+  NAME = 4,
+}
 
 export class DropDownLabel {
   public state: DropDownState;
@@ -29,6 +54,7 @@ export class DropDownOption extends Phaser.GameObjects.Container {
   private currentLabelIndex: number;
   private labels: DropDownLabel[];
   private onColor = 0x33bbff;
+  private partialColor = 0xffff00;
   private offColor = 0x272727;
   private excludeColor = 0xff5555;
   private unlockableColor = 0xffff00;
@@ -102,6 +128,9 @@ export class DropDownOption extends Phaser.GameObjects.Container {
         break;
       case DropDownState.UNLOCKABLE:
         this.toggle.setTint(this.unlockableColor);
+        break;
+      case DropDownState.PARTIAL:
+        this.toggle.setTint(this.partialColor);
         break;
     }
   }
