@@ -518,22 +518,22 @@ export default class PartyUiHandler extends MessageUiHandler {
           ui.playSelect();
           if (this.cursor >= globalScene.currentBattle.getBattlerCount() || !pokemon.isAllowedInBattle()) {
             this.blockInput = true;
+            const options: ConfirmModeConfig = {
+              yesHandler: () => {
+                ui.setMode(UiMode.PARTY);
+                this.tryRelease(this.cursor);
+              },
+              noHandler: () => {
+                ui.setMode(UiMode.PARTY);
+                this.showText("", 0);
+              },
+            };
             this.showText(
               i18next.t("partyUiHandler:releaseConfirmation", { pokemonName: getPokemonNameWithAffix(pokemon) }),
               null,
               () => {
                 this.blockInput = false;
-                ui.setModeWithoutClear(
-                  UiMode.CONFIRM,
-                  () => {
-                    ui.setMode(UiMode.PARTY);
-                    this.tryRelease(this.cursor);
-                  },
-                  () => {
-                    ui.setMode(UiMode.PARTY);
-                    this.showText("", 0);
-                  },
-                );
+                ui.setModeWithoutClear(UiMode.CONFIRM, options);
               },
             );
           } else {

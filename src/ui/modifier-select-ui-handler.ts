@@ -54,8 +54,10 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
 
   private cursorObj: Phaser.GameObjects.Image | null;
 
+  /**
+   * @todo Why does it use {@linkcode UiMode.CONFIRM} and not {@linkcode UiMode.MODIFIER_SELECT} (for the `super` call)?
+   */
   constructor() {
-    // TODO: why does it use Mode.CONFIRM and not Mode.MODIFIER_SELECT?
     super(UiMode.CONFIRM);
 
     this.options = [];
