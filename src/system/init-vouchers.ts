@@ -2,7 +2,7 @@ import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer
 import { TrainerType } from "#enums/trainer-type";
 import { VoucherType } from "#enums/voucher-type";
 import i18next from "i18next";
-import { achvs, getAchievementDescription } from "./achv";
+import { achvs } from "./achv";
 import { Voucher, vouchers } from "./voucher";
 
 export function initVouchers() {
@@ -15,7 +15,7 @@ export function initVouchers() {
           : achv.score >= 75
             ? VoucherType.PLUS
             : VoucherType.REGULAR;
-    vouchers[achv.id] = new Voucher(voucherType, getAchievementDescription(achv.localizationKey));
+    vouchers[achv.id] = new Voucher(voucherType, achv.description);
   }
 
   const bossTrainerTypes = Object.keys(allTrainerConfigs).filter(

@@ -2508,12 +2508,25 @@ export default class BattleScene extends SceneBase {
     this.validateAchvs(MoneyAchv);
   }
 
+  /**
+   * Function to get money on a given wave and multiplier
+   *
+   * waveSetIndex is 0 from waves 1-10, and then increases by 1 every 10 waves.
+   * This makes the base money amount increase significantly every time the player beats a wave that is a multiple of 10.
+   *
+   * The sum of 10 times the wave number plus 175 is
+   * raised to the power of 1 + .005 * waveSetIndex
+   *
+   * The final result is then multiplied by moneyMultiplier and has the ones
+   * digit replaced with a 0
+   *
+   * @param moneyMultiplier how much the money is multiplied by
+   * @returns the amount of money
+   */
   getWaveMoneyAmount(moneyMultiplier: number): number {
     const waveIndex = this.currentBattle.waveIndex;
     const waveSetIndex = Math.ceil(waveIndex / 10) - 1;
-    const moneyValue =
-      Math.pow((waveSetIndex + 1 + (0.75 + (((waveIndex - 1) % 10) + 1) / 10)) * 100, 1 + 0.005 * waveSetIndex)
-      * moneyMultiplier;
+    const moneyValue = Math.pow(waveIndex * 10 + 175, 1 + 0.005 * waveSetIndex) * moneyMultiplier;
     return Math.floor(moneyValue / 10) * 10;
   }
 
@@ -3092,14 +3105,14 @@ export default class BattleScene extends SceneBase {
   validateAchvs(achvType: AbstractConstructor<Achv>, ...args: unknown[]): void {
     const filteredAchvs = Object.values(achvs).filter((a) => a instanceof achvType);
     for (const achv of filteredAchvs) {
-      this.validateAchv(achv, args);
+      this.validateAchv(achv, ...args);
     }
   }
 
-  validateAchv(achv: Achv, args?: unknown[]): boolean {
+  validateAchv(achv: Achv, ...args: unknown[]): boolean {
     if (
       (!this.gameData.achvUnlocks.hasOwnProperty(achv.id) || Overrides.ACHIEVEMENTS_REUNLOCK_OVERRIDE)
-      && achv.validate(args)
+      && achv.validate(...args)
     ) {
       this.gameData.achvUnlocks[achv.id] = new Date().getTime();
       this.ui.achvBar.showAchv(achv);
@@ -3112,8 +3125,8 @@ export default class BattleScene extends SceneBase {
     return false;
   }
 
-  validateVoucher(voucher: Voucher, args?: unknown[]): boolean {
-    if (!this.gameData.voucherUnlocks.hasOwnProperty(voucher.id) && voucher.validate(args)) {
+  validateVoucher(voucher: Voucher, ...args: unknown[]): boolean {
+    if (!this.gameData.voucherUnlocks.hasOwnProperty(voucher.id) && voucher.validate(...args)) {
       this.gameData.voucherUnlocks[voucher.id] = new Date().getTime();
       this.ui.achvBar.showAchv(voucher);
       this.gameData.voucherCounts[voucher.voucherType]++;

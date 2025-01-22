@@ -27,7 +27,7 @@ import { MysteryEncounterRewardsPhase } from "#app/phases/mystery-encounter-phas
 import { MysteryEncounterBattleStartCleanupPhase } from "#app/phases/mystery-encounter-phases/battle-start-cleanup-phase";
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import type PokemonData from "#app/system/pokemon-data";
-import type { OptionSelectConfig, OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler";
+import type { OptionSelectModeConfig, OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import type { PokemonSelectFilter } from "#app/ui/party-ui-handler";
 import type { PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
@@ -548,6 +548,7 @@ export function selectPokemonForOption(
                 const fullOptions = secondaryOptions
                   .map((option) => {
                     // Update handler to resolve promise
+                    // TODO: don't update the handler like this
                     const onSelect = option.handler;
                     option.handler = () => {
                       onSelect();
@@ -573,18 +574,17 @@ export function selectPokemonForOption(
                     },
                   });
 
-                const config: OptionSelectConfig = {
+                const config: OptionSelectModeConfig = {
                   options: fullOptions,
                   maxOptions: 7,
-                  yOffset: 0,
-                  supportHover: true,
+                  yOffset: 48,
                 };
 
                 // Do hover over the starting selection option
                 if (fullOptions[0].onHover) {
                   fullOptions[0].onHover();
                 }
-                globalScene.ui.setModeWithoutClear(UiMode.OPTION_SELECT, config, null, true);
+                globalScene.ui.setModeWithoutClear(UiMode.OPTION_SELECT, config);
               };
 
               const textPromptKey =
@@ -635,7 +635,7 @@ export function selectOptionThenPokemon(
   return new Promise<PokemonAndOptionSelected | null>((resolve) => {
     const modeToSetOnExit = globalScene.ui.getMode();
 
-    const displayOptions = (config: OptionSelectConfig) => {
+    const displayOptions = (config: OptionSelectModeConfig) => {
       globalScene.ui.setMode(UiMode.MESSAGE).then(() => {
         if (!optionSelectPromptKey) {
           // Do hover over the starting selection option
@@ -684,6 +684,7 @@ export function selectOptionThenPokemon(
     const fullOptions = options
       .map((option, index) => {
         // Update handler to resolve promise
+        // TODO: don't update the handler like this
         const onSelect = option.handler;
         option.handler = () => {
           onSelect();
@@ -708,11 +709,10 @@ export function selectOptionThenPokemon(
         },
       });
 
-    const config: OptionSelectConfig = {
+    const config: OptionSelectModeConfig = {
       options: fullOptions,
       maxOptions: 7,
-      yOffset: 0,
-      supportHover: true,
+      yOffset: 48,
     };
 
     displayOptions(config);

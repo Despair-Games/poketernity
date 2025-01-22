@@ -35,6 +35,7 @@ import type { CommandPhase } from "#app/phases/command-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { globalScene } from "#app/global-scene";
 import { ForceSwitchOutAttr } from "#app/data/move-attrs/force-switch-out-attr";
+import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import { PartyOption } from "#enums/party-option";
 
@@ -485,9 +486,8 @@ export default class PartyUiHandler extends MessageUiHandler {
             }),
             null,
             () => {
-              ui.setModeWithoutClear(
-                UiMode.CONFIRM,
-                () => {
+              const options: ConfirmModeConfig = {
+                yesHandler: () => {
                   const fusionName = pokemon.name;
                   pokemon.unfuse().then(() => {
                     this.clearPartySlots();
@@ -505,11 +505,12 @@ export default class PartyUiHandler extends MessageUiHandler {
                     );
                   });
                 },
-                () => {
+                noHandler: () => {
                   ui.setMode(UiMode.PARTY);
                   this.showText("", 0);
                 },
-              );
+              };
+              ui.setModeWithoutClear(UiMode.CONFIRM, options);
             },
           );
         } else if (option === PartyOption.RELEASE) {

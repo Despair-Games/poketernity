@@ -15,6 +15,7 @@ import { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { VictoryPhase } from "#app/phases/victory-phase";
 import { achvs } from "#app/system/achv";
+import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { type PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import { SummaryUiMode } from "#enums/summary-ui-mode";
@@ -292,12 +293,11 @@ export class AttemptCapturePhase extends PokemonPhase {
         };
         Promise.all([pokemon.hideInfo(), gameData.setPokemonCaught(pokemon)]).then(() => {
           if (globalScene.getPlayerParty().length === PLAYER_PARTY_MAX_SIZE) {
-            const promptRelease = (): void => {
-              ui.showText(i18next.t("battle:partyFull", { pokemonName: pokemon.getNameToRender() }), null, () => {
-                pokemonInfoContainer.makeRoomForConfirmUi(1, true);
-                ui.setMode(
-                  UiMode.CONFIRM,
-                  () => {
+            const addToPartyMenuConfig: OptionSelectModeConfig = {
+              options: [
+                {
+                  label: i18next.t("partyUiHandler:SUMMARY"),
+                  handler: () => {
                     const newPokemon = globalScene.addPlayerPokemon(
                       pokemon.species,
                       pokemon.level,
@@ -322,15 +322,19 @@ export class AttemptCapturePhase extends PokemonPhase {
                       },
                       false,
                     );
+                    return true;
                   },
-                  () => {
+                },
+                {
+                  label: i18next.t("menu:yes"),
+                  handler: () => {
                     ui.setMode(
                       UiMode.PARTY,
                       PartyUiMode.RELEASE,
                       this.fieldIndex,
                       (slotIndex: number, _option: PartyOption) => {
                         ui.setMode(UiMode.MESSAGE).then(() => {
-                          if (slotIndex < 6) {
+                          if (slotIndex < PLAYER_PARTY_MAX_SIZE) {
                             addToParty(slotIndex);
                           } else {
                             promptRelease();
@@ -338,15 +342,28 @@ export class AttemptCapturePhase extends PokemonPhase {
                         });
                       },
                     );
+                    return true;
                   },
-                  () => {
+                },
+                {
+                  label: i18next.t("menu:no"),
+                  handler: () => {
                     ui.setMode(UiMode.MESSAGE).then(() => {
                       removePokemon();
                       end();
                     });
+                    return true;
                   },
-                  "fullParty",
-                );
+                },
+              ],
+              yOffset: 48,
+              onResize: (w: number, _h: number) => {
+                pokemonInfoContainer.makeRoomForOptionSelectUi(w);
+              },
+            };
+            const promptRelease = (): void => {
+              ui.showText(i18next.t("battle:partyFull", { pokemonName: pokemon.getNameToRender() }), null, () => {
+                ui.setMode(UiMode.OPTION_SELECT, addToPartyMenuConfig);
               });
             };
             promptRelease();

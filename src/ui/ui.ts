@@ -19,7 +19,7 @@ import { TextStyle } from "#enums/text-style";
 import AchvBar from "./achv-bar";
 import MenuUiHandler from "./menu-ui-handler";
 import AchvsUiHandler from "./achvs-ui-handler";
-import OptionSelectUiHandler from "./settings/option-select-ui-handler";
+import OptionSelectUiHandler from "./option-select-ui-handler";
 import EggHatchSceneHandler from "./egg-hatch-scene-handler";
 import EggListUiHandler from "./egg-list-ui-handler";
 import EggGachaUiHandler from "./egg-gacha-ui-handler";
@@ -238,6 +238,15 @@ export default class UI extends Phaser.GameObjects.Container {
     return this.handlers[UiMode.MESSAGE] as BattleMessageUiHandler;
   }
 
+  getCurrentMessageHandler(): MessageUiHandler {
+    const handler = this.getHandler();
+    if (handler instanceof MessageUiHandler && handler.message) {
+      return handler;
+    } else {
+      return this.getMessageHandler();
+    }
+  }
+
   processInfoButton(pressed: boolean) {
     if (this.overlayActive) {
       return false;
@@ -293,12 +302,7 @@ export default class UI extends Phaser.GameObjects.Container {
       }
       showMessageAndCallback();
     } else {
-      const handler = this.getHandler();
-      if (handler instanceof MessageUiHandler) {
-        (handler as MessageUiHandler).showText(text, delay, callback, callbackDelay, prompt, promptDelay);
-      } else {
-        this.getMessageHandler().showText(text, delay, callback, callbackDelay, prompt, promptDelay);
-      }
+      this.getCurrentMessageHandler().showText(text, delay, callback, callbackDelay, prompt, promptDelay);
     }
   }
 
@@ -341,28 +345,15 @@ export default class UI extends Phaser.GameObjects.Container {
       }
       showMessageAndCallback();
     } else {
-      const handler = this.getHandler();
-      if (handler instanceof MessageUiHandler) {
-        (handler as MessageUiHandler).showDialogue(
-          text,
-          name,
-          delay,
-          showMessageAndCallback,
-          callbackDelay,
-          true,
-          promptDelay,
-        );
-      } else {
-        this.getMessageHandler().showDialogue(
-          text,
-          name,
-          delay,
-          showMessageAndCallback,
-          callbackDelay,
-          true,
-          promptDelay,
-        );
-      }
+      this.getCurrentMessageHandler().showDialogue(
+        text,
+        name,
+        delay,
+        showMessageAndCallback,
+        callbackDelay,
+        true,
+        promptDelay,
+      );
     }
   }
 
@@ -441,12 +432,7 @@ export default class UI extends Phaser.GameObjects.Container {
   }
 
   clearText(): void {
-    const handler = this.getHandler();
-    if (handler instanceof MessageUiHandler) {
-      (handler as MessageUiHandler).clearText();
-    } else {
-      this.getMessageHandler().clearText();
-    }
+    this.getCurrentMessageHandler().clearText();
   }
 
   setCursor(cursor: number): boolean {

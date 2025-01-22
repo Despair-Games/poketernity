@@ -7,6 +7,7 @@ import { GameManager } from "#test/testUtils/gameManager";
 import { TurnStartPhase } from "#app/phases/turn-start-phase";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { MoveFlags } from "#enums/move-flags";
 
 describe("Abilities - Triage", () => {
   let phaserGame: Phaser.Game;
@@ -46,6 +47,7 @@ describe("Abilities - Triage", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const moveToUse = allMoves[move];
     const originalPriority = moveToUse.priority;
+    expect(moveToUse.checkFlag(MoveFlags.TRIAGE_MOVE, playerPokemon, null)).toBe(true);
     expect(moveToUse.getPriority(playerPokemon)).toBe(originalPriority + 3);
   });
 
@@ -63,6 +65,7 @@ describe("Abilities - Triage", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const moveToUse = allMoves[move];
     const originalPriority = moveToUse.priority;
+    expect(moveToUse.checkFlag(MoveFlags.TRIAGE_MOVE, playerPokemon, null)).toBe(false);
     expect(moveToUse.getPriority(playerPokemon)).toBe(originalPriority);
   });
 
@@ -79,6 +82,8 @@ describe("Abilities - Triage", () => {
       .enemyMoveset(Moves.QUICK_ATTACK);
     await game.classicMode.startBattle([Species.FEEBAS, Species.GOLDEEN]);
 
+    const playerPokemon = game.scene.getPlayerField()[0];
+
     game.move.select(Moves.POLLEN_PUFF, 0, BattlerIndex.PLAYER_2);
     game.move.select(Moves.SPLASH, 1);
 
@@ -87,6 +92,7 @@ describe("Abilities - Triage", () => {
     const healingPokemonIndex = phase.getCommandOrder().indexOf(BattlerIndex.PLAYER);
 
     // The Pokemon using Pollen Puff on its ally should be after the enemy Pokemon using Quick Attack
+    expect(allMoves[Moves.POLLEN_PUFF].checkFlag(MoveFlags.TRIAGE_MOVE, playerPokemon, null)).toBe(false);
     expect(healingPokemonIndex).toBeGreaterThanOrEqual(2);
   });
 });

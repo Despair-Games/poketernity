@@ -31,7 +31,7 @@ import {
   ShinyRateBoosterModifier,
   SpeciesStatBoosterModifier,
 } from "#app/modifier/modifier";
-import type { OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler";
+import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import PokemonData from "#app/system/pokemon-data";
 import i18next from "i18next";
 import { getGenderSymbol } from "#app/data/gender";

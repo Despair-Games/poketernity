@@ -3,6 +3,7 @@ import { CommonBattleAnim } from "#app/data/battle-anims";
 import { CommonAnim } from "#enums/common-anim";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { getTextColor } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
@@ -65,9 +66,8 @@ export class ScanIvsPhase extends PokemonPhase {
         i18next.t("battle:ivScannerUseQuestion", { pokemonName: getPokemonNameWithAffix(pokemon) }),
         null,
         () => {
-          ui.setMode(
-            UiMode.CONFIRM,
-            () => {
+          const options: ConfirmModeConfig = {
+            yesHandler: () => {
               ui.setMode(UiMode.MESSAGE);
               ui.clearText();
               new CommonBattleAnim(CommonAnim.LOCK_ON, pokemon, pokemon).play(false, () => {
@@ -76,12 +76,13 @@ export class ScanIvsPhase extends PokemonPhase {
                   .then(() => this.end());
               });
             },
-            () => {
+            noHandler: () => {
               ui.setMode(UiMode.MESSAGE);
               ui.clearText();
               this.end();
             },
-          );
+          };
+          ui.setMode(UiMode.CONFIRM, options);
         },
       );
     } else {
