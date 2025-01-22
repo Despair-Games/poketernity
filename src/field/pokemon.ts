@@ -2824,8 +2824,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return null;
   }
 
-  getOpponents(): Pokemon[] {
-    return this.getOpposingField().filter((p) => p.isActive());
+  getOpponents(onField: boolean = false): Pokemon[] {
+    return this.getOpposingField().filter((p) => p.isActive(onField));
   }
 
   getOpponentDescriptor(): string {

@@ -2,7 +2,6 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { Move } from "#app/data/move";
 import { ReducePpMoveAttr } from "#app/data/move-attrs/reduce-pp-move-attr";
 import type { MoveConditionFunc } from "../move-conditions";
-import { globalScene } from "#app/global-scene";
 
 /**
  * Attribute to reduce the PP of the target's last move after attacking.
@@ -28,7 +27,7 @@ export class AttackReducePpMoveAttr extends ReducePpMoveAttr {
    */
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (this.affectsBothOpponents) {
-      const allOpps = globalScene.getActiveOpps(target);
+      const allOpps = user.getOpponents(true);
       allOpps.forEach((opp) => {
         this.reducePP(user, opp, move);
       });

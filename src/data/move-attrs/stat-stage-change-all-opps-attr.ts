@@ -71,7 +71,7 @@ export class StatStageChangeAllOppsAttr extends MoveEffectAttr {
 
     const moveChance = this.getMoveChance(user, target, move, false, true);
     if (moveChance < 0 || moveChance === 100 || user.randSeedInt(100) < moveChance) {
-      const allOpps = globalScene.getActiveOpps(target);
+      const allOpps = user.getOpponents(true);
       allOpps.forEach((opp) =>
         globalScene.unshiftPhase(
           new StatStageChangePhase(opp.getBattlerIndex(), false, this.stats, this.stages, {
