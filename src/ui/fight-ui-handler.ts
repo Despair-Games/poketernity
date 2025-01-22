@@ -7,7 +7,7 @@ import { Type } from "#enums/type";
 import { BattleCommand } from "#enums/battle-command";
 import { UiMode } from "#enums/ui-mode";
 import UiHandler from "./ui-handler";
-import { getLocalizedSpriteKey, fixedNumber, padInt } from "#app/utils";
+import { getLocalizedSpriteKey, fixedNumber, leftPad } from "#app/utils";
 import { MoveCategory } from "#enums/move-category";
 import i18next from "i18next";
 import { Button } from "#enums/buttons";
@@ -253,8 +253,8 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
       const maxPP = pokemonMove.getMovePp();
       const pp = maxPP - pokemonMove.ppUsed;
 
-      const ppLeftStr = padInt(pp, 2, "  ");
-      const ppMaxStr = padInt(maxPP, 2, "  ");
+      const ppLeftStr = leftPad(pp, 2, "  ");
+      const ppMaxStr = leftPad(maxPP, 2, "  ");
       this.ppText.setText(`${ppLeftStr}/${ppMaxStr}`);
       this.powerText.setText(`${power >= 0 ? power : "---"}`);
       this.accuracyText.setText(`${accuracy >= 0 ? accuracy : "---"}`);
