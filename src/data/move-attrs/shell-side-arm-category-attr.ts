@@ -4,6 +4,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
 import { VariableMoveCategoryAttr } from "#app/data/move-attrs/variable-move-category-attr";
+import { AbilityApplyMode } from "#enums/ability-apply-mode";
 
 /**
  * Attribute used for shell side arm that makes the move physical (and makes contact)
@@ -12,8 +13,8 @@ import { VariableMoveCategoryAttr } from "#app/data/move-attrs/variable-move-cat
  */
 export class ShellSideArmCategoryAttr extends VariableMoveCategoryAttr {
   override apply(user: Pokemon, target: Pokemon, move: Move, category: NumberHolder): boolean {
-    const predictedPhysDmg = target.getBaseDamage(user, move, MoveCategory.PHYSICAL, true, true);
-    const predictedSpecDmg = target.getBaseDamage(user, move, MoveCategory.SPECIAL, true, true);
+    const predictedPhysDmg = target.getBaseDamage(user, move, MoveCategory.PHYSICAL, AbilityApplyMode.IGNORE);
+    const predictedSpecDmg = target.getBaseDamage(user, move, MoveCategory.SPECIAL, AbilityApplyMode.IGNORE);
 
     // Random chance of being physical or special if predicted damage is tied
     if (predictedPhysDmg > predictedSpecDmg || (predictedPhysDmg === predictedSpecDmg && user.randSeedInt(2) === 0)) {

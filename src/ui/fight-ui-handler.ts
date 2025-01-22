@@ -17,6 +17,7 @@ import type { CommandPhase } from "#app/phases/command-phase";
 import MoveInfoOverlay from "./move-info-overlay";
 import { BattleType } from "#enums/battle-type";
 import { settings } from "#app/system/settings/settings-manager";
+import { AbilityApplyMode } from "#enums/ability-apply-mode";
 
 export default class FightUiHandler extends UiHandler implements InfoToggle {
   public static readonly MOVES_CONTAINER_NAME = "moves";
@@ -300,11 +301,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
    * Returns undefined if it's a status move
    */
   private getEffectivenessText(pokemon: Pokemon, opponent: Pokemon, pokemonMove: PokemonMove): string | undefined {
-    const effectiveness = opponent.getMoveEffectiveness(
-      pokemon,
-      pokemonMove.getMove(),
-      !opponent.battleData?.abilityRevealed,
-    );
+    const effectiveness = opponent.getMoveEffectiveness(pokemon, pokemonMove.getMove(), AbilityApplyMode.REVEALED);
     if (effectiveness === undefined) {
       return undefined;
     }
@@ -347,9 +344,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
     }
 
     const moveColors = opponents
-      .map((opponent) =>
-        opponent.getMoveEffectiveness(pokemon, pokemonMove.getMove(), !opponent.battleData.abilityRevealed),
-      )
+      .map((opponent) => opponent.getMoveEffectiveness(pokemon, pokemonMove.getMove(), AbilityApplyMode.REVEALED))
       .sort((a, b) => b - a)
       .map((effectiveness) => getTypeDamageMultiplierColor(effectiveness ?? 0, "offense"));
 

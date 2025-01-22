@@ -1879,7 +1879,7 @@ export function initMoves() {
       .ballBombMove(),
     new AttackMove(Moves.FOUL_PLAY, Type.DARK, MoveCategory.PHYSICAL, 95, 100, 15, -1, 0, 5)
       .attr(TargetAtkUserAtkAttr)
-      .edgeCase(), // Does not consider Huge Power/other attack stat modifiers correctly
+      .edgeCase(), // Does not consider Huge Power/other attack stat modifiers correctly + disables Unaware during use
     new StatusMove(Moves.SIMPLE_BEAM, Type.NORMAL, 100, 15, -1, 0, 5).attr(AbilityChangeAttr, Abilities.SIMPLE),
     new StatusMove(Moves.ENTRAINMENT, Type.NORMAL, 100, 15, -1, 0, 5).attr(AbilityGiveAttr),
     new StatusMove(Moves.AFTER_YOU, Type.NORMAL, -1, 15, -1, 0, 5)
@@ -2980,7 +2980,7 @@ export function initMoves() {
       .danceMove(),
     new AttackMove(Moves.BODY_PRESS, Type.FIGHTING, MoveCategory.PHYSICAL, 80, 100, 10, -1, 0, 8)
       .attr(DefAtkAttr)
-      .edgeCase(), // Does not consider Huge Power or other attack stat modifiers correctly
+      .edgeCase(), // Does not consider Huge Power or other attack stat modifiers correctly + disables Unaware during use
     new StatusMove(Moves.DECORATE, Type.FAIRY, -1, 15, -1, 0, 8)
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.SPATK], 2)
       .ignoresProtect(),
@@ -3273,107 +3273,107 @@ export function initMoves() {
         StatusEffect.SLEEP,
       ]),
     new AttackMove(Moves.G_MAX_WILDFIRE, Type.FIRE, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gmaxMove()
+      .gMaxMove()
       .attr(AddArenaTagAttr, ArenaTagType.G_MAX_WILDFIRE),
     new AttackMove(Moves.G_MAX_BEFUDDLE, Type.BUG, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gmaxMove()
+      .gMaxMove()
       .unimplemented(), // All opps become poisoned, paralyzed, or asleep
     new AttackMove(Moves.G_MAX_VOLT_CRASH, Type.ELECTRIC, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gmaxMove()
+      .gMaxMove()
       .unimplemented(), // All opps become paralyze
     new AttackMove(Moves.G_MAX_GOLD_RUSH, Type.NORMAL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gmaxMove()
+      .gMaxMove()
       .unimplemented(), // Confuses all opps, gives 100x user level as money
     new AttackMove(Moves.G_MAX_CHI_STRIKE, Type.FIGHTING, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gmaxMove()
+      .gMaxMove()
       .unimplemented(),
     new AttackMove(Moves.G_MAX_TERROR, Type.GHOST, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gmaxMove()
+      .gMaxMove()
       .unimplemented(), // applies trapped to all opps
     new AttackMove(Moves.G_MAX_RESONANCE, Type.ICE, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gmaxMove()
+      .gMaxMove()
       .attr(AddArenaTagAttr, ArenaTagType.AURORA_VEIL, { turnCount: 5, selfSideTarget: true }),
     new AttackMove(Moves.G_MAX_CUDDLE, Type.NORMAL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gmaxMove()
+      .gMaxMove()
       .unimplemented(), // tries to apply attract to all opps
     new AttackMove(Moves.G_MAX_REPLENISH, Type.NORMAL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gmaxMove()
+      .gMaxMove()
       .unimplemented(), // 50% of replenishing user and ally's berries (like recycle)
     new AttackMove(Moves.G_MAX_MALODOR, Type.POISON, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gmaxMove()
+      .gMaxMove()
       .unimplemented(), // applies poison to all opps
     new AttackMove(Moves.G_MAX_STONESURGE, Type.WATER, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gmaxMove()
+      .gMaxMove()
       .attr(AddArenaTrapTagAttr, ArenaTagType.STEALTH_ROCK),
     new AttackMove(Moves.G_MAX_WIND_RAGE, Type.FLYING, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gmaxMove()
+      .gMaxMove()
       .attr(ClearWeatherAttr, WeatherType.FOG)
       .attr(ClearTerrainAttr)
       .attr(RemoveScreensAttr, false)
       .attr(RemoveArenaTrapAttr, true)
       .attr(RemoveArenaTagsAttr, [ArenaTagType.SAFEGUARD, ArenaTagType.MIST], ArenaTagRelativeSide.TARGET),
     new AttackMove(Moves.G_MAX_STUN_SHOCK, Type.ELECTRIC, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gmaxMove()
+      .gMaxMove()
       .unimplemented(), // each opp becomes either paralyzed or poisoned
     new AttackMove(Moves.G_MAX_FINALE, Type.FAIRY, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gmaxMove()
+      .gMaxMove()
       .unimplemented(), // heal user and ally by 1/6
     new AttackMove(Moves.G_MAX_DEPLETION, Type.DRAGON, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gmaxMove()
+      .gMaxMove()
       .unimplemented(), // needs to spite both opponents
     new AttackMove(Moves.G_MAX_GRAVITAS, Type.PSYCHIC, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gmaxMove()
+      .gMaxMove()
       .attr(AddArenaTagAttr, ArenaTagType.GRAVITY, { turnCount: 5 }),
     new AttackMove(Moves.G_MAX_VOLCALITH, Type.ROCK, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gmaxMove()
+      .gMaxMove()
       .attr(AddArenaTagAttr, ArenaTagType.G_MAX_VOLCALITH),
     new AttackMove(Moves.G_MAX_SANDBLAST, Type.GROUND, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gmaxMove()
+      .gMaxMove()
       .unimplemented(), // applies a stronger version of sand tomb
     new AttackMove(Moves.G_MAX_SNOOZE, Type.DARK, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gmaxMove()
+      .gMaxMove()
       .unimplemented(), // 50% of applying drowsy
     new AttackMove(Moves.G_MAX_TARTNESS, Type.GRASS, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gmaxMove()
+      .gMaxMove()
       .attr(StatStageChangeAttr, [Stat.EVA], -1),
     new AttackMove(Moves.G_MAX_SWEETNESS, Type.GRASS, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gmaxMove()
+      .gMaxMove()
       .unimplemented(), // heals user and ally of status condition
     new AttackMove(Moves.G_MAX_SMITE, Type.FAIRY, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gmaxMove()
+      .gMaxMove()
       .unimplemented(), // applies confuse to all opps
     new AttackMove(Moves.G_MAX_STEELSURGE, Type.STEEL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gmaxMove()
+      .gMaxMove()
       .attr(AddArenaTrapTagAttr, ArenaTagType.SHARP_STEEL),
     new AttackMove(Moves.G_MAX_MELTDOWN, Type.STEEL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gmaxMove()
+      .gMaxMove()
       .unimplemented(), // applies torment to all opps
     new AttackMove(Moves.G_MAX_FOAM_BURST, Type.WATER, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gmaxMove()
+      .gMaxMove()
       .attr(StatStageChangeAttr, [Stat.SPD], -2),
     new AttackMove(Moves.G_MAX_CENTIFERNO, Type.FIRE, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gmaxMove()
+      .gMaxMove()
       .unimplemented(), // applies a stronger version of fire spin
     new AttackMove(Moves.G_MAX_VINE_LASH, Type.GRASS, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gmaxMove()
+      .gMaxMove()
       .attr(AddArenaTagAttr, ArenaTagType.G_MAX_VINE_LASH),
     new AttackMove(Moves.G_MAX_CANNONADE, Type.WATER, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gmaxMove()
+      .gMaxMove()
       .attr(AddArenaTagAttr, ArenaTagType.G_MAX_CANNONADE),
     new AttackMove(Moves.G_MAX_DRUM_SOLO, Type.GRASS, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gmaxMove()
+      .gMaxMove()
       .ignoresAbilities(),
     new AttackMove(Moves.G_MAX_FIREBALL, Type.FIRE, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gmaxMove()
+      .gMaxMove()
       .ignoresAbilities(),
     new AttackMove(Moves.G_MAX_HYDROSNIPE, Type.WATER, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gmaxMove()
+      .gMaxMove()
       .ignoresAbilities(),
     new AttackMove(Moves.G_MAX_ONE_BLOW, Type.DARK, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gmaxMove()
+      .gMaxMove()
       .ignoresProtect(),
     new AttackMove(Moves.G_MAX_RAPID_FLOW, Type.WATER, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gmaxMove()
+      .gMaxMove()
       .ignoresProtect(),
     new AttackMove(Moves.TERA_BLAST, Type.NORMAL, MoveCategory.SPECIAL, 80, 100, 10, -1, 0, 9)
       .attr(TeraMoveCategoryAttr)
@@ -3381,8 +3381,7 @@ export function initMoves() {
       .attr(TeraBlastPowerAttr)
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.SPATK], -1, true, {
         condition: (user, _target, _move) => user.isTerastallized() && user.isOfType(Type.STELLAR),
-      })
-      .partial(), // Does not ignore abilities that affect stats, relevant in determining the move's category {@see TeraMoveCategoryAttr}
+      }),
     new SelfStatusMove(Moves.SILK_TRAP, Type.BUG, -1, 10, -1, 4, 9)
       .attr(ProtectAttr, BattlerTagType.SILK_TRAP)
       .condition(failIfLastCondition),
@@ -3641,8 +3640,7 @@ export function initMoves() {
         && user.isTerastallized()
           ? MoveTarget.ALL_NEAR_ENEMIES
           : MoveTarget.NEAR_OTHER,
-      )
-      .partial(), // Does not ignore abilities that affect stats, relevant in determining the move's category {@see TeraMoveCategoryAttr}
+      ),
     new AttackMove(Moves.FICKLE_BEAM, Type.DRAGON, MoveCategory.SPECIAL, 80, 100, 5, 30, 0, 9)
       .attr(PreMoveMessageAttr, doublePowerChanceMessageFunc)
       .attr(DoublePowerChanceAttr)

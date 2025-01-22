@@ -13,7 +13,9 @@ export class CopyFaintedAllyAbilityAbAttr extends PostKnockOutAbAttr {
       && !knockedOutPokemon.getAbility().hasAttr(UncopiableAbilityAbAttr)
     ) {
       if (!simulated) {
-        pokemon.summonData.ability = knockedOutPokemon.getAbility().id;
+        const knockedOutAllyAb = knockedOutPokemon.getAbility().id;
+        pokemon.summonData.ability = knockedOutAllyAb;
+        pokemon.battleData.abilitiesRevealed.push(knockedOutAllyAb);
         globalScene.queueMessage(
           i18next.t("abilityTriggers:copyFaintedAllyAbility", {
             pokemonNameWithAffix: getPokemonNameWithAffix(knockedOutPokemon),

@@ -575,7 +575,7 @@ export abstract class Move implements Localizable {
    * and {@linkcode moveTarget} to NEAR_ENEMY (g-max moves cannot target allies)
    * @returns The {@linkcode Move} that called this function
    */
-  gmaxMove(): this {
+  gMaxMove(): this {
     this.setFlag(MoveFlags.G_MAX_MOVE, true);
     this.moveTarget = MoveTarget.NEAR_ENEMY;
     return this;

@@ -23,6 +23,7 @@ export class PostDefendAbilityGiveAbAttr extends PostDefendAbAttr {
     ) {
       if (!simulated) {
         attacker.summonData.ability = this.ability;
+        attacker.battleData.abilitiesRevealed.push(this.ability);
       }
 
       return true;

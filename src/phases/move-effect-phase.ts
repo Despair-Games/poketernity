@@ -43,6 +43,7 @@ import i18next from "i18next";
 import { FaintPhase } from "./faint-phase";
 import { HitCheckPhase } from "./hit-check-phase";
 import { MoveFlags } from "#enums/move-flags";
+import { AbilityApplyMode } from "#enums/ability-apply-mode";
 
 export class MoveEffectPhase extends HitCheckPhase {
   private moveHistoryEntry: TurnMove;
@@ -296,17 +297,8 @@ export class MoveEffectPhase extends HitCheckPhase {
 
     this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target, firstTarget, true);
 
-    /**
-     * G-Max Moves apply their effects to both opponents (even if the target faints) and also
-     * ignores substitutes
-     *
-     * TODO: G-Max move edge cases like snooze and the random status ones
-     */
     if (move.checkFlag(MoveFlags.G_MAX_MOVE, user, target)) {
-      this.applyOnTargetEffects(user, target, hitResult, firstTarget);
-      if (target.getAlly()?.isActive(true)) {
-        this.applyOnTargetEffects(user, target.getAlly(), hitResult, firstTarget);
-      }
+      this.applyGMaxEffects(user, target, hitResult, firstTarget);
     } else if (!move.hitsSubstitute(user, target)) {
       this.applyOnTargetEffects(user, target, hitResult, firstTarget);
     }
@@ -317,6 +309,19 @@ export class MoveEffectPhase extends HitCheckPhase {
       if (user.turnData.hitCount > 1) {
         applyAbAttrs(PostDamageAbAttr, target, false, 0, user);
       }
+    }
+  }
+
+  /**
+   * G-Max Moves apply their effects to both opponents (even if the target faints) and also
+   * ignores substitutes
+   *
+   * TODO: G-Max move edge cases like G-max Snooze
+   */
+  private applyGMaxEffects(user: Pokemon, target: Pokemon, hitResult: HitResult, firstTarget: boolean) {
+    this.applyOnTargetEffects(user, target, hitResult, firstTarget);
+    if (target.getAlly()?.isActive(true)) {
+      this.applyOnTargetEffects(user, target.getAlly(), hitResult, firstTarget);
     }
   }
 
@@ -373,8 +378,7 @@ export class MoveEffectPhase extends HitCheckPhase {
     const { result: result, damage: dmg } = target.getAttackDamage(
       user,
       move,
-      false,
-      false,
+      AbilityApplyMode.DEFAULT,
       isCritical,
       false,
       effectiveness,
