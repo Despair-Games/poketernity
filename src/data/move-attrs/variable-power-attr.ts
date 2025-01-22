@@ -7,7 +7,7 @@ import type { NumberHolder } from "#app/utils";
  * Attribute to modify a move's power based on game state.
  * @extends MoveAttr
  */
-export class VariablePowerAttr extends MoveAttr {
+export abstract class VariablePowerAttr extends MoveAttr {
   /**
    * Modifies the given move's power based on game state
    * @param _user the {@linkcode Pokemon} using the move

@@ -5,7 +5,7 @@ import { AbAttr } from "./ab-attr";
  * Triggers after the Pokemon loses or consumes an item
  * @extends AbAttr
  */
-export class PostItemLostAbAttr extends AbAttr {
+export abstract class PostItemLostAbAttr extends AbAttr {
   /**
    * Applies an effect when the source Pokemon loses or consumes an item
    * @param pokemon The {@linkcode Pokemon} with this ability

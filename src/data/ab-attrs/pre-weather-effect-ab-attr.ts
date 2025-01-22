@@ -3,7 +3,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
 import { AbAttr } from "./ab-attr";
 
-export class PreWeatherEffectAbAttr extends AbAttr {
+export abstract class PreWeatherEffectAbAttr extends AbAttr {
   /**
    * Applies an effect before weather effects would trigger
    * @param pokemon The {@linkcode Pokemon} with this ability

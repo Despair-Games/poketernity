@@ -1701,7 +1701,7 @@ export enum Moves {
   LUNAR_BLESSING,
   /**{@link https://bulbapedia.bulbagarden.net/wiki/Take_Heart_(move) | Source} */
   TAKE_HEART,
-  /*G_MAX_WILDFIRE,
+  G_MAX_WILDFIRE = 8001,
   G_MAX_BEFUDDLE,
   G_MAX_VOLT_CRASH,
   G_MAX_GOLD_RUSH,
@@ -1733,9 +1733,9 @@ export enum Moves {
   G_MAX_FIREBALL,
   G_MAX_HYDROSNIPE,
   G_MAX_ONE_BLOW,
-  G_MAX_RAPID_FLOW,*/
+  G_MAX_RAPID_FLOW,
   /**{@link https://bulbapedia.bulbagarden.net/wiki/Tera_Blast_(move) | Source} */
-  TERA_BLAST,
+  TERA_BLAST = 851,
   /**{@link https://bulbapedia.bulbagarden.net/wiki/Silk_Trap_(move) | Source} */
   SILK_TRAP,
   /**{@link https://bulbapedia.bulbagarden.net/wiki/Axe_Kick_(move) | Source} */

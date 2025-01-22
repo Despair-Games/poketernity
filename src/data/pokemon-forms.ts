@@ -4,7 +4,7 @@ import { StatusEffect } from "#enums/status-effect";
 import { allMoves } from "#app/data/all-moves";
 import { MoveCategory } from "#enums/move-category";
 import { Type } from "#enums/type";
-import type { Constructor, nil } from "#app/utils";
+import type { AbstractConstructor, nil } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
@@ -75,7 +75,7 @@ export class SpeciesFormChange {
     return true;
   }
 
-  findTrigger(triggerType: Constructor<SpeciesFormChangeTrigger>): SpeciesFormChangeTrigger | nil {
+  findTrigger(triggerType: AbstractConstructor<SpeciesFormChangeTrigger>): SpeciesFormChangeTrigger | nil {
     if (!this.trigger.hasTriggerType(triggerType)) {
       return null;
     }
@@ -105,7 +105,7 @@ export abstract class SpeciesFormChangeTrigger {
     return true;
   }
 
-  hasTriggerType(triggerType: Constructor<SpeciesFormChangeTrigger>): boolean {
+  hasTriggerType(triggerType: AbstractConstructor<SpeciesFormChangeTrigger>): boolean {
     return this instanceof triggerType;
   }
 }
@@ -133,7 +133,7 @@ export class SpeciesFormChangeCompoundTrigger {
     return true;
   }
 
-  hasTriggerType(triggerType: Constructor<SpeciesFormChangeTrigger>): boolean {
+  hasTriggerType(triggerType: AbstractConstructor<SpeciesFormChangeTrigger>): boolean {
     return !!this.triggers.find((t) => t.hasTriggerType(triggerType));
   }
 }

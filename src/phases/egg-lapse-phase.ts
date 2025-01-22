@@ -8,6 +8,7 @@ import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import { Phase } from "#app/phase";
 import { achvs } from "#app/system/achv";
+import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { Mode } from "#app/ui/ui";
 import i18next from "i18next";
 import { EggHatchPhase } from "./egg-hatch-phase";
@@ -38,24 +39,20 @@ export class EggLapsePhase extends Phase {
           i18next.t("battle:eggHatching"),
           0,
           () => {
-            // show prompt for skip, blocking inputs for 1 second
-            globalScene.ui.showText(i18next.t("battle:eggSkipPrompt", { eggsToHatch: eggsToHatchCount }), 0);
-            globalScene.ui.setModeWithoutClear(
-              Mode.CONFIRM,
-              () => {
+            const options: ConfirmModeConfig = {
+              yesHandler: () => {
                 this.hatchEggsSkipped(eggsToHatch);
                 this.showSummary();
               },
-              () => {
+              noHandler: () => {
                 this.hatchEggsRegular(eggsToHatch);
                 this.end();
               },
-              null,
-              null,
-              null,
-              1000,
-              true,
-            );
+              inputDelay: 1000,
+            };
+            // show prompt for skip, blocking inputs for 1 second
+            globalScene.ui.showText(i18next.t("battle:eggSkipPrompt", { eggsToHatch: eggsToHatchCount }), 0);
+            globalScene.ui.setModeWithoutClear(Mode.CONFIRM, options);
           },
           100,
           true,

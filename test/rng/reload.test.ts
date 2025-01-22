@@ -1,6 +1,6 @@
 import { GameModes } from "#enums/game-modes";
 import { api } from "#app/plugins/api/api";
-import type OptionSelectUiHandler from "#app/ui/settings/option-select-ui-handler";
+import type OptionSelectUiHandler from "#app/ui/option-select-ui-handler";
 import { Mode } from "#app/ui/ui";
 import { Biome } from "#enums/biome";
 import { Button } from "#enums/buttons";

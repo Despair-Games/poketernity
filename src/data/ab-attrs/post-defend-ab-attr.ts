@@ -2,7 +2,7 @@ import type { Move } from "#app/data/move";
 import { type Pokemon } from "#app/field/pokemon";
 import { AbAttr } from "./ab-attr";
 
-export class PostDefendAbAttr extends AbAttr {
+export abstract class PostDefendAbAttr extends AbAttr {
   /**
    * Applies an effect after being affected by another Pokemon's move.
    * @param pokemon The {@linkcode Pokemon} with this ability

@@ -37,6 +37,7 @@ import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import type { Abilities } from "#enums/abilities";
 import type { PokeballType } from "#enums/pokeball";
 import { StatusEffect } from "#enums/status-effect";
+import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { settings } from "#app/system/settings/settings-manager";
 
 /** Will give +1 level every 10 waves */
@@ -665,6 +666,7 @@ export async function catchPokemon(
   globalScene.gameData.updateSpeciesDexIvs(pokemon.species.getRootSpeciesId(true), pokemon.ivs);
 
   return new Promise((resolve) => {
+    // TODO: remove all this duplicated code from attempt-capture-phase
     const doPokemonCatchMenu = () => {
       const end = () => {
         // Ensure the pokemon is in the enemy party in all situations
@@ -701,64 +703,80 @@ export async function catchPokemon(
       };
       Promise.all([pokemon.hideInfo(), globalScene.gameData.setPokemonCaught(pokemon)]).then(() => {
         if (globalScene.getPlayerParty().length === 6) {
+          const addToPartyMenuConfig: OptionSelectModeConfig = {
+            options: [
+              {
+                label: i18next.t("partyUiHandler:SUMMARY"),
+                handler: () => {
+                  globalScene.ui.setMode(Mode.MESSAGE).then(() => {
+                    removePokemon();
+                    end();
+                  });
+                  return true;
+                },
+              },
+              {
+                label: i18next.t("menu:yes"),
+                handler: () => {
+                  const newPokemon = globalScene.addPlayerPokemon(
+                    pokemon.species,
+                    pokemon.level,
+                    pokemon.abilityIndex,
+                    pokemon.formIndex,
+                    pokemon.gender,
+                    pokemon.shiny,
+                    pokemon.variant,
+                    pokemon.ivs,
+                    pokemon.nature,
+                    pokemon,
+                  );
+                  globalScene.ui.setMode(
+                    Mode.SUMMARY,
+                    newPokemon,
+                    0,
+                    SummaryUiMode.DEFAULT,
+                    () => {
+                      globalScene.ui.setMode(Mode.MESSAGE).then(() => {
+                        promptRelease();
+                      });
+                    },
+                    false,
+                  );
+                  return true;
+                },
+              },
+              {
+                label: i18next.t("menu:no"),
+                handler: () => {
+                  globalScene.ui.setMode(
+                    Mode.PARTY,
+                    PartyUiMode.RELEASE,
+                    0,
+                    (slotIndex: number, _option: PartyOption) => {
+                      globalScene.ui.setMode(Mode.MESSAGE).then(() => {
+                        if (slotIndex < 6) {
+                          addToParty(slotIndex);
+                        } else {
+                          promptRelease();
+                        }
+                      });
+                    },
+                  );
+                  return true;
+                },
+              },
+            ],
+            yOffset: 48,
+            onResize: (w: number, _h: number) => {
+              globalScene.pokemonInfoContainer.makeRoomForOptionSelectUi(w);
+            },
+          };
           const promptRelease = () => {
             globalScene.ui.showText(
               i18next.t("battle:partyFull", { pokemonName: pokemon.getNameToRender() }),
               null,
               () => {
-                globalScene.pokemonInfoContainer.makeRoomForConfirmUi(1, true);
-                globalScene.ui.setMode(
-                  Mode.CONFIRM,
-                  () => {
-                    const newPokemon = globalScene.addPlayerPokemon(
-                      pokemon.species,
-                      pokemon.level,
-                      pokemon.abilityIndex,
-                      pokemon.formIndex,
-                      pokemon.gender,
-                      pokemon.shiny,
-                      pokemon.variant,
-                      pokemon.ivs,
-                      pokemon.nature,
-                      pokemon,
-                    );
-                    globalScene.ui.setMode(
-                      Mode.SUMMARY,
-                      newPokemon,
-                      0,
-                      SummaryUiMode.DEFAULT,
-                      () => {
-                        globalScene.ui.setMode(Mode.MESSAGE).then(() => {
-                          promptRelease();
-                        });
-                      },
-                      false,
-                    );
-                  },
-                  () => {
-                    globalScene.ui.setMode(
-                      Mode.PARTY,
-                      PartyUiMode.RELEASE,
-                      0,
-                      (slotIndex: number, _option: PartyOption) => {
-                        globalScene.ui.setMode(Mode.MESSAGE).then(() => {
-                          if (slotIndex < 6) {
-                            addToParty(slotIndex);
-                          } else {
-                            promptRelease();
-                          }
-                        });
-                      },
-                    );
-                  },
-                  () => {
-                    globalScene.ui.setMode(Mode.MESSAGE).then(() => {
-                      removePokemon();
-                      end();
-                    });
-                  },
-                  "fullParty",
-                );
+                globalScene.ui.setMode(Mode.OPTION_SELECT, addToPartyMenuConfig);
               },
             );
           };

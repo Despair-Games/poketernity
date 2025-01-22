@@ -3,7 +3,7 @@ import { FormModalUiHandler } from "./form-modal-ui-handler";
 import type { ModalConfig } from "./modal-ui-handler";
 import i18next from "i18next";
 import type { PlayerPokemon } from "#app/field/pokemon";
-import type { OptionSelectItem } from "./abstact-option-select-ui-handler";
+import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import { isNullOrUndefined } from "#app/utils";
 import { Mode } from "./ui";
 
