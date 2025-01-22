@@ -32,14 +32,14 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
     private selfSwitch: boolean = false,
     private switchType: SwitchType = SwitchType.SWITCH,
   ) {
-    super(false, { lastHitOnly: true });
+    super(selfSwitch, { lastHitOnly: true });
   }
 
   isBatonPass() {
     return this.switchType === SwitchType.BATON_PASS;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+  override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     // Check if the move category is not STATUS or if the switch out condition is not met
     if (!this.getSwitchOutCondition()(user, target, move)) {
       return false;

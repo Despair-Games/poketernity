@@ -7,41 +7,29 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { type Move } from "#app/data/move";
 import { AddBattlerTagAttr } from "./add-battler-tag-attr";
-import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import { StatStageChangeAttr } from "#app/data/move-attrs/stat-stage-change-attr";
 import { StatusEffectAttr } from "#app/data/move-attrs/status-effect-attr";
 import { NumberHolder } from "#app/utils";
 import { IgnoreMoveEffectsAbAttr } from "#app/data/ab-attrs/ignore-move-effect-ab-attr";
 import { MoveEffectChanceMultiplierAbAttr } from "#app/data/ab-attrs/move-effect-chance-multiplier-ab-attr";
 import { applyAbAttrs } from "#app/data/ability";
+import { ChanceBasedMoveEffectAttr } from "./chance-based-move-effect-attr";
 
 /**
  * Attribute used to determine the Biome/Terrain-based secondary
  * effect of {@link https://bulbapedia.bulbagarden.net/wiki/Secret_Power_(move) | Secret Power}.
- * @extends MoveEffectAttr
+ * @extends ChanceBasedMoveEffectAttr
  */
-export class SecretPowerAttr extends MoveEffectAttr {
+export class SecretPowerAttr extends ChanceBasedMoveEffectAttr {
   constructor() {
     super(false, { lastHitOnly: true });
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
-    if (!super.apply(user, target, move)) {
-      return false;
-    }
-    const chance = this.getMoveChance(user, target, move, false);
-    if (chance < 0 || user.randSeedInt(100) < chance) {
-      let secondaryEffect: MoveEffectAttr;
-      const terrain = globalScene.arena.getTerrainType();
-      if (terrain !== TerrainType.NONE) {
-        secondaryEffect = this.determineTerrainEffect(terrain);
-      } else {
-        const biome = globalScene.arena.biomeType;
-        secondaryEffect = this.determineBiomeEffect(biome);
-      }
-      return secondaryEffect.apply(user, target, move);
-    }
-    return false;
+  override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
+    const terrain = globalScene.arena.getTerrainType();
+    const biome = globalScene.arena.biomeType;
+    const secondaryEffect = this.determineTerrainEffect(terrain) ?? this.determineBiomeEffect(biome);
+    return secondaryEffect.applyEffect(user, target, move);
   }
 
   /**
@@ -56,24 +44,19 @@ export class SecretPowerAttr extends MoveEffectAttr {
    * @param terrain - {@linkcode TerrainType} The current terrain
    * @returns the chosen secondary effect {@linkcode MoveEffectAttr}
    */
-  private determineTerrainEffect(terrain: TerrainType): MoveEffectAttr {
-    let secondaryEffect: MoveEffectAttr;
+  private determineTerrainEffect(terrain: TerrainType): ChanceBasedMoveEffectAttr | undefined {
     switch (terrain) {
       case TerrainType.ELECTRIC:
-      default:
-        secondaryEffect = new StatusEffectAttr(StatusEffect.PARALYSIS, false, undefined, undefined, -1);
-        break;
+        return new StatusEffectAttr(StatusEffect.PARALYSIS, false, undefined, undefined);
       case TerrainType.MISTY:
-        secondaryEffect = new StatStageChangeAttr([Stat.SPATK], -1, false, { effectChanceOverride: -1 });
-        break;
+        return new StatStageChangeAttr([Stat.SPATK], -1, false);
       case TerrainType.GRASSY:
-        secondaryEffect = new StatusEffectAttr(StatusEffect.SLEEP, false, undefined, undefined, -1);
-        break;
+        return new StatusEffectAttr(StatusEffect.SLEEP, false, undefined, undefined);
       case TerrainType.PSYCHIC:
-        secondaryEffect = new StatStageChangeAttr([Stat.SPD], -1, false, { effectChanceOverride: -1 });
-        break;
+        return new StatStageChangeAttr([Stat.SPD], -1, false);
+      default:
+        return undefined;
     }
-    return secondaryEffect;
   }
 
   /**
@@ -93,8 +76,7 @@ export class SecretPowerAttr extends MoveEffectAttr {
    * @param biome - The current {@linkcode Biome} the battle is set in
    * @returns the chosen secondary effect {@linkcode MoveEffectAttr}
    */
-  private determineBiomeEffect(biome: Biome): MoveEffectAttr {
-    let secondaryEffect: MoveEffectAttr;
+  private determineBiomeEffect(biome: Biome): ChanceBasedMoveEffectAttr {
     switch (biome) {
       case Biome.PLAINS:
       case Biome.GRASS:
@@ -102,46 +84,37 @@ export class SecretPowerAttr extends MoveEffectAttr {
       case Biome.FOREST:
       case Biome.JUNGLE:
       case Biome.MEADOW:
-        secondaryEffect = new StatusEffectAttr(StatusEffect.SLEEP, false, undefined, undefined, -1);
-        break;
+        return new StatusEffectAttr(StatusEffect.SLEEP, false, undefined, undefined, -1);
       case Biome.SWAMP:
       case Biome.MOUNTAIN:
       case Biome.TEMPLE:
       case Biome.RUINS:
-        secondaryEffect = new StatStageChangeAttr([Stat.SPD], -1, false, { effectChanceOverride: -1 });
-        break;
+        return new StatStageChangeAttr([Stat.SPD], -1, false, { effectChanceOverride: -1 });
       case Biome.ICE_CAVE:
       case Biome.SNOWY_FOREST:
-        secondaryEffect = new StatusEffectAttr(StatusEffect.FREEZE, false, undefined, undefined, -1);
-        break;
+        return new StatusEffectAttr(StatusEffect.FREEZE, false, undefined, undefined, -1);
       case Biome.VOLCANO:
-        secondaryEffect = new StatusEffectAttr(StatusEffect.BURN, false, undefined, undefined, -1);
-        break;
+        return new StatusEffectAttr(StatusEffect.BURN, false, undefined, undefined, -1);
       case Biome.FAIRY_CAVE:
-        secondaryEffect = new StatStageChangeAttr([Stat.SPATK], -1, false, { effectChanceOverride: -1 });
-        break;
+        return new StatStageChangeAttr([Stat.SPATK], -1, false, { effectChanceOverride: -1 });
       case Biome.DESERT:
       case Biome.CONSTRUCTION_SITE:
       case Biome.BEACH:
       case Biome.ISLAND:
       case Biome.BADLANDS:
-        secondaryEffect = new StatStageChangeAttr([Stat.ACC], -1, false, { effectChanceOverride: -1 });
-        break;
+        return new StatStageChangeAttr([Stat.ACC], -1, false, { effectChanceOverride: -1 });
       case Biome.SEA:
       case Biome.LAKE:
       case Biome.SEABED:
-        secondaryEffect = new StatStageChangeAttr([Stat.ATK], -1, false, { effectChanceOverride: -1 });
-        break;
+        return new StatStageChangeAttr([Stat.ATK], -1, false, { effectChanceOverride: -1 });
       case Biome.CAVE:
       case Biome.WASTELAND:
       case Biome.GRAVEYARD:
       case Biome.ABYSS:
       case Biome.SPACE:
-        secondaryEffect = new AddBattlerTagAttr(BattlerTagType.FLINCHED, false, { effectChanceOverride: -1 });
-        break;
+        return new AddBattlerTagAttr(BattlerTagType.FLINCHED, false, { effectChanceOverride: -1 });
       case Biome.END:
-        secondaryEffect = new StatStageChangeAttr([Stat.DEF], -1, false, { effectChanceOverride: -1 });
-        break;
+        return new StatStageChangeAttr([Stat.DEF], -1, false, { effectChanceOverride: -1 });
       case Biome.TOWN:
       case Biome.METROPOLIS:
       case Biome.SLUM:
@@ -150,10 +123,8 @@ export class SecretPowerAttr extends MoveEffectAttr {
       case Biome.LABORATORY:
       case Biome.POWER_PLANT:
       default:
-        secondaryEffect = new StatusEffectAttr(StatusEffect.PARALYSIS, false, undefined, undefined, -1);
-        break;
+        return new StatusEffectAttr(StatusEffect.PARALYSIS, false, undefined, undefined, -1);
     }
-    return secondaryEffect;
   }
 
   /** Secret Power ignores the move chance bonus from the Water + Fire Pledge combo effect */

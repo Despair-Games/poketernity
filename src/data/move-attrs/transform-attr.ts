@@ -14,11 +14,7 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
  * @see {@linkcode PokemonTransformPhase}
  */
 export class TransformAttr extends MoveEffectAttr {
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
-    if (!super.apply(user, target, move)) {
-      return false;
-    }
-
+  override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
     globalScene.unshiftPhase(new PokemonTransformPhase(user.getBattlerIndex(), target.getBattlerIndex()));
 
     globalScene.queueMessage(

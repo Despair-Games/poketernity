@@ -25,11 +25,7 @@ export class AddSubstituteAttr extends MoveEffectAttr {
     this.hpCost = hpCost;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
-    if (!super.apply(user, target, move)) {
-      return false;
-    }
-
+  override applyEffect(user: Pokemon, _target: Pokemon, move: Move): boolean {
     user.damageAndUpdate(Math.floor(user.getMaxHp() * this.hpCost), HitResult.OTHER, false, true, true);
     user.addTag(BattlerTagType.SUBSTITUTE, 0, move.id, user.id);
     return true;

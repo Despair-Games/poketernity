@@ -23,32 +23,29 @@ export class SwapStatStagesAttr extends MoveEffectAttr {
     this.stats = stats;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
-    if (super.apply(user, target, move)) {
-      for (const s of this.stats) {
-        const temp = user.getStatStage(s);
-        user.setStatStage(s, target.getStatStage(s));
-        target.setStatStage(s, temp);
-      }
-
-      target.updateInfo();
-      user.updateInfo();
-
-      if (this.stats.length === 7) {
-        globalScene.queueMessage(
-          i18next.t("moveTriggers:switchedStatChanges", { pokemonName: getPokemonNameWithAffix(user) }),
-        );
-      } else if (this.stats.length === 2) {
-        globalScene.queueMessage(
-          i18next.t("moveTriggers:switchedTwoStatChanges", {
-            pokemonName: getPokemonNameWithAffix(user),
-            firstStat: i18next.t(getStatKey(this.stats[0])),
-            secondStat: i18next.t(getStatKey(this.stats[1])),
-          }),
-        );
-      }
-      return true;
+  override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
+    for (const s of this.stats) {
+      const temp = user.getStatStage(s);
+      user.setStatStage(s, target.getStatStage(s));
+      target.setStatStage(s, temp);
     }
-    return false;
+
+    target.updateInfo();
+    user.updateInfo();
+
+    if (this.stats.length === 7) {
+      globalScene.queueMessage(
+        i18next.t("moveTriggers:switchedStatChanges", { pokemonName: getPokemonNameWithAffix(user) }),
+      );
+    } else if (this.stats.length === 2) {
+      globalScene.queueMessage(
+        i18next.t("moveTriggers:switchedTwoStatChanges", {
+          pokemonName: getPokemonNameWithAffix(user),
+          firstStat: i18next.t(getStatKey(this.stats[0])),
+          secondStat: i18next.t(getStatKey(this.stats[1])),
+        }),
+      );
+    }
+    return true;
   }
 }
