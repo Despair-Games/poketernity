@@ -12,10 +12,7 @@ export class AddBattlerTagIfBoostedAttr extends AddBattlerTagAttr {
     super(tag, false, { turnCountMin: 2, turnCountMax: 5 });
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
-    if (target.turnData.statStagesIncreased) {
-      super.apply(user, target, move);
-    }
-    return true;
+  override canApply(user: Pokemon, target: Pokemon, move: Move): boolean {
+    return target.turnData.statStagesIncreased && super.canApply(user, target, move);
   }
 }

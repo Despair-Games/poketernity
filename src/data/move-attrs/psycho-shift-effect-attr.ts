@@ -15,7 +15,7 @@ export class PsychoShiftEffectAttr extends MoveEffectAttr {
     super(false);
   }
 
-  override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
+  override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
     const statusToApply = this.getStatusToApply(user);
 
     if (!statusToApply) {

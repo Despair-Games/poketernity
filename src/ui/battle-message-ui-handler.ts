@@ -11,6 +11,8 @@ import { PERMANENT_STATS, getStatKey } from "#enums/stat";
 import { settings } from "#app/system/settings/settings-manager";
 
 export default class BattleMessageUiHandler extends MessageUiHandler {
+  private readonly wordWrapWidth: number = 1780;
+
   private levelUpStatsContainer: Phaser.GameObjects.Container;
   private levelUpStatsIncrContent: Phaser.GameObjects.Text;
   private levelUpStatsValuesContent: BBCodeText;
@@ -21,8 +23,6 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
   public commandWindow: Phaser.GameObjects.NineSlice;
   public movesWindowContainer: Phaser.GameObjects.Container;
   public nameBoxContainer: Phaser.GameObjects.Container;
-
-  public readonly wordWrapWidth: number = 1780;
 
   constructor() {
     super(Mode.MESSAGE);

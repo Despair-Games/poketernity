@@ -14,6 +14,7 @@ export const courtChangeArenaTags = [
   ArenaTagType.REFLECT,
   ArenaTagType.SPIKES,
   ArenaTagType.STEALTH_ROCK,
+  ArenaTagType.SHARP_STEEL,
   ArenaTagType.STICKY_WEB,
   ArenaTagType.TAILWIND,
   ArenaTagType.TOXIC_SPIKES,
@@ -21,6 +22,10 @@ export const courtChangeArenaTags = [
   ArenaTagType.GRASS_WATER_PLEDGE,
   ArenaTagType.FIRE_GRASS_PLEDGE,
   ArenaTagType.WATER_FIRE_PLEDGE,
+  ArenaTagType.G_MAX_VINE_LASH,
+  ArenaTagType.G_MAX_WILDFIRE,
+  ArenaTagType.G_MAX_CANNONADE,
+  ArenaTagType.G_MAX_VOLCALITH,
 ];
 
 /**
@@ -36,11 +41,7 @@ export class SwapArenaTagsAttr extends MoveEffectAttr {
     this.swappableTags = SwapTags;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
-    if (!super.apply(user, target, move)) {
-      return false;
-    }
-
+  override applyEffect(user: Pokemon, _target: Pokemon, _move: Move): boolean {
     const tagPlayerTemp = globalScene.arena.findTagsOnSide(
       (t) => this.swappableTags.includes(t.tagType),
       ArenaTagSide.PLAYER,

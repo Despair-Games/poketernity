@@ -24,11 +24,7 @@ export class SketchAttr extends MoveEffectAttr {
     super(true);
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
-    if (!super.apply(user, target, move)) {
-      return false;
-    }
-
+  override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     const targetMove = target
       .getLastXMoves(-1)
       .find((m) => m.move !== Moves.NONE && m.move !== Moves.STRUGGLE && !m.virtual);

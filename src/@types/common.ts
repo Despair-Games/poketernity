@@ -1,1 +1,1 @@
-export type ConditionFn = (args?: any[]) => boolean;
+export type ConditionFn = (...args: unknown[]) => boolean;

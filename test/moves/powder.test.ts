@@ -162,7 +162,6 @@ describe("Moves - Powder", () => {
     game.move.select(Moves.ROAR, 0, BattlerIndex.ENEMY_2);
     game.move.select(Moves.SPLASH, 1);
     await game.toNextTurn();
-    await game.toNextTurn(); // Requires game.toNextTurn() twice due to double battle
 
     // Turn 2: Enemy should activate Powder twice: From using Ember, and from copying Fiery Dance via Dancer
     playerPokemon.hp = playerPokemon.getMaxHp();

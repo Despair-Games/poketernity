@@ -21,21 +21,18 @@ export class SwapStatAttr extends MoveEffectAttr {
     this.stat = stat;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
-    if (super.apply(user, target, move)) {
-      const temp = user.getStat(this.stat, false);
-      user.setStat(this.stat, target.getStat(this.stat, false), false);
-      target.setStat(this.stat, temp, false);
+  override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
+    const temp = user.getStat(this.stat, false);
+    user.setStat(this.stat, target.getStat(this.stat, false), false);
+    target.setStat(this.stat, temp, false);
 
-      globalScene.queueMessage(
-        i18next.t("moveTriggers:switchedStat", {
-          pokemonName: getPokemonNameWithAffix(user),
-          stat: i18next.t(getStatKey(this.stat)),
-        }),
-      );
+    globalScene.queueMessage(
+      i18next.t("moveTriggers:switchedStat", {
+        pokemonName: getPokemonNameWithAffix(user),
+        stat: i18next.t(getStatKey(this.stat)),
+      }),
+    );
 
-      return true;
-    }
-    return false;
+    return true;
   }
 }
