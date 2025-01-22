@@ -75,7 +75,7 @@ describe("Moves - G-Max Chi Strike grants a stackable crit boost", () => {
     game.override
       .battleType("double")
       .enemyAbility(Abilities.PRANKSTER)
-      .moveset([Moves.G_MAX_CHI_STRIKE, Moves.BITE, Moves.SPLASH])
+      .moveset([Moves.G_MAX_CHI_STRIKE, Moves.BITE, Moves.SPLASH, Moves.DRAGON_CHEER])
       .enemyMoveset([Moves.SUBSTITUTE]);
     await game.classicMode.startBattle([Species.MACHAMP, Species.SHUCKLE]);
 
@@ -91,6 +91,11 @@ describe("Moves - G-Max Chi Strike grants a stackable crit boost", () => {
     game.move.select(Moves.BITE, 1, BattlerIndex.ENEMY);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemy.getCritStage).toHaveReturnedWith(1);
+
+    game.move.select(Moves.DRAGON_CHEER);
+    game.move.select(Moves.BITE, 1, BattlerIndex.ENEMY);
+    await game.phaseInterceptor.to("TurnEndPhase");
+    expect(enemy.getCritStage).toHaveReturnedWith(2);
   });
 
   it("G-Max chi strike crit boost is not baton passable", async () => {
