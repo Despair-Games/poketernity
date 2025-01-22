@@ -3,6 +3,8 @@ import "vitest-canvas-mock";
 import { afterAll, beforeAll, vi } from "vitest";
 import { initTestFile } from "#test/testUtils/testFileInitialization";
 
+//#region Mocking
+
 /** Mock the override import to always return default values, ignoring any custom overrides. */
 vi.mock("#app/overrides", async (importOriginal) => {
   // eslint-disable-next-line
@@ -49,6 +51,16 @@ vi.mock("i18next", async (importOriginal) => {
 
   return await importOriginal();
 });
+
+/** Making sure that i18n is initialized on all calls. */
+vi.mock("#app/plugins/i18n", async (importOriginal) => {
+  const importedStuff: any = await importOriginal();
+  const { initI18n } = importedStuff;
+  await initI18n();
+  return importedStuff;
+});
+
+//#region
 
 global.testFailed = false;
 
