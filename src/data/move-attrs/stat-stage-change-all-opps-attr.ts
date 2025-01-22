@@ -79,8 +79,8 @@ export class StatStageChangeAllOppsAttr extends ChanceBasedMoveEffectAttr {
           }),
         ),
       );
-      return true;
     }
+    return true;
   }
 
   override getTargetBenefitScore(_user: Pokemon, target: Pokemon, _move: Move): number {
