@@ -3349,13 +3349,13 @@ export function initMoves() {
     new AttackMove(Moves.G_MAX_SMITE, Type.FAIRY, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
       .unimplemented(), // applies confuse to all opps
-    new AttackMove(Moves.G_MAX_MELTDOWN, Type.STEEL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .target(MoveTarget.ALL_NEAR_ENEMIES)
-      .unimplemented(), // applies torment to all opps
     new AttackMove(Moves.G_MAX_STEELSURGE, Type.STEEL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).attr(
       AddArenaTrapTagHitAttr,
       ArenaTagType.SHARP_STEEL,
     ),
+    new AttackMove(Moves.G_MAX_MELTDOWN, Type.STEEL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
+      .target(MoveTarget.ALL_NEAR_ENEMIES)
+      .unimplemented(), // applies torment to all opps
     new AttackMove(Moves.G_MAX_FOAM_BURST, Type.WATER, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).attr(
       StatStageChangeAllOppsAttr,
       [Stat.SPD],
@@ -3375,22 +3375,8 @@ export function initMoves() {
     new AttackMove(Moves.G_MAX_DRUM_SOLO, Type.GRASS, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).ignoresAbilities(),
     new AttackMove(Moves.G_MAX_FIREBALL, Type.FIRE, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).ignoresAbilities(),
     new AttackMove(Moves.G_MAX_HYDROSNIPE, Type.WATER, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).ignoresAbilities(),
-    new AttackMove(Moves.G_MAX_ONE_BLOW, Type.DARK, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .attr(
-        RemoveArenaTagsAttr,
-        [ArenaTagType.QUICK_GUARD, ArenaTagType.WIDE_GUARD, ArenaTagType.MAT_BLOCK, ArenaTagType.CRAFTY_SHIELD],
-        ArenaTagRelativeSide.TARGET,
-        MoveEffectTrigger.PRE_APPLY,
-      )
-      .ignoresProtect(),
-    new AttackMove(Moves.G_MAX_RAPID_FLOW, Type.WATER, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .attr(
-        RemoveArenaTagsAttr,
-        [ArenaTagType.QUICK_GUARD, ArenaTagType.WIDE_GUARD, ArenaTagType.MAT_BLOCK, ArenaTagType.CRAFTY_SHIELD],
-        ArenaTagRelativeSide.TARGET,
-        MoveEffectTrigger.PRE_APPLY,
-      )
-      .ignoresProtect(),
+    new AttackMove(Moves.G_MAX_ONE_BLOW, Type.DARK, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).ignoresProtect(),
+    new AttackMove(Moves.G_MAX_RAPID_FLOW, Type.WATER, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8).ignoresProtect(),
     new AttackMove(Moves.TERA_BLAST, Type.NORMAL, MoveCategory.SPECIAL, 80, 100, 10, -1, 0, 9)
       .attr(TeraMoveCategoryAttr)
       .attr(TeraBlastTypeAttr)
