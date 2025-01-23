@@ -234,6 +234,7 @@ import {
   failIfSingleBattle,
   unknownTypeCondition,
   UpperHandCondition,
+  failOnMaxCondition,
 } from "./move-conditions";
 import { SelfStatusMove } from "./move";
 import { isNonVolatileStatusEffect, getNonVolatileStatusEffects } from "./status-effect";
@@ -377,6 +378,7 @@ export function initMoves() {
     new AttackMove(Moves.SONIC_BOOM, Type.NORMAL, MoveCategory.SPECIAL, -1, 90, 20, -1, 0, 1).attr(FixedDamageAttr, 20),
     new StatusMove(Moves.DISABLE, Type.NORMAL, 100, 20, -1, 0, 1)
       .attr(AddBattlerTagAttr, BattlerTagType.DISABLED, false, { failOnOverlap: true })
+      .condition(failOnMaxCondition)
       .condition(
         (_user, target, _move) =>
           target
@@ -431,7 +433,9 @@ export function initMoves() {
     new AttackMove(Moves.SUBMISSION, Type.FIGHTING, MoveCategory.PHYSICAL, 80, 80, 20, -1, 0, 1)
       .attr(RecoilAttr)
       .recklessMove(),
-    new AttackMove(Moves.LOW_KICK, Type.FIGHTING, MoveCategory.PHYSICAL, -1, 100, 20, -1, 0, 1).attr(WeightPowerAttr),
+    new AttackMove(Moves.LOW_KICK, Type.FIGHTING, MoveCategory.PHYSICAL, -1, 100, 20, -1, 0, 1)
+      .condition(failOnMaxCondition)
+      .attr(WeightPowerAttr),
     new AttackMove(Moves.COUNTER, Type.FIGHTING, MoveCategory.PHYSICAL, -1, 100, 20, -1, -5, 1)
       .attr(CounterDamageAttr, (move: Move) => move.category === MoveCategory.PHYSICAL, 2)
       .target(MoveTarget.ATTACKER),
@@ -1694,6 +1698,7 @@ export function initMoves() {
       .attr(AddArenaTrapTagAttr, ArenaTagType.STEALTH_ROCK)
       .target(MoveTarget.ENEMY_SIDE),
     new AttackMove(Moves.GRASS_KNOT, Type.GRASS, MoveCategory.SPECIAL, -1, 100, 20, -1, 0, 4)
+      .condition(failOnMaxCondition)
       .attr(WeightPowerAttr)
       .makesContact(),
     new AttackMove(Moves.CHATTER, Type.FLYING, MoveCategory.SPECIAL, 65, 100, 20, 100, 0, 4)
@@ -1847,6 +1852,7 @@ export function initMoves() {
       .attr(StatStageChangeAttr, [Stat.SPATK, Stat.SPDEF, Stat.SPD], 1, true)
       .danceMove(),
     new AttackMove(Moves.HEAVY_SLAM, Type.STEEL, MoveCategory.PHYSICAL, -1, 100, 10, -1, 0, 5)
+      .condition(failOnMaxCondition)
       .attr(AlwaysHitMinimizeAttr)
       .attr(CompareWeightPowerAttr)
       .attr(HitsTagForDoubleDamageAttr, BattlerTagType.MINIMIZED),
@@ -2050,6 +2056,7 @@ export function initMoves() {
       .attr(StatStageChangeAttr, [Stat.DEF], -1)
       .slicingMove(),
     new AttackMove(Moves.HEAT_CRASH, Type.FIRE, MoveCategory.PHYSICAL, -1, 100, 10, -1, 0, 5)
+      .condition(failOnMaxCondition)
       .attr(AlwaysHitMinimizeAttr)
       .attr(CompareWeightPowerAttr)
       .attr(HitsTagForDoubleDamageAttr, BattlerTagType.MINIMIZED),
