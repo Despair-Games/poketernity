@@ -34,9 +34,7 @@ describe("Abilities - Bulletproof", () => {
   it("should prevent HP recovery from ally-directed Pollen Puff", async () => {
     game.override.moveset([Moves.POLLEN_PUFF, Moves.SPLASH]).battleType("double");
     await game.classicMode.startBattle([Species.FEEBAS, Species.SLAKOTH]);
-    const playerParty = game.scene.getPlayerField();
-    const playerPokemon1 = playerParty[0];
-    const playerPokemon2 = playerParty[1];
+    const [playerPokemon1, playerPokemon2] = game.scene.getPlayerField();
     playerPokemon2.hp = 1;
 
     game.move.select(Moves.POLLEN_PUFF, 0, BattlerIndex.PLAYER_2);
