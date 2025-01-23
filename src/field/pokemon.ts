@@ -2056,6 +2056,65 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
+   * Obtains this Pokemon's Attack Score (AS) against the given opponent
+   * for the given move. This score ranges from (-1) to (+4) depending on the
+   * move's forecasted damage against the opponent:
+   * - If the move is forecasted to KO the opponent, AS = (+4)
+   * - If the move deals at least 80% of the opponent's maximum HP but does not KO, AS = (+2)
+   * - If the move deals damage in the interval of (0, 80)% max HP, and does not KO, AS
+   * is determined randomly based on the damage forecasted:
+   *   - Let *d* = 40*x* + *y* where d is the damage dealt in terms of % max HP,
+   * 40*x* is the next highest multiple of 40 below *d*, and *y* < 40, then
+   *     - P(AS = x + 1) = y / 40
+   *     - P(AS = x) = 1 - (y / 40)
+   * - If the move is not forecasted to deal damage, AS = -1, denoting a move with no effect.
+   * @param opponent The {@linkcode Pokemon} to forecast the move against
+   * @param move The {@linkcode Move} whose outcome is forecasted and scored
+   * @returns The calculated AS for the forecasted action
+   */
+  public getAttackScore(opponent: Pokemon, move: Move): number {
+    const { damage } = opponent.getAttackDamage(this, move, AbilityApplyMode.REVEALED);
+
+    if (damage >= opponent.hp) {
+      return 4;
+    } else if (damage <= 0) {
+      return -1;
+    }
+
+    const damagePct = Math.floor((damage / opponent.getMaxHp()) * 100);
+
+    if (damagePct >= 80) {
+      return 2;
+    } else {
+      const minAttackScore = Math.floor(damagePct / 40);
+      const tierUpChance = (damagePct % 40) * (100 / 40);
+
+      return this.randSeedInt(100) < tierUpChance ? minAttackScore + 1 : minAttackScore;
+    }
+  }
+
+  /**
+   * Obtains the expected value of this Pokemon's Attack Score (AS) against the
+   * given opponent when using the given move
+   * @param opponent The {@linkcode Pokemon} to forecast the move against
+   * @param move The {@linkcode Move} being scored
+   * @returns The expected AS for the forecasted action
+   * @see {@linkcode getAttackScore}
+   */
+  public getExpectedAttackScore(opponent: Pokemon, move: Move): number {
+    const { damage } = opponent.getAttackDamage(this, move, AbilityApplyMode.REVEALED);
+
+    if (damage >= opponent.hp) {
+      return 4;
+    } else if (damage <= 0) {
+      return -1;
+    } else {
+      const damagePct = Math.floor((damage / opponent.getMaxHp()) * 100);
+      return damagePct / 40;
+    }
+  }
+
+  /**
    * Computes the given Pokemon's matchup score against this Pokemon.
    * In most cases, this score ranges from near-zero to 16, but the maximum possible matchup score is 64.
    * @param opponent {@linkcode Pokemon} The Pokemon to compare this Pokemon against
