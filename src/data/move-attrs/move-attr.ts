@@ -67,4 +67,8 @@ export abstract class MoveAttr {
   getTargetBenefitScore(_user: Pokemon, _target: Pokemon, _move: Move): number {
     return 0;
   }
+
+  getEffectScore(_user: Pokemon, _target: Pokemon, _move: Move): number {
+    return 0;
+  }
 }

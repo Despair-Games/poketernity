@@ -33,6 +33,10 @@ export class MoveCondition {
   getUserBenefitScore(_user: Pokemon, _target: Pokemon, _move: Move): number {
     return 0;
   }
+
+  public getConditionScore(_user: Pokemon, _target: Pokemon, _move: Move): number {
+    return 0;
+  }
 }
 
 export class FirstMoveCondition extends MoveCondition {

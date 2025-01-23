@@ -1,5 +1,5 @@
 import type { BattlerIndex } from "#enums/battler-index";
-import { type Pokemon } from "#app/field/pokemon";
+import { type EnemyPokemon, type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { Localizable } from "#app/interfaces/locales";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -648,6 +648,7 @@ export abstract class Move implements Localizable {
    * @param target {@linkcode Pokemon} receiving the move
    * @param move {@linkcode Move} using the move
    * @returns integer representing the total benefitScore
+   * @deprecated
    */
   getUserBenefitScore(user: Pokemon, target: Pokemon, move: Move): number {
     let score = 0;
@@ -669,6 +670,7 @@ export abstract class Move implements Localizable {
    * @param target {@linkcode Pokemon} receiving the move
    * @param move {@linkcode Move} using the move
    * @returns integer representing the total benefitScore
+   * @deprecated
    */
   getTargetBenefitScore(user: Pokemon, target: Pokemon, move: Move): number {
     let score = 0;
@@ -685,6 +687,35 @@ export abstract class Move implements Localizable {
     }
 
     return score;
+  }
+
+  /**
+   * Calculates the move's combined effect score (ES) from all attributes,
+   * conditions, and other score modifiers. ES is used to evaluate secondary
+   * effects and is agnostic of damage dealt, as that is accounted for by
+   * {@linkcode Pokemon.getAttackScore}.
+   * @param user the {@linkcode Pokemon} using the move
+   * @param target the {@linkcode Pokemon} targeted by the move
+   * @returns a score value accumulated from effect score modifiers.
+   * @todo Add Low Accuracy Penalty and Ally Target Penalty
+   */
+  public getEffectScore(user: EnemyPokemon, target: Pokemon): number {
+    // penalize targeting Pokemon that are hidden by Commander
+    if (target.getAlly()?.getTag(BattlerTagType.COMMANDED)?.getSourcePokemon() === target) {
+      return -20;
+    }
+
+    /** The combined score from all attributes of the move */
+    const attrScores = this.attrs.map((attr) => attr.getEffectScore(user, target, this));
+
+    /** The combined score from all conditions of the move */
+    const conditionScores = this.conditions.map((cond) => cond.getConditionScore(user, target, this));
+
+    const totalScore = attrScores.concat(conditionScores).reduce((total, score) => total + score);
+
+    // @todo apply low accuracy penalty + ally target penalty to totalScore
+
+    return totalScore;
   }
 
   /**
@@ -864,6 +895,7 @@ export class AttackMove extends Move {
     }
   }
 
+  /** @deprecated */
   override getTargetBenefitScore(user: Pokemon, target: Pokemon, move: Move): number {
     let ret = super.getTargetBenefitScore(user, target, move);
 

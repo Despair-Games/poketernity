@@ -5533,6 +5533,18 @@ export class EnemyPokemon extends Pokemon {
   }
 
   /**
+   * Obtains the total score for the given move when used by this Pokemon
+   * against the given target. A move's total score is based on attack score (AS)
+   * and effect score (ES)
+   * @param opponent the {@linkcode Pokemon} the move is evaluated against
+   * @param move the {@linkcode Move} being evaluated
+   * @returns the sum of the move's AS and ES against the given opponent
+   */
+  public getMoveScore(opponent: Pokemon, move: Move): number {
+    return this.getAttackScore(opponent, move) + move.getEffectScore(this, opponent);
+  }
+
+  /**
    * Determines the move this Pokemon will use on the next turn, as well as
    * the Pokemon the move will target.
    * @returns this Pokemon's next move in the format {move, moveTargets}
