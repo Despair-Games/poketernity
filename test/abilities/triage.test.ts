@@ -4,7 +4,6 @@ import { BattlerIndex } from "#enums/battler-index";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
-import { TurnStartPhase } from "#app/phases/turn-start-phase";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { MoveFlags } from "#enums/move-flags";
@@ -87,12 +86,10 @@ describe("Abilities - Triage", () => {
     game.move.select(Moves.POLLEN_PUFF, 0, BattlerIndex.PLAYER_2);
     game.move.select(Moves.SPLASH, 1);
 
-    await game.phaseInterceptor.to(TurnStartPhase, false);
-    const phase = game.scene.getCurrentPhase() as TurnStartPhase;
-    const healingPokemonIndex = phase.getCommandOrder().indexOf(BattlerIndex.PLAYER);
+    await game.phaseInterceptor.to("TurnEndPhase", false);
 
     // The Pokemon using Pollen Puff on its ally should be after the enemy Pokemon using Quick Attack
     expect(allMoves[Moves.POLLEN_PUFF].checkFlag(MoveFlags.TRIAGE_MOVE, playerPokemon, null)).toBe(false);
-    expect(healingPokemonIndex).toBeGreaterThanOrEqual(2);
+    expect(playerPokemon[0].turnData.order).toBeGreaterThanOrEqual(2);
   });
 });

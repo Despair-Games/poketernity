@@ -1,4 +1,5 @@
 import { Abilities } from "#enums/abilities";
+import { BattleCommand } from "#enums/battle-command";
 import type { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveCategory } from "#enums/move-category";
@@ -18,7 +19,6 @@ import { MoveEndPhase } from "./phases/move-end-phase";
 import { MoveHeaderPhase } from "./phases/move-header-phase";
 import { MovePhase } from "./phases/move-phase";
 import { SwitchSummonPhase } from "./phases/switch-summon-phase";
-import { Command } from "./ui/command-ui-handler";
 import { BooleanHolder, isNullOrUndefined, randSeedShuffle } from "./utils";
 
 /**
@@ -29,7 +29,7 @@ export interface TurnCommand {
   /** The {@linkcode Pokemon} carrying out the action */
   pokemon: Pokemon;
   /** The type of action to carry out */
-  command: Command;
+  command: BattleCommand;
   /**
    * The cursor index given by the user.
    * Used for {@linkcode Command.POKEMON | switch commands}.
@@ -165,7 +165,7 @@ export class TurnCommandManager {
 
     this.turnCommands.forEach((tc) => {
       if (
-        tc.command === Command.FIGHT
+        tc.command === BattleCommand.FIGHT
         && tc.pokemon.isPlayer() !== removedPokemon.isPlayer()
         && tc.targets?.length === 1
         && tc.targets[0] === removedPokemon.getBattlerIndex()
@@ -187,13 +187,13 @@ export class TurnCommandManager {
     }
 
     switch (nextCommand.command) {
-      case Command.FIGHT:
+      case BattleCommand.FIGHT:
         return this.handleFightCommand(nextCommand);
-      case Command.BALL:
+      case BattleCommand.BALL:
         return this.handleBallCommand(nextCommand);
-      case Command.POKEMON:
+      case BattleCommand.POKEMON:
         return this.handlePokemonCommand(nextCommand);
-      case Command.RUN:
+      case BattleCommand.RUN:
         return this.handleRunCommand(nextCommand);
     }
   }
@@ -207,12 +207,12 @@ export class TurnCommandManager {
    * @returns `true` if a command is found and scheduled for execution
    */
   public preemptFightCommand(condition: (command: TurnCommand) => boolean): boolean {
-    if (this.turnCommands.some((tc) => tc.command !== Command.FIGHT)) {
+    if (this.turnCommands.some((tc) => tc.command !== BattleCommand.FIGHT)) {
       console.warn("Found non-FIGHT commands in the turn command queue when trying to preempt a FIGHT command");
       return false;
     }
 
-    const turnCommand = this.tryRemoveCommand((tc) => tc.command === Command.FIGHT && condition(tc));
+    const turnCommand = this.tryRemoveCommand((tc) => tc.command === BattleCommand.FIGHT && condition(tc));
 
     if (turnCommand) {
       const { pokemon, cursor, move: queuedMove, targets } = turnCommand;
@@ -267,7 +267,7 @@ export class TurnCommandManager {
    */
   public tryReplaceMove(pokemon: Pokemon, move: PokemonMove, targets: BattlerIndex[]): boolean {
     const turnCommand = this.findPokemonCommand(pokemon);
-    if (turnCommand?.command !== Command.FIGHT) {
+    if (turnCommand?.command !== BattleCommand.FIGHT) {
       return false;
     }
 
@@ -325,12 +325,12 @@ export class TurnCommandManager {
   private sortPostSpeed(quiet: boolean = true): void {
     this.turnCommands.sort((a: TurnCommand, b: TurnCommand) => {
       if (a.command !== b.command) {
-        if (a.command === Command.FIGHT) {
+        if (a.command === BattleCommand.FIGHT) {
           return 1;
-        } else if (b.command === Command.FIGHT) {
+        } else if (b.command === BattleCommand.FIGHT) {
           return -1;
         }
-      } else if (a.command === Command.FIGHT) {
+      } else if (a.command === BattleCommand.FIGHT) {
         const priority = [a, b].map((tc) => {
           const move = allMoves[tc.move!.move];
           return move.getPriority(tc.pokemon, quiet);
@@ -423,7 +423,7 @@ export class TurnCommandManager {
    * before this function is called.
    */
   private shiftNonFightCommands(): void {
-    while (this.turnCommands[0] && this.turnCommands[0].command !== Command.FIGHT) {
+    while (this.turnCommands[0] && this.turnCommands[0].command !== BattleCommand.FIGHT) {
       this.shiftNextCommand();
     }
   }
@@ -457,7 +457,7 @@ export class TurnCommandManager {
    */
   private applyMoveHeaderAttrs(): void {
     this.turnCommands.forEach((tc) => {
-      if (tc.command !== Command.FIGHT) {
+      if (tc.command !== BattleCommand.FIGHT) {
         return;
       }
       const { pokemon, move: queuedMove } = tc;

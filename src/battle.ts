@@ -1,13 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import {
-  randomString,
-  NumberHolder,
-  randSeedInt,
-  shiftCharCodes,
-  randSeedItem,
-  randInt,
-  isBetween,
-} from "#app/utils";
+import { randomString, NumberHolder, randSeedInt, shiftCharCodes, randSeedItem, randInt, isBetween } from "#app/utils";
 import { TrainerVariant } from "#enums/trainer-variant";
 import Trainer from "./field/trainer";
 import type { GameMode } from "./game-mode";
