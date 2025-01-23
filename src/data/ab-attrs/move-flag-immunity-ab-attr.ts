@@ -4,7 +4,15 @@ import type { MoveFlags } from "#enums/move-flags";
 
 /**
  * This ability attribute provides the ability holder immunity to moves of a specified move flag category
- * Soundproof, Bulletproof, Powder
+ * ```
++-------------+-------------+
+|   Ability   |  Move Flag  |
++-------------+-------------+
+| Soundproof  | SOUND_BASED |
+| Overcoat    | POWDER_MOVE |
+| Bulletproof | BULLET_MOVE |
++-------------+-------------+
+ * ```
  */
 export class MoveFlagImmunityAbAttr extends MoveImmunityAbAttr {
   /**
