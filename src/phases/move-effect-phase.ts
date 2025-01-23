@@ -321,8 +321,8 @@ export class MoveEffectPhase extends HitCheckPhase {
    */
   private applyGMaxUserEffects(user: Pokemon, target: Pokemon, firstTarget: boolean) {
     this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target, firstTarget, true);
-    if (target.getAlly()?.isActive(true)) {
-      this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, user.getAlly(), firstTarget, false);
+    if (user.getAlly()?.isActive(true)) {
+      this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user.getAlly(), target, firstTarget, true);
     }
   }
 
@@ -333,7 +333,14 @@ export class MoveEffectPhase extends HitCheckPhase {
    * @todo: G-Max move edge cases like G-max Snooze
    */
   private applyGMaxTargetEffects(user: Pokemon, target: Pokemon, hitResult: HitResult, firstTarget: boolean) {
-    this.applyOnTargetEffects(user, target, hitResult, firstTarget);
+    const move = this.move.getMove();
+
+    if (move.hitsSubstitute(user, target)) {
+      this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target, firstTarget, false)
+    } else {
+      this.applyOnTargetEffects(user, target, hitResult, firstTarget);
+    }
+
     if (target.getAlly()?.isActive(true)) {
       this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target.getAlly(), firstTarget, false);
     }
