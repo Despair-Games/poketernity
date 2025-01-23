@@ -805,7 +805,7 @@ export function initAbilities() {
       .ignorable(),
     new Ability(Abilities.MOODY, 5).attr(MoodyAbAttr),
     new Ability(Abilities.OVERCOAT, 5)
-      .attr(BlockWeatherDamageAttr)
+      .attr(BlockWeatherDamageAttr, WeatherType.HAIL, WeatherType.SANDSTORM)
       .attr(MoveFlagImmunityAbAttr, MoveFlags.POWDER_MOVE)
       .ignorable(),
     new Ability(Abilities.POISON_TOUCH, 5)
