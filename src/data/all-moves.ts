@@ -582,7 +582,7 @@ export function initMoves() {
       .target(MoveTarget.ALL_NEAR_OTHERS),
     new AttackMove(Moves.EGG_BOMB, Type.NORMAL, MoveCategory.PHYSICAL, 100, 75, 10, -1, 0, 1)
       .makesContact(false)
-      .ballBombMove(),
+      .bulletMove(),
     new AttackMove(Moves.LICK, Type.GHOST, MoveCategory.PHYSICAL, 30, 100, 30, 30, 0, 1).attr(
       StatusEffectAttr,
       StatusEffect.PARALYSIS,
@@ -641,7 +641,7 @@ export function initMoves() {
     new AttackMove(Moves.BARRAGE, Type.NORMAL, MoveCategory.PHYSICAL, 15, 85, 20, -1, 0, 1)
       .attr(MultiHitAttr)
       .makesContact(false)
-      .ballBombMove(),
+      .bulletMove(),
     new AttackMove(Moves.LEECH_LIFE, Type.BUG, MoveCategory.PHYSICAL, 80, 100, 10, -1, 0, 1)
       .attr(HitHealAttr)
       .triageMove(),
@@ -781,7 +781,7 @@ export function initMoves() {
     ),
     new AttackMove(Moves.SLUDGE_BOMB, Type.POISON, MoveCategory.SPECIAL, 90, 100, 10, 30, 0, 2)
       .attr(StatusEffectAttr, StatusEffect.POISON)
-      .ballBombMove(),
+      .bulletMove(),
     new AttackMove(Moves.MUD_SLAP, Type.GROUND, MoveCategory.SPECIAL, 20, 100, 10, 100, 0, 2).attr(
       StatStageChangeAttr,
       [Stat.ACC],
@@ -789,13 +789,13 @@ export function initMoves() {
     ),
     new AttackMove(Moves.OCTAZOOKA, Type.WATER, MoveCategory.SPECIAL, 65, 85, 10, 50, 0, 2)
       .attr(StatStageChangeAttr, [Stat.ACC], -1)
-      .ballBombMove(),
+      .bulletMove(),
     new StatusMove(Moves.SPIKES, Type.GROUND, -1, 20, -1, 0, 2)
       .attr(AddArenaTrapTagAttr, ArenaTagType.SPIKES)
       .target(MoveTarget.ENEMY_SIDE),
     new AttackMove(Moves.ZAP_CANNON, Type.ELECTRIC, MoveCategory.SPECIAL, 120, 50, 5, 100, 0, 2)
       .attr(StatusEffectAttr, StatusEffect.PARALYSIS)
-      .ballBombMove(),
+      .bulletMove(),
     new StatusMove(Moves.FORESIGHT, Type.NORMAL, -1, 40, -1, 0, 2)
       .attr(ExposedMoveAttr, BattlerTagType.IGNORE_GHOST)
       .ignoresSubstitute(),
@@ -996,7 +996,7 @@ export function initMoves() {
     ),
     new AttackMove(Moves.SHADOW_BALL, Type.GHOST, MoveCategory.SPECIAL, 80, 100, 15, 20, 0, 2)
       .attr(StatStageChangeAttr, [Stat.SPDEF], -1)
-      .ballBombMove(),
+      .bulletMove(),
     new AttackMove(Moves.FUTURE_SIGHT, Type.PSYCHIC, MoveCategory.SPECIAL, 120, 100, 10, -1, 0, 2)
       .partial() // hits immediately when called by Metronome/etc, should not apply abilities or held items if user is off the field
       .ignoresProtect()
@@ -1176,7 +1176,7 @@ export function initMoves() {
     ),
     new AttackMove(Moves.MIST_BALL, Type.PSYCHIC, MoveCategory.SPECIAL, 95, 100, 5, 50, 0, 3)
       .attr(StatStageChangeAttr, [Stat.SPATK], -1)
-      .ballBombMove(),
+      .bulletMove(),
     new StatusMove(Moves.FEATHER_DANCE, Type.FLYING, 100, 15, -1, 0, 3)
       .attr(StatStageChangeAttr, [Stat.ATK], -2)
       .danceMove(),
@@ -1194,7 +1194,7 @@ export function initMoves() {
     new AttackMove(Moves.ICE_BALL, Type.ICE, MoveCategory.PHYSICAL, 30, 90, 20, -1, 0, 3)
       .partial() // Does not lock the user properly, does not increase damage correctly
       .attr(ConsecutiveUseDoublePowerAttr, 5, true, true, Moves.DEFENSE_CURL)
-      .ballBombMove(),
+      .bulletMove(),
     new AttackMove(Moves.NEEDLE_ARM, Type.GRASS, MoveCategory.PHYSICAL, 60, 100, 15, 30, 0, 3).attr(FlinchAttr),
     new SelfStatusMove(Moves.SLACK_OFF, Type.NORMAL, -1, 5, -1, 0, 3).attr(HealAttr, 0.5).triageMove(),
     new AttackMove(Moves.HYPER_VOICE, Type.NORMAL, MoveCategory.SPECIAL, 90, 100, 10, -1, 0, 3)
@@ -1236,7 +1236,7 @@ export function initMoves() {
         }
         return 1;
       })
-      .ballBombMove(),
+      .bulletMove(),
     new StatusMove(Moves.AROMATHERAPY, Type.GRASS, -1, 5, -1, 0, 3)
       .attr(PartyStatusCureAttr, i18next.t("moveTriggers:soothingAromaWaftedThroughArea"), Abilities.SAP_SIPPER)
       .target(MoveTarget.PARTY),
@@ -1294,7 +1294,7 @@ export function initMoves() {
     new AttackMove(Moves.BULLET_SEED, Type.GRASS, MoveCategory.PHYSICAL, 25, 100, 30, -1, 0, 3)
       .attr(MultiHitAttr)
       .makesContact(false)
-      .ballBombMove(),
+      .bulletMove(),
     new AttackMove(Moves.AERIAL_ACE, Type.FLYING, MoveCategory.PHYSICAL, 60, -1, 20, -1, 0, 3).slicingMove(),
     new AttackMove(Moves.ICICLE_SPEAR, Type.ICE, MoveCategory.PHYSICAL, 25, 100, 30, -1, 0, 3)
       .attr(MultiHitAttr)
@@ -1358,7 +1358,7 @@ export function initMoves() {
     new AttackMove(Moves.ROCK_BLAST, Type.ROCK, MoveCategory.PHYSICAL, 25, 90, 10, -1, 0, 3)
       .attr(MultiHitAttr)
       .makesContact(false)
-      .ballBombMove(),
+      .bulletMove(),
     new AttackMove(Moves.SHOCK_WAVE, Type.ELECTRIC, MoveCategory.SPECIAL, 60, -1, 20, -1, 0, 3),
     new AttackMove(Moves.WATER_PULSE, Type.WATER, MoveCategory.SPECIAL, 60, 100, 20, 20, 0, 3)
       .attr(ConfuseAttr)
@@ -1398,7 +1398,7 @@ export function initMoves() {
       .punchingMove(),
     new AttackMove(Moves.GYRO_BALL, Type.STEEL, MoveCategory.PHYSICAL, -1, 100, 5, -1, 0, 4)
       .attr(GyroBallPowerAttr)
-      .ballBombMove(),
+      .bulletMove(),
     new SelfStatusMove(Moves.HEALING_WISH, Type.PSYCHIC, -1, 10, -1, 0, 4)
       .attr(SacrificialFullRestoreAttr, false, "moveTriggers:sacrificialFullRestore")
       .triageMove()
@@ -1549,7 +1549,7 @@ export function initMoves() {
     ),
     new AttackMove(Moves.AURA_SPHERE, Type.FIGHTING, MoveCategory.SPECIAL, 80, -1, 20, -1, 0, 4)
       .pulseMove()
-      .ballBombMove(),
+      .bulletMove(),
     new SelfStatusMove(Moves.ROCK_POLISH, Type.ROCK, -1, 20, -1, 0, 4).attr(StatStageChangeAttr, [Stat.SPD], 2, true),
     new AttackMove(Moves.POISON_JAB, Type.POISON, MoveCategory.PHYSICAL, 80, 100, 20, 30, 0, 4).attr(
       StatusEffectAttr,
@@ -1564,7 +1564,7 @@ export function initMoves() {
     new AttackMove(Moves.AQUA_TAIL, Type.WATER, MoveCategory.PHYSICAL, 90, 90, 10, -1, 0, 4),
     new AttackMove(Moves.SEED_BOMB, Type.GRASS, MoveCategory.PHYSICAL, 80, 100, 15, -1, 0, 4)
       .makesContact(false)
-      .ballBombMove(),
+      .bulletMove(),
     new AttackMove(Moves.AIR_SLASH, Type.FLYING, MoveCategory.SPECIAL, 75, 95, 15, 30, 0, 4)
       .attr(FlinchAttr)
       .slicingMove(),
@@ -1585,10 +1585,10 @@ export function initMoves() {
     new AttackMove(Moves.VACUUM_WAVE, Type.FIGHTING, MoveCategory.SPECIAL, 40, 100, 30, -1, 1, 4),
     new AttackMove(Moves.FOCUS_BLAST, Type.FIGHTING, MoveCategory.SPECIAL, 120, 70, 5, 10, 0, 4)
       .attr(StatStageChangeAttr, [Stat.SPDEF], -1)
-      .ballBombMove(),
+      .bulletMove(),
     new AttackMove(Moves.ENERGY_BALL, Type.GRASS, MoveCategory.SPECIAL, 90, 100, 10, 10, 0, 4)
       .attr(StatStageChangeAttr, [Stat.SPDEF], -1)
-      .ballBombMove(),
+      .bulletMove(),
     new AttackMove(Moves.BRAVE_BIRD, Type.FLYING, MoveCategory.PHYSICAL, 120, 100, 15, -1, 0, 4)
       .attr(RecoilAttr, false, 0.33)
       .recklessMove(),
@@ -1621,7 +1621,7 @@ export function initMoves() {
     new AttackMove(Moves.SHADOW_SNEAK, Type.GHOST, MoveCategory.PHYSICAL, 40, 100, 30, -1, 1, 4),
     new AttackMove(Moves.MUD_BOMB, Type.GROUND, MoveCategory.SPECIAL, 65, 85, 10, 30, 0, 4)
       .attr(StatStageChangeAttr, [Stat.ACC], -1)
-      .ballBombMove(),
+      .bulletMove(),
     new AttackMove(Moves.PSYCHO_CUT, Type.PSYCHIC, MoveCategory.PHYSICAL, 70, 100, 20, -1, 0, 4)
       .attr(HighCritAttr)
       .slicingMove()
@@ -1671,7 +1671,7 @@ export function initMoves() {
     new AttackMove(Moves.ROCK_WRECKER, Type.ROCK, MoveCategory.PHYSICAL, 150, 90, 5, -1, 0, 4)
       .attr(RechargeAttr)
       .makesContact(false)
-      .ballBombMove(),
+      .bulletMove(),
     new AttackMove(Moves.CROSS_POISON, Type.POISON, MoveCategory.PHYSICAL, 70, 100, 20, 10, 0, 4)
       .attr(HighCritAttr)
       .attr(StatusEffectAttr, StatusEffect.POISON)
@@ -1682,7 +1682,7 @@ export function initMoves() {
     new AttackMove(Moves.IRON_HEAD, Type.STEEL, MoveCategory.PHYSICAL, 80, 100, 15, 30, 0, 4).attr(FlinchAttr),
     new AttackMove(Moves.MAGNET_BOMB, Type.STEEL, MoveCategory.PHYSICAL, 60, -1, 20, -1, 0, 4)
       .makesContact(false)
-      .ballBombMove(),
+      .bulletMove(),
     new AttackMove(Moves.STONE_EDGE, Type.ROCK, MoveCategory.PHYSICAL, 100, 80, 5, -1, 0, 4)
       .attr(HighCritAttr)
       .makesContact(false),
@@ -1856,7 +1856,7 @@ export function initMoves() {
       .attr(HitsSameTypeAttr),
     new AttackMove(Moves.ELECTRO_BALL, Type.ELECTRIC, MoveCategory.SPECIAL, -1, 100, 10, -1, 0, 5)
       .attr(ElectroBallPowerAttr)
-      .ballBombMove(),
+      .bulletMove(),
     new StatusMove(Moves.SOAK, Type.WATER, 100, 20, -1, 0, 5).attr(ChangeTypeAttr, Type.WATER),
     new AttackMove(Moves.FLAME_CHARGE, Type.FIRE, MoveCategory.PHYSICAL, 50, 100, 20, 100, 0, 5).attr(
       StatStageChangeAttr,
@@ -1877,7 +1877,7 @@ export function initMoves() {
     ),
     new AttackMove(Moves.ACID_SPRAY, Type.POISON, MoveCategory.SPECIAL, 40, 100, 20, 100, 0, 5)
       .attr(StatStageChangeAttr, [Stat.SPDEF], -2)
-      .ballBombMove(),
+      .bulletMove(),
     new AttackMove(Moves.FOUL_PLAY, Type.DARK, MoveCategory.PHYSICAL, 95, 100, 15, -1, 0, 5)
       .attr(TargetAtkUserAtkAttr)
       .edgeCase(), // Does not consider Huge Power/other attack stat modifiers correctly + disables Unaware during use
@@ -2087,7 +2087,7 @@ export function initMoves() {
     ),
     new AttackMove(Moves.SEARING_SHOT, Type.FIRE, MoveCategory.SPECIAL, 100, 100, 5, 30, 0, 5)
       .attr(StatusEffectAttr, StatusEffect.BURN)
-      .ballBombMove()
+      .bulletMove()
       .target(MoveTarget.ALL_NEAR_OTHERS),
     new AttackMove(Moves.TECHNO_BLAST, Type.NORMAL, MoveCategory.SPECIAL, 120, 100, 5, -1, 0, 5).attr(
       TechnoBlastTypeAttr,
@@ -2565,7 +2565,7 @@ export function initMoves() {
     new AttackMove(Moves.POLLEN_PUFF, Type.BUG, MoveCategory.SPECIAL, 90, 100, 15, -1, 0, 7)
       .attr(StatusCategoryOnAllyAttr)
       .attr(HealOnAllyAttr, 0.5, true, false)
-      .ballBombMove(),
+      .bulletMove(),
     new AttackMove(Moves.ANCHOR_SHOT, Type.STEEL, MoveCategory.PHYSICAL, 80, 100, 20, 100, 0, 7).attr(
       AddBattlerTagAttr,
       BattlerTagType.TRAPPED,
@@ -2626,7 +2626,7 @@ export function initMoves() {
     new StatusMove(Moves.INSTRUCT, Type.PSYCHIC, -1, 15, -1, 0, 7).ignoresSubstitute().attr(RepeatMoveAttr).edgeCase(), // incorrect interactions with Gigaton Hammer, Blood Moon & Torment
     new AttackMove(Moves.BEAK_BLAST, Type.FLYING, MoveCategory.PHYSICAL, 100, 100, 15, -1, -3, 7)
       .attr(BeakBlastHeaderAttr)
-      .ballBombMove()
+      .bulletMove()
       .makesContact(false),
     new AttackMove(Moves.CLANGING_SCALES, Type.DRAGON, MoveCategory.SPECIAL, 110, 100, 5, -1, 0, 7)
       .attr(StatStageChangeAttr, [Stat.DEF], -1, true, { firstTargetOnly: true })
@@ -2995,7 +2995,7 @@ export function initMoves() {
     new AttackMove(Moves.PYRO_BALL, Type.FIRE, MoveCategory.PHYSICAL, 120, 90, 5, 10, 0, 8)
       .attr(HealStatusEffectAttr, true, StatusEffect.FREEZE)
       .attr(StatusEffectAttr, StatusEffect.BURN)
-      .ballBombMove()
+      .bulletMove()
       .makesContact(false),
     new AttackMove(Moves.BEHEMOTH_BLADE, Type.STEEL, MoveCategory.PHYSICAL, 100, 100, 5, -1, 0, 8).slicingMove(),
     new AttackMove(Moves.BEHEMOTH_BASH, Type.STEEL, MoveCategory.PHYSICAL, 100, 100, 5, -1, 0, 8),
@@ -3622,7 +3622,7 @@ export function initMoves() {
       .triageMove(),
     new AttackMove(Moves.SYRUP_BOMB, Type.GRASS, MoveCategory.SPECIAL, 60, 85, 10, 100, 0, 9)
       .attr(AddBattlerTagAttr, BattlerTagType.SYRUP_BOMB, false, { turnCountMin: 3 })
-      .ballBombMove(),
+      .bulletMove(),
     new AttackMove(Moves.IVY_CUDGEL, Type.GRASS, MoveCategory.PHYSICAL, 100, 100, 10, -1, 0, 9)
       .attr(IvyCudgelTypeAttr)
       .attr(HighCritAttr)

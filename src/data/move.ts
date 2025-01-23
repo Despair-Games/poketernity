@@ -481,12 +481,12 @@ export abstract class Move implements Localizable {
   }
 
   /**
-   * Sets the {@linkcode MoveFlags.BALLBOMB_MOVE} flag for the calling Move
+   * Sets the {@linkcode MoveFlags.BULLET_MOVE} flag for the calling Move
    * @see {@linkcode Moves.ELECTRO_BALL}
    * @returns The {@linkcode Move} that called this function
    */
-  ballBombMove(): this {
-    this.setFlag(MoveFlags.BALLBOMB_MOVE, true);
+  bulletMove(): this {
+    this.setFlag(MoveFlags.BULLET_MOVE, true);
     return this;
   }
 

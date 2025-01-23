@@ -199,6 +199,7 @@ import { BypassSpeedChanceAbAttr } from "./ab-attrs/bypass-speed-chance-ab-attr"
 import { TerrainEventTypeChangeAbAttr } from "./ab-attrs/terrain-event-type-change-ab-attr";
 import { WeatherBasedSpeedDoublerAbAttr } from "./ab-attrs/weather-based-speed-doubler-ab-attr";
 import { MoveFlagPowerBoostAbAttr } from "./ab-attrs/move-flag-power-boost-ab-attr";
+import { MoveFlagImmunityAbAttr } from "./ab-attrs/move-flag-immunity-ab-attr";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {
@@ -450,12 +451,7 @@ export function initAbilities() {
       }
       return false;
     }),
-    new Ability(Abilities.SOUNDPROOF, 3)
-      .attr(
-        MoveImmunityAbAttr,
-        (pokemon, attacker, move) => pokemon !== attacker && move.hasFlag(MoveFlags.SOUND_BASED),
-      )
-      .ignorable(),
+    new Ability(Abilities.SOUNDPROOF, 3).attr(MoveFlagImmunityAbAttr, MoveFlags.SOUND_BASED).ignorable(),
     new Ability(Abilities.RAIN_DISH, 3).attr(PostWeatherLapseHealAbAttr, 1, WeatherType.RAIN, WeatherType.HEAVY_RAIN),
     new Ability(Abilities.SAND_STREAM, 3)
       .attr(PostSummonWeatherChangeAbAttr, WeatherType.SANDSTORM)
@@ -810,10 +806,7 @@ export function initAbilities() {
     new Ability(Abilities.MOODY, 5).attr(MoodyAbAttr),
     new Ability(Abilities.OVERCOAT, 5)
       .attr(BlockWeatherDamageAttr)
-      .attr(
-        MoveImmunityAbAttr,
-        (pokemon, attacker, move) => pokemon !== attacker && move.hasFlag(MoveFlags.POWDER_MOVE),
-      )
+      .attr(MoveFlagImmunityAbAttr, MoveFlags.POWDER_MOVE)
       .ignorable(),
     new Ability(Abilities.POISON_TOUCH, 5)
       .attr(PostAttackApplyStatusEffectAbAttr, true, 30, StatusEffect.POISON)
@@ -906,12 +899,7 @@ export function initAbilities() {
     //.condition((p) => !p.summonData?.abilitiesApplied.includes(Abilities.PROTEAN)), //Gen 9 Implementation
     new Ability(Abilities.FUR_COAT, 6).attr(StatMultiplierAbAttr, Stat.DEF, 2, (_user, target) => !!target).ignorable(),
     new Ability(Abilities.MAGICIAN, 6).attr(PostAttackStealHeldItemAbAttr),
-    new Ability(Abilities.BULLETPROOF, 6)
-      .attr(
-        MoveImmunityAbAttr,
-        (pokemon, attacker, move) => pokemon !== attacker && move.hasFlag(MoveFlags.BALLBOMB_MOVE),
-      )
-      .ignorable(),
+    new Ability(Abilities.BULLETPROOF, 6).attr(MoveFlagImmunityAbAttr, MoveFlags.BULLET_MOVE).ignorable(),
     new Ability(Abilities.COMPETITIVE, 6)
       .attr(PostStatStageChangeStatStageChangeAbAttr, (_target, _statsChanged, stages) => stages < 0, [Stat.SPATK], 2)
       .edgeCase(), // Should not boost stats if switching into court changed sticky web

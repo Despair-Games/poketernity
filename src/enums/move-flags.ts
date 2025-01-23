@@ -26,7 +26,7 @@ export enum MoveFlags {
    */
   RECKLESS_MOVE = 1 << 10,
   /** Indicates a move should be affected by {@linkcode Abilities.BULLETPROOF} */
-  BALLBOMB_MOVE = 1 << 11,
+  BULLET_MOVE = 1 << 11,
   /** Grass types and pokemon with {@linkcode Abilities.OVERCOAT} are immune to powder moves */
   POWDER_MOVE = 1 << 12,
   /** Indicates a move should trigger {@linkcode Abilities.DANCER} */
