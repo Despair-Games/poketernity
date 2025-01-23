@@ -336,7 +336,7 @@ export class MoveEffectPhase extends HitCheckPhase {
     const move = this.move.getMove();
 
     if (move.hitsSubstitute(user, target)) {
-      this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target, firstTarget, false)
+      this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target, firstTarget, false);
     } else {
       this.applyOnTargetEffects(user, target, hitResult, firstTarget);
     }
