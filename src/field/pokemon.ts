@@ -1371,6 +1371,72 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
+   * Obtains the attacks in this Pokemon's moveset.
+   * @param usableOnly if `true`, filters out any moves that are unusable
+   * @param revealedOnly if `true`, filters out any moves that have not yet
+   * been revealed in the current battle
+   * @returns the [filtered] array of attack moves
+   */
+  public getAttackMoves(usableOnly: boolean = false, revealedOnly: boolean = false): Move[] {
+    return this.getMoveset()
+      .filter((pmv) => !usableOnly || pmv.isUsable(this))
+      .map((pmv) => pmv.getMove())
+      .filter((move) => move.category !== MoveCategory.STATUS)
+      .filter((move) => !revealedOnly || this.battleData.revealedMoves.has(move.id));
+  }
+
+  /**
+   * Generates an estimated set of attack moves for this Pokemon
+   * based on what of the Pokemon's actual moves have been revealed
+   * in the current battle. If 4 moves have not been revealed, this
+   * fills the remaining space with up to 2 "simulated moves."
+   * @returns The estimated array of moves.
+   * @see {@linkcode getSimulatedMoves}
+   */
+  public estimateAttackMoves(): Move[] {
+    const revealedAttackMoves = this.getAttackMoves(true, true);
+    revealedAttackMoves.push(...this.getSimulatedMoves());
+    return revealedAttackMoves;
+  }
+
+  /**
+   * Generates placeholder moves for this Pokemon with properties based
+   * on the Pokemon's type(s), attacking stats, and the current wave index.
+   * This generates up to 2 moves:
+   * - One move for each of the Pokemon's base type(s).
+   * - The category of each move (physical or special) matches the Pokemon's
+   * dominant attacking stat (or physical if the stats are tied).
+   * - The power of each move increases based on the current wave index.
+   * - Each move has 100 accuracy
+   * - Each move has 0 priority and no secondary effects.
+   * @returns
+   */
+  protected getSimulatedMoves(): Move[] {
+    const types = this.getTypes(false, false, true);
+    const category = this.getStat(Stat.ATK) >= this.getStat(Stat.SPATK) ? MoveCategory.PHYSICAL : MoveCategory.SPECIAL;
+    const ret: Move[] = [];
+
+    for (let i = 0; i < Math.min(types.length, 4 - this.battleData.revealedMoves.size); i++) {
+      ret.push(new AttackMove(Moves.NONE, types[i], category, this.getSimulatedMovePower(), 100, 10, -1, 0, 0));
+    }
+
+    return ret;
+  }
+
+  private getSimulatedMovePower(): number {
+    const { waveIndex } = globalScene.currentBattle;
+    if (waveIndex <= 20) {
+      return 40;
+    } else if (waveIndex <= 40) {
+      return 60;
+    } else if (waveIndex <= 60) {
+      return 80;
+    } else {
+      return 90;
+    }
+  }
+
+  /**
    * Checks which egg moves have been unlocked for the {@linkcode Pokemon} based
    * on the species it was met at or by the first {@linkcode Pokemon} in its evolution
    * line that can act as a starter and provides those egg moves.
@@ -2115,44 +2181,44 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * Computes the given Pokemon's matchup score against this Pokemon.
-   * In most cases, this score ranges from near-zero to 16, but the maximum possible matchup score is 64.
-   * @param opponent {@linkcode Pokemon} The Pokemon to compare this Pokemon against
-   * @returns A score value based on how favorable this Pokemon is when fighting the given Pokemon
+   * Computes this Pokemon's matchup score (MUS) against the given opponent.
+   * This MUS is a reflection of
+   * 1. How effective this Pokemon's moves are against the opponent, and
+   * 2. How many turns this Pokemon will have to act, assuming the opponent
+   * attacks every turn.
+   *
+   * If this Pokemon is on the field and can safely KO the opponent, its MUS
+   * against that opponent will be `Infinity`. Otherwise, MUS falls in the
+   * interval [0, 8]
+   * @param opponent The {@linkcode Pokemon} to score this Pokemon against
+   * @returns the calculated score for the matchup.
    */
-  getMatchupScore(opponent: Pokemon): number {
-    const types = this.getTypes(true);
-    const enemyTypes = opponent.getTypes(true, true);
-    /** Is this Pokemon faster than the opponent? */
-    const outspeed =
-      (this.isActive(true) ? this.getEffectiveStat(Stat.SPD, opponent) : this.getStat(Stat.SPD, false))
-      >= opponent.getEffectiveStat(Stat.SPD, this);
-    /**
-     * Based on how effective this Pokemon's types are offensively against the opponent's types.
-     * This score is increased by 25 percent if this Pokemon is faster than the opponent.
-     */
-    let atkScore = opponent.getAttackTypeEffectiveness(types[0], this) * (outspeed ? 1.25 : 1);
-    /**
-     * Based on how effectively this Pokemon defends against the opponent's types.
-     * This score cannot be higher than 4.
-     */
-    let defScore = 1 / Math.max(this.getAttackTypeEffectiveness(enemyTypes[0], opponent), 0.25);
-    if (types.length > 1) {
-      atkScore *= opponent.getAttackTypeEffectiveness(types[1], this);
+  public getMatchupScore(opponent: Pokemon): number {
+    const speed = this.getEffectiveStat(Stat.SPD, opponent, undefined, AbilityApplyMode.REVEALED);
+    const oppSpeed = opponent.getEffectiveStat(Stat.SPD, this, undefined, AbilityApplyMode.REVEALED);
+    const outspeed = speed >= oppSpeed;
+
+    const attackMoves = this.getAttackMoves(true);
+    const oppAttackMoves = opponent.estimateAttackMoves();
+
+    const EAS = Math.max(...attackMoves.map((mv) => this.getExpectedAttackScore(opponent, mv)));
+    const oppEAS = Math.max(...oppAttackMoves.map((mv) => opponent.getExpectedAttackScore(this, mv)));
+
+    if (this.isActive(true)) {
+      if (EAS >= 4 && (outspeed || oppEAS < EAS)) {
+        return Infinity;
+      } else if (oppEAS >= 4 && (!outspeed || EAS < oppEAS)) {
+        return 0;
+      } else {
+        return EAS * (3 - oppEAS + (outspeed ? 1 : 0));
+      }
+    } else {
+      if (oppEAS >= 4) {
+        return 0;
+      } else {
+        return EAS * (2 - oppEAS + (outspeed ? 1 : 0));
+      }
     }
-    if (enemyTypes.length > 1) {
-      defScore *= 1 / Math.max(this.getAttackTypeEffectiveness(enemyTypes[1], opponent), 0.25);
-    }
-    /**
-     * Based on this Pokemon's HP ratio compared to that of the opponent.
-     * This ratio is multiplied by 1.5 if this Pokemon outspeeds the opponent;
-     * however, the final ratio cannot be higher than 1.
-     */
-    let hpDiffRatio = this.getHpRatio() + (1 - opponent.getHpRatio());
-    if (outspeed) {
-      hpDiffRatio = Math.min(hpDiffRatio * 1.5, 1);
-    }
-    return (atkScore + defScore) * hpDiffRatio;
   }
 
   getEvolution(): SpeciesFormEvolution | null {
@@ -3775,6 +3841,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
     turnMove.turn = globalScene.currentBattle?.turn;
     this.getMoveHistory().push(turnMove);
+    this.battleData.revealedMoves.add(turnMove.move);
   }
 
   /**
@@ -6007,6 +6074,10 @@ export class PokemonBattleData {
    * without applying them.
    */
   public abilitiesRevealed: Abilities[] = [];
+  /**
+   * The moves revealed from this Pokemon
+   */
+  public revealedMoves: Set<Moves> = new Set();
 }
 
 export class PokemonBattleSummonData {
