@@ -451,7 +451,7 @@ export function initAbilities() {
       }
       return false;
     }),
-    new Ability(Abilities.SOUNDPROOF, 3).attr(MoveFlagImmunityAbAttr, MoveFlags.SOUND_BASED).ignorable(),
+    new Ability(Abilities.SOUNDPROOF, 3).attr(MoveFlagImmunityAbAttr, MoveFlags.SOUND_MOVE).ignorable(),
     new Ability(Abilities.RAIN_DISH, 3).attr(PostWeatherLapseHealAbAttr, 1, WeatherType.RAIN, WeatherType.HEAVY_RAIN),
     new Ability(Abilities.SAND_STREAM, 3)
       .attr(PostSummonWeatherChangeAbAttr, WeatherType.SANDSTORM)
@@ -1063,7 +1063,7 @@ export function initAbilities() {
       MoveTypeChangeAbAttr,
       Type.WATER,
       1,
-      (_user, _target, move) => !!move?.hasFlag(MoveFlags.SOUND_BASED),
+      (_user, _target, move) => !!move?.hasFlag(MoveFlags.SOUND_MOVE),
     ),
     new Ability(Abilities.TRIAGE, 7).attr(
       ChangeMovePriorityAbAttr,
@@ -1298,8 +1298,8 @@ export function initAbilities() {
       6,
     ),
     new Ability(Abilities.PUNK_ROCK, 8)
-      .attr(MoveFlagPowerBoostAbAttr, MoveFlags.SOUND_BASED, 1.3)
-      .attr(ReceivedMoveDamageMultiplierAbAttr, (_target, _user, move) => move.hasFlag(MoveFlags.SOUND_BASED), 0.5)
+      .attr(MoveFlagPowerBoostAbAttr, MoveFlags.SOUND_MOVE, 1.3)
+      .attr(ReceivedMoveDamageMultiplierAbAttr, (_target, _user, move) => move.hasFlag(MoveFlags.SOUND_MOVE), 0.5)
       .ignorable(),
     new Ability(Abilities.SAND_SPIT, 8).attr(
       PostDefendWeatherChangeAbAttr,

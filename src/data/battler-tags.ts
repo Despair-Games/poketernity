@@ -227,7 +227,7 @@ export class ThroatChoppedTag extends MoveRestrictionBattlerTag {
    * @returns `true` if the move is sound-based, `false` otherwise
    */
   override isMoveRestricted(move: Moves): boolean {
-    return allMoves[move].hasFlag(MoveFlags.SOUND_BASED);
+    return allMoves[move].hasFlag(MoveFlags.SOUND_MOVE);
   }
 
   /**

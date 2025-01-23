@@ -58,7 +58,7 @@ describe("Abilities - Move Flag Power Boost Ability Attr", () => {
       ability: Abilities.PUNK_ROCK,
       abilityName: "Punk Rock",
       move: Moves.UPROAR,
-      moveFlag: MoveFlags.SOUND_BASED,
+      moveFlag: MoveFlags.SOUND_MOVE,
       factor: 1.3,
     },
     {

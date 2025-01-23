@@ -13,7 +13,7 @@ export enum MoveFlags {
    *
    * cf https://bulbapedia.bulbagarden.net/wiki/Sound-based_move
    */
-  SOUND_BASED = 1 << 3,
+  SOUND_MOVE = 1 << 3,
   HIDE_USER = 1 << 4,
   HIDE_TARGET = 1 << 5,
   BITING_MOVE = 1 << 6,

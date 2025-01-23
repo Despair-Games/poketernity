@@ -312,7 +312,7 @@ export abstract class Move implements Localizable {
     // TODO: Allow this to be simulated
     applyAbAttrs(InfiltratorAbAttr, user, false, bypassed);
 
-    return !bypassed.value && !this.hasFlag(MoveFlags.SOUND_BASED) && !this.hasFlag(MoveFlags.IGNORE_SUBSTITUTE);
+    return !bypassed.value && !this.hasFlag(MoveFlags.SOUND_MOVE) && !this.hasFlag(MoveFlags.IGNORE_SUBSTITUTE);
   }
 
   /**
@@ -401,12 +401,12 @@ export abstract class Move implements Localizable {
   }
 
   /**
-   * Sets the {@linkcode MoveFlags.SOUND_BASED} flag for the calling Move
+   * Sets the {@linkcode MoveFlags.SOUND_MOVE} flag for the calling Move
    * @see {@linkcode Moves.UPROAR}
    * @returns The {@linkcode Move} that called this function
    */
-  soundBased(): this {
-    this.setFlag(MoveFlags.SOUND_BASED, true);
+  soundMove(): this {
+    this.setFlag(MoveFlags.SOUND_MOVE, true);
     return this;
   }
 
