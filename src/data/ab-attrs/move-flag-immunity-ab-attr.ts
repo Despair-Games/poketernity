@@ -8,7 +8,7 @@ import type { MoveFlags } from "#enums/move-flags";
 +-------------+-------------+
 |   Ability   |  Move Flag  |
 +-------------+-------------+
-| Soundproof  | SOUND_BASED |
+| Soundproof  | SOUND_MOVE  |
 | Overcoat    | POWDER_MOVE |
 | Bulletproof | BULLET_MOVE |
 +-------------+-------------+
