@@ -3,7 +3,7 @@ import type { BooleanHolder } from "#app/utils";
 import type { BattleStat } from "#enums/stat";
 import { AbAttr } from "./ab-attr";
 
-export class PreStatStageChangeAbAttr extends AbAttr {
+export abstract class PreStatStageChangeAbAttr extends AbAttr {
   /**
    * Applies an effect before the source's stat stage(s) would change
    * @param pokemon The {@linkcode Pokemon} with this ability

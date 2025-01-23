@@ -1,13 +1,16 @@
 import { globalScene } from "#app/global-scene";
-import { addTextObject, TextStyle } from "./text";
-import { addWindow, WindowVariant } from "./ui-theme";
+import { addTextObject } from "./text";
+import { TextStyle } from "#enums/text-style";
+import { addWindow } from "./ui-theme";
+import { WindowVariant } from "#enums/window-variant";
 import i18next from "i18next";
 
 export enum DropDownState {
-  ON = 0,
-  OFF = 1,
-  EXCLUDE = 2,
-  UNLOCKABLE = 3,
+  ON,
+  OFF,
+  EXCLUDE,
+  UNLOCKABLE,
+  PARTIAL,
 }
 
 export enum DropDownType {
@@ -51,6 +54,7 @@ export class DropDownOption extends Phaser.GameObjects.Container {
   private currentLabelIndex: number;
   private labels: DropDownLabel[];
   private onColor = 0x33bbff;
+  private partialColor = 0xffff00;
   private offColor = 0x272727;
   private excludeColor = 0xff5555;
   private unlockableColor = 0xffff00;
@@ -124,6 +128,9 @@ export class DropDownOption extends Phaser.GameObjects.Container {
         break;
       case DropDownState.UNLOCKABLE:
         this.toggle.setTint(this.unlockableColor);
+        break;
+      case DropDownState.PARTIAL:
+        this.toggle.setTint(this.partialColor);
         break;
     }
   }

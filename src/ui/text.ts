@@ -1,49 +1,13 @@
 import { EggTier } from "#enums/egg-type";
 import { UiTheme } from "#enums/ui-theme";
 import type Phaser from "phaser";
-import BBCodeText from "phaser3-rex-plugins/plugins/gameobjects/tagtext/bbcodetext/BBCodeText";
-import InputText from "phaser3-rex-plugins/plugins/inputtext";
+import type BBCodeText from "phaser3-rex-plugins/plugins/gameobjects/tagtext/bbcodetext/BBCodeText";
+import type InputText from "phaser3-rex-plugins/plugins/inputtext";
 import { globalScene } from "#app/global-scene";
-import { ModifierTier } from "../modifier/modifier-tier";
+import { ModifierTier } from "#enums/modifier-tier";
 import i18next from "#app/plugins/i18n";
 import { settings } from "#app/system/settings/settings-manager";
-
-export enum TextStyle {
-  MESSAGE,
-  WINDOW,
-  WINDOW_ALT,
-  BATTLE_INFO,
-  PARTY,
-  PARTY_RED,
-  SUMMARY,
-  SUMMARY_ALT,
-  SUMMARY_RED,
-  SUMMARY_BLUE,
-  SUMMARY_PINK,
-  SUMMARY_GOLD,
-  SUMMARY_GRAY,
-  SUMMARY_GREEN,
-  MONEY, // Money default styling (pale yellow)
-  MONEY_WINDOW, // Money displayed in Windows (needs different colors based on theme)
-  STATS_LABEL,
-  STATS_VALUE,
-  SETTINGS_VALUE,
-  SETTINGS_LABEL,
-  SETTINGS_SELECTED,
-  SETTINGS_LOCKED,
-  TOOLTIP_TITLE,
-  TOOLTIP_CONTENT,
-  MOVE_INFO_CONTENT,
-  MOVE_PP_FULL,
-  MOVE_PP_HALF_FULL,
-  MOVE_PP_NEAR_EMPTY,
-  MOVE_PP_EMPTY,
-  SMALLER_WINDOW_ALT,
-  BGM_BAR,
-  PERFECT_IV,
-  ME_OPTION_DEFAULT, // Default style for choices in ME
-  ME_OPTION_SPECIAL, // Style for choices with special requirements in ME
-}
+import { TextStyle } from "#enums/text-style";
 
 export interface TextStyleOptions {
   scale: number;
@@ -114,8 +78,7 @@ export function addBBCodeTextObject(
     extraStyleOptions,
   );
 
-  const ret = new BBCodeText(globalScene, x, y, content, styleOptions as BBCodeText.TextStyle);
-  globalScene.add.existing(ret);
+  const ret = globalScene.add.rexBBCodeText(x, y, content, styleOptions as BBCodeText.TextStyle);
   ret.setScale(scale);
   ret.setShadow(shadowXpos, shadowYpos, shadowColor);
   if (!(styleOptions as BBCodeText.TextStyle).lineSpacing) {
@@ -139,8 +102,7 @@ export function addTextInputObject(
 ): InputText {
   const { scale, styleOptions } = getTextStyleOptions(style, settings.display.uiTheme, extraStyleOptions);
 
-  const ret = new InputText(globalScene, x, y, width, height, styleOptions as InputText.IConfig);
-  globalScene.add.existing(ret);
+  const ret = globalScene.add.rexInputText(x, y, width, height, styleOptions as InputText.IConfig);
   ret.setScale(scale);
 
   return ret;
@@ -270,8 +232,11 @@ export function getTextStyleOptions(
   return { scale, styleOptions, shadowColor, shadowXpos, shadowYpos };
 }
 
-export function getBBCodeFrag(content: string, textStyle: TextStyle, uiTheme: UiTheme = UiTheme.DEFAULT): string {
-  return `[color=${getTextColor(textStyle, false, uiTheme)}][shadow=${getTextColor(textStyle, true, uiTheme)}]${content}`;
+export function getBBCodeFrag(content: string, textStyle: TextStyle, closeFragment: boolean = false): string {
+  const uiTheme = settings.display.uiTheme ?? UiTheme.DEFAULT;
+  const openingFragment = `[color=${getTextColor(textStyle, false, uiTheme)}][shadow=${getTextColor(textStyle, true, uiTheme)}]`;
+  const closingFragment = closeFragment ? "[/color][/shadow]" : "";
+  return `${openingFragment}${content}${closingFragment}`;
 }
 
 /**
@@ -290,14 +255,9 @@ export function getBBCodeFrag(content: string, textStyle: TextStyle, uiTheme: Ui
  * @param forWindow set to `true` if the text is to be displayed in a window ({@linkcode BattleScene.addWindow})
  *  it will replace all instances of the default MONEY TextStyle by {@linkcode TextStyle.MONEY_WINDOW}
  */
-export function getTextWithColors(
-  content: string,
-  primaryStyle: TextStyle,
-  uiTheme: UiTheme,
-  forWindow?: boolean,
-): string {
+export function getTextWithColors(content: string, primaryStyle: TextStyle, forWindow?: boolean): string {
   // Apply primary styling before anything else
-  let text = getBBCodeFrag(content, primaryStyle, uiTheme) + "[/color][/shadow]";
+  let text = getBBCodeFrag(content, primaryStyle, true);
   const primaryStyleString = [...text.match(new RegExp(/\[color=[^\[]*\]\[shadow=[^\[]*\]/i))!][0];
 
   /* For money text displayed in game windows, we can't use the default {@linkcode TextStyle.MONEY}
@@ -309,12 +269,7 @@ export function getTextWithColors(
 
   // Set custom colors
   text = text.replace(/@\[([^{]*)\]{([^}]*)}/gi, (_substring, textStyle: string, textToColor: string) => {
-    return (
-      "[/color][/shadow]"
-      + getBBCodeFrag(textToColor, TextStyle[textStyle], uiTheme)
-      + "[/color][/shadow]"
-      + primaryStyleString
-    );
+    return "[/color][/shadow]" + getBBCodeFrag(textToColor, TextStyle[textStyle], true) + primaryStyleString;
   });
 
   // Remove extra style block at the end

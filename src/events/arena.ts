@@ -2,19 +2,7 @@ import type { ArenaTagSide } from "#enums/arena-tag-side";
 import type { ArenaTagType } from "#enums/arena-tag-type";
 import type { TerrainType } from "#enums/terrain-type";
 import type { WeatherType } from "#enums/weather-type";
-
-/** Alias for all {@linkcode ArenaEvent} type strings */
-export enum ArenaEventType {
-  /** Triggers when a {@linkcode WeatherType} is added, overlapped, or removed */
-  WEATHER_CHANGED = "onWeatherChanged",
-  /** Triggers when a {@linkcode TerrainType} is added, overlapped, or removed */
-  TERRAIN_CHANGED = "onTerrainChanged",
-
-  /** Triggers when a {@linkcode ArenaTagType} is added */
-  TAG_ADDED = "onTagAdded",
-  /** Triggers when a {@linkcode ArenaTagType} is removed */
-  TAG_REMOVED = "onTagRemoved",
-}
+import { ArenaEventType } from "#enums/arena-event-type";
 
 /**
  * Base container class for all {@linkcode ArenaEventType} events

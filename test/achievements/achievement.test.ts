@@ -1,32 +1,37 @@
 import { TurnHeldItemTransferModifier } from "#app/modifier/modifier";
-import { Achv, DamageAchv, HealAchv, LevelAchv, ModifierAchv, MoneyAchv, RibbonAchv, achvs } from "#app/system/achv";
+import {
+  Achv,
+  ChallengeAchv,
+  DamageAchv,
+  HealAchv,
+  LevelAchv,
+  ModifierAchv,
+  MoneyAchv,
+  MonoGenAchv,
+  MonoTypeAchv,
+  RibbonAchv,
+  achvs,
+} from "#app/system/achv";
 import { AchvTier } from "#enums/achv-tier";
 import { NumberHolder } from "#app/utils";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type BattleScene from "#app/battle-scene";
-
-describe("check some Achievement related stuff", () => {
-  it("should check Achievement creation", () => {
-    const ach = new MoneyAchv("", "Achievement", 1000, null!, 100);
-    expect(ach.name).toBe("Achievement");
-  });
-});
+import { InverseBattleChallenge, SingleGenerationChallenge, SingleTypeChallenge } from "#app/data/challenge";
+import { Type } from "#enums/type";
 
 describe("Achv", () => {
   let achv: Achv;
 
   beforeEach(() => {
-    achv = new Achv("", "Test Achievement", "This is a test achievement", "test_icon", 10);
+    achv = new Achv("TestAchievement", "test_icon", 10);
   });
 
-  it("should have the correct name", () => {
-    expect(achv.getDescription()).toBe("This is a test achievement");
-  });
-
-  it("should have the correct icon image", () => {
-    expect(achv.getIconImage()).toBe("test_icon");
+  it("should have the correct attributes", () => {
+    expect(achv.name).toBe("TestAchievement.name");
+    expect(achv.description).toBe("TestAchievement.description");
+    expect(achv.iconImage).toBe("test_icon");
+    expect(achv.score).toBe(10);
   });
 
   it("should set the achievement as secret", () => {
@@ -37,18 +42,14 @@ describe("Achv", () => {
     achv.setSecret(true);
     expect(achv.secret).toBe(true);
     expect(achv.hasParent).toBe(true);
-
-    achv.setSecret(false);
-    expect(achv.secret).toBe(true);
-    expect(achv.hasParent).toBe(false);
   });
 
   it("should return the correct tier based on the score", () => {
-    const achv1 = new Achv("", "Test Achievement 1", "Test Description", "test_icon", 10);
-    const achv2 = new Achv("", "Test Achievement 2", "Test Description", "test_icon", 25);
-    const achv3 = new Achv("", "Test Achievement 3", "Test Description", "test_icon", 50);
-    const achv4 = new Achv("", "Test Achievement 4", "Test Description", "test_icon", 75);
-    const achv5 = new Achv("", "Test Achievement 5", "Test Description", "test_icon", 100);
+    const achv1 = new Achv("", "test_icon", 10);
+    const achv2 = new Achv("", "test_icon", 25);
+    const achv3 = new Achv("", "test_icon", 50);
+    const achv4 = new Achv("", "test_icon", 75);
+    const achv5 = new Achv("", "test_icon", 100);
 
     expect(achv1.getTier()).toBe(AchvTier.COMMON);
     expect(achv2.getTier()).toBe(AchvTier.GREAT);
@@ -58,11 +59,11 @@ describe("Achv", () => {
   });
 
   it("should validate the achievement based on the condition function", () => {
-    const conditionFunc = vi.fn((args: any[]) => args[0] === 10);
-    const achv = new Achv("", "Test Achievement", "Test Description", "test_icon", 10, conditionFunc);
+    const conditionFunc = vi.fn((value: number) => value === 10);
+    const achv = new Achv("", "test_icon", 10, conditionFunc);
 
-    expect(achv.validate([5])).toBe(false);
-    expect(achv.validate([10])).toBe(true);
+    expect(achv.validate(5)).toBe(false);
+    expect(achv.validate(10)).toBe(true);
     expect(conditionFunc).toHaveBeenCalledTimes(2);
   });
 });
@@ -70,7 +71,6 @@ describe("Achv", () => {
 describe("MoneyAchv", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
-  let scene: BattleScene;
 
   beforeAll(() => {
     phaserGame = new Phaser.Game({
@@ -84,30 +84,28 @@ describe("MoneyAchv", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    scene = game.scene;
   });
 
   it("should create an instance of MoneyAchv", () => {
-    const moneyAchv = new MoneyAchv("", "Test Money Achievement", 10000, "money_icon", 10);
+    const moneyAchv = new MoneyAchv("", 10000, "money_icon", 10);
     expect(moneyAchv).toBeInstanceOf(MoneyAchv);
     expect(moneyAchv instanceof Achv).toBe(true);
   });
 
   it("should validate the achievement based on the money amount", () => {
-    const moneyAchv = new MoneyAchv("", "Test Money Achievement", 10000, "money_icon", 10);
-    scene.money = 5000;
+    const moneyAchv = new MoneyAchv("", 10000, "money_icon", 10);
+    game.scene.money = 5000;
 
-    expect(moneyAchv.validate([])).toBe(false);
+    expect(moneyAchv.validate()).toBe(false);
 
-    scene.money = 15000;
-    expect(moneyAchv.validate([])).toBe(true);
+    game.scene.money = 15000;
+    expect(moneyAchv.validate()).toBe(true);
   });
 });
 
 describe("RibbonAchv", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
-  let scene: BattleScene;
 
   beforeAll(() => {
     phaserGame = new Phaser.Game({
@@ -121,112 +119,198 @@ describe("RibbonAchv", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.moveset([]);
-    game.override.startingLevel(0);
-    game.override.starterSpecies(0);
-    game.override.enemyMoveset([]);
-    game.override.enemySpecies(0);
-    game.override.startingWave(0);
-    scene = game.scene;
   });
 
   it("should create an instance of RibbonAchv", () => {
-    const ribbonAchv = new RibbonAchv("", "Test Ribbon Achievement", 10, "ribbon_icon", 10);
+    const ribbonAchv = new RibbonAchv("", 10, "ribbon_icon", 10);
     expect(ribbonAchv).toBeInstanceOf(RibbonAchv);
     expect(ribbonAchv instanceof Achv).toBe(true);
   });
 
   it("should validate the achievement based on the ribbon amount", () => {
-    const ribbonAchv = new RibbonAchv("", "Test Ribbon Achievement", 10, "ribbon_icon", 10);
-    scene.gameData.gameStats.ribbonsOwned = 5;
+    const ribbonAchv = new RibbonAchv("", 10, "ribbon_icon", 10);
+    game.scene.gameData.gameStats.ribbonsOwned = 5;
 
-    expect(ribbonAchv.validate([])).toBe(false);
+    expect(ribbonAchv.validate()).toBe(false);
 
-    scene.gameData.gameStats.ribbonsOwned = 15;
-    expect(ribbonAchv.validate([])).toBe(true);
+    game.scene.gameData.gameStats.ribbonsOwned = 15;
+    expect(ribbonAchv.validate()).toBe(true);
   });
 });
 
 describe("DamageAchv", () => {
   it("should create an instance of DamageAchv", () => {
-    const damageAchv = new DamageAchv("", "Test Damage Achievement", 250, "damage_icon", 10);
+    const damageAchv = new DamageAchv("", 250, "damage_icon", 10);
     expect(damageAchv).toBeInstanceOf(DamageAchv);
     expect(damageAchv instanceof Achv).toBe(true);
   });
 
   it("should validate the achievement based on the damage amount", () => {
-    const damageAchv = new DamageAchv("", "Test Damage Achievement", 250, "damage_icon", 10);
-    const numberHolder = new NumberHolder(200);
+    const damageAchv = new DamageAchv("", 250, "damage_icon", 10);
+    const damageValue = new NumberHolder(200);
 
-    expect(damageAchv.validate([numberHolder])).toBe(false);
+    expect(damageAchv.validate(damageValue)).toBe(false);
 
-    numberHolder.value = 300;
-    expect(damageAchv.validate([numberHolder])).toBe(true);
+    damageValue.value = 300;
+    expect(damageAchv.validate(damageValue)).toBe(true);
   });
 });
 
 describe("HealAchv", () => {
   it("should create an instance of HealAchv", () => {
-    const healAchv = new HealAchv("", "Test Heal Achievement", 250, "heal_icon", 10);
+    const healAchv = new HealAchv("", 250, "heal_icon", 10);
     expect(healAchv).toBeInstanceOf(HealAchv);
     expect(healAchv instanceof Achv).toBe(true);
   });
 
   it("should validate the achievement based on the heal amount", () => {
-    const healAchv = new HealAchv("", "Test Heal Achievement", 250, "heal_icon", 10);
-    const numberHolder = new NumberHolder(200);
+    const healAchv = new HealAchv("", 250, "heal_icon", 10);
+    const healValue = new NumberHolder(200);
 
-    expect(healAchv.validate([numberHolder])).toBe(false);
+    expect(healAchv.validate(healValue)).toBe(false);
 
-    numberHolder.value = 300;
-    expect(healAchv.validate([numberHolder])).toBe(true);
+    healValue.value = 300;
+    expect(healAchv.validate(healValue)).toBe(true);
   });
 });
 
 describe("LevelAchv", () => {
   it("should create an instance of LevelAchv", () => {
-    const levelAchv = new LevelAchv("", "Test Level Achievement", 100, "level_icon", 10);
+    const levelAchv = new LevelAchv("", 100, "level_icon", 10);
     expect(levelAchv).toBeInstanceOf(LevelAchv);
     expect(levelAchv instanceof Achv).toBe(true);
   });
 
   it("should validate the achievement based on the level", () => {
-    const levelAchv = new LevelAchv("", "Test Level Achievement", 100, "level_icon", 10);
-    const _NumberHolder = new NumberHolder(50);
+    const levelAchv = new LevelAchv("", 100, "level_icon", 10);
+    const levelValue = new NumberHolder(50);
 
-    expect(levelAchv.validate([_NumberHolder])).toBe(false);
+    expect(levelAchv.validate(levelValue)).toBe(false);
 
-    _NumberHolder.value = 150;
-    expect(levelAchv.validate([_NumberHolder])).toBe(true);
+    levelValue.value = 150;
+    expect(levelAchv.validate(levelValue)).toBe(true);
   });
 });
 
 describe("ModifierAchv", () => {
   it("should create an instance of ModifierAchv", () => {
-    const modifierAchv = new ModifierAchv(
-      "",
-      "Test Modifier Achievement",
-      "Test Description",
-      "modifier_icon",
-      10,
-      () => true,
-    );
+    const modifierAchv = new ModifierAchv("", "modifier_icon", 10, () => true);
     expect(modifierAchv).toBeInstanceOf(ModifierAchv);
     expect(modifierAchv instanceof Achv).toBe(true);
   });
 
   it("should validate the achievement based on the modifier function", () => {
-    const modifierAchv = new ModifierAchv(
-      "",
-      "Test Modifier Achievement",
-      "Test Description",
-      "modifier_icon",
-      10,
-      () => true,
-    );
+    const modifierAchv = new ModifierAchv("", "modifier_icon", 10, () => true);
     const modifier = new TurnHeldItemTransferModifier(null!, 3, 1);
 
-    expect(modifierAchv.validate([modifier])).toBe(true);
+    expect(modifierAchv.validate(modifier)).toBe(true);
+  });
+});
+
+describe("MonoGenAchv", () => {
+  let phaserGame: Phaser.Game;
+  let game: GameManager;
+
+  beforeAll(() => {
+    phaserGame = new Phaser.Game({
+      type: Phaser.HEADLESS,
+    });
+  });
+
+  afterEach(() => {
+    game.phaseInterceptor.restoreOg();
+  });
+
+  beforeEach(() => {
+    game = new GameManager(phaserGame);
+    game.scene.gameMode.challenges = [];
+  });
+
+  it("should create an instance of MonoGenAchv", () => {
+    const monoGenAchv = new MonoGenAchv("SomeAchv", 3, "monotype_icon", 10);
+    expect(monoGenAchv).toBeInstanceOf(MonoGenAchv);
+    expect(monoGenAchv instanceof Achv).toBe(true);
+    expect(monoGenAchv.name).toBe("SomeAchv.name");
+    expect(monoGenAchv.description).toBe("SomeAchv.description");
+  });
+
+  it("should validate the achievement based on the challenge value and type", () => {
+    const monoGenAchv = new MonoGenAchv("SomeAchv", 3, "monotype_icon", 10);
+    const challenge = new SingleGenerationChallenge();
+    challenge.value = 1;
+    expect(monoGenAchv.validate(challenge)).toBe(false);
+    challenge.value = 3;
+    expect(monoGenAchv.validate(challenge)).toBe(true);
+    const wrongChallenge = new SingleTypeChallenge();
+    wrongChallenge.value = 3;
+    expect(monoGenAchv.validate(wrongChallenge)).toBe(false);
+  });
+
+  it("should not validate the achievement if inverse challenge is active", () => {
+    const monoGenAchv = new MonoGenAchv("SomeAchv", 3, "monotype_icon", 10);
+    const challenge = new SingleGenerationChallenge();
+    challenge.value = 3;
+    const inverseChallenge = new InverseBattleChallenge();
+    game.scene.gameMode.challenges.push(inverseChallenge);
+
+    inverseChallenge.value = 0;
+    expect(monoGenAchv.validate(challenge)).toBe(true);
+    inverseChallenge.value = 1;
+    expect(monoGenAchv.validate(challenge)).toBe(false);
+  });
+});
+
+describe("MonoTypeAchv", () => {
+  let phaserGame: Phaser.Game;
+  let game: GameManager;
+
+  beforeAll(() => {
+    phaserGame = new Phaser.Game({
+      type: Phaser.HEADLESS,
+    });
+  });
+
+  afterEach(() => {
+    game.phaseInterceptor.restoreOg();
+  });
+
+  beforeEach(() => {
+    game = new GameManager(phaserGame);
+    game.scene.gameMode.challenges = [];
+  });
+
+  it("should create an instance of MonoTypeAchv", () => {
+    const monoTypeAchv = new MonoTypeAchv(Type.STELLAR, "monotype_icon", 10);
+    expect(monoTypeAchv).toBeInstanceOf(MonoTypeAchv);
+    expect(monoTypeAchv instanceof Achv).toBe(true);
+    expect(monoTypeAchv.name).toBe("MONO_STELLAR.name");
+    expect(monoTypeAchv.description).toBe("Complete the Stellar monotype challenge.");
+  });
+
+  it("should validate the achievement based on the challenge value and type", () => {
+    const monoTypeAchv = new MonoTypeAchv(Type.ROCK, "monotype_icon", 10);
+    const challenge = new SingleTypeChallenge();
+    challenge.value = 1;
+    expect(monoTypeAchv.validate(challenge)).toBe(false);
+    challenge.value = 6;
+    expect(monoTypeAchv.validate(challenge)).toBe(true);
+
+    const wrongChallenge = new SingleGenerationChallenge();
+    wrongChallenge.value = 6;
+    expect(monoTypeAchv.validate(wrongChallenge)).toBe(false);
+  });
+
+  it("should not validate the achievement if inverse challenge is active", () => {
+    const monoTypeAchv = new MonoTypeAchv(Type.ROCK, "monotype_icon", 10);
+    const challenge = new SingleTypeChallenge();
+    challenge.value = 6;
+    const inverseChallenge = new InverseBattleChallenge();
+    game.scene.gameMode.challenges.push(inverseChallenge);
+
+    inverseChallenge.value = 0;
+    expect(monoTypeAchv.validate(challenge)).toBe(true);
+    inverseChallenge.value = 1;
+    expect(monoTypeAchv.validate(challenge)).toBe(false);
   });
 });
 
@@ -272,6 +356,37 @@ describe("achvs", () => {
     expect(achvs.HIDDEN_ABILITY).toBeInstanceOf(Achv);
     expect(achvs.PERFECT_IVS).toBeInstanceOf(Achv);
     expect(achvs.CLASSIC_VICTORY).toBeInstanceOf(Achv);
+    expect(achvs.UNEVOLVED_CLASSIC_VICTORY).toBeInstanceOf(Achv);
+    expect(achvs.FRESH_START).toBeInstanceOf(ChallengeAchv);
+    expect(achvs.INVERSE_BATTLE).toBeInstanceOf(ChallengeAchv);
+    expect(achvs.BREEDERS_IN_SPACE).toBeInstanceOf(Achv);
+    expect(achvs.MONO_GEN_ONE_VICTORY).toBeInstanceOf(MonoGenAchv);
+    expect(achvs.MONO_GEN_TWO_VICTORY).toBeInstanceOf(MonoGenAchv);
+    expect(achvs.MONO_GEN_THREE_VICTORY).toBeInstanceOf(MonoGenAchv);
+    expect(achvs.MONO_GEN_FOUR_VICTORY).toBeInstanceOf(MonoGenAchv);
+    expect(achvs.MONO_GEN_FIVE_VICTORY).toBeInstanceOf(MonoGenAchv);
+    expect(achvs.MONO_GEN_SIX_VICTORY).toBeInstanceOf(MonoGenAchv);
+    expect(achvs.MONO_GEN_SEVEN_VICTORY).toBeInstanceOf(MonoGenAchv);
+    expect(achvs.MONO_GEN_EIGHT_VICTORY).toBeInstanceOf(MonoGenAchv);
+    expect(achvs.MONO_GEN_NINE_VICTORY).toBeInstanceOf(MonoGenAchv);
+    expect(achvs.MONO_NORMAL).toBeInstanceOf(MonoTypeAchv);
+    expect(achvs.MONO_FIGHTING).toBeInstanceOf(MonoTypeAchv);
+    expect(achvs.MONO_FLYING).toBeInstanceOf(MonoTypeAchv);
+    expect(achvs.MONO_POISON).toBeInstanceOf(MonoTypeAchv);
+    expect(achvs.MONO_GROUND).toBeInstanceOf(MonoTypeAchv);
+    expect(achvs.MONO_ROCK).toBeInstanceOf(MonoTypeAchv);
+    expect(achvs.MONO_BUG).toBeInstanceOf(MonoTypeAchv);
+    expect(achvs.MONO_GHOST).toBeInstanceOf(MonoTypeAchv);
+    expect(achvs.MONO_STEEL).toBeInstanceOf(MonoTypeAchv);
+    expect(achvs.MONO_FIRE).toBeInstanceOf(MonoTypeAchv);
+    expect(achvs.MONO_WATER).toBeInstanceOf(MonoTypeAchv);
+    expect(achvs.MONO_GRASS).toBeInstanceOf(MonoTypeAchv);
+    expect(achvs.MONO_ELECTRIC).toBeInstanceOf(MonoTypeAchv);
+    expect(achvs.MONO_PSYCHIC).toBeInstanceOf(MonoTypeAchv);
+    expect(achvs.MONO_ICE).toBeInstanceOf(MonoTypeAchv);
+    expect(achvs.MONO_DRAGON).toBeInstanceOf(MonoTypeAchv);
+    expect(achvs.MONO_DARK).toBeInstanceOf(MonoTypeAchv);
+    expect(achvs.MONO_FAIRY).toBeInstanceOf(MonoTypeAchv);
   });
 
   it("should initialize the achievements with IDs and parent IDs", () => {

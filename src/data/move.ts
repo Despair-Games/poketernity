@@ -8,7 +8,7 @@ import {
   PokemonMultiHitModifier,
   AttackTypeBoosterModifier,
 } from "#app/modifier/modifier";
-import type { Constructor, nil } from "#app/utils";
+import type { AbstractConstructor, Constructor, nil } from "#app/utils";
 import { BooleanHolder, NumberHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -39,7 +39,6 @@ import type { MoveAttr } from "./move-attrs/move-attr";
 import { MultiHitAttr } from "./move-attrs/multi-hit-attr";
 import { OneHitKOAccuracyAttr } from "./move-attrs/one-hit-ko-accuracy-attr";
 import { SacrificialAttr } from "./move-attrs/sacrificial-attr";
-import { SacrificialAttrOnHit } from "./move-attrs/sacrificial-attr-on-hit";
 import { TypelessAttr } from "./move-attrs/typeless-attr";
 import { VariableAccuracyAttr } from "./move-attrs/variable-accuracy-attr";
 import { VariablePowerAttr } from "./move-attrs/variable-power-attr";
@@ -50,7 +49,7 @@ import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { HealStatusEffectAttr } from "./move-attrs/heal-status-effect-attr";
 import { VariableAtkAttr } from "./move-attrs/variable-atk-attr";
-import { ChargeAnim } from "./battle-anims";
+import { ChargeAnim } from "#enums/charge-anim";
 import { allMoves } from "#app/data/all-moves";
 
 export abstract class Move implements Localizable {
@@ -129,7 +128,7 @@ export abstract class Move implements Localizable {
    * @param attrType any attribute that extends {@linkcode MoveAttr}
    * @returns Array of attributes that match `attrType`, Empty Array if none match.
    */
-  getAttrs<T extends MoveAttr>(attrType: Constructor<T>): T[] {
+  getAttrs<T extends MoveAttr>(attrType: AbstractConstructor<T>): T[] {
     return this.attrs.filter((a): a is T => a instanceof attrType);
   }
 
@@ -138,7 +137,7 @@ export abstract class Move implements Localizable {
    * @param attrType any attribute that extends {@linkcode MoveAttr}
    * @returns true if the move has attribute `attrType`
    */
-  hasAttr<T extends MoveAttr>(attrType: Constructor<T>): boolean {
+  hasAttr<T extends MoveAttr>(attrType: AbstractConstructor<T>): boolean {
     return this.attrs.some((attr) => attr instanceof attrType);
   }
 
@@ -313,7 +312,7 @@ export abstract class Move implements Localizable {
     // TODO: Allow this to be simulated
     applyAbAttrs(InfiltratorAbAttr, user, false, bypassed);
 
-    return !bypassed.value && !this.hasFlag(MoveFlags.SOUND_BASED) && !this.hasFlag(MoveFlags.IGNORE_SUBSTITUTE);
+    return !bypassed.value && !this.hasFlag(MoveFlags.SOUND_MOVE) && !this.hasFlag(MoveFlags.IGNORE_SUBSTITUTE);
   }
 
   /**
@@ -392,12 +391,12 @@ export abstract class Move implements Localizable {
   }
 
   /**
-   * Sets the {@linkcode MoveFlags.SOUND_BASED} flag for the calling Move
+   * Sets the {@linkcode MoveFlags.SOUND_MOVE} flag for the calling Move
    * @see {@linkcode Moves.UPROAR}
    * @returns The {@linkcode Move} that called this function
    */
-  soundBased(): this {
-    this.setFlag(MoveFlags.SOUND_BASED, true);
+  soundMove(): this {
+    this.setFlag(MoveFlags.SOUND_MOVE, true);
     return this;
   }
 
@@ -472,12 +471,12 @@ export abstract class Move implements Localizable {
   }
 
   /**
-   * Sets the {@linkcode MoveFlags.BALLBOMB_MOVE} flag for the calling Move
+   * Sets the {@linkcode MoveFlags.BULLET_MOVE} flag for the calling Move
    * @see {@linkcode Moves.ELECTRO_BALL}
    * @returns The {@linkcode Move} that called this function
    */
-  ballBombMove(): this {
-    this.setFlag(MoveFlags.BALLBOMB_MOVE, true);
+  bulletMove(): this {
+    this.setFlag(MoveFlags.BULLET_MOVE, true);
     return this;
   }
 
@@ -817,7 +816,7 @@ export abstract class Move implements Localizable {
     const isMultiTarget = multiple && targets.length > 1;
 
     // ...cannot enhance multi-hit or sacrificial moves
-    const exceptAttrs: Constructor<MoveAttr>[] = [MultiHitAttr, SacrificialAttr, SacrificialAttrOnHit];
+    const exceptAttrs: AbstractConstructor<MoveAttr>[] = [MultiHitAttr, SacrificialAttr];
 
     // ...and cannot enhance these specific moves.
     const exceptMoves: Moves[] = [Moves.FLING, Moves.UPROAR, Moves.ROLLOUT, Moves.ICE_BALL, Moves.ENDEAVOR];
@@ -976,7 +975,7 @@ function ChargeMove<TBase extends SubMove>(Base: TBase) {
      * @returns Array of attributes that match `attrType`, or an empty array if
      * no matches are found.
      */
-    getChargeAttrs<T extends MoveAttr>(attrType: Constructor<T>): T[] {
+    getChargeAttrs<T extends MoveAttr>(attrType: AbstractConstructor<T>): T[] {
       return this.chargeAttrs.filter((attr): attr is T => attr instanceof attrType);
     }
 
@@ -985,7 +984,7 @@ function ChargeMove<TBase extends SubMove>(Base: TBase) {
      * @param attrType any attribute that extends {@linkcode MoveAttr}
      * @returns `true` if a matching attribute is found; `false` otherwise
      */
-    hasChargeAttr<T extends MoveAttr>(attrType: Constructor<T>): boolean {
+    hasChargeAttr<T extends MoveAttr>(attrType: AbstractConstructor<T>): boolean {
       return this.chargeAttrs.some((attr) => attr instanceof attrType);
     }
 
@@ -1045,7 +1044,7 @@ function applyMoveChargeAttrsInternal<TAttr extends MoveAttr>(
 }
 
 export function applyMoveAttrs<TAttr extends MoveAttr>(
-  attrType: Constructor<TAttr>,
+  attrType: AbstractConstructor<TAttr>,
   ...params: Parameters<TAttr["apply"]>
 ): void {
   applyMoveAttrsInternal((attr: MoveAttr) => attr instanceof attrType, ...params);
@@ -1059,7 +1058,7 @@ export function applyFilteredMoveAttrs<TAttr extends MoveAttr>(
 }
 
 export function applyMoveChargeAttrs<TAttr extends MoveAttr>(
-  attrType: Constructor<TAttr>,
+  attrType: AbstractConstructor<TAttr>,
   ...params: Parameters<TAttr["apply"]>
 ): void {
   applyMoveChargeAttrsInternal((attr: MoveAttr) => attr instanceof attrType, ...params);

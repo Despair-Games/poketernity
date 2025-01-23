@@ -11,7 +11,7 @@ import { getEncounterText } from "#app/data/mystery-encounters/utils/encounter-d
 import type { OptionSelectSettings } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { isNullOrUndefined } from "#app/utils";
 import { MysteryEncounterOptionSelectedPhase } from "./option-selected-phase";
 
@@ -63,7 +63,7 @@ export class MysteryEncounterPhase extends Phase {
     }
 
     // Initiates encounter dialogue window and option select
-    ui.setMode(Mode.MYSTERY_ENCOUNTER, this.optionSelectSettings);
+    ui.setMode(UiMode.MYSTERY_ENCOUNTER, this.optionSelectSettings);
   }
 
   /**
@@ -124,7 +124,7 @@ export class MysteryEncounterPhase extends Phase {
     const optionSelectDialogue = currentBattle?.mysteryEncounter?.selectedOption?.dialogue;
     if (optionSelectDialogue?.selected && optionSelectDialogue.selected.length > 0) {
       // Handle intermediate dialogue (between player selection event and the onOptionSelect logic)
-      ui.setMode(Mode.MESSAGE);
+      ui.setMode(UiMode.MESSAGE);
       const selectedDialogue = optionSelectDialogue.selected;
       let i = 0;
       const showNextDialogue = (): void => {
@@ -154,6 +154,6 @@ export class MysteryEncounterPhase extends Phase {
    * Ends phase
    */
   public override end(): void {
-    globalScene.ui.setMode(Mode.MESSAGE).then(() => super.end());
+    globalScene.ui.setMode(UiMode.MESSAGE).then(() => super.end());
   }
 }

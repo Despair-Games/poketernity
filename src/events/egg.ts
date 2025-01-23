@@ -1,10 +1,4 @@
-export enum EggEventType {
-  /**
-   * Triggers when egg count is changed.
-   * @see {@linkcode MoveUsedEvent}
-   */
-  EGG_COUNT_CHANGED = "onEggCountChanged",
-}
+import { EggEventType } from "#enums/egg-event-type";
 
 /**
  * Container class for {@linkcode EggEventType.EGG_COUNT_CHANGED} events

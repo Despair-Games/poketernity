@@ -13,28 +13,19 @@ export class JawLockAttr extends AddBattlerTagAttr {
     super(BattlerTagType.TRAPPED);
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
-    if (!super.canApply(user, target, move)) {
-      return false;
-    }
-
+  override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     // If either the user or the target already has the tag, do not apply
     if (user.getTag(TrappedTag) || target.getTag(TrappedTag)) {
       return false;
     }
 
-    const moveChance = this.getMoveChance(user, target, move, this.selfTarget);
-    if (moveChance < 0 || moveChance === 100 || user.randSeedInt(100) < moveChance) {
-      /**
-       * Add the tag to both the user and the target.
-       * The target's tag source is considered to be the user and vice versa
-       */
-      return (
-        target.addTag(BattlerTagType.TRAPPED, 1, move.id, user.id)
-        && user.addTag(BattlerTagType.TRAPPED, 1, move.id, target.id)
-      );
-    }
-
-    return false;
+    /**
+     * Add the tag to both the user and the target.
+     * The target's tag source is considered to be the user and vice versa
+     */
+    return (
+      target.addTag(BattlerTagType.TRAPPED, 1, move.id, user.id)
+      && user.addTag(BattlerTagType.TRAPPED, 1, move.id, target.id)
+    );
   }
 }

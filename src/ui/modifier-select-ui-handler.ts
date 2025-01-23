@@ -2,9 +2,10 @@ import { globalScene } from "#app/global-scene";
 import type { ModifierTypeOption } from "../modifier/modifier-type";
 import { getPlayerShopModifierTypeOptionsForWave, TmModifierType } from "../modifier/modifier-type";
 import { getPokeballAtlasKey } from "#app/data/pokeball";
-import { addTextObject, getTextStyleOptions, getModifierTierTextTint, getTextColor, TextStyle } from "./text";
+import { addTextObject, getTextStyleOptions, getModifierTierTextTint, getTextColor } from "./text";
+import { TextStyle } from "#enums/text-style";
 import AwaitableUiHandler from "./awaitable-ui-handler";
-import { Mode } from "./ui";
+import { UiMode } from "#enums/ui-mode";
 import { LockModifierTiersModifier, PokemonHeldItemModifier, HealShopCostModifier } from "../modifier/modifier";
 import { handleTutorial } from "../tutorial";
 import { Tutorial } from "#enums/tutorial";
@@ -18,7 +19,7 @@ import { ShopCursorTarget } from "#enums/shop-cursor-target";
 import { NumberHolder } from "#app/utils";
 import Phaser from "phaser";
 import { PokeballType } from "#enums/pokeball";
-import { ModifierTier } from "#app/modifier/modifier-tier";
+import { ModifierTier } from "#enums/modifier-tier";
 import { settings } from "#app/system/settings/settings-manager";
 
 export const SHOP_OPTIONS_ROW_LIMIT = 7;
@@ -53,9 +54,11 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
 
   private cursorObj: Phaser.GameObjects.Image | null;
 
+  /**
+   * @todo Why does it use {@linkcode UiMode.CONFIRM} and not {@linkcode UiMode.MODIFIER_SELECT} (for the `super` call)?
+   */
   constructor() {
-    // TODO: why does it use Mode.CONFIRM and not Mode.MODIFIER_SELECT?
-    super(Mode.CONFIRM);
+    super(UiMode.CONFIRM);
 
     this.options = [];
     this.shopOptionsRows = [];

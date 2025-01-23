@@ -6,8 +6,6 @@ import type {
   UserFacingSettings,
 } from "#app/@types/Settings";
 import { BattleStyle } from "#app/enums/battle-style";
-import { CandyUpgradeDisplayMode } from "#app/enums/candy-upgrade-display";
-import { CandyUpgradeNotificationMode } from "#app/enums/candy-upgrade-notification-mode";
 import { DamageNumbersMode } from "#app/enums/damage-numbers-mode";
 import { EaseType } from "#app/enums/ease-type";
 import { EggSkipPreference } from "#app/enums/egg-skip-preference";
@@ -43,8 +41,6 @@ export const defaultDisplaySettings: DisplaySettings = {
   damageNumbersMode: DamageNumbersMode.OFF,
   enableMoveAnimations: true,
   showStatsOnLevelUp: true,
-  candyUpgradeNotificationMode: CandyUpgradeNotificationMode.ON,
-  candyUpgradeDisplayMode: CandyUpgradeDisplayMode.ICON,
   enableMoveInfo: true,
   showMovesetFlyout: true,
   showArenaFlyout: true,

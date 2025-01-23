@@ -1,6 +1,8 @@
-import { Mode } from "#app/ui/ui";
-import PokemonIconAnimHandler, { PokemonIconAnimMode } from "#app/ui/pokemon-icon-anim-handler";
-import { TextStyle, addTextObject } from "#app/ui/text";
+import { UiMode } from "#enums/ui-mode";
+import PokemonIconAnimHandler from "#app/ui/pokemon-icon-anim-handler";
+import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
+import { addTextObject } from "#app/ui/text";
+import { TextStyle } from "#enums/text-style";
 import MessageUiHandler from "#app/ui/message-ui-handler";
 import { addWindow } from "#app/ui/ui-theme";
 import { Button } from "#enums/buttons";
@@ -29,7 +31,7 @@ export default class EggListUiHandler extends MessageUiHandler {
   private iconAnimHandler: PokemonIconAnimHandler;
 
   constructor() {
-    super(Mode.EGG_LIST);
+    super(UiMode.EGG_LIST);
   }
 
   setup() {

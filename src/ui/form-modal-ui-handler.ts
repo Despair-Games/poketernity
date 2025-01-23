@@ -1,8 +1,10 @@
 import type { ModalConfig } from "./modal-ui-handler";
 import { ModalUiHandler } from "./modal-ui-handler";
-import type { Mode } from "./ui";
-import { TextStyle, addTextInputObject, addTextObject } from "./text";
-import { WindowVariant, addWindow } from "./ui-theme";
+import type { UiMode } from "#enums/ui-mode";
+import { addTextInputObject, addTextObject } from "./text";
+import { TextStyle } from "#enums/text-style";
+import { addWindow } from "./ui-theme";
+import { WindowVariant } from "#enums/window-variant";
 import type InputText from "phaser3-rex-plugins/plugins/inputtext";
 import { fixedNumber } from "#app/utils";
 import { Button } from "#enums/buttons";
@@ -21,7 +23,7 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
   protected tween: Phaser.Tweens.Tween;
   protected formLabels: Phaser.GameObjects.Text[];
 
-  constructor(mode: Mode | null = null) {
+  constructor(mode: UiMode | null = null) {
     super(mode);
 
     this.editing = false;

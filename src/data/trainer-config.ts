@@ -20,8 +20,6 @@ import { TrainerSlot } from "#enums/trainer-slot";
 
 /** Minimum BST for Pokemon generated onto the Elite Four's teams */
 const ELITE_FOUR_MINIMUM_BST = 460;
-/** Minimum BST for Pokemon generated onto the E4 Champion's team */
-const CHAMPION_MINIMUM_BST = 508;
 
 export interface TrainerTierPools {
   [key: number]: Species[];
@@ -203,7 +201,8 @@ export const trainerPartyTemplates = {
 
   CHAMPION: new TrainerPartyCompoundTemplate(
     new TrainerPartyTemplate(1, PartyMemberStrength.STRONGER),
-    new TrainerPartyTemplate(5, PartyMemberStrength.STRONG, false, true),
+    new TrainerPartyTemplate(3, PartyMemberStrength.STRONG),
+    new TrainerPartyTemplate(2, PartyMemberStrength.STRONGER),
   ),
 
   RIVAL: new TrainerPartyCompoundTemplate(
@@ -1121,18 +1120,14 @@ export class TrainerConfig {
   }
 
   /**
-   * Initializes the trainer configuration for an evil team leader. Temporarily hardcoding evil leader teams though.
-   * @param signatureSpecies The signature species for the evil team leader.
-   * @param specialtyTypes The specialty types for the evil team Leader.
-   * @param boolean Whether or not this is the rematch fight
+   * Initializes the trainer configuration for an evil team leader.
+   * @param title the string representation of the evil team leader's title
+   * @param name the string representation of the evil team leader's name
+   * @param rematch Whether or not this is the rematch fight
+   * @param mixedBattleBgm the string representation of the mixed battle bgm
    * @returns The updated TrainerConfig instance.
    * **/
-  initForEvilTeamLeader(
-    title: string,
-    signatureSpecies: (Species | Species[])[],
-    rematch: boolean = false,
-    ...specialtyTypes: Type[]
-  ): TrainerConfig {
+  initForEvilTeamLeader(title: string, name: string, rematch: boolean = false, mixedBattleBgm: string): TrainerConfig {
     if (!getIsInitialized()) {
       initI18n();
     }
@@ -1141,17 +1136,7 @@ export class TrainerConfig {
     } else {
       this.setPartyTemplates(trainerPartyTemplates.RIVAL_5);
     }
-    signatureSpecies.forEach((speciesPool, s) => {
-      if (!Array.isArray(speciesPool)) {
-        speciesPool = [speciesPool];
-      }
-      this.setPartyMemberFunc(-(s + 1), getRandomPartyMemberFunc(speciesPool));
-    });
-    if (specialtyTypes.length) {
-      this.setSpeciesFilter((p) => specialtyTypes.find((t) => p.isOfType(t)) !== undefined);
-      this.setSpecialtyTypes(...specialtyTypes);
-    }
-    const nameForCall = this.name.toLowerCase().replace(/\s/g, "_");
+    const nameForCall = name.toLowerCase().replace(/\s/g, "_");
     this.name = i18next.t(`trainerNames:${nameForCall}`);
     this.setTitle(title);
     this.setMoneyMultiplier(2.5);
@@ -1159,6 +1144,7 @@ export class TrainerConfig {
     this.setStaticParty();
     this.setHasVoucher(true);
     this.setBattleBgm("battle_plasma_boss");
+    this.setMixedBattleBgm(mixedBattleBgm);
     this.setVictoryBgm("victory_team_plasma");
 
     return this;
@@ -1182,7 +1168,15 @@ export class TrainerConfig {
     }
 
     // Set the function to generate the Gym Leader's party template.
-    this.setPartyTemplateFunc(getGymLeaderPartyTemplate);
+    this.setPartyTemplateFunc(() =>
+      getWavePartyTemplate(
+        trainerPartyTemplates.GYM_LEADER_1,
+        trainerPartyTemplates.GYM_LEADER_2,
+        trainerPartyTemplates.GYM_LEADER_3,
+        trainerPartyTemplates.GYM_LEADER_4,
+        trainerPartyTemplates.GYM_LEADER_5,
+      ),
+    );
 
     // Set up party members with their corresponding species.
     signatureSpecies.forEach((speciesPool, s) => {
@@ -1293,30 +1287,21 @@ export class TrainerConfig {
 
   /**
    * Initializes the trainer configuration for a Champion.
-   * @param signatureSpecies The signature species for the Champion.
    * @param isMale Whether the Champion is Male or Female (for localization of the title).
+   * @param battleBgm String representing the battle music
+   * @param mixedBattleBgm String representing mixed battle music
    * @returns The updated TrainerConfig instance.
    **/
-  initForChampion(signatureSpecies: (Species | Species[])[], isMale: boolean): TrainerConfig {
+  initForChampion(isMale: boolean, battleBgm: string, mixedBattleBgm: string): TrainerConfig {
     // Check if the internationalization (i18n) system is initialized.
     if (!getIsInitialized()) {
       initI18n();
     }
+    this.setBattleBgm(battleBgm);
+    this.setMixedBattleBgm(mixedBattleBgm);
 
     // Set the party templates for the Champion.
     this.setPartyTemplates(trainerPartyTemplates.CHAMPION);
-
-    // Set up party members with their corresponding species.
-    signatureSpecies.forEach((speciesPool, s) => {
-      // Ensure speciesPool is an array.
-      if (!Array.isArray(speciesPool)) {
-        speciesPool = [speciesPool];
-      }
-      // Set a function to get a random party member from the species pool.
-      this.setPartyMemberFunc(-(s + 1), getRandomPartyMemberFunc(speciesPool));
-    });
-
-    this.setSpeciesFilter((p) => p.baseTotal >= CHAMPION_MINIMUM_BST);
 
     // Localize the trainer's name by converting it to lowercase and replacing spaces with underscores.
     const nameForCall = this.name.toLowerCase().replace(/\s/g, "_");
@@ -1333,7 +1318,6 @@ export class TrainerConfig {
     this.setBoss();
     this.setStaticParty();
     this.setHasVoucher(true);
-    this.setBattleBgm("battle_champion_alder");
     this.setVictoryBgm("victory_champion");
     this.setGenModifiersFunc((party) => getRandomTeraModifiers(party, 3));
 
@@ -1534,29 +1518,31 @@ export function getEvilGruntPartyTemplate(): TrainerPartyTemplate {
   }
 }
 
-export function getWavePartyTemplate(...templates: TrainerPartyTemplate[]) {
+/**
+ * Function used to generate a {@linkcode TrainerPartyTemplate} for trainers that change their
+ * party template as the player progresses.
+ * Subtracting offsetWave (20) from the waveIndex scaled by mode (+30 if daily),
+ * for every wavesToScale (30), the trainer will onto their next given {@linkcode TrainerPartyTemplate}
+ *
+ * Currently used by ace trainers, breeders, twins, and gym leaders
+ * @param templates an array of templates that the trainers can use
+ * @returns a {@linkcode TrainerPartyTemplate}
+ */
+export function getWavePartyTemplate(...templates: TrainerPartyTemplate[]): TrainerPartyTemplate {
+  const wavesToScale = 30;
+  const offsetWave = 20;
+
   const wave = Overrides.STARTING_WAVE_OVERRIDE || 1;
   return templates[
-    Math.min(
-      Math.max(
-        Math.ceil(
-          (globalScene.gameMode.getWaveForDifficulty(globalScene.currentBattle?.waveIndex || wave, true) - 20) / 30,
-        ),
-        0,
+    Phaser.Math.Clamp(
+      Math.ceil(
+        (globalScene.gameMode.getWaveForDifficulty(globalScene.currentBattle?.waveIndex || wave, true) - offsetWave)
+          / wavesToScale,
       ),
+      0,
       templates.length - 1,
     )
   ];
-}
-
-function getGymLeaderPartyTemplate() {
-  return getWavePartyTemplate(
-    trainerPartyTemplates.GYM_LEADER_1,
-    trainerPartyTemplates.GYM_LEADER_2,
-    trainerPartyTemplates.GYM_LEADER_3,
-    trainerPartyTemplates.GYM_LEADER_4,
-    trainerPartyTemplates.GYM_LEADER_5,
-  );
 }
 
 /**

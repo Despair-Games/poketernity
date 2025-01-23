@@ -1,11 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { fixedNumber } from "#app/utils";
-
-export enum PokemonIconAnimMode {
-  NONE,
-  PASSIVE,
-  ACTIVE,
-}
+import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
 
 type PokemonIcon = Phaser.GameObjects.Container | Phaser.GameObjects.Sprite;
 

@@ -87,7 +87,7 @@ import {
   TurnStatusEffectModifier,
   type Modifier,
 } from "#app/modifier/modifier";
-import { ModifierTier } from "#app/modifier/modifier-tier";
+import { ModifierTier } from "#enums/modifier-tier";
 import Overrides from "#app/overrides";
 import { Unlockables } from "#enums/unlockables";
 import { getVoucherTypeIcon, getVoucherTypeName } from "#app/system/voucher";
@@ -101,7 +101,7 @@ import {
   getEnumValues,
   isNullOrUndefined,
   NumberHolder,
-  padInt,
+  leftPad,
   randSeedInt,
   randSeedItem,
 } from "#app/utils";
@@ -1122,7 +1122,7 @@ export class TmModifierType extends PokemonModifierType {
 
   override get name(): string {
     return i18next.t("modifierType:ModifierType.TmModifierType.name", {
-      moveId: padInt(Object.keys(tmSpecies).indexOf(this.moveId.toString()) + 1, 3),
+      moveId: leftPad(Object.keys(tmSpecies).indexOf(this.moveId.toString()) + 1, 3),
       moveName: allMoves[this.moveId].name,
     });
   }

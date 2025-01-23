@@ -13,7 +13,7 @@ import { StockpilingTag } from "./battler-tags";
 import { type Move } from "./move";
 import { allMoves } from "#app/data/all-moves";
 import { MoveCategory } from "#enums/move-category";
-import { Command } from "#app/ui/command-ui-handler";
+import { BattleCommand } from "#enums/battle-command";
 import { FieldPreventExplosionLikeAbAttr } from "./ab-attrs/field-prevent-explosion-like-ab-attr";
 
 export type MoveConditionFunc = (user: Pokemon, target: Pokemon, move: Move) => boolean;
@@ -58,7 +58,7 @@ export class UpperHandCondition extends MoveCondition {
 
       return (
         !!targetCommand
-        && targetCommand.command === Command.FIGHT
+        && targetCommand.command === BattleCommand.FIGHT
         && !target.turnData.acted
         && !!targetCommand.move?.move
         && allMoves[targetCommand.move.move].category !== MoveCategory.STATUS

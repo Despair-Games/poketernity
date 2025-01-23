@@ -1,6 +1,4 @@
 import type { BattleStyle } from "#enums/battle-style";
-import type { CandyUpgradeDisplayMode } from "#enums/candy-upgrade-display";
-import type { CandyUpgradeNotificationMode } from "#enums/candy-upgrade-notification-mode";
 import type { DamageNumbersMode } from "#enums/damage-numbers-mode";
 import type { EaseType } from "#enums/ease-type";
 import type { EggSkipPreference } from "#enums/egg-skip-preference";
@@ -51,8 +49,6 @@ export interface DisplaySettings {
   damageNumbersMode: DamageNumbersMode;
   enableMoveAnimations: boolean;
   showStatsOnLevelUp: boolean;
-  candyUpgradeNotificationMode: CandyUpgradeNotificationMode;
-  candyUpgradeDisplayMode: CandyUpgradeDisplayMode;
   enableMoveInfo: boolean;
   showMovesetFlyout: boolean;
   showArenaFlyout: boolean;

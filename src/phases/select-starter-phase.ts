@@ -7,9 +7,9 @@ import { overrideHeldItems, overrideModifiers } from "#app/modifier/modifier";
 import Overrides from "#app/overrides";
 import { Phase } from "#app/phase";
 import { TitlePhase } from "#app/phases/title-phase";
-import { SaveSlotUiMode } from "#app/ui/save-slot-select-ui-handler";
+import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
 import type { Starter } from "#app/ui/starter-select-ui-handler";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { Gender } from "#enums/gender";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 
@@ -19,9 +19,9 @@ export class SelectStarterPhase extends Phase {
 
     globalScene.playBgm("menu");
 
-    globalScene.ui.setMode(Mode.STARTER_SELECT, (starters: Starter[]) => {
+    globalScene.ui.setMode(UiMode.STARTER_SELECT, (starters: Starter[]) => {
       globalScene.ui.clearText();
-      globalScene.ui.setMode(Mode.SAVE_SLOT, SaveSlotUiMode.SAVE, (slotId: number) => {
+      globalScene.ui.setMode(UiMode.SAVE_SLOT, SaveSlotUiMode.SAVE, (slotId: number) => {
         if (slotId === -1) {
           globalScene.clearPhaseQueue();
           globalScene.pushPhase(new TitlePhase());

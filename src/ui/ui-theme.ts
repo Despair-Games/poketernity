@@ -1,12 +1,7 @@
 import { legacyCompatibleImages } from "#app/scene-base";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
-
-export enum WindowVariant {
-  NORMAL,
-  THIN,
-  XTHIN,
-}
+import { WindowVariant } from "#enums/window-variant";
 
 export function getWindowVariantSuffix(windowVariant: WindowVariant): string {
   switch (windowVariant) {

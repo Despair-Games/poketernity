@@ -3,7 +3,7 @@ import { PostWeatherLapseAbAttr } from "#app/data/ab-attrs/post-weather-lapse-ab
 import { PreWeatherDamageAbAttr } from "#app/data/ab-attrs/pre-weather-damage-ab-attr";
 import { SuppressWeatherEffectAbAttr } from "#app/data/ab-attrs/suppress-weather-effect-ab-attr";
 import { applyAbAttrs } from "#app/data/ability";
-import { CommonAnim } from "#app/data/battle-anims";
+import { CommonAnim } from "#enums/common-anim";
 import { type Weather, getWeatherDamageMessage, getWeatherLapseMessage } from "#app/data/weather";
 import { type Pokemon } from "#app/field/pokemon";
 import { HitResult } from "#enums/hit-result";

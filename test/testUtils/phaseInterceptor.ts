@@ -1,5 +1,6 @@
 import { ErrorInterceptor } from "#test/testUtils/errorInterceptor";
-import UI, { Mode } from "#app/ui/ui";
+import UI from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { Phase } from "#app/phase";
 import { AttemptRunPhase } from "#app/phases/attempt-run-phase";
 import { BattleEndPhase } from "#app/phases/battle-end-phase";
@@ -62,7 +63,7 @@ import { RevivalBlessingPhase } from "#app/phases/revival-blessing-phase";
 
 export interface PromptHandler {
   phaseTarget?: string;
-  mode?: Mode;
+  mode?: UiMode;
   callback?: () => void;
   expireFn?: () => void;
   awaitingActionInput?: boolean;
@@ -485,13 +486,13 @@ export class PhaseInterceptor {
 
   /**
    * m2m to set mode.
-   * @param mode - The {@linkcode Mode} to set.
+   * @param mode - The {@linkcode UiMode} to set.
    * @param args - Additional arguments to pass to the original method.
    */
-  setMode(mode: Mode, ...args: unknown[]): Promise<void> {
+  setMode(mode: UiMode, ...args: unknown[]): Promise<void> {
     const currentPhase = this.scene.getCurrentPhase();
     const instance = this.scene.ui;
-    console.log("setMode", `${Mode[mode]} (=${mode})`, args);
+    console.log("setMode", `${UiMode[mode]} (=${mode})`, args);
     const ret = this.originalSetMode.apply(instance, [mode, ...args]);
     if (!this.phases[currentPhase.constructor.name]) {
       throw new Error(
@@ -544,7 +545,7 @@ export class PhaseInterceptor {
    */
   addToNextPrompt(
     phaseTarget: string,
-    mode: Mode,
+    mode: UiMode,
     callback: () => void,
     expireFn?: () => void,
     awaitingActionInput: boolean = false,

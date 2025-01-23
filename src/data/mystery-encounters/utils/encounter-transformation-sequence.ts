@@ -1,12 +1,7 @@
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { getTypeRgb } from "#app/data/type";
 import { globalScene } from "#app/global-scene";
-
-export enum TransformationScreenPosition {
-  CENTER,
-  LEFT,
-  RIGHT,
-}
+import { TransformationScreenPosition } from "#enums/transformation-screen-position";
 
 /**
  * Initiates an "evolution-like" animation to transform a previousPokemon (presumably from the player's party) into a new one, not necessarily an evolution species.

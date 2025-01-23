@@ -1,8 +1,7 @@
 import { BattleType } from "#enums/battle-type";
-import { SwitchType } from "#app/enums/switch-type";
-import type { Pokemon } from "#app/field/pokemon";
-import type { EnemyPokemon } from "#app/field/pokemon";
-import { PlayerPokemon } from "#app/field/pokemon";
+import { SwitchType } from "#enums/switch-type";
+import type { Pokemon, EnemyPokemon } from "#app/field/pokemon";
+import type { AbilityFilterOptions } from "#app/data/ability-filter-options";
 import { globalScene } from "#app/global-scene";
 import type { Localizable } from "#app/interfaces/locales";
 import { BattleEndPhase } from "#app/phases/battle-end-phase";
@@ -10,7 +9,7 @@ import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { NewBattlePhase } from "#app/phases/new-battle-phase";
 import { SwitchPhase } from "#app/phases/switch-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
-import type { Constructor } from "#app/utils";
+import type { AbstractConstructor, Constructor } from "#app/utils";
 import { BooleanHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import i18next from "i18next";
@@ -19,6 +18,7 @@ import type { AbAttr } from "./ab-attrs/ab-attr";
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import { ForceSwitchOutImmunityAbAttr } from "./ab-attrs/force-switch-out-immunity-ab-attr";
 import { queueShowAbility } from "./ability-utils";
+import { AbilityApplyMode } from "#enums/ability-apply-mode";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -59,7 +59,7 @@ export class Ability implements Localizable {
    * @param attrType any attribute that extends {@linkcode AbAttr}
    * @returns Array of attributes that match `attrType`, Empty Array if none match.
    */
-  getAttrs<T extends AbAttr>(attrType: Constructor<T>): T[] {
+  getAttrs<T extends AbAttr>(attrType: AbstractConstructor<T>): T[] {
     return this.attrs.filter((a): a is T => a instanceof attrType);
   }
 
@@ -68,7 +68,7 @@ export class Ability implements Localizable {
    * @param attrType any attribute that extends {@linkcode AbAttr}
    * @returns true if the ability has attribute `attrType`
    */
-  hasAttr<T extends AbAttr>(attrType: Constructor<T>): boolean {
+  hasAttr<T extends AbAttr>(attrType: AbstractConstructor<T>): boolean {
     return this.attrs.some((attr) => attr instanceof attrType);
   }
 
@@ -144,7 +144,7 @@ export class ForceSwitchOutHelper {
      * - Whether there are available party members to switch in.
      * - If the Pokémon is still alive (hp > 0), and if so, it leaves the field and a new SwitchPhase is initiated.
      */
-    if (switchOutTarget instanceof PlayerPokemon) {
+    if (switchOutTarget.isPlayer()) {
       if (globalScene.getPlayerParty().filter((p) => p.isAllowedInBattle() && !p.isOnField()).length < 1) {
         return false;
       }
@@ -219,13 +219,13 @@ export class ForceSwitchOutHelper {
    * @param opponent The opponent Pokémon.
    * @returns `true` if the switch-out condition is met
    */
-  public getSwitchOutCondition(pokemon: Pokemon, opponent: Pokemon): boolean {
+  public getSwitchOutCondition(pokemon: Pokemon, _opponent: Pokemon): boolean {
     const switchOutTarget = pokemon;
-    const player = switchOutTarget instanceof PlayerPokemon;
+    const player = switchOutTarget.isPlayer();
 
     if (player) {
       const blockedByAbility = new BooleanHolder(false);
-      applyAbAttrs(ForceSwitchOutImmunityAbAttr, opponent, false, blockedByAbility);
+      applyAbAttrs(ForceSwitchOutImmunityAbAttr, pokemon, false, blockedByAbility);
       return !blockedByAbility.value;
     }
 
@@ -279,18 +279,19 @@ export class ForceSwitchOutHelper {
  * @returns The message(s) displayed when the ability applies
  * @see {@linkcode AbAttr}
  */
-export function applyAbAttrs<TAttr extends AbAttr>(
-  attrType: Constructor<TAttr>,
+function applyAbAttrsInternal<TAttr extends AbAttr>(
+  abFilterOptions: AbilityFilterOptions,
+  attrType: AbstractConstructor<TAttr>,
   ...params: Parameters<TAttr["apply"]>
 ): string[] {
   const messages: string[] = [];
   const [pokemon, simulated, ...args] = params;
-  for (const passive of [false, true]) {
-    if (!pokemon.canApplyAbility(passive) || (passive && pokemon.getPassiveAbility().id === pokemon.getAbility().id)) {
-      continue;
+  const abilities = pokemon.getAbilities(abFilterOptions);
+  abilities.forEach(({ ability, passive }) => {
+    if (passive && pokemon.getPassiveAbility().id === pokemon.getAbility().id) {
+      return;
     }
 
-    const ability = passive ? pokemon.getPassiveAbility() : pokemon.getAbility();
     const matchingAttrs = ability.getAttrs(attrType).filter((attr) => {
       const condition = attr.getCondition();
       return !condition || condition(pokemon);
@@ -306,6 +307,7 @@ export function applyAbAttrs<TAttr extends AbAttr>(
         }
         if (pokemon.battleData && !pokemon.battleData.abilitiesApplied.includes(ability.id)) {
           pokemon.battleData.abilitiesApplied.push(ability.id);
+          pokemon.battleData.abilitiesRevealed.push(ability.id);
         }
         if (attr.showAbility) {
           if (attr.showAbilityInstant) {
@@ -314,19 +316,58 @@ export function applyAbAttrs<TAttr extends AbAttr>(
             queueShowAbility(pokemon, passive);
           }
         }
-
+      }
+      if (result) {
         const message = attr.getTriggerMessage(pokemon, ability.name, ...args);
         if (message) {
-          globalScene.queueMessage(message);
+          if (!simulated) {
+            globalScene.queueMessage(message);
+          }
           messages.push(message);
         }
       }
 
       globalScene.clearPhaseQueueSplice();
     });
-  }
+  });
 
   return messages;
+}
+
+export function applyAbAttrs<TAttr extends AbAttr>(
+  attrType: AbstractConstructor<TAttr>,
+  ...params: Parameters<TAttr["apply"]>
+): string[] {
+  return applyAbAttrsInternal({ canApplyOnly: true }, attrType, ...params);
+}
+
+export function applyRevealedAbAttrs<TAttr extends AbAttr>(
+  attrType: AbstractConstructor<TAttr>,
+  ...params: Parameters<TAttr["apply"]>
+): string[] {
+  return applyAbAttrsInternal({ canApplyOnly: true, revealedOnly: true }, attrType, ...params);
+}
+
+/**
+ * Obtains the function to apply abilities corresponding to the given mode
+ * @param mode the {@linkcode AbilityApplyMode} determining how abilities are applied:
+ * @returns the function to apply abilities based on the mode:
+ * - {@linkcode AbilityApplyMode.DEFAULT} applies abilities without restriction
+ * (as long as they meet conditions to apply).
+ * - {@linkcode AbilityApplyMode.REVEALED} only applies abilities that have
+ * previously applied in the current battle.
+ * - {@linkcode AbilityApplyMode.IGNORE} does nothing and returns an empty
+ * message array.
+ */
+export function getAbApplyFunc(mode: AbilityApplyMode) {
+  switch (mode) {
+    case AbilityApplyMode.DEFAULT:
+      return applyAbAttrs;
+    case AbilityApplyMode.REVEALED:
+      return applyRevealedAbAttrs;
+    case AbilityApplyMode.IGNORE:
+      return () => [];
+  }
 }
 
 export const allAbilities = [new Ability(Abilities.NONE, 3)];

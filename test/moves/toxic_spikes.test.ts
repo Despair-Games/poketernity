@@ -105,9 +105,11 @@ describe("Moves - Toxic Spikes", () => {
   });
 
   it("shouldn't create multiple layers per use in doubles", async () => {
+    game.override.battleType("double");
     await game.classicMode.startBattle([Species.MIGHTYENA, Species.POOCHYENA]);
 
-    game.move.select(Moves.TOXIC_SPIKES);
+    game.move.select(Moves.TOXIC_SPIKES, 0);
+    game.move.select(Moves.SPLASH, 1);
     await game.toNextTurn();
 
     const arenaTags = game.scene.arena.getTagOnSide(ArenaTagType.TOXIC_SPIKES, ArenaTagSide.ENEMY) as ArenaTrapTag;

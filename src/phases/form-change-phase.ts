@@ -10,7 +10,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { achvs } from "#app/system/achv";
 import type PartyUiHandler from "#app/ui/party-ui-handler";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { fixedNumber } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { SpeciesFormKey } from "#enums/species-form-key";
@@ -41,7 +41,7 @@ export class FormChangePhase extends FormChangeBasePhase {
     if (!this.modal) {
       return super.setMode();
     }
-    return globalScene.ui.setOverlayMode(Mode.FORM_CHANGE_SCENE);
+    return globalScene.ui.setOverlayMode(UiMode.FORM_CHANGE_SCENE);
   }
 
   public override doFormChange(): void {
@@ -200,7 +200,7 @@ export class FormChangePhase extends FormChangeBasePhase {
     this.pokemon.findAndRemoveTags((t) => t.tagType === BattlerTagType.AUTOTOMIZED);
     if (this.modal) {
       ui.revertMode().then(() => {
-        if (ui.getMode() === Mode.PARTY) {
+        if (ui.getMode() === UiMode.PARTY) {
           const partyUiHandler = ui.getHandler() as PartyUiHandler;
           partyUiHandler.clearPartySlots();
           partyUiHandler.populatePartySlots();

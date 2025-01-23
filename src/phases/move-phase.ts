@@ -7,7 +7,7 @@ import { RedirectMoveAbAttr } from "#app/data/ab-attrs/redirect-move-ab-attr";
 import { ReduceSleepDurationAbAttr } from "#app/data/ab-attrs/reduce-sleep-duration-ab-attr";
 import { applyAbAttrs } from "#app/data/ability";
 import { allMoves } from "#app/data/all-moves";
-import { CommonAnim } from "#app/data/battle-anims";
+import { CommonAnim } from "#enums/common-anim";
 import { CenterOfAttentionTag, SkyDropTag } from "#app/data/battler-tags";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { applyMoveAttrs } from "#app/data/move";

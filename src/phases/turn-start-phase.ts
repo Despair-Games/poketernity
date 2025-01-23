@@ -9,7 +9,7 @@ import { PokemonMove, type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { BypassSpeedChanceModifier } from "#app/modifier/modifier";
 import { CheckStatusEffectPhase } from "#app/phases/check-status-effect-phase";
-import { Command } from "#app/ui/command-ui-handler";
+import { BattleCommand } from "#enums/battle-command";
 import { BooleanHolder, isNullOrUndefined, randSeedShuffle } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { Stat } from "#enums/stat";
@@ -95,12 +95,12 @@ export class TurnStartPhase extends FieldPhase {
       const bCommand = globalScene.currentBattle.turnCommands[b];
 
       if (aCommand?.command !== bCommand?.command) {
-        if (aCommand?.command === Command.FIGHT) {
+        if (aCommand?.command === BattleCommand.FIGHT) {
           return 1;
-        } else if (bCommand?.command === Command.FIGHT) {
+        } else if (bCommand?.command === BattleCommand.FIGHT) {
           return -1;
         }
-      } else if (aCommand?.command === Command.FIGHT) {
+      } else if (aCommand?.command === BattleCommand.FIGHT) {
         const aMove = allMoves[aCommand.move!.move];
         const bMove = allMoves[bCommand!.move!.move];
 
@@ -153,7 +153,7 @@ export class TurnStartPhase extends FieldPhase {
       }
 
       switch (turnCommand?.command) {
-        case Command.FIGHT:
+        case BattleCommand.FIGHT:
           const queuedMove = turnCommand.move;
           pokemon.turnData.order = orderIndex++;
           if (!queuedMove) {
@@ -184,7 +184,7 @@ export class TurnStartPhase extends FieldPhase {
             );
           }
           break;
-        case Command.BALL:
+        case BattleCommand.BALL:
           if (!isNullOrUndefined(turnCommand.targets) && !isNullOrUndefined(turnCommand.cursor)) {
             globalScene.unshiftPhase(new AttemptCapturePhase(turnCommand.targets[0] % 2, turnCommand.cursor));
           } else {
@@ -192,7 +192,7 @@ export class TurnStartPhase extends FieldPhase {
             console.error(turnCommand);
           }
           break;
-        case Command.POKEMON:
+        case BattleCommand.POKEMON:
           const switchType = turnCommand.args?.[0] ? SwitchType.BATON_PASS : SwitchType.SWITCH;
           if (!isNullOrUndefined(turnCommand.cursor)) {
             globalScene.unshiftPhase(
@@ -203,7 +203,7 @@ export class TurnStartPhase extends FieldPhase {
             console.error(turnCommand);
           }
           break;
-        case Command.RUN:
+        case BattleCommand.RUN:
           let runningPokemon = pokemon;
           if (globalScene.currentBattle.double) {
             const playerActivePokemon = globalScene.getField().filter((pokemon) => {
