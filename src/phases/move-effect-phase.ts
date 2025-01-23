@@ -295,10 +295,14 @@ export class MoveEffectPhase extends HitCheckPhase {
 
     const hitResult = this.applyMove(target, effectiveness);
 
-    this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target, firstTarget, true);
+    if (move.checkFlag(MoveFlags.G_MAX_MOVE, user, target)) {
+      this.applyGMaxUserEffects(user, target, firstTarget);
+    } else {
+      this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target, firstTarget, true);
+    }
 
     if (move.checkFlag(MoveFlags.G_MAX_MOVE, user, target)) {
-      this.applyGMaxEffects(user, target, hitResult, firstTarget);
+      this.applyGMaxTargetEffects(user, target, hitResult, firstTarget);
     } else if (!move.hitsSubstitute(user, target)) {
       this.applyOnTargetEffects(user, target, hitResult, firstTarget);
     }
@@ -313,15 +317,25 @@ export class MoveEffectPhase extends HitCheckPhase {
   }
 
   /**
+   * G-Max Moves applying positive effects to both the user and their active ally
+   */
+  private applyGMaxUserEffects(user: Pokemon, target: Pokemon, firstTarget: boolean) {
+    this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target, firstTarget, true);
+    if (target.getAlly()?.isActive(true)) {
+      this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, user.getAlly(), firstTarget, false);
+    }
+  }
+
+  /**
    * G-Max Moves apply their effects to both opponents (even if the target faints) and also
    * ignores substitutes
    *
-   * TODO: G-Max move edge cases like G-max Snooze
+   * @todo: G-Max move edge cases like G-max Snooze
    */
-  private applyGMaxEffects(user: Pokemon, target: Pokemon, hitResult: HitResult, firstTarget: boolean) {
+  private applyGMaxTargetEffects(user: Pokemon, target: Pokemon, hitResult: HitResult, firstTarget: boolean) {
     this.applyOnTargetEffects(user, target, hitResult, firstTarget);
     if (target.getAlly()?.isActive(true)) {
-      this.applyOnTargetEffects(user, target.getAlly(), hitResult, firstTarget);
+      this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target.getAlly(), firstTarget, false);
     }
   }
 
